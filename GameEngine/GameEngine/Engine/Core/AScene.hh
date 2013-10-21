@@ -2,24 +2,24 @@
 #define ASCENE_HH_
 
 #include "ACamera.hh"
-#include "Entities/AEntity.hh"
+#include "Entities/Entity.hh"
 
 #include <list>
 
 class AScene
 {
 private:
-	SmartPointer<AEntity>								_root;
+	SmartPointer<Entity>								_root;
 	ACamera 											*_camera;
 
-	void 				recomputePositions(SmartPointer<AEntity> &father,
+	void 				recomputePositions(SmartPointer<Entity> &father,
 											bool hasMoved);
 
 public:
 	AScene();
 	virtual ~AScene();
 
-	SmartPointer<AEntity>	const	&getRoot();
+	SmartPointer<Entity>	const	&getRoot();
 	void 							setCamera(ACamera *camera);
 	ACamera 						*getCamera() const;
 

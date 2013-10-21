@@ -33,9 +33,6 @@
     <ClCompile Include="Engine\EngineMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Entities\AEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\OpenGL\Attribute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -76,6 +73,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\ACamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo\DemoScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -783,7 +786,6 @@
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />
     <None Include="Engine\OpenGL\VertexBuffer.hh" />
-    <None Include="Engine\Entities\AEntity.hh" />
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />
@@ -798,5 +800,7 @@
     <None Include="Engine\Components\AComponent.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
     <None Include="Engine\Core\ACamera.hh" />
+    <None Include="Demo\DemoScene.hh" />
+    <None Include="Engine\Entities\Entity.hh" />
   </ItemGroup>
 </Project>

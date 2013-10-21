@@ -2,6 +2,7 @@
 #include "AScene.hh"
 
 AScene::AScene() :
+	_root(new Entity),
 	_camera(NULL)
 {
 }
@@ -10,18 +11,18 @@ AScene::~AScene()
 {
 }
 
-void 							AScene::recomputePositions(SmartPointer<AEntity> &father,
+void 							AScene::recomputePositions(SmartPointer<Entity> &father,
 															bool hasMoved)
 {
-	AEntity::t_sonsList::iterator 	it = father->getSonsBegin();
+	Entity::t_sonsList::iterator 	it = father->getSonsBegin();
 
 	while (it != father->getSonsEnd())
 	{
-		AEntity::t_ComponentsList::iterator		comp = it->second->getComponentsBegin();
+		Entity::t_ComponentsList::iterator		comp = it->second->getComponentsBegin();
 
 		while (comp != it->second->getComponentsEnd())
 			comp->second->update(); // update components
-		if (father->getFlags() & AEntity::HAS_MOVED)
+		if (father->getFlags() & Entity::HAS_MOVED)
 			hasMoved = true;
 		if (hasMoved)
 			it->second->computeGlobalTransform(father->getGlobalTransform());
@@ -30,7 +31,7 @@ void 							AScene::recomputePositions(SmartPointer<AEntity> &father,
 	}
 }
 
-SmartPointer<AEntity>	const	&AScene::getRoot()
+SmartPointer<Entity>	const	&AScene::getRoot()
 {
 	return (_root);
 }

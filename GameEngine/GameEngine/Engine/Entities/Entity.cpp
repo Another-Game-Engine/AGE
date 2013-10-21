@@ -1,18 +1,18 @@
 
-#include "AEntity.hh"
+#include "Entity.hh"
 
 #include <limits>
 
-size_t AEntity::_currentId = 0;
+size_t Entity::_currentId = 0;
 
-AEntity::AEntity() :
+Entity::Entity() :
 	_id(_currentId++),
 	_flags(0),
 	_father(NULL)
 {
 }
 
-AEntity::~AEntity()
+Entity::~Entity()
 {
 	t_sonsList::iterator 	it = _sons.begin();
 
@@ -23,65 +23,65 @@ AEntity::~AEntity()
 	}
 }
 
-glm::mat4 const  		&AEntity::getLocalTransform()
+glm::mat4 const  		&Entity::getLocalTransform()
 {
 	return (_localTransform);
 }
 
-glm::mat4   			&AEntity::setLocalTransform()
+glm::mat4   			&Entity::setLocalTransform()
 {
 	_flags |= HAS_MOVED;
 	return (_localTransform);
 }
 
-glm::mat4 const			&AEntity::getGlobalTransform() const
+glm::mat4 const			&Entity::getGlobalTransform() const
 {
 	return (_globalTransform);
 }
 
-void 					AEntity::computeGlobalTransform(glm::mat4 const &fatherTransform)
+void 					Entity::computeGlobalTransform(glm::mat4 const &fatherTransform)
 {
 	_globalTransform = fatherTransform * _localTransform;
 }
 
-size_t 					AEntity::getId() const
+size_t 					Entity::getId() const
 {
 	return (_id);
 }
 
-size_t 					AEntity::getFlags() const
+size_t 					Entity::getFlags() const
 {
 	return (_flags);
 }
 
-void 					AEntity::setFlags(size_t flags)
+void 					Entity::setFlags(size_t flags)
 {
 	_flags = flags;
 }
 
-void 					AEntity::addFlags(size_t flags)
+void 					Entity::addFlags(size_t flags)
 {
 	_flags |= flags;
 }
 
-void 					AEntity::removeFlags(size_t flags)
+void 					Entity::removeFlags(size_t flags)
 {
 	flags &= _flags;
 	_flags ^= flags;
 }
 
-AEntity 				*AEntity::getFather() const
+Entity 				*Entity::getFather() const
 {
 	return (_father);
 }
 
-void 						AEntity::setFather(AEntity *father)
+void 						Entity::setFather(Entity *father)
 {
 	_flags |= HAS_MOVED;
 	_father = father;
 }
 
-void 						AEntity::addSon(SmartPointer<AEntity> const &son)
+void 						Entity::addSon(SmartPointer<Entity> const &son)
 {
 	t_sonsList::iterator 	it;
 	size_t 					sonId = son->getId();
@@ -93,7 +93,7 @@ void 						AEntity::addSon(SmartPointer<AEntity> const &son)
 	}
 }
 
-void 						AEntity::removeSon(size_t sonId)
+void 						Entity::removeSon(size_t sonId)
 {
 	t_sonsList::iterator 	it;
 
@@ -104,36 +104,36 @@ void 						AEntity::removeSon(size_t sonId)
 	}
 }
 
-SmartPointer<AEntity> 	AEntity::getSon(size_t sonId)
+SmartPointer<Entity> 	Entity::getSon(size_t sonId)
 {
 	t_sonsList::iterator 	it;
 
 	if ((it = _sons.find(sonId)) != _sons.end())
 		return (it->second);
-	return (SmartPointer<AEntity>(NULL));
+	return (SmartPointer<Entity>(NULL));
 }
 
-SmartPointer<AEntity> 	AEntity::getSonRec(size_t sonId)
+SmartPointer<Entity> 	Entity::getSonRec(size_t sonId)
 {
 	t_sonsList::iterator	e = _sons.begin();
 
 	while (e != _sons.end())
 	{
-		SmartPointer<AEntity>	res;
+		SmartPointer<Entity>	res;
 
 		res = e->second->getSon(sonId);
-		if (res != SmartPointer<AEntity>(NULL))
+		if (res != SmartPointer<Entity>(NULL))
 			return (res);
 		else
 			e->second->getSonRec(sonId);
 		++e;
 	}
-	return (SmartPointer<AEntity>(NULL));
+	return (SmartPointer<Entity>(NULL));
 }
 
-SmartPointer<AEntity::t_EntityList> 	AEntity::getSonsByFlags(size_t flags, GetFlags op)
+SmartPointer<Entity::t_EntityList> 	Entity::getSonsByFlags(size_t flags, GetFlags op)
 {
-	SmartPointer<AEntity::t_EntityList>	sons = new AEntity::t_EntityList;
+	SmartPointer<Entity::t_EntityList>	sons = new Entity::t_EntityList;
 	t_sonsList::iterator				e = _sons.begin();
 
 	if (op == GetFlags::ONLY_THIS_FLAGS)
@@ -167,13 +167,13 @@ SmartPointer<AEntity::t_EntityList> 	AEntity::getSonsByFlags(size_t flags, GetFl
 	return (sons);
 }
 
-void					AEntity::addComponent(SmartPointer<Components::AComponent> const &component)
+void					Entity::addComponent(SmartPointer<Components::AComponent> const &component)
 {
 	_components[component->getName()] = component;
 	component->setFather(this);
 }
 
-bool					AEntity::removeComponent(std::string const &name)
+bool					Entity::removeComponent(std::string const &name)
 {
 	std::map<std::string, SmartPointer<Components::AComponent> >::iterator	it;
 
@@ -184,22 +184,22 @@ bool					AEntity::removeComponent(std::string const &name)
 	return (true);
 }
 
-AEntity::t_sonsList::iterator 		AEntity::getSonsBegin()
+Entity::t_sonsList::iterator 		Entity::getSonsBegin()
 {
 	return (_sons.begin());
 }
 
-AEntity::t_sonsList::iterator 		AEntity::getSonsEnd()
+Entity::t_sonsList::iterator 		Entity::getSonsEnd()
 {
 	return (_sons.end());
 }
 
-AEntity::t_ComponentsList::iterator 	AEntity::getComponentsBegin()
+Entity::t_ComponentsList::iterator 	Entity::getComponentsBegin()
 {
 	return (_components.begin());
 }
 
-AEntity::t_ComponentsList::iterator 	AEntity::getComponentsEnd()
+Entity::t_ComponentsList::iterator 	Entity::getComponentsEnd()
 {
 	return (_components.end());
 }

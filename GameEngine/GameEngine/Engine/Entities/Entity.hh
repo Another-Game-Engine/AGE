@@ -1,6 +1,6 @@
 
-#ifndef AEntity_HH_
-#define AEntity_HH_
+#ifndef Entity_HH_
+#define Entity_HH_
 
 #include <map>
 
@@ -12,7 +12,7 @@
 
 #include "glm/glm.hpp"
 
-class AEntity
+class Entity
 {
 private:
 	static size_t 					_currentId;
@@ -30,8 +30,8 @@ public:
 		HAS_MOVED = 1
 	};
 
-	typedef std::map<size_t, SmartPointer<AEntity> >						t_sonsList;
-	typedef std::list<SmartPointer<AEntity> >								t_EntityList;
+	typedef std::map<size_t, SmartPointer<Entity> >						t_sonsList;
+	typedef std::list<SmartPointer<Entity> >								t_EntityList;
 	typedef std::map<std::string, SmartPointer<Components::AComponent> >	t_ComponentsList;
 
 private:
@@ -41,25 +41,22 @@ private:
 	glm::mat4 			_localTransform;
 	glm::mat4 			_globalTransform;
 
-	AEntity 			*_father;
+	Entity 			*_father;
 	t_sonsList 			_sons;
 	t_ComponentsList	_components;
 
-	AEntity(AEntity const &oth);
-	AEntity 			&operator=(AEntity const &oth);
+	Entity(Entity const &oth);
+	Entity 			&operator=(Entity const &oth);
 
 public:
-	AEntity();
-	virtual ~AEntity();
+	Entity();
+	virtual ~Entity();
 
 	glm::mat4 const  		&getLocalTransform();
 	glm::mat4   			&setLocalTransform();
 
 	glm::mat4 const			&getGlobalTransform() const;
 	void 					computeGlobalTransform(glm::mat4 const &fatherTransform);
-
-	virtual void 			draw() = 0;
-	virtual void 			update(Timer const &timer, Input &input) = 0;
 
 	size_t 					getId() const;
 
@@ -68,13 +65,13 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	AEntity 				*getFather() const;
-	void 					setFather(AEntity *father);
+	Entity 				*getFather() const;
+	void 					setFather(Entity *father);
 
-	void 					addSon(SmartPointer<AEntity> const &son);
+	void 					addSon(SmartPointer<Entity> const &son);
 	void 					removeSon(size_t sonId);
-	SmartPointer<AEntity> 	getSon(size_t sonId);
-	SmartPointer<AEntity> 	getSonRec(size_t sonId);
+	SmartPointer<Entity> 	getSon(size_t sonId);
+	SmartPointer<Entity> 	getSonRec(size_t sonId);
 
 	SmartPointer<t_EntityList> 	getSonsByFlags(size_t flags, GetFlags op);
 

@@ -1,6 +1,6 @@
 #include "AComponent.hh"
 
-#include "Entities/AEntity.hh"
+#include "Entities/Entity.hh"
 
 namespace	Components
 {
@@ -22,7 +22,7 @@ AComponent::ComponentType	AComponent::getType() const
 	return (_type);
 }
 
-void						AComponent::setFather(AEntity *father)
+void						AComponent::setFather(Entity *father)
 {
 	if (_father != NULL)
 	{
@@ -33,9 +33,14 @@ void						AComponent::setFather(AEntity *father)
 	start();
 }
 
-AEntity						*AComponent::getFather() const
+Entity						*AComponent::getFather() const
 {
 	return (_father);
+}
+
+std::string const			&AComponent::getName() const
+{
+	return (_name);
 }
 
 }

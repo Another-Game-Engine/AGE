@@ -3,7 +3,7 @@
 
 #include <string>
 
-class	AEntity;
+class	Entity;
 
 namespace	Components
 {
@@ -20,7 +20,7 @@ public:
 
 private:
 	const std::string	_name;
-	AEntity				*_father;
+	Entity				*_father;
 
 protected:
 	const ComponentType	_type;
@@ -31,12 +31,12 @@ public:
 
 	ComponentType	getType() const;
 
-	virtual void	start() = 0;
-	virtual void	update() = 0;
-	virtual void	stop() = 0;
+	virtual void	start() {}
+	virtual void	update() {}
+	virtual void	stop() {}
 
-	void			setFather(AEntity *father);
-	AEntity			*getFather() const;
+	void			setFather(Entity *father);
+	Entity			*getFather() const;
 
 	std::string const &getName() const;
 };

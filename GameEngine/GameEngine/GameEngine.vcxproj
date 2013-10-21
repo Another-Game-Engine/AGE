@@ -67,6 +67,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Demo\DemoScene.cpp" />
     <ClCompile Include="Engine\Components\AComponent.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
@@ -78,7 +79,7 @@
     <ClCompile Include="Engine\Core\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\EngineMain.cpp" />
-    <ClCompile Include="Engine\Entities\AEntity.cpp" />
+    <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
     <ClCompile Include="Engine\OpenGL\Shader.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="TinyThread\tinythread.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Demo\DemoScene.hh" />
     <None Include="Engine\Components\AComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
@@ -228,7 +230,7 @@
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />
     <None Include="Engine\Core\Timer.hh" />
-    <None Include="Engine\Entities\AEntity.hh" />
+    <None Include="Engine\Entities\Entity.hh" />
     <None Include="Engine\OpenGL\Attribute.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />

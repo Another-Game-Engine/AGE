@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "Entities/AEntity.hh"
+#include "Entities/Entity.hh"
 #include "Components/MeshRenderer.hh"
 #include "OpenGL/Shader.hh"
 #include "OpenGL/UniformBuffer.hh"

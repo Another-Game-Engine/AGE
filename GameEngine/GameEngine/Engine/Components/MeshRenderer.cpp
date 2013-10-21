@@ -44,6 +44,11 @@ bool	MeshRenderer::setShader(std::string const &name)
 	return (true);
 }
 
+std::string const		&MeshRenderer::getShader() const
+{
+	return (_shader);
+}
+
 SmartPointer<Resources::SharedMesh> const &MeshRenderer::getMesh() const
 {
 	return (_mesh);
