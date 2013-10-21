@@ -72,13 +72,13 @@ bool 		Engine::update()
 {
 	_timer.update();
 	_context->updateEvents(_inputs);
-	_sceneBinded->update(_timer, _inputs);
-	return (_sceneBinded->userUpdate(_timer, _inputs));
+	_sceneBinded->update();
+	return (_sceneBinded->userUpdate());
 }
 
 void 		Engine::draw()
 {
-	_sceneBinded->render();
+	_renderer.render();
 	_context->flush();
 }
 

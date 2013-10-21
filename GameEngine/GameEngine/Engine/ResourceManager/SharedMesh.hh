@@ -4,6 +4,8 @@
 #include "AResource.hh"
 #include "OpenGL/VertexBuffer.hh"
 
+#include "glm/glm.hpp"
+
 namespace	Resources
 {
 
@@ -27,6 +29,8 @@ public:
 	virtual ~SharedMesh(void);
 
 	virtual bool	load(std::string const &path);
+
+	void			draw() const;
 
 	OpenGLTools::VertexBuffer	&getBuffer();
 

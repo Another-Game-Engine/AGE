@@ -30,8 +30,9 @@ public:
 		HAS_MOVED = 1
 	};
 
-	typedef std::map<size_t, SmartPointer<AEntity> >	t_sonsList;
-	typedef std::list<SmartPointer<AEntity> >			t_EntityList;
+	typedef std::map<size_t, SmartPointer<AEntity> >						t_sonsList;
+	typedef std::list<SmartPointer<AEntity> >								t_EntityList;
+	typedef std::map<std::string, SmartPointer<Components::AComponent> >	t_ComponentsList;
 
 private:
 	size_t 				_id;
@@ -42,9 +43,7 @@ private:
 
 	AEntity 			*_father;
 	t_sonsList 			_sons;
-
-	std::map<std::string,
-			SmartPointer<Components::AComponent> >		_components;
+	t_ComponentsList	_components;
 
 	AEntity(AEntity const &oth);
 	AEntity 			&operator=(AEntity const &oth);
@@ -82,8 +81,10 @@ public:
 	void					addComponent(SmartPointer<Components::AComponent> const &component);
 	bool					removeComponent(std::string const &name);
 
-	t_sonsList::iterator 	getSonsBegin();
-	t_sonsList::iterator 	getSonsEnd();
+	t_sonsList::iterator 		getSonsBegin();
+	t_sonsList::iterator 		getSonsEnd();
+	t_ComponentsList::iterator 	getComponentsBegin();
+	t_ComponentsList::iterator 	getComponentsEnd();
 };
 
 #endif

@@ -113,13 +113,14 @@ void Shader::compileShader(GLuint shaderId, std::string const &file) const
     } 
 }
 
-bool	Shader::bindUniformBlock(std::string const &blockName, UniformBuffer const &buffer)
+bool	Shader::bindUniformBlock(std::string const &blockName, UniformBuffer<> const &buffer)
 {
 	GLuint	blockId;
 
 	assert(_progId != 0 && "Must initialize the shader...");
 	blockId = glGetUniformBlockIndex(_progId, blockName.c_str());
-	glUniformBlockBinding(_progId, blockId, buffer.bin);
+	glUniformBlockBinding(_progId, blockId, buffer.getBindingPoint());
+	return (true);
 }
 
 GLuint	Shader::getId() const

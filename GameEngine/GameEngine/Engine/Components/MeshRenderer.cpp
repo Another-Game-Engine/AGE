@@ -2,7 +2,12 @@
 
 #include "Core/Engine.hh"
 
-MeshRenderer::MeshRenderer(void)
+namespace Components
+{
+
+MeshRenderer::MeshRenderer(std::string const &name) :
+	AComponent(name),
+	_next(NULL)
 {
 }
 
@@ -16,13 +21,32 @@ void	MeshRenderer::start()
 
 void	MeshRenderer::update()
 {
-	GameEngine.instance()->renderer().addToRenderQueue(
+	GameEngine::instance()->renderer().addToRenderQueue(this);
 }
 
 void	MeshRenderer::stop()
 {
 }
 
-bool	MeshRenderer::setShader(std::string)
+void								MeshRenderer::setNext(SmartPointer<MeshRenderer> const &n)
 {
+	_next = n;
+}
+
+SmartPointer<MeshRenderer> const	&MeshRenderer::getNext() const
+{
+	return (_next);
+}
+
+bool	MeshRenderer::setShader(std::string const &name)
+{
+	_shader = name;
+	return (true);
+}
+
+SmartPointer<Resources::SharedMesh> const &MeshRenderer::getMesh() const
+{
+	return (_mesh);
+}
+
 }

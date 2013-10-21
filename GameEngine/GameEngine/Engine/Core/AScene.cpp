@@ -17,6 +17,10 @@ void 							AScene::recomputePositions(SmartPointer<AEntity> &father,
 
 	while (it != father->getSonsEnd())
 	{
+		AEntity::t_ComponentsList::iterator		comp = it->second->getComponentsBegin();
+
+		while (comp != it->second->getComponentsEnd())
+			comp->second->update(); // update components
 		if (father->getFlags() & AEntity::HAS_MOVED)
 			hasMoved = true;
 		if (hasMoved)
@@ -28,6 +32,7 @@ void 							AScene::recomputePositions(SmartPointer<AEntity> &father,
 
 SmartPointer<AEntity>	const	&AScene::getRoot()
 {
+	return (_root);
 }
 
 void 							AScene::setCamera(ACamera *camera)
@@ -41,18 +46,6 @@ ACamera 						*AScene::getCamera() const
 }
 
 void 							AScene::update()
-{
-	std::list<SmartPointer<Components::AComponent> >::iterator	it;
-
-	it = _components.begin();
-	while (it != _components.end())
-	{
-		(*it)->update();
-		++it;
-	}
-}
-
-void 							AScene::recomputePositions()
 {
 	recomputePositions(_root, false);
 }

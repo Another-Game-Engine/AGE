@@ -1,5 +1,5 @@
 
-#include "engine/Input.hh"
+#include "Input.hh"
 
 Input::Input() :
 	_mousePosition(0),

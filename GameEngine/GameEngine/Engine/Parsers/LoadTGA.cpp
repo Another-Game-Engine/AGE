@@ -53,7 +53,7 @@ GLbyte *loadTGA(const char *szFileName,
         return NULL;
  
     // Read in header (binary)
-    fread(&amp;tgaHeader, 18/* sizeof(TGAHEADER)*/, 1, pFile);
+    fread(&tgaHeader, 18/* sizeof(TGAHEADER)*/, 1, pFile);
  
     // Do byte swap for big vs little endian
 #ifdef __APPLE__
@@ -73,7 +73,7 @@ GLbyte *loadTGA(const char *szFileName,
  
     // Put some validity checks here. Very simply, I only understand
     // or care about 8, 24, or 32 bit targa's.
-    if(tgaHeader.bits != 8 &amp;&amp; tgaHeader.bits != 24 &amp;&amp; tgaHeader.bits != 32)
+    if(tgaHeader.bits != 8 && tgaHeader.bits != 24 && tgaHeader.bits != 32)
         return NULL;
  
     // Calculate size of image buffer

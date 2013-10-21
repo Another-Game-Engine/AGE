@@ -1,7 +1,9 @@
 #ifndef		ACOMPONENT_HH_
 #define		ACOMPONENT_HH_
 
-#include "Entities/AEntity.hh"
+#include <string>
+
+class	AEntity;
 
 namespace	Components
 {

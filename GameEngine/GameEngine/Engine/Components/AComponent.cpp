@@ -1,5 +1,7 @@
 #include "AComponent.hh"
 
+#include "Entities/AEntity.hh"
+
 namespace	Components
 {
 
@@ -12,6 +14,7 @@ AComponent::AComponent(std::string const &name) :
 
 AComponent::~AComponent(void)
 {
+	stop();
 }
 
 AComponent::ComponentType	AComponent::getType() const

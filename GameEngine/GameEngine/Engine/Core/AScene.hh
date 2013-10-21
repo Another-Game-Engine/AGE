@@ -10,7 +10,6 @@ class AScene
 {
 private:
 	SmartPointer<AEntity>								_root;
-	std::list<SmartPointer<Components::AComponent> >	_components;
 	ACamera 											*_camera;
 
 	void 				recomputePositions(SmartPointer<AEntity> &father,
@@ -27,7 +26,6 @@ public:
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate() = 0;
 	void 					update();
-	void					recomputePositions();
 };
 
 #endif

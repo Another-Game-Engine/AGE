@@ -4,27 +4,27 @@
 #include <memory.h>
 
 template<size_t S>
-UniformBuffer::UniformBuffer(GLuint bindingPoint) :
-	_bindingPoint(bindingPoint) :
+UniformBuffer<S>::UniformBuffer(GLuint bindingPoint) :
+	_bindingPoint(bindingPoint),
 	_globalSize(0)
 {
 }
 
 template<size_t S>
-UniformBuffer::~UniformBuffer(void)
+UniformBuffer<S>::~UniformBuffer(void)
 {
 	glDeleteBuffers(1, &_bufferId);
 }
 
 template<size_t S>
-void	UniformBuffer::init()
+void	UniformBuffer<S>::init()
 {
 	glGenBuffers(1, &_bufferId);
 	glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, _bufferId);
 }
 
 template<size_t S>
-void	UniformBuffer::registerUniform(std::string const &name, size_t offset, size_t size)
+UniformBuffer<S>	&UniformBuffer<S>::registerUniform(std::string const &name, size_t offset, size_t size)
 {
 	SUniformVars		var;
 
@@ -33,10 +33,11 @@ void	UniformBuffer::registerUniform(std::string const &name, size_t offset, size
 	if (offset + size > _globalSize)
 		_globalSize = offset + size;
 	_vars[name] = var;
+	return (*this);
 }
 
 template<size_t S>
-void	UniformBuffer::setUniform(std::string const &name, void *data)
+void	UniformBuffer<S>::setUniform(std::string const &name, void *data)
 {
 	SUniformVars		var;
 
@@ -45,14 +46,14 @@ void	UniformBuffer::setUniform(std::string const &name, void *data)
 }
 
 template<size_t S>
-void	UniformBuffer::flushChanges()
+void	UniformBuffer<S>::flushChanges()
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, _bufferId);
 	glBufferData(GL_UNIFORM_BUFFER, _globalSize, _buffer, GL_DYNAMIC_DRAW);
 }
 
 template<size_t S>
-GLuint	UniformBuffer::getBindingPoint() const
+GLuint	UniformBuffer<S>::getBindingPoint() const
 {
 	return (_bindingPoint);
 }

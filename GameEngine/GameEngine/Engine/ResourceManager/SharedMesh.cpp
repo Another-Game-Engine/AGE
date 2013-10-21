@@ -35,6 +35,11 @@ bool	SharedMesh::load(std::string const &path)
 	return (true);
 }
 
+void		SharedMesh::draw() const
+{
+	_buffer.draw(GL_TRIANGLES);
+}
+
 OpenGLTools::VertexBuffer	&SharedMesh::getBuffer()
 {
 	return (_buffer);

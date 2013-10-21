@@ -3,6 +3,9 @@
 #include "Parsers/Parsers.hh"
 #include "Utils/OpenGL.hh"
 
+namespace	Resources
+{
+
 Texture::Texture(void) :
 	_id(0),
 	_wrap(GL_REPEAT),
@@ -48,4 +51,6 @@ bool			Texture::load(std::string const &path)
 GLuint			Texture::getId() const
 {
 	return (_id);
+}
+
 }

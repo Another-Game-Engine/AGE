@@ -2,7 +2,7 @@
 #ifndef SINGLETON_HH_
 #define SINGLETON_HH_
 
-template<class T>
+template<class T, class Param>
 class Singleton
 {
 private:

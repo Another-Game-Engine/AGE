@@ -115,15 +115,18 @@ SmartPointer<AEntity> 	AEntity::getSon(size_t sonId)
 
 SmartPointer<AEntity> 	AEntity::getSonRec(size_t sonId)
 {
-	for (auto &e : _sons)
+	t_sonsList::iterator	e = _sons.begin();
+
+	while (e != _sons.end())
 	{
 		SmartPointer<AEntity>	res;
 
-		res = e.second->getSon(sonId);
+		res = e->second->getSon(sonId);
 		if (res != SmartPointer<AEntity>(NULL))
 			return (res);
 		else
-			e.second->getSonRec(sonId);
+			e->second->getSonRec(sonId);
+		++e;
 	}
 	return (SmartPointer<AEntity>(NULL));
 }
@@ -131,30 +134,34 @@ SmartPointer<AEntity> 	AEntity::getSonRec(size_t sonId)
 SmartPointer<AEntity::t_EntityList> 	AEntity::getSonsByFlags(size_t flags, GetFlags op)
 {
 	SmartPointer<AEntity::t_EntityList>	sons = new AEntity::t_EntityList;
+	t_sonsList::iterator				e = _sons.begin();
 
 	if (op == GetFlags::ONLY_THIS_FLAGS)
 	{
-		for (auto &e : _sons)
+		while (e != _sons.end())
 		{
-			if ((e.second->getFlags() & flags == flags) &&
-				(e.second->getFlags() | flags == flags))
-				sons->push_back(e.second);
+			if ((e->second->getFlags() & flags == flags) &&
+				(e->second->getFlags() | flags == flags))
+				sons->push_back(e->second);
+			++e;
 		}
 	}
 	else if (op == GetFlags::THIS_FLAGS)
 	{
-		for (auto &e : _sons)
+		while (e != _sons.end())
 		{
-			if ((e.second->getFlags() & flags) == flags)
-				sons->push_back(e.second);
+			if ((e->second->getFlags() & flags) == flags)
+				sons->push_back(e->second);
+			++e;
 		}
 	}
 	else if (op == GetFlags::NOT_THIS_FLAGS)
 	{
-		for (auto &e : _sons)
+		while (e != _sons.end())
 		{
-			if ((e.second->getFlags() & flags) == 0)
-				sons->push_back(e.second);
+			if ((e->second->getFlags() & flags) == 0)
+				sons->push_back(e->second);
+			++e;
 		}
 	}
 	return (sons);
@@ -185,4 +192,14 @@ AEntity::t_sonsList::iterator 		AEntity::getSonsBegin()
 AEntity::t_sonsList::iterator 		AEntity::getSonsEnd()
 {
 	return (_sons.end());
+}
+
+AEntity::t_ComponentsList::iterator 	AEntity::getComponentsBegin()
+{
+	return (_components.begin());
+}
+
+AEntity::t_ComponentsList::iterator 	AEntity::getComponentsEnd()
+{
+	return (_components.end());
 }

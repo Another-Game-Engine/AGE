@@ -46,6 +46,8 @@ public:
 	void 		stop();
 };
 
-typedef Singleton<Engine> 	GameEngine;
+#include "Context/SdlContext.hh"
+
+typedef Singleton<Engine, SdlContext> 	GameEngine;
 
 #endif

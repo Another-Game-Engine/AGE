@@ -1,6 +1,8 @@
 #ifndef		UNIFORMBUFFER_HH_
 #define		UNIFORMBUFFER_HH_
 
+#include <map>
+
 namespace	OpenGLTools
 {
 
@@ -24,9 +26,9 @@ public:
 	UniformBuffer(GLuint bindingPoint);
 	~UniformBuffer(void);
 
-	void	init();
-	void	registerUniform(std::string const &name, size_t offset, size_t size);
-	void	setUniform(std::string const &name, void *data);
+	void			init();
+	UniformBuffer	&registerUniform(std::string const &name, size_t offset, size_t size);
+	void			setUniform(std::string const &name, void *data);
 
 	void	flushChanges();
 

@@ -2,22 +2,37 @@
 #define		MESHRENDERER_HH_
 
 #include "AComponent.hh"
+#include "Utils/SmartPointer.hh"
+#include "ResourceManager/SharedMesh.hh"
 
-class MeshRenderer : AComponent
+namespace Components
+{
+
+class MeshRenderer : public AComponent
 {
 private:
-	Smartpointer<SharedMesh>	_mesh;
-	std::string					_shader;
+	SmartPointer<Resources::SharedMesh>	_mesh;
+	std::string							_shader;
+	// used for render queue
+	SmartPointer<MeshRenderer>			_next;
 
 public:
-	MeshRenderer(void);
+	MeshRenderer(std::string const &name);
 	virtual ~MeshRenderer(void);
 
 	virtual void	start();
 	virtual void	update();
 	virtual void	stop();
 
-	bool			setShader(std::string);
+	void								setNext(SmartPointer<MeshRenderer> const &n);
+	SmartPointer<MeshRenderer> const	&getNext() const;
+
+	bool				setShader(std::string const &name);
+	std::string const	&getShader() const;
+
+	SmartPointer<Resources::SharedMesh>	const &getMesh() const;
 };
+
+}
 
 #endif
