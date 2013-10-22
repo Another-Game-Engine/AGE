@@ -1,0 +1,36 @@
+#version 330
+
+layout (std140) uniform PerFrame
+{
+	mat4 vProjection;
+	mat4 vView;
+	vec3 fLightSpot;
+}
+
+layout (std140) uniform PerFrame
+{
+	mat4 vModel;
+	sampler2D fTexture;
+}
+
+layout (location = 0) in vec4 vPosition;
+layout (location = 1) in vec4 vColor;
+layout (location = 2) in vec4 vNormal;
+layout (location = 3) in vec2 vTexCoord;
+
+out vec4 fPosition;
+out vec4 fColor;
+out vec4 fNormal;
+out vec2 fTexCoord;
+
+void main(void)
+{
+  mat4 modelView = vView * vModel;
+  mat4 vectorSpace = transpose(inverse(modelView));
+
+  fColor = vColor;
+  fNormal = normalize(vectorSpace * vNormal);
+  fPosition = modelView * vPosition;
+  fTexCoord = vTexCoord;
+  gl_Position = vProjection * modelView * vPosition;
+}
