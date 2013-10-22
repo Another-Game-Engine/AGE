@@ -5,173 +5,138 @@
 
 #include "glm/glm.hpp"
 
-
-/**
- * Extract the vertex data from the current line.
- */
-static bool _parseVertex(FILE *file, std::vector<glm::vec4> &_vertices)
-{
-  glm::vec4 vertex;
-  int ret = fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-  vertex.w = 1;
-	if (ret != 3)
-		return (false);
-  _vertices.push_back(vertex);
-  return (true);
-}
-
-/**
- * Extract the normal data from the current line.
- */
-static bool _parseNormal(FILE *file, bool &_hasNormals, std::vector<glm::vec4> &_normals)
-{
-  _hasNormals = true;
-  glm::vec4 normal;
-  int ret = fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-  normal.w = 0;
-	if (ret != 3)
-		return (false);
-  _normals.push_back(normal);
-  return (true);
-}
-
-/**
- * Extract the uv coords from the current line.
- */
-static bool _parseUv(FILE *file, bool &_hasUvs, std::vector<glm::vec2> &_uvs)
-{
-  _hasUvs = true;
-  glm::vec2 uv;
-  int ret = fscanf(file, "%f %f\n", &uv.x, &uv.y);
-  if (ret != 2)
-	  return (false);
-  _uvs.push_back(uv);
-  return (true);
-}
-
-/**
- * Extract the face from the current line.
- */
-static bool _parseFace(FILE *file, bool _hasUvs, bool _hasNormals,
-						std::vector<unsigned int> &_vertexIndices,
-						std::vector<unsigned int> &_uvIndices,
-						std::vector<unsigned int> &_normalIndices)
-{
-  std::string vertex1, vertex2, vertex3;
-  unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-
-  if (_hasUvs && _hasNormals)
-  {
-    int matches = fscanf(
-      file, "%d/%d/%d %d/%d/%d %d/%d/%d\n",
-      &vertexIndex[0], &uvIndex[0], &normalIndex[0],
-      &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-      &vertexIndex[2], &uvIndex[2], &normalIndex[2]
-    );
-	if (matches != 9)
-		return (false);
-    _vertexIndices.push_back(vertexIndex[0]);
-    _vertexIndices.push_back(vertexIndex[1]);
-    _vertexIndices.push_back(vertexIndex[2]);
-    _uvIndices.push_back(uvIndex[0]);
-    _uvIndices.push_back(uvIndex[1]);
-    _uvIndices.push_back(uvIndex[2]);
-    _normalIndices.push_back(normalIndex[0]);
-    _normalIndices.push_back(normalIndex[1]);
-    _normalIndices.push_back(normalIndex[2]);
-  }
-  else if (!_hasUvs && _hasNormals)
-  {
-    int matches = fscanf(
-      file, "%d//%d %d//%d %d//%d\n",
-      &vertexIndex[0], &normalIndex[0],
-      &vertexIndex[1], &normalIndex[1],
-      &vertexIndex[2], &normalIndex[2]
-    );
-	if (matches != 6)
-		return (false);
-    _vertexIndices.push_back(vertexIndex[0]);
-    _vertexIndices.push_back(vertexIndex[1]);
-    _vertexIndices.push_back(vertexIndex[2]);
-    _normalIndices.push_back(normalIndex[0]);
-    _normalIndices.push_back(normalIndex[1]);
-    _normalIndices.push_back(normalIndex[2]);
-  }
-  return (true);
-}
+#include "Utils/File.hpp"
+#include "tiny_obj_loader.h"
 
 bool	loadObj(std::string const &path, Resources::Geometry &geometry)
 {
-  std::vector<glm::vec4> _vertices;
-  std::vector<glm::vec4> _normals;
-  std::vector<glm::vec2> _uvs;
-  std::vector<unsigned int> _vertexIndices;
-  std::vector<unsigned int> _normalIndices;
-  std::vector<unsigned int> _uvIndices;
-  bool _hasNormals;
-  bool _hasUvs;
+	File file(path);
 
-  FILE *file;
-  char type[128];
+	if (!file.exists())
+		return false;
 
-  file = fopen(path.c_str(), "r");
-  if (file == NULL)
-    return false;
-  while (fscanf(file, "%s", type) != EOF)
-  {
-    if (strcmp(type, "v") == 0)
-		if (_parseVertex(file, _vertices) == false)
-			return (false);
-    else if (strcmp(type, "vt") == 0)
-		if (_parseUv(file, _hasUvs, _uvs) == false)
-			return (false);
-    else if (strcmp(type, "vn") == 0)
-		if (_parseNormal(file, _hasNormals, _normals) == false)
-			return (false);
-    else if (strcmp(type, "f") == 0)
-		if (_parseFace(file, _hasUvs, _hasNormals, _vertexIndices, _uvIndices, _normalIndices) == false)
-			return (false);
-    else // skip this line.
-    {
-      char buf[1024];
-      fgets(buf, 1024, file);
-    }
-  }
+    std::string inputfile = file.getFullName();
+    std::vector<tinyobj::shape_t> shapes;
+    std::string err = tinyobj::LoadObj(shapes, inputfile.c_str());
+	assert(err.empty() && err.c_str());
 
-  unsigned int vertexIndex;
-  unsigned int uvIndex;
-  unsigned int normalIndex;
-
-  glm::vec4 vertex;
-  glm::vec4 normal;
-  glm::vec2 uv;
-
-  geometry.normals.clear();
-  geometry.vertices.clear();
-  geometry.colors.clear();
-  geometry.uvs.clear();
-  // For each vertex of each triangle
-  for (unsigned int i = 0; i < _vertexIndices.size(); ++i)
-  {
-
-    // Get the indices of its attributes
-    vertexIndex = _vertexIndices[i];
-    normalIndex = _normalIndices[i];
-    if (_hasUvs)
-      uvIndex = _uvIndices[i];
-
-    // Get the attributes thanks to the index
-    vertex = _vertices[ vertexIndex-1 ];
-    normal = _normals[ normalIndex-1 ];
-    if (_hasUvs)
-      uv = _uvs[ uvIndex-1 ];
-
-    // Put the attributes in buffers
-    geometry.vertices.push_back(vertex);
-    geometry.uvs.push_back(_hasUvs ? uv : glm::vec2());
-    geometry.normals.push_back(normal);
-    geometry.indices.push_back(i);
-    geometry.colors.push_back(glm::vec4(1, 1, 1, 1));
-  }
-  return true;
+	// just on mesh for a single .obj for the moment
+    for (size_t i = 0; i < 1; i++)
+	{
+		  for (size_t v = 0; v < shapes[i].mesh.indices.size(); v++)
+		  {
+			  if (shapes[i].mesh.positions.size() > 0)
+				  geometry.vertices.push_back(glm::vec4(shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 0],
+				  shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 1],
+				  shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 2], 0));
+			  if (shapes[i].mesh.normals.size() > 0)
+				  geometry.normals.push_back(glm::vec4(shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 0],
+				  shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 1],
+				  shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 2], 0));
+			  if (shapes[i].mesh.texcoords.size() > 0)
+				  geometry.uvs.push_back(glm::vec2(shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 0],
+				  shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 1]));
+			  else
+				  geometry.uvs.push_back(glm::vec2());
+			  geometry.indices.push_back(v);
+			  geometry.colors.push_back(glm::vec4(1, 1, 1, 1));
+		  }
+	}
+	return true;
 }
+
+  //virtual ObjModelMedia			*load(const File &file, bool force = false)
+  //{
+
+  //  GLuint				vertexBuffer;
+
+  //  glGenBuffers(1, &vertexBuffer);
+  //  glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+  //  glBufferData(GL_ARRAY_BUFFER, resVertices.size() * sizeof(glm::vec3), &resVertices[0], GL_STATIC_DRAW);
+  //  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  //  GLuint				uvBuffer;
+
+  //  glGenBuffers(1, &uvBuffer);
+  //  glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
+  //  glBufferData(GL_ARRAY_BUFFER, resUvs.size() * sizeof(glm::vec2), &resUvs[0], GL_STATIC_DRAW);
+  //  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  //  return new ObjModelMedia(vertexBuffer, uvBuffer, resVertices.size(), file.getFileName(), force);
+  //}
+
+
+//bool	loadObj(std::string const &path, Resources::Geometry &geometry)
+//{
+//  std::vector<glm::vec4> _vertices;
+//  std::vector<glm::vec4> _normals;
+//  std::vector<glm::vec2> _uvs;
+//  std::vector<unsigned int> _vertexIndices;
+//  std::vector<unsigned int> _normalIndices;
+//  std::vector<unsigned int> _uvIndices;
+//  bool _hasNormals;
+//  bool _hasUvs;
+//
+//  FILE *file;
+//  char type[128];
+//
+//  file = fopen(path.c_str(), "r");
+//  if (file == NULL)
+//    return false;
+//  while (fscanf(file, "%s", type) != EOF)
+//  {
+//    if (strcmp(type, "v") == 0)
+//		if (_parseVertex(file, _vertices) == false)
+//			return (false);
+//    else if (strcmp(type, "vt") == 0)
+//		if (_parseUv(file, _hasUvs, _uvs) == false)
+//			return (false);
+//    else if (strcmp(type, "vn") == 0)
+//		if (_parseNormal(file, _hasNormals, _normals) == false)
+//			return (false);
+//    else if (strcmp(type, "f") == 0)
+//		if (_parseFace(file, _hasUvs, _hasNormals, _vertexIndices, _uvIndices, _normalIndices) == false)
+//			return (false);
+//    else // skip this line.
+//    {
+//      char buf[1024];
+//      fgets(buf, 1024, file);
+//    }
+//  }
+//
+//  unsigned int vertexIndex;
+//  unsigned int uvIndex;
+//  unsigned int normalIndex;
+//
+//  glm::vec4 vertex;
+//  glm::vec4 normal;
+//  glm::vec2 uv;
+//
+//  geometry.normals.clear();
+//  geometry.vertices.clear();
+//  geometry.colors.clear();
+//  geometry.uvs.clear();
+//  // For each vertex of each triangle
+//  for (unsigned int i = 0; i < _vertexIndices.size(); ++i)
+//  {
+//
+//    // Get the indices of its attributes
+//    vertexIndex = _vertexIndices[i];
+//    normalIndex = _normalIndices[i];
+//    if (_hasUvs)
+//      uvIndex = _uvIndices[i];
+//
+//    // Get the attributes thanks to the index
+//    vertex = _vertices[ vertexIndex-1 ];
+//    normal = _normals[ normalIndex-1 ];
+//    if (_hasUvs)
+//      uv = _uvs[ uvIndex-1 ];
+//
+//    // Put the attributes in buffers
+//    geometry.vertices.push_back(vertex);
+//    geometry.uvs.push_back(_hasUvs ? uv : glm::vec2());
+//    geometry.normals.push_back(normal);
+//    geometry.indices.push_back(i);
+//    geometry.colors.push_back(glm::vec4(1, 1, 1, 1));
+//  }
+//  return true;
+//}
