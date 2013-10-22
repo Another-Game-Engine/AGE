@@ -16,9 +16,8 @@ DemoScene::~DemoScene(void)
 bool 			DemoScene::userStart()
 {
 	SmartPointer<Entity>		e = new Entity;
-	AssetsManager::instance()->addResource("model:ball", new Resources::SharedMesh(), "ball.obj");
+	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "ball.obj");
 	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer", "model:ball");
-
 	OpenGLTools::UniformBuffer<>	&u = GameEngine::instance()->renderer().addUniform("PerFrame");
 	
 	u.init();

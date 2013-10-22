@@ -31,6 +31,4 @@ public:
 
 }
 
-typedef	Singleton<Resources::ResourceManager>	AssetsManager;
-
 #endif

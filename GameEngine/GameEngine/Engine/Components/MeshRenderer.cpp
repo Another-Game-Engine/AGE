@@ -7,7 +7,7 @@ namespace Components
 
 MeshRenderer::MeshRenderer(std::string const &name, std::string const &resource) :
 	AComponent(name),
-	_mesh(AssetsManager::instance()->getResource(resource)),
+	_mesh(GameEngine::instance()->resources().getResource(resource)),
 	_next(NULL)
 {
 }
