@@ -1,6 +1,7 @@
 # Blender v2.68 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib ball.mtl
+# mtllib missing
+# mtllib ball.mtl
 o Sphere
 v -0.286304 0.951101 -0.028199
 v -0.287216 0.951114 -0.014122

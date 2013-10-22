@@ -18,7 +18,7 @@ bool	loadObj(std::string const &path, Resources::Geometry &geometry)
     std::string inputfile = file.getFullName();
     std::vector<tinyobj::shape_t> shapes;
     std::string err = tinyobj::LoadObj(shapes, inputfile.c_str());
-	assert(err.empty() && err.c_str());
+	assert(err.empty());
 
 	// just on mesh for a single .obj for the moment
     for (size_t i = 0; i < 1; i++)

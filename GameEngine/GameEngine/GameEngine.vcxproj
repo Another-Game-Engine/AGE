@@ -91,6 +91,7 @@
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="TinyThread\tinythread.cpp" />
+    <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
@@ -222,6 +223,7 @@
     <ClInclude Include="glm\virtrev\xstream.hpp" />
     <ClInclude Include="TinyThread\fast_mutex.h" />
     <ClInclude Include="TinyThread\tinythread.h" />
+    <ClInclude Include="Vendors\shared\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\DemoScene.hh" />
