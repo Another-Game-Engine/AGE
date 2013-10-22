@@ -16,8 +16,12 @@ private:
 	// used for render queue
 	SmartPointer<MeshRenderer>			_next;
 
+	MeshRenderer();
+	MeshRenderer(MeshRenderer const &);
+	MeshRenderer	&operator=(MeshRenderer const &);
+
 public:
-	MeshRenderer(std::string const &name);
+	MeshRenderer(std::string const &name, std::string const &resource);
 	virtual ~MeshRenderer(void);
 
 	virtual void	start();

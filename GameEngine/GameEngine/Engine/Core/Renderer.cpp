@@ -112,4 +112,5 @@ void		Renderer::render()
 		}
 		++it;
 	}
+	_queues.clear();
 }

@@ -5,6 +5,7 @@
 
 int			main(int ac, char **av)
 {
+	GameEngine::instance()->setContext(new SdlContext);
 	GameEngine::instance()->addScene(new DemoScene, "demo");
 	GameEngine::instance()->bindScene("demo");
 	if (GameEngine::instance()->start() == false)

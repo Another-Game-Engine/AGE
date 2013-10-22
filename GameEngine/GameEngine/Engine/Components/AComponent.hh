@@ -22,6 +22,8 @@ private:
 	const std::string	_name;
 	Entity				*_father;
 
+	AComponent();
+
 protected:
 	const ComponentType	_type;
 

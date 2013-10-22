@@ -24,12 +24,14 @@ private:
 	AScene							*_sceneBinded;
 	std::map<std::string, AScene*>	_scenes;
 
-	Engine();
-	Engine		&operator=(Engine const &oth);
+	Engine(Engine const &);
+	Engine		&operator=(Engine const &);
 
 public:
-	Engine(IRenderContext *ctx);
+	Engine();
 	~Engine();
+
+	void		setContext(IRenderContext *ctx);
 
 	void		addScene(AScene *scene, std::string const &name);
 	void		removeScene(std::string const &name);
@@ -48,6 +50,6 @@ public:
 
 #include "Context/SdlContext.hh"
 
-typedef Singleton<Engine, SdlContext> 	GameEngine;
+typedef Singleton<Engine> 	GameEngine;
 
 #endif

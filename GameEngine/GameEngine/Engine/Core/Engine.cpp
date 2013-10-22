@@ -4,15 +4,23 @@
 #include "Utils/OpenGL.hh"
 #include <iostream>
 
-Engine::Engine(IRenderContext *ctx) :
-	_context(ctx),
+Engine::Engine() :
+	_context(NULL),
 	_sceneBinded(NULL)
 {
 }
 
 Engine::~Engine()
 {
-	delete _context;
+	if (_context != NULL)
+		delete _context;
+}
+
+void			Engine::setContext(IRenderContext *ctx)
+{
+	if (_context != NULL)
+		delete _context;
+	_context = ctx;
 }
 
 void			Engine::addScene(AScene *scene, std::string const &name)
@@ -52,6 +60,7 @@ Renderer		&Engine::renderer()
 
 bool 		Engine::start()
 {
+	assert(_context != NULL && "Context must be initialized.");
 	if (!_context->start(1280, 720, "super!"))
 		return (false);
  	if (glewInit() != GLEW_OK)
@@ -70,6 +79,7 @@ bool 		Engine::start()
 
 bool 		Engine::update()
 {
+	assert(_context != NULL && "Context must be initialized.");
 	_timer.update();
 	_context->updateEvents(_inputs);
 	_sceneBinded->update();
@@ -78,11 +88,13 @@ bool 		Engine::update()
 
 void 		Engine::draw()
 {
+	assert(_context != NULL && "Context must be initialized.");
 	_renderer.render();
 	_context->flush();
 }
 
 void 		Engine::stop()
 {
+	assert(_context != NULL && "Context must be initialized.");
 	_context->stop();
 }
