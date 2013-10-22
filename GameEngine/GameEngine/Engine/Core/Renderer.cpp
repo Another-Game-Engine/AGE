@@ -30,12 +30,19 @@ void		Renderer::addToRenderQueue(SmartPointer<Components::MeshRenderer> const &o
 OpenGLTools::Shader		&Renderer::addShader(std::string const &name, std::string const &vp, std::string const &fp)
 {
 	std::map<std::string, OpenGLTools::Shader*>::iterator	it;
+   	OpenGLTools::Shader* shader;
 
 	if ((it = _shaders.find(name)) == _shaders.end())
-		_shaders[name] = new OpenGLTools::Shader;
+	{
+		shader = new OpenGLTools::Shader;
+		_shaders[name] = shader;
+	}
 	else
+	{
 		it->second->init(vp, fp);
-	return (*it->second);
+		shader = it->second;
+	}
+	return *shader;
 }
 
 bool		Renderer::removeShader(std::string const &name)
