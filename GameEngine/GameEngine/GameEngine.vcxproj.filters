@@ -467,6 +467,9 @@
     <ClInclude Include="Engine\ResourceManager\AResource.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Utils\File.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glm\CMakeFiles\CMakeDetermineCompilerABI_C.bin">
