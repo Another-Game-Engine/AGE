@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="Demo\DemoScene.cpp" />
     <ClCompile Include="Engine\Components\AComponent.cpp" />
+    <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
     <ClCompile Include="Engine\Parsers\LoadOBJ.cpp" />
@@ -228,6 +229,7 @@
   <ItemGroup>
     <None Include="Demo\DemoScene.hh" />
     <None Include="Engine\Components\AComponent.hh" />
+    <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
     <None Include="Engine\Core\ACamera.hh" />

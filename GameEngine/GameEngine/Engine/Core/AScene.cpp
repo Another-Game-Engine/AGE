@@ -22,7 +22,7 @@ void 							AScene::recomputePositions(SmartPointer<Entity> &father,
 
 		while (comp != it->second->getComponentsEnd())
 		{
-//			comp->second->update(); // update components
+			comp->second->update(); // update components
 			++comp;
 		}
 		if (father->getFlags() & Entity::HAS_MOVED)
