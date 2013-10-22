@@ -33,15 +33,6 @@
     <ClCompile Include="Engine\EngineMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\OpenGL\Attribute.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OpenGL\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TinyThread\tinythread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -84,11 +75,20 @@
     <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Components\EmptyComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OpenGL\Attribute.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OpenGL\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\OpenGL\UniformBuffer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Utils\Singleton.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -476,6 +476,9 @@
     <ClInclude Include="Vendors\shared\tiny_obj_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\OpenGL\UniformBuffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glm\CMakeFiles\CMakeDetermineCompilerABI_C.bin">
@@ -791,10 +794,6 @@
     <None Include="Engine\Utils\Singleton.hh" />
     <None Include="Engine\Utils\SmartPointer.hh" />
     <None Include="Engine\Utils\Utils.hh" />
-    <None Include="Engine\OpenGL\Attribute.hh" />
-    <None Include="Engine\OpenGL\Shader.hh" />
-    <None Include="Engine\OpenGL\UniformBuffer.hh" />
-    <None Include="Engine\OpenGL\VertexBuffer.hh" />
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />
@@ -811,5 +810,10 @@
     <None Include="Engine\Core\ACamera.hh" />
     <None Include="Demo\DemoScene.hh" />
     <None Include="Engine\Entities\Entity.hh" />
+    <None Include="Engine\Components\EmptyComponent.hh" />
+    <None Include="Engine\OpenGL\Attribute.hh" />
+    <None Include="Engine\OpenGL\Shader.hh" />
+    <None Include="Engine\OpenGL\UniformBuffer.hh" />
+    <None Include="Engine\OpenGL\VertexBuffer.hh" />
   </ItemGroup>
 </Project>

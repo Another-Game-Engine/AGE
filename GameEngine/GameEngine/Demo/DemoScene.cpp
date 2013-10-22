@@ -2,6 +2,7 @@
 #include "DemoScene.hh"
 
 #include "ResourceManager/SharedMesh.hh"
+#include "Components/EmptyComponent.hh"
 
 #include <SDL\SDL.h>
 
@@ -17,7 +18,12 @@ bool 			DemoScene::userStart()
 {
 	SmartPointer<Entity>		e = new Entity;
 	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
-	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer", "model:ball");
+
+
+		SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer", "model:ball");
+//		SmartPointer<Components::EmptyComponent> r = new Components::EmptyComponent();
+
+
 	OpenGLTools::UniformBuffer<>	&u = GameEngine::instance()->renderer().addUniform("PerFrame");
 	
 	u.init();
