@@ -1,5 +1,6 @@
 #include "Renderer.hh"
 
+#include "Core/Engine.hh"
 
 Renderer::Renderer(void)
 {
@@ -85,6 +86,15 @@ bool		Renderer::removeUniform(std::string const &name)
 	return (true);
 }
 
+OpenGLTools::UniformBuffer<>	*Renderer::getUniform(std::string const &name)
+{
+	std::map<std::string, OpenGLTools::UniformBuffer<>*>::iterator	it;
+
+	if ((it = _uniforms.find(name)) == _uniforms.end())
+		return (NULL);
+	return (it->second);
+}
+
 bool		Renderer::bindShaderToUniform(std::string const &shader,
 										std::string const &blockName,
 										std::string const &uniform)
@@ -103,6 +113,17 @@ void		Renderer::render()
 {
 	std::map<std::string, SmartPointer<Components::MeshRenderer> >::iterator	it;
 
+	// Set les uniforms du block PerFrame
+	float		light[] = {0.0f, 5.0f, 0.0f};
+	void		*data;
+
+	data = (void*)&GameEngine::instance()->getCurrentScene()->getCamera()->getProjection();
+	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("vProjection", data);
+	data = (void*)&GameEngine::instance()->getCurrentScene()->getCamera()->getTransform();
+	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("vView", data);
+	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("fLightSpot", light);
+	GameEngine::instance()->renderer().getUniform("PerFrame")->flushChanges();
+
 	it = _queues.begin();
 	while (it != _queues.end()) // for each shader
 	{
@@ -114,6 +135,11 @@ void		Renderer::render()
 		currentShader->use();
 		while (obj != SmartPointer<Components::MeshRenderer>(NULL)) // for each object
 		{
+			// Set les uniforms du block PerModel
+			data = (void*)&obj->getFather()->getGlobalTransform();
+			GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("vModel", data);
+			GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
+			
 			obj->getMesh()->draw();
 			obj = obj->getNext();
 		}

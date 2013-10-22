@@ -28,6 +28,8 @@ bool 			DemoScene::userStart()
 	u.registerUniform("vModel", 0, 16 * sizeof(float));
 	u.registerUniform("fTexture", 16 * sizeof(float), 1 * sizeof(GLuint));
 	GameEngine::instance()->renderer().addShader("basicLight", "shaders/light.vp", "shaders/light.fp");
+	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
+	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
 	r->setShader("basicLight");
 	e->addComponent(r);
 	getRoot()->addSon(e);

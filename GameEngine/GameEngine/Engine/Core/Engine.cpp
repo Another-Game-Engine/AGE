@@ -38,6 +38,11 @@ void			Engine::bindScene(std::string const &name)
 	_sceneBinded = _scenes[name];
 }
 
+AScene			*Engine::getCurrentScene() const
+{
+	return (_sceneBinded);
+}
+
 Input			&Engine::inputs()
 {
 	return (_inputs);

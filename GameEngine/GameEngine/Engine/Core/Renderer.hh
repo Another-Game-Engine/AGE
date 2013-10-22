@@ -31,6 +31,8 @@ public:
 	// Uniform buffers
 	OpenGLTools::UniformBuffer<>	&addUniform(std::string const &name);
 	bool							removeUniform(std::string const &name);
+	OpenGLTools::UniformBuffer<>	*getUniform(std::string const &name);
+
 	// Bind shader to uniform
 	bool							bindShaderToUniform(std::string const &shader,
 														std::string const &blockName,

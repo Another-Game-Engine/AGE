@@ -36,6 +36,7 @@ public:
 	void		addScene(AScene *scene, std::string const &name);
 	void		removeScene(std::string const &name);
 	void		bindScene(std::string const &name);
+	AScene		*getCurrentScene() const;
 
 	Input						&inputs();
 	Timer const					&timer();
