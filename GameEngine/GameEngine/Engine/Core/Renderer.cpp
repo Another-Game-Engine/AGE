@@ -34,6 +34,7 @@ OpenGLTools::Shader		&Renderer::addShader(std::string const &name, std::string c
 	if ((it = _shaders.find(name)) == _shaders.end())
 	{
 		shader = new OpenGLTools::Shader;
+		shader->init(vp, fp);
 		_shaders[name] = shader;
 	}
 	else

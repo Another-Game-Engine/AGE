@@ -5,13 +5,14 @@ layout (std140) uniform PerFrame
 	mat4 vProjection;
 	mat4 vView;
 	vec3 fLightSpot;
-}
+};
 
-layout (std140) uniform PerFrame
+layout (std140) uniform PerModel
 {
 	mat4 vModel;
-	sampler2D fTexture;
-}
+};
+
+uniform	sampler2D fTexture;
 
 in vec4 fPosition;
 in vec4 fColor;
@@ -37,7 +38,7 @@ void main(void)
    * entre le vecteur de lumiére et la normal du fragment.
    */
   float lamberTerm = clamp(dot(fNormal.xyz, vectorLight.xyz), 0.0, 1.0);
-  vec4 pxlColor = fColor; /** texture2D(fTexture, fTexCoord);/*
+  vec4 pxlColor = fColor * texture2D(fTexture, fTexCoord);
   vec4 ambiant = pxlColor * vec4(0.01, 0.01, 0.01, 1.0);
   vec4 diffuse = pxlColor * lamberTerm * 7;
   FragColor = max(ambiant, diffuse);
