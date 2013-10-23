@@ -26,10 +26,13 @@ bool	loadObj(std::string const &path, Resources::Geometry &geometry)
     for (size_t i = 0; i < 1; i++)
 	{
 		for (size_t v = 0; v < shapes[i].mesh.positions.size(); v += 3)
+		{
 			geometry.vertices.push_back(glm::vec4(shapes[i].mesh.positions[v],
 												  shapes[i].mesh.positions[v + 1],
 												  shapes[i].mesh.positions[v + 2],
 												  1));
+			geometry.colors.push_back(glm::vec4(1));
+		}
 		for (size_t v = 0; v < shapes[i].mesh.normals.size(); v += 3)
 			geometry.normals.push_back(glm::vec4(shapes[i].mesh.normals[v],
 												 shapes[i].mesh.normals[v + 1],
