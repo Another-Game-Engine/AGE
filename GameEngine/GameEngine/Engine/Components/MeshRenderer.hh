@@ -13,8 +13,6 @@ class MeshRenderer : public AComponent
 private:
 	SmartPointer<Resources::SharedMesh>	_mesh;
 	std::string							_shader;
-	// used for render queue
-	SmartPointer<MeshRenderer>			_next;
 
 	MeshRenderer();
 	MeshRenderer(MeshRenderer const &);
@@ -27,9 +25,6 @@ public:
 	virtual void	start();
 	virtual void	update();
 	virtual void	stop();
-
-	void								setNext(SmartPointer<MeshRenderer> const &n);
-	SmartPointer<MeshRenderer> const	&getNext() const;
 
 	bool				setShader(std::string const &name);
 	std::string const	&getShader() const;

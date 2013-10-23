@@ -7,8 +7,7 @@ namespace Components
 
 MeshRenderer::MeshRenderer(std::string const &name, std::string const &resource) :
 	AComponent(name),
-	_mesh(GameEngine::instance()->resources().getResource(resource)),
-	_next(NULL)
+	_mesh(GameEngine::instance()->resources().getResource(resource))
 {
 }
 
@@ -27,16 +26,6 @@ void	MeshRenderer::update()
 
 void	MeshRenderer::stop()
 {
-}
-
-void								MeshRenderer::setNext(SmartPointer<MeshRenderer> const &n)
-{
-	_next = n;
-}
-
-SmartPointer<MeshRenderer> const	&MeshRenderer::getNext() const
-{
-	return (_next);
 }
 
 bool	MeshRenderer::setShader(std::string const &name)
