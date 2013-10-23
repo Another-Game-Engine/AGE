@@ -17,9 +17,9 @@ namespace Components
 		EmptyComponent();
 		virtual ~EmptyComponent(void);
 
-		virtual void	start() final;
-		virtual void	update() final;
-		virtual void	stop() final;
+		virtual void	start();
+		virtual void	update();
+		virtual void	stop();
 	};
 
 }

@@ -16,7 +16,10 @@
 namespace OpenGLTools
 {
 
-Shader::Shader(void)
+Shader::Shader(void) :
+	_progId(0),
+	_vertexId(0),
+	_fragId(0)
 {
 }
 

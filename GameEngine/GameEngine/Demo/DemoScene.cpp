@@ -1,5 +1,6 @@
 #include "Core/Engine.hh"
 #include "DemoScene.hh"
+#include "BasicCam.hh"
 
 #include "ResourceManager/SharedMesh.hh"
 #include "Components/EmptyComponent.hh"
@@ -26,7 +27,6 @@ bool 			DemoScene::userStart()
 
 	OpenGLTools::UniformBuffer<>	&u = GameEngine::instance()->renderer().addUniform("PerFrame");
 	
-	u.init();
 	u.registerUniform("vProjection", 0, 16 * sizeof(float));
 	u.registerUniform("vView", 16 * sizeof(float), 16 * sizeof(float));
 	u.registerUniform("fLightSpot", 2 * (16 * sizeof(float)), 3 * sizeof(float));
@@ -39,6 +39,9 @@ bool 			DemoScene::userStart()
 	r->setShader("basicLight");
 	e->addComponent(r);
 	getRoot()->addSon(e);
+
+	setCamera(new BasicCam);
+
 	return (true);
 }
 
