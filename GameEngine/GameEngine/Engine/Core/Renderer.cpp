@@ -14,9 +14,9 @@ Renderer::~Renderer(void)
 void		Renderer::addToRenderQueue(SmartPointer<Components::MeshRenderer> const &obj)
 {
 	std::string		name = obj->getShader();
-	std::map<std::string, SmartPointer<Components::MeshRenderer> >::iterator	it;
+	auto &it = _queues.find(name);
 
-	if ((it = _queues.find(name)) == _queues.end())
+	if (it == std::end(_queues))
 	{
 		obj->setNext(NULL);
 		_queues[obj->getShader()] = obj;
@@ -111,8 +111,6 @@ bool		Renderer::bindShaderToUniform(std::string const &shader,
 
 void		Renderer::render()
 {
-	std::map<std::string, SmartPointer<Components::MeshRenderer> >::iterator	it;
-
 	// Set les uniforms du block PerFrame
 	float		light[] = {0.0f, 5.0f, 0.0f};
 	void		*data;
@@ -124,8 +122,8 @@ void		Renderer::render()
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("fLightSpot", light);
 	GameEngine::instance()->renderer().getUniform("PerFrame")->flushChanges();
 
-	it = _queues.begin();
-	while (it != _queues.end()) // for each shader
+	auto &it = std::begin(_queues);
+	while (it != std::end(_queues)) // for each shader
 	{
 		OpenGLTools::Shader		*currentShader = getShader(it->first);
 		SmartPointer<Components::MeshRenderer>	obj = it->second;

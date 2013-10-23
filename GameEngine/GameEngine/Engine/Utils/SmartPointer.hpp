@@ -155,4 +155,12 @@ INLINE bool 			SmartPointer<T>::operator!=(T *oth) const
 	return (_reference->pointer != oth);	
 }
 
+template<class T>
+INLINE T 			*SmartPointer<T>::get() const
+{
+	if (!_reference)
+		return nullptr;
+	return _reference->pointer;
+}
+
 #endif
