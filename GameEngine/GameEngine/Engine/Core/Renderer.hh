@@ -15,15 +15,19 @@ private:
 		OpenGLTools::Shader*>						_shaders;
 	std::map<std::string,
 		OpenGLTools::UniformBuffer<>*>				_uniforms;
-	std::map<std::string,
-		SmartPointer<Components::MeshRenderer> >	_queues; // Queues sorted by materials
+	std::multimap<std::string,
+		Components::MeshRenderer* >	_queues; // Queues sorted by materials
+
+typedef std::multimap<std::string,
+		Components::MeshRenderer* > queueType;
+typedef queueType::iterator queueIt;
 
 public:
 	Renderer(void);
 	~Renderer(void);
 
 	// Add an object that contain a render component to the render queue queueIdx
-	void					addToRenderQueue(SmartPointer<Components::MeshRenderer> const &obj); // queueIdx between 0 and 3
+	void					addToRenderQueue(Components::MeshRenderer *obj); // queueIdx between 0 and 3
 	// Shaders
 	OpenGLTools::Shader		&addShader(std::string const &name, std::string const &vp, std::string const &fp);
 	bool					removeShader(std::string const &name);
