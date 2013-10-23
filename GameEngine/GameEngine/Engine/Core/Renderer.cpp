@@ -2,6 +2,8 @@
 
 #include "Core/Engine.hh"
 
+#include "glm/gtc/type_ptr.hpp"
+
 Renderer::Renderer(void)
 {
 }
@@ -114,9 +116,9 @@ void		Renderer::render()
 	float		light[] = {0.0f, 5.0f, 0.0f};
 	void		*data;
 
-	data = (void*)&GameEngine::instance()->getCurrentScene()->getCamera()->getProjection();
+	data = (void*)glm::value_ptr(GameEngine::instance()->getCurrentScene()->getCamera()->getProjection());
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("vProjection", data);
-	data = (void*)&GameEngine::instance()->getCurrentScene()->getCamera()->getTransform();
+	data = (void*)glm::value_ptr(GameEngine::instance()->getCurrentScene()->getCamera()->getTransform());
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("vView", data);
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("fLightSpot", light);
 	GameEngine::instance()->renderer().getUniform("PerFrame")->flushChanges();
@@ -136,7 +138,7 @@ void		Renderer::render()
         for (sIt = keyRange.first;  sIt != keyRange.second;  ++sIt)
         {
 			// Set les uniforms du block PerModel
-			data = (void*)&(sIt->second->getFather()->getGlobalTransform());
+			data = (void*)glm::value_ptr(sIt->second->getFather()->getGlobalTransform());
 			GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("vModel", data);
 			GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
 			sIt->second->getMesh()->draw();

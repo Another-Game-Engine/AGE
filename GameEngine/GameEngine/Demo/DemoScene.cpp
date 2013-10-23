@@ -25,14 +25,15 @@ bool 			DemoScene::userStart()
 //		SmartPointer<Components::EmptyComponent> r = new Components::EmptyComponent();
 
 
-	OpenGLTools::UniformBuffer<>	&u = GameEngine::instance()->renderer().addUniform("PerFrame");
-	
-	u.registerUniform("vProjection", 0, 16 * sizeof(float));
-	u.registerUniform("vView", 16 * sizeof(float), 16 * sizeof(float));
-	u.registerUniform("fLightSpot", 2 * (16 * sizeof(float)), 3 * sizeof(float));
-	u = GameEngine::instance()->renderer().addUniform("PerModel");
-	u.registerUniform("vModel", 0, 16 * sizeof(float));
-	u.registerUniform("fTexture", 16 * sizeof(float), 1 * sizeof(GLuint));
+	GameEngine::instance()->renderer().addUniform("PerFrame")
+		.registerUniform("vProjection", 0, 16 * sizeof(float))
+		.registerUniform("vView", 16 * sizeof(float), 16 * sizeof(float))
+		.registerUniform("fLightSpot", 2 * (16 * sizeof(float)), 3 * sizeof(float));
+
+	GameEngine::instance()->renderer().addUniform("PerModel")
+		.registerUniform("vModel", 0, 16 * sizeof(float))
+		.registerUniform("fTexture", 16 * sizeof(float), 1 * sizeof(GLuint));
+
 	GameEngine::instance()->renderer().addShader("basicLight", "shaders/light.vp", "shaders/light.fp");
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
