@@ -38,6 +38,7 @@ public:
 	INLINE bool 			operator!=(SmartPointer const &oth) const;
 	INLINE bool 			operator==(T *oth) const;
 	INLINE bool 			operator!=(T *oth) const;
+	INLINE T                *get() const;
 };
 
 #include "SmartPointer.hpp"
