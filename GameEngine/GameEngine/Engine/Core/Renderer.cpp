@@ -141,28 +141,5 @@ void		Renderer::render()
 			sIt->second->getMesh()->draw();
         }
     }
-
-
-	//auto &it = std::begin(_queues);
-	//while (it != std::end(_queues)) // for each shader
-	//{
-	//	OpenGLTools::Shader		*currentShader = getShader(it->first);
-	//	SmartPointer<Components::MeshRenderer>	obj = it->second;
-
-	//	// Set the uniforms values for the shader
-	//	assert(currentShader != NULL && "Shader binded that does not exist");
-	//	currentShader->use();
-	//	while (obj != SmartPointer<Components::MeshRenderer>(NULL)) // for each object
-	//	{
-	//		// Set les uniforms du block PerModel
-	//		data = (void*)&obj->getFather()->getGlobalTransform();
-	//		GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("vModel", data);
-	//		GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
-	//		
-	//		obj->getMesh()->draw();
-	//		obj = obj->getNext();
-	//	}
-	//	++it;
-	//}
 	_queues.clear();
 }
