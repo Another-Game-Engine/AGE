@@ -15,6 +15,8 @@ bool	loadObj(std::string const &path, Resources::Geometry &geometry)
 	if (!file.exists())
 		return false;
 
+	// using tyny obj : https://github.com/syoyo/tinyobjloader
+
     std::string inputfile = file.getFullName();
     std::vector<tinyobj::shape_t> shapes;
     std::string err = tinyobj::LoadObj(shapes, inputfile.c_str());
@@ -23,7 +25,7 @@ bool	loadObj(std::string const &path, Resources::Geometry &geometry)
 	// just on mesh for a single .obj for the moment
     for (size_t i = 0; i < 1; i++)
 	{
-		  for (size_t v = 0; v < shapes[i].mesh.indices.size(); v++)
+		  for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++)
 		  {
 			  if (shapes[i].mesh.positions.size() > 0)
 				  geometry.vertices.push_back(glm::vec4(shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 0],
