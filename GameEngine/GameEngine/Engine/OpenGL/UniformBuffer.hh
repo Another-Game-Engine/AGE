@@ -14,6 +14,22 @@ private:
 	{
 		GLuint	size;
 		GLuint	offset;
+
+		SUniformVars()
+		{
+		}
+
+		SUniformVars(SUniformVars const &oth)
+		{
+			*this = oth;
+		}
+
+		SUniformVars	&operator=(SUniformVars const &oth)
+		{
+			size = oth.size;
+			offset = oth.offset;
+			return (*this);
+		}
 	};
 
 	GLuint									_bindingPoint;

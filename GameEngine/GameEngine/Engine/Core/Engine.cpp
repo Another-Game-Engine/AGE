@@ -75,7 +75,7 @@ bool 		Engine::start()
  	}
 	if (!_sceneBinded || !_sceneBinded->userStart())
 		return (false);
-  	glClearColor(0, 0, 0, 1);
+  	glClearColor(0.1, 0.1, 0.1, 1);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -93,6 +93,7 @@ bool 		Engine::update()
 
 void 		Engine::draw()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	assert(_context != NULL && "Context must be initialized.");
 	_renderer.render();
 	_context->flush();

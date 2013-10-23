@@ -41,6 +41,6 @@ void main(void)
   vec4 pxlColor = fColor * texture2D(fTexture, fTexCoord);
   vec4 ambiant = pxlColor * vec4(0.01, 0.01, 0.01, 1.0);
   vec4 diffuse = pxlColor * lamberTerm * 7;
-  FragColor = max(ambiant, diffuse);
-//	FragColor = vec4(lamberTerm);
+//  FragColor = max(ambiant, diffuse);
+	FragColor = vec4(1, 0, 0, 1);
 }
