@@ -5,13 +5,15 @@
 
 int			main(int ac, char **av)
 {
-	GameEngine::instance()->setContext(new SdlContext);
-	GameEngine::instance()->addScene(new DemoScene, "demo");
-	GameEngine::instance()->bindScene("demo");
-	if (GameEngine::instance()->start() == false)
+	Engine	&e = *GameEngine::instance();
+
+	e.setContext(new SdlContext);
+	e.addScene(new DemoScene, "demo");
+	e.bindScene("demo");
+	if (e.start() == false)
 		return (EXIT_FAILURE);
-	while (GameEngine::instance()->update())
-		GameEngine::instance()->draw();
-	GameEngine::instance()->stop();
+	while (e.update())
+		e.draw();
+	e.stop();
 	return (EXIT_SUCCESS);
 }
