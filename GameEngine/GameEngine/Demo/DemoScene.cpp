@@ -18,7 +18,7 @@ DemoScene::~DemoScene(void)
 bool 			DemoScene::userStart()
 {
 	SmartPointer<Entity>		e = new Entity;
-	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
+	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/cube.obj");
 
 	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer", "model:ball");
 //		SmartPointer<Components::EmptyComponent> r = new Components::EmptyComponent();
