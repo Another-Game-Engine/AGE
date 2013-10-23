@@ -25,24 +25,21 @@ bool	loadObj(std::string const &path, Resources::Geometry &geometry)
 	// just on mesh for a single .obj for the moment
     for (size_t i = 0; i < 1; i++)
 	{
-		  for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++)
-		  {
-			  if (shapes[i].mesh.positions.size() > 0)
-				  geometry.vertices.push_back(glm::vec4(shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 0],
-				  shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 1],
-				  shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 2], 0));
-			  if (shapes[i].mesh.normals.size() > 0)
-				  geometry.normals.push_back(glm::vec4(shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 0],
-				  shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 1],
-				  shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 2], 0));
-			  if (shapes[i].mesh.texcoords.size() > 0)
-				  geometry.uvs.push_back(glm::vec2(shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 0],
-				  shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 1]));
-			  else
-				  geometry.uvs.push_back(glm::vec2());
-			  geometry.indices.push_back(v);
-			  geometry.colors.push_back(glm::vec4(1, 1, 1, 1));
-		  }
+		for (size_t v = 0; v < shapes[i].mesh.positions.size(); v += 3)
+			geometry.vertices.push_back(glm::vec4(shapes[i].mesh.positions[v],
+												  shapes[i].mesh.positions[v + 1],
+												  shapes[i].mesh.positions[v + 2],
+												  1));
+		for (size_t v = 0; v < shapes[i].mesh.normals.size(); v += 3)
+			geometry.normals.push_back(glm::vec4(shapes[i].mesh.normals[v],
+												 shapes[i].mesh.normals[v + 1],
+												 shapes[i].mesh.normals[v + 2],
+												 0));
+		for (size_t v = 0; v < shapes[i].mesh.texcoords.size(); v += 2)
+			geometry.uvs.push_back(glm::vec2(shapes[i].mesh.texcoords[v],
+												 shapes[i].mesh.texcoords[v + 1]));
+		for (size_t v = 0; v < shapes[i].mesh.indices.size(); v += 1)
+			geometry.indices.push_back(shapes[i].mesh.indices[v]);
 	}
 	return true;
 }
