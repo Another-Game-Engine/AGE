@@ -20,10 +20,8 @@ bool 			DemoScene::userStart()
 	SmartPointer<Entity>		e = new Entity;
 	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
 
-
 	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer", "model:ball");
 //		SmartPointer<Components::EmptyComponent> r = new Components::EmptyComponent();
-
 
 	GameEngine::instance()->renderer().addUniform("PerFrame")
 		.registerUniform("vProjection", 0, 16 * sizeof(float))
@@ -31,8 +29,7 @@ bool 			DemoScene::userStart()
 		.registerUniform("fLightSpot", 2 * (16 * sizeof(float)), 3 * sizeof(float));
 
 	GameEngine::instance()->renderer().addUniform("PerModel")
-		.registerUniform("vModel", 0, 16 * sizeof(float))
-		.registerUniform("fTexture", 16 * sizeof(float), 1 * sizeof(GLuint));
+		.registerUniform("vModel", 0, 16 * sizeof(float));
 
 	GameEngine::instance()->renderer().addShader("basicLight", "shaders/light.vp", "shaders/light.fp");
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
