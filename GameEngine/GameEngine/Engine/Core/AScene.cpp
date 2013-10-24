@@ -16,6 +16,10 @@ void 							AScene::recomputePositions(SmartPointer<Entity> &father,
 {
 	Entity::t_sonsList::iterator 	it = father->getSonsBegin();
 
+	if (!hasMoved && (father->getFlags() & Entity::HAS_MOVED))
+		hasMoved = true;
+	if (hasMoved && it == father->getSonsEnd())
+		father->computeGlobalTransform(father->getGlobalTransform());
 	while (it != father->getSonsEnd())
 	{
 		Entity::t_ComponentsList::iterator		comp = it->second->getComponentsBegin();
@@ -25,8 +29,6 @@ void 							AScene::recomputePositions(SmartPointer<Entity> &father,
 			comp->second->update(); // update components
 			++comp;
 		}
-		if (father->getFlags() & Entity::HAS_MOVED)
-			hasMoved = true;
 		if (hasMoved)
 			it->second->computeGlobalTransform(father->getGlobalTransform());
 		recomputePositions(it->second, hasMoved);
