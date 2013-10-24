@@ -1,0 +1,25 @@
+#version 330
+
+layout (std140) uniform PerFrame
+{
+	mat4 vProjection;
+	mat4 vView;
+};
+
+layout (std140) uniform PerModel
+{
+	mat4 vModel;
+};
+
+layout (location = 0) in vec4 vPosition;
+layout (location = 1) in vec4 vColor;
+
+out vec4 fColor;
+
+void main(void)
+{
+  mat4 modelView = vView * vModel;
+
+  fColor = vColor;
+  gl_Position = vProjection * modelView * vPosition;
+}

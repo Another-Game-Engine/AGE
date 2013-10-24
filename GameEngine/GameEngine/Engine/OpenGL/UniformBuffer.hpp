@@ -48,6 +48,12 @@ void	UniformBuffer<S>::setUniform(std::string const &name, void *data)
 template<size_t S>
 void	UniformBuffer<S>::flushChanges()
 {
+	// dirty fix for @cesar AMD gpu -> to fixe later
+	// www.opengl.org/discussion_boards/archive/index.php/t-178601.html
+	// www.opengl.org/discussion_boards/showthread.php/178326-Uniform-Buffer-Object-Performance?p=1240435#post1240435
+	glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, _bufferId);
+	// !end
+
 	glBindBuffer(GL_UNIFORM_BUFFER, _bufferId);
 	glBufferData(GL_UNIFORM_BUFFER, _globalSize, _buffer, GL_DYNAMIC_DRAW);
 }
