@@ -4,6 +4,7 @@
 
 #include "ResourceManager/SharedMesh.hh"
 #include "Components/EmptyComponent.hh"
+#include "Components/RotationForce.hh"
 
 #include <SDL\SDL.h>
 
@@ -21,7 +22,6 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/cube.obj");
 
 	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer", "model:ball");
-//		SmartPointer<Components::EmptyComponent> r = new Components::EmptyComponent();
 
 	GameEngine::instance()->renderer().addUniform("PerFrame")
 		.registerUniform("vProjection", 0, 16 * sizeof(float))
@@ -36,6 +36,10 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
 	r->setShader("basicLight");
 	e->addComponent(r);
+
+	SmartPointer<Components::RotationForce>	rotationForce = new Components::RotationForce(glm::vec3(10, 10, 10));
+
+	e->addComponent(rotationForce);
 	getRoot()->addSon(e);
 
 	setCamera(new BasicCam);
