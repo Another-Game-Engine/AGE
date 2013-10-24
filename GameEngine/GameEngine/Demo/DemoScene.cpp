@@ -57,10 +57,13 @@ bool 			DemoScene::userStart()
 	sun->addComponent(sunRot);
 	getRoot()->addSon(sun);
 
-	SmartPointer<Entity> earth = createPlanet(glm::vec3(0,0,0), glm::vec3(1), false);
-	SmartPointer<Components::RotationForce>	earthRot = new Components::RotationForce(glm::vec3(0, 40, 0));
-	earth->addComponent(earthRot);
-	getRoot()->addSon(earth);
+	SmartPointer<Entity> earth = createPlanet(glm::vec3(2,0,0), glm::vec3(1.2), false);
+
+	// enable 2 lines aboves for see the Local/Global position bug
+	//SmartPointer<Components::RotationForce>	earthRot = new Components::RotationForce(glm::vec3(0, 40, 0));
+	//earth->addComponent(earthRot);
+
+	sun->addSon(earth);
 
 	setCamera(new BasicCam);
 
