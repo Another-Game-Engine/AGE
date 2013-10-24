@@ -52,11 +52,12 @@ void 							AScene::recomputePositions(SmartPointer<Entity> &father,
 			comp->second->update(); // update components
 			++comp;
 		}
+		recomputePositions(it->second, hasMoved);
 		if (hasMoved)
 			it->second->computeGlobalTransform(father->getGlobalTransform());
-		recomputePositions(it->second, hasMoved);
 		++it;
 	}
+	father->removeFlags(Entity::HAS_MOVED);
 }
 
 
