@@ -31,7 +31,7 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().addUniform("PerModel")
 		.registerUniform("vModel", 0, 16 * sizeof(float));
 
-	GameEngine::instance()->renderer().addShader("basicLight", "shaders/light.vp", "shaders/light.fp");
+	GameEngine::instance()->renderer().addShader("basicLight", "../GameEngine/Shaders/light.vp", "../GameEngine/Shaders/light.fp");
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
 	r->setShader("basicLight");
