@@ -19,7 +19,7 @@ DemoScene::~DemoScene(void)
 bool 			DemoScene::userStart()
 {
 	SmartPointer<Entity>		e = new Entity;
-	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/cube.obj");
+	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
 
 	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer", "model:ball");
 
@@ -37,7 +37,7 @@ bool 			DemoScene::userStart()
 	r->setShader("basicLight");
 	e->addComponent(r);
 
-	SmartPointer<Components::RotationForce>	rotationForce = new Components::RotationForce(glm::vec3(10, 10, 10));
+	SmartPointer<Components::RotationForce>	rotationForce = new Components::RotationForce(glm::vec3(-15, 15, 10));
 
 	e->addComponent(rotationForce);
 	getRoot()->addSon(e);

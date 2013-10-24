@@ -18,9 +18,14 @@ namespace Components
 
 	void RotationForce::update()
 	{
-		this->getFather()->setLocalTransform() = glm::rotate(this->getFather()->getLocalTransform(), _force.x, glm::vec3(1,0,0));
-		this->getFather()->setLocalTransform() = glm::rotate(this->getFather()->getLocalTransform(), _force.y, glm::vec3(0,1,0));
-		this->getFather()->setLocalTransform() = glm::rotate(this->getFather()->getLocalTransform(), _force.z, glm::vec3(0,0,1));
+		glm::vec3 force = _force;
+		force *= GameEngine::instance()->timer().getElapsed();
+		glm::mat4 mat;
+
+		mat = glm::rotate(mat, force.x, glm::vec3(1,0,0));
+		mat = glm::rotate(mat, force.y, glm::vec3(0,1,0));
+		mat = glm::rotate(mat, force.z, glm::vec3(0,0,1));
+		getFather()->setLocalTransform() = mat;
 	}
 
 	void RotationForce::stop()
