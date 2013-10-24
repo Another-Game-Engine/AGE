@@ -73,6 +73,7 @@
     <ClCompile Include="Demo\DemoScene.cpp" />
     <ClCompile Include="Engine\Components\AComponent.cpp" />
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
+    <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
     <ClCompile Include="Engine\Parsers\LoadOBJ.cpp" />
@@ -96,6 +97,7 @@
     <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\OpenGL\UniformBuffer.hpp" />
     <ClInclude Include="Engine\Utils\File.hpp" />
