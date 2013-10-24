@@ -15,17 +15,7 @@ Renderer::~Renderer(void)
 
 void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
 {
-	std::string		name = obj->getShader();
-	auto &it = _queues.find(name);
-
-	if (it == std::end(_queues))
-	{
-		_queues.insert(std::make_pair(obj->getShader(), obj));
-	}
-	else
-	{
-		it->second = obj;
-	}
+	_queues.insert(std::make_pair(obj->getShader(), obj));
 }
 
 OpenGLTools::Shader		&Renderer::addShader(std::string const &name, std::string const &vp, std::string const &fp)

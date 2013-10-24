@@ -1,3 +1,5 @@
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "Core/Engine.hh"
 #include "DemoScene.hh"
 #include "BasicCam.hh"
@@ -16,12 +18,18 @@ DemoScene::~DemoScene(void)
 {
 }
 
-bool 			DemoScene::userStart()
+SmartPointer<Entity> createPlanet(glm::vec3 &pos = glm::vec3(0), glm::vec3 &scale = glm::vec3(1), bool ball = true)
 {
 	SmartPointer<Entity>		e = new Entity;
-	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
 
-	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer", "model:ball");
+	e->setLocalTransform() = glm::translate(glm::mat4(), pos);
+	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
+
+	SmartPointer<Components::MeshRenderer>	r;
+	if (ball)
+		r = new Components::MeshRenderer("renderer", "model:ball");
+	else
+		r = new Components::MeshRenderer("renderer", "model:cube");
 
 	GameEngine::instance()->renderer().addUniform("PerFrame")
 		.registerUniform("vProjection", 0, 16 * sizeof(float))
@@ -36,11 +44,23 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
 	r->setShader("basicLight");
 	e->addComponent(r);
+	return e;
+}
 
-	SmartPointer<Components::RotationForce>	rotationForce = new Components::RotationForce(glm::vec3(-15, 15, 10));
+bool 			DemoScene::userStart()
+{	
+	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
+	GameEngine::instance()->resources().addResource("model:cube", new Resources::SharedMesh(), "../Assets/cube.obj");
 
-	e->addComponent(rotationForce);
-	getRoot()->addSon(e);
+	SmartPointer<Entity> sun = createPlanet();
+	SmartPointer<Components::RotationForce>	sunRot = new Components::RotationForce(glm::vec3(0, 15, 0));
+	sun->addComponent(sunRot);
+	getRoot()->addSon(sun);
+
+	SmartPointer<Entity> earth = createPlanet(glm::vec3(0,0,0), glm::vec3(1), false);
+	SmartPointer<Components::RotationForce>	earthRot = new Components::RotationForce(glm::vec3(0, 40, 0));
+	earth->addComponent(earthRot);
+	getRoot()->addSon(earth);
 
 	setCamera(new BasicCam);
 
