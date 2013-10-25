@@ -38,7 +38,7 @@ void main(void)
    * entre le vecteur de lumiére et la normal du fragment.
    */
   float lamberTerm = clamp(dot(fNormal.xyz, vectorLight.xyz), 0.0, 1.0);
-  vec4 pxlColor = fColor /** texture2D(fTexture, fTexCoord)*/;
+  vec4 pxlColor = fColor * texture2D(fTexture, fTexCoord);
   vec4 ambiant = pxlColor * vec4(0.01, 0.01, 0.01, 1.0);
   vec4 diffuse = pxlColor * lamberTerm;
   FragColor = max(ambiant, diffuse);

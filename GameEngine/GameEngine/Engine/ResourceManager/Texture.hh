@@ -27,7 +27,7 @@ public:
 
 	virtual bool	load(std::string const &path);
 
-	GLuint			getId() const;
+	const GLuint			getId() const;
 };
 
 }

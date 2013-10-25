@@ -131,7 +131,10 @@ void		Renderer::render()
 			data = (void*)glm::value_ptr(sIt->second->getFather()->getGlobalTransform());
 			GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("vModel", data);
 			GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
+
+			sIt->second->bindTextures();
 			sIt->second->getMesh()->draw();
+			sIt->second->unbindTextures();
         }
     }
 	_queues.clear();
