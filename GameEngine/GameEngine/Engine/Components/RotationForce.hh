@@ -13,9 +13,9 @@ namespace Components
 		RotationForce(const glm::vec3 &force = glm::vec3(0,0,0));
 		virtual ~RotationForce(void);
 
-		virtual void	start() final;
-		virtual void	update() final;
-		virtual void	stop() final;
+		virtual void	start();
+		virtual void	update();
+		virtual void	stop();
 
 		void setForce(const glm::vec3 &force);
 		const glm::vec3 &getForce() const;
