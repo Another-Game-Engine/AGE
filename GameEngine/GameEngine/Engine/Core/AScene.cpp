@@ -11,38 +11,11 @@ AScene::~AScene()
 {
 }
 
-//void 							AScene::recomputePositions(SmartPointer<Entity> &father,
-//															bool hasMoved)
-//{
-//	Entity::t_sonsList::iterator 	it = father->getSonsBegin();
-//
-//	while (it != father->getSonsEnd())
-//	{
-//		Entity::t_ComponentsList::iterator		comp = it->second->getComponentsBegin();
-//
-//		while (comp != it->second->getComponentsEnd())
-//		{
-//			comp->second->update(); // update components
-//			++comp;
-//		}
-//		if (father->getFlags() & Entity::HAS_MOVED)
-//			hasMoved = true;
-//		if (hasMoved)
-//			it->second->computeGlobalTransform(father->getGlobalTransform());
-//		recomputePositions(it->second, hasMoved);
-//		++it;
-//	}
-//}
-
 void 							AScene::recomputePositions(SmartPointer<Entity> &father,
 															bool hasMoved)
 {
 	Entity::t_sonsList::iterator 	it = father->getSonsBegin();
 
-	if (!hasMoved && (father->getFlags() & Entity::HAS_MOVED))
-		hasMoved = true;
-	if (hasMoved)
-		father->computeGlobalTransform(father->getGlobalTransform());
 	while (it != father->getSonsEnd())
 	{
 		Entity::t_ComponentsList::iterator		comp = it->second->getComponentsBegin();
@@ -52,13 +25,40 @@ void 							AScene::recomputePositions(SmartPointer<Entity> &father,
 			comp->second->update(); // update components
 			++comp;
 		}
-		recomputePositions(it->second, hasMoved);
+		if (father->getFlags() & Entity::HAS_MOVED)
+			hasMoved = true;
 		if (hasMoved)
 			it->second->computeGlobalTransform(father->getGlobalTransform());
+		recomputePositions(it->second, hasMoved);
 		++it;
 	}
-	father->removeFlags(Entity::HAS_MOVED);
 }
+
+//void 							AScene::recomputePositions(SmartPointer<Entity> &father,
+//															bool hasMoved)
+//{
+//	Entity::t_sonsList::iterator 	it = father->getSonsBegin();
+//
+//	if (!hasMoved && (father->getFlags() & Entity::HAS_MOVED))
+//		hasMoved = true;
+//	if (hasMoved)
+//		father->computeGlobalTransform(father->getGlobalTransform());
+//	while (it != father->getSonsEnd())
+//	{
+//		Entity::t_ComponentsList::iterator		comp = it->second->getComponentsBegin();
+//
+//		while (comp != it->second->getComponentsEnd())
+//		{
+//			comp->second->update(); // update components
+//			++comp;
+//		}
+//		recomputePositions(it->second, hasMoved);
+//		if (hasMoved)
+//			it->second->computeGlobalTransform(father->getGlobalTransform());
+//		++it;
+//	}
+//	father->removeFlags(Entity::HAS_MOVED);
+//}
 
 
 SmartPointer<Entity>	const	&AScene::getRoot()
