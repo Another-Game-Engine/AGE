@@ -2,6 +2,7 @@
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Core/Engine.hh"
 
 BasicCam::BasicCam(void)
 {
@@ -13,7 +14,11 @@ BasicCam::~BasicCam(void)
 {
 }
 
-void      BasicCam::update()
+void      BasicCam::customUpdate()
 {
+	float elapsed = GameEngine::instance()->timer().getElapsed();
 
+	setTransform() = glm::rotate(getTransform(), 4.0f * elapsed, glm::vec3(1,0,0));
+	setTransform() = glm::rotate(getTransform(), 10.0f * elapsed, glm::vec3(0,1,0));
+	setTransform() = glm::rotate(getTransform(), 4.0f * elapsed, glm::vec3(0,0,1));
 }

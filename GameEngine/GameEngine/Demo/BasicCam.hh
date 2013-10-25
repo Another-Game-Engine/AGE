@@ -8,8 +8,8 @@ class BasicCam : public ACamera
 public:
 	BasicCam(void);
 	virtual ~BasicCam(void);
-
-	virtual void      update();
+private:
+	virtual void      customUpdate();
 };
 
 #endif
