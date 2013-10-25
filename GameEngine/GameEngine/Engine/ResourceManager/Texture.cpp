@@ -48,7 +48,7 @@ bool			Texture::load(std::string const &path)
 	return (true);
 }
 
-GLuint			Texture::getId() const
+const GLuint			Texture::getId() const
 {
 	return (_id);
 }

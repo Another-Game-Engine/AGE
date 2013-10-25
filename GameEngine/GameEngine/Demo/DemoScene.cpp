@@ -28,9 +28,15 @@ SmartPointer<Entity> createPlanet(glm::vec3 &pos = glm::vec3(0), glm::vec3 &scal
 
 	SmartPointer<Components::MeshRenderer>	r;
 	if (ball)
+	{
 		r = new Components::MeshRenderer("renderer", "model:ball");
+		r->addTexture("texture:goose");
+	}
 	else
+	{
 		r = new Components::MeshRenderer("renderer", "model:cube");
+		r->addTexture("texture:test");
+	}
 
 	GameEngine::instance()->renderer().addUniform("PerFrame")
 		.registerUniform("vProjection", 0, 16 * sizeof(float))
@@ -52,6 +58,7 @@ bool 			DemoScene::userStart()
 {	
 	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/goose.obj");
 	GameEngine::instance()->resources().addResource("model:cube", new Resources::SharedMesh(), "../Assets/cube.obj");
+	GameEngine::instance()->resources().addResource("texture:goose", new Resources::Texture(), "../Assets/goose.tga");
 	GameEngine::instance()->resources().addResource("texture:test", new Resources::Texture(), "../Assets/test.tga");
 
 	SmartPointer<Entity> sun = createPlanet();
