@@ -42,6 +42,7 @@ glm::mat4 const			&Entity::getGlobalTransform() const
 void 					Entity::computeGlobalTransform(glm::mat4 const &fatherTransform)
 {
 	_globalTransform = fatherTransform * _localTransform;
+	_flags ^= HAS_MOVED;
 }
 
 size_t 					Entity::getId() const
