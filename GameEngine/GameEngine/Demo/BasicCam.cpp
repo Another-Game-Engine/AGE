@@ -6,8 +6,8 @@
 
 BasicCam::BasicCam(void)
 {
-	setProjection() = glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 200.0f);
-	setTransform() = glm::lookAt(glm::vec3(0, 5, -5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	setProjection() = glm::perspective(55.0f, 16.0f / 9.0f, 1.f, 1000.f);
+	setTransform() = glm::lookAt(glm::vec3(57950, 0, -10), glm::vec3(57950, 0, 0), glm::vec3(0, 1, 0));
 }
 
 BasicCam::~BasicCam(void)
