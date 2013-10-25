@@ -22,7 +22,7 @@ bool					ResourceManager::addResource(std::string const &name,
 	if ((it = _resources.find(name)) != _resources.end())
 		return (false);
 	_resources[name] = resource;
-	resource->load(param);
+	assert(resource->load(param) == true && "Resource does not load correctly.");
 	return (true);
 }
 

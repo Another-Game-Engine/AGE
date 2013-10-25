@@ -1,7 +1,7 @@
 #ifndef		MESHRENDERER_HH_
 #define		MESHRENDERER_HH_
 
-#include <list>
+#include <map>
 
 #include "AComponent.hh"
 #include "Utils/SmartPointer.hh"
@@ -18,10 +18,13 @@ namespace Components
 class MeshRenderer : public AComponent
 {
 private:
+	typedef std::multimap<unsigned int, std::pair<std::string, SmartPointer<Resources::Texture> > > textureMap;
+	typedef textureMap::iterator textureMapIt;
+
 	SmartPointer<Resources::SharedMesh>	_mesh;
 
 	std::string							_shader;
-	std::list<SmartPointer<Resources::Texture> > _textures;
+	textureMap                          _textures;
 
 	MeshRenderer();
 	MeshRenderer(MeshRenderer const &);
@@ -38,7 +41,8 @@ public:
 	bool				setShader(std::string const &name);
 	std::string const	&getShader() const;
 
-	void addTexture(const std::string &textureName);
+	void addTexture(const std::string &textureName, const std::string &name, unsigned int priority = 0);
+	void removeTexture(const std::string &name);
 	void bindTextures() const;
 	void unbindTextures() const;
 
