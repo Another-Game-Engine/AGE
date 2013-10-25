@@ -12,12 +12,15 @@ namespace	Resources
 	{
 	private:
 		GLuint _id;
+		GLuint _vbo;
+		GLuint _vao;
 	public:
 		CubeMap(void);
 		virtual ~CubeMap(void);
 
 		virtual bool	load(std::string const &path);
-		const GLuint			getId() const;
+		const GLuint	getId() const;
+		void draw() const;
 	};
 
 }

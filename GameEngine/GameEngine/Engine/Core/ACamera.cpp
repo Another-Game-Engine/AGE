@@ -2,6 +2,8 @@
 #include "ACamera.hh"
 #include "Core/Engine.hh"
 #include "ResourceManager/CubeMap.hh"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 ACamera::ACamera() :
 	_hasMoved(true),
@@ -59,10 +61,28 @@ void ACamera::update()
 	{
 		OpenGLTools::Shader *s = GameEngine::instance()->renderer().getShader(_cubeMapShader);
 		assert(s != NULL && "Skybox does not have a shader associated");
+
+		void		*data;
+
+		data = (void*)glm::value_ptr(getProjection());
+		GameEngine::instance()->renderer().getUniform("cameraUniform")->setUniform("vProjection", data);
+
+		glm::mat4 t = getTransform();
+		t[3][0] = 0;
+		t[3][1] = 0;
+		t[3][2] = 0;
+		t[3][3] = 1;
+		data = (void*)glm::value_ptr(t);
+		GameEngine::instance()->renderer().getUniform("cameraUniform")->setUniform("vView", data);
+
 		s->use();
+
+		GameEngine::instance()->renderer().getUniform("cameraUniform")->flushChanges();
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, _skybox->getId());
 		glDepthMask(0);
+		_skybox->draw();
 		glDepthMask(1);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	}
