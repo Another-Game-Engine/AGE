@@ -22,27 +22,56 @@ bool	loadObj(std::string const &path, Resources::Geometry &geometry)
     std::string err = tinyobj::LoadObj(shapes, inputfile.c_str());
 	assert(err.empty());
 
+	std::vector<glm::vec4> resPos;
+	std::vector<glm::vec4> resNorm;
+	std::vector<glm::vec2> resUv;
+	std::vector<glm::vec4> resCol;
+
 	// just on mesh for a single .obj for the moment
     for (size_t i = 0; i < 1; i++)
 	{
-		for (size_t v = 0; v < shapes[i].mesh.positions.size(); v += 3)
+		for (size_t v = 0; v < shapes[i].mesh.indices.size(); ++v)
 		{
-			geometry.vertices.push_back(glm::vec4(shapes[i].mesh.positions[v],
-												  shapes[i].mesh.positions[v + 1],
-												  shapes[i].mesh.positions[v + 2],
-												  1));
-			geometry.colors.push_back(glm::vec4(1));
+			unsigned int p = shapes[i].mesh.indices[v] * 3;
+			unsigned int p2 = shapes[i].mesh.indices[v] * 2;
+
+			if (shapes[i].mesh.positions.size() > 0)
+				resPos.push_back(glm::vec4(shapes[i].mesh.positions[p],
+				shapes[i].mesh.positions[p + 1],
+				shapes[i].mesh.positions[p + 2], 1));
+			if (shapes[i].mesh.positions.size() > 0)
+				resNorm.push_back(glm::vec4(shapes[i].mesh.normals[p],
+				shapes[i].mesh.normals[p + 1],
+				shapes[i].mesh.normals[p + 2], 1));
+			if (shapes[i].mesh.texcoords.size() > 0)
+				resUv.push_back(glm::vec2(shapes[i].mesh.texcoords[p2],
+				shapes[i].mesh.texcoords[p2 + 1]));
+			resCol.push_back(glm::vec4(1));
+			geometry.indices.push_back(v);
 		}
-		for (size_t v = 0; v < shapes[i].mesh.normals.size(); v += 3)
-			geometry.normals.push_back(glm::vec4(shapes[i].mesh.normals[v],
-												 shapes[i].mesh.normals[v + 1],
-												 shapes[i].mesh.normals[v + 2],
-												 0));
-		for (size_t v = 0; v < shapes[i].mesh.texcoords.size(); v += 2)
-			geometry.uvs.push_back(glm::vec2(shapes[i].mesh.texcoords[v],
-												 shapes[i].mesh.texcoords[v + 1]));
-		for (size_t v = 0; v < shapes[i].mesh.indices.size(); v += 1)
-			geometry.indices.push_back(shapes[i].mesh.indices[v]);
+		geometry.colors = resCol;
+		geometry.uvs = resUv;
+		geometry.normals = resNorm;
+		geometry.vertices = resPos;
+
+		//for (size_t v = 0; v < shapes[i].mesh.positions.size(); v += 3)
+		//{
+		//	geometry.vertices.push_back(glm::vec4(shapes[i].mesh.positions[v],
+		//										  shapes[i].mesh.positions[v + 1],
+		//										  shapes[i].mesh.positions[v + 2],
+		//										  1));
+		//	geometry.colors.push_back(glm::vec4(1));
+		//}
+		//for (size_t v = 0; v < shapes[i].mesh.normals.size(); v += 3)
+		//	geometry.normals.push_back(glm::vec4(shapes[i].mesh.normals[v],
+		//										 shapes[i].mesh.normals[v + 1],
+		//										 shapes[i].mesh.normals[v + 2],
+		//										 0));
+		//for (size_t v = 0; v < shapes[i].mesh.texcoords.size(); v += 2)
+		//	geometry.uvs.push_back(glm::vec2(shapes[i].mesh.texcoords[v],
+		//										 shapes[i].mesh.texcoords[v + 1]));
+		//for (size_t v = 0; v < shapes[i].mesh.indices.size(); v += 1)
+		//	geometry.indices.push_back(shapes[i].mesh.indices[v]);
 	}
 	return true;
 }

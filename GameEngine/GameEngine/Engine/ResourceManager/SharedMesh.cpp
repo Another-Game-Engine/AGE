@@ -19,7 +19,7 @@ bool	SharedMesh::load(std::string const &path)
 {
 	if (loadObj(path, _geometry) == false)
 		return (false);
-	_buffer.init(_geometry.indices.size(), &_geometry.indices[0]);
+	_buffer.init(_geometry.vertices.size(), &_geometry.indices[0]);
 	_buffer.addAttribute(OpenGLTools::Attribute(sizeof(float) * 4, 4, GL_FLOAT));
 	_buffer.addAttribute(OpenGLTools::Attribute(sizeof(float) * 4, 4, GL_FLOAT));
 	_buffer.addAttribute(OpenGLTools::Attribute(sizeof(float) * 4, 4, GL_FLOAT));
