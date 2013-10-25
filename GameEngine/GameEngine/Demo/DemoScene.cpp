@@ -6,6 +6,7 @@
 
 #include "ResourceManager/SharedMesh.hh"
 #include "ResourceManager/Texture.hh"
+#include "ResourceManager/CubeMap.hh"
 #include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
 
@@ -60,6 +61,7 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->resources().addResource("model:cube", new Resources::SharedMesh(), "../Assets/cube.obj");
 	GameEngine::instance()->resources().addResource("texture:goose", new Resources::Texture(), "../Assets/goose.tga");
 	GameEngine::instance()->resources().addResource("texture:test", new Resources::Texture(), "../Assets/test.tga");
+	GameEngine::instance()->resources().addResource("cubemap:italy", new Resources::CubeMap(), "../Assets/skyboxItaly");
 
 	SmartPointer<Entity> sun = createPlanet();
 	SmartPointer<Components::RotationForce>	sunRot = new Components::RotationForce(glm::vec3(0, 15, 0));
@@ -74,8 +76,21 @@ bool 			DemoScene::userStart()
 
 	sun->addSon(earth);
 
+
+	// --
+	// Setting camera with skybox
+	// --
+
 	setCamera(new BasicCam);
 
+	GameEngine::instance()->renderer().addUniform("cameraUniform")
+		.registerUniform("vProjection", 0, 16 * sizeof(float))
+		.registerUniform("vView", 16 * sizeof(float), 16 * sizeof(float));
+
+	GameEngine::instance()->renderer().addShader("cubemapShader", "../GameEngine/Shaders/cubemap.vp", "../GameEngine/Shaders/cubemap.fp");
+	GameEngine::instance()->renderer().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
+	getCamera()->attachSkybox("cubemap:italy", "cubemapShader");
 	return (true);
 }
 
@@ -83,6 +98,7 @@ bool 			DemoScene::userUpdate()
 {
 	Engine		&engine = *GameEngine::instance();
 
+	getCamera()->update();
 	if (engine.inputs().getInput(SDLK_ESCAPE) ||
 		engine.inputs().getInput(SDL_QUIT))
 		return (false);
