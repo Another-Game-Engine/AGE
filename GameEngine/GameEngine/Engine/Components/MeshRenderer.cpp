@@ -50,9 +50,9 @@ namespace Components
 	{
 		SmartPointer<Resources::Texture> texture = GameEngine::instance()->resources().getResource(textureName);
 
-		for (auto &i : _textures)
+		for (textureMapIt it = _textures.begin(); it != _textures.end(); ++it)
 		{
-			if (i.second.first == name)
+			if (it->second.first == name)
 				return;
 		}
 		_textures.insert(std::make_pair(priority, std::make_pair(name, texture)));
@@ -60,7 +60,7 @@ namespace Components
 
 	void MeshRenderer::removeTexture(const std::string &name)
 	{
-		for (textureMapIt it = std::begin(_textures); it != std::end(_textures); ++it)
+		for (textureMapIt it = _textures.begin(); it != _textures.end(); ++it)
 		{
 			if (it->second.first == name)
 			{
