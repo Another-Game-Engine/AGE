@@ -30,12 +30,12 @@ SmartPointer<Entity> createPlanet(glm::vec3 &pos = glm::vec3(0), glm::vec3 &scal
 	if (ball)
 	{
 		r = new Components::MeshRenderer("renderer", "model:ball");
-		r->addTexture("texture:goose");
+		r->addTexture("texture:goose", "ambiant", 0);
 	}
 	else
 	{
 		r = new Components::MeshRenderer("renderer", "model:cube");
-		r->addTexture("texture:test");
+		r->addTexture("texture:test", "ambiant", 0);
 	}
 
 	GameEngine::instance()->renderer().addUniform("PerFrame")

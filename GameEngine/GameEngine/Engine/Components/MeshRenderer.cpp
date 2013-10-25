@@ -46,9 +46,28 @@ namespace Components
 		return (_mesh);
 	}
 
-	void MeshRenderer::addTexture(const std::string &textureName)
+	void MeshRenderer::addTexture(const std::string &textureName, const std::string &name, unsigned int priority)
 	{
-		_textures.push_back(GameEngine::instance()->resources().getResource(textureName));
+		SmartPointer<Resources::Texture> texture = GameEngine::instance()->resources().getResource(textureName);
+
+		for (auto &i : _textures)
+		{
+			if (i.second.first == name)
+				return;
+		}
+		_textures.insert(std::make_pair(priority, std::make_pair(name, texture)));
+	}
+
+	void MeshRenderer::removeTexture(const std::string &name)
+	{
+		for (textureMapIt it = std::begin(_textures); it != std::end(_textures); ++it)
+		{
+			if (it->second.first == name)
+			{
+				_textures.erase(it);
+				return;
+			}
+		}
 	}
 
 	void MeshRenderer::bindTextures() const
@@ -57,7 +76,7 @@ namespace Components
 		for (auto &i : _textures)
 		{
 			glActiveTexture(GL_TEXTURE0 + c++);
-			glBindTexture(GL_TEXTURE_2D, i->getId());
+			glBindTexture(GL_TEXTURE_2D, i.second.second->getId());
 		}
 	}
 
