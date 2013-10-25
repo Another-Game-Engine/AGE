@@ -57,7 +57,7 @@ SmartPointer<Entity> createPlanet(glm::vec3 &pos = glm::vec3(0), glm::vec3 &scal
 
 bool 			DemoScene::userStart()
 {	
-	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/cube.obj");
+	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/goose.obj");
 	GameEngine::instance()->resources().addResource("model:cube", new Resources::SharedMesh(), "../Assets/cube.obj");
 	GameEngine::instance()->resources().addResource("texture:goose", new Resources::Texture(), "../Assets/goose.tga");
 	GameEngine::instance()->resources().addResource("texture:test", new Resources::Texture(), "../Assets/test.tga");
