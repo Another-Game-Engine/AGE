@@ -30,13 +30,13 @@ SmartPointer<Entity> createPlanet(glm::vec3 &pos = glm::vec3(0), glm::vec3 &scal
 	SmartPointer<Components::MeshRenderer>	r;
 	if (ball)
 	{
-		r = new Components::MeshRenderer("renderer", "model:ball");
-		r->addTexture("texture:goose", "ambiant", 0);
+		r = new Components::MeshRenderer("renderer", "model:goose");
+		r->addTexture("texture:test", "ambiant", 0);
 	}
 	else
 	{
-		r = new Components::MeshRenderer("renderer", "model:cube");
-		r->addTexture("texture:test", "ambiant", 0);
+		r = new Components::MeshRenderer("renderer", "model:goose");
+		r->addTexture("texture:goose", "ambiant", 0);
 	}
 
 	GameEngine::instance()->renderer().addUniform("PerFrame")
@@ -57,8 +57,9 @@ SmartPointer<Entity> createPlanet(glm::vec3 &pos = glm::vec3(0), glm::vec3 &scal
 
 bool 			DemoScene::userStart()
 {	
-	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/goose.obj");
-	GameEngine::instance()->resources().addResource("model:cube", new Resources::SharedMesh(), "../Assets/cube.obj");
+	GameEngine::instance()->resources().addResource("model:goose", new Resources::SharedMesh(), "../Assets/goose.obj");
+	//GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
+	//GameEngine::instance()->resources().addResource("model:cube", new Resources::SharedMesh(), "../Assets/cube.obj");
 	GameEngine::instance()->resources().addResource("texture:goose", new Resources::Texture(), "../Assets/goose.tga");
 	GameEngine::instance()->resources().addResource("texture:test", new Resources::Texture(), "../Assets/test.tga");
 	GameEngine::instance()->resources().addResource("cubemap:italy", new Resources::CubeMap(), "../Assets/skyboxItaly");
@@ -70,9 +71,8 @@ bool 			DemoScene::userStart()
 
 	SmartPointer<Entity> earth = createPlanet(glm::vec3(2,0,0), glm::vec3(1.2), false);
 
-	// enable 2 lines aboves for see the Local/Global position bug
-	//SmartPointer<Components::RotationForce>	earthRot = new Components::RotationForce(glm::vec3(0, 40, 0));
-	//earth->addComponent(earthRot);
+	SmartPointer<Components::RotationForce>	earthRot = new Components::RotationForce(glm::vec3(0, 40, 0));
+	earth->addComponent(earthRot);
 
 	sun->addSon(earth);
 
