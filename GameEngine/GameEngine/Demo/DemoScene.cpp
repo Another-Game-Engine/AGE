@@ -62,7 +62,7 @@ bool 			DemoScene::userStart()
 	//GameEngine::instance()->resources().addResource("model:cube", new Resources::SharedMesh(), "../Assets/cube.obj");
 	GameEngine::instance()->resources().addResource("texture:goose", new Resources::Texture(), "../Assets/goose.tga");
 	GameEngine::instance()->resources().addResource("texture:test", new Resources::Texture(), "../Assets/test.tga");
-	GameEngine::instance()->resources().addResource("cubemap:italy", new Resources::CubeMap(), "../Assets/skyboxItaly");
+	GameEngine::instance()->resources().addResource("cubemap:space", new Resources::CubeMap(), "../Assets/skyboxSpace");
 
 	SmartPointer<Entity> sun = createPlanet();
 	SmartPointer<Components::RotationForce>	sunRot = new Components::RotationForce(glm::vec3(0, 15, 0));
@@ -90,7 +90,7 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().addShader("cubemapShader", "../GameEngine/Shaders/cubemap.vp", "../GameEngine/Shaders/cubemap.fp");
 	GameEngine::instance()->renderer().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
-	getCamera()->attachSkybox("cubemap:italy", "cubemapShader");
+	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
 	return (true);
 }
 
