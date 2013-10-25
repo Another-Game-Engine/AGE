@@ -6,6 +6,13 @@
 #include "Timer.hh"
 
 #include "glm/glm.hpp"
+#include "Utils/SmartPointer.hh"
+#include "OpenGL/Shader.hh"
+
+namespace Resources
+{
+	class CubeMap;
+};
 
 class ACamera
 {
@@ -14,6 +21,11 @@ private:
   glm::mat4       _projection;
 
   bool            _hasMoved;
+
+  SmartPointer<Resources::CubeMap> _skybox;
+  std::string _cubeMapShader;
+
+  virtual void customUpdate() = 0;
 
 public:
   ACamera();
@@ -27,7 +39,10 @@ public:
   bool              hasMoved() const;
   void              resetMoved();
 
-  virtual void      update() = 0;
+  void attachSkybox(const std::string &name, const std::string &cubeMapShader);
+  void dettachSkybox();
+
+  void      update();
 };
 
 #endif

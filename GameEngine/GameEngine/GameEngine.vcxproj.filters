@@ -93,6 +93,9 @@
     <ClCompile Include="Engine\Components\RotationForce.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\ResourceManager\CubeMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Singleton.hpp">
@@ -486,6 +489,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Components\RotationForce.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ResourceManager\CubeMap.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

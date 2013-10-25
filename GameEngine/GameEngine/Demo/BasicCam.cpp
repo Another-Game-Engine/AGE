@@ -13,7 +13,7 @@ BasicCam::~BasicCam(void)
 {
 }
 
-void      BasicCam::update()
+void      BasicCam::customUpdate()
 {
 
 }
