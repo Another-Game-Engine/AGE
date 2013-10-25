@@ -6,6 +6,7 @@
 
 #include "ResourceManager/SharedMesh.hh"
 #include "ResourceManager/Texture.hh"
+#include "ResourceManager/CubeMap.hh"
 #include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
 
@@ -19,20 +20,25 @@ DemoScene::~DemoScene(void)
 {
 }
 
-SmartPointer<Entity> createPlanet(float diametre, float distance)
+SmartPointer<Entity> createPlanet(glm::vec3 &pos = glm::vec3(0), glm::vec3 &scale = glm::vec3(1), bool ball = true)
 {
-	SmartPointer<Entity>						e = new Entity;
-	SmartPointer<Components::MeshRenderer>		r = new Components::MeshRenderer("renderer", "model:ball");
+	SmartPointer<Entity>		e = new Entity;
 
-	r->setShader("basicLight");
-	e->addComponent(r);
-	e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(distance, 0, 0));
-	e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(diametre));
-	return (e);
-}
+	e->setLocalTransform() = glm::translate(glm::mat4(), pos);
+	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
-bool 			DemoScene::userStart()
-{	
+	SmartPointer<Components::MeshRenderer>	r;
+	if (ball)
+	{
+		r = new Components::MeshRenderer("renderer", "model:goose");
+		r->addTexture("texture:test", "ambiant", 0);
+	}
+	else
+	{
+		r = new Components::MeshRenderer("renderer", "model:goose");
+		r->addTexture("texture:goose", "ambiant", 0);
+	}
+
 	GameEngine::instance()->renderer().addUniform("PerFrame")
 		.registerUniform("vProjection", 0, 16 * sizeof(float))
 		.registerUniform("vView", 16 * sizeof(float), 16 * sizeof(float))
@@ -43,30 +49,48 @@ bool 			DemoScene::userStart()
 
 	GameEngine::instance()->renderer().addShader("basicLight", "../GameEngine/Shaders/light.vp", "../GameEngine/Shaders/light.fp");
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
-    GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
+	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
+	r->setShader("basicLight");
+	e->addComponent(r);
+	return e;
+}
 
-	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
-	GameEngine::instance()->resources().addResource("test", new Resources::SharedMesh(), "../Assets/ball.obj");
+bool 			DemoScene::userStart()
+{	
+	GameEngine::instance()->resources().addResource("model:goose", new Resources::SharedMesh(), "../Assets/goose.obj");
+	//GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
+	//GameEngine::instance()->resources().addResource("model:cube", new Resources::SharedMesh(), "../Assets/cube.obj");
+	GameEngine::instance()->resources().addResource("texture:goose", new Resources::Texture(), "../Assets/goose.tga");
+	GameEngine::instance()->resources().addResource("texture:test", new Resources::Texture(), "../Assets/test.tga");
+	GameEngine::instance()->resources().addResource("cubemap:space", new Resources::CubeMap(), "../Assets/skyboxSpace");
 
-	SmartPointer<Entity> sun = createPlanet(1392, 0);
-	SmartPointer<Entity> planet = createPlanet(4.8, 57950);
-	sun->addSon(planet);
-	planet = createPlanet(12.1, 108110);
-	sun->addSon(planet);
-	planet = createPlanet(12.7, 149570);
-	sun->addSon(planet);
-	planet = createPlanet(6.7, 227840);
-	sun->addSon(planet);
-	planet = createPlanet(142.9, 778140);
-	sun->addSon(planet);
-	planet = createPlanet(116.4, 1427006);
-	sun->addSon(planet);
-	planet = createPlanet(46.9, 2870300);
-	sun->addSon(planet);
-	planet = createPlanet(43.4, 4499900);
-	sun->addSon(planet);
+	SmartPointer<Entity> sun = createPlanet();
+	SmartPointer<Components::RotationForce>	sunRot = new Components::RotationForce(glm::vec3(0, 15, 0));
+	sun->addComponent(sunRot);
 	getRoot()->addSon(sun);
+
+	SmartPointer<Entity> earth = createPlanet(glm::vec3(2,0,0), glm::vec3(1.2), false);
+
+	SmartPointer<Components::RotationForce>	earthRot = new Components::RotationForce(glm::vec3(0, 40, 0));
+	earth->addComponent(earthRot);
+
+	sun->addSon(earth);
+
+
+	// --
+	// Setting camera with skybox
+	// --
+
 	setCamera(new BasicCam);
+
+	GameEngine::instance()->renderer().addUniform("cameraUniform")
+		.registerUniform("vProjection", 0, 16 * sizeof(float))
+		.registerUniform("vView", 16 * sizeof(float), 16 * sizeof(float));
+
+	GameEngine::instance()->renderer().addShader("cubemapShader", "../GameEngine/Shaders/cubemap.vp", "../GameEngine/Shaders/cubemap.fp");
+	GameEngine::instance()->renderer().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
+	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
 	return (true);
 }
 

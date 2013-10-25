@@ -90,6 +90,7 @@
     <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="Engine\ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="Engine\ResourceManager\SharedMesh.cpp" />
+    <ClCompile Include="Engine\ResourceManager\CubeMap.cpp" />
     <ClCompile Include="Engine\ResourceManager\Texture.cpp" />
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\OpenGL\UniformBuffer.hpp" />
+    <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
     <ClInclude Include="Engine\Utils\File.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
@@ -359,6 +361,8 @@
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Core\Renderer.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+    <None Include="Shaders\cubemap.fp" />
+    <None Include="Shaders\cubemap.vp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
