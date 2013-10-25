@@ -831,5 +831,7 @@
     <None Include="Engine\OpenGL\UniformBuffer.hh" />
     <None Include="Engine\OpenGL\VertexBuffer.hh" />
     <None Include="Demo\BasicCam.hh" />
+    <None Include="Shaders\cubemap.vp" />
+    <None Include="Shaders\cubemap.fp" />
   </ItemGroup>
 </Project>

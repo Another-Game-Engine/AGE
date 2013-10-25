@@ -113,6 +113,8 @@ void		Renderer::render()
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("fLightSpot", light);
 	GameEngine::instance()->renderer().getUniform("PerFrame")->flushChanges();
 
+	GameEngine::instance()->getCurrentScene()->getCamera()->update();
+
 	queueIt mIt, sIt;
 
     for (mIt = std::begin(_queues);  mIt != std::end(_queues);  mIt = sIt)
