@@ -1,15 +1,16 @@
-#version 330
+﻿#version 330
 
 layout (std140) uniform PerFrame
 {
-	mat4 vProjection;
-	mat4 vView;
-	vec3 fLightSpot;
+	mat4 projection;
+	mat4 view;
+	vec4 light;
+	float time;
 };
 
 layout (std140) uniform PerModel
 {
-	mat4 vModel;
+	mat4 model;
 };
 
 uniform	sampler2D fTexture;
@@ -29,10 +30,10 @@ void main(void)
    * - vecteur de reflection de la lumiére
    * - vecteur de l'oeil vers le frag
    */
-  vec3 lightPos = (vView * vec4(fLightSpot, 1)).xyz;
+  vec3 lightPos = (view * light).xyz;
   vec4 vectorLight = normalize(vec4(lightPos - fPosition.xyz, 1.0));
   vec4 vectorReflect = normalize(reflect(-vectorLight, fNormal));
-  vec4 vectorView = normalize(vec4(fPosition.xyz - vView[3].xyz, 1.0));
+  vec4 vectorView = normalize(vec4(fPosition.xyz - view[3].xyz, 1.0));
   /**
    * calcule de lambert afin de determiner le cos(a)
    * entre le vecteur de lumiére et la normal du fragment.
@@ -42,5 +43,4 @@ void main(void)
   vec4 ambiant = pxlColor * vec4(0.01, 0.01, 0.01, 1.0);
   vec4 diffuse = pxlColor * lamberTerm;
   FragColor = max(ambiant, diffuse);
-//	FragColor = vec4(1, 0, 0, 1);
 }

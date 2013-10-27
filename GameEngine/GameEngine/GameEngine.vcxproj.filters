@@ -96,6 +96,9 @@
     <ClCompile Include="Engine\ResourceManager\CubeMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Singleton.hpp">
@@ -485,9 +488,6 @@
     <ClInclude Include="Vendors\shared\tiny_obj_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\OpenGL\UniformBuffer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Components\RotationForce.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -833,5 +833,9 @@
     <None Include="Demo\BasicCam.hh" />
     <None Include="Shaders\cubemap.vp" />
     <None Include="Shaders\cubemap.fp" />
+    <None Include="shaders\earth.fp" />
+    <None Include="shaders\earth.vp" />
+    <None Include="shaders\bump.vp" />
+    <None Include="shaders\bump.fp" />
   </ItemGroup>
 </Project>

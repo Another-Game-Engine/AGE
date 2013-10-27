@@ -14,13 +14,11 @@ private:
 	std::map<std::string,
 		OpenGLTools::Shader*>						_shaders;
 	std::map<std::string,
-		OpenGLTools::UniformBuffer<>*>				_uniforms;
-	std::multimap<std::string,
-		Components::MeshRenderer* >	_queues; // Queues sorted by materials
+		OpenGLTools::UniformBuffer*>				_uniforms;
+	std::map<std::string,
+			Components::MeshRenderer* >				_queues; // Queues sorted by materials
 
-typedef std::multimap<std::string,
-		Components::MeshRenderer* > queueType;
-typedef queueType::iterator queueIt;
+	typedef std::map<std::string, Components::MeshRenderer*>::iterator	queueIt;
 
 public:
 	Renderer(void);
@@ -33,9 +31,9 @@ public:
 	bool					removeShader(std::string const &name);
 	OpenGLTools::Shader		*getShader(std::string const &name);
 	// Uniform buffers
-	OpenGLTools::UniformBuffer<>	&addUniform(std::string const &name);
+	OpenGLTools::UniformBuffer	&addUniform(std::string const &name);
 	bool							removeUniform(std::string const &name);
-	OpenGLTools::UniformBuffer<>	*getUniform(std::string const &name);
+	OpenGLTools::UniformBuffer	*getUniform(std::string const &name);
 
 	// Bind shader to uniform
 	bool							bindShaderToUniform(std::string const &shader,

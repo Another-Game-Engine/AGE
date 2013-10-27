@@ -1,19 +1,24 @@
 #ifndef		UNIFORMBUFFER_HH_
 #define		UNIFORMBUFFER_HH_
 
+#include "Utils/OpenGL.hh"
+
+#include "glm/glm.hpp"
+
 #include <map>
 
 namespace	OpenGLTools
 {
 
-template<size_t S = 4096>
+class Shader;
+
 class UniformBuffer
 {
 private:
 	struct	SUniformVars
 	{
-		GLuint	size;
 		GLuint	offset;
+		GLint	type;
 
 		SUniformVars()
 		{
@@ -26,7 +31,7 @@ private:
 
 		SUniformVars	&operator=(SUniformVars const &oth)
 		{
-			size = oth.size;
+			type = oth.type;
 			offset = oth.offset;
 			return (*this);
 		}
@@ -34,24 +39,30 @@ private:
 
 	GLuint									_bindingPoint;
 	GLuint									_bufferId;
-	GLuint									_globalSize;
+	GLuint									_dataSize;
 	std::map<std::string, SUniformVars>		_vars;
-	char									_buffer[S];
+	char									*_buffer;
 
 public:
 	UniformBuffer(GLuint bindingPoint);
 	~UniformBuffer(void);
 
-	void			init();
-	UniformBuffer	&registerUniform(std::string const &name, size_t offset, size_t size);
-	void			setUniform(std::string const &name, void *data);
+	void			init(Shader *referent, std::string const &blockName, std::string const vars[]);
+
+	void			setUniform(std::string const &name, int data);
+	void			setUniform(std::string const &name, unsigned int data);
+	void			setUniform(std::string const &name, float data);
+	void			setUniform(std::string const &name, glm::vec2 const &data);
+	void			setUniform(std::string const &name, glm::vec3 const &data);
+	void			setUniform(std::string const &name, glm::vec4 const &data);
+	void			setUniform(std::string const &name, glm::mat2 const &data);
+	void			setUniform(std::string const &name, glm::mat3 const &data);
+	void			setUniform(std::string const &name, glm::mat4 const &data);
 
 	void	flushChanges();
 
 	GLuint	getBindingPoint() const;
 };
-
-#include "UniformBuffer.hpp"
 
 }
 
