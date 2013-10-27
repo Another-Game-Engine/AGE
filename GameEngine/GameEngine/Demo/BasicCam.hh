@@ -11,6 +11,7 @@ public:
 	BasicCam(SmartPointer<Entity> const &toLook);
 	virtual ~BasicCam(void);
 private:
+	int						_lastKey;
 	glm::vec3				_pos;
 	SmartPointer<Entity>	_toLook;
 
