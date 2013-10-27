@@ -64,32 +64,30 @@ bool 			DemoScene::userStart()
 		"time"
 	};
 
-	OpenGLTools::Shader &s = GameEngine::instance()->renderer().addShader("basicLight", "../GameEngine/Shaders/light.vp", "../GameEngine/Shaders/light.fp");
+	OpenGLTools::Shader &s = GameEngine::instance()->renderer().addShader("earth", "../GameEngine/Shaders/earth.vp", "../GameEngine/Shaders/earth.fp")
+		.bindActiveTexture("fDayTexture", 0)
+		.bindActiveTexture("fNightTexture", 1)
+		.bindActiveTexture("fClouds", 2)
+		.bindActiveTexture("fBump", 3);
 
 	GameEngine::instance()->renderer().addUniform("PerFrame")
 		.init(&s, "PerFrame", perFrameVars);
 	GameEngine::instance()->renderer().addUniform("PerModel")
 		.init(&s, "PerModel", perModelVars);
 
-	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
-	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
-	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
-
 	GameEngine::instance()->renderer().addShader("basic", "../GameEngine/Shaders/basic.vp", "../GameEngine/Shaders/basic.fp");
-	GameEngine::instance()->renderer().bindShaderToUniform("basic", "PerFrame", "PerFrame");
-	GameEngine::instance()->renderer().bindShaderToUniform("basic", "PerModel", "PerModel");
-
-	GameEngine::instance()->renderer().addShader("earth", "../GameEngine/Shaders/earth.vp", "../GameEngine/Shaders/earth.fp")
-		.bindActiveTexture("fDayTexture", 0)
-		.bindActiveTexture("fNightTexture", 1)
-		.bindActiveTexture("fClouds", 2)
-		.bindActiveTexture("fBump", 3);
-	GameEngine::instance()->renderer().bindShaderToUniform("earth", "PerFrame", "PerFrame");
-	GameEngine::instance()->renderer().bindShaderToUniform("earth", "PerModel", "PerModel");
-
+	GameEngine::instance()->renderer().addShader("basicLight", "../GameEngine/Shaders/light.vp", "../GameEngine/Shaders/light.fp");
 	GameEngine::instance()->renderer().addShader("bump", "../GameEngine/Shaders/bump.vp", "../GameEngine/Shaders/bump.fp")
 		.bindActiveTexture("fTexture", 0)
 		.bindActiveTexture("fBump", 1);
+
+	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
+	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
+	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
+	GameEngine::instance()->renderer().bindShaderToUniform("basic", "PerFrame", "PerFrame");
+	GameEngine::instance()->renderer().bindShaderToUniform("basic", "PerModel", "PerModel");
+	GameEngine::instance()->renderer().bindShaderToUniform("earth", "PerFrame", "PerFrame");
+	GameEngine::instance()->renderer().bindShaderToUniform("earth", "PerModel", "PerModel");
 	GameEngine::instance()->renderer().bindShaderToUniform("bump", "PerFrame", "PerFrame");
 	GameEngine::instance()->renderer().bindShaderToUniform("bump", "PerModel", "PerModel");
 
@@ -110,7 +108,7 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->resources().addResource("cubemap:space", new Resources::CubeMap(), "../Assets/skyboxSpace");
 
 	SmartPointer<Entity> sun = createPlanet(50, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
-	SmartPointer<Entity> earth = createPlanet(2, 12, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
+	SmartPointer<Entity> earth = createPlanet(2, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
 	SmartPointer<Entity> moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
 
 	getRoot()->addSon(earth);
