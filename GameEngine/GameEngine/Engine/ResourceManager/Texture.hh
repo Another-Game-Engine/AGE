@@ -22,8 +22,8 @@ public:
 	Texture(void);
 	virtual ~Texture(void);
 
-	void			setWrapMode(GLenum wrapMode);
-	void			setFilters(GLenum magFilter, GLenum minFilter);
+	void			setWrapMode(GLenum wrapMode) { _wrap = wrapMode; }
+	void			setFilters(GLenum magFilter, GLenum minFilter) { _magFilter = magFilter; _minFilter = minFilter; }
 
 	virtual bool	load(std::string const &path);
 

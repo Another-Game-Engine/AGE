@@ -116,7 +116,7 @@ void Shader::compileShader(GLuint shaderId, std::string const &file) const
     } 
 }
 
-bool	Shader::bindUniformBlock(std::string const &blockName, UniformBuffer<> const &buffer)
+bool	Shader::bindUniformBlock(std::string const &blockName, UniformBuffer const &buffer)
 {
 	GLuint	blockId;
 
@@ -124,6 +124,17 @@ bool	Shader::bindUniformBlock(std::string const &blockName, UniformBuffer<> cons
 	blockId = glGetUniformBlockIndex(_progId, blockName.c_str());
 	glUniformBlockBinding(_progId, blockId, buffer.getBindingPoint());
 	return (true);
+}
+
+Shader	&Shader::bindActiveTexture(std::string const &uniformName, GLuint activeTexture)
+{
+	use();
+	GLuint	location = glGetUniformLocation(_progId, uniformName.c_str());
+
+	glUniform1i(location, activeTexture);
+	if (glGetError() != GL_NO_ERROR)
+		std::cerr << "Bind active texture failed." << std::endl;
+	return (*this);
 }
 
 GLuint	Shader::getId() const

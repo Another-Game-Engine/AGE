@@ -66,7 +66,7 @@ Renderer		&Engine::renderer()
 bool 		Engine::start()
 {
 	assert(_context != NULL && "Context must be initialized.");
-	if (!_context->start(1280, 720, "super!"))
+	if (!_context->start(1920, 1080, "Mini solar system"))
 		return (false);
  	if (glewInit() != GLEW_OK)
  	{
