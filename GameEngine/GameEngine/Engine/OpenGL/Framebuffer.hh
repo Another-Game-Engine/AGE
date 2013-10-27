@@ -1,6 +1,7 @@
 #ifndef  __FRAMEBUFFER_HH__
 # define __FRAMEBUFFER_HH__
 
+#include <map>
 #include "Utils/OpenGL.hh"
 
 namespace OpenGLTools
@@ -13,10 +14,15 @@ namespace OpenGLTools
 		unsigned int _height;
 		GLuint _handle;
 		GLuint _depth;
+		std::map<unsigned int, GLuint> _layers;
 	public:
 		Framebuffer();
 		~Framebuffer();
 		bool init(unsigned int width, unsigned int height);
+		void bind();
+		void unbind();
+		void addLayer(unsigned int id);
+		void bindTexture(unsigned int id);
 	private:
 		Framebuffer(const Framebuffer &o);
 		Framebuffer &operator=(const Framebuffer &o);

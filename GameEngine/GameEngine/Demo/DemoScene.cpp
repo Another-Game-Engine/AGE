@@ -91,6 +91,15 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
+
+
+
+	// --
+	// Framebuffer
+	// --
+
+	GameEngine::instance()->renderer().getFbo().addLayer(0);
+
 	return (true);
 }
 
