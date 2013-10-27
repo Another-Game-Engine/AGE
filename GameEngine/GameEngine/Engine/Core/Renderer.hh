@@ -7,7 +7,7 @@
 #include "Components/MeshRenderer.hh"
 #include "OpenGL/Shader.hh"
 #include "OpenGL/UniformBuffer.hh"
-#include "OpenGL/Framebuffer.hpp"
+#include "OpenGL/Framebuffer.hh"
 
 class Renderer
 {

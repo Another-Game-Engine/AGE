@@ -75,6 +75,7 @@
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
+    <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
     <ClCompile Include="Engine\Parsers\LoadOBJ.cpp" />
     <ClCompile Include="Engine\ResourceManager\AResource.cpp" />
@@ -247,7 +248,7 @@
     <None Include="Engine\Core\Timer.hh" />
     <None Include="Engine\Entities\Entity.hh" />
     <None Include="Engine\OpenGL\Attribute.hh" />
-    <None Include="Engine\OpenGL\Framebuffer.hpp" />
+    <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />
     <None Include="Engine\OpenGL\VertexBuffer.hh" />

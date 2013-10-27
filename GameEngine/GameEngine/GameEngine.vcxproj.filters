@@ -96,6 +96,9 @@
     <ClCompile Include="Engine\ResourceManager\CubeMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\OpenGL\Framebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Singleton.hpp">
@@ -837,6 +840,6 @@
     <None Include="Shaders\cubemap.vp" />
     <None Include="Shaders\cubemap.fp" />
     <None Include="Engine\Core\MaterialPass.hh" />
-    <None Include="Engine\OpenGL\Framebuffer.hpp" />
+    <None Include="Engine\OpenGL\Framebuffer.hh" />
   </ItemGroup>
 </Project>
