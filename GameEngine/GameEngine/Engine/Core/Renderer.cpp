@@ -119,7 +119,7 @@ void		Renderer::render()
 	// Set les uniforms du block PerFrame
 	e.renderer().getUniform("PerFrame")->setUniform("projection", e.getCurrentScene()->getCamera()->getProjection());
 	e.renderer().getUniform("PerFrame")->setUniform("view", e.getCurrentScene()->getCamera()->getTransform());
-//	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
+	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
 	e.renderer().getUniform("PerFrame")->flushChanges();
 
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();

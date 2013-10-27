@@ -45,6 +45,6 @@ void main(void)
   float lamberTerm = clamp(dot(normal.xyz, vectorLight.xyz), 0.03, 1.0);
   FragColor = lamberTerm * texture2D(fDayTexture, fTexCoord) +
 				(1.0 - lamberTerm) * texture2D(fNightTexture, fTexCoord) +
-				lamberTerm * texture2D(fClouds, fTexCoord);
+				lamberTerm * texture2D(fClouds, fTexCoord - vec2(time / 40, 0));
 //	FragColor = vec4(lamberTerm, lamberTerm, lamberTerm, 1);
 }
