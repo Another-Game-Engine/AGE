@@ -102,5 +102,10 @@ void 		Engine::draw()
 void 		Engine::stop()
 {
 	assert(_context != NULL && "Context must be initialized.");
+	_resources.uninit();
+	_renderer.uninit();
+	for (auto &e : _scenes)
+		delete e.second;
+	_scenes.clear();
 	_context->stop();
 }

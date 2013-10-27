@@ -9,6 +9,9 @@ AScene::AScene() :
 
 AScene::~AScene()
 {
+	if (_camera)
+		delete _camera;
+	_root = NULL;
 }
 
 void 							AScene::recomputePositions(SmartPointer<Entity> &father,

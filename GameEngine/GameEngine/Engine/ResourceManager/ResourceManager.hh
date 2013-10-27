@@ -26,6 +26,7 @@ public:
 										std::string const &param);
 	bool					removeResource(std::string const &name);
 	SmartPointer<AResource>	getResource(std::string const &name);
+	void uninit();
 
 };
 

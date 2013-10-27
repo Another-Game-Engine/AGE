@@ -17,6 +17,7 @@ namespace	Resources
 
 	Texture::~Texture(void)
 	{
+		glDeleteTextures(1, &_id);
 	}
 
 	bool			Texture::load(std::string const &path)
