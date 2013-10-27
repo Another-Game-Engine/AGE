@@ -7,6 +7,7 @@
 #include "Components/MeshRenderer.hh"
 #include "OpenGL/Shader.hh"
 #include "OpenGL/UniformBuffer.hh"
+#include "OpenGL/Framebuffer.hpp"
 
 class Renderer
 {
@@ -25,6 +26,8 @@ typedef queueType::iterator queueIt;
 public:
 	Renderer(void);
 	~Renderer(void);
+
+	bool init();
 
 	// Add an object that contain a render component to the render queue queueIdx
 	void					addToRenderQueue(Components::MeshRenderer *obj); // queueIdx between 0 and 3

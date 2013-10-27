@@ -4,7 +4,7 @@
 #include <string>
 #include <list>
 
-#include "ResourceManager/SharedMesh.hh"
+#include "Components/MeshRenderer.hh"
 
 static				int uniqueId()
 {
@@ -18,7 +18,7 @@ public:
 private:
 	// todo add a framebuffer index or pointer
 	std::string _shader;
-	std::list<Resources::SharedMesh*> _objects;
+	std::list<Components::MeshRenderer*> _objects;
 public:
 	MaterialPass();
 	~MaterialPass();

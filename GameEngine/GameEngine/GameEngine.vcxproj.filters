@@ -494,6 +494,9 @@
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Core\Material.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glm\CMakeFiles\CMakeDetermineCompilerABI_C.bin">
@@ -833,5 +836,7 @@
     <None Include="Demo\BasicCam.hh" />
     <None Include="Shaders\cubemap.vp" />
     <None Include="Shaders\cubemap.fp" />
+    <None Include="Engine\Core\MaterialPass.hh" />
+    <None Include="Engine\OpenGL\Framebuffer.hpp" />
   </ItemGroup>
 </Project>

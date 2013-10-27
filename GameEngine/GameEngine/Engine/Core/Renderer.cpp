@@ -13,6 +13,11 @@ Renderer::~Renderer(void)
 {
 }
 
+bool Renderer::init()
+{
+	return true;
+}
+
 void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
 {
 	_queues.insert(std::make_pair(obj->getShader(), obj));
