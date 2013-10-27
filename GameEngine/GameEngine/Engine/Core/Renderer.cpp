@@ -15,7 +15,8 @@ Renderer::~Renderer(void)
 
 bool Renderer::init()
 {
-	return true;
+	// todo /!\ real window size
+	return _fbo.init(500, 500);
 }
 
 void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
@@ -121,6 +122,8 @@ void		Renderer::render()
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
 	queueIt mIt, sIt;
+	_fbo.bind();
+	_fbo.bindTexture(0);
 
     for (mIt = std::begin(_queues);  mIt != std::end(_queues);  mIt = sIt)
     {
@@ -145,4 +148,10 @@ void		Renderer::render()
         }
     }
 	_queues.clear();
+	_fbo.unbind();
+}
+
+OpenGLTools::Framebuffer        &Renderer::getFbo()
+{
+	return _fbo;
 }

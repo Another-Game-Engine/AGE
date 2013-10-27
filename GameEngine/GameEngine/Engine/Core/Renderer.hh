@@ -12,6 +12,7 @@
 class Renderer
 {
 private:
+	OpenGLTools::Framebuffer                        _fbo;
 	std::map<std::string,
 		OpenGLTools::Shader*>						_shaders;
 	std::map<std::string,
@@ -46,6 +47,8 @@ public:
 														std::string const &uniform);
 	// Render queue
 	void							render();
+
+	OpenGLTools::Framebuffer        &getFbo();
 };
 
 #endif

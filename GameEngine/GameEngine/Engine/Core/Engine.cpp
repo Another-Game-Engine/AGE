@@ -73,14 +73,14 @@ bool 		Engine::start()
  		std::cerr << "glewInit Failed" << std::endl;
  		return (false);
  	}
+	if (!renderer().init())
+		return false;
 	if (!_sceneBinded || !_sceneBinded->userStart())
 		return (false);
   	glClearColor(0.1, 0.1, 0.1, 1);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	if (!renderer().init())
-		return false;
 	return (true);
 }
 
