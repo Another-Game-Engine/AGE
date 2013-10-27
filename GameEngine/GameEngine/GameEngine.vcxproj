@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
+    <ClInclude Include="Engine\Core\Material.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\OpenGL\UniformBuffer.hpp" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
@@ -242,9 +243,11 @@
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />
+    <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
     <None Include="Engine\Entities\Entity.hh" />
     <None Include="Engine\OpenGL\Attribute.hh" />
+    <None Include="Engine\OpenGL\Framebuffer.hpp" />
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />
     <None Include="Engine\OpenGL\VertexBuffer.hh" />
