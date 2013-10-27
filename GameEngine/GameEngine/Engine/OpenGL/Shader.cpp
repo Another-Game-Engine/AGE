@@ -25,6 +25,9 @@ Shader::Shader(void) :
 
 Shader::~Shader(void)
 {
+	glDetachShader(_progId, _vertexId);
+	glDetachShader(_progId, _fragId);
+	glDeleteProgram(_progId);
 }
 
 bool Shader::init(std::string const &vertex, std::string const &fragment)

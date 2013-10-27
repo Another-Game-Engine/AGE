@@ -41,6 +41,7 @@ public:
 														std::string const &uniform);
 	// Render queue
 	void							render();
+	void                            uninit();
 };
 
 #endif
