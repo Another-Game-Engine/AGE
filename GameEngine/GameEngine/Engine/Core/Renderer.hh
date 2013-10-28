@@ -50,12 +50,9 @@ public:
 														std::string const &uniform);
 	// Render queue
 	void							render();
-<<<<<<< HEAD
 
 	OpenGLTools::Framebuffer        &getFbo();
-=======
 	void                            uninit();
->>>>>>> master
 };
 
 #endif

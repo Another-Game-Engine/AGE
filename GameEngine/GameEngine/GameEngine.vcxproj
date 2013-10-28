@@ -75,11 +75,8 @@
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
-=======
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
->>>>>>> master
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
     <ClCompile Include="Engine\Parsers\LoadOBJ.cpp" />
     <ClCompile Include="Engine\ResourceManager\AResource.cpp" />
