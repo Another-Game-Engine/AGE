@@ -1,6 +1,9 @@
  #version 330
  #extension GL_ARB_geometry_shader4 : enable
 
+layout(triangles) in;
+layout(triangle_strip, max_vertices=6) out;
+
 layout (std140) uniform PerFrame
 {
 	mat4 projection;
