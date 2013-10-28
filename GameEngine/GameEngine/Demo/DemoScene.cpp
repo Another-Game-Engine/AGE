@@ -66,8 +66,7 @@ bool 			DemoScene::userStart()
 
 	OpenGLTools::Shader &s = GameEngine::instance()->renderer().addShader("earth",
 																		  "../GameEngine/Shaders/earth.vp",
-																		  "../GameEngine/Shaders/earth.fp",
-																		  "../GameEngine/Shaders/tesselation.gp")
+																		  "../GameEngine/Shaders/earth.fp")
 		.bindActiveTexture("fDayTexture", 0)
 		.bindActiveTexture("fNightTexture", 1)
 		.bindActiveTexture("fClouds", 2)
@@ -78,7 +77,7 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().addUniform("PerModel")
 		.init(&s, "PerModel", perModelVars);
 
-	GameEngine::instance()->renderer().addShader("basic", "../GameEngine/Shaders/basic.vp", "../GameEngine/Shaders/basic.fp");
+	GameEngine::instance()->renderer().addShader("basic", "../GameEngine/Shaders/basic.vp", "../GameEngine/Shaders/basic.fp", "../GameEngine/Shaders/tesselation.gp");
 	GameEngine::instance()->renderer().addShader("basicLight", "../GameEngine/Shaders/light.vp", "../GameEngine/Shaders/light.fp");
 	GameEngine::instance()->renderer().addShader("bump", "../GameEngine/Shaders/bump.vp", "../GameEngine/Shaders/bump.fp")
 		.bindActiveTexture("fTexture", 0)
@@ -110,7 +109,7 @@ bool 			DemoScene::userStart()
 
 	GameEngine::instance()->resources().addResource("cubemap:space", new Resources::CubeMap(), "../Assets/skyboxSpace");
 
-	SmartPointer<Entity> sun = createPlanet(50, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
+	SmartPointer<Entity> sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
 	SmartPointer<Entity> earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
 	SmartPointer<Entity> moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
 
