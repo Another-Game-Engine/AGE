@@ -23,19 +23,19 @@ layout (location = 1) in vec4 vColor;
 layout (location = 2) in vec4 vNormal;
 layout (location = 3) in vec2 vTexCoord;
 
-out vec4 fPosition;
-out vec4 fColor;
-out vec4 fNormal;
-out vec2 fTexCoord;
+out vec4 gPosition;
+out vec4 gColor;
+out vec4 gNormal;
+out vec2 gTexCoord;
 
 void main(void)
 {
   mat4 modelView = view * model;
   mat4 vectorSpace = transpose(inverse(modelView));
 
-  fColor = vColor;
-  fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);
-  fPosition = modelView * vPosition;
-  fTexCoord = vTexCoord;
+  gColor = vColor;
+  gNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);
+  gPosition = modelView * vPosition;
+  gTexCoord = vTexCoord;
   gl_Position = projection * modelView * vPosition;
 }
