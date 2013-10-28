@@ -30,7 +30,10 @@ void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
 	}
 }
 
-OpenGLTools::Shader		&Renderer::addShader(std::string const &name, std::string const &vp, std::string const &fp)
+OpenGLTools::Shader		&Renderer::addShader(std::string const &name,
+											 std::string const &vp,
+											 std::string const &fp,
+											 std::string const &geo)
 {
 	std::map<std::string, OpenGLTools::Shader*>::iterator	it;
    	OpenGLTools::Shader* shader;
@@ -38,12 +41,12 @@ OpenGLTools::Shader		&Renderer::addShader(std::string const &name, std::string c
 	if ((it = _shaders.find(name)) == _shaders.end())
 	{
 		shader = new OpenGLTools::Shader;
-		shader->init(vp, fp);
+		shader->init(vp, fp, geo);
 		_shaders[name] = shader;
 	}
 	else
 	{
-		it->second->init(vp, fp);
+		it->second->init(vp, fp, geo);
 		shader = it->second;
 	}
 	return *shader;

@@ -64,7 +64,10 @@ bool 			DemoScene::userStart()
 		"time"
 	};
 
-	OpenGLTools::Shader &s = GameEngine::instance()->renderer().addShader("earth", "../GameEngine/Shaders/earth.vp", "../GameEngine/Shaders/earth.fp")
+	OpenGLTools::Shader &s = GameEngine::instance()->renderer().addShader("earth",
+																		  "../GameEngine/Shaders/earth.vp",
+																		  "../GameEngine/Shaders/earth.fp",
+																		  "../GameEngine/Shaders/tesselation.gp")
 		.bindActiveTexture("fDayTexture", 0)
 		.bindActiveTexture("fNightTexture", 1)
 		.bindActiveTexture("fClouds", 2)
