@@ -102,4 +102,34 @@ namespace Components
 		return (_next);
 	}
 
+	void MeshRenderer::addMaterial(SmartPointer<Material> material)
+	{
+		material->addObject(this);
+		_materials.insert(material->getName());
+	}
+
+	void MeshRenderer::removeMaterial(SmartPointer<Material> material)
+	{
+		// be carefull when iterating on it
+		material->removeObject(this);
+		_materials.erase(material->getName());
+	}
+
+	void MeshRenderer::addMaterial(const std::string &material)
+	{
+		SmartPointer<Material> m = GameEngine::instance()->renderer().getMaterialManager().getMaterial(material);
+		if (!m.get())
+			return;
+		m->addObject(this);
+		_materials.insert(m->getName());
+	}
+
+	void MeshRenderer::removeMaterial(const std::string &material)
+	{
+		SmartPointer<Material> m = GameEngine::instance()->renderer().getMaterialManager().getMaterial(material);
+		if (!m.get())
+			return;
+		m->removeObject(this);
+		_materials.erase(m->getName());
+	}
 }

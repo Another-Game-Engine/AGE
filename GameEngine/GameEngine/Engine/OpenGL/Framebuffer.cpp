@@ -4,7 +4,8 @@ namespace OpenGLTools
 {
 
 Framebuffer::Framebuffer()
-   : _width(0),
+   : _isBinded(false),
+    _width(0),
 	_height(0),
 	_handle(0),
 	_depth(0)
@@ -31,12 +32,16 @@ bool Framebuffer::init(unsigned int width, unsigned int height)
 
 void Framebuffer::bind()
 {
+	//glBindTexture(GL_TEXTURE_2D, 0);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, _handle);
+	_isBinded = true;
 }
 
 void Framebuffer::unbind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	_isBinded = false;
 }
 
 void Framebuffer::addLayer(unsigned int id)
@@ -65,6 +70,8 @@ void Framebuffer::bindTexture(unsigned int id)
 	auto &e = _layers.find(id);
 	if (e == std::end(_layers))
 		return;
+	glBindTexture(GL_TEXTURE_2D, e->second);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, GL_TEXTURE_2D, e->second, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
-
 }

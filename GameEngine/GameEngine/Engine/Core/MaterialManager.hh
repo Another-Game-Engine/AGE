@@ -3,9 +3,11 @@
 
 #include <map>
 #include <set>
+#include <string>
 #include "Utils/SmartPointer.hh"
+#include "Material.hh"
+#include "OpenGL/Framebuffer.hh"
 
-class Material;
 class Shader;
 namespace Components
 {
@@ -23,9 +25,10 @@ private:
 	{
 		std::set<std::string> preShaders;
 		unsigned int weight;
-		std::set<SmartPointer<Components::MeshRenderer> > objects;
+		std::map<std::string, SmartPointer<Material> > materials;
 		unsigned int id;
-
+		std::string name;
+		bool last;
 	};
 
 	std::multimap<unsigned int, SmartPointer<ShaderHolder> > _shaders;
@@ -35,7 +38,8 @@ public:
 	~MaterialManager();
 	SmartPointer<Material> getMaterial(const std::string &name);
 	SmartPointer<Material> createMaterial(const std::string &name);
-	void compile();
+	void compile(OpenGLTools::Framebuffer &fbo);
+	inline std::multimap<unsigned int, SmartPointer<ShaderHolder> > &getShaderList() {return _shaders;}
 private:
 	MaterialManager(const MaterialManager &o);
 	MaterialManager &operator=(const MaterialManager &o);

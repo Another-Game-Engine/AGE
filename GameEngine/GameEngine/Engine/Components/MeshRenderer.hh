@@ -2,6 +2,7 @@
 #define		MESHRENDERER_HH_
 
 #include <map>
+#include <set>
 
 #include "AComponent.hh"
 #include "Utils/SmartPointer.hh"
@@ -11,6 +12,8 @@ namespace Resources
 {
 	class Texture;
 };
+
+class Material;
 
 namespace Components
 {
@@ -27,11 +30,11 @@ private:
 	textureMap                          _textures;
 
 	MeshRenderer						*_next;
+	std::set<std::string>                _materials;
 
 	MeshRenderer();
 	MeshRenderer(MeshRenderer const &);
 	MeshRenderer	&operator=(MeshRenderer const &);
-
 public:
 	MeshRenderer(std::string const &name, std::string const &resource);
 	virtual ~MeshRenderer(void);
@@ -47,6 +50,10 @@ public:
 	void removeTexture(const std::string &name);
 	void bindTextures() const;
 	void unbindTextures() const;
+	void addMaterial(SmartPointer<Material> material);
+	void removeMaterial(SmartPointer<Material> material);
+	void addMaterial(const std::string &material);
+	void removeMaterial(const std::string &material);
 
 	void			setNext(MeshRenderer *next);
 	MeshRenderer	*getNext() const;

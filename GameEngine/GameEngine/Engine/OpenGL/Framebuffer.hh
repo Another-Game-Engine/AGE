@@ -10,6 +10,7 @@ namespace OpenGLTools
 	{
 	public:
 	private:
+		bool _isBinded;
 		unsigned int _width;
 		unsigned int _height;
 		GLuint _handle;
@@ -23,6 +24,8 @@ namespace OpenGLTools
 		void unbind();
 		void addLayer(unsigned int id);
 		void bindTexture(unsigned int id);
+		void renderToScreen();
+		inline bool isBinded(){return _isBinded;};
 	private:
 		Framebuffer(const Framebuffer &o);
 		Framebuffer &operator=(const Framebuffer &o);
