@@ -15,11 +15,12 @@ void    SdlContext::updateEvents(Input &input) const
 {
   SDL_Event events;
 
-  input.clearInputs();
   while (SDL_PollEvent(&events))
   {
     if (events.type == SDL_KEYDOWN)
-      input.addInput(events.key.keysym.sym);
+      input.addKeyInput(events.key.keysym.sym);
+    if (events.type == SDL_KEYUP)
+      input.removeKeyInput(events.key.keysym.sym);
     else if (events.type == SDL_MOUSEMOTION)
       input.setMousePosition(glm::i8vec2(events.motion.x, events.motion.x));
     else
