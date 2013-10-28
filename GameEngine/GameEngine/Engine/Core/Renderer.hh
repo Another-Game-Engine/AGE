@@ -18,7 +18,9 @@ private:
 	std::map<std::string,
 			Components::MeshRenderer* >				_queues; // Queues sorted by materials
 
-	typedef std::map<std::string, Components::MeshRenderer*>::iterator	queueIt;
+	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;
+	typedef std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	uniformsIt;
+	typedef std::map<std::string, Components::MeshRenderer*>::iterator		queueIt;
 
 public:
 	Renderer(void);

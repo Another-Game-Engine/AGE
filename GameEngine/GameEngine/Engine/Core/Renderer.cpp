@@ -154,10 +154,10 @@ void		Renderer::render()
 
 void Renderer::uninit()
 {
-	for (auto &e : _shaders)
-		delete e.second;
-	for (auto &e : _uniforms)
-		delete e.second;
+	for (shadersIt it = _shaders.begin(); it != _shaders.end(); ++it)
+		delete it->second;
+	for (uniformsIt it = _uniforms.begin(); it != _uniforms.end(); ++it)
+		delete it->second;
 	_shaders.clear();
 	_uniforms.clear();
 }
