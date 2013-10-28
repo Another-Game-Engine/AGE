@@ -42,7 +42,8 @@ int		i;
 
   for (i = 0; i < gl_VerticesIn; i++)
   {
-    gl_Position = gl_PositionIn[i] + vec4(rand(gl_PositionIn[i].xy));
+    gl_Position = projection * view * model * (gl_PositionIn[i] + vec4(cos(time * gl_PositionIn[i].x * 10) / 40, 0,
+																	   cos(time * gl_PositionIn[i].z * 10) / 40, 0));
 	fPosition = gPosition[i];
 	fColor = gColor[i];
 	fNormal = gNormal[i];
