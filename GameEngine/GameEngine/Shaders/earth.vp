@@ -1,0 +1,41 @@
+#version 330
+
+layout (std140) uniform PerFrame
+{
+	mat4 projection;
+	mat4 view;
+	vec4 light;
+	float time;
+};
+
+layout (std140) uniform PerModel
+{
+	mat4 model;
+};
+
+uniform	sampler2D fDayTexture;
+uniform	sampler2D fNightTexture;
+uniform	sampler2D fClouds;
+uniform	sampler2D fBump;
+
+layout (location = 0) in vec4 vPosition;
+layout (location = 1) in vec4 vColor;
+layout (location = 2) in vec4 vNormal;
+layout (location = 3) in vec2 vTexCoord;
+
+out vec4 fPosition;
+out vec4 fColor;
+out vec4 fNormal;
+out vec2 fTexCoord;
+
+void main(void)
+{
+  mat4 modelView = view * model;
+  mat4 vectorSpace = transpose(inverse(view * model));
+
+  fColor = vColor;
+  fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);
+  fPosition = modelView * vPosition;
+  fTexCoord = vTexCoord;
+  gl_Position = projection * modelView * vPosition;
+}

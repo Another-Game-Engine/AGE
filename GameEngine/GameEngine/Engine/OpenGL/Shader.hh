@@ -12,7 +12,7 @@
 # define SHADER_HH_
 
 # include "Utils/OpenGL.hh"
-# include "UniformBuffer.hh"
+# include "OpenGL/UniformBuffer.hh"
 
 # include "glm/glm.hpp"
 
@@ -32,6 +32,7 @@ private:
 	GLuint						_progId;
 	GLuint						_vertexId;
 	GLuint						_fragId;
+	GLuint						_geometryId;
 
 	void linkProgram(GLuint progId) const;
 	void compileShader(GLuint shaderId, std::string const &file) const;
@@ -41,8 +42,9 @@ public:
 	Shader(void);
 	~Shader(void);
 
-	bool	init(std::string const &vertex, std::string const &fragment);
-	bool	bindUniformBlock(std::string const &blockName, UniformBuffer<> const &buff);
+	bool	init(std::string const &vertex, std::string const &fragment, std::string const &geometry = "");
+	bool	bindUniformBlock(std::string const &blockName, UniformBuffer const &buff);
+	Shader	&bindActiveTexture(std::string const &uniformName, GLuint activeTexture);
 
 	void	use(void);
 	GLuint	getId() const;

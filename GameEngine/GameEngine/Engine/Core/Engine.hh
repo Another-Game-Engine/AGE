@@ -27,6 +27,8 @@ private:
 	Engine(Engine const &);
 	Engine		&operator=(Engine const &);
 
+	typedef	std::map<std::string, AScene*>::iterator	scenesIt;
+
 public:
 	Engine();
 	~Engine();

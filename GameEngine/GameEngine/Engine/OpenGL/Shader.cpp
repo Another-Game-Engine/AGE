@@ -19,15 +19,21 @@ namespace OpenGLTools
 Shader::Shader(void) :
 	_progId(0),
 	_vertexId(0),
-	_fragId(0)
+	_fragId(0),
+	_geometryId(0)
 {
 }
 
 Shader::~Shader(void)
 {
+	glDetachShader(_progId, _vertexId);
+	glDetachShader(_progId, _fragId);
+	if (_geometryId != 0)
+		glDetachShader(_progId, _geometryId);
+	glDeleteProgram(_progId);
 }
 
-bool Shader::init(std::string const &vertex, std::string const &fragment)
+bool Shader::init(std::string const &vertex, std::string const &fragment, std::string const &geometry)
 {
   if ((_vertexId = addShader(vertex, GL_VERTEX_SHADER)) == 0)
     {
@@ -39,9 +45,17 @@ bool Shader::init(std::string const &vertex, std::string const &fragment)
       std::cerr << "Error: fragment shader invalid" << std::endl;
       return (false);
     }
+  if (geometry.empty() == false &&
+	  (_geometryId = addShader(geometry, GL_GEOMETRY_SHADER)) == 0)
+    {
+      std::cerr << "Error: geometry shader invalid" << std::endl;
+      return (false);
+    }
   _progId = glCreateProgram();
   glAttachShader(_progId, _vertexId);
   glAttachShader(_progId, _fragId);
+  if (_geometryId != 0)
+	  glAttachShader(_progId, _geometryId);
   linkProgram(_progId);
   return (true);
 }
@@ -116,7 +130,7 @@ void Shader::compileShader(GLuint shaderId, std::string const &file) const
     } 
 }
 
-bool	Shader::bindUniformBlock(std::string const &blockName, UniformBuffer<> const &buffer)
+bool	Shader::bindUniformBlock(std::string const &blockName, UniformBuffer const &buffer)
 {
 	GLuint	blockId;
 
@@ -124,6 +138,17 @@ bool	Shader::bindUniformBlock(std::string const &blockName, UniformBuffer<> cons
 	blockId = glGetUniformBlockIndex(_progId, blockName.c_str());
 	glUniformBlockBinding(_progId, blockId, buffer.getBindingPoint());
 	return (true);
+}
+
+Shader	&Shader::bindActiveTexture(std::string const &uniformName, GLuint activeTexture)
+{
+	use();
+	GLuint	location = glGetUniformLocation(_progId, uniformName.c_str());
+
+	glUniform1i(location, activeTexture);
+	if (glGetError() != GL_NO_ERROR)
+		std::cerr << "Bind active texture failed." << std::endl;
+	return (*this);
 }
 
 GLuint	Shader::getId() const

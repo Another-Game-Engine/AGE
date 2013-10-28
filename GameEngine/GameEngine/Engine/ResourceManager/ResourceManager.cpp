@@ -45,4 +45,9 @@ SmartPointer<AResource>	ResourceManager::getResource(std::string const &name)
 	return (it->second);
 }
 
+void ResourceManager::uninit()
+{
+	_resources.clear();
+}
+
 }
