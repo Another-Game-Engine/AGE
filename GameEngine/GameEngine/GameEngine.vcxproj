@@ -75,7 +75,11 @@
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
+=======
+    <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
+>>>>>>> master
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
     <ClCompile Include="Engine\Parsers\LoadOBJ.cpp" />
     <ClCompile Include="Engine\ResourceManager\AResource.cpp" />
@@ -102,7 +106,6 @@
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Core\Material.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
-    <ClInclude Include="Engine\OpenGL\UniformBuffer.hpp" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
     <ClInclude Include="Engine\Utils\File.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
@@ -365,8 +368,12 @@
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Core\Renderer.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+    <None Include="shaders\bump.fp" />
+    <None Include="shaders\bump.vp" />
     <None Include="Shaders\cubemap.fp" />
     <None Include="Shaders\cubemap.vp" />
+    <None Include="shaders\earth.fp" />
+    <None Include="shaders\earth.vp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -26,6 +26,8 @@ private:
 	std::string							_shader;
 	textureMap                          _textures;
 
+	MeshRenderer						*_next;
+
 	MeshRenderer();
 	MeshRenderer(MeshRenderer const &);
 	MeshRenderer	&operator=(MeshRenderer const &);
@@ -45,6 +47,9 @@ public:
 	void removeTexture(const std::string &name);
 	void bindTextures() const;
 	void unbindTextures() const;
+
+	void			setNext(MeshRenderer *next);
+	MeshRenderer	*getNext() const;
 
 	SmartPointer<Resources::SharedMesh>	const &getMesh() const;
 };

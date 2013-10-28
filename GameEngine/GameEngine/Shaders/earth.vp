@@ -13,7 +13,10 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform	sampler2D fTexture;
+uniform	sampler2D fDayTexture;
+uniform	sampler2D fNightTexture;
+uniform	sampler2D fClouds;
+uniform	sampler2D fBump;
 
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;
@@ -28,7 +31,7 @@ out vec2 fTexCoord;
 void main(void)
 {
   mat4 modelView = view * model;
-  mat4 vectorSpace = transpose(inverse(modelView));
+  mat4 vectorSpace = transpose(inverse(view * model));
 
   fColor = vColor;
   fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);

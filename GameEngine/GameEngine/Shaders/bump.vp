@@ -14,6 +14,7 @@ layout (std140) uniform PerModel
 };
 
 uniform	sampler2D fTexture;
+uniform	sampler2D fBump;
 
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;

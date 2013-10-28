@@ -9,7 +9,8 @@ namespace Components
 
 	MeshRenderer::MeshRenderer(std::string const &name, std::string const &resource) :
 		AComponent(name),
-		_mesh(GameEngine::instance()->resources().getResource(resource))
+		_mesh(GameEngine::instance()->resources().getResource(resource)),
+		_next(NULL)
 	{
 	}
 
@@ -88,6 +89,17 @@ namespace Components
 			glActiveTexture(GL_TEXTURE0 + c++);
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+		glActiveTexture(GL_TEXTURE0);
+	}
+
+	void			MeshRenderer::setNext(MeshRenderer *next)
+	{
+		_next = next;
+	}
+
+	MeshRenderer	*MeshRenderer::getNext() const
+	{
+		return (_next);
 	}
 
 }

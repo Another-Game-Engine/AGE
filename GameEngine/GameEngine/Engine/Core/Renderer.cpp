@@ -11,6 +11,7 @@ Renderer::Renderer(void)
 
 Renderer::~Renderer(void)
 {
+	uninit();
 }
 
 bool Renderer::init()
@@ -21,10 +22,24 @@ bool Renderer::init()
 
 void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
 {
-	_queues.insert(std::make_pair(obj->getShader(), obj));
+	queueIt		it;
+
+	if ((it = _queues.find(obj->getShader())) != std::end(_queues))
+	{
+		obj->setNext(it->second);
+		it->second = obj;
+	}
+	else
+	{
+		obj->setNext(NULL);
+		_queues[obj->getShader()] = obj;
+	}
 }
 
-OpenGLTools::Shader		&Renderer::addShader(std::string const &name, std::string const &vp, std::string const &fp)
+OpenGLTools::Shader		&Renderer::addShader(std::string const &name,
+											 std::string const &vp,
+											 std::string const &fp,
+											 std::string const &geo)
 {
 	std::map<std::string, OpenGLTools::Shader*>::iterator	it;
    	OpenGLTools::Shader* shader;
@@ -32,12 +47,12 @@ OpenGLTools::Shader		&Renderer::addShader(std::string const &name, std::string c
 	if ((it = _shaders.find(name)) == _shaders.end())
 	{
 		shader = new OpenGLTools::Shader;
-		shader->init(vp, fp);
+		shader->init(vp, fp, geo);
 		_shaders[name] = shader;
 	}
 	else
 	{
-		it->second->init(vp, fp);
+		it->second->init(vp, fp, geo);
 		shader = it->second;
 	}
 	return *shader;
@@ -62,19 +77,18 @@ OpenGLTools::Shader		*Renderer::getShader(std::string const &name)
 	return (it->second);
 }
 
-OpenGLTools::UniformBuffer<>	&Renderer::addUniform(std::string const &name)
+OpenGLTools::UniformBuffer	&Renderer::addUniform(std::string const &name)
 {
 	static GLuint					idx = 0;
-	OpenGLTools::UniformBuffer<>	*buff = new OpenGLTools::UniformBuffer<>(idx++);
+	OpenGLTools::UniformBuffer		*buff = new OpenGLTools::UniformBuffer(idx++);
 
-	buff->init();
 	_uniforms[name] = buff;
 	return (*buff);
 }
 
 bool		Renderer::removeUniform(std::string const &name)
 {
-	std::map<std::string, OpenGLTools::UniformBuffer<>*>::iterator	it;
+	std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	it;
 
 	if ((it = _uniforms.find(name)) == _uniforms.end())
 		return (false);
@@ -83,9 +97,9 @@ bool		Renderer::removeUniform(std::string const &name)
 	return (true);
 }
 
-OpenGLTools::UniformBuffer<>	*Renderer::getUniform(std::string const &name)
+OpenGLTools::UniformBuffer	*Renderer::getUniform(std::string const &name)
 {
-	std::map<std::string, OpenGLTools::UniformBuffer<>*>::iterator	it;
+	std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	it;
 
 	if ((it = _uniforms.find(name)) == _uniforms.end())
 		return (NULL);
@@ -97,7 +111,7 @@ bool		Renderer::bindShaderToUniform(std::string const &shader,
 										std::string const &uniform)
 {
 	std::map<std::string, OpenGLTools::Shader*>::iterator			sh;
-	std::map<std::string, OpenGLTools::UniformBuffer<>*>::iterator	un;
+	std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	un;
 
 	if ((sh = _shaders.find(shader)) == _shaders.end() ||
 		(un = _uniforms.find(uniform)) == _uniforms.end())
@@ -108,50 +122,64 @@ bool		Renderer::bindShaderToUniform(std::string const &shader,
 
 void		Renderer::render()
 {
-	// Set les uniforms du block PerFrame
-	float		light[] = {0.0f, 5.0f, 0.0f};
-	void		*data;
+	static double time = 0;
+	Engine	&e = *GameEngine::instance();
 
-	data = (void*)glm::value_ptr(GameEngine::instance()->getCurrentScene()->getCamera()->getProjection());
-	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("vProjection", data);
-	data = (void*)glm::value_ptr(GameEngine::instance()->getCurrentScene()->getCamera()->getTransform());
-	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("vView", data);
-	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("fLightSpot", light);
-	GameEngine::instance()->renderer().getUniform("PerFrame")->flushChanges();
+	time += e.timer().getElapsed();
+	// Set les uniforms du block PerFrame
+	e.renderer().getUniform("PerFrame")->setUniform("projection", e.getCurrentScene()->getCamera()->getProjection());
+	e.renderer().getUniform("PerFrame")->setUniform("view", e.getCurrentScene()->getCamera()->getTransform());
+	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
+	e.renderer().getUniform("PerFrame")->flushChanges();
 
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
+<<<<<<< HEAD
 	queueIt mIt, sIt;
 	_fbo.bind();
 	_fbo.bindTexture(0);
+=======
+	queueIt			it;
+>>>>>>> master
 
-    for (mIt = std::begin(_queues);  mIt != std::end(_queues);  mIt = sIt)
+    for (it = std::begin(_queues);  it != std::end(_queues);  ++it)
     {
-        std::string key = mIt->first;
-        std::pair<queueIt, queueIt> keyRange = _queues.equal_range(key);
-
-		OpenGLTools::Shader		*currentShader = getShader(key);
+		OpenGLTools::Shader		*currentShader = getShader(it->first);
 		// Set the uniforms values for the shader
 		assert(currentShader != NULL && "Shader binded that does not exist");
 		currentShader->use();
 
-        for (sIt = keyRange.first;  sIt != keyRange.second;  ++sIt)
-        {
+		Components::MeshRenderer		*cur = it->second;
+
+		while (cur)
+		{
 			// Set les uniforms du block PerModel
-			data = (void*)glm::value_ptr(sIt->second->getFather()->getGlobalTransform());
-			GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("vModel", data);
+			GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", cur->getFather()->getGlobalTransform());
 			GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
 
-			sIt->second->bindTextures();
-			sIt->second->getMesh()->draw();
-			sIt->second->unbindTextures();
+			cur->bindTextures();
+			cur->getMesh()->draw();
+			cur->unbindTextures();
+			cur = cur->getNext();
         }
     }
 	_queues.clear();
 	_fbo.unbind();
 }
 
+<<<<<<< HEAD
 OpenGLTools::Framebuffer        &Renderer::getFbo()
 {
 	return _fbo;
+=======
+
+void Renderer::uninit()
+{
+	for (shadersIt it = _shaders.begin(); it != _shaders.end(); ++it)
+		delete it->second;
+	for (uniformsIt it = _uniforms.begin(); it != _uniforms.end(); ++it)
+		delete it->second;
+	_shaders.clear();
+	_uniforms.clear();
+>>>>>>> master
 }

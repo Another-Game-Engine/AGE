@@ -1,7 +1,15 @@
 #version 330
 
-in vec3 texcoords;
+layout (std140) uniform cameraUniform
+{
+	mat4 projection;
+	mat4 view;
+};
+
 uniform samplerCube cube_texture;
+
+in vec3 texcoords;
+
 out vec4 frag_colour;
 
 void main () {
