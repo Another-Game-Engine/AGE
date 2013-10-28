@@ -132,15 +132,10 @@ void		Renderer::render()
 	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
 	e.renderer().getUniform("PerFrame")->flushChanges();
 
+	_fbo.bind();
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
-<<<<<<< HEAD
-	queueIt mIt, sIt;
-	_fbo.bind();
-	_fbo.bindTexture(0);
-=======
 	queueIt			it;
->>>>>>> master
 
     for (it = std::begin(_queues);  it != std::end(_queues);  ++it)
     {
@@ -150,7 +145,6 @@ void		Renderer::render()
 		currentShader->use();
 
 		Components::MeshRenderer		*cur = it->second;
-
 		while (cur)
 		{
 			// Set les uniforms du block PerModel
@@ -167,11 +161,11 @@ void		Renderer::render()
 	_fbo.unbind();
 }
 
-<<<<<<< HEAD
+
 OpenGLTools::Framebuffer        &Renderer::getFbo()
 {
 	return _fbo;
-=======
+}
 
 void Renderer::uninit()
 {
@@ -181,5 +175,4 @@ void Renderer::uninit()
 		delete it->second;
 	_shaders.clear();
 	_uniforms.clear();
->>>>>>> master
 }
