@@ -1,19 +1,22 @@
 #ifndef  __MATERIAL_HH__
 # define __MATERIAL_HH__
 
-#include <list>
+#include <vector>
 
-class MaterialPass;
+class MaterialManager;
 
 class Material
 {
 public:
 private:
-	std::list<MaterialPass> _passes;
+	MaterialManager *_manager;
+	std::vector<std::string> _shaders;
 	// TODO ass an FB pointer for _lastFrameBuffer;
 public:
-	Material();
+	Material(MaterialManager *manager);
 	~Material();
+	Material &pushShader(const std::string &shader);
+	const std::vector<std::string> &getShaders() const;
 private:
 	Material(const Material &o);
 	Material &operator=(const Material &o);
