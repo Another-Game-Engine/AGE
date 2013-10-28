@@ -104,8 +104,8 @@ void 		Engine::stop()
 	assert(_context != NULL && "Context must be initialized.");
 	_resources.uninit();
 	_renderer.uninit();
-	for (auto &e : _scenes)
-		delete e.second;
+	for (scenesIt it = _scenes.begin(); it != _scenes.end(); ++it)
+		delete it->second;
 	_scenes.clear();
 	_context->stop();
 }
