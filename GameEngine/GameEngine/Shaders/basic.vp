@@ -20,14 +20,14 @@ layout (location = 1) in vec4 vColor;
 layout (location = 2) in vec4 vNormal;
 layout (location = 3) in vec2 vTexCoord;
 
-out vec4 fColor;
-out vec2 fUv;
+out vec4 gColor;
+out vec2 gUv;
 
 void main(void)
 {
   mat4 modelView = view * model;
 
-  fColor = vColor;
-  fUv = vTexCoord;
-  gl_Position = projection * modelView * vPosition;
+  gColor = vColor;
+  gUv = vTexCoord;
+  gl_Position = vPosition;
 }
