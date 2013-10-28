@@ -32,18 +32,22 @@ out vec4 fColor;
 out vec4 fNormal;
 out vec2 fTexCoord;
 
- void main()
- {
-	int		i;
+float rand(vec2 co)
+{
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+void main()
+{
+int		i;
 
-   for (i = 0; i < gl_VerticesIn; i++)
-   {
-     gl_Position = gl_PositionIn[i];
-	 fPosition = gPosition[i];
-	 fColor = gColor[i];
-	 fNormal = gNormal[i];
-	 fTexCoord = gTexCoord[i];
-     EmitVertex();
-   }
-   EndPrimitive();
- }
+  for (i = 0; i < gl_VerticesIn; i++)
+  {
+    gl_Position = gl_PositionIn[i] + vec4(rand(gl_PositionIn[i].xy));
+	fPosition = gPosition[i];
+	fColor = gColor[i];
+	fNormal = gNormal[i];
+	fTexCoord = gTexCoord[i];
+    EmitVertex();
+  }
+  EndPrimitive();
+}
