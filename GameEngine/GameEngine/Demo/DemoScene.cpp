@@ -34,7 +34,12 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer:" + tex1, "model:ball");
 
-	r->setShader(shader);
+	SmartPointer<Material> materialPlanet = GameEngine::instance()->renderer().getMaterialManager().createMaterial("material:planet_" + shader);
+
+	materialPlanet->pushShader(shader);
+	r->addMaterial(materialPlanet);
+
+//	r->setShader(shader);
 	r->addTexture(tex1, "texture1", 0);
 	if (!tex2.empty())
 		r->addTexture(tex2, "texture2", 1);
@@ -144,7 +149,9 @@ bool 			DemoScene::userStart()
 	// Framebuffer
 	// --
 
-	GameEngine::instance()->renderer().getFbo().addLayer(0);
+	//GameEngine::instance()->renderer().getFbo().addLayer(0);
+
+	GameEngine::instance()->renderer().getMaterialManager().compile(GameEngine::instance()->renderer().getFbo());
 
 	return (true);
 }

@@ -4,7 +4,7 @@
 MaterialManager::MaterialManager()
 {}
 
-MaterialManager::MaterialManager()
+MaterialManager::~MaterialManager()
 {}
 
 SmartPointer<Material> MaterialManager::getMaterial(const::std::string &name)
@@ -20,12 +20,12 @@ SmartPointer<Material> MaterialManager::createMaterial(const::std::string &name)
 	auto &it = _materials.find(name);
 	if (it != std::end(_materials))
 		return it->second;
-	SmartPointer<Material> m = new Material(this);
+	SmartPointer<Material> m = new Material(this, name);
 	_materials.insert(std::make_pair(name, m));
 	return m;
 }
 
-void MaterialManager::compile()
+void MaterialManager::compile(OpenGLTools::Framebuffer &fbo)
 {
 	_shaderIds.clear();
 	_shaders.clear();
@@ -35,7 +35,7 @@ void MaterialManager::compile()
 	for (auto &e : _materials)
 	{
 		auto &l = e.second->getShaders();
-		for (int i = 0; i < l.size(); ++i)
+		for (unsigned int i = 0; i < l.size(); ++i)
 		{
 			unsigned int id = shaderId;
 			SmartPointer<ShaderHolder> shader;
@@ -46,6 +46,7 @@ void MaterialManager::compile()
 				shader = new ShaderHolder;
 				shader->id = shaderId;
 				shader->weight = 1;
+				shader->name = l[i];
 				tmpList.insert(std::make_pair(shaderId, shader));
 				++shaderId;
 			}
@@ -53,8 +54,18 @@ void MaterialManager::compile()
 			{
 				shader = tmpList[currentIdIt->second];
 			}
-			for (int j = i - 1; i >= 0; --j)
+			for (int j = (int)(i) - 1; j >= 0; --j)
 				shader->preShaders.insert(l[j]);
+			if (i == l.size() - 1)
+			{
+				shader->last = true;
+			}
+			else
+			{
+				shader->last = false;
+				fbo.addLayer(shader->id);
+			}
+			shader->materials.insert(std::make_pair(e.first, e.second));
 		}
 	}
 	for (auto &e : tmpList)

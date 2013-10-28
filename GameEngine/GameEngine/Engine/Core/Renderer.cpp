@@ -132,33 +132,64 @@ void		Renderer::render()
 	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
 	e.renderer().getUniform("PerFrame")->flushChanges();
 
-	_fbo.bind();
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
-	queueIt			it;
+	// @cesar's implementation
 
-    for (it = std::begin(_queues);  it != std::end(_queues);  ++it)
-    {
-		OpenGLTools::Shader		*currentShader = getShader(it->first);
-		// Set the uniforms values for the shader
-		assert(currentShader != NULL && "Shader binded that does not exist");
-		currentShader->use();
-
-		Components::MeshRenderer		*cur = it->second;
-		while (cur)
+	for (auto &shaderName : _materialManager.getShaderList())
+	{
+		OpenGLTools::Shader	*shader = getShader(shaderName.second->name);
+		if (!shaderName.second->last)
 		{
-			// Set les uniforms du block PerModel
-			GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", cur->getFather()->getGlobalTransform());
-			GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
+			if (!_fbo.isBinded())
+				_fbo.bind();
+			_fbo.bindTexture(shaderName.second->id);
+		}
+		else if (_fbo.isBinded())
+			_fbo.unbind();
+		shader->use();
+		for (auto &mat : shaderName.second->materials)
+		{
+			for (auto &obj : mat.second->getObjects())
+			{
+				GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+				GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
 
-			cur->bindTextures();
-			cur->getMesh()->draw();
-			cur->unbindTextures();
-			cur = cur->getNext();
-        }
-    }
+				obj->bindTextures();
+				obj->getMesh()->draw();
+				obj->unbindTextures();
+			}
+		}
+	}
 	_queues.clear();
 	_fbo.unbind();
+
+
+	// @paulo's implementation
+
+	//queueIt			it;
+
+ //   for (it = std::begin(_queues);  it != std::end(_queues);  ++it)
+ //   {
+	//	OpenGLTools::Shader		*currentShader = getShader(it->first);
+	//	// Set the uniforms values for the shader
+	//	assert(currentShader != NULL && "Shader binded that does not exist");
+	//	currentShader->use();
+
+	//	Components::MeshRenderer		*cur = it->second;
+	//	while (cur)
+	//	{
+	//		// Set les uniforms du block PerModel
+	//		GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", cur->getFather()->getGlobalTransform());
+	//		GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
+
+	//		cur->bindTextures();
+	//		cur->getMesh()->draw();
+	//		cur->unbindTextures();
+	//		cur = cur->getNext();
+ //       }
+ //   }
+	//_queues.clear();
 }
 
 
