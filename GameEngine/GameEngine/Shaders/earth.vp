@@ -31,7 +31,7 @@ out vec2 fTexCoord;
 void main(void)
 {
   mat4 modelView = view * model;
-  mat4 vectorSpace = transpose(inverse(view * model));
+  mat4 vectorSpace = transpose(inverse(modelView));
 
   fColor = vColor;
   fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);

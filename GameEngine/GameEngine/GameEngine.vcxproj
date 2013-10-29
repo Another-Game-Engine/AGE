@@ -19,7 +19,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -96,6 +96,7 @@
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="TinyThread\tinythread.cpp" />
+    <ClCompile Include="Demo\TrackBall.cpp" />
     <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -367,6 +368,8 @@
     <None Include="Shaders\cubemap.vp" />
     <None Include="shaders\earth.fp" />
     <None Include="shaders\earth.vp" />
+    <None Include="shaders\tesselation.gp" />
+    <None Include="Demo\TrackBall.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

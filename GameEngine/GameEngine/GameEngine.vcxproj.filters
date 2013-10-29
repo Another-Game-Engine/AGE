@@ -99,6 +99,9 @@
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Demo\TrackBall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Singleton.hpp">
@@ -837,5 +840,7 @@
     <None Include="shaders\earth.vp" />
     <None Include="shaders\bump.vp" />
     <None Include="shaders\bump.fp" />
+    <None Include="shaders\tesselation.gp" />
+    <None Include="Demo\TrackBall.hh" />
   </ItemGroup>
 </Project>
