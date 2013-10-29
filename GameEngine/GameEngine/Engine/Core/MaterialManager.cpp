@@ -64,7 +64,7 @@ SmartPointer<MaterialManager::ShaderHolder> MaterialManager::getShaderHolder(con
 	auto &currentIdIt = _shaderIds.find(name);
 	if (currentIdIt == std::end(_shaderIds))
 	{
-		unsigned int id = _shaderIds.size();
+		unsigned int id = _shaderIds.size() + 1;
 		_shaderIds.insert(std::make_pair(name, id));
 		shader = new ShaderHolder;
 		shader->id = id;

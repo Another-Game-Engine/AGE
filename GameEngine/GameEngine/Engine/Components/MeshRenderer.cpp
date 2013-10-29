@@ -81,12 +81,12 @@ namespace Components
 		}
 	}
 
-	void MeshRenderer::unbindTextures() const
+	void MeshRenderer::unbindTextures(unsigned int offset) const
 	{
 		unsigned int c = 0;
 		for (textureMap::const_iterator it = _textures.begin(); it != _textures.end(); ++it)
 		{
-			glActiveTexture(GL_TEXTURE0 + c++);
+			glActiveTexture(GL_TEXTURE0 + c++ + offset);
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		glActiveTexture(GL_TEXTURE0);
