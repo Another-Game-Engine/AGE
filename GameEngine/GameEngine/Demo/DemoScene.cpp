@@ -121,7 +121,7 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	setCamera(new TrackBall(earth->getSonsBegin()->second, 50));
+	setCamera(new TrackBall(earth->getSonsBegin()->second, 50, 3, 1));
 
 	std::string		vars[] = 
 	{

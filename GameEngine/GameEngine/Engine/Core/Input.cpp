@@ -10,7 +10,7 @@ Input::Input() :
 void 	Input::clearInputs()
 {
 	_inputs.clear();
-	_mouseDelta = glm::i8vec2(0);
+	_mouseWheelDelta = _mouseDelta = glm::i8vec2(0);
 }
 
 void 	Input::addInput(int input)
@@ -33,6 +33,16 @@ void 				Input::setMousePosition(glm::i8vec2 const &pos)
 	if (_mousePosition != glm::i8vec2(0))
 		_mouseDelta = _mousePosition - pos;
 	_mousePosition = pos;
+}
+
+void				Input::setMouseWheel(glm::i8vec2 const &delta)
+{
+	_mouseWheelDelta = delta;
+}
+
+glm::i8vec2 const  	&Input::getMouseWheel()
+{
+	return (_mouseWheelDelta);
 }
 
 glm::i8vec2 const  	&Input::getMousePosition()

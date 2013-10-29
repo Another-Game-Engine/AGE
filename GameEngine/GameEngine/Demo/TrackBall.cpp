@@ -2,8 +2,11 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
-TrackBall::TrackBall(SmartPointer<Entity> const &toLook, float dist) :
+TrackBall::TrackBall(SmartPointer<Entity> const &toLook, float dist,
+					 float rotatingSpeed, float zoomingSpeed) :
 	_dist(dist),
+	_rotateSpeed(rotatingSpeed),
+	_zoomSpeed(zoomingSpeed),
 	_angles(0, 0),
 	_toLook(toLook)
 {
@@ -19,12 +22,16 @@ void      TrackBall::customUpdate()
 	Input			&inputs = GameEngine::instance()->inputs();
 	glm::vec3		pos;
 
-	if (inputs.getKey(SDLK_DOWN))
-		_dist += GameEngine::instance()->timer().getElapsed() * 15;
-	if (inputs.getKey(SDLK_UP))
-		_dist -= GameEngine::instance()->timer().getElapsed() * 15;
+	_dist -= inputs.getMouseWheel().y * _zoomSpeed;
 	if (inputs.getKey(SDL_BUTTON_LEFT))
-		_angles -= glm::vec2(-(float)inputs.getMouseDelta().x / 200, (float)inputs.getMouseDelta().y / 200);
+		_angles -= glm::vec2(-(float)inputs.getMouseDelta().x / (1000 / _rotateSpeed), (float)inputs.getMouseDelta().y / (1000 / _rotateSpeed));
+	if (abs(_dist) < 0.0001)
+	{
+		if (_dist < 0)
+			_dist = -0.0001;
+		else
+			_dist = 0.0001;
+	}
 	pos.x = sin(_angles.x) * cos(_angles.y) * _dist;
 	pos.y = sin(_angles.y) * _dist;
 	pos.z = cos(_angles.x) * cos(_angles.y) * _dist;

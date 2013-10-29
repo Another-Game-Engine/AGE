@@ -19,12 +19,14 @@ void    SdlContext::updateEvents(Input &input) const
   {
     if (events.type == SDL_KEYDOWN)
       input.addKeyInput(events.key.keysym.sym);
-    if (events.type == SDL_KEYUP)
+    else if (events.type == SDL_KEYUP)
       input.removeKeyInput(events.key.keysym.sym);
-	if (events.type == SDL_MOUSEBUTTONDOWN)
+	else if (events.type == SDL_MOUSEBUTTONDOWN)
 		input.addKeyInput(events.button.button);
-	if (events.type == SDL_MOUSEBUTTONUP)
+	else if (events.type == SDL_MOUSEBUTTONUP)
 		input.removeKeyInput(events.button.button);
+	else if (events.type == SDL_MOUSEWHEEL)
+		input.setMouseWheel(glm::i8vec2(events.wheel.x, events.wheel.y));
     else if (events.type == SDL_MOUSEMOTION)
       input.setMousePosition(glm::i8vec2(events.motion.x, events.motion.y));
     else
