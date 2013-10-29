@@ -17,7 +17,7 @@ Renderer::~Renderer(void)
 bool Renderer::init()
 {
 	// todo /!\ real window size
-	return _fbo.init(500, 500);
+	return _fbo.init(1400, 1000);
 }
 
 void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
@@ -132,10 +132,11 @@ void		Renderer::render()
 	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
 	e.renderer().getUniform("PerFrame")->flushChanges();
 
-	GameEngine::instance()->getCurrentScene()->getCamera()->update();
+	//GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
 	// @cesar's implementation
 
+	_fbo.bind();
 	for (auto &shaderName : _materialManager.getShaderList())
 	{
 		OpenGLTools::Shader	*shader = getShader(shaderName.second->name);
@@ -143,13 +144,13 @@ void		Renderer::render()
 
 		if (!shaderName.second->last)
 		{
-			if (!_fbo.isBinded())
-				_fbo.bind();
 			_fbo.bindTexture(shaderName.second->id);
-			texturesOffset = _fbo.bindTextures(shaderName.second->preShaders);
 		}
-		else if (_fbo.isBinded())
-			_fbo.unbind();
+		else
+		{
+			_fbo.bindTexture(0);
+		}
+		texturesOffset = _fbo.bindTextures(shaderName.second->preShaders);
 		shader->use();
 		for (auto &mat : shaderName.second->materials)
 		{
@@ -160,12 +161,15 @@ void		Renderer::render()
 
 				obj->bindTextures(texturesOffset);
 				obj->getMesh()->draw();
-				obj->unbindTextures();
+				obj->unbindTextures(texturesOffset);
 			}
 		}
+		_fbo.unbindTextures(shaderName.second->preShaders);
 	}
 	_queues.clear();
 	_fbo.unbind();
+	_fbo.clearDepth();
+	_fbo.renderToScreen();
 
 
 	// @paulo's implementation

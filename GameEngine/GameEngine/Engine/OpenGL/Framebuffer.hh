@@ -28,6 +28,8 @@ namespace OpenGLTools
 		void renderToScreen();
 		inline bool isBinded(){return _isBinded;};
 		unsigned int bindTextures(const std::vector<unsigned int> &list);
+		void unbindTextures(const std::vector<unsigned int> &list);
+		void clearDepth();
 	private:
 		Framebuffer(const Framebuffer &o);
 		Framebuffer &operator=(const Framebuffer &o);

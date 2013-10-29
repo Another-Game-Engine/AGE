@@ -374,6 +374,10 @@
     <None Include="Shaders\cubemap.vp" />
     <None Include="shaders\earth.fp" />
     <None Include="shaders\earth.vp" />
+    <None Include="Shaders\fboToScreen.fp" />
+    <None Include="Shaders\fboToScreen.vp" />
+    <None Include="Shaders\scndPassTest.fp" />
+    <None Include="Shaders\scndPassTest.vp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

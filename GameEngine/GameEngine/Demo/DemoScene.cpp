@@ -36,7 +36,9 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	SmartPointer<Material> materialPlanet = GameEngine::instance()->renderer().getMaterialManager().createMaterial("material:planet_" + shader);
 
-	materialPlanet->pushShader(shader);
+	GameEngine::instance()->renderer().addShader("scndPassTest" + shader, "../GameEngine/Shaders/scndPassTest.vp", "../GameEngine/Shaders/scndPassTest.fp");
+
+	materialPlanet->pushShader(shader).pushShader("scndPassTest" + shader);
 	r->addMaterial(materialPlanet);
 
 //	r->setShader(shader);
@@ -87,8 +89,10 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().addShader("bump", "../GameEngine/Shaders/bump.vp", "../GameEngine/Shaders/bump.fp")
 		.bindActiveTexture("fTexture", 0)
 		.bindActiveTexture("fBump", 1);
+	GameEngine::instance()->renderer().addShader("fboToScreen", "../GameEngine/Shaders/fboToScreen.vp", "../GameEngine/Shaders/fboToScreen.fp");
 
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
+
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
 	GameEngine::instance()->renderer().bindShaderToUniform("basic", "PerFrame", "PerFrame");

@@ -27,6 +27,8 @@ bool Framebuffer::init(unsigned int width, unsigned int height)
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, _width, _height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depth);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	addLayer(0);
+
 	return true;
 }
 
@@ -36,6 +38,7 @@ void Framebuffer::bind()
 	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, _handle);
 	_isBinded = true;
+	//glViewport(0, 0, _width, _height);
 }
 
 void Framebuffer::unbind()
@@ -81,13 +84,41 @@ unsigned int Framebuffer::bindTextures(const std::vector<unsigned int> &list)
 		return 0;
 	for (unsigned int i = list.size(); i > 0; --i)
 	{
-		auto &e = _layers.find(list[i]);
+		auto &e = _layers.find(list[i - 1]);
 		if (e == std::end(_layers))
 			continue;
 		glActiveTexture(GL_TEXTURE0 + i - 1);
 		glBindTexture(GL_TEXTURE_2D, e->second);
 	}
-	return (list.size() - 1);
+	return (list.size());
+}
+
+void Framebuffer::unbindTextures(const std::vector<unsigned int> &list)
+{
+	if (list.size() == 0)
+		return;
+	for (unsigned int i = list.size(); i > 0; --i)
+	{
+		auto &e = _layers.find(list[i - 1]);
+		if (e == std::end(_layers))
+			continue;
+		glActiveTexture(GL_TEXTURE0 + i - 1);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	glActiveTexture(GL_TEXTURE0);
+}
+
+void Framebuffer::clearDepth()
+{
+	if (!_isBinded)
+		bind();
+	glClear(GL_DEPTH_BUFFER_BIT);
+	unbind();
+}
+
+void Framebuffer::renderToScreen()
+{
+
 }
 
 }
