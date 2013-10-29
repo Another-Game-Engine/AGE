@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include "Utils/OpenGL.hh"
+#include "VertexBuffer.hh"
 
 namespace OpenGLTools
 {
@@ -16,6 +17,7 @@ namespace OpenGLTools
 		unsigned int _height;
 		GLuint _handle;
 		GLuint _depth;
+		OpenGLTools::VertexBuffer _vbo;
 		std::map<unsigned int, GLuint> _layers;
 	public:
 		Framebuffer();
@@ -29,7 +31,7 @@ namespace OpenGLTools
 		inline bool isBinded(){return _isBinded;};
 		unsigned int bindTextures(const std::vector<unsigned int> &list);
 		void unbindTextures(const std::vector<unsigned int> &list);
-		void clearDepth();
+		void clear();
 	private:
 		Framebuffer(const Framebuffer &o);
 		Framebuffer &operator=(const Framebuffer &o);

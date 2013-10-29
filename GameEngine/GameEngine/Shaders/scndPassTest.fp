@@ -15,12 +15,12 @@ layout (std140) uniform PerModel
 
 uniform	sampler2D prePassTexture;
 
-in vec4 fColor;
-in vec2 fUv;
+in vec4 gColor;
+in vec2 gUv;
 
 out vec4 FragColor;
 
 void main(void)
 {
-  FragColor =	fColor + texture2D(prePassTexture, vec2(gl_FragCoord.x / 1400.0f, gl_FragCoord.y / 1000.0f));
+    FragColor =	gColor * texture(prePassTexture, gUv);
 }
