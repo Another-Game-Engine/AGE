@@ -38,7 +38,7 @@ void MaterialManager::compile(OpenGLTools::Framebuffer &fbo)
 		{
 			SmartPointer<ShaderHolder> shader = getShaderHolder(l[i]);
 			for (int j = (int)(i) - 1; j >= 0; --j)
-				shader->preShaders.insert(getShaderHolder(l[j])->id);
+				shader->preShaders.push_back(getShaderHolder(l[j])->id);
 			if (i == l.size() - 1)
 			{
 				shader->last = true;

@@ -2,7 +2,6 @@
 # define __MATERIAL_MANAGER_HH__
 
 #include <map>
-#include <set>
 #include <string>
 #include "Utils/SmartPointer.hh"
 #include "Material.hh"
@@ -23,7 +22,7 @@ private:
 
 	struct ShaderHolder
 	{
-		std::set<unsigned int> preShaders;
+		std::vector<unsigned int> preShaders;
 		unsigned int weight;
 		std::map<std::string, SmartPointer<Material> > materials;
 		unsigned int id;

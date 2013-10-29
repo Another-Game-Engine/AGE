@@ -74,4 +74,20 @@ void Framebuffer::bindTexture(unsigned int id)
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, GL_TEXTURE_2D, e->second, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
+
+unsigned int Framebuffer::bindTextures(const std::vector<unsigned int> &list)
+{
+	if (list.size() == 0)
+		return 0;
+	for (unsigned int i = list.size(); i > 0; --i)
+	{
+		auto &e = _layers.find(list[i]);
+		if (e == std::end(_layers))
+			continue;
+		glActiveTexture(GL_TEXTURE0 + i - 1);
+		glBindTexture(GL_TEXTURE_2D, e->second);
+	}
+	return (list.size() - 1);
+}
+
 }

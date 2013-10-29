@@ -2,6 +2,7 @@
 # define __FRAMEBUFFER_HH__
 
 #include <map>
+#include <vector>
 #include "Utils/OpenGL.hh"
 
 namespace OpenGLTools
@@ -26,6 +27,7 @@ namespace OpenGLTools
 		void bindTexture(unsigned int id);
 		void renderToScreen();
 		inline bool isBinded(){return _isBinded;};
+		unsigned int bindTextures(const std::vector<unsigned int> &list);
 	private:
 		Framebuffer(const Framebuffer &o);
 		Framebuffer &operator=(const Framebuffer &o);
