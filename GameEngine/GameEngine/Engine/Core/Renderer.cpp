@@ -17,7 +17,7 @@ Renderer::~Renderer(void)
 bool Renderer::init()
 {
 	// todo /!\ real window size
-	return _fbo.init(1400, 1000);
+	return _fbo.init(1920, 1080);
 }
 
 void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
@@ -132,7 +132,7 @@ void		Renderer::render()
 	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
 	e.renderer().getUniform("PerFrame")->flushChanges();
 
-	//GameEngine::instance()->getCurrentScene()->getCamera()->update();
+	GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
 	// @cesar's implementation
 
@@ -166,10 +166,16 @@ void		Renderer::render()
 		}
 		_fbo.unbindTextures(shaderName.second->preShaders);
 	}
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	_queues.clear();
 	_fbo.unbind();
-	_fbo.clearDepth();
+	std::vector<unsigned int> lol;
+	lol.push_back(0);
+	_fbo.bindTextures(lol);
+	getShader("fboToScreen")->use();
 	_fbo.renderToScreen();
+	_fbo.unbindTextures(lol);
+	_fbo.clear();
 
 
 	// @paulo's implementation

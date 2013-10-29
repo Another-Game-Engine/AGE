@@ -21,13 +21,11 @@ layout (location = 2) in vec4 vNormal;
 layout (location = 3) in vec2 vTexCoord;
 
 out vec4 gColor;
-out vec2 gUv;
 
 void main(void)
 {
   mat4 modelView = view * model;
 
   gColor = vColor;
-  gUv = vTexCoord;
   gl_Position = vPosition;
 }

@@ -12,7 +12,8 @@ Framebuffer::Framebuffer()
 {}
 
 Framebuffer::~Framebuffer()
-{}
+{
+}
 
 bool Framebuffer::init(unsigned int width, unsigned int height)
 {
@@ -28,6 +29,31 @@ bool Framebuffer::init(unsigned int width, unsigned int height)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depth);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	addLayer(0);
+
+	// x,y vertex positions
+	float ss_quad_pos[] = {
+		-1.0, -1.0,
+		1.0, -1.0,
+		1.0,  1.0,
+		1.0,  1.0,
+		-1.0,  1.0,
+		-1.0, -1.0
+	};
+	// per-vertex texture coordinates
+	float ss_quad_st[] = {
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0
+	};
+	unsigned int indice[] = {0,1,2,3,4,5,6};
+	_vbo.init(6, &indice[0]);
+	_vbo.addAttribute(OpenGLTools::Attribute(sizeof(float) * 2, 2, GL_FLOAT));
+	_vbo.addAttribute(OpenGLTools::Attribute(sizeof(float) * 2, 2, GL_FLOAT));
+	_vbo.setBuffer(0, reinterpret_cast<byte *>(&ss_quad_pos));
+	_vbo.setBuffer(1, reinterpret_cast<byte *>(&ss_quad_st));
 
 	return true;
 }
@@ -75,7 +101,8 @@ void Framebuffer::bindTexture(unsigned int id)
 		return;
 	glBindTexture(GL_TEXTURE_2D, e->second);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, GL_TEXTURE_2D, e->second, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	//if (id != 0)
+		//glClear(GL_COLOR_BUFFER_BIT);
 }
 
 unsigned int Framebuffer::bindTextures(const std::vector<unsigned int> &list)
@@ -108,17 +135,24 @@ void Framebuffer::unbindTextures(const std::vector<unsigned int> &list)
 	glActiveTexture(GL_TEXTURE0);
 }
 
-void Framebuffer::clearDepth()
+void Framebuffer::clear()
 {
 	if (!_isBinded)
 		bind();
 	glClear(GL_DEPTH_BUFFER_BIT);
+	for (auto &e : _layers)
+	{
+		glBindTexture(GL_TEXTURE_2D, e.second);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + e.first, GL_TEXTURE_2D, e.second, 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
+
 	unbind();
 }
 
 void Framebuffer::renderToScreen()
 {
-
+	_vbo.draw(GL_TRIANGLES);
 }
 
 }
