@@ -139,11 +139,14 @@ void		Renderer::render()
 	for (auto &shaderName : _materialManager.getShaderList())
 	{
 		OpenGLTools::Shader	*shader = getShader(shaderName.second->name);
+		unsigned int texturesOffset = 0;
+
 		if (!shaderName.second->last)
 		{
 			if (!_fbo.isBinded())
 				_fbo.bind();
 			_fbo.bindTexture(shaderName.second->id);
+			texturesOffset = _fbo.bindTextures(shaderName.second->preShaders);
 		}
 		else if (_fbo.isBinded())
 			_fbo.unbind();
@@ -155,7 +158,7 @@ void		Renderer::render()
 				GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
 				GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
 
-				obj->bindTextures();
+				obj->bindTextures(texturesOffset);
 				obj->getMesh()->draw();
 				obj->unbindTextures();
 			}

@@ -48,7 +48,7 @@ public:
 
 	void addTexture(const std::string &textureName, const std::string &name, unsigned int priority = 0);
 	void removeTexture(const std::string &name);
-	void bindTextures() const;
+	void bindTextures(unsigned int offset = 0) const;
 	void unbindTextures() const;
 	void addMaterial(SmartPointer<Material> material);
 	void removeMaterial(SmartPointer<Material> material);
