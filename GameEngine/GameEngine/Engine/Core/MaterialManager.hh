@@ -23,7 +23,7 @@ private:
 
 	struct ShaderHolder
 	{
-		std::set<std::string> preShaders;
+		std::set<unsigned int> preShaders;
 		unsigned int weight;
 		std::map<std::string, SmartPointer<Material> > materials;
 		unsigned int id;
@@ -32,7 +32,7 @@ private:
 	};
 
 	std::multimap<unsigned int, SmartPointer<ShaderHolder> > _shaders;
-
+	std::map<unsigned int, SmartPointer<ShaderHolder> > _tmpList;
 public:
 	MaterialManager();
 	~MaterialManager();
@@ -43,6 +43,7 @@ public:
 private:
 	MaterialManager(const MaterialManager &o);
 	MaterialManager &operator=(const MaterialManager &o);
+	SmartPointer<ShaderHolder> getShaderHolder(const std::string &name);
 };
 
 #endif //!__MATERIAL_MANAGER_HH__
