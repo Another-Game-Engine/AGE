@@ -13,6 +13,7 @@ private:
 	std::list<int>	_keyInputs;
 	glm::i8vec2		_mousePosition;
 	glm::i8vec2		_mouseDelta;
+	glm::i8vec2		_mouseWheelDelta;
 
 public:
 	Input();
@@ -23,8 +24,10 @@ public:
 	void 				addKeyInput(int input);
 	void 				removeKeyInput(int input);
 	void 				setMousePosition(glm::i8vec2 const &pos);
+	void				setMouseWheel(glm::i8vec2 const &delta);
 	glm::i8vec2 const  	&getMousePosition();
 	glm::i8vec2 const  	&getMouseDelta();
+	glm::i8vec2 const  	&getMouseWheel();
   	bool 				getInput(int input, bool handled = false);
   	bool 				getKey(int input, bool handled = false);
 };

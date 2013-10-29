@@ -9,11 +9,13 @@ class TrackBall : public ACamera
 {
 private:
 	float					_dist;
+	float					_rotateSpeed, _zoomSpeed;
 	glm::vec2				_angles;
 	SmartPointer<Entity>	_toLook;
 
 public:
-	TrackBall(SmartPointer<Entity> const &toLook, float dist);
+	TrackBall(SmartPointer<Entity> const &toLook, float dist,
+			  float rotatingSpeed, float zoomingSpeed);
 	virtual ~TrackBall(void);
 
 	virtual void      customUpdate();
