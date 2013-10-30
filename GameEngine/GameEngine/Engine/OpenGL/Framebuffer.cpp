@@ -3,32 +3,58 @@
 namespace OpenGLTools
 {
 
+unsigned int Framebuffer::_depth = 0;
+
 Framebuffer::Framebuffer()
    : _isBinded(false),
     _width(0),
 	_height(0),
 	_handle(0),
-	_depth(0)
+	_layerNumber(0),
+	_layers(nullptr)
 {}
 
 Framebuffer::~Framebuffer()
 {
 }
 
-bool Framebuffer::init(unsigned int width, unsigned int height)
+bool Framebuffer::init(unsigned int width, unsigned int height, unsigned int layerNumber)
 {
+	// todo clear all if allready initilized
+
 	_width = width;
 	_height = height;
+	std::cout << GL_MAX_COLOR_ATTACHMENTS << std::endl;
+	if (layerNumber > GL_MAX_COLOR_ATTACHMENTS)
+		layerNumber = GL_MAX_COLOR_ATTACHMENTS;
+
+	std::cout << layerNumber << std::endl;
+	_layerNumber = layerNumber;
 	glGenFramebuffers(1, &_handle);
 	glBindFramebuffer(GL_FRAMEBUFFER, _handle);
-			
-	glGenRenderbuffers(1, &_depth);
-	glBindTexture(GL_TEXTURE_2D, _depth);
+	
+	_layers = new unsigned int[layerNumber];
+	glGenTextures(layerNumber, _layers);
+
+	for (unsigned int i = 0; i < layerNumber; ++i)
+	{
+		glBindTexture(GL_TEXTURE_2D, _layers[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, _layers[i], 0);
+	}
+
+	if (_depth == 0)
+	{
+		glGenRenderbuffers(1, &_depth);
+	}
+
 	glBindRenderbuffer(GL_RENDERBUFFER, _depth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, _width, _height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depth);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	addLayer(0);
 
 	// x,y vertex positions
 	float ss_quad_pos[] = {
@@ -60,11 +86,8 @@ bool Framebuffer::init(unsigned int width, unsigned int height)
 
 void Framebuffer::bind()
 {
-	//glBindTexture(GL_TEXTURE_2D, 0);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, _handle);
 	_isBinded = true;
-	//glViewport(0, 0, _width, _height);
 }
 
 void Framebuffer::unbind()
@@ -73,80 +96,37 @@ void Framebuffer::unbind()
 	_isBinded = false;
 }
 
-void Framebuffer::addLayer(unsigned int id)
+unsigned int Framebuffer::bindTextures()
 {
-	if (_layers.find(id) != std::end(_layers))
-		return;
-	bind();
-	GLuint tex;
-	glGenTextures(1, &tex);
-	//assert(tex != 0);
-//	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + _layers.size(), GL_TEXTURE_2D, tex, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-//	GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3};
-//	glDrawBuffers(4, drawBuffers);
-	_layers.insert(std::make_pair(id, tex));
-	unbind();
-}
-
-void Framebuffer::bindTexture(unsigned int id)
-{
-	auto &e = _layers.find(id);
-	if (e == std::end(_layers))
-		return;
-	glBindTexture(GL_TEXTURE_2D, e->second);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, GL_TEXTURE_2D, e->second, 0);
-	//if (id != 0)
-		//glClear(GL_COLOR_BUFFER_BIT);
-}
-
-unsigned int Framebuffer::bindTextures(const std::vector<unsigned int> &list)
-{
-	if (list.size() == 0)
-		return 0;
-	for (unsigned int i = list.size(); i > 0; --i)
+	for (unsigned int i = 0; i > _layerNumber; ++i)
 	{
-		auto &e = _layers.find(list[i - 1]);
-		if (e == std::end(_layers))
-			continue;
-		glActiveTexture(GL_TEXTURE0 + i - 1);
-		glBindTexture(GL_TEXTURE_2D, e->second);
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, _layers[i]);
 	}
-	return (list.size());
+	glActiveTexture(GL_TEXTURE0);
+	return _layerNumber;
 }
 
-void Framebuffer::unbindTextures(const std::vector<unsigned int> &list)
+void Framebuffer::unbindTextures()
 {
-	if (list.size() == 0)
-		return;
-	for (unsigned int i = list.size(); i > 0; --i)
+	for (unsigned int i = 0; i > _layerNumber; ++i)
 	{
-		auto &e = _layers.find(list[i - 1]);
-		if (e == std::end(_layers))
-			continue;
-		glActiveTexture(GL_TEXTURE0 + i - 1);
+		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	glActiveTexture(GL_TEXTURE0);
 }
 
-void Framebuffer::clear()
+void Framebuffer::clear(unsigned int from)
 {
 	if (!_isBinded)
 		bind();
 	glClear(GL_DEPTH_BUFFER_BIT);
-	for (auto &e : _layers)
+	for (unsigned int i = from; i < _layerNumber; ++i)
 	{
-		glBindTexture(GL_TEXTURE_2D, e.second);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + e.first, GL_TEXTURE_2D, e.second, 0);
+		glBindTexture(GL_TEXTURE_2D, _layers[i]);
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
-
 	unbind();
 }
 

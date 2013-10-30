@@ -124,6 +124,7 @@ void		Renderer::render()
 {
 	static double time = 0;
 	Engine	&e = *GameEngine::instance();
+	unsigned int textureOffset;
 
 	time += e.timer().getElapsed();
 	// Set les uniforms du block PerFrame
@@ -132,50 +133,80 @@ void		Renderer::render()
 	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
 	e.renderer().getUniform("PerFrame")->flushChanges();
 
-	GameEngine::instance()->getCurrentScene()->getCamera()->update();
+	//GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
 	// @cesar's implementation
 
 	_fbo.bind();
-	for (auto &shaderName : _materialManager.getShaderList())
+	textureOffset = _fbo.bindTextures();
+	for (auto &material : _materialManager.getMaterialList())
 	{
-		OpenGLTools::Shader	*shader = getShader(shaderName.second->name);
-		unsigned int texturesOffset = 0;
+		for (auto &shaderName : material.second->getShaders())
+		{
+			OpenGLTools::Shader *shader = getShader(shaderName);
 
-		if (!shaderName.second->last)
-		{
-			_fbo.bindTexture(shaderName.second->id);
-		}
-		else
-		{
-			_fbo.bindTexture(0);
-		}
-		texturesOffset = _fbo.bindTextures(shaderName.second->preShaders);
-		shader->use();
-		for (auto &mat : shaderName.second->materials)
-		{
-			for (auto &obj : mat.second->getObjects())
+			shader->use();
+
+			for (auto &obj : material.second->getObjects())
 			{
-				GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
-				GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
+				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+				getUniform("PerModel")->flushChanges();
 
-				obj->bindTextures(texturesOffset);
+				//obj->bindTextures(textureOffset);
 				obj->getMesh()->draw();
-				obj->unbindTextures(texturesOffset);
+				//obj->unbindTextures(textureOffset);
 			}
 		}
-		_fbo.unbindTextures(shaderName.second->preShaders);
 	}
-	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-	_queues.clear();
+	_fbo.unbindTextures();
 	_fbo.unbind();
-	std::vector<unsigned int> lol;
-	lol.push_back(0);
-	_fbo.bindTextures(lol);
 	getShader("fboToScreen")->use();
+//	glBindTexture(GL_TEXTURE_2D, 0);
+	_fbo.bindTextures();
 	_fbo.renderToScreen();
-	_fbo.unbindTextures(lol);
-	_fbo.clear();
+	_fbo.unbindTextures();
+	//_fbo.clear();
+
+
+
+	//	OpenGLTools::Shader	*shader = getShader(shaderName.second->name);
+	//	unsigned int texturesOffset = 0;
+
+	//	if (!shaderName.second->last)
+	//	{
+	//		std::cout << GL_MAX_FRAMEBUFFER_LAYERS << std::endl;
+	//		_fbo.bindTexture(shaderName.second->id);
+	//	}
+	//	else
+	//	{
+	//		_fbo.bindTexture(0);
+	//	}
+	//	texturesOffset = _fbo.bindTextures(shaderName.second->preShaders);
+	//	shader->use();
+	//	for (auto &mat : shaderName.second->materials)
+	//	{
+	//		for (auto &obj : mat.second->getObjects())
+	//		{
+	//			GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+	//			GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
+
+	//			obj->bindTextures(texturesOffset);
+	//			obj->getMesh()->draw();
+	//			obj->unbindTextures(texturesOffset);
+	//		}
+	//	}
+	//	_fbo.unbindTextures(shaderName.second->preShaders);
+	//}
+	//glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	//_queues.clear();
+	//_fbo.unbind();
+	//std::vector<unsigned int> lol;
+	//lol.push_back(0);
+	//_fbo.bindTextures(lol);
+	//getShader("fboToScreen")->use();
+	//_fbo.renderToScreen();
+	//_fbo.unbindTextures(lol);
+	//_fbo.clear();
 
 
 	// @paulo's implementation

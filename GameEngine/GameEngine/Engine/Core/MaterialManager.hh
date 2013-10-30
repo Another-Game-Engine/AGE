@@ -18,31 +18,15 @@ class MaterialManager
 public:
 private:
 	std::map<std::string, SmartPointer<Material> > _materials;
-	std::map<std::string, unsigned int> _shaderIds;
-
-	struct ShaderHolder
-	{
-		std::vector<unsigned int> preShaders;
-		unsigned int weight;
-		std::map<std::string, SmartPointer<Material> > materials;
-		unsigned int id;
-		std::string name;
-		bool last;
-	};
-
-	std::multimap<unsigned int, SmartPointer<ShaderHolder> > _shaders;
-	std::map<unsigned int, SmartPointer<ShaderHolder> > _tmpList;
 public:
 	MaterialManager();
 	~MaterialManager();
 	SmartPointer<Material> getMaterial(const std::string &name);
 	SmartPointer<Material> createMaterial(const std::string &name);
-	void compile(OpenGLTools::Framebuffer &fbo);
-	inline std::multimap<unsigned int, SmartPointer<ShaderHolder> > &getShaderList() {return _shaders;}
+	inline std::map<std::string, SmartPointer<Material> > &getMaterialList() {return _materials;}
 private:
 	MaterialManager(const MaterialManager &o);
 	MaterialManager &operator=(const MaterialManager &o);
-	SmartPointer<ShaderHolder> getShaderHolder(const std::string &name);
 };
 
 #endif //!__MATERIAL_MANAGER_HH__
