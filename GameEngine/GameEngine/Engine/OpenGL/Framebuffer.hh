@@ -16,22 +16,21 @@ namespace OpenGLTools
 		unsigned int _width;
 		unsigned int _height;
 		GLuint _handle;
-		GLuint _depth;
+		static GLuint _depth;
 		OpenGLTools::VertexBuffer _vbo;
-		std::map<unsigned int, GLuint> _layers;
+		unsigned int _layerNumber;
+		unsigned int *_layers;
 	public:
 		Framebuffer();
 		~Framebuffer();
-		bool init(unsigned int width, unsigned int height);
+		bool init(unsigned int width, unsigned int height, unsigned int layerNumber = 8);
 		void bind();
 		void unbind();
-		void addLayer(unsigned int id);
-		void bindTexture(unsigned int id);
 		void renderToScreen();
 		inline bool isBinded(){return _isBinded;};
-		unsigned int bindTextures(const std::vector<unsigned int> &list);
-		void unbindTextures(const std::vector<unsigned int> &list);
-		void clear();
+		unsigned int bindTextures();
+		void unbindTextures();
+		void clear(unsigned int from = 1);
 	private:
 		Framebuffer(const Framebuffer &o);
 		Framebuffer &operator=(const Framebuffer &o);

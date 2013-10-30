@@ -36,9 +36,9 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	SmartPointer<Material> materialPlanet = GameEngine::instance()->renderer().getMaterialManager().createMaterial("material:planet_" + shader);
 
-	GameEngine::instance()->renderer().addShader("scndPassTest" + shader, "../GameEngine/Shaders/scndPassTest.vp", "../GameEngine/Shaders/scndPassTest.fp");
+//	GameEngine::instance()->renderer().addShader("scndPassTest" + shader, "../GameEngine/Shaders/scndPassTest.vp", "../GameEngine/Shaders/scndPassTest.fp");
 
-	materialPlanet->pushShader(shader).pushShader("scndPassTest" + shader);
+	materialPlanet->pushShader(shader);//.pushShader("scndPassTest" + shader);
 	r->addMaterial(materialPlanet);
 
 //	r->setShader(shader);
@@ -146,16 +146,6 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
-
-
-
-	// --
-	// Framebuffer
-	// --
-
-	//GameEngine::instance()->renderer().getFbo().addLayer(0);
-
-	GameEngine::instance()->renderer().getMaterialManager().compile(GameEngine::instance()->renderer().getFbo());
 
 	return (true);
 }
