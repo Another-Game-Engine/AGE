@@ -133,12 +133,15 @@ void		Renderer::render()
 	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
 	e.renderer().getUniform("PerFrame")->flushChanges();
 
-	//GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
 	// @cesar's implementation
 
-	_fbo.bind();
-	textureOffset = _fbo.bindTextures();
+	_fbo.renderBegin();
+	_fbo.clearLayer(0);
+	_fbo.clearDepth();
+
+	GameEngine::instance()->getCurrentScene()->getCamera()->update();
+
 	for (auto &material : _materialManager.getMaterialList())
 	{
 		for (auto &shaderName : material.second->getShaders())
@@ -152,20 +155,18 @@ void		Renderer::render()
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
 				getUniform("PerModel")->flushChanges();
 
-				//obj->bindTextures(textureOffset);
+				obj->bindTextures();
 				obj->getMesh()->draw();
-				//obj->unbindTextures(textureOffset);
+				obj->unbindTextures();
 			}
 		}
 	}
-	_fbo.unbindTextures();
-	_fbo.unbind();
+
+	_fbo.renderEnd();
+	_fbo.bind(0);
 	getShader("fboToScreen")->use();
-//	glBindTexture(GL_TEXTURE_2D, 0);
-	_fbo.bindTextures();
 	_fbo.renderToScreen();
-	_fbo.unbindTextures();
-	//_fbo.clear();
+	_fbo.unbind(0);
 
 
 
