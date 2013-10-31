@@ -12,7 +12,7 @@ namespace OpenGLTools
 	{
 	public:
 	private:
-		bool _isBinded;
+		bool _isRendering;
 		unsigned int _width;
 		unsigned int _height;
 		GLuint _handle;
@@ -24,13 +24,33 @@ namespace OpenGLTools
 		Framebuffer();
 		~Framebuffer();
 		bool init(unsigned int width, unsigned int height, unsigned int layerNumber = 8);
-		void bind();
-		void unbind();
+		void renderBegin();
+		void renderEnd();
 		void renderToScreen();
-		inline bool isBinded(){return _isBinded;};
-		unsigned int bindTextures();
-		void unbindTextures();
-		void clear(unsigned int from = 1);
+		inline bool isRendering(){return _isRendering;}
+		void bind(unsigned int target);
+		void unbind(unsigned int target);
+		void clearDepth();
+		void clearLayer(unsigned int layer);
+
+		//template<typename... args>
+		//inline void clearLayer(args&& ...)
+		//{
+		//	clearLayer(args...);
+		//}
+
+		//template<typename... args>
+		//inline void bind(args&& ...)
+		//{
+		//	bind(args...);
+		//}
+
+		//template<typename... args>
+		//inline void unbind(args&& ...)
+		//{
+		//	unbind(args...);
+		//}
+
 	private:
 		Framebuffer(const Framebuffer &o);
 		Framebuffer &operator=(const Framebuffer &o);
