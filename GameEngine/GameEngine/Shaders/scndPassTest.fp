@@ -13,12 +13,12 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform	sampler2D prePassTexture;
+uniform layout (location = 1) sampler2D prePassTexture;
 
 in vec4 gColor;
 in vec2 gUv;
 
-out vec4 FragColor;
+out layout (location = 0) vec4 FragColor;
 
 void main(void)
 {

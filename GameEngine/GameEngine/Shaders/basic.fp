@@ -18,7 +18,7 @@ uniform	sampler2D fTexture;
 in vec4 fColor;
 in vec2 fUv;
 
-out vec4 FragColor;
+out layout (location = 1) vec4 FragColor;
 
 void main(void)
 {

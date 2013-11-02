@@ -1,10 +1,10 @@
 #version 330
 
 // vertex positions input attribute
-layout (location = 0) in vec2 vp;
+ in vec2 vp;
 
 // per-vertex texture coordinates input attribute
-layout (location = 1) in vec2 vt;
+ in vec2 vt;
 
 // texture coordinates to be interpolated to fragment shaders
 out vec2 st;

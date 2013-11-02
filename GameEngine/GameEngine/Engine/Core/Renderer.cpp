@@ -138,6 +138,7 @@ void		Renderer::render()
 
 	_fbo.renderBegin();
 	_fbo.clearLayer(0);
+	_fbo.clearLayer(1);
 	_fbo.clearDepth();
 
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
@@ -152,17 +153,18 @@ void		Renderer::render()
 
 			for (auto &obj : material.second->getObjects())
 			{
+				_fbo.bind(1);
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
 				getUniform("PerModel")->flushChanges();
-
-				obj->bindTextures();
+				obj->bindTextures(0);
 				obj->getMesh()->draw();
-				obj->unbindTextures();
+				obj->unbindTextures(0);
 			}
 		}
 	}
 
 	_fbo.renderEnd();
+
 	_fbo.bind(0);
 	getShader("fboToScreen")->use();
 	_fbo.renderToScreen();
