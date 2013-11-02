@@ -27,5 +27,5 @@ void main(void)
   mat4 modelView = view * model;
 
   gColor = vColor;
-  gl_Position = vPosition;
+  gl_Position = vPosition * modelView;
 }

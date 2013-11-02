@@ -36,12 +36,16 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	SmartPointer<Material> materialPlanet = GameEngine::instance()->renderer().getMaterialManager().createMaterial("material:planet_" + shader);
 
-//	GameEngine::instance()->renderer().addShader("scndPassTest" + shader, "../GameEngine/Shaders/scndPassTest.vp", "../GameEngine/Shaders/scndPassTest.fp");
+	GameEngine::instance()->renderer().addShader("scndPassTest" + shader, "../GameEngine/Shaders/scndPassTest.vp", "../GameEngine/Shaders/scndPassTest.fp");
 
-	materialPlanet->pushShader(shader);//.pushShader("scndPassTest" + shader);
+	materialPlanet->pushShader(shader);
+	if (tex1 == "texture:sun")
+	{
+		materialPlanet->pushShader("scndPassTest" + shader);
+	}
 	r->addMaterial(materialPlanet);
 
-//	r->setShader(shader);
+	//r->setShader(shader);
 	r->addTexture(tex1, "texture1", 0);
 	if (!tex2.empty())
 		r->addTexture(tex2, "texture2", 1);

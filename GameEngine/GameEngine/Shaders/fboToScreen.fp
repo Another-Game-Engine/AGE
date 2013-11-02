@@ -4,7 +4,7 @@
 in vec2 st;
 
 // texture sampler
-uniform sampler2D tex;
+uniform layout (location = 1) sampler2D tex;
 
 // output fragment colour RGBA
 out vec4 frag_colour;
