@@ -13,7 +13,11 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform layout (location = 1) sampler2D prePassTexture;
+uniform layout (location = 0) sampler2D layer0;
+uniform layout (location = 1) sampler2D layer1;
+uniform layout (location = 2) sampler2D layer2;
+uniform layout (location = 3) sampler2D layer3;
+
 
 in vec4 gColor;
 in vec2 gUv;
@@ -22,5 +26,5 @@ out layout (location = 0) vec4 FragColor;
 
 void main(void)
 {
-    FragColor =	gColor * texture(prePassTexture, gUv);
+    FragColor =	gColor * texture(layer0, gUv);
 }

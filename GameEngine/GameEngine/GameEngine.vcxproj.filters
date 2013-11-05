@@ -310,5 +310,7 @@
     <None Include="Shaders\scndPassTest.fp" />
     <None Include="Shaders\fboToScreen.vp" />
     <None Include="Shaders\fboToScreen.fp" />
+    <None Include="Shaders\glowEarth.vp" />
+    <None Include="Shaders\glowEarth.fp" />
   </ItemGroup>
 </Project>

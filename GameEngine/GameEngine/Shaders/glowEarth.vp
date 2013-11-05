@@ -13,20 +13,16 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform	sampler2D prePassTexture;
-
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;
 layout (location = 2) in vec4 vNormal;
 layout (location = 3) in vec2 vTexCoord;
 
-out vec4 gColor;
-out vec2 gUv;
 
 void main(void)
 {
   mat4 modelView = view * model;
-  gColor = vColor;
-  gl_Position = vPosition * modelView;
-  gUv =	(vPosition).xy;
+  mat4 vectorSpace = transpose(inverse(view * model));
+
+  gl_Position = projection * modelView * vPosition;
 }
