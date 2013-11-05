@@ -45,10 +45,10 @@ bool Framebuffer::init(unsigned int width, unsigned int height, const std::vecto
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
  
-	std::unique_ptr<GLenum[]> arr(new GLenum[_layerNumber]);
+	_drawBuffers = new unsigned int[_layerNumber];
 	for (size_t c = 0; c < _layerNumber; ++c)
-		arr[c] = GL_COLOR_ATTACHMENT0 + c;
-	glDrawBuffers(_layerNumber, arr.get());
+		_drawBuffers[c] = GL_COLOR_ATTACHMENT0 + c;
+	glDrawBuffers(_layerNumber, _drawBuffers);
 
 	if (_depth == 0)
 	{
@@ -90,6 +90,7 @@ bool Framebuffer::init(unsigned int width, unsigned int height, const std::vecto
 void Framebuffer::renderBegin()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, _handle);
+	glDrawBuffers(_layerNumber, _drawBuffers);
 	_isRendering = true;
 }
 
@@ -99,12 +100,18 @@ void Framebuffer::renderEnd()
 	_isRendering = false;
 }
 
+void Framebuffer::applyViewport()
+{
+	glViewport(0, 0, _width, _height);
+}
+
 void Framebuffer::bind(Shader *shader)
 {
 	for (unsigned int i = 0; i < _layerNumber; ++i)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, _layers[i]);
+//		shader->bindActiveTexture(_layerNames[i], _layers[i]);
 	}
 }
 
@@ -117,16 +124,9 @@ void Framebuffer::unbind()
 	}
 }
 
-void Framebuffer::clearDepth()
+void Framebuffer::clear()
 {
-	glClear(GL_DEPTH_BUFFER_BIT);
-}
-
-void Framebuffer::clearLayer(unsigned int layer)
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _layers[layer]);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 }
 
 void Framebuffer::renderToScreen(Shader *shader)
@@ -134,7 +134,7 @@ void Framebuffer::renderToScreen(Shader *shader)
 	shader->use();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _layers[0]);
-//	shader->bindActiveTexture(_layerNames[0], 0);
+//	shader->bindActiveTexture(_layerNames[0], 1);
 	_vbo.draw(GL_TRIANGLES);
 }
 

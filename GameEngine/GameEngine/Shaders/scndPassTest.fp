@@ -26,5 +26,5 @@ out layout (location = 0) vec4 FragColor;
 
 void main(void)
 {
-    FragColor =	gColor * texture(layer0, gUv);
+    FragColor =	vec4(1,0,1,1);// * texture(layer1, gUv / vec2(1920, 1080));
 }

@@ -138,9 +138,8 @@ void		Renderer::render()
 	// @cesar's implementation
 
 	_fbo.renderBegin();
-	_fbo.clearLayer(0);
-	_fbo.clearLayer(1);
-	_fbo.clearDepth();
+	_fbo.applyViewport();
+	_fbo.clear();
 
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
 	for (auto &material : _materialManager.getMaterialList())
@@ -161,7 +160,7 @@ void		Renderer::render()
 			{
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
 				getUniform("PerModel")->flushChanges();
-				obj->bindTextures();
+				obj->bindTextures(4, shader);
 				obj->getMesh()->draw();
 				obj->unbindTextures();
 			}

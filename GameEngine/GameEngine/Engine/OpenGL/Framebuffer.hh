@@ -20,6 +20,7 @@ namespace OpenGLTools
 		OpenGLTools::VertexBuffer _vbo;
 		unsigned int _layerNumber;
 		unsigned int *_layers;
+		unsigned int *_drawBuffers;
 		std::vector<std::string> _layerNames;
 	public:
 		Framebuffer();
@@ -27,12 +28,12 @@ namespace OpenGLTools
 		bool init(unsigned int width, unsigned int height, const std::vector<std::string> &layers);
 		void renderBegin();
 		void renderEnd();
+		void Framebuffer::applyViewport();
 		void renderToScreen(Shader *shader);
 		inline bool isRendering(){return _isRendering;}
 		void bind(Shader *shader);
 		void unbind();
-		void clearDepth();
-		void clearLayer(unsigned int layer);
+		void clear();
 
 		//template<typename... args>
 		//inline void clearLayer(args&& ...)
