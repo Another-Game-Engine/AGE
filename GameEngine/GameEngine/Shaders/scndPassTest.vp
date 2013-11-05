@@ -25,9 +25,8 @@ out vec2 gUv;
 
 void main(void)
 {
-  mat4 modelView = view * model;
+  mat4 modelView = view * model * projection;
   gColor = vColor;
-  gl_Position = (modelView * vPosition * projection);
-  gl_Position = vec4(gl_Position.xy, 0, 1);
-  gUv =	(gl_Position).xy;
+  gl_Position = (modelView * vPosition);
+  gUv =	vTexCoord;
 }
