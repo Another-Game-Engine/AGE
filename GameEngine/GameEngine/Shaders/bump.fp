@@ -19,8 +19,8 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform	sampler2D fTexture;
-uniform	sampler2D fBump;
+uniform	sampler2D fTexture0;
+uniform	sampler2D fTexture1;
 
 in vec4 fPosition;
 in vec4 fColor;
@@ -31,7 +31,7 @@ out layout (location = 0) vec4 FragColor;
 
 void main(void)
 {
-  vec4 bNormal = vec4(normalize(fNormal.xyz + texture2D(fBump, fTexCoord).xyz), 0);
+  vec4 bNormal = vec4(normalize(fNormal.xyz + texture2D(fTexture1, fTexCoord).xyz), 0);
   /**
    * Calcule des vecteur indispensable au calcule de light :
    * - vecteur du frag au spot
@@ -47,7 +47,7 @@ void main(void)
    * entre le vecteur de lumiére et la normal du fragment.
    */
   float lamberTerm = clamp(dot(bNormal.xyz, vectorLight.xyz), 0.0, 1.0);
-  vec4 pxlColor = fColor * texture2D(fTexture, fTexCoord);
+  vec4 pxlColor = fColor * texture2D(fTexture0, fTexCoord);
   vec4 ambiant = pxlColor * vec4(0.05, 0.05, 0.05, 1.0);
   vec4 diffuse = pxlColor * lamberTerm;
   FragColor = max(ambiant, diffuse);

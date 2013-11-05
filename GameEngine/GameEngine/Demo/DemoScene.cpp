@@ -44,13 +44,13 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	r->addMaterial(materialPlanet);
 
 	//r->setShader(shader);
-	r->addTexture(tex1, "texture1", 0);
+	r->addTexture(tex1, 0);
 	if (!tex2.empty())
-		r->addTexture(tex2, "texture2", 1);
+		r->addTexture(tex2, 1);
 	if (!tex3.empty())
-		r->addTexture(tex3, "texture3", 2);
+		r->addTexture(tex3, 2);
 	if (!tex4.empty())
-		r->addTexture(tex4, "texture4", 2);
+		r->addTexture(tex4, 3);
 	e->addComponent(r);
 	e->addComponent(new Components::RotationForce(glm::vec3(0, orbitSpeed, 0)));
 	p->addSon(e);
@@ -92,7 +92,7 @@ bool 			DemoScene::userStart()
 		.bindActiveTexture("fTexture", 0)
 		.bindActiveTexture("fBump", 1);
 	GameEngine::instance()->renderer().addShader("fboToScreen", "../GameEngine/Shaders/fboToScreen.vp", "../GameEngine/Shaders/fboToScreen.fp").bindActiveTexture("tex", 0);
-	GameEngine::instance()->renderer().addShader("glowEarth", "../GameEngine/Shaders/glowEarth.vp", "../GameEngine/Shaders/glowEarth.fp");
+	GameEngine::instance()->renderer().addShader("glowEarth", "../GameEngine/Shaders/scndPassTest.vp", "../GameEngine/Shaders/scndPassTest.fp");
 
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
 

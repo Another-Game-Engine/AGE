@@ -27,6 +27,7 @@ void main(void)
 {
   mat4 modelView = view * model;
   gColor = vColor;
-  gl_Position = vPosition * modelView;
-  gUv =	(vPosition).xy;
+  gl_Position = (modelView * vPosition * projection);
+  gl_Position = vec4(gl_Position.xy, 0, 1);
+  gUv =	(gl_Position).xy;
 }
