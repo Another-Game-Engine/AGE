@@ -147,7 +147,7 @@ Shader	&Shader::bindActiveTexture(std::string const &uniformName, GLuint activeT
 
 	glUniform1i(location, activeTexture);
 	if (glGetError() != GL_NO_ERROR)
-		std::cerr << "Bind active texture failed." << std::endl;
+		std::cerr << "Bind active texture failed for uniform " << uniformName << "." << std::endl;
 	return (*this);
 }
 

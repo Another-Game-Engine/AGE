@@ -46,6 +46,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -376,6 +377,8 @@
     <None Include="shaders\earth.vp" />
     <None Include="Shaders\fboToScreen.fp" />
     <None Include="Shaders\fboToScreen.vp" />
+    <None Include="Shaders\glowEarth.fp" />
+    <None Include="Shaders\glowEarth.vp" />
     <None Include="Shaders\scndPassTest.fp" />
     <None Include="Shaders\scndPassTest.vp" />
   </ItemGroup>

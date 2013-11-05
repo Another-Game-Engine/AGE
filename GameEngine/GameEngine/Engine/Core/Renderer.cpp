@@ -16,8 +16,9 @@ Renderer::~Renderer(void)
 
 bool Renderer::init()
 {
-	// todo /!\ real window size
-	return _fbo.init(1920, 1080);
+	std::vector<std::string> list; list.push_back("layer0"); list.push_back("layer1"); list.push_back("layer2"); list.push_back("layer3");
+
+	return _fbo.init(1920, 1080, list);
 }
 
 void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
@@ -142,33 +143,34 @@ void		Renderer::render()
 	_fbo.clearDepth();
 
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
-
 	for (auto &material : _materialManager.getMaterialList())
 	{
+		unsigned int shaderIndex = 0;
 		for (auto &shaderName : material.second->getShaders())
 		{
+			if (shaderIndex == 0)
+				glEnable(GL_DEPTH_TEST);
+			else
+				glDisable(GL_DEPTH_TEST);
+			++shaderIndex;
 			OpenGLTools::Shader *shader = getShader(shaderName);
 
 			shader->use();
-
+			_fbo.bind(shader);
 			for (auto &obj : material.second->getObjects())
 			{
-				_fbo.bind(1);
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
 				getUniform("PerModel")->flushChanges();
-				obj->bindTextures(0);
+				obj->bindTextures();
 				obj->getMesh()->draw();
-				obj->unbindTextures(0);
+				obj->unbindTextures();
 			}
+			_fbo.unbind();
 		}
 	}
 
 	_fbo.renderEnd();
-
-	_fbo.bind(0);
-	getShader("fboToScreen")->use();
-	_fbo.renderToScreen();
-	_fbo.unbind(0);
+	_fbo.renderToScreen(getShader("fboToScreen"));
 
 
 

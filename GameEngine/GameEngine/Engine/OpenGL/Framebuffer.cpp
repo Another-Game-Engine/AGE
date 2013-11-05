@@ -1,5 +1,6 @@
 #include <memory>
 #include "Framebuffer.hh"
+#include "Shader.hh"
 
 namespace OpenGLTools
 {
@@ -19,21 +20,22 @@ Framebuffer::~Framebuffer()
 {
 }
 
-bool Framebuffer::init(unsigned int width, unsigned int height, unsigned int layerNumber)
+bool Framebuffer::init(unsigned int width, unsigned int height, const std::vector<std::string> &layerNames)
 {
 	// todo clear all if allready initilized
 
 	_width = width;
 	_height = height;
 
-	_layerNumber = layerNumber;
+	_layerNumber = layerNames.size();
+	_layerNames = layerNames;
 	glGenFramebuffers(1, &_handle);
 	glBindFramebuffer(GL_FRAMEBUFFER, _handle);
 	
-	_layers = new unsigned int[layerNumber];
-	glGenTextures(layerNumber, _layers);
+	_layers = new unsigned int[_layerNumber];
+	glGenTextures(_layerNumber, _layers);
 
-	for (unsigned int i = 0; i < layerNumber; ++i)
+	for (unsigned int i = 0; i < _layerNumber; ++i)
 	{
 		glBindTexture(GL_TEXTURE_2D, _layers[i]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
@@ -41,7 +43,7 @@ bool Framebuffer::init(unsigned int width, unsigned int height, unsigned int lay
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, _layers[i], 0);
 	}
-		glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
  
 	std::unique_ptr<GLenum[]> arr(new GLenum[_layerNumber]);
 	for (size_t c = 0; c < _layerNumber; ++c)
@@ -97,16 +99,22 @@ void Framebuffer::renderEnd()
 	_isRendering = false;
 }
 
-void Framebuffer::bind(unsigned int target)
+void Framebuffer::bind(Shader *shader)
 {
-	glActiveTexture(GL_TEXTURE0 + target);
-	glBindTexture(GL_TEXTURE_2D, _layers[target]);
+	for (unsigned int i = 0; i < _layerNumber; ++i)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, _layers[i]);
+	}
 }
 
-void Framebuffer::unbind(unsigned int layer)
+void Framebuffer::unbind()
 {
-	glActiveTexture(GL_TEXTURE0 + layer);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	for (unsigned int i = 0; i < _layerNumber; ++i)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }
 
 void Framebuffer::clearDepth()
@@ -121,8 +129,12 @@ void Framebuffer::clearLayer(unsigned int layer)
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Framebuffer::renderToScreen()
+void Framebuffer::renderToScreen(Shader *shader)
 {
+	shader->use();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _layers[0]);
+//	shader->bindActiveTexture(_layerNames[0], 0);
 	_vbo.draw(GL_TRIANGLES);
 }
 
