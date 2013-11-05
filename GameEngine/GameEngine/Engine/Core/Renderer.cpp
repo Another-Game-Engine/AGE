@@ -142,20 +142,27 @@ void		Renderer::render()
 	_fbo.clear();
 
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
+
 	for (auto &material : _materialManager.getMaterialList())
 	{
 		unsigned int shaderIndex = 0;
 		for (auto &shaderName : material.second->getShaders())
 		{
-			if (shaderIndex == 0)
-				glEnable(GL_DEPTH_TEST);
-			else
-				glDisable(GL_DEPTH_TEST);
-			++shaderIndex;
+			//if (shaderIndex == 0)
+			//{
+			//	glDepthFunc(GL_LESS);
+			//	glDepthMask(GL_TRUE);
+			//}
+			//else
+			//{
+			//	glDepthFunc(GL_LEQUAL);
+			//	glDepthMask(GL_FALSE);
+			//}
+			//++shaderIndex;
 			OpenGLTools::Shader *shader = getShader(shaderName);
 
 			shader->use();
-			_fbo.bind(shader);
+//			_fbo.bind(shader);
 			for (auto &obj : material.second->getObjects())
 			{
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
@@ -164,13 +171,12 @@ void		Renderer::render()
 				obj->getMesh()->draw();
 				obj->unbindTextures();
 			}
-			_fbo.unbind();
+//			_fbo.unbind();
 		}
 	}
 
 	_fbo.renderEnd();
 	_fbo.renderToScreen(getShader("fboToScreen"));
-
 
 
 	//	OpenGLTools::Shader	*shader = getShader(shaderName.second->name);

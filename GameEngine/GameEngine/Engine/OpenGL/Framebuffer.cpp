@@ -38,26 +38,29 @@ bool Framebuffer::init(unsigned int width, unsigned int height, const std::vecto
 	for (unsigned int i = 0; i < _layerNumber; ++i)
 	{
 		glBindTexture(GL_TEXTURE_2D, _layers[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, _layers[i], 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + i), GL_TEXTURE_2D, _layers[i], 0);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
  
-	_drawBuffers = new unsigned int[_layerNumber];
-	for (size_t c = 0; c < _layerNumber; ++c)
-		_drawBuffers[c] = GL_COLOR_ATTACHMENT0 + c;
-	glDrawBuffers(_layerNumber, _drawBuffers);
-
 	if (_depth == 0)
 	{
 		glGenRenderbuffers(1, &_depth);
 	}
 
 	glBindRenderbuffer(GL_RENDERBUFFER, _depth);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, _width, _height);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _width, _height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depth);
+
+	_drawBuffers = new unsigned int[_layerNumber];
+	for (size_t c = 0; c < _layerNumber; ++c)
+		_drawBuffers[c] = GL_COLOR_ATTACHMENT0 + c;
+
+	glDrawBuffers(_layerNumber, _drawBuffers);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 
 	// x,y vertex positions
 	float ss_quad_pos[] = {
@@ -77,7 +80,7 @@ bool Framebuffer::init(unsigned int width, unsigned int height, const std::vecto
 		0.0, 1.0,
 		0.0, 0.0
 	};
-	unsigned int indice[] = {0,1,2,3,4,5,6};
+	unsigned int indice[] = {0,1,2,3,4,5};
 	_vbo.init(6, &indice[0]);
 	_vbo.addAttribute(OpenGLTools::Attribute(sizeof(float) * 2, 2, GL_FLOAT));
 	_vbo.addAttribute(OpenGLTools::Attribute(sizeof(float) * 2, 2, GL_FLOAT));
@@ -90,7 +93,7 @@ bool Framebuffer::init(unsigned int width, unsigned int height, const std::vecto
 void Framebuffer::renderBegin()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, _handle);
-	glDrawBuffers(_layerNumber, _drawBuffers);
+//	glDrawBuffers(_layerNumber, _drawBuffers);
 	_isRendering = true;
 }
 
@@ -111,7 +114,7 @@ void Framebuffer::bind(Shader *shader)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, _layers[i]);
-//		shader->bindActiveTexture(_layerNames[i], _layers[i]);
+		shader->bindActiveTexture(_layerNames[i], i);
 	}
 }
 
@@ -132,10 +135,35 @@ void Framebuffer::clear()
 void Framebuffer::renderToScreen(Shader *shader)
 {
 	shader->use();
+
+	glViewport(0,0,500,500);
+//	bind(shader);
+//	glActiveTexture(GL_TEXTURE0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _layers[0]);
-//	shader->bindActiveTexture(_layerNames[0], 1);
+//	shader->bindActiveTexture(_layerNames[0], 0);
 	_vbo.draw(GL_TRIANGLES);
+//	unbind();
+
+	glViewport(500,0,500,500);
+//	bind(shader);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _layers[1]);
+//	shader->bindActiveTexture(_layerNames[0], 0);
+	_vbo.draw(GL_TRIANGLES);
+//	unbind();
+
+	glViewport(0,500,500,500);
+//	bind(shader);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _layers[2]);
+//	shader->bindActiveTexture(_layerNames[0], 0);
+	_vbo.draw(GL_TRIANGLES);
+//	unbind();
+
+
+	glUseProgram(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 }
