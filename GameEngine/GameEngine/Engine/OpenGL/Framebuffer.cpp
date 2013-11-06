@@ -53,6 +53,7 @@ bool Framebuffer::init(unsigned int width, unsigned int height, const std::vecto
 	glBindRenderbuffer(GL_RENDERBUFFER, _depth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _width, _height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depth);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	_drawBuffers = new unsigned int[_layerNumber];
 	for (size_t c = 0; c < _layerNumber; ++c)
@@ -136,6 +137,13 @@ void Framebuffer::renderToScreen(Shader *shader)
 {
 	shader->use();
 
+	for (auto i = 0; i < _layerNumber; ++i)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		shader->bindActiveTexture(_layerNames[0], 0);
+	}
+
 	glViewport(0,0,500,500);
 //	bind(shader);
 //	glActiveTexture(GL_TEXTURE0);
@@ -157,6 +165,14 @@ void Framebuffer::renderToScreen(Shader *shader)
 //	bind(shader);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _layers[2]);
+//	shader->bindActiveTexture(_layerNames[0], 0);
+	_vbo.draw(GL_TRIANGLES);
+//	unbind();
+
+	glViewport(500,500,500,500);
+//	bind(shader);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _layers[3]);
 //	shader->bindActiveTexture(_layerNames[0], 0);
 	_vbo.draw(GL_TRIANGLES);
 //	unbind();
