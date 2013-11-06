@@ -141,7 +141,7 @@ void		Renderer::render()
 	_fbo.applyViewport();
 	_fbo.clear();
 
-	GameEngine::instance()->getCurrentScene()->getCamera()->update();
+//	GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
 	for (auto &material : _materialManager.getMaterialList())
 	{
@@ -176,6 +176,10 @@ void		Renderer::render()
 	}
 
 	_fbo.renderEnd();
+
+	// for breakpoint purpose
+	//	glCheckFramebufferStatus(GL_FRAMEBUFFER_UNDEFINED);
+
 	_fbo.renderToScreen(getShader("fboToScreen"));
 
 

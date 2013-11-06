@@ -26,7 +26,7 @@ in vec4 fColor;
 in vec4 fNormal;
 in vec2 fTexCoord;
 
- layout (location = 0) vec4 FragColor;
+out layout (location = 0) vec4 FragColor;
 
 void main(void)
 {
