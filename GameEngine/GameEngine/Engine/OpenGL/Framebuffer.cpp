@@ -1,4 +1,5 @@
 #include <memory>
+#include <cmath>
 #include "Framebuffer.hh"
 #include "Shader.hh"
 
@@ -165,7 +166,27 @@ namespace OpenGLTools
 		glBindTexture(GL_TEXTURE_2D, _layers[3]);
 		_vbo.draw(GL_TRIANGLES);
 
+		glUseProgram(0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
+	}
+
+	void Framebuffer::debugRendering(Shader *shader)
+	{
+		shader->use();
+		for (unsigned int i = 0; i < _layerNumber; ++i)
+		{
+			glViewport(
+				(i % 3) * ((float)_width / 3),
+				_height - ((i / 3 + 1) * ((float)_height / 3)),
+				(float)_width / 3,
+				(float)_height / 3
+				);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, _layers[i]);
+			_vbo.draw(GL_TRIANGLES);
+		   
+		}
 		glUseProgram(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
