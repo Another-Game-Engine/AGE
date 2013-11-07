@@ -20,7 +20,8 @@ Shader::Shader(void) :
 	_progId(0),
 	_vertexId(0),
 	_fragId(0),
-	_geometryId(0)
+	_geometryId(0),
+	_targets(nullptr)
 {
 }
 
@@ -31,6 +32,8 @@ Shader::~Shader(void)
 	if (_geometryId != 0)
 		glDetachShader(_progId, _geometryId);
 	glDeleteProgram(_progId);
+	if (_targets)
+		delete _targets;
 }
 
 bool Shader::init(std::string const &vertex, std::string const &fragment, std::string const &geometry)
@@ -57,6 +60,7 @@ bool Shader::init(std::string const &vertex, std::string const &fragment, std::s
   if (_geometryId != 0)
 	  glAttachShader(_progId, _geometryId);
   linkProgram(_progId);
+
   return (true);
 }
 
@@ -155,5 +159,57 @@ GLuint	Shader::getId() const
 {
 	return (_progId);
 }
+
+GLenum  *Shader::getTargets() const
+{
+	return _targets;
+}
+
+unsigned int Shader::getTargetsNumber() const
+{
+	return _targetsList.size();
+}
+
+bool Shader::buildTargets()
+{
+	// if there is no targets defined
+	if (_targetsList.size() == 0)
+	{
+		std::cout << "No targets defined for shader" << std::endl;
+		_targetsList.insert(GL_COLOR_ATTACHMENT0);
+	}
+
+	if (_targets)
+		delete _targets;
+	_targets = new GLenum[_targetsList.size()];
+	if (!_targets)
+		return false;
+
+	unsigned int i = 0;
+	for (auto &e : _targetsList)
+	{
+		_targets[i] = e;
+		++i;
+	}
+}
+
+	Shader &Shader::addTarget(GLenum target)
+	{
+		_targetsList.insert(target);
+		return *this;
+	}
+
+	Shader &Shader::removeTarget(GLenum target)
+	{
+		_targetsList.erase(target);
+		return *this;
+	}
+
+	void Shader::clearTargets()
+	{
+		_targetsList.clear();
+		if (_targets)
+			delete _targets;
+	}
 
 }
