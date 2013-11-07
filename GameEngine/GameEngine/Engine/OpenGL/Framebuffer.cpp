@@ -110,7 +110,7 @@ namespace OpenGLTools
 		glViewport(0, 0, _width, _height);
 	}
 
-	void Framebuffer::bind(Shader *shader)
+	unsigned int Framebuffer::bind(Shader *shader)
 	{
 		for (unsigned int i = 0; i < _layerNumber; ++i)
 		{
@@ -118,6 +118,7 @@ namespace OpenGLTools
 			glBindTexture(GL_TEXTURE_2D, _layers[i]);
 			shader->bindActiveTexture(_layerNames[i], i);
 		}
+		return _layerNumber;
 	}
 
 	void Framebuffer::unbind()
