@@ -134,9 +134,6 @@ void		Renderer::render()
 	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
 	e.renderer().getUniform("PerFrame")->flushChanges();
 
-
-	// @cesar's implementation
-
 	_fbo.renderBegin();
 	_fbo.applyViewport();
 	_fbo.clear();
@@ -153,6 +150,7 @@ void		Renderer::render()
 			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
 
 			shader->use();
+			_fbo.bind(shader);
 			for (auto &obj : material.second->getObjects())
 			{
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
@@ -161,6 +159,7 @@ void		Renderer::render()
 				obj->getMesh()->draw();
 				obj->unbindTextures();
 			}
+			_fbo.unbind();
 		}
 	}
 	_fbo.bindDrawTargets(nullptr, 0);
