@@ -74,6 +74,9 @@ namespace Components
 
 	void MeshRenderer::bindTextures() const
 	{
+		//
+		// a little bit hardcodeded -> to clean
+		//
 		unsigned int c = 0;
 		for (textureMap::const_iterator it = _textures.begin(); it != _textures.end(); ++it)
 		{
