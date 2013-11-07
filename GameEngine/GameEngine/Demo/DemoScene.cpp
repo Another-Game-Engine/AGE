@@ -39,17 +39,17 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	materialPlanet->pushShader(shader);
 	if (tex1 == "texture:earth")
 	{
-//		materialPlanet->pushShader("glowEarth");
+		//		materialPlanet->pushShader("glowEarth");
 	}
 
 	r->addMaterial(materialPlanet);
-	r->addTexture(tex1, "texture1", 0);
+	r->addTexture(tex1, 0);
 	if (!tex2.empty())
-		r->addTexture(tex2, "texture2", 1);
+		r->addTexture(tex2, 1);
 	if (!tex3.empty())
-		r->addTexture(tex3, "texture3", 2);
+		r->addTexture(tex3, 2);
 	if (!tex4.empty())
-		r->addTexture(tex4, "texture4", 3);
+		r->addTexture(tex4, 3);
 
 	e->addComponent(r);
 	e->addComponent(new Components::RotationForce(glm::vec3(0, orbitSpeed, 0)));
@@ -74,8 +74,8 @@ bool 			DemoScene::userStart()
 	};
 
 	OpenGLTools::Shader &s = GameEngine::instance()->renderer().addShader("earth",
-																		  "../GameEngine/Shaders/earth.vp",
-																		  "../GameEngine/Shaders/earth.fp")
+		"../GameEngine/Shaders/earth.vp",
+		"../GameEngine/Shaders/earth.fp")
 		.bindActiveTexture("fDayTexture", 0)
 		.bindActiveTexture("fNightTexture", 1)
 		.bindActiveTexture("fClouds", 2)
