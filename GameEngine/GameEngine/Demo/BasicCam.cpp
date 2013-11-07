@@ -48,7 +48,7 @@ void      BasicCam::customUpdate()
 	}
 	if (GameEngine::instance()->inputs().getInput(SDLK_UP))
 		_dist -= 1;
-	if (GameEngine::instance()->inputs().getInput(SDLK_DOWN))
+	if (GameEngine::instance()->inputs().getInput(SDLK_DOWN) || GameEngine::instance()->inputs().getInput(SDL_BUTTON_LEFT))
 		_dist += 1;
 	setTransform() = glm::lookAt(_pos, lookPos, glm::vec3(0, 1, 0));
 }

@@ -72,6 +72,7 @@
   <ItemGroup>
     <ClCompile Include="Demo\BasicCam.cpp" />
     <ClCompile Include="Demo\DemoScene.cpp" />
+    <ClCompile Include="Demo\TrackBall.cpp" />
     <ClCompile Include="Engine\Components\AComponent.cpp" />
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
@@ -239,6 +240,7 @@
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />
     <None Include="Demo\DemoScene.hh" />
+    <None Include="Demo\TrackBall.hh" />
     <None Include="Engine\Components\AComponent.hh" />
     <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
@@ -369,6 +371,8 @@
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Core\Renderer.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+    <None Include="Shaders\basic.fp" />
+    <None Include="Shaders\basic.vp" />
     <None Include="shaders\bump.fp" />
     <None Include="shaders\bump.vp" />
     <None Include="Shaders\cubemap.fp" />
@@ -379,8 +383,11 @@
     <None Include="Shaders\fboToScreen.vp" />
     <None Include="Shaders\glowEarth.fp" />
     <None Include="Shaders\glowEarth.vp" />
+    <None Include="Shaders\light.fp" />
+    <None Include="Shaders\light.vp" />
     <None Include="Shaders\scndPassTest.fp" />
     <None Include="Shaders\scndPassTest.vp" />
+    <None Include="Shaders\tesselation.gp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

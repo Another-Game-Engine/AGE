@@ -88,6 +88,7 @@ bool 		Engine::update()
 {
 	assert(_context != NULL && "Context must be initialized.");
 	_timer.update();
+    _inputs.clearInputs();
 	_context->updateEvents(_inputs);
 	_sceneBinded->update();
 	return (_sceneBinded->userUpdate());

@@ -2,7 +2,7 @@
 
 #include "Core/Engine.hh"
 #include "DemoScene.hh"
-#include "BasicCam.hh"
+#include "TrackBall.hh"
 
 #include "ResourceManager/SharedMesh.hh"
 #include "ResourceManager/Texture.hh"
@@ -143,7 +143,7 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	setCamera(new BasicCam(earth->getSonsBegin()->second));
+	setCamera(new TrackBall(earth->getSonsBegin()->second, 50, 3, 1));
 
 	std::string		vars[] = 
 	{
