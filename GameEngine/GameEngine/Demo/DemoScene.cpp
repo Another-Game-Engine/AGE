@@ -94,12 +94,12 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().addShader("fboToScreen", "../GameEngine/Shaders/fboToScreen.vp", "../GameEngine/Shaders/fboToScreen.fp");
 	GameEngine::instance()->renderer().addShader("glowEarth", "../GameEngine/Shaders/scndPassTest.vp", "../GameEngine/Shaders/scndPassTest.fp");
 
-	GameEngine::instance()->renderer().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT2).buildTargets();
+	GameEngine::instance()->renderer().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).addTarget(GL_COLOR_ATTACHMENT1).buildTargets();
 	GameEngine::instance()->renderer().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
-	GameEngine::instance()->renderer().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT3).buildTargets();
+	GameEngine::instance()->renderer().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
 	GameEngine::instance()->renderer().getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
 	GameEngine::instance()->renderer().getShader("glowEarth")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
-	GameEngine::instance()->renderer().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT1).buildTargets();
+	GameEngine::instance()->renderer().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
 
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
 
