@@ -150,12 +150,12 @@ void		Renderer::render()
 			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
 
 			shader->use();
-			_fbo.bind(shader);
+			unsigned int offset = _fbo.bind(shader);
 			for (auto &obj : material.second->getObjects())
 			{
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
 				getUniform("PerModel")->flushChanges();
-				obj->bindTextures(4, shader);
+				obj->bindTextures(offset, shader);
 				obj->getMesh()->draw();
 				obj->unbindTextures();
 			}
