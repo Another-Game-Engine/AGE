@@ -47,23 +47,24 @@ namespace Components
 		return (_mesh);
 	}
 
-	void MeshRenderer::addTexture(const std::string &textureName, unsigned int priority)
+
+	void MeshRenderer::addTexture(const std::string &textureName, const std::string &name, unsigned int priority)
 	{
 		SmartPointer<Resources::Texture> texture = GameEngine::instance()->resources().getResource(textureName);
-
+		
 		for (textureMapIt it = _textures.begin(); it != _textures.end(); ++it)
 		{
-			if (it->first == priority)
+			if (it->second.first == name)
 				return;
 		}
-		_textures.insert(std::make_pair(priority, std::make_pair(textureName, texture)));
+		_textures.insert(std::make_pair(priority, std::make_pair(name, texture)));
 	}
 
-	void MeshRenderer::removeTexture(unsigned int priority)
+	void MeshRenderer::removeTexture(const std::string &name)
 	{
 		for (textureMapIt it = _textures.begin(); it != _textures.end(); ++it)
 		{
-			if (it->first == priority)
+			if (it->second.first == name)
 			{
 				_textures.erase(it);
 				return;
@@ -71,17 +72,13 @@ namespace Components
 		}
 	}
 
-	void MeshRenderer::bindTextures(unsigned int offset, OpenGLTools::Shader *shader) const
+	void MeshRenderer::bindTextures() const
 	{
 		unsigned int c = 0;
-		static char s[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 		for (textureMap::const_iterator it = _textures.begin(); it != _textures.end(); ++it)
 		{
-			std::string name = "fTexture";
-			name += s[c];
-			glActiveTexture(GL_TEXTURE0 + c + offset);
+			glActiveTexture(GL_TEXTURE0 + c);
 			glBindTexture(GL_TEXTURE_2D, it->second.second->getId());
-			shader->bindActiveTexture(name, c + offset);
 			++c;
 		}
 	}

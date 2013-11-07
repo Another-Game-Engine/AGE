@@ -157,7 +157,7 @@ void		Renderer::render()
 			{
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
 				getUniform("PerModel")->flushChanges();
-				obj->bindTextures(4, shader);
+				obj->bindTextures();
 				obj->getMesh()->draw();
 				obj->unbindTextures();
 			}
