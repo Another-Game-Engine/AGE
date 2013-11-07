@@ -141,28 +141,18 @@ void		Renderer::render()
 	_fbo.applyViewport();
 	_fbo.clear();
 
-//	GameEngine::instance()->getCurrentScene()->getCamera()->update();
+	GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
 	for (auto &material : _materialManager.getMaterialList())
 	{
 		unsigned int shaderIndex = 0;
 		for (auto &shaderName : material.second->getShaders())
 		{
-			//if (shaderIndex == 0)
-			//{
-			//	glDepthFunc(GL_LESS);
-			//	glDepthMask(GL_TRUE);
-			//}
-			//else
-			//{
-			//	glDepthFunc(GL_LEQUAL);
-			//	glDepthMask(GL_FALSE);
-			//}
-			//++shaderIndex;
 			OpenGLTools::Shader *shader = getShader(shaderName);
 
+			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
+
 			shader->use();
-//			_fbo.bind(shader);
 			for (auto &obj : material.second->getObjects())
 			{
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
@@ -171,83 +161,11 @@ void		Renderer::render()
 				obj->getMesh()->draw();
 				obj->unbindTextures();
 			}
-//			_fbo.unbind();
 		}
 	}
-
+	_fbo.bindDrawTargets(nullptr, 0);
 	_fbo.renderEnd();
-
-	// for breakpoint purpose
-	//	glCheckFramebufferStatus(GL_FRAMEBUFFER_UNDEFINED);
-
 	_fbo.renderToScreen(getShader("fboToScreen"));
-
-
-	//	OpenGLTools::Shader	*shader = getShader(shaderName.second->name);
-	//	unsigned int texturesOffset = 0;
-
-	//	if (!shaderName.second->last)
-	//	{
-	//		std::cout << GL_MAX_FRAMEBUFFER_LAYERS << std::endl;
-	//		_fbo.bindTexture(shaderName.second->id);
-	//	}
-	//	else
-	//	{
-	//		_fbo.bindTexture(0);
-	//	}
-	//	texturesOffset = _fbo.bindTextures(shaderName.second->preShaders);
-	//	shader->use();
-	//	for (auto &mat : shaderName.second->materials)
-	//	{
-	//		for (auto &obj : mat.second->getObjects())
-	//		{
-	//			GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
-	//			GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
-
-	//			obj->bindTextures(texturesOffset);
-	//			obj->getMesh()->draw();
-	//			obj->unbindTextures(texturesOffset);
-	//		}
-	//	}
-	//	_fbo.unbindTextures(shaderName.second->preShaders);
-	//}
-	//glDrawBuffer(GL_COLOR_ATTACHMENT0);
-	//_queues.clear();
-	//_fbo.unbind();
-	//std::vector<unsigned int> lol;
-	//lol.push_back(0);
-	//_fbo.bindTextures(lol);
-	//getShader("fboToScreen")->use();
-	//_fbo.renderToScreen();
-	//_fbo.unbindTextures(lol);
-	//_fbo.clear();
-
-
-	// @paulo's implementation
-
-	//queueIt			it;
-
- //   for (it = std::begin(_queues);  it != std::end(_queues);  ++it)
- //   {
-	//	OpenGLTools::Shader		*currentShader = getShader(it->first);
-	//	// Set the uniforms values for the shader
-	//	assert(currentShader != NULL && "Shader binded that does not exist");
-	//	currentShader->use();
-
-	//	Components::MeshRenderer		*cur = it->second;
-	//	while (cur)
-	//	{
-	//		// Set les uniforms du block PerModel
-	//		GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", cur->getFather()->getGlobalTransform());
-	//		GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
-
-	//		cur->bindTextures();
-	//		cur->getMesh()->draw();
-	//		cur->unbindTextures();
-	//		cur = cur->getNext();
- //       }
- //   }
-	//_queues.clear();
 }
 
 

@@ -21,6 +21,7 @@
 # include <vector>
 # include <fstream>
 # include <string>
+# include <set>
 
 namespace OpenGLTools
 {
@@ -33,6 +34,8 @@ private:
 	GLuint						_vertexId;
 	GLuint						_fragId;
 	GLuint						_geometryId;
+	GLenum                      *_targets;
+	std::set<GLenum>            _targetsList;
 
 	void linkProgram(GLuint progId) const;
 	void compileShader(GLuint shaderId, std::string const &file) const;
@@ -48,6 +51,12 @@ public:
 
 	void	use(void);
 	GLuint	getId() const;
+	GLenum  *getTargets() const;
+	unsigned int getTargetsNumber() const;
+	bool buildTargets();
+	Shader &addTarget(GLenum target);
+	Shader &removeTarget(GLenum target);
+	void clearTargets();
 };
 
 }

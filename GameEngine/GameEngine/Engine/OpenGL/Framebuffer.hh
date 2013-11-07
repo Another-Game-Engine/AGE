@@ -20,12 +20,12 @@ namespace OpenGLTools
 		OpenGLTools::VertexBuffer _vbo;
 		unsigned int _layerNumber;
 		unsigned int *_layers;
-		unsigned int *_drawBuffers;
 		std::vector<std::string> _layerNames;
 	public:
 		Framebuffer();
 		~Framebuffer();
 		bool init(unsigned int width, unsigned int height, const std::vector<std::string> &layers);
+		void bindDrawTargets(GLenum *targets, unsigned int number);
 		void renderBegin();
 		void renderEnd();
 		void Framebuffer::applyViewport();
@@ -34,25 +34,7 @@ namespace OpenGLTools
 		void bind(Shader *shader);
 		void unbind();
 		void clear();
-
-		//template<typename... args>
-		//inline void clearLayer(args&& ...)
-		//{
-		//	clearLayer(args...);
-		//}
-
-		//template<typename... args>
-		//inline void bind(args&& ...)
-		//{
-		//	bind(args...);
-		//}
-
-		//template<typename... args>
-		//inline void unbind(args&& ...)
-		//{
-		//	unbind(args...);
-		//}
-
+		bool checkStatus();
 	private:
 		Framebuffer(const Framebuffer &o);
 		Framebuffer &operator=(const Framebuffer &o);
