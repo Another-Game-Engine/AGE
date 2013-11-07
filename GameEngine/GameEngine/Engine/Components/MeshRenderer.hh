@@ -22,7 +22,7 @@ namespace Components
 class MeshRenderer : public AComponent
 {
 private:
-	typedef std::map<unsigned int, std::pair<std::string, SmartPointer<Resources::Texture> > > textureMap;
+	typedef std::multimap<unsigned int, std::pair<std::string, SmartPointer<Resources::Texture> > > textureMap;
 	typedef textureMap::iterator textureMapIt;
 
 	SmartPointer<Resources::SharedMesh>	_mesh;
@@ -47,9 +47,9 @@ public:
 	bool				setShader(std::string const &name);
 	std::string const	&getShader() const;
 
-	void addTexture(const std::string &textureName, unsigned int priority = 0);
-	void removeTexture(unsigned int priority);
-	void bindTextures(unsigned int offset, OpenGLTools::Shader *shader) const;
+	void addTexture(const std::string &textureName, const std::string &name, unsigned int priority = 0);
+	void removeTexture(const std::string &name);
+	void bindTextures() const;
 	void unbindTextures() const;
 	void addMaterial(SmartPointer<Material> material);
 	void removeMaterial(SmartPointer<Material> material);
