@@ -41,7 +41,7 @@ void main(void)
    * - vecteur de reflection de la lumiére
    * - vecteur de l'oeil vers le frag
    */
-  vec3 lightPos = (view * light).xyz;
+  vec3 lightPos = vec3(view * light);
   vec4 vectorLight = normalize(vec4(lightPos - fPosition.xyz, 1.0));
   vec4 vectorReflect = normalize(reflect(-vectorLight, normal));
   vec4 vectorView = normalize(vec4(fPosition.xyz - view[3].xyz, 1.0));

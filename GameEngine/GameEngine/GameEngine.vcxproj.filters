@@ -32,6 +32,7 @@
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="TinyThread\tinythread.cpp" />
     <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
+    <ClCompile Include="Demo\TrackBall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -312,5 +313,11 @@
     <None Include="Shaders\fboToScreen.fp" />
     <None Include="Shaders\glowEarth.vp" />
     <None Include="Shaders\glowEarth.fp" />
+    <None Include="Demo\TrackBall.hh" />
+    <None Include="Shaders\light.vp" />
+    <None Include="Shaders\light.fp" />
+    <None Include="Shaders\tesselation.gp" />
+    <None Include="Shaders\basic.fp" />
+    <None Include="Shaders\basic.vp" />
   </ItemGroup>
 </Project>
