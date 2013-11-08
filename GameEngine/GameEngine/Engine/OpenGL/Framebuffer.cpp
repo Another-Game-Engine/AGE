@@ -106,6 +106,20 @@ namespace OpenGLTools
 		_isRendering = false;
 	}
 
+	void Framebuffer::zPassBegin()
+	{
+		glDepthFunc(GL_LESS);
+		glColorMask(0,0,0,0);
+		glDepthMask(GL_TRUE);
+	}
+
+	void Framebuffer::zPassEnd()
+	{
+		glDepthFunc(GL_LEQUAL);
+		glColorMask(1,1,1,1);
+		glDepthMask(GL_FALSE);
+	}
+
 	void Framebuffer::applyViewport()
 	{
 		glViewport(0, 0, _width, _height);
@@ -131,7 +145,7 @@ namespace OpenGLTools
 		}
 	}
 
-	void Framebuffer::clear()
+	void Framebuffer::clearColor()
 	{
 		std::unique_ptr<GLenum[]> drawBuffers(new GLenum[_layerNumber]);
 		for (unsigned int i = 0; i < _layerNumber; ++i)
@@ -139,8 +153,15 @@ namespace OpenGLTools
 			drawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
 		}
 		glDrawBuffers(_layerNumber, drawBuffers.get());
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
+
+	void Framebuffer::clearZ()
+	{
+		glDrawBuffers(0, nullptr);
+		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+
 
 	void Framebuffer::renderToScreen(Shader *shader)
 	{

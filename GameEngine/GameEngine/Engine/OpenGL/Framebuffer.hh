@@ -26,6 +26,8 @@ namespace OpenGLTools
 		~Framebuffer();
 		bool init(unsigned int width, unsigned int height, const std::vector<std::string> &layers);
 		void bindDrawTargets(GLenum *targets, unsigned int number);
+		void zPassBegin();
+		void zPassEnd();
 		void renderBegin();
 		void renderEnd();
 		void Framebuffer::applyViewport();
@@ -34,7 +36,8 @@ namespace OpenGLTools
 		inline bool isRendering(){return _isRendering;}
 		unsigned int bind(Shader *shader);
 		void unbind();
-		void clear();
+		void clearColor();
+		void clearZ();
 		bool checkStatus();
 	private:
 		Framebuffer(const Framebuffer &o);

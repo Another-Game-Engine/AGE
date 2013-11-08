@@ -136,9 +136,42 @@ void		Renderer::render()
 
 	_fbo.renderBegin();
 	_fbo.applyViewport();
-	_fbo.clear();
+	_fbo.clearColor();
+	_fbo.clearZ();
+
+	//render skybox before z-pass
 
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
+
+	// Depth pre-pass
+
+	_fbo.zPassBegin();
+
+	for (auto &material : _materialManager.getMaterialList())
+	{
+		unsigned int shaderIndex = 0;
+		for (auto &shaderName : material.second->getShaders())
+		{
+			OpenGLTools::Shader *shader = getShader(shaderName);
+
+			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
+
+			shader->use();
+			unsigned int offset = _fbo.bind(shader);
+			for (auto &obj : material.second->getObjects())
+			{
+				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+				getUniform("PerModel")->flushChanges();
+				obj->bindTextures(offset, shader);
+				obj->getMesh()->draw();
+				obj->unbindTextures();
+			}
+			_fbo.unbind();
+		}
+	}
+	_fbo.zPassEnd();
+
+	// Render pass
 
 	for (auto &material : _materialManager.getMaterialList())
 	{
