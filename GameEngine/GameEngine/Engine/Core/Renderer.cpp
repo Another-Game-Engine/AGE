@@ -218,9 +218,42 @@ void		Renderer::render()
 			_fbo.unbind();
 		}
 	}
+
+
+	// post FX pass
+	
+//	for (auto &m : _postEffects)
+//	{
+//		unsigned int shaderIndex = 0;
+//		auto material = _materialManager.getMaterial(m.second);
+//		for (auto &shaderName : material->getShaders())
+//		{
+//			OpenGLTools::Shader *shader = getShader(shaderName);
+//
+//			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
+//
+//			shader->use();
+//			unsigned int offset = _fbo.bind(shader);
+//
+//			getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+//			getUniform("PerModel")->flushChanges();
+//
+////			_fbo.render(
+//
+//			_fbo.unbind();
+//		}
+//	}
+
 	_fbo.bindDrawTargets(nullptr, 0);
 	_fbo.renderEnd();
+
+	_fbo.renderBegin();
+	_fbo.bindDrawTargets(getShader("brightnessFilter")->getTargets(), getShader("brightnessFilter")->getTargetsNumber());
+	_fbo.renderRect(getShader("brightnessFilter"));
+	_fbo.renderEnd();
+
 	_fbo.debugRendering(getShader("fboToScreen"));
+
 }
 
 

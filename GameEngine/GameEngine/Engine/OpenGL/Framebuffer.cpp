@@ -163,33 +163,18 @@ namespace OpenGLTools
 	}
 
 
-	void Framebuffer::renderToScreen(Shader *shader)
+	void Framebuffer::renderRect(Shader *shader)
 	{
 		shader->use();
 
-		glViewport(0,0,500,500);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _layers[0]);
-		_vbo.draw(GL_TRIANGLES);
-
-		glViewport(500,0,500,500);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _layers[1]);
-		_vbo.draw(GL_TRIANGLES);
-
-		glViewport(0,500,500,500);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _layers[2]);
-		_vbo.draw(GL_TRIANGLES);
-
-		glViewport(500,500,500,500);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _layers[3]);
+		glViewport(0,0,_width,_height);
+//		glActiveTexture(GL_TEXTURE0);
+//		glBindTexture(GL_TEXTURE_2D, _layers[0]);
+		bind(shader);
 		_vbo.draw(GL_TRIANGLES);
 
 		glUseProgram(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-
 	}
 
 	void Framebuffer::debugRendering(Shader *shader)
