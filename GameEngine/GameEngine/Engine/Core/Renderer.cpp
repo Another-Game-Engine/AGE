@@ -197,7 +197,6 @@ void		Renderer::render()
 	}
 	_fbo.bindDrawTargets(nullptr, 0);
 	_fbo.renderEnd();
-//	_fbo.renderToScreen(getShader("fboToScreen"));
 	_fbo.debugRendering(getShader("fboToScreen"));
 }
 
