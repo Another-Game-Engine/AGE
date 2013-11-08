@@ -92,14 +92,14 @@ bool 			DemoScene::userStart()
 		.bindActiveTexture("fTexture", 0)
 		.bindActiveTexture("fBump", 1);
 	GameEngine::instance()->renderer().addShader("fboToScreen", "../GameEngine/Shaders/fboToScreen.vp", "../GameEngine/Shaders/fboToScreen.fp");
-	GameEngine::instance()->renderer().addShader("glowEarth", "../GameEngine/Shaders/scndPassTest.vp", "../GameEngine/Shaders/scndPassTest.fp");
+	GameEngine::instance()->renderer().addShader("brightnessFilter", "../GameEngine/Shaders/brightnessFilter.vp", "../GameEngine/Shaders/brightnessFilter.fp");
 
-	GameEngine::instance()->renderer().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).addTarget(GL_COLOR_ATTACHMENT1).buildTargets();
+	GameEngine::instance()->renderer().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
 	GameEngine::instance()->renderer().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
 	GameEngine::instance()->renderer().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
 	GameEngine::instance()->renderer().getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
-	GameEngine::instance()->renderer().getShader("glowEarth")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
 	GameEngine::instance()->renderer().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
+	GameEngine::instance()->renderer().getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1).buildTargets();
 
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
 
@@ -111,9 +111,6 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().bindShaderToUniform("earth", "PerModel", "PerModel");
 	GameEngine::instance()->renderer().bindShaderToUniform("bump", "PerFrame", "PerFrame");
 	GameEngine::instance()->renderer().bindShaderToUniform("bump", "PerModel", "PerModel");
-	GameEngine::instance()->renderer().bindShaderToUniform("glowEarth", "PerFrame", "PerFrame");
-	GameEngine::instance()->renderer().bindShaderToUniform("glowEarth", "PerModel", "PerModel");
-
 
 	GameEngine::instance()->resources().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
 

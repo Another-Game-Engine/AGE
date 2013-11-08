@@ -373,6 +373,8 @@
     <None Include="Engine\Components\MeshRenderer.hh" />
     <None Include="Shaders\basic.fp" />
     <None Include="Shaders\basic.vp" />
+    <None Include="Shaders\brightnessFilter.fp" />
+    <None Include="Shaders\brightnessFilter.vp" />
     <None Include="shaders\bump.fp" />
     <None Include="shaders\bump.vp" />
     <None Include="Shaders\cubemap.fp" />
@@ -383,8 +385,6 @@
     <None Include="shaders\earth.vp" />
     <None Include="Shaders\fboToScreen.fp" />
     <None Include="Shaders\fboToScreen.vp" />
-    <None Include="Shaders\glowEarth.fp" />
-    <None Include="Shaders\glowEarth.vp" />
     <None Include="Shaders\light.fp" />
     <None Include="Shaders\light.vp" />
     <None Include="Shaders\scndPassTest.fp" />

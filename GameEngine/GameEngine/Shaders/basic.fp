@@ -26,10 +26,8 @@ in vec4 fColor;
 in vec2 fUv;
 
 out layout (location = 0) vec4 FragColor;
-out layout (location = 1) vec4 ShinySpot;
 
 void main(void)
 {
   FragColor = fColor * texture2D(fTexture0, fUv);
-  ShinySpot	= vec4(1,1,1,1);
 }

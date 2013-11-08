@@ -311,8 +311,6 @@
     <None Include="Shaders\scndPassTest.fp" />
     <None Include="Shaders\fboToScreen.vp" />
     <None Include="Shaders\fboToScreen.fp" />
-    <None Include="Shaders\glowEarth.vp" />
-    <None Include="Shaders\glowEarth.fp" />
     <None Include="Demo\TrackBall.hh" />
     <None Include="Shaders\light.vp" />
     <None Include="Shaders\light.fp" />
@@ -321,5 +319,7 @@
     <None Include="Shaders\basic.vp" />
     <None Include="Shaders\depthOnly.fp" />
     <None Include="Shaders\depthOnly.vp" />
+    <None Include="Shaders\brightnessFilter.fp" />
+    <None Include="Shaders\brightnessFilter.vp" />
   </ItemGroup>
 </Project>

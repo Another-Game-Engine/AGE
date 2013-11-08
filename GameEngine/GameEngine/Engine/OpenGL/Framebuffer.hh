@@ -31,7 +31,7 @@ namespace OpenGLTools
 		void renderBegin();
 		void renderEnd();
 		void Framebuffer::applyViewport();
-		void renderToScreen(Shader *shader);
+		void renderRect(Shader *shader);
 		void debugRendering(Shader *shader);
 		inline bool isRendering(){return _isRendering;}
 		unsigned int bind(Shader *shader);

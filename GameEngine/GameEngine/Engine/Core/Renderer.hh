@@ -13,6 +13,13 @@
 class Renderer
 {
 private:
+
+	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;
+	typedef std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	uniformsIt;
+	typedef std::map<std::string, Components::MeshRenderer*>::iterator		queueIt;
+	typedef std::multimap<unsigned int, std::string>                        postEffectCol;
+	typedef std::multimap<unsigned int, std::string>::iterator              postEffectColIt;
+
 	OpenGLTools::Framebuffer                        _fbo;
 	std::map<std::string,
 		OpenGLTools::Shader*>						_shaders;
@@ -20,11 +27,8 @@ private:
 		OpenGLTools::UniformBuffer*>				_uniforms;
 	std::map<std::string,
 			Components::MeshRenderer* >				_queues; // Queues sorted by materials
-	MaterialManager _materialManager;
-
-	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;
-	typedef std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	uniformsIt;
-	typedef std::map<std::string, Components::MeshRenderer*>::iterator		queueIt;
+	MaterialManager                                 _materialManager;
+	postEffectCol                                   _postEffects;
 public:
 	Renderer(void);
 	~Renderer(void);
@@ -55,6 +59,7 @@ public:
 	OpenGLTools::Framebuffer        &getFbo();
 	void                            uninit();
 	inline MaterialManager &getMaterialManager() {return _materialManager;}
+	inline void addPostEffect(const std::string &name, unsigned int priority) {_postEffects.insert(std::make_pair(priority, name));}
 };
 
 #endif
