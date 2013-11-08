@@ -24,7 +24,7 @@ namespace OpenGLTools
 	public:
 		Framebuffer();
 		~Framebuffer();
-		bool init(unsigned int width, unsigned int height, const std::vector<std::string> &layers);
+		bool init(unsigned int width, unsigned int height, unsigned int layerNumber);
 		void bindDrawTargets(GLenum *targets, unsigned int number);
 		void zPassBegin();
 		void zPassEnd();
