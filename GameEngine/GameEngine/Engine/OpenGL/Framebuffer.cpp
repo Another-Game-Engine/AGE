@@ -117,7 +117,7 @@ namespace OpenGLTools
 	{
 		glDepthFunc(GL_LEQUAL);
 		glColorMask(1,1,1,1);
-		glDepthMask(GL_FALSE);
+//		glDepthMask(GL_FALSE);
 	}
 
 	void Framebuffer::applyViewport()
