@@ -18,6 +18,12 @@ bool Renderer::init()
 {
 	std::vector<std::string> list; list.push_back("layer0"); list.push_back("layer1"); list.push_back("layer2"); list.push_back("layer3");
 
+	GameEngine::instance()->renderer().addShader("depthOnly", "../GameEngine/Shaders/depthOnly.vp", "../GameEngine/Shaders/depthOnly.fp");
+	GameEngine::instance()->renderer().bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
+	GameEngine::instance()->renderer().bindShaderToUniform("depthOnly", "PerModel", "PerModel");
+	GameEngine::instance()->renderer().getShader("depthOnly")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
+
+
 	return _fbo.init(1920, 1080, list);
 }
 
@@ -144,9 +150,31 @@ void		Renderer::render()
 	GameEngine::instance()->getCurrentScene()->getCamera()->update();
 
 	// Depth pre-pass
+	// to uncomment when depthOnly shader fixed
+
+	//_fbo.zPassBegin();
+	//unsigned int shaderIndex = 0;
+	//OpenGLTools::Shader *shader = getShader("depthOnly");
+	//shader->use();
+	//_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
+	//unsigned int offset = 0;
+	//for (auto &material : _materialManager.getMaterialList())
+	//{
+	//	for (auto &obj : material.second->getObjects())
+	//	{
+	//		getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+	//		getUniform("PerModel")->flushChanges();
+	//		obj->getMesh()->draw();
+	//	}
+	//}
+	//_fbo.unbind();
+	//_fbo.zPassEnd();
+
+
+	// temporary z-pass
+	// to erase when depthOnly shader fixed
 
 	_fbo.zPassBegin();
-
 	for (auto &material : _materialManager.getMaterialList())
 	{
 		unsigned int shaderIndex = 0;
@@ -157,14 +185,11 @@ void		Renderer::render()
 			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
 
 			shader->use();
-			unsigned int offset = _fbo.bind(shader);
 			for (auto &obj : material.second->getObjects())
 			{
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
 				getUniform("PerModel")->flushChanges();
-				obj->bindTextures(offset, shader);
 				obj->getMesh()->draw();
-				obj->unbindTextures();
 			}
 			_fbo.unbind();
 		}
