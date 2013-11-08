@@ -127,11 +127,12 @@ namespace OpenGLTools
 
 	unsigned int Framebuffer::bind(Shader *shader)
 	{
-		for (unsigned int i = 0; i < _layerNumber; ++i)
+		unsigned int i = 0;
+		for (auto &e : shader->getLayers())
 		{
 			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, _layers[i]);
-			shader->bindActiveTexture(_layerNames[i], i);
+			glBindTexture(GL_TEXTURE_2D, _layers[e - GL_COLOR_ATTACHMENT0]);
+			++i;
 		}
 		return _layerNumber;
 	}

@@ -71,16 +71,16 @@ namespace Components
 		}
 	}
 
-	void MeshRenderer::bindTextures(unsigned int offset, OpenGLTools::Shader *shader) const
+	void MeshRenderer::bindTextures(OpenGLTools::Shader *shader) const
 	{
 		unsigned int c = 0;
+		unsigned int offset = shader->getLayers().size();
 
 		for (textureMap::const_iterator it = _textures.begin(); it != _textures.end(); ++it)
 		{
-			std::string name = "fTexture" + std::to_string(c);
 			glActiveTexture(GL_TEXTURE0 + c + offset);
 			glBindTexture(GL_TEXTURE_2D, it->second.second->getId());
-			shader->bindActiveTexture(name, c + offset);
+//			shader->bindActiveTexture("fTexture" + std::to_string(c), c + offset);
 			++c;
 		}
 	}

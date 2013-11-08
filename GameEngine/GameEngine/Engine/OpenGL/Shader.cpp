@@ -21,7 +21,8 @@ Shader::Shader(void) :
 	_vertexId(0),
 	_fragId(0),
 	_geometryId(0),
-	_targets(nullptr)
+	_targets(nullptr),
+	_textureNumber(0)
 {
 }
 
@@ -144,6 +145,7 @@ bool	Shader::bindUniformBlock(std::string const &blockName, UniformBuffer const 
 	return (true);
 }
 
+// function outdated -> to erase if team is agree
 Shader	&Shader::bindActiveTexture(std::string const &uniformName, GLuint activeTexture)
 {
 	use();
@@ -170,8 +172,10 @@ unsigned int Shader::getTargetsNumber() const
 	return _targetsList.size();
 }
 
-bool Shader::buildTargets()
+bool Shader::build()
 {
+	use();
+
 	// if there is no targets defined
 	if (_targetsList.size() == 0)
 	{
@@ -191,6 +195,29 @@ bool Shader::buildTargets()
 		_targets[i] = e;
 		++i;
 	}
+
+	unsigned int destIndex = 0;
+	for (auto &e : _layersList)
+	{
+		GLuint	location = glGetUniformLocation(_progId, std::string("layer" + std::to_string(destIndex)).c_str());
+
+		glUniform1i(location, destIndex);
+		if (glGetError() != GL_NO_ERROR)
+			std::cerr << "Bind active texture failed for uniform <layer" << e << ">." << std::endl;
+		++destIndex;
+	}
+
+	for (unsigned int i = 0; i < _textureNumber; ++i)
+	{
+		GLuint	location = glGetUniformLocation(_progId, std::string("fTexture" + std::to_string(i)).c_str());
+
+		glUniform1i(location, i);
+		if (glGetError() != GL_NO_ERROR)
+			std::cerr << "Bind active texture failed for uniform <fTexture" << i << ">." << std::endl;
+		++destIndex;
+	}
+
+	return true;
 }
 
 	Shader &Shader::addTarget(GLenum target)
@@ -210,6 +237,23 @@ bool Shader::buildTargets()
 		_targetsList.clear();
 		if (_targets)
 			delete _targets;
+	}
+
+	Shader &Shader::addLayer(GLenum layer)
+	{
+		_layersList.insert(layer);
+		return *this;
+	}
+
+	Shader &Shader::removeLayer(GLenum layer)
+	{
+		_layersList.erase(layer);
+		return *this;
+	}
+
+	void Shader::clearLayers()
+	{
+		_layersList.clear();
 	}
 
 }
