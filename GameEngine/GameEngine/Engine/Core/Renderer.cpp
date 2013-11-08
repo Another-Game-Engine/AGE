@@ -16,15 +16,13 @@ Renderer::~Renderer(void)
 
 bool Renderer::init()
 {
-	std::vector<std::string> list; list.push_back("layer0"); list.push_back("layer1"); list.push_back("layer2"); list.push_back("layer3");
-
 	GameEngine::instance()->renderer().addShader("depthOnly", "../GameEngine/Shaders/depthOnly.vp", "../GameEngine/Shaders/depthOnly.fp");
 	GameEngine::instance()->renderer().bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
 	GameEngine::instance()->renderer().bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 	GameEngine::instance()->renderer().getShader("depthOnly")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
 
 
-	return _fbo.init(1920, 1080, list);
+	return _fbo.init(1920, 1080, 4);
 }
 
 void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)

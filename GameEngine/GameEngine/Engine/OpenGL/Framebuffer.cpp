@@ -21,15 +21,14 @@ namespace OpenGLTools
 	{
 	}
 
-	bool Framebuffer::init(unsigned int width, unsigned int height, const std::vector<std::string> &layerNames)
+	bool Framebuffer::init(unsigned int width, unsigned int height, unsigned int layerNumber)
 	{
 		// todo clear all if allready initilized
 
 		_width = width;
 		_height = height;
 
-		_layerNumber = layerNames.size();
-		_layerNames = layerNames;
+		_layerNumber = layerNumber;
 		glGenFramebuffers(1, &_handle);
 		glBindFramebuffer(GL_FRAMEBUFFER, _handle);
 
@@ -38,6 +37,7 @@ namespace OpenGLTools
 
 		for (unsigned int i = 0; i < _layerNumber; ++i)
 		{
+			_layerNames.push_back("layer" + std::to_string(i));
 			glBindTexture(GL_TEXTURE_2D, _layers[i]);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
