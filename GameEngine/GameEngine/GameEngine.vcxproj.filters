@@ -321,5 +321,6 @@
     <None Include="Shaders\depthOnly.vp" />
     <None Include="Shaders\brightnessFilter.fp" />
     <None Include="Shaders\brightnessFilter.vp" />
+    <None Include="Shaders\blur1.fp" />
   </ItemGroup>
 </Project>

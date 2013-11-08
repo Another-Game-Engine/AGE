@@ -250,6 +250,8 @@ void		Renderer::render()
 	_fbo.renderBegin();
 	_fbo.bindDrawTargets(getShader("brightnessFilter")->getTargets(), getShader("brightnessFilter")->getTargetsNumber());
 	_fbo.renderRect(getShader("brightnessFilter"));
+	_fbo.bindDrawTargets(getShader("blurY")->getTargets(), getShader("blurY")->getTargetsNumber());
+	_fbo.renderRect(getShader("blurY"));
 	_fbo.renderEnd();
 
 	_fbo.debugRendering(getShader("fboToScreen"));
