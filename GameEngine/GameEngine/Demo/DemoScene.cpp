@@ -95,13 +95,16 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().addShader("brightnessFilter", "../GameEngine/Shaders/brightnessFilter.vp", "../GameEngine/Shaders/brightnessFilter.fp");
 	GameEngine::instance()->renderer().addShader("blurY", "../GameEngine/Shaders/brightnessFilter.vp", "../GameEngine/Shaders/blur1.fp");
 
-	GameEngine::instance()->renderer().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
-	GameEngine::instance()->renderer().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
-	GameEngine::instance()->renderer().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
-	GameEngine::instance()->renderer().getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
-	GameEngine::instance()->renderer().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
-	GameEngine::instance()->renderer().getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1).buildTargets();
-	GameEngine::instance()->renderer().getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2).buildTargets();
+	GameEngine::instance()->renderer().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	GameEngine::instance()->renderer().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	GameEngine::instance()->renderer().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
+	GameEngine::instance()->renderer().getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
+		.addLayer(GL_COLOR_ATTACHMENT0).build();
+	GameEngine::instance()->renderer().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+	GameEngine::instance()->renderer().getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
+		.addLayer(GL_COLOR_ATTACHMENT0).build();
+	GameEngine::instance()->renderer().getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2)
+		.addLayer(GL_COLOR_ATTACHMENT0).addLayer(GL_COLOR_ATTACHMENT1).build();
 
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
 
@@ -152,7 +155,7 @@ bool 			DemoScene::userStart()
 
 	OpenGLTools::Shader &sky = GameEngine::instance()->renderer().addShader("cubemapShader", "../GameEngine/Shaders/cubemap.vp", "../GameEngine/Shaders/cubemap.fp");
 
-	GameEngine::instance()->renderer().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).buildTargets();
+	GameEngine::instance()->renderer().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 
 	GameEngine::instance()->renderer().addUniform("cameraUniform").
 		init(&sky, "cameraUniform", vars);

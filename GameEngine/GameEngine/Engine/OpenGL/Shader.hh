@@ -35,7 +35,9 @@ private:
 	GLuint						_fragId;
 	GLuint						_geometryId;
 	GLenum                      *_targets;
+	GLuint                      _textureNumber;
 	std::set<GLenum>            _targetsList;
+	std::set<GLenum>      _layersList;
 
 	void linkProgram(GLuint progId) const;
 	void compileShader(GLuint shaderId, std::string const &file) const;
@@ -53,10 +55,15 @@ public:
 	GLuint	getId() const;
 	GLenum  *getTargets() const;
 	unsigned int getTargetsNumber() const;
-	bool buildTargets();
+	bool build();
 	Shader &addTarget(GLenum target);
 	Shader &removeTarget(GLenum target);
 	void clearTargets();
+	Shader &addLayer(GLenum layer);
+	Shader &removeLayer(GLenum layer);
+	void clearLayers();
+	inline const std::set<GLenum> &getLayers() const {return _layersList;}
+	inline Shader &setTextureNumber(unsigned int t){_textureNumber = t; return *this;}
 };
 
 }

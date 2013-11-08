@@ -49,7 +49,7 @@ public:
 
 	void addTexture(const std::string &textureName, unsigned int priority = 0);
 	void removeTexture(unsigned int priority);
-	void bindTextures(unsigned int offset, OpenGLTools::Shader *shader) const;
+	void bindTextures(OpenGLTools::Shader *shader) const;
 	void unbindTextures() const;
 	void addMaterial(SmartPointer<Material> material);
 	void removeMaterial(SmartPointer<Material> material);
