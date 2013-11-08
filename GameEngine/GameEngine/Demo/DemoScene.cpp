@@ -75,11 +75,11 @@ bool 			DemoScene::userStart()
 
 	OpenGLTools::Shader &s = GameEngine::instance()->renderer().addShader("earth",
 		"../GameEngine/Shaders/earth.vp",
-		"../GameEngine/Shaders/earth.fp")
-		.bindActiveTexture("fDayTexture", 0)
-		.bindActiveTexture("fNightTexture", 1)
-		.bindActiveTexture("fClouds", 2)
-		.bindActiveTexture("fBump", 3);
+		"../GameEngine/Shaders/earth.fp");
+		//.bindActiveTexture("fDayTexture", 0)
+		//.bindActiveTexture("fNightTexture", 1)
+		//.bindActiveTexture("fClouds", 2)
+		//.bindActiveTexture("fBump", 3);
 
 	GameEngine::instance()->renderer().addUniform("PerFrame")
 		.init(&s, "PerFrame", perFrameVars);
@@ -88,9 +88,9 @@ bool 			DemoScene::userStart()
 
 	GameEngine::instance()->renderer().addShader("basic", "../GameEngine/Shaders/basic.vp", "../GameEngine/Shaders/basic.fp", "../GameEngine/Shaders/tesselation.gp");
 	GameEngine::instance()->renderer().addShader("basicLight", "../GameEngine/Shaders/light.vp", "../GameEngine/Shaders/light.fp");
-	GameEngine::instance()->renderer().addShader("bump", "../GameEngine/Shaders/bump.vp", "../GameEngine/Shaders/bump.fp")
-		.bindActiveTexture("fTexture", 0)
-		.bindActiveTexture("fBump", 1);
+	GameEngine::instance()->renderer().addShader("bump", "../GameEngine/Shaders/bump.vp", "../GameEngine/Shaders/bump.fp");
+		//.bindActiveTexture("fTexture", 0)
+		//.bindActiveTexture("fBump", 1);
 	GameEngine::instance()->renderer().addShader("fboToScreen", "../GameEngine/Shaders/fboToScreen.vp", "../GameEngine/Shaders/fboToScreen.fp");
 	GameEngine::instance()->renderer().addShader("brightnessFilter", "../GameEngine/Shaders/brightnessFilter.vp", "../GameEngine/Shaders/brightnessFilter.fp");
 	GameEngine::instance()->renderer().addShader("blurY", "../GameEngine/Shaders/brightnessFilter.vp", "../GameEngine/Shaders/blur1.fp");
