@@ -74,11 +74,10 @@ namespace Components
 	void MeshRenderer::bindTextures(unsigned int offset, OpenGLTools::Shader *shader) const
 	{
 		unsigned int c = 0;
-		static char s[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
 		for (textureMap::const_iterator it = _textures.begin(); it != _textures.end(); ++it)
 		{
-			std::string name = "fTexture";
-			name += s[c];
+			std::string name = "fTexture" + std::to_string(c);
 			glActiveTexture(GL_TEXTURE0 + c + offset);
 			glBindTexture(GL_TEXTURE_2D, it->second.second->getId());
 			shader->bindActiveTexture(name, c + offset);
