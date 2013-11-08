@@ -319,5 +319,7 @@
     <None Include="Shaders\tesselation.gp" />
     <None Include="Shaders\basic.fp" />
     <None Include="Shaders\basic.vp" />
+    <None Include="Shaders\depthOnly.fp" />
+    <None Include="Shaders\depthOnly.vp" />
   </ItemGroup>
 </Project>

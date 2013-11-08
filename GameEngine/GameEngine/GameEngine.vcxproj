@@ -377,6 +377,8 @@
     <None Include="shaders\bump.vp" />
     <None Include="Shaders\cubemap.fp" />
     <None Include="Shaders\cubemap.vp" />
+    <None Include="Shaders\depthOnly.fp" />
+    <None Include="Shaders\depthOnly.vp" />
     <None Include="shaders\earth.fp" />
     <None Include="shaders\earth.vp" />
     <None Include="Shaders\fboToScreen.fp" />
