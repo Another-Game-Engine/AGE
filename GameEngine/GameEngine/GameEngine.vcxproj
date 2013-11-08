@@ -388,8 +388,6 @@
     <None Include="Shaders\fboToScreen.vp" />
     <None Include="Shaders\light.fp" />
     <None Include="Shaders\light.vp" />
-    <None Include="Shaders\scndPassTest.fp" />
-    <None Include="Shaders\scndPassTest.vp" />
     <None Include="Shaders\tesselation.gp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
