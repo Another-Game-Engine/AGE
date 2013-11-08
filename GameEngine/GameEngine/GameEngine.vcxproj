@@ -373,6 +373,7 @@
     <None Include="Engine\Components\MeshRenderer.hh" />
     <None Include="Shaders\basic.fp" />
     <None Include="Shaders\basic.vp" />
+    <None Include="Shaders\blur1.fp" />
     <None Include="Shaders\brightnessFilter.fp" />
     <None Include="Shaders\brightnessFilter.vp" />
     <None Include="shaders\bump.fp" />

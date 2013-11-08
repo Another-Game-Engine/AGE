@@ -10,10 +10,5 @@ uniform layout (location = 0) sampler2D layer0;
 out vec4 frag_colour;
 
 void main () {
-	vec4 colour;
-	if (st.x > 0.5)
-	colour = 0.5 * texture(layer0, st);
-	else
-	colour = texture(layer0, st);
-	frag_colour	= colour;
+	frag_colour = texture(layer0, st);
 }

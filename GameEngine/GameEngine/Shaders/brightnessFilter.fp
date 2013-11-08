@@ -12,8 +12,6 @@ uniform layout (location = 3) sampler2D layer3;
 // output fragment colour RGBA
 layout (location = 0) out vec4 frag_colour;
 
-uniform float pixelOffset[10] = float[](0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
-uniform float weight[10];
 uniform float threshold = 0.3;
 
 float luma(vec3 color)
