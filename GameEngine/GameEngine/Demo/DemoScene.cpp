@@ -34,14 +34,23 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer:" + tex1, "model:ball");
 
-	r->setShader(shader);
-	r->addTexture(tex1, "texture1", 0);
+	SmartPointer<Material> materialPlanet = GameEngine::instance()->renderer().getMaterialManager().createMaterial("material:planet_" + shader);
+
+	materialPlanet->pushShader(shader);
+	if (tex1 == "texture:earth")
+	{
+		//		materialPlanet->pushShader("glowEarth");
+	}
+
+	r->addMaterial(materialPlanet);
+	r->addTexture(tex1, 0);
 	if (!tex2.empty())
-		r->addTexture(tex2, "texture2", 1);
+		r->addTexture(tex2, 1);
 	if (!tex3.empty())
-		r->addTexture(tex3, "texture3", 2);
+		r->addTexture(tex3, 2);
 	if (!tex4.empty())
-		r->addTexture(tex4, "texture4", 2);
+		r->addTexture(tex4, 3);
+
 	e->addComponent(r);
 	e->addComponent(new Components::RotationForce(glm::vec3(0, orbitSpeed, 0)));
 	p->addSon(e);
@@ -65,12 +74,12 @@ bool 			DemoScene::userStart()
 	};
 
 	OpenGLTools::Shader &s = GameEngine::instance()->renderer().addShader("earth",
-																		  "../GameEngine/Shaders/earth.vp",
-																		  "../GameEngine/Shaders/earth.fp")
-		.bindActiveTexture("fDayTexture", 0)
-		.bindActiveTexture("fNightTexture", 1)
-		.bindActiveTexture("fClouds", 2)
-		.bindActiveTexture("fBump", 3);
+		"../GameEngine/Shaders/earth.vp",
+		"../GameEngine/Shaders/earth.fp");
+		//.bindActiveTexture("fDayTexture", 0)
+		//.bindActiveTexture("fNightTexture", 1)
+		//.bindActiveTexture("fClouds", 2)
+		//.bindActiveTexture("fBump", 3);
 
 	GameEngine::instance()->renderer().addUniform("PerFrame")
 		.init(&s, "PerFrame", perFrameVars);
@@ -79,11 +88,26 @@ bool 			DemoScene::userStart()
 
 	GameEngine::instance()->renderer().addShader("basic", "../GameEngine/Shaders/basic.vp", "../GameEngine/Shaders/basic.fp", "../GameEngine/Shaders/tesselation.gp");
 	GameEngine::instance()->renderer().addShader("basicLight", "../GameEngine/Shaders/light.vp", "../GameEngine/Shaders/light.fp");
-	GameEngine::instance()->renderer().addShader("bump", "../GameEngine/Shaders/bump.vp", "../GameEngine/Shaders/bump.fp")
-		.bindActiveTexture("fTexture", 0)
-		.bindActiveTexture("fBump", 1);
+	GameEngine::instance()->renderer().addShader("bump", "../GameEngine/Shaders/bump.vp", "../GameEngine/Shaders/bump.fp");
+		//.bindActiveTexture("fTexture", 0)
+		//.bindActiveTexture("fBump", 1);
+	GameEngine::instance()->renderer().addShader("fboToScreen", "../GameEngine/Shaders/fboToScreen.vp", "../GameEngine/Shaders/fboToScreen.fp");
+	GameEngine::instance()->renderer().addShader("brightnessFilter", "../GameEngine/Shaders/brightnessFilter.vp", "../GameEngine/Shaders/brightnessFilter.fp");
+	GameEngine::instance()->renderer().addShader("blurY", "../GameEngine/Shaders/brightnessFilter.vp", "../GameEngine/Shaders/blur1.fp");
+
+	GameEngine::instance()->renderer().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	GameEngine::instance()->renderer().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	GameEngine::instance()->renderer().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
+	GameEngine::instance()->renderer().getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
+		.addLayer(GL_COLOR_ATTACHMENT0).build();
+	GameEngine::instance()->renderer().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+	GameEngine::instance()->renderer().getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
+		.addLayer(GL_COLOR_ATTACHMENT0).build();
+	GameEngine::instance()->renderer().getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2)
+		.addLayer(GL_COLOR_ATTACHMENT0).addLayer(GL_COLOR_ATTACHMENT1).build();
 
 	GameEngine::instance()->renderer().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
+
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
 	GameEngine::instance()->renderer().bindShaderToUniform("basicLight", "PerModel", "PerModel");
 	GameEngine::instance()->renderer().bindShaderToUniform("basic", "PerFrame", "PerFrame");
@@ -131,12 +155,15 @@ bool 			DemoScene::userStart()
 
 	OpenGLTools::Shader &sky = GameEngine::instance()->renderer().addShader("cubemapShader", "../GameEngine/Shaders/cubemap.vp", "../GameEngine/Shaders/cubemap.fp");
 
+	GameEngine::instance()->renderer().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+
 	GameEngine::instance()->renderer().addUniform("cameraUniform").
 		init(&sky, "cameraUniform", vars);
 
 	GameEngine::instance()->renderer().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
+
 	return (true);
 }
 

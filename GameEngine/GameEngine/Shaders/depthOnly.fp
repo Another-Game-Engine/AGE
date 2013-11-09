@@ -13,14 +13,9 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform	sampler2D fTexture0;
-
-in vec4 fColor;
-in vec2 fUv;
-
 out layout (location = 0) vec4 FragColor;
 
 void main(void)
 {
-  FragColor = fColor * texture2D(fTexture0, fUv);
+  FragColor = vec4(0,0,0,0);
 }

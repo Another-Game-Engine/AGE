@@ -7,24 +7,33 @@
 #include "Components/MeshRenderer.hh"
 #include "OpenGL/Shader.hh"
 #include "OpenGL/UniformBuffer.hh"
+#include "OpenGL/Framebuffer.hh"
+#include "MaterialManager.hh"
 
 class Renderer
 {
 private:
+
+	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;
+	typedef std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	uniformsIt;
+	typedef std::map<std::string, Components::MeshRenderer*>::iterator		queueIt;
+	typedef std::multimap<unsigned int, std::string>                        postEffectCol;
+	typedef std::multimap<unsigned int, std::string>::iterator              postEffectColIt;
+
+	OpenGLTools::Framebuffer                        _fbo;
 	std::map<std::string,
 		OpenGLTools::Shader*>						_shaders;
 	std::map<std::string,
 		OpenGLTools::UniformBuffer*>				_uniforms;
 	std::map<std::string,
 			Components::MeshRenderer* >				_queues; // Queues sorted by materials
-
-	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;
-	typedef std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	uniformsIt;
-	typedef std::map<std::string, Components::MeshRenderer*>::iterator		queueIt;
-
+	MaterialManager                                 _materialManager;
+	postEffectCol                                   _postEffects;
 public:
 	Renderer(void);
 	~Renderer(void);
+
+	bool init();
 
 	// Add an object that contain a render component to the render queue queueIdx
 	void					addToRenderQueue(Components::MeshRenderer *obj); // queueIdx between 0 and 3
@@ -46,7 +55,11 @@ public:
 														std::string const &uniform);
 	// Render queue
 	void							render();
+
+	OpenGLTools::Framebuffer        &getFbo();
 	void                            uninit();
+	inline MaterialManager &getMaterialManager() {return _materialManager;}
+	inline void addPostEffect(const std::string &name, unsigned int priority) {_postEffects.insert(std::make_pair(priority, name));}
 };
 
 #endif

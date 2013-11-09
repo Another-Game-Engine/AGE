@@ -1,5 +1,11 @@
 #version 330
 
+// framebuffer texture sampler
+uniform layout (location = 0) sampler2D layer0;
+uniform layout (location = 1) sampler2D layer1;
+uniform layout (location = 2) sampler2D layer2;
+uniform layout (location = 3) sampler2D layer3;
+
 layout (std140) uniform PerFrame
 {
 	mat4 projection;
@@ -13,14 +19,14 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform	sampler2D fTexture;
+uniform	sampler2D fTexture0;
 
 in vec4 fPosition;
 in vec4 fColor;
 in vec4 fNormal;
 in vec2 fTexCoord;
 
-out vec4 FragColor;
+out layout (location = 0) vec4 FragColor;
 
 void main(void)
 {
@@ -39,7 +45,7 @@ void main(void)
    * entre le vecteur de lumiére et la normal du fragment.
    */
   float lamberTerm = clamp(dot(fNormal.xyz, vectorLight.xyz), 0.0, 1.0);
-  vec4 pxlColor = fColor * texture2D(fTexture, fTexCoord);
+  vec4 pxlColor = fColor * texture2D(fTexture0, fTexCoord);
   vec4 ambiant = pxlColor * vec4(0.01, 0.01, 0.01, 1.0);
   vec4 diffuse = pxlColor * lamberTerm;
   FragColor = max(ambiant, diffuse);
