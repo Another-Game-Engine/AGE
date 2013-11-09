@@ -19,7 +19,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -46,6 +46,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,10 +72,14 @@
   <ItemGroup>
     <ClCompile Include="Demo\BasicCam.cpp" />
     <ClCompile Include="Demo\DemoScene.cpp" />
+    <ClCompile Include="Demo\TrackBall.cpp" />
     <ClCompile Include="Engine\Components\AComponent.cpp" />
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
+    <ClCompile Include="Engine\Core\Material.cpp" />
+    <ClCompile Include="Engine\Core\MaterialManager.cpp" />
+    <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
     <ClCompile Include="Engine\Parsers\LoadOBJ.cpp" />
@@ -96,11 +101,11 @@
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="TinyThread\tinythread.cpp" />
-    <ClCompile Include="Demo\TrackBall.cpp" />
     <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
+    <ClInclude Include="Engine\Core\Material.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
     <ClInclude Include="Engine\Utils\File.hpp" />
@@ -235,6 +240,7 @@
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />
     <None Include="Demo\DemoScene.hh" />
+    <None Include="Demo\TrackBall.hh" />
     <None Include="Engine\Components\AComponent.hh" />
     <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
@@ -243,9 +249,12 @@
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />
+    <None Include="Engine\Core\MaterialManager.hh" />
+    <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
     <None Include="Engine\Entities\Entity.hh" />
     <None Include="Engine\OpenGL\Attribute.hh" />
+    <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />
     <None Include="Engine\OpenGL\VertexBuffer.hh" />
@@ -362,14 +371,24 @@
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Core\Renderer.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+    <None Include="Shaders\basic.fp" />
+    <None Include="Shaders\basic.vp" />
+    <None Include="Shaders\blur1.fp" />
+    <None Include="Shaders\brightnessFilter.fp" />
+    <None Include="Shaders\brightnessFilter.vp" />
     <None Include="shaders\bump.fp" />
     <None Include="shaders\bump.vp" />
     <None Include="Shaders\cubemap.fp" />
     <None Include="Shaders\cubemap.vp" />
+    <None Include="Shaders\depthOnly.fp" />
+    <None Include="Shaders\depthOnly.vp" />
     <None Include="shaders\earth.fp" />
     <None Include="shaders\earth.vp" />
-    <None Include="shaders\tesselation.gp" />
-    <None Include="Demo\TrackBall.hh" />
+    <None Include="Shaders\fboToScreen.fp" />
+    <None Include="Shaders\fboToScreen.vp" />
+    <None Include="Shaders\light.fp" />
+    <None Include="Shaders\light.vp" />
+    <None Include="Shaders\tesselation.gp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

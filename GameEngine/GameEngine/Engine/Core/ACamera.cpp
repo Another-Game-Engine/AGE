@@ -73,6 +73,8 @@ void ACamera::update()
 		GameEngine::instance()->renderer().getUniform("cameraUniform")->setUniform("view", t);
 		GameEngine::instance()->renderer().getUniform("cameraUniform")->flushChanges();
 
+		GameEngine::instance()->renderer().getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
+
 		s->use();
 
 		glActiveTexture(GL_TEXTURE0);
