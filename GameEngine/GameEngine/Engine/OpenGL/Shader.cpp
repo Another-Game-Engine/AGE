@@ -27,10 +27,6 @@ Shader::Shader(void) :
 
 Shader::~Shader(void)
 {
-	glDetachShader(_progId, _vertexId);
-	glDetachShader(_progId, _fragId);
-	if (_geometryId != 0)
-		glDetachShader(_progId, _geometryId);
 	if (_targets)
 		delete _targets;
 }
@@ -59,6 +55,15 @@ bool Shader::init(std::string const &vertex, std::string const &fragment, std::s
   if (_geometryId != 0)
 	  glAttachShader(_progId, _geometryId);
   linkProgram();
+
+  glDetachShader(_progId, _vertexId);
+  glDetachShader(_progId, _fragId);
+  if (_geometryId != 0)
+	  glDetachShader(_progId, _geometryId);
+  glDeleteShader(_vertexId);
+  glDeleteShader(_fragId);
+  if (_geometryId != 0)
+	  glDeleteShader(_geometryId);
 
   return (true);
 }
