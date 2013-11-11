@@ -9,6 +9,7 @@
 #include "ResourceManager/CubeMap.hh"
 #include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
+#include <OpenGL/ComputeShader.hh>
 
 #include <SDL\SDL.h>
 
@@ -163,6 +164,10 @@ bool 			DemoScene::userStart()
 	GameEngine::instance()->renderer().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
+
+
+	OpenGLTools::ComputeShader *cs = new OpenGLTools::ComputeShader();
+	cs->init(File("../GameEngine/Shaders/test.cp"));
 
 	return (true);
 }

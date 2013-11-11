@@ -41,19 +41,19 @@ void AShader::compileShader(GLuint shaderId, std::string const &file) const
     } 
 }
 
-void AShader::linkProgram(GLuint progId) const
+void AShader::linkProgram() const
 {
   GLint         linkRet = 0;
   GLsizei       msgLenght;
   GLchar        *errorMsg;
 
-  glLinkProgram(progId);
-  glGetProgramiv(progId, GL_LINK_STATUS, &linkRet);
+  glLinkProgram(_progId);
+  glGetProgramiv(_progId, GL_LINK_STATUS, &linkRet);
   if (linkRet == GL_FALSE)
     {
-      glGetProgramiv(progId, GL_INFO_LOG_LENGTH, &msgLenght);
+      glGetProgramiv(_progId, GL_INFO_LOG_LENGTH, &msgLenght);
       errorMsg = new GLchar[msgLenght];
-      glGetProgramInfoLog(progId, msgLenght,
+      glGetProgramInfoLog(_progId, msgLenght,
 			  &msgLenght, errorMsg);
       std::cerr << "Link error on program : " << std::endl;
 	  std::cerr << std::string(errorMsg).data() << std::endl;

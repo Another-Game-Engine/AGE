@@ -18,12 +18,12 @@ namespace OpenGLTools
 		AShader();
 		virtual ~AShader();
 		bool	bindUniformBlock(std::string const &blockName, UniformBuffer const &buff);
-		bool build() {return _build();}
+		bool    build() {return _build();}
 		void	use(void);
 		GLuint	getId() const;
 	protected:
 		void compileShader(GLuint shaderId, std::string const &file) const;
-		void linkProgram(GLuint progId) const;
+		void linkProgram() const;
 		GLuint addShader(std::string const &path, GLenum type);
 	private:
 		virtual bool _build() = 0;
