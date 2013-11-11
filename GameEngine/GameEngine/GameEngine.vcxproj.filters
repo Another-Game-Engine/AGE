@@ -34,6 +34,7 @@
     <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
     <ClCompile Include="Demo\TrackBall.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
+    <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -322,5 +323,7 @@
     <None Include="Shaders\brightnessFilter.fp" />
     <None Include="Shaders\brightnessFilter.vp" />
     <None Include="Shaders\blur1.fp" />
+    <None Include="Engine\OpenGL\ComputeShader.hh" />
+    <None Include="Shaders\test.cp" />
   </ItemGroup>
 </Project>

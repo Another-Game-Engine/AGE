@@ -58,7 +58,7 @@ bool Shader::init(std::string const &vertex, std::string const &fragment, std::s
   glAttachShader(_progId, _fragId);
   if (_geometryId != 0)
 	  glAttachShader(_progId, _geometryId);
-  linkProgram(_progId);
+  linkProgram();
 
   return (true);
 }
