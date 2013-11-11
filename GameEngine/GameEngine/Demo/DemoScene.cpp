@@ -166,8 +166,10 @@ bool 			DemoScene::userStart()
 	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
 
 
-	OpenGLTools::ComputeShader *cs = new OpenGLTools::ComputeShader();
-	cs->init(File("../GameEngine/Shaders/test.cp"));
+	//OpenGLTools::ComputeShader *cs = new OpenGLTools::ComputeShader();
+	//cs->init(File("../GameEngine/Shaders/test.cp"));
+	//cs->use();
+	//glDispatchCompute(512/16, 512/16, 1);
 
 	return (true);
 }
