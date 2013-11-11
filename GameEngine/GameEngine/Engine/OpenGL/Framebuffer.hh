@@ -16,7 +16,7 @@ namespace OpenGLTools
 		unsigned int _width;
 		unsigned int _height;
 		GLuint _handle;
-		static GLuint _depth;
+		GLuint _depth;
 		OpenGLTools::VertexBuffer _vbo;
 		unsigned int _layerNumber;
 		unsigned int *_layers;
@@ -25,6 +25,7 @@ namespace OpenGLTools
 		Framebuffer();
 		~Framebuffer();
 		bool init(unsigned int width, unsigned int height, unsigned int layerNumber);
+		void uninit();
 		void bindDrawTargets(GLenum *targets, unsigned int number);
 		void zPassBegin();
 		void zPassEnd();

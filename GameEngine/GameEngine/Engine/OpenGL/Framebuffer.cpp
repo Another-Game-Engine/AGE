@@ -5,20 +5,19 @@
 
 namespace OpenGLTools
 {
-
-	unsigned int Framebuffer::_depth = 0;
-
 	Framebuffer::Framebuffer()
 		: _isRendering(false),
 		_width(0),
 		_height(0),
 		_handle(0),
+		_depth(0),
 		_layerNumber(0),
 		_layers(nullptr)
 	{}
 
 	Framebuffer::~Framebuffer()
 	{
+		uninit();
 	}
 
 	bool Framebuffer::init(unsigned int width, unsigned int height, unsigned int layerNumber)
@@ -46,10 +45,7 @@ namespace OpenGLTools
 		}
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		if (_depth == 0)
-		{
-			glGenRenderbuffers(1, &_depth);
-		}
+		glGenRenderbuffers(1, &_depth);
 
 		glBindRenderbuffer(GL_RENDERBUFFER, _depth);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _width, _height);
@@ -87,6 +83,26 @@ namespace OpenGLTools
 		_vbo.setBuffer(1, reinterpret_cast<byte *>(&ss_quad_st));
 
 		return true;
+	}
+
+	void Framebuffer::uninit()
+	{
+		if (_layers)
+		{
+			glDeleteTextures(_layerNumber, _layers);
+			delete _layers;
+			_layers = nullptr;
+		}
+		if (_depth != 0)
+		{
+			glDeleteRenderbuffers(1, &_depth);
+			_depth = 0;
+		}
+		if (_handle != 0)
+		{
+			glDeleteFramebuffers(1, &_handle);
+			_handle = 0;
+		}
 	}
 
 	void Framebuffer::bindDrawTargets(GLenum *targets, unsigned int number)

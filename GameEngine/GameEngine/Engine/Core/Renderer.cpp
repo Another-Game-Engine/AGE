@@ -272,4 +272,5 @@ void Renderer::uninit()
 		delete it->second;
 	_shaders.clear();
 	_uniforms.clear();
+	_fbo.uninit();
 }
