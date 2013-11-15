@@ -25,7 +25,7 @@ bool Renderer::init()
 	return _fbo.init(1920, 1080, 4);
 }
 
-void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
+void		Renderer::addToRenderQueue(Component::MeshRenderer *obj)
 {
 	queueIt		it;
 

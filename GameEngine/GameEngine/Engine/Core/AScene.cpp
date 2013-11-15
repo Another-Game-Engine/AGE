@@ -21,13 +21,18 @@ void 							AScene::recomputePositions(SmartPointer<Entity> &father,
 
 	while (it != father->getSonsEnd())
 	{
-		Entity::t_ComponentsList::iterator		comp = it->second->getComponentsBegin();
 
-		while (comp != it->second->getComponentsEnd())
-		{
-			comp->second->update(); // update components
-			++comp;
-		}
+		/////
+		/////   UPDATE SYSTEMS HERE !!!! TODO
+		/////
+
+		//Entity::t_ComponentsList::iterator		comp = it->second->getComponentsBegin();
+
+		//while (comp != it->second->getComponentsEnd())
+		//{
+		//	comp->second->update(); // update components
+		//	++comp;
+		//}
 		if (it->second->getFlags() & Entity::HAS_MOVED)
 			hasMoved = true;
 		if (hasMoved)

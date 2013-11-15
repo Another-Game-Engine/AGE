@@ -182,3 +182,8 @@ const Barcode                       &Entity::getCode() const
 {
 	return _code;
 }
+
+bool Entity::hasComponent(unsigned int componentId) const
+{
+		return _code.isSet(componentId);
+}

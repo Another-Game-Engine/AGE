@@ -16,7 +16,7 @@ private:
 
 	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;
 	typedef std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	uniformsIt;
-	typedef std::map<std::string, Components::MeshRenderer*>::iterator		queueIt;
+	typedef std::map<std::string, Component::MeshRenderer*>::iterator		queueIt;
 	typedef std::multimap<unsigned int, std::string>                        postEffectCol;
 	typedef std::multimap<unsigned int, std::string>::iterator              postEffectColIt;
 
@@ -26,7 +26,7 @@ private:
 	std::map<std::string,
 		OpenGLTools::UniformBuffer*>				_uniforms;
 	std::map<std::string,
-			Components::MeshRenderer* >				_queues; // Queues sorted by materials
+			Component::MeshRenderer* >				_queues; // Queues sorted by materials
 	MaterialManager                                 _materialManager;
 	postEffectCol                                   _postEffects;
 public:
@@ -36,7 +36,7 @@ public:
 	bool init();
 
 	// Add an object that contain a render component to the render queue queueIdx
-	void					addToRenderQueue(Components::MeshRenderer *obj); // queueIdx between 0 and 3
+	void					addToRenderQueue(Component::MeshRenderer *obj); // queueIdx between 0 and 3
 	// Shaders
 	OpenGLTools::Shader		&addShader(std::string const &name,
 									   std::string const &vp,
