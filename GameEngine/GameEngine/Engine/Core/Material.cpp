@@ -19,12 +19,12 @@ const std::vector<std::string> &Material::getShaders() const
 	return _shaders;
 }
 
-void Material::addObject(Components::MeshRenderer *object)
+void Material::addObject(Component::MeshRenderer *object)
 {
 	_meshs.insert(object);
 }
 
-void Material::removeObject(Components::MeshRenderer *object)
+void Material::removeObject(Component::MeshRenderer *object)
 {
 	_meshs.erase(object);
 }

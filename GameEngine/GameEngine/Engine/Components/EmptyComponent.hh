@@ -1,13 +1,13 @@
 #ifndef		EMPTY_COMPONENT_HH_
 #define		EMPTY_COMPONENT_HH_
 
-#include "AComponent.hh"
+#include "Component.hpp"
 #include "Utils/SmartPointer.hh"
 #include "ResourceManager/SharedMesh.hh"
 
-namespace Components
+namespace Component
 {
-	class EmptyComponent : public AComponent
+	class EmptyComponent : public ComponentBase<EmptyComponent>
 	{
 	private:
 		EmptyComponent(EmptyComponent const &);
@@ -16,10 +16,6 @@ namespace Components
 	public:
 		EmptyComponent();
 		virtual ~EmptyComponent(void);
-
-		virtual void	start();
-		virtual void	update();
-		virtual void	stop();
 	};
 
 }

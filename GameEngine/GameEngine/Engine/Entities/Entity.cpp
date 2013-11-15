@@ -168,23 +168,6 @@ SmartPointer<Entity::t_EntityList> 	Entity::getSonsByFlags(size_t flags, GetFlag
 	return (sons);
 }
 
-void					Entity::addComponent(SmartPointer<Components::AComponent> const &component)
-{
-	_components[component->getName()] = component;
-	component->setFather(this);
-}
-
-bool					Entity::removeComponent(std::string const &name)
-{
-	std::map<std::string, SmartPointer<Components::AComponent> >::iterator	it;
-
-	if ((it = _components.find(name)) == _components.end())
-		return (false);
-	it->second->setFather(NULL);
-	_components.erase(it);
-	return (true);
-}
-
 Entity::t_sonsList::iterator 		Entity::getSonsBegin()
 {
 	return (_sons.begin());
@@ -193,16 +176,6 @@ Entity::t_sonsList::iterator 		Entity::getSonsBegin()
 Entity::t_sonsList::iterator 		Entity::getSonsEnd()
 {
 	return (_sons.end());
-}
-
-Entity::t_ComponentsList::iterator 	Entity::getComponentsBegin()
-{
-	return (_components.begin());
-}
-
-Entity::t_ComponentsList::iterator 	Entity::getComponentsEnd()
-{
-	return (_components.end());
 }
 
 const Barcode                       &Entity::getCode() const

@@ -4,11 +4,11 @@
 
 #include "Core/Engine.hh"
 
-namespace Components
+namespace Component
 {
 
 	MeshRenderer::MeshRenderer(std::string const &name, std::string const &resource) :
-		AComponent(name),
+		Component::ComponentBase<MeshRenderer>(name),
 		_mesh(GameEngine::instance()->resources().getResource(resource)),
 		_next(NULL)
 	{
@@ -18,18 +18,10 @@ namespace Components
 	{
 	}
 
-	void	MeshRenderer::start()
-	{
-	}
-
-	void	MeshRenderer::update()
-	{
-		GameEngine::instance()->renderer().addToRenderQueue(this);
-	}
-
-	void	MeshRenderer::stop()
-	{
-	}
+	//void	MeshRenderer::update()
+	//{
+	//	GameEngine::instance()->renderer().addToRenderQueue(this);
+	//}
 
 	bool	MeshRenderer::setShader(std::string const &name)
 	{

@@ -4,7 +4,7 @@
 #include <map>
 #include <set>
 
-#include "AComponent.hh"
+#include "Components/Component.hpp"
 #include "Utils/SmartPointer.hh"
 #include "ResourceManager/SharedMesh.hh"
 #include "OpenGL/Shader.hh"
@@ -16,10 +16,10 @@ namespace Resources
 
 class Material;
 
-namespace Components
+namespace Component
 {
 
-class MeshRenderer : public AComponent
+class MeshRenderer : public Component::ComponentBase<MeshRenderer>
 {
 private:
 	typedef std::map<unsigned int, std::pair<std::string, SmartPointer<Resources::Texture> > > textureMap;
@@ -39,10 +39,6 @@ private:
 public:
 	MeshRenderer(std::string const &name, std::string const &resource);
 	virtual ~MeshRenderer(void);
-
-	virtual void	start();
-	virtual void	update();
-	virtual void	stop();
 
 	bool				setShader(std::string const &name);
 	std::string const	&getShader() const;

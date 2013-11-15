@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="Demo\BasicCam.cpp" />
     <ClCompile Include="Demo\DemoScene.cpp" />
-    <ClCompile Include="Engine\Components\AComponent.cpp" />
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
@@ -181,7 +180,6 @@
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />
     <None Include="Demo\DemoScene.hh" />
-    <None Include="Engine\Components\AComponent.hh" />
     <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
@@ -332,5 +330,6 @@
     <None Include="Shaders\blur1.fp" />
     <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Shaders\test.cp" />
+    <None Include="Engine\Components\Component.hpp" />
   </ItemGroup>
 </Project>

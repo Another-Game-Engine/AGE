@@ -4,7 +4,7 @@
 
 #include <map>
 
-#include "Components/AComponent.hh"
+#include "Components/Component.hpp"
 #include "Core/Input.hh"
 #include "Core/Timer.hh"
 #include "Utils/SmartPointer.hh"
@@ -34,7 +34,7 @@ public:
 
 	typedef std::map<size_t, SmartPointer<Entity> >						t_sonsList;
 	typedef std::list<SmartPointer<Entity> >								t_EntityList;
-	typedef std::map<std::string, SmartPointer<Components::AComponent> >	t_ComponentsList;
+	typedef std::map<std::string, SmartPointer<Component::Base> >	t_ComponentsList;
 
 private:
 	size_t 				_id;
@@ -43,7 +43,7 @@ private:
 	glm::mat4 			_localTransform;
 	glm::mat4 			_globalTransform;
 
-	Entity 			*_father;
+	Entity   			*_father;
 	t_sonsList 			_sons;
 	t_ComponentsList	_components;
 
@@ -71,7 +71,7 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	Entity 				*getFather() const;
+	Entity 			    	*getFather() const;
 	void 					setFather(Entity *father);
 
 	void 					addSon(SmartPointer<Entity> const &son);
@@ -81,15 +81,54 @@ public:
 
 	SmartPointer<t_EntityList> 	getSonsByFlags(size_t flags, GetFlags op);
 
-	void					addComponent(SmartPointer<Components::AComponent> const &component);
-	bool					removeComponent(std::string const &name);
-
 	t_sonsList::iterator 		getSonsBegin();
 	t_sonsList::iterator 		getSonsEnd();
-	t_ComponentsList::iterator 	getComponentsBegin();
-	t_ComponentsList::iterator 	getComponentsEnd();
-
 	const Barcode &getCode() const;
+
+	template <typename T>
+	bool hasComponent() const
+	{
+		return code_.isSet<T>();
+	}
+
+	template <typename T>
+	T *addComponent()
+	{
+		unsigned int id = T::getTypeId();
+		if (hasComponent(id))
+		{
+			return static_cast<T*>(components_[id]);
+		}
+		T *tmp = new T;
+		// todo assert if new T fail
+		code_.add(id);
+		components_[id] = tmp;
+		systemManager_.componentAdded<T>(*this);
+		return tmp;
+	}
+
+	template <typename T>
+	T *getComponent() const
+	{
+		unsigned int id = T::getTypeId();
+		if (!hasComponent(id))
+			return nullptr;
+		return static_cast<T*>(components_[id]);
+	}
+
+	template <typename T>
+	void removeComponent()
+	{
+		unsigned int id = T::getTypeId();
+		if (!hasComponent(id))
+			return;
+		code_.remove(id);
+		delete components_[id];
+		components_[id]	= nullptr;
+		informSystemsAboutRemovedCpt_();
+		// component remove -> signal to system
+	}
+
 };
 
 #endif
