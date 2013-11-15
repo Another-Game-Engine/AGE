@@ -103,20 +103,25 @@
     <ClCompile Include="Engine\ResourceManager\Texture.cpp" />
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
+    <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Utils\PubSub.cpp" />
+    <ClCompile Include="Engine\Utils\Tag.cpp" />
     <ClCompile Include="TinyThread\tinythread.cpp" />
     <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Core\Material.hh" />
+    <ClInclude Include="Engine\Core\Settings.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
+    <ClInclude Include="Engine\Utils\Barcode.h" />
     <ClInclude Include="Engine\Utils\File.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
+    <ClInclude Include="Engine\Utils\Tag.hpp" />
     <ClInclude Include="glm\core\func_common.hpp" />
     <ClInclude Include="glm\core\func_exponential.hpp" />
     <ClInclude Include="glm\core\func_geometric.hpp" />

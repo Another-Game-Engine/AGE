@@ -36,6 +36,8 @@
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\Utils\PubSub.cpp" />
+    <ClCompile Include="Engine\Utils\Tag.cpp" />
+    <ClCompile Include="Engine\Utils\Barcode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -172,6 +174,9 @@
     <ClInclude Include="Vendors\shared\tiny_obj_loader.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
+    <ClInclude Include="Engine\Utils\Tag.hpp" />
+    <ClInclude Include="Engine\Core\Settings.h" />
+    <ClInclude Include="Engine\Utils\Barcode.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />
