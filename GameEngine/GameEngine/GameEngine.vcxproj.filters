@@ -35,6 +35,7 @@
     <ClCompile Include="Demo\TrackBall.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
+    <ClCompile Include="Engine\Utils\PubSub.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -170,6 +171,7 @@
     <ClInclude Include="TinyThread\tinythread.h" />
     <ClInclude Include="Vendors\shared\tiny_obj_loader.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
+    <ClInclude Include="Engine\Utils\PubSub.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />
