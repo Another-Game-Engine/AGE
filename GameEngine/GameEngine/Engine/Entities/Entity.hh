@@ -33,8 +33,8 @@ public:
 	};
 
 	typedef std::map<size_t, SmartPointer<Entity> >						t_sonsList;
-	typedef std::list<SmartPointer<Entity> >								t_EntityList;
-	typedef std::map<std::string, SmartPointer<Component::Base> >	t_ComponentsList;
+	typedef std::list<SmartPointer<Entity> >							t_EntityList;
+	typedef std::vector<SmartPointer<Component::Base> >             	t_ComponentsList;
 
 private:
 	size_t 				_id;
@@ -84,6 +84,8 @@ public:
 	t_sonsList::iterator 		getSonsBegin();
 	t_sonsList::iterator 		getSonsEnd();
 	const Barcode &getCode() const;
+	bool hasComponent(unsigned int componentId) const;
+
 
 	template <typename T>
 	bool hasComponent() const
@@ -91,19 +93,18 @@ public:
 		return code_.isSet<T>();
 	}
 
-	template <typename T>
-	T *addComponent()
+	template <typename T, typename... Args>
+	SmartPointer<T> addComponent(Args ...args)
 	{
 		unsigned int id = T::getTypeId();
 		if (hasComponent(id))
 		{
-			return static_cast<T*>(components_[id]);
+			return static_cast<SmartPointer<T> >(_components[id]);
 		}
-		T *tmp = new T;
+		SmartPointer<T> tmp(new T(args...));
 		// todo assert if new T fail
-		code_.add(id);
-		components_[id] = tmp;
-		systemManager_.componentAdded<T>(*this);
+		_code.add(id);
+		_components[id] = tmp;
 		return tmp;
 	}
 
@@ -113,7 +114,7 @@ public:
 		unsigned int id = T::getTypeId();
 		if (!hasComponent(id))
 			return nullptr;
-		return static_cast<T*>(components_[id]);
+		return static_cast<T*>(_components[id]);
 	}
 
 	template <typename T>
@@ -123,8 +124,8 @@ public:
 		if (!hasComponent(id))
 			return;
 		code_.remove(id);
-		delete components_[id];
-		components_[id]	= nullptr;
+		delete _components[id];
+		_components[id]	= nullptr;
 		informSystemsAboutRemovedCpt_();
 		// component remove -> signal to system
 	}

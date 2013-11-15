@@ -33,8 +33,7 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
-	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>();
-//		new Component::MeshRenderer("renderer:" + tex1, "model:ball");
+	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>("renderer:" + tex1, "model:ball");
 
 	SmartPointer<Material> materialPlanet = GameEngine::instance()->renderer().getMaterialManager().createMaterial("material:planet_" + shader);
 
@@ -53,10 +52,9 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	if (!tex4.empty())
 		r->addTexture(tex4, 3);
 
-	e->addComponent(r);
-	e->addComponent(new Components::RotationForce(glm::vec3(0, orbitSpeed, 0)));
+	e->addComponent<Component::RotationForce>(glm::vec3(0, orbitSpeed, 0));
 	p->addSon(e);
-	p->addComponent(new Components::RotationForce(glm::vec3(0, rotSpeed, 0)));
+	p->addComponent<Component::RotationForce>(glm::vec3(0, rotSpeed, 0));
 	return (p);
 }
 
