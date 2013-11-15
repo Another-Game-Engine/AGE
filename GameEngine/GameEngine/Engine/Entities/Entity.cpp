@@ -10,6 +10,9 @@ Entity::Entity() :
 	_flags(0),
 	_father(NULL)
 {
+	_tag = Tag(DEFAULT_TAG);
+	_layer = Tag(DEFAULT_LAYER);
+	_components.resize(COMPONENTS_MAX_NUMBER);
 }
 
 Entity::~Entity()
