@@ -33,7 +33,8 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
-	SmartPointer<Components::MeshRenderer>	r = new Components::MeshRenderer("renderer:" + tex1, "model:ball");
+	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>();
+//		new Component::MeshRenderer("renderer:" + tex1, "model:ball");
 
 	SmartPointer<Material> materialPlanet = GameEngine::instance()->renderer().getMaterialManager().createMaterial("material:planet_" + shader);
 

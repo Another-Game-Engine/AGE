@@ -74,7 +74,6 @@
     <ClCompile Include="Demo\BasicCam.cpp" />
     <ClCompile Include="Demo\DemoScene.cpp" />
     <ClCompile Include="Demo\TrackBall.cpp" />
-    <ClCompile Include="Engine\Components\AComponent.cpp" />
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
@@ -252,7 +251,7 @@
     <None Include="Demo\BasicCam.hh" />
     <None Include="Demo\DemoScene.hh" />
     <None Include="Demo\TrackBall.hh" />
-    <None Include="Engine\Components\AComponent.hh" />
+    <None Include="Engine\Components\Component.hpp" />
     <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
