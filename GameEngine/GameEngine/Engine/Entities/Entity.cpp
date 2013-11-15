@@ -204,3 +204,8 @@ Entity::t_ComponentsList::iterator 	Entity::getComponentsEnd()
 {
 	return (_components.end());
 }
+
+const Barcode                       &Entity::getCode() const
+{
+	return _code;
+}

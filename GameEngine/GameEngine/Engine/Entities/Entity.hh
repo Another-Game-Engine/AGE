@@ -9,6 +9,8 @@
 #include "Core/Timer.hh"
 #include "Utils/SmartPointer.hh"
 #include "OpenGL/Shader.hh"
+#include "Utils/Tag.hpp"
+#include "Utils/Barcode.h"
 
 #include "glm/glm.hpp"
 
@@ -48,6 +50,10 @@ private:
 	Entity(Entity const &oth);
 	Entity 			&operator=(Entity const &oth);
 
+	Tag _tag;
+	Tag _layer;
+	Barcode _code;
+
 public:
 	Entity();
 	virtual ~Entity();
@@ -82,6 +88,8 @@ public:
 	t_sonsList::iterator 		getSonsEnd();
 	t_ComponentsList::iterator 	getComponentsBegin();
 	t_ComponentsList::iterator 	getComponentsEnd();
+
+	const Barcode &getCode() const;
 };
 
 #endif
