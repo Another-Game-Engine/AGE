@@ -65,6 +65,12 @@ private:
 	std::string str_;
 	unsigned int id_;
 	static std::unordered_map<std::string, unsigned int> list_;
+	static std::unordered_map<std::string, unsigned int> init()
+	{
+		std::unordered_map<std::string, unsigned int> map;
+		map[""] = 0;
+		return map;
+	}
 };
 
 #endif    //__TAG_HPP__
