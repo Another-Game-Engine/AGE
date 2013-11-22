@@ -62,3 +62,11 @@ void 							AScene::update()
 	_root->computeGlobalTransform(glm::mat4(1));
 	recomputePositions(_root, false);
 }
+
+SmartPointer<Entity>            &AScene::createEntity()
+{
+	SmartPointer<Entity> tmp = new Entity();
+
+	_root->addSon(tmp);
+	return tmp;
+}

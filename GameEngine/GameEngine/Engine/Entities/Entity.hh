@@ -10,10 +10,11 @@
 #include "Utils/SmartPointer.hh"
 #include "OpenGL/Shader.hh"
 #include "Utils/Barcode.h"
+#include "Utils/PubSub.hpp"
 
 #include "glm/glm.hpp"
 
-class Entity
+class Entity : public PubSub
 {
 private:
 	static size_t 					_currentId;
@@ -105,6 +106,7 @@ public:
 		_code.add(id);
 		_components[id] = tmp;
 		tmp->setFather(this);
+		pub("componentAdded" + _id, this);
 		return tmp;
 	}
 
@@ -126,7 +128,7 @@ public:
 		code_.remove(id);
 		delete _components[id];
 		_components[id]	= nullptr;
-		informSystemsAboutRemovedCpt_();
+		pub("componentRemoved" + _id, this);
 		// component remove -> signal to system
 	}
 
