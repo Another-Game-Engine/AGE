@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "Core/Engine.hh"
 #include "Demo/DemoScene.hh"
+#include "Utils/PubSub.hpp"
 
 int			main(int ac, char **av)
 {
