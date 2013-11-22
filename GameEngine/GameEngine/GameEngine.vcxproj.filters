@@ -36,6 +36,7 @@
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\Utils\PubSub.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
+    <ClCompile Include="Engine\Systems\System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -174,6 +175,8 @@
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Core\Settings.h" />
     <ClInclude Include="Engine\Utils\Barcode.h" />
+    <ClInclude Include="Engine\Systems\System.h" />
+    <ClInclude Include="Engine\Systems\EmptySystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />

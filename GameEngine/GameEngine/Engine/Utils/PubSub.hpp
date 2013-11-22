@@ -89,6 +89,8 @@ public:
 	template <typename ...Args>
 	void pub(std::string name, Args ...args)
 	{
+		if (_callbacks.find(name) == std::end(_callbacks))
+			return;
 		auto callback = _callbacks.at(name);
 		auto function = static_cast<std::function<void(Args...)>*>(callback.function);
 
