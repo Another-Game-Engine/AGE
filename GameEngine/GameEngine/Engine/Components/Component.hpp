@@ -27,7 +27,7 @@ namespace	Component
 			return *this;
 		}
 
-		inline void			setFather(Entity *father)
+		void			setFather(Entity *father)
 		{
 			_father = father;
 		}

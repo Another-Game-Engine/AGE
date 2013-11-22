@@ -104,6 +104,7 @@ public:
 		// todo assert if new T fail
 		_code.add(id);
 		_components[id] = tmp;
+		tmp->setFather(this);
 		return tmp;
 	}
 
