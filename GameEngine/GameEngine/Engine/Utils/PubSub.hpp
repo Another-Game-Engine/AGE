@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include <map>
+#include "Singleton.hh"
 
 template <typename F>
 struct MyFunc : public MyFunc<decltype(&F::operator())>
@@ -41,6 +42,59 @@ public:
 		void *function;
 		const std::type_info *signature;
 	};
+
+	struct PubSubManager
+	{
+	public:
+		void clearAll()
+		{
+			for (auto &e : allCallbacks)
+			{
+				for (auto &o : e.second)
+				{
+					o->clearSubscriptions();
+				}
+				e.second.clear();
+			}
+		}
+
+	template <typename ...Args>
+	void broadcast(std::string name, Args ...args)
+	{
+		auto set = allCallbacks.find(name);
+		if (set == std::end(allCallbacks) || set->second.empty())
+			return;
+		for (auto it = std::begin(set->second); it != std::end(set->second); )
+		{
+			auto e = *it;
+			++it;
+			e->pub(name, args...);
+		}
+	}
+
+	void removeFromGlobalCallbacks(const std::map<std::string, Callback> callbacks, PubSub *ptr)
+	{
+		for (auto &e : callbacks)
+		{
+			if (allCallbacks.find(e.first) == std::end(allCallbacks))
+				continue;
+			allCallbacks[e.first].erase(ptr);
+		}
+	}
+
+	void removeFromGlobalCallbacks(const std::string &key, PubSub *ptr)
+	{
+		if (allCallbacks.find(key) == std::end(allCallbacks))
+			return;
+		allCallbacks[key].erase(ptr);
+
+	}
+
+	std::map<std::string, std::unordered_set<PubSub*> > allCallbacks;
+	};
+
+	typedef Singleton<PubSubManager> Manager;
+
 public:
 	void clearSubscriptions()
 	{
@@ -51,16 +105,9 @@ public:
 		_callbacks.clear();
 	}
 
-	static void clearAll()
+	void clearAll()
 	{
-		for (auto &e : _allCallbacks)
-		{
-			for (auto &o : e.second)
-			{
-				o->clearSubscriptions();
-			}
-			e.second.clear();
-		}
+		Manager::instance()->clearAll();
 	}
 
 	template <typename F>
@@ -71,9 +118,9 @@ public:
 		auto fn = new decltype(toFn(lambda))(toFn(lambda));
 		_callbacks[key].function = static_cast<void*>(fn);
 		_callbacks[key].signature = &typeid(fn);
-		if (_allCallbacks.find(key) == std::end(_allCallbacks))
-			_allCallbacks.emplace(key, std::unordered_set<PubSub*>());
-		_allCallbacks[key].insert(this);
+		if (_manager->allCallbacks.find(key) == std::end(_manager->allCallbacks))
+			_manager->allCallbacks.emplace(key, std::unordered_set<PubSub*>());
+		_manager->allCallbacks[key].insert(this);
 	}
 
 	void unsub(const std::string &key)
@@ -83,14 +130,12 @@ public:
 			delete static_cast<std::function<void()>*>(_callbacks[key].function);
 			_callbacks.erase(key);
 		}
-		removeFromGlobalCallbacks(key);
+		Manager::instance()->removeFromGlobalCallbacks(key, this);
 	}
 
 	template <typename ...Args>
 	void pub(std::string name, Args ...args)
 	{
-		if (_callbacks.find(name) == std::end(_callbacks))
-			return;
 		auto callback = _callbacks.at(name);
 		auto function = static_cast<std::function<void(Args...)>*>(callback.function);
 
@@ -102,47 +147,18 @@ public:
 		(*function)(args...);
 	}
 
-	template <typename ...Args>
-	static void broadcast(std::string name, Args ...args)
-	{
-		auto set = _allCallbacks.find(name);
-		if (set == std::end(_allCallbacks) || set->second.empty())
-			return;
-		for (auto it = std::begin(set->second); it != std::end(set->second); )
-		{
-			auto e = *it;
-			++it;
-			e->pub(name, args...);
-		}
-	}
-
-	PubSub(){}
+	PubSub()
+		: _manager(Manager::instance())
+	{}
 	virtual ~PubSub()
 	{
-		removeFromGlobalCallbacks();
+		Manager::instance()->removeFromGlobalCallbacks(_callbacks, this);
 		clearSubscriptions();
 	}
 
-	static std::map<std::string, std::unordered_set<PubSub*> > _allCallbacks;
 private:
-	void removeFromGlobalCallbacks()
-	{
-		for (auto &e : _callbacks)
-		{
-			if (_allCallbacks.find(e.first) == std::end(_allCallbacks))
-				continue;
-			_allCallbacks[e.first].erase(this);
-		}
-	}
-
-	void removeFromGlobalCallbacks(const std::string &key)
-	{
-		if (_allCallbacks.find(key) == std::end(_allCallbacks))
-			return;
-		_allCallbacks[key].erase(this);
-
-	}
 	std::map<std::string, Callback> _callbacks;
+	PubSubManager *_manager;
 };
 
 #endif    //__PUBSUB_HPP__
