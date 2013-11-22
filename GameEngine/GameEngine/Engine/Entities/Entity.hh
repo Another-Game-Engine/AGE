@@ -9,7 +9,6 @@
 #include "Core/Timer.hh"
 #include "Utils/SmartPointer.hh"
 #include "OpenGL/Shader.hh"
-#include "Utils/Tag.hpp"
 #include "Utils/Barcode.h"
 
 #include "glm/glm.hpp"
@@ -50,8 +49,8 @@ private:
 	Entity(Entity const &oth);
 	Entity 			&operator=(Entity const &oth);
 
-	Tag _tag;
-	Tag _layer;
+	std::string _tag;
+	std::string _layer;
 	Barcode _code;
 
 public:

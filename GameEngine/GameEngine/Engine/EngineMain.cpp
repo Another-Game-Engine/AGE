@@ -8,6 +8,8 @@ int			main(int ac, char **av)
 	Engine	&e = *GameEngine::instance();
 
 	e.setContext(new SdlContext);
+	if (e.init() == false)
+		return (EXIT_FAILURE);
 	e.addScene(new DemoScene, "demo");
 	e.bindScene("demo");
 	if (e.start() == false)
