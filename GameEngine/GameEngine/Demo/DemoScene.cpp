@@ -10,6 +10,7 @@
 #include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
 #include <OpenGL/ComputeShader.hh>
+#include <Systems/EmptySystem.hpp>
 
 #include <SDL\SDL.h>
 
@@ -60,6 +61,17 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 bool 			DemoScene::userStart()
 {	
+	// System Tests
+	//
+	//
+
+	System *testSys = new EmptySystem();
+	testSys->require<Component::RotationForce>();
+
+	//
+	//
+	// end System Test
+
 	std::string		perModelVars[] = 
 	{
 		"model"
