@@ -163,4 +163,17 @@ INLINE T 			*SmartPointer<T>::get() const
 	return _reference->pointer;
 }
 
+namespace std
+{
+	template <typename T>
+	class hash<SmartPointer<T> >
+	{
+	public:
+		std::size_t operator()(const SmartPointer<T> &o) const
+		{
+			return reinterpret_cast<std::size_t>(o.get());
+		}
+	};
+};
+
 #endif
