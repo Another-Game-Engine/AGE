@@ -54,7 +54,7 @@ public:
 														std::string const &blockName,
 														std::string const &uniform);
 	// Render queue
-	void							render();
+	void							render(double time);
 
 	OpenGLTools::Framebuffer        &getFbo();
 	void                            uninit();

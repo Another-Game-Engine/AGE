@@ -96,7 +96,7 @@ bool 		Engine::update()
 	_timer.update();
     _inputs.clearInputs();
 	_context->updateEvents(_inputs);
-	_sceneBinded->update();
+	_sceneBinded->update(_timer.getElapsed());
 	return (_sceneBinded->userUpdate());
 }
 
@@ -104,7 +104,7 @@ void 		Engine::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	assert(_context != NULL && "Context must be initialized.");
-	_renderer.render();
+	_renderer.render(_timer.getElapsed());
 	_context->flush();
 }
 

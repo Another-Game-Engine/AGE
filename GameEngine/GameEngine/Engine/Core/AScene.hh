@@ -32,7 +32,7 @@ public:
 
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate() = 0;
-	void 					update();
+	void 					update(double time);
 
 	template <typename T>
 	SmartPointer<System> addSystem(std::size_t priority)

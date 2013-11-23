@@ -125,17 +125,17 @@ bool		Renderer::bindShaderToUniform(std::string const &shader,
 	return (true);
 }
 
-void		Renderer::render()
+void		Renderer::render(double time)
 {
-	static double time = 0;
+	static double t = 0;
 	Engine	&e = *GameEngine::instance();
 	unsigned int textureOffset;
 
-	time += e.timer().getElapsed();
+	t += time;
 	// Set les uniforms du block PerFrame
 	e.renderer().getUniform("PerFrame")->setUniform("projection", e.getCurrentScene()->getCamera()->getProjection());
 	e.renderer().getUniform("PerFrame")->setUniform("view", e.getCurrentScene()->getCamera()->getTransform());
-	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
+	e.renderer().getUniform("PerFrame")->setUniform("time", (float)t);
 	e.renderer().getUniform("PerFrame")->flushChanges();
 
 	_fbo.renderBegin();
