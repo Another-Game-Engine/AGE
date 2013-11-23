@@ -61,13 +61,13 @@ ACamera 						*AScene::getCamera() const
 
 void 							AScene::update()
 {
-	_root->computeGlobalTransform(glm::mat4(1));
-	recomputePositions(_root, false);
 	double time = GameEngine::instance()->timer().getElapsed();
 	for (auto &e : _systems)
 	{
 		e.second->update(time);
 	}
+	_root->computeGlobalTransform(glm::mat4(1));
+	recomputePositions(_root, false);
 }
 
 SmartPointer<Entity>            &AScene::createEntity()
