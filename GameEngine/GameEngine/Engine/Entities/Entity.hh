@@ -106,17 +106,17 @@ public:
 		_code.add(id);
 		_components[id] = tmp;
 		tmp->setFather(this);
-		pub("componentAdded" + _id, this);
+		pub(std::string("componentAdded" + std::to_string(id)), this);
 		return tmp;
 	}
 
 	template <typename T>
-	T *getComponent() const
+	SmartPointer<T> getComponent() const
 	{
 		unsigned int id = T::getTypeId();
 		if (!hasComponent(id))
 			return nullptr;
-		return static_cast<T*>(_components[id]);
+		return static_cast<SmartPointer<T> >(_components[id]);
 	}
 
 	template <typename T>
@@ -128,7 +128,7 @@ public:
 		code_.remove(id);
 		delete _components[id];
 		_components[id]	= nullptr;
-		pub("componentRemoved" + _id, this);
+		pub(std::string("componentRemoved" + std::to_string(id)), this);
 		// component remove -> signal to system
 	}
 

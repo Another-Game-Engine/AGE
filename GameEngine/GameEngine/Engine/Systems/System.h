@@ -23,10 +23,10 @@ public:
 	void require()
 	{
 		_code.add<T>();
-		sub("componentAdded" + T::getTypeId(), [&](SmartPointer<Entity> entity){
+		sub(std::string("componentAdded" + std::to_string(T::getTypeId())), [&](Entity *entity){
 			_componentAdded<T>(entity);
 		});
-		sub("componentRemoved" + T::getTypeId(), [&](SmartPointer<Entity> entity){
+		sub(std::string("componentRemoved" + std::to_string(T::getTypeId())), [&](Entity *entity){
 			_componentRemoved<T>(entity);
 		});
 	}
@@ -35,27 +35,27 @@ public:
 	void unRequire()
 	{
 		_code.remove<T>();
-		unsub("componentAdded" + T::getTypeId());
-		unsub("componentRemoved" + T::getTypeId());
+		unsub(std::string("componentAdded" + std::to_string(T::getTypeId())));
+		unsub(std::string("componentRemoved" + std::to_string(T::getTypeId())));
 	}
 
 
 protected:
-	std::unordered_set<SmartPointer<Entity> > _collection;
+	std::unordered_set<Entity*> _collection;
 	Barcode _code;
 
 	template <typename T>
-	void _componentAdded(SmartPointer<Entity> e)
+	void _componentAdded(Entity *e)
 	{
-		if (e->getCode().match(_code))
+		if (_code.match(*e))
 			_collection.insert(e);
 	}
 
 	template <typename T>
-	void _componentRemoved(SmartPointer<Entity> e)
+	void _componentRemoved(Entity *e)
 	{
-		if (!(e->getCode().match(_code)))
-			_collection.insert(e);
+		if (!_code.match(*e))
+			_collection.erase(e);
 	}
 
 private:

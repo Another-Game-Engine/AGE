@@ -107,7 +107,7 @@ public:
 	}
 
 	template <typename ...Args>
-	void call(PubSubKey name, Args ...args)
+	void call(PubSubKey &name, Args ...args)
 	{
 		auto callback = _callbacks.at(name);
 		auto function = static_cast<std::function<void(Args...)>*>(callback.function);
@@ -121,7 +121,7 @@ public:
 	}
 
 	template <typename ...Args>
-	static void pub(PubSubKey name, Args ...args)
+	static void pub(PubSubKey &name, Args ...args)
 	{
 		auto &col = Manager::getInstance().collection;
 		auto set = col.find(name);

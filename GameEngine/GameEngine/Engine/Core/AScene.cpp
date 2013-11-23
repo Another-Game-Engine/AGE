@@ -1,5 +1,6 @@
 
 #include "AScene.hh"
+#include <Core/Engine.hh>
 
 AScene::AScene() :
 	_root(new Entity),
@@ -12,6 +13,7 @@ AScene::~AScene()
 	if (_camera)
 		delete _camera;
 	_root = NULL;
+	_systems.clear();
 }
 
 void 							AScene::recomputePositions(SmartPointer<Entity> &father,
@@ -61,6 +63,11 @@ void 							AScene::update()
 {
 	_root->computeGlobalTransform(glm::mat4(1));
 	recomputePositions(_root, false);
+	double time = GameEngine::instance()->timer().getElapsed();
+	for (auto &e : _systems)
+	{
+		e.second->update(time);
+	}
 }
 
 SmartPointer<Entity>            &AScene::createEntity()
