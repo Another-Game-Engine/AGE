@@ -1,5 +1,5 @@
-#ifndef   __EMPTY_SYSTEM_HPP__
-# define  __EMPTY_SYSTEM_HPP__
+#ifndef   __ROTATION_FORCE_SYSTEM_HPP__
+# define  __ROTATION_FORCE_SYSTEM_HPP__
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -7,11 +7,11 @@
 #include <Components/RotationForce.hh>
 #include <Entities/Entity.hh>
 
-class EmptySystem : public System
+class RotationForceSystem : public System
 {
 public:
-	EmptySystem(){}
-	virtual ~EmptySystem(){}
+	RotationForceSystem(){}
+	virtual ~RotationForceSystem(){}
 private:
 	virtual void updateBegin(double time)
 	{}
@@ -32,7 +32,9 @@ private:
 	}
 
 	virtual void initialize()
-	{}
+	{
+		require<Component::RotationForce>();
+	}
 };
 
-#endif    //__EMPTY_SYSTEM_HPP__
+#endif    //__ROTATION_FORCE_SYSTEM_HPP__

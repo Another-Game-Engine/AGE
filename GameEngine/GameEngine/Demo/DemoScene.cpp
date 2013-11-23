@@ -10,7 +10,7 @@
 #include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
 #include <OpenGL/ComputeShader.hh>
-#include <Systems/EmptySystem.hpp>
+#include <Systems/RotationForceSystem.hpp>
 
 #include <SDL\SDL.h>
 
@@ -65,7 +65,7 @@ bool 			DemoScene::userStart()
 	//
 	//
 
-	addSystem<EmptySystem>(0)->require<Component::RotationForce>();
+	addSystem<RotationForceSystem>(0);
 
 	//
 	//

@@ -39,6 +39,7 @@ public:
 	{
 		SmartPointer<System> tmp = new T();
 		_systems.insert(std::make_pair(priority, tmp));
+		tmp->init();
 		return tmp;
 	}
 
