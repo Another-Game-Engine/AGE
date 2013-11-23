@@ -3,9 +3,11 @@
 
 #include "ACamera.hh"
 #include "Entities/Entity.hh"
+#include <Systems/System.h>
 
 #include <list>
 #include <queue>
+#include <map>
 
 class AScene
 {
@@ -14,6 +16,7 @@ private:
 	ACamera 											*_camera;
 	std::list<SmartPointer<Entity> >                    _collection;
 	std::queue<SmartPointer<Entity> >                   _pool;
+	std::multimap<std::size_t, SmartPointer<System> >   _systems;
 
 	void 				recomputePositions(SmartPointer<Entity> &father,
 											bool hasMoved);
@@ -30,6 +33,37 @@ public:
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate() = 0;
 	void 					update();
+
+	template <typename T>
+	void addSystem(std::size_t priority)
+	{
+		_systems.insert(std::make_pair(priority, new T()));
+	}
+
+	template <typename T>
+	SmartPointer<System> getSystem()
+	{
+		for (auto &e : _systems)
+		{
+			if (typeid(*e.second.get()).name() == typeid(T).name())
+				return e.second;
+		}
+		return nullptr;
+	}
+
+	template <typename T>
+	void deleteSystem()
+	{
+		for (auto &e : _systems)
+		{
+			if (typeid(*e.second.get()).name() == typeid(T).name())
+			{
+				delete e.second;
+				_systems.erase(e);
+				return;
+			}
+		}
+	}
 };
 
 #endif

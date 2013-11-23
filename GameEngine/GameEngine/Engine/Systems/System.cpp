@@ -7,11 +7,17 @@ System::~System()
 {}
 
 
-void System::update()
-{}
+void System::update(double time)
+{
+	updateBegin(time);
+	mainUpdate(time);
+	updateEnd(time);
+}
 
 void System::init()
-{}
+{
+	initialize();
+}
 
 const Barcode &System::getCode() const
 {
