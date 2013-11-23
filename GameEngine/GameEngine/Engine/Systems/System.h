@@ -14,7 +14,7 @@ class	System : public PubSub
 public:
 	System();
 	virtual ~System();
-	void update();
+	void update(double time);
 	void entityUpdated(Entity &entity);
 	void init();
 	const Barcode &getCode() const;
