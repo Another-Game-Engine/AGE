@@ -59,9 +59,8 @@ ACamera 						*AScene::getCamera() const
 	return (_camera);
 }
 
-void 							AScene::update()
+void 							AScene::update(double time)
 {
-	double time = GameEngine::instance()->timer().getElapsed();
 	for (auto &e : _systems)
 	{
 		e.second->update(time);
