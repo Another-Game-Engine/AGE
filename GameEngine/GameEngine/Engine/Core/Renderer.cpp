@@ -185,9 +185,6 @@ void		Renderer::render()
 			shader->use();
 			for (auto &obj : material.second->getObjects())
 			{
-				OpenGLTools::UniformBuffer *a = getUniform("PerModel");
-				Entity *b = obj->getFather();
-				std::cout << "0" << std::endl;
 				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
 				getUniform("PerModel")->flushChanges();
 				obj->getMesh()->draw();
