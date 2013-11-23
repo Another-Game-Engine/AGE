@@ -34,7 +34,6 @@
     <ClCompile Include="Demo\TrackBall.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
-    <ClCompile Include="Engine\Utils\PubSub.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
   </ItemGroup>
