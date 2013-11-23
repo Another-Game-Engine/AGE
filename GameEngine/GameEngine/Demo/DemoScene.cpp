@@ -65,8 +65,7 @@ bool 			DemoScene::userStart()
 	//
 	//
 
-	System *testSys = new EmptySystem();
-	testSys->require<Component::RotationForce>();
+	addSystem<EmptySystem>(0)->require<Component::RotationForce>();
 
 	//
 	//

@@ -4,7 +4,9 @@ System::System()
 {}
 
 System::~System()
-{}
+{
+	_collection.clear();
+}
 
 
 void System::update(double time)

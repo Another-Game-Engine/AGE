@@ -35,9 +35,11 @@ public:
 	void 					update();
 
 	template <typename T>
-	void addSystem(std::size_t priority)
+	SmartPointer<System> addSystem(std::size_t priority)
 	{
-		_systems.insert(std::make_pair(priority, new T()));
+		SmartPointer<System> tmp = new T();
+		_systems.insert(std::make_pair(priority, tmp));
+		return tmp;
 	}
 
 	template <typename T>
