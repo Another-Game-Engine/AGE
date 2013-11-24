@@ -1,18 +1,19 @@
 #ifndef		__SYSTEM_H__
 # define	__SYSTEM_H__
 
-#include    <unordered_set>
+#include    <set>
 #include	"Utils/Barcode.h"
 #include    "Utils/PubSub.hpp"
 #include    <Utils/SmartPointer.hh>
 
 class Entity;
 
+bool defaultEntityComparaison(Entity *e1, Entity *e2);
 
 class	System : public PubSub
 {
 public:
-	System();
+	System(bool(*)(Entity*, Entity*) = defaultEntityComparaison);
 	virtual ~System();
 	void update(double time);
 	void entityUpdated(Entity &entity);
@@ -41,7 +42,7 @@ public:
 
 
 protected:
-	std::unordered_set<Entity*> _collection;
+	std::set<Entity*, bool(*)(Entity*, Entity*)> _collection;
 	Barcode _code;
 
 	template <typename T>
