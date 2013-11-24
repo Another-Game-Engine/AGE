@@ -9,6 +9,7 @@
 #include "ResourceManager/CubeMap.hh"
 #include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
+#include "Components/MaterialComponent.h"
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
@@ -40,6 +41,8 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	SmartPointer<Material> materialPlanet = GameEngine::instance()->renderer().getMaterialManager().createMaterial("material:planet_" + shader);
 
 	materialPlanet->pushShader(shader);
+
+	e->addComponent<Component::ComponentMaterial>(std::string("material:planet_" + shader))->setMaterial("material:planet_" + shader);
 
 	r->addMaterial(materialPlanet);
 	r->addTexture(tex1, 0);
