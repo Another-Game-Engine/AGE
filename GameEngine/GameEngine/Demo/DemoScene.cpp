@@ -11,6 +11,7 @@
 #include "Components/RotationForce.hh"
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
+#include <Systems/MeshRenderSystem.h>
 
 #include <SDL\SDL.h>
 
@@ -62,6 +63,7 @@ bool 			DemoScene::userStart()
 	//
 
 	addSystem<RotationForceSystem>(0);
+	addSystem<MeshRendererSystem>(1);
 
 	//
 	//
