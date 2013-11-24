@@ -176,6 +176,7 @@
     <ClInclude Include="Engine\Utils\Barcode.h" />
     <ClInclude Include="Engine\Systems\System.h" />
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
+    <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />

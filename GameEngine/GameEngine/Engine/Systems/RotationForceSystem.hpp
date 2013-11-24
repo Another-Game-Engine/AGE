@@ -10,7 +10,8 @@
 class RotationForceSystem : public System
 {
 public:
-	RotationForceSystem(){}
+	RotationForceSystem()
+	{}
 	virtual ~RotationForceSystem(){}
 private:
 	virtual void updateBegin(double time)
