@@ -39,10 +39,6 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	SmartPointer<Material> materialPlanet = GameEngine::instance()->renderer().getMaterialManager().createMaterial("material:planet_" + shader);
 
 	materialPlanet->pushShader(shader);
-	if (tex1 == "texture:earth")
-	{
-		//		materialPlanet->pushShader("glowEarth");
-	}
 
 	r->addMaterial(materialPlanet);
 	r->addTexture(tex1, 0);

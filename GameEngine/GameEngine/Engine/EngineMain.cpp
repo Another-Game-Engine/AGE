@@ -1,3 +1,8 @@
+// for leak detection
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 
 #include <stdlib.h>
 #include "Core/Engine.hh"
