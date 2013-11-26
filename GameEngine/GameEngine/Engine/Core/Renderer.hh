@@ -35,8 +35,6 @@ public:
 
 	bool init();
 
-	// Add an object that contain a render component to the render queue queueIdx
-	void					addToRenderQueue(Component::MeshRenderer *obj); // queueIdx between 0 and 3
 	// Shaders
 	OpenGLTools::Shader		&addShader(std::string const &name,
 									   std::string const &vp,

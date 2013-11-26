@@ -25,22 +25,6 @@ bool Renderer::init()
 	return _fbo.init(1920, 1080, 4);
 }
 
-void		Renderer::addToRenderQueue(Component::MeshRenderer *obj)
-{
-	queueIt		it;
-
-	if ((it = _queues.find(obj->getShader())) != std::end(_queues))
-	{
-		obj->setNext(it->second);
-		it->second = obj;
-	}
-	else
-	{
-		obj->setNext(NULL);
-		_queues[obj->getShader()] = obj;
-	}
-}
-
 OpenGLTools::Shader		&Renderer::addShader(std::string const &name,
 											 std::string const &vp,
 											 std::string const &fp,

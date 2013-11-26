@@ -9,29 +9,12 @@ namespace Component
 
 	MeshRenderer::MeshRenderer(std::string const &name, std::string const &resource) :
 		Component::ComponentBase<MeshRenderer>(name),
-		_mesh(GameEngine::instance()->resources().getResource(resource)),
-		_next(NULL)
+		_mesh(GameEngine::instance()->resources().getResource(resource))
 	{
 	}
 
 	MeshRenderer::~MeshRenderer(void)
 	{
-	}
-
-	//void	MeshRenderer::update()
-	//{
-	//	GameEngine::instance()->renderer().addToRenderQueue(this);
-	//}
-
-	bool	MeshRenderer::setShader(std::string const &name)
-	{
-		_shader = name;
-		return (true);
-	}
-
-	std::string const		&MeshRenderer::getShader() const
-	{
-		return (_shader);
 	}
 
 	SmartPointer<Resources::SharedMesh> const &MeshRenderer::getMesh() const
@@ -87,16 +70,6 @@ namespace Component
 			++c;
 		}
 		glActiveTexture(GL_TEXTURE0);
-	}
-
-	void			MeshRenderer::setNext(MeshRenderer *next)
-	{
-		_next = next;
-	}
-
-	MeshRenderer	*MeshRenderer::getNext() const
-	{
-		return (_next);
 	}
 
 	void MeshRenderer::addMaterial(SmartPointer<Material> material)
