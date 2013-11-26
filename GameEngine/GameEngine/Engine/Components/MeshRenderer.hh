@@ -27,10 +27,7 @@ private:
 
 	SmartPointer<Resources::SharedMesh>	_mesh;
 
-	std::string							_shader;
 	textureMap                          _textures;
-
-	MeshRenderer						*_next;
 	std::set<std::string>                _materials;
 
 	MeshRenderer();
@@ -39,9 +36,6 @@ private:
 public:
 	MeshRenderer(std::string const &name, std::string const &resource);
 	virtual ~MeshRenderer(void);
-
-	bool				setShader(std::string const &name);
-	std::string const	&getShader() const;
 
 	void addTexture(const std::string &textureName, unsigned int priority = 0);
 	void removeTexture(unsigned int priority);
