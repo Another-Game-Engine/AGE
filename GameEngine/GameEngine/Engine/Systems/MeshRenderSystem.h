@@ -32,13 +32,14 @@ private:
 		unsigned int textureOffset;
 		Renderer &renderer = e.renderer();
 		OpenGLTools::Framebuffer &fbo = renderer.getFbo();
+		OpenGLTools::UniformBuffer *perFrameBuffer = e.renderer().getUniform("PerFrame");
 
 		t += time;
 		// Set les uniforms du block PerFrame
-		e.renderer().getUniform("PerFrame")->setUniform("projection", e.getCurrentScene()->getCamera()->getProjection());
-		e.renderer().getUniform("PerFrame")->setUniform("view", e.getCurrentScene()->getCamera()->getTransform());
-		e.renderer().getUniform("PerFrame")->setUniform("time", (float)t);
-		e.renderer().getUniform("PerFrame")->flushChanges();
+		perFrameBuffer->setUniform("projection", e.getCurrentScene()->getCamera()->getProjection());
+		perFrameBuffer->setUniform("view", e.getCurrentScene()->getCamera()->getTransform());
+		perFrameBuffer->setUniform("time", (float)t);
+		perFrameBuffer->flushChanges();
 
 		fbo.renderBegin();
 		fbo.applyViewport();
@@ -54,6 +55,8 @@ private:
 
 		fbo.zPassBegin();
 
+		OpenGLTools::UniformBuffer *perModelUniform = GameEngine::instance()->renderer().getUniform("PerModel");
+
 		for (auto &mat : _sorted)
 		{
 			for (auto &shaderName : mat.first->getShaders())
@@ -63,8 +66,8 @@ private:
 				for (auto &e : mat.second)
 				{
 					auto &mesh = e->getComponent<Component::MeshRenderer>();
-					GameEngine::instance()->renderer().getUniform("PerModel")->setUniform("model", e->getGlobalTransform());
-					GameEngine::instance()->renderer().getUniform("PerModel")->flushChanges();
+					perModelUniform->setUniform("model", e->getGlobalTransform());
+					perModelUniform->flushChanges();
 					mesh->getMesh()->draw();
 				}
 			}
@@ -85,8 +88,8 @@ private:
 				for (auto &e : mat.second)
 				{
 					auto &mesh = e->getComponent<Component::MeshRenderer>();
-					renderer.getUniform("PerModel")->setUniform("model", e->getGlobalTransform());
-					renderer.getUniform("PerModel")->flushChanges();
+					perModelUniform->setUniform("model", e->getGlobalTransform());
+					perModelUniform->flushChanges();
 					mesh->bindTextures(shader);
 					mesh->getMesh()->draw();
 					mesh->unbindTextures();
