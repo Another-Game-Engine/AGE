@@ -153,6 +153,22 @@ bool 			DemoScene::userStart()
 	earth->getSonsBegin()->second->addSon(moon);
 	getRoot()->addSon(sun);
 
+	// Generating a lot of planet for performance test
+	//
+	//
+	SmartPointer<Entity> planets[100];
+	for (unsigned int i = 0; i < 100; ++i)
+	{
+		planets[i] = createPlanet((std::rand() % 200) / 100.0f
+			, (std::rand() % 200) / 100.0f,
+			glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
+			glm::vec3(std::rand() % 30), "basic", "texture:sun");
+		sun->addSon(planets[i]);
+	}
+	//
+	//
+	// END : Generating a lot of planet for performance test
+
 	// --
 	// Setting camera with skybox
 	// --
