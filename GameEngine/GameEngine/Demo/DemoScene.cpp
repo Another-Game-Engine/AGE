@@ -156,15 +156,22 @@ bool 			DemoScene::userStart()
 	// Generating a lot of planet for performance test
 	//
 	//
-	SmartPointer<Entity> planets[100];
-	for (unsigned int i = 0; i < 100; ++i)
+
+	unsigned int nbPlanet = 10;
+
+	SmartPointer<Entity> planets[10];
+	for (unsigned int i = 0; i < nbPlanet; ++i)
 	{
 		planets[i] = createPlanet((std::rand() % 200) / 100.0f
 			, (std::rand() % 200) / 100.0f,
 			glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
 			glm::vec3(std::rand() % 30), "basic", "texture:sun");
-		sun->addSon(planets[i]);
+		if (i == 0)
+			sun->addSon(planets[i]);
+		else
+			planets[i - 1]->addSon(planets[i]);
 	}
+
 	//
 	//
 	// END : Generating a lot of planet for performance test
