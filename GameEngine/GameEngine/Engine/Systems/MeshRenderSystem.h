@@ -84,7 +84,8 @@ private:
 				auto shader = GameEngine::instance()->renderer().getShader(shaderName);
 				fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
 				shader->use();
-				fbo.bind(shader);
+				// /!\ THAT'S VERY STRANGE WHEN I DON'T USE THAT THAT'S STILL WORKING !!
+				//fbo.bind(shader);
 				for (auto &e : mat.second)
 				{
 					auto &mesh = e->getComponent<Component::MeshRenderer>();
@@ -92,9 +93,9 @@ private:
 					perModelUniform->flushChanges();
 					mesh->bindTextures(shader);
 					mesh->getMesh()->draw();
-					mesh->unbindTextures();
+					//mesh->unbindTextures();
 				}
-				fbo.unbind();
+				//fbo.unbind();
 			}
 		}
 
