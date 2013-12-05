@@ -35,7 +35,7 @@ public:
 	void 					update(double time);
 
 	template <typename T>
-	SmartPointer<System> addSystem(std::size_t priority)
+	SmartPointer<T> addSystem(std::size_t priority)
 	{
 		SmartPointer<System> tmp = new T();
 		_systems.insert(std::make_pair(priority, tmp));
@@ -44,7 +44,7 @@ public:
 	}
 
 	template <typename T>
-	SmartPointer<System> getSystem()
+	SmartPointer<T> getSystem()
 	{
 		for (auto &e : _systems)
 		{
