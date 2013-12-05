@@ -12,11 +12,24 @@ class MeshRendererSystem : public System
 {
 public:
 	MeshRendererSystem()
+		: _renderDebugMethod(false)
 	{}
 	virtual ~MeshRendererSystem(){}
+
+	void setRenderDebugMode(bool t)
+	{
+		_renderDebugMethod = t;
+	}
+
+	bool getRenderDebugMode() const
+	{
+		return _renderDebugMethod;
+	}
+
 private:
 
 	std::map<Material*, std::list<Entity*> > _sorted;
+	bool _renderDebugMethod;
 
 	virtual void updateBegin(double time)
 	{
@@ -109,7 +122,10 @@ private:
 		fbo.renderRect(renderer.getShader("blurY"));
 		fbo.renderEnd();
 
-		fbo.debugRendering(renderer.getShader("fboToScreen"));
+		if (_renderDebugMethod)
+			fbo.debugRendering(renderer.getShader("fboToScreen"));
+		else
+			fbo.renderRect(renderer.getShader("fboToScreen"));
 	}
 
 	virtual void initialize()
