@@ -42,16 +42,15 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		static double t = 0;
-		Engine	&e = *GameEngine::instance();
 		unsigned int textureOffset;
-		Renderer &renderer = e.renderer();
+		Renderer &renderer = _engine.renderer();
 		OpenGLTools::Framebuffer &fbo = renderer.getFbo();
-		OpenGLTools::UniformBuffer *perFrameBuffer = e.renderer().getUniform("PerFrame");
+		OpenGLTools::UniformBuffer *perFrameBuffer = _engine.renderer().getUniform("PerFrame");
 
 		t += time;
 		// Set les uniforms du block PerFrame
-		perFrameBuffer->setUniform("projection", e.getCurrentScene()->getCamera()->getProjection());
-		perFrameBuffer->setUniform("view", e.getCurrentScene()->getCamera()->getTransform());
+		perFrameBuffer->setUniform("projection", _engine.getCurrentScene()->getCamera()->getProjection());
+		perFrameBuffer->setUniform("view", _engine.getCurrentScene()->getCamera()->getTransform());
 		perFrameBuffer->setUniform("time", (float)t);
 		perFrameBuffer->flushChanges();
 

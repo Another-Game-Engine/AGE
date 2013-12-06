@@ -17,8 +17,9 @@ private:
 	std::list<SmartPointer<Entity> >                    _collection;
 	std::queue<SmartPointer<Entity> >                   _pool;
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
+protected:
 	Engine                                              &_engine;
-
+private:
 	void 				recomputePositions(SmartPointer<Entity> &father,
 											bool hasMoved);
 
