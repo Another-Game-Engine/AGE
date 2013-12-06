@@ -6,7 +6,7 @@
 class DemoScene : public AScene
 {
 public:
-	DemoScene(void);
+	DemoScene(Engine &engine);
 	virtual ~DemoScene(void);
 
 	SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed, glm::vec3 &pos, glm::vec3 &scale,

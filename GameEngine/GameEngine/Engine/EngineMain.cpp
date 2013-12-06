@@ -16,7 +16,7 @@ int			main(int ac, char **av)
 	e.setContext(new SdlContext);
 	if (e.init() == false)
 		return (EXIT_FAILURE);
-	e.addScene(new DemoScene, "demo");
+	e.addScene(new DemoScene(e), "demo");
 	e.bindScene("demo");
 	if (e.start() == false)
 		return (EXIT_FAILURE);
