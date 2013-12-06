@@ -12,7 +12,6 @@ Entity::Entity() :
 {
 	_tag = DEFAULT_TAG;
 	_layer = DEFAULT_LAYER;
-	_components.resize(COMPONENTS_MAX_NUMBER);
 }
 
 Entity::~Entity()
