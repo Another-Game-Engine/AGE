@@ -181,7 +181,7 @@ Entity::t_sonsList::iterator 		Entity::getSonsEnd()
 	return (_sons.end());
 }
 
-const Barcode                       &Entity::getCode() const
+Barcode                       &Entity::getCode()
 {
 	return _code;
 }

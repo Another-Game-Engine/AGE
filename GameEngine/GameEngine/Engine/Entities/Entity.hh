@@ -83,7 +83,7 @@ public:
 
 	t_sonsList::iterator 		getSonsBegin();
 	t_sonsList::iterator 		getSonsEnd();
-	const Barcode &getCode() const;
+	Barcode &getCode();
 	bool hasComponent(unsigned int componentId) const;
 
 
@@ -100,6 +100,10 @@ public:
 		if (hasComponent(id))
 		{
 			return static_cast<SmartPointer<T> >(_components[id]);
+		}
+		else if (_components.size() <= id)
+		{
+			_components.resize(id + 10);
 		}
 		SmartPointer<T> tmp(new T(args...));
 		// todo assert if new T fail
