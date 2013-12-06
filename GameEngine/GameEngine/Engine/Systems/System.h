@@ -7,13 +7,14 @@
 #include    <Utils/SmartPointer.hh>
 
 class Entity;
+class Engine;
 
 bool defaultEntityComparaison(Entity *e1, Entity *e2);
 
 class	System : public PubSub
 {
 public:
-	System(bool(*)(Entity*, Entity*) = defaultEntityComparaison);
+	System(Engine &engine, bool(*)(Entity*, Entity*) = defaultEntityComparaison);
 	virtual ~System();
 	void update(double time);
 	void entityUpdated(Entity &entity);
@@ -58,6 +59,8 @@ protected:
 		if (!_code.match(*e))
 			_collection.erase(e);
 	}
+
+	Engine &_engine;
 
 private:
 	virtual void updateBegin(double time) = 0;

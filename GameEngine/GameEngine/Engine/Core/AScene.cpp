@@ -2,9 +2,10 @@
 #include "AScene.hh"
 #include <Core/Engine.hh>
 
-AScene::AScene() :
+AScene::AScene(Engine &engine) :
 	_root(new Entity),
-	_camera(NULL)
+	_camera(NULL),
+	_engine(engine)
 {
 }
 

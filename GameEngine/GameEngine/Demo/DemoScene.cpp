@@ -16,7 +16,7 @@
 
 #include <SDL\SDL.h>
 
-DemoScene::DemoScene(void)
+DemoScene::DemoScene(Engine &engine) : AScene(engine)
 {
 }
 

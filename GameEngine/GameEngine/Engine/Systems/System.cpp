@@ -5,8 +5,9 @@ bool defaultEntityComparaison(Entity *e1, Entity *e2)
 	return e1 < e2;
 }
 
-System::System(bool(*comparacomparaisonFunction)(Entity*, Entity*))
+System::System(Engine &engine, bool(*comparacomparaisonFunction)(Entity*, Entity*))
 : _collection(comparacomparaisonFunction)
+, _engine(engine)
 {}
 
 System::~System()

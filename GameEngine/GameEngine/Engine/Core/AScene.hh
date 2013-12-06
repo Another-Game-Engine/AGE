@@ -17,12 +17,13 @@ private:
 	std::list<SmartPointer<Entity> >                    _collection;
 	std::queue<SmartPointer<Entity> >                   _pool;
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
+	Engine                                              &_engine;
 
 	void 				recomputePositions(SmartPointer<Entity> &father,
 											bool hasMoved);
 
 public:
-	AScene();
+	AScene(Engine &engine);
 	virtual ~AScene();
 
 	SmartPointer<Entity>	const	&getRoot();
@@ -37,7 +38,7 @@ public:
 	template <typename T>
 	SmartPointer<T> addSystem(std::size_t priority)
 	{
-		SmartPointer<System> tmp = new T();
+		SmartPointer<System> tmp = new T(_engine);
 		_systems.insert(std::make_pair(priority, tmp));
 		tmp->init();
 		return tmp;

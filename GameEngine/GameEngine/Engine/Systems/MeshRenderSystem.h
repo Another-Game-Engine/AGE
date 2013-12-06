@@ -11,8 +11,9 @@
 class MeshRendererSystem : public System
 {
 public:
-	MeshRendererSystem()
-		: _renderDebugMethod(false)
+	MeshRendererSystem(Engine &engine)
+		: System(engine)
+		, _renderDebugMethod(false)
 	{}
 	virtual ~MeshRendererSystem(){}
 
