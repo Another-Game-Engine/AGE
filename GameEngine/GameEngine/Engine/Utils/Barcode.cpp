@@ -2,14 +2,16 @@
 #include <Engine/Entities/Entity.hh>
 
 Barcode::Barcode()
-{}
+: code_(1)
+{
+}
 
-Barcode::Barcode(const Entity &entity)
+Barcode::Barcode(Entity &entity)
 {
 	code_ = entity.getCode().code_;
 }
 
-Barcode::Barcode(const Barcode &other)
+Barcode::Barcode(Barcode &other)
 {
 	code_ = other.code_;
 }
@@ -23,19 +25,26 @@ Barcode &Barcode::operator=(const Barcode &other)
 Barcode::~Barcode()
 {}
 
-bool Barcode::match(const std::bitset<COMPONENTS_MAX_NUMBER> &set) const
+bool Barcode::match(boost::dynamic_bitset<> &set)
 {
-	return((set & code_) == code_);
+	if (code_.size() != set.size())
+	{
+		if (code_.size() < set.size())
+			code_.resize(set.size());
+		else
+			set.resize(code_.size());
+	}
+	return code_.is_subset_of(set);
 }
 
-bool Barcode::match(const Entity &entity) const
+bool Barcode::match(Entity &entity)
 {
-	return((entity.getCode().code_ & code_) == code_);
+	return match(entity.getCode().code_);
 }
 
-bool Barcode::match(const Barcode &other) const
+bool Barcode::match(Barcode &other)
 {
-	return((other.code_ & code_) == code_);
+	return match(other.code_);
 }
 
 void Barcode::reset()
@@ -60,5 +69,5 @@ bool Barcode::isEmpty() const
 
 bool Barcode::isSet(unsigned int componentId) const
 {
-	return code_.test(componentId);
+	return (code_.size() > componentId && code_.test(componentId));
 }

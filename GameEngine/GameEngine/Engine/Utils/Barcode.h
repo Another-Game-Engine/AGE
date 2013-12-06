@@ -3,6 +3,7 @@
 
 #include   <bitset>
 #include   <assert.h>
+#include   "boost/dynamic_bitset/dynamic_bitset.hpp"
 
 #include "Core/Settings.h"
 
@@ -18,13 +19,13 @@ class Barcode
 public:
 
 	Barcode();
-	Barcode(const ::Entity &entity);
-	Barcode(const Barcode &other);
+	Barcode(::Entity &entity);
+	Barcode(Barcode &other);
 	Barcode &operator=(const Barcode &other);
 	~Barcode();
-	bool match(const std::bitset<COMPONENTS_MAX_NUMBER> &set) const;
-	bool match(const ::Entity &entity) const;
-	bool match(const Barcode &entity) const;
+	bool match(boost::dynamic_bitset<> &set);
+	bool match(::Entity &entity);
+	bool match(Barcode &entity);
 	void reset();
 	void add(unsigned int componentId);
 	void remove(unsigned int componentId);
@@ -52,11 +53,12 @@ public:
 private:
 	void applyChange(unsigned int componentId, bool tof)
 	{
-		assert(componentId < COMPONENTS_MAX_NUMBER, "Component ID > COMPONENTS_MAX_NUMBER");
+		if (code_.size() <= componentId)
+			code_.resize(componentId + 1);
 		code_[componentId] = tof;
 	}
 
-	std::bitset<COMPONENTS_MAX_NUMBER> code_;
+	boost::dynamic_bitset<> code_;
 };
 
 #endif		//__BARCODE_H__
