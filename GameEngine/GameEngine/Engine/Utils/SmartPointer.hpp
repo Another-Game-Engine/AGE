@@ -156,6 +156,16 @@ INLINE bool 			SmartPointer<T>::operator!=(T *oth) const
 }
 
 template<class T>
+INLINE bool             SmartPointer<T>::operator<(SmartPointer const &oth) const
+{
+	if (!_reference)
+		return true;
+	if (!oth._reference)
+		return false;
+	return static_cast<void*>(_reference->pointer) < static_cast<void*>(oth._reference->pointer);
+}
+
+template<class T>
 INLINE T 			*SmartPointer<T>::get() const
 {
 	if (!_reference)

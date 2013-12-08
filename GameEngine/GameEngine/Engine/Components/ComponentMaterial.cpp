@@ -19,9 +19,9 @@ namespace Component
 
 	bool                				ComponentMaterial::setMaterial(std::string const &name)
 	{
-		Material *old = _material.get();
+		SmartPointer<Material> old = _material;
 		_material = GameEngine::instance()->renderer().getMaterialManager().getMaterial(name);
-		PubSub::pub(std::string("MaterialComponentChanged"), this->getFather(), old, _material.get());
+		PubSub::pub(std::string("MaterialComponentChanged"), this->getFather(), old, _material);
 		return (_material != nullptr);
 	}
 

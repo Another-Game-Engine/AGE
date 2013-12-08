@@ -42,7 +42,7 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	materialPlanet->pushShader(shader);
 
-	e->addComponent<Component::ComponentMaterial>(std::string("material:planet_" + shader))->setMaterial("material:planet_" + shader);
+	e->addComponent<Component::ComponentMaterial>(std::string("material:planet_" + shader));
 
 	//r->addMaterial(materialPlanet);
 	r->addTexture(tex1, 0);
@@ -157,9 +157,9 @@ bool 			DemoScene::userStart()
 	//
 	//
 
-	unsigned int nbPlanet = 10;
+	unsigned int nbPlanet = 400;
 
-	SmartPointer<Entity> planets[10];
+	SmartPointer<Entity> planets[400];
 	for (unsigned int i = 0; i < nbPlanet; ++i)
 	{
 		planets[i] = createPlanet((std::rand() % 200) / 100.0f
