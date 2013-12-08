@@ -28,6 +28,7 @@ private:
 	SmartPointer<Resources::SharedMesh>	_mesh;
 
 	textureMap                          _textures;
+
 	MeshRenderer();
 	MeshRenderer(MeshRenderer const &);
 	MeshRenderer	&operator=(MeshRenderer const &);
