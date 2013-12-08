@@ -50,6 +50,8 @@ namespace	Component
 	template <class T>
 	struct ComponentBase : public Base
 	{
+		virtual ~ComponentBase()
+		{}
 		ComponentBase(const std::string &name = "NoName")
 		: Base(name)
 		{}
