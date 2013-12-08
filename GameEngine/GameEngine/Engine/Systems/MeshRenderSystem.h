@@ -27,7 +27,7 @@ public:
 		return _renderDebugMethod;
 	}
 
-private:
+protected:
 
 	std::map<Material*, std::list<Entity*> > _sorted;
 	bool _renderDebugMethod;
@@ -146,25 +146,23 @@ private:
 		});
 	}
 
-	template <typename T>
-	void _componentAdded(Entity *e)
+	virtual void _componentAdded(Entity *e, unsigned int typeId)
 	{
 		if (_code.match(*e) && _collection.find(e) == std::end(_collection))
 		{
 			_collection.insert(e);
-			_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial()] = e;
+			_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial().get()].push_back(e);
 		}
 	}
 
-	template <typename T>
-	void _componentRemoved(Entity *e)
+	virtual void _componentRemoved(Entity *e, unsigned int typeId)
 	{
 		if (!_code.match(*e) && _collection.find(e) != std::end(_collection))
 		{
 			_collection.erase(e);
 			if (e->getComponent<Component::ComponentMaterial>() != nullptr)
 			{
-				_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial()].remove(e);
+				_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial().get()].remove(e);
 			}
 		}
 	}
