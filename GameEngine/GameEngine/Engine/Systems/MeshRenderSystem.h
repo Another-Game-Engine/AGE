@@ -29,7 +29,7 @@ public:
 
 protected:
 
-	std::map<Material*, std::list<Entity*> > _sorted;
+	std::map<SmartPointer<Material>, std::list<Entity*> > _sorted;
 	bool _renderDebugMethod;
 
 	virtual void updateBegin(double time)
@@ -132,7 +132,7 @@ protected:
 	{
 		require<Component::MeshRenderer>();
 		require<Component::ComponentMaterial>();
-		sub("MaterialComponentChanged", [&](Entity *e, Material *oldMaterial, Material *newMaterial)
+		sub("MaterialComponentChanged", [&](Entity *e, SmartPointer<Material> oldMaterial, SmartPointer<Material> newMaterial)
 		{
 			if (_collection.find(e) == std::end(_collection) || oldMaterial == nullptr)
 				return;
@@ -140,7 +140,7 @@ protected:
 			{
 				_sorted[oldMaterial].remove(e);
 			}
-			if (newMaterial == nullptr)
+			if (!newMaterial.get())
 				return;
 			_sorted[newMaterial].push_back(e);
 		});
@@ -151,7 +151,7 @@ protected:
 		if (_code.match(*e) && _collection.find(e) == std::end(_collection))
 		{
 			_collection.insert(e);
-			_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial().get()].push_back(e);
+			_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial()].push_back(e);
 		}
 	}
 
@@ -162,7 +162,7 @@ protected:
 			_collection.erase(e);
 			if (e->getComponent<Component::ComponentMaterial>() != nullptr)
 			{
-				_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial().get()].remove(e);
+				_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial()].remove(e);
 			}
 		}
 	}
