@@ -115,6 +115,7 @@
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Core\Material.hh" />
     <ClInclude Include="Engine\Core\Settings.h" />
+    <ClInclude Include="Engine\Entities\EntityManager.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
@@ -250,6 +251,10 @@
     <ClInclude Include="glm\virtrev\xstream.hpp" />
     <ClInclude Include="TinyThread\fast_mutex.h" />
     <ClInclude Include="TinyThread\tinythread.h" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml.hpp" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_iterators.hpp" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_print.hpp" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="Vendors\shared\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
