@@ -28,8 +28,6 @@ private:
 	SmartPointer<Resources::SharedMesh>	_mesh;
 
 	textureMap                          _textures;
-	std::set<std::string>                _materials;
-
 	MeshRenderer();
 	MeshRenderer(MeshRenderer const &);
 	MeshRenderer	&operator=(MeshRenderer const &);
@@ -41,10 +39,6 @@ public:
 	void removeTexture(unsigned int priority);
 	void bindTextures(OpenGLTools::Shader *shader) const;
 	void unbindTextures() const;
-	void addMaterial(SmartPointer<Material> material);
-	void removeMaterial(SmartPointer<Material> material);
-	void addMaterial(const std::string &material);
-	void removeMaterial(const std::string &material);
 
 	void			setNext(MeshRenderer *next);
 	MeshRenderer	*getNext() const;

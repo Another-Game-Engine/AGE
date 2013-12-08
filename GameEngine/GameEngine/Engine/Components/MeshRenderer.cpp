@@ -11,7 +11,7 @@ namespace Component
 		Component::ComponentBase<MeshRenderer>(name),
 		_mesh(GameEngine::instance()->resources().getResource(resource))
 	{
-	}
+		}
 
 	MeshRenderer::~MeshRenderer(void)
 	{
@@ -55,7 +55,7 @@ namespace Component
 		{
 			glActiveTexture(GL_TEXTURE0 + c + offset);
 			glBindTexture(GL_TEXTURE_2D, it->second.second->getId());
-//			shader->bindActiveTexture("fTexture" + std::to_string(c), c + offset);
+			//			shader->bindActiveTexture("fTexture" + std::to_string(c), c + offset);
 			++c;
 		}
 	}
@@ -70,36 +70,5 @@ namespace Component
 			++c;
 		}
 		glActiveTexture(GL_TEXTURE0);
-	}
-
-	void MeshRenderer::addMaterial(SmartPointer<Material> material)
-	{
-		material->addObject(this);
-		_materials.insert(material->getName());
-	}
-
-	void MeshRenderer::removeMaterial(SmartPointer<Material> material)
-	{
-		// be carefull when iterating on it
-		material->removeObject(this);
-		_materials.erase(material->getName());
-	}
-
-	void MeshRenderer::addMaterial(const std::string &material)
-	{
-		SmartPointer<Material> m = GameEngine::instance()->renderer().getMaterialManager().getMaterial(material);
-		if (!m.get())
-			return;
-		m->addObject(this);
-		_materials.insert(m->getName());
-	}
-
-	void MeshRenderer::removeMaterial(const std::string &material)
-	{
-		SmartPointer<Material> m = GameEngine::instance()->renderer().getMaterialManager().getMaterial(material);
-		if (!m.get())
-			return;
-		m->removeObject(this);
-		_materials.erase(m->getName());
 	}
 }

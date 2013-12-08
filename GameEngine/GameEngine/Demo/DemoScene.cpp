@@ -44,7 +44,7 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	e->addComponent<Component::ComponentMaterial>(std::string("material:planet_" + shader))->setMaterial("material:planet_" + shader);
 
-	r->addMaterial(materialPlanet);
+	//r->addMaterial(materialPlanet);
 	r->addTexture(tex1, 0);
 	if (!tex2.empty())
 		r->addTexture(tex2, 1);

@@ -26,10 +26,10 @@ public:
 	{
 		_code.add<T>();
 		sub(std::string("componentAdded" + std::to_string(T::getTypeId())), [&](Entity *entity){
-			_componentAdded<T>(entity);
+			_componentAdded(entity, T::getTypeId());
 		});
 		sub(std::string("componentRemoved" + std::to_string(T::getTypeId())), [&](Entity *entity){
-			_componentRemoved<T>(entity);
+			_componentRemoved(entity, T::getTypeId());
 		});
 	}
 
@@ -46,15 +46,13 @@ protected:
 	std::set<Entity*, bool(*)(Entity*, Entity*)> _collection;
 	Barcode _code;
 
-	template <typename T>
-	void _componentAdded(Entity *e)
+	virtual void _componentAdded(Entity *e, unsigned int typeId)
 	{
 		if (_code.match(*e))
 			_collection.insert(e);
 	}
 
-	template <typename T>
-	void _componentRemoved(Entity *e)
+	virtual void _componentRemoved(Entity *e, unsigned int typeId)
 	{
 		if (!_code.match(*e))
 			_collection.erase(e);
