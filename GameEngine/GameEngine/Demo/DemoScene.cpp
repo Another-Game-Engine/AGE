@@ -157,20 +157,37 @@ bool 			DemoScene::userStart()
 	//
 	//
 
-	unsigned int nbPlanet = 400;
 
-	SmartPointer<Entity> planets[400];
-	for (unsigned int i = 0; i < nbPlanet; ++i)
+	// !!!! THIS CODE CAUSE A STACKOVERFLOW !!!
+	//{
+	//	unsigned int nbPlanet = 265;
+	//	SmartPointer<Entity> planets[265];
+
+	//	for (unsigned int i = 0; i < nbPlanet; ++i)
+	//	{
+	//		planets[i] = createPlanet((std::rand() % 200) / 100.0f
+	//			, (std::rand() % 200) / 100.0f,
+	//			glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
+	//			glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
+	//		if (i == 0)
+	//			sun->addSon(planets[i]);
+	//		else
+	//			planets[i - 1]->addSon(planets[i]);
+	//	}
+	//}
+
 	{
-		planets[i] = createPlanet((std::rand() % 200) / 100.0f
-			, (std::rand() % 200) / 100.0f,
-			glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-			glm::vec3(std::rand() % 30), "basic", "texture:sun");
-		if (i == 0)
-			sun->addSon(planets[i]);
-		else
-			planets[i - 1]->addSon(planets[i]);
+		unsigned int nbPlanet = 150;
+		for (unsigned int i = 0; i < nbPlanet; ++i)
+		{
+			sun->addSon(createPlanet((std::rand() % 200) / 100.0f
+				, (std::rand() % 200) / 100.0f,
+				glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
+				glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun"));
+		}
 	}
+
+
 
 	//
 	//
