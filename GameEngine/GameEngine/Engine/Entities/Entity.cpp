@@ -23,6 +23,7 @@ Entity::~Entity()
 		it->second->setFather(NULL);
 		++it;
 	}
+	_components.clear();
 }
 
 glm::mat4 const  		&Entity::getLocalTransform()

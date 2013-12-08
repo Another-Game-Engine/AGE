@@ -50,6 +50,11 @@ public:
 		return code_.test(T::getTypeId());
 	}
 
+	bool isSet(unsigned int id)
+	{
+		return code_.test(id);
+	}
+
 private:
 	void applyChange(unsigned int componentId, bool tof)
 	{
