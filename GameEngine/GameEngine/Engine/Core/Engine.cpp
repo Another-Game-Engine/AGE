@@ -5,34 +5,19 @@
 #include <iostream>
 
 Engine::Engine() :
-	_context(NULL),
 	_sceneBinded(NULL)
 {
 
 	// DEFINE BASED DEPENDENCIES
 
-	getInstance<Input>();
-	getInstance<Timer>();
-	getInstance<Resources::ResourceManager>();
-//	getInstance<Renderer>();
-
- // 	IRenderContext 					*_context;
-
-//	getInstance<IR>()
-
+	setInstance<Input>();
+	setInstance<Timer>();
+	setInstance<Resources::ResourceManager>();
+	setInstance<Renderer>();
 }
 
 Engine::~Engine()
 {
-	if (_context != NULL)
-		delete _context;
-}
-
-void			Engine::setContext(IRenderContext *ctx)
-{
-	if (_context != NULL)
-		delete _context;
-	_context = ctx;
 }
 
 void			Engine::addScene(AScene *scene, std::string const &name)
@@ -57,8 +42,9 @@ AScene			*Engine::getCurrentScene() const
 
 bool        Engine::init()
 {
-	assert(_context != NULL && "Context must be initialized.");
-	if (!_context->start(1920, 1080, "Mini solar system"))
+	auto &context = getInstance<IRenderContext>();
+
+	if (!context.start(1920, 1080, "Mini solar system"))
 		return (false);
  	if (glewInit() != GLEW_OK)
  	{
@@ -84,19 +70,19 @@ bool 		Engine::start()
 
 bool 		Engine::update()
 {
+	static auto &context = getInstance<IRenderContext>();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	assert(_context != NULL && "Context must be initialized.");
 
 	static auto &timer = getInstance<Timer>();
 	static auto &inputs = getInstance<Input>();
 
-
 	timer.update();
     inputs.clearInputs();
-	_context->updateEvents(inputs);
+	context.updateEvents(inputs);
 	_sceneBinded->update(timer.getElapsed());
 
-	_context->flush();
+	context.flush();
 
 	return (_sceneBinded->userUpdate());
 }
@@ -111,15 +97,14 @@ void 		Engine::draw()
 
 void 		Engine::stop()
 {
-	assert(_context != NULL && "Context must be initialized.");
-
 	static auto &renderer = getInstance<Renderer>();
 	static auto &resources = getInstance<Resources::ResourceManager>();
+	auto &context = getInstance<IRenderContext>();
 
 	resources.uninit();
 	renderer.uninit();
 	for (scenesIt it = _scenes.begin(); it != _scenes.end(); ++it)
 		delete it->second;
 	_scenes.clear();
-	_context->stop();
+	context.stop();
 }

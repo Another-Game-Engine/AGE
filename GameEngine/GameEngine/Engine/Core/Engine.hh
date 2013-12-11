@@ -8,15 +8,12 @@
 #include "Timer.hh"
 #include "Renderer.hh"
 #include "AScene.hh"
-#include "Context/SdlContext.hh"
 #include "Utils/Singleton.hh"
 #include "ResourceManager/ResourceManager.hh"
 
 class Engine
 {
 private:
-  	IRenderContext 					*_context;
-
 	AScene							*_sceneBinded;
 	std::map<std::string, AScene*>	_scenes;
 
@@ -28,8 +25,6 @@ private:
 public:
 	Engine();
 	~Engine();
-
-	void		setContext(IRenderContext *ctx);
 
 	void		addScene(AScene *scene, std::string const &name);
 	void		removeScene(std::string const &name);
@@ -47,8 +42,17 @@ public:
 // Dangerous use  of void*
 // to enhance !
 public:
-	template <typename T, typename TypeSelector = T>
+	template <typename T>
 	T &getInstance()
+	{
+		const std::string tt = typeid(T).name();
+		size_t id = typeid(T).hash_code();
+		assert(_instances.find(id) != std::end(_instances), "Instance is not set !");
+		return *(static_cast<T*>(_instances[id]));
+	}
+
+	template <typename T, typename TypeSelector = T>
+	T &setInstance()
 	{
 		size_t id = typeid(TypeSelector).hash_code();
 		if (_instances.find(id) == std::end(_instances))
@@ -59,12 +63,12 @@ public:
 		return *(static_cast<T*>(_instances[id]));
 	}
 
+
+
 private:
 	std::map<size_t, void*> _instances;
 
 };
-
-#include "Context/SdlContext.hh"
 
 typedef Singleton<Engine> 	GameEngine;
 

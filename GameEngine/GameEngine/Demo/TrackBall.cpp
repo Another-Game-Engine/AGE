@@ -1,6 +1,7 @@
 #include "TrackBall.hh"
 
 #include "glm/gtc/matrix_transform.hpp"
+#include "Context/SdlContext.hh"
 
 TrackBall::TrackBall(SmartPointer<Entity> const &toLook, float dist,
 					 float rotatingSpeed, float zoomingSpeed) :
