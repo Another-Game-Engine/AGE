@@ -145,8 +145,8 @@ SmartPointer<Entity::t_EntityList> 	Entity::getSonsByFlags(size_t flags, GetFlag
 	{
 		while (e != _sons.end())
 		{
-			if ((e->second->getFlags() & flags == flags) &&
-				(e->second->getFlags() | flags == flags))
+			if (((e->second->getFlags() & flags) == flags) &&
+				((e->second->getFlags() | flags) == flags))
 				sons->push_back(e->second);
 			++e;
 		}

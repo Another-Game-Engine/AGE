@@ -98,7 +98,8 @@ bool Shader::_build()
 	unsigned int i = 0;
 	for (auto &e : _targetsList)
 	{
-		_targets[i] = e;
+#pragma warning(suppress: 6386)
+		_targets[i] = static_cast<GLenum>(e);
 		++i;
 	}
 
