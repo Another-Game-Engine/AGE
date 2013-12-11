@@ -14,15 +14,25 @@ int			main(int ac, char **av)
 {
 	Engine	e;
 
+	// set Rendering context of the engine
+	// you can also set any other dependencies
 	e.setInstance<SdlContext, IRenderContext>();
+
+	// init engine
 	if (e.init() == false)
 		return (EXIT_FAILURE);
+
+	// add scene
 	e.addScene(new DemoScene(e), "demo");
+
+	// bind scene
 	e.bindScene("demo");
+
+	// lanch engine
 	if (e.start() == false)
 		return (EXIT_FAILURE);
 	while (e.update())
-		e.draw();
+		;
 	e.stop();
 	return (EXIT_SUCCESS);
 }
