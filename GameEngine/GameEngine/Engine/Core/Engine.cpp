@@ -89,14 +89,6 @@ bool 		Engine::update()
 	return (_sceneBinded->userUpdate());
 }
 
-void 		Engine::draw()
-{
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//assert(_context != NULL && "Context must be initialized.");
-	//_renderer.render(_timer.getElapsed());
-	//_context->flush();
-}
-
 void 		Engine::stop()
 {
 	static auto &renderer = getInstance<Renderer>();

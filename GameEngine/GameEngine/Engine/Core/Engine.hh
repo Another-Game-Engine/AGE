@@ -33,7 +33,6 @@ public:
 	bool        init();
 	bool 		start();
 	bool 		update();
-	void 		draw();
 	void 		stop();
 
 
