@@ -46,7 +46,7 @@ void              ACamera::resetMoved()
 
 void ACamera::attachSkybox(const std::string &name, const std::string &cubeMapShader)
 {
-	_skybox = GameEngine::instance()->resources().getResource(name);
+	_skybox = GameEngine::instance()->getInstance<Resources::ResourceManager>().getResource(name);
 	_cubeMapShader = cubeMapShader;
 }
 
@@ -59,10 +59,10 @@ void ACamera::update()
 {
 	if (_skybox.get())
 	{
-		OpenGLTools::Shader *s = GameEngine::instance()->renderer().getShader(_cubeMapShader);
+		OpenGLTools::Shader *s = GameEngine::instance()->getInstance<Renderer>().getShader(_cubeMapShader);
 		assert(s != NULL && "Skybox does not have a shader associated");
 
-		GameEngine::instance()->renderer().getUniform("cameraUniform")->setUniform("projection", getProjection());
+		GameEngine::instance()->getInstance<Renderer>().getUniform("cameraUniform")->setUniform("projection", getProjection());
 
 		glm::mat4 t = getTransform();
 		t[3][0] = 0;
@@ -70,10 +70,10 @@ void ACamera::update()
 		t[3][2] = 0;
 		t[3][3] = 1;
 
-		GameEngine::instance()->renderer().getUniform("cameraUniform")->setUniform("view", t);
-		GameEngine::instance()->renderer().getUniform("cameraUniform")->flushChanges();
+		GameEngine::instance()->getInstance<Renderer>().getUniform("cameraUniform")->setUniform("view", t);
+		GameEngine::instance()->getInstance<Renderer>().getUniform("cameraUniform")->flushChanges();
 
-		GameEngine::instance()->renderer().getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
+		GameEngine::instance()->getInstance<Renderer>().getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
 
 		s->use();
 

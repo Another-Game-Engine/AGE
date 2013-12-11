@@ -19,7 +19,7 @@ TrackBall::~TrackBall(void)
 
 void      TrackBall::customUpdate()
 {
-	Input			&inputs = GameEngine::instance()->inputs();
+	Input			&inputs = GameEngine::instance()->getInstance<Input>();
 	glm::vec3		pos;
 
 	_dist -= inputs.getMouseWheel().y * _zoomSpeed;
