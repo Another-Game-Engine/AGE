@@ -23,10 +23,10 @@ public:
 	~MaterialManager();
 	SmartPointer<Material> getMaterial(const std::string &name);
 	SmartPointer<Material> createMaterial(const std::string &name);
-	inline std::map<std::string, SmartPointer<Material> > &getMaterialList() {return _materials;}
+	std::map<std::string, SmartPointer<Material> > &getMaterialList();
 private:
-	MaterialManager(const MaterialManager &o);
-	MaterialManager &operator=(const MaterialManager &o);
+	//MaterialManager(const MaterialManager &o);
+	//MaterialManager &operator=(const MaterialManager &o);
 };
 
 #endif //!__MATERIAL_MANAGER_HH__

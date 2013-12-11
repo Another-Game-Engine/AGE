@@ -13,6 +13,8 @@
 class Renderer
 {
 private:
+	Renderer(const Renderer &o);
+	Renderer &operator=(const Renderer &o);
 
 	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;
 	typedef std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	uniformsIt;
@@ -56,8 +58,8 @@ public:
 
 	OpenGLTools::Framebuffer        &getFbo();
 	void                            uninit();
-	inline MaterialManager &getMaterialManager() {return _materialManager;}
-	inline void addPostEffect(const std::string &name, unsigned int priority) {_postEffects.insert(std::make_pair(priority, name));}
+	MaterialManager &getMaterialManager();
+	void addPostEffect(const std::string &name, unsigned int priority);
 };
 
 #endif

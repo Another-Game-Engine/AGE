@@ -252,4 +252,8 @@ namespace OpenGLTools
 		}	
 	}
 
+	bool Framebuffer::isRendering()
+	{
+		return _isRendering;
+	}
 }
