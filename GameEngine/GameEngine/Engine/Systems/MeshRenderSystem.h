@@ -42,10 +42,10 @@ protected:
 	virtual void mainUpdate(double time)
 	{
 		static double t = 0;
-		unsigned int textureOffset;
-		Renderer &renderer = _engine.renderer();
+		unsigned int textureOffset = 0;
+		auto &renderer = _engine.getInstance<Renderer>();
 		OpenGLTools::Framebuffer &fbo = renderer.getFbo();
-		OpenGLTools::UniformBuffer *perFrameBuffer = _engine.renderer().getUniform("PerFrame");
+		OpenGLTools::UniformBuffer *perFrameBuffer = _engine.getInstance<Renderer>().getUniform("PerFrame");
 
 		t += time;
 		// Set les uniforms du block PerFrame
@@ -68,7 +68,7 @@ protected:
 
 		fbo.zPassBegin();
 
-		OpenGLTools::UniformBuffer *perModelUniform = GameEngine::instance()->renderer().getUniform("PerModel");
+		OpenGLTools::UniformBuffer *perModelUniform = GameEngine::instance()->getInstance<Renderer>().getUniform("PerModel");
 
 		for (auto &mat : _sorted)
 		{
@@ -94,7 +94,7 @@ protected:
 		{
 			for (auto &shaderName : mat.first->getShaders())
 			{
-				auto shader = GameEngine::instance()->renderer().getShader(shaderName);
+				auto shader = GameEngine::instance()->getInstance<Renderer>().getShader(shaderName);
 				fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
 				shader->use();
 				// /!\ THAT'S VERY STRANGE WHEN I DON'T USE THAT THAT'S STILL WORKING !!

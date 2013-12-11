@@ -9,13 +9,11 @@
 #include "OpenGL/UniformBuffer.hh"
 #include "OpenGL/Framebuffer.hh"
 #include "MaterialManager.hh"
+#include "Utils/Any.hpp"
 
 class Renderer
 {
 private:
-	Renderer(const Renderer &o);
-	Renderer &operator=(const Renderer &o);
-
 	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;
 	typedef std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	uniformsIt;
 	typedef std::map<std::string, Component::MeshRenderer*>::iterator		queueIt;
@@ -33,7 +31,7 @@ private:
 	postEffectCol                                   _postEffects;
 public:
 	Renderer(void);
-	~Renderer(void);
+	virtual ~Renderer(void);
 
 	bool init();
 
@@ -60,6 +58,9 @@ public:
 	void                            uninit();
 	MaterialManager &getMaterialManager();
 	void addPostEffect(const std::string &name, unsigned int priority);
+private:
+	Renderer(const Renderer &o);
+	Renderer &operator=(const Renderer &o);
 };
 
 #endif

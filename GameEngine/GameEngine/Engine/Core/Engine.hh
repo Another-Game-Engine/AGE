@@ -2,18 +2,15 @@
 #ifndef ENGINE_HH_
 #define ENGINE_HH_
 
+#include <map>
+#include <typeinfo>
+
 #include "Timer.hh"
 #include "Renderer.hh"
 #include "AScene.hh"
 #include "Context/SdlContext.hh"
 #include "Utils/Singleton.hh"
 #include "ResourceManager/ResourceManager.hh"
-
-#include "Utils/Any.hpp"
-
-
-#include <map>
-#include <typeinfo>
 
 class Engine
 {
@@ -24,7 +21,7 @@ private:
 	std::map<std::string, AScene*>	_scenes;
 
 	Engine(Engine const &);
-	Engine		&operator=(Engine const &);
+	Engine &operator=(Engine const &);
 
 	typedef	std::map<std::string, AScene*>::iterator	scenesIt;
 
@@ -47,6 +44,8 @@ public:
 
 /////////////////////////////////////////////////////
 // Dependencie injector implementation
+// Dangerous use  of void*
+// to enhance !
 public:
 	template <typename T, typename TypeSelector = T>
 	T &getInstance()
@@ -54,15 +53,14 @@ public:
 		size_t id = typeid(TypeSelector).hash_code();
 		if (_instances.find(id) == std::end(_instances))
 		{
-			std::shared_ptr<Any> n(new Any(T()));
+			auto n = new T();
 			_instances.insert(std::make_pair(id, n));
-			return n->get<T>();
 		}
-		return _instances[id]->get<T>();
+		return *(static_cast<T*>(_instances[id]));
 	}
 
 private:
-	std::map<size_t, std::shared_ptr<Any> > _instances;
+	std::map<size_t, void*> _instances;
 
 };
 

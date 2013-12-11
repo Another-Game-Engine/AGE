@@ -16,10 +16,10 @@ Renderer::~Renderer(void)
 
 bool Renderer::init()
 {
-	GameEngine::instance()->renderer().addShader("depthOnly", "../GameEngine/Shaders/depthOnly.vp", "../GameEngine/Shaders/depthOnly.fp");
-	GameEngine::instance()->renderer().bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
-	GameEngine::instance()->renderer().bindShaderToUniform("depthOnly", "PerModel", "PerModel");
-	GameEngine::instance()->renderer().getShader("depthOnly")->addTarget(GL_COLOR_ATTACHMENT0).build();
+	addShader("depthOnly", "../GameEngine/Shaders/depthOnly.vp", "../GameEngine/Shaders/depthOnly.fp");
+	bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
+	bindShaderToUniform("depthOnly", "PerModel", "PerModel");
+	getShader("depthOnly")->addTarget(GL_COLOR_ATTACHMENT0).build();
 
 
 	return _fbo.init(1920, 1080, 4);

@@ -66,7 +66,7 @@ bool        Engine::init()
  		return (false);
  	}
 
-	if (!renderer().init())
+	if (!getInstance<Renderer>().init())
 		return false;
   	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
@@ -113,7 +113,7 @@ void 		Engine::stop()
 {
 	assert(_context != NULL && "Context must be initialized.");
 
-	static auto &renderer = Renderer();// getInstance<Renderer>();
+	static auto &renderer = getInstance<Renderer>();
 	static auto &resources = getInstance<Resources::ResourceManager>();
 
 	resources.uninit();
