@@ -184,6 +184,7 @@
     <ClInclude Include="Vendors\shared\rapidxml\rapidxml_print.hpp" />
     <ClInclude Include="Vendors\shared\rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="Engine\Entities\EntityManager.h" />
+    <ClInclude Include="Engine\Utils\Function.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />

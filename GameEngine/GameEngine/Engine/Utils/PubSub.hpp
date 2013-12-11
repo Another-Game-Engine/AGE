@@ -6,34 +6,9 @@
 #include <map>
 #include <memory>
 #include <functional>
+#include  "Function.hpp"
 
 typedef std::string PubSubKey;
-
-template <typename F>
-struct MyFunc : public MyFunc<decltype(&F::operator())>
-{};
-
-template <typename Type, typename Return, typename... Args>
-struct MyFunc<Return(Type::*)(Args...) const>
-{
-	typedef Return(*pointer)(Args...);
-	typedef std::function<Return(Args...)> function;
-};
-
-template <typename F>
-typename MyFunc<F>::pointer
-toFnPointer(F &lambda)
-{
-	return static_cast<typename MyFunc<F>::pointer>(lambda);
-}
-
-
-template <typename F>
-typename MyFunc<F>::function
-toFn(F &lambda)
-{
-	return static_cast<typename MyFunc<F>::function>(lambda);
-}
 
 class PubSub
 {

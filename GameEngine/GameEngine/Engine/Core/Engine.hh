@@ -50,6 +50,7 @@ public:
 	bool 		update();
 	void 		draw();
 	void 		stop();
+
 };
 
 #include "Context/SdlContext.hh"
