@@ -9,7 +9,7 @@ namespace Component
 
 	MeshRenderer::MeshRenderer(std::string const &name, std::string const &resource) :
 		Component::ComponentBase<MeshRenderer>(name),
-		_mesh(GameEngine::instance()->getInstance<Resources::ResourceManager>().getResource(resource))
+		_mesh(_engine.getInstance<Resources::ResourceManager>().getResource(resource))
 	{
 		}
 
@@ -24,7 +24,7 @@ namespace Component
 
 	void MeshRenderer::addTexture(const std::string &textureName, unsigned int priority)
 	{
-		SmartPointer<Resources::Texture> texture = GameEngine::instance()->getInstance<Resources::ResourceManager>().getResource(textureName);
+		SmartPointer<Resources::Texture> texture = _engine.getInstance<Resources::ResourceManager>().getResource(textureName);
 
 		for (textureMapIt it = _textures.begin(); it != _textures.end(); ++it)
 		{

@@ -15,7 +15,7 @@ namespace Component
 
 	//void RotationForce::update()
 	//{
-	//	float	elapsed = GameEngine::instance()->timer().getElapsed();
+	//	float	elapsed = _engine.timer().getElapsed();
 
 	//	getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.x * elapsed, glm::vec3(1,0,0));
 	//	getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.y * elapsed, glm::vec3(0,1,0));

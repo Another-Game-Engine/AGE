@@ -61,14 +61,14 @@ protected:
 
 		//render skybox before z-pass
 
-		GameEngine::instance()->getCurrentScene()->getCamera()->update();
+		_engine.getCurrentScene()->getCamera()->update();
 
 		// temporary z-pass
 		// to erase when depthOnly shader fixed
 
 		fbo.zPassBegin();
 
-		OpenGLTools::UniformBuffer *perModelUniform = GameEngine::instance()->getInstance<Renderer>().getUniform("PerModel");
+		OpenGLTools::UniformBuffer *perModelUniform = _engine.getInstance<Renderer>().getUniform("PerModel");
 
 		for (auto &mat : _sorted)
 		{
@@ -94,7 +94,7 @@ protected:
 		{
 			for (auto &shaderName : mat.first->getShaders())
 			{
-				auto shader = GameEngine::instance()->getInstance<Renderer>().getShader(shaderName);
+				auto shader = _engine.getInstance<Renderer>().getShader(shaderName);
 				fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
 				shader->use();
 				// /!\ THAT'S VERY STRANGE WHEN I DON'T USE THAT THAT'S STILL WORKING !!

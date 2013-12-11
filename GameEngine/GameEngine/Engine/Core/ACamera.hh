@@ -9,6 +9,9 @@
 #include "Utils/SmartPointer.hh"
 #include "OpenGL/Shader.hh"
 
+class Engine
+{};
+
 namespace Resources
 {
 	class CubeMap;
@@ -26,9 +29,10 @@ private:
   std::string _cubeMapShader;
 
   virtual void customUpdate() = 0;
-
+protected:
+	Engine          &_engine;
 public:
-  ACamera();
+  ACamera(Engine &engine);
   virtual ~ACamera() { }
 
   glm::mat4         &setTransform();
