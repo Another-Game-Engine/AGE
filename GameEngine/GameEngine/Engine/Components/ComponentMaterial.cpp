@@ -6,7 +6,7 @@ namespace Component
 	ComponentMaterial::ComponentMaterial(std::string const &name)
 		: _material(nullptr)
 	{
-		_material = GameEngine::instance()->getInstance<Renderer>().getMaterialManager().getMaterial(name);
+		_material = _engine.getInstance<Renderer>().getMaterialManager().getMaterial(name);
 	}
 
 	ComponentMaterial::ComponentMaterial(SmartPointer<Material> material)
@@ -20,7 +20,7 @@ namespace Component
 	bool                				ComponentMaterial::setMaterial(std::string const &name)
 	{
 		SmartPointer<Material> old = _material;
-		_material = GameEngine::instance()->getInstance<Renderer>().getMaterialManager().getMaterial(name);
+		_material = _engine.getInstance<Renderer>().getMaterialManager().getMaterial(name);
 		PubSub::pub(std::string("MaterialComponentChanged"), this->getFather(), old, _material);
 		return (_material != nullptr);
 	}

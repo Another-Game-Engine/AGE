@@ -8,7 +8,7 @@
 class BasicCam : public ACamera
 {
 public:
-	BasicCam(SmartPointer<Entity> const &toLook);
+	BasicCam(Engine &engine, SmartPointer<Entity> const &toLook);
 	virtual ~BasicCam(void);
 private:
 	float					_dist;

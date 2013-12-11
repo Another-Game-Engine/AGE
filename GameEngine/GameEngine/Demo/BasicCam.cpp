@@ -5,7 +5,7 @@
 #include "Core/Engine.hh"
 #include "Context/SdlContext.hh"
 
-BasicCam::BasicCam(SmartPointer<Entity> const &toLook) :
+BasicCam::BasicCam(Engine &engine, SmartPointer<Entity> const &toLook) : ACamera(engine),
 	_dist(50),
 	_lastKey(SDLK_r)
 {
@@ -23,6 +23,7 @@ BasicCam::~BasicCam(void)
 void      BasicCam::customUpdate()
 {
 	glm::vec3	lookPos;
+	Input &input = _engine.getInstance<Input>();
 
 	if (_lastKey == SDLK_r)
 		lookPos = glm::vec3(_toLook->getGlobalTransform()[3].x, _toLook->getGlobalTransform()[3].y, _toLook->getGlobalTransform()[3].z);
@@ -35,21 +36,21 @@ void      BasicCam::customUpdate()
 		_pos = glm::vec3(_toLook->getGlobalTransform()[3].x + 1, _toLook->getGlobalTransform()[3].y, _toLook->getGlobalTransform()[3].z + _dist);
 		lookPos = glm::vec3(_toLook->getGlobalTransform()[3].x, _toLook->getGlobalTransform()[3].y, _toLook->getGlobalTransform()[3].z);
 	}
-	if (GameEngine::instance()->getInstance<Input>().getInput(SDLK_u))
+	if (input.getInput(SDLK_u))
 	{
 		_pos = glm::vec3(2, 800, 0);
 		_lastKey = SDLK_u;
 	}
-	if (GameEngine::instance()->getInstance<Input>().getInput(SDLK_SPACE))
+	if (input.getInput(SDLK_SPACE))
 		_lastKey = SDLK_SPACE;
-	if (GameEngine::instance()->getInstance<Input>().getInput(SDLK_r))
+	if (input.getInput(SDLK_r))
 	{
 		_pos = glm::vec3(0, 5, -500);
 		_lastKey = SDLK_r;
 	}
-	if (GameEngine::instance()->getInstance<Input>().getInput(SDLK_UP))
+	if (input.getInput(SDLK_UP))
 		_dist -= 1;
-	if (GameEngine::instance()->getInstance<Input>().getInput(SDLK_DOWN) || GameEngine::instance()->getInstance<Input>().getInput(SDL_BUTTON_LEFT))
+	if (input.getInput(SDLK_DOWN) || input.getInput(SDL_BUTTON_LEFT))
 		_dist += 1;
 	setTransform() = glm::lookAt(_pos, lookPos, glm::vec3(0, 1, 0));
 }

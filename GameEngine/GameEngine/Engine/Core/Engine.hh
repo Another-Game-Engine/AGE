@@ -37,10 +37,12 @@ public:
 	void 		draw();
 	void 		stop();
 
+
 /////////////////////////////////////////////////////
 // Dependencie injector implementation
 // Dangerous use  of void*
 // to enhance !
+
 public:
 	template <typename T>
 	T &getInstance()
@@ -67,9 +69,6 @@ public:
 
 private:
 	std::map<size_t, void*> _instances;
-
 };
-
-typedef Singleton<Engine> 	GameEngine;
 
 #endif
