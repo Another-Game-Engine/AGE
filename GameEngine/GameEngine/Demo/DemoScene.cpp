@@ -30,8 +30,8 @@ SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 												std::string const &tex1, std::string const &tex2, std::string const &tex3,
 												std::string const &tex4)
 {
-	SmartPointer<Entity>		p = new Entity;
-	SmartPointer<Entity>		e = new Entity;
+	SmartPointer<Entity>		p = new Entity(_engine);
+	SmartPointer<Entity>		e = new Entity(_engine);
 
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
@@ -197,7 +197,7 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	setCamera(new TrackBall(earth->getSonsBegin()->second, 50, 3, 1));
+	setCamera(new TrackBall(_engine, earth->getSonsBegin()->second, 50, 3, 1));
 
 	std::string		vars[] = 
 	{

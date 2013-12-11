@@ -4,6 +4,7 @@
 #include <string>
 
 class	Entity;
+class   Engine;
 
 namespace	Component
 {
@@ -16,8 +17,9 @@ namespace	Component
 
 	struct Base
 	{
-		Base(const std::string &name = "NoName")
-		: _name(name)
+		Base(Engine &engine, const std::string &name = "NoName")
+		: _engine(engine)
+		, _name(name)
 		, _father(nullptr)
 		{
 		}
@@ -43,6 +45,7 @@ namespace	Component
 		}
 
 	protected:
+		Engine              &_engine;
 		std::string         _name;
 		Entity				*_father;
 	};
@@ -52,8 +55,8 @@ namespace	Component
 	{
 		virtual ~ComponentBase()
 		{}
-		ComponentBase(const std::string &name = "NoName")
-		: Base(name)
+		ComponentBase(Engine &engine, const std::string &name = "NoName")
+		: Base(engine, name)
 		{}
 
 		static unsigned int getTypeId()

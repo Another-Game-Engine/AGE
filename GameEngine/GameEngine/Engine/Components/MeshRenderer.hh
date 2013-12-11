@@ -33,7 +33,7 @@ private:
 	MeshRenderer(MeshRenderer const &);
 	MeshRenderer	&operator=(MeshRenderer const &);
 public:
-	MeshRenderer(std::string const &name, std::string const &resource);
+	MeshRenderer(Engine &engine, std::string const &name, std::string const &resource);
 	virtual ~MeshRenderer(void);
 
 	void addTexture(const std::string &textureName, unsigned int priority = 0);

@@ -12,7 +12,7 @@
 
 int			main(int ac, char **av)
 {
-	Engine	&e = *GameEngine::instance();
+	Engine	e;
 
 	e.setInstance<SdlContext, IRenderContext>();
 	if (e.init() == false)

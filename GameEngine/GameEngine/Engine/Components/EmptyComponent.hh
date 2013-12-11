@@ -5,6 +5,8 @@
 #include "Utils/SmartPointer.hh"
 #include "ResourceManager/SharedMesh.hh"
 
+class Engine;
+
 namespace Component
 {
 	class EmptyComponent : public ComponentBase<EmptyComponent>
@@ -14,7 +16,7 @@ namespace Component
 		EmptyComponent	&operator=(EmptyComponent const &);
 
 	public:
-		EmptyComponent();
+		EmptyComponent(Engine &engine);
 		virtual ~EmptyComponent(void);
 	};
 

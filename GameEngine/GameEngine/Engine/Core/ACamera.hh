@@ -9,8 +9,7 @@
 #include "Utils/SmartPointer.hh"
 #include "OpenGL/Shader.hh"
 
-class Engine
-{};
+class Engine;
 
 namespace Resources
 {
