@@ -4,6 +4,8 @@
 #include "ResourceManager/CubeMap.hh"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include <Core/Renderer.hh>
+#include <ResourceManager/ResourceManager.hh>
 
 ACamera::ACamera(Engine &engine) :
 _engine(engine),

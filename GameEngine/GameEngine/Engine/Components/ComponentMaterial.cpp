@@ -1,5 +1,6 @@
 #include "MaterialComponent.h"
 #include "Utils/PubSub.hpp"
+#include <Core/Renderer.hh>
 
 namespace Component
 {

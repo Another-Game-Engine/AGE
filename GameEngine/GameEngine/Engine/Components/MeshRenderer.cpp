@@ -3,6 +3,8 @@
 #include "ResourceManager/Texture.hh"
 
 #include "Core/Engine.hh"
+#include <ResourceManager/Texture.hh>
+#include <ResourceManager/ResourceManager.hh>
 
 namespace Component
 {

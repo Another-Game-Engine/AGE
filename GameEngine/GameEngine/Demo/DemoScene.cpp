@@ -1,6 +1,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Core/Engine.hh"
+#include "Core/Renderer.hh"
 #include "DemoScene.hh"
 #include "TrackBall.hh"
 
@@ -13,6 +14,7 @@
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
+#include "ResourceManager/ResourceManager.hh"
 
 #include <SDL\SDL.h>
 

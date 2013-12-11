@@ -1,7 +1,11 @@
 
 #include "Engine.hh"
 #include "Context/IRenderContext.hh"
+#include "ResourceManager/ResourceManager.hh"
 #include "Utils/OpenGL.hh"
+#include "Timer.hh"
+#include "Renderer.hh"
+
 #include <iostream>
 
 Engine::Engine() :
@@ -18,8 +22,6 @@ Engine::Engine() :
 
 Engine::~Engine()
 {
-	for (auto &e : _instances)
-		delete e.second;
 }
 
 void			Engine::addScene(AScene *scene, std::string const &name)
