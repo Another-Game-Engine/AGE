@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Core/Engine.hh"
+#include "Context/SdlContext.hh"
 
 BasicCam::BasicCam(SmartPointer<Entity> const &toLook) :
 	_dist(50),
