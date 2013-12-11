@@ -8,6 +8,18 @@ Engine::Engine() :
 	_context(NULL),
 	_sceneBinded(NULL)
 {
+
+	// DEFINE BASED DEPENDENCIES
+
+	getInstance<Input>();
+	getInstance<Timer>();
+	getInstance<Resources::ResourceManager>();
+//	getInstance<Renderer>();
+
+ // 	IRenderContext 					*_context;
+
+//	getInstance<IR>()
+
 }
 
 Engine::~Engine()
@@ -43,26 +55,6 @@ AScene			*Engine::getCurrentScene() const
 	return (_sceneBinded);
 }
 
-Input			&Engine::inputs()
-{
-	return (_inputs);
-}
-
-Timer const		&Engine::timer()
-{
-	return (_timer);
-}
-
-Resources::ResourceManager &Engine::resources()
-{
-	return (_resources);
-}
-
-Renderer		&Engine::renderer()
-{
-	return (_renderer);
-}
-
 bool        Engine::init()
 {
 	assert(_context != NULL && "Context must be initialized.");
@@ -95,11 +87,14 @@ bool 		Engine::update()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	assert(_context != NULL && "Context must be initialized.");
 
-	assert(_context != NULL && "Context must be initialized.");
-	_timer.update();
-    _inputs.clearInputs();
-	_context->updateEvents(_inputs);
-	_sceneBinded->update(_timer.getElapsed());
+	static auto &timer = getInstance<Timer>();
+	static auto &inputs = getInstance<Input>();
+
+
+	timer.update();
+    inputs.clearInputs();
+	_context->updateEvents(inputs);
+	_sceneBinded->update(timer.getElapsed());
 
 	_context->flush();
 
@@ -117,8 +112,12 @@ void 		Engine::draw()
 void 		Engine::stop()
 {
 	assert(_context != NULL && "Context must be initialized.");
-	_resources.uninit();
-	_renderer.uninit();
+
+	static auto &renderer = Renderer();// getInstance<Renderer>();
+	static auto &resources = getInstance<Resources::ResourceManager>();
+
+	resources.uninit();
+	renderer.uninit();
 	for (scenesIt it = _scenes.begin(); it != _scenes.end(); ++it)
 		delete it->second;
 	_scenes.clear();

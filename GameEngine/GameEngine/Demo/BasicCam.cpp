@@ -34,14 +34,14 @@ void      BasicCam::customUpdate()
 		_pos = glm::vec3(_toLook->getGlobalTransform()[3].x + 1, _toLook->getGlobalTransform()[3].y, _toLook->getGlobalTransform()[3].z + _dist);
 		lookPos = glm::vec3(_toLook->getGlobalTransform()[3].x, _toLook->getGlobalTransform()[3].y, _toLook->getGlobalTransform()[3].z);
 	}
-	if (GameEngine::instance()->inputs().getInput(SDLK_u))
+	if (GameEngine::instance()->getInstance<Input>().getInput(SDLK_u))
 	{
 		_pos = glm::vec3(2, 800, 0);
 		_lastKey = SDLK_u;
 	}
-	if (GameEngine::instance()->inputs().getInput(SDLK_SPACE))
+	if (GameEngine::instance()->getInstance<Input>().getInput(SDLK_SPACE))
 		_lastKey = SDLK_SPACE;
-	if (GameEngine::instance()->inputs().getInput(SDLK_r))
+	if (GameEngine::instance()->getInstance<Input>().getInput(SDLK_r))
 	{
 		_pos = glm::vec3(0, 5, -500);
 		_lastKey = SDLK_r;

@@ -1,5 +1,4 @@
 #include "MaterialManager.hh"
-#include "Material.hh"
 
 MaterialManager::MaterialManager()
 {}
@@ -25,3 +24,7 @@ SmartPointer<Material> MaterialManager::createMaterial(const::std::string &name)
 	return m;
 }
 
+std::map<std::string, SmartPointer<Material> > &MaterialManager::getMaterialList()
+{
+	return _materials;
+}

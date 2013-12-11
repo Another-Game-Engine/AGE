@@ -9,17 +9,16 @@
 #include "Utils/Singleton.hh"
 #include "ResourceManager/ResourceManager.hh"
 
+#include "Utils/Any.hpp"
+
 
 #include <map>
+#include <typeinfo>
 
 class Engine
 {
 private:
   	IRenderContext 					*_context;
-	Input 							_inputs;
-  	Timer 							_timer;
-	Resources::ResourceManager		_resources;
-	Renderer						_renderer;
 
 	AScene							*_sceneBinded;
 	std::map<std::string, AScene*>	_scenes;
@@ -40,11 +39,6 @@ public:
 	void		bindScene(std::string const &name);
 	AScene		*getCurrentScene() const;
 
-	Input						&inputs();
-	Timer const					&timer();
-	Resources::ResourceManager	&resources();
-	Renderer					&renderer();
-
 	bool        init();
 	bool 		start();
 	bool 		update();
@@ -53,6 +47,22 @@ public:
 
 /////////////////////////////////////////////////////
 // Dependencie injector implementation
+public:
+	template <typename T, typename TypeSelector = T>
+	T &getInstance()
+	{
+		size_t id = typeid(TypeSelector).hash_code();
+		if (_instances.find(id) == std::end(_instances))
+		{
+			std::shared_ptr<Any> n(new Any(T()));
+			_instances.insert(std::make_pair(id, n));
+			return n->get<T>();
+		}
+		return _instances[id]->get<T>();
+	}
+
+private:
+	std::map<size_t, std::shared_ptr<Any> > _instances;
 
 };
 
