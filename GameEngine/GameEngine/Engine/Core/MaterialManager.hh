@@ -8,7 +8,7 @@
 #include "OpenGL/Framebuffer.hh"
 
 class Shader;
-namespace Components
+namespace Component
 {
 	class MeshRenderer;
 };

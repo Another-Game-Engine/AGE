@@ -2,31 +2,26 @@
 #include "RotationForce.hh"
 #include "Core/Engine.hh"
 
-namespace Components
+namespace Component
 {
 
 	RotationForce::RotationForce(const glm::vec3 &force)
-		: AComponent("RotationForce")
+		: Component::ComponentBase<RotationForce>("RotationForce")
 		, _force(force)
 	{}
 
 	RotationForce::~RotationForce(void)
 	{}
 
-	void RotationForce::start()
-	{}
+	//void RotationForce::update()
+	//{
+	//	float	elapsed = GameEngine::instance()->timer().getElapsed();
 
-	void RotationForce::update()
-	{
-		float	elapsed = GameEngine::instance()->timer().getElapsed();
+	//	getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.x * elapsed, glm::vec3(1,0,0));
+	//	getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.y * elapsed, glm::vec3(0,1,0));
+	//	getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.z * elapsed, glm::vec3(0,0,1));
+	//}
 
-		getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.x * elapsed, glm::vec3(1,0,0));
-		getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.y * elapsed, glm::vec3(0,1,0));
-		getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.z * elapsed, glm::vec3(0,0,1));
-	}
-
-	void RotationForce::stop()
-	{}
 
 	void RotationForce::setForce(const glm::vec3 &force)
 	{

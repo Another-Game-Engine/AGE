@@ -25,22 +25,6 @@ bool Renderer::init()
 	return _fbo.init(1920, 1080, 4);
 }
 
-void		Renderer::addToRenderQueue(Components::MeshRenderer *obj)
-{
-	queueIt		it;
-
-	if ((it = _queues.find(obj->getShader())) != std::end(_queues))
-	{
-		obj->setNext(it->second);
-		it->second = obj;
-	}
-	else
-	{
-		obj->setNext(NULL);
-		_queues[obj->getShader()] = obj;
-	}
-}
-
 OpenGLTools::Shader		&Renderer::addShader(std::string const &name,
 											 std::string const &vp,
 											 std::string const &fp,
@@ -125,136 +109,136 @@ bool		Renderer::bindShaderToUniform(std::string const &shader,
 	return (true);
 }
 
-void		Renderer::render()
+void		Renderer::render(double time)
 {
-	static double time = 0;
-	Engine	&e = *GameEngine::instance();
-	unsigned int textureOffset;
-
-	time += e.timer().getElapsed();
-	// Set les uniforms du block PerFrame
-	e.renderer().getUniform("PerFrame")->setUniform("projection", e.getCurrentScene()->getCamera()->getProjection());
-	e.renderer().getUniform("PerFrame")->setUniform("view", e.getCurrentScene()->getCamera()->getTransform());
-	e.renderer().getUniform("PerFrame")->setUniform("time", (float)time);
-	e.renderer().getUniform("PerFrame")->flushChanges();
-
-	_fbo.renderBegin();
-	_fbo.applyViewport();
-	_fbo.clearColor();
-	_fbo.clearZ();
-
-	//render skybox before z-pass
-
-	GameEngine::instance()->getCurrentScene()->getCamera()->update();
-
-	// Depth pre-pass
-	// to uncomment when depthOnly shader fixed
-
-	//_fbo.zPassBegin();
-	//unsigned int shaderIndex = 0;
-	//OpenGLTools::Shader *shader = getShader("depthOnly");
-	//shader->use();
-	//_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
-	//unsigned int offset = 0;
-	//for (auto &material : _materialManager.getMaterialList())
-	//{
-	//	for (auto &obj : material.second->getObjects())
-	//	{
-	//		getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
-	//		getUniform("PerModel")->flushChanges();
-	//		obj->getMesh()->draw();
-	//	}
-	//}
-	//_fbo.unbind();
-	//_fbo.zPassEnd();
-
-
-	// temporary z-pass
-	// to erase when depthOnly shader fixed
-
-	_fbo.zPassBegin();
-	for (auto &material : _materialManager.getMaterialList())
-	{
-		unsigned int shaderIndex = 0;
-		for (auto &shaderName : material.second->getShaders())
-		{
-			OpenGLTools::Shader *shader = getShader(shaderName);
-
-			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
-
-			shader->use();
-			for (auto &obj : material.second->getObjects())
-			{
-				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
-				getUniform("PerModel")->flushChanges();
-				obj->getMesh()->draw();
-			}
-			_fbo.unbind();
-		}
-	}
-	_fbo.zPassEnd();
-
-	// Render pass
-
-	for (auto &material : _materialManager.getMaterialList())
-	{
-		unsigned int shaderIndex = 0;
-		for (auto &shaderName : material.second->getShaders())
-		{
-			OpenGLTools::Shader *shader = getShader(shaderName);
-
-			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
-
-			shader->use();
-			_fbo.bind(shader);
-			for (auto &obj : material.second->getObjects())
-			{
-				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
-				getUniform("PerModel")->flushChanges();
-				obj->bindTextures(shader);
-				obj->getMesh()->draw();
-				obj->unbindTextures();
-			}
-			_fbo.unbind();
-		}
-	}
-
-
-	// post FX pass
-	
-//	for (auto &m : _postEffects)
+//	static double t = 0;
+//	Engine	&e = *GameEngine::instance();
+//	unsigned int textureOffset;
+//
+//	t += time;
+//	// Set les uniforms du block PerFrame
+//	e.renderer().getUniform("PerFrame")->setUniform("projection", e.getCurrentScene()->getCamera()->getProjection());
+//	e.renderer().getUniform("PerFrame")->setUniform("view", e.getCurrentScene()->getCamera()->getTransform());
+//	e.renderer().getUniform("PerFrame")->setUniform("time", (float)t);
+//	e.renderer().getUniform("PerFrame")->flushChanges();
+//
+//	_fbo.renderBegin();
+//	_fbo.applyViewport();
+//	_fbo.clearColor();
+//	_fbo.clearZ();
+//
+//	//render skybox before z-pass
+//
+//	GameEngine::instance()->getCurrentScene()->getCamera()->update();
+//
+//	// Depth pre-pass
+//	// to uncomment when depthOnly shader fixed
+//
+//	//_fbo.zPassBegin();
+//	//unsigned int shaderIndex = 0;
+//	//OpenGLTools::Shader *shader = getShader("depthOnly");
+//	//shader->use();
+//	//_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
+//	//unsigned int offset = 0;
+//	//for (auto &material : _materialManager.getMaterialList())
+//	//{
+//	//	for (auto &obj : material.second->getObjects())
+//	//	{
+//	//		getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+//	//		getUniform("PerModel")->flushChanges();
+//	//		obj->getMesh()->draw();
+//	//	}
+//	//}
+//	//_fbo.unbind();
+//	//_fbo.zPassEnd();
+//
+//
+//	// temporary z-pass
+//	// to erase when depthOnly shader fixed
+//
+//	_fbo.zPassBegin();
+//	for (auto &material : _materialManager.getMaterialList())
 //	{
 //		unsigned int shaderIndex = 0;
-//		auto material = _materialManager.getMaterial(m.second);
-//		for (auto &shaderName : material->getShaders())
+//		for (auto &shaderName : material.second->getShaders())
 //		{
 //			OpenGLTools::Shader *shader = getShader(shaderName);
 //
 //			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
 //
 //			shader->use();
-//			unsigned int offset = _fbo.bind(shader);
-//
-//			getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
-//			getUniform("PerModel")->flushChanges();
-//
-////			_fbo.render(
-//
+//			for (auto &obj : material.second->getObjects())
+//			{
+//				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+//				getUniform("PerModel")->flushChanges();
+//				obj->getMesh()->draw();
+//			}
 //			_fbo.unbind();
 //		}
 //	}
-
-	_fbo.bindDrawTargets(nullptr, 0);
-	_fbo.renderEnd();
-
-	_fbo.renderBegin();
-	_fbo.bindDrawTargets(getShader("brightnessFilter")->getTargets(), getShader("brightnessFilter")->getTargetsNumber());
-	_fbo.renderRect(getShader("brightnessFilter"));
-	_fbo.bindDrawTargets(getShader("blurY")->getTargets(), getShader("blurY")->getTargetsNumber());
-	_fbo.renderRect(getShader("blurY"));
-	_fbo.renderEnd();
-
-	_fbo.debugRendering(getShader("fboToScreen"));
+//	_fbo.zPassEnd();
+//
+//	// Render pass
+//
+//	for (auto &material : _materialManager.getMaterialList())
+//	{
+//		unsigned int shaderIndex = 0;
+//		for (auto &shaderName : material.second->getShaders())
+//		{
+//			OpenGLTools::Shader *shader = getShader(shaderName);
+//
+//			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
+//
+//			shader->use();
+//			_fbo.bind(shader);
+//			for (auto &obj : material.second->getObjects())
+//			{
+//				getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+//				getUniform("PerModel")->flushChanges();
+//				obj->bindTextures(shader);
+//				obj->getMesh()->draw();
+//				obj->unbindTextures();
+//			}
+//			_fbo.unbind();
+//		}
+//	}
+//
+//
+//	// post FX pass
+//	
+////	for (auto &m : _postEffects)
+////	{
+////		unsigned int shaderIndex = 0;
+////		auto material = _materialManager.getMaterial(m.second);
+////		for (auto &shaderName : material->getShaders())
+////		{
+////			OpenGLTools::Shader *shader = getShader(shaderName);
+////
+////			_fbo.bindDrawTargets(shader->getTargets(), shader->getTargetsNumber());
+////
+////			shader->use();
+////			unsigned int offset = _fbo.bind(shader);
+////
+////			getUniform("PerModel")->setUniform("model", obj->getFather()->getGlobalTransform());
+////			getUniform("PerModel")->flushChanges();
+////
+//////			_fbo.render(
+////
+////			_fbo.unbind();
+////		}
+////	}
+//
+//	_fbo.bindDrawTargets(nullptr, 0);
+//	_fbo.renderEnd();
+//
+//	_fbo.renderBegin();
+//	_fbo.bindDrawTargets(getShader("brightnessFilter")->getTargets(), getShader("brightnessFilter")->getTargetsNumber());
+//	_fbo.renderRect(getShader("brightnessFilter"));
+//	_fbo.bindDrawTargets(getShader("blurY")->getTargets(), getShader("blurY")->getTargetsNumber());
+//	_fbo.renderRect(getShader("blurY"));
+//	_fbo.renderEnd();
+//
+//	_fbo.debugRendering(getShader("fboToScreen"));
 
 }
 

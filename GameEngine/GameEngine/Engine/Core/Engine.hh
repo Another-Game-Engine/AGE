@@ -45,6 +45,7 @@ public:
 	Resources::ResourceManager	&resources();
 	Renderer					&renderer();
 
+	bool        init();
 	bool 		start();
 	bool 		update();
 	void 		draw();

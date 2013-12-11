@@ -10,6 +10,8 @@ Entity::Entity() :
 	_flags(0),
 	_father(NULL)
 {
+	_tag = DEFAULT_TAG;
+	_layer = DEFAULT_LAYER;
 }
 
 Entity::~Entity()
@@ -21,6 +23,7 @@ Entity::~Entity()
 		it->second->setFather(NULL);
 		++it;
 	}
+	_components.clear();
 }
 
 glm::mat4 const  		&Entity::getLocalTransform()
@@ -168,23 +171,6 @@ SmartPointer<Entity::t_EntityList> 	Entity::getSonsByFlags(size_t flags, GetFlag
 	return (sons);
 }
 
-void					Entity::addComponent(SmartPointer<Components::AComponent> const &component)
-{
-	_components[component->getName()] = component;
-	component->setFather(this);
-}
-
-bool					Entity::removeComponent(std::string const &name)
-{
-	std::map<std::string, SmartPointer<Components::AComponent> >::iterator	it;
-
-	if ((it = _components.find(name)) == _components.end())
-		return (false);
-	it->second->setFather(NULL);
-	_components.erase(it);
-	return (true);
-}
-
 Entity::t_sonsList::iterator 		Entity::getSonsBegin()
 {
 	return (_sons.begin());
@@ -195,12 +181,12 @@ Entity::t_sonsList::iterator 		Entity::getSonsEnd()
 	return (_sons.end());
 }
 
-Entity::t_ComponentsList::iterator 	Entity::getComponentsBegin()
+Barcode                       &Entity::getCode()
 {
-	return (_components.begin());
+	return _code;
 }
 
-Entity::t_ComponentsList::iterator 	Entity::getComponentsEnd()
+bool Entity::hasComponent(unsigned int componentId) const
 {
-	return (_components.end());
+		return _code.isSet(componentId);
 }
