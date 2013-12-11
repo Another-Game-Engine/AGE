@@ -51,6 +51,9 @@ public:
 	void 		draw();
 	void 		stop();
 
+/////////////////////////////////////////////////////
+// Dependencie injector implementation
+
 };
 
 #include "Context/SdlContext.hh"
