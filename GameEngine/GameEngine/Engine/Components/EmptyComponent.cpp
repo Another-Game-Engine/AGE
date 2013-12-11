@@ -2,22 +2,13 @@
 
 #include "Core/Engine.hh"
 
-namespace Components
+namespace Component
 {
 
 	EmptyComponent::EmptyComponent()
-		: AComponent("EmptyComponent")
+		: ComponentBase("EmptyComponent")
 	{}
 
 	EmptyComponent::~EmptyComponent(void)
-	{}
-
-	void EmptyComponent::start()
-	{}
-
-	void EmptyComponent::update()
-	{}
-
-	void EmptyComponent::stop()
 	{}
 };

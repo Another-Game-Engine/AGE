@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="Demo\BasicCam.cpp" />
     <ClCompile Include="Demo\DemoScene.cpp" />
-    <ClCompile Include="Engine\Components\AComponent.cpp" />
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
@@ -35,6 +34,9 @@
     <ClCompile Include="Demo\TrackBall.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
+    <ClCompile Include="Engine\Utils\Barcode.cpp" />
+    <ClCompile Include="Engine\Systems\System.cpp" />
+    <ClCompile Include="Engine\Components\ComponentMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -170,11 +172,22 @@
     <ClInclude Include="TinyThread\tinythread.h" />
     <ClInclude Include="Vendors\shared\tiny_obj_loader.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
+    <ClInclude Include="Engine\Utils\PubSub.hpp" />
+    <ClInclude Include="Engine\Core\Settings.h" />
+    <ClInclude Include="Engine\Utils\Barcode.h" />
+    <ClInclude Include="Engine\Systems\System.h" />
+    <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
+    <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
+    <ClInclude Include="Engine\Components\MaterialComponent.h" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml.hpp" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_iterators.hpp" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_print.hpp" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_utils.hpp" />
+    <ClInclude Include="Engine\Entities\EntityManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />
     <None Include="Demo\DemoScene.hh" />
-    <None Include="Engine\Components\AComponent.hh" />
     <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
@@ -325,5 +338,6 @@
     <None Include="Shaders\blur1.fp" />
     <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Shaders\test.cp" />
+    <None Include="Engine\Components\Component.hpp" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,13 +19,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -38,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)Vendors/Windows/include;$(ProjectDir)Vendors/shared;$(IncludePath)</IncludePath>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)Vendors/Windows/include;$(ProjectDir)Vendors/shared;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)Vendors/Windows/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -47,6 +48,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,7 +76,7 @@
     <ClCompile Include="Demo\BasicCam.cpp" />
     <ClCompile Include="Demo\DemoScene.cpp" />
     <ClCompile Include="Demo\TrackBall.cpp" />
-    <ClCompile Include="Engine\Components\AComponent.cpp" />
+    <ClCompile Include="Engine\Components\ComponentMaterial.cpp" />
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
@@ -102,16 +105,26 @@
     <ClCompile Include="Engine\ResourceManager\Texture.cpp" />
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
+    <ClCompile Include="Engine\Systems\System.cpp" />
+    <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="TinyThread\tinythread.cpp" />
     <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Components\MaterialComponent.h" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Core\Material.hh" />
+    <ClInclude Include="Engine\Core\Settings.h" />
+    <ClInclude Include="Engine\Entities\EntityManager.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
+    <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
+    <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
+    <ClInclude Include="Engine\Systems\System.h" />
+    <ClInclude Include="Engine\Utils\Barcode.h" />
     <ClInclude Include="Engine\Utils\File.hpp" />
+    <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="glm\core\func_common.hpp" />
@@ -238,13 +251,17 @@
     <ClInclude Include="glm\virtrev\xstream.hpp" />
     <ClInclude Include="TinyThread\fast_mutex.h" />
     <ClInclude Include="TinyThread\tinythread.h" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml.hpp" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_iterators.hpp" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_print.hpp" />
+    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="Vendors\shared\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />
     <None Include="Demo\DemoScene.hh" />
     <None Include="Demo\TrackBall.hh" />
-    <None Include="Engine\Components\AComponent.hh" />
+    <None Include="Engine\Components\Component.hpp" />
     <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />

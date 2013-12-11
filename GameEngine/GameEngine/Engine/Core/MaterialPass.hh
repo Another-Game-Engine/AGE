@@ -18,7 +18,7 @@ public:
 private:
 	// todo add a framebuffer index or pointer
 	std::string _shader;
-	std::list<Components::MeshRenderer*> _objects;
+	std::list<Component::MeshRenderer*> _objects;
 public:
 	MaterialPass();
 	~MaterialPass();

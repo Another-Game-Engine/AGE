@@ -143,13 +143,16 @@ namespace OpenGLTools
 
 	unsigned int Framebuffer::bind(Shader *shader)
 	{
+		static GLenum activeTexture = GL_TEXTURE0;
 		unsigned int i = 0;
 		for (auto &e : shader->getLayers())
 		{
-			glActiveTexture(GL_TEXTURE0 + i);
+			if (GL_TEXTURE0 + i != activeTexture)
+				glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, _layers[e - GL_COLOR_ATTACHMENT0]);
 			++i;
 		}
+		activeTexture = GL_TEXTURE0 + (i - 1);
 		return _layerNumber;
 	}
 
