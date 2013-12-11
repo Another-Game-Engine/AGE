@@ -3,13 +3,14 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "Context/SdlContext.hh"
 
-TrackBall::TrackBall(SmartPointer<Entity> const &toLook, float dist,
-					 float rotatingSpeed, float zoomingSpeed) :
-	_dist(dist),
-	_rotateSpeed(rotatingSpeed),
-	_zoomSpeed(zoomingSpeed),
-	_angles(0, 0),
-	_toLook(toLook)
+TrackBall::TrackBall(Engine &engine, SmartPointer<Entity> const &toLook, float dist,
+					 float rotatingSpeed, float zoomingSpeed)
+					 : ACamera(engine),
+					 _dist(dist),
+					 _rotateSpeed(rotatingSpeed),
+					 _zoomSpeed(zoomingSpeed),
+					 _angles(0, 0),
+					 _toLook(toLook)
 {
 	setProjection() = glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f);
 }

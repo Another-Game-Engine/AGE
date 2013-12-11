@@ -18,6 +18,8 @@ Engine::Engine() :
 
 Engine::~Engine()
 {
+	for (auto &e : _instances)
+		delete e.second;
 }
 
 void			Engine::addScene(AScene *scene, std::string const &name)
@@ -70,12 +72,12 @@ bool 		Engine::start()
 
 bool 		Engine::update()
 {
-	static auto &context = getInstance<IRenderContext>();
+	auto &context = getInstance<IRenderContext>();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	static auto &timer = getInstance<Timer>();
-	static auto &inputs = getInstance<Input>();
+	auto &timer = getInstance<Timer>();
+	auto &inputs = getInstance<Input>();
 
 	timer.update();
     inputs.clearInputs();

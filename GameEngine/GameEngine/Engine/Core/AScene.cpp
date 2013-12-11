@@ -3,7 +3,7 @@
 #include <Core/Engine.hh>
 
 AScene::AScene(Engine &engine) :
-	_root(new Entity),
+	_root(new Entity(engine)),
 	_camera(NULL),
 	_engine(engine)
 {
@@ -72,7 +72,7 @@ void 							AScene::update(double time)
 
 SmartPointer<Entity>            &AScene::createEntity()
 {
-	SmartPointer<Entity> tmp = new Entity();
+	SmartPointer<Entity> tmp = new Entity(_engine);
 
 	_root->addSon(tmp);
 	return tmp;

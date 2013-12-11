@@ -5,7 +5,8 @@
 
 size_t Entity::_currentId = 0;
 
-Entity::Entity() :
+Entity::Entity(Engine &engine) :
+    _engine(engine),
 	_id(_currentId++),
 	_flags(0),
 	_father(NULL)

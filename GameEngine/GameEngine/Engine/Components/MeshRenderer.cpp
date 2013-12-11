@@ -6,9 +6,8 @@
 
 namespace Component
 {
-
-	MeshRenderer::MeshRenderer(std::string const &name, std::string const &resource) :
-		Component::ComponentBase<MeshRenderer>(name),
+	MeshRenderer::MeshRenderer(Engine &engine, std::string const &name, std::string const &resource) :
+		Component::ComponentBase<MeshRenderer>(engine, name),
 		_mesh(_engine.getInstance<Resources::ResourceManager>().getResource(resource))
 	{
 		}

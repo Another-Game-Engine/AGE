@@ -14,7 +14,7 @@ private:
 	SmartPointer<Entity>	_toLook;
 
 public:
-	TrackBall(SmartPointer<Entity> const &toLook, float dist,
+	TrackBall(Engine &engine, SmartPointer<Entity> const &toLook, float dist,
 			  float rotatingSpeed, float zoomingSpeed);
 	virtual ~TrackBall(void);
 

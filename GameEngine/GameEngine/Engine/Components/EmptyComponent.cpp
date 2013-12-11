@@ -5,8 +5,8 @@
 namespace Component
 {
 
-	EmptyComponent::EmptyComponent()
-		: ComponentBase("EmptyComponent")
+	EmptyComponent::EmptyComponent(Engine &engine)
+		: ComponentBase<EmptyComponent>(engine, "EmptyComponent")
 	{}
 
 	EmptyComponent::~EmptyComponent(void)

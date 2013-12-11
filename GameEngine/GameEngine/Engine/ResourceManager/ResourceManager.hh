@@ -2,7 +2,6 @@
 #ifndef		RESOURCEMANAGER_HH_
 #define		RESOURCEMANAGER_HH_
 
-#include "Utils/Singleton.hh"
 #include "AResource.hh"
 #include "Utils/SmartPointer.hh"
 

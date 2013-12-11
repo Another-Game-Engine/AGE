@@ -14,6 +14,8 @@
 
 #include "glm/glm.hpp"
 
+class Engine;
+
 class Entity : public PubSub
 {
 private:
@@ -37,6 +39,7 @@ public:
 	typedef std::vector<SmartPointer<Component::Base> >             	t_ComponentsList;
 
 private:
+	Engine              &_engine;
 	size_t 				_id;
 	size_t 				_flags;
 
@@ -55,7 +58,7 @@ private:
 	Barcode _code;
 
 public:
-	Entity();
+	Entity(Engine &engine);
 	virtual ~Entity();
 
 	glm::mat4 const  		&getLocalTransform();
@@ -105,7 +108,7 @@ public:
 		{
 			_components.resize(id + 10);
 		}
-		SmartPointer<T> tmp(new T(args...));
+		SmartPointer<T> tmp(new T(_engine, args...));
 		// todo assert if new T fail
 		_code.add(id);
 		_components[id] = tmp;

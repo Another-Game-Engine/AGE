@@ -17,8 +17,8 @@ namespace Component
 		ComponentMaterial(ComponentMaterial const &);
 		ComponentMaterial                  &operator=(ComponentMaterial const &);
 	public:
-		ComponentMaterial(std::string const &name);
-		ComponentMaterial(SmartPointer<Material> material);
+		ComponentMaterial(Engine &engine, std::string const &name);
+		ComponentMaterial(Engine &engine, SmartPointer<Material> material);
 		virtual                            ~ComponentMaterial(void);
 
 		bool                				setMaterial(std::string const &name);

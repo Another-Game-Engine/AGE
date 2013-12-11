@@ -8,7 +8,6 @@
 #include "Timer.hh"
 #include "Renderer.hh"
 #include "AScene.hh"
-#include "Utils/Singleton.hh"
 #include "ResourceManager/ResourceManager.hh"
 
 class Engine
@@ -49,7 +48,7 @@ public:
 	{
 		const std::string tt = typeid(T).name();
 		size_t id = typeid(T).hash_code();
-		assert(_instances.find(id) != std::end(_instances), "Instance is not set !");
+		assert(_instances.find(id) != std::end(_instances) && "Engine Instance is not set !");
 		return *(static_cast<T*>(_instances[id]));
 	}
 
@@ -59,7 +58,7 @@ public:
 		size_t id = typeid(TypeSelector).hash_code();
 		if (_instances.find(id) == std::end(_instances))
 		{
-			auto n = new T();
+			T *n = new T();
 			_instances.insert(std::make_pair(id, n));
 		}
 		return *(static_cast<T*>(_instances[id]));
