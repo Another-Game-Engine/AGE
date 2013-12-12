@@ -7,6 +7,7 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/MaterialComponent.h>
 #include <Entities/Entity.hh>
+#include <Core/SceneManager.hh>
 
 class MeshRendererSystem : public System
 {
@@ -47,10 +48,12 @@ protected:
 		OpenGLTools::Framebuffer &fbo = renderer.getFbo();
 		OpenGLTools::UniformBuffer *perFrameBuffer = _engine.getInstance<Renderer>().getUniform("PerFrame");
 
+		auto currentScene = _engine.getInstance<SceneManager>().getCurrentScene();
+
 		t += time;
 		// Set les uniforms du block PerFrame
-		perFrameBuffer->setUniform("projection", _engine.getCurrentScene()->getCamera()->getProjection());
-		perFrameBuffer->setUniform("view", _engine.getCurrentScene()->getCamera()->getTransform());
+		perFrameBuffer->setUniform("projection", currentScene->getCamera()->getProjection());
+		perFrameBuffer->setUniform("view", currentScene->getCamera()->getTransform());
 		perFrameBuffer->setUniform("time", (float)t);
 		perFrameBuffer->flushChanges();
 
@@ -60,8 +63,8 @@ protected:
 		fbo.clearZ();
 
 		//render skybox before z-pass
-
-		_engine.getCurrentScene()->getCamera()->update();
+		// TODO : !!!! TRANSFORM CAMERA INTO COMPONENT !!!
+		_engine.getInstance<SceneManager>().getCurrentScene()->getCamera()->update();
 
 		// temporary z-pass
 		// to erase when depthOnly shader fixed

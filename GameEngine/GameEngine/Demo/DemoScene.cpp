@@ -226,7 +226,7 @@ bool 			DemoScene::userStart()
 	return (true);
 }
 
-bool 			DemoScene::userUpdate()
+bool 			DemoScene::userUpdate(double time)
 {
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))

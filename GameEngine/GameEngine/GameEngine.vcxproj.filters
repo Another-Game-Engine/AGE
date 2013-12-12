@@ -37,6 +37,7 @@
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Components\ComponentMaterial.cpp" />
+    <ClCompile Include="Engine\Core\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\Any.hpp" />
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
+    <ClInclude Include="Engine\Core\SceneManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />

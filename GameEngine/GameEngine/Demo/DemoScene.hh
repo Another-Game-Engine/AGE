@@ -16,7 +16,7 @@ public:
 													std::string const &tex4 = "");
 
 	virtual bool 			userStart();
-	virtual bool 			userUpdate();
+	virtual bool 			userUpdate(double time);
 };
 
 #endif
