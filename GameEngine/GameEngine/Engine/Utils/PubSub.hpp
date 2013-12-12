@@ -19,7 +19,7 @@ public:
 		const std::type_info *signature;
 	};
 
-private:
+public:
 
 	// manager class
 	//
@@ -28,19 +28,48 @@ private:
 	class Manager
 	{
 	public:
-		std::map<PubSubKey, std::unordered_set<PubSub*> > collection;
-		static Manager           &getInstance()
+		template <typename ...Args>
+		void pub(PubSubKey &name, Args ...args)
 		{
-			static Manager *instance = nullptr;
-			if (instance == nullptr)
+			auto set = _collection.find(name);
+			if (set == std::end(_collection) || set->second.empty())
+				return;
+			for (auto it = std::begin(set->second); it != std::end(set->second);)
 			{
-				instance = new Manager();
+				auto e = *it;
+				++it;
+				e->call(name, args...);
 			}
-			return (*instance);
+		}
+
+		void clearAll()
+		{
+			for (auto &e : _collection)
+			{
+				for (auto &o : e.second)
+				{
+					o->_unsubAll();
+				}
+				e.second.clear();
+			}
+		}
+		
+		std::map<PubSubKey, std::unordered_set<PubSub*> > &getCollection()
+		{
+			return _collection;
+		}
+
+		Manager()
+		{}
+
+		~Manager()
+		{
+			clearAll();
 		}
 	private:
-		Manager(){}
-		~Manager(){}
+		std::map<PubSubKey, std::unordered_set<PubSub*> > _collection;
+		Manager(const Manager &o);
+		Manager &operator=(const Manager &o);
 	};
 
 	//
@@ -51,14 +80,15 @@ public:
 	template <typename F>
 	void sub(const PubSubKey &key, F lambda)
 	{
+		auto &collection = _manager.getCollection();
 		if (_callbacks.find(key) != std::end(_callbacks))
 			return;
 		auto fn = new decltype(toFn(lambda))(toFn(lambda));
 		_callbacks[key].function = static_cast<void*>(fn);
 		_callbacks[key].signature = &typeid(fn);
-		if (_manager.collection.find(key) == std::end(_manager.collection))
-			_manager.collection.emplace(key, std::unordered_set<PubSub*>());
-		_manager.collection[key].insert(this);
+		if (collection.find(key) == std::end(collection))
+			collection.emplace(key, std::unordered_set<PubSub*>());
+		collection[key].insert(this);
 	}
 
 	void unsub(const PubSubKey &key)
@@ -80,6 +110,12 @@ public:
 		}
 		_callbacks.clear();
 	}
+	
+	template <typename ...Args>
+	void pub(PubSubKey &name, Args ...args)
+	{
+		_manager.pub(name, args...);
+	}
 
 	template <typename ...Args>
 	void call(PubSubKey &name, Args ...args)
@@ -95,36 +131,8 @@ public:
 		(*function)(args...);
 	}
 
-	template <typename ...Args>
-	static void pub(PubSubKey &name, Args ...args)
-	{
-		auto &col = Manager::getInstance().collection;
-		auto set = col.find(name);
-		if (set == std::end(col) || set->second.empty())
-			return;
-		for (auto it = std::begin(set->second); it != std::end(set->second); )
-		{
-			auto e = *it;
-			++it;
-			e->call(name, args...);
-		}
-	}
-
-	static void clearAll()
-	{
-		auto &col = Manager::getInstance().collection;
-		for (auto &e : col)
-		{
-			for (auto &o : e.second)
-			{
-				o->_unsubAll();
-			}
-			e.second.clear();
-		}
-	}
-
-	PubSub()
-		: _manager(Manager::getInstance())
+	PubSub(Manager &manager)
+		: _manager(manager)
 	{}
 
 	virtual ~PubSub()
@@ -134,19 +142,21 @@ public:
 private:
 	void removeFromGlobalCallbacks()
 	{
+		auto &collection = _manager.getCollection();
 		for (auto &e : _callbacks)
 		{
-			if (_manager.collection.find(e.first) == std::end(_manager.collection))
+			if (collection.find(e.first) == std::end(collection))
 				continue;
-			_manager.collection[e.first].erase(this);
+			collection[e.first].erase(this);
 		}
 	}
 
 	void removeFromGlobalCallbacks(const PubSubKey &key)
 	{
-		if (_manager.collection.find(key) == std::end(_manager.collection))
+		auto &collection = _manager.getCollection();
+		if (collection.find(key) == std::end(collection))
 			return;
-		_manager.collection[key].erase(this);
+		collection[key].erase(this);
 
 	}
 

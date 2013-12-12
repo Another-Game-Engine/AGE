@@ -24,7 +24,7 @@ namespace Component
 	{
 		SmartPointer<Material> old = _material;
 		_material = _engine.getInstance<Renderer>().getMaterialManager().getMaterial(name);
-		PubSub::pub(std::string("MaterialComponentChanged"), this->getFather(), old, _material);
+		_engine.getInstance<PubSub::Manager>().pub(std::string("MaterialComponentChanged"), this->getFather(), old, _material);
 		return (_material != nullptr);
 	}
 

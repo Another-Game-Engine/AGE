@@ -5,6 +5,7 @@
 #include "Utils/OpenGL.hh"
 #include "Timer.hh"
 #include "Renderer.hh"
+#include "Utils/PubSub.hpp"
 
 #include <iostream>
 
@@ -18,6 +19,7 @@ Engine::Engine() :
 	setInstance<Timer>();
 	setInstance<Resources::ResourceManager>();
 	setInstance<Renderer>();
+	setInstance<PubSub::Manager>();
 }
 
 Engine::~Engine()
