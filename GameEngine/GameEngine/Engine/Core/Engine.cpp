@@ -6,11 +6,11 @@
 #include "Timer.hh"
 #include "Renderer.hh"
 #include "Utils/PubSub.hpp"
+#include "SceneManager.hh"
 
 #include <iostream>
 
-Engine::Engine() :
-	_sceneBinded(NULL)
+Engine::Engine()
 {
 
 	// DEFINE BASED DEPENDENCIES
@@ -20,30 +20,11 @@ Engine::Engine() :
 	setInstance<Resources::ResourceManager>();
 	setInstance<Renderer>();
 	setInstance<PubSub::Manager>();
+	setInstance<SceneManager>();
 }
 
 Engine::~Engine()
 {
-}
-
-void			Engine::addScene(AScene *scene, std::string const &name)
-{
-	_scenes[name] = scene;
-}
-
-void			Engine::removeScene(std::string const &name)
-{
-	_scenes.erase(name);
-}
-
-void			Engine::bindScene(std::string const &name)
-{
-	_sceneBinded = _scenes[name];
-}
-
-AScene			*Engine::getCurrentScene() const
-{
-	return (_sceneBinded);
 }
 
 bool        Engine::init()
@@ -69,7 +50,7 @@ bool        Engine::init()
 
 bool 		Engine::start()
 {
-	if (!_sceneBinded || !_sceneBinded->userStart())
+	if (!getInstance<SceneManager>().startScene())
 		return (false);
 	return (true);
 }
@@ -82,15 +63,17 @@ bool 		Engine::update()
 
 	auto &timer = getInstance<Timer>();
 	auto &inputs = getInstance<Input>();
+	auto &sceneManager = getInstance<SceneManager>();
+	auto time = timer.getElapsed();
 
 	timer.update();
     inputs.clearInputs();
 	context.updateEvents(inputs);
-	_sceneBinded->update(timer.getElapsed());
+	sceneManager.update(time);
 
 	context.flush();
 
-	return (_sceneBinded->userUpdate());
+	return (sceneManager.userUpdate(time));
 }
 
 void 		Engine::stop()
@@ -101,8 +84,5 @@ void 		Engine::stop()
 
 	resources.uninit();
 	renderer.uninit();
-	for (scenesIt it = _scenes.begin(); it != _scenes.end(); ++it)
-		delete it->second;
-	_scenes.clear();
 	context.stop();
 }

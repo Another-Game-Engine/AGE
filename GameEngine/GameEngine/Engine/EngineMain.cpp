@@ -13,6 +13,7 @@
 #include "Demo/DemoScene.hh"
 #include "Utils/PubSub.hpp"
 #include "Context/SdlContext.hh"
+#include "Core/SceneManager.hh"
 
 int			main(int ac, char **av)
 {
@@ -27,10 +28,10 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 
 	// add scene
-	e.addScene(new DemoScene(e), "demo");
+	e.getInstance<SceneManager>().addScene(new DemoScene(e), "demo");
 
 	// bind scene
-	e.bindScene("demo");
+	e.getInstance<SceneManager>().bindScene("demo");
 
 	// lanch engine
 	if (e.start() == false)

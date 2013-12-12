@@ -83,6 +83,7 @@
     <ClCompile Include="Engine\Core\ACamera.cpp" />
     <ClCompile Include="Engine\Core\Material.cpp" />
     <ClCompile Include="Engine\Core\MaterialManager.cpp" />
+    <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="Engine\Components\MaterialComponent.h" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Core\Material.hh" />
+    <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Settings.h" />
     <ClInclude Include="Engine\Entities\EntityManager.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
