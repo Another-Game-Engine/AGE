@@ -1,4 +1,5 @@
 #include "System.h"
+#include "Core/Engine.hh"
 
 bool defaultEntityComparaison(Entity *e1, Entity *e2)
 {
@@ -6,7 +7,8 @@ bool defaultEntityComparaison(Entity *e1, Entity *e2)
 }
 
 System::System(Engine &engine, bool(*comparacomparaisonFunction)(Entity*, Entity*))
-: _collection(comparacomparaisonFunction)
+: PubSub(engine.getInstance<PubSub::Manager>()),
+_collection(comparacomparaisonFunction)
 , _engine(engine)
 {}
 

@@ -1,11 +1,12 @@
 
 #include "Entity.hh"
-
+#include "Core/Engine.hh"
 #include <limits>
 
 size_t Entity::_currentId = 0;
 
 Entity::Entity(Engine &engine) :
+    PubSub(engine.getInstance<PubSub::Manager>()),
     _engine(engine),
 	_id(_currentId++),
 	_flags(0),
