@@ -26,7 +26,7 @@ Entity *Handle::operator->()
 Entity *Handle::get() const
 {
 	static unsigned int max = std::numeric_limits<unsigned int>::max();
-	if (_id == max)
+	if (!_manager || _id == max)
 		return nullptr;
 	return _manager->get(*this);
 }
