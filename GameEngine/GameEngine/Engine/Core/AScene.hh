@@ -12,7 +12,6 @@
 class AScene
 {
 private:
-	SmartPointer<Entity>								_root;
 	ACamera 											*_camera;
 	std::list<SmartPointer<Entity> >                    _collection;
 	std::queue<SmartPointer<Entity> >                   _pool;
@@ -20,14 +19,13 @@ private:
 protected:
 	Engine                                              &_engine;
 private:
-	void 				recomputePositions(SmartPointer<Entity> &father,
+	void 				recomputePositions(Handle &father,
 											bool hasMoved);
 
 public:
 	AScene(Engine &engine);
 	virtual ~AScene();
 
-	SmartPointer<Entity>	const	&getRoot();
 	void 							setCamera(ACamera *camera);
 	ACamera 						*getCamera() const;
 	SmartPointer<Entity>            &createEntity();

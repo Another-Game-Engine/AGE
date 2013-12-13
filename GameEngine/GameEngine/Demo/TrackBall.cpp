@@ -3,7 +3,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "Context/SdlContext.hh"
 
-TrackBall::TrackBall(Engine &engine, SmartPointer<Entity> const &toLook, float dist,
+TrackBall::TrackBall(Engine &engine, Handle toLook, float dist,
 					 float rotatingSpeed, float zoomingSpeed)
 					 : ACamera(engine),
 					 _dist(dist),

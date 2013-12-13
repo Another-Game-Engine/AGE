@@ -15,12 +15,9 @@ Handle EntityManager::createEntity()
 {
 	if (_free.empty())
 	{
-		for (auto i = 0; i < 16; ++i)
-		{
-			_pool.push_back(Entity(_engine));
-			_pool.back().setHandle(Handle(_pool.size() - 1, this));
-			_free.push(_pool.size() - 1);
-		}
+		_pool.push_back(Entity(_engine));
+		_pool.back().setHandle(Handle(_pool.size() - 1, this));
+		_free.push(_pool.size() - 1);
 	}
 	unsigned int index = _free.back();
 	_free.pop();
