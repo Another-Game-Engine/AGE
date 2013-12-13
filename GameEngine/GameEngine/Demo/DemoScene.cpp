@@ -179,13 +179,27 @@ bool 			DemoScene::userStart()
 	//}
 
 	{
-		unsigned int nbPlanet = 150;
+		unsigned int nbPlanet = 350;
+		SmartPointer<Entity> past = nullptr;
 		for (unsigned int i = 0; i < nbPlanet; ++i)
 		{
-			sun->addSon(createPlanet((std::rand() % 200) / 100.0f
-				, (std::rand() % 200) / 100.0f,
-				glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-				glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun"));
+			if (!past.get())
+			{
+				past = createPlanet((std::rand() % 200) / 100.0f
+					, (std::rand() % 200) / 100.0f,
+					glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
+					glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
+				sun->addSon(past);
+			}
+			else
+			{
+				SmartPointer<Entity> p = createPlanet((std::rand() % 200) / 100.0f
+					, (std::rand() % 200) / 100.0f,
+					glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
+					glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
+				past->addSon(p);
+				past = p;
+			}
 		}
 	}
 
