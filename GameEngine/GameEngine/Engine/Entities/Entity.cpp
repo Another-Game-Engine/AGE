@@ -1,7 +1,28 @@
 
 #include "Entity.hh"
 #include "Core/Engine.hh"
+#include "EntityManager.h"
 #include <limits>
+
+
+Handle::Handle(unsigned int id, EntityManager *manager)
+: _id(id), _manager(_manager)
+{}
+
+Handle::~Handle()
+{}
+
+
+const unsigned int Handle::getId() const
+{
+	return _id;
+}
+
+Entity *Handle::operator->()
+{
+	return _manager->get(*this);
+}
+
 
 size_t Entity::_currentId = 0;
 
@@ -12,8 +33,6 @@ Entity::Entity(Engine &engine) :
 	_flags(0),
 	_father(NULL)
 {
-	_tag = DEFAULT_TAG;
-	_layer = DEFAULT_LAYER;
 }
 
 Entity::~Entity()
@@ -28,12 +47,12 @@ Entity::~Entity()
 	_components.clear();
 }
 
-EntityHandle &Entity::getHandle()
+Handle &Entity::getHandle()
 {
 	return _handle;
 }
 
-void Entity::setHandle(EntityHandle &handle)
+void Entity::setHandle(Handle &handle)
 {
 	_handle = handle;
 }

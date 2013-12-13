@@ -14,6 +14,9 @@
 #include "Utils/PubSub.hpp"
 #include "Context/SdlContext.hh"
 #include "Core/SceneManager.hh"
+#include "ResourceManager/ResourceManager.hh"
+#include "Core/Renderer.hh"
+#include "Entities/EntityManager.h"
 
 int			main(int ac, char **av)
 {
@@ -21,7 +24,14 @@ int			main(int ac, char **av)
 
 	// set Rendering context of the engine
 	// you can also set any other dependencies
+	e.setInstance<EntityManager>(&e);
 	e.setInstance<SdlContext, IRenderContext>();
+	e.setInstance<Input>();
+	e.setInstance<Timer>();
+	e.setInstance<Resources::ResourceManager>();
+	e.setInstance<Renderer>();
+	e.setInstance<PubSub::Manager>();
+	e.setInstance<SceneManager>();
 
 	// init engine
 	if (e.init() == false)

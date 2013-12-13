@@ -36,13 +36,13 @@ public:
 		return *(static_cast<T*>(_instances[id]));
 	}
 
-	template <typename T, typename TypeSelector = T>
-	T &setInstance()
+	template <typename T, typename TypeSelector = T, typename ...Args>
+	T &setInstance(Args ...args)
 	{
 		size_t id = typeid(TypeSelector).hash_code();
 		if (_instances.find(id) == std::end(_instances))
 		{
-			T *n = new T();
+			T *n = new T(args...);
 			_instances.insert(std::make_pair(id, n));
 		}
 		return *(static_cast<T*>(_instances[id]));
