@@ -28,6 +28,17 @@ Entity::~Entity()
 	_components.clear();
 }
 
+EntityHandle &Entity::getHandle()
+{
+	return _handle;
+}
+
+void Entity::setHandle(EntityHandle &handle)
+{
+	_handle = handle;
+}
+
+
 glm::mat4 const  		&Entity::getLocalTransform()
 {
 	return (_localTransform);
