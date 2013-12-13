@@ -23,6 +23,13 @@ Entity *Handle::operator->()
 	return _manager->get(*this);
 }
 
+Entity *Handle::get()
+{
+	static unsigned int max = std::numeric_limits<unsigned int>::max();
+	if (_id == max)
+		return nullptr;
+	return _manager->get(*this);
+}
 
 size_t Entity::_currentId = 0;
 

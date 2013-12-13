@@ -16,6 +16,7 @@ public:
 	Handle createEntity();
 	void destroy(const Handle &h);
 	Entity *get(const Handle &h);
+	const Handle &getRoot() const;
 
 private:
 	Engine &_engine;
