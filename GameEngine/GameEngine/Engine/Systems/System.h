@@ -45,13 +45,13 @@ protected:
 	std::set<Handle, bool(*)(Handle, Handle)> _collection;
 	Barcode _code;
 
-	virtual void _componentAdded(Handle e, unsigned int typeId)
+	virtual void _componentAdded(Handle &e, unsigned int typeId)
 	{
 		if (_code.match(e->getCode()))
 			_collection.insert(e);
 	}
 
-	virtual void _componentRemoved(Handle e, unsigned int typeId)
+	virtual void _componentRemoved(Handle &e, unsigned int typeId)
 	{
 		if (!_code.match(e->getCode()))
 			_collection.erase(e);
