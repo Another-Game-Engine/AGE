@@ -36,6 +36,11 @@ bool Handle::operator<(const Handle &o) const
 	return _id < o._id;
 }
 
+bool Handle::operator==(const Handle &o) const
+{
+	return _id == o._id;
+}
+
 size_t Entity::_currentId = 0;
 
 Entity::Entity(Engine &engine) :

@@ -30,7 +30,7 @@ public:
 
 protected:
 
-	std::map<SmartPointer<Material>, std::list<Entity*> > _sorted;
+	std::map<SmartPointer<Material>, std::list<Handle> > _sorted;
 	bool _renderDebugMethod;
 
 	virtual void updateBegin(double time)
@@ -135,7 +135,7 @@ protected:
 	{
 		require<Component::MeshRenderer>();
 		require<Component::ComponentMaterial>();
-		sub("MaterialComponentChanged", [&](Entity *e, SmartPointer<Material> oldMaterial, SmartPointer<Material> newMaterial)
+		sub("MaterialComponentChanged", [&](Handle &e, SmartPointer<Material> oldMaterial, SmartPointer<Material> newMaterial)
 		{
 			if (_collection.find(e) == std::end(_collection) || oldMaterial == nullptr)
 				return;
@@ -149,18 +149,18 @@ protected:
 		});
 	}
 
-	virtual void _componentAdded(Entity *e, unsigned int typeId)
+	virtual void _componentAdded(Handle &e, unsigned int typeId)
 	{
-		if (_code.match(*e) && _collection.find(e) == std::end(_collection))
+		if (_code.match(e->getCode()) && _collection.find(e) == std::end(_collection))
 		{
 			_collection.insert(e);
 			_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial()].push_back(e);
 		}
 	}
 
-	virtual void _componentRemoved(Entity *e, unsigned int typeId)
+	virtual void _componentRemoved(Handle &e, unsigned int typeId)
 	{
-		if (!_code.match(*e) && _collection.find(e) != std::end(_collection))
+		if (!_code.match(e->getCode()) && _collection.find(e) != std::end(_collection))
 		{
 			_collection.erase(e);
 			if (e->getComponent<Component::ComponentMaterial>() != nullptr)

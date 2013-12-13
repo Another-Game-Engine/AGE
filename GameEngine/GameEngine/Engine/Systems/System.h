@@ -5,19 +5,18 @@
 #include	"Utils/Barcode.h"
 #include    "Utils/PubSub.hpp"
 #include    <Utils/SmartPointer.hh>
+#include    <Entities/Entity.hh>
 
-class Entity;
 class Engine;
 
-bool defaultEntityComparaison(Entity *e1, Entity *e2);
+bool defaultEntityComparaison(Handle e1, Handle e2);
 
 class	System : public PubSub
 {
 public:
-	System(Engine &engine, bool(*)(Entity*, Entity*) = defaultEntityComparaison);
+	System(Engine &engine, bool(*)(Handle, Handle) = defaultEntityComparaison);
 	virtual ~System();
 	void update(double time);
-	void entityUpdated(Entity &entity);
 	void init();
 	const Barcode &getCode() const;
 
@@ -25,10 +24,10 @@ public:
 	void require()
 	{
 		_code.add<T>();
-		sub(std::string("componentAdded" + std::to_string(T::getTypeId())), [&](Entity *entity){
+		sub(std::string("componentAdded" + std::to_string(T::getTypeId())), [&](Handle entity){
 			_componentAdded(entity, T::getTypeId());
 		});
-		sub(std::string("componentRemoved" + std::to_string(T::getTypeId())), [&](Entity *entity){
+		sub(std::string("componentRemoved" + std::to_string(T::getTypeId())), [&](Handle entity){
 			_componentRemoved(entity, T::getTypeId());
 		});
 	}
@@ -43,18 +42,18 @@ public:
 
 
 protected:
-	std::set<Entity*, bool(*)(Entity*, Entity*)> _collection;
+	std::set<Handle, bool(*)(Handle, Handle)> _collection;
 	Barcode _code;
 
-	virtual void _componentAdded(Entity *e, unsigned int typeId)
+	virtual void _componentAdded(Handle e, unsigned int typeId)
 	{
-		if (_code.match(*e))
+		if (_code.match(e->getCode()))
 			_collection.insert(e);
 	}
 
-	virtual void _componentRemoved(Entity *e, unsigned int typeId)
+	virtual void _componentRemoved(Handle e, unsigned int typeId)
 	{
-		if (!_code.match(*e))
+		if (!_code.match(e->getCode()))
 			_collection.erase(e);
 	}
 
