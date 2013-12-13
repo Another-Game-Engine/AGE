@@ -6,7 +6,7 @@
 
 
 Handle::Handle(unsigned int id, EntityManager *manager)
-: _id(id), _manager(_manager)
+: _id(id), _manager(manager)
 {}
 
 Handle::~Handle()
@@ -23,12 +23,17 @@ Entity *Handle::operator->()
 	return _manager->get(*this);
 }
 
-Entity *Handle::get()
+Entity *Handle::get() const
 {
 	static unsigned int max = std::numeric_limits<unsigned int>::max();
 	if (_id == max)
 		return nullptr;
 	return _manager->get(*this);
+}
+
+bool Handle::operator<(const Handle &o) const
+{
+	return _id < o._id;
 }
 
 size_t Entity::_currentId = 0;
@@ -38,18 +43,16 @@ Entity::Entity(Engine &engine) :
     _engine(engine),
 	_id(_currentId++),
 	_flags(0),
-	_father(NULL)
+	_father(engine.getInstance<EntityManager>().getRoot())
 {
 }
 
 Entity::~Entity()
 {
-	t_sonsList::iterator 	it = _sons.begin();
-
-	while (it != _sons.end())
+	auto root = _engine.getInstance<EntityManager>().getRoot();
+	for (auto e : _sons)
 	{
-		it->second->setFather(NULL);
-		++it;
+		e->setFather(root);
 	}
 	_components.clear();
 }
@@ -113,98 +116,56 @@ void 					Entity::removeFlags(size_t flags)
 	_flags ^= flags;
 }
 
-Entity 				*Entity::getFather() const
+const Handle 				&Entity::getFather() const
 {
-	return (_father);
+	return _father;
 }
 
-void 						Entity::setFather(Entity *father)
+void 						Entity::setFather(Handle &father)
 {
 	_flags |= HAS_MOVED;
 	_father = father;
 }
 
-void 						Entity::addSon(SmartPointer<Entity> const &son)
-{
-	t_sonsList::iterator 	it;
-	size_t 					sonId = son->getId();
-
-	if ((it = _sons.find(sonId)) == _sons.end())
-	{
-		son->setFather(this);
-		_sons[sonId] = son;
-	}
-}
-
-void 						Entity::removeSon(size_t sonId)
+void 						Entity::addSon(Handle &son)
 {
 	t_sonsList::iterator 	it;
 
-  	if ((it = _sons.find(sonId)) != _sons.end())
-	{
-		it->second->setFather(NULL);
-		_sons.erase(it);
-	}
+	_sons.insert(son);
 }
 
-SmartPointer<Entity> 	Entity::getSon(size_t sonId)
+void 						Entity::removeSon(Handle &son)
 {
-	t_sonsList::iterator 	it;
-
-	if ((it = _sons.find(sonId)) != _sons.end())
-		return (it->second);
-	return (SmartPointer<Entity>(NULL));
-}
-
-SmartPointer<Entity> 	Entity::getSonRec(size_t sonId)
-{
-	t_sonsList::iterator	e = _sons.begin();
-
-	while (e != _sons.end())
-	{
-		SmartPointer<Entity>	res;
-
-		res = e->second->getSon(sonId);
-		if (res != SmartPointer<Entity>(NULL))
-			return (res);
-		else
-			e->second->getSonRec(sonId);
-		++e;
-	}
-	return (SmartPointer<Entity>(NULL));
+	_sons.erase(son);
 }
 
 SmartPointer<Entity::t_EntityList> 	Entity::getSonsByFlags(size_t flags, GetFlags op)
 {
 	SmartPointer<Entity::t_EntityList>	sons = new Entity::t_EntityList;
-	t_sonsList::iterator				e = _sons.begin();
 
 	if (op == GetFlags::ONLY_THIS_FLAGS)
 	{
-		while (e != _sons.end())
+		for (auto e : _sons)
 		{
-			if (((e->second->getFlags() & flags) == flags) &&
-				((e->second->getFlags() | flags) == flags))
-				sons->push_back(e->second);
-			++e;
+			if (((e->getFlags() & flags) == flags) &&
+				((e->getFlags() | flags) == flags))
+				sons->push_back(e);
 		}
 	}
 	else if (op == GetFlags::THIS_FLAGS)
 	{
-		while (e != _sons.end())
+		for (auto e : _sons)
 		{
-			if ((e->second->getFlags() & flags) == flags)
-				sons->push_back(e->second);
-			++e;
+			if ((e->getFlags() & flags) == flags)
+				sons->push_back(e);
 		}
 	}
 	else if (op == GetFlags::NOT_THIS_FLAGS)
 	{
-		while (e != _sons.end())
+		for (auto e : _sons)
 		{
-			if ((e->second->getFlags() & flags) == 0)
-				sons->push_back(e->second);
-			++e;
+			if ((e->getFlags() & flags) == 0)
+				sons->push_back(e);
 		}
 	}
 	return (sons);

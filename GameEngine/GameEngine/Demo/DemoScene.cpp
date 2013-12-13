@@ -15,6 +15,8 @@
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
 #include "ResourceManager/ResourceManager.hh"
+#include <Core/Engine.hh>
+#include <Entities/EntityManager.h>
 
 #include <SDL\SDL.h>
 
@@ -26,14 +28,15 @@ DemoScene::~DemoScene(void)
 {
 }
 
-SmartPointer<Entity>	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
+Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 												glm::vec3 &pos, glm::vec3 &scale,
 												std::string const &shader,
 												std::string const &tex1, std::string const &tex2, std::string const &tex3,
 												std::string const &tex4)
 {
-	SmartPointer<Entity>		p = new Entity(_engine);
-	SmartPointer<Entity>		e = new Entity(_engine);
+	auto &m = _engine.getInstance<EntityManager>();
+	auto p = m.createEntity();
+	auto e = m.createEntity();
 
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
@@ -147,14 +150,15 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "../Assets/skyboxSpace");
 
-	SmartPointer<Entity> sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
-	SmartPointer<Entity> earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
-	SmartPointer<Entity> moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
+	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
+	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
+	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
 
 	//earth->setFather(_engine.getInstance<EntityManager>().getRoot());
-	getRoot()->addSon(earth);
-	earth->getSonsBegin()->second->addSon(moon);
-	getRoot()->addSon(sun);
+//---> canceled to replace by
+	//getRoot()->addSon(earth);
+	//earth->getSonsBegin()->second->addSon(moon);
+	//getRoot()->addSon(sun);
 
 	// Generating a lot of planet for performance test
 	//
@@ -181,7 +185,7 @@ bool 			DemoScene::userStart()
 
 	{
 		unsigned int nbPlanet = 350;
-		SmartPointer<Entity> past = nullptr;
+		Handle past = _engine.getInstance<EntityManager>().getRoot();
 		for (unsigned int i = 0; i < nbPlanet; ++i)
 		{
 			if (!past.get())
@@ -194,7 +198,7 @@ bool 			DemoScene::userStart()
 			}
 			else
 			{
-				SmartPointer<Entity> p = createPlanet((std::rand() % 200) / 100.0f
+				Handle p = createPlanet((std::rand() % 200) / 100.0f
 					, (std::rand() % 200) / 100.0f,
 					glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
 					glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
@@ -214,7 +218,7 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	setCamera(new TrackBall(_engine, earth->getSonsBegin()->second, 50, 3, 1));
+	setCamera(new TrackBall(_engine, *(earth->getSonsBegin()), 50, 3, 1));
 
 	std::string		vars[] = 
 	{

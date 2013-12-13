@@ -16,13 +16,15 @@
 class Engine;
 class EntityManager;
 
-struct Handle
+class Handle
 {
+public:
 	Handle(unsigned int id = 0, EntityManager *manager = nullptr);
 	~Handle();
 	const unsigned int getId() const;
 	Entity *operator->();
-	Entity *get();
+	Entity *get() const;
+	bool operator<(const Handle &o) const;
 private:
 	unsigned int _id;
 	EntityManager *_manager;
@@ -46,8 +48,8 @@ public:
 		HAS_MOVED = 1
 	};
 
-	typedef std::map<size_t, SmartPointer<Entity> >						t_sonsList;
-	typedef std::list<SmartPointer<Entity> >							t_EntityList;
+	typedef std::set<Handle>						t_sonsList;
+	typedef std::list<Handle>							t_EntityList;
 	typedef std::vector<SmartPointer<Component::Base> >             	t_ComponentsList;
 
 	Handle &getHandle();
@@ -61,18 +63,22 @@ private:
 	glm::mat4 			_localTransform;
 	glm::mat4 			_globalTransform;
 
-	Entity   			*_father;
+	Handle   			_father;
 	t_sonsList 			_sons;
 	t_ComponentsList	_components;
-
-	Entity(Entity const &oth);
-	Entity 			&operator=(Entity const &oth);
 
 	Barcode _code;
 
 public:
 	Entity(Engine &engine);
 	virtual ~Entity();
+
+	//Entity 			&operator=(Entity const &oth){}
+	//Entity(Entity const &oth)
+	//	: PubSub(oth._engine.getInstance<PubSub::Manager>()),
+	//	_engine(oth._engine)
+	//{
+	//}
 
 	glm::mat4 const  		&getLocalTransform();
 	glm::mat4   			&setLocalTransform();
@@ -87,19 +93,30 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	Entity 			    	*getFather() const;
-	void 					setFather(Entity *father);
+	const Handle	    	&getFather() const;
+	void 					setFather(Handle &father);
 
-	void 					addSon(SmartPointer<Entity> const &son);
-	void 					removeSon(size_t sonId);
-	SmartPointer<Entity> 	getSon(size_t sonId);
-	SmartPointer<Entity> 	getSonRec(size_t sonId);
+	void 					addSon(Handle &son);
+	void 					removeSon(Handle &son);
 
 	SmartPointer<t_EntityList> 	getSonsByFlags(size_t flags, GetFlags op);
 
 	t_sonsList::iterator 		getSonsBegin();
 	t_sonsList::iterator 		getSonsEnd();
 	Barcode &getCode();
+
+
+	////////////////////////////
+	//
+	//
+	// COMPONENTS OPETATIONS
+	//
+	//
+	//
+
+
+
+
 	bool hasComponent(unsigned int componentId) const;
 
 

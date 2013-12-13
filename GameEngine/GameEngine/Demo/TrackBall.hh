@@ -11,10 +11,10 @@ private:
 	float					_dist;
 	float					_rotateSpeed, _zoomSpeed;
 	glm::vec2				_angles;
-	SmartPointer<Entity>	_toLook;
+	Handle              	_toLook;
 
 public:
-	TrackBall(Engine &engine, SmartPointer<Entity> const &toLook, float dist,
+	TrackBall(Engine &engine, Handle toLook, float dist,
 			  float rotatingSpeed, float zoomingSpeed);
 	virtual ~TrackBall(void);
 
