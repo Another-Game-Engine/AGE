@@ -8,33 +8,38 @@ _engine(*engine),
 _unique(Handle(std::numeric_limits<unsigned int>::max(), nullptr))
 {}
 
-	EntityManager::~EntityManager()
-	{}
+EntityManager::~EntityManager()
+{}
 
-	Handle EntityManager::createEntity()
+Handle EntityManager::createEntity()
+{
+	if (_free.empty())
 	{
-		if (_free.empty())
+		for (auto i = 0; i < 16; ++i)
 		{
-			for (auto i = 0; i < 16; ++i)
-			{
-				_pool.push_back(Entity(_engine));
-				_pool.back().setHandle(Handle(_pool.size() - 1, this));
-				_free.push(_pool.size() - 1);
-			}
+			_pool.push_back(Entity(_engine));
+			_pool.back().setHandle(Handle(_pool.size() - 1, this));
+			_free.push(_pool.size() - 1);
 		}
-		unsigned int index = _free.back();
-		_free.pop();
-		return _pool[index].getHandle();
 	}
+	unsigned int index = _free.back();
+	_free.pop();
+	return _pool[index].getHandle();
+}
 
-	void EntityManager::destroy(const Handle &h)
-	{
-		_free.push(h.getId());
-	}
+void EntityManager::destroy(const Handle &h)
+{
+	_free.push(h.getId());
+}
 
-	Entity *EntityManager::get(const Handle &h)
-	{
-		if (h.getId() >= _pool.size())
-			return nullptr;
-		return &_pool[h.getId()];
-	}
+Entity *EntityManager::get(const Handle &h)
+{
+	if (h.getId() >= _pool.size())
+		return nullptr;
+	return &_pool[h.getId()];
+}
+
+const Handle &EntityManager::getRoot() const
+{
+	return _unique;
+}

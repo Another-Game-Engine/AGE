@@ -22,6 +22,7 @@ struct Handle
 	~Handle();
 	const unsigned int getId() const;
 	Entity *operator->();
+	Entity *get();
 private:
 	unsigned int _id;
 	EntityManager *_manager;
