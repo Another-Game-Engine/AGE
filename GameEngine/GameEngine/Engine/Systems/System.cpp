@@ -1,12 +1,12 @@
 #include "System.h"
 #include "Core/Engine.hh"
 
-bool defaultEntityComparaison(Entity *e1, Entity *e2)
+bool defaultEntityComparaison(Handle e1, Handle e2)
 {
 	return e1 < e2;
 }
 
-System::System(Engine &engine, bool(*comparacomparaisonFunction)(Entity*, Entity*))
+System::System(Engine &engine, bool(*comparacomparaisonFunction)(Handle, Handle))
 : PubSub(engine.getInstance<PubSub::Manager>()),
 _collection(comparacomparaisonFunction)
 , _engine(engine)

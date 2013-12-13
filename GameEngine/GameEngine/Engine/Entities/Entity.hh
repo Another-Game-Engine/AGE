@@ -25,6 +25,7 @@ public:
 	Entity *operator->();
 	Entity *get() const;
 	bool operator<(const Handle &o) const;
+	bool operator==(const Handle &o) const;
 private:
 	unsigned int _id;
 	EntityManager *_manager;
@@ -143,7 +144,7 @@ public:
 		_code.add(id);
 		_components[id] = tmp;
 		tmp->setFather(this);
-		pub(std::string("componentAdded" + std::to_string(id)), this);
+		pub(std::string("componentAdded" + std::to_string(id)), _handle);
 		return tmp;
 	}
 
@@ -165,7 +166,7 @@ public:
 		code_.remove(id);
 		delete _components[id];
 		_components[id]	= nullptr;
-		pub(std::string("componentRemoved" + std::to_string(id)), this);
+		pub(std::string("componentRemoved" + std::to_string(id)), _handle);
 		// component remove -> signal to system
 	}
 
