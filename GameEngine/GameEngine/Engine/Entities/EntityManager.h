@@ -1,9 +1,8 @@
 #ifndef   __ENTITY_MANAGER_H__
 # define  __ENTITY_MANAGER_H__
 
-#include <set>
+#include <vector>
 #include "Entity.hh"
-#include "Utils/SmartPointer.hh"
 
 class EntityManager
 {
