@@ -11,6 +11,7 @@
 #include "OpenGL/Shader.hh"
 #include "Utils/Barcode.h"
 #include "Utils/PubSub.hpp"
+#include "EntityManager.h"
 
 #include "glm/glm.hpp"
 
@@ -20,7 +21,7 @@ class Entity : public PubSub
 {
 private:
 	static size_t 					_currentId;
-
+	EntityHandle                    _handle;
 public:
 	enum	GetFlags
 	{
@@ -37,6 +38,9 @@ public:
 	typedef std::map<size_t, SmartPointer<Entity> >						t_sonsList;
 	typedef std::list<SmartPointer<Entity> >							t_EntityList;
 	typedef std::vector<SmartPointer<Component::Base> >             	t_ComponentsList;
+
+	EntityHandle &getHandle();
+	void setHandle(EntityHandle &handle);
 
 private:
 	Engine              &_engine;
