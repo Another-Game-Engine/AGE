@@ -38,6 +38,7 @@
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Components\ComponentMaterial.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
+    <ClCompile Include="Engine\Entities\EntityManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />

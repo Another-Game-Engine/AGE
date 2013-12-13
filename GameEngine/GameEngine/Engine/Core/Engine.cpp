@@ -13,14 +13,6 @@
 Engine::Engine()
 {
 
-	// DEFINE BASED DEPENDENCIES
-
-	setInstance<Input>();
-	setInstance<Timer>();
-	setInstance<Resources::ResourceManager>();
-	setInstance<Renderer>();
-	setInstance<PubSub::Manager>();
-	setInstance<SceneManager>();
 }
 
 Engine::~Engine()

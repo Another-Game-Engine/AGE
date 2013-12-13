@@ -11,17 +11,27 @@
 #include "OpenGL/Shader.hh"
 #include "Utils/Barcode.h"
 #include "Utils/PubSub.hpp"
-#include "EntityManager.h"
-
 #include "glm/glm.hpp"
 
 class Engine;
+class EntityManager;
+
+struct Handle
+{
+	Handle(unsigned int id = 0, EntityManager *manager = nullptr);
+	~Handle();
+	const unsigned int getId() const;
+	Entity *operator->();
+private:
+	unsigned int _id;
+	EntityManager *_manager;
+};
 
 class Entity : public PubSub
 {
 private:
 	static size_t 					_currentId;
-	EntityHandle                    _handle;
+	Handle                          _handle;
 public:
 	enum	GetFlags
 	{
@@ -39,8 +49,8 @@ public:
 	typedef std::list<SmartPointer<Entity> >							t_EntityList;
 	typedef std::vector<SmartPointer<Component::Base> >             	t_ComponentsList;
 
-	EntityHandle &getHandle();
-	void setHandle(EntityHandle &handle);
+	Handle &getHandle();
+	void setHandle(Handle &handle);
 
 private:
 	Engine              &_engine;
@@ -57,8 +67,6 @@ private:
 	Entity(Entity const &oth);
 	Entity 			&operator=(Entity const &oth);
 
-	std::string _tag;
-	std::string _layer;
 	Barcode _code;
 
 public:
