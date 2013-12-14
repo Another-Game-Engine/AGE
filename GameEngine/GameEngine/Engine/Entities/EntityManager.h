@@ -13,14 +13,16 @@ class EntityManager
 public:
 	EntityManager(Engine *engine);
 	virtual ~EntityManager();
-	Handle createEntity();
+	// IT'S IMPORTANT TO INIT ENTITY MANAGER !
+	void init();
+	Handle &createEntity();
 	void destroy(const Handle &h);
 	Entity *get(const Handle &h);
-	const Handle &getRoot() const;
+	Handle &getRoot();
 
 private:
 	Engine &_engine;
-	const Handle &_unique;
+	Handle &_unique;
 	std::vector<Entity> _pool;
 	std::queue<unsigned int> _free;
 };

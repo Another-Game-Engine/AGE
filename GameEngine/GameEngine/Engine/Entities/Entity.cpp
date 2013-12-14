@@ -41,6 +41,20 @@ bool Handle::operator==(const Handle &o) const
 	return _id == o._id;
 }
 
+Handle::Handle(const Handle &o)
+{
+	_id = o._id;
+	_manager = o._manager;
+}
+
+Handle &Handle::operator=(const Handle &o)
+{
+	_id = o._id;
+	_manager = o._manager;
+	return *this;
+}
+
+
 size_t Entity::_currentId = 0;
 
 Entity::Entity(Engine &engine) :
