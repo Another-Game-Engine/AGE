@@ -26,6 +26,8 @@ public:
 	Entity *get() const;
 	bool operator<(const Handle &o) const;
 	bool operator==(const Handle &o) const;
+	Handle(const Handle &o);
+	Handle &operator=(const Handle &o);
 private:
 	unsigned int _id;
 	EntityManager *_manager;

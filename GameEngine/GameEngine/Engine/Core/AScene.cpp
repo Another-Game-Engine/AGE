@@ -1,6 +1,7 @@
 
 #include "AScene.hh"
 #include <Core/Engine.hh>
+#include <Entities/EntityManager.h>
 
 AScene::AScene(Engine &engine) :
 	_camera(NULL),
@@ -18,6 +19,8 @@ AScene::~AScene()
 void 							AScene::recomputePositions(Handle &father,
 															bool hasMoved)
 {
+	if (!father.get())
+		return;
 	Entity::t_sonsList::iterator 	it = father->getSonsBegin();
 
 	while (it != father->getSonsEnd())
@@ -50,5 +53,5 @@ void 							AScene::update(double time)
 		e.second->update(time);
 	}
 	//_root->computeGlobalTransform(glm::mat4(1));
-	//recomputePositions(_root, false);
+	//recomputePositions(_engine.getInstance<EntityManager>().getRoot(), false);
 }

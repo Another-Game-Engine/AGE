@@ -154,7 +154,9 @@ bool 			DemoScene::userStart()
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
 	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
 
-	//earth->setFather(_engine.getInstance<EntityManager>().getRoot());
+	earth->setFather(_engine.getInstance<EntityManager>().getRoot());
+	earth->getSonsBegin()->get()->addSon(moon);
+	sun->setFather(_engine.getInstance<EntityManager>().getRoot());
 //---> canceled to replace by
 	//getRoot()->addSon(earth);
 	//earth->getSonsBegin()->second->addSon(moon);
@@ -184,7 +186,8 @@ bool 			DemoScene::userStart()
 	//}
 
 	{
-		unsigned int nbPlanet = 350;
+//		unsigned int nbPlanet = 350;
+		unsigned int nbPlanet = 2;
 		Handle past = _engine.getInstance<EntityManager>().getRoot();
 		for (unsigned int i = 0; i < nbPlanet; ++i)
 		{
