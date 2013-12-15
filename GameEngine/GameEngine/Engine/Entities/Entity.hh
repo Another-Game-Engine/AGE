@@ -4,7 +4,6 @@
 
 #include <map>
 
-#include "Components/Component.hpp"
 #include "Core/Input.hh"
 #include "Core/Timer.hh"
 #include "Utils/SmartPointer.hh"
@@ -12,9 +11,11 @@
 #include "Utils/Barcode.h"
 #include "Utils/PubSub.hpp"
 #include "glm/glm.hpp"
+#include <Components/Component.hpp>
 
 class Engine;
 class EntityManager;
+class Handle;
 
 class Handle
 {
@@ -52,7 +53,7 @@ public:
 	};
 
 	typedef std::set<Handle>						t_sonsList;
-	typedef std::list<Handle>							t_EntityList;
+	typedef std::list<Handle>						t_EntityList;
 	typedef std::vector<SmartPointer<Component::Base> >             	t_ComponentsList;
 
 	Handle &getHandle();
@@ -116,62 +117,8 @@ public:
 	//
 	//
 	//
-
-
-
-
 	bool hasComponent(unsigned int componentId) const;
-
-
-	template <typename T>
-	bool hasComponent() const
-	{
-		return code_.isSet<T>();
-	}
-
-	template <typename T, typename... Args>
-	SmartPointer<T> addComponent(Args ...args)
-	{
-		unsigned int id = T::getTypeId();
-		if (hasComponent(id))
-		{
-			return static_cast<SmartPointer<T> >(_components[id]);
-		}
-		else if (_components.size() <= id)
-		{
-			_components.resize(id + 10);
-		}
-		SmartPointer<T> tmp(new T(_engine, args...));
-		// todo assert if new T fail
-		_code.add(id);
-		_components[id] = tmp;
-		tmp->setFather(this);
-		pub(std::string("componentAdded" + std::to_string(id)), _handle);
-		return tmp;
-	}
-
-	template <typename T>
-	SmartPointer<T> getComponent() const
-	{
-		unsigned int id = T::getTypeId();
-		if (!hasComponent(id))
-			return nullptr;
-		return static_cast<SmartPointer<T> >(_components[id]);
-	}
-
-	template <typename T>
-	void removeComponent()
-	{
-		unsigned int id = T::getTypeId();
-		if (!hasComponent(id))
-			return;
-		code_.remove(id);
-		delete _components[id];
-		_components[id]	= nullptr;
-		pub(std::string("componentRemoved" + std::to_string(id)), _handle);
-		// component remove -> signal to system
-	}
-
+    #include "Entity.hpp"
 };
 
 #endif

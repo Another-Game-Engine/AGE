@@ -191,6 +191,7 @@
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
+    <ClInclude Include="Engine\Entities\Entity.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />

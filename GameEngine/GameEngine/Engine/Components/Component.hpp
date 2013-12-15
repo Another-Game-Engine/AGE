@@ -2,9 +2,9 @@
 #define		__COMPONENT_HPP__
 
 #include <string>
+#include <Entities/Entity.hh>
 
-class	Entity;
-class   Engine;
+class Engine;
 
 namespace	Component
 {
@@ -20,23 +20,25 @@ namespace	Component
 		Base(Engine &engine, const std::string &name = "NoName")
 		: _engine(engine)
 		, _name(name)
-		, _father(nullptr)
+		, _entity(Handle(std::numeric_limits<unsigned int>::max(), nullptr))
 		{
 		}
+
 		virtual ~Base(){}
+
 		virtual Base &operator=(const Base &other)
 		{
 			return *this;
 		}
 
-		void			setFather(Entity *father)
+		void			setEntity(Handle &entity)
 		{
-			_father = father;
+			_entity = entity;
 		}
 
-		inline Entity		*getFather() const
+		Handle		&getEntity()
 		{
-			return _father;
+			return _entity;
 		}
 
 		inline std::string const &getName() const
@@ -47,7 +49,7 @@ namespace	Component
 	protected:
 		Engine              &_engine;
 		std::string         _name;
-		Entity				*_father;
+		Handle				_entity;
 	};
 
 	template <class T>

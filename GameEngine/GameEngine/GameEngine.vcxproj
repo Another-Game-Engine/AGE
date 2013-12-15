@@ -120,6 +120,7 @@
     <ClInclude Include="Engine\Core\Material.hh" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Settings.h" />
+    <ClInclude Include="Engine\Entities\Entity.hpp" />
     <ClInclude Include="Engine\Entities\EntityManager.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />

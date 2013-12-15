@@ -2,6 +2,7 @@
 #include "Entity.hh"
 #include "Core/Engine.hh"
 #include "EntityManager.h"
+#include "Components/Component.hpp"
 #include <limits>
 
 
