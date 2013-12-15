@@ -19,27 +19,61 @@ namespace Component
 		virtual ~GraphNode()
 		{}
 
-		const Handle	    	&getFather() const
+		const Handle	    	&getParent() const
 		{
-			return _father;
+			return _parent;
 		}
 
-		void 					setFather(Handle &father)
+		void 					removeSon(Handle &son, bool notify = true)
+		{
+			_childs.erase(son);
+			if (notify && son->hasComponent<Component::GraphNode>())
+			{
+				son->getComponent<Component::GraphNode>()->removeParent(false);
+			}
+		}
+
+		void 					setParent(Handle &father, bool notify = true)
 		{
 			// TODO CHECK IF FATHER != NULL IF NOT SO, REMOVE FROM CHILDRENS
-			if ()
+			if (_parent.get() && _parent->hasComponent<Component::GraphNode>())
+			{
+				_parent->getComponent<Component::GraphNode>()->removeSon(_father, false);
+			}
+			_parent = father;
+			if (notify && father->hasComponent<Component::GraphNode>())
+				father->getComponent<Component::GraphNode>()->addSon(_father, false);
 		}
 
-	void 					addSon(Handle &son);
-	void 					removeSon(Handle &son);
+		void 					addSon(Handle &son, bool notify = true)
+		{
+			_childs.insert(son);
+			if (notify && son->hasComponent<Component::GraphNode>())
+			{
+				son->getComponent<Component::GraphNode>()->setParent(_father, false);
+			}
+		}
 
-	SmartPointer<t_EntityList> 	getSonsByFlags(size_t flags, GetFlags op);
+		void                    removeParent(bool notify = true)
+		{
+			if (notify && _parent.get() && _parent->hasComponent<Component::GraphNode>())
+			{
+				_parent->getComponent<Component::GraphNode>()->removeSon(_father);
+			}
+			auto key = PubSubKey("graphNodeSetAsRoot");
+			_father->pub(key, _father);
+			_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
+		}
 
-	t_sonsList::iterator 		getSonsBegin();
-	t_sonsList::iterator 		getSonsEnd();
+	//SmartPointer<t_EntityList> 	getSonsByFlags(size_t flags, Entity::GetFlags op);
+
+	//t_sonsList::iterator 		getSonsBegin();
+	//t_sonsList::iterator 		getSonsEnd();
 	private:
-		bool _isRoot;
-		Handle _father;
+		Handle _parent;
+		std::set<Handle> _childs;
+
+
 	};
 }
 
