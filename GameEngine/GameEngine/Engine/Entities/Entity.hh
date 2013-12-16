@@ -50,7 +50,6 @@ private:
 	glm::mat4 			_localTransform;
 	glm::mat4 			_globalTransform;
 
-	Handle   			_father;
 	t_sonsList 			_sons;
 	t_ComponentsList	_components;
 
