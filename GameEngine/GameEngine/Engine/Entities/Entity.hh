@@ -105,7 +105,7 @@ public:
 	template <typename T>
 	bool hasComponent() const
 	{
-		return code_.isSet<T>();
+		return _code.isSet<T>();
 	}
 
 	template <typename T, typename... Args>
