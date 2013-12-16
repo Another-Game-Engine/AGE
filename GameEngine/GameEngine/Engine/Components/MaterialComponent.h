@@ -8,18 +8,18 @@
 
 namespace Component
 {
-	class ComponentMaterial : public Component::ComponentBase<ComponentMaterial>
+	class MaterialComponent : public Component::ComponentBase<MaterialComponent>
 	{
 	private:
 		SmartPointer<Material>             _material;
 
-		ComponentMaterial();
-		ComponentMaterial(ComponentMaterial const &);
-		ComponentMaterial                  &operator=(ComponentMaterial const &);
+		MaterialComponent();
+		MaterialComponent(MaterialComponent const &);
+		MaterialComponent                  &operator=(MaterialComponent const &);
 	public:
-		ComponentMaterial(Engine &engine, Handle &entity, std::string const &name);
-		ComponentMaterial(Engine &engine, Handle &entity, SmartPointer<Material> material);
-		virtual                            ~ComponentMaterial(void);
+		MaterialComponent(Engine &engine, Handle &entity, std::string const &name);
+		MaterialComponent(Engine &engine, Handle &entity, SmartPointer<Material> material);
+		virtual                            ~MaterialComponent(void);
 
 		bool                				setMaterial(std::string const &name);
 		SmartPointer<Material>              getMaterial() const;

@@ -134,7 +134,7 @@ protected:
 	virtual void initialize()
 	{
 		require<Component::MeshRenderer>();
-		require<Component::ComponentMaterial>();
+		require<Component::MaterialComponent>();
 		sub("MaterialComponentChanged", [&](Handle &e, SmartPointer<Material> oldMaterial, SmartPointer<Material> newMaterial)
 		{
 			if (_collection.find(e) == std::end(_collection) || oldMaterial == nullptr)
@@ -154,7 +154,7 @@ protected:
 		if (_code.match(e->getCode()) && _collection.find(e) == std::end(_collection))
 		{
 			_collection.insert(e);
-			_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial()].push_back(e);
+			_sorted[e->getComponent<Component::MaterialComponent>()->getMaterial()].push_back(e);
 		}
 	}
 
@@ -163,9 +163,9 @@ protected:
 		if (!_code.match(e->getCode()) && _collection.find(e) != std::end(_collection))
 		{
 			_collection.erase(e);
-			if (e->getComponent<Component::ComponentMaterial>() != nullptr)
+			if (e->getComponent<Component::MaterialComponent>() != nullptr)
 			{
-				_sorted[e->getComponent<Component::ComponentMaterial>()->getMaterial()].remove(e);
+				_sorted[e->getComponent<Component::MaterialComponent>()->getMaterial()].remove(e);
 			}
 		}
 	}

@@ -50,7 +50,7 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	materialPlanet->pushShader(shader);
 
-	e->addComponent<Component::ComponentMaterial>(std::string("material:planet_" + shader));
+	e->addComponent<Component::MaterialComponent>(std::string("material:planet_" + shader));
 
 	//r->addMaterial(materialPlanet);
 	r->addTexture(tex1, 0);
@@ -158,15 +158,7 @@ bool 			DemoScene::userStart()
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
 	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
 
-	auto ttt = earth.get();
-	auto iii = ttt->getComponent<Component::GraphNode>();
-	auto jjj = iii->getSonsBegin();
-
 	earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
-//---> canceled to replace by
-	//getRoot()->addSon(earth);
-	//earth->getSonsBegin()->second->addSon(moon);
-	//getRoot()->addSon(sun);
 
 	// Generating a lot of planet for performance test
 	//
@@ -174,44 +166,20 @@ bool 			DemoScene::userStart()
 
 
 	// !!!! THIS CODE CAUSE A STACKOVERFLOW !!!
-	//{
-	//	unsigned int nbPlanet = 265;
-	//	SmartPointer<Entity> planets[265];
-
-	//	for (unsigned int i = 0; i < nbPlanet; ++i)
-	//	{
-	//		planets[i] = createPlanet((std::rand() % 200) / 100.0f
-	//			, (std::rand() % 200) / 100.0f,
-	//			glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-	//			glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
-	//		if (i == 0)
-	//			sun->addSon(planets[i]);
-	//		else
-	//			planets[i - 1]->addSon(planets[i]);
-	//	}
-	//}
 	{
-		unsigned int nbPlanet = 350;
-		Handle past;
+		unsigned int nbPlanet = 70;
+		Handle planets[70];
+
 		for (unsigned int i = 0; i < nbPlanet; ++i)
 		{
-			if (!past.get())
-			{
-				past = createPlanet((std::rand() % 200) / 100.0f
-					, (std::rand() % 200) / 100.0f,
-					glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-					glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
-				sun->getComponent<Component::GraphNode>()->addSon(past);
-			}
+			planets[i] = createPlanet((std::rand() % 200) / 100.0f
+				, (std::rand() % 200) / 100.0f,
+				glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
+				glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
+			if (i == 0)
+				sun->getComponent<Component::GraphNode>()->addSon(planets[i]);
 			else
-			{
-				Handle p = createPlanet((std::rand() % 200) / 100.0f
-					, (std::rand() % 200) / 100.0f,
-					glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-					glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
-				past->getComponent<Component::GraphNode>()->addSon(p);
-				past = p;
-			}
+				planets[i - 1]->getComponent<Component::GraphNode>()->addSon(planets[i]);
 		}
 	}
 
