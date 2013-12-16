@@ -4,15 +4,15 @@
 
 namespace Component
 {
-	ComponentMaterial::ComponentMaterial(Engine &engine, std::string const &name)
-		: ComponentBase<ComponentMaterial>(engine, "MaterialCpt"),
+	ComponentMaterial::ComponentMaterial(Engine &engine, Handle &entity, std::string const &name)
+		: ComponentBase<ComponentMaterial>(engine, entity, "MaterialCpt"),
 		_material(nullptr)
 	{
 		_material = _engine.getInstance<Renderer>().getMaterialManager().getMaterial(name);
 	}
 
-	ComponentMaterial::ComponentMaterial(Engine &engine, SmartPointer<Material> material)
-		: ComponentBase<ComponentMaterial>(engine, "MaterialCpt"),
+	ComponentMaterial::ComponentMaterial(Engine &engine, Handle &entity, SmartPointer<Material> material)
+		: ComponentBase<ComponentMaterial>(engine, entity, "MaterialCpt"),
 		_material(material)
 	{
 	}

@@ -120,7 +120,7 @@ public:
 		{
 			_components.resize(id + 10);
 		}
-		SmartPointer<T> tmp(new T(_engine, args...));
+		SmartPointer<T> tmp(new T(_engine, getHandle(), args...));
 		// todo assert if new T fail
 		_code.add(id);
 		_components[id] = tmp;

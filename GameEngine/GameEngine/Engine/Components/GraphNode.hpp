@@ -12,8 +12,8 @@ namespace Component
 	public:
 		typedef std::list<Handle> t_EntityList;
 
-		GraphNode(Engine &engine)
-			: ComponentBase<GraphNode>(engine)
+		GraphNode(Engine &engine, Handle &entity)
+			: ComponentBase<GraphNode>(engine, entity, "GraphNodeComponent")
 		{}
 
 		virtual ~GraphNode()

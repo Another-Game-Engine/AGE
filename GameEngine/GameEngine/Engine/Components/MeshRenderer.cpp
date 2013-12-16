@@ -8,11 +8,11 @@
 
 namespace Component
 {
-	MeshRenderer::MeshRenderer(Engine &engine, std::string const &name, std::string const &resource) :
-		Component::ComponentBase<MeshRenderer>(engine, name),
+	MeshRenderer::MeshRenderer(Engine &engine, Handle &entity, std::string const &resource) :
+		Component::ComponentBase<MeshRenderer>(engine, entity, "MeshComponent"),
 		_mesh(_engine.getInstance<Resources::ResourceManager>().getResource(resource))
 	{
-		}
+	}
 
 	MeshRenderer::~MeshRenderer(void)
 	{

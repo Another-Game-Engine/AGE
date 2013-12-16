@@ -5,8 +5,8 @@
 namespace Component
 {
 
-	EmptyComponent::EmptyComponent(Engine &engine)
-		: ComponentBase<EmptyComponent>(engine, "EmptyComponent")
+	EmptyComponent::EmptyComponent(Engine &engine, Handle &entity)
+		: ComponentBase<EmptyComponent>(engine, entity, "EmptyComponent")
 	{}
 
 	EmptyComponent::~EmptyComponent(void)

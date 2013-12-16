@@ -17,7 +17,7 @@ namespace	Component
 
 	struct Base
 	{
-		Base(Engine &engine, const std::string &name = "NoName");
+		Base(Engine &engine, Handle &entity, const std::string &name = "NoName");
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
 		void			setEntity(Handle &entity);
@@ -32,8 +32,8 @@ namespace	Component
 	template <class T>
 	struct ComponentBase : public Base
 	{
-		ComponentBase(Engine &engine, const std::string &name = "DefaultComponentName")
-			: Base(engine, name)
+		ComponentBase(Engine &engine, Handle &entity, const std::string &name = "DefaultComponentName")
+			: Base(engine, entity, name)
 		{}
 
 		virtual ~ComponentBase()
