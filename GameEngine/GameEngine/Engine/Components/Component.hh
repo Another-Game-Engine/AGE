@@ -32,7 +32,7 @@ namespace	Component
 	template <class T>
 	struct ComponentBase : public Base
 	{
-		ComponentBase(Engine &engine, const std::string &name)
+		ComponentBase(Engine &engine, const std::string &name = "DefaultComponentName")
 			: Base(engine, name)
 		{}
 
