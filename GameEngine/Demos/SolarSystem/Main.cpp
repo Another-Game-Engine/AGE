@@ -10,7 +10,7 @@
 
 #include <stdlib.h>
 #include "Core/Engine.hh"
-#include "Demo/DemoScene.hh"
+#include "DemoScene.hh"
 #include "Utils/PubSub.hpp"
 #include "Context/SdlContext.hh"
 #include "Core/SceneManager.hh"
@@ -21,8 +21,7 @@
 int			main(int ac, char **av)
 {
 	Engine	e;
-	char buffer[1024];
-	char *asdf = _getcwd(buffer,1024);
+
 	// set Rendering context of the engine
 	// you can also set any other dependencies
 	e.setInstance<PubSub::Manager>();
