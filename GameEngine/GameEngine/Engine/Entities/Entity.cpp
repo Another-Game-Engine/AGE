@@ -20,11 +20,6 @@ Entity::Entity(Engine &engine) :
 
 Entity::~Entity()
 {
-	auto root = _engine.getInstance<EntityManager>().getRoot();
-	for (auto e : _sons)
-	{
-		e->setFather(root);
-	}
 	_components.clear();
 }
 
@@ -85,71 +80,6 @@ void 					Entity::removeFlags(size_t flags)
 {
 	flags &= _flags;
 	_flags ^= flags;
-}
-
-const Handle 				&Entity::getFather() const
-{
-	return _father;
-}
-
-void 						Entity::setFather(Handle &father)
-{
-	_flags |= HAS_MOVED;
-	_father = father;
-}
-
-void 						Entity::addSon(Handle &son)
-{
-	t_sonsList::iterator 	it;
-
-	_sons.insert(son);
-}
-
-void 						Entity::removeSon(Handle &son)
-{
-	_sons.erase(son);
-}
-
-SmartPointer<Entity::t_EntityList> 	Entity::getSonsByFlags(size_t flags, GetFlags op)
-{
-	SmartPointer<Entity::t_EntityList>	sons = new Entity::t_EntityList;
-
-	if (op == GetFlags::ONLY_THIS_FLAGS)
-	{
-		for (auto e : _sons)
-		{
-			if (((e->getFlags() & flags) == flags) &&
-				((e->getFlags() | flags) == flags))
-				sons->push_back(e);
-		}
-	}
-	else if (op == GetFlags::THIS_FLAGS)
-	{
-		for (auto e : _sons)
-		{
-			if ((e->getFlags() & flags) == flags)
-				sons->push_back(e);
-		}
-	}
-	else if (op == GetFlags::NOT_THIS_FLAGS)
-	{
-		for (auto e : _sons)
-		{
-			if ((e->getFlags() & flags) == 0)
-				sons->push_back(e);
-		}
-	}
-	return (sons);
-}
-
-Entity::t_sonsList::iterator 		Entity::getSonsBegin()
-{
-	return (_sons.begin());
-}
-
-Entity::t_sonsList::iterator 		Entity::getSonsEnd()
-{
-	return (_sons.end());
 }
 
 Barcode                       &Entity::getCode()

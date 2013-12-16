@@ -38,6 +38,8 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	auto &m = _engine.getInstance<EntityManager>();
 	auto p = m.createEntity();
 	auto e = m.createEntity();
+	p->addComponent<Component::GraphNode>();
+	e->addComponent<Component::GraphNode>();
 
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
@@ -58,9 +60,9 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 		r->addTexture(tex3, 2);
 	if (!tex4.empty())
 		r->addTexture(tex4, 3);
-
+	
 	e->addComponent<Component::RotationForce>(glm::vec3(0, orbitSpeed, 0));
-	p->addSon(e);
+	p->getComponent<Component::GraphNode>()->addSon(e);
 	p->addComponent<Component::RotationForce>(glm::vec3(0, rotSpeed, 0));
 	return (p);
 }
@@ -156,9 +158,11 @@ bool 			DemoScene::userStart()
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
 	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
 
-	earth->setFather(_engine.getInstance<EntityManager>().getRoot());
-	earth->getSonsBegin()->get()->addSon(moon);
-	sun->setFather(_engine.getInstance<EntityManager>().getRoot());
+	auto ttt = earth.get();
+	auto iii = ttt->getComponent<Component::GraphNode>();
+	auto jjj = iii->getSonsBegin();
+
+	earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
 //---> canceled to replace by
 	//getRoot()->addSon(earth);
 	//earth->getSonsBegin()->second->addSon(moon);
@@ -188,8 +192,7 @@ bool 			DemoScene::userStart()
 	//}
 
 	{
-//		unsigned int nbPlanet = 350;
-		unsigned int nbPlanet = 2;
+		unsigned int nbPlanet = 350;
 		Handle past = _engine.getInstance<EntityManager>().getRoot();
 		for (unsigned int i = 0; i < nbPlanet; ++i)
 		{
@@ -199,7 +202,7 @@ bool 			DemoScene::userStart()
 					, (std::rand() % 200) / 100.0f,
 					glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
 					glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
-				sun->addSon(past);
+				sun->getComponent<Component::GraphNode>()->addSon(past);
 			}
 			else
 			{
@@ -207,7 +210,7 @@ bool 			DemoScene::userStart()
 					, (std::rand() % 200) / 100.0f,
 					glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
 					glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
-				past->addSon(p);
+				past->getComponent<Component::GraphNode>()->addSon(p);
 				past = p;
 			}
 		}
@@ -223,8 +226,7 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	setCamera(new TrackBall(_engine, *(earth->getSonsBegin()), 50, 3, 1));
-
+	setCamera(new TrackBall(_engine, *(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50, 3, 1));
 	std::string		vars[] = 
 	{
 		"projection",

@@ -18,10 +18,6 @@ private:
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
 protected:
 	Engine                                              &_engine;
-private:
-	void 				recomputePositions(Handle &father,
-											bool hasMoved);
-
 public:
 	AScene(Engine &engine);
 	virtual ~AScene();

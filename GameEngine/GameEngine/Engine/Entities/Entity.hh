@@ -80,16 +80,8 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	const Handle	    	&getFather() const;
-	void 					setFather(Handle &father);
+	//to implement in graphnode component
 
-	void 					addSon(Handle &son);
-	void 					removeSon(Handle &son);
-
-	SmartPointer<t_EntityList> 	getSonsByFlags(size_t flags, GetFlags op);
-
-	t_sonsList::iterator 		getSonsBegin();
-	t_sonsList::iterator 		getSonsEnd();
 	Barcode &getCode();
 
 

@@ -17,27 +17,6 @@ AScene::~AScene()
 }
 
 
-// to delete !!!
-void 							AScene::recomputePositions(Handle &father,
-															bool hasMoved)
-{
-	if (!father.get())
-		return;
-	Entity::t_sonsList::iterator 	it = father->getSonsBegin();
-
-	while (it != father->getSonsEnd())
-	{
-
-		if ((it->get())->getFlags() & Entity::HAS_MOVED)
-			hasMoved = true;
-		if (hasMoved)
-			it->get()->computeGlobalTransform(father->getGlobalTransform());
-		auto &a = *it;
-		recomputePositions(it->get()->getHandle(), hasMoved);
-		++it;
-	}
-}
-
 void 							AScene::setCamera(ACamera *camera)
 {
 	_camera = camera;
