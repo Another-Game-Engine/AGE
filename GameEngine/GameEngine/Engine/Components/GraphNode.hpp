@@ -81,12 +81,12 @@ namespace Component
 			_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
 		}
 
-		std::set<Handle>::iterator &getSonsBegin()
+		std::set<Handle>::iterator getSonsBegin()
 		{
 			return std::begin(_childs);
 		}
 		
-		std::set<Handle>::iterator &getSonsEnd()
+		std::set<Handle>::iterator getSonsEnd()
 		{
 			return std::end(_childs);
 		}
