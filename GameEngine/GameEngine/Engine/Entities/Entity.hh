@@ -124,7 +124,6 @@ public:
 		// todo assert if new T fail
 		_code.add(id);
 		_components[id] = tmp;
-		tmp->setEntity(this->getHandle());
 		pub(std::string("componentAdded" + std::to_string(id)), _handle);
 		return tmp;
 	}
