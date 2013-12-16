@@ -11,28 +11,11 @@
 #include "Utils/Barcode.h"
 #include "Utils/PubSub.hpp"
 #include "glm/glm.hpp"
-#include <Components/Component.hpp>
+#include <Components/Component.hh>
 
 class Engine;
 class EntityManager;
 class Handle;
-
-class Handle
-{
-public:
-	Handle(unsigned int id = 0, EntityManager *manager = nullptr);
-	~Handle();
-	const unsigned int getId() const;
-	Entity *operator->();
-	Entity *get() const;
-	bool operator<(const Handle &o) const;
-	bool operator==(const Handle &o) const;
-	Handle(const Handle &o);
-	Handle &operator=(const Handle &o);
-private:
-	unsigned int _id;
-	EntityManager *_manager;
-};
 
 class Entity : public PubSub
 {
@@ -118,7 +101,56 @@ public:
 	//
 	//
 	bool hasComponent(unsigned int componentId) const;
-    #include "Entity.hpp"
+
+	template <typename T>
+	bool hasComponent() const
+	{
+		return code_.isSet<T>();
+	}
+
+	template <typename T, typename... Args>
+	SmartPointer<T> addComponent(Args ...args)
+	{
+		unsigned int id = T::getTypeId();
+		if (hasComponent(id))
+		{
+			return static_cast<SmartPointer<T> >(_components[id]);
+		}
+		else if (_components.size() <= id)
+		{
+			_components.resize(id + 10);
+		}
+		SmartPointer<T> tmp(new T(_engine, args...));
+		// todo assert if new T fail
+		_code.add(id);
+		_components[id] = tmp;
+		tmp->setEntity(this->getHandle());
+		pub(std::string("componentAdded" + std::to_string(id)), _handle);
+		return tmp;
+	}
+
+	template <typename T>
+	SmartPointer<T> getComponent() const
+	{
+		unsigned int id = T::getTypeId();
+		if (!hasComponent(id))
+			return nullptr;
+		return static_cast<SmartPointer<T> >(_components[id]);
+	}
+
+	template <typename T>
+	void removeComponent()
+	{
+		unsigned int id = T::getTypeId();
+		if (!hasComponent(id))
+			return;
+		code_.remove(id);
+		delete _components[id];
+		_components[id]	= nullptr;
+		pub(std::string("componentRemoved" + std::to_string(id)), _handle);
+		// component remove -> signal to system
+	}
+
 };
 
 #endif

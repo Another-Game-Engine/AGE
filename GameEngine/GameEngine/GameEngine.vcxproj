@@ -77,6 +77,7 @@
     <ClCompile Include="Demo\BasicCam.cpp" />
     <ClCompile Include="Demo\DemoScene.cpp" />
     <ClCompile Include="Demo\TrackBall.cpp" />
+    <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\ComponentMaterial.cpp" />
     <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
@@ -85,6 +86,7 @@
     <ClCompile Include="Engine\Core\MaterialManager.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Entities\EntityManager.cpp" />
+    <ClCompile Include="Engine\Entities\Handle.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
@@ -120,8 +122,8 @@
     <ClInclude Include="Engine\Core\Material.hh" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Settings.h" />
-    <ClInclude Include="Engine\Entities\Entity.hpp" />
     <ClInclude Include="Engine\Entities\EntityManager.h" />
+    <ClInclude Include="Engine\Entities\Handle.hh" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
@@ -270,7 +272,7 @@
     <None Include="Demo\BasicCam.hh" />
     <None Include="Demo\DemoScene.hh" />
     <None Include="Demo\TrackBall.hh" />
-    <None Include="Engine\Components\Component.hpp" />
+    <None Include="Engine\Components\Component.hh" />
     <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />

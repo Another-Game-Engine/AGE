@@ -1,7 +1,7 @@
 #ifndef  __MATERIAL_COMPONENT_H__
 #define  __MATERIAL_COMPONENT_H__
 
-#include "Components/Component.hpp"
+#include "Components/Component.hh"
 #include <Core/Material.hh>
 #include <Core/Engine.hh>
 #include "Utils/SmartPointer.hh"

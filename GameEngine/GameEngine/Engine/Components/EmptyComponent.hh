@@ -1,7 +1,7 @@
 #ifndef		EMPTY_COMPONENT_HH_
 #define		EMPTY_COMPONENT_HH_
 
-#include "Component.hpp"
+#include "Component.hh"
 #include "Utils/SmartPointer.hh"
 #include "ResourceManager/SharedMesh.hh"
 

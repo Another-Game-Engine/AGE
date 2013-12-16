@@ -1,7 +1,7 @@
 #ifndef		ROTATION_FORCE_HH_
 #define		ROTATION_FORCE_HH_
 
-#include "Component.hpp"
+#include "Component.hh"
 #include "Utils/SmartPointer.hh"
 #include <glm/glm.hpp>
 

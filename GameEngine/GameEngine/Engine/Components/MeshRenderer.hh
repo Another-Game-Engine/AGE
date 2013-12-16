@@ -4,7 +4,7 @@
 #include <map>
 #include <set>
 
-#include "Components/Component.hpp"
+#include "Components/Component.hh"
 #include "Utils/SmartPointer.hh"
 #include "ResourceManager/SharedMesh.hh"
 #include "OpenGL/Shader.hh"

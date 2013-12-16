@@ -39,6 +39,8 @@
     <ClCompile Include="Engine\Components\ComponentMaterial.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Entities\EntityManager.cpp" />
+    <ClCompile Include="Engine\Components\Component.cpp" />
+    <ClCompile Include="Engine\Entities\Handle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -191,7 +193,7 @@
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
-    <ClInclude Include="Engine\Entities\Entity.hpp" />
+    <ClInclude Include="Engine\Entities\Handle.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo\BasicCam.hh" />
@@ -346,6 +348,6 @@
     <None Include="Shaders\blur1.fp" />
     <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Shaders\test.cp" />
-    <None Include="Engine\Components\Component.hpp" />
+    <None Include="Engine\Components\Component.hh" />
   </ItemGroup>
 </Project>
