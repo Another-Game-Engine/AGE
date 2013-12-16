@@ -18,7 +18,6 @@
     <ClCompile Include="Engine\Core\Engine.cpp" />
     <ClCompile Include="Engine\Core\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
-    <ClCompile Include="Engine\EngineMain.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
     <ClCompile Include="Engine\OpenGL\Shader.cpp" />

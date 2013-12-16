@@ -21,7 +21,8 @@
 int			main(int ac, char **av)
 {
 	Engine	e;
-
+	char buffer[1024];
+	char *asdf = _getcwd(buffer,1024);
 	// set Rendering context of the engine
 	// you can also set any other dependencies
 	e.setInstance<PubSub::Manager>();
