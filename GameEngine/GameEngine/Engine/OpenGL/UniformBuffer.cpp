@@ -37,6 +37,7 @@ void	UniformBuffer::init(Shader *referent, std::string const &blockName, std::st
 	_buffer = new char[_dataSize];
 	// get the number of uniforms
 	glGetActiveUniformBlockiv(referent->getId(), blockIdx,	GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &varNbr);
+	assert(varNbr > 0 && "glGetActiveUniformBlockid Error");
 	// we store the uniforms informations in this table with this layout:
 	// Indices - Types - Offset
 	varsInfos = new GLint[varNbr * 3];

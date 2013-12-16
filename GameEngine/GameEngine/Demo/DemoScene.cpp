@@ -95,8 +95,8 @@ bool 			DemoScene::userStart()
 	};
 
 	OpenGLTools::Shader &s = _engine.getInstance<Renderer>().addShader("earth",
-		"../GameEngine/Shaders/earth.vp",
-		"../GameEngine/Shaders/earth.fp");
+		"./Shaders/earth.vp",
+		"./Shaders/earth.fp");
 		//.bindActiveTexture("fDayTexture", 0)
 		//.bindActiveTexture("fNightTexture", 1)
 		//.bindActiveTexture("fClouds", 2)
@@ -107,14 +107,14 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().addUniform("PerModel")
 		.init(&s, "PerModel", perModelVars);
 
-	_engine.getInstance<Renderer>().addShader("basic", "../GameEngine/Shaders/basic.vp", "../GameEngine/Shaders/basic.fp", "../GameEngine/Shaders/tesselation.gp");
-	_engine.getInstance<Renderer>().addShader("basicLight", "../GameEngine/Shaders/light.vp", "../GameEngine/Shaders/light.fp");
-	_engine.getInstance<Renderer>().addShader("bump", "../GameEngine/Shaders/bump.vp", "../GameEngine/Shaders/bump.fp");
+	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
+	_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
+	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
 		//.bindActiveTexture("fTexture", 0)
 		//.bindActiveTexture("fBump", 1);
-	_engine.getInstance<Renderer>().addShader("fboToScreen", "../GameEngine/Shaders/fboToScreen.vp", "../GameEngine/Shaders/fboToScreen.fp");
-	_engine.getInstance<Renderer>().addShader("brightnessFilter", "../GameEngine/Shaders/brightnessFilter.vp", "../GameEngine/Shaders/brightnessFilter.fp");
-	_engine.getInstance<Renderer>().addShader("blurY", "../GameEngine/Shaders/brightnessFilter.vp", "../GameEngine/Shaders/blur1.fp");
+	_engine.getInstance<Renderer>().addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
+	_engine.getInstance<Renderer>().addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
+	_engine.getInstance<Renderer>().addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
 
 	_engine.getInstance<Renderer>().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 	_engine.getInstance<Renderer>().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
@@ -138,21 +138,21 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerModel", "PerModel");
 
-	_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "../Assets/ball.obj");
+	_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball.obj");
 
 	SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
 
 	toRepeat->setWrapMode(GL_REPEAT);
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "../Assets/SunTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earth", new Resources::Texture(), "../Assets/EarthTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthBump", new Resources::Texture(), "../Assets/EarthTextureBump.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthNight", new Resources::Texture(), "../Assets/EarthNightTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthClouds", toRepeat, "../Assets/EarthClouds.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "../Assets/SunTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moon", new Resources::Texture(), "../Assets/MoonTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moonBump", new Resources::Texture(), "../Assets/MoonNormalMap.tga");
+	_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "./Assets/SunTexture.tga");
+	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earth", new Resources::Texture(), "./Assets/EarthTexture.tga");
+	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthBump", new Resources::Texture(), "./Assets/EarthTextureBump.tga");
+	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthNight", new Resources::Texture(), "./Assets/EarthNightTexture.tga");
+	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthClouds", toRepeat, "./Assets/EarthClouds.tga");
+	_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "./Assets/SunTexture.tga");
+	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moon", new Resources::Texture(), "./Assets/MoonTexture.tga");
+	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moonBump", new Resources::Texture(), "./Assets/MoonNormalMap.tga");
 
-	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "../Assets/skyboxSpace");
+	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
@@ -231,7 +231,7 @@ bool 			DemoScene::userStart()
 		"view"
 	};
 
-	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>().addShader("cubemapShader", "../GameEngine/Shaders/cubemap.vp", "../GameEngine/Shaders/cubemap.fp");
+	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>().addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
 
 	_engine.getInstance<Renderer>().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 

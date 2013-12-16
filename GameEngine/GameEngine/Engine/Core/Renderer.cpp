@@ -16,7 +16,7 @@ Renderer::~Renderer(void)
 
 bool Renderer::init()
 {
-	addShader("depthOnly", "../GameEngine/Shaders/depthOnly.vp", "../GameEngine/Shaders/depthOnly.fp");
+	addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
 	bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
 	bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 	getShader("depthOnly")->addTarget(GL_COLOR_ATTACHMENT0).build();
