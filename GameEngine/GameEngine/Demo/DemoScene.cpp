@@ -190,10 +190,9 @@ bool 			DemoScene::userStart()
 	//			planets[i - 1]->addSon(planets[i]);
 	//	}
 	//}
-
 	{
 		unsigned int nbPlanet = 350;
-		Handle past = _engine.getInstance<EntityManager>().getRoot();
+		Handle past;
 		for (unsigned int i = 0; i < nbPlanet; ++i)
 		{
 			if (!past.get())
@@ -215,7 +214,6 @@ bool 			DemoScene::userStart()
 			}
 		}
 	}
-
 
 
 	//

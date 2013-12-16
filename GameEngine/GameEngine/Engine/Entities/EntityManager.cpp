@@ -4,14 +4,8 @@
 
 
 EntityManager::EntityManager(Engine *engine) :
-_engine(*engine),
-_unique(Handle(std::numeric_limits<unsigned int>::max(), nullptr))
+_engine(*engine)
 {	
-}
-
-void EntityManager::init()
-{
-	_unique = createEntity();
 }
 
 EntityManager::~EntityManager()
@@ -40,9 +34,4 @@ Entity *EntityManager::get(const Handle &h)
 	if (h.getId() >= _pool.size())
 		return nullptr;
 	return &_pool[h.getId()];
-}
-
-Handle &EntityManager::getRoot()
-{
-	return _unique;
 }

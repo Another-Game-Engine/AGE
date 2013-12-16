@@ -13,8 +13,7 @@ Entity::Entity(Engine &engine) :
     PubSub(engine.getInstance<PubSub::Manager>()),
     _engine(engine),
 	_id(_currentId++),
-	_flags(0),
-	_father(engine.getInstance<EntityManager>().getRoot())
+	_flags(0)
 {
 }
 

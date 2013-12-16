@@ -25,7 +25,7 @@ int			main(int ac, char **av)
 	// set Rendering context of the engine
 	// you can also set any other dependencies
 	e.setInstance<PubSub::Manager>();
-	e.setInstance<EntityManager>(&e).init();
+	e.setInstance<EntityManager>(&e);
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
