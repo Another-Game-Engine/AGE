@@ -14,7 +14,13 @@ namespace Component
 
 		GraphNode(Engine &engine, Handle &entity)
 			: ComponentBase<GraphNode>(engine, entity, "GraphNodeComponent")
-		{}
+		{
+				_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
+
+				// signal it's a root node
+				auto key = PubSubKey("graphNodeSetAsRoot");
+				_entity->pub(key, _entity);
+			}
 
 		virtual ~GraphNode()
 		{}
@@ -39,9 +45,20 @@ namespace Component
 			{
 				_parent->getComponent<Component::GraphNode>()->removeSon(_entity, false);
 			}
-			_parent = father;
+
 			if (notify && father->hasComponent<Component::GraphNode>())
 				father->getComponent<Component::GraphNode>()->addSon(_entity, false);
+			if (!father.get()) // if parent is null -> it's a root node
+			{
+				auto key = PubSubKey("graphNodeSetAsRoot");
+				_entity->pub(key, _entity);
+			}
+			else if (!_parent.get()) // if it was a root node
+			{
+				auto key = PubSubKey("graphNodeNotARoot");
+				_entity->pub(key, _entity);
+			}
+			_parent = father;
 		}
 
 		void 					addSon(Handle &son, bool notify = true)
