@@ -16,6 +16,8 @@ AScene::~AScene()
 	_systems.clear();
 }
 
+
+// to delete !!!
 void 							AScene::recomputePositions(Handle &father,
 															bool hasMoved)
 {

@@ -80,6 +80,17 @@ namespace Component
 			_entity->pub(key, _entity);
 			_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
 		}
+
+		std::set<Handle>::iterator &getSonsBegin()
+		{
+			return std::begin(_childs);
+		}
+		
+		std::set<Handle>::iterator &getSonsEnd()
+		{
+			return std::end(_childs);
+		}
+
 	private:
 		Handle _parent;
 		std::set<Handle> _childs;

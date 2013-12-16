@@ -14,6 +14,7 @@
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
+#include <Systems/GraphNodeSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityManager.h>
@@ -72,6 +73,7 @@ bool 			DemoScene::userStart()
 
 	addSystem<RotationForceSystem>(0);
 	addSystem<MeshRendererSystem>(1)->setRenderDebugMode(true);
+	addSystem<GraphNodeSystem>(2);
 
 	//
 	//
