@@ -16,7 +16,7 @@ namespace Component
 		EmptyComponent	&operator=(EmptyComponent const &);
 
 	public:
-		EmptyComponent(Engine &engine);
+		EmptyComponent(Engine &engine, Handle &entity);
 		virtual ~EmptyComponent(void);
 	};
 

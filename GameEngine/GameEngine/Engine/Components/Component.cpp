@@ -3,10 +3,10 @@
 
 using namespace Component;
 
-Base::Base(Engine &engine, const std::string &name)
+Base::Base(Engine &engine, Handle &entity, const std::string &name)
 : _engine(engine)
 , _name(name)
-, _entity(Handle(std::numeric_limits<unsigned int>::max(), nullptr))
+, _entity(entity)
 {
 }
 
