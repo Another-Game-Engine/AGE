@@ -11,6 +11,7 @@
 #include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
 #include "Components/MaterialComponent.h"
+#include <Components/CameraComponent.hh>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
@@ -164,8 +165,6 @@ bool 			DemoScene::userStart()
 	//
 	//
 
-
-	// !!!! THIS CODE CAUSE A STACKOVERFLOW !!!
 	{
 		unsigned int nbPlanet = 70;
 		Handle planets[70];
@@ -183,10 +182,17 @@ bool 			DemoScene::userStart()
 		}
 	}
 
-
 	//
 	//
 	// END : Generating a lot of planet for performance test
+
+	// CAMERA AS COMPONENT
+	//
+	//auto camera = _engine.getInstance<EntityManager>().createEntity();
+	//camera->addComponent<Component::CameraComponent>();	
+	//
+	// END CAMERA AS COMPONENT
+
 
 	// --
 	// Setting camera with skybox
@@ -210,10 +216,19 @@ bool 			DemoScene::userStart()
 
 	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
 
+
+	// Compute shader Tests
+	//
+	//
+
 	//OpenGLTools::ComputeShader *cs = new OpenGLTools::ComputeShader();
 	//cs->init(File("../GameEngine/Shaders/test.cp"));
 	//cs->use();
 	//glDispatchCompute(512/16, 512/16, 1);
+
+	//
+	//
+	// End compute shader test
 
 	return (true);
 }
