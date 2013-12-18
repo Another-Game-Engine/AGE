@@ -1,5 +1,5 @@
 #version 330
-
+#extension GL_ARB_separate_shader_objects: enable
 // texture coordinates from vertex shaders
 in vec2 st;
 
@@ -21,5 +21,5 @@ float luma(vec3 color)
 
 void main ()
 {
-	frag_colour	= clamp(luma(texture(layer0, st)) - threshold, 0.0, 1.0) * (1.0 / (1.0 - threshold));
+	frag_colour	= vec4(0);//clamp(luma(vec3(texture(layer0, st))) - threshold, 0.0, 1.0) * (1.0 / (1.0 - threshold));
 }
