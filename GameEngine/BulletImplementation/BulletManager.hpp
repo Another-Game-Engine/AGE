@@ -19,6 +19,7 @@ public:
 		_broadphaseInterface = new btDbvtBroadphase();
 		_constraintSolver = new btSequentialImpulseConstraintSolver();
 		_world = new btDiscreteDynamicsWorld(_collisionDispatcher, _broadphaseInterface, _constraintSolver, _collisionConfiguation);
+		_world->setGravity(btVector3(0, -10, 0));
 		return true;
 	}
 
