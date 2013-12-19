@@ -27,9 +27,16 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		_manager.getWorld().stepSimulation(1.f/60.f,10);
+		_manager.getWorld().stepSimulation(time,10);
 		for (auto e : _collection)
 		{
+			btTransform t;
+			e->getComponent<Component::RigidBody>()->getMotionState().getWorldTransform(t);
+			auto &shape = e->getComponent<Component::RigidBody>()->getShape();
+			glm::mat4 m = convertBulletTransformToGLM(t);
+
+			m = glm::scale(m, glm::vec3(shape.getLocalScaling().getX(), shape.getLocalScaling().getY(), shape.getLocalScaling().getZ()));
+			e->setLocalTransform() = m;
 		}
 	}
 

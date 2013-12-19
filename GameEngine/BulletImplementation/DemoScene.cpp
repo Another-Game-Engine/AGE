@@ -31,7 +31,7 @@ DemoScene::~DemoScene(void)
 {
 }
 
-Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex)
+Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass)
 {
 	auto &m = _engine.getInstance<EntityManager>();
 	auto e = m.createEntity();
@@ -39,8 +39,26 @@ Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>();
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-	rigidBody->setMass(1.0f);
+	rigidBody->setMass(mass);
 	auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
+	auto mat = e->addComponent<Component::MaterialComponent>(material);
+	mesh->addTexture(tex, 0);
+	e->addComponent<Component::GraphNode>();
+
+	return e;
+}
+
+Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass)
+{
+	auto &m = _engine.getInstance<EntityManager>();
+	auto e = m.createEntity();
+	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
+	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
+//	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), (rand() % 1000) / 10.0f, glm::vec3(1, 0, 0));
+	auto rigidBody = e->addComponent<Component::RigidBody>();
+	rigidBody->setCollisionShape(Component::RigidBody::CUBE);
+	rigidBody->setMass(mass);
+	auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
 	auto mat = e->addComponent<Component::MaterialComponent>(material);
 	mesh->addTexture(tex, 0);
 	e->addComponent<Component::GraphNode>();
@@ -59,8 +77,7 @@ Handle  DemoScene::createPlane(glm::vec3 &pos, glm::vec3 &scale, std::string con
 
 	auto rigidBody = e->addComponent<Component::RigidBody>();
 	rigidBody->setCollisionShape(Component::RigidBody::PLANE);
-	rigidBody->setMass(0);
-	auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
+	auto mesh = e->addComponent<Component::MeshRenderer>("model:square");
 	auto mat = e->addComponent<Component::MaterialComponent>(material);
 	mesh->addTexture(tex, 0);
 	e->addComponent<Component::GraphNode>();
@@ -76,35 +93,7 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 {
 	auto &m = _engine.getInstance<EntityManager>();
 	auto p = m.createEntity();
-	auto e = m.createEntity();
-	auto plane = m.createEntity();
-
-	p->addComponent<Component::GraphNode>();
-	e->addComponent<Component::GraphNode>();
-
-	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>("model:ball");
-	SmartPointer<Material> materialPlanet = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:planet_" + shader);
-	r->addTexture(tex1, 0);
-	if (!tex2.empty())
-		r->addTexture(tex2, 1);
-	if (!tex3.empty())
-		r->addTexture(tex3, 2);
-	if (!tex4.empty())
-		r->addTexture(tex4, 3);
-	materialPlanet->pushShader(shader);
-
-	e->addComponent<Component::MaterialComponent>(std::string("material:planet_" + shader));
-	e->addComponent<Component::RigidBody>()->setCollisionShape(Component::RigidBody::SPHERE);
-	e->getComponent<Component::RigidBody>()->setMass(100.0f);
-
-	plane->addComponent<Component::MaterialComponent>(std::string("material:planet_" + shader));
-	plane->addComponent<Component::RigidBody>()->setCollisionShape(Component::RigidBody::PLANE);
-
-
-	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
-
-	p->getComponent<Component::GraphNode>()->addSon(e);
+	
 	return (p);
 }
 
@@ -114,8 +103,8 @@ bool 			DemoScene::userStart()
 	//
 	//
 	addSystem<BulletSystem>(0);
-	addSystem<MeshRendererSystem>(1)->setRenderDebugMode(true);
-	addSystem<GraphNodeSystem>(2);
+	addSystem<MeshRendererSystem>(2);// ->setRenderDebugMode(true);
+	addSystem<GraphNodeSystem>(1);
 
 	//
 	//
@@ -176,6 +165,7 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball.obj");
 	_engine.getInstance<Resources::ResourceManager>().addResource("model:cube", new Resources::SharedMesh(), "./Assets/cube.obj");
+	_engine.getInstance<Resources::ResourceManager>().addResource("model:square", new Resources::SharedMesh(), "./Assets/square.obj");
 
 	SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
 
@@ -197,14 +187,22 @@ bool 			DemoScene::userStart()
 	materialMoon->pushShader("basic");
 
 
-	auto s1 = createSphere(glm::vec3(0,10,0), glm::vec3(1,1,1), "material:sun", "texture:sun");
-	auto p1 = createPlane(glm::vec3(0,0,0), glm::vec3(1,1,1), "material:moon", "texture:moon");
+
+	for (unsigned int i = 0; i < 100; ++i)
+	{
+		if (i % 2)
+			auto c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(2, 1, 3), "material:sun", "texture:sun", 10.0f);
+		else
+			auto c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(1, 1, 1), "material:sun", "texture:earth", 10.0f);
+	}
+	auto p1 = createCube(glm::vec3(0,0,0), glm::vec3(10,1,10), "material:moon", "texture:moon", 0);
+
 
 	// --
 	// Setting camera with skybox
 	// --
 
-	setCamera(new TrackBall(_engine, s1, 5.0f, 1.0f, 1.0f));
+	setCamera(new TrackBall(_engine, p1, 30.0f, 1.0f, 1.0f));
 	std::string		vars[] = 
 	{
 		"projection",
