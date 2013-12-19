@@ -195,7 +195,7 @@ bool 			DemoScene::userStart()
 		else
 			auto c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(1, 1, 1), "material:sun", "texture:earth", 10.0f);
 	}
-	auto p1 = createCube(glm::vec3(0,0,0), glm::vec3(10,1,10), "material:moon", "texture:moon", 0);
+	auto p1 = createCube(glm::vec3(0,0,0), glm::vec3(100,1,100), "material:moon", "texture:moon", 0);
 
 
 	// --
