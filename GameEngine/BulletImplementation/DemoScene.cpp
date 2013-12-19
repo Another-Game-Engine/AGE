@@ -17,6 +17,7 @@
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
 #include <Systems/GraphNodeSystem.hpp>
+#include <System/BulletSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityManager.h>
@@ -51,7 +52,7 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	e->addComponent<Component::MaterialComponent>(std::string("material:planet_" + shader));
 	e->addComponent<Component::RigidBody>();
-	e->removeComponent<Component::RigidBody>();
+
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
@@ -73,7 +74,7 @@ bool 			DemoScene::userStart()
 	// System Tests
 	//
 	//
-
+	addSystem<BulletSystem>(0);
 	addSystem<MeshRendererSystem>(1)->setRenderDebugMode(true);
 	addSystem<GraphNodeSystem>(2);
 

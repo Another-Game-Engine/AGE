@@ -6,24 +6,61 @@
 #include "Utils/SmartPointer.hh"
 #include <glm/glm.hpp>
 #include <Entities/Entity.hh>
+#include <Entities/Handle.hh>
+#include <Core/Engine.hh>
+#include "../BulletManager.hpp"
 
 namespace Component
 {
 	class RigidBody : public Component::ComponentBase<RigidBody>
 	{
 	public:
-		RigidBody(Engine &engine, Handle &entity)
-			: ComponentBase(engine, entity)
+		class EntityState : public btMotionState
 		{
-			PubSubKey key("TransformChanged");
-			sub(key, _entity.get(), [&] () {
-				std::cout << "CHANGE" << std::endl;
-			});
+		public:
+			EntityState(Handle &entity) :
+				_entity(entity)
+			{}
+
+			~EntityState()
+			{}
+    	
+			virtual void getWorldTransform(btTransform& worldTrans) const
+			{
+				 worldTrans.setFromOpenGLMatrix(glm::value_ptr(_entity.get()->setLocalTransform()));
+			}
+			virtual void setWorldTransform(const btTransform& worldTrans)
+			{
+				 worldTrans.getOpenGLMatrix(glm::value_ptr(_entity.get()->setLocalTransform()));
+			}
+		private:
+			Handle      _entity;
+			btTransform  mWorldTrans;
+		};
+
+		RigidBody(Engine &engine, Handle &entity)
+			: ComponentBase(engine, entity),
+			_manager(engine.getInstance<BulletManager>())
+		{
+			_collisionShape = new btSphereShape(btScalar(1.0f));
+			_mass = btScalar(1.0f);
+			_inertia = btVector3(0.0f, 0.0f, 0.0f);
+			_motionState = new EntityState(entity);
+			btRigidBody::btRigidBodyConstructionInfo rbInfo(_mass, _motionState, _collisionShape, _inertia);
+			_rigidBody = new btRigidBody(rbInfo);
+			_manager.getWorld().addRigidBody(_rigidBody);
 		}
+
 		virtual ~RigidBody(void)
 		{
-		}
+			_manager.getWorld().removeRigidBody(_rigidBody);
+			delete _rigidBody;
+			delete _motionState;
+			delete _collisionShape;
+		}		
+
 	private:
+		BulletManager &_manager;
 		btCollisionShape *_collisionShape;
 		btMotionState *_motionState;
 		btRigidBody *_rigidBody;
