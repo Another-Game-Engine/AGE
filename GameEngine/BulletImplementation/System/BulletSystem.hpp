@@ -32,10 +32,10 @@ private:
 		{
 			btTransform t;
 			e->getComponent<Component::RigidBody>()->getMotionState().getWorldTransform(t);
-			auto &shape = e->getComponent<Component::RigidBody>()->getShape();
 			glm::mat4 m = convertBulletTransformToGLM(t);
+			glm::vec3 s = convertBulletVectorToGLM(e->getComponent<Component::RigidBody>()->getShape().getLocalScaling());
 
-			m = glm::scale(m, glm::vec3(shape.getLocalScaling().getX(), shape.getLocalScaling().getY(), shape.getLocalScaling().getZ()));
+			m = glm::scale(m, s);
 			e->setLocalTransform() = m;
 		}
 	}

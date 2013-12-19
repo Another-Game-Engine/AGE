@@ -143,7 +143,6 @@ namespace Component
 			else if (c == CUBE)
 			{
 				_collisionShape = new btBoxShape(btVector3(0.5,0.5,0.5));
-//				std::cout << scaling.x << " " << scaling.y << " " << scaling.z << std::endl;
 			}
 			_collisionShape->setLocalScaling(btVector3(scaling.x, scaling.y, scaling.z));
 			_init();
