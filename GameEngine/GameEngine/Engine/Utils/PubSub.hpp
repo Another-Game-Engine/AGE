@@ -133,6 +133,20 @@ public:
 	}
 
 	template <typename ...Args>
+	void pub(PubSubKey &name, Args ...args)
+	{
+		auto set = _subscribers.find(name);
+		if (set == std::end(_collection) || set->second.empty())
+			return;
+		for (auto it = std::begin(set->second); it != std::end(set->second);)
+		{
+			auto e = *it;
+			++it;
+			e->call(name, args...);
+		}
+	}
+
+	template <typename ...Args>
 	void call(PubSubKey &name, Args ...args)
 	{
 		auto callback = _callbacks.at(name);
