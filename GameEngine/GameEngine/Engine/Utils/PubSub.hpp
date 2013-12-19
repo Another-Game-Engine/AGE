@@ -78,7 +78,7 @@ public:
 
 public:
 	template <typename F>
-	void sub(const PubSubKey &key, F lambda)
+	void globalSub(const PubSubKey &key, F lambda)
 	{
 		auto &collection = _manager.getCollection();
 		if (_callbacks.find(key) != std::end(_callbacks))
@@ -112,7 +112,7 @@ public:
 	}
 	
 	template <typename ...Args>
-	void pub(PubSubKey &name, Args ...args)
+	void broadCast(PubSubKey &name, Args ...args)
 	{
 		_manager.pub(name, args...);
 	}
@@ -138,6 +138,11 @@ public:
 	virtual ~PubSub()
 	{
 		unsubAll();
+	}
+
+	Manager &getPubSubManager()
+	{
+		return _manager;
 	}
 private:
 	void removeFromGlobalCallbacks()
