@@ -131,8 +131,7 @@ public:
 		unsigned int id = T::getTypeId();
 		if (!hasComponent(id))
 			return;
-		code_.remove(id);
-		delete _components[id];
+		_code.remove(id);
 		_components[id]	= nullptr;
 		pub(std::string("componentRemoved" + std::to_string(id)), _handle);
 		// component remove -> signal to system

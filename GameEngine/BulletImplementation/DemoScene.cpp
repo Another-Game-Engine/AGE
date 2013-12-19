@@ -12,6 +12,7 @@
 #include "Components/RotationForce.hh"
 #include "Components/MaterialComponent.h"
 #include <Components/CameraComponent.hh>
+#include <Component/RigidBody.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
@@ -42,9 +43,6 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	p->addComponent<Component::GraphNode>();
 	e->addComponent<Component::GraphNode>();
 
-	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
-
 	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>("model:ball");
 
 	SmartPointer<Material> materialPlanet = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:planet_" + shader);
@@ -52,6 +50,10 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	materialPlanet->pushShader(shader);
 
 	e->addComponent<Component::MaterialComponent>(std::string("material:planet_" + shader));
+	e->addComponent<Component::RigidBody>();
+	e->removeComponent<Component::RigidBody>();
+	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
+	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
 	//r->addMaterial(materialPlanet);
 	r->addTexture(tex1, 0);
@@ -61,7 +63,7 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 		r->addTexture(tex3, 2);
 	if (!tex4.empty())
 		r->addTexture(tex4, 3);
-	
+
 	p->getComponent<Component::GraphNode>()->addSon(e);
 	return (p);
 }

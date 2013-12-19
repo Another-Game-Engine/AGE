@@ -5,14 +5,24 @@
 #include <Components/Component.hh>
 #include "Utils/SmartPointer.hh"
 #include <glm/glm.hpp>
+#include <Entities/Entity.hh>
 
 namespace Component
 {
 	class RigidBody : public Component::ComponentBase<RigidBody>
 	{
 	public:
-		RigidBody(Engine &engine, Handle &entity);
-		virtual ~RigidBody(void);
+		RigidBody(Engine &engine, Handle &entity)
+			: ComponentBase(engine, entity)
+		{
+			PubSubKey key("TransformChanged");
+			sub(key, _entity.get(), [&] () {
+				std::cout << "CHANGE" << std::endl;
+			});
+		}
+		virtual ~RigidBody(void)
+		{
+		}
 	private:
 		btCollisionShape *_collisionShape;
 		btMotionState *_motionState;
