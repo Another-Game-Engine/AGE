@@ -85,7 +85,7 @@ namespace Component
 			if (c == SPHERE)
 				_collisionShape = new btSphereShape(1.0f);
 			else if (c == PLANE)
-				_collisionShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+				_collisionShape = new btBoxShape(btVector3(50, 0.1, 50));
 			_init();
 		}
 
@@ -122,6 +122,8 @@ namespace Component
 				_manager.getWorld().removeRigidBody(_rigidBody);
 				delete _rigidBody;
 			}
+			if (_mass != 0)
+				_collisionShape->calculateLocalInertia(_mass, _inertia);
 			btRigidBody::btRigidBodyConstructionInfo rbInfo(_mass, _motionState, _collisionShape, _inertia);
 			_rigidBody = new btRigidBody(rbInfo);
 			_manager.getWorld().addRigidBody(_rigidBody);

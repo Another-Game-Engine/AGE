@@ -30,8 +30,6 @@ private:
 		_manager.getWorld().stepSimulation(1.f/60.f,10);
 		for (auto e : _collection)
 		{
-//			glm::vec3 force = e->getComponent<Component::RotationForce>()->getForce();
-
 		}
 	}
 
