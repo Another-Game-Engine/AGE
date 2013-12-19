@@ -135,7 +135,7 @@ protected:
 	{
 		require<Component::MeshRenderer>();
 		require<Component::MaterialComponent>();
-		sub("MaterialComponentChanged", [&](Handle &e, SmartPointer<Material> oldMaterial, SmartPointer<Material> newMaterial)
+		globalSub("MaterialComponentChanged", [&](Handle &e, SmartPointer<Material> oldMaterial, SmartPointer<Material> newMaterial)
 		{
 			if (_collection.find(e) == std::end(_collection) || oldMaterial == nullptr)
 				return;

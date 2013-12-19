@@ -54,7 +54,6 @@ private:
 	t_ComponentsList	_components;
 
 	Barcode _code;
-
 public:
 	Entity(Engine &engine);
 	virtual ~Entity();
@@ -79,15 +78,13 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	//to implement in graphnode component
-
 	Barcode &getCode();
 
 
 	////////////////////////////
 	//
 	//
-	// COMPONENTS OPETATIONS
+	// COMPONENTS OPERATIONS
 	//
 	//
 	//
@@ -115,7 +112,7 @@ public:
 		// todo assert if new T fail
 		_code.add(id);
 		_components[id] = tmp;
-		pub(std::string("componentAdded" + std::to_string(id)), _handle);
+		broadCast(std::string("componentAdded" + std::to_string(id)), _handle);
 		return tmp;
 	}
 

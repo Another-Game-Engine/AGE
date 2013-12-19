@@ -3,6 +3,7 @@
 
 #include <string>
 #include <Entities/Handle.hh>
+#include <Utils/PubSub.hpp>
 
 class Engine;
 
@@ -30,23 +31,28 @@ namespace	Component
 	};
 
 	template <class T>
-	struct ComponentBase : public Base
+	struct ComponentBase : public Base, public PubSub
 	{
 		ComponentBase(Engine &engine, Handle &entity, const std::string &name = "DefaultComponentName")
-			: Base(engine, entity, name)
+		: Base(engine, entity, name),
+		PubSub(entity->getPubSubManager())
 		{}
 
 		virtual ~ComponentBase()
-		{}
+		{
+			//for (auto e : _subscriptions)
+			//{
+			//	_entity->unsub(e, true);
+			//}
+		}
 
 		static unsigned int getTypeId()
 		{
 			static unsigned int id = uniqueId();
 			return id;
 		}
-		//ComponentBase(Engine &engine, const std::string &name = "NoName");
-		//virtual ~ComponentBase();
-		//static unsigned int getTypeId();
+	private:
+		//std::multiset<PubSubKey> _subscriptions; // subscriptions to local entity events
 	};
 }
 
