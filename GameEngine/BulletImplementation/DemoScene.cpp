@@ -41,22 +41,13 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	auto &m = _engine.getInstance<EntityManager>();
 	auto p = m.createEntity();
 	auto e = m.createEntity();
+	auto plane = m.createEntity();
+
 	p->addComponent<Component::GraphNode>();
 	e->addComponent<Component::GraphNode>();
 
 	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>("model:ball");
-
 	SmartPointer<Material> materialPlanet = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:planet_" + shader);
-
-	materialPlanet->pushShader(shader);
-
-	e->addComponent<Component::MaterialComponent>(std::string("material:planet_" + shader));
-	e->addComponent<Component::RigidBody>();
-
-	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
-
-	//r->addMaterial(materialPlanet);
 	r->addTexture(tex1, 0);
 	if (!tex2.empty())
 		r->addTexture(tex2, 1);
@@ -64,6 +55,18 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 		r->addTexture(tex3, 2);
 	if (!tex4.empty())
 		r->addTexture(tex4, 3);
+	materialPlanet->pushShader(shader);
+
+	e->addComponent<Component::MaterialComponent>(std::string("material:planet_" + shader));
+	e->addComponent<Component::RigidBody>()->setCollisionShape(Component::RigidBody::SPHERE);
+	e->getComponent<Component::RigidBody>()->setMass(100.0f);
+
+	plane->addComponent<Component::MaterialComponent>(std::string("material:planet_" + shader));
+	plane->addComponent<Component::RigidBody>()->setCollisionShape(Component::RigidBody::PLANE);
+
+
+	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
+	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
 	p->getComponent<Component::GraphNode>()->addSon(e);
 	return (p);
