@@ -136,7 +136,7 @@ public:
 	void pub(PubSubKey &name, Args ...args)
 	{
 		auto set = _subscribers.find(name);
-		if (set == std::end(_collection) || set->second.empty())
+		if (set == std::end(_subscribers) || set->second.empty())
 			return;
 		for (auto it = std::begin(set->second); it != std::end(set->second);)
 		{

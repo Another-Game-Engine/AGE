@@ -41,6 +41,8 @@ glm::mat4 const  		&Entity::getLocalTransform()
 glm::mat4   			&Entity::setLocalTransform()
 {
 	_flags |= HAS_MOVED;
+	PubSubKey key("TransformChanged");
+	pub(key);
 	return (_localTransform);
 }
 
@@ -52,6 +54,8 @@ glm::mat4 const			&Entity::getGlobalTransform() const
 void 					Entity::computeGlobalTransform(glm::mat4 const &fatherTransform)
 {
 	_globalTransform = fatherTransform * _localTransform;
+	PubSubKey key("TransformChanged");
+	pub(key);
 	_flags ^= HAS_MOVED;
 }
 
