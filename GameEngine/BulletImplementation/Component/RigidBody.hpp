@@ -15,6 +15,13 @@ namespace Component
 	class RigidBody : public Component::ComponentBase<RigidBody>
 	{
 	public:
+
+		typedef enum
+		{
+			SPHERE,
+			PLANE
+		} CollisionShape;
+
 		class EntityState : public btMotionState
 		{
 		public:
@@ -40,23 +47,59 @@ namespace Component
 
 		RigidBody(Engine &engine, Handle &entity)
 			: ComponentBase(engine, entity),
-			_manager(engine.getInstance<BulletManager>())
+			_manager(engine.getInstance<BulletManager>()),
+			_collisionShape(nullptr),
+			_motionState(nullptr),
+			_rigidBody(nullptr),
+			_mass(1.0f),
+			_inertia(btVector3(0.0f, 0.0f, 0.0f))
 		{
-			_collisionShape = new btSphereShape(btScalar(1.0f));
 			_mass = btScalar(1.0f);
 			_inertia = btVector3(0.0f, 0.0f, 0.0f);
 			_motionState = new EntityState(entity);
-			btRigidBody::btRigidBodyConstructionInfo rbInfo(_mass, _motionState, _collisionShape, _inertia);
-			_rigidBody = new btRigidBody(rbInfo);
-			_manager.getWorld().addRigidBody(_rigidBody);
+		}
+
+		void setMass(float mass)
+		{
+			_mass = btScalar(mass);
+			_init();
+		}
+
+		void setInertia(btVector3 const &v)
+		{
+			_inertia = v;
+			_init();
+		}
+
+		void setCollisionShape(CollisionShape c)
+		{
+			if (_collisionShape != nullptr)
+			{
+				if (_rigidBody != nullptr)
+				{
+					_manager.getWorld().removeRigidBody(_rigidBody);
+					delete _rigidBody;
+				}
+				delete _collisionShape;
+			}
+			if (c == SPHERE)
+				_collisionShape = new btSphereShape(1.0f);
+			else if (c == PLANE)
+				_collisionShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+			_init();
 		}
 
 		virtual ~RigidBody(void)
 		{
-			_manager.getWorld().removeRigidBody(_rigidBody);
-			delete _rigidBody;
-			delete _motionState;
-			delete _collisionShape;
+			if (_rigidBody)
+			{
+				_manager.getWorld().removeRigidBody(_rigidBody);
+				delete _rigidBody;
+			}
+			if (_motionState)
+				delete _motionState;
+			if (_collisionShape)
+				delete _collisionShape;
 		}		
 
 	private:
@@ -70,6 +113,19 @@ namespace Component
 	private:
 		RigidBody(RigidBody const &);
 		RigidBody &operator=(RigidBody const &);
+		void _init()
+		{
+			if (!_collisionShape || !_motionState)
+				return;
+			if (_rigidBody != nullptr)
+			{
+				_manager.getWorld().removeRigidBody(_rigidBody);
+				delete _rigidBody;
+			}
+			btRigidBody::btRigidBodyConstructionInfo rbInfo(_mass, _motionState, _collisionShape, _inertia);
+			_rigidBody = new btRigidBody(rbInfo);
+			_manager.getWorld().addRigidBody(_rigidBody);
+		}
 	};
 
 }
