@@ -44,5 +44,8 @@
     <ClInclude Include="Component\RigidBody.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="System\BulletSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
