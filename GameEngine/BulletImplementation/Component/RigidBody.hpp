@@ -11,6 +11,7 @@
 #include <ResourceManager/ResourceManager.hh>
 #include <ResourceManager/SharedMesh.hh>
 #include "../BulletManager.hpp"
+#include "BulletCollision/CollisionShapes/btShapeHull.h"
 
 
 ///
@@ -173,9 +174,21 @@ namespace Component
 					t[i * 3 + 2] = geo.vertices[i].z;
 				}
 				btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
-				tmp->setLocalScaling(convertGLMVectorToBullet(scale));
+				btShapeHull *hull = new btShapeHull(tmp);
+				btScalar margin = tmp->getMargin();
+				hull->buildHull(margin);
+				tmp->setUserPointer(hull);
+				btConvexHullShape *s = new btConvexHullShape();
+				for (int i = 0; i < hull->numVertices(); ++i)
+				{
+					s->addPoint(hull->getVertexPointer()[i], false);
+				}
+				s->recalcLocalAabb();
+				s->setLocalScaling(convertGLMVectorToBullet(scale));
+				_collisionShape = s;
 				delete t;
-				_collisionShape = tmp;
+				delete hull;
+				delete tmp;
 			}
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
