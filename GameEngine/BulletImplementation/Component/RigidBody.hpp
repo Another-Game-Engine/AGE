@@ -90,7 +90,8 @@ namespace Component
 		typedef enum
 		{
 			SPHERE,
-			CUBE
+			BOX,
+			UNDEFINED
 		} CollisionShape;
 
 		class EntityState : public btMotionState
@@ -181,31 +182,10 @@ namespace Component
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 			_motionState = new btDefaultMotionState(transform);
 			btVector3 halfScale(scale.x * 0.5f, scale.y * 0.5f, scale.z * 0.5f);
-			if (c == CUBE)
+			if (c == BOX)
 				_collisionShape = new btBoxShape(halfScale);
 			else if (c == SPHERE)
 				_collisionShape = new btSphereShape(scale.x);
-			//// get scale
-			//glm::mat4 m = _entity->getLocalTransform();
-			//// Extract col vectors of the matrix
-			//glm::vec3 col1(m[0][0], m[0][1], m[0][2]);
-			//glm::vec3 col2(m[1][0], m[1][1], m[1][2]);
-			//glm::vec3 col3(m[2][0], m[2][1], m[2][2]);
-			////Extract the scaling factors
-			//glm::vec3 scaling;
-			//scaling.x = glm::length(col1);
-			//scaling.y = glm::length(col2);
-			//scaling.z = glm::length(col3);
-
-			//if (c == SPHERE)
-			//{
-			//	_collisionShape = new btSphereShape(1.0f);
-			//}
-			//else if (c == CUBE)
-			//{
-			//	_collisionShape = new btBoxShape(btVector3(0.5,0.5,0.5));
-			//}
-			//_collisionShape->setLocalScaling(btVector3(scaling.x, scaling.y, scaling.z));
 			_init();
 		}
 
@@ -249,19 +229,6 @@ namespace Component
 			_rigidBody->setUserPointer(&_entity);
 
 			_manager.getWorld().addRigidBody(_rigidBody);
-
-			//if (_mass != 0)
-			//	_collisionShape->calculateLocalInertia(_mass, _inertia);
-			//btRigidBody::btRigidBodyConstructionInfo rbInfo(_mass, _motionState, _collisionShape, _inertia);
-			//_rigidBody = new btRigidBody(rbInfo);
-
-			////_rigidBody->setWorldTransform(convertGLMTransformToBullet(_entity.get()->getLocalTransform()));
-			//btTransform t;
-			//t = _rigidBody->getWorldTransform();
-			//auto tr = _entity.get()->getLocalTransform();
-			//t.setOrigin(btVector3(tr[3].x, tr[3].y, tr[3].z));
-			//_manager.getWorld().addRigidBody(_rigidBody);
-			//_rigidBody->setWorldTransform(t);
 		}
 	};
 

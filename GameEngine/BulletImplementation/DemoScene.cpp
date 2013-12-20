@@ -57,7 +57,7 @@ Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::CUBE);
+	rigidBody->setCollisionShape(Component::RigidBody::BOX);
 	auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
 	auto mat = e->addComponent<Component::MaterialComponent>(material);
 	mesh->addTexture(tex, 0);
@@ -160,7 +160,7 @@ bool 			DemoScene::userStart()
 		if (i % 2)
 			auto c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(2, 1, 3), "material:basic", "texture:sun", 10.0f);
 		else
-			auto c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(1, 1, 1), "material:basic", "texture:earth", 10.0f);
+			auto c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(1, 1, 1), "material:basic", "texture:earth", 100.0f);
 	}
 	auto p1 = createCube(glm::vec3(0,0,0), glm::vec3(100,1,100), "material:basic", "texture:moon", 0);
 
