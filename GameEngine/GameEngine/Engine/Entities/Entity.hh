@@ -133,7 +133,7 @@ public:
 			return;
 		_code.remove(id);
 		_components[id]	= nullptr;
-		pub(std::string("componentRemoved" + std::to_string(id)), _handle);
+		broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
 		// component remove -> signal to system
 	}
 
