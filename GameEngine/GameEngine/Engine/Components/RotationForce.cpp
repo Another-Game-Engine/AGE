@@ -13,16 +13,6 @@ namespace Component
 	RotationForce::~RotationForce(void)
 	{}
 
-	//void RotationForce::update()
-	//{
-	//	float	elapsed = _engine.timer().getElapsed();
-
-	//	getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.x * elapsed, glm::vec3(1,0,0));
-	//	getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.y * elapsed, glm::vec3(0,1,0));
-	//	getFather()->setLocalTransform() = glm::rotate(getFather()->getLocalTransform(), _force.z * elapsed, glm::vec3(0,0,1));
-	//}
-
-
 	void RotationForce::setForce(const glm::vec3 &force)
 	{
 		_force = force;

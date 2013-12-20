@@ -96,6 +96,7 @@
   <ItemGroup>
     <ClInclude Include="BasicCam.hh" />
     <ClInclude Include="BulletManager.hpp" />
+    <ClInclude Include="Component\Collision.hpp" />
     <ClInclude Include="Component\RigidBody.hpp" />
     <ClInclude Include="DemoScene.hh" />
     <ClInclude Include="System\BulletSystem.hpp" />
