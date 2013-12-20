@@ -10,6 +10,7 @@ namespace OpenGLTools
 
 	VertexArray::~VertexArray()
 	{
+		glDeleteVertexArrays(1, &_id);
 	}
 
 	VertexArray::VertexArray(VertexArray const &copy)
@@ -59,10 +60,6 @@ namespace OpenGLTools
 		return (*this);
 	}
 
-	void VertexArray::unload()
-	{
-		glDeleteVertexArrays(1, &_id);
-	}
 
 	void VertexArray::addAttribute(size_t nbrElement, unsigned char nbrComponent, unsigned char nbrByte, Byte *data)
 	{
