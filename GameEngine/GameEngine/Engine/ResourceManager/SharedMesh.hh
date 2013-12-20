@@ -2,6 +2,7 @@
 #define		SHAREDMESH_HH_
 
 #include "AResource.hh"
+#include "OpenGL/VertexArray.hh"
 #include "OpenGL/VertexBuffer.hh"
 
 #include "glm/glm.hpp"
@@ -22,7 +23,7 @@ class SharedMesh : public AResource
 {
 private:
 	Geometry					_geometry;
-	OpenGLTools::VertexBuffer	_buffer;
+	OpenGLTools::VertexArray	_buffer;
 
 public:
 	SharedMesh(void);
@@ -32,7 +33,7 @@ public:
 
 	void			draw() const;
 
-	OpenGLTools::VertexBuffer	&getBuffer();
+	OpenGLTools::VertexArray	&getBuffer();
 
 };
 
