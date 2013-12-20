@@ -34,7 +34,6 @@ DemoScene::~DemoScene(void)
 Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass)
 {
 	auto &m = _engine.getInstance<EntityManager>();
-	auto father = m.createEntity();
 	auto e = m.createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
@@ -44,14 +43,13 @@ Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	auto mat = e->addComponent<Component::MaterialComponent>(material);
 	mesh->addTexture(tex, 0);
 	e->addComponent<Component::GraphNode>();
-	father->addComponent<Component::GraphNode>()->addSon(e);
-	return father;
+	return e;
 }
 
 Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass)
 {
 	auto &m = _engine.getInstance<EntityManager>();
-	auto father = m.createEntity();
+
 	auto e = m.createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(1, 0, 0));
@@ -64,8 +62,7 @@ Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	auto mat = e->addComponent<Component::MaterialComponent>(material);
 	mesh->addTexture(tex, 0);
 	e->addComponent<Component::GraphNode>();
-	father->addComponent<Component::GraphNode>()->addSon(e);
-	return father;
+	return e;
 }
 
 bool 			DemoScene::userStart()
@@ -156,23 +153,28 @@ bool 			DemoScene::userStart()
 	SmartPointer<Material> materialBasic = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:basic");
 	materialBasic->pushShader("basic");
 
-	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 0.f);
+	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 0.0f);
+
 	Handle c1;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
 		if (i % 2)
+		{
 			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "material:basic", "texture:sun", 10.0f);
+			c1->getComponent<Component::RigidBody>()->setAllowedRotation(false, false, false);
+		}
 		else
 			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "material:basic", "texture:earth", 100.0f);
-		p1->getComponent<Component::GraphNode>()->addSon(c1);
+		//p1->getComponent<Component::GraphNode>()->addSon(c1);
 	}
-
+	p1->setLocalTransform() = glm::scale(p1->getLocalTransform(), glm::vec3(0.1, 1, 0.1));
+	p1->getComponent<Component::RigidBody>()->updateScale();
 
 	// --
 	// Setting camera with skybox
 	// --
 
-	setCamera(new TrackBall(_engine, c1->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getHandle(), 30.0f, 1.0f, 1.0f));
+	setCamera(new TrackBall(_engine, p1, 30.0f, 1.0f, 1.0f));
 	std::string		vars[] = 
 	{
 		"projection",
