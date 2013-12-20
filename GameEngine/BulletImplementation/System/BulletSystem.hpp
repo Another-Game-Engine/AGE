@@ -20,14 +20,28 @@ public:
 private:
 	BulletManager &_manager;
 	virtual void updateBegin(double time)
-	{}
+	{
+		_manager.getWorld().stepSimulation(time,10);
+		//btDispatcher *dispatcher = _manager.getWorld().getDispatcher();
+		//unsigned int max = dispatcher->getNumManifolds();
+		//for (unsigned int i = 0; i < max; ++i)
+		//{
+		//	btPersistentManifold *contact = dispatcher->getManifoldByIndexInternal(i);
+		//	const btCollisionObject *oa = static_cast<const btCollisionObject*>(contact->getBody0());
+		//	const btCollisionObject *ob = static_cast<const btCollisionObject*>(contact->getBody1());
+		//	Handle h1 = *(static_cast<Handle*>(oa->getUserPointer()));
+		//	Entity *e1 = h1.get();
+		//	e1->removeComponent<Component::GraphNode>();
+		//	e1->removeComponent<Component::RigidBody>();
+		//	std::cout << "a" << std::endl;
+		//}
+	}
 
 	virtual void updateEnd(double time)
 	{}
 
 	virtual void mainUpdate(double time)
 	{
-		_manager.getWorld().stepSimulation(time,10);
 		for (auto e : _collection)
 		{
 			glm::mat4 m;

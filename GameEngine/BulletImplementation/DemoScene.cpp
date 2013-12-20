@@ -168,9 +168,9 @@ bool 			DemoScene::userStart()
 	SmartPointer<Material> materialBasic = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:basic");
 	materialBasic->pushShader("basic");
 
-	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 0.0f);
+	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 1.0f);
 	p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
-	p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, true);
+	p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, false);
 	//p1->setLocalTransform() = glm::scale(p1->getLocalTransform(), glm::vec3(0.5, 1, 0.5));
 	//p1->getComponent<Component::RigidBody>()->updateScale();
 //	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));

@@ -199,6 +199,7 @@ namespace Component
 			_manager.getWorld().addRigidBody(_rigidBody);
 		}
 
+
 		void updateScale()
 		{
 			if (!_collisionShape)

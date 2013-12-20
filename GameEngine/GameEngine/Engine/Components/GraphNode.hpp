@@ -23,7 +23,10 @@ namespace Component
 			}
 
 		virtual ~GraphNode()
-		{}
+		{
+			auto key = PubSubKey("graphNodeNotARoot");
+			broadCast(key, _entity);
+		}
 
 		const Handle	    	&getParent() const
 		{
