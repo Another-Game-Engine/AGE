@@ -102,7 +102,9 @@ namespace Component
 			_rigidBody(nullptr),
 			_shapeType(UNDEFINED),
 			_mass(mass),
-			_inertia(btVector3(0.0f, 0.0f, 0.0f))
+			_inertia(btVector3(0.0f, 0.0f, 0.0f)),
+			_rotationConstraint(glm::vec3(1,1,1)),
+			_transformConstraint(glm::vec3(1,1,1))
 		{
 		}
 
@@ -158,8 +160,9 @@ namespace Component
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
 			_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
 			_rigidBody->setUserPointer(&_entity);
+			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
+			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
 			_manager.getWorld().addRigidBody(_rigidBody);
-
 		}
 
 		void updateScale()
@@ -172,11 +175,24 @@ namespace Component
 				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scaleFromMat4(_entity->getLocalTransform())));
 		}
 
-		void setAllowedRotation(bool x, bool y, bool z)
+		void setRotationConstraint(bool x, bool y, bool z)
 		{
+			_rotationConstraint = glm::vec3(static_cast<unsigned int>(x),
+				static_cast<unsigned int>(y),
+				static_cast<unsigned int>(z));
 			if (!_rigidBody)
 				return;
-			_rigidBody->setAngularFactor(btVector3(x, y, z));
+			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
+		}
+
+		void setTransformConstraint(bool x, bool y, bool z)
+		{
+			_transformConstraint = glm::vec3(static_cast<unsigned int>(x),
+				static_cast<unsigned int>(y),
+				static_cast<unsigned int>(z));
+			if (!_rigidBody)
+				return;
+			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
 		}
 
 		virtual ~RigidBody(void)
@@ -200,6 +216,8 @@ namespace Component
 		CollisionShape _shapeType;
 		btScalar _mass;
 		btVector3 _inertia;
+		glm::vec3 _rotationConstraint;
+		glm::vec3 _transformConstraint;
 	private:
 		RigidBody(RigidBody const &);
 		RigidBody &operator=(RigidBody const &);

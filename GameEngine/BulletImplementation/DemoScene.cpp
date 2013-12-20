@@ -153,22 +153,23 @@ bool 			DemoScene::userStart()
 	SmartPointer<Material> materialBasic = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:basic");
 	materialBasic->pushShader("basic");
 
-	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 0.0f);
+	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 1.0f);
+	p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
+	p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, true);
+	p1->setLocalTransform() = glm::scale(p1->getLocalTransform(), glm::vec3(0.5, 1, 0.5));
+	p1->getComponent<Component::RigidBody>()->updateScale();
+
 
 	Handle c1;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
 		if (i % 2)
 		{
-			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "material:basic", "texture:sun", 10.0f);
-			c1->getComponent<Component::RigidBody>()->setAllowedRotation(false, false, false);
+			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "material:basic", "texture:sun", 1.0f);
 		}
 		else
-			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "material:basic", "texture:earth", 100.0f);
-		//p1->getComponent<Component::GraphNode>()->addSon(c1);
+			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "material:basic", "texture:earth", 1.0f);
 	}
-	p1->setLocalTransform() = glm::scale(p1->getLocalTransform(), glm::vec3(0.1, 1, 0.1));
-	p1->getComponent<Component::RigidBody>()->updateScale();
 
 	// --
 	// Setting camera with skybox
