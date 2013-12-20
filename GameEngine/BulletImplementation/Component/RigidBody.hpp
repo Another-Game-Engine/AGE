@@ -94,46 +94,13 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		class EntityState : public btMotionState
-		{
-		public:
-			EntityState(Handle &entity) :
-				_entity(entity)
-			{
-				glm::mat4 m = entity->getLocalTransform();
-				_scale = scaleFromMat4(m);
-				m = glm::scale(m, - _scale);
-				_worldTrans = convertGLMTransformToBullet(m);
-			}
-
-			~EntityState()
-			{}
-
-			virtual void getWorldTransform(btTransform& worldTrans) const
-			{
-				worldTrans = _worldTrans;
-			}
-			virtual void setWorldTransform(const btTransform& worldTrans)
-			{
-				_worldTrans = worldTrans;
-				_entity->setLocalTransform() = convertBulletTransformToGLM(worldTrans);
-				_entity->setLocalTransform() = glm::scale(_entity->getLocalTransform(), _scale);
-				
-				//btTransform t = worldTrans;
-				//_entity.get()->setLocalTransform() = convertBulletTransformToGLM(t);
-			}
-		private:
-			Handle      _entity;
-			btTransform  _worldTrans;
-			glm::vec3 _scale;
-		};
-
 		RigidBody(Engine &engine, Handle &entity, float mass = 1.0f)
 			: ComponentBase(engine, entity),
 			_manager(engine.getInstance<BulletManager>()),
 			_collisionShape(nullptr),
 			_motionState(nullptr),
 			_rigidBody(nullptr),
+			_shapeType(UNDEFINED),
 			_mass(mass),
 			_inertia(btVector3(0.0f, 0.0f, 0.0f))
 		{
@@ -167,6 +134,7 @@ namespace Component
 		void setCollisionShape(CollisionShape c)
 		{
 			_reset();
+			_shapeType = c;
 			btTransform transform;
 			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
 			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
@@ -190,9 +158,25 @@ namespace Component
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
 			_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
 			_rigidBody->setUserPointer(&_entity);
-
 			_manager.getWorld().addRigidBody(_rigidBody);
 
+		}
+
+		void updateScale()
+		{
+			if (!_collisionShape)
+				return;
+			if (_shapeType == BOX)
+				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scaleFromMat4(_entity->getLocalTransform()) / 2.0f));
+			else if (_shapeType == SPHERE)
+				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scaleFromMat4(_entity->getLocalTransform())));
+		}
+
+		void setAllowedRotation(bool x, bool y, bool z)
+		{
+			if (!_rigidBody)
+				return;
+			_rigidBody->setAngularFactor(btVector3(x, y, z));
 		}
 
 		virtual ~RigidBody(void)
@@ -213,7 +197,7 @@ namespace Component
 		btCollisionShape *_collisionShape;
 		btMotionState *_motionState;
 		btRigidBody *_rigidBody;
-
+		CollisionShape _shapeType;
 		btScalar _mass;
 		btVector3 _inertia;
 	private:
