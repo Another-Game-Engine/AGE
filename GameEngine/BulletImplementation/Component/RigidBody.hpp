@@ -8,6 +8,8 @@
 #include <Entities/Entity.hh>
 #include <Entities/Handle.hh>
 #include <Core/Engine.hh>
+#include <ResourceManager/ResourceManager.hh>
+#include <ResourceManager/SharedMesh.hh>
 #include "../BulletManager.hpp"
 
 
@@ -91,6 +93,7 @@ namespace Component
 		{
 			SPHERE,
 			BOX,
+			MESH,
 			UNDEFINED
 		} CollisionShape;
 
@@ -133,8 +136,10 @@ namespace Component
 			_inertia = v;
 		}
 
-		void setCollisionShape(CollisionShape c)
+		void setCollisionShape(CollisionShape c, const std::string &meshName = "")
 		{
+			if (c == UNDEFINED)
+				return;
 			_reset();
 			_shapeType = c;
 			btTransform transform;
@@ -155,6 +160,22 @@ namespace Component
 			{
 				_collisionShape = new btSphereShape(1);//new btSphereShape(scale.x);
 				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
+			}
+			else if (c == MESH)
+			{
+				SmartPointer<Resources::SharedMesh> mesh = _engine.getInstance<Resources::ResourceManager>().getResource(meshName);
+				const Resources::Geometry &geo = mesh->getGeometry();
+				btScalar *t = new btScalar[geo.vertices.size() * 3]();
+				for (unsigned int i = 0; i < geo.vertices.size(); ++i)
+				{
+					t[i * 3] = geo.vertices[i].x;
+					t[i * 3 + 1] = geo.vertices[i].y;
+					t[i * 3 + 2] = geo.vertices[i].z;
+				}
+				btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
+				tmp->setLocalScaling(convertGLMVectorToBullet(scale));
+				delete t;
+				_collisionShape = tmp;
 			}
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
