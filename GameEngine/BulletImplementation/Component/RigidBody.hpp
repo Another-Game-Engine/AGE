@@ -45,7 +45,6 @@ namespace Component
 		typedef enum
 		{
 			SPHERE,
-			PLANE,
 			CUBE
 		} CollisionShape;
 
@@ -137,9 +136,9 @@ namespace Component
 			scaling.z = glm::length(col3);
 
 			if (c == SPHERE)
+			{
 				_collisionShape = new btSphereShape(1.0f);
-			else if (c == PLANE)
-				_collisionShape = new btBoxShape(btVector3(1,1,1));
+			}
 			else if (c == CUBE)
 			{
 				_collisionShape = new btBoxShape(btVector3(0.5,0.5,0.5));

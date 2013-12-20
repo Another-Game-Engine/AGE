@@ -53,8 +53,8 @@ Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	auto &m = _engine.getInstance<EntityManager>();
 	auto e = m.createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
+//	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), (rand() % 1000) / 10.0f, glm::vec3(1, 1, 1));
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
-//	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), (rand() % 1000) / 10.0f, glm::vec3(1, 0, 0));
 	auto rigidBody = e->addComponent<Component::RigidBody>();
 	rigidBody->setCollisionShape(Component::RigidBody::CUBE);
 	rigidBody->setMass(mass);
@@ -66,39 +66,10 @@ Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	return e;
 }
 
-Handle  DemoScene::createPlane(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex)
-{
-	auto &m = _engine.getInstance<EntityManager>();
-	auto e = m.createEntity();
-	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
-
-	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 10.0f, glm::vec3(0, 0, 1));
-
-	auto rigidBody = e->addComponent<Component::RigidBody>();
-	rigidBody->setCollisionShape(Component::RigidBody::PLANE);
-	auto mesh = e->addComponent<Component::MeshRenderer>("model:square");
-	auto mat = e->addComponent<Component::MaterialComponent>(material);
-	mesh->addTexture(tex, 0);
-	e->addComponent<Component::GraphNode>();
-
-	return e;
-}
-
-Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
-												glm::vec3 &pos, glm::vec3 &scale,
-												std::string const &shader,
-												std::string const &tex1, std::string const &tex2, std::string const &tex3,
-												std::string const &tex4)
-{
-	auto &m = _engine.getInstance<EntityManager>();
-	auto p = m.createEntity();
-	
-	return (p);
-}
-
 bool 			DemoScene::userStart()
 {	
+	std::srand(0);
+
 	// System Tests
 	//
 	//
@@ -132,7 +103,7 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().addUniform("PerModel")
 		.init(&s, "PerModel", perModelVars);
 
-	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
+	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 	_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
 	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
 
@@ -180,22 +151,18 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moonBump", new Resources::Texture(), "./Assets/MoonNormalMap.tga");
 	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
 
-	SmartPointer<Material> materialsun = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:sun");
-	materialsun->pushShader("basic");
-
-	SmartPointer<Material> materialMoon = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:moon");
-	materialMoon->pushShader("basic");
-
+	SmartPointer<Material> materialBasic = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:basic");
+	materialBasic->pushShader("basic");
 
 
 	for (unsigned int i = 0; i < 100; ++i)
 	{
 		if (i % 2)
-			auto c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(2, 1, 3), "material:sun", "texture:sun", 10.0f);
+			auto c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(2, 1, 3), "material:basic", "texture:sun", 10.0f);
 		else
-			auto c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(1, 1, 1), "material:sun", "texture:earth", 10.0f);
+			auto c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i, 0), glm::vec3(1, 1, 1), "material:basic", "texture:earth", 10.0f);
 	}
-	auto p1 = createCube(glm::vec3(0,0,0), glm::vec3(100,1,100), "material:moon", "texture:moon", 0);
+	auto p1 = createCube(glm::vec3(0,0,0), glm::vec3(100,1,100), "material:basic", "texture:moon", 0);
 
 
 	// --
