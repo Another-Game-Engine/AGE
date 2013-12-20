@@ -50,13 +50,6 @@ protected:
 
 		auto currentScene = _engine.getInstance<SceneManager>().getCurrentScene();
 
-		t += time;
-		// Set les uniforms du block PerFrame
-		perFrameBuffer->setUniform("projection", currentScene->getCamera()->getProjection());
-		perFrameBuffer->setUniform("view", currentScene->getCamera()->getTransform());
-		perFrameBuffer->setUniform("time", (float)t);
-		perFrameBuffer->flushChanges();
-
 		fbo.renderBegin();
 		fbo.applyViewport();
 		fbo.clearColor();
@@ -65,6 +58,13 @@ protected:
 		//render skybox before z-pass
 		// TODO : !!!! TRANSFORM CAMERA INTO COMPONENT !!!
 		_engine.getInstance<SceneManager>().getCurrentScene()->getCamera()->update();
+
+		t += time;
+		// Set les uniforms du block PerFrame
+		perFrameBuffer->setUniform("projection", currentScene->getCamera()->getProjection());
+		perFrameBuffer->setUniform("view", currentScene->getCamera()->getTransform());
+		perFrameBuffer->setUniform("time", (float)t);
+		perFrameBuffer->flushChanges();
 
 		// temporary z-pass
 		// to erase when depthOnly shader fixed

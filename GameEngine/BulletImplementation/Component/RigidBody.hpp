@@ -100,7 +100,10 @@ namespace Component
 			EntityState(Handle &entity) :
 				_entity(entity)
 			{
-				this->mWorldTrans = convertGLMTransformToBullet(entity->getLocalTransform());
+				glm::mat4 m = entity->getLocalTransform();
+				_scale = scaleFromMat4(m);
+				m = glm::scale(m, - _scale);
+				_worldTrans = convertGLMTransformToBullet(m);
 			}
 
 			~EntityState()
@@ -108,16 +111,21 @@ namespace Component
 
 			virtual void getWorldTransform(btTransform& worldTrans) const
 			{
-				worldTrans = convertGLMTransformToBullet(_entity.get()->getLocalTransform());
+				worldTrans = _worldTrans;
 			}
 			virtual void setWorldTransform(const btTransform& worldTrans)
 			{
-				btTransform t = worldTrans;
-				_entity.get()->setLocalTransform() = convertBulletTransformToGLM(t);
+				_worldTrans = worldTrans;
+				_entity->setLocalTransform() = convertBulletTransformToGLM(worldTrans);
+				_entity->setLocalTransform() = glm::scale(_entity->getLocalTransform(), _scale);
+				
+				//btTransform t = worldTrans;
+				//_entity.get()->setLocalTransform() = convertBulletTransformToGLM(t);
 			}
 		private:
 			Handle      _entity;
-			btTransform  mWorldTrans;
+			btTransform  _worldTrans;
+			glm::vec3 _scale;
 		};
 
 		RigidBody(Engine &engine, Handle &entity, float mass = 1.0f)
@@ -149,30 +157,16 @@ namespace Component
 		void setMass(float mass)
 		{
 			_mass = btScalar(mass);
-			_init();
 		}
 
 		void setInertia(btVector3 const &v)
 		{
 			_inertia = v;
-			_init();
 		}
 
 		void setCollisionShape(CollisionShape c)
 		{
-			if (_rigidBody != nullptr)
-			{
-				_manager.getWorld().removeRigidBody(_rigidBody);
-				delete _rigidBody;
-			}
-			if (_motionState != nullptr)
-			{
-				delete _motionState;
-			}
-			if (_collisionShape != nullptr)
-			{
-				delete _collisionShape;
-			}
+			_reset();
 			btTransform transform;
 			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
 			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
@@ -181,12 +175,24 @@ namespace Component
 			transform.setOrigin(convertGLMVectorToBullet(position));
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 			_motionState = new btDefaultMotionState(transform);
-			btVector3 halfScale(scale.x * 0.5f, scale.y * 0.5f, scale.z * 0.5f);
 			if (c == BOX)
-				_collisionShape = new btBoxShape(halfScale);
+			{
+				btVector3 halfScale(scale.x * 0.5f, scale.y * 0.5f, scale.z * 0.5f);
+				_collisionShape = new btBoxShape(btVector3(1, 1, 1));//new btBoxShape(halfScale);
+				_collisionShape->setLocalScaling(halfScale);
+			}
 			else if (c == SPHERE)
-				_collisionShape = new btSphereShape(scale.x);
-			_init();
+			{
+				_collisionShape = new btSphereShape(1);//new btSphereShape(scale.x);
+				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
+			}
+			if (_mass != 0)
+				_collisionShape->calculateLocalInertia(_mass, _inertia);
+			_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
+			_rigidBody->setUserPointer(&_entity);
+
+			_manager.getWorld().addRigidBody(_rigidBody);
+
 		}
 
 		virtual ~RigidBody(void)
@@ -213,22 +219,22 @@ namespace Component
 	private:
 		RigidBody(RigidBody const &);
 		RigidBody &operator=(RigidBody const &);
-		void _init()
+
+		void _reset()
 		{
-			if (!_collisionShape || !_motionState)
-				return;
 			if (_rigidBody != nullptr)
 			{
 				_manager.getWorld().removeRigidBody(_rigidBody);
 				delete _rigidBody;
 			}
-
-			if (_mass != 0)
-				_collisionShape->calculateLocalInertia(_mass, _inertia);
-			_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
-			_rigidBody->setUserPointer(&_entity);
-
-			_manager.getWorld().addRigidBody(_rigidBody);
+			if (_motionState != nullptr)
+			{
+				delete _motionState;
+			}
+			if (_collisionShape != nullptr)
+			{
+				delete _collisionShape;
+			}
 		}
 	};
 

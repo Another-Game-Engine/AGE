@@ -60,6 +60,7 @@ void ACamera::dettachSkybox()
 
 void ACamera::update()
 {
+	customUpdate();
 	if (_skybox.get())
 	{
 		OpenGLTools::Shader *s = _engine.getInstance<Renderer>().getShader(_cubeMapShader);
@@ -87,5 +88,4 @@ void ACamera::update()
 		glDepthMask(1);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	}
-	customUpdate();
 }
