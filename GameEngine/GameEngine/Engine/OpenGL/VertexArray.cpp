@@ -112,7 +112,7 @@ namespace OpenGLTools
 		glBindVertexArray(0);
 	}
 
-	void VertexArray::transferGPU() const
+	void VertexArray::transferGPU(GLenum mode) const
 	{
 		size_t offset = 0;
 		glBindVertexArray(_id);
@@ -123,7 +123,7 @@ namespace OpenGLTools
 			handleError();
 			offset += _attributes[index].nbrByte * _attributes[index].nbrComponent * _attributes[index].nbrElement;
 		}
-		_data.transferGPU();
+		_data.transferGPU(_withIndex, mode);
 		handleError();
 		glBindVertexArray(0);
 	}

@@ -44,7 +44,7 @@ namespace OpenGLTools
 		void popBuffer();
 		void clearBuffer();
 		
-		void transferGPU(bool isIndice, GLenum connect, GLenum mode) const;
+		void transferGPU(bool isIndice, GLenum mode) const;
 		void handleError() const;
 
 	private:

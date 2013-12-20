@@ -62,17 +62,17 @@ namespace OpenGLTools
 		 _buffers.clear();
 	 }
 	
-	 void VertexBuffer::transferGPU(bool isIndice, GLenum connect, GLenum mode) const
+	 void VertexBuffer::transferGPU(bool isIndice, GLenum mode) const
 	 {
 		GLenum type = isIndice ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER;
 		size_t offset = 0;
 
 		glBindBuffer(type, _id);
-		glBufferData(connect, _size, NULL, mode);
+		glBufferData(type, _size, NULL, mode);
 		handleError();
 		for (size_t index = 0; index < _buffers.size(); ++index)
 		{
-			glBufferSubData(connect, offset, _buffers[index].size, _buffers[index].data);
+			glBufferSubData(type, offset, _buffers[index].size, _buffers[index].data);
 			handleError();
 			offset += _buffers[index].size;
 		}
