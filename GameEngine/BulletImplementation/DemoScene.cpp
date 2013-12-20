@@ -54,11 +54,26 @@ Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(1, 0, 0));
 	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(0, 1, 0));
-	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::BOX);
 	auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
+	auto mat = e->addComponent<Component::MaterialComponent>(material);
+	mesh->addTexture(tex, 0);
+	e->addComponent<Component::GraphNode>();
+	return e;
+}
+
+Handle  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass)
+{
+	auto &m = _engine.getInstance<EntityManager>();
+
+	auto e = m.createEntity();
+	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
+	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
+	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
+	rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:monkey");
+	auto mesh = e->addComponent<Component::MeshRenderer>("model:monkey");
 	auto mat = e->addComponent<Component::MaterialComponent>(material);
 	mesh->addTexture(tex, 0);
 	e->addComponent<Component::GraphNode>();
@@ -136,6 +151,7 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball.obj");
 	_engine.getInstance<Resources::ResourceManager>().addResource("model:cube", new Resources::SharedMesh(), "./Assets/cube.obj");
 	_engine.getInstance<Resources::ResourceManager>().addResource("model:square", new Resources::SharedMesh(), "./Assets/square.obj");
+	_engine.getInstance<Resources::ResourceManager>().addResource("model:monkey", new Resources::SharedMesh(), "./Assets/monkey.obj");
 
 	SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
 
@@ -145,7 +161,6 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthBump", new Resources::Texture(), "./Assets/EarthTextureBump.tga");
 	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthNight", new Resources::Texture(), "./Assets/EarthNightTexture.tga");
 	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthClouds", toRepeat, "./Assets/EarthClouds.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "./Assets/SunTexture.tga");
 	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moon", new Resources::Texture(), "./Assets/MoonTexture.tga");
 	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moonBump", new Resources::Texture(), "./Assets/MoonNormalMap.tga");
 	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
@@ -153,22 +168,29 @@ bool 			DemoScene::userStart()
 	SmartPointer<Material> materialBasic = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:basic");
 	materialBasic->pushShader("basic");
 
-	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 1.0f);
+	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 0.0f);
 	p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
 	p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, true);
 	p1->setLocalTransform() = glm::scale(p1->getLocalTransform(), glm::vec3(0.5, 1, 0.5));
 	p1->getComponent<Component::RigidBody>()->updateScale();
-
+//	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));
 
 	Handle c1;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
-		if (i % 2)
+		if (i % 3)
 		{
 			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "material:basic", "texture:sun", 1.0f);
 		}
-		else
+		else if (i % 2)
+		{
 			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "material:basic", "texture:earth", 1.0f);
+		}
+		else
+		{
+			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 90.0f), "material:basic", "texture:earth", 10.0f);
+			c1->setLocalTransform() = glm::rotate(c1->getLocalTransform(), std::rand() % 100 / 10.0f, glm::vec3(1, 1, 1));
+		}
 	}
 
 	// --

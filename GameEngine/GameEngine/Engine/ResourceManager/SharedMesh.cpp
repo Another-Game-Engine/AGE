@@ -45,4 +45,9 @@ OpenGLTools::VertexBuffer	&SharedMesh::getBuffer()
 	return (_buffer);
 }
 
+const Geometry      &SharedMesh::getGeometry() const
+{
+	return _geometry;
+}
+
 }
