@@ -28,7 +28,6 @@ namespace OpenGLTools
 		VertexArray(VertexArray const &vertexarray);
 		VertexArray &operator=(VertexArray const &vertexarray);
 
-		void unload();
 		void addAttribute(size_t nbrElement, unsigned char nbrComponent, unsigned char nbrByte, Byte *data);
 
 		VertexBuffer const &getIndices() const;
