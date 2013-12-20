@@ -37,9 +37,8 @@ Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	auto e = m.createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
-	auto rigidBody = e->addComponent<Component::RigidBody>();
+	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-	rigidBody->setMass(mass);
 	auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
 	auto mat = e->addComponent<Component::MaterialComponent>(material);
 	mesh->addTexture(tex, 0);
@@ -53,11 +52,12 @@ Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	auto &m = _engine.getInstance<EntityManager>();
 	auto e = m.createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-//	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), (rand() % 1000) / 10.0f, glm::vec3(1, 1, 1));
+	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(1, 0, 0));
+	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(0, 1, 0));
+	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
-	auto rigidBody = e->addComponent<Component::RigidBody>();
+	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::CUBE);
-	rigidBody->setMass(mass);
 	auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
 	auto mat = e->addComponent<Component::MaterialComponent>(material);
 	mesh->addTexture(tex, 0);
