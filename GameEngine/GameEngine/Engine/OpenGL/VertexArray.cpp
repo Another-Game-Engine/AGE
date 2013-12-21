@@ -3,12 +3,25 @@
 namespace OpenGLTools
 {
 	VertexArray::VertexArray()
-		: _withIndex(false)
+		: _withIndex(false),
+		_id(0),
+		_isDrawable(false)
 	{
-		glGenVertexArrays(1, &_id);
 	}
 
 	VertexArray::~VertexArray()
+	{
+	}
+
+	void VertexArray::init()
+	{
+		_isDrawable = true;
+		glGenVertexArrays(1, &_id);
+		_data.init();
+		_indices.init();
+	}
+
+	void VertexArray::unload()
 	{
 		glDeleteVertexArrays(1, &_id);
 	}
@@ -63,10 +76,8 @@ namespace OpenGLTools
 
 	void VertexArray::addAttribute(size_t nbrElement, unsigned char nbrComponent, unsigned char nbrByte, Byte *data)
 	{
-		glBindVertexArray(_id);
 		_attributes.push_back(Attribute(nbrElement, nbrComponent, nbrByte));
 		_data.pushBuffer(data, nbrElement * nbrComponent * nbrByte);
-		glBindVertexArray(0);
 	}
 
 	VertexBuffer const &VertexArray::getIndices() const
@@ -103,52 +114,58 @@ namespace OpenGLTools
 
 	void VertexArray::draw(GLenum draw) const
 	{
-		glBindVertexArray(_id);
-		if (_withIndex)
-			glDrawElements(draw, _indices.getSize(), GL_UNSIGNED_BYTE, static_cast<GLvoid const *>(0));
-		else
-			glDrawArrays(draw, 0, _data.getSize());
-		handleError();
-		glBindVertexArray(0);
+		if (_isDrawable)
+		{
+			glBindVertexArray(_id);
+			if (_withIndex)
+				glDrawElements(draw, _indices.getSize(), GL_UNSIGNED_INT, static_cast<GLvoid const *>(0));
+			else
+				glDrawArrays(draw, 0, _data.getSize());
+			handleError("draw");
+			glBindVertexArray(0);
+		}
+
 	}
 
 	void VertexArray::transferGPU(GLenum mode) const
 	{
-		size_t offset = 0;
 		glBindVertexArray(_id);
+		_data.transferGPU(false, mode);
+		handleError("transferGPU-vertexbuffer");
+		if (_withIndex)
+		{
+			_indices.transferGPU(true, mode);
+			handleError("transferGPU-vertexbuffer");
+		}
+		size_t offset = 0;
 		for (size_t index = 0; index < _attributes.size(); ++index)
 		{
 			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, _attributes[index].nbrComponent, GL_FLOAT, GL_FALSE, 0, (const GLvoid *)offset);
-			handleError();
+			glVertexAttribPointer(index, (GLint)_attributes[index].nbrComponent, GL_FLOAT, GL_TRUE, 0, (const GLvoid *)offset);
+			handleError("transferGPU-vertexAttribPointer");
 			offset += _attributes[index].nbrByte * _attributes[index].nbrComponent * _attributes[index].nbrElement;
 		}
-		_data.transferGPU(_withIndex, mode);
-		handleError();
 		glBindVertexArray(0);
 	}
 
-	void VertexArray::handleError() const
+	void VertexArray::handleError(std::string const &localisation) const
 	{
 		GLenum error;
 
 		error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			std::cerr << "Error: check into an VertexArray:" << std::endl;
+			std::cerr << "Error: check into an VertexArray : -> " << localisation << std::endl;
 			switch (error)
 			{
 			case GL_INVALID_ENUM:
-				std::cerr << " - this mode is not accepted." << std::endl;
+				std::cerr << "Invalid Enum" << std::endl;
 				break;
 			case GL_INVALID_VALUE:
-				std::cerr << " - the count set is negative." << std::endl;
+				std::cerr << "Invalid Value" << std::endl;
 				break;
 			case GL_INVALID_OPERATION:
-				std::cerr << " - A non-zero buffer object name is bound to an enabled array."
-						  << std::endl
-						  << " - or the element array and the buffer object's data store is currently mapped."
-						  << std::endl;
+				std::cerr << "Invalid Operation" << std::endl;
 				break;
 			}
 		}
