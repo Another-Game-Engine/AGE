@@ -51,6 +51,6 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 	while (e.update())
 		;
-	e.stop();
+	//e.stop();
 	return (EXIT_SUCCESS);
 }
