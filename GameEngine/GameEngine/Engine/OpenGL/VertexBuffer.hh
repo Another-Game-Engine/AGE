@@ -8,7 +8,6 @@
 # include <map>
 # include <string>
 
-# include "Attribute.hh"
 # include "UniformBuffer.hh"
 
 namespace OpenGLTools
@@ -27,13 +26,20 @@ namespace OpenGLTools
 			Buffer(size_t size, Byte *data)
 				: size(size), data(data)
 			{}
-			~Buffer();
+			Buffer(Buffer const &copy)
+				: size(copy.size), data(copy.data)
+			{}
+			~Buffer(){}
 		};
+
 	public:
 		VertexBuffer();
 		~VertexBuffer();
 		VertexBuffer(VertexBuffer const &copy);
 		
+		void init();
+		void unload();
+
 		VertexBuffer &operator=(VertexBuffer const &vertexbuffer);
 		void pushBuffer(Byte *data, size_t size);
 		

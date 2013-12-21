@@ -7,10 +7,18 @@ namespace OpenGLTools
 	VertexBuffer::VertexBuffer()
 		: _size(0)
 	{
-		glGenBuffers(1, &_id);
 	}
 
 	 VertexBuffer::~VertexBuffer()
+	 {
+	 }
+
+	 void VertexBuffer::init()
+	 {
+		 glGenBuffers(1, &_id);
+	 }
+
+	 void VertexBuffer::unload()
 	 {
 		 glDeleteBuffers(1, &_id);
 	 }
@@ -76,7 +84,6 @@ namespace OpenGLTools
 			handleError();
 			offset += _buffers[index].size;
 		}
-		glBindBuffer(type, 0);
 	}
 
 	 void VertexBuffer::handleError() const

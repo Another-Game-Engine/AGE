@@ -1,8 +1,8 @@
 #ifndef VERTEXARRAY_HH_
 # define VERTEXARRAY_HH_
 
+# include "Utils/OpenGL.hh"
 # include <vector>
-# include <Utils/OpenGL.hh>
 
 # include "VertexBuffer.hh"
 
@@ -28,6 +28,9 @@ namespace OpenGLTools
 		 VertexArray(VertexArray const &vertexarray);
 		 VertexArray &operator=(VertexArray const &vertexarray);
 
+		 void init();
+		 void unload();
+
 		void addAttribute(size_t nbrElement, unsigned char nbrComponent, unsigned char nbrByte, Byte *data);
 
 		VertexBuffer const &getIndices() const;
@@ -37,9 +40,9 @@ namespace OpenGLTools
 		void clearIndices();
 		void setData(VertexBuffer const &vertexbuffer);
 		void clearData();
-		void transferGPU(GLenum mode)     const;
-		void handleError()				  const;
-		void draw(GLenum draw)			  const;
+		void transferGPU(GLenum mode)					  const;
+		void handleError(std::string const &localisation) const;
+		void draw(GLenum draw)							  const;
 
 	private:
 		bool                   _withIndex;
@@ -47,6 +50,7 @@ namespace OpenGLTools
 		VertexBuffer           _data;
 		VertexBuffer           _indices;
 		GLuint                 _id;
+		bool				   _isDrawable;
 	};
 }
 
