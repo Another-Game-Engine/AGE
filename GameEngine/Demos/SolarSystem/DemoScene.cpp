@@ -75,7 +75,7 @@ bool 			DemoScene::userStart()
 	//
 
 	addSystem<RotationForceSystem>(0);
-	addSystem<MeshRendererSystem>(1)->setRenderDebugMode(true);
+	addSystem<MeshRendererSystem>(1);//->setRenderDebugMode(true);
 	addSystem<GraphNodeSystem>(2);
 
 	//
