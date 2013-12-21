@@ -90,6 +90,7 @@
     <ClCompile Include="Engine\Entities\Handle.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
+    <ClCompile Include="Engine\OpenGL\ErrorControler.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexArray.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="Engine\Entities\EntityManager.h" />
     <ClInclude Include="Engine\Entities\Handle.hh" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
+    <ClInclude Include="Engine\OpenGL\ErrorControler.hh" />
     <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
