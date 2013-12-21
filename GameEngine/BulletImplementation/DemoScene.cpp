@@ -167,9 +167,42 @@ bool 			DemoScene::userStart()
 	SmartPointer<Material> materialBasic = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:basic");
 	materialBasic->pushShader("basic");
 
+
 	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 1.0f);
 	p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
 	p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, false);
+
+	{
+		auto &m = _engine.getInstance<EntityManager>();
+		auto e = m.createEntity();
+		e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 45.0f, glm::vec3(0, 1, 0));
+		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(10,10,10));
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(10,10,10));
+
+		auto rigidBody = e->addComponent<Component::RigidBody>(100.0f);
+		rigidBody->setCollisionShape(Component::RigidBody::BOX);
+		auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
+		auto mat = e->addComponent<Component::MaterialComponent>("material:basic");
+		mesh->addTexture("texture:moon", 0);
+		e->addComponent<Component::GraphNode>();
+		e->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
+		e->getComponent<Component::RigidBody>()->setRotationConstraint(true, true, true);
+	}
+
+	{
+		auto &m = _engine.getInstance<EntityManager>();
+		auto e = m.createEntity();
+		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(-5,0,0));
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(6));
+
+		auto rigidBody = e->addComponent<Component::RigidBody>(0);
+		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
+		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
+		auto mat = e->addComponent<Component::MaterialComponent>("material:basic");
+		mesh->addTexture("texture:moon", 0);
+		e->addComponent<Component::GraphNode>();
+	}
+
 	//p1->setLocalTransform() = glm::scale(p1->getLocalTransform(), glm::vec3(0.5, 1, 0.5));
 	//p1->getComponent<Component::RigidBody>()->updateScale();
 //	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));

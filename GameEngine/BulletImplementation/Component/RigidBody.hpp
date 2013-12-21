@@ -106,6 +106,7 @@ namespace Component
 			_inertia(btVector3(0.0f, 0.0f, 0.0f)),
 			_rotationConstraint(glm::vec3(1,1,1)),
 			_transformConstraint(glm::vec3(1,1,1)),
+			_meshName(""),
 			_collisionShape(nullptr),
 			_motionState(nullptr),
 			_rigidBody(nullptr)
@@ -171,11 +172,13 @@ namespace Component
 		{
 			if (c == UNDEFINED)
 				return;
+			_meshName = meshName;
 			_reset();
 			_shapeType = c;
 			btTransform transform;
 			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
 			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
+			std::cout << scale.x << " " << scale.y << " " << scale.z << std::endl;
 			glm::vec3 rot = rotFromMat4(_entity->getLocalTransform(), true);
 			transform.setIdentity();
 			transform.setOrigin(convertGLMVectorToBullet(position));
@@ -229,17 +232,6 @@ namespace Component
 			_manager.getWorld().addRigidBody(_rigidBody);
 		}
 
-
-		void updateScale()
-		{
-			if (!_collisionShape)
-				return;
-			if (_shapeType == BOX)
-				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scaleFromMat4(_entity->getLocalTransform()) / 2.0f));
-			else if (_shapeType == SPHERE)
-				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scaleFromMat4(_entity->getLocalTransform())));
-		}
-
 		void setRotationConstraint(bool x, bool y, bool z)
 		{
 			_rotationConstraint = glm::vec3(static_cast<unsigned int>(x),
@@ -280,6 +272,7 @@ namespace Component
 		btVector3 _inertia;
 		glm::vec3 _rotationConstraint;
 		glm::vec3 _transformConstraint;
+		std::string _meshName;
 		btCollisionShape *_collisionShape;
 		btMotionState *_motionState;
 		btRigidBody *_rigidBody;
