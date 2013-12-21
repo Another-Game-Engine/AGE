@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
     <ClCompile Include="Engine\Core\Material.cpp" />
@@ -195,7 +194,6 @@
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
     <None Include="Engine\Core\ACamera.hh" />

@@ -99,21 +99,34 @@ public:
 	template <typename T, typename... Args>
 	SmartPointer<T> addComponent(Args ...args)
 	{
+		// get the component type ID
 		unsigned int id = T::getTypeId();
+		SmartPointer<T> res;
+
+		// if entity already have component, return it
 		if (hasComponent(id))
 		{
 			return static_cast<SmartPointer<T> >(_components[id]);
 		}
+		// else if entity components array is to small, resize it
 		else if (_components.size() <= id)
 		{
-			_components.resize(id + 10);
+			_components.resize(id + 1);
 		}
-		SmartPointer<T> tmp(new T(_engine, getHandle(), args...));
-		// todo assert if new T fail
+		// if component has never been created, create one
+		if (!_components[id].get())
+		{
+			res = new T(_engine, getHandle());
+			assert(res != nullptr && "Memory error : Component creation failed.");
+			_components[id] = res;
+		}
+		else
+			res = _components[id];
+		//init component
+		res->init(args...);
 		_code.add(id);
-		_components[id] = tmp;
 		broadCast(std::string("componentAdded" + std::to_string(id)), _handle);
-		return tmp;
+		return res;
 	}
 
 	template <typename T>
@@ -132,7 +145,8 @@ public:
 		if (!hasComponent(id))
 			return;
 		_code.remove(id);
-		_components[id]	= nullptr;
+//		_components[id]	= nullptr;
+		_components[id]->reset();
 		broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
 		// component remove -> signal to system
 	}

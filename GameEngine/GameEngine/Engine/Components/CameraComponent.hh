@@ -26,6 +26,8 @@ namespace Component
 	public:
 		CameraComponent(Engine &engine, Handle &entity);
 		virtual              ~CameraComponent(void);
+		void init(){}
+		virtual void reset(){}
 		void                 attachSkybox(const std::string &name, const std::string &cubeMapShader);
 		void                 dettachSkybox();
  		glm::mat4            &setProjection();

@@ -31,7 +31,7 @@ private:
 			const btCollisionObject *oa = static_cast<const btCollisionObject*>(contact->getBody0());
 			const btCollisionObject *ob = static_cast<const btCollisionObject*>(contact->getBody1());
 
-	/*		Handle h1 = *(static_cast<Handle*>(oa->getUserPointer()));
+			Handle h1 = *(static_cast<Handle*>(oa->getUserPointer()));
 			Entity *e1 = h1.get();
 			auto c1 = e1->addComponent<Component::Collision>();
 
@@ -41,7 +41,7 @@ private:
 
 
 			c1->addCollision(h2);
-			c2->addCollision(h1); */
+			c2->addCollision(h1); 
 		}
 	}
 
@@ -65,7 +65,7 @@ private:
 			glm::vec3 scale = scaleFromMat4(e->getLocalTransform());
 			m = glm::scale(m, scale);
 			e->setLocalTransform() = m;
-			//e->removeComponent<Component::Collision>();
+			e->removeComponent<Component::Collision>();
 		}
 	}
 
