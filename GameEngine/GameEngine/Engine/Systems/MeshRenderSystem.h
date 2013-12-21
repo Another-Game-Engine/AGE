@@ -153,6 +153,11 @@ protected:
 	{
 		if (_code.match(e->getCode()) && _collection.find(e) == std::end(_collection))
 		{
+			auto m = e->getComponent<Component::MaterialComponent>()->getMaterial();
+			if (_sorted.find(m) == std::end(_sorted))
+			{
+				_sorted.insert(std::make_pair(m, std::list<Handle>()));
+			}
 			_collection.insert(e);
 			_sorted[e->getComponent<Component::MaterialComponent>()->getMaterial()].push_back(e);
 		}

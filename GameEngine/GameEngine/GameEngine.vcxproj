@@ -46,7 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Builds\</OutDir>
     <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)Vendors/Windows/include;$(ProjectDir)Vendors/shared;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Vendors/Windows/lib;$(LibraryPath);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)Vendors/Windows/lib;$(LibraryPath);</LibraryPath>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

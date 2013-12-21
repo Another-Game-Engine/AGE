@@ -101,7 +101,6 @@ public:
 	{
 		// get the component type ID
 		unsigned int id = T::getTypeId();
-		SmartPointer<T> res;
 
 		// if entity already have component, return it
 		if (hasComponent(id))
@@ -116,17 +115,14 @@ public:
 		// if component has never been created, create one
 		if (!_components[id].get())
 		{
-			res = new T(_engine, getHandle());
-			assert(res != nullptr && "Memory error : Component creation failed.");
-			_components[id] = res;
+			_components[id] = new T(_engine, getHandle());
+			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
 		}
-		else
-			res = _components[id];
 		//init component
-		res->init(args...);
+		static_cast<SmartPointer<T> >(_components[id])->init(args...);
 		_code.add(id);
 		broadCast(std::string("componentAdded" + std::to_string(id)), _handle);
-		return res;
+		return static_cast<SmartPointer<T> >(_components[id]);
 	}
 
 	template <typename T>
