@@ -86,10 +86,10 @@ glm::vec3 rotFromMat4(const glm::mat4 &m, bool toEuler)
 }
 namespace Component
 {
-	class RigidBody : public Component::ComponentBase<RigidBody>
+	ATTRIBUTE_ALIGNED16(class) RigidBody : public Component::ComponentBase<RigidBody>
 	{
 	public:
-
+		BT_DECLARE_ALIGNED_ALLOCATOR();
 		typedef enum
 		{
 			SPHERE,
@@ -101,14 +101,14 @@ namespace Component
 		RigidBody(Engine &engine, Handle &entity)
 			: ComponentBase(engine, entity),
 			_manager(engine.getInstance<BulletManager>()),
-			_collisionShape(nullptr),
-			_motionState(nullptr),
-			_rigidBody(nullptr),
 			_shapeType(UNDEFINED),
 			_mass(0.0f),
 			_inertia(btVector3(0.0f, 0.0f, 0.0f)),
 			_rotationConstraint(glm::vec3(1,1,1)),
-			_transformConstraint(glm::vec3(1,1,1))
+			_transformConstraint(glm::vec3(1,1,1)),
+			_collisionShape(nullptr),
+			_motionState(nullptr),
+			_rigidBody(nullptr)
 		{
 		}
 
@@ -204,7 +204,7 @@ namespace Component
 					t[i * 3 + 2] = geo.vertices[i].z;
 				}
 				btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
-	/*			btShapeHull *hull = new btShapeHull(tmp);
+				btShapeHull *hull = new btShapeHull(tmp);
 				btScalar margin = tmp->getMargin();
 				hull->buildHull(margin);
 				tmp->setUserPointer(hull);
@@ -218,8 +218,7 @@ namespace Component
 				_collisionShape = s;
 				delete t;
 				delete hull;
-				delete tmp;*/
-				_collisionShape = tmp;
+				delete tmp;
 			}
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
@@ -276,14 +275,14 @@ namespace Component
 
 	private:
 		BulletManager &_manager;
-		btCollisionShape *_collisionShape;
-		btMotionState *_motionState;
-		btRigidBody *_rigidBody;
 		CollisionShape _shapeType;
 		btScalar _mass;
 		btVector3 _inertia;
 		glm::vec3 _rotationConstraint;
 		glm::vec3 _transformConstraint;
+		btCollisionShape *_collisionShape;
+		btMotionState *_motionState;
+		btRigidBody *_rigidBody;
 	private:
 		RigidBody(RigidBody const &);
 		RigidBody &operator=(RigidBody const &);

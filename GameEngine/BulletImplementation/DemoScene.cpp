@@ -175,7 +175,7 @@ bool 			DemoScene::userStart()
 //	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));
 
 	Handle c1;
-	for (unsigned int i = 0; i < 100; ++i)
+	for (unsigned int i = 0; i < 200; ++i)
 	{
 		if (i % 3)
 		{
@@ -187,8 +187,8 @@ bool 			DemoScene::userStart()
 		}
 		else
 		{
-//			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f), "material:basic", "texture:earth", 10.0f);
-//			c1->setLocalTransform() = glm::rotate(c1->getLocalTransform(), std::rand() % 100 / 10.0f, glm::vec3(1, 1, 1));
+			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f), "material:basic", "texture:earth", 10.0f);
+			c1->setLocalTransform() = glm::rotate(c1->getLocalTransform(), std::rand() % 100 / 10.0f, glm::vec3(1, 1, 1));
 		}
 	}
 
