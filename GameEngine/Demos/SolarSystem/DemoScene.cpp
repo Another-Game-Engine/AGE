@@ -8,7 +8,6 @@
 #include "ResourceManager/SharedMesh.hh"
 #include "ResourceManager/Texture.hh"
 #include "ResourceManager/CubeMap.hh"
-#include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
 #include "Components/MaterialComponent.h"
 #include <Components/CameraComponent.hh>

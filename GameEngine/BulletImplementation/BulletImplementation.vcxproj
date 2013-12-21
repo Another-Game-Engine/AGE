@@ -44,6 +44,11 @@
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Builds\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)GameEngine/Vendors/Windows/include;$(SolutionDir)GameEngine/Vendors/shared;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -78,11 +83,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Libs\bullet-2.82-r2704\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -22,7 +22,7 @@
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
@@ -42,6 +42,12 @@
     <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)Vendors/Windows/include;$(ProjectDir)Vendors/shared;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)Vendors/Windows/lib;$(LibraryPath);</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Builds\</OutDir>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)Vendors/Windows/include;$(ProjectDir)Vendors/shared;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Vendors/Windows/lib;$(LibraryPath);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -81,12 +87,18 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</AdditionalLibraryDirectories>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\MaterialComponent.cpp" />
-    <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
     <ClCompile Include="Engine\Core\ACamera.cpp" />
     <ClCompile Include="Engine\Core\Material.cpp" />
@@ -278,7 +290,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
-    <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
     <None Include="Engine\Core\ACamera.hh" />

@@ -7,7 +7,6 @@
 #include "ResourceManager/SharedMesh.hh"
 #include "ResourceManager/Texture.hh"
 #include "ResourceManager/CubeMap.hh"
-#include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
 #include "Components/MaterialComponent.h"
 #include <Components/CameraComponent.hh>
@@ -176,7 +175,7 @@ bool 			DemoScene::userStart()
 //	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));
 
 	Handle c1;
-	for (unsigned int i = 0; i < 100; ++i)
+	for (unsigned int i = 0; i < 500; ++i)
 	{
 		if (i % 3)
 		{

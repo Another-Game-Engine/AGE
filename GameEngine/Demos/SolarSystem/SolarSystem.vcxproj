@@ -43,6 +43,10 @@
     <LibraryPath>$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)GameEngine/Vendors/Windows/include;$(SolutionDir)GameEngine/Vendors/shared;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -67,6 +71,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>GameEngine.lib;opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
