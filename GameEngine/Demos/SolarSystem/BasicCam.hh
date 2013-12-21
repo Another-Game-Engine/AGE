@@ -1,9 +1,9 @@
 #ifndef		BASICCAM_HH_
 #define		BASICCAM_HH_
 
-#include "Core\ACamera.hh"
+#include <Core\ACamera.hh>
 
-#include "Entities/Entity.hh"
+#include <Entities/Entity.hh>
 
 class BasicCam : public ACamera
 {

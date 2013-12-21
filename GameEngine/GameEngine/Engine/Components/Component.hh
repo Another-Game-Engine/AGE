@@ -24,6 +24,7 @@ namespace	Component
 		void			setEntity(Handle &entity);
 		Handle		&getEntity();
 		std::string const &getName() const;
+		virtual void reset() = 0;
 	protected:
 		Engine              &_engine;
 		std::string         _name;
@@ -40,10 +41,6 @@ namespace	Component
 
 		virtual ~ComponentBase()
 		{
-			//for (auto e : _subscriptions)
-			//{
-			//	_entity->unsub(e, true);
-			//}
 		}
 
 		static unsigned int getTypeId()

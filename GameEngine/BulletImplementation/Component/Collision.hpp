@@ -19,6 +19,14 @@ namespace Component
 		{
 		}
 
+		void init()
+		{}
+
+		virtual void reset()
+		{
+			_collsions.clear();
+		}
+
 		void addCollision(const Handle &entity)
 		{
 			_collsions.insert(entity);

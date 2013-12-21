@@ -5,13 +5,22 @@
 namespace Component
 {
 
-	RotationForce::RotationForce(Engine &engine, Handle &entity, const glm::vec3 &force)
+	RotationForce::RotationForce(Engine &engine, Handle &entity)
 		: Component::ComponentBase<RotationForce>(engine, entity, "RotationForce")
-		, _force(force)
+		, _force(glm::vec3(0))
 	{}
 
 	RotationForce::~RotationForce(void)
 	{}
+	
+	void RotationForce::init(const glm::vec3 &force)
+	{
+		_force = force;
+	}
+
+	void RotationForce::reset()
+	{}
+
 
 	void RotationForce::setForce(const glm::vec3 &force)
 	{

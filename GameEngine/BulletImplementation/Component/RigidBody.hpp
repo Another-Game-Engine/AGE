@@ -98,18 +98,48 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		RigidBody(Engine &engine, Handle &entity, float mass = 1.0f)
+		RigidBody(Engine &engine, Handle &entity)
 			: ComponentBase(engine, entity),
 			_manager(engine.getInstance<BulletManager>()),
 			_collisionShape(nullptr),
 			_motionState(nullptr),
 			_rigidBody(nullptr),
 			_shapeType(UNDEFINED),
-			_mass(mass),
+			_mass(0.0f),
 			_inertia(btVector3(0.0f, 0.0f, 0.0f)),
 			_rotationConstraint(glm::vec3(1,1,1)),
 			_transformConstraint(glm::vec3(1,1,1))
 		{
+		}
+
+		void init(float mass = 1.0f)
+		{
+			_mass = mass;
+		}
+
+		virtual void reset()
+		{
+			if (_rigidBody != nullptr)
+			{
+				_manager.getWorld().removeRigidBody(_rigidBody);
+				delete _rigidBody;
+				_rigidBody = nullptr;
+			}
+			if (_motionState != nullptr)
+			{
+				delete _motionState;
+				_motionState = nullptr;
+			}
+			if (_collisionShape != nullptr)
+			{
+				delete _collisionShape;
+				_collisionShape = nullptr;
+			}
+			_shapeType = UNDEFINED;
+			_mass = 0.0f;
+			_inertia = btVector3(0.0f, 0.0f, 0.0f);
+			_rotationConstraint = glm::vec3(1, 1, 1);
+			_transformConstraint = glm::vec3(1, 1, 1);
 		}
 
 		btMotionState &getMotionState()
