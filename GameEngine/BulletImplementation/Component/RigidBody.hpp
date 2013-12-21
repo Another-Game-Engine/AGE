@@ -204,7 +204,7 @@ namespace Component
 					t[i * 3 + 2] = geo.vertices[i].z;
 				}
 				btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
-				btShapeHull *hull = new btShapeHull(tmp);
+	/*			btShapeHull *hull = new btShapeHull(tmp);
 				btScalar margin = tmp->getMargin();
 				hull->buildHull(margin);
 				tmp->setUserPointer(hull);
@@ -218,7 +218,8 @@ namespace Component
 				_collisionShape = s;
 				delete t;
 				delete hull;
-				delete tmp;
+				delete tmp;*/
+				_collisionShape = tmp;
 			}
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
