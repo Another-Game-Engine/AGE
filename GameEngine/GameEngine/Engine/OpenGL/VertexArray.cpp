@@ -124,7 +124,6 @@ namespace OpenGLTools
 			handleError("draw");
 			glBindVertexArray(0);
 		}
-
 	}
 
 	void VertexArray::transferGPU(GLenum mode) const
