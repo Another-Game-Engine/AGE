@@ -80,13 +80,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Libs\bullet-2.82-r2704\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Libs\bullet-2.82-r2704\src;C:/Libs/bullet-2.82-r2704/Extras/ConvexDecomposition;C:/Libs/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;C:/Libs/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;C:/Libs/bullet-2.82-r2704/Extras/HACD;C:/Libs/bullet-2.82-r2704/Demos/OpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -113,6 +114,18 @@
     <ClInclude Include="TrackBall.hh" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Libs\bullet-2.82-r2704\build\Extras\ConvexDecomposition\ConvexDecomposition.vcxproj">
+      <Project>{3bc92494-b1e2-482d-a11f-1d2ddc947f43}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\..\Libs\bullet-2.82-r2704\build\Extras\HACD\HACD.vcxproj">
+      <Project>{9e2cd29b-f31d-4e6e-bb2c-8d50aa7a48db}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\..\Libs\bullet-2.82-r2704\build\Extras\Serialize\BulletFileLoader\BulletFileLoader.vcxproj">
+      <Project>{35b3008c-b5d7-4d65-96ce-bcce836aeff4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\..\Libs\bullet-2.82-r2704\build\Extras\Serialize\BulletWorldImporter\BulletWorldImporter.vcxproj">
+      <Project>{a793d0b2-ccf0-4595-875b-0ea1aec75aa8}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\..\Libs\bullet-2.82-r2704\build\src\BulletCollision\BulletCollision.vcxproj">
       <Project>{6f8f423a-54a9-420f-b536-eb6a9683cada}</Project>
       <Private>false</Private>
