@@ -33,8 +33,10 @@ namespace Component
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);
 	public:
-		MeshRenderer(Engine &engine, Handle &entity, std::string const &resource);
+		MeshRenderer(Engine &engine, Handle &entity);
 		virtual ~MeshRenderer(void);
+		void init(std::string const &resource);
+		virtual void reset();
 
 		void addTexture(const std::string &textureName, unsigned int priority = 0);
 		void removeTexture(unsigned int priority);

@@ -15,15 +15,24 @@ namespace Component
 		GraphNode(Engine &engine, Handle &entity)
 			: ComponentBase<GraphNode>(engine, entity, "GraphNodeComponent")
 		{
-				_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
-
-				// signal it's a root node
-				auto key = PubSubKey("graphNodeSetAsRoot");
-				_entity->broadCast(key, _entity);
 			}
 
 		virtual ~GraphNode()
 		{
+		}
+
+		void init()
+		{
+			_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
+
+			// signal it's a root node
+			auto key = PubSubKey("graphNodeSetAsRoot");
+			_entity->broadCast(key, _entity);
+		}
+
+		virtual void reset()
+		{
+			_childs.clear();
 			auto key = PubSubKey("graphNodeNotARoot");
 			broadCast(key, _entity);
 		}
