@@ -6,13 +6,9 @@
 #include "Handle.hh"
 #include <limits>
 
-
-size_t Entity::_currentId = 0;
-
 Entity::Entity(Engine &engine) :
     PubSub(engine.getInstance<PubSub::Manager>()),
     _engine(engine),
-	_id(_currentId++),
 	_flags(0)
 {
 }
@@ -53,11 +49,6 @@ void 					Entity::computeGlobalTransform(glm::mat4 const &fatherTransform)
 {
 	_globalTransform = fatherTransform * _localTransform;
 	_flags ^= HAS_MOVED;
-}
-
-size_t 					Entity::getId() const
-{
-	return (_id);
 }
 
 size_t 					Entity::getFlags() const

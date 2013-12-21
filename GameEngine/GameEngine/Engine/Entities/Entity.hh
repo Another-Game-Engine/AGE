@@ -44,7 +44,6 @@ public:
 
 private:
 	Engine              &_engine;
-	size_t 				_id;
 	size_t 				_flags;
 
 	glm::mat4 			_localTransform;
@@ -70,8 +69,6 @@ public:
 
 	glm::mat4 const			&getGlobalTransform() const;
 	void 					computeGlobalTransform(glm::mat4 const &fatherTransform);
-
-	size_t 					getId() const;
 
 	size_t 					getFlags() const;
 	void 					setFlags(size_t flags);
