@@ -1,4 +1,5 @@
 #include "VertexArray.hh"
+# include "ErrorController.hh"
 
 namespace OpenGLTools
 {
@@ -94,7 +95,7 @@ namespace OpenGLTools
 	{
 		_withIndex = true;
 		_indices.clearBuffer();
-		_indices.pushBuffer(reinterpret_cast<Byte *>(buffer), nbrElement);
+		_indices.pushBuffer(reinterpret_cast<Byte *>(buffer), nbrElement * sizeof(unsigned int));
 	}
 
 	void VertexArray::setData(VertexBuffer const &vertexbuffer)
@@ -141,7 +142,7 @@ namespace OpenGLTools
 		{
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(index, (GLint)_attributes[index].nbrComponent, GL_FLOAT, GL_TRUE, 0, (const GLvoid *)offset);
-			handleError("transferGPU-vertexAttribPointer");
+			ErrorController<Attribute>();
 			offset += _attributes[index].nbrByte * _attributes[index].nbrComponent * _attributes[index].nbrElement;
 		}
 		glBindVertexArray(0);

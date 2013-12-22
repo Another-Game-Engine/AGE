@@ -38,7 +38,6 @@
     <ClCompile Include="Engine\Components\MaterialComponent.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexArray.cpp" />
-    <ClCompile Include="Engine\OpenGL\ErrorControler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -195,7 +194,7 @@
     <ClInclude Include="Engine\Systems\GraphNodeSystem.hpp" />
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
     <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
-    <ClInclude Include="Engine\OpenGL\ErrorControler.hh" />
+    <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\EmptyComponent.hh" />
