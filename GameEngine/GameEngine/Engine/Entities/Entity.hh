@@ -35,9 +35,7 @@ public:
 		HAS_MOVED = 1
 	};
 
-	typedef std::set<Handle>						t_sonsList;
-	typedef std::list<Handle>						t_EntityList;
-	typedef std::vector<SmartPointer<Component::Base> >             	t_ComponentsList;
+	typedef std::vector<SmartPointer<Component::Base> >	t_ComponentsList;
 
 	Handle &getHandle();
 	void setHandle(Handle &handle);
@@ -49,7 +47,14 @@ private:
 	glm::mat4 			_localTransform;
 	glm::mat4 			_globalTransform;
 
-	t_sonsList 			_sons;
+	glm::vec3           _localRotation;
+	glm::vec3           _localScale;
+	glm::vec3           _localTranslation;
+
+	glm::vec3           _globalRotation;
+	glm::vec3           _globalScale;
+	glm::vec3           _globalTranslation;
+
 	t_ComponentsList	_components;
 
 	Barcode _code;
@@ -57,18 +62,25 @@ public:
 	Entity(Engine &engine);
 	virtual ~Entity();
 
-	//Entity 			&operator=(Entity const &oth){}
-	//Entity(Entity const &oth)
-	//	: PubSub(oth._engine.getInstance<PubSub::Manager>()),
-	//	_engine(oth._engine)
-	//{
-	//}
+	void                    translate(const glm::vec3 &v);
+	void                    setTranslation(const glm::vec3 &v);
+	glm::vec3 const         &getTranslation() const;
+	void                    rotate(const glm::vec3 &v);
+	void                    setRotation(const glm::vec3 &v);
+	glm::vec3 const         &getRotation() const;
+	void                    scale(const glm::vec3 &v);
+	void                    setScale(const glm::vec3 &v);
+	glm::vec3 const         &getScale() const;
+
 
 	glm::mat4 const  		&getLocalTransform();
-	glm::mat4   			&setLocalTransform();
+	// TO DELETE
+	//glm::mat4   			&setLocalTransform();  // <-- //
 
 	glm::mat4 const			&getGlobalTransform() const;
-	void 					computeGlobalTransform(glm::mat4 const &fatherTransform);
+	// TO DELETE
+	void 					computeGlobalTransform(glm::mat4 const &fatherTransform);  // <-- //
+	void                    computeGlobalTransform(const Handle &parent);
 
 	size_t 					getFlags() const;
 	void 					setFlags(size_t flags);
@@ -76,7 +88,6 @@ public:
 	void 					removeFlags(size_t flags);
 
 	Barcode &getCode();
-
 
 	////////////////////////////
 	//

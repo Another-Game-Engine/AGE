@@ -26,6 +26,7 @@ private:
 		for (auto e : _collection)
 		{
 			glm::vec3 force = e->getComponent<Component::RotationForce>()->getForce();
+			e->rotate(force * glm::vec3(t));
 			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), force.x * t, glm::vec3(1, 0, 0));
 			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), force.y * t, glm::vec3(0, 1, 0));
 			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), force.z * t, glm::vec3(0, 0, 1));
