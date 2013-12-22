@@ -40,11 +40,11 @@ glm::mat4 const  		&Entity::getLocalTransform()
 }
 
 //  TO DELETE
-//glm::mat4   			&Entity::setLocalTransform()
-//{
-//	_flags |= HAS_MOVED;
-//	return (_localTransform);
-//}
+glm::mat4   			&Entity::setLocalTransform()
+{
+	_flags |= HAS_MOVED;
+	return (_localTransform);
+}
 
 glm::mat4 const			&Entity::getGlobalTransform() const
 {
