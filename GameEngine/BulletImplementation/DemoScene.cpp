@@ -2,7 +2,6 @@
 #include "Core/Engine.hh"
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
-#include "TrackBall.hh"
 
 #include "ResourceManager/SharedMesh.hh"
 #include "ResourceManager/Texture.hh"
@@ -12,12 +11,13 @@
 #include <Components/CameraComponent.hh>
 #include <Component/RigidBody.hpp>
 #include <Component/KinematicCharacterController.hpp>
-#include <System/KinematicCharacterControllerSystem.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
-#include <Systems/MeshRenderSystem.h>
 #include <Systems/GraphNodeSystem.hpp>
+#include <Systems/CameraSystem.hpp>
+#include <Systems/MeshRenderSystem.h>
 #include <System/BulletSystem.hpp>
+#include <System/KinematicCharacterControllerSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityManager.h>
@@ -88,10 +88,11 @@ bool 			DemoScene::userStart()
 	// System Tests
 	//
 	//
+	addSystem<MeshRendererSystem>(0);
 	addSystem<BulletSystem>(0);
 	addSystem<GraphNodeSystem>(100);
 	addSystem<KinematicCharacterControllerSystem>(100);
-	addSystem<MeshRendererSystem>(200);// ->setRenderDebugMode(true);
+	addSystem<CameraSystem>(200);
 
 	//
 	//
@@ -206,7 +207,7 @@ bool 			DemoScene::userStart()
 		e->addComponent<Component::GraphNode>();
 	}
 
-	Handle follow;
+	Handle character;
 	{
 		auto &m = _engine.getInstance<EntityManager>();
 		auto e = m.createEntity();
@@ -217,7 +218,7 @@ bool 			DemoScene::userStart()
 		auto mat = e->addComponent<Component::MaterialComponent>("material:basic");
 		mesh->addTexture("texture:moon", 0);
 		e->addComponent<Component::GraphNode>();
-		follow = e;
+		character = e;
 	}
 
 	//p1->setLocalTransform() = glm::scale(p1->getLocalTransform(), glm::vec3(0.5, 1, 0.5));
@@ -246,7 +247,10 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	setCamera(new TrackBall(_engine, follow, 30.0f, 1.0f, 1.0f));
+	//setCamera(new TrackBall(_engine, follow, 30.0f, 1.0f, 1.0f));
+	auto camera = _engine.getInstance<EntityManager>().createEntity();
+	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
+
 	std::string		vars[] = 
 	{
 		"projection",
@@ -262,9 +266,9 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
-	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
-
-
+	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
+	camera->addComponent<Component::GraphNode>();
+	character->getComponent<Component::GraphNode>()->addSon(camera);
 	return (true);
 }
 

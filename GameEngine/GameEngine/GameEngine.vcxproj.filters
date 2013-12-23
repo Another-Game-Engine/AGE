@@ -192,6 +192,7 @@
     <ClInclude Include="Engine\Entities\Handle.hh" />
     <ClInclude Include="Engine\Systems\GraphNodeSystem.hpp" />
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
+    <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Context\IRenderContext.hh" />

@@ -146,6 +146,7 @@
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
+    <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
     <ClInclude Include="Engine\Systems\GraphNodeSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />

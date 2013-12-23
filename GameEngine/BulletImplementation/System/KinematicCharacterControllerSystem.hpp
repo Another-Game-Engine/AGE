@@ -88,7 +88,7 @@ private:
 
 			glm::mat4 t = convertBulletTransformToGLM(trans);
 			m = glm::translate(m, posFromMat4(t));
-			glm::vec3 rot = -rotFromMat4(t, false);
+			glm::vec3 rot = rotFromMat4(t, false);
 			m = glm::rotate(m, rot.x, glm::vec3(1, 0, 0));
 			m = glm::rotate(m, rot.y, glm::vec3(0, 1, 0));
 			m = glm::rotate(m, rot.z, glm::vec3(0, 0, 1));

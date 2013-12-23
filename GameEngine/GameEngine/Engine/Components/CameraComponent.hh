@@ -32,7 +32,8 @@ namespace Component
 		void                 dettachSkybox();
  		glm::mat4            &setProjection();
 		glm::mat4            &getProjection();
-
+		SmartPointer<Resources::CubeMap> getSkybox();
+		const std::string &getSkyboxShader() const;
 	};
 }
 
