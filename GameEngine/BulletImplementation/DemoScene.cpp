@@ -225,7 +225,7 @@ bool 			DemoScene::userStart()
 //	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));
 
 	Handle c1;
-	for (unsigned int i = 0; i < 20; ++i)
+	for (unsigned int i = 0; i < 70; ++i)
 	{
 		if (i % 3)
 		{
@@ -267,8 +267,8 @@ bool 			DemoScene::userStart()
 
 	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
 	camera->addComponent<Component::GraphNode>();
-//	camera->setLocalTransform() = glm::rotate(camera->getLocalTransform(), 180.0f, glm::vec3(1, 0, 0));
-//	camera->setLocalTransform() = glm::translate(camera->getLocalTransform(), glm::vec3(0, 0, 0));
+	//camera->setLocalTransform() = glm::rotate(camera->getLocalTransform(), -180.0f, glm::vec3(1, 1, 1));
+	camera->setLocalTransform() = glm::translate(camera->getLocalTransform(), glm::vec3(0.5, 0.5, 0));
 	character->getComponent<Component::GraphNode>()->addSon(camera);
 	return (true);
 }
