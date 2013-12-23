@@ -33,6 +33,7 @@ private:
 		Input			&inputs = _engine.getInstance<Input>();
 
 		bool dir[5] = { false, false, false, false, false };
+		bool reset = false;
 		if (inputs.getKey(SDLK_w))
 			dir[0] = true;
 		if (inputs.getKey(SDLK_d))
@@ -43,7 +44,8 @@ private:
 			dir[3] = true;
 		if (inputs.getKey(SDLK_SPACE))
 			dir[4] = true;
-
+		if (inputs.getKey(SDLK_r))
+			reset = true;
 		for (auto e : _collection)
 		{
 			glm::mat4 m;
@@ -85,7 +87,8 @@ private:
 
 			if (dir[4]) // jump
 				controller.jump();
-
+			if (reset)
+				controller.warp(btVector3(0, 8, 0));
 			glm::mat4 t = convertBulletTransformToGLM(trans);
 
 
