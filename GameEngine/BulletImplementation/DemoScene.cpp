@@ -11,6 +11,8 @@
 #include "Components/MaterialComponent.h"
 #include <Components/CameraComponent.hh>
 #include <Component/RigidBody.hpp>
+#include <Component/KinematicCharacterController.hpp>
+#include <System/KinematicCharacterControllerSystem.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
@@ -87,8 +89,9 @@ bool 			DemoScene::userStart()
 	//
 	//
 	addSystem<BulletSystem>(0);
-	addSystem<GraphNodeSystem>(1);
-	addSystem<MeshRendererSystem>(2);// ->setRenderDebugMode(true);
+	addSystem<GraphNodeSystem>(100);
+	addSystem<KinematicCharacterControllerSystem>(100);
+	addSystem<MeshRendererSystem>(200);// ->setRenderDebugMode(true);
 
 	//
 	//
@@ -203,12 +206,26 @@ bool 			DemoScene::userStart()
 		e->addComponent<Component::GraphNode>();
 	}
 
+	Handle follow;
+	{
+		auto &m = _engine.getInstance<EntityManager>();
+		auto e = m.createEntity();
+		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,20,0));
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(1));
+		e->addComponent<Component::KineCharacterController>();
+		auto mesh = e->addComponent<Component::MeshRenderer>("model:monkey");
+		auto mat = e->addComponent<Component::MaterialComponent>("material:basic");
+		mesh->addTexture("texture:moon", 0);
+		e->addComponent<Component::GraphNode>();
+		follow = e;
+	}
+
 	//p1->setLocalTransform() = glm::scale(p1->getLocalTransform(), glm::vec3(0.5, 1, 0.5));
 	//p1->getComponent<Component::RigidBody>()->updateScale();
 //	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));
 
 	Handle c1;
-	for (unsigned int i = 0; i < 200; ++i)
+	for (unsigned int i = 0; i < 20; ++i)
 	{
 		if (i % 3)
 		{
@@ -229,7 +246,7 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	setCamera(new TrackBall(_engine, p1, 30.0f, 1.0f, 1.0f));
+	setCamera(new TrackBall(_engine, follow, 30.0f, 1.0f, 1.0f));
 	std::string		vars[] = 
 	{
 		"projection",
