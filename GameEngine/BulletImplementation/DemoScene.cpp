@@ -90,8 +90,8 @@ bool 			DemoScene::userStart()
 	//
 	addSystem<MeshRendererSystem>(0);
 	addSystem<BulletSystem>(0);
+	addSystem<KinematicCharacterControllerSystem>(50);
 	addSystem<GraphNodeSystem>(100);
-	addSystem<KinematicCharacterControllerSystem>(100);
 	addSystem<CameraSystem>(200);
 
 	//
@@ -212,11 +212,10 @@ bool 			DemoScene::userStart()
 		auto &m = _engine.getInstance<EntityManager>();
 		auto e = m.createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,20,0));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(1));
 		e->addComponent<Component::KineCharacterController>();
-		auto mesh = e->addComponent<Component::MeshRenderer>("model:monkey");
-		auto mat = e->addComponent<Component::MaterialComponent>("material:basic");
-		mesh->addTexture("texture:moon", 0);
+//		auto mesh = e->addComponent<Component::MeshRenderer>("model:monkey");
+//		auto mat = e->addComponent<Component::MaterialComponent>("material:basic");
+//		mesh->addTexture("texture:moon", 0);
 		e->addComponent<Component::GraphNode>();
 		character = e;
 	}
@@ -268,6 +267,8 @@ bool 			DemoScene::userStart()
 
 	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
 	camera->addComponent<Component::GraphNode>();
+//	camera->setLocalTransform() = glm::rotate(camera->getLocalTransform(), 180.0f, glm::vec3(1, 0, 0));
+//	camera->setLocalTransform() = glm::translate(camera->getLocalTransform(), glm::vec3(0, 0, 0));
 	character->getComponent<Component::GraphNode>()->addSon(camera);
 	return (true);
 }

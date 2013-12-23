@@ -89,6 +89,9 @@ protected:
 			perFrameBuffer->setUniform("time", (float)t);
 			perFrameBuffer->flushChanges();
 			_engine.getInstance<SceneManager>().getCurrentScene()->getSystem<MeshRendererSystem>()->render(time);
+			e->setLocalTransform() = glm::lookAt(glm::vec3(0,0,0),
+								 glm::vec3(0,0,1),
+								 glm::vec3(0, -1, 0));
 		}
 	}
 
