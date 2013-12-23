@@ -64,14 +64,14 @@ private:
 			if (dir[3]) // left
 			{
 				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
-				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), -0.1));
+				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), 0.1));
 				ghost.getWorldTransform().setBasis(orn);
 			}
 
 			if (dir[1]) // right
 			{
 				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
-				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0),0.1));
+				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0),-0.1));
 				ghost.getWorldTransform().setBasis(orn);
 			}
 
@@ -87,6 +87,13 @@ private:
 				controller.jump();
 
 			glm::mat4 t = convertBulletTransformToGLM(trans);
+
+
+			auto bodyPos = posFromMat4(e->getGlobalTransform());
+			Entity *prout = e.get()->getComponent<Component::GraphNode>()->getSonsBegin()->get();
+			auto cameraPos = posFromMat4(prout->getGlobalTransform());
+			auto cameraLocalPos = posFromMat4(prout->getLocalTransform());
+
 			m = glm::translate(m, posFromMat4(t));
 			glm::vec3 rot = rotFromMat4(t, false);
 			m = glm::rotate(m, rot.x, glm::vec3(1, 0, 0));
