@@ -21,6 +21,7 @@ public:
 	virtual ~KinematicCharacterControllerSystem(){}
 private:
 	BulletManager &_manager;
+
 	virtual void updateBegin(double time)
 	{
 	}
@@ -46,6 +47,7 @@ private:
 			dir[4] = true;
 		if (inputs.getKey(SDLK_r))
 			reset = true;
+		auto angle = glm::vec2(-(float)inputs.getMouseDelta().x, (float)inputs.getMouseDelta().y);
 		for (auto e : _collection)
 		{
 			glm::mat4 m;
@@ -59,22 +61,24 @@ private:
 			forwardDir.normalize();
 			upDir.normalize();
 			sideDir.normalize();
-			btVector3 walkDirection = btVector3(0.00001, 0.0, 0.0);
-			btScalar walkVelocity = btScalar(1.1) * 4.0;
-			btScalar walkSpeed = walkVelocity * 0.1;
+			btVector3 walkDirection = btVector3(0.000001, 0.0, 0.0);
+			btScalar walkVelocity = btScalar(1.1) * 10.0;
+			btScalar walkSpeed = walkVelocity * time;
+
+			{
+				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
+				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), angle.x / 300.0f));
+				ghost.getWorldTransform().setBasis(orn);
+			}
 
 			if (dir[3]) // left
 			{
-				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
-				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), -0.05));
-				ghost.getWorldTransform().setBasis(orn);
+				walkDirection += sideDir;
 			}
 
 			if (dir[1]) // right
 			{
-				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
-				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0),0.05));
-				ghost.getWorldTransform().setBasis(orn);
+				walkDirection -= sideDir;
 			}
 
 			if (dir[0]) // forward
@@ -89,16 +93,9 @@ private:
 				controller.jump();
 			if (reset)
 				controller.warp(btVector3(0, 8, 0));
+
+			trans = ghost.getWorldTransform();
 			glm::mat4 t = convertBulletTransformToGLM(trans);
-
-
-			//auto bodyPos = posFromMat4(e->getGlobalTransform());
-			//Entity *prout = e.get()->getComponent<Component::GraphNode>()->getSonsBegin()->get();
-			//auto cameraPos = posFromMat4(prout->getGlobalTransform());
-			//auto cameraLocalPos = posFromMat4(prout->getLocalTransform());
-			//auto cameraTrans = prout->getGlobalTransform();
-			//auto bodyTrans = e.get()->getGlobalTransform();
-			//bool YES = cameraTrans == bodyTrans;
 
 			m = glm::translate(m, posFromMat4(t));
 			glm::vec3 rot = -rotFromMat4(t, false);
@@ -114,6 +111,7 @@ private:
 	virtual void initialize()
 	{
 		require<Component::KineCharacterController>();
+		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };
 
