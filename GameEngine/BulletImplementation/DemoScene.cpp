@@ -247,8 +247,7 @@ bool 			DemoScene::userStart()
 	// --
 
 	//setCamera(new TrackBall(_engine, follow, 30.0f, 1.0f, 1.0f));
-	auto camera = _engine.getInstance<EntityManager>().createEntity();
-	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
+	auto cameraComponent = character->addComponent<Component::CameraComponent>();
 
 	std::string		vars[] = 
 	{
@@ -266,10 +265,6 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
-	camera->addComponent<Component::GraphNode>();
-	//camera->setLocalTransform() = glm::rotate(camera->getLocalTransform(), -180.0f, glm::vec3(1, 1, 1));
-	camera->setLocalTransform() = glm::translate(camera->getLocalTransform(), glm::vec3(0.5, 0.5, 0));
-	character->getComponent<Component::GraphNode>()->addSon(camera);
 	return (true);
 }
 
