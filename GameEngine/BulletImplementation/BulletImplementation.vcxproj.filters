@@ -27,6 +27,12 @@
     <ClCompile Include="BasicCam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\FPController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\BtConversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScene.hh">
@@ -41,19 +47,22 @@
     <ClInclude Include="BasicCam.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Component\RigidBody.hpp">
+    <ClInclude Include="Components\Collision.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="System\BulletSystem.hpp">
+    <ClInclude Include="Components\FPController.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Component\Collision.hpp">
+    <ClInclude Include="Components\RigidBody.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Component\KinematicCharacterController.hpp">
+    <ClInclude Include="Systems\BulletSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="System\KinematicCharacterControllerSystem.hpp">
+    <ClInclude Include="Systems\FPControllerSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\BtConversion.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

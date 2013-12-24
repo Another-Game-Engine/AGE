@@ -4,21 +4,21 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Systems/System.h>
-#include <Component/KinematicCharacterController.hpp>
+#include <Components/FPController.hpp>
 #include <Entities/Entity.hh>
 #include "../BulletManager.hpp"
 #include <Core/Engine.hh>
-#include <Component/Collision.hpp>
+#include <Components/Collision.hpp>
 #include "Context/SdlContext.hh"
 
 
-class KinematicCharacterControllerSystem : public System
+class FPControllerSystem : public System
 {
 public:
-	KinematicCharacterControllerSystem(Engine &engine) : System(engine)
+	FPControllerSystem(Engine &engine) : System(engine)
 		, _manager(engine.getInstance<BulletManager>())
 	{}
-	virtual ~KinematicCharacterControllerSystem(){}
+	virtual ~FPControllerSystem(){}
 private:
 	BulletManager &_manager;
 
@@ -51,8 +51,8 @@ private:
 		for (auto e : _collection)
 		{
 			glm::mat4 m;
-			auto &ghost = e->getComponent<Component::KineCharacterController>()->getGhost();
-			auto &controller = e->getComponent<Component::KineCharacterController>()->getController();
+			auto &ghost = e->getComponent<Component::FPController>()->getGhost();
+			auto &controller = e->getComponent<Component::FPController>()->getController();
 			btTransform trans = ghost.getWorldTransform();
 
 			btVector3 forwardDir = trans.getBasis()[2];
@@ -110,7 +110,7 @@ private:
 
 	virtual void initialize()
 	{
-		require<Component::KineCharacterController>();
+		require<Component::FPController>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };

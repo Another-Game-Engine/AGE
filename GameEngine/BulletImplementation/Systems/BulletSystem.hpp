@@ -1,14 +1,13 @@
 #ifndef   __BULLET_SYSTEM_HPP__
 # define  __BULLET_SYSTEM_HPP__
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <Utils/BtConversion.hpp>
 #include <Systems/System.h>
-#include <Component/RigidBody.hpp>
+#include <Components/RigidBody.hpp>
 #include <Entities/Entity.hh>
 #include "../BulletManager.hpp"
 #include <Core/Engine.hh>
-#include <Component/Collision.hpp>
+#include <Components/Collision.hpp>
 
 
 class BulletSystem : public System

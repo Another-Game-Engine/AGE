@@ -9,15 +9,15 @@
 #include "Components/RotationForce.hh"
 #include "Components/MaterialComponent.h"
 #include <Components/CameraComponent.hh>
-#include <Component/RigidBody.hpp>
-#include <Component/KinematicCharacterController.hpp>
+#include <Components/RigidBody.hpp>
+#include <Components/FPController.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/GraphNodeSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
-#include <System/BulletSystem.hpp>
-#include <System/KinematicCharacterControllerSystem.hpp>
+#include <Systems/BulletSystem.hpp>
+#include <Systems/FPControllerSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityManager.h>
@@ -90,7 +90,7 @@ bool 			DemoScene::userStart()
 	//
 	addSystem<MeshRendererSystem>(0);
 	addSystem<BulletSystem>(0);
-	addSystem<KinematicCharacterControllerSystem>(50);
+	addSystem<FPControllerSystem>(50);
 	addSystem<GraphNodeSystem>(100);
 	addSystem<CameraSystem>(200);
 
@@ -212,7 +212,7 @@ bool 			DemoScene::userStart()
 		auto &m = _engine.getInstance<EntityManager>();
 		auto e = m.createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,20,0));
-		e->addComponent<Component::KineCharacterController>();
+		e->addComponent<Component::FPController>();
 //		auto mesh = e->addComponent<Component::MeshRenderer>("model:monkey");
 //		auto mat = e->addComponent<Component::MaterialComponent>("material:basic");
 //		mesh->addTexture("texture:moon", 0);
