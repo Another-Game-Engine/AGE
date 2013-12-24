@@ -28,10 +28,9 @@ void 	Input::removeKeyInput(int input)
 	_keyInputs.remove(input);
 }
 
-void 				Input::setMousePosition(glm::i8vec2 const &pos)
+void 				Input::setMousePosition(glm::i8vec2 const &pos, glm::i8vec2 const &rel)
 {
-	if (_mousePosition != glm::i8vec2(0))
-		_mouseDelta = _mousePosition - pos;
+	_mouseDelta = rel;
 	_mousePosition = pos;
 }
 

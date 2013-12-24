@@ -31,72 +31,15 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		Input			&inputs = _engine.getInstance<Input>();
-
-		bool dir[5] = { false, false, false, false, false };
-		bool reset = false;
-		if (inputs.getKey(SDLK_w))
-			dir[0] = true;
-		if (inputs.getKey(SDLK_d))
-			dir[1] = true;
-		if (inputs.getKey(SDLK_s))
-			dir[2] = true;
-		if (inputs.getKey(SDLK_a))
-			dir[3] = true;
-		if (inputs.getKey(SDLK_SPACE))
-			dir[4] = true;
-		if (inputs.getKey(SDLK_r))
-			reset = true;
-		auto angle = glm::vec2(-(float)inputs.getMouseDelta().x, (float)inputs.getMouseDelta().y);
 		for (auto e : _collection)
 		{
-			glm::mat4 m;
-			auto &ghost = e->getComponent<Component::FPController>()->getGhost();
-			auto &controller = e->getComponent<Component::FPController>()->getController();
-			btTransform trans = ghost.getWorldTransform();
+			auto fp = e->getComponent<Component::FPController>();
+			updateComponent(e, fp, time);
 
-			btVector3 forwardDir = trans.getBasis()[2];
-			btVector3 upDir = trans.getBasis()[1];
-			btVector3 sideDir = trans.getBasis()[0];
-			forwardDir.normalize();
-			upDir.normalize();
-			sideDir.normalize();
-			btVector3 walkDirection = btVector3(0.000001, 0.0, 0.0);
-			btScalar walkVelocity = btScalar(1.1) * 10.0;
-			btScalar walkSpeed = walkVelocity * time;
-
-			{
-				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
-				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), angle.x / 300.0f));
-				ghost.getWorldTransform().setBasis(orn);
-			}
-
-			if (dir[3]) // left
-			{
-				walkDirection += sideDir;
-			}
-
-			if (dir[1]) // right
-			{
-				walkDirection -= sideDir;
-			}
-
-			if (dir[0]) // forward
-				walkDirection += forwardDir;
-
-			if (dir[2]) // backward
-				walkDirection -= forwardDir;
-
-			controller.setWalkDirection(walkDirection * walkSpeed);
-
-			if (dir[4]) // jump
-				controller.jump();
-			if (reset)
-				controller.warp(btVector3(0, 8, 0));
-
-			trans = ghost.getWorldTransform();
+			auto &ghost = fp->getGhost();
+			auto trans = ghost.getWorldTransform();
 			glm::mat4 t = convertBulletTransformToGLM(trans);
-
+			glm::mat4 m = glm::mat4(1);
 			m = glm::translate(m, posFromMat4(t));
 			glm::vec3 rot = -rotFromMat4(t, false);
 			m = glm::rotate(m, rot.x, glm::vec3(1, 0, 0));
@@ -106,6 +49,67 @@ private:
 			m = glm::scale(m, scale);
 			e->setLocalTransform() = m;
 		}
+	}
+
+	void updateComponent(Handle &entity, SmartPointer<Component::FPController> fp, double time)
+	{
+			fp->resetControls();
+			auto &inputs = _engine.getInstance<Input>();
+			auto &controls = fp->getControls();
+			auto &keys = fp->getKeys();
+			auto angle = glm::vec2((float)inputs.getMouseDelta().x, (float)inputs.getMouseDelta().y);
+
+			// UPDATE KEYS
+			for (unsigned int i = 0; i < controls.size(); ++i)
+			{
+				controls[i] = inputs.getKey(keys[i]);
+			}
+
+			auto &ghost = fp->getGhost();
+			auto &controller = fp->getController();
+
+			// UPDATE GHOST TRANSFORMATION
+			btTransform trans = ghost.getWorldTransform();
+			// we apply Y rotation on trans
+			btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
+			orn *= btMatrix3x3(btQuaternion(btVector3(1, 0, 0), fp->getOrientation().x));
+			std::cout << fp->getOrientation().x << std::endl;
+			trans.setBasis(orn);
+
+			btVector3 forwardDir = trans.getBasis()[2];
+			btVector3 upDir = trans.getBasis()[1];
+			btVector3 sideDir = trans.getBasis()[0];
+			forwardDir.normalize();
+			upDir.normalize();
+			sideDir.normalize();
+			btVector3 walkDirection = btVector3(0.000001, 0.0, 0.0);
+			bool isRunning = false;
+			if (controls[Component::FPController::RUN])
+				isRunning = true;
+			if (controls[Component::FPController::LEFT])
+				walkDirection += sideDir * (isRunning ? fp->getSideRunSpeed() : fp->getSideWalkSpeed()) * time;
+
+			if (controls[Component::FPController::RIGHT])
+				walkDirection -= sideDir  * (isRunning ? fp->getSideRunSpeed() : fp->getSideWalkSpeed()) * time;
+
+			if (controls[Component::FPController::FORWARD])
+				walkDirection += forwardDir * (isRunning ? fp->getForwardRunSpeed() : fp->getForwardWalkSpeed()) * time;
+
+			if (controls[Component::FPController::BACKWARD])
+				walkDirection -= forwardDir * (isRunning ? fp->getBackwardRunSpeed() : fp->getBackwardWalkSpeed()) * time;
+
+
+			// HORIZONTAL ROTATION APPLIED ON GHOST
+			{
+				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
+				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), angle.x / 300.0f));
+				ghost.getWorldTransform().setBasis(orn);
+			}
+
+			if (fp->canJump() && controls[Component::FPController::JUMP])
+				controller.jump();
+
+			controller.setWalkDirection(walkDirection);
 	}
 
 	virtual void initialize()
