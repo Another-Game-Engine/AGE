@@ -6,14 +6,15 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletDynamics/Character/btKinematicCharacterController.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
-#include "RigidBody.hpp"
+#include "Context/SdlContext.hh"
 #include "../BulletManager.hpp"
+#include <array>
 
 namespace Component
 {
-	ATTRIBUTE_ALIGNED16(class) FPController : public ComponentBase<KineCharacterController>
+	ATTRIBUTE_ALIGNED16(class) FPController : public ComponentBase<FPController>
 	{
-	private:
+	public:
 		enum CONTROLS
 		{
 			FORWARD = 0,
@@ -52,19 +53,14 @@ namespace Component
 		const float getRotateYSpeed() const;
 		void setRotateYSpeed(float s);
 		const float getJumpSpeed() const;
-		void setJumpSpeed();
+		void setJumpSpeed(float s);
 		const float getJumpHeight() const;
 		void setJumpHeight(float s);
 		bool canJump() const;
 		void setCanJump(bool b);
 		bool canRun() const;
 		void setCanRun(bool b);
-		void setKeys(unsigned int left
-			, unsigned int right
-			, unsigned int forward
-			, unsigned int backward
-			, unsigned int jump
-			, unsigned int run);
+		void setKey(CONTROLS k, unsigned int key);
 	private:
 		btKinematicCharacterController *_controller;
 		btPairCachingGhostObject *_ghost;
@@ -82,13 +78,8 @@ namespace Component
 		float _jumpHeight;
 		bool _canJump;
 		bool _canRun;
-		unsigned int _leftKey;
-		unsigned int _rightKey;
-		unsigned int _forwarKey;
-		unsigned int _backWardKey;
-		unsigned int _jumpKey;
-		unsigned int _runKey;
-		bool _controls[6] = { false, false, false, false, false, false};
+		std::array<unsigned int, 6> _keys;
+		std::array<bool, 6> _controls;
 	};
 }
 

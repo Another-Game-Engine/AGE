@@ -99,21 +99,24 @@
   <ItemGroup>
     <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="DemoScene.cpp" />
+    <ClCompile Include="Components\FPController.cpp" />
     <ClCompile Include="Main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="TrackBall.cpp" />
+    <ClCompile Include="Utils\BtConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicCam.hh" />
     <ClInclude Include="BulletManager.hpp" />
-    <ClInclude Include="Component\Collision.hpp" />
-    <ClInclude Include="Component\KinematicCharacterController.hpp" />
-    <ClInclude Include="Component\RigidBody.hpp" />
+    <ClInclude Include="Components\Collision.hpp" />
+    <ClInclude Include="Components\FPController.hpp" />
+    <ClInclude Include="Components\RigidBody.hpp" />
     <ClInclude Include="DemoScene.hh" />
-    <ClInclude Include="System\BulletSystem.hpp" />
-    <ClInclude Include="System\KinematicCharacterControllerSystem.hpp" />
+    <ClInclude Include="Systems\BulletSystem.hpp" />
+    <ClInclude Include="Systems\FPControllerSystem.hpp" />
     <ClInclude Include="TrackBall.hh" />
+    <ClInclude Include="Utils\BtConversion.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\..\Libs\bullet-2.82-r2704\build\Extras\ConvexDecomposition\ConvexDecomposition.vcxproj">

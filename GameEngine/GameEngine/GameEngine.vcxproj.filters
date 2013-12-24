@@ -37,6 +37,7 @@
     <ClCompile Include="Engine\Entities\Handle.cpp" />
     <ClCompile Include="Engine\Components\MaterialComponent.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
+    <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\RotationForce.hh" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Engine\Systems\GraphNodeSystem.hpp" />
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
+    <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Context\IRenderContext.hh" />
