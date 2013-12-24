@@ -9,12 +9,12 @@ FPController::FPController(Engine &engine, Handle &entity) : ComponentBase<FPCon
 , _ghost(nullptr)
 , _shape(nullptr)
 , _orientation(glm::vec3(0, 0, 0))
-, _forwardWalkSpeed(4.0f)
-, _forwardRunSpeed(7.0f)
-, _backwardWalkSpeed(4.0f)
-, _backwardRunSpeed(7.0f)
-, _sideWalkSpeed(3.0f)
-, _sideRunSpeed(5.0f)
+, _forwardWalkSpeed(8.0f)
+, _forwardRunSpeed(15.0f)
+, _backwardWalkSpeed(8.0f)
+, _backwardRunSpeed(15.0f)
+, _sideWalkSpeed(5.0f)
+, _sideRunSpeed(8.0f)
 , _rotateXSpeed(1.0f)
 , _rotateYSpeed(1.0f)
 , _jumpSpeed(2.0f)
@@ -218,4 +218,19 @@ void FPController::setKey(FPController::CONTROLS k, unsigned int key)
 	if (k >= 6)
 		return;
 	_keys[k] = key;
+}
+
+std::array<unsigned int, 6> &FPController::getKeys()
+{
+	return _keys;
+}
+
+std::array<bool, 6> &FPController::getControls()
+{
+	return _controls;
+}
+
+void FPController::resetControls()
+{
+	_controls.fill(false);
 }

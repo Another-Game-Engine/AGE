@@ -61,6 +61,9 @@ namespace Component
 		bool canRun() const;
 		void setCanRun(bool b);
 		void setKey(CONTROLS k, unsigned int key);
+		std::array<unsigned int, 6> &getKeys();
+		std::array<bool, 6> &getControls();
+		void resetControls();
 	private:
 		btKinematicCharacterController *_controller;
 		btPairCachingGhostObject *_ghost;
