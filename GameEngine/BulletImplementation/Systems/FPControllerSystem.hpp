@@ -35,9 +35,10 @@ private:
 		{
 			auto fp = e->getComponent<Component::FPController>();
 			updateComponent(e, fp, time);
-
+			auto &inputs = _engine.getInstance<Input>();
 			auto &ghost = fp->getGhost();
 			auto trans = ghost.getWorldTransform();
+
 			glm::mat4 t = convertBulletTransformToGLM(trans);
 			glm::mat4 m = glm::mat4(1);
 			m = glm::translate(m, posFromMat4(t));
@@ -48,6 +49,16 @@ private:
 			glm::vec3 scale = scaleFromMat4(e->getLocalTransform());
 			m = glm::scale(m, scale);
 			e->setLocalTransform() = m;
+
+			float yAngle = inputs.getMouseDelta().y;
+			fp->setYOrientation(fp->getYOrientation() + yAngle * fp->getRotateYSpeed());
+			if (fp->getYOrientation() >= 90.0f)
+				fp->setYOrientation(89.9f);
+			else if (fp->getYOrientation() <= -90.0f)
+				fp->setYOrientation(-89.9f);
+
+			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), fp->getYOrientation(), glm::vec3(1, 0, 0));
+
 		}
 	}
 
@@ -70,12 +81,6 @@ private:
 
 			// UPDATE GHOST TRANSFORMATION
 			btTransform trans = ghost.getWorldTransform();
-			// we apply Y rotation on trans
-			btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
-			orn *= btMatrix3x3(btQuaternion(btVector3(1, 0, 0), fp->getOrientation().x));
-			std::cout << fp->getOrientation().x << std::endl;
-			trans.setBasis(orn);
-
 			btVector3 forwardDir = trans.getBasis()[2];
 			btVector3 upDir = trans.getBasis()[1];
 			btVector3 sideDir = trans.getBasis()[0];
@@ -102,7 +107,7 @@ private:
 			// HORIZONTAL ROTATION APPLIED ON GHOST
 			{
 				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
-				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), angle.x / 300.0f));
+				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), angle.x * fp->getRotateXSpeed()));
 				ghost.getWorldTransform().setBasis(orn);
 			}
 

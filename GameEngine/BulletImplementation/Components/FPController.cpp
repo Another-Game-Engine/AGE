@@ -8,15 +8,15 @@ FPController::FPController(Engine &engine, Handle &entity) : ComponentBase<FPCon
 , _controller(nullptr)
 , _ghost(nullptr)
 , _shape(nullptr)
-, _orientation(glm::vec3(0, 0, 0))
+, _yOrientation(0.0f)
 , _forwardWalkSpeed(8.0f)
 , _forwardRunSpeed(15.0f)
 , _backwardWalkSpeed(8.0f)
 , _backwardRunSpeed(15.0f)
 , _sideWalkSpeed(5.0f)
 , _sideRunSpeed(8.0f)
-, _rotateXSpeed(1.0f)
-, _rotateYSpeed(1.0f)
+, _rotateXSpeed(0.01f)
+, _rotateYSpeed(0.15f)
 , _jumpSpeed(2.0f)
 , _jumpHeight(3.0f)
 , _canJump(true)
@@ -83,14 +83,14 @@ btConvexShape &FPController::getShape()
 	return *_shape;
 }
 
-const glm::vec3 &FPController::getOrientation() const
+const float FPController::getYOrientation() const
 {
-	return _orientation;
+	return _yOrientation;
 }
 
-void FPController::setOrientation(const glm::vec3 &v)
+void FPController::setYOrientation(float y)
 {
-	_orientation = v;
+	_yOrientation = y;
 }
 
 const float FPController::getForwardWalkSpeed() const

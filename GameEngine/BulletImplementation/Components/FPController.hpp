@@ -34,8 +34,8 @@ namespace Component
 		btKinematicCharacterController &getController();
 		btGhostObject &getGhost();
 		btConvexShape &getShape();
-		const glm::vec3 &getOrientation() const;
-		void setOrientation(const glm::vec3 &v);
+		const float getYOrientation() const;
+		void setYOrientation(float y);
 		const float getForwardWalkSpeed() const;
 		void setForwardWalkSpeed(float s);
 		const float getForwardRunSpeed() const;
@@ -68,7 +68,7 @@ namespace Component
 		btKinematicCharacterController *_controller;
 		btPairCachingGhostObject *_ghost;
 		btConvexShape *_shape;
-		glm::vec3 _orientation;
+		float _yOrientation;
 		float _forwardWalkSpeed;
 		float _backwardWalkSpeed;
 		float _forwardRunSpeed;
