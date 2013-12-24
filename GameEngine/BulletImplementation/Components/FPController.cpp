@@ -1,6 +1,7 @@
 #include <Components/FPController.hpp>
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
+#include <Components/Extras/CustomCharacterController.hh>
 
 using namespace Component;
 
@@ -40,17 +41,17 @@ FPController::FPController(Engine &engine, Handle &entity) : ComponentBase<FPCon
 	transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
 	_ghost = new btPairCachingGhostObject();
-	_shape = new btCapsuleShape(1, 1);
+	_shape = new btCapsuleShape(1.75, 0.44);
+
 	_ghost->setCollisionShape(_shape);
 	_ghost->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 	_ghost->setWorldTransform(transform);
-	_controller = new btKinematicCharacterController(_ghost, _shape, btScalar(0.35));
-	//_controller->setGravity(- _engine.getInstance<BulletManager>().getWorld().getGravity().y());
-	//				_engine.getInstance<BulletManager>().getWorld().addCharacter(_controller);
+	_controller = new btKinematicCharacterController(_ghost, _shape, 1);
 	_ghost->setUserPointer(&(_entity));
 	_engine.getInstance<BulletManager>().getWorld().addCollisionObject(_ghost, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter);
 	_engine.getInstance<BulletManager>().getWorld().addAction(_controller);
 	_engine.getInstance<BulletManager>().getWorld().getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+
 }
 
 FPController::~FPController()

@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="Components\Extras\CustomCharacterController.cpp" />
     <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="Components\FPController.cpp" />
     <ClCompile Include="Main.cpp">
@@ -110,6 +111,7 @@
     <ClInclude Include="BasicCam.hh" />
     <ClInclude Include="BulletManager.hpp" />
     <ClInclude Include="Components\Collision.hpp" />
+    <ClInclude Include="Components\Extras\CustomCharacterController.hh" />
     <ClInclude Include="Components\FPController.hpp" />
     <ClInclude Include="Components\RigidBody.hpp" />
     <ClInclude Include="DemoScene.hh" />
