@@ -89,8 +89,8 @@ bool 			DemoScene::userStart()
 	//
 	//
 	addSystem<MeshRendererSystem>(0);
-	addSystem<BulletSystem>(0);
 	addSystem<FPControllerSystem>(50);
+	addSystem<BulletSystem>(70);
 	addSystem<GraphNodeSystem>(100);
 	addSystem<CameraSystem>(200);
 
@@ -172,9 +172,9 @@ bool 			DemoScene::userStart()
 	materialBasic->pushShader("basic");
 
 
-	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 1.0f);
-	p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
-	p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, false);
+	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "material:basic", "texture:moon", 0.0f);
+	//p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
+	//p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, false);
 
 	{
 		auto &m = _engine.getInstance<EntityManager>();
@@ -183,7 +183,7 @@ bool 			DemoScene::userStart()
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(10,10,10));
 		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(10,10,10));
 
-		auto rigidBody = e->addComponent<Component::RigidBody>(100.0f);
+		auto rigidBody = e->addComponent<Component::RigidBody>(1.0f);
 		rigidBody->setCollisionShape(Component::RigidBody::BOX);
 		auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
 		auto mat = e->addComponent<Component::MaterialComponent>("material:basic");
@@ -229,7 +229,7 @@ bool 			DemoScene::userStart()
 	{
 		if (i % 3)
 		{
-			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "material:basic", "texture:sun", 1.0f);
+			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "material:basic", "texture:sun", 1.f);
 		}
 		else if (i % 2)
 		{
@@ -237,7 +237,7 @@ bool 			DemoScene::userStart()
 		}
 		else
 		{
-			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f), "material:basic", "texture:earth", 10.0f);
+			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f), "material:basic", "texture:earth", 1.0f);
 			c1->setLocalTransform() = glm::rotate(c1->getLocalTransform(), std::rand() % 100 / 10.0f, glm::vec3(1, 1, 1));
 		}
 	}
