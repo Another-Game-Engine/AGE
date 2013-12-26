@@ -77,17 +77,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="Main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="TrackBall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicCam.hh" />
     <ClInclude Include="DemoScene.hh" />
-    <ClInclude Include="TrackBall.hh" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
