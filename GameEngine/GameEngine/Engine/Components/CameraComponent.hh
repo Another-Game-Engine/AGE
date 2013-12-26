@@ -23,6 +23,7 @@ namespace Component
 		glm::mat4                        _projection;
 		SmartPointer<Resources::CubeMap> _skybox;
 		std::string                      _cubeMapShader;
+		glm::mat4                        _lookAtTransform;
 	public:
 		CameraComponent(Engine &engine, Handle &entity);
 		virtual              ~CameraComponent(void);
@@ -32,6 +33,8 @@ namespace Component
 		void                 dettachSkybox();
  		glm::mat4            &setProjection();
 		glm::mat4            &getProjection();
+		glm::mat4            &setLookAtTransform() { return _lookAtTransform; }
+		const glm::mat4      &getLookAtTransform() const { return _lookAtTransform; }
 		SmartPointer<Resources::CubeMap> getSkybox();
 		const std::string &getSkyboxShader() const;
 	};
