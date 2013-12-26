@@ -76,16 +76,19 @@ namespace Component
 
 		btMotionState &getMotionState()
 		{
+			assert(_motionState != nullptr && "Motion state is NULL, RigidBody error. Tips : Have you setAcollisionShape to Component ?.");
 			return *_motionState;
 		}
 
 		btCollisionShape &getShape()
 		{
+			assert(_collisionShape != nullptr && "Shape is NULL, RigidBody error. Tips : Have you setAcollisionShape to Component ?.");
 			return *_collisionShape;
 		}
 
 		btRigidBody &getBody()
 		{
+			assert(_rigidBody != nullptr && "RigidBody is NULL. Tips : Have you setAcollisionShape to Component ?.");
 			return *_rigidBody;
 		}
 
