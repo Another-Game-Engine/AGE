@@ -23,7 +23,7 @@ public:
 	void 				addInput(int input);
 	void 				addKeyInput(int input);
 	void 				removeKeyInput(int input);
-	void 				setMousePosition(glm::i8vec2 const &pos);
+	void 				setMousePosition(glm::i8vec2 const &pos, glm::i8vec2 const &rel);
 	void				setMouseWheel(glm::i8vec2 const &delta);
 	glm::i8vec2 const  	&getMousePosition();
 	glm::i8vec2 const  	&getMouseDelta();
