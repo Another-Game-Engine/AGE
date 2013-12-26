@@ -20,6 +20,7 @@
 #include <Systems/TrackBallSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/BulletSystem.hpp>
+#include <Systems/VelocitySystem.hpp>
 
 ////////////
 // COMPONENTS
@@ -28,6 +29,7 @@
 #include <Components/GraphNode.hpp>
 #include <Components/FPController.hpp>
 #include <Components/FirstPersonView.hpp>
+#include <Components/VelocityComponent.hpp>
 
 class InGameScene : public AScene
 {
@@ -44,6 +46,7 @@ public:
 
 		addSystem<MeshRendererSystem>(0);
 		addSystem<BulletSystem>(0);
+		addSystem<VelocitySystem>(50);
 		addSystem<GraphNodeSystem>(100);
 		addSystem<TrackBallSystem>(150);
 		addSystem<CameraSystem>(200);
@@ -131,7 +134,7 @@ public:
 		// HEROS
 		auto heros = createHeros(glm::vec3(0,0,1));
 		auto test = createHeros(glm::vec3(0,0,2));
-
+		test->addComponent<Component::Velocity>(glm::vec3(0.001,0,0));
 
 		// CAMERA
 		auto camera = _engine.getInstance<EntityManager>().createEntity();
