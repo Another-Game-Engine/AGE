@@ -9,16 +9,15 @@
 
 
 #include <stdlib.h>
-#include "Core/Engine.hh"
+#include <Core/Engine.hh>
 #include "DemoScene.hh"
-#include "Utils/PubSub.hpp"
-#include "Context/SdlContext.hh"
-#include "Core/SceneManager.hh"
-#include "ResourceManager/ResourceManager.hh"
-#include "Core/Renderer.hh"
-#include "Entities/EntityManager.h"
-
-#include "BulletManager.hpp"
+#include <Utils/PubSub.hpp>
+#include <Context/SdlContext.hh>
+#include <Core/SceneManager.hh>
+#include <ResourceManager/ResourceManager.hh>
+#include <Core/Renderer.hh>
+#include <Entities/EntityManager.h>
+#include <Managers/BulletManager.hpp>
 
 int			main(int ac, char **av)
 {

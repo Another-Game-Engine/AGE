@@ -9,7 +9,7 @@
 #include <Core/Engine.hh>
 #include <ResourceManager/ResourceManager.hh>
 #include <ResourceManager/SharedMesh.hh>
-#include "../BulletManager.hpp"
+#include <Managers/BulletManager.hpp>
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
