@@ -40,13 +40,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)GameEngine/Vendors/Windows/include;$(SolutionDir)GameEngine/Vendors/shared;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Builds\</OutDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)GameEngine/Vendors/Windows/include;$(SolutionDir)GameEngine/Vendors/shared;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -117,30 +117,25 @@
     <ClInclude Include="Utils\BtConversion.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameEngine\GameEngine.vcxproj">
+    <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
-      <Private>false</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
-    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\Extras\ConvexDecomposition\ConvexDecomposition.vcxproj">
+    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\ConvexDecomposition\ConvexDecomposition.vcxproj">
       <Project>{45ab731e-6b5d-4583-9f94-6a89a3fbe91c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\Extras\HACD\HACD.vcxproj">
+    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\HACD\HACD.vcxproj">
       <Project>{c6f57a4c-3163-466f-a499-621507d2a1a9}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\src\BulletCollision\BulletCollision.vcxproj">
+    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\src\BulletCollision\BulletCollision.vcxproj">
       <Project>{a4be8dc8-0ac3-4aaf-b610-05716b33112a}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\src\BulletDynamics\BulletDynamics.vcxproj">
+    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\src\BulletDynamics\BulletDynamics.vcxproj">
       <Project>{75438ac1-bf59-475e-86a5-b9b5b0e427d6}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\src\BulletMultiThreaded\BulletMultiThreaded.vcxproj">
+    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\src\BulletMultiThreaded\BulletMultiThreaded.vcxproj">
       <Project>{7a44668a-af3b-4024-9e17-8156e8ee1221}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\src\LinearMath\LinearMath.vcxproj">
+    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\src\LinearMath\LinearMath.vcxproj">
       <Project>{40caa15c-227b-45be-ad17-d21a099989b8}</Project>
     </ProjectReference>
   </ItemGroup>
