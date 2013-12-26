@@ -11,6 +11,7 @@
 #include <Components/CameraComponent.hh>
 #include <Components/RigidBody.hpp>
 #include <Components/FPController.hpp>
+#include <Components/FirstPersonView.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/GraphNodeSystem.hpp>
@@ -18,6 +19,7 @@
 #include <Systems/MeshRenderSystem.h>
 #include <Systems/BulletSystem.hpp>
 #include <Systems/FPControllerSystem.hpp>
+#include <Systems/FirstPersonViewSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityManager.h>
@@ -92,6 +94,7 @@ bool 			DemoScene::userStart()
 	addSystem<FPControllerSystem>(50);
 	addSystem<BulletSystem>(70);
 	addSystem<GraphNodeSystem>(100);
+	addSystem<FirstPersonViewSystem>(150);
 	addSystem<CameraSystem>(200);
 
 	//
@@ -248,6 +251,7 @@ bool 			DemoScene::userStart()
 
 	//setCamera(new TrackBall(_engine, follow, 30.0f, 1.0f, 1.0f));
 	auto cameraComponent = character->addComponent<Component::CameraComponent>();
+	character->addComponent<Component::FirstPersonView>();
 
 	std::string		vars[] = 
 	{

@@ -10,6 +10,8 @@
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Systems/MeshRenderSystem.h>
+// to erase
+#include <Components/TrackBallComponent.hpp>
 
 class CameraSystem : public System
 {
@@ -55,7 +57,7 @@ protected:
 			auto lookAt = e->getGlobalTransform();
 			lookAt = glm::translate(lookAt, glm::vec3(0, 0, 1));
 
-			auto cameraPosition = e->getGlobalTransform();//glm::lookAt(posFromMat4(e->getGlobalTransform()), posFromMat4(lookAt), glm::vec3(0, 1, 0));
+			auto cameraPosition = camera->getLookAtTransform();
 
 			if (skybox.get())
 			{
