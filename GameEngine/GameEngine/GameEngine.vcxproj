@@ -100,7 +100,6 @@
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\MaterialComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
-    <ClCompile Include="Engine\Core\ACamera.cpp" />
     <ClCompile Include="Engine\Core\Material.cpp" />
     <ClCompile Include="Engine\Core\MaterialManager.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
@@ -299,7 +298,6 @@
     <None Include="Engine\Components\Component.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
-    <None Include="Engine\Core\ACamera.hh" />
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />

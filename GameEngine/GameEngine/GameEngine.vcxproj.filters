@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
-    <ClCompile Include="Engine\Core\ACamera.cpp" />
     <ClCompile Include="Engine\Core\Material.cpp" />
     <ClCompile Include="Engine\Core\MaterialManager.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
@@ -203,7 +202,6 @@
   <ItemGroup>
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
-    <None Include="Engine\Core\ACamera.hh" />
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />

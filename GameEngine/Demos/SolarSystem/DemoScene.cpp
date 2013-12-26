@@ -189,14 +189,6 @@ bool 			DemoScene::userStart()
 	//
 	// END : Generating a lot of planet for performance test
 
-	// CAMERA AS COMPONENT
-	//
-	//auto camera = _engine.getInstance<EntityManager>().createEntity();
-	//camera->addComponent<Component::CameraComponent>();	
-	//
-	// END CAMERA AS COMPONENT
-
-
 	// --
 	// Setting camera with skybox
 	// --

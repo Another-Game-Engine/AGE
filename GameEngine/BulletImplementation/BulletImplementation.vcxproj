@@ -97,18 +97,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="Components\Extras\CustomCharacterController.cpp" />
     <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="Components\FPController.cpp" />
     <ClCompile Include="Main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="TrackBall.cpp" />
     <ClCompile Include="Utils\BtConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicCam.hh" />
     <ClInclude Include="BulletManager.hpp" />
     <ClInclude Include="Components\Collision.hpp" />
     <ClInclude Include="Components\Extras\CustomCharacterController.hh" />
@@ -117,7 +114,6 @@
     <ClInclude Include="DemoScene.hh" />
     <ClInclude Include="Systems\BulletSystem.hpp" />
     <ClInclude Include="Systems\FPControllerSystem.hpp" />
-    <ClInclude Include="TrackBall.hh" />
     <ClInclude Include="Utils\BtConversion.hpp" />
   </ItemGroup>
   <ItemGroup>
