@@ -1,4 +1,5 @@
-#version 330
+#version 430
+
 #extension GL_ARB_separate_shader_objects: enable
 // texture coordinates from vertex shaders
 in vec2 st;
