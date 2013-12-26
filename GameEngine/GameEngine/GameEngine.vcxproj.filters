@@ -24,8 +24,6 @@
     <ClCompile Include="Engine\ResourceManager\Texture.cpp" />
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
-    <ClCompile Include="TinyThread\tinythread.cpp" />
-    <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
@@ -168,9 +166,6 @@
     <ClInclude Include="glm\gtx\verbose_operator.hpp" />
     <ClInclude Include="glm\gtx\wrap.hpp" />
     <ClInclude Include="glm\virtrev\xstream.hpp" />
-    <ClInclude Include="TinyThread\fast_mutex.h" />
-    <ClInclude Include="TinyThread\tinythread.h" />
-    <ClInclude Include="Vendors\shared\tiny_obj_loader.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Core\Settings.h" />
@@ -179,10 +174,6 @@
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
     <ClInclude Include="Engine\Components\MaterialComponent.h" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml.hpp" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_iterators.hpp" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_print.hpp" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="Engine\Entities\EntityManager.h" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\Any.hpp" />

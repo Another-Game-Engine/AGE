@@ -39,15 +39,17 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)Vendors/Windows/include;$(ProjectDir)Vendors/shared;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Vendors/Windows/lib;$(LibraryPath);</LibraryPath>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
+    <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Builds\</OutDir>
-    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)Vendors/Windows/include;$(ProjectDir)Vendors/shared;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Vendors/Windows/lib;$(LibraryPath);</LibraryPath>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
+    <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -70,7 +72,7 @@
     </ProjectReference>
     <Lib>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Vendors/OpenGL/lib;$(SolutionDir)Builds/;$(LibraryPath)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -89,7 +91,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Vendors/OpenGL/lib;$(SolutionDir)Builds/;$(LibraryPath)</AdditionalLibraryDirectories>
     </Lib>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -130,8 +132,6 @@
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
-    <ClCompile Include="TinyThread\tinythread.cpp" />
-    <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
@@ -286,13 +286,6 @@
     <ClInclude Include="glm\gtx\verbose_operator.hpp" />
     <ClInclude Include="glm\gtx\wrap.hpp" />
     <ClInclude Include="glm\virtrev\xstream.hpp" />
-    <ClInclude Include="TinyThread\fast_mutex.h" />
-    <ClInclude Include="TinyThread\tinythread.h" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml.hpp" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_iterators.hpp" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_print.hpp" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_utils.hpp" />
-    <ClInclude Include="Vendors\shared\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
