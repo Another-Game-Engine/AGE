@@ -129,19 +129,15 @@ public:
 		//
 
 		// HEROS
-		auto heros = createHeros();
-		heros->setLocalTransform() = glm::translate(heros->getLocalTransform(), glm::vec3(0, 0, 1));
-
-		auto test = createHeros();
-		test->setLocalTransform() = glm::translate(test->getLocalTransform(), glm::vec3(0, 0, 2));
+		auto heros = createHeros(glm::vec3(0,0,1));
+		auto test = createHeros(glm::vec3(0,0,2));
 
 
 		// CAMERA
 		auto camera = _engine.getInstance<EntityManager>().createEntity();
 		camera->addComponent<Component::GraphNode>();
 		auto cameraComponent = camera->addComponent<Component::CameraComponent>();
-		//camera->addComponent<Component::FirstPersonView>();
-		auto trackBall = camera->addComponent<Component::TrackBall>(test, 5.0f, 3.0f, 1.0f);
+		auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 3.0f, 1.0f);
 
 
 		cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
@@ -149,17 +145,16 @@ public:
 		return true;
 	}
 
-	Handle                  createHeros()
+	Handle                  createHeros(const glm::vec3 &pos)
 	{
 		auto e = _engine.getInstance<EntityManager>().createEntity();
+		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 		e->addComponent<Component::GraphNode>();
 		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
 		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros");
 		material->pushShader("basic");
 		e->addComponent<Component::MaterialComponent>(std::string("material:heros"));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0.0f);
-		rigidBody->setInertia(btVector3(0,0,0));
-		rigidBody->setMass(0);
 		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 
 		mesh->addTexture("texture:earth", 0);
