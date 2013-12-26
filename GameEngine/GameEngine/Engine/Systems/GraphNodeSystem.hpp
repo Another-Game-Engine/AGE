@@ -56,11 +56,11 @@ private:
 		// DOES NOT REQUIRE COMPONENTS BECAUSE GraphNode set as root  will directly communicate with it
 		//require<Component::GraphNode>();
 
-		sub(PubSubKey("graphNodeSetAsRoot"), [&](Handle entity){
+		globalSub(PubSubKey("graphNodeSetAsRoot"), [&](Handle entity){
 			_roots.insert(entity);
 		});
 
-		sub(PubSubKey("graphNodeNotARoot"), [&](Handle entity){
+		globalSub(PubSubKey("graphNodeNotARoot"), [&](Handle entity){
 			_roots.erase(entity);
 		});
 	}

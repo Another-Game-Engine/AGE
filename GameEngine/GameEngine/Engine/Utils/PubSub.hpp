@@ -78,7 +78,7 @@ public:
 
 public:
 	template <typename F>
-	void sub(const PubSubKey &key, F lambda)
+	void globalSub(const PubSubKey &key, F lambda)
 	{
 		auto &collection = _manager.getCollection();
 		if (_callbacks.find(key) != std::end(_callbacks))
@@ -89,6 +89,21 @@ public:
 		if (collection.find(key) == std::end(collection))
 			collection.emplace(key, std::unordered_set<PubSub*>());
 		collection[key].insert(this);
+	}
+
+	template <typename F>
+	void sub(const PubSubKey &key, PubSub *emitter, F lambda)
+	{
+		auto &collection = emitter->getSubscribers();
+		if (_callbacks.find(key) != std::end(_callbacks))
+			return;
+		auto fn = new decltype(toFn(lambda))(toFn(lambda));
+		_callbacks[key].function = static_cast<void*>(fn);
+		_callbacks[key].signature = &typeid(fn);
+		if (collection.find(key) == std::end(collection))
+			collection.emplace(key, std::unordered_set<PubSub*>());
+		collection[key].insert(this);
+		_emitters.insert(emitter);
 	}
 
 	void unsub(const PubSubKey &key)
@@ -112,9 +127,23 @@ public:
 	}
 	
 	template <typename ...Args>
-	void pub(PubSubKey &name, Args ...args)
+	void broadCast(PubSubKey &name, Args ...args)
 	{
 		_manager.pub(name, args...);
+	}
+
+	template <typename ...Args>
+	void pub(PubSubKey &name, Args ...args)
+	{
+		auto set = _subscribers.find(name);
+		if (set == std::end(_subscribers) || set->second.empty())
+			return;
+		for (auto it = std::begin(set->second); it != std::end(set->second);)
+		{
+			auto e = *it;
+			++it;
+			e->call(name, args...);
+		}
 	}
 
 	template <typename ...Args>
@@ -137,7 +166,39 @@ public:
 
 	virtual ~PubSub()
 	{
+		// unsub local subscriber
+		for (auto &k : _subscribers)
+		{
+			for (auto &e : k.second)
+			{
+				e->_emitters.erase(this);
+			}
+			k.second.clear();
+		}
+		_subscribers.clear();
+
+		// remove this from emitters list
+		for (auto &e : _emitters)
+		{
+			for (auto &c : _callbacks)
+			{
+				auto &subscription = e->_subscribers.find(c.first);
+				if (subscription == std::end(e->_subscribers))
+					continue;
+				subscription->second.erase(this);
+			}
+		}
 		unsubAll();
+	}
+
+	Manager &getPubSubManager()
+	{
+		return _manager;
+	}
+
+	std::map<PubSubKey, std::unordered_set<PubSub*> > &getSubscribers()
+	{
+		return _subscribers;
 	}
 private:
 	void removeFromGlobalCallbacks()
@@ -170,6 +231,8 @@ private:
 	}
 
 	std::map<PubSubKey, Callback> _callbacks;
+	std::map<PubSubKey, std::unordered_set<PubSub*> > _subscribers;
+	std::unordered_set<PubSub*> _emitters;
 	Manager &_manager;
 };
 

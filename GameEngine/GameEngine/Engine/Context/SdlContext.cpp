@@ -1,4 +1,5 @@
 #include "context/SdlContext.hh"
+#include <iostream>
 
 bool    SdlContext::start(unsigned int swidth, unsigned int sheight, const char *name)
 {
@@ -27,8 +28,8 @@ void    SdlContext::updateEvents(Input &input) const
 		input.removeKeyInput(events.button.button);
 	else if (events.type == SDL_MOUSEWHEEL)
 		input.setMouseWheel(glm::i8vec2(events.wheel.x, events.wheel.y));
-    else if (events.type == SDL_MOUSEMOTION)
-      input.setMousePosition(glm::i8vec2(events.motion.x, events.motion.y));
+	else if (events.type == SDL_MOUSEMOTION)
+      input.setMousePosition(glm::i8vec2(events.motion.x, events.motion.y), glm::i8vec2(events.motion.xrel, events.motion.yrel));
     else
       input.addInput(events.type);
   }

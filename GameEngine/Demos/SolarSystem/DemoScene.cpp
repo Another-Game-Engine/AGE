@@ -3,19 +3,20 @@
 #include "Core/Engine.hh"
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
-#include "TrackBall.hh"
 
 #include "ResourceManager/SharedMesh.hh"
 #include "ResourceManager/Texture.hh"
 #include "ResourceManager/CubeMap.hh"
-#include "Components/EmptyComponent.hh"
 #include "Components/RotationForce.hh"
 #include "Components/MaterialComponent.h"
 #include <Components/CameraComponent.hh>
+#include <Components/TrackBallComponent.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
 #include <Systems/GraphNodeSystem.hpp>
+#include <Systems/CameraSystem.hpp>
+#include <Systems/TrackBallSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityManager.h>
@@ -75,8 +76,10 @@ bool 			DemoScene::userStart()
 	//
 
 	addSystem<RotationForceSystem>(0);
-	addSystem<MeshRendererSystem>(1)->setRenderDebugMode(true);
-	addSystem<GraphNodeSystem>(2);
+	addSystem<MeshRendererSystem>(0);
+	addSystem<GraphNodeSystem>(100);
+	addSystem<TrackBallSystem>(150);
+	addSystem<CameraSystem>(200);
 
 	//
 	//
@@ -186,19 +189,15 @@ bool 			DemoScene::userStart()
 	//
 	// END : Generating a lot of planet for performance test
 
-	// CAMERA AS COMPONENT
-	//
-	//auto camera = _engine.getInstance<EntityManager>().createEntity();
-	//camera->addComponent<Component::CameraComponent>();	
-	//
-	// END CAMERA AS COMPONENT
-
-
 	// --
 	// Setting camera with skybox
 	// --
 
-	setCamera(new TrackBall(_engine, *(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50, 3, 1));
+	auto camera = _engine.getInstance<EntityManager>().createEntity();
+	camera->addComponent<Component::GraphNode>();
+	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
+	auto trackBall = camera->addComponent<Component::TrackBall>(	*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
+
 	std::string		vars[] = 
 	{
 		"projection",
@@ -214,7 +213,7 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
-	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
+	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
 
 
 	// Compute shader Tests

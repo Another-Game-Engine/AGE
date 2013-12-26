@@ -22,7 +22,7 @@
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
@@ -39,9 +39,17 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)Vendors/Windows/include;$(ProjectDir)Vendors/shared;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Vendors/Windows/lib;$(LibraryPath);</LibraryPath>
+    <IncludePath>$(SolutionDir)Vendors/glm;C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
+    <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Builds\</OutDir>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;$(LibraryPath)</LibraryPath>
+    <TargetExt>.lib</TargetExt>
+    <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -52,12 +60,21 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/TinyObjLoader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Vendors/OpenGL/lib;$(SolutionDir)Builds/;$(LibraryPath)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -73,14 +90,19 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Vendors/OpenGL/lib;$(SolutionDir)Builds/;$(LibraryPath)</AdditionalLibraryDirectories>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\MaterialComponent.cpp" />
-    <ClCompile Include="Engine\Components\EmptyComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
-    <ClCompile Include="Engine\Core\ACamera.cpp" />
     <ClCompile Include="Engine\Core\Material.cpp" />
     <ClCompile Include="Engine\Core\MaterialManager.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
@@ -110,14 +132,15 @@
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
-    <ClCompile Include="TinyThread\tinythread.cpp" />
-    <ClCompile Include="Vendors\shared\tiny_obj_loader.cpp" />
+    <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
+    <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\MaterialComponent.h" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
+    <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Core\Material.hh" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Settings.h" />
@@ -126,154 +149,27 @@
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
+    <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
+    <ClInclude Include="Engine\Systems\FirstPersonViewSystem.hpp" />
     <ClInclude Include="Engine\Systems\GraphNodeSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
     <ClInclude Include="Engine\Systems\System.h" />
+    <ClInclude Include="Engine\Systems\TrackBallSystem.hpp" />
     <ClInclude Include="Engine\Utils\Any.hpp" />
     <ClInclude Include="Engine\Utils\Barcode.h" />
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Utils\File.hpp" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
+    <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
-    <ClInclude Include="glm\core\func_common.hpp" />
-    <ClInclude Include="glm\core\func_exponential.hpp" />
-    <ClInclude Include="glm\core\func_geometric.hpp" />
-    <ClInclude Include="glm\core\func_integer.hpp" />
-    <ClInclude Include="glm\core\func_matrix.hpp" />
-    <ClInclude Include="glm\core\func_noise.hpp" />
-    <ClInclude Include="glm\core\func_packing.hpp" />
-    <ClInclude Include="glm\core\func_trigonometric.hpp" />
-    <ClInclude Include="glm\core\func_vector_relational.hpp" />
-    <ClInclude Include="glm\core\hint.hpp" />
-    <ClInclude Include="glm\core\intrinsic_common.hpp" />
-    <ClInclude Include="glm\core\intrinsic_exponential.hpp" />
-    <ClInclude Include="glm\core\intrinsic_geometric.hpp" />
-    <ClInclude Include="glm\core\intrinsic_matrix.hpp" />
-    <ClInclude Include="glm\core\intrinsic_trigonometric.hpp" />
-    <ClInclude Include="glm\core\intrinsic_vector_relational.hpp" />
-    <ClInclude Include="glm\core\setup.hpp" />
-    <ClInclude Include="glm\core\type.hpp" />
-    <ClInclude Include="glm\core\type_float.hpp" />
-    <ClInclude Include="glm\core\type_gentype.hpp" />
-    <ClInclude Include="glm\core\type_half.hpp" />
-    <ClInclude Include="glm\core\type_int.hpp" />
-    <ClInclude Include="glm\core\type_mat.hpp" />
-    <ClInclude Include="glm\core\type_mat2x2.hpp" />
-    <ClInclude Include="glm\core\type_mat2x3.hpp" />
-    <ClInclude Include="glm\core\type_mat2x4.hpp" />
-    <ClInclude Include="glm\core\type_mat3x2.hpp" />
-    <ClInclude Include="glm\core\type_mat3x3.hpp" />
-    <ClInclude Include="glm\core\type_mat3x4.hpp" />
-    <ClInclude Include="glm\core\type_mat4x2.hpp" />
-    <ClInclude Include="glm\core\type_mat4x3.hpp" />
-    <ClInclude Include="glm\core\type_mat4x4.hpp" />
-    <ClInclude Include="glm\core\type_size.hpp" />
-    <ClInclude Include="glm\core\type_vec.hpp" />
-    <ClInclude Include="glm\core\type_vec1.hpp" />
-    <ClInclude Include="glm\core\type_vec2.hpp" />
-    <ClInclude Include="glm\core\type_vec3.hpp" />
-    <ClInclude Include="glm\core\type_vec4.hpp" />
-    <ClInclude Include="glm\core\_detail.hpp" />
-    <ClInclude Include="glm\core\_fixes.hpp" />
-    <ClInclude Include="glm\core\_swizzle.hpp" />
-    <ClInclude Include="glm\core\_swizzle_func.hpp" />
-    <ClInclude Include="glm\core\_vectorize.hpp" />
-    <ClInclude Include="glm\ext.hpp" />
-    <ClInclude Include="glm\glm.hpp" />
-    <ClInclude Include="glm\gtc\constants.hpp" />
-    <ClInclude Include="glm\gtc\epsilon.hpp" />
-    <ClInclude Include="glm\gtc\half_float.hpp" />
-    <ClInclude Include="glm\gtc\matrix_access.hpp" />
-    <ClInclude Include="glm\gtc\matrix_integer.hpp" />
-    <ClInclude Include="glm\gtc\matrix_inverse.hpp" />
-    <ClInclude Include="glm\gtc\matrix_transform.hpp" />
-    <ClInclude Include="glm\gtc\noise.hpp" />
-    <ClInclude Include="glm\gtc\quaternion.hpp" />
-    <ClInclude Include="glm\gtc\random.hpp" />
-    <ClInclude Include="glm\gtc\reciprocal.hpp" />
-    <ClInclude Include="glm\gtc\swizzle.hpp" />
-    <ClInclude Include="glm\gtc\type_precision.hpp" />
-    <ClInclude Include="glm\gtc\type_ptr.hpp" />
-    <ClInclude Include="glm\gtc\ulp.hpp" />
-    <ClInclude Include="glm\gtx\associated_min_max.hpp" />
-    <ClInclude Include="glm\gtx\bit.hpp" />
-    <ClInclude Include="glm\gtx\closest_point.hpp" />
-    <ClInclude Include="glm\gtx\color_cast.hpp" />
-    <ClInclude Include="glm\gtx\color_space.hpp" />
-    <ClInclude Include="glm\gtx\color_space_YCoCg.hpp" />
-    <ClInclude Include="glm\gtx\compatibility.hpp" />
-    <ClInclude Include="glm\gtx\component_wise.hpp" />
-    <ClInclude Include="glm\gtx\constants.hpp" />
-    <ClInclude Include="glm\gtx\epsilon.hpp" />
-    <ClInclude Include="glm\gtx\euler_angles.hpp" />
-    <ClInclude Include="glm\gtx\extend.hpp" />
-    <ClInclude Include="glm\gtx\extented_min_max.hpp" />
-    <ClInclude Include="glm\gtx\fast_exponential.hpp" />
-    <ClInclude Include="glm\gtx\fast_square_root.hpp" />
-    <ClInclude Include="glm\gtx\fast_trigonometry.hpp" />
-    <ClInclude Include="glm\gtx\gradient_paint.hpp" />
-    <ClInclude Include="glm\gtx\handed_coordinate_space.hpp" />
-    <ClInclude Include="glm\gtx\inertia.hpp" />
-    <ClInclude Include="glm\gtx\integer.hpp" />
-    <ClInclude Include="glm\gtx\intersect.hpp" />
-    <ClInclude Include="glm\gtx\int_10_10_10_2.hpp" />
-    <ClInclude Include="glm\gtx\log_base.hpp" />
-    <ClInclude Include="glm\gtx\matrix_cross_product.hpp" />
-    <ClInclude Include="glm\gtx\matrix_interpolation.hpp" />
-    <ClInclude Include="glm\gtx\matrix_major_storage.hpp" />
-    <ClInclude Include="glm\gtx\matrix_operation.hpp" />
-    <ClInclude Include="glm\gtx\matrix_query.hpp" />
-    <ClInclude Include="glm\gtx\mixed_product.hpp" />
-    <ClInclude Include="glm\gtx\multiple.hpp" />
-    <ClInclude Include="glm\gtx\noise.hpp" />
-    <ClInclude Include="glm\gtx\norm.hpp" />
-    <ClInclude Include="glm\gtx\normal.hpp" />
-    <ClInclude Include="glm\gtx\normalize_dot.hpp" />
-    <ClInclude Include="glm\gtx\number_precision.hpp" />
-    <ClInclude Include="glm\gtx\ocl_type.hpp" />
-    <ClInclude Include="glm\gtx\optimum_pow.hpp" />
-    <ClInclude Include="glm\gtx\orthonormalize.hpp" />
-    <ClInclude Include="glm\gtx\perpendicular.hpp" />
-    <ClInclude Include="glm\gtx\polar_coordinates.hpp" />
-    <ClInclude Include="glm\gtx\projection.hpp" />
-    <ClInclude Include="glm\gtx\quaternion.hpp" />
-    <ClInclude Include="glm\gtx\random.hpp" />
-    <ClInclude Include="glm\gtx\raw_data.hpp" />
-    <ClInclude Include="glm\gtx\reciprocal.hpp" />
-    <ClInclude Include="glm\gtx\rotate_vector.hpp" />
-    <ClInclude Include="glm\gtx\simd_mat4.hpp" />
-    <ClInclude Include="glm\gtx\simd_vec4.hpp" />
-    <ClInclude Include="glm\gtx\spline.hpp" />
-    <ClInclude Include="glm\gtx\std_based_type.hpp" />
-    <ClInclude Include="glm\gtx\string_cast.hpp" />
-    <ClInclude Include="glm\gtx\transform.hpp" />
-    <ClInclude Include="glm\gtx\transform2.hpp" />
-    <ClInclude Include="glm\gtx\ulp.hpp" />
-    <ClInclude Include="glm\gtx\unsigned_int.hpp" />
-    <ClInclude Include="glm\gtx\vec1.hpp" />
-    <ClInclude Include="glm\gtx\vector_access.hpp" />
-    <ClInclude Include="glm\gtx\vector_angle.hpp" />
-    <ClInclude Include="glm\gtx\vector_query.hpp" />
-    <ClInclude Include="glm\gtx\verbose_operator.hpp" />
-    <ClInclude Include="glm\gtx\wrap.hpp" />
-    <ClInclude Include="glm\virtrev\xstream.hpp" />
-    <ClInclude Include="TinyThread\fast_mutex.h" />
-    <ClInclude Include="TinyThread\tinythread.h" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml.hpp" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_iterators.hpp" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_print.hpp" />
-    <ClInclude Include="Vendors\shared\rapidxml\rapidxml_utils.hpp" />
-    <ClInclude Include="Vendors\shared\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
-    <None Include="Engine\Components\EmptyComponent.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />
-    <None Include="Engine\Core\ACamera.hh" />
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />
@@ -293,113 +189,15 @@
     <None Include="Engine\Utils\Singleton.hh" />
     <None Include="Engine\Utils\SmartPointer.hh" />
     <None Include="Engine\Utils\Utils.hh" />
-    <None Include="glm\CMakeFiles\CMakeDetermineCompilerABI_C.bin" />
-    <None Include="glm\CMakeFiles\CMakeDetermineCompilerABI_CXX.bin" />
-    <None Include="glm\core\func_common.inl" />
-    <None Include="glm\core\func_exponential.inl" />
-    <None Include="glm\core\func_geometric.inl" />
-    <None Include="glm\core\func_integer.inl" />
-    <None Include="glm\core\func_matrix.inl" />
-    <None Include="glm\core\func_noise.inl" />
-    <None Include="glm\core\func_packing.inl" />
-    <None Include="glm\core\func_trigonometric.inl" />
-    <None Include="glm\core\func_vector_relational.inl" />
-    <None Include="glm\core\intrinsic_common.inl" />
-    <None Include="glm\core\intrinsic_exponential.inl" />
-    <None Include="glm\core\intrinsic_geometric.inl" />
-    <None Include="glm\core\intrinsic_matrix.inl" />
-    <None Include="glm\core\intrinsic_trigonometric.inl" />
-    <None Include="glm\core\intrinsic_vector_relational.inl" />
-    <None Include="glm\core\type_gentype.inl" />
-    <None Include="glm\core\type_half.inl" />
-    <None Include="glm\core\type_mat.inl" />
-    <None Include="glm\core\type_mat2x2.inl" />
-    <None Include="glm\core\type_mat2x3.inl" />
-    <None Include="glm\core\type_mat2x4.inl" />
-    <None Include="glm\core\type_mat3x2.inl" />
-    <None Include="glm\core\type_mat3x3.inl" />
-    <None Include="glm\core\type_mat3x4.inl" />
-    <None Include="glm\core\type_mat4x2.inl" />
-    <None Include="glm\core\type_mat4x3.inl" />
-    <None Include="glm\core\type_mat4x4.inl" />
-    <None Include="glm\core\type_vec.inl" />
-    <None Include="glm\core\type_vec1.inl" />
-    <None Include="glm\core\type_vec2.inl" />
-    <None Include="glm\core\type_vec3.inl" />
-    <None Include="glm\core\type_vec4.inl" />
-    <None Include="glm\gtc\constants.inl" />
-    <None Include="glm\gtc\epsilon.inl" />
-    <None Include="glm\gtc\half_float.inl" />
-    <None Include="glm\gtc\matrix_access.inl" />
-    <None Include="glm\gtc\matrix_inverse.inl" />
-    <None Include="glm\gtc\matrix_transform.inl" />
-    <None Include="glm\gtc\noise.inl" />
-    <None Include="glm\gtc\quaternion.inl" />
-    <None Include="glm\gtc\random.inl" />
-    <None Include="glm\gtc\reciprocal.inl" />
-    <None Include="glm\gtc\swizzle.inl" />
-    <None Include="glm\gtc\type_precision.inl" />
-    <None Include="glm\gtc\type_ptr.inl" />
-    <None Include="glm\gtc\ulp.inl" />
-    <None Include="glm\gtx\associated_min_max.inl" />
-    <None Include="glm\gtx\bit.inl" />
-    <None Include="glm\gtx\closest_point.inl" />
-    <None Include="glm\gtx\color_cast.inl" />
-    <None Include="glm\gtx\color_space.inl" />
-    <None Include="glm\gtx\color_space_YCoCg.inl" />
-    <None Include="glm\gtx\compatibility.inl" />
-    <None Include="glm\gtx\component_wise.inl" />
-    <None Include="glm\gtx\euler_angles.inl" />
-    <None Include="glm\gtx\extend.inl" />
-    <None Include="glm\gtx\extented_min_max.inl" />
-    <None Include="glm\gtx\fast_exponential.inl" />
-    <None Include="glm\gtx\fast_square_root.inl" />
-    <None Include="glm\gtx\fast_trigonometry.inl" />
-    <None Include="glm\gtx\gradient_paint.inl" />
-    <None Include="glm\gtx\handed_coordinate_space.inl" />
-    <None Include="glm\gtx\inertia.inl" />
-    <None Include="glm\gtx\integer.inl" />
-    <None Include="glm\gtx\intersect.inl" />
-    <None Include="glm\gtx\int_10_10_10_2.inl" />
-    <None Include="glm\gtx\log_base.inl" />
-    <None Include="glm\gtx\matrix_cross_product.inl" />
-    <None Include="glm\gtx\matrix_interpolation.inl" />
-    <None Include="glm\gtx\matrix_major_storage.inl" />
-    <None Include="glm\gtx\matrix_operation.inl" />
-    <None Include="glm\gtx\matrix_query.inl" />
-    <None Include="glm\gtx\mixed_product.inl" />
-    <None Include="glm\gtx\multiple.inl" />
-    <None Include="glm\gtx\norm.inl" />
-    <None Include="glm\gtx\normal.inl" />
-    <None Include="glm\gtx\normalize_dot.inl" />
-    <None Include="glm\gtx\number_precision.inl" />
-    <None Include="glm\gtx\ocl_type.inl" />
-    <None Include="glm\gtx\optimum_pow.inl" />
-    <None Include="glm\gtx\orthonormalize.inl" />
-    <None Include="glm\gtx\perpendicular.inl" />
-    <None Include="glm\gtx\polar_coordinates.inl" />
-    <None Include="glm\gtx\projection.inl" />
-    <None Include="glm\gtx\quaternion.inl" />
-    <None Include="glm\gtx\raw_data.inl" />
-    <None Include="glm\gtx\rotate_vector.inl" />
-    <None Include="glm\gtx\simd_mat4.inl" />
-    <None Include="glm\gtx\simd_vec4.inl" />
-    <None Include="glm\gtx\spline.inl" />
-    <None Include="glm\gtx\std_based_type.inl" />
-    <None Include="glm\gtx\string_cast.inl" />
-    <None Include="glm\gtx\transform.inl" />
-    <None Include="glm\gtx\transform2.inl" />
-    <None Include="glm\gtx\unsigned_int.inl" />
-    <None Include="glm\gtx\vec1.inl" />
-    <None Include="glm\gtx\vector_access.inl" />
-    <None Include="glm\gtx\vector_angle.inl" />
-    <None Include="glm\gtx\vector_query.inl" />
-    <None Include="glm\gtx\verbose_operator.inl" />
-    <None Include="glm\gtx\wrap.inl" />
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Core\Renderer.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vendors\TinyObjLoader\TinyObjLoader.vcxproj">
+      <Project>{99fc20c2-9ad1-4049-bb11-b369c42fd6a8}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
