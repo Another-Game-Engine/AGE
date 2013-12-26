@@ -1,5 +1,5 @@
-#version 330
-#extension GL_ARB_separate_shader_objects: enable
+#version 430
+//#extension GL_ARB_separate_shader_objects: enable
 // framebuffer texture sampler
 uniform layout (location = 0) sampler2D layer0;
 uniform layout (location = 1) sampler2D layer1;
