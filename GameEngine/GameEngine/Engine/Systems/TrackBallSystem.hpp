@@ -38,8 +38,7 @@ protected:
 			glm::vec3		pos;
 
 			trackBall->dist -= inputs.getMouseWheel().y * trackBall->zoomSpeed;
-			if (inputs.getKey(SDL_BUTTON_LEFT))
-				trackBall->angles -= glm::vec2(-(float)inputs.getMouseDelta().x / (1000 / trackBall->rotateSpeed), (float)inputs.getMouseDelta().y / (1000 / trackBall->rotateSpeed));
+			trackBall->angles -= glm::vec2((float)inputs.getMouseDelta().x / (1000 / trackBall->rotateSpeed), -(float)inputs.getMouseDelta().y / (1000 / trackBall->rotateSpeed));
 			if (abs(trackBall->dist) < 0.0001)
 			{
 				if (trackBall->dist < 0)
@@ -61,6 +60,7 @@ protected:
 	{
 		require<Component::CameraComponent>();
 		require<Component::TrackBall>();
+		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };
 
