@@ -6,10 +6,10 @@
 #include <Systems/System.h>
 #include <Components/FPController.hpp>
 #include <Entities/Entity.hh>
-#include "../BulletManager.hpp"
+#include <Managers/BulletManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
-#include "Context/SdlContext.hh"
+#include <Context/SdlContext.hh>
 
 
 class FPControllerSystem : public System

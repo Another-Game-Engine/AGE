@@ -88,11 +88,11 @@
     <ClCompile Include="Utils\BtConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BulletManager.hpp" />
     <ClInclude Include="Components\Collision.hpp" />
     <ClInclude Include="Components\Extras\CustomCharacterController.hh" />
     <ClInclude Include="Components\FPController.hpp" />
     <ClInclude Include="Components\RigidBody.hpp" />
+    <ClInclude Include="Managers\BulletManager.hpp" />
     <ClInclude Include="Systems\BulletSystem.hpp" />
     <ClInclude Include="Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Utils\BtConversion.hpp" />

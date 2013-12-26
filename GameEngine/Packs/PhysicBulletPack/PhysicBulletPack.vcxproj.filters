@@ -44,10 +44,10 @@
     <ClInclude Include="Utils\BtConversion.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BulletManager.hpp">
+    <ClInclude Include="Components\Extras\CustomCharacterController.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Extras\CustomCharacterController.hh">
+    <ClInclude Include="Managers\BulletManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

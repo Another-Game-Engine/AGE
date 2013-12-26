@@ -5,7 +5,7 @@
 #include <Systems/System.h>
 #include <Components/RigidBody.hpp>
 #include <Entities/Entity.hh>
-#include "../BulletManager.hpp"
+#include <Managers/BulletManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 
