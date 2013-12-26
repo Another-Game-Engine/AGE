@@ -15,6 +15,7 @@
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
 #include <Systems/GraphNodeSystem.hpp>
+#include <Systems/CameraSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityManager.h>
@@ -74,8 +75,9 @@ bool 			DemoScene::userStart()
 	//
 
 	addSystem<RotationForceSystem>(0);
-	addSystem<MeshRendererSystem>(1)->setRenderDebugMode(true);
-	addSystem<GraphNodeSystem>(2);
+	addSystem<MeshRendererSystem>(0);
+	addSystem<GraphNodeSystem>(100);
+	addSystem<CameraSystem>(200);
 
 	//
 	//
@@ -197,6 +199,8 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
+	auto camera = *earth->getComponent<Component::GraphNode>()->getSonsBegin();
+	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 	setCamera(new TrackBall(_engine, *(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50, 3, 1));
 	std::string		vars[] = 
 	{
@@ -213,7 +217,7 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
-	getCamera()->attachSkybox("cubemap:space", "cubemapShader");
+	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
 
 
 	// Compute shader Tests
