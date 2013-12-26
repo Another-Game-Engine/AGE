@@ -3,7 +3,6 @@
 #include "Core/Engine.hh"
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
-#include "TrackBall.hh"
 
 #include "ResourceManager/SharedMesh.hh"
 #include "ResourceManager/Texture.hh"
@@ -11,11 +10,13 @@
 #include "Components/RotationForce.hh"
 #include "Components/MaterialComponent.h"
 #include <Components/CameraComponent.hh>
+#include <Components/TrackBallComponent.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
 #include <Systems/GraphNodeSystem.hpp>
 #include <Systems/CameraSystem.hpp>
+#include <Systems/TrackBallSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityManager.h>
@@ -77,6 +78,7 @@ bool 			DemoScene::userStart()
 	addSystem<RotationForceSystem>(0);
 	addSystem<MeshRendererSystem>(0);
 	addSystem<GraphNodeSystem>(100);
+	addSystem<TrackBallSystem>(150);
 	addSystem<CameraSystem>(200);
 
 	//
@@ -199,9 +201,11 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	auto camera = *earth->getComponent<Component::GraphNode>()->getSonsBegin();
+	auto camera = _engine.getInstance<EntityManager>().createEntity();
+	camera->addComponent<Component::GraphNode>();
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
-	setCamera(new TrackBall(_engine, *(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50, 3, 1));
+	auto trackBall = camera->addComponent<Component::TrackBall>(	*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
+
 	std::string		vars[] = 
 	{
 		"projection",

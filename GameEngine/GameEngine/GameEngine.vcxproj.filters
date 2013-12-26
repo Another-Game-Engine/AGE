@@ -195,6 +195,8 @@
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
+    <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
+    <ClInclude Include="Engine\Systems\TrackBallSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Context\IRenderContext.hh" />
