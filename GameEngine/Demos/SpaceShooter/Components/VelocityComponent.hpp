@@ -16,7 +16,7 @@ namespace Component
 	public:
 		Velocity(Engine &engine, Handle &entity) :
 			_direction(0,0,0),
-			_function([](double time, double totalTime, const glm::vec3 &direction){return direction * glm::vec3(time);}),
+			_function([&](double time, double totalTime, const glm::vec3 direction){return direction * glm::vec3(time);}),
 			ComponentBase<Velocity>(engine, entity, "VelocityComponent")
 		{}
 
@@ -31,9 +31,10 @@ namespace Component
 			_function = function;
 		}
 
-		const glm::vec3 &compute(double time, double totalTime) const
+		const glm::vec3 compute(double time, double totalTime) const
 		{
-			return _function(time, totalTime, this->_direction);
+			auto r = _function(time, totalTime, this->_direction);
+			return r;
 		}
 
 		virtual void reset()
