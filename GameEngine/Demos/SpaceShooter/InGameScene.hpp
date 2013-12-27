@@ -19,7 +19,7 @@
 #include <Systems/GraphNodeSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
 #include <Systems/CameraSystem.hpp>
-#include <Systems/BulletDynamicSystem.hpp>
+#include <Systems/BulletCollisionSystem.hpp>
 #include <Systems/VelocitySystem.hpp>
 
 ////////////
@@ -45,7 +45,7 @@ public:
 	{
 
 		addSystem<MeshRendererSystem>(0);
-		addSystem<BulletDynamicSystem>(0);
+		addSystem<BulletCollisionSystem>(0);
 		addSystem<VelocitySystem>(50);
 		addSystem<GraphNodeSystem>(100);
 		addSystem<TrackBallSystem>(150);

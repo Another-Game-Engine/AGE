@@ -53,6 +53,7 @@ public:
 	{
 		_world->removeCollisionObject(object);
 	}
+	inline btCollisionWorld *getWorld() const { return _world; }
 protected:
 	btCollisionWorld *_world;
 	btCollisionDispatcher *_dispatcher;
