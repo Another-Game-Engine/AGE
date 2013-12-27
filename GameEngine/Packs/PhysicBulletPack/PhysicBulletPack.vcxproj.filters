@@ -62,5 +62,11 @@
     <ClInclude Include="Components\CollisionBody.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Systems\CollisionAdderSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\CollisionCleanerSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

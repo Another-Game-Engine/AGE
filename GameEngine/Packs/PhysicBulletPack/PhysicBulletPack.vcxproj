@@ -98,6 +98,8 @@
     <ClInclude Include="Systems\BulletCollisionSystem.hpp" />
     <ClInclude Include="Systems\BulletDynamicSystem.hpp" />
     <ClInclude Include="Systems\BulletSystem.hpp" />
+    <ClInclude Include="Systems\CollisionAdderSystem.hpp" />
+    <ClInclude Include="Systems\CollisionCleanerSystem.hpp" />
     <ClInclude Include="Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Utils\BtConversion.hpp" />
   </ItemGroup>

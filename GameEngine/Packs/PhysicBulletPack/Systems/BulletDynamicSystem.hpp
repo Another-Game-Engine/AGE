@@ -67,7 +67,7 @@ private:
 			glm::vec3 scale = scaleFromMat4(e->getLocalTransform());
 			m = glm::scale(m, scale);
 			e->setLocalTransform() = m;
-			e->removeComponent<Component::Collision>();
+			//e->removeComponent<Component::Collision>();
 		}
 	}
 
