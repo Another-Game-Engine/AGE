@@ -5,7 +5,7 @@
 #include <Systems/System.h>
 #include <Components/RigidBody.hpp>
 #include <Entities/Entity.hh>
-#include <Managers/BulletManager.hpp>
+#include <Managers/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 
@@ -14,11 +14,11 @@ class BulletSystem : public System
 {
 public:
 	BulletSystem(Engine &engine) : System(engine)
-		, _manager(engine.getInstance<BulletManager>())
+		, _manager(engine.getInstance<BulletDynamicManager>())
 	{}
 	virtual ~BulletSystem(){}
 private:
-	BulletManager &_manager;
+	BulletDynamicManager &_manager;
 	virtual void updateBegin(double time)
 	{
 		_manager.getWorld().stepSimulation(time,10);
