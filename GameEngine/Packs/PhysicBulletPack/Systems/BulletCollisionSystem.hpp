@@ -3,7 +3,7 @@
 
 #include <Utils/BtConversion.hpp>
 #include <Systems/System.h>
-#include <Components/RigidBody.hpp>
+#include <Components/CollisionBody.hpp>
 #include <Entities/Entity.hh>
 #include <Managers/BulletCollisionManager.hpp>
 #include <Core/Engine.hh>
