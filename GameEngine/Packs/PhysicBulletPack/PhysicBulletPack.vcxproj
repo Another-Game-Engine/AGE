@@ -92,6 +92,7 @@
     <ClInclude Include="Components\Extras\CustomCharacterController.hh" />
     <ClInclude Include="Components\FPController.hpp" />
     <ClInclude Include="Components\RigidBody.hpp" />
+    <ClInclude Include="Managers\BulletCollisionManager.hpp" />
     <ClInclude Include="Managers\BulletDynamicManager.hpp" />
     <ClInclude Include="Systems\BulletSystem.hpp" />
     <ClInclude Include="Systems\FPControllerSystem.hpp" />
