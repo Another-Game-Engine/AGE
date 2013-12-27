@@ -16,11 +16,11 @@ class FPControllerSystem : public System
 {
 public:
 	FPControllerSystem(Engine &engine) : System(engine)
-		, _manager(engine.getInstance<BulletDynamicManager>())
+		, _manager(&engine.getInstance<BulletCollisionManager>())
 	{}
 	virtual ~FPControllerSystem(){}
 private:
-	BulletDynamicManager &_manager;
+	BulletCollisionManager *_manager;
 
 	virtual void updateBegin(double time)
 	{

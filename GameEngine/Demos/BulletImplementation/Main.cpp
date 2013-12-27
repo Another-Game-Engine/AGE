@@ -33,7 +33,7 @@ int			main(int ac, char **av)
 	e.setInstance<Resources::ResourceManager>();
 	e.setInstance<Renderer>();
 	e.setInstance<SceneManager>();
-	e.setInstance<BulletDynamicManager>().init();
+	e.setInstance<BulletDynamicManager, BulletCollisionManager>().init();
 
 	// init engine
 	if (e.init() == false)

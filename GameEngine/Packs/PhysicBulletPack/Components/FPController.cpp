@@ -48,9 +48,11 @@ FPController::FPController(Engine &engine, Handle &entity) : ComponentBase<FPCon
 	_ghost->setWorldTransform(transform);
 	_controller = new btKinematicCharacterController(_ghost, _shape, 1);
 	_ghost->setUserPointer(&(_entity));
-	_engine.getInstance<BulletDynamicManager>().getWorld().addCollisionObject(_ghost, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter);
-	_engine.getInstance<BulletDynamicManager>().getWorld().addAction(_controller);
-	_engine.getInstance<BulletDynamicManager>().getWorld().getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+	auto bulletManager = dynamic_cast<BulletDynamicManager*>(&_engine.getInstance<BulletCollisionManager>());
+	assert(bulletManager != nullptr);
+	bulletManager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter);
+	bulletManager->getWorld()->addAction(_controller);
+	bulletManager->getWorld()->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 
 }
 

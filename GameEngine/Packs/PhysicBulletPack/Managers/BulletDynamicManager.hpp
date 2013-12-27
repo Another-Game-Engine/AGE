@@ -1,58 +1,43 @@
 #ifndef  __BULLET_MANAGER_HPP__
 # define __BULLET_MANAGER_HPP__
 
-#include <btBulletDynamicsCommon.h>
+#include <Managers/BulletCollisionManager.hpp>
 
-class BulletDynamicManager
+class BulletDynamicManager : public BulletCollisionManager
 {
 private:
-	btDefaultCollisionConfiguration *_collisionConfiguation;
-	btCollisionDispatcher *_collisionDispatcher;
-	btBroadphaseInterface *_broadphaseInterface;
 	btSequentialImpulseConstraintSolver *_constraintSolver;
-	btDiscreteDynamicsWorld *_world;
 public:
 	BulletDynamicManager()
+		: BulletCollisionManager()
+		, _constraintSolver(nullptr)
 	{}
 
-	~BulletDynamicManager()
+	virtual ~BulletDynamicManager()
 	{
 		uninit();
 	}
 
-	static void myTickCallback(btDynamicsWorld *world, btScalar timeStep) {
-	}
-
 	bool init()
 	{
-		_collisionConfiguation = new btDefaultCollisionConfiguration();
-		_collisionDispatcher = new btCollisionDispatcher(_collisionConfiguation);
-		_broadphaseInterface = new btDbvtBroadphase();
+		if (!BulletCollisionManager::init(false))
+			return false;
 		_constraintSolver = new btSequentialImpulseConstraintSolver();
-		_world = new btDiscreteDynamicsWorld(_collisionDispatcher, _broadphaseInterface, _constraintSolver, _collisionConfiguation);
-		_world->setGravity(btVector3(0, -10, 0));
-		_world->setInternalTickCallback(myTickCallback);
+		if (!_constraintSolver)
+			return false;
+		_world = new btDiscreteDynamicsWorld(_dispatcher, _broadphase, _constraintSolver, &_defaultCollisionConfiguration);
+		if (!_world)
+			return false;
+		static_cast<btDiscreteDynamicsWorld *>(_world)->setGravity(btVector3(0, -10, 0));
 		return true;
 	}
 
-	void uninit()
+	virtual void uninit()
 	{
-		if (_world)
-			delete _world;
 		if (_constraintSolver)
 			delete _constraintSolver;
-		if (_broadphaseInterface)
-			delete _broadphaseInterface;
-		if (_collisionDispatcher)
-			delete _collisionDispatcher;
-		if (_collisionConfiguation)
-			delete _collisionConfiguation;
 	}
-
-	btDiscreteDynamicsWorld &getWorld()
-	{
-		return *_world;
-	}
+	inline btDynamicsWorld * getWorld() const { return static_cast<btDynamicsWorld *>(_world); }
 };
 
 #endif   //__BULLET_MANAGER_HPP__
