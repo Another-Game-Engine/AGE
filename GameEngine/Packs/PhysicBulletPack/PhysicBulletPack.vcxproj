@@ -92,7 +92,7 @@
     <ClInclude Include="Components\Extras\CustomCharacterController.hh" />
     <ClInclude Include="Components\FPController.hpp" />
     <ClInclude Include="Components\RigidBody.hpp" />
-    <ClInclude Include="Managers\BulletManager.hpp" />
+    <ClInclude Include="Managers\BulletDynamicManager.hpp" />
     <ClInclude Include="Systems\BulletSystem.hpp" />
     <ClInclude Include="Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Utils\BtConversion.hpp" />

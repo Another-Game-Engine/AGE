@@ -9,7 +9,7 @@
 #include <Core/Engine.hh>
 #include <ResourceManager/ResourceManager.hh>
 #include <ResourceManager/SharedMesh.hh>
-#include <Managers/BulletManager.hpp>
+#include <Managers/BulletDynamicManager.hpp>
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
@@ -31,7 +31,7 @@ namespace Component
 
 		RigidBody(Engine &engine, Handle &entity)
 			: ComponentBase(engine, entity),
-			_manager(engine.getInstance<BulletManager>()),
+			_manager(engine.getInstance<BulletDynamicManager>()),
 			_shapeType(UNDEFINED),
 			_mass(0.0f),
 			_inertia(btVector3(0.0f, 0.0f, 0.0f)),
@@ -200,7 +200,7 @@ namespace Component
 		}
 
 	private:
-		BulletManager &_manager;
+		BulletDynamicManager &_manager;
 		CollisionShape _shapeType;
 		btScalar _mass;
 		btVector3 _inertia;

@@ -17,7 +17,7 @@
 #include <ResourceManager/ResourceManager.hh>
 #include <Core/Renderer.hh>
 #include <Entities/EntityManager.h>
-#include <Managers/BulletManager.hpp>
+#include <Managers/BulletDynamicManager.hpp>
 
 int			main(int ac, char **av)
 {
@@ -33,7 +33,7 @@ int			main(int ac, char **av)
 	e.setInstance<Resources::ResourceManager>();
 	e.setInstance<Renderer>();
 	e.setInstance<SceneManager>();
-	e.setInstance<BulletManager>().init();
+	e.setInstance<BulletDynamicManager>().init();
 
 	// init engine
 	if (e.init() == false)
