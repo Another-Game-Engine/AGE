@@ -3,7 +3,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-class BulletManager
+class BulletDynamicManager
 {
 private:
 	btDefaultCollisionConfiguration *_collisionConfiguation;
@@ -12,15 +12,19 @@ private:
 	btSequentialImpulseConstraintSolver *_constraintSolver;
 	btDiscreteDynamicsWorld *_world;
 public:
+	BulletDynamicManager()
+	{}
+
+	~BulletDynamicManager()
+	{
+		uninit();
+	}
+
 	static void myTickCallback(btDynamicsWorld *world, btScalar timeStep) {
-//		std::cout << "The world just ticked by " << timeStep << " seconds" << std::endl;
 	}
 
 	bool init()
 	{
-
-// And then somewhere after you construct the world:
-
 		_collisionConfiguation = new btDefaultCollisionConfiguration();
 		_collisionDispatcher = new btCollisionDispatcher(_collisionConfiguation);
 		_broadphaseInterface = new btDbvtBroadphase();
@@ -33,11 +37,16 @@ public:
 
 	void uninit()
 	{
-		delete _world;
-		delete _constraintSolver;
-		delete _broadphaseInterface;
-		delete _collisionDispatcher;
-		delete _collisionConfiguation;
+		if (_world)
+			delete _world;
+		if (_constraintSolver)
+			delete _constraintSolver;
+		if (_broadphaseInterface)
+			delete _broadphaseInterface;
+		if (_collisionDispatcher)
+			delete _collisionDispatcher;
+		if (_collisionConfiguation)
+			delete _collisionConfiguation;
 	}
 
 	btDiscreteDynamicsWorld &getWorld()
