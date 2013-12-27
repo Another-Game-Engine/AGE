@@ -31,7 +31,7 @@ namespace Component
 
 		RigidBody(Engine &engine, Handle &entity)
 			: ComponentBase(engine, entity),
-			_manager(engine.getInstance<BulletDynamicManager>()),
+			_manager(nullptr),
 			_shapeType(UNDEFINED),
 			_mass(0.0f),
 			_inertia(btVector3(0.0f, 0.0f, 0.0f)),
@@ -42,6 +42,8 @@ namespace Component
 			_motionState(nullptr),
 			_rigidBody(nullptr)
 		{
+			_manager = dynamic_cast<BulletDynamicManager*>(&engine.getInstance<BulletCollisionManager>());
+			assert(_manager != nullptr);
 		}
 
 		void init(float mass = 1.0f)
@@ -53,7 +55,7 @@ namespace Component
 		{
 			if (_rigidBody != nullptr)
 			{
-				_manager.getWorld().removeRigidBody(_rigidBody);
+				_manager->getWorld()->removeRigidBody(_rigidBody);
 				delete _rigidBody;
 				_rigidBody = nullptr;
 			}
@@ -163,7 +165,7 @@ namespace Component
 			_rigidBody->setUserPointer(&_entity);
 			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
 			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
-			_manager.getWorld().addRigidBody(_rigidBody);
+			_manager->getWorld()->addRigidBody(_rigidBody);
 		}
 
 		void setRotationConstraint(bool x, bool y, bool z)
@@ -190,7 +192,7 @@ namespace Component
 		{
 			if (_rigidBody)
 			{
-				_manager.getWorld().removeRigidBody(_rigidBody);
+				_manager->getWorld()->removeRigidBody(_rigidBody);
 				delete _rigidBody;
 			}
 			if (_motionState)
@@ -200,7 +202,7 @@ namespace Component
 		}
 
 	private:
-		BulletDynamicManager &_manager;
+		BulletDynamicManager *_manager;
 		CollisionShape _shapeType;
 		btScalar _mass;
 		btVector3 _inertia;
@@ -218,7 +220,7 @@ namespace Component
 		{
 			if (_rigidBody != nullptr)
 			{
-				_manager.getWorld().removeRigidBody(_rigidBody);
+				_manager->getWorld()->removeRigidBody(_rigidBody);
 				delete _rigidBody;
 			}
 			if (_motionState != nullptr)

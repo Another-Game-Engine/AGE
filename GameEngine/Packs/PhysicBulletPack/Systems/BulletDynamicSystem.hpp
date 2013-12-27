@@ -14,15 +14,18 @@ class BulletDynamicSystem : public System
 {
 public:
 	BulletDynamicSystem(Engine &engine) : System(engine)
-		, _manager(engine.getInstance<BulletDynamicManager>())
-	{}
+		, _manager(nullptr)
+	{
+		_manager = dynamic_cast<BulletDynamicManager*>(&engine.getInstance<BulletCollisionManager>());
+		assert(_manager != nullptr);
+	}
 	virtual ~BulletDynamicSystem(){}
 private:
-	BulletDynamicManager &_manager;
+	BulletDynamicManager *_manager;
 	virtual void updateBegin(double time)
 	{
-		_manager.getWorld().stepSimulation(time,10);
-		btDispatcher *dispatcher = _manager.getWorld().getDispatcher();
+		_manager->getWorld()->stepSimulation(time,10);
+		btDispatcher *dispatcher = _manager->getWorld()->getDispatcher();
 		unsigned int max = dispatcher->getNumManifolds();
 		for (unsigned int i = 0; i < max; ++i)
 		{
