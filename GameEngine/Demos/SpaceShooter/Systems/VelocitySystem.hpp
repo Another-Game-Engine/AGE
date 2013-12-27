@@ -30,9 +30,9 @@ private:
 			auto velocity = e->getComponent<Component::Velocity>();
 			auto lol = posFromMat4(e->getLocalTransform());
 			auto lilou = velocity->compute(time, totalTime);
-			auto crotte = posFromMat4(e->getLocalTransform()) * velocity->compute(time, totalTime);
-//			e->setLocalTransform() = glm::translate(e->getLocalTransform(), posFromMat4(e->getLocalTransform()) * velocity->compute(time, totalTime));
-			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,-0.1,0) * (float)time);
+			auto crotte = posFromMat4(e->getLocalTransform()) + velocity->compute(time, totalTime);
+			e->setLocalTransform() = glm::translate(e->getLocalTransform(), velocity->compute(time, totalTime));
+//			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,-0.1,0) * (float)time);
 		}
 	}
 

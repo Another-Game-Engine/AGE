@@ -135,7 +135,7 @@ public:
 		// HEROS
 		auto heros = createHeros(glm::vec3(0,0,1));
 		auto test = createHeros(glm::vec3(0,4,1));
-		test->addComponent<Component::Velocity>(glm::vec3(0,0,1));
+		test->addComponent<Component::Velocity>(glm::vec3(0, -0.5, 0));
 
 		// CAMERA
 		auto camera = _engine.getInstance<EntityManager>().createEntity();
