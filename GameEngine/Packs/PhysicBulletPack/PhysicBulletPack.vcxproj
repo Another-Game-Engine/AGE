@@ -94,6 +94,7 @@
     <ClInclude Include="Components\RigidBody.hpp" />
     <ClInclude Include="Managers\BulletCollisionManager.hpp" />
     <ClInclude Include="Managers\BulletDynamicManager.hpp" />
+    <ClInclude Include="Systems\BulletDynamicSystem.hpp" />
     <ClInclude Include="Systems\BulletSystem.hpp" />
     <ClInclude Include="Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Utils\BtConversion.hpp" />

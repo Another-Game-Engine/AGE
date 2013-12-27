@@ -10,13 +10,13 @@
 #include <Components/Collision.hpp>
 
 
-class BulletSystem : public System
+class BulletDynamicSystem : public System
 {
 public:
-	BulletSystem(Engine &engine) : System(engine)
+	BulletDynamicSystem(Engine &engine) : System(engine)
 		, _manager(engine.getInstance<BulletDynamicManager>())
 	{}
-	virtual ~BulletSystem(){}
+	virtual ~BulletDynamicSystem(){}
 private:
 	BulletDynamicManager &_manager;
 	virtual void updateBegin(double time)

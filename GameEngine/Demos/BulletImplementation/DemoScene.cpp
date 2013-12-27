@@ -17,7 +17,7 @@
 #include <Systems/GraphNodeSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
-#include <Systems/BulletSystem.hpp>
+#include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/FPControllerSystem.hpp>
 #include <Systems/FirstPersonViewSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
@@ -92,7 +92,7 @@ bool 			DemoScene::userStart()
 	//
 	addSystem<MeshRendererSystem>(0);
 	addSystem<FPControllerSystem>(50);
-	addSystem<BulletSystem>(70);
+	addSystem<BulletDynamicSystem>(70);
 	addSystem<GraphNodeSystem>(100);
 	addSystem<FirstPersonViewSystem>(150);
 	addSystem<CameraSystem>(200);
