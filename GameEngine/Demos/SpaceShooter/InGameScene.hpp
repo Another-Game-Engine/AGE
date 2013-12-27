@@ -21,6 +21,8 @@
 #include <Systems/CameraSystem.hpp>
 #include <Systems/BulletCollisionSystem.hpp>
 #include <Systems/VelocitySystem.hpp>
+#include <Systems/CollisionAdderSystem.hpp>
+#include <Systems/CollisionCleanerSystem.hpp>
 
 ////////////
 // COMPONENTS
@@ -45,12 +47,13 @@ public:
 	{
 
 		addSystem<MeshRendererSystem>(0);
-		addSystem<GraphNodeSystem>(0);
-		addSystem<BulletCollisionSystem>(10);
-		addSystem<VelocitySystem>(50);
-//		addSystem<GraphNodeSystem>(100);
-		addSystem<TrackBallSystem>(150);
-		addSystem<CameraSystem>(200);
+		addSystem<GraphNodeSystem>(0); // UPDATE GRAPH NODE POSITION
+		addSystem<BulletCollisionSystem>(10); // CHECK FOR COLLISIONS
+		addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ELEMENTS
+		addSystem<VelocitySystem>(50); // UPDATE VELOCITY
+		addSystem<TrackBallSystem>(150); // UPDATE CAMERA TRACKBALL BEHAVIOR
+		addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
+		addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENT FROM COLLIDING ELEMENTS
 
 		std::string		perModelVars[] =
 		{
