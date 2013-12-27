@@ -133,8 +133,8 @@ public:
 
 		// HEROS
 		auto heros = createHeros(glm::vec3(0,0,1));
-		auto test = createHeros(glm::vec3(0,0,2));
-		test->addComponent<Component::Velocity>(glm::vec3(0.001,0,0));
+		auto test = createHeros(glm::vec3(0,2,2));
+//		test->addComponent<Component::Velocity>(glm::vec3(0,-1,0));
 
 		// CAMERA
 		auto camera = _engine.getInstance<EntityManager>().createEntity();
@@ -157,8 +157,8 @@ public:
 		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros");
 		material->pushShader("basic");
 		e->addComponent<Component::MaterialComponent>(std::string("material:heros"));
-		auto rigidBody = e->addComponent<Component::RigidBody>(0.0f);
-		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
+		auto rigidBody = e->addComponent<Component::CollisionBody>();
+		rigidBody->setCollisionShape(Component::CollisionBody::SPHERE);
 
 		mesh->addTexture("texture:earth", 0);
 		mesh->addTexture("texture:earthNight", 1);

@@ -59,5 +59,8 @@
     <ClInclude Include="Systems\BulletCollisionSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\CollisionBody.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
