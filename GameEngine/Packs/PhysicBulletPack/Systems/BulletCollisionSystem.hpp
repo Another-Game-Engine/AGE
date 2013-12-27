@@ -9,7 +9,6 @@
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 
-
 class BulletCollisionSystem : public System
 {
 public:
@@ -21,6 +20,27 @@ private:
 	BulletCollisionManager &_manager;
 	virtual void updateBegin(double time)
 	{
+		for (auto e : _collection)
+		{
+			btTransform transform;
+			glm::vec3 position = posFromMat4(e->getGlobalTransform());
+			glm::vec3 scale = scaleFromMat4(e->getGlobalTransform());
+			glm::vec3 rot = rotFromMat4(e->getGlobalTransform(), true);
+			transform.setIdentity();
+			transform.setOrigin(convertGLMVectorToBullet(position));
+			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
+
+			auto c = e->getComponent<Component::CollisionBody>();
+			c->getBody().setWorldTransform(transform);
+		}
+	}
+
+	virtual void updateEnd(double time)
+	{}
+
+	virtual void mainUpdate(double time)
+	{
+		_manager.getWorld()->performDiscreteCollisionDetection();
 		btDispatcher *dispatcher = _manager.getWorld()->getDispatcher();
 		unsigned int max = dispatcher->getNumManifolds();
 		for (unsigned int i = 0; i < max; ++i)
@@ -36,23 +56,14 @@ private:
 			Handle h2 = *(static_cast<Handle*>(ob->getUserPointer()));
 			Entity *e2 = h2.get();
 			auto c2 = e2->addComponent<Component::Collision>();
-
-
 			c1->addCollision(h2);
 			c2->addCollision(h1); 
 		}
 	}
 
-	virtual void updateEnd(double time)
-	{}
-
-	virtual void mainUpdate(double time)
-	{
-
-	}
-
 	virtual void initialize()
 	{
+		require<Component::CollisionBody>();
 	}
 };
 
