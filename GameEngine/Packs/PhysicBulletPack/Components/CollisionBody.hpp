@@ -131,7 +131,8 @@ namespace Component
 			_body = new btCollisionObject();
 			_body->setUserPointer(&_entity);
 			_body->setCollisionShape(_collisionShape);
-			_manager->getWorld()->addCollisionObject(_body);
+			_body->setWorldTransform(transform);
+			_manager->getWorld()->addCollisionObject(_body, btCollisionObject::CF_STATIC_OBJECT, btCollisionObject::CF_STATIC_OBJECT);
 		}
 
 		virtual ~CollisionBody(void)

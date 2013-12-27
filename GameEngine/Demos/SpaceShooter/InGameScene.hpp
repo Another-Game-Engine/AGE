@@ -45,9 +45,10 @@ public:
 	{
 
 		addSystem<MeshRendererSystem>(0);
-		addSystem<BulletCollisionSystem>(0);
+		addSystem<GraphNodeSystem>(0);
+		addSystem<BulletCollisionSystem>(10);
 		addSystem<VelocitySystem>(50);
-		addSystem<GraphNodeSystem>(100);
+//		addSystem<GraphNodeSystem>(100);
 		addSystem<TrackBallSystem>(150);
 		addSystem<CameraSystem>(200);
 
@@ -133,8 +134,8 @@ public:
 
 		// HEROS
 		auto heros = createHeros(glm::vec3(0,0,1));
-		auto test = createHeros(glm::vec3(0,2,2));
-//		test->addComponent<Component::Velocity>(glm::vec3(0,-1,0));
+		auto test = createHeros(glm::vec3(0,4,1));
+		test->addComponent<Component::Velocity>(glm::vec3(0,0,1));
 
 		// CAMERA
 		auto camera = _engine.getInstance<EntityManager>().createEntity();
@@ -155,7 +156,7 @@ public:
 		e->addComponent<Component::GraphNode>();
 		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
 		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros");
-		material->pushShader("basic");
+		material->pushShader("earth");
 		e->addComponent<Component::MaterialComponent>(std::string("material:heros"));
 		auto rigidBody = e->addComponent<Component::CollisionBody>();
 		rigidBody->setCollisionShape(Component::CollisionBody::SPHERE);
