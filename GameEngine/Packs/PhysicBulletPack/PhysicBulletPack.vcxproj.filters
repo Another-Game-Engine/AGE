@@ -53,5 +53,8 @@
     <ClInclude Include="Managers\BulletCollisionManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Systems\BulletDynamicSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
