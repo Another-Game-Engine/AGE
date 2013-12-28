@@ -40,6 +40,7 @@ private:
 
 			auto c = e->getComponent<Component::CollisionBody>();
 			c->getBody().setWorldTransform(transform);
+			c->getShape().setLocalScaling(convertGLMVectorToBullet(scale));
 		}
 		// PERFORM COLLISION CHECK
 		_manager.getWorld()->performDiscreteCollisionDetection();

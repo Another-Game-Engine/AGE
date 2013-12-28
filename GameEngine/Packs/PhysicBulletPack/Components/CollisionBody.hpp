@@ -91,14 +91,11 @@ namespace Component
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 			if (c == BOX)
 			{
-				btVector3 halfScale(scale.x * 0.5f, scale.y * 0.5f, scale.z * 0.5f);
-				_collisionShape = new btBoxShape(btVector3(1, 1, 1));//new btBoxShape(halfScale);
-				_collisionShape->setLocalScaling(halfScale);
+				_collisionShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));//new btBoxShape(halfScale);
 			}
 			else if (c == SPHERE)
 			{
 				_collisionShape = new btSphereShape(1);//new btSphereShape(scale.x);
-				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			}
 			else if (c == MESH)
 			{
@@ -122,12 +119,12 @@ namespace Component
 					s->addPoint(hull->getVertexPointer()[i], false);
 				}
 				s->recalcLocalAabb();
-				s->setLocalScaling(convertGLMVectorToBullet(scale));
 				_collisionShape = s;
 				delete t;
 				delete hull;
 				delete tmp;
 			}
+			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_body = new btCollisionObject();
 			_body->setUserPointer(&_entity);
 			_body->setCollisionShape(_collisionShape);
