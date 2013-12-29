@@ -1,5 +1,5 @@
-#ifndef		__RIGID_BODY_HPP__
-#define		__RIGID_BODY_HPP__
+#ifndef		__COLLISION_BODY_HPP__
+#define		__COLLISION_BODY_HPP__
 
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
@@ -9,7 +9,7 @@
 #include <Core/Engine.hh>
 #include <ResourceManager/ResourceManager.hh>
 #include <ResourceManager/SharedMesh.hh>
-#include <Managers/BulletDynamicManager.hpp>
+#include <Managers/BulletCollisionManager.hpp>
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
@@ -17,7 +17,7 @@
 
 namespace Component
 {
-	ATTRIBUTE_ALIGNED16(class) RigidBody : public Component::ComponentBase<RigidBody>
+	ATTRIBUTE_ALIGNED16(class) CollisionBody : public Component::ComponentBase<CollisionBody>
 	{
 	public:
 		BT_DECLARE_ALIGNED_ALLOCATOR();
@@ -29,40 +29,25 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		RigidBody(Engine &engine, Handle &entity)
-			: ComponentBase(engine, entity),
+		CollisionBody(Engine &engine, Handle &entity)
+			: ComponentBase(engine, entity, "CollisionBody"),
 			_manager(nullptr),
 			_shapeType(UNDEFINED),
-			_mass(0.0f),
-			_inertia(btVector3(0.0f, 0.0f, 0.0f)),
-			_rotationConstraint(glm::vec3(1,1,1)),
-			_transformConstraint(glm::vec3(1,1,1)),
 			_meshName(""),
 			_collisionShape(nullptr),
-			_motionState(nullptr),
-			_rigidBody(nullptr)
+			_body(nullptr)
 		{
-			_manager = dynamic_cast<BulletDynamicManager*>(&engine.getInstance<BulletCollisionManager>());
+			_manager = dynamic_cast<BulletCollisionManager*>(&engine.getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
-		}
-
-		void init(float mass = 1.0f)
-		{
-			_mass = mass;
 		}
 
 		virtual void reset()
 		{
-			if (_rigidBody != nullptr)
+			if (_body != nullptr)
 			{
-				_manager->getWorld()->removeRigidBody(_rigidBody);
-				delete _rigidBody;
-				_rigidBody = nullptr;
-			}
-			if (_motionState != nullptr)
-			{
-				delete _motionState;
-				_motionState = nullptr;
+				_manager->getWorld()->removeCollisionObject(_body);
+				delete _body;
+				_body = nullptr;
 			}
 			if (_collisionShape != nullptr)
 			{
@@ -70,16 +55,11 @@ namespace Component
 				_collisionShape = nullptr;
 			}
 			_shapeType = UNDEFINED;
-			_mass = 0.0f;
-			_inertia = btVector3(0.0f, 0.0f, 0.0f);
-			_rotationConstraint = glm::vec3(1, 1, 1);
-			_transformConstraint = glm::vec3(1, 1, 1);
 		}
 
-		btMotionState &getMotionState()
+		bool init()
 		{
-			assert(_motionState != nullptr && "Motion state is NULL, RigidBody error. Tips : Have you setAcollisionShape to Component ?.");
-			return *_motionState;
+			return true;
 		}
 
 		btCollisionShape &getShape()
@@ -88,20 +68,10 @@ namespace Component
 			return *_collisionShape;
 		}
 
-		btRigidBody &getBody()
+		btCollisionObject &getBody()
 		{
-			assert(_rigidBody != nullptr && "RigidBody is NULL. Tips : Have you setAcollisionShape to Component ?.");
-			return *_rigidBody;
-		}
-
-		void setMass(float mass)
-		{
-			_mass = btScalar(mass);
-		}
-
-		void setInertia(btVector3 const &v)
-		{
-			_inertia = v;
+			assert(_body != nullptr && "Collision body is NULL. Tips : Have you setAcollisionShape to Component ?.");
+			return *_body;
 		}
 
 		void setCollisionShape(CollisionShape c, const std::string &meshName = "")
@@ -119,7 +89,6 @@ namespace Component
 			transform.setIdentity();
 			transform.setOrigin(convertGLMVectorToBullet(position));
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
-			_motionState = new btDefaultMotionState(transform);
 			if (c == BOX)
 			{
 				_collisionShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));//new btBoxShape(halfScale);
@@ -155,74 +124,41 @@ namespace Component
 				delete hull;
 				delete tmp;
 			}
-			if (_mass != 0)
-				_collisionShape->calculateLocalInertia(_mass, _inertia);
 			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
-			_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
-			_rigidBody->setUserPointer(&_entity);
-			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
-			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
-			_manager->getWorld()->addRigidBody(_rigidBody);
+			_body = new btCollisionObject();
+			_body->setUserPointer(&_entity);
+			_body->setCollisionShape(_collisionShape);
+			_body->setWorldTransform(transform);
+			_manager->getWorld()->addCollisionObject(_body, btCollisionObject::CF_STATIC_OBJECT, btCollisionObject::CF_STATIC_OBJECT);
 		}
 
-		void setRotationConstraint(bool x, bool y, bool z)
+		virtual ~CollisionBody(void)
 		{
-			_rotationConstraint = glm::vec3(static_cast<unsigned int>(x),
-				static_cast<unsigned int>(y),
-				static_cast<unsigned int>(z));
-			if (!_rigidBody)
-				return;
-			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
-		}
-
-		void setTransformConstraint(bool x, bool y, bool z)
-		{
-			_transformConstraint = glm::vec3(static_cast<unsigned int>(x),
-				static_cast<unsigned int>(y),
-				static_cast<unsigned int>(z));
-			if (!_rigidBody)
-				return;
-			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
-		}
-
-		virtual ~RigidBody(void)
-		{
-			if (_rigidBody)
+			if (_body)
 			{
-				_manager->getWorld()->removeRigidBody(_rigidBody);
-				delete _rigidBody;
+				_manager->getWorld()->removeCollisionObject(_body);
+				delete _body;
 			}
-			if (_motionState)
-				delete _motionState;
 			if (_collisionShape)
 				delete _collisionShape;
 		}
 
 	private:
-		BulletDynamicManager *_manager;
+		BulletCollisionManager *_manager;
 		CollisionShape _shapeType;
-		btScalar _mass;
-		btVector3 _inertia;
-		glm::vec3 _rotationConstraint;
-		glm::vec3 _transformConstraint;
 		std::string _meshName;
 		btCollisionShape *_collisionShape;
-		btMotionState *_motionState;
-		btRigidBody *_rigidBody;
+		btCollisionObject *_body;
 	private:
-		RigidBody(RigidBody const &);
-		RigidBody &operator=(RigidBody const &);
+		CollisionBody(CollisionBody const &);
+		CollisionBody &operator=(CollisionBody const &);
 
 		void _reset()
 		{
-			if (_rigidBody != nullptr)
+			if (_body != nullptr)
 			{
-				_manager->getWorld()->removeRigidBody(_rigidBody);
-				delete _rigidBody;
-			}
-			if (_motionState != nullptr)
-			{
-				delete _motionState;
+				_manager->getWorld()->removeCollisionObject(_body);
+				delete _body;
 			}
 			if (_collisionShape != nullptr)
 			{
@@ -233,4 +169,4 @@ namespace Component
 
 }
 
-#endif //!__RIGID_BODY_HPP__
+#endif //!__COLLISION_BODY_HPP__
