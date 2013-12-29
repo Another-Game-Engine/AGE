@@ -89,11 +89,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\Collision.hpp" />
+    <ClInclude Include="Components\CollisionBody.hpp" />
     <ClInclude Include="Components\Extras\CustomCharacterController.hh" />
     <ClInclude Include="Components\FPController.hpp" />
     <ClInclude Include="Components\RigidBody.hpp" />
-    <ClInclude Include="Managers\BulletManager.hpp" />
+    <ClInclude Include="Managers\BulletCollisionManager.hpp" />
+    <ClInclude Include="Managers\BulletDynamicManager.hpp" />
+    <ClInclude Include="Systems\BulletCollisionSystem.hpp" />
+    <ClInclude Include="Systems\BulletDynamicSystem.hpp" />
     <ClInclude Include="Systems\BulletSystem.hpp" />
+    <ClInclude Include="Systems\CollisionAdderSystem.hpp" />
+    <ClInclude Include="Systems\CollisionCleanerSystem.hpp" />
     <ClInclude Include="Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Utils\BtConversion.hpp" />
   </ItemGroup>

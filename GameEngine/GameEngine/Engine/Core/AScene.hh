@@ -20,8 +20,6 @@ public:
 	AScene(Engine &engine);
 	virtual ~AScene();
 
-	SmartPointer<Entity>            &createEntity();
-
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);

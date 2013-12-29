@@ -6,21 +6,27 @@
 #include "ResourceManager/SharedMesh.hh"
 #include "ResourceManager/Texture.hh"
 #include "ResourceManager/CubeMap.hh"
-#include "Components/RotationForce.hh"
-#include "Components/MaterialComponent.h"
+#include "ResourceManager/ResourceManager.hh"
+
+#include <Components/RotationForce.hh>
+#include <Components/MaterialComponent.h>
 #include <Components/CameraComponent.hh>
 #include <Components/RigidBody.hpp>
 #include <Components/FPController.hpp>
 #include <Components/FirstPersonView.hpp>
+
 #include <OpenGL/ComputeShader.hh>
+
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/GraphNodeSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
-#include <Systems/BulletSystem.hpp>
+#include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/FPControllerSystem.hpp>
 #include <Systems/FirstPersonViewSystem.hpp>
-#include "ResourceManager/ResourceManager.hh"
+#include <Systems/CollisionAdderSystem.hpp>
+#include <Systems/CollisionCleanerSystem.hpp>
+
 #include <Core/Engine.hh>
 #include <Entities/EntityManager.h>
 
@@ -91,12 +97,13 @@ bool 			DemoScene::userStart()
 	//
 	//
 	addSystem<MeshRendererSystem>(0);
-	addSystem<FPControllerSystem>(50);
-	addSystem<BulletSystem>(70);
-	addSystem<GraphNodeSystem>(100);
-	addSystem<FirstPersonViewSystem>(150);
-	addSystem<CameraSystem>(200);
-
+	addSystem<GraphNodeSystem>(0); // UPDATE ENTITIES TRANSFORMATION
+	addSystem<BulletDynamicSystem>(10); // UPDATE PHYSIC WORLD
+	addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
+	addSystem<FPControllerSystem>(50); // UPDATE FIRST PERSON CONTROLLER
+	addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
+	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
+	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
 	//
 	//
 	// end System Test
