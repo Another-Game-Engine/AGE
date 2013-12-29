@@ -42,6 +42,7 @@ namespace OpenGLTools
     ~VertexBuffer(void);
 
     void addAttribute(Attribute const &attribute);
+	Attribute *getAttribute(unsigned int index);
     void clearAttributes(void);
     void clearUniform(void);
 

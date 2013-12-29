@@ -10,8 +10,11 @@ namespace Component
 	class RotationForce : public Component::ComponentBase<RotationForce>
 	{
 	public:
-		RotationForce(Engine &engine, Handle &entity, const glm::vec3 &force = glm::vec3(0,0,0));
+		RotationForce(Engine &engine, Handle &entity);
 		virtual ~RotationForce(void);
+
+		void init(const glm::vec3 &force = glm::vec3(0, 0, 0));
+		virtual void reset();
 
 		void setForce(const glm::vec3 &force);
 		const glm::vec3 &getForce() const;

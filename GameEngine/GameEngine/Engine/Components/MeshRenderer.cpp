@@ -8,9 +8,9 @@
 
 namespace Component
 {
-	MeshRenderer::MeshRenderer(Engine &engine, Handle &entity, std::string const &resource) :
+	MeshRenderer::MeshRenderer(Engine &engine, Handle &entity) :
 		Component::ComponentBase<MeshRenderer>(engine, entity, "MeshComponent"),
-		_mesh(_engine.getInstance<Resources::ResourceManager>().getResource(resource))
+		_mesh(nullptr)
 	{
 	}
 
@@ -18,9 +18,19 @@ namespace Component
 	{
 	}
 
+	void MeshRenderer::init(std::string const &resource)
+	{
+		_mesh =_engine.getInstance<Resources::ResourceManager>().getResource(resource);
+	}
+
 	SmartPointer<Resources::SharedMesh> const &MeshRenderer::getMesh() const
 	{
 		return (_mesh);
+	}
+
+	void MeshRenderer::reset()
+	{
+		_mesh = nullptr;
 	}
 
 	void MeshRenderer::addTexture(const std::string &textureName, unsigned int priority)

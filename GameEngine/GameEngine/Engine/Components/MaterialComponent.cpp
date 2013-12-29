@@ -4,21 +4,30 @@
 
 namespace Component
 {
-	MaterialComponent::MaterialComponent(Engine &engine, Handle &entity, std::string const &name)
+	MaterialComponent::MaterialComponent(Engine &engine, Handle &entity)
 		: ComponentBase<MaterialComponent>(engine, entity, "MaterialCpt"),
 		_material(nullptr)
-	{
-		_material = _engine.getInstance<Renderer>().getMaterialManager().getMaterial(name);
-	}
-
-	MaterialComponent::MaterialComponent(Engine &engine, Handle &entity, SmartPointer<Material> material)
-		: ComponentBase<MaterialComponent>(engine, entity, "MaterialCpt"),
-		_material(material)
 	{
 	}
 
 	MaterialComponent::~MaterialComponent(void)
 	{}
+
+	void MaterialComponent::init(std::string const &name)
+	{
+		_material = _engine.getInstance<Renderer>().getMaterialManager().getMaterial(name);
+	}
+
+	void MaterialComponent::init(SmartPointer<Material> material)
+	{
+		_material = material;
+	}
+
+	void MaterialComponent::reset()
+	{
+		_material = nullptr;
+	}
+
 
 	bool                				MaterialComponent::setMaterial(std::string const &name)
 	{

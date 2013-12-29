@@ -92,6 +92,13 @@ void VertexBuffer::addAttribute(Attribute const &attribute)
   _attribute.push_back(r);
 }
 
+Attribute *VertexBuffer::getAttribute(unsigned int index)
+{
+	if (index >= _attribute.size())
+		return nullptr;
+	return &(_attribute[index]);
+}
+
 /// delete a Attribute
 void VertexBuffer::clearAttributes(void)
 {
