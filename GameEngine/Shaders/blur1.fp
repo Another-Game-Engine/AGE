@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 #version 430
 //#extension GL_ARB_separate_shader_objects: enable
+=======
+#version 330
+#extension GL_ARB_explicit_uniform_location: enable
+#extension GL_ARB_separate_shader_objects: enable
+>>>>>>> master
 
 // texture coordinates from vertex shaders
 in vec2 st;

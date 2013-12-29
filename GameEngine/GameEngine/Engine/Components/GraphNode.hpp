@@ -15,15 +15,27 @@ namespace Component
 		GraphNode(Engine &engine, Handle &entity)
 			: ComponentBase<GraphNode>(engine, entity, "GraphNodeComponent")
 		{
-				_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
-
-				// signal it's a root node
-				auto key = PubSubKey("graphNodeSetAsRoot");
-				_entity->pub(key, _entity);
 			}
 
 		virtual ~GraphNode()
-		{}
+		{
+		}
+
+		void init()
+		{
+			_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
+
+			// signal it's a root node
+			auto key = PubSubKey("graphNodeSetAsRoot");
+			_entity->broadCast(key, _entity);
+		}
+
+		virtual void reset()
+		{
+			_childs.clear();
+			auto key = PubSubKey("graphNodeNotARoot");
+			broadCast(key, _entity);
+		}
 
 		const Handle	    	&getParent() const
 		{
@@ -51,12 +63,12 @@ namespace Component
 			if (!father.get()) // if parent is null -> it's a root node
 			{
 				auto key = PubSubKey("graphNodeSetAsRoot");
-				_entity->pub(key, _entity);
+				_entity->broadCast(key, _entity);
 			}
 			else if (!_parent.get()) // if it was a root node
 			{
 				auto key = PubSubKey("graphNodeNotARoot");
-				_entity->pub(key, _entity);
+				_entity->broadCast(key, _entity);
 			}
 			_parent = father;
 		}
@@ -77,7 +89,7 @@ namespace Component
 				_parent->getComponent<Component::GraphNode>()->removeSon(_entity);
 			}
 			auto key = PubSubKey("graphNodeSetAsRoot");
-			_entity->pub(key, _entity);
+			_entity->broadCast(key, _entity);
 			_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
 		}
 

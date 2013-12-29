@@ -1,7 +1,6 @@
 #ifndef ASCENE_HH_
 #define ASCENE_HH_
 
-#include "ACamera.hh"
 #include "Entities/Entity.hh"
 #include <Systems/System.h>
 
@@ -12,7 +11,6 @@
 class AScene
 {
 private:
-	ACamera 											*_camera;
 	std::list<SmartPointer<Entity> >                    _collection;
 	std::queue<SmartPointer<Entity> >                   _pool;
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
@@ -22,8 +20,6 @@ public:
 	AScene(Engine &engine);
 	virtual ~AScene();
 
-	void 							setCamera(ACamera *camera);
-	ACamera 						*getCamera() const;
 	SmartPointer<Entity>            &createEntity();
 
 	virtual bool 			userStart() = 0;

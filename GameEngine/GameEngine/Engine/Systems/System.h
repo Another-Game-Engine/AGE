@@ -24,10 +24,10 @@ public:
 	void require()
 	{
 		_code.add<T>();
-		sub(std::string("componentAdded" + std::to_string(T::getTypeId())), [&](Handle entity){
+		globalSub(std::string("componentAdded" + std::to_string(T::getTypeId())), [&](Handle entity){
 			_componentAdded(entity, T::getTypeId());
 		});
-		sub(std::string("componentRemoved" + std::to_string(T::getTypeId())), [&](Handle entity){
+		globalSub(std::string("componentRemoved" + std::to_string(T::getTypeId())), [&](Handle entity){
 			_componentRemoved(entity, T::getTypeId());
 		});
 	}
