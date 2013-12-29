@@ -33,13 +33,8 @@ public:
 
 	void			draw() const;
 
-<<<<<<< HEAD
-	OpenGLTools::VertexBuffer	&getBuffer();
-	const Geometry      &getGeometry() const;
-=======
 	OpenGLTools::VertexArray	&getBuffer();
->>>>>>> 2e79899faeb4f4542f69433c05fa9d4f84cb4912
-
+	const Geometry      &getGeometry() const;
 };
 
 }

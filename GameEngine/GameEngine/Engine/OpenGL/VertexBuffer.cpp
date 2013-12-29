@@ -18,56 +18,6 @@ namespace OpenGLTools
 		 glGenBuffers(1, &_id);
 	 }
 
-<<<<<<< HEAD
-/// draw with the elements the contain of vbo
-void VertexBuffer::draw(GLenum mode) const
-{
-  assert(_drawable == true && "Cannot draw, buffer not initialized correctly");
-  glBindBuffer(GL_ARRAY_BUFFER, _idBuffer);
-  for (size_t i = 0; i < _attribute.size(); ++i)
-  {
-    glEnableVertexAttribArray(i);
-    glVertexAttribPointer(i, _attribute[i].nbrCompenent, _attribute[i].type, GL_FALSE, 0, (const GLvoid*)(_attribute[i].offset));
-  }
-  if (_drawable)
-  {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _idIndex);
-    glDrawElements(mode, _nbrVertex, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
-  }
-  else
-  {
-    glDrawArrays(mode, 0, _nbrVertex);
-  }
-}
-
-/// add a new attribute
-void VertexBuffer::addAttribute(Attribute const &attribute)
-{
-  Attribute r(attribute);
-  
-  if (_attribute.size() > 0)
-    {
-      r.offset = _attribute.back().offset + _attribute.back().nbrByte * _nbrVertex;
-    }
-  glBindBuffer(GL_ARRAY_BUFFER, _idBuffer);
-  size_t size = r.offset + r.nbrByte * _nbrVertex;
-  glBufferData(GL_ARRAY_BUFFER, size, 0, GL_DYNAMIC_DRAW);
-  _attribute.push_back(r);
-}
-
-Attribute *VertexBuffer::getAttribute(unsigned int index)
-{
-	if (index >= _attribute.size())
-		return nullptr;
-	return &(_attribute[index]);
-}
-
-/// delete a Attribute
-void VertexBuffer::clearAttributes(void)
-{
-  _attribute.clear();
-}
-=======
 	 void VertexBuffer::unload()
 	 {
 		 glDeleteBuffers(1, &_id);
@@ -77,7 +27,6 @@ void VertexBuffer::clearAttributes(void)
 		 : _id(copy._id),
 		 _size(copy._size)
 	 {
->>>>>>> 2e79899faeb4f4542f69433c05fa9d4f84cb4912
 
 	 }
 
