@@ -198,7 +198,7 @@ bool 			DemoScene::userStart()
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 	auto trackBall = camera->addComponent<Component::TrackBall>(	*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
 
-	std::string		vars[] = 
+	std::string		vars[] =	
 	{
 		"projection",
 		"view"
