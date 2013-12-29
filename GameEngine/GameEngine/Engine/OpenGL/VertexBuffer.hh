@@ -1,13 +1,3 @@
-//
-// VertexBuffer.hh for  in /home/massora/GIT/amd_project/render/ShaderTool
-// 
-// Made by dorian pinaud
-// Login   <pinaud_d@epitech.net>
-// 
-// Started on  Sun Jul 28 23:56:28 2013 dorian pinaud
-// Last update Mon Aug  5 17:30:46 2013 dorian pinaud
-//
-
 #ifndef VERTEXBUFFER_HH_
 # define VERTEXBUFFER_HH_
 
@@ -18,11 +8,11 @@
 # include <map>
 # include <string>
 
-# include "Attribute.hh"
 # include "UniformBuffer.hh"
 
 namespace OpenGLTools
 {
+<<<<<<< HEAD
   /// Buffer containing on the GPU the vertex
   class VertexBuffer
   {
@@ -52,6 +42,54 @@ namespace OpenGLTools
     void draw(GLenum mode) const;
     GLuint getId() const;
   };
+=======
+	typedef unsigned char Byte;
+
+	/// Buffer containing on the GPU the vertex
+	class VertexBuffer
+	{
+	private:
+		struct Buffer
+		{
+			size_t size;
+			Byte *data;
+
+			Buffer(size_t size, Byte *data)
+				: size(size), data(data)
+			{}
+			Buffer(Buffer const &copy)
+				: size(copy.size), data(copy.data)
+			{}
+			~Buffer(){}
+		};
+
+	public:
+		VertexBuffer();
+		~VertexBuffer();
+		VertexBuffer(VertexBuffer const &copy);
+		
+		void init();
+		void unload();
+
+		VertexBuffer &operator=(VertexBuffer const &vertexbuffer);
+		void pushBuffer(Byte *data, size_t size);
+		
+		size_t getSize() const;
+		Buffer const &getBuffer(size_t index) const;
+		void setBuffer(Buffer const &buffer, size_t index);
+		
+		void popBuffer();
+		void clearBuffer();
+		
+		void transferGPU(bool isIndice, GLenum mode) const;
+		void handleError() const;
+
+	private:
+		GLuint _id;
+		std::vector<Buffer> _buffers;
+		size_t _size;
+	};
+>>>>>>> 2e79899faeb4f4542f69433c05fa9d4f84cb4912
 }
 
 #endif /*!VERTEXBUFFER_HH_*/

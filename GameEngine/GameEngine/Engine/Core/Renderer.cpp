@@ -22,7 +22,8 @@ bool Renderer::init()
 	getShader("depthOnly")->addTarget(GL_COLOR_ATTACHMENT0).build();
 
 
-	return _fbo.init(1920, 1080, 4);
+	//return _fbo.init(1920, 1080, 4);
+	return true;
 }
 
 OpenGLTools::Shader		&Renderer::addShader(std::string const &name,
@@ -127,7 +128,7 @@ void Renderer::uninit()
 		delete it->second;
 	_shaders.clear();
 	_uniforms.clear();
-	_fbo.uninit();
+	//_fbo.uninit();
 }
 
 void Renderer::addPostEffect(const std::string &name, unsigned int priority)

@@ -76,10 +76,15 @@ bool 			DemoScene::userStart()
 	//
 
 	addSystem<RotationForceSystem>(0);
+<<<<<<< HEAD
 	addSystem<MeshRendererSystem>(0);
 	addSystem<GraphNodeSystem>(100);
 	addSystem<TrackBallSystem>(150);
 	addSystem<CameraSystem>(200);
+=======
+	addSystem<MeshRendererSystem>(1);//->setRenderDebugMode(true);
+	addSystem<GraphNodeSystem>(2);
+>>>>>>> 2e79899faeb4f4542f69433c05fa9d4f84cb4912
 
 	//
 	//
