@@ -37,7 +37,7 @@ namespace	Component
 	{
 		ComponentBase(AScene *scene, Handle &entity, const std::string &name = "DefaultComponentName")
 		: Base(scene, entity, name),
-		PubSub(entity->getPubSubManager())
+		PubSub(scene->getInstance<PubSub::Manager>())
 		{}
 
 		virtual ~ComponentBase()

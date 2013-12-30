@@ -16,6 +16,7 @@
 #include <Components/FirstPersonView.hpp>
 
 #include <OpenGL/ComputeShader.hh>
+#include <OpenGL/Attribute.hh>
 
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/GraphNodeSystem.hpp>
@@ -50,6 +51,7 @@ Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	auto mat = e->addComponent<Component::MaterialComponent>(material);
 	mesh->addTexture(tex, 0);
 	e->addComponent<Component::GraphNode>();
+	auto asd = e.get();
 	return e;
 }
 
