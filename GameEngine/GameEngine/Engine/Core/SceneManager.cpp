@@ -93,6 +93,7 @@ void            SceneManager::update(double time)
 {
 	for (auto &e : _actives)
 	{
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		e.second->update(time);
 	}
 }

@@ -17,6 +17,7 @@
 #include <Core/Renderer.hh>
 #include <Managers/BulletCollisionManager.hpp>
 #include "InGameScene.hpp"
+#include "SecondScene.hpp"
 
 int			main(int ac, char **av)
 {
@@ -39,11 +40,15 @@ int			main(int ac, char **av)
 
 	// add scene
 	e.getInstance<SceneManager>().addScene(new InGameScene(e), "InGameScene");
+	e.getInstance<SceneManager>().addScene(new SecondScene(e), "SecondScene");
 
 	// bind scene
 	if (!e.getInstance<SceneManager>().initScene("InGameScene"))
 		return false;
-	e.getInstance<SceneManager>().enableScene("InGameScene", 0);
+	if (!e.getInstance<SceneManager>().initScene("SecondScene"))
+		return false;
+	e.getInstance<SceneManager>().enableScene("InGameScene", 100);
+	e.getInstance<SceneManager>().enableScene("SecondScene", 10);
 
 	// launch engine
 	if (e.start() == false)
