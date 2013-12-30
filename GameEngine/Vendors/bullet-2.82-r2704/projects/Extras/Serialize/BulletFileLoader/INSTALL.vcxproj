@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{1C8E0E00-1F44-4D9E-A4B0-42F5EA685E5B}</ProjectGUID>
+    <ProjectGUID>{5B4931D5-A350-4B91-9D6F-0D95595AEE40}</ProjectGUID>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
     <ProjectName>INSTALL</ProjectName>
@@ -64,7 +64,7 @@
     </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/Glut;C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -86,7 +86,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/Glut;C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -108,7 +108,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/Glut;C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -130,7 +130,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/Glut;C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -151,7 +151,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\CMakeFiles\962c7248cd87c429ea1cb56983e04f0e\INSTALL_force.rule">
+    <CustomBuild Include="..\..\..\CMakeFiles\176795083f13fe34453e25dbf8da854e\INSTALL_force.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
 cd .
@@ -162,8 +162,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/projects/CMakeFiles/962c7248cd87c429ea1cb56983e04f0e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\cesar\Downloads\bullet-2.82-r2704\bullet-2.82-r2704\projects\Extras\Serialize\BulletFileLoader\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/CMakeFiles/176795083f13fe34453e25dbf8da854e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\Extras\Serialize\BulletFileLoader\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
@@ -175,8 +175,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/projects/CMakeFiles/962c7248cd87c429ea1cb56983e04f0e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\cesar\Downloads\bullet-2.82-r2704\bullet-2.82-r2704\projects\Extras\Serialize\BulletFileLoader\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/CMakeFiles/176795083f13fe34453e25dbf8da854e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\Extras\Serialize\BulletFileLoader\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
@@ -188,8 +188,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/projects/CMakeFiles/962c7248cd87c429ea1cb56983e04f0e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\cesar\Downloads\bullet-2.82-r2704\bullet-2.82-r2704\projects\Extras\Serialize\BulletFileLoader\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/CMakeFiles/176795083f13fe34453e25dbf8da854e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\Extras\Serialize\BulletFileLoader\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
@@ -201,14 +201,14 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/projects/CMakeFiles/962c7248cd87c429ea1cb56983e04f0e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\cesar\Downloads\bullet-2.82-r2704\bullet-2.82-r2704\projects\Extras\Serialize\BulletFileLoader\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/CMakeFiles/176795083f13fe34453e25dbf8da854e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\Extras\Serialize\BulletFileLoader\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/projects/ALL_BUILD.vcxproj">
-      <Project>31679303-8036-46CC-AB6C-3E8A880151E1</Project>
+    <ProjectReference Include="C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/ALL_BUILD.vcxproj">
+      <Project>8C97B116-FEF1-4209-B5EB-06D11D6D72D3</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

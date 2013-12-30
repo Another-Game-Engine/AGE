@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/Extras/Serialize
+# Install script for directory: C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Extras/Serialize
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,9 +29,9 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/projects/Extras/Serialize/BulletFileLoader/cmake_install.cmake")
-  INCLUDE("C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/projects/Extras/Serialize/BulletXmlWorldImporter/cmake_install.cmake")
-  INCLUDE("C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/projects/Extras/Serialize/BulletWorldImporter/cmake_install.cmake")
+  INCLUDE("C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/Extras/Serialize/BulletFileLoader/cmake_install.cmake")
+  INCLUDE("C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/Extras/Serialize/BulletXmlWorldImporter/cmake_install.cmake")
+  INCLUDE("C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/Extras/Serialize/BulletWorldImporter/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

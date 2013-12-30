@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/cesar/Downloads/bullet-2.82-r2704/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader
+# Install script for directory: C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

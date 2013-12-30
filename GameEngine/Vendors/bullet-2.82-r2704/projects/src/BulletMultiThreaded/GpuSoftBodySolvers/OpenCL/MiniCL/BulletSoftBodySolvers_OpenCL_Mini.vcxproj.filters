@@ -41,10 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{E28CC655-406D-44F4-9AF9-3D600C7FA9F6}</UniqueIdentifier>
+      <UniqueIdentifier>{09FF0BC2-CD67-40A6-ADA4-8E8443628DC5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{31E67026-5930-49FD-B787-494CD540A777}</UniqueIdentifier>
+      <UniqueIdentifier>{A4203E87-F805-44C7-9CBA-4C82341D4B63}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
