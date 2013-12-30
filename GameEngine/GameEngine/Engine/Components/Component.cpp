@@ -3,8 +3,8 @@
 
 using namespace Component;
 
-Base::Base(Engine &engine, Handle &entity, const std::string &name)
-: _engine(engine)
+Base::Base(AScene *scene, Handle &entity, const std::string &name)
+: _scene(scene)
 , _name(name)
 , _entity(entity)
 {

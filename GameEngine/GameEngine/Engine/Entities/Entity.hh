@@ -13,7 +13,7 @@
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
 
-class Engine;
+class AScene;
 class EntityManager;
 class Handle;
 
@@ -41,7 +41,7 @@ public:
 	void setHandle(Handle &handle);
 
 private:
-	Engine              &_engine;
+	AScene              *_scene;
 	size_t 				_flags;
 
 	glm::mat4 			_localTransform;
@@ -59,7 +59,7 @@ private:
 
 	Barcode _code;
 public:
-	Entity(Engine &engine);
+	Entity(AScene *scene);
 	virtual ~Entity();
 
 	void                    translate(const glm::vec3 &v);
@@ -123,7 +123,7 @@ public:
 		// if component has never been created, create one
 		if (!_components[id].get())
 		{
-			_components[id] = new T(_engine, getHandle());
+			_components[id] = new T(_scene, getHandle());
 			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
 		}
 		//init component

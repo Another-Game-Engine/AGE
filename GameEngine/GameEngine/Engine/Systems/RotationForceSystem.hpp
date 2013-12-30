@@ -10,7 +10,7 @@
 class RotationForceSystem : public System
 {
 public:
-	RotationForceSystem(Engine &engine) : System(engine)
+	RotationForceSystem(AScene *scene) : System(scene)
 	{}
 	virtual ~RotationForceSystem(){}
 private:

@@ -16,8 +16,8 @@
 class CameraSystem : public System
 {
 public:
-	CameraSystem(Engine &engine)
-		: System(engine)
+	CameraSystem(AScene *scene)
+		: System(scene)
 		, _renderDebugMethod(false)
 	{}
 	virtual ~CameraSystem(){}
@@ -47,8 +47,8 @@ protected:
 	{
 		static double t = 0;
 		unsigned int textureOffset = 0;
-		auto &renderer = _engine.getInstance<Renderer>();
-		OpenGLTools::UniformBuffer *perFrameBuffer = _engine.getInstance<Renderer>().getUniform("PerFrame");
+		auto &renderer = _scene->getEngine().getInstance<Renderer>();
+		OpenGLTools::UniformBuffer *perFrameBuffer = _scene->getEngine().getInstance<Renderer>().getUniform("PerFrame");
 
 		for (auto e : _collection)
 		{
@@ -61,10 +61,10 @@ protected:
 
 			if (skybox.get())
 			{
-				OpenGLTools::Shader *s = _engine.getInstance<Renderer>().getShader(camera->getSkyboxShader());
+				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>().getShader(camera->getSkyboxShader());
 				assert(s != NULL && "Skybox does not have a shader associated");
 
-				_engine.getInstance<Renderer>().getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
+				_scene->getEngine().getInstance<Renderer>().getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
 
 				glm::mat4 t = cameraPosition;
 				t[3][0] = 0;
@@ -72,8 +72,8 @@ protected:
 				t[3][2] = 0;
 				t[3][3] = 1;
 
-				_engine.getInstance<Renderer>().getUniform("cameraUniform")->setUniform("view", t);
-				_engine.getInstance<Renderer>().getUniform("cameraUniform")->flushChanges();
+				_scene->getEngine().getInstance<Renderer>().getUniform("cameraUniform")->setUniform("view", t);
+				_scene->getEngine().getInstance<Renderer>().getUniform("cameraUniform")->flushChanges();
 
 //				_engine.getInstance<Renderer>().getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
 
@@ -96,7 +96,7 @@ protected:
 			perFrameBuffer->setUniform("view", cameraPosition);
 			perFrameBuffer->setUniform("time", (float)t);
 			perFrameBuffer->flushChanges();
-			_engine.getInstance<SceneManager>().getCurrentScene()->getSystem<MeshRendererSystem>()->render(time);
+			_scene->getSystem<MeshRendererSystem>()->render(time);
 		}
 	}
 

@@ -19,7 +19,6 @@
 #include <Systems/TrackBallSystem.hpp>
 #include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
-#include <Entities/EntityManager.h>
 
 #include <SDL\SDL.h>
 
@@ -37,9 +36,8 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 												std::string const &tex1, std::string const &tex2, std::string const &tex3,
 												std::string const &tex4)
 {
-	auto &m = _engine.getInstance<EntityManager>();
-	auto p = m.createEntity();
-	auto e = m.createEntity();
+	auto p = createEntity();
+	auto e = createEntity();
 	p->addComponent<Component::GraphNode>();
 	e->addComponent<Component::GraphNode>();
 
@@ -193,7 +191,7 @@ bool 			DemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	auto camera = _engine.getInstance<EntityManager>().createEntity();
+	auto camera = createEntity();
 	camera->addComponent<Component::GraphNode>();
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 	auto trackBall = camera->addComponent<Component::TrackBall>(	*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);

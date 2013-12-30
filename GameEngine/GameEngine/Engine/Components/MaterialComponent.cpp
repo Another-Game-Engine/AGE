@@ -4,8 +4,8 @@
 
 namespace Component
 {
-	MaterialComponent::MaterialComponent(Engine &engine, Handle &entity)
-		: ComponentBase<MaterialComponent>(engine, entity, "MaterialCpt"),
+	MaterialComponent::MaterialComponent(AScene *scene, Handle &entity)
+		: ComponentBase<MaterialComponent>(scene, entity, "MaterialCpt"),
 		_material(nullptr)
 	{
 	}
@@ -15,7 +15,7 @@ namespace Component
 
 	void MaterialComponent::init(std::string const &name)
 	{
-		_material = _engine.getInstance<Renderer>().getMaterialManager().getMaterial(name);
+		_material = _scene->getEngine().getInstance<Renderer>().getMaterialManager().getMaterial(name);
 	}
 
 	void MaterialComponent::init(SmartPointer<Material> material)
@@ -32,8 +32,8 @@ namespace Component
 	bool                				MaterialComponent::setMaterial(std::string const &name)
 	{
 		SmartPointer<Material> old = _material;
-		_material = _engine.getInstance<Renderer>().getMaterialManager().getMaterial(name);
-		_engine.getInstance<PubSub::Manager>().pub(std::string("MaterialComponentChanged"), this->getEntity(), old, _material);
+		_material = _scene->getEngine().getInstance<Renderer>().getMaterialManager().getMaterial(name);
+		broadCast(std::string("MaterialComponentChanged"), this->getEntity(), old, _material);
 		return (_material != nullptr);
 	}
 

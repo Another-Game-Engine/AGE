@@ -33,7 +33,7 @@ namespace Component
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);
 	public:
-		MeshRenderer(Engine &engine, Handle &entity);
+		MeshRenderer(AScene *scene, Handle &entity);
 		virtual ~MeshRenderer(void);
 		void init(std::string const &resource);
 		virtual void reset();

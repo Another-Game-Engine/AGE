@@ -17,7 +17,7 @@ namespace Component
 		MaterialComponent(MaterialComponent const &);
 		MaterialComponent                  &operator=(MaterialComponent const &);
 	public:
-		MaterialComponent(Engine &engine, Handle &entity);
+		MaterialComponent(AScene *scene, Handle &entity);
 		void init(std::string const &name);
 		void init(SmartPointer<Material> material);
 		virtual void reset();

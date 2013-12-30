@@ -3,7 +3,6 @@
 
 #include <Core/Engine.hh>
 #include <Core/AScene.hh>
-#include <Entities/EntityManager.h>
 
 /////////////
 // RESOURCES
@@ -141,7 +140,7 @@ public:
 		test->addComponent<Component::Velocity>(glm::vec3(0, -0.5, 0));
 
 		// CAMERA
-		auto camera = _engine.getInstance<EntityManager>().createEntity();
+		auto camera = createEntity();
 		camera->addComponent<Component::GraphNode>();
 		auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 		auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 3.0f, 1.0f);
@@ -154,7 +153,7 @@ public:
 
 	Handle                  createHeros(const glm::vec3 &pos)
 	{
-		auto e = _engine.getInstance<EntityManager>().createEntity();
+		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 		e->addComponent<Component::GraphNode>();
 		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");

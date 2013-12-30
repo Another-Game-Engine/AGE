@@ -2,12 +2,12 @@
 # define  __HANDLE_HH__
 
 class Entity;
-class EntityManager;
+class AScene;
 
 class Handle
 {
 public:
-	Handle(unsigned int id = 0, EntityManager *manager = nullptr);
+	Handle(unsigned int id = 0, AScene *manager = nullptr);
 	~Handle();
 	const unsigned int getId() const;
 	Entity *operator->();
@@ -18,7 +18,7 @@ public:
 	Handle &operator=(const Handle &o);
 private:
 	unsigned int _id;
-	EntityManager *_manager;
+	AScene *_manager;
 };
 
 #endif    //__HANDLE_HH__

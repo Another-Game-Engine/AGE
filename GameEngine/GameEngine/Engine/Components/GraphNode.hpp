@@ -12,8 +12,8 @@ namespace Component
 	public:
 		typedef std::list<Handle> t_EntityList;
 
-		GraphNode(Engine &engine, Handle &entity)
-			: ComponentBase<GraphNode>(engine, entity, "GraphNodeComponent")
+		GraphNode(AScene *scene, Handle &entity)
+			: ComponentBase<GraphNode>(scene, entity, "GraphNodeComponent")
 		{
 			}
 

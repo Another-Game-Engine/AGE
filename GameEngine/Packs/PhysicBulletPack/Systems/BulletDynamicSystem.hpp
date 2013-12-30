@@ -13,10 +13,10 @@
 class BulletDynamicSystem : public System
 {
 public:
-	BulletDynamicSystem(Engine &engine) : System(engine)
+	BulletDynamicSystem(AScene *scene) : System(scene)
 		, _manager(nullptr)
 	{
-		_manager = dynamic_cast<BulletDynamicManager*>(&engine.getInstance<BulletCollisionManager>());
+		_manager = dynamic_cast<BulletDynamicManager*>(&_scene->getEngine().getInstance<BulletCollisionManager>());
 		assert(_manager != nullptr);
 	}
 	virtual ~BulletDynamicSystem(){}
