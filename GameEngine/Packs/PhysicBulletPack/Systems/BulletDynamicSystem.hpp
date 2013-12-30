@@ -1,28 +1,31 @@
-#ifndef   __BULLET_SYSTEM_HPP__
-# define  __BULLET_SYSTEM_HPP__
+#ifndef   __BULLET_DYNAMIC_SYSTEM_HPP__
+# define  __BULLET_DYNAMIC_SYSTEM_HPP__
 
 #include <Utils/BtConversion.hpp>
 #include <Systems/System.h>
 #include <Components/RigidBody.hpp>
 #include <Entities/Entity.hh>
-#include <Managers/BulletManager.hpp>
+#include <Managers/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 
 
-class BulletSystem : public System
+class BulletDynamicSystem : public System
 {
 public:
-	BulletSystem(Engine &engine) : System(engine)
-		, _manager(engine.getInstance<BulletManager>())
-	{}
-	virtual ~BulletSystem(){}
+	BulletDynamicSystem(Engine &engine) : System(engine)
+		, _manager(nullptr)
+	{
+		_manager = dynamic_cast<BulletDynamicManager*>(&engine.getInstance<BulletCollisionManager>());
+		assert(_manager != nullptr);
+	}
+	virtual ~BulletDynamicSystem(){}
 private:
-	BulletManager &_manager;
+	BulletDynamicManager *_manager;
 	virtual void updateBegin(double time)
 	{
-		_manager.getWorld().stepSimulation(time,10);
-		btDispatcher *dispatcher = _manager.getWorld().getDispatcher();
+		_manager->getWorld()->stepSimulation(time,10);
+		btDispatcher *dispatcher = _manager->getWorld()->getDispatcher();
 		unsigned int max = dispatcher->getNumManifolds();
 		for (unsigned int i = 0; i < max; ++i)
 		{
@@ -64,7 +67,6 @@ private:
 			glm::vec3 scale = scaleFromMat4(e->getLocalTransform());
 			m = glm::scale(m, scale);
 			e->setLocalTransform() = m;
-			e->removeComponent<Component::Collision>();
 		}
 	}
 
@@ -74,4 +76,4 @@ private:
 	}
 };
 
-#endif    //__BULLET_SYSTEM_HPP__
+#endif    //__BULLET_DYNAMIC_SYSTEM_HPP__
