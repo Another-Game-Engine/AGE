@@ -47,7 +47,7 @@ int			main(int ac, char **av)
 		return false;
 	if (!e.getInstance<SceneManager>().initScene("SecondScene"))
 		return false;
-	e.getInstance<SceneManager>().enableScene("InGameScene", 100);
+//	e.getInstance<SceneManager>().enableScene("InGameScene", 100);
 	e.getInstance<SceneManager>().enableScene("SecondScene", 10);
 
 	// launch engine
