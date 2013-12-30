@@ -42,8 +42,8 @@ bool        Engine::init()
 
 bool 		Engine::start()
 {
-	if (!getInstance<SceneManager>().startScene())
-		return (false);
+	//if (!getInstance<SceneManager>().startScene())
+	//	return (false);
 	return (true);
 }
 

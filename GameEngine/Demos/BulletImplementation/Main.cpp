@@ -41,7 +41,10 @@ int			main(int ac, char **av)
 	e.getInstance<SceneManager>().addScene(new DemoScene(e), "demo");
 
 	// bind scene
-	e.getInstance<SceneManager>().bindScene("demo");
+	if (!e.getInstance<SceneManager>().initScene("demo"))
+		return false;
+	e.getInstance<SceneManager>().enableScene("demo", 0);
+
 
 	// lanch engine
 	if (e.start() == false)
