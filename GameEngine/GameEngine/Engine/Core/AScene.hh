@@ -3,12 +3,13 @@
 
 #include "Entities/Entity.hh"
 #include <Systems/System.h>
+#include <Utils/DependenciesInjector.hpp>
 
 #include <list>
 #include <queue>
 #include <map>
 
-class AScene
+class AScene : public DependenciesInjector
 {
 private:
 	std::list<SmartPointer<Entity> >                    _collection;
