@@ -41,7 +41,9 @@ int			main(int ac, char **av)
 	e.getInstance<SceneManager>().addScene(new InGameScene(e), "InGameScene");
 
 	// bind scene
-	e.getInstance<SceneManager>().bindScene("InGameScene");
+	if (!e.getInstance<SceneManager>().initScene("InGameScene"))
+		return false;
+	e.getInstance<SceneManager>().enableScene("InGameScene", 0);
 
 	// lanch engine
 	if (e.start() == false)
