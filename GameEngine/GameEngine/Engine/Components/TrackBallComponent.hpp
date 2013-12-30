@@ -10,8 +10,8 @@ namespace Component
 	class TrackBall : public Component::ComponentBase<TrackBall>
 	{
 	public:
-		TrackBall(Engine &engine, Handle &entity) :
-			Component::ComponentBase<Component::TrackBall>(engine, entity, "TrackBall"),
+		TrackBall(AScene *scene, Handle &entity) :
+			Component::ComponentBase<Component::TrackBall>(scene, entity, "TrackBall"),
 			dist(0.0f),
 			rotateSpeed(0.0f),
 			zoomSpeed(0.0f),

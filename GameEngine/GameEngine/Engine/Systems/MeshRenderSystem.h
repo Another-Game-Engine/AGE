@@ -12,8 +12,8 @@
 class MeshRendererSystem : public System
 {
 public:
-	MeshRendererSystem(Engine &engine)
-		: System(engine)
+	MeshRendererSystem(AScene *scene)
+		: System(scene)
 		, _renderDebugMethod(false)
 	{}
 	virtual ~MeshRendererSystem(){}
@@ -32,17 +32,17 @@ public:
 	{
 		static double t = 0;
 		unsigned int textureOffset = 0;
-		auto &renderer = _engine.getInstance<Renderer>();
+		auto &renderer = _scene->getEngine().getInstance<Renderer>();
 
 		t += time;
 
-		OpenGLTools::UniformBuffer *perModelUniform = _engine.getInstance<Renderer>().getUniform("PerModel");
+		OpenGLTools::UniformBuffer *perModelUniform = _scene->getEngine().getInstance<Renderer>().getUniform("PerModel");
 
 		for (auto &mat : _sorted)
 		{
 			for (auto &shaderName : mat.first->getShaders())
 			{
-				auto shader = _engine.getInstance<Renderer>().getShader(shaderName);
+				auto shader = _scene->getEngine().getInstance<Renderer>().getShader(shaderName);
 				shader->use();
 				for (auto &e : mat.second)
 				{

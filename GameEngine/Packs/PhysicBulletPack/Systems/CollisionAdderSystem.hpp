@@ -11,8 +11,8 @@
 class CollisionAdder : public System
 {
 public:
-	CollisionAdder(Engine &engine) : System(engine)
-		, _manager(engine.getInstance<BulletCollisionManager>())
+	CollisionAdder(AScene *scene) : System(scene)
+		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
 	{}
 	virtual ~CollisionAdder(){}
 private:

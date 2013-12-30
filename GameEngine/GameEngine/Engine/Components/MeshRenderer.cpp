@@ -8,8 +8,8 @@
 
 namespace Component
 {
-	MeshRenderer::MeshRenderer(Engine &engine, Handle &entity) :
-		Component::ComponentBase<MeshRenderer>(engine, entity, "MeshComponent"),
+	MeshRenderer::MeshRenderer(AScene *scene, Handle &entity) :
+		Component::ComponentBase<MeshRenderer>(scene, entity, "MeshComponent"),
 		_mesh(nullptr)
 	{
 	}
@@ -20,7 +20,7 @@ namespace Component
 
 	void MeshRenderer::init(std::string const &resource)
 	{
-		_mesh =_engine.getInstance<Resources::ResourceManager>().getResource(resource);
+		_mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(resource);
 	}
 
 	SmartPointer<Resources::SharedMesh> const &MeshRenderer::getMesh() const
@@ -35,7 +35,7 @@ namespace Component
 
 	void MeshRenderer::addTexture(const std::string &textureName, unsigned int priority)
 	{
-		SmartPointer<Resources::Texture> texture = _engine.getInstance<Resources::ResourceManager>().getResource(textureName);
+		SmartPointer<Resources::Texture> texture = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(textureName);
 
 		for (textureMapIt it = _textures.begin(); it != _textures.end(); ++it)
 		{

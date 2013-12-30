@@ -14,8 +14,8 @@
 class TrackBallSystem : public System
 {
 public:
-	TrackBallSystem(Engine &engine)
-		: System(engine)
+	TrackBallSystem(AScene *scene)
+		: System(scene)
 	{}
 	virtual ~TrackBallSystem(){}
 protected:
@@ -28,7 +28,7 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		Input			&inputs = _engine.getInstance<Input>();
+		Input			&inputs = _scene->getEngine().getInstance<Input>();
 
 		for (auto e : _collection)
 		{

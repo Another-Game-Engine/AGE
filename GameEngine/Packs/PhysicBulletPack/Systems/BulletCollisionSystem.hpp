@@ -12,8 +12,8 @@
 class BulletCollisionSystem : public System
 {
 public:
-	BulletCollisionSystem(Engine &engine) : System(engine)
-		, _manager(engine.getInstance<BulletCollisionManager>())
+	BulletCollisionSystem(AScene *scene) : System(scene)
+		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
 	{}
 	virtual ~BulletCollisionSystem(){}
 private:

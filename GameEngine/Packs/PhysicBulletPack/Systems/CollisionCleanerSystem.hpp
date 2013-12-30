@@ -9,7 +9,7 @@
 class CollisionCleaner : public System
 {
 public:
-	CollisionCleaner(Engine &engine) : System(engine)
+	CollisionCleaner(AScene *scene) : System(scene)
 	{}
 	virtual ~CollisionCleaner(){}
 private:

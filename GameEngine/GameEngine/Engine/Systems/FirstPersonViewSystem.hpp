@@ -12,8 +12,8 @@
 class FirstPersonViewSystem : public System
 {
 public:
-	FirstPersonViewSystem(Engine &engine)
-		: System(engine)
+	FirstPersonViewSystem(AScene *scene)
+		: System(scene)
 	{}
 	virtual ~FirstPersonViewSystem(){}
 protected:

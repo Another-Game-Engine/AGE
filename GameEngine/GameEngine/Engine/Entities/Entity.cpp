@@ -1,14 +1,13 @@
 
 #include "Entity.hh"
 #include "Core/Engine.hh"
-#include "EntityManager.h"
 #include "Components/Component.hh"
 #include "Handle.hh"
 #include <limits>
 
-Entity::Entity(Engine &engine) :
-    PubSub(engine.getInstance<PubSub::Manager>()),
-    _engine(engine),
+Entity::Entity(AScene *scene) :
+    PubSub(scene->getInstance<PubSub::Manager>()),
+    _scene(scene),
 	_flags(0),
 	_localTranslation(0),
 	_localRotation(0),

@@ -28,7 +28,6 @@
 #include <Systems/CollisionCleanerSystem.hpp>
 
 #include <Core/Engine.hh>
-#include <Entities/EntityManager.h>
 
 #include <SDL\SDL.h>
 
@@ -42,8 +41,7 @@ DemoScene::~DemoScene(void)
 
 Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass)
 {
-	auto &m = _engine.getInstance<EntityManager>();
-	auto e = m.createEntity();
+	auto e = createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
@@ -57,9 +55,7 @@ Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 
 Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass)
 {
-	auto &m = _engine.getInstance<EntityManager>();
-
-	auto e = m.createEntity();
+	auto e = createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(1, 0, 0));
 	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(0, 1, 0));
@@ -75,9 +71,7 @@ Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 
 Handle  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass)
 {
-	auto &m = _engine.getInstance<EntityManager>();
-
-	auto e = m.createEntity();
+	auto e = createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
@@ -187,8 +181,7 @@ bool 			DemoScene::userStart()
 	//p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, false);
 
 	{
-		auto &m = _engine.getInstance<EntityManager>();
-		auto e = m.createEntity();
+		auto e = createEntity();
 		e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 45.0f, glm::vec3(0, 1, 0));
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(10,10,10));
 		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(10,10,10));
@@ -204,8 +197,7 @@ bool 			DemoScene::userStart()
 	}
 
 	{
-		auto &m = _engine.getInstance<EntityManager>();
-		auto e = m.createEntity();
+		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(-5,0,0));
 		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(6));
 
@@ -219,8 +211,7 @@ bool 			DemoScene::userStart()
 
 	Handle character;
 	{
-		auto &m = _engine.getInstance<EntityManager>();
-		auto e = m.createEntity();
+		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,20,0));
 		e->addComponent<Component::FPController>();
 //		auto mesh = e->addComponent<Component::MeshRenderer>("model:monkey");

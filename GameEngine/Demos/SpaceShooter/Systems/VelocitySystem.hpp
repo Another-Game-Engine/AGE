@@ -11,7 +11,7 @@
 class VelocitySystem : public System
 {
 public:
-	VelocitySystem(Engine &engine) : System(engine)
+	VelocitySystem(AScene *scene) : System(scene)
 	{}
 	virtual ~VelocitySystem(){}
 private:
@@ -24,7 +24,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		auto totalTime = _engine.getInstance<Timer>().getElapsed();
+		auto totalTime = _scene->getEngine().getInstance<Timer>().getElapsed();
 		for (auto e : _collection)
 		{
 			auto velocity = e->getComponent<Component::Velocity>();

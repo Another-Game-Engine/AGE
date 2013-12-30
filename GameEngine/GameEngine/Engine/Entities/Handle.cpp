@@ -1,11 +1,11 @@
-#include "Handle.hh"
-#include "Entity.hh"
-#include "Core/Engine.hh"
-#include "EntityManager.h"
-#include "Components/Component.hh"
+#include <Entities\Handle.hh>
+#include <Entities\Entity.hh>
+#include <Core/Engine.hh>
+#include <Components/Component.hh>
 #include <limits>
+#include <Core/AScene.hh>
 
-Handle::Handle(unsigned int id, EntityManager *manager)
+Handle::Handle(unsigned int id, AScene *manager)
 : _id(id), _manager(manager)
 {}
 

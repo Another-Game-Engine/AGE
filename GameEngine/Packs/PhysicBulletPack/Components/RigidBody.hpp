@@ -29,8 +29,8 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		RigidBody(Engine &engine, Handle &entity)
-			: ComponentBase(engine, entity),
+		RigidBody(AScene *scene, Handle &entity)
+			: ComponentBase(scene, entity),
 			_manager(nullptr),
 			_shapeType(UNDEFINED),
 			_mass(0.0f),
@@ -42,7 +42,7 @@ namespace Component
 			_motionState(nullptr),
 			_rigidBody(nullptr)
 		{
-			_manager = dynamic_cast<BulletDynamicManager*>(&engine.getInstance<BulletCollisionManager>());
+			_manager = dynamic_cast<BulletDynamicManager*>(&scene->getEngine().getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 		}
 
@@ -130,7 +130,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				SmartPointer<Resources::SharedMesh> mesh = _engine.getInstance<Resources::ResourceManager>().getResource(meshName);
+				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
 				const Resources::Geometry &geo = mesh->getGeometry();
 				btScalar *t = new btScalar[geo.vertices.size() * 3]();
 				for (unsigned int i = 0; i < geo.vertices.size(); ++i)

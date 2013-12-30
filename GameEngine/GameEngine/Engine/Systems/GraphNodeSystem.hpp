@@ -8,7 +8,7 @@
 class GraphNodeSystem : public System
 {
 public:
-	GraphNodeSystem(Engine &engine) : System(engine)
+	GraphNodeSystem(AScene *scene) : System(scene)
 	{}
 	virtual ~GraphNodeSystem(){}
 private:

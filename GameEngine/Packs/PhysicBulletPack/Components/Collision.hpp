@@ -2,15 +2,14 @@
 # define  __COLLISION_HPP__
 
 #include <Components/Component.hh>
-#include "Core/Engine.hh"
 
 namespace Component
 {
 	class Collision : public ComponentBase<Collision>
 	{
 	public:
-		Collision(Engine &engine, Handle &entity)
-			: ComponentBase<Collision>(engine, entity, "CollisionComponent")
+		Collision(AScene *scene, Handle &entity)
+			: ComponentBase<Collision>(scene, entity, "CollisionComponent")
 		{
 				
 		}

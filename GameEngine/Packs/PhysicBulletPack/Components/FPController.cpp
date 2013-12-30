@@ -5,7 +5,7 @@
 
 using namespace Component;
 
-FPController::FPController(Engine &engine, Handle &entity) : ComponentBase<FPController>(engine, entity, "KinematicCharacterController")
+FPController::FPController(AScene *scene, Handle &entity) : ComponentBase<FPController>(scene, entity, "KinematicCharacterController")
 , _controller(nullptr)
 , _ghost(nullptr)
 , _shape(nullptr)
@@ -48,7 +48,7 @@ FPController::FPController(Engine &engine, Handle &entity) : ComponentBase<FPCon
 	_ghost->setWorldTransform(transform);
 	_controller = new btKinematicCharacterController(_ghost, _shape, 1);
 	_ghost->setUserPointer(&(_entity));
-	auto bulletManager = dynamic_cast<BulletDynamicManager*>(&_engine.getInstance<BulletCollisionManager>());
+	auto bulletManager = dynamic_cast<BulletDynamicManager*>(&(_scene->getEngine().getInstance<BulletCollisionManager>()));
 	assert(bulletManager != nullptr);
 	bulletManager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter);
 	bulletManager->getWorld()->addAction(_controller);
