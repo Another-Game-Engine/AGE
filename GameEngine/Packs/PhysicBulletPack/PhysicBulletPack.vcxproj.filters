@@ -47,7 +47,25 @@
     <ClInclude Include="Components\Extras\CustomCharacterController.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Managers\BulletManager.hpp">
+    <ClInclude Include="Managers\BulletDynamicManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\BulletCollisionManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\BulletDynamicSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\BulletCollisionSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\CollisionBody.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\CollisionAdderSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\CollisionCleanerSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

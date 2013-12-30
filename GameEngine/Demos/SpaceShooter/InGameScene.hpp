@@ -19,7 +19,10 @@
 #include <Systems/GraphNodeSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
 #include <Systems/CameraSystem.hpp>
-#include <Systems/BulletSystem.hpp>
+#include <Systems/BulletCollisionSystem.hpp>
+#include <Systems/VelocitySystem.hpp>
+#include <Systems/CollisionAdderSystem.hpp>
+#include <Systems/CollisionCleanerSystem.hpp>
 
 ////////////
 // COMPONENTS
@@ -28,6 +31,7 @@
 #include <Components/GraphNode.hpp>
 #include <Components/FPController.hpp>
 #include <Components/FirstPersonView.hpp>
+#include <Components/VelocityComponent.hpp>
 
 class InGameScene : public AScene
 {
@@ -43,10 +47,13 @@ public:
 	{
 
 		addSystem<MeshRendererSystem>(0);
-		addSystem<BulletSystem>(0);
-		addSystem<GraphNodeSystem>(100);
-		addSystem<TrackBallSystem>(150);
-		addSystem<CameraSystem>(200);
+		addSystem<GraphNodeSystem>(0); // UPDATE GRAPH NODE POSITION
+		addSystem<BulletCollisionSystem>(10); // CHECK FOR COLLISIONS
+		addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ELEMENTS
+		addSystem<VelocitySystem>(50); // UPDATE VELOCITY
+		addSystem<TrackBallSystem>(150); // UPDATE CAMERA TRACKBALL BEHAVIOR
+		addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
+		addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENT FROM COLLIDING ELEMENTS
 
 		std::string		perModelVars[] =
 		{
@@ -130,8 +137,8 @@ public:
 
 		// HEROS
 		auto heros = createHeros(glm::vec3(0,0,1));
-		auto test = createHeros(glm::vec3(0,0,2));
-
+		auto test = createHeros(glm::vec3(0,4,1));
+		test->addComponent<Component::Velocity>(glm::vec3(0, -0.5, 0));
 
 		// CAMERA
 		auto camera = _engine.getInstance<EntityManager>().createEntity();
@@ -154,13 +161,13 @@ public:
 		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros");
 		material->pushShader("basic");
 		e->addComponent<Component::MaterialComponent>(std::string("material:heros"));
-		auto rigidBody = e->addComponent<Component::RigidBody>(0.0f);
-		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
+		auto rigidBody = e->addComponent<Component::CollisionBody>();
+		rigidBody->setCollisionShape(Component::CollisionBody::SPHERE);
 
-		mesh->addTexture("texture:earth", 0);
-		mesh->addTexture("texture:earthNight", 1);
-		mesh->addTexture("texture:earthClouds", 2);
-		mesh->addTexture("texture:earthBump", 3);
+		mesh->addTexture("texture:sun", 0);
+		//mesh->addTexture("texture:earthNight", 1);
+		//mesh->addTexture("texture:earthClouds", 2);
+		//mesh->addTexture("texture:earthBump", 3);
 		return e;
 	}
 

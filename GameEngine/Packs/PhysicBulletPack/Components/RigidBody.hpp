@@ -9,7 +9,7 @@
 #include <Core/Engine.hh>
 #include <ResourceManager/ResourceManager.hh>
 #include <ResourceManager/SharedMesh.hh>
-#include <Managers/BulletManager.hpp>
+#include <Managers/BulletDynamicManager.hpp>
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
@@ -31,7 +31,7 @@ namespace Component
 
 		RigidBody(Engine &engine, Handle &entity)
 			: ComponentBase(engine, entity),
-			_manager(engine.getInstance<BulletManager>()),
+			_manager(nullptr),
 			_shapeType(UNDEFINED),
 			_mass(0.0f),
 			_inertia(btVector3(0.0f, 0.0f, 0.0f)),
@@ -42,6 +42,8 @@ namespace Component
 			_motionState(nullptr),
 			_rigidBody(nullptr)
 		{
+			_manager = dynamic_cast<BulletDynamicManager*>(&engine.getInstance<BulletCollisionManager>());
+			assert(_manager != nullptr);
 		}
 
 		void init(float mass = 1.0f)
@@ -53,7 +55,7 @@ namespace Component
 		{
 			if (_rigidBody != nullptr)
 			{
-				_manager.getWorld().removeRigidBody(_rigidBody);
+				_manager->getWorld()->removeRigidBody(_rigidBody);
 				delete _rigidBody;
 				_rigidBody = nullptr;
 			}
@@ -120,14 +122,11 @@ namespace Component
 			_motionState = new btDefaultMotionState(transform);
 			if (c == BOX)
 			{
-				btVector3 halfScale(scale.x * 0.5f, scale.y * 0.5f, scale.z * 0.5f);
-				_collisionShape = new btBoxShape(btVector3(1, 1, 1));//new btBoxShape(halfScale);
-				_collisionShape->setLocalScaling(halfScale);
+				_collisionShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));//new btBoxShape(halfScale);
 			}
 			else if (c == SPHERE)
 			{
 				_collisionShape = new btSphereShape(1);//new btSphereShape(scale.x);
-				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			}
 			else if (c == MESH)
 			{
@@ -151,7 +150,6 @@ namespace Component
 					s->addPoint(hull->getVertexPointer()[i], false);
 				}
 				s->recalcLocalAabb();
-				s->setLocalScaling(convertGLMVectorToBullet(scale));
 				_collisionShape = s;
 				delete t;
 				delete hull;
@@ -159,11 +157,12 @@ namespace Component
 			}
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
+			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
 			_rigidBody->setUserPointer(&_entity);
 			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
 			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
-			_manager.getWorld().addRigidBody(_rigidBody);
+			_manager->getWorld()->addRigidBody(_rigidBody);
 		}
 
 		void setRotationConstraint(bool x, bool y, bool z)
@@ -190,7 +189,7 @@ namespace Component
 		{
 			if (_rigidBody)
 			{
-				_manager.getWorld().removeRigidBody(_rigidBody);
+				_manager->getWorld()->removeRigidBody(_rigidBody);
 				delete _rigidBody;
 			}
 			if (_motionState)
@@ -200,7 +199,7 @@ namespace Component
 		}
 
 	private:
-		BulletManager &_manager;
+		BulletDynamicManager *_manager;
 		CollisionShape _shapeType;
 		btScalar _mass;
 		btVector3 _inertia;
@@ -218,7 +217,7 @@ namespace Component
 		{
 			if (_rigidBody != nullptr)
 			{
-				_manager.getWorld().removeRigidBody(_rigidBody);
+				_manager->getWorld()->removeRigidBody(_rigidBody);
 				delete _rigidBody;
 			}
 			if (_motionState != nullptr)
