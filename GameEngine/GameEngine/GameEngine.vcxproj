@@ -110,6 +110,7 @@
     <ClCompile Include="Engine\Entities\EntityManager.cpp" />
     <ClCompile Include="Engine\Entities\Handle.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
+    <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
@@ -122,7 +123,6 @@
     <ClCompile Include="Engine\Core\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
-    <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
     <ClCompile Include="Engine\OpenGL\Shader.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="Engine\ResourceManager\ResourceManager.cpp" />
@@ -148,6 +148,8 @@
     <ClInclude Include="Engine\Entities\EntityManager.h" />
     <ClInclude Include="Engine\Entities\Handle.hh" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
+    <ClInclude Include="Engine\OpenGL\Attribute.hh" />
+    <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
@@ -178,7 +180,6 @@
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
     <None Include="Engine\Entities\Entity.hh" />
-    <None Include="Engine\OpenGL\Attribute.hh" />
     <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />
