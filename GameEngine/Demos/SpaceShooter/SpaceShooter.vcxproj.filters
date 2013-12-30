@@ -29,5 +29,8 @@
     <ClInclude Include="Systems\VelocitySystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SecondScene.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
