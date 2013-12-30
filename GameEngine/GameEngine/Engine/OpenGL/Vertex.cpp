@@ -59,3 +59,22 @@ void const * const VertexData::getBuffer() const
 {
 	return (_buffer);
 }
+
+bool VertexData::operator==(VertexData const &vertexData) const
+{
+	return (_id == vertexData._id);
+}
+
+bool VertexData::operator!=(VertexData const &vertexData) const
+{
+	return (!(*this == vertexData));
+}
+
+void VertexData::clearBuffer()
+{
+	if (_buffer)
+	{
+		delete[] _buffer;
+		_buffer = NULL;
+	}
+}
