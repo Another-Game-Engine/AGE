@@ -45,7 +45,7 @@ int			main(int ac, char **av)
 		return false;
 	e.getInstance<SceneManager>().enableScene("InGameScene", 0);
 
-	// lanch engine
+	// launch engine
 	if (e.start() == false)
 		return (EXIT_FAILURE);
 	while (e.update())
