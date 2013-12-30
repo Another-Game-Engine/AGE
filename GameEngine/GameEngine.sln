@@ -14,7 +14,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SolarSystem", "Demos\SolarS
 	ProjectSection(ProjectDependencies) = postProject
 		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
 	EndProjectSection
-<<<<<<< HEAD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vendors", "Vendors", "{9D3EF6A3-621D-4807-90CB-705CCD3A8FB8}"
 EndProject
@@ -43,8 +42,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysicBulletPack", "Packs\PhysicBulletPack\PhysicBulletPack.vcxproj", "{3073A470-6943-400E-BDFF-D25AA01577F8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceShooter", "Demos\SpaceShooter\SpaceShooter.vcxproj", "{ECFC3CA5-DB31-4109-8A00-88358E23B3B9}"
-=======
->>>>>>> 2e79899faeb4f4542f69433c05fa9d4f84cb4912
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -306,8 +303,6 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-<<<<<<< HEAD
-=======
 	GlobalSection(NestedProjects) = preSolution
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F} = {E92BB286-351B-420A-B152-DB0511195EFC}
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F} = {E92BB286-351B-420A-B152-DB0511195EFC}
@@ -322,5 +317,4 @@ Global
 		{C6F57A4C-3163-466F-A499-621507D2A1A9} = {A2CDA61C-7E07-4C22-8D7D-9F71E6378B89}
 		{3073A470-6943-400E-BDFF-D25AA01577F8} = {EEB678B9-3558-486B-9221-D076C77DFDDF}
 	EndGlobalSection
->>>>>>> master
 EndGlobal
