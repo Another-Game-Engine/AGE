@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704
+# Install script for directory: C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,15 +29,15 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/bullet" TYPE FILE FILES
-    "C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/UseBullet.cmake"
-    "C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/BulletConfig.cmake"
+    "C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/UseBullet.cmake"
+    "C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects/BulletConfig.cmake"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/Extras/cmake_install.cmake")
-  INCLUDE("C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/src/cmake_install.cmake")
+  INCLUDE("C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects/Extras/cmake_install.cmake")
+  INCLUDE("C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects/src/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
@@ -47,7 +47,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)
