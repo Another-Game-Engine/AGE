@@ -20,6 +20,9 @@ Builds/
 [Bb]uilds/*
 [Bb]uild/*
 
+# Exclude bullet /Projects
+projects/*
+
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
 
