@@ -7,7 +7,6 @@
 class Data
 {
 private:
-	uint32_t _id;
 	uint32_t _nbrByte;
 	uint32_t _nbrComponent;
 	uint32_t _nbrElement;
