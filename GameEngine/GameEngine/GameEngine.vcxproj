@@ -115,7 +115,6 @@
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Vertex.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexArray.cpp" />
-    <ClCompile Include="Engine\OpenGL\VertexManager.cpp" />
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
     <ClCompile Include="Engine\Parsers\LoadOBJ.cpp" />
     <ClCompile Include="Engine\ResourceManager\AResource.cpp" />
