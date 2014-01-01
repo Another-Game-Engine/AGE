@@ -17,46 +17,18 @@ namespace OpenGLTools
 	/// Buffer containing on the GPU the vertex
 	class VertexBuffer
 	{
-	private:
-		struct Buffer
-		{
-			size_t size;
-			Byte *data;
-
-			Buffer(size_t size, Byte *data)
-				: size(size), data(data)
-			{}
-			Buffer(Buffer const &copy)
-				: size(copy.size), data(copy.data)
-			{}
-			~Buffer(){}
-		};
-
 	public:
 		VertexBuffer();
 		~VertexBuffer();
 		VertexBuffer(VertexBuffer const &copy);
-		
+		VertexBuffer &operator=(VertexBuffer const &vertexbuffer);
 		void init();
 		void unload();
-
-		VertexBuffer &operator=(VertexBuffer const &vertexbuffer);
-		void pushBuffer(Byte *data, size_t size);
-		
-		size_t getSize() const;
-		Buffer const &getBuffer(size_t index) const;
-		void setBuffer(Buffer const &buffer, size_t index);
-		
-		void popBuffer();
-		void clearBuffer();
-		
-		void transferGPU(bool isIndice, GLenum mode) const;
-		void handleError() const;
-
+		void bind() const;
+		void unbind() const;
+		GLuint getId() const;
 	private:
 		GLuint _id;
-		std::vector<Buffer> _buffers;
-		size_t _size;
 	};
 }
 
