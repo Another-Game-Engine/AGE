@@ -35,7 +35,6 @@
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
-    <ClCompile Include="Engine\OpenGL\VertexManager.cpp" />
     <ClCompile Include="Engine\OpenGL\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
