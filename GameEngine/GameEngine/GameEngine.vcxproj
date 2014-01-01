@@ -111,9 +111,9 @@
     <ClCompile Include="Engine\Entities\Handle.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
+    <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
-    <ClCompile Include="Engine\OpenGL\Vertex.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexArray.cpp" />
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
     <ClCompile Include="Engine\Parsers\LoadOBJ.cpp" />
@@ -149,10 +149,14 @@
     <ClInclude Include="Engine\Entities\EntityManager.h" />
     <ClInclude Include="Engine\Entities\Handle.hh" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
+    <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
+    <ClInclude Include="Engine\OpenGL\Pool.hpp" />
     <ClInclude Include="Engine\OpenGL\Vertex.hh" />
+    <ClInclude Include="Engine\OpenGL\Vertex.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
     <ClInclude Include="Engine\OpenGL\VertexManager.hh" />
+    <ClInclude Include="Engine\OpenGL\VertexManager.hpp" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
