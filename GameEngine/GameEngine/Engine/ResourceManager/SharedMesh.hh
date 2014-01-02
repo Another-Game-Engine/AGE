@@ -21,8 +21,8 @@ struct Geometry
 class SharedMesh : public AResource
 {
 private:
-	Geometry					_geometry;
-	OpenGLTools::VertexBuffer	_buffer;
+	std::vector<Geometry>		_geometry;
+	std::vector<OpenGLTools::VertexBuffer>	_buffer;
 
 public:
 	SharedMesh(void);
@@ -32,8 +32,8 @@ public:
 
 	void			draw() const;
 
-	OpenGLTools::VertexBuffer	&getBuffer();
-	const Geometry      &getGeometry() const;
+	std::vector<OpenGLTools::VertexBuffer>	&getBuffer();
+	const std::vector<Geometry>      &getGeometry() const;
 
 };
 

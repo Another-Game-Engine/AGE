@@ -155,8 +155,9 @@ public:
 
 		// HEROS
 		auto heros = createHeros(glm::vec3(0,0,1));
-		auto test = createHeros(glm::vec3(0,4,1));
-		test->addComponent<Component::Velocity>(glm::vec3(0, -0.5, 0));
+		//auto test = createHeros(glm::vec3(0,4,1));
+		//test->addComponent<Component::Velocity>(glm::vec3(0, -0.5, 0));
+		//destroy(test);
 
 		// CAMERA
 		auto camera = createEntity();

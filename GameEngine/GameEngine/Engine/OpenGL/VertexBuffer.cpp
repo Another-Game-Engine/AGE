@@ -22,6 +22,13 @@ VertexBuffer::VertexBuffer(void)
 {
 }
 
+VertexBuffer::VertexBuffer(VertexBuffer const &o)
+{
+	_idBuffer = o._idBuffer;
+	_idIndex = o._idIndex;
+	_drawable = o._drawable;
+}
+
 VertexBuffer::~VertexBuffer(void)
 {
 	if (_idBuffer != 0)
