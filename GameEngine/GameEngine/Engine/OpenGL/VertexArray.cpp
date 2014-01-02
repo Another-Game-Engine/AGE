@@ -4,7 +4,8 @@
 namespace OpenGLTools
 {
 	VertexArray::VertexArray()
-		: _id(0)
+		: _id(0),
+		_isBind(false)
 	{
 	}
 
@@ -29,23 +30,30 @@ namespace OpenGLTools
 	}
 
 	VertexArray::VertexArray(VertexArray const &copy)
-		: _id(copy._id)
+		: _id(copy._id),
+		_isBind(copy._isBind)
 	{
 	}
 
 	VertexArray &VertexArray::operator=(VertexArray const &vertexarray)
 	{
 		_id = vertexarray._id;
+		_isBind = vertexarray._isBind;
 		return (*this);
 	}
 
-	void VertexArray::bind() const
+	void VertexArray::bind()
 	{
-		glBindVertexArray(_id);
+		if (_isBind == false)
+		{
+			_isBind = true;
+			glBindVertexArray(_id);
+		}
 	}
-	
-	void VertexArray::unbind() const
+
+	void VertexArray::unbind()
 	{
+		_isBind = false;
 		glBindVertexArray(0);
 	}
 

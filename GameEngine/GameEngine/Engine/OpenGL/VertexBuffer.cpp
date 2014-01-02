@@ -4,9 +4,11 @@
 
 namespace OpenGLTools
 {
-	VertexBuffer::VertexBuffer()
-		: _id(0)
+	VertexBuffer::VertexBuffer(bool isIndices)
+		: _id(0),
+		_isBind(false)
 	{
+		_mode = isIndices ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER;
 	}
 
 	 VertexBuffer::~VertexBuffer()
@@ -30,7 +32,9 @@ namespace OpenGLTools
 	 }
 	 
 	 VertexBuffer::VertexBuffer(VertexBuffer const &copy)
-		 : _id(copy._id)
+		 : _id(copy._id),
+		 _mode(copy._mode),
+		 _isBind(copy._isBind)
 	 {
 
 	 }
@@ -38,7 +42,23 @@ namespace OpenGLTools
 	 VertexBuffer &VertexBuffer::operator=(VertexBuffer const &vertexbuffer)
 	 {
 		 _id = vertexbuffer._id;
+		 _mode = vertexbuffer._mode;
+		 _isBind = vertexbuffer._isBind;
 		 return (*this);
 	 }
 
+	 void VertexBuffer::bind()
+	 {
+		 if (_isBind == false)
+		 {
+			 _isBind = true;
+			 glBindBuffer(_mode, _id);
+		 }
+	 }
+
+	 void VertexBuffer::unbind()
+	 {
+		 _isBind = false;
+		 glBindBuffer(_mode, 0);
+	 }
 }

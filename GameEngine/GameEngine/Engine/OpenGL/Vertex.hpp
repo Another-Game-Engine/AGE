@@ -3,7 +3,9 @@
 template <uint32_t NBR_ATTRIBUTE>
 Vertex<NBR_ATTRIBUTE>::Vertex(std::array<Data, NBR_ATTRIBUTE> attributes, Data const * const indices)
 : _attributes(attributes),
-_sizeIndices(0)
+	_sizeIndices(0),
+	_vertexManager(NULL),
+	_indexPool(-1)
 {
 	for (uint32_t index = 0; index < NBR_ATTRIBUTE; ++index)
 		_sizeAttributes += _attribute[index].getSizeBuffer();
@@ -17,7 +19,9 @@ _sizeIndices(0)
 template <uint32_t NBR_ATTRIBUTE>
 Vertex<NBR_ATTRIBUTE>::Vertex(Vertex<NBR_ATTRIBUTE> const &copy)
 : _attributes(copy._attributes),
-_size(copy._size)
+	_size(copy._size),
+	_vertexManager(copy._vertexManager),
+	_indexPool(copy._indexPool)
 {
 	if (copy.indices)
 	{
@@ -36,7 +40,10 @@ template <uint32_t NBR_ATTRIBUTE>
 Vertex<NBR_ATTRIBUTE> &Vertex<NBR_ATTRIBUTE>::operator=(Vertex<NBR_ATTRIBUTE> const &vertex)
 {
 	_attributes = vertex._attributes;
-	_indices = new Data(vertex.indices);
+	if (vertex._indices)
+		_indices = new Data(vertex.indices);
+	_vertexManager = vertex._vertexManager;
+	_indexPool = vertex._indexPool;
 	return (*this);
 }
 
@@ -82,6 +89,24 @@ template <uint32_t NBR_ATTRIBUTE>
 uint32_t Vertex<NBR_ATTRIBUTE>::getSizeIndices() const
 {
 	return (_sizeIndices);
+}
+
+template <uint32_t NBR_ATTRIBUTE>
+uint32_t Vertex<NBR_ATTRIBUTE>::draw() const
+{
+	if (_vertexManager != NULL)
+	{
+
+	}
+}
+
+template <uint32_t NBR_ATTRIBUTE>
+bool Vertex<NBR_ATTRIBUTE>::isDrawable() const
+{
+	if (_vertexManager == NULL)
+		return (false);
+	else
+		return (true);
 }
 
 #endif /*!VERTEX_HPP_*/

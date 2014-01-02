@@ -1,7 +1,8 @@
-#ifdef VERTEXMANAGER_HH_
+//#ifdef VERTEXMANAGER_HH_
 
 template <uint16_t NBR_ATTRIBUTE>
 VertexManager<NBR_ATTRIBUTE>::VertexManager()
+: _indexBuffer(true)
 {
 }
 
@@ -29,15 +30,25 @@ VertexManager<NBR_ATTRIBUTE> &VertexManager<NBR_ATTRIBUTE>::operator=(VertexMana
 }
 
 template <uint16_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::addVertex(Vertex<NBR_ATTRIBUTE> const &vertex, std::string const &name)
+void VertexManager<NBR_ATTRIBUTE>::addVertex(std::string const &name, Vertex<NBR_ATTRIBUTE> *vertex)
 {
-	if (_pool != vertex)
-		_pool += vertex;
+	int32_t index;
+
+	if ((index = (_pool != vertex)) == -1);
+		index = int32_t((_pool += vertex));
+	_drawable[name] = vertex;
+	vertex->_indexPool = index;
+	vertex->_vertexManager = this;
 }
 
 template <uint16_t NBR_ATTRIBUTE>
 void VertexManager<NBR_ATTRIBUTE>::deleteVertex(std::string const &name)
 {
+	Vertex<NBR_ATTRIBUTE> *vertex = _drawable[name];
+
+	vertex->_indexPool = -1;
+	vertex->_vertexManager = NULL;
+
 }
 
 template <uint16_t NBR_ATTRIBUTE>
@@ -55,4 +66,4 @@ void VertexManager<NBR_ATTRIBUTE>::sendToGraphicProcessUnit(GLenum mode) const
 {
 }
 
-#endif /*VERTEXMANAGER_HH_*/
+//#endif /*VERTEXMANAGER_HH_*/
