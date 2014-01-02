@@ -149,8 +149,9 @@ public:
 		// COMPLEXE OBJ LOAD TEST
 		///
 		///
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/head/head.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
 
 		///
 		///
