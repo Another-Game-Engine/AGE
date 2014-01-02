@@ -1,4 +1,4 @@
-#ifdef VERTEXMANAGER_HH_
+//#ifdef VERTEXMANAGER_HH_
 
 /**
 * - Declaration of the struct into VertexManager.hh
@@ -39,27 +39,27 @@ VertexManager<NBR_ATTRIBUTE>::Pool &VertexManager<NBR_ATTRIBUTE>::Pool::operator
 }
 
 template <uint16_t NBR_ATTRIBUTE>
-bool VertexManager<NBR_ATTRIBUTE>::Pool::operator==(Vertex<NBR_ATTRIBUTE> const &vertex) const
+int32_t VertexManager<NBR_ATTRIBUTE>::Pool::operator==(Vertex<NBR_ATTRIBUTE> const &vertex) const
 {
 	for (uint32_t index = 0; index < _pool.size(); ++index)
 		if (poolElements[index].vertex == vertex)
-			return (true);
-	return (false);
+			return (index);
+	return (-1);
 }
 
 template <uint16_t NBR_ATTRIBUTE>
-bool VertexManager<NBR_ATTRIBUTE>::Pool::operator!=(Vertex<NBR_ATTRIBUTE> const &vertex) const
+int32_t VertexManager<NBR_ATTRIBUTE>::Pool::operator!=(Vertex<NBR_ATTRIBUTE> const &vertex) const
 {
 	return (!(*this == vertex));
 }
 
 template <uint16_t NBR_ATTRIBUTE>
-Pool &VertexManager<NBR_ATTRIBUTE>::Pool::operator+=(Vertex<NBR_ATTRIBUTE> const &vertex)
+uint32_t &VertexManager<NBR_ATTRIBUTE>::Pool::operator+=(Vertex<NBR_ATTRIBUTE> const &vertex)
 {
 	poolElements.push_back(1, vertex);
 	sizeIndices += vertex.getSizeIndices();
 	sizeData += vertex.getSizeAttributes();
-	return (*this);
+	return (poolElements.size() - 1);
 }
 
 /**
@@ -123,4 +123,4 @@ bool VertexManager<NBR_ATTRIBUTE>::PoolElement::operator!=(Vertex<NBR_ATTRIBUTE>
 	return (vertex != element);
 }
 
-#endif /*!VERTEXMANAGER_HH_*/
+//#endif /*!VERTEXMANAGER_HH_*/

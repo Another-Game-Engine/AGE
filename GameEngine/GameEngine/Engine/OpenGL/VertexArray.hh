@@ -18,11 +18,12 @@ namespace OpenGLTools
 		 VertexArray &operator=(VertexArray const &vertexarray);
 		 void init();
 		 void unload();
-		 void bind() const;
-		 void unbind() const;
+		 void bind();
+		 void unbind();
 		 GLuint getId() const;
 	private:
 		GLuint _id;
+		bool _isBind;
 	};
 }
 

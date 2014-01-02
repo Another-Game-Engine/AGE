@@ -14,6 +14,8 @@ template <uint16_t NBR_ATTRIBUTE>
 class VertexManager
 {
 public:
+	class Vertex<NBR_ATTRIBUTE>;
+
 	struct Pool
 	{
 		std::vector<PoolElement> poolElements;
@@ -23,9 +25,9 @@ public:
 		~Pool();
 		Pool(Pool const &copy);
 		Pool &operator=(Pool const &pool);
-		Pool &operator+=(Vertex<NBR_ATTRIBUTE> const &vertex);
-		bool operator==(Vertex<NBR_ATTRIBUTE> const &vertex) const;
-		bool operator!=(Vertex<NBR_ATTRIBUTE> const &vertex) const;
+		uint32_t &operator+=(Vertex<NBR_ATTRIBUTE> const &vertex);
+		int32_t operator==(Vertex<NBR_ATTRIBUTE> const &vertex) const;
+		int32_t operator!=(Vertex<NBR_ATTRIBUTE> const &vertex) const;
 	};
 	struct PoolElement
 	{
@@ -33,8 +35,8 @@ public:
 		Vertex<NBR_ATTRIBUTE> vertex;
 		PoolElement(uint32_t nbrEntity, Vertex<NBR_ATTRIBUTE> vertex);
 		PoolElement(PoolElement const &copy);
-		PoolElement &operator=(PoolElement const &element);
 		~PoolElement();
+		PoolElement &operator=(PoolElement const &element);
 		bool operator==(PoolElement const &element);
 		bool operator!=(PoolElement const &element);
 		bool operator==(Vertex<NBR_ATTRIBUTE> const &element);
@@ -45,20 +47,19 @@ public:
 	~VertexManager();
 	VertexManager(VertexManager const &copy);
 	VertexManager &operator=(VertexManager const &vertexmanager);
-	void addVertex(Vertex<NBR_ATTRIBUTE> const &vertex, std::string const &name);
+	void addVertex(std::string const &name, Vertex<NBR_ATTRIBUTE> *vertex);
 	void deleteVertex(std::string const &name);
 	void sendToGraphicProcessUnit(GLenum mode = GL_STREAM) const;
 	void clear();
-	void draw(GLenum mode = GL_TRIANGLES);
 private:
 	OpenGLTools::VertexArray _vertexArray;
 	OpenGLTools::VertexBuffer _indexBuffer;
 	OpenGLTools::VertexBuffer _dataBuffer;
 	Pool _pool;
+	std::unordered_map<std::string, Vertex<NBR_ATTRIBUTE> *> _drawable;
 };
 
 # include "Pool.hpp"
 # include "VertexManager.hpp"
-
 
 #endif /*!VERTEXMANAGER_HH_*/
