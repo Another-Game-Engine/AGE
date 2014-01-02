@@ -172,7 +172,7 @@ public:
 
 		// HEROS
 		auto heros = createHeros(glm::vec3(0,0,1));
-		heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(2, 2, 2));
+		heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(10));
 		//auto test = createHeros(glm::vec3(0,4,1));
 		//test->addComponent<Component::Velocity>(glm::vec3(0, -0.5, 0));
 		//destroy(test);
