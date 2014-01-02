@@ -27,9 +27,7 @@ namespace OpenGLTools
   class VertexBuffer
   {
   private:
-    VertexBuffer(VertexBuffer const &);
     VertexBuffer &operator=(VertexBuffer const &);
-
   private:
     GLuint					_idBuffer;
     GLuint					_idIndex;
@@ -40,6 +38,8 @@ namespace OpenGLTools
   public:
     VertexBuffer(void);
     ~VertexBuffer(void);
+    VertexBuffer(VertexBuffer const &);
+
 
     void addAttribute(Attribute const &attribute);
 	Attribute *getAttribute(unsigned int index);

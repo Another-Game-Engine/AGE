@@ -101,7 +101,8 @@ namespace Component
 			else if (c == MESH)
 			{
 				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
-				const Resources::Geometry &geo = mesh->getGeometry();
+				const Resources::Geometry &geo = mesh->getGeometry()[0]; // DIRTY HACK TEMPORARY
+				// NEED TO REPLACE MESH BY MESH GROUP !
 				btScalar *t = new btScalar[geo.vertices.size() * 3]();
 				for (unsigned int i = 0; i < geo.vertices.size(); ++i)
 				{
