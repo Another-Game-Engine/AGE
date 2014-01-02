@@ -76,7 +76,7 @@ public:
 		_engine.getInstance<Renderer>().addUniform("PerModel")
 			.init(&s, "PerModel", perModelVars);
 
-		_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
+		_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 		_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
 		_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
 		_engine.getInstance<Renderer>().addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
@@ -178,12 +178,12 @@ public:
 		e->addComponent<Component::GraphNode>();
 		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
 		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros");
-		material->pushShader("basic");
+//		material->pushShader("basic");
 		e->addComponent<Component::MaterialComponent>(std::string("material:heros"));
 		auto rigidBody = e->addComponent<Component::CollisionBody>();
 		rigidBody->setCollisionShape(Component::CollisionBody::SPHERE);
-
-		mesh->addTexture("texture:sun", 0);
+		mesh->setShader("basic");
+//		mesh->addTexture("texture:sun", 0);
 		//mesh->addTexture("texture:earthNight", 1);
 		//mesh->addTexture("texture:earthClouds", 2);
 		//mesh->addTexture("texture:earthBump", 3);

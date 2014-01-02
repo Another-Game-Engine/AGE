@@ -4,7 +4,8 @@
 namespace	Resources
 {
 
-ResourceManager::ResourceManager()
+ResourceManager::ResourceManager(Engine *engine) :
+_engine(*engine)
 {
 
 }
@@ -21,6 +22,7 @@ bool					ResourceManager::addResource(std::string const &name,
 
 	if ((it = _resources.find(name)) != _resources.end())
 		return (false);
+	resource->setEngine(_engine);
 	_resources[name] = resource;
 	assert(resource->load(param) == true && "Resource does not load correctly.");
 	return (true);

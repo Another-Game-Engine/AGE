@@ -17,7 +17,7 @@ SharedMesh::~SharedMesh(void)
 
 bool	SharedMesh::load(std::string const &path)
 {
-	if (loadObj(path, _geometry) == false)
+	if (loadObj(path, *this) == false)
 		return (false);
 	_buffer.resize(_geometry.size());
 	for (unsigned int i = 0; i < _geometry.size(); ++i)
@@ -50,7 +50,7 @@ std::vector<OpenGLTools::VertexBuffer>	&SharedMesh::getBuffer()
 	return (_buffer);
 }
 
-const std::vector<Geometry>      &SharedMesh::getGeometry() const
+std::vector<Geometry>      &SharedMesh::getGeometry()
 {
 	return _geometry;
 }

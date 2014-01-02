@@ -4,8 +4,10 @@
 #include <vector>
 #include "glm/glm.hpp"
 #include "Utils/File.hpp"
+#include <core/Engine.hh>
+#include <core/Renderer.hh>
 
-bool	loadObj(std::string const &path, std::vector<Resources::Geometry> &geometry)
+bool	loadObj(std::string const &path, Resources::SharedMesh &mesh)
 {
 	File file(path);
 
@@ -19,14 +21,28 @@ bool	loadObj(std::string const &path, std::vector<Resources::Geometry> &geometry
     std::string err = tinyobj::LoadObj(shapes, inputfile.c_str(), file.getFolder().c_str());
 	assert(err.empty());
 
+	auto &geometry = mesh.getGeometry();
 	geometry.resize(shapes.size());
-
+	mesh.getDefaultMaterialsList().resize(shapes.size());
     for (size_t i = 0; i < shapes.size(); i++)
 	{
 		loadObjShape(shapes[i], geometry[i]);
-
+		loadObjMaterials(shapes[i], mesh, file, i);
 	}
 	return true;
+}
+
+void    loadObjMaterials(tinyobj::shape_t &shape, Resources::SharedMesh &mesh, const File &objPath, unsigned int index)
+{
+	auto &m = mesh.getDefaultMaterialsList();
+	auto &manager = mesh.getEngine()->getInstance<Renderer>().getMaterialManager();
+	auto name = "material:" + File(shape.material.name).getFileName();
+	m[index] = manager.getMaterial(name);
+	if (m[index] != nullptr)
+		return;
+	auto material = manager.createMaterial(name);
+	material->loadMtl(shape.material, objPath);
+	m[index] = material;
 }
 
 void loadObjShape(tinyobj::shape_t &shape, Resources::Geometry &geometry)

@@ -158,15 +158,11 @@ public:
 		e->addComponent<Component::GraphNode>();
 		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
 		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros2");
-		material->pushShader("earth");
+//		material->pushShader("earth");
 		e->addComponent<Component::MaterialComponent>(std::string("material:heros2"));
 		auto rigidBody = e->addComponent<Component::CollisionBody>();
 		rigidBody->setCollisionShape(Component::CollisionBody::SPHERE);
 
-		mesh->addTexture("texture:earth", 0);
-		mesh->addTexture("texture:earthNight", 1);
-		mesh->addTexture("texture:earthClouds", 2);
-		mesh->addTexture("texture:earthBump", 3);
 		return e;
 	}
 

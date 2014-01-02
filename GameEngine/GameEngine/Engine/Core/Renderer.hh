@@ -10,6 +10,7 @@
 #include "OpenGL/Framebuffer.hh"
 #include "MaterialManager.hh"
 #include "Utils/Any.hpp"
+#include <core/Engine.hh>
 
 class Renderer
 {
@@ -29,8 +30,9 @@ private:
 			Component::MeshRenderer* >				_queues; // Queues sorted by materials
 	MaterialManager                                 _materialManager;
 	postEffectCol                                   _postEffects;
+	Engine &_engine;
 public:
-	Renderer(void);
+	Renderer(Engine *engine);
 	virtual ~Renderer(void);
 
 	bool init();
@@ -58,6 +60,7 @@ public:
 	void                            uninit();
 	MaterialManager &getMaterialManager();
 	void addPostEffect(const std::string &name, unsigned int priority);
+	inline Engine &getEngine() { return _engine; }
 private:
 	Renderer(const Renderer &o);
 	Renderer &operator=(const Renderer &o);
