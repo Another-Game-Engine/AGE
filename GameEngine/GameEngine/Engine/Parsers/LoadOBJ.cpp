@@ -19,7 +19,7 @@ bool	loadObj(std::string const &path, Resources::Geometry &geometry)
 
     std::string inputfile = file.getFullName();
     std::vector<tinyobj::shape_t> shapes;
-    std::string err = tinyobj::LoadObj(shapes, inputfile.c_str());
+    std::string err = tinyobj::LoadObj(shapes, inputfile.c_str(), file.getFolder().c_str());
 	assert(err.empty());
 
 	std::vector<glm::vec4> resPos;
@@ -39,7 +39,7 @@ bool	loadObj(std::string const &path, Resources::Geometry &geometry)
 				resPos.push_back(glm::vec4(shapes[i].mesh.positions[p],
 				shapes[i].mesh.positions[p + 1],
 				shapes[i].mesh.positions[p + 2], 1));
-			if (shapes[i].mesh.positions.size() > 0)
+			if (shapes[i].mesh.normals.size() > 0)
 				resNorm.push_back(glm::vec4(shapes[i].mesh.normals[p],
 				shapes[i].mesh.normals[p + 1],
 				shapes[i].mesh.normals[p + 2], 1));

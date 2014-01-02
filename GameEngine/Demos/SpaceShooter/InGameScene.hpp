@@ -101,7 +101,7 @@ public:
 		_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerModel", "PerModel");
 		_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerFrame", "PerFrame");
 		_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerModel", "PerModel");
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball.obj");
 		SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
 
 		toRepeat->setWrapMode(GL_REPEAT);
@@ -124,6 +124,25 @@ public:
 		_engine.getInstance<Renderer>().addUniform("cameraUniform").
 			init(&sky, "cameraUniform", vars);
 		_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
+
+
+
+		////////////////////////
+		/////////
+		// COMPLEXE OBJ LOAD TEST
+		///
+		///
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
+
+		///
+		///
+		///
+		////////
+		////////////////////////
+
+
+
 
 		/////////////////////////////
 		/////
