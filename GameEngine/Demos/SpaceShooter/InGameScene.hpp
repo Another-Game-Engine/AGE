@@ -67,15 +67,29 @@ public:
 			"time"
 		};
 
-		OpenGLTools::Shader &s = _engine.getInstance<Renderer>().addShader("earth",
-			"./Shaders/earth.vp",
-			"./Shaders/earth.fp");
+		std::string		materialBasic[] =
+		{
+			"ambient",
+			"diffuse",
+			"specular",
+			"transmittance",
+			"emission",
+			"shininess"
+		};
 
+
+		OpenGLTools::Shader &s = _engine.getInstance<Renderer>().addShader("MaterialBasic",
+			"./Shaders/MaterialBasic.vp",
+			"./Shaders/MaterialBasic.fp");
+
+		_engine.getInstance<Renderer>().addUniform("MaterialBasic")
+			.init(&s, "MaterialBasic", materialBasic);
 		_engine.getInstance<Renderer>().addUniform("PerFrame")
 			.init(&s, "PerFrame", perFrameVars);
 		_engine.getInstance<Renderer>().addUniform("PerModel")
 			.init(&s, "PerModel", perModelVars);
 
+		_engine.getInstance<Renderer>().getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
 		_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 		_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
 		_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
@@ -87,7 +101,7 @@ public:
 		_engine.getInstance<Renderer>().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
 		_engine.getInstance<Renderer>().getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
 			.addLayer(GL_COLOR_ATTACHMENT0).build();
-		_engine.getInstance<Renderer>().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+//		_engine.getInstance<Renderer>().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
 		_engine.getInstance<Renderer>().getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
 			.addLayer(GL_COLOR_ATTACHMENT0).build();
 		_engine.getInstance<Renderer>().getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2)
@@ -97,8 +111,10 @@ public:
 		_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerModel", "PerModel");
 		_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerFrame", "PerFrame");
 		_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerModel", "PerModel");
-		_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerFrame", "PerFrame");
-		_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerModel", "PerModel");
+//		_engine.getInstance<Renderer>().bindShaderToUniform("basic", "MaterialBasic", "MateriaBasic");
+		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
+		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
+		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 		_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerFrame", "PerFrame");
 		_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerModel", "PerModel");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball.obj");
@@ -113,7 +129,7 @@ public:
 		_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "./Assets/SunTexture.tga");
 		_engine.getInstance<Resources::ResourceManager>().addResource("texture:moon", new Resources::Texture(), "./Assets/MoonTexture.tga");
 		_engine.getInstance<Resources::ResourceManager>().addResource("texture:moonBump", new Resources::Texture(), "./Assets/MoonNormalMap.tga");
-		_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
+		_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/lake.skybox");
 		std::string		vars[] =
 		{
 			"projection",
@@ -134,6 +150,7 @@ public:
 		///
 		///
 		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/head/head.obj");
 
 		///
 		///
@@ -155,6 +172,7 @@ public:
 
 		// HEROS
 		auto heros = createHeros(glm::vec3(0,0,1));
+		heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(2, 2, 2));
 		//auto test = createHeros(glm::vec3(0,4,1));
 		//test->addComponent<Component::Velocity>(glm::vec3(0, -0.5, 0));
 		//destroy(test);
@@ -182,7 +200,7 @@ public:
 		e->addComponent<Component::MaterialComponent>(std::string("material:heros"));
 		auto rigidBody = e->addComponent<Component::CollisionBody>();
 		rigidBody->setCollisionShape(Component::CollisionBody::SPHERE);
-		mesh->setShader("basic");
+		mesh->setShader("MaterialBasic");
 //		mesh->addTexture("texture:sun", 0);
 		//mesh->addTexture("texture:earthNight", 1);
 		//mesh->addTexture("texture:earthClouds", 2);
