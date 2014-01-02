@@ -36,13 +36,21 @@ namespace Component
 	void MeshRenderer::render()
 	{
 		OpenGLTools::UniformBuffer *perModelUniform = _scene->getEngine().getInstance<Renderer>().getUniform("PerModel");
+		OpenGLTools::UniformBuffer *materialUniform = _scene->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
 		auto shader = _scene->getEngine().getInstance<Renderer>().getShader(_shader);
 		if (shader)
 			shader->use();
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());
+		auto &g = _mesh->getGeometry();
+		auto &m = _mesh->getDefaultMaterialsList();
+		auto &b = _mesh->getBuffer();
 		perModelUniform->flushChanges();
-		if (_mesh != nullptr)
-			_mesh->draw();
+		for (unsigned int i = 0; i < g.size(); ++i)
+		{
+			m[i]->setUniforms(materialUniform);
+			materialUniform->flushChanges();
+			b[i].draw(GL_TRIANGLES);
+		}
 	}
 
 	//void MeshRenderer::addTexture(const std::string &textureName, unsigned int priority)

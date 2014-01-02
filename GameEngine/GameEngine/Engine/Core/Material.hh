@@ -109,6 +109,36 @@ public:
 		}
 	}
 	
+	void setUniforms(OpenGLTools::UniformBuffer *buffer)
+	{
+		buffer->setUniform("ambient", _ambient);
+		buffer->setUniform("diffuse", _diffuse);
+		buffer->setUniform("specular", _specular);
+		buffer->setUniform("transmittance", _transmittance);
+		buffer->setUniform("emission", _emission);
+		buffer->setUniform("shininess", _shininess);
+		if (_ambientTex != nullptr)
+		{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, _ambientTex->getId());
+		}
+		if (_diffuseTex != nullptr)
+		{
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, _diffuseTex->getId());
+		}
+		if (_specularTex != nullptr)
+		{
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, _specularTex->getId());
+		}
+		if (_normalTex != nullptr)
+		{
+			glActiveTexture(GL_TEXTURE3);
+			glBindTexture(GL_TEXTURE_2D, _normalTex->getId());
+		}
+	}
+
 private:
 	Material(const Material &o);
 	Material &operator=(const Material &o);
