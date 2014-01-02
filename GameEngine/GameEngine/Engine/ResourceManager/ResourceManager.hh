@@ -8,6 +8,8 @@
 #include <map>
 #include <string>
 
+class Engine;
+
 namespace	Resources
 {
 
@@ -15,9 +17,9 @@ class	ResourceManager
 {
 private:
 	std::map<std::string, SmartPointer<AResource> >		_resources;
-
+	Engine &_engine;
 public:
-	ResourceManager();
+	ResourceManager(Engine *engine);
 	~ResourceManager();
 
 	bool					addResource(std::string const &name,

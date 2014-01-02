@@ -15,15 +15,16 @@ namespace Component
 
 class MaterialManager
 {
-public:
 private:
+	Engine &_engine;
 	std::map<std::string, SmartPointer<Material> > _materials;
 public:
-	MaterialManager();
+	MaterialManager(Engine &engine);
 	~MaterialManager();
 	SmartPointer<Material> getMaterial(const std::string &name);
 	SmartPointer<Material> createMaterial(const std::string &name);
 	std::map<std::string, SmartPointer<Material> > &getMaterialList();
+	inline Engine &getEngine(){ return _engine; }
 private:
 	MaterialManager(const MaterialManager &o);
 	MaterialManager &operator=(const MaterialManager &o);
