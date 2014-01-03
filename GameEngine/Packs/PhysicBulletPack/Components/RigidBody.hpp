@@ -174,9 +174,9 @@ namespace Component
 				auto trimesh = new btTriangleMesh();
 				auto &geos = mesh->getGeometry();
 
-				for (unsigned int i = 0; i < geos.size(); ++i)
+				for (unsigned int j = 0; j < geos.size(); ++j)
 				{
-					const Resources::Geometry &geo = geos[i];
+					const Resources::Geometry &geo = geos[j];
 					for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
 					{
 						trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
@@ -184,7 +184,7 @@ namespace Component
 							, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
 					}
 				}
-
+//new btbvh
 				auto bvh = new btBvhTriangleMeshShape(trimesh, true);
 				bvh->buildOptimizedBvh();
 				bool isit = bvh->isConcave();
