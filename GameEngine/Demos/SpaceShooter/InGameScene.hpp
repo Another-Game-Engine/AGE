@@ -151,7 +151,8 @@ public:
 		// COMPLEXE OBJ LOAD TEST
 		///
 		///
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/head/head.obj");
 		_engine.getInstance<Resources::ResourceManager>().addResource("model:galileo", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
 
@@ -174,9 +175,10 @@ public:
 		//
 
 		// HEROS
+
 		{
 			auto heros = createHeros(glm::vec3(0, -100, 1));
-			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(1));
+			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(200));
 			auto rigidBody = heros->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:sponza");
@@ -184,9 +186,10 @@ public:
 			mesh->setShader("MaterialBasic");
 		}
 
+
 		auto heros = createHeros(glm::vec3(0, 100, 1));
 		{
-			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(0.05));
+			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(1));
 			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 90.0f, glm::vec3(0, 1, 1));
 			auto rigidBody = heros->addComponent<Component::RigidBody>();
 			rigidBody->setMass(100.0f);
@@ -194,6 +197,8 @@ public:
 			auto mesh = heros->addComponent<Component::MeshRenderer>("model:galileo");
 			mesh->setShader("MaterialBasic");
 		}
+
+
 
 		// CAMERA
 		auto camera = createEntity();

@@ -20,10 +20,37 @@ bool	loadObj(std::string const &path, Resources::SharedMesh &mesh)
     std::vector<tinyobj::shape_t> shapes;
     std::string err = tinyobj::LoadObj(shapes, inputfile.c_str(), file.getFolder().c_str());
 	assert(err.empty());
-
 	auto &geometry = mesh.getGeometry();
 	geometry.resize(shapes.size());
 	mesh.getDefaultMaterialsList().resize(shapes.size());
+
+	float min = 0.0f;
+	float max = 0.0f;
+    for (size_t i = 0; i < shapes.size(); i++)
+	{
+		for (auto &e : shapes[i].mesh.positions)
+		{
+			if (e < min)
+				min = e;
+			else if (e > max)
+				max = e;
+		}
+	}
+
+	float minCof = std::abs(min) * 2.0f;
+	float maxCof = max * 2.0f;
+    for (size_t i = 0; i < shapes.size(); i++)
+	{
+		for (auto &e : shapes[i].mesh.positions)
+		{
+			if (e < 0)
+				e /= minCof;
+			else if (e > 0)
+				e /= maxCof;
+		}
+	}
+
+
     for (size_t i = 0; i < shapes.size(); i++)
 	{
 		loadObjShape(shapes[i], geometry[i]);
