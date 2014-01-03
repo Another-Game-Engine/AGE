@@ -24,8 +24,8 @@ bool	loadObj(std::string const &path, Resources::SharedMesh &mesh)
 	geometry.resize(shapes.size());
 	mesh.getDefaultMaterialsList().resize(shapes.size());
 
-	float min = 0.0f;
-	float max = 0.0f;
+	float min = -0.5f;
+	float max = 0.5f;
     for (size_t i = 0; i < shapes.size(); i++)
 	{
 		for (auto &e : shapes[i].mesh.positions)
@@ -37,8 +37,8 @@ bool	loadObj(std::string const &path, Resources::SharedMesh &mesh)
 		}
 	}
 
-	float minCof = std::abs(min) * 2.0f;
-	float maxCof = max * 2.0f;
+	float minCof = min != -0.5f ? std::abs(min) * 2.0f : 1.0f;
+	float maxCof = min != 0.5f ? max * 2.0f : 1.0f;
     for (size_t i = 0; i < shapes.size(); i++)
 	{
 		for (auto &e : shapes[i].mesh.positions)
