@@ -23,6 +23,8 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/BulletDynamicSystem.hpp>
+#include <Systems/FPControllerSystem.hpp>
+#include <Systems/FirstPersonViewSystem.hpp>
 
 ////////////
 // COMPONENTS
@@ -48,11 +50,13 @@ public:
 	{
 
 		addSystem<MeshRendererSystem>(0);
-		addSystem<GraphNodeSystem>(0); // UPDATE GRAPH NODE POSITION
+		addSystem<GraphNodeSystem>(1); // UPDATE GRAPH NODE POSITION
 		addSystem<BulletDynamicSystem>(10); // CHECK FOR COLLISIONS
 		addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ELEMENTS
 		addSystem<VelocitySystem>(50); // UPDATE VELOCITY
+		addSystem<FPControllerSystem>(60); // UPDATE FIRST PERSON CONTROLLER
 		addSystem<TrackBallSystem>(150); // UPDATE CAMERA TRACKBALL BEHAVIOR
+		addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
 		addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
 		addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENT FROM COLLIDING ELEMENTS
 
@@ -151,10 +155,12 @@ public:
 		// COMPLEXE OBJ LOAD TEST
 		///
 		///
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
+   	_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/head/head.obj");
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:galileo", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:galileo", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
 
 		///
 		///
@@ -177,37 +183,54 @@ public:
 		// HEROS
 
 		{
-			auto heros = createHeros(glm::vec3(0, -100, 1));
-			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(200));
+			auto heros = createHeros(glm::vec3(3, -10, 2));
+			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(100, 100, 100));
+			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 2.0f, glm::vec3(0, 1, 1));
 			auto rigidBody = heros->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:sponza");
+			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "model:sponza");
 			auto mesh = heros->addComponent<Component::MeshRenderer>("model:sponza");
 			mesh->setShader("MaterialBasic");
 		}
 
 
-		auto heros = createHeros(glm::vec3(0, 100, 1));
 		{
+			auto heros = createHeros(glm::vec3(100, 100, 1));
 			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(1));
-			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 90.0f, glm::vec3(0, 1, 1));
-			auto rigidBody = heros->addComponent<Component::RigidBody>();
-			rigidBody->setMass(100.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:galileo");
-			auto mesh = heros->addComponent<Component::MeshRenderer>("model:galileo");
-			mesh->setShader("MaterialBasic");
+			heros->addComponent<Component::FPController>();
+			heros->addComponent<Component::FirstPersonView>();
+			auto cameraComponent = heros->addComponent<Component::CameraComponent>();
+			cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
+		}
+
+
+		{
+//			auto heros = createHeros(glm::vec3(0, 100, 0));
+//			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(10));
+////			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 90.0f, glm::vec3(0, 1, 1));
+//			auto rigidBody = heros->addComponent<Component::RigidBody>();
+//			rigidBody->setMass(1.0f);
+//			rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
+//			auto mesh = heros->addComponent<Component::MeshRenderer>("model:ball");
+//			//heros->addComponent<Component::FPController>();
+//			mesh->setShader("MaterialBasic");
+//			auto camera = createEntity();
+//			camera->addComponent<Component::GraphNode>();
+//			auto cameraComponent = camera->addComponent<Component::CameraComponent>();
+//			auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 3.0f, 1.0f);
 		}
 
 
 
 		// CAMERA
-		auto camera = createEntity();
-		camera->addComponent<Component::GraphNode>();
-		auto cameraComponent = camera->addComponent<Component::CameraComponent>();
-		auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 3.0f, 1.0f);
+		//auto camera = createEntity();
+		//camera->addComponent<Component::GraphNode>();
+		//auto cameraComponent = camera->addComponent<Component::CameraComponent>();
+		//auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 3.0f, 1.0f);
 
 
-		cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
+
+
 
 		return true;
 	}

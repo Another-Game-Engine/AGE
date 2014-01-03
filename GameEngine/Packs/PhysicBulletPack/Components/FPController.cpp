@@ -41,7 +41,7 @@ FPController::FPController(AScene *scene, Handle &entity) : ComponentBase<FPCont
 	transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
 	_ghost = new btPairCachingGhostObject();
-	_shape = new btCapsuleShape(1.75, 0.44);
+	_shape = new btCapsuleShape(scale.x, scale.z);
 
 	_ghost->setCollisionShape(_shape);
 	_ghost->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
