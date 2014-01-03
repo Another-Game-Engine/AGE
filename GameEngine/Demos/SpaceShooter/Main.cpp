@@ -32,7 +32,8 @@ int			main(int ac, char **av)
 	e.setInstance<Resources::ResourceManager>(&e);
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
-	e.setInstance<BulletCollisionManager>().init();
+//	e.setInstance<BulletCollisionManager>().init();
+	e.setInstance<BulletDynamicManager, BulletCollisionManager>().init();
 
 	// init engine
 	if (e.init() == false)
