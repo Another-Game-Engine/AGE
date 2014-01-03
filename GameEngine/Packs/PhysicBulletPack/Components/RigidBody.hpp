@@ -11,6 +11,7 @@
 #include <ResourceManager/SharedMesh.hh>
 #include <Managers/BulletDynamicManager.hpp>
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
+#include <hacdHACD.h>
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 
@@ -166,30 +167,51 @@ namespace Component
 					delete hull;
 					delete tmp;
 				}
-//				_collisionShape = group;
+				_collisionShape = group;
 			}
 			else if (c == CONCAVE_STATIC_MESH)
 			{
 				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
-				auto trimesh = new btTriangleMesh();
+				auto group = new btCompoundShape();
 				auto &geos = mesh->getGeometry();
-
+				auto trimesh = new btTriangleMesh();
 				for (unsigned int j = 0; j < geos.size(); ++j)
 				{
 					const Resources::Geometry &geo = geos[j];
-					for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
+					for (unsigned int i = 0; i < geo.vertices.size(); i += 3)
 					{
-						trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
-							, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
-							, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
+						trimesh->addTriangle(btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z)
+							, btVector3(geo.vertices[i + 1].x, geo.vertices[i + 1].y, geo.vertices[i + 1].z)
+							, btVector3(geo.vertices[i + 2].x, geo.vertices[i + 2].y, geo.vertices[i + 2].z));
 					}
+					btTransform localTrans;
+					localTrans.setIdentity();
+					group->addChildShape(localTrans,new btBvhTriangleMeshShape(trimesh,false));
 				}
-//new btbvh
-				auto bvh = new btBvhTriangleMeshShape(trimesh, true);
-				bvh->buildOptimizedBvh();
-				bool isit = bvh->isConcave();
-				_collisionShape = bvh;// new btScaledBvhTriangleMeshShape(bvh, convertGLMVectorToBullet(scale));
+				_collisionShape = group;
 			}
+
+			//{
+			//	SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+			//	auto trimesh = new btTriangleMesh();
+			//	auto &geos = mesh->getGeometry();
+
+			//	for (unsigned int j = 0; j < geos.size(); ++j)
+			//	{
+			//		const Resources::Geometry &geo = geos[j];
+			//		for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
+			//		{
+			//			trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
+			//				, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
+			//				, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
+			//		}
+			//	}
+//new btbvh
+			//	auto bvh = new btBvhTriangleMeshShape(trimesh, true);
+			//	bvh->buildOptimizedBvh();
+			//	bool isit = bvh->isConcave();
+			//	_collisionShape = bvh;// new btScaledBvhTriangleMeshShape(bvh, convertGLMVectorToBullet(scale));
+			//}
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
 //			if (c != CONCAVE_STATIC_MESH)
