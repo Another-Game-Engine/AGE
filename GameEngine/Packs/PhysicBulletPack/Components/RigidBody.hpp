@@ -26,6 +26,7 @@ namespace Component
 			SPHERE,
 			BOX,
 			MESH,
+			CONCAVE_STATIC_MESH,
 			UNDEFINED
 		} CollisionShape;
 
@@ -131,30 +132,64 @@ namespace Component
 			else if (c == MESH)
 			{
 				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
-				const Resources::Geometry &geo = mesh->getGeometry()[0]; // DIRTY HACK TEMPORARY
-				// NEED TO REPLACE MESH BY MESH GROUP !
-				btScalar *t = new btScalar[geo.vertices.size() * 3]();
-				for (unsigned int i = 0; i < geo.vertices.size(); ++i)
+				auto group = new btCompoundShape();
+
+				auto &geos = mesh->getGeometry();
+
+				for (unsigned int i = 0; i < geos.size(); ++i)
 				{
-					t[i * 3] = geo.vertices[i].x;
-					t[i * 3 + 1] = geo.vertices[i].y;
-					t[i * 3 + 2] = geo.vertices[i].z;
+					const Resources::Geometry &geo = geos[i]; // DIRTY HACK TEMPORARY
+					// NEED TO REPLACE MESH BY MESH GROUP !
+					btScalar *t = new btScalar[geo.vertices.size() * 3]();
+					for (unsigned int i = 0; i < geo.vertices.size(); ++i)
+					{
+						t[i * 3] = geo.vertices[i].x;
+						t[i * 3 + 1] = geo.vertices[i].y;
+						t[i * 3 + 2] = geo.vertices[i].z;
+					}
+					btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
+					btShapeHull *hull = new btShapeHull(tmp);
+					btScalar margin = tmp->getMargin();
+					hull->buildHull(margin);
+					tmp->setUserPointer(hull);
+					btConvexHullShape *s = new btConvexHullShape();
+					for (int i = 0; i < hull->numVertices(); ++i)
+					{
+						s->addPoint(hull->getVertexPointer()[i], false);
+					}
+					s->recalcLocalAabb();
+					btTransform localTrans;
+					localTrans.setIdentity();
+					group->addChildShape(localTrans,s);
+					delete t;
+					delete hull;
+					delete tmp;
 				}
-				btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
-				btShapeHull *hull = new btShapeHull(tmp);
-				btScalar margin = tmp->getMargin();
-				hull->buildHull(margin);
-				tmp->setUserPointer(hull);
-				btConvexHullShape *s = new btConvexHullShape();
-				for (int i = 0; i < hull->numVertices(); ++i)
+				_collisionShape = group;
+			}
+			else if (c == CONCAVE_STATIC_MESH)
+			{
+				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+				auto trimesh = new btTriangleMesh();
+				auto &geos = mesh->getGeometry();
+
+				for (unsigned int i = 0; i < geos.size(); ++i)
 				{
-					s->addPoint(hull->getVertexPointer()[i], false);
+					const Resources::Geometry &geo = geos[i]; // DIRTY HACK TEMPORARY
+					// NEED TO REPLACE MESH BY MESH GROUP !
+					btScalar *t = new btScalar[geo.vertices.size() * 3]();
+					for (unsigned int i = 0; i < geo.vertices.size(); ++i)
+					{
+						t[i * 3] = geo.vertices[i].x;
+						t[i * 3 + 1] = geo.vertices[i].y;
+						t[i * 3 + 2] = geo.vertices[i].z;
+						if (i != 0 && i % 3 == 0)
+							trimesh->addTriangle(btVector3(t[i * 3 - 8], t[i * 3 - 7], t[i * 3 - 6]), btVector3(t[i * 3 - 5], t[i * 3 - 4], t[i * 3 - 3]), btVector3(t[i * 3 - 2], t[i * 3 - 1], t[i * 3 - 0]));
+					}
+					delete t;
 				}
-				s->recalcLocalAabb();
-				_collisionShape = s;
-				delete t;
-				delete hull;
-				delete tmp;
+
+				_collisionShape = new btBvhTriangleMeshShape(trimesh, true);
 			}
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);

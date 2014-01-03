@@ -22,6 +22,7 @@
 #include <Systems/VelocitySystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
+#include <Systems/BulletDynamicSystem.hpp>
 
 ////////////
 // COMPONENTS
@@ -31,6 +32,7 @@
 #include <Components/FPController.hpp>
 #include <Components/FirstPersonView.hpp>
 #include <Components/VelocityComponent.hpp>
+#include <Components/RigidBody.hpp>
 
 class InGameScene : public AScene
 {
@@ -47,7 +49,7 @@ public:
 
 		addSystem<MeshRendererSystem>(0);
 		addSystem<GraphNodeSystem>(0); // UPDATE GRAPH NODE POSITION
-		addSystem<BulletCollisionSystem>(10); // CHECK FOR COLLISIONS
+		addSystem<BulletDynamicSystem>(10); // CHECK FOR COLLISIONS
 		addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ELEMENTS
 		addSystem<VelocitySystem>(50); // UPDATE VELOCITY
 		addSystem<TrackBallSystem>(150); // UPDATE CAMERA TRACKBALL BEHAVIOR
@@ -149,9 +151,9 @@ public:
 		// COMPLEXE OBJ LOAD TEST
 		///
 		///
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/head/head.obj");
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:galileo", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
 
 		///
 		///
@@ -172,11 +174,26 @@ public:
 		//
 
 		// HEROS
-		auto heros = createHeros(glm::vec3(0,0,1));
-		heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(10));
-		//auto test = createHeros(glm::vec3(0,4,1));
-		//test->addComponent<Component::Velocity>(glm::vec3(0, -0.5, 0));
-		//destroy(test);
+		{
+			auto heros = createHeros(glm::vec3(0, -100, 1));
+			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(1));
+			auto rigidBody = heros->addComponent<Component::RigidBody>();
+			rigidBody->setMass(0.0f);
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:sponza");
+			auto mesh = heros->addComponent<Component::MeshRenderer>("model:sponza");
+			mesh->setShader("MaterialBasic");
+		}
+
+		auto heros = createHeros(glm::vec3(0, 100, 1));
+		{
+			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(0.05));
+			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 90.0f, glm::vec3(0, 1, 1));
+			auto rigidBody = heros->addComponent<Component::RigidBody>();
+			rigidBody->setMass(100.0f);
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:galileo");
+			auto mesh = heros->addComponent<Component::MeshRenderer>("model:galileo");
+			mesh->setShader("MaterialBasic");
+		}
 
 		// CAMERA
 		auto camera = createEntity();
@@ -195,13 +212,9 @@ public:
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 		e->addComponent<Component::GraphNode>();
-		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
-		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros");
 //		material->pushShader("basic");
 		e->addComponent<Component::MaterialComponent>(std::string("material:heros"));
-		auto rigidBody = e->addComponent<Component::CollisionBody>();
-		rigidBody->setCollisionShape(Component::CollisionBody::SPHERE);
-		mesh->setShader("MaterialBasic");
+		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros");
 //		mesh->addTexture("texture:sun", 0);
 		//mesh->addTexture("texture:earthNight", 1);
 		//mesh->addTexture("texture:earthClouds", 2);
