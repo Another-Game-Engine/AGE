@@ -1,8 +1,8 @@
 // for leak detection
-#define _CRTDBG_MAP_ALLOC
-#define GLM_FORCE_INLINE 
-#define GLM_FORCE_SSE2 
-#define GLM_FORCE_AVX
+//#define _CRTDBG_MAP_ALLOC
+//#define GLM_FORCE_INLINE 
+//#define GLM_FORCE_SSE2 
+//#define GLM_FORCE_AVX
 
 #include <stdlib.h>
 #include <crtdbg.h>
