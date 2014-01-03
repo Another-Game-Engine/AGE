@@ -198,6 +198,10 @@ namespace Component
 			_rigidBody->setUserPointer(&_entity);
 			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
 			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
+			if (_rigidBody->isStaticObject())
+			{
+				_rigidBody->setActivationState(DISABLE_SIMULATION);
+			}
 			_manager->getWorld()->addRigidBody(_rigidBody);
 		}
 

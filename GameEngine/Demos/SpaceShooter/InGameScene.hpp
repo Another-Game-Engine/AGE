@@ -155,8 +155,8 @@ public:
 		// COMPLEXE OBJ LOAD TEST
 		///
 		///
-   	_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
+//   	_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/head/head.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:galileo", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
@@ -185,7 +185,7 @@ public:
 		{
 			auto heros = createHeros(glm::vec3(3, -10, 2));
 			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(100, 100, 100));
-			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 2.0f, glm::vec3(0, 1, 1));
+//			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 2.0f, glm::vec3(0, 1, 1));
 			auto rigidBody = heros->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "model:sponza");
@@ -195,8 +195,8 @@ public:
 
 
 		{
-			auto heros = createHeros(glm::vec3(100, 100, 1));
-			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(1));
+			auto heros = createHeros(glm::vec3(10, 100, 1));
+			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(2,1,1));
 			heros->addComponent<Component::FPController>();
 			heros->addComponent<Component::FirstPersonView>();
 			auto cameraComponent = heros->addComponent<Component::CameraComponent>();
