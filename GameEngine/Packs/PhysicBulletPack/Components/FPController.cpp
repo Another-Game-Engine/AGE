@@ -42,19 +42,21 @@ FPController::FPController(AScene *scene, Handle &entity) : ComponentBase<FPCont
 
 	_ghost = new btPairCachingGhostObject();
 	_shape = new btCapsuleShape(scale.x, scale.y);
+//	_shape = new btSphereShape(scale.y);
 
 	_ghost->setCollisionShape(_shape);
 	_ghost->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 //	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
 	_ghost->setWorldTransform(transform);
-	_controller = new btKinematicCharacterController(_ghost, _shape, 1);
+	_ghost->setRestitution(0);
+	_ghost->setActivationState(DISABLE_DEACTIVATION);
 	_ghost->setUserPointer(&(_entity));
+	_controller = new btKinematicCharacterController(_ghost, _shape, 1);
 	auto bulletManager = dynamic_cast<BulletDynamicManager*>(&(_scene->getEngine().getInstance<BulletCollisionManager>()));
 	assert(bulletManager != nullptr);
-	bulletManager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::KinematicFilter);
+	bulletManager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::KinematicFilter);
 	bulletManager->getWorld()->addAction(_controller);
-	bulletManager->getWorld()->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
-
+	bulletManager->getWorld()->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 }
 
 FPController::~FPController()

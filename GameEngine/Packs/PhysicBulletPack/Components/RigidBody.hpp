@@ -172,23 +172,29 @@ namespace Component
 			else if (c == CONCAVE_STATIC_MESH)
 			{
 				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
-				auto group = new btCompoundShape();
+				std::vector<btCollisionShape*> col;
 				auto &geos = mesh->getGeometry();
-				auto trimesh = new btTriangleMesh();
-				for (unsigned int j = 0; j < geos.size(); ++j)
+				for (auto &e : geos)
 				{
-					const Resources::Geometry &geo = geos[j];
-					for (unsigned int i = 0; i < geo.vertices.size(); i += 3)
+					const Resources::Geometry &geo = e;
+					auto trimesh = new btTriangleMesh();
+					for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
 					{
-						trimesh->addTriangle(btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z)
-							, btVector3(geo.vertices[i + 1].x, geo.vertices[i + 1].y, geo.vertices[i + 1].z)
-							, btVector3(geo.vertices[i + 2].x, geo.vertices[i + 2].y, geo.vertices[i + 2].z));
+						trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
+							, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
+							, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
 					}
-					btTransform localTrans;
-					localTrans.setIdentity();
-					group->addChildShape(localTrans,new btBvhTriangleMeshShape(trimesh,false));
+					btCollisionShape *s = new btBvhTriangleMeshShape(trimesh, true);
+					col.push_back(s);
+					s->setLocalScaling(convertGLMVectorToBullet(scale));
+					_rigidBody = new btRigidBody(_mass, _motionState, s, _inertia);
+					_rigidBody->setUserPointer(&_entity);
+					_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
+					_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
+					_rigidBody->setActivationState(DISABLE_SIMULATION);
+					_manager->getWorld()->addCollisionObject(_rigidBody, btBroadphaseProxy::StaticFilter);
 				}
-				_collisionShape = group;
+				return;
 			}
 
 			//{
