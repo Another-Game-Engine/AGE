@@ -156,8 +156,8 @@ public:
 		///
 		///
 //   	_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/dabrovic-sponza/sponza.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/head/head.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:galileo", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
 		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
@@ -181,9 +181,9 @@ public:
 		//
 
 		// HEROS
-
+		Handle heros;
 		{
-			auto heros = createHeros(glm::vec3(3, -10, 2));
+			heros = createHeros(glm::vec3(3, -10, 2));
 			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(100, 100, 100));
 //			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 2.0f, glm::vec3(0, 1, 1));
 			auto rigidBody = heros->addComponent<Component::RigidBody>();
@@ -193,46 +193,34 @@ public:
 			mesh->setShader("MaterialBasic");
 		}
 
-		{
-			auto heros = createHeros(glm::vec3(2, 40, 5));
-			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(5));
-//			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 2.0f, glm::vec3(0, 1, 1));
-			auto rigidBody = heros->addComponent<Component::RigidBody>();
-			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "model:sponza");
-			auto mesh = heros->addComponent<Component::MeshRenderer>("model:sponza");
-			mesh->setShader("MaterialBasic");
-		}
+//		{
+//			auto heros = createHeros(glm::vec3(2, 40, 5));
+//			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(5));
+////			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 2.0f, glm::vec3(0, 1, 1));
+//			auto rigidBody = heros->addComponent<Component::RigidBody>();
+//			rigidBody->setMass(0.0f);
+//			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "model:sponza");
+//			auto mesh = heros->addComponent<Component::MeshRenderer>("model:sponza");
+//			mesh->setShader("MaterialBasic");
+//		}
 
 		for (auto i = 0; i < 100; ++i)
 		{
 		}
 
-		{
-			auto heros = createHeros(glm::vec3(10, 100, 1));
-			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(2,1,1));
-			heros->addComponent<Component::FPController>();
-			heros->addComponent<Component::FirstPersonView>();
-			auto cameraComponent = heros->addComponent<Component::CameraComponent>();
-			cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
-		}
+		//{
+		//	auto heros = createHeros(glm::vec3(10, 100, 1));
+		//	heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(2,1,1));
+		//	heros->addComponent<Component::FPController>();
+		//	heros->addComponent<Component::FirstPersonView>();
+		//	auto cameraComponent = heros->addComponent<Component::CameraComponent>();
+		//	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
+		//}
 
-
-		{
-//			auto heros = createHeros(glm::vec3(0, 100, 0));
-//			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(10));
-////			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 90.0f, glm::vec3(0, 1, 1));
-//			auto rigidBody = heros->addComponent<Component::RigidBody>();
-//			rigidBody->setMass(1.0f);
-//			rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-//			auto mesh = heros->addComponent<Component::MeshRenderer>("model:ball");
-//			//heros->addComponent<Component::FPController>();
-//			mesh->setShader("MaterialBasic");
-//			auto camera = createEntity();
-//			camera->addComponent<Component::GraphNode>();
-//			auto cameraComponent = camera->addComponent<Component::CameraComponent>();
-//			auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 3.0f, 1.0f);
-		}
+			auto camera = createEntity();
+			camera->addComponent<Component::GraphNode>();
+			auto cameraComponent = camera->addComponent<Component::CameraComponent>();
+			auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 3.0f, 1.0f);
 
 
 
@@ -269,6 +257,26 @@ public:
 		if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 			_engine.getInstance<Input>().getInput(SDL_QUIT))
 			return (false);
+		static auto lol = 0.0f;
+		if (_engine.getInstance<Input>().getInput(SDLK_r) && lol <= 0.0f)
+		{
+			lol = 2.0f;
+			for (auto i = 0; i < 10; ++i)
+			{
+				auto heros = createHeros(glm::vec3(rand() % 20, 50 + rand() % 100, rand() % 20));
+				heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3((float)(rand() % 10) / 0.8));
+				//			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 90.0f, glm::vec3(0, 1, 1));
+				auto rigidBody = heros->addComponent<Component::RigidBody>();
+				rigidBody->setMass(1.0f);
+				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
+				auto mesh = heros->addComponent<Component::MeshRenderer>("model:ball");
+				//heros->addComponent<Component::FPController>();
+				mesh->setShader("MaterialBasic");
+			}
+		}
+			if (lol > 0.0f)
+				lol -= time;
+
 		return (true);
 	}
 };
