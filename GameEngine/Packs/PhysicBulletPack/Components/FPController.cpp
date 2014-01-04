@@ -41,12 +41,13 @@ FPController::FPController(AScene *scene, Handle &entity) : ComponentBase<FPCont
 	transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
 	_ghost = new btPairCachingGhostObject();
-	_shape = new btCapsuleShape(scale.x, scale.y);
-//	_shape = new btSphereShape(scale.y);
+//	_shape = new btCapsuleShape(scale.x, scale.y);
+//	_shape = new btBoxShape(convertGLMVectorToBullet(scale));
+	_shape = new btCylinderShape(convertGLMVectorToBullet(scale));
 
 	_ghost->setCollisionShape(_shape);
-	_ghost->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-//	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+//	_ghost->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
 	_ghost->setWorldTransform(transform);
 	_ghost->setRestitution(0);
 	_ghost->setActivationState(DISABLE_DEACTIVATION);
