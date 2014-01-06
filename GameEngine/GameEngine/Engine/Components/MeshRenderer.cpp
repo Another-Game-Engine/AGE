@@ -68,12 +68,17 @@ namespace Component
 	{
 		for (auto &e : _materials)
 		{
-			if (e.getName() == name)
+			if (e.name == name)
 				return &e;
 		}
 		return nullptr;
 	}
 
-	Material *getMaterial(unsigned int index);
+	Material *MeshRenderer::getMaterial(unsigned int index)
+	{
+		if (index < _materials.size())
+			return &_materials[index];
+		return nullptr;
+	}
 
 }

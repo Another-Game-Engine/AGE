@@ -1,5 +1,5 @@
-#ifndef  __MATERIAL_HH__
-# define __MATERIAL_HH__
+#ifndef  MATERIALHH
+# define MATERIALHH
 
 #include <set>
 
@@ -19,39 +19,39 @@ class MaterialManager;
 
 class Material
 {
-private:
-	std::string _name;
-	glm::vec3 _ambient;
-	glm::vec3 _diffuse;
-	glm::vec3 _specular;
-	glm::vec3 _transmittance;
-	glm::vec3 _emission;
-	float _shininess;
-	SmartPointer<Resources::Texture> _ambientTex;
-	SmartPointer<Resources::Texture> _diffuseTex;
-	SmartPointer<Resources::Texture> _specularTex;
-	SmartPointer<Resources::Texture> _normalTex;
-	std::map<std::string, glm::vec2> _paramVec2;
-	std::map<std::string, glm::vec3> _paramVec3;
-	std::map<std::string, glm::vec4> _paramVec4;
-	std::map<std::string, glm::mat2> _paramMat2;
-	std::map<std::string, glm::mat3> _paramMat3;
-	std::map<std::string, glm::mat4> _paramMat4;
-	std::map<std::string, int> _paramInt;
-	std::map<std::string, float> _paramFloat;
-public:
+private:public:
+	std::string name;
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+	glm::vec3 transmittance;
+	glm::vec3 emission;
+	float shininess;
+	SmartPointer<Resources::Texture> ambientTex;
+	SmartPointer<Resources::Texture> diffuseTex;
+	SmartPointer<Resources::Texture> specularTex;
+	SmartPointer<Resources::Texture> normalTex;
+	std::map<std::string, glm::vec2> paramVec2;
+	std::map<std::string, glm::vec3> paramVec3;
+	std::map<std::string, glm::vec4> paramVec4;
+	std::map<std::string, glm::mat2> paramMat2;
+	std::map<std::string, glm::mat3> paramMat3;
+	std::map<std::string, glm::mat4> paramMat4;
+	std::map<std::string, int> paramInt;
+	std::map<std::string, float> paramFloat;
+
 	Material(const std::string &name) :
-		_name(name),
-		_ambient(0),
-		_diffuse(0),
-		_specular(0),
-		_transmittance(0),
-		_emission(0),
-		_shininess(0),
-		_ambientTex(nullptr),
-		_diffuseTex(nullptr),
-		_specularTex(nullptr),
-		_normalTex(nullptr)
+		name(name),
+		ambient(0),
+		diffuse(0),
+		specular(0),
+		transmittance(0),
+		emission(0),
+		shininess(0),
+		ambientTex(nullptr),
+		diffuseTex(nullptr),
+		specularTex(nullptr),
+		normalTex(nullptr)
 	{}
 
 	virtual ~Material()
@@ -59,12 +59,12 @@ public:
 
 	void loadMtl(tinyobj::material_t &m, const File &file, Engine *engine)
 	{
-		_ambient = glm::vec3(m.ambient[0], m.ambient[1], m.ambient[2]);
-		_diffuse = glm::vec3(m.diffuse[0], m.diffuse[1], m.diffuse[2]);
-		_specular = glm::vec3(m.specular[0], m.specular[1], m.specular[2]);
-		_transmittance = glm::vec3(m.transmittance[0], m.transmittance[1], m.transmittance[2]);
-		_emission = glm::vec3(m.emission[0], m.emission[1], m.emission[2]);
-		_shininess = m.shininess;
+		ambient = glm::vec3(m.ambient[0], m.ambient[1], m.ambient[2]);
+		diffuse = glm::vec3(m.diffuse[0], m.diffuse[1], m.diffuse[2]);
+		specular = glm::vec3(m.specular[0], m.specular[1], m.specular[2]);
+		transmittance = glm::vec3(m.transmittance[0], m.transmittance[1], m.transmittance[2]);
+		emission = glm::vec3(m.emission[0], m.emission[1], m.emission[2]);
+		shininess = m.shininess;
 		if (m.ambient_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.ambient_texname;
@@ -73,7 +73,7 @@ public:
 				name,
 				new Resources::Texture(),
 				path);
-			_ambientTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
+			ambientTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
 		}
 		if (m.diffuse_texname.size() > 0)
 		{
@@ -83,7 +83,7 @@ public:
 				name,
 				new Resources::Texture(),
 				path);
-			_diffuseTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
+			diffuseTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
 		}
 		if (m.specular_texname.size() > 0)
 		{
@@ -93,7 +93,7 @@ public:
 				name,
 				new Resources::Texture(),
 				path);
-			_specularTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
+			specularTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
 		}
 		if (m.normal_texname.size() > 0)
 		{
@@ -103,76 +103,76 @@ public:
 				name,
 				new Resources::Texture(),
 				path);
-			_normalTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
+			normalTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
 		}
 	}
 	
 	void setUniforms(OpenGLTools::UniformBuffer *buffer)
 	{
-		buffer->setUniform("ambient", _ambient);
-		buffer->setUniform("diffuse", _diffuse);
-		buffer->setUniform("specular", _specular);
-		buffer->setUniform("transmittance", _transmittance);
-		buffer->setUniform("emission", _emission);
-		buffer->setUniform("shininess", _shininess);
-		if (_ambientTex != nullptr)
+		buffer->setUniform("ambient", ambient);
+		buffer->setUniform("diffuse", diffuse);
+		buffer->setUniform("specular", specular);
+		buffer->setUniform("transmittance", transmittance);
+		buffer->setUniform("emission", emission);
+		buffer->setUniform("shininess", shininess);
+		if (ambientTex != nullptr)
 		{
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, _ambientTex->getId());
+			glBindTexture(GL_TEXTURE_2D, ambientTex->getId());
 		}
-		if (_diffuseTex != nullptr)
+		if (diffuseTex != nullptr)
 		{
 			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, _diffuseTex->getId());
+			glBindTexture(GL_TEXTURE_2D, diffuseTex->getId());
 		}
-		if (_specularTex != nullptr)
+		if (specularTex != nullptr)
 		{
 			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, _specularTex->getId());
+			glBindTexture(GL_TEXTURE_2D, specularTex->getId());
 		}
-		if (_normalTex != nullptr)
+		if (normalTex != nullptr)
 		{
 			glActiveTexture(GL_TEXTURE3);
-			glBindTexture(GL_TEXTURE_2D, _normalTex->getId());
+			glBindTexture(GL_TEXTURE_2D, normalTex->getId());
 		}
 	}
 
 	Material &operator=(const Material &o)
 	{
-		_name = o._name;
-		_ambient = o._ambient;
-		_diffuse = o._diffuse;
-		_specular = o._specular;
-		_transmittance = o._transmittance;
-		_emission = o._emission;
-		_shininess = o._shininess;
-		_ambientTex = o._ambientTex;
-		_diffuseTex = o._diffuseTex;
-		_specularTex = o._specularTex;
-		_normalTex = o._normalTex;
+		name = o.name;
+		ambient = o.ambient;
+		diffuse = o.diffuse;
+		specular = o.specular;
+		transmittance = o.transmittance;
+		emission = o.emission;
+		shininess = o.shininess;
+		ambientTex = o.ambientTex;
+		diffuseTex = o.diffuseTex;
+		specularTex = o.specularTex;
+		normalTex = o.normalTex;
 		return *this;
 	}
 
 	Material(const Material &o)
 	{
-		_name = o._name;
-		_ambient = o._ambient;
-		_diffuse = o._diffuse;
-		_specular = o._specular;
-		_transmittance = o._transmittance;
-		_emission = o._emission;
-		_shininess = o._shininess;
-		_ambientTex = o._ambientTex;
-		_diffuseTex = o._diffuseTex;
-		_specularTex = o._specularTex;
-		_normalTex = o._normalTex;
+		name = o.name;
+		ambient = o.ambient;
+		diffuse = o.diffuse;
+		specular = o.specular;
+		transmittance = o.transmittance;
+		emission = o.emission;
+		shininess = o.shininess;
+		ambientTex = o.ambientTex;
+		diffuseTex = o.diffuseTex;
+		specularTex = o.specularTex;
+		normalTex = o.normalTex;
 	}
 
 	const std::string &getName() const
 	{
-		return _name;
+		return name;
 	}
 private:
 };
 
-#endif   //!__MATERIAL_HH__
+#endif   //!MATERIALHH
