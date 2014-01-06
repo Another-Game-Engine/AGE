@@ -111,6 +111,8 @@ public:
 		// get the component type ID
 		unsigned int id = T::getTypeId();
 
+		auto a = _code.isEmpty();
+
 		// if entity already have component, return it
 		if (hasComponent(id))
 		{

@@ -163,9 +163,11 @@ void Entity::reset()
 		{
 			_code.remove(i);
 			broadCast(std::string("componentRemoved" + std::to_string(i)), _handle);
-			_components[i].reset();
 		}
+		_components[i].reset();
 	}
+	auto a = _code.isEmpty();
 	_components.clear();
 	_code.reset();
+	auto b = _code.isEmpty();
 }
