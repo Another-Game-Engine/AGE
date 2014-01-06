@@ -28,8 +28,8 @@ int			main(int ac, char **av)
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
-	e.setInstance<Resources::ResourceManager>();
-	e.setInstance<Renderer>();
+	e.setInstance<Resources::ResourceManager>(&e);
+	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 	e.setInstance<BulletDynamicManager, BulletCollisionManager>().init();
 
