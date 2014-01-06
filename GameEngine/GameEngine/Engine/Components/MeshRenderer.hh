@@ -8,6 +8,7 @@
 #include "Utils/SmartPointer.hh"
 #include "ResourceManager/SharedMesh.hh"
 #include "OpenGL/Shader.hh"
+#include <core/Renderer.hh>
 
 namespace Resources
 {
@@ -22,12 +23,9 @@ namespace Component
 	class MeshRenderer : public Component::ComponentBase<MeshRenderer>
 	{
 	private:
-		typedef std::map<unsigned int, std::pair<std::string, SmartPointer<Resources::Texture> > > textureMap;
-		typedef textureMap::iterator textureMapIt;
-
 		SmartPointer<Resources::SharedMesh>	_mesh;
-
-		textureMap                          _textures;
+		std::string _shader;
+		std::vector<Material> _materials;
 
 		MeshRenderer();
 		MeshRenderer(MeshRenderer const &);
@@ -37,16 +35,12 @@ namespace Component
 		virtual ~MeshRenderer(void);
 		void init(std::string const &resource);
 		virtual void reset();
-
-		void addTexture(const std::string &textureName, unsigned int priority = 0);
-		void removeTexture(unsigned int priority);
-		void bindTextures(OpenGLTools::Shader *shader) const;
-		void unbindTextures() const;
-
-		void			setNext(MeshRenderer *next);
-		MeshRenderer	*getNext() const;
-
+		void setShader(const std::string &shader) { _shader = shader; }
+		void render();
 		SmartPointer<Resources::SharedMesh>	const &getMesh() const;
+		std::vector<Material> &getMaterials();
+		Material *getMaterial(const std::string &name);
+		Material *getMaterial(unsigned int index);
 	};
 
 }

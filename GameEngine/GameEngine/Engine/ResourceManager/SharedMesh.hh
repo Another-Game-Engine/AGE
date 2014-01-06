@@ -3,8 +3,10 @@
 
 #include "AResource.hh"
 #include "OpenGL/VertexBuffer.hh"
-
+#include <Utils/SmartPointer.hh>
 #include "glm/glm.hpp"
+
+class Material;
 
 namespace	Resources
 {
@@ -23,7 +25,7 @@ class SharedMesh : public AResource
 private:
 	std::vector<Geometry>		_geometry;
 	std::vector<OpenGLTools::VertexBuffer>	_buffer;
-
+	std::vector<SmartPointer<Material> > _defaultMaterialsList;
 public:
 	SharedMesh(void);
 	virtual ~SharedMesh(void);
@@ -33,8 +35,8 @@ public:
 	void			draw() const;
 
 	std::vector<OpenGLTools::VertexBuffer>	&getBuffer();
-	const std::vector<Geometry>      &getGeometry() const;
-
+	std::vector<Geometry>      &getGeometry();
+	inline std::vector<SmartPointer<Material> > &getDefaultMaterialsList() { return _defaultMaterialsList; }
 };
 
 }

@@ -11,6 +11,7 @@
 #include <ResourceManager/SharedMesh.hh>
 #include <Managers/BulletDynamicManager.hpp>
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
+#include <hacdHACD.h>
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 
@@ -26,6 +27,7 @@ namespace Component
 			SPHERE,
 			BOX,
 			MESH,
+			CONCAVE_STATIC_MESH,
 			UNDEFINED
 		} CollisionShape;
 
@@ -126,35 +128,69 @@ namespace Component
 			}
 			else if (c == SPHERE)
 			{
-				_collisionShape = new btSphereShape(1);//new btSphereShape(scale.x);
+				_collisionShape = new btSphereShape(0.5);//new btSphereShape(scale.x);
 			}
 			else if (c == MESH)
 			{
+				// THERE IS SOME LEAKS BECAUSE THAT'S TEMPORARY
 				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
-				const Resources::Geometry &geo = mesh->getGeometry()[0]; // DIRTY HACK TEMPORARY
-				// NEED TO REPLACE MESH BY MESH GROUP !
-				btScalar *t = new btScalar[geo.vertices.size() * 3]();
-				for (unsigned int i = 0; i < geo.vertices.size(); ++i)
+				auto group = new btCompoundShape();
+
+				auto &geos = mesh->getGeometry();
+
+				for (unsigned int i = 0; i < geos.size(); ++i)
 				{
-					t[i * 3] = geo.vertices[i].x;
-					t[i * 3 + 1] = geo.vertices[i].y;
-					t[i * 3 + 2] = geo.vertices[i].z;
+					const Resources::Geometry &geo = geos[i]; // DIRTY HACK TEMPORARY
+					// NEED TO REPLACE MESH BY MESH GROUP !
+					btScalar *t = new btScalar[geo.vertices.size() * 3]();
+					for (unsigned int i = 0; i < geo.vertices.size(); ++i)
+					{
+						t[i * 3] = geo.vertices[i].x;
+						t[i * 3 + 1] = geo.vertices[i].y;
+						t[i * 3 + 2] = geo.vertices[i].z;
+					}
+					btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
+					btShapeHull *hull = new btShapeHull(tmp);
+					btScalar margin = tmp->getMargin();
+					hull->buildHull(margin);
+					tmp->setUserPointer(hull);
+					btConvexHullShape *s = new btConvexHullShape();
+					for (int i = 0; i < hull->numVertices(); ++i)
+					{
+						s->addPoint(hull->getVertexPointer()[i], false);
+					}
+					s->recalcLocalAabb();
+					btTransform localTrans;
+					localTrans.setIdentity();
+					_collisionShape = s;
+					group->addChildShape(localTrans,s);
+					delete t;
+					delete hull;
+					delete tmp;
 				}
-				btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
-				btShapeHull *hull = new btShapeHull(tmp);
-				btScalar margin = tmp->getMargin();
-				hull->buildHull(margin);
-				tmp->setUserPointer(hull);
-				btConvexHullShape *s = new btConvexHullShape();
-				for (int i = 0; i < hull->numVertices(); ++i)
+				_collisionShape = group;
+			}
+			else if (c == CONCAVE_STATIC_MESH) // dont work
+			{
+				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+				auto trimesh = new btTriangleMesh();
+				auto &geos = mesh->getGeometry();
+
+				for (unsigned int j = 0; j < geos.size(); ++j)
 				{
-					s->addPoint(hull->getVertexPointer()[i], false);
+					const Resources::Geometry &geo = geos[j];
+					for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
+					{
+						trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
+							, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
+							, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
+					}
 				}
-				s->recalcLocalAabb();
-				_collisionShape = s;
-				delete t;
-				delete hull;
-				delete tmp;
+
+				auto bvh = new btBvhTriangleMeshShape(trimesh, true);
+				bvh->buildOptimizedBvh();
+				bool isit = bvh->isConcave();
+				_collisionShape = bvh;
 			}
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
@@ -163,6 +199,10 @@ namespace Component
 			_rigidBody->setUserPointer(&_entity);
 			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
 			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
+			if (_rigidBody->isStaticObject())
+			{
+				_rigidBody->setActivationState(DISABLE_SIMULATION);
+			}
 			_manager->getWorld()->addRigidBody(_rigidBody);
 		}
 

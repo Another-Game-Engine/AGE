@@ -1,8 +1,8 @@
 // for leak detection
-#define _CRTDBG_MAP_ALLOC
-#define GLM_FORCE_INLINE 
-#define GLM_FORCE_SSE2 
-#define GLM_FORCE_AVX
+//#define _CRTDBG_MAP_ALLOC
+//#define GLM_FORCE_INLINE 
+//#define GLM_FORCE_SSE2 
+//#define GLM_FORCE_AVX
 
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -29,10 +29,11 @@ int			main(int ac, char **av)
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
-	e.setInstance<Resources::ResourceManager>();
-	e.setInstance<Renderer>();
+	e.setInstance<Resources::ResourceManager>(&e);
+	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
-	e.setInstance<BulletCollisionManager>().init();
+//	e.setInstance<BulletCollisionManager>().init();
+	e.setInstance<BulletDynamicManager, BulletCollisionManager>().init();
 
 	// init engine
 	if (e.init() == false)
@@ -40,15 +41,11 @@ int			main(int ac, char **av)
 
 	// add scene
 	e.getInstance<SceneManager>().addScene(new InGameScene(e), "InGameScene");
-	//e.getInstance<SceneManager>().addScene(new SecondScene(e), "SecondScene");
 
 	// bind scene
 	if (!e.getInstance<SceneManager>().initScene("InGameScene"))
 		return false;
-	//if (!e.getInstance<SceneManager>().initScene("SecondScene"))
-	//	return false;
 	e.getInstance<SceneManager>().enableScene("InGameScene", 100);
-	//e.getInstance<SceneManager>().enableScene("SecondScene", 10);
 
 	// launch engine
 	if (e.start() == false)
