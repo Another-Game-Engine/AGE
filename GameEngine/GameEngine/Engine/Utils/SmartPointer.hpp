@@ -173,6 +173,17 @@ INLINE T 			*SmartPointer<T>::get() const
 	return _reference->pointer;
 }
 
+template<class T>
+INLINE void 		SmartPointer<T>::reset(T* newValue)
+{
+	if (_reference)
+	{
+		if (_reference->pointer)
+			delete _reference->pointer;
+		_reference->pointer = newValue;
+	}
+}
+
 namespace std
 {
 	template <typename T>

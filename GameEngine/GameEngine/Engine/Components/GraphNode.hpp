@@ -19,6 +19,7 @@ namespace Component
 
 		virtual ~GraphNode()
 		{
+			reset();
 		}
 
 		void init()

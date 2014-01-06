@@ -10,7 +10,9 @@ Base::Base(AScene *scene, Handle &entity, const std::string &name)
 {
 }
 
-Base::~Base(){}
+Base::~Base()
+{
+}
 
 Base &Base::operator=(const Base &other)
 {
