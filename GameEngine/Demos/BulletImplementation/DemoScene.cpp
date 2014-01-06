@@ -48,8 +48,9 @@ Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 	auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
-	auto mat = e->addComponent<Component::MaterialComponent>(material);
-	mesh->addTexture(tex, 0);
+	//auto mat = e->addComponent<Component::MaterialComponent>(material);
+	//mesh->addTexture(tex, 0);
+mesh->
 	e->addComponent<Component::GraphNode>();
 	auto asd = e.get();
 	return e;

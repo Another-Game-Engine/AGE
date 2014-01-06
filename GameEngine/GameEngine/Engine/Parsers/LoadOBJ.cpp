@@ -68,7 +68,7 @@ void    loadObjMaterials(tinyobj::shape_t &shape, Resources::SharedMesh &mesh, c
 	if (m[index] != nullptr)
 		return;
 	auto material = manager.createMaterial(name);
-	material->loadMtl(shape.material, objPath);
+	material->loadMtl(shape.material, objPath, mesh.getEngine());
 	m[index] = material;
 }
 
