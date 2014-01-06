@@ -41,8 +41,8 @@ Handle &AScene::createEntity()
 
 void AScene::destroy(const Handle &h)
 {
-	_free.push(h.getId());
 	h.get()->reset();
+	_free.push(h.getId());
 }
 
 Entity *AScene::get(const Handle &h)
