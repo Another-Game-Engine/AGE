@@ -21,7 +21,6 @@ class Material
 {
 private:
 	std::string _name;
-	Engine &_engine;
 	glm::vec3 _ambient;
 	glm::vec3 _diffuse;
 	glm::vec3 _specular;
@@ -41,9 +40,8 @@ private:
 	std::map<std::string, int> _paramInt;
 	std::map<std::string, float> _paramFloat;
 public:
-	Material(Engine &engine, const std::string &name) :
+	Material(const std::string &name) :
 		_name(name),
-		_engine(engine),
 		_ambient(0),
 		_diffuse(0),
 		_specular(0),
@@ -59,7 +57,7 @@ public:
 	virtual ~Material()
 	{}
 
-	void loadMtl(tinyobj::material_t &m, const File &file)
+	void loadMtl(tinyobj::material_t &m, const File &file, Engine *engine)
 	{
 		_ambient = glm::vec3(m.ambient[0], m.ambient[1], m.ambient[2]);
 		_diffuse = glm::vec3(m.diffuse[0], m.diffuse[1], m.diffuse[2]);
@@ -71,41 +69,41 @@ public:
 		{
 			auto path = file.getFolder() + m.ambient_texname;
 			auto name = "texture:" + File(m.ambient_texname).getFileName();
-			_engine.getInstance<Resources::ResourceManager>().addResource(
+			engine->getInstance<Resources::ResourceManager>().addResource(
 				name,
 				new Resources::Texture(),
 				path);
-			_ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource(name);
+			_ambientTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
 		}
 		if (m.diffuse_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.diffuse_texname;
 			auto name = "texture:" + File(m.diffuse_texname).getFileName();
-			_engine.getInstance<Resources::ResourceManager>().addResource(
+			engine->getInstance<Resources::ResourceManager>().addResource(
 				name,
 				new Resources::Texture(),
 				path);
-			_diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(name);
+			_diffuseTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
 		}
 		if (m.specular_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.specular_texname;
 			auto name = "texture:" + File(m.specular_texname).getFileName();
-			_engine.getInstance<Resources::ResourceManager>().addResource(
+			engine->getInstance<Resources::ResourceManager>().addResource(
 				name,
 				new Resources::Texture(),
 				path);
-			_specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(name);
+			_specularTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
 		}
 		if (m.normal_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.normal_texname;
 			auto name = "texture:" + File(m.normal_texname).getFileName();
-			_engine.getInstance<Resources::ResourceManager>().addResource(
+			engine->getInstance<Resources::ResourceManager>().addResource(
 				name,
 				new Resources::Texture(),
 				path);
-			_normalTex = _engine.getInstance<Resources::ResourceManager>().getResource(name);
+			_normalTex = engine->getInstance<Resources::ResourceManager>().getResource(name);
 		}
 	}
 	
@@ -139,9 +137,42 @@ public:
 		}
 	}
 
+	Material &operator=(const Material &o)
+	{
+		_name = o._name;
+		_ambient = o._ambient;
+		_diffuse = o._diffuse;
+		_specular = o._specular;
+		_transmittance = o._transmittance;
+		_emission = o._emission;
+		_shininess = o._shininess;
+		_ambientTex = o._ambientTex;
+		_diffuseTex = o._diffuseTex;
+		_specularTex = o._specularTex;
+		_normalTex = o._normalTex;
+		return *this;
+	}
+
+	Material(const Material &o)
+	{
+		_name = o._name;
+		_ambient = o._ambient;
+		_diffuse = o._diffuse;
+		_specular = o._specular;
+		_transmittance = o._transmittance;
+		_emission = o._emission;
+		_shininess = o._shininess;
+		_ambientTex = o._ambientTex;
+		_diffuseTex = o._diffuseTex;
+		_specularTex = o._specularTex;
+		_normalTex = o._normalTex;
+	}
+
+	const std::string &getName() const
+	{
+		return _name;
+	}
 private:
-	Material(const Material &o);
-	Material &operator=(const Material &o);
 };
 
 #endif   //!__MATERIAL_HH__

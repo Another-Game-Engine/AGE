@@ -25,6 +25,7 @@ namespace Component
 	private:
 		SmartPointer<Resources::SharedMesh>	_mesh;
 		std::string _shader;
+		std::vector<Material> _materials;
 
 		MeshRenderer();
 		MeshRenderer(MeshRenderer const &);
@@ -37,6 +38,9 @@ namespace Component
 		void setShader(const std::string &shader) { _shader = shader; }
 		void render();
 		SmartPointer<Resources::SharedMesh>	const &getMesh() const;
+		std::vector<Material> &getMaterials();
+		Material *getMaterial(const std::string &name);
+		Material *getMaterial(unsigned int index);
 	};
 
 }
