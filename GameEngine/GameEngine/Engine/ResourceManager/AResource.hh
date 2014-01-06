@@ -3,6 +3,8 @@
 
 #include <string>
 
+class Engine;
+
 namespace	Resources
 {
 
@@ -18,7 +20,8 @@ public:
 private:
 	bool			_isLoaded;
 	ResourceType	_type;
-
+protected:
+	Engine          *_engine;
 public:
 	AResource(void);
 	virtual ~AResource(void);
@@ -27,7 +30,8 @@ public:
 
 	bool			isLoaded() const;
 	void			setLoaded(bool loaded);
-
+	inline void     setEngine(Engine &engine){ _engine = &engine; }
+	inline Engine   *getEngine() { return _engine; }
 	ResourceType	getType() const;
 };
 

@@ -39,12 +39,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)/Vendors;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)/Vendors;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
   </PropertyGroup>
