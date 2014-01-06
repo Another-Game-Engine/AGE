@@ -16,6 +16,7 @@ namespace Component
 
 	MeshRenderer::~MeshRenderer(void)
 	{
+		reset();
 	}
 
 	void MeshRenderer::init(std::string const &resource)

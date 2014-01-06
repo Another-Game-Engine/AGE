@@ -126,11 +126,11 @@ public:
 		// COMPLEXE OBJ LOAD TEST
 		///
 		///
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/crytek-sponza/sponza.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/crytek-sponza/sponza.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/head/head.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:galileo", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/head/head.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
 		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
 
 		///
@@ -184,22 +184,33 @@ public:
 
 	virtual bool 			userUpdate(double time)
 	{
+		static std::vector<Handle> balls;
+
 		if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 			_engine.getInstance<Input>().getInput(SDL_QUIT))
 			return (false);
 		static auto timer = 0.0f;
+
+		if (_engine.getInstance<Input>().getInput(SDLK_d))
+		{
+			for (auto &e : balls)
+				destroy(e);
+			balls.clear();
+		}
+
 		if (_engine.getInstance<Input>().getInput(SDLK_r) && timer <= 0.0f)
 		{
 			timer = 2.0f;
 			for (auto i = 0; i < 10; ++i)
 			{
-				auto heros = createHeros(glm::vec3(rand() % 20, 50 + rand() % 100, rand() % 20));
-				heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3((float)(rand() % 10) / 0.8));
-				auto rigidBody = heros->addComponent<Component::RigidBody>();
+				auto e = createHeros(glm::vec3(rand() % 20, 50 + rand() % 100, rand() % 20));
+				e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3((float)(rand() % 10) / 0.8));
+				auto rigidBody = e->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-				auto mesh = heros->addComponent<Component::MeshRenderer>("model:ball");
+				auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
 				mesh->setShader("MaterialBasic");
+				balls.push_back(e);
 			}
 		}
 		if (timer > 0.0f)

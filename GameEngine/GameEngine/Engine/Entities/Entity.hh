@@ -88,6 +88,7 @@ public:
 	void 					removeFlags(size_t flags);
 
 	Barcode &getCode();
+	void reset();
 
 	////////////////////////////
 	//
@@ -150,11 +151,10 @@ public:
 			return;
 		_code.remove(id);
 //		_components[id]	= nullptr;
-		_components[id]->reset();
+		_components[id].get()->reset();
 		broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
 		// component remove -> signal to system
 	}
-
 };
 
 #endif

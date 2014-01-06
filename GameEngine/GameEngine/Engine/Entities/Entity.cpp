@@ -144,3 +144,28 @@ bool Entity::hasComponent(unsigned int componentId) const
 {
 		return _code.isSet(componentId);
 }
+
+void Entity::reset()
+{
+	_flags = 0;
+	_localTranslation = glm::vec3(0);
+	_localRotation = glm::vec3(0);
+	_localScale = glm::vec3(0);
+	_globalTranslation = glm::vec3(0);
+	_globalRotation = glm::vec3(0);
+	_globalScale = glm::vec3(0);
+	_globalTransform = glm::mat4(1);
+	_localTransform = glm::mat4(1);
+
+	for (unsigned int i = 0; i < _components.size(); ++i)
+	{
+		if (_code.isSet(i))
+		{
+			_code.remove(i);
+			broadCast(std::string("componentRemoved" + std::to_string(i)), _handle);
+			_components[i].reset();
+		}
+	}
+	_components.clear();
+	_code.reset();
+}

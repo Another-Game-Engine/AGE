@@ -228,6 +228,7 @@ namespace Component
 
 		virtual ~RigidBody(void)
 		{
+			reset();
 			if (_rigidBody)
 			{
 				_manager->getWorld()->removeRigidBody(_rigidBody);
