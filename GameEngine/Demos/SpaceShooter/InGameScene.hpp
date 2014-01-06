@@ -188,7 +188,7 @@ public:
 //			heros->setLocalTransform() = glm::rotate(heros->getLocalTransform(), 2.0f, glm::vec3(0, 1, 1));
 			auto rigidBody = heros->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "model:sponza");
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:sponza");
 			auto mesh = heros->addComponent<Component::MeshRenderer>("model:sponza");
 			mesh->setShader("MaterialBasic");
 		}

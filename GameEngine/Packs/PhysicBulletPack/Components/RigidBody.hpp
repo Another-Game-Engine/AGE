@@ -132,6 +132,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
+				// THERE IS SOME LEAKS BECAUSE THAT'S TEMPORARY
 				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
 				auto group = new btCompoundShape();
 
@@ -169,34 +170,7 @@ namespace Component
 				}
 				_collisionShape = group;
 			}
-			else if (c == CONCAVE_STATIC_MESH)
-			//{
-			//	SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
-			//	std::vector<btCollisionShape*> col;
-			//	auto &geos = mesh->getGeometry();
-			//	for (auto &e : geos)
-			//	{
-			//		const Resources::Geometry &geo = e;
-			//		auto trimesh = new btTriangleMesh();
-			//		for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
-			//		{
-			//			trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
-			//				, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
-			//				, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
-			//		}
-			//		btCollisionShape *s = new btBvhTriangleMeshShape(trimesh, true);
-			//		col.push_back(s);
-			//		s->setLocalScaling(convertGLMVectorToBullet(scale));
-			//		_rigidBody = new btRigidBody(_mass, _motionState, s, _inertia);
-			//		_rigidBody->setUserPointer(&_entity);
-			//		_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
-			//		_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
-			//		_rigidBody->setActivationState(DISABLE_SIMULATION);
-			//		_manager->getWorld()->addCollisionObject(_rigidBody, btBroadphaseProxy::StaticFilter);
-			//	}
-			//	return;
-			//}
-
+			else if (c == CONCAVE_STATIC_MESH) // dont work
 			{
 				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
 				auto trimesh = new btTriangleMesh();
@@ -216,12 +190,11 @@ namespace Component
 				auto bvh = new btBvhTriangleMeshShape(trimesh, true);
 				bvh->buildOptimizedBvh();
 				bool isit = bvh->isConcave();
-				_collisionShape = bvh;// new btScaledBvhTriangleMeshShape(bvh, convertGLMVectorToBullet(scale));
+				_collisionShape = bvh;
 			}
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
-//			if (c != CONCAVE_STATIC_MESH)
-				_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
+			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
 			_rigidBody->setUserPointer(&_entity);
 			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
