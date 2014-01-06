@@ -3,13 +3,13 @@
 
 #include <set>
 
-#include "Utils/SmartPointer.hh"
+#include <Utils/SmartPointer.hh>
 #include <ResourceManager/Texture.hh>
-#include <tiny_obj_loader.h>
 #include <Utils/File.hpp>
 #include <ResourceManager/ResourceManager.hh>
 #include <core/AScene.hh>
 #include <core/Engine.hh>
+#include <tiny_obj_loader.h>
 
 namespace Component
 {

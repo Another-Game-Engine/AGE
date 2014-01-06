@@ -46,20 +46,11 @@ Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>("model:ball");
 
-	SmartPointer<Material> materialPlanet = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:planet_" + shader);
-
-	materialPlanet->pushShader(shader);
-
-	e->addComponent<Component::MaterialComponent>(std::string("material:planet_" + shader));
-
-	//r->addMaterial(materialPlanet);
-	r->addTexture(tex1, 0);
-	if (!tex2.empty())
-		r->addTexture(tex2, 1);
-	if (!tex3.empty())
-		r->addTexture(tex3, 2);
-	if (!tex4.empty())
-		r->addTexture(tex4, 3);
+	r->setShader(shader);
+	r->getMaterials()[0].ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex1);
+	r->getMaterials()[0].diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex2);
+	r->getMaterials()[0].specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex3);
+	r->getMaterials()[0].normalTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex4);
 	
 	e->addComponent<Component::RotationForce>(glm::vec3(0, orbitSpeed, 0));
 	p->getComponent<Component::GraphNode>()->addSon(e);
@@ -83,41 +74,48 @@ bool 			DemoScene::userStart()
 	//
 	// end System Test
 
-	std::string		perModelVars[] = 
-	{
-		"model"
-	};
+		std::string		perModelVars[] =
+		{
+			"model"
+		};
 
-	std::string		perFrameVars[] = 
-	{
-		"projection",
-		"view",
-		"light",
-		"time"
-	};
+		std::string		perFrameVars[] =
+		{
+			"projection",
+			"view",
+			"light",
+			"time"
+		};
 
-	OpenGLTools::Shader &s = _engine.getInstance<Renderer>().addShader("earth",
-		"./Shaders/earth.vp",
-		"./Shaders/earth.fp");
-		//.bindActiveTexture("fDayTexture", 0)
-		//.bindActiveTexture("fNightTexture", 1)
-		//.bindActiveTexture("fClouds", 2)
-		//.bindActiveTexture("fBump", 3);
+		std::string		materialBasic[] =
+		{
+			"ambient",
+			"diffuse",
+			"specular",
+			"transmittance",
+			"emission",
+			"shininess"
+		};
 
-	_engine.getInstance<Renderer>().addUniform("PerFrame")
-		.init(&s, "PerFrame", perFrameVars);
-	_engine.getInstance<Renderer>().addUniform("PerModel")
-		.init(&s, "PerModel", perModelVars);
+	OpenGLTools::Shader &s = _engine.getInstance<Renderer>().addShader("MaterialBasic",
+		"./Shaders/MaterialBasic.vp",
+		"./Shaders/MaterialBasic.fp");
 
+		_engine.getInstance<Renderer>().addUniform("MaterialBasic")
+			.init(&s, "MaterialBasic", materialBasic);
+		_engine.getInstance<Renderer>().addUniform("PerFrame")
+			.init(&s, "PerFrame", perFrameVars);
+		_engine.getInstance<Renderer>().addUniform("PerModel")
+			.init(&s, "PerModel", perModelVars);
+
+		_engine.getInstance<Renderer>().addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
 	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
 	_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
 	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
-		//.bindActiveTexture("fTexture", 0)
-		//.bindActiveTexture("fBump", 1);
 	_engine.getInstance<Renderer>().addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
 	_engine.getInstance<Renderer>().addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
 	_engine.getInstance<Renderer>().addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
-
+	_engine.getInstance<Renderer>().getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
 	_engine.getInstance<Renderer>().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 	_engine.getInstance<Renderer>().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 	_engine.getInstance<Renderer>().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
@@ -133,14 +131,21 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "MaterialBasic", "MaterialBasic");
 	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "MaterialBasic", "MaterialBasic");
 	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "MaterialBasic", "MaterialBasic");
 	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
-	_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball.obj");
+	_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
 
 	SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
 
