@@ -72,11 +72,12 @@
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\OpenGL\Vertex.hh" />
     <ClInclude Include="Engine\OpenGL\VertexManager.hh" />
-    <ClInclude Include="Engine\OpenGL\Pool.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexManager.hpp" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\Vertex.hpp" />
     <ClInclude Include="Engine\OpenGL\PoolElement.hpp" />
+    <ClInclude Include="Engine\OpenGL\VertexPool.hh" />
+    <ClInclude Include="Engine\OpenGL\VertexPool.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
