@@ -6,7 +6,7 @@
 # include <vector>
 # include <utility>
 # include "Vertex.hh"
-# include "PoolElement.hh"
+# include "VertexPoolElement.hh"
 
 template <uint16_t NBR_ATTRIBUTE>
 class VertexPool
