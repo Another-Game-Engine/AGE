@@ -17,20 +17,6 @@ class VertexManager
 public:
 	class Vertex<NBR_ATTRIBUTE>;
 
-	struct PoolElement
-	{
-		uint32_t nbrEntity;
-		Vertex<NBR_ATTRIBUTE> vertex;
-		PoolElement(uint32_t nbrEntity, Vertex<NBR_ATTRIBUTE> vertex);
-		PoolElement(PoolElement const &copy);
-		~PoolElement();
-		PoolElement &operator=(PoolElement const &element);
-		bool operator==(PoolElement const &element);
-		bool operator!=(PoolElement const &element);
-		bool operator==(Vertex<NBR_ATTRIBUTE> const &element);
-		bool operator!=(Vertex<NBR_ATTRIBUTE> const &element);
-		Data const &operator[](size_t index) const;
-	};
 public:
 	VertexManager();
 	~VertexManager();
@@ -56,7 +42,6 @@ private:
 	inline void sendToGPUVertexAttribPointer();
 };
 
-# include "PoolElement.hpp"
 # include "VertexManager.hpp"
 
 #endif /*!VERTEXMANAGER_HH_*/
