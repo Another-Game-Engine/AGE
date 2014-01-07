@@ -5,7 +5,7 @@ Vertex<NBR_ATTRIBUTE>::Vertex(std::array<Data, NBR_ATTRIBUTE> attributes, Data c
 : _attributes(attributes),
 	_sizeIndices(0),
 	_vertexManager(NULL),
-	_indexPool(-1)
+	_indexPoolVertexManager(-1)
 {
 	for (uint32_t index = 0; index < NBR_ATTRIBUTE; ++index)
 		_sizeAttributes += _attribute[index].getSizeBuffer();
@@ -21,7 +21,7 @@ Vertex<NBR_ATTRIBUTE>::Vertex(Vertex<NBR_ATTRIBUTE> const &copy)
 : _attributes(copy._attributes),
 	_size(copy._size),
 	_vertexManager(copy._vertexManager),
-	_indexPool(copy._indexPool)
+	_indexPoolVertexManager(copy._indexPoolVertexManager)
 {
 	if (copy.indices)
 	{
@@ -43,14 +43,14 @@ Vertex<NBR_ATTRIBUTE> &Vertex<NBR_ATTRIBUTE>::operator=(Vertex<NBR_ATTRIBUTE> co
 	if (vertex._indices)
 		_indices = new Data(vertex.indices);
 	_vertexManager = vertex._vertexManager;
-	_indexPool = vertex._indexPool;
+	_indexPoolVertexManager = vertex._indexPool;
 	return (*this);
 }
 
 template <uint32_t NBR_ATTRIBUTE>
-std::array<Data, NBR_ATTRIBUTE> const &Vertex<NBR_ATTRIBUTE>::getAttributes() const
+Data const &Vertex<NBR_ATTRIBUTE>::operator[](size_t index) const
 {
-	return (_attributes);
+	return (_attributes[index]);
 }
 
 template <uint32_t NBR_ATTRIBUTE>
