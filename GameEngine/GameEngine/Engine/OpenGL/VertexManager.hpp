@@ -1,4 +1,4 @@
-//#ifdef VERTEXMANAGER_HH_
+#ifdef VERTEXMANAGER_HH_
 
 template <uint16_t NBR_ATTRIBUTE>
 VertexManager<NBR_ATTRIBUTE>::VertexManager()
@@ -144,4 +144,4 @@ void VertexManager<NBR_ATTRIBUTE>::sendToGPU(GLenum mode)
 	}
 }
 
-//#endif /*VERTEXMANAGER_HH_*/
+#endif /*VERTEXMANAGER_HH_*/
