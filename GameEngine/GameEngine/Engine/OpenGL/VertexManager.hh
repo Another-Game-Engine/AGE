@@ -9,6 +9,7 @@
 # include "Vertex.hh"
 # include "VertexArray.hh"
 # include "VertexBuffer.hh"
+# include "VertexPool.hh"
 
 template <uint16_t NBR_ATTRIBUTE>
 class VertexManager
@@ -16,37 +17,6 @@ class VertexManager
 public:
 	class Vertex<NBR_ATTRIBUTE>;
 
-	class Pool
-	{
-	private:
-		std::vector<PoolElement> _poolElements;
-		uint32_t _sizeIndices;
-		uint32_t _sizeData;
-		GLint _sizeAttibute[NBR_ATTRIBUTE];
-		GLenum _typeAttribute[NBR_ATTRIBUTE];
-		GLenum _normalizedAttribute[NBR_ATTRIBUTE];
-		GLsizei _strideAttribute[NBR_ATTRIBUTE];
-		GLuint _pointerAttribute[NBR_ATTRIBUTE];
-		bool _updatePool;
-		bool _startPool;
-	public:
-		Pool();
-		~Pool();
-		Pool(Pool const &copy);
-		Pool &operator=(Pool const &pool);
-		int32_t &operator+=(Vertex<NBR_ATTRIBUTE> const &vertex);
-		int32_t operator==(Vertex<NBR_ATTRIBUTE> const &vertex) const;
-		int32_t operator!=(Vertex<NBR_ATTRIBUTE> const &vertex) const;
-		void clear();
-		size_t size() const;
-		GLint sizeAttribute(GLint index) const;
-		GLenum typeAttribute(GLint index) const;
-		GLenum normalizedAttribute(GLint index) const;
-		GLsizei strideAttribute(GLint index) const;
-		GLvoid const *pointerAttribute(GLint index) const;
-	private:
-		bool checkDataVertex(Vertex<NBR_ATTRIBUTE> const &vertex) const;
-	};
 	struct PoolElement
 	{
 		uint32_t nbrEntity;
@@ -75,7 +45,7 @@ private:
 	OpenGLTools::VertexBuffer _indexBuffer;
 	OpenGLTools::VertexBuffer _dataBuffer;
 	bool _updatePool;
-	Pool _pool;
+	VertexPool<NBR_ATTRIBUTE> _pool;
 	std::unordered_map<std::string, Vertex<NBR_ATTRIBUTE> *> _drawable;
 	bool _isBindAttribtue[NBR_ATTRIBUTE];
 private:
@@ -86,7 +56,6 @@ private:
 	inline void sendToGPUVertexAttribPointer();
 };
 
-# include "Pool.hpp"
 # include "PoolElement.hpp"
 # include "VertexManager.hpp"
 
