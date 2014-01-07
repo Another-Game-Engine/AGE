@@ -152,6 +152,7 @@
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
     <ClInclude Include="Engine\OpenGL\Pool.hpp" />
+    <ClInclude Include="Engine\OpenGL\PoolElement.hpp" />
     <ClInclude Include="Engine\OpenGL\Vertex.hh" />
     <ClInclude Include="Engine\OpenGL\Vertex.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
