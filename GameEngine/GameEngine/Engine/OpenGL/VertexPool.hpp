@@ -80,9 +80,16 @@ bool VertexPool<NBR_ATTRIBUTE>::checkDataVertex(Vertex<NBR_ATTRIBUTE> const &ver
 }
 
 template <uint16_t NBR_ATTRIBUTE>
-void VertexPool<NBR_ATTRIBUTE>::setDataAttributeAtStart()
+void VertexPool<NBR_ATTRIBUTE>::setDataAttributeAtStart(Vertex<NBR_ATTRIBUTE> const &vertex)
 {
-
+	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
+	{
+		_sizeAttribute[index];
+		_typeAttribute[index];
+		_normalizedAttribute[index];
+		_strideAttribute[index];
+		_pointerAttribute[index];
+	}
 }
 
 template <uint16_t NBR_ATTRIBUTE>
@@ -94,7 +101,7 @@ int32_t &VertexPool<NBR_ATTRIBUTE>::operator+=(Vertex<NBR_ATTRIBUTE> const &vert
 			return (-1);
 	}
 	else
-		setDataAttributeAtStart();
+		setDataAttributeAtStart(vertex);
 	_poolElements.push_back(1, vertex);
 	_sizeIndices += vertex.getSizeIndices();
 	_sizeData += vertex.getSizeAttributes();
