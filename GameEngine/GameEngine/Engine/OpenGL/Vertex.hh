@@ -14,7 +14,7 @@ public:
 	~Vertex();
 	Vertex(Vertex const &copy);
 	Vertex &operator=(Vertex const &vertex);
-	std::array<Data, NBR_ATTRIBUTE> const &getAttributes() const;
+	Data const &operator[](size_t index) const;
 	Data const * const getIndices() const;
 	bool operator==(Vertex<NBR_ATTRIBUTE> const &vertex) const;
 	bool operator!=(Vertex<NBR_ATTRIBUTE> const &vertex) const;
@@ -29,7 +29,7 @@ private:
 	uint32_t _sizeAttributes;
 	uint32_t _sizeIndices;
 	VertexManager<NBR_ATTRIBUTE> *_vertexManager;
-	int32_t _indexPool;
+	int32_t _indexPoolVertexManager;
 };
 
 # include "Vertex.hpp"

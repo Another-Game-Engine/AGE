@@ -78,3 +78,10 @@ void Data::clearBuffer()
 		_buffer = NULL;
 	}
 }
+
+bool Data::consistency(Data const &data) const
+{
+	if (_nbrByte != data._nbrByte || _nbrComponent != data._nbrComponent)
+		return (false);
+	return (true);
+}

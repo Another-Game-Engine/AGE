@@ -77,10 +77,10 @@ namespace OpenGLTools
 		};
 		unsigned int indice[] = {0,1,2,3,4,5};
 		_vao.init();
-		_vao.setIndices(6, &indice[0]);
-		_vao.addAttribute(6, 2, sizeof(float), reinterpret_cast<byte *>(ss_quad_pos));
-		_vao.addAttribute(6, 2, sizeof(float), reinterpret_cast<byte *>(ss_quad_st));
-		_vao.transferGPU(GL_STREAM_DRAW);
+		//_vao.setIndices(6, &indice[0]);
+		//_vao.addAttribute(6, 2, sizeof(float), reinterpret_cast<byte *>(ss_quad_pos));
+		//_vao.addAttribute(6, 2, sizeof(float), reinterpret_cast<byte *>(ss_quad_st));
+		//_vao.transferGPU(GL_STREAM_DRAW);
 		return true;
 	}
 
@@ -190,7 +190,7 @@ namespace OpenGLTools
 //		glActiveTexture(GL_TEXTURE0);
 //		glBindTexture(GL_TEXTURE_2D, _layers[0]);
 		bind(shader);
-		_vao.draw(GL_TRIANGLES);
+		/*_vao.draw(GL_TRIANGLES);*/
 
 		glUseProgram(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -202,14 +202,14 @@ namespace OpenGLTools
 		for (unsigned int i = 0; i < _layerNumber; ++i)
 		{
 			glViewport(
-				(i % 3) * ((float)_width / 3),
-				_height - ((i / 3 + 1) * ((float)_height / 3)),
-				(float)_width / 3,
-				(float)_height / 3
+				(i % 3) * ((float)_width / 3.0),
+				_height - ((i / 3.0 + 1.0) * ((float)_height / 3.0)),
+				(float)_width / 3.0,
+				(float)_height / 3.0
 				);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, _layers[i]);
-			_vao.draw(GL_TRIANGLES);
+		/*	_vao.draw(GL_TRIANGLES);*/
 		   
 		}
 		glUseProgram(0);

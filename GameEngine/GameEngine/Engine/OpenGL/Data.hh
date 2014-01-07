@@ -22,6 +22,7 @@ public:
 	uint32_t getNbrElement() const;
 	uint32_t getNbrByte() const;
 	uint32_t getSizeBuffer() const;
+	bool consistency(Data const &data) const;
 	void const * const getBuffer() const;
 	bool operator==(Data const &data) const;
 	bool operator!=(Data const &data) const;

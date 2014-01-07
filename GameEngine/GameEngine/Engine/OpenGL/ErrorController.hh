@@ -11,7 +11,7 @@ namespace OpenGLTools
 	void ErrorController();
 
 	template <>
-	void ErrorController<VertexArray::Attribute>()
+	void ErrorController<int>()
 	{
 		GLenum error = glGetError();
 		if (error == GL_NO_ERROR)
