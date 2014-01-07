@@ -62,7 +62,7 @@ bool VertexPoolElement<NBR_ATTRIBUTE>::operator!=(Vertex<NBR_ATTRIBUTE> const &e
 }
 
 template <uint16_t NBR_ATTRIBUTE>
-Data<NBR_ATTRIBUTE> const & VertexPoolElement<NBR_ATTRIBUTE>::operator[](size_t index) const
+Data const & VertexPoolElement<NBR_ATTRIBUTE>::operator[](size_t index) const
 {
 	return (vertex[index]);
 }
