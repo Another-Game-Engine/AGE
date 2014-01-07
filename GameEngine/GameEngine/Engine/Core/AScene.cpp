@@ -14,6 +14,10 @@ AScene::AScene(Engine &engine) :
 AScene::~AScene()
 {
 	_systems.clear();
+	for (auto &e : _pool)
+		e.reset();
+	_pool.clear();
+
 }
 
 void 							AScene::update(double time)
@@ -34,8 +38,9 @@ Handle &AScene::createEntity()
 		_pool.back().setHandle(Handle(_pool.size() - 1, this));
 		_free.push(_pool.size() - 1);
 	}
-	unsigned int index = _free.back();
+	unsigned int index = _free.front();
 	_free.pop();
+	auto lol = _pool[index];
 	return _pool[index].getHandle();
 }
 

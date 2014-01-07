@@ -158,7 +158,8 @@ public:
 			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(100, 100, 100));
 			auto rigidBody = heros->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:sponza");
+			//rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:sponza");
+			rigidBody->setCollisionShape(Component::RigidBody::BOX);
 			auto mesh = heros->addComponent<Component::MeshRenderer>("model:sponza");
 			mesh->setShader("MaterialBasic");
 		}
@@ -175,6 +176,7 @@ public:
 	Handle                  createHeros(const glm::vec3 &pos)
 	{
 		auto e = createEntity();
+		auto lol = e.get();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 		e->addComponent<Component::GraphNode>();
 		e->addComponent<Component::MaterialComponent>(std::string("material:heros"));
@@ -200,7 +202,7 @@ public:
 
 		if (_engine.getInstance<Input>().getInput(SDLK_r) && timer <= 0.0f)
 		{
-			timer = 2.0f;
+			timer = 0.3f;
 			for (auto i = 0; i < 10; ++i)
 			{
 				auto e = createHeros(glm::vec3(rand() % 20, 50 + rand() % 100, rand() % 20));
