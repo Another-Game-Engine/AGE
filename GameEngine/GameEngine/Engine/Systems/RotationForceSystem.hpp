@@ -22,7 +22,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		float t = time;
+		float t = float(time);
 		for (auto e : _collection)
 		{
 			glm::vec3 force = e->getComponent<Component::RotationForce>()->getForce();
