@@ -32,5 +32,8 @@
     <ClInclude Include="SecondScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\SpaceshipController.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

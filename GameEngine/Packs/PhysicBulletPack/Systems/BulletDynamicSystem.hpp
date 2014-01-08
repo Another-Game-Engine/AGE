@@ -54,8 +54,10 @@ private:
 	{
 		for (auto e : _collection)
 		{
-			glm::mat4 m;
+			if (e->getComponent<Component::RigidBody>()->getBody().isStaticOrKinematicObject())
+				continue;
 			btMotionState &state = e->getComponent<Component::RigidBody>()->getMotionState();
+			glm::mat4 m;
 			btTransform trans;
 			state.getWorldTransform(trans);
 			glm::mat4 t = convertBulletTransformToGLM(trans);

@@ -91,6 +91,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\SpaceshipController.hpp" />
     <ClInclude Include="Components\VelocityComponent.hpp" />
     <ClInclude Include="InGameScene.hpp" />
     <ClInclude Include="SecondScene.hpp" />

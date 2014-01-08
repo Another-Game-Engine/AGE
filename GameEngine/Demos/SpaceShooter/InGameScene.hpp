@@ -35,6 +35,7 @@
 #include <Components/FirstPersonView.hpp>
 #include <Components/VelocityComponent.hpp>
 #include <Components/RigidBody.hpp>
+#include <Components/SpaceshipController.hpp>
 
 class InGameScene : public AScene
 {
@@ -163,6 +164,7 @@ public:
 			auto mesh = e->addComponent<Component::MeshRenderer>("model:spaceship");
 			mesh->setShader("MaterialBasic");
 			e->addComponent<Component::FPController>();
+			e->addComponent<Component::SpaceshipController>();
 			heros = e;
 		}
 
