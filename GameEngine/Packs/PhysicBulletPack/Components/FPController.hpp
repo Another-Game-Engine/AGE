@@ -64,7 +64,7 @@ namespace Component
 		std::array<unsigned int, 6> &getKeys();
 		std::array<bool, 6> &getControls();
 		void resetControls();
-	private:
+	protected:
 		btKinematicCharacterController *_controller;
 		btPairCachingGhostObject *_ghost;
 		btConvexShape *_shape;
