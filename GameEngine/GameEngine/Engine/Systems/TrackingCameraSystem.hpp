@@ -39,7 +39,7 @@ protected:
 			auto mat = t->toLook->getLocalTransform();
 			mat = glm::translate(mat, t->dist);
 
-			mat = glm::interpolate(e->getLocalTransform(), mat, 0.05f);
+//			mat = glm::interpolate(e->getLocalTransform(), mat, 0.05f);
 
 			glm::vec3 pos = posFromMat4(mat);
 			e->setLocalTransform() = mat;

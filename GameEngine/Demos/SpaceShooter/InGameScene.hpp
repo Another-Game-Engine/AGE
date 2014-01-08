@@ -56,6 +56,7 @@ public:
 		addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ELEMENTS
 		addSystem<VelocitySystem>(50); // UPDATE VELOCITY
 		addSystem<SpaceshipControllerSystem>(60); // UPDATE FIRST PERSON CONTROLLER
+		addSystem<GraphNodeSystem>(70); // UPDATE GRAPH NODE POSITION
 		addSystem<TrackingCameraSystem>(150); // UPDATE CAMERA TRACKING BEHAVIOR
 		addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
 		addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
