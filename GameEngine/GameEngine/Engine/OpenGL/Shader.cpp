@@ -114,13 +114,13 @@ bool Shader::_build()
 		++destIndex;
 	}
 
-	for (unsigned int i = 0; i < _textureNumber; ++i)
+	for (unsigned int it = 0; it < _textureNumber; ++it)
 	{
-		GLuint	location = glGetUniformLocation(_progId, std::string("fTexture" + std::to_string(i)).c_str());
+		GLuint	location = glGetUniformLocation(_progId, std::string("fTexture" + std::to_string(it)).c_str());
 
-		glUniform1i(location, i);
+		glUniform1i(location, it);
 		if (glGetError() != GL_NO_ERROR)
-			std::cerr << "Bind active texture failed for uniform <fTexture" << i << ">." << std::endl;
+			std::cerr << "Bind active texture failed for uniform <fTexture" << it << ">." << std::endl;
 		++destIndex;
 	}
 
