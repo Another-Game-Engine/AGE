@@ -122,7 +122,7 @@ namespace Component
 				}
 				s->recalcLocalAabb();
 				_collisionShape = s;
-				delete t;
+				delete[] t;
 				delete hull;
 				delete tmp;
 			}

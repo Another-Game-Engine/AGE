@@ -45,7 +45,7 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		static double t = 0;
+		static double totalTime = 0;
 		unsigned int textureOffset = 0;
 		auto &renderer = _scene->getEngine().getInstance<Renderer>();
 		OpenGLTools::UniformBuffer *perFrameBuffer = _scene->getEngine().getInstance<Renderer>().getUniform("PerFrame");
@@ -87,14 +87,14 @@ protected:
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 			}
 
-			t += time;
+			totalTime += time;
 
 
 
 			// Set les uniforms du block PerFrame
 			perFrameBuffer->setUniform("projection", camera->getProjection());
 			perFrameBuffer->setUniform("view", cameraPosition);
-			perFrameBuffer->setUniform("time", (float)t);
+			perFrameBuffer->setUniform("time", (float)totalTime);
 			perFrameBuffer->flushChanges();
 			_scene->getSystem<MeshRendererSystem>()->render(time);
 		}
