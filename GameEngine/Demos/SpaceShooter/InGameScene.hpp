@@ -23,7 +23,7 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/BulletDynamicSystem.hpp>
-#include <Systems/FPControllerSystem.hpp>
+#include <Systems/SpaceshipControllerSystem.hpp>
 #include <Systems/FirstPersonViewSystem.hpp>
 
 ////////////
@@ -54,7 +54,7 @@ public:
 		addSystem<BulletDynamicSystem>(10); // CHECK FOR COLLISIONS
 		addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ELEMENTS
 		addSystem<VelocitySystem>(50); // UPDATE VELOCITY
-		addSystem<FPControllerSystem>(60); // UPDATE FIRST PERSON CONTROLLER
+		addSystem<SpaceshipControllerSystem>(60); // UPDATE FIRST PERSON CONTROLLER
 		addSystem<TrackBallSystem>(150); // UPDATE CAMERA TRACKBALL BEHAVIOR
 		addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
 		addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
@@ -128,7 +128,7 @@ public:
 		///
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/crytek-sponza/sponza.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:cube", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/head/head.obj");
 		_engine.getInstance<Resources::ResourceManager>().addResource("model:spaceship", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
 		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
@@ -168,10 +168,24 @@ public:
 			heros = e;
 		}
 
+		Handle floor;
+		{
+			Handle e = createEntity();
+			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, -10, 0));
+			e->addComponent<Component::GraphNode>();
+			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 1, 100));
+			auto rigidBody = e->addComponent<Component::RigidBody>();
+			rigidBody->setMass(0.0f);
+			rigidBody->setCollisionShape(Component::RigidBody::BOX);
+			auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
+			mesh->setShader("MaterialBasic");
+			floor = e;
+		}
+
 		auto camera = createEntity();
-		camera->addComponent<Component::GraphNode>();
+		auto graph = camera->addComponent<Component::GraphNode>();
 		auto cameraComponent = camera->addComponent<Component::CameraComponent>();
-		auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 3.0f, 1.0f);
+		auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 0, 0);
 		cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
 
 		return true;
