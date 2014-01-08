@@ -95,6 +95,7 @@
     <ClInclude Include="Components\VelocityComponent.hpp" />
     <ClInclude Include="InGameScene.hpp" />
     <ClInclude Include="SecondScene.hpp" />
+    <ClInclude Include="Systems\SpaceshipControllerSystem.hpp" />
     <ClInclude Include="Systems\VelocitySystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

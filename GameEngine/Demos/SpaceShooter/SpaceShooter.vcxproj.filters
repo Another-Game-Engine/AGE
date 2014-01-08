@@ -35,5 +35,8 @@
     <ClInclude Include="Components\SpaceshipController.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Systems\SpaceshipControllerSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
