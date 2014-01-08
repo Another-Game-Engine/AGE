@@ -156,18 +156,13 @@ void Entity::reset()
 	_globalScale = glm::vec3(0);
 	_globalTransform = glm::mat4(1);
 	_localTransform = glm::mat4(1);
-
+	_code.reset();
 	for (unsigned int i = 0; i < _components.size(); ++i)
 	{
-		if (_code.isSet(i))
+		if (_components[i].get())
 		{
-			_code.remove(i);
 			broadCast(std::string("componentRemoved" + std::to_string(i)), _handle);
 		}
 		_components[i].reset();
 	}
-	auto a = _code.isEmpty();
-	_components.clear();
-	_code.reset();
-	auto b = _code.isEmpty();
 }

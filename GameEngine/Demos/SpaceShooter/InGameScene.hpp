@@ -214,6 +214,7 @@ public:
 				mesh->setShader("MaterialBasic");
 				balls.push_back(e);
 			}
+			std::cout << balls.size() << std::endl;
 		}
 		if (timer > 0.0f)
 			timer -= time;		
