@@ -48,7 +48,6 @@ public:
 
 	virtual bool 			userStart()
 	{
-
 		addSystem<MeshRendererSystem>(0);
 		addSystem<GraphNodeSystem>(1); // UPDATE GRAPH NODE POSITION
 		addSystem<BulletDynamicSystem>(10); // CHECK FOR COLLISIONS
@@ -128,9 +127,9 @@ public:
 		///
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/crytek-sponza/sponza.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/head/head.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:spaceship", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
 		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
 
 		///
@@ -154,14 +153,17 @@ public:
 		// HEROS
 		Handle heros;
 		{
-			heros = createHeros(glm::vec3(3, -10, 2));
-			heros->setLocalTransform() = glm::scale(heros->getLocalTransform(), glm::vec3(100, 100, 100));
-			auto rigidBody = heros->addComponent<Component::RigidBody>();
+			Handle e = createEntity();
+			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, 0, 0));
+			e->addComponent<Component::GraphNode>();
+			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(2));
+			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
-			//rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:sponza");
-			rigidBody->setCollisionShape(Component::RigidBody::BOX);
-			auto mesh = heros->addComponent<Component::MeshRenderer>("model:sponza");
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:spaceship");
+			auto mesh = e->addComponent<Component::MeshRenderer>("model:spaceship");
 			mesh->setShader("MaterialBasic");
+			e->addComponent<Component::FPController>();
+			heros = e;
 		}
 
 		auto camera = createEntity();
@@ -176,11 +178,8 @@ public:
 	Handle                  createHeros(const glm::vec3 &pos)
 	{
 		auto e = createEntity();
-		auto lol = e.get();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 		e->addComponent<Component::GraphNode>();
-		e->addComponent<Component::MaterialComponent>(std::string("material:heros"));
-		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros");
 		return e;
 	}
 

@@ -143,11 +143,11 @@ namespace Component
 					const Resources::Geometry &geo = geos[i]; // DIRTY HACK TEMPORARY
 					// NEED TO REPLACE MESH BY MESH GROUP !
 					btScalar *t = new btScalar[geo.vertices.size() * 3]();
-					for (unsigned int i = 0; i < geo.vertices.size(); ++i)
+					for (unsigned int it = 0; it < geo.vertices.size(); ++it)
 					{
-						t[i * 3] = geo.vertices[i].x;
-						t[i * 3 + 1] = geo.vertices[i].y;
-						t[i * 3 + 2] = geo.vertices[i].z;
+						t[it * 3] = geo.vertices[it].x;
+						t[it * 3 + 1] = geo.vertices[it].y;
+						t[it * 3 + 2] = geo.vertices[it].z;
 					}
 					btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
 					btShapeHull *hull = new btShapeHull(tmp);
@@ -155,16 +155,16 @@ namespace Component
 					hull->buildHull(margin);
 					tmp->setUserPointer(hull);
 					btConvexHullShape *s = new btConvexHullShape();
-					for (int i = 0; i < hull->numVertices(); ++i)
+					for (int it = 0; it < hull->numVertices(); ++it)
 					{
-						s->addPoint(hull->getVertexPointer()[i], false);
+						s->addPoint(hull->getVertexPointer()[it], false);
 					}
 					s->recalcLocalAabb();
 					btTransform localTrans;
 					localTrans.setIdentity();
 					_collisionShape = s;
 					group->addChildShape(localTrans,s);
-					delete t;
+					delete[] t;
 					delete hull;
 					delete tmp;
 				}
