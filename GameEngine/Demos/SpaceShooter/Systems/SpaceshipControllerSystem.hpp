@@ -75,12 +75,35 @@ private:
 
 			if (controls[Component::SpaceshipController::BACKWARD])
 				direction -= forwardDir * (float)(10.0f * time);
+			static std::vector<Handle> balls;
+
+			if (controls[Component::SpaceshipController::SHOOT])
+			{
+				Handle b = _scene->createEntity();
+				b->setLocalTransform() = entity->getLocalTransform();
+				b->addComponent<Component::GraphNode>();
+				auto rigidBody = b->addComponent<Component::RigidBody>();
+				rigidBody->setMass(1.0f);
+				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
+//				rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, 1000));
+				auto mesh = b->addComponent<Component::MeshRenderer>("model:ball");
+				mesh->setShader("MaterialBasic");
+//				_scene->destroy(b);
+				balls.push_back(b);
+			}
+			if (inputs.getKey(SDLK_p))
+			{
+				for (auto e : balls)
+					_scene->destroy(e);
+				balls.clear();
+			}
 			entity->setLocalTransform() = glm::translate(entity->getLocalTransform(), direction);
 	}
 
 	virtual void initialize()
 	{
 		require<Component::SpaceshipController>();
+		require<Component::RigidBody>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };
