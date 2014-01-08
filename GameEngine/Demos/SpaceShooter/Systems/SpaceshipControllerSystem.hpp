@@ -30,7 +30,11 @@ private:
 		for (auto e : _collection)
 		{
 			auto c = e->getComponent<Component::SpaceshipController>();
-
+			if (e->hasComponent<Component::Collision>())
+			{
+				auto lol = e->getComponent<Component::Collision>();
+				std::cout << "lol" << std::endl;
+			}
 			updateComponent(e, c, time);
 		}
 	}

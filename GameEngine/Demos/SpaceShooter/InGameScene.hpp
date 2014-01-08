@@ -161,10 +161,9 @@ public:
 			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(2));
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:spaceship");
+			rigidBody->setCollisionShape(Component::RigidBody::BOX, "model:spaceship");
 			auto mesh = e->addComponent<Component::MeshRenderer>("model:spaceship");
 			mesh->setShader("MaterialBasic");
-			e->addComponent<Component::FPController>();
 			e->addComponent<Component::SpaceshipController>();
 			heros = e;
 		}
