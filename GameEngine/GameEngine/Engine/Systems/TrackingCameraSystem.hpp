@@ -10,7 +10,7 @@
 #include <Core/Engine.hh>
 #include <Context/SdlContext.hh>
 #include <Utils/MatrixConversion.hpp>
-
+#include <glm/gtx/matrix_interpolation.hpp>
 
 class TrackingCameraSystem : public System
 {
@@ -39,12 +39,13 @@ protected:
 			auto mat = t->toLook->getLocalTransform();
 			mat = glm::translate(mat, t->dist);
 
-			glm::vec3 targetRot = rotFromMat4(t->toLook->getLocalTransform(), true);
+			mat = glm::interpolate(e->getLocalTransform(), mat, 0.05f);
+
 			glm::vec3 pos = posFromMat4(mat);
-			e->setLocalTransform() = glm::lookAt(pos,
+			e->setLocalTransform() = mat;
+			c->setLookAtTransform() = glm::lookAt(pos,
 				glm::vec3(t->toLook->getGlobalTransform()[3]),
-				glm::vec3(0, 1, 0));
-			c->setLookAtTransform() = e->getLocalTransform();
+				glm::vec3(0, 1, 0));//e->getLocalTransform();
 		}
 	}
 
