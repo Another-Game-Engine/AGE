@@ -25,6 +25,7 @@
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/SpaceshipControllerSystem.hpp>
 #include <Systems/FirstPersonViewSystem.hpp>
+#include <Systems/TrackingCameraSystem.hpp>
 
 ////////////
 // COMPONENTS
@@ -55,7 +56,7 @@ public:
 		addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ELEMENTS
 		addSystem<VelocitySystem>(50); // UPDATE VELOCITY
 		addSystem<SpaceshipControllerSystem>(60); // UPDATE FIRST PERSON CONTROLLER
-		addSystem<TrackBallSystem>(150); // UPDATE CAMERA TRACKBALL BEHAVIOR
+		addSystem<TrackingCameraSystem>(150); // UPDATE CAMERA TRACKING BEHAVIOR
 		addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
 		addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
 		addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENT FROM COLLIDING ELEMENTS
@@ -185,7 +186,7 @@ public:
 		auto camera = createEntity();
 		auto graph = camera->addComponent<Component::GraphNode>();
 		auto cameraComponent = camera->addComponent<Component::CameraComponent>();
-		auto trackBall = camera->addComponent<Component::TrackBall>(heros, 5.0f, 0, 0);
+		auto trackBall = camera->addComponent<Component::TrackingCamera>(heros, glm::vec3(0, 0, -5.0f));
 		cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
 
 		return true;
