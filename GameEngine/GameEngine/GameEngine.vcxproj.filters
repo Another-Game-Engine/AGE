@@ -75,6 +75,7 @@
     <ClInclude Include="Engine\OpenGL\Attribute.hh" />
     <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Systems\TrackingCameraSystem.hpp" />
+    <ClInclude Include="Engine\Utils\MetaData.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
