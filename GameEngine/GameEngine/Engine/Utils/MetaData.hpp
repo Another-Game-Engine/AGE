@@ -4,6 +4,8 @@
 #include <string>
 #include <map>
 
+#include <Utils/StripQualifiers.hpp>
+
 namespace Meta
 {
 	class Data
@@ -87,11 +89,12 @@ namespace Meta
 # define NAME_GENERATOR_INTERNAL( _ ) PASTE_TOKENS( GENERATED_TOKEN_, _ )
 # define NAME_GENERATOR( ) NAME_GENERATOR_INTERNAL( __COUNTER__ )
 
-# define META_TYPE(T)(Meta::Creator<T>::getData())
-# define META_OBJECT(O)(Meta::Creator<decltype(O)>::getData())
-# define META_NAME(S)(Meta::Manager::getData(S))
 # define META_REG(T) \
-	Meta::Creator<T>NAME_GENERATOR()(#T, sizeof(T))
+	Meta::Creator<StripQual<T> >NAME_GENERATOR()(#T, sizeof(T))
+
+# define META_TYPE(T) Meta::Creator<StripQual<T>::type>::getData()
+# define META_OBJECT(O)(Meta::Creator<StripQual<decltype(O)>::type>::getData())
+# define META_NAME(S)(Meta::Manager::getData(S))
 }
 
 #endif    //__META_DATA_HPP__
