@@ -84,11 +84,19 @@ void VertexPool<NBR_ATTRIBUTE>::setDataAttributeAtStart(Vertex<NBR_ATTRIBUTE> co
 {
 	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
 	{
-		_sizeAttribute[index];
-		_typeAttribute[index];
-		_normalizedAttribute[index];
-		_strideAttribute[index];
-		_pointerAttribute[index];
+		_sizeAttribute[index] = vertex[index].getNbrComponent();
+		switch (vertex[index].getNbrByte();)
+		{
+		case 1:
+			_typeAttribute[index] = GL_BYTE;
+			break;
+		case 2:
+			_typeAttribute[index] = GL_SHORT;
+			break;
+		case 4:
+			_typeAttribute[index] = GL_FLOAT;
+			break;
+		}
 	}
 }
 
@@ -102,6 +110,9 @@ int32_t &VertexPool<NBR_ATTRIBUTE>::operator+=(Vertex<NBR_ATTRIBUTE> const &vert
 	}
 	else
 		setDataAttributeAtStart(vertex);
+	_pointerAttribute[0] = 0;
+	for (uint16_t index = 1; index < NBR_ATTRIBUTE; ++index)
+		_pointerAttribute[index] += vertex[index - 1].getSizeBuffer();
 	_poolElements.push_back(1, vertex);
 	_sizeIndices += vertex.getSizeIndices();
 	_sizeData += vertex.getSizeAttributes();
@@ -109,11 +120,36 @@ int32_t &VertexPool<NBR_ATTRIBUTE>::operator+=(Vertex<NBR_ATTRIBUTE> const &vert
 }
 
 template <uint16_t NBR_ATTRIBUTE>
+void VertexPool<NBR_ATTRIBUTE>::operator-=(uint32_t index)
+{
+	if (index < _poolElements.size())
+	{
+		for (uint16_t index = 1; index < NBR_ATTRIBUTE; ++index)
+			_pointerAttribute[index] -= _poolElement[index].getSizeBuffer();
+		_sizeIndices -= _poolElements[index].getSizeIndices();
+		_sizeData -= _poolElements[index].getSizeAttibutes();
+		_poolElements.erase(index);
+	}
+	else
+		std::cerr << "Warning: you try to delete an index superior than the Pool's size" << std::endl;
+}
+
+template <uint16_t NBR_ATTRIBUTE>
 void VertexPool<NBR_ATTRIBUTE>::clear()
+{
+	for (size_t index = 0; index < _poolElements.size(); ++index)
+	if (!_poolElement[index])
+		*this -= index;
+}
+
+template <uint16_t NBR_ATTRIBUTE>
+void VertexPool<NBR_ATTRIBUTE>::fullClear()
 {
 	_poolElements.clear();
 	_sizeIndices = 0;
 	_sizeData = 0;
+	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
+		_pointerAttribute[index] = 0;
 }
 
 template <uint16_t NBR_ATTRIBUTE>
@@ -125,7 +161,31 @@ size_t VertexPool<NBR_ATTRIBUTE>::size() const
 template <uint16_t NBR_ATTRIBUTE>
 GLint VertexPool<NBR_ATTRIBUTE>::sizeAttribute(GLint index) const
 {
+	return (_sizeAttibute[index]);
+}
 
+template <uint16_t NBR_ATTRIBUTE>
+GLenum VertexPool<NBR_ATTRIBUTE>::typeAttribute(GLint index) const
+{
+	return (_typeAttribute[index]);
+}
+
+template <uint16_t NBR_ATTRIBUTE>
+GLenum VertexPool<NBR_ATTRIBUTE>::normalizedAttribute(GLint index) const
+{
+	return (_normalizedAttribute[index]);
+}
+
+template <uint16_t NBR_ATTRIBUTE>
+GLsizei VertexPool<NBR_ATTRIBUTE>::strideAttribute(GLint index) const
+{
+	return (_strideAttribute[index]);
+}
+
+template <uint16_t NBR_ATTIBUTE>
+GLuint VertexPool<NBR_ATTRIBUTE>::pointerAttribute(GLint index) const
+{
+	return (_pointerAttribute[index]);
 }
 
 #endif /*!VERTEXMANAGER_HH_*/

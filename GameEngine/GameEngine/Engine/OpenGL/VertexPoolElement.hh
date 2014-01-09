@@ -18,6 +18,7 @@ struct VertexPoolElement
 	bool operator==(Vertex<NBR_ATTRIBUTE> const &element);
 	bool operator!=(Vertex<NBR_ATTRIBUTE> const &element);
 	Data const &operator[](size_t index) const;
+	bool operator!() const;
 };
 
 #include "VertexPoolElement.hpp"
