@@ -26,8 +26,10 @@ public:
 	VertexPool(VertexPool const &copy);
 	VertexPool &operator=(VertexPool const &vertexpool);
 	int32_t &operator+=(Vertex<NBR_ATTRIBUTE> const &vertex);
+	void operator-=(uint32_t index);
 	int32_t operator==(Vertex<NBR_ATTRIBUTE> const &vertex) const;
 	int32_t operator!=(Vertex<NBR_ATTRIBUTE> const &vertex) const;
+	void fullClear();
 	void clear();
 	size_t size() const;
 	GLint sizeAttribute(GLint index) const;

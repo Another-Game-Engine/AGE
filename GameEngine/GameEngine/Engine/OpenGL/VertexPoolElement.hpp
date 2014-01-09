@@ -67,4 +67,10 @@ Data const & VertexPoolElement<NBR_ATTRIBUTE>::operator[](size_t index) const
 	return (vertex[index]);
 }
 
+template <uint16_t NBR_ATTRIBUTE>
+bool VertexPoolElement<NBR_ATTRIBUTE>::operator!() const
+{
+	return (nbrEntity == 0 ? true : false);
+}
+
 #endif /*VERTEXMANAGER_HH_*/

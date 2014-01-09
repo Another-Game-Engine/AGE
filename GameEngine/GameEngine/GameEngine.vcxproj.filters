@@ -75,10 +75,10 @@
     <ClInclude Include="Engine\OpenGL\VertexManager.hpp" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\Vertex.hpp" />
-    <ClInclude Include="Engine\OpenGL\PoolElement.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexPool.hh" />
     <ClInclude Include="Engine\OpenGL\VertexPool.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hh" />
+    <ClInclude Include="Engine\OpenGL\VertexPoolElement.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
