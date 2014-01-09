@@ -22,21 +22,34 @@
 
 #include <Components/GraphNode.hpp>
 
-struct Prout {
-	unsigned int lol;
-};
+META_REG_POD( int );
+META_REG_POD( float );
+META_REG_POD( std::string );
 
-META_REG(Component::GraphNode);
-META_REG(Component::CameraComponent);
+
+
+META_REG(Handle)
+{
+}
+
+META_REG(Component::TrackingCamera)
+{
+	META_MEMBER(dist);
+	META_MEMBER(toLook);
+}
+
+
+
+
+//META_REG(Component::GraphNode);
+//META_REG(Component::CameraComponent);
 
 int			main(int ac, char **av)
 {
-	Prout test;
+	std::cout << META_TYPE(Handle)->getName() << " " << META_TYPE(Handle)->getSize() << std::endl;
+	std::cout << META_TYPE(Component::TrackingCamera)->getName() << " " << META_TYPE(Component::TrackingCamera)->getSize() << std::endl;
+	auto lol = META_TYPE(Component::TrackingCamera);
 
-	std::cout << META_TYPE(Prout)->getName() << " " << META_TYPE(Prout)->getSize() << std::endl;
-	std::cout << META_OBJECT(test)->getName() << " " << META_OBJECT(test)->getSize() << std::endl;
-	std::cout << META_TYPE(Component::GraphNode)->getName() << " " << META_TYPE(Component::GraphNode)->getSize() << std::endl;
-	std::cout << META_TYPE(Component::CameraComponent)->getName() << " " << META_TYPE(Component::CameraComponent)->getSize() << std::endl;
 
 	Engine	e;
 
