@@ -18,9 +18,22 @@
 #include <Managers/BulletCollisionManager.hpp>
 #include "InGameScene.hpp"
 #include "SecondScene.hpp"
+#include <Utils/MetaData.hpp>
+
+struct Prout {
+	unsigned int lol;
+};
+
+META_REG(Prout);
 
 int			main(int ac, char **av)
 {
+	Prout test;
+
+	std::cout << META_TYPE(Prout)->getName() << " " << META_TYPE(Prout)->getSize() << std::endl;
+	std::cout << META_OBJECT(test)->getName() << " " << META_OBJECT(test)->getSize() << std::endl;
+
+
 	Engine	e;
 
 	// set Rendering context of the engine

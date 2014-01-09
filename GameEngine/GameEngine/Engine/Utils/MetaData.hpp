@@ -9,13 +9,19 @@ namespace Meta
 	class Data
 	{
 	public:
-		Data(const std::string name, std::size_t size) :
+		Data(const std::string name = "", std::size_t size = 0) :
 			_name(name)
 			, _size(size)
 		{}
 
 		~Data()
 		{}
+
+		void initialize(const std::string name, std::size_t size)
+		{
+			_name = name;
+			_size = size;
+		}
 
 		inline const std::string getName() { return _name; } const
 		inline void setName(const std::string name) { _name = name; }
@@ -60,7 +66,7 @@ namespace Meta
 				getMap().insert(std::make_pair(name, data));
 		}
 
-		static inline const Data *get(const std::string name)
+		static inline const Data *getData(const std::string name)
 		{
 			auto &it = getMap().find(name);
 			if (it == std::end(getMap()))
@@ -75,6 +81,17 @@ namespace Meta
 		}
 	};
 
+
+# define PASTE_TOKENS_2( _, __ ) _##__
+# define PASTE_TOKENS( _, __ ) PASTE_TOKENS_2( _, __ )
+# define NAME_GENERATOR_INTERNAL( _ ) PASTE_TOKENS( GENERATED_TOKEN_, _ )
+# define NAME_GENERATOR( ) NAME_GENERATOR_INTERNAL( __COUNTER__ )
+
+# define META_TYPE(T)(Meta::Creator<T>::getData())
+# define META_OBJECT(O)(Meta::Creator<decltype(O)>::getData())
+# define META_NAME(S)(Meta::Manager::getData(S))
+# define META_REG(T) \
+	Meta::Creator<T>NAME_GENERATOR()(#T, sizeof(T))
 }
 
 #endif    //__META_DATA_HPP__
