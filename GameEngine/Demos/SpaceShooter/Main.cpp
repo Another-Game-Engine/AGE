@@ -20,11 +20,14 @@
 #include "SecondScene.hpp"
 #include <Utils/MetaData.hpp>
 
+#include <Components/GraphNode.hpp>
+
 struct Prout {
 	unsigned int lol;
 };
 
-META_REG(Prout);
+META_REG(Component::GraphNode);
+META_REG(Component::CameraComponent);
 
 int			main(int ac, char **av)
 {
@@ -32,7 +35,8 @@ int			main(int ac, char **av)
 
 	std::cout << META_TYPE(Prout)->getName() << " " << META_TYPE(Prout)->getSize() << std::endl;
 	std::cout << META_OBJECT(test)->getName() << " " << META_OBJECT(test)->getSize() << std::endl;
-
+	std::cout << META_TYPE(Component::GraphNode)->getName() << " " << META_TYPE(Component::GraphNode)->getSize() << std::endl;
+	std::cout << META_TYPE(Component::CameraComponent)->getName() << " " << META_TYPE(Component::CameraComponent)->getSize() << std::endl;
 
 	Engine	e;
 

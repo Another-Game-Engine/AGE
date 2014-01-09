@@ -169,6 +169,7 @@
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
+    <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
