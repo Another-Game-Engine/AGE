@@ -21,21 +21,18 @@
 #include <Utils/MetaData.hpp>
 
 #include <Components/GraphNode.hpp>
+#include <Utils/SmartPointer.hh>
 
 DEFINE_META_POD( int );
 DEFINE_META_POD( float );
 DEFINE_META_POD( unsigned int );
 DEFINE_META_POD( std::string );
 
-
-
 DEFINE_META(Handle)
 {
 	ADD_MEMBER(_id);
 	ADD_MEMBER(_manager);
 }
-
-
 
 //META_REG(Component::GraphNode);
 //META_REG(Component::CameraComponent);
@@ -46,6 +43,11 @@ int			main(int ac, char **av)
 	std::cout << META_TYPE(Component::TrackingCamera)->getName() << " " << META_TYPE(Component::TrackingCamera)->getSize() << std::endl;
 	auto lol = META_TYPE(Handle);
 
+	std::auto_ptr<Handle> h();
+	auto smart = META_OBJECT(h);
+
+	//std::shared_ptr<Handle> i();
+	//auto smart2 = META_OBJECT(i);
 
 	Engine	e;
 
