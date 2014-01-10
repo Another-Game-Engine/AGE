@@ -1,6 +1,8 @@
 #ifndef  __STRIP_QUALIFIERS_HPP__
 # define __STRIP_QUALIFIERS_HPP__
 
+#include <memory>
+
 template <typename T>
 struct StripQual
 {
