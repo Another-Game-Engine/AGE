@@ -22,22 +22,18 @@
 
 #include <Components/GraphNode.hpp>
 
-META_REG_POD( int );
-META_REG_POD( float );
-META_REG_POD( std::string );
+DEFINE_META_POD( int );
+DEFINE_META_POD( float );
+DEFINE_META_POD( unsigned int );
+DEFINE_META_POD( std::string );
 
 
 
-META_REG(Handle)
+DEFINE_META(Handle)
 {
+	ADD_MEMBER(_id);
+	ADD_MEMBER(_manager);
 }
-
-META_REG(Component::TrackingCamera)
-{
-	META_MEMBER(dist);
-	META_MEMBER(toLook);
-}
-
 
 
 
@@ -48,7 +44,7 @@ int			main(int ac, char **av)
 {
 	std::cout << META_TYPE(Handle)->getName() << " " << META_TYPE(Handle)->getSize() << std::endl;
 	std::cout << META_TYPE(Component::TrackingCamera)->getName() << " " << META_TYPE(Component::TrackingCamera)->getSize() << std::endl;
-	auto lol = META_TYPE(Component::TrackingCamera);
+	auto lol = META_TYPE(Handle);
 
 
 	Engine	e;

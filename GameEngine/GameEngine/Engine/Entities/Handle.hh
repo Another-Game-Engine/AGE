@@ -1,12 +1,15 @@
 #ifndef   __HANDLE_HH__
 # define  __HANDLE_HH__
 
+#include <Utils/MetaData.hpp>
+
 class Entity;
 class AScene;
 
 class Handle
 {
 public:
+	META_DATA(Handle);
 	Handle(unsigned int id = 0, AScene *manager = nullptr);
 	~Handle();
 	const unsigned int getId() const;
