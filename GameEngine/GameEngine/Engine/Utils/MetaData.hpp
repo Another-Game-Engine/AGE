@@ -13,11 +13,14 @@
 # define NAME_GENERATOR( ) NAME_GENERATOR_INTERNAL( __COUNTER__ )
 
 // For registering a Type, following by META_DATA to register members
-# define META_REG(T) \
+# define DEFINE_META(T) \
 	Meta::Creator<StripQual<T>::type >NAME_GENERATOR()(#T, sizeof(T)); \
-	void Meta::Creator<StripQual<T>::type>::registerMetaData()
+    StripQual<T>::type *T::nullCast() { return reinterpret_cast<StripQual<T>::type *>(nullptr); } \
+	void T::addMember(const std::string name, std::size_t offset, Meta::Data *data) { return Meta::Creator<StripQual<T>::type>::addMember(name, offset, data); } \
+	void Meta::Creator<StripQual<T>::type>::registerMetaData() { T::registerMetaData(); } \
+	void T::registerMetaData()
 
-# define META_REG_POD(T) \
+# define DEFINE_META_POD(T) \
     Meta::Creator<StripQual<T>::type> NAME_GENERATOR( )( #T, sizeof( T ) ); \
     void Meta::Creator<StripQual<T>::type>::registerMetaData() \
   { \
@@ -34,11 +37,11 @@
 // To insert inside public class declaration
 # define META_DATA(T) \
 	static void addMember(const std::string name, std::size_t offset, Meta::Data *data); \
-	static StripQual<T>::type *nullCast(){ T::registerMetaData(); } \
-	static void registerMetaData();
+	static StripQual<T>::type *nullCast(); \
+	static void registerMetaData()
 
 // To add class members to MetaData
-# define META_MEMBER(M) \
+# define ADD_MEMBER(M) \
 	addMember(#M, (std::size_t)(&(nullCast()->M)), META_OBJECT(nullCast()->M))
 
 namespace Meta
