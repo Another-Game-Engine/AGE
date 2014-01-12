@@ -16,7 +16,7 @@ VertexManager<NBR_ATTRIBUTE>::~VertexManager()
 	_vertexArray.bind();
 	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
 	if (_isAttributeActivate[index] == true)
-			glDisableVertexAttribArray(index);
+		glDisableVertexAttribArray(index);
 	_vertexArray.unbind();
 	_indexBuffer.unbind();
 	_dataBuffer.unbind();
@@ -51,7 +51,7 @@ VertexManager<NBR_ATTRIBUTE> &VertexManager<NBR_ATTRIBUTE>::operator=(VertexMana
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::addVertex(Vertex<NBR_ATTRIBUTE> *vertex)
+void VertexManager<NBR_ATTRIBUTE>::addVertice(Vertice<NBR_ATTRIBUTE> *vertex)
 {
 	int32_t index;
 
@@ -64,7 +64,7 @@ void VertexManager<NBR_ATTRIBUTE>::addVertex(Vertex<NBR_ATTRIBUTE> *vertex)
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::deleteVertex(Vertice<NBR_ATTRIBUTE> * const vertice)
+void VertexManager<NBR_ATTRIBUTE>::deleteVertice(Vertice<NBR_ATTRIBUTE> * const vertice)
 {
 	_pool.deleteElement(vertice);
 	vertice->_index = -1;
@@ -91,12 +91,12 @@ inline void VertexManager<NBR_ATTRIBUTE>::update()
 			_isBindAttribute[index] = true;
 		}
 		glVertexAttribPointer
-		(index,
-		_attributes[index].getNbrComponent(),
-		_attributes[index].getType(),
-		GL_FALSE,
-		0,
-		_pool.getPointer(index));
+			(index,
+			_attributes[index].getNbrComponent(),
+			_attributes[index].getType(),
+			GL_FALSE,
+			0,
+			_pool.getPointerAttribute(index));
 	}
 	_indexBuffer.bind();
 	_vertexArray.unbind();
@@ -113,7 +113,7 @@ void VertexManager<NBR_ATTRIBUTE>::callDraw(Vertice<NBR_ATTRIBUTE> const * const
 		{
 			_vertexArray.bind();
 			if (drawable->hasIndices())
-				glDrawElements(mode, drawable->getSizeIndices() / sizeof(uint32_t), GL_UNSIGNED_INT, _pool[drawable->getIndexPool()].vertexOffset());
+				glDrawElementsBaseVertex(mode, drawable->getSizeIndices() / sizeof(uint32_t), GL_UNSIGNED_INT, _pool[drawable->getIndexPool()].vertexOffset(), _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
 			else
 				glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
 		}

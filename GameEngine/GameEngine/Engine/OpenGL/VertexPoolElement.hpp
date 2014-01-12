@@ -5,7 +5,7 @@
 * - implement PoolElement and Pool struct use by VertexManager.hh
 */
 
-template <uint16_t NBR_ATTRIBUTE>
+/*template <uint16_t NBR_ATTRIBUTE>
 VertexPoolElement<NBR_ATTRIBUTE>::VertexPoolElement(uint32_t nbrEntity, Vertex<NBR_ATTRIBUTE> vertex)
 : nbrEntity(nbrEntity),
 vertex(vertex)
@@ -65,6 +65,6 @@ template <uint16_t NBR_ATTRIBUTE>
 bool VertexPoolElement<NBR_ATTRIBUTE>::operator!() const
 {
 	return (nbrEntity == 0 ? true : false);
-}
+}*/
 
 #endif /*VERTEXMANAGER_HH_*/

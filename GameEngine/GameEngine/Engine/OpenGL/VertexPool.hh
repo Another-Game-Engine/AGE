@@ -5,6 +5,7 @@
 # include <iostream>
 # include <vector>
 # include <utility>
+# include <stdint.h>
 # include "Vertice.hh"
 # include "VertexPoolElement.hh"
 
@@ -12,36 +13,23 @@ template <uint16_t NBR_ATTRIBUTE>
 class VertexPool
 {
 private:
-	std::vector<VertexPoolElement> _poolElements;
 	uint32_t _sizeIndices;
 	uint32_t _sizeData;
-	GLint _sizeAttibute[NBR_ATTRIBUTE];
-	GLenum _typeAttribute[NBR_ATTRIBUTE];
-	GLenum _normalizedAttribute[NBR_ATTRIBUTE];
-	GLsizei _strideAttribute[NBR_ATTRIBUTE];
-	GLuint _pointerAttribute[NBR_ATTRIBUTE];
+	std::array<GLuint, NBR_ATTRIBUTE> _pointerAttributes;
 public:
 	VertexPool();
 	~VertexPool();
 	VertexPool(VertexPool const &copy);
 	VertexPool &operator=(VertexPool const &vertexpool);
-	int32_t &operator+=(Vertex<NBR_ATTRIBUTE> const &vertex);
-	void operator-=(uint32_t index);
-	int32_t operator==(Vertex<NBR_ATTRIBUTE> const &vertex) const;
-	int32_t operator!=(Vertex<NBR_ATTRIBUTE> const &vertex) const;
+	int32_t addElement(Vertice<NBR_ATTRIBUTE> const &vertex);
+	void deleteElement(Vertice<NBR_ATTRIBUTE> const &vertex);
 	void fullClear();
 	void clear();
-	size_t size() const;
+	bool update();
+	size_t getNbrElement() const;
 	uint32_t getSizeIndices() const;
 	uint32_t getSizeData() const;
-	GLint sizeAttribute(GLint index) const;
-	GLenum typeAttribute(GLint index) const;
-	GLenum normalizedAttribute(GLint index) const;
-	GLsizei strideAttribute(GLint index) const;
-	GLuint pointerAttribute(GLint index) const;
-private:
-	bool checkDataVertex(Vertex<NBR_ATTRIBUTE> const &vertex) const;
-	inline void setDataAttributeAtStart();
+	GLuint getPointerAttribute(GLint index) const;
 };
 
 # include "VertexPool.hpp"

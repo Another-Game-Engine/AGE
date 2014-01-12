@@ -3,6 +3,7 @@
 template <uint8_t NBR_ATTRIBUTE>
 Vertice<NBR_ATTRIBUTE>::Vertice(uint32_t nbrVertex, std::array<Data, NBR_ATTRIBUTE> attribData, Data const * const indices)
 : _bufferData(attribData),
+_sizeBuffer(0),
 _nbrVertex(nbrVertex),
 _vertexManager(NULL),
 _index(-1)
@@ -16,10 +17,10 @@ _index(-1)
 template <uint8_t NBR_ATTRIBUTE>
 Vertice<NBR_ATTRIBUTE>::Vertice(Vertice<NBR_ATTRIBUTE> const &copy)
 : _bufferData(copy._bufferData),
-	_sizeBuffer(copy._sizeBuffer),
-	_nbrVertex(copy._nbrVertex),
-	_vertexManager(copy._vertexManager),
-	_index(copy._index)
+_sizeBuffer(copy._sizeBuffer),
+_nbrVertex(copy._nbrVertex),
+_vertexManager(copy._vertexManager),
+_index(copy._index)
 {
 	if (copy.indices)
 		_indices = new Data(copy.indices);

@@ -36,6 +36,7 @@
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
+    <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
@@ -79,6 +80,7 @@
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hpp" />
     <ClInclude Include="Engine\OpenGL\Vertice.hh" />
     <ClInclude Include="Engine\OpenGL\Vertice.hpp" />
+    <ClInclude Include="Engine\OpenGL\Attribute.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
