@@ -17,10 +17,19 @@
 #include "ResourceManager/ResourceManager.hh"
 #include "Core/Renderer.hh"
 #include "Entities/EntityManager.h"
+#include "OpenGL/VertexManager.hh"
+#include "OpenGL/Attribute.hh"
 
 int			main(int ac, char **av)
 {
 	Engine	e;
+	std::array<Attribute, 4> param =
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 2)
+	};
 
 	// set Rendering context of the engine
 	// you can also set any other dependencies
@@ -32,6 +41,7 @@ int			main(int ac, char **av)
 	e.setInstance<Resources::ResourceManager>();
 	e.setInstance<Renderer>();
 	e.setInstance<SceneManager>();
+	e.setInstance<VertexManager<4>>(param);
 
 	// init engine
 	if (e.init() == false)

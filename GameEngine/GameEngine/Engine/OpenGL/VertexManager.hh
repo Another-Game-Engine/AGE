@@ -5,13 +5,11 @@
 # include <iostream>
 # include <unordered_map>
 # include <utility>
+# include "Vertice.hh"
 # include "Attribute.hh"
 # include "VertexArray.hh"
 # include "VertexBuffer.hh"
 # include "VertexPool.hh"
-
-template <uint8_t NBR_ATTRIBUTE>
-class Vertice;
 
 template <uint8_t NBR_ATTRIBUTE>
 class VertexManager
@@ -21,19 +19,17 @@ public:
 	~VertexManager();
 	VertexManager(VertexManager const &copy);
 	VertexManager &operator=(VertexManager const &vertexmanager);
-
-	void addVertex(Vertice<NBR_ATTRIBUTE> * const vertice);
-	void deleteVertex(Vertice<NBR_ATTRIBUTE> * const vertice);
+	void addVertice(Vertice<NBR_ATTRIBUTE> * const vertice);
+	void deleteVertice(Vertice<NBR_ATTRIBUTE> * const vertice);
 	void update();
 	void clear();
-	void callDraw(Vertice<NBR_ATTRIBUTE> const * const drawable);
+	void callDraw(Vertice<NBR_ATTRIBUTE> const * const drawable, GLenum mode);
+
 private:
 	OpenGLTools::VertexArray _vertexArray;
 	OpenGLTools::VertexBuffer _indexBuffer;
 	OpenGLTools::VertexBuffer _dataBuffer;
-
 	VertexPool<NBR_ATTRIBUTE> _pool;
-	
 	std::array<bool, NBR_ATTRIBUTE> _isAttributeActivate;
 	std::array<Attribute, NBR_ATTRIBUTE> _attributes;
 };

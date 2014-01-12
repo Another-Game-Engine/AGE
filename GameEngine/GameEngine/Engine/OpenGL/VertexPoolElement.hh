@@ -5,23 +5,27 @@
 # include <iostream>
 # include <stdint.h>
 # include "Vertice.hh"
-# include "VertexPoolElement.hh"
 
-template <uint16_t NBR_ATTRIBUTE>
-struct VertexPoolElement
+template <uint8_t NBR_ATTRIBUTE>
+class VertexPoolElement
 {
-	uint32_t nbrEntity;
-	Vertex<NBR_ATTRIBUTE> vertex;
-	VertexPoolElement(uint32_t nbrEntity, Vertex<NBR_ATTRIBUTE> vertex);
+public:
+	VertexPoolElement(uint32_t nbrEntity, Vertice<NBR_ATTRIBUTE> vertex);
 	VertexPoolElement(VertexPoolElement<NBR_ATTRIBUTE> const &copy);
 	~VertexPoolElement();
-	VertexPoolElement &operator=(VertexPoolElement const &element);
-	bool operator==(VertexPoolElement<NBR_ATTRIBUTE> const &element);
-	bool operator!=(VertexPoolElement<NBR_ATTRIBUTE> const &element);
-	bool operator==(Vertex<NBR_ATTRIBUTE> const &element);
-	bool operator!=(Vertex<NBR_ATTRIBUTE> const &element);
-	Data const &operator[](size_t index) const;
-	bool operator!() const;
+	VertexPoolElement &operator=(VertexPoolElement<NBR_ATTRIBUTE> const &element);
+
+	bool addVertice(Vertice<NBR_ATTRIBUTE> const vertice);
+	void deleteVertice();
+
+	uint32_t getVertexOffset() const;
+	uint32_t getByteOffset() const;
+
+private:
+	uint32_t _nbrEntity;
+	Vertice<NBR_ATTRIBUTE> _vertex;
+	uint32_t _vertexOffset;
+	uint32_t _byteOffset;
 };
 
 #include "VertexPoolElement.hpp"

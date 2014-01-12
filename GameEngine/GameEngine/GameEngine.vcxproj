@@ -110,6 +110,7 @@
     <ClCompile Include="Engine\Entities\EntityManager.cpp" />
     <ClCompile Include="Engine\Entities\Handle.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
+    <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Engine\Entities\EntityManager.h" />
     <ClInclude Include="Engine\Entities\Handle.hh" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
+    <ClInclude Include="Engine\OpenGL\Attribute.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hh" />
