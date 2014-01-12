@@ -5,14 +5,14 @@
 # include <iostream>
 # include <vector>
 # include <utility>
-# include "Vertex.hh"
+# include "Vertice.hh"
 # include "VertexPoolElement.hh"
 
 template <uint16_t NBR_ATTRIBUTE>
 class VertexPool
 {
 private:
-	std::vector<PoolElement> _poolElements;
+	std::vector<VertexPoolElement> _poolElements;
 	uint32_t _sizeIndices;
 	uint32_t _sizeData;
 	GLint _sizeAttibute[NBR_ATTRIBUTE];
@@ -32,11 +32,13 @@ public:
 	void fullClear();
 	void clear();
 	size_t size() const;
+	uint32_t getSizeIndices() const;
+	uint32_t getSizeData() const;
 	GLint sizeAttribute(GLint index) const;
 	GLenum typeAttribute(GLint index) const;
 	GLenum normalizedAttribute(GLint index) const;
 	GLsizei strideAttribute(GLint index) const;
-	GLvoid const *pointerAttribute(GLint index) const;
+	GLuint pointerAttribute(GLint index) const;
 private:
 	bool checkDataVertex(Vertex<NBR_ATTRIBUTE> const &vertex) const;
 	inline void setDataAttributeAtStart();

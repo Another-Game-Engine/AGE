@@ -1,14 +1,14 @@
 #include "Data.hh"
 
-Data::Data(uint32_t nbrByte, uint32_t nbrComponent, uint32_t nbrElement, void *buffer)
-: _nbrByte(nbrByte), _nbrComponent(nbrComponent), _nbrElement(nbrElement), _sizeBuffer(nbrByte * nbrComponent * nbrElement)
+Data::Data(uint32_t sizeBuffer, void *buffer)
+: _sizeBuffer(sizeBuffer)
 {
 	_buffer = new uint8_t[_sizeBuffer];
 	memcpy(_buffer, buffer, _sizeBuffer);
 }
 
 Data::Data(Data const &copy)
-: _nbrByte(copy._nbrByte), _nbrComponent(copy._nbrComponent), _nbrElement(copy._nbrElement), _sizeBuffer(copy._nbrByte * copy._nbrComponent * copy._nbrElement)
+: _sizeBuffer(copy._sizeBuffer)
 {
 	_buffer = new uint8_t[copy._sizeBuffer];
 	memcpy(_buffer, copy._buffer, copy._sizeBuffer);
@@ -16,9 +16,6 @@ Data::Data(Data const &copy)
 
 Data &Data::operator=(Data const &data)
 {
-	_nbrByte = data._nbrByte;
-	_nbrComponent = data._nbrComponent;
-	_nbrElement = data._nbrElement;
 	_buffer = new uint8_t[data._sizeBuffer];
 	memcpy(_buffer, data._buffer, data._sizeBuffer);
 	_sizeBuffer = data._sizeBuffer;
@@ -29,21 +26,6 @@ Data::~Data()
 {
 	if (_buffer)
 		delete[] _buffer;
-}
-
-uint32_t Data::getNbrComponent() const
-{
-	return (_nbrComponent);
-}
-
-uint32_t Data::getNbrByte() const
-{
-	return (_nbrByte);
-}
-
-uint32_t Data::getNbrElement() const
-{
-	return (_nbrElement);
 }
 
 uint32_t Data::getSizeBuffer() const
@@ -58,7 +40,7 @@ void const * const Data::getBuffer() const
 
 bool Data::operator==(Data const &data) const
 {
-	if (_nbrByte != data._nbrByte || _nbrComponent != data._nbrComponent || _nbrElement != data._nbrElement || _sizeBuffer != data._sizeBuffer)
+	if (_sizeBuffer != data._sizeBuffer)
 		return (false);
 	if ((memcmp(_buffer, data._buffer, _sizeBuffer)) != 0)
 		return (false);
@@ -70,18 +52,18 @@ bool Data::operator!=(Data const &data) const
 	return (!(*this == data));
 }
 
-void Data::clearBuffer()
+Data &Data::operator()(uint32_t sizeBuffer, void *buffer)
 {
+	_sizeBuffer = sizeBuffer;
 	if (_buffer)
 	{
 		delete[] _buffer;
 		_buffer = NULL;
 	}
-}
-
-bool Data::consistency(Data const &data) const
-{
-	if (_nbrByte != data._nbrByte || _nbrComponent != data._nbrComponent)
-		return (false);
-	return (true);
+	else
+	{
+		_buffer = new uint8_t[sizeBuffer];
+		memcpy(_buffer, buffer, sizeBuffer);
+	}
+	return (*this);
 }

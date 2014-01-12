@@ -61,4 +61,9 @@ namespace OpenGLTools
 		 _isBind = false;
 		 glBindBuffer(_mode, 0);
 	 }
+
+	 GLenum VertexBuffer::getMode() const
+	 {
+		 return (_mode);
+	 }
 }
