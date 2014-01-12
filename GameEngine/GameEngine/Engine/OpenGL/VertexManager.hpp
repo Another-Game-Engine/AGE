@@ -1,146 +1,122 @@
 #ifdef VERTEXMANAGER_HH_
 
-template <uint16_t NBR_ATTRIBUTE>
-VertexManager<NBR_ATTRIBUTE>::VertexManager()
+template <uint8_t NBR_ATTRIBUTE>
+VertexManager<NBR_ATTRIBUTE>::VertexManager(std::array<Attribute, NBR_ATTRIBUTE> const &attributes)
 : _indexBuffer(true),
-_updatePool(true)
+_attributes(attributes)
 {
 	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
-		_isBindAttribtue[index] = false;
+		_isAttributeActivate[index] = false;
 }
 
 
-template <uint16_t NBR_ATTRIBUTE>
+template <uint8_t NBR_ATTRIBUTE>
 VertexManager<NBR_ATTRIBUTE>::~VertexManager()
 {
 	_vertexArray.bind();
 	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
-	if (_isBindAttribtue[index] == true)
-		glDisableVertexAttribArray(index);
+	if (_isAttributeActivate[index] == true)
+			glDisableVertexAttribArray(index);
+	_vertexArray.unbind();
+	_indexBuffer.unbind();
+	_dataBuffer.unbind();
 	_vertexArray.unload();
 	_indexBuffer.unload();
 	_dataBuffer.unload();
 }
 
-template <uint16_t NBR_ATTRIBUTE>
+template <uint8_t NBR_ATTRIBUTE>
 VertexManager<NBR_ATTRIBUTE>::VertexManager(VertexManager<NBR_ATTRIBUTE> const &copy)
 : _vertexArray(copy._vertexArray),
 _indexBuffer(copy._indexBuffer),
 _dataBuffer(copy._dataBuffer),
-_updatePool(copy._updatePool)
+_pool(copy._pool),
+_isAttributeActivate(copy._isAttributeActivate)
 {
 	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
 		_isBindAttribtue[index] = copy._isBindAttribtue[index];
 }
 
-template <uint16_t NBR_ATTRIBUTE>
+template <uint8_t NBR_ATTRIBUTE>
 VertexManager<NBR_ATTRIBUTE> &VertexManager<NBR_ATTRIBUTE>::operator=(VertexManager<NBR_ATTRIBUTE> const &vertexmanager)
 {
 	_vertexArray = vertexmanager._vertexArray;
 	_indiceBuffer = vertexmanager._indexBuffer;
 	_dataBuffer = vertexmanager._dataBuffer;
-	_updatePool = vertexmanager._updatePool;
+	_pool = vertexmanager._pool;
 	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
-		_isBindAttribtue[index] = pool._isBindAttribtue[index];
+		_isAttributeActivate[index] = pool._isAttributeActivate[index];
+	_attributes = copy._attribute;
 	return (*this);
 }
 
-template <uint16_t NBR_ATTRIBTUE>
-void VertexManager<NBR_ATTRIBUTE>::addVertexInPool(Vertex<NBR_ATTRIBUTE> *vertex)
+template <uint8_t NBR_ATTRIBUTE>
+void VertexManager<NBR_ATTRIBUTE>::addVertex(Vertex<NBR_ATTRIBUTE> *vertex)
 {
 	int32_t index;
 
-	if ((index = (_pool != vertex)) == -1)
-	{
-		if ((index = int32_t((_pool += vertex)) != -1)
-		{
-			_updatePool = true;
-			vertex->_indexPoolVertexManager = index;
-		}
-	}
-}
-
-template <uint16_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBTUE>::addVertexInDrawable(std::string const &name, Vertex<NBR_ATTRIBUTE> *vertex)
-{
-	if (vertex->_indexPoolVertexManager == -1)
-	{
-		vertex->_vertexManager = this;
-		_drawable[name] = vertex;
-	}
-}
-
-template <uint16_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::addVertex(std::string const &name, Vertex<NBR_ATTRIBUTE> *vertex)
-{
 	if (vertex)
 	{
-		addVertexInDrawable(name, vertex);
-		addVertexInPool(vertex);
+		index = _pool.addElement(vertex);
+		vertex->_index = index;
+		vertex->_vertexManager = this;
 	}
 }
 
-template <uint16_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::deleteVertexInPool(Vertex<NBR_ATTRIBUTE> * const vertex)
+template <uint8_t NBR_ATTRIBUTE>
+void VertexManager<NBR_ATTRIBUTE>::deleteVertex(Vertice<NBR_ATTRIBUTE> * const vertice)
 {
-	vertex->_vertexManager = NULL;
-	vertex->_indexPoolVertexManager = -1;
+	_pool.deleteElement(vertice);
+	vertice->_index = -1;
+	vertice->_vertexManager = NULL;
 }
 
-template <uint16_t NBR_ATTRIBUTE>
-Vertex<NBR_ATTRIBUTE> * const VertexManager<NBR_ATTRIBUTE>::deleteVertexInDrawable(std::string const &name)
-{
-	std::unordered_map<std::string, Vertex<NBR_ATTRIBUTE> *>::iterator it = _drawable.find(name);
-	if (it == std::unordered_map<std::string, Vertex<NBR_ATTRIBUTE> *>::end)
-		return (NULL);
-	else
-	{
-		Vertex<NBR_ATTRIBUTE> *vertex = *it;
-		_drawable.erase(it);
-		return (vertex);
-	}
-}
-
-template <uint16_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::deleteVertex(std::string const &name)
-{
-	deleteVertexInDrawable(deleteVertexInPool(vertex));
-}
-
-template <uint16_t NBR_ATTRIBUTE>
+template <uint8_t NBR_ATTRIBUTE>
 void VertexManager<NBR_ATTRIBUTE>::clear()
 {
 	_drawable.clear();
-	_pool.clear();
+	_pool.fullClear();
 }
 
-template <uint16_t NBR_ATTRIBUTE>
-inline void VertexManager<NBR_ATTRIBUTE>::sendToGPUVertexAttribPointer()
+template <uint8_t NBR_ATTRIBUTE>
+inline void VertexManager<NBR_ATTRIBUTE>::update()
 {
+	_vertexArray.bind();
+	_dataBuffer.bind();
 	for (GLuint index = 0; index < GLuint(NBR_ATTRIBUTE); ++index)
 	{
-		if (_isBindAttribtue[index] == false)
+		if (_isBindAttribute[index] == false)
 		{
 			glEnableVertexAttribArray(index);
-			_isBindAttribtue[index] = true;
+			_isBindAttribute[index] = true;
 		}
-		glVertexAttribPointer(
-			index,
-			_pool.sizeAttribute(index),
-			_pool.typeAttribute(index), 
-			_pool.normalizedAttibute(index),
-			_pool.strideAttribute(index),
-			_pool.pointerAttribute(index));
+		glVertexAttribPointer
+		(index,
+		_attributes[index].getNbrComponent(),
+		_attributes[index].getType(),
+		GL_FALSE,
+		0,
+		_pool.getPointer(index));
 	}
+	_indexBuffer.bind();
+	_vertexArray.unbind();
 }
 
-template <uint16_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::sendToGPU(GLenum mode)
+template <uint8_t NBR_ATTRIBUTE>
+void VertexManager<NBR_ATTRIBUTE>::callDraw(Vertice<NBR_ATTRIBUTE> const * const drawable, GLenum mode)
 {
-	if (_updatePool)
+	if (drawable->isDrawable())
 	{
-		sendToGPUVertexAttribPointer();
-
+		if (_pool.update())
+			update();
+		else
+		{
+			_vertexArray.bind();
+			if (drawable->hasIndices())
+				glDrawElements(mode, drawable->getSizeIndices() / sizeof(uint32_t), GL_UNSIGNED_INT, _pool[drawable->getIndexPool()].vertexOffset());
+			else
+				glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
+		}
 	}
 }
 

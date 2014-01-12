@@ -113,6 +113,12 @@ int32_t &VertexPool<NBR_ATTRIBUTE>::operator+=(Vertex<NBR_ATTRIBUTE> const &vert
 	_pointerAttribute[0] = 0;
 	for (uint16_t index = 1; index < NBR_ATTRIBUTE; ++index)
 		_pointerAttribute[index] += vertex[index - 1].getSizeBuffer();
+	/*
+	* remplir les offsets de :
+	* - Buffer
+	* - VertexPointer
+	* - Indice
+	*/
 	_poolElements.push_back(1, vertex);
 	_sizeIndices += vertex.getSizeIndices();
 	_sizeData += vertex.getSizeAttributes();
@@ -182,7 +188,7 @@ GLsizei VertexPool<NBR_ATTRIBUTE>::strideAttribute(GLint index) const
 	return (_strideAttribute[index]);
 }
 
-template <uint16_t NBR_ATTIBUTE>
+template <uint16_t NBR_ATTRIBUTE>
 GLuint VertexPool<NBR_ATTRIBUTE>::pointerAttribute(GLint index) const
 {
 	return (_pointerAttribute[index]);

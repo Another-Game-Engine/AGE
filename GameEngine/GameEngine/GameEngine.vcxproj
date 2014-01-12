@@ -152,14 +152,14 @@
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hh" />
-    <ClInclude Include="Engine\OpenGL\Vertex.hh" />
-    <ClInclude Include="Engine\OpenGL\Vertex.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
     <ClInclude Include="Engine\OpenGL\VertexManager.hh" />
     <ClInclude Include="Engine\OpenGL\VertexManager.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexPool.hh" />
     <ClInclude Include="Engine\OpenGL\VertexPool.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hpp" />
+    <ClInclude Include="Engine\OpenGL\Vertice.hh" />
+    <ClInclude Include="Engine\OpenGL\Vertice.hpp" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />

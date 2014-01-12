@@ -27,6 +27,7 @@ namespace OpenGLTools
 		void bind();
 		void unbind();
 		GLuint getId() const;
+		GLenum getMode() const;
 	private:
 		bool _isBind;
 		GLenum _mode;

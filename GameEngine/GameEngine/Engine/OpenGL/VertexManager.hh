@@ -4,42 +4,38 @@
 # include "Utils/OpenGL.hh"
 # include <iostream>
 # include <unordered_map>
-# include <vector>
 # include <utility>
-# include "Vertex.hh"
+# include "Attribute.hh"
 # include "VertexArray.hh"
 # include "VertexBuffer.hh"
 # include "VertexPool.hh"
 
-template <uint16_t NBR_ATTRIBUTE>
+template <uint8_t NBR_ATTRIBUTE>
+class Vertice;
+
+template <uint8_t NBR_ATTRIBUTE>
 class VertexManager
 {
 public:
-	class Vertex<NBR_ATTRIBUTE>;
-
-public:
-	VertexManager();
+	VertexManager(std::array<Attribute, NBR_ATTRIBUTE> const &attributes);
 	~VertexManager();
 	VertexManager(VertexManager const &copy);
 	VertexManager &operator=(VertexManager const &vertexmanager);
-	void addVertex(std::string const &name, Vertex<NBR_ATTRIBUTE> *vertex);
-	void deleteVertex(std::string const &name);
+
+	void addVertex(Vertice<NBR_ATTRIBUTE> * const vertice);
+	void deleteVertex(Vertice<NBR_ATTRIBUTE> * const vertice);
+	void update();
 	void clear();
-	inline void sendToGPU(GLenum mode = GL_STREAM);
+	void callDraw(Vertice<NBR_ATTRIBUTE> const * const drawable);
 private:
 	OpenGLTools::VertexArray _vertexArray;
 	OpenGLTools::VertexBuffer _indexBuffer;
 	OpenGLTools::VertexBuffer _dataBuffer;
-	bool _updatePool;
+
 	VertexPool<NBR_ATTRIBUTE> _pool;
-	std::unordered_map<std::string, Vertex<NBR_ATTRIBUTE> *> _drawable;
-	bool _isBindAttribtue[NBR_ATTRIBUTE];
-private:
-	inline void addVertexInPool(Vertex<NBR_ATTRIBUTE> * vertex);
-	inline void addVertexInDrawable(std::string const &name, Vertex<NBR_ATTRIBUTE> *vertex);
-	inline void deleteVertexInPool(Vertex<NBR_ATTRIBUTE> * const vertex);
-	Vertex<NBR_ATTRIBUTE> * const deleteVertexInDrawable(std::string const &name);
-	inline void sendToGPUVertexAttribPointer();
+	
+	std::array<bool, NBR_ATTRIBUTE> _isAttributeActivate;
+	std::array<Attribute, NBR_ATTRIBUTE> _attributes;
 };
 
 # include "VertexManager.hpp"

@@ -4,6 +4,7 @@
 #include "AResource.hh"
 #include "OpenGL/VertexArray.hh"
 #include "OpenGL/VertexBuffer.hh"
+#include "OpenGL/Vertice.hh"
 
 #include "glm/glm.hpp"
 
