@@ -72,15 +72,29 @@ uint32_t VertexPoolElement<NBR_ATTRIBUTE>::getVertexOffset() const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPoolElement<NBR_ATTRIBUTE>::getByteOffset() const
+uint32_t VertexPoolElement<NBR_ATTRIBUTE>::getByteOffset(uint8_t index) const
 {
-	return (_byteOffset);
+	return (_byteOffset[index]);
+}
+
+template <uint8_t NBR_ATTRIBUTE>
+uint32_t VertexPoolElement<NBR_ATTRIBUTE>::getIndicesOffset() const
+{
+	return (_indicesOffset);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
 Vertice<NBR_ATTRIBUTE> const &VertexPoolElement<NBR_ATTRIBUTE>::getVertex() const
 {
 	return (_vertices);
+}
+
+template <uint8_t NBR_ATTRIBUTE>
+void VertexPoolElement<NBR_ATTRIBUTE>::settingOffset(uint32_t vertexOffset, uint32_t indicesOffset, std::array<uint32_t, NBR_ATTRIBUTE> byteOffset)
+{
+	_vertexOffset = vertexOffset;
+	_indicesOffset = indicesOffset;
+	_byteOffset = byteOffset;
 }
 
 #endif /*VERTEXMANAGER_HH_*/

@@ -23,7 +23,6 @@ namespace OpenGLTools
 		VertexBuffer(VertexBuffer const &copy);
 		VertexBuffer &operator=(VertexBuffer const &vertexbuffer);
 		void init();
-		void unload();
 		void bind();
 		void unbind();
 		GLuint getId() const;

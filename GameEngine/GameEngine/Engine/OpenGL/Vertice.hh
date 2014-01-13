@@ -16,8 +16,9 @@ public:
 	Vertice(Vertice const &copy);
 	Vertice &operator=(Vertice const &vertex);
 	bool operator==(Vertice<NBR_ATTRIBUTE> const &vertex) const;
-	uint32_t getSizeBuffer() const;
-	uint32_t getSizeIndices() const;
+	uint32_t getSizeVertexBuffer() const;
+	uint32_t getSizeIndicesBuffer() const;
+	uint32_t getNbrIndices() const;
 	uint32_t getNbrVertex() const;
 	int32_t getIndexPool() const;
 	bool isDrawable() const;
@@ -27,9 +28,11 @@ public:
 
 private:
 	std::array<Data, NBR_ATTRIBUTE> _bufferData;
-	uint32_t _sizeBuffer;
-	Data *_indices;
+	uint32_t _sizeVertexBuffer;
+	uint32_t _sizeIndicesBuffer;
 	uint32_t _nbrVertex;
+	uint32_t _nbrIndices;
+	Data *_indices;
 	VertexManager<NBR_ATTRIBUTE> *_vertexManager;
 	int32_t _index;
 };
