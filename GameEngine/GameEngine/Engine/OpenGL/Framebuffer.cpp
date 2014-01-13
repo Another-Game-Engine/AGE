@@ -76,7 +76,7 @@ namespace OpenGLTools
 			0.0, 0.0
 		};
 		unsigned int indice[] = {0,1,2,3,4,5};
-		_vao.init();
+		//_vao.init();
 		//_vao.setIndices(6, &indice[0]);
 		//_vao.addAttribute(6, 2, sizeof(float), reinterpret_cast<byte *>(ss_quad_pos));
 		//_vao.addAttribute(6, 2, sizeof(float), reinterpret_cast<byte *>(ss_quad_st));

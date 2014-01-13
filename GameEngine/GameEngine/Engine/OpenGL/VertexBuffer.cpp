@@ -16,20 +16,6 @@ namespace OpenGLTools
 		 if (_id)
 		   glDeleteBuffers(1, &_id);
 	 }
-
-	 void VertexBuffer::init()
-	 {
-		 glGenBuffers(1, &_id);
-	 }
-
-	 void VertexBuffer::unload()
-	 {
-		 if (_id)
-		 {
-			 glDeleteBuffers(1, &_id);
-			 _id = 0;
-		 }
-	 }
 	 
 	 VertexBuffer::VertexBuffer(VertexBuffer const &copy)
 		 : _id(copy._id),
@@ -37,6 +23,11 @@ namespace OpenGLTools
 		 _isBind(copy._isBind)
 	 {
 
+	 }
+
+	 void VertexBuffer::init()
+	 {
+		 glGenBuffers(1, &_id);
 	 }
 
 	 VertexBuffer &VertexBuffer::operator=(VertexBuffer const &vertexbuffer)

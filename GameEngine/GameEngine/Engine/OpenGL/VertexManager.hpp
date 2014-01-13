@@ -3,12 +3,12 @@
 template <uint8_t NBR_ATTRIBUTE>
 VertexManager<NBR_ATTRIBUTE>::VertexManager(std::array<Attribute, NBR_ATTRIBUTE> const &attributes)
 : _indexBuffer(true),
+_pool(attributes),
 _attributes(attributes)
 {
 	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
 		_isAttributeActivate[index] = false;
 }
-
 
 template <uint8_t NBR_ATTRIBUTE>
 VertexManager<NBR_ATTRIBUTE>::~VertexManager()
@@ -31,7 +31,8 @@ VertexManager<NBR_ATTRIBUTE>::VertexManager(VertexManager<NBR_ATTRIBUTE> const &
 _indexBuffer(copy._indexBuffer),
 _dataBuffer(copy._dataBuffer),
 _pool(copy._pool),
-_isAttributeActivate(copy._isAttributeActivate)
+_isAttributeActivate(copy._isAttributeActivate),
+_attributes(copy._attributes)
 {
 	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
 		_isBindAttribtue[index] = copy._isBindAttribtue[index];
@@ -46,8 +47,17 @@ VertexManager<NBR_ATTRIBUTE> &VertexManager<NBR_ATTRIBUTE>::operator=(VertexMana
 	_pool = vertexmanager._pool;
 	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
 		_isAttributeActivate[index] = pool._isAttributeActivate[index];
-	_attributes = copy._attribute;
+	_attributes = vertexmanager._attribute;
 	return (*this);
+}
+
+template <uint8_t NBR_ATTRIBUTE>
+bool VertexManager<NBR_ATTRIBUTE>::init()
+{
+	_vertexArray.init();
+	_indexBuffer.init();
+	_dataBuffer.init();
+	return (true);
 }
 
 template <uint8_t NBR_ATTRIBUTE>

@@ -3,22 +3,30 @@
 template <uint8_t NBR_ATTRIBUTE>
 Vertice<NBR_ATTRIBUTE>::Vertice(uint32_t nbrVertex, std::array<Data, NBR_ATTRIBUTE> attribData, Data const * const indices)
 : _bufferData(attribData),
-_sizeBuffer(0),
+_sizeVertexBuffer(0),
+_sizeIndicesBuffer(0),
 _nbrVertex(nbrVertex),
+_nbrIndices(0),
 _vertexManager(NULL),
 _index(-1)
 {
 	for (uint8_t index = 0; index < NBR_ATTRIBUTE; ++index)
-		_sizeBuffer += _bufferData[index].getSizeBuffer();
+		_sizeVertexBuffer += _bufferData[index].getSizeBuffer();
 	if (indices != NULL)
+	{
 		_indices = new Data(*indices);
+		_sizeIndicesBuffer = _indices->getSizeBuffer();
+		_nbrIndices = _indices->getSizeBuffer() / sizeof(unsigned int);
+	}
 }
 
 template <uint8_t NBR_ATTRIBUTE>
 Vertice<NBR_ATTRIBUTE>::Vertice(Vertice<NBR_ATTRIBUTE> const &copy)
 : _bufferData(copy._bufferData),
-_sizeBuffer(copy._sizeBuffer),
+_sizeVertexBuffer(copy._sizeVertexBuffer),
+_sizeIndicesBuffer(copy._sizeIndicesBuffer),
 _nbrVertex(copy._nbrVertex),
+_nbrIndice(copy._nbrIndice),
 _vertexManager(copy._vertexManager),
 _index(copy._index)
 {
@@ -39,8 +47,10 @@ Vertice<NBR_ATTRIBUTE> &Vertice<NBR_ATTRIBUTE>::operator=(Vertice<NBR_ATTRIBUTE>
 	_bufferData = vertex._bufferDatas;
 	_attribComponent = vertex._attribComponent;
 	_attribByte = vertex._attribByte;
-	_sizeBuffer = vertex._sizeBuffer;
+	_sizeVertexBuffer = vertex._sizeVertexBuffer;
+	_sizeIndicesBuffer = vertex._sizeIndicesBuffer;
 	_nbrVertex = vertex._nbrVertex;
+	_nbrIndice = vertex._nbrIndice;
 	if (vertex._indices)
 		_indices = new Data(vertex.indices);
 	_vertexManager = vertex._vertexManager;
@@ -65,23 +75,27 @@ bool Vertice<NBR_ATTRIBUTE>::operator==(Vertice<NBR_ATTRIBUTE> const &vertex) co
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t Vertice<NBR_ATTRIBUTE>::getSizeBuffer() const
+uint32_t Vertice<NBR_ATTRIBUTE>::getSizeVertexBuffer() const
 {
-	return (_sizeBuffer);
+	return (_sizeVertexBuffer);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t Vertice<NBR_ATTRIBUTE>::getSizeIndices() const
+uint32_t Vertice<NBR_ATTRIBUTE>::getSizeIndicesBuffer() const
 {
-	if (_indices != NULL)
-		return (_indices->getSizeBuffer());
-	return (0);
+	return (_sizeIndicesBuffer);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
 uint32_t Vertice<NBR_ATTRIBUTE>::getNbrVertex() const
 {
 	return (_nbrVertex);
+}
+
+template <uint8_t NBR_ATTRIBUTE>
+uint32_t Vertice<NBR_ATTRIBUTE>::getNbrIndices() const
+{
+	return (_nbrIndices);
 }
 
 template <uint8_t NBR_ATTRIBUTE>

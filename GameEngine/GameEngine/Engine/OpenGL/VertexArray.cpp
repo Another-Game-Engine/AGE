@@ -9,24 +9,15 @@ namespace OpenGLTools
 	{
 	}
 
-	VertexArray::~VertexArray()
-	{
-		if (_id)
-			glDeleteVertexArrays(1, &_id);
-	}
-
 	void VertexArray::init()
 	{
 		glGenVertexArrays(1, &_id);
 	}
 
-	void VertexArray::unload()
+	VertexArray::~VertexArray()
 	{
 		if (_id)
-		{
 			glDeleteVertexArrays(1, &_id);
-			_id = 0;
-		}
 	}
 
 	VertexArray::VertexArray(VertexArray const &copy)

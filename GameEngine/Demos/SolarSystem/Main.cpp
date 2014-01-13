@@ -39,13 +39,14 @@ int			main(int ac, char **av)
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
 	e.setInstance<Resources::ResourceManager>();
-	e.setInstance<Renderer>();
 	e.setInstance<SceneManager>();
 	e.setInstance<VertexManager<4>>(param);
+	e.setInstance<Renderer>();
 
 	// init engine
 	if (e.init() == false)
 		return (EXIT_FAILURE);
+
 
 	// add scene
 	e.getInstance<SceneManager>().addScene(new DemoScene(e), "demo");
