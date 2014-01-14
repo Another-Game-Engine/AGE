@@ -7,7 +7,7 @@
 Assets/
 
 # Vendors/Cereal -> Download it manualy : http://uscilab.github.io/cereal/
-Vendors/Cereal/*
+Cereal/
 
 # User-specific files
 *.suo
