@@ -26,6 +26,8 @@ public:
 	}
 
 	bool load(const std::string filename, const std::string name);
+
+	bool serializeData();
 private:
 	File _outputDirectory;
 	std::map < std::string, std::shared_ptr<AMediaFile> > _files;

@@ -51,11 +51,13 @@ bool 			DemoScene::userStart()
 	{
 		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
 		auto success = convertor.load("./Assets/cube/cube.obj", "cube");
+		convertor.serializeData();
 	}
 	{
 		//auto &convertor = _engine.getInstance<AssetsConvertorManager>();
 		//auto success = convertor.load("./Assets/crytek-sponza/sponza.obj", "sponza");
 	}
+
 
 	return (true);
 }

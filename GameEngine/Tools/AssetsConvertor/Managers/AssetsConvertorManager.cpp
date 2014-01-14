@@ -2,6 +2,9 @@
 #include <Managers/AConvertor.hh>
 #include <MediaFiles/AMediaFile.hpp>
 #include <Managers/ObjConvertor.hh>
+#include <Cereal/archives/json.hpp>
+#include <Cereal/archives/binary.hpp>
+#include <Cereal/archives/xml.hpp>
 
 AssetsConvertorManager::AssetsConvertorManager()
 {
@@ -34,4 +37,14 @@ bool AssetsConvertorManager::load(const std::string filename, const std::string 
 		}
 	}
 	return false;
+}
+
+bool AssetsConvertorManager::serializeData()
+{
+	cereal::XMLOutputArchive archive( std::cout );
+	for (auto &e : _files)
+	{
+		serialize(archive, *(e.second.get()));
+	}
+	return true;
 }

@@ -4,6 +4,7 @@
 #include <MediaFiles/AMediaFile.hpp>
 #include <vector>
 #include <glm/glm.hpp>
+#include <Cereal/types/base_class.hpp>
 
 struct ObjFile : public AMediaFile
 {
@@ -19,5 +20,18 @@ struct ObjFile : public AMediaFile
 	std::vector<Geometry> geometries;
 //	std::vector<MaterialFile> materials;
 };
+
+template <class Archive>
+void serialize( Archive &ar, ObjFile & c)
+{
+	ar( cereal::base_class<AMediaFile>(&c), CEREAL_NVP(c.geometries));
+}
+
+template <class Archive>
+void serialize( Archive &ar, ObjFile::Geometry & c)
+{
+	ar(CEREAL_NVP(c.name), CEREAL_NVP(c.vertices), CEREAL_NVP(c.normals), CEREAL_NVP(c.colors), CEREAL_NVP(c.uvs), CEREAL_NVP(c.indices));
+}
+
 
 #endif   //__OBJ_FILE_HPP__
