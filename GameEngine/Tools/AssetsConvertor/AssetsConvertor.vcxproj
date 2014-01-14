@@ -91,10 +91,15 @@
     <ClInclude Include="Managers\AConvertor.hh" />
     <ClInclude Include="Managers\AssetsConvertorManager.hh" />
     <ClInclude Include="Managers\ObjConvertor.hh" />
+    <ClInclude Include="MediaFiles\AMediaFile.hpp" />
+    <ClInclude Include="MediaFiles\ObjFile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Vendors\TinyObjLoader\TinyObjLoader.vcxproj">
+      <Project>{99fc20c2-9ad1-4049-bb11-b369c42fd6a8}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

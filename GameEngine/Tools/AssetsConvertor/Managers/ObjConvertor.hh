@@ -10,6 +10,7 @@ class ObjConvertor : public AConvertor
 public:
 	ObjConvertor(AssetsConvertorManager *manager);
 	virtual ~ObjConvertor();
+	virtual std::auto_ptr<AMediaFile> convert(const File file);
 private:
 };
 

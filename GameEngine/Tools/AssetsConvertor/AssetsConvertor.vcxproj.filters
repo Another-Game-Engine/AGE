@@ -44,5 +44,11 @@
     <ClInclude Include="Managers\ObjConvertor.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MediaFiles\AMediaFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MediaFiles\ObjFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
