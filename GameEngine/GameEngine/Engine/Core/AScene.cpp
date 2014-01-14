@@ -30,12 +30,12 @@ void 							AScene::update(double time)
 	//recomputePositions(_engine.getInstance<EntityManager>().getRoot(), false);
 }
 
-Handle &AScene::createEntity()
+Entity &AScene::createEntity()
 {
 	if (_free.empty())
 	{
 		_pool.push_back(EntityData(this));
-		_pool.back().setHandle(Handle(_pool.size() - 1, this));
+		_pool.back().setHandle(Entity(_pool.size() - 1, this));
 		_free.push(_pool.size() - 1);
 	}
 	unsigned int index = _free.front();
@@ -44,13 +44,13 @@ Handle &AScene::createEntity()
 	return _pool[index].getHandle();
 }
 
-void AScene::destroy(const Handle &h)
+void AScene::destroy(const Entity &h)
 {
 	h.get()->reset();
 	_free.push(h.getId());
 }
 
-EntityData *AScene::get(const Handle &h)
+EntityData *AScene::get(const Entity &h)
 {
 	if (h.getId() >= _pool.size())
 		return nullptr;

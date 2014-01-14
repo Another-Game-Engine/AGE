@@ -10,9 +10,9 @@ namespace Component
 	class GraphNode : public ComponentBase<GraphNode>
 	{
 	public:
-		typedef std::list<Handle> t_EntityList;
+		typedef std::list<Entity> t_EntityList;
 
-		GraphNode(AScene *scene, Handle &entity)
+		GraphNode(AScene *scene, Entity &entity)
 			: ComponentBase<GraphNode>(scene, entity, "GraphNodeComponent")
 		{
 			}
@@ -24,7 +24,7 @@ namespace Component
 
 		void init()
 		{
-			_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
+			_parent = Entity(std::numeric_limits<unsigned int>::max(), nullptr);
 
 			// signal it's a root node
 			auto key = PubSubKey("graphNodeSetAsRoot");
@@ -38,12 +38,12 @@ namespace Component
 			broadCast(key, _entity);
 		}
 
-		const Handle	    	&getParent() const
+		const Entity	    	&getParent() const
 		{
 			return _parent;
 		}
 
-		void 					removeSon(Handle &son, bool notify = true)
+		void 					removeSon(Entity &son, bool notify = true)
 		{
 			_childs.erase(son);
 			if (notify && son->hasComponent<Component::GraphNode>())
@@ -52,7 +52,7 @@ namespace Component
 			}
 		}
 
-		void 					setParent(Handle &father, bool notify = true)
+		void 					setParent(Entity &father, bool notify = true)
 		{
 			if (_parent.get() && _parent->hasComponent<Component::GraphNode>())
 			{
@@ -74,7 +74,7 @@ namespace Component
 			_parent = father;
 		}
 
-		void 					addSon(Handle &son, bool notify = true)
+		void 					addSon(Entity &son, bool notify = true)
 		{
 			_childs.insert(son);
 			if (notify && son->hasComponent<Component::GraphNode>())
@@ -91,22 +91,22 @@ namespace Component
 			}
 			auto key = PubSubKey("graphNodeSetAsRoot");
 			_entity->broadCast(key, _entity);
-			_parent = Handle(std::numeric_limits<unsigned int>::max(), nullptr);
+			_parent = Entity(std::numeric_limits<unsigned int>::max(), nullptr);
 		}
 
-		std::set<Handle>::iterator getSonsBegin()
+		std::set<Entity>::iterator getSonsBegin()
 		{
 			return std::begin(_childs);
 		}
 		
-		std::set<Handle>::iterator getSonsEnd()
+		std::set<Entity>::iterator getSonsEnd()
 		{
 			return std::end(_childs);
 		}
 
 	private:
-		Handle _parent;
-		std::set<Handle> _childs;
+		Entity _parent;
+		std::set<Entity> _childs;
 	};
 }
 

@@ -30,7 +30,7 @@ DemoScene::~DemoScene(void)
 {
 }
 
-Handle	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
+Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 												glm::vec3 &pos, glm::vec3 &scale,
 												std::string const &shader,
 												std::string const &tex1, std::string const &tex2, std::string const &tex3,
@@ -173,7 +173,7 @@ bool 			DemoScene::userStart()
 
 	{
 		unsigned int nbPlanet = 70;
-		Handle planets[70];
+		Entity planets[70];
 
 		for (unsigned int i = 0; i < nbPlanet; ++i)
 		{

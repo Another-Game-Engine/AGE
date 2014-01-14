@@ -10,14 +10,14 @@ namespace Component
 	class TrackingCamera : public Component::ComponentBase<TrackingCamera>
 	{
 	public:
-		TrackingCamera(AScene *scene, Handle &entity) :
+		TrackingCamera(AScene *scene, Entity &entity) :
 			Component::ComponentBase<Component::TrackingCamera>(scene, entity, "TrackingCamera"),
 			dist(0.0f),
 			toLook(entity)
 		{}
 		virtual ~TrackingCamera(void)
 		{}
-		void init(Handle _toLook, glm::vec3 _dist)
+		void init(Entity _toLook, glm::vec3 _dist)
 		{
 			toLook = _toLook;
 			dist = _dist;
@@ -26,7 +26,7 @@ namespace Component
 		{}
 public:
 	glm::vec3               dist;
-	Handle                  toLook;
+	Entity                  toLook;
 	private:
 		TrackingCamera(TrackingCamera const &);
 		TrackingCamera &operator=(TrackingCamera const &);

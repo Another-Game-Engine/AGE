@@ -41,7 +41,7 @@ DemoScene::~DemoScene(void)
 {
 }
 
-Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
+Entity  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
@@ -56,7 +56,7 @@ Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	return e;
 }
 
-Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
+Entity  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
@@ -72,7 +72,7 @@ Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	return e;
 }
 
-Handle  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
+Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
@@ -231,7 +231,7 @@ bool 			DemoScene::userStart()
 		mesh->setShader("basicLight");
 	}
 
-	Handle character;
+	Entity character;
 	{
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,20,0));
@@ -240,7 +240,7 @@ bool 			DemoScene::userStart()
 		character = e;
 	}
 
-	Handle c1;
+	Entity c1;
 	for (unsigned int i = 0; i < 70; ++i)
 	{
 		if (i % 3)

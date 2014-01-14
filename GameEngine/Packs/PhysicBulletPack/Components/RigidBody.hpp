@@ -5,7 +5,7 @@
 #include <Components/Component.hh>
 #include "Utils/SmartPointer.hh"
 #include <Entities/EntityData.hh>
-#include <Entities/Handle.hh>
+#include <Entities/Entity.hh>
 #include <Core/Engine.hh>
 #include <ResourceManager/ResourceManager.hh>
 #include <ResourceManager/SharedMesh.hh>
@@ -31,7 +31,7 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		RigidBody(AScene *scene, Handle &entity)
+		RigidBody(AScene *scene, Entity &entity)
 			: ComponentBase(scene, entity),
 			_manager(nullptr),
 			_shapeType(UNDEFINED),

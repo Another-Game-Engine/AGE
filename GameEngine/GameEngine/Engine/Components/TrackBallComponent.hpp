@@ -10,7 +10,7 @@ namespace Component
 	class TrackBall : public Component::ComponentBase<TrackBall>
 	{
 	public:
-		TrackBall(AScene *scene, Handle &entity) :
+		TrackBall(AScene *scene, Entity &entity) :
 			Component::ComponentBase<Component::TrackBall>(scene, entity, "TrackBall"),
 			dist(0.0f),
 			rotateSpeed(0.0f),
@@ -20,7 +20,7 @@ namespace Component
 		{}
 		virtual ~TrackBall(void)
 		{}
-		void init(Handle _toLook, float _dist, float rotatingSpeed, float zoomingSpeed)
+		void init(Entity _toLook, float _dist, float rotatingSpeed, float zoomingSpeed)
 		{
 			toLook = _toLook;
 			dist = _dist;
@@ -33,7 +33,7 @@ public:
 	float					dist;
 	float					rotateSpeed, zoomSpeed;
 	glm::vec2				angles;
-	Handle                  toLook;
+	Entity                  toLook;
 	private:
 		TrackBall(TrackBall const &);
 		TrackBall &operator=(TrackBall const &);

@@ -6,19 +6,19 @@
 class EntityData;
 class AScene;
 
-class Handle
+class Entity
 {
 public:
-	META_DATA(Handle);
-	Handle(unsigned int id = 0, AScene *manager = nullptr);
-	~Handle();
+	META_DATA(Entity);
+	Entity(unsigned int id = 0, AScene *manager = nullptr);
+	~Entity();
 	const unsigned int getId() const;
 	EntityData *operator->();
 	EntityData *get() const;
-	bool operator<(const Handle &o) const;
-	bool operator==(const Handle &o) const;
-	Handle(const Handle &o);
-	Handle &operator=(const Handle &o);
+	bool operator<(const Entity &o) const;
+	bool operator==(const Entity &o) const;
+	Entity(const Entity &o);
+	Entity &operator=(const Entity &o);
 private:
 	unsigned int _id;
 	AScene *_manager;

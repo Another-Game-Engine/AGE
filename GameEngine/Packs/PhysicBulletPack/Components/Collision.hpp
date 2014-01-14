@@ -8,7 +8,7 @@ namespace Component
 	class Collision : public ComponentBase<Collision>
 	{
 	public:
-		Collision(AScene *scene, Handle &entity)
+		Collision(AScene *scene, Entity &entity)
 			: ComponentBase<Collision>(scene, entity, "CollisionComponent")
 		{
 				
@@ -26,12 +26,12 @@ namespace Component
 			_collsions.clear();
 		}
 
-		void addCollision(const Handle &entity)
+		void addCollision(const Entity &entity)
 		{
 			_collsions.insert(entity);
 		}
 
-		std::set<Handle> &getCollisions()
+		std::set<Entity> &getCollisions()
 		{
 			return _collsions;
 		}
@@ -41,7 +41,7 @@ namespace Component
 			_collsions.clear();
 		}
 	private:
-		std::set<Handle> _collsions;
+		std::set<Entity> _collsions;
 	};
 }
 

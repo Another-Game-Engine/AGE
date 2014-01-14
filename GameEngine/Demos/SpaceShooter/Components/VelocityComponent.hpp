@@ -4,7 +4,7 @@
 #include <Components/Component.hh>
 #include <functional>
 #include <Core/Engine.hh>
-#include <Entities/Handle.hh>
+#include <Entities/Entity.hh>
 
 namespace Component
 {
@@ -14,7 +14,7 @@ namespace Component
 		Velocity(const Velocity &o);
 		Velocity &operator=(const Velocity &o);
 	public:
-		Velocity(AScene *scene, Handle &entity) :
+		Velocity(AScene *scene, Entity &entity) :
 			_direction(0,0,0),
 			_function([&](double time, double totalTime, const glm::vec3 direction){return direction * glm::vec3(time);}),
 			ComponentBase<Velocity>(scene, entity, "VelocityComponent")

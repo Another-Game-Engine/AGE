@@ -10,7 +10,7 @@ namespace Component
 	class RotationForce : public Component::ComponentBase<RotationForce>
 	{
 	public:
-		RotationForce(AScene *scene, Handle &entity);
+		RotationForce(AScene *scene, Entity &entity);
 		virtual ~RotationForce(void);
 
 		void init(const glm::vec3 &force = glm::vec3(0, 0, 0));
