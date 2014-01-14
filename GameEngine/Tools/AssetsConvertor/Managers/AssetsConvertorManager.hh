@@ -5,7 +5,7 @@
 #include <map>
 #include <memory>
 
-class AMediaFile;
+struct AMediaFile;
 class AConvertor;
 
 class AssetsConvertorManager
@@ -24,6 +24,8 @@ public:
 			return;
 		_convertors.insert(std::make_pair(key, new T(std::make_shared(this))));
 	}
+
+	bool load(const std::string filename, const std::string name);
 private:
 	File _outputDirectory;
 	std::map < std::string, std::auto_ptr<AMediaFile> > _files;

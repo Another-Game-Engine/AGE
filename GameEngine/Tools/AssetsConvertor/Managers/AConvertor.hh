@@ -7,7 +7,7 @@
 #include <Utils/File.hpp>
 
 
-class AMediaFile;
+struct AMediaFile;
 class AssetsConvertorManager;
 
 class AConvertor
@@ -15,7 +15,7 @@ class AConvertor
 public:
 	AConvertor(AssetsConvertorManager *manager, std::set<std::string> extensions);
 	virtual ~AConvertor();
-//		virtual std::auto_ptr<AMediaFile> convert(const File file) = 0;
+	virtual std::auto_ptr<AMediaFile> convert(const File file) = 0;
 	bool supportFile(const File file);
 protected:
 	const std::set<std::string> _extensions;
