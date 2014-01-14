@@ -2,9 +2,7 @@
 # define  __AMEDIA_FILE_HPP__
 
 #include <Utils/File.hpp>
-#include <Cereal/cereal.hpp>
-#include <cereal/types/base_class.hpp>
-#include <cereal/types/utility.hpp>
+#include <Utils/Archive.hpp>
 
 struct AMediaFile
 {
@@ -14,19 +12,15 @@ struct AMediaFile
 	File path;
 	std::string name;
 
-	template <class Archive>
-	void serialize(Archive &ar)
+	void serialize(std::ofstream &os)
 	{
-		unsigned int t = 2;
-//		ar(CEREAL_NVP(c.name));
-		ar(t);
+		Archive::serialize(os, path.getFullName());
+		Archive::serialize(os, name);
+		_serialize(os);
 	}
+private:
+	virtual void _serialize(std::ofstream &os) = 0;
+	virtual void _unserialize(std::ifstream &is) = 0;
 };
-
-//template <class Archive>
-//void serialize( Archive &ar, File & c)
-//{
-//	ar( CEREAL_NVP(c.getFullName()));
-//}
 
 #endif    //__AMEDIA_FILE_HPP__

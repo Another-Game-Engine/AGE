@@ -162,6 +162,7 @@
     <ClInclude Include="Engine\Systems\TrackBallSystem.hpp" />
     <ClInclude Include="Engine\Systems\TrackingCameraSystem.hpp" />
     <ClInclude Include="Engine\Utils\Any.hpp" />
+    <ClInclude Include="Engine\Utils\Archive.hpp" />
     <ClInclude Include="Engine\Utils\Barcode.h" />
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Utils\File.hpp" />

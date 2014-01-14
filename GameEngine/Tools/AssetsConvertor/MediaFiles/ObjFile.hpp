@@ -18,28 +18,24 @@ struct ObjFile : public AMediaFile
 		std::vector<glm::vec4>		colors;		// vertices colors
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
-
-		template <class Archive>
-		void serialize(Archive &ar)
-		{
-			ar(CEREAL_NVP(name), CEREAL_NVP(vertices), CEREAL_NVP(normals), CEREAL_NVP(colors), CEREAL_NVP(uvs), CEREAL_NVP(indices));
-		}
-
 	};
 	std::vector<Geometry> geometries;
-	template <class Archive>
-	void serialize(Archive &ar)
+	//	std::vector<MaterialFile> materials;
+
+private:
+	virtual void _serialize(std::ofstream &os)
 	{
-//		ar(CEREAL_NVP(geometries));
+		Archive::serialize(os, geometries.size());
+		for (unsigned int i = 0, j = geometries.size(); i < j; ++i)
+		{
+			Archive::serialize(os, geometries[i].name);
+		}
 	}
 
-//	std::vector<MaterialFile> materials;
+	virtual void _unserialize(std::ifstream &is)
+	{
+
+	}
 };
-
-template <class Archive>
-void serialize( Archive &ar, ObjFile::Geometry & c)
-{
-
-}
 
 #endif   //__OBJ_FILE_HPP__
