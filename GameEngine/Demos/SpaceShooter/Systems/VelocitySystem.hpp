@@ -2,7 +2,7 @@
 # define  __VELOCITY_SYSTEM_HPP__
 
 #include <Systems/System.h>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/VelocityComponent.hpp>
 #include <glm/gtc/matrix_transform.hpp>

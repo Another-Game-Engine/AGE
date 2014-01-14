@@ -4,7 +4,7 @@
 #include <Utils/BtConversion.hpp>
 #include <Systems/System.h>
 #include <Components/CollisionBody.hpp>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Managers/BulletCollisionManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>

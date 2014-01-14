@@ -3,7 +3,7 @@
 
 #include "System.h"
 #include <Components/GraphNode.hpp>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 
 class GraphNodeSystem : public System
 {
@@ -23,7 +23,7 @@ private:
 		float t = time;
 		for (auto e : _roots)
 		{
-			if (e->getFlags() & Entity::HAS_MOVED)
+			if (e->getFlags() & EntityData::HAS_MOVED)
 			{
 				e->computeGlobalTransform(glm::mat4(1));
 				recomputePositions(e, true);
@@ -42,7 +42,7 @@ private:
 
 		while (it != node->getSonsEnd())
 		{
-			if ((it->get())->getFlags() & Entity::HAS_MOVED)
+			if ((it->get())->getFlags() & EntityData::HAS_MOVED)
 				hasMoved = true;
 			if (hasMoved)
 				it->get()->computeGlobalTransform(e->getGlobalTransform());

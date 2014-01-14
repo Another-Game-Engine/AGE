@@ -1,7 +1,7 @@
 #ifndef ASCENE_HH_
 #define ASCENE_HH_
 
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 //#include <Systems/System.h>
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/SmartPointer.hh>
@@ -17,7 +17,7 @@ class AScene : public DependenciesInjector
 {
 private:
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
-	std::vector<Entity>                                 _pool;
+	std::vector<EntityData>                                 _pool;
 	std::queue<unsigned int>                            _free;
 protected:
 	Engine                                              &_engine;
@@ -30,7 +30,7 @@ public:
 	void 					update(double time);
 	Handle &createEntity();
 	void destroy(const Handle &h);
-	Entity *get(const Handle &h);
+	EntityData *get(const Handle &h);
 
 	Engine &getEngine()
 	{

@@ -4,7 +4,7 @@
 #include    <set>
 #include	<Utils/Barcode.h>
 #include    <Utils/PubSub.hpp>
-#include    <Entities/Entity.hh>
+#include    <Entities/EntityData.hh>
 //#include    <Entities/Handle.hh>
 
 class AScene;

@@ -6,7 +6,7 @@
 #include "System.h"
 #include <Components/MeshRenderer.hh>
 #include <Components/MaterialComponent.h>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 
 class MeshRendererSystem : public System

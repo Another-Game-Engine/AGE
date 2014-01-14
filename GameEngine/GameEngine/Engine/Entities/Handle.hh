@@ -3,7 +3,7 @@
 
 #include <Utils/MetaData.hpp>
 
-class Entity;
+class EntityData;
 class AScene;
 
 class Handle
@@ -13,8 +13,8 @@ public:
 	Handle(unsigned int id = 0, AScene *manager = nullptr);
 	~Handle();
 	const unsigned int getId() const;
-	Entity *operator->();
-	Entity *get() const;
+	EntityData *operator->();
+	EntityData *get() const;
 	bool operator<(const Handle &o) const;
 	bool operator==(const Handle &o) const;
 	Handle(const Handle &o);

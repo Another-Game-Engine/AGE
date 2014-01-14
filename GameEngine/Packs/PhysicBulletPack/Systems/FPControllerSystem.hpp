@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Systems/System.h>
 #include <Components/FPController.hpp>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Managers/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>

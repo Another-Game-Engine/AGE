@@ -34,7 +34,7 @@ Handle &AScene::createEntity()
 {
 	if (_free.empty())
 	{
-		_pool.push_back(Entity(this));
+		_pool.push_back(EntityData(this));
 		_pool.back().setHandle(Handle(_pool.size() - 1, this));
 		_free.push(_pool.size() - 1);
 	}
@@ -50,7 +50,7 @@ void AScene::destroy(const Handle &h)
 	_free.push(h.getId());
 }
 
-Entity *AScene::get(const Handle &h)
+EntityData *AScene::get(const Handle &h)
 {
 	if (h.getId() >= _pool.size())
 		return nullptr;

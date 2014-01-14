@@ -26,7 +26,7 @@ namespace Component
 
 	glm::mat4         &CameraComponent::setProjection()
 	{
-		_entity->getFlags() & Entity::HAS_MOVED;
+		_entity->getFlags() & EntityData::HAS_MOVED;
 		return (_projection);
 }
 

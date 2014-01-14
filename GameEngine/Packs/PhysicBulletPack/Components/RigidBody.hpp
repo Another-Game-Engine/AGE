@@ -4,7 +4,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
 #include "Utils/SmartPointer.hh"
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Entities/Handle.hh>
 #include <Core/Engine.hh>
 #include <ResourceManager/ResourceManager.hh>
