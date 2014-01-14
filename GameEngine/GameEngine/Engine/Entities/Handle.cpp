@@ -1,5 +1,5 @@
 #include <Entities\Handle.hh>
-#include <Entities\Entity.hh>
+#include <Entities\EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/Component.hh>
 #include <limits>
@@ -18,12 +18,12 @@ const unsigned int Handle::getId() const
 	return _id;
 }
 
-Entity *Handle::operator->()
+EntityData *Handle::operator->()
 {
 	return _manager->get(*this);
 }
 
-Entity *Handle::get() const
+EntityData *Handle::get() const
 {
 	static unsigned int max = std::numeric_limits<unsigned int>::max();
 	if (!_manager || _id == max)

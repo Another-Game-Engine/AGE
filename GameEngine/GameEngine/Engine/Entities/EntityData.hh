@@ -17,7 +17,7 @@ class AScene;
 class EntityManager;
 class Handle;
 
-class Entity : public PubSub
+class EntityData : public PubSub
 {
 private:
 	static size_t 					_currentId;
@@ -59,8 +59,8 @@ private:
 
 	Barcode _code;
 public:
-	Entity(AScene *scene);
-	virtual ~Entity();
+	EntityData(AScene *scene);
+	virtual ~EntityData();
 
 	void                    translate(const glm::vec3 &v);
 	void                    setTranslation(const glm::vec3 &v);

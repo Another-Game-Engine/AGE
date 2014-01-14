@@ -2,7 +2,7 @@
 # define __COLLISION_CLEANER_SYSTEM_HPP__
 
 #include <Systems/System.h>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 

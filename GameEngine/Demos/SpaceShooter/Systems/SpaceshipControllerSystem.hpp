@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Systems/System.h>
 #include <Components/SpaceshipController.hpp>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 #include <Context/SdlContext.hh>

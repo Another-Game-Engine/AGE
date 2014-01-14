@@ -20,7 +20,6 @@
     <ClCompile Include="Engine\Core\Engine.cpp" />
     <ClCompile Include="Engine\Core\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
-    <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\OpenGL\Shader.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="Engine\ResourceManager\ResourceManager.cpp" />
@@ -38,6 +37,7 @@
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
+    <ClCompile Include="Engine\Entities\EntityData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
@@ -77,6 +77,7 @@
     <ClInclude Include="Engine\Systems\TrackingCameraSystem.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
+    <ClInclude Include="Engine\Entities\EntityData.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -88,7 +89,6 @@
     <None Include="Engine\Core\MaterialManager.hh" />
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
-    <None Include="Engine\Entities\Entity.hh" />
     <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />

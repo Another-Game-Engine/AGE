@@ -1,11 +1,11 @@
 
-#include "Entity.hh"
+#include "EntityData.hh"
 #include "Core/Engine.hh"
 #include "Components/Component.hh"
 #include "Handle.hh"
 #include <limits>
 
-Entity::Entity(AScene *scene) :
+EntityData::EntityData(AScene *scene) :
     PubSub(scene->getInstance<PubSub::Manager>()),
     _scene(scene),
 	_flags(0),
@@ -18,134 +18,134 @@ Entity::Entity(AScene *scene) :
 {
 }
 
-Entity::~Entity()
+EntityData::~EntityData()
 {
 	_components.clear();
 }
 
-Handle &Entity::getHandle()
+Handle &EntityData::getHandle()
 {
 	return _handle;
 }
 
-void Entity::setHandle(Handle &handle)
+void EntityData::setHandle(Handle &handle)
 {
 	_handle = handle;
 }
 
-glm::mat4 const  		&Entity::getLocalTransform()
+glm::mat4 const  		&EntityData::getLocalTransform()
 {
 	return (_localTransform);
 }
 
 //  TO DELETE
-glm::mat4   			&Entity::setLocalTransform()
+glm::mat4   			&EntityData::setLocalTransform()
 {
 	_flags |= HAS_MOVED;
 	return (_localTransform);
 }
 
-glm::mat4 const			&Entity::getGlobalTransform() const
+glm::mat4 const			&EntityData::getGlobalTransform() const
 {
 	return (_globalTransform);
 }
 
 // TO DELETE
-void 					Entity::computeGlobalTransform(glm::mat4 const &fatherTransform)
+void 					EntityData::computeGlobalTransform(glm::mat4 const &fatherTransform)
 {
 	_globalTransform = fatherTransform * _localTransform;
 	_flags ^= HAS_MOVED;
 }
 
-void 					Entity::computeGlobalTransform(const Handle &parent)
+void 					EntityData::computeGlobalTransform(const Handle &parent)
 {
 
 	_flags ^= HAS_MOVED;
 }
 
-void                    Entity::translate(const glm::vec3 &v)
+void                    EntityData::translate(const glm::vec3 &v)
 {
 	_localTranslation += v;
 	_flags |= HAS_MOVED;
 }
 
-void                    Entity::setTranslation(const glm::vec3 &v)
+void                    EntityData::setTranslation(const glm::vec3 &v)
 {
 	_localTranslation = v;
 	_flags |= HAS_MOVED;
 }
 
-glm::vec3 const         &Entity::getTranslation() const
+glm::vec3 const         &EntityData::getTranslation() const
 {
 	return _localTranslation;
 }
 
-void                    Entity::rotate(const glm::vec3 &v)
+void                    EntityData::rotate(const glm::vec3 &v)
 {
 	_localRotation += v;
 	_flags |= HAS_MOVED;
 }
 
-void                    Entity::setRotation(const glm::vec3 &v)
+void                    EntityData::setRotation(const glm::vec3 &v)
 {
 	_localRotation = v;
 	_flags |= HAS_MOVED;
 }
 
-glm::vec3 const         &Entity::getRotation() const
+glm::vec3 const         &EntityData::getRotation() const
 {
 	return _localRotation;
 }
 
-void                    Entity::scale(const glm::vec3 &v)
+void                    EntityData::scale(const glm::vec3 &v)
 {
 	_localScale += v;
 	_flags |= HAS_MOVED;
 }
 
-void                    Entity::setScale(const glm::vec3 &v)
+void                    EntityData::setScale(const glm::vec3 &v)
 {
 	_localScale = v;
 	_flags |= HAS_MOVED;
 }
 
-glm::vec3 const         &Entity::getScale() const
+glm::vec3 const         &EntityData::getScale() const
 {
 	return _localScale;
 }
 
-size_t 					Entity::getFlags() const
+size_t 					EntityData::getFlags() const
 {
 	return (_flags);
 }
 
-void 					Entity::setFlags(size_t flags)
+void 					EntityData::setFlags(size_t flags)
 {
 	_flags = flags;
 }
 
-void 					Entity::addFlags(size_t flags)
+void 					EntityData::addFlags(size_t flags)
 {
 	_flags |= flags;
 }
 
-void 					Entity::removeFlags(size_t flags)
+void 					EntityData::removeFlags(size_t flags)
 {
 	flags &= _flags;
 	_flags ^= flags;
 }
 
-Barcode                       &Entity::getCode()
+Barcode                       &EntityData::getCode()
 {
 	return _code;
 }
 
-bool Entity::hasComponent(unsigned int componentId) const
+bool EntityData::hasComponent(unsigned int componentId) const
 {
 		return _code.isSet(componentId);
 }
 
-void Entity::reset()
+void EntityData::reset()
 {
 	_flags = 0;
 	_localTranslation = glm::vec3(0);

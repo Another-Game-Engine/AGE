@@ -12,19 +12,19 @@ namespace   Component
 	struct  Base;
 };
 
-class	Entity;
+class	EntityData;
 
 class Barcode
 {
 public:
 
 	Barcode();
-	Barcode(::Entity &entity);
+	Barcode(::EntityData &entity);
 	Barcode(Barcode &other);
 	Barcode &operator=(const Barcode &other);
 	~Barcode();
 	bool match(boost::dynamic_bitset<> &set);
-	bool match(::Entity &entity);
+	bool match(::EntityData &entity);
 	bool match(Barcode &entity);
 	void reset();
 	void add(unsigned int componentId);

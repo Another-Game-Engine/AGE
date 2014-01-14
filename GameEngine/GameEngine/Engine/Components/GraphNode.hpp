@@ -3,7 +3,7 @@
 
 #include "Component.hh"
 #include <Core/Engine.hh>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 
 namespace Component
 {

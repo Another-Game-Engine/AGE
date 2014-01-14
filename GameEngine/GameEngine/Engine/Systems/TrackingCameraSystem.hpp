@@ -5,7 +5,7 @@
 #include "System.h"
 #include <Components/CameraComponent.hh>
 #include <Components/TrackingCamera.hpp>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/Input.hh>
 #include <Core/Engine.hh>
 #include <Context/SdlContext.hh>
@@ -39,7 +39,7 @@ protected:
 			auto mat = t->toLook->getLocalTransform();
 			mat = glm::translate(mat, t->dist);
 
-//			mat = glm::interpolate(e->getLocalTransform(), mat, 0.05f);
+			mat = glm::interpolate(e->getLocalTransform(), mat, 0.05f);
 
 			glm::vec3 pos = posFromMat4(mat);
 			e->setLocalTransform() = mat;

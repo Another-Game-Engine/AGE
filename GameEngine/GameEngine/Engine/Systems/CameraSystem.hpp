@@ -6,7 +6,7 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/MaterialComponent.h>
 #include <Components/CameraComponent.hh>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Systems/MeshRenderSystem.h>
