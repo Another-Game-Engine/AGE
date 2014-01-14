@@ -6,6 +6,9 @@
 # https://www.dropbox.com/sh/b3zej58eusof9dt/rwImSYCUbj
 Assets/
 
+# Vendors/Cereal -> Download it manualy : http://uscilab.github.io/cereal/
+Vendors/Cereal/*
+
 # User-specific files
 *.suo
 *.user
