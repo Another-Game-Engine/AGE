@@ -8,6 +8,8 @@
 #include "ResourceManager/CubeMap.hh"
 #include "ResourceManager/ResourceManager.hh"
 
+#include <Managers/AssetsConvertorManager.hh>
+
 #include <Components/RotationForce.hh>
 #include <Components/MaterialComponent.h>
 #include <Components/CameraComponent.hh>
@@ -46,6 +48,15 @@ bool 			DemoScene::userStart()
 	//
 	//
 	// end System Test
+	{
+		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
+		auto success = convertor.load("./Assets/cube/cube.obj", "cube");
+	}
+	{
+		//auto &convertor = _engine.getInstance<AssetsConvertorManager>();
+		//auto success = convertor.load("./Assets/crytek-sponza/sponza.obj", "sponza");
+	}
+
 	return (true);
 }
 
