@@ -6,10 +6,6 @@
 #include <MediaFiles/AMediaFile.hpp>
 #include <MediaFiles/ObjFile.hpp>
 
-#include <cereal/archives/binary.hpp>
-#include <cereal/archives/xml.hpp>
-#include <cereal/archives/json.hpp>
-
 AssetsConvertorManager::AssetsConvertorManager()
 {
 	registerConvertor<ObjConvertor>();
@@ -45,10 +41,11 @@ bool AssetsConvertorManager::load(const std::string filename, const std::string 
 
 bool AssetsConvertorManager::serializeData()
 {
-	cereal::XMLOutputArchive archive( std::cout );
+	std::ofstream test;
+	Archive::open(test, "test.serialization");
 	for (auto &e : _files)
 	{
-		archive(e.second);
+		e.second->serialize(test);
 	}
 	return true;
 }
