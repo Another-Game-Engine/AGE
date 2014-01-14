@@ -5,7 +5,9 @@
 #include <map>
 #include <memory>
 
-struct AMediaFile;
+#include <MediaFiles/AMediaFile.hpp>
+#include <MediaFiles/ObjFile.hpp>
+
 class AConvertor;
 
 class AssetsConvertorManager
