@@ -34,11 +34,11 @@ private:
 			const btCollisionObject *oa = static_cast<const btCollisionObject*>(contact->getBody0());
 			const btCollisionObject *ob = static_cast<const btCollisionObject*>(contact->getBody1());
 
-			Handle h1 = *(static_cast<Handle*>(oa->getUserPointer()));
+			Entity h1 = *(static_cast<Entity*>(oa->getUserPointer()));
 			EntityData *e1 = h1.get();
 			auto c1 = e1->addComponent<Component::Collision>();
 
-			Handle h2 = *(static_cast<Handle*>(ob->getUserPointer()));
+			Entity h2 = *(static_cast<Entity*>(ob->getUserPointer()));
 			EntityData *e2 = h2.get();
 			auto c2 = e2->addComponent<Component::Collision>();
 			c1->addCollision(h2);

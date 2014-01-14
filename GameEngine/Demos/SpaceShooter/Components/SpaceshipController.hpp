@@ -25,7 +25,7 @@ namespace Component
 		};
 	public:
 		BT_DECLARE_ALIGNED_ALLOCATOR();
-		SpaceshipController(AScene *scene, Handle &entity)
+		SpaceshipController(AScene *scene, Entity &entity)
 			: ComponentBase<SpaceshipController>(scene, entity)
 		{
 			setKey(LEFT, SDLK_a);

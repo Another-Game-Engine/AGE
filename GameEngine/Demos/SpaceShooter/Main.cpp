@@ -28,7 +28,7 @@ DEFINE_META_POD( float );
 DEFINE_META_POD( unsigned int );
 DEFINE_META_POD( std::string );
 
-DEFINE_META(Handle)
+DEFINE_META(Entity)
 {
 	ADD_MEMBER(_id);
 	ADD_MEMBER(_manager);
@@ -39,14 +39,14 @@ DEFINE_META(Handle)
 
 int			main(int ac, char **av)
 {
-	std::cout << META_TYPE(Handle)->getName() << " " << META_TYPE(Handle)->getSize() << std::endl;
+	std::cout << META_TYPE(Entity)->getName() << " " << META_TYPE(Entity)->getSize() << std::endl;
 	std::cout << META_TYPE(Component::TrackingCamera)->getName() << " " << META_TYPE(Component::TrackingCamera)->getSize() << std::endl;
-	auto lol = META_TYPE(Handle);
+	auto lol = META_TYPE(Entity);
 
-	std::auto_ptr<Handle> h();
+	std::auto_ptr<Entity> h();
 	auto smart = META_OBJECT(h);
 
-	//std::shared_ptr<Handle> i();
+	//std::shared_ptr<Entity> i();
 	//auto smart2 = META_OBJECT(i);
 
 	Engine	e;

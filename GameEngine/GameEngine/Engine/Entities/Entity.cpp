@@ -1,29 +1,29 @@
-#include <Entities\Handle.hh>
+#include <Entities\Entity.hh>
 #include <Entities\EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/Component.hh>
 #include <limits>
 #include <Core/AScene.hh>
 
-Handle::Handle(unsigned int id, AScene *manager)
+Entity::Entity(unsigned int id, AScene *manager)
 : _id(id), _manager(manager)
 {}
 
-Handle::~Handle()
+Entity::~Entity()
 {}
 
 
-const unsigned int Handle::getId() const
+const unsigned int Entity::getId() const
 {
 	return _id;
 }
 
-EntityData *Handle::operator->()
+EntityData *Entity::operator->()
 {
 	return _manager->get(*this);
 }
 
-EntityData *Handle::get() const
+EntityData *Entity::get() const
 {
 	static unsigned int max = std::numeric_limits<unsigned int>::max();
 	if (!_manager || _id == max)
@@ -31,23 +31,23 @@ EntityData *Handle::get() const
 	return _manager->get(*this);
 }
 
-bool Handle::operator<(const Handle &o) const
+bool Entity::operator<(const Entity &o) const
 {
 	return _id < o._id;
 }
 
-bool Handle::operator==(const Handle &o) const
+bool Entity::operator==(const Entity &o) const
 {
 	return _id == o._id;
 }
 
-Handle::Handle(const Handle &o)
+Entity::Entity(const Entity &o)
 {
 	_id = o._id;
 	_manager = o._manager;
 }
 
-Handle &Handle::operator=(const Handle &o)
+Entity &Entity::operator=(const Entity &o)
 {
 	_id = o._id;
 	_manager = o._manager;

@@ -5,7 +5,7 @@
 
 using namespace Component;
 
-FPController::FPController(AScene *scene, Handle &entity) : ComponentBase<FPController>(scene, entity, "KinematicCharacterController")
+FPController::FPController(AScene *scene, Entity &entity) : ComponentBase<FPController>(scene, entity, "KinematicCharacterController")
 , _controller(nullptr)
 , _ghost(nullptr)
 , _shape(nullptr)

@@ -28,9 +28,9 @@ public:
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
-	Handle &createEntity();
-	void destroy(const Handle &h);
-	EntityData *get(const Handle &h);
+	Entity &createEntity();
+	void destroy(const Entity &h);
+	EntityData *get(const Entity &h);
 
 	Engine &getEngine()
 	{

@@ -151,7 +151,7 @@ public:
 		return true;
 	}
 
-	Handle                  createHeros(const glm::vec3 &pos)
+	Entity                  createHeros(const glm::vec3 &pos)
 	{
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);

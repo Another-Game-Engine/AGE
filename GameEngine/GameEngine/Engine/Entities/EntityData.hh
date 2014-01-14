@@ -15,13 +15,13 @@
 
 class AScene;
 class EntityManager;
-class Handle;
+class Entity;
 
 class EntityData : public PubSub
 {
 private:
 	static size_t 					_currentId;
-	Handle                          _handle;
+	Entity                          _handle;
 public:
 	enum	GetFlags
 	{
@@ -37,8 +37,8 @@ public:
 
 	typedef std::vector<SmartPointer<Component::Base> >	t_ComponentsList;
 
-	Handle &getHandle();
-	void setHandle(Handle &handle);
+	Entity &getHandle();
+	void setHandle(Entity &handle);
 
 private:
 	AScene              *_scene;
@@ -80,7 +80,7 @@ public:
 	glm::mat4 const			&getGlobalTransform() const;
 	// TO DELETE
 	void 					computeGlobalTransform(glm::mat4 const &fatherTransform);  // <-- //
-	void                    computeGlobalTransform(const Handle &parent);
+	void                    computeGlobalTransform(const Entity &parent);
 
 	size_t 					getFlags() const;
 	void 					setFlags(size_t flags);

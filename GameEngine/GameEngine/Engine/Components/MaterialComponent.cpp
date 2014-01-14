@@ -4,7 +4,7 @@
 
 namespace Component
 {
-	MaterialComponent::MaterialComponent(AScene *scene, Handle &entity)
+	MaterialComponent::MaterialComponent(AScene *scene, Entity &entity)
 		: ComponentBase<MaterialComponent>(scene, entity, "MaterialCpt"),
 		_material(nullptr)
 	{

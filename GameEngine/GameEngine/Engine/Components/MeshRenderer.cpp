@@ -8,7 +8,7 @@
 
 namespace Component
 {
-	MeshRenderer::MeshRenderer(AScene *scene, Handle &entity) :
+	MeshRenderer::MeshRenderer(AScene *scene, Entity &entity) :
 		Component::ComponentBase<MeshRenderer>(scene, entity, "MeshComponent"),
 		_mesh(nullptr)
 	{

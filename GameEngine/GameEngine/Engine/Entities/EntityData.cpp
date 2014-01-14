@@ -2,7 +2,7 @@
 #include "EntityData.hh"
 #include "Core/Engine.hh"
 #include "Components/Component.hh"
-#include "Handle.hh"
+#include "Entity.hh"
 #include <limits>
 
 EntityData::EntityData(AScene *scene) :
@@ -23,12 +23,12 @@ EntityData::~EntityData()
 	_components.clear();
 }
 
-Handle &EntityData::getHandle()
+Entity &EntityData::getHandle()
 {
 	return _handle;
 }
 
-void EntityData::setHandle(Handle &handle)
+void EntityData::setHandle(Entity &handle)
 {
 	_handle = handle;
 }
@@ -57,7 +57,7 @@ void 					EntityData::computeGlobalTransform(glm::mat4 const &fatherTransform)
 	_flags ^= HAS_MOVED;
 }
 
-void 					EntityData::computeGlobalTransform(const Handle &parent)
+void 					EntityData::computeGlobalTransform(const Entity &parent)
 {
 
 	_flags ^= HAS_MOVED;

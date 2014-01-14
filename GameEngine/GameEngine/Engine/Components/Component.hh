@@ -2,7 +2,7 @@
 #define		__COMPONENT_HPP__
 
 #include <string>
-#include <Entities/Handle.hh>
+#include <Entities/Entity.hh>
 #include <Utils/PubSub.hpp>
 #include <Core/AScene.hh>
 
@@ -19,23 +19,23 @@ namespace	Component
 
 	struct Base
 	{
-		Base(AScene *scene, Handle &entity, const std::string &name = "NoName");
+		Base(AScene *scene, Entity &entity, const std::string &name = "NoName");
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
-		void			setEntity(Handle &entity);
-		Handle		&getEntity();
+		void			setEntity(Entity &entity);
+		Entity		&getEntity();
 		std::string const &getName() const;
 		virtual void reset() = 0;
 	protected:
 		AScene              *_scene;
 		std::string         _name;
-		Handle				_entity;
+		Entity				_entity;
 	};
 
 	template <class T>
 	struct ComponentBase : public Base, public PubSub
 	{
-		ComponentBase(AScene *scene, Handle &entity, const std::string &name = "DefaultComponentName")
+		ComponentBase(AScene *scene, Entity &entity, const std::string &name = "DefaultComponentName")
 		: Base(scene, entity, name),
 		PubSub(scene->getInstance<PubSub::Manager>())
 		{}

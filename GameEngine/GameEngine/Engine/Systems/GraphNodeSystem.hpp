@@ -35,7 +35,7 @@ private:
 		}
 	}
 
-	void recomputePositions(Handle &e, bool hasMoved)
+	void recomputePositions(Entity &e, bool hasMoved)
 	{
 		auto node = e->getComponent<Component::GraphNode>();
 		auto it = node->getSonsBegin();
@@ -56,16 +56,16 @@ private:
 		// DOES NOT REQUIRE COMPONENTS BECAUSE GraphNode set as root  will directly communicate with it
 		//require<Component::GraphNode>();
 
-		globalSub(PubSubKey("graphNodeSetAsRoot"), [&](Handle entity){
+		globalSub(PubSubKey("graphNodeSetAsRoot"), [&](Entity entity){
 			_roots.insert(entity);
 		});
 
-		globalSub(PubSubKey("graphNodeNotARoot"), [&](Handle entity){
+		globalSub(PubSubKey("graphNodeNotARoot"), [&](Entity entity){
 			_roots.erase(entity);
 		});
 	}
 
-	std::set<Handle> _roots;
+	std::set<Entity> _roots;
 };
 
 #endif     //__GRAPH_NODE_SYSTEM_HPP__

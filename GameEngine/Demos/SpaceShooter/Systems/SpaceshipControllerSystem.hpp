@@ -39,7 +39,7 @@ private:
 		}
 	}
 
-	void updateComponent(Handle &entity, SmartPointer<Component::SpaceshipController> c, double time)
+	void updateComponent(Entity &entity, SmartPointer<Component::SpaceshipController> c, double time)
 	{
 			c->resetControls();
 			auto &inputs = _scene->getEngine().getInstance<Input>();
@@ -75,11 +75,11 @@ private:
 
 			if (controls[Component::SpaceshipController::BACKWARD])
 				direction -= forwardDir * (float)(10.0f * time);
-			static std::vector<Handle> balls;
+			static std::vector<Entity> balls;
 
 			if (controls[Component::SpaceshipController::SHOOT])
 			{
-				Handle b = _scene->createEntity();
+				Entity b = _scene->createEntity();
 				b->setLocalTransform() = entity->getLocalTransform();
 				b->addComponent<Component::GraphNode>();
 				auto rigidBody = b->addComponent<Component::RigidBody>();

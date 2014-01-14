@@ -33,7 +33,7 @@ public:
 	}
 
 protected:
-	std::map<SmartPointer<Material>, std::list<Handle> > _sorted;
+	std::map<SmartPointer<Material>, std::list<Entity> > _sorted;
 	bool _renderDebugMethod;
 
 	virtual void updateBegin(double time)

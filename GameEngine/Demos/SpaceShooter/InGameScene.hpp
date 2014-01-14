@@ -154,9 +154,9 @@ public:
 		//
 
 		// HEROS
-		Handle heros;
+		Entity heros;
 		{
-			Handle e = createEntity();
+			Entity e = createEntity();
 			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, 0, 0));
 			e->addComponent<Component::GraphNode>();
 			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(2));
@@ -169,9 +169,9 @@ public:
 			heros = e;
 		}
 
-		Handle floor;
+		Entity floor;
 		{
-			Handle e = createEntity();
+			Entity e = createEntity();
 			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, -10, 0));
 			e->addComponent<Component::GraphNode>();
 			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 1, 100));
@@ -192,7 +192,7 @@ public:
 		return true;
 	}
 
-	Handle                  createHeros(const glm::vec3 &pos)
+	Entity                  createHeros(const glm::vec3 &pos)
 	{
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
@@ -202,7 +202,7 @@ public:
 
 	virtual bool 			userUpdate(double time)
 	{
-		static std::vector<Handle> balls;
+		static std::vector<Entity> balls;
 
 		if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 			_engine.getInstance<Input>().getInput(SDL_QUIT))
