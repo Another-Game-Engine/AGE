@@ -5,13 +5,13 @@
 #include <MediaFiles/ObjFile.hpp>
 
 ObjConvertor::ObjConvertor(AssetsConvertorManager *manager)
-: AConvertor(manager, std::set<std::string>({ ".obj" }))
+: AConvertor(manager, std::set<std::string>({ "obj" }))
 {}
 
 ObjConvertor::~ObjConvertor()
 {}
 
-std::auto_ptr<AMediaFile> ObjConvertor::convert(const File file)
+std::shared_ptr<AMediaFile> ObjConvertor::convert(const File file)
 {
 	if (!file.exists())
 		return std::auto_ptr<AMediaFile>(nullptr);
@@ -21,7 +21,7 @@ std::auto_ptr<AMediaFile> ObjConvertor::convert(const File file)
     std::string err = tinyobj::LoadObj(shapes, inputfile.c_str(), file.getFolder().c_str());
 	assert(err.empty() && "Tiny Obj error loading file.");
 
-	std::auto_ptr<ObjFile> mesh;
+	std::shared_ptr<ObjFile> mesh{ new ObjFile };
 	mesh->geometries.resize(shapes.size());
 
 	///////////

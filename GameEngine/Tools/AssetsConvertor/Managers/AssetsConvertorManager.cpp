@@ -1,6 +1,6 @@
 #include <Managers/AssetsConvertorManager.hh>
 #include <Managers/AConvertor.hh>
-
+#include <MediaFiles/AMediaFile.hpp>
 #include <Managers/ObjConvertor.hh>
 
 AssetsConvertorManager::AssetsConvertorManager()
@@ -27,6 +27,10 @@ bool AssetsConvertorManager::load(const std::string filename, const std::string 
 			auto res = e.second->convert(file);
 			if (res.get() == nullptr)
 				return false;
+			res->name = name;
+			res->path = file.getFullName();
+			_files.insert(std::make_pair(name, res));
+			return true;
 		}
 	}
 	return false;

@@ -22,13 +22,13 @@ public:
 		std::size_t key = typeid(T).hash_code();
 		if (_convertors.find(key) != std::end(_convertors))
 			return;
-		_convertors.insert(std::make_pair(key, new T(std::make_shared(this))));
+		_convertors.emplace(key, std::make_unique<T>(this));
 	}
 
 	bool load(const std::string filename, const std::string name);
 private:
 	File _outputDirectory;
-	std::map < std::string, std::auto_ptr<AMediaFile> > _files;
+	std::map < std::string, std::shared_ptr<AMediaFile> > _files;
 	std::map < std::size_t, std::unique_ptr<AConvertor> > _convertors;
 };
 

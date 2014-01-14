@@ -3,6 +3,7 @@
 
 AConvertor::AConvertor(AssetsConvertorManager *manager, std::set<std::string> extensions)
 : _manager(manager)
+, _extensions(extensions)
 {}
 
 AConvertor::~AConvertor()
