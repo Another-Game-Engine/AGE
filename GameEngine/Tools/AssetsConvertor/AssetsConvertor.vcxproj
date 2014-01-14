@@ -82,9 +82,15 @@
     <ClCompile Include="Main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Managers\AConvertor.cpp" />
+    <ClCompile Include="Managers\AssetsConvertorManager.cpp" />
+    <ClCompile Include="Managers\ObjConvertor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScene.hh" />
+    <ClInclude Include="Managers\AConvertor.hh" />
+    <ClInclude Include="Managers\AssetsConvertorManager.hh" />
+    <ClInclude Include="Managers\ObjConvertor.hh" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
