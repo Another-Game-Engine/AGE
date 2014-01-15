@@ -20,9 +20,6 @@ VertexManager<NBR_ATTRIBUTE>::~VertexManager()
 	_vertexArray.unbind();
 	_indexBuffer.unbind();
 	_dataBuffer.unbind();
-	_vertexArray.unload();
-	_indexBuffer.unload();
-	_dataBuffer.unload();
 }
 
 template <uint8_t NBR_ATTRIBUTE>
@@ -67,7 +64,7 @@ void VertexManager<NBR_ATTRIBUTE>::addVertice(Vertice<NBR_ATTRIBUTE> *vertex)
 
 	if (vertex)
 	{
-		index = _pool.addElement(vertex);
+		index = _pool.addElement(*vertex);
 		vertex->_index = index;
 		vertex->_vertexManager = this;
 	}
@@ -89,16 +86,14 @@ void VertexManager<NBR_ATTRIBUTE>::clear()
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-inline void VertexManager<NBR_ATTRIBUTE>::update()
+inline void VertexManager<NBR_ATTRIBUTE>::sendVertexAttribPointerOnGPU()
 {
-	_vertexArray.bind();
-	_dataBuffer.bind();
 	for (GLuint index = 0; index < GLuint(NBR_ATTRIBUTE); ++index)
 	{
-		if (_isBindAttribute[index] == false)
+		if (_isAttributeActivate[index] == false)
 		{
 			glEnableVertexAttribArray(index);
-			_isBindAttribute[index] = true;
+			_isAttributeActivate[index] = true;
 		}
 		glVertexAttribPointer
 			(index,
@@ -106,10 +101,76 @@ inline void VertexManager<NBR_ATTRIBUTE>::update()
 			_attributes[index].getType(),
 			GL_FALSE,
 			0,
-			_pool.getPointerAttribute(index));
+			reinterpret_cast<GLvoid const *>(_pool.getPointerAttribute(index)));
 	}
+}
+
+template <uint8_t NBR_ATTRIBUTE>
+void VertexManager<NBR_ATTRIBUTE>::sendMajorVertexDataOnGPU()
+{
+	_vertexArray.bind();
+	_dataBuffer.bind();
+	sendVertexAttribPointerOnGPU();
 	_indexBuffer.bind();
 	_vertexArray.unbind();
+
+	_indexBuffer.bind();
+	_dataBuffer.bind();
+	glBufferData(GL_ARRAY_BUFFER, _pool.getSizeVertexBuffer(), NULL, GL_STREAM_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _pool.getSizeVertexBuffer(), NULL, GL_STREAM_DRAW);
+	for (size_t index = 0; index < _pool.getNbrElement(); ++index)
+	{
+		for (uint8_t attribute = 0; attribute < NBR_ATTRIBUTE; ++attribute)
+		{
+			glBufferSubData
+				(GL_ARRAY_BUFFER,
+				_pool[index].getByteOffset(attribute),
+				_pool[index].getNbrByte(attribute),
+				_pool[index].getVertex().getBuffer(attribute));
+			glBufferSubData
+				(GL_ELEMENT_ARRAY_BUFFER,
+				_pool[index].getIndicesOffset() * sizeof(unsigned int),
+				_pool[index].getVertex().getNbrIndices() * sizeof(unsigned int),
+				_pool[index].getVertex().getBuffer(attribute));
+		}
+	}
+	_indexBuffer.unbind();
+	_dataBuffer.unbind();
+	_pool.resetState();
+}
+
+template <uint8_t NBR_ATTRIBUTE>
+void VertexManager<NBR_ATTRIBUTE>::sendMinorVertexDataOnGPU()
+{
+	uint32_t index;
+	while (_pool.getUpdateMinor(index))
+	{
+		for (uint8_t attribute = 0; attribute < NBR_ATTRIBUTE; ++attribute)
+		{
+			_indexBuffer.bind();
+			_dataBuffer.bind();
+			glBufferSubData
+				(GL_ARRAY_BUFFER,
+				_pool[index].getByteOffset(attribute),
+				_pool[index].getNbrByte(attribute),
+				_pool[index].getVertex().getBuffer(attribute));
+			glBufferSubData
+				(GL_ELEMENT_ARRAY_BUFFER,
+				_pool[index].getIndicesOffset() * sizeof(unsigned int),
+				_pool[index].getVertex().getNbrIndices() * sizeof(unsigned int),
+				_pool[index].getVertex().getBuffer(attribute));
+		}
+	}
+	_pool.resetState();
+}
+
+template <uint8_t NBR_ATTRIBUTE>
+void VertexManager<NBR_ATTRIBUTE>::update()
+{
+	if (_pool.getUpdateState() == MAJOR_UPDATE)
+		sendMajorVertexDataOnGPU();
+	else if (_pool.getUpdateState() == MINOR_UPDATE)
+		sendMinorVertexDataOnGPU();
 }
 
 template <uint8_t NBR_ATTRIBUTE>
@@ -117,16 +178,12 @@ void VertexManager<NBR_ATTRIBUTE>::callDraw(Vertice<NBR_ATTRIBUTE> const * const
 {
 	if (drawable->isDrawable())
 	{
-		if (_pool.update())
-			update();
+		update();
+		_vertexArray.bind();
+		if (drawable->hasIndices())
+			glDrawElementsBaseVertex(mode, drawable->getNbrIndices(), GL_UNSIGNED_INT, reinterpret_cast<GLvoid const *>(_pool[drawable->getIndexPool()].getIndicesOffset() * sizeof(unsigned int)), _pool[drawable->getIndexPool()].getVertexOffset());
 		else
-		{
-			_vertexArray.bind();
-			if (drawable->hasIndices())
-				glDrawElementsBaseVertex(mode, drawable->getSizeIndices() / sizeof(uint32_t), GL_UNSIGNED_INT, _pool[drawable->getIndexPool()].vertexOffset(), _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
-			else
-				glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
-		}
+			glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
 	}
 }
 

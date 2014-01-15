@@ -6,8 +6,7 @@ VertexPool<NBR_ATTRIBUTE>::VertexPool(std::array<Attribute, 4> const &attributes
 _sizeIndicesBuffer(0),
 _nbrVertex(0),
 _nbrIndices(0),
-_updateMajor(false),
-_updateMinor(false),
+_updateState(NO_UPDATE),
 _attributes(attributes)
 {
 	for (uint8_t index = 0; index < NBR_ATTRIBUTE; ++index)
@@ -28,8 +27,7 @@ _nbrVertex(copy._nbrVertex),
 _nbrIndices(copy._nbrIndices),
 _pointerAttributes(copy._pointerAttributes),
 _updateBuffer(copy._updateBuffer),
-_updateMajor(copy._updateMajor),
-_updateMinor(copy._updateMinor),
+_updateState(copy._updateState),
 _attributes(copy._attributes)
 {
 }
@@ -44,8 +42,7 @@ VertexPool<NBR_ATTRIBUTE> &VertexPool<NBR_ATTRIBUTE>::operator=(VertexPool<NBR_A
 	_nbrIndices = vertexpool._nbrIndices;
 	_pointerAttributes = vertexpool._pointerAttributes;
 	_updateBuffer = vertexpool._updateBuffer;
-	_updateMajor = vertexpool._updateMajor;
-	_updateMinor = vertexpool._updateMinor;
+	_updateState = vertexpool._updateState;
 	_attributes = vertexpool._attributes;
 	return (*this);
 }
@@ -53,7 +50,7 @@ VertexPool<NBR_ATTRIBUTE> &VertexPool<NBR_ATTRIBUTE>::operator=(VertexPool<NBR_A
 template <uint8_t NBR_ATTRIBUTE>
 VertexPoolElement<NBR_ATTRIBUTE> const &VertexPool<NBR_ATTRIBUTE>::operator[](uint32_t index)
 {
-	return (_element[index]);
+	return (_elements[index]);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
@@ -63,31 +60,35 @@ void VertexPool<NBR_ATTRIBUTE>::computeOffset()
 	uint32_t indicesOffset = 0;
 	uint32_t vertexOffset = 0;
 	std::array<uint32_t, NBR_ATTRIBUTE> byteOffset;
+	std::array<uint32_t, NBR_ATTRIBUTE> nbrByte;
 
 	if (element.size() > 0)
 	{
 		_pointerAttributes[0] = 0;
-		_byteOffset[0] = 0;
+		byteOffset[0] = 0;
+		nbrByte[0] = _elements[0].getVertex().getNbrVertex() * _attributes[0].getSizeType() * _attributes[0].getNbrComponent();
 		for (uint8_t index = 1; index < NBR_ATTRIBUTE; ++index)
 		{
+			nbrByte[index] = _elements[0].getVertex().getNbrVertex() * _attributes[index].getSizeType() * _attributes[index].getNbrComponent();
 			_pointerAttribute[index] = _attributes[index - 1].getSizeType * _attributes[index - 1].getNbrComponent * _nbrVertex;
 			byteOffset[index] = _pointerAttributes[index];
 		}
-		_elements[0].settingOffset(0, 0, byteOffset);
+		_elements[0].settingOffset(0, 0, byteOffset, nbrByte);
 		for (uint32_t index = 1; index < _elements.size(); ++index)
 		{
 			VertexPoolElement<NBR_ATTRIBUTE> element(_elements[index - 1]);
 			indicesOffset = element.getIndicesOffset() + element.getVertex().getNbrIndices();
 			vertexOffset = element.getVertexOffset() + element.getVertex().getNbrVertex();
-			for (uint8_t index = 0; index < NBR_ATTRIBUTE; ++index)
+			for (uint8_t attribute = 0; attribute < NBR_ATTRIBUTE; ++attribute)
 			{
-				byteOffset[index] =
-					element.getByteOffset(index) +
+				nbrByte[attribute] = _elements[index].getVertex().getNbrVertex() * _attributes[attribute].getSizeType() * _attributes[attribute].getNbrComponent();
+				byteOffset[attribute] = 
+					element.getByteOffset(attribute) +
 					(element.getVertex().getNbrVertex() *
-					_attributes[index].getSizeType() *
-					_attributes[index].getNbrComponent());
+					_attributes[attribute].getSizeType() *
+					_attributes[attribute].getNbrComponent());
 			}
-			_elements[index].settingOffset(indicesOffset, vertexOffset, byteOffset);
+			_elements[index].settingOffset(indicesOffset, vertexOffset, byteOffset, nbrByte);
 		}
 	}
 }
@@ -97,31 +98,32 @@ uint32_t VertexPool<NBR_ATTRIBUTE>::addElement(Vertice<NBR_ATTRIBUTE> const &ver
 {
 	uint32_t sizeNotUse = 0;
 	std::array<uint32_t, NBR_ATTRIBUTE> byteOffset;
-	uint32_t vertexOffset;
-	uint32_t indicesOffset;
+	uint32_t vertexOffset = 0;
+	uint32_t indicesOffset = 0;
+	AddVerticesResult ret = FAIL;
 
-	for (uint32_t index = 0; index < _element.size(); ++index)
+	for (size_t index = 0; index < _elements.size(); ++index)
 	{
-		if ((AddVerticeResult ret = _elements[index].addVertice(vertices)) != FAIL)
+		if ((ret = _elements[index].addVertice(vertices)) != FAIL)
 		{
 			if (ret == SET)
 			{
-				_updateMinor = true;
+				_updateState = MINOR_UPDATE;
 				_updateBuffer.push(index);
 			}
 			return (index);
 		}
 		if (_elements[index].isEmpty())
-			sizeNotUse += _elements[index].getVertex().getSizeBuffer();
+			sizeNotUse += _elements[index].getVertex().getSizeVertexBuffer();
 	}
-	if (_sizeBuffer > 0 && (float(sizeNotUse) / float(_sizeBuffer)) > 0.75)
+	if (_sizeVertexBuffer > 0 && (float(sizeNotUse) / float(_sizeVertexBuffer)) > 0.75)
 		clear();
-	_elements.push_back(VertexPoolElement(1, vertices));
-	_sizeIndicesBuffer += vertex.getSizeIndicesBuffer();
-	_sizeVertexBuffer += vertex.getSizeVertexBuffer();
-	_nbrVertex += vertex.getNbrVertex();
-	_nbrIndices += vertex.getNbrIndices();
-	_updateMajor = true;
+	_elements.push_back(VertexPoolElement<NBR_ATTRIBUTE>(1, vertices));
+	_sizeIndicesBuffer += vertices.getSizeIndicesBuffer();
+	_sizeVertexBuffer += vertices.getSizeVertexBuffer();
+	_nbrVertex += vertices.getNbrVertex();
+	_nbrIndices += vertices.getNbrIndices();
+	_updateState = MAJOR_UPDATE;
 	return (_elements.size() - 1);
 }
 
@@ -138,14 +140,14 @@ void VertexPool<NBR_ATTRIBUTE>::clear()
 	std::vector<VertexPoolElement<NBR_ATTRIBUTE>>::iterator it;
 
 	it = _elements.begin();
-	while (it != _element.end())
+	while (it != _elements.end())
 	{
 		if ((*it).isEmpty())
 		{
-			_sizeIndicesBuffer += (*it).getSizeIndicesBuffer();
-			_sizeVertexBuffer += (*it).getSizeVertexBuffer();
-			_nbrVertex += (*it).getNbrVertex();
-			_nbrIndices += (*it).getNbrIndices();
+			_sizeIndicesBuffer += (*it).getVertex().getSizeIndicesBuffer();
+			_sizeVertexBuffer += (*it).getVertex().getSizeVertexBuffer();
+			_nbrVertex += (*it).getVertex().getNbrVertex();
+			_nbrIndices += (*it).getVertex().getNbrIndices();
 			it = _elements.erase(it);
 		}
 		++it;
@@ -163,7 +165,7 @@ void VertexPool<NBR_ATTRIBUTE>::fullClear()
 template <uint8_t NBR_ATTRIBUTE>
 size_t VertexPool<NBR_ATTRIBUTE>::getNbrElement() const
 {
-	return (_element.size());
+	return (_elements.size());
 }
 
 template <uint8_t NBR_ATTRIBUTE>
@@ -197,24 +199,25 @@ GLuint VertexPool<NBR_ATTRIBUTE>::getPointerAttribute(GLint index) const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-void VertexPool<NBR_ATTRIBUTE>::updateMinor() const
+StateVertexPool VertexPool<NBR_ATTRIBUTE>::getUpdateState() const
 {
-
+	return (_updateState);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-void VertexPool<NBR_ATTRIBUTE>::updateMajor() const
+bool VertexPool<NBR_ATTRIBUTE>::getUpdateMinor(uint32_t &index)
 {
-
+	if (_updateBuffer.empty())
+		return (false);
+	index = _updateBuffer.front();
+	_updateBuffer.pop();
+	return (true);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-bool VertexPool<NBR_ATTRIBUTE>::update()
+void VertexPool<NBR_ATTRIBUTE>::resetState()
 {
-	if (_updateMajor)
-		updateMajor();
-	else if (_updateMinor)
-		updateMinor();
+	_updateState = NO_UPDATE;
 }
 
 #endif /*!VERTEXPOOL_HH_*/

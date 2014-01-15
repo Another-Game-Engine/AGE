@@ -33,8 +33,6 @@ bool        Engine::init()
 	}
 	if (!getInstance<Renderer>().init())
 		return false;
-	if (!getInstance<VertexManager<4>>().init())
-		return (false);
   	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
