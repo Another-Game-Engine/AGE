@@ -34,7 +34,13 @@ private:
 
 	virtual void _unserialize(std::ifstream &is)
 	{
-
+		unsigned int size;
+		Archive::unserialize(is, size);
+		geometries.resize(size);
+		for (unsigned int i = 0; i < size; ++i)
+		{
+			Archive::unserialize(is, geometries[i].name);
+		}
 	}
 };
 

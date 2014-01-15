@@ -18,6 +18,16 @@ struct AMediaFile
 		Archive::serialize(os, name);
 		_serialize(os);
 	}
+
+	void unserialize(std::ifstream &is)
+	{
+		std::string pathName;
+		Archive::unserialize(is, pathName);
+		path = File(pathName);
+		Archive::unserialize(is, name);
+		_unserialize(is);
+	}
+
 private:
 	virtual void _serialize(std::ofstream &os) = 0;
 	virtual void _unserialize(std::ifstream &is) = 0;
