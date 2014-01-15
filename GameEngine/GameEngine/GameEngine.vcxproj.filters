@@ -31,7 +31,6 @@
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
-    <ClCompile Include="Engine\Entities\Handle.cpp" />
     <ClCompile Include="Engine\Components\MaterialComponent.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
@@ -78,6 +77,7 @@
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
+    <ClInclude Include="Engine\Utils\Archive.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
