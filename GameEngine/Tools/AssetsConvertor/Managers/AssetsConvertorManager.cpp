@@ -48,12 +48,12 @@ bool AssetsConvertorManager::serializeData()
 	//	e.second->serialize(test);
 	//}
 
-	std::ifstream test;
-	Archive::open(test, "test.serialization");
-	AMediaFile t;
-	for (auto &e : _files)
-	{
-		e.second->unserialize(test);
-	}
+	//std::ifstream test;
+	//Archive::open(test, "test.serialization");
+
+	//for (auto &e : _files)
+	//{
+	//	e.second->unserialize(test);
+	//}
 	return true;
 }
