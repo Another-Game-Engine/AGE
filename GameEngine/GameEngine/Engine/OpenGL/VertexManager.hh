@@ -34,6 +34,10 @@ private:
 	VertexPool<NBR_ATTRIBUTE> _pool;
 	std::array<bool, NBR_ATTRIBUTE> _isAttributeActivate;
 	std::array<Attribute, NBR_ATTRIBUTE> _attributes;
+private:
+	inline void sendVertexAttribPointerOnGPU();
+	inline void sendMajorVertexDataOnGPU();
+	inline void sendMinorVertexDataOnGPU();
 };
 
 # include "VertexManager.hpp"

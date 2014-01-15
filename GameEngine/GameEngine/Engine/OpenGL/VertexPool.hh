@@ -10,6 +10,13 @@
 # include "Vertice.hh"
 # include "VertexPoolElement.hh"
 
+enum StateVertexPool
+{
+	MINOR_UPDATE = 0,
+	MAJOR_UPDATE,
+	NO_UPDATE
+};
+
 template <uint8_t NBR_ATTRIBUTE>
 class VertexPool
 {
@@ -21,29 +28,30 @@ private:
 	uint32_t _nbrIndices;
 	std::array<GLuint, NBR_ATTRIBUTE> _pointerAttributes;
 	std::queue<uint32_t> _updateBuffer;
-	bool _updateMajor;
-	bool _updateMinor;
+	StateVertexPool _updateState;
 	std::array<Attribute, 4> _attributes;
-	inline void updateMajor() const;
-	inline void updateMinor() const;
 public:
 	VertexPool(std::array<Attribute, 4> const &attributes);
 	~VertexPool();
 	VertexPool(VertexPool<NBR_ATTRIBUTE> const &copy);
 	VertexPool &operator=(VertexPool const &vertexpool);
-	VertexPoolElement<NBR_ATTRIBUTE> const &operator[](uint32_t index);
+	
 	uint32_t addElement(Vertice<NBR_ATTRIBUTE> const &vertices);
 	void deleteElement(Vertice<NBR_ATTRIBUTE> const &vertices);
 	void fullClear();
 	void clear();
-	bool update();
+	inline void computeOffset();
+
+	VertexPoolElement<NBR_ATTRIBUTE> const &operator[](uint32_t index);
 	size_t getNbrElement() const;
 	uint32_t getSizeIndicesBuffer() const;
 	uint32_t getSizeVertexBuffer() const;
 	uint32_t getNbrVertex() const;
 	uint32_t getNbrIndices() const;
 	GLuint getPointerAttribute(GLint index) const;
-	inline void computeOffset();
+	StateVertexPool getUpdateState() const;
+	bool getUpdateMinor(uint32_t &index);
+	void resetState();
 };
 
 # include "VertexPool.hpp"

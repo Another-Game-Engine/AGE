@@ -26,12 +26,12 @@ Vertice<NBR_ATTRIBUTE>::Vertice(Vertice<NBR_ATTRIBUTE> const &copy)
 _sizeVertexBuffer(copy._sizeVertexBuffer),
 _sizeIndicesBuffer(copy._sizeIndicesBuffer),
 _nbrVertex(copy._nbrVertex),
-_nbrIndice(copy._nbrIndice),
+_nbrIndices(copy._nbrIndices),
 _vertexManager(copy._vertexManager),
 _index(copy._index)
 {
-	if (copy.indices)
-		_indices = new Data(copy.indices);
+	if (copy._indices)
+		_indices = new Data(*copy._indices);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
@@ -44,17 +44,15 @@ Vertice<NBR_ATTRIBUTE>::~Vertice()
 template <uint8_t NBR_ATTRIBUTE>
 Vertice<NBR_ATTRIBUTE> &Vertice<NBR_ATTRIBUTE>::operator=(Vertice<NBR_ATTRIBUTE> const &vertex)
 {
-	_bufferData = vertex._bufferDatas;
-	_attribComponent = vertex._attribComponent;
-	_attribByte = vertex._attribByte;
+	_bufferData = vertex._bufferData;
 	_sizeVertexBuffer = vertex._sizeVertexBuffer;
 	_sizeIndicesBuffer = vertex._sizeIndicesBuffer;
 	_nbrVertex = vertex._nbrVertex;
-	_nbrIndice = vertex._nbrIndice;
+	_nbrIndices = vertex._nbrIndices;
 	if (vertex._indices)
-		_indices = new Data(vertex.indices);
+		_indices = new Data(*vertex._indices);
 	_vertexManager = vertex._vertexManager;
-	_index = vertex._indexPool;
+	_index = vertex._index;
 	return (*this);
 }
 
@@ -105,6 +103,12 @@ int32_t Vertice<NBR_ATTRIBUTE>::getIndexPool() const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
+void const * const Vertice<NBR_ATTRIBUTE>::getBuffer(uint8_t index) const
+{
+	return (_bufferData[index].getBuffer());
+}
+
+template <uint8_t NBR_ATTRIBUTE>
 bool Vertice<NBR_ATTRIBUTE>::isDrawable() const
 {
 	if (_vertexManager == NULL || _index == -1)
@@ -123,11 +127,11 @@ bool Vertice<NBR_ATTRIBUTE>::hasIndices() const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-void Vertice<NBR_ATTRIBUTE>::draw() const
+void Vertice<NBR_ATTRIBUTE>::draw(GLenum mode) const
 {
 	if (_vertexManager != NULL)
 	{
-		std::cout << "I'am draw somthing" << std::endl;
+		_vertexManager->callDraw(this, mode);
 	}
 }
 
