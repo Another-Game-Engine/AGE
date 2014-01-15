@@ -49,14 +49,13 @@ namespace			Archive
   */
   inline void			unserialize(std::ifstream &file, std::string & a)
   {
-    //int				strSize;
-
-    //unserialize(file, strSize);
-
-    //char			buffer[strSize + 1];
-    //file.read(buffer, strSize);
-    //buffer[strSize] = '\0';
-    //a.assign(buffer);
+    int				    strSize;
+    unserialize(file, strSize);
+	char                *str = new char[strSize + 1]();
+    file.read(str, strSize);
+	str[strSize] = '\0';
+	a.assign(str);
+	delete[] str;
   }
 }
 
