@@ -6,6 +6,9 @@
 #include <MediaFiles/AMediaFile.hpp>
 #include <MediaFiles/ObjFile.hpp>
 
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+
 AssetsConvertorManager::AssetsConvertorManager()
 {
 	registerConvertor<ObjConvertor>();
@@ -41,12 +44,14 @@ bool AssetsConvertorManager::load(const std::string filename, const std::string 
 
 bool AssetsConvertorManager::serializeData()
 {
-	//std::ofstream test;
-	//Archive::open(test, "test.serialization");
-	//for (auto &e : _files)
-	//{
-	//	e.second->serialize(test);
-	//}
+	std::ofstream ofs("test.serialization");
+
+	boost::archive::text_oarchive oa(ofs);
+
+	for (auto &e : _files)
+	{
+		ofs << e.second;
+	}
 
 	//std::ifstream test;
 	//Archive::open(test, "test.serialization");
