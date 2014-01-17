@@ -128,9 +128,9 @@ public:
 		// COMPLEXE OBJ LOAD TEST
 		///
 		///
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/crytek-sponza/sponza.obj");
+		_engine.getInstance<Resources::ResourceManager>().addResource("model:cube", new Resources::SharedMesh(), "./Assets/crytek-sponza/sponza.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:cube", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
+//		_engine.getInstance<Resources::ResourceManager>().addResource("model:cube", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
 //		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/head/head.obj");
 		_engine.getInstance<Resources::ResourceManager>().addResource("model:spaceship", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
 		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
@@ -174,7 +174,7 @@ public:
 			Entity e = createEntity();
 			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, -10, 0));
 			e->addComponent<Component::GraphNode>();
-			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 1, 100));
+			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 100, 100));
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			rigidBody->setCollisionShape(Component::RigidBody::BOX);
