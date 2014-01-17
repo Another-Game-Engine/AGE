@@ -8,7 +8,7 @@ Assets/
 
 # Vendors/Cereal -> Download it manualy : http://uscilab.github.io/cereal/
 Cereal/
-bullet-2.82-r2704/*
+GameEngine/Vendors/bullet-2.82-r2704/*
 
 # User-specific files
 *.suo
