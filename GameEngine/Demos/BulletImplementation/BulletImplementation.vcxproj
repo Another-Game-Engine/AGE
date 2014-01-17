@@ -40,13 +40,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);C:/boost/boost_1_55_0</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Builds\</OutDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);C:/boost/boost_1_55_0</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -56,7 +56,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\boost\boost_1_55_0;C:\boost\boost_1_55_0;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost\boost_1_55_0;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -83,7 +83,7 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\boost\boost_1_55_0;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
