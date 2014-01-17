@@ -41,7 +41,7 @@ void	UniformBuffer::init(Shader *referent, std::string const &blockName, std::st
 	// we store the uniforms informations in this table with this layout:
 	// Indices - Types - Offset
 	varsInfos = new GLint[varNbr * 3];
-	glGetActiveUniformBlockiv(referent->getId(), blockIdx,	GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, varsInfos);
+	(referent->getId(), blockIdx,	GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, varsInfos);
 	glGetActiveUniformsiv(referent->getId(), varNbr, (GLuint*)varsInfos, GL_UNIFORM_TYPE, varsInfos + varNbr);
 	glGetActiveUniformsiv(referent->getId(), varNbr, (GLuint*)varsInfos, GL_UNIFORM_OFFSET, varsInfos + 2 * varNbr);
 	// sort the vars by offset to make them correspond with the order of the names
