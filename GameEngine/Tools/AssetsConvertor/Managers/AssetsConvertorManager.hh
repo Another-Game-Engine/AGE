@@ -5,6 +5,10 @@
 #include <map>
 #include <memory>
 
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/xml.hpp>
+
 #include <MediaFiles/AMediaFile.hpp>
 #include <MediaFiles/ObjFile.hpp>
 
@@ -32,7 +36,7 @@ public:
 	bool serializeData();
 private:
 	File _outputDirectory;
-	std::map < std::string, std::shared_ptr<AMediaFile> > _files;
+	std::map < std::string, std::shared_ptr<Basebase> > _files;
 	std::map < std::size_t, std::unique_ptr<AConvertor> > _convertors;
 };
 

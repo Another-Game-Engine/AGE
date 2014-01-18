@@ -2,26 +2,43 @@
 # define  __AMEDIA_FILE_HPP__
 
 #include <Utils/File.hpp>
-//#include <cereal/types/map.hpp>
-//#include <cereal/types/vector.hpp>
-//#include <cereal/types/string.hpp>
-//#include <cereal/types/complex.hpp>
 
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <cereal/cereal.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/complex.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/base_class.hpp>
+#include <cereal/types/memory.hpp>
 
-struct AMediaFile
+struct Basebase
+{
+	Basebase(){}
+	virtual ~Basebase(){}
+	template <class Archive>
+	void serialize(Archive & ar)
+	{
+		int b = 3;
+		ar(CEREAL_NVP(b));
+    }
+};
+
+struct AMediaFile : public Basebase
 {
 	AMediaFile();
 	virtual ~AMediaFile();
-		virtual void test(){}
+	virtual void test(){}
 	File path;
 	std::string name;
 
 	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
+	void serialize(Archive & ar)
 	{
-		ar & "lol";
+		int u = 2;
+		ar(CEREAL_NVP(u));
     }
 };
 

@@ -4,6 +4,15 @@
 #include <MediaFiles/AMediaFile.hpp>
 #include <vector>
 #include <glm/glm.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/complex.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/base_class.hpp>
+#include <cereal/types/memory.hpp>
 
 struct ObjFile : public AMediaFile
 {
@@ -21,7 +30,13 @@ struct ObjFile : public AMediaFile
 	};
 	std::vector<Geometry> geometries;
 	//	std::vector<MaterialFile> materials;
-private:
+
+	template <class Archive>
+	void serialize(Archive & ar)
+	{
+		int r = 0;
+		ar(r);
+    }
 };
 
 #endif   //__OBJ_FILE_HPP__
