@@ -5,7 +5,8 @@
 #include <cereal/types/polymorphic.hpp>
 
 AMediaFile::AMediaFile()
-{}
+{
+}
 
 AMediaFile::~AMediaFile()
 {}

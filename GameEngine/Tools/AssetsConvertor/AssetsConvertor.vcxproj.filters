@@ -56,5 +56,8 @@
     <ClInclude Include="MediaFiles\ObjFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MediaFiles\Serializable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
