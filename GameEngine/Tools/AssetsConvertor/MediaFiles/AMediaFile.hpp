@@ -15,6 +15,8 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 
+#include "Serializable.hpp"
+
 struct AMediaFile
 {
 	AMediaFile();
