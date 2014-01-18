@@ -9,7 +9,6 @@ class AScene;
 class Entity
 {
 public:
-	META_DATA(Entity);
 	Entity(unsigned int id = 0, AScene *manager = nullptr);
 	~Entity();
 	const unsigned int getId() const;
