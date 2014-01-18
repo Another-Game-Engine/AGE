@@ -3,12 +3,6 @@
 #include <MediaFiles/AMediaFile.hpp>
 #include <Managers/ObjConvertor.hh>
 
-#include <MediaFiles/AMediaFile.hpp>
-#include <MediaFiles/ObjFile.hpp>
-
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-
 AssetsConvertorManager::AssetsConvertorManager()
 {
 	registerConvertor<ObjConvertor>();
@@ -46,11 +40,11 @@ bool AssetsConvertorManager::serializeData()
 {
 	std::ofstream ofs("test.serialization");
 
-	boost::archive::text_oarchive oa(ofs);
-
 	for (auto &e : _files)
 	{
-		ofs << e.second;
+		cereal::JSONOutputArchive oa(ofs);
+		//oa(*e.second.get());
+		oa(cereal::make_nvp("coucou", e.second));
 	}
 
 	//std::ifstream test;
