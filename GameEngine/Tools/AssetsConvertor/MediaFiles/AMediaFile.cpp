@@ -10,5 +10,4 @@ AMediaFile::AMediaFile()
 AMediaFile::~AMediaFile()
 {}
 
-CEREAL_REGISTER_TYPE(Basebase);
-CEREAL_REGISTER_TYPE(AMediaFile);
+//CEREAL_REGISTER_TYPE(AMediaFile);

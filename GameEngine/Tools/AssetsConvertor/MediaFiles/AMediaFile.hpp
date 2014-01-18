@@ -1,6 +1,7 @@
 #ifndef   __AMEDIA_FILE_HPP__
 # define  __AMEDIA_FILE_HPP__
 
+#include <functional>
 #include <Utils/File.hpp>
 
 #include <cereal/cereal.hpp>
@@ -14,32 +15,32 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 
-struct Basebase
-{
-	Basebase(){}
-	virtual ~Basebase(){}
-	template <class Archive>
-	void serialize(Archive & ar)
-	{
-		int b = 3;
-		ar(CEREAL_NVP(b));
-    }
-};
-
-struct AMediaFile : public Basebase
+struct AMediaFile
 {
 	AMediaFile();
 	virtual ~AMediaFile();
-	virtual void test(){}
+
 	File path;
 	std::string name;
 
-	template <class Archive>
-	void serialize(Archive & ar)
+	virtual void serialize(std::ofstream &s) = 0;
+	virtual AMediaFile *unserialize(std::ifstream &s) = 0;
+protected:
+	static int uniqueId()
 	{
-		int u = 2;
-		ar(CEREAL_NVP(u));
-    }
+		static int id = 0;
+		return id++;
+	}
+};
+
+template <typename T>
+struct AMediaFileBase : public AMediaFile
+{
+	static unsigned int getTypeId()
+	{
+		static unsigned int id = AMediaFile::uniqueId();
+		return id;
+	}
 };
 
 #endif    //__AMEDIA_FILE_HPP__

@@ -10,4 +10,5 @@ ObjFile::ObjFile()
 ObjFile::~ObjFile()
 {}
 
-CEREAL_REGISTER_TYPE_WITH_NAME(ObjFile, "lolo");
+//CEREAL_REGISTER_TYPE(ObjFile);
+//CEREAL_REGISTER_TYPE(AMediaFileBase<ObjFile>);

@@ -14,7 +14,7 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 
-struct ObjFile : public AMediaFile
+struct ObjFile : public AMediaFileBase<ObjFile>
 {
 	ObjFile();
 	virtual ~ObjFile();
@@ -31,12 +31,17 @@ struct ObjFile : public AMediaFile
 	std::vector<Geometry> geometries;
 	//	std::vector<MaterialFile> materials;
 
-	template <class Archive>
-	void serialize(Archive & ar)
+	virtual void serialize(std::ofstream &s)
 	{
-		int r = 0;
-		ar(r);
+		cereal::JSONOutputArchive ar(s);
+		auto c = 1;
+		ar(c);
     }
+
+	virtual AMediaFile *unserialize(std::ifstream &s)
+	{
+		return nullptr;
+	}
 };
 
 #endif   //__OBJ_FILE_HPP__

@@ -42,17 +42,24 @@ bool AssetsConvertorManager::serializeData()
 
 	for (auto &e : _files)
 	{
-		cereal::JSONOutputArchive oa(ofs);
-		//oa(*e.second.get());
-		oa(cereal::make_nvp("coucou", e.second));
+		e.second->serialize(ofs);
+//		cereal::JSONOutputArchive oa(ofs);
+
+
+
+		//e.second->serialize(oa);
+		//oa(e.second);
+		//test1->serialize(oa);
+		//test2->serialize(oa);
+		//test3->serialize(oa);
+		//oa(*test3.get());
 	}
+	ofs.close();
+	std::ifstream ifs("test.serialization");
 
-	//std::ifstream test;
-	//Archive::open(test, "test.serialization");
-
-	//for (auto &e : _files)
-	//{
-	//	e.second->unserialize(test);
-	//}
+	for (auto &e : _files)
+	{
+//		e.second->unserialize(ifs);
+	}
 	return true;
 }

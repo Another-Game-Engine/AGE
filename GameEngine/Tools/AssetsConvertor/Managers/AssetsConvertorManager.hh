@@ -36,7 +36,7 @@ public:
 	bool serializeData();
 private:
 	File _outputDirectory;
-	std::map < std::string, std::shared_ptr<Basebase> > _files;
+	std::map < std::string, std::shared_ptr<AMediaFile> > _files;
 	std::map < std::size_t, std::unique_ptr<AConvertor> > _convertors;
 };
 
