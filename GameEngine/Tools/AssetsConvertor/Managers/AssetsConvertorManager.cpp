@@ -39,14 +39,14 @@ bool AssetsConvertorManager::load(const std::string filename, const std::string 
 
 bool AssetsConvertorManager::serializeData()
 {
-	std::ofstream ofs("test.serialization");
+	std::ofstream ofs("test.serialization", std::ios_base::binary);
 
 	for (auto &e : _files)
 	{
 		e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
 	}
 	ofs.close();
-	std::ifstream ifs("test.serialization");
+	std::ifstream ifs("test.serialization", std::ios_base::binary);
 
 	for (auto &e : _files)
 	{
