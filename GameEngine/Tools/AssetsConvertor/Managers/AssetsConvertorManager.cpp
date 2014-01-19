@@ -43,15 +43,14 @@ bool AssetsConvertorManager::serializeData()
 
 	for (auto &e : _files)
 	{
-		dynamic_cast<ObjFile*>(e.second.get())->test = glm::vec3(42, 123, 666);
-		e.second->serialize<cereal::JSONOutputArchive>(ofs);
+		e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
 	}
 	ofs.close();
 	std::ifstream ifs("test.serialization");
 
 	for (auto &e : _files)
 	{
-		AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream<cereal::JSONInputArchive>(ifs);
+		AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream<cereal::PortableBinaryInputArchive>(ifs);
 		std::cout << "lol" << std::endl;
 	}
 	return true;
