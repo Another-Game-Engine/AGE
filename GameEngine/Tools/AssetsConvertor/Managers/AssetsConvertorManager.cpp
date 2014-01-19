@@ -44,23 +44,13 @@ bool AssetsConvertorManager::serializeData()
 	for (auto &e : _files)
 	{
 		e.second->serialize(ofs);
-//		cereal::JSONOutputArchive oa(ofs);
-
-
-
-		//e.second->serialize(oa);
-		//oa(e.second);
-		//test1->serialize(oa);
-		//test2->serialize(oa);
-		//test3->serialize(oa);
-		//oa(*test3.get());
 	}
 	ofs.close();
 	std::ifstream ifs("test.serialization");
 
 	for (auto &e : _files)
 	{
-//		e.second->unserialize(ifs);
+		AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream(ifs);
 	}
 	return true;
 }

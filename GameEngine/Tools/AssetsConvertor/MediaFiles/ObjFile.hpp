@@ -16,9 +16,11 @@
 
 struct ObjFile : public AMediaFile
 {
-	ObjFile(){}
+	ObjFile() : AMediaFile()
+	{
+		type = typeid(ObjFile).hash_code();
+	}
 	virtual ~ObjFile(){}
-	virtual void test(){}
 	struct Geometry
 	{
 		std::string                 name;
@@ -29,18 +31,32 @@ struct ObjFile : public AMediaFile
 		std::vector<unsigned int>	indices;	// indices
 	};
 	std::vector<Geometry> geometries;
+	unsigned int test;
 	//	std::vector<MaterialFile> materials;
 
 	virtual void serialize(std::ofstream &s)
 	{
-		cereal::JSONOutputArchive ar(s);
-		auto c = 1;
-		ar(c);
+		{
+			cereal::JSONOutputArchive ar(s);
+			ar(type);
+//		}
+//		{
+//			cereal::JSONOutputArchive ar(s);
+			ar(*this);
+		}
     }
 
-	virtual AMediaFile *unserialize(std::ifstream &s)
+	virtual AMediaFile *unserialize(cereal::JSONInputArchive &ar)
 	{
-		return nullptr;
+		AMediaFile *res = new ObjFile();
+		ar(static_cast<ObjFile&>(*res));
+		return res;
+	}
+
+	template <typename Archive>
+	void serialize(Archive &ar)
+	{
+		ar(test);
 	}
 };
 
