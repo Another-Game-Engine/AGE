@@ -48,16 +48,20 @@ bool 			DemoScene::userStart()
 	//
 	//
 	// end System Test
-	{
-		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
-//		auto success = convertor.load("./Assets/paris/paris.obj", "cube");
-		auto success = convertor.load("./Assets/ball/ball.obj", "cube");
-		convertor.serializeData();
-	}
+	//{
+	//	auto &convertor = _engine.getInstance<AssetsConvertorManager>();
+	//	auto success = convertor.load("./Assets/cube/cube.obj", "cube");
+	//	convertor.serializeData();
+	//}
 	{
 		//auto &convertor = _engine.getInstance<AssetsConvertorManager>();
 		//auto success = convertor.load("./Assets/crytek-sponza/sponza.obj", "sponza");
 	}
+
+	std::ifstream ifs("test.serialization", std::ios_base::binary);
+
+	AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream<cereal::PortableBinaryInputArchive>(ifs);
+	std::cout << "lol" << std::endl;
 
 
 	return (true);

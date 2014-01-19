@@ -6,6 +6,8 @@
 #include <glm/glm.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/vector.hpp>
+#include <cereal/types/common.hpp>
+#include <cereal/types/list.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/complex.hpp>
 #include <cereal/archives/binary.hpp>
@@ -95,11 +97,10 @@ struct ObjFile : public AMediaFile
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
-			ar(name,uvs);
+			ar(name,vertices, normals,colors,uvs, indices);
 		}
 	};
 	std::vector<Geometry> geometries;
-	glm::vec3 test;
 	//	std::vector<MaterialFile> materials;
 
 	virtual AMediaFile *unserialize(cereal::JSONInputArchive &ar)
@@ -154,7 +155,7 @@ struct ObjFile : public AMediaFile
 	template <typename Archive>
 	void serialize(Archive &ar)
 	{
-		ar(geometries, test);
+		ar(geometries);
 	}
 
 	//template <typename Archive>
