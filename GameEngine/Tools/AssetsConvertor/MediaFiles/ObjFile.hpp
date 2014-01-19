@@ -14,12 +14,42 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 
+#include <glm/gtc/packing.hpp>
+
+
+//template<typename Archive>
+//void serialize(Archive &ar, glm::vec2 &v)
+//{
+//	ar(v.x, v.y);
+//}
+
+template<typename Archive>
+void save(Archive &ar, const glm::vec3 &v)
+{
+	unsigned int t = glm::packF2x11_1x10(v);
+	ar(v.x);
+}
+
+template<typename Archive>
+void load(Archive &ar, glm::vec3 &v)
+{
+	unsigned int p;
+	ar(p);
+	v = glm::unpackF2x11_1x10(p);
+}
+
+
+//template<typename Archive>
+//void serialize(Archive &ar, glm::vec4 &v)
+//{
+//	ar(v.x, v.y, v.z, v.w);
+//}
+
 struct ObjFile : public AMediaFile
 {
 	ObjFile() : AMediaFile()
 	{
 		type = typeid(ObjFile).hash_code();
-		test = 42;
 	}
 	virtual ~ObjFile(){}
 	struct Geometry
@@ -30,9 +60,15 @@ struct ObjFile : public AMediaFile
 		std::vector<glm::vec4>		colors;		// vertices colors
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(name);
+		}
 	};
 	std::vector<Geometry> geometries;
-	unsigned int test;
+	glm::vec3 test;
 	//	std::vector<MaterialFile> materials;
 
 	virtual AMediaFile *unserialize(cereal::JSONInputArchive &ar)
@@ -76,8 +112,24 @@ struct ObjFile : public AMediaFile
 	template <typename Archive>
 	void serialize(Archive &ar)
 	{
-		ar(test);
+		ar(geometries, test);
 	}
+
+	//template <typename Archive>
+	//void save(Archive &ar) const
+	//{
+	//	uint32_t lol = glm::packF2x11_1x10(test);
+	//	ar(geometries, lol);
+	//}
+
+	//template <typename Archive>
+	//void load(Archive &ar)
+	//{
+	//	uint32_t lol;
+	//	ar(geometries, lol);
+	//	test = glm::unpackF2x11_1x10(lol);
+	//}
+
 };
 
 #endif   //__OBJ_FILE_HPP__
