@@ -25,7 +25,8 @@ class SharedMesh : public AResource
 private:
 	Geometry					_geometry;
 	OpenGLTools::VertexArray	_buffer;
-
+	Vertice<4>					*_obj;
+	VertexManager<4>			*_manager;
 public:
 	SharedMesh(void);
 	virtual ~SharedMesh(void);

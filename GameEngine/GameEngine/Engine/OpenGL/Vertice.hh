@@ -22,6 +22,7 @@ public:
 	uint32_t getNbrVertex() const;
 	int32_t getIndexPool() const;
 	void const * const getBuffer(uint8_t index) const;
+	void const * const getIndices() const;
 	bool isDrawable() const;
 	bool hasIndices() const;
 	void draw(GLenum mode = GL_TRIANGLES) const;

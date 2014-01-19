@@ -35,16 +35,11 @@ namespace OpenGLTools
 
 	void VertexArray::bind()
 	{
-		if (_isBind == false)
-		{
-			_isBind = true;
-			glBindVertexArray(_id);
-		}
+		glBindVertexArray(_id);
 	}
 
 	void VertexArray::unbind()
 	{
-		_isBind = false;
 		glBindVertexArray(0);
 	}
 

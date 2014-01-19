@@ -109,6 +109,15 @@ void const * const Vertice<NBR_ATTRIBUTE>::getBuffer(uint8_t index) const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
+void const * const Vertice<NBR_ATTRIBUTE>::getIndices() const
+{
+	if (_indices)
+		return (_indices->getBuffer());
+	else
+		return (NULL);
+}
+
+template <uint8_t NBR_ATTRIBUTE>
 bool Vertice<NBR_ATTRIBUTE>::isDrawable() const
 {
 	if (_vertexManager == NULL || _index == -1)

@@ -56,13 +56,12 @@ VertexPoolElement<NBR_ATTRIBUTE> const &VertexPool<NBR_ATTRIBUTE>::operator[](ui
 template <uint8_t NBR_ATTRIBUTE>
 void VertexPool<NBR_ATTRIBUTE>::computeOffset()
 {
-	VertexPoolElement<NBR_ATTRIBUTE> element(vertex);
 	uint32_t indicesOffset = 0;
 	uint32_t vertexOffset = 0;
 	std::array<uint32_t, NBR_ATTRIBUTE> byteOffset;
 	std::array<uint32_t, NBR_ATTRIBUTE> nbrByte;
 
-	if (element.size() > 0)
+	if (_elements.size() > 0)
 	{
 		_pointerAttributes[0] = 0;
 		byteOffset[0] = 0;
@@ -70,7 +69,7 @@ void VertexPool<NBR_ATTRIBUTE>::computeOffset()
 		for (uint8_t index = 1; index < NBR_ATTRIBUTE; ++index)
 		{
 			nbrByte[index] = _elements[0].getVertex().getNbrVertex() * _attributes[index].getSizeType() * _attributes[index].getNbrComponent();
-			_pointerAttribute[index] = _attributes[index - 1].getSizeType * _attributes[index - 1].getNbrComponent * _nbrVertex;
+			_pointerAttributes[index] = _pointerAttributes[index - 1] + _attributes[index - 1].getSizeType() * _attributes[index - 1].getNbrComponent() * _nbrVertex;
 			byteOffset[index] = _pointerAttributes[index];
 		}
 		_elements[0].settingOffset(0, 0, byteOffset, nbrByte);
