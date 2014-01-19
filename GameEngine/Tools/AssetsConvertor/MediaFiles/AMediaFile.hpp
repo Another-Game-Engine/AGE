@@ -11,7 +11,7 @@
 #include <cereal/types/complex.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
-#include <cereal/archives/binary.hpp>
+#include <cereal/archives/xml.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 
@@ -51,6 +51,8 @@ public:
 
 	virtual void serialize(std::ofstream &s) = 0;
 	virtual AMediaFile *unserialize(cereal::JSONInputArchive &ar) = 0;
+	virtual AMediaFile *unserialize(cereal::BinaryInputArchive &ar) = 0;
+	virtual AMediaFile *unserialize(cereal::XMLInputArchive &ar) = 0;
 };
 
 #endif    //__AMEDIA_FILE_HPP__
