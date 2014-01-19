@@ -27,7 +27,7 @@ struct FileTypeRegister
 	std::map<std::size_t, AMediaFile*> refs;
 
 	void registerType(AMediaFile *t);
-	AMediaFile *getFromType(std::size_t key, std::ifstream &s);
+	AMediaFile *getFromType(std::size_t key, cereal::JSONInputArchive &s);
 	AMediaFile *unserializeFromStream(std::ifstream &s);
 
 	template <typename T>
@@ -50,13 +50,7 @@ public:
 	virtual ~AMediaFile(){}
 
 	virtual void serialize(std::ofstream &s) = 0;
-	virtual AMediaFile *unserialize(std::ifstream &s) = 0;
-
-	void saveType(std::ofstream &s)
-	{
-		cereal::JSONOutputArchive ar(s);
-		ar(type);
-	}
+	virtual AMediaFile *unserialize(cereal::JSONInputArchive &ar) = 0;
 };
 
 #endif    //__AMEDIA_FILE_HPP__

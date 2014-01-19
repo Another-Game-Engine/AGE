@@ -8,7 +8,7 @@ void FileTypeRegister::registerType(AMediaFile *t)
 	refs.insert(std::make_pair(key, t));
 }
 
-AMediaFile *FileTypeRegister::getFromType(std::size_t key, std::ifstream &s)
+AMediaFile *FileTypeRegister::getFromType(std::size_t key, cereal::JSONInputArchive &s)
 {
 	auto &it = refs.find(key);
 	if (it == std::end(refs))
@@ -18,8 +18,8 @@ AMediaFile *FileTypeRegister::getFromType(std::size_t key, std::ifstream &s)
 
 AMediaFile *FileTypeRegister::unserializeFromStream(std::ifstream &s)
 {
-	cereal::JSONInputArchive ar(s);
 	std::size_t key = 0;
+	cereal::JSONInputArchive ar(s);
 	ar(key);
-	return getFromType(key, s);
+	return getFromType(key, ar);
 }
