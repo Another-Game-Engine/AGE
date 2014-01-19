@@ -89,7 +89,6 @@
     <ClCompile Include="Managers\AConvertor.cpp" />
     <ClCompile Include="Managers\AssetsConvertorManager.cpp" />
     <ClCompile Include="Managers\ObjConvertor.cpp" />
-    <ClCompile Include="MediaFiles\AMediaFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScene.hh" />

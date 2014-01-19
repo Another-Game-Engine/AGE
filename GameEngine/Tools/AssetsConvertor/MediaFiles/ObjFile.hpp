@@ -19,6 +19,7 @@ struct ObjFile : public AMediaFile
 	ObjFile() : AMediaFile()
 	{
 		type = typeid(ObjFile).hash_code();
+		test = 42;
 	}
 	virtual ~ObjFile(){}
 	struct Geometry
@@ -34,18 +35,6 @@ struct ObjFile : public AMediaFile
 	unsigned int test;
 	//	std::vector<MaterialFile> materials;
 
-	virtual void serialize(std::ofstream &s)
-	{
-		{
-			cereal::JSONOutputArchive ar(s);
-			ar(type);
-//		}
-//		{
-//			cereal::JSONOutputArchive ar(s);
-			ar(*this);
-		}
-    }
-
 	virtual AMediaFile *unserialize(cereal::JSONInputArchive &ar)
 	{
 		return unserialize<cereal::JSONInputArchive>(ar);
@@ -59,6 +48,21 @@ struct ObjFile : public AMediaFile
 	virtual AMediaFile *unserialize(cereal::XMLInputArchive &ar)
 	{
 		return unserialize<cereal::XMLInputArchive>(ar);
+	}
+
+	virtual void _serialize(cereal::JSONOutputArchive &ar)
+	{
+		ar(*this);//return serialize<cereal::JSONOutputArchive>(ar);
+	}
+
+	virtual void _serialize(cereal::BinaryOutputArchive &ar)
+	{
+		return serialize<cereal::BinaryOutputArchive>(ar);
+	}
+
+	virtual void _serialize(cereal::XMLOutputArchive &ar)
+	{
+		return serialize<cereal::XMLOutputArchive>(ar);
 	}
 
 	template <typename Archive>
