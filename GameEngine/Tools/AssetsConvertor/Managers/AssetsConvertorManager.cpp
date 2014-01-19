@@ -43,14 +43,15 @@ bool AssetsConvertorManager::serializeData()
 
 	for (auto &e : _files)
 	{
-		e.second->serialize(ofs);
+		e.second->serialize<cereal::JSONOutputArchive>(ofs);
 	}
 	ofs.close();
 	std::ifstream ifs("test.serialization");
 
 	for (auto &e : _files)
 	{
-		AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream(ifs);
+		AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream<cereal::JSONInputArchive>(ifs);
+		std::cout << "lol" << std::endl;
 	}
 	return true;
 }
