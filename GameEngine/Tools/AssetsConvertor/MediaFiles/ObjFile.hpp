@@ -52,17 +52,17 @@ struct ObjFile : public AMediaFile
 
 	virtual void _serialize(cereal::JSONOutputArchive &ar)
 	{
-		ar(*this);//return serialize<cereal::JSONOutputArchive>(ar);
+		ar(*this);
 	}
 
 	virtual void _serialize(cereal::BinaryOutputArchive &ar)
 	{
-		return serialize<cereal::BinaryOutputArchive>(ar);
+		ar(*this);
 	}
 
 	virtual void _serialize(cereal::XMLOutputArchive &ar)
 	{
-		return serialize<cereal::XMLOutputArchive>(ar);
+		ar(*this);
 	}
 
 	template <typename Archive>
