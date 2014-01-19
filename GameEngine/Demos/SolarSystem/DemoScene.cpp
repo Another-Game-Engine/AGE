@@ -169,8 +169,8 @@ bool 			DemoScene::userStart()
 	//
 
 	{
-		unsigned int nbPlanet = 500;
-		Handle planets[500];
+		unsigned int nbPlanet = 50;
+		Handle planets[50];
 
 		for (unsigned int i = 0; i < nbPlanet; ++i)
 		{
