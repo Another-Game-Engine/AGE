@@ -14,10 +14,10 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 
-struct ObjFile : public AMediaFileBase<ObjFile>
+struct ObjFile : public AMediaFile
 {
-	ObjFile();
-	virtual ~ObjFile();
+	ObjFile(){}
+	virtual ~ObjFile(){}
 	virtual void test(){}
 	struct Geometry
 	{

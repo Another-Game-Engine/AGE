@@ -1,14 +1,25 @@
-#include <MediaFiles/AMediaFile.hpp>
-#include <cereal/archives/binary.hpp>
-#include <cereal/archives/json.hpp>
-#include <cereal/archives/binary.hpp>
-#include <cereal/types/polymorphic.hpp>
+#include "AMediaFile.hpp"
 
-AMediaFile::AMediaFile()
+void FileTypeRegister::registerType(AMediaFile *t)
 {
+	std::size_t key = t->type;
+	if (refs.find(key) != std::end(refs))
+		return;
+	refs.insert(std::make_pair(key, t));
 }
 
-AMediaFile::~AMediaFile()
-{}
+AMediaFile *FileTypeRegister::getFromType(std::size_t key, std::ifstream &s)
+{
+	auto &it = refs.find(key);
+	if (it == std::end(refs))
+		return nullptr;
+	return it->second->unserialize(s);
+}
 
-//CEREAL_REGISTER_TYPE(AMediaFile);
+AMediaFile *FileTypeRegister::unserializeFromStream(std::ifstream &s)
+{
+	cereal::JSONInputArchive ar(s);
+	std::size_t key = 0;
+	ar(key);
+	return getFromType(key, s);
+}
