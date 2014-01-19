@@ -15,33 +15,47 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 
-#include "Serializable.hpp"
+struct AMediaFile;
 
-struct AMediaFile
+struct FileTypeRegister
 {
-	AMediaFile();
-	virtual ~AMediaFile();
-
-	File path;
-	std::string name;
-
-	virtual void serialize(std::ofstream &s) = 0;
-	virtual AMediaFile *unserialize(std::ifstream &s) = 0;
-protected:
-	static int uniqueId()
+	static FileTypeRegister *getInstance()
 	{
-		static int id = 0;
-		return id++;
+		static FileTypeRegister *t = new FileTypeRegister();
+		return t;
+	}
+	std::map<std::size_t, AMediaFile*> refs;
+
+	void registerType(AMediaFile *t);
+	AMediaFile *getFromType(std::size_t key, std::ifstream &s);
+	AMediaFile *unserializeFromStream(std::ifstream &s);
+
+	template <typename T>
+	void registerType()
+	{
+		registerType(new T());
 	}
 };
 
-template <typename T>
-struct AMediaFileBase : public AMediaFile
+struct AMediaFile
 {
-	static unsigned int getTypeId()
+public:
+	File path;
+	std::string name;
+	std::size_t type;
+public:
+	AMediaFile()
 	{
-		static unsigned int id = AMediaFile::uniqueId();
-		return id;
+	}
+	virtual ~AMediaFile(){}
+
+	virtual void serialize(std::ofstream &s) = 0;
+	virtual AMediaFile *unserialize(std::ifstream &s) = 0;
+
+	void saveType(std::ofstream &s)
+	{
+		cereal::JSONOutputArchive ar(s);
+		ar(type);
 	}
 };
 

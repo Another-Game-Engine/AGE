@@ -6,6 +6,7 @@
 AssetsConvertorManager::AssetsConvertorManager()
 {
 	registerConvertor<ObjConvertor>();
+	FileTypeRegister::getInstance()->registerType<ObjFile>();
 }
 
 AssetsConvertorManager::~AssetsConvertorManager()

@@ -90,7 +90,6 @@
     <ClCompile Include="Managers\AssetsConvertorManager.cpp" />
     <ClCompile Include="Managers\ObjConvertor.cpp" />
     <ClCompile Include="MediaFiles\AMediaFile.cpp" />
-    <ClCompile Include="MediaFiles\ObjFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScene.hh" />
@@ -99,7 +98,6 @@
     <ClInclude Include="Managers\ObjConvertor.hh" />
     <ClInclude Include="MediaFiles\AMediaFile.hpp" />
     <ClInclude Include="MediaFiles\ObjFile.hpp" />
-    <ClInclude Include="MediaFiles\Serializable.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">

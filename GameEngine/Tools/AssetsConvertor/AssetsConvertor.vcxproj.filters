@@ -33,9 +33,6 @@
     <ClCompile Include="MediaFiles\AMediaFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MediaFiles\ObjFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScene.hh">
@@ -54,9 +51,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MediaFiles\ObjFile.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MediaFiles\Serializable.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
