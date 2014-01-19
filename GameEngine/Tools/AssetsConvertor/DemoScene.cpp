@@ -50,7 +50,8 @@ bool 			DemoScene::userStart()
 	// end System Test
 	{
 		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
-		auto success = convertor.load("./Assets/cube/cube.obj", "cube");
+//		auto success = convertor.load("./Assets/paris/paris.obj", "cube");
+		auto success = convertor.load("./Assets/ball/ball.obj", "cube");
 		convertor.serializeData();
 	}
 	{

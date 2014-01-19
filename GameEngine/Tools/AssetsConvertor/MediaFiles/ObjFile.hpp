@@ -17,26 +17,57 @@
 #include <glm/gtc/packing.hpp>
 
 
-//template<typename Archive>
-//void serialize(Archive &ar, glm::vec2 &v)
+namespace cereal
+{
+	template<typename Archive>
+	void save(Archive &ar, const glm::vec2 &v)
+	{
+		ar(v.x, v.y);
+	}
+
+	template<typename Archive>
+	void load(Archive &ar, glm::vec2 &v)
+	{
+		float x, y;
+		ar(x, y);
+		v = glm::vec2(x, y);
+	}
+
+	template<typename Archive>
+	void save(Archive &ar, const glm::vec3 &v)
+	{
+		ar(v.x, v.y, v.z);
+	}
+
+	template<typename Archive>
+	void load(Archive &ar, glm::vec3 &v)
+	{
+		float x, y, z;
+		ar(x, y, z);
+		v = glm::vec3(x, y, z);
+	}
+
+	template<typename Archive>
+	void save(Archive &ar, const glm::vec4 &v)
+	{
+		ar(v.x, v.y, v.z, v.w);
+	}
+
+	template<typename Archive>
+	void load(Archive &ar, glm::vec4 &v)
+	{
+		float x, y, z, w;
+		ar(v.x, v.y, v.z, v.w);
+//		v = glm::vec4(x, y, z, w);
+	}
+}
+//
+//
+//template<typename Archive, typename T, glm::precision p>
+//void serialize(Archive &ar, glm::detail::tvec3<T, p> &v)
 //{
-//	ar(v.x, v.y);
+////	ar(v.x, v.y, v.z, v.w);
 //}
-
-template<typename Archive>
-void save(Archive &ar, const glm::vec3 &v)
-{
-	unsigned int t = glm::packF2x11_1x10(v);
-	ar(v.x);
-}
-
-template<typename Archive>
-void load(Archive &ar, glm::vec3 &v)
-{
-	unsigned int p;
-	ar(p);
-	v = glm::unpackF2x11_1x10(p);
-}
 
 
 //template<typename Archive>
@@ -64,7 +95,7 @@ struct ObjFile : public AMediaFile
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
-			ar(name);
+			ar(name,uvs);
 		}
 	};
 	std::vector<Geometry> geometries;
@@ -86,6 +117,11 @@ struct ObjFile : public AMediaFile
 		return unserialize<cereal::XMLInputArchive>(ar);
 	}
 
+	virtual AMediaFile *unserialize(cereal::PortableBinaryInputArchive &ar)
+	{
+		return unserialize<cereal::PortableBinaryInputArchive>(ar);
+	}
+
 	virtual void _serialize(cereal::JSONOutputArchive &ar)
 	{
 		ar(*this);
@@ -100,6 +136,12 @@ struct ObjFile : public AMediaFile
 	{
 		ar(*this);
 	}
+
+	virtual void _serialize(cereal::PortableBinaryOutputArchive &ar)
+	{
+		ar(*this);
+	}
+
 
 	template <typename Archive>
 	AMediaFile *unserialize(Archive &ar)
