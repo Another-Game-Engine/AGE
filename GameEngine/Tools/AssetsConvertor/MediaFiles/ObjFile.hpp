@@ -48,6 +48,22 @@ struct ObjFile : public AMediaFile
 
 	virtual AMediaFile *unserialize(cereal::JSONInputArchive &ar)
 	{
+		return unserialize<cereal::JSONInputArchive>(ar);
+	}
+
+	virtual AMediaFile *unserialize(cereal::BinaryInputArchive &ar)
+	{
+		return unserialize<cereal::BinaryInputArchive>(ar);
+	}
+
+	virtual AMediaFile *unserialize(cereal::XMLInputArchive &ar)
+	{
+		return unserialize<cereal::XMLInputArchive>(ar);
+	}
+
+	template <typename Archive>
+	AMediaFile *unserialize(Archive &ar)
+	{
 		AMediaFile *res = new ObjFile();
 		ar(static_cast<ObjFile&>(*res));
 		return res;
