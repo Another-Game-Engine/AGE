@@ -40,21 +40,21 @@ namespace OpenGLTools
 
 	 void VertexBuffer::bind()
 	 {
-		 if (_isBind == false)
-		 {
-			 _isBind = true;
-			 glBindBuffer(_mode, _id);
-		 }
+		glBindBuffer(_mode, _id);
 	 }
 
 	 void VertexBuffer::unbind()
 	 {
-		 _isBind = false;
-		 glBindBuffer(_mode, 0);
+		glBindBuffer(_mode, 0);
 	 }
 
 	 GLenum VertexBuffer::getMode() const
 	 {
 		 return (_mode);
+	 }
+
+	 GLuint VertexBuffer::getId() const
+	 {
+		 return (_id);
 	 }
 }

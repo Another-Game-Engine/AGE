@@ -24,22 +24,21 @@ bool	SharedMesh::load(std::string const &path)
 		Attribute(GL_FLOAT, sizeof(float), 4),
 		Attribute(GL_FLOAT, sizeof(float), 2)
 	};
-	VertexManager<4> m(param);
-	m.init();
+
+	_manager = new VertexManager<4>(param);
+	_manager->init();
 	if (loadObj(path, _geometry) == false)
 		return (false);
 	//_buffer.init();
-	std::array<Data, 4> data = {Data(_geometry.vertices.size() * 3 * sizeof(float), &_geometry.vertices[0].x),
-		Data(_geometry.colors.size() * 3 * sizeof(float), &_geometry.colors[0].x),
-		Data(_geometry.normals.size() * 3 * sizeof(float), &_geometry.normals[0].x),
+	std::array<Data, 4> data = {Data(_geometry.vertices.size() * 4 * sizeof(float), &_geometry.vertices[0].x),
+		Data(_geometry.colors.size() * 4 * sizeof(float), &_geometry.colors[0].x),
+		Data(_geometry.normals.size() * 4 * sizeof(float), &_geometry.normals[0].x),
 		Data(_geometry.uvs.size() * 2 * sizeof(float), &_geometry.uvs[0].x)};
 	Data indicesData(_geometry.indices.size() * sizeof(unsigned int), &_geometry.indices[0]);
-	Vertice<4> obj(_geometry.vertices.size(), data, &indicesData);
-	std::cout << "nombre de octet dans le buffer de geometry : " << obj.getSizeVertexBuffer() << std::endl;
-	std::cout << "nombre de octet dans le buffer de indices : " << obj.getSizeIndicesBuffer() << std::endl;
-	m.addVertice(&obj);
-
-	obj.draw();
+	_obj = new Vertice<4>(_geometry.vertices.size(), data, &indicesData);
+	std::cout << "nombre de octet dans le buffer de geometry : " << _obj->getSizeVertexBuffer() << std::endl;
+	std::cout << "nombre de octet dans le buffer de indices : " << _obj->getSizeIndicesBuffer() << std::endl;
+	_manager->addVertice(_obj);
 	/*_buffer.setIndices(_geometry.indices.size(), &_geometry.indices[0]);
 	_buffer.addAttribute(_geometry.vertices.size(), 4, sizeof(float), reinterpret_cast<OpenGLTools::Byte *>(&_geometry.vertices[0].x));
 	_buffer.addAttribute(_geometry.colors.size(), 4, sizeof(float), reinterpret_cast<OpenGLTools::Byte *>(&_geometry.colors[0].x));
@@ -52,6 +51,7 @@ bool	SharedMesh::load(std::string const &path)
 
 void		SharedMesh::draw() const
 {
+	_obj->draw();
 	//_buffer.draw(GL_TRIANGLES);
 }
 
