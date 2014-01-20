@@ -28,6 +28,11 @@ Entity &EntityData::getHandle()
 	return _handle;
 }
 
+AScene *EntityData::getScene() const
+{
+	return _scene;
+}
+
 void EntityData::setHandle(Entity &handle)
 {
 	_handle = handle;
