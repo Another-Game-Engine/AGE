@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <functional>
+#include <Utils/Dependency.hpp>
 #include  "Function.hpp"
 
 typedef std::string PubSubKey;
@@ -25,7 +26,7 @@ public:
 	//
 	//
 
-	class Manager
+	class Manager : public Dependency
 	{
 	public:
 		template <typename ...Args>
@@ -62,7 +63,7 @@ public:
 		Manager()
 		{}
 
-		~Manager()
+		virtual ~Manager()
 		{
 			clearAll();
 		}

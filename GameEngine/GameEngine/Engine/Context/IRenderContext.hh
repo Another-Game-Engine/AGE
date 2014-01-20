@@ -3,8 +3,9 @@
 #define IRenderContext_HH_
 
 #include "Core/Input.hh"
+#include <Utils/Dependency.hpp>
 
-class IRenderContext
+class IRenderContext : public Dependency
 {
 public:
 	IRenderContext() { }
