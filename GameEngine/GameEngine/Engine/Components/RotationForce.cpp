@@ -7,28 +7,28 @@ namespace Component
 
 	RotationForce::RotationForce()
 		: Component::ComponentBase<RotationForce>()
-		, _force(glm::vec3(0))
+		, force(glm::vec3(0))
 	{}
 
 	RotationForce::~RotationForce(void)
 	{}
 	
-	void RotationForce::init(const glm::vec3 &force)
+	void RotationForce::init(const glm::vec3 &_force)
 	{
-		_force = force;
+		force = _force;
 	}
 
 	void RotationForce::reset()
 	{}
 
 
-	void RotationForce::setForce(const glm::vec3 &force)
+	void RotationForce::setForce(const glm::vec3 &_force)
 	{
-		_force = force;
+		force = _force;
 	}
 
 	const glm::vec3 &RotationForce::getForce() const
 	{
-		return _force;
+		return force;
 	}
 };

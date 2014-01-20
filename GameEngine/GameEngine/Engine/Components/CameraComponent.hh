@@ -15,16 +15,8 @@ namespace Resources
 
 namespace Component
 {
-	class CameraComponent : public ComponentBase<CameraComponent>
+	struct CameraComponent : public ComponentBase<CameraComponent>
 	{
-	private:
-		CameraComponent(CameraComponent const &);
-		CameraComponent	&operator=(CameraComponent const &);
-		glm::mat4                        _projection;
-		SmartPointer<Resources::CubeMap> _skybox;
-		std::string                      _cubeMapShader;
-		glm::mat4                        _lookAtTransform;
-	public:
 		CameraComponent();
 		virtual              ~CameraComponent(void);
 		void init(){}
@@ -33,10 +25,18 @@ namespace Component
 		void                 dettachSkybox();
  		glm::mat4            &setProjection();
 		glm::mat4            &getProjection();
-		glm::mat4            &setLookAtTransform() { return _lookAtTransform; }
-		const glm::mat4      &getLookAtTransform() const { return _lookAtTransform; }
+		inline glm::mat4            &setLookAtTransform() { return lookAtTransform; }
+		inline const glm::mat4      &getLookAtTransform() const { return lookAtTransform; }
 		SmartPointer<Resources::CubeMap> getSkybox();
 		const std::string &getSkyboxShader() const;
+
+		glm::mat4                        projection;
+		SmartPointer<Resources::CubeMap> skybox;
+		std::string                      cubeMapShader;
+		glm::mat4                        lookAtTransform;
+	private:
+		CameraComponent(CameraComponent const &);
+		CameraComponent	&operator=(CameraComponent const &);
 	};
 }
 
