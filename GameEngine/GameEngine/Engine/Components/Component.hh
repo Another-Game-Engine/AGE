@@ -5,6 +5,12 @@
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 
+#include <cereal/cereal.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/xml.hpp>
+
 namespace	Component
 {
 
@@ -23,6 +29,16 @@ namespace	Component
 		Entity		&getEntity();
 		virtual void reset() = 0;
 		std::size_t serializedID;
+
+		//virtual Base *unserialize(cereal::JSONInputArchive &ar) = 0;
+		//virtual Base *unserialize(cereal::BinaryInputArchive &ar) = 0;
+		//virtual Base *unserialize(cereal::XMLInputArchive &ar) = 0;
+		//virtual Base *unserialize(cereal::PortableBinaryInputArchive &ar) = 0;
+		//virtual void _serialize(cereal::JSONOutputArchive &ar) = 0;
+		//virtual void _serialize(cereal::BinaryOutputArchive &ar) = 0;
+		//virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;
+		//virtual void _serialize(cereal::PortableBinaryOutputArchive &ar) = 0;
+
 	protected:
 		Entity				_entity;
 	};
@@ -31,7 +47,7 @@ namespace	Component
 	struct ComponentBase : public Base
 	{
 		ComponentBase()
-		: Base(typeid(T).hash_code())
+			: Base(typeid(T).hash_code())
 		{}
 
 		virtual ~ComponentBase()
@@ -43,6 +59,47 @@ namespace	Component
 			static unsigned int id = uniqueId();
 			return id;
 		}
+
+//		virtual Base *unserialize(cereal::JSONInputArchive &ar)
+//		{
+////			return dynamic_cast<T*>(this)->unserialize<cereal::JSONInputArchive>(ar);
+//			return nullptr;
+//		}
+//
+//		virtual Base *unserialize(cereal::BinaryInputArchive &ar)
+//		{
+//			return dynamic_cast<T*>(this)->unserialize<cereal::BinaryInputArchive>(ar);
+//		}
+//
+//		virtual Base *unserialize(cereal::XMLInputArchive &ar)
+//		{
+//			return dynamic_cast<T*>(this)->unserialize<cereal::XMLInputArchive>(ar);
+//		}
+//
+//		virtual Base *unserialize(cereal::PortableBinaryInputArchive &ar)
+//		{
+//			return dynamic_cast<T*>(this)->unserialize<cereal::PortableBinaryInputArchive>(ar);
+//		}
+//
+//		virtual void _serialize(cereal::JSONOutputArchive &ar)
+//		{
+//			ar(*dynamic_cast<T*>(this));
+//		}
+//
+//		virtual void _serialize(cereal::BinaryOutputArchive &ar)
+//		{
+//			ar(*dynamic_cast<T*>(this));
+//		}
+//
+//		virtual void _serialize(cereal::XMLOutputArchive &ar)
+//		{
+//			ar(*dynamic_cast<T*>(this));
+//		}
+//
+//		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar)
+//		{
+//			ar(*dynamic_cast<T*>(this));
+//		}
 
 	private:
 		//std::multiset<PubSubKey> _subscriptions; // subscriptions to local entity events
