@@ -3,7 +3,6 @@
 
 #include <string>
 #include <Entities/Entity.hh>
-#include <Utils/PubSub.hpp>
 #include <Core/AScene.hh>
 
 class AScene;
@@ -31,11 +30,10 @@ namespace	Component
 	};
 
 	template <class T>
-	struct ComponentBase : public Base, public PubSub
+	struct ComponentBase : public Base
 	{
 		ComponentBase(AScene *scene, Entity &entity)
-		: Base(scene, entity),
-		PubSub(scene->getInstance<PubSub::Manager>())
+		: Base(scene, entity)
 		{}
 
 		virtual ~ComponentBase()
