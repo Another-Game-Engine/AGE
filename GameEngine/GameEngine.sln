@@ -87,6 +87,7 @@ Global
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.Debug|Win32.Build.0 = Debug|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.MinSizeRel|Any CPU.ActiveCfg = Release|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.MinSizeRel|Mixed Platforms.ActiveCfg = Release|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.MinSizeRel|Mixed Platforms.Build.0 = Release|Win32
@@ -105,6 +106,7 @@ Global
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Debug|Win32.Build.0 = Debug|Win32
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.MinSizeRel|Any CPU.ActiveCfg = Release|Win32
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.MinSizeRel|Mixed Platforms.ActiveCfg = Release|Win32
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.MinSizeRel|Mixed Platforms.Build.0 = Release|Win32
@@ -143,6 +145,7 @@ Global
 		{3073A470-6943-400E-BDFF-D25AA01577F8}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{3073A470-6943-400E-BDFF-D25AA01577F8}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{3073A470-6943-400E-BDFF-D25AA01577F8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3073A470-6943-400E-BDFF-D25AA01577F8}.Debug|Win32.Build.0 = Debug|Win32
 		{3073A470-6943-400E-BDFF-D25AA01577F8}.MinSizeRel|Any CPU.ActiveCfg = Release|Win32
 		{3073A470-6943-400E-BDFF-D25AA01577F8}.MinSizeRel|Mixed Platforms.ActiveCfg = Release|Win32
 		{3073A470-6943-400E-BDFF-D25AA01577F8}.MinSizeRel|Mixed Platforms.Build.0 = Release|Win32
@@ -161,6 +164,7 @@ Global
 		{ECFC3CA5-DB31-4109-8A00-88358E23B3B9}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{ECFC3CA5-DB31-4109-8A00-88358E23B3B9}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{ECFC3CA5-DB31-4109-8A00-88358E23B3B9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ECFC3CA5-DB31-4109-8A00-88358E23B3B9}.Debug|Win32.Build.0 = Debug|Win32
 		{ECFC3CA5-DB31-4109-8A00-88358E23B3B9}.MinSizeRel|Any CPU.ActiveCfg = Release|Win32
 		{ECFC3CA5-DB31-4109-8A00-88358E23B3B9}.MinSizeRel|Mixed Platforms.ActiveCfg = Release|Win32
 		{ECFC3CA5-DB31-4109-8A00-88358E23B3B9}.MinSizeRel|Mixed Platforms.Build.0 = Release|Win32

@@ -19,24 +19,22 @@ namespace	Component
 
 	struct Base
 	{
-		Base(AScene *scene, Entity &entity, const std::string &name = "NoName");
+		Base(AScene *scene, Entity &entity);
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
 		void			setEntity(Entity &entity);
 		Entity		&getEntity();
-		std::string const &getName() const;
 		virtual void reset() = 0;
 	protected:
 		AScene              *_scene;
-		std::string         _name;
 		Entity				_entity;
 	};
 
 	template <class T>
 	struct ComponentBase : public Base, public PubSub
 	{
-		ComponentBase(AScene *scene, Entity &entity, const std::string &name = "DefaultComponentName")
-		: Base(scene, entity, name),
+		ComponentBase(AScene *scene, Entity &entity)
+		: Base(scene, entity),
 		PubSub(scene->getInstance<PubSub::Manager>())
 		{}
 

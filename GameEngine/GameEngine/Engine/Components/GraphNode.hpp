@@ -13,7 +13,7 @@ namespace Component
 		typedef std::list<Entity> t_EntityList;
 
 		GraphNode(AScene *scene, Entity &entity)
-			: ComponentBase<GraphNode>(scene, entity, "GraphNodeComponent")
+			: ComponentBase<GraphNode>(scene, entity)
 		{
 			}
 

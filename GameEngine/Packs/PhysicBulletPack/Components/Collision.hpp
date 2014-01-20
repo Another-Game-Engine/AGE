@@ -9,7 +9,7 @@ namespace Component
 	{
 	public:
 		Collision(AScene *scene, Entity &entity)
-			: ComponentBase<Collision>(scene, entity, "CollisionComponent")
+			: ComponentBase<Collision>(scene, entity)
 		{
 				
 		}

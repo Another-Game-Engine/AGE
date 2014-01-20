@@ -31,7 +31,7 @@ namespace Component
 		} CollisionShape;
 
 		CollisionBody(AScene *scene, Entity &entity)
-			: ComponentBase(scene, entity, "CollisionBody"),
+			: ComponentBase(scene, entity),
 			_manager(nullptr),
 			_shapeType(UNDEFINED),
 			_meshName(""),

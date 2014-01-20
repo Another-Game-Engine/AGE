@@ -11,7 +11,7 @@ namespace Component
 	{
 	public:
 		TrackingCamera(AScene *scene, Entity &entity) :
-			Component::ComponentBase<Component::TrackingCamera>(scene, entity, "TrackingCamera"),
+			Component::ComponentBase<Component::TrackingCamera>(scene, entity),
 			dist(0.0f),
 			toLook(entity)
 		{}

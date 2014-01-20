@@ -16,7 +16,7 @@ namespace Component
 		FirstPersonView	&operator=(FirstPersonView const &);
 	public:
 		FirstPersonView(AScene *scene, Entity &entity) :
-			ComponentBase<FirstPersonView>(scene, entity, "FirstPersonView")
+			ComponentBase<FirstPersonView>(scene, entity)
 		{}
 		virtual              ~FirstPersonView(void){}
 		void init(){}

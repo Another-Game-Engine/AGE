@@ -3,9 +3,8 @@
 
 using namespace Component;
 
-Base::Base(AScene *scene, Entity &entity, const std::string &name)
+Base::Base(AScene *scene, Entity &entity)
 : _scene(scene)
-, _name(name)
 , _entity(entity)
 {
 }
@@ -27,9 +26,4 @@ void			Base::setEntity(Entity &entity)
 Entity		&Base::getEntity()
 {
 	return _entity;
-}
-
-std::string const &Base::getName() const
-{
-	return _name;
 }
