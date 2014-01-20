@@ -78,6 +78,7 @@
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
     <ClInclude Include="Engine\Utils\Archive.hpp" />
+    <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
