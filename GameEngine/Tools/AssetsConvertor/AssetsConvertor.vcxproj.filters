@@ -56,5 +56,8 @@
     <ClInclude Include="MediaFiles\MediaFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MediaFiles\MaterialFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

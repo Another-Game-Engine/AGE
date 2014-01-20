@@ -17,7 +17,7 @@ namespace Component
 		Velocity(AScene *scene, Entity &entity) :
 			_direction(0,0,0),
 			_function([&](double time, double totalTime, const glm::vec3 direction){return direction * glm::vec3(time);}),
-			ComponentBase<Velocity>(scene, entity, "VelocityComponent")
+			ComponentBase<Velocity>(scene, entity)
 		{}
 
 		virtual ~Velocity()

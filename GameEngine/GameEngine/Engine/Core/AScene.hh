@@ -17,7 +17,7 @@ class AScene : public DependenciesInjector
 {
 private:
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
-	std::vector<EntityData>                                 _pool;
+	std::vector<EntityData>                             _pool;
 	std::queue<unsigned int>                            _free;
 protected:
 	Engine                                              &_engine;
