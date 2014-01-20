@@ -33,7 +33,7 @@ namespace Component
 	{
 		SmartPointer<Material> old = _material;
 		_material = _scene->getEngine().getInstance<Renderer>().getMaterialManager().getMaterial(name);
-		broadCast(std::string("MaterialComponentChanged"), this->getEntity(), old, _material);
+		_entity->broadCast(std::string("MaterialComponentChanged"), this->getEntity(), old, _material);
 		return (_material != nullptr);
 	}
 

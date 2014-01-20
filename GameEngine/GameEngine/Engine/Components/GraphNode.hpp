@@ -35,7 +35,7 @@ namespace Component
 		{
 			_childs.clear();
 			auto key = PubSubKey("graphNodeNotARoot");
-			broadCast(key, _entity);
+			_entity->broadCast(key, _entity);
 		}
 
 		const Entity	    	&getParent() const
