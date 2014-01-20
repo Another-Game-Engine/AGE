@@ -62,6 +62,7 @@ public:
 	EntityData(AScene *scene);
 	virtual ~EntityData();
 
+	AScene                  *getScene() const;
 	void                    translate(const glm::vec3 &v);
 	void                    setTranslation(const glm::vec3 &v);
 	glm::vec3 const         &getTranslation() const;
