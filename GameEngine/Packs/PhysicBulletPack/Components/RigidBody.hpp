@@ -31,8 +31,8 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		RigidBody(Entity &entity)
-			: ComponentBase(entity),
+		RigidBody()
+			: ComponentBase(),
 			_manager(nullptr),
 			_shapeType(UNDEFINED),
 			_mass(0.0f),
@@ -44,12 +44,12 @@ namespace Component
 			_motionState(nullptr),
 			_rigidBody(nullptr)
 		{
-			_manager = dynamic_cast<BulletDynamicManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
-			assert(_manager != nullptr);
 		}
 
 		void init(float mass = 1.0f)
 		{
+			_manager = dynamic_cast<BulletDynamicManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
+			assert(_manager != nullptr);
 			_mass = mass;
 		}
 

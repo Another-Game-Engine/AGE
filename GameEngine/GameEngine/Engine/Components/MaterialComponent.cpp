@@ -4,8 +4,8 @@
 
 namespace Component
 {
-	MaterialComponent::MaterialComponent(Entity &entity)
-		: ComponentBase<MaterialComponent>(entity),
+	MaterialComponent::MaterialComponent()
+		: ComponentBase<MaterialComponent>(),
 		_material(nullptr)
 	{
 	}

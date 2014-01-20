@@ -10,13 +10,13 @@ namespace Component
 	class TrackBall : public Component::ComponentBase<TrackBall>
 	{
 	public:
-		TrackBall(Entity &entity) :
-			Component::ComponentBase<Component::TrackBall>(entity),
+		TrackBall() :
+			Component::ComponentBase<Component::TrackBall>(),
 			dist(0.0f),
 			rotateSpeed(0.0f),
 			zoomSpeed(0.0f),
-			angles(0, 0),
-			toLook(entity)
+			angles(0, 0)
+			//,toLook()
 		{}
 		virtual ~TrackBall(void)
 		{}

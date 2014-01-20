@@ -8,8 +8,8 @@
 
 namespace Component
 {
-	MeshRenderer::MeshRenderer(Entity &entity) :
-		Component::ComponentBase<MeshRenderer>(entity),
+	MeshRenderer::MeshRenderer() :
+		Component::ComponentBase<MeshRenderer>(),
 		_mesh(nullptr)
 	{
 	}

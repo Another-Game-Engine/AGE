@@ -3,8 +3,8 @@
 
 using namespace Component;
 
-Base::Base(Entity &entity, std::size_t serId)
-: _entity(entity)
+Base::Base(std::size_t serId)
+: _entity(Entity(std::numeric_limits<unsigned int>::max(), nullptr))
 , serializedID(serId)
 {
 }

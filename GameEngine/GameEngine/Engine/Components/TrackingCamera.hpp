@@ -10,10 +10,10 @@ namespace Component
 	class TrackingCamera : public Component::ComponentBase<TrackingCamera>
 	{
 	public:
-		TrackingCamera(Entity &entity) :
-			Component::ComponentBase<Component::TrackingCamera>(entity),
-			dist(0.0f),
-			toLook(entity)
+		TrackingCamera() :
+			Component::ComponentBase<Component::TrackingCamera>(),
+			dist(0.0f)
+//			,toLook()
 		{}
 		virtual ~TrackingCamera(void)
 		{}

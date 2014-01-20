@@ -16,7 +16,7 @@ namespace	Component
 
 	struct Base
 	{
-		Base(Entity &entity, std::size_t serId);
+		Base(std::size_t serId);
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
 		void			setEntity(Entity &entity);
@@ -30,8 +30,8 @@ namespace	Component
 	template <class T>
 	struct ComponentBase : public Base
 	{
-		ComponentBase(Entity &entity)
-		: Base(entity, typeid(T).hash_code())
+		ComponentBase()
+		: Base(typeid(T).hash_code())
 		{}
 
 		virtual ~ComponentBase()

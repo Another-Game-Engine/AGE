@@ -25,8 +25,8 @@ namespace Component
 		};
 	public:
 		BT_DECLARE_ALIGNED_ALLOCATOR();
-		SpaceshipController(Entity &entity)
-			: ComponentBase<SpaceshipController>(entity)
+		SpaceshipController()
+			: ComponentBase<SpaceshipController>()
 		{
 			setKey(LEFT, SDLK_a);
 			setKey(RIGHT, SDLK_d);
