@@ -16,12 +16,13 @@ namespace	Component
 
 	struct Base
 	{
-		Base(Entity &entity);
+		Base(Entity &entity, std::size_t serId);
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
 		void			setEntity(Entity &entity);
 		Entity		&getEntity();
 		virtual void reset() = 0;
+		std::size_t serializedID;
 	protected:
 		Entity				_entity;
 	};
@@ -30,7 +31,7 @@ namespace	Component
 	struct ComponentBase : public Base
 	{
 		ComponentBase(Entity &entity)
-		: Base(entity)
+		: Base(entity, typeid(T).hash_code())
 		{}
 
 		virtual ~ComponentBase()
@@ -42,6 +43,7 @@ namespace	Component
 			static unsigned int id = uniqueId();
 			return id;
 		}
+
 	private:
 		//std::multiset<PubSubKey> _subscriptions; // subscriptions to local entity events
 	};

@@ -70,6 +70,22 @@ public:
 			}
 		}
 	}
+
+
+//	template <typename T>
+//	void registerComponents()
+//	{
+//		std::cout << "Solo : " << typeid(T).name() << std::endl;
+//	}
+//
+//
+//	template <typename T, typename... Types>
+//	void registerComponents()
+//	{
+////		std::cout << "Multi : " << typeid(T).name() << std::endl;
+//		registerComponents(T());
+//		registerComponents<Types...>();
+//	}
 };
 
 #endif
