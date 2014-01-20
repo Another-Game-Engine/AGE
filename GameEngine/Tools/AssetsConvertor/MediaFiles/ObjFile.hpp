@@ -15,68 +15,7 @@
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
-
-#include <glm/gtc/packing.hpp>
-
-
-namespace cereal
-{
-	template<typename Archive>
-	void save(Archive &ar, const glm::vec2 &v)
-	{
-		ar(v.x, v.y);
-	}
-
-	template<typename Archive>
-	void load(Archive &ar, glm::vec2 &v)
-	{
-		float x, y;
-		ar(x, y);
-		v = glm::vec2(x, y);
-	}
-
-	template<typename Archive>
-	void save(Archive &ar, const glm::vec3 &v)
-	{
-		ar(v.x, v.y, v.z);
-	}
-
-	template<typename Archive>
-	void load(Archive &ar, glm::vec3 &v)
-	{
-		float x, y, z;
-		ar(x, y, z);
-		v = glm::vec3(x, y, z);
-	}
-
-	template<typename Archive>
-	void save(Archive &ar, const glm::vec4 &v)
-	{
-		ar(v.x, v.y, v.z, v.w);
-	}
-
-	template<typename Archive>
-	void load(Archive &ar, glm::vec4 &v)
-	{
-		float x, y, z, w;
-		ar(v.x, v.y, v.z, v.w);
-//		v = glm::vec4(x, y, z, w);
-	}
-}
-//
-//
-//template<typename Archive, typename T, glm::precision p>
-//void serialize(Archive &ar, glm::detail::tvec3<T, p> &v)
-//{
-////	ar(v.x, v.y, v.z, v.w);
-//}
-
-
-//template<typename Archive>
-//void serialize(Archive &ar, glm::vec4 &v)
-//{
-//	ar(v.x, v.y, v.z, v.w);
-//}
+#include <Utils/GlmSerialization.hpp>
 
 struct ObjFile : public AMediaFile
 {

@@ -45,23 +45,19 @@ bool 			DemoScene::userStart()
 	addSystem<MeshRendererSystem>(0);
 	addSystem<GraphNodeSystem>(0); // UPDATE ENTITIES TRANSFORMATION
 	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
-	//
-	//
+
+
 	// end System Test
-	//{
-	//	auto &convertor = _engine.getInstance<AssetsConvertorManager>();
-	//	auto success = convertor.load("./Assets/cube/cube.obj", "cube");
-	//	convertor.serializeData();
-	//}
+	{
+		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
+		auto success = convertor.load("./Assets/cube/cube.obj", "cube");
+		convertor.serializeData();
+	}
 	{
 		//auto &convertor = _engine.getInstance<AssetsConvertorManager>();
 		//auto success = convertor.load("./Assets/crytek-sponza/sponza.obj", "sponza");
 	}
 
-	std::ifstream ifs("test.serialization", std::ios_base::binary);
-
-	AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream<cereal::PortableBinaryInputArchive>(ifs);
-	std::cout << "lol" << std::endl;
 
 
 	return (true);
