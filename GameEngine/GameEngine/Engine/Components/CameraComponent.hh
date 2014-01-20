@@ -25,7 +25,7 @@ namespace Component
 		std::string                      _cubeMapShader;
 		glm::mat4                        _lookAtTransform;
 	public:
-		CameraComponent(AScene *scene, Entity &entity);
+		CameraComponent(Entity &entity);
 		virtual              ~CameraComponent(void);
 		void init(){}
 		virtual void reset(){}

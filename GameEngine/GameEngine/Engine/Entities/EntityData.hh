@@ -127,7 +127,7 @@ public:
 		// if component has never been created, create one
 		if (!_components[id].get())
 		{
-			_components[id] = new T(_scene, getHandle());
+			_components[id] = new T(getHandle());
 			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
 		}
 		//init component

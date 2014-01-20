@@ -31,8 +31,8 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		RigidBody(AScene *scene, Entity &entity)
-			: ComponentBase(scene, entity),
+		RigidBody(Entity &entity)
+			: ComponentBase(entity),
 			_manager(nullptr),
 			_shapeType(UNDEFINED),
 			_mass(0.0f),
@@ -44,7 +44,7 @@ namespace Component
 			_motionState(nullptr),
 			_rigidBody(nullptr)
 		{
-			_manager = dynamic_cast<BulletDynamicManager*>(&scene->getEngine().getInstance<BulletCollisionManager>());
+			_manager = dynamic_cast<BulletDynamicManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 		}
 
@@ -133,7 +133,7 @@ namespace Component
 			else if (c == MESH)
 			{
 				// THERE IS SOME LEAKS BECAUSE THAT'S TEMPORARY
-				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+				SmartPointer<Resources::SharedMesh> mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
 				auto group = new btCompoundShape();
 
 				auto &geos = mesh->getGeometry();
@@ -172,7 +172,7 @@ namespace Component
 			}
 			else if (c == CONCAVE_STATIC_MESH) // dont work
 			{
-				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+				SmartPointer<Resources::SharedMesh> mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
 				auto trimesh = new btTriangleMesh();
 				auto &geos = mesh->getGeometry();
 
