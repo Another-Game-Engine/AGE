@@ -60,6 +60,14 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 bool 			DemoScene::userStart()
 {	
+	//registerComponents<Component::CameraComponent,
+	//	Component::GraphNode,
+	//	Component::MaterialComponent,
+	//	Component::MeshRenderer,
+	//	Component::RotationForce,
+	//	Component::TrackBall>();
+
+
 	// System Tests
 	//
 	//

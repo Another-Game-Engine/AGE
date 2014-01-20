@@ -3,8 +3,9 @@
 
 using namespace Component;
 
-Base::Base(Entity &entity)
+Base::Base(Entity &entity, std::size_t serId)
 : _entity(entity)
+, serializedID(serId)
 {
 }
 
