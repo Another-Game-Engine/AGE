@@ -98,8 +98,10 @@
     <ClInclude Include="DemoScene.hh" />
     <ClInclude Include="Managers\AConvertor.hh" />
     <ClInclude Include="Managers\AssetsConvertorManager.hh" />
+    <ClInclude Include="Managers\FileTypeRegister.hpp" />
     <ClInclude Include="Managers\ObjConvertor.hh" />
     <ClInclude Include="MediaFiles\AMediaFile.hpp" />
+    <ClInclude Include="MediaFiles\MediaFile.hpp" />
     <ClInclude Include="MediaFiles\ObjFile.hpp" />
   </ItemGroup>
   <ItemGroup>

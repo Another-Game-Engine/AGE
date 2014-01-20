@@ -50,5 +50,11 @@
     <ClInclude Include="MediaFiles\ObjFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Managers\FileTypeRegister.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MediaFiles\MediaFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
