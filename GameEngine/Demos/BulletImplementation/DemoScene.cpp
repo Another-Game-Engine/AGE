@@ -240,17 +240,8 @@ bool 			DemoScene::userStart()
 		character = e;
 	}
 
-<<<<<<< HEAD
-	//p1->setLocalTransform() = glm::scale(p1->getLocalTransform(), glm::vec3(0.5, 1, 0.5));
-	//p1->getComponent<Component::RigidBody>()->updateScale();
-//	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 15.0f, glm::vec3(0, 0, 1));
-
-	Handle c1;
-	for (unsigned int i = 0; i < 1000; ++i)
-=======
 	Entity c1;
 	for (unsigned int i = 0; i < 70; ++i)
->>>>>>> origin
 	{
 		if (i % 3)
 		{
