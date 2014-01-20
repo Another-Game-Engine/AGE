@@ -41,6 +41,17 @@ public:
 			return this->fullPath_;
 	}
 
+	std::string             getFolder() const
+	{
+		std::string::size_type		pos;
+
+		pos = this->fullPath_.find_last_of("\\/");
+		if (pos != std::string::npos)
+			return this->fullPath_.substr(0, pos + 1);
+		else
+			return this->fullPath_;
+	}
+
 	std::string				getShortFileName() const
 	{
 		return this->getFileName().substr(0, this->getFileName().find_last_of("."));

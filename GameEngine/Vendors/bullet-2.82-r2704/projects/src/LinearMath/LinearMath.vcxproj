@@ -58,48 +58,51 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">\Vendors\bullet-2.82-r2704\projects\lib\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\lib\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LinearMath.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LinearMath_Debug</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">\Vendors\bullet-2.82-r2704\projects\lib\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\lib\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LinearMath.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LinearMath</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">\Vendors\bullet-2.82-r2704\projects\lib\MinSizeRel\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\lib\MinSizeRel\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">LinearMath.dir\MinSizeRel\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">LinearMath_MinsizeRel</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">\Vendors\bullet-2.82-r2704\projects\lib\RelWithDebInfo\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\lib\RelWithDebInfo\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">LinearMath.dir\RelWithDebInfo\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">LinearMath_RelWithDebugInfo</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointModel>Precise</FloatingPointModel>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_DEBUG;USE_GRAPHICAL_BENCHMARK;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_DEBUG;USE_GRAPHICAL_BENCHMARK;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -109,7 +112,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
@@ -128,10 +131,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;NDEBUG;USE_GRAPHICAL_BENCHMARK;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -141,7 +144,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
@@ -160,10 +163,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;NDEBUG;USE_GRAPHICAL_BENCHMARK;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -173,7 +176,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -191,10 +194,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;NDEBUG;USE_GRAPHICAL_BENCHMARK;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/Glut;C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -204,9 +207,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\src\LinearMath\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704 -BC:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects --check-stamp-file C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704 -BC:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects --check-stamp-file C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -214,12 +217,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt;C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt;C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704 -BC:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects --check-stamp-file C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704 -BC:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects --check-stamp-file C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -227,12 +230,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt;C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt;C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704 -BC:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects --check-stamp-file C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704 -BC:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects --check-stamp-file C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -240,12 +243,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt;C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt;C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704 -BC:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects --check-stamp-file C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704 -BC:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects --check-stamp-file C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -253,8 +256,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt;C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\doria_000\Documents\GIT\Demo-OpenGL-AMD\Demoscene-OpenGL\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src/LinearMath/CMakeLists.txt;C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\src\LinearMath\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\cesar\Documents\GitHub\Demoscene-OpenGL-PFA\GameEngine\Vendors\bullet-2.82-r2704\projects\src\LinearMath\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
@@ -295,8 +298,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="..\..\..\src\LinearMath\btVector3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/ZERO_CHECK.vcxproj">
-      <Project>37F2EE80-C0AC-4DF5-85A1-C7433072E051</Project>
+    <ProjectReference Include="C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects/ZERO_CHECK.vcxproj">
+      <Project>4B3C8B1B-9443-4A12-B831-3B13548CD1B4</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

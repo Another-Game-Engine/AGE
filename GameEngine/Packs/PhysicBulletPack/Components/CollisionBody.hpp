@@ -4,8 +4,8 @@
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
 #include "Utils/SmartPointer.hh"
+#include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
-#include <Entities/Handle.hh>
 #include <Core/Engine.hh>
 #include <ResourceManager/ResourceManager.hh>
 #include <ResourceManager/SharedMesh.hh>
@@ -13,6 +13,7 @@
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
+#include <Core/AScene.hh>
 
 
 namespace Component
@@ -29,15 +30,15 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		CollisionBody(Engine &engine, Handle &entity)
-			: ComponentBase(engine, entity, "CollisionBody"),
+		CollisionBody(AScene *scene, Entity &entity)
+			: ComponentBase(scene, entity, "CollisionBody"),
 			_manager(nullptr),
 			_shapeType(UNDEFINED),
 			_meshName(""),
 			_collisionShape(nullptr),
 			_body(nullptr)
 		{
-			_manager = dynamic_cast<BulletCollisionManager*>(&engine.getInstance<BulletCollisionManager>());
+			_manager = dynamic_cast<BulletCollisionManager*>(&scene->getEngine().getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 		}
 
@@ -99,8 +100,9 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				SmartPointer<Resources::SharedMesh> mesh = _engine.getInstance<Resources::ResourceManager>().getResource(meshName);
-				const Resources::Geometry &geo = mesh->getGeometry();
+				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+				const Resources::Geometry &geo = mesh->getGeometry()[0]; // DIRTY HACK TEMPORARY
+				// NEED TO REPLACE MESH BY MESH GROUP !
 				btScalar *t = new btScalar[geo.vertices.size() * 3]();
 				for (unsigned int i = 0; i < geo.vertices.size(); ++i)
 				{
@@ -120,7 +122,7 @@ namespace Component
 				}
 				s->recalcLocalAabb();
 				_collisionShape = s;
-				delete t;
+				delete[] t;
 				delete hull;
 				delete tmp;
 			}

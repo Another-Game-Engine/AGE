@@ -9,44 +9,91 @@ SceneManager::~SceneManager()
 	for (auto &e : _scenes)
 		delete e.second;
 	_scenes.clear();
+	_actives.clear();
 }
 
-void			SceneManager::addScene(AScene *scene, std::string const &name)
+void		SceneManager::addScene(AScene *scene, std::string const &name)
 {
 	_scenes[name] = scene;
 }
 
-void			SceneManager::removeScene(std::string const &name)
+void		SceneManager::removeScene(std::string const &name)
 {
+	auto t = _scenes.find(name);
+	if (t == std::end(_scenes))
+		return;
+	for (auto &e = std::begin(_actives); e != std::end(_actives);)
+	{
+		auto a = e;
+		++e;
+		if (a->second == t->second)
+		{
+			_actives.erase(a);
+			break;
+		}
+	}
+	delete _scenes[name];
 	_scenes.erase(name);
 }
 
-void			SceneManager::bindScene(std::string const &name)
+void		SceneManager::enableScene(std::string const &name, unsigned int priority)
 {
-	_sceneBinded = _scenes[name];
+	auto t = _scenes.find(name);
+	if (t == std::end(_scenes))
+		return;
+	_actives[priority] = t->second;
 }
 
-AScene			*SceneManager::getCurrentScene() const
+void        SceneManager::disableScene(std::string const &name)
 {
-	return (_sceneBinded);
+	auto t = _scenes.find(name);
+	if (t == std::end(_scenes))
+		return;
+	for (auto &e = std::begin(_actives); e != std::end(_actives);)
+	{
+		auto a = e;
+		++e;
+		if (a->second == t->second)
+		{
+			_actives.erase(a);
+			break;
+		}
+	}
 }
 
-bool            SceneManager::startScene() const
+void        SceneManager::resetScene(std::string const &name)
 {
-	if (!_sceneBinded)
+	auto t = _scenes.find(name);
+	if (t == std::end(_scenes))
+		return;
+	// TODO
+	// TO IMPLEMENT : CLEAR ENTITY POOL
+	//	t->second->reset();
+}
+
+bool        SceneManager::initScene(std::string const &name)
+{
+	auto t = _scenes.find(name);
+	if (t == std::end(_scenes))
 		return false;
-	return _sceneBinded->userStart();
+	return t->second->userStart();
 }
 
 bool            SceneManager::userUpdate(double time) const
 {
-	if (!_sceneBinded)
-		return false;
-	return _sceneBinded->userUpdate(time);
+	for (auto &e : _actives)
+	{
+		if (!e.second->userUpdate(time))
+			return false;
+	}
+	return true;
 }
 
 void            SceneManager::update(double time)
 {
-	if (_sceneBinded)
-		_sceneBinded->update(time);
+	for (auto &e : _actives)
+	{
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		e.second->update(time);
+	}
 }

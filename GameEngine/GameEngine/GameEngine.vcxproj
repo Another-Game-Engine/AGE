@@ -39,17 +39,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Vendors/glm;C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)Vendors/Cereal/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Builds\</OutDir>
-    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)Vendors/Cereal/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -62,6 +63,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>C:\boost\boost_1_55_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -104,11 +106,10 @@
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\MaterialComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
-    <ClCompile Include="Engine\Core\Material.cpp" />
     <ClCompile Include="Engine\Core\MaterialManager.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
-    <ClCompile Include="Engine\Entities\EntityManager.cpp" />
-    <ClCompile Include="Engine\Entities\Handle.cpp" />
+    <ClCompile Include="Engine\Entities\Entity.cpp" />
+    <ClCompile Include="Engine\Entities\EntityData.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
@@ -124,7 +125,6 @@
     <ClCompile Include="Engine\Core\Engine.cpp" />
     <ClCompile Include="Engine\Core\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
-    <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\OpenGL\Shader.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="Engine\ResourceManager\ResourceManager.cpp" />
@@ -144,11 +144,12 @@
     <ClInclude Include="Engine\Components\MaterialComponent.h" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
+    <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Core\Material.hh" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Settings.h" />
-    <ClInclude Include="Engine\Entities\EntityManager.h" />
-    <ClInclude Include="Engine\Entities\Handle.hh" />
+    <ClInclude Include="Engine\Entities\Entity.hh" />
+    <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\OpenGL\Attribute.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
@@ -171,15 +172,19 @@
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
     <ClInclude Include="Engine\Systems\System.h" />
     <ClInclude Include="Engine\Systems\TrackBallSystem.hpp" />
+    <ClInclude Include="Engine\Systems\TrackingCameraSystem.hpp" />
     <ClInclude Include="Engine\Utils\Any.hpp" />
+    <ClInclude Include="Engine\Utils\Archive.hpp" />
     <ClInclude Include="Engine\Utils\Barcode.h" />
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Utils\File.hpp" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
+    <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
+    <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -191,7 +196,6 @@
     <None Include="Engine\Core\MaterialManager.hh" />
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
-    <None Include="Engine\Entities\Entity.hh" />
     <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />

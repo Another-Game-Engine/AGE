@@ -1,28 +1,30 @@
 #include <Components/Component.hh>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 
 using namespace Component;
 
-Base::Base(Engine &engine, Handle &entity, const std::string &name)
-: _engine(engine)
+Base::Base(AScene *scene, Entity &entity, const std::string &name)
+: _scene(scene)
 , _name(name)
 , _entity(entity)
 {
 }
 
-Base::~Base(){}
+Base::~Base()
+{
+}
 
 Base &Base::operator=(const Base &other)
 {
 	return *this;
 }
 
-void			Base::setEntity(Handle &entity)
+void			Base::setEntity(Entity &entity)
 {
 	_entity = entity;
 }
 
-Handle		&Base::getEntity()
+Entity		&Base::getEntity()
 {
 	return _entity;
 }

@@ -5,16 +5,12 @@
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\MaterialComponent.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
-    <ClCompile Include="Engine\Core\Material.cpp" />
     <ClCompile Include="Engine\Core\MaterialManager.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
-    <ClCompile Include="Engine\Entities\EntityManager.cpp" />
-    <ClCompile Include="Engine\Entities\Handle.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
-    <ClCompile Include="Engine\OpenGL\VertexArray.cpp" />
     <ClCompile Include="Engine\Parsers\LoadTGA.cpp" />
     <ClCompile Include="Engine\Parsers\LoadOBJ.cpp" />
     <ClCompile Include="Engine\ResourceManager\AResource.cpp" />
@@ -23,7 +19,6 @@
     <ClCompile Include="Engine\Core\Engine.cpp" />
     <ClCompile Include="Engine\Core\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
-    <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\OpenGL\Shader.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="Engine\ResourceManager\ResourceManager.cpp" />
@@ -34,9 +29,15 @@
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
+    <ClCompile Include="Engine\Core\SceneManager.cpp" />
+    <ClCompile Include="Engine\Components\Component.cpp" />
+    <ClCompile Include="Engine\Components\MaterialComponent.cpp" />
+    <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
+    <ClCompile Include="Engine\Entities\EntityData.cpp" />
+    <ClCompile Include="Engine\Entities\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
@@ -48,11 +49,8 @@
     <ClInclude Include="Engine\Core\Material.hh" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Settings.h" />
-    <ClInclude Include="Engine\Entities\EntityManager.h" />
-    <ClInclude Include="Engine\Entities\Handle.hh" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
-    <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
     <ClInclude Include="Engine\ResourceManager\AResource.hh" />
     <ClInclude Include="Engine\ResourceManager\CubeMap.hh" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
@@ -62,6 +60,8 @@
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
     <ClInclude Include="Engine\Systems\System.h" />
     <ClInclude Include="Engine\Systems\TrackBallSystem.hpp" />
+    <ClInclude Include="Engine\Components\MaterialComponent.h" />
+    <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\Any.hpp" />
     <ClInclude Include="Engine\Utils\Barcode.h" />
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
@@ -81,6 +81,13 @@
     <ClInclude Include="Engine\OpenGL\Vertice.hh" />
     <ClInclude Include="Engine\OpenGL\Vertice.hpp" />
     <ClInclude Include="Engine\OpenGL\Attribute.hh" />
+    <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
+    <ClInclude Include="Engine\Systems\TrackingCameraSystem.hpp" />
+    <ClInclude Include="Engine\Utils\MetaData.hpp" />
+    <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
+    <ClInclude Include="Engine\Entities\EntityData.hh" />
+    <ClInclude Include="Engine\Entities\Entity.hh" />
+    <ClInclude Include="Engine\Utils\Archive.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -92,7 +99,6 @@
     <None Include="Engine\Core\MaterialManager.hh" />
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
-    <None Include="Engine\Entities\Entity.hh" />
     <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />

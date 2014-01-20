@@ -1,15 +1,15 @@
-#include "System.h"
-#include "Core/Engine.hh"
+#include <Systems/System.h>
+#include <Core/AScene.hh>
 
-bool defaultEntityComparaison(Handle e1, Handle e2)
+bool defaultEntityComparaison(Entity e1, Entity e2)
 {
 	return e1 < e2;
 }
 
-System::System(Engine &engine, bool(*comparacomparaisonFunction)(Handle, Handle))
-: PubSub(engine.getInstance<PubSub::Manager>()),
+System::System(AScene *scene, bool(*comparacomparaisonFunction)(Entity, Entity))
+: PubSub(scene->getInstance<PubSub::Manager>()),
 _collection(comparacomparaisonFunction)
-, _engine(engine)
+, _scene(scene)
 {}
 
 System::~System()
@@ -33,4 +33,16 @@ void System::init()
 const Barcode &System::getCode() const
 {
 	return _code;
+}
+
+void System::_componentAdded(Entity &e, unsigned int typeId)
+{
+	if (_code.match(e->getCode()))
+		_collection.insert(e);
+}
+
+void System::_componentRemoved(Entity &e, unsigned int typeId)
+{
+	if (!_code.match(e->getCode()))
+		_collection.erase(e);
 }

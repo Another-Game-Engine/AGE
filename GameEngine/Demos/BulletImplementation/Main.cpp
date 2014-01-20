@@ -16,7 +16,6 @@
 #include <Core/SceneManager.hh>
 #include <ResourceManager/ResourceManager.hh>
 #include <Core/Renderer.hh>
-#include <Entities/EntityManager.h>
 #include <Managers/BulletDynamicManager.hpp>
 
 int			main(int ac, char **av)
@@ -26,12 +25,11 @@ int			main(int ac, char **av)
 	// set Rendering context of the engine
 	// you can also set any other dependencies
 	e.setInstance<PubSub::Manager>();
-	e.setInstance<EntityManager>(&e);
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
-	e.setInstance<Resources::ResourceManager>();
-	e.setInstance<Renderer>();
+	e.setInstance<Resources::ResourceManager>(&e);
+	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 	e.setInstance<BulletDynamicManager, BulletCollisionManager>().init();
 
@@ -43,7 +41,10 @@ int			main(int ac, char **av)
 	e.getInstance<SceneManager>().addScene(new DemoScene(e), "demo");
 
 	// bind scene
-	e.getInstance<SceneManager>().bindScene("demo");
+	if (!e.getInstance<SceneManager>().initScene("demo"))
+		return false;
+	e.getInstance<SceneManager>().enableScene("demo", 0);
+
 
 	// lanch engine
 	if (e.start() == false)

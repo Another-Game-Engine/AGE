@@ -4,7 +4,7 @@
 #include <Utils/BtConversion.hpp>
 #include <Systems/System.h>
 #include <Components/CollisionBody.hpp>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Managers/BulletCollisionManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
@@ -12,8 +12,8 @@
 class BulletCollisionSystem : public System
 {
 public:
-	BulletCollisionSystem(Engine &engine) : System(engine)
-		, _manager(engine.getInstance<BulletCollisionManager>())
+	BulletCollisionSystem(AScene *scene) : System(scene)
+		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
 	{}
 	virtual ~BulletCollisionSystem(){}
 private:

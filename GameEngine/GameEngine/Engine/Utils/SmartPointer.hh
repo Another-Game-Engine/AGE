@@ -39,6 +39,7 @@ public:
 	INLINE bool 			operator==(T *oth) const;
 	INLINE bool 			operator!=(T *oth) const;
 	INLINE T                *get() const;
+	INLINE void             reset(T* newValue = nullptr);
 	INLINE bool             operator<(SmartPointer const &oth) const;
 };
 

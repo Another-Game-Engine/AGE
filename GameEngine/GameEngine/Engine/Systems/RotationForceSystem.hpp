@@ -5,12 +5,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "System.h"
 #include <Components/RotationForce.hh>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 
 class RotationForceSystem : public System
 {
 public:
-	RotationForceSystem(Engine &engine) : System(engine)
+	RotationForceSystem(AScene *scene) : System(scene)
 	{}
 	virtual ~RotationForceSystem(){}
 private:

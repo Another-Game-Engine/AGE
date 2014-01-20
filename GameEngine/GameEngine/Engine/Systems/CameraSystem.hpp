@@ -6,7 +6,7 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/MaterialComponent.h>
 #include <Components/CameraComponent.hh>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Systems/MeshRenderSystem.h>
@@ -16,8 +16,8 @@
 class CameraSystem : public System
 {
 public:
-	CameraSystem(Engine &engine)
-		: System(engine)
+	CameraSystem(AScene *scene)
+		: System(scene)
 		, _renderDebugMethod(false)
 	{}
 	virtual ~CameraSystem(){}
@@ -33,7 +33,7 @@ public:
 	}
 
 protected:
-	std::map<SmartPointer<Material>, std::list<Handle> > _sorted;
+	std::map<SmartPointer<Material>, std::list<Entity> > _sorted;
 	bool _renderDebugMethod;
 
 	virtual void updateBegin(double time)
@@ -45,10 +45,10 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		static double t = 0;
+		static double totalTime = 0;
 		unsigned int textureOffset = 0;
-		auto &renderer = _engine.getInstance<Renderer>();
-		OpenGLTools::UniformBuffer *perFrameBuffer = _engine.getInstance<Renderer>().getUniform("PerFrame");
+		auto &renderer = _scene->getEngine().getInstance<Renderer>();
+		OpenGLTools::UniformBuffer *perFrameBuffer = _scene->getEngine().getInstance<Renderer>().getUniform("PerFrame");
 
 		for (auto e : _collection)
 		{
@@ -61,10 +61,10 @@ protected:
 
 			if (skybox.get())
 			{
-				OpenGLTools::Shader *s = _engine.getInstance<Renderer>().getShader(camera->getSkyboxShader());
+				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>().getShader(camera->getSkyboxShader());
 				assert(s != NULL && "Skybox does not have a shader associated");
 
-				_engine.getInstance<Renderer>().getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
+				_scene->getEngine().getInstance<Renderer>().getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
 
 				glm::mat4 t = cameraPosition;
 				t[3][0] = 0;
@@ -72,8 +72,8 @@ protected:
 				t[3][2] = 0;
 				t[3][3] = 1;
 
-				_engine.getInstance<Renderer>().getUniform("cameraUniform")->setUniform("view", t);
-				_engine.getInstance<Renderer>().getUniform("cameraUniform")->flushChanges();
+				_scene->getEngine().getInstance<Renderer>().getUniform("cameraUniform")->setUniform("view", t);
+				_scene->getEngine().getInstance<Renderer>().getUniform("cameraUniform")->flushChanges();
 
 //				_engine.getInstance<Renderer>().getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
 
@@ -87,16 +87,16 @@ protected:
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 			}
 
-			t += time;
+			totalTime += time;
 
 
 
 			// Set les uniforms du block PerFrame
 			perFrameBuffer->setUniform("projection", camera->getProjection());
 			perFrameBuffer->setUniform("view", cameraPosition);
-			perFrameBuffer->setUniform("time", (float)t);
+			perFrameBuffer->setUniform("time", (float)totalTime);
 			perFrameBuffer->flushChanges();
-			_engine.getInstance<SceneManager>().getCurrentScene()->getSystem<MeshRendererSystem>()->render(time);
+			_scene->getSystem<MeshRendererSystem>()->render(time);
 		}
 	}
 

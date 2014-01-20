@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL
+# Install script for directory: C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,7 +29,7 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("C:/Users/doria_000/Documents/GIT/Demo-OpenGL-AMD/Demoscene-OpenGL/GameEngine/Vendors/bullet-2.82-r2704/projects/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/cmake_install.cmake")
+  INCLUDE("C:/Users/cesar/Documents/GitHub/Demoscene-OpenGL-PFA/GameEngine/Vendors/bullet-2.82-r2704/projects/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
