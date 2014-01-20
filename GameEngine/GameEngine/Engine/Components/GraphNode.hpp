@@ -7,9 +7,8 @@
 
 namespace Component
 {
-	class GraphNode : public ComponentBase<GraphNode>
+	struct GraphNode : public ComponentBase<GraphNode>
 	{
-	public:
 		typedef std::list<Entity> t_EntityList;
 
 		GraphNode()
@@ -19,7 +18,6 @@ namespace Component
 
 		virtual ~GraphNode()
 		{
-			reset();
 		}
 
 		void init()

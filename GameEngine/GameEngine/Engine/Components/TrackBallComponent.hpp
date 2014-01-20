@@ -7,16 +7,14 @@
 
 namespace Component
 {
-	class TrackBall : public Component::ComponentBase<TrackBall>
+	struct TrackBall : public Component::ComponentBase<TrackBall>
 	{
-	public:
 		TrackBall() :
 			Component::ComponentBase<Component::TrackBall>(),
 			dist(0.0f),
 			rotateSpeed(0.0f),
 			zoomSpeed(0.0f),
 			angles(0, 0)
-			//,toLook()
 		{}
 		virtual ~TrackBall(void)
 		{}
@@ -27,13 +25,13 @@ namespace Component
 			rotateSpeed = rotatingSpeed;
 			zoomSpeed = zoomingSpeed;
 		}
-		void reset()
+		virtual void reset()
 		{}
-public:
-	float					dist;
-	float					rotateSpeed, zoomSpeed;
-	glm::vec2				angles;
-	Entity                  toLook;
+
+		float					dist;
+		float					rotateSpeed, zoomSpeed;
+		glm::vec2				angles;
+		Entity                  toLook;
 	private:
 		TrackBall(TrackBall const &);
 		TrackBall &operator=(TrackBall const &);

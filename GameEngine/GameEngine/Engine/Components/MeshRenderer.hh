@@ -19,14 +19,9 @@ class Material;
 
 namespace Component
 {
-
-	class MeshRenderer : public Component::ComponentBase<MeshRenderer>
+	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>
 	{
 	private:
-		SmartPointer<Resources::SharedMesh>	_mesh;
-		std::string _shader;
-		std::vector<Material> _materials;
-
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);
 
@@ -34,19 +29,19 @@ namespace Component
 		////
 		// Serialization
 
-		template <typename Archive>
-		Base *unserialize(Archive &ar)
-		{
-			auto res = new MeshRenderer();
-			ar(*res);
-			return res;
-		}
+		//template <typename Archive>
+		//Base *unserialize(Archive &ar)
+		//{
+		//	auto res = new MeshRenderer();
+		//	ar(*res);
+		//	return res;
+		//}
 
-		template <typename Archive>
-		void serialize(Archive &ar)
-		{
-			ar(_shader);
-		}
+		//template <typename Archive>
+		//void serialize(Archive &ar)
+		//{
+		//	ar(_shader);
+		//}
 
 		// !Serialization
 		////
@@ -57,12 +52,16 @@ namespace Component
 		virtual ~MeshRenderer(void);
 		void init(std::string const &resource);
 		virtual void reset();
-		void setShader(const std::string &shader) { _shader = shader; }
+		inline void setShader(const std::string &_shader) { shader = _shader; }
 		void render();
 		SmartPointer<Resources::SharedMesh>	const &getMesh() const;
 		std::vector<Material> &getMaterials();
 		Material *getMaterial(const std::string &name);
 		Material *getMaterial(unsigned int index);
+
+		SmartPointer<Resources::SharedMesh>	mesh;
+		std::string shader;
+		std::vector<Material> materials;
 	};
 
 }

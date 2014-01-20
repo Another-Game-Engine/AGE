@@ -7,13 +7,11 @@
 
 namespace Component
 {
-	class TrackingCamera : public Component::ComponentBase<TrackingCamera>
+	struct TrackingCamera : public Component::ComponentBase<TrackingCamera>
 	{
-	public:
 		TrackingCamera() :
 			Component::ComponentBase<Component::TrackingCamera>(),
 			dist(0.0f)
-//			,toLook()
 		{}
 		virtual ~TrackingCamera(void)
 		{}
@@ -22,11 +20,11 @@ namespace Component
 			toLook = _toLook;
 			dist = _dist;
 		}
-		void reset()
+		virtual void reset()
 		{}
-public:
-	glm::vec3               dist;
-	Entity                  toLook;
+
+		glm::vec3               dist;
+		Entity                  toLook;
 	private:
 		TrackingCamera(TrackingCamera const &);
 		TrackingCamera &operator=(TrackingCamera const &);

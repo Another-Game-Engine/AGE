@@ -7,9 +7,8 @@
 
 namespace Component
 {
-	class RotationForce : public Component::ComponentBase<RotationForce>
+	struct RotationForce : public Component::ComponentBase<RotationForce>
 	{
-	public:
 		RotationForce();
 		virtual ~RotationForce(void);
 
@@ -18,8 +17,8 @@ namespace Component
 
 		void setForce(const glm::vec3 &force);
 		const glm::vec3 &getForce() const;
-	private:
-		glm::vec3 _force;
+
+		glm::vec3 force;
 	private:
 		RotationForce(RotationForce const &);
 		RotationForce &operator=(RotationForce const &);

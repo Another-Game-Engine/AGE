@@ -9,11 +9,8 @@
 
 namespace Component
 {
-	class FirstPersonView : public ComponentBase<FirstPersonView>
+	struct FirstPersonView : public ComponentBase<FirstPersonView>
 	{
-	private:
-		FirstPersonView(FirstPersonView const &);
-		FirstPersonView	&operator=(FirstPersonView const &);
 	public:
 		FirstPersonView() :
 			ComponentBase<FirstPersonView>()
@@ -21,6 +18,9 @@ namespace Component
 		virtual              ~FirstPersonView(void){}
 		void init(){}
 		virtual void reset(){}
+	private:
+		FirstPersonView(FirstPersonView const &);
+		FirstPersonView	&operator=(FirstPersonView const &);
 	};
 }
 

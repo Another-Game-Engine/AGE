@@ -8,7 +8,7 @@
 
 namespace Component
 {
-	class MaterialComponent : public Component::ComponentBase<MaterialComponent>
+	struct MaterialComponent : public Component::ComponentBase<MaterialComponent>
 	{
 	private:
 		SmartPointer<Material>             _material;
@@ -19,7 +19,7 @@ namespace Component
 		MaterialComponent();
 		void init(std::string const &name);
 		void init(SmartPointer<Material> material);
-		virtual void reset();
+		virtual void                       reset();
 		virtual                            ~MaterialComponent(void);
 
 		bool                				setMaterial(std::string const &name);
