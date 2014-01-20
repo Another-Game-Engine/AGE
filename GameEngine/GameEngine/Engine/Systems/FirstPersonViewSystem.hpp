@@ -5,15 +5,15 @@
 #include "System.h"
 #include <Components/CameraComponent.hh>
 #include <Components/FirstPersonView.hpp>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/Engine.hh>
 
 
 class FirstPersonViewSystem : public System
 {
 public:
-	FirstPersonViewSystem(Engine &engine)
-		: System(engine)
+	FirstPersonViewSystem(AScene *scene)
+		: System(scene)
 	{}
 	virtual ~FirstPersonViewSystem(){}
 protected:

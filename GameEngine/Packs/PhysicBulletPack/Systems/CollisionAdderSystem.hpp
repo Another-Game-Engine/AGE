@@ -2,7 +2,7 @@
 # define __COLLISION_ADDER_SYSTEM_HPP__
 
 #include <Systems/System.h>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 #include <Managers/BulletCollisionManager.hpp>
@@ -11,8 +11,8 @@
 class CollisionAdder : public System
 {
 public:
-	CollisionAdder(Engine &engine) : System(engine)
-		, _manager(engine.getInstance<BulletCollisionManager>())
+	CollisionAdder(AScene *scene) : System(scene)
+		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
 	{}
 	virtual ~CollisionAdder(){}
 private:
@@ -34,12 +34,12 @@ private:
 			const btCollisionObject *oa = static_cast<const btCollisionObject*>(contact->getBody0());
 			const btCollisionObject *ob = static_cast<const btCollisionObject*>(contact->getBody1());
 
-			Handle h1 = *(static_cast<Handle*>(oa->getUserPointer()));
-			Entity *e1 = h1.get();
+			Entity h1 = *(static_cast<Entity*>(oa->getUserPointer()));
+			EntityData *e1 = h1.get();
 			auto c1 = e1->addComponent<Component::Collision>();
 
-			Handle h2 = *(static_cast<Handle*>(ob->getUserPointer()));
-			Entity *e2 = h2.get();
+			Entity h2 = *(static_cast<Entity*>(ob->getUserPointer()));
+			EntityData *e2 = h2.get();
 			auto c2 = e2->addComponent<Component::Collision>();
 			c1->addCollision(h2);
 			c2->addCollision(h1); 

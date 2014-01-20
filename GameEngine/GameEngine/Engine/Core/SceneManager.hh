@@ -9,8 +9,8 @@ class AScene;
 class SceneManager
 {
 private:
-	AScene							*_sceneBinded;
 	std::map<std::string, AScene*>	_scenes;
+	std::map < unsigned int, AScene*> _actives;
 	SceneManager(const SceneManager &o);
 	SceneManager &operator=(const SceneManager &o);
 public:
@@ -29,11 +29,14 @@ public:
 	// When a scene is destroyed or reset the EntityCreator flush all created entities.
 	SceneManager();
 	virtual ~SceneManager();
+
 	void		addScene(AScene *scene, std::string const &name);
 	void		removeScene(std::string const &name);
-	void		bindScene(std::string const &name);
-	AScene		*getCurrentScene() const;
-	bool        startScene() const;
+	void		enableScene(std::string const &name, unsigned int priority);
+	void		disableScene(std::string const &name);
+	void        resetScene(std::string const &name);
+	bool        initScene(std::string const &name);
+
 	bool        userUpdate(double time) const;
 	void        update(double time);
 };

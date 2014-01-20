@@ -3,12 +3,12 @@
 
 #include "System.h"
 #include <Components/GraphNode.hpp>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 
 class GraphNodeSystem : public System
 {
 public:
-	GraphNodeSystem(Engine &engine) : System(engine)
+	GraphNodeSystem(AScene *scene) : System(scene)
 	{}
 	virtual ~GraphNodeSystem(){}
 private:
@@ -23,7 +23,7 @@ private:
 		float t = float(time);
 		for (auto e : _roots)
 		{
-			if (e->getFlags() & Entity::HAS_MOVED)
+			if (e->getFlags() & EntityData::HAS_MOVED)
 			{
 				e->computeGlobalTransform(glm::mat4(1));
 				recomputePositions(e, true);
@@ -35,14 +35,14 @@ private:
 		}
 	}
 
-	void recomputePositions(Handle &e, bool hasMoved)
+	void recomputePositions(Entity &e, bool hasMoved)
 	{
 		auto node = e->getComponent<Component::GraphNode>();
 		auto it = node->getSonsBegin();
 
 		while (it != node->getSonsEnd())
 		{
-			if ((it->get())->getFlags() & Entity::HAS_MOVED)
+			if ((it->get())->getFlags() & EntityData::HAS_MOVED)
 				hasMoved = true;
 			if (hasMoved)
 				it->get()->computeGlobalTransform(e->getGlobalTransform());
@@ -56,16 +56,16 @@ private:
 		// DOES NOT REQUIRE COMPONENTS BECAUSE GraphNode set as root  will directly communicate with it
 		//require<Component::GraphNode>();
 
-		globalSub(PubSubKey("graphNodeSetAsRoot"), [&](Handle entity){
+		globalSub(PubSubKey("graphNodeSetAsRoot"), [&](Entity entity){
 			_roots.insert(entity);
 		});
 
-		globalSub(PubSubKey("graphNodeNotARoot"), [&](Handle entity){
+		globalSub(PubSubKey("graphNodeNotARoot"), [&](Entity entity){
 			_roots.erase(entity);
 		});
 	}
 
-	std::set<Handle> _roots;
+	std::set<Entity> _roots;
 };
 
 #endif     //__GRAPH_NODE_SYSTEM_HPP__

@@ -2,7 +2,7 @@
 # define  __VELOCITY_SYSTEM_HPP__
 
 #include <Systems/System.h>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/VelocityComponent.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,7 +11,7 @@
 class VelocitySystem : public System
 {
 public:
-	VelocitySystem(Engine &engine) : System(engine)
+	VelocitySystem(AScene *scene) : System(scene)
 	{}
 	virtual ~VelocitySystem(){}
 private:
@@ -24,7 +24,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		auto totalTime = _engine.getInstance<Timer>().getElapsed();
+		auto totalTime = _scene->getEngine().getInstance<Timer>().getElapsed();
 		for (auto e : _collection)
 		{
 			auto velocity = e->getComponent<Component::Velocity>();

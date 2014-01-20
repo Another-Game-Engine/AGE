@@ -1,147 +1,55 @@
-
-#include "Entity.hh"
-#include "Core/Engine.hh"
-#include "EntityManager.h"
-#include "Components/Component.hh"
-#include "Handle.hh"
+#include <Entities\Entity.hh>
+#include <Entities\EntityData.hh>
+#include <Core/Engine.hh>
+#include <Components/Component.hh>
 #include <limits>
+#include <Core/AScene.hh>
 
-Entity::Entity(Engine &engine) :
-    PubSub(engine.getInstance<PubSub::Manager>()),
-    _engine(engine),
-	_flags(0),
-	_localTranslation(0),
-	_localRotation(0),
-	_localScale(0),
-	_globalTranslation(0),
-	_globalRotation(0),
-	_globalScale(0)
-{
-}
+Entity::Entity(unsigned int id, AScene *manager)
+: _id(id), _manager(manager)
+{}
 
 Entity::~Entity()
+{}
+
+
+const unsigned int Entity::getId() const
 {
-	_components.clear();
+	return _id;
 }
 
-Handle &Entity::getHandle()
+EntityData *Entity::operator->()
 {
-	return _handle;
+	return _manager->get(*this);
 }
 
-void Entity::setHandle(Handle &handle)
+EntityData *Entity::get() const
 {
-	_handle = handle;
+	static unsigned int max = std::numeric_limits<unsigned int>::max();
+	if (!_manager || _id == max)
+		return nullptr;
+	return _manager->get(*this);
 }
 
-glm::mat4 const  		&Entity::getLocalTransform()
+bool Entity::operator<(const Entity &o) const
 {
-	return (_localTransform);
+	return _id < o._id;
 }
 
-//  TO DELETE
-glm::mat4   			&Entity::setLocalTransform()
+bool Entity::operator==(const Entity &o) const
 {
-	_flags |= HAS_MOVED;
-	return (_localTransform);
+	return _id == o._id;
 }
 
-glm::mat4 const			&Entity::getGlobalTransform() const
+Entity::Entity(const Entity &o)
 {
-	return (_globalTransform);
+	_id = o._id;
+	_manager = o._manager;
 }
 
-// TO DELETE
-void 					Entity::computeGlobalTransform(glm::mat4 const &fatherTransform)
+Entity &Entity::operator=(const Entity &o)
 {
-	_globalTransform = fatherTransform * _localTransform;
-	_flags ^= HAS_MOVED;
-}
-
-void 					Entity::computeGlobalTransform(const Handle &parent)
-{
-
-	_flags ^= HAS_MOVED;
-}
-
-void                    Entity::translate(const glm::vec3 &v)
-{
-	_localTranslation += v;
-	_flags |= HAS_MOVED;
-}
-
-void                    Entity::setTranslation(const glm::vec3 &v)
-{
-	_localTranslation = v;
-	_flags |= HAS_MOVED;
-}
-
-glm::vec3 const         &Entity::getTranslation() const
-{
-	return _localTranslation;
-}
-
-void                    Entity::rotate(const glm::vec3 &v)
-{
-	_localRotation += v;
-	_flags |= HAS_MOVED;
-}
-
-void                    Entity::setRotation(const glm::vec3 &v)
-{
-	_localRotation = v;
-	_flags |= HAS_MOVED;
-}
-
-glm::vec3 const         &Entity::getRotation() const
-{
-	return _localRotation;
-}
-
-void                    Entity::scale(const glm::vec3 &v)
-{
-	_localScale += v;
-	_flags |= HAS_MOVED;
-}
-
-void                    Entity::setScale(const glm::vec3 &v)
-{
-	_localScale = v;
-	_flags |= HAS_MOVED;
-}
-
-glm::vec3 const         &Entity::getScale() const
-{
-	return _localScale;
-}
-
-size_t 					Entity::getFlags() const
-{
-	return (_flags);
-}
-
-void 					Entity::setFlags(size_t flags)
-{
-	_flags = flags;
-}
-
-void 					Entity::addFlags(size_t flags)
-{
-	_flags |= flags;
-}
-
-void 					Entity::removeFlags(size_t flags)
-{
-	flags &= _flags;
-	_flags ^= flags;
-}
-
-Barcode                       &Entity::getCode()
-{
-	return _code;
-}
-
-bool Entity::hasComponent(unsigned int componentId) const
-{
-		return _code.isSet(componentId);
+	_id = o._id;
+	_manager = o._manager;
+	return *this;
 }

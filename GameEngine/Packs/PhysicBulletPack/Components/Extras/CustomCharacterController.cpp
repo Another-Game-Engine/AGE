@@ -210,7 +210,7 @@ void CustomCharacterController::stepUp ( btCollisionWorld* world)
    start.setIdentity ();
    end.setIdentity ();
 
-   /* FIXME: Handle penetration properly */
+   /* FIXME: Entity penetration properly */
    start.setOrigin (m_currentPosition + getUpAxisDirections()[m_upAxis] * (m_convexShape->getMargin() + m_addedMargin));
    end.setOrigin (m_targetPosition);
 

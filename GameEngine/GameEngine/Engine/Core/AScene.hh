@@ -1,19 +1,24 @@
 #ifndef ASCENE_HH_
 #define ASCENE_HH_
 
-#include "Entities/Entity.hh"
-#include <Systems/System.h>
-
+#include <Entities/EntityData.hh>
+//#include <Systems/System.h>
+#include <Utils/DependenciesInjector.hpp>
+#include <Utils/SmartPointer.hh>
 #include <list>
 #include <queue>
 #include <map>
 
-class AScene
+class Engine;
+class System;
+
+
+class AScene : public DependenciesInjector
 {
 private:
-	std::list<SmartPointer<Entity> >                    _collection;
-	std::queue<SmartPointer<Entity> >                   _pool;
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
+	std::vector<EntityData>                                 _pool;
+	std::queue<unsigned int>                            _free;
 protected:
 	Engine                                              &_engine;
 public:
@@ -23,11 +28,19 @@ public:
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
+	Entity &createEntity();
+	void destroy(const Entity &h);
+	EntityData *get(const Entity &h);
+
+	Engine &getEngine()
+	{
+		return _engine;
+	}
 
 	template <typename T>
 	SmartPointer<T> addSystem(std::size_t priority)
 	{
-		SmartPointer<System> tmp = new T(_engine);
+		SmartPointer<System> tmp = new T(this);
 		_systems.insert(std::make_pair(priority, tmp));
 		tmp->init();
 		return tmp;

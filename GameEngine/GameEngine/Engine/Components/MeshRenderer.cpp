@@ -8,19 +8,27 @@
 
 namespace Component
 {
-	MeshRenderer::MeshRenderer(Engine &engine, Handle &entity) :
-		Component::ComponentBase<MeshRenderer>(engine, entity, "MeshComponent"),
+	MeshRenderer::MeshRenderer(AScene *scene, Entity &entity) :
+		Component::ComponentBase<MeshRenderer>(scene, entity, "MeshComponent"),
 		_mesh(nullptr)
 	{
 	}
 
 	MeshRenderer::~MeshRenderer(void)
 	{
+		reset();
 	}
 
 	void MeshRenderer::init(std::string const &resource)
 	{
-		_mesh =_engine.getInstance<Resources::ResourceManager>().getResource(resource);
+		_mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(resource);
+		// DEFAULT MATERIAL OF MESH COPY
+		_materials.clear();
+		auto &m = _mesh->getDefaultMaterialsList();
+		for (auto &e : m)
+		{
+			_materials.push_back(*(e.get()));
+		}
 	}
 
 	SmartPointer<Resources::SharedMesh> const &MeshRenderer::getMesh() const
@@ -33,53 +41,45 @@ namespace Component
 		_mesh = nullptr;
 	}
 
-	void MeshRenderer::addTexture(const std::string &textureName, unsigned int priority)
+	void MeshRenderer::render()
 	{
-		SmartPointer<Resources::Texture> texture = _engine.getInstance<Resources::ResourceManager>().getResource(textureName);
-
-		for (textureMapIt it = _textures.begin(); it != _textures.end(); ++it)
+		OpenGLTools::UniformBuffer *perModelUniform = _scene->getEngine().getInstance<Renderer>().getUniform("PerModel");
+		OpenGLTools::UniformBuffer *materialUniform = _scene->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
+		auto shader = _scene->getEngine().getInstance<Renderer>().getShader(_shader);
+		if (shader)
+			shader->use();
+		perModelUniform->setUniform("model", _entity->getGlobalTransform());
+		auto &g = _mesh->getGeometry();
+		auto &b = _mesh->getDrawable();
+		perModelUniform->flushChanges();
+		for (unsigned int i = 0; i < g.size(); ++i)
 		{
-			if (it->first == priority)
-				return;
-		}
-		_textures.insert(std::make_pair(priority, std::make_pair(textureName, texture)));
-	}
-
-	void MeshRenderer::removeTexture(unsigned int priority)
-	{
-		for (textureMapIt it = _textures.begin(); it != _textures.end(); ++it)
-		{
-			if (it->first == priority)
-			{
-				_textures.erase(it);
-				return;
-			}
+			_materials[i].setUniforms(materialUniform);
+			materialUniform->flushChanges();
+			b[i]->draw(GL_TRIANGLES);
 		}
 	}
 
-	void MeshRenderer::bindTextures(OpenGLTools::Shader *shader) const
+	std::vector<Material> &MeshRenderer::getMaterials()
 	{
-		unsigned int c = 0;
-		unsigned int offset = shader->getLayers().size();
-
-		for (textureMap::const_iterator it = _textures.begin(); it != _textures.end(); ++it)
-		{
-			glActiveTexture(GL_TEXTURE0 + c + offset);
-			glBindTexture(GL_TEXTURE_2D, it->second.second->getId());
-			//			shader->bindActiveTexture("fTexture" + std::to_string(c), c + offset);
-			++c;
-		}
+		return _materials;
 	}
 
-	void MeshRenderer::unbindTextures() const
+	Material *MeshRenderer::getMaterial(const std::string &name)
 	{
-		unsigned int c = 0;
-		for (textureMap::const_iterator it = _textures.begin(); it != _textures.end(); ++it)
+		for (auto &e : _materials)
 		{
-			glActiveTexture(GL_TEXTURE0 + c);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			++c;
+			if (e.name == name)
+				return &e;
 		}
-		glActiveTexture(GL_TEXTURE0);
+		return nullptr;
 	}
+
+	Material *MeshRenderer::getMaterial(unsigned int index)
+	{
+		if (index < _materials.size())
+			return &_materials[index];
+		return nullptr;
+	}
+
 }

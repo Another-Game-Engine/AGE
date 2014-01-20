@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Systems/System.h>
 #include <Components/FPController.hpp>
-#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 #include <Managers/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
@@ -15,8 +15,8 @@
 class FPControllerSystem : public System
 {
 public:
-	FPControllerSystem(Engine &engine) : System(engine)
-		, _manager(&engine.getInstance<BulletCollisionManager>())
+	FPControllerSystem(AScene *scene) : System(scene)
+		, _manager(&scene->getEngine().getInstance<BulletCollisionManager>())
 	{}
 	virtual ~FPControllerSystem(){}
 private:
@@ -35,7 +35,7 @@ private:
 		{
 			auto fp = e->getComponent<Component::FPController>();
 			updateComponent(e, fp, time);
-			auto &inputs = _engine.getInstance<Input>();
+			auto &inputs = _scene->getEngine().getInstance<Input>();
 			auto &ghost = fp->getGhost();
 			auto trans = ghost.getWorldTransform();
 
@@ -62,10 +62,10 @@ private:
 		}
 	}
 
-	void updateComponent(Handle &entity, SmartPointer<Component::FPController> fp, double time)
+	void updateComponent(Entity &entity, SmartPointer<Component::FPController> fp, double time)
 	{
 			fp->resetControls();
-			auto &inputs = _engine.getInstance<Input>();
+			auto &inputs = _scene->getEngine().getInstance<Input>();
 			auto &controls = fp->getControls();
 			auto &keys = fp->getKeys();
 			auto angle = glm::vec2((float)inputs.getMouseDelta().x, (float)inputs.getMouseDelta().y);

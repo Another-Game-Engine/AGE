@@ -2,7 +2,6 @@
 #ifndef ENGINE_HH_
 #define ENGINE_HH_
 
-#include "AScene.hh"
 #include "Utils/DependenciesInjector.hpp"
 
 class Engine : public DependenciesInjector

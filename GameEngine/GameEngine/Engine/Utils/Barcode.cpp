@@ -1,12 +1,12 @@
 #include "Barcode.h"
-#include <Engine/Entities/Entity.hh>
+#include <Engine/Entities/EntityData.hh>
 
 Barcode::Barcode()
 : code_(1)
 {
 }
 
-Barcode::Barcode(Entity &entity)
+Barcode::Barcode(EntityData &entity)
 {
 	code_ = entity.getCode().code_;
 }
@@ -37,7 +37,7 @@ bool Barcode::match(boost::dynamic_bitset<> &set)
 	return code_.is_subset_of(set);
 }
 
-bool Barcode::match(Entity &entity)
+bool Barcode::match(EntityData &entity)
 {
 	return match(entity.getCode().code_);
 }

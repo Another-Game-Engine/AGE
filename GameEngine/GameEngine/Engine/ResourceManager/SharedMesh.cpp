@@ -7,62 +7,58 @@
 namespace	Resources
 {
 
-SharedMesh::SharedMesh(void)
-{
-}
-
-SharedMesh::~SharedMesh(void)
-{
-}
-
-bool	SharedMesh::load(std::string const &path)
-{
-	std::array<Attribute, 4> param =
+	SharedMesh::SharedMesh(void)
 	{
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 2)
-	};
+	}
+	
+	SharedMesh::~SharedMesh(void)
+	{
+		for (size_t index = 0; index < _objs.size(); ++index)
+			delete _objs[index];
+	}
+	
+	bool	SharedMesh::load(std::string const &path)
+	{
+		std::array<Attribute, 4> param =
+		{
+			Attribute(GL_FLOAT, sizeof(float), 4),
+			Attribute(GL_FLOAT, sizeof(float), 4),
+			Attribute(GL_FLOAT, sizeof(float), 4),
+			Attribute(GL_FLOAT, sizeof(float), 2)
+		};
+	
+		_manager = new VertexManager<4>(param);
+		_manager->init();
+		if (loadObj(path, *this) == false)
+			return (false);
+		_objs.resize(_geometry.size());
+		for (unsigned int i = 0; i < _geometry.size(); ++i)
+		{
+			std::array<Data, 4> data = { Data(_geometry[i].vertices.size() * 4 * sizeof(float), &_geometry[i].vertices[0].x),
+				Data(_geometry[i].colors.size() * 4 * sizeof(float), &_geometry[i].colors[0].x),
+				Data(_geometry[i].normals.size() * 4 * sizeof(float), &_geometry[i].normals[0].x),
+				Data(_geometry[i].uvs.size() * 2 * sizeof(float), &_geometry[i].uvs[0].x) };
+			Data indicesData(_geometry[i].indices.size() * sizeof(unsigned int), &_geometry[i].indices[0]);
+			_objs[i] = new Vertice<4>(_geometry[i].vertices.size(), data, &indicesData);
+			_manager->addVertice(_objs[i]);
+			assert(_geometry[i].vertices.size() > 0 && "Cannot create mesh without vertices.");
+		}
+		return (true);
+	}
+	
+	void		SharedMesh::draw() const
+	{
+		for (auto &e : _objs)
+			e->draw();
+	}
+	
+	std::vector<Geometry>      &SharedMesh::getGeometry()
+	{
+		return _geometry;
+	}
 
-	_manager = new VertexManager<4>(param);
-	_manager->init();
-	if (loadObj(path, _geometry) == false)
-		return (false);
-	//_buffer.init();
-	std::array<Data, 4> data = {Data(_geometry.vertices.size() * 4 * sizeof(float), &_geometry.vertices[0].x),
-		Data(_geometry.colors.size() * 4 * sizeof(float), &_geometry.colors[0].x),
-		Data(_geometry.normals.size() * 4 * sizeof(float), &_geometry.normals[0].x),
-		Data(_geometry.uvs.size() * 2 * sizeof(float), &_geometry.uvs[0].x)};
-	Data indicesData(_geometry.indices.size() * sizeof(unsigned int), &_geometry.indices[0]);
-	_obj = new Vertice<4>(_geometry.vertices.size(), data, &indicesData);
-	std::cout << "nombre de octet dans le buffer de geometry : " << _obj->getSizeVertexBuffer() << std::endl;
-	std::cout << "nombre de octet dans le buffer de indices : " << _obj->getSizeIndicesBuffer() << std::endl;
-	_manager->addVertice(_obj);
-	/*_buffer.setIndices(_geometry.indices.size(), &_geometry.indices[0]);
-	_buffer.addAttribute(_geometry.vertices.size(), 4, sizeof(float), reinterpret_cast<OpenGLTools::Byte *>(&_geometry.vertices[0].x));
-	_buffer.addAttribute(_geometry.colors.size(), 4, sizeof(float), reinterpret_cast<OpenGLTools::Byte *>(&_geometry.colors[0].x));
-	_buffer.addAttribute(_geometry.normals.size(), 4, sizeof(float), reinterpret_cast<OpenGLTools::Byte *>(&_geometry.normals[0].x));
-	_buffer.addAttribute(_geometry.uvs.size(), 2, sizeof(float), reinterpret_cast<OpenGLTools::Byte *>(&_geometry.uvs[0].x));
-	_buffer.transferGPU(GL_STREAM_DRAW);*/
-	assert(_geometry.vertices.size() > 0 && "Cannot create mesh without vertices.");
-	return (true);
-}
-
-void		SharedMesh::draw() const
-{
-	_obj->draw();
-	//_buffer.draw(GL_TRIANGLES);
-}
-
-OpenGLTools::VertexArray	&SharedMesh::getBuffer()
-{
-	return (_buffer);
-}
-
-const Geometry      &SharedMesh::getGeometry() const
-{
-	return _geometry;
-}
-
+	std::vector<Vertice<4> *> const &SharedMesh::getDrawable() const
+	{
+		return (_objs);
+	}
 }

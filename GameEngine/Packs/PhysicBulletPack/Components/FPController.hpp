@@ -26,7 +26,7 @@ namespace Component
 		};
 	public:
 		BT_DECLARE_ALIGNED_ALLOCATOR();
-		FPController(Engine &engine, Handle &entity);
+		FPController(AScene *scene, Entity &entity);
 		virtual ~FPController();
 		void init();
 		virtual void reset();
@@ -64,7 +64,7 @@ namespace Component
 		std::array<unsigned int, 6> &getKeys();
 		std::array<bool, 6> &getControls();
 		void resetControls();
-	private:
+	protected:
 		btKinematicCharacterController *_controller;
 		btPairCachingGhostObject *_ghost;
 		btConvexShape *_shape;

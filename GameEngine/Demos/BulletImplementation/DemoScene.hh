@@ -10,9 +10,9 @@ public:
 	DemoScene(Engine &engine);
 	virtual ~DemoScene(void);
 
-	Handle  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass);
-	Handle  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass);
-	Handle  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &material, std::string const &tex, float mass);
+	Entity  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass);
+	Entity  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass);
+	Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass);
 
 	virtual bool 			userStart();
 	virtual bool 			userUpdate(double time);

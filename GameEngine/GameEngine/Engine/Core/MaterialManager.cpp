@@ -1,6 +1,7 @@
 #include "MaterialManager.hh"
 
-MaterialManager::MaterialManager()
+MaterialManager::MaterialManager(Engine &engine)
+: _engine(engine)
 {}
 
 MaterialManager::~MaterialManager()
@@ -19,7 +20,7 @@ SmartPointer<Material> MaterialManager::createMaterial(const::std::string &name)
 	auto &it = _materials.find(name);
 	if (it != std::end(_materials))
 		return it->second;
-	SmartPointer<Material> m = new Material(this, name);
+	SmartPointer<Material> m = new Material(name);
 	_materials.insert(std::make_pair(name, m));
 	return m;
 }

@@ -1,12 +1,17 @@
 #ifndef		SHAREDMESH_HH_
 #define		SHAREDMESH_HH_
 
+#include <iostream>
+#include <array>
+#include <Utils/SmartPointer.hh>
 #include "AResource.hh"
 #include "OpenGL/VertexArray.hh"
 #include "OpenGL/VertexBuffer.hh"
 #include "OpenGL/Vertice.hh"
-
+#include "OpenGL/Attribute.hh"
 #include "glm/glm.hpp"
+
+class Material;
 
 namespace	Resources
 {
@@ -23,10 +28,11 @@ struct Geometry
 class SharedMesh : public AResource
 {
 private:
-	Geometry					_geometry;
-	OpenGLTools::VertexArray	_buffer;
-	Vertice<4>					*_obj;
-	VertexManager<4>			*_manager;
+	std::vector<Geometry>		_geometry;
+	std::vector<Vertice<4> *> _objs;
+	std::vector<SmartPointer<Material> > _defaultMaterialsList;
+	VertexManager<4> *_manager;
+
 public:
 	SharedMesh(void);
 	virtual ~SharedMesh(void);
@@ -35,8 +41,9 @@ public:
 
 	void			draw() const;
 
-	OpenGLTools::VertexArray	&getBuffer();
-	const Geometry      &getGeometry() const;
+	std::vector<Geometry>      &getGeometry();
+	std::vector<Vertice<4> *> const &getDrawable() const;
+	inline std::vector<SmartPointer<Material> > &getDefaultMaterialsList() { return _defaultMaterialsList; }
 };
 
 }

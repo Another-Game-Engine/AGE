@@ -47,6 +47,7 @@
     <OutDir>$(SolutionDir)Builds\</OutDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -54,6 +55,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\boost\boost_1_55_0;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -74,6 +76,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -88,8 +91,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\SpaceshipController.hpp" />
     <ClInclude Include="Components\VelocityComponent.hpp" />
     <ClInclude Include="InGameScene.hpp" />
+    <ClInclude Include="SecondScene.hpp" />
+    <ClInclude Include="Systems\SpaceshipControllerSystem.hpp" />
     <ClInclude Include="Systems\VelocitySystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
