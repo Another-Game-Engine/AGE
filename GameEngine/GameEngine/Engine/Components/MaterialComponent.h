@@ -13,11 +13,10 @@ namespace Component
 	private:
 		SmartPointer<Material>             _material;
 
-		MaterialComponent();
 		MaterialComponent(MaterialComponent const &);
 		MaterialComponent                  &operator=(MaterialComponent const &);
 	public:
-		MaterialComponent(Entity &entity);
+		MaterialComponent();
 		void init(std::string const &name);
 		void init(SmartPointer<Material> material);
 		virtual void reset();

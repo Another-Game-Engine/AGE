@@ -27,11 +27,10 @@ namespace Component
 		std::string _shader;
 		std::vector<Material> _materials;
 
-		MeshRenderer();
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);
 	public:
-		MeshRenderer(Entity &entity);
+		MeshRenderer();
 		virtual ~MeshRenderer(void);
 		void init(std::string const &resource);
 		virtual void reset();

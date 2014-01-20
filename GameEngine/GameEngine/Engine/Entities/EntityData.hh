@@ -127,8 +127,9 @@ public:
 		// if component has never been created, create one
 		if (!_components[id].get())
 		{
-			_components[id] = new T(getHandle());
+			_components[id] = new T();
 			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
+			_components[id]->setEntity(getHandle());
 		}
 		//init component
 		static_cast<SmartPointer<T> >(_components[id])->init(args...);

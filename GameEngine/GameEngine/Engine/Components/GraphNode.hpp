@@ -12,10 +12,10 @@ namespace Component
 	public:
 		typedef std::list<Entity> t_EntityList;
 
-		GraphNode(Entity &entity)
-			: ComponentBase<GraphNode>(entity)
+		GraphNode()
+			: ComponentBase<GraphNode>()
 		{
-			}
+		}
 
 		virtual ~GraphNode()
 		{

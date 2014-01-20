@@ -15,8 +15,8 @@ namespace Component
 		FirstPersonView(FirstPersonView const &);
 		FirstPersonView	&operator=(FirstPersonView const &);
 	public:
-		FirstPersonView(Entity &entity) :
-			ComponentBase<FirstPersonView>(entity)
+		FirstPersonView() :
+			ComponentBase<FirstPersonView>()
 		{}
 		virtual              ~FirstPersonView(void){}
 		void init(){}

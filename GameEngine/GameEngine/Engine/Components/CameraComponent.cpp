@@ -4,8 +4,8 @@
 
 namespace Component
 {
-	CameraComponent::CameraComponent(Entity &entity)
-		: ComponentBase<CameraComponent>(entity),
+	CameraComponent::CameraComponent()
+		: ComponentBase<CameraComponent>(),
 		_projection(glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f)),
 		_lookAtTransform(1)
 	{}

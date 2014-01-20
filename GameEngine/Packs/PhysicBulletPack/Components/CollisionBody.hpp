@@ -30,16 +30,13 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		CollisionBody(Entity &entity)
-			: ComponentBase(entity),
+		CollisionBody() :
 			_manager(nullptr),
 			_shapeType(UNDEFINED),
 			_meshName(""),
 			_collisionShape(nullptr),
 			_body(nullptr)
 		{
-			_manager = dynamic_cast<BulletCollisionManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
-			assert(_manager != nullptr);
 		}
 
 		virtual void reset()
@@ -60,6 +57,8 @@ namespace Component
 
 		bool init()
 		{
+			_manager = dynamic_cast<BulletCollisionManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
+			assert(_manager != nullptr);
 			return true;
 		}
 

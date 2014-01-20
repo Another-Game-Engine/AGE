@@ -5,7 +5,7 @@
 
 using namespace Component;
 
-FPController::FPController(Entity &entity) : ComponentBase<FPController>(entity)
+FPController::FPController() : ComponentBase<FPController>()
 , _controller(nullptr)
 , _ghost(nullptr)
 , _shape(nullptr)
@@ -22,6 +22,16 @@ FPController::FPController(Entity &entity) : ComponentBase<FPController>(entity)
 , _jumpHeight(3.0f)
 , _canJump(true)
 , _canRun(true)
+{
+
+}
+
+FPController::~FPController()
+{
+	reset();
+}
+
+void FPController::init()
 {
 	setKey(LEFT, SDLK_a);
 	setKey(RIGHT, SDLK_d);
@@ -41,12 +51,9 @@ FPController::FPController(Entity &entity) : ComponentBase<FPController>(entity)
 	transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
 	_ghost = new btPairCachingGhostObject();
-//	_shape = new btCapsuleShape(scale.x, scale.y);
-//	_shape = new btBoxShape(convertGLMVectorToBullet(scale));
 	_shape = new btCylinderShape(convertGLMVectorToBullet(scale));
 
 	_ghost->setCollisionShape(_shape);
-//	_ghost->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
 	_ghost->setWorldTransform(transform);
 	_ghost->setRestitution(0);
@@ -60,15 +67,25 @@ FPController::FPController(Entity &entity) : ComponentBase<FPController>(entity)
 	bulletManager->getWorld()->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 }
 
-FPController::~FPController()
-{
-}
-
-void FPController::init()
-{}
-
 void FPController::reset()
 {
+	auto bulletManager = dynamic_cast<BulletDynamicManager*>(&(_entity->getScene()->getEngine().getInstance<BulletCollisionManager>()));
+	assert(bulletManager != nullptr);
+
+	if (_controller)
+	{
+		bulletManager->getWorld()->removeAction(_controller);
+		delete _controller;
+	}
+	if (_shape)
+	{
+		delete _shape;
+	}
+	if (_ghost)
+	{
+		bulletManager->getWorld()->removeCollisionObject(_ghost);
+		delete _ghost;
+	}
 }
 
 void FPController::clear()
