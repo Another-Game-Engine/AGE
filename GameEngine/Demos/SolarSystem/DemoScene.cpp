@@ -172,8 +172,8 @@ bool 			DemoScene::userStart()
 	//
 
 	{
-		unsigned int nbPlanet = 10000;
-		Entity planets[10000];
+		unsigned int nbPlanet = 30;
+		Entity planets[30];
 
 
 		for (unsigned int i = 0; i < nbPlanet; ++i)
