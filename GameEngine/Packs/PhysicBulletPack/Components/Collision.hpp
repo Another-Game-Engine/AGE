@@ -8,8 +8,8 @@ namespace Component
 	class Collision : public ComponentBase<Collision>
 	{
 	public:
-		Collision(AScene *scene, Entity &entity)
-			: ComponentBase<Collision>(scene, entity)
+		Collision(Entity &entity)
+			: ComponentBase<Collision>(entity)
 		{
 				
 		}

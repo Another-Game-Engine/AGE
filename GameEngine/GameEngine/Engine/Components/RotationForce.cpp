@@ -5,8 +5,8 @@
 namespace Component
 {
 
-	RotationForce::RotationForce(AScene *scene, Entity &entity)
-		: Component::ComponentBase<RotationForce>(scene, entity)
+	RotationForce::RotationForce(Entity &entity)
+		: Component::ComponentBase<RotationForce>(entity)
 		, _force(glm::vec3(0))
 	{}
 

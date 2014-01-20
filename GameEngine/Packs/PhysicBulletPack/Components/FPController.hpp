@@ -26,7 +26,7 @@ namespace Component
 		};
 	public:
 		BT_DECLARE_ALIGNED_ALLOCATOR();
-		FPController(AScene *scene, Entity &entity);
+		FPController(Entity &entity);
 		virtual ~FPController();
 		void init();
 		virtual void reset();

@@ -30,15 +30,15 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		CollisionBody(AScene *scene, Entity &entity)
-			: ComponentBase(scene, entity),
+		CollisionBody(Entity &entity)
+			: ComponentBase(entity),
 			_manager(nullptr),
 			_shapeType(UNDEFINED),
 			_meshName(""),
 			_collisionShape(nullptr),
 			_body(nullptr)
 		{
-			_manager = dynamic_cast<BulletCollisionManager*>(&scene->getEngine().getInstance<BulletCollisionManager>());
+			_manager = dynamic_cast<BulletCollisionManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 		}
 
@@ -100,7 +100,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+				SmartPointer<Resources::SharedMesh> mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
 				const Resources::Geometry &geo = mesh->getGeometry()[0]; // DIRTY HACK TEMPORARY
 				// NEED TO REPLACE MESH BY MESH GROUP !
 				btScalar *t = new btScalar[geo.vertices.size() * 3]();

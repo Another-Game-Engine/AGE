@@ -5,8 +5,6 @@
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 
-class AScene;
-
 namespace	Component
 {
 
@@ -18,22 +16,21 @@ namespace	Component
 
 	struct Base
 	{
-		Base(AScene *scene, Entity &entity);
+		Base(Entity &entity);
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
 		void			setEntity(Entity &entity);
 		Entity		&getEntity();
 		virtual void reset() = 0;
 	protected:
-		AScene              *_scene;
 		Entity				_entity;
 	};
 
 	template <class T>
 	struct ComponentBase : public Base
 	{
-		ComponentBase(AScene *scene, Entity &entity)
-		: Base(scene, entity)
+		ComponentBase(Entity &entity)
+		: Base(entity)
 		{}
 
 		virtual ~ComponentBase()

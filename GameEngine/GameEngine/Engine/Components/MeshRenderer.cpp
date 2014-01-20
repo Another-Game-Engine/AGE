@@ -8,8 +8,8 @@
 
 namespace Component
 {
-	MeshRenderer::MeshRenderer(AScene *scene, Entity &entity) :
-		Component::ComponentBase<MeshRenderer>(scene, entity),
+	MeshRenderer::MeshRenderer(Entity &entity) :
+		Component::ComponentBase<MeshRenderer>(entity),
 		_mesh(nullptr)
 	{
 	}
@@ -21,7 +21,7 @@ namespace Component
 
 	void MeshRenderer::init(std::string const &resource)
 	{
-		_mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(resource);
+		_mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(resource);
 		// DEFAULT MATERIAL OF MESH COPY
 		_materials.clear();
 		auto &m = _mesh->getDefaultMaterialsList();
@@ -43,9 +43,9 @@ namespace Component
 
 	void MeshRenderer::render()
 	{
-		OpenGLTools::UniformBuffer *perModelUniform = _scene->getEngine().getInstance<Renderer>().getUniform("PerModel");
-		OpenGLTools::UniformBuffer *materialUniform = _scene->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
-		auto shader = _scene->getEngine().getInstance<Renderer>().getShader(_shader);
+		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("PerModel");
+		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
+		auto shader = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(_shader);
 		if (shader)
 			shader->use();
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());

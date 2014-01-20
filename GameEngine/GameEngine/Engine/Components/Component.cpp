@@ -3,9 +3,8 @@
 
 using namespace Component;
 
-Base::Base(AScene *scene, Entity &entity)
-: _scene(scene)
-, _entity(entity)
+Base::Base(Entity &entity)
+: _entity(entity)
 {
 }
 
