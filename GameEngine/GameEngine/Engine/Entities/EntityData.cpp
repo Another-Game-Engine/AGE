@@ -167,6 +167,7 @@ void EntityData::reset()
 		if (_components[i].get())
 		{
 			broadCast(std::string("componentRemoved" + std::to_string(i)), _handle);
+			_components[i]->reset();
 		}
 		_components[i].reset();
 	}
