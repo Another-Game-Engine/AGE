@@ -1,7 +1,6 @@
 #include <Managers/AssetsConvertorManager.hh>
 #include <Managers/AConvertor.hh>
 #include <Managers/ObjConvertor.hh>
-#include <Managers/MtlConvertor.hh>
 #include <Managers/FileTypeRegister.hpp>
 
 AssetsConvertorManager::AssetsConvertorManager()
