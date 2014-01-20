@@ -60,13 +60,12 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 bool 			DemoScene::userStart()
 {	
-	//registerComponents<Component::CameraComponent,
-	//	Component::GraphNode,
-	//	Component::MaterialComponent,
-	//	Component::MeshRenderer,
-	//	Component::RotationForce,
-	//	Component::TrackBall>();
-
+	rct<Component::CameraComponent>()
+		.rct<Component::GraphNode>()
+		.rct<Component::MaterialComponent>()
+		.rct<Component::MeshRenderer>()
+		.rct<Component::RotationForce>()
+		.rct<Component::TrackBall>();
 
 	// System Tests
 	//
@@ -247,6 +246,11 @@ bool 			DemoScene::userUpdate(double time)
 {
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
+	{
+		std::ofstream s("SolarSystem.scenesave", std::ios_base::binary);
+		save<cereal::PortableBinaryOutputArchive>(s);
+		s.close();
 		return (false);
+	}
 	return (true);
 }

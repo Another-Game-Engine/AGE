@@ -9,6 +9,12 @@
 #include <queue>
 #include <map>
 
+#include <cereal/cereal.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/xml.hpp>
+
 class Engine;
 class System;
 
@@ -71,21 +77,17 @@ public:
 		}
 	}
 
+	template <typename T>
+	AScene &rct()
+	{
+		std::cout << "Multi : " << typeid(T).name() << std::endl;
+		return *this;
+	}
 
-//	template <typename T>
-//	void registerComponents()
-//	{
-//		std::cout << "Solo : " << typeid(T).name() << std::endl;
-//	}
-//
-//
-//	template <typename T, typename... Types>
-//	void registerComponents()
-//	{
-////		std::cout << "Multi : " << typeid(T).name() << std::endl;
-//		registerComponents(T());
-//		registerComponents<Types...>();
-//	}
+	template <typename Archive>
+	void save(std::ofstream &s)
+	{}
+
 };
 
 #endif

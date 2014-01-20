@@ -29,6 +29,29 @@ namespace Component
 
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar)
+		{
+			auto res = new MeshRenderer();
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(_shader);
+		}
+
+		// !Serialization
+		////
+		//////
+
 	public:
 		MeshRenderer();
 		virtual ~MeshRenderer(void);
