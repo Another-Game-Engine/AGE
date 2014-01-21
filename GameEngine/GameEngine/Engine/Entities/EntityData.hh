@@ -12,6 +12,7 @@
 #include "Utils/PubSub.hpp"
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
+#include <Utils/GlmSerialization.hpp>
 
 class AScene;
 class EntityManager;
@@ -165,6 +166,12 @@ public:
 	template <class Archive>
 	void save(Archive &ar) const
 	{
+		// Save Entity informations
+		ar(cereal::make_nvp("flags", _flags),
+			cereal::make_nvp("localTransform", _localTransform),
+			cereal::make_nvp("globalTransform", _globalTransform));
+
+		// Save Entity Components
 		unsigned int cptNumber = 0;
 		for (auto &e : _components)
 		{
@@ -183,8 +190,10 @@ public:
 	}
 
 	template <class Archive>
-	void load(Archive &ar) const
+	void load(Archive &ar)
 	{
+		// load Entity informations
+		ar(_flags, _localTransform, _globalTransform);
 		unsigned int cptNumber = 0;
 		ar(cptNumber);
 		for (unsigned int i = 0; i < cptNumber; ++i)
@@ -195,10 +204,10 @@ public:
 			unsigned int position;
 			Component::Base *cpt = _scene->createFromType(type, ar, _handle, typeId);
 			cpt->setEntity(_handle);
-			if (_handle.get()->_components.size() <= typeId)
-				_handle.get()->_components.resize(typeId + 1);
-			_handle.get()->_components[typeId] = SmartPointer<Component::Base>(cpt);
-			_handle.get()->_code.add(typeId);
+			if (_components.size() <= typeId)
+				_components.resize(typeId + 1);
+			_components[typeId] = SmartPointer<Component::Base>(cpt);
+			_code.add(typeId);
 			broadCast(std::string("componentAdded" + std::to_string(typeId)), _handle);
 		}
 		std::cout << "lol" << std::endl;
