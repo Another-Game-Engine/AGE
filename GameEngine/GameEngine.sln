@@ -9,6 +9,30 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\Ga
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6823E483-DFC6-4750-920C-35DA2E87B060}"
+	ProjectSection(SolutionItems) = preProject
+		Shaders\basic.fp = Shaders\basic.fp
+		Shaders\basic.gp = Shaders\basic.gp
+		Shaders\basic.vp = Shaders\basic.vp
+		Shaders\blur1.fp = Shaders\blur1.fp
+		Shaders\brightnessFilter.fp = Shaders\brightnessFilter.fp
+		Shaders\brightnessFilter.vp = Shaders\brightnessFilter.vp
+		Shaders\bump.fp = Shaders\bump.fp
+		Shaders\bump.vp = Shaders\bump.vp
+		Shaders\cubemap.fp = Shaders\cubemap.fp
+		Shaders\cubemap.vp = Shaders\cubemap.vp
+		Shaders\depthOnly.fp = Shaders\depthOnly.fp
+		Shaders\depthOnly.vp = Shaders\depthOnly.vp
+		Shaders\earth.fp = Shaders\earth.fp
+		Shaders\earth.vp = Shaders\earth.vp
+		Shaders\fboToScreen.fp = Shaders\fboToScreen.fp
+		Shaders\fboToScreen.vp = Shaders\fboToScreen.vp
+		Shaders\light.fp = Shaders\light.fp
+		Shaders\light.vp = Shaders\light.vp
+		Shaders\MaterialBasic.fp = Shaders\MaterialBasic.fp
+		Shaders\MaterialBasic.vp = Shaders\MaterialBasic.vp
+		Shaders\tesselation.gp = Shaders\tesselation.gp
+		Shaders\test.cp = Shaders\test.cp
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SolarSystem", "Demos\SolarSystem\SolarSystem.vcxproj", "{60ACE0BC-C15B-4A41-A735-63FD967CC91F}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -316,5 +340,8 @@ Global
 		{86C78A50-477B-40DE-9696-928A85263479} = {A2CDA61C-7E07-4C22-8D7D-9F71E6378B89}
 		{4B51C5C9-B892-4C73-AF4C-E2C4B4DA41FD} = {A2CDA61C-7E07-4C22-8D7D-9F71E6378B89}
 		{3073A470-6943-400E-BDFF-D25AA01577F8} = {EEB678B9-3558-486B-9221-D076C77DFDDF}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
