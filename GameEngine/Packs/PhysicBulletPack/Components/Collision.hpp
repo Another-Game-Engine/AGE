@@ -5,9 +5,8 @@
 
 namespace Component
 {
-	class Collision : public ComponentBase<Collision>
+	struct Collision : public ComponentBase<Collision>
 	{
-	public:
 		Collision()
 			: ComponentBase<Collision>()
 		{
@@ -23,25 +22,25 @@ namespace Component
 
 		virtual void reset()
 		{
-			_collsions.clear();
+			collisions.clear();
 		}
 
 		void addCollision(const Entity &entity)
 		{
-			_collsions.insert(entity);
+			collisions.insert(entity);
 		}
 
 		std::set<Entity> &getCollisions()
 		{
-			return _collsions;
+			return collisions;
 		}
 
 		void clear()
 		{
-			_collsions.clear();
+			collisions.clear();
 		}
-	private:
-		std::set<Entity> _collsions;
+
+		std::set<Entity> collisions;
 	};
 }
 
