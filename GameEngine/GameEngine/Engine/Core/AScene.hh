@@ -97,6 +97,26 @@ public:
 		}
 	}
 
+	template <typename Archive>
+	void load(std::ifstream &s)
+	{
+		while (!s.eof())
+		{
+			std::size_t cptType;
+			Archive ar(s);
+			ar(cptType);
+// HERE
+		}
+		for (auto &e : _pool)
+		{
+			if (e.getFlags() & EntityData::ACTIVE)
+			{
+				Archive ar(s);
+				ar(e);
+			}
+		}
+	}
+
 };
 
 #endif
