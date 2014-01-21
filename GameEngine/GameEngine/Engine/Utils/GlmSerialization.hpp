@@ -62,6 +62,8 @@ namespace cereal
 
 		double dArray[16] = { 0.0 };
 		const float *pSource = (const float*)glm::value_ptr(v);
+		std::cout << "float : " << sizeof(glm::value_ptr(v)) * v.length() << std::endl;
+		std::cout << "double : " << sizeof(dArray) << std::endl;
 		for (int i = 0; i < 16; ++i)
 			dArray[i] = pSource[i];
 		ar(cereal::make_nvp("mat4", dArray));
