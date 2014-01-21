@@ -169,8 +169,9 @@ bool 			DemoScene::userStart()
 	File saveFile("SolarSystem.scenesave");
 	if (saveFile.exists())
 	{
-		std::ifstream fileStream("SolarSystem.scenesave");
-		load<cereal::JSONInputArchive>(fileStream);
+		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
+//		load<cereal::PortableBinaryInputArchive>(fileStream);
+		load<cereal::BinaryInputArchive>(fileStream);
 		fileStream.close();
 		return true;
 	}
@@ -254,11 +255,17 @@ bool 			DemoScene::userUpdate(double time)
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 	{
-		//std::ofstream s("SolarSystem.scenesave", std::ios_base::binary);
-		//save<cereal::PortableBinaryOutputArchive>(s);
-		std::ofstream s("SolarSystem.scenesave", std::ios_base::binary);
-		save<cereal::JSONOutputArchive>(s);
-		s.close();
+		{
+			std::ofstream s("SolarSystem.scenesave", std::ios_base::binary);
+			save<cereal::BinaryOutputArchive>(s);
+			s.close();
+		}
+		{
+			std::ofstream s("SolarSystemJson.scenesave", std::ios_base::binary);
+			save<cereal::JSONOutputArchive>(s);
+			s.close();
+		}
+
 		return (false);
 	}
 	return (true);
