@@ -23,19 +23,25 @@ public:
 		if (it != std::end(_collection))
 			return *this;
 		_collection.insert(std::make_pair(key, new T()));
+		_typeId.insert(std::make_pair(key, T::getTypeId()));
 		return *this;
 	}
 
 	template <class Archive>
-	Component::Base *createFromType(unsigned int type, Archive &ar)
+	Component::Base *createFromType(unsigned int type, Archive &ar, Entity e, unsigned int &typeId)
 	{
 		auto &it = _collection.find(type);
-		assert(it != std::end(_collection) && "Component has not been registered");
-		return it->second->unserialize(ar);
+		auto &typeIt = _typeId.find(type);
+		assert(it != std::end(_collection) || typeIt != std::end(_typeId) && "Component has not been registered");
+		auto res = it->second->unserialize(ar);
+		typeId = typeIt->second;
+		res->setEntity(e);
+		return res;
 	}
 
 private:
 	std::map<std::size_t, Component::Base*> _collection;
+	std::map<std::size_t, unsigned int> _typeId;
 };
 
 #endif    //__COMPONENT_REGISTRAR_HPP__

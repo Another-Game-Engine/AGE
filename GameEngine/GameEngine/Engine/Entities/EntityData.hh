@@ -190,10 +190,14 @@ public:
 		for (unsigned int i = 0; i < cptNumber; ++i)
 		{
 			std::size_t type = 0;
+			unsigned int typeId;
 			ar(type);
 			unsigned int position;
-			Component::Base *cpt = _scene->createFromType(type, ar);
-			_components[cpt->]
+			Component::Base *cpt = _scene->createFromType(type, ar, _handle, typeId);
+			cpt->setEntity(_handle);
+			_handle.get()->_components[typeId] = SmartPointer<Component::Base>(cpt);
+			_handle.get()->_code.add(typeId);
+			broadCast(std::string("componentAdded" + std::to_string(typeId)), _handle);
 		}
 		std::cout << "lol" << std::endl;
 	}
