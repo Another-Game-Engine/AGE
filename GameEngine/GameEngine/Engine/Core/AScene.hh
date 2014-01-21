@@ -5,6 +5,8 @@
 //#include <Systems/System.h>
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/SmartPointer.hh>
+#include <Components/ComponentRegistrar.hpp>
+
 #include <list>
 #include <queue>
 #include <map>
@@ -19,7 +21,7 @@ class Engine;
 class System;
 
 
-class AScene : public DependenciesInjector
+class AScene : public DependenciesInjector, public ComponentRegistrar
 {
 private:
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
@@ -77,22 +79,15 @@ public:
 		}
 	}
 
-	template <typename T>
-	AScene &rct()
-	{
-		std::cout << "Multi : " << typeid(T).name() << std::endl;
-		return *this;
-	}
-
 	template <typename Archive>
 	void save(std::ofstream &s)
 	{
+		Archive ar(s);
 		for (auto &e : _pool)
 		{
 			if (e.getFlags() & EntityData::ACTIVE)
 			{
-				Archive ar(s);
-				ar(e);
+				ar(cereal::make_nvp("Entity_" + std::to_string(e.getHandle().getId()), e));
 			}
 		}
 	}
@@ -100,20 +95,12 @@ public:
 	template <typename Archive>
 	void load(std::ifstream &s)
 	{
+		Archive ar(s);
 		while (!s.eof())
 		{
-			std::size_t cptType;
-			Archive ar(s);
+			std::size_t cptType = 0;
 			ar(cptType);
-// HERE
-		}
-		for (auto &e : _pool)
-		{
-			if (e.getFlags() & EntityData::ACTIVE)
-			{
-				Archive ar(s);
-				ar(e);
-			}
+			std::cout << cptType << std::endl;
 		}
 	}
 
