@@ -10,6 +10,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
+#include <regex>
 
 namespace	Component
 {
@@ -55,6 +56,7 @@ namespace	Component
 	{
 		ComponentBase()
 			: Base(typeid(T).hash_code())
+			, _name(std::regex_replace(typeid(T).name(), std::regex("(\\s)+|(:)+"), "_"))
 		{
 		}
 
@@ -90,25 +92,26 @@ namespace	Component
 
 		virtual void _serialize(cereal::JSONOutputArchive &ar)
 		{
-			ar(cereal::make_nvp(typeid(T).name(), *dynamic_cast<T*>(this)));
+			ar(cereal::make_nvp(_name, *dynamic_cast<T*>(this)));
 		}
 
 		virtual void _serialize(cereal::BinaryOutputArchive &ar)
 		{
-			ar(cereal::make_nvp(typeid(T).name(), *dynamic_cast<T*>(this)));
+			ar(*dynamic_cast<T*>(this));
 		}
 
 		virtual void _serialize(cereal::XMLOutputArchive &ar)
 		{
-			ar(cereal::make_nvp(typeid(T).name(), *dynamic_cast<T*>(this)));
+			ar(cereal::make_nvp(_name, *dynamic_cast<T*>(this)));
 		}
 
 		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar)
 		{
-			ar(cereal::make_nvp(typeid(T).name(), *dynamic_cast<T*>(this)));
+			ar(*dynamic_cast<T*>(this));
 		}
 
 	private:
+		const std::string _name;
 		//std::multiset<PubSubKey> _subscriptions; // subscriptions to local entity events
 	};
 }
