@@ -171,7 +171,8 @@ bool 			DemoScene::userStart()
 	{
 		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
 //		load<cereal::PortableBinaryInputArchive>(fileStream);
-		load<cereal::BinaryInputArchive>(fileStream);
+//		load<cereal::BinaryInputArchive>(fileStream);
+		load<cereal::JSONInputArchive>(fileStream);
 		fileStream.close();
 		return true;
 	}
@@ -257,7 +258,8 @@ bool 			DemoScene::userUpdate(double time)
 	{
 		{
 			std::ofstream s("SolarSystem.scenesave", std::ios_base::binary);
-			save<cereal::BinaryOutputArchive>(s);
+//			save<cereal::BinaryOutputArchive>(s);
+			save<cereal::JSONOutputArchive>(s);
 			s.close();
 		}
 		{
