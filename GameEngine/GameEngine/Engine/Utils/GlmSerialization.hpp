@@ -2,12 +2,15 @@
 # define  __GLM_SERIALIZATION_HPP__
 
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <cereal/cereal.hpp>
 #include <cereal/types/common.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/base_class.hpp>
+#include <cereal/types/array.hpp>
+#include <array>
 
 namespace cereal
 {
@@ -51,6 +54,25 @@ namespace cereal
 		float x, y, z, w;
 		ar(x, y, z, w);
 		v = glm::vec4(x, y, z, w);
+	}
+
+	template<typename Archive>
+	void save(Archive &ar, const glm::mat4 &v)
+	{
+
+		double dArray[16] = { 0.0 };
+		const float *pSource = (const float*)glm::value_ptr(v);
+		for (int i = 0; i < 16; ++i)
+			dArray[i] = pSource[i];
+		ar(dArray);
+	}
+
+	template<typename Archive>
+	void load(Archive &ar, glm::mat4 &v)
+	{
+		float source[16];
+		ar(source);
+		v = glm::make_mat4(source);
 	}
 }
 

@@ -39,6 +39,13 @@ namespace	Component
 		virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;
 		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar) = 0;
 
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(serializedID);
+			_serialize(ar);
+		}
+
 	protected:
 		Entity				_entity;
 	};
