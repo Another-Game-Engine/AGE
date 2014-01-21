@@ -166,14 +166,14 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
 
-	//File saveFile("SolarSystem.scenesave");
-	//if (saveFile.exists())
-	//{
-	//	std::ifstream fileStream("SolarSystem.scenesave");
-	//	load<cereal::JSONInputArchive>(fileStream);
-	//	fileStream.close();
-	//	return true;
-	//}
+	File saveFile("SolarSystem.scenesave");
+	if (saveFile.exists())
+	{
+		std::ifstream fileStream("SolarSystem.scenesave");
+		load<cereal::JSONInputArchive>(fileStream);
+		fileStream.close();
+		return true;
+	}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");

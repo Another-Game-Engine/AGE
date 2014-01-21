@@ -165,17 +165,38 @@ public:
 	template <class Archive>
 	void save(Archive &ar) const
 	{
+		unsigned int cptNumber = 0;
 		for (auto &e : _components)
 		{
 			if (!e.get())
 				continue;
-			ar(*e.get());
+			++cptNumber;
+		}
+		ar(cereal::make_nvp("component_number", cptNumber));
+		for (auto &e : _components)
+		{
+			if (!e.get())
+				continue;
+//			ar(*e.get());
+			e->serialize(ar);
 		}
 	}
 
 	template <class Archive>
 	void load(Archive &ar) const
-	{}
+	{
+		unsigned int cptNumber = 0;
+		ar(cptNumber);
+		for (unsigned int i = 0; i < cptNumber; ++i)
+		{
+			std::size_t type = 0;
+			ar(type);
+			unsigned int position;
+			Component::Base *cpt = _scene->createFromType(type, ar);
+			_components[cpt->]
+		}
+		std::cout << "lol" << std::endl;
+	}
 
 };
 

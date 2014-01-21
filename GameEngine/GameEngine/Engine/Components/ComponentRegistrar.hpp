@@ -26,6 +26,14 @@ public:
 		return *this;
 	}
 
+	template <class Archive>
+	Component::Base *createFromType(unsigned int type, Archive &ar)
+	{
+		auto &it = _collection.find(type);
+		assert(it != std::end(_collection) && "Component has not been registered");
+		return it->second->unserialize(ar);
+	}
+
 private:
 	std::map<std::size_t, Component::Base*> _collection;
 };

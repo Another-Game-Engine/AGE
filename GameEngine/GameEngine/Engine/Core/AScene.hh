@@ -98,9 +98,8 @@ public:
 		Archive ar(s);
 		while (!s.eof())
 		{
-			std::size_t cptType = 0;
-			ar(cptType);
-			std::cout << cptType << std::endl;
+			Entity e = createEntity();
+			ar(*e.get());
 		}
 	}
 
