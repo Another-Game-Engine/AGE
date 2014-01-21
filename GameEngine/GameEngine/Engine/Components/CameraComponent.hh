@@ -47,7 +47,7 @@ namespace Component
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
-			ar(projection, cubeMapShader, lookAtTransform);
+			ar(CEREAL_NVP(projection), CEREAL_NVP(cubeMapShader), CEREAL_NVP(lookAtTransform));
 		}
 
 		// !Serialization

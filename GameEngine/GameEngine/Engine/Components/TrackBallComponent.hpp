@@ -44,7 +44,7 @@ namespace Component
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
-			ar(dist, rotateSpeed, zoomSpeed, angles);
+			ar(CEREAL_NVP(dist), CEREAL_NVP(rotateSpeed), CEREAL_NVP(zoomSpeed), CEREAL_NVP(angles));
 		}
 
 		// !Serialization

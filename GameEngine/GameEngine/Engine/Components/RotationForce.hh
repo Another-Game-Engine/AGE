@@ -34,7 +34,7 @@ namespace Component
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
-			ar(force);
+			ar(CEREAL_NVP(force));
 		}
 
 		// !Serialization
