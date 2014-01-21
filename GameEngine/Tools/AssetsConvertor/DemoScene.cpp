@@ -45,8 +45,8 @@ bool 			DemoScene::userStart()
 	addSystem<MeshRendererSystem>(0);
 	addSystem<GraphNodeSystem>(0); // UPDATE ENTITIES TRANSFORMATION
 	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
-	//
-	//
+
+
 	// end System Test
 	{
 		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
@@ -57,6 +57,7 @@ bool 			DemoScene::userStart()
 		//auto &convertor = _engine.getInstance<AssetsConvertorManager>();
 		//auto success = convertor.load("./Assets/crytek-sponza/sponza.obj", "sponza");
 	}
+
 
 
 	return (true);
