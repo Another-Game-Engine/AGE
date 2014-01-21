@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2014 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -37,13 +37,12 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 #ifndef GLM_GTX_extented_min_max
-#define GLM_GTX_extented_min_max GLM_VERSION
+#define GLM_GTX_extented_min_max
 
 // Dependency:
 #include "../glm.hpp"
-#include "../gtc/half_float.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
+#if(defined(GLM_MESSAGES) && !defined(GLM_EXT_INCLUDED))
 #	pragma message("GLM: GLM_GTX_extented_min_max extension included")
 #endif
 
@@ -69,8 +68,8 @@ namespace glm
 	>
 	C<T> min(
 		C<T> const & x, 
-		typename C<T>::value_type const & y, 
-		typename C<T>::value_type const & z);
+		typename C<T>::T const & y, 
+		typename C<T>::T const & z);
 
 	/// Return the minimum component-wise values of 3 inputs 
 	/// @see gtx_extented_min_max
@@ -102,9 +101,9 @@ namespace glm
 	>
 	C<T> min(
 		C<T> const & x, 
-		typename C<T>::value_type const & y, 
-		typename C<T>::value_type const & z, 
-		typename C<T>::value_type const & w);
+		typename C<T>::T const & y, 
+		typename C<T>::T const & z, 
+		typename C<T>::T const & w);
 
 	/// Return the minimum component-wise values of 4 inputs
 	/// @see gtx_extented_min_max
@@ -136,8 +135,8 @@ namespace glm
 	>
 	C<T> max(
 		C<T> const & x, 
-		typename C<T>::value_type const & y, 
-		typename C<T>::value_type const & z);
+		typename C<T>::T const & y, 
+		typename C<T>::T const & z);
 
 	/// Return the maximum component-wise values of 3 inputs 
 	/// @see gtx_extented_min_max
@@ -169,9 +168,9 @@ namespace glm
 	>
 	C<T> max(
 		C<T> const & x, 
-		typename C<T>::value_type const & y, 
-		typename C<T>::value_type const & z, 
-		typename C<T>::value_type const & w);
+		typename C<T>::T const & y, 
+		typename C<T>::T const & z, 
+		typename C<T>::T const & w);
 
 	/// Return the maximum component-wise values of 4 inputs 
 	/// @see gtx_extented_min_max

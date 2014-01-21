@@ -1,15 +1,25 @@
 #ifndef  __OBJ_FILE_HPP__
 # define __OBJ_FILE_HPP__
 
-#include <MediaFiles/AMediaFile.hpp>
+#include <MediaFiles/MediaFile.hpp>
 #include <vector>
 #include <glm/glm.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/common.hpp>
+#include <cereal/types/list.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/complex.hpp>
+#include <cereal/types/base_class.hpp>
+#include <cereal/types/memory.hpp>
+#include <Utils/GlmSerialization.hpp>
 
-struct ObjFile : public AMediaFile
+struct ObjFile : public MediaFile<ObjFile>
 {
-	ObjFile();
-	virtual ~ObjFile();
-
+	ObjFile() : MediaFile<ObjFile>()
+	{
+	}
+	virtual ~ObjFile(){}
 	struct Geometry
 	{
 		std::string                 name;
@@ -18,29 +28,29 @@ struct ObjFile : public AMediaFile
 		std::vector<glm::vec4>		colors;		// vertices colors
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(name,vertices, normals,colors,uvs, indices);
+		}
 	};
+
 	std::vector<Geometry> geometries;
 	//	std::vector<MaterialFile> materials;
 
-private:
-	virtual void _serialize(std::ofstream &os)
+	template <typename Archive>
+	AMediaFile *unserialize(Archive &ar)
 	{
-		Archive::serialize(os, geometries.size());
-		for (unsigned int i = 0, j = geometries.size(); i < j; ++i)
-		{
-			Archive::serialize(os, geometries[i].name);
-		}
+		AMediaFile *res = new ObjFile();
+		ar(static_cast<ObjFile&>(*res));
+		return res;
 	}
 
-	virtual void _unserialize(std::ifstream &is)
+	template <typename Archive>
+	void serialize(Archive &ar)
 	{
-		unsigned int size;
-		Archive::unserialize(is, size);
-		geometries.resize(size);
-		for (unsigned int i = 0; i < size; ++i)
-		{
-			Archive::unserialize(is, geometries[i].name);
-		}
+		ar(geometries);
 	}
 };
 
