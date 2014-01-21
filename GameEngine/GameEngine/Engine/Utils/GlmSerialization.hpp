@@ -70,7 +70,7 @@ namespace cereal
 	template<typename Archive>
 	void load(Archive &ar, glm::mat4 &v)
 	{
-		float source[16];
+		double source[16];
 		ar(source);
 		v = glm::make_mat4(source);
 	}
