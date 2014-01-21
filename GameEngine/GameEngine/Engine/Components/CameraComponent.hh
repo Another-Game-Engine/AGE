@@ -7,6 +7,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "Component.hh"
 #include <Utils/SmartPointer.hh>
+#include <Utils/GlmSerialization.hpp>
+#include <cereal/types/string.hpp>
 
 namespace Resources
 {
@@ -29,6 +31,28 @@ namespace Component
 		inline const glm::mat4      &getLookAtTransform() const { return lookAtTransform; }
 		SmartPointer<Resources::CubeMap> getSkybox();
 		const std::string &getSkyboxShader() const;
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar)
+		{
+			auto res = new CameraComponent();
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(projection, cubeMapShader, lookAtTransform);
+		}
+
+		// !Serialization
+		////
+		//////
 
 		glm::mat4                        projection;
 		SmartPointer<Resources::CubeMap> skybox;

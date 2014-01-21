@@ -8,7 +8,6 @@
 #include "ResourceManager/Texture.hh"
 #include "ResourceManager/CubeMap.hh"
 #include "Components/RotationForce.hh"
-#include "Components/MaterialComponent.h"
 #include <Components/CameraComponent.hh>
 #include <Components/TrackBallComponent.hpp>
 #include <OpenGL/ComputeShader.hh>
@@ -62,7 +61,6 @@ bool 			DemoScene::userStart()
 {	
 	rct<Component::CameraComponent>()
 		.rct<Component::GraphNode>()
-		.rct<Component::MaterialComponent>()
 		.rct<Component::MeshRenderer>()
 		.rct<Component::RotationForce>()
 		.rct<Component::TrackBall>();

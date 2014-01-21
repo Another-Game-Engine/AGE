@@ -4,6 +4,7 @@
 #include "Component.hh"
 #include "Utils/SmartPointer.hh"
 #include <glm/glm.hpp>
+#include <Utils/GlmSerialization.hpp>
 
 namespace Component
 {
@@ -27,6 +28,28 @@ namespace Component
 		}
 		virtual void reset()
 		{}
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar)
+		{
+			auto res = new TrackBall();
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(dist, rotateSpeed, zoomSpeed, angles);
+		}
+
+		// !Serialization
+		////
+		//////
 
 		float					dist;
 		float					rotateSpeed, zoomSpeed;

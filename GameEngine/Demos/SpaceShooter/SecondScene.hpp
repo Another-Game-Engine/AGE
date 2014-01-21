@@ -157,9 +157,6 @@ public:
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 		e->addComponent<Component::GraphNode>();
 		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
-		auto material = _engine.getInstance<Renderer>().getMaterialManager().createMaterial("material:heros2");
-//		material->pushShader("earth");
-		e->addComponent<Component::MaterialComponent>(std::string("material:heros2"));
 		auto rigidBody = e->addComponent<Component::CollisionBody>();
 		rigidBody->setCollisionShape(Component::CollisionBody::SPHERE);
 

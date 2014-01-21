@@ -102,6 +102,28 @@ namespace Component
 			return std::end(_childs);
 		}
 
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar)
+		{
+			auto res = new GraphNode();
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			//			ar(dist);
+		}
+
+		// !Serialization
+		////
+		//////
+
 	private:
 		Entity _parent;
 		std::set<Entity> _childs;

@@ -9,7 +9,6 @@
 #include "ResourceManager/ResourceManager.hh"
 
 #include <Components/RotationForce.hh>
-#include <Components/MaterialComponent.h>
 #include <Components/CameraComponent.hh>
 #include <Components/RigidBody.hpp>
 #include <Components/FPController.hpp>
