@@ -195,6 +195,8 @@ public:
 			unsigned int position;
 			Component::Base *cpt = _scene->createFromType(type, ar, _handle, typeId);
 			cpt->setEntity(_handle);
+			if (_handle.get()->_components.size() <= typeId)
+				_handle.get()->_components.resize(typeId + 1);
 			_handle.get()->_components[typeId] = SmartPointer<Component::Base>(cpt);
 			_handle.get()->_code.add(typeId);
 			broadCast(std::string("componentAdded" + std::to_string(typeId)), _handle);

@@ -83,6 +83,15 @@ public:
 	void save(std::ofstream &s)
 	{
 		Archive ar(s);
+		unsigned int size = 0;
+		for (auto &e : _pool)
+		{
+			if (e.getFlags() & EntityData::ACTIVE)
+			{
+				++size;
+			}
+		}
+		ar(cereal::make_nvp("Number_of_serialized_entities", size));
 		for (auto &e : _pool)
 		{
 			if (e.getFlags() & EntityData::ACTIVE)
@@ -96,7 +105,9 @@ public:
 	void load(std::ifstream &s)
 	{
 		Archive ar(s);
-		while (!s.eof())
+		unsigned int size = 0;
+		ar(size);
+		for (unsigned int i = 0; i < size; ++i)
 		{
 			Entity e = createEntity();
 			ar(*e.get());
