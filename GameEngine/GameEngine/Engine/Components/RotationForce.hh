@@ -18,6 +18,28 @@ namespace Component
 		void setForce(const glm::vec3 &force);
 		const glm::vec3 &getForce() const;
 
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar)
+		{
+			auto res = new RotationForce();
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(force);
+		}
+
+		// !Serialization
+		////
+		//////
+
 		glm::vec3 force;
 	private:
 		RotationForce(RotationForce const &);

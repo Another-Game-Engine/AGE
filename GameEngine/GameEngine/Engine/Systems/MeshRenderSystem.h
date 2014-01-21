@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "System.h"
 #include <Components/MeshRenderer.hh>
-#include <Components/MaterialComponent.h>
 #include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 

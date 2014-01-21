@@ -9,6 +9,7 @@
 #include "ResourceManager/SharedMesh.hh"
 #include "OpenGL/Shader.hh"
 #include <core/Renderer.hh>
+#include <cereal/types/string.hpp>
 
 namespace Resources
 {
@@ -21,33 +22,6 @@ namespace Component
 {
 	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>
 	{
-	private:
-		MeshRenderer(MeshRenderer const &);
-		MeshRenderer	&operator=(MeshRenderer const &);
-
-		//////
-		////
-		// Serialization
-
-		//template <typename Archive>
-		//Base *unserialize(Archive &ar)
-		//{
-		//	auto res = new MeshRenderer();
-		//	ar(*res);
-		//	return res;
-		//}
-
-		//template <typename Archive>
-		//void serialize(Archive &ar)
-		//{
-		//	ar(_shader);
-		//}
-
-		// !Serialization
-		////
-		//////
-
-	public:
 		MeshRenderer();
 		virtual ~MeshRenderer(void);
 		void init(std::string const &resource);
@@ -59,9 +33,34 @@ namespace Component
 		Material *getMaterial(const std::string &name);
 		Material *getMaterial(unsigned int index);
 
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar)
+		{
+			auto res = new MeshRenderer();
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(shader);
+		}
+
+		// !Serialization
+		////
+		//////
+
 		SmartPointer<Resources::SharedMesh>	mesh;
 		std::string shader;
 		std::vector<Material> materials;
+	private:
+		MeshRenderer(MeshRenderer const &);
+		MeshRenderer	&operator=(MeshRenderer const &);
 	};
 
 }
