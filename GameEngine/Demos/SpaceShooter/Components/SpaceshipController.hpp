@@ -12,9 +12,8 @@
 
 namespace Component
 {
-	ATTRIBUTE_ALIGNED16(class) SpaceshipController : public ComponentBase<SpaceshipController>
+	ATTRIBUTE_ALIGNED16(struct) SpaceshipController : public ComponentBase<SpaceshipController>
 	{
-	public:
 		enum CONTROLS
 		{
 			FORWARD = 0,
@@ -23,7 +22,7 @@ namespace Component
 			RIGHT,
 			SHOOT
 		};
-	public:
+
 		BT_DECLARE_ALIGNED_ALLOCATOR();
 		SpaceshipController()
 			: ComponentBase<SpaceshipController>()
@@ -33,7 +32,7 @@ namespace Component
 			setKey(FORWARD, SDLK_w);
 			setKey(BACKWARD, SDLK_s);
 			setKey(SHOOT, SDLK_SPACE);
-			_controls.fill(false);
+			controls.fill(false);
 		}
 
 		virtual ~SpaceshipController()
@@ -49,26 +48,16 @@ namespace Component
 		{
 			if (k >= 5)
 				return;
-			_keys[k] = key;
-		}
-
-		std::array<unsigned int, 5> &getKeys()
-		{
-			return _keys;
-		}
-
-		std::array<bool, 5> &getControls()
-		{
-			return _controls;
+			keys[k] = key;
 		}
 
 		void resetControls()
 		{
-			_controls.fill(false);
+			controls.fill(false);
 		}
-	protected:
-		std::array<unsigned int, 5> _keys;
-		std::array<bool, 5> _controls;
+
+		std::array<unsigned int, 5> keys;
+		std::array<bool, 5> controls;
 	};
 }
 

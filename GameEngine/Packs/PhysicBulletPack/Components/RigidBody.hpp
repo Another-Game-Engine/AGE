@@ -18,9 +18,8 @@
 
 namespace Component
 {
-	ATTRIBUTE_ALIGNED16(class) RigidBody : public Component::ComponentBase<RigidBody>
+	ATTRIBUTE_ALIGNED16(struct) RigidBody : public Component::ComponentBase<RigidBody>
 	{
-	public:
 		BT_DECLARE_ALIGNED_ALLOCATOR();
 		typedef enum
 		{
@@ -34,12 +33,12 @@ namespace Component
 		RigidBody()
 			: ComponentBase(),
 			_manager(nullptr),
-			_shapeType(UNDEFINED),
-			_mass(0.0f),
-			_inertia(btVector3(0.0f, 0.0f, 0.0f)),
-			_rotationConstraint(glm::vec3(1,1,1)),
-			_transformConstraint(glm::vec3(1,1,1)),
-			_meshName(""),
+			shapeType(UNDEFINED),
+			mass(0.0f),
+			inertia(btVector3(0.0f, 0.0f, 0.0f)),
+			rotationConstraint(glm::vec3(1,1,1)),
+			transformConstraint(glm::vec3(1,1,1)),
+			meshName(""),
 			_collisionShape(nullptr),
 			_motionState(nullptr),
 			_rigidBody(nullptr)
@@ -50,7 +49,7 @@ namespace Component
 		{
 			_manager = dynamic_cast<BulletDynamicManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
-			_mass = mass;
+			mass = mass;
 		}
 
 		virtual void reset()
@@ -71,11 +70,11 @@ namespace Component
 				delete _collisionShape;
 				_collisionShape = nullptr;
 			}
-			_shapeType = UNDEFINED;
-			_mass = 0.0f;
-			_inertia = btVector3(0.0f, 0.0f, 0.0f);
-			_rotationConstraint = glm::vec3(1, 1, 1);
-			_transformConstraint = glm::vec3(1, 1, 1);
+			shapeType = UNDEFINED;
+			mass = 0.0f;
+			inertia = btVector3(0.0f, 0.0f, 0.0f);
+			rotationConstraint = glm::vec3(1, 1, 1);
+			transformConstraint = glm::vec3(1, 1, 1);
 		}
 
 		btMotionState &getMotionState()
@@ -98,21 +97,21 @@ namespace Component
 
 		void setMass(float mass)
 		{
-			_mass = btScalar(mass);
+			mass = btScalar(mass);
 		}
 
 		void setInertia(btVector3 const &v)
 		{
-			_inertia = v;
+			inertia = v;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &meshName = "")
+		void setCollisionShape(CollisionShape c, const std::string &_meshName = "")
 		{
 			if (c == UNDEFINED)
 				return;
-			_meshName = meshName;
+			meshName = _meshName;
 			_reset();
-			_shapeType = c;
+			shapeType = c;
 			btTransform transform;
 			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
 			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
@@ -192,13 +191,13 @@ namespace Component
 				bool isit = bvh->isConcave();
 				_collisionShape = bvh;
 			}
-			if (_mass != 0)
-				_collisionShape->calculateLocalInertia(_mass, _inertia);
+			if (mass != 0)
+				_collisionShape->calculateLocalInertia(mass, inertia);
 			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
-			_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
+			_rigidBody = new btRigidBody(mass, _motionState, _collisionShape, inertia);
 			_rigidBody->setUserPointer(&_entity);
-			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
-			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
+			_rigidBody->setAngularFactor(convertGLMVectorToBullet(rotationConstraint));
+			_rigidBody->setLinearFactor(convertGLMVectorToBullet(transformConstraint));
 			if (_rigidBody->isStaticObject())
 			{
 				_rigidBody->setActivationState(DISABLE_SIMULATION);
@@ -208,22 +207,22 @@ namespace Component
 
 		void setRotationConstraint(bool x, bool y, bool z)
 		{
-			_rotationConstraint = glm::vec3(static_cast<unsigned int>(x),
+			rotationConstraint = glm::vec3(static_cast<unsigned int>(x),
 				static_cast<unsigned int>(y),
 				static_cast<unsigned int>(z));
 			if (!_rigidBody)
 				return;
-			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
+			_rigidBody->setAngularFactor(convertGLMVectorToBullet(rotationConstraint));
 		}
 
 		void setTransformConstraint(bool x, bool y, bool z)
 		{
-			_transformConstraint = glm::vec3(static_cast<unsigned int>(x),
+			transformConstraint = glm::vec3(static_cast<unsigned int>(x),
 				static_cast<unsigned int>(y),
 				static_cast<unsigned int>(z));
 			if (!_rigidBody)
 				return;
-			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
+			_rigidBody->setLinearFactor(convertGLMVectorToBullet(transformConstraint));
 		}
 
 		virtual ~RigidBody(void)
@@ -240,14 +239,13 @@ namespace Component
 				delete _collisionShape;
 		}
 
-	private:
 		BulletDynamicManager *_manager;
-		CollisionShape _shapeType;
-		btScalar _mass;
-		btVector3 _inertia;
-		glm::vec3 _rotationConstraint;
-		glm::vec3 _transformConstraint;
-		std::string _meshName;
+		CollisionShape shapeType;
+		btScalar mass;
+		btVector3 inertia;
+		glm::vec3 rotationConstraint;
+		glm::vec3 transformConstraint;
+		std::string meshName;
 		btCollisionShape *_collisionShape;
 		btMotionState *_motionState;
 		btRigidBody *_rigidBody;

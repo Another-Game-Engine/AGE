@@ -18,9 +18,8 @@
 
 namespace Component
 {
-	ATTRIBUTE_ALIGNED16(class) CollisionBody : public Component::ComponentBase<CollisionBody>
+	ATTRIBUTE_ALIGNED16(struct) CollisionBody : public Component::ComponentBase<CollisionBody>
 	{
-	public:
 		BT_DECLARE_ALIGNED_ALLOCATOR();
 		typedef enum
 		{
@@ -32,8 +31,8 @@ namespace Component
 
 		CollisionBody() :
 			_manager(nullptr),
-			_shapeType(UNDEFINED),
-			_meshName(""),
+			shapeType(UNDEFINED),
+			meshName(""),
 			_collisionShape(nullptr),
 			_body(nullptr)
 		{
@@ -52,7 +51,7 @@ namespace Component
 				delete _collisionShape;
 				_collisionShape = nullptr;
 			}
-			_shapeType = UNDEFINED;
+			shapeType = UNDEFINED;
 		}
 
 		bool init()
@@ -74,13 +73,13 @@ namespace Component
 			return *_body;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &meshName = "")
+		void setCollisionShape(CollisionShape c, const std::string &_meshName = "")
 		{
 			if (c == UNDEFINED)
 				return;
-			_meshName = meshName;
-			_reset();
-			_shapeType = c;
+			meshName = _meshName;
+			reset();
+			shapeType = c;
 			btTransform transform;
 			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
 			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
@@ -144,28 +143,15 @@ namespace Component
 				delete _collisionShape;
 		}
 
+
+		CollisionShape shapeType;
+		std::string meshName;
 	private:
 		BulletCollisionManager *_manager;
-		CollisionShape _shapeType;
-		std::string _meshName;
 		btCollisionShape *_collisionShape;
 		btCollisionObject *_body;
-	private:
 		CollisionBody(CollisionBody const &);
 		CollisionBody &operator=(CollisionBody const &);
-
-		void _reset()
-		{
-			if (_body != nullptr)
-			{
-				_manager->getWorld()->removeCollisionObject(_body);
-				delete _body;
-			}
-			if (_collisionShape != nullptr)
-			{
-				delete _collisionShape;
-			}
-		}
 	};
 
 }
