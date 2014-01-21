@@ -44,6 +44,7 @@ public:
 	void setHandle(Entity &handle);
 
 private:
+	friend class cereal::access;
 	AScene              *_scene;
 	size_t 				_flags;
 
