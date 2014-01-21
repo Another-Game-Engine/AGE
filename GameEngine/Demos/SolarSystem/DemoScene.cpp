@@ -245,8 +245,10 @@ bool 			DemoScene::userUpdate(double time)
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 	{
+		//std::ofstream s("SolarSystem.scenesave", std::ios_base::binary);
+		//save<cereal::PortableBinaryOutputArchive>(s);
 		std::ofstream s("SolarSystem.scenesave", std::ios_base::binary);
-		save<cereal::PortableBinaryOutputArchive>(s);
+		save<cereal::JSONOutputArchive>(s);
 		s.close();
 		return (false);
 	}

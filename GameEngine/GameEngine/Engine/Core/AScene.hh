@@ -86,7 +86,16 @@ public:
 
 	template <typename Archive>
 	void save(std::ofstream &s)
-	{}
+	{
+		for (auto &e : _pool)
+		{
+			if (e.getFlags() & EntityData::ACTIVE)
+			{
+				Archive ar(s);
+				ar(e);
+			}
+		}
+	}
 
 };
 

@@ -32,7 +32,9 @@ public:
 
 	enum	EntityFlags
 	{
-		HAS_MOVED = 1
+		HAS_MOVED = 1,
+		ACTIVE = 2,
+
 	};
 
 	typedef std::vector<SmartPointer<Component::Base> >	t_ComponentsList;
@@ -159,6 +161,22 @@ public:
 		broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
 		// component remove -> signal to system
 	}
+
+	template <class Archive>
+	void save(Archive &ar) const
+	{
+		for (auto &e : _components)
+		{
+			if (!e.get())
+				continue;
+			ar(*e.get());
+		}
+	}
+
+	template <class Archive>
+	void load(Archive &ar) const
+	{}
+
 };
 
 #endif

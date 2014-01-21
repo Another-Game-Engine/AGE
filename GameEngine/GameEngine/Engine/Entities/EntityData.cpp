@@ -16,6 +16,7 @@ EntityData::EntityData(AScene *scene) :
 	_globalRotation(0),
 	_globalScale(0)
 {
+	removeFlags(ACTIVE);
 }
 
 EntityData::~EntityData()
