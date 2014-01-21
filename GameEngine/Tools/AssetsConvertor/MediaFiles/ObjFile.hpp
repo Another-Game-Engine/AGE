@@ -35,6 +35,7 @@ struct ObjFile : public MediaFile<ObjFile>
 			ar(name,vertices, normals,colors,uvs, indices);
 		}
 	};
+
 	std::vector<Geometry> geometries;
 	//	std::vector<MaterialFile> materials;
 
