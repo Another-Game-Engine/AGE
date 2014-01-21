@@ -48,7 +48,7 @@ namespace Component
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
-			ar(shader);
+			ar(CEREAL_NVP(shader));
 		}
 
 		// !Serialization

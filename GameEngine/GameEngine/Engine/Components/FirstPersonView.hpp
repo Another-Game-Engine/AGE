@@ -18,6 +18,28 @@ namespace Component
 		virtual              ~FirstPersonView(void){}
 		void init(){}
 		virtual void reset(){}
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar)
+		{
+			auto res = new FirstPersonView();
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+		}
+
+		// !Serialization
+		////
+		//////
+
 	private:
 		FirstPersonView(FirstPersonView const &);
 		FirstPersonView	&operator=(FirstPersonView const &);
