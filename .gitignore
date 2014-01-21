@@ -9,6 +9,7 @@ Assets/
 # Vendors/Cereal -> Download it manualy : http://uscilab.github.io/cereal/
 Cereal/
 *.serialization
+*.scenesave
 
 # User-specific files
 *.suo
