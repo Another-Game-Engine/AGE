@@ -42,7 +42,7 @@ namespace	Component
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
-			ar(serializedID);
+			ar(cereal::make_nvp("Component_Type_ID", serializedID));
 			_serialize(ar);
 		}
 
@@ -70,7 +70,6 @@ namespace	Component
 		virtual Base *unserialize(cereal::JSONInputArchive &ar)
 		{
 			return dynamic_cast<T*>(this)->unserialize<cereal::JSONInputArchive>(ar);
-			return nullptr;
 		}
 
 		virtual Base *unserialize(cereal::BinaryInputArchive &ar)
@@ -90,22 +89,22 @@ namespace	Component
 
 		virtual void _serialize(cereal::JSONOutputArchive &ar)
 		{
-			ar(*dynamic_cast<T*>(this));
+			ar(cereal::make_nvp(typeid(T).name(), *dynamic_cast<T*>(this)));
 		}
 
 		virtual void _serialize(cereal::BinaryOutputArchive &ar)
 		{
-			ar(*dynamic_cast<T*>(this));
+			ar(cereal::make_nvp(typeid(T).name(), *dynamic_cast<T*>(this)));
 		}
 
 		virtual void _serialize(cereal::XMLOutputArchive &ar)
 		{
-			ar(*dynamic_cast<T*>(this));
+			ar(cereal::make_nvp(typeid(T).name(), *dynamic_cast<T*>(this)));
 		}
 
 		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar)
 		{
-			ar(*dynamic_cast<T*>(this));
+			ar(cereal::make_nvp(typeid(T).name(), *dynamic_cast<T*>(this)));
 		}
 
 	private:

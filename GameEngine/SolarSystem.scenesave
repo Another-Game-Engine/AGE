@@ -1,8 +1,8 @@
 {
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0,
@@ -11,15 +11,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0,
@@ -28,21 +28,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 7,
@@ -51,15 +51,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 20,
@@ -68,21 +68,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "earth"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0,
@@ -91,15 +91,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 10,
@@ -108,21 +108,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "bump"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.2400000095367432,
@@ -131,15 +131,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.690000057220459,
@@ -148,21 +148,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.4500000476837158,
@@ -171,15 +171,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0499999523162842,
@@ -188,21 +188,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.4199999570846558,
@@ -211,15 +211,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.9500000476837158,
@@ -228,21 +228,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5299999713897705,
@@ -251,15 +251,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0199999809265137,
@@ -268,21 +268,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.94999998807907104,
@@ -291,15 +291,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1799999475479126,
@@ -308,21 +308,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1200000047683716,
@@ -331,15 +331,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.68999999761581421,
@@ -348,21 +348,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.10999999940395355,
@@ -371,15 +371,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0299999713897705,
@@ -388,21 +388,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1100000143051147,
@@ -411,15 +411,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.4099999666213989,
@@ -428,21 +428,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5700000524520874,
@@ -451,15 +451,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.62000000476837158,
@@ -468,21 +468,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.7799999713897705,
@@ -491,15 +491,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.2899999618530273,
@@ -508,21 +508,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.059999942779541,
@@ -531,15 +531,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.87999999523162842,
@@ -548,21 +548,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.05000000074505806,
@@ -571,15 +571,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.46000000834465027,
@@ -588,21 +588,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0099999904632568,
@@ -611,15 +611,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.059999998658895493,
@@ -628,21 +628,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5399999618530273,
@@ -651,15 +651,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.8399999737739563,
@@ -668,21 +668,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0800000429153442,
@@ -691,15 +691,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.309999942779541,
@@ -708,21 +708,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.3799999952316284,
@@ -731,15 +731,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.3700000047683716,
@@ -748,21 +748,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1499999761581421,
@@ -771,15 +771,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.33000001311302185,
@@ -788,21 +788,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.059999942779541,
@@ -811,15 +811,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.7699999809265137,
@@ -828,21 +828,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.72000002861022949,
@@ -851,15 +851,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.2400000095367432,
@@ -868,21 +868,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1200000047683716,
@@ -891,15 +891,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.97000002861022949,
@@ -908,21 +908,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.6699999570846558,
@@ -931,15 +931,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5499999523162842,
@@ -948,21 +948,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5,
@@ -971,15 +971,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5,
@@ -988,21 +988,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.9099999666213989,
@@ -1011,15 +1011,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0700000524520874,
@@ -1028,21 +1028,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.8300000429153442,
@@ -1051,15 +1051,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5299999713897705,
@@ -1068,21 +1068,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.8799999952316284,
@@ -1091,15 +1091,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.20999999344348907,
@@ -1108,21 +1108,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.6799999475479126,
@@ -1131,15 +1131,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.12999999523162842,
@@ -1148,21 +1148,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5900000333786011,
@@ -1171,15 +1171,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.10000000149011612,
@@ -1188,21 +1188,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.40999999642372131,
@@ -1211,15 +1211,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.9500000476837158,
@@ -1228,21 +1228,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.20000000298023224,
@@ -1251,15 +1251,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.7400000095367432,
@@ -1268,21 +1268,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.8399999737739563,
@@ -1291,15 +1291,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.68000000715255737,
@@ -1308,21 +1308,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.3799999952316284,
@@ -1331,15 +1331,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.18000000715255737,
@@ -1348,21 +1348,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.93000000715255737,
@@ -1371,15 +1371,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.2799999713897705,
@@ -1388,21 +1388,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.17000000178813934,
@@ -1411,15 +1411,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1000000238418579,
@@ -1428,21 +1428,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.50999999046325684,
@@ -1451,15 +1451,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.3500000238418579,
@@ -1468,21 +1468,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0299999713897705,
@@ -1491,15 +1491,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.9800000190734863,
@@ -1508,21 +1508,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0199999809265137,
@@ -1531,15 +1531,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.8899999856948853,
@@ -1548,21 +1548,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.8700000047683716,
@@ -1571,15 +1571,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.2300000190734863,
@@ -1588,21 +1588,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.18000000715255737,
@@ -1611,15 +1611,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.57999998331069946,
@@ -1628,21 +1628,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.9800000190734863,
@@ -1651,15 +1651,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.8899999856948853,
@@ -1668,21 +1668,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.92000001668930054,
@@ -1691,15 +1691,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.3799999952316284,
@@ -1708,21 +1708,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.9099999666213989,
@@ -1731,15 +1731,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5800000429153442,
@@ -1748,21 +1748,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.34000000357627869,
@@ -1771,15 +1771,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.019999999552965164,
@@ -1788,21 +1788,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.86000001430511475,
@@ -1811,15 +1811,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.6200000047683716,
@@ -1828,21 +1828,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.15999999642372131,
@@ -1851,15 +1851,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.43999999761581421,
@@ -1868,21 +1868,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.99000000953674316,
@@ -1891,15 +1891,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.20999999344348907,
@@ -1908,21 +1908,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1200000047683716,
@@ -1931,15 +1931,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.75,
@@ -1948,21 +1948,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.87999999523162842,
@@ -1971,15 +1971,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.61000001430511475,
@@ -1988,21 +1988,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.8500000238418579,
@@ -2011,15 +2011,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.019999999552965164,
@@ -2028,21 +2028,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5700000524520874,
@@ -2051,15 +2051,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.17000000178813934,
@@ -2068,21 +2068,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.8899999856948853,
@@ -2091,15 +2091,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.2100000381469727,
@@ -2108,21 +2108,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5499999523162842,
@@ -2131,15 +2131,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.25,
@@ -2148,21 +2148,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.60000002384185791,
@@ -2171,15 +2171,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.4500000476837158,
@@ -2188,21 +2188,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.9600000381469727,
@@ -2211,15 +2211,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.79000002145767212,
@@ -2228,21 +2228,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.4900000095367432,
@@ -2251,15 +2251,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.6600000262260437,
@@ -2268,21 +2268,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0499999523162842,
@@ -2291,15 +2291,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.86000001430511475,
@@ -2308,21 +2308,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0099999904632568,
@@ -2331,15 +2331,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1399999856948853,
@@ -2348,21 +2348,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5499999523162842,
@@ -2371,15 +2371,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1299999952316284,
@@ -2388,21 +2388,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.4500000476837158,
@@ -2411,15 +2411,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.31999999284744263,
@@ -2428,21 +2428,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.8200000524520874,
@@ -2451,15 +2451,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.46000000834465027,
@@ -2468,21 +2468,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.6100000143051147,
@@ -2491,15 +2491,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.2899999618530273,
@@ -2508,21 +2508,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.5899999737739563,
@@ -2531,15 +2531,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.43999999761581421,
@@ -2548,21 +2548,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1000000238418579,
@@ -2571,15 +2571,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5399999618530273,
@@ -2588,21 +2588,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.2199999988079071,
@@ -2611,15 +2611,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.74000000953674316,
@@ -2628,21 +2628,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.9099999666213989,
@@ -2651,15 +2651,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.5800000429153442,
@@ -2668,21 +2668,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.23999999463558197,
@@ -2691,15 +2691,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.1399999856948853,
@@ -2708,21 +2708,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.69999998807907104,
@@ -2731,15 +2731,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.33000001311302185,
@@ -2748,21 +2748,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.69999998807907104,
@@ -2771,15 +2771,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.7300000190734863,
@@ -2788,21 +2788,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.80000001192092896,
@@ -2811,15 +2811,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.0199999809265137,
@@ -2828,21 +2828,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.25,
@@ -2851,15 +2851,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.2699999809265137,
@@ -2868,21 +2868,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 1.809999942779541,
@@ -2891,15 +2891,15 @@
             }
         },
         "value1": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2347179728,
-            "value1": {
+            "Component_Type_ID": 2347179728,
+            "struct Component::RotationForce": {
                 "value0": {
                     "value0": 0,
                     "value1": 0.61000001430511475,
@@ -2908,21 +2908,21 @@
             }
         },
         "value1": {
-            "value0": 400427089,
-            "value1": {
+            "Component_Type_ID": 400427089,
+            "struct Component::MeshRenderer": {
                 "value0": "basic"
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }{
     "value0": {
         "value0": {
-            "value0": 2816539503,
-            "value1": {
+            "Component_Type_ID": 2816539503,
+            "struct Component::CameraComponent": {
                 "value0": {
                     "value0": {
                         "value0": 1.0805524587631226,
@@ -2946,41 +2946,41 @@
                 "value1": "cubemapShader",
                 "value2": {
                     "value0": {
-                        "value0": -0.88810402154922485,
-                        "value1": -0.034440863877534866,
-                        "value2": -0.45835024118423462,
+                        "value0": -0.64666461944580078,
+                        "value1": -0.0068648699671030045,
+                        "value2": 0.76274365186691284,
                         "value3": 0,
                         "value4": 0,
-                        "value5": 0.9971887469291687,
-                        "value6": -0.074929706752300262,
+                        "value5": 0.99995964765548706,
+                        "value6": 0.0089998673647642136,
                         "value7": 0,
-                        "value8": 0.45964229106903076,
-                        "value9": -0.066545374691486359,
-                        "value10": -0.88560754060745239,
+                        "value8": -0.76277458667755127,
+                        "value9": 0.0058198957704007626,
+                        "value10": -0.64663839340209961,
                         "value11": 0,
-                        "value12": 284.45864868164062,
-                        "value13": 7.1412262916564941,
-                        "value14": 45.037765502929688,
+                        "value12": -99.917251586914063,
+                        "value13": 2.5458130836486816,
+                        "value14": -468.86083984375,
                         "value15": 1
                     }
                 }
             }
         },
         "value1": {
-            "value0": 2198803695,
-            "value1": {
-                "value0": 50,
+            "Component_Type_ID": 2198803695,
+            "struct Component::TrackBall": {
+                "value0": 186,
                 "value1": 3,
                 "value2": 1,
                 "value3": {
-                    "value0": -2.6640000343322754,
-                    "value1": -0.075000002980232239
+                    "value0": 2.2739999294281006,
+                    "value1": 0.0089999893680214882
                 }
             }
         },
         "value2": {
-            "value0": 4132817957,
-            "value1": {}
+            "Component_Type_ID": 4132817957,
+            "struct Component::GraphNode": {}
         }
     }
 }
