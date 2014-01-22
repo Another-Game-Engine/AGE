@@ -158,7 +158,6 @@ public:
 		if (!hasComponent(id))
 			return;
 		_code.remove(id);
-//		_components[id]	= nullptr;
 		_components[id].get()->reset();
 		broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
 		// component remove -> signal to system
@@ -168,12 +167,13 @@ public:
 	void save(Archive &ar) const
 	{
 		// Save Entity informations
-		ar(cereal::make_nvp("flags", _flags),
-			cereal::make_nvp("localTransform", _localTransform),
-			cereal::make_nvp("globalTransform", _globalTransform));
+		ar(cereal::make_nvp("flags", _flags));
+		ar(cereal::make_nvp("localTransform", _localTransform));
+		ar(cereal::make_nvp("globalTransform", _globalTransform));
 
 		// Save Entity Components
-		unsigned int cptNumber = 0;
+		std::size_t cptNumber = 0;
+
 		for (auto &e : _components)
 		{
 			if (!e.get())
@@ -194,8 +194,10 @@ public:
 	void load(Archive &ar)
 	{
 		// load Entity informations
-		ar(_flags, _localTransform, _globalTransform);
-		unsigned int cptNumber = 0;
+		ar(_flags);
+		ar(_localTransform);
+		ar(_globalTransform);
+		std::size_t cptNumber = 0;
 		ar(cptNumber);
 		for (unsigned int i = 0; i < cptNumber; ++i)
 		{
@@ -211,7 +213,6 @@ public:
 			_code.add(typeId);
 			broadCast(std::string("componentAdded" + std::to_string(typeId)), _handle);
 		}
-		std::cout << "lol" << std::endl;
 	}
 
 };

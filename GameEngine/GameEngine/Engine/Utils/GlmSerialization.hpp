@@ -31,7 +31,13 @@ namespace cereal
 	template<typename Archive>
 	void save(Archive &ar, const glm::vec3 &v)
 	{
-		ar(cereal::make_nvp("x", v.x),cereal::make_nvp("y", v.y), cereal::make_nvp("z", v.z));
+		float x = v.x;
+		float y = v.y;
+		float z = v.z;
+		ar(x,y,z);
+		//ar(cereal::make_nvp("x", v.x),cereal::make_nvp("y", v.y), cereal::make_nvp("z", v.z));
+		//unsigned int i = 0;
+		//ar(i);
 	}
 
 	template<typename Archive>
@@ -39,7 +45,9 @@ namespace cereal
 	{
 		float x, y, z;
 		ar(x, y, z);
-		v = glm::vec3(x, y, z);
+		v = glm::vec3(x,y,z);
+		//unsigned int i = 0;
+		//ar(i);
 	}
 
 	template<typename Archive>
@@ -60,7 +68,7 @@ namespace cereal
 	void save(Archive &ar, const glm::mat4 &v)
 	{
 
-		double dArray[16] = { 0.0 };
+		float dArray[16] = { 0.0 };
 		const float *pSource = (const float*)glm::value_ptr(v);
 		std::cout << "float : " << sizeof(glm::value_ptr(v)) * v.length() << std::endl;
 		std::cout << "double : " << sizeof(dArray) << std::endl;
@@ -72,7 +80,7 @@ namespace cereal
 	template<typename Archive>
 	void load(Archive &ar, glm::mat4 &v)
 	{
-		double source[16];
+		float source[16];
 		ar(source);
 		v = glm::make_mat4(source);
 	}
