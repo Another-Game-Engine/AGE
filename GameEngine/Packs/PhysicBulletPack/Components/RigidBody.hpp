@@ -95,9 +95,9 @@ namespace Component
 			return *_rigidBody;
 		}
 
-		void setMass(float mass)
+		void setMass(float _mass)
 		{
-			mass = btScalar(mass);
+			mass = btScalar(_mass);
 		}
 
 		void setInertia(btVector3 const &v)
