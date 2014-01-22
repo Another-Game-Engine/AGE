@@ -77,6 +77,7 @@
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
     <ClInclude Include="Engine\Utils\Dependency.hpp" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
