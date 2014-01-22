@@ -47,9 +47,26 @@ namespace Component
 		}
 
 		template <typename Archive>
-		void serialize(Archive &ar)
+		void save(Archive &ar) const
 		{
 			ar(CEREAL_NVP(shader));
+			std::string meshName = mesh->getName();
+			ar(cereal::make_nvp("meshName", meshName));
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+			ar(shader);
+			std::string meshName;
+			ar(meshName);
+			mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+			// DEFAULT MATERIAL OF MESH COPY -> NOT SERIALIZED YET
+			auto &m = mesh->getDefaultMaterialsList();
+			for (auto &e : m)
+			{
+				materials.push_back(*(e.get()));
+			}
 		}
 
 		// !Serialization
