@@ -4,6 +4,8 @@
 #include "Component.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityData.hh>
+#include <cereal/types/base_class.hpp>
+#include <cereal/types/set.hpp>
 
 namespace Component
 {
@@ -116,11 +118,43 @@ namespace Component
 		}
 
 		template <typename Archive>
-		void serialize(Archive &ar)
+		void save(Archive &ar) const
 		{
-			unsigned int i = 0;
-			ar(i);
-			//			ar(dist);
+			std::set<std::size_t> childIds;
+			for (auto e : _childs)
+			{
+				childIds.insert(_entity.get()->getScene()->registrarSerializedEntity(e.getId()));
+			}
+			ar(CEREAL_NVP(childIds));
+			ar(cereal::make_nvp("haveParent", _parent.get() != nullptr));
+			ar(cereal::make_nvp("parentID", _parent.getId()));
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+			std::set<std::size_t> childIds;
+			ar(childIds);
+			for (auto e : childIds)
+				_childs.insert(Entity(e));
+			for (auto it = std::begin(_childs); it != std::end(_childs); ++it)
+			{ 
+				Entity *e = const_cast<Entity *>(&(*it));
+				_entity->getScene()->entityHandle(it->getId(), e);
+			}
+			bool haveParent = false;
+			ar(haveParent);
+			std::size_t parentId;
+			ar(parentId);
+			if (haveParent)
+			{
+				_entity->getScene()->entityHandle(parentId, &_parent);
+			}
+			else
+			{
+				auto key = PubSubKey("graphNodeSetAsRoot");
+				_entity->broadCast(key, _entity);
+			}
 		}
 
 		// !Serialization
