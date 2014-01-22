@@ -186,8 +186,7 @@ public:
 		{
 			if (!e.get())
 				continue;
-//			ar(*e.get());
-			e->serialize(ar);
+			e->serializeBase(ar);
 		}
 	}
 
@@ -195,6 +194,9 @@ public:
 	void load(Archive &ar)
 	{
 		// load Entity informations
+		std::size_t entityID;
+		ar(entityID);
+		_scene->registrarUnserializedEntity(_handle, entityID);
 		ar(_flags);
 		ar(_localTransform);
 		ar(_globalTransform);

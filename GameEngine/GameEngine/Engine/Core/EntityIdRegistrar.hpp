@@ -33,6 +33,7 @@ public:
 		{
 			updateEntityHandle(e.second, e.first);
 		}
+		assert(_toUpdate.size() == 0 && "All handles have not been unserialized correctly.");
 	}
 private:
 	void updateEntityHandle(Entity e, std::size_t id)

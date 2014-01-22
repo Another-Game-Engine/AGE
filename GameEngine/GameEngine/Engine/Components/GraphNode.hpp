@@ -107,9 +107,10 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar)
+		Base *unserialize(Archive &ar, Entity e)
 		{
 			auto res = new GraphNode();
+			res->setEntity(e);
 			ar(*res);
 			return res;
 		}

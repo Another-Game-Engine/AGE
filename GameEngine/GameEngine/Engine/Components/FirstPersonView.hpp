@@ -24,9 +24,10 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar)
+		Base *unserialize(Archive &ar, Entity e)
 		{
 			auto res = new FirstPersonView();
+			res->setEntity(e);
 			ar(*res);
 			return res;
 		}
