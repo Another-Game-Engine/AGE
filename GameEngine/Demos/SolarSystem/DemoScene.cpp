@@ -166,13 +166,27 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
 
+	std::string		vars[] = 
+	{
+		"projection",
+		"view"
+	};
+
+	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>().addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+
+	_engine.getInstance<Renderer>().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+
+	_engine.getInstance<Renderer>().addUniform("cameraUniform").
+		init(&sky, "cameraUniform", vars);
+
+	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
+
 	File saveFile("SolarSystem.scenesave");
 	if (saveFile.exists())
 	{
 		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
-//		load<cereal::PortableBinaryInputArchive>(fileStream);
-		load<cereal::PortableBinaryInputArchive>(fileStream);
-//		load<cereal::JSONInputArchive>(fileStream);
+		load<cereal::JSONInputArchive>(fileStream);
 		fileStream.close();
 		return true;
 	}
@@ -217,21 +231,6 @@ bool 			DemoScene::userStart()
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 	auto trackBall = camera->addComponent<Component::TrackBall>(	*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
 
-	std::string		vars[] = 
-	{
-		"projection",
-		"view"
-	};
-
-	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>().addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
-
-	_engine.getInstance<Renderer>().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-
-	_engine.getInstance<Renderer>().addUniform("cameraUniform").
-		init(&sky, "cameraUniform", vars);
-
-	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
-
 	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
 
 
@@ -253,20 +252,15 @@ bool 			DemoScene::userStart()
 
 bool 			DemoScene::userUpdate(double time)
 {
+	return false;
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 	{
 		{
 			std::ofstream s("SolarSystem.scenesave");
-			save<cereal::PortableBinaryOutputArchive>(s);
-			s.close();
-		}
-		{
-			std::ofstream s("SolarSystemJson.scenesave", std::ios_base::binary);
 			save<cereal::JSONOutputArchive>(s);
 			s.close();
 		}
-
 		return (false);
 	}
 	return (true);

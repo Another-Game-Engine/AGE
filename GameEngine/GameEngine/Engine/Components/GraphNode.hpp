@@ -117,6 +117,8 @@ namespace Component
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
+			unsigned int i = 0;
+			ar(i);
 			//			ar(dist);
 		}
 
