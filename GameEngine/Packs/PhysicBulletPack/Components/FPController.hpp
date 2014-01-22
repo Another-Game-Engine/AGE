@@ -36,6 +36,34 @@ namespace Component
 		void setKey(CONTROLS k, unsigned int key);
 		void resetControls();
 
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new FPController();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void save(Archive &ar) const
+		{
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+		}
+
+		// !Serialization
+		////
+		//////
+
+
 		float yOrientation;
 		float forwardWalkSpeed;
 		float backwardWalkSpeed;

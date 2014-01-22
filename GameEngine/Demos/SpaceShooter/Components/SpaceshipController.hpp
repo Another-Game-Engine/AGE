@@ -56,6 +56,34 @@ namespace Component
 			controls.fill(false);
 		}
 
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new SpaceshipController();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void save(Archive &ar) const
+		{
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+		}
+
+		// !Serialization
+		////
+		//////
+
+
 		std::array<unsigned int, 5> keys;
 		std::array<bool, 5> controls;
 	};

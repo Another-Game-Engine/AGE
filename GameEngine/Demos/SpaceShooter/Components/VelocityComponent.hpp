@@ -40,6 +40,33 @@ namespace Component
 		virtual void reset()
 		{}
 
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new Velocity();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void save(Archive &ar) const
+		{
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+		}
+
+		// !Serialization
+		////
+		//////
+
 		std::function<glm::vec3(double time, double totalTime, const glm::vec3 &direction)> function;
 		glm::vec3 direction;
 	};
