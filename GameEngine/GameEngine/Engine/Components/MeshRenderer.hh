@@ -29,7 +29,7 @@ namespace Component
 		inline void setShader(const std::string &_shader) { shader = _shader; }
 		void render();
 		SmartPointer<Resources::SharedMesh>	const &getMesh() const;
-		std::vector<Material> &getMaterials();
+		std::vector<SmartPointer<Material>> &getMaterials();
 		Material *getMaterial(const std::string &name);
 		Material *getMaterial(unsigned int index);
 
@@ -61,12 +61,6 @@ namespace Component
 			std::string meshName;
 			ar(meshName);
 			mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
-			// DEFAULT MATERIAL OF MESH COPY -> NOT SERIALIZED YET
-			auto &m = mesh->getDefaultMaterialsList();
-			for (auto &e : m)
-			{
-				materials.push_back(*(e.get()));
-			}
 		}
 
 		// !Serialization

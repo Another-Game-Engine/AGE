@@ -22,7 +22,7 @@ bool	loadObj(std::string const &path, Resources::SharedMesh &mesh)
 	assert(err.empty());
 	auto &geometry = mesh.getGeometry();
 	geometry.resize(shapes.size());
-	mesh.getDefaultMaterialsList().resize(shapes.size());
+	mesh.getMaterial().resize(shapes.size());
 
 	float min = -0.5f;
 	float max = 0.5f;
@@ -61,7 +61,7 @@ bool	loadObj(std::string const &path, Resources::SharedMesh &mesh)
 
 void    loadObjMaterials(tinyobj::shape_t &shape, Resources::SharedMesh &mesh, const File &objPath, unsigned int index)
 {
-	auto &m = mesh.getDefaultMaterialsList();
+	auto &m = mesh.getMaterial();
 	auto &manager = mesh.getEngine()->getInstance<Renderer>().getMaterialManager();
 	auto name = "material:" + File(shape.material.name).getFileName();
 	m[index] = manager.getMaterial(name);
