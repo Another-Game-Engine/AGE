@@ -11,6 +11,7 @@ template <uint8_t NBR_ATTRIBUTE>
 class Vertice
 {
 public:
+	Vertice();
 	Vertice(uint32_t nbrVertex, std::array<Data, NBR_ATTRIBUTE> attribData, Data const * const indices = NULL);
 	~Vertice();
 	Vertice(Vertice const &copy);
@@ -26,7 +27,8 @@ public:
 	bool isDrawable() const;
 	bool hasIndices() const;
 	void draw(GLenum mode = GL_TRIANGLES) const;
-	friend void VertexManager<NBR_ATTRIBUTE>::addVertice(Vertice<NBR_ATTRIBUTE> * const vertice);
+	friend void VertexManager<NBR_ATTRIBUTE>::addVertice(Vertice<NBR_ATTRIBUTE> &vertice);
+	friend void VertexManager<NBR_ATTRIBUTE>::deleteVertice(Vertice<NBR_ATTRIBUTE> &vertice);
 
 private:
 	std::array<Data, NBR_ATTRIBUTE> _bufferData;

@@ -21,8 +21,8 @@ public:
 	VertexManager(VertexManager const &copy);
 	VertexManager &operator=(VertexManager const &vertexmanager);
 	bool init();
-	void addVertice(Vertice<NBR_ATTRIBUTE> * const vertice);
-	void deleteVertice(Vertice<NBR_ATTRIBUTE> * const vertice);
+	void addVertice(Vertice<NBR_ATTRIBUTE> &vertice);
+	void deleteVertice(Vertice<NBR_ATTRIBUTE> &vertice);
 	void update();
 	void clear();
 	void callDraw(Vertice<NBR_ATTRIBUTE> const * const drawable, GLenum mode);

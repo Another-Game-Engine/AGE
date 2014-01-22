@@ -1,5 +1,11 @@
 #include "Data.hh"
 
+Data::Data()
+: _sizeBuffer(0),
+_buffer(NULL)
+{
+}
+
 Data::Data(uint32_t sizeBuffer, void *buffer)
 : _sizeBuffer(sizeBuffer)
 {

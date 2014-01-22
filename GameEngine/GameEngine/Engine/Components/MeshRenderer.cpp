@@ -56,7 +56,7 @@ namespace Component
 		{
 			_materials[i].setUniforms(materialUniform);
 			materialUniform->flushChanges();
-			b[i]->draw(GL_TRIANGLES);
+			b[i].draw(GL_TRIANGLES);
 		}
 	}
 

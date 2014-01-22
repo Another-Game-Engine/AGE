@@ -11,6 +11,7 @@ private:
 	uint32_t _sizeBuffer;
 	void *_buffer;
 public:
+	Data();
 	Data(uint32_t sizeBuffer, void *buffer);
 	Data(Data const &copy);
 	~Data();
