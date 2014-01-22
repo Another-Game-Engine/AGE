@@ -21,6 +21,17 @@ _index(-1)
 }
 
 template <uint8_t NBR_ATTRIBUTE>
+Vertice<NBR_ATTRIBUTE>::Vertice()
+: _sizeVertexBuffer(0),
+_sizeIndicesBuffer(0),
+_nbrVertex(0),
+_nbrIndices(0),
+_vertexManager(NULL),
+_index(-1)
+{
+}
+
+template <uint8_t NBR_ATTRIBUTE>
 Vertice<NBR_ATTRIBUTE>::Vertice(Vertice<NBR_ATTRIBUTE> const &copy)
 : _bufferData(copy._bufferData),
 _sizeVertexBuffer(copy._sizeVertexBuffer),
@@ -51,6 +62,8 @@ Vertice<NBR_ATTRIBUTE> &Vertice<NBR_ATTRIBUTE>::operator=(Vertice<NBR_ATTRIBUTE>
 	_nbrIndices = vertex._nbrIndices;
 	if (vertex._indices)
 		_indices = new Data(*vertex._indices);
+	if (_index != -1 && _vertexManager != NULL)
+		_vertexManager->deleteVertice(*this);
 	_vertexManager = vertex._vertexManager;
 	_index = vertex._index;
 	return (*this);

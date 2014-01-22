@@ -38,6 +38,7 @@
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
     <ClCompile Include="Engine\Entities\EntityData.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
+    <ClCompile Include="Engine\OpenGL\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
@@ -88,6 +89,8 @@
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
     <ClInclude Include="Engine\Utils\Archive.hpp" />
+    <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
+    <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

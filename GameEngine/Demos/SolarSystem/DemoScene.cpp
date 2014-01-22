@@ -108,7 +108,7 @@ bool 			DemoScene::userStart()
 		_engine.getInstance<Renderer>().addUniform("PerModel")
 			.init(&s, "PerModel", perModelVars);
 
-		_engine.getInstance<Renderer>().addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
+	_engine.getInstance<Renderer>().addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
 	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
 	_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
 	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
@@ -172,8 +172,9 @@ bool 			DemoScene::userStart()
 	//
 
 	{
-		unsigned int nbPlanet = 10000;
-		Entity planets[10000];
+# define NBR_PLANET 100
+		unsigned int nbPlanet = NBR_PLANET;
+		Entity planets[NBR_PLANET];
 
 
 		for (unsigned int i = 0; i < nbPlanet; ++i)

@@ -29,7 +29,7 @@ class SharedMesh : public AResource
 {
 private:
 	std::vector<Geometry>		_geometry;
-	std::vector<Vertice<4> *> _objs;
+	std::vector<Vertice<4>> _objs;
 	std::vector<SmartPointer<Material> > _defaultMaterialsList;
 	VertexManager<4> *_manager;
 
@@ -42,7 +42,7 @@ public:
 	void			draw() const;
 
 	std::vector<Geometry>      &getGeometry();
-	std::vector<Vertice<4> *> const &getDrawable() const;
+	std::vector<Vertice<4>> const &getDrawable() const;
 	inline std::vector<SmartPointer<Material> > &getDefaultMaterialsList() { return _defaultMaterialsList; }
 };
 

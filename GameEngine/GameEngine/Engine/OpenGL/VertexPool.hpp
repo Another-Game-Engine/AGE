@@ -130,7 +130,7 @@ template <uint8_t NBR_ATTRIBUTE>
 void VertexPool<NBR_ATTRIBUTE>::deleteElement(Vertice<NBR_ATTRIBUTE> const &vertex)
 {
 	if (vertex.getIndexPool() != -1)
-		_elements[vertex.getIndexPool].deleteVertice();
+		_elements[vertex.getIndexPool()].deleteVertice();
 }
 
 template <uint8_t NBR_ATTRIBUTE>

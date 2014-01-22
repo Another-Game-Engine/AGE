@@ -13,8 +13,6 @@ namespace	Resources
 	
 	SharedMesh::~SharedMesh(void)
 	{
-		for (size_t index = 0; index < _objs.size(); ++index)
-			delete _objs[index];
 	}
 	
 	bool	SharedMesh::load(std::string const &path)
@@ -39,7 +37,7 @@ namespace	Resources
 				Data(_geometry[i].normals.size() * 4 * sizeof(float), &_geometry[i].normals[0].x),
 				Data(_geometry[i].uvs.size() * 2 * sizeof(float), &_geometry[i].uvs[0].x) };
 			Data indicesData(_geometry[i].indices.size() * sizeof(unsigned int), &_geometry[i].indices[0]);
-			_objs[i] = new Vertice<4>(_geometry[i].vertices.size(), data, &indicesData);
+			_objs[i] = Vertice<4>(_geometry[i].vertices.size(), data, &indicesData);
 			_manager->addVertice(_objs[i]);
 			assert(_geometry[i].vertices.size() > 0 && "Cannot create mesh without vertices.");
 		}
@@ -49,7 +47,7 @@ namespace	Resources
 	void		SharedMesh::draw() const
 	{
 		for (auto &e : _objs)
-			e->draw();
+			e.draw();
 	}
 	
 	std::vector<Geometry>      &SharedMesh::getGeometry()
@@ -57,7 +55,7 @@ namespace	Resources
 		return _geometry;
 	}
 
-	std::vector<Vertice<4> *> const &SharedMesh::getDrawable() const
+	std::vector<Vertice<4>> const &SharedMesh::getDrawable() const
 	{
 		return (_objs);
 	}

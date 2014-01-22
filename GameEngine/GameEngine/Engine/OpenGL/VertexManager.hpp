@@ -58,24 +58,21 @@ bool VertexManager<NBR_ATTRIBUTE>::init()
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::addVertice(Vertice<NBR_ATTRIBUTE> *vertex)
+void VertexManager<NBR_ATTRIBUTE>::addVertice(Vertice<NBR_ATTRIBUTE> &vertex)
 {
 	int32_t index;
 
-	if (vertex)
-	{
-		index = _pool.addElement(*vertex);
-		vertex->_index = index;
-		vertex->_vertexManager = this;
-	}
+	index = _pool.addElement(vertex);
+	vertex._index = index;
+	vertex._vertexManager = this;
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::deleteVertice(Vertice<NBR_ATTRIBUTE> * const vertice)
+void VertexManager<NBR_ATTRIBUTE>::deleteVertice(Vertice<NBR_ATTRIBUTE> &vertice)
 {
 	_pool.deleteElement(vertice);
-	vertice->_index = -1;
-	vertice->_vertexManager = NULL;
+	vertice._index = -1;
+	vertice._vertexManager = NULL;
 }
 
 template <uint8_t NBR_ATTRIBUTE>
