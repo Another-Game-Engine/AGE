@@ -115,6 +115,7 @@ public:
 			Entity e = createEntity();
 			ar(*e.get());
 		}
+		updateEntityHandles();
 	}
 
 };

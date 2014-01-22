@@ -33,9 +33,8 @@ public:
 		auto &it = _collection.find(type);
 		auto &typeIt = _typeId.find(type);
 		assert(it != std::end(_collection) || typeIt != std::end(_typeId) && "Component has not been registered");
-		auto res = it->second->unserialize(ar);
+		auto res = it->second->unserialize(ar, e);
 		typeId = typeIt->second;
-		res->setEntity(e);
 		return res;
 	}
 
