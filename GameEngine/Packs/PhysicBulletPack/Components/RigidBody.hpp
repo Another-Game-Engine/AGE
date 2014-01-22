@@ -45,11 +45,11 @@ namespace Component
 		{
 		}
 
-		void init(float mass = 1.0f)
+		void init(float _mass = 1.0f)
 		{
 			_manager = dynamic_cast<BulletDynamicManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
-			mass = mass;
+			mass = _mass;
 		}
 
 		virtual void reset()
@@ -227,7 +227,6 @@ namespace Component
 
 		virtual ~RigidBody(void)
 		{
-			reset();
 			if (_rigidBody)
 			{
 				_manager->getWorld()->removeRigidBody(_rigidBody);
@@ -238,6 +237,34 @@ namespace Component
 			if (_collisionShape)
 				delete _collisionShape;
 		}
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new RigidBody();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void save(Archive &ar) const
+		{
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+		}
+
+		// !Serialization
+		////
+		//////
+
 
 		BulletDynamicManager *_manager;
 		CollisionShape shapeType;

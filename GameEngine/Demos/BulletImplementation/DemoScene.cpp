@@ -50,7 +50,7 @@ Entity  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
 	e->addComponent<Component::GraphNode>();
 	auto prout = mesh->getMaterials();
-	mesh->getMaterials()[0].diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
+	mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -66,7 +66,7 @@ Entity  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	rigidBody->setCollisionShape(Component::RigidBody::BOX);
 	auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
 	e->addComponent<Component::GraphNode>();
-	mesh->getMaterials()[0].diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
+	mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -79,7 +79,7 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:monkey");
 	auto mesh = e->addComponent<Component::MeshRenderer>("model:monkey");
-	mesh->getMaterials()[0].diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
+	mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
 	e->addComponent<Component::GraphNode>();
 	mesh->setShader("MaterialBasic");
 	return e;
@@ -208,7 +208,7 @@ bool 			DemoScene::userStart()
 		auto rigidBody = e->addComponent<Component::RigidBody>(1.0f);
 		rigidBody->setCollisionShape(Component::RigidBody::BOX);
 		auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
-		mesh->getMaterials()[0].diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
+		mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
 		e->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
@@ -223,9 +223,9 @@ bool 			DemoScene::userStart()
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
-		mesh->getMaterials()[0].normalTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moonBump");
-		mesh->getMaterials()[0].diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
-		mesh->getMaterials()[0].ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
+		mesh->getMaterials()[0]->normalTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moonBump");
+		mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
+		mesh->getMaterials()[0]->ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
 		e->addComponent<Component::GraphNode>();
 		mesh->setShader("basicLight");
 	}
