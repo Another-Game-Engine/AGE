@@ -21,13 +21,6 @@ namespace Component
 	void MeshRenderer::init(std::string const &resource)
 	{
 		mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(resource);
-		// DEFAULT MATERIAL OF MESH COPY
-		materials.clear();
-		auto &m = mesh->getDefaultMaterialsList();
-		for (auto &e : m)
-		{
-			materials.push_back(*(e.get()));
-		}
 	}
 
 	SmartPointer<Resources::SharedMesh> const &MeshRenderer::getMesh() const
@@ -53,15 +46,15 @@ namespace Component
 		perModelUniform->flushChanges();
 		for (unsigned int i = 0; i < g.size(); ++i)
 		{
-			materials[i].setUniforms(materialUniform);
+			mesh->getMaterial()[i]->setUniforms(materialUniform);
 			materialUniform->flushChanges();
 			b[i].draw(GL_TRIANGLES);
 		}
 	}
 
-	std::vector<Material> &MeshRenderer::getMaterials()
+	std::vector<SmartPointer<Material>> &MeshRenderer::getMaterials()
 	{
-		return materials;
+		return mesh->getMaterial();
 	}
 
 	Material *MeshRenderer::getMaterial(const std::string &name)

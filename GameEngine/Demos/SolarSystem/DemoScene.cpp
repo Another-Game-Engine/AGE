@@ -46,10 +46,10 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>("model:ball");
 
 	r->setShader(shader);
-	r->getMaterials()[0].ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex1);
-	r->getMaterials()[0].diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex2);
-	r->getMaterials()[0].specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex3);
-	r->getMaterials()[0].normalTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex4);
+	r->getMaterials()[0]->ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex1);
+	r->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex2);
+	r->getMaterials()[0]->specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex3);
+	r->getMaterials()[0]->normalTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex4);
 	
 	e->addComponent<Component::RotationForce>(glm::vec3(0, orbitSpeed, 0));
 	p->getComponent<Component::GraphNode>()->addSon(e);
@@ -217,6 +217,9 @@ bool 			DemoScene::userStart()
 				planets[i - 1]->getComponent<Component::GraphNode>()->addSon(planets[i]);
 		}
 	}
+
+	auto prout = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
+	destroy(prout);
 
 	//
 	//
