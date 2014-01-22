@@ -6,6 +6,7 @@
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/SmartPointer.hh>
 #include <Components/ComponentRegistrar.hpp>
+#include <Core/EntityIdRegistrar.hpp>
 
 #include <list>
 #include <queue>
@@ -21,7 +22,7 @@ class Engine;
 class System;
 
 
-class AScene : public DependenciesInjector, public ComponentRegistrar
+class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
 {
 private:
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
@@ -104,6 +105,8 @@ public:
 	template <typename Archive>
 	void load(std::ifstream &s)
 	{
+		std::map<unsigned int, unsigned int> unserializedId;
+
 		Archive ar(s);
 		unsigned int size = 0;
 		ar(size);

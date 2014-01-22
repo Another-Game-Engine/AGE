@@ -167,6 +167,7 @@ public:
 	void save(Archive &ar) const
 	{
 		// Save Entity informations
+		ar(cereal::make_nvp("entityID", _scene->registrarSerializedEntity(_handle.getId())));
 		ar(cereal::make_nvp("flags", _flags));
 		ar(cereal::make_nvp("localTransform", _localTransform));
 		ar(cereal::make_nvp("globalTransform", _globalTransform));
