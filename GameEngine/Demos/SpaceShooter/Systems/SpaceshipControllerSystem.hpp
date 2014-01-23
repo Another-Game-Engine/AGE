@@ -43,8 +43,8 @@ private:
 	{
 			c->resetControls();
 			auto &inputs = _scene->getEngine().getInstance<Input>();
-			auto &controls = c->getControls();
-			auto &keys = c->getKeys();
+			auto &controls = c->controls;
+			auto &keys = c->keys;
 
 			float yAngle = inputs.getMouseDelta().y * 0.3f;
 			float xAngle = - inputs.getMouseDelta().x * 0.3f;

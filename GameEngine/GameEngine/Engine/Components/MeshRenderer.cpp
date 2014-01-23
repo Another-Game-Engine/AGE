@@ -8,66 +8,58 @@
 
 namespace Component
 {
-	MeshRenderer::MeshRenderer(AScene *scene, Entity &entity) :
-		Component::ComponentBase<MeshRenderer>(scene, entity, "MeshComponent"),
-		_mesh(nullptr)
+	MeshRenderer::MeshRenderer() :
+		Component::ComponentBase<MeshRenderer>(),
+		mesh(nullptr)
 	{
 	}
 
 	MeshRenderer::~MeshRenderer(void)
 	{
-		reset();
 	}
 
 	void MeshRenderer::init(std::string const &resource)
 	{
-		_mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(resource);
-		// DEFAULT MATERIAL OF MESH COPY
-		_materials.clear();
-		auto &m = _mesh->getDefaultMaterialsList();
-		for (auto &e : m)
-		{
-			_materials.push_back(*(e.get()));
-		}
+		mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(resource);
 	}
 
 	SmartPointer<Resources::SharedMesh> const &MeshRenderer::getMesh() const
 	{
-		return (_mesh);
+		return (mesh);
 	}
 
 	void MeshRenderer::reset()
 	{
-		_mesh = nullptr;
+		mesh = nullptr;
 	}
 
 	void MeshRenderer::render()
 	{
-		OpenGLTools::UniformBuffer *perModelUniform = _scene->getEngine().getInstance<Renderer>().getUniform("PerModel");
-		OpenGLTools::UniformBuffer *materialUniform = _scene->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
-		auto shader = _scene->getEngine().getInstance<Renderer>().getShader(_shader);
-		if (shader)
-			shader->use();
+		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("PerModel");
+		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
+		auto s = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(shader);
+		if (s)
+			s->use();
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());
-		auto &g = _mesh->getGeometry();
-		auto &b = _mesh->getBuffer();
+		auto &g = mesh->getGeometry();
+		auto &b = mesh->getBuffer();
 		perModelUniform->flushChanges();
 		for (unsigned int i = 0; i < g.size(); ++i)
 		{
-			_materials[i].setUniforms(materialUniform);
+			mesh->getMaterial()[i]->setUniforms(materialUniform);
 			materialUniform->flushChanges();
 			b[i].draw(GL_TRIANGLES);
 		}
 	}
 
-	std::vector<Material> &MeshRenderer::getMaterials()
+	std::vector<SmartPointer<Material>> &MeshRenderer::getMaterials()
 	{
-		return _materials;
+		return mesh->getMaterial();
 	}
 
 	Material *MeshRenderer::getMaterial(const std::string &name)
 	{
-		for (auto &e : _materials)
+		for (auto &e : materials)
 		{
 			if (e.name == name)
 				return &e;
@@ -77,8 +69,8 @@ namespace Component
 
 	Material *MeshRenderer::getMaterial(unsigned int index)
 	{
-		if (index < _materials.size())
-			return &_materials[index];
+		if (index < materials.size())
+			return &materials[index];
 		return nullptr;
 	}
 
