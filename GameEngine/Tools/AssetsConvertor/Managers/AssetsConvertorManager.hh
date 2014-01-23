@@ -10,7 +10,6 @@
 #include <cereal/archives/xml.hpp>
 
 #include <MediaFiles/AMediaFile.hpp>
-#include <MediaFiles/ObjFile.hpp>
 
 #include <Utils/Dependency.hpp>
 
@@ -33,7 +32,7 @@ public:
 		_convertors.emplace(key, std::make_unique<T>(this));
 	}
 
-	bool load(const std::string filename, const std::string name);
+	std::shared_ptr<AMediaFile> load(const std::string filename, const std::string name);
 
 	bool serializeData();
 private:
