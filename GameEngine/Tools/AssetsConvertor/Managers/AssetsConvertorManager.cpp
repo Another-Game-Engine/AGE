@@ -1,12 +1,17 @@
 #include <Managers/AssetsConvertorManager.hh>
 #include <Managers/AConvertor.hh>
 #include <Managers/ObjConvertor.hh>
+#include <Managers/MaterialConvertor.hpp>
 #include <Managers/FileTypeRegister.hpp>
+
+#include <MediaFiles/MaterialFile.hpp>
 
 AssetsConvertorManager::AssetsConvertorManager()
 {
         registerConvertor<ObjConvertor>();
+		registerConvertor<MaterialConvertor>();
         FileTypeRegister::getInstance()->registerType<ObjFile>();
+        FileTypeRegister::getInstance()->registerType<MaterialFile>();
 }
 
 AssetsConvertorManager::~AssetsConvertorManager()

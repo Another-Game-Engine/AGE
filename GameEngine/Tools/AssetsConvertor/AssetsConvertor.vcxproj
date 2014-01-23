@@ -99,6 +99,7 @@
     <ClInclude Include="Managers\AConvertor.hh" />
     <ClInclude Include="Managers\AssetsConvertorManager.hh" />
     <ClInclude Include="Managers\FileTypeRegister.hpp" />
+    <ClInclude Include="Managers\MaterialConvertor.hpp" />
     <ClInclude Include="Managers\ObjConvertor.hh" />
     <ClInclude Include="MediaFiles\AMediaFile.hpp" />
     <ClInclude Include="MediaFiles\MaterialFile.hpp" />

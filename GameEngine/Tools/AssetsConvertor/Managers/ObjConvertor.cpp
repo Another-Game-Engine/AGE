@@ -14,7 +14,7 @@ ObjConvertor::~ObjConvertor()
 std::shared_ptr<AMediaFile> ObjConvertor::convert(const File file)
 {
 	if (!file.exists())
-		return std::auto_ptr<AMediaFile>(nullptr);
+		return std::shared_ptr<AMediaFile>(nullptr);
 
     std::string inputfile = file.getFullName();
     std::vector<tinyobj::shape_t> shapes;
@@ -79,7 +79,19 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File file)
 			mesh->geometries[i].colors.push_back(glm::vec4(1));
 			mesh->geometries[i].indices.push_back(v);
 		}
-//		loadObjMaterials(shapes[i], mesh, file, i);
 	}
 	return mesh;
 }
+
+//void    loadObjMaterials(tinyobj::shape_t &shape, Resources::SharedMesh &mesh, const File &objPath, unsigned int index)
+//{
+//	auto &m = mesh.getMaterial();
+//	auto &manager = mesh.getEngine()->getInstance<Renderer>().getMaterialManager();
+//	auto name = "material:" + File(shape.material.name).getFileName();
+//	m[index] = manager.getMaterial(name);
+//	if (m[index] != nullptr)
+//		return;
+//	auto material = manager.createMaterial(name);
+//	material->loadMtl(shape.material, objPath, mesh.getEngine());
+//	m[index] = material;
+//}
