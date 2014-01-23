@@ -20,6 +20,7 @@ public:
 private:
 	bool			_isLoaded;
 	ResourceType	_type;
+	std::string     _name;
 protected:
 	Engine          *_engine;
 public:
@@ -33,6 +34,8 @@ public:
 	inline void     setEngine(Engine &engine){ _engine = &engine; }
 	inline Engine   *getEngine() { return _engine; }
 	ResourceType	getType() const;
+	inline void     setName(const std::string &name){ _name = name; }
+	inline const std::string &getName() const { return _name; }
 };
 
 }

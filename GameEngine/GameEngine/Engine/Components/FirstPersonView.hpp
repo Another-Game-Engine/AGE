@@ -9,18 +9,41 @@
 
 namespace Component
 {
-	class FirstPersonView : public ComponentBase<FirstPersonView>
+	struct FirstPersonView : public ComponentBase<FirstPersonView>
 	{
-	private:
-		FirstPersonView(FirstPersonView const &);
-		FirstPersonView	&operator=(FirstPersonView const &);
 	public:
-		FirstPersonView(AScene *scene, Entity &entity) :
-			ComponentBase<FirstPersonView>(scene, entity, "FirstPersonView")
+		FirstPersonView() :
+			ComponentBase<FirstPersonView>()
 		{}
 		virtual              ~FirstPersonView(void){}
 		void init(){}
 		virtual void reset(){}
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new FirstPersonView();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+		}
+
+		// !Serialization
+		////
+		//////
+
+	private:
+		FirstPersonView(FirstPersonView const &);
+		FirstPersonView	&operator=(FirstPersonView const &);
 	};
 }
 

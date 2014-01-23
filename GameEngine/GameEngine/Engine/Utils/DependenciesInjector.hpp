@@ -4,6 +4,7 @@
 #include <map>
 #include <typeinfo>
 #include <cassert>
+#include <Utils/Dependency.hpp>
 
 class DependenciesInjector
 {
@@ -16,7 +17,7 @@ private:
 	// Dangerous use  of void*
 	// to enhance !
 
-	std::map<size_t, void*>         _instances;
+	std::map<size_t, Dependency*>         _instances;
 
 public:
 	DependenciesInjector()

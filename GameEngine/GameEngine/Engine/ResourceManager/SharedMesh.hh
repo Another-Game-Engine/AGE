@@ -36,7 +36,7 @@ public:
 
 	std::vector<OpenGLTools::VertexBuffer>	&getBuffer();
 	std::vector<Geometry>      &getGeometry();
-	inline std::vector<SmartPointer<Material> > &getDefaultMaterialsList() { return _defaultMaterialsList; }
+	inline std::vector<SmartPointer<Material> > &getMaterial() { return _defaultMaterialsList; }
 };
 
 }

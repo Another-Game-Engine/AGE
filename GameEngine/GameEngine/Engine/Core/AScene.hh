@@ -5,19 +5,28 @@
 //#include <Systems/System.h>
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/SmartPointer.hh>
+#include <Components/ComponentRegistrar.hpp>
+#include <Core/EntityIdRegistrar.hpp>
+
 #include <list>
 #include <queue>
 #include <map>
+
+#include <cereal/cereal.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/xml.hpp>
 
 class Engine;
 class System;
 
 
-class AScene : public DependenciesInjector
+class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
 {
 private:
 	std::multimap<std::size_t, SmartPointer<System> >   _systems;
-	std::vector<EntityData>                                 _pool;
+	std::vector<EntityData>                             _pool;
 	std::queue<unsigned int>                            _free;
 protected:
 	Engine                                              &_engine;
@@ -70,6 +79,45 @@ public:
 			}
 		}
 	}
+
+	template <typename Archive>
+	void save(std::ofstream &s)
+	{
+		Archive ar(s);
+		unsigned int size = 0;
+		for (auto &e : _pool)
+		{
+			if (e.getFlags() & EntityData::ACTIVE)
+			{
+				++size;
+			}
+		}
+		ar(cereal::make_nvp("Number_of_serialized_entities", size));
+		for (auto &e : _pool)
+		{
+			if (e.getFlags() & EntityData::ACTIVE)
+			{
+				ar(cereal::make_nvp("Entity_" + std::to_string(e.getHandle().getId()), e));
+			}
+		}
+	}
+
+	template <typename Archive>
+	void load(std::ifstream &s)
+	{
+		std::map<unsigned int, unsigned int> unserializedId;
+
+		Archive ar(s);
+		unsigned int size = 0;
+		ar(size);
+		for (unsigned int i = 0; i < size; ++i)
+		{
+			Entity e = createEntity();
+			ar(*e.get());
+		}
+		updateEntityHandles();
+	}
+
 };
 
 #endif

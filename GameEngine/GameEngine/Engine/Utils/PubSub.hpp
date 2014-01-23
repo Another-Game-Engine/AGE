@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <functional>
+#include <Utils/Dependency.hpp>
 #include  "Function.hpp"
 
 typedef std::string PubSubKey;
@@ -25,11 +26,11 @@ public:
 	//
 	//
 
-	class Manager
+	class Manager : public Dependency
 	{
 	public:
 		template <typename ...Args>
-		void pub(PubSubKey &name, Args ...args)
+		void pub(PubSubKey &name, Args ...args) const
 		{
 			auto set = _collection.find(name);
 			if (set == std::end(_collection) || set->second.empty())
@@ -62,7 +63,7 @@ public:
 		Manager()
 		{}
 
-		~Manager()
+		virtual ~Manager()
 		{
 			clearAll();
 		}
@@ -127,13 +128,13 @@ public:
 	}
 	
 	template <typename ...Args>
-	void broadCast(PubSubKey &name, Args ...args)
+	void broadCast(PubSubKey &name, Args ...args) const
 	{
 		_manager.pub(name, args...);
 	}
 
 	template <typename ...Args>
-	void pub(PubSubKey &name, Args ...args)
+	void pub(PubSubKey &name, Args ...args) const
 	{
 		auto set = _subscribers.find(name);
 		if (set == std::end(_subscribers) || set->second.empty())

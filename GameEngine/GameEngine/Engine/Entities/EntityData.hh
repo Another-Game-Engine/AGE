@@ -12,6 +12,7 @@
 #include "Utils/PubSub.hpp"
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
+#include <Utils/GlmSerialization.hpp>
 
 class AScene;
 class EntityManager;
@@ -32,7 +33,9 @@ public:
 
 	enum	EntityFlags
 	{
-		HAS_MOVED = 1
+		HAS_MOVED = 1,
+		ACTIVE = 2,
+
 	};
 
 	typedef std::vector<SmartPointer<Component::Base> >	t_ComponentsList;
@@ -41,6 +44,7 @@ public:
 	void setHandle(Entity &handle);
 
 private:
+	friend class cereal::access;
 	AScene              *_scene;
 	size_t 				_flags;
 
@@ -62,6 +66,7 @@ public:
 	EntityData(AScene *scene);
 	virtual ~EntityData();
 
+	AScene                  *getScene() const;
 	void                    translate(const glm::vec3 &v);
 	void                    setTranslation(const glm::vec3 &v);
 	glm::vec3 const         &getTranslation() const;
@@ -126,8 +131,9 @@ public:
 		// if component has never been created, create one
 		if (!_components[id].get())
 		{
-			_components[id] = new T(_scene, getHandle());
+			_components[id] = new T();
 			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
+			_components[id]->setEntity(getHandle());
 		}
 		//init component
 		static_cast<SmartPointer<T> >(_components[id])->init(args...);
@@ -152,11 +158,66 @@ public:
 		if (!hasComponent(id))
 			return;
 		_code.remove(id);
-//		_components[id]	= nullptr;
 		_components[id].get()->reset();
 		broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
 		// component remove -> signal to system
 	}
+
+	template <class Archive>
+	void save(Archive &ar) const
+	{
+		// Save Entity informations
+		ar(cereal::make_nvp("entityID", _scene->registrarSerializedEntity(_handle.getId())));
+		ar(cereal::make_nvp("flags", _flags));
+		ar(cereal::make_nvp("localTransform", _localTransform));
+		ar(cereal::make_nvp("globalTransform", _globalTransform));
+
+		// Save Entity Components
+		std::size_t cptNumber = 0;
+
+		for (auto &e : _components)
+		{
+			if (!e.get())
+				continue;
+			++cptNumber;
+		}
+		ar(cereal::make_nvp("component_number", cptNumber));
+		for (auto &e : _components)
+		{
+			if (!e.get())
+				continue;
+			e->serializeBase(ar);
+		}
+	}
+
+	template <class Archive>
+	void load(Archive &ar)
+	{
+		// load Entity informations
+		std::size_t entityID;
+		ar(entityID);
+		_scene->registrarUnserializedEntity(_handle, entityID);
+		ar(_flags);
+		ar(_localTransform);
+		ar(_globalTransform);
+		std::size_t cptNumber = 0;
+		ar(cptNumber);
+		for (unsigned int i = 0; i < cptNumber; ++i)
+		{
+			std::size_t type = 0;
+			unsigned int typeId;
+			ar(type);
+			unsigned int position;
+			Component::Base *cpt = _scene->createFromType(type, ar, _handle, typeId);
+			cpt->setEntity(_handle);
+			if (_components.size() <= typeId)
+				_components.resize(typeId + 1);
+			_components[typeId] = SmartPointer<Component::Base>(cpt);
+			_code.add(typeId);
+			broadCast(std::string("componentAdded" + std::to_string(typeId)), _handle);
+		}
+	}
+
 };
 
 #endif
