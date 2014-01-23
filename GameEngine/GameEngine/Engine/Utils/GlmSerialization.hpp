@@ -65,30 +65,44 @@ namespace cereal
 	}
 
 	template<typename Archive>
+	void save(Archive &ar, const glm::mat2 &v)
+	{
+		float dArray[8] = { 0.0 };
+		const float *pSource = (const float*)glm::value_ptr(v);
+		for (int i = 0; i < 8; ++i)
+			dArray[i] = pSource[i];
+		ar(cereal::make_nvp("mat2", dArray));
+	}
+
+	template<typename Archive>
+	void load(Archive &ar, glm::mat2 &v)
+	{
+		float source[8] = { 0.0 };
+		ar(source);
+		v = glm::make_mat2(source);
+	}
+
+	template<typename Archive>
 	void save(Archive &ar, const glm::mat3 &v)
 	{
-
-		float dArray[16] = { 0.0 };
+		float dArray[12] = { 0.0 };
 		const float *pSource = (const float*)glm::value_ptr(v);
-		std::cout << "float : " << sizeof(glm::value_ptr(v)) * v.length() << std::endl;
-		std::cout << "double : " << sizeof(dArray) << std::endl;
-		for (int i = 0; i < 16; ++i)
+		for (int i = 0; i < 12; ++i)
 			dArray[i] = pSource[i];
-		ar(cereal::make_nvp("mat4", dArray));
+		ar(cereal::make_nvp("mat3", dArray));
 	}
 
 	template<typename Archive>
 	void load(Archive &ar, glm::mat3 &v)
 	{
-		float source[16];
+		float source[12] = { 0.0 };
 		ar(source);
-		v = glm::make_mat4(source);
+		v = glm::make_mat3(source);
 	}
 
 	template<typename Archive>
 	void save(Archive &ar, const glm::mat4 &v)
 	{
-
 		float dArray[16] = { 0.0 };
 		const float *pSource = (const float*)glm::value_ptr(v);
 		std::cout << "float : " << sizeof(glm::value_ptr(v)) * v.length() << std::endl;
