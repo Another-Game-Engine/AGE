@@ -10,6 +10,7 @@ Assets/
 Cereal/
 *.serialization
 *.scenesave
+*.cpd
 
 # User-specific files
 *.suo
