@@ -2,6 +2,7 @@
 # define __OBJ_FILE_HPP__
 
 #include <MediaFiles/MediaFile.hpp>
+#include <MediaFiles/MaterialFile.hpp>
 #include <vector>
 #include <glm/glm.hpp>
 #include <cereal/types/map.hpp>
@@ -37,7 +38,7 @@ struct ObjFile : public MediaFile<ObjFile>
 	};
 
 	std::vector<Geometry> geometries;
-	//	std::vector<MaterialFile> materials;
+	std::shared_ptr<AMediaFile> material;
 
 	template <typename Archive>
 	AMediaFile *unserialize(Archive &ar)

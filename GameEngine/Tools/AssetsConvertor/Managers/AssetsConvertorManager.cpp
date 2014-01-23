@@ -4,6 +4,7 @@
 #include <Managers/MaterialConvertor.hpp>
 #include <Managers/FileTypeRegister.hpp>
 
+#include <MediaFiles/ObjFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
 
 AssetsConvertorManager::AssetsConvertorManager()
@@ -22,7 +23,7 @@ void AssetsConvertorManager::setOutputDirectory(const std::string directory)
         _outputDirectory = File(directory);
 }
 
-bool AssetsConvertorManager::load(const std::string filename, const std::string name)
+std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filename, const std::string name)
 {
         File file(filename);
 
@@ -32,31 +33,30 @@ bool AssetsConvertorManager::load(const std::string filename, const std::string 
                 {
                         auto res = e.second->convert(file);
                         if (res.get() == nullptr)
-                                return false;
+                                return std::shared_ptr<AMediaFile>{nullptr};
                         res->name = name;
                         res->path = file.getFullName();
                         _files.insert(std::make_pair(name, res));
-                        return true;
+                        return res;
                 }
         }
-        return false;
+		return std::shared_ptr<AMediaFile>{nullptr};
 }
 
 bool AssetsConvertorManager::serializeData()
 {
-        std::ofstream ofs("test.serialization", std::ios_base::binary);
-
         for (auto &e : _files)
         {
-                e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
+			std::ofstream ofs(e.second->name + ".cpd", std::ios_base::binary);
+			e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
+			ofs.close();
         }
-        ofs.close();
-        std::ifstream ifs("test.serialization", std::ios_base::binary);
 
         for (auto &e : _files)
         {
-                AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream<cereal::PortableBinaryInputArchive>(ifs);
-                std::cout << "lol" << std::endl;
+			std::ifstream ifs(e.second->name + ".cpd", std::ios_base::binary);
+			AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream<cereal::PortableBinaryInputArchive>(ifs);
+			ifs.close();
         }
         return true;
 }

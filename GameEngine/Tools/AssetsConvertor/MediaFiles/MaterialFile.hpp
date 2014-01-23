@@ -13,6 +13,7 @@
 #include <cereal/types/memory.hpp>
 #include <Utils/GlmSerialization.hpp>
 #include <OpenGL/UniformBuffer.hh>
+#include <tiny_obj_loader.h>
 
 struct MaterialFile : public MediaFile<MaterialFile>
 {
@@ -60,7 +61,9 @@ struct MaterialFile : public MediaFile<MaterialFile>
 			normalTex("NULL")
 		{}
 
-		void loadMtl(tinyobj::material_t &m, const File &file, AssetsConvertorManager *manager)
+		void loadMtl(tinyobj::material_t &m,
+			const File &file,
+			AssetsConvertorManager *manager)
 		{
 			name = m.name;
 			ambient = glm::vec3(m.ambient[0], m.ambient[1], m.ambient[2]);

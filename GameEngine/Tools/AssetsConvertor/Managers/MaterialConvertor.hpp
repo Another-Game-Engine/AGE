@@ -21,7 +21,9 @@ public:
 
 	virtual std::shared_ptr<AMediaFile> convert(const File file)
 	{
-		File fileMaterial(file.getFullName());
+		auto obj = file.getFullName().substr(0, file.getFullName().find_last_of("."));
+		obj += ".obj";
+		File fileMaterial(obj);
 		if (!fileMaterial.exists())
 			return std::shared_ptr<AMediaFile>(nullptr);
 
