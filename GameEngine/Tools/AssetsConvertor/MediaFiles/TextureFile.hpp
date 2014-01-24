@@ -17,13 +17,8 @@
 
 struct TextureFile : public MediaFile<TextureFile>
 {
-	std::unique_ptr<GLbyte> datas;
-	GLint		width, height;
-	GLint		components;
-	GLenum		format;
 	TextureFile()
 		: MediaFile<TextureFile>()
-		, datas(nullptr)
 		, width(0)
 		, height(0)
 		, components(0)
@@ -43,12 +38,13 @@ struct TextureFile : public MediaFile<TextureFile>
 	AMediaFile *unserialize(Archive &ar)
 	{
 		AMediaFile *res = new TextureFile();
+		res->manager = manager;
 		ar(static_cast<TextureFile&>(*res));
 		return res;
 	}
 
-	template <typename Archive> const
-	void save(Archive &ar)
+	template <typename Archive>
+	void save(Archive &ar) const
 	{
 		ar(cereal::make_nvp("datas", datas), CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(components), CEREAL_NVP(format));
 	}
@@ -67,12 +63,12 @@ struct TextureFile : public MediaFile<TextureFile>
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexImage2D(GL_TEXTURE_2D, 0, components, width, height, 0, format, GL_UNSIGNED_BYTE, datas);
+		glTexImage2D(GL_TEXTURE_2D, 0, components, width, height, 0, format, GL_UNSIGNED_BYTE, datas.data());
 
-		if (_minFilter == GL_LINEAR_MIPMAP_LINEAR ||
-			_minFilter == GL_LINEAR_MIPMAP_NEAREST ||
-			_minFilter == GL_NEAREST_MIPMAP_LINEAR ||
-			_minFilter == GL_NEAREST_MIPMAP_NEAREST)
+		if (minFilter == GL_LINEAR_MIPMAP_LINEAR ||
+			minFilter == GL_LINEAR_MIPMAP_NEAREST ||
+			minFilter == GL_NEAREST_MIPMAP_LINEAR ||
+			minFilter == GL_NEAREST_MIPMAP_NEAREST)
 			glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
@@ -81,7 +77,7 @@ struct TextureFile : public MediaFile<TextureFile>
 		return id;
 	}
 
-	std::unique_ptr<GLbyte> datas;
+	std::vector<GLbyte> datas;
 	GLint		width, height;
 	GLint		components;
 	GLenum		format;

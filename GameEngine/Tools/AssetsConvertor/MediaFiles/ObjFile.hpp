@@ -44,15 +44,28 @@ struct ObjFile : public MediaFile<ObjFile>
 	AMediaFile *unserialize(Archive &ar)
 	{
 		AMediaFile *res = new ObjFile();
+		res->manager = manager;
 		ar(static_cast<ObjFile&>(*res));
 		return res;
 	}
 
 	template <typename Archive>
-	void serialize(Archive &ar)
+	void save(Archive &ar) const
+	{
+		ar(CEREAL_NVP(geometries));
+		ar(cereal::make_nvp("material", material->name));
+	}
+
+	template <typename Archive>
+	void load(Archive &ar)
 	{
 		ar(geometries);
+		std::string matName;
+		ar(matName);
+		if (matName != "NULL")
+			manager->assetHandle(matName, &material);
 	}
+
 };
 
 #endif   //__OBJ_FILE_HPP__

@@ -10,12 +10,11 @@
 #include <cereal/archives/xml.hpp>
 
 #include <MediaFiles/AMediaFile.hpp>
-
-#include <Utils/Dependency.hpp>
+#include <Managers/AssetsManager.hpp>
 
 class AConvertor;
 
-class AssetsConvertorManager : public Dependency
+class AssetsConvertorManager : public AssetsManager
 {
 public:
 	AssetsConvertorManager();

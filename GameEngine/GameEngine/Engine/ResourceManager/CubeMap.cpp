@@ -49,7 +49,8 @@ namespace	Resources
 			GLint width, height;
 			GLint components;
 			GLenum format;
-			if ((datas = loadTGA(file.getFullName().c_str(), &width, &height, &components, &format)) == NULL)
+			unsigned int size;
+			if ((datas = loadTGA(file.getFullName().c_str(), &width, &height, &components, &format, &size)) == NULL)
 				return false; // TODO -> erase texture
 			glTexImage2D(targets[i], 0, components, width, height, 0, format, GL_UNSIGNED_BYTE, datas);
 		}

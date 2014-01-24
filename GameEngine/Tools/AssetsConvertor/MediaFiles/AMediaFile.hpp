@@ -16,6 +16,8 @@
 #include <cereal/archives/xml.hpp>
 #include <cereal/archives/portable_binary.hpp>
 
+class AssetsManager;
+
 struct AMediaFile
 {
 public:
@@ -24,6 +26,7 @@ public:
 	std::size_t type;
 public:
 	AMediaFile()
+		: manager(nullptr)
 	{
 	}
 	virtual ~AMediaFile(){}
@@ -44,6 +47,8 @@ public:
 	virtual void _serialize(cereal::BinaryOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::PortableBinaryOutputArchive &ar) = 0;
+
+	AssetsManager *manager;
 };
 
 #endif    //__AMEDIA_FILE_HPP__
