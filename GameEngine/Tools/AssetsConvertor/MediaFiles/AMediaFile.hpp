@@ -24,9 +24,12 @@ public:
 	File path;
 	std::string name;
 	std::size_t type;
+	AssetsManager *manager;
+	std::size_t childs;
 public:
 	AMediaFile()
-		: manager(nullptr)
+		: manager(nullptr),
+		childs(0)
 	{
 	}
 	virtual ~AMediaFile(){}
@@ -47,8 +50,6 @@ public:
 	virtual void _serialize(cereal::BinaryOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::PortableBinaryOutputArchive &ar) = 0;
-
-	AssetsManager *manager;
 };
 
 #endif    //__AMEDIA_FILE_HPP__

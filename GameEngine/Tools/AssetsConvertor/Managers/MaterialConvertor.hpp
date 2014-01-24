@@ -47,14 +47,15 @@ public:
 		{
 			auto &mesh = shapes[i];
 			auto &m = mesh.material;
-			loadMtl(m, file, material->materials[i]);
+			loadMtl(m, file, material->materials[i], material);
 		}
 		return material;
 	}
 
 	void loadMtl(tinyobj::material_t &m,
 		const File &file,
-		MaterialFile::Material &material)
+		MaterialFile::Material &material,
+		std::shared_ptr<MaterialFile> p)
 	{
 		material.name = m.name;
 		material.ambient = glm::vec3(m.ambient[0], m.ambient[1], m.ambient[2]);
@@ -67,21 +68,26 @@ public:
 		{
 			auto path = file.getFolder() + m.ambient_texname;
 			material.ambientTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
+			++p->childs;
 		}
 		if (m.diffuse_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.diffuse_texname;
 			material.diffuseTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
+			++p->childs;
 		}
+
 		if (m.specular_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.specular_texname;
 			material.specularTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
+			++p->childs;
 		}
 		if (m.normal_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.normal_texname;
 			material.normalTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
+			++p->childs;
 		}
 	}
 
