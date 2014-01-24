@@ -18,7 +18,14 @@ public:
 	virtual ~TgaConvertor()
 	{}
 
-	virtual std::shared_ptr<AMediaFile> convert(const File file)
+	virtual std::string setName(const File &file) const
+	{
+		auto obj = file.getShortFileName();
+		obj = "texture__" + obj;
+		return obj;
+	}
+
+	virtual std::shared_ptr<AMediaFile> convert(const File &file)
 	{
 		if (!file.exists())
 			return std::shared_ptr<AMediaFile>(nullptr);

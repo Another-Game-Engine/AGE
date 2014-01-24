@@ -20,7 +20,14 @@ public:
 	virtual ~MaterialConvertor()
 	{}
 
-	virtual std::shared_ptr<AMediaFile> convert(const File file)
+	virtual std::string setName(const File &file) const
+	{
+		auto obj = file.getShortFileName();
+		obj = "material__" + obj;
+		return obj;
+	}
+
+	virtual std::shared_ptr<AMediaFile> convert(const File &file)
 	{
 		auto obj = file.getFullName().substr(0, file.getFullName().find_last_of("."));
 		obj += ".obj";
@@ -59,26 +66,22 @@ public:
 		if (m.ambient_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.ambient_texname;
-			auto name = "texture__" + File(m.ambient_texname).getShortFileName();
-			material.ambientTex = std::static_pointer_cast<TextureFile>(_manager->load(path, name));
+			material.ambientTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
 		}
 		if (m.diffuse_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.diffuse_texname;
-			auto name = "texture__" + File(m.diffuse_texname).getShortFileName();
-			material.diffuseTex = std::static_pointer_cast<TextureFile>(_manager->load(path, name));
+			material.diffuseTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
 		}
 		if (m.specular_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.specular_texname;
-			auto name = "texture__" + File(m.specular_texname).getFileName();
-			material.specularTex = std::static_pointer_cast<TextureFile>(_manager->load(path, name));
+			material.specularTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
 		}
 		if (m.normal_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.normal_texname;
-			auto name = "texture__" + File(m.normal_texname).getFileName();
-			material.normalTex = std::static_pointer_cast<TextureFile>(_manager->load(path, name));
+			material.normalTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
 		}
 	}
 

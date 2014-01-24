@@ -11,7 +11,15 @@ ObjConvertor::ObjConvertor(AssetsConvertorManager *manager)
 ObjConvertor::~ObjConvertor()
 {}
 
-std::shared_ptr<AMediaFile> ObjConvertor::convert(const File file)
+std::string ObjConvertor::setName(const File &file) const
+{
+	std::string obj = file.getShortFileName();
+	obj = "obj__" + obj;
+	return obj;
+}
+
+
+std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 {
 	if (!file.exists())
 		return std::shared_ptr<AMediaFile>(nullptr);
@@ -82,6 +90,6 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File file)
 	}
 	auto mtl = file.getFullName().substr(0, file.getFullName().find_last_of("."));
 	mtl += ".mtl";
-	mesh->material = _manager->load(mtl, File(mtl).getShortFileName() + "__material");
+	mesh->material = _manager->load(mtl);
 	return mesh;
 }
