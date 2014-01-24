@@ -39,7 +39,9 @@ public:
 		std::size_t key = 0;
 		Archive ar(s);
 		ar(key);
-		return getFromType(key, ar);
+		auto res = getFromType(key, ar);
+		updateAssetHandles();
+		return res;
 	}
 
 	template <typename T>
@@ -54,6 +56,25 @@ public:
 		}
 		instance->manager = this;
 		refs.insert(std::make_pair(key, instance));
+	}
+
+	void updateAssetHandles()
+	{
+		for (auto &e : _ref)
+		{
+			updateAssetHandle(e.first, e.second);
+		}
+		assert(_toUpdate.size() == 0 && "All handles have not been unserialized correctly.");
+	}
+
+	void updateAssetHandle(std::string name, std::shared_ptr<AMediaFile> r)
+	{
+		auto ret = _toUpdate.equal_range(name);
+		for (auto it = ret.first; it != ret.second; ++it)
+		{
+			*(it->second) = r;
+		}
+		_toUpdate.erase(name);
 	}
 protected:
 	std::map<std::size_t, AMediaFile*> refs;
