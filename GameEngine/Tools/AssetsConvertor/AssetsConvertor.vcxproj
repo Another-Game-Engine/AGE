@@ -97,8 +97,8 @@
   <ItemGroup>
     <ClInclude Include="DemoScene.hh" />
     <ClInclude Include="Managers\AConvertor.hh" />
+    <ClInclude Include="Managers\AssetsManager.hpp" />
     <ClInclude Include="Managers\AssetsConvertorManager.hh" />
-    <ClInclude Include="Managers\FileTypeRegister.hpp" />
     <ClInclude Include="Managers\MaterialConvertor.hpp" />
     <ClInclude Include="Managers\ObjConvertor.hh" />
     <ClInclude Include="Managers\TgaConvertor.hpp" />

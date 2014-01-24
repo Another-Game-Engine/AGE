@@ -5,6 +5,7 @@
 #include <TinyObjLoader/tiny_obj_loader.h>
 #include <MediaFiles/MaterialFile.hpp>
 #include <Managers/AConvertor.hh>
+#include <MediaFiles/TextureFile.hpp>
 
 class AssetsConvertorManager;
 
@@ -39,10 +40,48 @@ public:
 		{
 			auto &mesh = shapes[i];
 			auto &m = mesh.material;
-			material->materials[i].loadMtl(m, fileMaterial, _manager);
+			loadMtl(m, file, material->materials[i]);
 		}
 		return material;
 	}
+
+	void loadMtl(tinyobj::material_t &m,
+		const File &file,
+		MaterialFile::Material &material)
+	{
+		material.name = m.name;
+		material.ambient = glm::vec3(m.ambient[0], m.ambient[1], m.ambient[2]);
+		material.diffuse = glm::vec3(m.diffuse[0], m.diffuse[1], m.diffuse[2]);
+		material.specular = glm::vec3(m.specular[0], m.specular[1], m.specular[2]);
+		material.transmittance = glm::vec3(m.transmittance[0], m.transmittance[1], m.transmittance[2]);
+		material.emission = glm::vec3(m.emission[0], m.emission[1], m.emission[2]);
+		material.shininess = m.shininess;
+		if (m.ambient_texname.size() > 0)
+		{
+			auto path = file.getFolder() + m.ambient_texname;
+			auto name = "texture__" + File(m.ambient_texname).getShortFileName();
+			material.ambientTex = std::static_pointer_cast<TextureFile>(_manager->load(path, name));
+		}
+		if (m.diffuse_texname.size() > 0)
+		{
+			auto path = file.getFolder() + m.diffuse_texname;
+			auto name = "texture__" + File(m.diffuse_texname).getShortFileName();
+			material.diffuseTex = std::static_pointer_cast<TextureFile>(_manager->load(path, name));
+		}
+		if (m.specular_texname.size() > 0)
+		{
+			auto path = file.getFolder() + m.specular_texname;
+			auto name = "texture__" + File(m.specular_texname).getFileName();
+			material.specularTex = std::static_pointer_cast<TextureFile>(_manager->load(path, name));
+		}
+		if (m.normal_texname.size() > 0)
+		{
+			auto path = file.getFolder() + m.normal_texname;
+			auto name = "texture__" + File(m.normal_texname).getFileName();
+			material.normalTex = std::static_pointer_cast<TextureFile>(_manager->load(path, name));
+		}
+	}
+
 };
 
 #endif  //__MATERIAL_CONVERTOR_HH__

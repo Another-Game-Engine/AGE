@@ -24,8 +24,10 @@ public:
 			return std::shared_ptr<AMediaFile>(nullptr);
 		std::string inputfile = file.getFullName();
 		std::shared_ptr<TextureFile> res{ new TextureFile };
-		res->datas = std::make_unique<GLbyte>(loadTGA(inputfile.c_str(), &res->width, &res->height, &res->components, &res->format));
-		assert(res->datas != nullptr && "Error while loading TGA file.");
+		unsigned int size;
+		auto data = loadTGA(inputfile.c_str(), &res->width, &res->height, &res->components, &res->format, &size);
+		assert(data != nullptr && "Error while loading TGA file.");
+		res->datas.assign(data, data + size);
 		return res;
 	}
 };

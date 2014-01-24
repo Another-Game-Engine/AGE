@@ -33,7 +33,7 @@ typedef struct
 // only, no palettes, no RLE encoding.
 GLbyte *loadTGA(const char *szFileName,
 				   GLint *iWidth, GLint *iHeight,
-				   GLint *iComponents, GLenum *eFormat)
+				   GLint *iComponents, GLenum *eFormat, unsigned int *size)
 {
     FILE *pFile;				// File pointer
     TGAHEADER tgaHeader;		// TGA file header
@@ -78,7 +78,7 @@ GLbyte *loadTGA(const char *szFileName,
  
     // Calculate size of image buffer
     lImageSize = tgaHeader.width * tgaHeader.height * sDepth;
- 
+	*size = lImageSize;
     // Allocate memory and check for success
     pBits = new GLbyte[(lImageSize * sizeof(GLbyte))];
     if(pBits == NULL)

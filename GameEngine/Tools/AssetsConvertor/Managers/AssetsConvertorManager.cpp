@@ -2,17 +2,20 @@
 #include <Managers/AConvertor.hh>
 #include <Managers/ObjConvertor.hh>
 #include <Managers/MaterialConvertor.hpp>
-#include <Managers/FileTypeRegister.hpp>
+#include <Managers/TgaConvertor.hpp>
 
 #include <MediaFiles/ObjFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
+#include <MediaFiles/TextureFile.hpp>
 
 AssetsConvertorManager::AssetsConvertorManager()
 {
 	registerConvertor<ObjConvertor>();
 	registerConvertor<MaterialConvertor>();
-	FileTypeRegister::getInstance()->registerType<ObjFile>();
-	FileTypeRegister::getInstance()->registerType<MaterialFile>();
+	registerConvertor<TgaConvertor>();
+	registerType<ObjFile>();
+	registerType<MaterialFile>();
+	registerType<TextureFile>();
 }
 
 AssetsConvertorManager::~AssetsConvertorManager()
@@ -48,14 +51,14 @@ bool AssetsConvertorManager::serializeData()
 	for (auto &e : _files)
 	{
 		std::ofstream ofs(e.second->name + ".cpd", std::ios_base::binary);
-		e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
+		e.second->serialize<cereal::JSONOutputArchive>(ofs);
 		ofs.close();
 	}
 
 	for (auto &e : _files)
 	{
 		std::ifstream ifs(e.second->name + ".cpd", std::ios_base::binary);
-		AMediaFile *test = FileTypeRegister::getInstance()->unserializeFromStream<cereal::PortableBinaryInputArchive>(ifs);
+		AMediaFile *test = unserializeFromStream<cereal::JSONInputArchive>(ifs);
 		ifs.close();
 	}
 	return true;

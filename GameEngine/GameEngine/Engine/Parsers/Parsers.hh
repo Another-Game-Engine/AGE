@@ -9,7 +9,7 @@ class File;
 
 GLbyte *loadTGA(const char *szFileName,
 			   GLint *iWidth, GLint *iHeight,
-			   GLint *iComponents, GLenum *eFormat);
+			   GLint *iComponents, GLenum *eFormat, unsigned int *size);
 
 bool	loadObj(std::string const &path, Resources::SharedMesh &geometry);
 void    loadObjShape(tinyobj::shape_t &shape, Resources::Geometry &geometry);

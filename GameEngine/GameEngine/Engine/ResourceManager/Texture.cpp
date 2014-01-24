@@ -26,8 +26,8 @@ namespace	Resources
 		GLint		width, height;
 		GLint		components;
 		GLenum		format;
-
-		if ((datas = loadTGA(path.c_str(), &width, &height, &components, &format)) == NULL)
+		unsigned int size;
+		if ((datas = loadTGA(path.c_str(), &width, &height, &components, &format, &size)) == NULL)
 			return (false);
 
 		glGenTextures(1, &_id);
