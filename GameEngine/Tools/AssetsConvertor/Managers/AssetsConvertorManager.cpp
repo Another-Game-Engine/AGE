@@ -50,14 +50,21 @@ std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filen
 	return std::shared_ptr<AMediaFile>{nullptr};
 }
 
-bool AssetsConvertorManager::serializeData()
+bool AssetsConvertorManager::serializeData(const std::string &exportName)
 {
+	std::multimap<std::size_t, std::string> files;
 	for (auto &e : _files)
 	{
 		std::ofstream ofs(_outputDirectory.getFolder() + e.second->name + ".cpd", std::ios_base::binary);
 		e.second->serialize<cereal::BinaryOutputArchive>(ofs);
 		ofs.close();
+		files.insert(std::make_pair(e.second->childs, e.second->name));
 	}
+
+	std::ofstream ofs(_outputDirectory.getFolder() + "export__" + exportName + ".cpd", std::ios_base::binary);
+	cereal::JSONOutputArchive ar(ofs);
+	ar(files);
+	ofs.close();
 
 	//for (auto &e : _files)
 	//{

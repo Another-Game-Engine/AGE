@@ -33,7 +33,7 @@ public:
 
 	std::shared_ptr<AMediaFile> load(const std::string filename);
 
-	bool serializeData();
+	bool serializeData(const std::string &exportName);
 private:
 	File _outputDirectory;
 	std::map < std::string, std::shared_ptr<AMediaFile> > _files;
