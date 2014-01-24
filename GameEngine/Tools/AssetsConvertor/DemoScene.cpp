@@ -48,14 +48,16 @@ bool 			DemoScene::userStart()
 
 	// end System Test
 	{
-		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
-		convertor.setOutputDirectory("./Assets/Serialized/");
-		auto success = convertor.load("./Assets/crytek-sponza/sponza.obj");
-		convertor.serializeData();
+		//auto &convertor = _engine.getInstance<AssetsConvertorManager>();
+		//convertor.setOutputDirectory("./Assets/Serialized/");
+		//auto success = convertor.load("./Assets/crytek-sponza/sponza.obj");
+		//convertor.serializeData();
 	}
 	{
-		//auto &convertor = _engine.getInstance<AssetsConvertorManager>();
-		//auto success = convertor.load("./Assets/crytek-sponza/sponza.obj", "sponza");
+		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
+		std::ifstream ifs("./Assets/Serialized/obj__sponza.cpd", std::ios_base::binary);
+		AMediaFile *test = convertor.unserializeFromStream<cereal::BinaryInputArchive>(ifs);
+		ifs.close();
 	}
 
 

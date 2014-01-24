@@ -43,6 +43,7 @@ std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filen
 			res->name = name;
 			res->path = file.getFullName();
 			_files.insert(std::make_pair(name, res));
+			std::cout << res.use_count() << std::endl;
 			return res;
 		}
 	}
