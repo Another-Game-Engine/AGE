@@ -25,22 +25,21 @@ public:
 	}
 
 	template <typename Archive>
-	AMediaFile *getFromType(std::size_t key, Archive &s)
+	std::shared_ptr<AMediaFile> getFromType(std::size_t key, Archive &s)
 	{
 		auto &it = refs.find(key);
 		if (it == std::end(refs))
-			return nullptr;
-		return it->second->unserialize(s);
+			return std::shared_ptr<AMediaFile>(nullptr);
+		return std::shared_ptr<AMediaFile>(it->second->unserialize(s));
 	}
 
 	template <typename Archive>
-	AMediaFile *unserializeFromStream(std::ifstream &s)
+	std::shared_ptr<AMediaFile> unserializeFromStream(std::ifstream &s)
 	{
 		std::size_t key = 0;
 		Archive ar(s);
 		ar(key);
-		auto res = getFromType(key, ar);
-		updateAssetHandles();
+		std::shared_ptr<AMediaFile> res = getFromType(key, ar);
 		return res;
 	}
 
