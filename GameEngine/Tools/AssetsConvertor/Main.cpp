@@ -16,6 +16,7 @@
 #include <ResourceManager/ResourceManager.hh>
 #include <Core/Renderer.hh>
 #include <Managers/AssetsConvertorManager.hh>
+#include <Managers/AssetsLoader.hpp>
 
 #include <cereal/archives/json.hpp>
 
@@ -33,6 +34,7 @@ int			main(int ac, char **av)
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 	e.setInstance<AssetsConvertorManager>();
+	e.setInstance<AssetsLoader>();
 
 	// init engine
 	if (e.init() == false)

@@ -56,15 +56,14 @@ bool AssetsConvertorManager::serializeData(const std::string &exportName)
 	for (auto &e : _files)
 	{
 		std::ofstream ofs(_outputDirectory.getFolder() + e.second->name + ".cpd", std::ios_base::binary);
-		e.second->serialize<cereal::BinaryOutputArchive>(ofs);
+		e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
 		ofs.close();
-		files.insert(std::make_pair(e.second->childs, e.second->name));
+		files.insert(std::make_pair(e.second->childs, _outputDirectory.getFolder() + e.second->name + ".cpd"));
 	}
 
 	std::ofstream ofs(_outputDirectory.getFolder() + "export__" + exportName + ".cpd", std::ios_base::binary);
 	cereal::JSONOutputArchive ar(ofs);
 	ar(files);
-	ofs.close();
 
 	//for (auto &e : _files)
 	//{
