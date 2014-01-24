@@ -49,7 +49,7 @@ bool 			DemoScene::userStart()
 	// end System Test
 	{
 		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
-		auto success = convertor.load("./Assets/cube/cube.obj", "cube");
+		auto success = convertor.load("./Assets/crytek-sponza/sponza.obj", "sponza");
 		convertor.serializeData();
 	}
 	{

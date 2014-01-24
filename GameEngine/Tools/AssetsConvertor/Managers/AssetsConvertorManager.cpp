@@ -34,6 +34,8 @@ std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filen
 	{
 		if (e.second->supportFile(file))
 		{
+			if (_files.find(name) != std::end(_files))
+				return _files[name];
 			auto res = e.second->convert(file);
 			if (res.get() == nullptr)
 				return std::shared_ptr<AMediaFile>{nullptr};
@@ -51,14 +53,14 @@ bool AssetsConvertorManager::serializeData()
 	for (auto &e : _files)
 	{
 		std::ofstream ofs(e.second->name + ".cpd", std::ios_base::binary);
-		e.second->serialize<cereal::JSONOutputArchive>(ofs);
+		e.second->serialize<cereal::BinaryOutputArchive>(ofs);
 		ofs.close();
 	}
 
 	for (auto &e : _files)
 	{
 		std::ifstream ifs(e.second->name + ".cpd", std::ios_base::binary);
-		AMediaFile *test = unserializeFromStream<cereal::JSONInputArchive>(ifs);
+		AMediaFile *test = unserializeFromStream<cereal::BinaryInputArchive>(ifs);
 		ifs.close();
 	}
 	return true;
