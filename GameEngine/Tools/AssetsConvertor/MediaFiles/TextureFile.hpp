@@ -17,12 +17,27 @@
 
 struct TextureFile : public MediaFile<TextureFile>
 {
-	TextureFile() : MediaFile<TextureFile>()
+	std::unique_ptr<GLbyte> datas;
+	GLint		width, height;
+	GLint		components;
+	GLenum		format;
+	TextureFile()
+		: MediaFile<TextureFile>()
+		, datas(nullptr)
+		, width(0)
+		, height(0)
+		, components(0)
+		, format(0)
+		, wrap(GL_REPEAT)
+		, minFilter(GL_LINEAR_MIPMAP_LINEAR)
+		, magFilter(GL_LINEAR)
 	{
 	}
-	virtual ~TextureFile(){}
 
-	GLbyte *bytes;
+	virtual ~TextureFile()
+	{
+		glDeleteTextures(1, &id);
+	}
 
 	template <typename Archive>
 	AMediaFile *unserialize(Archive &ar)
@@ -32,10 +47,48 @@ struct TextureFile : public MediaFile<TextureFile>
 		return res;
 	}
 
-	template <typename Archive>
-	void serialize(Archive &ar)
+	template <typename Archive> const
+	void save(Archive &ar)
 	{
+		ar(cereal::make_nvp("datas", datas), CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(components), CEREAL_NVP(format));
 	}
+
+	template <typename Archive>
+	void load(Archive &ar)
+	{
+		ar(cereal::make_nvp("datas", datas), CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(components), CEREAL_NVP(format));
+		glGenTextures(1, &id);
+		assert(id != 0 && "Error generating texture.");
+		glBindTexture(GL_TEXTURE_2D, id);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexImage2D(GL_TEXTURE_2D, 0, components, width, height, 0, format, GL_UNSIGNED_BYTE, datas);
+
+		if (_minFilter == GL_LINEAR_MIPMAP_LINEAR ||
+			_minFilter == GL_LINEAR_MIPMAP_NEAREST ||
+			_minFilter == GL_NEAREST_MIPMAP_LINEAR ||
+			_minFilter == GL_NEAREST_MIPMAP_NEAREST)
+			glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
+	inline const GLuint			getId() const
+	{
+		return id;
+	}
+
+	std::unique_ptr<GLbyte> datas;
+	GLint		width, height;
+	GLint		components;
+	GLenum		format;
+	GLuint      id;
+	GLenum		wrap;
+	GLenum		minFilter;
+	GLenum		magFilter;
 };
 
 #endif   //__TEXTURE_FILE_HPP__
