@@ -31,7 +31,7 @@ public:
 		_convertors.emplace(key, std::make_unique<T>(this));
 	}
 
-	std::shared_ptr<AMediaFile> load(const std::string filename, const std::string name);
+	std::shared_ptr<AMediaFile> load(const std::string filename);
 
 	bool serializeData();
 private:

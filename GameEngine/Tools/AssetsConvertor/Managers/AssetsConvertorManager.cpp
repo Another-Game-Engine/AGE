@@ -26,7 +26,7 @@ void AssetsConvertorManager::setOutputDirectory(const std::string directory)
 	_outputDirectory = File(directory);
 }
 
-std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filename, const std::string name)
+std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filename)
 {
 	File file(filename);
 
@@ -34,6 +34,7 @@ std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filen
 	{
 		if (e.second->supportFile(file))
 		{
+			std::string name = e.second->setName(file);
 			if (_files.find(name) != std::end(_files))
 				return _files[name];
 			auto res = e.second->convert(file);
@@ -52,16 +53,16 @@ bool AssetsConvertorManager::serializeData()
 {
 	for (auto &e : _files)
 	{
-		std::ofstream ofs(e.second->name + ".cpd", std::ios_base::binary);
+		std::ofstream ofs(_outputDirectory.getFolder() + e.second->name + ".cpd", std::ios_base::binary);
 		e.second->serialize<cereal::BinaryOutputArchive>(ofs);
 		ofs.close();
 	}
 
-	for (auto &e : _files)
-	{
-		std::ifstream ifs(e.second->name + ".cpd", std::ios_base::binary);
-		AMediaFile *test = unserializeFromStream<cereal::BinaryInputArchive>(ifs);
-		ifs.close();
-	}
+	//for (auto &e : _files)
+	//{
+	//	std::ifstream ifs(e.second->name + ".cpd", std::ios_base::binary);
+	//	AMediaFile *test = unserializeFromStream<cereal::BinaryInputArchive>(ifs);
+	//	ifs.close();
+	//}
 	return true;
 }
