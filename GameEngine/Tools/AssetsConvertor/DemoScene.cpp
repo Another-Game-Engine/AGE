@@ -51,7 +51,7 @@ bool 			DemoScene::userStart()
 
 
 	// end System Test
-	{
+
 		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
 		convertor.setOutputDirectory("./Assets/Serialized/");
 
@@ -70,16 +70,82 @@ bool 			DemoScene::userStart()
 		//success = convertor.load("./Assets/crytek-sponza/sponza.obj");
 		//convertor.serializeData("sponza");
 		//convertor.clear();
+
 		AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
 		AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 		AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 		AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+		auto test = convertor.get(std::string("obj__sponza"));
 		std::cout << "::" << std::endl;
-	}
-	{
-		//auto &loader = _engine.getInstance<AssetsLoader>();
-		//loader.loadFromList("./Assets/Serialized/export__cube.cpd");
-	}
+
+
+		std::string		perModelVars[] =
+		{
+			"model"
+		};
+
+		std::string		perFrameVars[] =
+		{
+			"projection",
+			"view",
+			"light",
+			"time"
+		};
+
+		std::string		materialBasic[] =
+		{
+			"ambient",
+			"diffuse",
+			"specular",
+			"transmittance",
+			"emission",
+			"shininess"
+		};
+
+
+		OpenGLTools::Shader &s = _engine.getInstance<Renderer>().addShader("MaterialBasic",
+			"./Shaders/MaterialBasic.vp",
+			"./Shaders/MaterialBasic.fp");
+
+		_engine.getInstance<Renderer>().addUniform("MaterialBasic")
+			.init(&s, "MaterialBasic", materialBasic);
+		_engine.getInstance<Renderer>().addUniform("PerFrame")
+			.init(&s, "PerFrame", perFrameVars);
+		_engine.getInstance<Renderer>().addUniform("PerModel")
+			.init(&s, "PerModel", perModelVars);
+
+		_engine.getInstance<Renderer>().getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+		_engine.getInstance<Renderer>().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
+		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
+		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
+		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
+
+		SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
+		toRepeat->setWrapMode(GL_REPEAT);
+
+		_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/lake.skybox");
+
+		std::string		vars[] =
+		{
+			"projection",
+			"view"
+		};
+
+		OpenGLTools::Shader &sky = _engine.getInstance<Renderer>().addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+		_engine.getInstance<Renderer>().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+		_engine.getInstance<Renderer>().addUniform("cameraUniform").
+			init(&sky, "cameraUniform", vars);
+		_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
+		Entity floor;
+
+		Entity e = createEntity();
+		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, -10, 0));
+		e->addComponent<Component::GraphNode>();
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 100, 100));
+		auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
+		mesh->setShader("MaterialBasic");
+		floor = e;
 
 
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21126.0
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -96,7 +96,6 @@ Global
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.Release|Win32.ActiveCfg = Release|Win32
-		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.Release|Win32.Build.0 = Release|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.RelWithDebInfo|Any CPU.ActiveCfg = Release|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.RelWithDebInfo|Mixed Platforms.ActiveCfg = Release|Win32
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F}.RelWithDebInfo|Mixed Platforms.Build.0 = Release|Win32
@@ -308,6 +307,7 @@ Global
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.Release|Win32.ActiveCfg = Release|Win32
+		{EB423B39-F564-498E-B291-0D9676AF09B5}.Release|Win32.Build.0 = Release|Win32
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.RelWithDebInfo|Any CPU.ActiveCfg = Release|Win32
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.RelWithDebInfo|Mixed Platforms.ActiveCfg = Release|Win32
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.RelWithDebInfo|Mixed Platforms.Build.0 = Release|Win32
