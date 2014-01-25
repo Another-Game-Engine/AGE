@@ -69,3 +69,8 @@ bool AssetsConvertorManager::serializeData(const std::string &exportName)
 	//}
 	return true;
 }
+
+void AssetsConvertorManager::clear()
+{
+	_files.clear();
+}

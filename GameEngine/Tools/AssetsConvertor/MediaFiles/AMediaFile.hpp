@@ -77,6 +77,8 @@ static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
 	}
 	assert(res != nullptr && "Unknown MediaFile type.");
 	assert(_manager != nullptr && "Media Manager is not set.");
+	res->path = file.getFullName();
+	res->name = file.getShortFileName();
 	_manager->add(res);
 	return res;
 }
