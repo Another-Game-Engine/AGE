@@ -54,6 +54,9 @@ static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
 	assert(file.exists() == true && "File does not exist.");
 	MEDIA_TYPE serializedFileType = UNKNOWN;
 	std::shared_ptr<AMediaFile> res{ nullptr };
+	res = _manager->get(file.getShortFileName());
+	if (res != nullptr)
+		return res;
 
 	std::ifstream ifs(file.getFullName(), std::ios::binary);
 	Archive ar(ifs);
