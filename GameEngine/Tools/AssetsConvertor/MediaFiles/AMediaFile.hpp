@@ -17,6 +17,10 @@
 #include <cereal/archives/portable_binary.hpp>
 
 class AssetsManager;
+struct ObjFile;
+struct TextureFile;
+struct MaterialFile;
+
 
 struct AMediaFile
 {
@@ -24,13 +28,13 @@ public:
 	File path;
 	std::string name;
 	std::size_t type;
-	AssetsManager *manager;
+	static AssetsManager *manager;
 	std::size_t childs;
 public:
-	AMediaFile()
-		: manager(nullptr),
+	AMediaFile() :
 		childs(0)
 	{
+		manager = nullptr;
 	}
 	virtual ~AMediaFile(){}
 
@@ -42,10 +46,46 @@ public:
 		_serialize(ar);
 	}
 
-	virtual AMediaFile *unserialize(cereal::JSONInputArchive &ar) = 0;
-	virtual AMediaFile *unserialize(cereal::BinaryInputArchive &ar) = 0;
-	virtual AMediaFile *unserialize(cereal::XMLInputArchive &ar) = 0;
-	virtual AMediaFile *unserialize(cereal::PortableBinaryInputArchive &ar) = 0;
+	template <typename Archive>
+	static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
+	{
+		assert(file.exists() == true && "File does not exist.");
+		static constexpr std::size_t objType = typeid(ObjFile).hash_code();
+		static constexpr std::size_t materialType = typeid(MaterialFile).hash_code();
+		static constexpr std::size_t textureType = typeid(TextureFile).hash_code();
+		std::size_t serializedFileType = 0;
+		std::shared_ptr<AMediaFile> res{ nullptr };
+
+		std::ifstream ifs(file.getFullName());
+		Archive ar(ifs);
+		ar(serializedFileType);
+		switch (serializedFileType)
+		{
+		case objType:
+			res = std::make_shared<ObjFile>();
+			ar(static_cast<ObjFile&>(*res.get()));
+			break;
+		case materialType:
+			res = std::make_shared<MaterialFile>();
+			ar(static_cast<MaterialFile&>(*res.get()));
+			break;
+		case textureType:
+			res = std::make_shared<TextureFile>();
+			ar(static_cast<TextureFile&>(*res.get()));
+			break;
+		default:
+			break;
+		}
+		assert(res != nullptr && "Unknown MediaFile type.");
+		assert(manager != nullptr && "Media Manager is not set.");
+		return res;
+	}
+
+	static void setManager(AssetsManager *_manager)
+	{
+		manager = _manager;
+	}
+
 	virtual void _serialize(cereal::JSONOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::BinaryOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;

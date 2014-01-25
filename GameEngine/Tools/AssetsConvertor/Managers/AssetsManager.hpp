@@ -24,39 +24,6 @@ public:
 		_toUpdate.insert(std::make_pair(name, file));
 	}
 
-	template <typename Archive>
-	std::shared_ptr<AMediaFile> getFromType(std::size_t key, Archive &s)
-	{
-		auto &it = refs.find(key);
-		if (it == std::end(refs))
-			return std::shared_ptr<AMediaFile>(nullptr);
-		return std::shared_ptr<AMediaFile>(it->second->unserialize(s));
-	}
-
-	template <typename Archive>
-	std::shared_ptr<AMediaFile> unserializeFromStream(std::ifstream &s)
-	{
-		std::size_t key = 0;
-		Archive ar(s);
-		ar(key);
-		std::shared_ptr<AMediaFile> res = getFromType(key, ar);
-		return res;
-	}
-
-	template <typename T>
-	void registerType()
-	{
-		auto instance = new T();
-		std::size_t key = instance->type;
-		if (refs.find(key) != std::end(refs))
-		{
-			delete instance;
-			return;
-		}
-		instance->manager = this;
-		refs.insert(std::make_pair(key, instance));
-	}
-
 	void updateAssetHandles()
 	{
 		for (auto &e : _ref)
