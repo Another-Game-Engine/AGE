@@ -19,6 +19,7 @@ struct ObjFile : public MediaFile<ObjFile>
 {
 	ObjFile() : MediaFile<ObjFile>()
 	{
+		_type = OBJ;
 	}
 	virtual ~ObjFile(){}
 	struct Geometry
@@ -63,7 +64,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::string matName;
 		ar(matName);
 		if (matName != "NULL")
-			manager->assetHandle(matName, &material);
+			material = AMediaFile::loadFromFile<Archive>(File(matName));
 	}
 
 };

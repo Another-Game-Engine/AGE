@@ -15,8 +15,8 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/archives/portable_binary.hpp>
+#include <Managers/AssetsManager.hpp>
 
-class AssetsManager;
 struct ObjFile;
 struct TextureFile;
 struct MaterialFile;
@@ -27,14 +27,22 @@ struct AMediaFile
 public:
 	File path;
 	std::string name;
-	std::size_t type;
-	static AssetsManager *manager;
-	std::size_t childs;
+protected:
+	std::size_t _type;
+	static AssetsManager *_manager;
+	std::size_t _childs;
+	enum MEDIA_TYPE
+	{
+		OBJ = 0,
+		TEXTURE = 1,
+		MATERIAL = 2,
+		UNKNOWN = 3
+	};
 public:
 	AMediaFile() :
-		childs(0)
+		_childs(0)
 	{
-		manager = nullptr;
+		_manager = nullptr;
 	}
 	virtual ~AMediaFile(){}
 
@@ -42,7 +50,7 @@ public:
 	void serialize(std::ofstream &s)
 	{
 		Archive ar(s);
-		ar(type);
+		ar(_type);
 		_serialize(ar);
 	}
 
@@ -50,10 +58,7 @@ public:
 	static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
 	{
 		assert(file.exists() == true && "File does not exist.");
-		static constexpr std::size_t objType = typeid(ObjFile).hash_code();
-		static constexpr std::size_t materialType = typeid(MaterialFile).hash_code();
-		static constexpr std::size_t textureType = typeid(TextureFile).hash_code();
-		std::size_t serializedFileType = 0;
+		MEDIA_TYPE serializedFileType = UNKNOWN;
 		std::shared_ptr<AMediaFile> res{ nullptr };
 
 		std::ifstream ifs(file.getFullName());
@@ -61,15 +66,15 @@ public:
 		ar(serializedFileType);
 		switch (serializedFileType)
 		{
-		case objType:
+		case OBJ:
 			res = std::make_shared<ObjFile>();
 			ar(static_cast<ObjFile&>(*res.get()));
 			break;
-		case materialType:
+		case MATERIAL:
 			res = std::make_shared<MaterialFile>();
 			ar(static_cast<MaterialFile&>(*res.get()));
 			break;
-		case textureType:
+		case TEXTURE:
 			res = std::make_shared<TextureFile>();
 			ar(static_cast<TextureFile&>(*res.get()));
 			break;
@@ -77,15 +82,32 @@ public:
 			break;
 		}
 		assert(res != nullptr && "Unknown MediaFile type.");
-		assert(manager != nullptr && "Media Manager is not set.");
+		assert(_manager != nullptr && "Media Manager is not set.");
+		_manager->add(res);
 		return res;
 	}
 
-	static void setManager(AssetsManager *_manager)
+	static void setManager(AssetsManager *manager)
 	{
-		manager = _manager;
+		_manager = _manager;
 	}
 
+	inline std::size_t getChilds() const
+	{
+		return _childs;	
+	}
+
+	inline void incrementChilds()
+	{
+		++_childs;
+	}
+
+	inline std::size_t getType() const
+	{
+		return _type;	
+	}
+
+protected:
 	virtual void _serialize(cereal::JSONOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::BinaryOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;

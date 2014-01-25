@@ -13,9 +13,6 @@ AssetsConvertorManager::AssetsConvertorManager()
 	registerConvertor<ObjConvertor>();
 	registerConvertor<MaterialConvertor>();
 	registerConvertor<TgaConvertor>();
-	registerType<ObjFile>();
-	registerType<MaterialFile>();
-	registerType<TextureFile>();
 }
 
 AssetsConvertorManager::~AssetsConvertorManager()
@@ -58,7 +55,7 @@ bool AssetsConvertorManager::serializeData(const std::string &exportName)
 		std::ofstream ofs(_outputDirectory.getFolder() + e.second->name + ".cpd", std::ios_base::binary);
 		e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
 		ofs.close();
-		files.insert(std::make_pair(e.second->childs, _outputDirectory.getFolder() + e.second->name + ".cpd"));
+		files.insert(std::make_pair(e.second->getChilds(), _outputDirectory.getFolder() + e.second->name + ".cpd"));
 	}
 
 	std::ofstream ofs(_outputDirectory.getFolder() + "export__" + exportName + ".cpd", std::ios_base::binary);

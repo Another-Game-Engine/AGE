@@ -56,7 +56,8 @@ namespace	Component
 	{
 		ComponentBase()
 			: Base(typeid(T).hash_code())
-			, _name(std::regex_replace(typeid(T).name(), std::regex("(\\s)+|(:)+"), "_"))
+			//, _name(std::regex_replace(typeid(T).name(), std::regex("(\\s)+|(:)+"), "_"))
+			, _name(typeid(T).name())
 		{
 		}
 

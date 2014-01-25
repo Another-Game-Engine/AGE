@@ -92,6 +92,6 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	mtl += ".mtl";
 	mesh->material = _manager->load(mtl);
 	if (mesh->material != nullptr)
-		++mesh->childs;
+		mesh->incrementChilds();
 	return mesh;
 }
