@@ -94,11 +94,11 @@
     <ClCompile Include="Managers\AssetsConvertorManager.cpp" />
     <ClCompile Include="Managers\AssetsManager.cpp" />
     <ClCompile Include="Managers\ObjConvertor.cpp" />
+    <ClCompile Include="MediaFiles\AMediaFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScene.hh" />
     <ClInclude Include="Managers\AConvertor.hh" />
-    <ClInclude Include="Managers\AssetsLoader.hpp" />
     <ClInclude Include="Managers\AssetsManager.hpp" />
     <ClInclude Include="Managers\AssetsConvertorManager.hh" />
     <ClInclude Include="Managers\MaterialConvertor.hpp" />
