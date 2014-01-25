@@ -81,6 +81,8 @@ static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
 	return res;
 }
 
+static void loadFromList(const File &file);
+
 	static void setManager(AssetsManager *manager)
 	{
 		_manager = manager;
