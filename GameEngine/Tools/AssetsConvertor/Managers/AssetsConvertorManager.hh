@@ -34,9 +34,10 @@ public:
 	std::shared_ptr<AMediaFile> load(const std::string filename);
 
 	bool serializeData(const std::string &exportName);
+
+	void clear();
 private:
 	File _outputDirectory;
-	std::map < std::string, std::shared_ptr<AMediaFile> > _files;
 	std::map < std::size_t, std::unique_ptr<AConvertor> > _convertors;
 };
 
