@@ -17,19 +17,14 @@
 #include <cereal/archives/portable_binary.hpp>
 #include <Managers/AssetsManager.hpp>
 
-struct ObjFile;
-struct TextureFile;
-struct MaterialFile;
-
-
 struct AMediaFile
 {
 public:
 	File path;
 	std::string name;
+	static AssetsManager *_manager;
 protected:
 	std::size_t _type;
-	static AssetsManager *_manager;
 	std::size_t _childs;
 	enum MEDIA_TYPE
 	{
@@ -42,7 +37,6 @@ public:
 	AMediaFile() :
 		_childs(0)
 	{
-		_manager = nullptr;
 	}
 	virtual ~AMediaFile(){}
 
@@ -55,41 +49,11 @@ public:
 	}
 
 	template <typename Archive>
-	static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
-	{
-		assert(file.exists() == true && "File does not exist.");
-		MEDIA_TYPE serializedFileType = UNKNOWN;
-		std::shared_ptr<AMediaFile> res{ nullptr };
-
-		std::ifstream ifs(file.getFullName());
-		Archive ar(ifs);
-		ar(serializedFileType);
-		switch (serializedFileType)
-		{
-		case OBJ:
-			res = std::make_shared<ObjFile>();
-			ar(static_cast<ObjFile&>(*res.get()));
-			break;
-		case MATERIAL:
-			res = std::make_shared<MaterialFile>();
-			ar(static_cast<MaterialFile&>(*res.get()));
-			break;
-		case TEXTURE:
-			res = std::make_shared<TextureFile>();
-			ar(static_cast<TextureFile&>(*res.get()));
-			break;
-		default:
-			break;
-		}
-		assert(res != nullptr && "Unknown MediaFile type.");
-		assert(_manager != nullptr && "Media Manager is not set.");
-		_manager->add(res);
-		return res;
-	}
+	static std::shared_ptr<AMediaFile> loadFromFile(const File &file);
 
 	static void setManager(AssetsManager *manager)
 	{
-		_manager = _manager;
+		_manager = manager;
 	}
 
 	inline std::size_t getChilds() const

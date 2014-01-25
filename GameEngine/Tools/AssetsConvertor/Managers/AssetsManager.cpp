@@ -2,7 +2,9 @@
 #include <MediaFiles/AMediaFile.hpp>
 
 	AssetsManager::AssetsManager()
-	{}
+	{
+		AMediaFile::setManager(this);
+	}
 
 	AssetsManager::~AssetsManager()
 	{}

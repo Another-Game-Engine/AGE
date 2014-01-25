@@ -9,7 +9,7 @@
 #include "ResourceManager/ResourceManager.hh"
 
 #include <Managers/AssetsConvertorManager.hh>
-#include <Managers/AssetsLoader.hpp>
+#include <MediaFiles/AMediaFile.hpp>
 
 #include <Components/RotationForce.hh>
 #include <Components/CameraComponent.hh>
@@ -49,15 +49,16 @@ bool 			DemoScene::userStart()
 
 	// end System Test
 	{
-//		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
-//		convertor.setOutputDirectory("./Assets/Serialized/");
+		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
+		convertor.setOutputDirectory("./Assets/Serialized/");
 ////		auto success = convertor.load("./Assets/crytek-sponza/sponza.obj");
-//		auto success = convertor.load("./Assets/cube/cube.obj");
-//		convertor.serializeData("cube");
+		auto success = convertor.load("./Assets/cube/cube.obj");
+		convertor.serializeData("cube");
+//		auto test = AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/obj__cube.cpd"));
 	}
 	{
-		auto &loader = _engine.getInstance<AssetsLoader>();
-		loader.loadFromList("./Assets/Serialized/export__cube.cpd");
+		//auto &loader = _engine.getInstance<AssetsLoader>();
+		//loader.loadFromList("./Assets/Serialized/export__cube.cpd");
 	}
 
 
