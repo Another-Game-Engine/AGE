@@ -40,7 +40,6 @@ std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filen
 			res->name = name;
 			res->path = File(_outputDirectory.getFolder() + name + ".cpd");
 			_files.insert(std::make_pair(name, res));
-			std::cout << res.use_count() << std::endl;
 			return res;
 		}
 	}
