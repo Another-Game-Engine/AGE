@@ -57,7 +57,7 @@ bool 			DemoScene::userStart()
 		auto success = convertor.load("./Assets/cube/cube.obj");
 		convertor.serializeData("cube");
 
-		auto test = AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/obj__cube.cpd"));
+		AMediaFile::loadFromList(File("./Assets/Serialized/export__cube.cpd"));
 
 	}
 	{
