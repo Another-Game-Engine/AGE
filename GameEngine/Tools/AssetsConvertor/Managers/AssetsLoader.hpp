@@ -13,9 +13,7 @@ class AssetsLoader : public AssetsManager
 public:
 	AssetsLoader()
 	{
-		registerType<ObjFile>();
-		registerType<MaterialFile>();
-		registerType<TextureFile>();
+		AMediaFile::setManager(this);
 	}
 
 	virtual ~AssetsLoader()
@@ -31,17 +29,8 @@ public:
 		ifs.close();
 		for (auto &e : files)
 		{
-			loadFromPath(File(e.second));
+			AMediaFile::loadFromFile<cereal::PortableBinaryInputArchive>(File(e.second));
 		}
-	}
-
-	void loadFromPath(const File &file)
-	{
-		assert(file.exists() == true && "File does not exist.");
-		std::ifstream ifs(file.getFullName(), std::ios_base::binary);
-		std::shared_ptr<AMediaFile> media = unserializeFromStream<cereal::PortableBinaryInputArchive>(ifs);
-		assert(media.get() != nullptr && "Media fail to load.");
-		_files.insert(std::make_pair(media->name, media));
 	}
 
 private:
