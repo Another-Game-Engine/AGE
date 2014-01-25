@@ -70,9 +70,9 @@ bool 			DemoScene::userStart()
 		//success = convertor.load("./Assets/crytek-sponza/sponza.obj");
 		//convertor.serializeData("sponza");
 		//convertor.clear();
-//		AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
-//		AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
-//		AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
+		AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
+		AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
+		AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 		AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 		std::cout << "::" << std::endl;
 	}
