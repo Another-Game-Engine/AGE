@@ -38,7 +38,7 @@ std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filen
 			if (res.get() == nullptr)
 				return std::shared_ptr<AMediaFile>{nullptr};
 			res->name = name;
-			res->path = file.getFullName();
+			res->path = File(_outputDirectory.getFolder() + name + ".cpd");
 			_files.insert(std::make_pair(name, res));
 			std::cout << res.use_count() << std::endl;
 			return res;
@@ -52,10 +52,11 @@ bool AssetsConvertorManager::serializeData(const std::string &exportName)
 	std::multimap<std::size_t, std::string> files;
 	for (auto &e : _files)
 	{
-		std::ofstream ofs(_outputDirectory.getFolder() + e.second->name + ".cpd", std::ios_base::binary);
-		e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
+		std::ofstream ofs(e.second->path.getFullName(), std::ios_base::binary);
+//		e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
+		e.second->serialize<cereal::JSONOutputArchive>(ofs);
 		ofs.close();
-		files.insert(std::make_pair(e.second->getChilds(), _outputDirectory.getFolder() + e.second->name + ".cpd"));
+		files.insert(std::make_pair(e.second->getChilds(), e.second->path.getFullName()));
 	}
 
 	std::ofstream ofs(_outputDirectory.getFolder() + "export__" + exportName + ".cpd", std::ios_base::binary);

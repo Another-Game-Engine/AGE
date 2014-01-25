@@ -24,7 +24,6 @@ public:
 	std::string name;
 	static AssetsManager *_manager;
 protected:
-	std::size_t _type;
 	std::size_t _childs;
 	enum MEDIA_TYPE
 	{
@@ -33,6 +32,7 @@ protected:
 		MATERIAL = 2,
 		UNKNOWN = 3
 	};
+	MEDIA_TYPE _type;
 public:
 	AMediaFile() :
 		_childs(0)
@@ -48,8 +48,38 @@ public:
 		_serialize(ar);
 	}
 
-	template <typename Archive>
-	static std::shared_ptr<AMediaFile> loadFromFile(const File &file);
+template <typename Archive>
+static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
+{
+	assert(file.exists() == true && "File does not exist.");
+	MEDIA_TYPE serializedFileType = UNKNOWN;
+	std::shared_ptr<AMediaFile> res{ nullptr };
+
+	std::ifstream ifs(file.getFullName());
+	Archive ar(ifs);
+	ar(serializedFileType);
+	switch (serializedFileType)
+	{
+	case OBJ:
+		res = std::make_shared<ObjFile>();
+		ar(static_cast<ObjFile&>(*res.get()));
+		break;
+	case MATERIAL:
+		res = std::make_shared<MaterialFile>();
+		ar(static_cast<MaterialFile&>(*res.get()));
+		break;
+	case TEXTURE:
+		res = std::make_shared<TextureFile>();
+		ar(static_cast<TextureFile&>(*res.get()));
+		break;
+	default:
+		break;
+	}
+	assert(res != nullptr && "Unknown MediaFile type.");
+	assert(_manager != nullptr && "Media Manager is not set.");
+	_manager->add(res);
+	return res;
+}
 
 	static void setManager(AssetsManager *manager)
 	{

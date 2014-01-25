@@ -10,6 +10,9 @@
 
 #include <Managers/AssetsConvertorManager.hh>
 #include <MediaFiles/AMediaFile.hpp>
+#include <MediaFiles/MaterialFile.hpp>
+#include <MediaFiles/ObjFile.hpp>
+#include <MediaFiles/TextureFile.hpp>
 
 #include <Components/RotationForce.hh>
 #include <Components/CameraComponent.hh>
@@ -54,7 +57,9 @@ bool 			DemoScene::userStart()
 ////		auto success = convertor.load("./Assets/crytek-sponza/sponza.obj");
 		auto success = convertor.load("./Assets/cube/cube.obj");
 		convertor.serializeData("cube");
-//		auto test = AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/obj__cube.cpd"));
+
+//		auto test = AMediaFile::loadFromFile<cereal::PortableBinaryInputArchive>(File("./Assets/Serialized/obj__cube.cpd"));
+		auto test = AMediaFile::loadFromFile<cereal::JSONInputArchive>(File("./Assets/Serialized/obj__cube.cpd"));
 	}
 	{
 		//auto &loader = _engine.getInstance<AssetsLoader>();
