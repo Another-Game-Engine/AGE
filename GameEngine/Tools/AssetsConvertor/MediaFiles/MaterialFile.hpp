@@ -20,6 +20,7 @@ struct MaterialFile : public MediaFile<MaterialFile>
 {
 	MaterialFile() : MediaFile<MaterialFile>()
 	{
+		_type = MATERIAL;
 	}
 
 	virtual ~MaterialFile()
@@ -145,13 +146,13 @@ struct MaterialFile : public MediaFile<MaterialFile>
 			std::string a, b, c, d;
 			ar(a, b, c, d);
 			if (a != "NULL")
-				file->manager->assetHandle(a, &(std::static_pointer_cast<AMediaFile>(ambientTex)));
+				ambientTex = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(a));
 			if (b != "NULL")
-				file->manager->assetHandle(b, &(std::static_pointer_cast<AMediaFile>(diffuseTex)));
+				diffuseTex = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(b));
 			if (c != "NULL")
-				file->manager->assetHandle(c, &(std::static_pointer_cast<AMediaFile>(specularTex)));
+				specularTex = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(c));
 			if (d != "NULL")
-				file->manager->assetHandle(d, &(std::static_pointer_cast<AMediaFile>(normalTex)));
+				normalTex = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(d));
 		}
 
 	};

@@ -27,20 +27,12 @@ struct TextureFile : public MediaFile<TextureFile>
 		, minFilter(GL_LINEAR_MIPMAP_LINEAR)
 		, magFilter(GL_LINEAR)
 	{
+		_type = TEXTURE;
 	}
 
 	virtual ~TextureFile()
 	{
 		glDeleteTextures(1, &id);
-	}
-
-	template <typename Archive>
-	AMediaFile *unserialize(Archive &ar)
-	{
-		AMediaFile *res = new TextureFile();
-		res->manager = manager;
-		ar(static_cast<TextureFile&>(*res));
-		return res;
 	}
 
 	template <typename Archive>

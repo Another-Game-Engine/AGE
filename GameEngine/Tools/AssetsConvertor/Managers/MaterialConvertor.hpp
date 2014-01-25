@@ -43,7 +43,7 @@ public:
 		std::shared_ptr<MaterialFile> material{ new MaterialFile };
 		material->materials.resize(shapes.size());
 
-		for (auto i = 0; i < shapes.size(); ++i)
+		for (std::size_t i = 0; i < shapes.size(); ++i)
 		{
 			auto &mesh = shapes[i];
 			auto &m = mesh.material;
@@ -68,26 +68,26 @@ public:
 		{
 			auto path = file.getFolder() + m.ambient_texname;
 			material.ambientTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
-			++p->childs;
+			p->incrementChilds();
 		}
 		if (m.diffuse_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.diffuse_texname;
 			material.diffuseTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
-			++p->childs;
+			p->incrementChilds();
 		}
 
 		if (m.specular_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.specular_texname;
 			material.specularTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
-			++p->childs;
+			p->incrementChilds();
 		}
 		if (m.normal_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.normal_texname;
 			material.normalTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
-			++p->childs;
+			p->incrementChilds();
 		}
 	}
 
