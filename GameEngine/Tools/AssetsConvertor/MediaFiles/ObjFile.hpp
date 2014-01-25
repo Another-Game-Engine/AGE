@@ -54,7 +54,7 @@ struct ObjFile : public MediaFile<ObjFile>
 	void save(Archive &ar) const
 	{
 		ar(CEREAL_NVP(geometries));
-		ar(cereal::make_nvp("material", material->name));
+		ar(cereal::make_nvp("material", material->path.getFullName()));
 	}
 
 	template <typename Archive>

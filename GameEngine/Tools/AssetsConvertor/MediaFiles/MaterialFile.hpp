@@ -132,10 +132,10 @@ struct MaterialFile : public MediaFile<MaterialFile>
 		{
 			ar(name, ambient, diffuse, specular, transmittance, emission, shininess, paramVec2, paramVec3, paramVec4, paramMat2, paramMat3, paramMat4, paramInt, paramFloat);
 			std::string a, b, c, d;
-			a = ambientTex != nullptr ? ambientTex->name : "NULL";
-			b = diffuseTex != nullptr ? diffuseTex->name : "NULL";
-			c = specularTex != nullptr ? specularTex->name : "NULL";
-			d = normalTex != nullptr ? normalTex->name : "NULL";
+			a = ambientTex != nullptr ? ambientTex->path.getFullName() : "NULL";
+			b = diffuseTex != nullptr ? diffuseTex->path.getFullName() : "NULL";
+			c = specularTex != nullptr ? specularTex->path.getFullName() : "NULL";
+			d = normalTex != nullptr ? normalTex->path.getFullName() : "NULL";
 			ar(a, b, c, d);
 		}
 
