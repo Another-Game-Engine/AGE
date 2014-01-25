@@ -55,7 +55,7 @@ static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
 	MEDIA_TYPE serializedFileType = UNKNOWN;
 	std::shared_ptr<AMediaFile> res{ nullptr };
 
-	std::ifstream ifs(file.getFullName());
+	std::ifstream ifs(file.getFullName(), std::ios::binary);
 	Archive ar(ifs);
 	ar(serializedFileType);
 	switch (serializedFileType)

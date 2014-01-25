@@ -52,14 +52,13 @@ bool AssetsConvertorManager::serializeData(const std::string &exportName)
 	std::multimap<std::size_t, std::string> files;
 	for (auto &e : _files)
 	{
-		std::ofstream ofs(e.second->path.getFullName(), std::ios_base::binary);
-//		e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
-		e.second->serialize<cereal::JSONOutputArchive>(ofs);
+		std::ofstream ofs(e.second->path.getFullName(), std::ios::trunc | std::ios::binary);
+		e.second->serialize<cereal::BinaryOutputArchive>(ofs);
 		ofs.close();
 		files.insert(std::make_pair(e.second->getChilds(), e.second->path.getFullName()));
 	}
 
-	std::ofstream ofs(_outputDirectory.getFolder() + "export__" + exportName + ".cpd", std::ios_base::binary);
+	std::ofstream ofs(_outputDirectory.getFolder() + "export__" + exportName + ".cpd", std::ios::trunc);
 	cereal::JSONOutputArchive ar(ofs);
 	ar(files);
 
