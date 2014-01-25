@@ -7,7 +7,8 @@
 #include <cereal/types/common.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
-#include <cereal/archives/binary.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/xml.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/array.hpp>
 #include <array>
@@ -53,7 +54,13 @@ namespace cereal
 	template<typename Archive>
 	void save(Archive &ar, const glm::vec4 &v)
 	{
-		ar(cereal::make_nvp("x", v.x), cereal::make_nvp("y", v.y), cereal::make_nvp("z", v.z), cereal::make_nvp("w", v.w));
+		float x = v.x;
+		float y = v.y;
+		float z = v.z;
+		float w = v.w;
+		ar(x,y,z,w);
+
+		//ar(cereal::make_nvp("x", v.x), cereal::make_nvp("y", v.y), cereal::make_nvp("z", v.z), cereal::make_nvp("w", v.w));
 	}
 
 	template<typename Archive>
