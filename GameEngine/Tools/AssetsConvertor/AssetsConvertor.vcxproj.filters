@@ -27,9 +27,6 @@
     <ClCompile Include="Managers\ObjConvertor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Parsers\LoadOBJ.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Parsers\LoadTGA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

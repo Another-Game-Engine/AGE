@@ -18,7 +18,10 @@ namespace cereal
 	template<typename Archive>
 	void save(Archive &ar, const glm::vec2 &v)
 	{
-		ar(cereal::make_nvp("x", v.x), cereal::make_nvp("y", v.y));
+		float x, y;
+		x = v.x;
+		y = v.y;
+		ar(x, y);
 	}
 
 	template<typename Archive>
