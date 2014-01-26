@@ -6,7 +6,9 @@
 
 #include "Components/Component.hh"
 #include "Utils/SmartPointer.hh"
-#include "ResourceManager/SharedMesh.hh"
+#include <MediaFiles/TextureFile.hpp>
+#include <MediaFiles/ObjFile.hpp>
+#include <MediaFiles/MaterialFile.hpp>
 #include "OpenGL/Shader.hh"
 #include <core/Renderer.hh>
 #include <cereal/types/string.hpp>
@@ -24,14 +26,11 @@ namespace Component
 	{
 		MeshRenderer();
 		virtual ~MeshRenderer(void);
-		void init(std::string const &resource);
+		void init(std::shared_ptr<AMediaFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
 		void render();
-		SmartPointer<Resources::SharedMesh>	const &getMesh() const;
-		std::vector<SmartPointer<Material>> &getMaterials();
-		Material *getMaterial(const std::string &name);
-		Material *getMaterial(unsigned int index);
+		std::shared_ptr<ObjFile>	const &getMesh() const;
 
 		//////
 		////
@@ -50,7 +49,7 @@ namespace Component
 		void save(Archive &ar) const
 		{
 			ar(CEREAL_NVP(shader));
-			std::string meshName = mesh->getName();
+			std::string meshName = mesh->path.getFullName();
 			ar(cereal::make_nvp("meshName", meshName));
 		}
 
@@ -60,16 +59,15 @@ namespace Component
 			ar(shader);
 			std::string meshName;
 			ar(meshName);
-			mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+			mesh = std::static_pointer_cast<ObjFile>(AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File(meshName)));
 		}
 
 		// !Serialization
 		////
 		//////
 
-		SmartPointer<Resources::SharedMesh>	mesh;
+		std::shared_ptr<ObjFile>	mesh;
 		std::string shader;
-		std::vector<Material> materials;
 	private:
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);

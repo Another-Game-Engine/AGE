@@ -8,7 +8,6 @@
 #include "OpenGL/Shader.hh"
 #include "OpenGL/UniformBuffer.hh"
 #include "OpenGL/Framebuffer.hh"
-#include "MaterialManager.hh"
 #include "Utils/Any.hpp"
 #include <core/Engine.hh>
 #include <Utils/Dependency.hpp>
@@ -29,7 +28,6 @@ private:
 		OpenGLTools::UniformBuffer*>				_uniforms;
 	std::map<std::string,
 			Component::MeshRenderer* >				_queues; // Queues sorted by materials
-	MaterialManager                                 _materialManager;
 	postEffectCol                                   _postEffects;
 	Engine &_engine;
 public:
@@ -59,7 +57,6 @@ public:
 
 	OpenGLTools::Framebuffer        &getFbo();
 	void                            uninit();
-	MaterialManager &getMaterialManager();
 	void addPostEffect(const std::string &name, unsigned int priority);
 	inline Engine &getEngine() { return _engine; }
 private:

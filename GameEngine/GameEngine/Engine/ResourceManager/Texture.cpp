@@ -1,7 +1,7 @@
 #include "Texture.hh"
 
-#include "Parsers/Parsers.hh"
-#include "Utils/OpenGL.hh"
+#include <Parsers/Parsers.hh>
+#include <Utils/OpenGL.hh>
 
 namespace	Resources
 {

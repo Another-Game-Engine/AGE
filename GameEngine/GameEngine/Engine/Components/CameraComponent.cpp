@@ -1,6 +1,5 @@
 #include "CameraComponent.hh"
 #include <Core/Engine.hh>
-#include <ResourceManager/ResourceManager.hh>
 
 namespace Component
 {
@@ -15,8 +14,9 @@ namespace Component
 
 	void CameraComponent::attachSkybox(const std::string &name, const std::string &_cubeMapShader)
 	{
-		skybox = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(name);
-		cubeMapShader = _cubeMapShader;
+		// TODO
+		//skybox = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(name);
+		//cubeMapShader = _cubeMapShader;
 	}
 
 	void CameraComponent::dettachSkybox()

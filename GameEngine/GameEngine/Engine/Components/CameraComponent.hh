@@ -2,7 +2,6 @@
 # define   __CAMERA_COMPONENT_HPP__
 
 #include "glm/glm.hpp"
-#include "ResourceManager/CubeMap.hh"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Component.hh"
