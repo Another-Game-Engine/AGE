@@ -48,7 +48,7 @@ GLbyte *loadTGA(const char *szFileName,
     *iComponents = GL_RGB8;
  
     // Attempt to open the fil
-    pFile = fopen(szFileName, "rb");
+    pFile = std::fopen(szFileName, "rb");
     if(pFile == NULL)
         return NULL;
  

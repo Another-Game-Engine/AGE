@@ -3,10 +3,9 @@
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
 
-#include "ResourceManager/SharedMesh.hh"
-#include "ResourceManager/Texture.hh"
-#include "ResourceManager/CubeMap.hh"
-#include "ResourceManager/ResourceManager.hh"
+//#include "ResourceManager/SharedMesh.hh
+//#include "ResourceManager/CubeMap.hh"
+//#include "ResourceManager/ResourceManager.hh"
 
 #include <Managers/AssetsConvertorManager.hh>
 #include <MediaFiles/AMediaFile.hpp>
@@ -55,28 +54,32 @@ bool 			DemoScene::userStart()
 		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
 		convertor.setOutputDirectory("./Assets/Serialized/");
 
-		//auto success = convertor.load("./Assets/cube/cube.obj");
-		//convertor.serializeData("cube");
+		auto success = convertor.load("./Assets/cube/cube.obj");
+		convertor.serializeData("cube");
+		convertor.clear();
+
+		success = convertor.load("./Assets/ball/ball.obj");
+		convertor.serializeData("ball");
+		convertor.clear();
+
+		success = convertor.load("./Assets/galileo/galileo.obj");
+		convertor.serializeData("galileo");
+		convertor.clear();
+
+		success = convertor.load("./Assets/crytek-sponza/sponza.obj");
+		convertor.serializeData("sponza");
+		convertor.clear();
+
+		//success = convertor.load("./Assets/elf/elf.obj");
+		//convertor.serializeData("elf");
 		//convertor.clear();
 
-		//success = convertor.load("./Assets/ball/ball.obj");
-		//convertor.serializeData("ball");
-		//convertor.clear();
-
-		//success = convertor.load("./Assets/galileo/galileo.obj");
-		//convertor.serializeData("galileo");
-		//convertor.clear();
-
-		//success = convertor.load("./Assets/crytek-sponza/sponza.obj");
-		//convertor.serializeData("sponza");
-		//convertor.clear();
-
-		AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
-		AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
-		AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
-		AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
-		auto test = convertor.get(std::string("obj__sponza"));
-		std::cout << "::" << std::endl;
+		//AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
+		//AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
+		//AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
+		//AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+		//auto test = convertor.get(std::string("obj__sponza"));
+		//std::cout << "::" << std::endl;
 
 
 		std::string		perModelVars[] =
@@ -120,10 +123,8 @@ bool 			DemoScene::userStart()
 		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
-		SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
-		toRepeat->setWrapMode(GL_REPEAT);
 
-		_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/lake.skybox");
+		//_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/lake.skybox");
 
 		std::string		vars[] =
 		{
@@ -143,7 +144,7 @@ bool 			DemoScene::userStart()
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, -10, 0));
 		e->addComponent<Component::GraphNode>();
 		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 100, 100));
-		auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::loadFromFile<cereal::BinaryInputArchive>("./Assets/Serialized/obj__sponza.cpd"));
 		mesh->setShader("MaterialBasic");
 		floor = e;
 

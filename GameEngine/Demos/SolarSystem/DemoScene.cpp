@@ -39,7 +39,7 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
-	auto ballMesh = AMediaFile::loadFromFile<cereal::BinaryInputArchive>("./Assets/Serialized/obj__ball.cpd");
+	auto ballMesh = AMediaFile::loadFromFile<cereal::BinaryInputArchive>("./Assets/Serialized/obj__sponza.cpd");
 
 	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(ballMesh);
 
@@ -174,35 +174,33 @@ bool 			DemoScene::userStart()
 		return true;
 	}
 
-	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
+	//auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
-	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
+	//auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
 
-	earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
+	//earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
 
 	// Generating a lot of planet for performance test
 	//
 	//
 
-	{
-		unsigned int nbPlanet = 70;
-		Entity planets[70];
+	//{
+	//	unsigned int nbPlanet = 70;
+	//	Entity planets[70];
 
-		for (unsigned int i = 0; i < nbPlanet; ++i)
-		{
-			planets[i] = createPlanet((std::rand() % 200) / 100.0f
-				, (std::rand() % 200) / 100.0f,
-				glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-				glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
-			if (i == 0)
-				sun->getComponent<Component::GraphNode>()->addSon(planets[i]);
-			else
-				planets[i - 1]->getComponent<Component::GraphNode>()->addSon(planets[i]);
-		}
-	}
+	//	for (unsigned int i = 0; i < nbPlanet; ++i)
+	//	{
+	//		planets[i] = createPlanet((std::rand() % 200) / 100.0f
+	//			, (std::rand() % 200) / 100.0f,
+	//			glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
+	//			glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
+	//		if (i == 0)
+	//			sun->getComponent<Component::GraphNode>()->addSon(planets[i]);
+	//		else
+	//			planets[i - 1]->getComponent<Component::GraphNode>()->addSon(planets[i]);
+	//	}
+	//}
 
-	auto prout = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
-	destroy(prout);
 
 	//
 	//
@@ -230,9 +228,9 @@ bool 			DemoScene::userUpdate(double time)
 	{
 		 //SERIALIZATION
 		{
-			std::ofstream s("SolarSystem.scenesave");
-			save<cereal::JSONOutputArchive>(s);
-			s.close();
+			//std::ofstream s("SolarSystem.scenesave");
+			//save<cereal::JSONOutputArchive>(s);
+			//s.close();
 		}
 		return (false);
 	}
