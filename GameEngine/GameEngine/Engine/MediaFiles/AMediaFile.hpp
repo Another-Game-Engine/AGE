@@ -15,7 +15,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/archives/portable_binary.hpp>
-#include <Managers/AssetsManager.hpp>
+#include <MediaFiles/AssetsManager.hpp>
 
 struct AMediaFile
 {

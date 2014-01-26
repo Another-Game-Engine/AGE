@@ -92,23 +92,18 @@
     </ClCompile>
     <ClCompile Include="Managers\AConvertor.cpp" />
     <ClCompile Include="Managers\AssetsConvertorManager.cpp" />
-    <ClCompile Include="Managers\AssetsManager.cpp" />
     <ClCompile Include="Managers\ObjConvertor.cpp" />
-    <ClCompile Include="MediaFiles\AMediaFile.cpp" />
+    <ClCompile Include="Parsers\LoadOBJ.cpp" />
+    <ClCompile Include="Parsers\LoadTGA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScene.hh" />
     <ClInclude Include="Managers\AConvertor.hh" />
-    <ClInclude Include="Managers\AssetsManager.hpp" />
     <ClInclude Include="Managers\AssetsConvertorManager.hh" />
     <ClInclude Include="Managers\MaterialConvertor.hpp" />
     <ClInclude Include="Managers\ObjConvertor.hh" />
     <ClInclude Include="Managers\TgaConvertor.hpp" />
-    <ClInclude Include="MediaFiles\AMediaFile.hpp" />
-    <ClInclude Include="MediaFiles\MaterialFile.hpp" />
-    <ClInclude Include="MediaFiles\MediaFile.hpp" />
-    <ClInclude Include="MediaFiles\ObjFile.hpp" />
-    <ClInclude Include="MediaFiles\TextureFile.hpp" />
+    <ClInclude Include="Parsers\Parsers.hh" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">

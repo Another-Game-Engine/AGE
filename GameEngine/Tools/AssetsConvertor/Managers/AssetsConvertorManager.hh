@@ -10,7 +10,7 @@
 #include <cereal/archives/xml.hpp>
 
 #include <MediaFiles/AMediaFile.hpp>
-#include <Managers/AssetsManager.hpp>
+#include <MediaFiles/AssetsManager.hpp>
 
 class AConvertor;
 

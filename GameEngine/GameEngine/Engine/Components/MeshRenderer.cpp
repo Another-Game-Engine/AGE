@@ -1,10 +1,6 @@
 #include "MeshRenderer.hh"
 
-#include "ResourceManager/Texture.hh"
-
 #include "Core/Engine.hh"
-#include <ResourceManager/Texture.hh>
-#include <ResourceManager/ResourceManager.hh>
 
 namespace Component
 {
@@ -18,12 +14,12 @@ namespace Component
 	{
 	}
 
-	void MeshRenderer::init(std::string const &resource)
+	void MeshRenderer::init(std::shared_ptr<AMediaFile> r)
 	{
-		mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(resource);
+		mesh = std::static_pointer_cast<ObjFile>(r);
 	}
 
-	SmartPointer<Resources::SharedMesh> const &MeshRenderer::getMesh() const
+	std::shared_ptr<ObjFile> const &MeshRenderer::getMesh() const
 	{
 		return (mesh);
 	}
@@ -41,37 +37,12 @@ namespace Component
 		if (s)
 			s->use();
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());
-		auto &g = mesh->getGeometry();
-		auto &b = mesh->getBuffer();
 		perModelUniform->flushChanges();
-		for (unsigned int i = 0; i < g.size(); ++i)
+		for (unsigned int i = 0; i < mesh->geometries.size(); ++i)
 		{
-			mesh->getMaterial()[i]->setUniforms(materialUniform);
+			std::static_pointer_cast<MaterialFile>(mesh->material)->materials[i].setUniforms(materialUniform);
 			materialUniform->flushChanges();
-			b[i].draw(GL_TRIANGLES);
+			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
 		}
 	}
-
-	std::vector<SmartPointer<Material>> &MeshRenderer::getMaterials()
-	{
-		return mesh->getMaterial();
-	}
-
-	Material *MeshRenderer::getMaterial(const std::string &name)
-	{
-		for (auto &e : materials)
-		{
-			if (e.name == name)
-				return &e;
-		}
-		return nullptr;
-	}
-
-	Material *MeshRenderer::getMaterial(unsigned int index)
-	{
-		if (index < materials.size())
-			return &materials[index];
-		return nullptr;
-	}
-
 }

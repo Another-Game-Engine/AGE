@@ -14,6 +14,7 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 #include <Utils/GlmSerialization.hpp>
+#include <OpenGL/VertexBuffer.hh>
 
 struct ObjFile : public MediaFile<ObjFile>
 {
@@ -30,11 +31,31 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec4>		colors;		// vertices colors
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
+		OpenGLTools::VertexBuffer	buffer;
 
 		template <typename Archive>
-		void serialize(Archive &ar)
+		void save(Archive &ar) const
 		{
 			ar(name,vertices, normals,colors,uvs, indices);
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+			ar(name,vertices, normals,colors,uvs, indices);
+			buffer.init(vertices.size(), &indices[0]);
+			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 4, 4, GL_FLOAT));
+			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 4, 4, GL_FLOAT));
+			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 4, 4, GL_FLOAT));
+			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 2, 2, GL_FLOAT));
+
+			buffer.setBuffer(0, reinterpret_cast<byte *>(&vertices[0].x));
+			if (colors.size())
+				buffer.setBuffer(1, reinterpret_cast<byte *>(&colors[0].x));
+			if (normals.size())
+				buffer.setBuffer(2, reinterpret_cast<byte *>(&normals[0].x));
+			if (uvs.size())
+				buffer.setBuffer(3, reinterpret_cast<byte *>(&uvs[0].x));
 		}
 	};
 
