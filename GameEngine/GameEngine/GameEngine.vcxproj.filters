@@ -75,6 +75,7 @@
     <ClInclude Include="Engine\MediaFiles\ObjFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\TextureFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\AssetsManager.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CubeMapFile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

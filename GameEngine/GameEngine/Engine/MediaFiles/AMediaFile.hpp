@@ -27,10 +27,11 @@ protected:
 	std::size_t _childs;
 	enum MEDIA_TYPE
 	{
-		OBJ = 0,
-		TEXTURE = 1,
-		MATERIAL = 2,
-		UNKNOWN = 3
+		UNKNOWN = 0
+		, OBJ = 1
+		, TEXTURE = 2
+		, MATERIAL = 3
+		, CUBEMAP = 4
 	};
 	MEDIA_TYPE _type;
 public:
