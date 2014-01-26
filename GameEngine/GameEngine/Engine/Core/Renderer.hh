@@ -17,7 +17,6 @@ class Renderer : public Dependency
 private:
 	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;
 	typedef std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	uniformsIt;
-	typedef std::map<std::string, Component::MeshRenderer*>::iterator		queueIt;
 	typedef std::multimap<unsigned int, std::string>                        postEffectCol;
 	typedef std::multimap<unsigned int, std::string>::iterator              postEffectColIt;
 
@@ -26,8 +25,6 @@ private:
 		OpenGLTools::Shader*>						_shaders;
 	std::map<std::string,
 		OpenGLTools::UniformBuffer*>				_uniforms;
-	std::map<std::string,
-			Component::MeshRenderer* >				_queues; // Queues sorted by materials
 	postEffectCol                                   _postEffects;
 	Engine &_engine;
 public:

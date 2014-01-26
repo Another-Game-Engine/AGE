@@ -39,7 +39,9 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
-	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(nullptr);
+	auto ballMesh = AMediaFile::loadFromFile<cereal::BinaryInputArchive>("./Assets/Serialized/obj__ball.cpd");
+
+	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(ballMesh);
 
 	r->setShader(shader);
 	//r->getMaterials()[0]->ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex1);
@@ -146,22 +148,6 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
-	//_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
-
-	SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
-
-	toRepeat->setWrapMode(GL_REPEAT);
-	//_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "./Assets/SunTexture.tga");
-	//_engine.getInstance<Resources::ResourceManager>().addResource("texture:earth", new Resources::Texture(), "./Assets/EarthTexture.tga");
-	//_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthBump", new Resources::Texture(), "./Assets/EarthTextureBump.tga");
-	//_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthNight", new Resources::Texture(), "./Assets/EarthNightTexture.tga");
-	//_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthClouds", toRepeat, "./Assets/EarthClouds.tga");
-	//_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "./Assets/SunTexture.tga");
-	//_engine.getInstance<Resources::ResourceManager>().addResource("texture:moon", new Resources::Texture(), "./Assets/MoonTexture.tga");
-	//_engine.getInstance<Resources::ResourceManager>().addResource("texture:moonBump", new Resources::Texture(), "./Assets/MoonNormalMap.tga");
-
-	//_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
-
 	std::string		vars[] = 
 	{
 		"projection",
@@ -178,14 +164,15 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 
-	File saveFile("SolarSystem.scenesave");
-	if (saveFile.exists())
-	{
-		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
-		load<cereal::JSONInputArchive>(fileStream);
-		fileStream.close();
-		return true;
-	}
+	// SERIALIZATION
+	//File saveFile("SolarSystem.scenesave");
+	//if (saveFile.exists())
+	//{
+	//	std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
+	//	load<cereal::JSONInputArchive>(fileStream);
+	//	fileStream.close();
+	//	return true;
+	//}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
@@ -230,21 +217,8 @@ bool 			DemoScene::userStart()
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 	auto trackBall = camera->addComponent<Component::TrackBall>(	*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
 
-	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
-
-
-	// Compute shader Tests
-	//
-	//
-
-	//OpenGLTools::ComputeShader *cs = new OpenGLTools::ComputeShader();
-	//cs->init(File("../GameEngine/Shaders/test.cp"));
-	//cs->use();
-	//glDispatchCompute(512/16, 512/16, 1);
-
-	//
-	//
-	// End compute shader test
+	//TODO
+	//cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
 
 	return (true);
 }
@@ -254,11 +228,12 @@ bool 			DemoScene::userUpdate(double time)
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 	{
-		{
-			std::ofstream s("SolarSystem.scenesave");
-			save<cereal::JSONOutputArchive>(s);
-			s.close();
-		}
+		// SERIALIZATION
+		//{
+		//	std::ofstream s("SolarSystem.scenesave");
+		//	save<cereal::JSONOutputArchive>(s);
+		//	s.close();
+		//}
 		return (false);
 	}
 	return (true);
