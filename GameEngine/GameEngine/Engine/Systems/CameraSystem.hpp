@@ -78,10 +78,13 @@ protected:
 
 				s->use();
 
+
 				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());
+				// TODO
+				//				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());
 				glDepthMask(0);
-				skybox->draw();
+				// TODO
+				//				skybox->draw();
 				glDepthMask(1);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 			}
