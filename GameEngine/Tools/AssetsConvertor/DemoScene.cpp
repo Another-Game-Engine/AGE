@@ -54,25 +54,25 @@ bool 			DemoScene::userStart()
 		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
 		convertor.setOutputDirectory("./Assets/Serialized/");
 
-		auto success = convertor.load("./Assets/cube/cube.obj");
-		convertor.serializeData("cube");
-		convertor.clear();
-
-		success = convertor.load("./Assets/ball/ball.obj");
-		convertor.serializeData("ball");
-		convertor.clear();
-
-		success = convertor.load("./Assets/galileo/galileo.obj");
-		convertor.serializeData("galileo");
-		convertor.clear();
-
-		success = convertor.load("./Assets/crytek-sponza/sponza.obj");
-		convertor.serializeData("sponza");
-		convertor.clear();
-
-		//success = convertor.load("./Assets/elf/elf.obj");
-		//convertor.serializeData("elf");
+		//auto success = convertor.load("./Assets/cube/cube.obj");
+		//convertor.serializeData("cube");
 		//convertor.clear();
+
+		//success = convertor.load("./Assets/ball/ball.obj");
+		//convertor.serializeData("ball");
+		//convertor.clear();
+
+		//success = convertor.load("./Assets/galileo/galileo.obj");
+		//convertor.serializeData("galileo");
+		//convertor.clear();
+
+		//success = convertor.load("./Assets/crytek-sponza/sponza.obj");
+		//convertor.serializeData("sponza");
+		//convertor.clear();
+
+		convertor.load("./Assets/mesh/mesh.obj");
+		convertor.serializeData("mesh");
+		convertor.clear();
 
 		//AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
 		//AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
