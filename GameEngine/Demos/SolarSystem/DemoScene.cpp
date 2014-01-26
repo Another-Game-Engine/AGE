@@ -165,14 +165,14 @@ bool 			DemoScene::userStart()
 
 
 	// SERIALIZATION
-	//File saveFile("SolarSystem.scenesave");
-	//if (saveFile.exists())
-	//{
-	//	std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
-	//	load<cereal::JSONInputArchive>(fileStream);
-	//	fileStream.close();
-	//	return true;
-	//}
+	File saveFile("SolarSystem.scenesave");
+	if (saveFile.exists())
+	{
+		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
+		load<cereal::JSONInputArchive>(fileStream);
+		fileStream.close();
+		return true;
+	}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
@@ -228,12 +228,12 @@ bool 			DemoScene::userUpdate(double time)
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 	{
-		// SERIALIZATION
-		//{
-		//	std::ofstream s("SolarSystem.scenesave");
-		//	save<cereal::JSONOutputArchive>(s);
-		//	s.close();
-		//}
+		 //SERIALIZATION
+		{
+			std::ofstream s("SolarSystem.scenesave");
+			save<cereal::JSONOutputArchive>(s);
+			s.close();
+		}
 		return (false);
 	}
 	return (true);
