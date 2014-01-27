@@ -60,7 +60,7 @@ struct ObjFile : public MediaFile<ObjFile>
 	};
 
 	std::vector<Geometry> geometries;
-	std::shared_ptr<AMediaFile> material;
+	std::shared_ptr<MaterialFile> material;
 
 	template <typename Archive>
 	AMediaFile *unserialize(Archive &ar)
@@ -85,7 +85,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::string matName;
 		ar(matName);
 		if (matName != "NULL")
-			material = AMediaFile::loadFromFile<Archive>(File(matName));
+			material = std::static_pointer_cast<MaterialFile>(AMediaFile::loadFromFile<Archive>(File(matName)));
 	}
 
 };
