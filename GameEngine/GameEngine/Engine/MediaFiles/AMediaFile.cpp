@@ -11,10 +11,14 @@ void AMediaFile::loadFromList(const File &file)
 
 	std::ifstream ifs(file.getFullName(), std::ios::binary);
 	cereal::JSONInputArchive ar(ifs);
-	std::map<std::size_t, std::string> list;
+	std::multimap<std::size_t, std::string> list;
 	ar(list);
 	for (auto &e : list)
 	{
 		AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File(e.second));
 	}
+}
+std::shared_ptr<AMediaFile> AMediaFile::get(const std::string &name)
+{
+	return _manager->get(name);
 }
