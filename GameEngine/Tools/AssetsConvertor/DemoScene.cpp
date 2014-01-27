@@ -70,8 +70,15 @@ bool 			DemoScene::userStart()
 		//convertor.serializeData("sponza");
 		//convertor.clear();
 
-		convertor.load("./Assets/mesh/mesh.obj");
-		convertor.serializeData("mesh");
+		convertor.load("./Assets/EarthCloud.tga");
+		convertor.load("./Assets/EarthNightTexture.tga");
+		convertor.load("./Assets/EarthTexture.tga");
+		convertor.load("./Assets/EarthTextureBump.tga");
+		convertor.load("./Assets/EarthClouds.tga");
+		convertor.load("./Assets/MoonNormalMap.tga");
+		convertor.load("./Assets/MoonTexture.tga");
+		convertor.load("./Assets/SunTexture.tga");
+		convertor.serializeData("Space");
 		convertor.clear();
 
 		//AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");

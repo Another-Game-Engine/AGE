@@ -39,7 +39,7 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
-	auto ballMesh = AMediaFile::loadFromFile<cereal::BinaryInputArchive>("./Assets/Serialized/obj__sponza.cpd");
+	auto ballMesh = AMediaFile::get("obj__ball");
 
 	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(ballMesh);
 
@@ -174,8 +174,17 @@ bool 			DemoScene::userStart()
 		return true;
 	}
 
+
+	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
+
 	//auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
-	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
+	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),
+		"earth",
+		"texture__EarthTexture",
+		"texture__EarthNightTexture",
+		"texture__EarthClouds",
+		"texture__EarthTextureBump");
 	//auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
 
 	//earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);

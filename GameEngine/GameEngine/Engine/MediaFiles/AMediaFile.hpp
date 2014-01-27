@@ -49,45 +49,52 @@ public:
 		_serialize(ar);
 	}
 
-template <typename Archive>
-static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
-{
-	assert(file.exists() == true && "File does not exist.");
-	MEDIA_TYPE serializedFileType = UNKNOWN;
-	std::shared_ptr<AMediaFile> res{ nullptr };
-	res = _manager->get(file.getShortFileName());
-	if (res != nullptr)
-		return res;
-
-	std::ifstream ifs(file.getFullName(), std::ios::binary);
-	Archive ar(ifs);
-	ar(serializedFileType);
-	switch (serializedFileType)
+	template <typename Archive>
+	static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
 	{
-	case OBJ:
-		res = std::make_shared<ObjFile>();
-		ar(static_cast<ObjFile&>(*res.get()));
-		break;
-	case MATERIAL:
-		res = std::make_shared<MaterialFile>();
-		ar(static_cast<MaterialFile&>(*res.get()));
-		break;
-	case TEXTURE:
-		res = std::make_shared<TextureFile>();
-		ar(static_cast<TextureFile&>(*res.get()));
-		break;
-	default:
-		break;
-	}
-	assert(res != nullptr && "Unknown MediaFile type.");
-	assert(_manager != nullptr && "Media Manager is not set.");
-	res->path = file.getFullName();
-	res->name = file.getShortFileName();
-	_manager->add(res);
-	return res;
-}
+		assert(file.exists() == true && "File does not exist.");
+		MEDIA_TYPE serializedFileType = UNKNOWN;
+		std::shared_ptr<AMediaFile> res{ nullptr };
+		res = _manager->get(file.getShortFileName());
+		if (res != nullptr)
+			return res;
 
-static void loadFromList(const File &file);
+		std::ifstream ifs(file.getFullName(), std::ios::binary);
+		Archive ar(ifs);
+		ar(serializedFileType);
+		switch (serializedFileType)
+		{
+		case OBJ:
+			res = std::make_shared<ObjFile>();
+			ar(static_cast<ObjFile&>(*res.get()));
+			break;
+		case MATERIAL:
+			res = std::make_shared<MaterialFile>();
+			ar(static_cast<MaterialFile&>(*res.get()));
+			break;
+		case TEXTURE:
+			res = std::make_shared<TextureFile>();
+			ar(static_cast<TextureFile&>(*res.get()));
+			break;
+		default:
+			break;
+		}
+		assert(res != nullptr && "Unknown MediaFile type.");
+		assert(_manager != nullptr && "Media Manager is not set.");
+		res->path = file.getFullName();
+		res->name = file.getShortFileName();
+		_manager->add(res);
+		return res;
+	}
+
+	static void loadFromList(const File &file);
+	static std::shared_ptr<AMediaFile> get(const std::string &name);
+
+	template <class T>
+	static std::shared_ptr<T> get(const std::string &name)
+	{
+		return std::static_pointer_cast<T>(_manager->get(name));
+	}
 
 	static void setManager(AssetsManager *manager)
 	{
@@ -96,7 +103,7 @@ static void loadFromList(const File &file);
 
 	inline std::size_t getChilds() const
 	{
-		return _childs;	
+		return _childs;
 	}
 
 	inline void incrementChilds()
@@ -106,7 +113,7 @@ static void loadFromList(const File &file);
 
 	inline std::size_t getType() const
 	{
-		return _type;	
+		return _type;
 	}
 
 protected:
