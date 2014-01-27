@@ -3,6 +3,7 @@
 #include <tiny_obj_loader.h>
 #include <cassert>
 #include <MediaFiles/ObjFile.hpp>
+#include <MediaFiles/MaterialFile.hpp>
 
 ObjConvertor::ObjConvertor(AssetsConvertorManager *manager)
 : AConvertor(manager, std::set<std::string>({ "obj" }))
@@ -90,7 +91,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	}
 	auto mtl = file.getFullName().substr(0, file.getFullName().find_last_of("."));
 	mtl += ".mtl";
-	mesh->material = _manager->load(mtl);
+	mesh->material = std::static_pointer_cast<MaterialFile>(_manager->load(mtl));
 	if (mesh->material != nullptr)
 		mesh->incrementChilds();
 	return mesh;

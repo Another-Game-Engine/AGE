@@ -44,7 +44,12 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(ballMesh);
 
 	r->setShader(shader);
-	//r->getMaterials()[0]->ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex1);
+
+	r->mesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>(tex1);
+	r->mesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>(tex2);
+	r->mesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>(tex3);
+	r->mesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>(tex4);
+	//r->getMaterials()[0]->ambientTex = AMediaFile::get(tex1);
 	//r->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex2);
 	//r->getMaterials()[0]->specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex3);
 	//r->getMaterials()[0]->normalTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex4);
@@ -178,16 +183,16 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
 
-	//auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
+	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),
 		"earth",
 		"texture__EarthTexture",
 		"texture__EarthNightTexture",
 		"texture__EarthClouds",
 		"texture__EarthTextureBump");
-	//auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
+	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture__MoonTexture", "texture__MoonTextureBump");
 
-	//earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
+	earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
 
 	// Generating a lot of planet for performance test
 	//
