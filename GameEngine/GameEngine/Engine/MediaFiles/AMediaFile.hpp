@@ -116,6 +116,28 @@ public:
 		return std::static_pointer_cast<T>(_manager->get(name));
 	}
 
+	template <class T>
+	static std::shared_ptr<T> create(const std::string &name, std::shared_ptr<AMediaFile> copyFrom = nullptr)
+	{
+		auto o = std::static_pointer_cast<T>(_manager->get(name));
+		if (o != nullptr)
+			return o;
+		auto n = create<T>(copyFrom);
+		n->name = name;
+		return n;
+	}
+
+	template <class T>
+	static std::shared_ptr<T> create(std::shared_ptr<AMediaFile> copyFrom = nullptr)
+	{
+		std::shared_ptr<T> n{ nullptr };
+		if (copyFrom != nullptr)
+			n = std::make_shared<T>(*std::static_pointer_cast<const T>(copyFrom).get());
+		else
+			n = std::make_shared<T>();
+		return n;
+	}
+
 	static void setManager(AssetsManager *manager)
 	{
 		_manager = manager;
