@@ -238,7 +238,7 @@ bool 			DemoScene::userStart()
 	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
 
 	//TODO
-	//cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
+	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 
 	return (true);
 }

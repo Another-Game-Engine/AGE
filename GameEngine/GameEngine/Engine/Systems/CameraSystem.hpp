@@ -58,7 +58,7 @@ protected:
 
 			auto cameraPosition = camera->getLookAtTransform();
 
-			if (skybox.get())
+			if (skybox != nullptr)
 			{
 				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>().getShader(camera->getSkyboxShader());
 				assert(s != NULL && "Skybox does not have a shader associated");
@@ -80,11 +80,9 @@ protected:
 
 
 				glActiveTexture(GL_TEXTURE0);
-				// TODO
-				//				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());
+				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());
 				glDepthMask(0);
-				// TODO
-				//				skybox->draw();
+				skybox->draw();
 				glDepthMask(1);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 			}

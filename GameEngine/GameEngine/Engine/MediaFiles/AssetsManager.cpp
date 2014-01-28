@@ -3,6 +3,7 @@
 #include <MediaFiles/MaterialFile.hpp>
 #include <MediaFiles/ObjFile.hpp>
 #include <MediaFiles/TextureFile.hpp>
+#include <MediaFiles/CubeMapFile.hpp>
 
 AssetsManager::AssetsManager()
 {
