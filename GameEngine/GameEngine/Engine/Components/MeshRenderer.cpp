@@ -43,9 +43,9 @@ namespace Component
 			s->use();
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());
 		perModelUniform->flushChanges();
-		for (unsigned int i = 0; i < mesh->geometries.size(); ++i)
+		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 		{
-			std::static_pointer_cast<MaterialFile>(mesh->material)->materials[i].setUniforms(materialUniform);
+			mesh->material->materials[i].setUniforms(materialUniform);
 			materialUniform->flushChanges();
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
 		}

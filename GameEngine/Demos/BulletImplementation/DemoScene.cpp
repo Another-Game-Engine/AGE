@@ -70,8 +70,8 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::MESH, "obj__cube");
-	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+	rigidBody->setCollisionShape(Component::RigidBody::MESH, "obj__galileo");
+	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 	e->addComponent<Component::GraphNode>();
 	mesh->setShader("MaterialBasic");
 	return e;
@@ -173,6 +173,18 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
+
+
+	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
+	auto planetMesh = AMediaFile::create<ObjFile>("my_planet", defaultBallMesh);
+	planetMesh->material = AMediaFile::create<MaterialFile>("", defaultBallMesh->material);
+	auto testsss = planetMesh->material->materials[0];
+	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
+	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
+	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
+	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>("texture__EarthTextureBump");
+
 
 
 	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture__MoonTexture", 0.0f);
@@ -225,6 +237,8 @@ bool 			DemoScene::userStart()
 		else if (i % 2)
 		{
 			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture__SunTexture", 1.0f);
+			auto lol = AMediaFile::get<ObjFile>("my_planet");
+			c1->getComponent<Component::MeshRenderer>()->mesh = AMediaFile::get<ObjFile>("my_planet");
 		}
 		else
 		{

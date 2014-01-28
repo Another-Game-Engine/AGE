@@ -20,6 +20,7 @@ struct MediaFile : public AMediaFile
 	{}
 
 	MediaFile(const MediaFile &o)
+		: AMediaFile(o)
 	{
 	}
 
