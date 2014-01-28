@@ -42,10 +42,9 @@ Entity  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-	auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
+
+	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
 	e->addComponent<Component::GraphNode>();
-	auto prout = mesh->getMaterials();
-	mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -59,9 +58,8 @@ Entity  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::BOX);
-	auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
+	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 	e->addComponent<Component::GraphNode>();
-	mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -72,9 +70,8 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:monkey");
-	auto mesh = e->addComponent<Component::MeshRenderer>("model:monkey");
-	mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
+	rigidBody->setCollisionShape(Component::RigidBody::MESH, "obj__cube");
+	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 	e->addComponent<Component::GraphNode>();
 	mesh->setShader("MaterialBasic");
 	return e;
@@ -172,7 +169,12 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
 
-	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture:moon", 0.0f);
+	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
+
+
+	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture__MoonTexture", 0.0f);
 	//p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
 	//p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, false);
 
@@ -184,8 +186,7 @@ bool 			DemoScene::userStart()
 
 		auto rigidBody = e->addComponent<Component::RigidBody>(1.0f);
 		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
-		mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
 		e->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
@@ -199,10 +200,7 @@ bool 			DemoScene::userStart()
 
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
-		mesh->getMaterials()[0]->normalTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moonBump");
-		mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
-		mesh->getMaterials()[0]->ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
 		e->addComponent<Component::GraphNode>();
 		mesh->setShader("basicLight");
 	}
@@ -221,15 +219,15 @@ bool 			DemoScene::userStart()
 	{
 		if (i % 3)
 		{
-			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "texture:sun", 1.f);
+			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "texture__SunTexture", 1.f);
 		}
 		else if (i % 2)
 		{
-			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture:earth", 1.0f);
+			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture__SunTexture", 1.0f);
 		}
 		else
 		{
-			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f),"texture:earth", 1.0f);
+			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f),"texture__SunTexture", 1.0f);
 			c1->setLocalTransform() = glm::rotate(c1->getLocalTransform(), std::rand() % 100 / 10.0f, glm::vec3(1, 1, 1));
 		}
 	}
@@ -257,7 +255,7 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
-	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
+	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	return (true);
 }
 
