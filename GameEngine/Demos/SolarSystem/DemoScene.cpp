@@ -201,7 +201,7 @@ bool 			DemoScene::userStart()
 	auto camera = createEntity();
 	camera->addComponent<Component::GraphNode>();
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
-	auto trackBall = camera->addComponent<Component::TrackBall>(	*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
+	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
 
 	std::string		vars[] =	
 	{
