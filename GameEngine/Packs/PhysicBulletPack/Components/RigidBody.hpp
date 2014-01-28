@@ -7,8 +7,7 @@
 #include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/Engine.hh>
-#include <ResourceManager/ResourceManager.hh>
-#include <ResourceManager/SharedMesh.hh>
+#include <MediaFiles/ObjFile.hpp>
 #include <Managers/BulletDynamicManager.hpp>
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include <hacdHACD.h>
@@ -132,14 +131,14 @@ namespace Component
 			else if (c == MESH)
 			{
 				// THERE IS SOME LEAKS BECAUSE THAT'S TEMPORARY
-				SmartPointer<Resources::SharedMesh> mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+				auto mesh = AMediaFile::get<ObjFile>(meshName);
 				auto group = new btCompoundShape();
 
-				auto &geos = mesh->getGeometry();
+				auto &geos = mesh->geometries;
 
 				for (unsigned int i = 0; i < geos.size(); ++i)
 				{
-					const Resources::Geometry &geo = geos[i]; // DIRTY HACK TEMPORARY
+					auto &geo = geos[i]; // DIRTY HACK TEMPORARY
 					// NEED TO REPLACE MESH BY MESH GROUP !
 					btScalar *t = new btScalar[geo.vertices.size() * 3]();
 					for (unsigned int it = 0; it < geo.vertices.size(); ++it)
@@ -171,13 +170,13 @@ namespace Component
 			}
 			else if (c == CONCAVE_STATIC_MESH) // dont work
 			{
-				SmartPointer<Resources::SharedMesh> mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+				auto mesh = AMediaFile::get<ObjFile>(meshName);
 				auto trimesh = new btTriangleMesh();
-				auto &geos = mesh->getGeometry();
+				auto &geos = mesh->geometries;
 
 				for (unsigned int j = 0; j < geos.size(); ++j)
 				{
-					const Resources::Geometry &geo = geos[j];
+					auto &geo = geos[j];
 					for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
 					{
 						trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
