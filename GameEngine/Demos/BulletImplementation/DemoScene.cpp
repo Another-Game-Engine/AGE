@@ -175,23 +175,22 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 
+	// EXAMPLE LOAD FROM SAVE
+	AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
+
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
-	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
-	auto planetMesh = AMediaFile::create<ObjFile>("my_planet", defaultBallMesh);
-	planetMesh->material = AMediaFile::create<MaterialFile>("my_planet_material", defaultBallMesh->material);
-	auto testsss = planetMesh->material->materials[0];
-	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
-	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthNightTexture");
-	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>("texture__EarthClouds");
-	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>("texture__EarthTextureBump");
+	//auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
+	//auto planetMesh = AMediaFile::create<ObjFile>("my_planet", defaultBallMesh);
+	//planetMesh->material = AMediaFile::create<MaterialFile>("my_planet_material", defaultBallMesh->material);
+	//auto testsss = planetMesh->material->materials[0];
+	//planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
+	//planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthNightTexture");
+	//planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>("texture__EarthClouds");
+	//planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>("texture__EarthTextureBump");
 
 	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
-	//AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
 	//AMediaFile::saveToFile("my_planet_material", "./Assets/Serialized/");
-
-
-	// EXAMPLE LOAD FROM SAVE
-	// AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
+	//AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
 
 	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture__MoonTexture", 0.0f);
 	//p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);

@@ -150,6 +150,7 @@ public:
 		std::string filePath = path + e->name + ".cpd";
 		std::ofstream ofs(filePath, std::ios::binary);
 		assert(ofs.is_open() && "Cannot open file for save");
+		e->path = File(path + e->name + ".cpd");
 		e->serialize<cereal::BinaryOutputArchive>(ofs);
 	}
 
