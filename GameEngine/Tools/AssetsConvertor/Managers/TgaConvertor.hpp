@@ -20,8 +20,13 @@ public:
 
 	virtual std::string setName(const File &file) const
 	{
+		auto folder = file.getFolder();
+		folder = folder.substr(0, folder.size() - 1);
+		auto folderExt = File(folder).getExtension();
 		auto obj = file.getShortFileName();
 		obj = "texture__" + obj;
+		if (folderExt == "skybox" || folderExt == "cubeMap")
+			obj += "_" + File(folder).getShortFileName();
 		return obj;
 	}
 
