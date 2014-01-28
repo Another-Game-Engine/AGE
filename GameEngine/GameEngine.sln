@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21126.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -66,6 +66,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HACD", "Vendors\bullet-2.82-r2704\projects\Extras\HACD\HACD.vcxproj", "{86C78A50-477B-40DE-9696-928A85263479}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletFileLoader", "Vendors\bullet-2.82-r2704\projects\Extras\Serialize\BulletFileLoader\BulletFileLoader.vcxproj", "{4B51C5C9-B892-4C73-AF4C-E2C4B4DA41FD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShadowMapping", "ShadowMapping\ShadowMapping.vcxproj", "{15D1542F-C88C-4549-8029-9D4495E54A04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -323,6 +325,26 @@ Global
 		{4B51C5C9-B892-4C73-AF4C-E2C4B4DA41FD}.RelWithDebInfo|Mixed Platforms.Build.0 = RelWithDebInfo|Win32
 		{4B51C5C9-B892-4C73-AF4C-E2C4B4DA41FD}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
 		{4B51C5C9-B892-4C73-AF4C-E2C4B4DA41FD}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Debug|Win32.ActiveCfg = Debug|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Debug|Win32.Build.0 = Debug|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.MinSizeRel|Any CPU.ActiveCfg = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.MinSizeRel|Mixed Platforms.ActiveCfg = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.MinSizeRel|Mixed Platforms.Build.0 = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.MinSizeRel|Win32.ActiveCfg = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.MinSizeRel|Win32.Build.0 = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Release|Any CPU.ActiveCfg = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Release|Win32.ActiveCfg = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.Release|Win32.Build.0 = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.RelWithDebInfo|Any CPU.ActiveCfg = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.RelWithDebInfo|Mixed Platforms.ActiveCfg = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.RelWithDebInfo|Mixed Platforms.Build.0 = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
+		{15D1542F-C88C-4549-8029-9D4495E54A04}.RelWithDebInfo|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -331,6 +353,7 @@ Global
 		{60ACE0BC-C15B-4A41-A735-63FD967CC91F} = {E92BB286-351B-420A-B152-DB0511195EFC}
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F} = {E92BB286-351B-420A-B152-DB0511195EFC}
 		{ECFC3CA5-DB31-4109-8A00-88358E23B3B9} = {E92BB286-351B-420A-B152-DB0511195EFC}
+		{15D1542F-C88C-4549-8029-9D4495E54A04} = {E92BB286-351B-420A-B152-DB0511195EFC}
 		{A2CDA61C-7E07-4C22-8D7D-9F71E6378B89} = {9D3EF6A3-621D-4807-90CB-705CCD3A8FB8}
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8} = {9D3EF6A3-621D-4807-90CB-705CCD3A8FB8}
 		{0AF596B3-CD77-4EF4-A4E1-B1AAD205B403} = {A2CDA61C-7E07-4C22-8D7D-9F71E6378B89}
