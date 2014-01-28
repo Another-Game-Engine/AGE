@@ -53,6 +53,7 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 			ny = o.ny;
 			pz = o.pz;
 			nz = o.nz;
+			init();
 	}
 
 	CubeMapFile &operator=(const CubeMapFile &o)
@@ -88,20 +89,24 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 		nx = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile(_nx));
 		ny = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile(_ny));
 		nz = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile(_nz));
+		init();
+	}
 
+	void init()
+	{
 		glActiveTexture(GL_TEXTURE0);
 		glGenTextures(1, &_id);
 		assert(_id > 0 && "glGenTextures error.");
 		glBindTexture(GL_TEXTURE_CUBE_MAP, _id);
 
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, px->components, px->width, px->height, 0, px->format, GL_UNSIGNED_BYTE, px->datas);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, nx->components, nx->width, nx->height, 0, nx->format, GL_UNSIGNED_BYTE, nx->datas);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, px->components, px->width, px->height, 0, px->format, GL_UNSIGNED_BYTE, px->datas.data());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, nx->components, nx->width, nx->height, 0, nx->format, GL_UNSIGNED_BYTE, nx->datas.data());
 
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, py->components, py->width, py->height, 0, py->format, GL_UNSIGNED_BYTE, py->datas);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, ny->components, ny->width, ny->height, 0, ny->format, GL_UNSIGNED_BYTE, ny->datas);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, py->components, py->width, py->height, 0, py->format, GL_UNSIGNED_BYTE, py->datas.data());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, ny->components, ny->width, ny->height, 0, ny->format, GL_UNSIGNED_BYTE, ny->datas.data());
 
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, pz->components, pz->width, pz->height, 0, pz->format, GL_UNSIGNED_BYTE, pz->datas);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, nz->components, nz->width, nz->height, 0, nz->format, GL_UNSIGNED_BYTE, nz->datas);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, pz->components, pz->width, pz->height, 0, pz->format, GL_UNSIGNED_BYTE, pz->datas.data());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, nz->components, nz->width, nz->height, 0, nz->format, GL_UNSIGNED_BYTE, nz->datas.data());
 
 		glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
