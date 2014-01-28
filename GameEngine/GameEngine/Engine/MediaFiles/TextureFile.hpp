@@ -35,6 +35,40 @@ struct TextureFile : public MediaFile<TextureFile>
 		glDeleteTextures(1, &id);
 	}
 
+	TextureFile(const TextureFile &o)
+		: MediaFile<TextureFile>(o)
+		, width(0)
+		, height(0)
+		, components(0)
+		, format(0)
+		, wrap(GL_REPEAT)
+		, minFilter(GL_LINEAR_MIPMAP_LINEAR)
+		, magFilter(GL_LINEAR)
+	{
+		width = o.width;
+		height = o.height;
+		components = o.components;
+		format = o.format;
+		wrap = o.wrap;
+		minFilter = o.minFilter;
+		magFilter = o.magFilter;
+	}
+
+	TextureFile &operator=(const TextureFile &o)
+	{
+		if (&o != this)
+		{
+			width = o.width;
+			height = o.height;
+			components = o.components;
+			format = o.format;
+			wrap = o.wrap;
+			minFilter = o.minFilter;
+			magFilter = o.magFilter;
+		}
+		return *this;
+	}
+
 	template <typename Archive>
 	void save(Archive &ar) const
 	{

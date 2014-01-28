@@ -19,6 +19,19 @@ struct MediaFile : public AMediaFile
 	virtual ~MediaFile()
 	{}
 
+	MediaFile(const MediaFile &o)
+	{
+	}
+
+	MediaFile &operator=(const MediaFile &o)
+	{
+		if (&o != this)
+		{
+		}
+		return *this;
+	}
+
+
 	virtual void _serialize(cereal::JSONOutputArchive &ar)
 	{
 		ar(*dynamic_cast<MediaType*>(this));

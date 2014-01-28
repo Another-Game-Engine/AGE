@@ -37,9 +37,25 @@ protected:
 public:
 	AMediaFile() :
 		_childs(0)
+		, _type(UNKNOWN)
 	{
 	}
 	virtual ~AMediaFile(){}
+
+	AMediaFile(const AMediaFile &o)
+		: _childs(0)
+	{
+		_type = o._type;
+	}
+
+	AMediaFile &operator=(const AMediaFile &o)
+	{
+		if (&o != this)
+		{
+			_type = o._type;
+		}
+		return *this;
+	}
 
 	template <typename Archive>
 	void serialize(std::ofstream &s)

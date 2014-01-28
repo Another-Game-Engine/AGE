@@ -27,6 +27,21 @@ struct MaterialFile : public MediaFile<MaterialFile>
 	{
 	}
 
+	MaterialFile(const MaterialFile &o)
+		: MediaFile<MaterialFile>(o)
+	{
+		materials = o.materials;
+	}
+
+	MaterialFile &operator=(const MaterialFile &o)
+	{
+		if (&o != this)
+		{
+			materials = o.materials;
+		}
+		return *this;
+	}
+
 	struct Material
 	{
 		std::string name;
