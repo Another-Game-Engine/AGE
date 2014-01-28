@@ -42,6 +42,7 @@ static bool initSceneEngine(Engine &engine, std::string const &nameScene)
 		std::cerr << "the init scene : " << nameScene << " fail." << std::endl;
 		return (false);
 	}
+	engine.getInstance<SceneManager>().enableScene(nameScene, 0);
 	return (true);
 }
 
