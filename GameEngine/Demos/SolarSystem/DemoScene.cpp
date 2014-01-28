@@ -41,7 +41,7 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	auto ballMesh = AMediaFile::get<ObjFile>("obj__ball");
 	auto planetMesh = AMediaFile::create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
-	planetMesh->material = AMediaFile::create<MaterialFile>(ballMesh->material);
+	planetMesh->material = AMediaFile::create<MaterialFile>("", ballMesh->material);
 	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>(tex1);
 	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>(tex2);
 	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>(tex3);
