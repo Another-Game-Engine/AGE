@@ -1,9 +1,8 @@
-#ifndef  __CUBE_MAP_HPP__
-# define __CUBE_MAP_HPP__
+#ifndef  __CUBE_MAP_FILE_HPP__
+# define __CUBE_MAP_FILE_HPP__
 
 #include <MediaFiles/MediaFile.hpp>
 #include <vector>
-#include <glm/glm.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/common.hpp>
@@ -13,9 +12,9 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 #include <Utils/GlmSerialization.hpp>
-#include <OpenGL/include/SDL/SDL_opengl.h>
-#include <Utils/OpenGL.hh>
+#include <OpenGL/VertexBuffer.hh>
 #include <MediaFiles/TextureFile.hpp>
+
 
 struct CubeMapFile : public MediaFile<CubeMapFile>
 {
@@ -28,8 +27,6 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 		, pz(nullptr)
 		, nz(nullptr)
 		, _id(0)
-		, _vbo(0)
-		, _vao(0)
 	{
 		_type = CUBEMAP;
 	}
@@ -38,10 +35,6 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 	{
 		if (_id != 0)
 			glDeleteTextures(1, &_id);
-		if (_vao != 0)
-			glDeleteVertexArrays(1, &_vao);
-		if (_vbo != 0)
-			glDeleteBuffers(1, &_vbo);
 	}
 
 	CubeMapFile(const CubeMapFile &o)
@@ -53,8 +46,6 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 		, pz(nullptr)
 		, nz(nullptr)
 		, _id(0)
-		, _vbo(0)
-		, _vao(0)
 	{
 			px = o.px;
 			nx = o.nx;
@@ -163,18 +154,9 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 			-10.0f, -10.0f,  10.0f,
 			10.0f, -10.0f,  10.0f
 		};
-
-		glGenBuffers (1, &_vbo);
-		assert(_vbo > 0 && "glGenBuffers error.");
-		glBindBuffer (GL_ARRAY_BUFFER, _vbo);
-		glBufferData (GL_ARRAY_BUFFER, 3 * 36 * sizeof (float), &points, GL_STATIC_DRAW);
-		
-		glGenVertexArrays (1, &_vao);
-		assert(_vao > 0 && "glGenVertexArrays error.");
-		glBindVertexArray (_vao);
-		glEnableVertexAttribArray (0);
-		glBindBuffer (GL_ARRAY_BUFFER, _vbo);
-		glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+		unsigned int indices[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 };
+		_buffer.init(36, &indices[0]);
+		_buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 3, 3, GL_FLOAT));
 	}
 
 	inline const GLuint			getId() const
@@ -184,9 +166,7 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 
 	void draw() const
 	{
-		glBindVertexArray (_vao);
-		glDrawArrays (GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
+		_buffer.draw(GL_TRIANGLES);
 	}
 
 	std::shared_ptr<TextureFile> px;
@@ -197,8 +177,7 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 	std::shared_ptr<TextureFile> nz;
 private:
 	GLuint _id;
-	GLuint _vbo;
-	GLuint _vao;
+	OpenGLTools::VertexBuffer _buffer;
 };
 
-#endif   //__CUBE_MAP_HPP__
+#endif   //__CUBE_MAP_FILE_HPP__

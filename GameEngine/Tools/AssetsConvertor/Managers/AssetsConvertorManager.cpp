@@ -3,16 +3,19 @@
 #include <Managers/ObjConvertor.hh>
 #include <Managers/MaterialConvertor.hpp>
 #include <Managers/TgaConvertor.hpp>
+#include <Managers/CubeMapConvertor.hpp>
 
 #include <MediaFiles/ObjFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
 #include <MediaFiles/TextureFile.hpp>
+#include <MediaFiles/CubeMapFile.hpp>
 
 AssetsConvertorManager::AssetsConvertorManager()
 {
 	registerConvertor<ObjConvertor>();
 	registerConvertor<MaterialConvertor>();
 	registerConvertor<TgaConvertor>();
+	registerConvertor<CubeMapConvertor>();
 }
 
 AssetsConvertorManager::~AssetsConvertorManager()

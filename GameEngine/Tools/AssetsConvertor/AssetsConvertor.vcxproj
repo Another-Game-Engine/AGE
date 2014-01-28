@@ -95,6 +95,7 @@
     <ClCompile Include="Managers\AConvertor.cpp" />
     <ClCompile Include="Managers\AssetsConvertorManager.cpp" />
     <ClCompile Include="Managers\ObjConvertor.cpp" />
+    <ClCompile Include="Managers\CubeMapConvertor.hpp" />
     <ClCompile Include="Parsers\LoadTGA.cpp" />
   </ItemGroup>
   <ItemGroup>
