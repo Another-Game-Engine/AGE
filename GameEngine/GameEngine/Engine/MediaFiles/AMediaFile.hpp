@@ -48,6 +48,9 @@ public:
 		_type = o._type;
 		name = o.name;
 		name += "_copy";
+		auto tmpPath = o.path.getFolder() + o.path.getShortFileName();
+		tmpPath += "_copy.cpd";
+		path = File(tmpPath);
 	}
 
 	AMediaFile &operator=(const AMediaFile &o)
@@ -140,11 +143,11 @@ public:
 		return n;
 	}
 
-	static void saveToFile(const std::string &media, const std::string &path, const std::string &name = "")
+	static void saveToFile(const std::string &media, const std::string &path)
 	{
 		auto &e = get<AMediaFile>(media);
 		assert(e != nullptr && "Media does not exists");
-		std::string filePath = path + (name.empty() ? e->name : name) + ".cpd";
+		std::string filePath = path + e->name + ".cpd";
 		std::ofstream ofs(filePath, std::ios::binary);
 		assert(ofs.is_open() && "Cannot open file for save");
 		e->serialize<cereal::BinaryOutputArchive>(ofs);
