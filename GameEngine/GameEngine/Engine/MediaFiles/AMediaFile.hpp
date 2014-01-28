@@ -46,6 +46,8 @@ public:
 		: _childs(0)
 	{
 		_type = o._type;
+		name = o.name;
+		name += "_copy";
 	}
 
 	AMediaFile &operator=(const AMediaFile &o)
@@ -53,6 +55,8 @@ public:
 		if (&o != this)
 		{
 			_type = o._type;
+			name = o.name;
+			name += "_copy";
 		}
 		return *this;
 	}
