@@ -22,7 +22,26 @@ struct ObjFile : public MediaFile<ObjFile>
 	{
 		_type = OBJ;
 	}
-	virtual ~ObjFile(){}
+	virtual ~ObjFile()
+	{}
+
+	ObjFile(const ObjFile &o)
+		: MediaFile<ObjFile>(o)
+	{
+		geometries = o.geometries;
+		material = o.material;
+	}
+
+	ObjFile &operator=(const ObjFile &o)
+	{
+		if (&o != this)
+		{
+			geometries = o.geometries;
+			material = o.material;
+		}
+		return *this;
+	}
+
 	struct Geometry
 	{
 		std::string                 name;
@@ -32,6 +51,38 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
 		OpenGLTools::VertexBuffer	buffer;
+
+		Geometry()
+			: name("")
+		{}
+
+		~Geometry()
+		{}
+
+		Geometry(const Geometry &o)
+			: name("")
+		{
+			name = o.name;
+			vertices = o.vertices;
+			normals = o.normals;
+			colors = o.colors;
+			uvs = o.uvs;
+			indices = o.indices;
+		}
+
+		Geometry &operator=(const Geometry &o)
+		{
+			if (&o != this)
+			{
+				name = o.name;
+				vertices = o.vertices;
+				normals = o.normals;
+				colors = o.colors;
+				uvs = o.uvs;
+				indices = o.indices;
+			}
+			return *this;
+		}
 
 		template <typename Archive>
 		void save(Archive &ar) const

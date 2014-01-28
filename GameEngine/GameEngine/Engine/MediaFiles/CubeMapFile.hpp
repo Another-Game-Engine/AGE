@@ -44,6 +44,41 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 			glDeleteBuffers(1, &_vbo);
 	}
 
+	CubeMapFile(const CubeMapFile &o)
+		: MediaFile<CubeMapFile>(o)
+		, px(nullptr)
+		, nx(nullptr)
+		, py(nullptr)
+		, ny(nullptr)
+		, pz(nullptr)
+		, nz(nullptr)
+		, _id(0)
+		, _vbo(0)
+		, _vao(0)
+	{
+			px = o.px;
+			nx = o.nx;
+			py = o.py;
+			ny = o.ny;
+			pz = o.pz;
+			nz = o.nz;
+	}
+
+	CubeMapFile &operator=(const CubeMapFile &o)
+	{
+		if (&o != this)
+		{
+			px = o.px;
+			nx = o.nx;
+			py = o.py;
+			ny = o.ny;
+			pz = o.pz;
+			nz = o.nz;
+		}
+		return *this;
+	}
+
+
 	template <typename Archive>
 	void save(Archive &ar) const
 	{
