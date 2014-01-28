@@ -178,7 +178,7 @@ bool 			DemoScene::userStart()
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
 	auto planetMesh = AMediaFile::create<ObjFile>("my_planet", defaultBallMesh);
-	planetMesh->material = AMediaFile::create<MaterialFile>("", defaultBallMesh->material);
+	planetMesh->material = AMediaFile::create<MaterialFile>("my_planet_material", defaultBallMesh->material);
 	auto testsss = planetMesh->material->materials[0];
 	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
 	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthNightTexture");
@@ -186,12 +186,12 @@ bool 			DemoScene::userStart()
 	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>("texture__EarthTextureBump");
 
 	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
-	// DO NOT WORK CORRECTLY
-	AMediaFile::saveToFile("my_planet", "./Assets/Serialized/", "my_planet_dynamic");
+	//AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
+	//AMediaFile::saveToFile("my_planet_material", "./Assets/Serialized/");
 
 
-	// EXAMPLE LOAD FROM SAVE - NOT WORKING
-	//  AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet_dynamic.cpd"));
+	// EXAMPLE LOAD FROM SAVE
+	// AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
 
 	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture__MoonTexture", 0.0f);
 	//p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
@@ -272,7 +272,7 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().addUniform("cameraUniform").
 		init(&sky, "cameraUniform", vars);
-
+	
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
