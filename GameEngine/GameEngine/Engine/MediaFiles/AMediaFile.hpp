@@ -96,6 +96,10 @@ public:
 			res = std::make_shared<TextureFile>();
 			ar(static_cast<TextureFile&>(*res.get()));
 			break;
+		case CUBEMAP:
+			res = std::make_shared<CubeMapFile>();
+			ar(static_cast<CubeMapFile&>(*res.get()));
+			break;
 		default:
 			break;
 		}

@@ -8,11 +8,7 @@
 #include <Utils/SmartPointer.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
-
-namespace Resources
-{
-	class CubeMap;
-};
+#include <MediaFiles/CubeMapFile.hpp>
 
 namespace Component
 {
@@ -28,7 +24,7 @@ namespace Component
 		glm::mat4            &getProjection();
 		inline glm::mat4            &setLookAtTransform() { return lookAtTransform; }
 		inline const glm::mat4      &getLookAtTransform() const { return lookAtTransform; }
-		SmartPointer<Resources::CubeMap> getSkybox();
+		std::shared_ptr<CubeMapFile> getSkybox();
 		const std::string &getSkyboxShader() const;
 
 		//////
@@ -55,7 +51,7 @@ namespace Component
 		//////
 
 		glm::mat4                        projection;
-		SmartPointer<Resources::CubeMap> skybox;
+		std::shared_ptr<CubeMapFile>     skybox;
 		std::string                      cubeMapShader;
 		glm::mat4                        lookAtTransform;
 	private:
