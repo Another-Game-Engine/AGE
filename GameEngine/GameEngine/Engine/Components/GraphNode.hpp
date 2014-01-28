@@ -4,22 +4,22 @@
 #include "Component.hh"
 #include <Core/Engine.hh>
 #include <Entities/EntityData.hh>
+#include <cereal/types/base_class.hpp>
+#include <cereal/types/set.hpp>
 
 namespace Component
 {
-	class GraphNode : public ComponentBase<GraphNode>
+	struct GraphNode : public ComponentBase<GraphNode>
 	{
-	public:
 		typedef std::list<Entity> t_EntityList;
 
-		GraphNode(AScene *scene, Entity &entity)
-			: ComponentBase<GraphNode>(scene, entity, "GraphNodeComponent")
+		GraphNode()
+			: ComponentBase<GraphNode>()
 		{
-			}
+		}
 
 		virtual ~GraphNode()
 		{
-			reset();
 		}
 
 		void init()
@@ -35,7 +35,7 @@ namespace Component
 		{
 			_childs.clear();
 			auto key = PubSubKey("graphNodeNotARoot");
-			broadCast(key, _entity);
+			_entity->broadCast(key, _entity);
 		}
 
 		const Entity	    	&getParent() const
@@ -103,6 +103,63 @@ namespace Component
 		{
 			return std::end(_childs);
 		}
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new GraphNode();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void save(Archive &ar) const
+		{
+			std::set<std::size_t> childIds;
+			for (auto e : _childs)
+			{
+				childIds.insert(_entity.get()->getScene()->registrarSerializedEntity(e.getId()));
+			}
+			ar(CEREAL_NVP(childIds));
+			ar(cereal::make_nvp("haveParent", _parent.get() != nullptr));
+			ar(cereal::make_nvp("parentID", _parent.getId()));
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+			std::set<std::size_t> childIds;
+			ar(childIds);
+			for (auto e : childIds)
+				_childs.insert(Entity(e));
+			for (auto it = std::begin(_childs); it != std::end(_childs); ++it)
+			{ 
+				Entity *e = const_cast<Entity *>(&(*it));
+				_entity->getScene()->entityHandle(it->getId(), e);
+			}
+			bool haveParent = false;
+			ar(haveParent);
+			std::size_t parentId;
+			ar(parentId);
+			if (haveParent)
+			{
+				_entity->getScene()->entityHandle(parentId, &_parent);
+			}
+			else
+			{
+				auto key = PubSubKey("graphNodeSetAsRoot");
+				_entity->broadCast(key, _entity);
+			}
+		}
+
+		// !Serialization
+		////
+		//////
 
 	private:
 		Entity _parent;

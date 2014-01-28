@@ -20,8 +20,10 @@ public:
 	bool					exists() const
 	{
 		std::ifstream file(this->fullPath_.c_str());
-
-		return file.is_open();
+		bool isOpen = file.is_open();
+		if (isOpen)
+			file.close();
+		return isOpen;
 	}
 
 	const std::string			&getFullName() const

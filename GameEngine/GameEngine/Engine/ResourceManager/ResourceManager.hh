@@ -4,6 +4,7 @@
 
 #include "AResource.hh"
 #include "Utils/SmartPointer.hh"
+#include <Utils/Dependency.hpp>
 
 #include <map>
 #include <string>
@@ -13,14 +14,14 @@ class Engine;
 namespace	Resources
 {
 
-class	ResourceManager
+class	ResourceManager : public Dependency
 {
 private:
 	std::map<std::string, SmartPointer<AResource> >		_resources;
 	Engine &_engine;
 public:
 	ResourceManager(Engine *engine);
-	~ResourceManager();
+	virtual ~ResourceManager();
 
 	bool					addResource(std::string const &name,
 										SmartPointer<AResource> resource,

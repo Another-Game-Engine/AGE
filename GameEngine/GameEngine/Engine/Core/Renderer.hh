@@ -11,8 +11,9 @@
 #include "MaterialManager.hh"
 #include "Utils/Any.hpp"
 #include <core/Engine.hh>
+#include <Utils/Dependency.hpp>
 
-class Renderer
+class Renderer : public Dependency
 {
 private:
 	typedef std::map<std::string, OpenGLTools::Shader*>::iterator			shadersIt;

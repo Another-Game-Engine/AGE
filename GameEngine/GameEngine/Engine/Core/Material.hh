@@ -13,7 +13,7 @@
 
 namespace Component
 {
-	class MeshRenderer;
+	struct MeshRenderer;
 };
 class MaterialManager;
 

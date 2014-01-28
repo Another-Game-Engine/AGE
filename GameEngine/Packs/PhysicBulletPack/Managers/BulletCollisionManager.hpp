@@ -3,8 +3,9 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+ #include <Utils/Dependency.hpp>
 
-class BulletCollisionManager
+class BulletCollisionManager : public Dependency
 {
 public:
 	BulletCollisionManager()
