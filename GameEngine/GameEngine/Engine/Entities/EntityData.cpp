@@ -16,6 +16,7 @@ EntityData::EntityData(AScene *scene) :
 	_globalRotation(0),
 	_globalScale(0)
 {
+	removeFlags(ACTIVE);
 }
 
 EntityData::~EntityData()
@@ -26,6 +27,11 @@ EntityData::~EntityData()
 Entity &EntityData::getHandle()
 {
 	return _handle;
+}
+
+AScene *EntityData::getScene() const
+{
+	return _scene;
 }
 
 void EntityData::setHandle(Entity &handle)
@@ -162,6 +168,7 @@ void EntityData::reset()
 		if (_components[i].get())
 		{
 			broadCast(std::string("componentRemoved" + std::to_string(i)), _handle);
+			_components[i]->reset();
 		}
 		_components[i].reset();
 	}

@@ -11,7 +11,6 @@
 #include <Managers/AssetsConvertorManager.hh>
 
 #include <Components/RotationForce.hh>
-#include <Components/MaterialComponent.h>
 #include <Components/CameraComponent.hh>
 
 #include <OpenGL/ComputeShader.hh>

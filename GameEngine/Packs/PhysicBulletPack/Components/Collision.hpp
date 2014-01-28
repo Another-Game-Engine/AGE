@@ -5,11 +5,10 @@
 
 namespace Component
 {
-	class Collision : public ComponentBase<Collision>
+	struct Collision : public ComponentBase<Collision>
 	{
-	public:
-		Collision(AScene *scene, Entity &entity)
-			: ComponentBase<Collision>(scene, entity, "CollisionComponent")
+		Collision()
+			: ComponentBase<Collision>()
 		{
 				
 		}
@@ -23,25 +22,67 @@ namespace Component
 
 		virtual void reset()
 		{
-			_collsions.clear();
+			collisions.clear();
 		}
 
 		void addCollision(const Entity &entity)
 		{
-			_collsions.insert(entity);
+			collisions.insert(entity);
 		}
 
 		std::set<Entity> &getCollisions()
 		{
-			return _collsions;
+			return collisions;
 		}
 
 		void clear()
 		{
-			_collsions.clear();
+			collisions.clear();
 		}
-	private:
-		std::set<Entity> _collsions;
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new Collision();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void save(Archive &ar) const
+		{
+			std::set<std::size_t> entityIds;
+			for (auto e : collisions)
+			{
+				entityIds.insert(_entity.get()->getScene()->registrarSerializedEntity(e.getId()));
+			}
+			ar(cereal::make_nvp("Collisions", entityIds));
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+			std::set<std::size_t> entityIds;
+			ar(entityIds);
+			for (auto e : entityIds)
+				collisions.insert(Entity(e));
+			for (auto it = std::begin(collisions); it != std::end(collisions); ++it)
+			{ 
+				Entity *e = const_cast<Entity *>(&(*it));
+				_entity->getScene()->entityHandle(it->getId(), e);
+			}
+		}
+
+		// !Serialization
+		////
+		//////
+
+		std::set<Entity> collisions;
 	};
 }
 

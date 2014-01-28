@@ -25,6 +25,7 @@ bool					ResourceManager::addResource(std::string const &name,
 	resource->setEngine(_engine);
 	_resources[name] = resource;
 	assert(resource->load(param) == true && "Resource does not load correctly.");
+	resource->setName(name);
 	return (true);
 }
 

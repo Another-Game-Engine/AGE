@@ -101,6 +101,7 @@
     <ClInclude Include="Managers\FileTypeRegister.hpp" />
     <ClInclude Include="Managers\ObjConvertor.hh" />
     <ClInclude Include="MediaFiles\AMediaFile.hpp" />
+    <ClInclude Include="MediaFiles\MaterialFile.hpp" />
     <ClInclude Include="MediaFiles\MediaFile.hpp" />
     <ClInclude Include="MediaFiles\ObjFile.hpp" />
   </ItemGroup>

@@ -3,10 +3,11 @@
 
 #include <string>
 #include <map>
+#include <Utils/Dependency.hpp>
 
 class AScene;
 
-class SceneManager
+class SceneManager : public Dependency
 {
 private:
 	std::map<std::string, AScene*>	_scenes;

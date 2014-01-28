@@ -3,10 +3,14 @@
 
 #include <string>
 #include <Entities/Entity.hh>
-#include <Utils/PubSub.hpp>
 #include <Core/AScene.hh>
 
-class AScene;
+#include <cereal/cereal.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/xml.hpp>
+#include <regex>
 
 namespace	Component
 {
@@ -19,26 +23,42 @@ namespace	Component
 
 	struct Base
 	{
-		Base(AScene *scene, Entity &entity, const std::string &name = "NoName");
+		Base(std::size_t serId);
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
-		void			setEntity(Entity &entity);
+		void			setEntity(Entity entity);
 		Entity		&getEntity();
-		std::string const &getName() const;
 		virtual void reset() = 0;
+		std::size_t serializedID;
+
+		virtual Base *unserialize(cereal::JSONInputArchive &ar, Entity e) = 0;
+		virtual Base *unserialize(cereal::BinaryInputArchive &ar, Entity e) = 0;
+		virtual Base *unserialize(cereal::XMLInputArchive &ar, Entity e) = 0;
+		virtual Base *unserialize(cereal::PortableBinaryInputArchive &ar, Entity e) = 0;
+		virtual void _serialize(cereal::JSONOutputArchive &ar) = 0;
+		virtual void _serialize(cereal::BinaryOutputArchive &ar) = 0;
+		virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;
+		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar) = 0;
+
+		template <typename Archive>
+		void serializeBase(Archive &ar)
+		{
+			ar(cereal::make_nvp("Component_Type_ID", serializedID));
+			_serialize(ar);
+		}
+
 	protected:
-		AScene              *_scene;
-		std::string         _name;
 		Entity				_entity;
 	};
 
 	template <class T>
-	struct ComponentBase : public Base, public PubSub
+	struct ComponentBase : public Base
 	{
-		ComponentBase(AScene *scene, Entity &entity, const std::string &name = "DefaultComponentName")
-		: Base(scene, entity, name),
-		PubSub(scene->getInstance<PubSub::Manager>())
-		{}
+		ComponentBase()
+			: Base(typeid(T).hash_code())
+			, _name(std::regex_replace(typeid(T).name(), std::regex("(\\s)+|(:)+"), "_"))
+		{
+		}
 
 		virtual ~ComponentBase()
 		{
@@ -49,7 +69,49 @@ namespace	Component
 			static unsigned int id = uniqueId();
 			return id;
 		}
+
+		virtual Base *unserialize(cereal::JSONInputArchive &ar, Entity e)
+		{
+			return dynamic_cast<T*>(this)->unserialize<cereal::JSONInputArchive>(ar, e);
+		}
+
+		virtual Base *unserialize(cereal::BinaryInputArchive &ar, Entity e)
+		{
+			return dynamic_cast<T*>(this)->unserialize<cereal::BinaryInputArchive>(ar, e);
+		}
+
+		virtual Base *unserialize(cereal::XMLInputArchive &ar, Entity e)
+		{
+			return dynamic_cast<T*>(this)->unserialize<cereal::XMLInputArchive>(ar, e);
+		}
+
+		virtual Base *unserialize(cereal::PortableBinaryInputArchive &ar, Entity e)
+		{
+			return dynamic_cast<T*>(this)->unserialize<cereal::PortableBinaryInputArchive>(ar, e);
+		}
+
+		virtual void _serialize(cereal::JSONOutputArchive &ar)
+		{
+			ar(cereal::make_nvp(_name, *dynamic_cast<T*>(this)));
+		}
+
+		virtual void _serialize(cereal::BinaryOutputArchive &ar)
+		{
+			ar(*dynamic_cast<T*>(this));
+		}
+
+		virtual void _serialize(cereal::XMLOutputArchive &ar)
+		{
+			ar(cereal::make_nvp(_name, *dynamic_cast<T*>(this)));
+		}
+
+		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar)
+		{
+			ar(*dynamic_cast<T*>(this));
+		}
+
 	private:
+		const std::string _name;
 		//std::multiset<PubSubKey> _subscriptions; // subscriptions to local entity events
 	};
 }

@@ -2,7 +2,9 @@
 #ifndef TIMER_HH_
 #define TIMER_HH_
 
-class Timer
+#include <Utils/Dependency.hpp>
+
+class Timer : public Dependency
 {
 private:
 	unsigned int 		_oldTime;
@@ -10,7 +12,7 @@ private:
 
 public:
 	Timer();
-	~Timer() { }
+	virtual ~Timer() { }
 
 	void 		update();
 	double 		getElapsed() const;

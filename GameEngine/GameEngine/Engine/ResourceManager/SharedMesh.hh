@@ -42,8 +42,10 @@ public:
 	void			draw() const;
 
 	std::vector<Geometry>      &getGeometry();
+
 	std::vector<Vertice<4>> const &getDrawable() const;
 	inline std::vector<SmartPointer<Material> > &getDefaultMaterialsList() { return _defaultMaterialsList; }
+
 };
 
 }

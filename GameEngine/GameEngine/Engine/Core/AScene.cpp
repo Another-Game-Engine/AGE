@@ -40,13 +40,14 @@ Entity &AScene::createEntity()
 	}
 	unsigned int index = _free.front();
 	_free.pop();
-	auto lol = _pool[index];
+	_pool[index].addFlags(EntityData::ACTIVE);
 	return _pool[index].getHandle();
 }
 
 void AScene::destroy(const Entity &h)
 {
 	h.get()->reset();
+	h.get()->removeFlags(EntityData::ACTIVE);
 	_free.push(h.getId());
 }
 

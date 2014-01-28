@@ -18,9 +18,8 @@
 
 namespace Component
 {
-	ATTRIBUTE_ALIGNED16(class) CollisionBody : public Component::ComponentBase<CollisionBody>
+	ATTRIBUTE_ALIGNED16(struct) CollisionBody : public Component::ComponentBase<CollisionBody>
 	{
-	public:
 		BT_DECLARE_ALIGNED_ALLOCATOR();
 		typedef enum
 		{
@@ -30,16 +29,13 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		CollisionBody(AScene *scene, Entity &entity)
-			: ComponentBase(scene, entity, "CollisionBody"),
+		CollisionBody() :
 			_manager(nullptr),
-			_shapeType(UNDEFINED),
-			_meshName(""),
+			shapeType(UNDEFINED),
+			meshName(""),
 			_collisionShape(nullptr),
 			_body(nullptr)
 		{
-			_manager = dynamic_cast<BulletCollisionManager*>(&scene->getEngine().getInstance<BulletCollisionManager>());
-			assert(_manager != nullptr);
 		}
 
 		virtual void reset()
@@ -55,11 +51,13 @@ namespace Component
 				delete _collisionShape;
 				_collisionShape = nullptr;
 			}
-			_shapeType = UNDEFINED;
+			shapeType = UNDEFINED;
 		}
 
 		bool init()
 		{
+			_manager = dynamic_cast<BulletCollisionManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
+			assert(_manager != nullptr);
 			return true;
 		}
 
@@ -75,13 +73,13 @@ namespace Component
 			return *_body;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &meshName = "")
+		void setCollisionShape(CollisionShape c, const std::string &_meshName = "")
 		{
 			if (c == UNDEFINED)
 				return;
-			_meshName = meshName;
-			_reset();
-			_shapeType = c;
+			meshName = _meshName;
+			reset();
+			shapeType = c;
 			btTransform transform;
 			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
 			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
@@ -100,7 +98,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				SmartPointer<Resources::SharedMesh> mesh = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
+				SmartPointer<Resources::SharedMesh> mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
 				const Resources::Geometry &geo = mesh->getGeometry()[0]; // DIRTY HACK TEMPORARY
 				// NEED TO REPLACE MESH BY MESH GROUP !
 				btScalar *t = new btScalar[geo.vertices.size() * 3]();
@@ -145,28 +143,42 @@ namespace Component
 				delete _collisionShape;
 		}
 
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new CollisionBody();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void save(Archive &ar) const
+		{
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+		}
+
+		// !Serialization
+		////
+		//////
+
+		CollisionShape shapeType;
+		std::string meshName;
 	private:
 		BulletCollisionManager *_manager;
-		CollisionShape _shapeType;
-		std::string _meshName;
 		btCollisionShape *_collisionShape;
 		btCollisionObject *_body;
-	private:
 		CollisionBody(CollisionBody const &);
 		CollisionBody &operator=(CollisionBody const &);
-
-		void _reset()
-		{
-			if (_body != nullptr)
-			{
-				_manager->getWorld()->removeCollisionObject(_body);
-				delete _body;
-			}
-			if (_collisionShape != nullptr)
-			{
-				delete _collisionShape;
-			}
-		}
 	};
 
 }

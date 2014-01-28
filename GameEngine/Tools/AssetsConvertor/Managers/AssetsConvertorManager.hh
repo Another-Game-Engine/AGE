@@ -12,13 +12,15 @@
 #include <MediaFiles/AMediaFile.hpp>
 #include <MediaFiles/ObjFile.hpp>
 
+#include <Utils/Dependency.hpp>
+
 class AConvertor;
 
-class AssetsConvertorManager
+class AssetsConvertorManager : public Dependency
 {
 public:
 	AssetsConvertorManager();
-	~AssetsConvertorManager();
+	virtual ~AssetsConvertorManager();
 
 	void setOutputDirectory(const std::string directory);
 

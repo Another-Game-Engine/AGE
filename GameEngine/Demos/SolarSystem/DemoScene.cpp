@@ -8,7 +8,6 @@
 #include "ResourceManager/Texture.hh"
 #include "ResourceManager/CubeMap.hh"
 #include "Components/RotationForce.hh"
-#include "Components/MaterialComponent.h"
 #include <Components/CameraComponent.hh>
 #include <Components/TrackBallComponent.hpp>
 #include <OpenGL/ComputeShader.hh>
@@ -47,10 +46,10 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>("model:ball");
 
 	r->setShader(shader);
-	r->getMaterials()[0].ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex1);
-	r->getMaterials()[0].diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex2);
-	r->getMaterials()[0].specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex3);
-	r->getMaterials()[0].normalTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex4);
+	r->getMaterials()[0]->ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex1);
+	r->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex2);
+	r->getMaterials()[0]->specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex3);
+	r->getMaterials()[0]->normalTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex4);
 	
 	e->addComponent<Component::RotationForce>(glm::vec3(0, orbitSpeed, 0));
 	p->getComponent<Component::GraphNode>()->addSon(e);
@@ -60,6 +59,12 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 bool 			DemoScene::userStart()
 {	
+	rct<Component::CameraComponent>()
+		.rct<Component::GraphNode>()
+		.rct<Component::MeshRenderer>()
+		.rct<Component::RotationForce>()
+		.rct<Component::TrackBall>();
+
 	// System Tests
 	//
 	//
@@ -161,6 +166,31 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
 
+	std::string		vars[] = 
+	{
+		"projection",
+		"view"
+	};
+
+	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>().addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+
+	_engine.getInstance<Renderer>().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+
+	_engine.getInstance<Renderer>().addUniform("cameraUniform").
+		init(&sky, "cameraUniform", vars);
+
+	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
+
+	File saveFile("SolarSystem.scenesave");
+	if (saveFile.exists())
+	{
+		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
+		load<cereal::JSONInputArchive>(fileStream);
+		fileStream.close();
+		return true;
+	}
+
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
 	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
@@ -190,6 +220,9 @@ bool 			DemoScene::userStart()
 		}
 	}
 
+	auto prout = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
+	destroy(prout);
+
 	//
 	//
 	// END : Generating a lot of planet for performance test
@@ -203,6 +236,7 @@ bool 			DemoScene::userStart()
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 	auto trackBall = camera->addComponent<Component::TrackBall>(	*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
 
+/*<<<<<<< HEAD
 	std::string		vars[] =	
 	{
 		"projection",
@@ -218,6 +252,8 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
+=======
+>>>>>>> origin*/
 	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
 
 
@@ -241,6 +277,13 @@ bool 			DemoScene::userUpdate(double time)
 {
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
+	{
+		{
+			std::ofstream s("SolarSystem.scenesave");
+			save<cereal::JSONOutputArchive>(s);
+			s.close();
+		}
 		return (false);
+	}
 	return (true);
 }

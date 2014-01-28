@@ -3,10 +3,9 @@
 
 using namespace Component;
 
-Base::Base(AScene *scene, Entity &entity, const std::string &name)
-: _scene(scene)
-, _name(name)
-, _entity(entity)
+Base::Base(std::size_t serId)
+: _entity(Entity(std::numeric_limits<unsigned int>::max(), nullptr))
+, serializedID(serId)
 {
 }
 
@@ -19,7 +18,7 @@ Base &Base::operator=(const Base &other)
 	return *this;
 }
 
-void			Base::setEntity(Entity &entity)
+void			Base::setEntity(Entity entity)
 {
 	_entity = entity;
 }
@@ -27,9 +26,4 @@ void			Base::setEntity(Entity &entity)
 Entity		&Base::getEntity()
 {
 	return _entity;
-}
-
-std::string const &Base::getName() const
-{
-	return _name;
 }
