@@ -57,8 +57,9 @@ bool DemoScene::userStart()
 
 	Entity sphere = createEntity();
 	Entity plan = createEntity();
+	Entity camera = createEntity();
 
-	sphere->translate(glm::vec3(0, 10, 0));
+	sphere->translate(glm::vec3(0, 20, 20));
 	auto &materialSphere = sphere->addComponent<Component::MeshRenderer>("model:ball")->getMaterials()[0];
 	sphere->addComponent<Component::MeshRenderer>("model:sphere")->setShader("MaterialBasic");
 	materialSphere.ambientTex = resources.getResource("texture:earth");
@@ -66,13 +67,17 @@ bool DemoScene::userStart()
 	materialSphere.specularTex = resources.getResource("texture:earth");
 	materialSphere.normalTex = resources.getResource("texture:earth");
 	
-	plan->translate(glm::vec3(0, 0, 0));
 	auto &materialPlan = plan->addComponent<Component::MeshRenderer>("model:cube")->getMaterials()[0];
 	plan->addComponent<Component::MeshRenderer>("model:cube")->setShader("MaterialBasic");
 	materialPlan.ambientTex = resources.getResource("");
 	materialPlan.diffuseTex = resources.getResource("");
 	materialPlan.specularTex = resources.getResource("");
 	materialPlan.normalTex = resources.getResource("");
+	plan->scale(glm::vec3(0, 0.1, 0));
+
+	camera->addComponent<Component::CameraComponent>();
+	auto trackBall = camera->addComponent<Component::TrackBall>(plan, 10.0f, 3.0f, 1.0f);
+
 	return (true);
 }
 
