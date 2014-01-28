@@ -49,19 +49,8 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 
 	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
 
-	r->mesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>(tex1);
-	r->mesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>(tex2);
-	r->mesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>(tex3);
-	r->mesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>(tex4);
-
-
 	r->setShader(shader);
 
-	//r->getMaterials()[0]->ambientTex = AMediaFile::get(tex1);
-	//r->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex2);
-	//r->getMaterials()[0]->specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex3);
-	//r->getMaterials()[0]->normalTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex4);
-	
 	e->addComponent<Component::RotationForce>(glm::vec3(0, orbitSpeed, 0));
 	p->getComponent<Component::GraphNode>()->addSon(e);
 	p->addComponent<Component::RotationForce>(glm::vec3(0, rotSpeed, 0));
