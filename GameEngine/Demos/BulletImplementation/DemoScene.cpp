@@ -175,17 +175,23 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 
-
+	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
 	auto planetMesh = AMediaFile::create<ObjFile>("my_planet", defaultBallMesh);
 	planetMesh->material = AMediaFile::create<MaterialFile>("", defaultBallMesh->material);
 	auto testsss = planetMesh->material->materials[0];
 	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
-	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
-	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
+	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthNightTexture");
+	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>("texture__EarthClouds");
 	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>("texture__EarthTextureBump");
 
+	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
+	// DO NOT WORK CORRECTLY
+	AMediaFile::saveToFile("my_planet", "./Assets/Serialized/", "my_planet_dynamic");
 
+
+	// EXAMPLE LOAD FROM SAVE - NOT WORKING
+	//  AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet_dynamic.cpd"));
 
 	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture__MoonTexture", 0.0f);
 	//p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
@@ -213,9 +219,9 @@ bool 			DemoScene::userStart()
 
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("my_planet"));
 		e->addComponent<Component::GraphNode>();
-		mesh->setShader("basicLight");
+		mesh->setShader("earth");
 	}
 
 	Entity character;
@@ -237,7 +243,6 @@ bool 			DemoScene::userStart()
 		else if (i % 2)
 		{
 			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture__SunTexture", 1.0f);
-			auto lol = AMediaFile::get<ObjFile>("my_planet");
 			c1->getComponent<Component::MeshRenderer>()->mesh = AMediaFile::get<ObjFile>("my_planet");
 		}
 		else
