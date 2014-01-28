@@ -39,16 +39,24 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
-	auto ballMesh = AMediaFile::get("obj__ball");
+	auto ballMesh = AMediaFile::get<ObjFile>("obj__ball");
+	auto planetMesh = AMediaFile::create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
+	planetMesh->material = AMediaFile::create<MaterialFile>(ballMesh->material);
+	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>(tex1);
+	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>(tex2);
+	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>(tex3);
+	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>(tex4);
 
-	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(ballMesh);
-
-	r->setShader(shader);
+	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
 
 	r->mesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>(tex1);
 	r->mesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>(tex2);
 	r->mesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>(tex3);
 	r->mesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>(tex4);
+
+
+	r->setShader(shader);
+
 	//r->getMaterials()[0]->ambientTex = AMediaFile::get(tex1);
 	//r->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex2);
 	//r->getMaterials()[0]->specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex3);
@@ -198,22 +206,22 @@ bool 			DemoScene::userStart()
 	//
 	//
 
-	//{
-	//	unsigned int nbPlanet = 70;
-	//	Entity planets[70];
+	{
+		unsigned int nbPlanet = 70;
+		Entity planets[70];
 
-	//	for (unsigned int i = 0; i < nbPlanet; ++i)
-	//	{
-	//		planets[i] = createPlanet((std::rand() % 200) / 100.0f
-	//			, (std::rand() % 200) / 100.0f,
-	//			glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-	//			glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
-	//		if (i == 0)
-	//			sun->getComponent<Component::GraphNode>()->addSon(planets[i]);
-	//		else
-	//			planets[i - 1]->getComponent<Component::GraphNode>()->addSon(planets[i]);
-	//	}
-	//}
+		for (unsigned int i = 0; i < nbPlanet; ++i)
+		{
+			planets[i] = createPlanet((std::rand() % 200) / 100.0f
+				, (std::rand() % 200) / 100.0f,
+				glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
+				glm::vec3(std::rand() % 10 + 10), "basic", "texture__SunTexture");
+			if (i == 0)
+				sun->getComponent<Component::GraphNode>()->addSon(planets[i]);
+			else
+				planets[i - 1]->getComponent<Component::GraphNode>()->addSon(planets[i]);
+		}
+	}
 
 
 	//

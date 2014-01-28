@@ -68,6 +68,7 @@ struct ObjFile : public MediaFile<ObjFile>
 			colors = o.colors;
 			uvs = o.uvs;
 			indices = o.indices;
+			init();
 		}
 
 		Geometry &operator=(const Geometry &o)
@@ -80,6 +81,7 @@ struct ObjFile : public MediaFile<ObjFile>
 				colors = o.colors;
 				uvs = o.uvs;
 				indices = o.indices;
+				init();
 			}
 			return *this;
 		}
@@ -93,7 +95,12 @@ struct ObjFile : public MediaFile<ObjFile>
 		template <typename Archive>
 		void load(Archive &ar)
 		{
-			ar(name,vertices, normals,colors,uvs, indices);
+			ar(name, vertices, normals, colors, uvs, indices);
+			init();
+		}
+
+		void init()
+		{
 			buffer.init(vertices.size(), &indices[0]);
 			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 4, 4, GL_FLOAT));
 			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 4, 4, GL_FLOAT));
@@ -108,6 +115,7 @@ struct ObjFile : public MediaFile<ObjFile>
 			if (uvs.size())
 				buffer.setBuffer(3, reinterpret_cast<byte *>(&uvs[0].x));
 		}
+
 	};
 
 	std::vector<Geometry> geometries;

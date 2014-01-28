@@ -19,6 +19,11 @@ namespace Component
 		mesh = std::static_pointer_cast<ObjFile>(r);
 	}
 
+	void MeshRenderer::init(std::shared_ptr<ObjFile> r)
+	{
+		mesh = r;
+	}
+
 	std::shared_ptr<ObjFile> const &MeshRenderer::getMesh() const
 	{
 		return (mesh);

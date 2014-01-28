@@ -27,6 +27,7 @@ namespace Component
 		MeshRenderer();
 		virtual ~MeshRenderer(void);
 		void init(std::shared_ptr<AMediaFile> file);
+		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
 		void render();
