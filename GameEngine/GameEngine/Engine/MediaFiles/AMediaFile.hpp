@@ -140,6 +140,16 @@ public:
 		return n;
 	}
 
+	static void saveToFile(const std::string &media, const std::string &path, const std::string &name = "")
+	{
+		auto &e = get<AMediaFile>(media);
+		assert(e != nullptr && "Media does not exists");
+		std::string filePath = path + (name.empty() ? e->name : name) + ".cpd";
+		std::ofstream ofs(filePath, std::ios::binary);
+		assert(ofs.is_open() && "Cannot open file for save");
+		e->serialize<cereal::BinaryOutputArchive>(ofs);
+	}
+
 	static void setManager(AssetsManager *manager)
 	{
 		_manager = manager;

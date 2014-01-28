@@ -39,6 +39,7 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
+	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	auto ballMesh = AMediaFile::get<ObjFile>("obj__ball");
 	auto planetMesh = AMediaFile::create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
 	planetMesh->material = AMediaFile::create<MaterialFile>("", ballMesh->material);
