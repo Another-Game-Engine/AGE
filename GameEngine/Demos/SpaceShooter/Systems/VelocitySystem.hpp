@@ -11,10 +11,16 @@
 class VelocitySystem : public System
 {
 public:
-	VelocitySystem(AScene *scene) : System(scene)
+	VelocitySystem(AScene *scene)
+		: System(scene)
+		, _filter(scene)
 	{}
+
 	virtual ~VelocitySystem(){}
 private:
+
+	EntityFilter _filter;
+
 	virtual void updateBegin(double time)
 	{
 	}
@@ -25,7 +31,7 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		auto totalTime = _scene->getEngine().getInstance<Timer>().getElapsed();
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			auto velocity = e->getComponent<Component::Velocity>();
 			auto lol = posFromMat4(e->getLocalTransform());
@@ -39,7 +45,7 @@ private:
 
 	virtual void initialize()
 	{
-		require<Component::Velocity>();
+		_filter.require<Component::Velocity>();
 	}
 };
 
