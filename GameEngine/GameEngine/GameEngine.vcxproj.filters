@@ -78,6 +78,7 @@
     <ClInclude Include="Engine\MediaFiles\AssetsManager.hpp" />
     <ClInclude Include="Engine\MediaFiles\CubeMapFile.hpp" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionShapeFile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -145,6 +145,7 @@
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\MediaFiles\AMediaFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\AssetsManager.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionShapeFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\CubeMapFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\MaterialFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\MediaFile.hpp" />
