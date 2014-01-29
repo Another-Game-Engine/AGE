@@ -44,7 +44,7 @@ private:
 		}
 	}
 
-	void updateComponent(Entity &entity, SmartPointer<Component::SpaceshipController> c, double time)
+	void updateComponent(Entity &entity, std::shared_ptr<Component::SpaceshipController> c, double time)
 	{
 			c->resetControls();
 			auto &inputs = _scene->getEngine().getInstance<Input>();

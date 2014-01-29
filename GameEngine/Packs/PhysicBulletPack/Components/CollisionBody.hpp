@@ -3,7 +3,6 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
-#include "Utils/SmartPointer.hh"
 #include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/Engine.hh>

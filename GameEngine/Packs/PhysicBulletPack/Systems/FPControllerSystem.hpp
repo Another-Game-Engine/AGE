@@ -64,7 +64,7 @@ private:
 		}
 	}
 
-	void updateComponent(Entity &entity, SmartPointer<Component::FPController> fp, double time)
+	void updateComponent(Entity &entity, std::shared_ptr<Component::FPController> fp, double time)
 	{
 			fp->resetControls();
 			auto &inputs = _scene->getEngine().getInstance<Input>();
