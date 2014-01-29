@@ -17,9 +17,12 @@ class TrackingCameraSystem : public System
 public:
 	TrackingCameraSystem(AScene *scene)
 		: System(scene)
+		, _filter(scene)
 	{}
 	virtual ~TrackingCameraSystem(){}
 protected:
+	EntityFilter _filter;
+
 	virtual void updateBegin(double time)
 	{
 	}
@@ -31,7 +34,7 @@ protected:
 	{
 		Input			&inputs = _scene->getEngine().getInstance<Input>();
 
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			auto c = e->getComponent<Component::CameraComponent>();
 			auto t = e->getComponent<Component::TrackingCamera>();
@@ -51,8 +54,8 @@ protected:
 
 	virtual void initialize()
 	{
-		require<Component::CameraComponent>();
-		require<Component::TrackingCamera>();
+		_filter.require<Component::CameraComponent>();
+		_filter.require<Component::TrackingCamera>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };

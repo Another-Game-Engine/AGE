@@ -16,9 +16,14 @@ class TrackBallSystem : public System
 public:
 	TrackBallSystem(AScene *scene)
 		: System(scene)
+		, _filter(scene)
 	{}
+
 	virtual ~TrackBallSystem(){}
 protected:
+
+	EntityFilter _filter;
+
 	virtual void updateBegin(double time)
 	{
 	}
@@ -30,7 +35,7 @@ protected:
 	{
 		Input			&inputs = _scene->getEngine().getInstance<Input>();
 
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			auto camera = e->getComponent<Component::CameraComponent>();
 			auto trackBall = e->getComponent<Component::TrackBall>();
@@ -58,8 +63,8 @@ protected:
 
 	virtual void initialize()
 	{
-		require<Component::CameraComponent>();
-		require<Component::TrackBall>();
+		_filter.require<Component::CameraComponent>();
+		_filter.require<Component::TrackBall>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };
