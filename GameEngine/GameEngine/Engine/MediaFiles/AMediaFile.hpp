@@ -32,6 +32,7 @@ protected:
 		, TEXTURE = 2
 		, MATERIAL = 3
 		, CUBEMAP = 4
+		, COLLISION_SHAPE = 5
 	};
 	MEDIA_TYPE _type;
 public:
