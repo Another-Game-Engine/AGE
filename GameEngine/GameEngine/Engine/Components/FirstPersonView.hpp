@@ -5,7 +5,6 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Component.hh"
-#include <Utils/SmartPointer.hh>
 
 namespace Component
 {

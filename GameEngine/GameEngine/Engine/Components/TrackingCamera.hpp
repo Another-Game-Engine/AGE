@@ -2,7 +2,6 @@
 #define		__TRACKING_COMPONENT_HH_
 
 #include "Component.hh"
-#include "Utils/SmartPointer.hh"
 #include <glm/glm.hpp>
 #include <Utils/GlmSerialization.hpp>
 
