@@ -21,21 +21,24 @@
     <ClCompile Include="DemoScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Managers\AConvertor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Managers\AssetsConvertorManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Managers\ObjConvertor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Parsers\LoadTGA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\AConvertor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\CubeMapConvertor.hpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScene.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\AConvertor.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Managers\AssetsConvertorManager.hh">
@@ -44,19 +47,16 @@
     <ClInclude Include="Managers\ObjConvertor.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MediaFiles\AMediaFile.hpp">
+    <ClInclude Include="Managers\MaterialConvertor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MediaFiles\ObjFile.hpp">
+    <ClInclude Include="Managers\TgaConvertor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Managers\FileTypeRegister.hpp">
+    <ClInclude Include="Parsers\Parsers.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MediaFiles\MediaFile.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MediaFiles\MaterialFile.hpp">
+    <ClInclude Include="Managers\AConvertor.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

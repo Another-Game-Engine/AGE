@@ -4,9 +4,6 @@
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
 
-#include "ResourceManager/SharedMesh.hh"
-#include "ResourceManager/Texture.hh"
-#include "ResourceManager/CubeMap.hh"
 #include "Components/RotationForce.hh"
 #include <Components/CameraComponent.hh>
 #include <Components/TrackBallComponent.hpp>
@@ -16,7 +13,6 @@
 #include <Systems/GraphNodeSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
-#include "ResourceManager/ResourceManager.hh"
 #include <Core/Engine.hh>
 
 #include <SDL\SDL.h>
@@ -43,14 +39,19 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
-	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>("model:ball");
+	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
+	auto ballMesh = AMediaFile::get<ObjFile>("obj__ball");
+	auto planetMesh = AMediaFile::create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
+	planetMesh->material = AMediaFile::create<MaterialFile>("", ballMesh->material);
+	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>(tex1);
+	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>(tex2);
+	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>(tex3);
+	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>(tex4);
+
+	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
 
 	r->setShader(shader);
-	r->getMaterials()[0]->ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex1);
-	r->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex2);
-	r->getMaterials()[0]->specularTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex3);
-	r->getMaterials()[0]->normalTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex4);
-	
+
 	e->addComponent<Component::RotationForce>(glm::vec3(0, orbitSpeed, 0));
 	p->getComponent<Component::GraphNode>()->addSon(e);
 	p->addComponent<Component::RotationForce>(glm::vec3(0, rotSpeed, 0));
@@ -150,22 +151,6 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
-	_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
-
-	SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
-
-	toRepeat->setWrapMode(GL_REPEAT);
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "./Assets/SunTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earth", new Resources::Texture(), "./Assets/EarthTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthBump", new Resources::Texture(), "./Assets/EarthTextureBump.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthNight", new Resources::Texture(), "./Assets/EarthNightTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthClouds", toRepeat, "./Assets/EarthClouds.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "./Assets/SunTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moon", new Resources::Texture(), "./Assets/MoonTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moonBump", new Resources::Texture(), "./Assets/MoonNormalMap.tga");
-
-	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
-
 	std::string		vars[] = 
 	{
 		"projection",
@@ -182,6 +167,7 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 
+	// SERIALIZATION
 	File saveFile("SolarSystem.scenesave");
 	if (saveFile.exists())
 	{
@@ -191,9 +177,18 @@ bool 			DemoScene::userStart()
 		return true;
 	}
 
-	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture:sun");
-	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
-	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture:moon", "texture:moonBump");
+
+	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
+
+	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
+	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),
+		"earth",
+		"texture__EarthTexture",
+		"texture__EarthNightTexture",
+		"texture__EarthClouds",
+		"texture__EarthTextureBump");
+	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture__MoonTexture", "texture__MoonTextureBump");
 
 	earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
 
@@ -210,7 +205,7 @@ bool 			DemoScene::userStart()
 			planets[i] = createPlanet((std::rand() % 200) / 100.0f
 				, (std::rand() % 200) / 100.0f,
 				glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-				glm::vec3(std::rand() % 10 + 10), "basic", "texture:sun");
+				glm::vec3(std::rand() % 10 + 10), "basic", "texture__SunTexture");
 			if (i == 0)
 				sun->getComponent<Component::GraphNode>()->addSon(planets[i]);
 			else
@@ -218,8 +213,6 @@ bool 			DemoScene::userStart()
 		}
 	}
 
-	auto prout = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20), "earth", "texture:earth", "texture:earthNight", "texture:earthClouds", "texture:earthBump");
-	destroy(prout);
 
 	//
 	//
@@ -232,23 +225,10 @@ bool 			DemoScene::userStart()
 	auto camera = createEntity();
 	camera->addComponent<Component::GraphNode>();
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
-	auto trackBall = camera->addComponent<Component::TrackBall>(	*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
+	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
 
-	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
-
-
-	// Compute shader Tests
-	//
-	//
-
-	//OpenGLTools::ComputeShader *cs = new OpenGLTools::ComputeShader();
-	//cs->init(File("../GameEngine/Shaders/test.cp"));
-	//cs->use();
-	//glDispatchCompute(512/16, 512/16, 1);
-
-	//
-	//
-	// End compute shader test
+	//TODO
+	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 
 	return (true);
 }
@@ -258,10 +238,11 @@ bool 			DemoScene::userUpdate(double time)
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 	{
+		 //SERIALIZATION
 		{
-			std::ofstream s("SolarSystem.scenesave");
-			save<cereal::JSONOutputArchive>(s);
-			s.close();
+			//std::ofstream s("SolarSystem.scenesave");
+			//save<cereal::JSONOutputArchive>(s);
+			//s.close();
 		}
 		return (false);
 	}
