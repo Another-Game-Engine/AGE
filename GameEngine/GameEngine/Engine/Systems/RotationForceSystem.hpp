@@ -10,10 +10,14 @@
 class RotationForceSystem : public System
 {
 public:
-	RotationForceSystem(AScene *scene) : System(scene)
+	RotationForceSystem(AScene *scene)
+		: System(scene)
+		, _filter(scene)
 	{}
 	virtual ~RotationForceSystem(){}
 private:
+	EntityFilter _filter;
+
 	virtual void updateBegin(double time)
 	{}
 
@@ -23,7 +27,7 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		float t = time;
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			glm::vec3 force = e->getComponent<Component::RotationForce>()->getForce();
 			e->rotate(force * glm::vec3(t));
@@ -35,7 +39,7 @@ private:
 
 	virtual void initialize()
 	{
-		require<Component::RotationForce>();
+		_filter.require<Component::RotationForce>();
 	}
 };
 
