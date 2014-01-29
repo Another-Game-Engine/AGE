@@ -5,7 +5,6 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Component.hh"
-#include <Utils/SmartPointer.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
 #include <MediaFiles/CubeMapFile.hpp>

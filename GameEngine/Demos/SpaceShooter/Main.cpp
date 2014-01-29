@@ -19,7 +19,6 @@
 #include "InGameScene.hpp"
 
 #include <Components/GraphNode.hpp>
-#include <Utils/SmartPointer.hh>
 
 int			main(int ac, char **av)
 {

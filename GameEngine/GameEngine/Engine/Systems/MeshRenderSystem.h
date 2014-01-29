@@ -39,8 +39,6 @@ public:
 	}
 
 protected:
-
-	std::map<SmartPointer<Material>, std::list<Entity> > _sorted;
 	EntityFilter _filter;
 	bool _renderDebugMethod;
 

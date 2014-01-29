@@ -48,7 +48,7 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>(tex3);
 	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>(tex4);
 
-	SmartPointer<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
+	std::shared_ptr<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
 
 	r->setShader(shader);
 

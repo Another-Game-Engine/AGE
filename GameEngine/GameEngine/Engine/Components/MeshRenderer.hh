@@ -5,7 +5,6 @@
 #include <set>
 
 #include "Components/Component.hh"
-#include "Utils/SmartPointer.hh"
 #include <MediaFiles/TextureFile.hpp>
 #include <MediaFiles/ObjFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
