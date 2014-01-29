@@ -7,7 +7,8 @@
 #include <cereal/types/common.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
-#include <cereal/archives/binary.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/xml.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/array.hpp>
 #include <array>
@@ -17,7 +18,10 @@ namespace cereal
 	template<typename Archive>
 	void save(Archive &ar, const glm::vec2 &v)
 	{
-		ar(cereal::make_nvp("x", v.x), cereal::make_nvp("y", v.y));
+		float x, y;
+		x = v.x;
+		y = v.y;
+		ar(x, y);
 	}
 
 	template<typename Archive>
@@ -53,7 +57,13 @@ namespace cereal
 	template<typename Archive>
 	void save(Archive &ar, const glm::vec4 &v)
 	{
-		ar(cereal::make_nvp("x", v.x), cereal::make_nvp("y", v.y), cereal::make_nvp("z", v.z), cereal::make_nvp("w", v.w));
+		float x = v.x;
+		float y = v.y;
+		float z = v.z;
+		float w = v.w;
+		ar(x,y,z,w);
+
+		//ar(cereal::make_nvp("x", v.x), cereal::make_nvp("y", v.y), cereal::make_nvp("z", v.z), cereal::make_nvp("w", v.w));
 	}
 
 	template<typename Archive>
@@ -65,9 +75,44 @@ namespace cereal
 	}
 
 	template<typename Archive>
+	void save(Archive &ar, const glm::mat2 &v)
+	{
+		float dArray[8] = { 0.0 };
+		const float *pSource = (const float*)glm::value_ptr(v);
+		for (int i = 0; i < 8; ++i)
+			dArray[i] = pSource[i];
+		ar(cereal::make_nvp("mat2", dArray));
+	}
+
+	template<typename Archive>
+	void load(Archive &ar, glm::mat2 &v)
+	{
+		float source[8] = { 0.0 };
+		ar(source);
+		v = glm::make_mat2(source);
+	}
+
+	template<typename Archive>
+	void save(Archive &ar, const glm::mat3 &v)
+	{
+		float dArray[12] = { 0.0 };
+		const float *pSource = (const float*)glm::value_ptr(v);
+		for (int i = 0; i < 12; ++i)
+			dArray[i] = pSource[i];
+		ar(cereal::make_nvp("mat3", dArray));
+	}
+
+	template<typename Archive>
+	void load(Archive &ar, glm::mat3 &v)
+	{
+		float source[12] = { 0.0 };
+		ar(source);
+		v = glm::make_mat3(source);
+	}
+
+	template<typename Archive>
 	void save(Archive &ar, const glm::mat4 &v)
 	{
-
 		float dArray[16] = { 0.0 };
 		const float *pSource = (const float*)glm::value_ptr(v);
 		std::cout << "float : " << sizeof(glm::value_ptr(v)) * v.length() << std::endl;

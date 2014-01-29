@@ -86,7 +86,7 @@ private:
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 //				rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, 1000));
-				auto mesh = b->addComponent<Component::MeshRenderer>("model:ball");
+				auto mesh = b->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
 //				_scene->destroy(b);
 				balls.push_back(b);

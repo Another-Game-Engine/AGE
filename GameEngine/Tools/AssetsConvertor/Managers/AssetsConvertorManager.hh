@@ -10,13 +10,11 @@
 #include <cereal/archives/xml.hpp>
 
 #include <MediaFiles/AMediaFile.hpp>
-#include <MediaFiles/ObjFile.hpp>
-
-#include <Utils/Dependency.hpp>
+#include <MediaFiles/AssetsManager.hpp>
 
 class AConvertor;
 
-class AssetsConvertorManager : public Dependency
+class AssetsConvertorManager : public AssetsManager
 {
 public:
 	AssetsConvertorManager();
@@ -33,12 +31,13 @@ public:
 		_convertors.emplace(key, std::make_unique<T>(this));
 	}
 
-	bool load(const std::string filename, const std::string name);
+	std::shared_ptr<AMediaFile> load(const std::string filename);
 
-	bool serializeData();
+	bool serializeData(const std::string &exportName);
+
+	void clear();
 private:
 	File _outputDirectory;
-	std::map < std::string, std::shared_ptr<AMediaFile> > _files;
 	std::map < std::size_t, std::unique_ptr<AConvertor> > _convertors;
 };
 

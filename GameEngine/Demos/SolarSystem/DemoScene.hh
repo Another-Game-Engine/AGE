@@ -12,8 +12,8 @@ public:
 
 	Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed, glm::vec3 &pos, glm::vec3 &scale,
 													std::string const &shader,
-													std::string const &tex1, std::string const &tex2 = "", std::string const &tex3 = "",
-													std::string const &tex4 = "");
+													std::string const &tex1, std::string const &tex2 = "NULL", std::string const &tex3 = "NULL",
+													std::string const &tex4 = "NULL");
 
 	virtual bool 			userStart();
 	virtual bool 			userUpdate(double time);

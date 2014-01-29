@@ -3,11 +3,6 @@
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
 
-#include "ResourceManager/SharedMesh.hh"
-#include "ResourceManager/Texture.hh"
-#include "ResourceManager/CubeMap.hh"
-#include "ResourceManager/ResourceManager.hh"
-
 #include <Components/RotationForce.hh>
 #include <Components/CameraComponent.hh>
 #include <Components/RigidBody.hpp>
@@ -47,10 +42,9 @@ Entity  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-	auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
+
+	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
 	e->addComponent<Component::GraphNode>();
-	auto prout = mesh->getMaterials();
-	mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -64,9 +58,8 @@ Entity  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::BOX);
-	auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
+	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 	e->addComponent<Component::GraphNode>();
-	mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -77,9 +70,8 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::MESH, "model:monkey");
-	auto mesh = e->addComponent<Component::MeshRenderer>("model:monkey");
-	mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource(tex);
+	rigidBody->setCollisionShape(Component::RigidBody::MESH, "obj__galileo");
+	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 	e->addComponent<Component::GraphNode>();
 	mesh->setShader("MaterialBasic");
 	return e;
@@ -177,25 +169,30 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
 
+	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 
-	_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
-	_engine.getInstance<Resources::ResourceManager>().addResource("model:cube", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
-	_engine.getInstance<Resources::ResourceManager>().addResource("model:square", new Resources::SharedMesh(), "./Assets/square.obj");
-	_engine.getInstance<Resources::ResourceManager>().addResource("model:monkey", new Resources::SharedMesh(), "./Assets/monkey.obj");
+	// EXAMPLE LOAD FROM SAVE
+	AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
 
-	SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
+	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
+	//auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
+	//auto planetMesh = AMediaFile::create<ObjFile>("my_planet", defaultBallMesh);
+	//planetMesh->material = AMediaFile::create<MaterialFile>("my_planet_material", defaultBallMesh->material);
+	//auto testsss = planetMesh->material->materials[0];
+	//planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
+	//planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthNightTexture");
+	//planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>("texture__EarthClouds");
+	//planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>("texture__EarthTextureBump");
 
-	toRepeat->setWrapMode(GL_REPEAT);
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:sun", new Resources::Texture(), "./Assets/SunTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earth", new Resources::Texture(), "./Assets/EarthTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthBump", new Resources::Texture(), "./Assets/EarthTextureBump.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthNight", new Resources::Texture(), "./Assets/EarthNightTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:earthClouds", toRepeat, "./Assets/EarthClouds.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moon", new Resources::Texture(), "./Assets/MoonTexture.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("texture:moonBump", new Resources::Texture(), "./Assets/MoonNormalMap.tga");
-	_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/skyboxSpace");
+	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
+	//AMediaFile::saveToFile("my_planet_material", "./Assets/Serialized/");
+	//AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
 
-	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture:moon", 0.0f);
+	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture__MoonTexture", 0.0f);
 	//p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
 	//p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, false);
 
@@ -207,8 +204,7 @@ bool 			DemoScene::userStart()
 
 		auto rigidBody = e->addComponent<Component::RigidBody>(1.0f);
 		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
-		mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
 		e->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
@@ -222,12 +218,9 @@ bool 			DemoScene::userStart()
 
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-		auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
-		mesh->getMaterials()[0]->normalTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moonBump");
-		mesh->getMaterials()[0]->diffuseTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
-		mesh->getMaterials()[0]->ambientTex = _engine.getInstance<Resources::ResourceManager>().getResource("texture:moon");
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("my_planet"));
 		e->addComponent<Component::GraphNode>();
-		mesh->setShader("basicLight");
+		mesh->setShader("earth");
 	}
 
 	Entity character;
@@ -244,15 +237,16 @@ bool 			DemoScene::userStart()
 	{
 		if (i % 3)
 		{
-			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "texture:sun", 1.f);
+			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "texture__SunTexture", 1.f);
 		}
 		else if (i % 2)
 		{
-			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture:earth", 1.0f);
+			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture__SunTexture", 1.0f);
+			c1->getComponent<Component::MeshRenderer>()->mesh = AMediaFile::get<ObjFile>("my_planet");
 		}
 		else
 		{
-			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f),"texture:earth", 1.0f);
+			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f),"texture__SunTexture", 1.0f);
 			c1->setLocalTransform() = glm::rotate(c1->getLocalTransform(), std::rand() % 100 / 10.0f, glm::vec3(1, 1, 1));
 		}
 	}
@@ -277,10 +271,10 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().addUniform("cameraUniform").
 		init(&sky, "cameraUniform", vars);
-
+	
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
-	cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
+	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	return (true);
 }
 

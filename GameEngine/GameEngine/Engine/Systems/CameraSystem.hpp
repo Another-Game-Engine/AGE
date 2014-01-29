@@ -58,7 +58,7 @@ protected:
 
 			auto cameraPosition = camera->getLookAtTransform();
 
-			if (skybox.get())
+			if (skybox != nullptr)
 			{
 				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>().getShader(camera->getSkyboxShader());
 				assert(s != NULL && "Skybox does not have a shader associated");
@@ -77,6 +77,7 @@ protected:
 //				_engine.getInstance<Renderer>().getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
 
 				s->use();
+
 
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());

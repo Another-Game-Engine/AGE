@@ -7,8 +7,6 @@
 #include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/Engine.hh>
-#include <ResourceManager/ResourceManager.hh>
-#include <ResourceManager/SharedMesh.hh>
 #include <Managers/BulletCollisionManager.hpp>
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include <Utils/BtConversion.hpp>
@@ -98,8 +96,8 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				SmartPointer<Resources::SharedMesh> mesh = _entity->getScene()->getEngine().getInstance<Resources::ResourceManager>().getResource(meshName);
-				const Resources::Geometry &geo = mesh->getGeometry()[0]; // DIRTY HACK TEMPORARY
+				auto mesh = AMediaFile::get<ObjFile>(meshName);
+				auto &geo = mesh->geometries[0]; // DIRTY HACK TEMPORARY
 				// NEED TO REPLACE MESH BY MESH GROUP !
 				btScalar *t = new btScalar[geo.vertices.size() * 3]();
 				for (unsigned int i = 0; i < geo.vertices.size(); ++i)
