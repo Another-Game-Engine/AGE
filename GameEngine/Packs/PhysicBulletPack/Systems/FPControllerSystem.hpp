@@ -17,10 +17,12 @@ class FPControllerSystem : public System
 public:
 	FPControllerSystem(AScene *scene) : System(scene)
 		, _manager(&scene->getEngine().getInstance<BulletCollisionManager>())
+		, _filter(scene)
 	{}
 	virtual ~FPControllerSystem(){}
 private:
 	BulletCollisionManager *_manager;
+	EntityFilter _filter;
 
 	virtual void updateBegin(double time)
 	{
@@ -31,7 +33,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			auto fp = e->getComponent<Component::FPController>();
 			updateComponent(e, fp, time);
@@ -119,7 +121,7 @@ private:
 
 	virtual void initialize()
 	{
-		require<Component::FPController>();
+		_filter.require<Component::FPController>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };
