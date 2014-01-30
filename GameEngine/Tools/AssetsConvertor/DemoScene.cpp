@@ -67,21 +67,21 @@ bool 			DemoScene::userStart()
 		//convertor.serializeData("galileo");
 		//convertor.clear();
 
-		//success = convertor.load("./Assets/crytek-sponza/sponza.obj");
-		//convertor.serializeData("sponza");
-		//convertor.clear();
-
-		convertor.load("./Assets/EarthCloud.tga");
-		convertor.load("./Assets/EarthNightTexture.tga");
-		convertor.load("./Assets/EarthTexture.tga");
-		convertor.load("./Assets/EarthTextureBump.tga");
-		convertor.load("./Assets/EarthClouds.tga");
-		convertor.load("./Assets/MoonNormalMap.tga");
-		convertor.load("./Assets/MoonTexture.tga");
-		convertor.load("./Assets/SunTexture.tga");
-		convertor.load("./Assets/space.skybox");
-		convertor.serializeData("Space");
+		convertor.load("./Assets/crytek-sponza/sponza.obj");
+		convertor.serializeData("sponza");
 		convertor.clear();
+
+		//convertor.load("./Assets/EarthCloud.tga");
+		//convertor.load("./Assets/EarthNightTexture.tga");
+		//convertor.load("./Assets/EarthTexture.tga");
+		//convertor.load("./Assets/EarthTextureBump.tga");
+		//convertor.load("./Assets/EarthClouds.tga");
+		//convertor.load("./Assets/MoonNormalMap.tga");
+		//convertor.load("./Assets/MoonTexture.tga");
+		//convertor.load("./Assets/SunTexture.tga");
+		//convertor.load("./Assets/space.skybox");
+		//convertor.serializeData("Space");
+		//convertor.clear();
 
 		//AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
 		//AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
