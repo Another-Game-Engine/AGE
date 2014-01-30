@@ -33,6 +33,7 @@
 
 class InGameScene : public AScene
 {
+	Entity test;
 public:
 	InGameScene(Engine &engine)
 		: AScene(engine)
@@ -167,6 +168,7 @@ public:
 			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "obj__sponza");
 			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
+			test = e;
 		}
 
 		auto camera = createEntity();
@@ -200,6 +202,16 @@ public:
 			for (auto &e : balls)
 				destroy(e);
 			balls.clear();
+		}
+
+		if (_engine.getInstance<Input>().getInput(SDLK_u))
+		{
+			test->setLocalTransform() = glm::scale(test->getLocalTransform(), glm::vec3(0.9));
+		}
+
+		if (_engine.getInstance<Input>().getInput(SDLK_i))
+		{
+			test->setLocalTransform() = glm::scale(test->getLocalTransform(), glm::vec3(1.1));
 		}
 
 		if (_engine.getInstance<Input>().getInput(SDLK_r) && timer <= 0.0f)
