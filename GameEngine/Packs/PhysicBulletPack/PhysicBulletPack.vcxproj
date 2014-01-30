@@ -115,6 +115,9 @@
     <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\Serialize\BulletFileLoader\BulletFileLoader.vcxproj">
       <Project>{bf62c23a-a810-4cb1-9631-a6cf9c27c6db}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\Serialize\BulletWorldImporter\BulletWorldImporter.vcxproj">
+      <Project>{8c289f4d-6321-4202-a8f9-81dcd4883cb3}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\src\BulletCollision\BulletCollision.vcxproj">
       <Project>{a820b1f5-9a4c-4f25-b086-60e0c1d2de47}</Project>
     </ProjectReference>

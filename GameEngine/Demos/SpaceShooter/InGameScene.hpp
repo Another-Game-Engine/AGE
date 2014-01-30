@@ -148,7 +148,8 @@ public:
 			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 100, 100));
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::BOX);
+			//rigidBody->setCollisionShape(Component::RigidBody::BOX);
+			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "obj__sponza");
 			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
 			floor = e;
