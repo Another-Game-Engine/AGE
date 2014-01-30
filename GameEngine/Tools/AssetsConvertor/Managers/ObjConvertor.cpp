@@ -4,6 +4,7 @@
 #include <cassert>
 #include <MediaFiles/ObjFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
+#include <MediaFiles/CollisionShapeStaticFile.hpp>
 
 ObjConvertor::ObjConvertor(AssetsConvertorManager *manager)
 : AConvertor(manager, std::set<std::string>({ "obj" }))
@@ -94,5 +95,33 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	mesh->material = std::static_pointer_cast<MaterialFile>(_manager->load(mtl));
 	if (mesh->material != nullptr)
 		mesh->incrementChilds();
+
+	/////
+	///
+	///
+	/// CONVERT FOR BULLET
+	{
+		btTriangleMesh trimesh;
+		auto &geos = mesh->geometries;
+
+		for (unsigned int j = 0; j < geos.size(); ++j)
+		{
+			auto &geo = geos[j];
+			for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
+			{
+				trimesh.addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
+					, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
+					, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
+			}
+		}
+		std::shared_ptr<btBvhTriangleMeshShape> bvh{ new btBvhTriangleMeshShape(&trimesh, true) };
+		bvh->buildOptimizedBvh();
+		std::shared_ptr<CollisionShapeStaticFile> staticShape{ new CollisionShapeStaticFile() };
+		staticShape->shape = bvh;
+		staticShape->name = "collision_shape_static_" + file.getShortFileName();
+		staticShape->path = "./Assets/Serialized/" + staticShape->name + ".bullet";
+		_manager->add(staticShape);
+	}
+
 	return mesh;
 }
