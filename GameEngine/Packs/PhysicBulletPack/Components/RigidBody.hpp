@@ -171,33 +171,33 @@ namespace Component
 			}
 			else if (c == CONCAVE_STATIC_MESH) // dont work
 			{
-				btBulletWorldImporter import(0);
-				import.loadFile("testFile.bullet");
-				int n = import.getNumCollisionShapes();
-				btCollisionShape *shape = import.getCollisionShapeByIndex(0);
-				_collisionShape = shape;
+				//btBulletWorldImporter import(0);
+				//import.loadFile("testFile.bullet");
+				//int n = import.getNumCollisionShapes();
+				//btCollisionShape *shape = import.getCollisionShapeByIndex(0);
+				//_collisionShape = shape;
 				///////////////////////
 
-				//auto mesh = AMediaFile::get<ObjFile>(meshName);
-				//auto trimesh = new btTriangleMesh();
-				//auto &geos = mesh->geometries;
+				auto mesh = AMediaFile::get<ObjFile>(meshName);
+				auto trimesh = new btTriangleMesh();
+				auto &geos = mesh->geometries;
 
-				//for (unsigned int j = 0; j < geos.size(); ++j)
-				//{
-				//	auto &geo = geos[j];
-				//	for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
-				//	{
-				//		trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
-				//			, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
-				//			, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
-				//	}
-				//}
+				for (unsigned int j = 0; j < geos.size(); ++j)
+				{
+					auto &geo = geos[j];
+					for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
+					{
+						trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
+							, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
+							, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
+					}
+				}
 
-				//auto bvh = new btBvhTriangleMeshShape(trimesh, true);
-				//bvh->buildOptimizedBvh();
-				//bool isit = bvh->isConcave();
+				auto bvh = new btBvhTriangleMeshShape(trimesh, true);
+				bvh->buildOptimizedBvh();
+				bool isit = bvh->isConcave();
 
-				/////////////////////////////
+				///////////////////////////
 
 				//btDefaultSerializer*	serializer = new btDefaultSerializer();
 				//serializer->startSerialization();
@@ -206,7 +206,7 @@ namespace Component
 				//FILE *f = fopen("testFile.bullet","wb");
 				//fwrite(serializer->getBufferPointer(), serializer->getCurrentBufferSize(), 1, f);
 				//fclose(f);
-				//_collisionShape = bvh;
+				_collisionShape = bvh;
 			}
 			if (mass != 0)
 				_collisionShape->calculateLocalInertia(mass, inertia);

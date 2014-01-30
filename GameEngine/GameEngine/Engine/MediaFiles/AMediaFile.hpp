@@ -32,7 +32,7 @@ protected:
 		, TEXTURE = 2
 		, MATERIAL = 3
 		, CUBEMAP = 4
-		, COLLISION_SHAPE = 5
+		, COLLISION_SHAPE_STATIC = 5
 	};
 	MEDIA_TYPE _type;
 public:
@@ -77,6 +77,17 @@ public:
 	static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
 	{
 		assert(file.exists() == true && "File does not exist.");
+
+
+		/////////////
+		/////// IF BULLET FILE
+		/////////////
+
+
+		///////
+		// ELSE
+		///////
+
 		MEDIA_TYPE serializedFileType = UNKNOWN;
 		std::shared_ptr<AMediaFile> res{ nullptr };
 		res = _manager->get(file.getShortFileName());
