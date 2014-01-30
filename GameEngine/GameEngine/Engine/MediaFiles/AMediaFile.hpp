@@ -76,23 +76,14 @@ public:
 	template <typename Archive>
 	static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
 	{
+		if (file.getExtension() == "bullet")
+			return loadBulletFile(file);
 		assert(file.exists() == true && "File does not exist.");
-
-
-		/////////////
-		/////// IF BULLET FILE
-		/////////////
-
-
-		///////
-		// ELSE
-		///////
-
-		MEDIA_TYPE serializedFileType = UNKNOWN;
 		std::shared_ptr<AMediaFile> res{ nullptr };
 		res = _manager->get(file.getShortFileName());
 		if (res != nullptr)
 			return res;
+		MEDIA_TYPE serializedFileType = UNKNOWN;
 
 		std::ifstream ifs(file.getFullName(), std::ios::binary);
 		Archive ar(ifs);
@@ -125,6 +116,8 @@ public:
 		_manager->add(res);
 		return res;
 	}
+
+	static std::shared_ptr<AMediaFile> loadBulletFile(const File &f);
 
 	static void loadFromList(const File &file);
 	static std::shared_ptr<AMediaFile> get(const std::string &name);

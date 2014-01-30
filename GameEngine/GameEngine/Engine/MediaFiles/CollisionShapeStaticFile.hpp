@@ -6,27 +6,27 @@
 #include <btBulletDynamicsCommon.h>
 #include <btBulletWorldImporter.h>
 
-struct CollisionShapeStatic : public MediaFile<CollisionShapeStatic>
+struct CollisionShapeStaticFile : public MediaFile<CollisionShapeStaticFile>
 {
 public:
-	CollisionShapeStatic()
-		: MediaFile<CollisionShapeStatic>()
+	CollisionShapeStaticFile()
+		: MediaFile<CollisionShapeStaticFile>()
 		, shape(nullptr)
 	{
 		_type = COLLISION_SHAPE_STATIC;
 	}
 
-	virtual ~CollisionShapeStatic()
+	virtual ~CollisionShapeStaticFile()
 	{
 	}
 
-	CollisionShapeStatic(const CollisionShapeStatic &o)
-		: MediaFile<CollisionShapeStatic>(o)
+	CollisionShapeStaticFile(const CollisionShapeStaticFile &o)
+		: MediaFile<CollisionShapeStaticFile>(o)
 		, shape(nullptr)
 	{
 	}
 
-	CollisionShapeStatic &operator=(const CollisionShapeStatic &o)
+	CollisionShapeStaticFile &operator=(const CollisionShapeStaticFile &o)
 	{
 		if (&o != this)
 		{
@@ -35,7 +35,7 @@ public:
 		return *this;
 	}
 
-	AMediaFile *unserialize(const File &f)
+	void unserialize(const File &f)
 	{
 		btBulletWorldImporter import(0);
 		assert(f.exists() == true && "File do not exists");
