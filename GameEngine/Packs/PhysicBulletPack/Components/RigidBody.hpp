@@ -176,7 +176,6 @@ namespace Component
 				int n = import.getNumCollisionShapes();
 				btCollisionShape *shape = import.getCollisionShapeByIndex(0);
 				_collisionShape = shape;
-
 				///////////////////////
 
 				//auto mesh = AMediaFile::get<ObjFile>(meshName);
