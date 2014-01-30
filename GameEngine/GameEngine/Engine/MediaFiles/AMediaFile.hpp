@@ -68,9 +68,16 @@ public:
 	template <typename Archive>
 	void serialize(std::ofstream &s)
 	{
-		Archive ar(s);
-		ar(_type);
-		_serialize(ar);
+		if (_type == COLLISION_SHAPE_STATIC)
+		{
+			std::cout << "lol" << std::endl;
+		}
+		else
+		{
+			Archive ar(s);
+			ar(_type);
+			_serialize(ar);
+		}
 	}
 
 	template <typename Archive>
