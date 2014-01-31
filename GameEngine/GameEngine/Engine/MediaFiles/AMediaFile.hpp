@@ -68,9 +68,10 @@ public:
 	template <typename Archive>
 	void serialize(std::ofstream &s)
 	{
-		if (_type == COLLISION_SHAPE_STATIC)
+		if (_type >= COLLISION_SHAPE_STATIC && _type <= COLLISION_SHAPE_STATIC)
 		{
-			std::cout << "lol" << std::endl;
+			serializeAsBulletFile(s);
+			return;
 		}
 		else
 		{
@@ -79,6 +80,8 @@ public:
 			_serialize(ar);
 		}
 	}
+
+	void serializeAsBulletFile(std::ofstream &s);
 
 	template <typename Archive>
 	static std::shared_ptr<AMediaFile> loadFromFile(const File &file)

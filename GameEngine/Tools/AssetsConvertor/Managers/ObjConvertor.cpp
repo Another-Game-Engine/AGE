@@ -101,7 +101,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	///
 	/// CONVERT FOR BULLET
 	{
-		btTriangleMesh trimesh;
+		std::shared_ptr<btTriangleMesh> trimesh{new btTriangleMesh()};
 		auto &geos = mesh->geometries;
 
 		for (unsigned int j = 0; j < geos.size(); ++j)
@@ -109,15 +109,16 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 			auto &geo = geos[j];
 			for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
 			{
-				trimesh.addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
+				trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
 					, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
 					, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
 			}
 		}
-		std::shared_ptr<btBvhTriangleMeshShape> bvh{ new btBvhTriangleMeshShape(&trimesh, true) };
+		std::shared_ptr<btBvhTriangleMeshShape> bvh{ new btBvhTriangleMeshShape(trimesh.get(), true) };
 		bvh->buildOptimizedBvh();
 		std::shared_ptr<CollisionShapeStaticFile> staticShape{ new CollisionShapeStaticFile() };
 		staticShape->shape = bvh;
+		staticShape->trimesh = trimesh;
 		staticShape->name = "collision_shape_static_" + file.getShortFileName();
 		staticShape->path = "./Assets/Serialized/" + staticShape->name + ".bullet";
 		_manager->add(staticShape);

@@ -44,3 +44,11 @@ std::shared_ptr<AMediaFile> AMediaFile::loadBulletFile(const File &file)
 		_manager->add(res);
 		return res;
 }
+
+void AMediaFile::serializeAsBulletFile(std::ofstream &s)
+{
+	if (_type == COLLISION_SHAPE_STATIC)
+	{
+		static_cast<CollisionShapeStaticFile*>(this)->serialize(s);
+	}
+}
