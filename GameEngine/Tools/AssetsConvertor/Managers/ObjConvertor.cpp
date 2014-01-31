@@ -130,9 +130,8 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 
 	// DYNAMIC SHAPE
 	{
-		auto group = std::shared_ptr<btCompoundShape>(new btCompoundShape());
 		auto &geos = mesh->geometries;
-
+		std::shared_ptr<btConvexHullShape> s{ new btConvexHullShape() };
 		for (unsigned int i = 0; i < geos.size(); ++i)
 		{
 			auto &geo = geos[i];
@@ -148,21 +147,18 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 			btScalar margin = tmp->getMargin();
 			hull->buildHull(margin);
 			tmp->setUserPointer(hull);
-			btConvexHullShape *s = new btConvexHullShape();
 			for (int it = 0; it < hull->numVertices(); ++it)
 			{
 				s->addPoint(hull->getVertexPointer()[it], false);
 			}
 			s->recalcLocalAabb();
 			btTransform localTrans;
-			localTrans.setIdentity();
-			group->addChildShape(localTrans, s);
 			delete[] t;
 			delete hull;
 			delete tmp;
 		}
 		std::shared_ptr<CollisionShapeDynamicFile> dynamicShape{ new CollisionShapeDynamicFile() };
-		dynamicShape->shape = group;
+		dynamicShape->shape = s;
 		dynamicShape->name = "collision_shape_dynamic_" + file.getShortFileName();
 		dynamicShape->path = "./Assets/Serialized/" + dynamicShape->name + ".bullet";
 		_manager->add(dynamicShape);

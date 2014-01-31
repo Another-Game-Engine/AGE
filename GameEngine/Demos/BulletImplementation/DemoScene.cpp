@@ -70,10 +70,10 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::MESH, "obj__galileo");
-	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
+	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
+	//auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 	e->addComponent<Component::GraphNode>();
-	mesh->setShader("MaterialBasic");
+	//mesh->setShader("MaterialBasic");
 	return e;
 }
 
@@ -233,22 +233,26 @@ bool 			DemoScene::userStart()
 	}
 
 	Entity c1;
-	for (unsigned int i = 0; i < 70; ++i)
+	auto lolol = 0;
+	for (unsigned int i = 0; i < 50; ++i)
 	{
-		if (i % 3)
+		//if (i % 3)
+		//{
+		//	c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "texture__SunTexture", 1.f);
+		//}
+		//else if (i % 2)
+		//{
+		//	c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture__SunTexture", 1.0f);
+		//	c1->getComponent<Component::MeshRenderer>()->mesh = AMediaFile::get<ObjFile>("my_planet");
+		//}
+		//else
+		//{
+		for (size_t j = 0; j < 50 - i; j++)
 		{
-			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "texture__SunTexture", 1.f);
+			c1 = createMonkey(glm::vec3(5 - i + j * 10, i * 10, 0), glm::vec3(2.0f), "texture__SunTexture", 1.0f);
+			++lolol;
 		}
-		else if (i % 2)
-		{
-			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture__SunTexture", 1.0f);
-			c1->getComponent<Component::MeshRenderer>()->mesh = AMediaFile::get<ObjFile>("my_planet");
-		}
-		else
-		{
-			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f),"texture__SunTexture", 1.0f);
-			c1->setLocalTransform() = glm::rotate(c1->getLocalTransform(), std::rand() % 100 / 10.0f, glm::vec3(1, 1, 1));
-		}
+		//}
 	}
 
 	// --
