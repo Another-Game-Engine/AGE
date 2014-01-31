@@ -128,6 +128,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
+				auto prout = AMediaFile::get(_meshName);
 				auto dynamic = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(AMediaFile::get(_meshName));
 				if (dynamic != nullptr)
 					_collisionShape = dynamic->shape;

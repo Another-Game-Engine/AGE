@@ -43,7 +43,7 @@ public:
 		assert(import.loadFile(f.getFullName().c_str()) == true && "Bullet importer cannot open file.");
 		int n = import.getNumCollisionShapes();
 		assert(n > 0 && "Bullet file is not correct. No collision shape inside.");
-		shape = std::shared_ptr<btCompoundShape>(static_cast<btCompoundShape*>(import.getCollisionShapeByIndex(0)));
+		shape = std::shared_ptr<btConvexHullShape>(static_cast<btConvexHullShape*>(import.getCollisionShapeByIndex(0)));
 	}
 
 	// WILL NEVER BE CALLED
@@ -60,7 +60,7 @@ public:
 		s.write((const char *)(serializer.getBufferPointer()), serializer.getCurrentBufferSize());
 	}
 
-	std::shared_ptr<btCompoundShape> shape;
+	std::shared_ptr<btConvexHullShape> shape;
 };
 
 #endif    //__COLLISION_SHAPE_DYNAMIC_HPP__

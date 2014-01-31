@@ -40,8 +40,8 @@ std::shared_ptr<AMediaFile> AMediaFile::loadBulletFile(const File &file)
 		}
 		else if (file.getShortFileName().find("collision_shape_dynamic") != std::string::npos)
 		{
-				res = std::make_shared<CollisionShapeStaticFile>();
-				static_cast<CollisionShapeStaticFile&>(*res.get()).unserialize(file);
+				res = std::make_shared<CollisionShapeDynamicFile>();
+				static_cast<CollisionShapeDynamicFile&>(*res.get()).unserialize(file);
 		}
 		assert(res != nullptr && "Unknown MediaFile type.");
 		assert(_manager != nullptr && "Media Manager is not set.");
