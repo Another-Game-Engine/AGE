@@ -33,6 +33,7 @@ protected:
 		, MATERIAL = 3
 		, CUBEMAP = 4
 		, COLLISION_SHAPE_STATIC = 5
+		, COLLISION_SHAPE_DYNAMIC = 6
 	};
 	MEDIA_TYPE _type;
 public:
