@@ -117,6 +117,7 @@ namespace Component
 			transform.setIdentity();
 			transform.setOrigin(convertGLMVectorToBullet(position));
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
+
 			_motionState = std::shared_ptr<btMotionState>(new btDefaultMotionState(transform));
 			if (c == BOX)
 			{
