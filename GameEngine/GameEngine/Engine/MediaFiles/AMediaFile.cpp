@@ -4,6 +4,7 @@
 #include <MediaFiles/TextureFile.hpp>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
+#include <MediaFiles/CollisionShapeDynamicFile.hpp>
 
 AssetsManager *AMediaFile::_manager = nullptr;
 
@@ -37,6 +38,11 @@ std::shared_ptr<AMediaFile> AMediaFile::loadBulletFile(const File &file)
 				res = std::make_shared<CollisionShapeStaticFile>();
 				static_cast<CollisionShapeStaticFile&>(*res.get()).unserialize(file);
 		}
+		else if (file.getShortFileName().find("collision_shape_dynamic") != std::string::npos)
+		{
+				res = std::make_shared<CollisionShapeStaticFile>();
+				static_cast<CollisionShapeStaticFile&>(*res.get()).unserialize(file);
+		}
 		assert(res != nullptr && "Unknown MediaFile type.");
 		assert(_manager != nullptr && "Media Manager is not set.");
 		res->path = file.getFullName();
@@ -51,4 +57,9 @@ void AMediaFile::serializeAsBulletFile(std::ofstream &s)
 	{
 		static_cast<CollisionShapeStaticFile*>(this)->serialize(s);
 	}
+	else if (_type == COLLISION_SHAPE_DYNAMIC)
+	{
+		static_cast<CollisionShapeDynamicFile*>(this)->serialize(s);
+	}
+
 }

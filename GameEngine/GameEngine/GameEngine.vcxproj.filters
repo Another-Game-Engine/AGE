@@ -80,6 +80,7 @@
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
     <ClInclude Include="Engine\MediaFiles\CollisionShapeFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\CollisionShapeStaticFile.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionShapeDynamicFile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
