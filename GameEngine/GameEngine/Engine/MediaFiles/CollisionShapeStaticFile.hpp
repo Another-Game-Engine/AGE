@@ -23,7 +23,10 @@ public:
 	CollisionShapeStaticFile(const CollisionShapeStaticFile &o)
 		: MediaFile<CollisionShapeStaticFile>(o)
 		, shape(nullptr)
+		, trimesh(nullptr)
 	{
+		shape = o.shape;
+		trimesh = o.trimesh;
 	}
 
 	CollisionShapeStaticFile &operator=(const CollisionShapeStaticFile &o)
@@ -31,6 +34,7 @@ public:
 		if (&o != this)
 		{
 			shape = o.shape;
+			trimesh = o.trimesh;
 		}
 		return *this;
 	}
@@ -58,6 +62,7 @@ public:
 		serializer.finishSerialization();
 		s.write((const char *)(serializer.getBufferPointer()), serializer.getCurrentBufferSize());
 	}
+
 	std::shared_ptr<btBvhTriangleMeshShape> shape;
 	std::shared_ptr<btTriangleMesh> trimesh;
 };
