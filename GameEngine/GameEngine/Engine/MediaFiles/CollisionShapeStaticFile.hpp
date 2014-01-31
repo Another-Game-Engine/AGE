@@ -25,8 +25,11 @@ public:
 		, shape(nullptr)
 		, trimesh(nullptr)
 	{
-		shape = o.shape;
-		trimesh = o.trimesh;
+			shape = o.shape;
+			trimesh = o.trimesh;
+////		shape = std::shared_ptr<btBvhTriangleMeshShape>(new btBvhTriangleMeshShape(*o.shape.get()));
+//		trimesh = std::shared_ptr<btTriangleMesh>(new btTriangleMesh(*o.shape->tri));
+//		std::shared_ptr<btBvhTriangleMeshShape>(new btBvhTriangleMeshShape(trimesh.get(), true));
 	}
 
 	CollisionShapeStaticFile &operator=(const CollisionShapeStaticFile &o)
@@ -35,6 +38,8 @@ public:
 		{
 			shape = o.shape;
 			trimesh = o.trimesh;
+			//shape = std::shared_ptr<btBvhTriangleMeshShape>(new btBvhTriangleMeshShape(*o.shape.get()));
+			//trimesh = std::shared_ptr<btTriangleMesh>(new btTriangleMesh(*o.trimesh.get()));
 		}
 		return *this;
 	}

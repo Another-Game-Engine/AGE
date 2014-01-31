@@ -169,7 +169,7 @@ namespace Component
 			}
 			else if (c == CONCAVE_STATIC_MESH) // dont work
 			{
-				_collisionShape = AMediaFile::get<CollisionShapeStaticFile>(_meshName)->shape;
+				_collisionShape = std::shared_ptr<btCollisionShape>(new btScaledBvhTriangleMeshShape(AMediaFile::get<CollisionShapeStaticFile>(_meshName)->shape.get(), btVector3(1,1,1)));
 			}
 			if (mass != 0)
 				_collisionShape->calculateLocalInertia(mass, inertia);
@@ -245,7 +245,7 @@ namespace Component
 		////
 		//////
 
-
+		std::unique_ptr<AMediaFile> mediaFile;
 		BulletDynamicManager *_manager;
 		CollisionShape shapeType;
 		btScalar mass;
