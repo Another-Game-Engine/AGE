@@ -28,7 +28,6 @@ namespace Component
 			SPHERE,
 			BOX,
 			MESH,
-			CONCAVE_STATIC_MESH,
 			UNDEFINED
 		} CollisionShape;
 
@@ -114,7 +113,6 @@ namespace Component
 			btTransform transform;
 			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
 			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
-			std::cout << scale.x << " " << scale.y << " " << scale.z << std::endl;
 			glm::vec3 rot = rotFromMat4(_entity->getLocalTransform(), true);
 			transform.setIdentity();
 			transform.setOrigin(convertGLMVectorToBullet(position));
@@ -130,11 +128,17 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				_collisionShape = AMediaFile::get<CollisionShapeDynamicFile>(_meshName)->shape;
-			}
-			else if (c == CONCAVE_STATIC_MESH) // dont work
-			{
-				_collisionShape = std::shared_ptr<btCollisionShape>(new btScaledBvhTriangleMeshShape(AMediaFile::get<CollisionShapeStaticFile>(_meshName)->shape.get(), btVector3(1,1,1)));
+				auto dynamic = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(AMediaFile::get(_meshName));
+				if (dynamic != nullptr)
+					_collisionShape = dynamic->shape;
+				else
+				{
+					auto staticShape = std::dynamic_pointer_cast<CollisionShapeStaticFile>(AMediaFile::get(_meshName));
+					if (staticShape != nullptr)
+						_collisionShape = std::shared_ptr<btCollisionShape>(new btScaledBvhTriangleMeshShape(staticShape->shape.get(), btVector3(1,1,1)));
+					else
+						assert(false && "Collision shape not found.");
+				}
 			}
 			if (mass != 0)
 				_collisionShape->calculateLocalInertia(mass, inertia);
@@ -210,7 +214,6 @@ namespace Component
 		////
 		//////
 
-		std::unique_ptr<AMediaFile> mediaFile;
 		BulletDynamicManager *_manager;
 		CollisionShape shapeType;
 		btScalar mass;
