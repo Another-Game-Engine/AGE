@@ -150,7 +150,7 @@ public:
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			//rigidBody->setCollisionShape(Component::RigidBody::BOX);
-			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "obj__sponza");
+			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "collision_shape_static_sponza");
 			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
 			floor = e;
@@ -161,11 +161,11 @@ public:
 			Entity e = createEntity();
 			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(50, -10, 50));
 			e->addComponent<Component::GraphNode>();
-			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(50,50,50));
+//			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(50,50,50));
+			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 100, 100));
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
-			//rigidBody->setCollisionShape(Component::RigidBody::BOX);
-			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "obj__sponza");
+			rigidBody->setCollisionShape(Component::RigidBody::CONCAVE_STATIC_MESH, "collision_shape_static_sponza");
 			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
 			test = e;
