@@ -50,17 +50,16 @@ public:
 	void serialize(Archive &ar)
 	{}
 
-	void serialize() const
+	void serialize(std::ofstream &s)
 	{
 		btDefaultSerializer	serializer;
 		serializer.startSerialization();
 		shape->serializeSingleShape(&serializer);
 		serializer.finishSerialization();
-		FILE *f = fopen(path.getFullName().c_str(), "wb");
-		fwrite(serializer.getBufferPointer(), serializer.getCurrentBufferSize(), 1, f);
-		fclose(f);
+		s.write((const char *)(serializer.getBufferPointer()), serializer.getCurrentBufferSize());
 	}
 	std::shared_ptr<btBvhTriangleMeshShape> shape;
+	std::shared_ptr<btTriangleMesh> trimesh;
 };
 
 #endif    //__COLLISION_SHAPE_STATIC_HPP__
