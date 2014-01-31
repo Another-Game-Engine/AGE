@@ -13,6 +13,7 @@
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
+#include <MediaFiles/CollisionShapeDynamicFile.hpp>
 #include <memory>
 
 #include "btBulletWorldImporter.h"
@@ -129,43 +130,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				//// THERE IS SOME LEAKS BECAUSE THAT'S TEMPORARY
-				//auto mesh = AMediaFile::get<ObjFile>(meshName);
-				//auto group = new btCompoundShape();
-
-				//auto &geos = mesh->geometries;
-
-				//for (unsigned int i = 0; i < geos.size(); ++i)
-				//{
-				//	auto &geo = geos[i]; // DIRTY HACK TEMPORARY
-				//	// NEED TO REPLACE MESH BY MESH GROUP !
-				//	btScalar *t = new btScalar[geo.vertices.size() * 3]();
-				//	for (unsigned int it = 0; it < geo.vertices.size(); ++it)
-				//	{
-				//		t[it * 3] = geo.vertices[it].x;
-				//		t[it * 3 + 1] = geo.vertices[it].y;
-				//		t[it * 3 + 2] = geo.vertices[it].z;
-				//	}
-				//	btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
-				//	btShapeHull *hull = new btShapeHull(tmp);
-				//	btScalar margin = tmp->getMargin();
-				//	hull->buildHull(margin);
-				//	tmp->setUserPointer(hull);
-				//	btConvexHullShape *s = new btConvexHullShape();
-				//	for (int it = 0; it < hull->numVertices(); ++it)
-				//	{
-				//		s->addPoint(hull->getVertexPointer()[it], false);
-				//	}
-				//	s->recalcLocalAabb();
-				//	btTransform localTrans;
-				//	localTrans.setIdentity();
-				//	_collisionShape = s;
-				//	group->addChildShape(localTrans,s);
-				//	delete[] t;
-				//	delete hull;
-				//	delete tmp;
-				// }
-				// _collisionShape = group;
+				_collisionShape = AMediaFile::get<CollisionShapeDynamicFile>(_meshName)->shape;
 			}
 			else if (c == CONCAVE_STATIC_MESH) // dont work
 			{

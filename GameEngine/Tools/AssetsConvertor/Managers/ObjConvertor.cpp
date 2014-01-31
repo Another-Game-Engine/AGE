@@ -5,6 +5,8 @@
 #include <MediaFiles/ObjFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
+#include <MediaFiles/CollisionShapeDynamicFile.hpp>
+#include <BulletCollision/CollisionShapes/btShapeHull.h>
 
 ObjConvertor::ObjConvertor(AssetsConvertorManager *manager)
 : AConvertor(manager, std::set<std::string>({ "obj" }))
@@ -100,6 +102,8 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	///
 	///
 	/// CONVERT FOR BULLET
+
+	// STATIC CONCAVE SHAPE
 	{
 		std::shared_ptr<btTriangleMesh> trimesh{new btTriangleMesh()};
 		auto &geos = mesh->geometries;
@@ -122,6 +126,46 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		staticShape->name = "collision_shape_static_" + file.getShortFileName();
 		staticShape->path = "./Assets/Serialized/" + staticShape->name + ".bullet";
 		_manager->add(staticShape);
+	}
+
+	// DYNAMIC SHAPE
+	{
+		auto group = std::shared_ptr<btCompoundShape>(new btCompoundShape());
+		auto &geos = mesh->geometries;
+
+		for (unsigned int i = 0; i < geos.size(); ++i)
+		{
+			auto &geo = geos[i];
+			btScalar *t = new btScalar[geo.vertices.size() * 3]();
+			for (unsigned int it = 0; it < geo.vertices.size(); ++it)
+			{
+				t[it * 3] = geo.vertices[it].x;
+				t[it * 3 + 1] = geo.vertices[it].y;
+				t[it * 3 + 2] = geo.vertices[it].z;
+			}
+			btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
+			btShapeHull *hull = new btShapeHull(tmp);
+			btScalar margin = tmp->getMargin();
+			hull->buildHull(margin);
+			tmp->setUserPointer(hull);
+			btConvexHullShape *s = new btConvexHullShape();
+			for (int it = 0; it < hull->numVertices(); ++it)
+			{
+				s->addPoint(hull->getVertexPointer()[it], false);
+			}
+			s->recalcLocalAabb();
+			btTransform localTrans;
+			localTrans.setIdentity();
+			group->addChildShape(localTrans, s);
+			delete[] t;
+			delete hull;
+			delete tmp;
+		}
+		std::shared_ptr<CollisionShapeDynamicFile> dynamicShape{ new CollisionShapeDynamicFile() };
+		dynamicShape->shape = group;
+		dynamicShape->name = "collision_shape_dynamic_" + file.getShortFileName();
+		dynamicShape->path = "./Assets/Serialized/" + dynamicShape->name + ".bullet";
+		_manager->add(dynamicShape);
 	}
 
 	return mesh;
