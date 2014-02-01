@@ -223,8 +223,8 @@ public:
 				auto rigidBody = e->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
-				//auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
-				//mesh->setShader("MaterialBasic");
+				auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
+				mesh->setShader("MaterialBasic");
 				balls.push_back(e);
 			}
 			std::cout << balls.size() << std::endl;
