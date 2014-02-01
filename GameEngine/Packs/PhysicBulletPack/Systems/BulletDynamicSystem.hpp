@@ -15,6 +15,7 @@ class BulletDynamicSystem : public System
 public:
 	BulletDynamicSystem(AScene *scene) : System(scene)
 		, _manager(nullptr)
+		, _filter(scene)
 	{
 		_manager = dynamic_cast<BulletDynamicManager*>(&_scene->getEngine().getInstance<BulletCollisionManager>());
 		assert(_manager != nullptr);
@@ -22,6 +23,8 @@ public:
 	virtual ~BulletDynamicSystem(){}
 private:
 	BulletDynamicManager *_manager;
+	EntityFilter _filter;
+
 	virtual void updateBegin(double time)
 	{
 		_manager->getWorld()->stepSimulation(time, 10);
@@ -52,7 +55,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			if (e->getComponent<Component::RigidBody>()->getBody().isStaticOrKinematicObject())
 				updateStatic(e);
@@ -96,7 +99,7 @@ private:
 
 	virtual void initialize()
 	{
-		require<Component::RigidBody>();
+		_filter.require<Component::RigidBody>();
 	}
 };
 

@@ -14,31 +14,24 @@ struct MediaFile : public AMediaFile
 {
 	MediaFile()
 	{
-		type = typeid(MediaType).hash_code();
 	}
 
 	virtual ~MediaFile()
 	{}
 
-	virtual AMediaFile *unserialize(cereal::JSONInputArchive &ar)
+	MediaFile(const MediaFile &o)
+		: AMediaFile(o)
 	{
-		return dynamic_cast<MediaType*>(this)->unserialize<cereal::JSONInputArchive>(ar);
 	}
 
-	virtual AMediaFile *unserialize(cereal::BinaryInputArchive &ar)
+	MediaFile &operator=(const MediaFile &o)
 	{
-		return dynamic_cast<MediaType*>(this)->unserialize<cereal::BinaryInputArchive>(ar);
+		if (&o != this)
+		{
+		}
+		return *this;
 	}
 
-	virtual AMediaFile *unserialize(cereal::XMLInputArchive &ar)
-	{
-		return dynamic_cast<MediaType*>(this)->unserialize<cereal::XMLInputArchive>(ar);
-	}
-
-	virtual AMediaFile *unserialize(cereal::PortableBinaryInputArchive &ar)
-	{
-		return dynamic_cast<MediaType*>(this)->unserialize<cereal::PortableBinaryInputArchive>(ar);
-	}
 
 	virtual void _serialize(cereal::JSONOutputArchive &ar)
 	{

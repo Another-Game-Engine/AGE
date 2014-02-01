@@ -6,7 +6,7 @@
 
 #include "Core/Input.hh"
 #include "Core/Timer.hh"
-#include "Utils/SmartPointer.hh"
+#include <memory>
 #include "OpenGL/Shader.hh"
 #include "Utils/Barcode.h"
 #include "Utils/PubSub.hpp"
@@ -38,7 +38,7 @@ public:
 
 	};
 
-	typedef std::vector<SmartPointer<Component::Base> >	t_ComponentsList;
+	typedef std::vector<std::shared_ptr<Component::Base> >	t_ComponentsList;
 
 	Entity &getHandle();
 	void setHandle(Entity &handle);
@@ -111,7 +111,7 @@ public:
 	}
 
 	template <typename T, typename... Args>
-	SmartPointer<T> addComponent(Args ...args)
+	std::shared_ptr<T> addComponent(Args ...args)
 	{
 		// get the component type ID
 		unsigned int id = T::getTypeId();
@@ -121,7 +121,7 @@ public:
 		// if entity already have component, return it
 		if (hasComponent(id))
 		{
-			return static_cast<SmartPointer<T> >(_components[id]);
+			return  std::static_pointer_cast<T>(_components[id]);
 		}
 		// else if entity components array is to small, resize it
 		else if (_components.size() <= id)
@@ -131,24 +131,24 @@ public:
 		// if component has never been created, create one
 		if (!_components[id].get())
 		{
-			_components[id] = new T();
+			_components[id] = std::shared_ptr<T>(new T());
 			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
 			_components[id]->setEntity(getHandle());
 		}
 		//init component
-		static_cast<SmartPointer<T> >(_components[id])->init(args...);
+		std::static_pointer_cast<T>(_components[id])->init(args...);
 		_code.add(id);
 		broadCast(std::string("componentAdded" + std::to_string(id)), _handle);
-		return static_cast<SmartPointer<T> >(_components[id]);
+		return std::static_pointer_cast<T>(_components[id]);
 	}
 
 	template <typename T>
-	SmartPointer<T> getComponent() const
+	std::shared_ptr<T> getComponent() const
 	{
 		unsigned int id = T::getTypeId();
 		if (!hasComponent(id))
 			return nullptr;
-		return static_cast<SmartPointer<T> >(_components[id]);
+		return std::static_pointer_cast<T>(_components[id]);
 	}
 
 	template <typename T>
@@ -212,7 +212,7 @@ public:
 			cpt->setEntity(_handle);
 			if (_components.size() <= typeId)
 				_components.resize(typeId + 1);
-			_components[typeId] = SmartPointer<Component::Base>(cpt);
+			_components[typeId] = std::shared_ptr<Component::Base>(cpt);
 			_code.add(typeId);
 			broadCast(std::string("componentAdded" + std::to_string(typeId)), _handle);
 		}
