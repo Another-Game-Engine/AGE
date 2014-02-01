@@ -1,7 +1,6 @@
 
 #include "Engine.hh"
 #include "Context/IRenderContext.hh"
-#include "ResourceManager/ResourceManager.hh"
 #include "Utils/OpenGL.hh"
 #include "Timer.hh"
 #include "Renderer.hh"
@@ -71,10 +70,8 @@ bool 		Engine::update()
 void 		Engine::stop()
 {
 	static auto &renderer = getInstance<Renderer>();
-	static auto &resources = getInstance<Resources::ResourceManager>();
 	auto &context = getInstance<IRenderContext>();
 
-	resources.uninit();
 	renderer.uninit();
 	context.stop();
 }

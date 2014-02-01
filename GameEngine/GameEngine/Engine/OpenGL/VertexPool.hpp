@@ -1,7 +1,7 @@
 #ifdef VERTEXPOOL_HH_
 
 template <uint8_t NBR_ATTRIBUTE>
-VertexPool<NBR_ATTRIBUTE>::VertexPool(std::array<Attribute, 4> const &attributes)
+VertexPool<NBR_ATTRIBUTE>::VertexPool(std::array<Attribute, NBR_ATTRIBUTE> const &attributes)
 : _sizeVertexBuffer(0),
 _sizeIndicesBuffer(0),
 _nbrVertex(0),

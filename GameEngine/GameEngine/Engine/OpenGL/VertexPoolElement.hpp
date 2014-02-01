@@ -7,6 +7,11 @@ _vertices(vertices),
 _vertexOffset(0),
 _indicesOffset(0)
 {
+	for (uint8_t index = 0; index < NBR_ATTRIBUTE; index++)
+	{
+		_byteOffset[index] = 0;
+		_nbrByte[index] = 0;
+	}
 }
 
 template <uint8_t NBR_ATTRIBUTE>

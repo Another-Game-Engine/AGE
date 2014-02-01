@@ -4,7 +4,7 @@
 #include <Entities/EntityData.hh>
 //#include <Systems/System.h>
 #include <Utils/DependenciesInjector.hpp>
-#include <Utils/SmartPointer.hh>
+#include <memory>
 #include <Components/ComponentRegistrar.hpp>
 #include <Core/EntityIdRegistrar.hpp>
 
@@ -25,7 +25,7 @@ class System;
 class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
 {
 private:
-	std::multimap<std::size_t, SmartPointer<System> >   _systems;
+	std::multimap<std::size_t, std::shared_ptr<System> >   _systems;
 	std::vector<EntityData>                             _pool;
 	std::queue<unsigned int>                            _free;
 protected:
@@ -47,21 +47,21 @@ public:
 	}
 
 	template <typename T>
-	SmartPointer<T> addSystem(std::size_t priority)
+	std::shared_ptr<T> addSystem(std::size_t priority)
 	{
-		SmartPointer<System> tmp = new T(this);
+		std::shared_ptr<T> tmp{ new T(this) };
 		_systems.insert(std::make_pair(priority, tmp));
 		tmp->init();
 		return tmp;
 	}
 
 	template <typename T>
-	SmartPointer<T> getSystem()
+	std::shared_ptr<T> getSystem()
 	{
 		for (auto &e : _systems)
 		{
 			if (typeid(*e.second.get()).name() == typeid(T).name())
-				return e.second;
+				return std::static_pointer_cast<T>(e.second);
 		}
 		return nullptr;
 	}

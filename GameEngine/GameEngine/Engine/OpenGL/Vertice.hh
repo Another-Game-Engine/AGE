@@ -15,7 +15,7 @@ public:
 	Vertice(uint32_t nbrVertex, std::array<Data, NBR_ATTRIBUTE> attribData, Data const * const indices = NULL);
 	~Vertice();
 	Vertice(Vertice const &copy);
-	Vertice &operator=(Vertice const &vertex);
+	Vertice<NBR_ATTRIBUTE> &operator=(Vertice<NBR_ATTRIBUTE> const &vertex);
 	bool operator==(Vertice<NBR_ATTRIBUTE> const &vertex) const;
 	uint32_t getSizeVertexBuffer() const;
 	uint32_t getSizeIndicesBuffer() const;

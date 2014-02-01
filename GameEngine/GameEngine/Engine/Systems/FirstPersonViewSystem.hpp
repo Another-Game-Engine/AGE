@@ -14,7 +14,9 @@ class FirstPersonViewSystem : public System
 public:
 	FirstPersonViewSystem(AScene *scene)
 		: System(scene)
+		, _filter(scene)
 	{}
+
 	virtual ~FirstPersonViewSystem(){}
 protected:
 	virtual void updateBegin(double time)
@@ -26,7 +28,7 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			auto lookAt = e->getGlobalTransform();
 			auto camera = e->getComponent<Component::CameraComponent>();
@@ -37,9 +39,11 @@ protected:
 
 	virtual void initialize()
 	{
-		require<Component::CameraComponent>();
-		require<Component::FirstPersonView>();
+		_filter.require<Component::CameraComponent>();
+		_filter.require<Component::FirstPersonView>();
 	}
+protected:
+	EntityFilter _filter;
 };
 
 #endif    //__FPVIEW_SYS_SYSTEM_HPP__

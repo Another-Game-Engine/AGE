@@ -14,10 +14,15 @@
 class SpaceshipControllerSystem : public System
 {
 public:
-	SpaceshipControllerSystem(AScene *scene) : System(scene)
+	SpaceshipControllerSystem(AScene *scene)
+		: System(scene)
+		, _filter(scene)
 	{}
 	virtual ~SpaceshipControllerSystem(){}
 private:
+
+	EntityFilter _filter;
+
 	virtual void updateBegin(double time)
 	{
 	}
@@ -27,7 +32,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			auto c = e->getComponent<Component::SpaceshipController>();
 			if (e->hasComponent<Component::Collision>())
@@ -39,7 +44,7 @@ private:
 		}
 	}
 
-	void updateComponent(Entity &entity, SmartPointer<Component::SpaceshipController> c, double time)
+	void updateComponent(Entity &entity, std::shared_ptr<Component::SpaceshipController> c, double time)
 	{
 			c->resetControls();
 			auto &inputs = _scene->getEngine().getInstance<Input>();
@@ -86,7 +91,7 @@ private:
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 //				rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, 1000));
-				auto mesh = b->addComponent<Component::MeshRenderer>("model:ball");
+				auto mesh = b->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
 //				_scene->destroy(b);
 				balls.push_back(b);
@@ -102,8 +107,8 @@ private:
 
 	virtual void initialize()
 	{
-		require<Component::SpaceshipController>();
-		require<Component::RigidBody>();
+		_filter.require<Component::SpaceshipController>();
+		_filter.require<Component::RigidBody>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };

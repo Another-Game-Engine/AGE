@@ -13,14 +13,12 @@
 #include <Utils/PubSub.hpp>
 #include <Context/SdlContext.hh>
 #include <Core/SceneManager.hh>
-#include <ResourceManager/ResourceManager.hh>
 #include <Core/Renderer.hh>
 #include <Managers/BulletCollisionManager.hpp>
+#include <MediaFiles/AssetsManager.hpp>
 #include "InGameScene.hpp"
-#include "SecondScene.hpp"
 
 #include <Components/GraphNode.hpp>
-#include <Utils/SmartPointer.hh>
 
 int			main(int ac, char **av)
 {
@@ -32,7 +30,7 @@ int			main(int ac, char **av)
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
-	e.setInstance<Resources::ResourceManager>(&e);
+	e.setInstance<AssetsManager>();
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 //	e.setInstance<BulletCollisionManager>().init();

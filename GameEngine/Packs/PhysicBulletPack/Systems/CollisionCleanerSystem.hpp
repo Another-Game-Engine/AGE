@@ -9,10 +9,14 @@
 class CollisionCleaner : public System
 {
 public:
-	CollisionCleaner(AScene *scene) : System(scene)
+	CollisionCleaner(AScene *scene)
+		: System(scene)
+		, _filter(scene)
 	{}
 	virtual ~CollisionCleaner(){}
 private:
+	EntityFilter _filter;
+
 	virtual void updateBegin(double time)
 	{
 	}
@@ -22,7 +26,8 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		for (auto &it = std::begin(_collection); it != std::end(_collection); )
+		auto collection = _filter.getCollection();
+		for (auto &it = std::begin(collection); it != std::end(collection); )
 		{
 			auto e = *it;
 			++it;
@@ -32,7 +37,7 @@ private:
 
 	virtual void initialize()
 	{
-		require<Component::Collision>();
+		_filter.require<Component::Collision>();
 	}
 };
 
