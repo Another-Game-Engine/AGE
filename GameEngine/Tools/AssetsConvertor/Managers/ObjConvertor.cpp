@@ -7,6 +7,7 @@
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
 #include <MediaFiles/CollisionShapeDynamicFile.hpp>
 #include <BulletCollision/CollisionShapes/btShapeHull.h>
+#include <tuple>
 
 ObjConvertor::ObjConvertor(AssetsConvertorManager *manager)
 : AConvertor(manager, std::set<std::string>({ "obj" }))
@@ -162,6 +163,48 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		dynamicShape->name = "collision_shape_dynamic_" + file.getShortFileName();
 		dynamicShape->path = "./Assets/Serialized/" + dynamicShape->name + ".bullet";
 		_manager->add(dynamicShape);
+	}
+
+	std::vector<std::tuple<float, float, float, float, float, float>> minAndMax;
+	std::tuple<float, float, float, float, float, float> totalMinMax;
+
+	for (std::size_t i = 0; i < mesh->geometries.size(); ++i)
+	{
+		std::get<0>(minAndMax[i]) = mesh->geometries[i].vertices[0].x;
+		std::get<1>(minAndMax[i]) = mesh->geometries[i].vertices[0].x;
+		std::get<2>(minAndMax[i]) = mesh->geometries[i].vertices[0].y;
+		std::get<3>(minAndMax[i]) = mesh->geometries[i].vertices[0].y;
+		std::get<4>(minAndMax[i]) = mesh->geometries[i].vertices[0].z;
+		std::get<5>(minAndMax[i]) = mesh->geometries[i].vertices[0].z;
+
+		std::get<0>(totalMinMax) = mesh->geometries[i].vertices[0].x;
+		std::get<1>(totalMinMax) = mesh->geometries[i].vertices[0].x;
+		std::get<2>(totalMinMax) = mesh->geometries[i].vertices[0].y;
+		std::get<3>(totalMinMax) = mesh->geometries[i].vertices[0].y;
+		std::get<4>(totalMinMax) = mesh->geometries[i].vertices[0].z;
+		std::get<5>(totalMinMax) = mesh->geometries[i].vertices[0].z;
+
+
+		for (std::size_t it = 1; it < mesh->geometries[i].vertices.size(); ++it)
+		{
+			std::get<0>(minAndMax[i]) = std::get<0>(minAndMax[i]) < mesh->geometries[i].vertices[it].x ? std::get<0>(minAndMax[i]) : mesh->geometries[i].vertices[it].x;
+			std::get<1>(minAndMax[i]) = std::get<1>(minAndMax[i]) > mesh->geometries[i].vertices[it].x ? std::get<1>(minAndMax[i]) : mesh->geometries[i].vertices[it].x;
+			std::get<2>(minAndMax[i]) = std::get<2>(minAndMax[i]) < mesh->geometries[i].vertices[it].y ? std::get<2>(minAndMax[i]) : mesh->geometries[i].vertices[it].y;
+			std::get<3>(minAndMax[i]) = std::get<3>(minAndMax[i]) > mesh->geometries[i].vertices[it].y ? std::get<3>(minAndMax[i]) : mesh->geometries[i].vertices[it].y;
+			std::get<4>(minAndMax[i]) = std::get<4>(minAndMax[i]) < mesh->geometries[i].vertices[it].z ? std::get<4>(minAndMax[i]) : mesh->geometries[i].vertices[it].z;
+			std::get<5>(minAndMax[i]) = std::get<5>(minAndMax[i]) > mesh->geometries[i].vertices[it].z ? std::get<5>(minAndMax[i]) : mesh->geometries[i].vertices[it].z;
+			std::get<0>(totalMinMax) = std::get<0>(totalMinMax) < mesh->geometries[i].vertices[it].x ? std::get<0>(totalMinMax) : mesh->geometries[i].vertices[it].x;
+			std::get<1>(totalMinMax) = std::get<1>(totalMinMax) < mesh->geometries[i].vertices[it].x ? std::get<1>(totalMinMax) : mesh->geometries[i].vertices[it].x;
+			std::get<2>(totalMinMax) = std::get<2>(totalMinMax) < mesh->geometries[i].vertices[it].y ? std::get<2>(totalMinMax) : mesh->geometries[i].vertices[it].y;
+			std::get<3>(totalMinMax) = std::get<3>(totalMinMax) < mesh->geometries[i].vertices[it].y ? std::get<3>(totalMinMax) : mesh->geometries[i].vertices[it].y;
+			std::get<4>(totalMinMax) = std::get<4>(totalMinMax) < mesh->geometries[i].vertices[it].z ? std::get<4>(totalMinMax) : mesh->geometries[i].vertices[it].z;
+			std::get<5>(totalMinMax) = std::get<5>(totalMinMax) < mesh->geometries[i].vertices[it].z ? std::get<5>(totalMinMax) : mesh->geometries[i].vertices[it].z;
+		}
+	}
+
+	// BOX
+	{
+
 	}
 
 	return mesh;
