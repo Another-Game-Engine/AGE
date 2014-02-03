@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include "Utils/OpenGL.hh"
-#include "VertexBuffer.hh"
+#include "VertexArray.hh"
 
 namespace OpenGLTools
 {
@@ -17,7 +17,7 @@ namespace OpenGLTools
 		unsigned int _height;
 		GLuint _handle;
 		GLuint _depth;
-		OpenGLTools::VertexBuffer _vbo;
+		OpenGLTools::VertexArray _vao;
 		unsigned int _layerNumber;
 		unsigned int *_layers;
 		std::vector<std::string> _layerNames;

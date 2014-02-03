@@ -1,4 +1,4 @@
-#version 330
+#version 430
 
 uniform float roll;
 uniform	image2D	destTex;
