@@ -43,13 +43,13 @@ protected:
 			glm::vec3		pos;
 
 			trackBall->dist -= inputs.getMouseWheel().y * trackBall->zoomSpeed;
-			trackBall->angles -= glm::vec2((float)inputs.getMouseDelta().x / (1000 / trackBall->rotateSpeed), -(float)inputs.getMouseDelta().y / (1000 / trackBall->rotateSpeed));
-			if (abs(trackBall->dist) < 0.0001)
+			trackBall->angles -= glm::vec2((float)inputs.getMouseDelta().x / float(1000 / trackBall->rotateSpeed), -(float)inputs.getMouseDelta().y / float(1000 / trackBall->rotateSpeed));
+			if (abs(trackBall->dist) < 0.0001f)
 			{
 				if (trackBall->dist < 0)
-					trackBall->dist = -0.0001;
+					trackBall->dist = -0.0001f;
 				else
-					trackBall->dist = 0.0001;
+					trackBall->dist = 0.0001f;
 			}
 			pos.x = sin(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist;
 			pos.y = sin(trackBall->angles.y) * trackBall->dist;

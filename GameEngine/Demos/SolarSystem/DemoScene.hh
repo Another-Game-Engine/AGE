@@ -1,7 +1,7 @@
 #ifndef		DEMOSCENE_HH_
 #define		DEMOSCENE_HH_
 
-#include "Core\AScene.hh"
+#include "Core/AScene.hh"
 #include "Core/Engine.hh"
 
 class DemoScene : public AScene

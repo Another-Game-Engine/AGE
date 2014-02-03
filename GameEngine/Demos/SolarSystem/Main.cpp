@@ -15,6 +15,8 @@
 #include "Context/SdlContext.hh"
 #include "Core/SceneManager.hh"
 #include "Core/Renderer.hh"
+#include "OpenGL/VertexManager.hh"
+#include "OpenGL/Attribute.hh"
 #include <MediaFiles/AssetsManager.hpp>
 
 int			main(int ac, char **av)
@@ -34,6 +36,7 @@ int			main(int ac, char **av)
 	// init engine
 	if (e.init() == false)
 		return (EXIT_FAILURE);
+
 
 	// add scene
 	e.getInstance<SceneManager>().addScene(new DemoScene(e), "demo");

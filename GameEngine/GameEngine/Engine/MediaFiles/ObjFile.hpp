@@ -14,7 +14,7 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 #include <Utils/GlmSerialization.hpp>
-#include <OpenGL/VertexBuffer.hh>
+#include <OpenGL/Vertice.hh>
 
 struct ObjFile : public MediaFile<ObjFile>
 {
@@ -50,18 +50,33 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec4>		colors;		// vertices colors
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
-		OpenGLTools::VertexBuffer	buffer;
+		Vertice<4>					buffer;
+		VertexManager<4>			*vertexManager;
 
 		Geometry()
 			: name("")
-		{}
+		{
+			std::array<Attribute, 4> param =
+			{
+				Attribute(GL_FLOAT, sizeof(float), 4),
+				Attribute(GL_FLOAT, sizeof(float), 4),
+				Attribute(GL_FLOAT, sizeof(float), 4),
+				Attribute(GL_FLOAT, sizeof(float), 2),
+			};
+			vertexManager = new VertexManager<4>(param);
+			vertexManager->init();
+		}
 
 		~Geometry()
-		{}
+		{
+			delete vertexManager;
+		}
 
 		Geometry(const Geometry &o)
 			: name("")
 		{
+			vertexManager = new VertexManager<4>(*o.vertexManager);
+			vertexManager->init();
 			name = o.name;
 			vertices = o.vertices;
 			normals = o.normals;
@@ -101,19 +116,16 @@ struct ObjFile : public MediaFile<ObjFile>
 
 		void init()
 		{
-			buffer.init(vertices.size(), &indices[0]);
-			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 4, 4, GL_FLOAT));
-			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 4, 4, GL_FLOAT));
-			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 4, 4, GL_FLOAT));
-			buffer.addAttribute(OpenGLTools::Attribute(sizeof(float)* 2, 2, GL_FLOAT));
-
-			buffer.setBuffer(0, reinterpret_cast<byte *>(&vertices[0].x));
-			if (colors.size())
-				buffer.setBuffer(1, reinterpret_cast<byte *>(&colors[0].x));
-			if (normals.size())
-				buffer.setBuffer(2, reinterpret_cast<byte *>(&normals[0].x));
-			if (uvs.size())
-				buffer.setBuffer(3, reinterpret_cast<byte *>(&uvs[0].x));
+			std::array<Data, 4> data = 
+			{
+				Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
+				Data(colors.size() * 4 * sizeof(float), &colors[0].x),
+				Data(normals.size() * 4 * sizeof(float), &normals[0].x),
+				Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
+			};
+			Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
+			buffer = Vertice<4>(vertices.size(), data, &indicesData);
+			vertexManager->addVertice(buffer);
 		}
 
 	};

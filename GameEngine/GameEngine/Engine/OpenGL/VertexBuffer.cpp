@@ -1,120 +1,60 @@
-//
-// VertexBuffer.cpp for  in /home/massora/GIT/amd_project/render/ShaderTool
-// 
-// Made by dorian pinaud
-// Login   <pinaud_d@epitech.net>
-// 
-// Started on  Sun Jul 28 23:59:16 2013 dorian pinaud
-// Last update Wed Aug  7 01:20:25 2013 dorian pinaud
-//
-
 #include "VertexBuffer.hh"
 
 #include <assert.h>
 
 namespace OpenGLTools
 {
+	VertexBuffer::VertexBuffer(bool isIndices)
+		: _id(0),
+		_isBind(false)
+	{
+		_mode = isIndices ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER;
+	}
 
-VertexBuffer::VertexBuffer(void)
-  : _idBuffer(0),
-    _idIndex(0),
-    _drawable(false)
-{
-}
+	 VertexBuffer::~VertexBuffer()
+	 {
+		 if (_id)
+		   glDeleteBuffers(1, &_id);
+	 }
+	 
+	 VertexBuffer::VertexBuffer(VertexBuffer const &copy)
+		 : _id(copy._id),
+		 _mode(copy._mode),
+		 _isBind(copy._isBind)
+	 {
 
-VertexBuffer::VertexBuffer(VertexBuffer const &o)
-{
-	_idBuffer = o._idBuffer;
-	_idIndex = o._idIndex;
-	_drawable = o._drawable;
-}
+	 }
 
-VertexBuffer::~VertexBuffer(void)
-{
-	if (_idBuffer != 0)
-		glDeleteBuffers(1, &_idBuffer);
-	if (_idIndex != 0)
-		glDeleteBuffers(1, &_idIndex);
-}
+	 void VertexBuffer::init()
+	 {
+		 glGenBuffers(1, &_id);
+	 }
 
-/// init the vertex buffer with information static
-void VertexBuffer::init(size_t nbrVertex, unsigned int *vertex)
-{
-  if (_idBuffer != 0)
-  	glDeleteBuffers(1, &_idBuffer);
-  if (_idIndex != 0)
-  	glDeleteBuffers(1, &_idIndex);
-  _nbrVertex = nbrVertex;
-  if (vertex)
-  {
-    glGenBuffers(2, &_idBuffer);
-    _drawable = true;
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _idIndex);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * nbrVertex, vertex, GL_DYNAMIC_DRAW);
-  }
-  else
-    glGenBuffers(1, &_idBuffer);
-}
+	 VertexBuffer &VertexBuffer::operator=(VertexBuffer const &vertexbuffer)
+	 {
+		 _id = vertexbuffer._id;
+		 _mode = vertexbuffer._mode;
+		 _isBind = vertexbuffer._isBind;
+		 return (*this);
+	 }
 
-/// Fill one blocks
-void VertexBuffer::setBuffer(size_t index, byte *buffer) const
-{
-  glBindBuffer(GL_ARRAY_BUFFER, _idBuffer);
-  glBufferSubData(GL_ARRAY_BUFFER, _attribute[index].offset, _attribute[index].nbrByte * _nbrVertex, buffer);
-}
+	 void VertexBuffer::bind()
+	 {
+		glBindBuffer(_mode, _id);
+	 }
 
-/// draw with the elements the contain of vbo
-void VertexBuffer::draw(GLenum mode) const
-{
-  assert(_drawable == true && "Cannot draw, buffer not initialized correctly");
-  glBindBuffer(GL_ARRAY_BUFFER, _idBuffer);
-  for (size_t i = 0; i < _attribute.size(); ++i)
-  {
-    glEnableVertexAttribArray(i);
-    glVertexAttribPointer(i, _attribute[i].nbrCompenent, _attribute[i].type, GL_FALSE, 0, (const GLvoid*)(_attribute[i].offset));
-  }
-  if (_drawable)
-  {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _idIndex);
-    glDrawElements(mode, _nbrVertex, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
-  }
-  else
-  {
-    glDrawArrays(mode, 0, _nbrVertex);
-  }
-}
+	 void VertexBuffer::unbind()
+	 {
+		glBindBuffer(_mode, 0);
+	 }
 
-/// add a new attribute
-void VertexBuffer::addAttribute(Attribute const &attribute)
-{
-  Attribute r(attribute);
-  
-  if (_attribute.size() > 0)
-    {
-      r.offset = _attribute.back().offset + _attribute.back().nbrByte * _nbrVertex;
-    }
-  glBindBuffer(GL_ARRAY_BUFFER, _idBuffer);
-  size_t size = r.offset + r.nbrByte * _nbrVertex;
-  glBufferData(GL_ARRAY_BUFFER, size, 0, GL_DYNAMIC_DRAW);
-  _attribute.push_back(r);
-}
+	 GLenum VertexBuffer::getMode() const
+	 {
+		 return (_mode);
+	 }
 
-Attribute *VertexBuffer::getAttribute(unsigned int index)
-{
-	if (index >= _attribute.size())
-		return nullptr;
-	return &(_attribute[index]);
-}
-
-/// delete a Attribute
-void VertexBuffer::clearAttributes(void)
-{
-  _attribute.clear();
-}
-
-GLuint VertexBuffer::getId() const
-{
-  return (_idBuffer);
-}
-
+	 GLuint VertexBuffer::getId() const
+	 {
+		 return (_id);
+	 }
 }
