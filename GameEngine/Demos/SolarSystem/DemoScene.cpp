@@ -197,7 +197,7 @@ bool 			DemoScene::userStart()
 	//
 
 	{
-# define NBR_PLANET 1
+# define NBR_PLANET 300
 		unsigned int nbPlanet = NBR_PLANET;
 		Entity planets[NBR_PLANET];
 
