@@ -30,31 +30,6 @@ public:
 
 	void render(double time)
 	{
-		//static double t = 0;
-		//unsigned int textureOffset = 0;
-		//auto &renderer = _scene->getEngine().getInstance<Renderer>();
-
-		//t += time;
-
-		//OpenGLTools::UniformBuffer *perModelUniform = _scene->getEngine().getInstance<Renderer>().getUniform("PerModel");
-
-		//for (auto &mat : _sorted)
-		//{
-		//	for (auto &shaderName : mat.first->getShaders())
-		//	{
-		//		auto shader = _scene->getEngine().getInstance<Renderer>().getShader(shaderName);
-		//		shader->use();
-		//		for (auto &e : mat.second)
-		//		{
-		//			auto &mesh = e->getComponent<Component::MeshRenderer>();
-		//			perModelUniform->setUniform("model", e->getGlobalTransform());
-		//			perModelUniform->flushChanges();
-		//			mesh->bindTextures(shader);
-		//			mesh->getMesh()->draw();
-		//		}
-		//	}
-		//}
-
 		for (auto e : _collection)
 		{
 			auto &mesh = e->getComponent<Component::MeshRenderer>();
@@ -72,7 +47,8 @@ protected:
 	}
 
 	virtual void updateEnd(double time)
-	{}
+	{
+	}
 
 	virtual void mainUpdate(double time)
 	{
@@ -81,46 +57,7 @@ protected:
 	virtual void initialize()
 	{
 		require<Component::MeshRenderer>();
-//		require<Component::MaterialComponent>();
-		//globalSub("MaterialComponentChanged", [&](Entity &e, SmartPointer<Material> oldMaterial, SmartPointer<Material> newMaterial)
-		//{
-		//	if (_collection.find(e) == std::end(_collection) || oldMaterial == nullptr)
-		//		return;
-		//	if (_sorted.find(oldMaterial) != std::end(_sorted))
-		//	{
-		//		_sorted[oldMaterial].remove(e);
-		//	}
-		//	if (!newMaterial.get())
-		//		return;
-		//	_sorted[newMaterial].push_back(e);
-		//});
 	}
-
-	//virtual void _componentAdded(Entity &e, unsigned int typeId)
-	//{
-	//	if (_code.match(e->getCode()) && _collection.find(e) == std::end(_collection))
-	//	{
-	//		auto m = e->getComponent<Component::MaterialComponent>()->getMaterial();
-	//		if (_sorted.find(m) == std::end(_sorted))
-	//		{
-	//			_sorted.insert(std::make_pair(m, std::list<Entity>()));
-	//		}
-	//		_collection.insert(e);
-	//		_sorted[e->getComponent<Component::MaterialComponent>()->getMaterial()].push_back(e);
-	//	}
-	//}
-
-	//virtual void _componentRemoved(Entity &e, unsigned int typeId)
-	//{
-	//	if (!_code.match(e->getCode()) && _collection.find(e) != std::end(_collection))
-	//	{
-	//		_collection.erase(e);
-	//		if (e->getComponent<Component::MaterialComponent>() != nullptr)
-	//		{
-	//			_sorted[e->getComponent<Component::MaterialComponent>()->getMaterial()].remove(e);
-	//		}
-	//	}
-	//}
 };
 
 #endif    //__MESH_RENDERER_SYSTEM_HPP__
