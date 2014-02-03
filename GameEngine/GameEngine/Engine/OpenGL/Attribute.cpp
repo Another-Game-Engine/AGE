@@ -1,45 +1,45 @@
-//
-// Attribute.cpp for  in /home/massora/GIT/amd_project/render/ShaderTool
-// 
-// Made by dorian pinaud
-// Login   <pinaud_d@epitech.net>
-// 
-// Started on  Mon Jul 29 19:28:55 2013 dorian pinaud
-// Last update Wed Aug  7 01:19:35 2013 dorian pinaud
-//
-
 #include "Attribute.hh"
 
-namespace OpenGLTools
+Attribute::Attribute(GLenum type, uint8_t sizeType, uint8_t nbrComponent)
+: _type(type),
+_sizeType(sizeType),
+_nbrComponent(nbrComponent)
 {
 
-Attribute::Attribute(size_t nbrByte, size_t nbrCompenent, GLenum type)
-  : nbrByte(nbrByte),
-    nbrCompenent(nbrCompenent),
-    offset(0),
-    type(type)
-{
 }
 
-Attribute::~Attribute(void)
+Attribute::~Attribute()
 {
+
 }
 
 Attribute::Attribute(Attribute const &copy)
-  : nbrByte(copy.nbrByte),
-    nbrCompenent(copy.nbrCompenent),
-    offset(copy.offset),
-    type(copy.type)
+: _type(copy._type),
+_sizeType(copy._sizeType),
+_nbrComponent(copy._nbrComponent)
 {
+
 }
 
-Attribute &Attribute::operator=(Attribute const &r)
+Attribute &Attribute::operator=(Attribute const &attribute)
 {
-  nbrByte = r.nbrByte;
-  nbrCompenent = r.nbrCompenent;
-  offset = r.offset;
-  type = r.type;
-  return (*this);
+	_type = attribute._type;
+	_sizeType = attribute._sizeType;
+	_nbrComponent = attribute._nbrComponent;
+	return (*this);
 }
 
+GLenum Attribute::getType() const
+{
+	return (_type);
+}
+
+uint8_t Attribute::getSizeType() const
+{
+	return (_sizeType);
+}
+
+uint8_t Attribute::getNbrComponent() const
+{
+	return (_nbrComponent);
 }
