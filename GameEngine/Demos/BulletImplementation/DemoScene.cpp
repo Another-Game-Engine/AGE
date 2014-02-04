@@ -234,7 +234,7 @@ bool 			DemoScene::userStart()
 
 	Entity c1;
 	auto lolol = 0;
-	for (unsigned int i = 0; i < 20; ++i)
+	for (unsigned int i = 0; i < 4; ++i)
 	{
 		//if (i % 3)
 		//{
@@ -247,7 +247,7 @@ bool 			DemoScene::userStart()
 		//}
 		//else
 		//{
-		for (size_t j = 0; j < 20 - i; j++)
+		for (size_t j = 0; j < 4 - i; j++)
 		{
 			c1 = createMonkey(glm::vec3(5 - i + j * 10, i * 10, 0), glm::vec3(rand() % 3 + 1), "texture__SunTexture", 1.0f);
 			++lolol;
@@ -284,6 +284,17 @@ bool 			DemoScene::userStart()
 
 bool 			DemoScene::userUpdate(double time)
 {
+	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_LEFT))
+	{
+		glm::vec3 from, to;
+		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
+		auto test = _engine.getInstance<BulletCollisionManager>().rayCast(from, to * 1000.0f);
+		if (test.size() != 0)
+		{
+			for (auto &e : test)
+				destroy(e);
+		}
+	}
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 		return (false);
