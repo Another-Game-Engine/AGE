@@ -284,17 +284,35 @@ bool 			DemoScene::userStart()
 
 bool 			DemoScene::userUpdate(double time)
 {
+	static Entity cursor;
+	static bool init = false;
+	if (!init)
+	{
+		cursor = createCube(glm::vec3(0.0f), glm::vec3(1.0f), "texture__SunTexture", 0);
+		cursor->removeComponent<Component::RigidBody>();
+		init = true;
+	}
+	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_RIGHT))
+	{
+		glm::vec3 from, to;
+		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
+		auto test = _engine.getInstance<BulletCollisionManager>().rayCast(from, from + to * 1000.0f);
+//		cursor->setLocalTransform() = glm::translate(glm::mat4(1), to * 5.0f + from);
+		if (test.size() != 0)
+		{
+			for (auto e : test)
+				if (!e->hasComponent<Component::FPController>())
+					destroy(e);
+		}
+	}
 	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_LEFT))
 	{
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-		auto test = _engine.getInstance<BulletCollisionManager>().rayCast(from, to * 1000.0f);
-		if (test.size() != 0)
-		{
-			for (auto &e : test)
-				destroy(e);
-		}
+		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 1.0f);
+		e->getComponent<Component::RigidBody>()->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
 	}
+
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 		return (false);
