@@ -14,6 +14,8 @@
 #include <Utils/MatrixConversion.hpp>
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
 #include <MediaFiles/CollisionShapeDynamicFile.hpp>
+#include <MediaFiles/CollisionBoxFile.hpp>
+#include <MediaFiles/CollisionSphereFile.hpp>
 #include <memory>
 
 #include "btBulletWorldImporter.h"
@@ -129,20 +131,31 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				auto prout = AMediaFile::get(_meshName);
-				auto dynamic = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(AMediaFile::get(_meshName));
-				if (dynamic != nullptr)
+				auto media = AMediaFile::get(_meshName);
+				if (!media)
+					return;
+				if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
 				{
-					_collisionShape = std::shared_ptr<btCollisionShape>(new btConvexHullShape(*dynamic->shape.get()));
+					auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(AMediaFile::get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btConvexHullShape(*s->shape.get()));
+				}
+				else if (media->getType() == AMediaFile::COLLISION_SHAPE_STATIC)
+				{
+					auto s = std::dynamic_pointer_cast<CollisionShapeStaticFile>(AMediaFile::get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btScaledBvhTriangleMeshShape(s->shape.get(), btVector3(1, 1, 1)));
+				}
+				else if (media->getType() == AMediaFile::COLLISION_BOX)
+				{
+					auto s = std::dynamic_pointer_cast<CollisionBoxFile>(AMediaFile::get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btBoxShape(*s->shape.get()));
+				}
+				else if (media->getType() == AMediaFile::COLLISION_SPHERE)
+				{
+					auto s = std::dynamic_pointer_cast<CollisionSphereFile>(AMediaFile::get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btSphereShape(*s->shape.get()));
 				}
 				else
-				{
-					auto staticShape = std::dynamic_pointer_cast<CollisionShapeStaticFile>(AMediaFile::get(_meshName));
-					if (staticShape != nullptr)
-						_collisionShape = std::shared_ptr<btCollisionShape>(new btScaledBvhTriangleMeshShape(staticShape->shape.get(), btVector3(1,1,1)));
-					else
-						assert(false && "Collision shape not found.");
-				}
+					std::cerr << "Collision mesh not found." << std::endl;
 			}
 			if (mass != 0)
 				_collisionShape->calculateLocalInertia(mass, inertia);
