@@ -6,6 +6,7 @@
 #include <MediaFiles/MaterialFile.hpp>
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
 #include <MediaFiles/CollisionShapeDynamicFile.hpp>
+#include <MediaFiles/CollisionBoxFile.hpp>
 #include <BulletCollision/CollisionShapes/btShapeHull.h>
 #include <tuple>
 
@@ -166,6 +167,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	}
 
 	std::vector<std::tuple<float, float, float, float, float, float>> minAndMax;
+	minAndMax.resize(mesh->geometries.size());
 	std::tuple<float, float, float, float, float, float> totalMinMax;
 
 	for (std::size_t i = 0; i < mesh->geometries.size(); ++i)
@@ -202,9 +204,18 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		}
 	}
 
-	// BOX
+	// UNIQUE BOX
 	{
-
+		std::shared_ptr<btBoxShape> box{new btBoxShape(btVector3(
+			std::get<1>(totalMinMax) - std::get<0>(totalMinMax),
+			std::get<3>(totalMinMax) - std::get<2>(totalMinMax),
+			std::get<5>(totalMinMax) - std::get<4>(totalMinMax)
+			))};
+		std::shared_ptr<CollisionBoxFile> shape{ new CollisionBoxFile() };
+		shape->shape = box;
+		shape->name = "collision_box_" + file.getShortFileName();
+		shape->path = "./Assets/Serialized/" + shape->name + ".bullet";
+		_manager->add(shape);
 	}
 
 	return mesh;

@@ -34,6 +34,7 @@ protected:
 		, CUBEMAP = 4
 		, COLLISION_SHAPE_STATIC = 5
 		, COLLISION_SHAPE_DYNAMIC = 6
+		, COLLISION_BOX = 7
 	};
 	MEDIA_TYPE _type;
 public:
