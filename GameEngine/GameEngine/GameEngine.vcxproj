@@ -149,6 +149,7 @@
     <ClInclude Include="Engine\MediaFiles\CollisionShapeDynamicFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\CollisionShapeFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\CollisionShapeStaticFile.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionSphereFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\CubeMapFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\MaterialFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\MediaFile.hpp" />

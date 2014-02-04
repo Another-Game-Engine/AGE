@@ -82,6 +82,7 @@
     <ClInclude Include="Engine\MediaFiles\CollisionShapeStaticFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\CollisionShapeDynamicFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\CollisionBoxFile.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionSphereFile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

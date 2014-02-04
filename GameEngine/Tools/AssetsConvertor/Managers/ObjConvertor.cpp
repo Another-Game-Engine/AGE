@@ -7,6 +7,7 @@
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
 #include <MediaFiles/CollisionShapeDynamicFile.hpp>
 #include <MediaFiles/CollisionBoxFile.hpp>
+#include <MediaFiles/CollisionSphereFile.hpp>
 #include <BulletCollision/CollisionShapes/btShapeHull.h>
 #include <tuple>
 
@@ -204,7 +205,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		}
 	}
 
-	// UNIQUE BOX
+	// BOX
 	{
 		std::shared_ptr<btBoxShape> box{new btBoxShape(btVector3(
 			std::get<1>(totalMinMax) - std::get<0>(totalMinMax),
@@ -217,6 +218,20 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		shape->path = "./Assets/Serialized/" + shape->name + ".bullet";
 		_manager->add(shape);
 	}
+
+	// SPHERE
+	{
+		float m = std::get<1>(totalMinMax) - std::get<0>(totalMinMax);
+		m = m < std::get<3>(totalMinMax) - std::get<2>(totalMinMax) ? std::get<3>(totalMinMax) - std::get<2>(totalMinMax) : m;
+		m = m < std::get<5>(totalMinMax) - std::get<4>(totalMinMax) ? std::get<5>(totalMinMax) - std::get<4>(totalMinMax) : m;
+		std::shared_ptr<btSphereShape> sphere{new btSphereShape(m)};
+		std::shared_ptr<CollisionSphereFile> shape{ new CollisionSphereFile() };
+		shape->shape = sphere;
+		shape->name = "collision_sphere_" + file.getShortFileName();
+		shape->path = "./Assets/Serialized/" + shape->name + ".bullet";
+		_manager->add(shape);
+	}
+
 
 	return mesh;
 }
