@@ -2,30 +2,18 @@
 # define   __CAMERA_COMPONENT_HPP__
 
 #include "glm/glm.hpp"
-#include "ResourceManager/CubeMap.hh"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Component.hh"
-#include <Utils/SmartPointer.hh>
-
-namespace Resources
-{
-	class CubeMap;
-};
+#include <Utils/GlmSerialization.hpp>
+#include <cereal/types/string.hpp>
+#include <MediaFiles/CubeMapFile.hpp>
 
 namespace Component
 {
-	class CameraComponent : public ComponentBase<CameraComponent>
+	struct CameraComponent : public ComponentBase<CameraComponent>
 	{
-	private:
-		CameraComponent(CameraComponent const &);
-		CameraComponent	&operator=(CameraComponent const &);
-		glm::mat4                        _projection;
-		SmartPointer<Resources::CubeMap> _skybox;
-		std::string                      _cubeMapShader;
-		glm::mat4                        _lookAtTransform;
-	public:
-		CameraComponent(AScene *scene, Entity &entity);
+		CameraComponent();
 		virtual              ~CameraComponent(void);
 		void init(){}
 		virtual void reset(){}
@@ -33,10 +21,41 @@ namespace Component
 		void                 dettachSkybox();
  		glm::mat4            &setProjection();
 		glm::mat4            &getProjection();
-		glm::mat4            &setLookAtTransform() { return _lookAtTransform; }
-		const glm::mat4      &getLookAtTransform() const { return _lookAtTransform; }
-		SmartPointer<Resources::CubeMap> getSkybox();
+		inline glm::mat4            &setLookAtTransform() { return lookAtTransform; }
+		inline const glm::mat4      &getLookAtTransform() const { return lookAtTransform; }
+		std::shared_ptr<CubeMapFile> getSkybox();
 		const std::string &getSkyboxShader() const;
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new CameraComponent();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(CEREAL_NVP(projection), CEREAL_NVP(cubeMapShader), CEREAL_NVP(lookAtTransform));
+		}
+
+		// !Serialization
+		////
+		//////
+
+		glm::mat4                        projection;
+		std::shared_ptr<CubeMapFile>     skybox;
+		std::string                      cubeMapShader;
+		glm::mat4                        lookAtTransform;
+	private:
+		CameraComponent(CameraComponent const &);
+		CameraComponent	&operator=(CameraComponent const &);
 	};
 }
 

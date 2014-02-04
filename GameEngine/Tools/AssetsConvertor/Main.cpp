@@ -13,7 +13,6 @@
 #include <Utils/PubSub.hpp>
 #include <Context/SdlContext.hh>
 #include <Core/SceneManager.hh>
-#include <ResourceManager/ResourceManager.hh>
 #include <Core/Renderer.hh>
 #include <Managers/AssetsConvertorManager.hh>
 
@@ -29,7 +28,6 @@ int			main(int ac, char **av)
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
-	e.setInstance<Resources::ResourceManager>(&e);
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 	e.setInstance<AssetsConvertorManager>();

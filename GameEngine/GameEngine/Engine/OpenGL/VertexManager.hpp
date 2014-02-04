@@ -31,8 +31,6 @@ _pool(copy._pool),
 _isAttributeActivate(copy._isAttributeActivate),
 _attributes(copy._attributes)
 {
-	for (uint16_t index = 0; index < NBR_ATTRIBUTE; ++index)
-		_isBindAttribtue[index] = copy._isBindAttribtue[index];
 }
 
 template <uint8_t NBR_ATTRIBUTE>
@@ -173,6 +171,7 @@ void VertexManager<NBR_ATTRIBUTE>::callDraw(Vertice<NBR_ATTRIBUTE> const * const
 	{
 		update();
 		_vertexArray.bind();
+		glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
 		if (drawable->hasIndices())
 			glDrawElementsBaseVertex(mode, drawable->getNbrIndices(), GL_UNSIGNED_INT, reinterpret_cast<GLvoid const *>(_pool[drawable->getIndexPool()].getIndicesOffset()), _pool[drawable->getIndexPool()].getVertexOffset());
 		else

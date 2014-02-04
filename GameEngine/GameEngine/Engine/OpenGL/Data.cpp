@@ -30,7 +30,7 @@ Data &Data::operator=(Data const &data)
 
 Data::~Data()
 {
-	if (_buffer)
+	if (_buffer != NULL)
 		delete[] _buffer;
 }
 

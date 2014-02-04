@@ -29,9 +29,9 @@ private:
 	std::array<GLuint, NBR_ATTRIBUTE> _pointerAttributes;
 	std::queue<uint32_t> _updateBuffer;
 	StateVertexPool _updateState;
-	std::array<Attribute, 4> _attributes;
+	std::array<Attribute, NBR_ATTRIBUTE> _attributes;
 public:
-	VertexPool(std::array<Attribute, 4> const &attributes);
+	VertexPool(std::array<Attribute, NBR_ATTRIBUTE> const &attributes);
 	~VertexPool();
 	VertexPool(VertexPool<NBR_ATTRIBUTE> const &copy);
 	VertexPool &operator=(VertexPool const &vertexpool);

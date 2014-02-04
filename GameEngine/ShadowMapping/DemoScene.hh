@@ -9,9 +9,6 @@
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
 
-#include "ResourceManager/ResourceManager.hh"
-#include "ResourceManager/Texture.hh"
-#include "ResourceManager/CubeMap.hh"
 
 class DemoScene : public AScene
 {

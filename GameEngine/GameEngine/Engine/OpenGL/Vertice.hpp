@@ -7,6 +7,7 @@ _sizeVertexBuffer(0),
 _sizeIndicesBuffer(0),
 _nbrVertex(nbrVertex),
 _nbrIndices(0),
+_indices(NULL),
 _vertexManager(NULL),
 _index(-1)
 {
@@ -26,6 +27,7 @@ Vertice<NBR_ATTRIBUTE>::Vertice()
 _sizeIndicesBuffer(0),
 _nbrVertex(0),
 _nbrIndices(0),
+_indices(NULL),
 _vertexManager(NULL),
 _index(-1)
 {
@@ -38,6 +40,7 @@ _sizeVertexBuffer(copy._sizeVertexBuffer),
 _sizeIndicesBuffer(copy._sizeIndicesBuffer),
 _nbrVertex(copy._nbrVertex),
 _nbrIndices(copy._nbrIndices),
+_indices(copy._indices),
 _vertexManager(copy._vertexManager),
 _index(copy._index)
 {
@@ -62,6 +65,8 @@ Vertice<NBR_ATTRIBUTE> &Vertice<NBR_ATTRIBUTE>::operator=(Vertice<NBR_ATTRIBUTE>
 	_nbrIndices = vertex._nbrIndices;
 	if (vertex._indices)
 		_indices = new Data(*vertex._indices);
+	else
+		_indices = NULL;
 	if (_index != -1 && _vertexManager != NULL)
 		_vertexManager->deleteVertice(*this);
 	_vertexManager = vertex._vertexManager;
@@ -74,12 +79,12 @@ bool Vertice<NBR_ATTRIBUTE>::operator==(Vertice<NBR_ATTRIBUTE> const &vertex) co
 {
 	if (vertex._indices && _indices)
 	{
-		if (vertex._indices != _indices)
+		if (*vertex._indices != *_indices)
 			return (false);
 	}
-	for (uint32_t index = 0; index < NBR_ATTRIBUTE; ++index)
+	for (uint8_t index = 0; index < NBR_ATTRIBUTE; ++index)
 	{
-		if (_bufferData[index] == vertex._bufferData[index])
+		if (_bufferData[index] != vertex._bufferData[index])
 			return (false);
 	}
 	return (true);

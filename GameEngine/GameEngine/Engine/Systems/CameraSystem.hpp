@@ -4,22 +4,21 @@
 #include <Utils/MatrixConversion.hpp>
 #include "System.h"
 #include <Components/MeshRenderer.hh>
-#include <Components/MaterialComponent.h>
 #include <Components/CameraComponent.hh>
 #include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Systems/MeshRenderSystem.h>
-// to erase
-#include <Components/TrackBallComponent.hpp>
 
 class CameraSystem : public System
 {
 public:
 	CameraSystem(AScene *scene)
 		: System(scene)
+		, _filter(scene)
 		, _renderDebugMethod(false)
 	{}
+
 	virtual ~CameraSystem(){}
 
 	void setRenderDebugMode(bool t)
@@ -33,7 +32,8 @@ public:
 	}
 
 protected:
-	std::map<SmartPointer<Material>, std::list<Entity> > _sorted;
+	EntityFilter _filter;
+
 	bool _renderDebugMethod;
 
 	virtual void updateBegin(double time)
@@ -50,7 +50,7 @@ protected:
 		auto &renderer = _scene->getEngine().getInstance<Renderer>();
 		OpenGLTools::UniformBuffer *perFrameBuffer = _scene->getEngine().getInstance<Renderer>().getUniform("PerFrame");
 
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			auto camera = e->getComponent<Component::CameraComponent>();
 			auto skybox = camera->getSkybox();
@@ -59,7 +59,7 @@ protected:
 
 			auto cameraPosition = camera->getLookAtTransform();
 
-			if (skybox.get())
+			if (skybox != nullptr)
 			{
 				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>().getShader(camera->getSkyboxShader());
 				assert(s != NULL && "Skybox does not have a shader associated");
@@ -79,6 +79,7 @@ protected:
 
 				s->use();
 
+
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());
 				glDepthMask(0);
@@ -88,8 +89,6 @@ protected:
 			}
 
 			totalTime += time;
-
-
 
 			// Set les uniforms du block PerFrame
 			perFrameBuffer->setUniform("projection", camera->getProjection());
@@ -102,7 +101,7 @@ protected:
 
 	virtual void initialize()
 	{
-		require<Component::CameraComponent>();
+		_filter.require<Component::CameraComponent>();
 	}
 };
 

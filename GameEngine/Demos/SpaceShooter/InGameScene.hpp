@@ -5,13 +5,6 @@
 #include <Core/AScene.hh>
 
 /////////////
-// RESOURCES
-/////////////
-#include <ResourceManager/Texture.hh>
-#include <ResourceManager/CubeMap.hh>
-#include <ResourceManager/SharedMesh.hh>
-
-/////////////
 // SYSTEMS
 /////////////
 #include <Systems/MeshRenderSystem.h>
@@ -103,10 +96,11 @@ public:
 		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 		_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
-		SmartPointer<Resources::Texture>		toRepeat = new Resources::Texture();
-		toRepeat->setWrapMode(GL_REPEAT);
-
-		_engine.getInstance<Resources::ResourceManager>().addResource("cubemap:space", new Resources::CubeMap(), "./Assets/lake.skybox");
+		AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
+		AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
+		AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
+		AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
+		AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 
 		std::string		vars[] =
 		{
@@ -119,29 +113,6 @@ public:
 		_engine.getInstance<Renderer>().addUniform("cameraUniform").
 			init(&sky, "cameraUniform", vars);
 		_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
-
-
-
-
-		////////////////////////
-		/////////
-		// COMPLEXE OBJ LOAD TEST
-		///
-		///
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:cube", new Resources::SharedMesh(), "./Assets/crytek-sponza/sponza.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/city/city.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:cube", new Resources::SharedMesh(), "./Assets/cube/cube.obj");
-//		_engine.getInstance<Resources::ResourceManager>().addResource("model:sponza", new Resources::SharedMesh(), "./Assets/head/head.obj");
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:spaceship", new Resources::SharedMesh(), "./Assets/galileo/galileo.obj");
-		_engine.getInstance<Resources::ResourceManager>().addResource("model:ball", new Resources::SharedMesh(), "./Assets/ball/ball.obj");
-
-		///
-		///
-		///
-		////////
-		////////////////////////
-
-
 
 
 		/////////////////////////////
@@ -162,8 +133,8 @@ public:
 			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(2));
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::BOX, "model:spaceship");
-			auto mesh = e->addComponent<Component::MeshRenderer>("model:spaceship");
+			rigidBody->setCollisionShape(Component::RigidBody::BOX, "obj__galileo");
+			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 			mesh->setShader("MaterialBasic");
 			e->addComponent<Component::SpaceshipController>();
 			heros = e;
@@ -178,7 +149,7 @@ public:
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			rigidBody->setCollisionShape(Component::RigidBody::BOX);
-			auto mesh = e->addComponent<Component::MeshRenderer>("model:cube");
+			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
 			floor = e;
 		}
@@ -187,7 +158,7 @@ public:
 		auto graph = camera->addComponent<Component::GraphNode>();
 		auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 		auto trackBall = camera->addComponent<Component::TrackingCamera>(heros, glm::vec3(0, 0, -5.0f));
-		cameraComponent->attachSkybox("cubemap:space", "cubemapShader");
+		cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 
 		return true;
 	}
@@ -226,7 +197,7 @@ public:
 				auto rigidBody = e->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-				auto mesh = e->addComponent<Component::MeshRenderer>("model:ball");
+				auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
 				balls.push_back(e);
 			}
