@@ -71,8 +71,8 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_sphere_galileo");
-	//auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
-	//mesh->setShader("MaterialBasic");
+	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
+	mesh->setShader("MaterialBasic");
 	e->addComponent<Component::GraphNode>();
 	return e;
 }
