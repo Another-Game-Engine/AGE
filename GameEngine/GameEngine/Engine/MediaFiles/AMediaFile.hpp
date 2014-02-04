@@ -72,7 +72,7 @@ public:
 	template <typename Archive>
 	void serialize(std::ofstream &s)
 	{
-		if (_type >= COLLISION_SHAPE_STATIC && _type <= COLLISION_SHAPE_DYNAMIC)
+		if (_type >= COLLISION_SHAPE_STATIC && _type <= COLLISION_MULTI_SPHERE)
 		{
 			serializeAsBulletFile(s);
 			return;
