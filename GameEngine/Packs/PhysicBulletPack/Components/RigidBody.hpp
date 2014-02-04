@@ -132,7 +132,9 @@ namespace Component
 				auto prout = AMediaFile::get(_meshName);
 				auto dynamic = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(AMediaFile::get(_meshName));
 				if (dynamic != nullptr)
-					_collisionShape = dynamic->shape;
+				{
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btConvexHullShape(*dynamic->shape.get()));
+				}
 				else
 				{
 					auto staticShape = std::dynamic_pointer_cast<CollisionShapeStaticFile>(AMediaFile::get(_meshName));
