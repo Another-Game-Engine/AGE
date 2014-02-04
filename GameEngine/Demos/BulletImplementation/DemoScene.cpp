@@ -70,10 +70,10 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_box_galileo");
-	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
+	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_sphere_galileo");
+	//auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
+	//mesh->setShader("MaterialBasic");
 	e->addComponent<Component::GraphNode>();
-	mesh->setShader("MaterialBasic");
 	return e;
 }
 
@@ -234,7 +234,7 @@ bool 			DemoScene::userStart()
 
 	Entity c1;
 	auto lolol = 0;
-	for (unsigned int i = 0; i < 4; ++i)
+	for (unsigned int i = 0; i < 20; ++i)
 	{
 		//if (i % 3)
 		//{
@@ -247,7 +247,7 @@ bool 			DemoScene::userStart()
 		//}
 		//else
 		//{
-		for (size_t j = 0; j < 4 - i; j++)
+		for (size_t j = 0; j < 20 - i; j++)
 		{
 			c1 = createMonkey(glm::vec3(5 - i + j * 10, i * 10, 0), glm::vec3(rand() % 3 + 1), "texture__SunTexture", 1.0f);
 			++lolol;
