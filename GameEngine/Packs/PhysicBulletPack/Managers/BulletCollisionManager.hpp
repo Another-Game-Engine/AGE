@@ -59,7 +59,7 @@ public:
 		_world->removeCollisionObject(object);
 	}
 
-	std::set<Entity> &&rayCast(const glm::vec3 &from, const glm::vec3 &to)
+	std::set<Entity> rayCast(const glm::vec3 &from, const glm::vec3 &to) const
 	{
 		std::set<Entity> r;
 		btCollisionWorld::AllHitsRayResultCallback raycastCallback(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to));
