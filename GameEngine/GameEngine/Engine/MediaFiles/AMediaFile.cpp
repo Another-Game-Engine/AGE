@@ -5,6 +5,8 @@
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
 #include <MediaFiles/CollisionShapeDynamicFile.hpp>
+#include <MediaFiles/CollisionBoxFile.hpp>
+#include <MediaFiles/CollisionSphereFile.hpp>
 
 AssetsManager *AMediaFile::_manager = nullptr;
 
@@ -61,5 +63,12 @@ void AMediaFile::serializeAsBulletFile(std::ofstream &s)
 	{
 		static_cast<CollisionShapeDynamicFile*>(this)->serialize(s);
 	}
-
+	else if (_type == COLLISION_BOX)
+	{
+		static_cast<CollisionBoxFile*>(this)->serialize(s);
+	}
+	else if (_type == COLLISION_SPHERE)
+	{
+		static_cast<CollisionSphereFile*>(this)->serialize(s);
+	}
 }
