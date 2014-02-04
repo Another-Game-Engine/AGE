@@ -197,11 +197,11 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 			std::get<4>(minAndMax[i]) = std::get<4>(minAndMax[i]) < mesh->geometries[i].vertices[it].z ? std::get<4>(minAndMax[i]) : mesh->geometries[i].vertices[it].z;
 			std::get<5>(minAndMax[i]) = std::get<5>(minAndMax[i]) > mesh->geometries[i].vertices[it].z ? std::get<5>(minAndMax[i]) : mesh->geometries[i].vertices[it].z;
 			std::get<0>(totalMinMax) = std::get<0>(totalMinMax) < mesh->geometries[i].vertices[it].x ? std::get<0>(totalMinMax) : mesh->geometries[i].vertices[it].x;
-			std::get<1>(totalMinMax) = std::get<1>(totalMinMax) < mesh->geometries[i].vertices[it].x ? std::get<1>(totalMinMax) : mesh->geometries[i].vertices[it].x;
+			std::get<1>(totalMinMax) = std::get<1>(totalMinMax) > mesh->geometries[i].vertices[it].x ? std::get<1>(totalMinMax) : mesh->geometries[i].vertices[it].x;
 			std::get<2>(totalMinMax) = std::get<2>(totalMinMax) < mesh->geometries[i].vertices[it].y ? std::get<2>(totalMinMax) : mesh->geometries[i].vertices[it].y;
-			std::get<3>(totalMinMax) = std::get<3>(totalMinMax) < mesh->geometries[i].vertices[it].y ? std::get<3>(totalMinMax) : mesh->geometries[i].vertices[it].y;
+			std::get<3>(totalMinMax) = std::get<3>(totalMinMax) > mesh->geometries[i].vertices[it].y ? std::get<3>(totalMinMax) : mesh->geometries[i].vertices[it].y;
 			std::get<4>(totalMinMax) = std::get<4>(totalMinMax) < mesh->geometries[i].vertices[it].z ? std::get<4>(totalMinMax) : mesh->geometries[i].vertices[it].z;
-			std::get<5>(totalMinMax) = std::get<5>(totalMinMax) < mesh->geometries[i].vertices[it].z ? std::get<5>(totalMinMax) : mesh->geometries[i].vertices[it].z;
+			std::get<5>(totalMinMax) = std::get<5>(totalMinMax) > mesh->geometries[i].vertices[it].z ? std::get<5>(totalMinMax) : mesh->geometries[i].vertices[it].z;
 		}
 	}
 

@@ -70,7 +70,7 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
+	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_box_galileo");
 	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 	e->addComponent<Component::GraphNode>();
 	mesh->setShader("MaterialBasic");
@@ -172,7 +172,7 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+//	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 
 	// EXAMPLE LOAD FROM SAVE
