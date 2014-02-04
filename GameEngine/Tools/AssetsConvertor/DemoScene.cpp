@@ -3,15 +3,18 @@
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
 
-#include "ResourceManager/SharedMesh.hh"
-#include "ResourceManager/Texture.hh"
-#include "ResourceManager/CubeMap.hh"
-#include "ResourceManager/ResourceManager.hh"
+//#include "ResourceManager/SharedMesh.hh
+//#include "ResourceManager/CubeMap.hh"
+//#include "ResourceManager/ResourceManager.hh"
 
 #include <Managers/AssetsConvertorManager.hh>
+#include <MediaFiles/AMediaFile.hpp>
+#include <MediaFiles/MaterialFile.hpp>
+#include <MediaFiles/ObjFile.hpp>
+#include <MediaFiles/TextureFile.hpp>
+#include <MediaFiles/CubeMapFile.hpp>
 
 #include <Components/RotationForce.hh>
-#include <Components/MaterialComponent.h>
 #include <Components/CameraComponent.hh>
 
 #include <OpenGL/ComputeShader.hh>
@@ -48,17 +51,37 @@ bool 			DemoScene::userStart()
 
 
 	// end System Test
-	{
+
 		auto &convertor = _engine.getInstance<AssetsConvertorManager>();
-		auto success = convertor.load("./Assets/cube/cube.obj", "cube");
-		convertor.serializeData();
-	}
-	{
-		//auto &convertor = _engine.getInstance<AssetsConvertorManager>();
-		//auto success = convertor.load("./Assets/crytek-sponza/sponza.obj", "sponza");
-	}
+		convertor.setOutputDirectory("./Assets/Serialized/");
 
+		convertor.load("./Assets/cube/cube.obj");
+		convertor.serializeData("cube");
+		convertor.clear();
 
+		convertor.load("./Assets/ball/ball.obj");
+		convertor.serializeData("ball");
+		convertor.clear();
+
+		convertor.load("./Assets/galileo/galileo.obj");
+		convertor.serializeData("galileo");
+		convertor.clear();
+
+		convertor.load("./Assets/crytek-sponza/sponza.obj");
+		convertor.serializeData("sponza");
+		convertor.clear();
+
+		convertor.load("./Assets/EarthCloud.tga");
+		convertor.load("./Assets/EarthNightTexture.tga");
+		convertor.load("./Assets/EarthTexture.tga");
+		convertor.load("./Assets/EarthTextureBump.tga");
+		convertor.load("./Assets/EarthClouds.tga");
+		convertor.load("./Assets/MoonNormalMap.tga");
+		convertor.load("./Assets/MoonTexture.tga");
+		convertor.load("./Assets/SunTexture.tga");
+//		convertor.load("./Assets/space.skybox");
+		convertor.serializeData("Space");
+		convertor.clear();
 
 	return (true);
 }

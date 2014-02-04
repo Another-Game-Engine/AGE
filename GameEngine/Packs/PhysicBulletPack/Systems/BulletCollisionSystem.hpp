@@ -14,10 +14,13 @@ class BulletCollisionSystem : public System
 public:
 	BulletCollisionSystem(AScene *scene) : System(scene)
 		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
+		, _filter(scene)
 	{}
 	virtual ~BulletCollisionSystem(){}
 private:
 	BulletCollisionManager &_manager;
+	EntityFilter _filter;
+
 	virtual void updateBegin(double time)
 	{
 	}
@@ -28,7 +31,7 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		// UPDATE POSITION OF CollisionBodies
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			btTransform transform;
 			glm::vec3 position = posFromMat4(e->getGlobalTransform());
@@ -48,7 +51,7 @@ private:
 
 	virtual void initialize()
 	{
-		require<Component::CollisionBody>();
+		_filter.require<Component::CollisionBody>();
 	}
 };
 

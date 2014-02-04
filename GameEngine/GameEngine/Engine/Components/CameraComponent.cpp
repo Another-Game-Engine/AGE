@@ -1,48 +1,47 @@
 #include "CameraComponent.hh"
 #include <Core/Engine.hh>
-#include <ResourceManager/ResourceManager.hh>
 
 namespace Component
 {
-	CameraComponent::CameraComponent(AScene *scene, Entity &entity)
-		: ComponentBase<CameraComponent>(scene, entity, "CameraComponent"),
-		_projection(glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f)),
-		_lookAtTransform(1)
+	CameraComponent::CameraComponent()
+		: ComponentBase<CameraComponent>(),
+		projection(glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f)),
+		lookAtTransform(1)
 	{}
 
 	CameraComponent::~CameraComponent(void)
 	{}
 
-	void CameraComponent::attachSkybox(const std::string &name, const std::string &cubeMapShader)
+	void CameraComponent::attachSkybox(const std::string &name, const std::string &_cubeMapShader)
 	{
-		_skybox = _scene->getEngine().getInstance<Resources::ResourceManager>().getResource(name);
-		_cubeMapShader = cubeMapShader;
+		skybox = AMediaFile::get<CubeMapFile>(name);
+		cubeMapShader = _cubeMapShader;
 	}
 
 	void CameraComponent::dettachSkybox()
 	{
-		_skybox = nullptr;
+		skybox = nullptr;
 	}
 
 	glm::mat4         &CameraComponent::setProjection()
 	{
 		_entity->getFlags() & EntityData::HAS_MOVED;
-		return (_projection);
+		return (projection);
 }
 
 	glm::mat4 		  &CameraComponent::getProjection()
 	{
-		return (_projection);
+		return (projection);
 	}
 
-	SmartPointer<Resources::CubeMap> CameraComponent::getSkybox()
+	std::shared_ptr<CubeMapFile> CameraComponent::getSkybox()
 	{
-		return _skybox;
+		return skybox;
 	}
 
 	const std::string &CameraComponent::getSkyboxShader() const
 	{
-		return _cubeMapShader;
+		return cubeMapShader;
 	}
 };
 

@@ -3,10 +3,11 @@
 #define INPUT_HH_
 
 #include <list>
+#include <Utils/Dependency.hpp>
 
 #include "glm/gtc/type_precision.hpp"
 
-class Input
+class Input : public Dependency
 {
 private:
 	std::list<int>	_inputs;
@@ -17,7 +18,7 @@ private:
 
 public:
 	Input();
-	~Input() { }
+	virtual ~Input() { }
 
 	void 				clearInputs();
 	void 				addInput(int input);

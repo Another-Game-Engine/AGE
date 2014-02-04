@@ -5,8 +5,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 Renderer::Renderer(Engine *engine)
-: _engine(*engine),
-_materialManager(*engine)
+: _engine(*engine)
 {
 }
 
@@ -136,9 +135,4 @@ void Renderer::uninit()
 void Renderer::addPostEffect(const std::string &name, unsigned int priority)
 {
 	_postEffects.insert(std::make_pair(priority, name));
-}
-
-MaterialManager &Renderer::getMaterialManager()
-{
-	return _materialManager;
 }

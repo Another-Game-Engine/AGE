@@ -8,40 +8,67 @@
 
 namespace Component
 {
-	class Velocity : public ComponentBase<Velocity>
+	struct Velocity : public ComponentBase<Velocity>
 	{
 	private:
 		Velocity(const Velocity &o);
 		Velocity &operator=(const Velocity &o);
 	public:
-		Velocity(AScene *scene, Entity &entity) :
-			_direction(0,0,0),
-			_function([&](double time, double totalTime, const glm::vec3 direction){return direction * glm::vec3(time);}),
-			ComponentBase<Velocity>(scene, entity, "VelocityComponent")
+		Velocity() :
+			direction(0,0,0),
+			function([&](double time, double totalTime, const glm::vec3 direction){return direction * glm::vec3(time);}),
+			ComponentBase<Velocity>()
 		{}
 
 		virtual ~Velocity()
 		{}
 
-		void init(const glm::vec3 &direction, std::function<glm::vec3(double time, double totalTime, const glm::vec3 &direction)> function = [](double time, double totalTime, const glm::vec3 &direction){
+		void init(const glm::vec3 &_direction, std::function<glm::vec3(double time, double totalTime, const glm::vec3 &direction)> _function = [](double time, double totalTime, const glm::vec3 &direction){
 			return direction * static_cast<float>(time);
 		})
 		{
-			_direction = direction;
-			_function = function;
+			direction = _direction;
+			function = _function;
 		}
 
 		const glm::vec3 compute(double time, double totalTime) const
 		{
-			auto r = _function(time, totalTime, this->_direction);
+			auto r = function(time, totalTime, this->direction);
 			return r;
 		}
 
 		virtual void reset()
 		{}
-	private:
-		std::function<glm::vec3(double time, double totalTime, const glm::vec3 &direction)> _function;
-		glm::vec3 _direction;
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new Velocity();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
+		void save(Archive &ar) const
+		{
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+		}
+
+		// !Serialization
+		////
+		//////
+
+		std::function<glm::vec3(double time, double totalTime, const glm::vec3 &direction)> function;
+		glm::vec3 direction;
 	};
 
 }

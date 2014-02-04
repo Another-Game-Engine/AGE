@@ -17,10 +17,12 @@ class FPControllerSystem : public System
 public:
 	FPControllerSystem(AScene *scene) : System(scene)
 		, _manager(&scene->getEngine().getInstance<BulletCollisionManager>())
+		, _filter(scene)
 	{}
 	virtual ~FPControllerSystem(){}
 private:
 	BulletCollisionManager *_manager;
+	EntityFilter _filter;
 
 	virtual void updateBegin(double time)
 	{
@@ -31,7 +33,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		for (auto e : _collection)
+		for (auto e : _filter.getCollection())
 		{
 			auto fp = e->getComponent<Component::FPController>();
 			updateComponent(e, fp, time);
@@ -51,23 +53,23 @@ private:
 			e->setLocalTransform() = m;
 
 			float yAngle = inputs.getMouseDelta().y;
-			fp->setYOrientation(fp->getYOrientation() + yAngle * fp->getRotateYSpeed());
-			if (fp->getYOrientation() >= 90.0f)
-				fp->setYOrientation(89.9f);
-			else if (fp->getYOrientation() <= -90.0f)
-				fp->setYOrientation(-89.9f);
+			fp->yOrientation = fp->yOrientation + yAngle * fp->rotateYSpeed;
+			if (fp->yOrientation >= 90.0f)
+				fp->yOrientation = 89.9f;
+			else if (fp->yOrientation <= -90.0f)
+				fp->yOrientation = -89.9f;
 
-			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), fp->getYOrientation(), glm::vec3(1, 0, 0));
+			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), fp->yOrientation, glm::vec3(1, 0, 0));
 
 		}
 	}
 
-	void updateComponent(Entity &entity, SmartPointer<Component::FPController> fp, double time)
+	void updateComponent(Entity &entity, std::shared_ptr<Component::FPController> fp, double time)
 	{
 			fp->resetControls();
 			auto &inputs = _scene->getEngine().getInstance<Input>();
-			auto &controls = fp->getControls();
-			auto &keys = fp->getKeys();
+			auto &controls = fp->controls;
+			auto &keys = fp->keys;
 			auto angle = glm::vec2((float)inputs.getMouseDelta().x, (float)inputs.getMouseDelta().y);
 
 			// UPDATE KEYS
@@ -92,26 +94,26 @@ private:
 			if (controls[Component::FPController::RUN])
 				isRunning = true;
 			if (controls[Component::FPController::LEFT])
-				walkDirection += sideDir * (isRunning ? fp->getSideRunSpeed() : fp->getSideWalkSpeed()) * time;
+				walkDirection += sideDir * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * time;
 
 			if (controls[Component::FPController::RIGHT])
-				walkDirection -= sideDir  * (isRunning ? fp->getSideRunSpeed() : fp->getSideWalkSpeed()) * time;
+				walkDirection -= sideDir  * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * time;
 
 			if (controls[Component::FPController::FORWARD])
-				walkDirection += forwardDir * (isRunning ? fp->getForwardRunSpeed() : fp->getForwardWalkSpeed()) * time;
+				walkDirection += forwardDir * (isRunning ? fp->forwardRunSpeed : fp->forwardWalkSpeed) * time;
 
 			if (controls[Component::FPController::BACKWARD])
-				walkDirection -= forwardDir * (isRunning ? fp->getBackwardRunSpeed() : fp->getBackwardWalkSpeed()) * time;
+				walkDirection -= forwardDir * (isRunning ? fp->backwardRunSpeed : fp->backwardWalkSpeed) * time;
 
 
 			// HORIZONTAL ROTATION APPLIED ON GHOST
 			{
 				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
-				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), angle.x * fp->getRotateXSpeed()));
+				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), angle.x * fp->rotateXSpeed));
 				ghost.getWorldTransform().setBasis(orn);
 			}
 
-			if (fp->canJump() && controls[Component::FPController::JUMP])
+			if (fp->canJump && controls[Component::FPController::JUMP])
 				controller.jump();
 
 			controller.setWalkDirection(walkDirection);
@@ -119,7 +121,7 @@ private:
 
 	virtual void initialize()
 	{
-		require<Component::FPController>();
+		_filter.require<Component::FPController>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };
