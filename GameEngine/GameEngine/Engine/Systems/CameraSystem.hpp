@@ -11,6 +11,7 @@
 #include <Systems/MeshRenderSystem.h>
 #include <Utils/ScreenPosToWorldRay.hpp>
 #include <Context/IRenderContext.hh>
+#include <Utils/MatrixConversion.hpp>
 
 class CameraSystem : public System
 {
@@ -50,7 +51,7 @@ public:
 		auto screenSize = _scene->getEngine().getInstance<IRenderContext>().getScreenSize();
 		auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
 		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
-		Utils::screenPosToWorldRay(centerPos.x, centerPos.y, screenSize.x, screenSize.y, cameraCpt->getEntity()->getGlobalTransform() , cameraCpt->projection, from, to);
+		Utils::screenPosToWorldRay(centerPos.x, centerPos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform , cameraCpt->projection, from, to);
 	}
 
 
