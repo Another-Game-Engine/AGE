@@ -23,8 +23,6 @@ public:
 	File path;
 	std::string name;
 	static AssetsManager *_manager;
-protected:
-	std::size_t _childs;
 	enum MEDIA_TYPE
 	{
 		UNKNOWN = 0
@@ -38,6 +36,8 @@ protected:
 		, COLLISION_SPHERE = 8
 		, COLLISION_MULTI_SPHERE = 9
 	};
+protected:
+	std::size_t _childs;
 	MEDIA_TYPE _type;
 public:
 	AMediaFile() :
@@ -188,7 +188,7 @@ public:
 		++_childs;
 	}
 
-	inline std::size_t getType() const
+	inline MEDIA_TYPE getType() const
 	{
 		return _type;
 	}
