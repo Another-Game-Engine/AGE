@@ -70,7 +70,7 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_sphere_galileo");
+	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
 	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 	mesh->setShader("MaterialBasic");
 	e->addComponent<Component::GraphNode>();
@@ -200,39 +200,11 @@ bool 			DemoScene::userStart()
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
 		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-//		rigidBody->getBody().setCollisionFlags(COLLISION_LAYER_KINEMATIC | COLLISION_LAYER_DYNAMIC);
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
 	}
-
-	//{
-	//	auto e = createEntity();
-	//	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 45.0f, glm::vec3(0, 1, 0));
-	//	e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(10,10,10));
-	//	e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(10,10,10));
-
-	//	auto rigidBody = e->addComponent<Component::RigidBody>(1.0f);
-	//	rigidBody->setCollisionShape(Component::RigidBody::BOX);
-	//	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-	//	mesh->setShader("MaterialBasic");
-	//	e->addComponent<Component::GraphNode>();
-	//	e->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
-	//	e->getComponent<Component::RigidBody>()->setRotationConstraint(true, true, true);
-	//}
-
-	//{
-	//	auto e = createEntity();
-	//	e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(-5,0,0));
-	//	e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(6));
-
-	//	auto rigidBody = e->addComponent<Component::RigidBody>(0);
-	//	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-	//	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("my_planet"));
-	//	e->addComponent<Component::GraphNode>();
-	//	mesh->setShader("earth");
-	//}
 
 	Entity character;
 	std::shared_ptr<Component::CameraComponent> cameraComponent;
@@ -247,20 +219,16 @@ bool 			DemoScene::userStart()
 		character->addComponent<Component::FirstPersonView>();
 	}
 
-	//Entity c1;
-	//for (unsigned int i = 0; i < 4; ++i)
-	//{
-	//	for (size_t j = 0; j < 4 - i; j++)
-	//	{
-	//		c1 = createMonkey(glm::vec3(5 - i + j * 10, i * 10, 0), glm::vec3(rand() % 3 + 1), "texture__SunTexture", 1.0f);
-	//	}
-	//}
+	{
+		auto e = createMonkey(glm::vec3(19, 0.9, -0.59), glm::vec3(1.5), "texture__SunTexture", 1.0f);
+		auto rigidbody = e->getComponent<Component::RigidBody>();
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+	}
 
 	// --
 	// Setting camera with skybox
 	// --
-
-	//setCamera(new TrackBall(_engine, follow, 30.0f, 1.0f, 1.0f));
 
 	std::string		vars[] = 
 	{
@@ -283,6 +251,8 @@ bool 			DemoScene::userStart()
 
 bool 			DemoScene::userUpdate(double time)
 {
+	static std::queue<Entity> stack;
+
 	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_RIGHT))
 	{
 		glm::vec3 from, to;
@@ -304,6 +274,12 @@ bool 			DemoScene::userUpdate(double time)
 		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+		if (stack.size() > 300)
+		{
+			destroy(stack.front());
+			stack.pop();
+		}
+		stack.push(e);
 	}
 
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
