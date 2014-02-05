@@ -4,17 +4,17 @@
 #define GLM_FORCE_SSE2 
 #define GLM_FORCE_AVX
 
-#include <stdlib.h>
-#include <crtdbg.h>
+# include <stdlib.h>
+# include <crtdbg.h>
 
-#include <iostream>
-#include "Core/Engine.hh"
-#include "Core/SceneManager.hh"
-#include "Core/Renderer.hh"
-#include "Utils/PubSub.hpp"
-#include "Context/SdlContext.hh"
-
-#include "DemoScene.hh"
+# include <iostream>
+# include "Core/Engine.hh"
+# include "Core/SceneManager.hh"
+# include "Core/Renderer.hh"
+# include <MediaFiles/AssetsManager.hpp>
+# include "Utils/PubSub.hpp"
+# include "Context/SdlContext.hh"
+# include "DemoScene.hh"
 
 
 static bool initInstanceEngine(Engine &engine)
@@ -23,7 +23,7 @@ static bool initInstanceEngine(Engine &engine)
 	engine.setInstance<SdlContext, IRenderContext>();
 	engine.setInstance<Input>();
 	engine.setInstance<Timer>();
-	engine.setInstance<Resources::ResourceManager>(&engine);
+	engine.setInstance<AssetsManager>();
 	engine.setInstance<Renderer>(&engine);
 	engine.setInstance<SceneManager>();
 	if (!engine.init())

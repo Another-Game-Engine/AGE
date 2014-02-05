@@ -14,6 +14,11 @@ DemoScene::~DemoScene()
 
 void DemoScene::initSytemeScene()
 {
+	rct<Component::CameraComponent>();
+	rct<Component::GraphNode>();
+	rct<Component::MeshRenderer>();
+	rct<Component::RotationForce>();
+	rct<Component::TrackBall>();
 	addSystem<MeshRendererSystem>(0);
 	addSystem<GraphNodeSystem>(100);
 	addSystem<TrackBallSystem>(150);
@@ -31,7 +36,7 @@ void DemoScene::initRenderer()
 	renderer.addUniform("MaterialBasic").init(&s, "MaterialBasic", materialBasic);
 	renderer.addUniform("PerFrame").init(&s, "PerFrame", perFrameVars);
 	renderer.addUniform("PerModel").init(&s, "PerModel", perModelVars);
-	renderer.getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+	//renderer.getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
 	renderer.bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	renderer.bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	renderer.bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
@@ -42,6 +47,9 @@ void DemoScene::initRenderer()
 
 void DemoScene::loadResources()
 {
+	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 }
 
 bool DemoScene::userStart()
@@ -49,6 +57,26 @@ bool DemoScene::userStart()
 	initSytemeScene();
 	initRenderer();
 	loadResources();
+	auto ball = createEntity();
+	auto ballMesh = AMediaFile::get<ObjFile>("obj__ball");
+	ball->addComponent<Component::GraphNode>();
+	ball->setLocalTransform() = glm::translate(ball->getLocalTransform(), glm::vec3(0.0, 4.0, 4.0));
+	ball->setLocalTransform() = glm::scale(ball->getLocalTransform(), glm::vec3(1.0, 1.0, 1.0));
+	auto r = ball->addComponent<Component::MeshRenderer>(ballMesh);
+	r->setShader("MaterialBasic");
+
+	auto platform = createEntity();
+	auto platformMesh = AMediaFile::get<ObjFile>("obj__cube");
+	platform->addComponent<Component::GraphNode>();
+	platform->setLocalTransform() = glm::translate(platform->getLocalTransform(), glm::vec3(4.0, 0.0, 4.0));
+	platform->setLocalTransform() = glm::scale(platform->getLocalTransform(), glm::vec3(8.0, 0.2, 8.0));
+	auto r2 = platform->addComponent<Component::MeshRenderer>(platformMesh);
+	r2->setShader("MaterialBasic");
+
+	auto camera = createEntity();
+	camera->addComponent<Component::GraphNode>();
+	camera->addComponent<Component::CameraComponent>();
+	auto trackBall = camera->addComponent<Component::TrackBall>(platform, 50.0, 3.0, 1.0);
 	return (true);
 }
 

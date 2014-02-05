@@ -4,10 +4,12 @@
 # include "Core/AScene.hh"
 # include "Core/Engine.hh"
 
-#include <Systems/MeshRenderSystem.h>
-#include <Systems/GraphNodeSystem.hpp>
-#include <Systems/CameraSystem.hpp>
-#include <Systems/TrackBallSystem.hpp>
+# include <MediaFiles/AMediaFile.hpp>
+# include <Systems/MeshRenderSystem.h>
+# include <Systems/GraphNodeSystem.hpp>
+# include <Systems/CameraSystem.hpp>
+# include <Systems/RotationForceSystem.hpp>
+# include <Systems/TrackBallSystem.hpp>
 
 
 class DemoScene : public AScene
