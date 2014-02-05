@@ -110,9 +110,6 @@
     <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\ConvexDecomposition\ConvexDecomposition.vcxproj">
       <Project>{d217d3ee-658e-4af9-8f77-ae4152409709}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\HACD\HACD.vcxproj">
-      <Project>{e7254dd1-a517-446f-a2af-c1426b2c0c4c}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\Serialize\BulletFileLoader\BulletFileLoader.vcxproj">
       <Project>{bf62c23a-a810-4cb1-9631-a6cf9c27c6db}</Project>
     </ProjectReference>

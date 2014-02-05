@@ -20,7 +20,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		float t = time;
+		float t = float(time);
 		for (auto e : _roots)
 		{
 			if (e->getFlags() & EntityData::HAS_MOVED)
