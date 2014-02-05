@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\AudioManager.hpp" />
+    <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />

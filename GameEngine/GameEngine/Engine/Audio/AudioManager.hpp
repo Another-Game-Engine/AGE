@@ -2,6 +2,7 @@
 
 #include <fmod.hpp>
 #include <Audio/FmodError.hpp>
+#include <Audio/ChannelGroupType.hpp>
 #include <Utils/Dependency.hpp>
 #include <memory>
 
@@ -14,10 +15,15 @@ public:
 
 	virtual ~AudioManager()
 	{
+		for (auto &&e : _channelGroups)
+		{
+			e.second->release();
+		}
+		_channelGroups.clear();
 		if (_system)
 		{
+			_system->close();
 			_system->release();
-			delete _system;
 		}
 	}
 
@@ -80,10 +86,21 @@ public:
 		// INITIALIZE SYSTEM
 		if (!fmodError(_system->init(32, FMOD_INIT_NORMAL, 0)))
 			return false;
+
+		// create Music Channels
+
+		for (std::size_t i = CHANNEL_GROUP_MUSIC; i <= CHANNEL_GROUP_CUSTOM_6; ++i)
+		{
+			FMOD::ChannelGroup *c;
+			if (!fmodError(_system->createChannelGroup(NULL, &c)))
+				return false;
+			_channelGroups.insert(std::make_pair(static_cast<ChannelGroupType>(i), c));
+		}
 		return true;
 	}
 private:
 	FMOD::System *_system;
 	FMOD_SPEAKERMODE _speakerMode;
 	FMOD_CAPS _caps;
+	std::map<ChannelGroupType, FMOD::ChannelGroup*> _channelGroups;
 };

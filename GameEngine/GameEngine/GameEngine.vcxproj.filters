@@ -98,6 +98,7 @@
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
     <ClInclude Include="Engine\Audio\AudioManager.hpp" />
+    <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
