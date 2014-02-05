@@ -180,7 +180,6 @@ bool 			DemoScene::userStart()
 
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),
@@ -197,7 +196,7 @@ bool 			DemoScene::userStart()
 	//
 
 	{
-# define NBR_PLANET 300
+# define NBR_PLANET 10
 		unsigned int nbPlanet = NBR_PLANET;
 		Entity planets[NBR_PLANET];
 
