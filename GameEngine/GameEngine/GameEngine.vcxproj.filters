@@ -96,6 +96,8 @@
     <ClInclude Include="Engine\MediaFiles\CollisionBoxFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\CollisionSphereFile.hpp" />
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />
+    <ClInclude Include="Engine\Audio\FmodError.hpp" />
+    <ClInclude Include="Engine\Audio\AudioManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
