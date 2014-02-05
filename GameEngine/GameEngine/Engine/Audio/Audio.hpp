@@ -24,8 +24,9 @@ enum AudioSpatialType
 };
 
 public:
-	Audio(const File &file, AudioType type, const std::string &name = "")
-		: _file(file)
+	Audio(FMOD::System *system, const File &file, AudioType type, const std::string &name = "")
+		: _system(system)
+		, _file(file)
 		, _name(name.empty() ? file.getShortFileName() : name)
 		, _audio(nullptr)
 		, _audioType(type)
@@ -34,18 +35,37 @@ public:
 	}
 
 	~Audio()
-	{}
+	{
+		if (!_audio)
+			return;
+		_audio->release();
+	}
 
 	bool load(AudioSpatialType type)
 	{
 		if (_audio)
 			return true;
+		if (_audioType == AUDIO_SOUND)
+		{
+			_system->createSound(_file.getFullName().c_str(), type, 0, &_audio);
+		}
+		else if (_audioType == AUDIO_STREAM)
+		{
+			_system->createStream(_file.getFullName().c_str(), type, 0, &_audio);
+		}
+		assert(_audio != nullptr && "FMOD failed to load audio.");
 		return true;
 	}
 
+	void play()
+	{
+		_system->playSound(FMOD_CHANNEL_FREE, _audio, false, 0);
+	}
+
 private:
+	FMOD::System *_system;
 	File _file;
 	const std::string _name;
-	std::shared_ptr<FMOD::Sound> _audio;
+	FMOD::Sound *_audio;
 	AudioType _audioType;
 };

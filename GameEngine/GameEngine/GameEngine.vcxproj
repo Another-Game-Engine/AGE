@@ -102,6 +102,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Audio\FmodError.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />

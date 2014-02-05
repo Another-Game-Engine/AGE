@@ -7,6 +7,7 @@
 #include <Utils/Dependency.hpp>
 #include <memory>
 #include <map>
+#include <iostream>
 
 class AudioManager : public Dependency
 {
@@ -17,6 +18,7 @@ public:
 
 	virtual ~AudioManager()
 	{
+		_audios.clear();
 		for (auto &&e : _channelGroups)
 		{
 			e.second->release();
@@ -111,10 +113,10 @@ public:
 		std::string tname = name.empty() ? file.getShortFileName() : name;
 		if (_audios.find(tname) != std::end(_audios))
 			return _audios[name];
-		std::shared_ptr<Audio> audio{ new Audio(file, Audio::AudioType::AUDIO_SOUND, name) };
+		std::shared_ptr<Audio> audio{ new Audio(_system, file, Audio::AudioType::AUDIO_SOUND, name) };
 		if (!audio->load(spacialType))
 		{
-			std::cerr << "Audio load failed : " << tname << std::endl;
+//			std::cerr << "Audio load failed : " << tname << std::endl;
 			return nullptr;
 		}
 		_audios.insert(std::make_pair(tname, audio));
@@ -126,10 +128,10 @@ public:
 		std::string tname = name.empty() ? file.getShortFileName() : name;
 		if (_audios.find(tname) != std::end(_audios))
 			return _audios[name];
-		std::shared_ptr<Audio> audio{ new Audio(file, Audio::AudioType::AUDIO_STREAM, name) };
+		std::shared_ptr<Audio> audio{ new Audio(_system, file, Audio::AudioType::AUDIO_STREAM, name) };
 		if (!audio->load(spacialType))
 		{
-			std::cerr << "Audio load failed : " << tname << std::endl;
+//			std::cerr << "Audio load failed : " << tname << std::endl;
 			return nullptr;
 		}
 		_audios.insert(std::make_pair(tname, audio));
