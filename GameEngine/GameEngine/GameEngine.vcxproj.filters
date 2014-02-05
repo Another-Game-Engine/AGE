@@ -101,6 +101,8 @@
     <ClInclude Include="Engine\Audio\AudioManager.hpp" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
     <ClInclude Include="Engine\Audio\Audio.hpp" />
+    <ClInclude Include="Engine\Components\AudioListener.hpp" />
+    <ClInclude Include="Engine\Systems\AudioSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
