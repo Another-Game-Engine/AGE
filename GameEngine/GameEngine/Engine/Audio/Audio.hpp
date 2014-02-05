@@ -4,24 +4,24 @@
 #include <fmod.hpp>
 #include <memory>
 #include <cassert>
+#include <Audio/FmodError.hpp>
 
 class Audio
 {
 public:
+	enum AudioType
+	{
+		AUDIO_TYPE_UNDEFINED = 0
+		, AUDIO_SOUND = 1
+		, AUDIO_STREAM = 2
+	};
 
-enum AudioType
-{
-	AUDIO_TYPE_UNDEFINED = 0
-	, AUDIO_SOUND = 1
-	, AUDIO_STREAM = 2
-};
-
-enum AudioSpatialType
-{
-	AUDIO_SPACE_UNDEFINED = 0
-	, AUDIO_2D = FMOD_2D
-	, AUDIO_3D = FMOD_3D
-};
+	enum AudioSpatialType
+	{
+		AUDIO_SPACE_UNDEFINED = 0
+		, AUDIO_2D = FMOD_2D
+		, AUDIO_3D = FMOD_3D
+	};
 
 public:
 	Audio(FMOD::System *system, const File &file, AudioType type, const std::string &name = "")
@@ -30,6 +30,7 @@ public:
 		, _name(name.empty() ? file.getShortFileName() : name)
 		, _audio(nullptr)
 		, _audioType(type)
+		, _channel(nullptr)
 	{
 		assert(type != AUDIO_TYPE_UNDEFINED && "Audio type is undefined");
 	}
@@ -59,7 +60,16 @@ public:
 
 	void play()
 	{
-		_system->playSound(FMOD_CHANNEL_FREE, _audio, false, 0);
+		_channel = nullptr;
+		_system->playSound(FMOD_CHANNEL_FREE, _audio, false, &_channel);
+		fmodError(_channel->set3DMinMaxDistance(50, 1000));
+		FMOD_VECTOR  sourcePos = { 0.0f, 0.0f, 0.0f  };
+		_channel->set3DAttributes(&sourcePos, 0);
+	}
+
+	FMOD::Channel *getChannel()
+	{
+		return _channel;
 	}
 
 private:
@@ -68,4 +78,5 @@ private:
 	const std::string _name;
 	FMOD::Sound *_audio;
 	AudioType _audioType;
+	FMOD::Channel *_channel;
 };

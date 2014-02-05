@@ -100,6 +100,10 @@ public:
 				return false;
 			_channelGroups.insert(std::make_pair(static_cast<ChannelGroupType>(i), c));
 		}
+
+		// SET 1 3D listener
+		if (!fmodError(_system->set3DNumListeners(1)))
+			return false;
 		return true;
 	}
 
@@ -136,6 +140,11 @@ public:
 		}
 		_audios.insert(std::make_pair(tname, audio));
 		return audio;
+	}
+
+	FMOD::System *getSystem()
+	{
+		return _system;
 	}
 
 private:

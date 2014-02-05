@@ -7,12 +7,14 @@
 #include "Components/RotationForce.hh"
 #include <Components/CameraComponent.hh>
 #include <Components/TrackBallComponent.hpp>
+#include <Components/AudioListener.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
 #include <Systems/GraphNodeSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
+#include <Systems/AudioSystem.hpp>
 #include <Audio/AudioManager.hpp>
 #include <Core/Engine.hh>
 
@@ -65,7 +67,8 @@ bool 			DemoScene::userStart()
 		.rct<Component::GraphNode>()
 		.rct<Component::MeshRenderer>()
 		.rct<Component::RotationForce>()
-		.rct<Component::TrackBall>();
+		.rct<Component::TrackBall>()
+		.rct<Component::AudioListener>();
 
 	// System Tests
 	//
@@ -75,6 +78,7 @@ bool 			DemoScene::userStart()
 	addSystem<MeshRendererSystem>(0);
 	addSystem<GraphNodeSystem>(100);
 	addSystem<TrackBallSystem>(150);
+	addSystem<AudioSystem>(170);
 	addSystem<CameraSystem>(200);
 
 	//
@@ -181,7 +185,7 @@ bool 			DemoScene::userStart()
 
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-	auto music = _engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_2D);
+	auto music = _engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 	if (music)
 	{
 		music->play();
@@ -233,6 +237,7 @@ bool 			DemoScene::userStart()
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
+	camera->addComponent<Component::AudioListener>();
 
 	return (true);
 }
