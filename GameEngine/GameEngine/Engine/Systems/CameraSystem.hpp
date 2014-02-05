@@ -34,15 +34,15 @@ public:
 		return _renderDebugMethod;
 	}
 
-	//void getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
-	//{
-	//	if (_filter.getCollection().size() == 0)
-	//		return;
-	//	auto mousePos = _scene->getEngine().getInstance<Input>().getMousePosition();
-	//	auto screenSize = _scene->getEngine().getInstance<IRenderContext>().getScreenSize();
-	//	auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
-	//	Utils::screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
-	//}
+	void getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
+	{
+		if (_filter.getCollection().size() == 0)
+			return;
+		auto mousePos = _scene->getEngine().getInstance<Input>().getMousePosition();
+		auto screenSize = _scene->getEngine().getInstance<IRenderContext>().getScreenSize();
+		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
+		Utils::screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
+	}
 
 	void getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 	{

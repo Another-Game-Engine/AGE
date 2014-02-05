@@ -172,7 +172,7 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-//	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 
 	// EXAMPLE LOAD FROM SAVE
@@ -192,76 +192,73 @@ bool 			DemoScene::userStart()
 	//AMediaFile::saveToFile("my_planet_material", "./Assets/Serialized/");
 	//AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
 
-	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture__MoonTexture", 0.0f);
-	//p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
-	//p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, false);
-
+	// CREATE SPONZA CHURCH
 	{
 		auto e = createEntity();
-		e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 45.0f, glm::vec3(0, 1, 0));
-		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(10,10,10));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(10,10,10));
-
-		auto rigidBody = e->addComponent<Component::RigidBody>(1.0f);
-		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0));
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
+		auto rigidBody = e->addComponent<Component::RigidBody>(0);
+		rigidBody->setMass(0);
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
-		e->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
-		e->getComponent<Component::RigidBody>()->setRotationConstraint(true, true, true);
 	}
 
-	{
-		auto e = createEntity();
-		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(-5,0,0));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(6));
+	//{
+	//	auto e = createEntity();
+	//	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 45.0f, glm::vec3(0, 1, 0));
+	//	e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(10,10,10));
+	//	e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(10,10,10));
 
-		auto rigidBody = e->addComponent<Component::RigidBody>(0);
-		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("my_planet"));
-		e->addComponent<Component::GraphNode>();
-		mesh->setShader("earth");
-	}
+	//	auto rigidBody = e->addComponent<Component::RigidBody>(1.0f);
+	//	rigidBody->setCollisionShape(Component::RigidBody::BOX);
+	//	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+	//	mesh->setShader("MaterialBasic");
+	//	e->addComponent<Component::GraphNode>();
+	//	e->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
+	//	e->getComponent<Component::RigidBody>()->setRotationConstraint(true, true, true);
+	//}
+
+	//{
+	//	auto e = createEntity();
+	//	e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(-5,0,0));
+	//	e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(6));
+
+	//	auto rigidBody = e->addComponent<Component::RigidBody>(0);
+	//	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
+	//	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("my_planet"));
+	//	e->addComponent<Component::GraphNode>();
+	//	mesh->setShader("earth");
+	//}
 
 	Entity character;
+	std::shared_ptr<Component::CameraComponent> cameraComponent;
+
 	{
 		auto e = createEntity();
-		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,20,0));
+		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,100,0));
 		e->addComponent<Component::FPController>();
 		e->addComponent<Component::GraphNode>();
 		character = e;
+		cameraComponent = character->addComponent<Component::CameraComponent>();
+		character->addComponent<Component::FirstPersonView>();
 	}
 
-	Entity c1;
-	auto lolol = 0;
-	for (unsigned int i = 0; i < 4; ++i)
-	{
-		//if (i % 3)
-		//{
-		//	c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "texture__SunTexture", 1.f);
-		//}
-		//else if (i % 2)
-		//{
-		//	c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture__SunTexture", 1.0f);
-		//	c1->getComponent<Component::MeshRenderer>()->mesh = AMediaFile::get<ObjFile>("my_planet");
-		//}
-		//else
-		//{
-		for (size_t j = 0; j < 4 - i; j++)
-		{
-			c1 = createMonkey(glm::vec3(5 - i + j * 10, i * 10, 0), glm::vec3(rand() % 3 + 1), "texture__SunTexture", 1.0f);
-			++lolol;
-		}
-		//}
-	}
+	//Entity c1;
+	//for (unsigned int i = 0; i < 4; ++i)
+	//{
+	//	for (size_t j = 0; j < 4 - i; j++)
+	//	{
+	//		c1 = createMonkey(glm::vec3(5 - i + j * 10, i * 10, 0), glm::vec3(rand() % 3 + 1), "texture__SunTexture", 1.0f);
+	//	}
+	//}
 
 	// --
 	// Setting camera with skybox
 	// --
 
 	//setCamera(new TrackBall(_engine, follow, 30.0f, 1.0f, 1.0f));
-	auto cameraComponent = character->addComponent<Component::CameraComponent>();
-	character->addComponent<Component::FirstPersonView>();
 
 	std::string		vars[] = 
 	{
@@ -284,20 +281,11 @@ bool 			DemoScene::userStart()
 
 bool 			DemoScene::userUpdate(double time)
 {
-	static Entity cursor;
-	static bool init = false;
-	if (!init)
-	{
-		cursor = createCube(glm::vec3(0.0f), glm::vec3(1.0f), "texture__SunTexture", 0);
-		cursor->removeComponent<Component::RigidBody>();
-		init = true;
-	}
 	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_RIGHT))
 	{
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 		auto test = _engine.getInstance<BulletCollisionManager>().rayCast(from, from + to * 1000.0f);
-//		cursor->setLocalTransform() = glm::translate(glm::mat4(1), to * 5.0f + from);
 		if (test.size() != 0)
 		{
 			for (auto e : test)
