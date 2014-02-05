@@ -114,7 +114,7 @@ bool 			DemoScene::userStart()
 		_engine.getInstance<Renderer>().addUniform("PerModel")
 			.init(&s, "PerModel", perModelVars);
 
-		_engine.getInstance<Renderer>().addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
+	_engine.getInstance<Renderer>().addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
 	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
 	_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
 	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
@@ -180,6 +180,7 @@ bool 			DemoScene::userStart()
 
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),
@@ -189,7 +190,6 @@ bool 			DemoScene::userStart()
 		"texture__EarthClouds",
 		"texture__EarthTextureBump");
 	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture__MoonTexture", "texture__MoonTextureBump");
-
 	earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
 
 	// Generating a lot of planet for performance test
@@ -197,8 +197,9 @@ bool 			DemoScene::userStart()
 	//
 
 	{
-		unsigned int nbPlanet = 70;
-		Entity planets[70];
+# define NBR_PLANET 300
+		unsigned int nbPlanet = NBR_PLANET;
+		Entity planets[NBR_PLANET];
 
 		for (unsigned int i = 0; i < nbPlanet; ++i)
 		{
@@ -226,8 +227,6 @@ bool 			DemoScene::userStart()
 	camera->addComponent<Component::GraphNode>();
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
-
-	//TODO
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 
 	return (true);
