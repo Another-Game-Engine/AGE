@@ -261,8 +261,10 @@ bool 			DemoScene::userUpdate(double time)
 		if (test.size() != 0)
 		{
 			for (auto e : test)
+			{
 				if (!e->hasComponent<Component::FPController>())
 					destroy(e);
+			}
 		}
 	}
 	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_LEFT))
