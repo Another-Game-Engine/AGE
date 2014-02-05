@@ -17,6 +17,7 @@
 #include <MediaFiles/CollisionBoxFile.hpp>
 #include <MediaFiles/CollisionSphereFile.hpp>
 #include <memory>
+#include <Components/CollisionLayers.hpp>
 
 #include "btBulletWorldImporter.h"
 

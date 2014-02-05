@@ -200,6 +200,8 @@ bool 			DemoScene::userStart()
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
 		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+//		rigidBody->getBody().setCollisionFlags(COLLISION_LAYER_KINEMATIC | COLLISION_LAYER_DYNAMIC);
+		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
@@ -238,7 +240,7 @@ bool 			DemoScene::userStart()
 	{
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,100,0));
-		e->addComponent<Component::FPController>();
+		auto fpc = e->addComponent<Component::FPController>();
 		e->addComponent<Component::GraphNode>();
 		character = e;
 		cameraComponent = character->addComponent<Component::CameraComponent>();
@@ -298,7 +300,10 @@ bool 			DemoScene::userUpdate(double time)
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 1.0f);
-		e->getComponent<Component::RigidBody>()->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
+		auto rigidbody = e->getComponent<Component::RigidBody>();
+		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 	}
 
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
