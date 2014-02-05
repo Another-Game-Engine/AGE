@@ -3,8 +3,10 @@
 #include <fmod.hpp>
 #include <Audio/FmodError.hpp>
 #include <Audio/ChannelGroupType.hpp>
+#include <Audio/Audio.hpp>
 #include <Utils/Dependency.hpp>
 #include <memory>
+#include <map>
 
 class AudioManager : public Dependency
 {
@@ -98,9 +100,46 @@ public:
 		}
 		return true;
 	}
+
+	void update()
+	{
+		_system->update();
+	}
+
+	std::shared_ptr<Audio> loadSound(const File &file, Audio::AudioSpatialType spacialType, const std::string &name = "")
+	{
+		std::string tname = name.empty() ? file.getShortFileName() : name;
+		if (_audios.find(tname) != std::end(_audios))
+			return _audios[name];
+		std::shared_ptr<Audio> audio{ new Audio(file, Audio::AudioType::AUDIO_SOUND, name) };
+		if (!audio->load(spacialType))
+		{
+			std::cerr << "Audio load failed : " << tname << std::endl;
+			return nullptr;
+		}
+		_audios.insert(std::make_pair(tname, audio));
+		return audio;
+	}
+
+	std::shared_ptr<Audio> loadStream(const File &file, Audio::AudioSpatialType spacialType, const std::string &name = "")
+	{
+		std::string tname = name.empty() ? file.getShortFileName() : name;
+		if (_audios.find(tname) != std::end(_audios))
+			return _audios[name];
+		std::shared_ptr<Audio> audio{ new Audio(file, Audio::AudioType::AUDIO_STREAM, name) };
+		if (!audio->load(spacialType))
+		{
+			std::cerr << "Audio load failed : " << tname << std::endl;
+			return nullptr;
+		}
+		_audios.insert(std::make_pair(tname, audio));
+		return audio;
+	}
+
 private:
 	FMOD::System *_system;
 	FMOD_SPEAKERMODE _speakerMode;
 	FMOD_CAPS _caps;
 	std::map<ChannelGroupType, FMOD::ChannelGroup*> _channelGroups;
+	std::map<std::string, std::shared_ptr<Audio>> _audios;
 };

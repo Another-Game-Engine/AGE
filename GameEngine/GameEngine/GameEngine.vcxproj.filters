@@ -99,6 +99,7 @@
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
     <ClInclude Include="Engine\Audio\AudioManager.hpp" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
+    <ClInclude Include="Engine\Audio\Audio.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
