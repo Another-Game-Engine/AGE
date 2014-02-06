@@ -30,13 +30,11 @@ public:
 	Audio(AudioManager *manager, const File &file, AudioType type, const std::string &name = "");
 	~Audio();
 	bool load(AudioSpatialType type);
-	void play(ChannelGroupType channelGroup, bool now);
-	FMOD::Channel *getChannel();
+	FMOD::Channel *play(ChannelGroupType channelGroup, bool now);
 private:
 	AudioManager *_manager;
 	File _file;
 	const std::string _name;
 	FMOD::Sound *_audio;
 	AudioType _audioType;
-	FMOD::Channel *_channel;
 };

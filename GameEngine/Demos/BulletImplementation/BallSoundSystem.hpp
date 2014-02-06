@@ -15,11 +15,13 @@ public:
 	BallSoundSystem(AScene *scene)
 		: System(scene)
 		, _balls(scene)
+		, _heros(scene)
 	{
 	}
 	virtual ~BallSoundSystem(){}
 protected:
 	EntityFilter _balls;
+	EntityFilter _heros;
 
 	virtual void updateBegin(double time)
 	{}
@@ -37,11 +39,19 @@ protected:
 			if (force > 1.0f)
 				ae->play("collision", false);
 		}
+
+		for (auto e : _heros.getCollection())
+		{
+			auto ae = e->getComponent<Component::AudioEmitter>();
+			auto c = e->getComponent<Component::FPController>();
+		}
 	}
 
 	virtual void initialize()
 	{
 		_balls.require<Component::AudioEmitter>();
 		_balls.require<Component::Collision>();
+		_heros.require<Component::FPController>();
+		_heros.require<Component::AudioEmitter>();
 	}
 };
