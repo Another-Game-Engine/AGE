@@ -27,5 +27,5 @@ void main(void)
 
   gColor = vColor;
   gUv = vTexCoord;
-  gl_Position = vPosition;
+  gl_Position = projection * modelView * vPosition;
 }

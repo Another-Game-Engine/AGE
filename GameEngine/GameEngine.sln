@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Shaders\light.vp = Shaders\light.vp
 		Shaders\MaterialBasic.fp = Shaders\MaterialBasic.fp
 		Shaders\MaterialBasic.vp = Shaders\MaterialBasic.vp
+		shadowMap.fp = shadowMap.fp
+		shadowMap.vp = shadowMap.vp
 		Shaders\tesselation.gp = Shaders\tesselation.gp
 		Shaders\test.cp = Shaders\test.cp
 	EndProjectSection

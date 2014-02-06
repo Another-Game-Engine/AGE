@@ -105,6 +105,7 @@
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
+    <ClCompile Include="Engine\Components\ShadowRenderer.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
+    <ClInclude Include="Engine\Components\ShadowRenderer.hpp" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
