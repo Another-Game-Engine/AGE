@@ -77,7 +77,7 @@ bool AudioManager::init()
 	}
 
 	// INITIALIZE SYSTEM
-	if (!fmodError(_system->init(32, FMOD_INIT_NORMAL, 0)))
+	if (!fmodError(_system->init(1024, FMOD_INIT_NORMAL, 0)))
 		return false;
 
 	// create Music Channels

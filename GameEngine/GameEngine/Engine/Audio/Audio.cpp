@@ -7,7 +7,6 @@ Audio::Audio(AudioManager *manager, const File &file, AudioType type, const std:
 , _name(name.empty() ? file.getShortFileName() : name)
 , _audio(nullptr)
 , _audioType(type)
-, _channel(nullptr)
 {
 	assert(type != AUDIO_TYPE_UNDEFINED && "Audio type is undefined");
 	assert(manager != nullptr && "Audio manager is null");
@@ -36,15 +35,11 @@ bool Audio::load(AudioSpatialType type)
 	return true;
 }
 
-void Audio::play(ChannelGroupType channelGroup, bool now)
+FMOD::Channel *Audio::play(ChannelGroupType channelGroup, bool now)
 {
-	_channel = nullptr;
-	_manager->getSystem()->playSound(FMOD_CHANNEL_FREE, _audio, true, &_channel);
-	_channel->setPaused(!now);
-	_channel->setChannelGroup(_manager->getChannelGroup(channelGroup));
-}
-
-FMOD::Channel *Audio::getChannel()
-{
-	return _channel;
+	FMOD::Channel *channel = nullptr;
+	_manager->getSystem()->playSound(FMOD_CHANNEL_FREE, _audio, true, &channel);
+	channel->setChannelGroup(_manager->getChannelGroup(channelGroup));
+	channel->setPaused(!now);
+	return channel;
 }

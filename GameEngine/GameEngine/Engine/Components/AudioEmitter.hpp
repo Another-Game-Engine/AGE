@@ -92,8 +92,11 @@ namespace Component
 				bool isPlaying;
 				e.second.channel->isPlaying(&isPlaying);
 				if (!isPlaying)
+				{
 					e.second.channel = nullptr;
-				fmodError(e.second.channel->set3DMinMaxDistance(10, 100));
+					continue;
+				}
+//				fmodError(e.second.channel->set3DMinMaxDistance(10, 100));
 				glm::vec3 pos = posFromMat4(_entity->getGlobalTransform());
 				FMOD_VECTOR  sourcePos = { pos.x, pos.y, pos.z };
 				fmodError(e.second.channel->set3DAttributes(&sourcePos, 0));
@@ -110,8 +113,7 @@ namespace Component
 			{
 				if (a->channel)
 					a->channel->stop();
-				a->audio->play(a->channelGroupType, true);
-				a->channel = a->audio->getChannel();
+				a->channel = a->audio->play(a->channelGroupType, true);
 			}
 			else if (a->channel != nullptr)
 			{
@@ -119,8 +121,7 @@ namespace Component
 				a->channel->isPlaying(&playing);
 				if (!playing)
 				{
-					a->audio->play(a->channelGroupType, true);
-					a->channel = a->audio->getChannel();
+					a->channel = a->audio->play(a->channelGroupType, true);
 				}
 			}
 		}
