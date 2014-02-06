@@ -32,7 +32,10 @@ protected:
 		for (auto e : _balls.getCollection())
 		{
 			auto ae = e->getComponent<Component::AudioEmitter>();
-			ae->play("collision", false);
+			auto force = e->getComponent<Component::Collision>()->force;
+//			std::cout << force << std::endl;
+			if (force > 1.0f)
+				ae->play("collision", false);
 		}
 	}
 
