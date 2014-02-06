@@ -244,8 +244,8 @@ bool 			DemoScene::userStart()
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 		auto audioCpt = e->addComponent<Component::AudioEmitter>();
-		//audioCpt->setAudio(_engine.getInstance<AudioManager>().getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
-		//audioCpt->play("ambiant", true);
+		audioCpt->setAudio(_engine.getInstance<AudioManager>().getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
+		audioCpt->play("ambiant", true);
 
 	}
 
