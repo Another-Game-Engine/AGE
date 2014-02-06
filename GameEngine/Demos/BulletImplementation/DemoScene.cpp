@@ -181,6 +181,7 @@ bool 			DemoScene::userStart()
 //	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 	auto effect = _engine.getInstance<AudioManager>().loadStream(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
+	_engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
@@ -235,6 +236,10 @@ bool 			DemoScene::userStart()
 		auto rigidbody = e->getComponent<Component::RigidBody>();
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+		auto audioCpt = e->addComponent<Component::AudioEmitter>();
+		audioCpt->setAudio(_engine.getInstance<AudioManager>().getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
+		audioCpt->play("ambiant", true);
+
 	}
 
 	// --
@@ -295,7 +300,7 @@ bool 			DemoScene::userUpdate(double time)
 			stack.pop();
 		}
 		stack.push(e);
-		delay = 0.5f;
+		delay = 0.1f;
 	}
 	if (delay >= 0.0f)
 		delay -= time;
