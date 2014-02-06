@@ -180,8 +180,10 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
 //	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
-	auto effect = _engine.getInstance<AudioManager>().loadStream(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
+	_engine.getInstance<AudioManager>().loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
 	_engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	_engine.getInstance<AudioManager>().loadSound(File("./Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	_engine.getInstance<AudioManager>().loadSound(File("./Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
@@ -229,6 +231,11 @@ bool 			DemoScene::userStart()
 		cameraComponent = character->addComponent<Component::CameraComponent>();
 		character->addComponent<Component::FirstPersonView>();
 		e->addComponent<Component::AudioListener>();
+		auto ae = e->addComponent<Component::AudioEmitter>();
+		auto arriveOnFloor = _engine.getInstance<AudioManager>().getAudio("arriveOnFloor");
+		auto jump = _engine.getInstance<AudioManager>().getAudio("jump");
+		ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
+		ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
 	}
 
 	{

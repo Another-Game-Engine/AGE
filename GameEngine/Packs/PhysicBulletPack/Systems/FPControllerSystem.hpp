@@ -113,9 +113,16 @@ private:
 				ghost.getWorldTransform().setBasis(orn);
 			}
 
-			if (fp->canJump && controls[Component::FPController::JUMP])
+			fp->justJump = false;
+			fp->justArriveOnFloor = false;
+			if (!fp->wasOnGround && controller.onGround())
+				fp->justArriveOnFloor = true;
+			if (fp->canJump && controls[Component::FPController::JUMP] && fp->getController().onGround())
+			{
 				controller.jump();
-
+				fp->justJump = true;
+			}
+			fp->wasOnGround = controller.onGround();
 			controller.setWalkDirection(walkDirection);
 	}
 

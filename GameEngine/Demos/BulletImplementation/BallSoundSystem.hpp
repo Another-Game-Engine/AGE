@@ -44,6 +44,10 @@ protected:
 		{
 			auto ae = e->getComponent<Component::AudioEmitter>();
 			auto c = e->getComponent<Component::FPController>();
+			if (c->justArriveOnFloor)
+				ae->play("arriveOnFloor", true);
+			if (c->justJump)
+				ae->play("jump", true);
 		}
 	}
 
