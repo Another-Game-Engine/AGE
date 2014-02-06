@@ -3,7 +3,7 @@
 #include <Components/Component.hh>
 #include <glm/glm.hpp>
 #include <Utils/GlmSerialization.hpp>
-#include <Audio/Audio.hpp>
+#include <Audio/Audio.hh>
 
 namespace Component
 {

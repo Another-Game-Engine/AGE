@@ -15,7 +15,7 @@
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
 #include <Systems/AudioSystem.hpp>
-#include <Audio/AudioManager.hpp>
+#include <Audio/AudioManager.hh>
 #include <Core/Engine.hh>
 
 #include <SDL\SDL.h>
@@ -188,7 +188,7 @@ bool 			DemoScene::userStart()
 	auto music = _engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 	if (music)
 	{
-		music->play();
+		music->play(CHANNEL_GROUP_MUSIC);
 	}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");

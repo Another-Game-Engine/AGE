@@ -3,7 +3,7 @@
 #include <Systems/System.h>
 #include <Entities/EntityData.hh>
 #include <Components/AudioListener.hpp>
-#include <Audio/AudioManager.hpp>
+#include <Audio/AudioManager.hh>
 #include <Core/Engine.hh>
 #include <Utils/MatrixConversion.hpp>
 
