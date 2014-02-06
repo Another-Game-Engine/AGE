@@ -105,6 +105,7 @@
     <ClInclude Include="Engine\Systems\AudioSystem.hpp" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\Audio.hh" />
+    <ClInclude Include="Engine\Components\AudioEmitter.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

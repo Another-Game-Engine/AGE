@@ -8,6 +8,7 @@
 #include <Components/CameraComponent.hh>
 #include <Components/TrackBallComponent.hpp>
 #include <Components/AudioListener.hpp>
+#include <Components/AudioEmitter.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
@@ -68,7 +69,8 @@ bool 			DemoScene::userStart()
 		.rct<Component::MeshRenderer>()
 		.rct<Component::RotationForce>()
 		.rct<Component::TrackBall>()
-		.rct<Component::AudioListener>();
+		.rct<Component::AudioListener>()
+		.rct<Component::AudioEmitter>();
 
 	// System Tests
 	//
@@ -186,10 +188,10 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
 	auto music = _engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	if (music)
-	{
-		music->play(CHANNEL_GROUP_MUSIC);
-	}
+	//if (music)
+	//{
+	//	music->play(CHANNEL_GROUP_MUSIC);
+	//}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),
@@ -199,6 +201,12 @@ bool 			DemoScene::userStart()
 		"texture__EarthClouds",
 		"texture__EarthTextureBump");
 	auto moon = createPlanet(0, 10, glm::vec3(5, 0, 0), glm::vec3(0.5), "bump", "texture__MoonTexture", "texture__MoonTextureBump");
+	auto audioCpt = sun->addComponent<Component::AudioEmitter>();
+	audioCpt->setAudio(music, "ambiant", CHANNEL_GROUP_MUSIC);
+	audioCpt->play("ambiant", true);
+	audioCpt->clearAudio("ambiant");
+	audioCpt->setAudio(music, "ambiant", CHANNEL_GROUP_MUSIC);
+	audioCpt->play("ambiant", true);
 	earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
 
 	// Generating a lot of planet for performance test

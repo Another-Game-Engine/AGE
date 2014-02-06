@@ -139,6 +139,7 @@
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
     <ClInclude Include="Engine\Audio\Audio.hh" />
+    <ClInclude Include="Engine\Components\AudioEmitter.hpp" />
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
