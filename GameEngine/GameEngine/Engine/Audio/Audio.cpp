@@ -36,14 +36,11 @@ bool Audio::load(AudioSpatialType type)
 	return true;
 }
 
-void Audio::play(ChannelGroupType channelGroup)
+void Audio::play(ChannelGroupType channelGroup, bool now)
 {
 	_channel = nullptr;
 	_manager->getSystem()->playSound(FMOD_CHANNEL_FREE, _audio, true, &_channel);
-	fmodError(_channel->set3DMinMaxDistance(10, 100));
-	FMOD_VECTOR  sourcePos = { 0.0f, 0.0f, 0.0f };
-	_channel->set3DAttributes(&sourcePos, 0);
-	_channel->setPaused(false);
+	_channel->setPaused(!now);
 	_channel->setChannelGroup(_manager->getChannelGroup(channelGroup));
 }
 

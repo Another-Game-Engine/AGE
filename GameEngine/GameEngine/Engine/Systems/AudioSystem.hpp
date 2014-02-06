@@ -3,6 +3,7 @@
 #include <Systems/System.h>
 #include <Entities/EntityData.hh>
 #include <Components/AudioListener.hpp>
+#include <Components/AudioEmitter.hpp>
 #include <Audio/AudioManager.hh>
 #include <Core/Engine.hh>
 #include <Utils/MatrixConversion.hpp>
@@ -34,18 +35,27 @@ protected:
 	{
 		_manager->update();
 
+		for (auto e : _emitters.getCollection())
+		{
+			auto ae = e->getComponent<Component::AudioEmitter>();
+			ae->updatePosition();
+		}
+
 		for (auto e : _listeners.getCollection())
 		{
 			auto l = e->getComponent<Component::AudioListener>();
 			auto pos = posFromMat4(e->getGlobalTransform());
 			FMOD_VECTOR v{pos.x, pos.y, pos.z};
+			auto rot = rotFromMat4(e->getGlobalTransform(), false);
 			FMOD_VECTOR up{ 0, -1, 0 };
-			_manager->getSystem()->set3DListenerAttributes(0, &v, 0, 0, &up);
+			FMOD_VECTOR forward{ 0, 0, 1 };
+			_manager->getSystem()->set3DListenerAttributes(0, &v, 0, &forward, &up);
 		}
 	}
 
 	virtual void initialize()
 	{
 		_listeners.require<Component::AudioListener>();
+		_emitters.require<Component::AudioEmitter>();
 	}
 };
