@@ -39,7 +39,8 @@ protected:
 			auto l = e->getComponent<Component::AudioListener>();
 			auto pos = posFromMat4(e->getGlobalTransform());
 			FMOD_VECTOR v{pos.x, pos.y, pos.z};
-			_manager->getSystem()->set3DListenerAttributes(0, &v, 0, 0, 0);
+			FMOD_VECTOR up{ 0, -1, 0 };
+			_manager->getSystem()->set3DListenerAttributes(0, &v, 0, 0, &up);
 		}
 	}
 
