@@ -111,12 +111,10 @@ public:
 	}
 
 	template <typename T, typename... Args>
-	std::shared_ptr<T> addComponent(Args ...args)
+	std::shared_ptr<T> addComponent(Args &&...args)
 	{
 		// get the component type ID
 		unsigned int id = T::getTypeId();
-
-		auto a = _code.isEmpty();
 
 		// if entity already have component, return it
 		if (hasComponent(id))
@@ -136,7 +134,7 @@ public:
 			_components[id]->setEntity(getHandle());
 		}
 		//init component
-		std::static_pointer_cast<T>(_components[id])->init(args...);
+		std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);
 		_code.add(id);
 		broadCast(std::string("componentAdded" + std::to_string(id)), _handle);
 		return std::static_pointer_cast<T>(_components[id]);

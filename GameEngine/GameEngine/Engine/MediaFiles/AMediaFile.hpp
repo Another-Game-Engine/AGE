@@ -23,8 +23,6 @@ public:
 	File path;
 	std::string name;
 	static AssetsManager *_manager;
-protected:
-	std::size_t _childs;
 	enum MEDIA_TYPE
 	{
 		UNKNOWN = 0
@@ -32,7 +30,14 @@ protected:
 		, TEXTURE = 2
 		, MATERIAL = 3
 		, CUBEMAP = 4
+		, COLLISION_SHAPE_STATIC = 5
+		, COLLISION_SHAPE_DYNAMIC = 6
+		, COLLISION_BOX = 7
+		, COLLISION_SPHERE = 8
+		, COLLISION_MULTI_SPHERE = 9
 	};
+protected:
+	std::size_t _childs;
 	MEDIA_TYPE _type;
 public:
 	AMediaFile() :
@@ -67,20 +72,32 @@ public:
 	template <typename Archive>
 	void serialize(std::ofstream &s)
 	{
-		Archive ar(s);
-		ar(_type);
-		_serialize(ar);
+		if (_type >= COLLISION_SHAPE_STATIC && _type <= COLLISION_MULTI_SPHERE)
+		{
+			serializeAsBulletFile(s);
+			return;
+		}
+		else
+		{
+			Archive ar(s);
+			ar(_type);
+			_serialize(ar);
+		}
 	}
+
+	void serializeAsBulletFile(std::ofstream &s);
 
 	template <typename Archive>
 	static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
 	{
+		if (file.getExtension() == "bullet")
+			return loadBulletFile(file);
 		assert(file.exists() == true && "File does not exist.");
-		MEDIA_TYPE serializedFileType = UNKNOWN;
 		std::shared_ptr<AMediaFile> res{ nullptr };
 		res = _manager->get(file.getShortFileName());
 		if (res != nullptr)
 			return res;
+		MEDIA_TYPE serializedFileType = UNKNOWN;
 
 		std::ifstream ifs(file.getFullName(), std::ios::binary);
 		Archive ar(ifs);
@@ -113,6 +130,8 @@ public:
 		_manager->add(res);
 		return res;
 	}
+
+	static std::shared_ptr<AMediaFile> loadBulletFile(const File &f);
 
 	static void loadFromList(const File &file);
 	static std::shared_ptr<AMediaFile> get(const std::string &name);
@@ -169,7 +188,7 @@ public:
 		++_childs;
 	}
 
-	inline std::size_t getType() const
+	inline MEDIA_TYPE getType() const
 	{
 		return _type;
 	}

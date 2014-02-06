@@ -66,8 +66,7 @@ void FPController::init()
 }
 
 void FPController::reset()
-{
-	auto bulletManager = dynamic_cast<BulletDynamicManager*>(&(_entity->getScene()->getEngine().getInstance<BulletCollisionManager>()));
+{	auto bulletManager = dynamic_cast<BulletDynamicManager*>(&(_entity->getScene()->getEngine().getInstance<BulletCollisionManager>()));
 	assert(bulletManager != nullptr);
 
 	if (_controller)

@@ -12,7 +12,14 @@
 #include <hacdHACD.h>
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
+#include <MediaFiles/CollisionShapeStaticFile.hpp>
+#include <MediaFiles/CollisionShapeDynamicFile.hpp>
+#include <MediaFiles/CollisionBoxFile.hpp>
+#include <MediaFiles/CollisionSphereFile.hpp>
+#include <memory>
+#include <Components/CollisionLayers.hpp>
 
+#include "btBulletWorldImporter.h"
 
 namespace Component
 {
@@ -24,7 +31,6 @@ namespace Component
 			SPHERE,
 			BOX,
 			MESH,
-			CONCAVE_STATIC_MESH,
 			UNDEFINED
 		} CollisionShape;
 
@@ -54,18 +60,15 @@ namespace Component
 		{
 			if (_rigidBody != nullptr)
 			{
-				_manager->getWorld()->removeRigidBody(_rigidBody);
-				delete _rigidBody;
+				_manager->getWorld()->removeRigidBody(_rigidBody.get());
 				_rigidBody = nullptr;
 			}
 			if (_motionState != nullptr)
 			{
-				delete _motionState;
 				_motionState = nullptr;
 			}
 			if (_collisionShape != nullptr)
 			{
-				delete _collisionShape;
 				_collisionShape = nullptr;
 			}
 			shapeType = UNDEFINED;
@@ -113,86 +116,52 @@ namespace Component
 			btTransform transform;
 			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
 			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
-			std::cout << scale.x << " " << scale.y << " " << scale.z << std::endl;
 			glm::vec3 rot = rotFromMat4(_entity->getLocalTransform(), true);
 			transform.setIdentity();
 			transform.setOrigin(convertGLMVectorToBullet(position));
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
-			_motionState = new btDefaultMotionState(transform);
+
+			_motionState = std::shared_ptr<btMotionState>(new btDefaultMotionState(transform));
 			if (c == BOX)
 			{
-				_collisionShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));//new btBoxShape(halfScale);
+				_collisionShape = std::shared_ptr<btCollisionShape>(new btBoxShape(btVector3(0.5, 0.5, 0.5)));
 			}
 			else if (c == SPHERE)
 			{
-				_collisionShape = new btSphereShape(0.5);//new btSphereShape(scale.x);
+				_collisionShape = std::shared_ptr<btCollisionShape>(new btSphereShape(0.5));
 			}
 			else if (c == MESH)
 			{
-				// THERE IS SOME LEAKS BECAUSE THAT'S TEMPORARY
-				auto mesh = AMediaFile::get<ObjFile>(meshName);
-				auto group = new btCompoundShape();
-
-				auto &geos = mesh->geometries;
-
-				for (unsigned int i = 0; i < geos.size(); ++i)
+				auto media = AMediaFile::get(_meshName);
+				if (!media)
+					return;
+				if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
 				{
-					auto &geo = geos[i]; // DIRTY HACK TEMPORARY
-					// NEED TO REPLACE MESH BY MESH GROUP !
-					btScalar *t = new btScalar[geo.vertices.size() * 3]();
-					for (unsigned int it = 0; it < geo.vertices.size(); ++it)
-					{
-						t[it * 3] = geo.vertices[it].x;
-						t[it * 3 + 1] = geo.vertices[it].y;
-						t[it * 3 + 2] = geo.vertices[it].z;
-					}
-					btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
-					btShapeHull *hull = new btShapeHull(tmp);
-					btScalar margin = tmp->getMargin();
-					hull->buildHull(margin);
-					tmp->setUserPointer(hull);
-					btConvexHullShape *s = new btConvexHullShape();
-					for (int it = 0; it < hull->numVertices(); ++it)
-					{
-						s->addPoint(hull->getVertexPointer()[it], false);
-					}
-					s->recalcLocalAabb();
-					btTransform localTrans;
-					localTrans.setIdentity();
-					_collisionShape = s;
-					group->addChildShape(localTrans,s);
-					delete[] t;
-					delete hull;
-					delete tmp;
+					auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(AMediaFile::get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btConvexHullShape(*s->shape.get()));
 				}
-				_collisionShape = group;
-			}
-			else if (c == CONCAVE_STATIC_MESH) // dont work
-			{
-				auto mesh = AMediaFile::get<ObjFile>(meshName);
-				auto trimesh = new btTriangleMesh();
-				auto &geos = mesh->geometries;
-
-				for (unsigned int j = 0; j < geos.size(); ++j)
+				else if (media->getType() == AMediaFile::COLLISION_SHAPE_STATIC)
 				{
-					auto &geo = geos[j];
-					for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
-					{
-						trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
-							, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
-							, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
-					}
+					auto s = std::dynamic_pointer_cast<CollisionShapeStaticFile>(AMediaFile::get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btScaledBvhTriangleMeshShape(s->shape.get(), btVector3(1, 1, 1)));
 				}
-
-				auto bvh = new btBvhTriangleMeshShape(trimesh, true);
-				bvh->buildOptimizedBvh();
-				bool isit = bvh->isConcave();
-				_collisionShape = bvh;
+				else if (media->getType() == AMediaFile::COLLISION_BOX)
+				{
+					auto s = std::dynamic_pointer_cast<CollisionBoxFile>(AMediaFile::get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btBoxShape(*s->shape.get()));
+				}
+				else if (media->getType() == AMediaFile::COLLISION_SPHERE)
+				{
+					auto s = std::dynamic_pointer_cast<CollisionSphereFile>(AMediaFile::get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btSphereShape(*s->shape.get()));
+				}
+				else
+					std::cerr << "Collision mesh not found." << std::endl;
 			}
 			if (mass != 0)
 				_collisionShape->calculateLocalInertia(mass, inertia);
 			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
-			_rigidBody = new btRigidBody(mass, _motionState, _collisionShape, inertia);
+			_rigidBody = std::shared_ptr<btRigidBody>(new btRigidBody(mass, _motionState.get(), _collisionShape.get(), inertia));
 			_rigidBody->setUserPointer(&_entity);
 			_rigidBody->setAngularFactor(convertGLMVectorToBullet(rotationConstraint));
 			_rigidBody->setLinearFactor(convertGLMVectorToBullet(transformConstraint));
@@ -200,7 +169,7 @@ namespace Component
 			{
 				_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
-			_manager->getWorld()->addRigidBody(_rigidBody);
+			_manager->getWorld()->addRigidBody(_rigidBody.get());
 		}
 
 		void setRotationConstraint(bool x, bool y, bool z)
@@ -225,15 +194,15 @@ namespace Component
 
 		virtual ~RigidBody(void)
 		{
-			if (_rigidBody)
+			if (_rigidBody != nullptr)
 			{
-				_manager->getWorld()->removeRigidBody(_rigidBody);
-				delete _rigidBody;
+				_manager->getWorld()->removeRigidBody(_rigidBody.get());
+				_rigidBody = nullptr;
 			}
-			if (_motionState)
-				delete _motionState;
-			if (_collisionShape)
-				delete _collisionShape;
+			if (_motionState != nullptr)
+				_motionState = nullptr;
+			if (_collisionShape != nullptr)
+				_collisionShape = nullptr;
 		}
 
 		//////
@@ -263,7 +232,6 @@ namespace Component
 		////
 		//////
 
-
 		BulletDynamicManager *_manager;
 		CollisionShape shapeType;
 		btScalar mass;
@@ -271,9 +239,9 @@ namespace Component
 		glm::vec3 rotationConstraint;
 		glm::vec3 transformConstraint;
 		std::string meshName;
-		btCollisionShape *_collisionShape;
-		btMotionState *_motionState;
-		btRigidBody *_rigidBody;
+		std::shared_ptr<btCollisionShape> _collisionShape;
+		std::shared_ptr<btMotionState> _motionState;
+		std::shared_ptr<btRigidBody> _rigidBody;
 	private:
 		RigidBody(RigidBody const &);
 		RigidBody &operator=(RigidBody const &);
@@ -282,16 +250,16 @@ namespace Component
 		{
 			if (_rigidBody != nullptr)
 			{
-				_manager->getWorld()->removeRigidBody(_rigidBody);
-				delete _rigidBody;
+				_manager->getWorld()->removeRigidBody(_rigidBody.get());
+				_rigidBody = nullptr;
 			}
 			if (_motionState != nullptr)
 			{
-				delete _motionState;
+				_motionState = nullptr;
 			}
 			if (_collisionShape != nullptr)
 			{
-				delete _collisionShape;
+				_collisionShape = nullptr;
 			}
 		}
 	};

@@ -70,10 +70,10 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::MESH, "obj__galileo");
+	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
 	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
-	e->addComponent<Component::GraphNode>();
 	mesh->setShader("MaterialBasic");
+	e->addComponent<Component::GraphNode>();
 	return e;
 }
 
@@ -175,89 +175,60 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 
+	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
+	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
+	auto planetMesh = AMediaFile::create<ObjFile>("my_planet", defaultBallMesh);
+	planetMesh->material = AMediaFile::create<MaterialFile>("my_planet_material", defaultBallMesh->material);
+	auto testsss = planetMesh->material->materials[0];
+	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
+	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthNightTexture");
+	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>("texture__EarthClouds");
+	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>("texture__EarthTextureBump");
+
+	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
+	AMediaFile::saveToFile("my_planet_material", "./Assets/Serialized/");
+	AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
+
 	// EXAMPLE LOAD FROM SAVE
 	AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
 
-	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
-	//auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
-	//auto planetMesh = AMediaFile::create<ObjFile>("my_planet", defaultBallMesh);
-	//planetMesh->material = AMediaFile::create<MaterialFile>("my_planet_material", defaultBallMesh->material);
-	//auto testsss = planetMesh->material->materials[0];
-	//planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
-	//planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthNightTexture");
-	//planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>("texture__EarthClouds");
-	//planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>("texture__EarthTextureBump");
-
-	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
-	//AMediaFile::saveToFile("my_planet_material", "./Assets/Serialized/");
-	//AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
-
-	auto p1 = createCube(glm::vec3(0, 0, 0), glm::vec3(100, 1, 100), "texture__MoonTexture", 0.0f);
-	//p1->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
-	//p1->getComponent<Component::RigidBody>()->setRotationConstraint(false, false, false);
-
+	// CREATE SPONZA CHURCH
 	{
 		auto e = createEntity();
-		e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 45.0f, glm::vec3(0, 1, 0));
-		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(10,10,10));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(10,10,10));
-
-		auto rigidBody = e->addComponent<Component::RigidBody>(1.0f);
-		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0));
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
+		auto rigidBody = e->addComponent<Component::RigidBody>(0);
+		rigidBody->setMass(0);
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
-		e->getComponent<Component::RigidBody>()->setTransformConstraint(false, false, false);
-		e->getComponent<Component::RigidBody>()->setRotationConstraint(true, true, true);
-	}
-
-	{
-		auto e = createEntity();
-		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(-5,0,0));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(6));
-
-		auto rigidBody = e->addComponent<Component::RigidBody>(0);
-		rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("my_planet"));
-		e->addComponent<Component::GraphNode>();
-		mesh->setShader("earth");
 	}
 
 	Entity character;
+	std::shared_ptr<Component::CameraComponent> cameraComponent;
+
 	{
 		auto e = createEntity();
-		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,20,0));
-		e->addComponent<Component::FPController>();
+		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,100,0));
+		auto fpc = e->addComponent<Component::FPController>();
 		e->addComponent<Component::GraphNode>();
 		character = e;
+		cameraComponent = character->addComponent<Component::CameraComponent>();
+		character->addComponent<Component::FirstPersonView>();
 	}
 
-	Entity c1;
-	for (unsigned int i = 0; i < 70; ++i)
 	{
-		if (i % 3)
-		{
-			c1 = createCube(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(2, 1, 3), "texture__SunTexture", 1.f);
-		}
-		else if (i % 2)
-		{
-			c1 = createSphere(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(1, 1, 1), "texture__SunTexture", 1.0f);
-			c1->getComponent<Component::MeshRenderer>()->mesh = AMediaFile::get<ObjFile>("my_planet");
-		}
-		else
-		{
-			c1 = createMonkey(glm::vec3(-3 + 0.2 * (float)i, 3 * i + 16, 0), glm::vec3(std::rand() % 100 / 80.0f),"texture__SunTexture", 1.0f);
-			c1->setLocalTransform() = glm::rotate(c1->getLocalTransform(), std::rand() % 100 / 10.0f, glm::vec3(1, 1, 1));
-		}
+		auto e = createMonkey(glm::vec3(19, 0.9, -0.59), glm::vec3(1.5), "texture__SunTexture", 1.0f);
+		auto rigidbody = e->getComponent<Component::RigidBody>();
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 	}
 
 	// --
 	// Setting camera with skybox
 	// --
-
-	//setCamera(new TrackBall(_engine, follow, 30.0f, 1.0f, 1.0f));
-	auto cameraComponent = character->addComponent<Component::CameraComponent>();
-	character->addComponent<Component::FirstPersonView>();
 
 	std::string		vars[] = 
 	{
@@ -280,6 +251,39 @@ bool 			DemoScene::userStart()
 
 bool 			DemoScene::userUpdate(double time)
 {
+	static std::queue<Entity> stack;
+
+	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_RIGHT))
+	{
+		glm::vec3 from, to;
+		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
+		auto test = _engine.getInstance<BulletCollisionManager>().rayCast(from, from + to * 1000.0f);
+		if (test.size() != 0)
+		{
+			for (auto e : test)
+			{
+				if (!e->hasComponent<Component::FPController>())
+					destroy(e);
+			}
+		}
+	}
+	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_LEFT))
+	{
+		glm::vec3 from, to;
+		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
+		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 1.0f);
+		auto rigidbody = e->getComponent<Component::RigidBody>();
+		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+		if (stack.size() > 300)
+		{
+			destroy(stack.front());
+			stack.pop();
+		}
+		stack.push(e);
+	}
+
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 		return (false);

@@ -79,7 +79,7 @@ bool 			DemoScene::userStart()
 		convertor.load("./Assets/MoonNormalMap.tga");
 		convertor.load("./Assets/MoonTexture.tga");
 		convertor.load("./Assets/SunTexture.tga");
-//		convertor.load("./Assets/space.skybox");
+		convertor.load("./Assets/space.skybox");
 		convertor.serializeData("Space");
 		convertor.clear();
 
