@@ -38,7 +38,6 @@ private:
 			if (e->hasComponent<Component::Collision>())
 			{
 				auto lol = e->getComponent<Component::Collision>();
-				std::cout << "lol" << std::endl;
 			}
 			updateComponent(e, c, time);
 		}
@@ -93,7 +92,6 @@ private:
 //				rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, 1000));
 				auto mesh = b->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
-//				_scene->destroy(b);
 				balls.push_back(b);
 			}
 			if (inputs.getKey(SDLK_p))

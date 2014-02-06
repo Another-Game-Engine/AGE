@@ -39,14 +39,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;C:\boost\boost_1_55_0;$(IncludePath)</IncludePath>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;C:\boost\boost_1_55_0;$(IncludePath);$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;</IncludePath>
     <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Builds\</OutDir>
-    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);C:/boost/boost_1_55_0</IncludePath>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);C:/boost/boost_1_55_0;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;</IncludePath>
     <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
@@ -147,6 +147,11 @@
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\MediaFiles\AMediaFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\AssetsManager.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionBoxFile.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionShapeDynamicFile.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionShapeFile.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionShapeStaticFile.hpp" />
+    <ClInclude Include="Engine\MediaFiles\CollisionSphereFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\CubeMapFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\MaterialFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\MediaFile.hpp" />
@@ -184,6 +189,7 @@
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
+    <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
@@ -210,6 +216,24 @@
     <None Include="Engine\Components\MeshRenderer.hh" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\Extras\ConvexDecomposition\ConvexDecomposition.vcxproj">
+      <Project>{d217d3ee-658e-4af9-8f77-ae4152409709}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\Extras\Serialize\BulletFileLoader\BulletFileLoader.vcxproj">
+      <Project>{bf62c23a-a810-4cb1-9631-a6cf9c27c6db}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\Extras\Serialize\BulletWorldImporter\BulletWorldImporter.vcxproj">
+      <Project>{8c289f4d-6321-4202-a8f9-81dcd4883cb3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\src\BulletCollision\BulletCollision.vcxproj">
+      <Project>{a820b1f5-9a4c-4f25-b086-60e0c1d2de47}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\src\BulletDynamics\BulletDynamics.vcxproj">
+      <Project>{24058763-e745-4017-b015-a5ad1d0b2bf0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\src\LinearMath\LinearMath.vcxproj">
+      <Project>{4173f5ca-9e74-4719-88c3-23bd2c7e3285}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Vendors\TinyObjLoader\TinyObjLoader.vcxproj">
       <Project>{99fc20c2-9ad1-4049-bb11-b369c42fd6a8}</Project>
     </ProjectReference>

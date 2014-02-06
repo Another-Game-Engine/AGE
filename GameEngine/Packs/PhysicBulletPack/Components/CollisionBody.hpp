@@ -11,6 +11,7 @@
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Core/AScene.hh>
+#include <Components/CollisionLayers.hpp>
 
 
 namespace Component

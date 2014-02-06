@@ -9,6 +9,9 @@
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Systems/MeshRenderSystem.h>
+#include <Utils/ScreenPosToWorldRay.hpp>
+#include <Context/IRenderContext.hh>
+#include <Utils/MatrixConversion.hpp>
 
 class CameraSystem : public System
 {
@@ -30,6 +33,27 @@ public:
 	{
 		return _renderDebugMethod;
 	}
+
+	void getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
+	{
+		if (_filter.getCollection().size() == 0)
+			return;
+		auto mousePos = _scene->getEngine().getInstance<Input>().getMousePosition();
+		auto screenSize = _scene->getEngine().getInstance<IRenderContext>().getScreenSize();
+		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
+		Utils::screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
+	}
+
+	void getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
+	{
+		if (_filter.getCollection().size() == 0)
+			return;
+		auto screenSize = _scene->getEngine().getInstance<IRenderContext>().getScreenSize();
+		auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
+		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
+		Utils::screenPosToWorldRay(centerPos.x, centerPos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform , cameraCpt->projection, from, to);
+	}
+
 
 protected:
 	EntityFilter _filter;
@@ -54,8 +78,6 @@ protected:
 		{
 			auto camera = e->getComponent<Component::CameraComponent>();
 			auto skybox = camera->getSkybox();
-			auto lookAt = e->getGlobalTransform();
-			lookAt = glm::translate(lookAt, glm::vec3(0, 0, 1));
 
 			auto cameraPosition = camera->getLookAtTransform();
 

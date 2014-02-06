@@ -11,6 +11,7 @@ Cereal/
 *.serialization
 *.scenesave
 *.cpd
+*.bullet
 
 # User-specific files
 *.suo

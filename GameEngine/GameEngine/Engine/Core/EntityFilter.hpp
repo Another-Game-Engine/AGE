@@ -22,7 +22,6 @@ public:
 
 	virtual ~EntityFilter()
 	{
-		_collection.clear();
 	}
 
 	template <typename T>

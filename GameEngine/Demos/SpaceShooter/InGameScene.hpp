@@ -33,6 +33,7 @@
 
 class InGameScene : public AScene
 {
+	Entity test;
 public:
 	InGameScene(Engine &engine)
 		: AScene(engine)
@@ -148,10 +149,25 @@ public:
 			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 100, 100));
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::BOX);
+			//rigidBody->setCollisionShape(Component::RigidBody::BOX);
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
 			floor = e;
+		}
+
+
+		{
+			Entity e = createEntity();
+			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(50, -10, 50));
+			e->addComponent<Component::GraphNode>();
+			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(50,50,50));
+			auto rigidBody = e->addComponent<Component::RigidBody>();
+			rigidBody->setMass(0.0f);
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+			mesh->setShader("MaterialBasic");
+			test = e;
 		}
 
 		auto camera = createEntity();
@@ -187,6 +203,16 @@ public:
 			balls.clear();
 		}
 
+		if (_engine.getInstance<Input>().getInput(SDLK_u))
+		{
+			test->setLocalTransform() = glm::scale(test->getLocalTransform(), glm::vec3(0.9));
+		}
+
+		if (_engine.getInstance<Input>().getInput(SDLK_i))
+		{
+			test->setLocalTransform() = glm::scale(test->getLocalTransform(), glm::vec3(1.1));
+		}
+
 		if (_engine.getInstance<Input>().getInput(SDLK_r) && timer <= 0.0f)
 		{
 			timer = 0.3f;
@@ -196,8 +222,8 @@ public:
 				e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3((float)(rand() % 10) / 0.8));
 				auto rigidBody = e->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
-				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-				auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
+				rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
+				auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");
 				balls.push_back(e);
 			}
