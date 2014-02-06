@@ -8,6 +8,8 @@
 #include <Components/RigidBody.hpp>
 #include <Components/FPController.hpp>
 #include <Components/FirstPersonView.hpp>
+#include <Components/AudioEmitter.hpp>
+#include <Components/AudioListener.hpp>
 
 #include <OpenGL/ComputeShader.hh>
 #include <OpenGL/Attribute.hh>
@@ -22,6 +24,8 @@
 #include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
+#include <Systems/AudioSystem.hpp>
+#include <BallSoundSystem.hpp>
 
 #include <Core/Engine.hh>
 
@@ -91,6 +95,8 @@ bool 			DemoScene::userStart()
 	addSystem<FPControllerSystem>(50); // UPDATE FIRST PERSON CONTROLLER
 	addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
 	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
+	addSystem<BallSoundSystem>(220);
+	addSystem<AudioSystem>(250);
 	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
 	//
 	//
@@ -172,8 +178,9 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+//	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
+	auto effect = _engine.getInstance<AudioManager>().loadStream(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
@@ -196,12 +203,15 @@ bool 			DemoScene::userStart()
 	{
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
+//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		rigidBody->setCollisionShape(Component::RigidBody::BOX);
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
 	}
@@ -217,6 +227,7 @@ bool 			DemoScene::userStart()
 		character = e;
 		cameraComponent = character->addComponent<Component::CameraComponent>();
 		character->addComponent<Component::FirstPersonView>();
+		e->addComponent<Component::AudioListener>();
 	}
 
 	{
@@ -267,7 +278,8 @@ bool 			DemoScene::userUpdate(double time)
 			}
 		}
 	}
-	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_LEFT))
+	static float delay = 0.0f;
+	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
 	{
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
@@ -276,14 +288,17 @@ bool 			DemoScene::userUpdate(double time)
 		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>().getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 		if (stack.size() > 300)
 		{
 			destroy(stack.front());
 			stack.pop();
 		}
 		stack.push(e);
+		delay = 0.5f;
 	}
-
+	if (delay >= 0.0f)
+		delay -= time;
 	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>().getInput(SDL_QUIT))
 		return (false);
