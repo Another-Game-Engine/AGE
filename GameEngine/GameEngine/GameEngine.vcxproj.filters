@@ -33,6 +33,8 @@
     <ClCompile Include="Engine\MediaFiles\AssetsManager.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
+    <ClCompile Include="Engine\Audio\AudioManager.cpp" />
+    <ClCompile Include="Engine\Audio\Audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
@@ -98,11 +100,11 @@
     <ClInclude Include="Engine\MediaFiles\CollisionSphereFile.hpp" />
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
-    <ClInclude Include="Engine\Audio\AudioManager.hpp" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
-    <ClInclude Include="Engine\Audio\Audio.hpp" />
     <ClInclude Include="Engine\Components\AudioListener.hpp" />
     <ClInclude Include="Engine\Systems\AudioSystem.hpp" />
+    <ClInclude Include="Engine\Audio\AudioManager.hh" />
+    <ClInclude Include="Engine\Audio\Audio.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

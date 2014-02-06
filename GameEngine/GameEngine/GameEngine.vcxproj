@@ -102,6 +102,8 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Audio\Audio.cpp" />
+    <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
@@ -133,10 +135,10 @@
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Audio\AudioManager.hpp" />
+    <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
-    <ClInclude Include="Engine\Audio\Audio.hpp" />
+    <ClInclude Include="Engine\Audio\Audio.hh" />
     <ClInclude Include="Engine\Components\CameraComponent.hh" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
