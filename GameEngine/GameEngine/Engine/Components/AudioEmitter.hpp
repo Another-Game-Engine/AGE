@@ -18,11 +18,23 @@ namespace Component
 				, channel(nullptr)
 				, channelGroupType(CHANNEL_GROUP_CUSTOM_0)
 				, name("")
+				, reverb(nullptr)
 			{}
+
+			~AudioInstance()
+			{
+				reverb->release();
+			}
+
+			void setReverb(FMOD_REVERB_PROPERTIES prop)
+			{
+			}
+
 			std::shared_ptr<Audio> audio;
 			FMOD::Channel *channel;
 			ChannelGroupType channelGroupType;
 			std::string name;
+			FMOD::Reverb *reverb;
 		};
 
 		AudioEmitter() :
