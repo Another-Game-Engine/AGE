@@ -181,7 +181,7 @@ bool 			DemoScene::userStart()
 //	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__City.cpd");
+
 	_engine.getInstance<AudioManager>().loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
 	_engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 	_engine.getInstance<AudioManager>().loadSound(File("./Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
@@ -215,11 +215,11 @@ bool 			DemoScene::userStart()
 		rigidBody->setMass(0);
 //		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 //		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_city");
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__city"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
 	}
