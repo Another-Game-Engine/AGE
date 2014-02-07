@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <glm/glm.hpp>
 
 #if  !WIN32
 #include <sys/time.h>
@@ -28,6 +29,6 @@ void 		Timer::update()
 
 double 		Timer::getElapsed() const
 {
-	return (static_cast<double>(_curTime - _oldTime) / 1000.0);
+	return glm::clamp(static_cast<double>(_curTime - _oldTime) / 1000.0, 0.0, 0.25);
 }
 
