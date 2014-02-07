@@ -22,6 +22,9 @@ FPController::FPController() : ComponentBase<FPController>()
 , jumpHeight(3.0f)
 , canJump(true)
 , canRun(true)
+, justJump(false)
+, justArriveOnFloor(false)
+, wasOnGround(false)
 {
 
 }
@@ -63,6 +66,9 @@ void FPController::init()
 	bulletManager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::KinematicFilter);
 	bulletManager->getWorld()->addAction(_controller);
 	bulletManager->getWorld()->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+	justJump = false;
+	justArriveOnFloor = false;
+	wasOnGround = true;
 }
 
 void FPController::reset()

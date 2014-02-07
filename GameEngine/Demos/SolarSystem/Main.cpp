@@ -18,6 +18,7 @@
 #include "OpenGL/VertexManager.hh"
 #include "OpenGL/Attribute.hh"
 #include <MediaFiles/AssetsManager.hpp>
+#include <Audio/AudioManager.hh>
 
 int			main(int ac, char **av)
 {
@@ -32,6 +33,8 @@ int			main(int ac, char **av)
 	e.setInstance<AssetsManager>();
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
+	if (!e.setInstance<AudioManager>().init())
+		return EXIT_FAILURE;
 
 	// init engine
 	if (e.init() == false)

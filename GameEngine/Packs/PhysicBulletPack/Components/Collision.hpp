@@ -9,6 +9,7 @@ namespace Component
 	{
 		Collision()
 			: ComponentBase<Collision>()
+			, force(0)
 		{
 				
 		}
@@ -18,7 +19,9 @@ namespace Component
 		}
 
 		void init()
-		{}
+		{
+			force = 0;
+		}
 
 		virtual void reset()
 		{
@@ -81,7 +84,7 @@ namespace Component
 		// !Serialization
 		////
 		//////
-
+		float force;
 		std::set<Entity> collisions;
 	};
 }

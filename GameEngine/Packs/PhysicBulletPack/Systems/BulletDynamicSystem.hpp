@@ -28,26 +28,6 @@ private:
 	virtual void updateBegin(double time)
 	{
 		_manager->getWorld()->stepSimulation(time, 10);
-		btDispatcher *dispatcher = _manager->getWorld()->getDispatcher();
-		unsigned int max = dispatcher->getNumManifolds();
-		for (unsigned int i = 0; i < max; ++i)
-		{
-			btPersistentManifold *contact = dispatcher->getManifoldByIndexInternal(i);
-			const btCollisionObject *oa = static_cast<const btCollisionObject*>(contact->getBody0());
-			const btCollisionObject *ob = static_cast<const btCollisionObject*>(contact->getBody1());
-
-			Entity h1 = *(static_cast<Entity*>(oa->getUserPointer()));
-			EntityData *e1 = h1.get();
-			auto c1 = e1->addComponent<Component::Collision>();
-
-			Entity h2 = *(static_cast<Entity*>(ob->getUserPointer()));
-			EntityData *e2 = h2.get();
-			auto c2 = e2->addComponent<Component::Collision>();
-
-
-			c1->addCollision(h2);
-			c2->addCollision(h1);
-		}
 	}
 
 	virtual void updateEnd(double time)

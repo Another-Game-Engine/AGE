@@ -77,6 +77,9 @@ namespace Component
 		float jumpHeight;
 		bool canJump;
 		bool canRun;
+		bool justJump;
+		bool justArriveOnFloor;
+		bool wasOnGround;
 		std::array<unsigned int, 6> keys;
 		std::array<bool, 6> controls;
 

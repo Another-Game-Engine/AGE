@@ -17,6 +17,7 @@
 #include <Core/Renderer.hh>
 #include <Managers/BulletDynamicManager.hpp>
 #include <MediaFiles/AssetsManager.hpp>
+#include <Audio/AudioManager.hh>
 
 int			main(int ac, char **av)
 {
@@ -32,6 +33,7 @@ int			main(int ac, char **av)
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 	e.setInstance<BulletDynamicManager, BulletCollisionManager>().init();
+	e.setInstance<AudioManager>().init();
 
 	// init engine
 	if (e.init() == false)
