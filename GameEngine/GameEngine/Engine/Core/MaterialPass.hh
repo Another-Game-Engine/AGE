@@ -1,5 +1,4 @@
-#ifndef  __MATERIAL_PASS_HH__
-# define __MATERIAL_PASS_HH__
+#pragma once
 
 #include <string>
 #include <list>
@@ -31,5 +30,3 @@ private:
 	MaterialPass(const MaterialPass &o);
 	MaterialPass &operator=(MaterialPass &o);
 };
-
-#endif  //!__MATERIAL_PASS_HH__
