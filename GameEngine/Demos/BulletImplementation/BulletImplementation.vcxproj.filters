@@ -26,5 +26,8 @@
     <ClInclude Include="DemoScene.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BallSoundSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
