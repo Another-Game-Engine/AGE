@@ -1,6 +1,4 @@
-
-#ifndef ENGINE_HH_
-#define ENGINE_HH_
+#pragma once
 
 #include "Utils/DependenciesInjector.hpp"
 
@@ -19,5 +17,3 @@ public:
 	bool 		update();
 	void 		stop();
 };
-
-#endif

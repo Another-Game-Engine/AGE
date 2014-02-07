@@ -114,6 +114,7 @@
     <ClCompile Include="Engine\Components\TrackBallComponent.cpp" />
     <ClCompile Include="Engine\Components\TrackingCamera.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
+    <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\Entities\EntityData.cpp" />
@@ -154,9 +155,8 @@
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
-    <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
-    <ClInclude Include="Engine\Core\Settings.h" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\MediaFiles\AMediaFile.hpp" />

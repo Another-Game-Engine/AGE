@@ -1,5 +1,4 @@
-#ifndef   __SCENE_MANAGER_HH__
-# define  __SCENE_MANAGER_HH__
+#pragma once
 
 #include <string>
 #include <map>
@@ -41,5 +40,3 @@ public:
 	bool        userUpdate(double time) const;
 	void        update(double time);
 };
-
-#endif    //__SCENE_MANAGER_HH__

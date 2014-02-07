@@ -1,6 +1,4 @@
-
-#ifndef TIMER_HH_
-#define TIMER_HH_
+#pragma once
 
 #include <Utils/Dependency.hpp>
 
@@ -17,5 +15,3 @@ public:
 	void 		update();
 	double 		getElapsed() const;
 };
-
-#endif
