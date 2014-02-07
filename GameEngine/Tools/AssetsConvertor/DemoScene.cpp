@@ -87,9 +87,9 @@ bool 			DemoScene::userStart()
 		convertor.serializeData("Museum");
 		convertor.clear();
 
-		convertor.load("./Assets/city/city.obj");
-		convertor.serializeData("City");
-		convertor.clear();
+		//convertor.load("./Assets/city/city.obj");
+		//convertor.serializeData("City");
+		//convertor.clear();
 
 	return (true);
 }

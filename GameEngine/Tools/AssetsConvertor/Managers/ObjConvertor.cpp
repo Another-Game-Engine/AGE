@@ -10,6 +10,7 @@
 #include <MediaFiles/CollisionSphereFile.hpp>
 #include <BulletCollision/CollisionShapes/btShapeHull.h>
 #include <tuple>
+#include <glm/gtx/matrix_cross_product.hpp>
 
 ObjConvertor::ObjConvertor(AssetsConvertorManager *manager)
 : AConvertor(manager, std::set<std::string>({ "obj" }))
@@ -114,15 +115,15 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		for (unsigned int j = 0; j < geos.size(); ++j)
 		{
 			auto &geo = geos[j];
-			for (unsigned int i = 2; i < geo.vertices.size(); i += 3)
+			for (unsigned int i = 0; i < geo.vertices.size(); i += 3)
 			{
-				trimesh->addTriangle(btVector3(geo.vertices[i - 2].x, geo.vertices[i - 2].y, geo.vertices[i - 2].z)
-					, btVector3(geo.vertices[i - 1].x, geo.vertices[i - 1].y, geo.vertices[i - 1].z)
-					, btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z));
+				trimesh->addTriangle(btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z)
+					, btVector3(geo.vertices[i + 1].x, geo.vertices[i + 1].y, geo.vertices[i + 1].z)
+					, btVector3(geo.vertices[i + 2].x, geo.vertices[i + 2].y, geo.vertices[i + 2].z), true);
 			}
 		}
 		std::shared_ptr<btBvhTriangleMeshShape> bvh{ new btBvhTriangleMeshShape(trimesh.get(), true) };
-		bvh->buildOptimizedBvh();
+		bvh->buildOptimizedBvh();		
 		std::shared_ptr<CollisionShapeStaticFile> staticShape{ new CollisionShapeStaticFile() };
 		staticShape->shape = bvh;
 		staticShape->trimesh = trimesh;
