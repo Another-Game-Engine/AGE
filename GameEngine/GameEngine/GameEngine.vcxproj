@@ -249,9 +249,6 @@
     <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\src\LinearMath\LinearMath.vcxproj">
       <Project>{4173f5ca-9e74-4719-88c3-23bd2c7e3285}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Vendors\TinyObjLoader\TinyObjLoader.vcxproj">
-      <Project>{99fc20c2-9ad1-4049-bb11-b369c42fd6a8}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
