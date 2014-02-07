@@ -4,7 +4,7 @@
 #include <Utils/MatrixConversion.hpp>
 #include "System.h"
 #include <Components/MeshRenderer.hh>
-#include <Components/CameraComponent.hh>
+#include <Components/CameraComponent.hpp>
 #include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>

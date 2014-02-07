@@ -1,32 +1,18 @@
-#ifndef		__TRACKBALL_COMPONENT_HH_
-#define		__TRACKBALL_COMPONENT_HH_
+#pragma once
 
-#include "Component.hh"
+#include <Components/Component.hh>
 #include <glm/glm.hpp>
 #include <Utils/GlmSerialization.hpp>
+#include <Core/AScene.hh>
 
 namespace Component
 {
 	struct TrackBall : public Component::ComponentBase<TrackBall>
 	{
-		TrackBall() :
-			Component::ComponentBase<Component::TrackBall>(),
-			dist(0.0f),
-			rotateSpeed(0.0f),
-			zoomSpeed(0.0f),
-			angles(0, 0)
-		{}
-		virtual ~TrackBall(void)
-		{}
-		void init(Entity _toLook, float _dist, float rotatingSpeed, float zoomingSpeed)
-		{
-			toLook = _toLook;
-			dist = _dist;
-			rotateSpeed = rotatingSpeed;
-			zoomSpeed = zoomingSpeed;
-		}
-		virtual void reset()
-		{}
+		TrackBall();
+		virtual ~TrackBall(void);
+		void init(Entity _toLook, float _dist, float rotatingSpeed, float zoomingSpeed);
+		virtual void reset();
 
 		//////
 		////
@@ -72,5 +58,3 @@ namespace Component
 	};
 
 }
-
-#endif //!__TRACKBALL_COMPONENT_HH_

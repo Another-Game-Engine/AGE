@@ -3,8 +3,8 @@
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
 
-#include <Components/RotationForce.hh>
-#include <Components/CameraComponent.hh>
+#include <Components/RotationForce.hpp>
+#include <Components/CameraComponent.hpp>
 #include <Components/RigidBody.hpp>
 #include <Components/FPController.hpp>
 #include <Components/FirstPersonView.hpp>

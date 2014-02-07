@@ -1,6 +1,6 @@
 #include "MeshRenderer.hh"
-
 #include "Core/Engine.hh"
+#include <Core/AScene.hh>
 
 namespace Component
 {
