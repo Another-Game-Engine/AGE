@@ -4,6 +4,7 @@
 #include "Components/Component.hh"
 #include "Entity.hh"
 #include <limits>
+#include <Core/AScene.hh>
 
 EntityData::EntityData(AScene *scene) :
     PubSub(scene->getInstance<PubSub::Manager>()),

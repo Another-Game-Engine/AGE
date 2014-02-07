@@ -35,12 +35,15 @@
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
+    <ClCompile Include="Engine\Components\AudioEmitter.cpp" />
+    <ClCompile Include="Engine\Components\AudioListener.cpp" />
+    <ClCompile Include="Engine\Components\ComponentRegistrar.cpp" />
+    <ClCompile Include="Engine\Components\TrackBallComponent.cpp" />
+    <ClCompile Include="Engine\Components\TrackingCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Components\CameraComponent.hh" />
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
-    <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Settings.h" />
@@ -106,6 +109,8 @@
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\Audio.hh" />
     <ClInclude Include="Engine\Components\AudioEmitter.hpp" />
+    <ClInclude Include="Engine\Components\RotationForce.hpp" />
+    <ClInclude Include="Engine\Components\CameraComponent.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

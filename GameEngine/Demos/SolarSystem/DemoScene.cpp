@@ -4,8 +4,8 @@
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
 
-#include "Components/RotationForce.hh"
-#include <Components/CameraComponent.hh>
+#include "Components/RotationForce.hpp"
+#include <Components/CameraComponent.hpp>
 #include <Components/TrackBallComponent.hpp>
 #include <Components/AudioListener.hpp>
 #include <Components/AudioEmitter.hpp>

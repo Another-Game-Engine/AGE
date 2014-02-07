@@ -1,5 +1,4 @@
-#ifndef    __CAMERA_COMPONENT_HPP__
-# define   __CAMERA_COMPONENT_HPP__
+#pragma once
 
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -58,5 +57,3 @@ namespace Component
 		CameraComponent	&operator=(CameraComponent const &);
 	};
 }
-
-#endif     //__CAMERA_COMPONENT_HPP__

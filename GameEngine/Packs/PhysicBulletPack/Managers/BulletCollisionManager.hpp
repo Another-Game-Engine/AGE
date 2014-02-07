@@ -5,6 +5,8 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <Utils/Dependency.hpp>
 #include <Utils/BtConversion.hpp>
+#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 
 class BulletCollisionManager : public Dependency
 {
