@@ -157,6 +157,7 @@
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
+    <ClInclude Include="Engine\Core\Tags.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\MediaFiles\AMediaFile.hpp" />
