@@ -109,12 +109,11 @@ public:
 	//
 	//
 	//
-	bool hasComponent(unsigned int componentId) const;
 
 	template <typename T>
 	bool hasComponent() const
 	{
-		return _code.isSet<T>();
+		return _code.isSet(T::getTypeId() + MAX_TAG_NUMBER);
 	}
 
 	template <typename T, typename... Args>
@@ -124,7 +123,7 @@ public:
 		unsigned int id = T::getTypeId();
 
 		// if entity already have component, return it
-		if (hasComponent(id))
+		if (_code.isSet(id + MAX_TAG_NUMBER))
 		{
 			return  std::static_pointer_cast<T>(_components[id]);
 		}
@@ -142,7 +141,7 @@ public:
 		}
 		//init component
 		std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);
-		_code.add(id);
+		_code.add(id + MAX_TAG_NUMBER);
 		broadCast(std::string("componentAdded" + std::to_string(id)), _handle);
 		return std::static_pointer_cast<T>(_components[id]);
 	}
@@ -151,7 +150,7 @@ public:
 	std::shared_ptr<T> getComponent() const
 	{
 		unsigned int id = T::getTypeId();
-		if (!hasComponent(id))
+		if (!hasComponent<T>())
 			return nullptr;
 		return std::static_pointer_cast<T>(_components[id]);
 	}
@@ -160,9 +159,9 @@ public:
 	void removeComponent()
 	{
 		unsigned int id = T::getTypeId();
-		if (!hasComponent(id))
+		if (!hasComponent<T>())
 			return;
-		_code.remove(id);
+		_code.remove(id + MAX_TAG_NUMBER);
 		_components[id].get()->reset();
 		broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
 		// component remove -> signal to system
@@ -218,7 +217,7 @@ public:
 			if (_components.size() <= typeId)
 				_components.resize(typeId + 1);
 			_components[typeId] = std::shared_ptr<Component::Base>(cpt);
-			_code.add(typeId);
+			_code.add(typeId + MAX_TAG_NUMBER);
 			broadCast(std::string("componentAdded" + std::to_string(typeId)), _handle);
 		}
 	}
