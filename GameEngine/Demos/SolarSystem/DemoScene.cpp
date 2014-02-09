@@ -220,8 +220,6 @@ bool 			DemoScene::userStart()
 		auto a = e->isTagged(0);
 		auto c = e->isTagged(1);
 		auto d = e->isTagged(2);
-		auto u = e->isTagged(1 | 2);
-		auto o = e->isTagged(0 | 2);
 	}
 
 	//
