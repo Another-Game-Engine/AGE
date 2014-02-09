@@ -128,7 +128,7 @@ private:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::FPController>();
+		_filter.requireComponent<Component::FPController>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };

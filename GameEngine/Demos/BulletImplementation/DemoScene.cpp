@@ -31,6 +31,8 @@
 
 #include <SDL\SDL.h>
 
+#define BALL_TAG (0)
+
 DemoScene::DemoScene(Engine &engine) : AScene(engine)
 {
 }
@@ -290,7 +292,7 @@ bool 			DemoScene::userUpdate(double time)
 		{
 			for (auto e : test)
 			{
-				if (!e->hasComponent<Component::FPController>())
+				if (e->isTagged(BALL_TAG))
 					destroy(e);
 			}
 		}
@@ -306,6 +308,7 @@ bool 			DemoScene::userUpdate(double time)
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>().getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
+		e->addTag(BALL_TAG);
 		if (stack.size() > 300)
 		{
 			destroy(stack.front());

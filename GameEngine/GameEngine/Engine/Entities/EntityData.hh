@@ -63,7 +63,6 @@ private:
 	t_ComponentsList	_components;
 
 	Barcode             _code;
-	unsigned int        _tags;
 public:
 	EntityData(AScene *scene);
 	virtual ~EntityData();
@@ -94,10 +93,10 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	unsigned int            getTags() const;
-	void                    addTags(unsigned int tags);
-	void                    removeTags(unsigned int tags);
+	void                    addTag(unsigned int tags);
+	void                    removeTag(unsigned int tags);
 	bool                    isTagged(unsigned int tags) const;
+	bool                    isTagged(Barcode &code);
 
 	Barcode &getCode();
 	void reset();
@@ -142,7 +141,7 @@ public:
 		//init component
 		std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);
 		_code.add(id + MAX_TAG_NUMBER);
-		broadCast(std::string("componentAdded" + std::to_string(id)), _handle);
+		broadCast(std::string("componentAdded" + std::to_string(id + MAX_TAG_NUMBER)), _handle);
 		return std::static_pointer_cast<T>(_components[id]);
 	}
 
@@ -163,7 +162,7 @@ public:
 			return;
 		_code.remove(id + MAX_TAG_NUMBER);
 		_components[id].get()->reset();
-		broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
+		broadCast(std::string("componentRemoved" + std::to_string(id + MAX_TAG_NUMBER)), _handle);
 		// component remove -> signal to system
 	}
 
@@ -218,7 +217,7 @@ public:
 				_components.resize(typeId + 1);
 			_components[typeId] = std::shared_ptr<Component::Base>(cpt);
 			_code.add(typeId + MAX_TAG_NUMBER);
-			broadCast(std::string("componentAdded" + std::to_string(typeId)), _handle);
+			broadCast(std::string("componentAdded" + std::to_string(typeId + MAX_TAG_NUMBER)), _handle);
 		}
 	}
 

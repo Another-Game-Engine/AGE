@@ -55,7 +55,7 @@ protected:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::MeshRenderer>();
+		_filter.requireComponent<Component::MeshRenderer>();
 	}
 };
 

@@ -215,12 +215,13 @@ bool 			DemoScene::userStart()
 
 	{
 		auto e = createEntity();
-		e->addTags(Tag<0>() | Tag<2>());
-		auto a = e->isTagged(Tag<0>());
-		auto c = e->isTagged(Tag<1>());
-		auto d = e->isTagged(Tag<2>());
-		auto u = e->isTagged(Tag<1>() | Tag<2>());
-		auto o = e->isTagged(Tag<0>() | Tag<2>());
+		e->addTag(0);
+		e->addTag(2);
+		auto a = e->isTagged(0);
+		auto c = e->isTagged(1);
+		auto d = e->isTagged(2);
+		auto u = e->isTagged(1 | 2);
+		auto o = e->isTagged(0 | 2);
 	}
 
 	//

@@ -54,8 +54,8 @@ protected:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::CameraComponent>();
-		_filter.require<Component::TrackingCamera>();
+		_filter.requireComponent<Component::CameraComponent>();
+		_filter.requireComponent<Component::TrackingCamera>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };

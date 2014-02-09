@@ -37,7 +37,7 @@ private:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::Collision>();
+		_filter.requireComponent<Component::Collision>();
 	}
 };
 

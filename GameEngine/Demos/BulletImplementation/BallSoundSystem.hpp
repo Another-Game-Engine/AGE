@@ -53,9 +53,9 @@ protected:
 
 	virtual void initialize()
 	{
-		_balls.require<Component::AudioEmitter>();
-		_balls.require<Component::Collision>();
-		_heros.require<Component::FPController>();
-		_heros.require<Component::AudioEmitter>();
+		_balls.requireComponent<Component::AudioEmitter>();
+		_balls.requireComponent<Component::Collision>();
+		_heros.requireComponent<Component::FPController>();
+		_heros.requireComponent<Component::AudioEmitter>();
 	}
 };

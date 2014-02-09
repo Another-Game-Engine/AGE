@@ -39,8 +39,8 @@ protected:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::CameraComponent>();
-		_filter.require<Component::FirstPersonView>();
+		_filter.requireComponent<Component::CameraComponent>();
+		_filter.requireComponent<Component::FirstPersonView>();
 	}
 protected:
 	EntityFilter _filter;

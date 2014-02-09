@@ -39,7 +39,7 @@ private:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::RotationForce>();
+		_filter.requireComponent<Component::RotationForce>();
 	}
 };
 

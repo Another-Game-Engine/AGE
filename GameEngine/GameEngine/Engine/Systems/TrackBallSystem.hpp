@@ -63,8 +63,8 @@ protected:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::CameraComponent>();
-		_filter.require<Component::TrackBall>();
+		_filter.requireComponent<Component::CameraComponent>();
+		_filter.requireComponent<Component::TrackBall>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };
