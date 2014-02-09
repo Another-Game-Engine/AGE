@@ -29,6 +29,6 @@ void 		Timer::update()
 
 double 		Timer::getElapsed() const
 {
-	return glm::clamp(static_cast<double>(_curTime - _oldTime) / 1000.0, 0.0, 0.25);
+	return glm::clamp(static_cast<double>(_curTime - _oldTime) / 1000.0, 0.0, 0.1);
 }
 

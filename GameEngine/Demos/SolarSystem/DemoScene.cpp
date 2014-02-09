@@ -228,6 +228,7 @@ bool 			DemoScene::userStart()
 				sun->getComponent<Component::GraphNode>()->addSon(planets[i]);
 			else
 				planets[i - 1]->getComponent<Component::GraphNode>()->addSon(planets[i]);
+			planets[i]->getComponent<Component::RotationForce>()->force = glm::vec3(10.0f);
 		}
 	}
 
