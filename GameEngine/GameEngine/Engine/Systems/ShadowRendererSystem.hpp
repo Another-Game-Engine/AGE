@@ -18,12 +18,19 @@ ShadowRendererSystem::~ShadowRendererSystem()
 
 void ShadowRendererSystem::render(double time)
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
 	glDrawBuffer(GL_NONE);
 	for (auto indice : _filter.getCollection())
 	{
 		auto &mesh = indice->getComponent<Component::MeshRenderer>();
 		mesh->render();
 	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+GLuint ShadowRendererSystem::getShadowMap() const
+{
+	return (_texture);
 }
 
 void ShadowRendererSystem::updateBegin(double time)
