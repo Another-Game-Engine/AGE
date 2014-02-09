@@ -165,13 +165,7 @@ void                    EntityData::removeTags(unsigned int tags)
 }
 bool                    EntityData::isTagged(unsigned int tags) const
 {
-	auto t = _tags & tags;
 	return (_tags & tags) == tags;
-}
-
-bool EntityData::hasComponent(unsigned int componentId) const
-{
-		return _code.isSet(componentId);
 }
 
 void EntityData::reset()

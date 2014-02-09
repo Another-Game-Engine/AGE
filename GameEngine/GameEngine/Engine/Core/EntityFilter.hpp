@@ -17,7 +17,7 @@ public:
 	template <typename T>
 	void require()
 	{
-		_code.add<T>();
+		_code.add(T::getTypeId() + MAX_TAG_NUMBER);
 		globalSub(std::string("componentAdded" + std::to_string(T::getTypeId())), [&](Entity entity){
 			_componentAdded(entity, T::getTypeId());
 		});
@@ -35,11 +35,16 @@ public:
 	}
 
 	const Barcode &getCode() const;
+	unsigned int getTag() const;
+	void addTags(unsigned int tags);
+	void removeTags(unsigned int tags);
+	bool isTagged(unsigned int tags) const;
 	std::set<Entity, bool(*)(Entity, Entity)> &getCollection();
 
 protected:
 	std::set<Entity, bool(*)(Entity, Entity)> _collection;
 	Barcode _code;
+	unsigned int _tags;
 	AScene *_scene;
 
 	void _componentAdded(Entity &e, unsigned int typeId);
