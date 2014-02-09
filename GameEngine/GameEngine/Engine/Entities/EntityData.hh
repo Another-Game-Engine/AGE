@@ -13,6 +13,7 @@
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
+#include <Core/Tags.hh>
 
 class AScene;
 class EntityManager;
@@ -61,7 +62,8 @@ private:
 
 	t_ComponentsList	_components;
 
-	Barcode _code;
+	Barcode             _code;
+	unsigned int        _tags;
 public:
 	EntityData(AScene *scene);
 	virtual ~EntityData();
@@ -91,6 +93,11 @@ public:
 	void 					setFlags(size_t flags);
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
+
+	unsigned int            getTags() const;
+	void                    addTags(unsigned int tags);
+	void                    removeTags(unsigned int tags);
+	bool                    isTagged(unsigned int tags) const;
 
 	Barcode &getCode();
 	void reset();

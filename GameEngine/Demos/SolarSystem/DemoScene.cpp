@@ -209,6 +209,25 @@ bool 			DemoScene::userStart()
 	audioCpt->play("ambiant", true);
 	earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
 
+	// TAGS TESTS ////////////////////
+	//
+	//
+
+	{
+		auto e = createEntity();
+		e->addTags(Tag<0>() | Tag<2>());
+		auto a = e->isTagged(Tag<0>());
+		auto c = e->isTagged(Tag<1>());
+		auto d = e->isTagged(Tag<2>());
+		auto u = e->isTagged(Tag<1>() | Tag<2>());
+		auto o = e->isTagged(Tag<0>() | Tag<2>());
+	}
+
+	//
+	//
+	//////////////////////////////////
+
+
 	// Generating a lot of planet for performance test
 	//
 	//
