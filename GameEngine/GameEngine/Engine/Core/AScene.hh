@@ -1,12 +1,11 @@
-#ifndef ASCENE_HH_
-#define ASCENE_HH_
+#pragma once
 
 #include <Entities/EntityData.hh>
 //#include <Systems/System.h>
 #include <Utils/DependenciesInjector.hpp>
 #include <memory>
 #include <Components/ComponentRegistrar.hpp>
-#include <Core/EntityIdRegistrar.hpp>
+#include <Core/EntityIdRegistrar.hh>
 
 #include <list>
 #include <queue>
@@ -17,10 +16,10 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
+#include <Components/ComponentRegistrar.hpp>
 
 class Engine;
 class System;
-
 
 class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
 {
@@ -119,5 +118,3 @@ public:
 	}
 
 };
-
-#endif

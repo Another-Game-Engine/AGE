@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "System.h"
-#include <Components/RotationForce.hh>
+#include <Components/RotationForce.hpp>
 #include <Entities/EntityData.hh>
 
 class RotationForceSystem : public System

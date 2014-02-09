@@ -1,5 +1,4 @@
-#ifndef    __GRAPH_NODE_HPP__
-# define   __GRAPH_NODE_HPP__
+#pragma once
 
 #include "Component.hh"
 #include <Core/Engine.hh>
@@ -166,5 +165,3 @@ namespace Component
 		std::set<Entity> _childs;
 	};
 }
-
-#endif     //__GRAPH_NODE_HPP__

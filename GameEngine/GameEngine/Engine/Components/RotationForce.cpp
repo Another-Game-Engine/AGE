@@ -1,6 +1,6 @@
 #include <glm/gtc/matrix_transform.hpp>
-#include "RotationForce.hh"
-#include "Core/Engine.hh"
+#include <Components/RotationForce.hpp>
+#include <Core/Engine.hh>
 
 namespace Component
 {

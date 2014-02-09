@@ -23,7 +23,7 @@
 ////////////
 // COMPONENTS
 ////////////
-#include <Components/CameraComponent.hh>
+#include <Components/CameraComponent.hpp>
 #include <Components/GraphNode.hpp>
 #include <Components/FPController.hpp>
 #include <Components/FirstPersonView.hpp>

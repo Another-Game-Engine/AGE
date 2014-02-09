@@ -105,10 +105,16 @@
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
+    <ClCompile Include="Engine\Components\AudioEmitter.cpp" />
+    <ClCompile Include="Engine\Components\AudioListener.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
+    <ClCompile Include="Engine\Components\ComponentRegistrar.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
+    <ClCompile Include="Engine\Components\TrackBallComponent.cpp" />
+    <ClCompile Include="Engine\Components\TrackingCamera.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
+    <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\Entities\EntityData.cpp" />
@@ -140,18 +146,18 @@
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
     <ClInclude Include="Engine\Audio\Audio.hh" />
     <ClInclude Include="Engine\Components\AudioEmitter.hpp" />
-    <ClInclude Include="Engine\Components\CameraComponent.hh" />
+    <ClInclude Include="Engine\Components\CameraComponent.hpp" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
-    <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Components\AudioListener.hpp" />
+    <ClInclude Include="Engine\Components\RotationForce.hpp" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
-    <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
-    <ClInclude Include="Engine\Core\Settings.h" />
+    <ClInclude Include="Engine\Core\Tags.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\MediaFiles\AMediaFile.hpp" />
@@ -243,9 +249,6 @@
     </ProjectReference>
     <ProjectReference Include="..\Vendors\bullet-2.82-r2704\build\src\LinearMath\LinearMath.vcxproj">
       <Project>{4173f5ca-9e74-4719-88c3-23bd2c7e3285}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Vendors\TinyObjLoader\TinyObjLoader.vcxproj">
-      <Project>{99fc20c2-9ad1-4049-bb11-b369c42fd6a8}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

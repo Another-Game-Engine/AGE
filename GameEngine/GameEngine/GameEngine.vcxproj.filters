@@ -35,15 +35,18 @@
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
+    <ClCompile Include="Engine\Components\AudioEmitter.cpp" />
+    <ClCompile Include="Engine\Components\AudioListener.cpp" />
+    <ClCompile Include="Engine\Components\ComponentRegistrar.cpp" />
+    <ClCompile Include="Engine\Components\TrackBallComponent.cpp" />
+    <ClCompile Include="Engine\Components\TrackingCamera.cpp" />
+    <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Components\CameraComponent.hh" />
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
-    <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
-    <ClInclude Include="Engine\Core\Settings.h" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
@@ -84,7 +87,6 @@
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
     <ClInclude Include="Engine\Utils\Dependency.hpp" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
-    <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
     <ClInclude Include="Engine\MediaFiles\AMediaFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\MaterialFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\MediaFile.hpp" />
@@ -106,6 +108,10 @@
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\Audio.hh" />
     <ClInclude Include="Engine\Components\AudioEmitter.hpp" />
+    <ClInclude Include="Engine\Components\RotationForce.hpp" />
+    <ClInclude Include="Engine\Components\CameraComponent.hpp" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
+    <ClInclude Include="Engine\Core\Tags.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

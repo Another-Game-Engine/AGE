@@ -1,5 +1,4 @@
-#ifndef			RENDERER_HH_
-#define			RENDERER_HH_
+#pragma once
 
 #include <map>
 
@@ -60,5 +59,3 @@ private:
 	Renderer(const Renderer &o);
 	Renderer &operator=(const Renderer &o);
 };
-
-#endif

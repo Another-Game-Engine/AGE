@@ -4,8 +4,8 @@
 #include "Core/Renderer.hh"
 #include "DemoScene.hh"
 
-#include "Components/RotationForce.hh"
-#include <Components/CameraComponent.hh>
+#include "Components/RotationForce.hpp"
+#include <Components/CameraComponent.hpp>
 #include <Components/TrackBallComponent.hpp>
 #include <Components/AudioListener.hpp>
 #include <Components/AudioEmitter.hpp>
@@ -228,6 +228,7 @@ bool 			DemoScene::userStart()
 				sun->getComponent<Component::GraphNode>()->addSon(planets[i]);
 			else
 				planets[i - 1]->getComponent<Component::GraphNode>()->addSon(planets[i]);
+			planets[i]->getComponent<Component::RotationForce>()->force = glm::vec3(10.0f);
 		}
 	}
 
