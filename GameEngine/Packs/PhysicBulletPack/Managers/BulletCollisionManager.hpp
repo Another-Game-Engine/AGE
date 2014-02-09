@@ -65,6 +65,8 @@ public:
 	{
 		std::set<Entity> r;
 		btCollisionWorld::AllHitsRayResultCallback raycastCallback(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to));
+		raycastCallback.m_collisionFilterMask = btBroadphaseProxy::AllFilter;
+		raycastCallback.m_collisionFilterGroup = btBroadphaseProxy::AllFilter;
 		_world->rayTest(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to), raycastCallback);
 		if (raycastCallback.hasHit())
 		{
