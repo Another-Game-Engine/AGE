@@ -123,7 +123,7 @@ protected:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::CameraComponent>();
+		_filter.requireComponent<Component::CameraComponent>();
 	}
 };
 

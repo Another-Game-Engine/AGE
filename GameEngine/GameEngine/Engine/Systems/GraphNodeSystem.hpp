@@ -54,7 +54,7 @@ private:
 	virtual void initialize()
 	{
 		// DOES NOT REQUIRE COMPONENTS BECAUSE GraphNode set as root  will directly communicate with it
-		//require<Component::GraphNode>();
+		//requireComponent<Component::GraphNode>();
 
 		globalSub(PubSubKey("graphNodeSetAsRoot"), [&](Entity entity){
 			_roots.insert(entity);

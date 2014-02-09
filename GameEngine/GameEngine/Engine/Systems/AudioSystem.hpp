@@ -61,7 +61,7 @@ protected:
 
 	virtual void initialize()
 	{
-		_listeners.require<Component::AudioListener>();
-		_emitters.require<Component::AudioEmitter>();
+		_listeners.requireComponent<Component::AudioListener>();
+		_emitters.requireComponent<Component::AudioEmitter>();
 	}
 };

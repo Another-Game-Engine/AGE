@@ -45,7 +45,7 @@ private:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::Velocity>();
+		_filter.requireComponent<Component::Velocity>();
 	}
 };
 

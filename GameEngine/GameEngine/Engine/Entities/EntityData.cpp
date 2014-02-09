@@ -16,7 +16,6 @@ EntityData::EntityData(AScene *scene) :
 	_globalTranslation(0),
 	_globalRotation(0),
 	_globalScale(0)
-	, _tags(0)
 {
 	removeFlags(ACTIVE);
 }
@@ -143,29 +142,32 @@ void 					EntityData::removeFlags(size_t flags)
 	_flags ^= flags;
 }
 
-Barcode                       &EntityData::getCode()
+Barcode                 &EntityData::getCode()
 {
 	return _code;
 }
 
-unsigned int            EntityData::getTags() const
+void                    EntityData::addTag(unsigned int tag)
 {
-	return _tags;
+	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	_code.add(tag);
 }
 
-void                    EntityData::addTags(unsigned int tags)
+void                    EntityData::removeTag(unsigned int tag)
 {
-	_tags |= tags;
+	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	_code.remove(tag);
+}
+bool                    EntityData::isTagged(unsigned int tag) const
+{
+	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	return _code.isSet(tag);
 }
 
-void                    EntityData::removeTags(unsigned int tags)
+bool                    EntityData::isTagged(Barcode &code)
 {
-	tags &= _tags;
-	_tags ^= tags;
-}
-bool                    EntityData::isTagged(unsigned int tags) const
-{
-	return (_tags & tags) == tags;
+	// TODO get the size of the code and assert if > 31
+	return _code.match(code);
 }
 
 void EntityData::reset()
@@ -182,9 +184,10 @@ void EntityData::reset()
 	_code.reset();
 	for (unsigned int i = 0; i < _components.size(); ++i)
 	{
+		unsigned int id = i + MAX_TAG_NUMBER;
 		if (_components[i].get())
 		{
-			broadCast(std::string("componentRemoved" + std::to_string(i)), _handle);
+			broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
 			_components[i]->reset();
 		}
 		_components[i].reset();
