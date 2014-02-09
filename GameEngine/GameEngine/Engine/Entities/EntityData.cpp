@@ -16,6 +16,7 @@ EntityData::EntityData(AScene *scene) :
 	_globalTranslation(0),
 	_globalRotation(0),
 	_globalScale(0)
+	, _tags(0)
 {
 	removeFlags(ACTIVE);
 }
@@ -145,6 +146,27 @@ void 					EntityData::removeFlags(size_t flags)
 Barcode                       &EntityData::getCode()
 {
 	return _code;
+}
+
+unsigned int            EntityData::getTags() const
+{
+	return _tags;
+}
+
+void                    EntityData::addTags(unsigned int tags)
+{
+	_tags |= tags;
+}
+
+void                    EntityData::removeTags(unsigned int tags)
+{
+	tags &= _tags;
+	_tags ^= tags;
+}
+bool                    EntityData::isTagged(unsigned int tags) const
+{
+	auto t = _tags & tags;
+	return (_tags & tags) == tags;
 }
 
 bool EntityData::hasComponent(unsigned int componentId) const
