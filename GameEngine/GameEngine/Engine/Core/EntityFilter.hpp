@@ -1,5 +1,4 @@
-#ifndef   __ENTITY_FILTER_HPP__
-# define  __ENTITY_FILTER_HPP__
+#pragma once
 
 #include    <set>
 #include	<Utils/Barcode.h>
@@ -12,17 +11,8 @@ bool defaultEntityComparaison(Entity e1, Entity e2);
 class EntityFilter : public PubSub
 {
 public:
-	EntityFilter(AScene *scene, bool(*comparaisonFn)(Entity, Entity) = defaultEntityComparaison)
-		: PubSub(scene->getInstance<PubSub::Manager>())
-		, _collection(comparaisonFn)
-		, _scene(scene)
-	{
-		assert(scene != nullptr && "System Scene is not valid.");
-	}
-
-	virtual ~EntityFilter()
-	{
-	}
+	EntityFilter(AScene *scene, bool(*comparaisonFn)(Entity, Entity) = defaultEntityComparaison);
+	virtual ~EntityFilter();
 
 	template <typename T>
 	void require()
@@ -44,32 +34,14 @@ public:
 		unsub(std::string("componentRemoved" + std::to_string(T::getTypeId())));
 	}
 
-	const Barcode &getCode() const
-	{
-		return _code;
-	}
-
-	inline std::set<Entity, bool(*)(Entity, Entity)> &getCollection()
-	{
-		return _collection;
-	}
+	const Barcode &getCode() const;
+	std::set<Entity, bool(*)(Entity, Entity)> &getCollection();
 
 protected:
 	std::set<Entity, bool(*)(Entity, Entity)> _collection;
 	Barcode _code;
 	AScene *_scene;
 
-	void _componentAdded(Entity &e, unsigned int typeId)
-	{
-		if (_code.match(e->getCode()))
-			_collection.insert(e);
-	}
-
-	void _componentRemoved(Entity &e, unsigned int typeId)
-	{
-		if (!_code.match(e->getCode()))
-			_collection.erase(e);
-	}
+	void _componentAdded(Entity &e, unsigned int typeId);
+	void _componentRemoved(Entity &e, unsigned int typeId);
 };
-
-#endif    //__ENTITY_FILTER_HPP__

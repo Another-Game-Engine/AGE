@@ -1,10 +1,9 @@
-#ifndef		MESHRENDERER_HH_
-#define		MESHRENDERER_HH_
+#pragma once
 
 #include <map>
 #include <set>
 
-#include "Components/Component.hh"
+#include <Components/Component.hh>
 #include <MediaFiles/TextureFile.hpp>
 #include <MediaFiles/ObjFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
@@ -12,6 +11,8 @@
 #include "OpenGL/Shader.hh"
 #include <core/Renderer.hh>
 #include <cereal/types/string.hpp>
+#include <Entities/EntityData.hh>
+#include <Entities/Entity.hh>
 
 namespace Resources
 {
@@ -75,5 +76,3 @@ namespace Component
 	};
 
 }
-
-#endif

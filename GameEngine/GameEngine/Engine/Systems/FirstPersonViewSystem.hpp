@@ -3,7 +3,7 @@
 
 #include <Utils/MatrixConversion.hpp>
 #include "System.h"
-#include <Components/CameraComponent.hh>
+#include <Components/CameraComponent.hpp>
 #include <Components/FirstPersonView.hpp>
 #include <Entities/EntityData.hh>
 #include <Core/Engine.hh>

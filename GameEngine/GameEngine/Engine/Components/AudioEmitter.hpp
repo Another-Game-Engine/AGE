@@ -13,23 +13,9 @@ namespace Component
 	{
 		struct AudioInstance
 		{
-			AudioInstance()
-				: audio(nullptr)
-				, channel(nullptr)
-				, channelGroupType(CHANNEL_GROUP_CUSTOM_0)
-				, name("")
-				, reverb(nullptr)
-			{}
-
-			~AudioInstance()
-			{
-				reverb->release();
-			}
-
-			void setReverb(FMOD_REVERB_PROPERTIES prop)
-			{
-			}
-
+			AudioInstance();
+			~AudioInstance();
+			void setReverb(FMOD_REVERB_PROPERTIES prop); // @TODO -> to implement
 			std::shared_ptr<Audio> audio;
 			FMOD::Channel *channel;
 			ChannelGroupType channelGroupType;
@@ -37,106 +23,17 @@ namespace Component
 			FMOD::Reverb *reverb;
 		};
 
-		AudioEmitter() :
-			Component::ComponentBase<Component::AudioEmitter>()
-		{}
-		virtual ~AudioEmitter(void)
-		{}
-
-		void init()
-		{
-			clearAllAudios();
-		}
-
-		virtual void reset()
-		{
-			clearAllAudios();
-		}
-
-		void clearAllAudios()
-		{
-			for (auto &&e : audios)
-				e.second.channel->stop();
-			audios.clear();
-		}
-
-		void clearAudio(const std::string &name)
-		{
-			if (audios.find(name) == std::end(audios))
-				return;
-			audios[name].channel->stop();
-			audios.erase(name);
-		}
-
-		AudioInstance *getAudio(const std::string &name)
-		{
-			if (audios.find(name) == std::end(audios))
-				return nullptr;
-			return &audios[name];
-		}
-
-		bool hasAudio(const std::string &name)
-		{
-			if (audios.find(name) == std::end(audios))
-				return false;
-			return true;
-		}
-
-		void setAudio(std::shared_ptr<Audio> audio, const std::string &name, ChannelGroupType groupType)
-		{
-			auto ai = hasAudio(name) ? audios[name] : AudioInstance();
-			ai.channelGroupType = groupType;
-			ai.name = name;
-			ai.audio = audio;
-			if (ai.channel)
-				ai.channel->stop();
-			ai.channel = nullptr;
-			if (!hasAudio(name))
-				audios.insert(std::make_pair(name, ai));
-		}
-
-		void updatePosition()
-		{
-			for (auto &&e : audios)
-			{
-				if (!e.second.channel)
-					continue;
-				bool isPlaying;
-				e.second.channel->isPlaying(&isPlaying);
-				if (!isPlaying)
-				{
-					e.second.channel = nullptr;
-					continue;
-				}
-				fmodError(e.second.channel->set3DMinMaxDistance(10, 100));
-				glm::vec3 pos = posFromMat4(_entity->getGlobalTransform());
-				FMOD_VECTOR  sourcePos = { pos.x, pos.y, pos.z };
-				fmodError(e.second.channel->set3DAttributes(&sourcePos, 0));
-
-			}
-		}
-
-		void play(const std::string &name, bool force)
-		{
-			if (!hasAudio(name))
-				return;
-			auto a = getAudio(name);
-			if (a->channel == nullptr || force == true)
-			{
-				if (a->channel)
-					a->channel->stop();
-				a->channel = a->audio->play(a->channelGroupType, true);
-			}
-			else if (a->channel != nullptr)
-			{
-				bool playing = true;
-				a->channel->isPlaying(&playing);
-				if (!playing)
-				{
-					a->channel = a->audio->play(a->channelGroupType, true);
-				}
-			}
-		}
+		AudioEmitter();
+		virtual ~AudioEmitter(void);
+		void init();
+		virtual void reset();
+		void clearAllAudios();
+		void clearAudio(const std::string &name);
+		AudioInstance *getAudio(const std::string &name);
+		bool hasAudio(const std::string &name);
+		void setAudio(std::shared_ptr<Audio> audio, const std::string &name, ChannelGroupType groupType);
+		void updatePosition();
+		void play(const std::string &name, bool force);
 
 		//////
 		////
@@ -145,7 +42,7 @@ namespace Component
 		template <typename Archive>
 		Base *unserialize(Archive &ar, Entity e)
 		{
-			auto res = new AudioListener();
+			auto res = new AudioEmitter();
 			res->setEntity(e);
 			ar(*res);
 			return res;

@@ -1,5 +1,4 @@
-#ifndef		__TRACKING_COMPONENT_HH_
-#define		__TRACKING_COMPONENT_HH_
+#pragma once
 
 #include "Component.hh"
 #include <glm/glm.hpp>
@@ -9,19 +8,10 @@ namespace Component
 {
 	struct TrackingCamera : public Component::ComponentBase<TrackingCamera>
 	{
-		TrackingCamera() :
-			Component::ComponentBase<Component::TrackingCamera>(),
-			dist(0.0f)
-		{}
-		virtual ~TrackingCamera(void)
-		{}
-		void init(Entity _toLook, glm::vec3 _dist)
-		{
-			toLook = _toLook;
-			dist = _dist;
-		}
-		virtual void reset()
-		{}
+		TrackingCamera();
+		virtual ~TrackingCamera(void);
+		void init(Entity _toLook, glm::vec3 _dist);
+		virtual void reset();
 
 		//////
 		////
@@ -52,7 +42,4 @@ namespace Component
 		TrackingCamera(TrackingCamera const &);
 		TrackingCamera &operator=(TrackingCamera const &);
 	};
-
 }
-
-#endif //!__TRACKING_COMPONENT_HH_

@@ -14,8 +14,8 @@
 #include <MediaFiles/TextureFile.hpp>
 #include <MediaFiles/CubeMapFile.hpp>
 
-#include <Components/RotationForce.hh>
-#include <Components/CameraComponent.hh>
+#include <Components/RotationForce.hpp>
+#include <Components/CameraComponent.hpp>
 
 #include <OpenGL/ComputeShader.hh>
 #include <OpenGL/Attribute.hh>
@@ -82,6 +82,14 @@ bool 			DemoScene::userStart()
 		convertor.load("./Assets/space.skybox");
 		convertor.serializeData("Space");
 		convertor.clear();
+
+		//convertor.load("./Assets/museum.obj");
+		//convertor.serializeData("Museum");
+		//convertor.clear();
+
+		//convertor.load("./Assets/city/city.obj");
+		//convertor.serializeData("City");
+		//convertor.clear();
 
 	return (true);
 }

@@ -9,18 +9,10 @@ namespace Component
 {
 	struct AudioListener : public Component::ComponentBase<AudioListener>
 	{
-		AudioListener() :
-			Component::ComponentBase<Component::AudioListener>()
-		{}
-		virtual ~AudioListener(void)
-		{}
-
-		void init()
-		{
-		}
-
-		virtual void reset()
-		{}
+		AudioListener();
+		virtual ~AudioListener(void);
+		void init();
+		virtual void reset();
 
 		//////
 		////
