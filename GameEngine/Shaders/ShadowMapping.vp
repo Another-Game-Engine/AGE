@@ -1,0 +1,13 @@
+#version 330
+
+layout (location = 0) in vec4 vPosition;
+layout (location = 1) in vec4 vColor;
+layout (location = 2) in vec4 vNormal;
+layout (location = 3) in vec2 vTexCoord;
+
+uniform mat4 lightMVP;
+
+void main()
+{
+	gl_Position = lightMVP * vec4(vPosition, 1.0);
+}
