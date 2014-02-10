@@ -16,7 +16,6 @@
 #include <OpenGL/include/SDL/SDL_opengl.h>
 
 #include <Systems/RotationForceSystem.hpp>
-#include <Systems/GraphNodeSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
 #include <Systems/BulletDynamicSystem.hpp>
@@ -50,7 +49,6 @@ Entity  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 
 	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
-	e->addComponent<Component::GraphNode>();
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -65,7 +63,6 @@ Entity  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::BOX);
 	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-	e->addComponent<Component::GraphNode>();
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -79,7 +76,6 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
 	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 	mesh->setShader("MaterialBasic");
-	e->addComponent<Component::GraphNode>();
 	return e;
 }
 
@@ -91,7 +87,6 @@ bool 			DemoScene::userStart()
 	//
 	//
 	addSystem<MeshRendererSystem>(0);
-	addSystem<GraphNodeSystem>(0); // UPDATE ENTITIES TRANSFORMATION
 	addSystem<BulletDynamicSystem>(10); // UPDATE PHYSIC WORLD
 	addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
 	addSystem<FPControllerSystem>(50); // UPDATE FIRST PERSON CONTROLLER
@@ -223,7 +218,6 @@ bool 			DemoScene::userStart()
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
-		e->addComponent<Component::GraphNode>();
 	}
 
 	Entity character;
@@ -233,7 +227,6 @@ bool 			DemoScene::userStart()
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,100,0));
 		auto fpc = e->addComponent<Component::FPController>();
-		e->addComponent<Component::GraphNode>();
 		character = e;
 		cameraComponent = character->addComponent<Component::CameraComponent>();
 		character->addComponent<Component::FirstPersonView>();

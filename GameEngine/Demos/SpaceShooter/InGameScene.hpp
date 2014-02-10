@@ -8,7 +8,6 @@
 // SYSTEMS
 /////////////
 #include <Systems/MeshRenderSystem.h>
-#include <Systems/GraphNodeSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/BulletCollisionSystem.hpp>
@@ -24,7 +23,6 @@
 // COMPONENTS
 ////////////
 #include <Components/CameraComponent.hpp>
-#include <Components/GraphNode.hpp>
 #include <Components/FPController.hpp>
 #include <Components/FirstPersonView.hpp>
 #include <Components/VelocityComponent.hpp>
@@ -45,12 +43,10 @@ public:
 	virtual bool 			userStart()
 	{
 		addSystem<MeshRendererSystem>(0);
-		addSystem<GraphNodeSystem>(1); // UPDATE GRAPH NODE POSITION
 		addSystem<BulletDynamicSystem>(10); // CHECK FOR COLLISIONS
 		addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ELEMENTS
 		addSystem<VelocitySystem>(50); // UPDATE VELOCITY
 		addSystem<SpaceshipControllerSystem>(60); // UPDATE FIRST PERSON CONTROLLER
-		addSystem<GraphNodeSystem>(70); // UPDATE GRAPH NODE POSITION
 		addSystem<TrackingCameraSystem>(150); // UPDATE CAMERA TRACKING BEHAVIOR
 		addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
 		addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
@@ -130,7 +126,6 @@ public:
 		{
 			Entity e = createEntity();
 			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, 0, 0));
-			e->addComponent<Component::GraphNode>();
 			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(2));
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
@@ -138,6 +133,7 @@ public:
 			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 			mesh->setShader("MaterialBasic");
 			e->addComponent<Component::SpaceshipController>();
+			e->computeTransformAndUpdateGraphnode();
 			heros = e;
 		}
 
@@ -145,7 +141,6 @@ public:
 		{
 			Entity e = createEntity();
 			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, -10, 0));
-			e->addComponent<Component::GraphNode>();
 			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 100, 100));
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
@@ -153,6 +148,7 @@ public:
 			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
+			e->computeTransformAndUpdateGraphnode();
 			floor = e;
 		}
 
@@ -160,7 +156,6 @@ public:
 		{
 			Entity e = createEntity();
 			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(50, -10, 50));
-			e->addComponent<Component::GraphNode>();
 			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(50,50,50));
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
@@ -168,14 +163,14 @@ public:
 			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
 			test = e;
+			e->computeTransformAndUpdateGraphnode();
 		}
 
 		auto camera = createEntity();
-		auto graph = camera->addComponent<Component::GraphNode>();
 		auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 		auto trackBall = camera->addComponent<Component::TrackingCamera>(heros, glm::vec3(0, 0, -5.0f));
 		cameraComponent->attachSkybox("skybox__space", "cubemapShader");
-
+		camera->computeTransformAndUpdateGraphnode();
 		return true;
 	}
 
@@ -183,7 +178,7 @@ public:
 	{
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-		e->addComponent<Component::GraphNode>();
+		e->computeTransformAndUpdateGraphnode();
 		return e;
 	}
 
@@ -206,11 +201,13 @@ public:
 		if (_engine.getInstance<Input>().getInput(SDLK_u))
 		{
 			test->setLocalTransform() = glm::scale(test->getLocalTransform(), glm::vec3(0.9));
+			test->computeTransformAndUpdateGraphnode();
 		}
 
 		if (_engine.getInstance<Input>().getInput(SDLK_i))
 		{
 			test->setLocalTransform() = glm::scale(test->getLocalTransform(), glm::vec3(1.1));
+			test->computeTransformAndUpdateGraphnode();
 		}
 
 		if (_engine.getInstance<Input>().getInput(SDLK_r) && timer <= 0.0f)
@@ -226,6 +223,7 @@ public:
 				auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");
 				balls.push_back(e);
+				e->computeTransformAndUpdateGraphnode();
 			}
 			std::cout << balls.size() << std::endl;
 		}
