@@ -106,6 +106,7 @@
   <ItemGroup>
     <ClInclude Include="BallSoundSystem.hpp" />
     <ClInclude Include="DemoScene.hh" />
+    <ClInclude Include="MyTags.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
