@@ -12,7 +12,6 @@
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
-#include <Systems/GraphNodeSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
 #include <Systems/AudioSystem.hpp>
@@ -37,8 +36,6 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 {
 	auto p = createEntity();
 	auto e = createEntity();
-	p->addComponent<Component::GraphNode>();
-	e->addComponent<Component::GraphNode>();
 
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
@@ -57,7 +54,7 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	r->setShader(shader);
 
 	e->addComponent<Component::RotationForce>(glm::vec3(0, orbitSpeed, 0));
-	p->getComponent<Component::GraphNode>()->addSon(e);
+	p->addChild(e);
 	p->addComponent<Component::RotationForce>(glm::vec3(0, rotSpeed, 0));
 	return (p);
 }
@@ -65,7 +62,6 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 bool 			DemoScene::userStart()
 {	
 	rct<Component::CameraComponent>()
-		.rct<Component::GraphNode>()
 		.rct<Component::MeshRenderer>()
 		.rct<Component::RotationForce>()
 		.rct<Component::TrackBall>()
@@ -78,7 +74,6 @@ bool 			DemoScene::userStart()
 
 	addSystem<RotationForceSystem>(0);
 	addSystem<MeshRendererSystem>(0);
-	addSystem<GraphNodeSystem>(100);
 	addSystem<TrackBallSystem>(150);
 	addSystem<AudioSystem>(170);
 	addSystem<CameraSystem>(200);
@@ -207,7 +202,7 @@ bool 			DemoScene::userStart()
 	audioCpt->clearAudio("ambiant");
 	audioCpt->setAudio(music, "ambiant", CHANNEL_GROUP_MUSIC);
 	audioCpt->play("ambiant", true);
-	earth->getComponent<Component::GraphNode>()->getSonsBegin()->get()->getComponent<Component::GraphNode>()->addSon(moon);
+	earth->getChildsBegin()->get()->addChild(moon);
 
 	// TAGS TESTS ////////////////////
 	//
@@ -243,9 +238,9 @@ bool 			DemoScene::userStart()
 				glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
 				glm::vec3(std::rand() % 10 + 10), "basic", "texture__SunTexture");
 			if (i == 0)
-				sun->getComponent<Component::GraphNode>()->addSon(planets[i]);
+				sun->addChild(planets[i]);
 			else
-				planets[i - 1]->getComponent<Component::GraphNode>()->addSon(planets[i]);
+				planets[i - 1]->addChild(planets[i]);
 			planets[i]->getComponent<Component::RotationForce>()->force = glm::vec3(10.0f);
 		}
 	}
@@ -260,9 +255,8 @@ bool 			DemoScene::userStart()
 	// --
 
 	auto camera = createEntity();
-	camera->addComponent<Component::GraphNode>();
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
-	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getComponent<Component::GraphNode>()->getSonsBegin()), 50.0f, 3.0f, 1.0f);
+	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getChildsBegin()), 50.0f, 3.0f, 1.0f);
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	camera->addComponent<Component::AudioListener>();
 

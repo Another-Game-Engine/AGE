@@ -66,7 +66,9 @@ void 					EntityData::computeGlobalTransform(glm::mat4 const &fatherTransform)
 
 void 					EntityData::computeGlobalTransform(const Entity &parent)
 {
-
+	if (!parent.get())
+		return;
+	_globalTransform = parent.get()->getGlobalTransform() * _localTransform;
 	_flags ^= HAS_MOVED;
 }
 
@@ -74,12 +76,14 @@ void                    EntityData::translate(const glm::vec3 &v)
 {
 	_localTranslation += v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 void                    EntityData::setTranslation(const glm::vec3 &v)
 {
 	_localTranslation = v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 glm::vec3 const         &EntityData::getTranslation() const
@@ -91,12 +95,14 @@ void                    EntityData::rotate(const glm::vec3 &v)
 {
 	_localRotation += v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 void                    EntityData::setRotation(const glm::vec3 &v)
 {
 	_localRotation = v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 glm::vec3 const         &EntityData::getRotation() const
@@ -108,17 +114,35 @@ void                    EntityData::scale(const glm::vec3 &v)
 {
 	_localScale += v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 void                    EntityData::setScale(const glm::vec3 &v)
 {
 	_localScale = v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 glm::vec3 const         &EntityData::getScale() const
 {
 	return _localScale;
+}
+
+void                    EntityData::computeTransformAndUpdateGraphnode()
+{
+	if (!_parent.get())
+	{
+		computeGlobalTransform(glm::mat4(1));
+	}
+	else
+	{
+		computeGlobalTransform(_parent);
+	}
+	for (auto e : _childs)
+	{
+		e->computeTransformAndUpdateGraphnode();
+	}
 }
 
 size_t 					EntityData::getFlags() const
@@ -192,6 +216,12 @@ void EntityData::reset()
 		}
 		_components[i].reset();
 	}
+	removeParent();
+	for (auto e : _childs)
+		e->removeParent(false);
+	_childs.clear();
+	auto key = PubSubKey("graphNodeNotARoot");
+	broadCast(key, _handle);
 }
 
 ////////////////
