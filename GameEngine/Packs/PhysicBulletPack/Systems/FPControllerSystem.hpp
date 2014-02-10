@@ -60,7 +60,7 @@ private:
 				fp->yOrientation = -89.9f;
 
 			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), fp->yOrientation, glm::vec3(1, 0, 0));
-
+			e->computeTransformAndUpdateGraphnode();
 		}
 	}
 
