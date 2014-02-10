@@ -31,7 +31,7 @@
 
 #include <SDL\SDL.h>
 
-#define BALL_TAG (0)
+#include <MyTags.hpp>
 
 DemoScene::DemoScene(Engine &engine) : AScene(engine)
 {
@@ -180,7 +180,7 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+//	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 //	AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
 
@@ -210,17 +210,17 @@ bool 			DemoScene::userStart()
 	{
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
-//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
+//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 //		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-//		rigidBody->setCollisionShape(Component::RigidBody::BOX);
+//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		rigidBody->setCollisionShape(Component::RigidBody::BOX);
 //		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
-//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
