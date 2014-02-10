@@ -193,3 +193,76 @@ void EntityData::reset()
 		_components[i].reset();
 	}
 }
+
+////////////////
+//
+// Graphnode
+
+const Entity	    	&EntityData::getParent() const
+{
+	return _parent;
+}
+
+void 					EntityData::removeChild(Entity &child, bool notify)
+{
+	_childs.erase(child);
+	if (notify)
+	{
+		child->removeParent(false);
+	}
+}
+
+void 					EntityData::setParent(Entity &parent, bool notify)
+{
+	if (_parent.get())
+	{
+		_parent->removeChild(_handle, false);
+	}
+	if (notify)
+		parent->addChild(_handle, false);
+	if (!parent.get()) // if parent is null -> it's a root node
+	{
+		auto key = PubSubKey("graphNodeSetAsRoot");
+		broadCast(key, _handle);
+	}
+	else if (!_parent.get()) // if it was a root node
+	{
+		auto key = PubSubKey("graphNodeNotARoot");
+		broadCast(key, _handle);
+	}
+	_parent = parent;
+}
+
+void 					EntityData::addChild(Entity &child, bool notify)
+{
+	_childs.insert(child);
+	if (notify)
+	{
+		child->setParent(_handle, false);
+	}
+}
+
+void                    EntityData::removeParent(bool notify)
+{
+	if (notify && _parent.get())
+	{
+		_parent->removeChild(_handle);
+	}
+	auto key = PubSubKey("graphNodeSetAsRoot");
+	broadCast(key, _handle);
+	_parent = Entity(std::numeric_limits<unsigned int>::max(), nullptr);
+}
+
+std::set<Entity>::iterator EntityData::getChildsBegin()
+{
+	return std::begin(_childs);
+}
+		
+std::set<Entity>::iterator EntityData::getChildsEnd()
+{
+	return std::end(_childs);
+}
+
+//
+//
+//////////////

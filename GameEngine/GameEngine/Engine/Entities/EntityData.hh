@@ -98,8 +98,27 @@ public:
 	bool                    isTagged(unsigned int tags) const;
 	bool                    isTagged(Barcode &code);
 
-	Barcode &getCode();
-	void reset();
+	Barcode                 &getCode();
+	void                    reset();
+
+	//////////////
+	//
+	// Graphnode
+
+	const Entity	    	&getParent() const;
+	void 					removeChild(Entity &child, bool notify = true);
+	void 					setParent(Entity &parent, bool notify = true);
+	void 					addChild(Entity &child, bool notify = true);
+	void                    removeParent(bool notify = true);
+	std::set<Entity>::iterator getChildsBegin();
+	std::set<Entity>::iterator getChildsEnd();
+
+	Entity                  _parent;
+	std::set<Entity>        _childs;
+
+	//
+	//
+	//////////////
 
 	////////////////////////////
 	//
@@ -166,6 +185,15 @@ public:
 		// component remove -> signal to system
 	}
 
+
+	//
+	//
+	/////////////
+
+	//////////////////
+	//
+	// Serialization
+
 	template <class Archive>
 	void save(Archive &ar) const
 	{
@@ -221,6 +249,9 @@ public:
 		}
 	}
 
+	//
+	//
+	////////////////
 };
 
 #endif
