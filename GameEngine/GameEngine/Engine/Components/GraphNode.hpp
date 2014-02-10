@@ -10,8 +10,6 @@ namespace Component
 {
 	struct GraphNode : public ComponentBase<GraphNode>
 	{
-		typedef std::list<Entity> t_EntityList;
-
 		GraphNode()
 			: ComponentBase<GraphNode>()
 		{
