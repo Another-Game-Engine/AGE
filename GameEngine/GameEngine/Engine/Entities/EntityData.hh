@@ -88,6 +88,8 @@ public:
 	void 					computeGlobalTransform(glm::mat4 const &fatherTransform);  // <-- //
 	void                    computeGlobalTransform(const Entity &parent);
 
+	void                    computeTransformAndUpdateGraphnode();
+
 	size_t 					getFlags() const;
 	void 					setFlags(size_t flags);
 	void 					addFlags(size_t flags);
