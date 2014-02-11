@@ -111,15 +111,6 @@
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\ConvexDecomposition\ConvexDecomposition.vcxproj">
-      <Project>{d217d3ee-658e-4af9-8f77-ae4152409709}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\Serialize\BulletFileLoader\BulletFileLoader.vcxproj">
-      <Project>{bf62c23a-a810-4cb1-9631-a6cf9c27c6db}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\Serialize\BulletWorldImporter\BulletWorldImporter.vcxproj">
-      <Project>{8c289f4d-6321-4202-a8f9-81dcd4883cb3}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\Vendors\TinyObjLoader\TinyObjLoader.vcxproj">
       <Project>{99fc20c2-9ad1-4049-bb11-b369c42fd6a8}</Project>
     </ProjectReference>
