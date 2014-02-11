@@ -8,8 +8,8 @@
 #include <Core/Engine.hh>
 #include <MediaFiles/ObjFile.hpp>
 #include <Managers/BulletDynamicManager.hpp>
-#include "BulletCollision/CollisionShapes/btShapeHull.h"
-#include <hacdHACD.h>
+#include <BulletCollision/CollisionShapes/btShapeHull.h>
+#include <HACD/hacdHACD.h>
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
@@ -18,8 +18,7 @@
 #include <MediaFiles/CollisionSphereFile.hpp>
 #include <memory>
 #include <Components/CollisionLayers.hpp>
-
-#include "btBulletWorldImporter.h"
+#include <Serialize/BulletWorldImporter/btBulletWorldImporter.h>
 
 namespace Component
 {
