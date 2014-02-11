@@ -18,9 +18,11 @@
 #include <Managers/BulletDynamicManager.hpp>
 #include <MediaFiles/AssetsManager.hpp>
 #include <Audio/AudioManager.hh>
+#include <Components/PointLight.hh>
 
 int			main(int ac, char **av)
 {
+	PointLight	toto;
 	Engine	e;
 
 	// set Rendering context of the engine

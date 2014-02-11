@@ -1,6 +1,5 @@
 #include "LightRenderingSystem.hh"
 
-#include "PointLight.hh"
 #include <Components\MeshRenderer.hh>
 #include <Context\IRenderContext.hh>
 #include <OpenGL\VertexBuffer.hh>
@@ -14,6 +13,7 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 
 LightRenderingSystem::~LightRenderingSystem()
 {
+	delete	_vertexManager;
 }
 
 void LightRenderingSystem::initialize()
@@ -30,8 +30,10 @@ void LightRenderingSystem::initialize()
 
 void LightRenderingSystem::mainUpdate(double time)
 {
-	auto perFrame = _scene->getEngine().getInstance<Renderer>().getUniform("PerFrame");
+	Renderer &renderer = _scene->getEngine().getInstance<Renderer>();
+	auto perFrame = renderer.getUniform("PerFrame");
 	int lightNbr = _lightFilter.getCollection().size();
+	auto ttest = PointLight::getTypeId();
 
 	perFrame->setUniform("lightNbr", lightNbr);
 	// Create the contiguous light buffer
@@ -56,7 +58,54 @@ void LightRenderingSystem::mainUpdate(double time)
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _lights);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, lightNbr * sizeof(PointLight), _contiguousLights.data(), GL_DYNAMIC_DRAW);
 	// ----------------------------------------------------
+	glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer); // Bind the FrameBuffer to render to textures
 
+	// Z PrePass
+	// ----------------------------------------------------
+	glEnable(GL_DEPTH_TEST);
+	glClearDepth(1.0f);
+	glDepthFunc(GL_LESS);
+	glDepthMask(GL_TRUE);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glColorMask(0, 0, 0, 0);
+
+	renderer.getShader("depthOnly")->use();
+
+	for (auto e : _meshRendererFilter.getCollection())
+	{
+		e->getComponent<Component::MeshRenderer>()->renderRaw();
+	}
+	// ----------------------------------------------------
+	// Final Lightning pass
+	// ----------------------------------------------------
+	glDepthFunc(GL_LEQUAL);
+	glDepthMask(GL_FALSE);
+	glColorMask(1, 1, 1, 1);
+
+	for (auto e : _meshRendererFilter.getCollection())
+	{
+		GLuint		localLightBuffId = _lights;
+		e->getComponent<Component::MeshRenderer>()->render(
+		[&renderer, localLightBuffId](OpenGLTools::Shader &s)
+		{
+			if (s.getId() == renderer.getShader("MaterialBasic")->getId())
+			{
+				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, localLightBuffId);
+			}
+		}
+		);
+	}
+	// ----------------------------------------------------
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0); // Rebind the default FrameBuffer
+
+	renderer.getShader("fboToScreen")->use();
+
+	// Bind texture of the final render
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _colorTexture);
+
+	_quad.draw();
 }
 
 void	LightRenderingSystem::initFrameBuffer()
@@ -92,10 +141,18 @@ void	LightRenderingSystem::initFrameBuffer()
 
 void	LightRenderingSystem::initQuad()
 {
+	std::array<Attribute, 2> param =
+	{
+		Attribute(GL_FLOAT, sizeof(float), 2),
+		Attribute(GL_FLOAT, sizeof(float), 2)
+	};
+	_vertexManager = new VertexManager<2>(param);
+	_vertexManager->init();
+
 	// Init the Quad:
 	// ------------------------------------
 	// x,y vertex positions
-	float ss_quad_pos[] = {
+	float quadPos[] = {
 		-1.0, -1.0,
 		1.0, -1.0,
 		1.0, 1.0,
@@ -105,7 +162,7 @@ void	LightRenderingSystem::initQuad()
 	};
 
 	// per-vertex texture coordinates
-	float ss_quad_st[] = {
+	float quadUvs[] = {
 		0.0, 0.0,
 		1.0, 0.0,
 		1.0, 1.0,
@@ -116,10 +173,13 @@ void	LightRenderingSystem::initQuad()
 
 	unsigned int indice[] = { 0, 1, 2, 3, 4, 5 };
 
-	_quad.init(6, &indice[0]);
-	_quad.addAttribute(OpenGLTools::Attribute(sizeof(float)* 2, 2, GL_FLOAT));
-	_quad.addAttribute(OpenGLTools::Attribute(sizeof(float)* 2, 2, GL_FLOAT));
-	_quad.setBuffer(0, reinterpret_cast<byte *>(&ss_quad_pos));
-	_quad.setBuffer(1, reinterpret_cast<byte *>(&ss_quad_st));
+	std::array<Data, 2> data =
+	{
+		Data(6 * 2 * sizeof(float), quadPos),
+		Data(6 * 2 * sizeof(float), quadUvs)
+	};
+	Data indicesData(6 * sizeof(unsigned int), indice);
+	_quad = Vertice<2>(6, data, &indicesData);
+	_vertexManager->addVertice(_quad);
 	// ------------------------------------
 }

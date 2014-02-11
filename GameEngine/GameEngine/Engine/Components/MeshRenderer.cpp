@@ -34,13 +34,14 @@ namespace Component
 		mesh = nullptr;
 	}
 
-	void MeshRenderer::render()
+	void MeshRenderer::render(std::function<void(OpenGLTools::Shader&)> func)
 	{
 		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("PerModel");
 		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
 		auto s = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(shader);
 		if (s)
 			s->use();
+		func(*s);
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());
 		perModelUniform->flushChanges();
 		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
@@ -50,4 +51,17 @@ namespace Component
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
 		}
 	}
+
+	void MeshRenderer::renderRaw()
+	{
+		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("PerModel");
+
+		perModelUniform->setUniform("model", _entity->getGlobalTransform());
+		perModelUniform->flushChanges();
+		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
+		{
+			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
+		}
+	}
+
 }

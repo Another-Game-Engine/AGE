@@ -112,6 +112,7 @@
     <ClInclude Include="Engine\Components\CameraComponent.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Core\Tags.hh" />
+    <ClInclude Include="Engine\Components\PointLight.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
