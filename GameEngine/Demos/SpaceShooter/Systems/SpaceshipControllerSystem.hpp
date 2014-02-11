@@ -105,8 +105,8 @@ private:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::SpaceshipController>();
-		_filter.require<Component::RigidBody>();
+		_filter.requireComponent<Component::SpaceshipController>();
+		_filter.requireComponent<Component::RigidBody>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };

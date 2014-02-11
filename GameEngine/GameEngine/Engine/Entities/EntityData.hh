@@ -13,6 +13,7 @@
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
+#include <Core/Tags.hh>
 
 class AScene;
 class EntityManager;
@@ -61,7 +62,7 @@ private:
 
 	t_ComponentsList	_components;
 
-	Barcode _code;
+	Barcode             _code;
 public:
 	EntityData(AScene *scene);
 	virtual ~EntityData();
@@ -92,6 +93,11 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
+	void                    addTag(unsigned int tags);
+	void                    removeTag(unsigned int tags);
+	bool                    isTagged(unsigned int tags) const;
+	bool                    isTagged(Barcode &code);
+
 	Barcode &getCode();
 	void reset();
 
@@ -102,12 +108,11 @@ public:
 	//
 	//
 	//
-	bool hasComponent(unsigned int componentId) const;
 
 	template <typename T>
 	bool hasComponent() const
 	{
-		return _code.isSet<T>();
+		return _code.isSet(T::getTypeId() + MAX_TAG_NUMBER);
 	}
 
 	template <typename T, typename... Args>
@@ -117,7 +122,7 @@ public:
 		unsigned int id = T::getTypeId();
 
 		// if entity already have component, return it
-		if (hasComponent(id))
+		if (_code.isSet(id + MAX_TAG_NUMBER))
 		{
 			return  std::static_pointer_cast<T>(_components[id]);
 		}
@@ -135,8 +140,8 @@ public:
 		}
 		//init component
 		std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);
-		_code.add(id);
-		broadCast(std::string("componentAdded" + std::to_string(id)), _handle);
+		_code.add(id + MAX_TAG_NUMBER);
+		broadCast(std::string("componentAdded" + std::to_string(id + MAX_TAG_NUMBER)), _handle);
 		return std::static_pointer_cast<T>(_components[id]);
 	}
 
@@ -144,7 +149,7 @@ public:
 	std::shared_ptr<T> getComponent() const
 	{
 		unsigned int id = T::getTypeId();
-		if (!hasComponent(id))
+		if (!hasComponent<T>())
 			return nullptr;
 		return std::static_pointer_cast<T>(_components[id]);
 	}
@@ -153,11 +158,11 @@ public:
 	void removeComponent()
 	{
 		unsigned int id = T::getTypeId();
-		if (!hasComponent(id))
+		if (!hasComponent<T>())
 			return;
-		_code.remove(id);
+		_code.remove(id + MAX_TAG_NUMBER);
 		_components[id].get()->reset();
-		broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
+		broadCast(std::string("componentRemoved" + std::to_string(id + MAX_TAG_NUMBER)), _handle);
 		// component remove -> signal to system
 	}
 
@@ -211,8 +216,8 @@ public:
 			if (_components.size() <= typeId)
 				_components.resize(typeId + 1);
 			_components[typeId] = std::shared_ptr<Component::Base>(cpt);
-			_code.add(typeId);
-			broadCast(std::string("componentAdded" + std::to_string(typeId)), _handle);
+			_code.add(typeId + MAX_TAG_NUMBER);
+			broadCast(std::string("componentAdded" + std::to_string(typeId + MAX_TAG_NUMBER)), _handle);
 		}
 	}
 

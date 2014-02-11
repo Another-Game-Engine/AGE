@@ -15,24 +15,32 @@ public:
 	virtual ~EntityFilter();
 
 	template <typename T>
-	void require()
+	void requireComponent()
 	{
-		_code.add<T>();
-		globalSub(std::string("componentAdded" + std::to_string(T::getTypeId())), [&](Entity entity){
-			_componentAdded(entity, T::getTypeId());
+		auto id = T::getTypeId() + MAX_TAG_NUMBER;
+		auto strId = std::to_string(id);
+		_code.add(id);
+		globalSub(std::string("componentAdded" + strId), [&](Entity entity){
+			_componentAdded(entity, id);
 		});
-		globalSub(std::string("componentRemoved" + std::to_string(T::getTypeId())), [&](Entity entity){
-			_componentRemoved(entity, T::getTypeId());
+		globalSub(std::string("componentRemoved" + strId), [&](Entity entity){
+			_componentRemoved(entity, id);
 		});
 	}
 
 	template <typename T>
-	void unRequire()
+	void unRequireComponent()
 	{
-		_code.remove<T>();
-		unsub(std::string("componentAdded" + std::to_string(T::getTypeId())));
-		unsub(std::string("componentRemoved" + std::to_string(T::getTypeId())));
+		auto id = T::getTypeId() + MAX_TAG_NUMBER;
+		auto strId = std::to_string(id);
+
+		_code.remove(id);
+		unsub(std::string("componentAdded" + strId));
+		unsub(std::string("componentRemoved" + strId));
 	}
+
+	void requireTag(unsigned int tag);
+	void unRequireTag(unsigned int tag);
 
 	const Barcode &getCode() const;
 	std::set<Entity, bool(*)(Entity, Entity)> &getCollection();
