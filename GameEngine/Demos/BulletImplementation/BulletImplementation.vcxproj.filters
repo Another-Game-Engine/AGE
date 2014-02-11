@@ -21,12 +21,18 @@
     <ClCompile Include="DemoScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LightRenderingSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DemoScene.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BallSoundSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightRenderingSystem.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

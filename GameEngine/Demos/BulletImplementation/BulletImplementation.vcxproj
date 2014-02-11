@@ -99,6 +99,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DemoScene.cpp" />
+    <ClCompile Include="LightRenderingSystem.cpp" />
     <ClCompile Include="Main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</ExcludedFromBuild>
     </ClCompile>
@@ -106,6 +107,7 @@
   <ItemGroup>
     <ClInclude Include="BallSoundSystem.hpp" />
     <ClInclude Include="DemoScene.hh" />
+    <ClInclude Include="LightRenderingSystem.hh" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
