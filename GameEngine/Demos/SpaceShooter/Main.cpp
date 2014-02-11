@@ -18,8 +18,6 @@
 #include <MediaFiles/AssetsManager.hpp>
 #include "InGameScene.hpp"
 
-#include <Components/GraphNode.hpp>
-
 int			main(int ac, char **av)
 {
 	Engine	e;

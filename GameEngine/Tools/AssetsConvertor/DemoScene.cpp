@@ -22,7 +22,6 @@
 #include <OpenGL/include/SDL/SDL_opengl.h>
 
 #include <Systems/RotationForceSystem.hpp>
-#include <Systems/GraphNodeSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/MeshRenderSystem.h>
 
@@ -46,7 +45,6 @@ bool 			DemoScene::userStart()
 	//
 	//
 	addSystem<MeshRendererSystem>(0);
-	addSystem<GraphNodeSystem>(0); // UPDATE ENTITIES TRANSFORMATION
 	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
 
 
