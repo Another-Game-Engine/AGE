@@ -4,7 +4,7 @@
 #include <MediaFiles/MediaFile.hpp>
 #include <Utils/File.hpp>
 #include <btBulletDynamicsCommon.h>
-#include <btBulletWorldImporter.h>
+#include <Serialize/BulletWorldImporter/btBulletWorldImporter.h>
 
 struct CollisionShapeDynamicFile : public MediaFile<CollisionShapeDynamicFile>
 {
