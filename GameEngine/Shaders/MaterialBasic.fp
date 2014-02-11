@@ -2,32 +2,43 @@
 
 layout (std140) uniform MaterialBasic
 {
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-  vec3 transmittance;
-  vec3 emission;
-  float shininess;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	vec3 transmittance;
+	vec3 emission;
+	float shininess;
 };
 
 layout (std140) uniform PerFrame
 {
-        mat4 projection;
-        mat4 view;
-        vec4 light;
-        float time;
+	mat4 projection;
+	mat4 view;
+	float time;
+	int	lightNbr;
 };
 
 layout (std140) uniform PerModel
 {
-        mat4 model;
+	mat4 model;
 };
 
-uniform          sampler2D fTexture0;//ambient;
-uniform          sampler2D fTexture1;//diffuse;
-uniform          sampler2D fTexture2;//specular;
-uniform          sampler2D fTexture3;//normal;
+layout(std430, binding = 0) uniform sampler2D fTexture0; //ambient;
+layout(std430, binding = 1) uniform sampler2D fTexture1; //diffuse;
+layout(std430, binding = 2) uniform sampler2D fTexture2; //specular;
+layout(std430, binding = 3) uniform sampler2D fTexture3; //normal;
 
+layout(std140) struct PointLight
+{
+	vec3	position;
+	vec3	color;
+	float	range;
+};
+
+layout(std430, binding = 4) buffer lightBuff
+{
+	PointLight	lights[];
+};
 
 in vec4 fPosition;
 in vec4 fColor;
@@ -35,28 +46,20 @@ in vec4 fNormal;
 in vec2 fTexCoord;
 
 out layout (location = 0) vec4 FragColor;
-out layout (location = 1) vec4 Lol;
 
 void main(void)
 {
-  vec4 bNormal = vec4(normalize(fNormal.xyz + texture2D(fTexture1, fTexCoord).xyz), 0);
-  /**
-   * Calcule des vecteur indispensable au calcule de light :
-   * - vecteur du frag au spot
-   * - vecteur de reflection de la lumiére
-   * - vecteur de l'oeil vers le frag
-   */
-  vec3 lightPos = (view * light).xyz;
-  vec4 vectorLight = normalize(vec4(lightPos - fPosition.xyz, 1.0));
-  vec4 vectorReflect = normalize(reflect(-vectorLight, bNormal));
-  vec4 vectorView = normalize(vec4(fPosition.xyz - view[3].xyz, 1.0));
-  /**
-   * calcule de lambert afin de determiner le cos(a)
-   * entre le vecteur de lumiére et la normal du fragment.
-   */
-  float lamberTerm = clamp(dot(diffuse.xyz, vectorLight.xyz), 0.0, 1.0);
-  vec4 pxlColor = fColor * texture2D(fTexture0, fTexCoord);
-  vec4 cAmbient = pxlColor * vec4(ambient.rgb, 1.0);
-  vec4 cDiffuse = pxlColor * lamberTerm;
-  FragColor = texture2D(fTexture1, fTexCoord);//max(cAmbient, cDiffuse);
+	vec4	finalColor = vec4(0, 0, 0, 1);
+
+	for (int i = 0; i < lightNbr; ++i)
+	{
+		vec3	fragToLight = lights[i].position - fPosition.xyz;
+		float	dist = length(fragToLight);
+		float	illumination =  clamp(dot(fNormal.xyz, fragToLight.xyz), 0.0, 1.0) * clamp(1.0f - dist / lights[i].range, 0, 1);
+
+		finalColor += vec4(illumination, illumination, illumination, 1.0f) *
+					  vec4(lights[i].color, 1.0f) *
+					  texture2D(fTexture1, fTexCoord);
+	}
+	FragColor = finalColor;
 }
