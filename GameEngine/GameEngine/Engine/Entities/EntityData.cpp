@@ -142,14 +142,32 @@ void 					EntityData::removeFlags(size_t flags)
 	_flags ^= flags;
 }
 
-Barcode                       &EntityData::getCode()
+Barcode                 &EntityData::getCode()
 {
 	return _code;
 }
 
-bool EntityData::hasComponent(unsigned int componentId) const
+void                    EntityData::addTag(unsigned int tag)
 {
-		return _code.isSet(componentId);
+	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	_code.add(tag);
+}
+
+void                    EntityData::removeTag(unsigned int tag)
+{
+	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	_code.remove(tag);
+}
+bool                    EntityData::isTagged(unsigned int tag) const
+{
+	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	return _code.isSet(tag);
+}
+
+bool                    EntityData::isTagged(Barcode &code)
+{
+	// TODO get the size of the code and assert if > 31
+	return _code.match(code);
 }
 
 void EntityData::reset()
@@ -166,9 +184,10 @@ void EntityData::reset()
 	_code.reset();
 	for (unsigned int i = 0; i < _components.size(); ++i)
 	{
+		unsigned int id = i + MAX_TAG_NUMBER;
 		if (_components[i].get())
 		{
-			broadCast(std::string("componentRemoved" + std::to_string(i)), _handle);
+			broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
 			_components[i]->reset();
 		}
 		_components[i].reset();

@@ -79,7 +79,7 @@ private:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::RigidBody>();
+		_filter.requireComponent<Component::RigidBody>();
 	}
 };
 
