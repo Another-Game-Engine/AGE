@@ -85,7 +85,6 @@ private:
 			{
 				Entity b = _scene->createEntity();
 				b->setLocalTransform() = entity->getLocalTransform();
-				b->addComponent<Component::GraphNode>();
 				auto rigidBody = b->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
@@ -93,6 +92,7 @@ private:
 				auto mesh = b->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
 				balls.push_back(b);
+				b->computeTransformAndUpdateGraphnode();
 			}
 			if (inputs.getKey(SDLK_p))
 			{
@@ -101,6 +101,7 @@ private:
 				balls.clear();
 			}
 			entity->setLocalTransform() = glm::translate(entity->getLocalTransform(), direction);
+			entity->computeTransformAndUpdateGraphnode();
 	}
 
 	virtual void initialize()

@@ -44,14 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
-    <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
     <ClInclude Include="Engine\Systems\FirstPersonViewSystem.hpp" />
-    <ClInclude Include="Engine\Systems\GraphNodeSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
     <ClInclude Include="Engine\Systems\System.h" />

@@ -14,6 +14,8 @@
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <Core/Tags.hh>
+#include <cereal/types/set.hpp>
+#include <cereal/types/base_class.hpp>
 
 class AScene;
 class EntityManager;
@@ -66,6 +68,8 @@ private:
 public:
 	EntityData(AScene *scene);
 	virtual ~EntityData();
+	EntityData &operator=(const EntityData &o);
+	EntityData(const EntityData &o);
 
 	AScene                  *getScene() const;
 	void                    translate(const glm::vec3 &v);
@@ -88,6 +92,8 @@ public:
 	void 					computeGlobalTransform(glm::mat4 const &fatherTransform);  // <-- //
 	void                    computeGlobalTransform(const Entity &parent);
 
+	void                    computeTransformAndUpdateGraphnode();
+
 	size_t 					getFlags() const;
 	void 					setFlags(size_t flags);
 	void 					addFlags(size_t flags);
@@ -98,8 +104,27 @@ public:
 	bool                    isTagged(unsigned int tags) const;
 	bool                    isTagged(Barcode &code);
 
-	Barcode &getCode();
-	void reset();
+	Barcode                 &getCode();
+	void                    reset();
+
+	//////////////
+	//
+	// Graphnode
+
+	const Entity	    	&getParent() const;
+	void 					removeChild(Entity &child, bool notify = true);
+	void 					setParent(Entity &parent, bool notify = true);
+	void 					addChild(Entity &child, bool notify = true);
+	void                    removeParent(bool notify = true);
+	std::set<Entity>::iterator getChildsBegin();
+	std::set<Entity>::iterator getChildsEnd();
+
+	Entity                  _parent;
+	std::set<Entity>        _childs;
+
+	//
+	//
+	//////////////
 
 	////////////////////////////
 	//
@@ -166,6 +191,15 @@ public:
 		// component remove -> signal to system
 	}
 
+
+	//
+	//
+	/////////////
+
+	//////////////////
+	//
+	// Serialization
+
 	template <class Archive>
 	void save(Archive &ar) const
 	{
@@ -191,6 +225,16 @@ public:
 				continue;
 			e->serializeBase(ar);
 		}
+
+		// serialize graphnode
+		std::set<std::size_t> childIds;
+		for (auto e : _childs)
+		{
+			childIds.insert(getScene()->registrarSerializedEntity(e.getId()));
+		}
+		ar(CEREAL_NVP(childIds));
+		ar(cereal::make_nvp("haveParent", _parent.get() != nullptr));
+		ar(cereal::make_nvp("parentID", _parent.getId()));
 	}
 
 	template <class Archive>
@@ -219,8 +263,34 @@ public:
 			_code.add(typeId + MAX_TAG_NUMBER);
 			broadCast(std::string("componentAdded" + std::to_string(typeId + MAX_TAG_NUMBER)), _handle);
 		}
+		// unserialize graphnode
+		std::set<std::size_t> childIds;
+		ar(childIds);
+		for (auto e : childIds)
+			_childs.insert(Entity(e, _scene));
+		for (auto it = std::begin(_childs); it != std::end(_childs); ++it)
+		{
+			Entity *e = const_cast<Entity *>(&(*it));
+			getScene()->entityHandle(it->getId(), e);
+		}
+		bool haveParent = false;
+		ar(haveParent);
+		std::size_t parentId;
+		ar(parentId);
+		if (haveParent)
+		{
+			getScene()->entityHandle(parentId, &_parent);
+		}
+		else
+		{
+			auto key = PubSubKey("graphNodeSetAsRoot");
+			broadCast(key, _handle);
+		}
 	}
 
+	//
+	//
+	////////////////
 };
 
 #endif
