@@ -169,6 +169,11 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 
+	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
+	auto music = _engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+
+
 	// SERIALIZATION
 	File saveFile("SolarSystem.scenesave");
 	if (saveFile.exists())
@@ -178,15 +183,6 @@ bool 			DemoScene::userStart()
 		fileStream.close();
 		return true;
 	}
-
-
-	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-	auto music = _engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	//if (music)
-	//{
-	//	music->play(CHANNEL_GROUP_MUSIC);
-	//}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),
