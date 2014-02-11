@@ -22,7 +22,6 @@
 
 int			main(int ac, char **av)
 {
-	PointLight	toto;
 	Engine	e;
 
 	// set Rendering context of the engine

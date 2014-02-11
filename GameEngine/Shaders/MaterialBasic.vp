@@ -14,6 +14,7 @@ layout (std140) uniform PerFrame
 {
 	mat4 projection;
 	mat4 view;
+	int	lightNbr;
 	float time;
 };
 
@@ -29,9 +30,8 @@ layout(binding = 3) uniform sampler2D fTexture3;//normal;
 
 struct PointLight
 {
-	vec3	position;
-	vec3	color;
-	float	range;
+	vec4	position;
+	vec4	colorRange;
 };
 
 layout(binding = 4, std430) buffer lightBuff
@@ -55,8 +55,8 @@ void main(void)
   mat4 vectorSpace = transpose(inverse(modelView));
 
   fColor = vColor;
-  fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);
-  fPosition = model * vPosition;
+  fNormal = vec4(normalize(vectorSpace * vNormal).xyz, 0.0f);
+  fPosition = modelView * vPosition;
   fTexCoord = vTexCoord;
   gl_Position = projection * modelView * vPosition;
 }

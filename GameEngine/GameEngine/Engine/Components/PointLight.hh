@@ -3,46 +3,74 @@
 #include <Components\Component.hh>
 #include <glm\glm.hpp>
 
-struct PointLight : public Component::ComponentBase<PointLight>
+struct ContiguousLight
 {
-	glm::vec3	position;
-	glm::vec3	color;
-	float		range;
+	glm::vec4	position;
+	glm::vec4	colorRange;
 
-	PointLight()
-	{
-	}
+	ContiguousLight() { }
 
-	PointLight(PointLight const &o)
+	ContiguousLight(ContiguousLight const &o)
 	{
 		*this = o;
 	}
 
-	virtual ~PointLight()
+	~ContiguousLight()
 	{
 	}
 
-	virtual void reset() { }
-
-	PointLight &operator=(PointLight const &o)
+	ContiguousLight &operator=(ContiguousLight const &o)
 	{
 		position = o.position;
-		color = o.color;
-		range = o.range;
+		colorRange = o.colorRange;
 		return (*this);
 	}
-
-	template <typename Archive>
-	Base *unserialize(Archive &ar, Entity e)
-	{
-		auto res = new PointLight();
-		return res;
-	}
-
-	template <typename Archive>
-	void serialize(Archive &ar)
-	{
-	}
-
 };
 
+namespace Component
+{
+
+	struct PointLight : public ComponentBase<PointLight>
+	{
+		ContiguousLight		lightData;
+
+		PointLight()
+		{
+		}
+
+		PointLight(PointLight const &o)
+		{
+			*this = o;
+		}
+
+		virtual ~PointLight()
+		{
+		}
+
+		virtual void reset() { }
+
+		PointLight &operator=(PointLight const &o)
+		{
+			lightData = o.lightData;
+			return (*this);
+		}
+
+		void	init()
+		{
+		}
+
+		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new PointLight();
+			return res;
+		}
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+		}
+
+	};
+
+}

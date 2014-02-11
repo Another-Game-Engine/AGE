@@ -38,7 +38,7 @@ private:
 
 	// Light Buffer
 	GLuint						_lights;
-	std::vector<PointLight>		_contiguousLights;
+	std::vector<ContiguousLight>		_contiguousLights;
 
 };
 
