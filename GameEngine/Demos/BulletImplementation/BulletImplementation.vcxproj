@@ -117,6 +117,14 @@
       <Project>{3073a470-6943-400e-bdff-d25aa01577f8}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Shaders\depthOnly.fp" />
+    <None Include="..\..\Shaders\depthOnly.vp" />
+    <None Include="..\..\Shaders\fboToScreen.fp" />
+    <None Include="..\..\Shaders\fboToScreen.vp" />
+    <None Include="..\..\Shaders\MaterialBasic.fp" />
+    <None Include="..\..\Shaders\MaterialBasic.vp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

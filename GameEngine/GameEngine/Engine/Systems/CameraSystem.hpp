@@ -101,7 +101,6 @@ protected:
 
 				s->use();
 
-
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());
 				glDepthMask(0);
@@ -117,7 +116,6 @@ protected:
 			perFrameBuffer->setUniform("view", cameraPosition);
 			perFrameBuffer->setUniform("time", (float)totalTime);
 			perFrameBuffer->flushChanges();
-			_scene->getSystem<MeshRendererSystem>()->render(time);
 		}
 	}
 

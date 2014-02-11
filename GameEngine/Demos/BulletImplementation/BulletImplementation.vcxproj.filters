@@ -36,4 +36,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Shaders\MaterialBasic.fp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\Shaders\MaterialBasic.vp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\Shaders\depthOnly.fp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\Shaders\depthOnly.vp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\Shaders\fboToScreen.fp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\Shaders\fboToScreen.vp">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

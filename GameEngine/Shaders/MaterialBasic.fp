@@ -1,4 +1,4 @@
-#version 330
+#version 430 core
 
 layout (std140) uniform MaterialBasic
 {
@@ -23,12 +23,12 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-layout(std430, binding = 0) uniform sampler2D fTexture0; //ambient;
-layout(std430, binding = 1) uniform sampler2D fTexture1; //diffuse;
-layout(std430, binding = 2) uniform sampler2D fTexture2; //specular;
-layout(std430, binding = 3) uniform sampler2D fTexture3; //normal;
+layout(binding = 0) uniform sampler2D fTexture0; //ambient;
+layout(binding = 1) uniform sampler2D fTexture1; //diffuse;
+layout(binding = 2) uniform sampler2D fTexture2; //specular;
+layout(binding = 3) uniform sampler2D fTexture3; //normal;
 
-layout(std140) struct PointLight
+struct PointLight
 {
 	vec3	position;
 	vec3	color;

@@ -29,6 +29,8 @@
 
 #include <Core/Engine.hh>
 
+#include <LightRenderingSystem.hh>
+
 #include <SDL\SDL.h>
 
 #define BALL_TAG (0)
@@ -90,7 +92,7 @@ bool 			DemoScene::userStart()
 	// System Tests
 	//
 	//
-	addSystem<MeshRendererSystem>(0);
+//	addSystem<MeshRendererSystem>(0);
 	addSystem<GraphNodeSystem>(0); // UPDATE ENTITIES TRANSFORMATION
 	addSystem<BulletDynamicSystem>(10); // UPDATE PHYSIC WORLD
 	addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
@@ -100,6 +102,7 @@ bool 			DemoScene::userStart()
 	addSystem<BallSoundSystem>(220);
 	addSystem<AudioSystem>(250);
 	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
+	addSystem<LightRenderingSystem>(1000); // Render with the lights
 	//
 	//
 	// end System Test
@@ -145,6 +148,10 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
 	_engine.getInstance<Renderer>().addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
 	_engine.getInstance<Renderer>().addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
+	_engine.getInstance<Renderer>().addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
+
+	_engine.getInstance<Renderer>().bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>().bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerModel", "PerModel");
@@ -170,7 +177,7 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+//	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 //	AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
 
@@ -200,17 +207,17 @@ bool 			DemoScene::userStart()
 	{
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
-//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
+//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 //		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-//		rigidBody->setCollisionShape(Component::RigidBody::BOX);
+//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		rigidBody->setCollisionShape(Component::RigidBody::BOX);
 //		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
-//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();

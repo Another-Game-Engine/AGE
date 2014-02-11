@@ -1,7 +1,11 @@
 #pragma once
 
+#include <Components\PointLight.hh>
+
 #include <Systems\System.h>
-#include <OpenGL\VertexBuffer.hh>
+#include <OpenGL\VertexManager.hh>
+
+#include <vector>
 
 class LightRenderingSystem : public System
 {
@@ -29,7 +33,8 @@ private:
 	// Quad to draw full screen
 	void						initQuad();
 		
-	OpenGLTools::VertexBuffer	_quad;
+	Vertice<2>					_quad;
+	VertexManager<2>			*_vertexManager;
 
 	// Light Buffer
 	GLuint						_lights;

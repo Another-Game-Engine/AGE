@@ -1,17 +1,14 @@
-#version 330
+#version 430
 
-// vertex positions input attribute
- in vec2 vp;
+in vec2 pos;
+in vec2 uv;
 
-// per-vertex texture coordinates input attribute
- in vec2 vt;
+out vec2 vUv;
 
-// texture coordinates to be interpolated to fragment shaders
-out vec2 st;
-
-void main () {
+void main ()
+{
 	// interpolate texture coordinates
-	st = vt;
+	vUv = uv;
 	// transform vertex position to clip space (camera view and perspective)
-	gl_Position = vec4 (vp, 0.0, 1.0);
+	gl_Position = vec4(pos, 0.0, 1.0);
 }

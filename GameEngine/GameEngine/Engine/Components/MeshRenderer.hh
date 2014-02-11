@@ -31,7 +31,8 @@ namespace Component
 		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
-		void render();
+		void render(std::function<void(OpenGLTools::Shader&)> func = [](OpenGLTools::Shader &s){});
+		void renderRaw();
 		std::shared_ptr<ObjFile>	const &getMesh() const;
 
 		//////
