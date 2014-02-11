@@ -15,7 +15,8 @@ EntityData::EntityData(AScene *scene) :
 	_localScale(0),
 	_globalTranslation(0),
 	_globalRotation(0),
-	_globalScale(0)
+	_globalScale(0),
+	_parent(Entity(std::numeric_limits<unsigned int>::max(), nullptr))
 {
 	removeFlags(ACTIVE);
 }
@@ -24,6 +25,43 @@ EntityData::~EntityData()
 {
 	_components.clear();
 }
+
+EntityData &EntityData::operator=(const EntityData &o)
+{
+	_scene = o._scene;
+	_flags = o._flags;
+	_localTransform = o._localTransform;
+	_localRotation = o._localRotation;
+	_localScale = o._localScale;
+	_globalTranslation = o._globalTranslation;
+	_globalRotation = o._globalRotation;
+	_globalScale = o._globalScale;
+	_parent = o._parent;
+	_childs = o._childs;
+	_handle = o._handle;
+	_components = o._components;
+	_code = o._code;
+	return *this;
+}
+
+EntityData::EntityData(const EntityData &o) : 
+PubSub(o._scene->getInstance<PubSub::Manager>())
+{
+	_scene = o._scene;
+	_flags = o._flags;
+	_localTransform = o._localTransform;
+	_localRotation = o._localRotation;
+	_localScale = o._localScale;
+	_globalTranslation = o._globalTranslation;
+	_globalRotation = o._globalRotation;
+	_globalScale = o._globalScale;
+	_parent = o._parent;
+	_childs = o._childs;
+	_handle = o._handle;
+	_components = o._components;
+	_code = o._code;
+}
+
 
 Entity &EntityData::getHandle()
 {
