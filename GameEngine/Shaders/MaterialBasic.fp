@@ -14,8 +14,8 @@ layout (std140) uniform PerFrame
 {
 	mat4 projection;
 	mat4 view;
-	float time;
 	int	lightNbr;
+	float time;
 };
 
 layout (std140) uniform PerModel
@@ -30,9 +30,8 @@ layout(binding = 3) uniform sampler2D fTexture3; //normal;
 
 struct PointLight
 {
-	vec3	position;
-	vec3	color;
-	float	range;
+	vec4	position;
+	vec4	colorRange;
 };
 
 layout(std430, binding = 4) buffer lightBuff
@@ -53,13 +52,18 @@ void main(void)
 
 	for (int i = 0; i < lightNbr; ++i)
 	{
-		vec3	fragToLight = lights[i].position - fPosition.xyz;
-		float	dist = length(fragToLight);
-		float	illumination =  clamp(dot(fNormal.xyz, fragToLight.xyz), 0.0, 1.0) * clamp(1.0f - dist / lights[i].range, 0, 1);
+		vec4	lightPos = view * lights[i].position;
+		vec3	lightColor = lights[i].colorRange.xyz;
+		float	lightRange = lights[i].colorRange.w;
 
-		finalColor += vec4(illumination, illumination, illumination, 1.0f) *
-					  vec4(lights[i].color, 1.0f) *
-					  texture2D(fTexture1, fTexCoord);
+		vec3	fragToLight = lightPos.xyz - fPosition.xyz;
+		float	dist = length(fragToLight);
+		float	illumination =  clamp(dot(normalize(fragToLight), normalize(fNormal.xyz)), 0.0, 1.0) *
+								clamp(1.0f - dist / lightRange, 0.0f, 1.0f);
+
+		finalColor += vec4(vec3(illumination) *
+						   lightColor *
+						   texture2D(fTexture1, fTexCoord).xyz, 0.0f);
 	}
 	FragColor = finalColor;
 }

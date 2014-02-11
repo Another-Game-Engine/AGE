@@ -11,7 +11,7 @@ layout (std140) uniform PerFrame
 {
 	mat4 projection;
 	mat4 view;
-	vec4 light;
+	int	lightNbr;
 	float time;
 };
 

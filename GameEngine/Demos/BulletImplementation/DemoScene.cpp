@@ -98,10 +98,10 @@ bool 			DemoScene::userStart()
 	addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
 	addSystem<FPControllerSystem>(50); // UPDATE FIRST PERSON CONTROLLER
 	addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
-	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<BallSoundSystem>(220);
 	addSystem<AudioSystem>(250);
 	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
+	addSystem<CameraSystem>(400); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<LightRenderingSystem>(1000); // Render with the lights
 	//
 	//
@@ -116,8 +116,8 @@ bool 			DemoScene::userStart()
 		{
 			"projection",
 			"view",
-			"time",
-			"lightNbr"
+			"lightNbr",
+			"time"
 		};
 
 		std::string		materialBasic[] =
@@ -143,8 +143,8 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 	_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
-	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
-	_engine.getInstance<Renderer>().addShader("earth", "Shaders/earth.vp", "Shaders/earth.fp");
+//	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
+//	_engine.getInstance<Renderer>().addShader("earth", "Shaders/earth.vp", "Shaders/earth.fp");
 	_engine.getInstance<Renderer>().addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
 	_engine.getInstance<Renderer>().addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
 	_engine.getInstance<Renderer>().addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
@@ -153,21 +153,21 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "MaterialBasic", "MaterialBasic");
+//	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
+//	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerModel", "PerModel");
+//	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "MaterialBasic", "MaterialBasic");
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "MaterialBasic", "MaterialBasic");
+//	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "MaterialBasic", "MaterialBasic");
 
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "MaterialBasic", "MaterialBasic");
-
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "MaterialBasic", "MaterialBasic");
+//	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerFrame", "PerFrame");
+//	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerModel", "PerModel");
+//	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "MaterialBasic", "MaterialBasic");
+//
+//	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerFrame", "PerFrame");
+//	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerModel", "PerModel");
+//	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "MaterialBasic", "MaterialBasic");
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
@@ -177,7 +177,7 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-//	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 //	AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
 
@@ -207,17 +207,17 @@ bool 			DemoScene::userStart()
 	{
 		auto e = createEntity();
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0));
-//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
+		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
+//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 //		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-		rigidBody->setCollisionShape(Component::RigidBody::BOX);
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+//		rigidBody->setCollisionShape(Component::RigidBody::BOX);
 //		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
-//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 		e->addComponent<Component::GraphNode>();
@@ -304,6 +304,8 @@ bool 			DemoScene::userUpdate(double time)
 		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+		auto light = e->addComponent<Component::PointLight>();
+		light->lightData.colorRange = glm::vec4((rand() % 10000) / 10000.0f, (rand() % 10000) / 10000.0f, (rand() % 10000) / 10000.0f, 10.0f);
 		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>().getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 		e->addTag(BALL_TAG);
 		if (stack.size() > 300)
