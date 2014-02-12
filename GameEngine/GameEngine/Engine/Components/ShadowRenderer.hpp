@@ -2,6 +2,8 @@
 # define SHADOWRENDERER_HPP_
 
 # include <memory>
+# include <glm/glm.hpp>
+# include <glm/gtc/matrix_transform.hpp>
 # include "MediaFiles/ObjFile.hpp"
 # include "Components/Component.hh"
 # include "Core/Renderer.hh"
@@ -17,7 +19,7 @@ namespace Component
 		void init(std::shared_ptr<ObjFile> const &obj);
 		void setShader(std::string const &s);
 		virtual void reset();
-		void render();
+		void render(glm::mat4 const &projection, glm::mat4 const &view);
 		std::shared_ptr<ObjFile> const &getMesh() const;
 
 		template <typename Archive>

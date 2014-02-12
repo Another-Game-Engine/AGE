@@ -4,7 +4,7 @@
 # include <glm/glm.hpp>
 # include <glm/gtc/matrix_transform.hpp>
 # include "System.h"
-# include <Components/MeshRenderer.hh>
+# include "Components/ShadowRenderer.hpp"
 # include <Entities/EntityData.hh>
 # include <Core/SceneManager.hh>
 
@@ -14,6 +14,7 @@ public:
 	ShadowRendererSystem(AScene *scene);
 	virtual ~ShadowRendererSystem();
 	void render(double time);
+	GLuint getShadowMap() const;
 
 protected:
 	GLuint _frameBuffer;
@@ -21,6 +22,7 @@ protected:
 	uint32_t _width;
 	GLuint _texture;
 	EntityFilter _filter;
+
 	virtual void updateBegin(double time);
 	virtual void updateEnd(double time);
 	virtual void mainUpdate(double time);

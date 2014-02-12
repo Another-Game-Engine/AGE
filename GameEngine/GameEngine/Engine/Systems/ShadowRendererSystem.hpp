@@ -18,12 +18,16 @@ ShadowRendererSystem::~ShadowRendererSystem()
 
 void ShadowRendererSystem::render(double time)
 {
+	glm::vec3 lightBase = glm::vec3(4, 8, 8);
+	glm::mat4 projectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+	glm::mat4 viewMatrix = glm::lookAt(lightBase, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+
 	glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
 	glDrawBuffer(GL_NONE);
 	for (auto indice : _filter.getCollection())
 	{
-		auto &mesh = indice->getComponent<Component::MeshRenderer>();
-		mesh->render();
+		auto &mesh = indice->getComponent<Component::ShadowRenderer>();
+		mesh->render(projectionMatrix, viewMatrix);
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
