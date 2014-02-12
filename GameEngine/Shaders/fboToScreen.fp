@@ -1,12 +1,20 @@
 #version 430
 
-in vec2 st;
+layout (std140) uniform PerFrame
+{
+	mat4 projection;
+	mat4 view;
+	int	lightNbr;
+	float time;
+};
+
+in vec2 vUv;
 
 uniform layout (location = 0) sampler2D layer0;
 
-out vec4 frag_colour;
+out vec4 frag_color;
 
 void main ()
 {
-	frag_colour = texture(layer0, st);
+	frag_color = texture(layer0, vUv);
 }

@@ -150,6 +150,8 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
 	_engine.getInstance<Renderer>().addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
 
+	_engine.getInstance<Renderer>().bindShaderToUniform("fboToScreen", "PerFrame", "PerFrame");
+
 	_engine.getInstance<Renderer>().bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 
@@ -299,16 +301,16 @@ bool 			DemoScene::userUpdate(double time)
 	{
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 1.0f);
+		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 10.0f);
 		auto rigidbody = e->getComponent<Component::RigidBody>();
-		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
+		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 80.0f));
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 		auto light = e->addComponent<Component::PointLight>();
 		light->lightData.colorRange = glm::vec4((rand() % 10000) / 10000.0f, (rand() % 10000) / 10000.0f, (rand() % 10000) / 10000.0f, 10.0f);
 		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>().getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 		e->addTag(BALL_TAG);
-		if (stack.size() > 300)
+		if (stack.size() > 50)
 		{
 			destroy(stack.front());
 			stack.pop();

@@ -3,6 +3,7 @@
 #include <Components\MeshRenderer.hh>
 #include <Context\IRenderContext.hh>
 #include <OpenGL\VertexBuffer.hh>
+#include <glm/gtc/matrix_transform.hpp>
 
 LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 				System(scene),
@@ -13,6 +14,10 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 
 LightRenderingSystem::~LightRenderingSystem()
 {
+	glDeleteFramebuffers(1, &_frameBuffer);
+	glDeleteTextures(1, &_colorTexture);
+	glDeleteTextures(1, &_depthTexture);
+	glDeleteBuffers(1, &_lights);
 	delete	_vertexManager;
 }
 
@@ -62,67 +67,38 @@ void LightRenderingSystem::mainUpdate(double time)
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _lights);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, lightNbr * sizeof(ContiguousLight), _contiguousLights.data(), GL_DYNAMIC_DRAW);
 	// ----------------------------------------------------
-//	glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer); // Bind the FrameBuffer to render to textures
-//
-//	// Z PrePass
-//	// ----------------------------------------------------
-//	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-//	glEnable(GL_DEPTH_TEST);
-//	glClearDepth(1.0f);
-//	glDepthFunc(GL_LESS);
-//	glDepthMask(GL_TRUE);
-//	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-//	glColorMask(0, 0, 0, 0);
-//
-//	renderer.getShader("depthOnly")->use();
-//
-//	for (auto e : _meshRendererFilter.getCollection())
-//	{
-//		e->getComponent<Component::MeshRenderer>()->renderRaw();
-//	}
-//	glFinish();
-//	// ----------------------------------------------------
-//	// Final Lightning pass
-//	// ----------------------------------------------------
-//	glDepthFunc(GL_LEQUAL);
-//	glDepthMask(GL_FALSE);
-//	glColorMask(1, 1, 1, 1);
-//
-//	GLuint		localLightBuffId = _lights;
-//
-//	for (auto e : _meshRendererFilter.getCollection())
-//	{
-//		e->getComponent<Component::MeshRenderer>()->render(
-//		[&renderer, localLightBuffId](OpenGLTools::Shader &s)
-//		{
-//			if (s.getId() == renderer.getShader("MaterialBasic")->getId())
-//			{
-//				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, localLightBuffId);
-//			}
-//		}
-//		);
-//	}
-//	glFinish();
-//	// ----------------------------------------------------
-//
-//	glBindFramebuffer(GL_FRAMEBUFFER, 0); // Rebind the default FrameBuffer
-//	glDisable(GL_DEPTH_TEST);
-//
-//	renderer.getShader("fboToScreen")->use();
-//
-//	// Bind texture of the final render
-//	glActiveTexture(GL_TEXTURE0);
-//	glBindTexture(GL_TEXTURE_2D, _colorTexture);
-//
-//	_quad.draw();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0); // Rebind the default FrameBuffer
+	glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer); // Bind the FrameBuffer to render to textures
+
+	// Z PrePass
+	// ----------------------------------------------------
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	glEnable(GL_DEPTH_TEST);
+	glClearDepth(1.0f);
+	glDepthFunc(GL_LESS);
+	glDepthMask(GL_TRUE);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glColorMask(0, 0, 0, 0);
+
+	renderer.getShader("depthOnly")->use();
+
+	for (auto e : _meshRendererFilter.getCollection())
+	{
+		e->getComponent<Component::MeshRenderer>()->renderRaw();
+	}
+
+	// ----------------------------------------------------
+	// Final Lightning pass
+	// ----------------------------------------------------
+	glDepthFunc(GL_LEQUAL);
+	glDepthMask(GL_FALSE);
+	glColorMask(1, 1, 1, 1);
 
 	GLuint		localLightBuffId = _lights;
 
 	for (auto e : _meshRendererFilter.getCollection())
 	{
 		e->getComponent<Component::MeshRenderer>()->render(
-		[&renderer, localLightBuffId](OpenGLTools::Shader &s)
+			[&renderer, localLightBuffId](OpenGLTools::Shader &s)
 		{
 			if (s.getId() == renderer.getShader("MaterialBasic")->getId())
 			{
@@ -131,6 +107,23 @@ void LightRenderingSystem::mainUpdate(double time)
 		}
 		);
 	}
+
+	// ----------------------------------------------------
+
+	perFrame->setUniform("view", glm::mat4(1));
+	perFrame->setUniform("projection", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+	perFrame->flushChanges();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0); // Rebind the default FrameBuffer
+	glDisable(GL_DEPTH_TEST);
+
+	renderer.getShader("fboToScreen")->use();
+
+	// Bind texture of the final render
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _colorTexture);
+
+	_quad.draw();
 }
 
 void	LightRenderingSystem::initFrameBuffer()
