@@ -13,6 +13,8 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
+uniform sampler2D fTexture0;
+
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;
 layout (location = 2) in vec4 vNormal;
@@ -27,5 +29,5 @@ void main(void)
 
   gColor = vColor;
   gUv = vTexCoord;
-  gl_Position = projection * modelView * vPosition;
+  gl_Position = vPosition;
 }

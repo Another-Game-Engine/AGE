@@ -19,7 +19,7 @@ namespace Component
 		void init(std::shared_ptr<ObjFile> const &obj);
 		void setShader(std::string const &s);
 		virtual void reset();
-		void render(glm::mat4 const &projection, glm::mat4 const &view);
+		void render(glm::mat4 const &VPLight);
 		std::shared_ptr<ObjFile> const &getMesh() const;
 
 		template <typename Archive>
