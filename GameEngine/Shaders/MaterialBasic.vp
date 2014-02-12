@@ -27,6 +27,7 @@ uniform          sampler2D fTexture0;//ambient;
 uniform          sampler2D fTexture1;//diffuse;
 uniform          sampler2D fTexture2;//specular;
 uniform          sampler2D fTexture3;//normal;
+uniform			 sampler2D fTexture4;// shadowMap;
 
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;

@@ -33,9 +33,9 @@ namespace Component
 		_shader = "";
 	}
 
-	void ShadowRenderer::render(glm::mat4 const &projection, glm::mat4 const &view)
+	void ShadowRenderer::render(glm::mat4 const &VPLight)
 	{
-		glm::mat4 depthMVP = projection * view * _entity->getGlobalTransform();
+		glm::mat4 depthMVP = VPLight * _entity->getGlobalTransform();
 		auto &renderer = _entity->getScene()->getEngine().getInstance<Renderer>();
 		std::shared_ptr<OpenGLTools::UniformBuffer> lightMVP(renderer.getUniform("Light"));
 		auto shader = renderer.getShader(_shader);

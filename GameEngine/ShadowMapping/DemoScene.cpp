@@ -20,6 +20,7 @@ void DemoScene::initSytemeScene()
 	rct<Component::RotationForce>();
 	rct<Component::TrackBall>();
 	addSystem<MeshRendererSystem>(0);
+	addSystem<ShadowRendererSystem>(50);
 	addSystem<GraphNodeSystem>(100);
 	addSystem<TrackBallSystem>(150);
 	addSystem<CameraSystem>(200);
@@ -36,19 +37,12 @@ void DemoScene::initRenderer()
 	renderer.addUniform("MaterialBasic").init(&s, "MaterialBasic", materialBasic);
 	renderer.addUniform("PerFrame").init(&s, "PerFrame", perFrameVars);
 	renderer.addUniform("PerModel").init(&s, "PerModel", perModelVars);
-	renderer.getShader("MaterialBasic")->setTextureNumber(4);
+	renderer.getShader("MaterialBasic")->setTextureNumber(5);
+	renderer.getShader("MaterialBasic");
 	renderer.bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	renderer.bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	renderer.bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 	renderer.getShader("MaterialBasic")->build();
-
-	OpenGLTools::Shader &s2 = renderer.addShader("Basic", "Shaders/basic.vp", "Shaders/basic.fp");
-	renderer.getUniform("PerFrame")->init(&s2, "PerFrame", perFrameVars);
-	renderer.getUniform("PerModel")->init(&s2, "PerModel", perModelVars);
-	renderer.bindShaderToUniform("Basic", "PerFrame", "PerFrame");
-	renderer.bindShaderToUniform("Basic", "PerModel", "PerModel");
-	renderer.getShader("Basic")->build();
-
 }
 
 void DemoScene::loadResources()
@@ -60,7 +54,6 @@ void DemoScene::loadResources()
 
 bool DemoScene::userStart()
 {
-	std::string const shaderName = "MaterialBasic";
 	initSytemeScene();
 	initRenderer();
 	loadResources();
@@ -69,16 +62,21 @@ bool DemoScene::userStart()
 	ball->addComponent<Component::GraphNode>();
 	ball->setLocalTransform() = glm::translate(ball->getLocalTransform(), glm::vec3(0.0, 4.0, 4.0));
 	ball->setLocalTransform() = glm::scale(ball->getLocalTransform(), glm::vec3(1.0, 1.0, 1.0));
-	auto r = ball->addComponent<Component::MeshRenderer>(ballMesh);
-	r->setShader(shaderName);
+	auto &r = ball->addComponent<Component::MeshRenderer>(ballMesh);
+	r->setShader("MaterialBasic");
+	auto &s = ball->addComponent<Component::ShadowRenderer>(ballMesh);
+	s->setShader("ShadowMapping");
+
 
 	auto platform = createEntity();
 	auto platformMesh = AMediaFile::get<ObjFile>("obj__cube");
 	platform->addComponent<Component::GraphNode>();
 	platform->setLocalTransform() = glm::translate(platform->getLocalTransform(), glm::vec3(4.0, 0.0, 4.0));
 	platform->setLocalTransform() = glm::scale(platform->getLocalTransform(), glm::vec3(8.0, 0.2, 8.0));
-	auto r2 = platform->addComponent<Component::MeshRenderer>(platformMesh);
-	r2->setShader(shaderName);
+	auto &r2 = platform->addComponent<Component::MeshRenderer>(platformMesh);
+	r2->setShader("MaterialBasic");
+	auto &s2 = platform->addComponent<Component::ShadowRenderer>(platformMesh);
+	s2->setShader("ShadowMapping");
 
 	auto camera = createEntity();
 	camera->addComponent<Component::GraphNode>();
