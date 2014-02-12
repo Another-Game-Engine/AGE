@@ -46,9 +46,19 @@ in vec2 fTexCoord;
 
 out layout (location = 0) vec4 FragColor;
 
+float		calcSpecular(vec3 lightPos, vec3 fragToLight)
+{
+	vec3	eyePos = normalize(-fPosition.xyz);
+	vec3	lightReflection = normalize(-reflect(fragToLight, normalize(fNormal.xyz)));
+	float	shininess2 = 10.0f;
+
+	return clamp(pow(max(dot(lightReflection, eyePos), 0.0), 0.3f * shininess2), 0.0f, 1.0f);
+}
+
 void main(void)
 {
-	vec4	finalColor = vec4(0, 0, 0, 1);
+	vec3	texColor = texture2D(fTexture1, fTexCoord).xyz;
+	vec4	finalColor = vec4(texColor * 0.08f, 1);
 
 	for (int i = 0; i < lightNbr; ++i)
 	{
@@ -57,13 +67,19 @@ void main(void)
 		float	lightRange = lights[i].colorRange.w;
 
 		vec3	fragToLight = lightPos.xyz - fPosition.xyz;
-		float	dist = length(fragToLight);
-		float	illumination =  clamp(dot(normalize(fragToLight), normalize(fNormal.xyz)), 0.0, 1.0) *
-								clamp(1.0f - dist / lightRange, 0.0f, 1.0f);
+		float	fragToLightDist = length(fragToLight);
 
-		finalColor += vec4(vec3(illumination) *
-						   lightColor *
-						   texture2D(fTexture1, fTexCoord).xyz, 0.0f);
+		if (fragToLightDist < lightRange) // Ugly test waiting for tile based forward rendering
+		{
+			fragToLight = normalize(fragToLight);
+	
+			float	illumination =  clamp(dot(fragToLight, normalize(fNormal.xyz)), 0.0f, 1.0f);
+			float	specular = calcSpecular(lightPos.xyz, fragToLight);
+			float	diminution = clamp(1.0f - fragToLightDist / lightRange, 0.0f, 1.0f);
+	
+			finalColor.xyz += specular * diminution * lightColor * texColor;
+			finalColor.xyz += illumination * diminution * lightColor * texColor;
+		}
 	}
 	FragColor = finalColor;
 }
