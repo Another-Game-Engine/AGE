@@ -2,25 +2,25 @@
 
 layout (std140) uniform MaterialBasic
 {
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-  vec3 transmittance;
-  vec3 emission;
-  float shininess;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	vec3 transmittance;
+	vec3 emission;
+	float shininess;
 };
 
 layout (std140) uniform PerFrame
 {
-        mat4 projection;
-        mat4 view;
-        vec4 light;
-        float time;
+	mat4 projection;
+	mat4 view;
+	vec4 light;
+	float time;
 };
 
 layout (std140) uniform PerModel
 {
-        mat4 model;
+	mat4 model;
 };
 
 uniform          sampler2D fTexture0;//ambient;

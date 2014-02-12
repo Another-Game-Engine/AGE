@@ -33,15 +33,16 @@ namespace Component
 		_shader = "";
 	}
 
-	void ShadowRenderer::render()
+	void ShadowRenderer::render(glm::mat4 const &projection, glm::mat4 const &view)
 	{
+		glm::mat4 depthMVP = projection * view * _entity->getGlobalTransform();
 		auto &renderer = _entity->getScene()->getEngine().getInstance<Renderer>();
-		std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform(renderer.getUniform("PerModel"));
+		std::shared_ptr<OpenGLTools::UniformBuffer> lightMVP(renderer.getUniform("Light"));
 		auto shader = renderer.getShader(_shader);
 		if (shader)
 			shader->use();
-		perModelUniform->setUniform("model", _entity->getGlobalTransform());
-		perModelUniform->flushChanges();
+		lightMVP->setUniform("Light", depthMVP);
+		lightMVP->flushChanges();
 		for (unsigned int i = 0; i < _mesh->material->materials.size(); ++i)
 		{
 			_mesh->geometries[i].buffer.draw(GL_TRIANGLES);
