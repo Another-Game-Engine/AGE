@@ -30,7 +30,7 @@ void 							AScene::update(double time)
 	//recomputePositions(_engine.getInstance<EntityManager>().getRoot(), false);
 }
 
-Entity AScene::createEntity()
+Entity &AScene::createEntity()
 {
 	if (_free.empty())
 	{
