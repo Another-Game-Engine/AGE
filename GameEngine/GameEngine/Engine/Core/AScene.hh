@@ -36,7 +36,7 @@ public:
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
-	Entity createEntity();
+	Entity &createEntity();
 	void destroy(const Entity &h);
 	EntityData *get(const Entity &h);
 
