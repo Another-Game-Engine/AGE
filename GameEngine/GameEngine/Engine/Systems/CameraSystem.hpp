@@ -8,6 +8,7 @@
 #include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
+#include <Systems/ShadowRendererSystem.hh>
 #include <Systems/MeshRenderSystem.h>
 
 class CameraSystem : public System
@@ -95,6 +96,7 @@ protected:
 			perFrameBuffer->setUniform("view", cameraPosition);
 			perFrameBuffer->setUniform("time", (float)totalTime);
 			perFrameBuffer->flushChanges();
+			_scene->getSystem<ShadowRendererSystem>()->render(time);
 			_scene->getSystem<MeshRendererSystem>()->render(time);
 		}
 	}

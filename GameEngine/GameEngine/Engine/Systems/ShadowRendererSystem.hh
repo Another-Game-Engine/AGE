@@ -66,8 +66,10 @@ protected:
 	virtual void mainUpdate(double time){}
 	virtual void initialize()
 	{
+		_filter.require<Component::ShadowRenderer>();
 		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-		_filter.require<Component::MeshRenderer>();
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			std::cout << "1) Something go wrong with the framebuffer" << std::endl;
 		glBindTexture(GL_TEXTURE_2D, _texture);
 		glTexImage2D(GL_TEXTURE_2D, 0, 1, _height, _width, 0, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -76,7 +78,7 @@ protected:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texture, 0);
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "Somthing go wrong with the framebuffer" << std::endl;
+			std::cout << "2) Something go wrong with the framebuffer" << std::endl;
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -85,7 +87,5 @@ private:
 	glm::mat4 _VPLight;
 
 };
-
-# include "ShadowRendererSystem.hpp"
 
 #endif /*!SHADOWRENDERERSYSTEM_HPP_*/

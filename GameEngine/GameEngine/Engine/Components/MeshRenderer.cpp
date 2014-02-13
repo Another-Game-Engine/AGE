@@ -34,7 +34,7 @@ namespace Component
 		mesh = nullptr;
 	}
 
-	void MeshRenderer::render()
+	void MeshRenderer::render(GLuint shadowTex)
 	{
 		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("PerModel");
 		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
@@ -47,6 +47,11 @@ namespace Component
 		{
 			mesh->material->materials[i].setUniforms(materialUniform);
 			materialUniform->flushChanges();
+			if (shadowTex != 0)
+			{
+				glActiveTexture(GL_TEXTURE1);
+				glBindTexture(GL_TEXTURE_2D, shadowTex);
+			}
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
 		}
 	}

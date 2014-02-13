@@ -28,21 +28,27 @@ void DemoScene::initSytemeScene()
 
 void DemoScene::initRenderer()
 {
+	std::string const lightShadow[] = {"lightMVP"};
 	std::string const perModelVars[] = { "model" };
 	std::string const perFrameVars[] = { "projection", "view", "light", "time" };
 	std::string const materialBasic[] = { "ambient", "diffuse", "specular", "transmittance", "emission", "shininess" };
 
 	auto &renderer = _engine.getInstance<Renderer>();
 	OpenGLTools::Shader &s = renderer.addShader("MaterialBasic", "Shaders/MaterialBasic.vp", "Shaders/MaterialBasic.fp");
-	renderer.addUniform("MaterialBasic").init(&s, "MaterialBasic", materialBasic);
+ 	renderer.addUniform("MaterialBasic").init(&s, "MaterialBasic", materialBasic);
 	renderer.addUniform("PerFrame").init(&s, "PerFrame", perFrameVars);
 	renderer.addUniform("PerModel").init(&s, "PerModel", perModelVars);
 	renderer.getShader("MaterialBasic")->setTextureNumber(5);
-	renderer.getShader("MaterialBasic");
 	renderer.bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	renderer.bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	renderer.bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 	renderer.getShader("MaterialBasic")->build();
+
+	OpenGLTools::Shader &shadow = renderer.addShader("ShadowMapping", "Shaders/ShadowMapping.vp", "Shaders/ShadowMapping.fp");
+	renderer.getShader("ShadowMapping")->setTextureNumber(0);
+	renderer.addUniform("Light").init(&shadow, "Light", lightShadow);
+	renderer.bindShaderToUniform("ShadowMapping", "Light", "Light");
+	renderer.getShader("ShadowMapping")->build();
 }
 
 void DemoScene::loadResources()
@@ -57,6 +63,10 @@ bool DemoScene::userStart()
 	initSytemeScene();
 	initRenderer();
 	loadResources();
+
+	getSystem<ShadowRendererSystem>()->setLight(glm::ortho<float>(-10, 10, -10, 10, 10, 20) * glm::lookAt(glm::vec3(0.5, 2, 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+	getSystem<MeshRendererSystem>()->setTexShadow(getSystem<ShadowRendererSystem>()->getShadowMap());
+
 	auto ball = createEntity();
 	auto ballMesh = AMediaFile::get<ObjFile>("obj__ball");
 	ball->addComponent<Component::GraphNode>();
@@ -66,7 +76,6 @@ bool DemoScene::userStart()
 	r->setShader("MaterialBasic");
 	auto &s = ball->addComponent<Component::ShadowRenderer>(ballMesh);
 	s->setShader("ShadowMapping");
-
 
 	auto platform = createEntity();
 	auto platformMesh = AMediaFile::get<ObjFile>("obj__cube");
