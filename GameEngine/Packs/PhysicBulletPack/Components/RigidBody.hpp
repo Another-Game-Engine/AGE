@@ -50,7 +50,8 @@ namespace Component
 
 		void init(float _mass = 1.0f)
 		{
-			_manager = dynamic_cast<BulletDynamicManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
+			auto test = _entity->getScene()->getInstance<BulletCollisionManager>();
+			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 			mass = _mass;
 		}
@@ -231,7 +232,7 @@ namespace Component
 		////
 		//////
 
-		BulletDynamicManager *_manager;
+		std::shared_ptr<BulletDynamicManager> _manager;
 		CollisionShape shapeType;
 		btScalar mass;
 		btVector3 inertia;

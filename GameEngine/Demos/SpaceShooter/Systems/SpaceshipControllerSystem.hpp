@@ -46,12 +46,12 @@ private:
 	void updateComponent(Entity &entity, std::shared_ptr<Component::SpaceshipController> c, double time)
 	{
 			c->resetControls();
-			auto &inputs = _scene->getEngine().getInstance<Input>();
+			auto inputs = _scene->getInstance<Input>();
 			auto &controls = c->controls;
 			auto &keys = c->keys;
 
-			float yAngle = inputs.getMouseDelta().y * 0.3f;
-			float xAngle = - inputs.getMouseDelta().x * 0.3f;
+			float yAngle = inputs->getMouseDelta().y * 0.3f;
+			float xAngle = - inputs->getMouseDelta().x * 0.3f;
 
 			entity->setLocalTransform() = glm::rotate(entity->getLocalTransform(), yAngle, glm::vec3(1, 0, 0));
 			entity->setLocalTransform() = glm::rotate(entity->getLocalTransform(), xAngle, glm::vec3(0, 1, 0));
@@ -59,7 +59,7 @@ private:
 			// UPDATE KEYS
 			for (unsigned int i = 0; i < controls.size(); ++i)
 			{
-				controls[i] = inputs.getKey(keys[i]);
+				controls[i] = inputs->getKey(keys[i]);
 			}
 
 			auto forwardDir = glm::vec3(0,0,1);
@@ -94,7 +94,7 @@ private:
 				balls.push_back(b);
 				b->computeTransformAndUpdateGraphnode();
 			}
-			if (inputs.getKey(SDLK_p))
+			if (inputs->getKey(SDLK_p))
 			{
 				for (auto e : balls)
 					_scene->destroy(e);

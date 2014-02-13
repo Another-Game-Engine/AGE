@@ -122,54 +122,54 @@ bool 			DemoScene::userStart()
 			"shininess"
 		};
 
-	OpenGLTools::Shader &s = _engine.getInstance<Renderer>().addShader("MaterialBasic",
+	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
 		"./Shaders/MaterialBasic.vp",
 		"./Shaders/MaterialBasic.fp");
 
-		_engine.getInstance<Renderer>().addUniform("MaterialBasic")
+		_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
 			.init(&s, "MaterialBasic", materialBasic);
-		_engine.getInstance<Renderer>().addUniform("PerFrame")
+		_engine.getInstance<Renderer>()->addUniform("PerFrame")
 			.init(&s, "PerFrame", perFrameVars);
-		_engine.getInstance<Renderer>().addUniform("PerModel")
+		_engine.getInstance<Renderer>()->addUniform("PerModel")
 			.init(&s, "PerModel", perModelVars);
 
-	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
-	_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
-	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
-	_engine.getInstance<Renderer>().addShader("earth", "Shaders/earth.vp", "Shaders/earth.fp");
-	_engine.getInstance<Renderer>().addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
-	_engine.getInstance<Renderer>().addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
-	_engine.getInstance<Renderer>().addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
+	_engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
+	_engine.getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
+	_engine.getInstance<Renderer>()->addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
+	_engine.getInstance<Renderer>()->addShader("earth", "Shaders/earth.vp", "Shaders/earth.fp");
+	_engine.getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
+	_engine.getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
+	_engine.getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
 
-	_engine.getInstance<Renderer>().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-	_engine.getInstance<Renderer>().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-	_engine.getInstance<Renderer>().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
-	_engine.getInstance<Renderer>().getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
+	_engine.getInstance<Renderer>()->getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	_engine.getInstance<Renderer>()->getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	_engine.getInstance<Renderer>()->getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
+	_engine.getInstance<Renderer>()->getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
 		.addLayer(GL_COLOR_ATTACHMENT0).build();
-	_engine.getInstance<Renderer>().getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
-	_engine.getInstance<Renderer>().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
-	_engine.getInstance<Renderer>().getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
+	_engine.getInstance<Renderer>()->getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+	_engine.getInstance<Renderer>()->getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+	_engine.getInstance<Renderer>()->getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
 		.addLayer(GL_COLOR_ATTACHMENT0).build();
-	_engine.getInstance<Renderer>().getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2)
+	_engine.getInstance<Renderer>()->getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2)
 		.addLayer(GL_COLOR_ATTACHMENT0).addLayer(GL_COLOR_ATTACHMENT1).build();
 
-	_engine.getInstance<Renderer>().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
+	_engine.getInstance<Renderer>()->getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
 
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "MaterialBasic", "MaterialBasic");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "MaterialBasic", "MaterialBasic");
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "MaterialBasic", "MaterialBasic");
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "MaterialBasic", "MaterialBasic");
-	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basicLight", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basicLight", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("earth", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("earth", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("earth", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("bump", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("bump", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("bump", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
 
 	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
@@ -179,10 +179,10 @@ bool 			DemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 //	AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
 
-	_engine.getInstance<AudioManager>().loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
-	_engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	_engine.getInstance<AudioManager>().loadSound(File("./Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	_engine.getInstance<AudioManager>().loadSound(File("./Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
+	_engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
@@ -232,8 +232,8 @@ bool 			DemoScene::userStart()
 		character->addComponent<Component::FirstPersonView>();
 		e->addComponent<Component::AudioListener>();
 		auto ae = e->addComponent<Component::AudioEmitter>();
-		auto arriveOnFloor = _engine.getInstance<AudioManager>().getAudio("arriveOnFloor");
-		auto jump = _engine.getInstance<AudioManager>().getAudio("jump");
+		auto arriveOnFloor = _engine.getInstance<AudioManager>()->getAudio("arriveOnFloor");
+		auto jump = _engine.getInstance<AudioManager>()->getAudio("jump");
 		ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
 		ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
 	}
@@ -244,7 +244,7 @@ bool 			DemoScene::userStart()
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 		auto audioCpt = e->addComponent<Component::AudioEmitter>();
-		audioCpt->setAudio(_engine.getInstance<AudioManager>().getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
+		audioCpt->setAudio(_engine.getInstance<AudioManager>()->getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
 		audioCpt->play("ambiant", true);
 
 	}
@@ -259,14 +259,14 @@ bool 			DemoScene::userStart()
 		"view"
 	};
 
-	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>().addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
 
-	_engine.getInstance<Renderer>().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	_engine.getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 
-	_engine.getInstance<Renderer>().addUniform("cameraUniform").
+	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
 		init(&sky, "cameraUniform", vars);
 	
-	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	return (true);
@@ -276,11 +276,11 @@ bool 			DemoScene::userUpdate(double time)
 {
 	static std::queue<Entity> stack;
 
-	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_RIGHT))
+	if (_engine.getInstance<Input>()->getInput(SDL_BUTTON_RIGHT))
 	{
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-		auto test = _engine.getInstance<BulletCollisionManager>().rayCast(from, from + to * 1000.0f);
+		auto test = _engine.getInstance<BulletCollisionManager>()->rayCast(from, from + to * 1000.0f);
 		if (test.size() != 0)
 		{
 			for (auto e : test)
@@ -291,7 +291,7 @@ bool 			DemoScene::userUpdate(double time)
 		}
 	}
 	static float delay = 0.0f;
-	if (_engine.getInstance<Input>().getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
+	if (_engine.getInstance<Input>()->getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
 	{
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
@@ -300,7 +300,7 @@ bool 			DemoScene::userUpdate(double time)
 		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
-		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>().getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
+		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 		e->addTag(BALL_TAG);
 		if (stack.size() > 300)
 		{
@@ -312,8 +312,8 @@ bool 			DemoScene::userUpdate(double time)
 	}
 	if (delay >= 0.0f)
 		delay -= time;
-	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
-		_engine.getInstance<Input>().getInput(SDL_QUIT))
+	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
+		_engine.getInstance<Input>()->getInput(SDL_QUIT))
 		return (false);
 	return (true);
 }
