@@ -36,12 +36,11 @@ namespace Component
 	void ShadowRenderer::render(glm::mat4 const &VPLight)
 	{
 		glm::mat4 depthMVP = VPLight * _entity->getGlobalTransform();
-		auto &renderer = _entity->getScene()->getEngine().getInstance<Renderer>();
-		std::shared_ptr<OpenGLTools::UniformBuffer> lightMVP(renderer.getUniform("Light"));
-		auto shader = renderer.getShader(_shader);
+		OpenGLTools::UniformBuffer *lightMVP = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("Light");
+		auto shader = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(_shader);
 		if (shader)
 			shader->use();
-		lightMVP->setUniform("Light", depthMVP);
+		lightMVP->setUniform("lightMVP", glm::mat4(0)/*depthMVP*/);
 		lightMVP->flushChanges();
 		for (unsigned int i = 0; i < _mesh->material->materials.size(); ++i)
 		{

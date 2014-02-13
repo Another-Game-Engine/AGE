@@ -12,7 +12,8 @@ class MeshRendererSystem : public System
 {
 public:
 	MeshRendererSystem(AScene *scene)
-		: System(scene)
+		: System(scene),
+		_texShadow(0)
 		, _filter(scene)
 		, _renderDebugMethod(false)
 	{}
@@ -34,11 +35,22 @@ public:
 		for (auto e : _filter.getCollection())
 		{
 			auto &mesh = e->getComponent<Component::MeshRenderer>();
-			mesh->render();
+			mesh->render(_texShadow);
 		}
 	}
 
+	void setTexShadow(GLuint texShadow)
+	{
+		_texShadow = texShadow;
+	}
+
+	void clearTexShadow()
+	{
+		_texShadow = 0;
+	}
+
 protected:
+	GLuint _texShadow;
 	EntityFilter _filter;
 	bool _renderDebugMethod;
 
