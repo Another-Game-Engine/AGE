@@ -36,6 +36,8 @@ private:
 	{
 		for (auto e : _filter.getCollection())
 		{
+			auto a = e;
+			auto b = e->getComponent<Component::RigidBody>();
 			if (e->getComponent<Component::RigidBody>()->getBody().isStaticOrKinematicObject())
 				updateStatic(e);
 			else
