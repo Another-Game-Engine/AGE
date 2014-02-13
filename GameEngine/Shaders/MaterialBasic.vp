@@ -2,12 +2,12 @@
 
 layout (std140) uniform MaterialBasic
 {
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-  vec3 transmittance;
-  vec3 emission;
-  float shininess;
+	vec3	ambient;
+	vec3	diffuse;
+	vec3	specular;
+	vec3	transmittance;
+	vec3	emission;
+	float	shininess;
 };
 
 layout (std140) uniform PerFrame
@@ -23,10 +23,10 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-layout(binding = 0) uniform sampler2D fTexture0;//ambient;
-layout(binding = 1) uniform sampler2D fTexture1;//diffuse;
-layout(binding = 2) uniform sampler2D fTexture2;//specular;
-layout(binding = 3) uniform sampler2D fTexture3;//normal;
+layout(binding = 0) uniform sampler2D fTexture0; // ambient;
+layout(binding = 1) uniform sampler2D fTexture1; // diffuse;
+layout(binding = 2) uniform sampler2D fTexture2; // specular;
+layout(binding = 3) uniform sampler2D fTexture3; // normal;
 
 struct PointLight
 {

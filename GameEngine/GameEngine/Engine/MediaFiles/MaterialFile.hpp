@@ -68,12 +68,12 @@ struct MaterialFile : public MediaFile<MaterialFile>
 
 		Material() :
 			name("noname"),
-			ambient(0),
-			diffuse(0),
-			specular(0),
+			ambient(1.0f),
+			diffuse(1.0f),
+			specular(1.0f),
 			transmittance(0),
 			emission(0),
-			shininess(0),
+			shininess(1.0f),
 			ambientTex(nullptr),
 			diffuseTex(nullptr),
 			specularTex(nullptr),
@@ -129,17 +129,7 @@ struct MaterialFile : public MediaFile<MaterialFile>
 
 		Material(const Material &o)
 		{
-			name = o.name;
-			ambient = o.ambient;
-			diffuse = o.diffuse;
-			specular = o.specular;
-			transmittance = o.transmittance;
-			emission = o.emission;
-			shininess = o.shininess;
-			ambientTex = o.ambientTex;
-			diffuseTex = o.diffuseTex;
-			specularTex = o.specularTex;
-			normalTex = o.normalTex;
+			*this = o;
 		}
 
 		template <typename Archive>

@@ -4,6 +4,7 @@
 
 #include <Systems\System.h>
 #include <OpenGL\VertexManager.hh>
+#include <OpenGL\ComputeShader.hh>
 
 #include <vector>
 
@@ -40,5 +41,15 @@ private:
 	GLuint						_lights;
 	std::vector<ContiguousLight>		_contiguousLights;
 
+	// HDR Compute shader
+	OpenGLTools::ComputeShader		_averageColor;
+	OpenGLTools::ComputeShader		_modulateRender;
+
+	// HDR Average color
+	GLuint							_avgColors;
+
+	// HDR factors
+	float							_curFactor;
+	float							_targetFactor;
 };
 
