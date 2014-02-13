@@ -2,10 +2,10 @@
 
 uniform uvec2	colorBufferSize;
 
-shared uint		groupAvgColorR = 0;
-shared uint		groupAvgColorG = 0;
-shared uint		groupAvgColorB = 0;
-shared uint		groupColorNbr = 0;
+shared uint		groupAvgColorR;
+shared uint		groupAvgColorG;
+shared uint		groupAvgColorB;
+shared uint		groupColorNbr;
 
 layout (binding = 0, rgba32f) readonly uniform image2D colorBuffer;
 
@@ -20,6 +20,12 @@ layout (local_size_x = 16, local_size_y = 16) in;
 
 void	main()
 {
+	groupAvgColorR = 0;
+	groupAvgColorG = 0;
+	groupAvgColorB = 0;
+	groupColorNbr = 0;
+	barrier();
+
 	ivec2		position = ivec2(gl_GlobalInvocationID.xy);
 
 	if (position.x < colorBufferSize.x &&
