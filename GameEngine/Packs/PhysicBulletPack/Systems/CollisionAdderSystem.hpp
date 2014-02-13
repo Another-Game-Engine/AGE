@@ -12,11 +12,11 @@ class CollisionAdder : public System
 {
 public:
 	CollisionAdder(AScene *scene) : System(scene)
-		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
+		, _manager(scene->getInstance<BulletCollisionManager>())
 	{}
 	virtual ~CollisionAdder(){}
 private:
-	BulletCollisionManager &_manager;
+	std::shared_ptr<BulletCollisionManager> _manager;
 	virtual void updateBegin(double time)
 	{
 	}
@@ -26,7 +26,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		btDispatcher *dispatcher = _manager.getWorld()->getDispatcher();
+		btDispatcher *dispatcher = _manager->getWorld()->getDispatcher();
 		unsigned int max = dispatcher->getNumManifolds();
 		for (unsigned int i = 0; i < max; ++i)
 		{

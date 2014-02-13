@@ -32,19 +32,19 @@ int			main(int ac, char **av)
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 //	e.setInstance<BulletCollisionManager>().init();
-	e.setInstance<BulletDynamicManager, BulletCollisionManager>().init();
+	e.setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 
 	// init engine
 	if (e.init() == false)
 		return (EXIT_FAILURE);
 
 	// add scene
-	e.getInstance<SceneManager>().addScene(new InGameScene(e), "InGameScene");
+	e.getInstance<SceneManager>()->addScene(new InGameScene(e), "InGameScene");
 
 	// bind scene
-	if (!e.getInstance<SceneManager>().initScene("InGameScene"))
+	if (!e.getInstance<SceneManager>()->initScene("InGameScene"))
 		return false;
-	e.getInstance<SceneManager>().enableScene("InGameScene", 100);
+	e.getInstance<SceneManager>()->enableScene("InGameScene", 100);
 
 	// launch engine
 	if (e.start() == false)

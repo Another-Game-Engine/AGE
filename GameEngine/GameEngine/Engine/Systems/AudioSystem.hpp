@@ -16,7 +16,7 @@ public:
 		: System(scene)
 		, _emitters(scene)
 		, _listeners(scene)
-		, _manager(&scene->getEngine().getInstance<AudioManager>())
+		, _manager(scene->getInstance<AudioManager>())
 	{
 		assert(_manager != nullptr && "No audio manager found.");
 	}
@@ -24,7 +24,7 @@ public:
 protected:
 	EntityFilter _emitters;
 	EntityFilter _listeners;
-	AudioManager *_manager;
+	std::shared_ptr<AudioManager> _manager;
 
 	virtual void updateBegin(double time)
 	{}
