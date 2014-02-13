@@ -276,6 +276,12 @@ bool 			BulletDemoScene::userUpdate(double time)
 {
 	static std::queue<Entity> stack;
 
+	if (_engine.getInstance<Input>()->getInput(SDLK_l))
+	{
+		_engine.getInstance<SceneManager>()->enableScene("SolarSystemDemo", 0);
+		_engine.getInstance<SceneManager>()->disableScene("BulletDemo");
+	}
+
 	if (_engine.getInstance<Input>()->getInput(SDL_BUTTON_RIGHT))
 	{
 		glm::vec3 from, to;
