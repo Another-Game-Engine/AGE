@@ -6,9 +6,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 LightRenderingSystem::LightRenderingSystem(AScene *scene) :
-				System(scene),
-				_lightFilter(scene),
-				_meshRendererFilter(scene)
+						System(scene),
+						_lightFilter(scene),
+						_meshRendererFilter(scene),
+						_curFactor(1.0f),
+						_targetFactor(1.0f)
 {
 }
 
@@ -18,6 +20,7 @@ LightRenderingSystem::~LightRenderingSystem()
 	glDeleteTextures(1, &_colorTexture);
 	glDeleteTextures(1, &_depthTexture);
 	glDeleteBuffers(1, &_lights);
+	glDeleteBuffers(1, &_avgColors);
 	delete	_vertexManager;
 }
 
@@ -29,8 +32,13 @@ void LightRenderingSystem::initialize()
 	initQuad();
 	initFrameBuffer();
 
+	_averageColor.init("./ComputeShaders/AverageColorFirstPass.kernel");
+	_modulateRender.init("./ComputeShaders/HighDynamicRange.kernel");
+
 	// Gen light buffer
 	glGenBuffers(1, &_lights);
+	// Gen average color buffer
+	glGenBuffers(1, &_avgColors);
 }
 
 void LightRenderingSystem::mainUpdate(double time)
@@ -40,7 +48,7 @@ void LightRenderingSystem::mainUpdate(double time)
 	int lightNbr = _lightFilter.getCollection().size();
 
 	perFrame->setUniform("lightNbr", lightNbr);
-	perFrame->flushChanges();
+	perFrame->flushChanges(); 
 	// Create the contiguous light buffer
 	if (_contiguousLights.size() != lightNbr)
 	{
@@ -62,8 +70,7 @@ void LightRenderingSystem::mainUpdate(double time)
 			++i;
 		}
 	}
-
-	size_t	toto = sizeof(Component::PointLight);
+	// Fill light buffer
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _lights);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, lightNbr * sizeof(ContiguousLight), _contiguousLights.data(), GL_DYNAMIC_DRAW);
 	// ----------------------------------------------------
@@ -95,12 +102,29 @@ void LightRenderingSystem::mainUpdate(double time)
 
 	GLuint		localLightBuffId = _lights;
 
+	// shaders that needs light buffer
+	GLuint		materialBasicId = -1;
+	GLuint		earthId = -1; 
+	GLuint		bumpId = -1;
+
+	auto		materialBasic = renderer.getShader("MaterialBasic");
+	auto		earth = renderer.getShader("earth");
+	auto		bump = renderer.getShader("bump");
+
+	if (materialBasic != NULL)
+		materialBasicId = materialBasic->getId();
+	if (earth != NULL)
+		earthId = earth->getId();
+	if (bump != NULL)
+		bumpId = bump->getId();
 	for (auto e : _meshRendererFilter.getCollection())
 	{
 		e->getComponent<Component::MeshRenderer>()->render(
-			[&renderer, localLightBuffId](OpenGLTools::Shader &s)
+			[localLightBuffId, materialBasicId, earthId, bumpId](OpenGLTools::Shader &s)
 		{
-			if (s.getId() == renderer.getShader("MaterialBasic")->getId())
+			if (s.getId() == earthId ||
+				s.getId() == materialBasicId ||
+				s.getId() == bumpId)
 			{
 				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, localLightBuffId);
 			}
@@ -108,6 +132,85 @@ void LightRenderingSystem::mainUpdate(double time)
 		);
 	}
 
+	// ----------------------------------------------------
+	// HDR Pass
+	// ----------------------------------------------------
+	// ----------------------------------------------------
+	// Average colors:
+	// ----------------------------------------------------
+	_averageColor.use();
+
+	GLint		colorBufferSizeLocation = glGetUniformLocation(_averageColor.getId(), "colorBufferSize");
+	size_t		WORK_GROUP_SIZE = 16;
+	glm::uvec2	fboSize = glm::uvec2(_scene->getEngine().getInstance<IRenderContext>().getScreenSize());
+	glm::uvec2	groupNbr = glm::uvec2((fboSize.x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
+									  (fboSize.y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
+	size_t		bufferSize = groupNbr.y * groupNbr.x;
+	glm::vec4	*datas = new glm::vec4[bufferSize];
+	glm::vec4	avgColor(0);
+
+	// set the color buffer size
+	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(fboSize));
+	// Allocate avg color buffer
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, bufferSize * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
+
+	// Bind color texture to sample
+	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+	// Bind average color buffer
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, _avgColors);
+	// Launch kernel
+	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
+	// wait for the shader to finish writing on the buffer
+	glMemoryBarrier(GL_ALL_BARRIER_BITS);
+	// We get the buffer datas
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
+	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, bufferSize * sizeof(glm::vec4), datas);
+	// and we calcultae the average
+	for (size_t i = 0; i < bufferSize; ++i)
+	{
+		avgColor += datas[i];
+	}
+	avgColor /= glm::vec4(bufferSize);
+	delete[] datas;
+	// ----------------------------------------------------
+	// Modulate colors:
+	// ----------------------------------------------------
+	float	avgIllumination = (avgColor.x + avgColor.y + avgColor.z) / 3.0f;
+
+	_targetFactor = glm::min(0.5f / avgIllumination, 1.0f);
+
+	_modulateRender.use();
+
+	colorBufferSizeLocation = glGetUniformLocation(_modulateRender.getId(), "colorBufferSize");
+	GLint		avgIllumLocation = glGetUniformLocation(_modulateRender.getId(), "factor");
+
+	if (_curFactor != _targetFactor)
+	{
+		if (_curFactor < _targetFactor)
+		{
+			_curFactor += 0.4f * _scene->getEngine().getInstance<Timer>().getElapsed();
+			if (_curFactor > _targetFactor)
+				_curFactor = _targetFactor;
+		}
+		else
+		{
+			_curFactor -= 0.4f * _scene->getEngine().getInstance<Timer>().getElapsed();
+			if (_curFactor < _targetFactor)
+				_curFactor = _targetFactor;
+		}
+	}
+
+	// Set the uniforms
+	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(fboSize));
+	glUniform1f(avgIllumLocation, _curFactor);
+
+	// Bind color texture to modulate
+	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+
+	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
+
+	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 	// ----------------------------------------------------
 
 	perFrame->setUniform("view", glm::mat4(1));
@@ -146,7 +249,7 @@ void	LightRenderingSystem::initFrameBuffer()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, wDimensions.x, wDimensions.y, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, wDimensions.x, wDimensions.y, 0, GL_RGBA, GL_FLOAT, NULL);
 
 	// generate frame buffer
 	glGenFramebuffers(1, &_frameBuffer);

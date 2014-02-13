@@ -50,15 +50,20 @@ float		calcSpecular(vec3 lightPos, vec3 fragToLight)
 {
 	vec3	eyePos = normalize(-fPosition.xyz);
 	vec3	lightReflection = normalize(-reflect(fragToLight, normalize(fNormal.xyz)));
-	float	shininess2 = 10.0f;
 
-	return clamp(pow(max(dot(lightReflection, eyePos), 0.0), 0.3f * shininess2), 0.0f, 1.0f);
+	return clamp(pow(max(dot(lightReflection, eyePos), 0.0), 0.3f * shininess), 0.0f, 1.0f);
 }
 
 void main(void)
 {
-	vec3	texColor = texture2D(fTexture1, fTexCoord).xyz;
-	vec4	finalColor = vec4(texColor * 0.08f, 1);
+	vec3	ambientColor = 0.05f * texture2D(fTexture0, fTexCoord).rgb * ambient;
+	vec3	diffuseColor = texture2D(fTexture0, fTexCoord).rgb * diffuse;
+	vec3	specularColor = texture2D(fTexture0, fTexCoord).rgb * specular;
+
+	// TODO: Implement a real normal mapping: this is an ugly trick just to see if it workss
+	vec3	fragNormal = normalize(normalize(fNormal.xyz) + normalize(texture2D(fTexture3, fTexCoord).xyz));
+
+	vec4	finalColor = vec4(ambientColor, 1);
 
 	for (int i = 0; i < lightNbr; ++i)
 	{
@@ -77,8 +82,8 @@ void main(void)
 			float	specular = calcSpecular(lightPos.xyz, fragToLight);
 			float	diminution = clamp(1.0f - fragToLightDist / lightRange, 0.0f, 1.0f);
 	
-			finalColor.xyz += specular * diminution * lightColor * texColor;
-			finalColor.xyz += illumination * diminution * lightColor * texColor;
+			finalColor.xyz += specular * diminution * lightColor * specularColor;
+			finalColor.xyz += illumination * diminution * lightColor * diffuseColor;
 		}
 	}
 	FragColor = finalColor;

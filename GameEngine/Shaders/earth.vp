@@ -1,4 +1,4 @@
-#version 330
+#version 430 core
 
 layout (std140) uniform PerFrame
 {
@@ -13,10 +13,10 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform	sampler2D fTexture0;
-uniform	sampler2D fTexture1;
-uniform	sampler2D fTexture2;
-uniform	sampler2D fTexture3;
+layout(binding = 0) uniform sampler2D fTexture0; // ambient;
+layout(binding = 1) uniform sampler2D fTexture1; // diffuse;
+layout(binding = 2) uniform sampler2D fTexture2; // specular;
+layout(binding = 3) uniform sampler2D fTexture3; // normal;
 
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;

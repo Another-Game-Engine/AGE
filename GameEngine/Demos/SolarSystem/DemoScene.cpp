@@ -18,6 +18,7 @@
 #include <Systems/AudioSystem.hpp>
 #include <Audio/AudioManager.hh>
 #include <Core/Engine.hh>
+#include <Systems\LightRenderingSystem.hh>
 
 #include <SDL\SDL.h>
 
@@ -70,18 +71,19 @@ bool 			DemoScene::userStart()
 		.rct<Component::RotationForce>()
 		.rct<Component::TrackBall>()
 		.rct<Component::AudioListener>()
-		.rct<Component::AudioEmitter>();
+		.rct<Component::AudioEmitter>()
+		.rct<Component::PointLight>();
 
 	// System Tests
 	//
 	//
 
 	addSystem<RotationForceSystem>(0);
-	addSystem<MeshRendererSystem>(0);
 	addSystem<GraphNodeSystem>(100);
 	addSystem<TrackBallSystem>(150);
 	addSystem<AudioSystem>(170);
 	addSystem<CameraSystem>(200);
+	addSystem<LightRenderingSystem>(300);
 
 	//
 	//
@@ -96,7 +98,7 @@ bool 			DemoScene::userStart()
 		{
 			"projection",
 			"view",
-			"light",
+			"lightNbr",
 			"time"
 		};
 
@@ -123,37 +125,20 @@ bool 			DemoScene::userStart()
 
 	_engine.getInstance<Renderer>().addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
 	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
-	_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
 	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
 	_engine.getInstance<Renderer>().addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
 	_engine.getInstance<Renderer>().addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
 	_engine.getInstance<Renderer>().addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
-	_engine.getInstance<Renderer>().getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
-	_engine.getInstance<Renderer>().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-	_engine.getInstance<Renderer>().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-	_engine.getInstance<Renderer>().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
-	_engine.getInstance<Renderer>().getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
-		.addLayer(GL_COLOR_ATTACHMENT0).build();
-	_engine.getInstance<Renderer>().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
-	_engine.getInstance<Renderer>().getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
-		.addLayer(GL_COLOR_ATTACHMENT0).build();
-	_engine.getInstance<Renderer>().getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2)
-		.addLayer(GL_COLOR_ATTACHMENT0).addLayer(GL_COLOR_ATTACHMENT1).build();
 
-	_engine.getInstance<Renderer>().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
-
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "MaterialBasic", "MaterialBasic");
 	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "MaterialBasic", "MaterialBasic");
+
 	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "MaterialBasic", "MaterialBasic");
+
 	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "MaterialBasic", "MaterialBasic");
+	
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
@@ -166,7 +151,7 @@ bool 			DemoScene::userStart()
 
 	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>().addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
 
-	_engine.getInstance<Renderer>().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	_engine.getInstance<Renderer>().getShader("cubemapShader");
 
 	_engine.getInstance<Renderer>().addUniform("cameraUniform").
 		init(&sky, "cameraUniform", vars);
@@ -194,6 +179,9 @@ bool 			DemoScene::userStart()
 	//}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
+	auto light = sun->addComponent<Component::PointLight>();
+
+	light->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 100.0f);
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),
 		"earth",
 		"texture__EarthTexture",
