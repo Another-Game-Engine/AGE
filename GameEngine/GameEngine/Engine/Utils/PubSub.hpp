@@ -81,7 +81,7 @@ public:
 	template <typename F>
 	void globalSub(const PubSubKey &key, F lambda)
 	{
-		auto &collection = _manager.getCollection();
+		auto &collection = _manager->getCollection();
 		if (_callbacks.find(key) != std::end(_callbacks))
 			return;
 		auto fn = new decltype(toFn(lambda))(toFn(lambda));
@@ -130,7 +130,7 @@ public:
 	template <typename ...Args>
 	void broadCast(PubSubKey &name, Args ...args) const
 	{
-		_manager.pub(name, args...);
+		_manager->pub(name, args...);
 	}
 
 	template <typename ...Args>
@@ -161,7 +161,7 @@ public:
 		(*function)(args...);
 	}
 
-	PubSub(Manager &manager)
+	PubSub(std::shared_ptr<Manager> manager)
 		: _manager(manager)
 	{}
 
@@ -192,7 +192,7 @@ public:
 		unsubAll();
 	}
 
-	Manager &getPubSubManager()
+	std::shared_ptr<Manager> getPubSubManager()
 	{
 		return _manager;
 	}
@@ -204,7 +204,7 @@ public:
 private:
 	void removeFromGlobalCallbacks()
 	{
-		auto &collection = _manager.getCollection();
+		auto &collection = _manager->getCollection();
 		for (auto &e : _callbacks)
 		{
 			if (collection.find(e.first) == std::end(collection))
@@ -215,7 +215,7 @@ private:
 
 	void removeFromGlobalCallbacks(const PubSubKey &key)
 	{
-		auto &collection = _manager.getCollection();
+		auto &collection = _manager->getCollection();
 		if (collection.find(key) == std::end(collection))
 			return;
 		collection[key].erase(this);
@@ -234,7 +234,7 @@ private:
 	std::map<PubSubKey, Callback> _callbacks;
 	std::map<PubSubKey, std::unordered_set<PubSub*> > _subscribers;
 	std::unordered_set<PubSub*> _emitters;
-	Manager &_manager;
+	std::shared_ptr<Manager> _manager;
 };
 
 #endif    //__PUBSUB_HPP__

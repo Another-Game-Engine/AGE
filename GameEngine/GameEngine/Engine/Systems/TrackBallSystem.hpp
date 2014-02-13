@@ -33,7 +33,7 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		Input			&inputs = _scene->getEngine().getInstance<Input>();
+		auto inputs = _scene->getInstance<Input>();
 
 		for (auto e : _filter.getCollection())
 		{
@@ -42,8 +42,8 @@ protected:
 
 			glm::vec3		pos;
 
-			trackBall->dist -= inputs.getMouseWheel().y * trackBall->zoomSpeed;
-			trackBall->angles -= glm::vec2((float)inputs.getMouseDelta().x / float(1000 / trackBall->rotateSpeed), -(float)inputs.getMouseDelta().y / float(1000 / trackBall->rotateSpeed));
+			trackBall->dist -= inputs->getMouseWheel().y * trackBall->zoomSpeed;
+			trackBall->angles -= glm::vec2((float)inputs->getMouseDelta().x / float(1000 / trackBall->rotateSpeed), -(float)inputs->getMouseDelta().y / float(1000 / trackBall->rotateSpeed));
 			if (abs(trackBall->dist) < 0.0001f)
 			{
 				if (trackBall->dist < 0)

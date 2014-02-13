@@ -54,7 +54,7 @@ namespace Component
 
 		bool init()
 		{
-			_manager = dynamic_cast<BulletCollisionManager*>(&_entity->getScene()->getEngine().getInstance<BulletCollisionManager>());
+			_manager = _entity->getScene()->getInstance<BulletCollisionManager>();
 			assert(_manager != nullptr);
 			return true;
 		}
@@ -172,7 +172,7 @@ namespace Component
 		CollisionShape shapeType;
 		std::string meshName;
 	private:
-		BulletCollisionManager *_manager;
+		std::shared_ptr<BulletCollisionManager> _manager;
 		btCollisionShape *_collisionShape;
 		btCollisionObject *_body;
 		CollisionBody(CollisionBody const &);

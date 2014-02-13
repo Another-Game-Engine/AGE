@@ -36,9 +36,9 @@ namespace Component
 
 	void MeshRenderer::render()
 	{
-		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("PerModel");
-		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
-		auto s = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(shader);
+		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("PerModel");
+		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("MaterialBasic");
+		auto s = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(shader);
 		if (s)
 			s->use();
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());

@@ -20,9 +20,9 @@ Engine::~Engine()
 
 bool        Engine::init()
 {
-	auto &context = getInstance<IRenderContext>();
+	auto context = getInstance<IRenderContext>();
 
-	if (!context.start(1920, 1080, "Mini solar system"))
+	if (!context->start(1920, 1080, "Mini solar system"))
 		return (false);
 
 	if (glewInit() != GLEW_OK)
@@ -30,7 +30,7 @@ bool        Engine::init()
 		std::cerr << "glewInit Failed" << std::endl;
 		return (false);
 	}
-	if (!getInstance<Renderer>().init())
+	if (!getInstance<Renderer>()->init())
 		return false;
   	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
@@ -52,26 +52,26 @@ bool 		Engine::update()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	auto &timer = getInstance<Timer>();
-	auto &inputs = getInstance<Input>();
-	auto &sceneManager = getInstance<SceneManager>();
-	auto time = timer.getElapsed();
+	auto timer = getInstance<Timer>();
+	auto inputs = getInstance<Input>();
+	auto sceneManager = getInstance<SceneManager>();
+	auto time = timer->getElapsed();
 
-	timer.update();
-    inputs.clearInputs();
-	context.updateEvents(inputs);
-	sceneManager.update(time);
+	timer->update();
+    inputs->clearInputs();
+	context->updateEvents(*inputs.get());
+	sceneManager->update(time);
 
-	context.flush();
+	context->flush();
 
-	return (sceneManager.userUpdate(time));
+	return (sceneManager->userUpdate(time));
 }
 
 void 		Engine::stop()
 {
-	static auto &renderer = getInstance<Renderer>();
-	auto &context = getInstance<IRenderContext>();
+	auto renderer = getInstance<Renderer>();
+	auto context = getInstance<IRenderContext>();
 
-	renderer.uninit();
-	context.stop();
+	renderer->uninit();
+	context->stop();
 }

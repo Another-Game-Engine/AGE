@@ -105,53 +105,53 @@ bool 			DemoScene::userStart()
 			"shininess"
 		};
 
-	OpenGLTools::Shader &s = _engine.getInstance<Renderer>().addShader("MaterialBasic",
+	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
 		"./Shaders/MaterialBasic.vp",
 		"./Shaders/MaterialBasic.fp");
 
-		_engine.getInstance<Renderer>().addUniform("MaterialBasic")
+		_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
 			.init(&s, "MaterialBasic", materialBasic);
-		_engine.getInstance<Renderer>().addUniform("PerFrame")
+		_engine.getInstance<Renderer>()->addUniform("PerFrame")
 			.init(&s, "PerFrame", perFrameVars);
-		_engine.getInstance<Renderer>().addUniform("PerModel")
+		_engine.getInstance<Renderer>()->addUniform("PerModel")
 			.init(&s, "PerModel", perModelVars);
 
-	_engine.getInstance<Renderer>().addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
-	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
-	_engine.getInstance<Renderer>().addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
-	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
-	_engine.getInstance<Renderer>().addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
-	_engine.getInstance<Renderer>().addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
-	_engine.getInstance<Renderer>().addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
-	_engine.getInstance<Renderer>().getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
-	_engine.getInstance<Renderer>().getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-	_engine.getInstance<Renderer>().getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-	_engine.getInstance<Renderer>().getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
-	_engine.getInstance<Renderer>().getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
+	_engine.getInstance<Renderer>()->addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
+	_engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
+	_engine.getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
+	_engine.getInstance<Renderer>()->addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
+	_engine.getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
+	_engine.getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
+	_engine.getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
+	_engine.getInstance<Renderer>()->getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+	_engine.getInstance<Renderer>()->getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	_engine.getInstance<Renderer>()->getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	_engine.getInstance<Renderer>()->getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
+	_engine.getInstance<Renderer>()->getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
 		.addLayer(GL_COLOR_ATTACHMENT0).build();
-	_engine.getInstance<Renderer>().getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
-	_engine.getInstance<Renderer>().getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
+	_engine.getInstance<Renderer>()->getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+	_engine.getInstance<Renderer>()->getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
 		.addLayer(GL_COLOR_ATTACHMENT0).build();
-	_engine.getInstance<Renderer>().getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2)
+	_engine.getInstance<Renderer>()->getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2)
 		.addLayer(GL_COLOR_ATTACHMENT0).addLayer(GL_COLOR_ATTACHMENT1).build();
 
-	_engine.getInstance<Renderer>().getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
+	_engine.getInstance<Renderer>()->getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
 
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basicLight", "MaterialBasic", "MaterialBasic");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "MaterialBasic", "MaterialBasic");
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("earth", "MaterialBasic", "MaterialBasic");
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("bump", "MaterialBasic", "MaterialBasic");
-	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basicLight", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basicLight", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("earth", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("earth", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("earth", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("bump", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("bump", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("bump", "MaterialBasic", "MaterialBasic");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
 	std::string		vars[] = 
 	{
@@ -159,19 +159,19 @@ bool 			DemoScene::userStart()
 		"view"
 	};
 
-	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>().addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
 
-	_engine.getInstance<Renderer>().getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	_engine.getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 
-	_engine.getInstance<Renderer>().addUniform("cameraUniform").
+	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
 		init(&sky, "cameraUniform", vars);
 
-	_engine.getInstance<Renderer>().bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-	auto music = _engine.getInstance<AudioManager>().loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	auto music = _engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 
 	// SERIALIZATION
@@ -261,8 +261,8 @@ bool 			DemoScene::userStart()
 
 bool 			DemoScene::userUpdate(double time)
 {
-	if (_engine.getInstance<Input>().getInput(SDLK_ESCAPE) ||
-		_engine.getInstance<Input>().getInput(SDL_QUIT))
+	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
+		_engine.getInstance<Input>()->getInput(SDL_QUIT))
 	{
 		 //SERIALIZATION
 		{

@@ -48,7 +48,7 @@ void AudioEmitter::reset()
 
 void AudioEmitter::clearAllAudios()
 {
-	for (auto &&e : audios)
+	for (auto &e : audios)
 		e.second.channel->stop();
 	audios.clear();
 }

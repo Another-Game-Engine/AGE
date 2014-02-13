@@ -32,20 +32,20 @@ int			main(int ac, char **av)
 	e.setInstance<AssetsManager>();
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
-	e.setInstance<BulletDynamicManager, BulletCollisionManager>().init();
-	e.setInstance<AudioManager>().init();
+	e.setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
+	e.setInstance<AudioManager>()->init();
 
 	// init engine
 	if (e.init() == false)
 		return (EXIT_FAILURE);
 
 	// add scene
-	e.getInstance<SceneManager>().addScene(new DemoScene(e), "demo");
+	e.getInstance<SceneManager>()->addScene(new DemoScene(e), "demo");
 
 	// bind scene
-	if (!e.getInstance<SceneManager>().initScene("demo"))
+	if (!e.getInstance<SceneManager>()->initScene("demo"))
 		return false;
-	e.getInstance<SceneManager>().enableScene("demo", 0);
+	e.getInstance<SceneManager>()->enableScene("demo", 0);
 
 
 	// lanch engine

@@ -17,12 +17,11 @@ public:
 		, _manager(nullptr)
 		, _filter(scene)
 	{
-		_manager = dynamic_cast<BulletDynamicManager*>(&_scene->getEngine().getInstance<BulletCollisionManager>());
-		assert(_manager != nullptr);
+		_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene->getInstance<BulletCollisionManager>());
 	}
 	virtual ~BulletDynamicSystem(){}
 private:
-	BulletDynamicManager *_manager;
+	std::shared_ptr<BulletDynamicManager> _manager;
 	EntityFilter _filter;
 
 	virtual void updateBegin(double time)
