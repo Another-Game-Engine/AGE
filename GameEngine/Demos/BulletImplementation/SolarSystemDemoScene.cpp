@@ -261,6 +261,11 @@ bool 			SolarSystemDemoScene::userStart()
 
 bool 			SolarSystemDemoScene::userUpdate(double time)
 {
+	if (_engine.getInstance<Input>()->getInput(SDLK_l))
+	{
+		_engine.getInstance<SceneManager>()->enableScene("BulletDemo", 0);
+		_engine.getInstance<SceneManager>()->disableScene("SolarSystemDemo");
+	}
 	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>()->getInput(SDL_QUIT))
 	{
