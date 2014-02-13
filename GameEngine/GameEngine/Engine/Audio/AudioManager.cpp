@@ -106,7 +106,7 @@ std::shared_ptr<Audio> AudioManager::loadSound(const File &file, Audio::AudioSpa
 {
 	std::string tname = name.empty() ? file.getShortFileName() : name;
 	if (_audios.find(tname) != std::end(_audios))
-		return _audios[name];
+		return _audios[tname];
 
 	std::shared_ptr<Audio> audio{ new Audio(shared_from_this(), file, Audio::AudioType::AUDIO_SOUND, name) };
 	if (!audio->load(spacialType))
@@ -122,7 +122,7 @@ std::shared_ptr<Audio> AudioManager::loadStream(const File &file, Audio::AudioSp
 {
 	std::string tname = name.empty() ? file.getShortFileName() : name;
 	if (_audios.find(tname) != std::end(_audios))
-		return _audios[name];
+		return _audios[tname];
 	std::shared_ptr<Audio> audio{ new Audio(shared_from_this() , file, Audio::AudioType::AUDIO_STREAM, name) };
 	if (!audio->load(spacialType))
 	{

@@ -98,15 +98,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DemoScene.cpp" />
+    <ClCompile Include="BulletDemoScene.cpp" />
     <ClCompile Include="Main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="SolarSystemDemoScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BallSoundSystem.hpp" />
-    <ClInclude Include="DemoScene.hh" />
+    <ClInclude Include="BulletDemoScene.hh" />
     <ClInclude Include="MyTags.hpp" />
+    <ClInclude Include="SolarSystemDemoScene.hh" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
