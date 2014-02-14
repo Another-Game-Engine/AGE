@@ -7,7 +7,7 @@ shared uint		groupAvgColorG = 0;
 shared uint		groupAvgColorB = 0;
 shared uint		groupColorNbr = 0;
 
-layout (binding = 0, rgba32f) readonly uniform image2D colorBuffer;
+layout (binding = 0, rgba16f) readonly uniform image2D colorBuffer;
 
 // buffer to fill that contains per tile depth informations
 layout(std430, binding = 1) buffer averageColorBuffer
@@ -26,7 +26,7 @@ void	main()
 		position.y < colorBufferSize.y)
 	{
 		vec4	pxlColor = imageLoad(colorBuffer, position);
-		uvec3	integerColor = uvec3(pxlColor.xyz * vec3(0xFFFF));
+		uvec3	integerColor = uvec3(pxlColor.xyz * vec3(0xFFF));
 
 		atomicAdd(groupColorNbr, 1);
 		atomicAdd(groupAvgColorR, integerColor.x);
@@ -38,6 +38,6 @@ void	main()
 	{
 		uint	curId = gl_WorkGroupID.y * gl_NumWorkGroups.x + gl_WorkGroupID.x;
 
-		avgColors[curId] = vec4(vec3(groupAvgColorR, groupAvgColorG, groupAvgColorB) / vec3(0xFFFF) / vec3(groupColorNbr), 1.0f);
+		avgColors[curId] = vec4(vec3(groupAvgColorR, groupAvgColorG, groupAvgColorB) / vec3(0xFFF) / vec3(groupColorNbr), 1.0f);
 	}
 }
