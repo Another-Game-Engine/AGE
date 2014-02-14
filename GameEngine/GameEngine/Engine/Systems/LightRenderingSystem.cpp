@@ -94,6 +94,8 @@ void LightRenderingSystem::mainUpdate(double time)
 		e->getComponent<Component::MeshRenderer>()->renderRaw();
 	}
 
+	glFinish();
+
 	// ----------------------------------------------------
 	// Final Lightning pass
 	// ----------------------------------------------------
@@ -157,7 +159,7 @@ void LightRenderingSystem::mainUpdate(double time)
 	glBufferData(GL_SHADER_STORAGE_BUFFER, bufferSize * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
 
 	// Bind color texture to sample
-	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
 	// Bind average color buffer
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, _avgColors);
 	// Launch kernel
@@ -179,7 +181,7 @@ void LightRenderingSystem::mainUpdate(double time)
 	// ----------------------------------------------------
 	float	avgIllumination = (avgColor.x + avgColor.y + avgColor.z) / 3.0f;
 
-	_targetFactor = glm::min(0.5f / avgIllumination, 1.0f);
+	_targetFactor = glm::min(0.3f / avgIllumination, 1.0f);
 
 	_modulateRender.use();
 
@@ -190,13 +192,13 @@ void LightRenderingSystem::mainUpdate(double time)
 	{
 		if (_curFactor < _targetFactor)
 		{
-			_curFactor += 0.4f * _scene->getEngine().getInstance<Timer>().getElapsed();
+			_curFactor += 0.15f * _scene->getEngine().getInstance<Timer>().getElapsed();
 			if (_curFactor > _targetFactor)
 				_curFactor = _targetFactor;
 		}
 		else
 		{
-			_curFactor -= 0.4f * _scene->getEngine().getInstance<Timer>().getElapsed();
+			_curFactor -= 0.15f * _scene->getEngine().getInstance<Timer>().getElapsed();
 			if (_curFactor < _targetFactor)
 				_curFactor = _targetFactor;
 		}
@@ -207,7 +209,7 @@ void LightRenderingSystem::mainUpdate(double time)
 	glUniform1f(avgIllumLocation, _curFactor);
 
 	// Bind color texture to modulate
-	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
 
@@ -241,7 +243,7 @@ void	LightRenderingSystem::initFrameBuffer()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, wDimensions.x, wDimensions.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, wDimensions.x, wDimensions.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
 	// generate the color texture
 	glGenTextures(1, &_colorTexture);
@@ -250,7 +252,7 @@ void	LightRenderingSystem::initFrameBuffer()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, wDimensions.x, wDimensions.y, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, wDimensions.x, wDimensions.y, 0, GL_RGBA, GL_FLOAT, NULL);
 
 	// generate frame buffer
 	glGenFramebuffers(1, &_frameBuffer);
