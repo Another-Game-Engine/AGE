@@ -43,8 +43,8 @@ void LightRenderingSystem::initialize()
 
 void LightRenderingSystem::mainUpdate(double time)
 {
-	Renderer &renderer = _scene->getEngine().getInstance<Renderer>();
-	auto perFrame = renderer.getUniform("PerFrame");
+	auto renderer = _scene->getInstance<Renderer>();
+	auto perFrame = renderer->getUniform("PerFrame");
 	int lightNbr = _lightFilter.getCollection().size();
 
 	perFrame->setUniform("lightNbr", lightNbr);
@@ -87,7 +87,7 @@ void LightRenderingSystem::mainUpdate(double time)
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glColorMask(0, 0, 0, 0);
 
-	renderer.getShader("depthOnly")->use();
+	renderer->getShader("depthOnly")->use();
 
 	for (auto e : _meshRendererFilter.getCollection())
 	{
@@ -110,9 +110,9 @@ void LightRenderingSystem::mainUpdate(double time)
 	GLuint		earthId = -1; 
 	GLuint		bumpId = -1;
 
-	auto		materialBasic = renderer.getShader("MaterialBasic");
-	auto		earth = renderer.getShader("earth");
-	auto		bump = renderer.getShader("bump");
+	auto		materialBasic = renderer->getShader("MaterialBasic");
+	auto		earth = renderer->getShader("earth");
+	auto		bump = renderer->getShader("bump");
 
 	if (materialBasic != NULL)
 		materialBasicId = materialBasic->getId();
@@ -145,7 +145,7 @@ void LightRenderingSystem::mainUpdate(double time)
 
 	GLint		colorBufferSizeLocation = glGetUniformLocation(_averageColor.getId(), "colorBufferSize");
 	size_t		WORK_GROUP_SIZE = 16;
-	glm::uvec2	fboSize = glm::uvec2(_scene->getEngine().getInstance<IRenderContext>().getScreenSize());
+	glm::uvec2	fboSize = glm::uvec2(_scene->getEngine().getInstance<IRenderContext>()->getScreenSize());
 	glm::uvec2	groupNbr = glm::uvec2((fboSize.x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
 									  (fboSize.y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
 	size_t		bufferSize = groupNbr.y * groupNbr.x;
@@ -192,13 +192,13 @@ void LightRenderingSystem::mainUpdate(double time)
 	{
 		if (_curFactor < _targetFactor)
 		{
-			_curFactor += 0.15f * _scene->getEngine().getInstance<Timer>().getElapsed();
+			_curFactor += 0.15f * _scene->getEngine().getInstance<Timer>()->getElapsed();
 			if (_curFactor > _targetFactor)
 				_curFactor = _targetFactor;
 		}
 		else
 		{
-			_curFactor -= 0.15f * _scene->getEngine().getInstance<Timer>().getElapsed();
+			_curFactor -= 0.15f * _scene->getEngine().getInstance<Timer>()->getElapsed();
 			if (_curFactor < _targetFactor)
 				_curFactor = _targetFactor;
 		}
@@ -223,7 +223,7 @@ void LightRenderingSystem::mainUpdate(double time)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0); // Rebind the default FrameBuffer
 	glDisable(GL_DEPTH_TEST);
 
-	renderer.getShader("fboToScreen")->use();
+	renderer->getShader("fboToScreen")->use();
 
 	// Bind texture of the final render
 	glActiveTexture(GL_TEXTURE0);
@@ -234,7 +234,7 @@ void LightRenderingSystem::mainUpdate(double time)
 
 void	LightRenderingSystem::initFrameBuffer()
 {
-	glm::ivec2 wDimensions = _scene->getEngine().getInstance<IRenderContext>().getScreenSize();
+	glm::ivec2 wDimensions = _scene->getInstance<IRenderContext>()->getScreenSize();
 
 	// generate the deth texture
 	glGenTextures(1, &_depthTexture);

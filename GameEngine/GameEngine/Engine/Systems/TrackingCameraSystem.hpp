@@ -32,8 +32,6 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		Input			&inputs = _scene->getEngine().getInstance<Input>();
-
 		for (auto e : _filter.getCollection())
 		{
 			auto c = e->getComponent<Component::CameraComponent>();

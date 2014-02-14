@@ -9,6 +9,8 @@
 #include <Utils/MatrixConversion.hpp>
 #include <Components/Collision.hpp>
 
+#include <MyTags.hpp>
+
 class BallSoundSystem : public System
 {
 public:
@@ -53,7 +55,8 @@ protected:
 
 	virtual void initialize()
 	{
-		_balls.requireComponent<Component::AudioEmitter>();
+		_balls.requireTag(BALL_TAG);
+//		_balls.requireComponent<Component::AudioEmitter>();
 		_balls.requireComponent<Component::Collision>();
 		_heros.requireComponent<Component::FPController>();
 		_heros.requireComponent<Component::AudioEmitter>();

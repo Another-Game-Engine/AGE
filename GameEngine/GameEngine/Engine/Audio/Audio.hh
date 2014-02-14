@@ -27,14 +27,14 @@ public:
 	};
 
 public:
-	Audio(AudioManager *manager, const File &file, AudioType type, const std::string &name = "");
+	Audio(std::shared_ptr<AudioManager> manager, const File &file, AudioType type, const std::string &name = "");
 	~Audio();
 	bool load(AudioSpatialType type);
 	FMOD::Channel *play(ChannelGroupType channelGroup, bool now);
 private:
-	AudioManager *_manager;
+	std::shared_ptr<AudioManager> _manager;
 	File _file;
 	const std::string _name;
-	FMOD::Sound *_audio;
+	std::shared_ptr<FMOD::Sound> _audio;
 	AudioType _audioType;
 };
