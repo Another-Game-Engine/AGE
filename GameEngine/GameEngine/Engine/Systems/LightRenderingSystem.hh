@@ -3,8 +3,10 @@
 #include <Components\PointLight.hh>
 
 #include <Systems\System.h>
+#include <Systems\CameraSystem.hpp>
 #include <OpenGL\VertexManager.hh>
 #include <OpenGL\ComputeShader.hh>
+#include <OpenGL\Framebuffer.hh>
 
 #include <vector>
 
@@ -20,18 +22,15 @@ public:
 	virtual void initialize();
 
 	void		useHDR(bool use) { _useHDR = use; }
+	void		setHDRIdealIllumination(float idealIllum) { _idealIllum = idealIllum; }
+	void		setHDRAdaptationSpeed(float adaptSpeed) { _adaptationSpeed = adaptSpeed; }
+	void		setHDRMaxDarkImprovement(float maxDarkImprovement) { _maxDarkImprovement = maxDarkImprovement; }
 
 private:
 	// Filters
 	EntityFilter				_lightFilter;
 	EntityFilter				_meshRendererFilter;
-
-	void						initFrameBuffer();
-	// Frame Buffer
-	GLuint						_frameBuffer;
-	// Render textures
-	GLuint						_depthTexture;
-	GLuint						_colorTexture;
+	EntityFilter				_cameraFilter;
 
 	// Quad to draw full screen
 	void						initQuad();
@@ -40,8 +39,13 @@ private:
 	VertexManager<2>			*_vertexManager;
 
 	// Light Buffer
-	GLuint						_lights;
+	GLuint								_lights;
 	std::vector<ContiguousLight>		_contiguousLights;
+
+	// HDR parameters
+	float							_idealIllum;
+	float							_adaptationSpeed;
+	float							_maxDarkImprovement;
 
 	// HDR Compute shader
 	OpenGLTools::ComputeShader		_averageColor;
@@ -57,6 +61,7 @@ private:
 	// Use HDR
 	bool							_useHDR;
 
-	void		computeHdr();
+	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
+	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo);
 };
 

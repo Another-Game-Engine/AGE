@@ -54,7 +54,6 @@ public:
 		Utils::screenPosToWorldRay(centerPos.x, centerPos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform , cameraCpt->projection, from, to);
 	}
 
-
 protected:
 	EntityFilter _filter;
 
@@ -97,9 +96,15 @@ protected:
 				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("view", t);
 				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
 
-//				_engine.getInstance<Renderer>()->getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
-
 				s->use();
+
+				OpenGLTools::Framebuffer &camFbo = e->getComponent<Component::CameraComponent>()->frameBuffer;
+
+				if (camFbo.isInit() == true)
+				{
+					camFbo.bind();
+					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				}
 
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());

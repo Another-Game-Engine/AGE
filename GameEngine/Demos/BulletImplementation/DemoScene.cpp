@@ -304,5 +304,9 @@ bool 			DemoScene::userUpdate(double time)
 	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>()->getInput(SDL_QUIT))
 		return (false);
+	if (_engine.getInstance<Input>()->getInput(SDLK_h))
+		getSystem<LightRenderingSystem>()->useHDR(true);
+	if (_engine.getInstance<Input>()->getInput(SDLK_j))
+		getSystem<LightRenderingSystem>()->useHDR(false);
 	return (true);
 }
