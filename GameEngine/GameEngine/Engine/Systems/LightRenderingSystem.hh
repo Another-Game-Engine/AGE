@@ -19,6 +19,8 @@ public:
 	virtual void mainUpdate(double time);
 	virtual void initialize();
 
+	void		useHDR(bool use) { _useHDR = use; }
+
 private:
 	// Filters
 	EntityFilter				_lightFilter;
@@ -51,5 +53,10 @@ private:
 	// HDR factors
 	float							_curFactor;
 	float							_targetFactor;
+
+	// Use HDR
+	bool							_useHDR;
+
+	void		computeHdr();
 };
 

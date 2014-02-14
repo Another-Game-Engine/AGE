@@ -97,6 +97,9 @@ bool 			DemoScene::userStart()
 	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
 	addSystem<CameraSystem>(400); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<LightRenderingSystem>(1000); // Render with the lights
+
+	getSystem<LightRenderingSystem>()->useHDR(false);
+
 	//
 	//
 	// end System Test
@@ -285,6 +288,7 @@ bool 			DemoScene::userUpdate(double time)
 
 		auto light = e->addComponent<Component::PointLight>();
 		light->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 10.0f);
+		light->lightData.positionPower.w = 3.0f;
 		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 		e->addTag(BALL_TAG);
 		if (stack.size() > 50)
