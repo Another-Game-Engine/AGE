@@ -123,12 +123,16 @@ bool 			DemoScene::userStart()
 		_engine.getInstance<Renderer>().addUniform("PerModel")
 			.init(&s, "PerModel", perModelVars);
 
+	_engine.getInstance<Renderer>().addShader("depthOnly", "./Shaders/depthOnly.vp", "./Shaders/depthOnly.fp");
 	_engine.getInstance<Renderer>().addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
-	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
+	_engine.getInstance<Renderer>().addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp");
 	_engine.getInstance<Renderer>().addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
 	_engine.getInstance<Renderer>().addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
 	_engine.getInstance<Renderer>().addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
 	_engine.getInstance<Renderer>().addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
+
+	_engine.getInstance<Renderer>().bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
+	_engine.getInstance<Renderer>().bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 
 	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("basic", "PerModel", "PerModel");
@@ -142,6 +146,8 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	_engine.getInstance<Renderer>().bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
+
+	_engine.getInstance<Renderer>().bindShaderToUniform("fboToScreen", "PerFrame", "PerFrame");
 
 	std::string		vars[] = 
 	{

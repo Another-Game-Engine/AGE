@@ -307,7 +307,7 @@ bool 			DemoScene::userUpdate(double time)
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 		auto light = e->addComponent<Component::PointLight>();
-		light->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 6.0f);
+		light->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 10.0f);
 		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>().getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 		e->addTag(BALL_TAG);
 		if (stack.size() > 50)
