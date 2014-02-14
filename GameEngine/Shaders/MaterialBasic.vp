@@ -30,7 +30,7 @@ layout(binding = 3) uniform sampler2D fTexture3; // normal;
 
 struct PointLight
 {
-	vec4	position;
+	vec4	positionPower;
 	vec4	colorRange;
 };
 

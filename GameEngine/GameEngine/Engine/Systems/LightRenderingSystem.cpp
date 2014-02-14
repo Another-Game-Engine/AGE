@@ -10,7 +10,8 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						_lightFilter(scene),
 						_meshRendererFilter(scene),
 						_curFactor(1.0f),
-						_targetFactor(1.0f)
+						_targetFactor(1.0f),
+						_useHDR(true)
 {
 }
 
@@ -56,7 +57,9 @@ void LightRenderingSystem::mainUpdate(double time)
 		for (auto e : _lightFilter.getCollection())
 		{
 			_contiguousLights.push_back(e->getComponent<Component::PointLight>()->lightData);
-			_contiguousLights.back().position = e->getGlobalTransform()[3];
+			_contiguousLights.back().positionPower.x = e->getGlobalTransform()[3].x;
+			_contiguousLights.back().positionPower.y = e->getGlobalTransform()[3].y;
+			_contiguousLights.back().positionPower.z = e->getGlobalTransform()[3].z;
 		}
 	}
 	else // Or just update it
@@ -66,7 +69,9 @@ void LightRenderingSystem::mainUpdate(double time)
 		for (auto e : _lightFilter.getCollection())
 		{
 			_contiguousLights[i] = e->getComponent<Component::PointLight>()->lightData;
-			_contiguousLights[i].position = e->getGlobalTransform()[3];
+			_contiguousLights[i].positionPower.x = e->getGlobalTransform()[3].x;
+			_contiguousLights[i].positionPower.y = e->getGlobalTransform()[3].y;
+			_contiguousLights[i].positionPower.z = e->getGlobalTransform()[3].z;
 			++i;
 		}
 	}
@@ -92,8 +97,6 @@ void LightRenderingSystem::mainUpdate(double time)
 	{
 		e->getComponent<Component::MeshRenderer>()->renderRaw();
 	}
-
-	glFinish();
 
 	// ----------------------------------------------------
 	// Final Lightning pass
@@ -134,86 +137,8 @@ void LightRenderingSystem::mainUpdate(double time)
 		);
 	}
 
-	// ----------------------------------------------------
-	// HDR Pass
-	// ----------------------------------------------------
-	// ----------------------------------------------------
-	// Average colors:
-	// ----------------------------------------------------
-	_averageColor.use();
-
-	GLint		colorBufferSizeLocation = glGetUniformLocation(_averageColor.getId(), "colorBufferSize");
-	size_t		WORK_GROUP_SIZE = 16;
-	glm::uvec2	fboSize = glm::uvec2(_scene->getEngine().getInstance<IRenderContext>().getScreenSize());
-	glm::uvec2	groupNbr = glm::uvec2((fboSize.x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
-									  (fboSize.y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
-	size_t		bufferSize = groupNbr.y * groupNbr.x;
-	glm::vec4	*datas = new glm::vec4[bufferSize];
-	glm::vec4	avgColor(0);
-
-	// set the color buffer size
-	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(fboSize));
-	// Allocate avg color buffer
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, bufferSize * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
-
-	// Bind color texture to sample
-	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
-	// Bind average color buffer
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, _avgColors);
-	// Launch kernel
-	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
-	// wait for the shader to finish writing on the buffer
-	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-	// We get the buffer datas
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
-	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, bufferSize * sizeof(glm::vec4), datas);
-	// and we calcultae the average
-	for (size_t i = 0; i < bufferSize; ++i)
-	{
-		avgColor += datas[i];
-	}
-	avgColor /= glm::vec4(bufferSize);
-	delete[] datas;
-	// ----------------------------------------------------
-	// Modulate colors:
-	// ----------------------------------------------------
-	float	avgIllumination = (avgColor.x + avgColor.y + avgColor.z) / 3.0f;
-
-	_targetFactor = glm::min(0.3f / avgIllumination, 1.0f);
-
-	_modulateRender.use();
-
-	colorBufferSizeLocation = glGetUniformLocation(_modulateRender.getId(), "colorBufferSize");
-	GLint		avgIllumLocation = glGetUniformLocation(_modulateRender.getId(), "factor");
-
-	if (_curFactor != _targetFactor)
-	{
-		if (_curFactor < _targetFactor)
-		{
-			_curFactor += 0.15f * _scene->getEngine().getInstance<Timer>().getElapsed();
-			if (_curFactor > _targetFactor)
-				_curFactor = _targetFactor;
-		}
-		else
-		{
-			_curFactor -= 0.15f * _scene->getEngine().getInstance<Timer>().getElapsed();
-			if (_curFactor < _targetFactor)
-				_curFactor = _targetFactor;
-		}
-	}
-
-	// Set the uniforms
-	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(fboSize));
-	glUniform1f(avgIllumLocation, _curFactor);
-
-	// Bind color texture to modulate
-	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
-
-	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
-
-	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-	// ----------------------------------------------------
+	if (_useHDR)
+		computeHdr();
 
 	perFrame->setUniform("view", glm::mat4(1));
 	perFrame->setUniform("projection", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
@@ -305,4 +230,88 @@ void	LightRenderingSystem::initQuad()
 	_quad = Vertice<2>(6, data, &indicesData);
 	_vertexManager->addVertice(_quad);
 	// ------------------------------------
+}
+
+void		LightRenderingSystem::computeHdr()
+{
+	// ----------------------------------------------------
+	// HDR Pass
+	// ----------------------------------------------------
+	// ----------------------------------------------------
+	// Average colors:
+	// ----------------------------------------------------
+	_averageColor.use();
+
+	GLint		colorBufferSizeLocation = glGetUniformLocation(_averageColor.getId(), "colorBufferSize");
+	size_t		WORK_GROUP_SIZE = 16;
+	glm::uvec2	fboSize = glm::uvec2(_scene->getEngine().getInstance<IRenderContext>().getScreenSize());
+	glm::uvec2	groupNbr = glm::uvec2((fboSize.x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
+		(fboSize.y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
+	size_t		bufferSize = groupNbr.y * groupNbr.x;
+	glm::vec4	*datas = new glm::vec4[bufferSize];
+	glm::vec4	avgColor(0);
+
+	// set the color buffer size
+	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(fboSize));
+	// Allocate avg color buffer
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, bufferSize * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
+
+	// Bind color texture to sample
+	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
+	// Bind average color buffer
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, _avgColors);
+	// Launch kernel
+	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
+	// wait for the shader to finish writing on the buffer
+	glMemoryBarrier(GL_ALL_BARRIER_BITS);
+	// We get the buffer datas
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
+	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, bufferSize * sizeof(glm::vec4), datas);
+	// and we calcultae the average
+	for (size_t i = 0; i < bufferSize; ++i)
+	{
+		avgColor += datas[i];
+	}
+	avgColor /= glm::vec4(bufferSize);
+	delete[] datas;
+	// ----------------------------------------------------
+	// Modulate colors:
+	// ----------------------------------------------------
+	float	avgIllumination = (avgColor.x + avgColor.y + avgColor.z) / 3.0f;
+
+	_targetFactor = glm::min(0.3f / avgIllumination, 1.0f);
+
+	_modulateRender.use();
+
+	colorBufferSizeLocation = glGetUniformLocation(_modulateRender.getId(), "colorBufferSize");
+	GLint		avgIllumLocation = glGetUniformLocation(_modulateRender.getId(), "factor");
+
+	if (_curFactor != _targetFactor)
+	{
+		if (_curFactor < _targetFactor)
+		{
+			_curFactor += 0.15f * _scene->getEngine().getInstance<Timer>().getElapsed();
+			if (_curFactor > _targetFactor)
+				_curFactor = _targetFactor;
+		}
+		else
+		{
+			_curFactor -= 0.15f * _scene->getEngine().getInstance<Timer>().getElapsed();
+			if (_curFactor < _targetFactor)
+				_curFactor = _targetFactor;
+		}
+	}
+
+	// Set the uniforms
+	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(fboSize));
+	glUniform1f(avgIllumLocation, _curFactor);
+
+	// Bind color texture to modulate
+	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
+
+	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
+
+	glMemoryBarrier(GL_ALL_BARRIER_BITS);
+	// ----------------------------------------------------
 }
