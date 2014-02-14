@@ -12,12 +12,6 @@
 
 namespace	Component
 {
-	static int uniqueId()
-	{
-		static int id = 0;
-		return id++;
-	}
-
 	struct Base
 	{
 		Base(std::size_t serId);
@@ -46,6 +40,11 @@ namespace	Component
 
 	protected:
 		Entity				_entity;
+		static int uniqueId()
+		{
+			static int id = 0;
+			return id++;
+		}
 	};
 
 	template <class T>
