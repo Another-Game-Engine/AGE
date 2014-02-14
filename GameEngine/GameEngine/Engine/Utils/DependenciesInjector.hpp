@@ -5,6 +5,7 @@
 #include <typeinfo>
 #include <cassert>
 #include <Utils/Dependency.hpp>
+#include <memory>
 
 class DependenciesInjector
 {
@@ -12,58 +13,64 @@ private:
 	DependenciesInjector(DependenciesInjector const &);
 	DependenciesInjector &operator=(DependenciesInjector const &);
 
-	/////////////////////////////////////////////////////
-	// Dependencie injector implementation
-	// Dangerous use  of void*
-	// to enhance !
-
-	std::map<size_t, Dependency*>         _instances;
-
+	std::map<size_t, std::shared_ptr<Dependency>>         _instances;
+	DependenciesInjector                                  *_parent;
 public:
-	DependenciesInjector()
+	DependenciesInjector(DependenciesInjector *parent = nullptr)
+		:_parent(parent)
 	{}
 
 	virtual ~DependenciesInjector()
 	{
-		for (auto &e : _instances)
-			delete e.second;
+		_instances.clear();
 	}
 
 	template <typename T>
-	T &getInstance()
+	std::shared_ptr<T> getInstance()
 	{
-		const std::string tt = typeid(T).name();
 		size_t id = typeid(T).hash_code();
-		assert(_instances.find(id) != std::end(_instances) && "Engine Instance is not set !");
-		return *(static_cast<T*>(_instances[id]));
+		if (_instances.find(id) == std::end(_instances))
+		{
+			if (_parent)
+				return _parent->getInstance<T>();
+			else
+				assert(false && "Engine Instance is not set !");
+		}
+		return std::dynamic_pointer_cast<T>(_instances[id]);
 	}
 
 	template <typename T, typename TypeSelector = T, typename ...Args>
-	T &setInstance(Args ...args)
+	std::shared_ptr<T> setInstance(Args ...args)
 	{
 		size_t id = typeid(TypeSelector).hash_code();
+		if (_parent && _parent->hasInstance<TypeSelector>())
+			return _parent->setInstance<T, TypeSelector>(args...);
 		if (_instances.find(id) == std::end(_instances))
 		{
-			T *n = new T(args...);
+			auto n = std::make_shared<T>(args...);
 			_instances.insert(std::make_pair(id, n));
 		}
-		return *(static_cast<T*>(_instances[id]));
+		return std::dynamic_pointer_cast<T>(_instances[id]);
 	}
 
 	template <typename T>
 	void unsetInstance()
 	{
+		if (_parent && _parent->hasInstance<T>())
+		{
+			_parent->unsetInstance();
+			return;
+		}
 		size_t id = typeid(TypeSelector).hash_code();
 		if (_instances.find(id) == std::end(_instances))
 			return;
-		delete _instances[id];
 		_instances.erase(id);
 	}
 
 	template <typename T>
 	bool hasInstance()
 	{
-		size_t id = typeid(TypeSelector).hash_code();
+		size_t id = typeid(T).hash_code();
 		return _instances.find(id) != std::end(_instances);
 	}
 };

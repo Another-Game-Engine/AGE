@@ -36,9 +36,9 @@ namespace Component
 
 	void MeshRenderer::render(std::function<void(OpenGLTools::Shader&)> func)
 	{
-		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("PerModel");
-		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
-		auto s = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(shader);
+		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("PerModel");
+		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("MaterialBasic");
+		auto s = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(shader);
 		if (s)
 			s->use();
 		func(*s);
@@ -54,7 +54,7 @@ namespace Component
 
 	void MeshRenderer::renderRaw()
 	{
-		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("PerModel");
+		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("PerModel");
 
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());
 		perModelUniform->flushChanges();

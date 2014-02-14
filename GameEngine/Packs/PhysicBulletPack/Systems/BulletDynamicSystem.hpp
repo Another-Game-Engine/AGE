@@ -17,12 +17,11 @@ public:
 		, _manager(nullptr)
 		, _filter(scene)
 	{
-		_manager = dynamic_cast<BulletDynamicManager*>(&_scene->getEngine().getInstance<BulletCollisionManager>());
-		assert(_manager != nullptr);
+		_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene->getInstance<BulletCollisionManager>());
 	}
 	virtual ~BulletDynamicSystem(){}
 private:
-	BulletDynamicManager *_manager;
+	std::shared_ptr<BulletDynamicManager> _manager;
 	EntityFilter _filter;
 
 	virtual void updateBegin(double time)
@@ -58,6 +57,7 @@ private:
 		auto c = e->getComponent<Component::RigidBody>();
 		c->getBody().setWorldTransform(transform);
 		c->getShape().setLocalScaling(convertGLMVectorToBullet(scale));
+		e->computeTransformAndUpdateGraphnode();
 	}
 
 	void updateDynamic(Entity &e)
@@ -75,6 +75,7 @@ private:
 		glm::vec3 scale = scaleFromMat4(e->getLocalTransform());
 		m = glm::scale(m, scale);
 		e->setLocalTransform() = m;
+		e->computeTransformAndUpdateGraphnode();
 	}
 
 	virtual void initialize()

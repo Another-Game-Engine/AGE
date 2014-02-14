@@ -15,7 +15,8 @@ EntityData::EntityData(AScene *scene) :
 	_localScale(0),
 	_globalTranslation(0),
 	_globalRotation(0),
-	_globalScale(0)
+	_globalScale(0),
+	_parent(Entity(std::numeric_limits<unsigned int>::max(), nullptr))
 {
 	removeFlags(ACTIVE);
 }
@@ -66,7 +67,9 @@ void 					EntityData::computeGlobalTransform(glm::mat4 const &fatherTransform)
 
 void 					EntityData::computeGlobalTransform(const Entity &parent)
 {
-
+	if (!parent.get())
+		return;
+	_globalTransform = parent.get()->getGlobalTransform() * _localTransform;
 	_flags ^= HAS_MOVED;
 }
 
@@ -74,12 +77,14 @@ void                    EntityData::translate(const glm::vec3 &v)
 {
 	_localTranslation += v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 void                    EntityData::setTranslation(const glm::vec3 &v)
 {
 	_localTranslation = v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 glm::vec3 const         &EntityData::getTranslation() const
@@ -91,12 +96,14 @@ void                    EntityData::rotate(const glm::vec3 &v)
 {
 	_localRotation += v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 void                    EntityData::setRotation(const glm::vec3 &v)
 {
 	_localRotation = v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 glm::vec3 const         &EntityData::getRotation() const
@@ -108,17 +115,35 @@ void                    EntityData::scale(const glm::vec3 &v)
 {
 	_localScale += v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 void                    EntityData::setScale(const glm::vec3 &v)
 {
 	_localScale = v;
 	_flags |= HAS_MOVED;
+	computeTransformAndUpdateGraphnode();
 }
 
 glm::vec3 const         &EntityData::getScale() const
 {
 	return _localScale;
+}
+
+void                    EntityData::computeTransformAndUpdateGraphnode()
+{
+	if (!_parent.get())
+	{
+		computeGlobalTransform(glm::mat4(1));
+	}
+	else
+	{
+		computeGlobalTransform(_parent);
+	}
+	for (auto e : _childs)
+	{
+		e->computeTransformAndUpdateGraphnode();
+	}
 }
 
 size_t 					EntityData::getFlags() const
@@ -192,4 +217,83 @@ void EntityData::reset()
 		}
 		_components[i].reset();
 	}
+	removeParent();
+	for (auto e : _childs)
+		e->removeParent(false);
+	_childs.clear();
+	auto key = PubSubKey("graphNodeNotARoot");
+	broadCast(key, _handle);
 }
+
+////////////////
+//
+// Graphnode
+
+const Entity	    	&EntityData::getParent() const
+{
+	return _parent;
+}
+
+void 					EntityData::removeChild(Entity &child, bool notify)
+{
+	_childs.erase(child);
+	if (notify)
+	{
+		child->removeParent(false);
+	}
+}
+
+void 					EntityData::setParent(Entity &parent, bool notify)
+{
+	if (_parent.get())
+	{
+		_parent->removeChild(_handle, false);
+	}
+	if (notify)
+		parent->addChild(_handle, false);
+	if (!parent.get()) // if parent is null -> it's a root node
+	{
+		auto key = PubSubKey("graphNodeSetAsRoot");
+		broadCast(key, _handle);
+	}
+	else if (!_parent.get()) // if it was a root node
+	{
+		auto key = PubSubKey("graphNodeNotARoot");
+		broadCast(key, _handle);
+	}
+	_parent = parent;
+}
+
+void 					EntityData::addChild(Entity &child, bool notify)
+{
+	_childs.insert(child);
+	if (notify)
+	{
+		child->setParent(_handle, false);
+	}
+}
+
+void                    EntityData::removeParent(bool notify)
+{
+	if (notify && _parent.get())
+	{
+		_parent->removeChild(_handle);
+	}
+	auto key = PubSubKey("graphNodeSetAsRoot");
+	broadCast(key, _handle);
+	_parent = Entity(std::numeric_limits<unsigned int>::max(), nullptr);
+}
+
+std::set<Entity>::iterator EntityData::getChildsBegin()
+{
+	return std::begin(_childs);
+}
+		
+std::set<Entity>::iterator EntityData::getChildsEnd()
+{
+	return std::end(_childs);
+}
+
+//
+//
+//////////////
