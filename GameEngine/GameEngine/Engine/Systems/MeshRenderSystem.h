@@ -33,7 +33,7 @@ public:
 	{
 		for (auto e : _filter.getCollection())
 		{
-			auto &mesh = e->getComponent<Component::MeshRenderer>();
+			auto mesh = e->getComponent<Component::MeshRenderer>();
 			mesh->render();
 		}
 	}

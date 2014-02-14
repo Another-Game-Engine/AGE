@@ -41,6 +41,7 @@
     <ClCompile Include="Engine\Components\TrackBallComponent.cpp" />
     <ClCompile Include="Engine\Components\TrackingCamera.cpp" />
     <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
+    <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
