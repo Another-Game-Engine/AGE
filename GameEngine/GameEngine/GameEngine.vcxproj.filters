@@ -41,7 +41,11 @@
     <ClCompile Include="Engine\Components\TrackBallComponent.cpp" />
     <ClCompile Include="Engine\Components\TrackingCamera.cpp" />
     <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Engine\Systems\LightRenderingSystem.cpp" />
+=======
+    <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
+>>>>>>> 5adb6912ac60c516dd785a5a518916a95cdaf643
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />

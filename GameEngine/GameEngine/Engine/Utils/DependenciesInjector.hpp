@@ -43,8 +43,6 @@ public:
 	std::shared_ptr<T> setInstance(Args ...args)
 	{
 		size_t id = typeid(TypeSelector).hash_code();
-		if (_parent && _parent->hasInstance<TypeSelector>())
-			return _parent->setInstance<T, TypeSelector>(args...);
 		if (_instances.find(id) == std::end(_instances))
 		{
 			auto n = std::make_shared<T>(args...);

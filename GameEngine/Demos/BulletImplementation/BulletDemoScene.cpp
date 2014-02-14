@@ -1,7 +1,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Core/Engine.hh"
 #include "Core/Renderer.hh"
-#include "DemoScene.hh"
+#include "BulletDemoScene.hh"
 
 #include <Components/RotationForce.hpp>
 #include <Components/CameraComponent.hpp>
@@ -34,15 +34,15 @@
 
 #include <MyTags.hpp>
 
-DemoScene::DemoScene(Engine &engine) : AScene(engine)
+BulletDemoScene::BulletDemoScene(Engine &engine) : AScene(engine)
 {
 }
 
-DemoScene::~DemoScene(void)
+BulletDemoScene::~BulletDemoScene(void)
 {
 }
 
-Entity  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
+Entity  BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
@@ -55,7 +55,7 @@ Entity  DemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	return e;
 }
 
-Entity  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
+Entity  BulletDemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
@@ -69,7 +69,7 @@ Entity  DemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string cons
 	return e;
 }
 
-Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
+Entity  BulletDemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
@@ -81,7 +81,7 @@ Entity  DemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string co
 	return e;
 }
 
-bool 			DemoScene::userStart()
+bool 			BulletDemoScene::userStart()
 {	
 	std::srand(0);
 
@@ -257,9 +257,15 @@ bool 			DemoScene::userStart()
 	return (true);
 }
 
-bool 			DemoScene::userUpdate(double time)
+bool 			BulletDemoScene::userUpdate(double time)
 {
 	static std::queue<Entity> stack;
+
+	if (_engine.getInstance<Input>()->getInput(SDLK_l))
+	{
+		_engine.getInstance<SceneManager>()->enableScene("SolarSystemDemo", 0);
+		_engine.getInstance<SceneManager>()->disableScene("BulletDemo");
+	}
 
 	if (_engine.getInstance<Input>()->getInput(SDL_BUTTON_RIGHT))
 	{

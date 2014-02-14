@@ -18,18 +18,24 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DemoScene.cpp">
+    <ClCompile Include="BulletDemoScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SolarSystemDemoScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DemoScene.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BallSoundSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyTags.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletDemoScene.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SolarSystemDemoScene.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
