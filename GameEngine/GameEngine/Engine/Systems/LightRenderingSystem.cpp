@@ -71,6 +71,7 @@ void LightRenderingSystem::mainUpdate(double time)
 		}
 	}
 	// Fill light buffer
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, _lights);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _lights);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, lightNbr * sizeof(ContiguousLight), _contiguousLights.data(), GL_DYNAMIC_DRAW);
 	// ----------------------------------------------------
