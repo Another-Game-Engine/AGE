@@ -30,7 +30,7 @@ layout(binding = 3) uniform sampler2D fTexture3; //normal;
 
 struct PointLight
 {
-	vec4	position;
+	vec4	positionPower;
 	vec4	colorRange;
 };
 
@@ -67,9 +67,10 @@ void main(void)
 
 	for (int i = 0; i < lightNbr; ++i)
 	{
-		vec4	lightPos = view * lights[i].position;
+		vec4	lightPos = view * vec4(lights[i].positionPower.xyz, 1.0f);
 		vec3	lightColor = lights[i].colorRange.xyz;
 		float	lightRange = lights[i].colorRange.w;
+		float	lightPower = lights[i].positionPower.w;
 
 		vec3	fragToLight = lightPos.xyz - fPosition.xyz;
 		float	fragToLightDist = length(fragToLight);
@@ -82,8 +83,8 @@ void main(void)
 			float	specular = calcSpecular(lightPos.xyz, fragToLight);
 			float	diminution = clamp(1.0f - fragToLightDist / lightRange, 0.0f, 1.0f);
 	
-			finalColor.xyz += specular * diminution * lightColor * specularColor;
-			finalColor.xyz += illumination * diminution * lightColor * diffuseColor;
+			finalColor.xyz += lightPower * specular * diminution * lightColor * specularColor;
+			finalColor.xyz += lightPower * illumination * diminution * lightColor * diffuseColor;
 		}
 	}
 	FragColor = finalColor;
