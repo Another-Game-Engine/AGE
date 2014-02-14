@@ -5,7 +5,7 @@
 
 struct ContiguousLight
 {
-	glm::vec4	position;
+	glm::vec4	positionPower;
 	glm::vec4	colorRange;
 
 	ContiguousLight() { }
@@ -21,7 +21,7 @@ struct ContiguousLight
 
 	ContiguousLight &operator=(ContiguousLight const &o)
 	{
-		position = o.position;
+		positionPower = o.positionPower;
 		colorRange = o.colorRange;
 		return (*this);
 	}
