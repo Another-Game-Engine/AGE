@@ -1,14 +1,21 @@
 #include "LightRenderingSystem.hh"
 
 #include <Components\MeshRenderer.hh>
+#include <Components\CameraComponent.hpp>
 #include <Context\IRenderContext.hh>
 #include <OpenGL\VertexBuffer.hh>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						System(scene),
 						_lightFilter(scene),
 						_meshRendererFilter(scene),
+						_cameraFilter(scene),
+						_lights(0),
+						_idealIllum(0.3f),
+						_adaptationSpeed(0.15f),
+						_maxDarkImprovement(1.0f),
 						_curFactor(1.0f),
 						_targetFactor(1.0f),
 						_useHDR(true)
@@ -17,9 +24,6 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 
 LightRenderingSystem::~LightRenderingSystem()
 {
-	glDeleteFramebuffers(1, &_frameBuffer);
-	glDeleteTextures(1, &_colorTexture);
-	glDeleteTextures(1, &_depthTexture);
 	glDeleteBuffers(1, &_lights);
 	glDeleteBuffers(1, &_avgColors);
 	delete	_vertexManager;
@@ -29,9 +33,9 @@ void LightRenderingSystem::initialize()
 {
 	_lightFilter.requireComponent<Component::PointLight>();
 	_meshRendererFilter.requireComponent<Component::MeshRenderer>();
+	_cameraFilter.requireComponent<Component::CameraComponent>();
 
 	initQuad();
-	initFrameBuffer();
 
 	_averageColor.init("./ComputeShaders/AverageColorFirstPass.kernel");
 	_modulateRender.init("./ComputeShaders/HighDynamicRange.kernel");
@@ -79,113 +83,42 @@ void LightRenderingSystem::mainUpdate(double time)
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, _lights);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _lights);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, lightNbr * sizeof(ContiguousLight), _contiguousLights.data(), GL_DYNAMIC_DRAW);
-	// ----------------------------------------------------
-	glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer); // Bind the FrameBuffer to render to textures
-
-	// Z PrePass
-	// ----------------------------------------------------
-	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-	glEnable(GL_DEPTH_TEST);
-	glClearDepth(1.0f);
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_TRUE);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	glColorMask(0, 0, 0, 0);
-
-	renderer->getShader("depthOnly")->use();
-
-	for (auto e : _meshRendererFilter.getCollection())
+	// -------------------- Render -------------------- \\
+	// For each camera
+	for (auto c : _cameraFilter.getCollection())
 	{
-		e->getComponent<Component::MeshRenderer>()->renderRaw();
-	}
+		OpenGLTools::Framebuffer &fbo = c->getComponent<Component::CameraComponent>()->frameBuffer;
 
-	// ----------------------------------------------------
-	// Final Lightning pass
-	// ----------------------------------------------------
-	glDepthFunc(GL_LEQUAL);
-	glDepthMask(GL_FALSE);
-	glColorMask(1, 1, 1, 1);
-
-	GLuint		localLightBuffId = _lights;
-
-	// shaders that needs light buffer
-	GLuint		materialBasicId = -1;
-	GLuint		earthId = -1; 
-	GLuint		bumpId = -1;
-
-	auto		materialBasic = renderer->getShader("MaterialBasic");
-	auto		earth = renderer->getShader("earth");
-	auto		bump = renderer->getShader("bump");
-
-	if (materialBasic != NULL)
-		materialBasicId = materialBasic->getId();
-	if (earth != NULL)
-		earthId = earth->getId();
-	if (bump != NULL)
-		bumpId = bump->getId();
-	for (auto e : _meshRendererFilter.getCollection())
-	{
-		e->getComponent<Component::MeshRenderer>()->render(
-			[localLightBuffId, materialBasicId, earthId, bumpId](OpenGLTools::Shader &s)
+		if (fbo.isInit() == false)
 		{
-			if (s.getId() == earthId ||
-				s.getId() == materialBasicId ||
-				s.getId() == bumpId)
-			{
-				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, localLightBuffId);
-			}
+			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize());
+			fbo.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
+			fbo.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
+			fbo.attachAll();
 		}
-		);
+
+		computeCameraRender(fbo);
+
+		// Render final quad on screen:
+		auto viewport = c->getComponent<Component::CameraComponent>()->viewport;
+		glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+
+		perFrame->setUniform("view", glm::mat4(1));
+		perFrame->setUniform("projection", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+		perFrame->flushChanges();
+
+		// Write on default FrameBuffer
+		glBindFramebuffer(GL_FRAMEBUFFER, 0); // Rebind the default FrameBuffer
+		glDisable(GL_DEPTH_TEST);
+
+		renderer->getShader("fboToScreen")->use();
+
+		// Bind texture of the final render
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, fbo.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+
+		_quad.draw();
 	}
-
-	if (_useHDR)
-		computeHdr();
-
-	perFrame->setUniform("view", glm::mat4(1));
-	perFrame->setUniform("projection", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
-	perFrame->flushChanges();
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0); // Rebind the default FrameBuffer
-	glDisable(GL_DEPTH_TEST);
-
-	renderer->getShader("fboToScreen")->use();
-
-	// Bind texture of the final render
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _colorTexture);
-
-	_quad.draw();
-}
-
-void	LightRenderingSystem::initFrameBuffer()
-{
-	glm::ivec2 wDimensions = _scene->getInstance<IRenderContext>()->getScreenSize();
-
-	// generate the deth texture
-	glGenTextures(1, &_depthTexture);
-	glBindTexture(GL_TEXTURE_2D, _depthTexture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, wDimensions.x, wDimensions.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-
-	// generate the color texture
-	glGenTextures(1, &_colorTexture);
-	glBindTexture(GL_TEXTURE_2D, _colorTexture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, wDimensions.x, wDimensions.y, 0, GL_RGBA, GL_FLOAT, NULL);
-
-	// generate frame buffer
-	glGenFramebuffers(1, &_frameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-
-	// bind depth texture to frame buffer
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthTexture, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _colorTexture, 0);
 }
 
 void	LightRenderingSystem::initQuad()
@@ -233,8 +166,76 @@ void	LightRenderingSystem::initQuad()
 	// ------------------------------------
 }
 
-void		LightRenderingSystem::computeHdr()
+void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo)
 {
+	auto renderer = _scene->getInstance<Renderer>();
+	auto perFrame = renderer->getUniform("PerFrame");
+
+	// ----------------------------------------------------
+	camFbo.bind();
+
+	// Z PrePass
+	// ----------------------------------------------------
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	glEnable(GL_DEPTH_TEST);
+	glClearDepth(1.0f);
+	glDepthFunc(GL_LESS);
+	glDepthMask(GL_TRUE);
+	glColorMask(0, 0, 0, 0);
+
+	renderer->getShader("depthOnly")->use();
+
+	for (auto e : _meshRendererFilter.getCollection())
+	{
+		e->getComponent<Component::MeshRenderer>()->renderRaw();
+	}
+
+	// ----------------------------------------------------
+	// Final Lightning pass
+	// ----------------------------------------------------
+	glDepthFunc(GL_LEQUAL);
+	glDepthMask(GL_FALSE);
+	glColorMask(1, 1, 1, 1);
+
+	GLuint		localLightBuffId = _lights;
+
+	// shaders that needs light buffer
+	GLuint		materialBasicId = -1;
+	GLuint		earthId = -1;
+	GLuint		bumpId = -1;
+
+	auto		materialBasic = renderer->getShader("MaterialBasic");
+	auto		earth = renderer->getShader("earth");
+	auto		bump = renderer->getShader("bump");
+
+	if (materialBasic != NULL)
+		materialBasicId = materialBasic->getId();
+	if (earth != NULL)
+		earthId = earth->getId();
+	if (bump != NULL)
+		bumpId = bump->getId();
+	for (auto e : _meshRendererFilter.getCollection())
+	{
+		e->getComponent<Component::MeshRenderer>()->render(
+			[localLightBuffId, materialBasicId, earthId, bumpId](OpenGLTools::Shader &s)
+		{
+			if (s.getId() == earthId ||
+				s.getId() == materialBasicId ||
+				s.getId() == bumpId)
+			{
+				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, localLightBuffId);
+			}
+		}
+		);
+	}
+
+	if (_useHDR)
+		computeHdr(camFbo);
+}
+
+void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
+{
+	GLuint	colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
 	// ----------------------------------------------------
 	// HDR Pass
 	// ----------------------------------------------------
@@ -245,21 +246,20 @@ void		LightRenderingSystem::computeHdr()
 
 	GLint		colorBufferSizeLocation = glGetUniformLocation(_averageColor.getId(), "colorBufferSize");
 	size_t		WORK_GROUP_SIZE = 16;
-	glm::uvec2	fboSize = glm::uvec2(_scene->getInstance<IRenderContext>()->getScreenSize());
-	glm::uvec2	groupNbr = glm::uvec2((fboSize.x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
-		(fboSize.y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
+	glm::uvec2	groupNbr = glm::uvec2((camFbo.getSize().x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
+									  (camFbo.getSize().y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
 	size_t		bufferSize = groupNbr.y * groupNbr.x;
 	glm::vec4	*datas = new glm::vec4[bufferSize];
 	glm::vec4	avgColor(0);
 
 	// set the color buffer size
-	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(fboSize));
+	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(camFbo.getSize()));
 	// Allocate avg color buffer
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, bufferSize * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
 
 	// Bind color texture to sample
-	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
+	glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
 	// Bind average color buffer
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, _avgColors);
 	// Launch kernel
@@ -281,7 +281,7 @@ void		LightRenderingSystem::computeHdr()
 	// ----------------------------------------------------
 	float	avgIllumination = (avgColor.x + avgColor.y + avgColor.z) / 3.0f;
 
-	_targetFactor = glm::min(0.3f / avgIllumination, 1.0f);
+	_targetFactor = glm::min(_idealIllum / avgIllumination, _maxDarkImprovement);
 
 	_modulateRender.use();
 
@@ -292,24 +292,24 @@ void		LightRenderingSystem::computeHdr()
 	{
 		if (_curFactor < _targetFactor)
 		{
-			_curFactor += 0.15f * _scene->getInstance<Timer>()->getElapsed();
+			_curFactor += _adaptationSpeed * _scene->getInstance<Timer>()->getElapsed();
 			if (_curFactor > _targetFactor)
 				_curFactor = _targetFactor;
 		}
 		else
 		{
-			_curFactor -= 0.15f * _scene->getInstance<Timer>()->getElapsed();
+			_curFactor -= _adaptationSpeed * _scene->getInstance<Timer>()->getElapsed();
 			if (_curFactor < _targetFactor)
 				_curFactor = _targetFactor;
 		}
 	}
 
 	// Set the uniforms
-	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(fboSize));
+	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(camFbo.getSize()));
 	glUniform1f(avgIllumLocation, _curFactor);
 
 	// Bind color texture to modulate
-	glBindImageTexture(0, _colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
+	glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
 

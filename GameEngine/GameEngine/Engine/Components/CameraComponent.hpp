@@ -7,6 +7,7 @@
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
 #include <MediaFiles/CubeMapFile.hpp>
+#include <OpenGL\Framebuffer.hh>
 
 namespace Component
 {
@@ -48,10 +49,13 @@ namespace Component
 		////
 		//////
 
-		glm::mat4                        projection;
-		std::shared_ptr<CubeMapFile>     skybox;
-		std::string                      cubeMapShader;
-		glm::mat4                        lookAtTransform;
+		glm::uvec4						viewport;
+
+		glm::mat4                       projection;
+		std::shared_ptr<CubeMapFile>    skybox;
+		std::string                     cubeMapShader;
+		glm::mat4                       lookAtTransform;
+		OpenGLTools::Framebuffer		frameBuffer;
 	private:
 		CameraComponent(CameraComponent const &);
 		CameraComponent	&operator=(CameraComponent const &);
