@@ -33,12 +33,6 @@ private:
 	EntityFilter				_meshRendererFilter;
 	EntityFilter				_cameraFilter;
 
-	// Quad to draw full screen
-	void						initQuad();
-		
-	Vertice<2>					_quad;
-	VertexManager<2>			*_vertexManager;
-
 	// Light Buffer
 	GLuint								_lights;
 	std::vector<ContiguousLight>		_contiguousLights;
@@ -64,10 +58,6 @@ private:
 
 	// Use HDR
 	bool							_useHDR;
-
-	// Average Datas
-	size_t							_oldBuffSize;
-	glm::vec4						*_avgBuffer;
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
 	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, OpenGLTools::UniformBuffer *perFrame);

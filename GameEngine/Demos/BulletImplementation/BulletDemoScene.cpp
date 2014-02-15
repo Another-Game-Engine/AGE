@@ -98,6 +98,7 @@ bool 			BulletDemoScene::userStart()
 	addSystem<CameraSystem>(400); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<LightRenderingSystem>(1000); // Render with the lights
 
+	getSystem<LightRenderingSystem>()->setHDRIdealIllumination(0.3f);
 	getSystem<LightRenderingSystem>()->useHDR(false);
 
 	//
