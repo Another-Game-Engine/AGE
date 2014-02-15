@@ -1,6 +1,7 @@
 #ifndef SHADOWRENDERERSYSTEM_HH_
 # define SHADOWRENDERERSYSTEM_HH_
 
+# include "Utils/OpenGL.hh"
 # include <glm/glm.hpp>
 # include <glm/gtc/matrix_transform.hpp>
 # include "System.h"
@@ -30,7 +31,6 @@ public:
 	void render(double time)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-		glDrawBuffer(GL_NONE);
 		for (auto indice : _filter.getCollection())
 		{
 			auto &mesh = indice->getComponent<Component::ShadowRenderer>();
@@ -68,17 +68,23 @@ protected:
 	{
 		_filter.require<Component::ShadowRenderer>();
 		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "1) Something go wrong with the framebuffer" << std::endl;
 		glBindTexture(GL_TEXTURE_2D, _texture);
-		glTexImage2D(GL_TEXTURE_2D, 0, 1, _height, _width, 0, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA/*GL_DEPTH_COMPONENT16*/, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texture, 0);
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "2) Something go wrong with the framebuffer" << std::endl;
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, _texture, 0);
+		GLenum mode = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		if (mode != GL_FRAMEBUFFER_COMPLETE)
+			std::cout << "Error frambuffer" << std::endl;
+		if (mode == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+			std::cout << "Error frambuffer incomplete attachment" << std::endl;
+		if (mode == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+			std::cout << "Error framebuffer missing attachement" << std::endl;
+		if (mode == GL_FRAMEBUFFER_UNSUPPORTED)
+			std::cout << "Error framebuffer unsupported" << std::endl;
+		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

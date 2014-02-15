@@ -64,8 +64,7 @@ bool DemoScene::userStart()
 	initRenderer();
 	loadResources();
 
-	getSystem<ShadowRendererSystem>()->setLight(glm::ortho<float>(-10, 10, -10, 10, 10, 20) * glm::lookAt(glm::vec3(0.5, 2, 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
-	getSystem<MeshRendererSystem>()->setTexShadow(getSystem<ShadowRendererSystem>()->getShadowMap());
+	getSystem<ShadowRendererSystem>()->setLight(glm::ortho<float>(-10, 10, -10, 10, 1, 20) * glm::lookAt(glm::vec3(0.5f, 2, 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
 	auto ball = createEntity();
 	auto ballMesh = AMediaFile::get<ObjFile>("obj__ball");
@@ -96,6 +95,8 @@ bool DemoScene::userStart()
 
 bool DemoScene::userUpdate(double time)
 {
+	glClearColor(0.2, 0.2, 0.2, 1.0);
+	getSystem<MeshRendererSystem>()->setTexShadow(getSystem<ShadowRendererSystem>()->getShadowMap());
 	auto input = _engine.getInstance<Input>();
 	if (input.getInput(SDLK_ESCAPE) || input.getInput(SDL_QUIT))
 		return (false);

@@ -40,7 +40,7 @@ namespace Component
 		auto shader = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(_shader);
 		if (shader)
 			shader->use();
-		lightMVP->setUniform("lightMVP", glm::mat4(0)/*depthMVP*/);
+		lightMVP->setUniform("lightMVP", depthMVP);
 		lightMVP->flushChanges();
 		for (unsigned int i = 0; i < _mesh->material->materials.size(); ++i)
 		{
