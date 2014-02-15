@@ -16,9 +16,12 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						_idealIllum(0.3f),
 						_adaptationSpeed(0.15f),
 						_maxDarkImprovement(1.0f),
+						_maxLightDiminution(0),
 						_curFactor(1.0f),
 						_targetFactor(1.0f),
-						_useHDR(true)
+						_useHDR(true),
+						_oldBuffSize(0),
+						_avgBuffer(NULL)
 {
 }
 
@@ -27,6 +30,8 @@ LightRenderingSystem::~LightRenderingSystem()
 	glDeleteBuffers(1, &_lights);
 	glDeleteBuffers(1, &_avgColors);
 	delete	_vertexManager;
+	if (_avgBuffer != NULL)
+		delete[] _avgBuffer;
 }
 
 void LightRenderingSystem::initialize()
@@ -44,6 +49,8 @@ void LightRenderingSystem::initialize()
 	glGenBuffers(1, &_lights);
 	// Gen average color buffer
 	glGenBuffers(1, &_avgColors);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, 4 * sizeof(float), NULL, GL_DYNAMIC_DRAW);
 }
 
 void LightRenderingSystem::mainUpdate(double time)
@@ -246,50 +253,46 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	// ----------------------------------------------------
 	// Average colors:
 	// ----------------------------------------------------
-	_averageColor.use();
-
-	GLint		colorBufferSizeLocation = glGetUniformLocation(_averageColor.getId(), "colorBufferSize");
-	size_t		WORK_GROUP_SIZE = 16;
-	glm::uvec2	groupNbr = glm::uvec2((camFbo.getSize().x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
-									  (camFbo.getSize().y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
-	size_t		bufferSize = groupNbr.y * groupNbr.x;
-	glm::vec4	*datas = new glm::vec4[bufferSize];
 	glm::vec4	avgColor(0);
 
-	// set the color buffer size
-	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(camFbo.getSize()));
-	// Allocate avg color buffer
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, bufferSize * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
+	_averageColor.use();
 
-	// Bind color texture to sample
-	glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
-	// Bind average color buffer
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, _avgColors);
-	// Launch kernel
-	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
-	// wait for the shader to finish writing on the buffer
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, colorTexture);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	float	maxDimension = glm::max(static_cast<float>(camFbo.getSize().x), static_cast<float>(camFbo.getSize().y));
+	int		mipMapNbr = static_cast<int>(glm::floor(glm::log2(maxDimension)));
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, mipMapNbr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipMapNbr);
+
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, _avgColors);
+
+	glDispatchCompute(1, 1, 1);
+
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-	// We get the buffer datas
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1000);
+
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
-	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, bufferSize * sizeof(glm::vec4), datas);
-	// and we calcultae the average
-	for (size_t i = 0; i < bufferSize; ++i)
-	{
-		avgColor += datas[i];
-	}
-	avgColor /= glm::vec4(bufferSize);
-	delete[] datas;
+	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, 4 * sizeof(float), glm::value_ptr(avgColor));
 	// ----------------------------------------------------
 	// Modulate colors:
 	// ----------------------------------------------------
+	size_t		WORK_GROUP_SIZE = 16;
+	glm::uvec2	groupNbr = glm::uvec2((camFbo.getSize().x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
+									  (camFbo.getSize().y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
+
 	float	avgIllumination = (avgColor.x + avgColor.y + avgColor.z) / 3.0f;
 
-	_targetFactor = glm::min(_idealIllum / avgIllumination, _maxDarkImprovement);
+	_targetFactor = glm::clamp(_idealIllum / avgIllumination, _maxLightDiminution, _maxDarkImprovement);
 
 	_modulateRender.use();
 
-	colorBufferSizeLocation = glGetUniformLocation(_modulateRender.getId(), "colorBufferSize");
+	GLint		colorBufferSizeLocation = glGetUniformLocation(_modulateRender.getId(), "colorBufferSize");
 	GLint		avgIllumLocation = glGetUniformLocation(_modulateRender.getId(), "factor");
 
 	if (_curFactor != _targetFactor)
