@@ -138,11 +138,11 @@ bool 			BulletDemoScene::userStart()
 		_engine.getInstance<Renderer>()->addUniform("PerModel")
 			.init(&s, "PerModel", perModelVars);
 
-	_engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
+//	_engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 	_engine.getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
 	_engine.getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
-	_engine.getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
-	_engine.getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
+//	_engine.getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
+//	_engine.getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
 	_engine.getInstance<Renderer>()->addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
 
 	_engine.getInstance<Renderer>()->bindShaderToUniform("fboToScreen", "PerFrame", "PerFrame");
@@ -150,8 +150,8 @@ bool 			BulletDemoScene::userStart()
 	_engine.getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 
-	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerModel", "PerModel");
+//	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerFrame", "PerFrame");
+//	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerModel", "PerModel");
 
 	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
@@ -253,7 +253,10 @@ bool 			BulletDemoScene::userStart()
 	
 	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
+	auto screenSize = _engine.getInstance<IRenderContext>()->getScreenSize();
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
+	cameraComponent->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
+
 	return (true);
 }
 

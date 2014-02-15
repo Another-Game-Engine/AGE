@@ -62,6 +62,6 @@ private:
 	bool							_useHDR;
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
-	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo);
+	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, OpenGLTools::UniformBuffer *perFrame);
 };
 

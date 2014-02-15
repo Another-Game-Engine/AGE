@@ -87,6 +87,14 @@ void LightRenderingSystem::mainUpdate(double time)
 	// For each camera
 	for (auto c : _cameraFilter.getCollection())
 	{
+		auto camera = c->getComponent<Component::CameraComponent>();
+		// Set les uniforms du block PerFrame
+		perFrame->setUniform("projection", camera->getProjection());
+		perFrame->setUniform("view", camera->getLookAtTransform());
+		perFrame->setUniform("time", static_cast<float>(_scene->getSystem<CameraSystem>()->getLifeTime()));
+
+		perFrame->flushChanges();
+
 		OpenGLTools::Framebuffer &fbo = c->getComponent<Component::CameraComponent>()->frameBuffer;
 
 		if (fbo.isInit() == false)
@@ -97,8 +105,7 @@ void LightRenderingSystem::mainUpdate(double time)
 			fbo.attachAll();
 		}
 
-		computeCameraRender(fbo);
-
+		computeCameraRender(fbo, perFrame);
 		// Render final quad on screen:
 		auto viewport = c->getComponent<Component::CameraComponent>()->viewport;
 		glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
@@ -166,10 +173,10 @@ void	LightRenderingSystem::initQuad()
 	// ------------------------------------
 }
 
-void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo)
+void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo,
+													  OpenGLTools::UniformBuffer *perFrame)
 {
 	auto renderer = _scene->getInstance<Renderer>();
-	auto perFrame = renderer->getUniform("PerFrame");
 
 	// ----------------------------------------------------
 	camFbo.bind();
@@ -177,11 +184,10 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	// Z PrePass
 	// ----------------------------------------------------
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0f);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_TRUE);
-	glColorMask(0, 0, 0, 0);
 
 	renderer->getShader("depthOnly")->use();
 
@@ -219,9 +225,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 		e->getComponent<Component::MeshRenderer>()->render(
 			[localLightBuffId, materialBasicId, earthId, bumpId](OpenGLTools::Shader &s)
 		{
-			if (s.getId() == earthId ||
-				s.getId() == materialBasicId ||
-				s.getId() == bumpId)
+			if (s.getId() == earthId || s.getId() == materialBasicId || s.getId() == bumpId)
 			{
 				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, localLightBuffId);
 			}
@@ -314,5 +318,4 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
 
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-	// ----------------------------------------------------
 }
