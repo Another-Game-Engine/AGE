@@ -19,9 +19,7 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						_maxLightDiminution(0),
 						_curFactor(1.0f),
 						_targetFactor(1.0f),
-						_useHDR(true),
-						_oldBuffSize(0),
-						_avgBuffer(NULL)
+						_useHDR(true)
 {
 }
 
@@ -29,9 +27,6 @@ LightRenderingSystem::~LightRenderingSystem()
 {
 	glDeleteBuffers(1, &_lights);
 	glDeleteBuffers(1, &_avgColors);
-	delete	_vertexManager;
-	if (_avgBuffer != NULL)
-		delete[] _avgBuffer;
 }
 
 void LightRenderingSystem::initialize()
@@ -39,8 +34,6 @@ void LightRenderingSystem::initialize()
 	_lightFilter.requireComponent<Component::PointLight>();
 	_meshRendererFilter.requireComponent<Component::MeshRenderer>();
 	_cameraFilter.requireComponent<Component::CameraComponent>();
-
-	initQuad();
 
 	_averageColor.init("./ComputeShaders/AverageColorFirstPass.kernel");
 	_modulateRender.init("./ComputeShaders/HighDynamicRange.kernel");
@@ -106,78 +99,22 @@ void LightRenderingSystem::mainUpdate(double time)
 
 		if (fbo.isInit() == false)
 		{
-			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize());
+			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 4);
 			fbo.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
 			fbo.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
 			fbo.attachAll();
 		}
 
 		computeCameraRender(fbo, perFrame);
-		// Render final quad on screen:
+		// Blit final result on back buffer:
 		auto viewport = c->getComponent<Component::CameraComponent>()->viewport;
 		glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
 
-		perFrame->setUniform("view", glm::mat4(1));
-		perFrame->setUniform("projection", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
-		perFrame->flushChanges();
-
-		// Write on default FrameBuffer
-		glBindFramebuffer(GL_FRAMEBUFFER, 0); // Rebind the default FrameBuffer
-		glDisable(GL_DEPTH_TEST);
-
-		renderer->getShader("fboToScreen")->use();
-
-		// Bind texture of the final render
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, fbo.getTextureAttachment(GL_COLOR_ATTACHMENT0));
-
-		_quad.draw();
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo.getId());
+		glDrawBuffer(GL_BACK);
+		glBlitFramebuffer(0, 0, fbo.getSize().x, fbo.getSize().y, 0, 0, fbo.getSize().x, fbo.getSize().y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 	}
-}
-
-void	LightRenderingSystem::initQuad()
-{
-	std::array<Attribute, 2> param =
-	{
-		Attribute(GL_FLOAT, sizeof(float), 2),
-		Attribute(GL_FLOAT, sizeof(float), 2)
-	};
-	_vertexManager = new VertexManager<2>(param);
-	_vertexManager->init();
-
-	// Init the Quad:
-	// ------------------------------------
-	// x,y vertex positions
-	float quadPos[] = {
-		-1.0, -1.0,
-		1.0, -1.0,
-		1.0, 1.0,
-		1.0, 1.0,
-		-1.0, 1.0,
-		-1.0, -1.0
-	};
-
-	// per-vertex texture coordinates
-	float quadUvs[] = {
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0
-	};
-
-	unsigned int indice[] = { 0, 1, 2, 3, 4, 5 };
-
-	std::array<Data, 2> data =
-	{
-		Data(6 * 2 * sizeof(float), quadPos),
-		Data(6 * 2 * sizeof(float), quadUvs)
-	};
-	Data indicesData(6 * sizeof(unsigned int), indice);
-	_quad = Vertice<2>(6, data, &indicesData);
-	_vertexManager->addVertice(_quad);
-	// ------------------------------------
 }
 
 void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo,
@@ -247,9 +184,11 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 {
 	GLuint	colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
+	GLenum	textureType = camFbo.isMultisampled() ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	// ----------------------------------------------------
 	// HDR Pass
 	// ----------------------------------------------------
+	// TODO : Try to pack this in one pass
 	// ----------------------------------------------------
 	// Average colors:
 	// ----------------------------------------------------
@@ -258,7 +197,7 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	_averageColor.use();
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, colorTexture);
+	glBindTexture(textureType, colorTexture);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 

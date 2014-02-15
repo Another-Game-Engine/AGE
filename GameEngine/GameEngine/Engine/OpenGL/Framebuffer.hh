@@ -14,12 +14,14 @@ namespace OpenGLTools
 		GLuint						_id;
 		std::map<GLenum, GLuint>	_attachments;
 		glm::uvec2					_size;
+		int							_sampleNbr;
+		bool						_multiSample;
 
 	public:
 		Framebuffer();
 		~Framebuffer();
 
-		void		init(glm::uvec2 size);
+		void		init(glm::uvec2 size, int sampleNbr);
 
 		void		addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment);
 		void		attachAll() const;
@@ -28,6 +30,8 @@ namespace OpenGLTools
 		glm::uvec2	getSize();
 
 		bool		isInit() const { return (_id != 0); }
+		bool		isMultisampled() const { return (_multiSample); }
+		GLuint		getId() const { return (_id); }
 
 	private:
 		Framebuffer(const Framebuffer &o);

@@ -56,7 +56,7 @@ float		calcSpecular(vec3 lightPos, vec3 fragToLight)
 
 void main(void)
 {
-	vec3	ambientColor = 0.1f * texture2D(fTexture0, fTexCoord).rgb * ambient;
+	vec3	ambientColor = 0.05f * texture2D(fTexture0, fTexCoord).rgb * ambient;
 	vec3	diffuseColor = texture2D(fTexture0, fTexCoord).rgb * diffuse;
 	vec3	specularColor = texture2D(fTexture0, fTexCoord).rgb * specular;
 
@@ -88,5 +88,4 @@ void main(void)
 		}
 	}
 	FragColor = finalColor;
-//	FragColor = vec4(1.0f, 0.0f, 1.0f, 1.0f);
 }

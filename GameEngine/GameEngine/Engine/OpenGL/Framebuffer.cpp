@@ -7,7 +7,8 @@ namespace OpenGLTools
 {
 	Framebuffer::Framebuffer() :
 		_id(0),
-		_size(0)
+		_size(0),
+		_multiSample(false)
 	{
 	}
 
@@ -19,8 +20,10 @@ namespace OpenGLTools
 			glDeleteTextures(1, &a.second);
 	}
 
-	void		Framebuffer::init(glm::uvec2 size)
+	void		Framebuffer::init(glm::uvec2 size, int sampleNbr)
 	{
+		_sampleNbr = sampleNbr;
+		_multiSample = sampleNbr > 1;
 		_size = size;
 		glGenFramebuffers(1, &_id);
 	}
@@ -28,15 +31,20 @@ namespace OpenGLTools
 	void		Framebuffer::addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment)
 	{
 		assert(_id != 0 && "Frame buffer not initialized");
+		GLenum	texture2D = (_multiSample ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D);
 		GLuint	texture;
 
 		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glBindTexture(texture2D, texture);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexImage2D(GL_TEXTURE_2D, 0, textureInternalFormat, _size.x, _size.y, 0, textureFormat, GL_FLOAT, NULL);
+		if (_multiSample)
+			glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, _sampleNbr, textureInternalFormat, _size.x, _size.y, GL_FALSE);
+		else
+			glTexImage2D(GL_TEXTURE_2D, 0, textureInternalFormat, _size.x, _size.y, 0, textureFormat, GL_FLOAT, NULL);
+
 		auto	attach = _attachments.find(attachment);
 		if (attach != _attachments.end())
 		{
@@ -49,9 +57,10 @@ namespace OpenGLTools
 
 	void		Framebuffer::attachAll() const
 	{
+		GLenum	texture2D = (_multiSample ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D);
 		bind();
 		for (auto a : _attachments)
-			glFramebufferTexture2D(GL_FRAMEBUFFER, a.first, GL_TEXTURE_2D, a.second, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, a.first, texture2D, a.second, 0);
 	}
 
 	void		Framebuffer::bind() const
