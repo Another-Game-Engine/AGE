@@ -25,6 +25,7 @@ public:
 	void		setHDRIdealIllumination(float idealIllum) { _idealIllum = idealIllum; }
 	void		setHDRAdaptationSpeed(float adaptSpeed) { _adaptationSpeed = adaptSpeed; }
 	void		setHDRMaxDarkImprovement(float maxDarkImprovement) { _maxDarkImprovement = maxDarkImprovement; }
+	void		setMaxLightDiminution(float maxLightDiminution) { _maxLightDiminution = maxLightDiminution; }
 
 private:
 	// Filters
@@ -42,10 +43,13 @@ private:
 	GLuint								_lights;
 	std::vector<ContiguousLight>		_contiguousLights;
 
+	// HDR Utils
+	// ----------------------------------------
 	// HDR parameters
 	float							_idealIllum;
 	float							_adaptationSpeed;
 	float							_maxDarkImprovement;
+	float							_maxLightDiminution;
 
 	// HDR Compute shader
 	OpenGLTools::ComputeShader		_averageColor;
@@ -60,6 +64,10 @@ private:
 
 	// Use HDR
 	bool							_useHDR;
+
+	// Average Datas
+	size_t							_oldBuffSize;
+	glm::vec4						*_avgBuffer;
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
 	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, OpenGLTools::UniformBuffer *perFrame);
