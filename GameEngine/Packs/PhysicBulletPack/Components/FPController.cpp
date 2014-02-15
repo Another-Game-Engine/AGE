@@ -65,7 +65,7 @@ void FPController::init()
 	_ghost->setRestitution(0);
 	_ghost->setActivationState(DISABLE_DEACTIVATION);
 	_ghost->setUserPointer(&(_entity));
-	_controller = new btKinematicCharacterController(_ghost, _shape, 1);
+	_controller = new btKinematicCharacterController(_ghost, _shape, 0.1);
 	_manager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::KinematicFilter);
 	_manager->getWorld()->addAction(_controller);
 	_manager->getWorld()->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
