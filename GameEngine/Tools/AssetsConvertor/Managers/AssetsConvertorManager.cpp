@@ -28,7 +28,7 @@ void AssetsConvertorManager::setOutputDirectory(const std::string directory)
 
 std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filename)
 {
-	File file(filename);
+	const File file(filename);
 
 	for (auto &e : _convertors)
 	{

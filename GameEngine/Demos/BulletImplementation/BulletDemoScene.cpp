@@ -3,6 +3,8 @@
 #include "Core/Renderer.hh"
 #include "BulletDemoScene.hh"
 
+#include <MediaFiles/AssetsManager.hpp>
+
 #include <Components/RotationForce.hpp>
 #include <Components/CameraComponent.hpp>
 #include <Components/RigidBody.hpp>
@@ -48,7 +50,7 @@ Entity  BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::str
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 
-	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
+	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -62,7 +64,7 @@ Entity  BulletDemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::strin
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::BOX);
-	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -74,7 +76,7 @@ Entity  BulletDemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::str
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
-	auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
+	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -172,13 +174,13 @@ bool 			BulletDemoScene::userStart()
 	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
 
-	AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__SketchTest.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
 	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
 	_engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
@@ -186,21 +188,21 @@ bool 			BulletDemoScene::userStart()
 	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
-	auto defaultBallMesh = AMediaFile::get<ObjFile>("obj__ball");
-	auto planetMesh = AMediaFile::create<ObjFile>("my_planet", defaultBallMesh);
-	planetMesh->material = AMediaFile::create<MaterialFile>("my_planet_material", defaultBallMesh->material);
+	auto defaultBallMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
+	auto planetMesh = getInstance<AssetsManager>()->create<ObjFile>("my_planet", defaultBallMesh);
+	planetMesh->material = getInstance<AssetsManager>()->create<MaterialFile>("my_planet_material", defaultBallMesh->material);
 	auto testsss = planetMesh->material->materials[0];
-	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>("texture__EarthTexture");
-	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>("texture__EarthNightTexture");
-	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>("texture__EarthClouds");
-	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>("texture__EarthTextureBump");
+	planetMesh->material->materials[0].ambientTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTexture");
+	planetMesh->material->materials[0].diffuseTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthNightTexture");
+	planetMesh->material->materials[0].specularTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthClouds");
+	planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTextureBump");
 
 	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
 	AMediaFile::saveToFile("my_planet_material", "./Assets/Serialized/");
 	AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
 
 	// EXAMPLE LOAD FROM SAVE
-	AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
+	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
 
 	// CREATE SPONZA CHURCH
 	{
@@ -221,7 +223,7 @@ bool 			BulletDemoScene::userStart()
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 	}
 

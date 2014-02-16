@@ -13,6 +13,8 @@
 #include <cereal/types/string.hpp>
 #include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
+#include <Core/AScene.hh>
+#include <MediaFiles/AssetsManager.hpp>
 
 namespace Resources
 {
@@ -61,7 +63,7 @@ namespace Component
 			ar(shader);
 			std::string meshName;
 			ar(meshName);
-			mesh = std::static_pointer_cast<ObjFile>(AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File(meshName)));
+			mesh = std::static_pointer_cast<ObjFile>(_entity->getScene()->getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File(meshName)));
 		}
 
 		// !Serialization
