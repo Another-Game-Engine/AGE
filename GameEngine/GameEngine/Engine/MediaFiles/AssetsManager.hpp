@@ -13,6 +13,7 @@ class AssetsManager : public Dependency, public std::enable_shared_from_this<Ass
 public:
 	AssetsManager();
 	virtual ~AssetsManager();
+	virtual void init();
 	void add(std::shared_ptr<AMediaFile> f);
 	std::shared_ptr<AMediaFile> get(const File &file);
 	std::shared_ptr<AMediaFile> get(const std::string &name);
