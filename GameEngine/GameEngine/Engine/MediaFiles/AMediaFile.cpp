@@ -21,15 +21,10 @@ void AMediaFile::loadFromList(const File &file)
 	std::multimap<std::size_t, std::string> list;
 	ar(list);
 
-	std::vector<std::thread> threads;
 	for (auto &e : list)
 	{
-		threads.push_back(std::thread([e]()
-		{
-			AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File(e.second));
-		}));
+		AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File(e.second));
 	}
-	std::for_each(std::begin(threads), std::end(threads), [](std::thread &t){t.join(); });
 }
 std::shared_ptr<AMediaFile> AMediaFile::get(const std::string &name)
 {

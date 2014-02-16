@@ -8,11 +8,15 @@
 
 AssetsManager::AssetsManager()
 {
-	AMediaFile::setManager(shared_from_this());
 }
 
 AssetsManager::~AssetsManager()
 {}
+
+void AssetsManager::init()
+{
+	AMediaFile::setManager(shared_from_this());
+}
 
 void AssetsManager::add(std::shared_ptr<AMediaFile> f)
 {
