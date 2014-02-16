@@ -161,13 +161,13 @@ struct MaterialFile : public MediaFile<MaterialFile>
 			std::string a, b, c, d;
 			ar(a, b, c, d);
 			if (a != "NULL")
-				ambientTex = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(a));
+				ambientTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(a)));
 			if (b != "NULL")
-				diffuseTex = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(b));
+				diffuseTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(b)));
 			if (c != "NULL")
-				specularTex = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(c));
+				specularTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(c)));
 			if (d != "NULL")
-				normalTex = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(d));
+				normalTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(d)));
 		}
 
 	};

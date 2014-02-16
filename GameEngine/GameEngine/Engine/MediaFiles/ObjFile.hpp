@@ -156,7 +156,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::string matName;
 		ar(matName);
 		if (matName != "NULL")
-			material = std::static_pointer_cast<MaterialFile>(AMediaFile::loadFromFile<Archive>(File(matName)));
+			material = std::static_pointer_cast<MaterialFile>(_manager->loadFromFile<Archive>(File(matName)));
 	}
 
 };

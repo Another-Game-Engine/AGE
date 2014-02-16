@@ -3,6 +3,8 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #include <Entities/Entity.hh>
 #include <Entities/EntityData.hh>
+#include <MediaFiles/AssetsManager.hpp>
+#include <Core/AScene.hh>
 
 namespace Component
 {
@@ -17,7 +19,7 @@ namespace Component
 
 	void CameraComponent::attachSkybox(const std::string &name, const std::string &_cubeMapShader)
 	{
-		skybox = AMediaFile::get<CubeMapFile>(name);
+		skybox = _entity->getScene()->getInstance<AssetsManager>()->get<CubeMapFile>(name);
 		cubeMapShader = _cubeMapShader;
 	}
 

@@ -6,7 +6,6 @@
 #include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/Engine.hh>
-#include <MediaFiles/ObjFile.hpp>
 #include <Managers/BulletDynamicManager.hpp>
 #include <BulletCollision/CollisionShapes/btShapeHull.h>
 #include <HACD/hacdHACD.h>
@@ -19,6 +18,7 @@
 #include <memory>
 #include <Components/CollisionLayers.hpp>
 #include <Serialize/BulletWorldImporter/btBulletWorldImporter.h>
+#include <MediaFiles/AssetsManager.hpp>
 
 namespace Component
 {
@@ -110,6 +110,7 @@ namespace Component
 		{
 			if (c == UNDEFINED)
 				return;
+			auto mediaManager = _entity->getScene()->getInstance<AssetsManager>();
 			meshName = _meshName;
 			_reset();
 			shapeType = c;
@@ -132,27 +133,27 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				auto media = AMediaFile::get(_meshName);
+				auto media = mediaManager->get(_meshName);
 				if (!media)
 					return;
 				if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
 				{
-					auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(AMediaFile::get(_meshName));
+					auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(mediaManager->get(_meshName));
 					_collisionShape = std::shared_ptr<btCollisionShape>(new btConvexHullShape(*s->shape.get()));
 				}
 				else if (media->getType() == AMediaFile::COLLISION_SHAPE_STATIC)
 				{
-					auto s = std::dynamic_pointer_cast<CollisionShapeStaticFile>(AMediaFile::get(_meshName));
+					auto s = std::dynamic_pointer_cast<CollisionShapeStaticFile>(mediaManager->get(_meshName));
 					_collisionShape = std::shared_ptr<btCollisionShape>(new btScaledBvhTriangleMeshShape(s->shape.get(), btVector3(1, 1, 1)));
 				}
 				else if (media->getType() == AMediaFile::COLLISION_BOX)
 				{
-					auto s = std::dynamic_pointer_cast<CollisionBoxFile>(AMediaFile::get(_meshName));
+					auto s = std::dynamic_pointer_cast<CollisionBoxFile>(mediaManager->get(_meshName));
 					_collisionShape = std::shared_ptr<btCollisionShape>(new btBoxShape(*s->shape.get()));
 				}
 				else if (media->getType() == AMediaFile::COLLISION_SPHERE)
 				{
-					auto s = std::dynamic_pointer_cast<CollisionSphereFile>(AMediaFile::get(_meshName));
+					auto s = std::dynamic_pointer_cast<CollisionSphereFile>(mediaManager->get(_meshName));
 					_collisionShape = std::shared_ptr<btCollisionShape>(new btSphereShape(*s->shape.get()));
 				}
 				else
