@@ -22,7 +22,7 @@ struct AMediaFile
 public:
 	File path;
 	std::string name;
-	static AssetsManager *_manager;
+	static std::shared_ptr<AssetsManager> _manager;
 	enum MEDIA_TYPE
 	{
 		UNKNOWN = 0
@@ -173,7 +173,7 @@ public:
 		e->serialize<cereal::BinaryOutputArchive>(ofs);
 	}
 
-	static void setManager(AssetsManager *manager)
+	static void setManager(std::shared_ptr<AssetsManager> manager)
 	{
 		_manager = manager;
 	}

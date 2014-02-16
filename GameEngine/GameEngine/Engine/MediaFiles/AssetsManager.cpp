@@ -8,7 +8,7 @@
 
 AssetsManager::AssetsManager()
 {
-	AMediaFile::setManager(this);
+	AMediaFile::setManager(shared_from_this());
 }
 
 AssetsManager::~AssetsManager()

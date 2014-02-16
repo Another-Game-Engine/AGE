@@ -7,8 +7,10 @@
 #include <MediaFiles/CollisionShapeDynamicFile.hpp>
 #include <MediaFiles/CollisionBoxFile.hpp>
 #include <MediaFiles/CollisionSphereFile.hpp>
+#include <thread>
+#include <memory>
 
-AssetsManager *AMediaFile::_manager = nullptr;
+std::shared_ptr<AssetsManager> AMediaFile::_manager = nullptr;
 
 void AMediaFile::loadFromList(const File &file)
 {
@@ -18,10 +20,16 @@ void AMediaFile::loadFromList(const File &file)
 	cereal::JSONInputArchive ar(ifs);
 	std::multimap<std::size_t, std::string> list;
 	ar(list);
+
+	std::vector<std::thread> threads;
 	for (auto &e : list)
 	{
-		AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File(e.second));
+		threads.push_back(std::thread([e]()
+		{
+			AMediaFile::loadFromFile<cereal::BinaryInputArchive>(File(e.second));
+		}));
 	}
+	std::for_each(std::begin(threads), std::end(threads), [](std::thread &t){t.join(); });
 }
 std::shared_ptr<AMediaFile> AMediaFile::get(const std::string &name)
 {
