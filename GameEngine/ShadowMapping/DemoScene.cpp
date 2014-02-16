@@ -64,12 +64,12 @@ bool DemoScene::userStart()
 	initRenderer();
 	loadResources();
 
-	getSystem<ShadowRendererSystem>()->setLight(glm::ortho<float>(-10, 10, -10, 10, 1, 20) * glm::lookAt(glm::vec3(0.5f, 2, 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+	getSystem<ShadowRendererSystem>()->setLight(glm::ortho<float>(-10, 10, -10, 10, -10, 20) * glm::lookAt(glm::vec3(0, 2, -2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
 	auto ball = createEntity();
 	auto ballMesh = AMediaFile::get<ObjFile>("obj__ball");
 	ball->addComponent<Component::GraphNode>();
-	ball->setLocalTransform() = glm::translate(ball->getLocalTransform(), glm::vec3(0.0, 4.0, 4.0));
+	ball->setLocalTransform() = glm::translate(ball->getLocalTransform(), glm::vec3(0, 4.0, 4.0));
 	ball->setLocalTransform() = glm::scale(ball->getLocalTransform(), glm::vec3(1.0, 1.0, 1.0));
 	auto &r = ball->addComponent<Component::MeshRenderer>(ballMesh);
 	r->setShader("MaterialBasic");

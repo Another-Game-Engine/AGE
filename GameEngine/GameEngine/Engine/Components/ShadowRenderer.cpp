@@ -35,6 +35,7 @@ namespace Component
 
 	void ShadowRenderer::render(glm::mat4 const &VPLight)
 	{
+		glEnable(GL_DEPTH_TEST);
 		glm::mat4 depthMVP = VPLight * _entity->getGlobalTransform();
 		OpenGLTools::UniformBuffer *lightMVP = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("Light");
 		auto shader = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(_shader);

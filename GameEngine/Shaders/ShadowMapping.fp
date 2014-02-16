@@ -9,5 +9,5 @@ layout (location = 0) out vec4 fDepth;
 
 void main()
 {
-	fDepth = vec4(1.0, 1.0, 1.0, 1.0)/*gl_FragCoord.z*/;
+	fDepth = vec4(0.0, 1.0, 0.0, 1.0)/*gl_FragCoord.z*/;
 }
