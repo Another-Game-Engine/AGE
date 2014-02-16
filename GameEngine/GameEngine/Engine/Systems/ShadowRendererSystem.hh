@@ -36,6 +36,7 @@ public:
 			auto &mesh = indice->getComponent<Component::ShadowRenderer>();
 			mesh->render(_VPLight);
 		}
+		glFinish();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
@@ -69,12 +70,16 @@ protected:
 		_filter.require<Component::ShadowRenderer>();
 		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
 		glBindTexture(GL_TEXTURE_2D, _texture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA/*GL_DEPTH_COMPONENT16*/, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, _width, _height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		//glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texture, 0);
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, _texture, 0);
+		glDrawBuffer(GL_COLOR_ATTACHMENT0);
+		//glDrawBuffer(GL_NONE);
 		GLenum mode = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (mode != GL_FRAMEBUFFER_COMPLETE)
 			std::cout << "Error frambuffer" << std::endl;
@@ -84,7 +89,6 @@ protected:
 			std::cout << "Error framebuffer missing attachement" << std::endl;
 		if (mode == GL_FRAMEBUFFER_UNSUPPORTED)
 			std::cout << "Error framebuffer unsupported" << std::endl;
-		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
