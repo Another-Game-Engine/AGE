@@ -210,15 +210,16 @@ bool 			BulletDemoScene::userStart()
 //		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 //		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
 //		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		rigidBody->getShape().setMargin(0.001f);
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 	}
 
