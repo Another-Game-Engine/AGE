@@ -7,25 +7,14 @@
 class					File
 {
 public:
-	explicit File(const std::string &name = "unknownFile") :
+	File(const std::string &name = "unknownFile") :
 		fullPath_(name)
 	{
 	}
 
-	explicit File(const char *name) :
+	File(const char *name) :
 		fullPath_(name)
 	{
-	}
-
-	explicit File(const File &file) :
-		fullPath_(file.fullPath_)
-	{
-	}
-
-	File &operator=(const File &file)
-	{
-		fullPath_ = file.fullPath_;
-		return *this;
 	}
 
 	bool					exists() const
