@@ -36,7 +36,7 @@ public:
 	void add(std::shared_ptr<AMediaFile> f);
 
 	template <typename T = AMediaFile>
-	std::shared_ptr<T> get(const File &file)
+	std::shared_ptr<T> getFromFile(const File &file)
 	{
 		std::string name = file.getShortFileName();
 		auto it = _files.find(name);
@@ -116,7 +116,7 @@ public:
 	{
 		assert(file.exists() == true && "File does not exist.");
 		std::shared_ptr<AMediaFile> res{ nullptr };
-		res = get(file);
+		res = get(file.getShortFileName());
 		if (res != nullptr)
 			return res;
 		if (file.getShortFileName().find("collision_shape_static") != std::string::npos)
