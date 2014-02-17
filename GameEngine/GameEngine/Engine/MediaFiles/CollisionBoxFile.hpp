@@ -36,14 +36,16 @@ public:
 		return *this;
 	}
 
-	void unserialize(const File &f)
+	void unserialize(File f)
 	{
 		btBulletWorldImporter import(0);
 		assert(f.exists() == true && "File do not exists");
-		assert(import.loadFile(f.getFullName().c_str()) == true && "Bullet importer cannot open file.");
+		auto loadFile = import.loadFile(f.getFullName().c_str());
+		assert(loadFile == true && "Bullet importer cannot open file.");
 		int n = import.getNumCollisionShapes();
 		assert(n > 0 && "Bullet file is not correct. No collision box inside.");
-		shape = std::shared_ptr<btBoxShape>(static_cast<btBoxShape*>(import.getCollisionShapeByIndex(0)));
+		auto o = import.getCollisionShapeByIndex(0);
+		shape = std::shared_ptr<btBoxShape>(static_cast<btBoxShape*>(o));
 	}
 
 	// WILL NEVER BE CALLED
