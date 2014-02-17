@@ -132,7 +132,8 @@ public:
 		else if (file.getShortFileName().find("collision_sphere") != std::string::npos)
 		{
 			res = std::make_shared<CollisionSphereFile>();
-			static_cast<CollisionSphereFile&>(*res.get()).unserialize(file);
+			auto uuu = std::dynamic_pointer_cast<CollisionSphereFile>(res);
+			uuu->unserialize(file);
 		}
 		else if (file.getShortFileName().find("collision_box") != std::string::npos)
 		{
