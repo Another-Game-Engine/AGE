@@ -31,6 +31,7 @@ namespace OpenGLTools
 
 		bool		isInit() const { return (_id != 0); }
 		bool		isMultisampled() const { return (_multiSample); }
+		int			getSampleNbr() const { return (_sampleNbr); }
 		GLuint		getId() const { return (_id); }
 
 	private:
