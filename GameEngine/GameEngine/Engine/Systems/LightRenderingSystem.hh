@@ -7,6 +7,7 @@
 #include <OpenGL\VertexManager.hh>
 #include <OpenGL\ComputeShader.hh>
 #include <OpenGL\Framebuffer.hh>
+#include <Utils\DrawQuad.hh>
 
 #include <vector>
 
@@ -58,6 +59,11 @@ private:
 
 	// Use HDR
 	bool							_useHDR;
+
+	// Final render quad
+	DrawQuad						_quad;
+
+	OpenGLTools::Framebuffer		_downSampling;
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
 	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, OpenGLTools::UniformBuffer *perFrame);

@@ -1,12 +1,7 @@
-#version 430
+﻿#version 430
 
-layout (std140) uniform PerFrame
-{
-	mat4 projection;
-	mat4 view;
-	int	lightNbr;
-	float time;
-};
+uniform mat4	projection;
+uniform mat4	view;
 
 in vec2 vUv;
 

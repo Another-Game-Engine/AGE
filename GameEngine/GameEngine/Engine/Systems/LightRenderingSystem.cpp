@@ -31,6 +31,8 @@ LightRenderingSystem::~LightRenderingSystem()
 
 void LightRenderingSystem::initialize()
 {
+	_quad.init(_scene->getEngine());
+
 	_lightFilter.requireComponent<Component::PointLight>();
 	_meshRendererFilter.requireComponent<Component::MeshRenderer>();
 	_cameraFilter.requireComponent<Component::CameraComponent>();
@@ -99,21 +101,41 @@ void LightRenderingSystem::mainUpdate(double time)
 
 		if (fbo.isInit() == false)
 		{
-			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 4);
+			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 8);
 			fbo.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
 			fbo.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
 			fbo.attachAll();
 		}
+		
+		if (fbo.isMultisampled() && _downSampling.getSize() != fbo.getSize())
+		{
+			_downSampling.init(fbo.getSize(), 1);
+			_downSampling.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
+			_downSampling.attachAll();
+		}
 
+		// First Pass
 		computeCameraRender(fbo, perFrame);
+
+		// If multisampled, downsample the texture
+		if (fbo.isMultisampled())
+		{
+			// Down sample before post Fx
+			_downSampling.bind();
+			_quad.draw(fbo.getTextureAttachment(GL_COLOR_ATTACHMENT0), fbo.getSampleNbr(), fbo.getSize());
+			glFinish();
+		}
+		OpenGLTools::Framebuffer	&current = fbo.isMultisampled() ? _downSampling : fbo;
+
+		// Compute HDR
+		if (_useHDR)
+			computeHdr(current);
+
 		// Blit final result on back buffer:
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		auto viewport = c->getComponent<Component::CameraComponent>()->viewport;
 		glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
-
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo.getId());
-		glDrawBuffer(GL_BACK);
-		glBlitFramebuffer(0, 0, fbo.getSize().x, fbo.getSize().y, 0, 0, fbo.getSize().x, fbo.getSize().y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+		_quad.draw(current.getTextureAttachment(GL_COLOR_ATTACHMENT0), current.getSampleNbr(), current.getSize());
 	}
 }
 
@@ -176,9 +198,6 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 		}
 		);
 	}
-
-	if (_useHDR)
-		computeHdr(camFbo);
 }
 
 void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)

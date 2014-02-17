@@ -1,12 +1,7 @@
 #version 430
 
-layout (std140) uniform PerFrame
-{
-	mat4 projection;
-	mat4 view;
-	int	lightNbr;
-	float time;
-};
+uniform mat4	projection;
+uniform mat4	view;
 
 in vec2 pos;
 in vec2 uv;
@@ -15,8 +10,6 @@ out vec2 vUv;
 
 void main ()
 {
-	// interpolate texture coordinates
 	vUv = uv;
-	// transform vertex position to clip space (camera view and perspective)
 	gl_Position = projection * view * vec4(pos, 0.0, 1.0);
 }

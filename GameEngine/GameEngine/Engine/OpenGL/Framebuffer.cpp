@@ -22,9 +22,15 @@ namespace OpenGLTools
 
 	void		Framebuffer::init(glm::uvec2 size, int sampleNbr)
 	{
+		if (_id != 0)
+			glDeleteFramebuffers(1, &_id);
+		for (auto a : _attachments)
+			glDeleteTextures(1, &a.second);
+
 		_sampleNbr = sampleNbr;
 		_multiSample = sampleNbr > 1;
 		_size = size;
+
 		glGenFramebuffers(1, &_id);
 	}
 
