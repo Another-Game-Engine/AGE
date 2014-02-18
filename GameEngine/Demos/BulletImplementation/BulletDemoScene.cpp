@@ -98,7 +98,12 @@ bool 			BulletDemoScene::userStart()
 	addSystem<CameraSystem>(400); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<LightRenderingSystem>(1000); // Render with the lights
 
+	
 	getSystem<LightRenderingSystem>()->setHDRIdealIllumination(0.3f);
+	getSystem<LightRenderingSystem>()->setHDRAdaptationSpeed(0.1f);
+
+	getSystem<LightRenderingSystem>()->setHDRMaxLightDiminution(0.3f);
+	getSystem<LightRenderingSystem>()->setHDRMaxDarkImprovement(1.2f);
 	getSystem<LightRenderingSystem>()->useHDR(false);
 	//
 	//
@@ -160,6 +165,7 @@ bool 			BulletDemoScene::userStart()
 	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+//	AMediaFile::loadFromList("./Assets/Serialized/export__SketchTest.cpd");
 	AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
 //	AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
 
@@ -191,15 +197,19 @@ bool 			BulletDemoScene::userStart()
 		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0));
 		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
 //		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
-//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
 		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
 //		rigidBody->setCollisionShape(Component::RigidBody::BOX);
 //		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
-		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+		rigidBody->getShape().setMargin(0.001f);
+		rigidBody->getBody().setFriction(1.0f);
+		rigidBody->getBody().setRestitution(0.9f);
+//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 //		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 	}
@@ -297,6 +307,8 @@ bool 			BulletDemoScene::userUpdate(double time)
 		auto light = e->addComponent<Component::PointLight>();
 		light->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 10.0f);
 		light->lightData.positionPower.w = 3.0f;
+		rigidbody->getBody().setFriction(1.0f);
+		rigidbody->getBody().setRestitution(0.9f);
 		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 		e->addTag(BALL_TAG);
 		if (stack.size() > 50)

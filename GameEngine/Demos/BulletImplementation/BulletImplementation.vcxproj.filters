@@ -60,5 +60,6 @@
     </None>
     <None Include="..\..\ComputeShaders\AverageColorFirstPass.kernel" />
     <None Include="..\..\ComputeShaders\HighDynamicRange.kernel" />
+    <None Include="..\..\Shaders\fboToScreenMultisampled.fp" />
   </ItemGroup>
 </Project>
