@@ -23,6 +23,11 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
+layout (std140) uniform Light
+{
+	mat4 lightMVP;
+};
+
 uniform          sampler2D fTexture0;//ambient;
 uniform          sampler2D fTexture1;//diffuse;
 uniform          sampler2D fTexture2;//specular;
@@ -38,17 +43,17 @@ out vec4 fPosition;
 out vec4 fColor;
 out vec4 fNormal;
 out vec2 fTexCoord;
-
+out vec4 ShadowCoord;
 
 void main(void)
 {
   mat4 modelView = view * model;
   mat4 vectorSpace = transpose(inverse(modelView));
 
-
   fColor = vColor;
   fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);
   fPosition = modelView * vPosition;
   fTexCoord = vTexCoord;
+  ShadowCoord = lightMVP * vPosition; 
   gl_Position = projection * modelView * vPosition;
 }
