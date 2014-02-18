@@ -34,14 +34,16 @@ void DemoScene::initRenderer()
 	std::string const materialBasic[] = { "ambient", "diffuse", "specular", "transmittance", "emission", "shininess" };
 
 	auto &renderer = _engine.getInstance<Renderer>();
-	OpenGLTools::Shader &s = renderer.addShader("MaterialBasic", "Shaders/MaterialBasic.vp", "Shaders/MaterialBasic.fp");
+	OpenGLTools::Shader &s = renderer.addShader("MaterialBasic", "Shaders/lightWithShadow.vp", "Shaders/lightWithShadow.fp");
  	renderer.addUniform("MaterialBasic").init(&s, "MaterialBasic", materialBasic);
 	renderer.addUniform("PerFrame").init(&s, "PerFrame", perFrameVars);
 	renderer.addUniform("PerModel").init(&s, "PerModel", perModelVars);
+	renderer.addUniform("Light").init(&s, "Light", lightShadow);
 	renderer.getShader("MaterialBasic")->setTextureNumber(5);
 	renderer.bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	renderer.bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	renderer.bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
+	renderer.bindShaderToUniform("ShadowMapping", "Light", "Light");
 	renderer.getShader("MaterialBasic")->build();
 
 	OpenGLTools::Shader &shadow = renderer.addShader("ShadowMapping", "Shaders/ShadowMapping.vp", "Shaders/ShadowMapping.fp");
@@ -96,6 +98,7 @@ bool DemoScene::userStart()
 bool DemoScene::userUpdate(double time)
 {
 	glClearColor(0.2, 0.2, 0.2, 1.0);
+	getSystem<MeshRendererSystem>()->setLightVP(getSystem<ShadowRendererSystem>()->getLightVP());
 	getSystem<MeshRendererSystem>()->setTexShadow(getSystem<ShadowRendererSystem>()->getShadowMap());
 	auto input = _engine.getInstance<Input>();
 	if (input.getInput(SDLK_ESCAPE) || input.getInput(SDL_QUIT))

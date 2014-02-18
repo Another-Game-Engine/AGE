@@ -30,7 +30,7 @@ namespace Component
 		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
-		void render(GLuint shadowTex);
+		void render(GLuint shadowTex, glm::mat4 const &lightVP);
 		std::shared_ptr<ObjFile>	const &getMesh() const;
 
 		//////

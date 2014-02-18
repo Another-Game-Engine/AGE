@@ -35,7 +35,7 @@ public:
 		for (auto e : _filter.getCollection())
 		{
 			auto &mesh = e->getComponent<Component::MeshRenderer>();
-			mesh->render(_texShadow);
+			mesh->render(_texShadow, _lightVP);
 		}
 	}
 
@@ -49,7 +49,18 @@ public:
 		_texShadow = 0;
 	}
 
+	void setLightVP(glm::mat4 const &lightVP)
+	{
+		_lightVP = lightVP;
+	}
+
+	void clearLightVP()
+	{
+		_lightVP = glm::mat4(0);
+	}
+
 protected:
+	glm::mat4 _lightVP;
 	GLuint _texShadow;
 	EntityFilter _filter;
 	bool _renderDebugMethod;
