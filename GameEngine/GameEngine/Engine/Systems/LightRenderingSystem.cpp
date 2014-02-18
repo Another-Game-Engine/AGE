@@ -101,7 +101,7 @@ void LightRenderingSystem::mainUpdate(double time)
 
 		if (fbo.isInit() == false)
 		{
-			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 8);
+			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 4);
 			fbo.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
 			fbo.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
 			fbo.attachAll();
