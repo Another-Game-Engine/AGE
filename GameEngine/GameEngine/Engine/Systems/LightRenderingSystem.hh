@@ -26,7 +26,7 @@ public:
 	void		setHDRIdealIllumination(float idealIllum) { _idealIllum = idealIllum; }
 	void		setHDRAdaptationSpeed(float adaptSpeed) { _adaptationSpeed = adaptSpeed; }
 	void		setHDRMaxDarkImprovement(float maxDarkImprovement) { _maxDarkImprovement = maxDarkImprovement; }
-	void		setMaxLightDiminution(float maxLightDiminution) { _maxLightDiminution = maxLightDiminution; }
+	void		setHDRMaxLightDiminution(float maxLightDiminution) { _maxLightDiminution = maxLightDiminution; }
 
 private:
 	// Filters

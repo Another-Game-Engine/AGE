@@ -125,6 +125,7 @@
     <None Include="..\..\Shaders\depthOnly.vp" />
     <None Include="..\..\Shaders\fboToScreen.fp" />
     <None Include="..\..\Shaders\fboToScreen.vp" />
+    <None Include="..\..\Shaders\fboToScreenMultisampled.fp" />
     <None Include="..\..\Shaders\MaterialBasic.fp" />
     <None Include="..\..\Shaders\MaterialBasic.vp" />
   </ItemGroup>

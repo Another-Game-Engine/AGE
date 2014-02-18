@@ -39,7 +39,10 @@ protected:
 			auto force = e->getComponent<Component::Collision>()->force;
 //			std::cout << force << std::endl;
 			if (force > 1.0f)
+			{
 				ae->play("collision", false);
+				ae->getAudio("collision")->channel->setVolume(force / 10.0f);
+			}
 		}
 
 		for (auto e : _heros.getCollection())
