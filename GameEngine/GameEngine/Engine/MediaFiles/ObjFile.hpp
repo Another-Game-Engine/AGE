@@ -116,6 +116,21 @@ struct ObjFile : public MediaFile<ObjFile>
 			Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
 			buffer = Vertice<4>(vertices.size(), data, &indicesData);
 			engine->getInstance<VertexManager<4>>()->addVertice(buffer);
+
+			/////
+			// The old method here strangly works
+
+			//std::array<Attribute, 4> param =
+			//{
+			//	Attribute(GL_FLOAT, sizeof(float), 4),
+			//	Attribute(GL_FLOAT, sizeof(float), 4),
+			//	Attribute(GL_FLOAT, sizeof(float), 4),
+			//	Attribute(GL_FLOAT, sizeof(float), 2),
+			//};
+	
+			//auto leak = new VertexManager<4>(param);
+			//leak->init();
+			//leak->addVertice(buffer);
 		}
 	};
 
