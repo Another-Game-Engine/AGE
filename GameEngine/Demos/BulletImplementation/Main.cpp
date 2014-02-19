@@ -10,13 +10,15 @@
 
 #include <stdlib.h>
 #include <Core/Engine.hh>
-#include "DemoScene.hh"
+#include "BulletDemoScene.hh"
+#include "SolarSystemDemoScene.hh"
 #include <Utils/PubSub.hpp>
 #include <Context/SdlContext.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Managers/BulletDynamicManager.hpp>
 #include <MediaFiles/AssetsManager.hpp>
+#include <Audio/AudioManager.hh>
 
 int			main(int ac, char **av)
 {
@@ -31,20 +33,23 @@ int			main(int ac, char **av)
 	e.setInstance<AssetsManager>();
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
-	e.setInstance<BulletDynamicManager, BulletCollisionManager>().init();
+	e.setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
+	e.setInstance<AudioManager>()->init();
 
 	// init engine
 	if (e.init() == false)
 		return (EXIT_FAILURE);
 
 	// add scene
-	e.getInstance<SceneManager>().addScene(new DemoScene(e), "demo");
+	e.getInstance<SceneManager>()->addScene(new BulletDemoScene(e), "BulletDemo");
+	e.getInstance<SceneManager>()->addScene(new SolarSystemDemoScene(e), "SolarSystemDemo");
 
 	// bind scene
-	if (!e.getInstance<SceneManager>().initScene("demo"))
+	if (!e.getInstance<SceneManager>()->initScene("BulletDemo"))
 		return false;
-	e.getInstance<SceneManager>().enableScene("demo", 0);
-
+	if (!e.getInstance<SceneManager>()->initScene("SolarSystemDemo"))
+		return false;
+	e.getInstance<SceneManager>()->enableScene("BulletDemo", 0);
 
 	// lanch engine
 	if (e.start() == false)

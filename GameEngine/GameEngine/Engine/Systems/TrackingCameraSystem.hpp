@@ -3,7 +3,7 @@
 
 #include <Utils/MatrixConversion.hpp>
 #include "System.h"
-#include <Components/CameraComponent.hh>
+#include <Components/CameraComponent.hpp>
 #include <Components/TrackingCamera.hpp>
 #include <Entities/EntityData.hh>
 #include <Core/Input.hh>
@@ -32,8 +32,6 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		Input			&inputs = _scene->getEngine().getInstance<Input>();
-
 		for (auto e : _filter.getCollection())
 		{
 			auto c = e->getComponent<Component::CameraComponent>();
@@ -54,8 +52,8 @@ protected:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::CameraComponent>();
-		_filter.require<Component::TrackingCamera>();
+		_filter.requireComponent<Component::CameraComponent>();
+		_filter.requireComponent<Component::TrackingCamera>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };

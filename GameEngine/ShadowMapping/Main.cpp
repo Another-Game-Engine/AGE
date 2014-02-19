@@ -36,13 +36,13 @@ static bool initInstanceEngine(Engine &engine)
 
 static bool initSceneEngine(Engine &engine, std::string const &nameScene)
 {
-	engine.getInstance<SceneManager>().addScene(new DemoScene(engine), nameScene);
-	if (!engine.getInstance<SceneManager>().initScene(nameScene))
+	engine.getInstance<SceneManager>()->addScene(new DemoScene(engine), nameScene);
+	if (!engine.getInstance<SceneManager>()->initScene(nameScene))
 	{
 		std::cerr << "the init scene : " << nameScene << " fail." << std::endl;
 		return (false);
 	}
-	engine.getInstance<SceneManager>().enableScene(nameScene, 0);
+	engine.getInstance<SceneManager>()->enableScene(nameScene, 0);
 	return (true);
 }
 

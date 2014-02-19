@@ -1,5 +1,4 @@
-#ifndef   __ENTITY_FILTER_HPP__
-# define  __ENTITY_FILTER_HPP__
+#pragma once
 
 #include    <set>
 #include	<Utils/Barcode.h>
@@ -12,65 +11,45 @@ bool defaultEntityComparaison(Entity e1, Entity e2);
 class EntityFilter : public PubSub
 {
 public:
-	EntityFilter(AScene *scene, bool(*comparaisonFn)(Entity, Entity) = defaultEntityComparaison)
-		: PubSub(scene->getInstance<PubSub::Manager>())
-		, _collection(comparaisonFn)
-		, _scene(scene)
-	{
-		assert(scene != nullptr && "System Scene is not valid.");
-	}
-
-	virtual ~EntityFilter()
-	{
-		_collection.clear();
-	}
+	EntityFilter(AScene *scene, bool(*comparaisonFn)(Entity, Entity) = defaultEntityComparaison);
+	virtual ~EntityFilter();
 
 	template <typename T>
-	void require()
+	void requireComponent()
 	{
-		_code.add<T>();
-		globalSub(std::string("componentAdded" + std::to_string(T::getTypeId())), [&](Entity entity){
-			_componentAdded(entity, T::getTypeId());
+		auto id = T::getTypeId() + MAX_TAG_NUMBER;
+		auto strId = std::to_string(id);
+		_code.add(id);
+		globalSub(std::string("componentAdded" + strId), [&](Entity entity){
+			_componentAdded(entity, id);
 		});
-		globalSub(std::string("componentRemoved" + std::to_string(T::getTypeId())), [&](Entity entity){
-			_componentRemoved(entity, T::getTypeId());
+		globalSub(std::string("componentRemoved" + strId), [&](Entity entity){
+			_componentRemoved(entity, id);
 		});
 	}
 
 	template <typename T>
-	void unRequire()
+	void unRequireComponent()
 	{
-		_code.remove<T>();
-		unsub(std::string("componentAdded" + std::to_string(T::getTypeId())));
-		unsub(std::string("componentRemoved" + std::to_string(T::getTypeId())));
+		auto id = T::getTypeId() + MAX_TAG_NUMBER;
+		auto strId = std::to_string(id);
+
+		_code.remove(id);
+		unsub(std::string("componentAdded" + strId));
+		unsub(std::string("componentRemoved" + strId));
 	}
 
-	const Barcode &getCode() const
-	{
-		return _code;
-	}
+	void requireTag(unsigned int tag);
+	void unRequireTag(unsigned int tag);
 
-	inline std::set<Entity, bool(*)(Entity, Entity)> &getCollection()
-	{
-		return _collection;
-	}
+	const Barcode &getCode() const;
+	std::set<Entity, bool(*)(Entity, Entity)> &getCollection();
 
 protected:
 	std::set<Entity, bool(*)(Entity, Entity)> _collection;
 	Barcode _code;
 	AScene *_scene;
 
-	void _componentAdded(Entity &e, unsigned int typeId)
-	{
-		if (_code.match(e->getCode()))
-			_collection.insert(e);
-	}
-
-	void _componentRemoved(Entity &e, unsigned int typeId)
-	{
-		if (!_code.match(e->getCode()))
-			_collection.erase(e);
-	}
+	void _componentAdded(Entity &e, unsigned int typeId);
+	void _componentRemoved(Entity &e, unsigned int typeId);
 };
-
-#endif    //__ENTITY_FILTER_HPP__

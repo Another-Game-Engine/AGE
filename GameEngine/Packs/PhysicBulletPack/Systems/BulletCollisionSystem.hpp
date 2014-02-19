@@ -13,12 +13,12 @@ class BulletCollisionSystem : public System
 {
 public:
 	BulletCollisionSystem(AScene *scene) : System(scene)
-		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
+		, _manager(scene->getInstance<BulletCollisionManager>())
 		, _filter(scene)
 	{}
 	virtual ~BulletCollisionSystem(){}
 private:
-	BulletCollisionManager &_manager;
+	std::shared_ptr<BulletCollisionManager> _manager;
 	EntityFilter _filter;
 
 	virtual void updateBegin(double time)
@@ -44,14 +44,15 @@ private:
 			auto c = e->getComponent<Component::CollisionBody>();
 			c->getBody().setWorldTransform(transform);
 			c->getShape().setLocalScaling(convertGLMVectorToBullet(scale));
+			e->computeTransformAndUpdateGraphnode();
 		}
 		// PERFORM COLLISION CHECK
-		_manager.getWorld()->performDiscreteCollisionDetection();
+		_manager->getWorld()->performDiscreteCollisionDetection();
 	}
 
 	virtual void initialize()
 	{
-		_filter.require<Component::CollisionBody>();
+		_filter.requireComponent<Component::CollisionBody>();
 	}
 };
 

@@ -6,7 +6,8 @@
 #include <Systems/System.h>
 
 AScene::AScene(Engine &engine) :
-	_engine(engine)
+DependenciesInjector(&engine),
+_engine(engine)
 {
 	setInstance<PubSub::Manager>();
 }

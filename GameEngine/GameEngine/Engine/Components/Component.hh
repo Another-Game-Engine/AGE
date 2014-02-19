@@ -1,9 +1,7 @@
-#ifndef		__COMPONENT_HPP__
-#define		__COMPONENT_HPP__
+#pragma once
 
 #include <string>
 #include <Entities/Entity.hh>
-#include <Core/AScene.hh>
 
 #include <cereal/cereal.hpp>
 #include <cereal/archives/binary.hpp>
@@ -14,13 +12,6 @@
 
 namespace	Component
 {
-
-	static int uniqueId()
-	{
-		static int id = 0;
-		return id++;
-	}
-
 	struct Base
 	{
 		Base(std::size_t serId);
@@ -49,6 +40,11 @@ namespace	Component
 
 	protected:
 		Entity				_entity;
+		static int uniqueId()
+		{
+			static int id = 0;
+			return id++;
+		}
 	};
 
 	template <class T>
@@ -56,7 +52,6 @@ namespace	Component
 	{
 		ComponentBase()
 			: Base(typeid(T).hash_code())
-			//, _name(std::regex_replace(typeid(T).name(), std::regex("(\\s)+|(:)+"), "_"))
 			, _name(typeid(T).name())
 		{
 		}
@@ -113,8 +108,5 @@ namespace	Component
 
 	private:
 		const std::string _name;
-		//std::multiset<PubSubKey> _subscriptions; // subscriptions to local entity events
 	};
 }
-
-#endif

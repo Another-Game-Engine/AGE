@@ -1,5 +1,8 @@
-#include "CameraComponent.hh"
+#include <Components/CameraComponent.hpp>
 #include <Core/Engine.hh>
+#include <glm/gtc/matrix_inverse.hpp>
+#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 
 namespace Component
 {

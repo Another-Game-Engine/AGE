@@ -18,6 +18,7 @@
 #include "OpenGL/VertexManager.hh"
 #include "OpenGL/Attribute.hh"
 #include <MediaFiles/AssetsManager.hpp>
+#include <Audio/AudioManager.hh>
 
 int			main(int ac, char **av)
 {
@@ -32,6 +33,8 @@ int			main(int ac, char **av)
 	e.setInstance<AssetsManager>();
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
+	if (!e.setInstance<AudioManager>()->init())
+		return EXIT_FAILURE;
 
 	// init engine
 	if (e.init() == false)
@@ -39,12 +42,12 @@ int			main(int ac, char **av)
 
 
 	// add scene
-	e.getInstance<SceneManager>().addScene(new DemoScene(e), "demo");
+	e.getInstance<SceneManager>()->addScene(new DemoScene(e), "demo");
 
 	// bind scene
-	if (!e.getInstance<SceneManager>().initScene("demo"))
+	if (!e.getInstance<SceneManager>()->initScene("demo"))
 		return false;
-	e.getInstance<SceneManager>().enableScene("demo", 0);
+	e.getInstance<SceneManager>()->enableScene("demo", 0);
 
 	// launch engine
 	if (e.start() == false)

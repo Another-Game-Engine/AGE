@@ -3,7 +3,10 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
- #include <Utils/Dependency.hpp>
+#include <Utils/Dependency.hpp>
+#include <Utils/BtConversion.hpp>
+#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 
 class BulletCollisionManager : public Dependency
 {
@@ -57,6 +60,24 @@ public:
 	{
 		_world->removeCollisionObject(object);
 	}
+
+	std::set<Entity> rayCast(const glm::vec3 &from, const glm::vec3 &to) const
+	{
+		std::set<Entity> r;
+		btCollisionWorld::AllHitsRayResultCallback raycastCallback(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to));
+		raycastCallback.m_collisionFilterMask = btBroadphaseProxy::AllFilter;
+		raycastCallback.m_collisionFilterGroup = btBroadphaseProxy::AllFilter;
+		_world->rayTest(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to), raycastCallback);
+		if (raycastCallback.hasHit())
+		{
+			for (std::size_t it = 0; it < raycastCallback.m_collisionObjects.size(); ++it)
+			{
+				r.insert(*static_cast<Entity*>(raycastCallback.m_collisionObjects.at(it)->getUserPointer()));
+			}
+		}
+		return std::move(r);
+	}
+
 	inline btCollisionWorld *getWorld() const { return _world; }
 protected:
 	btCollisionWorld *_world;
