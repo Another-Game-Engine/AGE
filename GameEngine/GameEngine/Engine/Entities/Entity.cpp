@@ -6,7 +6,7 @@
 #include <Core/AScene.hh>
 
 Entity::Entity(unsigned int id, AScene *manager)
-: _id(id), _version(0), _manager(manager)
+: _id(id), _manager(manager), _version(0)
 {}
 
 Entity::~Entity()

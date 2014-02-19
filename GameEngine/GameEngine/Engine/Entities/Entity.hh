@@ -23,8 +23,8 @@ public:
 private:
 	friend class AScene;
 	unsigned int _id;
-	unsigned short _version;
 	AScene *_manager;
+	unsigned short _version;
 };
 
 #endif    //__HANDLE_HH__
