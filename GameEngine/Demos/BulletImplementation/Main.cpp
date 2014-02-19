@@ -54,13 +54,13 @@ int			main(int ac, char **av)
 
 	// add scene
 	e.getInstance<SceneManager>()->addScene(new BulletDemoScene(e), "BulletDemo");
-//	e.getInstance<SceneManager>()->addScene(new SolarSystemDemoScene(e), "SolarSystemDemo");
+	e.getInstance<SceneManager>()->addScene(new SolarSystemDemoScene(e), "SolarSystemDemo");
 
 	// bind scene
 	if (!e.getInstance<SceneManager>()->initScene("BulletDemo"))
 		return false;
-	//if (!e.getInstance<SceneManager>()->initScene("SolarSystemDemo"))
-	//	return false;
+	if (!e.getInstance<SceneManager>()->initScene("SolarSystemDemo"))
+		return false;
 	e.getInstance<SceneManager>()->enableScene("BulletDemo", 0);
 
 	// lanch engine
