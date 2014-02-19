@@ -26,7 +26,7 @@ public:
 		return isOpen;
 	}
 
-	const std::string			&getFullName() const
+	const std::string			getFullName() const
 	{
 		return this->fullPath_;
 	}
@@ -34,24 +34,26 @@ public:
 	std::string				getFileName() const
 	{
 		std::string::size_type		pos;
+		auto path = fullPath_;
 
-		pos = this->fullPath_.find_last_of("\\/");
+		pos = path.find_last_of("\\/");
 
 		if (pos != std::string::npos)
-			return this->fullPath_.substr(pos + 1, std::string::npos);
+			return path.substr(pos + 1, std::string::npos);
 		else
-			return this->fullPath_;
+			return path;
 	}
 
 	std::string             getFolder() const
 	{
 		std::string::size_type		pos;
+		auto path = fullPath_;
 
-		pos = this->fullPath_.find_last_of("\\/");
+		pos = path.find_last_of("\\/");
 		if (pos != std::string::npos)
-			return this->fullPath_.substr(0, pos + 1);
+			return path.substr(0, pos + 1);
 		else
-			return this->fullPath_;
+			return path;
 	}
 
 	std::string				getShortFileName() const
@@ -62,10 +64,10 @@ public:
 	std::string				getExtension() const
 	{
 		std::string::size_type		pos;
-
-		pos = this->fullPath_.find_last_of(".");
+		auto path = fullPath_;
+		pos = path.find_last_of(".");
 		if (pos != std::string::npos)
-			return this->fullPath_.substr(pos + 1, std::string::npos);
+			return path.substr(pos + 1, std::string::npos);
 		else
 			return "";
 	}

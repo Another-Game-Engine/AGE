@@ -9,6 +9,8 @@
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 #include <Context/SdlContext.hh>
+#include <MediaFiles/AssetsManager.hpp>
+#include <Core/AScene.hh>
 
 
 class SpaceshipControllerSystem : public System
@@ -89,7 +91,7 @@ private:
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 //				rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, 1000));
-				auto mesh = b->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
+				auto mesh = b->addComponent<Component::MeshRenderer>(entity->getScene()->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
 				balls.push_back(b);
 				b->computeTransformAndUpdateGraphnode();
