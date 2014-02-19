@@ -19,7 +19,7 @@ class VertexManager : public Dependency
 {
 public:
 	VertexManager(std::array<Attribute, NBR_ATTRIBUTE> const &attributes);
-	~VertexManager();
+	virtual ~VertexManager();
 	VertexManager(VertexManager const &copy);
 	VertexManager &operator=(VertexManager const &vertexmanager);
 	bool init();
