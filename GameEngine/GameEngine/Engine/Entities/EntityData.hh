@@ -69,9 +69,10 @@ private:
 	Barcode             _code;
 
 	EntityData(AScene *scene);
+public:
+
 	virtual ~EntityData();
 
-public:
 	AScene                  *getScene() const;
 	void                    translate(const glm::vec3 &v);
 	void                    setTranslation(const glm::vec3 &v);

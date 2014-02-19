@@ -52,7 +52,7 @@ void AScene::destroy(const Entity &h)
 		return;
 	e->reset();
 	e->removeFlags(EntityData::ACTIVE);
-	++(e->getHandle()._id);
+	++(e->getHandle()._version);
 	_free.push(h.getId());
 }
 
