@@ -176,7 +176,6 @@
     <ClInclude Include="Engine\OpenGL\Attribute.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
-    <ClInclude Include="Engine\OpenGL\VertexManagerDependency.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hh" />
     <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
     <ClInclude Include="Engine\OpenGL\VertexManager.hh" />
