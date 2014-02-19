@@ -281,17 +281,6 @@ bool 			BulletDemoScene::userStart()
 
 bool 			BulletDemoScene::userUpdate(double time)
 {
-
-	Entity first = createEntity();
-	Entity secode = createEntity();
-
-	destroy(first);
-
-	auto v1 = first.get();
-	auto v2 = secode.get();
-	std::cout << sizeof(v1) << " " <<sizeof(Entity) << " " << sizeof(EntityData) << std::endl;
-	destroy(secode);
-
 	static std::queue<Entity> stack;
 
 	if (_engine.getInstance<Input>()->getInput(SDLK_l))
