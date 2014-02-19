@@ -51,9 +51,11 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
 		Vertice<4>					buffer;
+		Engine                      *engine;
 
 		Geometry()
 			: name("")
+			, engine(nullptr)
 		{
 		}
 
@@ -70,6 +72,8 @@ struct ObjFile : public MediaFile<ObjFile>
 			colors = o.colors;
 			uvs = o.uvs;
 			indices = o.indices;
+			engine = o.engine;
+			init();
 		}
 
 		Geometry &operator=(const Geometry &o)
@@ -82,6 +86,8 @@ struct ObjFile : public MediaFile<ObjFile>
 				colors = o.colors;
 				uvs = o.uvs;
 				indices = o.indices;
+				engine = o.engine;
+				init();
 			}
 			return *this;
 		}
@@ -98,7 +104,7 @@ struct ObjFile : public MediaFile<ObjFile>
 			ar(name, vertices, normals, colors, uvs, indices);
 		}
 
-		void init(Engine *engine)
+		void init()
 		{
 			std::array<Data, 4> data = 
 			{
@@ -129,7 +135,8 @@ struct ObjFile : public MediaFile<ObjFile>
 		ar(geometries);
 		for (auto &e : geometries)
 		{
-			e.init(_engine);
+			e.engine = _engine;
+			e.init();
 		}
 		std::string matName;
 		ar(matName);
