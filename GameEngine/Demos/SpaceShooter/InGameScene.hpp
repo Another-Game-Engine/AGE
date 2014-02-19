@@ -29,6 +29,8 @@
 #include <Components/RigidBody.hpp>
 #include <Components/SpaceshipController.hpp>
 
+#include <MediaFiles/AssetsManager.hpp>
+
 class InGameScene : public AScene
 {
 	Entity test;
@@ -93,11 +95,11 @@ public:
 		_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 		_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
-		AMediaFile::loadFromList("./Assets/Serialized/export__cube.cpd");
-		AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
-		AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
-		AMediaFile::loadFromList("./Assets/Serialized/export__galileo.cpd");
-		AMediaFile::loadFromList("./Assets/Serialized/export__sponza.cpd");
+		getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
+		getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
+		getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
+		getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
+		getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
 
 		std::string		vars[] =
 		{
@@ -130,7 +132,7 @@ public:
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			rigidBody->setCollisionShape(Component::RigidBody::BOX, "obj__galileo");
-			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
+			auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 			mesh->setShader("MaterialBasic");
 			e->addComponent<Component::SpaceshipController>();
 			e->computeTransformAndUpdateGraphnode();
@@ -146,7 +148,7 @@ public:
 			rigidBody->setMass(0.0f);
 			//rigidBody->setCollisionShape(Component::RigidBody::BOX);
 			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+			auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
 			e->computeTransformAndUpdateGraphnode();
 			floor = e;
@@ -160,7 +162,7 @@ public:
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-			auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+			auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
 			test = e;
 			e->computeTransformAndUpdateGraphnode();
@@ -220,7 +222,7 @@ public:
 				auto rigidBody = e->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
-				auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__galileo"));
+				auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");
 				balls.push_back(e);
 				e->computeTransformAndUpdateGraphnode();

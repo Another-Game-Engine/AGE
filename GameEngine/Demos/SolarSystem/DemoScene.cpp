@@ -17,6 +17,7 @@
 #include <Systems/AudioSystem.hpp>
 #include <Audio/AudioManager.hh>
 #include <Core/Engine.hh>
+#include <MediaFiles/AssetsManager.hpp>
 
 #include <SDL\SDL.h>
 
@@ -36,18 +37,18 @@ Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 {
 	auto p = createEntity();
 	auto e = createEntity();
-
+	auto mediaManager = getInstance<AssetsManager>();
 	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
 	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
-	auto ballMesh = AMediaFile::get<ObjFile>("obj__ball");
-	auto planetMesh = AMediaFile::create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
-	planetMesh->material = AMediaFile::create<MaterialFile>("", ballMesh->material);
-	planetMesh->material->materials[0].ambientTex = AMediaFile::get<TextureFile>(tex1);
-	planetMesh->material->materials[0].diffuseTex = AMediaFile::get<TextureFile>(tex2);
-	planetMesh->material->materials[0].specularTex = AMediaFile::get<TextureFile>(tex3);
-	planetMesh->material->materials[0].normalTex = AMediaFile::get<TextureFile>(tex4);
+	auto ballMesh = mediaManager->get<ObjFile>("obj__ball");
+	auto planetMesh = mediaManager->create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
+	planetMesh->material = mediaManager->create<MaterialFile>("", ballMesh->material);
+	planetMesh->material->materials[0].ambientTex = mediaManager->get<TextureFile>(tex1);
+	planetMesh->material->materials[0].diffuseTex = mediaManager->get<TextureFile>(tex2);
+	planetMesh->material->materials[0].specularTex = mediaManager->get<TextureFile>(tex3);
+	planetMesh->material->materials[0].normalTex = mediaManager->get<TextureFile>(tex4);
 
 	std::shared_ptr<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
 
@@ -169,8 +170,8 @@ bool 			DemoScene::userStart()
 	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 
-	AMediaFile::loadFromList("./Assets/Serialized/export__ball.cpd");
-	AMediaFile::loadFromList("./Assets/Serialized/export__Space.cpd");
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
 	auto music = _engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 
