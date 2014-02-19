@@ -40,13 +40,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetExt>.lib</TargetExt>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);C:/boost/boost_1_55_0</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);C:/boost/boost_1_55_0;C:\bullet\src</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetExt>.lib</TargetExt>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);C:/boost/boost_1_55_0</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);C:/boost/boost_1_55_0;C:\bullet\src</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClInclude Include="Components\Collision.hpp" />
     <ClInclude Include="Components\CollisionBody.hpp" />
+    <ClInclude Include="Components\CollisionLayers.hpp" />
     <ClInclude Include="Components\Extras\CustomCharacterController.hh" />
     <ClInclude Include="Components\FPController.hpp" />
     <ClInclude Include="Components\RigidBody.hpp" />
@@ -104,23 +105,6 @@
     <ClInclude Include="Systems\CollisionCleanerSystem.hpp" />
     <ClInclude Include="Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Utils\BtConversion.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\ConvexDecomposition\ConvexDecomposition.vcxproj">
-      <Project>{d217d3ee-658e-4af9-8f77-ae4152409709}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\Extras\Serialize\BulletFileLoader\BulletFileLoader.vcxproj">
-      <Project>{bf62c23a-a810-4cb1-9631-a6cf9c27c6db}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\src\BulletCollision\BulletCollision.vcxproj">
-      <Project>{a820b1f5-9a4c-4f25-b086-60e0c1d2de47}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\src\BulletDynamics\BulletDynamics.vcxproj">
-      <Project>{24058763-e745-4017-b015-a5ad1d0b2bf0}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Vendors\bullet-2.82-r2704\build\src\LinearMath\LinearMath.vcxproj">
-      <Project>{4173f5ca-9e74-4719-88c3-23bd2c7e3285}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

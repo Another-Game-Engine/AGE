@@ -38,7 +38,6 @@ private:
 			if (e->hasComponent<Component::Collision>())
 			{
 				auto lol = e->getComponent<Component::Collision>();
-				std::cout << "lol" << std::endl;
 			}
 			updateComponent(e, c, time);
 		}
@@ -47,12 +46,12 @@ private:
 	void updateComponent(Entity &entity, std::shared_ptr<Component::SpaceshipController> c, double time)
 	{
 			c->resetControls();
-			auto &inputs = _scene->getEngine().getInstance<Input>();
+			auto inputs = _scene->getInstance<Input>();
 			auto &controls = c->controls;
 			auto &keys = c->keys;
 
-			float yAngle = inputs.getMouseDelta().y * 0.3f;
-			float xAngle = - inputs.getMouseDelta().x * 0.3f;
+			float yAngle = inputs->getMouseDelta().y * 0.3f;
+			float xAngle = - inputs->getMouseDelta().x * 0.3f;
 
 			entity->setLocalTransform() = glm::rotate(entity->getLocalTransform(), yAngle, glm::vec3(1, 0, 0));
 			entity->setLocalTransform() = glm::rotate(entity->getLocalTransform(), xAngle, glm::vec3(0, 1, 0));
@@ -60,7 +59,7 @@ private:
 			// UPDATE KEYS
 			for (unsigned int i = 0; i < controls.size(); ++i)
 			{
-				controls[i] = inputs.getKey(keys[i]);
+				controls[i] = inputs->getKey(keys[i]);
 			}
 
 			auto forwardDir = glm::vec3(0,0,1);
@@ -86,29 +85,29 @@ private:
 			{
 				Entity b = _scene->createEntity();
 				b->setLocalTransform() = entity->getLocalTransform();
-				b->addComponent<Component::GraphNode>();
 				auto rigidBody = b->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 //				rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, 1000));
 				auto mesh = b->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
-//				_scene->destroy(b);
 				balls.push_back(b);
+				b->computeTransformAndUpdateGraphnode();
 			}
-			if (inputs.getKey(SDLK_p))
+			if (inputs->getKey(SDLK_p))
 			{
 				for (auto e : balls)
 					_scene->destroy(e);
 				balls.clear();
 			}
 			entity->setLocalTransform() = glm::translate(entity->getLocalTransform(), direction);
+			entity->computeTransformAndUpdateGraphnode();
 	}
 
 	virtual void initialize()
 	{
-		_filter.require<Component::SpaceshipController>();
-		_filter.require<Component::RigidBody>();
+		_filter.requireComponent<Component::SpaceshipController>();
+		_filter.requireComponent<Component::RigidBody>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };

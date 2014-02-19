@@ -30,7 +30,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		auto totalTime = _scene->getEngine().getInstance<Timer>().getElapsed();
+		auto totalTime = _scene->getEngine().getInstance<Timer>()->getElapsed();
 		for (auto e : _filter.getCollection())
 		{
 			auto velocity = e->getComponent<Component::Velocity>();
@@ -45,7 +45,7 @@ private:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::Velocity>();
+		_filter.requireComponent<Component::Velocity>();
 	}
 };
 

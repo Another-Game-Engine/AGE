@@ -2,6 +2,12 @@
 # define  __COLLISION_HPP__
 
 #include <Components/Component.hh>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/xml.hpp>
+#include <cereal/types/set.hpp>
+#include <cereal/types/base_class.hpp>
 
 namespace Component
 {
@@ -9,6 +15,7 @@ namespace Component
 	{
 		Collision()
 			: ComponentBase<Collision>()
+			, force(0)
 		{
 				
 		}
@@ -18,7 +25,9 @@ namespace Component
 		}
 
 		void init()
-		{}
+		{
+			force = 0;
+		}
 
 		virtual void reset()
 		{
@@ -81,7 +90,7 @@ namespace Component
 		// !Serialization
 		////
 		//////
-
+		float force;
 		std::set<Entity> collisions;
 	};
 }

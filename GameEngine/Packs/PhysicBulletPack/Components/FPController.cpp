@@ -2,6 +2,9 @@
 #include <Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Components/Extras/CustomCharacterController.hh>
+#include <Entities/EntityData.hh>
+#include <Entities/Entity.hh>
+#include <Core/AScene.hh>
 
 using namespace Component;
 
@@ -9,6 +12,7 @@ FPController::FPController() : ComponentBase<FPController>()
 , _controller(nullptr)
 , _ghost(nullptr)
 , _shape(nullptr)
+, _manager(nullptr)
 , yOrientation(0.0f)
 , forwardWalkSpeed(8.0f)
 , forwardRunSpeed(15.0f)
@@ -22,6 +26,9 @@ FPController::FPController() : ComponentBase<FPController>()
 , jumpHeight(3.0f)
 , canJump(true)
 , canRun(true)
+, justJump(false)
+, justArriveOnFloor(false)
+, wasOnGround(false)
 {
 
 }
@@ -32,6 +39,7 @@ FPController::~FPController()
 
 void FPController::init()
 {
+	_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene()->getInstance<BulletCollisionManager>());
 	setKey(LEFT, SDLK_a);
 	setKey(RIGHT, SDLK_d);
 	setKey(FORWARD, SDLK_w);
@@ -57,22 +65,20 @@ void FPController::init()
 	_ghost->setRestitution(0);
 	_ghost->setActivationState(DISABLE_DEACTIVATION);
 	_ghost->setUserPointer(&(_entity));
-	_controller = new btKinematicCharacterController(_ghost, _shape, 1);
-	auto bulletManager = dynamic_cast<BulletDynamicManager*>(&(_entity->getScene()->getEngine().getInstance<BulletCollisionManager>()));
-	assert(bulletManager != nullptr);
-	bulletManager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::KinematicFilter);
-	bulletManager->getWorld()->addAction(_controller);
-	bulletManager->getWorld()->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+	_controller = new btKinematicCharacterController(_ghost, _shape, 0.1);
+	_manager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::KinematicFilter);
+	_manager->getWorld()->addAction(_controller);
+	_manager->getWorld()->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+	justJump = false;
+	justArriveOnFloor = false;
+	wasOnGround = true;
 }
 
 void FPController::reset()
 {
-	auto bulletManager = dynamic_cast<BulletDynamicManager*>(&(_entity->getScene()->getEngine().getInstance<BulletCollisionManager>()));
-	assert(bulletManager != nullptr);
-
 	if (_controller)
 	{
-		bulletManager->getWorld()->removeAction(_controller);
+		_manager->getWorld()->removeAction(_controller);
 		delete _controller;
 	}
 	if (_shape)
@@ -81,7 +87,7 @@ void FPController::reset()
 	}
 	if (_ghost)
 	{
-		bulletManager->getWorld()->removeCollisionObject(_ghost);
+		_manager->getWorld()->removeCollisionObject(_ghost);
 		delete _ghost;
 	}
 }

@@ -1,24 +1,20 @@
-#ifndef   __COMPONENT_REGISTRAR_HPP__
-# define  __COMPONENT_REGISTRAR_HPP__
+#pragma once
 
 #include <map>
 #include <functional>
 #include <cereal/cereal.hpp>
 #include <Components/Component.hh>
 
+namespace Component
+{
+	struct Base;
+};
+
 class ComponentRegistrar
 {
 public:
-	ComponentRegistrar()
-	{}
-
-	virtual ~ComponentRegistrar()
-	{
-		for (auto &e : _collection)
-			delete e.second;
-		_collection.clear();
-		_typeId.clear();
-	}
+	ComponentRegistrar();
+	virtual ~ComponentRegistrar();
 
 	template <class T>
 	ComponentRegistrar &rct()
@@ -47,5 +43,3 @@ private:
 	std::map<std::size_t, Component::Base*> _collection;
 	std::map<std::size_t, unsigned int> _typeId;
 };
-
-#endif    //__COMPONENT_REGISTRAR_HPP__

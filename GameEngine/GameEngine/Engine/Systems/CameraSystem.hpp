@@ -4,12 +4,16 @@
 #include <Utils/MatrixConversion.hpp>
 #include "System.h"
 #include <Components/MeshRenderer.hh>
-#include <Components/CameraComponent.hh>
+#include <Components/CameraComponent.hpp>
 #include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Systems/ShadowRendererSystem.hh>
 #include <Systems/MeshRenderSystem.h>
+#include <Utils/ScreenPosToWorldRay.hpp>
+#include <Context/IRenderContext.hh>
+#include <Utils/MatrixConversion.hpp>
+
 
 class CameraSystem : public System
 {
@@ -32,6 +36,27 @@ public:
 		return _renderDebugMethod;
 	}
 
+	void getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
+	{
+		if (_filter.getCollection().size() == 0)
+			return;
+		auto mousePos = _scene->getEngine().getInstance<Input>()->getMousePosition();
+		auto screenSize = _scene->getEngine().getInstance<IRenderContext>()->getScreenSize();
+		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
+		screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
+	}
+
+	void getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
+	{
+		if (_filter.getCollection().size() == 0)
+			return;
+		auto screenSize = _scene->getEngine().getInstance<IRenderContext>()->getScreenSize();
+		auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
+		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
+		screenPosToWorldRay(centerPos.x, centerPos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform , cameraCpt->projection, from, to);
+	}
+
+
 protected:
 	EntityFilter _filter;
 
@@ -49,23 +74,21 @@ protected:
 		static double totalTime = 0;
 		unsigned int textureOffset = 0;
 		auto &renderer = _scene->getEngine().getInstance<Renderer>();
-		OpenGLTools::UniformBuffer *perFrameBuffer = _scene->getEngine().getInstance<Renderer>().getUniform("PerFrame");
+		OpenGLTools::UniformBuffer *perFrameBuffer = _scene->getEngine().getInstance<Renderer>()->getUniform("PerFrame");
 
 		for (auto e : _filter.getCollection())
 		{
 			auto camera = e->getComponent<Component::CameraComponent>();
 			auto skybox = camera->getSkybox();
-			auto lookAt = e->getGlobalTransform();
-			lookAt = glm::translate(lookAt, glm::vec3(0, 0, 1));
 
 			auto cameraPosition = camera->getLookAtTransform();
 
 			if (skybox != nullptr)
 			{
-				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>().getShader(camera->getSkyboxShader());
+				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>()->getShader(camera->getSkyboxShader());
 				assert(s != NULL && "Skybox does not have a shader associated");
 
-				_scene->getEngine().getInstance<Renderer>().getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
+				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
 
 				glm::mat4 t = cameraPosition;
 				t[3][0] = 0;
@@ -73,10 +96,10 @@ protected:
 				t[3][2] = 0;
 				t[3][3] = 1;
 
-				_scene->getEngine().getInstance<Renderer>().getUniform("cameraUniform")->setUniform("view", t);
-				_scene->getEngine().getInstance<Renderer>().getUniform("cameraUniform")->flushChanges();
+				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("view", t);
+				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
 
-//				_engine.getInstance<Renderer>().getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
+//				_engine.getInstance<Renderer>()->getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
 
 				s->use();
 
@@ -103,7 +126,7 @@ protected:
 
 	virtual void initialize()
 	{
-		_filter.require<Component::CameraComponent>();
+		_filter.requireComponent<Component::CameraComponent>();
 	}
 };
 

@@ -5,8 +5,6 @@
 #include   <assert.h>
 #include   <boost/dynamic_bitset/dynamic_bitset.hpp>
 
-#include "Core/Settings.h"
-
 namespace   Component
 {
 	struct  Base;
@@ -31,29 +29,6 @@ public:
 	void remove(unsigned int componentId);
 	bool isEmpty() const;
 	bool isSet(unsigned int componentId) const;
-
-	template <class T>
-	void add()
-	{
-		applyChange(T::getTypeId(), true);
-	}
-
-	template <class T>
-	void remove()
-	{
-		applyChange(T::getTypeId(), false);
-	}
-
-	template <class T>
-	bool isSet() const
-	{
-		return code_.test(T::getTypeId());
-	}
-
-	bool isSet(unsigned int id)
-	{
-		return code_.test(id);
-	}
 
 private:
 	void applyChange(unsigned int componentId, bool tof)

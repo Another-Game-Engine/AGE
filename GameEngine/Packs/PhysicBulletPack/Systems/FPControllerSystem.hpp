@@ -16,12 +16,12 @@ class FPControllerSystem : public System
 {
 public:
 	FPControllerSystem(AScene *scene) : System(scene)
-		, _manager(&scene->getEngine().getInstance<BulletCollisionManager>())
+		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
 		, _filter(scene)
 	{}
 	virtual ~FPControllerSystem(){}
 private:
-	BulletCollisionManager *_manager;
+	std::shared_ptr<BulletCollisionManager> _manager;
 	EntityFilter _filter;
 
 	virtual void updateBegin(double time)
@@ -37,7 +37,7 @@ private:
 		{
 			auto fp = e->getComponent<Component::FPController>();
 			updateComponent(e, fp, time);
-			auto &inputs = _scene->getEngine().getInstance<Input>();
+			auto inputs = _scene->getEngine().getInstance<Input>();
 			auto &ghost = fp->getGhost();
 			auto trans = ghost.getWorldTransform();
 
@@ -52,7 +52,7 @@ private:
 			m = glm::scale(m, scale);
 			e->setLocalTransform() = m;
 
-			float yAngle = inputs.getMouseDelta().y;
+			float yAngle = inputs->getMouseDelta().y;
 			fp->yOrientation = fp->yOrientation + yAngle * fp->rotateYSpeed;
 			if (fp->yOrientation >= 90.0f)
 				fp->yOrientation = 89.9f;
@@ -60,22 +60,22 @@ private:
 				fp->yOrientation = -89.9f;
 
 			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), fp->yOrientation, glm::vec3(1, 0, 0));
-
+			e->computeTransformAndUpdateGraphnode();
 		}
 	}
 
 	void updateComponent(Entity &entity, std::shared_ptr<Component::FPController> fp, double time)
 	{
 			fp->resetControls();
-			auto &inputs = _scene->getEngine().getInstance<Input>();
+			auto inputs = _scene->getInstance<Input>();
 			auto &controls = fp->controls;
 			auto &keys = fp->keys;
-			auto angle = glm::vec2((float)inputs.getMouseDelta().x, (float)inputs.getMouseDelta().y);
+			auto angle = glm::vec2((float)inputs->getMouseDelta().x, (float)inputs->getMouseDelta().y);
 
 			// UPDATE KEYS
 			for (unsigned int i = 0; i < controls.size(); ++i)
 			{
-				controls[i] = inputs.getKey(keys[i]);
+				controls[i] = inputs->getKey(keys[i]);
 			}
 
 			auto &ghost = fp->getGhost();
@@ -113,15 +113,22 @@ private:
 				ghost.getWorldTransform().setBasis(orn);
 			}
 
-			if (fp->canJump && controls[Component::FPController::JUMP])
+			fp->justJump = false;
+			fp->justArriveOnFloor = false;
+			if (!fp->wasOnGround && controller.onGround())
+				fp->justArriveOnFloor = true;
+			if (fp->canJump && controls[Component::FPController::JUMP] && fp->getController().onGround())
+			{
 				controller.jump();
-
+				fp->justJump = true;
+			}
+			fp->wasOnGround = controller.onGround();
 			controller.setWalkDirection(walkDirection);
 	}
 
 	virtual void initialize()
 	{
-		_filter.require<Component::FPController>();
+		_filter.requireComponent<Component::FPController>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
 	}
 };

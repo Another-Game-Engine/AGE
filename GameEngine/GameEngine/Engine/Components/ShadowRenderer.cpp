@@ -1,4 +1,6 @@
 #include "ShadowRenderer.hpp"
+#include <Entities/Entity.hh>
+#include <Core/AScene.hh>
 
 namespace Component
 {
@@ -37,8 +39,8 @@ namespace Component
 	{
 		glEnable(GL_DEPTH_TEST);
 		glm::mat4 depthMVP = VPLight * _entity->getGlobalTransform();
-		OpenGLTools::UniformBuffer *lightMVP = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("Light");
-		auto shader = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(_shader);
+		OpenGLTools::UniformBuffer *lightMVP = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("Light");
+		auto shader = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(_shader);
 		if (shader)
 			shader->use();
 		lightMVP->setUniform("lightMVP", depthMVP);

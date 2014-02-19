@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "System.h"
-#include <Components/RotationForce.hh>
+#include <Components/RotationForce.hpp>
 #include <Entities/EntityData.hh>
 
 class RotationForceSystem : public System
@@ -34,12 +34,13 @@ private:
 			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), force.x * t, glm::vec3(1, 0, 0));
 			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), force.y * t, glm::vec3(0, 1, 0));
 			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), force.z * t, glm::vec3(0, 0, 1));
+			e->computeTransformAndUpdateGraphnode();
 		}
 	}
 
 	virtual void initialize()
 	{
-		_filter.require<Component::RotationForce>();
+		_filter.requireComponent<Component::RotationForce>();
 	}
 };
 

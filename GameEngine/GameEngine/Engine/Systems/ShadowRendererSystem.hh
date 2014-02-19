@@ -76,7 +76,7 @@ protected:
 	virtual void mainUpdate(double time){}
 	virtual void initialize()
 	{
-		_filter.require<Component::ShadowRenderer>();
+		_filter.requireComponent<Component::ShadowRenderer>();
 		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
 		glBindTexture(GL_TEXTURE_2D, _texture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, _width, _height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);

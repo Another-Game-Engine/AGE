@@ -1,6 +1,6 @@
 #include "MeshRenderer.hh"
-
 #include "Core/Engine.hh"
+#include <Core/AScene.hh>
 
 namespace Component
 {
@@ -40,10 +40,10 @@ namespace Component
 							0.0, 0.5, 0.0, 0.0,
 							0.0, 0.0, 0.5, 0.0,
 							0.5, 0.5, 0.5, 1.0);
-		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("PerModel");
-		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("MaterialBasic");
-		OpenGLTools::UniformBuffer *shadowUniform = _entity->getScene()->getEngine().getInstance<Renderer>().getUniform("Light");
-		auto s = _entity->getScene()->getEngine().getInstance<Renderer>().getShader(shader);
+		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("PerModel");
+		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("MaterialBasic");
+		OpenGLTools::UniformBuffer *shadowUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("Light");
+		auto s = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(shader);
 		if (s)
 			s->use();
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());

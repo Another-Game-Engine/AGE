@@ -7,7 +7,6 @@
 # include <MediaFiles/AMediaFile.hpp>
 # include <Systems/MeshRenderSystem.h>
 # include <Systems/ShadowRendererSystem.hh>
-# include <Systems/GraphNodeSystem.hpp>
 # include <Systems/CameraSystem.hpp>
 # include <Systems/RotationForceSystem.hpp>
 # include <Systems/TrackBallSystem.hpp>

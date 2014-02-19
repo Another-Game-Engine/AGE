@@ -1,5 +1,4 @@
-#ifndef    __FIRST_PERSON_VIEW_COMPONENT_HPP__
-# define   __FIRST_PERSON_VIEW_COMPONENT_HPP__
+#pragma once
 
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -14,7 +13,7 @@ namespace Component
 		FirstPersonView() :
 			ComponentBase<FirstPersonView>()
 		{}
-		virtual              ~FirstPersonView(void){}
+		virtual ~FirstPersonView(void){}
 		void init(){}
 		virtual void reset(){}
 
@@ -45,5 +44,3 @@ namespace Component
 		FirstPersonView	&operator=(FirstPersonView const &);
 	};
 }
-
-#endif     //__FIRST_PERSON_VIEW_COMPONENT_HPP__

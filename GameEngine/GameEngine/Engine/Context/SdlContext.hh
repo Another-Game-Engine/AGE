@@ -11,7 +11,6 @@ class SdlContext : public IRenderContext
 private:
 	SDL_Window		*_window;
 	SDL_GLContext	_glContext;
-
 public:
   SdlContext() { }
   virtual ~SdlContext() { }

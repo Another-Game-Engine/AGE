@@ -1,6 +1,4 @@
-
-#ifndef INPUT_HH_
-#define INPUT_HH_
+#pragma once
 
 #include <list>
 #include <Utils/Dependency.hpp>
@@ -32,5 +30,3 @@ public:
   	bool 				getInput(int input, bool handled = false);
   	bool 				getKey(int input, bool handled = false);
 };
-
-#endif
