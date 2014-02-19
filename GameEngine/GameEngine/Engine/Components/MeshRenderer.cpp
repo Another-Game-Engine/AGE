@@ -14,6 +14,13 @@ namespace Component
 	{
 	}
 
+	void MeshRenderer::initComponentManager(std::shared_ptr<VertexManager<4>> const &manager)
+	{
+		_manager = manager;
+		for (auto &vertice : mesh->geometries)
+			vertice.init(_manager);
+	} 
+
 	void MeshRenderer::init(std::shared_ptr<AMediaFile> r)
 	{
 		mesh = std::static_pointer_cast<ObjFile>(r);
@@ -42,21 +49,21 @@ namespace Component
 							0.5, 0.5, 0.5, 1.0);
 		OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("PerModel");
 		OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("MaterialBasic");
-		OpenGLTools::UniformBuffer *shadowUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("Light");
+		//OpenGLTools::UniformBuffer *shadowUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("Light");
 		auto s = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(shader);
 		if (s)
 			s->use();
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());
 		perModelUniform->flushChanges();
-		shadowUniform->setUniform("lightMVP", (biasMatrix * lightVP * glm::mat4(1)));
+		//shadowUniform->setUniform("lightMVP", (biasMatrix * lightVP * glm::mat4(1)));
 		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 		{
 			mesh->material->materials[i].setUniforms(materialUniform);
-			if (shadowTex != 0)
+		/*	if (shadowTex != 0)
 			{
 				glActiveTexture(GL_TEXTURE1);
 				glBindTexture(GL_TEXTURE_2D, shadowTex);
-			}
+			}*/
 			materialUniform->flushChanges();
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
 		}

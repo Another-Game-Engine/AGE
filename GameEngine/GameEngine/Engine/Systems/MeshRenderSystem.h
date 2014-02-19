@@ -16,7 +16,17 @@ public:
 		_texShadow(0)
 		, _filter(scene)
 		, _renderDebugMethod(false)
-	{}
+	{
+		std::array<Attribute, 4> param =
+		{
+			Attribute(GL_FLOAT, sizeof(float), 4),
+			Attribute(GL_FLOAT, sizeof(float), 4),
+			Attribute(GL_FLOAT, sizeof(float), 4),
+			Attribute(GL_FLOAT, sizeof(float), 2),
+		};
+		_manager = std::make_shared<VertexManager<4>>(param);
+		_manager->init();
+	}
 
 	virtual ~MeshRendererSystem(){}
 
@@ -60,6 +70,7 @@ public:
 	}
 
 protected:
+	std::shared_ptr<VertexManager<4>> _manager;
 	glm::mat4 _lightVP;
 	GLuint _texShadow;
 	EntityFilter _filter;
@@ -80,6 +91,11 @@ protected:
 	virtual void initialize()
 	{
 		_filter.requireComponent<Component::MeshRenderer>();
+		for (auto collection : _filter.getCollection())
+		{
+			auto &object = collection->getComponent<Component::MeshRenderer>();
+			object->initComponentManager(_manager);
+		}
 	}
 };
 

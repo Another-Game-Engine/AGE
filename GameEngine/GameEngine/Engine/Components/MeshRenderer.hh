@@ -13,6 +13,7 @@
 #include <cereal/types/string.hpp>
 #include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
+#include <OpenGL/VertexManager.hh>
 
 namespace Resources
 {
@@ -31,6 +32,7 @@ namespace Component
 		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
+		void initComponentManager(std::shared_ptr<VertexManager<4>> const &manager);
 		void render(GLuint shadowTex, glm::mat4 const &lightVP);
 		std::shared_ptr<ObjFile>	const &getMesh() const;
 
@@ -73,6 +75,7 @@ namespace Component
 	private:
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);
+		std::shared_ptr<VertexManager<4>> _manager;
 	};
 
 }

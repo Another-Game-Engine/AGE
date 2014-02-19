@@ -43,7 +43,7 @@ public:
 	void unRequireTag(unsigned int tag);
 
 	const Barcode &getCode() const;
-	std::set<Entity, bool(*)(Entity, Entity)> &getCollection();
+	std::set<Entity, bool(*)(Entity, Entity)> const &getCollection();
 
 protected:
 	std::set<Entity, bool(*)(Entity, Entity)> _collection;
