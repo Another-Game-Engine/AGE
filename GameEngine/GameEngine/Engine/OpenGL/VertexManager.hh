@@ -12,8 +12,13 @@
 # include "VertexBuffer.hh"
 # include "VertexPool.hh"
 
+#include <Utils/Dependency.hpp>
+
+class AVertexManager
+{};
+
 template <uint8_t NBR_ATTRIBUTE>
-class VertexManager
+class VertexManager : public AVertexManager, public Dependency
 {
 public:
 	VertexManager(std::array<Attribute, NBR_ATTRIBUTE> const &attributes);

@@ -27,12 +27,14 @@
 #include <cereal/archives/xml.hpp>
 #include <cereal/archives/portable_binary.hpp>
 
+class Engine;
+
 class AssetsManager : public Dependency, public std::enable_shared_from_this<AssetsManager>
 {
 public:
 	AssetsManager();
 	virtual ~AssetsManager();
-	virtual void init();
+	virtual void init(Engine *engine);
 	void add(std::shared_ptr<AMediaFile> f);
 
 	template <typename T = AMediaFile>
@@ -73,18 +75,22 @@ public:
 		{
 		case AMediaFile::OBJ:
 			res = std::make_shared<ObjFile>();
+			res->_engine = _engine;
 			ar(static_cast<ObjFile&>(*res.get()));
 			break;
 		case AMediaFile::MATERIAL:
 			res = std::make_shared<MaterialFile>();
+			res->_engine = _engine;
 			ar(static_cast<MaterialFile&>(*res.get()));
 			break;
 		case AMediaFile::TEXTURE:
 			res = std::make_shared<TextureFile>();
+			res->_engine = _engine;
 			ar(static_cast<TextureFile&>(*res.get()));
 			break;
 		case AMediaFile::CUBEMAP:
 			res = std::make_shared<CubeMapFile>();
+			res->_engine = _engine;
 			ar(static_cast<CubeMapFile&>(*res.get()));
 			break;
 		default:
@@ -122,22 +128,26 @@ public:
 		if (file.getShortFileName().find("collision_shape_static") != std::string::npos)
 		{
 			res = std::make_shared<CollisionShapeStaticFile>();
+			res->_engine = _engine;
 			static_cast<CollisionShapeStaticFile&>(*res.get()).unserialize(file);
 		}
 		else if (file.getShortFileName().find("collision_shape_dynamic") != std::string::npos)
 		{
 			res = std::make_shared<CollisionShapeDynamicFile>();
+			res->_engine = _engine;
 			static_cast<CollisionShapeDynamicFile&>(*res.get()).unserialize(file);
 		}
 		else if (file.getShortFileName().find("collision_sphere") != std::string::npos)
 		{
 			res = std::make_shared<CollisionSphereFile>();
+			res->_engine = _engine;
 			auto uuu = std::dynamic_pointer_cast<CollisionSphereFile>(res);
 			uuu->unserialize(file);
 		}
 		else if (file.getShortFileName().find("collision_box") != std::string::npos)
 		{
 			res = std::make_shared<CollisionBoxFile>();
+			res->_engine = _engine;
 			static_cast<CollisionBoxFile&>(*res.get()).unserialize(file);
 		}
 		assert(res != nullptr && "Unknown MediaFile type.");
@@ -170,6 +180,7 @@ public:
 
 protected:
 	std::map<std::string, std::shared_ptr<AMediaFile>> _files;
+	Engine *_engine;
 };
 
 #endif    //__ASSETS_MANAGER_HPP__
