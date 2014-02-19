@@ -48,6 +48,8 @@ public:
 
 private:
 	friend class cereal::access;
+	friend class AScene;
+
 	AScene              *_scene;
 	size_t 				_flags;
 
@@ -65,10 +67,11 @@ private:
 	t_ComponentsList	_components;
 
 	Barcode             _code;
-public:
+
 	EntityData(AScene *scene);
 	virtual ~EntityData();
 
+public:
 	AScene                  *getScene() const;
 	void                    translate(const glm::vec3 &v);
 	void                    setTranslation(const glm::vec3 &v);
