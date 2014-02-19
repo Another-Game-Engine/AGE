@@ -22,7 +22,7 @@ const Barcode &EntityFilter::getCode() const
 	return _code;
 }
 
-std::set<Entity, bool(*)(Entity, Entity)> &EntityFilter::getCollection()
+std::set<Entity, bool(*)(Entity, Entity)> const &EntityFilter::getCollection()
 {
 	return _collection;
 }

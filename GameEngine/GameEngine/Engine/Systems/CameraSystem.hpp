@@ -119,7 +119,7 @@ protected:
 			perFrameBuffer->setUniform("view", cameraPosition);
 			perFrameBuffer->setUniform("time", (float)totalTime);
 			perFrameBuffer->flushChanges();
-			_scene->getSystem<ShadowRendererSystem>()->render(time);
+			//_scene->getSystem<ShadowRendererSystem>()->render(time);
 			_scene->getSystem<MeshRendererSystem>()->render(time);
 		}
 	}
