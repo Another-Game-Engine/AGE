@@ -12,14 +12,18 @@ public:
 	Entity(unsigned int id = 0, AScene *manager = nullptr);
 	~Entity();
 	const unsigned int getId() const;
+	const unsigned short getVersion() const;
 	EntityData *operator->();
 	EntityData *get() const;
 	bool operator<(const Entity &o) const;
 	bool operator==(const Entity &o) const;
+	bool operator!=(const Entity &o) const;
 	Entity(const Entity &o);
 	Entity &operator=(const Entity &o);
 private:
+	friend class AScene;
 	unsigned int _id;
+	unsigned short _version;
 	AScene *_manager;
 };
 

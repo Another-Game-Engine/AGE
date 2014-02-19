@@ -47,14 +47,21 @@ Entity &AScene::createEntity()
 
 void AScene::destroy(const Entity &h)
 {
-	h.get()->reset();
-	h.get()->removeFlags(EntityData::ACTIVE);
+	auto e = get(h);
+	if (!e)
+		return;
+	e->reset();
+	e->removeFlags(EntityData::ACTIVE);
+	++(e->getHandle()._id);
 	_free.push(h.getId());
 }
 
 EntityData *AScene::get(const Entity &h)
 {
 	if (h.getId() >= _pool.size())
+		return nullptr;
+	auto res = &_pool[h.getId()];
+	if (res->getHandle() != h)
 		return nullptr;
 	return &_pool[h.getId()];
 }
