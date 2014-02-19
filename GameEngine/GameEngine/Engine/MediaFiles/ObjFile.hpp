@@ -51,39 +51,25 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
 		Vertice<4>					buffer;
-		VertexManager<4>			*vertexManager;
 
 		Geometry()
 			: name("")
 		{
-			std::array<Attribute, 4> param =
-			{
-				Attribute(GL_FLOAT, sizeof(float), 4),
-				Attribute(GL_FLOAT, sizeof(float), 4),
-				Attribute(GL_FLOAT, sizeof(float), 4),
-				Attribute(GL_FLOAT, sizeof(float), 2),
-			};
-			vertexManager = new VertexManager<4>(param);
-			vertexManager->init();
 		}
 
 		~Geometry()
 		{
-			delete vertexManager;
 		}
 
 		Geometry(const Geometry &o)
 			: name("")
 		{
-			vertexManager = new VertexManager<4>(*o.vertexManager);
-			vertexManager->init();
 			name = o.name;
 			vertices = o.vertices;
 			normals = o.normals;
 			colors = o.colors;
 			uvs = o.uvs;
 			indices = o.indices;
-			init();
 		}
 
 		Geometry &operator=(const Geometry &o)
@@ -96,7 +82,6 @@ struct ObjFile : public MediaFile<ObjFile>
 				colors = o.colors;
 				uvs = o.uvs;
 				indices = o.indices;
-				init();
 			}
 			return *this;
 		}
@@ -111,10 +96,9 @@ struct ObjFile : public MediaFile<ObjFile>
 		void load(Archive &ar)
 		{
 			ar(name, vertices, normals, colors, uvs, indices);
-			init();
 		}
 
-		void init()
+		void init(Engine *engine)
 		{
 			std::array<Data, 4> data = 
 			{
@@ -125,22 +109,12 @@ struct ObjFile : public MediaFile<ObjFile>
 			};
 			Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
 			buffer = Vertice<4>(vertices.size(), data, &indicesData);
-			vertexManager->addVertice(buffer);
+			engine->getInstance<VertexManager<4>>()->addVertice(buffer);
 		}
-
 	};
 
 	std::vector<Geometry> geometries;
 	std::shared_ptr<MaterialFile> material;
-
-	template <typename Archive>
-	AMediaFile *unserialize(Archive &ar)
-	{
-		AMediaFile *res = new ObjFile();
-		res->manager = manager;
-		ar(static_cast<ObjFile&>(*res));
-		return res;
-	}
 
 	template <typename Archive>
 	void save(Archive &ar) const
@@ -153,6 +127,10 @@ struct ObjFile : public MediaFile<ObjFile>
 	void load(Archive &ar)
 	{
 		ar(geometries);
+		for (auto &e : geometries)
+		{
+			e.init(_engine);
+		}
 		std::string matName;
 		ar(matName);
 		if (matName != "NULL")
