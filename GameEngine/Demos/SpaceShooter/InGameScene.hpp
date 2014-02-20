@@ -175,7 +175,6 @@ public:
 		auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 		auto trackBall = camera->addComponent<Component::TrackingCamera>(heros, glm::vec3(0, 0, -5.0f));
 		cameraComponent->attachSkybox("skybox__space", "cubemapShader");
-		camera->computeTransformAndUpdateGraphnode();
 		return true;
 	}
 
