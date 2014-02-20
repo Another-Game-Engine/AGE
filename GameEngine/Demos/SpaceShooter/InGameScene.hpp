@@ -127,45 +127,48 @@ public:
 		Entity heros;
 		{
 			Entity e = createEntity();
-			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, 0, 0));
-			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(2));
+			auto t = e->getLocalTransform();
+			t = glm::translate(t, glm::vec3(0, 0, 0));
+			t = glm::scale(t, glm::vec3(2));
+			e->setLocalTransform(t);
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			rigidBody->setCollisionShape(Component::RigidBody::BOX, "obj__galileo");
 			auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 			mesh->setShader("MaterialBasic");
 			e->addComponent<Component::SpaceshipController>();
-			e->computeTransformAndUpdateGraphnode();
 			heros = e;
 		}
 
 		Entity floor;
 		{
 			Entity e = createEntity();
-			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0, -10, 0));
-			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(100, 100, 100));
+			auto t = e->getLocalTransform();
+			t = glm::translate(t, glm::vec3(0, -10, 0));
+			t = glm::scale(t, glm::vec3(100, 100, 100));
+			e->setLocalTransform(t);
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			//rigidBody->setCollisionShape(Component::RigidBody::BOX);
 			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 			auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
-			e->computeTransformAndUpdateGraphnode();
 			floor = e;
 		}
 
 
 		{
 			Entity e = createEntity();
-			e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(50, -10, 50));
-			e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(50,50,50));
+			auto t = e->getLocalTransform();
+			t = glm::translate(t, glm::vec3(50, -10, 50));
+			t = glm::scale(t, glm::vec3(50,50,50));
+			e->setLocalTransform(t);
 			auto rigidBody = e->addComponent<Component::RigidBody>();
 			rigidBody->setMass(0.0f);
 			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 			auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
 			mesh->setShader("MaterialBasic");
 			test = e;
-			e->computeTransformAndUpdateGraphnode();
 		}
 
 		auto camera = createEntity();
@@ -179,8 +182,7 @@ public:
 	Entity                  createHeros(const glm::vec3 &pos)
 	{
 		auto e = createEntity();
-		e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-		e->computeTransformAndUpdateGraphnode();
+		e->setLocalTransform(glm::translate(e->getLocalTransform(), pos));
 		return e;
 	}
 
@@ -202,14 +204,12 @@ public:
 
 		if (_engine.getInstance<Input>()->getInput(SDLK_u))
 		{
-			test->setLocalTransform() = glm::scale(test->getLocalTransform(), glm::vec3(0.9));
-			test->computeTransformAndUpdateGraphnode();
+			test->setLocalTransform(glm::scale(test->getLocalTransform(), glm::vec3(0.9)));
 		}
 
 		if (_engine.getInstance<Input>()->getInput(SDLK_i))
 		{
-			test->setLocalTransform() = glm::scale(test->getLocalTransform(), glm::vec3(1.1));
-			test->computeTransformAndUpdateGraphnode();
+			test->setLocalTransform(glm::scale(test->getLocalTransform(), glm::vec3(1.1)));
 		}
 
 		if (_engine.getInstance<Input>()->getInput(SDLK_r) && timer <= 0.0f)
@@ -218,14 +218,13 @@ public:
 			for (auto i = 0; i < 10; ++i)
 			{
 				auto e = createHeros(glm::vec3(rand() % 20, 50 + rand() % 100, rand() % 20));
-				e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3((float)(rand() % 10) / 0.8));
+				e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3((float)(rand() % 10) / 0.8)));
 				auto rigidBody = e->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
 				auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");
 				balls.push_back(e);
-				e->computeTransformAndUpdateGraphnode();
 			}
 			std::cout << balls.size() << std::endl;
 		}
