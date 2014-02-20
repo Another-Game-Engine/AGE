@@ -162,7 +162,10 @@ public:
 		else
 			n = std::make_shared<T>();
 		if (!name.empty())
+		{
 			n->name = name;
+			n->path = File(n->path.getFolder() + name + "." + n->path.getExtension());
+		}
 		add(n);
 		return n;
 	}
