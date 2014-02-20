@@ -203,10 +203,6 @@ bool 			BulletDemoScene::userStart()
 	planetMesh->material->materials[0].specularTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthClouds");
 	planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTextureBump");
 
-	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
-	AMediaFile::saveToFile("my_planet_material", "./Assets/Serialized/");
-	AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
-
 	// EXAMPLE LOAD FROM SAVE
 	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
 
