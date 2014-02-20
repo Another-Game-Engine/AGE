@@ -48,6 +48,8 @@ public:
 
 private:
 	friend class cereal::access;
+	friend class AScene;
+
 	AScene              *_scene;
 	size_t 				_flags;
 
@@ -65,8 +67,10 @@ private:
 	t_ComponentsList	_components;
 
 	Barcode             _code;
-public:
+
 	EntityData(AScene *scene);
+public:
+
 	virtual ~EntityData();
 
 	AScene                  *getScene() const;
