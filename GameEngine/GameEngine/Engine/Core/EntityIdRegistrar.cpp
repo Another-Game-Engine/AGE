@@ -11,7 +11,7 @@ EntityIdRegistrar::~EntityIdRegistrar()
 void EntityIdRegistrar::registrarUnserializedEntity(Entity e, std::size_t id)
 {
 	_unser.insert(std::make_pair(id, e));
-	updateEntityHandle(e, id);
+//	updateEntityHandle(e, id);
 }
 
 std::size_t EntityIdRegistrar::registrarSerializedEntity(std::size_t id)

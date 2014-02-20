@@ -188,7 +188,7 @@ bool 			SolarSystemDemoScene::userStart()
 		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
 		load<cereal::JSONInputArchive>(fileStream);
 		fileStream.close();
-		return true;
+//		return true;
 	}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");

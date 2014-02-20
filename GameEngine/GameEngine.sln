@@ -44,6 +44,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{E92BB286-351B-420A-B152-DB0511195EFC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletImplementation", "Demos\BulletImplementation\BulletImplementation.vcxproj", "{CE40F8DC-055E-424B-A0D0-1C020EB3632F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
+		{3073A470-6943-400E-BDFF-D25AA01577F8} = {3073A470-6943-400E-BDFF-D25AA01577F8}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinyObjLoader", "Vendors\TinyObjLoader\TinyObjLoader.vcxproj", "{99FC20C2-9AD1-4049-BB11-B369C42FD6A8}"
 EndProject
