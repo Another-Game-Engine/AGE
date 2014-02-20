@@ -12,6 +12,12 @@ Entity::Entity(unsigned int id, AScene *manager)
 Entity::~Entity()
 {}
 
+Entity::Entity(Entity &&o)
+{
+	_id = std::move(o._id);
+	_version = std::move(o._version);
+	_manager = std::move(o._manager);
+}
 
 const unsigned int Entity::getId() const
 {

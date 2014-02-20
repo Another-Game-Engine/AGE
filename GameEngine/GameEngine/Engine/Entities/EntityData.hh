@@ -48,9 +48,10 @@ public:
 
 private:
 	friend class cereal::access;
+	friend class std::vector<EntityData>;
 	friend class AScene;
 
-	AScene              *_scene;
+	std::shared_ptr<AScene> _scene;
 	size_t 				_flags;
 
 	glm::mat4 			_localTransform;
@@ -68,12 +69,16 @@ private:
 
 	Barcode             _code;
 
-	EntityData(AScene *scene);
+	EntityData(std::shared_ptr<AScene> scene);
+	EntityData();
+	EntityData(const EntityData &o);
+	const EntityData &operator=(const EntityData &o);
 public:
 
 	virtual ~EntityData();
+	EntityData(EntityData &&o);
 
-	AScene                  *getScene() const;
+	std::shared_ptr<AScene> getScene() const;
 	void                    translate(const glm::vec3 &v);
 	void                    setTranslation(const glm::vec3 &v);
 	glm::vec3 const         &getTranslation() const;
@@ -269,7 +274,7 @@ public:
 		std::set<std::size_t> childIds;
 		ar(childIds);
 		for (auto e : childIds)
-			_childs.insert(Entity(e, _scene));
+			_childs.insert(Entity(e, _scene.get()));
 		for (auto it = std::begin(_childs); it != std::end(_childs); ++it)
 		{
 			Entity *e = const_cast<Entity *>(&(*it));

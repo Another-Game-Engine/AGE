@@ -185,10 +185,10 @@ bool 			SolarSystemDemoScene::userStart()
 	File saveFile("SolarSystem.scenesave");
 	if (saveFile.exists())
 	{
-		//std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
-		//load<cereal::JSONInputArchive>(fileStream);
-		//fileStream.close();
-		//return true;
+		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
+		load<cereal::JSONInputArchive>(fileStream);
+		fileStream.close();
+		return true;
 	}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
@@ -205,6 +205,9 @@ bool 			SolarSystemDemoScene::userStart()
 	audioCpt->clearAudio("ambiant");
 	audioCpt->setAudio(music, "ambiant", CHANNEL_GROUP_MUSIC);
 	audioCpt->play("ambiant", true);
+	//auto aaa = earth->getChildsBegin();
+	//auto bbb = aaa->get();
+	//bbb->addChild(moon);
 	earth->getChildsBegin()->get()->addChild(moon);
 
 	// TAGS TESTS ////////////////////
