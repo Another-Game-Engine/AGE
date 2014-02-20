@@ -59,7 +59,6 @@ private:
 		auto c = e->getComponent<Component::RigidBody>();
 		c->getBody().setWorldTransform(transform);
 		c->getShape().setLocalScaling(convertGLMVectorToBullet(scale));
-		e->computeTransformAndUpdateGraphnode();
 	}
 
 	void updateDynamic(Entity &e)
