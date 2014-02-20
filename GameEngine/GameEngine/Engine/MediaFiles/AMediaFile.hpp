@@ -88,7 +88,7 @@ public:
 
 	void serializeAsBulletFile(std::ofstream &s);
 
-	static void saveToFile(const std::string &media, const std::string &path);
+	void saveToFile();
 
 	static void setManager(std::shared_ptr<AssetsManager> manager)
 	{
