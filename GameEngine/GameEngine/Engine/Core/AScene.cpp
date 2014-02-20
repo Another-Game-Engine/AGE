@@ -35,7 +35,7 @@ Entity &AScene::createEntity()
 {
 	if (_free.empty())
 	{
-		_pool.push_back(EntityData(this));
+		_pool.push_back(std::move(EntityData(shared_from_this())));
 		_pool.back().setHandle(Entity(_pool.size() - 1, this));
 		_free.push(_pool.size() - 1);
 	}

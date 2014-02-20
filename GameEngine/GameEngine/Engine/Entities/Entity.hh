@@ -11,6 +11,7 @@ class Entity
 public:
 	Entity(unsigned int id = 0, AScene *manager = nullptr);
 	~Entity();
+	Entity(Entity &&o);
 	const unsigned int getId() const;
 	const unsigned short getVersion() const;
 	EntityData *operator->();

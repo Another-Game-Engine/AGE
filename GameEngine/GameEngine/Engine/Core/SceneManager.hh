@@ -3,14 +3,15 @@
 #include <string>
 #include <map>
 #include <Utils/Dependency.hpp>
+#include <memory>
 
 class AScene;
 
 class SceneManager : public Dependency
 {
 private:
-	std::map<std::string, AScene*>	_scenes;
-	std::map < unsigned int, AScene*> _actives;
+	std::map<std::string, std::shared_ptr<AScene>>	_scenes;
+	std::map < unsigned int, std::shared_ptr<AScene>> _actives;
 	SceneManager(const SceneManager &o);
 	SceneManager &operator=(const SceneManager &o);
 public:
@@ -30,7 +31,7 @@ public:
 	SceneManager();
 	virtual ~SceneManager();
 
-	void		addScene(AScene *scene, std::string const &name);
+	void		addScene(std::shared_ptr<AScene> scene, std::string const &name);
 	void		removeScene(std::string const &name);
 	void		enableScene(std::string const &name, unsigned int priority);
 	void		disableScene(std::string const &name);
