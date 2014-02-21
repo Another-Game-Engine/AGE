@@ -87,7 +87,7 @@ public:
 
 	glm::mat4 const  		&getLocalTransform();
 	// TO DELETE
-	glm::mat4   			&setLocalTransform();  // <-- //
+	void        			setLocalTransform(const glm::mat4 &t);
 
 	glm::mat4 const			&getGlobalTransform() const;
 	// TO DELETE

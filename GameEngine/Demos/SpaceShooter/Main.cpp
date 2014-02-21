@@ -28,7 +28,7 @@ int			main(int ac, char **av)
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
-	e.setInstance<AssetsManager>();
+	e.setInstance<AssetsManager>()->init();
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 //	e.setInstance<BulletCollisionManager>().init();
