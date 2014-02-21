@@ -271,28 +271,12 @@ public:
 			broadCast(std::string("componentAdded" + std::to_string(typeId + MAX_TAG_NUMBER)), _handle);
 		}
 		// unserialize graphnode
-		std::set<std::size_t> childIds;
-		ar(childIds);
-		for (auto e : childIds)
-			_childs.insert(Entity(e, _scene.get()));
-		for (auto it = std::begin(_childs); it != std::end(_childs); ++it)
-		{
-			Entity *e = const_cast<Entity *>(&(*it));
-			getScene()->entityHandle(it->getId(), e);
-		}
-		bool haveParent = false;
-		ar(haveParent);
-		std::size_t parentId;
-		ar(parentId);
-		if (haveParent)
-		{
-			getScene()->entityHandle(parentId, &_parent);
-		}
-		else
-		{
-			auto key = PubSubKey("graphNodeSetAsRoot");
-			broadCast(key, _handle);
-		}
+		EntityIdRegistrar::GraphNodeUnserialize graphUnser;
+		ar(graphUnser.childs);
+		ar(graphUnser.haveParent);
+		if (graphUnser.haveParent)
+			ar(graphUnser.parent);
+		_scene->registrarGraphNode(entityID, graphUnser);
 	}
 
 	//

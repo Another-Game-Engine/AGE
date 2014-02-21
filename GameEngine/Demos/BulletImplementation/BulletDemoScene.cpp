@@ -91,6 +91,17 @@ bool 			BulletDemoScene::userStart()
 {	
 	std::srand(0);
 
+	rct<Component::CameraComponent>()
+		.rct<Component::MeshRenderer>()
+		.rct<Component::RotationForce>()
+		.rct<Component::AudioListener>()
+		.rct<Component::AudioEmitter>()
+		.rct<Component::RigidBody>()
+		.rct<Component::Collision>()
+		.rct<Component::FirstPersonView>()
+		.rct<Component::FPController>();
+
+
 	// System Tests
 	//
 	//
@@ -205,6 +216,16 @@ bool 			BulletDemoScene::userStart()
 
 	// EXAMPLE LOAD FROM SAVE
 	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
+
+
+	//File saveFile("BulletScene.scenesave");
+	//if (saveFile.exists())
+	//{
+	//	std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
+	//	load<cereal::JSONInputArchive>(fileStream);
+	//	fileStream.close();
+	//	return true;
+	//}
 
 	// CREATE SPONZA CHURCH
 	{
@@ -331,6 +352,14 @@ bool 			BulletDemoScene::userUpdate(double time)
 		delay -= time;
 	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>()->getInput(SDL_QUIT))
+	{
+		 //SERIALIZATION
+		{
+			std::ofstream s("BulletScene.scenesave");
+			save<cereal::JSONOutputArchive>(s);
+			s.close();
+		}
 		return (false);
+	}
 	return (true);
 }

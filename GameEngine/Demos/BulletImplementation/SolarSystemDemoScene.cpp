@@ -53,6 +53,7 @@ Entity	SolarSystemDemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	//planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>(tex4);
 	//planetMesh->saveToFile();
 	//planetMesh->material->saveToFile();
+
 	
 	auto planetMesh = getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/" + tex1 + tex2 + tex3 + tex4 + ".cpd"));
 
@@ -205,9 +206,6 @@ bool 			SolarSystemDemoScene::userStart()
 	audioCpt->clearAudio("ambiant");
 	audioCpt->setAudio(music, "ambiant", CHANNEL_GROUP_MUSIC);
 	audioCpt->play("ambiant", true);
-	//auto aaa = earth->getChildsBegin();
-	//auto bbb = aaa->get();
-	//bbb->addChild(moon);
 	earth->getChildsBegin()->get()->addChild(moon);
 
 	// TAGS TESTS ////////////////////

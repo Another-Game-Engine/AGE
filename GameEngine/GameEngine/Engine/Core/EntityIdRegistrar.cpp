@@ -1,5 +1,6 @@
 #include <Core/EntityIdRegistrar.hh>
 #include <cassert>
+#include <Entities/EntityData.hh>
 
 EntityIdRegistrar::EntityIdRegistrar()
 {}
@@ -11,7 +12,6 @@ EntityIdRegistrar::~EntityIdRegistrar()
 void EntityIdRegistrar::registrarUnserializedEntity(Entity e, std::size_t id)
 {
 	_unser.insert(std::make_pair(id, e));
-//	updateEntityHandle(e, id);
 }
 
 std::size_t EntityIdRegistrar::registrarSerializedEntity(std::size_t id)
@@ -34,7 +34,7 @@ void EntityIdRegistrar::updateEntityHandles()
 	{
 		updateEntityHandle(e.second, e.first);
 	}
-	assert(_toUpdate.size() == 0 && "All handles have not been unserialized correctly.");
+	assert(_toUpdate.size() == 0 && _graphNode.size() == 0 && "All handles have not been unserialized correctly.");
 }
 
 void EntityIdRegistrar::updateEntityHandle(Entity e, std::size_t id)
@@ -42,7 +42,37 @@ void EntityIdRegistrar::updateEntityHandle(Entity e, std::size_t id)
 	auto ret = _toUpdate.equal_range(id);
 	for (auto it = ret.first; it != ret.second; ++it)
 	{
+		auto test = it->second;
+		auto testy = *test;
 		*(it->second) = e;
 	}
 	_toUpdate.erase(id);
+
+	auto t = _graphNode.find(id);
+	if (t == std::end(_graphNode))
+		return;
+	for (auto it : t->second.childs)
+	{
+		auto h = _unser.find(it);
+		if (h == std::end(_unser))
+			continue;
+		e->addChild(h->second);
+	}
+	if (t->second.haveParent)
+	{
+		auto h = _unser.find(t->second.parent);
+		if (h != std::end(_unser))
+			e->setParent(h->second, false);
+	}
+	else
+	{
+		auto key = PubSubKey("graphNodeSetAsRoot");
+		e->broadCast(key, e);
+	}
+	_graphNode.erase(id);
+}
+
+void EntityIdRegistrar::registrarGraphNode(std::size_t e, GraphNodeUnserialize g)
+{
+	_graphNode.insert(std::make_pair(e, g));
 }
