@@ -38,9 +38,10 @@ Entity	SolarSystemDemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 {
 	auto p = createEntity();
 	auto e = createEntity();
-
-	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
+	auto t = e->getLocalTransform();
+	t = glm::translate(t, pos);
+	t = glm::scale(t, scale);
+	e->setLocalTransform(t);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");

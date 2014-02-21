@@ -59,7 +59,6 @@ private:
 		auto c = e->getComponent<Component::RigidBody>();
 		c->getBody().setWorldTransform(transform);
 		c->getShape().setLocalScaling(convertGLMVectorToBullet(scale));
-		e->computeTransformAndUpdateGraphnode();
 	}
 
 	void updateDynamic(Entity &e)
@@ -76,8 +75,7 @@ private:
 		m = glm::rotate(m, rot.z, glm::vec3(0, 0, 1));
 		glm::vec3 scale = scaleFromMat4(e->getLocalTransform());
 		m = glm::scale(m, scale);
-		e->setLocalTransform() = m;
-		e->computeTransformAndUpdateGraphnode();
+		e->setLocalTransform(m);
 	}
 
 	virtual void initialize()
