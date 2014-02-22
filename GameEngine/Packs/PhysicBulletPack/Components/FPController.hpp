@@ -50,13 +50,26 @@ namespace Component
 		}
 
 		template <typename Archive>
-		void save(Archive &ar) const
+		void serialize(Archive &ar) const
 		{
-		}
-
-		template <typename Archive>
-		void load(Archive &ar)
-		{
+			ar(yOrientation
+				, forwardWalkSpeed
+				, backwardWalkSpeed
+				, forwardRunSpeed
+				, backwardRunSpeed
+				, sideWalkSpeed
+				, sideRunSpeed
+				, rotateXSpeed
+				, rotateYSpeed
+				, jumpSpeed
+				, jumpHeight
+				, canJump
+				, canRun
+				, justJump
+				, justArriveOnFloor
+				, wasOnGround
+				, keys
+				, controls);
 		}
 
 		// !Serialization
