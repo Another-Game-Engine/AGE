@@ -50,7 +50,7 @@ namespace Component
 		}
 
 		template <typename Archive>
-		void serialize(Archive &ar) const
+		void serialize(Archive &ar)
 		{
 			ar(yOrientation
 				, forwardWalkSpeed
@@ -67,9 +67,7 @@ namespace Component
 				, canRun
 				, justJump
 				, justArriveOnFloor
-				, wasOnGround
-				, keys
-				, controls);
+				, wasOnGround);
 		}
 
 		// !Serialization

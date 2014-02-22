@@ -19,7 +19,12 @@
 #include <Components/CollisionLayers.hpp>
 #include <Serialize/BulletWorldImporter/btBulletWorldImporter.h>
 #include <MediaFiles/AssetsManager.hpp>
-
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/xml.hpp>
+#include <cereal/types/set.hpp>
+#include <cereal/types/base_class.hpp>
 namespace Component
 {
 	ATTRIBUTE_ALIGNED16(struct) RigidBody : public Component::ComponentBase<RigidBody>
@@ -215,18 +220,28 @@ namespace Component
 		{
 			auto res = new RigidBody();
 			res->setEntity(e);
+			res->init();
 			ar(*res);
+			setCollisionShape(shapeType, meshName);
 			return res;
 		}
 
 		template <typename Archive>
 		void save(Archive &ar) const
 		{
+			//float _mass = mass;
+			//glm::vec3 _inertia = convertBulletVectorToGLM(inertia);
+			//ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint);
 		}
 
 		template <typename Archive>
 		void load(Archive &ar)
 		{
+			//float _mass;
+			//glm::vec3 _inertia;
+			//ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint);
+			//mass = btScalar(_mass);
+			//inertia = convertGLMVectorToBullet(_inertia);
 		}
 
 		// !Serialization
