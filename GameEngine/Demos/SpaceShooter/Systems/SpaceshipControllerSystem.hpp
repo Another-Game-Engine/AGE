@@ -9,6 +9,8 @@
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 #include <Context/SdlContext.hh>
+#include <MediaFiles/AssetsManager.hpp>
+#include <Core/AScene.hh>
 
 
 class SpaceshipControllerSystem : public System
@@ -53,8 +55,10 @@ private:
 			float yAngle = inputs->getMouseDelta().y * 0.3f;
 			float xAngle = - inputs->getMouseDelta().x * 0.3f;
 
-			entity->setLocalTransform() = glm::rotate(entity->getLocalTransform(), yAngle, glm::vec3(1, 0, 0));
-			entity->setLocalTransform() = glm::rotate(entity->getLocalTransform(), xAngle, glm::vec3(0, 1, 0));
+			auto t = entity->getLocalTransform();
+			t = glm::rotate(t, yAngle, glm::vec3(1, 0, 0));
+			t = glm::rotate(t, xAngle, glm::vec3(0, 1, 0));
+			entity->setLocalTransform(t);
 
 			// UPDATE KEYS
 			for (unsigned int i = 0; i < controls.size(); ++i)
@@ -84,15 +88,14 @@ private:
 			if (controls[Component::SpaceshipController::SHOOT])
 			{
 				Entity b = _scene->createEntity();
-				b->setLocalTransform() = entity->getLocalTransform();
+				b->setLocalTransform(entity->getLocalTransform());
 				auto rigidBody = b->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 //				rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, 1000));
-				auto mesh = b->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__ball"));
+				auto mesh = b->addComponent<Component::MeshRenderer>(entity->getScene()->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
 				balls.push_back(b);
-				b->computeTransformAndUpdateGraphnode();
 			}
 			if (inputs->getKey(SDLK_p))
 			{
@@ -100,8 +103,7 @@ private:
 					_scene->destroy(e);
 				balls.clear();
 			}
-			entity->setLocalTransform() = glm::translate(entity->getLocalTransform(), direction);
-			entity->computeTransformAndUpdateGraphnode();
+			entity->setLocalTransform(glm::translate(entity->getLocalTransform(), direction));
 	}
 
 	virtual void initialize()

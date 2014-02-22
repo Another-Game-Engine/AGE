@@ -6,7 +6,7 @@
 #include <Core/AScene.hh>
 
 Entity::Entity(unsigned int id, AScene *manager)
-: _id(id), _manager(manager)
+: _id(id), _manager(manager), _version(0)
 {}
 
 Entity::~Entity()
@@ -16,6 +16,11 @@ Entity::~Entity()
 const unsigned int Entity::getId() const
 {
 	return _id;
+}
+
+const unsigned short Entity::getVersion() const
+{
+	return _version;
 }
 
 EntityData *Entity::operator->()
@@ -38,18 +43,25 @@ bool Entity::operator<(const Entity &o) const
 
 bool Entity::operator==(const Entity &o) const
 {
-	return _id == o._id;
+	return (_id == o._id && _version == o._version);
+}
+
+bool Entity::operator!=(const Entity &o) const
+{
+	return (_id != o._id || _version != o._version);
 }
 
 Entity::Entity(const Entity &o)
 {
 	_id = o._id;
+	_version = o._version;
 	_manager = o._manager;
 }
 
 Entity &Entity::operator=(const Entity &o)
 {
 	_id = o._id;
+	_version = o._version;
 	_manager = o._manager;
 	return *this;
 }

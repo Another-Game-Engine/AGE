@@ -128,7 +128,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		staticShape->shape = bvh;
 		staticShape->trimesh = trimesh;
 		staticShape->name = "collision_shape_static_" + file.getShortFileName();
-		staticShape->path = "./Assets/Serialized/" + staticShape->name + ".bullet";
+		staticShape->path = File("./Assets/Serialized/" + staticShape->name + ".bullet");
 		_manager->add(staticShape);
 	}
 
@@ -164,7 +164,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		std::shared_ptr<CollisionShapeDynamicFile> dynamicShape{ new CollisionShapeDynamicFile() };
 		dynamicShape->shape = s;
 		dynamicShape->name = "collision_shape_dynamic_" + file.getShortFileName();
-		dynamicShape->path = "./Assets/Serialized/" + dynamicShape->name + ".bullet";
+		dynamicShape->path = File("./Assets/Serialized/" + dynamicShape->name + ".bullet");
 		_manager->add(dynamicShape);
 	}
 
@@ -216,7 +216,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		std::shared_ptr<CollisionBoxFile> shape{ new CollisionBoxFile() };
 		shape->shape = box;
 		shape->name = "collision_box_" + file.getShortFileName();
-		shape->path = "./Assets/Serialized/" + shape->name + ".bullet";
+		shape->path = File("./Assets/Serialized/" + shape->name + ".bullet");
 		_manager->add(shape);
 	}
 
@@ -230,7 +230,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		std::shared_ptr<CollisionSphereFile> shape{ new CollisionSphereFile() };
 		shape->shape = sphere;
 		shape->name = "collision_sphere_" + file.getShortFileName();
-		shape->path = "./Assets/Serialized/" + shape->name + ".bullet";
+		shape->path = File("./Assets/Serialized/" + shape->name + ".bullet");
 		_manager->add(shape);
 	}
 

@@ -15,6 +15,7 @@
 #include <cereal/types/memory.hpp>
 #include <Utils/GlmSerialization.hpp>
 #include <OpenGL/Vertice.hh>
+#include <OpenGL/VertexManager.hh>
 
 struct ObjFile : public MediaFile<ObjFile>
 {
@@ -51,27 +52,39 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
 		Vertice<4>					buffer;
-		std::shared_ptr<VertexManager<4>> vertexManager;
+		VertexManager<4> *vertexManager;
 
 		Geometry()
 			: name("")
 		{
+			std::array<Attribute, 4> param =
+			{
+				Attribute(GL_FLOAT, sizeof(float), 4),
+				Attribute(GL_FLOAT, sizeof(float), 4),
+				Attribute(GL_FLOAT, sizeof(float), 4),
+				Attribute(GL_FLOAT, sizeof(float), 2),
+			};
+			vertexManager = new	VertexManager<4>(param);
+			vertexManager->init();
 		}
 
 		~Geometry()
 		{
-			vertexManager->deleteVertice(buffer);
+			delete vertexManager;
 		}
 
 		Geometry(const Geometry &o)
 			: name("")
 		{
+			vertexManager = new VertexManager<4>(*o.vertexManager);
+			vertexManager->init();
 			name = o.name;
 			vertices = o.vertices;
 			normals = o.normals;
 			colors = o.colors;
 			uvs = o.uvs;
 			indices = o.indices;
+			init();
 		}
 
 		Geometry &operator=(const Geometry &o)
@@ -84,6 +97,7 @@ struct ObjFile : public MediaFile<ObjFile>
 				colors = o.colors;
 				uvs = o.uvs;
 				indices = o.indices;
+				init();
 			}
 			return *this;
 		}
@@ -98,11 +112,11 @@ struct ObjFile : public MediaFile<ObjFile>
 		void load(Archive &ar)
 		{
 			ar(name, vertices, normals, colors, uvs, indices);
+			init();
 		}
 
-		void init(std::shared_ptr<VertexManager<4>> const &manager)
+		void init()
 		{
-			vertexManager = manager;
 			std::array<Data, 4> data = 
 			{
 				Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
@@ -143,7 +157,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::string matName;
 		ar(matName);
 		if (matName != "NULL")
-			material = std::static_pointer_cast<MaterialFile>(AMediaFile::loadFromFile<Archive>(File(matName)));
+			material = std::static_pointer_cast<MaterialFile>(_manager->loadFromFile<Archive>(File(matName)));
 	}
 
 };

@@ -47,10 +47,11 @@ glm::mat4 const  		&EntityData::getLocalTransform()
 }
 
 //  TO DELETE
-glm::mat4   			&EntityData::setLocalTransform()
+void   			        EntityData::setLocalTransform(const glm::mat4 &t)
 {
 	_flags |= HAS_MOVED;
-	return (_localTransform);
+	_localTransform = t;
+	computeTransformAndUpdateGraphnode();
 }
 
 glm::mat4 const			&EntityData::getGlobalTransform() const

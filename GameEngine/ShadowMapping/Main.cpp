@@ -23,7 +23,7 @@ static bool initInstanceEngine(Engine &engine)
 	engine.setInstance<SdlContext, IRenderContext>();
 	engine.setInstance<Input>();
 	engine.setInstance<Timer>();
-	engine.setInstance<AssetsManager>();
+	engine.setInstance<AssetsManager>()->init();
 	engine.setInstance<Renderer>(&engine);
 	engine.setInstance<SceneManager>();
 	if (!engine.init())
