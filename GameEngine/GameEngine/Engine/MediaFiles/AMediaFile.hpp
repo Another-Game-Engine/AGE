@@ -15,14 +15,15 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/archives/portable_binary.hpp>
-#include <MediaFiles/AssetsManager.hpp>
+
+class AssetsManager;
 
 struct AMediaFile
 {
 public:
 	File path;
 	std::string name;
-	static AssetsManager *_manager;
+	static std::shared_ptr<AssetsManager> _manager;
 	enum MEDIA_TYPE
 	{
 		UNKNOWN = 0
@@ -87,93 +88,9 @@ public:
 
 	void serializeAsBulletFile(std::ofstream &s);
 
-	template <typename Archive>
-	static std::shared_ptr<AMediaFile> loadFromFile(const File &file)
-	{
-		if (file.getExtension() == "bullet")
-			return loadBulletFile(file);
-		assert(file.exists() == true && "File does not exist.");
-		std::shared_ptr<AMediaFile> res{ nullptr };
-		res = _manager->get(file.getShortFileName());
-		if (res != nullptr)
-			return res;
-		MEDIA_TYPE serializedFileType = UNKNOWN;
+	static void saveToFile(const std::string &media, const std::string &path);
 
-		std::ifstream ifs(file.getFullName(), std::ios::binary);
-		Archive ar(ifs);
-		ar(serializedFileType);
-		switch (serializedFileType)
-		{
-		case OBJ:
-			res = std::make_shared<ObjFile>();
-			ar(static_cast<ObjFile&>(*res.get()));
-			break;
-		case MATERIAL:
-			res = std::make_shared<MaterialFile>();
-			ar(static_cast<MaterialFile&>(*res.get()));
-			break;
-		case TEXTURE:
-			res = std::make_shared<TextureFile>();
-			ar(static_cast<TextureFile&>(*res.get()));
-			break;
-		case CUBEMAP:
-			res = std::make_shared<CubeMapFile>();
-			ar(static_cast<CubeMapFile&>(*res.get()));
-			break;
-		default:
-			break;
-		}
-		assert(res != nullptr && "Unknown MediaFile type.");
-		assert(_manager != nullptr && "Media Manager is not set.");
-		res->path = file.getFullName();
-		res->name = file.getShortFileName();
-		_manager->add(res);
-		return res;
-	}
-
-	static std::shared_ptr<AMediaFile> loadBulletFile(const File &f);
-
-	static void loadFromList(const File &file);
-	static std::shared_ptr<AMediaFile> get(const std::string &name);
-
-	template <class T>
-	static std::shared_ptr<T> get(const std::string &name)
-	{
-		return std::static_pointer_cast<T>(_manager->get(name));
-	}
-
-	template <class T>
-	static std::shared_ptr<T> create(const std::string &name = "", std::shared_ptr<AMediaFile> copyFrom = nullptr)
-	{
-		if (!name.empty())
-		{
-			auto o = std::static_pointer_cast<T>(_manager->get(name));
-			if (o != nullptr)
-				return o;
-		}
-		std::shared_ptr<T> n{ nullptr };
-		if (copyFrom != nullptr)
-			n = std::make_shared<T>(*std::static_pointer_cast<const T>(copyFrom).get());
-		else
-			n = std::make_shared<T>();
-		if (!name.empty())
-			n->name = name;
-		_manager->add(n);
-		return n;
-	}
-
-	static void saveToFile(const std::string &media, const std::string &path)
-	{
-		auto &e = get<AMediaFile>(media);
-		assert(e != nullptr && "Media does not exists");
-		std::string filePath = path + e->name + ".cpd";
-		std::ofstream ofs(filePath, std::ios::binary);
-		assert(ofs.is_open() && "Cannot open file for save");
-		e->path = File(path + e->name + ".cpd");
-		e->serialize<cereal::BinaryOutputArchive>(ofs);
-	}
-
-	static void setManager(AssetsManager *manager)
+	static void setManager(std::shared_ptr<AssetsManager> manager)
 	{
 		_manager = manager;
 	}

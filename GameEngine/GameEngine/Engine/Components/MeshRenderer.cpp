@@ -1,6 +1,6 @@
 #include "MeshRenderer.hh"
 #include "Core/Engine.hh"
-#include <Core/AScene.hh>
+#include <Core/AScene.hh>	
 
 namespace Component
 {
@@ -13,13 +13,6 @@ namespace Component
 	MeshRenderer::~MeshRenderer(void)
 	{
 	}
-
-	void MeshRenderer::initComponentManager(std::shared_ptr<VertexManager<4>> const &manager)
-	{
-		_manager = manager;
-		for (auto &vertice : mesh->geometries)
-			vertice.init(_manager);
-	} 
 
 	void MeshRenderer::init(std::shared_ptr<AMediaFile> r)
 	{
@@ -66,6 +59,7 @@ namespace Component
 			}*/
 			materialUniform->flushChanges();
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
+			glFinish();
 		}
 	}
 }

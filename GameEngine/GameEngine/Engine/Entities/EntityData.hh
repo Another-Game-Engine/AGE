@@ -48,6 +48,8 @@ public:
 
 private:
 	friend class cereal::access;
+	friend class AScene;
+
 	AScene              *_scene;
 	size_t 				_flags;
 
@@ -65,8 +67,10 @@ private:
 	t_ComponentsList	_components;
 
 	Barcode             _code;
-public:
+
 	EntityData(AScene *scene);
+public:
+
 	virtual ~EntityData();
 
 	AScene                  *getScene() const;
@@ -83,7 +87,7 @@ public:
 
 	glm::mat4 const  		&getLocalTransform();
 	// TO DELETE
-	glm::mat4   			&setLocalTransform();  // <-- //
+	void        			setLocalTransform(const glm::mat4 &t);
 
 	glm::mat4 const			&getGlobalTransform() const;
 	// TO DELETE

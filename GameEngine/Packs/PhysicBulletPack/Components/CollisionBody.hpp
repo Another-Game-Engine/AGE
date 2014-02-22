@@ -12,6 +12,7 @@
 #include <Utils/MatrixConversion.hpp>
 #include <Core/AScene.hh>
 #include <Components/CollisionLayers.hpp>
+#include <MediaFiles/AssetsManager.hpp>
 
 
 namespace Component
@@ -96,7 +97,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				auto mesh = AMediaFile::get<ObjFile>(meshName);
+				auto mesh = _entity->getScene()->getInstance<AssetsManager>()->get<ObjFile>(meshName);
 				auto &geo = mesh->geometries[0]; // DIRTY HACK TEMPORARY
 				// NEED TO REPLACE MESH BY MESH GROUP !
 				btScalar *t = new btScalar[geo.vertices.size() * 3]();

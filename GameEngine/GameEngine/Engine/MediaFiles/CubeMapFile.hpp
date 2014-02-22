@@ -89,12 +89,12 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 	{
 		std::string _px, _py, _pz, _nx, _ny, _nz;
 		ar(_px, _py, _pz, _nx, _ny, _nz);
-		px = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(_px));
-		py = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(_py));
-		pz = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(_pz));
-		nx = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(_nx));
-		ny = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(_ny));
-		nz = std::static_pointer_cast<TextureFile>(AMediaFile::loadFromFile<Archive>(_nz));
+		px = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_px)));
+		py = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_py)));
+		pz = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_pz)));
+		nx = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_nx)));
+		ny = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_ny)));
+		nz = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_nz)));
 		init();
 	}
 

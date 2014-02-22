@@ -17,7 +17,7 @@ public:
 	virtual ~AConvertor();
 	virtual std::shared_ptr<AMediaFile> convert(const File &file) = 0;
 	virtual std::string setName(const File &file) const = 0;
-	bool supportFile(const File file);
+	bool supportFile(const File &file);
 protected:
 	const std::set<std::string> _extensions;
 	AssetsConvertorManager *_manager;

@@ -9,7 +9,7 @@ AConvertor::AConvertor(AssetsConvertorManager *manager, std::set<std::string> ex
 AConvertor::~AConvertor()
 {}
 
-bool AConvertor::supportFile(const File file)
+bool AConvertor::supportFile(const File &file)
 {
 	if (_extensions.find(file.getExtension()) != std::end(_extensions))
 		return true;
