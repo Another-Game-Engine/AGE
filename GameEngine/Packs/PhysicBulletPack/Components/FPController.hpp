@@ -46,6 +46,7 @@ namespace Component
 			auto res = new FPController();
 			res->setEntity(e);
 			ar(*res);
+			res->init();
 			return res;
 		}
 

@@ -222,26 +222,26 @@ namespace Component
 			res->setEntity(e);
 			res->init();
 			ar(*res);
-			setCollisionShape(shapeType, meshName);
+			res->setCollisionShape(res->shapeType, res->meshName);
 			return res;
 		}
 
 		template <typename Archive>
 		void save(Archive &ar) const
 		{
-			//float _mass = mass;
-			//glm::vec3 _inertia = convertBulletVectorToGLM(inertia);
-			//ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint);
+			float _mass = mass;
+			glm::vec3 _inertia = convertBulletVectorToGLM(inertia);
+			ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint, meshName);
 		}
 
 		template <typename Archive>
 		void load(Archive &ar)
 		{
-			//float _mass;
-			//glm::vec3 _inertia;
-			//ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint);
-			//mass = btScalar(_mass);
-			//inertia = convertGLMVectorToBullet(_inertia);
+			float _mass;
+			glm::vec3 _inertia;
+			ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint, meshName);
+			mass = btScalar(_mass);
+			inertia = convertGLMVectorToBullet(_inertia);
 		}
 
 		// !Serialization
