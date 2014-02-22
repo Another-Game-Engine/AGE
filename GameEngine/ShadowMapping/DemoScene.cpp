@@ -18,8 +18,7 @@ void DemoScene::initSytemeScene()
 	rct<Component::MeshRenderer>();
 	rct<Component::RotationForce>();
 	rct<Component::TrackBall>();
-	addSystem<MeshRendererSystem>(0);
-	//addSystem<ShadowRendererSystem>(50);
+	addSystem<MeshRendererSystem>(0)->onShadow();
 	addSystem<TrackBallSystem>(150);
 	addSystem<CameraSystem>(200);
 }
@@ -64,25 +63,17 @@ bool DemoScene::userStart()
 	initRenderer();
 	loadResources();
 
-	//getSystem<ShadowRendererSystem>()->setLight(glm::ortho<float>(-10, 10, -10, 10, -10, 20) * glm::lookAt(glm::vec3(0, 2, -2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+	getSystem<MeshRendererSystem>()->setLightVP(glm::ortho<float>(-10, 10, -10, 10, -10, 20) * glm::lookAt(glm::vec3(0, 2, -2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
 	auto ball = createEntity();
 	auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
 	auto &r = ball->addComponent<Component::MeshRenderer>(ballMesh);
 	r->setShader("MaterialBasic");
-	/*auto &s = ball->addComponent<Component::ShadowRenderer>(ballMesh);
-	s->setShader("ShadowMapping");*/
-	//ball->setLocalTransform(glm::translate(ball->getLocalTransform(), glm::vec3(0, 4.0, 4.0)));
-	//ball->setLocalTransform(glm::scale(ball->getLocalTransform(), glm::vec3(1.0, 1.0, 1.0)));
 
 	auto platform = createEntity();
 	auto platformMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
 	auto &r2 = platform->addComponent<Component::MeshRenderer>(platformMesh);
 	r2->setShader("MaterialBasic");
-	/*auto &s2 = platform->addComponent<Component::ShadowRenderer>(platformMesh);
-	s2->setShader("ShadowMapping");*/
-	//platform->setLocalTransform(glm::translate(platform->getLocalTransform(), glm::vec3(4.0, 0.0, 4.0)));
-	//platform->setLocalTransform(glm::scale(platform->getLocalTransform(), glm::vec3(8.0, 0.2, 8.0)));
 
 	auto camera = createEntity();
 	camera->addComponent<Component::CameraComponent>();
@@ -93,8 +84,6 @@ bool DemoScene::userStart()
 bool DemoScene::userUpdate(double time)
 {
 	glClearColor(0.2, 0.2, 0.2, 1.0);
-	/*getSystem<MeshRendererSystem>()->setLightVP(getSystem<ShadowRendererSystem>()->getLightVP());
-	getSystem<MeshRendererSystem>()->setTexShadow(getSystem<ShadowRendererSystem>()->getShadowMap());*/
 	auto input = _engine.getInstance<Input>();
 	if (input->getInput(SDLK_ESCAPE) || input->getInput(SDL_QUIT))
 		return (false);
