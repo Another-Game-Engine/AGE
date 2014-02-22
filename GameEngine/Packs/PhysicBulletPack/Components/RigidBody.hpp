@@ -222,7 +222,6 @@ namespace Component
 			res->setEntity(e);
 			res->init();
 			ar(*res);
-			res->setCollisionShape(res->shapeType, res->meshName);
 			return res;
 		}
 
@@ -232,6 +231,13 @@ namespace Component
 			float _mass = mass;
 			glm::vec3 _inertia = convertBulletVectorToGLM(inertia);
 			ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint, meshName);
+			ar(_rigidBody->getBroadphaseHandle()->m_collisionFilterGroup, _rigidBody->getBroadphaseHandle()->m_collisionFilterMask);
+			float friction = _rigidBody->getFriction();
+			float restitution = _rigidBody->getRestitution();
+			ar(friction, restitution);
+			ar(_rigidBody->getFlags());
+			float margin = _collisionShape->getMargin();
+			ar(margin);
 		}
 
 		template <typename Archive>
@@ -242,6 +248,22 @@ namespace Component
 			ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint, meshName);
 			mass = btScalar(_mass);
 			inertia = convertGLMVectorToBullet(_inertia);
+			setCollisionShape(shapeType, meshName);
+			short int layer;
+			short int mask;
+			ar(layer, mask);
+			getBody().getBroadphaseHandle()->m_collisionFilterGroup = layer;
+			getBody().getBroadphaseHandle()->m_collisionFilterMask = mask;
+			float friction, restitution;
+			ar(friction, restitution);
+			getBody().setFriction(btScalar(friction));
+			getBody().setRestitution(btScalar(restitution));
+			int flags;
+			ar(flags);
+			getBody().setFlags(flags);
+			float margin;
+			ar(margin);
+			_collisionShape->setMargin(margin);
 		}
 
 		// !Serialization
