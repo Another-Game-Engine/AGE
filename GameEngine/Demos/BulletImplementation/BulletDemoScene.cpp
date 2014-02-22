@@ -194,8 +194,8 @@ bool 			BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
+//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
+//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
@@ -218,14 +218,14 @@ bool 			BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
 
 
-	//File saveFile("BulletScene.scenesave");
-	//if (saveFile.exists())
-	//{
-	//	std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
-	//	load<cereal::JSONInputArchive>(fileStream);
-	//	fileStream.close();
-	//	return true;
-	//}
+	File saveFile("BulletScene.scenesave");
+	if (saveFile.exists())
+	{
+		std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
+		load<cereal::JSONInputArchive>(fileStream);
+		fileStream.close();
+		return true;
+	}
 
 	// CREATE SPONZA CHURCH
 	{
