@@ -53,11 +53,11 @@ public:
 				mesh->render_shadowmap(_texShadow, _lightVP);
 			}
 		}
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDrawBuffer(GL_COLOR_ATTACHMENT0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (auto e : _filter.getCollection())
-		{
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			glDrawBuffer(GL_COLOR_ATTACHMENT0);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		{	
 			auto &mesh = e->getComponent<Component::MeshRenderer>();
 			mesh->render(_shadow, _texShadow, _lightVP);
 		}
