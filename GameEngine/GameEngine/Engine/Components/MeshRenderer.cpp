@@ -68,8 +68,8 @@ namespace Component
 			for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 			{
 				mesh->material->materials[i].setUniforms(materialUniform);
-				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, shadowTex);
+				//glActiveTexture(GL_TEXTURE1);
+				//glBindTexture(GL_TEXTURE_2D, shadowTex);
 				materialUniform->flushChanges();
 				mesh->geometries[i].buffer.draw(GL_TRIANGLES);
 			}

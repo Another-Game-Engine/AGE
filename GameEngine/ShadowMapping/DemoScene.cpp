@@ -69,11 +69,15 @@ bool DemoScene::userStart()
 	auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
 	auto &r = ball->addComponent<Component::MeshRenderer>(ballMesh);
 	r->setShader("MaterialBasic");
+	ball->setLocalTransform(glm::translate(ball->getLocalTransform(), glm::vec3(0.0, 5.0, 0.0)));
+	ball->setLocalTransform(glm::scale(ball->getLocalTransform(), glm::vec3(2.0, 2.0, 2.0)));
 
 	auto platform = createEntity();
 	auto platformMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
 	auto &r2 = platform->addComponent<Component::MeshRenderer>(platformMesh);
 	r2->setShader("MaterialBasic");
+	platform->setLocalTransform(glm::translate(platform->getLocalTransform(), glm::vec3(-2.5, 0.0, 2.5)));
+	platform->setLocalTransform(glm::scale(platform->getLocalTransform(), glm::vec3(5.0, 0.2, 5.0)));
 
 	auto camera = createEntity();
 	camera->addComponent<Component::CameraComponent>();
