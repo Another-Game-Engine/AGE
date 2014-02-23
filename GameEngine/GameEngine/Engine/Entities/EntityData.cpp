@@ -282,6 +282,7 @@ void 					EntityData::setParent(Entity &parent, bool notify)
 		auto key = PubSubKey("graphNodeNotARoot");
 		broadCast(key, _handle);
 	}
+	computeTransformAndUpdateGraphnode();
 	_parent = parent;
 }
 
@@ -303,6 +304,7 @@ void                    EntityData::removeParent(bool notify)
 	auto key = PubSubKey("graphNodeSetAsRoot");
 	broadCast(key, _handle);
 	_parent = Entity(std::numeric_limits<unsigned int>::max(), nullptr);
+	computeTransformAndUpdateGraphnode();
 }
 
 std::set<Entity>::iterator EntityData::getChildsBegin()
