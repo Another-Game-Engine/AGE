@@ -241,7 +241,10 @@ public:
 		}
 		ar(CEREAL_NVP(childIds));
 		ar(cereal::make_nvp("haveParent", _parent.get() != nullptr));
-		ar(cereal::make_nvp("parentID", _parent.getId()));
+		if (_parent.get() != nullptr)
+			ar(cereal::make_nvp("parentID", getScene()->registrarSerializedEntity(_parent.getId())));
+		else
+			ar(cereal::make_nvp("parentID", getScene()->registrarSerializedEntity(-1)));
 	}
 
 	template <class Archive>
