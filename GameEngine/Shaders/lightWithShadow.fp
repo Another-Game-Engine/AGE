@@ -23,9 +23,9 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-layout (std140) uniform Light
+layout (std140) uniform LightBias
 {
-  mat4 lightMVP;
+  mat4 lightBiasMVP;
 };
 
 uniform          sampler2D fTexture0;//ambient;
@@ -53,4 +53,5 @@ void main(void)
 	  visibility = 0.5;
 	FragColor = vec4(vec3(1.0, 1.0, 1.0) * lamberTerm * visibility, 1.0) ;
 	//FragColor = texture(fTexture1, fTexCoord);
+	//FragColor = vec4(1.0, 1.0, 1.0, 1.0);
 }
