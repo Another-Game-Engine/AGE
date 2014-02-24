@@ -40,7 +40,7 @@ void DemoScene::initRenderer()
 	renderer->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	renderer->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	renderer->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
-	renderer->bindShaderToUniform("ShadowMapping", "Light", "Light");
+	renderer->bindShaderToUniform("MaterialBasic", "Light", "Light");
 	renderer->getShader("MaterialBasic")->build();
 
 	OpenGLTools::Shader &shadow = renderer->addShader("ShadowMapping", "Shaders/ShadowMapping.vp", "Shaders/ShadowMapping.fp");
@@ -63,7 +63,7 @@ bool DemoScene::userStart()
 	initRenderer();
 	loadResources();
 
-	getSystem<MeshRendererSystem>()->setLightVP(glm::ortho<float>(-10, 10, -10, 10, -10, 20) * glm::lookAt(glm::vec3(0, 2, -2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+	getSystem<MeshRendererSystem>()->setLightVP(glm::ortho<float>(-10, 10, -10, 10, -10, 20) * glm::lookAt(glm::vec3(-3, 1, -1), glm::vec3(-3, 0, 0), glm::vec3(0, 1, 0)));
 
 	auto ball = createEntity();
 	auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");

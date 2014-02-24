@@ -54,6 +54,6 @@ void main(void)
   fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);
   fPosition = modelView * vPosition;
   fTexCoord = vTexCoord;
-  ShadowCoord = lightMVP * vPosition; 
+  ShadowCoord = lightMVP * vPosition;
   gl_Position = projection * modelView * vPosition;
 }
