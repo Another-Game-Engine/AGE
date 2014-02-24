@@ -19,8 +19,8 @@ std::size_t EntityIdRegistrar::registrarSerializedEntity(std::size_t id)
 	static std::size_t counter = 0;
 	if (_ser.find(id) != std::end(_ser))
 		return _ser[id];
-	_ser.insert(std::make_pair(id, counter));
-	return counter++;
+	_ser.insert(std::make_pair(id, ++counter));
+	return counter;
 }
 
 void EntityIdRegistrar::entityHandle(std::size_t id, Entity *e)
@@ -42,6 +42,8 @@ void EntityIdRegistrar::updateEntityHandles()
 		stack.pop();
 	}
 	assert(_toUpdate.size() == 0 && _graphNode.size() == 0 && "All handles have not been unserialized correctly.");
+	_ser.clear();
+	_unser.clear();
 }
 
 void EntityIdRegistrar::updateEntityHandle(Entity e, std::size_t id)
@@ -58,18 +60,18 @@ void EntityIdRegistrar::updateEntityHandle(Entity e, std::size_t id)
 	auto t = _graphNode.find(id);
 	if (t == std::end(_graphNode))
 		return;
-	for (auto it : t->second.childs)
-	{
-		auto h = _unser.find(it);
-		if (h == std::end(_unser))
-			continue;
-		e->addChild(h->second);
-	}
+	//for (auto it : t->second.childs)
+	//{
+	//	auto h = _unser.find(it);
+	//	if (h == std::end(_unser))
+	//		continue;
+	//	e->addChild(h->second);
+	//}
 	if (t->second.haveParent)
 	{
 		auto h = _unser.find(t->second.parent);
 		if (h != std::end(_unser))
-			e->setParent(h->second, false);
+			e->setParent(h->second, true);
 	}
 	else
 	{
