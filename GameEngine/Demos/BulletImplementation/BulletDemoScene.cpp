@@ -109,6 +109,7 @@ bool 			BulletDemoScene::userStart()
 	addSystem<BulletDynamicSystem>(10); // UPDATE PHYSIC WORLD
 	addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
 	addSystem<FPControllerSystem>(50); // UPDATE FIRST PERSON CONTROLLER
+	addSystem<RotationForceSystem>(55);
 	addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
 	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<BallSoundSystem>(220);
@@ -217,6 +218,18 @@ bool 			BulletDemoScene::userStart()
 	// EXAMPLE LOAD FROM SAVE
 	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
 
+	// SETTING UP THE CAMERA
+	std::string		vars[] = 
+	{
+		"projection",
+		"view"
+	};
+	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+	_engine.getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
+		init(&sky, "cameraUniform", vars);
+	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
 
 	File saveFile("BulletScene.scenesave");
 	if (saveFile.exists())
@@ -228,77 +241,74 @@ bool 			BulletDemoScene::userStart()
 	}
 
 	// CREATE SPONZA CHURCH
-	{
+//	{
+//		auto e = createEntity();
+//		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
+//		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
+////		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
+//		auto rigidBody = e->addComponent<Component::RigidBody>(0);
+//		rigidBody->setMass(0);
+////		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+////		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
+////		rigidBody->setCollisionShape(Component::RigidBody::BOX);
+//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
+//		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
+//		rigidBody->getShape().setMargin(0.001f);
+//		rigidBody->getBody().setFriction(1.0f);
+//		rigidBody->getBody().setRestitution(0.9f);
+////		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
+////		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+////		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+//		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
+//		mesh->setShader("MaterialBasic");
+//	}
+//
+//	Entity character;
+	std::shared_ptr<Component::CameraComponent> cameraComponent;
+//
+//	{
+//		auto e = createEntity();
+//		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0,100,0)));
+//		auto fpc = e->addComponent<Component::FPController>();
+//		character = e;
+//		cameraComponent = character->addComponent<Component::CameraComponent>();
+//		character->addComponent<Component::FirstPersonView>();
+//		e->addComponent<Component::AudioListener>();
+//		auto ae = e->addComponent<Component::AudioEmitter>();
+//		auto arriveOnFloor = _engine.getInstance<AudioManager>()->getAudio("arriveOnFloor");
+//		auto jump = _engine.getInstance<AudioManager>()->getAudio("jump");
+//		ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
+//		ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
+//	}
+//
+//	{
+//		auto e = createMonkey(glm::vec3(19, 0.9, -0.59), glm::vec3(1.5), "texture__SunTexture", 1.0f);
+//		auto rigidbody = e->getComponent<Component::RigidBody>();
+//		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+//		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+//		auto audioCpt = e->addComponent<Component::AudioEmitter>();
+//		audioCpt->setAudio(_engine.getInstance<AudioManager>()->getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
+//		audioCpt->play("ambiant", true);
+//
+//	}
+//
+//	// --
+//	// Setting camera with skybox
+//	// --
+//
+
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
-		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
-//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
-		auto rigidBody = e->addComponent<Component::RigidBody>(0);
-		rigidBody->setMass(0);
-//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
-//		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
-		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
-		rigidBody->getShape().setMargin(0.001f);
-		rigidBody->getBody().setFriction(1.0f);
-		rigidBody->getBody().setRestitution(0.9f);
-//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
-//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(5)));
 		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
-	}
 
-	Entity character;
-	std::shared_ptr<Component::CameraComponent> cameraComponent;
-
-	{
-		auto e = createEntity();
+		e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0,100,0)));
-		auto fpc = e->addComponent<Component::FPController>();
-		character = e;
-		cameraComponent = character->addComponent<Component::CameraComponent>();
-		character->addComponent<Component::FirstPersonView>();
-		e->addComponent<Component::AudioListener>();
-		auto ae = e->addComponent<Component::AudioEmitter>();
-		auto arriveOnFloor = _engine.getInstance<AudioManager>()->getAudio("arriveOnFloor");
-		auto jump = _engine.getInstance<AudioManager>()->getAudio("jump");
-		ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
-		ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
-	}
+		cameraComponent = e->addComponent<Component::CameraComponent>();
+		cameraComponent->attachSkybox("skybox__space", "cubemapShader");
+		e->addComponent<Component::RotationForce>(glm::vec3(10));
 
-	{
-		auto e = createMonkey(glm::vec3(19, 0.9, -0.59), glm::vec3(1.5), "texture__SunTexture", 1.0f);
-		auto rigidbody = e->getComponent<Component::RigidBody>();
-		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
-		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
-		auto audioCpt = e->addComponent<Component::AudioEmitter>();
-		audioCpt->setAudio(_engine.getInstance<AudioManager>()->getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
-		audioCpt->play("ambiant", true);
-
-	}
-
-	// --
-	// Setting camera with skybox
-	// --
-
-	std::string		vars[] = 
-	{
-		"projection",
-		"view"
-	};
-
-	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
-
-	_engine.getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-
-	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
-		init(&sky, "cameraUniform", vars);
-	
-	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
-
-	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	return (true);
 }
 
