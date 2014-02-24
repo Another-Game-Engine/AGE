@@ -25,6 +25,7 @@
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/set.hpp>
 #include <cereal/types/base_class.hpp>
+#include <cereal/types/string.hpp>
 namespace Component
 {
 	ATTRIBUTE_ALIGNED16(struct) RigidBody : public Component::ComponentBase<RigidBody>
@@ -111,7 +112,7 @@ namespace Component
 			inertia = v;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &_meshName = "")
+		void setCollisionShape(CollisionShape c, const std::string &_meshName = "NULL")
 		{
 			if (c == UNDEFINED)
 				return;

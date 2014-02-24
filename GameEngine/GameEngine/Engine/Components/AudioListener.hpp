@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <Utils/GlmSerialization.hpp>
 #include <Audio/Audio.hh>
+#include <cereal/types/base_class.hpp>
+#include <cereal/types/string.hpp>
 
 namespace Component
 {
@@ -30,6 +32,7 @@ namespace Component
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
+			ar(std::string("temporary"));
 		}
 
 		// !Serialization
