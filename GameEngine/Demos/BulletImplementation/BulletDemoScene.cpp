@@ -238,7 +238,7 @@ bool 			BulletDemoScene::userStart()
 	if (saveFile.exists())
 	{
 		std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
-		load<cereal::JSONInputArchive>(fileStream);
+		load<cereal::BinaryInputArchive>(fileStream);
 		fileStream.close();
 		return true;
 	}
@@ -356,8 +356,8 @@ bool 			BulletDemoScene::userUpdate(double time)
 	{
 		 //SERIALIZATION
 		{
-			std::ofstream s("BulletScene.scenesave");
-			save<cereal::JSONOutputArchive>(s);
+			std::ofstream s("BulletScene.scenesave", std::ios_base::binary);
+			save<cereal::BinaryOutputArchive>(s);
 			s.close();
 		}
 		return (false);
