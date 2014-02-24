@@ -46,6 +46,9 @@ void LightRenderingSystem::initialize()
 	glGenBuffers(1, &_avgColors);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, 4 * sizeof(float), NULL, GL_DYNAMIC_DRAW);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 }
 
 void LightRenderingSystem::mainUpdate(double time)
@@ -123,7 +126,6 @@ void LightRenderingSystem::mainUpdate(double time)
 			// Down sample before post Fx
 			_downSampling.bind();
 			_quad.draw(fbo.getTextureAttachment(GL_COLOR_ATTACHMENT0), fbo.getSampleNbr(), fbo.getSize());
-			glFinish();
 		}
 		OpenGLTools::Framebuffer	&current = fbo.isMultisampled() ? _downSampling : fbo;
 
