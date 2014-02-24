@@ -109,7 +109,6 @@ bool 			BulletDemoScene::userStart()
 	addSystem<BulletDynamicSystem>(10); // UPDATE PHYSIC WORLD
 	addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
 	addSystem<FPControllerSystem>(50); // UPDATE FIRST PERSON CONTROLLER
-	addSystem<RotationForceSystem>(55);
 	addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
 	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<BallSoundSystem>(220);
@@ -218,6 +217,7 @@ bool 			BulletDemoScene::userStart()
 	// EXAMPLE LOAD FROM SAVE
 	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
 
+	// SKYBOX SETTINGS
 
 	std::string		vars[] = 
 	{
@@ -226,11 +226,13 @@ bool 			BulletDemoScene::userStart()
 	};
 
 	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+
 	_engine.getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+
 	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
 		init(&sky, "cameraUniform", vars);
+	
 	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
-
 
 	File saveFile("BulletScene.scenesave");
 	if (saveFile.exists())
@@ -241,7 +243,7 @@ bool 			BulletDemoScene::userStart()
 		return true;
 	}
 
-//	 CREATE SPONZA CHURCH
+	// CREATE SPONZA CHURCH
 	{
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
@@ -292,17 +294,12 @@ bool 			BulletDemoScene::userStart()
 		audioCpt->play("ambiant", true);
 
 	}
-//
-//	// --
-//	// Setting camera with skybox
-//	// --
-//
-		auto e = createEntity();
-		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0,100,0)));
-		cameraComponent = e->addComponent<Component::CameraComponent>();
-		cameraComponent->attachSkybox("skybox__space", "cubemapShader");
-		e->addComponent<Component::RotationForce>(glm::vec3(10));
 
+	// --
+	// Setting camera with skybox
+	// --
+
+	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	return (true);
 }
 
