@@ -5,9 +5,9 @@ layout (std140) uniform Light
 	mat4 lightMVP;
 };
 
-layout (location = 0) out vec4 fDepth;
+layout (location = 0) out float fDepth;
 
 void main()
 {
-	fDepth = vec4(0.0, 1.0, 0.0, 1.0)/*gl_FragCoord.z*/;
+	fDepth = gl_FragCoord.z;
 }

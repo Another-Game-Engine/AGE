@@ -46,26 +46,11 @@ out layout (location = 1) vec4 Lol;
 void main(void)
 {
 	float visibility = 1.0;
-	vec4 bNormal = vec4(normalize(fNormal.xyz + texture2D(fTexture1, fTexCoord).xyz), 0);
-	/**
-	 * Calcule des vecteur indispensable au calcule de light :
-	 * - vecteur du frag au spot
-	 * - vecteur de reflection de la lumiére
-	 * - vecteur de l'oeil vers le frag
-	 */
-	vec3 lightPos = (view * light).xyz;
-	vec4 vectorLight = normalize(vec4(lightPos - fPosition.xyz, 1.0));
-	vec4 vectorReflect = normalize(reflect(-vectorLight, bNormal));
-	vec4 vectorView = normalize(vec4(fPosition.xyz - view[3].xyz, 1.0));
-	/**
-	 * calcule de lambert afin de determiner le cos(a)
-	 * entre le vecteur de lumiére et la normal du fragment.
-	 */
-	float lamberTerm = clamp(dot(diffuse.xyz, vectorLight.xyz), 0.0, 1.0);
-	vec4 pxlColor = fColor * texture2D(fTexture0, fTexCoord);
-	vec4 cAmbient = pxlColor * vec4(ambient.rgb, 1.0);
-	vec4 cDiffuse = pxlColor * lamberTerm;
-	if (texture2D(fTexture1, ShadowCoord.xy).z < ShadowCoord.z)
+	vec4 lightPos = (view * vec4(0.0, 20.0, -20.0, 1.0));
+	vec3 vectorLight = normalize(vec3((lightPos.xyz / lightPos.w) - (fPosition.xyz / fPosition.w)));
+	float lamberTerm = clamp(dot(fNormal.xyz, vectorLight), 0.0, 1.0);
+	if (texture(fTexture1, ShadowCoord.xy).z < ShadowCoord.z)
 	  visibility = 0.5;
-	FragColor = vec4(vec3(1.0, 1.0, 1.0) * visibility, 1.0) ;
+	FragColor = vec4(vec3(1.0, 1.0, 1.0) * lamberTerm * visibility, 1.0) ;
+	//FragColor = texture(fTexture1, fTexCoord);
 }

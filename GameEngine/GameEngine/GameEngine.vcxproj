@@ -111,7 +111,6 @@
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\ComponentRegistrar.cpp" />
     <ClCompile Include="Engine\Components\RotationForce.cpp" />
-    <ClCompile Include="Engine\Components\ShadowRenderer.cpp" />
     <ClCompile Include="Engine\Components\TrackBallComponent.cpp" />
     <ClCompile Include="Engine\Components\TrackingCamera.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
@@ -154,7 +153,6 @@
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Components\RotationForce.hpp" />
-    <ClInclude Include="Engine\Components\ShadowRenderer.hpp" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
@@ -195,7 +193,6 @@
     <ClInclude Include="Engine\Systems\FirstPersonViewSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
-    <ClInclude Include="Engine\Systems\ShadowRendererSystem.hh" />
     <ClInclude Include="Engine\Systems\System.h" />
     <ClInclude Include="Engine\Systems\TrackBallSystem.hpp" />
     <ClInclude Include="Engine\Systems\TrackingCameraSystem.hpp" />
