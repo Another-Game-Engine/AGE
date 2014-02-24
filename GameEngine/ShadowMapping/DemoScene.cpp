@@ -25,6 +25,7 @@ void DemoScene::initSytemeScene()
 
 void DemoScene::initRenderer()
 {
+	std::string const lightShadowBias[] = { "lightBiasMVP" };
 	std::string const lightShadow[] = {"lightMVP"};
 	std::string const perModelVars[] = { "model" };
 	std::string const perFrameVars[] = { "projection", "view", "light", "time" };
@@ -35,12 +36,12 @@ void DemoScene::initRenderer()
  	renderer->addUniform("MaterialBasic").init(&s, "MaterialBasic", materialBasic);
 	renderer->addUniform("PerFrame").init(&s, "PerFrame", perFrameVars);
 	renderer->addUniform("PerModel").init(&s, "PerModel", perModelVars);
-	renderer->addUniform("Light").init(&s, "Light", lightShadow);
+	renderer->addUniform("LightBias").init(&s, "LightBias", lightShadowBias);
 	renderer->getShader("MaterialBasic")->setTextureNumber(5);
 	renderer->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	renderer->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	renderer->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
-	renderer->bindShaderToUniform("MaterialBasic", "Light", "Light");
+	renderer->bindShaderToUniform("MaterialBasic", "LightBias", "LightBias");
 	renderer->getShader("MaterialBasic")->build();
 
 	OpenGLTools::Shader &shadow = renderer->addShader("ShadowMapping", "Shaders/ShadowMapping.vp", "Shaders/ShadowMapping.fp");

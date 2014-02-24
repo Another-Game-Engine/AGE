@@ -55,17 +55,20 @@ namespace Component
 	{
 		if (shadow)
 		{
-			glm::mat4 biasMatrix(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);
+			glm::mat4 biasMatrix(0.5, 0.0, 0.0, 0.0,
+								 0.0, 0.5, 0.0, 0.0,
+								 0.0, 0.0, 0.5, 0.0,
+								 0.5, 0.5, 0.5, 1.0);
 			OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("PerModel");
 			OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("MaterialBasic");
-			OpenGLTools::UniformBuffer *shadowUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("Light");
+			OpenGLTools::UniformBuffer *shadowUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("LightBias");
 			auto s = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(shader);
 			if (s)
 				s->use();
 			glm::mat4 depthMVP = lightVP * _entity->getGlobalTransform();
 			perModelUniform->setUniform("model", _entity->getGlobalTransform());
-			shadowUniform->setUniform("lightMVP", biasMatrix * depthMVP);
 			perModelUniform->flushChanges();
+			shadowUniform->setUniform("lightBiasMVP", biasMatrix * depthMVP);
 			shadowUniform->flushChanges();
 			for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 			{

@@ -23,9 +23,9 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-layout (std140) uniform Light
+layout (std140) uniform LightBias
 {
-	mat4 lightMVP;
+	mat4 lightBiasMVP;
 };
 
 uniform          sampler2D fTexture0;//ambient;
@@ -54,6 +54,6 @@ void main(void)
   fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);
   fPosition = modelView * vPosition;
   fTexCoord = vTexCoord;
-  ShadowCoord = lightMVP * vPosition;
+  ShadowCoord = lightBiasMVP * vPosition;
   gl_Position = projection * modelView * vPosition;
 }
