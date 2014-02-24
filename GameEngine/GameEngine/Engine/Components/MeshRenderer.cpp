@@ -62,14 +62,16 @@ namespace Component
 			auto s = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(shader);
 			if (s)
 				s->use();
+			glm::mat4 depthMVP = lightVP * _entity->getGlobalTransform();
 			perModelUniform->setUniform("model", _entity->getGlobalTransform());
+			shadowUniform->setUniform("lightMVP", biasMatrix * depthMVP);
 			perModelUniform->flushChanges();
-			shadowUniform->setUniform("lightMVP", (biasMatrix * lightVP * glm::mat4(1)));
+			shadowUniform->flushChanges();
 			for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 			{
 				mesh->material->materials[i].setUniforms(materialUniform);
-				//glActiveTexture(GL_TEXTURE1);
-				//glBindTexture(GL_TEXTURE_2D, shadowTex);
+				glActiveTexture(GL_TEXTURE1);
+				glBindTexture(GL_TEXTURE_2D, shadowTex);
 				materialUniform->flushChanges();
 				mesh->geometries[i].buffer.draw(GL_TRIANGLES);
 			}
