@@ -41,7 +41,7 @@ public:
 		std::string name = file.getShortFileName();
 		auto it = _files.find(name);
 		if (it == std::end(_files))
-			return loadFromFile<cereal::BinaryInputArchive>(file);
+			return std::static_pointer_cast<T>(loadFromFile<cereal::BinaryInputArchive>(file));
 		return std::static_pointer_cast<T>(it->second);
 	}
 
