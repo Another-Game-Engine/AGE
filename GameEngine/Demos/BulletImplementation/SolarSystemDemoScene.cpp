@@ -260,6 +260,7 @@ bool 			SolarSystemDemoScene::userStart()
 
 	auto camera = createEntity();
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
+	camera->setLocalTransform(glm::translate(camera->getLocalTransform(), glm::vec3(30000, 0, 30000)));
 	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getChildsBegin()), 50.0f, 3.0f, 1.0f);
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	camera->addComponent<Component::AudioListener>();

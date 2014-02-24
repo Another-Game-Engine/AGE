@@ -42,6 +42,8 @@ namespace Component
 		template <typename Archive>
 		void save(Archive &ar) const
 		{
+			std::fstream t("test.log", std::ios::app);
+			t << "CAMERA SAVE : ";
 			ar(CEREAL_NVP(projection), CEREAL_NVP(cubeMapShader), CEREAL_NVP(lookAtTransform));
 			if (skybox != nullptr)
 			{
@@ -54,6 +56,8 @@ namespace Component
 		template <typename Archive>
 		void load(Archive &ar)
 		{
+			std::fstream t("test.log", std::ios::app);
+			t << "CAMERA LOAD : ";
 			ar(projection, cubeMapShader, lookAtTransform);
 			std::string _skybox;
 			ar(_skybox);
