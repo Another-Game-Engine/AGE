@@ -80,6 +80,13 @@ bool DemoScene::userStart()
 	platform->setLocalTransform(glm::translate(platform->getLocalTransform(), glm::vec3(-2.5, 0.0, -2.5)));
 	platform->setLocalTransform(glm::scale(platform->getLocalTransform(), glm::vec3(10.0, 0.2, 10.0)));
 
+	auto ball2 = createEntity();
+	auto ball2Mesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
+	auto &r3 = ball2->addComponent<Component::MeshRenderer>(ball2Mesh);
+	r3->setShader("MaterialBasic");
+	ball2->setLocalTransform(glm::translate(ball2->getLocalTransform(), glm::vec3(-4.0, 4.0, -4.0)));
+	ball2->setLocalTransform(glm::scale(ball2->getLocalTransform(), glm::vec3(4.0, 4.0, 4.0)));
+
 	auto camera = createEntity();
 	camera->addComponent<Component::CameraComponent>();
 	auto trackBall = camera->addComponent<Component::TrackBall>(platform, 50.0, 3.0, 1.0);
