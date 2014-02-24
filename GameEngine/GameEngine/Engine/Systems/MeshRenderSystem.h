@@ -42,13 +42,13 @@ public:
 	{
 		if (_shadow)
 		{
+			glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+			glDrawBuffer(GL_NONE);
+			glClearDepth(1.0f);
+			glDepthFunc(GL_LESS);
+			glClear(GL_DEPTH_BUFFER_BIT);
 			for (auto e : _filter.getCollection())
 			{
-				glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-				glDrawBuffer(GL_NONE);
-				glClearDepth(1.0f);
-				glDepthFunc(GL_LESS);
-				glClear(GL_DEPTH_BUFFER_BIT);
 				auto &mesh = e->getComponent<Component::MeshRenderer>();
 				mesh->render_shadowmap(_texShadow, _lightVP);
 			}

@@ -67,5 +67,5 @@ void main(void)
 	vec4 cDiffuse = pxlColor * lamberTerm;
 	if (texture2D(fTexture1, ShadowCoord.xy).z < ShadowCoord.z)
 	  visibility = 0.5;
-	FragColor = vec4(vec3(1.0, 1.0, 1.0) * visibility * lamberTerm, 1.0) ;
+	FragColor = vec4(vec3(1.0, 1.0, 1.0) * visibility, 1.0) ;
 }
