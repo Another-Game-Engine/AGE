@@ -42,20 +42,20 @@ int			main(int ac, char **av)
 
 	// add scene
 	e.getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");
-//	e.getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
+	e.getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
 
 	// bind scene
-	if (!e.getInstance<SceneManager>()->initScene("BulletDemo"))
+	//if (!e.getInstance<SceneManager>()->initScene("BulletDemo"))
+	//	return false;
+	if (!e.getInstance<SceneManager>()->initScene("SolarSystemDemo"))
 		return false;
-//	if (!e.getInstance<SceneManager>()->initScene("SolarSystemDemo"))
-//		return false;
-	e.getInstance<SceneManager>()->enableScene("BulletDemo", 0);
+	e.getInstance<SceneManager>()->enableScene("SolarSystemDemo", 0);
 
 	// lanch engine
 	if (e.start() == false)
 		return (EXIT_FAILURE);
 	while (e.update())
 		;
-	//e.stop();
+	e.stop();
 	return (EXIT_SUCCESS);
 }

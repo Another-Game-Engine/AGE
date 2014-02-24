@@ -30,9 +30,16 @@ void EntityIdRegistrar::entityHandle(std::size_t id, Entity *e)
 
 void EntityIdRegistrar::updateEntityHandles()
 {
+	std::stack<Entity> stack;
 	for (auto &e : _unser)
 	{
+		stack.push(e.second);
 		updateEntityHandle(e.second, e.first);
+	}
+	while (!stack.empty())
+	{
+		stack.top()->computeTransformAndUpdateGraphnode();
+		stack.pop();
 	}
 	assert(_toUpdate.size() == 0 && _graphNode.size() == 0 && "All handles have not been unserialized correctly.");
 }
@@ -66,6 +73,7 @@ void EntityIdRegistrar::updateEntityHandle(Entity e, std::size_t id)
 	}
 	else
 	{
+		e->_globalTransform = e->_localTransform;
 		auto key = PubSubKey("graphNodeSetAsRoot");
 		e->broadCast(key, e);
 	}

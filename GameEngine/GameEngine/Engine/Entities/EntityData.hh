@@ -49,6 +49,7 @@ public:
 private:
 	friend class cereal::access;
 	friend class std::vector<EntityData>;
+	friend class EntityIdRegistrar;
 	friend class AScene;
 
 	std::shared_ptr<AScene> _scene;
@@ -214,7 +215,6 @@ public:
 		ar(cereal::make_nvp("entityID", _scene->registrarSerializedEntity(_handle.getId())));
 		ar(cereal::make_nvp("flags", _flags));
 		ar(cereal::make_nvp("localTransform", _localTransform));
-		ar(cereal::make_nvp("globalTransform", _globalTransform));
 
 		// Save Entity Components
 		std::size_t cptNumber = 0;
@@ -253,7 +253,6 @@ public:
 		_scene->registrarUnserializedEntity(_handle, entityID);
 		ar(_flags);
 		ar(_localTransform);
-		ar(_globalTransform);
 		std::size_t cptNumber = 0;
 		ar(cptNumber);
 		for (unsigned int i = 0; i < cptNumber; ++i)
@@ -274,8 +273,7 @@ public:
 		EntityIdRegistrar::GraphNodeUnserialize graphUnser;
 		ar(graphUnser.childs);
 		ar(graphUnser.haveParent);
-		if (graphUnser.haveParent)
-			ar(graphUnser.parent);
+		ar(graphUnser.parent);
 		_scene->registrarGraphNode(entityID, graphUnser);
 	}
 

@@ -115,18 +115,30 @@ namespace cereal
 	{
 		float dArray[16] = { 0.0 };
 		const float *pSource = (const float*)glm::value_ptr(v);
-		std::cout << "float : " << sizeof(glm::value_ptr(v)) * v.length() << std::endl;
-		std::cout << "double : " << sizeof(dArray) << std::endl;
+		std::fstream t("test.log", std::ios::app);
+		t << "serr mat 4 : ";
 		for (int i = 0; i < 16; ++i)
-			dArray[i] = pSource[i];
+		{
+			dArray[i] = pSource[i] + 0.0f;
+			t << dArray[i] << " ";
+		}
+		t << std::endl;
 		ar(cereal::make_nvp("mat4", dArray));
 	}
 
 	template<typename Archive>
 	void load(Archive &ar, glm::mat4 &v)
 	{
-		float source[16];
+		float source[16] = { 0.0 };
 		ar(source);
+
+		std::fstream t("test.log", std::ios::app);
+		t << "unse mat 4 : ";
+		for (unsigned int i = 0; i < 16; ++i)
+		{
+			t << source[i] << " ";
+		}
+		t << std::endl;
 		v = glm::make_mat4(source);
 	}
 }
