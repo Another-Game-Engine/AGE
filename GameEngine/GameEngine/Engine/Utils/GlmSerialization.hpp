@@ -115,14 +115,8 @@ namespace cereal
 	{
 		float dArray[16] = { 0.0 };
 		const float *pSource = (const float*)glm::value_ptr(v);
-		std::fstream t("test.log", std::ios::app);
-		t << "serr mat 4 : ";
 		for (int i = 0; i < 16; ++i)
-		{
 			dArray[i] = pSource[i] + 0.0f;
-			t << dArray[i] << " ";
-		}
-		t << std::endl;
 		ar(cereal::make_nvp("mat4", dArray));
 	}
 
@@ -131,14 +125,6 @@ namespace cereal
 	{
 		float source[16] = { 0.0 };
 		ar(source);
-
-		std::fstream t("test.log", std::ios::app);
-		t << "unse mat 4 : ";
-		for (unsigned int i = 0; i < 16; ++i)
-		{
-			t << source[i] << " ";
-		}
-		t << std::endl;
 		v = glm::make_mat4(source);
 	}
 }
