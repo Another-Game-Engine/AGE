@@ -32,7 +32,6 @@ namespace Component
 		template <typename Archive>
 		void serialize(Archive &ar)
 		{
-			ar(std::string("temporary"));
 		}
 
 		// !Serialization
