@@ -120,17 +120,17 @@ struct ObjFile : public MediaFile<ObjFile>
 			/////
 			// The old method here strangly works
 
-			//std::array<Attribute, 4> param =
-			//{
-			//	Attribute(GL_FLOAT, sizeof(float), 4),
-			//	Attribute(GL_FLOAT, sizeof(float), 4),
-			//	Attribute(GL_FLOAT, sizeof(float), 4),
-			//	Attribute(GL_FLOAT, sizeof(float), 2),
-			//};
+			/*std::array<Attribute, 4> param =
+			{
+				Attribute(GL_FLOAT, sizeof(float), 4),
+				Attribute(GL_FLOAT, sizeof(float), 4),
+				Attribute(GL_FLOAT, sizeof(float), 4),
+				Attribute(GL_FLOAT, sizeof(float), 2),
+			};
 	
-			//auto leak = new VertexManager<4>(param);
-			//leak->init();
-			//leak->addVertice(buffer);
+			auto leak = new VertexManager<4>(param);
+			leak->init();
+			leak->addVertice(buffer);*/
 		}
 	};
 

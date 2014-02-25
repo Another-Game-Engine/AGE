@@ -81,11 +81,10 @@ void VertexPool<NBR_ATTRIBUTE>::computeOffset()
 			for (uint8_t attribute = 0; attribute < NBR_ATTRIBUTE; ++attribute)
 			{
 				nbrByte[attribute] = _elements[index].getVertex().getNbrVertex() * _attributes[attribute].getSizeType() * _attributes[attribute].getNbrComponent();
-				byteOffset[attribute] = 
-					element.getByteOffset(attribute) +
-					(element.getVertex().getNbrVertex() *
-					_attributes[attribute].getSizeType() *
-					_attributes[attribute].getNbrComponent());
+				byteOffset[attribute] = element.getByteOffset(attribute) + (element.getVertex().getNbrVertex() * _attributes[attribute].getSizeType() * _attributes[attribute].getNbrComponent());
+				std::cout << "for the attribute : " << attribute << std::endl;
+				std::cout << "base an old element : " << element.getByteOffset(attribute) << std::endl;
+				std::cout << "value at what i add : " << element.getVertex().getNbrVertex() * _attributes[attribute].getSizeType() * _attributes[attribute].getNbrComponent() << std::endl;
 			}
 			_elements[index].settingOffset(indicesOffset, vertexOffset, byteOffset, nbrByte);
 		}
