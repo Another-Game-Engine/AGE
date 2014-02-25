@@ -183,14 +183,14 @@ bool 			SolarSystemDemoScene::userStart()
 
 
 	// SERIALIZATION
-	File saveFile("SolarSystem.scenesave");
-	if (saveFile.exists())
-	{
-		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
-		load<cereal::JSONInputArchive>(fileStream);
-		fileStream.close();
-		return true;
-	}
+	//File saveFile("SolarSystem.scenesave");
+	//if (saveFile.exists())
+	//{
+	//	std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
+	//	load<cereal::JSONInputArchive>(fileStream);
+	//	fileStream.close();
+	//	return true;
+	//}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),

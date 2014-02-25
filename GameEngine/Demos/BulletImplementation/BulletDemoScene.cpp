@@ -234,14 +234,14 @@ bool 			BulletDemoScene::userStart()
 	
 	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
-	File saveFile("BulletScene.scenesave");
-	if (saveFile.exists())
-	{
-		std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
-		load<cereal::BinaryInputArchive>(fileStream);
-		fileStream.close();
-		return true;
-	}
+	//File saveFile("BulletScene.scenesave");
+	//if (saveFile.exists())
+	//{
+	//	std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
+	//	load<cereal::BinaryInputArchive>(fileStream);
+	//	fileStream.close();
+	//	return true;
+	//}
 
 	// CREATE SPONZA CHURCH
 	{
