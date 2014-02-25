@@ -31,6 +31,8 @@ public:
 	~Audio();
 	bool load(AudioSpatialType type);
 	FMOD::Channel *play(ChannelGroupType channelGroup, bool now);
+	const File &getPath() const;
+	const std::string &getName() const;
 private:
 	std::shared_ptr<AudioManager> _manager;
 	File _file;

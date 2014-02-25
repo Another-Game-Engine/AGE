@@ -16,6 +16,7 @@
 #include <Core/Tags.hh>
 #include <cereal/types/set.hpp>
 #include <cereal/types/base_class.hpp>
+#include <cereal/types/array.hpp>
 
 class AScene;
 class EntityManager;
@@ -216,6 +217,12 @@ public:
 		ar(cereal::make_nvp("flags", _flags));
 		ar(cereal::make_nvp("localTransform", _localTransform));
 
+		// serialize tags
+		std::array<bool, MAX_TAG_NUMBER> tags{false};
+		for (unsigned int i = 0; i < MAX_TAG_NUMBER; ++i)
+			tags[i] = _code.isSet(i);
+		ar(cereal::make_nvp("tags", tags));
+
 		// Save Entity Components
 		std::size_t cptNumber = 0;
 
@@ -256,6 +263,16 @@ public:
 		_scene->registrarUnserializedEntity(_handle, entityID);
 		ar(_flags);
 		ar(_localTransform);
+
+		// load tags
+		std::array<bool, MAX_TAG_NUMBER> tags{false};
+		ar(tags);
+		for (unsigned int i = 0; i < MAX_TAG_NUMBER; ++i)
+		{
+			if (tags[i])
+				_code.add(i);
+		}
+
 		std::size_t cptNumber = 0;
 		ar(cptNumber);
 		for (unsigned int i = 0; i < cptNumber; ++i)
