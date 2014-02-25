@@ -43,7 +43,7 @@ protected:
 //			mat = glm::interpolate(e->getLocalTransform(), mat, 0.05f);
 
 			glm::vec3 pos = posFromMat4(mat);
-			e->setLocalTransform() = mat;
+			e->setLocalTransform(mat);
 			c->setLookAtTransform() = glm::lookAt(pos,
 				glm::vec3(t->toLook->getGlobalTransform()[3]),
 				glm::vec3(0, 1, 0));//e->getLocalTransform();
