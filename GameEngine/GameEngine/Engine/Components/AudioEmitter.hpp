@@ -6,6 +6,13 @@
 #include <Audio/Audio.hh>
 #include <Audio/ChannelGroupType.hpp>
 #include <Utils/MatrixConversion.hpp>
+#include <Audio/AudioManager.hh>
+#include <Entities/EntityData.hh>
+#include <Core/AScene.hh>
+#include <vector>
+#include <cereal/types/base_class.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
 
 namespace Component
 {
@@ -21,6 +28,19 @@ namespace Component
 			ChannelGroupType channelGroupType;
 			std::string name;
 			FMOD::Reverb *reverb;
+		};
+
+		struct SerializedAudioInstance
+		{
+			std::string filename;
+			std::string name;
+			ChannelGroupType channelGroupType;
+
+			template <typename Archive>
+			void serialize(Archive &ar)
+			{
+				ar(filename, name, channelGroupType);
+			}
 		};
 
 		AudioEmitter();
@@ -49,9 +69,35 @@ namespace Component
 		}
 
 		template <typename Archive>
-		void serialize(Archive &ar)
+		void save(Archive &ar) const
 		{
+			std::vector<SerializedAudioInstance> v;
+			for (auto &e : audios)
+			{
+				SerializedAudioInstance a;
+				a.channelGroupType = e.second.channelGroupType;
+				a.filename = e.second.audio->getName();
+				a.name = e.first;
+				v.push_back(a);
+			}
+			ar(v);
 		}
+
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+			std::vector<SerializedAudioInstance> v;
+			ar(v);
+			for (auto e : v)
+			{
+				std::shared_ptr<Audio> a = _entity->getScene()->getInstance<AudioManager>()->getAudio(e.filename);
+				if (!a)
+					continue;
+				setAudio(a, e.name, e.channelGroupType);
+			}
+		}
+
 
 		// !Serialization
 		////
