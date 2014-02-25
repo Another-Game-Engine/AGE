@@ -45,8 +45,10 @@ BulletDemoScene::~BulletDemoScene(void)
 Entity  BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
+	auto t = e->getLocalTransform();
+	t = glm::translate(t, pos);
+	t = glm::scale(t, scale);
+	e->setLocalTransform(t);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 
@@ -58,10 +60,12 @@ Entity  BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::str
 Entity  BulletDemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(1, 0, 0));
-	e->setLocalTransform() = glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(0, 1, 0));
-	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
+	auto t = e->getLocalTransform();
+	t = glm::translate(t, pos);
+	t = glm::rotate(t, 0.0f, glm::vec3(1, 0, 0));
+	t = glm::rotate(t, 0.0f, glm::vec3(0, 1, 0));
+	t = glm::scale(t, scale);
+	e->setLocalTransform(t);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::BOX);
 	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
@@ -72,8 +76,10 @@ Entity  BulletDemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::strin
 Entity  BulletDemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	e->setLocalTransform() = glm::translate(e->getLocalTransform(), pos);
-	e->setLocalTransform() = glm::scale(e->getLocalTransform(), scale);
+	auto t = e->getLocalTransform();
+	t = glm::translate(t, pos);
+	t = glm::scale(t, scale);
+	e->setLocalTransform(t);
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
 	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
@@ -207,8 +213,8 @@ bool 			BulletDemoScene::userStart()
 	// CREATE SPONZA CHURCH
 	{
 		auto e = createEntity();
-		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0));
-		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70));
+		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
+		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
 //		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
@@ -232,7 +238,7 @@ bool 			BulletDemoScene::userStart()
 
 	{
 		auto e = createEntity();
-		e->setLocalTransform() = glm::translate(e->getLocalTransform(), glm::vec3(0,100,0));
+		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0,100,0)));
 		auto fpc = e->addComponent<Component::FPController>();
 		character = e;
 		cameraComponent = character->addComponent<Component::CameraComponent>();

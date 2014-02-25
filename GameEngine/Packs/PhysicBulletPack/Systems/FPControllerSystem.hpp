@@ -50,7 +50,7 @@ private:
 			m = glm::rotate(m, rot.z, glm::vec3(0, 0, 1));
 			glm::vec3 scale = scaleFromMat4(e->getLocalTransform());
 			m = glm::scale(m, scale);
-			e->setLocalTransform() = m;
+			e->setLocalTransform(m);
 
 			float yAngle = inputs->getMouseDelta().y;
 			fp->yOrientation = fp->yOrientation + yAngle * fp->rotateYSpeed;
@@ -59,8 +59,7 @@ private:
 			else if (fp->yOrientation <= -90.0f)
 				fp->yOrientation = -89.9f;
 
-			e->setLocalTransform() = glm::rotate(e->getLocalTransform(), fp->yOrientation, glm::vec3(1, 0, 0));
-			e->computeTransformAndUpdateGraphnode();
+			e->setLocalTransform(glm::rotate(e->getLocalTransform(), fp->yOrientation, glm::vec3(1, 0, 0)));
 		}
 	}
 

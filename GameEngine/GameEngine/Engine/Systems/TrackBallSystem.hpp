@@ -54,9 +54,9 @@ protected:
 			pos.x = sin(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist;
 			pos.y = sin(trackBall->angles.y) * trackBall->dist;
 			pos.z = cos(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist;
-			e->setLocalTransform() = glm::lookAt(glm::vec3(trackBall->toLook->getGlobalTransform()[3]) + pos,
+			e->setLocalTransform(glm::lookAt(glm::vec3(trackBall->toLook->getGlobalTransform()[3]) + pos,
 				glm::vec3(trackBall->toLook->getGlobalTransform()[3]),
-				glm::vec3(0, 1, 0));
+				glm::vec3(0, 1, 0)));
 			camera->setLookAtTransform() = e->getLocalTransform();
 		}
 	}
