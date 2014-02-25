@@ -35,11 +35,13 @@ namespace Component
 			std::string filename;
 			std::string name;
 			ChannelGroupType channelGroupType;
-
+			bool isPlaying;
+			float volume;
+			unsigned int position;
 			template <typename Archive>
 			void serialize(Archive &ar)
 			{
-				ar(filename, name, channelGroupType);
+				ar(filename, name, channelGroupType, isPlaying, volume, position);
 			}
 		};
 
@@ -78,6 +80,18 @@ namespace Component
 				a.channelGroupType = e.second.channelGroupType;
 				a.filename = e.second.audio->getName();
 				a.name = e.first;
+				a.isPlaying = false;
+				a.volume = 0.0f;
+				a.position = 0;
+				if (e.second.channel != nullptr)
+				{
+					e.second.channel->isPlaying(&a.isPlaying);
+					if (a.isPlaying)
+					{
+						e.second.channel->getVolume(&a.volume);
+						e.second.channel->getPosition(&a.position, FMOD_TIMEUNIT_MS);
+					}
+				}
 				v.push_back(a);
 			}
 			ar(v);
@@ -95,6 +109,13 @@ namespace Component
 				if (!a)
 					continue;
 				setAudio(a, e.name, e.channelGroupType);
+				if (e.isPlaying)
+				{
+					play(e.name, false);
+					getAudio(e.name)->channel->setVolume(e.volume);
+					getAudio(e.name)->channel->setPosition(e.position, FMOD_TIMEUNIT_MS);
+				}
+
 			}
 		}
 
