@@ -87,6 +87,7 @@ bool DemoScene::userStart()
 	ball2->setLocalTransform(glm::translate(ball2->getLocalTransform(), glm::vec3(-4.0, 4.0, -4.0)));
 	ball2->setLocalTransform(glm::scale(ball2->getLocalTransform(), glm::vec3(4.0, 4.0, 4.0)));
 
+
 	auto camera = createEntity();
 	camera->addComponent<Component::CameraComponent>();
 	auto trackBall = camera->addComponent<Component::TrackBall>(platform, 50.0, 3.0, 1.0);
