@@ -28,14 +28,6 @@ int			main(int ac, char **av)
 	// set Rendering context of the engine
 	// you can also set any other dependencies
 
-	std::array<Attribute, 4> param =
-	{
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 2),
-	};
-
 	e.setInstance<PubSub::Manager>();
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
@@ -49,6 +41,14 @@ int			main(int ac, char **av)
 	// init engine
 	if (e.init() == false)
 		return (EXIT_FAILURE);
+
+	std::array<Attribute, 4> param =
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 2),
+	};
 
 	e.setInstance<VertexManager<4>>(param)->init();
 
