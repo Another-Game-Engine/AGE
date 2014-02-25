@@ -109,7 +109,9 @@ void VertexManager<NBR_ATTRIBUTE>::sendMajorVertexDataOnGPU()
 	_indexBuffer.bind();
 	sendVertexAttribPointerOnGPU();
 	glBufferData(GL_ARRAY_BUFFER, _pool.getSizeVertexBuffer(), NULL, GL_STREAM_DRAW);
+	glFinish();
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _pool.getSizeIndicesBuffer(), NULL, GL_STREAM_DRAW);
+	glFinish();
 	for (size_t index = 0; index < _pool.getNbrElement(); ++index)
 	{
 		for (uint8_t attribute = 0; attribute < NBR_ATTRIBUTE; ++attribute)
@@ -119,12 +121,14 @@ void VertexManager<NBR_ATTRIBUTE>::sendMajorVertexDataOnGPU()
 				_pool[index].getByteOffset(attribute),
 				_pool[index].getNbrByte(attribute),
 				_pool[index].getVertex().getBuffer(attribute));
+			glFinish();
 		}
 		glBufferSubData
 			(GL_ELEMENT_ARRAY_BUFFER,
 			_pool[index].getIndicesOffset() * sizeof(unsigned int),
 			_pool[index].getVertex().getNbrIndices() * sizeof(unsigned int),
 			_pool[index].getVertex().getIndices());
+		glFinish();
 	}
 	_vertexArray.unbind();
 	_pool.resetState();
@@ -171,11 +175,11 @@ void VertexManager<NBR_ATTRIBUTE>::callDraw(Vertice<NBR_ATTRIBUTE> const * const
 	{
 		update();
 		_vertexArray.bind();
-		glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
 		if (drawable->hasIndices())
 			glDrawElementsBaseVertex(mode, drawable->getNbrIndices(), GL_UNSIGNED_INT, reinterpret_cast<GLvoid const *>(_pool[drawable->getIndexPool()].getIndicesOffset()), _pool[drawable->getIndexPool()].getVertexOffset());
 		else
 			glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
+		glFinish();
 	}
 }
 
