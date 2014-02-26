@@ -53,8 +53,8 @@ int			main(int ac, char **av)
 	e.setInstance<VertexManager<4>>(param)->init();
 
 	// add scene
-	e.getInstance<SceneManager>()->addScene(new BulletDemoScene(e), "BulletDemo");
-	e.getInstance<SceneManager>()->addScene(new SolarSystemDemoScene(e), "SolarSystemDemo");
+	e.getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");
+	e.getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
 
 	// bind scene
 	if (!e.getInstance<SceneManager>()->initScene("BulletDemo"))

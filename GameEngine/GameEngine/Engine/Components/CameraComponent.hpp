@@ -7,6 +7,7 @@
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
 #include <MediaFiles/CubeMapFile.hpp>
+#include <MediaFiles/AssetsManager.hpp>
 
 namespace Component
 {
@@ -39,9 +40,25 @@ namespace Component
 		}
 
 		template <typename Archive>
-		void serialize(Archive &ar)
+		void save(Archive &ar) const
 		{
 			ar(CEREAL_NVP(projection), CEREAL_NVP(cubeMapShader), CEREAL_NVP(lookAtTransform));
+			if (skybox != nullptr)
+			{
+				ar(skybox->path.getFullName());
+			}
+			else
+				ar(std::string("NULL"));
+		}
+
+		template <typename Archive>
+		void load(Archive &ar)
+		{
+			ar(projection, cubeMapShader, lookAtTransform);
+			std::string _skybox;
+			ar(_skybox);
+			if (_skybox != "NULL")
+				skybox = _entity->getScene()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
 		}
 
 		// !Serialization

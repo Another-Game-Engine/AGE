@@ -28,7 +28,7 @@ int			main(int ac, char **av)
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
-	e.setInstance<AssetsManager>()->init();
+	e.setInstance<AssetsManager>()->init(&e);
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 //	e.setInstance<BulletCollisionManager>().init();
@@ -39,7 +39,7 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 
 	// add scene
-	e.getInstance<SceneManager>()->addScene(new InGameScene(e), "InGameScene");
+	e.getInstance<SceneManager>()->addScene(std::make_shared<InGameScene>(e), "InGameScene");
 
 	// bind scene
 	if (!e.getInstance<SceneManager>()->initScene("InGameScene"))
