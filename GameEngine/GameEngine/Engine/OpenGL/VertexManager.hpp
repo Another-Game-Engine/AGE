@@ -109,9 +109,7 @@ void VertexManager<NBR_ATTRIBUTE>::sendMajorVertexDataOnGPU()
 	_indexBuffer.bind();
 	sendVertexAttribPointerOnGPU();
 	glBufferData(GL_ARRAY_BUFFER, _pool.getSizeVertexBuffer(), NULL, GL_STREAM_DRAW);
-	glFinish();
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _pool.getSizeIndicesBuffer(), NULL, GL_STREAM_DRAW);
-	glFinish();
 	for (size_t index = 0; index < _pool.getNbrElement(); ++index)
 	{
 		for (uint8_t attribute = 0; attribute < NBR_ATTRIBUTE; ++attribute)
@@ -121,14 +119,12 @@ void VertexManager<NBR_ATTRIBUTE>::sendMajorVertexDataOnGPU()
 				_pool[index].getByteOffset(attribute),
 				_pool[index].getNbrByte(attribute),
 				_pool[index].getVertex().getBuffer(attribute));
-			glFinish();
 		}
 		glBufferSubData
 			(GL_ELEMENT_ARRAY_BUFFER,
-			_pool[index].getIndicesOffset() * sizeof(unsigned int),
-			_pool[index].getVertex().getNbrIndices() * sizeof(unsigned int),
+			_pool[index].getIndicesOffset(),
+			_pool[index].getVertex().getSizeIndicesBuffer(),
 			_pool[index].getVertex().getIndices());
-		glFinish();
 	}
 	_vertexArray.unbind();
 	_pool.resetState();
@@ -152,8 +148,8 @@ void VertexManager<NBR_ATTRIBUTE>::sendMinorVertexDataOnGPU()
 		}
 		glBufferSubData
 			(GL_ELEMENT_ARRAY_BUFFER,
-			_pool[index].getIndicesOffset() * sizeof(unsigned int),
-			_pool[index].getVertex().getNbrIndices() * sizeof(unsigned int),
+			_pool[index].getIndicesOffset(),
+			_pool[index].getVertex().getSizeIndicesBuffer(),
 			_pool[index].getVertex().getIndices());
 	}
 	_pool.resetState();
@@ -176,7 +172,13 @@ void VertexManager<NBR_ATTRIBUTE>::callDraw(Vertice<NBR_ATTRIBUTE> const * const
 		update();
 		_vertexArray.bind();
 		if (drawable->hasIndices())
+		{
+			std::cout << "Draw something..." << std::endl;
+			std::cout << "nbr of indice : " << drawable->getNbrIndices() << std::endl;
+			std::cout << "offset of indice : " << _pool[drawable->getIndexPool()].getIndicesOffset() << std::endl;
+			std::cout << "offset of vertex : " << _pool[drawable->getIndexPool()].getVertexOffset() << std::endl;
 			glDrawElementsBaseVertex(mode, drawable->getNbrIndices(), GL_UNSIGNED_INT, reinterpret_cast<GLvoid const *>(_pool[drawable->getIndexPool()].getIndicesOffset()), _pool[drawable->getIndexPool()].getVertexOffset());
+		}
 		else
 			glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
 		glFinish();
