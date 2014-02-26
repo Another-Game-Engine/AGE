@@ -165,6 +165,14 @@ public:
 		: _manager(manager)
 	{}
 
+	PubSub(PubSub &&o)
+	{
+		_callbacks = std::move(o._callbacks);
+		_subscribers = std::move(o._subscribers);
+		_emitters = std::move(o._emitters);
+		_manager = std::move(o._manager);
+	}
+
 	virtual ~PubSub()
 	{
 		// unsub local subscriber

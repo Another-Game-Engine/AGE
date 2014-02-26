@@ -18,6 +18,7 @@ public:
 
 	Barcode();
 	Barcode(::EntityData &entity);
+	Barcode(Barcode &&o);
 	Barcode(Barcode &other);
 	Barcode &operator=(const Barcode &other);
 	~Barcode();

@@ -11,6 +11,11 @@ Barcode::Barcode(EntityData &entity)
 	code_ = entity.getCode().code_;
 }
 
+Barcode::Barcode(Barcode &&o)
+{
+	code_ = std::move(o.code_);
+}
+
 Barcode::Barcode(Barcode &other)
 {
 	code_ = other.code_;

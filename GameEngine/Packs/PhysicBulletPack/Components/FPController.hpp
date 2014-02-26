@@ -52,11 +52,49 @@ namespace Component
 		template <typename Archive>
 		void save(Archive &ar) const
 		{
+			ar(yOrientation
+				, forwardWalkSpeed
+				, backwardWalkSpeed
+				, forwardRunSpeed
+				, backwardRunSpeed
+				, sideWalkSpeed
+				, sideRunSpeed
+				, rotateXSpeed
+				, rotateYSpeed
+				, jumpSpeed
+				, jumpHeight
+				, canJump
+				, canRun
+				, justJump
+				, justArriveOnFloor
+				, wasOnGround);
+			glm::mat4 m = convertBulletTransformToGLM(_ghost->getWorldTransform());
+			ar(m);
 		}
 
 		template <typename Archive>
 		void load(Archive &ar)
 		{
+			ar(yOrientation
+				, forwardWalkSpeed
+				, backwardWalkSpeed
+				, forwardRunSpeed
+				, backwardRunSpeed
+				, sideWalkSpeed
+				, sideRunSpeed
+				, rotateXSpeed
+				, rotateYSpeed
+				, jumpSpeed
+				, jumpHeight
+				, canJump
+				, canRun
+				, justJump
+				, justArriveOnFloor
+				, wasOnGround);
+			glm::mat4 m;
+			init();
+			ar(m);
+			_ghost->setWorldTransform(convertGLMTransformToBullet(m));
 		}
 
 		// !Serialization

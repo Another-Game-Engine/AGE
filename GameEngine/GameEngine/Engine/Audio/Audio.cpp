@@ -41,6 +41,16 @@ bool Audio::load(AudioSpatialType type)
 	return true;
 }
 
+const File &Audio::getPath() const
+{
+	return _file;
+}
+
+const std::string &Audio::getName() const
+{
+	return _name;
+}
+
 FMOD::Channel *Audio::play(ChannelGroupType channelGroup, bool now)
 {
 	FMOD::Channel *channel = nullptr;

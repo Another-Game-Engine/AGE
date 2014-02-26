@@ -44,13 +44,18 @@ Entity	SolarSystemDemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform(t);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
-	auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
-	auto planetMesh = getInstance<AssetsManager>()->create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
-	planetMesh->material = getInstance<AssetsManager>()->create<MaterialFile>("", ballMesh->material);
-	planetMesh->material->materials[0].ambientTex = getInstance<AssetsManager>()->get<TextureFile>(tex1);
-	planetMesh->material->materials[0].diffuseTex = getInstance<AssetsManager>()->get<TextureFile>(tex2);
-	planetMesh->material->materials[0].specularTex = getInstance<AssetsManager>()->get<TextureFile>(tex3);
-	planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>(tex4);
+	//auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
+	//auto planetMesh = getInstance<AssetsManager>()->create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
+	//planetMesh->material = getInstance<AssetsManager>()->create<MaterialFile>("material_" + tex1 + tex2 + tex3 + tex4, ballMesh->material);
+	//planetMesh->material->materials[0].ambientTex = getInstance<AssetsManager>()->get<TextureFile>(tex1);
+	//planetMesh->material->materials[0].diffuseTex = getInstance<AssetsManager>()->get<TextureFile>(tex2);
+	//planetMesh->material->materials[0].specularTex = getInstance<AssetsManager>()->get<TextureFile>(tex3);
+	//planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>(tex4);
+	//planetMesh->saveToFile();
+	//planetMesh->material->saveToFile();
+
+	
+	auto planetMesh = getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/" + tex1 + tex2 + tex3 + tex4 + ".cpd"));
 
 	std::shared_ptr<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
 
@@ -178,14 +183,14 @@ bool 			SolarSystemDemoScene::userStart()
 
 
 	// SERIALIZATION
-	File saveFile("SolarSystem.scenesave");
-	if (saveFile.exists())
-	{
-		std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
-		load<cereal::JSONInputArchive>(fileStream);
-		fileStream.close();
-		return true;
-	}
+	//File saveFile("SolarSystem.scenesave");
+	//if (saveFile.exists())
+	//{
+	//	std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
+	//	load<cereal::JSONInputArchive>(fileStream);
+	//	fileStream.close();
+	//	return true;
+	//}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
 	auto earth = createPlanet(7, 20, glm::vec3(300, 0, 0), glm::vec3(20),
@@ -202,23 +207,6 @@ bool 			SolarSystemDemoScene::userStart()
 	audioCpt->setAudio(music, "ambiant", CHANNEL_GROUP_MUSIC);
 	audioCpt->play("ambiant", true);
 	earth->getChildsBegin()->get()->addChild(moon);
-
-	// TAGS TESTS ////////////////////
-	//
-	//
-
-	{
-		auto e = createEntity();
-		e->addTag(0);
-		e->addTag(2);
-		auto a = e->isTagged(0);
-		auto c = e->isTagged(1);
-		auto d = e->isTagged(2);
-	}
-
-	//
-	//
-	//////////////////////////////////
 
 
 	// Generating a lot of planet for performance test
@@ -255,6 +243,7 @@ bool 			SolarSystemDemoScene::userStart()
 
 	auto camera = createEntity();
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
+	camera->setLocalTransform(glm::translate(camera->getLocalTransform(), glm::vec3(30000, 0, 30000)));
 	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getChildsBegin()), 50.0f, 3.0f, 1.0f);
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	camera->addComponent<Component::AudioListener>();
@@ -274,9 +263,9 @@ bool 			SolarSystemDemoScene::userUpdate(double time)
 	{
 		 //SERIALIZATION
 		{
-			//std::ofstream s("SolarSystem.scenesave");
-			//save<cereal::JSONOutputArchive>(s);
-			//s.close();
+			std::ofstream s("SolarSystem.scenesave");
+			save<cereal::JSONOutputArchive>(s);
+			s.close();
 		}
 		return (false);
 	}

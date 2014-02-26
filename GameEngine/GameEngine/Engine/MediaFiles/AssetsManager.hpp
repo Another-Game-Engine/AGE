@@ -43,7 +43,7 @@ public:
 		std::string name = file.getShortFileName();
 		auto it = _files.find(name);
 		if (it == std::end(_files))
-			return loadFromFile<cereal::BinaryInputArchive>(file);
+			return std::static_pointer_cast<T>(loadFromFile<cereal::BinaryInputArchive>(file));
 		return std::static_pointer_cast<T>(it->second);
 	}
 
@@ -172,7 +172,10 @@ public:
 		else
 			n = std::make_shared<T>();
 		if (!name.empty())
+		{
 			n->name = name;
+			n->path = File(n->path.getFolder() + name + "." + n->path.getExtension());
+		}
 		add(n);
 		return n;
 	}

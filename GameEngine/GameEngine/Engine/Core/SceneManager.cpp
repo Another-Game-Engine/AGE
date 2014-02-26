@@ -6,13 +6,11 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
-	for (auto &e : _scenes)
-		delete e.second;
 	_scenes.clear();
 	_actives.clear();
 }
 
-void		SceneManager::addScene(AScene *scene, std::string const &name)
+void		SceneManager::addScene(std::shared_ptr<AScene> scene, std::string const &name)
 {
 	_scenes[name] = scene;
 }
@@ -32,7 +30,6 @@ void		SceneManager::removeScene(std::string const &name)
 			break;
 		}
 	}
-	delete _scenes[name];
 	_scenes.erase(name);
 }
 
