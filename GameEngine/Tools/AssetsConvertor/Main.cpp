@@ -37,7 +37,7 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 
 	// add scene
-	e.getInstance<SceneManager>()->addScene(new DemoScene(e), "demo");
+	e.getInstance<SceneManager>()->addScene(std::make_shared<DemoScene>(e), "demo");
 
 	// bind scene
 	if (!e.getInstance<SceneManager>()->initScene("demo"))

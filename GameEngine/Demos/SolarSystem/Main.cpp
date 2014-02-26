@@ -30,7 +30,7 @@ int			main(int ac, char **av)
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
-	e.setInstance<AssetsManager>()->init();
+	e.setInstance<AssetsManager>()->init(&e);
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 	if (!e.setInstance<AudioManager>()->init())
@@ -42,7 +42,7 @@ int			main(int ac, char **av)
 
 
 	// add scene
-	e.getInstance<SceneManager>()->addScene(new DemoScene(e), "demo");
+	e.getInstance<SceneManager>()->addScene(std::make_shared<DemoScene>(e), "demo");
 
 	// bind scene
 	if (!e.getInstance<SceneManager>()->initScene("demo"))

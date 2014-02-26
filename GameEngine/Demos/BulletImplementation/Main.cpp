@@ -19,6 +19,7 @@
 #include <Managers/BulletDynamicManager.hpp>
 #include <MediaFiles/AssetsManager.hpp>
 #include <Audio/AudioManager.hh>
+#include <OpenGL/VertexManager.hh>
 
 int			main(int ac, char **av)
 {
@@ -26,11 +27,12 @@ int			main(int ac, char **av)
 
 	// set Rendering context of the engine
 	// you can also set any other dependencies
+
 	e.setInstance<PubSub::Manager>();
 	e.setInstance<SdlContext, IRenderContext>();
 	e.setInstance<Input>();
 	e.setInstance<Timer>();
-	e.setInstance<AssetsManager>()->init();
+	e.setInstance<AssetsManager>()->init(&e);
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 	e.setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
@@ -39,6 +41,16 @@ int			main(int ac, char **av)
 	// init engine
 	if (e.init() == false)
 		return (EXIT_FAILURE);
+
+	std::array<Attribute, 4> param =
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 2),
+	};
+
+	e.setInstance<VertexManager<4>>(param)->init();
 
 	// add scene
 	e.getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");

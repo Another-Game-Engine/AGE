@@ -15,6 +15,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/archives/portable_binary.hpp>
+#include <Core/Engine.hh>
 
 class AssetsManager;
 
@@ -40,10 +41,12 @@ public:
 protected:
 	std::size_t _childs;
 	MEDIA_TYPE _type;
+	Engine *_engine;
 public:
 	AMediaFile() :
 		_childs(0)
 		, _type(UNKNOWN)
+		, _engine(nullptr)
 	{
 	}
 	virtual ~AMediaFile(){}
@@ -111,6 +114,7 @@ public:
 	}
 
 protected:
+	friend class AssetsManager;
 	virtual void _serialize(cereal::JSONOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::BinaryOutputArchive &ar) = 0;
 	virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;
