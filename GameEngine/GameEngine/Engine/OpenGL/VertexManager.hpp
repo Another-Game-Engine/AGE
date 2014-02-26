@@ -181,7 +181,6 @@ void VertexManager<NBR_ATTRIBUTE>::callDraw(Vertice<NBR_ATTRIBUTE> const * const
 		}
 		else
 			glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
-		glFinish();
 	}
 }
 
