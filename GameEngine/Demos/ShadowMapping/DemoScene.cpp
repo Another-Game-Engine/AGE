@@ -19,6 +19,7 @@ void DemoScene::initSytemeScene()
 	rct<Component::RotationForce>();
 	rct<Component::TrackBall>();
 	addSystem<MeshRendererSystem>(0)->onShadow();
+	addSystem<RotationForceSystem>(50);
 	addSystem<TrackBallSystem>(150);
 	addSystem<CameraSystem>(200);
 }
@@ -55,7 +56,7 @@ void DemoScene::loadResources()
 {
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
+//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
 }
 
 bool DemoScene::userStart()
@@ -64,7 +65,7 @@ bool DemoScene::userStart()
 	initRenderer();
 	loadResources();
 
-	getSystem<MeshRendererSystem>()->setLightVP(glm::ortho<float>(-10, 10, -10, 10, -10, 20) * glm::lookAt(glm::vec3(-3, 1, -1), glm::vec3(-3, 0, 0), glm::vec3(0, 1, 0)));
+	getSystem<MeshRendererSystem>()->setLightVP(glm::ortho<float>(-100, 100, -100, 100, -100, 200) * glm::lookAt(glm::vec3(-3, 1, -1), glm::vec3(-3, 0, 0), glm::vec3(0, 1, 0)));
 
 	auto ball = createEntity();
 	auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
@@ -72,6 +73,9 @@ bool DemoScene::userStart()
 	r->setShader("MaterialBasic");
 	ball->setLocalTransform(glm::translate(ball->getLocalTransform(), glm::vec3(0, 1.0, 0)));
 	ball->setLocalTransform(glm::scale(ball->getLocalTransform(), glm::vec3(2.0, 2.0, 2.0)));
+	auto rot = ball->addComponent<Component::RotationForce>();
+	rot->force = glm::vec3(10.0f);
+
 
 	auto platform = createEntity();
 	auto platformMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
@@ -87,6 +91,8 @@ bool DemoScene::userStart()
 	ball2->setLocalTransform(glm::translate(ball2->getLocalTransform(), glm::vec3(-4.0, 4.0, -4.0)));
 	ball2->setLocalTransform(glm::scale(ball2->getLocalTransform(), glm::vec3(4.0, 4.0, 4.0)));
 
+
+	ball->addChild(ball2);
 
 	auto camera = createEntity();
 	camera->addComponent<Component::CameraComponent>();
