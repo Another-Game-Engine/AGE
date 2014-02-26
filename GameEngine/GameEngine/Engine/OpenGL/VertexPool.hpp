@@ -76,17 +76,14 @@ void VertexPool<NBR_ATTRIBUTE>::computeOffset()
 		for (uint32_t index = 1; index < _elements.size(); ++index)
 		{
 			VertexPoolElement<NBR_ATTRIBUTE> element(_elements[index - 1]);
-			indicesOffset = element.getIndicesOffset() + element.getVertex().getNbrIndices();
+			indicesOffset = element.getIndicesOffset() + element.getVertex().getSizeIndicesBuffer();
 			vertexOffset = element.getVertexOffset() + element.getVertex().getNbrVertex();
 			for (uint8_t attribute = 0; attribute < NBR_ATTRIBUTE; ++attribute)
 			{
 				nbrByte[attribute] = _elements[index].getVertex().getNbrVertex() * _attributes[attribute].getSizeType() * _attributes[attribute].getNbrComponent();
 				byteOffset[attribute] = element.getByteOffset(attribute) + (element.getVertex().getNbrVertex() * _attributes[attribute].getSizeType() * _attributes[attribute].getNbrComponent());
-				std::cout << "for the attribute : " << attribute << std::endl;
-				std::cout << "base an old element : " << element.getByteOffset(attribute) << std::endl;
-				std::cout << "value at what i add : " << element.getVertex().getNbrVertex() * _attributes[attribute].getSizeType() * _attributes[attribute].getNbrComponent() << std::endl;
 			}
-			_elements[index].settingOffset(indicesOffset, vertexOffset, byteOffset, nbrByte);
+			_elements[index].settingOffset(vertexOffset, indicesOffset, byteOffset, nbrByte);
 		}
 	}
 }
