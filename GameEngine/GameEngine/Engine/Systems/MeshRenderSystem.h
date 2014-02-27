@@ -55,7 +55,6 @@ public:
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (auto e : _filter.getCollection())
 		{	
 			auto &mesh = e->getComponent<Component::MeshRenderer>();
