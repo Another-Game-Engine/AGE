@@ -46,7 +46,7 @@ out layout (location = 1) vec4 Lol;
 void main(void)
 {
 	float visibility = 1.0;
-	float bias = 0.005;
+	float bias = 0.005 + (ambient.x * 0.0);
 	vec4 lightPos = (view * vec4(0.0, 20.0, -20.0, 1.0));
 	vec3 vectorLight = normalize(vec3((lightPos.xyz / lightPos.w) - (fPosition.xyz / fPosition.w)));
 	float lamberTerm = clamp(dot(fNormal.xyz, vectorLight), 0.0, 1.0);
