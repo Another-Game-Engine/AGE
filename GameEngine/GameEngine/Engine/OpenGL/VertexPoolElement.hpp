@@ -20,6 +20,7 @@ VertexPoolElement<NBR_ATTRIBUTE>::VertexPoolElement(VertexPoolElement<NBR_ATTRIB
 _vertices(copy._vertices),
 _vertexOffset(copy._vertexOffset),
 _indicesOffset(copy._indicesOffset),
+_byteOffset(copy._byteOffset),
 _nbrByte(copy._nbrByte)
 {
 }
@@ -31,6 +32,7 @@ VertexPoolElement<NBR_ATTRIBUTE> &VertexPoolElement<NBR_ATTRIBUTE>::operator=(Ve
 	_vertices = element._vertices;
 	_vertexOffset = element._vertexOffset;
 	_indicesOffset = element._indicesOffset;
+	_byteOffset = element._byteOffset,
 	_nbrByte = element._nbrByte;
 	return (*this);
 }

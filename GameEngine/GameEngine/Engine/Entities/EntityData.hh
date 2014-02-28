@@ -16,6 +16,7 @@
 #include <Core/Tags.hh>
 #include <cereal/types/set.hpp>
 #include <cereal/types/base_class.hpp>
+#include <cereal/types/array.hpp>
 
 class AScene;
 class EntityManager;
@@ -48,9 +49,11 @@ public:
 
 private:
 	friend class cereal::access;
+	friend class std::vector<EntityData>;
+	friend class EntityIdRegistrar;
 	friend class AScene;
 
-	AScene              *_scene;
+	std::shared_ptr<AScene> _scene;
 	size_t 				_flags;
 
 	glm::mat4 			_localTransform;
@@ -68,12 +71,16 @@ private:
 
 	Barcode             _code;
 
-	EntityData(AScene *scene);
+	EntityData(std::shared_ptr<AScene> scene);
+	EntityData();
+	EntityData(const EntityData &o);
+	const EntityData &operator=(const EntityData &o);
 public:
 
 	virtual ~EntityData();
+	EntityData(EntityData &&o);
 
-	AScene                  *getScene() const;
+	std::shared_ptr<AScene> getScene() const;
 	void                    translate(const glm::vec3 &v);
 	void                    setTranslation(const glm::vec3 &v);
 	glm::vec3 const         &getTranslation() const;
@@ -209,7 +216,12 @@ public:
 		ar(cereal::make_nvp("entityID", _scene->registrarSerializedEntity(_handle.getId())));
 		ar(cereal::make_nvp("flags", _flags));
 		ar(cereal::make_nvp("localTransform", _localTransform));
-		ar(cereal::make_nvp("globalTransform", _globalTransform));
+
+		// serialize tags
+		std::array<bool, MAX_TAG_NUMBER> tags{false};
+		for (unsigned int i = 0; i < MAX_TAG_NUMBER; ++i)
+			tags[i] = _code.isSet(i);
+		ar(cereal::make_nvp("tags", tags));
 
 		// Save Entity Components
 		std::size_t cptNumber = 0;
@@ -236,7 +248,10 @@ public:
 		}
 		ar(CEREAL_NVP(childIds));
 		ar(cereal::make_nvp("haveParent", _parent.get() != nullptr));
-		ar(cereal::make_nvp("parentID", _parent.getId()));
+		if (_parent.get() != nullptr)
+			ar(cereal::make_nvp("parentID", getScene()->registrarSerializedEntity(_parent.getId())));
+		else
+			ar(cereal::make_nvp("parentID", getScene()->registrarSerializedEntity(-1)));
 	}
 
 	template <class Archive>
@@ -248,7 +263,16 @@ public:
 		_scene->registrarUnserializedEntity(_handle, entityID);
 		ar(_flags);
 		ar(_localTransform);
-		ar(_globalTransform);
+
+		// load tags
+		std::array<bool, MAX_TAG_NUMBER> tags{false};
+		ar(tags);
+		for (unsigned int i = 0; i < MAX_TAG_NUMBER; ++i)
+		{
+			if (tags[i])
+				_code.add(i);
+		}
+
 		std::size_t cptNumber = 0;
 		ar(cptNumber);
 		for (unsigned int i = 0; i < cptNumber; ++i)
@@ -266,28 +290,11 @@ public:
 			broadCast(std::string("componentAdded" + std::to_string(typeId + MAX_TAG_NUMBER)), _handle);
 		}
 		// unserialize graphnode
-		std::set<std::size_t> childIds;
-		ar(childIds);
-		for (auto e : childIds)
-			_childs.insert(Entity(e, _scene));
-		for (auto it = std::begin(_childs); it != std::end(_childs); ++it)
-		{
-			Entity *e = const_cast<Entity *>(&(*it));
-			getScene()->entityHandle(it->getId(), e);
-		}
-		bool haveParent = false;
-		ar(haveParent);
-		std::size_t parentId;
-		ar(parentId);
-		if (haveParent)
-		{
-			getScene()->entityHandle(parentId, &_parent);
-		}
-		else
-		{
-			auto key = PubSubKey("graphNodeSetAsRoot");
-			broadCast(key, _handle);
-		}
+		EntityIdRegistrar::GraphNodeUnserialize graphUnser;
+		ar(graphUnser.childs);
+		ar(graphUnser.haveParent);
+		ar(graphUnser.parent);
+		_scene->registrarGraphNode(entityID, graphUnser);
 	}
 
 	//

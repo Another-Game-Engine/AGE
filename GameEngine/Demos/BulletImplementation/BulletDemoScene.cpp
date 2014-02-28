@@ -91,6 +91,17 @@ bool 			BulletDemoScene::userStart()
 {
 	std::srand(0);
 
+	rct<Component::CameraComponent>()
+		.rct<Component::MeshRenderer>()
+		.rct<Component::RotationForce>()
+		.rct<Component::AudioListener>()
+		.rct<Component::AudioEmitter>()
+		.rct<Component::RigidBody>()
+		.rct<Component::Collision>()
+		.rct<Component::FirstPersonView>()
+		.rct<Component::FPController>();
+
+
 	// System Tests
 	//
 	//
@@ -183,8 +194,8 @@ bool 			BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
+//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
+//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
@@ -203,12 +214,34 @@ bool 			BulletDemoScene::userStart()
 	planetMesh->material->materials[0].specularTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthClouds");
 	planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTextureBump");
 
-	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
-	AMediaFile::saveToFile("my_planet_material", "./Assets/Serialized/");
-	AMediaFile::saveToFile("my_planet", "./Assets/Serialized/");
-
 	// EXAMPLE LOAD FROM SAVE
 	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
+
+	// SKYBOX SETTINGS
+
+	std::string		vars[] = 
+	{
+		"projection",
+		"view"
+	};
+
+	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+
+	_engine.getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+
+	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
+		init(&sky, "cameraUniform", vars);
+	
+	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
+	//File saveFile("BulletScene.scenesave");
+	//if (saveFile.exists())
+	//{
+	//	std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
+	//	load<cereal::BinaryInputArchive>(fileStream);
+	//	fileStream.close();
+	//	return true;
+	//}
 
 	// CREATE SPONZA CHURCH
 	{
@@ -266,21 +299,6 @@ bool 			BulletDemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	std::string		vars[] = 
-	{
-		"projection",
-		"view"
-	};
-
-	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
-
-	_engine.getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-
-	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
-		init(&sky, "cameraUniform", vars);
-	
-	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
-
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	return (true);
 }
@@ -335,6 +353,14 @@ bool 			BulletDemoScene::userUpdate(double time)
 		delay -= time;
 	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>()->getInput(SDL_QUIT))
+	{
+		 //SERIALIZATION
+		{
+			std::ofstream s("BulletScene.scenesave", std::ios_base::binary);
+			save<cereal::BinaryOutputArchive>(s);
+			s.close();
+		}
 		return (false);
+	}
 	return (true);
 }
