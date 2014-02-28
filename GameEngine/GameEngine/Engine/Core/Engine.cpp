@@ -48,7 +48,7 @@ bool 		Engine::start()
 
 bool 		Engine::update()
 {
-	auto &context = getInstance<IRenderContext>();
+	auto context = getInstance<IRenderContext>();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

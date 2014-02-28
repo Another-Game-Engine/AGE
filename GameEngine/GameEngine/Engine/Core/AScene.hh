@@ -21,7 +21,7 @@
 class Engine;
 class System;
 
-class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
+class AScene : public std::enable_shared_from_this<AScene>, public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
 {
 private:
 	std::multimap<std::size_t, std::shared_ptr<System> >   _systems;
@@ -111,7 +111,7 @@ public:
 		ar(size);
 		for (unsigned int i = 0; i < size; ++i)
 		{
-			Entity e = createEntity();
+			auto e = createEntity();
 			ar(*e.get());
 		}
 		updateEntityHandles();

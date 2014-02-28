@@ -33,13 +33,9 @@ void AMediaFile::serializeAsBulletFile(std::ofstream &s)
 	}
 }
 
-	void AMediaFile::saveToFile(const std::string &media, const std::string &path)
+	void AMediaFile::saveToFile()
 	{
-		auto &e = _manager->get<AMediaFile>(media);
-		assert(e != nullptr && "Media does not exists");
-		std::string filePath = path + e->name + ".cpd";
-		std::ofstream ofs(filePath, std::ios::binary);
+		std::ofstream ofs(this->path.getFullName().c_str(), std::ios::binary);
 		assert(ofs.is_open() && "Cannot open file for save");
-		e->path = File(path + e->name + ".cpd");
-		e->serialize<cereal::BinaryOutputArchive>(ofs);
+		serialize<cereal::BinaryOutputArchive>(ofs);
 	}

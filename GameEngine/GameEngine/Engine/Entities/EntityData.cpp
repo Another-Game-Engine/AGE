@@ -6,7 +6,7 @@
 #include <limits>
 #include <Core/AScene.hh>
 
-EntityData::EntityData(AScene *scene) :
+EntityData::EntityData(std::shared_ptr<AScene> scene) :
     PubSub(scene->getInstance<PubSub::Manager>()),
     _scene(scene),
 	_flags(0),
@@ -26,12 +26,32 @@ EntityData::~EntityData()
 	_components.clear();
 }
 
+EntityData::EntityData(EntityData &&o)
+: PubSub(std::forward<PubSub>(o))
+{
+	_handle = std::move(o._handle);
+	_scene = std::move(o._scene);
+	_flags = std::move(o._flags);
+	_localTransform = std::move(o._localTransform);
+	_globalTransform = std::move(o._globalTransform);
+	_localRotation = std::move(o._localRotation);
+	_localScale = std::move(o._localScale);
+	_localTranslation = std::move(o._localTranslation);
+	_globalRotation = std::move(o._globalRotation);
+	_globalScale = std::move(o._globalScale);
+	_globalTranslation = std::move(o._globalTranslation);
+	_components = std::move(o._components);
+	_code = std::move(o._code);
+	_childs = std::move(o._childs);
+	_parent = std::move(o._parent);
+}
+
 Entity &EntityData::getHandle()
 {
 	return _handle;
 }
 
-AScene *EntityData::getScene() const
+std::shared_ptr<AScene> EntityData::getScene() const
 {
 	return _scene;
 }
@@ -262,6 +282,7 @@ void 					EntityData::setParent(Entity &parent, bool notify)
 		auto key = PubSubKey("graphNodeNotARoot");
 		broadCast(key, _handle);
 	}
+	computeTransformAndUpdateGraphnode();
 	_parent = parent;
 }
 
@@ -283,6 +304,7 @@ void                    EntityData::removeParent(bool notify)
 	auto key = PubSubKey("graphNodeSetAsRoot");
 	broadCast(key, _handle);
 	_parent = Entity(std::numeric_limits<unsigned int>::max(), nullptr);
+	computeTransformAndUpdateGraphnode();
 }
 
 std::set<Entity>::iterator EntityData::getChildsBegin()

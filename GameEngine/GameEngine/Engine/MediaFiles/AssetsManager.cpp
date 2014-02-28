@@ -1,14 +1,17 @@
 #include <MediaFiles/AssetsManager.hpp>
+#include <Core/Engine.hh>
 
 AssetsManager::AssetsManager()
+: _engine(nullptr)
 {
 }
 
 AssetsManager::~AssetsManager()
 {}
 
-void AssetsManager::init()
+void AssetsManager::init(Engine *e)
 {
+	_engine = e;
 	AMediaFile::setManager(shared_from_this());
 }
 
