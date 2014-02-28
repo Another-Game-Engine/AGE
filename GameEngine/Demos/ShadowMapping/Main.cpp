@@ -15,6 +15,7 @@
 # include "Utils/PubSub.hpp"
 # include "Context/SdlContext.hh"
 # include "DemoScene.hh"
+# include <OpenGL/VertexManager.hh>
 
 
 static bool initInstanceEngine(Engine &engine)
@@ -23,7 +24,7 @@ static bool initInstanceEngine(Engine &engine)
 	engine.setInstance<SdlContext, IRenderContext>();
 	engine.setInstance<Input>();
 	engine.setInstance<Timer>();
-	engine.setInstance<AssetsManager>()->init();
+	engine.setInstance<AssetsManager>()->init(&engine);
 	engine.setInstance<Renderer>(&engine);
 	engine.setInstance<SceneManager>();
 	if (!engine.init())
@@ -31,12 +32,21 @@ static bool initInstanceEngine(Engine &engine)
 		std::cerr << "Engine initialization fail." << std::endl;
 		return (false);
 	}
+	std::array<Attribute, 4> param =
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 2),
+	};
+
+	engine.setInstance<VertexManager<4>>(param)->init();
 	return (true);
 }
 
 static bool initSceneEngine(Engine &engine, std::string const &nameScene)
 {
-	engine.getInstance<SceneManager>()->addScene(new DemoScene(engine), nameScene);
+	engine.getInstance<SceneManager>()->addScene(std::make_shared<DemoScene>(engine), nameScene);
 	if (!engine.getInstance<SceneManager>()->initScene(nameScene))
 	{
 		std::cerr << "the init scene : " << nameScene << " fail." << std::endl;
