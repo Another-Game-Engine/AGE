@@ -88,7 +88,7 @@ Entity  BulletDemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::str
 }
 
 bool 			BulletDemoScene::userStart()
-{	
+{
 	std::srand(0);
 
 	rct<Component::CameraComponent>()

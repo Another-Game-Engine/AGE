@@ -15,6 +15,7 @@
 #include <cereal/types/memory.hpp>
 #include <Utils/GlmSerialization.hpp>
 #include <OpenGL/Vertice.hh>
+#include <OpenGL/VertexManager.hh>
 
 struct ObjFile : public MediaFile<ObjFile>
 {

@@ -12,21 +12,27 @@ layout (std140) uniform MaterialBasic
 
 layout (std140) uniform PerFrame
 {
-mat4 projection;
-mat4 view;
-vec4 light;
-float time;
+	mat4 projection;
+	mat4 view;
+	vec4 light;
+	float time;
 };
 
 layout (std140) uniform PerModel
 {
-mat4 model;
+	mat4 model;
 };
 
-uniform sampler2D fTexture0;//ambient;
-uniform sampler2D fTexture1;//diffuse;
-uniform sampler2D fTexture2;//specular;
-uniform sampler2D fTexture3;//normal;
+layout (std140) uniform LightBias
+{
+	mat4 lightBiasMVP;
+};
+
+uniform          sampler2D fTexture0;//ambient;
+uniform          sampler2D fTexture1;//diffuse;
+uniform          sampler2D fTexture2;//specular;
+uniform          sampler2D fTexture3;//normal;
+uniform			 sampler2D fTexture4;// shadowMap;
 
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;
@@ -37,6 +43,7 @@ out vec4 fPosition;
 out vec4 fColor;
 out vec4 fNormal;
 out vec2 fTexCoord;
+out vec4 ShadowCoord;
 
 void main(void)
 {
@@ -47,5 +54,6 @@ void main(void)
   fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);
   fPosition = modelView * vPosition;
   fTexCoord = vTexCoord;
+  ShadowCoord = lightBiasMVP * vPosition;
   gl_Position = projection * modelView * vPosition;
 }

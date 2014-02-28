@@ -13,7 +13,7 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform	sampler2D fTexture0;
+uniform sampler2D fTexture0;
 
 in vec4 fColor;
 in vec2 fUv;
