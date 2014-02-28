@@ -55,7 +55,7 @@ Entity	SolarSystemDemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	//planetMesh->material->saveToFile();
 
 	
-	auto planetMesh = getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/" + tex1 + tex2 + tex3 + tex4 + ".cpd"));
+	auto planetMesh = getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/" + tex1/* + tex2 + tex3 + tex4*/ + ".cpd"));
 
 	std::shared_ptr<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
 

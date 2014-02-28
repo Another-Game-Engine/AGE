@@ -256,7 +256,6 @@ bool 			DemoScene::userStart()
 	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getChildsBegin()), 50.0f, 3.0f, 1.0f);
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	camera->addComponent<Component::AudioListener>();
-
 	return (true);
 }
 
