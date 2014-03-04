@@ -8,6 +8,12 @@
 #include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 
+enum Shadow
+{
+	DIRECTIONAL,
+	POINT_LIGHT
+};
+
 class MeshRendererSystem : public System
 {
 public:
@@ -63,9 +69,25 @@ public:
 		glFinish();
 	}
 
-	void onShadow()
+	void onShadow(Shadow type)
 	{
+		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
 		_shadow = true;
+		if (type == DIRECTIONAL)
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texShadow, 0);
+		else if (type == POINT_LIGHT)
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texShadow, 0);
+		else
+			std::cerr << "Error on Shadow, this kind of shadow doesn't exist." << std::endl;
+		GLenum mode = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		if (mode != GL_FRAMEBUFFER_COMPLETE)
+			std::cout << "Error frambuffer" << std::endl;
+		if (mode == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+			std::cout << "Error frambuffer incomplete attachment" << std::endl;
+		if (mode == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+			std::cout << "Error framebuffer missing attachement" << std::endl;
+		if (mode == GL_FRAMEBUFFER_UNSUPPORTED)
+			std::cout << "Error framebuffer unsupported" << std::endl;
 	}
 
 	void offShadow()
@@ -87,6 +109,7 @@ protected:
 	bool _shadow;
 	glm::mat4 _lightVP;
 	GLuint _texShadow;
+	GLuint _cubeMapShadow;
 	GLuint _frameBuffer;
 	EntityFilter _filter;
 	bool _renderDebugMethod;
@@ -106,7 +129,6 @@ protected:
 	virtual void initialize()
 	{
 		_filter.requireComponent<Component::MeshRenderer>();
-		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
 		glBindTexture(GL_TEXTURE_2D, _texShadow);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -115,16 +137,13 @@ protected:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texShadow, 0);
-		GLenum mode = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		if (mode != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "Error frambuffer" << std::endl;
-		if (mode == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
-			std::cout << "Error frambuffer incomplete attachment" << std::endl;
-		if (mode == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
-			std::cout << "Error framebuffer missing attachement" << std::endl;
-		if (mode == GL_FRAMEBUFFER_UNSUPPORTED)
-			std::cout << "Error framebuffer unsupported" << std::endl;
+		glBindTexture(GL_TEXTURE_CUBE_MAP, _cubeMapShadow);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	}
 
 
