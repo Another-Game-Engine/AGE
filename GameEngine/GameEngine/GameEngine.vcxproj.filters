@@ -40,6 +40,7 @@
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Context\SdlContext.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
+    <ClCompile Include="Engine\Text\Font.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
@@ -112,6 +113,8 @@
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hpp" />
     <ClInclude Include="Engine\Text\FontManager.hh" />
+    <ClInclude Include="Engine\Text\FontGlyph.hh" />
+    <ClInclude Include="Engine\Text\Font.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
