@@ -33,8 +33,10 @@ void DemoScene::initRenderer()
 	std::string const materialBasic[] = { "ambient", "diffuse", "specular", "transmittance", "emission", "shininess" };
 
 	auto &renderer = _engine.getInstance<Renderer>();
-	OpenGLTools::Shader &s = renderer->addShader("MaterialBasic", "Shaders/lightWithShadow.vp", "Shaders/lightWithShadow.fp");
- 	renderer->addUniform("MaterialBasic").init(&s, "MaterialBasic", materialBasic);
+	//	OpenGLTools::Shader &s = renderer->addShader("MaterialBasic", "Shaders/lightWithShadow.vp", "Shaders/lightWithShadow.fp");
+	// OpenGLTools::Shader &s = renderer->addShader("MaterialBasic", "Shaders/lightShadowPoissonDisk.vp", "Shaders/lightShadowPoissonDisk.fp");
+ OpenGLTools::Shader &s = renderer->addShader("MaterialBasic", "Shaders/lightShadowDust.vp", "Shaders/lightShadowDust.fp");
+	renderer->addUniform("MaterialBasic").init(&s, "MaterialBasic", materialBasic);
 	renderer->addUniform("PerFrame").init(&s, "PerFrame", perFrameVars);
 	renderer->addUniform("PerModel").init(&s, "PerModel", perModelVars);
 	renderer->addUniform("LightBias").init(&s, "LightBias", lightShadowBias);
