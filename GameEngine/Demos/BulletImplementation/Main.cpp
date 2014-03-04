@@ -20,6 +20,7 @@
 #include <MediaFiles/AssetsManager.hpp>
 #include <Audio/AudioManager.hh>
 #include <OpenGL/VertexManager.hh>
+#include <Text/FontManager.hh>
 
 int			main(int ac, char **av)
 {
@@ -37,6 +38,7 @@ int			main(int ac, char **av)
 	e.setInstance<SceneManager>();
 	e.setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 	e.setInstance<AudioManager>()->init();
+	e.setInstance<FontManager>()->init();
 
 	// init engine
 	if (e.init() == false)
