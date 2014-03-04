@@ -28,6 +28,8 @@
 #include <Systems/AudioSystem.hpp>
 #include <BallSoundSystem.hpp>
 
+#include <Text/FontManager.hh>
+
 #include <Core/Engine.hh>
 
 #include <SDL\SDL.h>
@@ -198,6 +200,9 @@ bool 			BulletDemoScene::userStart()
 //	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
+
+	getInstance<FontManager>()->loadFont(File("./Assets/Montez-Regular.ttf"));
+
 
 	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
 	_engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
