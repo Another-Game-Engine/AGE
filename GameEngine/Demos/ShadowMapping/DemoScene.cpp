@@ -65,7 +65,7 @@ bool DemoScene::userStart()
 	initRenderer();
 	loadResources();
 
-	getSystem<MeshRendererSystem>()->setLightVP(glm::ortho<float>(-100, 100, -100, 100, -100, 200) * glm::lookAt(glm::vec3(-3, 1, -1), glm::vec3(-3, 0, 0), glm::vec3(0, 1, 0)));
+	getSystem<MeshRendererSystem>()->setLightVP(glm::ortho<float>(-20, 20, -20, 20, -20, 40) * glm::lookAt(glm::vec3(-3, 1, -1), glm::vec3(-3, 0, 0), glm::vec3(0, 1, 0)));
 
 	auto ball = createEntity();
 	auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
