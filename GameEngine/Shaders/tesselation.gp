@@ -6,10 +6,10 @@ layout(triangle_strip, max_vertices=6) out;
 
 layout (std140) uniform PerFrame
 {
-	mat4 projection;
-	mat4 view;
-	vec4 light;
-	float time;
+        mat4 projection;
+        mat4 view;
+		int	lightNbr;
+        float time;
 };
 
 layout (std140) uniform PerModel

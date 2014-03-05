@@ -1,21 +1,21 @@
-#version 330
+#version 430 core
 
 layout (std140) uniform MaterialBasic
 {
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-  vec3 transmittance;
-  vec3 emission;
-  float shininess;
+	vec3	ambient;
+	vec3	diffuse;
+	vec3	specular;
+	vec3	transmittance;
+	vec3	emission;
+	float	shininess;
 };
 
 layout (std140) uniform PerFrame
 {
-mat4 projection;
-mat4 view;
-vec4 light;
-float time;
+	mat4 projection;
+	mat4 view;
+	int	lightNbr;
+	float time;
 };
 
 layout (std140) uniform PerModel
@@ -23,10 +23,21 @@ layout (std140) uniform PerModel
 mat4 model;
 };
 
-uniform sampler2D fTexture0;//ambient;
-uniform sampler2D fTexture1;//diffuse;
-uniform sampler2D fTexture2;//specular;
-uniform sampler2D fTexture3;//normal;
+layout(binding = 0) uniform sampler2D fTexture0; // ambient;
+layout(binding = 1) uniform sampler2D fTexture1; // diffuse;
+layout(binding = 2) uniform sampler2D fTexture2; // specular;
+layout(binding = 3) uniform sampler2D fTexture3; // normal;
+
+struct PointLight
+{
+	vec4	positionPower;
+	vec4	colorRange;
+};
+
+layout(binding = 4, std430) buffer lightBuff
+{
+	PointLight	lights[];
+};
 
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;
@@ -44,7 +55,7 @@ void main(void)
   mat4 vectorSpace = transpose(inverse(modelView));
 
   fColor = vColor;
-  fNormal = vec4(normalize((vectorSpace * vNormal).xyz), 0);
+  fNormal = vec4(normalize(vectorSpace * vNormal).xyz, 0.0f);
   fPosition = modelView * vPosition;
   fTexCoord = vTexCoord;
   gl_Position = projection * modelView * vPosition;

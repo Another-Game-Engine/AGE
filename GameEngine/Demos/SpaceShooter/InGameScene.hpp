@@ -7,7 +7,8 @@
 /////////////
 // SYSTEMS
 /////////////
-#include <Systems/MeshRenderSystem.h>
+
+#include <Systems/LightRenderingSystem.hh>
 #include <Systems/TrackBallSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/BulletCollisionSystem.hpp>
@@ -44,7 +45,6 @@ public:
 
 	virtual bool 			userStart()
 	{
-		addSystem<MeshRendererSystem>(0);
 		addSystem<BulletDynamicSystem>(10); // CHECK FOR COLLISIONS
 		addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ELEMENTS
 		addSystem<VelocitySystem>(50); // UPDATE VELOCITY
@@ -52,6 +52,7 @@ public:
 		addSystem<TrackingCameraSystem>(150); // UPDATE CAMERA TRACKING BEHAVIOR
 		addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
 		addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
+		addSystem<LightRenderingSystem>(250);
 		addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENT FROM COLLIDING ELEMENTS
 
 		std::string		perModelVars[] =
@@ -63,7 +64,7 @@ public:
 		{
 			"projection",
 			"view",
-			"light",
+			"lightNbr",
 			"time"
 		};
 
@@ -89,8 +90,9 @@ public:
 		_engine.getInstance<Renderer>()->addUniform("PerModel")
 			.init(&s, "PerModel", perModelVars);
 
-		_engine.getInstance<Renderer>()->getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
-		_engine.getInstance<Renderer>()->getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
+
+		_engine.getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
+
 		_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 		_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 		_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");

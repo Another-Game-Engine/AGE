@@ -50,8 +50,6 @@ bool 		Engine::update()
 {
 	auto context = getInstance<IRenderContext>();
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	auto timer = getInstance<Timer>();
 	auto inputs = getInstance<Input>();
 	auto sceneManager = getInstance<SceneManager>();

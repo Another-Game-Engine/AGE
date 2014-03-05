@@ -1,10 +1,10 @@
-#version 330
+#version 430 core
 
 layout (std140) uniform PerFrame
 {
         mat4 projection;
         mat4 view;
-        vec4 light;
+		int	lightNbr;
         float time;
 };
 
@@ -13,10 +13,21 @@ layout (std140) uniform PerModel
         mat4 model;
 };
 
-uniform          sampler2D fTexture0;//fDayTexture;
-uniform          sampler2D fTexture1;//fNightTexture;
-uniform          sampler2D fTexture2;//fClouds;
-uniform          sampler2D fTexture3;//fBump;
+layout(binding = 0) uniform sampler2D fTexture0; // ambient;
+layout(binding = 1) uniform sampler2D fTexture1; // diffuse;
+layout(binding = 2) uniform sampler2D fTexture2; // specular;
+layout(binding = 3) uniform sampler2D fTexture3; // normal;
+
+struct PointLight
+{
+	vec4	position;
+	vec4	colorRange;
+};
+
+layout(binding = 4, std430) buffer lightBuff
+{
+	PointLight	lights[];
+};
 
 in vec4 fPosition;
 in vec4 fColor;
@@ -27,24 +38,21 @@ out layout (location = 0) vec4 FragColor;
 
 void main(void)
 {
-  vec4 normal = vec4(normalize(fNormal.xyz + texture2D(fTexture3, fTexCoord).xyz), 0);
-  /**
-   * Calcule des vecteur indispensable au calcule de light :
-   * - vecteur du frag au spot
-   * - vecteur de reflection de la lumiére
-   * - vecteur de l'oeil vers le frag
-   */
-  vec3 lightPos = vec3(view * light);
-  vec4 vectorLight = normalize(vec4(lightPos - fPosition.xyz, 1.0));
-  vec4 vectorReflect = normalize(reflect(-vectorLight, normal));
-  vec4 vectorView = normalize(vec4(fPosition.xyz - view[3].xyz, 1.0));
-  /**
-   * calcule de lambert afin de determiner le cos(a)
-   * entre le vecteur de lumiére et la normal du fragment.
-   */
-  float lamberTerm = clamp(dot(normal.xyz, vectorLight.xyz), 0.03, 1.0);
-  FragColor = lamberTerm * texture2D(fTexture0, fTexCoord) +
-                                (1.0 - lamberTerm) * texture2D(fTexture1, fTexCoord) +
-                                lamberTerm * texture2D(fTexture2, fTexCoord - vec2(time / 80, 0));
-//        FragColor = vec4(lamberTerm, lamberTerm, lamberTerm, 1);
+	vec4	finalColor = vec4(0, 0, 0, 1);
+
+	for (uint i = 0; i < lightNbr; ++i)
+	{
+	  vec4 normal = vec4(normalize(fNormal.xyz + texture2D(fTexture3, fTexCoord).xyz), 0);
+
+	  vec3 lightPos = vec3(view * lights[i].position);
+	  vec4 vectorLight = normalize(vec4(lightPos - fPosition.xyz, 1.0));
+	  vec4 vectorReflect = normalize(reflect(-vectorLight, normal));
+	  vec4 vectorView = normalize(vec4(fPosition.xyz - view[3].xyz, 1.0));
+
+	  float lamberTerm = clamp(dot(normal.xyz, vectorLight.xyz), 0.03, 1.0);
+	  finalColor.xyz += lamberTerm * texture2D(fTexture0, fTexCoord).rgb +
+					(1.0 - lamberTerm) * texture2D(fTexture1, fTexCoord).rgb +
+					lamberTerm * texture2D(fTexture2, fTexCoord - vec2(time / 80, 0)).rgb;
+	}
+	FragColor = finalColor;
 }
