@@ -7,15 +7,18 @@
 #include <cereal/archives/xml.hpp>
 #include <OpenGL/Vertice.hh>
 #include <OpenGL/VertexManager.hh>
+#include <Core/Renderer.hh>
 
 FontManager::FontManager()
+: _engine(nullptr)
 {}
 
 FontManager::~FontManager()
 {}
 
-bool FontManager::init()
+bool FontManager::init(Engine *e)
 {
+	_engine = e;
 	if (FT_Init_FreeType(&_library))
 	{
 		std::cerr << "Could not init freetype library" << std::endl;
@@ -316,8 +319,13 @@ bool FontManager::isLoaded(const std::string &name)
 	return _collection.find(name) != std::end(_collection);
 }
 
-void FontManager::drawString(const std::string &text, const std::string &fontName, std::size_t size, const glm::fvec2 &position)
+void FontManager::drawString(const std::string &text, const std::string &fontName, std::size_t size, const glm::fvec2 &position, const std::string &shader)
 {
+	auto s = _engine->getInstance<Renderer>()->getShader("2DText");
+	if (!s)
+		return;
+	s->use();
+
 	auto font = _collection.find(fontName);
 	if (font == std::end(_collection) || !font->second.isLoaded())
 	{
@@ -364,10 +372,10 @@ void FontManager::drawString(const std::string &text, const std::string &fontNam
 		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
 		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
 		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
-		uvs.push_back(glm::vec2(0, 0));
-		uvs.push_back(glm::vec2(1, 0));
-		uvs.push_back(glm::vec2(1, 1));
-		uvs.push_back(glm::vec2(0, 1));
+		uvs.push_back(glm::vec2(f._map[l].uvs[0], f._map[l].uvs[1]));
+		uvs.push_back(glm::vec2(f._map[l].uvs[2], f._map[l].uvs[1]));
+		uvs.push_back(glm::vec2(f._map[l].uvs[2], f._map[l].uvs[3]));
+		uvs.push_back(glm::vec2(f._map[l].uvs[0], f._map[l].uvs[3]));
 		normals.push_back(glm::vec4(1));
 		normals.push_back(glm::vec4(1));
 		normals.push_back(glm::vec4(1));
@@ -395,7 +403,10 @@ void FontManager::drawString(const std::string &text, const std::string &fontNam
 		Attribute(GL_FLOAT, sizeof(float), 4),
 		Attribute(GL_FLOAT, sizeof(float), 2),
 	};
-	
+	glUniform1i(glGetUniformLocation(s->getId(), "fTexture0"), 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, f._textureId);
+
 	auto leak = new VertexManager<4>(param);
 	leak->init();
 	leak->addVertice(buffer);
