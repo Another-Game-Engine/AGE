@@ -31,12 +31,19 @@ static void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, uns
 {
     // offset dst bitmap by x,y.
     dstBitmap +=  (x + (y * dstWidth));
-	srcBitmap += srcWidth * srcHeight;
+//	srcBitmap += srcWidth * srcHeight;
     for (int i = 0; i < srcHeight; ++i)
     {
-        srcBitmap -= srcWidth;
-        memcpy(dstBitmap, (const void*)srcBitmap, srcWidth);
+		auto d = dstBitmap;
+		for (auto j = srcWidth - 1; j >= 0; --j)
+		{
+			*d = srcBitmap[j];
+			++d;
+		}
+////        srcBitmap -= srcWidth;
+//        memcpy(dstBitmap, (const void*)srcBitmap, srcWidth);
         dstBitmap += dstWidth;
+		srcBitmap += srcWidth;
     }
 }
 
@@ -53,7 +60,7 @@ bool FontManager::_convertFont(Font::FontSize &font, std::size_t size, FT_Face &
 
 	for (unsigned int requestedSize = font._size; requestedSize > 0; --requestedSize)
 	{
-		if (FT_Set_Char_Size(face, 0, requestedSize * 64, 0, 0))
+		if (FT_Set_Pixel_Sizes(face, requestedSize, 0))
 		{
 			//
 			return false;
@@ -225,6 +232,26 @@ bool FontManager::_convertFont(Font::FontSize &font, std::size_t size, FT_Face &
 		font._map[i].bt = slot->bitmap_top;
 		font._map[i].tx = penX / (float)font._texW;
 		font._map[i].ty = penY / (float)font._texH;
+
+		GLuint tid;
+			glGenTextures(1, &tid);
+			glBindTexture(GL_TEXTURE_2D, tid);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			glTexImage2D(
+				GL_TEXTURE_2D,
+				0,
+				GL_ALPHA,
+				slot->bitmap.width,
+				slot->bitmap.rows,
+				0,
+				GL_ALPHA,
+				GL_UNSIGNED_BYTE,
+				slot->bitmap.buffer
+				);
 
 		// Draw the glyph to the bitmap with a one pixel padding.
 		drawBitmap(font._textureDatas.data(), penX, penY, font._texW, glyphBuffer, glyphWidth, glyphHeight);
