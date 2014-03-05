@@ -67,8 +67,11 @@ protected:
 
 	virtual void updateEnd(double time)
 	{
-		_scene->getInstance<Renderer>()->getShader("MaterialBasic")->use();
-		_scene->getInstance<FontManager>()->drawString("nique ta mere la pute", "myFont", 70, glm::vec2(400, 400));
+		_scene->getInstance<Renderer>()->getShader("2DText")->use();
+		//_scene->getInstance<Renderer>()->getUniform("PerModel")->setUniform("model", glm::mat4(1));
+		//_scene->getInstance<Renderer>()->getUniform("PerModel")->flushChanges();
+		_scene->getInstance<FontManager>()->drawString("a b c d e f g h i j k l m n o p q r s t u v w x y z", "myFont", 70, glm::fvec2(-1.0f, 0));
+		glFinish();
 	}
 
 	virtual void mainUpdate(double time)
