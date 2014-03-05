@@ -19,6 +19,7 @@ bool Font::load()
 		if (!e.second.load())
 			return false;
 	}
+	_isLoaded = true;
 	return true;
 }
 
