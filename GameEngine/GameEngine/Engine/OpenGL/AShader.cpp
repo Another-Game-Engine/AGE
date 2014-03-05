@@ -17,6 +17,7 @@ bool	AShader::bindUniformBlock(std::string const &blockName, UniformBuffer const
 
 	assert(_progId != 0 && "Must initialize the shader...");
 	blockId = glGetUniformBlockIndex(_progId, blockName.c_str());
+	assert(blockId != GL_INVALID_INDEX && "Cannot find the block in this shader");
 	glUniformBlockBinding(_progId, blockId, buffer.getBindingPoint());
 	return (true);
 }

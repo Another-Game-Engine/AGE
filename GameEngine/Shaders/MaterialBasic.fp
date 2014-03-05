@@ -1,33 +1,44 @@
-#version 330
+#version 430 core
 
 layout (std140) uniform MaterialBasic
 {
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-  vec3 transmittance;
-  vec3 emission;
-  float shininess;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	vec3 transmittance;
+	vec3 emission;
+	float shininess;
 };
 
 layout (std140) uniform PerFrame
 {
-        mat4 projection;
-        mat4 view;
-        vec4 light;
-        float time;
+	mat4 projection;
+	mat4 view;
+	int	lightNbr;
+	float time;
 };
 
 layout (std140) uniform PerModel
 {
-        mat4 model;
+	mat4 model;
 };
 
-uniform sampler2D fTexture0;//ambient;
-uniform sampler2D fTexture1;//diffuse;
-uniform sampler2D fTexture2;//specular;
-uniform sampler2D fTexture3;//normal;
 
+layout(binding = 0) uniform sampler2D fTexture0; //ambient;
+layout(binding = 1) uniform sampler2D fTexture1; //diffuse;
+layout(binding = 2) uniform sampler2D fTexture2; //specular;
+layout(binding = 3) uniform sampler2D fTexture3; //normal;
+
+struct PointLight
+{
+	vec4	positionPower;
+	vec4	colorRange;
+};
+
+layout(std430, binding = 4) buffer lightBuff
+{
+	PointLight	lights[];
+};
 
 in vec4 fPosition;
 in vec4 fColor;
@@ -35,28 +46,47 @@ in vec4 fNormal;
 in vec2 fTexCoord;
 
 out layout (location = 0) vec4 FragColor;
-out layout (location = 1) vec4 Lol;
+
+float		calcSpecular(vec3 lightPos, vec3 fragToLight)
+{
+	vec3	eyePos = normalize(-fPosition.xyz);
+	vec3	lightReflection = normalize(-reflect(fragToLight, normalize(fNormal.xyz)));
+
+	return clamp(pow(max(dot(lightReflection, eyePos), 0.0), 0.3f * shininess), 0.0f, 1.0f);
+}
 
 void main(void)
 {
-  vec4 bNormal = vec4(normalize(fNormal.xyz + texture2D(fTexture1, fTexCoord).xyz), 0);
-  /**
-* Calcule des vecteur indispensable au calcule de light :
-* - vecteur du frag au spot
-* - vecteur de reflection de la lumiére
-* - vecteur de l'oeil vers le frag
-*/
-  vec3 lightPos = (view * light).xyz;
-  vec4 vectorLight = normalize(vec4(lightPos - fPosition.xyz, 1.0));
-  vec4 vectorReflect = normalize(reflect(-vectorLight, bNormal));
-  vec4 vectorView = normalize(vec4(fPosition.xyz - view[3].xyz, 1.0));
-  /**
-* calcule de lambert afin de determiner le cos(a)
-* entre le vecteur de lumiére et la normal du fragment.
-*/
-  float lamberTerm = clamp(dot(diffuse.xyz, vectorLight.xyz), 0.0, 1.0);
-  vec4 pxlColor = fColor * texture2D(fTexture0, fTexCoord);
-  vec4 cAmbient = pxlColor * vec4(ambient.rgb, 1.0);
-  vec4 cDiffuse = pxlColor * lamberTerm;
-  FragColor = texture2D(fTexture1, fTexCoord);//max(cAmbient, cDiffuse);
+	vec3	ambientColor = 0.05f * texture2D(fTexture0, fTexCoord).rgb * ambient;
+	vec3	diffuseColor = texture2D(fTexture0, fTexCoord).rgb * diffuse;
+	vec3	specularColor = texture2D(fTexture0, fTexCoord).rgb * specular;
+
+	// TODO: Implement a real normal mapping: this is an ugly trick just to see if it workss
+	vec3	fragNormal = normalize(normalize(fNormal.xyz) + normalize(texture2D(fTexture3, fTexCoord).xyz));
+
+	vec4	finalColor = vec4(ambientColor, 1);
+
+	for (int i = 0; i < lightNbr; ++i)
+	{
+		vec4	lightPos = view * vec4(lights[i].positionPower.xyz, 1.0f);
+		vec3	lightColor = lights[i].colorRange.xyz;
+		float	lightRange = lights[i].colorRange.w;
+		float	lightPower = lights[i].positionPower.w;
+
+		vec3	fragToLight = lightPos.xyz - fPosition.xyz;
+		float	fragToLightDist = length(fragToLight);
+
+		if (fragToLightDist < lightRange) // Ugly test waiting for tile based forward rendering
+		{
+			fragToLight = normalize(fragToLight);
+	
+			float	illumination =  clamp(dot(fragToLight, normalize(fNormal.xyz)), 0.0f, 1.0f);
+			float	specular = calcSpecular(lightPos.xyz, fragToLight);
+			float	diminution = clamp(1.0f - fragToLightDist / lightRange, 0.0f, 1.0f);
+	
+			finalColor.xyz += lightPower * specular * diminution * lightColor * specularColor;
+			finalColor.xyz += lightPower * illumination * diminution * lightColor * diffuseColor;
+		}
+	}
+	FragColor = finalColor;
 }

@@ -39,6 +39,8 @@ namespace Component
 		void render_shadowmap(glm::mat4 const &lightVP);
 		void setShaderShadowMap(std::string const &shaderShadow);
 		std::string const &getShaderShadowMap() const;
+		void render(std::function<void(OpenGLTools::Shader&)> func = [](OpenGLTools::Shader &s){});
+		void renderRaw();
 		std::shared_ptr<ObjFile>	const &getMesh() const;
 
 		//////

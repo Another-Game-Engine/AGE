@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-
 #include <stdlib.h>
 #include <Core/Engine.hh>
 #include "BulletDemoScene.hh"
@@ -20,6 +19,7 @@
 #include <MediaFiles/AssetsManager.hpp>
 #include <Audio/AudioManager.hh>
 #include <OpenGL/VertexManager.hh>
+#include <Components/PointLight.hh>
 
 int			main(int ac, char **av)
 {

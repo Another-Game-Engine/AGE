@@ -20,6 +20,7 @@ public:
 		: System(scene)
 		, _filter(scene)
 		, _renderDebugMethod(false)
+		, _totalTime(0)
 	{}
 
 	virtual ~CameraSystem(){}
@@ -54,11 +55,17 @@ public:
 		screenPosToWorldRay(centerPos.x, centerPos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform , cameraCpt->projection, from, to);
 	}
 
+	// Returns the number of seconds since the component creation
+	double		getLifeTime() const
+	{
+		return (_totalTime);
+	}
 
 protected:
 	EntityFilter _filter;
 
 	bool _renderDebugMethod;
+	double	_totalTime;
 
 	virtual void updateBegin(double time)
 	{
@@ -69,7 +76,6 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		static double totalTime = 0;
 		unsigned int textureOffset = 0;
 		auto &renderer = _scene->getEngine().getInstance<Renderer>();
 		OpenGLTools::UniformBuffer *perFrameBuffer = _scene->getEngine().getInstance<Renderer>()->getUniform("PerFrame");
@@ -97,28 +103,27 @@ protected:
 				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("view", t);
 				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
 
-//				_engine.getInstance<Renderer>()->getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
-
 				s->use();
 
+				OpenGLTools::Framebuffer &camFbo = e->getComponent<Component::CameraComponent>()->frameBuffer;
 
+				if (camFbo.isInit() == true)
+				{
+					camFbo.bind();
+					glEnable(GL_DEPTH_TEST);
+					glDrawBuffer(GL_COLOR_ATTACHMENT0);
+					glClearColor(0, 0, 0, 0);
+					glClear(GL_COLOR_BUFFER_BIT);
+				}
+				glDepthMask(GL_FALSE);
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());
-				glDepthMask(0);
 				skybox->draw();
-				glDepthMask(1);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+				glDepthMask(GL_TRUE);
 			}
-
-			totalTime += time;
-
-			// Set les uniforms du block PerFrame
-			perFrameBuffer->setUniform("projection", camera->getProjection());
-			perFrameBuffer->setUniform("view", cameraPosition);
-			perFrameBuffer->setUniform("time", (float)totalTime);
-			perFrameBuffer->flushChanges();
-			_scene->getSystem<MeshRendererSystem>()->render(time);
 		}
+		_totalTime += time;
 	}
 
 	virtual void initialize()
