@@ -70,8 +70,14 @@ protected:
 //		_scene->getInstance<Renderer>()->getShader("2DText")->use();
 		//_scene->getInstance<Renderer>()->getUniform("PerModel")->setUniform("model", glm::mat4(1));
 		//_scene->getInstance<Renderer>()->getUniform("PerModel")->flushChanges();
-		_scene->getInstance<FontManager>()->drawString("J'en ai marre de ce projet, j'ai envie de changer de metier", "myFont", 70, glm::fvec2(-1.0f, 0.5f), "2DText");
-		_scene->getInstance<FontManager>()->drawString("Je vais me suicider !!!!!!!!! 8=====o", "myFont", 30, glm::fvec2(-1.0f, 0), "2DText");
+		_scene->getInstance<FontManager>()->drawString("On s'en fout", "myFont", 70, glm::fvec2(-1.0f, 0.8f), "2DText");
+		_scene->getInstance<FontManager>()->drawString("De Ta Vielle vie de Merde", "myFont", 60, glm::fvec2(-1.0f, 0.6f), "2DText");
+		_scene->getInstance<FontManager>()->drawString("Tu ne vaux meme pas 3 sous", "myFont", 50, glm::fvec2(-1.0f, 0.4f), "2DText");
+		_scene->getInstance<FontManager>()->drawString("Rentre chez ta mere !!!", "myFont", 40, glm::fvec2(-1.0f, 0.2f), "2DText");
+		_scene->getInstance<FontManager>()->drawString("Faire de l'ASCII ART avec ta bite !", "myFont", 30, glm::fvec2(-1.0f, 0.0f), "2DText");
+		_scene->getInstance<FontManager>()->drawString("CeCi EsT uNe BiTe 8=====o", "myFont", 20, glm::fvec2(-1.0f, -0.2f), "2DText");
+		_scene->getInstance<FontManager>()->drawString("Et ca un smyley :-D", "myFont", 10, glm::fvec2(-1.0f, -0.4f), "2DText");
+		_scene->getInstance<FontManager>()->drawString("Kill me please...", "myFont", 5, glm::fvec2(-1.0f, -0.6f), "2DText");
 		glFinish();
 	}
 
