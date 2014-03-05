@@ -12,6 +12,7 @@
 #include <Utils/ScreenPosToWorldRay.hpp>
 #include <Context/IRenderContext.hh>
 #include <Utils/MatrixConversion.hpp>
+#include <Text/FontManager.hh>
 
 class CameraSystem : public System
 {
@@ -65,7 +66,10 @@ protected:
 	}
 
 	virtual void updateEnd(double time)
-	{}
+	{
+		_scene->getInstance<Renderer>()->getShader("MaterialBasic")->use();
+		_scene->getInstance<FontManager>()->drawString("nique ta mere la pute", "myFont", 70, glm::vec2(400, 400));
+	}
 
 	virtual void mainUpdate(double time)
 	{

@@ -5,6 +5,8 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
+#include <OpenGL/Vertice.hh>
+#include <OpenGL/VertexManager.hh>
 
 FontManager::FontManager()
 {}
@@ -274,8 +276,6 @@ bool FontManager::convertFont(const File &file,
 		font.load();
 	}
 
-	///
-
 	std::ofstream s(outputDirectory + font._name + ".cpdFont", std::ios_base::binary);
 	cereal::PortableBinaryOutputArchive ar(s);
 	ar(font);
@@ -296,27 +296,17 @@ bool FontManager::loadFont(const File &file, const std::string &name)
 		std::cerr << "Font file " << file.getFullName() << " not found" << std::endl;
 	}
 
-	FT_Face face;
-
-	if (FT_New_Face(_library, file.getFullName().c_str(), 0, &face)) {
-		std::cerr << "Could not load font " << file.getFullName() << std::endl;
+	Font font;
+	std::ifstream s(file.getFileName(), std::ios_base::binary);
+	cereal::PortableBinaryInputArchive ar(s);
+	ar(font);
+	s.close();
+	if (!font.load())
+	{
+		std::cerr << "Fail to load font: " << file.getFullName() << std::endl;
 		return false;
 	}
-
-	if (_collection.find(face->family_name) != std::end(_collection))
-	{
-		FT_Done_Face(face);
-		return true;
-	}
-
-	std::string _name;
-	if (name.empty())
-	{
-		_name = std::string(face->family_name) + "_" + std::string(face->style_name);
-	}
-	else
-		_name = name;
-	_collection.insert(std::make_pair(name, face));
+	_collection.insert(std::make_pair(font._name, font));
 
 	return true;
 }
@@ -324,4 +314,76 @@ bool FontManager::loadFont(const File &file, const std::string &name)
 bool FontManager::isLoaded(const std::string &name)
 {
 	return _collection.find(name) != std::end(_collection);
+}
+
+void FontManager::drawString(const std::string &text, const std::string &fontName, std::size_t size, const glm::vec2 &position)
+{
+	auto font = _collection.find(fontName);
+	if (font == std::end(_collection) || !font->second.isLoaded())
+	{
+		std::cerr << "Font not found : " << fontName << std::endl;
+		return;
+	}
+
+	auto fontSize = font->second._sizes.find(size);
+	if (fontSize == std::end(font->second._sizes) || !fontSize->second.isLoaded())
+	{
+		std::cerr << "Size not found [" << size << "] for font : " << fontName << std::endl;
+		return;
+	}
+	auto &f = fontSize->second;
+
+	std::vector<glm::vec4>		vertices;	// vertices positions
+	std::vector<glm::vec4>		colors;		// vertices colors
+	std::vector<glm::vec4>		normals;	// normals
+	std::vector<glm::vec2>		uvs;		// texture coordinates
+	std::vector<unsigned int>	indices;	// indices
+	Vertice<4>					buffer;
+
+	for (auto i = 0; i < text.size(); ++i)
+	{
+		auto l = text[i] - ASCII_BEGIN;
+		vertices.push_back(glm::vec4(i * 10 + position.x, position.y, 0, 1));
+		vertices.push_back(glm::vec4(i * 10 + position.x + f._map[l].width, position.y, 0, 1));
+		vertices.push_back(glm::vec4(i * 10 + position.x, position.y + f._map[l].height, 0, 1));
+		vertices.push_back(glm::vec4(i * 10 + position.x + f._map[l].width, position.y + f._map[l].height, 0, 1));
+		colors.push_back(glm::vec4(0, 1, 1, 1));
+		colors.push_back(glm::vec4(1, 0, 1, 1));
+		colors.push_back(glm::vec4(1, 1, 0, 1));
+		colors.push_back(glm::vec4(1, 1, 1, 1));
+		uvs.push_back(glm::vec2(0, 0));
+		uvs.push_back(glm::vec2(0, 1));
+		uvs.push_back(glm::vec2(1, 1));
+		uvs.push_back(glm::vec2(1, 0));
+		normals.push_back(glm::vec4(1));
+		normals.push_back(glm::vec4(1));
+		normals.push_back(glm::vec4(1));
+		normals.push_back(glm::vec4(1));
+		indices.push_back(i);
+	}
+
+	std::array<Data, 4> data =
+	{
+		Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
+		Data(colors.size() * 4 * sizeof(float), &colors[0].x),
+		Data(normals.size() * 4 * sizeof(float), &normals[0].x),
+		Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
+	};
+	Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
+	buffer = Vertice<4>(vertices.size(), data, &indicesData);
+
+	std::array<Attribute, 4> param =
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 2),
+	};
+	
+	auto leak = new VertexManager<4>(param);
+	leak->init();
+	leak->addVertice(buffer);
+
+	glBindTexture(GL_TEXTURE_2D, f._textureId);
+	buffer.draw(GL_QUADS);
 }
