@@ -1,6 +1,12 @@
 #include "Font.hh"
 
 Font::Font()
+: _size(0)
+, _glyphSize(0)
+, _name("")
+, _textureId(0)
+, _texW(0)
+, _texH(0)
 {
 }
 

@@ -56,11 +56,8 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 	font._size = size;
 	font._name = name;
 
-	unsigned int fontSize = size;
-
-	int rowSize = 0;
-	int glyphSize = 0;
-	int actualfontHeight = 0;
+	unsigned int rowSize = 0;
+	unsigned int actualfontHeight = 0;
 
 	FT_GlyphSlot slot = NULL;
 	FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
@@ -69,7 +66,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 	// Since free type (due to modern fonts) does not directly correlate requested
 	// size to glyph size, we'll brute-force attempt to set the largest font size
 	// possible that will fit within the requested pixel size.
-	for (unsigned int requestedSize = fontSize; requestedSize > 0; --requestedSize)
+	for (unsigned int requestedSize = font._size; requestedSize > 0; --requestedSize)
 	{
 		// Set the pixel size.
 		if (FT_Set_Char_Size(face, 0, requestedSize * 64, 0, 0))
@@ -82,7 +79,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		slot = face->glyph;
 
 		rowSize = 0;
-		glyphSize = 0;
+		font._glyphSize = 0;
 		actualfontHeight = 0;
 
 		// Find the width of the image.
@@ -94,7 +91,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 				//LOG(1, "FT_Load_Char error : %d \n", error);
 			}
 
-			int bitmapRows = slot->bitmap.rows;
+			unsigned int bitmapRows = slot->bitmap.rows;
 			actualfontHeight = (actualfontHeight < bitmapRows) ? bitmapRows : actualfontHeight;
 
 			if (slot->bitmap.rows > slot->bitmap_top)
@@ -105,15 +102,15 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		}
 
 		// Have we found a pixel size that fits?
-		if (rowSize <= (int)fontSize)
+		if (rowSize <= font._size)
 		{
-			glyphSize = rowSize;
-			rowSize = fontSize;
+			font._glyphSize = rowSize;
+			rowSize = font._size;
 			break;
 		}
 	}
 
-	if (slot == NULL || glyphSize == 0)
+	if (slot == NULL || font._glyphSize == 0)
 	{
 		//LOG(1, "Cannot generate a font of the requested size: %d\n", fontSize);
 		return false;
@@ -123,13 +120,11 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 	rowSize += GLYPH_PADDING;
 
 	// Initialize with padding.
-	int penX = 0;
-	int penY = 0;
+	unsigned int penX = 0;
+	unsigned int penY = 0;
 	int row = 0;
 
 	double powerOf2 = 2;
-	unsigned int imageWidth = 0;
-	unsigned int imageHeight = 0;
 	bool textureSizeFound = false;
 
 	int advance;
@@ -137,8 +132,8 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 
 	while (textureSizeFound == false)
 	{
-		imageWidth = (unsigned int)pow(2.0, powerOf2);
-		imageHeight = (unsigned int)pow(2.0, powerOf2);
+		font._texW = (std::size_t)pow(2.0, powerOf2);
+		font._texH = (std::size_t)pow(2.0, powerOf2);
 		penX = 0;
 		penY = 0;
 		row = 0;
@@ -160,12 +155,12 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 			advance = glyphWidth + GLYPH_PADDING;
 
 			// If we reach the end of the image wrap aroud to the next row.
-			if ((penX + advance) > (int)imageWidth)
+			if ((penX + advance) > font._texW)
 			{
 				penX = 0;
 				row += 1;
 				penY = row * rowSize;
-				if (penY + rowSize > (int)imageHeight)
+				if (penY + rowSize > font._texH)
 				{
 					powerOf2++;
 					break;
@@ -198,14 +193,14 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		}
 		else
 		{
-			imageHeight = (int)pow(2.0, powerOf2);
+			font._texH = (std::size_t)pow(2.0, powerOf2);
 			break;
 		}
 	}
 
 	// Allocate temporary image buffer to draw the glyphs into.
-	unsigned char* imageBuffer = (unsigned char*)malloc(imageWidth * imageHeight);
-	memset(imageBuffer, 0, imageWidth * imageHeight);
+	font._textureDatas.clear();
+	font._textureDatas.assign(font._texW * font._texH, '\0');
 	penX = 0;
 	penY = 0;
 	row = 0;
@@ -226,16 +221,15 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		advance = glyphWidth + GLYPH_PADDING;
 
 		// If we reach the end of the image wrap aroud to the next row.
-		if ((penX + advance) > (int)imageWidth)
+		if ((penX + advance) > (int)font._texW)
 		{
 			penX = 0;
 			row += 1;
 			penY = row * rowSize;
-			if (penY + rowSize > (int)imageHeight)
+			if (penY + rowSize > (int)font._texH)
 			{
-				free(imageBuffer);
 				//LOG(1, "Image size exceeded!");
-				return -1;
+				return false;
 			}
 		}
 
@@ -243,7 +237,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
 
 		// Draw the glyph to the bitmap with a one pixel padding.
-		drawBitmap(imageBuffer, penX, penY, imageWidth, glyphBuffer, glyphWidth, glyphHeight);
+		drawBitmap(font._textureDatas.data(), penX, penY, font._texW, glyphBuffer, glyphWidth, glyphHeight);
 
 		// Move Y back to the top of the row.
 		penY = row * rowSize;
@@ -252,20 +246,18 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		font._map[i].width = advance - GLYPH_PADDING;
 
 		// Generate UV coords.
-		font._map[i].uvs[0] = (float)penX / (float)imageWidth;
-		font._map[i].uvs[1] = (float)penY / (float)imageHeight;
-		font._map[i].uvs[2] = (float)(penX + advance - GLYPH_PADDING) / (float)imageWidth;
-		font._map[i].uvs[3] = (float)(penY + rowSize - GLYPH_PADDING) / (float)imageHeight;
+		font._map[i].uvs[0] = (float)penX / (float)font._texW;
+		font._map[i].uvs[1] = (float)penY / (float)font._texH;
+		font._map[i].uvs[2] = (float)(penX + advance - GLYPH_PADDING) / (float)font._texW;
+		font._map[i].uvs[3] = (float)(penY + rowSize - GLYPH_PADDING) / (float)font._texH;
 
 		// Set the pen position for the next glyph
 		penX += advance;
 		i++;
 	}
 
-	font._glyphSize = glyphSize;
-	font._textureDatas = std::unique_ptr<unsigned char>(imageBuffer);
-	font._texW = imageWidth;
-	font._texH = imageHeight;
+	font._texW = font._texW;
+	font._texH = font._texH;
 
 	GLuint tex;
 	glGenTextures(1, &tex);
@@ -279,7 +271,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		0,
 		GL_ALPHA,
 		GL_UNSIGNED_BYTE,
-		font._textureDatas.get()
+		font._textureDatas.data()
 		);
 
 
