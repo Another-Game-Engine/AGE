@@ -35,36 +35,13 @@ static void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, uns
     }
 }
 
-
 // CODE LARGELY INSPIRED FROM : https://github.com/blackberry/GamePlay/blob/master/tools/encoder/src/TTFFontEncoder.cpp
-bool FontManager::convertFont(const File &file, std::size_t size, const std::string &outputDirectory, const std::string &name)
+bool FontManager::_convertFont(Font::FontSize &font, std::size_t size, FT_Face &face)
 {
-	if (!file.exists())
-	{
-		std::cerr << "Font file " << file.getFullName() << " not found" << std::endl;
-	}
-
-	FT_Face face;
-
-	if (FT_New_Face(_library, file.getFullName().c_str(), 0, &face)) {
-		std::cerr << "Could not load font " << file.getFullName() << std::endl;
-		return false;
-	}
-
-	std::string _name;
-	if (name.empty())
-	{
-		_name = std::string(face->family_name) + "_" + std::string(face->style_name) + "_" + std::to_string(size);
-	}
-	else
-		_name = name;
-
-	Font font;
-	font._size = size;
-	font._name = _name;
-
 	unsigned int rowSize = 0;
 	unsigned int actualfontHeight = 0;
+
+	font._size = size;
 
 	FT_GlyphSlot slot = NULL;
 	FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
@@ -111,7 +88,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 
 	if (slot == NULL || font._glyphSize == 0)
 	{
-		std::cerr << "Error generating Charset of size " << font._size << "for font " << font._name << std::endl;
+		std::cerr << "Error generating Charset of size " << font._size << "for font " << face->family_name << std::endl;
 		return false;
 	}
 
@@ -254,6 +231,51 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		penX += advance;
 		i++;
 	}
+	return true;
+}
+
+bool FontManager::convertFont(const File &file,
+	const std::vector<std::size_t> &sizes,
+	const std::string &outputDirectory,
+	const std::string &name)
+{
+	if (!file.exists())
+	{
+		std::cerr << "Font file " << file.getFullName() << " not found" << std::endl;
+		return false;
+	}
+
+	FT_Face face;
+
+	if (FT_New_Face(_library, file.getFullName().c_str(), 0, &face)) {
+		std::cerr << "Could not load font " << file.getFullName() << std::endl;
+		return false;
+	}
+
+	std::string _name;
+	if (name.empty())
+	{
+		_name = std::string(face->family_name) + "_" + std::string(face->style_name);
+	}
+	else
+		_name = name;
+
+	Font font;
+	font._name = _name;
+
+	for (auto &size : sizes)
+	{
+		if (font._sizes.find(size) != std::end(font._sizes))
+			continue;
+		Font::FontSize f;
+		if (!_convertFont(f, size, face))
+			continue;
+		font._sizes.insert(std::make_pair(size, f));
+		font.load();
+	}
+
+	///
+
 	std::ofstream s(outputDirectory + font._name + ".cpdFont", std::ios_base::binary);
 	cereal::PortableBinaryOutputArchive ar(s);
 	ar(font);

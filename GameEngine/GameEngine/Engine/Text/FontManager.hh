@@ -13,10 +13,16 @@ public:
 	virtual ~FontManager();
 	bool init();
 
-	bool convertFont(const File &file, std::size_t size, const std::string &outputDirectory, const std::string &name = "");
+	bool convertFont(const File &file,
+		const std::vector<std::size_t> &sizes,
+		const std::string &outputDirectory,
+		const std::string &name = "");
 
 	bool loadFont(const File &file, const std::string &name = "");
 	bool isLoaded(const std::string &name);
+
+private:
+	bool _convertFont(Font::FontSize &font, std::size_t size, FT_Face &face);
 	std::map <std::string, FT_Face> _collection;
 	FT_Library  _library;
 };
