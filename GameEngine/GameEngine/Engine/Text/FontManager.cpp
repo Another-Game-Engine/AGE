@@ -1,6 +1,11 @@
 #include <iostream>
 #include "FontManager.hh"
 
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/xml.hpp>
+
 FontManager::FontManager()
 {}
 
@@ -30,6 +35,8 @@ static void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, uns
     }
 }
 
+
+// CODE LARGELY INSPIRED FROM : https://github.com/blackberry/GamePlay/blob/master/tools/encoder/src/TTFFontEncoder.cpp
 bool FontManager::convertFont(const File &file, std::size_t size, const std::string &outputDirectory, const std::string &name)
 {
 	if (!file.exists())
@@ -54,7 +61,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 
 	Font font;
 	font._size = size;
-	font._name = name;
+	font._name = _name;
 
 	unsigned int rowSize = 0;
 	unsigned int actualfontHeight = 0;
@@ -62,33 +69,26 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 	FT_GlyphSlot slot = NULL;
 	FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
 
-	// We want to generate fonts that fit exactly the requested pixels size.
-	// Since free type (due to modern fonts) does not directly correlate requested
-	// size to glyph size, we'll brute-force attempt to set the largest font size
-	// possible that will fit within the requested pixel size.
 	for (unsigned int requestedSize = font._size; requestedSize > 0; --requestedSize)
 	{
-		// Set the pixel size.
 		if (FT_Set_Char_Size(face, 0, requestedSize * 64, 0, 0))
 		{
 			//
 			return false;
 		}
 
-		// Save glyph information (slot contains the actual glyph bitmap).
 		slot = face->glyph;
 
 		rowSize = 0;
 		font._glyphSize = 0;
 		actualfontHeight = 0;
 
-		// Find the width of the image.
 		for (unsigned char ascii = ASCII_BEGIN; ascii < ASCII_END; ++ascii)
 		{
-			// Load glyph image into the slot (erase previous one)
 			if (FT_Load_Char(face, ascii, loadFlags))
 			{
-				//LOG(1, "FT_Load_Char error : %d \n", error);
+				std::cerr << "Error loading char [" << (unsigned char)(ascii) << "]" << std::endl;
+				continue;
 			}
 
 			unsigned int bitmapRows = slot->bitmap.rows;
@@ -101,7 +101,6 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 			rowSize = (rowSize < bitmapRows) ? bitmapRows : rowSize;
 		}
 
-		// Have we found a pixel size that fits?
 		if (rowSize <= font._size)
 		{
 			font._glyphSize = rowSize;
@@ -112,7 +111,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 
 	if (slot == NULL || font._glyphSize == 0)
 	{
-		//LOG(1, "Cannot generate a font of the requested size: %d\n", fontSize);
+		std::cerr << "Error generating Charset of size " << font._size << "for font " << font._name << std::endl;
 		return false;
 	}
 
@@ -146,7 +145,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 			
 			if (FT_Load_Char(face, ascii, loadFlags))
 			{
-				//LOG(1, "FT_Load_Char error : %d \n", error);
+				std::cerr << "Error loading char [" << (unsigned char)(ascii) << "]" << std::endl;
 			}
 			// Glyph image.
 			int glyphWidth = slot->bitmap.pitch;
@@ -210,7 +209,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		// Load glyph image into the slot (erase the previous one).		
 		if (FT_Load_Char(face, ascii, loadFlags))
 		{
-			//LOG(1, "FT_Load_Char error : %d \n", error);
+			std::cerr << "Error loading char [" << (unsigned char)(ascii) << "]" << std::endl;
 		}
 
 		// Glyph image.
@@ -228,7 +227,7 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 			penY = row * rowSize;
 			if (penY + rowSize > (int)font._texH)
 			{
-				//LOG(1, "Image size exceeded!");
+				std::cerr << "Image size exceeded" << std::endl;
 				return false;
 			}
 		}
@@ -255,26 +254,10 @@ bool FontManager::convertFont(const File &file, std::size_t size, const std::str
 		penX += advance;
 		i++;
 	}
-
-	font._texW = font._texW;
-	font._texH = font._texH;
-
-	GLuint tex;
-	glGenTextures(1, &tex);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexImage2D(
-		GL_TEXTURE_2D,
-		0,
-		GL_ALPHA,
-		font._texW,
-		font._texH,
-		0,
-		GL_ALPHA,
-		GL_UNSIGNED_BYTE,
-		font._textureDatas.data()
-		);
-
-
+	std::ofstream s(outputDirectory + font._name + ".cpdFont", std::ios_base::binary);
+	cereal::PortableBinaryOutputArchive ar(s);
+	ar(font);
+	s.close();
 	return true;
 }
 
