@@ -16,11 +16,13 @@
 #include <Core/AScene.hh>
 #include <MediaFiles/AssetsManager.hpp>
 
+
 namespace Resources
 {
 	class Texture;
 };
 
+enum Shadow;
 class Material;
 
 namespace Component
@@ -34,7 +36,7 @@ namespace Component
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
 		void render(bool shadow, GLuint shadowTex, glm::mat4 const &lightVP);
-		void render_shadowmap(GLuint shadowTex, glm::mat4 const &lightVP);
+		void render_shadowmap(glm::mat4 const &lightVP);
 		void setShaderShadowMap(std::string const &shaderShadow);
 		std::string const &getShaderShadowMap() const;
 		std::shared_ptr<ObjFile>	const &getMesh() const;

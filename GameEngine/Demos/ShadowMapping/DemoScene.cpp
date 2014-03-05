@@ -18,7 +18,7 @@ void DemoScene::initSytemeScene()
 	rct<Component::MeshRenderer>();
 	rct<Component::RotationForce>();
 	rct<Component::TrackBall>();
-	addSystem<MeshRendererSystem>(0)->onShadow(DIRECTIONAL);
+	addSystem<MeshRendererSystem>(0)->onShadow(POINT_LIGHT);
 	addSystem<RotationForceSystem>(50);
 	addSystem<TrackBallSystem>(150);
 	addSystem<CameraSystem>(200);
