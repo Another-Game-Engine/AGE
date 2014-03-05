@@ -31,11 +31,11 @@ static void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, uns
 {
     // offset dst bitmap by x,y.
     dstBitmap +=  (x + (y * dstWidth));
-
+	srcBitmap += srcWidth * srcHeight;
     for (int i = 0; i < srcHeight; ++i)
     {
+        srcBitmap -= srcWidth;
         memcpy(dstBitmap, (const void*)srcBitmap, srcWidth);
-        srcBitmap += srcWidth;
         dstBitmap += dstWidth;
     }
 }
@@ -196,7 +196,7 @@ bool FontManager::_convertFont(Font::FontSize &font, std::size_t size, FT_Face &
 
 		// Glyph image.
 		unsigned char* glyphBuffer = slot->bitmap.buffer;
-		int glyphWidth = slot->bitmap.pitch;
+		int glyphWidth = slot->bitmap.width;
 		int glyphHeight = slot->bitmap.rows;
 
 		advance = glyphWidth + GLYPH_PADDING;
@@ -217,6 +217,15 @@ bool FontManager::_convertFont(Font::FontSize &font, std::size_t size, FT_Face &
 		// penY should include the glyph offsets.
 		penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
 
+		font._map[i].ax = slot->advance.x >> 6;
+		font._map[i].ay = slot->advance.y >> 6;
+		font._map[i].bw = slot->bitmap.width;
+		font._map[i].bh = slot->bitmap.rows;
+		font._map[i].bl = slot->bitmap_left;
+		font._map[i].bt = slot->bitmap_top;
+		font._map[i].tx = penX / (float)font._texW;
+		font._map[i].ty = penY / (float)font._texH;
+
 		// Draw the glyph to the bitmap with a one pixel padding.
 		drawBitmap(font._textureDatas.data(), penX, penY, font._texW, glyphBuffer, glyphWidth, glyphHeight);
 
@@ -225,6 +234,9 @@ bool FontManager::_convertFont(Font::FontSize &font, std::size_t size, FT_Face &
 
 		font._map[i].index = ascii;
 		font._map[i].width = advance - GLYPH_PADDING;
+
+		if (i == 't')
+			std::cout << "prout" << std::endl;
 
 		// Generate UV coords.
 		font._map[i].uvs[0] = (float)penX / (float)font._texW;
@@ -359,6 +371,9 @@ void FontManager::drawString(const std::string &text, const std::string &fontNam
 		//glVertex4f(-0.1, 0.1, 0, 1);
 		//glEnd();
 		auto test = f._map[l];
+
+
+
 		vertices.push_back(glm::vec4(lastX, position.y, 0, 1));
 		vertices.push_back(glm::vec4(lastX + f._map[l].uvs[2] - f._map[l].uvs[0], position.y, 0, 1));
 		vertices.push_back(glm::vec4(lastX + f._map[l].uvs[2] - f._map[l].uvs[0], position.y + f._map[l].uvs[3] - f._map[l].uvs[1], 0, 1));
