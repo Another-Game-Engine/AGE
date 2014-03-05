@@ -70,7 +70,8 @@ protected:
 //		_scene->getInstance<Renderer>()->getShader("2DText")->use();
 		//_scene->getInstance<Renderer>()->getUniform("PerModel")->setUniform("model", glm::mat4(1));
 		//_scene->getInstance<Renderer>()->getUniform("PerModel")->flushChanges();
-		_scene->getInstance<FontManager>()->drawString("J'en ai marre de ce projet, j'ai envie de changer de metier", "myFont", 70, glm::fvec2(-1.0f, 0), "2DText");
+		_scene->getInstance<FontManager>()->drawString("J'en ai marre de ce projet, j'ai envie de changer de metier", "myFont", 70, glm::fvec2(-1.0f, 0.5f), "2DText");
+		_scene->getInstance<FontManager>()->drawString("Je vais me suicider !!!!!!!!! 8=====o", "myFont", 30, glm::fvec2(-1.0f, 0), "2DText");
 		glFinish();
 	}
 
