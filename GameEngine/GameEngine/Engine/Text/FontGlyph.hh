@@ -2,6 +2,7 @@
 
 #define ASCII_BEGIN 32   //space
 #define ASCII_END   127  //DEL
+#define GLYPH_PADDING 4
 
 #include <array>
 #include <cstddef>

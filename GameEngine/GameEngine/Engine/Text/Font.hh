@@ -19,6 +19,6 @@ private:
 	GLuint _textureId;
 	std::size_t _texW;
 	std::size_t _texH;
-	std::array<std::unique_ptr<FontGlyph>, ASCII_END - ASCII_BEGIN> _map;
+	std::array<FontGlyph, ASCII_END - ASCII_BEGIN> _map;
 	friend class FontManager;
 };
