@@ -120,39 +120,43 @@ bool 			BulletDemoScene::userStart()
 	//
 	// end System Test
 
-		std::string		perModelVars[] =
-		{
-			"model"
-		};
+	std::string		perModelVars[] =
+	{
+		"model"
+	};
 
-		std::string		perFrameVars[] =
-		{
-			"projection",
-			"view",
-			"light",
-			"time"
-		};
+	std::string		perFrameVars[] =
+	{
+		"projection",
+		"view",
+		"light",
+		"time"
+	};
 
-		std::string		materialBasic[] =
-		{
-			"ambient",
-			"diffuse",
-			"specular",
-			"transmittance",
-			"emission",
-			"shininess"
-		};
+	std::string		materialBasic[] =
+	{
+		"ambient",
+		"diffuse",
+		"specular",
+		"transmittance",
+		"emission",
+		"shininess"
+	};
 
 	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
 		"./Shaders/MaterialBasic.vp",
 		"./Shaders/MaterialBasic.fp");
 
-		_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
-			.init(&s, "MaterialBasic", materialBasic);
-		_engine.getInstance<Renderer>()->addUniform("PerFrame")
-			.init(&s, "PerFrame", perFrameVars);
-		_engine.getInstance<Renderer>()->addUniform("PerModel")
-			.init(&s, "PerModel", perModelVars);
+	_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
+		.init(&s, "MaterialBasic", materialBasic);
+	_engine.getInstance<Renderer>()->addUniform("PerFrame")
+		.init(&s, "PerFrame", perFrameVars);
+	_engine.getInstance<Renderer>()->addUniform("PerModel")
+		.init(&s, "PerModel", perModelVars);
+
+	_engine.getInstance<Renderer>()->addShader("2DText",
+		"./Shaders/2DText.vp",
+		"./Shaders/2DText.fp");
 
 	_engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 	_engine.getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
@@ -168,6 +172,7 @@ bool 			BulletDemoScene::userStart()
 	_engine.getInstance<Renderer>()->getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
 		.addLayer(GL_COLOR_ATTACHMENT0).build();
 	_engine.getInstance<Renderer>()->getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
+	_engine.getInstance<Renderer>()->getShader("2DText")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 	_engine.getInstance<Renderer>()->getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
 	_engine.getInstance<Renderer>()->getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
 		.addLayer(GL_COLOR_ATTACHMENT0).build();
@@ -196,12 +201,12 @@ bool 			BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
-//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
-//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
+	//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
+	//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
-//	getInstance<FontManager>()->convertFont(File("./Assets/Montez-Regular.ttf"), {10, 20, 30, 40, 50, 60, 70}, "./", "myFont");
+	//	getInstance<FontManager>()->convertFont(File("./Assets/Montez-Regular.ttf"), {10, 20, 30, 40, 50, 60, 70}, "./", "myFont");
 	getInstance<FontManager>()->loadFont(File("myFont.cpdFont"));
 
 	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
@@ -224,7 +229,7 @@ bool 			BulletDemoScene::userStart()
 
 	// SKYBOX SETTINGS
 
-	std::string		vars[] = 
+	std::string		vars[] =
 	{
 		"projection",
 		"view"
@@ -236,7 +241,7 @@ bool 			BulletDemoScene::userStart()
 
 	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
 		init(&sky, "cameraUniform", vars);
-	
+
 	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	//File saveFile("BulletScene.scenesave");
@@ -253,20 +258,20 @@ bool 			BulletDemoScene::userStart()
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
 		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
-//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
+		//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
-//		rigidBody->setCollisionShape(Component::RigidBody::BOX);
+		//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
+		//		rigidBody->setCollisionShape(Component::RigidBody::BOX);
 		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
 		rigidBody->getBody().setRestitution(0.9f);
-//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
-//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
+		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
+		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
 		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 	}
@@ -276,7 +281,7 @@ bool 			BulletDemoScene::userStart()
 
 	{
 		auto e = createEntity();
-		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0,100,0)));
+		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 100, 0)));
 		auto fpc = e->addComponent<Component::FPController>();
 		character = e;
 		cameraComponent = character->addComponent<Component::CameraComponent>();
@@ -359,7 +364,7 @@ bool 			BulletDemoScene::userUpdate(double time)
 	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
 		_engine.getInstance<Input>()->getInput(SDL_QUIT))
 	{
-		 //SERIALIZATION
+		//SERIALIZATION
 		{
 			std::ofstream s("BulletScene.scenesave", std::ios_base::binary);
 			save<cereal::BinaryOutputArchive>(s);

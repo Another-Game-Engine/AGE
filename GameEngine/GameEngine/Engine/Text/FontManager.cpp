@@ -316,7 +316,7 @@ bool FontManager::isLoaded(const std::string &name)
 	return _collection.find(name) != std::end(_collection);
 }
 
-void FontManager::drawString(const std::string &text, const std::string &fontName, std::size_t size, const glm::vec2 &position)
+void FontManager::drawString(const std::string &text, const std::string &fontName, std::size_t size, const glm::fvec2 &position)
 {
 	auto font = _collection.find(fontName);
 	if (font == std::end(_collection) || !font->second.isLoaded())
@@ -339,27 +339,43 @@ void FontManager::drawString(const std::string &text, const std::string &fontNam
 	std::vector<glm::vec2>		uvs;		// texture coordinates
 	std::vector<unsigned int>	indices;	// indices
 	Vertice<4>					buffer;
-
+	float lastX = position.x;
 	for (auto i = 0; i < text.size(); ++i)
 	{
 		auto l = text[i] - ASCII_BEGIN;
-		vertices.push_back(glm::vec4(i * 10 + position.x, position.y, 0, 1));
-		vertices.push_back(glm::vec4(i * 10 + position.x + f._map[l].width, position.y, 0, 1));
-		vertices.push_back(glm::vec4(i * 10 + position.x, position.y + f._map[l].height, 0, 1));
-		vertices.push_back(glm::vec4(i * 10 + position.x + f._map[l].width, position.y + f._map[l].height, 0, 1));
-		colors.push_back(glm::vec4(0, 1, 1, 1));
-		colors.push_back(glm::vec4(1, 0, 1, 1));
-		colors.push_back(glm::vec4(1, 1, 0, 1));
-		colors.push_back(glm::vec4(1, 1, 1, 1));
+		//glBegin(GL_QUADS);
+		//glColor4f(1, 0, 1, 0);
+		//glVertex4f(-0.1, -0.1, 0, 1);
+		//glVertex4f(0.1, -0.1, 0, 1);
+		//glVertex4f(0.1, 0.1, 0, 1);
+		//glVertex4f(-0.1, 0.1, 0, 1);
+		//glEnd();
+		auto test = f._map[l];
+		vertices.push_back(glm::vec4(lastX, position.y, 0, 1));
+		vertices.push_back(glm::vec4(lastX + f._map[l].uvs[2] - f._map[l].uvs[0], position.y, 0, 1));
+		vertices.push_back(glm::vec4(lastX + f._map[l].uvs[2] - f._map[l].uvs[0], position.y + f._map[l].uvs[3] - f._map[l].uvs[1], 0, 1));
+		vertices.push_back(glm::vec4(lastX, position.y + f._map[l].uvs[3] - f._map[l].uvs[1], 0, 1));
+		lastX += f._map[l].uvs[2] - f._map[l].uvs[0];
+		//vertices.push_back(glm::vec4((float)i / 100.0f + position.x, position.y, 0, 1));
+		//vertices.push_back(glm::vec4((float)i / 100.0f + position.x + f._map[l].width, position.y, 0, 1));
+		//vertices.push_back(glm::vec4((float)i / 100.0f + position.x, position.y + f._map[l].height, 0, 1));
+		//vertices.push_back(glm::vec4((float)i / 1000.0f + position.x + f._map[l].width, position.y + f._map[l].height, 0, 1));
+		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
+		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
+		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
+		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
 		uvs.push_back(glm::vec2(0, 0));
-		uvs.push_back(glm::vec2(0, 1));
-		uvs.push_back(glm::vec2(1, 1));
 		uvs.push_back(glm::vec2(1, 0));
+		uvs.push_back(glm::vec2(1, 1));
+		uvs.push_back(glm::vec2(0, 1));
 		normals.push_back(glm::vec4(1));
 		normals.push_back(glm::vec4(1));
 		normals.push_back(glm::vec4(1));
 		normals.push_back(glm::vec4(1));
-		indices.push_back(i);
+		indices.push_back(i * 4);
+		indices.push_back(i * 4 + 1);
+		indices.push_back(i * 4 + 2);
+		indices.push_back(i * 4 + 3);
 	}
 
 	std::array<Data, 4> data =
@@ -384,6 +400,6 @@ void FontManager::drawString(const std::string &text, const std::string &fontNam
 	leak->init();
 	leak->addVertice(buffer);
 
-	glBindTexture(GL_TEXTURE_2D, f._textureId);
 	buffer.draw(GL_QUADS);
+	delete leak;
 }
