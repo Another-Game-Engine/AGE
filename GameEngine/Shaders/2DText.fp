@@ -13,5 +13,6 @@ void main(void)
 {
 //  FragColor = vec4(1,1,1,1);//
 //  FragColor = fColor;
+//    FragColor = vec4(1,1,1,texture2D(fTexture0, fTexCoord).a);
   FragColor = vec4(1,1,1,texture2D(fTexture0, fTexCoord).a) * fColor;
 }

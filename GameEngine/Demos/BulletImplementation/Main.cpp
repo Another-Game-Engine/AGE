@@ -38,7 +38,7 @@ int			main(int ac, char **av)
 	e.setInstance<SceneManager>();
 	e.setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 	e.setInstance<AudioManager>()->init();
-	e.setInstance<FontManager>()->init();
+	e.setInstance<FontManager>()->init(&e);
 
 	// init engine
 	if (e.init() == false)
