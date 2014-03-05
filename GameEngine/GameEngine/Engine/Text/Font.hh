@@ -1,8 +1,8 @@
 #pragma once
 
 #include "FontGlyph.hh"
-#include <memory>
 #include <Utils/OpenGL.hh>
+#include <vector>
 
 class Font
 {
@@ -14,7 +14,7 @@ public:
 private:
 	std::size_t _size;
 	std::size_t _glyphSize;
-	std::unique_ptr<unsigned char> _textureDatas;
+	std::vector<unsigned char> _textureDatas;
 	std::string _name;
 	GLuint _textureId;
 	std::size_t _texW;
