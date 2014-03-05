@@ -10,8 +10,9 @@
 
 enum Shadow
 {
-	DIRECTIONAL,
-	POINT_LIGHT
+	DIRECTIONAL = 0,
+	POINT_LIGHT,
+	UNKNOW
 };
 
 class MeshRendererSystem : public System
@@ -19,18 +20,22 @@ class MeshRendererSystem : public System
 public:
 	MeshRendererSystem(AScene *scene)
 		: System(scene),
+		_type(UNKNOW),
 		_shadow(false),
 		_texShadow(0),
 		_filter(scene),
 		_renderDebugMethod(false)
 	{
+		glEnable(GL_TEXTURE_CUBE_MAP);
 		glGenTextures(1, &_texShadow);
+		glGenTextures(1, &_cubeMapShadow); 
 		glGenFramebuffers(1, &_frameBuffer);
 	}
 
 	virtual ~MeshRendererSystem()
 	{
 		glDeleteTextures(1, &_texShadow);
+		glDeleteTextures(1, &_cubeMapShadow);
 		glDeleteFramebuffers(1, &_frameBuffer);
 	}
 
@@ -53,10 +58,57 @@ public:
 			glClearDepth(1.0f);
 			glDepthFunc(GL_LESS);
 			glClear(GL_DEPTH_BUFFER_BIT);
-			for (auto e : _filter.getCollection())
+			if (_type == DIRECTIONAL)
 			{
-				auto &mesh = e->getComponent<Component::MeshRenderer>();
-				mesh->render_shadowmap(_texShadow, _lightVP);
+				glBindTexture(GL_TEXTURE_2D, _texShadow);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _texShadow, 0);
+				GLenum mode = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+				if (mode != GL_FRAMEBUFFER_COMPLETE)
+					std::cout << "Error frambuffer" << std::endl;
+				if (mode == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+					std::cout << "Error frambuffer incomplete attachment" << std::endl;
+				if (mode == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+					std::cout << "Error framebuffer missing attachement" << std::endl;
+				if (mode == GL_FRAMEBUFFER_UNSUPPORTED)
+					std::cout << "Error framebuffer unsupported" << std::endl;
+				for (auto e : _filter.getCollection())
+				{
+					auto &mesh = e->getComponent<Component::MeshRenderer>();
+					mesh->render_shadowmap(_lightVP);
+				}
+			}
+			else if (_type == POINT_LIGHT)
+			{
+				glm::vec3 cubeMapPos[6] =
+				{
+					glm::vec3(0, 1, 0),
+					glm::vec3(1, 0, 0),
+					glm::vec3(-1, 0, 0),
+					glm::vec3(0, -1, 0),
+					glm::vec3(0, 0, 1),
+					glm::vec3(0, 0, -1)
+				};
+
+				glBindTexture(GL_TEXTURE_CUBE_MAP, _cubeMapShadow);
+				for (unsigned int j = 0; j < 6; ++j)
+				{
+					glm::mat4 viewProjection = glm::perspective<float>(90.0f, 1.0, 2.0f, 50.0f) * glm::lookAt(glm::vec3(0, 0, 0), cubeMapPos[j], glm::vec3(0, 1, 0));
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, _cubeMapShadow, 0);
+					GLenum mode = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+					if (mode != GL_FRAMEBUFFER_COMPLETE)
+						std::cout << "Error frambuffer" << std::endl;
+					if (mode == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+						std::cout << "Error frambuffer incomplete attachment" << std::endl;
+					if (mode == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+						std::cout << "Error framebuffer missing attachement" << std::endl;
+					if (mode == GL_FRAMEBUFFER_UNSUPPORTED)
+						std::cout << "Error framebuffer unsupported" << std::endl;
+					for (auto e : _filter.getCollection())
+					{
+						auto &mesh = e->getComponent<Component::MeshRenderer>();
+						mesh->render_shadowmap(_lightVP);
+					}
+				}
 			}
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -71,28 +123,14 @@ public:
 
 	void onShadow(Shadow type)
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+		_type = type;
 		_shadow = true;
-		if (type == DIRECTIONAL)
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texShadow, 0);
-		else if (type == POINT_LIGHT)
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texShadow, 0);
-		else
-			std::cerr << "Error on Shadow, this kind of shadow doesn't exist." << std::endl;
-		GLenum mode = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		if (mode != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "Error frambuffer" << std::endl;
-		if (mode == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
-			std::cout << "Error frambuffer incomplete attachment" << std::endl;
-		if (mode == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
-			std::cout << "Error framebuffer missing attachement" << std::endl;
-		if (mode == GL_FRAMEBUFFER_UNSUPPORTED)
-			std::cout << "Error framebuffer unsupported" << std::endl;
 	}
 
 	void offShadow()
 	{
 		_shadow = false;
+		_type = UNKNOW;
 	}
 
 	void setLightVP(glm::mat4 const &lightVP)
@@ -106,6 +144,7 @@ public:
 	}
 
 protected:
+	Shadow _type;
 	bool _shadow;
 	glm::mat4 _lightVP;
 	GLuint _texShadow;
@@ -138,12 +177,15 @@ protected:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, _cubeMapShadow);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_DEPTH_COMPONENT16, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+		for (int i = 0; i < 6; ++i)
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT16, 500, 500, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	}
 
 

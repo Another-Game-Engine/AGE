@@ -35,7 +35,7 @@ namespace Component
 		mesh = nullptr;
 	}
 
-	void MeshRenderer::render_shadowmap(GLuint shadowTex, glm::mat4 const &lightVP)
+	void MeshRenderer::render_shadowmap(glm::mat4 const &lightVP)
 	{
 		glEnable(GL_DEPTH_TEST);
 		glm::mat4 depthMVP = lightVP * _entity->getGlobalTransform();
@@ -46,9 +46,7 @@ namespace Component
 		lightMVP->setUniform("lightMVP", depthMVP);
 		lightMVP->flushChanges();
 		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
-		{
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
-		}
 	}
 
 	void MeshRenderer::render(bool shadow, GLuint shadowTex, glm::mat4 const &lightVP)
