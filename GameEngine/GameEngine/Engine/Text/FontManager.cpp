@@ -379,9 +379,22 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 	}
 
 	auto fontSize = font->second._sizes.find(size);
-	if (fontSize == std::end(font->second._sizes) || !fontSize->second.isLoaded())
+	if (fontSize == std::end(font->second._sizes))
 	{
-		std::cerr << "Size not found [" << size << "] for font : " << fontName << std::endl;
+		fontSize = font->second._sizes.upper_bound(size);
+		if (fontSize == std::end(font->second._sizes))
+		{
+			fontSize = font->second._sizes.lower_bound(size);
+			if (fontSize == std::end(font->second._sizes))
+			{
+				std::cerr << "Size not found [" << size << "] for font : " << fontName << std::endl;
+				return;
+			}
+		}
+	}
+	if (!fontSize->second.isLoaded())
+	{
+		std::cerr << "Size [" << size << "] for font " << fontName << " is not loaded." << std::endl;
 		return;
 	}
 	auto &f = fontSize->second;
