@@ -398,7 +398,7 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 		// IF SPACE
 		if (text[i] == ' ')
 		{
-			lastX += 0.01f;
+			lastX += (float)size / 3.0f;
 		}
 		vertices.push_back(glm::vec4(lastX, position.y + size, 0, 1));
 		vertices.push_back(glm::vec4(lastX + f._map[l].width, position.y + size, 0, 1));
@@ -422,7 +422,7 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 		indices.push_back(i * 4 + 2);
 		indices.push_back(i * 4 + 3);
 
-		lastX += f._map[l].width * 3;
+		lastX += f._map[l].width;
 	}
 
 	std::array<Data, 3> data =
