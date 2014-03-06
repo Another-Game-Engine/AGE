@@ -1,10 +1,10 @@
 #version 330
 
 uniform sampler2D fTexture0;
+uniform mat4 transformation;
 
 in vec4 fPosition;
 in vec4 fColor;
-in vec4 fNormal;
 in vec2 fTexCoord;
 
 out layout (location = 0) vec4 FragColor;
