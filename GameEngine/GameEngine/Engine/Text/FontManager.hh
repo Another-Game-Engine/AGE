@@ -22,7 +22,7 @@ public:
 
 	bool loadFont(const File &file, const std::string &name = "");
 	bool isLoaded(const std::string &name);
-	void drawString(const std::string &s, const std::string &fontName, std::size_t size, const glm::fvec2 &position, const std::string &shader);
+	void draw2DString(const std::string &s, const std::string &fontName, std::size_t size, const glm::ivec2 &position, const std::string &shader);
 private:
 	bool _convertFont(Font::FontSize &font, std::size_t size, FT_Face &face);
 	std::map <std::string, Font> _collection;
