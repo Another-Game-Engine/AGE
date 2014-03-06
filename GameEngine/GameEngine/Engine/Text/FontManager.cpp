@@ -399,12 +399,16 @@ void FontManager::drawString(const std::string &text, const std::string &fontNam
 		//glEnd();
 		auto test = f._map[l];
 
-
-
-		vertices.push_back(glm::vec4(lastX, position.y, 0, 1));
-		vertices.push_back(glm::vec4(lastX + f._map[l].uvs[2] - f._map[l].uvs[0], position.y, 0, 1));
+		// IF SPACE
+		if (text[i] == ' ')
+		{
+			lastX += 0.01f;
+		}
 		vertices.push_back(glm::vec4(lastX + f._map[l].uvs[2] - f._map[l].uvs[0], position.y + f._map[l].uvs[3] - f._map[l].uvs[1], 0, 1));
 		vertices.push_back(glm::vec4(lastX, position.y + f._map[l].uvs[3] - f._map[l].uvs[1], 0, 1));
+		vertices.push_back(glm::vec4(lastX, position.y, 0, 1));
+		vertices.push_back(glm::vec4(lastX + f._map[l].uvs[2] - f._map[l].uvs[0], position.y, 0, 1));
+
 		lastX += f._map[l].uvs[2] - f._map[l].uvs[0];
 		//vertices.push_back(glm::vec4((float)i / 100.0f + position.x, position.y, 0, 1));
 		//vertices.push_back(glm::vec4((float)i / 100.0f + position.x + f._map[l].width, position.y, 0, 1));
