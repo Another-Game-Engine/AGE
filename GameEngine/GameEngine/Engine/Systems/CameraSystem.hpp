@@ -70,14 +70,14 @@ protected:
 //		_scene->getInstance<Renderer>()->getShader("2DText")->use();
 		//_scene->getInstance<Renderer>()->getUniform("PerModel")->setUniform("model", glm::mat4(1));
 		//_scene->getInstance<Renderer>()->getUniform("PerModel")->flushChanges();
-		_scene->getInstance<FontManager>()->drawString("On s'en fout", "myFont", 70, glm::fvec2(-1.0f, 0.8f), "2DText");
-		_scene->getInstance<FontManager>()->drawString("De Ta Vielle vie de Merde", "myFont", 60, glm::fvec2(-1.0f, 0.6f), "2DText");
-		_scene->getInstance<FontManager>()->drawString("Tu ne vaux meme pas 3 sous", "myFont", 50, glm::fvec2(-1.0f, 0.4f), "2DText");
-		_scene->getInstance<FontManager>()->drawString("Rentre chez ta mere !!!", "myFont", 40, glm::fvec2(-1.0f, 0.2f), "2DText");
-		_scene->getInstance<FontManager>()->drawString("Faire de l'ASCII ART avec ta bite !", "myFont", 30, glm::fvec2(-1.0f, 0.0f), "2DText");
-		_scene->getInstance<FontManager>()->drawString("CeCi EsT uNe BiTe 8=====o", "myFont", 20, glm::fvec2(-1.0f, -0.2f), "2DText");
-		_scene->getInstance<FontManager>()->drawString("Et ca un smyley :-D", "myFont", 10, glm::fvec2(-1.0f, -0.4f), "2DText");
-		_scene->getInstance<FontManager>()->drawString("Kill me please...", "myFont", 5, glm::fvec2(-1.0f, -0.6f), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("On s'en fout", "myFont", 70, glm::fvec2(-1.0f, 0.8f), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("De Ta Vielle vie de Merde", "myFont", 60, glm::fvec2(-1.0f, 0.6f), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("Tu ne vaux meme pas 3 sous", "myFont", 50, glm::fvec2(-1.0f, 0.4f), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("Rentre chez ta mere !!!", "myFont", 40, glm::fvec2(-1.0f, 0.2f), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("Faire de l'ASCII ART avec ta bite !", "myFont", 30, glm::fvec2(-1.0f, 0.0f), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("CeCi EsT uNe BiTe 8=====o", "myFont", 20, glm::fvec2(-1.0f, -0.2f), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("Et ca un smyley :-D", "myFont", 10, glm::fvec2(-1.0f, -0.4f), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("Kill me please...", "myFont", 5, glm::fvec2(-1.0f, -0.6f), "2DText");
 		glFinish();
 	}
 

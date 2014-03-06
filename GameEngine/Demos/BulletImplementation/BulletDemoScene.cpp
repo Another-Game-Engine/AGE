@@ -206,7 +206,8 @@ bool 			BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
-	getInstance<FontManager>()->convertFont(File("./Assets/ContrailOne.ttf"), {5, 10, 20, 30, 40, 50, 60, 70}, "./", "myFont");
+	getInstance<FontManager>()->convertFont(File("./Assets/Montez-Regular.ttf"), {5, 10, 20, 30, 40, 50, 60, 70}, "./", "myFont");
+//	getInstance<FontManager>()->convertFont(File("./Assets/ContrailOne.ttf"), {5, 10, 20, 30, 40, 50, 60, 70}, "./", "myFont");
 	getInstance<FontManager>()->loadFont(File("myFont.cpdFont"));
 
 	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);

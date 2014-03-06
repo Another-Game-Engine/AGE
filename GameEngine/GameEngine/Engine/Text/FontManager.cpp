@@ -358,7 +358,7 @@ bool FontManager::isLoaded(const std::string &name)
 	return _collection.find(name) != std::end(_collection);
 }
 
-void FontManager::drawString(const std::string &text, const std::string &fontName, std::size_t size, const glm::fvec2 &position, const std::string &shader)
+void FontManager::draw2DString(const std::string &text, const std::string &fontName, std::size_t size, const glm::fvec2 &position, const std::string &shader)
 {
 	auto s = _engine->getInstance<Renderer>()->getShader("2DText");
 	if (!s)
