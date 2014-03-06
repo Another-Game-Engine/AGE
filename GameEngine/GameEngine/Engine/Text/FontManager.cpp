@@ -265,17 +265,11 @@ bool FontManager::_convertFont(Font::FontSize &font, std::size_t size, FT_Face &
 		font._map[i].width = advance - GLYPH_PADDING;
 		font._map[i].height = penY + rowSize - GLYPH_PADDING;
 
-		if (i == 't')
-			std::cout << "prout" << std::endl;
-
 		// Generate UV coords.
 		font._map[i].uvs[0] = (float)penX / (float)font._texW;
 		font._map[i].uvs[1] = (float)penY / (float)font._texH;
 		font._map[i].uvs[2] = (float)(penX + advance - GLYPH_PADDING) / (float)font._texW;
 		font._map[i].uvs[3] = (float)(penY + rowSize - GLYPH_PADDING) / (float)font._texH;
-
-		if (size == 70.0f)
-			std::cout << "asdas" << std::endl;
 
 		// Set the pen position for the next glyph
 		penX += advance;
