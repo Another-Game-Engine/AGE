@@ -384,12 +384,7 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 		fontSize = font->second._sizes.upper_bound(size);
 		if (fontSize == std::end(font->second._sizes))
 		{
-			fontSize = font->second._sizes.lower_bound(size);
-			if (fontSize == std::end(font->second._sizes))
-			{
-				std::cerr << "Size not found [" << size << "] for font : " << fontName << std::endl;
-				return;
-			}
+			fontSize = --font->second._sizes.end();
 		}
 	}
 	if (!fontSize->second.isLoaded())
@@ -398,6 +393,9 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 		return;
 	}
 	auto &f = fontSize->second;
+	float sz = f._size;
+	if (sz != (float)size)
+		sz = size;
 
 	std::vector<glm::vec4>		vertices;	// vertices positions
 	std::vector<glm::vec4>		colors;		// vertices colors
@@ -411,11 +409,12 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 		// IF SPACE
 		if (text[i] == ' ')
 		{
-			lastX += (float)size / 3.0f;
+			lastX += sz / 3.0f;
 		}
-		vertices.push_back(glm::vec4(lastX, position.y + size, 0, 1));
-		vertices.push_back(glm::vec4(lastX + f._map[l].width, position.y + size, 0, 1));
-		vertices.push_back(glm::vec4(lastX + f._map[l].width, position.y, 0, 1));
+		auto glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
+		vertices.push_back(glm::vec4(lastX, position.y + sz, 0, 1));
+		vertices.push_back(glm::vec4(lastX + glyphWidth, position.y + sz, 0, 1));
+		vertices.push_back(glm::vec4(lastX + glyphWidth, position.y, 0, 1));
 		vertices.push_back(glm::vec4(lastX, position.y, 0, 1));
 
 
@@ -435,7 +434,7 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 		indices.push_back(i * 4 + 2);
 		indices.push_back(i * 4 + 3);
 
-		lastX += f._map[l].width;
+		lastX += glyphWidth;
 	}
 
 	std::array<Data, 3> data =
