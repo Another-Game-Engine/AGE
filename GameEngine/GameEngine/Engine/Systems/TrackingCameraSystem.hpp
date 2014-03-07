@@ -18,7 +18,9 @@ public:
 	TrackingCameraSystem(AScene *scene)
 		: System(scene)
 		, _filter(scene)
-	{}
+	{
+		_name = "tracking_camera_system";
+	}
 	virtual ~TrackingCameraSystem(){}
 protected:
 	EntityFilter _filter;

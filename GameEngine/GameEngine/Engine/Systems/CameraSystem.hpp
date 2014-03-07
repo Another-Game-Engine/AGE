@@ -21,7 +21,9 @@ public:
 		: System(scene)
 		, _filter(scene)
 		, _renderDebugMethod(false)
-	{}
+	{
+		_name = "camera_system";
+	}
 
 	virtual ~CameraSystem(){}
 
