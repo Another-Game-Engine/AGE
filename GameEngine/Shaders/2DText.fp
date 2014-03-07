@@ -2,6 +2,7 @@
 
 uniform sampler2D fTexture0;
 uniform mat4 transformation;
+uniform vec4 color;
 
 in vec4 fPosition;
 in vec4 fColor;

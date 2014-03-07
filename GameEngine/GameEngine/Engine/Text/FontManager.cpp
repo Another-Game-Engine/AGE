@@ -5,8 +5,6 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
-#include <OpenGL/Vertice.hh>
-#include <OpenGL/VertexManager.hh>
 #include <Core/Renderer.hh>
 #include <Context/IRenderContext.hh>
 #include <glm/gtc/matrix_transform.hpp>
@@ -26,7 +24,14 @@ bool FontManager::init(Engine *e)
 		std::cerr << "Could not init freetype library" << std::endl;
 		return false;
 	}
-	return true;
+
+	std::array<Attribute, 2> param =
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 2),
+	};
+	_vertexManager = std::make_unique<VertexManager<2>>(param);
+	return _vertexManager->init();
 }
 
 static void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned char* srcBitmap, int srcWidth, int srcHeight)
@@ -358,7 +363,12 @@ bool FontManager::isLoaded(const std::string &name)
 	return _collection.find(name) != std::end(_collection);
 }
 
-void FontManager::draw2DString(const std::string &text, const std::string &fontName, std::size_t size, const glm::ivec2 &position, const std::string &shader)
+void FontManager::draw2DString(const std::string &text,
+	const std::string &fontName,
+	std::size_t size,
+	const glm::ivec2 &position,
+	const glm::vec4 &color,
+	const std::string &shader)
 {
 	auto s = _engine->getInstance<Renderer>()->getShader(shader);
 	if (!s)
@@ -391,11 +401,9 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 	if (sz != (float)size)
 		sz = size;
 
-	std::vector<glm::vec4>		vertices;	// vertices positions
-	std::vector<glm::vec4>		colors;		// vertices colors
-	std::vector<glm::vec2>		uvs;		// texture coordinates
-	std::vector<unsigned int>	indices;	// indices
-	Vertice<3>					buffer;
+	_vertices.clear();
+	_uvs.clear();
+	_indices.clear();
 	float lastX = position.x;
 	for (auto i = 0; i < text.size(); ++i)
 	{
@@ -406,48 +414,36 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 			lastX += sz / 3.0f;
 		}
 		auto glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
-		vertices.push_back(glm::vec4(lastX, position.y + sz, 0, 1));
-		vertices.push_back(glm::vec4(lastX + glyphWidth, position.y + sz, 0, 1));
-		vertices.push_back(glm::vec4(lastX + glyphWidth, position.y, 0, 1));
-		vertices.push_back(glm::vec4(lastX, position.y, 0, 1));
+		_vertices.emplace_back(lastX, position.y + sz, 0, 1);
+		_vertices.emplace_back(lastX + glyphWidth, position.y + sz, 0, 1);
+		_vertices.emplace_back(lastX + glyphWidth, position.y, 0, 1);
+		_vertices.emplace_back(lastX, position.y, 0, 1);
+
+		_uvs.emplace_back(f._map[l].uvs[2], f._map[l].uvs[3]);
+		_uvs.emplace_back(f._map[l].uvs[0], f._map[l].uvs[3]);
+		_uvs.emplace_back(f._map[l].uvs[0], f._map[l].uvs[1]);
+		_uvs.emplace_back(f._map[l].uvs[2], f._map[l].uvs[1]);
 
 
-		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
-		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
-		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
-		colors.push_back(glm::vec4(0, (float)(i) / 48.0f, 1, 1));
-
-		uvs.push_back(glm::vec2(f._map[l].uvs[2], f._map[l].uvs[3]));
-		uvs.push_back(glm::vec2(f._map[l].uvs[0], f._map[l].uvs[3]));
-		uvs.push_back(glm::vec2(f._map[l].uvs[0], f._map[l].uvs[1]));
-		uvs.push_back(glm::vec2(f._map[l].uvs[2], f._map[l].uvs[1]));
-
-
-		indices.push_back(i * 4);
-		indices.push_back(i * 4 + 1);
-		indices.push_back(i * 4 + 2);
-		indices.push_back(i * 4 + 3);
+		_indices.push_back(i * 4);
+		_indices.push_back(i * 4 + 1);
+		_indices.push_back(i * 4 + 2);
+		_indices.push_back(i * 4 + 3);
 
 		lastX += glyphWidth;
 	}
 
-	std::array<Data, 3> data =
+	std::array<Data, 2> data =
 	{
-		Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
-		Data(colors.size() * 4 * sizeof(float), &colors[0].x),
-		Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
+		Data(_vertices.size() * 4 * sizeof(float), &_vertices[0].x),
+		Data(_uvs.size() * 2 * sizeof(float), &_uvs[0].x)
 	};
-	Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
-	buffer = Vertice<3>(vertices.size(), data, &indicesData);
+	Data indicesData(_indices.size() * sizeof(unsigned int), &_indices[0]);
 
-	std::array<Attribute, 3> param =
-	{
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 2),
-	};
+	auto buffer = Vertice<2>(_vertices.size(), data, &indicesData);
 
 	glUniform1i(glGetUniformLocation(s->getId(), "fTexture0"), 0);
+	glUniform4f(glGetUniformLocation(s->getId(), "color"), color.x, color.y, color.z, color.a);
 	glm::ivec2 screen = _engine->getInstance<IRenderContext>()->getScreenSize();
 	glm::mat4 Projection = glm::mat4(1);
 	Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
@@ -455,10 +451,20 @@ void FontManager::draw2DString(const std::string &text, const std::string &fontN
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, f._textureId);
 
-	auto leak = new VertexManager<3>(param);
-	leak->init();
-	leak->addVertice(buffer);
+	std::array<Attribute, 2> param =
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 2),
+	};
 
+	//auto leak = new VertexManager<2>(param);
+	//leak->init();
+	//leak->addVertice(buffer);
+	//buffer.draw(GL_QUADS);
+	//leak->deleteVertice(buffer);
+	//delete leak;
+
+	_vertexManager->addVertice(buffer);
 	buffer.draw(GL_QUADS);
-	delete leak;
+//	_vertexManager->deleteVertice(buffer);
 }
