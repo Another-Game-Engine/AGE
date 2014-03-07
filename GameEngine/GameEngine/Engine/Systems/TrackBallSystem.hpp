@@ -17,7 +17,9 @@ public:
 	TrackBallSystem(AScene *scene)
 		: System(scene)
 		, _filter(scene)
-	{}
+	{
+		_name = "trackball_system";
+	}
 
 	virtual ~TrackBallSystem(){}
 protected:
