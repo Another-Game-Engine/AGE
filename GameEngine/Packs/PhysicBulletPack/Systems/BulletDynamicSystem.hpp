@@ -17,6 +17,7 @@ public:
 		, _manager(nullptr)
 		, _filter(scene)
 	{
+		_name = "bullet_dynamic_system";
 		_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene->getInstance<BulletCollisionManager>());
 	}
 	virtual ~BulletDynamicSystem(){}

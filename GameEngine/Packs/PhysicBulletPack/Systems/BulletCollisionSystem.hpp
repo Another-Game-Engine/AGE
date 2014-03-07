@@ -15,7 +15,9 @@ public:
 	BulletCollisionSystem(AScene *scene) : System(scene)
 		, _manager(scene->getInstance<BulletCollisionManager>())
 		, _filter(scene)
-	{}
+	{
+		_name = "bullet_collision_system";
+	}
 	virtual ~BulletCollisionSystem(){}
 private:
 	std::shared_ptr<BulletCollisionManager> _manager;

@@ -379,6 +379,9 @@ bool 			BulletDemoScene::userUpdate(double time)
 	timeCounter += time;
 	frameCounter += 1;
 	getInstance<FontManager>()->draw2DString("FPS : " + std::to_string(lastFrame), "myFont", 40, glm::ivec2(10, 10), glm::vec4(1), "2DText");
+
+	getInstance<FontManager>()->draw2DString("Entity Nbr : " + std::to_string(getNumberOfEntities()), "myFont", 30, glm::ivec2(10, 50), glm::vec4(1), "2DText");
+
 	if (timeCounter >= 1.0f)
 	{
 		lastFrame = frameCounter;
