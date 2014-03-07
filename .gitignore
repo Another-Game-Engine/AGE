@@ -12,6 +12,7 @@ Cereal/
 *.scenesave
 *.cpd
 *.bullet
+*.cpdFont
 
 # User-specific files
 *.suo
