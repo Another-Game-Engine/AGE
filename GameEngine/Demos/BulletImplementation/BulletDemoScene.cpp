@@ -373,5 +373,18 @@ bool 			BulletDemoScene::userUpdate(double time)
 		}
 		return (false);
 	}
+	static auto timeCounter = 0.0f;
+	static auto frameCounter = 0;
+	static auto lastFrame = 0;
+	timeCounter += time;
+	frameCounter += 1;
+	getInstance<FontManager>()->draw2DString("FPS : " + std::to_string(lastFrame), "myFont", 40, glm::ivec2(10, 10), glm::vec4(1), "2DText");
+	if (timeCounter >= 1.0f)
+	{
+		lastFrame = frameCounter;
+		timeCounter = 0.0f;
+		frameCounter = 0;
+	}
+
 	return (true);
 }

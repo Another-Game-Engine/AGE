@@ -9,16 +9,20 @@
 #include <Context/IRenderContext.hh>
 #include <glm/gtc/matrix_transform.hpp>
 
-FontManager::FontManager()
-: _engine(nullptr)
+FontManager::FontManager(Engine *engine)
+: PubSub(engine->getInstance<PubSub::Manager>())
+, _engine(engine)
 {}
 
 FontManager::~FontManager()
 {}
 
-bool FontManager::init(Engine *e)
+bool FontManager::init()
 {
-	_engine = e;
+	globalSub(std::string("endOfFrame"), [&](){
+		_drawList();
+	});
+
 	if (FT_Init_FreeType(&_library))
 	{
 		std::cerr << "Could not init freetype library" << std::endl;
@@ -363,7 +367,16 @@ bool FontManager::isLoaded(const std::string &name)
 	return _collection.find(name) != std::end(_collection);
 }
 
-void FontManager::draw2DString(const std::string &text,
+void FontManager::_drawList()
+{
+	for (auto &e : _toDraw)
+	{
+		_draw2DString(e.str, e.fontName, e.size, e.position, e.color, e.shader);
+	}
+	_toDraw.clear();
+}
+
+void FontManager::_draw2DString(const std::string &text,
 	const std::string &fontName,
 	std::size_t size,
 	const glm::ivec2 &position,
@@ -467,4 +480,14 @@ void FontManager::draw2DString(const std::string &text,
 	_vertexManager->addVertice(buffer);
 	buffer.draw(GL_QUADS);
 //	_vertexManager->deleteVertice(buffer);
+}
+
+void FontManager::draw2DString(const std::string &text,
+	const std::string &fontName,
+	std::size_t size,
+	const glm::ivec2 &position,
+	const glm::vec4 &color,
+	const std::string &shader)
+{
+	_toDraw.emplace_back(text, fontName, size, position, color, shader);
 }

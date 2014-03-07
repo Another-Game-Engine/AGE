@@ -52,7 +52,7 @@ int			main(int ac, char **av)
 	};
 
 	e.setInstance<VertexManager<4>>(param)->init();
-	e.setInstance<FontManager>()->init(&e);
+	e.setInstance<FontManager>(&e)->init();
 
 	// add scene
 	e.getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");
