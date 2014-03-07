@@ -12,7 +12,9 @@ public:
 	CollisionCleaner(AScene *scene)
 		: System(scene)
 		, _filter(scene)
-	{}
+	{
+		_name = "collision_cleaner_system";
+	}
 	virtual ~CollisionCleaner(){}
 private:
 	EntityFilter _filter;

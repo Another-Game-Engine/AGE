@@ -15,7 +15,7 @@ public:
 	virtual ~System();
 	void update(double time);
 	void init();
-	inline const std::string &getName() const { return _name; }
+	inline const std::string &getName() const {return _name; }
 protected:
 	AScene *_scene;
 	std::string _name;
