@@ -71,16 +71,16 @@ protected:
 		//_scene->getInstance<Renderer>()->getUniform("PerModel")->setUniform("model", glm::mat4(1));
 		//_scene->getInstance<Renderer>()->getUniform("PerModel")->flushChanges();
 
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 150, glm::ivec2(100, 0), "2DText");
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 100, glm::ivec2(100, 100), "2DText");
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 90, glm::ivec2(100, 200), "2DText");
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 80, glm::ivec2(100, 300), "2DText");
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 70, glm::ivec2(100, 400), "2DText");
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 60, glm::ivec2(100, 500), "2DText");
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 55, glm::ivec2(100, 600), "2DText");
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 50, glm::ivec2(100, 650), "2DText");
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 45, glm::ivec2(100, 700), "2DText");
-		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 40, glm::ivec2(100, 7050), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 150, glm::ivec2(100, 0), glm::vec4(1), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 100, glm::ivec2(100, 100), glm::vec4(1, 0, 1, 1), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 90, glm::ivec2(100, 200), glm::vec4(1 , 1 , 0 , 1), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 80, glm::ivec2(100, 300), glm::vec4(0, 1, 1, 1), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 70, glm::ivec2(100, 400), glm::vec4(0.5, 0.2, 0.8, 1), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 60, glm::ivec2(100, 500), glm::vec4(0.23, 0.923, 0.123, 1), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 55, glm::ivec2(100, 600), glm::vec4(0.932, 0.32, 0.543, 0.8), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 50, glm::ivec2(100, 650), glm::vec4(1), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 45, glm::ivec2(100, 700), glm::vec4(1), "2DText");
+		_scene->getInstance<FontManager>()->draw2DString("La vie c'est de la merde !", "myFont", 40, glm::ivec2(100, 7050), glm::vec4(1), "2DText");
 		glFinish();
 	}
 
