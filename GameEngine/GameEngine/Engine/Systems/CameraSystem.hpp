@@ -12,6 +12,7 @@
 #include <Utils/ScreenPosToWorldRay.hpp>
 #include <Context/IRenderContext.hh>
 #include <Utils/MatrixConversion.hpp>
+#include <Text/FontManager.hh>
 
 class CameraSystem : public System
 {
@@ -20,7 +21,9 @@ public:
 		: System(scene)
 		, _filter(scene)
 		, _renderDebugMethod(false)
-	{}
+	{
+		_name = "camera_system";
+	}
 
 	virtual ~CameraSystem(){}
 
@@ -65,7 +68,8 @@ protected:
 	}
 
 	virtual void updateEnd(double time)
-	{}
+	{
+	}
 
 	virtual void mainUpdate(double time)
 	{

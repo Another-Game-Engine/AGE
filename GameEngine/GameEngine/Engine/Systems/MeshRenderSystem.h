@@ -18,6 +18,7 @@ public:
 		_filter(scene),
 		_renderDebugMethod(false)
 	{
+		_name = "mesh_renderer_system";
 		glGenTextures(1, &_texShadow);
 		glGenFramebuffers(1, &_frameBuffer);
 	}

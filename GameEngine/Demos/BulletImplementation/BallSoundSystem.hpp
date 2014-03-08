@@ -19,6 +19,7 @@ public:
 		, _balls(scene)
 		, _heros(scene)
 	{
+		_name = "ball_sound_system";
 	}
 	virtual ~BallSoundSystem(){}
 protected:

@@ -8,6 +8,7 @@
 //#include "ResourceManager/ResourceManager.hh"
 
 #include <Managers/AssetsConvertorManager.hh>
+#include <Managers/FontConvertor.hh>
 #include <MediaFiles/AMediaFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
 #include <MediaFiles/ObjFile.hpp>
@@ -81,9 +82,9 @@ bool 			DemoScene::userStart()
 		//convertor.serializeData("Space");
 		//convertor.clear();
 
-		convertor->load("./Assets/museum.obj");
-		convertor->serializeData("Museum");
-		convertor->clear();
+		//convertor->load("./Assets/museum.obj");
+		//convertor->serializeData("Museum");
+		//convertor->clear();
 
 		//convertor->load("./Assets/elf/elf.obj");
 		//convertor->serializeData("Elf");
@@ -92,6 +93,10 @@ bool 			DemoScene::userStart()
 		//convertor->load("./Assets/sketch-test.obj");
 		//convertor->serializeData("SketchTest");
 		//convertor->clear();
+
+//		getInstance<FontConvertor>()->convertFont(File("./Assets/Montez-Regular.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./", "myFont");
+		getInstance<FontConvertor>()->convertFont(File("./Assets/ContrailOne.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./Assets/Serialized/", "myFont");
+
 
 	return (true);
 }
