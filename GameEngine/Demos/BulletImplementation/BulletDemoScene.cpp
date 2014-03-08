@@ -201,10 +201,10 @@ bool 			BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
+	//getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
 	//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
-	//getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
 	getInstance<FontManager>()->loadFont(File("./Assets/Serialized/myFont.cpdFont"));
 
@@ -260,18 +260,18 @@ bool 			BulletDemoScene::userStart()
 		//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
 		//rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
 		rigidBody->getBody().setRestitution(0.9f);
 		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
 		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
-		//auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
+		//auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 	}
 
@@ -379,6 +379,12 @@ bool 			BulletDemoScene::userUpdate(double time)
 	getInstance<FontManager>()->draw2DString("FPS : " + std::to_string(lastFrame), "myFont", 40, glm::ivec2(10, 10), glm::vec4(1), "2DText");
 
 	getInstance<FontManager>()->draw2DString("Entity Nbr : " + std::to_string(getNumberOfEntities()), "myFont", 30, glm::ivec2(10, 50), glm::vec4(1), "2DText");
+
+	getInstance<FontManager>()->draw2DString("This is test 1", "myFont", 30, glm::ivec2(10, 100), glm::vec4(1,0,1,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 2", "myFont", 30, glm::ivec2(10, 150), glm::vec4(0,1,1,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 3", "myFont", 30, glm::ivec2(10, 200), glm::vec4(1,1,0,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 4", "myFont", 30, glm::ivec2(10, 250), glm::vec4(0.5,0.2,0.4,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 5", "myFont", 30, glm::ivec2(10, 300), glm::vec4(1,1,1,0.5), "2DText");
 
 	if (timeCounter >= 1.0f)
 	{
