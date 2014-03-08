@@ -15,6 +15,7 @@
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Managers/AssetsConvertorManager.hh>
+#include <Managers/FontConvertor.hh>
 
 #include <cereal/archives/json.hpp>
 
@@ -31,6 +32,8 @@ int			main(int ac, char **av)
 	e.setInstance<Renderer>(&e);
 	e.setInstance<SceneManager>();
 	e.setInstance<AssetsConvertorManager>();
+	if (!e.setInstance<FontConvertor>()->init())
+		return EXIT_FAILURE;
 
 	// init engine
 	if (e.init() == false)

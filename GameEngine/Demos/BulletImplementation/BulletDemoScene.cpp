@@ -201,14 +201,12 @@ bool 			BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
-	//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
 	//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
+	//getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
-//	getInstance<FontManager>()->convertFont(File("./Assets/Montez-Regular.ttf"), {5, 10, 20, 30, 40, 50, 60, 70}, "./", "myFont");
-	getInstance<FontManager>()->convertFont(File("./Assets/ContrailOne.ttf"), {5, 10, 20, 30, 40, 50, 60, 70}, "./", "myFont");
-	getInstance<FontManager>()->loadFont(File("myFont.cpdFont"));
+	getInstance<FontManager>()->loadFont(File("./Assets/Serialized/myFont.cpdFont"));
 
 	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
 	_engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
@@ -262,18 +260,18 @@ bool 			BulletDemoScene::userStart()
 		//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-		//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-		//		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
-		//		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
+		//rigidBody->setCollisionShape(Component::RigidBody::BOX);
+		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
 		rigidBody->getBody().setRestitution(0.9f);
 		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
 		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sponza"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
+		//auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
 		mesh->setShader("MaterialBasic");
 	}
 

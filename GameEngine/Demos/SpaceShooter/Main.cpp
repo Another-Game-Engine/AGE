@@ -38,6 +38,16 @@ int			main(int ac, char **av)
 	if (e.init() == false)
 		return (EXIT_FAILURE);
 
+	std::array<Attribute, 4> param =
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 2),
+	};
+
+	e.setInstance<VertexManager<4>>(param)->init();
+
 	// add scene
 	e.getInstance<SceneManager>()->addScene(std::make_shared<InGameScene>(e), "InGameScene");
 

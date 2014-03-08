@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;C:\boost\boost_1_55_0;$(IncludePath);$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\bullet\src;C:\freetype-lib\include\freetype2</IncludePath>
-    <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\bullet\lib\Debug;C:\freetype-lib\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;C:\boost\boost_1_55_0;$(IncludePath);$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\bullet\src</IncludePath>
+    <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\bullet\lib\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Builds\</OutDir>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
   </PropertyGroup>
@@ -74,7 +74,7 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Vendors/OpenGL/lib;$(SolutionDir)Builds/;$(LibraryPath);</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>

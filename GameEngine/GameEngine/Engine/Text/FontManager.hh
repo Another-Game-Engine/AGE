@@ -19,11 +19,6 @@ public:
 	virtual ~FontManager();
 	bool init();
 
-	bool convertFont(const File &file,
-		const std::vector<std::size_t> &sizes,
-		const std::string &outputDirectory,
-		const std::string &name = "");
-
 	bool loadFont(const File &file, const std::string &name = "");
 	bool isLoaded(const std::string &name);
 	void draw2DString(const std::string &s,
@@ -67,9 +62,7 @@ private:
 	};
 
 	std::vector<DrawStringSave> _toDraw;
-	bool _convertFont(Font::FontSize &font, std::size_t size, FT_Face &face);
 	std::map <std::string, Font> _collection;
-	FT_Library  _library;
 	Engine *_engine;
 	std::unique_ptr<VertexManager<2>> _vertexManager;
 	std::vector<glm::vec4>		_vertices;	// vertices positions
