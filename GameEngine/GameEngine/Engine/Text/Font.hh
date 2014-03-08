@@ -9,6 +9,8 @@
 #include <cereal/types/map.hpp>
 #include <cereal/types/string.hpp>
 
+class FontConvertor;
+
 class Font
 {
 public:
@@ -86,4 +88,5 @@ private:
 	bool _isLoaded;
 	std::map<std::size_t, FontSize> _sizes;
 	friend class FontManager;
+	friend class FontConvertor;
 };
