@@ -42,17 +42,15 @@ static void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, uns
 {
     // offset dst bitmap by x,y.
     dstBitmap +=  (x + (y * dstWidth));
-//	srcBitmap += srcWidth * srcHeight;
     for (int i = 0; i < srcHeight; ++i)
     {
-		auto d = dstBitmap;
-		for (auto j = srcWidth - 1; j >= 0; --j)
-		{
-			*d = srcBitmap[j];
-			++d;
-		}
-////        srcBitmap -= srcWidth;
-//        memcpy(dstBitmap, (const void*)srcBitmap, srcWidth);
+		// auto d = dstBitmap;
+		//for (auto j = srcWidth - 1; j >= 0; --j)
+		//{
+		//	*d = srcBitmap[j];
+		//	++d;
+		//}
+        memcpy(dstBitmap, (const void*)srcBitmap, srcWidth);
         dstBitmap += dstWidth;
 		srcBitmap += srcWidth;
     }
@@ -244,26 +242,6 @@ bool FontManager::_convertFont(Font::FontSize &font, std::size_t size, FT_Face &
 		font._map[i].tx = penX / (float)font._texW;
 		font._map[i].ty = penY / (float)font._texH;
 
-		GLuint tid;
-			glGenTextures(1, &tid);
-			glBindTexture(GL_TEXTURE_2D, tid);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			glTexImage2D(
-				GL_TEXTURE_2D,
-				0,
-				GL_ALPHA,
-				slot->bitmap.width,
-				slot->bitmap.rows,
-				0,
-				GL_ALPHA,
-				GL_UNSIGNED_BYTE,
-				slot->bitmap.buffer
-				);
-
 		// Draw the glyph to the bitmap with a one pixel padding.
 		drawBitmap(font._textureDatas.data(), penX, penY, font._texW, glyphBuffer, glyphWidth, glyphHeight);
 
@@ -427,15 +405,15 @@ void FontManager::_draw2DString(const std::string &text,
 			lastX += sz / 3.0f;
 		}
 		auto glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
-		_vertices.emplace_back(lastX, position.y + sz, 0, 1);
-		_vertices.emplace_back(lastX + glyphWidth, position.y + sz, 0, 1);
-		_vertices.emplace_back(lastX + glyphWidth, position.y, 0, 1);
 		_vertices.emplace_back(lastX, position.y, 0, 1);
+		_vertices.emplace_back(lastX + glyphWidth, position.y, 0, 1);
+		_vertices.emplace_back(lastX + glyphWidth, position.y + sz, 0, 1);
+		_vertices.emplace_back(lastX, position.y + sz, 0, 1);
 
-		_uvs.emplace_back(f._map[l].uvs[2], f._map[l].uvs[3]);
-		_uvs.emplace_back(f._map[l].uvs[0], f._map[l].uvs[3]);
 		_uvs.emplace_back(f._map[l].uvs[0], f._map[l].uvs[1]);
 		_uvs.emplace_back(f._map[l].uvs[2], f._map[l].uvs[1]);
+		_uvs.emplace_back(f._map[l].uvs[2], f._map[l].uvs[3]);
+		_uvs.emplace_back(f._map[l].uvs[0], f._map[l].uvs[3]);
 
 
 		_indices.push_back(i * 4);
