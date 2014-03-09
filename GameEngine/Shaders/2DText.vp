@@ -14,8 +14,9 @@ out vec2 fTexCoord;
 
 void main(void)
 {
+  mat4 mvp = projection * transformation;
   fColor = color;
-  fPosition = projection * transformation * vPosition;
+  fPosition = mvp * vPosition;
   fTexCoord = vTexCoord;
   gl_Position = fPosition;
 }
