@@ -5,6 +5,8 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/array.hpp>
+#include <OpenGL/VertexManager.hh>
+#include <OpenGL/Vertice.hh>
 
 #define ASCII_BEGIN 32   //space
 #define ASCII_END   127  //DEL
@@ -19,14 +21,25 @@ struct FontGlyph
 		: index(0)
 		, width(0)
 		, height(0)
+		, buffer(nullptr)
 	{
 		uvs.fill(0);
+	}
+
+	FontGlyph(const FontGlyph &o)
+		: index(o.index)
+		, width(o.width)
+		, height(o.height)
+		, uvs(o.uvs)
+		, buffer(nullptr)
+	{
 	}
 
 	std::size_t index;
 	std::size_t width;
 	std::size_t height;
 	std::array<float, 4> uvs;
+	Vertice<2> *buffer;
 	float ax;	// advance.x
 	float ay;	// advance.y
 	float bw;	// bitmap.width;

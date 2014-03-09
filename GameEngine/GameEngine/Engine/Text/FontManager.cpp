@@ -1,6 +1,7 @@
 #include <iostream>
 #include "FontManager.hh"
 
+#include <cereal/cereal.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
@@ -50,7 +51,8 @@ bool FontManager::loadFont(const File &file, const std::string &name)
 	cereal::PortableBinaryInputArchive ar(s);
 	ar(font);
 	s.close();
-	if (!font.load())
+ 
+	if (!font.load(_vertexManager))
 	{
 		std::cerr << "Fail to load font: " << file.getFullName() << std::endl;
 		return false;
@@ -112,72 +114,66 @@ void FontManager::_draw2DString(const std::string &text,
 	if (sz != (float)size)
 		sz = size;
 
-	_vertices.clear();
-	_uvs.clear();
-	_indices.clear();
-	float lastX = position.x;
-	for (auto i = 0; i < text.size(); ++i)
-	{
-		auto l = text[i] - ASCII_BEGIN;
-		// IF SPACE
-		if (text[i] == ' ')
-		{
-			lastX += sz / 3.0f;
-		}
-		auto glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
-		_vertices.emplace_back(lastX, position.y, 0, 1);
-		_vertices.emplace_back(lastX + glyphWidth, position.y, 0, 1);
-		_vertices.emplace_back(lastX + glyphWidth, position.y + sz, 0, 1);
-		_vertices.emplace_back(lastX, position.y + sz, 0, 1);
+	//_vertices.clear();
+	//_uvs.clear();
+	//_indices.clear();
+	//float lastX = position.x;
+	//for (auto i = 0; i < text.size(); ++i)
+	//{
+	//	auto l = text[i] - ASCII_BEGIN;
+	//	// IF SPACE
+	//	if (text[i] == ' ')
+	//	{
+	//		lastX += sz / 3.0f;
+	//	}
+	//	auto glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
+	//	_vertices.emplace_back(lastX, position.y, 0, 1);
+	//	_vertices.emplace_back(lastX + glyphWidth, position.y, 0, 1);
+	//	_vertices.emplace_back(lastX + glyphWidth, position.y + sz, 0, 1);
+	//	_vertices.emplace_back(lastX, position.y + sz, 0, 1);
 
-		_uvs.emplace_back(f._map[l].uvs[0], f._map[l].uvs[1]);
-		_uvs.emplace_back(f._map[l].uvs[2], f._map[l].uvs[1]);
-		_uvs.emplace_back(f._map[l].uvs[2], f._map[l].uvs[3]);
-		_uvs.emplace_back(f._map[l].uvs[0], f._map[l].uvs[3]);
+	//	_uvs.emplace_back(f._map[l].uvs[0], f._map[l].uvs[1]);
+	//	_uvs.emplace_back(f._map[l].uvs[2], f._map[l].uvs[1]);
+	//	_uvs.emplace_back(f._map[l].uvs[2], f._map[l].uvs[3]);
+	//	_uvs.emplace_back(f._map[l].uvs[0], f._map[l].uvs[3]);
 
 
-		_indices.push_back(i * 4);
-		_indices.push_back(i * 4 + 1);
-		_indices.push_back(i * 4 + 2);
-		_indices.push_back(i * 4 + 3);
+	//	_indices.push_back(i * 4);
+	//	_indices.push_back(i * 4 + 1);
+	//	_indices.push_back(i * 4 + 2);
+	//	_indices.push_back(i * 4 + 3);
 
-		lastX += glyphWidth;
-	}
+	//	lastX += glyphWidth;
+	//}
 
-	std::array<Data, 2> data =
-	{
-		Data(_vertices.size() * 4 * sizeof(float), &_vertices[0].x),
-		Data(_uvs.size() * 2 * sizeof(float), &_uvs[0].x)
-	};
-	Data indicesData(_indices.size() * sizeof(unsigned int), &_indices[0]);
+	//std::array<Data, 2> data =
+	//{
+	//	Data(_vertices.size() * 4 * sizeof(float), &_vertices[0].x),
+	//	Data(_uvs.size() * 2 * sizeof(float), &_uvs[0].x)
+	//};
+	//Data indicesData(_indices.size() * sizeof(unsigned int), &_indices[0]);
 
-	auto buffer = Vertice<2>(_vertices.size(), data, &indicesData);
+	//auto buffer = Vertice<2>(_vertices.size(), data, &indicesData);
 
 	glUniform1i(glGetUniformLocation(s->getId(), "fTexture0"), 0);
 	glUniform4f(glGetUniformLocation(s->getId(), "color"), color.x, color.y, color.z, color.a);
 	glm::ivec2 screen = _engine->getInstance<IRenderContext>()->getScreenSize();
 	glm::mat4 Projection = glm::mat4(1);
 	Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
-	glUniformMatrix4fv(glGetUniformLocation(s->getId(), "transformation"), 1, GL_FALSE, glm::value_ptr(Projection));
+	glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, glm::value_ptr(Projection));
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, f._textureId);
 
-	std::array<Attribute, 2> param =
-	{
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 2),
-	};
 
-	//auto leak = new VertexManager<2>(param);
-	//leak->init();
-	//leak->addVertice(buffer);
+
+	//std::array<Attribute, 2> param =
+	//{
+	//	Attribute(GL_FLOAT, sizeof(float), 4),
+	//	Attribute(GL_FLOAT, sizeof(float), 2),
+	//};
+
+	//_vertexManager->addVertice(buffer);
 	//buffer.draw(GL_QUADS);
-	//leak->deleteVertice(buffer);
-	//delete leak;
-
-	_vertexManager->addVertice(buffer);
-	buffer.draw(GL_QUADS);
-//	_vertexManager->deleteVertice(buffer);
 }
 
 void FontManager::draw2DString(const std::string &text,

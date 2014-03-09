@@ -16,7 +16,7 @@ class Font
 public:
 	Font();
 	~Font();
-	bool load();
+	bool load(std::unique_ptr<VertexManager<2>> &vm);
 	bool isLoaded();
 
 	template <class Archive>
@@ -45,12 +45,44 @@ private:
 			, _texH(0)
 		{}
 
-		bool load()
+		bool load(std::unique_ptr<VertexManager<2>> &vm)
 		{
 			if (_textureDatas.size() == 0)
 				return false;
 			if (isLoaded())
 				return true;
+
+			std::vector<glm::vec4>		vertices;	// vertices positions
+			std::vector<glm::vec2>		uvs;		// texture coordinates
+			std::vector<unsigned int>	indices;	// indices
+
+			vertices.resize(4);
+			uvs.resize(4);
+			indices.resize(4);
+			indices = { 0, 1, 3, 4 };
+			for (auto &glyph : _map)
+			{
+				auto glyphWidth = (float)glyph.width;
+				vertices[0] = glm::vec4(0, 0, 0, 1);
+				vertices[1] = glm::vec4(glyphWidth, 0, 0, 1);
+				vertices[2] = glm::vec4(glyphWidth, (float)(_size), 0, 1);
+				vertices[3] = glm::vec4(0, (float)(_size), 0, 1);
+
+				uvs[0] = glm::vec2(glyph.uvs[0], glyph.uvs[1]);
+				uvs[1] = glm::vec2(glyph.uvs[2], glyph.uvs[1]);
+				uvs[2] = glm::vec2(glyph.uvs[2], glyph.uvs[3]);
+				uvs[3] = glm::vec2(glyph.uvs[0], glyph.uvs[3]);
+
+				std::array<Data, 2> data =
+				{
+					Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
+					Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
+				};
+				Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
+				glyph.buffer = new Vertice<2>(vertices.size(), data, &indicesData);
+				vm->addVertice(*(glyph.buffer));
+			}
+
 			glGenTextures(1, &_textureId);
 			glBindTexture(GL_TEXTURE_2D, _textureId);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
