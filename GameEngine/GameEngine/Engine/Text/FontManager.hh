@@ -4,11 +4,10 @@
 #include <map>
 #include <string>
 #include <Utils/File.hpp>
+#include "FontGlyph.hh"
 #include "Font.hh"
 #include <glm/glm.hpp>
 #include <Core/Engine.hh>
-#include <OpenGL/Vertice.hh>
-#include <OpenGL/VertexManager.hh>
 #include <Utils/PubSub.hpp>
 
 

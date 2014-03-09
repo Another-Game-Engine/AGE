@@ -1,6 +1,7 @@
 #version 330
 
 uniform sampler2D fTexture0;
+uniform mat4 projection;
 uniform mat4 transformation;
 uniform vec4 color;
 

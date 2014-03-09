@@ -3,6 +3,7 @@
 #include <Managers/AssetsConvertorManager.hh>
 #include <Utils/Dependency.hpp>
 #include <Text/Font.hh>
+#include <Text/FontGlyph.hh>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -82,7 +83,6 @@ public:
 			if (!_convertFont(f, size, face))
 				continue;
 			font._sizes.insert(std::make_pair(size, f));
-			font.load();
 		}
 
 		std::ofstream s(outputDirectory + font._name + ".cpdFont", std::ios_base::binary);
