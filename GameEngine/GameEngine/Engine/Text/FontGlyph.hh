@@ -31,7 +31,7 @@ struct FontGlyph
 		, width(o.width)
 		, height(o.height)
 		, uvs(o.uvs)
-		, buffer(nullptr)
+		, buffer(o.buffer)
 	{
 	}
 

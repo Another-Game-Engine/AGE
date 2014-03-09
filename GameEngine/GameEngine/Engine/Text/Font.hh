@@ -59,7 +59,7 @@ private:
 			vertices.resize(4);
 			uvs.resize(4);
 			indices.resize(4);
-			indices = { 0, 1, 3, 4 };
+			indices = { 0, 1, 2, 3 };
 			for (auto &glyph : _map)
 			{
 				auto glyphWidth = (float)glyph.width;
