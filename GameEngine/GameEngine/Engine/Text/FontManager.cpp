@@ -114,27 +114,31 @@ void FontManager::_draw2DString(const std::string &text,
 	if (sz != (float)size)
 		sz = size;
 	glm::mat4 transformation(1);
-	//	transformation = glm::translate(transformation, glm::vec3(position.x, position.y, 0));
+	transformation = glm::translate(transformation, glm::vec3(position.x, position.y, 0));
 
 	float lastX = position.x;
+
+	glUniform1i(glGetUniformLocation(s->getId(), "fTexture0"), 0);
+	glUniform4f(glGetUniformLocation(s->getId(), "color"), color.x, color.y, color.z, color.a);
+	glm::ivec2 screen = _engine->getInstance<IRenderContext>()->getScreenSize();
+	glm::mat4 Projection = glm::mat4(1);
+	Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
+	glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, glm::value_ptr(Projection));
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, f._textureId);
+
 	for (auto i = 0; i < text.size(); ++i)
 	{
 		auto l = text[i] - ASCII_BEGIN;
+		auto glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
+		lastX = glyphWidth;
 		if (text[i] == ' ')
 		{
-			lastX += sz / 3.0f;
+			lastX = sz / 3.0f;
 		}
-			glUniform1i(glGetUniformLocation(s->getId(), "fTexture0"), 0);
-			glUniform4f(glGetUniformLocation(s->getId(), "color"), color.x, color.y, color.z, color.a);
-			glm::ivec2 screen = _engine->getInstance<IRenderContext>()->getScreenSize();
-			glm::mat4 Projection = glm::mat4(1);
-			Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
-			glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, glm::value_ptr(Projection));
-			glUniformMatrix4fv(glGetUniformLocation(s->getId(), "transformation"), 1, GL_FALSE, glm::value_ptr(transformation));
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, f._textureId);
-			f._map[l].buffer->draw(GL_QUADS);
-
+		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "transformation"), 1, GL_FALSE, glm::value_ptr(transformation));
+		f._map[l].buffer->draw(GL_QUADS);
+		transformation = glm::translate(transformation, glm::vec3(lastX, 0, 0));
 	}
 
 	//_vertices.clear();
