@@ -274,15 +274,6 @@ private:
 			// penY should include the glyph offsets.
 			penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
 
-			font._map[i].ax = slot->advance.x >> 6;
-			font._map[i].ay = slot->advance.y >> 6;
-			font._map[i].bw = slot->bitmap.width;
-			font._map[i].bh = slot->bitmap.rows;
-			font._map[i].bl = slot->bitmap_left;
-			font._map[i].bt = slot->bitmap_top;
-			font._map[i].tx = penX / (float)font._texW;
-			font._map[i].ty = penY / (float)font._texH;
-
 			// Draw the glyph to the bitmap with a one pixel padding.
 			drawBitmap(font._textureDatas.data(), penX, penY, font._texW, glyphBuffer, glyphWidth, glyphHeight);
 
