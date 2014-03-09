@@ -381,10 +381,10 @@ bool 			BulletDemoScene::userUpdate(double time)
 	getInstance<FontManager>()->draw2DString("Entity Nbr : " + std::to_string(getNumberOfEntities()), "myFont", 30, glm::ivec2(10, 50), glm::vec4(1), "2DText");
 
 	getInstance<FontManager>()->draw2DString("This is test 1", "myFont", 30, glm::ivec2(10, 100), glm::vec4(1,0,1,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 2", "myFont", 30, glm::ivec2(10, 150), glm::vec4(0,1,1,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 3", "myFont", 30, glm::ivec2(10, 200), glm::vec4(1,1,0,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 4", "myFont", 30, glm::ivec2(10, 250), glm::vec4(0.5,0.2,0.4,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 5", "myFont", 30, glm::ivec2(10, 300), glm::vec4(1,1,1,0.5), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 2", "myFont", 35, glm::ivec2(10, 150), glm::vec4(0,1,1,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 3", "myFont", 40, glm::ivec2(10, 200), glm::vec4(1,1,0,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 4", "myFont", 45, glm::ivec2(10, 250), glm::vec4(0.5,0.2,0.4,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 5", "myFont", 50, glm::ivec2(10, 300), glm::vec4(1,1,1,0.5), "2DText");
 
 	if (timeCounter >= 1.0f)
 	{
