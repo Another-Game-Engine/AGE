@@ -138,6 +138,7 @@
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Text\Font.cpp" />
+    <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />

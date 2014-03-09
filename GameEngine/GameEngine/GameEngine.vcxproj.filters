@@ -41,6 +41,7 @@
     <ClCompile Include="Engine\Context\SdlContext.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
     <ClCompile Include="Engine\Text\Font.cpp" />
+    <ClCompile Include="Engine\Text\FontGlyph.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\AudioManager.hh" />

@@ -64,8 +64,4 @@ private:
 	std::map <std::string, Font> _collection;
 	Engine *_engine;
 	std::unique_ptr<VertexManager<2>> _vertexManager;
-	std::vector<glm::vec4>		_vertices;	// vertices positions
-	std::vector<glm::vec2>		_uvs;		// texture coordinates
-	std::vector<unsigned int>	_indices;	// indices
-
 };
