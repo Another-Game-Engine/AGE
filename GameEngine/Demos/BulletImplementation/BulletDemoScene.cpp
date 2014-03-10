@@ -27,6 +27,7 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/AudioSystem.hpp>
+#include <Systems/SpriteSystem.hh>
 #include <BallSoundSystem.hpp>
 
 #include <Text/FontManager.hh>
@@ -118,6 +119,7 @@ bool 			BulletDemoScene::userStart()
 	addSystem<BallSoundSystem>(220);
 	addSystem<AudioSystem>(250);
 	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
+	addSystem<SpriteSystem>(350); // DRAW SPRITES
 	//
 	//
 	// end System Test
@@ -259,7 +261,7 @@ bool 			BulletDemoScene::userStart()
 	// CREATE SPRITE ANIMATION
 	{
 		auto e = createEntity();
-		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "walk"), _engine.getInstance<Renderer>()->getShader("2DText"));
+		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "idle"), _engine.getInstance<Renderer>()->getShader("2DText"));
 	}
 
 
