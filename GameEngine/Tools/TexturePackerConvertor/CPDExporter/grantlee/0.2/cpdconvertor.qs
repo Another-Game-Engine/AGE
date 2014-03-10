@@ -2,22 +2,26 @@ var fromX, fromY;
 
 var uvFromX = function(input)
 {
+	fromX = +input;
 	return input;
 }
 
 var uvFromY = function(input)
 {
+	fromY = +input;
 	return input;
 }
 
 var uvToX = function(input)
 {
-	return "0";
+	var v = fromX + (+input);
+	return ""+v;
 }
 
 var uvToY = function(input)
 {
-	return "0";
+	var v = fromY + (+input);
+	return ""+v;
 }
 
 // the filter name
