@@ -85,6 +85,30 @@ var isLastFrame = function(input)
 	return "";
 }
 
+var margin = [0,0];
+
+var marginX = function(input)
+{
+	margin[0] = +input;
+	return input;
+}
+
+var marginY = function(input)
+{
+	margin[1] = +input;
+	return input;
+}
+
+var posToX = function(input)
+{
+	return ""+(margin[0] + (+input));
+}
+
+var posToY = function(input)
+{
+	return ""+(margin[1] + (+input));
+}
+
 // the filter name
 
 uvFromX.filterName = "uvfromx";
@@ -97,7 +121,10 @@ animationLoopEnd.filterName = "animationLoopEnd";
 getAnimationName.filterName = "getAnimationName";
 isInAnimation.filterName = "isInAnimation";
 isLastFrame.filterName = "isLastFrame";
-
+marginX.filterName = "marginX";
+marginY.filterName = "marginY";
+posToX.filterName = "posToX";
+posToY.filterName = "posToY";
  
 
 // register the filter
@@ -112,3 +139,7 @@ Library.addFilter("animationLoopEnd");
 Library.addFilter("getAnimationName");
 Library.addFilter("isInAnimation");
 Library.addFilter("isLastFrame");
+Library.addFilter("marginX");
+Library.addFilter("marginY");
+Library.addFilter("posToX");
+Library.addFilter("posToY");

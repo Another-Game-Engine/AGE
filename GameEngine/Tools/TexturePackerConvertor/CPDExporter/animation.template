@@ -5,7 +5,7 @@
 "frames": {{% for sprite in sprites %}
 	"{{sprite.trimmedName}}":{
         "uvs": [{{sprite.frameRectRel.x|uvfromx}}, {{sprite.frameRectRel.y|uvfromy}}, {{sprite.frameRectRel.width|uvtox}}, {{sprite.frameRectRel.height|uvtoy}}],
-        "dimensions": [{{sprite.frameRect.width}}, {{sprite.frameRect.height}}],
+        "dimensions": [{{sprite.sourceRect.x|marginX}}, {{sprite.sourceRect.y|marginY}}, {{sprite.sourceRect.width|posToX}}, {{sprite.sourceRect.height|posToY}}],
         "alias": [{% for alias in sprite.aliasList %}"{{alias.trimmedName}}"{% if not forloop.last %}, {% endif %}{% endfor %}]
     }{% if not forloop.last %}, {% endif %}{% endfor %}
 },
