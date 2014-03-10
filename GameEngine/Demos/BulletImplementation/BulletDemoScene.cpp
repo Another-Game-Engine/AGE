@@ -277,6 +277,11 @@ bool 			BulletDemoScene::userStart()
 		e3->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "crouch_idle"),
 			_engine.getInstance<Renderer>()->getShader("SpriteBasic"));
 		e3->setLocalTransform(glm::translate(e3->getLocalTransform(), glm::vec3(1700, 400, 0)));
+		auto e4 = createEntity();
+		e4->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "kitten"),
+			_engine.getInstance<Renderer>()->getShader("SpriteBasic"));
+		e4->setLocalTransform(glm::translate(e4->getLocalTransform(), glm::vec3(1700, 800, 0)));
+		e4->setLocalTransform(glm::scale(e4->getLocalTransform(), glm::vec3(0.1)));
 	}
 
 
