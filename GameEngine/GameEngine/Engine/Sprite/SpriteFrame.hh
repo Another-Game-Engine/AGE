@@ -32,10 +32,10 @@ public:
 		indices.resize(4);
 		indices = { 0, 1, 2, 3 };
 
-		vertices[0] = glm::vec4(0, 0, 0, 1);
-		vertices[1] = glm::vec4(_dimensions.x, 0, 0, 1);
-		vertices[2] = glm::vec4(_dimensions.x, _dimensions.y, 0, 1);
-		vertices[3] = glm::vec4(0, _dimensions.y, 0, 1);
+		vertices[0] = glm::vec4(_dimensions[0], _dimensions[1], 0, 1);
+		vertices[1] = glm::vec4(_dimensions[2], _dimensions[1], 0, 1);
+		vertices[2] = glm::vec4(_dimensions[2], _dimensions[3], 0, 1);
+		vertices[3] = glm::vec4(_dimensions[0], _dimensions[3], 0, 1);
 
 		uvs[0] = glm::vec2(_uvs[0], _uvs[1]);
 		uvs[1] = glm::vec2(_uvs[2], _uvs[1]);
@@ -54,11 +54,11 @@ public:
 		vm->addVertice(*(_buffer));
 		return true;
 	}
-	inline const glm::uvec2 &getDimensions() const { return _dimensions; }
+	inline const glm::uvec4 &getDimensions() const { return _dimensions; }
 	inline const glm::vec4 &getUvs() const { return _uvs; }
 	inline void draw() const { _buffer->draw(GL_QUADS); }
 private:
-	glm::uvec2 _dimensions;
+	glm::uvec4 _dimensions;
 	glm::vec4 _uvs;
 	Vertice<2> *_buffer;
 	friend class SpriteManager;

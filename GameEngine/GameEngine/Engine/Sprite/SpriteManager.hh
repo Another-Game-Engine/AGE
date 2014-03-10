@@ -115,7 +115,7 @@ public:
 
 			// LOAD DIMENSIONS
 			const rapidjson::Value& dimensions = itr->value["dimensions"];
-			if (!dimensions.IsArray() || dimensions.Size() != 2)
+			if (!dimensions.IsArray() || dimensions.Size() != 4)
 			{
 				std::cerr << "dimensions is not valid." << std::endl;
 				return false;
