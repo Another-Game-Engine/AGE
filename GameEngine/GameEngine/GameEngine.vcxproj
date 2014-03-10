@@ -156,6 +156,7 @@
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Components\RotationForce.hpp" />
+    <ClInclude Include="Engine\Components\SpriteComponent.hh" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />

@@ -179,6 +179,14 @@ public:
 		_collection.insert(std::make_pair(sprite->_name, sprite));
 		return true;
 	}
+
+	std::shared_ptr<SpriteAnimation> getAnimation(const std::string &spriteName, const std::string &animationName) const
+	{
+		if (_collection.find(spriteName) == std::end(_collection))
+			return nullptr;
+		return _collection.at(spriteName)->getAnimation(animationName);
+	}
+
 private:
 	Engine *_engine;
 	std::unique_ptr<VertexManager<2>> _vertexManager;

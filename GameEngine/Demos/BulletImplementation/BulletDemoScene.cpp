@@ -12,6 +12,7 @@
 #include <Components/FirstPersonView.hpp>
 #include <Components/AudioEmitter.hpp>
 #include <Components/AudioListener.hpp>
+#include <Components/SpriteComponent.hh>
 
 #include <OpenGL/ComputeShader.hh>
 #include <OpenGL/Attribute.hh>
@@ -254,6 +255,13 @@ bool 			BulletDemoScene::userStart()
 	//	fileStream.close();
 	//	return true;
 	//}
+
+	// CREATE SPRITE ANIMATION
+	{
+		auto e = createEntity();
+		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "walk"), _engine.getInstance<Renderer>()->getShader("2DText"));
+	}
+
 
 	// CREATE SPONZA CHURCH
 	{
