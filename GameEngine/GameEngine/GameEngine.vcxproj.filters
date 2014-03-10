@@ -116,6 +116,7 @@
     <ClInclude Include="Engine\Text\FontManager.hh" />
     <ClInclude Include="Engine\Text\FontGlyph.hh" />
     <ClInclude Include="Engine\Text\Font.hh" />
+    <ClInclude Include="Engine\Sprite\SpriteManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

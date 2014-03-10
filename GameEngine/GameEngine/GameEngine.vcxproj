@@ -191,6 +191,7 @@
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hpp" />
     <ClInclude Include="Engine\OpenGL\Vertice.hh" />
     <ClInclude Include="Engine\OpenGL\Vertice.hpp" />
+    <ClInclude Include="Engine\Sprite\SpriteManager.hh" />
     <ClInclude Include="Engine\Systems\AudioSystem.hpp" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
     <ClInclude Include="Engine\Systems\FirstPersonViewSystem.hpp" />

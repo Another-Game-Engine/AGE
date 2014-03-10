@@ -21,6 +21,7 @@
 #include <Audio/AudioManager.hh>
 #include <OpenGL/VertexManager.hh>
 #include <Text/FontManager.hh>
+#include <Sprite/SpriteManager.hh>
 
 int			main(int ac, char **av)
 {
@@ -38,6 +39,7 @@ int			main(int ac, char **av)
 	e.setInstance<SceneManager>();
 	e.setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 	e.setInstance<AudioManager>()->init();
+	e.setInstance<SpriteManager>()->init(&e);
 
 	// init engine
 	if (e.init() == false)
