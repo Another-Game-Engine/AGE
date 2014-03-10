@@ -1,9 +1,10 @@
 {% load cpdconvertor %}{% for sprite in allSprites %}{{sprite.trimmedName|registerAnimations}}{% endfor %}
 {
-"images": ["{{settings.textureSubPath}}{{texture.fullName}}"],
+"images": "{{settings.textureSubPath}}{{texture.fullName}}",
 "frames": {{% for sprite in sprites %}
 	"{{sprite.trimmedName}}":{
-        "spriteDatas": [{{sprite.frameRectRel.x|uvfromx}}, {{sprite.frameRectRel.y|uvfromy}}, {{sprite.frameRectRel.width|uvtox}}, {{sprite.frameRectRel.height|uvtoy}}],
+        "uvs": [{{sprite.frameRectRel.x|uvfromx}}, {{sprite.frameRectRel.y|uvfromy}}, {{sprite.frameRectRel.width|uvtox}}, {{sprite.frameRectRel.height|uvtoy}}],
+        "dimensions": [{{sprite.frameRect.width}}, {{sprite.frameRect.height}}],
         "alias": [{% for alias in sprite.aliasList %}"{{alias.trimmedName}}"{% if not forloop.last %}, {% endif %}{% endfor %}]
     }{% if not forloop.last %}, {% endif %}{% endfor %}
 },
