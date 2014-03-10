@@ -1,0 +1,22 @@
+#version 330
+
+uniform sampler2D fTexture0;
+uniform mat4 projection;
+uniform mat4 transformation;
+uniform vec4 color;
+
+layout (location = 0) in vec4 vPosition;
+layout (location = 1) in vec2 vTexCoord;
+
+out vec4 fPosition;
+out vec4 fColor;
+out vec2 fTexCoord;
+
+void main(void)
+{
+  mat4 mvp = projection * transformation;
+  fColor = color;
+  fPosition = mvp * vPosition;
+  fTexCoord = vTexCoord;
+  gl_Position = fPosition;
+}

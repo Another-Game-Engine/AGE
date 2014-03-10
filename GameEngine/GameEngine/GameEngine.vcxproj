@@ -137,6 +137,9 @@
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
+    <ClCompile Include="Engine\Text\Font.cpp" />
+    <ClCompile Include="Engine\Text\FontGlyph.cpp" />
+    <ClCompile Include="Engine\Text\FontManager.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
@@ -196,6 +199,9 @@
     <ClInclude Include="Engine\Systems\System.h" />
     <ClInclude Include="Engine\Systems\TrackBallSystem.hpp" />
     <ClInclude Include="Engine\Systems\TrackingCameraSystem.hpp" />
+    <ClInclude Include="Engine\Text\Font.hh" />
+    <ClInclude Include="Engine\Text\FontGlyph.hh" />
+    <ClInclude Include="Engine\Text\FontManager.hh" />
     <ClInclude Include="Engine\Utils\Any.hpp" />
     <ClInclude Include="Engine\Utils\Archive.hpp" />
     <ClInclude Include="Engine\Utils\Barcode.h" />

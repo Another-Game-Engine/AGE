@@ -13,7 +13,9 @@ public:
 	RotationForceSystem(AScene *scene)
 		: System(scene)
 		, _filter(scene)
-	{}
+	{
+		_name = "rotation_force_system";
+	}
 	virtual ~RotationForceSystem(){}
 private:
 	EntityFilter _filter;

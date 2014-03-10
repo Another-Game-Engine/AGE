@@ -18,7 +18,9 @@ public:
 	FPControllerSystem(AScene *scene) : System(scene)
 		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
 		, _filter(scene)
-	{}
+	{
+		_name = "FP_controller_system";
+	}
 	virtual ~FPControllerSystem(){}
 private:
 	std::shared_ptr<BulletCollisionManager> _manager;
