@@ -29,6 +29,7 @@
 #include <BallSoundSystem.hpp>
 
 #include <Text/FontManager.hh>
+#include <Sprite/SpriteManager.hh>
 
 #include <Core/Engine.hh>
 
@@ -207,6 +208,8 @@ bool 			BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
 	getInstance<FontManager>()->loadFont(File("./Assets/Serialized/myFont.cpdFont"));
+
+	getInstance<SpriteManager>()->loadFile(File("./Assets/Serialized/GreyMan.CPDAnimation"));
 
 	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
 	_engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
