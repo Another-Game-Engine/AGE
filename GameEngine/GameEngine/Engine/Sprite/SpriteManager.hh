@@ -66,6 +66,14 @@ public:
 		std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
 
 		std::string image = document["image"].GetString();
+		auto texture = _engine->getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(file.getFolder() + "/" + image);
+
+		if (!texture.get())
+		{
+			std::cerr << "Texture [" << image << "] not found.";
+			return false;
+		}
+
 		sprite->_name = document["name"].GetString();
 
 		if (!document.HasMember("frames") || !document["frames"].IsObject())
@@ -163,6 +171,7 @@ public:
 					ref = tmpRef.find(address->second);
 					animation->_frames.push_back(address->second);
 				}
+				animation->_texture = std::static_pointer_cast<TextureFile>(texture);
 				animation->_steps.push_back(ref->second);
 			}
 			sprite->_animations.insert(std::make_pair(itr->name.GetString(), animation));
