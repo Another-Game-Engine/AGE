@@ -119,6 +119,7 @@ bool 			BulletDemoScene::userStart()
 	addSystem<BallSoundSystem>(220);
 	addSystem<AudioSystem>(250);
 	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
+	addSystem<RotationForceSystem>(320);
 	addSystem<SpriteSystem>(350); // DRAW SPRITES
 	//
 	//
@@ -161,6 +162,10 @@ bool 			BulletDemoScene::userStart()
 	_engine.getInstance<Renderer>()->addShader("2DText",
 		"./Shaders/2DText.vp",
 		"./Shaders/2DText.fp");
+
+	_engine.getInstance<Renderer>()->addShader("SpriteBasic",
+		"./Shaders/SpriteBasic.vp",
+		"./Shaders/SpriteBasic.fp");
 
 	_engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 	_engine.getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
@@ -261,7 +266,17 @@ bool 			BulletDemoScene::userStart()
 	// CREATE SPRITE ANIMATION
 	{
 		auto e = createEntity();
-		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "idle"), _engine.getInstance<Renderer>()->getShader("2DText"));
+		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "idle"),
+			_engine.getInstance<Renderer>()->getShader("SpriteBasic"));
+		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 300, 0)));
+		auto e2 = createEntity();
+		e2->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "walk"),
+			_engine.getInstance<Renderer>()->getShader("SpriteBasic"));
+		e2->setLocalTransform(glm::translate(e2->getLocalTransform(), glm::vec3(1700, 0, 0)));
+		auto e3 = createEntity();
+		e3->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "crouch_idle"),
+			_engine.getInstance<Renderer>()->getShader("SpriteBasic"));
+		e3->setLocalTransform(glm::translate(e3->getLocalTransform(), glm::vec3(1700, 400, 0)));
 	}
 
 
