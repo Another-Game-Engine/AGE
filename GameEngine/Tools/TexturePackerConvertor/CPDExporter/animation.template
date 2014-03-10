@@ -1,0 +1,25 @@
+{% load cpdconvertor %}
+
+{
+"images": ["{{settings.textureSubPath}}{{texture.fullName}}"],
+"frames": {
+{% for sprite in sprites %}
+    "{{sprite.trimmedName}}":{
+        "spriteDatas": [{{sprite.frameRectRel.x|uvfromx}}, {{sprite.frameRectRel.y|uvfromy}}, {{sprite.frameRectRel.width|uvtox}}, {{sprite.frameRectRel.height|uvtoy}}],
+        "alias": [{% for alias in sprite.aliasList %}"{{alias.trimmedName}}"{% if not forloop.last %}, {% endif %}{% endfor %}]
+    }
+{% if not forloop.last %}, {% endif %}{% endfor %}
+},
+{% for sprite in sprites %}
+"{{sprite.trimmedName}}":[
+        {% for alias in sprite.aliasList %}"{{alias.trimmedName}}"{% if not forloop.last %}, {% endif %}{% endfor %}]{% if not forloop.last %}, {% endif %}{% endfor %}
+},
+"animations": {
+    {% for sprite in allSprites %}
+        "{{ forloop.counter0 }}":[{{sprite.trimmedName}}]{% if not forloop.last %}, {% endif %}{% endfor %}
+},
+"texturepacker": [
+        "SmartUpdateHash: {{smartUpdateKey}}",
+        "Created with TexturePacker (http://www.texturepacker.com) for EaselJS"
+]
+}
