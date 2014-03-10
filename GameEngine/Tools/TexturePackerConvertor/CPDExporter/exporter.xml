@@ -1,0 +1,49 @@
+<exporter version="1.0">
+  <!-- identifier of the exporter -->
+  <name>CPDExporter</name>
+ 
+  <!-- display name of the exporter for the combo box -->
+  <displayName>CPDExporter</displayName>
+ 
+  <!-- description of the exporter -->
+  <description>Export to CPD format.</description>
+ 
+  <!-- exporter version -->
+  <version>1.0</version>
+ 
+  <!-- currently only one file allowed - 
+       more to come soon -->
+  <files>
+      <file>
+          <!-- name of this file variable -->
+          <name>CPDAnimationFile</name>
+ 
+          <!-- human readable name (for GUI) -->
+          <displayName>CPDAnimationFile</displayName>
+ 
+          <!-- file extension for the file -->
+          <fileExtension>CPDAnimation</fileExtension>
+ 
+          <!-- name of the template file -->
+          <template>animation.template</template>
+      </file>
+  </files>
+ 
+  <!-- target framework supports trimming -->
+  <supportsTrimming>yes</supportsTrimming>
+ 
+  <!-- target framework supports rotated sprites -->
+  <supportsRotation>no</supportsRotation>
+ 
+  <!-- rotated sprites direction (cw/ccw) -->
+  <rotationDirection>cw</rotationDirection>
+ 
+  <!-- supports npot sizes -->
+  <supportsNPOT>yes</supportsNPOT>
+ 
+  <!-- supports file name stripping (remove .png etc.) -->
+  <supportsTrimSpriteNames>yes</supportsTrimSpriteNames>
+ 
+  <!-- supports texture subpath -->
+  <supportsTextureSubPath>yes</supportsTextureSubPath>
+</exporter>
