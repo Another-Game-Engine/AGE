@@ -14,4 +14,5 @@ public:
 
 	void 		update();
 	double 		getElapsed() const;
+	double 		getNow() const;
 };

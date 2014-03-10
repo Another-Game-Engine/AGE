@@ -27,12 +27,13 @@ private:
 	std::multimap<std::size_t, std::shared_ptr<System> >   _systems;
 	std::vector<EntityData>                             _pool;
 	std::queue<unsigned int>                            _free;
+	std::size_t                                         _entityNumber;
 protected:
 	Engine                                              &_engine;
 public:
 	AScene(Engine &engine);
 	virtual ~AScene();
-
+	inline std::size_t getNumberOfEntities() { return _entityNumber; }
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);

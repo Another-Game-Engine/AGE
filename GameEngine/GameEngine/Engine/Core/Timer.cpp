@@ -32,3 +32,8 @@ double 		Timer::getElapsed() const
 	return glm::clamp(static_cast<double>(_curTime - _oldTime) / 1000.0, 0.0, 0.1);
 }
 
+double 		Timer::getNow() const
+{
+	return static_cast<double>(SDL_GetTicks()) / 1000.0f;
+}
+

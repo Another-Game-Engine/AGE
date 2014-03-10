@@ -13,7 +13,9 @@ class CollisionAdder : public System
 public:
 	CollisionAdder(AScene *scene) : System(scene)
 		, _manager(scene->getInstance<BulletCollisionManager>())
-	{}
+	{
+		_name = "collision_adder_system";
+	}
 	virtual ~CollisionAdder(){}
 private:
 	std::shared_ptr<BulletCollisionManager> _manager;

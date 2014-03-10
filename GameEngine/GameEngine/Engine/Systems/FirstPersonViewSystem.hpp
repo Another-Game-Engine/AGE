@@ -15,7 +15,9 @@ public:
 	FirstPersonViewSystem(AScene *scene)
 		: System(scene)
 		, _filter(scene)
-	{}
+	{
+		_name = "first_person_view_system";
+	}
 
 	virtual ~FirstPersonViewSystem(){}
 protected:

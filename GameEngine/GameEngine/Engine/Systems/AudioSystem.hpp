@@ -18,6 +18,7 @@ public:
 		, _listeners(scene)
 		, _manager(scene->getInstance<AudioManager>())
 	{
+		_name = "audio_system";
 		assert(_manager != nullptr && "No audio manager found.");
 	}
 	virtual ~AudioSystem(){}
