@@ -39,7 +39,6 @@ int			main(int ac, char **av)
 	e.setInstance<SceneManager>();
 	e.setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 	e.setInstance<AudioManager>()->init();
-	e.setInstance<SpriteManager>()->init(&e);
 
 	// init engine
 	if (e.init() == false)
@@ -55,6 +54,7 @@ int			main(int ac, char **av)
 
 	e.setInstance<VertexManager<4>>(param)->init();
 	e.setInstance<FontManager>(&e)->init();
+	e.setInstance<SpriteManager>()->init(&e);
 
 	// add scene
 	e.getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");

@@ -8,24 +8,15 @@
 #include <Core/Engine.hh>
 #include <vector>
 #include <set>
+#include <MediaFiles/AssetsManager.hpp>
+#include <Sprite/Sprite.hh>
 
 class SpriteManager : public Dependency
 {
-private:
-	struct LoadFrame
-	{
-		float uvs[4];
-		unsigned int dimensions[2];
-	};
-
-	struct LoadAnimation
-	{
-		std::vector<unsigned int> steps;
-		std::vector<std::shared_ptr<LoadFrame>> frames;
-	};
-
 public:
 	SpriteManager()
+		: _engine(nullptr)
+		, _vertexManager(nullptr)
 	{}
 
 	virtual ~SpriteManager()
@@ -34,7 +25,13 @@ public:
 	bool init(Engine *e)
 	{
 		_engine = e;
-		return true;
+		std::array<Attribute, 2> param =
+		{
+			Attribute(GL_FLOAT, sizeof(float), 4),
+			Attribute(GL_FLOAT, sizeof(float), 2),
+		};
+		_vertexManager = std::make_unique<VertexManager<2>>(param);
+		return _vertexManager->init();
 	}
 
 	bool loadFile(const File &file)
@@ -66,8 +63,10 @@ public:
 			return false;
 		}
 
+		std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
+
 		std::string image = document["image"].GetString();
-		std::string name = document["name"].GetString();
+		sprite->_name = document["name"].GetString();
 
 		if (!document.HasMember("frames") || !document["frames"].IsObject())
 		{
@@ -81,7 +80,7 @@ public:
 			return false;
 		}
 
-		std::map<std::string, std::shared_ptr<LoadFrame>> frames;
+		std::map<std::string, std::shared_ptr<SpriteFrame>> frames;
 
 		for (rapidjson::Value::ConstMemberIterator itr = document["frames"].MemberBegin(); itr != document["frames"].MemberEnd(); ++itr)
 		{
@@ -91,7 +90,7 @@ public:
 				return false;
 			}
 
-			std::shared_ptr<LoadFrame> f = std::make_shared<LoadFrame>();
+			std::shared_ptr<SpriteFrame> f = std::make_shared<SpriteFrame>();
 
 			// LOAD UVS
 			const rapidjson::Value& uvs = itr->value["uvs"];
@@ -103,7 +102,7 @@ public:
 
 			for (rapidjson::SizeType i = 0; i < uvs.Size(); i++)
 			{
-				f->uvs[i] = uvs[i].GetDouble();
+				f->_uvs[i] = uvs[i].GetDouble();
 			}
 
 			// LOAD DIMENSIONS
@@ -116,7 +115,13 @@ public:
 
 			for (rapidjson::SizeType i = 0; i < dimensions.Size(); i++)
 			{
-				f->dimensions[i] = dimensions[i].GetUint();
+				f->_dimensions[i] = dimensions[i].GetUint();
+			}
+
+			// LOAD FRAME
+			if (!f->load(_vertexManager))
+			{
+				std::cerr << "Frame failed to load." << std::endl;
 			}
 
 			// LOAD ALIAS
@@ -135,11 +140,10 @@ public:
 		}
 
 		// LOAD ANIMATIONS
-		std::map<std::string, std::shared_ptr<LoadAnimation>> animations;
 
 		for (rapidjson::Value::ConstMemberIterator itr = document["animations"].MemberBegin(); itr != document["animations"].MemberEnd(); ++itr)
 		{
-			auto animation = std::make_shared<LoadAnimation>();
+			auto animation = std::make_shared<SpriteAnimation>();
 			if (!itr->value.IsArray())
 			{
 				std::cerr << "Animation [" << itr->name.GetString() << "] is not valid." << std::endl;
@@ -147,7 +151,7 @@ public:
 			}
 
 			// LOAD ANIMATION
-			std::map<std::shared_ptr<LoadFrame>, unsigned int> tmpRef;
+			std::map<std::shared_ptr<SpriteFrame>, unsigned int> tmpRef;
 			for (rapidjson::SizeType i = 0; i < itr->value.Size(); i++)
 			{
 				auto name = itr->value[i].GetString();
@@ -155,36 +159,19 @@ public:
 				auto ref = tmpRef.find(address->second);
 				if (ref == std::end(tmpRef))
 				{
-					tmpRef.insert(std::make_pair(address->second, animation->frames.size()));
+					tmpRef.insert(std::make_pair(address->second, animation->_frames.size()));
 					ref = tmpRef.find(address->second);
-					animation->frames.push_back(address->second);
+					animation->_frames.push_back(address->second);
 				}
-				animation->steps.push_back(ref->second);
+				animation->_steps.push_back(ref->second);
 			}
-			animations.insert(std::make_pair(itr->name.GetString(), animation));
+			sprite->_animations.insert(std::make_pair(itr->name.GetString(), animation));
 		}
-		//assert(document["t"].IsBool());         // JSON true/false are bool. Can also uses more specific function IsTrue().
-		//printf("t = %s\n", document["t"].GetBool() ? "true" : "false");
-
-		//assert(document["f"].IsBool());
-		//printf("f = %s\n", document["f"].GetBool() ? "true" : "false");
-
-		//printf("n = %s\n", document["n"].IsNull() ? "null" : "?");
-
-		//assert(document["i"].IsNumber());       // Number is a JSON type, but C++ needs more specific type.
-		//assert(document["i"].IsInt());          // In this case, IsUint()/IsInt64()/IsUInt64() also return true.
-		//printf("i = %d\n", document["i"].GetInt());     // Alternative (int)document["i"]
-
-		//assert(document["pi"].IsNumber());
-		//assert(document["pi"].IsDouble());
-		//printf("pi = %g\n", document["pi"].GetDouble());
-
-		//const Value& a = document["a"]; // Using a reference for consecutive access is handy and faster.
-		//assert(a.IsArray());
-		//for (SizeType i = 0; i < a.Size(); i++) // rapidjson uses SizeType instead of size_t.
-		//	printf("a[%d] = %d\n", i, a[i].GetInt());
+		_collection.insert(std::make_pair(sprite->_name, sprite));
 		return true;
 	}
 private:
 	Engine *_engine;
+	std::unique_ptr<VertexManager<2>> _vertexManager;
+	std::map<std::string, std::shared_ptr<Sprite>> _collection;
 };
