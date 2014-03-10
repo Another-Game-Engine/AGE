@@ -53,6 +53,13 @@ public:
 			return false;
 		}
 
+		if (!document.HasMember("name") || !document["name"].IsString())
+		{
+			std::cerr << "Document don't have member [name]." << std::endl;
+			return false;
+		}
+
+
 		if (!document.HasMember("image") || !document["image"].IsString())
 		{
 			std::cerr << "Document don't have member [image]." << std::endl;
@@ -60,6 +67,7 @@ public:
 		}
 
 		std::string image = document["image"].GetString();
+		std::string name = document["name"].GetString();
 
 		if (!document.HasMember("frames") || !document["frames"].IsObject())
 		{

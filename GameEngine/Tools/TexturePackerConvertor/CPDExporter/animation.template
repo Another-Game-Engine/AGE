@@ -1,6 +1,7 @@
 {% load cpdconvertor %}{% for sprite in allSprites %}{{sprite.trimmedName|registerAnimations}}{% endfor %}
 {
-"image": "{{settings.textureSubPath}}{{texture.fullName}}",
+"name": "{{settings.textureSubPath}}{{texture.trimmedName}}",
+"image": "texture__{{settings.textureSubPath}}{{texture.trimmedName}}.cpd",
 "frames": {{% for sprite in sprites %}
 	"{{sprite.trimmedName}}":{
         "uvs": [{{sprite.frameRectRel.x|uvfromx}}, {{sprite.frameRectRel.y|uvfromy}}, {{sprite.frameRectRel.width|uvtox}}, {{sprite.frameRectRel.height|uvtoy}}],
