@@ -6,9 +6,23 @@
 #include <cereal/external/rapidjson/document.h>
 #include <iostream>
 #include <Core/Engine.hh>
+#include <vector>
 
 class SpriteManager : public Dependency
 {
+private:
+	struct LoadFrame
+	{
+		float uvs[4];
+		unsigned int dimensions[2];
+	};
+
+	struct LoadAnimation
+	{
+		std::map<std::string, LoadFrame> usedFrames;
+		std::vector<std::string> frames;
+	};
+
 public:
 	SpriteManager()
 	{}
@@ -44,7 +58,66 @@ public:
 			return false;
 		}
 
-		std::cout << "image = " << document["image"].GetString() << std::endl;
+		std::string image = document["image"].GetString();
+
+		if (!document.HasMember("frames") || !document["frames"].IsObject())
+		{
+			std::cerr << "Document don't have member [frames]." << std::endl;
+			return false;
+		}
+
+		std::map<std::string, std::shared_ptr<LoadFrame>> frames;
+
+		for (rapidjson::Value::ConstMemberIterator itr = document["frames"].MemberBegin(); itr != document["frames"].MemberEnd(); ++itr)
+		{
+			if (!itr->value.HasMember("uvs") || !itr->value.HasMember("dimensions") || !itr->value.HasMember("alias"))
+			{
+				std::cerr << "Frame [" << itr->name.GetString() << "] is not valid." << std::endl;
+				return false;
+			}
+
+			std::shared_ptr<LoadFrame> f = std::make_shared<LoadFrame>();
+
+			// LOAD UVS
+			const rapidjson::Value& uvs = itr->value["uvs"];
+			if (!uvs.IsArray() || uvs.Size() != 4)
+			{
+				std::cerr << "uvs is not valid." << std::endl;
+				return false;
+			}
+
+			for (rapidjson::SizeType i = 0; i < uvs.Size(); i++)
+			{
+				f->uvs[i] = uvs[i].GetDouble();
+			}
+
+			// LOAD DIMENSIONS
+			const rapidjson::Value& dimensions = itr->value["dimensions"];
+			if (!dimensions.IsArray() || dimensions.Size() != 2)
+			{
+				std::cerr << "dimensions is not valid." << std::endl;
+				return false;
+			}
+
+			for (rapidjson::SizeType i = 0; i < dimensions.Size(); i++)
+			{
+				f->dimensions[i] = dimensions[i].GetUint();
+			}
+
+			// LOAD ALIAS
+			const rapidjson::Value& alias = itr->value["alias"];
+			if (!alias.IsArray())
+			{
+				std::cerr << "alias is not valid." << std::endl;
+				return false;
+			}
+
+			for (rapidjson::SizeType i = 0; i < alias.Size(); i++)
+			{
+				frames.insert(std::make_pair(alias[i].GetString(), f));
+			}
+			frames.insert(std::make_pair(itr->name.GetString(), f));
+		}
 
 		//assert(document["t"].IsBool());         // JSON true/false are bool. Can also uses more specific function IsTrue().
 		//printf("t = %s\n", document["t"].GetBool() ? "true" : "false");
