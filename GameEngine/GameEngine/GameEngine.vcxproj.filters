@@ -121,6 +121,7 @@
     <ClInclude Include="Engine\Sprite\SpriteAnimation.hh" />
     <ClInclude Include="Engine\Sprite\SpriteFrame.hh" />
     <ClInclude Include="Engine\Components\SpriteComponent.hh" />
+    <ClInclude Include="Engine\Systems\SpriteSystem.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
