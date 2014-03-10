@@ -7,6 +7,7 @@
 #include <iostream>
 #include <Core/Engine.hh>
 #include <vector>
+#include <set>
 
 class SpriteManager : public Dependency
 {
@@ -19,8 +20,8 @@ private:
 
 	struct LoadAnimation
 	{
-		std::map<std::string, LoadFrame> usedFrames;
-		std::vector<std::string> frames;
+		std::vector<unsigned int> steps;
+		std::vector<std::shared_ptr<LoadFrame>> frames;
 	};
 
 public:
@@ -61,6 +62,12 @@ public:
 		std::string image = document["image"].GetString();
 
 		if (!document.HasMember("frames") || !document["frames"].IsObject())
+		{
+			std::cerr << "Document don't have member [frames]." << std::endl;
+			return false;
+		}
+
+		if (!document.HasMember("animations") || !document["animations"].IsObject())
 		{
 			std::cerr << "Document don't have member [frames]." << std::endl;
 			return false;
@@ -119,6 +126,35 @@ public:
 			frames.insert(std::make_pair(itr->name.GetString(), f));
 		}
 
+		// LOAD ANIMATIONS
+		std::map<std::string, std::shared_ptr<LoadAnimation>> animations;
+
+		for (rapidjson::Value::ConstMemberIterator itr = document["animations"].MemberBegin(); itr != document["animations"].MemberEnd(); ++itr)
+		{
+			auto animation = std::make_shared<LoadAnimation>();
+			if (!itr->value.IsArray())
+			{
+				std::cerr << "Animation [" << itr->name.GetString() << "] is not valid." << std::endl;
+				return false;
+			}
+
+			// LOAD ANIMATION
+			std::map<std::shared_ptr<LoadFrame>, unsigned int> tmpRef;
+			for (rapidjson::SizeType i = 0; i < itr->value.Size(); i++)
+			{
+				auto name = itr->value[i].GetString();
+				auto address = frames.find(name);
+				auto ref = tmpRef.find(address->second);
+				if (ref == std::end(tmpRef))
+				{
+					tmpRef.insert(std::make_pair(address->second, animation->frames.size()));
+					ref = tmpRef.find(address->second);
+					animation->frames.push_back(address->second);
+				}
+				animation->steps.push_back(ref->second);
+			}
+			animations.insert(std::make_pair(itr->name.GetString(), animation));
+		}
 		//assert(document["t"].IsBool());         // JSON true/false are bool. Can also uses more specific function IsTrue().
 		//printf("t = %s\n", document["t"].GetBool() ? "true" : "false");
 

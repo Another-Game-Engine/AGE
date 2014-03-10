@@ -31,7 +31,7 @@ var uvToY = function(input)
 var registerAnimations = function(input)
 {
 	input = input.rawString();
-	var key = input.substring(0,input.indexOf("_"));
+	var key = input.substring(0,input.indexOf("__"));
 	if (animationNames.indexOf(key) === -1)
 	{
 		counter[key] = 0;
@@ -67,7 +67,7 @@ var getAnimationName = function(input)
 var isInAnimation = function(input)
 {
 	input = input.rawString();
-	var key = input.substring(0,input.indexOf("_"));
+	var key = input.substring(0,input.indexOf("__"));
 	if (animationNames.indexOf(key) === animationNames.length - 1)
 	{
 		return "true";
@@ -79,7 +79,7 @@ var isLastFrame = function(input)
 {
 	i++;
 	input = input.rawString();
-	var key = input.substring(0,input.indexOf("_"));
+	var key = input.substring(0,input.indexOf("__"));
 	if (counter[key] < i)
 		return "true"
 	return "";
