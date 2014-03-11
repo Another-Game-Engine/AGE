@@ -101,8 +101,9 @@ bool 			SolarSystemDemoScene::userStart()
 	{
 		"projection",
 		"view",
-		"lightNbr",
-		"time"
+		"time",
+		"pointLightNbr",
+		"spotLightNbr"
 	};
 
 	std::string		materialBasic[] =

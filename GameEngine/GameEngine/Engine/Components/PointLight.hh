@@ -5,8 +5,11 @@
 
 struct PointLightData
 {
-	glm::vec4	positionPower;
-	glm::vec4	colorRange;
+	glm::vec4		positionPower;
+	glm::vec4		colorRange;
+	unsigned int	hasShadow;
+
+	glm::uvec3		padding;
 
 	PointLightData() { }
 
@@ -23,6 +26,7 @@ struct PointLightData
 	{
 		positionPower = o.positionPower;
 		colorRange = o.colorRange;
+		hasShadow = o.hasShadow;
 		return (*this);
 	}
 };

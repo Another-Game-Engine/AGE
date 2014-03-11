@@ -5,8 +5,12 @@
 
 struct SpotLightData
 {
-	glm::vec4	positionPower;
-	glm::vec4	colorRange;
+	glm::mat4		lightVP;
+	glm::vec4		positionPower;
+	glm::vec4		colorRange;
+	unsigned int	hasShadow;
+
+	glm::uvec3		padding;
 
 	SpotLightData() { }
 
@@ -21,8 +25,10 @@ struct SpotLightData
 
 	SpotLightData &operator=(SpotLightData const &o)
 	{
+		lightVP = o.lightVP;
 		positionPower = o.positionPower;
 		colorRange = o.colorRange;
+		hasShadow = o.hasShadow;
 		return (*this);
 	}
 };

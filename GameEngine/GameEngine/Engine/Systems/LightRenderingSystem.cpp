@@ -9,10 +9,10 @@
 
 LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						System(scene),
-						_lightFilter(scene),
+						_pointLightFilter(scene),
+						_spotLightFilter(scene),
 						_meshRendererFilter(scene),
 						_cameraFilter(scene),
-						_lights(0),
 						_idealIllum(0.3f),
 						_adaptationSpeed(0.15f),
 						_maxDarkImprovement(1.0f),
@@ -25,7 +25,6 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 
 LightRenderingSystem::~LightRenderingSystem()
 {
-	glDeleteBuffers(1, &_lights);
 	glDeleteBuffers(1, &_avgColors);
 }
 
@@ -33,15 +32,23 @@ void LightRenderingSystem::initialize()
 {
 	_quad.init(_scene->getEngine());
 
-	_lightFilter.requireComponent<Component::PointLight>();
+	_pointLightFilter.requireComponent<Component::PointLight>();
+	_spotLightFilter.requireComponent<Component::SpotLight>();
 	_meshRendererFilter.requireComponent<Component::MeshRenderer>();
 	_cameraFilter.requireComponent<Component::CameraComponent>();
 
 	_averageColor.init("./ComputeShaders/AverageColorFirstPass.kernel");
 	_modulateRender.init("./ComputeShaders/HighDynamicRange.kernel");
 
-	// Gen light buffer
-	glGenBuffers(1, &_lights);
+	// And lights uniform buffer
+	_scene->getInstance<Renderer>()->addUniform("pointLightBuff")
+		.init(POINT_LIGHT_BUFF_SIZE);
+	_scene->getInstance<Renderer>()->addUniform("spotLightBuff")
+		.init(SPOT_LIGHT_BUFF_SIZE);
+
+	_scene->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "pointLightBuff", "pointLightBuff");
+	_scene->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "spotLightBuff", "spotLightBuff");
+
 	// Gen average color buffer
 	glGenBuffers(1, &_avgColors);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
@@ -51,43 +58,64 @@ void LightRenderingSystem::initialize()
 	glCullFace(GL_BACK);
 }
 
-void LightRenderingSystem::mainUpdate(double time)
+void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
+{
+	// Update the lights buffers
+	auto		pointLightBuff = _scene->getInstance<Renderer>()->getUniform("pointLightBuff");
+	auto		spotLightBuff = _scene->getInstance<Renderer>()->getUniform("spotLightBuff");
+	size_t		i = 0;
+
+	_pointLightNbr = _pointLightFilter.getCollection().size();
+	assert(_pointLightNbr <= MAX_LIGHT_NBR && "to many point lights");
+	for (auto e : _pointLightFilter.getCollection())
+	{
+		_contiguousPointLights[i] = e->getComponent<Component::PointLight>()->lightData;
+		_contiguousPointLights[i].positionPower.x = e->getGlobalTransform()[3].x;
+		_contiguousPointLights[i].positionPower.y = e->getGlobalTransform()[3].y;
+		_contiguousPointLights[i].positionPower.z = e->getGlobalTransform()[3].z;
+		++i;
+	}
+	i = 0;
+	_spotLightNbr = _spotLightFilter.getCollection().size();
+	assert(_spotLightNbr <= MAX_LIGHT_NBR && "to many spot lights");
+	for (auto e : _spotLightFilter.getCollection())
+	{
+		assert(i < MAX_LIGHT_NBR && "to many point lights");
+		_contiguousSpotLights[i] = e->getComponent<Component::SpotLight>()->lightData;
+		_contiguousSpotLights[i].positionPower.x = e->getGlobalTransform()[3].x;
+		_contiguousSpotLights[i].positionPower.y = e->getGlobalTransform()[3].y;
+		_contiguousSpotLights[i].positionPower.z = e->getGlobalTransform()[3].z;
+		++i;
+	}
+
+	perFrame->setUniform("pointLightNbr", _pointLightNbr);
+	perFrame->setUniform("spotLightNbr", _spotLightNbr);
+
+	pointLightBuff->setBufferData(POINT_LIGHT_BUFF_SIZE, reinterpret_cast<char*>(_contiguousPointLights));
+	spotLightBuff->setBufferData(SPOT_LIGHT_BUFF_SIZE, reinterpret_cast<char*>(_contiguousSpotLights));
+
+	pointLightBuff->flushChanges();
+	spotLightBuff->flushChanges();
+	// Update the lights shadowmaps
+	for (auto e : _spotLightFilter.getCollection())
+	{
+		SpotLightData	&spotLightData = e->getComponent<Component::SpotLight>()->lightData;
+
+		if (spotLightData.hasShadow) // if the light has shadows, render the shadowmap
+		{
+			// Render raw from camera point of view to a framebuffer
+		}
+	}
+}
+
+void	LightRenderingSystem::mainUpdate(double time)
 {
 	auto renderer = _scene->getInstance<Renderer>();
 	auto perFrame = renderer->getUniform("PerFrame");
-	int lightNbr = _lightFilter.getCollection().size();
 
-	perFrame->setUniform("lightNbr", lightNbr);
-	perFrame->flushChanges(); 
-	// Create the contiguous light buffer
-	if (_contiguousLights.size() != lightNbr)
-	{
-		_contiguousLights.clear();
-		for (auto e : _lightFilter.getCollection())
-		{
-			_contiguousLights.push_back(e->getComponent<Component::PointLight>()->lightData);
-			_contiguousLights.back().positionPower.x = e->getGlobalTransform()[3].x;
-			_contiguousLights.back().positionPower.y = e->getGlobalTransform()[3].y;
-			_contiguousLights.back().positionPower.z = e->getGlobalTransform()[3].z;
-		}
-	}
-	else // Or just update it
-	{
-		size_t		i = 0;
+	// set all the lights in the GPU uniform buffers
+	updateLights(perFrame);
 
-		for (auto e : _lightFilter.getCollection())
-		{
-			_contiguousLights[i] = e->getComponent<Component::PointLight>()->lightData;
-			_contiguousLights[i].positionPower.x = e->getGlobalTransform()[3].x;
-			_contiguousLights[i].positionPower.y = e->getGlobalTransform()[3].y;
-			_contiguousLights[i].positionPower.z = e->getGlobalTransform()[3].z;
-			++i;
-		}
-	}
-	// Fill light buffer
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, _lights);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _lights);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, lightNbr * sizeof(ContiguousLight), _contiguousLights.data(), GL_DYNAMIC_DRAW);
 	// -------------------- Render -------------------- \\
 	// For each camera
 	for (auto c : _cameraFilter.getCollection())
@@ -171,8 +199,6 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	glDepthMask(GL_FALSE);
 	glColorMask(1, 1, 1, 1);
 
-	GLuint		localLightBuffId = _lights;
-
 	// shaders that needs light buffer
 	GLuint		materialBasicId = -1;
 	GLuint		earthId = -1;
@@ -190,15 +216,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 		bumpId = bump->getId();
 	for (auto e : _meshRendererFilter.getCollection())
 	{
-		e->getComponent<Component::MeshRenderer>()->render(
-			[localLightBuffId, materialBasicId, earthId, bumpId](OpenGLTools::Shader &s)
-		{
-			if (s.getId() == earthId || s.getId() == materialBasicId || s.getId() == bumpId)
-			{
-				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, localLightBuffId);
-			}
-		}
-		);
+		e->getComponent<Component::MeshRenderer>()->render();
 	}
 }
 

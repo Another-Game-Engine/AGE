@@ -47,7 +47,10 @@ public:
 	UniformBuffer(GLuint bindingPoint);
 	~UniformBuffer(void);
 
+	void			init(size_t size);
 	void			init(Shader *referent, std::string const &blockName, std::string const vars[]);
+
+	void			setBufferData(size_t size, const char *data);
 
 	void			setUniform(std::string const &name, int data);
 	void			setUniform(std::string const &name, unsigned int data);
