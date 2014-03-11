@@ -16,7 +16,7 @@ class FPControllerSystem : public System
 {
 public:
 	FPControllerSystem(AScene *scene) : System(scene)
-		, _manager(scene->getEngine().getInstance<BulletCollisionManager>())
+		, _manager(scene->getInstance<BulletCollisionManager>())
 		, _filter(scene)
 	{
 		_name = "FP_controller_system";
@@ -39,7 +39,7 @@ private:
 		{
 			auto fp = e->getComponent<Component::FPController>();
 			updateComponent(e, fp, time);
-			auto inputs = _scene->getEngine().getInstance<Input>();
+			auto inputs = _scene->getInstance<Input>();
 			auto &ghost = fp->getGhost();
 			auto trans = ghost.getWorldTransform();
 

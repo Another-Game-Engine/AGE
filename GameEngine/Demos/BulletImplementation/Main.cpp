@@ -57,8 +57,8 @@ int			main(int ac, char **av)
 	e->setInstance<SpriteManager>()->init();
 
 	// add scene
-	e->getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(*e.get()), "BulletDemo");
-	e->getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(*e.get()), "SolarSystemDemo");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
 
 	// bind scene
 	if (!e->getInstance<SceneManager>()->initScene("BulletDemo"))

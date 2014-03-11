@@ -41,8 +41,8 @@ public:
 	{
 		if (_filter.getCollection().size() == 0)
 			return;
-		auto mousePos = _scene->getEngine().getInstance<Input>()->getMousePosition();
-		auto screenSize = _scene->getEngine().getInstance<IRenderContext>()->getScreenSize();
+		auto mousePos = _scene->getInstance<Input>()->getMousePosition();
+		auto screenSize = _scene->getInstance<IRenderContext>()->getScreenSize();
 		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
 		screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
 	}
@@ -51,7 +51,7 @@ public:
 	{
 		if (_filter.getCollection().size() == 0)
 			return;
-		auto screenSize = _scene->getEngine().getInstance<IRenderContext>()->getScreenSize();
+		auto screenSize = _scene->getInstance<IRenderContext>()->getScreenSize();
 		auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
 		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
 		screenPosToWorldRay(centerPos.x, centerPos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform , cameraCpt->projection, from, to);
@@ -75,7 +75,7 @@ protected:
 	{
 		static double totalTime = 0;
 		unsigned int textureOffset = 0;
-		auto &renderer = _scene->getEngine().getInstance<Renderer>();
+		auto &renderer = _scene->getInstance<Renderer>();
 		std::shared_ptr<OpenGLTools::UniformBuffer> perFrameBuffer = _scene->getInstance<Renderer>()->getUniform("PerFrame");
 
 		for (auto e : _filter.getCollection())
@@ -98,8 +98,8 @@ protected:
 				t[3][2] = 0;
 				t[3][3] = 1;
 
-				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("view", t);
-				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
+				_scene->getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("view", t);
+				_scene->getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
 
 //				_engine.getInstance<Renderer>()->getFbo().bindDrawTargets(s->getTargets(), s->getTargetsNumber());
 
