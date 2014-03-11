@@ -12,6 +12,7 @@
 #include <Components/FirstPersonView.hpp>
 #include <Components/AudioEmitter.hpp>
 #include <Components/AudioListener.hpp>
+#include <Components/SpriteComponent.hh>
 
 #include <OpenGL/ComputeShader.hh>
 #include <OpenGL/Attribute.hh>
@@ -26,9 +27,11 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/AudioSystem.hpp>
+#include <Systems/SpriteSystem.hh>
 #include <BallSoundSystem.hpp>
 
 #include <Text/FontManager.hh>
+#include <Sprite/SpriteManager.hh>
 
 #include <Core/Engine.hh>
 
@@ -116,6 +119,8 @@ bool 			BulletDemoScene::userStart()
 	addSystem<BallSoundSystem>(220);
 	addSystem<AudioSystem>(250);
 	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
+	addSystem<RotationForceSystem>(320);
+	addSystem<SpriteSystem>(350); // DRAW SPRITES
 	//
 	//
 	// end System Test
@@ -157,6 +162,10 @@ bool 			BulletDemoScene::userStart()
 	_engine.getInstance<Renderer>()->addShader("2DText",
 		"./Shaders/2DText.vp",
 		"./Shaders/2DText.fp");
+
+	_engine.getInstance<Renderer>()->addShader("SpriteBasic",
+		"./Shaders/SpriteBasic.vp",
+		"./Shaders/SpriteBasic.fp");
 
 	_engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 	_engine.getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
@@ -208,6 +217,8 @@ bool 			BulletDemoScene::userStart()
 
 	getInstance<FontManager>()->loadFont(File("./Assets/Serialized/myFont.cpdFont"));
 
+	getInstance<SpriteManager>()->loadFile(File("./Assets/Serialized/GreyMan.CPDAnimation"));
+
 	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
 	_engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
@@ -251,6 +262,28 @@ bool 			BulletDemoScene::userStart()
 	//	fileStream.close();
 	//	return true;
 	//}
+
+	// CREATE SPRITE ANIMATION
+	{
+		auto e = createEntity();
+		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "idle"),
+			_engine.getInstance<Renderer>()->getShader("SpriteBasic"));
+		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 300, 0)));
+		auto e2 = createEntity();
+		e2->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "walk"),
+			_engine.getInstance<Renderer>()->getShader("SpriteBasic"));
+		e2->setLocalTransform(glm::translate(e2->getLocalTransform(), glm::vec3(1700, 0, 0)));
+		auto e3 = createEntity();
+		e3->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "crouch_idle"),
+			_engine.getInstance<Renderer>()->getShader("SpriteBasic"));
+		e3->setLocalTransform(glm::translate(e3->getLocalTransform(), glm::vec3(1700, 400, 0)));
+		auto e4 = createEntity();
+		e4->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "kitten"),
+			_engine.getInstance<Renderer>()->getShader("SpriteBasic"));
+		e4->setLocalTransform(glm::translate(e4->getLocalTransform(), glm::vec3(1700, 800, 0)));
+		e4->setLocalTransform(glm::scale(e4->getLocalTransform(), glm::vec3(0.1)));
+	}
+
 
 	// CREATE SPONZA CHURCH
 	{
