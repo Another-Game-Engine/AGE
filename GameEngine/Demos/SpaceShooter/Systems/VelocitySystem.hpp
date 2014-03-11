@@ -11,7 +11,7 @@
 class VelocitySystem : public System
 {
 public:
-	VelocitySystem(AScene *scene)
+	VelocitySystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{}
@@ -30,13 +30,10 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		auto totalTime = _scene->getEngine().getInstance<Timer>()->getElapsed();
+		auto totalTime = _scene.lock()->getInstance<Timer>()->getElapsed();
 		for (auto e : _filter.getCollection())
 		{
 			auto velocity = e->getComponent<Component::Velocity>();
-			auto lol = posFromMat4(e->getLocalTransform());
-			auto lilou = velocity->compute(time, totalTime);
-			auto crotte = posFromMat4(e->getLocalTransform()) + velocity->compute(time, totalTime);
 			auto t = e->getLocalTransform();
 			t = glm::translate(t, velocity->compute(time, totalTime));
 			t = glm::scale(t, glm::vec3(1.001, 1.001, 1.001));

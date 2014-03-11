@@ -89,12 +89,13 @@ struct CubeMapFile : public MediaFile<CubeMapFile>
 	{
 		std::string _px, _py, _pz, _nx, _ny, _nz;
 		ar(_px, _py, _pz, _nx, _ny, _nz);
-		px = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_px)));
-		py = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_py)));
-		pz = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_pz)));
-		nx = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_nx)));
-		ny = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_ny)));
-		nz = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(_nz)));
+		auto assetsManager = _dpyManager.lock()->getInstance<AssetsManager>();
+		px = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile<Archive>(File(_px)));
+		py = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile<Archive>(File(_py)));
+		pz = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile<Archive>(File(_pz)));
+		nx = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile<Archive>(File(_nx)));
+		ny = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile<Archive>(File(_ny)));
+		nz = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile<Archive>(File(_nz)));
 		init();
 	}
 

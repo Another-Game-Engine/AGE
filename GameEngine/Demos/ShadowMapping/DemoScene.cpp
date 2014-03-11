@@ -3,7 +3,7 @@
 #include "DemoScene.hh"
 #include <SDL\SDL.h>
 
-DemoScene::DemoScene(Engine &engine)
+DemoScene::DemoScene(std::weak_ptr<Engine> engine)
 : AScene(engine)
 {
 }
@@ -32,12 +32,12 @@ void DemoScene::initRenderer()
 	std::string const perFrameVars[] = { "projection", "view", "light", "time" };
 	std::string const materialBasic[] = { "ambient", "diffuse", "specular", "transmittance", "emission", "shininess" };
 
-	auto &renderer = _engine.getInstance<Renderer>();
-	OpenGLTools::Shader &s = renderer->addShader("MaterialBasic", "Shaders/lightWithShadow.vp", "Shaders/lightWithShadow.fp");
- 	renderer->addUniform("MaterialBasic").init(&s, "MaterialBasic", materialBasic);
-	renderer->addUniform("PerFrame").init(&s, "PerFrame", perFrameVars);
-	renderer->addUniform("PerModel").init(&s, "PerModel", perModelVars);
-	renderer->addUniform("LightBias").init(&s, "LightBias", lightShadowBias);
+	auto &renderer = getInstance<Renderer>();
+	auto s = renderer->addShader("MaterialBasic", "Shaders/lightWithShadow.vp", "Shaders/lightWithShadow.fp");
+ 	renderer->addUniform("MaterialBasic")->init(s, "MaterialBasic", materialBasic);
+	renderer->addUniform("PerFrame")->init(s, "PerFrame", perFrameVars);
+	renderer->addUniform("PerModel")->init(s, "PerModel", perModelVars);
+	renderer->addUniform("LightBias")->init(s, "LightBias", lightShadowBias);
 	renderer->getShader("MaterialBasic")->setTextureNumber(5);
 	renderer->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	renderer->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
@@ -45,9 +45,9 @@ void DemoScene::initRenderer()
 	renderer->bindShaderToUniform("MaterialBasic", "LightBias", "LightBias");
 	renderer->getShader("MaterialBasic")->build();
 
-	OpenGLTools::Shader &shadow = renderer->addShader("ShadowMapping", "Shaders/ShadowMapping.vp", "Shaders/ShadowMapping.fp");
+	auto shadow = renderer->addShader("ShadowMapping", "Shaders/ShadowMapping.vp", "Shaders/ShadowMapping.fp");
 	renderer->getShader("ShadowMapping")->setTextureNumber(0);
-	renderer->addUniform("Light").init(&shadow, "Light", lightShadow);
+	renderer->addUniform("Light")->init(shadow, "Light", lightShadow);
 	renderer->bindShaderToUniform("ShadowMapping", "Light", "Light");
 	renderer->getShader("ShadowMapping")->build();
 }
@@ -103,7 +103,7 @@ bool DemoScene::userStart()
 bool DemoScene::userUpdate(double time)
 {
 	glClearColor(0.2, 0.2, 0.2, 1.0);
-	auto input = _engine.getInstance<Input>();
+	auto input = getInstance<Input>();
 	if (input->getInput(SDLK_ESCAPE) || input->getInput(SDL_QUIT))
 		return (false);
 	return (true);

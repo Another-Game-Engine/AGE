@@ -5,12 +5,10 @@
 #include <Core/AScene.hh>
 #include <Systems/System.h>
 
-AScene::AScene(Engine &engine) :
-DependenciesInjector(&engine),
-_engine(engine)
+AScene::AScene(std::weak_ptr<Engine> engine) :
+DependenciesInjector(engine)
 , _entityNumber(0)
 {
-	setInstance<PubSub::Manager>();
 }
 
 AScene::~AScene()
@@ -19,7 +17,6 @@ AScene::~AScene()
 	for (auto &e : _pool)
 		e.reset();
 	_pool.clear();
-
 }
 
 void 							AScene::update(double time)
@@ -30,12 +27,18 @@ void 							AScene::update(double time)
 	}
 }
 
+bool                           AScene::start()
+{
+	setInstance<PubSub::Manager>();
+	return userStart();
+}
+
 Entity &AScene::createEntity()
 {
 	++_entityNumber;
 	if (_free.empty())
 	{
-		_pool.push_back(std::move(EntityData(shared_from_this())));
+		_pool.push_back(std::move(EntityData(std::static_pointer_cast<AScene>(shared_from_this()))));
 		_pool.back().setHandle(Entity(_pool.size() - 1, this));
 		_free.push(_pool.size() - 1);
 	}

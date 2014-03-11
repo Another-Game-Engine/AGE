@@ -9,7 +9,7 @@
 class CollisionCleaner : public System
 {
 public:
-	CollisionCleaner(AScene *scene)
+	CollisionCleaner(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{

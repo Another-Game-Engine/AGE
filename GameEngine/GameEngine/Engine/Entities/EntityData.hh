@@ -53,7 +53,7 @@ private:
 	friend class EntityIdRegistrar;
 	friend class AScene;
 
-	std::shared_ptr<AScene> _scene;
+	std::weak_ptr<AScene> _scene;
 	size_t 				_flags;
 
 	glm::mat4 			_localTransform;
@@ -71,7 +71,7 @@ private:
 
 	Barcode             _code;
 
-	EntityData(std::shared_ptr<AScene> scene);
+	EntityData(std::weak_ptr<AScene> scene);
 	EntityData();
 	EntityData(const EntityData &o);
 	const EntityData &operator=(const EntityData &o);
@@ -213,7 +213,7 @@ public:
 	void save(Archive &ar) const
 	{
 		// Save Entity informations
-		ar(cereal::make_nvp("entityID", _scene->registrarSerializedEntity(_handle.getId())));
+		ar(cereal::make_nvp("entityID", _scene.lock()->registrarSerializedEntity(_handle.getId())));
 		ar(cereal::make_nvp("flags", _flags));
 		ar(cereal::make_nvp("localTransform", _localTransform));
 
@@ -258,9 +258,10 @@ public:
 	void load(Archive &ar)
 	{
 		// load Entity informations
+		auto scene = _scene.lock();
 		std::size_t entityID;
 		ar(entityID);
-		_scene->registrarUnserializedEntity(_handle, entityID);
+		scene->registrarUnserializedEntity(_handle, entityID);
 		ar(_flags);
 		ar(_localTransform);
 
@@ -281,7 +282,7 @@ public:
 			unsigned int typeId;
 			ar(type);
 			unsigned int position;
-			Component::Base *cpt = _scene->createFromType(type, ar, _handle, typeId);
+			Component::Base *cpt = scene->createFromType(type, ar, _handle, typeId);
 			cpt->setEntity(_handle);
 			if (_components.size() <= typeId)
 				_components.resize(typeId + 1);
@@ -294,7 +295,7 @@ public:
 		ar(graphUnser.childs);
 		ar(graphUnser.haveParent);
 		ar(graphUnser.parent);
-		_scene->registrarGraphNode(entityID, graphUnser);
+		scene->registrarGraphNode(entityID, graphUnser);
 	}
 
 	//

@@ -64,6 +64,9 @@ struct MaterialFile : public MediaFile<MaterialFile>
 		std::map<std::string, int> paramInt;
 		std::map<std::string, float> paramFloat;
 		MaterialFile *file;
+	private:
+		std::weak_ptr<DependenciesInjector> _dpyManager;
+		friend class MaterialFile;
 	public:
 
 		Material() :
@@ -81,7 +84,7 @@ struct MaterialFile : public MediaFile<MaterialFile>
 			file(nullptr)
 		{}
 
-		void setUniforms(OpenGLTools::UniformBuffer *buffer)
+		void setUniforms(std::shared_ptr<OpenGLTools::UniformBuffer> buffer)
 		{
 			buffer->setUniform("ambient", ambient);
 			buffer->setUniform("diffuse", diffuse);
@@ -159,15 +162,16 @@ struct MaterialFile : public MediaFile<MaterialFile>
 		{
 			ar(name, ambient, diffuse, specular, transmittance, emission, shininess, paramVec2, paramVec3, paramVec4, paramMat2, paramMat3, paramMat4, paramInt, paramFloat);
 			std::string a, b, c, d;
+			auto manager = _dpyManager.lock()->getInstance<AssetsManager>();
 			ar(a, b, c, d);
 			if (a != "NULL")
-				ambientTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(a)));
+				ambientTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile<Archive>(File(a)));
 			if (b != "NULL")
-				diffuseTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(b)));
+				diffuseTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile<Archive>(File(b)));
 			if (c != "NULL")
-				specularTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(c)));
+				specularTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile<Archive>(File(c)));
 			if (d != "NULL")
-				normalTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(d)));
+				normalTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile<Archive>(File(d)));
 		}
 
 	};
@@ -197,7 +201,10 @@ struct MaterialFile : public MediaFile<MaterialFile>
 		ar(size);
 		materials.resize(size);
 		for (auto &e : materials)
+		{
 			e.file = this;
+			e._dpyManager = _dpyManager;
+		}
 		ar(materials);
 	}
 

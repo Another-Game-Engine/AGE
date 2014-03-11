@@ -30,7 +30,7 @@
 
 #include <SDL\SDL.h>
 
-DemoScene::DemoScene(Engine &engine) : AScene(engine)
+DemoScene::DemoScene(std::weak_ptr<Engine> engine) : AScene(engine)
 {
 }
 
@@ -51,7 +51,7 @@ bool 			DemoScene::userStart()
 
 	// end System Test
 
-		auto convertor = _engine.getInstance<AssetsConvertorManager>();
+		auto convertor = getInstance<AssetsConvertorManager>();
 		convertor->setOutputDirectory("./Assets/Serialized/");
 
 		//convertor.load("./Assets/cube/cube.obj");
@@ -90,12 +90,16 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("Elf");
 		//convertor->clear();
 
-		//convertor->load("./Assets/sketch-test.obj");
-		//convertor->serializeData("SketchTest");
-		//convertor->clear();
+		convertor->load("./Assets/sketch-test.obj");
+		convertor->serializeData("SketchTest");
+		convertor->clear();
 
 //		getInstance<FontConvertor>()->convertFont(File("./Assets/Montez-Regular.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./", "myFont");
 		getInstance<FontConvertor>()->convertFont(File("./Assets/ContrailOne.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./Assets/Serialized/", "myFont");
+
+		convertor->load("./Assets/GreyMan.tga");
+		convertor->serializeData("GreyMan");
+		convertor->clear();
 
 
 	return (true);
@@ -103,8 +107,8 @@ bool 			DemoScene::userStart()
 
 bool 			DemoScene::userUpdate(double time)
 {
-	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
-		_engine.getInstance<Input>()->getInput(SDL_QUIT))
+	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
+		getInstance<Input>()->getInput(SDL_QUIT))
 		return (false);
 	return (true);
 }
