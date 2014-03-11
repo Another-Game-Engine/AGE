@@ -5,9 +5,8 @@
 #include <Core/AScene.hh>
 #include <Systems/System.h>
 
-AScene::AScene(Engine &engine) :
-DependenciesInjector(&engine),
-_engine(engine)
+AScene::AScene(std::weak_ptr<Engine> engine) :
+DependenciesInjector(engine)
 , _entityNumber(0)
 {
 }

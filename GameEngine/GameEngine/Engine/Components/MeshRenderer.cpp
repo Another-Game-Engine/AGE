@@ -83,7 +83,7 @@ namespace Component
 		{
 			std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("PerModel");
 			std::shared_ptr<OpenGLTools::UniformBuffer> materialUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("MaterialBasic");
-			auto s = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(shader);
+			auto s = _entity->getScene()->getInstance<Renderer>()->getShader(shader);
 			if (s)
 				s->use();
 			perModelUniform->setUniform("model", _entity->getGlobalTransform());

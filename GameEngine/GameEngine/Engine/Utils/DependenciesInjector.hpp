@@ -14,9 +14,9 @@ private:
 	DependenciesInjector &operator=(DependenciesInjector const &);
 
 	std::map<size_t, std::shared_ptr<Dependency>>         _instances;
-	DependenciesInjector                                  *_parent;
+	std::weak_ptr<DependenciesInjector>                   _parent;
 public:
-	DependenciesInjector(DependenciesInjector *parent = nullptr)
+	DependenciesInjector(std::weak_ptr<DependenciesInjector> parent = std::weak_ptr<DependenciesInjector>())
 		: std::enable_shared_from_this<DependenciesInjector>()
 		, _parent(parent)
 	{}
@@ -32,8 +32,9 @@ public:
 		size_t id = typeid(T).hash_code();
 		if (_instances.find(id) == std::end(_instances))
 		{
-			if (_parent)
-				return _parent->getInstance<T>();
+			auto p = _parent.lock();
+			if (p)
+				return p->getInstance<T>();
 			else
 				assert(false && "Engine Instance is not set !");
 		}
@@ -56,9 +57,10 @@ public:
 	template <typename T>
 	void unsetInstance()
 	{
-		if (_parent && _parent->hasInstance<T>())
+		auto p = _parent.lock();
+		if (p && p->hasInstance<T>())
 		{
-			_parent->unsetInstance();
+			p->unsetInstance();
 			return;
 		}
 		size_t id = typeid(TypeSelector).hash_code();

@@ -18,8 +18,8 @@
 #include <cereal/archives/xml.hpp>
 #include <Components/ComponentRegistrar.hpp>
 
-class Engine;
 class System;
+class Engine;
 
 class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
 {
@@ -28,10 +28,8 @@ private:
 	std::vector<EntityData>                             _pool;
 	std::queue<unsigned int>                            _free;
 	std::size_t                                         _entityNumber;
-protected:
-	Engine                                              &_engine;
 public:
-	AScene(Engine &engine);
+	AScene(std::weak_ptr<Engine> engine);
 	virtual ~AScene();
 	inline std::size_t getNumberOfEntities() { return _entityNumber; }
 	virtual bool 			userStart() = 0;
@@ -41,11 +39,6 @@ public:
 	Entity &createEntity();
 	void destroy(const Entity &h);
 	EntityData *get(const Entity &h);
-
-	Engine &getEngine()
-	{
-		return _engine;
-	}
 
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
