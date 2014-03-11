@@ -74,13 +74,6 @@ void VertexManager<NBR_ATTRIBUTE>::deleteVertice(Vertice<NBR_ATTRIBUTE> &vertice
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-void VertexManager<NBR_ATTRIBUTE>::clear()
-{
-	_drawable.clear();
-	_pool.fullClear();
-}
-
-template <uint8_t NBR_ATTRIBUTE>
 void VertexManager<NBR_ATTRIBUTE>::sendVertexAttribPointerOnGPU()
 {
 	for (GLuint index = 0; index < GLuint(NBR_ATTRIBUTE); ++index)
