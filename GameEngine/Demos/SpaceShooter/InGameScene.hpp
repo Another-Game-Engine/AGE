@@ -64,7 +64,6 @@ public:
 		{
 			"projection",
 			"view",
-			"lightNbr",
 			"time"
 		};
 

@@ -14,13 +14,14 @@ layout (std140) uniform PerFrame
 {
 	mat4 projection;
 	mat4 view;
-	int	lightNbr;
 	float time;
+	uint		pointLightNbr;
+	uint		spotLightNbr;
 };
 
 layout (std140) uniform PerModel
 {
-mat4 model;
+	mat4 model;
 };
 
 layout(binding = 0) uniform sampler2D fTexture0; // ambient;

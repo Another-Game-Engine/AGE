@@ -24,6 +24,20 @@ UniformBuffer::~UniformBuffer(void)
 		delete[] _buffer;
 }
 
+void	UniformBuffer::init(size_t bufferSize)
+{
+	glGenBuffers(1, &_bufferId);
+	glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, _bufferId);
+	_dataSize = bufferSize;
+	_buffer = new char[_dataSize];
+}
+
+void	UniformBuffer::setBufferData(size_t size, const char *data)
+{
+	assert(size <= _dataSize && "Size to big for this uniform buffer");
+	memcpy(_buffer, data, size);
+}
+
 void	UniformBuffer::init(Shader *referent, std::string const &blockName, std::string const vars[])
 {
 	GLint		blockIdx, varNbr;

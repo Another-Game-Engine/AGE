@@ -12,6 +12,10 @@
 
 #include <vector>
 
+#define		MAX_LIGHT_NBR	255
+#define		POINT_LIGHT_BUFF_SIZE	(MAX_LIGHT_NBR * sizeof(PointLightData))
+#define		SPOT_LIGHT_BUFF_SIZE	(MAX_LIGHT_NBR * sizeof(SpotLightData))
+
 class LightRenderingSystem : public System
 {
 public:
@@ -31,15 +35,20 @@ public:
 
 private:
 	// Filters
-	EntityFilter				_lightFilter;
-	EntityFilter				_meshRendererFilter;
-	EntityFilter				_cameraFilter;
+	EntityFilter						_pointLightFilter;
+	EntityFilter						_spotLightFilter;
+	EntityFilter						_meshRendererFilter;
+	EntityFilter						_cameraFilter;
 
-	// Light Buffer
-	GLuint								_pointLights;
-	GLuint								_spotLights;
-	ContiguousLight						_contiguousPointLights;
-	ContiguousLight						_contiguousSpotLights;
+	// Point lights uniform buffer
+	PointLightData						_contiguousPointLights[MAX_LIGHT_NBR];
+	unsigned int						_pointLightNbr;
+
+	// Spot lights uniform buffer
+	SpotLightData						_contiguousSpotLights[MAX_LIGHT_NBR];
+	unsigned int						_spotLightNbr;
+
+	void								updateLights(OpenGLTools::UniformBuffer *perFrame);
 
 	// HDR Utils
 	// ----------------------------------------

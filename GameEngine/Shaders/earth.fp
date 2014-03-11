@@ -4,7 +4,6 @@ layout (std140) uniform PerFrame
 {
         mat4 projection;
         mat4 view;
-		int	lightNbr;
         float time;
 };
 
@@ -40,19 +39,19 @@ void main(void)
 {
 	vec4	finalColor = vec4(0, 0, 0, 1);
 
-	for (uint i = 0; i < lightNbr; ++i)
-	{
-	  vec4 normal = vec4(normalize(fNormal.xyz + texture2D(fTexture3, fTexCoord).xyz), 0);
-
-	  vec3 lightPos = vec3(view * lights[i].position);
-	  vec4 vectorLight = normalize(vec4(lightPos - fPosition.xyz, 1.0));
-	  vec4 vectorReflect = normalize(reflect(-vectorLight, normal));
-	  vec4 vectorView = normalize(vec4(fPosition.xyz - view[3].xyz, 1.0));
-
-	  float lamberTerm = clamp(dot(normal.xyz, vectorLight.xyz), 0.03, 1.0);
-	  finalColor.xyz += lamberTerm * texture2D(fTexture0, fTexCoord).rgb +
-					(1.0 - lamberTerm) * texture2D(fTexture1, fTexCoord).rgb +
-					lamberTerm * texture2D(fTexture2, fTexCoord - vec2(time / 80, 0)).rgb;
-	}
+//	for (uint i = 0; i < lightNbr; ++i)
+//	{
+//	  vec4 normal = vec4(normalize(fNormal.xyz + texture2D(fTexture3, fTexCoord).xyz), 0);
+//
+//	  vec3 lightPos = vec3(view * lights[i].position);
+//	  vec4 vectorLight = normalize(vec4(lightPos - fPosition.xyz, 1.0));
+//	  vec4 vectorReflect = normalize(reflect(-vectorLight, normal));
+//	  vec4 vectorView = normalize(vec4(fPosition.xyz - view[3].xyz, 1.0));
+//
+//	  float lamberTerm = clamp(dot(normal.xyz, vectorLight.xyz), 0.03, 1.0);
+//	  finalColor.xyz += lamberTerm * texture2D(fTexture0, fTexCoord).rgb +
+//					(1.0 - lamberTerm) * texture2D(fTexture1, fTexCoord).rgb +
+//					lamberTerm * texture2D(fTexture2, fTexCoord - vec2(time / 80, 0)).rgb;
+//	}
 	FragColor = finalColor;
 }

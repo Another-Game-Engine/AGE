@@ -94,7 +94,6 @@ bool 			DemoScene::userStart()
 		{
 			"projection",
 			"view",
-			"lightNbr",
 			"time"
 		};
 
