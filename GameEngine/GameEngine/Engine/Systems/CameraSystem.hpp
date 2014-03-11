@@ -76,7 +76,7 @@ protected:
 		static double totalTime = 0;
 		unsigned int textureOffset = 0;
 		auto &renderer = _scene->getEngine().getInstance<Renderer>();
-		OpenGLTools::UniformBuffer *perFrameBuffer = _scene->getEngine().getInstance<Renderer>()->getUniform("PerFrame");
+		std::shared_ptr<OpenGLTools::UniformBuffer> perFrameBuffer = _scene->getInstance<Renderer>()->getUniform("PerFrame");
 
 		for (auto e : _filter.getCollection())
 		{
@@ -87,10 +87,10 @@ protected:
 
 			if (skybox != nullptr)
 			{
-				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>()->getShader(camera->getSkyboxShader());
+				std::shared_ptr<OpenGLTools::Shader> s = _scene->getInstance<Renderer>()->getShader(camera->getSkyboxShader());
 				assert(s != NULL && "Skybox does not have a shader associated");
 
-				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
+				_scene->getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
 
 				glm::mat4 t = cameraPosition;
 				t[3][0] = 0;
