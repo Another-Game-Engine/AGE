@@ -24,7 +24,7 @@ UniformBuffer::~UniformBuffer(void)
 		delete[] _buffer;
 }
 
-void	UniformBuffer::init(Shader *referent, std::string const &blockName, std::string const vars[])
+void	UniformBuffer::init(std::shared_ptr<Shader> referent, std::string const &blockName, std::string const vars[])
 {
 	GLint		blockIdx, varNbr;
 	GLint		*varsInfos;

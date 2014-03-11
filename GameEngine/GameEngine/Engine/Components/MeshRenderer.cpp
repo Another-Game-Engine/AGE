@@ -39,8 +39,8 @@ namespace Component
 	{
 		glEnable(GL_DEPTH_TEST);
 		glm::mat4 depthMVP = lightVP * _entity->getGlobalTransform();
-		OpenGLTools::UniformBuffer *lightMVP = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("Light");
-		auto shader = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(_shaderShadow);
+		std::shared_ptr<OpenGLTools::UniformBuffer> lightMVP = _entity->getScene()->getInstance<Renderer>()->getUniform("Light");
+		auto shader = _entity->getScene()->getInstance<Renderer>()->getShader(_shaderShadow);
 		if (shader)
 			shader->use();
 		lightMVP->setUniform("lightMVP", depthMVP);
