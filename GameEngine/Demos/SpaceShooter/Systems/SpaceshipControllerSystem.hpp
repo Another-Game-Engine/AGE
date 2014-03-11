@@ -16,7 +16,7 @@
 class SpaceshipControllerSystem : public System
 {
 public:
-	SpaceshipControllerSystem(AScene *scene)
+	SpaceshipControllerSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{}

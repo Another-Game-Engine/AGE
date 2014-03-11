@@ -15,7 +15,7 @@
 class TrackingCameraSystem : public System
 {
 public:
-	TrackingCameraSystem(AScene *scene)
+	TrackingCameraSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{

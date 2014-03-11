@@ -11,7 +11,7 @@
 class MeshRendererSystem : public System
 {
 public:
-	MeshRendererSystem(AScene *scene)
+	MeshRendererSystem(std::weak_ptr<AScene> scene)
 		: System(scene),
 		_shadow(false),
 		_texShadow(0),

@@ -14,7 +14,7 @@
 class TrackBallSystem : public System
 {
 public:
-	TrackBallSystem(AScene *scene)
+	TrackBallSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{
@@ -35,7 +35,8 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		auto inputs = _scene->getInstance<Input>();
+		auto scene = _scene.lock();
+		auto inputs = scene->getInstance<Input>();
 
 		for (auto e : _filter.getCollection())
 		{
