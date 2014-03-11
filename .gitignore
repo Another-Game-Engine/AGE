@@ -13,6 +13,8 @@ Cereal/
 *.cpd
 *.bullet
 *.cpdFont
+*.CPDAnimation
+*.png
 
 # User-specific files
 *.suo

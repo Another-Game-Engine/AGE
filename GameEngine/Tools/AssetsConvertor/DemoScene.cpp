@@ -95,7 +95,11 @@ bool 			DemoScene::userStart()
 		//convertor->clear();
 
 //		getInstance<FontConvertor>()->convertFont(File("./Assets/Montez-Regular.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./", "myFont");
-		getInstance<FontConvertor>()->convertFont(File("./Assets/ContrailOne.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./Assets/Serialized/", "myFont");
+//		getInstance<FontConvertor>()->convertFont(File("./Assets/ContrailOne.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./Assets/Serialized/", "myFont");
+
+		convertor->load("./Assets/GreyMan.tga");
+		convertor->serializeData("GreyMan");
+		convertor->clear();
 
 
 	return (true);

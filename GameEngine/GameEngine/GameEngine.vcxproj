@@ -156,6 +156,7 @@
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Components\RotationForce.hpp" />
+    <ClInclude Include="Engine\Components\SpriteComponent.hh" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
@@ -191,11 +192,16 @@
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hpp" />
     <ClInclude Include="Engine\OpenGL\Vertice.hh" />
     <ClInclude Include="Engine\OpenGL\Vertice.hpp" />
+    <ClInclude Include="Engine\Sprite\Sprite.hh" />
+    <ClInclude Include="Engine\Sprite\SpriteAnimation.hh" />
+    <ClInclude Include="Engine\Sprite\SpriteFrame.hh" />
+    <ClInclude Include="Engine\Sprite\SpriteManager.hh" />
     <ClInclude Include="Engine\Systems\AudioSystem.hpp" />
     <ClInclude Include="Engine\Systems\CameraSystem.hpp" />
     <ClInclude Include="Engine\Systems\FirstPersonViewSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
+    <ClInclude Include="Engine\Systems\SpriteSystem.hh" />
     <ClInclude Include="Engine\Systems\System.h" />
     <ClInclude Include="Engine\Systems\TrackBallSystem.hpp" />
     <ClInclude Include="Engine\Systems\TrackingCameraSystem.hpp" />
