@@ -43,7 +43,8 @@ bool FontManager::loadFont(const File &file, const std::string &name)
 	}
 
 	Font font;
-	std::ifstream s(file.getFileName(), std::ios_base::binary);
+//	std::ifstream s(file.getFileName(), std::ios_base::binary);
+	std::ifstream s(file.getFullName(), std::ios_base::binary);
 	cereal::PortableBinaryInputArchive ar(s);
 	ar(font);
 	s.close();

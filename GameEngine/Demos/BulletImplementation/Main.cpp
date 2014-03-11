@@ -64,7 +64,7 @@ int			main(int ac, char **av)
 	if (!e.getInstance<SceneManager>()->initScene("SolarSystemDemo"))
 		return false;
 	e.getInstance<SceneManager>()->enableScene("BulletDemo", 0);
-
+	e.getInstance<SceneManager>()->enableScene("SolarSystemDemo", 0);
 	// lanch engine
 	if (e.start() == false)
 		return (EXIT_FAILURE);
