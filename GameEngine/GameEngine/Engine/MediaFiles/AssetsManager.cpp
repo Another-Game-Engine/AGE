@@ -2,17 +2,16 @@
 #include <Core/Engine.hh>
 
 AssetsManager::AssetsManager()
-: _engine(nullptr)
 {
 }
 
 AssetsManager::~AssetsManager()
 {}
 
-void AssetsManager::init(Engine *e)
+void AssetsManager::init()
 {
-	_engine = e;
-	AMediaFile::setManager(shared_from_this());
+	// TODO DELETE THIS LINE AND AMEDIAFILE MANAGER PTR
+	//AMediaFile::setManager(shared_from_this());
 }
 
 void AssetsManager::add(std::shared_ptr<AMediaFile> f)

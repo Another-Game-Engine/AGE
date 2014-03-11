@@ -10,7 +10,7 @@
 class SpriteSystem : public System
 {
 public:
-	SpriteSystem(AScene *scene)
+	SpriteSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{
@@ -28,11 +28,11 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-	glm::ivec2 screen = _scene->getInstance<IRenderContext>()->getScreenSize();
-	glm::mat4 Projection = glm::mat4(1);
-	Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
-	//auto glyphWidth = 0.0f;
-	//float lastX = position.x;
+		glm::ivec2 screen = _scene.lock()->getInstance<IRenderContext>()->getScreenSize();
+		glm::mat4 Projection = glm::mat4(1);
+		Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
+		//auto glyphWidth = 0.0f;
+		//float lastX = position.x;
 
 		for (auto e : _filter.getCollection())
 		{
@@ -45,7 +45,7 @@ private:
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, s->animation->getTexture()->getId());
 			glUniformMatrix4fv(transformationID, 1, GL_FALSE, glm::value_ptr(e->getLocalTransform()));
- 			s->animation->update(s->index);
+			s->animation->update(s->index);
 			s->animation->draw(s->index);
 		}
 	}

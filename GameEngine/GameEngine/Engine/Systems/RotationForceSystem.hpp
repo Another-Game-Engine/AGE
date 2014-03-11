@@ -10,7 +10,7 @@
 class RotationForceSystem : public System
 {
 public:
-	RotationForceSystem(AScene *scene)
+	RotationForceSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{

@@ -25,23 +25,23 @@
 
 int			main(int ac, char **av)
 {
-	Engine	e;
+	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
 	// set Rendering context of the engine
 	// you can also set any other dependencies
 
-	e.setInstance<PubSub::Manager>();
-	e.setInstance<SdlContext, IRenderContext>();
-	e.setInstance<Input>();
-	e.setInstance<Timer>();
-	e.setInstance<AssetsManager>()->init(&e);
-	e.setInstance<Renderer>(&e);
-	e.setInstance<SceneManager>();
-	e.setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
-	e.setInstance<AudioManager>()->init();
+	e->setInstance<PubSub::Manager>();
+	e->setInstance<SdlContext, IRenderContext>();
+	e->setInstance<Input>();
+	e->setInstance<Timer>();
+	e->setInstance<AssetsManager>()->init();
+	e->setInstance<Renderer>();
+	e->setInstance<SceneManager>();
+	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
+	e->setInstance<AudioManager>()->init();
 
 	// init engine
-	if (e.init() == false)
+	if (e->init() == false)
 		return (EXIT_FAILURE);
 
 	std::array<Attribute, 4> param =
@@ -52,25 +52,25 @@ int			main(int ac, char **av)
 		Attribute(GL_FLOAT, sizeof(float), 2),
 	};
 
-	e.setInstance<VertexManager<4>>(param)->init();
-	e.setInstance<FontManager>(&e)->init();
-	e.setInstance<SpriteManager>()->init(&e);
+	e->setInstance<VertexManager<4>>(param)->init();
+	e->setInstance<FontManager>(e)->init();
+	e->setInstance<SpriteManager>()->init();
 
 	// add scene
-	e.getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");
-	e.getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
 
 	// bind scene
-	if (!e.getInstance<SceneManager>()->initScene("BulletDemo"))
+	if (!e->getInstance<SceneManager>()->initScene("BulletDemo"))
 		return false;
-	if (!e.getInstance<SceneManager>()->initScene("SolarSystemDemo"))
+	if (!e->getInstance<SceneManager>()->initScene("SolarSystemDemo"))
 		return false;
-	e.getInstance<SceneManager>()->enableScene("BulletDemo", 0);
+	e->getInstance<SceneManager>()->enableScene("BulletDemo", 0);
 
 	// lanch engine
-	if (e.start() == false)
+	if (e->start() == false)
 		return (EXIT_FAILURE);
-	while (e.update())
+	while (e->update())
 		;
 	//e.stop();
 	return (EXIT_SUCCESS);

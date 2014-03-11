@@ -22,22 +22,22 @@
 
 int			main(int ac, char **av)
 {
-	Engine	e;
+	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
 	// set Rendering context of the engine
 	// you can also set any other dependencies
-	e.setInstance<PubSub::Manager>();
-	e.setInstance<SdlContext, IRenderContext>();
-	e.setInstance<Input>();
-	e.setInstance<Timer>();
-	e.setInstance<AssetsManager>()->init(&e);
-	e.setInstance<Renderer>(&e);
-	e.setInstance<SceneManager>();
-	if (!e.setInstance<AudioManager>()->init())
+	e->setInstance<PubSub::Manager>();
+	e->setInstance<SdlContext, IRenderContext>();
+	e->setInstance<Input>();
+	e->setInstance<Timer>();
+	e->setInstance<AssetsManager>()->init();
+	e->setInstance<Renderer>();
+	e->setInstance<SceneManager>();
+	if (!e->setInstance<AudioManager>()->init())
 		return EXIT_FAILURE;
 
 	// init engine
-	if (e.init() == false)
+	if (e->init() == false)
 		return (EXIT_FAILURE);
 
 	std::array<Attribute, 4> param =
@@ -48,22 +48,22 @@ int			main(int ac, char **av)
 		Attribute(GL_FLOAT, sizeof(float), 2),
 	};
 
-	e.setInstance<VertexManager<4>>(param)->init();
+	e->setInstance<VertexManager<4>>(param)->init();
 
 
 	// add scene
-	e.getInstance<SceneManager>()->addScene(std::make_shared<DemoScene>(e), "demo");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<DemoScene>(e), "demo");
 
 	// bind scene
-	if (!e.getInstance<SceneManager>()->initScene("demo"))
+	if (!e->getInstance<SceneManager>()->initScene("demo"))
 		return false;
-	e.getInstance<SceneManager>()->enableScene("demo", 0);
+	e->getInstance<SceneManager>()->enableScene("demo", 0);
 
 	// launch engine
-	if (e.start() == false)
+	if (e->start() == false)
 		return (EXIT_FAILURE);
-	while (e.update())
+	while (e->update())
 		;
-	e.stop();
+	e->stop();
 	return (EXIT_SUCCESS);
 }

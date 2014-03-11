@@ -11,13 +11,13 @@
 class	System : public PubSub
 {
 public:
-	System(AScene *scene);
+	System(std::weak_ptr<AScene> scene);
 	virtual ~System();
 	void update(double time);
 	void init();
 	inline const std::string &getName() const {return _name; }
 protected:
-	AScene *_scene;
+	std::weak_ptr<AScene> _scene;
 	std::string _name;
 private:
 	virtual void updateBegin(double time) = 0;

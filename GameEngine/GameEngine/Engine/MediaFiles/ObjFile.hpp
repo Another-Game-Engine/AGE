@@ -52,11 +52,12 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
 		Vertice<4>					buffer;
-		Engine                      *engine;
-
+	private:
+		std::weak_ptr<DependenciesInjector> _dpyManager;
+		friend class ObjFile;
+	public:
 		Geometry()
 			: name("")
-			, engine(nullptr)
 		{
 		}
 
@@ -73,7 +74,7 @@ struct ObjFile : public MediaFile<ObjFile>
 			colors = o.colors;
 			uvs = o.uvs;
 			indices = o.indices;
-			engine = o.engine;
+			_dpyManager = o._dpyManager;
 			init();
 		}
 
@@ -87,7 +88,7 @@ struct ObjFile : public MediaFile<ObjFile>
 				colors = o.colors;
 				uvs = o.uvs;
 				indices = o.indices;
-				engine = o.engine;
+				_dpyManager = o._dpyManager;
 				init();
 			}
 			return *this;
@@ -116,7 +117,7 @@ struct ObjFile : public MediaFile<ObjFile>
 			};
 			Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
 			buffer = Vertice<4>(vertices.size(), data, &indicesData);
-			engine->getInstance<VertexManager<4>>()->addVertice(buffer);
+			_dpyManager.lock()->getInstance<VertexManager<4>>()->addVertice(buffer);
 
 			/////
 			// The old method here strangly works
@@ -151,13 +152,13 @@ struct ObjFile : public MediaFile<ObjFile>
 		ar(geometries);
 		for (auto &e : geometries)
 		{
-			e.engine = _engine;
+			e._dpyManager = _dpyManager;
 			e.init();
 		}
 		std::string matName;
 		ar(matName);
 		if (matName != "NULL")
-			material = std::static_pointer_cast<MaterialFile>(_manager->loadFromFile<Archive>(File(matName)));
+			material = std::static_pointer_cast<MaterialFile>(_dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile<Archive>(File(matName)));
 	}
 
 };

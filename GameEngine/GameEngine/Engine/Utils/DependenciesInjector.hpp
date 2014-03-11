@@ -7,17 +7,18 @@
 #include <Utils/Dependency.hpp>
 #include <memory>
 
-class DependenciesInjector
+class DependenciesInjector : public std::enable_shared_from_this<DependenciesInjector>
 {
 private:
 	DependenciesInjector(DependenciesInjector const &);
 	DependenciesInjector &operator=(DependenciesInjector const &);
 
 	std::map<size_t, std::shared_ptr<Dependency>>         _instances;
-	DependenciesInjector                                  *_parent;
+	std::weak_ptr<DependenciesInjector>                   _parent;
 public:
-	DependenciesInjector(DependenciesInjector *parent = nullptr)
-		:_parent(parent)
+	DependenciesInjector(std::weak_ptr<DependenciesInjector> parent = std::weak_ptr<DependenciesInjector>())
+		: std::enable_shared_from_this<DependenciesInjector>()
+		, _parent(parent)
 	{}
 
 	virtual ~DependenciesInjector()
@@ -31,8 +32,9 @@ public:
 		size_t id = typeid(T).hash_code();
 		if (_instances.find(id) == std::end(_instances))
 		{
-			if (_parent)
-				return _parent->getInstance<T>();
+			auto p = _parent.lock();
+			if (p)
+				return p->getInstance<T>();
 			else
 				assert(false && "Engine Instance is not set !");
 		}
@@ -46,6 +48,7 @@ public:
 		if (_instances.find(id) == std::end(_instances))
 		{
 			auto n = std::make_shared<T>(args...);
+			n->_dpyManager = shared_from_this();
 			_instances.insert(std::make_pair(id, n));
 		}
 		return std::dynamic_pointer_cast<T>(_instances[id]);
@@ -54,9 +57,10 @@ public:
 	template <typename T>
 	void unsetInstance()
 	{
-		if (_parent && _parent->hasInstance<T>())
+		auto p = _parent.lock();
+		if (p && p->hasInstance<T>())
 		{
-			_parent->unsetInstance();
+			p->unsetInstance();
 			return;
 		}
 		size_t id = typeid(TypeSelector).hash_code();

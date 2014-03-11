@@ -7,7 +7,7 @@
 class DemoScene : public AScene
 {
 public:
-	DemoScene(Engine &engine);
+	DemoScene(std::weak_ptr<Engine> engine);
 	virtual ~DemoScene(void);
 
 	virtual bool 			userStart();
