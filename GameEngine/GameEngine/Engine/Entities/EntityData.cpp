@@ -6,8 +6,8 @@
 #include <limits>
 #include <Core/AScene.hh>
 
-EntityData::EntityData(std::shared_ptr<AScene> scene) :
-    PubSub(scene->getInstance<PubSub::Manager>()),
+EntityData::EntityData(std::weak_ptr<AScene> scene) :
+    PubSub(scene.lock()->getInstance<PubSub::Manager>()),
     _scene(scene),
 	_flags(0),
 	_localTranslation(0),
@@ -53,7 +53,7 @@ Entity &EntityData::getHandle()
 
 std::shared_ptr<AScene> EntityData::getScene() const
 {
-	return _scene;
+	return _scene.lock();
 }
 
 void EntityData::setHandle(Entity &handle)
