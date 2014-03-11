@@ -53,7 +53,7 @@ private:
 	friend class EntityIdRegistrar;
 	friend class AScene;
 
-	std::shared_ptr<AScene> _scene;
+	std::weak_ptr<AScene> _scene;
 	size_t 				_flags;
 
 	glm::mat4 			_localTransform;
@@ -71,7 +71,7 @@ private:
 
 	Barcode             _code;
 
-	EntityData(std::shared_ptr<AScene> scene);
+	EntityData(std::weak_ptr<AScene> scene);
 	EntityData();
 	EntityData(const EntityData &o);
 	const EntityData &operator=(const EntityData &o);
@@ -213,7 +213,7 @@ public:
 	void save(Archive &ar) const
 	{
 		// Save Entity informations
-		ar(cereal::make_nvp("entityID", _scene->registrarSerializedEntity(_handle.getId())));
+		ar(cereal::make_nvp("entityID", _scene.lock()->registrarSerializedEntity(_handle.getId())));
 		ar(cereal::make_nvp("flags", _flags));
 		ar(cereal::make_nvp("localTransform", _localTransform));
 

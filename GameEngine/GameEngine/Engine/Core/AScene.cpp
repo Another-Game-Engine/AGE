@@ -17,7 +17,6 @@ AScene::~AScene()
 	for (auto &e : _pool)
 		e.reset();
 	_pool.clear();
-
 }
 
 void 							AScene::update(double time)
