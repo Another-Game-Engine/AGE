@@ -7,7 +7,7 @@
 #include <Utils/Dependency.hpp>
 #include <memory>
 
-class DependenciesInjector
+class DependenciesInjector : public std::enable_shared_from_this<DependenciesInjector>
 {
 private:
 	DependenciesInjector(DependenciesInjector const &);
@@ -17,7 +17,8 @@ private:
 	DependenciesInjector                                  *_parent;
 public:
 	DependenciesInjector(DependenciesInjector *parent = nullptr)
-		:_parent(parent)
+		: std::enable_shared_from_this<DependenciesInjector>()
+		, _parent(parent)
 	{}
 
 	virtual ~DependenciesInjector()
@@ -46,6 +47,7 @@ public:
 		if (_instances.find(id) == std::end(_instances))
 		{
 			auto n = std::make_shared<T>(args...);
+			n->_dpyManager = shared_from_this();
 			_instances.insert(std::make_pair(id, n));
 		}
 		return std::dynamic_pointer_cast<T>(_instances[id]);

@@ -21,7 +21,7 @@
 class Engine;
 class System;
 
-class AScene : public std::enable_shared_from_this<AScene>, public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
+class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
 {
 private:
 	std::multimap<std::size_t, std::shared_ptr<System> >   _systems;
@@ -37,6 +37,7 @@ public:
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
+	bool                    start();
 	Entity &createEntity();
 	void destroy(const Entity &h);
 	EntityData *get(const Entity &h);

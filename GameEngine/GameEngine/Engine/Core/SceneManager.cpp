@@ -73,7 +73,7 @@ bool        SceneManager::initScene(std::string const &name)
 	auto t = _scenes.find(name);
 	if (t == std::end(_scenes))
 		return false;
-	return t->second->userStart();
+	return t->second->start();
 }
 
 bool            SceneManager::userUpdate(double time) const
