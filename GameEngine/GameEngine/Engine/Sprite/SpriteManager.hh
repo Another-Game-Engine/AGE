@@ -15,16 +15,14 @@ class SpriteManager : public Dependency
 {
 public:
 	SpriteManager()
-		: _engine(nullptr)
-		, _vertexManager(nullptr)
+		: _vertexManager(nullptr)
 	{}
 
 	virtual ~SpriteManager()
 	{}
 
-	bool init(Engine *e)
+	bool init()
 	{
-		_engine = e;
 		std::array<Attribute, 2> param =
 		{
 			Attribute(GL_FLOAT, sizeof(float), 4),
@@ -66,7 +64,7 @@ public:
 		std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
 
 		std::string image = document["image"].GetString();
-		auto texture = _engine->getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(file.getFolder() + "/" + image);
+		auto texture = _dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(file.getFolder() + "/" + image);
 
 		if (!texture.get())
 		{
@@ -188,7 +186,6 @@ public:
 	}
 
 private:
-	Engine *_engine;
 	std::unique_ptr<VertexManager<2>> _vertexManager;
 	std::map<std::string, std::shared_ptr<Sprite>> _collection;
 };

@@ -11,7 +11,7 @@
 class MeshRendererSystem : public System
 {
 public:
-	MeshRendererSystem(AScene *scene)
+	MeshRendererSystem(std::weak_ptr<AScene> scene)
 		: System(scene),
 		_shadow(false),
 		_texShadow(0),
@@ -61,7 +61,6 @@ public:
 			auto &mesh = e->getComponent<Component::MeshRenderer>();
 			mesh->render(_shadow, _texShadow, _lightVP);
 		}
-		glFinish();
 	}
 
 	void onShadow()

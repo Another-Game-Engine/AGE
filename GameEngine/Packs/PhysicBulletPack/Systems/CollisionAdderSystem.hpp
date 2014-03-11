@@ -11,8 +11,8 @@
 class CollisionAdder : public System
 {
 public:
-	CollisionAdder(AScene *scene) : System(scene)
-		, _manager(scene->getInstance<BulletCollisionManager>())
+	CollisionAdder(std::weak_ptr<AScene> scene) : System(scene)
+		, _manager(scene.lock()->getInstance<BulletCollisionManager>())
 	{
 		_name = "collision_adder_system";
 	}

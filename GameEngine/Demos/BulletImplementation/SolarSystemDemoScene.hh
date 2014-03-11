@@ -6,7 +6,7 @@
 class SolarSystemDemoScene : public AScene
 {
 public:
-	SolarSystemDemoScene(Engine &engine);
+	SolarSystemDemoScene(std::weak_ptr<Engine> engine);
 	virtual ~SolarSystemDemoScene(void);
 
 	Entity	SolarSystemDemoScene::createPlanet(float rotSpeed, float orbitSpeed, glm::vec3 &pos, glm::vec3 &scale,

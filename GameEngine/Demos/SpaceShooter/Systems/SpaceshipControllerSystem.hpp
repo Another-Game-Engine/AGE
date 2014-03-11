@@ -16,7 +16,7 @@
 class SpaceshipControllerSystem : public System
 {
 public:
-	SpaceshipControllerSystem(AScene *scene)
+	SpaceshipControllerSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{}
@@ -48,7 +48,8 @@ private:
 	void updateComponent(Entity &entity, std::shared_ptr<Component::SpaceshipController> c, double time)
 	{
 			c->resetControls();
-			auto inputs = _scene->getInstance<Input>();
+			auto scene = _scene.lock();
+			auto inputs = scene->getInstance<Input>();
 			auto &controls = c->controls;
 			auto &keys = c->keys;
 
@@ -87,20 +88,20 @@ private:
 
 			if (controls[Component::SpaceshipController::SHOOT])
 			{
-				Entity b = _scene->createEntity();
+				Entity b = scene->createEntity();
 				b->setLocalTransform(entity->getLocalTransform());
 				auto rigidBody = b->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 //				rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, 1000));
-				auto mesh = b->addComponent<Component::MeshRenderer>(entity->getScene()->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+				auto mesh = b->addComponent<Component::MeshRenderer>(scene->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
 				balls.push_back(b);
 			}
 			if (inputs->getKey(SDLK_p))
 			{
 				for (auto e : balls)
-					_scene->destroy(e);
+					scene->destroy(e);
 				balls.clear();
 			}
 			entity->setLocalTransform(glm::translate(entity->getLocalTransform(), direction));

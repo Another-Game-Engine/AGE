@@ -4,8 +4,7 @@
 
 #include "glm/gtc/type_ptr.hpp"
 
-Renderer::Renderer(Engine *engine)
-: _engine(*engine)
+Renderer::Renderer()
 {
 }
 

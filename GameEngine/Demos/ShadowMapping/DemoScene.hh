@@ -14,7 +14,7 @@
 class DemoScene : public AScene
 {
 public:
-	DemoScene(Engine &engine);
+	DemoScene(std::weak_ptr<Engine> engine);
 	virtual ~DemoScene();
 	virtual bool userStart();
 	virtual bool userUpdate(double time);

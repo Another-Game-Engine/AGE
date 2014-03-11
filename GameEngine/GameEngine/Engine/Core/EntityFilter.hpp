@@ -11,7 +11,7 @@ bool defaultEntityComparaison(Entity e1, Entity e2);
 class EntityFilter : public PubSub
 {
 public:
-	EntityFilter(AScene *scene, bool(*comparaisonFn)(Entity, Entity) = defaultEntityComparaison);
+	EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(Entity, Entity) = defaultEntityComparaison);
 	virtual ~EntityFilter();
 
 	template <typename T>
@@ -48,7 +48,7 @@ public:
 protected:
 	std::set<Entity, bool(*)(Entity, Entity)> _collection;
 	Barcode _code;
-	AScene *_scene;
+	std::weak_ptr<AScene> _scene;
 
 	void _componentAdded(Entity &e, unsigned int typeId);
 	void _componentRemoved(Entity &e, unsigned int typeId);

@@ -11,8 +11,6 @@
 #include <thread>
 #include <memory>
 
-std::shared_ptr<AssetsManager> AMediaFile::_manager = nullptr;
-
 void AMediaFile::serializeAsBulletFile(std::ofstream &s)
 {
 	if (_type == COLLISION_SHAPE_STATIC)
