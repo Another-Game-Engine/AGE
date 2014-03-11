@@ -3,23 +3,23 @@
 #include <Components\Component.hh>
 #include <glm\glm.hpp>
 
-struct PointLightData
+struct SpotLightData
 {
 	glm::vec4	positionPower;
 	glm::vec4	colorRange;
 
-	PointLightData() { }
+	SpotLightData() { }
 
-	PointLightData(PointLightData const &o)
+	SpotLightData(SpotLightData const &o)
 	{
 		*this = o;
 	}
 
-	~PointLightData()
+	~SpotLightData()
 	{
 	}
 
-	PointLightData &operator=(PointLightData const &o)
+	SpotLightData &operator=(SpotLightData const &o)
 	{
 		positionPower = o.positionPower;
 		colorRange = o.colorRange;
@@ -30,26 +30,26 @@ struct PointLightData
 namespace Component
 {
 
-	struct PointLight : public ComponentBase<PointLight>
+	struct SpotLight : public ComponentBase<SpotLight>
 	{
-		PointLightData		lightData;
+		SpotLightData		lightData;
 
-		PointLight()
+		SpotLight()
 		{
 		}
 
-		PointLight(PointLight const &o)
+		SpotLight(SpotLight const &o)
 		{
 			*this = o;
 		}
 
-		virtual ~PointLight()
+		virtual ~SpotLight()
 		{
 		}
 
 		virtual void reset() { }
 
-		PointLight &operator=(PointLight const &o)
+		SpotLight &operator=(SpotLight const &o)
 		{
 			lightData = o.lightData;
 			return (*this);

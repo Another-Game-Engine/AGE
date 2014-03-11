@@ -44,7 +44,8 @@ layout (location = 1) in vec4 vColor;
 layout (location = 2) in vec4 vNormal;
 layout (location = 3) in vec2 vTexCoord;
 
-out vec4 fPosition;
+out vec4 fScreenPosition;
+out vec4 fWorldPosition;
 out vec4 fColor;
 out vec4 fNormal;
 out vec2 fTexCoord;
@@ -56,7 +57,8 @@ void main(void)
 
   fColor = vColor;
   fNormal = vec4(normalize(vectorSpace * vNormal).xyz, 0.0f);
-  fPosition = modelView * vPosition;
+  fScreenPosition = modelView * vPosition;
+  fWorldPosition = model * vPosition;
   fTexCoord = vTexCoord;
   gl_Position = projection * modelView * vPosition;
 }

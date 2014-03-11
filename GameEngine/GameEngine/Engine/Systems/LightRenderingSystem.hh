@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Components\PointLight.hh>
+#include <Components\SpotLight.hh>
 
 #include <Systems\System.h>
 #include <Systems\CameraSystem.hpp>
@@ -35,8 +36,10 @@ private:
 	EntityFilter				_cameraFilter;
 
 	// Light Buffer
-	GLuint								_lights;
-	std::vector<ContiguousLight>		_contiguousLights;
+	GLuint								_pointLights;
+	GLuint								_spotLights;
+	ContiguousLight						_contiguousPointLights;
+	ContiguousLight						_contiguousSpotLights;
 
 	// HDR Utils
 	// ----------------------------------------
