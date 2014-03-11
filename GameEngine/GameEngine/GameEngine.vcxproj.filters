@@ -51,14 +51,11 @@
     <ClInclude Include="Engine\Components\CameraComponent.hpp" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
     <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
-    <ClInclude Include="Engine\Components\GraphNode.hpp" />
-    <ClInclude Include="Engine\Components\RotationForce.hh" />
+    <ClInclude Include="Engine\Components\AudioListener.hpp" />
+    <ClInclude Include="Engine\Components\RotationForce.hpp" />
     <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
     <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
-    <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
-    <ClInclude Include="Engine\Core\Material.hh" />
-    <ClInclude Include="Engine\Components\AudioListener.hpp" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Tags.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
@@ -112,16 +109,21 @@
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
-    <ClInclude Include="Engine\Components\RotationForce.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
+    <ClInclude Include="Engine\Components\GraphNode.hpp" />
+    <ClInclude Include="Engine\Components\RotationForce.hh" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
+    <ClInclude Include="Engine\Core\Material.hh" />
+    <ClInclude Include="Engine\Components\SpotLight.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
+    <None Include="Engine\Context\IRenderContext.hh" />
+    <None Include="Engine\Context\SdlContext.hh" />
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />
-    <None Include="Engine\Core\MaterialManager.hh" />
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
     <None Include="Engine\OpenGL\ComputeShader.hh" />
@@ -129,16 +131,15 @@
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />
     <None Include="Engine\OpenGL\VertexBuffer.hh" />
-    <None Include="Engine\Parsers\Parsers.hh" />
     <None Include="Engine\Utils\OpenGL.hh" />
     <None Include="Engine\Utils\Singleton.hh" />
     <None Include="Engine\Utils\SmartPointer.hh" />
     <None Include="Engine\Utils\Utils.hh" />
-    <None Include="Engine\ResourceManager\SharedMesh.hh" />
-    <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Core\Renderer.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
-    <None Include="Engine\Context\IRenderContext.hh" />
-    <None Include="Engine\Context\SdlContext.hh" />
+    <None Include="Engine\Core\MaterialManager.hh" />
+    <None Include="Engine\Parsers\Parsers.hh" />
+    <None Include="Engine\ResourceManager\SharedMesh.hh" />
+    <None Include="Engine\ResourceManager\Texture.hh" />
   </ItemGroup>
 </Project>
