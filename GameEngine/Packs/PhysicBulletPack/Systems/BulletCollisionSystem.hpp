@@ -12,8 +12,8 @@
 class BulletCollisionSystem : public System
 {
 public:
-	BulletCollisionSystem(AScene *scene) : System(scene)
-		, _manager(scene->getInstance<BulletCollisionManager>())
+	BulletCollisionSystem(std::weak_ptr<AScene> scene) : System(scene)
+		, _manager(scene.lock()->getInstance<BulletCollisionManager>())
 		, _filter(scene)
 	{
 		_name = "bullet_collision_system";

@@ -12,7 +12,7 @@
 class FirstPersonViewSystem : public System
 {
 public:
-	FirstPersonViewSystem(AScene *scene)
+	FirstPersonViewSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{

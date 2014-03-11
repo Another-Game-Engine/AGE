@@ -39,8 +39,8 @@ namespace Component
 	{
 		glEnable(GL_DEPTH_TEST);
 		glm::mat4 depthMVP = lightVP * _entity->getGlobalTransform();
-		OpenGLTools::UniformBuffer *lightMVP = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("Light");
-		auto shader = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(_shaderShadow);
+		std::shared_ptr<OpenGLTools::UniformBuffer> lightMVP = _entity->getScene()->getInstance<Renderer>()->getUniform("Light");
+		auto shader = _entity->getScene()->getInstance<Renderer>()->getShader(_shaderShadow);
 		if (shader)
 			shader->use();
 		lightMVP->setUniform("lightMVP", depthMVP);
@@ -59,10 +59,10 @@ namespace Component
 								 0.0, 0.5, 0.0, 0.0,
 								 0.0, 0.0, 0.5, 0.0,
 								 0.5, 0.5, 0.5, 1.0);
-			OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("PerModel");
-			OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("MaterialBasic");
-			OpenGLTools::UniformBuffer *shadowUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("LightBias");
-			auto s = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(shader);
+			auto perModelUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("PerModel");
+			auto materialUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("MaterialBasic");
+			auto shadowUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("LightBias");
+			auto s = _entity->getScene()->getInstance<Renderer>()->getShader(shader);
 			if (s)
 				s->use();
 			glm::mat4 depthMVP = lightVP * _entity->getGlobalTransform();
@@ -81,9 +81,9 @@ namespace Component
 		}
 		else
 		{
-			OpenGLTools::UniformBuffer *perModelUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("PerModel");
-			OpenGLTools::UniformBuffer *materialUniform = _entity->getScene()->getEngine().getInstance<Renderer>()->getUniform("MaterialBasic");
-			auto s = _entity->getScene()->getEngine().getInstance<Renderer>()->getShader(shader);
+			std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("PerModel");
+			std::shared_ptr<OpenGLTools::UniformBuffer> materialUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("MaterialBasic");
+			auto s = _entity->getScene()->getInstance<Renderer>()->getShader(shader);
 			if (s)
 				s->use();
 			perModelUniform->setUniform("model", _entity->getGlobalTransform());

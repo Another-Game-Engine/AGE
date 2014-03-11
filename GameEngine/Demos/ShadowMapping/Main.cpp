@@ -18,16 +18,16 @@
 # include <OpenGL/VertexManager.hh>
 
 
-static bool initInstanceEngine(Engine &engine)
+static bool initInstanceEngine(std::shared_ptr<Engine> engine)
 {
-	engine.setInstance<PubSub::Manager>();
-	engine.setInstance<SdlContext, IRenderContext>();
-	engine.setInstance<Input>();
-	engine.setInstance<Timer>();
-	engine.setInstance<AssetsManager>()->init(&engine);
-	engine.setInstance<Renderer>(&engine);
-	engine.setInstance<SceneManager>();
-	if (!engine.init())
+	engine->setInstance<PubSub::Manager>();
+	engine->setInstance<SdlContext, IRenderContext>();
+	engine->setInstance<Input>();
+	engine->setInstance<Timer>();
+	engine->setInstance<AssetsManager>()->init();
+	engine->setInstance<Renderer>();
+	engine->setInstance<SceneManager>();
+	if (!engine->init())
 	{
 		std::cerr << "Engine initialization fail." << std::endl;
 		return (false);
@@ -40,33 +40,33 @@ static bool initInstanceEngine(Engine &engine)
 		Attribute(GL_FLOAT, sizeof(float), 2),
 	};
 
-	engine.setInstance<VertexManager<4>>(param)->init();
+	engine->setInstance<VertexManager<4>>(param)->init();
 	return (true);
 }
 
-static bool initSceneEngine(Engine &engine, std::string const &nameScene)
+static bool initSceneEngine(std::shared_ptr<Engine> engine, std::string const &nameScene)
 {
-	engine.getInstance<SceneManager>()->addScene(std::make_shared<DemoScene>(engine), nameScene);
-	if (!engine.getInstance<SceneManager>()->initScene(nameScene))
+	engine->getInstance<SceneManager>()->addScene(std::make_shared<DemoScene>(engine), nameScene);
+	if (!engine->getInstance<SceneManager>()->initScene(nameScene))
 	{
 		std::cerr << "the init scene : " << nameScene << " fail." << std::endl;
 		return (false);
 	}
-	engine.getInstance<SceneManager>()->enableScene(nameScene, 0);
+	engine->getInstance<SceneManager>()->enableScene(nameScene, 0);
 	return (true);
 }
 
 int main(int argc, char **argv)
 {
-	Engine engine;
+	std::shared_ptr<Engine> engine = std::make_shared<Engine>();
 
 	if (!initInstanceEngine(engine))
 		return (EXIT_FAILURE);
 	if (!initSceneEngine(engine, "demo-Shadow-Mapping"))
 		return (EXIT_FAILURE);
-	if (!engine.start())
+	if (!engine->start())
 		return (EXIT_FAILURE);
-	while (engine.update());
-	engine.stop();
+	while (engine->update());
+	engine->stop();
 	return (EXIT_SUCCESS);
 }

@@ -6,9 +6,9 @@
 #include <Context/IRenderContext.hh>
 #include <glm/gtc/matrix_transform.hpp>
 
-FontManager::FontManager(Engine *engine)
-: PubSub(engine->getInstance<PubSub::Manager>())
-, _engine(engine)
+FontManager::FontManager(std::weak_ptr<Engine> engine)
+: Dependency()
+, PubSub(engine.lock()->getInstance<PubSub::Manager>())
 {}
 
 FontManager::~FontManager()
@@ -43,8 +43,14 @@ bool FontManager::loadFont(const File &file, const std::string &name)
 	}
 
 	Font font;
-//	std::ifstream s(file.getFileName(), std::ios_base::binary);
+
 	std::ifstream s(file.getFullName(), std::ios_base::binary);
+	if (!s.is_open())
+	{
+		std::cerr << "File " << file.getFullName() << " is not open." << std::endl;
+		return false;
+	}
+
 	cereal::PortableBinaryInputArchive ar(s);
 	ar(font);
 	s.close();
@@ -80,7 +86,7 @@ void FontManager::_draw2DString(const std::string &text,
 	const glm::vec4 &color,
 	const std::string &shader)
 {
-	auto s = _engine->getInstance<Renderer>()->getShader(shader);
+	auto s = _dpyManager.lock()->getInstance<Renderer>()->getShader(shader);
 	if (!s)
 		return;
 	s->use();
@@ -115,7 +121,7 @@ void FontManager::_draw2DString(const std::string &text,
 
 	glUniform1i(glGetUniformLocation(s->getId(), "fTexture0"), 0);
 	glUniform4f(glGetUniformLocation(s->getId(), "color"), color.x, color.y, color.z, color.a);
-	glm::ivec2 screen = _engine->getInstance<IRenderContext>()->getScreenSize();
+	glm::ivec2 screen = _dpyManager.lock()->getInstance<IRenderContext>()->getScreenSize();
 	glm::mat4 Projection = glm::mat4(1);
 	Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
 	glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, glm::value_ptr(Projection));
