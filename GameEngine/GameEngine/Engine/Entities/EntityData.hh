@@ -258,9 +258,10 @@ public:
 	void load(Archive &ar)
 	{
 		// load Entity informations
+		auto scene = _scene.lock();
 		std::size_t entityID;
 		ar(entityID);
-		_scene->registrarUnserializedEntity(_handle, entityID);
+		scene->registrarUnserializedEntity(_handle, entityID);
 		ar(_flags);
 		ar(_localTransform);
 
@@ -281,7 +282,7 @@ public:
 			unsigned int typeId;
 			ar(type);
 			unsigned int position;
-			Component::Base *cpt = _scene->createFromType(type, ar, _handle, typeId);
+			Component::Base *cpt = scene->createFromType(type, ar, _handle, typeId);
 			cpt->setEntity(_handle);
 			if (_components.size() <= typeId)
 				_components.resize(typeId + 1);
@@ -294,7 +295,7 @@ public:
 		ar(graphUnser.childs);
 		ar(graphUnser.haveParent);
 		ar(graphUnser.parent);
-		_scene->registrarGraphNode(entityID, graphUnser);
+		scene->registrarGraphNode(entityID, graphUnser);
 	}
 
 	//

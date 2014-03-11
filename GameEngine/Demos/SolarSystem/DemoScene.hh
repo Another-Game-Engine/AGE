@@ -7,7 +7,7 @@
 class DemoScene : public AScene
 {
 public:
-	DemoScene(Engine &engine);
+	DemoScene(std::weak_ptr<Engine> engine);
 	virtual ~DemoScene(void);
 
 	Entity	DemoScene::createPlanet(float rotSpeed, float orbitSpeed, glm::vec3 &pos, glm::vec3 &scale,
