@@ -19,7 +19,7 @@ namespace Component
 		virtual ~Sprite(void)
 		{}
 
-		void init(std::shared_ptr<SpriteAnimation> _animation, OpenGLTools::Shader *_shader)
+		void init(std::shared_ptr<SpriteAnimation> _animation, std::shared_ptr<OpenGLTools::Shader> _shader)
 		{
 			animation = _animation;
 			shader = _shader;
@@ -56,7 +56,7 @@ namespace Component
 		//////
 
 		std::shared_ptr<SpriteAnimation> animation;
-		OpenGLTools::Shader *shader;
+		std::shared_ptr<OpenGLTools::Shader> shader;
 		float fps;
 		std::size_t index;
 	private:
