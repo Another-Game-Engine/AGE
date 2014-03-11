@@ -15,7 +15,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/archives/portable_binary.hpp>
-#include <Core/Engine.hh>
+#include <Utils/DependenciesInjector.hpp>
 
 class AssetsManager;
 
@@ -24,7 +24,6 @@ struct AMediaFile
 public:
 	File path;
 	std::string name;
-	static std::shared_ptr<AssetsManager> _manager;
 	enum MEDIA_TYPE
 	{
 		UNKNOWN = 0
@@ -41,12 +40,11 @@ public:
 protected:
 	std::size_t _childs;
 	MEDIA_TYPE _type;
-	Engine *_engine;
+	std::weak_ptr<DependenciesInjector> _dpyManager;
 public:
 	AMediaFile() :
 		_childs(0)
 		, _type(UNKNOWN)
-		, _engine(nullptr)
 	{
 	}
 	virtual ~AMediaFile(){}
@@ -60,6 +58,7 @@ public:
 		auto tmpPath = o.path.getFolder() + o.path.getShortFileName();
 		tmpPath += "_copy.cpd";
 		path = File(tmpPath);
+		_dpyManager = o._dpyManager;
 	}
 
 	AMediaFile &operator=(const AMediaFile &o)
@@ -69,6 +68,7 @@ public:
 			_type = o._type;
 			name = o.name;
 			name += "_copy";
+			_dpyManager = o._dpyManager;
 		}
 		return *this;
 	}
@@ -92,11 +92,6 @@ public:
 	void serializeAsBulletFile(std::ofstream &s);
 
 	void saveToFile();
-
-	static void setManager(std::shared_ptr<AssetsManager> manager)
-	{
-		_manager = manager;
-	}
 
 	inline std::size_t getChilds() const
 	{

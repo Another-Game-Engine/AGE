@@ -21,9 +21,8 @@ private:
 	std::map<std::string,
 		std::shared_ptr<OpenGLTools::UniformBuffer>> _uniforms;
 	std::multimap<unsigned int, std::string>         _postEffects;
-	Engine &_engine;
 public:
-	Renderer(Engine *engine);
+	Renderer();
 	virtual ~Renderer(void);
 
 	bool init();
@@ -52,7 +51,6 @@ public:
 	OpenGLTools::Framebuffer        &getFbo();
 	void                            uninit();
 	void addPostEffect(const std::string &name, unsigned int priority);
-	inline Engine &getEngine() { return _engine; }
 private:
 	Renderer(const Renderer &o);
 	Renderer &operator=(const Renderer &o);
