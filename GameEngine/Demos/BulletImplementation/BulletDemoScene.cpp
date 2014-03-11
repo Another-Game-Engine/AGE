@@ -148,16 +148,16 @@ bool 			BulletDemoScene::userStart()
 		"shininess"
 	};
 
-	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
+	auto s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
 		"./Shaders/MaterialBasic.vp",
 		"./Shaders/MaterialBasic.fp");
 
 	_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
-		.init(&s, "MaterialBasic", materialBasic);
+		->init(s, "MaterialBasic", materialBasic);
 	_engine.getInstance<Renderer>()->addUniform("PerFrame")
-		.init(&s, "PerFrame", perFrameVars);
+		->init(s, "PerFrame", perFrameVars);
 	_engine.getInstance<Renderer>()->addUniform("PerModel")
-		.init(&s, "PerModel", perModelVars);
+		->init(s, "PerModel", perModelVars);
 
 	_engine.getInstance<Renderer>()->addShader("2DText",
 		"./Shaders/2DText.vp",
