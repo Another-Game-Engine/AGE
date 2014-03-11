@@ -13,12 +13,12 @@
 class BulletDynamicSystem : public System
 {
 public:
-	BulletDynamicSystem(AScene *scene) : System(scene)
+	BulletDynamicSystem(std::weak_ptr<AScene> scene) : System(scene)
 		, _manager(nullptr)
 		, _filter(scene)
 	{
 		_name = "bullet_dynamic_system";
-		_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene->getInstance<BulletCollisionManager>());
+		_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene.lock()->getInstance<BulletCollisionManager>());
 	}
 	virtual ~BulletDynamicSystem(){}
 private:

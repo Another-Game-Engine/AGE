@@ -15,8 +15,8 @@
 class FPControllerSystem : public System
 {
 public:
-	FPControllerSystem(AScene *scene) : System(scene)
-		, _manager(scene->getInstance<BulletCollisionManager>())
+	FPControllerSystem(std::weak_ptr<AScene> scene) : System(scene)
+		, _manager(scene.lock()->getInstance<BulletCollisionManager>())
 		, _filter(scene)
 	{
 		_name = "FP_controller_system";
@@ -35,11 +35,12 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
+		auto scene = _scene.lock();
 		for (auto e : _filter.getCollection())
 		{
 			auto fp = e->getComponent<Component::FPController>();
 			updateComponent(e, fp, time);
-			auto inputs = _scene->getInstance<Input>();
+			auto inputs = scene->getInstance<Input>();
 			auto &ghost = fp->getGhost();
 			auto trans = ghost.getWorldTransform();
 
@@ -68,7 +69,8 @@ private:
 	void updateComponent(Entity &entity, std::shared_ptr<Component::FPController> fp, double time)
 	{
 			fp->resetControls();
-			auto inputs = _scene->getInstance<Input>();
+			auto scene = _scene.lock();
+			auto inputs = scene->getInstance<Input>();
 			auto &controls = fp->controls;
 			auto &keys = fp->keys;
 			auto angle = glm::vec2((float)inputs->getMouseDelta().x, (float)inputs->getMouseDelta().y);

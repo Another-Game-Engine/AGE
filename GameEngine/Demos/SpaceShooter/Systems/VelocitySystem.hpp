@@ -11,7 +11,7 @@
 class VelocitySystem : public System
 {
 public:
-	VelocitySystem(AScene *scene)
+	VelocitySystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 	{}

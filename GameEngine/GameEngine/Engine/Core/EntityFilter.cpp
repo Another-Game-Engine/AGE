@@ -5,12 +5,12 @@ bool defaultEntityComparaison(Entity e1, Entity e2)
 	return e1 < e2;
 }
 
-EntityFilter::EntityFilter(AScene *scene, bool(*comparaisonFn)(Entity, Entity))
-: PubSub(scene->getInstance<PubSub::Manager>())
+EntityFilter::EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(Entity, Entity))
+: PubSub(scene.lock()->getInstance<PubSub::Manager>())
 , _collection(comparaisonFn)
 , _scene(scene)
 {
-	assert(scene != nullptr && "System Scene is not valid.");
+	assert(scene.lock() != nullptr && "System Scene is not valid.");
 }
 
 EntityFilter::~EntityFilter()

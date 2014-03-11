@@ -43,7 +43,7 @@ public:
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
 	{
-		std::shared_ptr<T> tmp{ new T(this) };
+		auto tmp = std::make_shared<T>(std::static_pointer_cast<AScene>(shared_from_this()));
 		_systems.insert(std::make_pair(priority, tmp));
 		tmp->init();
 		return tmp;
