@@ -8,6 +8,7 @@
 # include <iostream>
 # include <fstream>
 # include <string>
+#include <memory>
 
 
 namespace OpenGLTools
@@ -17,7 +18,7 @@ namespace OpenGLTools
 	public:
 		AShader();
 		virtual ~AShader();
-		bool	bindUniformBlock(std::string const &blockName, UniformBuffer const &buff);
+		bool	bindUniformBlock(std::string const &blockName, std::shared_ptr<UniformBuffer> const &buff);
 		bool    build() {return _build();}
 		void	use(void);
 		GLuint	getId() const;
