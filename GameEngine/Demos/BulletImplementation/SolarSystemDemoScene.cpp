@@ -113,16 +113,16 @@ bool 			SolarSystemDemoScene::userStart()
 			"shininess"
 		};
 
-	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
+	auto s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
 		"./Shaders/MaterialBasic.vp",
 		"./Shaders/MaterialBasic.fp");
 
 		_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
-			.init(&s, "MaterialBasic", materialBasic);
+			->init(s, "MaterialBasic", materialBasic);
 		_engine.getInstance<Renderer>()->addUniform("PerFrame")
-			.init(&s, "PerFrame", perFrameVars);
+			->init(s, "PerFrame", perFrameVars);
 		_engine.getInstance<Renderer>()->addUniform("PerModel")
-			.init(&s, "PerModel", perModelVars);
+			->init(s, "PerModel", perModelVars);
 
 	_engine.getInstance<Renderer>()->addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
 	_engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
@@ -167,12 +167,12 @@ bool 			SolarSystemDemoScene::userStart()
 		"view"
 	};
 
-	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+	auto sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
 
 	_engine.getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 
-	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
-		init(&sky, "cameraUniform", vars);
+	_engine.getInstance<Renderer>()->addUniform("cameraUniform")
+		->init(sky, "cameraUniform", vars);
 
 	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 

@@ -81,7 +81,7 @@ struct MaterialFile : public MediaFile<MaterialFile>
 			file(nullptr)
 		{}
 
-		void setUniforms(OpenGLTools::UniformBuffer *buffer)
+		void setUniforms(std::shared_ptr<OpenGLTools::UniformBuffer> buffer)
 		{
 			buffer->setUniform("ambient", ambient);
 			buffer->setUniform("diffuse", diffuse);
