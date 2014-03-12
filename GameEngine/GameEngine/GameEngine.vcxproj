@@ -98,8 +98,10 @@
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision.lib;BulletDynamics.lib;BulletFileLoader.lib;BulletWorldImporter.lib;ConvexDecomposition.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)Vendors/OpenGL/lib;$(SolutionDir)Builds/;$(LibraryPath);</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Lib>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
