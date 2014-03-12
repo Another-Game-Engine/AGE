@@ -75,7 +75,7 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <Lib>
-      <AdditionalDependencies>glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Vendors/OpenGL/lib;$(SolutionDir)Builds/;$(LibraryPath);</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -96,7 +96,7 @@
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision.lib;BulletDynamics.lib;BulletFileLoader.lib;BulletWorldImporter.lib;ConvexDecomposition.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision.lib;BulletDynamics.lib;BulletFileLoader.lib;BulletWorldImporter.lib;ConvexDecomposition.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Vendors/OpenGL/lib;$(SolutionDir)Builds/;$(LibraryPath);</AdditionalLibraryDirectories>
     </Lib>
     <ProjectReference>
