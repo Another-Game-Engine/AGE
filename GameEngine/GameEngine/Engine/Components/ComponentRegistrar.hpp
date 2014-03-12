@@ -29,7 +29,7 @@ public:
 	}
 
 	template <class Archive>
-	Component::Base *createFromType(unsigned int type, Archive &ar, Entity e, unsigned int &typeId)
+	Component::Base *createFromType(unsigned int type, Archive &ar, Entity e, std::size_t &typeId)
 	{
 		auto &it = _collection.find(type);
 		auto &typeIt = _typeId.find(type);

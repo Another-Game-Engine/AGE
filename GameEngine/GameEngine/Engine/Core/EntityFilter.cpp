@@ -27,7 +27,7 @@ std::set<Entity, bool(*)(const Entity&, const Entity&)> const &EntityFilter::get
 	return _collection;
 }
 
-void EntityFilter::requireTag(unsigned int tag)
+void EntityFilter::requireTag(std::size_t tag)
 {
 	auto strId = std::to_string(tag);
 
@@ -40,7 +40,7 @@ void EntityFilter::requireTag(unsigned int tag)
 	});
 }
 
-void EntityFilter::unRequireTag(unsigned int tag)
+void EntityFilter::unRequireTag(std::size_t tag)
 {
 	auto strId = std::to_string(tag);
 
@@ -49,13 +49,13 @@ void EntityFilter::unRequireTag(unsigned int tag)
 	unsub(std::string("entityUntagged" + strId));
 }
 
-void EntityFilter::_componentAdded(Entity &e, unsigned int typeId)
+void EntityFilter::_componentAdded(Entity &e, std::size_t typeId)
 {
 	if (_code.match(e->getCode()))
 		_collection.insert(e);
 }
 
-void EntityFilter::_componentRemoved(Entity &e, unsigned int typeId)
+void EntityFilter::_componentRemoved(Entity &e, std::size_t typeId)
 {
 	if (!_code.match(e->getCode()))
 		_collection.erase(e);

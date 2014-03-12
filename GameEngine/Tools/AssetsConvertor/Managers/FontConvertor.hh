@@ -100,8 +100,8 @@ private:
 	// CODE LARGELY INSPIRED FROM : https://github.com/blackberry/GamePlay/blob/master/tools/encoder/src/TTFFontEncoder.cpp
 	bool _convertFont(Font::FontSize &font, std::size_t size, FT_Face &face)
 	{
-		unsigned int rowSize = 0;
-		unsigned int actualfontHeight = 0;
+		std::size_t rowSize = 0;
+		std::size_t actualfontHeight = 0;
 
 		font._size = size;
 
