@@ -158,8 +158,8 @@ private:
 		rowSize += GLYPH_PADDING;
 
 		// Initialize with padding.
-		unsigned int penX = 0;
-		unsigned int penY = 0;
+		std::size_t penX = 0;
+		std::size_t penY = 0;
 		int row = 0;
 
 		double powerOf2 = 2;
