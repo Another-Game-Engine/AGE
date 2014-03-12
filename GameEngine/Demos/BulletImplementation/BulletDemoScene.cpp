@@ -376,11 +376,12 @@ bool 			BulletDemoScene::userUpdate(double time)
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 1.0f);
 		auto rigidbody = e->getComponent<Component::RigidBody>();
-		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
-		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
-		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
-		rigidbody->getBody().setFriction(1.0f);
-		rigidbody->getBody().setRestitution(0.9f);
+		auto &body = rigidbody->getBody();
+		body.applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
+		body.getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+		body.getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+		body.setFriction(1.0f);
+		body.setRestitution(0.9f);
 		e->addComponent<Component::AudioEmitter>()->setAudio(getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 		e->addTag(BALL_TAG);
 		if (stack.size() > 300)

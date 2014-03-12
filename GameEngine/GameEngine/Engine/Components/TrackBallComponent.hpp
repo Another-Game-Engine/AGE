@@ -11,7 +11,7 @@ namespace Component
 	{
 		TrackBall();
 		virtual ~TrackBall(void);
-		void init(Entity _toLook, float _dist, float rotatingSpeed, float zoomingSpeed);
+		void init(const Entity &_toLook, float _dist, float rotatingSpeed, float zoomingSpeed);
 		virtual void reset();
 
 		//////

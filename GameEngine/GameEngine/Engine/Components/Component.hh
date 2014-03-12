@@ -17,7 +17,7 @@ namespace	Component
 		Base(std::size_t serId);
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
-		void			setEntity(Entity entity);
+		void			setEntity(const Entity &entity);
 		Entity		&getEntity();
 		virtual void reset() = 0;
 		std::size_t serializedID;
