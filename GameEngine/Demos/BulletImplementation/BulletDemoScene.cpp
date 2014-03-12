@@ -332,9 +332,9 @@ bool BulletDemoScene::userUpdate(double time)
 		auto l = e->addComponent<Component::SpotLight>();
 		auto cam = globalCamera->getComponent<Component::CameraComponent>();
 		l->lightData.lightVP = cam->getProjection() * cam->getLookAtTransform();
-		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 10.0f);
-		l->lightData.positionPower.w = 2.0f;
-		e->setLocalTransform(cam->getLookAtTransform());
+		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
+		l->lightData.positionPower.w = 5.0f;
+		e->setLocalTransform(glm::inverse(cam->getLookAtTransform()));
 		delay = 0.1f;
 	}
 	if (delay >= 0.0f)
