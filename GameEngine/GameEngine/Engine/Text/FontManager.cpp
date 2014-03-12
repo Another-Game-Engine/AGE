@@ -114,8 +114,8 @@ void FontManager::_draw2DString(const std::string &text,
 	}
 	auto &f = fontSize->second;
 	float sz = f._size;
-	if (sz != (float)size)
-		sz = size;
+	if (sz != static_cast<float>(size))
+		sz = static_cast<float>(size);
 	glm::mat4 transformation(1);
 	transformation = glm::translate(transformation, glm::vec3(position.x, position.y, 0));
 

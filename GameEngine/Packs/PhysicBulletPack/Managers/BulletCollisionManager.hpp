@@ -64,7 +64,7 @@ public:
 		_world->rayTest(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to), raycastCallback);
 		if (raycastCallback.hasHit())
 		{
-			for (std::size_t it = 0; it < raycastCallback.m_collisionObjects.size(); ++it)
+			for (std::size_t it = 0, mit = static_cast<std::size_t>(raycastCallback.m_collisionObjects.size()); it < mit; ++it)
 			{
 				r.insert(*static_cast<Entity*>(raycastCallback.m_collisionObjects.at(it)->getUserPointer()));
 			}

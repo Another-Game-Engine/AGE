@@ -66,7 +66,7 @@ struct MaterialFile : public MediaFile<MaterialFile>
 		MaterialFile *file;
 	private:
 		std::weak_ptr<DependenciesInjector> _dpyManager;
-		friend class MaterialFile;
+		friend struct MaterialFile;
 	public:
 
 		Material() :
