@@ -1,7 +1,7 @@
 #ifndef  __BULLET_MANAGER_HPP__
 # define __BULLET_MANAGER_HPP__
 
-#include <Managers/BulletCollisionManager.hpp>
+#include <Physic/BulletCollisionManager.hpp>
 
 class BulletDynamicManager : public BulletCollisionManager
 {
