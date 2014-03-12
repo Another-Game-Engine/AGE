@@ -26,13 +26,13 @@ public:
 	bool match(::EntityData &entity);
 	bool match(Barcode &entity);
 	void reset();
-	void add(unsigned int componentId);
-	void remove(unsigned int componentId);
+	void add(std::size_t componentId);
+	void remove(std::size_t componentId);
 	bool isEmpty() const;
-	bool isSet(unsigned int componentId) const;
+	bool isSet(std::size_t componentId) const;
 
 private:
-	void applyChange(unsigned int componentId, bool tof)
+	void applyChange(std::size_t componentId, bool tof)
 	{
 		if (code_.size() <= componentId)
 			code_.resize(componentId + 1);

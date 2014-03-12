@@ -1,16 +1,18 @@
 #ifndef   __HANDLE_HH__
 # define  __HANDLE_HH__
 
+#include <cstddef>
+
 class EntityData;
 class AScene;
 
 class Entity
 {
 public:
-	Entity(unsigned int id = 0, AScene *manager = nullptr);
+	Entity(std::size_t id = 0, AScene *manager = nullptr);
 	~Entity();
 	Entity(Entity &&o);
-	const unsigned int getId() const;
+	const std::size_t getId() const;
 	const unsigned short getVersion() const;
 	EntityData *operator->();
 	EntityData *get() const;
@@ -21,7 +23,7 @@ public:
 	Entity &operator=(const Entity &o);
 private:
 	friend class AScene;
-	unsigned int _id;
+	std::size_t _id;
 	AScene *_manager;
 	unsigned short _version;
 };

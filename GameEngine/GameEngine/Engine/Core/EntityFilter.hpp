@@ -39,8 +39,8 @@ public:
 		unsub(std::string("componentRemoved" + strId));
 	}
 
-	void requireTag(unsigned int tag);
-	void unRequireTag(unsigned int tag);
+	void requireTag(std::size_t tag);
+	void unRequireTag(std::size_t tag);
 
 	const Barcode &getCode() const;
 	std::set<Entity, bool(*)(const Entity&, const Entity&)> const &getCollection();
@@ -50,6 +50,6 @@ protected:
 	Barcode _code;
 	std::weak_ptr<AScene> _scene;
 
-	void _componentAdded(Entity &e, unsigned int typeId);
-	void _componentRemoved(Entity &e, unsigned int typeId);
+	void _componentAdded(Entity &e, std::size_t typeId);
+	void _componentRemoved(Entity &e, std::size_t typeId);
 };

@@ -108,9 +108,9 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	void                    addTag(unsigned int tags);
-	void                    removeTag(unsigned int tags);
-	bool                    isTagged(unsigned int tags) const;
+	void                    addTag(std::size_t tags);
+	void                    removeTag(std::size_t tags);
+	bool                    isTagged(std::size_t tags) const;
 	bool                    isTagged(Barcode &code);
 
 	Barcode                 &getCode();
@@ -191,7 +191,7 @@ public:
 	template <typename T>
 	void removeComponent()
 	{
-		unsigned int id = T::getTypeId();
+		std::size_t id = T::getTypeId();
 		if (!hasComponent<T>())
 			return;
 		_code.remove(id + MAX_TAG_NUMBER);
@@ -276,12 +276,11 @@ public:
 
 		std::size_t cptNumber = 0;
 		ar(cptNumber);
-		for (unsigned int i = 0; i < cptNumber; ++i)
+		for (std::size_t i = 0; i < cptNumber; ++i)
 		{
 			std::size_t type = 0;
-			unsigned int typeId;
+			std::size_t typeId;
 			ar(type);
-			unsigned int position;
 			Component::Base *cpt = scene->createFromType(type, ar, _handle, typeId);
 			cpt->setEntity(_handle);
 			if (_components.size() <= typeId)
