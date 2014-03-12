@@ -6,7 +6,7 @@ _buffer(NULL)
 {
 }
 
-Data::Data(uint32_t sizeBuffer, void *buffer)
+Data::Data(std::size_t sizeBuffer, void *buffer)
 : _sizeBuffer(sizeBuffer)
 {
 	_buffer = new uint8_t[_sizeBuffer];
@@ -34,7 +34,7 @@ Data::~Data()
 		delete[] _buffer;
 }
 
-uint32_t Data::getSizeBuffer() const
+std::size_t Data::getSizeBuffer() const
 {
 	return (_sizeBuffer);
 }
@@ -58,7 +58,7 @@ bool Data::operator!=(Data const &data) const
 	return (!(*this == data));
 }
 
-Data &Data::operator()(uint32_t sizeBuffer, void *buffer)
+Data &Data::operator()(std::size_t sizeBuffer, void *buffer)
 {
 	_sizeBuffer = sizeBuffer;
 	if (_buffer)

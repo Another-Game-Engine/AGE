@@ -126,7 +126,7 @@ void VertexManager<NBR_ATTRIBUTE>::sendMajorVertexDataOnGPU()
 template <uint8_t NBR_ATTRIBUTE>
 void VertexManager<NBR_ATTRIBUTE>::sendMinorVertexDataOnGPU()
 {
-	uint32_t index;
+	std::size_t index;
 	_dataBuffer.bind();
 	_indexBuffer.bind();
 	while (_pool.getUpdateMinor(index))

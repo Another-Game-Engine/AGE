@@ -22,12 +22,12 @@ class VertexPool
 {
 private:
 	std::vector<VertexPoolElement<NBR_ATTRIBUTE>> _elements;
-	uint32_t _sizeVertexBuffer;
-	uint32_t _sizeIndicesBuffer;
-	uint32_t _nbrVertex;
-	uint32_t _nbrIndices;
+	std::size_t _sizeVertexBuffer;
+	std::size_t _sizeIndicesBuffer;
+	std::size_t _nbrVertex;
+	std::size_t _nbrIndices;
 	std::array<GLuint, NBR_ATTRIBUTE> _pointerAttributes;
-	std::queue<uint32_t> _updateBuffer;
+	std::queue<std::size_t> _updateBuffer;
 	StateVertexPool _updateState;
 	std::array<Attribute, NBR_ATTRIBUTE> _attributes;
 public:
@@ -36,21 +36,21 @@ public:
 	VertexPool(VertexPool<NBR_ATTRIBUTE> const &copy);
 	VertexPool &operator=(VertexPool const &vertexpool);
 	
-	uint32_t addElement(Vertice<NBR_ATTRIBUTE> const &vertices);
+	std::size_t addElement(Vertice<NBR_ATTRIBUTE> const &vertices);
 	void deleteElement(Vertice<NBR_ATTRIBUTE> const &vertices);
 	void fullClear();
 	void clear();
 	inline void computeOffset();
 
-	VertexPoolElement<NBR_ATTRIBUTE> const &operator[](uint32_t index);
+	VertexPoolElement<NBR_ATTRIBUTE> const &operator[](std::size_t index);
 	size_t getNbrElement() const;
-	uint32_t getSizeIndicesBuffer() const;
-	uint32_t getSizeVertexBuffer() const;
-	uint32_t getNbrVertex() const;
-	uint32_t getNbrIndices() const;
+	std::size_t getSizeIndicesBuffer() const;
+	std::size_t getSizeVertexBuffer() const;
+	std::size_t getNbrVertex() const;
+	std::size_t getNbrIndices() const;
 	GLuint getPointerAttribute(GLint index) const;
 	StateVertexPool getUpdateState() const;
-	bool getUpdateMinor(uint32_t &index);
+	bool getUpdateMinor(std::size_t &index);
 	void resetState();
 };
 
