@@ -80,18 +80,18 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		{
 			unsigned int p = shapes[i].mesh.indices[v] * 3;
 			unsigned int p2 = shapes[i].mesh.indices[v] * 2;
-
-			if (shapes[i].mesh.positions.size() > 0)
-				mesh->geometries[i].vertices.push_back(glm::vec4(shapes[i].mesh.positions[p],
-				shapes[i].mesh.positions[p + 1],
-				shapes[i].mesh.positions[p + 2], 1));
-			if (shapes[i].mesh.normals.size() > 0)
-				mesh->geometries[i].normals.push_back(glm::vec4(shapes[i].mesh.normals[p],
-				shapes[i].mesh.normals[p + 1],
-				shapes[i].mesh.normals[p + 2], 1));
-			if (shapes[i].mesh.texcoords.size() > 0)
-				mesh->geometries[i].uvs.push_back(glm::vec2(shapes[i].mesh.texcoords[p2],
-				shapes[i].mesh.texcoords[p2 + 1]));
+			auto &m = shapes[i].mesh;
+			if (m.positions.size() > 0)
+				mesh->geometries[i].vertices.push_back(glm::vec4(m.positions[p],
+				m.positions[p + 1],
+				m.positions[p + 2], 1));
+			if (m.normals.size() > 0)
+				mesh->geometries[i].normals.push_back(glm::vec4(m.normals[p],
+				m.normals[p + 1],
+				m.normals[p + 2], 1));
+			if (m.texcoords.size() > 0)
+				mesh->geometries[i].uvs.push_back(glm::vec2(m.texcoords[p2],
+				m.texcoords[p2 + 1]));
 			mesh->geometries[i].colors.push_back(glm::vec4(1));
 			mesh->geometries[i].indices.push_back(v);
 		}
