@@ -54,7 +54,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		Vertice<4>					buffer;
 	private:
 		std::weak_ptr<DependenciesInjector> _dpyManager;
-		friend class ObjFile;
+		friend struct ObjFile;
 	public:
 		Geometry()
 			: name("")

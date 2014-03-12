@@ -195,18 +195,18 @@ Barcode                 &EntityData::getCode()
 
 void                    EntityData::addTag(std::size_t tag)
 {
-	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.add(tag);
 }
 
 void                    EntityData::removeTag(std::size_t tag)
 {
-	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.remove(tag);
 }
 bool                    EntityData::isTagged(std::size_t tag) const
 {
-	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	return _code.isSet(tag);
 }
 
