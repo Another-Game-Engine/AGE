@@ -56,7 +56,15 @@ public:
 		auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
 		auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
 		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
-		screenPosToWorldRay(centerPos.x, centerPos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform , cameraCpt->projection, from, to);
+		screenPosToWorldRay(
+			static_cast<int>(centerPos.x),
+			static_cast<int>(centerPos.y),
+			static_cast<int>(screenSize.x),
+			static_cast<int>(screenSize.y),
+			cameraCpt->lookAtTransform,
+			cameraCpt->projection,
+			from,
+			to);
 	}
 
 

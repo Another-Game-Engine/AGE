@@ -16,7 +16,7 @@ namespace Component
 	public:
 		Velocity() :
 			direction(0,0,0),
-			function([&](double time, double totalTime, const glm::vec3 direction){return direction * glm::vec3(time);}),
+			function([&](double time, double totalTime, const glm::vec3 direction){return direction * glm::vec3(static_cast<float>(time));}),
 			ComponentBase<Velocity>()
 		{}
 

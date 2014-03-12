@@ -188,6 +188,7 @@ public:
 	virtual bool 			userUpdate(double time)
 	{
 		static std::vector<Entity> balls;
+		float ftime = static_cast<float>(time);
 
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
 			getInstance<Input>()->getInput(SDL_QUIT))
@@ -203,12 +204,14 @@ public:
 
 		if (getInstance<Input>()->getInput(SDLK_u))
 		{
-			test->setLocalTransform(glm::scale(test->getLocalTransform(), glm::vec3(0.9)));
+			test->setLocalTransform(glm::scale(
+				test->getLocalTransform(),
+				glm::vec3(0.9f)));
 		}
 
 		if (getInstance<Input>()->getInput(SDLK_i))
 		{
-			test->setLocalTransform(glm::scale(test->getLocalTransform(), glm::vec3(1.1)));
+			test->setLocalTransform(glm::scale(test->getLocalTransform(), glm::vec3(1.1f)));
 		}
 
 		if (getInstance<Input>()->getInput(SDLK_r) && timer <= 0.0f)
@@ -217,7 +220,7 @@ public:
 			for (auto i = 0; i < 10; ++i)
 			{
 				auto e = createHeros(glm::vec3(rand() % 20, 50 + rand() % 100, rand() % 20));
-				e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3((float)(rand() % 10) / 0.8)));
+				e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3((rand() % 10) / 0.8f)));
 				auto rigidBody = e->addComponent<Component::RigidBody>();
 				rigidBody->setMass(1.0f);
 				rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
@@ -228,7 +231,7 @@ public:
 			std::cout << balls.size() << std::endl;
 		}
 		if (timer > 0.0f)
-			timer -= time;		
+			timer -= ftime;		
 		return (true);
 	}
 };

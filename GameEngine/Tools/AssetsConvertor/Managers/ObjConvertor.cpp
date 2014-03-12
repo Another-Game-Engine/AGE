@@ -170,7 +170,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 
 	std::vector<std::tuple<float, float, float, float, float, float>> minAndMax;
 	minAndMax.resize(mesh->geometries.size());
-	std::tuple<float, float, float, float, float, float> totalMinMax{0,0,0,0,0,0};
+	std::tuple<float, float, float, float, float, float> totalMinMax{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
 
 	for (std::size_t i = 0; i < mesh->geometries.size(); ++i)
 	{

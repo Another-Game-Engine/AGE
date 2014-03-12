@@ -56,6 +56,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4503;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -70,6 +71,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4503;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
