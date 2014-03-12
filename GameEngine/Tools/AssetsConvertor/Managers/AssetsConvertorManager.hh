@@ -20,7 +20,7 @@ public:
 	AssetsConvertorManager();
 	virtual ~AssetsConvertorManager();
 
-	void setOutputDirectory(const std::string directory);
+	void setOutputDirectory(const std::string &directory);
 
 	template <typename T>
 	void registerConvertor()
@@ -31,7 +31,7 @@ public:
 		_convertors.emplace(key, std::make_unique<T>(this));
 	}
 
-	std::shared_ptr<AMediaFile> load(const std::string filename);
+	std::shared_ptr<AMediaFile> load(const std::string &filename);
 
 	bool serializeData(const std::string &exportName);
 

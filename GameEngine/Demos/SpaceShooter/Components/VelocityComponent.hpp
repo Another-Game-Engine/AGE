@@ -23,7 +23,7 @@ namespace Component
 		virtual ~Velocity()
 		{}
 
-		void init(const glm::vec3 &_direction, std::function<glm::vec3(double time, double totalTime, const glm::vec3 &direction)> _function = [](double time, double totalTime, const glm::vec3 &direction){
+		void init(const glm::vec3 &_direction, const std::function<glm::vec3(double time, double totalTime, const glm::vec3 &direction)> &_function = [](double time, double totalTime, const glm::vec3 &direction){
 			return direction * static_cast<float>(time);
 		})
 		{

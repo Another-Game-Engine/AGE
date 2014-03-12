@@ -1,11 +1,11 @@
 #include <Core/EntityFilter.hpp>
 
-bool defaultEntityComparaison(Entity e1, Entity e2)
+bool defaultEntityComparaison(const Entity &e1, const Entity &e2)
 {
 	return e1 < e2;
 }
 
-EntityFilter::EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(Entity, Entity))
+EntityFilter::EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(const Entity&, const Entity&))
 : PubSub(scene.lock()->getInstance<PubSub::Manager>())
 , _collection(comparaisonFn)
 , _scene(scene)
@@ -22,7 +22,7 @@ const Barcode &EntityFilter::getCode() const
 	return _code;
 }
 
-std::set<Entity, bool(*)(Entity, Entity)> const &EntityFilter::getCollection()
+std::set<Entity, bool(*)(const Entity&, const Entity&)> const &EntityFilter::getCollection()
 {
 	return _collection;
 }

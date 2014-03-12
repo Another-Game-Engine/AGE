@@ -1,8 +1,6 @@
 #ifndef   __HANDLE_HH__
 # define  __HANDLE_HH__
 
-#include <Utils/MetaData.hpp>
-
 class EntityData;
 class AScene;
 
