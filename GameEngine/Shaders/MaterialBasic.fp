@@ -73,16 +73,9 @@ float		calcSpecular(vec3 lightPos, vec3 fragToLight)
 	return clamp(pow(max(dot(lightReflection, eyePos), 0.0), 0.3f * shininess), 0.0f, 1.0f);
 }
 
-void main(void)
+vec3		computePointLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 {
-	vec3	ambientColor = 0.05f * texture2D(fTexture0, fTexCoord).rgb * ambient;
-	vec3	diffuseColor = texture2D(fTexture0, fTexCoord).rgb * diffuse;
-	vec3	specularColor = texture2D(fTexture0, fTexCoord).rgb * specular;
-
-	// TODO: Implement a real normal mapping: this is an ugly trick just to see if it workss
-	vec3	fragNormal = normalize(normalize(fNormal.xyz) + normalize(texture2D(fTexture3, fTexCoord).xyz));
-
-	vec4	finalColor = vec4(ambientColor, 1);
+	vec3	pointLightsColor = vec3(0);
 
 	for (uint i = 0; i < pointLightNbr; ++i)
 	{
@@ -102,10 +95,16 @@ void main(void)
 			float	specular = calcSpecular(lightPos.xyz, fragToLight);
 			float	diminution = clamp(1.0f - fragToLightDist / lightRange, 0.0f, 1.0f);
 
-			finalColor.xyz += lightPower * specular * diminution * lightColor * specularColor;
-			finalColor.xyz += lightPower * illumination * diminution * lightColor * diffuseColor;
+			pointLightsColor += lightPower * specular * diminution * lightColor * specularColor;
+			pointLightsColor += lightPower * illumination * diminution * lightColor * diffuseColor;
 		}
 	}
+	return (pointLightsColor);
+}
+
+vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
+{
+	vec3	spotLightsColor = vec3(0);
 
 	for (uint i = 0; i < spotLightNbr; ++i)
 	{
@@ -114,40 +113,47 @@ void main(void)
 		float	lightRange = spotLights[i].colorRange.w;
 		float	lightPower = spotLights[i].positionPower.w;
 
-		vec3	fragToLight = lightPos.xyz - fScreenPosition.xyz;
-		float	fragToLightDist = length(fragToLight);
+		// Calculate the influence factor depending on the frustum
+		vec4	shadowPosition = spotLights[i].lightVP * fWorldPosition;
+		vec4	projectedPosition = shadowPosition / shadowPosition.w;
 
-		if (fragToLightDist < lightRange) // Ugly test waiting for tile based forward rendering
+		if (shadowPosition.z > 0)
 		{
-			fragToLight = normalize(fragToLight);
-	
-			float	illumination =  clamp(dot(fragToLight, normalize(fNormal.xyz)), 0.0f, 1.0f);
-			float	specular = calcSpecular(lightPos.xyz, fragToLight);
-			float	diminution = clamp(1.0f - fragToLightDist / lightRange, 0.0f, 1.0f);
-	
-			vec3	addedColor = lightPower * specular * diminution * lightColor * specularColor;
-			addedColor += lightPower * illumination * diminution * lightColor * diffuseColor;
+			float factor = clamp(1.0f - abs(projectedPosition.x), 0.0f, 1.0f) *
+					 clamp(1.0f - abs(projectedPosition.y), 0.0f, 1.0f);
 
-			// Calculate the influence factor depending on the frustum
-			float	factor;
-			vec4	shadowPosition = spotLights[i].lightVP * fWorldPosition;
-			vec4	projectedPosition = shadowPosition / shadowPosition.w;
+			vec3	fragToLight = lightPos.xyz - fScreenPosition.xyz;
+			float	fragToLightDist = length(fragToLight);
 
-			if (projectedPosition.z < 0)
+			if (fragToLightDist < lightRange) // Ugly test waiting for tile based forward rendering
 			{
-				if (projectedPosition.x < 0.0f)
-					factor = clamp(1.0f + projectedPosition.x, 0.0f, 1.0f);
-				else
-					factor = clamp(projectedPosition.x, 0.0f, 1.0f);
-				if (projectedPosition.y < 0.0f)
-					factor *= clamp(1.0f + projectedPosition.y, 0.0f, 1.0f);
-				else
-					factor *= clamp(projectedPosition.y, 0.0f, 1.0f);
+				fragToLight = normalize(fragToLight);
+	
+				float	illumination =  clamp(dot(fragToLight, normalize(fNormal.xyz)), 0.0f, 1.0f);
+				float	specular = calcSpecular(lightPos.xyz, fragToLight);
+				float	diminution = clamp(1.0f - fragToLightDist / lightRange, 0.0f, 1.0f);
+	
+				vec3	addedColor = lightPower * specular * diminution * lightColor * specularColor;
+				addedColor += lightPower * illumination * diminution * lightColor * diffuseColor;
+
+				spotLightsColor += factor * addedColor;
 			}
-			//--------------------------------------------------------
-			finalColor.xyz += addedColor;
 		}
 	}
+	return (spotLightsColor);
+}
+
+void main(void)
+{
+	vec3	ambientColor = 0.05f * texture2D(fTexture0, fTexCoord).rgb * ambient;
+	vec3	diffuseColor = texture2D(fTexture0, fTexCoord).rgb * diffuse;
+	vec3	specularColor = texture2D(fTexture0, fTexCoord).rgb * specular;
+
+	vec3	fragNormal = normalize(fNormal.xyz);
+
+	vec4	finalColor = vec4(ambientColor, 1);
+	finalColor.xyz += computePointLightsInfluence(diffuseColor, specularColor);
+	finalColor.xyz += computeSpotLightsInfluence(diffuseColor, specularColor);
 
 	FragColor = finalColor;
 }
