@@ -64,7 +64,7 @@ public:
 		std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
 
 		std::string image = document["image"].GetString();
-		auto texture = _dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(file.getFolder() + "/" + image);
+		auto texture = _dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile<cereal::PortableBinaryInputArchive>(file.getFolder() + "/" + image);
 
 		if (!texture.get())
 		{

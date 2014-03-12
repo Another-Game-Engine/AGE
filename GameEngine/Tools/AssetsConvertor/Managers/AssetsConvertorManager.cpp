@@ -55,7 +55,7 @@ bool AssetsConvertorManager::serializeData(const std::string &exportName)
 	for (auto &e : _files)
 	{
 		std::ofstream ofs(e.second->path.getFullName(), std::ios::trunc | std::ios::binary);
-		e.second->serialize<cereal::BinaryOutputArchive>(ofs);
+		e.second->serialize<cereal::PortableBinaryOutputArchive>(ofs);
 		ofs.close();
 		files.insert(std::make_pair(e.second->getChilds(), e.second->path.getFullName()));
 	}

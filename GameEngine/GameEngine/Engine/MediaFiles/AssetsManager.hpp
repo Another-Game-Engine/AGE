@@ -114,7 +114,7 @@ public:
 
 		for (auto &e : list)
 		{
-			loadFromFile<cereal::BinaryInputArchive>(File(e.second));
+			loadFromFile<cereal::PortableBinaryInputArchive>(File(e.second));
 		}
 	}
 
