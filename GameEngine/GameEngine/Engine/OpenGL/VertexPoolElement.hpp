@@ -1,7 +1,7 @@
 #ifdef VERTEXPOOLELEMENT_HH_
 
 template <uint8_t NBR_ATTRIBUTE>
-VertexPoolElement<NBR_ATTRIBUTE>::VertexPoolElement(uint32_t nbrEntity, Vertice<NBR_ATTRIBUTE> const &vertices)
+VertexPoolElement<NBR_ATTRIBUTE>::VertexPoolElement(std::size_t nbrEntity, Vertice<NBR_ATTRIBUTE> const &vertices)
 : _nbrEntity(nbrEntity),
 _vertices(vertices),
 _vertexOffset(0),
@@ -75,25 +75,25 @@ bool VertexPoolElement<NBR_ATTRIBUTE>::isEmpty() const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPoolElement<NBR_ATTRIBUTE>::getVertexOffset() const
+std::size_t VertexPoolElement<NBR_ATTRIBUTE>::getVertexOffset() const
 {
 	return (_vertexOffset);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPoolElement<NBR_ATTRIBUTE>::getByteOffset(uint8_t index) const
+std::size_t VertexPoolElement<NBR_ATTRIBUTE>::getByteOffset(uint8_t index) const
 {
 	return (_byteOffset[index]);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPoolElement<NBR_ATTRIBUTE>::getNbrByte(uint8_t index) const
+std::size_t VertexPoolElement<NBR_ATTRIBUTE>::getNbrByte(uint8_t index) const
 {
 	return (_nbrByte[index]);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPoolElement<NBR_ATTRIBUTE>::getIndicesOffset() const
+std::size_t VertexPoolElement<NBR_ATTRIBUTE>::getIndicesOffset() const
 {
 	return (_indicesOffset);
 }
@@ -105,7 +105,7 @@ Vertice<NBR_ATTRIBUTE> const &VertexPoolElement<NBR_ATTRIBUTE>::getVertex() cons
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-void VertexPoolElement<NBR_ATTRIBUTE>::settingOffset(uint32_t vertexOffset, uint32_t indicesOffset, std::array<uint32_t, NBR_ATTRIBUTE> const &byteOffset, std::array<uint32_t, NBR_ATTRIBUTE> const &nbrByte)
+void VertexPoolElement<NBR_ATTRIBUTE>::settingOffset(std::size_t vertexOffset, std::size_t indicesOffset, std::array<std::size_t, NBR_ATTRIBUTE> const &byteOffset, std::array<std::size_t, NBR_ATTRIBUTE> const &nbrByte)
 {
 	_vertexOffset = vertexOffset;
 	_indicesOffset = indicesOffset;

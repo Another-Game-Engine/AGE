@@ -28,7 +28,7 @@ namespace OpenGLTools
 		bool	init(std::string const &vertex, std::string const &fragment, std::string const &geometry = "");
 
 		GLenum  *getTargets() const;
-		unsigned int getTargetsNumber() const;
+		std::size_t getTargetsNumber() const;
 
 		Shader &addTarget(GLenum target);
 		Shader &removeTarget(GLenum target);

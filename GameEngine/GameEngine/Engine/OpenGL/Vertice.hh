@@ -12,15 +12,15 @@ class Vertice
 {
 public:
 	Vertice();
-	Vertice(uint32_t nbrVertex, std::array<Data, NBR_ATTRIBUTE> attribData, Data const * const indices = NULL);
+	Vertice(std::size_t nbrVertex, std::array<Data, NBR_ATTRIBUTE> attribData, Data const * const indices = NULL);
 	~Vertice();
 	Vertice(Vertice const &copy);
 	Vertice<NBR_ATTRIBUTE> &operator=(Vertice<NBR_ATTRIBUTE> const &vertex);
 	bool operator==(Vertice<NBR_ATTRIBUTE> const &vertex) const;
-	uint32_t getSizeVertexBuffer() const;
-	uint32_t getSizeIndicesBuffer() const;
-	uint32_t getNbrIndices() const;
-	uint32_t getNbrVertex() const;
+	std::size_t getSizeVertexBuffer() const;
+	std::size_t getSizeIndicesBuffer() const;
+	std::size_t getNbrIndices() const;
+	std::size_t getNbrVertex() const;
 	int32_t getIndexPool() const;
 	void const * const getBuffer(uint8_t index) const;
 	void const * const getIndices() const;
@@ -32,10 +32,10 @@ public:
 
 private:
 	std::array<Data, NBR_ATTRIBUTE> _bufferData;
-	uint32_t _sizeVertexBuffer;
-	uint32_t _sizeIndicesBuffer;
-	uint32_t _nbrVertex;
-	uint32_t _nbrIndices;
+	std::size_t _sizeVertexBuffer;
+	std::size_t _sizeIndicesBuffer;
+	std::size_t _nbrVertex;
+	std::size_t _nbrIndices;
 	Data *_indices;
 	VertexManager<NBR_ATTRIBUTE> *_vertexManager;
 	int32_t _index;
