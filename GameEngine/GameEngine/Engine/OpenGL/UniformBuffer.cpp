@@ -24,11 +24,16 @@ UniformBuffer::~UniformBuffer(void)
 		delete[] _buffer;
 }
 
-void	UniformBuffer::init(size_t bufferSize)
+void	UniformBuffer::init(Shader *referent, std::string const &blockName, size_t bufferSize)
 {
 	glGenBuffers(1, &_bufferId);
 	glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, _bufferId);
-	_dataSize = bufferSize;
+
+	GLint	blockIdx = glGetUniformBlockIndex(referent->getId(), blockName.c_str());
+	// find the total size to check if the size passed as a parameter is correct
+	glGetActiveUniformBlockiv(referent->getId(), blockIdx, GL_UNIFORM_BLOCK_DATA_SIZE, (GLint*)&_dataSize);
+	assert(bufferSize == _dataSize && "The size does not correspond to the uniform buffer size. Check the padding.");
+
 	_buffer = new char[_dataSize];
 }
 

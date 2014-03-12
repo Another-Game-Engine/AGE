@@ -40,11 +40,13 @@ void LightRenderingSystem::initialize()
 	_averageColor.init("./ComputeShaders/AverageColorFirstPass.kernel");
 	_modulateRender.init("./ComputeShaders/HighDynamicRange.kernel");
 
+	OpenGLTools::Shader *materialBasic = _scene->getInstance<Renderer>()->getShader("MaterialBasic");
+
 	// And lights uniform buffer
 	_scene->getInstance<Renderer>()->addUniform("pointLightBuff")
-		.init(POINT_LIGHT_BUFF_SIZE);
+		.init(materialBasic, "pointLightBuff", POINT_LIGHT_BUFF_SIZE);
 	_scene->getInstance<Renderer>()->addUniform("spotLightBuff")
-		.init(SPOT_LIGHT_BUFF_SIZE);
+		.init(materialBasic, "spotLightBuff", SPOT_LIGHT_BUFF_SIZE);
 
 	_scene->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "pointLightBuff", "pointLightBuff");
 	_scene->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "spotLightBuff", "spotLightBuff");
@@ -54,8 +56,8 @@ void LightRenderingSystem::initialize()
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, 4 * sizeof(float), NULL, GL_DYNAMIC_DRAW);
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+//	glEnable(GL_CULL_FACE);
+//	glCullFace(GL_BACK);
 }
 
 void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
@@ -80,7 +82,6 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 	assert(_spotLightNbr <= MAX_LIGHT_NBR && "to many spot lights");
 	for (auto e : _spotLightFilter.getCollection())
 	{
-		assert(i < MAX_LIGHT_NBR && "to many point lights");
 		_contiguousSpotLights[i] = e->getComponent<Component::SpotLight>()->lightData;
 		_contiguousSpotLights[i].positionPower.x = e->getGlobalTransform()[3].x;
 		_contiguousSpotLights[i].positionPower.y = e->getGlobalTransform()[3].y;
@@ -172,6 +173,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo,
 													  OpenGLTools::UniformBuffer *perFrame)
 {
+	glFinish();
 	auto renderer = _scene->getInstance<Renderer>();
 
 	// ----------------------------------------------------
@@ -184,7 +186,6 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_TRUE);
-
 	renderer->getShader("depthOnly")->use();
 
 	for (auto e : _meshRendererFilter.getCollection())
@@ -196,7 +197,6 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	// Final Lightning pass
 	// ----------------------------------------------------
 	glDepthFunc(GL_LEQUAL);
-	glDepthMask(GL_FALSE);
 	glColorMask(1, 1, 1, 1);
 
 	// shaders that needs light buffer
@@ -218,6 +218,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	{
 		e->getComponent<Component::MeshRenderer>()->render();
 	}
+	glFinish();
 }
 
 void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)

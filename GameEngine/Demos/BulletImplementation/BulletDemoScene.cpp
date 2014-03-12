@@ -34,6 +34,8 @@
 
 #include <MyTags.hpp>
 
+Entity globalCamera;
+
 BulletDemoScene::BulletDemoScene(Engine &engine) : AScene(engine)
 {
 }
@@ -85,6 +87,10 @@ bool BulletDemoScene::userStart()
 {
 	std::srand(0);
 
+	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
+		"./Shaders/MaterialBasic.vp",
+		"./Shaders/MaterialBasic.fp");
+
 	// System Tests
 	//
 	//
@@ -132,10 +138,6 @@ bool BulletDemoScene::userStart()
 		"emission",
 		"shininess"
 	};
-
-	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
-		"./Shaders/MaterialBasic.vp",
-		"./Shaders/MaterialBasic.fp");
 
 	_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
 		.init(&s, "MaterialBasic", materialBasic);
@@ -234,6 +236,7 @@ bool BulletDemoScene::userStart()
 		auto jump = _engine.getInstance<AudioManager>()->getAudio("jump");
 		ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
 		ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
+		globalCamera = e;
 	}
 
 	{
@@ -269,7 +272,6 @@ bool BulletDemoScene::userStart()
 	auto screenSize = _engine.getInstance<IRenderContext>()->getScreenSize();
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	cameraComponent->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
-
 	return (true);
 }
 
@@ -321,6 +323,18 @@ bool BulletDemoScene::userUpdate(double time)
 			stack.pop();
 		}
 		stack.push(e);
+		delay = 0.1f;
+	}
+	if (_engine.getInstance<Input>()->getInput(SDL_BUTTON_MIDDLE) && delay <= 0.0f)
+	{
+		auto e = createEntity();
+
+		auto l = e->addComponent<Component::SpotLight>();
+		auto cam = globalCamera->getComponent<Component::CameraComponent>();
+		l->lightData.lightVP = cam->getProjection() * cam->getLookAtTransform();
+		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 10.0f);
+		l->lightData.positionPower.w = 2.0f;
+		e->setLocalTransform(cam->getLookAtTransform());
 		delay = 0.1f;
 	}
 	if (delay >= 0.0f)

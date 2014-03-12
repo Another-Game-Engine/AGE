@@ -86,7 +86,17 @@ protected:
 			auto skybox = camera->getSkybox();
 
 			auto cameraPosition = camera->getLookAtTransform();
+			OpenGLTools::Framebuffer &camFbo = e->getComponent<Component::CameraComponent>()->frameBuffer;
 
+			glFinish();
+			if (camFbo.isInit() == true)
+			{
+				camFbo.bind();
+				glEnable(GL_DEPTH_TEST);
+				glDrawBuffer(GL_COLOR_ATTACHMENT0);
+				glClearColor(1, 0, 0, 0);
+				glClear(GL_COLOR_BUFFER_BIT);
+			}
 			if (skybox != nullptr)
 			{
 				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>()->getShader(camera->getSkyboxShader());
@@ -105,16 +115,6 @@ protected:
 
 				s->use();
 
-				OpenGLTools::Framebuffer &camFbo = e->getComponent<Component::CameraComponent>()->frameBuffer;
-
-				if (camFbo.isInit() == true)
-				{
-					camFbo.bind();
-					glEnable(GL_DEPTH_TEST);
-					glDrawBuffer(GL_COLOR_ATTACHMENT0);
-					glClearColor(0, 0, 0, 0);
-					glClear(GL_COLOR_BUFFER_BIT);
-				}
 				glDepthMask(GL_FALSE);
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getId());
