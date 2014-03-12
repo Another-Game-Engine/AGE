@@ -222,8 +222,8 @@ bool 			SolarSystemDemoScene::userStart()
 		{
 			planets[i] = createPlanet((std::rand() % 200) / 100.0f
 				, (std::rand() % 200) / 100.0f,
-				glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-				glm::vec3(std::rand() % 10 + 10), "basic", "texture__SunTexture");
+				glm::vec3(static_cast<float>(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150)),
+				glm::vec3(static_cast<float>(std::rand() % 10 + 10)), "basic", "texture__SunTexture");
 			if (i == 0)
 				sun->addChild(planets[i]);
 			else

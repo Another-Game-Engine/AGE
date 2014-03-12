@@ -96,13 +96,13 @@ bool DemoScene::userStart()
 
 	auto camera = createEntity();
 	camera->addComponent<Component::CameraComponent>();
-	auto trackBall = camera->addComponent<Component::TrackBall>(platform, 50.0, 3.0, 1.0);
+	auto trackBall = camera->addComponent<Component::TrackBall>(platform, 50.0f, 3.0f, 1.0f);
 	return (true);
 }
 
 bool DemoScene::userUpdate(double time)
 {
-	glClearColor(0.2, 0.2, 0.2, 1.0);
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	auto input = getInstance<Input>();
 	if (input->getInput(SDLK_ESCAPE) || input->getInput(SDL_QUIT))
 		return (false);
