@@ -6,7 +6,7 @@
 #include <Systems/System.h>
 #include <Components/FPController.hpp>
 #include <Entities/EntityData.hh>
-#include <Managers/BulletDynamicManager.hpp>
+#include <Physic/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 #include <Context/SdlContext.hh>

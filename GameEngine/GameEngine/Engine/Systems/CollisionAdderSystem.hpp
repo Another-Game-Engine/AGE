@@ -5,7 +5,7 @@
 #include <Entities/EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
-#include <Managers/BulletCollisionManager.hpp>
+#include <Physic/BulletCollisionManager.hpp>
 
 
 class CollisionAdder : public System

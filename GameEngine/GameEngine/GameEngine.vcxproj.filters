@@ -42,6 +42,8 @@
     <ClCompile Include="Engine\Text\FontManager.cpp" />
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
+    <ClCompile Include="Engine\Components\FPController.cpp" />
+    <ClCompile Include="Engine\Physic\Utils\BtConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
@@ -122,6 +124,19 @@
     <ClInclude Include="Engine\Sprite\SpriteFrame.hh" />
     <ClInclude Include="Engine\Components\SpriteComponent.hh" />
     <ClInclude Include="Engine\Systems\SpriteSystem.hh" />
+    <ClInclude Include="Engine\Components\FPController.hpp" />
+    <ClInclude Include="Engine\Components\RigidBody.hpp" />
+    <ClInclude Include="Engine\Components\Collision.hpp" />
+    <ClInclude Include="Engine\Components\CollisionBody.hpp" />
+    <ClInclude Include="Engine\Components\CollisionLayers.hpp" />
+    <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
+    <ClInclude Include="Engine\Systems\BulletCollisionSystem.hpp" />
+    <ClInclude Include="Engine\Systems\BulletDynamicSystem.hpp" />
+    <ClInclude Include="Engine\Systems\CollisionAdderSystem.hpp" />
+    <ClInclude Include="Engine\Systems\CollisionCleanerSystem.hpp" />
+    <ClInclude Include="Engine\Physic\BulletCollisionManager.hpp" />
+    <ClInclude Include="Engine\Physic\BulletDynamicManager.hpp" />
+    <ClInclude Include="Engine\Physic\Utils\BtConversion.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

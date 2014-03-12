@@ -16,7 +16,7 @@
 #include <Context/SdlContext.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
-#include <Managers/BulletDynamicManager.hpp>
+#include <Physic/BulletDynamicManager.hpp>
 #include <MediaFiles/AssetsManager.hpp>
 #include <Audio/AudioManager.hh>
 #include <OpenGL/VertexManager.hh>

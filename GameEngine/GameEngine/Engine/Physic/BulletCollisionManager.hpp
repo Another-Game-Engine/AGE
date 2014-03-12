@@ -4,7 +4,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <Utils/Dependency.hpp>
-#include <Utils/BtConversion.hpp>
+#include <Physic/Utils/BtConversion.hpp>
 #include <Entities/Entity.hh>
 #include <Entities/EntityData.hh>
 
