@@ -206,7 +206,7 @@ private:
 				}
 
 				// penY should include the glyph offsets.
-				penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
+				//penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
 
 				// Set the pen position for the next glyph
 				penX += advance; // Move X to next glyph position
