@@ -74,7 +74,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);C:/boost/boost_1_55_0;C:\bullet\src;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\freetype-lib\include\freetype2</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(LibraryPath);$(SolutionDir)Vendors/OpenGL/lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\bullet\lib\Debug</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)Builds/;$(LibraryPath);$(SolutionDir)Vendors/OpenGL/lib/x64;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\bullet\lib\x64Debug</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Builds\</OutDir>
@@ -83,7 +83,7 @@
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);C:/boost/boost_1_55_0;C:\bullet\src;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;$(SolutionDir)Vendors/OpenGL/lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\bullet\lib\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)Builds/;$(SolutionDir)Vendors/OpenGL/lib/x64;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\bullet\lib\Release;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);C:/boost/boost_1_55_0;C:\bullet\src;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc</IncludePath>
   </PropertyGroup>
@@ -134,7 +134,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex64_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>
