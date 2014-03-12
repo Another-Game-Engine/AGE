@@ -228,7 +228,7 @@ void EntityData::reset()
 	_globalTransform = glm::mat4(1);
 	_localTransform = glm::mat4(1);
 	_code.reset();
-	for (unsigned int i = 0; i < _components.size(); ++i)
+	for (std::size_t i = 0; i < _components.size(); ++i)
 	{
 		unsigned int id = i + MAX_TAG_NUMBER;
 		if (_components[i].get())

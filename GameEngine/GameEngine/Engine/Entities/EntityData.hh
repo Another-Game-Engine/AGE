@@ -153,7 +153,7 @@ public:
 	std::shared_ptr<T> addComponent(Args &&...args)
 	{
 		// get the component type ID
-		unsigned int id = T::getTypeId();
+		std::size_t id = T::getTypeId();
 
 		// if entity already have component, return it
 		if (_code.isSet(id + MAX_TAG_NUMBER))
@@ -182,7 +182,7 @@ public:
 	template <typename T>
 	std::shared_ptr<T> getComponent() const
 	{
-		unsigned int id = T::getTypeId();
+		std::size_t id = T::getTypeId();
 		if (!hasComponent<T>())
 			return nullptr;
 		return std::static_pointer_cast<T>(_components[id]);
