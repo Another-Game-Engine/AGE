@@ -67,8 +67,8 @@ namespace Component
 		////
 		//////
 
-		std::function<glm::vec3(double time, double totalTime, const glm::vec3 &direction)> function;
 		glm::vec3 direction;
+		std::function<glm::vec3(double time, double totalTime, const glm::vec3 &direction)> function;
 	};
 
 }

@@ -20,16 +20,10 @@ public:
 	virtual bool init(bool init = true)
 	{
 		_dispatcher = new btCollisionDispatcher(&_defaultCollisionConfiguration);
-		if (!_dispatcher)
-			return false;
 		_broadphase = new btDbvtBroadphase();
-		if (!_broadphase)
-			return false;
 		if (init) // init is false when called by Dynamic World
 		{
 			_world = new btCollisionWorld(_dispatcher, _broadphase, &_defaultCollisionConfiguration);
-			if (!_world)
-				return false;
 			btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher*>(_world->getDispatcher());
 			btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
 		}
