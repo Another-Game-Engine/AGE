@@ -51,7 +51,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec4>		colors;		// vertices colors
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
-		Vertice<4>					buffer;
+		Vertice<4>					buffer; //-V112
 	private:
 		std::weak_ptr<DependenciesInjector> _dpyManager;
 		friend struct ObjFile;
@@ -108,7 +108,7 @@ struct ObjFile : public MediaFile<ObjFile>
 
 		void init()
 		{
-			std::array<Data, 4> data = 
+			std::array<Data, 4> data =  //-V112
 			{
 				Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
 				Data(colors.size() * 4 * sizeof(float), &colors[0].x),

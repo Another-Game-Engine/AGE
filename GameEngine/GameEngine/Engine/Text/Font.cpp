@@ -47,9 +47,9 @@ bool Font::FontSize::load(std::unique_ptr<VertexManager<2>> &vm)
 	std::vector<glm::vec2>		uvs;		// texture coordinates
 	std::vector<unsigned int>	indices;	// indices
 
-	vertices.resize(4);
-	uvs.resize(4);
-	indices.resize(4);
+	vertices.resize(4); //-V112
+	uvs.resize(4); //-V112
+	indices.resize(4); //-V112
 	indices = { 0, 1, 2, 3 };
 	for (auto &glyph : _map)
 	{
