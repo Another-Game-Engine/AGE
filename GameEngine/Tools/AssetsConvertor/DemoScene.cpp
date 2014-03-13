@@ -66,9 +66,9 @@ bool 			DemoScene::userStart()
 		convertor->serializeData("galileo");
 		convertor->clear();
 
-		//convertor->load("./Assets/crytek-sponza/sponza.obj");
-		//convertor->serializeData("sponza");
-		//convertor->clear();
+		convertor->load("./Assets/crytek-sponza/sponza.obj");
+		convertor->serializeData("sponza");
+		convertor->clear();
 
 		convertor->load("./Assets/EarthCloud.tga");
 		convertor->load("./Assets/EarthNightTexture.tga");
@@ -86,13 +86,13 @@ bool 			DemoScene::userStart()
 		convertor->serializeData("Museum");
 		convertor->clear();
 
-		//convertor->load("./Assets/elf/elf.obj");
-		//convertor->serializeData("Elf");
-		//convertor->clear();
+		convertor->load("./Assets/elf/elf.obj");
+		convertor->serializeData("Elf");
+		convertor->clear();
 
-		//convertor->load("./Assets/sketch-test.obj");
-		//convertor->serializeData("SketchTest");
-		//convertor->clear();
+		convertor->load("./Assets/sketch-test.obj");
+		convertor->serializeData("SketchTest");
+		convertor->clear();
 
 //		getInstance<FontConvertor>()->convertFont(File("./Assets/Montez-Regular.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./", "myFont");
 		getInstance<FontConvertor>()->convertFont(File("./Assets/ContrailOne.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./Assets/Serialized/", "myFont");
