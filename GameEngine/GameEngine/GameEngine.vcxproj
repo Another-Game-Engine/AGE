@@ -219,6 +219,14 @@
     <ClCompile Include="Engine\Entities\EntityData.cpp" />
     <ClCompile Include="Engine\MediaFiles\AMediaFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\AssetsManager.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionBoxFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionShapeDynamicFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionShapeStaticFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionShereFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CubeMapFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\MaterialFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\ObjFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\TextureFile.cpp" />
     <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
     <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
@@ -251,6 +259,7 @@
     <ClInclude Include="Engine\Audio\Audio.hh" />
     <ClInclude Include="Engine\Components\AudioEmitter.hpp" />
     <ClInclude Include="Engine\Components\CameraComponent.hpp" />
+    <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
     <ClInclude Include="Engine\Components\Collision.hpp" />
     <ClInclude Include="Engine\Components\CollisionBody.hpp" />
     <ClInclude Include="Engine\Components\CollisionLayers.hpp" />
