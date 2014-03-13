@@ -93,7 +93,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 				mesh->geometries[i].uvs.push_back(glm::vec2(m.texcoords[p2],
 				m.texcoords[p2 + 1]));
 			mesh->geometries[i].colors.push_back(glm::vec4(1));
-			mesh->geometries[i].indices.push_back(v);
+			mesh->geometries[i].indices.push_back(static_cast<unsigned int>(v));
 		}
 	}
 	auto mtl = file.getFullName().substr(0, file.getFullName().find_last_of("."));
@@ -146,7 +146,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 				t[it * 3 + 1] = geo.vertices[it].y;
 				t[it * 3 + 2] = geo.vertices[it].z;
 			}
-			btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
+			btConvexHullShape *tmp = new btConvexHullShape(t, static_cast<int>(geo.vertices.size()), 3 * sizeof(btScalar));
 			btShapeHull *hull = new btShapeHull(tmp);
 			btScalar margin = tmp->getMargin();
 			hull->buildHull(margin);

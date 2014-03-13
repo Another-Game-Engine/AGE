@@ -42,7 +42,7 @@ Entity &AScene::createEntity()
 		_pool.back().setHandle(Entity(_pool.size() - 1, this));
 		_free.push(_pool.size() - 1);
 	}
-	unsigned int index = _free.front();
+	std::size_t index = _free.front();
 	_free.pop();
 	_pool[index].addFlags(EntityData::ACTIVE);
 	return _pool[index].getHandle();
