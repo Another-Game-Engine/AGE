@@ -114,8 +114,8 @@ bool 			SolarSystemDemoScene::userStart()
 		};
 
 	auto s = getInstance<Renderer>()->addShader("MaterialBasic",
-		"./Shaders/MaterialBasic.vp",
-		"./Shaders/MaterialBasic.fp");
+		"../../Shaders/MaterialBasic.vp",
+		"../../Shaders/MaterialBasic.fp");
 
 		getInstance<Renderer>()->addUniform("MaterialBasic")
 			->init(s, "MaterialBasic", materialBasic);
@@ -124,13 +124,13 @@ bool 			SolarSystemDemoScene::userStart()
 		getInstance<Renderer>()->addUniform("PerModel")
 			->init(s, "PerModel", perModelVars);
 
-	getInstance<Renderer>()->addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
-	getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/tesselation.gp");
-	getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
-	getInstance<Renderer>()->addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
-	getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
-	getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
-	getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
+	getInstance<Renderer>()->addShader("earth", "../../Shaders/earth.vp", "../../Shaders/earth.fp");
+	getInstance<Renderer>()->addShader("basic", "../../Shaders/basic.vp", "../../Shaders/basic.fp", "../../Shaders/tesselation.gp");
+	getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
+	getInstance<Renderer>()->addShader("bump", "../../Shaders/bump.vp", "../../Shaders/bump.fp");
+	getInstance<Renderer>()->addShader("fboToScreen", "../../Shaders/fboToScreen.vp", "../../Shaders/fboToScreen.fp");
+	getInstance<Renderer>()->addShader("brightnessFilter", "../../Shaders/brightnessFilter.vp", "../../Shaders/brightnessFilter.fp");
+	getInstance<Renderer>()->addShader("blurY", "../../Shaders/brightnessFilter.vp", "../../Shaders/blur1.fp");
 	getInstance<Renderer>()->getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build(); //-V112
 	getInstance<Renderer>()->getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 	getInstance<Renderer>()->getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
@@ -167,7 +167,7 @@ bool 			SolarSystemDemoScene::userStart()
 		"view"
 	};
 
-	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
 
 	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 
@@ -177,9 +177,9 @@ bool 			SolarSystemDemoScene::userStart()
 	getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
-	auto music = getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
+	auto music = getInstance<AudioManager>()->loadStream(File("../../Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 
 	// SERIALIZATION

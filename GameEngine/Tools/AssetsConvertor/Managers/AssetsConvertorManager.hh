@@ -21,6 +21,7 @@ public:
 	virtual ~AssetsConvertorManager();
 
 	void setOutputDirectory(const std::string &directory);
+	inline const File &getOutputDirectory() const { return _outputDirectory; }
 
 	template <typename T>
 	void registerConvertor()
