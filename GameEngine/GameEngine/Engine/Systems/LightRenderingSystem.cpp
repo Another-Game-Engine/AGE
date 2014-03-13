@@ -15,7 +15,7 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						_cameraFilter(scene),
 						_spotShadowNbr(0),
 						_pointShadowNbr(0),
-						_shadowDimensions(1920, 1080),
+						_shadowDimensions(1500, 1500),
 						_idealIllum(0.3f),
 						_adaptationSpeed(0.15f),
 						_maxDarkImprovement(1.0f),
@@ -55,10 +55,18 @@ void LightRenderingSystem::initialize()
 	_scene->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "spotLightBuff", "spotLightBuff");
 
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
 
 	// shadows fbo and textures
 	glGenTextures(1, &_spotShadowTextures);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
+
 	glGenFramebuffers(1, &_shadowsFbo);
 }
 
@@ -101,22 +109,15 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 	// Make the shadow texture array larger to fit all the lights textures in it
 	if (_spotShadowNbr != shadowNbr)
 	{
-		glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
-		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
+		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE_ARRAY, _spotShadowTextures);
 		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT24, _shadowDimensions.x, _shadowDimensions.y, shadowNbr, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 		_spotShadowNbr = shadowNbr;
 	}
 
 	_scene->getInstance<Renderer>()->getShader("ShadowDepth")->use();
 	i = 0;
 	shadowNbr = 0;
+	glViewport(0, 0, _shadowDimensions.x, _shadowDimensions.y);
 	// Update the lights shadowmaps
 	for (auto e : _spotLightFilter.getCollection())
 	{
@@ -172,6 +173,9 @@ void	LightRenderingSystem::mainUpdate(double time)
 	// For each camera
 	for (auto c : _cameraFilter.getCollection())
 	{
+		auto viewport = c->getComponent<Component::CameraComponent>()->viewport;
+		glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+
 		auto camera = c->getComponent<Component::CameraComponent>();
 		// Set les uniforms du block PerFrame
 		perFrame->setUniform("projection", camera->getProjection());
@@ -215,8 +219,6 @@ void	LightRenderingSystem::mainUpdate(double time)
 
 		// Blit final result on back buffer:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		auto viewport = c->getComponent<Component::CameraComponent>()->viewport;
-		glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
 		_quad.draw(current.getTextureAttachment(GL_COLOR_ATTACHMENT0), current.getSampleNbr(), current.getSize());
 	}
 }

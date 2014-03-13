@@ -68,6 +68,13 @@ in vec2 fTexCoord;
 
 out layout (location = 0) vec4 FragColor;
 
+float random_number(vec3 seed, int index)
+{
+	vec4 seed4 = vec4(seed, index);
+	float dot_product = dot(seed4, vec4(12.9898, 78.233, 45.164, 94.673));
+	return fract(sin(dot_product) * 43758.5453);
+}
+
 float		calcSpecular(vec3 lightPos, vec3 fragToLight)
 {
 	vec3	eyePos = normalize(-fScreenPosition.xyz);
@@ -108,6 +115,11 @@ vec3		computePointLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 {
 	vec3	spotLightsColor = vec3(0);
+	vec2	poissonDisk[4] = vec2[](	vec2(-0.94201624, -0.39906216),
+										vec2(0.94558609, -0.76890725),
+										vec2(-0.094184101, -0.92938870),
+										vec2(0.34495938, 0.29387760)
+									);
 
 	for (uint i = 0; i < spotLightNbr; ++i)
 	{
@@ -121,14 +133,6 @@ vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 		vec4	shadowPosition = spotLights[i].lightVP * fWorldPosition;
 		vec4	projectedPosition = shadowPosition / shadowPosition.w;
 
-		float	shadowRatio = 1.0f;
-
-		float bias = 0.001;
-
-		if (shadowIndex != -1)
-			shadowRatio = texture(spotShadowMaps, vec4(projectedPosition.xy * vec2(0.5f) + vec2(0.5f),
-														float(shadowIndex),
-														projectedPosition.z * 0.5f + 0.5f - bias));
 		if (shadowPosition.z > 0)
 		{
 			float factor = clamp(1.0f - abs(projectedPosition.x), 0.0f, 1.0f) *
@@ -147,6 +151,24 @@ vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 	
 				vec3	addedColor = lightPower * specular * diminution * lightColor * specularColor;
 				addedColor += lightPower * illumination * diminution * lightColor * diffuseColor;
+
+				ivec3	shadowSize = textureSize(spotShadowMaps, 0);
+				float	shadowRatio = 1.0f;
+				float	bias = 0.0001f;
+
+				if (shadowIndex != -1)
+				{
+					vec2		diskSpreading = vec2(shadowSize.xy);
+
+					for (int i = 0; i < 4; ++i)
+					{
+						int index = int(4.0 * random_number(floor(fWorldPosition.xyz * 1000.0), i)) % 4;
+						float	shadowTest = texture(spotShadowMaps, vec4(projectedPosition.xy * vec2(0.5f) + vec2(0.5f) + vec2(poissonDisk[index]) / diskSpreading,
+																	float(shadowIndex),
+																	projectedPosition.z * 0.5f + 0.5f - bias));
+						shadowRatio -=  (1.0f - shadowTest) / 4.0f;
+					}
+				}
 
 				spotLightsColor += shadowRatio * factor * addedColor;
 			}
