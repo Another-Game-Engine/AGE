@@ -55,32 +55,6 @@ namespace OpenGLTools
 		if (!checkStatus())
 			return false;
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-		// x,y vertex positions
-		float ss_quad_pos[] = {
-			-1.0, -1.0,
-			1.0, -1.0,
-			1.0,  1.0,
-			1.0,  1.0,
-			-1.0,  1.0,
-			-1.0, -1.0
-		};
-		// per-vertex texture coordinates
-		float ss_quad_st[] = {
-			0.0, 0.0,
-			1.0, 0.0,
-			1.0, 1.0,
-			1.0, 1.0,
-			0.0, 1.0,
-			0.0, 0.0
-		};
-		unsigned int indice[] = {0,1,2,3,4,5};
-		//_vao.init();
-		//_vao.setIndices(6, &indice[0]);
-		//_vao.addAttribute(6, 2, sizeof(float), reinterpret_cast<byte *>(ss_quad_pos));
-		//_vao.addAttribute(6, 2, sizeof(float), reinterpret_cast<byte *>(ss_quad_st));
-		//_vao.transferGPU(GL_STREAM_DRAW);
 		return true;
 	}
 
@@ -192,26 +166,6 @@ namespace OpenGLTools
 		bind(shader);
 		/*_vao.draw(GL_TRIANGLES);*/
 
-		glUseProgram(0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
-	void Framebuffer::debugRendering(Shader *shader)
-	{
-		shader->use();
-		for (unsigned int i = 0; i < _layerNumber; ++i)
-		{
-			glViewport(
-				(i % 3) * ((float)_width / 3.0),
-				_height - ((i / 3.0 + 1.0) * ((float)_height / 3.0)),
-				(float)_width / 3.0,
-				(float)_height / 3.0
-				);
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, _layers[i]);
-		/*	_vao.draw(GL_TRIANGLES);*/
-		   
-		}
 		glUseProgram(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}

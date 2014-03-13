@@ -21,12 +21,12 @@ AssetsConvertorManager::AssetsConvertorManager()
 AssetsConvertorManager::~AssetsConvertorManager()
 {}
 
-void AssetsConvertorManager::setOutputDirectory(const std::string directory)
+void AssetsConvertorManager::setOutputDirectory(const std::string &directory)
 {
 	_outputDirectory = File(directory);
 }
 
-std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filename)
+std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string &filename)
 {
 	const File file(filename);
 

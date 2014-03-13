@@ -6,10 +6,10 @@
 #include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/Engine.hh>
-#include <Managers/BulletDynamicManager.hpp>
+#include <Physic/BulletDynamicManager.hpp>
 #include <BulletCollision/CollisionShapes/btShapeHull.h>
 #include <HACD/hacdHACD.h>
-#include <Utils/BtConversion.hpp>
+#include <Physic/Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <MediaFiles/CollisionShapeStaticFile.hpp>
 #include <MediaFiles/CollisionShapeDynamicFile.hpp>

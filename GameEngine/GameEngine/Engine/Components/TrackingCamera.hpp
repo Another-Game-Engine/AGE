@@ -10,7 +10,7 @@ namespace Component
 	{
 		TrackingCamera();
 		virtual ~TrackingCamera(void);
-		void init(Entity _toLook, glm::vec3 _dist);
+		void init(const Entity &_toLook, glm::vec3 _dist);
 		virtual void reset();
 
 		//////

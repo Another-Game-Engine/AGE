@@ -6,7 +6,7 @@
 #include <Systems/System.h>
 #include <Components/FPController.hpp>
 #include <Entities/EntityData.hh>
-#include <Managers/BulletDynamicManager.hpp>
+#include <Physic/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 #include <Context/SdlContext.hh>
@@ -68,65 +68,66 @@ private:
 
 	void updateComponent(Entity &entity, std::shared_ptr<Component::FPController> fp, double time)
 	{
-			fp->resetControls();
-			auto scene = _scene.lock();
-			auto inputs = scene->getInstance<Input>();
-			auto &controls = fp->controls;
-			auto &keys = fp->keys;
-			auto angle = glm::vec2((float)inputs->getMouseDelta().x, (float)inputs->getMouseDelta().y);
+		float ftime = static_cast<float>(time);
+		fp->resetControls();
+		auto scene = _scene.lock();
+		auto inputs = scene->getInstance<Input>();
+		auto &controls = fp->controls;
+		auto &keys = fp->keys;
+		auto angle = glm::vec2((float)inputs->getMouseDelta().x, (float)inputs->getMouseDelta().y);
 
-			// UPDATE KEYS
-			for (unsigned int i = 0; i < controls.size(); ++i)
-			{
-				controls[i] = inputs->getKey(keys[i]);
-			}
+		// UPDATE KEYS
+		for (unsigned int i = 0; i < controls.size(); ++i)
+		{
+			controls[i] = inputs->getKey(keys[i]);
+		}
 
-			auto &ghost = fp->getGhost();
-			auto &controller = fp->getController();
+		auto &ghost = fp->getGhost();
+		auto &controller = fp->getController();
 
-			// UPDATE GHOST TRANSFORMATION
-			btTransform trans = ghost.getWorldTransform();
-			btVector3 forwardDir = trans.getBasis()[2];
-			btVector3 upDir = trans.getBasis()[1];
-			btVector3 sideDir = trans.getBasis()[0];
-			forwardDir.normalize();
-			upDir.normalize();
-			sideDir.normalize();
-			btVector3 walkDirection = btVector3(0.0, 0.0000000001, 0.0);
-			bool isRunning = false;
-			if (controls[Component::FPController::RUN])
-				isRunning = true;
-			if (controls[Component::FPController::LEFT])
-				walkDirection += sideDir * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * time;
+		// UPDATE GHOST TRANSFORMATION
+		btTransform trans = ghost.getWorldTransform();
+		btVector3 forwardDir = trans.getBasis()[2];
+		btVector3 upDir = trans.getBasis()[1];
+		btVector3 sideDir = trans.getBasis()[0];
+		forwardDir.normalize();
+		upDir.normalize();
+		sideDir.normalize();
+		btVector3 walkDirection = btVector3(0.0, 0.0000000001, 0.0);
+		bool isRunning = false;
+		if (controls[Component::FPController::RUN])
+			isRunning = true;
+		if (controls[Component::FPController::LEFT])
+			walkDirection += sideDir * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * ftime;
 
-			if (controls[Component::FPController::RIGHT])
-				walkDirection -= sideDir  * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * time;
+		if (controls[Component::FPController::RIGHT])
+			walkDirection -= sideDir  * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * ftime;
 
-			if (controls[Component::FPController::FORWARD])
-				walkDirection += forwardDir * (isRunning ? fp->forwardRunSpeed : fp->forwardWalkSpeed) * time;
+		if (controls[Component::FPController::FORWARD])
+			walkDirection += forwardDir * (isRunning ? fp->forwardRunSpeed : fp->forwardWalkSpeed) * ftime;
 
-			if (controls[Component::FPController::BACKWARD])
-				walkDirection -= forwardDir * (isRunning ? fp->backwardRunSpeed : fp->backwardWalkSpeed) * time;
+		if (controls[Component::FPController::BACKWARD])
+			walkDirection -= forwardDir * (isRunning ? fp->backwardRunSpeed : fp->backwardWalkSpeed) * ftime;
 
 
-			// HORIZONTAL ROTATION APPLIED ON GHOST
-			{
-				btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
-				orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), angle.x * fp->rotateXSpeed));
-				ghost.getWorldTransform().setBasis(orn);
-			}
+		// HORIZONTAL ROTATION APPLIED ON GHOST
+		{
+			btMatrix3x3 orn = ghost.getWorldTransform().getBasis();
+			orn *= btMatrix3x3(btQuaternion(btVector3(0, 1, 0), angle.x * fp->rotateXSpeed));
+			ghost.getWorldTransform().setBasis(orn);
+		}
 
-			fp->justJump = false;
-			fp->justArriveOnFloor = false;
-			if (!fp->wasOnGround && controller.onGround())
-				fp->justArriveOnFloor = true;
-			if (fp->canJump && controls[Component::FPController::JUMP] && fp->getController().onGround())
-			{
-				controller.jump();
-				fp->justJump = true;
-			}
-			fp->wasOnGround = controller.onGround();
-			controller.setWalkDirection(walkDirection);
+		fp->justJump = false;
+		fp->justArriveOnFloor = false;
+		if (!fp->wasOnGround && controller.onGround())
+			fp->justArriveOnFloor = true;
+		if (fp->canJump && controls[Component::FPController::JUMP] && fp->getController().onGround())
+		{
+			controller.jump();
+			fp->justJump = true;
+		}
+		fp->wasOnGround = controller.onGround();
+		controller.setWalkDirection(walkDirection);
 	}
 
 	virtual void initialize()

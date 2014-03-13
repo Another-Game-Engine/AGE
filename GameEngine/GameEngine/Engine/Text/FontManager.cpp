@@ -113,9 +113,9 @@ void FontManager::_draw2DString(const std::string &text,
 		return;
 	}
 	auto &f = fontSize->second;
-	float sz = f._size;
-	if (sz != (float)size)
-		sz = size;
+	float sz = static_cast<float>(f._size);
+	if (sz != static_cast<float>(size))
+		sz = static_cast<float>(size);
 	glm::mat4 transformation(1);
 	transformation = glm::translate(transformation, glm::vec3(position.x, position.y, 0));
 
@@ -129,8 +129,8 @@ void FontManager::_draw2DString(const std::string &text,
 	glBindTexture(GL_TEXTURE_2D, f._textureId);
 	auto transformationID = glGetUniformLocation(s->getId(), "transformation");
 	auto glyphWidth = 0.0f;
-	float lastX = position.x;
-	for (auto i = 0; i < text.size(); ++i)
+	float lastX = static_cast<float>(position.x);
+	for (std::size_t i = 0; i < text.size(); ++i)
 	{
 		auto l = text[i] - ASCII_BEGIN;
 		glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;

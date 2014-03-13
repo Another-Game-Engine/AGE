@@ -108,7 +108,7 @@ public:
 
 			for (rapidjson::SizeType i = 0; i < uvs.Size(); i++)
 			{
-				f->_uvs[i] = uvs[i].GetDouble();
+				f->_uvs[i] = static_cast<float>(uvs[i].GetDouble());
 			}
 
 			// LOAD DIMENSIONS

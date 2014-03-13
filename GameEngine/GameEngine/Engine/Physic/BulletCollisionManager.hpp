@@ -4,7 +4,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <Utils/Dependency.hpp>
-#include <Utils/BtConversion.hpp>
+#include <Physic/Utils/BtConversion.hpp>
 #include <Entities/Entity.hh>
 #include <Entities/EntityData.hh>
 
@@ -20,16 +20,10 @@ public:
 	virtual bool init(bool init = true)
 	{
 		_dispatcher = new btCollisionDispatcher(&_defaultCollisionConfiguration);
-		if (!_dispatcher)
-			return false;
 		_broadphase = new btDbvtBroadphase();
-		if (!_broadphase)
-			return false;
 		if (init) // init is false when called by Dynamic World
 		{
 			_world = new btCollisionWorld(_dispatcher, _broadphase, &_defaultCollisionConfiguration);
-			if (!_world)
-				return false;
 			btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher*>(_world->getDispatcher());
 			btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
 		}
@@ -70,7 +64,7 @@ public:
 		_world->rayTest(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to), raycastCallback);
 		if (raycastCallback.hasHit())
 		{
-			for (std::size_t it = 0; it < raycastCallback.m_collisionObjects.size(); ++it)
+			for (std::size_t it = 0, mit = static_cast<std::size_t>(raycastCallback.m_collisionObjects.size()); it < mit; ++it)
 			{
 				r.insert(*static_cast<Entity*>(raycastCallback.m_collisionObjects.at(it)->getUserPointer()));
 			}

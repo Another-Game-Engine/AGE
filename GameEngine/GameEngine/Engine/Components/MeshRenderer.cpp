@@ -53,16 +53,17 @@ namespace Component
 
 	void MeshRenderer::render(bool shadow, GLuint shadowTex, glm::mat4 const &lightVP)
 	{
+		auto renderer = _entity->getScene()->getInstance<Renderer>();
 		if (shadow)
 		{
 			glm::mat4 biasMatrix(0.5, 0.0, 0.0, 0.0,
 								 0.0, 0.5, 0.0, 0.0,
 								 0.0, 0.0, 0.5, 0.0,
 								 0.5, 0.5, 0.5, 1.0);
-			auto perModelUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("PerModel");
-			auto materialUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("MaterialBasic");
-			auto shadowUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("LightBias");
-			auto s = _entity->getScene()->getInstance<Renderer>()->getShader(shader);
+			auto perModelUniform = renderer->getUniform("PerModel");
+			auto materialUniform = renderer->getUniform("MaterialBasic");
+			auto shadowUniform = renderer->getUniform("LightBias");
+			auto s = renderer->getShader(shader);
 			if (s)
 				s->use();
 			glm::mat4 depthMVP = lightVP * _entity->getGlobalTransform();
@@ -83,7 +84,7 @@ namespace Component
 		{
 			std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("PerModel");
 			std::shared_ptr<OpenGLTools::UniformBuffer> materialUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("MaterialBasic");
-			auto s = _entity->getScene()->getInstance<Renderer>()->getShader(shader);
+			auto s = renderer->getShader(shader);
 			if (s)
 				s->use();
 			perModelUniform->setUniform("model", _entity->getGlobalTransform());

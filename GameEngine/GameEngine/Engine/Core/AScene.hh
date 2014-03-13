@@ -99,8 +99,6 @@ public:
 	template <typename Archive>
 	void load(std::ifstream &s)
 	{
-		std::map<unsigned int, unsigned int> unserializedId;
-
 		Archive ar(s);
 		unsigned int size = 0;
 		ar(size);

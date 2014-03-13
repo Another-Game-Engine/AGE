@@ -30,7 +30,6 @@ namespace Component
 
 	glm::mat4         &CameraComponent::setProjection()
 	{
-		_entity->getFlags() & EntityData::HAS_MOVED;
 		return (projection);
 }
 

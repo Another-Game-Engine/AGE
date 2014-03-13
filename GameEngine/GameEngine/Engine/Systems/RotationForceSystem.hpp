@@ -28,7 +28,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		float t = time;
+		float t = static_cast<float>(time);
 		for (auto e : _filter.getCollection())
 		{
 			glm::vec3 force = e->getComponent<Component::RotationForce>()->getForce();

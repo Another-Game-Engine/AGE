@@ -1,11 +1,11 @@
 #include <Core/EntityFilter.hpp>
 
-bool defaultEntityComparaison(Entity e1, Entity e2)
+bool defaultEntityComparaison(const Entity &e1, const Entity &e2)
 {
 	return e1 < e2;
 }
 
-EntityFilter::EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(Entity, Entity))
+EntityFilter::EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(const Entity&, const Entity&))
 : PubSub(scene.lock()->getInstance<PubSub::Manager>())
 , _collection(comparaisonFn)
 , _scene(scene)
@@ -22,12 +22,12 @@ const Barcode &EntityFilter::getCode() const
 	return _code;
 }
 
-std::set<Entity, bool(*)(Entity, Entity)> const &EntityFilter::getCollection()
+std::set<Entity, bool(*)(const Entity&, const Entity&)> const &EntityFilter::getCollection()
 {
 	return _collection;
 }
 
-void EntityFilter::requireTag(unsigned int tag)
+void EntityFilter::requireTag(std::size_t tag)
 {
 	auto strId = std::to_string(tag);
 
@@ -40,7 +40,7 @@ void EntityFilter::requireTag(unsigned int tag)
 	});
 }
 
-void EntityFilter::unRequireTag(unsigned int tag)
+void EntityFilter::unRequireTag(std::size_t tag)
 {
 	auto strId = std::to_string(tag);
 
@@ -49,13 +49,13 @@ void EntityFilter::unRequireTag(unsigned int tag)
 	unsub(std::string("entityUntagged" + strId));
 }
 
-void EntityFilter::_componentAdded(Entity &e, unsigned int typeId)
+void EntityFilter::_componentAdded(Entity &e, std::size_t typeId)
 {
 	if (_code.match(e->getCode()))
 		_collection.insert(e);
 }
 
-void EntityFilter::_componentRemoved(Entity &e, unsigned int typeId)
+void EntityFilter::_componentRemoved(Entity &e, std::size_t typeId)
 {
 	if (!_code.match(e->getCode()))
 		_collection.erase(e);
