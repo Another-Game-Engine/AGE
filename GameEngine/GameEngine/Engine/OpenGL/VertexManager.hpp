@@ -58,7 +58,7 @@ bool VertexManager<NBR_ATTRIBUTE>::init()
 template <uint8_t NBR_ATTRIBUTE>
 void VertexManager<NBR_ATTRIBUTE>::addVertice(Vertice<NBR_ATTRIBUTE> &vertex)
 {
-	int32_t index;
+	std::size_t index;
 
 	index = _pool.addElement(vertex);
 	vertex._index = index;

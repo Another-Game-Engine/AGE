@@ -21,7 +21,7 @@ public:
 	std::size_t getSizeIndicesBuffer() const;
 	std::size_t getNbrIndices() const;
 	std::size_t getNbrVertex() const;
-	int32_t getIndexPool() const;
+	std::size_t getIndexPool() const;
 	void const * const getBuffer(uint8_t index) const;
 	void const * const getIndices() const;
 	bool isDrawable() const;
@@ -38,7 +38,7 @@ private:
 	std::size_t _nbrIndices;
 	Data *_indices;
 	VertexManager<NBR_ATTRIBUTE> *_vertexManager;
-	int32_t _index;
+	std::size_t _index;
 };
 
 # include "Vertice.hpp"

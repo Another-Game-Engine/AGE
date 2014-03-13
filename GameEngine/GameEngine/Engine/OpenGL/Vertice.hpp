@@ -115,7 +115,7 @@ std::size_t Vertice<NBR_ATTRIBUTE>::getNbrIndices() const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-int32_t Vertice<NBR_ATTRIBUTE>::getIndexPool() const
+std::size_t Vertice<NBR_ATTRIBUTE>::getIndexPool() const
 {
 	return (_index);
 }

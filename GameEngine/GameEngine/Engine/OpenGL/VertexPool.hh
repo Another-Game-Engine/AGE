@@ -26,7 +26,7 @@ private:
 	std::size_t _sizeIndicesBuffer;
 	std::size_t _nbrVertex;
 	std::size_t _nbrIndices;
-	std::array<GLuint, NBR_ATTRIBUTE> _pointerAttributes;
+	std::array<std::size_t, NBR_ATTRIBUTE> _pointerAttributes;
 	std::queue<std::size_t> _updateBuffer;
 	StateVertexPool _updateState;
 	std::array<Attribute, NBR_ATTRIBUTE> _attributes;
@@ -48,7 +48,7 @@ public:
 	std::size_t getSizeVertexBuffer() const;
 	std::size_t getNbrVertex() const;
 	std::size_t getNbrIndices() const;
-	GLuint getPointerAttribute(GLint index) const;
+	std::size_t getPointerAttribute(GLint index) const;
 	StateVertexPool getUpdateState() const;
 	bool getUpdateMinor(std::size_t &index);
 	void resetState();
