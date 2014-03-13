@@ -73,25 +73,25 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	/////////////
 	// Converting
 	//
-    for (size_t i = 0; i < shapes.size(); i++)
+    for (std::size_t i = 0; i < shapes.size(); i++)
 	{
 		mesh->geometries[i].name = shapes[i].name;
-		for (size_t v = 0; v < shapes[i].mesh.indices.size(); ++v)
+		for (std::size_t v = 0; v < shapes[i].mesh.indices.size(); ++v)
 		{
-			unsigned int p = shapes[i].mesh.indices[v] * 3;
-			unsigned int p2 = shapes[i].mesh.indices[v] * 2;
+			std::size_t p = shapes[i].mesh.indices[v] * std::size_t(3);
+			std::size_t p2 = shapes[i].mesh.indices[v] * std::size_t(2);
 			auto &m = shapes[i].mesh;
 			if (m.positions.size() > 0)
 				mesh->geometries[i].vertices.push_back(glm::vec4(m.positions[p],
-				m.positions[p + 1],
-				m.positions[p + 2], 1));
+				m.positions[p + std::size_t(1)],
+				m.positions[p + std::size_t(2)], 1));
 			if (m.normals.size() > 0)
 				mesh->geometries[i].normals.push_back(glm::vec4(m.normals[p],
-				m.normals[p + 1],
-				m.normals[p + 2], 1));
+				m.normals[p + std::size_t(1)],
+				m.normals[p + std::size_t(2)], 1));
 			if (m.texcoords.size() > 0)
 				mesh->geometries[i].uvs.push_back(glm::vec2(m.texcoords[p2],
-				m.texcoords[p2 + 1]));
+				m.texcoords[p2 + std::size_t(1)]));
 			mesh->geometries[i].colors.push_back(glm::vec4(1));
 			mesh->geometries[i].indices.push_back(static_cast<unsigned int>(v));
 		}
@@ -112,14 +112,14 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		std::shared_ptr<btTriangleMesh> trimesh{new btTriangleMesh()};
 		auto &geos = mesh->geometries;
 
-		for (unsigned int j = 0; j < geos.size(); ++j)
+		for (std::size_t j = 0; j < geos.size(); ++j)
 		{
 			auto &geo = geos[j];
-			for (unsigned int i = 0; i < geo.vertices.size(); i += 3)
+			for (std::size_t i = 0; i < geo.vertices.size(); i += 3)
 			{
 				trimesh->addTriangle(btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z)
-					, btVector3(geo.vertices[i + 1].x, geo.vertices[i + 1].y, geo.vertices[i + 1].z)
-					, btVector3(geo.vertices[i + 2].x, geo.vertices[i + 2].y, geo.vertices[i + 2].z), true);
+					, btVector3(geo.vertices[i + std::size_t(1)].x, geo.vertices[i + std::size_t(1)].y, geo.vertices[i + std::size_t(1)].z)
+					, btVector3(geo.vertices[i + std::size_t(2)].x, geo.vertices[i + std::size_t(2)].y, geo.vertices[i + std::size_t(2)].z), true);
 			}
 		}
 		std::shared_ptr<btBvhTriangleMeshShape> bvh{ new btBvhTriangleMeshShape(trimesh.get(), true) };
@@ -136,11 +136,11 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	{
 		auto &geos = mesh->geometries;
 		std::shared_ptr<btConvexHullShape> s{ new btConvexHullShape() };
-		for (unsigned int i = 0; i < geos.size(); ++i)
+		for (std::size_t i = 0; i < geos.size(); ++i)
 		{
 			auto &geo = geos[i];
 			btScalar *t = new btScalar[geo.vertices.size() * 3]();
-			for (unsigned int it = 0; it < geo.vertices.size(); ++it)
+			for (std::size_t it = 0; it < geo.vertices.size(); ++it)
 			{
 				t[it * 3] = geo.vertices[it].x;
 				t[it * 3 + 1] = geo.vertices[it].y;
@@ -153,7 +153,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 			tmp->setUserPointer(hull);
 			for (int it = 0; it < hull->numVertices(); ++it)
 			{
-				s->addPoint(hull->getVertexPointer()[it], false);
+				s->addPoint(hull->getVertexPointer()[std::size_t(it)], false);
 			}
 			s->recalcLocalAabb();
 			btTransform localTrans;
