@@ -33,7 +33,7 @@ typedef struct
 // only, no palettes, no RLE encoding.
 GLbyte *loadTGA(const char *szFileName,
 				   GLint *iWidth, GLint *iHeight,
-				   GLint *iComponents, GLenum *eFormat, unsigned int *size)
+				   GLint *iComponents, GLenum *eFormat, std::size_t *size)
 {
     FILE *pFile;				// File pointer
     TGAHEADER tgaHeader;		// TGA file header
