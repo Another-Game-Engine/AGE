@@ -19,7 +19,7 @@ public:
 	template <class T>
 	ComponentRegistrar &rct()
 	{
-		auto key = typeid(T).hash_code();
+		std::size_t key = typeid(T).hash_code();
 		auto it = _collection.find(key);
 		if (it != std::end(_collection))
 			return *this;
