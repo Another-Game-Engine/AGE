@@ -187,7 +187,7 @@ std::size_t VertexPool<NBR_ATTRIBUTE>::getNbrIndices() const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-GLuint VertexPool<NBR_ATTRIBUTE>::getPointerAttribute(GLint index) const
+std::size_t VertexPool<NBR_ATTRIBUTE>::getPointerAttribute(GLint index) const
 {
 	return (_pointerAttributes[index]);
 }
