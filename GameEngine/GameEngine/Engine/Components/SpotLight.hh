@@ -8,7 +8,7 @@ struct SpotLightData
 	glm::mat4		lightVP;
 	glm::vec4		positionPower;
 	glm::vec4		colorRange;
-	unsigned int	hasShadow;
+	int				shadowId;
 	unsigned int	padding[3];
 
 	SpotLightData() { }
@@ -27,7 +27,7 @@ struct SpotLightData
 		lightVP = o.lightVP;
 		positionPower = o.positionPower;
 		colorRange = o.colorRange;
-		hasShadow = o.hasShadow;
+		shadowId = o.shadowId;
 		return (*this);
 	}
 };
