@@ -57,12 +57,12 @@ void Barcode::reset()
 	code_.reset();
 }
 
-void Barcode::add(unsigned int componentId)
+void Barcode::add(std::size_t componentId)
 {
 	applyChange(componentId, true);
 }
 
-void Barcode::remove(unsigned int componentId)
+void Barcode::remove(std::size_t componentId)
 {
 	applyChange(componentId, false);
 }
@@ -72,7 +72,7 @@ bool Barcode::isEmpty() const
 	return (code_.none());
 }
 
-bool Barcode::isSet(unsigned int componentId) const
+bool Barcode::isSet(std::size_t componentId) const
 {
 	return (code_.size() > componentId && code_.test(componentId));
 }

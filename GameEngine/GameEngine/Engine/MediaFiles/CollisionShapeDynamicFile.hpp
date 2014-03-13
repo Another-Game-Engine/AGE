@@ -36,7 +36,7 @@ public:
 		return *this;
 	}
 
-	void unserialize(File f)
+	void unserialize(const File &f)
 	{
 		btBulletWorldImporter import(0);
 		assert(f.exists() == true && "File do not exists");

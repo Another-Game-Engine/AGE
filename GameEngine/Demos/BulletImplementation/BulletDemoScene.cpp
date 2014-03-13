@@ -291,7 +291,7 @@ bool 			BulletDemoScene::userStart()
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
 		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
 		//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
-		auto rigidBody = e->addComponent<Component::RigidBody>(0);
+		auto rigidBody = e->addComponent<Component::RigidBody>(0.0f);
 		rigidBody->setMass(0);
 		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
@@ -348,6 +348,7 @@ bool 			BulletDemoScene::userStart()
 bool 			BulletDemoScene::userUpdate(double time)
 {
 	static std::queue<Entity> stack;
+	float ftime = static_cast<float>(time);
 
 	if (getInstance<Input>()->getInput(SDLK_l))
 	{
@@ -376,11 +377,12 @@ bool 			BulletDemoScene::userUpdate(double time)
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 1.0f);
 		auto rigidbody = e->getComponent<Component::RigidBody>();
-		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
-		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
-		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
-		rigidbody->getBody().setFriction(1.0f);
-		rigidbody->getBody().setRestitution(0.9f);
+		auto &body = rigidbody->getBody();
+		body.applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
+		body.getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+		body.getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+		body.setFriction(1.0f);
+		body.setRestitution(0.9f);
 		e->addComponent<Component::AudioEmitter>()->setAudio(getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 		e->addTag(BALL_TAG);
 		if (stack.size() > 300)
@@ -392,7 +394,7 @@ bool 			BulletDemoScene::userUpdate(double time)
 		delay = 0.1f;
 	}
 	if (delay >= 0.0f)
-		delay -= time;
+		delay -= ftime;
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
 		getInstance<Input>()->getInput(SDL_QUIT))
 	{
@@ -407,7 +409,7 @@ bool 			BulletDemoScene::userUpdate(double time)
 	static auto timeCounter = 0.0f;
 	static auto frameCounter = 0;
 	static auto lastFrame = 0;
-	timeCounter += time;
+	timeCounter += ftime;
 	frameCounter += 1;
 	getInstance<FontManager>()->draw2DString("FPS : " + std::to_string(lastFrame), "myFont", 40, glm::ivec2(10, 10), glm::vec4(1), "2DText");
 

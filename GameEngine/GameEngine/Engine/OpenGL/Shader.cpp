@@ -92,8 +92,6 @@ bool Shader::_build()
 	if (_targets)
 		delete _targets;
 	_targets = new GLenum[_targetsList.size()];
-	if (!_targets)
-		return false;
 
 	unsigned int i = 0;
 	for (auto &e : _targetsList)

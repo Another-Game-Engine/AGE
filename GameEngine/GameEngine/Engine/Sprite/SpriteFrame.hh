@@ -49,8 +49,6 @@ public:
 		};
 		Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
 		_buffer = new Vertice<2>(vertices.size(), data, &indicesData);
-		if (!_buffer)
-			return false;
 		vm->addVertice(*(_buffer));
 		return true;
 	}

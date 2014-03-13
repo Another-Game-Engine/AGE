@@ -7,7 +7,7 @@
 #include <BulletDynamics/Character/btKinematicCharacterController.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "Context/SdlContext.hh"
-#include <Managers/BulletDynamicManager.hpp>
+#include <Physic/BulletDynamicManager.hpp>
 #include <array>
 
 namespace Component

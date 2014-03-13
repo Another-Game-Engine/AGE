@@ -15,7 +15,7 @@ public:
 
 	void update(std::size_t &index) const
 	{
-		index = ++index % _steps.size();
+		index = (index + 1) % _steps.size();
 	}
 
 	void draw(std::size_t index) const

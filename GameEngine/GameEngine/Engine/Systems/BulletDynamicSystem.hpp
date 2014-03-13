@@ -1,11 +1,11 @@
 #ifndef   __BULLET_DYNAMIC_SYSTEM_HPP__
 # define  __BULLET_DYNAMIC_SYSTEM_HPP__
 
-#include <Utils/BtConversion.hpp>
+#include <Physic/Utils/BtConversion.hpp>
 #include <Systems/System.h>
 #include <Components/RigidBody.hpp>
 #include <Entities/EntityData.hh>
-#include <Managers/BulletDynamicManager.hpp>
+#include <Physic/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 
@@ -27,7 +27,7 @@ private:
 
 	virtual void updateBegin(double time)
 	{
-		_manager->getWorld()->stepSimulation(time, 10);
+		_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
 	}
 
 	virtual void updateEnd(double time)

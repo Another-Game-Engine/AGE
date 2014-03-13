@@ -193,20 +193,20 @@ Barcode                 &EntityData::getCode()
 	return _code;
 }
 
-void                    EntityData::addTag(unsigned int tag)
+void                    EntityData::addTag(std::size_t tag)
 {
-	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.add(tag);
 }
 
-void                    EntityData::removeTag(unsigned int tag)
+void                    EntityData::removeTag(std::size_t tag)
 {
-	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.remove(tag);
 }
-bool                    EntityData::isTagged(unsigned int tag) const
+bool                    EntityData::isTagged(std::size_t tag) const
 {
-	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	return _code.isSet(tag);
 }
 
@@ -228,9 +228,9 @@ void EntityData::reset()
 	_globalTransform = glm::mat4(1);
 	_localTransform = glm::mat4(1);
 	_code.reset();
-	for (unsigned int i = 0; i < _components.size(); ++i)
+	for (std::size_t i = 0; i < _components.size(); ++i)
 	{
-		unsigned int id = i + MAX_TAG_NUMBER;
+		std::size_t id = i + MAX_TAG_NUMBER;
 		if (_components[i].get())
 		{
 			broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);

@@ -136,15 +136,15 @@ void VertexPool<NBR_ATTRIBUTE>::clear()
 	it = _elements.begin();
 	while (it != _elements.end())
 	{
+		auto &v = (*it).getVertex();
 		if ((*it).isEmpty())
 		{
-			_sizeIndicesBuffer += (*it).getVertex().getSizeIndicesBuffer();
-			_sizeVertexBuffer += (*it).getVertex().getSizeVertexBuffer();
-			_nbrVertex += (*it).getVertex().getNbrVertex();
-			_nbrIndices += (*it).getVertex().getNbrIndices();
+			_sizeIndicesBuffer += v.getSizeIndicesBuffer();
+			_sizeVertexBuffer += v.getSizeVertexBuffer();
+			_nbrVertex += v.getNbrVertex();
+			_nbrIndices += v.getNbrIndices();
 			it = _elements.erase(it);
 		}
-		++it;
 	}
 }
 

@@ -22,4 +22,5 @@ bool ComputeShader::init(const File &file)
   _progId = glCreateProgram();
   glAttachShader(_progId, _csId);
   linkProgram();
+  return true;
 }

@@ -1,7 +1,7 @@
 #ifndef  __BULLET_MANAGER_HPP__
 # define __BULLET_MANAGER_HPP__
 
-#include <Managers/BulletCollisionManager.hpp>
+#include <Physic/BulletCollisionManager.hpp>
 
 class BulletDynamicManager : public BulletCollisionManager
 {
@@ -23,9 +23,6 @@ public:
 		if (!BulletCollisionManager::init(false))
 			return false;
 		_constraintSolver = new btSequentialImpulseConstraintSolver();
-		if (!_constraintSolver)
-			return false;
-
 		// DISGUSTING !! LEAK !!!
 		btVector3 worldMin(-1000, -1000, -1000);
 		btVector3 worldMax(1000, 1000, 1000);
@@ -33,8 +30,6 @@ public:
 		static auto test = sweepBP;
 
 		_world = new btDiscreteDynamicsWorld(_dispatcher, test, _constraintSolver, &_defaultCollisionConfiguration);
-		if (!_world)
-			return false;
 //		_world->getDispatchInfo().m_allowedCcdPenetration = 0.01f;
 		static_cast<btDiscreteDynamicsWorld *>(_world)->setGravity(btVector3(0, -10, 0));
 		return true;
