@@ -32,11 +32,14 @@ layout(binding = 1) uniform sampler2D fTexture1; //diffuse;
 layout(binding = 2) uniform sampler2D fTexture2; //specular;
 layout(binding = 3) uniform sampler2D fTexture3; //normal;
 
+// Shadow map
+layout(binding = 4) uniform sampler2DArrayShadow spotShadowMaps;
+
 struct PointLight
 {
 	vec4	positionPower;
 	vec4	colorRange;
-	uint	hasShadow;
+	int		shadowId;
 };
 
 struct SpotLight
@@ -44,7 +47,7 @@ struct SpotLight
 	mat4	lightVP;
 	vec4	positionPower;
 	vec4	colorRange;
-	uint	hasShadow;
+	int		shadowId;
 };
 
 layout(std140) uniform pointLightBuff
@@ -112,11 +115,18 @@ vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 		vec3	lightColor = spotLights[i].colorRange.xyz;
 		float	lightRange = spotLights[i].colorRange.w;
 		float	lightPower = spotLights[i].positionPower.w;
+		int		shadowIndex = spotLights[i].shadowId;
 
 		// Calculate the influence factor depending on the frustum
 		vec4	shadowPosition = spotLights[i].lightVP * fWorldPosition;
 		vec4	projectedPosition = shadowPosition / shadowPosition.w;
 
+		float	shadowRatio = 1.0f;
+
+		if (shadowIndex != -1)
+			shadowRatio = texture(spotShadowMaps, vec4(projectedPosition.xy * vec2(0.5f) + vec2(0.5f),
+														float(shadowIndex),
+														projectedPosition.z * 0.5f + 0.5f));
 		if (shadowPosition.z > 0)
 		{
 			float factor = clamp(1.0f - abs(projectedPosition.x), 0.0f, 1.0f) *
@@ -136,7 +146,7 @@ vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 				vec3	addedColor = lightPower * specular * diminution * lightColor * specularColor;
 				addedColor += lightPower * illumination * diminution * lightColor * diffuseColor;
 
-				spotLightsColor += factor * addedColor;
+				spotLightsColor += shadowRatio * factor * addedColor;
 			}
 		}
 	}

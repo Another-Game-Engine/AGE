@@ -348,6 +348,7 @@ bool BulletDemoScene::userUpdate(double time)
 		l->lightData.lightVP = cam->getProjection() * cam->getLookAtTransform();
 		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
 		l->lightData.positionPower.w = 5.0f;
+		l->lightData.shadowId = 1;
 		e->setLocalTransform(glm::inverse(cam->getLookAtTransform()));
 		delay = 0.1f;
 	}

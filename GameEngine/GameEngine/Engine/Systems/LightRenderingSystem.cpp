@@ -93,7 +93,7 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 		_contiguousSpotLights[i].positionPower.x = e->getGlobalTransform()[3].x;
 		_contiguousSpotLights[i].positionPower.y = e->getGlobalTransform()[3].y;
 		_contiguousSpotLights[i].positionPower.z = e->getGlobalTransform()[3].z;
-		if (_contiguousSpotLights[i].hasShadow)
+		if (_contiguousSpotLights[i].shadowId != -1)
 			++shadowNbr;
 		++i;
 	}
@@ -113,43 +113,38 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 
 	_scene->getInstance<Renderer>()->getShader("ShadowDepth")->use();
 	i = 0;
+	shadowNbr = 0;
 	// Update the lights shadowmaps
 	for (auto e : _spotLightFilter.getCollection())
 	{
 		SpotLightData	&spotLightData = e->getComponent<Component::SpotLight>()->lightData;
 
-		if (spotLightData.hasShadow) // if the light has shadows, render the shadowmap
+		if (spotLightData.shadowId != -1) // if the light has shadows, render the shadowmap
 		{
 			perLight->setUniform("lightVP", spotLightData.lightVP);
 			perLight->flushChanges();
 
 			glBindFramebuffer(GL_FRAMEBUFFER, _shadowsFbo);
-			//glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
-			//glFramebufferTexture3D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_3D, _spotShadowTextures, 0, i);
-			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _spotShadowTextures, 0, i);
-
-			GLenum mode = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-			if (mode != GL_FRAMEBUFFER_COMPLETE)
-				std::cout << "Error frambuffer" << std::endl;
-			if (mode == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
-				std::cout << "Error frambuffer incomplete attachment" << std::endl;
-			if (mode == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
-				std::cout << "Error framebuffer missing attachement" << std::endl;
-			if (mode == GL_FRAMEBUFFER_UNSUPPORTED)
-				std::cout << "Error framebuffer unsupported" << std::endl;
+			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _spotShadowTextures, 0, shadowNbr);
 
 			glDrawBuffer(GL_NONE);
 			glClearDepth(1.0f);
 			glClear(GL_DEPTH_BUFFER_BIT);
 			glDepthFunc(GL_LESS);
 			glDepthMask(GL_TRUE);
-
+			
 			for (auto e : _meshRendererFilter.getCollection())
 			{
 				e->getComponent<Component::MeshRenderer>()->renderRaw();
 			}
-			++i;
+
+			glFinish();
+
+			_contiguousSpotLights[i].shadowId = shadowNbr;
+
+			++shadowNbr;
 		}
+		++i;
 	}
 
 	perFrame->setUniform("pointLightNbr", _pointLightNbr);
@@ -251,9 +246,15 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	glDepthFunc(GL_LEQUAL);
 	glColorMask(1, 1, 1, 1);
 
+	GLuint		spotShadowMap = _spotShadowTextures;
+
 	for (auto e : _meshRendererFilter.getCollection())
 	{
-		e->getComponent<Component::MeshRenderer>()->render();
+		e->getComponent<Component::MeshRenderer>()->render([&](OpenGLTools::Shader &s)
+		{
+			glActiveTexture(GL_TEXTURE4);
+			glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
+		});
 	}
 }
 
