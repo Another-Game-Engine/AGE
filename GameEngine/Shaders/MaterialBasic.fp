@@ -123,10 +123,12 @@ vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 
 		float	shadowRatio = 1.0f;
 
+		float bias = 0.001;
+
 		if (shadowIndex != -1)
 			shadowRatio = texture(spotShadowMaps, vec4(projectedPosition.xy * vec2(0.5f) + vec2(0.5f),
 														float(shadowIndex),
-														projectedPosition.z * 0.5f + 0.5f));
+														projectedPosition.z * 0.5f + 0.5f - bias));
 		if (shadowPosition.z > 0)
 		{
 			float factor = clamp(1.0f - abs(projectedPosition.x), 0.0f, 1.0f) *
