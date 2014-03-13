@@ -170,7 +170,13 @@ void VertexManager<NBR_ATTRIBUTE>::callDraw(Vertice<NBR_ATTRIBUTE> const * const
 			//std::cout << "nbr of indice : " << drawable->getNbrIndices() << std::endl;
 			//std::cout << "offset of indice : " << _pool[drawable->getIndexPool()].getIndicesOffset() << std::endl;
 			//std::cout << "offset of vertex : " << _pool[drawable->getIndexPool()].getVertexOffset() << std::endl;
-			glDrawElementsBaseVertex(mode, drawable->getNbrIndices(), GL_UNSIGNED_INT, reinterpret_cast<GLvoid const *>(_pool[drawable->getIndexPool()].getIndicesOffset()), _pool[drawable->getIndexPool()].getVertexOffset());
+			glDrawElementsBaseVertex(
+				mode,
+				drawable->getNbrIndices(),
+				GL_UNSIGNED_INT,
+				reinterpret_cast<GLvoid const *>(_pool[drawable->getIndexPool()].getIndicesOffset()),
+				_pool[drawable->getIndexPool()].getVertexOffset()
+				);
 		}
 		else
 			glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());

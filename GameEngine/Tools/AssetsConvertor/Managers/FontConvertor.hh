@@ -7,18 +7,17 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-static void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned char* srcBitmap, int srcWidth, int srcHeight)
+static void drawBitmap(unsigned char* dstBitmap,
+	std::size_t x,
+	std::size_t y,
+	std::size_t dstWidth,
+	unsigned char* srcBitmap,
+	std::size_t srcWidth,
+	std::size_t srcHeight)
 {
-    // offset dst bitmap by x,y.
     dstBitmap +=  (x + (y * dstWidth));
-    for (int i = 0; i < srcHeight; ++i)
+    for (std::size_t i = 0; i < srcHeight; ++i)
     {
-		// auto d = dstBitmap;
-		//for (auto j = srcWidth - 1; j >= 0; --j)
-		//{
-		//	*d = srcBitmap[j];
-		//	++d;
-		//}
         memcpy(dstBitmap, (const void*)srcBitmap, srcWidth);
         dstBitmap += dstWidth;
 		srcBitmap += srcWidth;
@@ -108,9 +107,9 @@ private:
 		FT_GlyphSlot slot = NULL;
 		FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
 
-		for (unsigned int requestedSize = font._size; requestedSize > 0; --requestedSize)
+		for (std::size_t requestedSize = font._size; requestedSize > 0; --requestedSize)
 		{
-			if (FT_Set_Pixel_Sizes(face, requestedSize, 0))
+			if (FT_Set_Pixel_Sizes(face, static_cast<FT_UInt>(requestedSize), 0))
 			{
 				//
 				return false;
@@ -253,8 +252,8 @@ private:
 
 			// Glyph image.
 			unsigned char* glyphBuffer = slot->bitmap.buffer;
-			int glyphWidth = slot->bitmap.width;
-			int glyphHeight = slot->bitmap.rows;
+			std::size_t glyphWidth = slot->bitmap.width;
+			std::size_t glyphHeight = slot->bitmap.rows;
 
 			advance = glyphWidth + GLYPH_PADDING;
 
