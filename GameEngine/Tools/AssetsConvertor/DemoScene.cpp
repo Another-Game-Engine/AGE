@@ -66,9 +66,9 @@ bool 			DemoScene::userStart()
 		convertor->serializeData("galileo");
 		convertor->clear();
 
-		convertor->load("./Assets/crytek-sponza/sponza.obj");
-		convertor->serializeData("sponza");
-		convertor->clear();
+		//convertor->load("./Assets/crytek-sponza/sponza.obj");
+		//convertor->serializeData("sponza");
+		//convertor->clear();
 
 		convertor->load("./Assets/EarthCloud.tga");
 		convertor->load("./Assets/EarthNightTexture.tga");
