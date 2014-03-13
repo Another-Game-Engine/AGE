@@ -44,6 +44,14 @@
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Components\FPController.cpp" />
     <ClCompile Include="Engine\Physic\Utils\BtConversion.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionBoxFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\TextureFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\ObjFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CubeMapFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionShereFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionShapeStaticFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionShapeDynamicFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\MaterialFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
@@ -137,6 +145,7 @@
     <ClInclude Include="Engine\Physic\BulletCollisionManager.hpp" />
     <ClInclude Include="Engine\Physic\BulletDynamicManager.hpp" />
     <ClInclude Include="Engine\Physic\Utils\BtConversion.hpp" />
+    <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

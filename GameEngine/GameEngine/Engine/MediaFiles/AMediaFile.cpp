@@ -8,8 +8,48 @@
 #include <MediaFiles/CollisionBoxFile.hpp>
 #include <MediaFiles/CollisionSphereFile.hpp>
 #include <MediaFiles/AssetsManager.hpp>
-#include <thread>
+
+
+#include <cereal/types/map.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/complex.hpp>
+#include <cereal/types/base_class.hpp>
+#include <cereal/types/memory.hpp>
+
 #include <memory>
+
+AMediaFile::AMediaFile() :
+_childs(0)
+, _type(UNKNOWN)
+{
+}
+
+AMediaFile::~AMediaFile(){}
+
+AMediaFile::AMediaFile(const AMediaFile &o)
+: _childs(0)
+{
+	_type = o._type;
+	name = o.name;
+	name += "_copy";
+	auto tmpPath = o.path.getFolder() + o.path.getShortFileName();
+	tmpPath += "_copy.cpd";
+	path = File(tmpPath);
+	_dpyManager = o._dpyManager;
+}
+
+AMediaFile &AMediaFile::operator=(const AMediaFile &o)
+{
+	if (&o != this)
+	{
+		_type = o._type;
+		name = o.name;
+		name += "_copy";
+		_dpyManager = o._dpyManager;
+	}
+	return *this;
+}
 
 void AMediaFile::serializeAsBulletFile(std::ofstream &s)
 {
@@ -35,5 +75,21 @@ void AMediaFile::serializeAsBulletFile(std::ofstream &s)
 	{
 		std::ofstream ofs(this->path.getFullName().c_str(), std::ios::binary);
 		assert(ofs.is_open() && "Cannot open file for save");
-		serialize<cereal::BinaryOutputArchive>(ofs);
+		serialize(ofs);
+	}
+
+
+	void AMediaFile::serialize(std::ofstream &s)
+	{
+		if (_type >= COLLISION_SHAPE_STATIC && _type <= COLLISION_MULTI_SPHERE)
+		{
+			serializeAsBulletFile(s);
+			return;
+		}
+		else
+		{
+			cereal::PortableBinaryOutputArchive ar(s);
+			ar(_type);
+			_serialize(ar);
+		}
 	}

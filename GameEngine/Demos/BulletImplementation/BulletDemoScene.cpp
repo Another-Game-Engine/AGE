@@ -235,7 +235,7 @@ bool 			BulletDemoScene::userStart()
 	planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTextureBump");
 
 	// EXAMPLE LOAD FROM SAVE
-	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("../../Assets/Serialized/my_planet.cpd"));
+	getInstance<AssetsManager>()->loadFromFile(File("../../Assets/Serialized/my_planet.cpd"));
 
 	// SKYBOX SETTINGS
 
