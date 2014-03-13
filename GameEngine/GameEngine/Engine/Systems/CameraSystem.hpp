@@ -88,7 +88,6 @@ protected:
 			auto cameraPosition = camera->getLookAtTransform();
 			OpenGLTools::Framebuffer &camFbo = e->getComponent<Component::CameraComponent>()->frameBuffer;
 
-			glFinish();
 			if (camFbo.isInit() == true)
 			{
 				camFbo.bind();

@@ -90,6 +90,9 @@ bool BulletDemoScene::userStart()
 	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
 		"./Shaders/MaterialBasic.vp",
 		"./Shaders/MaterialBasic.fp");
+	OpenGLTools::Shader &shadowMap = _engine.getInstance<Renderer>()->addShader("ShadowDepth",
+		"Shaders/ShadowMapping.vp",
+		"Shaders/ShadowMapping.fp");
 
 	// System Tests
 	//
@@ -139,12 +142,20 @@ bool BulletDemoScene::userStart()
 		"shininess"
 	};
 
+	std::string	perLightVars[] =
+	{
+		"lightVP"
+	};
+
 	_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
 		.init(&s, "MaterialBasic", materialBasic);
 	_engine.getInstance<Renderer>()->addUniform("PerFrame")
 		.init(&s, "PerFrame", perFrameVars);
 	_engine.getInstance<Renderer>()->addUniform("PerModel")
 		.init(&s, "PerModel", perModelVars);
+
+	_engine.getInstance<Renderer>()->addUniform("PerLight")
+		.init(&shadowMap, "PerLight", perLightVars);
 
 	// _engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 	_engine.getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
@@ -153,6 +164,9 @@ bool BulletDemoScene::userStart()
 	_engine.getInstance<Renderer>()->addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
 	_engine.getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
 	_engine.getInstance<Renderer>()->addShader("fboToScreenMultisampled", "Shaders/fboToScreen.vp", "Shaders/fboToScreenMultisampled.fp");
+
+	_engine.getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
+	_engine.getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerLight", "PerLight");
 
 	_engine.getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
 	_engine.getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerModel", "PerModel");

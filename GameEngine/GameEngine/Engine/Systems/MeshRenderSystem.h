@@ -118,7 +118,6 @@ public:
 			auto &mesh = e->getComponent<Component::MeshRenderer>();
 			mesh->render(_shadow, _texShadow, _lightVP);
 		}
-		glFinish();
 	}
 
 	void onShadow(Shadow type)

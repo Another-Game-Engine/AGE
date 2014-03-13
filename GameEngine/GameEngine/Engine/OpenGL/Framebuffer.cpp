@@ -26,7 +26,7 @@ namespace OpenGLTools
 			glDeleteFramebuffers(1, &_id);
 		for (auto a : _attachments)
 			glDeleteTextures(1, &a.second);
-
+		_attachments.clear();
 		_sampleNbr = sampleNbr;
 		_multiSample = sampleNbr > 1;
 		_size = size;
