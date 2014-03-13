@@ -45,7 +45,7 @@ namespace Component
 			shader->use();
 		lightMVP->setUniform("lightMVP", depthMVP);
 		lightMVP->flushChanges();
-		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
+		for (std::size_t i = 0; i < mesh->material->materials.size(); ++i)
 		{
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
 		}
@@ -71,7 +71,7 @@ namespace Component
 			perModelUniform->flushChanges();
 			shadowUniform->setUniform("lightBiasMVP", biasMatrix * depthMVP);
 			shadowUniform->flushChanges();
-			for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
+			for (std::size_t i = 0; i < mesh->material->materials.size(); ++i)
 			{
 				mesh->material->materials[i].setUniforms(materialUniform);
 				glActiveTexture(GL_TEXTURE1);
@@ -89,7 +89,7 @@ namespace Component
 				s->use();
 			perModelUniform->setUniform("model", _entity->getGlobalTransform());
 			perModelUniform->flushChanges();
-			for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
+			for (std::size_t i = 0; i < mesh->material->materials.size(); ++i)
 			{
 				mesh->material->materials[i].setUniforms(materialUniform);
 				materialUniform->flushChanges();

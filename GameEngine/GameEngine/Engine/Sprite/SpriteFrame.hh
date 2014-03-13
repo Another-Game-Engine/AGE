@@ -27,9 +27,9 @@ public:
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
 
-		vertices.resize(4);
-		uvs.resize(4);
-		indices.resize(4);
+		vertices.resize(4); //-V112
+		uvs.resize(4); //-V112
+		indices.resize(4); //-V112
 		indices = { 0, 1, 2, 3 };
 
 		vertices[0] = glm::vec4(_dimensions[0], _dimensions[1], 0, 1);

@@ -159,7 +159,7 @@ private:
 		// Initialize with padding.
 		std::size_t penX = 0;
 		std::size_t penY = 0;
-		int row = 0;
+		std::size_t row = 0;
 
 		double powerOf2 = 2;
 		bool textureSizeFound = false;
@@ -224,7 +224,7 @@ private:
 		powerOf2 = 1;
 		for (;;)
 		{
-			if ((penY + rowSize) >= pow(2.0, powerOf2))
+			if ((penY + rowSize) >= (std::size_t)(pow(2.0, powerOf2)))
 			{
 				powerOf2++;
 			}
@@ -252,18 +252,18 @@ private:
 
 			// Glyph image.
 			unsigned char* glyphBuffer = slot->bitmap.buffer;
-			std::size_t glyphWidth = slot->bitmap.width;
-			std::size_t glyphHeight = slot->bitmap.rows;
+			std::size_t glyphWidth(slot->bitmap.width);
+			std::size_t glyphHeight(slot->bitmap.rows);
 
 			advance = glyphWidth + static_cast<std::size_t>(GLYPH_PADDING);
 
 			// If we reach the end of the image wrap aroud to the next row.
-			if ((penX + advance) > (int)font._texW)
+			if ((penX + advance) > font._texW)
 			{
 				penX = 0;
 				row += 1;
 				penY = row * rowSize;
-				if (penY + rowSize > (int)font._texH)
+				if (penY + rowSize > font._texH)
 				{
 					std::cerr << "Image size exceeded" << std::endl;
 					return false;
@@ -271,7 +271,7 @@ private:
 			}
 
 			// penY should include the glyph offsets.
-			penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
+			penY += (actualfontHeight - glyphHeight) + (glyphHeight - std::size_t(slot->bitmap_top));
 
 			// Draw the glyph to the bitmap with a one pixel padding.
 			drawBitmap(font._textureDatas.data(), penX, penY, font._texW, glyphBuffer, glyphWidth, glyphHeight);

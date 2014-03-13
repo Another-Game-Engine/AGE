@@ -157,7 +157,7 @@ public:
 			}
 
 			// LOAD ANIMATION
-			std::map<std::shared_ptr<SpriteFrame>, unsigned int> tmpRef;
+			std::map<std::shared_ptr<SpriteFrame>, std::size_t> tmpRef;
 			for (rapidjson::SizeType i = 0; i < itr->value.Size(); i++)
 			{
 				auto name = itr->value[i].GetString();

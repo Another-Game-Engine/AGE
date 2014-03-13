@@ -78,8 +78,8 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		mesh->geometries[i].name = shapes[i].name;
 		for (std::size_t v = 0; v < shapes[i].mesh.indices.size(); ++v)
 		{
-			std::size_t p = shapes[i].mesh.indices[v] * std::size_t(3);
-			std::size_t p2 = shapes[i].mesh.indices[v] * std::size_t(2);
+			std::size_t p = static_cast<std::size_t>(shapes[i].mesh.indices[v]) * std::size_t(3);
+			std::size_t p2 = static_cast<std::size_t>(shapes[i].mesh.indices[v]) * std::size_t(2);
 			auto &m = shapes[i].mesh;
 			if (m.positions.size() > 0)
 				mesh->geometries[i].vertices.push_back(glm::vec4(m.positions[p],
