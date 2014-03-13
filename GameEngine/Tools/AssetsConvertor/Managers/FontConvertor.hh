@@ -164,8 +164,8 @@ private:
 		double powerOf2 = 2;
 		bool textureSizeFound = false;
 
-		int advance;
-		int i;
+		std::size_t advance;
+		std::size_t i;
 
 		while (textureSizeFound == false)
 		{
@@ -255,7 +255,7 @@ private:
 			std::size_t glyphWidth = slot->bitmap.width;
 			std::size_t glyphHeight = slot->bitmap.rows;
 
-			advance = glyphWidth + GLYPH_PADDING;
+			advance = glyphWidth + static_cast<std::size_t>(GLYPH_PADDING);
 
 			// If we reach the end of the image wrap aroud to the next row.
 			if ((penX + advance) > (int)font._texW)
