@@ -50,6 +50,18 @@ private:
 
 	void								updateLights(OpenGLTools::UniformBuffer *perFrame);
 
+	// Shadow Textures
+	unsigned int						_spotShadowNbr;
+	GLuint								_spotShadowTextures;
+	unsigned int						_pointShadowNbr;
+	GLuint								_pointShadowTextures;
+
+	glm::uvec2							_shadowDimensions;
+
+	// Shadow frame buffer
+
+	GLuint								_shadowsFbo;
+
 	// HDR Utils
 	// ----------------------------------------
 	// HDR parameters
@@ -59,11 +71,7 @@ private:
 	float							_maxLightDiminution;
 
 	// HDR Compute shader
-	OpenGLTools::ComputeShader		_averageColor;
 	OpenGLTools::ComputeShader		_modulateRender;
-
-	// HDR Average color
-	GLuint							_avgColors;
 
 	// HDR factors
 	float							_curFactor;

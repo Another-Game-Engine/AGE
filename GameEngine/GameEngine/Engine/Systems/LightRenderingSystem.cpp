@@ -13,6 +13,9 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						_spotLightFilter(scene),
 						_meshRendererFilter(scene),
 						_cameraFilter(scene),
+						_spotShadowNbr(0),
+						_pointShadowNbr(0),
+						_shadowDimensions(1920, 1080),
 						_idealIllum(0.3f),
 						_adaptationSpeed(0.15f),
 						_maxDarkImprovement(1.0f),
@@ -25,7 +28,8 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 
 LightRenderingSystem::~LightRenderingSystem()
 {
-	glDeleteBuffers(1, &_avgColors);
+	glDeleteTextures(1, &_spotShadowTextures);
+	glDeleteFramebuffers(1, &_shadowsFbo);
 }
 
 void LightRenderingSystem::initialize()
@@ -37,7 +41,6 @@ void LightRenderingSystem::initialize()
 	_meshRendererFilter.requireComponent<Component::MeshRenderer>();
 	_cameraFilter.requireComponent<Component::CameraComponent>();
 
-	_averageColor.init("./ComputeShaders/AverageColorFirstPass.kernel");
 	_modulateRender.init("./ComputeShaders/HighDynamicRange.kernel");
 
 	OpenGLTools::Shader *materialBasic = _scene->getInstance<Renderer>()->getShader("MaterialBasic");
@@ -51,13 +54,12 @@ void LightRenderingSystem::initialize()
 	_scene->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "pointLightBuff", "pointLightBuff");
 	_scene->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "spotLightBuff", "spotLightBuff");
 
-	// Gen average color buffer
-	glGenBuffers(1, &_avgColors);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, 4 * sizeof(float), NULL, GL_DYNAMIC_DRAW);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
-//	glEnable(GL_CULL_FACE);
-//	glCullFace(GL_BACK);
+	// shadows fbo and textures
+	glGenTextures(1, &_spotShadowTextures);
+	glGenFramebuffers(1, &_shadowsFbo);
 }
 
 void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
@@ -65,7 +67,9 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 	// Update the lights buffers
 	auto		pointLightBuff = _scene->getInstance<Renderer>()->getUniform("pointLightBuff");
 	auto		spotLightBuff = _scene->getInstance<Renderer>()->getUniform("spotLightBuff");
+	auto		perLight = _scene->getInstance<Renderer>()->getUniform("PerLight");
 	size_t		i = 0;
+	size_t		shadowNbr = 0;
 
 	_pointLightNbr = _pointLightFilter.getCollection().size();
 	assert(_pointLightNbr <= MAX_LIGHT_NBR && "to many point lights");
@@ -77,7 +81,10 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 		_contiguousPointLights[i].positionPower.z = e->getGlobalTransform()[3].z;
 		++i;
 	}
+
+	// Fill the buffer datas
 	i = 0;
+	shadowNbr = 0;
 	_spotLightNbr = _spotLightFilter.getCollection().size();
 	assert(_spotLightNbr <= MAX_LIGHT_NBR && "to many spot lights");
 	for (auto e : _spotLightFilter.getCollection())
@@ -86,7 +93,63 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 		_contiguousSpotLights[i].positionPower.x = e->getGlobalTransform()[3].x;
 		_contiguousSpotLights[i].positionPower.y = e->getGlobalTransform()[3].y;
 		_contiguousSpotLights[i].positionPower.z = e->getGlobalTransform()[3].z;
+		if (_contiguousSpotLights[i].hasShadow)
+			++shadowNbr;
 		++i;
+	}
+
+	// Make the shadow texture array larger to fit all the lights textures in it
+	if (_spotShadowNbr != shadowNbr)
+	{
+		glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 0); // Only one level of mimap
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT24, _shadowDimensions.x, _shadowDimensions.y, shadowNbr, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+		_spotShadowNbr = shadowNbr;
+	}
+
+	_scene->getInstance<Renderer>()->getShader("ShadowDepth")->use();
+	i = 0;
+	// Update the lights shadowmaps
+	for (auto e : _spotLightFilter.getCollection())
+	{
+		SpotLightData	&spotLightData = e->getComponent<Component::SpotLight>()->lightData;
+
+		if (spotLightData.hasShadow) // if the light has shadows, render the shadowmap
+		{
+			perLight->setUniform("lightVP", spotLightData.lightVP);
+			perLight->flushChanges();
+
+			glBindFramebuffer(GL_FRAMEBUFFER, _shadowsFbo);
+			//glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
+			//glFramebufferTexture3D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_3D, _spotShadowTextures, 0, i);
+			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _spotShadowTextures, 0, i);
+
+			GLenum mode = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+			if (mode != GL_FRAMEBUFFER_COMPLETE)
+				std::cout << "Error frambuffer" << std::endl;
+			if (mode == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+				std::cout << "Error frambuffer incomplete attachment" << std::endl;
+			if (mode == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+				std::cout << "Error framebuffer missing attachement" << std::endl;
+			if (mode == GL_FRAMEBUFFER_UNSUPPORTED)
+				std::cout << "Error framebuffer unsupported" << std::endl;
+
+			glDrawBuffer(GL_NONE);
+			glClearDepth(1.0f);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glDepthFunc(GL_LESS);
+			glDepthMask(GL_TRUE);
+
+			for (auto e : _meshRendererFilter.getCollection())
+			{
+				e->getComponent<Component::MeshRenderer>()->renderRaw();
+			}
+			++i;
+		}
 	}
 
 	perFrame->setUniform("pointLightNbr", _pointLightNbr);
@@ -97,16 +160,6 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 
 	pointLightBuff->flushChanges();
 	spotLightBuff->flushChanges();
-	// Update the lights shadowmaps
-	for (auto e : _spotLightFilter.getCollection())
-	{
-		SpotLightData	&spotLightData = e->getComponent<Component::SpotLight>()->lightData;
-
-		if (spotLightData.hasShadow) // if the light has shadows, render the shadowmap
-		{
-			// Render raw from camera point of view to a framebuffer
-		}
-	}
 }
 
 void	LightRenderingSystem::mainUpdate(double time)
@@ -173,7 +226,6 @@ void	LightRenderingSystem::mainUpdate(double time)
 void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo,
 													  OpenGLTools::UniformBuffer *perFrame)
 {
-	glFinish();
 	auto renderer = _scene->getInstance<Renderer>();
 
 	// ----------------------------------------------------
@@ -199,26 +251,10 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	glDepthFunc(GL_LEQUAL);
 	glColorMask(1, 1, 1, 1);
 
-	// shaders that needs light buffer
-	GLuint		materialBasicId = -1;
-	GLuint		earthId = -1;
-	GLuint		bumpId = -1;
-
-	auto		materialBasic = renderer->getShader("MaterialBasic");
-	auto		earth = renderer->getShader("earth");
-	auto		bump = renderer->getShader("bump");
-
-	if (materialBasic != NULL)
-		materialBasicId = materialBasic->getId();
-	if (earth != NULL)
-		earthId = earth->getId();
-	if (bump != NULL)
-		bumpId = bump->getId();
 	for (auto e : _meshRendererFilter.getCollection())
 	{
 		e->getComponent<Component::MeshRenderer>()->render();
 	}
-	glFinish();
 }
 
 void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
@@ -228,15 +264,10 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	// ----------------------------------------------------
 	// HDR Pass
 	// ----------------------------------------------------
-	// TODO : Try to pack this in one pass
-	// ----------------------------------------------------
 	// Average colors:
 	// ----------------------------------------------------
 	glm::vec4	avgColor(0);
 
-	_averageColor.use();
-
-	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(textureType, colorTexture);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
@@ -244,20 +275,7 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	float	maxDimension = glm::max(static_cast<float>(camFbo.getSize().x), static_cast<float>(camFbo.getSize().y));
 	int		mipMapNbr = static_cast<int>(glm::floor(glm::log2(maxDimension)));
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, mipMapNbr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipMapNbr);
-
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, _avgColors);
-
-	glDispatchCompute(1, 1, 1);
-
-	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1000);
-
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, _avgColors);
-	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, 4 * sizeof(float), glm::value_ptr(avgColor));
+	glGetTexImage(GL_TEXTURE_2D, mipMapNbr, GL_RGBA, GL_FLOAT, &avgColor);
 	// ----------------------------------------------------
 	// Modulate colors:
 	// ----------------------------------------------------
