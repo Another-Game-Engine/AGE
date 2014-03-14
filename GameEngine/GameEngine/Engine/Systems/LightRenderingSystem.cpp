@@ -97,10 +97,9 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 	assert(_spotLightNbr <= MAX_LIGHT_NBR && "to many spot lights");
 	for (auto e : _spotLightFilter.getCollection())
 	{
-		_contiguousSpotLights[i] = e->getComponent<Component::SpotLight>()->lightData;
-		_contiguousSpotLights[i].positionPower.x = e->getGlobalTransform()[3].x;
-		_contiguousSpotLights[i].positionPower.y = e->getGlobalTransform()[3].y;
-		_contiguousSpotLights[i].positionPower.z = e->getGlobalTransform()[3].z;
+		std::shared_ptr<Component::SpotLight>	spot = e->getComponent<Component::SpotLight>();
+		spot->updateLightData();
+		_contiguousSpotLights[i] = spot->lightData;
 		if (_contiguousSpotLights[i].shadowId != -1)
 			++shadowNbr;
 		++i;
@@ -141,8 +140,6 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 			{
 				e->getComponent<Component::MeshRenderer>()->renderRaw();
 			}
-
-			glFinish();
 
 			_contiguousSpotLights[i].shadowId = shadowNbr;
 
@@ -233,7 +230,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	// Z PrePass
 	// ----------------------------------------------------
-	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	glDrawBuffer(GL_NONE);
 	glClearDepth(1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glDepthFunc(GL_LESS);
@@ -248,6 +245,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	// ----------------------------------------------------
 	// Final Lightning pass
 	// ----------------------------------------------------
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glDepthFunc(GL_LEQUAL);
 	glColorMask(1, 1, 1, 1);
 
