@@ -93,8 +93,9 @@ protected:
 				camFbo.bind();
 				glEnable(GL_DEPTH_TEST);
 				glDrawBuffer(GL_COLOR_ATTACHMENT0);
-				glClearColor(1, 0, 0, 0);
+				glClearColor(0, 0, 0, 1);
 				glClear(GL_COLOR_BUFFER_BIT);
+				glFinish();
 			}
 			if (skybox != nullptr)
 			{

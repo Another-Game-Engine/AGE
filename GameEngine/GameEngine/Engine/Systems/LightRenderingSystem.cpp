@@ -148,6 +148,7 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 		++i;
 	}
 
+	// Transfert the uniform buffers to the GPU
 	perFrame->setUniform("pointLightNbr", _pointLightNbr);
 	perFrame->setUniform("spotLightNbr", _spotLightNbr);
 
@@ -185,7 +186,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 
 		if (fbo.isInit() == false)
 		{
-			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 4);
+			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 1);
 			fbo.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
 			fbo.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
 			fbo.attachAll();
@@ -227,14 +228,15 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	// ----------------------------------------------------
 	camFbo.bind();
+	glFinish();
 
 	// Z PrePass
 	// ----------------------------------------------------
 	glDrawBuffer(GL_NONE);
-	glClearDepth(1.0f);
-	glClear(GL_DEPTH_BUFFER_BIT);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_TRUE);
+	glClearDepth(1.0f);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	renderer->getShader("depthOnly")->use();
 
 	for (auto e : _meshRendererFilter.getCollection())
@@ -245,6 +247,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	// ----------------------------------------------------
 	// Final Lightning pass
 	// ----------------------------------------------------
+	glFinish();
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glDepthFunc(GL_LEQUAL);
 	glColorMask(1, 1, 1, 1);
@@ -259,6 +262,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 			glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
 		});
 	}
+	glFinish();
 }
 
 void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
@@ -312,6 +316,8 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 		}
 	}
 
+	glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
 	// Set the uniforms
 	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(camFbo.getSize()));
 	glUniform1f(avgIllumLocation, _curFactor);
@@ -320,6 +326,4 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
-
-	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 }
