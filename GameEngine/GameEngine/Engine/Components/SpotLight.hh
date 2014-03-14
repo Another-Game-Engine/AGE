@@ -38,43 +38,27 @@ namespace Component
 	struct SpotLight : public ComponentBase<SpotLight>
 	{
 		SpotLightData		lightData;
+		glm::mat4			projection;
 
-		SpotLight()
-		{
-		}
+		SpotLight();
 
-		SpotLight(SpotLight const &o)
-		{
-			*this = o;
-		}
+		SpotLight(SpotLight const &o);
 
-		virtual ~SpotLight()
-		{
-		}
+		virtual ~SpotLight();
 
-		virtual void reset() { }
+		void		updateLightData();
 
-		SpotLight &operator=(SpotLight const &o)
-		{
-			lightData = o.lightData;
-			return (*this);
-		}
+		virtual void reset();
 
-		void	init()
-		{
-		}
+		SpotLight &operator=(SpotLight const &o);
+
+		void	init();
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new PointLight();
-			return res;
-		}
+		Base *unserialize(Archive &ar, Entity e);
 
 		template <typename Archive>
-		void serialize(Archive &ar)
-		{
-		}
+		void serialize(Archive &ar);
 
 	};
 
