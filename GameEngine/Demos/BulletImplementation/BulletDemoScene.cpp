@@ -324,11 +324,9 @@ bool BulletDemoScene::userUpdate(double time)
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 
-		auto light = e->addComponent<Component::SpotLight>();
-		light->projection = glm::perspective(80.0f, 1.0f, 0.01f, 50.0f);
-		light->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 50.0f);
-		light->lightData.positionPower.w = 4.0f;
-		light->lightData.shadowId = 1;
+		auto light = e->addComponent<Component::PointLight>();
+		light->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 5.0f);
+		light->lightData.positionPower.w = 3.0f;
 		rigidbody->getBody().setFriction(1.0f);
 		rigidbody->getBody().setRestitution(0.9f);
 		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
@@ -349,7 +347,7 @@ bool BulletDemoScene::userUpdate(double time)
 		auto cam = globalCamera->getComponent<Component::CameraComponent>();
 		l->projection = glm::perspective(40.0f, 1.0f, 0.1f, 100.0f);
 		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
-		l->lightData.positionPower.w = 5.0f;
+		l->lightData.positionPower.w = 10.0f;
 		l->lightData.shadowId = 1;
 		e->setLocalTransform(glm::inverse(cam->getLookAtTransform()));
 		delay = 0.1f;
