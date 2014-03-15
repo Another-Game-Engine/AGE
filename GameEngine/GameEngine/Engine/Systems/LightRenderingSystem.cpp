@@ -383,6 +383,6 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 
 		glDispatchCompute(groupNbr.x, groupNbr.y, 1);
 
-		glBindTexture(GL_TEXTURE_2D, colorTexture);
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 	}
 }
