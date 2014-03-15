@@ -22,18 +22,23 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						_maxLightDiminution(0),
 						_curFactor(1.0f),
 						_targetFactor(1.0f),
-						_useHDR(true)
+						_useHDR(true),
+						_useBloom(true),
+						_bloomTextureSize(0)
 {
 }
 
 LightRenderingSystem::~LightRenderingSystem()
 {
 	glDeleteTextures(1, &_spotShadowTextures);
+	glDeleteTextures(1, &_bloomTexture);
 	glDeleteFramebuffers(1, &_shadowsFbo);
 }
 
 void LightRenderingSystem::initialize()
 {
+	_scene->getInstance<Renderer>()->addShader("fboToScreenMultisampled", "Shaders/fboToScreen.vp", "Shaders/fboToScreenMultisampled.fp");
+	_scene->getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
 	_quad.init(_scene->getEngine());
 
 	_pointLightFilter.requireComponent<Component::PointLight>();
@@ -42,6 +47,7 @@ void LightRenderingSystem::initialize()
 	_cameraFilter.requireComponent<Component::CameraComponent>();
 
 	_modulateRender.init("./ComputeShaders/HighDynamicRange.kernel");
+	_bloom.init("./ComputeShaders/Bloom.kernel");
 
 	OpenGLTools::Shader *materialBasic = _scene->getInstance<Renderer>()->getShader("MaterialBasic");
 
@@ -68,6 +74,14 @@ void LightRenderingSystem::initialize()
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 
 	glGenFramebuffers(1, &_shadowsFbo);
+
+	// Bloom texture
+	glGenTextures(1, &_bloomTexture);
+	glBindTexture(GL_TEXTURE_2D, _bloomTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
@@ -186,7 +200,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 
 		if (fbo.isInit() == false)
 		{
-			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 1);
+			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 4);
 			fbo.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
 			fbo.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
 			fbo.attachAll();
@@ -228,7 +242,6 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	// ----------------------------------------------------
 	camFbo.bind();
-	glFinish();
 
 	// Z PrePass
 	// ----------------------------------------------------
@@ -247,7 +260,6 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	// ----------------------------------------------------
 	// Final Lightning pass
 	// ----------------------------------------------------
-	glFinish();
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glDepthFunc(GL_LEQUAL);
 	glColorMask(1, 1, 1, 1);
@@ -262,13 +274,11 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 			glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
 		});
 	}
-	glFinish();
 }
 
 void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 {
 	GLuint	colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
-	GLenum	textureType = camFbo.isMultisampled() ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	// ----------------------------------------------------
 	// HDR Pass
 	// ----------------------------------------------------
@@ -276,7 +286,7 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	// ----------------------------------------------------
 	glm::vec4	avgColor(0);
 
-	glBindTexture(textureType, colorTexture);
+	glBindTexture(GL_TEXTURE_2D, colorTexture);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -297,7 +307,6 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 
 	_modulateRender.use();
 
-	GLint		colorBufferSizeLocation = glGetUniformLocation(_modulateRender.getId(), "colorBufferSize");
 	GLint		avgIllumLocation = glGetUniformLocation(_modulateRender.getId(), "factor");
 
 	if (_curFactor != _targetFactor)
@@ -318,12 +327,62 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
-	// Set the uniforms
-	glUniform2uiv(colorBufferSizeLocation, 1, glm::value_ptr(camFbo.getSize()));
+	// Set the uniform
 	glUniform1f(avgIllumLocation, _curFactor);
 
 	// Bind color texture to modulate
 	glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
+
+	if (_useBloom)
+	{
+		// ----------------------------------------------------
+		// Bloom Pass:
+		// ----------------------------------------------------
+		// Creating bloom texture
+		// ----------------------------------------------------
+
+		if (_bloomTextureSize != camFbo.getSize())
+		{
+			glBindTexture(GL_TEXTURE_2D, _bloomTexture);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, camFbo.getSize().x, camFbo.getSize().y, 0, GL_RGBA, GL_FLOAT, NULL);
+		}
+
+		// ----------------------------------------------------
+		_bloom.use();
+
+
+		GLint		radiusLocation = glGetUniformLocation(_bloom.getId(), "radius");
+		GLint		passLocation = glGetUniformLocation(_bloom.getId(), "pass");
+		GLint		glareLocation = glGetUniformLocation(_bloom.getId(), "glareFactor");
+
+		glUniform1f(radiusLocation, 7.0f);
+		glUniform1ui(passLocation, 0);
+		glUniform1f(glareLocation, 2.0f);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, colorTexture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glBindImageTexture(1, _bloomTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
+
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
+		glDispatchCompute(groupNbr.x, groupNbr.y, 1);
+
+		glUniform1ui(passLocation, 1);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _bloomTexture);
+		glBindImageTexture(1, colorTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
+
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
+		glDispatchCompute(groupNbr.x, groupNbr.y, 1);
+
+		glBindTexture(GL_TEXTURE_2D, colorTexture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
 }

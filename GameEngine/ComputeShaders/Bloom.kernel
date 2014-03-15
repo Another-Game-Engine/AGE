@@ -2,6 +2,7 @@
 
 uniform float	radius;
 uniform uint	pass;
+uniform float	glareFactor;
 
 layout (binding = 0) uniform sampler2D input;
 layout (binding = 1, rgba16f) uniform image2D finalOutput;
@@ -52,13 +53,13 @@ const float	offsets[] = {
 		position.y < inputSize.y)
 	{
 		vec3	baseColor = texture(input, vec2(position) / vec2(inputSize)).rgb;
-		vec3	finalColor = baseColor + max((baseColor - vec3(1.0f)), vec3(0.0f)) * 0.159576912161f;
+		vec3	finalColor = baseColor + max((baseColor - vec3(glareFactor)), vec3(0.0f)) * 0.159576912161f;
 
 		for (uint i = 0; i < 14; ++i)
 		{
 			float	curOffset = offsets[i] * radius;
 			vec2	samplePosition = vec2(position) + vec2(float(pass) * curOffset, (1.0f - float(pass)) * curOffset);
-			finalColor += max(texture(input, samplePosition / vec2(inputSize)).rgb - vec3(1.0f), vec3(0)) * ratios[i];
+			finalColor += max(texture(input, samplePosition / vec2(inputSize)).rgb - vec3(glareFactor), vec3(0)) * ratios[i];
 		}
 		imageStore(finalOutput, position, vec4(finalColor, 1.0f));
 	}

@@ -27,6 +27,7 @@ public:
 	virtual void mainUpdate(double time);
 	virtual void initialize();
 
+	void		useBloom(bool use) { _useBloom = use; }
 	void		useHDR(bool use) { _useHDR = use; }
 	void		setHDRIdealIllumination(float idealIllum) { _idealIllum = idealIllum; }
 	void		setHDRAdaptationSpeed(float adaptSpeed) { _adaptationSpeed = adaptSpeed; }
@@ -72,6 +73,7 @@ private:
 
 	// HDR Compute shader
 	OpenGLTools::ComputeShader		_modulateRender;
+	OpenGLTools::ComputeShader		_bloom;
 
 	// HDR factors
 	float							_curFactor;
@@ -84,6 +86,11 @@ private:
 	DrawQuad						_quad;
 
 	OpenGLTools::Framebuffer		_downSampling;
+
+	bool							_useBloom;
+
+	glm::uvec2						_bloomTextureSize;
+	GLuint							_bloomTexture;
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
 	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, OpenGLTools::UniformBuffer *perFrame);
