@@ -1,6 +1,5 @@
 ﻿#version 430 core
 
-uniform uvec2	colorBufferSize;
 uniform float	factor;
 
 layout (binding = 0, rgba16f) uniform image2D colorBuffer;
@@ -11,6 +10,7 @@ layout (local_size_x = 16, local_size_y = 16) in;
 void	main()
 {
 	ivec2		position = ivec2(gl_GlobalInvocationID.xy);
+	ivec2		colorBufferSize = imageSize(colorBuffer);
 
 	if (position.x < colorBufferSize.x &&
 		position.y < colorBufferSize.y)
