@@ -28,6 +28,9 @@ public:
 	virtual void initialize();
 
 	void		useBloom(bool use) { _useBloom = use; }
+	void		setBloomSigma(float sigma) { _bloomSigma = sigma; }
+	void		setBloomGlare(float glare) { _bloomGlare = glare; }
+	void		setBloomSpreading(float spread) { _bloomSpreading = glm::max(spread, 1.0f); }
 	void		useHDR(bool use) { _useHDR = use; }
 	void		setHDRIdealIllumination(float idealIllum) { _idealIllum = idealIllum; }
 	void		setHDRAdaptationSpeed(float adaptSpeed) { _adaptationSpeed = adaptSpeed; }
@@ -91,6 +94,9 @@ private:
 
 	glm::uvec2						_bloomTextureSize;
 	GLuint							_bloomTexture;
+	float							_bloomSigma;
+	float							_bloomGlare;
+	float							_bloomSpreading;
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
 	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, OpenGLTools::UniformBuffer *perFrame);

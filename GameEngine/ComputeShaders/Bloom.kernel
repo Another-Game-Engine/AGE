@@ -1,6 +1,8 @@
 ﻿#version 430 core
 
-uniform uint	pass;
+uniform float	sigma;
+uniform float	spreading;
+uniform ivec2	pass;
 uniform float	glareFactor;
 
 layout (binding = 0, rgba16f) uniform image2D input;
@@ -11,54 +13,37 @@ layout (local_size_x = 16, local_size_y = 16) in;
 
 void	main()
 {
-const float	ratios[] = {
-						0.0044299121055113265f,
-						0.00895781211794f,
-						0.0215963866053f,
-						0.0443683338718f,
-						0.0776744219933f,
-						0.115876621105f,
-						0.147308056121f,
-						0.147308056121f,
-						0.115876621105f,
-						0.0776744219933f,
-						0.0443683338718f,
-						0.0215963866053f,
-						0.00895781211794f,
-						0.0044299121055113265f
-						};
-
-const int	offsets[] = {
-						-7,
-						-6,
-						-5,
-						-4,
-						-3,
-						-2,
-						-1,
-						1,
-						2,
-						3,
-						4,
-						5,
-						6,
-						7
-						};
-
 	ivec2		position = ivec2(gl_GlobalInvocationID.xy);
 	ivec2		inputSize = imageSize(input);
 
 	if (position.x < inputSize.x &&
 		position.y < inputSize.y)
 	{
+		float	glareThreshold = glareFactor * float(pass.x);
 		vec3	baseColor = imageLoad(input, position).rgb;
-		vec3	finalColor = baseColor + max((baseColor - vec3(glareFactor)), vec3(0.0f)) * 0.159576912161f;
+		float	g0, g1, g2, coefSum;
 
-		for (uint i = 0; i < 14; ++i)
+		g0 = 1.0 / (sqrt(2.0 * 3.1415926535) * sigma);
+		g1 = exp(-0.5f / (sigma * sigma));
+		g2 = g1 * g1;
+		coefSum = g0;
+		g0 *= g1;
+		g1 *= g2;
+
+		vec3	finalColor = (baseColor - vec3(glareThreshold)) * g0;
+
+		for (uint i = 1; i < uint(3.0f * sigma); i++)
 		{
-			ivec2	pxlPosition = position + ivec2(pass * offsets[i], (1 - pass) * offsets[i]);
-			finalColor += max(imageLoad(input, pxlPosition).rgb - vec3(glareFactor), vec3(0)) * ratios[i];
+			ivec2	pxlPosition1 = position + ivec2(vec2(pass) * vec2(i) * vec2(spreading));
+			ivec2	pxlPosition2 = position - ivec2(vec2(pass) * vec2(i) * vec2(spreading));
+			finalColor += max(imageLoad(input, pxlPosition1).rgb - vec3(glareThreshold), vec3(0)) * g0;
+			finalColor += max(imageLoad(input, pxlPosition2).rgb - vec3(glareThreshold), vec3(0)) * g0;
+
+			coefSum += 2.0f * g0;
+			g0 *= g1;
+			g1 *= g2;
 		}
-		imageStore(finalOutput, position, vec4(finalColor, 1.0f));
+		vec3	pxlColor = imageLoad(finalOutput, position).rgb * vec3(pass.y);
+		imageStore(finalOutput, position, vec4(pxlColor + max(finalColor / coefSum, vec3(0)), 1.0f));
 	}
 }
