@@ -162,8 +162,6 @@ bool BulletDemoScene::userStart()
 	// _engine.getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
 	// _engine.getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
 	_engine.getInstance<Renderer>()->addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
-	_engine.getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
-	_engine.getInstance<Renderer>()->addShader("fboToScreenMultisampled", "Shaders/fboToScreen.vp", "Shaders/fboToScreenMultisampled.fp");
 
 	_engine.getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
 	_engine.getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerLight", "PerLight");
@@ -361,5 +359,9 @@ bool BulletDemoScene::userUpdate(double time)
 		getSystem<LightRenderingSystem>()->useHDR(true);
 	if (_engine.getInstance<Input>()->getInput(SDLK_j))
 		getSystem<LightRenderingSystem>()->useHDR(false);
+	if (_engine.getInstance<Input>()->getInput(SDLK_f))
+		getSystem<LightRenderingSystem>()->useBloom(true);
+	if (_engine.getInstance<Input>()->getInput(SDLK_g))
+		getSystem<LightRenderingSystem>()->useBloom(false);
 	return (true);
 }
