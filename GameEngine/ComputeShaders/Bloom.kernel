@@ -1,0 +1,65 @@
+﻿#version 430 core
+
+uniform float	radius;
+uniform uint	pass;
+
+layout (binding = 0) uniform sampler2D input;
+layout (binding = 1, rgba16f) uniform image2D finalOutput;
+
+// we use 16 * 16 threads groups
+layout (local_size_x = 16, local_size_y = 16) in;
+
+void	main()
+{
+const float	ratios[] = {
+						0.0044299121055113265f,
+						0.00895781211794f,
+						0.0215963866053f,
+						0.0443683338718f,
+						0.0776744219933f,
+						0.115876621105f,
+						0.147308056121f,
+						0.147308056121f,
+						0.115876621105f,
+						0.0776744219933f,
+						0.0443683338718f,
+						0.0215963866053f,
+						0.00895781211794f,
+						0.0044299121055113265f
+						};
+
+const float	offsets[] = {
+						-1.4f,
+						-1.2f,
+						-1.0f,
+						-0.8f,
+						-0.6f,
+						-0.4f,
+						-0.2f,
+						0.2f,
+						0.4f,
+						0.6f,
+						0.8f,
+						1.0f,
+						1.2f,
+						1.4f
+						};
+
+	ivec2		position = ivec2(gl_GlobalInvocationID.xy);
+	ivec2		inputSize = textureSize(input, 0);
+
+	if (position.x < inputSize.x &&
+		position.y < inputSize.y)
+	{
+		vec3	baseColor = texture(input, vec2(position) / vec2(inputSize)).rgb;
+		vec3	finalColor = baseColor + max((baseColor - vec3(1.0f)), vec3(0.0f)) * 0.159576912161f;
+
+		for (uint i = 0; i < 14; ++i)
+		{
+			float	curOffset = offsets[i] * radius;
+			vec2	samplePosition = vec2(position) + vec2(float(pass) * curOffset, (1.0f - float(pass)) * curOffset);
+			finalColor += max(texture(input, samplePosition / vec2(inputSize)).rgb - vec3(1.0f), vec3(0)) * ratios[i];
+		}
+		imageStore(finalOutput, position, vec4(finalColor, 1.0f));
+	}
+}
