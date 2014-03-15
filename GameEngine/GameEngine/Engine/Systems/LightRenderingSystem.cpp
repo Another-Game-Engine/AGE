@@ -352,19 +352,13 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 		// ----------------------------------------------------
 		_bloom.use();
 
-
-		GLint		radiusLocation = glGetUniformLocation(_bloom.getId(), "radius");
 		GLint		passLocation = glGetUniformLocation(_bloom.getId(), "pass");
 		GLint		glareLocation = glGetUniformLocation(_bloom.getId(), "glareFactor");
 
-		glUniform1f(radiusLocation, 7.0f);
 		glUniform1ui(passLocation, 0);
-		glUniform1f(glareLocation, 2.0f);
+		glUniform1f(glareLocation, 1.5f);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, colorTexture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
 		glBindImageTexture(1, _bloomTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
@@ -373,8 +367,7 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 
 		glUniform1ui(passLocation, 1);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _bloomTexture);
+		glBindImageTexture(0, _bloomTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
 		glBindImageTexture(1, colorTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
@@ -382,7 +375,5 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 		glDispatchCompute(groupNbr.x, groupNbr.y, 1);
 
 		glBindTexture(GL_TEXTURE_2D, colorTexture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	}
 }
