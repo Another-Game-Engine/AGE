@@ -365,7 +365,6 @@ bool BulletDemoScene::userUpdate(double time)
 		getSystem<LightRenderingSystem>()->useBloom(false);
 	static float	sigma = 5.0f;
 	static float	glare = 1.0f;
-	static float	spread = 1.0f;
 	if (_engine.getInstance<Input>()->getInput(SDLK_UP))
 	{
 		sigma += 0.5f;
@@ -385,17 +384,6 @@ bool BulletDemoScene::userUpdate(double time)
 	{
 		glare += 0.2f;
 		getSystem<LightRenderingSystem>()->setBloomGlare(glare);
-	}
-	if (_engine.getInstance<Input>()->getInput(SDLK_b))
-	{
-		if (spread > 1.0f)
-			spread -= 0.2f;
-		getSystem<LightRenderingSystem>()->setBloomSpreading(spread);
-	}
-	if (_engine.getInstance<Input>()->getInput(SDLK_n))
-	{
-		spread += 0.2f;
-		getSystem<LightRenderingSystem>()->setBloomSpreading(spread);
 	}
 	return (true);
 }

@@ -27,7 +27,7 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						_bloomTextureSize(0),
 						_bloomSigma(5.0f),
 						_bloomGlare(1.0f),
-						_bloomSpreading(1.0f)
+						_bloomSpreading(2.0f)
 {
 }
 
@@ -365,7 +365,8 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 		glUniform1f(glareLocation, _bloomGlare);
 		glUniform2i(passLocation, 1, 0);
 
-		glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, colorTexture);
 		glBindImageTexture(1, _bloomTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
@@ -374,7 +375,8 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 
 		glUniform2i(passLocation, 0, 1);
 
-		glBindImageTexture(0, _bloomTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _bloomTexture);
 		glBindImageTexture(1, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
