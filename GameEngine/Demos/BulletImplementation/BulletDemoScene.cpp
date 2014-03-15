@@ -345,7 +345,7 @@ bool BulletDemoScene::userUpdate(double time)
 		auto cam = globalCamera->getComponent<Component::CameraComponent>();
 		l->projection = glm::perspective(40.0f, 1.0f, 0.1f, 100.0f);
 		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
-		l->lightData.positionPower.w = 10.0f;
+		l->lightData.positionPower.w = 50.0f;
 		l->lightData.shadowId = 1;
 		e->setLocalTransform(glm::inverse(cam->getLookAtTransform()));
 		delay = 0.1f;
@@ -363,5 +363,39 @@ bool BulletDemoScene::userUpdate(double time)
 		getSystem<LightRenderingSystem>()->useBloom(true);
 	if (_engine.getInstance<Input>()->getInput(SDLK_g))
 		getSystem<LightRenderingSystem>()->useBloom(false);
+	static float	sigma = 5.0f;
+	static float	glare = 1.0f;
+	static float	spread = 1.0f;
+	if (_engine.getInstance<Input>()->getInput(SDLK_UP))
+	{
+		sigma += 0.5f;
+		getSystem<LightRenderingSystem>()->setBloomSigma(sigma);
+	}
+	if (_engine.getInstance<Input>()->getInput(SDLK_DOWN))
+	{
+		sigma -= 0.5f;
+		getSystem<LightRenderingSystem>()->setBloomSigma(sigma);
+	}
+	if (_engine.getInstance<Input>()->getInput(SDLK_LEFT))
+	{
+		glare -= 0.2f;
+		getSystem<LightRenderingSystem>()->setBloomGlare(glare);
+	}
+	if (_engine.getInstance<Input>()->getInput(SDLK_RIGHT))
+	{
+		glare += 0.2f;
+		getSystem<LightRenderingSystem>()->setBloomGlare(glare);
+	}
+	if (_engine.getInstance<Input>()->getInput(SDLK_b))
+	{
+		if (spread > 1.0f)
+			spread -= 0.2f;
+		getSystem<LightRenderingSystem>()->setBloomSpreading(spread);
+	}
+	if (_engine.getInstance<Input>()->getInput(SDLK_n))
+	{
+		spread += 0.2f;
+		getSystem<LightRenderingSystem>()->setBloomSpreading(spread);
+	}
 	return (true);
 }

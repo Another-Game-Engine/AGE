@@ -24,7 +24,10 @@ LightRenderingSystem::LightRenderingSystem(AScene *scene) :
 						_targetFactor(1.0f),
 						_useHDR(true),
 						_useBloom(true),
-						_bloomTextureSize(0)
+						_bloomTextureSize(0),
+						_bloomSigma(5.0f),
+						_bloomGlare(1.0f),
+						_bloomSpreading(1.0f)
 {
 }
 
@@ -352,23 +355,27 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 		// ----------------------------------------------------
 		_bloom.use();
 
+		GLint		sigmaLocation = glGetUniformLocation(_bloom.getId(), "sigma");
+		GLint		spreadingLocation = glGetUniformLocation(_bloom.getId(), "spreading");
 		GLint		passLocation = glGetUniformLocation(_bloom.getId(), "pass");
 		GLint		glareLocation = glGetUniformLocation(_bloom.getId(), "glareFactor");
 
-		glUniform1ui(passLocation, 0);
-		glUniform1f(glareLocation, 1.5f);
+		glUniform1f(sigmaLocation, _bloomSigma);
+		glUniform1f(spreadingLocation, _bloomSpreading);
+		glUniform1f(glareLocation, _bloomGlare);
+		glUniform2i(passLocation, 1, 0);
 
 		glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
-		glBindImageTexture(1, _bloomTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
+		glBindImageTexture(1, _bloomTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 		glDispatchCompute(groupNbr.x, groupNbr.y, 1);
 
-		glUniform1ui(passLocation, 1);
+		glUniform2i(passLocation, 0, 1);
 
 		glBindImageTexture(0, _bloomTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
-		glBindImageTexture(1, colorTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
+		glBindImageTexture(1, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
