@@ -69,6 +69,8 @@
     <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);C:/boost/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc</IncludePath>
     <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\bullet\lib\Debug;$(LibraryPath)</LibraryPath>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
@@ -81,6 +83,8 @@
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath)</SourcePath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);C:/boost/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc</IncludePath>
