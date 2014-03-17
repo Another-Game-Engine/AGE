@@ -24,10 +24,10 @@ public:
 			return false;
 
 		btThreadSupportInterface *m_threadSupportSolver = nullptr;
-		int maxNumOutstandingTasks = 8;
+		int maxNumOutstandingTasks = 4;
 
 	m_threadSupportSolver = createSolverThreadSupport(maxNumOutstandingTasks);
-	_constraintSolver = new btParallelConstraintSolver(m_threadSupportSolver);
+	_constraintSolver = new btSequentialImpulseConstraintSolver();
 	//this solver requires the contacts to be in a contiguous pool, so avoid dynamic allocation
 	_dispatcher->setDispatcherFlags(btCollisionDispatcher::CD_DISABLE_CONTACTPOOL_DYNAMIC_ALLOCATION);
 

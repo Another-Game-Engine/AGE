@@ -376,6 +376,7 @@ bool 			BulletDemoScene::userUpdate(double time)
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 1.0f);
+//		e->removeComponent<Component::MeshRenderer>();
 		auto rigidbody = e->getComponent<Component::RigidBody>();
 		auto &body = rigidbody->getBody();
 		body.applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
