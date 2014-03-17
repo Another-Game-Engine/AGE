@@ -1,13 +1,9 @@
 #ifndef   __BULLET_COLLISION_MANAGER_HPP__
 #define   __BULLET_COLLISION_MANAGER_HPP__
 
-#include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
-#include <Utils/Dependency.hpp>
-#include <Physic/Utils/BtConversion.hpp>
-#include <Entities/Entity.hh>
-#include <Entities/EntityData.hh>
+#define __BT_SKIP_UINT64_H 1
 
+#include <btBulletDynamicsCommon.h>
 #include <BulletMultiThreaded/SpuGatheringCollisionDispatcher.h>
 #include <BulletMultiThreaded/PlatformDefinitions.h>
 
@@ -20,6 +16,13 @@
 
 #include <BulletMultiThreaded/btParallelConstraintSolver.h>
 #include <BulletMultiThreaded/SequentialThreadSupport.h>
+
+#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+
+#include <Utils/Dependency.hpp>
+#include <Physic/Utils/BtConversion.hpp>
+#include <Entities/Entity.hh>
+#include <Entities/EntityData.hh>
 
 static btThreadSupportInterface *createSolverThreadSupport(int maxNumThreads)
 {

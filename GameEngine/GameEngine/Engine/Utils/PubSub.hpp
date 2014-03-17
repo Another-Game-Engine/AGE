@@ -30,7 +30,7 @@ public:
 	{
 	public:
 		template <typename ...Args>
-		void pub(PubSubKey &name, Args ...args) const
+		void pub(const PubSubKey &&name, Args ...args) const
 		{
 			auto set = _collection.find(name);
 			if (set == std::end(_collection) || set->second.empty())
@@ -39,7 +39,7 @@ public:
 			{
 				auto e = *it;
 				++it;
-				e->call(name, args...);
+				e->call(std::move(name), args...);
 			}
 		}
 
@@ -128,13 +128,13 @@ public:
 	}
 	
 	template <typename ...Args>
-	void broadCast(PubSubKey &name, Args ...args) const
+	void broadCast(const PubSubKey &&name, Args ...args) const
 	{
-		_manager->pub(name, args...);
+		_manager->pub(std::move(name), args...);
 	}
 
 	template <typename ...Args>
-	void pub(PubSubKey &name, Args ...args) const
+	void pub(const PubSubKey &&name, Args ...args) const
 	{
 		auto set = _subscribers.find(name);
 		if (set == std::end(_subscribers) || set->second.empty())
@@ -148,7 +148,7 @@ public:
 	}
 
 	template <typename ...Args>
-	void call(PubSubKey &name, Args ...args)
+	void call(const PubSubKey &&name, Args ...args)
 	{
 		auto callback = _callbacks.at(name);
 		auto function = static_cast<std::function<void(Args...)>*>(callback.function);
