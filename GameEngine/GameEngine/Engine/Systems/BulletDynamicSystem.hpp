@@ -27,7 +27,7 @@ private:
 
 	virtual void updateBegin(double time)
 	{
-		_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
+//		_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
 	}
 
 	virtual void updateEnd(double time)
