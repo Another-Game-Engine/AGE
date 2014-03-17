@@ -28,7 +28,8 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		btDispatcher *dispatcher = _manager->getWorld()->getDispatcher();
+		SpuGatheringCollisionDispatcher *dispatcher = static_cast<SpuGatheringCollisionDispatcher*>(_manager->getWorld()->getDispatcher());
+
 		unsigned int max = dispatcher->getNumManifolds();
 		for (unsigned int i = 0; i < max; ++i)
 		{
