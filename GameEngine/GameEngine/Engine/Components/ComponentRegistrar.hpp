@@ -41,5 +41,5 @@ public:
 
 private:
 	std::map<std::size_t, Component::Base*> _collection;
-	std::map<std::size_t, unsigned int> _typeId;
+	std::map<std::size_t, std::size_t> _typeId;
 };
