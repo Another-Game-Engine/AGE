@@ -57,8 +57,8 @@ Entity  BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::str
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 
-	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
-	mesh->setShader("MaterialBasic");
+	//auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+	//mesh->setShader("MaterialBasic");
 	return e;
 }
 
@@ -376,7 +376,6 @@ bool 			BulletDemoScene::userUpdate(double time)
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 1.0f);
-//		e->removeComponent<Component::MeshRenderer>();
 		auto rigidbody = e->getComponent<Component::RigidBody>();
 		auto &body = rigidbody->getBody();
 		body.applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
