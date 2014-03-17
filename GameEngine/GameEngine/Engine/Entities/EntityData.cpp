@@ -233,7 +233,7 @@ void EntityData::reset()
 		std::size_t id = i + MAX_TAG_NUMBER;
 		if (_components[i].get())
 		{
-			broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
+			broadCast(PubSubKey(std::string("componentRemoved" + std::to_string(id))), _handle);
 			_components[i]->reset();
 		}
 		_components[i].reset();
@@ -243,7 +243,7 @@ void EntityData::reset()
 		e->removeParent(false);
 	_childs.clear();
 	auto key = PubSubKey("graphNodeNotARoot");
-	broadCast(key, _handle);
+	broadCast(std::move(key), _handle);
 }
 
 ////////////////
@@ -275,12 +275,12 @@ void 					EntityData::setParent(Entity &parent, bool notify)
 	if (!parent.get()) // if parent is null -> it's a root node
 	{
 		auto key = PubSubKey("graphNodeSetAsRoot");
-		broadCast(key, _handle);
+		broadCast(std::move(key), _handle);
 	}
 	else if (!_parent.get()) // if it was a root node
 	{
 		auto key = PubSubKey("graphNodeNotARoot");
-		broadCast(key, _handle);
+		broadCast(std::move(key), _handle);
 	}
 	computeTransformAndUpdateGraphnode();
 	_parent = parent;
@@ -302,7 +302,7 @@ void                    EntityData::removeParent(bool notify)
 		_parent->removeChild(_handle);
 	}
 	auto key = PubSubKey("graphNodeSetAsRoot");
-	broadCast(key, _handle);
+	broadCast(std::move(key), _handle);
 	_parent = Entity(std::numeric_limits<unsigned int>::max(), nullptr);
 	computeTransformAndUpdateGraphnode();
 }

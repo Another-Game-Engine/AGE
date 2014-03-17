@@ -62,7 +62,7 @@ bool 		Engine::update()
 	context->updateEvents(*inputs.get());
 	sceneManager->update(time);
 
-	getInstance<PubSub::Manager>()->pub(std::string("endOfFrame"));
+	getInstance<PubSub::Manager>()->pub(PubSubKey(std::string("endOfFrame")));
 	context->flush();
 
 	return (sceneManager->userUpdate(time));
