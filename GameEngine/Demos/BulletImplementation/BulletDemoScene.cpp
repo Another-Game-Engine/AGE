@@ -57,8 +57,8 @@ Entity  BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::str
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 
-	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
-	mesh->setShader("MaterialBasic");
+	//auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+	//mesh->setShader("MaterialBasic");
 	return e;
 }
 
