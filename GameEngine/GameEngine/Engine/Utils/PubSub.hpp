@@ -79,7 +79,7 @@ public:
 
 public:
 	template <typename F>
-	void globalSub(const PubSubKey &key, F lambda)
+	void globalSub(const PubSubKey &&key, F lambda)
 	{
 		auto &collection = _manager->getCollection();
 		if (_callbacks.find(key) != std::end(_callbacks))
@@ -93,7 +93,7 @@ public:
 	}
 
 	template <typename F>
-	void sub(const PubSubKey &key, PubSub *emitter, F lambda)
+	void sub(const PubSubKey &&key, PubSub *emitter, F lambda)
 	{
 		auto &collection = emitter->getSubscribers();
 		if (_callbacks.find(key) != std::end(_callbacks))
@@ -107,7 +107,7 @@ public:
 		_emitters.insert(emitter);
 	}
 
-	void unsub(const PubSubKey &key)
+	void unsub(const PubSubKey &&key)
 	{
 		if (_callbacks.find(key) != std::end(_callbacks))
 		{

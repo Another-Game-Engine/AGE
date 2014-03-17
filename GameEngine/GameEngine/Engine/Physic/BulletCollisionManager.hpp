@@ -45,13 +45,13 @@ public:
 	{
 		btDefaultCollisionConstructionInfo cci;
 		cci.m_defaultMaxPersistentManifoldPoolSize = 32768;
-	btCollisionConfiguration *_collisionConfiguration = new btDefaultCollisionConfiguration(cci);
-	int maxNumOutstandingTasks = 4;
+		btCollisionConfiguration *_collisionConfiguration = new btDefaultCollisionConfiguration(cci);
+		int maxNumOutstandingTasks = 4;
 
-	SequentialThreadSupport::SequentialThreadConstructionInfo colCI("collision", processCollisionTask, createCollisionLocalStoreMemory);
-	auto m_threadSupportCollision = new SequentialThreadSupport(colCI);
+		SequentialThreadSupport::SequentialThreadConstructionInfo colCI("collision", processCollisionTask, createCollisionLocalStoreMemory);
+		auto m_threadSupportCollision = new SequentialThreadSupport(colCI);
 
-	_dispatcher = new	SpuGatheringCollisionDispatcher(m_threadSupportCollision, maxNumOutstandingTasks, _collisionConfiguration);
+		_dispatcher = new	SpuGatheringCollisionDispatcher(m_threadSupportCollision, maxNumOutstandingTasks, _collisionConfiguration);
 
 	btVector3 worldAabbMin(-1000,-1000,-1000);
 	btVector3 worldAabbMax(1000,1000,1000);
