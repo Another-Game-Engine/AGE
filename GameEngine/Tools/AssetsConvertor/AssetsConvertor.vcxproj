@@ -67,23 +67,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(ProjectDir)Engine;$(SolutionDir)Vendors/TinyThread;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/freetype-lib\include\freetype2</IncludePath>
-    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Release/x86;$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Vendors/OpenGL/lib/x86;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;$(SolutionDir)Vendors/bullet\lib\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Release/x86;$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Vendors/OpenGL/lib/x86;$(SolutionDir)Vendors/fmod\lib;$(SolutionDir)Vendors/bullet\lib\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(ProjectDir)Engine;$(SolutionDir)Vendors/TinyThread;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/freetype-lib\include\freetype2</IncludePath>
-    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Debug/x64;$(LibraryPath);$(SolutionDir)Vendors/OpenGL/lib/x64;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;$(SolutionDir)Vendors/bullet\lib\x64Debug</LibraryPath>
+    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Debug/x64;$(LibraryPath);$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors/fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Debug</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(ProjectDir)Engine;$(SolutionDir)Vendors/TinyThread;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/freetype-lib\include\freetype2</IncludePath>
-    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Release/x86;$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Vendors/OpenGL/lib/x86;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;$(SolutionDir)Vendors/bullet\lib\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Release/x86;$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Vendors/OpenGL/lib/x86;$(SolutionDir)Vendors/fmod\lib;$(SolutionDir)Vendors/bullet\lib\Release;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(ProjectDir)Engine;$(SolutionDir)Vendors/TinyThread;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/freetype-lib\include\freetype2</IncludePath>
-    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Release/x64;$(LibraryPath);$(SolutionDir)Vendors/OpenGL/lib/x64;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;$(SolutionDir)Vendors/bullet\lib\x64Release</LibraryPath>
+    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Release/x64;$(LibraryPath);$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors/fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Release</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
