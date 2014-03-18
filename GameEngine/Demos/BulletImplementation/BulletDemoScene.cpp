@@ -93,12 +93,14 @@ bool BulletDemoScene::userStart()
 {
 	std::srand(0);
 
+	std::cout << "OPENGL VERSION : " << glGetString(GL_VERSION) << std::endl;
+
 	auto s = getInstance<Renderer>()->addShader("MaterialBasic",
-		"./Shaders/MaterialBasic.vp",
-		"./Shaders/MaterialBasic.fp");
+		"../../Shaders/MaterialBasic.vp",
+		"../../Shaders/MaterialBasic.fp");
 	auto shadowMap = getInstance<Renderer>()->addShader("ShadowDepth",
-		"Shaders/ShadowMapping.vp",
-		"Shaders/ShadowMapping.fp");
+		"../../Shaders/ShadowMapping.vp",
+		"../../Shaders/ShadowMapping.fp");
 
 	// System Tests
 	//
@@ -170,10 +172,10 @@ bool BulletDemoScene::userStart()
 		->init(shadowMap, "PerLight", perLightVars);
 
 	// _engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
-	getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
+	getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
 	// _engine.getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
 	// _engine.getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
-	getInstance<Renderer>()->addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
+	getInstance<Renderer>()->addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
 	getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
 	getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerLight", "PerLight");
 
@@ -190,10 +192,14 @@ bool BulletDemoScene::userStart()
 	// AMediaFile::loadFromList("./Assets/Serialized/export__SketchTest.cpd");
 	// AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
 
-	getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
-	getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	getInstance<AudioManager>()->loadSound(File("./Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	getInstance<AudioManager>()->loadSound(File("./Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<FontManager>()->loadFont(File("../../Assets/Serialized/myFont.cpdFont"));
+
+	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/GreyMan.CPDAnimation"));
+
+	getInstance<AudioManager>()->loadSound(File("../../Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadStream(File("../../Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadSound(File("../../Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadSound(File("../../Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
@@ -215,11 +221,11 @@ bool BulletDemoScene::userStart()
 
 
 //	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
 //	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
 	//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 //	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
 
@@ -321,7 +327,7 @@ bool BulletDemoScene::userStart()
 		"view"
 	};
 
-	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
 
 	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 
