@@ -1,6 +1,7 @@
 #include "Utils/OpenGL.hh"
 
 #include "Shader.hh"
+#include <Utils/File.hpp>
 #include <assert.h>
 
 namespace OpenGLTools
@@ -23,6 +24,16 @@ Shader::~Shader(void)
 
 bool Shader::init(std::string const &vertex, std::string const &fragment, std::string const &geometry)
 {
+	if (!File(vertex).exists() || !File(fragment).exists())
+	{
+		std::cerr << "Error : [" << vertex << "] and/or [" << fragment << "] does not exists." << std::endl;
+		return false;
+	}
+	if (!geometry.empty() && !File(geometry).exists())
+	{
+		std::cerr << "Error : [" << geometry << "] does not exists." << std::endl;
+		return false;
+	}
   if ((_vertexId = addShader(vertex, GL_VERTEX_SHADER)) == 0)
     {
       std::cerr << "Error: vertex shader invalid" << std::endl;

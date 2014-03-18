@@ -40,8 +40,8 @@ LightRenderingSystem::~LightRenderingSystem()
 
 void LightRenderingSystem::initialize()
 {
-	_scene.lock()->getInstance<Renderer>()->addShader("fboToScreenMultisampled", "Shaders/fboToScreen.vp", "Shaders/fboToScreenMultisampled.fp");
-	_scene.lock()->getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
+	_scene.lock()->getInstance<Renderer>()->addShader("fboToScreenMultisampled", "../../Shaders/fboToScreen.vp", "../../Shaders/fboToScreenMultisampled.fp");
+	_scene.lock()->getInstance<Renderer>()->addShader("fboToScreen", "../../Shaders/fboToScreen.vp", "../../Shaders/fboToScreen.fp");
 	_quad.init(_scene);
 
 	_pointLightFilter.requireComponent<Component::PointLight>();
@@ -49,8 +49,8 @@ void LightRenderingSystem::initialize()
 	_meshRendererFilter.requireComponent<Component::MeshRenderer>();
 	_cameraFilter.requireComponent<Component::CameraComponent>();
 
-	_modulateRender.init("./ComputeShaders/HighDynamicRange.kernel");
-	_bloom.init("./ComputeShaders/Bloom.kernel");
+	_modulateRender.init("../../ComputeShaders/HighDynamicRange.kernel");
+	_bloom.init("../../ComputeShaders/Bloom.kernel");
 
 	auto materialBasic = _scene.lock()->getInstance<Renderer>()->getShader("MaterialBasic");
 
