@@ -5,6 +5,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include <memory.h>
 #include <list>
+#include <cstdint>
 
 namespace	OpenGLTools
 {
@@ -24,7 +25,7 @@ UniformBuffer::~UniformBuffer(void)
 		delete[] _buffer;
 }
 
-void	UniformBuffer::init(std::shared_ptr<Shader> referent, std::string const &blockName, size_t bufferSize)
+void	UniformBuffer::init(std::shared_ptr<Shader> referent, std::string const &blockName, std::uint32_t bufferSize)
 {
 	glGenBuffers(1, &_bufferId);
 	glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, _bufferId);
