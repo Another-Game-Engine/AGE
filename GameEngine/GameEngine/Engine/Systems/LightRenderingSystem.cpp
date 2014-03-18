@@ -151,7 +151,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 
 			glBindFramebuffer(GL_FRAMEBUFFER, _shadowsFbo);
 			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _spotShadowTextures, 0, shadowNbr);
-
+			
 			glDrawBuffer(GL_NONE);
 			glClear(GL_DEPTH_BUFFER_BIT);
 			
