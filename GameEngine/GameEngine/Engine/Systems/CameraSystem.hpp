@@ -134,6 +134,7 @@ protected:
 				skybox->draw();
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 				glDepthMask(GL_TRUE);
+				glFinish();
 			}
 		}
 		_totalTime += time;

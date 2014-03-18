@@ -33,12 +33,13 @@ void	UniformBuffer::init(std::shared_ptr<Shader> referent, std::string const &bl
 	GLint	blockIdx = glGetUniformBlockIndex(referent->getId(), blockName.c_str());
 	// find the total size to check if the size passed as a parameter is correct
 	glGetActiveUniformBlockiv(referent->getId(), blockIdx, GL_UNIFORM_BLOCK_DATA_SIZE, (GLint*)&_dataSize);
-	_buffer = new char[glm::max(_dataSize, bufferSize)];
+	_dataSize = glm::max(_dataSize, bufferSize);
+	_buffer = new char[_dataSize];
 }
 
 void	UniformBuffer::setBufferData(size_t size, const char *data)
 {
-	assert(size <= _dataSize && "Size to big for this uniform buffer");
+	assert(size > _dataSize && "Size to big for this uniform buffer");
 	memcpy(_buffer, data, size);
 }
 
