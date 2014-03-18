@@ -15,7 +15,7 @@ LightRenderingSystem::LightRenderingSystem(std::weak_ptr<AScene> scene) :
 						_cameraFilter(scene),
 						_spotShadowNbr(0),
 						_pointShadowNbr(0),
-						_shadowDimensions(1500, 1500),
+						_shadowDimensions(2048, 2048),
 						_idealIllum(0.3f),
 						_adaptationSpeed(0.15f),
 						_maxDarkImprovement(1.0f),
@@ -25,7 +25,7 @@ LightRenderingSystem::LightRenderingSystem(std::weak_ptr<AScene> scene) :
 						_useHDR(true),
 						_useBloom(true),
 						_bloomTextureSize(0),
-						_bloomSigma(5.0f),
+						_bloomSigma(3.0f),
 						_bloomGlare(1.0f),
 						_bloomSpreading(2.0f)
 {
@@ -253,8 +253,6 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	glDrawBuffer(GL_NONE);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_TRUE);
-	glClearDepth(1.0f);
-	glClear(GL_DEPTH_BUFFER_BIT);
 	renderer->getShader("depthOnly")->use();
 
 	for (auto e : _meshRendererFilter.getCollection())
@@ -352,6 +350,7 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 		{
 			glBindTexture(GL_TEXTURE_2D, _bloomTexture);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, camFbo.getSize().x, camFbo.getSize().y, 0, GL_RGBA, GL_FLOAT, NULL);
+			_bloomTextureSize = camFbo.getSize();
 		}
 
 		// ----------------------------------------------------

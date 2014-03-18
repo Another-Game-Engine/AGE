@@ -14,9 +14,9 @@ layout (shared) uniform MaterialBasic
 
 layout (shared) uniform PerFrame
 {
-	mat4 projection;
-	mat4 view;
-	float time;
+	mat4		projection;
+	mat4		view;
+	float		time;
 	uint		pointLightNbr;
 	uint		spotLightNbr;
 };
@@ -179,7 +179,7 @@ vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 
 void main(void)
 {
-	vec3	ambientColor = 0.5f * texture2D(fTexture0, fTexCoord).rgb * ambient;
+	vec3	ambientColor = 0.05f * texture2D(fTexture0, fTexCoord).rgb * ambient;
 	vec3	diffuseColor = texture2D(fTexture0, fTexCoord).rgb * diffuse;
 	vec3	specularColor = texture2D(fTexture0, fTexCoord).rgb * specular;
 
