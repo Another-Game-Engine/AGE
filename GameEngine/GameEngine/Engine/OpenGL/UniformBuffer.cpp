@@ -39,7 +39,7 @@ void	UniformBuffer::init(std::shared_ptr<Shader> referent, std::string const &bl
 
 void	UniformBuffer::setBufferData(size_t size, const char *data)
 {
-	assert(size > _dataSize && "Size to big for this uniform buffer");
+	assert(size <= _dataSize && "Size to big for this uniform buffer");
 	memcpy(_buffer, data, size);
 }
 
