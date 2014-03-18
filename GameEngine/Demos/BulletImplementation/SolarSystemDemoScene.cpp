@@ -11,7 +11,6 @@
 #include <Components/AudioEmitter.hpp>
 #include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
-#include <Systems/MeshRenderSystem.h>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
 #include <Systems/AudioSystem.hpp>

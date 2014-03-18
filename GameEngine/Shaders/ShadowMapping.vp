@@ -1,11 +1,11 @@
-#version 330
+#version 430 core
 
-layout (std140) uniform PerModel
+layout (shared) uniform PerModel
 {
 	mat4 model;
 };
 
-layout (std140) uniform PerLight
+layout (shared) uniform PerLight
 {
 	mat4 lightVP;
 };

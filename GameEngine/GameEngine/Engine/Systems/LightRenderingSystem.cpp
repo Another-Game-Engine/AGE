@@ -125,7 +125,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 	// Make the shadow texture array larger to fit all the lights textures in it
 	if (_spotShadowNbr != shadowNbr)
 	{
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE_ARRAY, _spotShadowTextures);
+		glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
 		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT24, _shadowDimensions.x, _shadowDimensions.y, shadowNbr, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 		_spotShadowNbr = shadowNbr;
 	}
@@ -135,6 +135,11 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 	shadowNbr = 0;
 	glViewport(0, 0, _shadowDimensions.x, _shadowDimensions.y);
 	// Update the lights shadowmaps
+
+	glDepthFunc(GL_LESS);
+	glDepthMask(GL_TRUE);
+	glClearDepth(1.0f);
+
 	for (auto e : _spotLightFilter.getCollection())
 	{
 		SpotLightData	&spotLightData = e->getComponent<Component::SpotLight>()->lightData;
@@ -148,10 +153,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _spotShadowTextures, 0, shadowNbr);
 
 			glDrawBuffer(GL_NONE);
-			glClearDepth(1.0f);
 			glClear(GL_DEPTH_BUFFER_BIT);
-			glDepthFunc(GL_LESS);
-			glDepthMask(GL_TRUE);
 			
 			for (auto e : _meshRendererFilter.getCollection())
 			{

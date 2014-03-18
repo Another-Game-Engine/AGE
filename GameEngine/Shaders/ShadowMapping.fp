@@ -10,7 +10,7 @@ layout (std140) uniform PerLight
 	mat4 lightVP;
 };
 
-layout (location = 0) out float FragColor;
+layout (location = 0) out vec4 FragColor;
 
 void main()
 {

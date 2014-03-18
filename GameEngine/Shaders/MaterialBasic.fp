@@ -2,7 +2,7 @@
 
 #define		MAX_LIGHT_NBR	255
 
-layout (std140) uniform MaterialBasic
+layout (shared) uniform MaterialBasic
 {
 	vec3 ambient;
 	vec3 diffuse;
@@ -12,7 +12,7 @@ layout (std140) uniform MaterialBasic
 	float shininess;
 };
 
-layout (std140) uniform PerFrame
+layout (shared) uniform PerFrame
 {
 	mat4 projection;
 	mat4 view;
@@ -21,7 +21,7 @@ layout (std140) uniform PerFrame
 	uint		spotLightNbr;
 };
 
-layout (std140) uniform PerModel
+layout (shared) uniform PerModel
 {
 	mat4 model;
 };

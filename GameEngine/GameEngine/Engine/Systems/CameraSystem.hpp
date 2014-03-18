@@ -8,7 +8,6 @@
 #include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
-#include <Systems/MeshRenderSystem.h>
 #include <Utils/ScreenPosToWorldRay.hpp>
 #include <Context/IRenderContext.hh>
 #include <Utils/MatrixConversion.hpp>

@@ -2,13 +2,14 @@
 
 #include <Components\Component.hh>
 #include <glm\glm.hpp>
+#include <cstdint>
 
 struct PointLightData
 {
 	glm::vec4		positionPower;
 	glm::vec4		colorRange;
-	unsigned int	hasShadow;
-	unsigned int	padding[3];
+	std::uint32_t	hasShadow;
+	std::uint32_t	padding[3];
 
 	PointLightData() { }
 
