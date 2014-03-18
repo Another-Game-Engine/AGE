@@ -10,10 +10,12 @@
 class RotationForceSystem : public System
 {
 public:
-	RotationForceSystem(AScene *scene)
+	RotationForceSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
-	{}
+	{
+		_name = "rotation_force_system";
+	}
 	virtual ~RotationForceSystem(){}
 private:
 	EntityFilter _filter;
@@ -26,7 +28,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		float t = time;
+		float t = static_cast<float>(time);
 		for (auto e : _filter.getCollection())
 		{
 			glm::vec3 force = e->getComponent<Component::RotationForce>()->getForce();

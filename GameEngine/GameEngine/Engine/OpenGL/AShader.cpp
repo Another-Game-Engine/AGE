@@ -11,14 +11,14 @@ AShader::~AShader()
 	glDeleteProgram(_progId);
 }
 
-bool	AShader::bindUniformBlock(std::string const &blockName, UniformBuffer const &buffer)
+bool	AShader::bindUniformBlock(std::string const &blockName, std::shared_ptr<UniformBuffer> const &buffer)
 {
 	GLuint	blockId;
 
 	assert(_progId != 0 && "Must initialize the shader...");
 	blockId = glGetUniformBlockIndex(_progId, blockName.c_str());
 	assert(blockId != GL_INVALID_INDEX && "Cannot find the block in this shader");
-	glUniformBlockBinding(_progId, blockId, buffer.getBindingPoint());
+	glUniformBlockBinding(_progId, blockId, buffer->getBindingPoint());
 	return (true);
 }
 

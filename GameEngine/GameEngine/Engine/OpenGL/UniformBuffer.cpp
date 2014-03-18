@@ -24,7 +24,7 @@ UniformBuffer::~UniformBuffer(void)
 		delete[] _buffer;
 }
 
-void	UniformBuffer::init(Shader *referent, std::string const &blockName, size_t bufferSize)
+void	UniformBuffer::init(std::shared_ptr<Shader> referent, std::string const &blockName, size_t bufferSize)
 {
 	glGenBuffers(1, &_bufferId);
 	glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, _bufferId);
@@ -42,7 +42,7 @@ void	UniformBuffer::setBufferData(size_t size, const char *data)
 	memcpy(_buffer, data, size);
 }
 
-void	UniformBuffer::init(Shader *referent, std::string const &blockName, std::string const vars[])
+void	UniformBuffer::init(std::shared_ptr<Shader> referent, std::string const &blockName, std::string const vars[])
 {
 	GLint		blockIdx, varNbr;
 	GLint		*varsInfos;

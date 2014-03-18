@@ -40,8 +40,25 @@
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Engine\Utils\DrawQuad.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
+=======
+    <ClCompile Include="Engine\Context\SdlContext.cpp" />
+    <ClCompile Include="Engine\Text\FontManager.cpp" />
+    <ClCompile Include="Engine\Text\Font.cpp" />
+    <ClCompile Include="Engine\Text\FontGlyph.cpp" />
+    <ClCompile Include="Engine\Components\FPController.cpp" />
+    <ClCompile Include="Engine\Physic\Utils\BtConversion.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionBoxFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\TextureFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\ObjFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CubeMapFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionShereFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionShapeStaticFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\CollisionShapeDynamicFile.cpp" />
+    <ClCompile Include="Engine\MediaFiles\MaterialFile.cpp" />
+>>>>>>> 0634a3594e8f80f08e98d33e297ebe6a15d5f330
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
@@ -114,9 +131,35 @@
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hpp" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Components\SpotLight.hh" />
+=======
+    <ClInclude Include="Engine\Text\FontManager.hh" />
+    <ClInclude Include="Engine\Text\FontGlyph.hh" />
+    <ClInclude Include="Engine\Text\Font.hh" />
+    <ClInclude Include="Engine\Sprite\SpriteManager.hh" />
+    <ClInclude Include="Engine\Sprite\Sprite.hh" />
+    <ClInclude Include="Engine\Sprite\SpriteAnimation.hh" />
+    <ClInclude Include="Engine\Sprite\SpriteFrame.hh" />
+    <ClInclude Include="Engine\Components\SpriteComponent.hh" />
+    <ClInclude Include="Engine\Systems\SpriteSystem.hh" />
+    <ClInclude Include="Engine\Components\FPController.hpp" />
+    <ClInclude Include="Engine\Components\RigidBody.hpp" />
+    <ClInclude Include="Engine\Components\Collision.hpp" />
+    <ClInclude Include="Engine\Components\CollisionBody.hpp" />
+    <ClInclude Include="Engine\Components\CollisionLayers.hpp" />
+    <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
+    <ClInclude Include="Engine\Systems\BulletCollisionSystem.hpp" />
+    <ClInclude Include="Engine\Systems\BulletDynamicSystem.hpp" />
+    <ClInclude Include="Engine\Systems\CollisionAdderSystem.hpp" />
+    <ClInclude Include="Engine\Systems\CollisionCleanerSystem.hpp" />
+    <ClInclude Include="Engine\Physic\BulletCollisionManager.hpp" />
+    <ClInclude Include="Engine\Physic\BulletDynamicManager.hpp" />
+    <ClInclude Include="Engine\Physic\Utils\BtConversion.hpp" />
+    <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
+>>>>>>> 0634a3594e8f80f08e98d33e297ebe6a15d5f330
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

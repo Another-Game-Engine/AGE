@@ -12,10 +12,12 @@
 class FirstPersonViewSystem : public System
 {
 public:
-	FirstPersonViewSystem(AScene *scene)
+	FirstPersonViewSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
-	{}
+	{
+		_name = "first_person_view_system";
+	}
 
 	virtual ~FirstPersonViewSystem(){}
 protected:

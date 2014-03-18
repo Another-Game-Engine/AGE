@@ -12,16 +12,19 @@
 #include <Utils/ScreenPosToWorldRay.hpp>
 #include <Context/IRenderContext.hh>
 #include <Utils/MatrixConversion.hpp>
+#include <Text/FontManager.hh>
 
 class CameraSystem : public System
 {
 public:
-	CameraSystem(AScene *scene)
+	CameraSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
 		, _renderDebugMethod(false)
 		, _totalTime(0)
-	{}
+	{
+		_name = "camera_system";
+	}
 
 	virtual ~CameraSystem(){}
 
@@ -39,8 +42,9 @@ public:
 	{
 		if (_filter.getCollection().size() == 0)
 			return;
-		auto mousePos = _scene->getEngine().getInstance<Input>()->getMousePosition();
-		auto screenSize = _scene->getEngine().getInstance<IRenderContext>()->getScreenSize();
+		auto scene = _scene.lock();
+		auto mousePos = scene->getInstance<Input>()->getMousePosition();
+		auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
 		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
 		screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
 	}
@@ -49,10 +53,19 @@ public:
 	{
 		if (_filter.getCollection().size() == 0)
 			return;
-		auto screenSize = _scene->getEngine().getInstance<IRenderContext>()->getScreenSize();
+		auto scene = _scene.lock();
+		auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
 		auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
 		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
-		screenPosToWorldRay(centerPos.x, centerPos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform , cameraCpt->projection, from, to);
+		screenPosToWorldRay(
+			static_cast<int>(centerPos.x),
+			static_cast<int>(centerPos.y),
+			static_cast<int>(screenSize.x),
+			static_cast<int>(screenSize.y),
+			cameraCpt->lookAtTransform,
+			cameraCpt->projection,
+			from,
+			to);
 	}
 
 	// Returns the number of seconds since the component creation
@@ -72,13 +85,15 @@ protected:
 	}
 
 	virtual void updateEnd(double time)
-	{}
+	{
+	}
 
 	virtual void mainUpdate(double time)
 	{
 		unsigned int textureOffset = 0;
-		auto &renderer = _scene->getEngine().getInstance<Renderer>();
-		OpenGLTools::UniformBuffer *perFrameBuffer = _scene->getEngine().getInstance<Renderer>()->getUniform("PerFrame");
+		auto scene = _scene.lock();
+		auto &renderer = scene->getInstance<Renderer>();
+		std::shared_ptr<OpenGLTools::UniformBuffer> perFrameBuffer = scene->getInstance<Renderer>()->getUniform("PerFrame");
 
 		for (auto e : _filter.getCollection())
 		{
@@ -98,10 +113,10 @@ protected:
 			}
 			if (skybox != nullptr)
 			{
-				OpenGLTools::Shader *s = _scene->getEngine().getInstance<Renderer>()->getShader(camera->getSkyboxShader());
-				assert(s != NULL && "Skybox does not have a shader associated");
+				std::shared_ptr<OpenGLTools::Shader> s = scene->getInstance<Renderer>()->getShader(camera->getSkyboxShader());
+				assert(s != nullptr && "Skybox does not have a shader associated");
 
-				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
+				scene->getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
 
 				glm::mat4 t = cameraPosition;
 				t[3][0] = 0;
@@ -109,8 +124,8 @@ protected:
 				t[3][2] = 0;
 				t[3][3] = 1;
 
-				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("view", t);
-				_scene->getEngine().getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
+				scene->getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("view", t);
+				scene->getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
 
 				s->use();
 

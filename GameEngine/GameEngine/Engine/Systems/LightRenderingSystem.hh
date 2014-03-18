@@ -19,7 +19,7 @@
 class LightRenderingSystem : public System
 {
 public:
-	LightRenderingSystem(AScene *scene);
+	LightRenderingSystem(std::weak_ptr<AScene> scene);
 	virtual ~LightRenderingSystem();
 
 	virtual void updateBegin(double time) { }
@@ -52,7 +52,7 @@ private:
 	SpotLightData						_contiguousSpotLights[MAX_LIGHT_NBR];
 	unsigned int						_spotLightNbr;
 
-	void								updateLights(OpenGLTools::UniformBuffer *perFrame);
+	void								updateLights(std::shared_ptr<OpenGLTools::UniformBuffer> perFrame);
 
 	// Shadow Textures
 	unsigned int						_spotShadowNbr;
@@ -99,6 +99,6 @@ private:
 	float							_bloomSpreading;
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
-	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, OpenGLTools::UniformBuffer *perFrame);
+	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, std::shared_ptr<OpenGLTools::UniformBuffer> perFrame);
 };
 

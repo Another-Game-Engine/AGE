@@ -6,12 +6,12 @@
 #include    <Entities/EntityData.hh>
 #include    <Core/AScene.hh>
 
-bool defaultEntityComparaison(Entity e1, Entity e2);
+bool defaultEntityComparaison(const Entity &e1, const Entity &e2);
 
 class EntityFilter : public PubSub
 {
 public:
-	EntityFilter(AScene *scene, bool(*comparaisonFn)(Entity, Entity) = defaultEntityComparaison);
+	EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(const Entity&, const Entity&) = defaultEntityComparaison);
 	virtual ~EntityFilter();
 
 	template <typename T>
@@ -39,17 +39,17 @@ public:
 		unsub(std::string("componentRemoved" + strId));
 	}
 
-	void requireTag(unsigned int tag);
-	void unRequireTag(unsigned int tag);
+	void requireTag(std::size_t tag);
+	void unRequireTag(std::size_t tag);
 
 	const Barcode &getCode() const;
-	std::set<Entity, bool(*)(Entity, Entity)> const &getCollection();
+	std::set<Entity, bool(*)(const Entity&, const Entity&)> const &getCollection();
 
 protected:
-	std::set<Entity, bool(*)(Entity, Entity)> _collection;
+	std::set<Entity, bool(*)(const Entity&, const Entity&)> _collection;
 	Barcode _code;
-	AScene *_scene;
+	std::weak_ptr<AScene> _scene;
 
-	void _componentAdded(Entity &e, unsigned int typeId);
-	void _componentRemoved(Entity &e, unsigned int typeId);
+	void _componentAdded(Entity &e, std::size_t typeId);
+	void _componentRemoved(Entity &e, std::size_t typeId);
 };

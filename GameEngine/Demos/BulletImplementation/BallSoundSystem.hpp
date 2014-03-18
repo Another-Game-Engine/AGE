@@ -14,11 +14,12 @@
 class BallSoundSystem : public System
 {
 public:
-	BallSoundSystem(AScene *scene)
+	BallSoundSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _balls(scene)
 		, _heros(scene)
 	{
+		_name = "ball_sound_system";
 	}
 	virtual ~BallSoundSystem(){}
 protected:

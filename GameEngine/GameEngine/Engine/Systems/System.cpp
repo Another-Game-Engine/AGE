@@ -1,8 +1,8 @@
 #include <Systems/System.h>
 #include <Core/AScene.hh>
 
-System::System(AScene *scene)
-: PubSub(scene->getInstance<PubSub::Manager>())
+System::System(std::weak_ptr<AScene> scene)
+: PubSub(scene.lock()->getInstance<PubSub::Manager>())
 , _scene(scene)
 {}
 

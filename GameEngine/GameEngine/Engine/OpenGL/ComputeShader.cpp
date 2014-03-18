@@ -16,6 +16,8 @@ bool ComputeShader::_build()
 
 bool ComputeShader::init(const File &file)
 {
+	if (!file.exists())
+		return false;
 	if ((_csId = addShader(file.getFullName(), GL_COMPUTE_SHADER)) == 0)
 	{
 		std::cerr << "Error: compute shader invalid" << std::endl;
@@ -26,4 +28,5 @@ bool ComputeShader::init(const File &file)
 	linkProgram();
 	glDetachShader(_progId, _csId);
 	glDeleteShader(_csId);
+	return true;
 }
