@@ -8,6 +8,6 @@ class File;
 
 GLbyte *loadTGA(const char *szFileName,
 			   GLint *iWidth, GLint *iHeight,
-			   GLint *iComponents, GLenum *eFormat, unsigned int *size);
+			   GLint *iComponents, GLenum *eFormat, std::size_t *size);
 
 #endif

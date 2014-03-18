@@ -64,7 +64,7 @@ public:
 		std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
 
 		std::string image = document["image"].GetString();
-		auto texture = _dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(file.getFolder() + "/" + image);
+		auto texture = _dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile(file.getFolder() + "/" + image);
 
 		if (!texture.get())
 		{
@@ -157,7 +157,7 @@ public:
 			}
 
 			// LOAD ANIMATION
-			std::map<std::shared_ptr<SpriteFrame>, unsigned int> tmpRef;
+			std::map<std::shared_ptr<SpriteFrame>, std::size_t> tmpRef;
 			for (rapidjson::SizeType i = 0; i < itr->value.Size(); i++)
 			{
 				auto name = itr->value[i].GetString();

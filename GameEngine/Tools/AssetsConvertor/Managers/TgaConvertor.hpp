@@ -36,7 +36,7 @@ public:
 			return std::shared_ptr<AMediaFile>(nullptr);
 		std::string inputfile = file.getFullName();
 		std::shared_ptr<TextureFile> res{ new TextureFile };
-		unsigned int size;
+		std::size_t size;
 		auto data = loadTGA(inputfile.c_str(), &res->width, &res->height, &res->components, &res->format, &size);
 		assert(data != nullptr && "Error while loading TGA file.");
 		res->datas.assign(data, data + size);

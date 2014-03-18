@@ -26,7 +26,7 @@ class AScene : public DependenciesInjector, public ComponentRegistrar, public En
 private:
 	std::multimap<std::size_t, std::shared_ptr<System> >   _systems;
 	std::vector<EntityData>                             _pool;
-	std::queue<unsigned int>                            _free;
+	std::queue<std::size_t>                             _free;
 	std::size_t                                         _entityNumber;
 public:
 	AScene(std::weak_ptr<Engine> engine);

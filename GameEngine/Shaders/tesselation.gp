@@ -1,4 +1,4 @@
-#version 430
+#version 330
 #extension GL_ARB_geometry_shader4 : enable
 
 layout(triangles) in;

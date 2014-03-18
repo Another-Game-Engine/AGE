@@ -149,8 +149,8 @@ bool 			BulletDemoScene::userStart()
 	};
 
 	auto s = getInstance<Renderer>()->addShader("MaterialBasic",
-		"./Shaders/MaterialBasic.vp",
-		"./Shaders/MaterialBasic.fp");
+		"../../Shaders/MaterialBasic.vp",
+		"../../Shaders/MaterialBasic.fp");
 
 	getInstance<Renderer>()->addUniform("MaterialBasic")
 		->init(s, "MaterialBasic", materialBasic);
@@ -160,20 +160,20 @@ bool 			BulletDemoScene::userStart()
 		->init(s, "PerModel", perModelVars);
 
 	getInstance<Renderer>()->addShader("2DText",
-		"./Shaders/2DText.vp",
-		"./Shaders/2DText.fp");
+		"../../Shaders/2DText.vp",
+		"../../Shaders/2DText.fp");
 
 	getInstance<Renderer>()->addShader("SpriteBasic",
-		"./Shaders/SpriteBasic.vp",
-		"./Shaders/SpriteBasic.fp");
+		"../../Shaders/SpriteBasic.vp",
+		"../../Shaders/SpriteBasic.fp");
 
-	getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
-	getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
-	getInstance<Renderer>()->addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
-	getInstance<Renderer>()->addShader("earth", "Shaders/earth.vp", "Shaders/earth.fp");
-	getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
-	getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
-	getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
+	getInstance<Renderer>()->addShader("basic", "../../Shaders/basic.vp", "../../Shaders/basic.fp", "../../Shaders/basic.gp");
+	getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
+	getInstance<Renderer>()->addShader("bump", "../../Shaders/bump.vp", "../../Shaders/bump.fp");
+	getInstance<Renderer>()->addShader("earth", "../../Shaders/earth.vp", "../../Shaders/earth.fp");
+	getInstance<Renderer>()->addShader("fboToScreen", "../../Shaders/fboToScreen.vp", "../../Shaders/fboToScreen.fp");
+	getInstance<Renderer>()->addShader("brightnessFilter", "../../Shaders/brightnessFilter.vp", "../../Shaders/brightnessFilter.fp");
+	getInstance<Renderer>()->addShader("blurY", "../../Shaders/brightnessFilter.vp", "../../Shaders/blur1.fp");
 
 	getInstance<Renderer>()->getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 	getInstance<Renderer>()->getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
@@ -207,22 +207,22 @@ bool 			BulletDemoScene::userStart()
 	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
 
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
-	//getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__sponza.cpd"));
-	//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
+	//getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
+	//	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__SketchTest.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Museum.cpd"));
 
-	getInstance<FontManager>()->loadFont(File("./Assets/Serialized/myFont.cpdFont"));
+	getInstance<FontManager>()->loadFont(File("../../Assets/Serialized/myFont.cpdFont"));
 
-	getInstance<SpriteManager>()->loadFile(File("./Assets/Serialized/GreyMan.CPDAnimation"));
+	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/GreyMan.CPDAnimation"));
 
-	getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
-	getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	getInstance<AudioManager>()->loadSound(File("./Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	getInstance<AudioManager>()->loadSound(File("./Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadSound(File("../../Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadStream(File("../../Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadSound(File("../../Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadSound(File("../../Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	auto defaultBallMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
@@ -235,7 +235,7 @@ bool 			BulletDemoScene::userStart()
 	planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTextureBump");
 
 	// EXAMPLE LOAD FROM SAVE
-	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
+	getInstance<AssetsManager>()->loadFromFile(File("../../Assets/Serialized/my_planet.cpd"));
 
 	// SKYBOX SETTINGS
 
@@ -245,7 +245,7 @@ bool 			BulletDemoScene::userStart()
 		"view"
 	};
 
-	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
 
 	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 

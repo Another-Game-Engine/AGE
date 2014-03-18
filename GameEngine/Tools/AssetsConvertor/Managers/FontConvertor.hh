@@ -7,18 +7,17 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-static void drawBitmap(unsigned char* dstBitmap, int x, int y, int dstWidth, unsigned char* srcBitmap, int srcWidth, int srcHeight)
+static void drawBitmap(unsigned char* dstBitmap,
+	std::size_t x,
+	std::size_t y,
+	std::size_t dstWidth,
+	unsigned char* srcBitmap,
+	std::size_t srcWidth,
+	std::size_t srcHeight)
 {
-    // offset dst bitmap by x,y.
     dstBitmap +=  (x + (y * dstWidth));
-    for (int i = 0; i < srcHeight; ++i)
+    for (std::size_t i = 0; i < srcHeight; ++i)
     {
-		// auto d = dstBitmap;
-		//for (auto j = srcWidth - 1; j >= 0; --j)
-		//{
-		//	*d = srcBitmap[j];
-		//	++d;
-		//}
         memcpy(dstBitmap, (const void*)srcBitmap, srcWidth);
         dstBitmap += dstWidth;
 		srcBitmap += srcWidth;
@@ -108,9 +107,9 @@ private:
 		FT_GlyphSlot slot = NULL;
 		FT_Int32 loadFlags = FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT;
 
-		for (unsigned int requestedSize = font._size; requestedSize > 0; --requestedSize)
+		for (std::size_t requestedSize = font._size; requestedSize > 0; --requestedSize)
 		{
-			if (FT_Set_Pixel_Sizes(face, requestedSize, 0))
+			if (FT_Set_Pixel_Sizes(face, static_cast<FT_UInt>(requestedSize), 0))
 			{
 				//
 				return false;
@@ -158,15 +157,15 @@ private:
 		rowSize += GLYPH_PADDING;
 
 		// Initialize with padding.
-		unsigned int penX = 0;
-		unsigned int penY = 0;
-		int row = 0;
+		std::size_t penX = 0;
+		std::size_t penY = 0;
+		std::size_t row = 0;
 
 		double powerOf2 = 2;
 		bool textureSizeFound = false;
 
-		int advance;
-		int i;
+		std::size_t advance;
+		std::size_t i;
 
 		while (textureSizeFound == false)
 		{
@@ -225,7 +224,7 @@ private:
 		powerOf2 = 1;
 		for (;;)
 		{
-			if ((penY + rowSize) >= pow(2.0, powerOf2))
+			if ((penY + rowSize) >= (std::size_t)(pow(2.0, powerOf2)))
 			{
 				powerOf2++;
 			}
@@ -253,18 +252,18 @@ private:
 
 			// Glyph image.
 			unsigned char* glyphBuffer = slot->bitmap.buffer;
-			int glyphWidth = slot->bitmap.width;
-			int glyphHeight = slot->bitmap.rows;
+			std::size_t glyphWidth(slot->bitmap.width);
+			std::size_t glyphHeight(slot->bitmap.rows);
 
-			advance = glyphWidth + GLYPH_PADDING;
+			advance = glyphWidth + static_cast<std::size_t>(GLYPH_PADDING);
 
 			// If we reach the end of the image wrap aroud to the next row.
-			if ((penX + advance) > (int)font._texW)
+			if ((penX + advance) > font._texW)
 			{
 				penX = 0;
 				row += 1;
 				penY = row * rowSize;
-				if (penY + rowSize > (int)font._texH)
+				if (penY + rowSize > font._texH)
 				{
 					std::cerr << "Image size exceeded" << std::endl;
 					return false;
@@ -272,7 +271,7 @@ private:
 			}
 
 			// penY should include the glyph offsets.
-			penY += (actualfontHeight - glyphHeight) + (glyphHeight - slot->bitmap_top);
+			penY += (actualfontHeight - glyphHeight) + (glyphHeight - std::size_t(slot->bitmap_top));
 
 			// Draw the glyph to the bitmap with a one pixel padding.
 			drawBitmap(font._textureDatas.data(), penX, penY, font._texW, glyphBuffer, glyphWidth, glyphHeight);

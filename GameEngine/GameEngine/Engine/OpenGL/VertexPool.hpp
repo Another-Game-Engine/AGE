@@ -48,7 +48,7 @@ VertexPool<NBR_ATTRIBUTE> &VertexPool<NBR_ATTRIBUTE>::operator=(VertexPool<NBR_A
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-VertexPoolElement<NBR_ATTRIBUTE> const &VertexPool<NBR_ATTRIBUTE>::operator[](uint32_t index)
+VertexPoolElement<NBR_ATTRIBUTE> const &VertexPool<NBR_ATTRIBUTE>::operator[](std::size_t index)
 {
 	return (_elements[index]);
 }
@@ -56,10 +56,10 @@ VertexPoolElement<NBR_ATTRIBUTE> const &VertexPool<NBR_ATTRIBUTE>::operator[](ui
 template <uint8_t NBR_ATTRIBUTE>
 void VertexPool<NBR_ATTRIBUTE>::computeOffset()
 {
-	uint32_t indicesOffset = 0;
-	uint32_t vertexOffset = 0;
-	std::array<uint32_t, NBR_ATTRIBUTE> byteOffset;
-	std::array<uint32_t, NBR_ATTRIBUTE> nbrByte;
+	std::size_t indicesOffset = 0;
+	std::size_t vertexOffset = 0;
+	std::array<std::size_t, NBR_ATTRIBUTE> byteOffset;
+	std::array<std::size_t, NBR_ATTRIBUTE> nbrByte;
 
 	if (_elements.size() > 0)
 	{
@@ -73,7 +73,7 @@ void VertexPool<NBR_ATTRIBUTE>::computeOffset()
 			byteOffset[index] = _pointerAttributes[index];
 		}
 		_elements[0].settingOffset(0, 0, byteOffset, nbrByte);
-		for (uint32_t index = 1; index < _elements.size(); ++index)
+		for (std::size_t index = 1; index < _elements.size(); ++index)
 		{
 			VertexPoolElement<NBR_ATTRIBUTE> element(_elements[index - 1]);
 			indicesOffset = element.getIndicesOffset() + element.getVertex().getSizeIndicesBuffer();
@@ -89,14 +89,14 @@ void VertexPool<NBR_ATTRIBUTE>::computeOffset()
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPool<NBR_ATTRIBUTE>::addElement(Vertice<NBR_ATTRIBUTE> const &vertices)
+std::size_t VertexPool<NBR_ATTRIBUTE>::addElement(Vertice<NBR_ATTRIBUTE> const &vertices)
 {
-	uint32_t sizeNotUse = 0;
-	uint32_t vertexOffset = 0;
-	uint32_t indicesOffset = 0;
+	std::size_t sizeNotUse = 0;
+	std::size_t vertexOffset = 0;
+	std::size_t indicesOffset = 0;
 	AddVerticesResult ret = FAIL;
 
-	for (size_t index = 0; index < _elements.size(); ++index)
+	for (std::size_t index = 0; index < _elements.size(); ++index)
 	{
 		if ((ret = _elements[index].addVertice(vertices)) != FAIL)
 		{
@@ -163,31 +163,31 @@ size_t VertexPool<NBR_ATTRIBUTE>::getNbrElement() const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPool<NBR_ATTRIBUTE>::getSizeIndicesBuffer() const
+std::size_t VertexPool<NBR_ATTRIBUTE>::getSizeIndicesBuffer() const
 {
 	return (_sizeIndicesBuffer);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPool<NBR_ATTRIBUTE>::getSizeVertexBuffer() const
+std::size_t VertexPool<NBR_ATTRIBUTE>::getSizeVertexBuffer() const
 {
 	return (_sizeVertexBuffer);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPool<NBR_ATTRIBUTE>::getNbrVertex() const
+std::size_t VertexPool<NBR_ATTRIBUTE>::getNbrVertex() const
 {
 	return (_nbrVertex);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-uint32_t VertexPool<NBR_ATTRIBUTE>::getNbrIndices() const
+std::size_t VertexPool<NBR_ATTRIBUTE>::getNbrIndices() const
 {
 	return (_nbrIndices);
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-GLuint VertexPool<NBR_ATTRIBUTE>::getPointerAttribute(GLint index) const
+std::size_t VertexPool<NBR_ATTRIBUTE>::getPointerAttribute(GLint index) const
 {
 	return (_pointerAttributes[index]);
 }
@@ -199,7 +199,7 @@ StateVertexPool VertexPool<NBR_ATTRIBUTE>::getUpdateState() const
 }
 
 template <uint8_t NBR_ATTRIBUTE>
-bool VertexPool<NBR_ATTRIBUTE>::getUpdateMinor(uint32_t &index)
+bool VertexPool<NBR_ATTRIBUTE>::getUpdateMinor(std::size_t &index)
 {
 	if (_updateBuffer.empty())
 		return (false);

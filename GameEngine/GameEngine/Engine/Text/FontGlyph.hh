@@ -27,7 +27,7 @@ struct FontGlyph
 	std::size_t index;
 	std::size_t width;
 	std::size_t height;
-	std::array<float, 4> uvs;
+	std::array<float, 4> uvs; //-V112
 	Vertice<2> *buffer;
 	float ax;	// advance.x
 	float ay;	// advance.y

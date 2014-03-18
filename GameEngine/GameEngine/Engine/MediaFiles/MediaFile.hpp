@@ -32,23 +32,12 @@ struct MediaFile : public AMediaFile
 		return *this;
 	}
 
-
-	virtual void _serialize(cereal::JSONOutputArchive &ar)
-	{
-		ar(*dynamic_cast<MediaType*>(this));
-	}
-
-	virtual void _serialize(cereal::BinaryOutputArchive &ar)
-	{
-		ar(*dynamic_cast<MediaType*>(this));
-	}
-
-	virtual void _serialize(cereal::XMLOutputArchive &ar)
-	{
-		ar(*dynamic_cast<MediaType*>(this));
-	}
-
 	virtual void _serialize(cereal::PortableBinaryOutputArchive &ar)
+	{
+		ar(*dynamic_cast<MediaType*>(this));
+	}
+
+	virtual void _serialize(cereal::PortableBinaryInputArchive &ar)
 	{
 		ar(*dynamic_cast<MediaType*>(this));
 	}
