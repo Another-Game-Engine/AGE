@@ -58,7 +58,7 @@ bool VertexManager<NBR_ATTRIBUTE>::init()
 template <uint8_t NBR_ATTRIBUTE>
 void VertexManager<NBR_ATTRIBUTE>::addVertice(Vertice<NBR_ATTRIBUTE> &vertex)
 {
-	int32_t index;
+	std::size_t index;
 
 	index = _pool.addElement(vertex);
 	vertex._index = index;
@@ -126,7 +126,7 @@ void VertexManager<NBR_ATTRIBUTE>::sendMajorVertexDataOnGPU()
 template <uint8_t NBR_ATTRIBUTE>
 void VertexManager<NBR_ATTRIBUTE>::sendMinorVertexDataOnGPU()
 {
-	uint32_t index;
+	std::size_t index;
 	_dataBuffer.bind();
 	_indexBuffer.bind();
 	while (_pool.getUpdateMinor(index))
@@ -170,10 +170,18 @@ void VertexManager<NBR_ATTRIBUTE>::callDraw(Vertice<NBR_ATTRIBUTE> const * const
 			//std::cout << "nbr of indice : " << drawable->getNbrIndices() << std::endl;
 			//std::cout << "offset of indice : " << _pool[drawable->getIndexPool()].getIndicesOffset() << std::endl;
 			//std::cout << "offset of vertex : " << _pool[drawable->getIndexPool()].getVertexOffset() << std::endl;
-			glDrawElementsBaseVertex(mode, drawable->getNbrIndices(), GL_UNSIGNED_INT, reinterpret_cast<GLvoid const *>(_pool[drawable->getIndexPool()].getIndicesOffset()), _pool[drawable->getIndexPool()].getVertexOffset());
+			glDrawElementsBaseVertex(
+				mode,
+				static_cast<GLsizei>(drawable->getNbrIndices()),
+				GL_UNSIGNED_INT,
+				reinterpret_cast<GLvoid const *>(_pool[drawable->getIndexPool()].getIndicesOffset()),
+				static_cast<GLint>(_pool[drawable->getIndexPool()].getVertexOffset())
+				);
 		}
 		else
-			glDrawArrays(mode, _pool[drawable->getIndexPool()].getVertexOffset(), drawable->getNbrVertex());
+			glDrawArrays(mode
+			, static_cast<GLint>(_pool[drawable->getIndexPool()].getVertexOffset())
+			, static_cast<GLsizei>(drawable->getNbrVertex()));
 	}
 }
 

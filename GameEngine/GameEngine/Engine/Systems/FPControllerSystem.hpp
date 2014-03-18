@@ -77,7 +77,7 @@ private:
 		auto angle = glm::vec2((float)inputs->getMouseDelta().x, (float)inputs->getMouseDelta().y);
 
 		// UPDATE KEYS
-		for (unsigned int i = 0; i < controls.size(); ++i)
+		for (std::size_t i = 0; i < controls.size(); ++i)
 		{
 			controls[i] = inputs->getKey(keys[i]);
 		}

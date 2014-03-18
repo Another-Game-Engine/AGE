@@ -22,7 +22,7 @@ bool FontManager::init()
 
 	std::array<Attribute, 2> param =
 	{
-		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
 		Attribute(GL_FLOAT, sizeof(float), 2),
 	};
 	_vertexManager = std::make_unique<VertexManager<2>>(param);
@@ -132,7 +132,7 @@ void FontManager::_draw2DString(const std::string &text,
 	float lastX = static_cast<float>(position.x);
 	for (std::size_t i = 0; i < text.size(); ++i)
 	{
-		auto l = text[i] - ASCII_BEGIN;
+		std::size_t l = std::size_t(text[i] - ASCII_BEGIN);
 		glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
 		if (text[i] == ' ')
 		{

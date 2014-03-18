@@ -23,7 +23,7 @@ public:
 		_frames[_steps[index]]->draw();
 	}
 private:
-	std::vector<unsigned int> _steps;
+	std::vector<std::size_t> _steps;
 	std::vector<std::shared_ptr<SpriteFrame>> _frames;
 	std::shared_ptr<TextureFile> _texture;
 	std::string _name;

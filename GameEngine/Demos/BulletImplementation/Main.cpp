@@ -44,11 +44,11 @@ int			main(int ac, char **av)
 	if (e->init() == false)
 		return (EXIT_FAILURE);
 
-	std::array<Attribute, 4> param =
+	std::array<Attribute, 4> param = //-V112
 	{
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 4),
-		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
 		Attribute(GL_FLOAT, sizeof(float), 2),
 	};
 

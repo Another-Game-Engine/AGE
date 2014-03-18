@@ -1,13 +1,3 @@
-//
-// Shader.cpp for  in /home/massora/GIT/amd_project/render/ShaderTool
-// 
-// Made by dorian pinaud
-// Login   <pinaud_d@epitech.net>
-// 
-// Started on  Mon Aug  5 00:37:46 2013 dorian pinaud
-// Last update Mon Aug 19 00:15:12 2013 dorian pinaud
-//
-
 #include "Utils/OpenGL.hh"
 
 #include "Shader.hh"
@@ -73,7 +63,7 @@ GLenum  *Shader::getTargets() const
 	return _targets;
 }
 
-unsigned int Shader::getTargetsNumber() const
+std::size_t Shader::getTargetsNumber() const
 {
 	return _targetsList.size();
 }
