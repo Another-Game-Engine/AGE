@@ -1,3 +1,3 @@
 #pragma once
-
-#define MAX_TAG_NUMBER (32)
+#include <cstddef>
+static const std::size_t MAX_TAG_NUMBER = 32;

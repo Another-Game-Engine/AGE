@@ -19,7 +19,7 @@ public:
 	template <class T>
 	ComponentRegistrar &rct()
 	{
-		auto key = typeid(T).hash_code();
+		std::size_t key = typeid(T).hash_code();
 		auto it = _collection.find(key);
 		if (it != std::end(_collection))
 			return *this;
@@ -29,11 +29,11 @@ public:
 	}
 
 	template <class Archive>
-	Component::Base *createFromType(unsigned int type, Archive &ar, Entity e, unsigned int &typeId)
+	Component::Base *createFromType(unsigned int type, Archive &ar, Entity e, std::size_t &typeId)
 	{
 		auto &it = _collection.find(type);
 		auto &typeIt = _typeId.find(type);
-		assert(it != std::end(_collection) || typeIt != std::end(_typeId) && "Component has not been registered");
+		assert((it != std::end(_collection) || typeIt != std::end(_typeId)) && "Component has not been registered");
 		auto res = it->second->unserialize(ar, e);
 		typeId = typeIt->second;
 		return res;
@@ -41,5 +41,5 @@ public:
 
 private:
 	std::map<std::size_t, Component::Base*> _collection;
-	std::map<std::size_t, unsigned int> _typeId;
+	std::map<std::size_t, std::size_t> _typeId;
 };

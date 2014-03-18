@@ -53,7 +53,7 @@ private:
 	friend class EntityIdRegistrar;
 	friend class AScene;
 
-	std::shared_ptr<AScene> _scene;
+	std::weak_ptr<AScene> _scene;
 	size_t 				_flags;
 
 	glm::mat4 			_localTransform;
@@ -71,7 +71,7 @@ private:
 
 	Barcode             _code;
 
-	EntityData(std::shared_ptr<AScene> scene);
+	EntityData(std::weak_ptr<AScene> scene);
 	EntityData();
 	EntityData(const EntityData &o);
 	const EntityData &operator=(const EntityData &o);
@@ -108,9 +108,9 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	void                    addTag(unsigned int tags);
-	void                    removeTag(unsigned int tags);
-	bool                    isTagged(unsigned int tags) const;
+	void                    addTag(std::size_t tags);
+	void                    removeTag(std::size_t tags);
+	bool                    isTagged(std::size_t tags) const;
 	bool                    isTagged(Barcode &code);
 
 	Barcode                 &getCode();
@@ -153,7 +153,7 @@ public:
 	std::shared_ptr<T> addComponent(Args &&...args)
 	{
 		// get the component type ID
-		unsigned int id = T::getTypeId();
+		std::size_t id = T::getTypeId();
 
 		// if entity already have component, return it
 		if (_code.isSet(id + MAX_TAG_NUMBER))
@@ -182,7 +182,7 @@ public:
 	template <typename T>
 	std::shared_ptr<T> getComponent() const
 	{
-		unsigned int id = T::getTypeId();
+		std::size_t id = T::getTypeId();
 		if (!hasComponent<T>())
 			return nullptr;
 		return std::static_pointer_cast<T>(_components[id]);
@@ -191,7 +191,7 @@ public:
 	template <typename T>
 	void removeComponent()
 	{
-		unsigned int id = T::getTypeId();
+		std::size_t id = T::getTypeId();
 		if (!hasComponent<T>())
 			return;
 		_code.remove(id + MAX_TAG_NUMBER);
@@ -213,7 +213,7 @@ public:
 	void save(Archive &ar) const
 	{
 		// Save Entity informations
-		ar(cereal::make_nvp("entityID", _scene->registrarSerializedEntity(_handle.getId())));
+		ar(cereal::make_nvp("entityID", _scene.lock()->registrarSerializedEntity(_handle.getId())));
 		ar(cereal::make_nvp("flags", _flags));
 		ar(cereal::make_nvp("localTransform", _localTransform));
 
@@ -258,9 +258,10 @@ public:
 	void load(Archive &ar)
 	{
 		// load Entity informations
+		auto scene = _scene.lock();
 		std::size_t entityID;
 		ar(entityID);
-		_scene->registrarUnserializedEntity(_handle, entityID);
+		scene->registrarUnserializedEntity(_handle, entityID);
 		ar(_flags);
 		ar(_localTransform);
 
@@ -275,13 +276,12 @@ public:
 
 		std::size_t cptNumber = 0;
 		ar(cptNumber);
-		for (unsigned int i = 0; i < cptNumber; ++i)
+		for (std::size_t i = 0; i < cptNumber; ++i)
 		{
 			std::size_t type = 0;
-			unsigned int typeId;
+			std::size_t typeId;
 			ar(type);
-			unsigned int position;
-			Component::Base *cpt = _scene->createFromType(type, ar, _handle, typeId);
+			Component::Base *cpt = scene->createFromType(type, ar, _handle, typeId);
 			cpt->setEntity(_handle);
 			if (_components.size() <= typeId)
 				_components.resize(typeId + 1);
@@ -294,7 +294,7 @@ public:
 		ar(graphUnser.childs);
 		ar(graphUnser.haveParent);
 		ar(graphUnser.parent);
-		_scene->registrarGraphNode(entityID, graphUnser);
+		scene->registrarGraphNode(entityID, graphUnser);
 	}
 
 	//

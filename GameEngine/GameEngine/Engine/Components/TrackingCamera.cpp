@@ -10,7 +10,7 @@ dist(0.0f)
 TrackingCamera::~TrackingCamera(void)
 {}
 
-void TrackingCamera::init(Entity _toLook, glm::vec3 _dist)
+void TrackingCamera::init(const Entity &_toLook, glm::vec3 _dist)
 {
 	toLook = _toLook;
 	dist = _dist;

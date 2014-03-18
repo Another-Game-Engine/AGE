@@ -18,7 +18,7 @@ Base &Base::operator=(const Base &other)
 	return *this;
 }
 
-void			Base::setEntity(Entity entity)
+void			Base::setEntity(const Entity &entity)
 {
 	_entity = entity;
 }

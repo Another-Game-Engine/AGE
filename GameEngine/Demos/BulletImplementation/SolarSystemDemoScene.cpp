@@ -23,7 +23,7 @@
 
 #include <SDL\SDL.h>
 
-SolarSystemDemoScene::SolarSystemDemoScene(Engine &engine) : AScene(engine)
+SolarSystemDemoScene::SolarSystemDemoScene(std::weak_ptr<Engine> engine) : AScene(engine)
 {
 }
 
@@ -45,18 +45,18 @@ Entity	SolarSystemDemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	e->setLocalTransform(t);
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
-	//auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
-	//auto planetMesh = getInstance<AssetsManager>()->create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
-	//planetMesh->material = getInstance<AssetsManager>()->create<MaterialFile>("material_" + tex1 + tex2 + tex3 + tex4, ballMesh->material);
-	//planetMesh->material->materials[0].ambientTex = getInstance<AssetsManager>()->get<TextureFile>(tex1);
-	//planetMesh->material->materials[0].diffuseTex = getInstance<AssetsManager>()->get<TextureFile>(tex2);
-	//planetMesh->material->materials[0].specularTex = getInstance<AssetsManager>()->get<TextureFile>(tex3);
-	//planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>(tex4);
+	auto ballMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
+	auto planetMesh = getInstance<AssetsManager>()->create<ObjFile>(tex1 + tex2 + tex3 + tex4, ballMesh);
+	planetMesh->material = getInstance<AssetsManager>()->create<MaterialFile>("material_" + tex1 + tex2 + tex3 + tex4, ballMesh->material);
+	planetMesh->material->materials[0].ambientTex = getInstance<AssetsManager>()->get<TextureFile>(tex1);
+	planetMesh->material->materials[0].diffuseTex = getInstance<AssetsManager>()->get<TextureFile>(tex2);
+	planetMesh->material->materials[0].specularTex = getInstance<AssetsManager>()->get<TextureFile>(tex3);
+	planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>(tex4);
 	//planetMesh->saveToFile();
 	//planetMesh->material->saveToFile();
 
 	
-	auto planetMesh = getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/" + tex1/* + tex2 + tex3 + tex4*/ + ".cpd"));
+	//auto planetMesh = getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/" + tex1/* + tex2 + tex3 + tex4*/ + ".cpd"));
 
 	std::shared_ptr<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
 
@@ -116,62 +116,60 @@ bool 			SolarSystemDemoScene::userStart()
 		"shininess"
 	};
 
-	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
+	auto s = getInstance<Renderer>()->addShader("MaterialBasic",
 		"./Shaders/MaterialBasic.vp",
 		"./Shaders/MaterialBasic.fp");
 
-	_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
-		.init(&s, "MaterialBasic", materialBasic);
-	_engine.getInstance<Renderer>()->addUniform("PerFrame")
-		.init(&s, "PerFrame", perFrameVars);
-	_engine.getInstance<Renderer>()->addUniform("PerModel")
-		.init(&s, "PerModel", perModelVars);
+	getInstance<Renderer>()->addUniform("MaterialBasic")
+		->init(s, "MaterialBasic", materialBasic);
+	getInstance<Renderer>()->addUniform("PerFrame")
+		->init(s, "PerFrame", perFrameVars);
+	getInstance<Renderer>()->addUniform("PerModel")
+		->init(s, "PerModel", perModelVars);
 
 
-	_engine.getInstance<Renderer>()->addShader("depthOnly", "./Shaders/depthOnly.vp", "./Shaders/depthOnly.fp");
-	_engine.getInstance<Renderer>()->addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
-	_engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp");
-	_engine.getInstance<Renderer>()->addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
-	_engine.getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
-	_engine.getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
-	_engine.getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
+	getInstance<Renderer>()->addShader("depthOnly", "./Shaders/depthOnly.vp", "./Shaders/depthOnly.fp");
+	getInstance<Renderer>()->addShader("earth", "./Shaders/earth.vp", "./Shaders/earth.fp");
+	getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp");
+	getInstance<Renderer>()->addShader("bump", "Shaders/bump.vp", "Shaders/bump.fp");
+	getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
+	getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
+	getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
 
-	_engine.getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerModel", "PerModel");
+	getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
+	getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 
-	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerModel", "PerModel");
+	getInstance<Renderer>()->bindShaderToUniform("basic", "PerFrame", "PerFrame");
+	getInstance<Renderer>()->bindShaderToUniform("basic", "PerModel", "PerModel");
 
-	_engine.getInstance<Renderer>()->bindShaderToUniform("earth", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("earth", "PerModel", "PerModel");
+	getInstance<Renderer>()->bindShaderToUniform("earth", "PerFrame", "PerFrame");
+	getInstance<Renderer>()->bindShaderToUniform("earth", "PerModel", "PerModel");
 
-	_engine.getInstance<Renderer>()->bindShaderToUniform("bump", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("bump", "PerModel", "PerModel");
+	getInstance<Renderer>()->bindShaderToUniform("bump", "PerFrame", "PerFrame");
+	getInstance<Renderer>()->bindShaderToUniform("bump", "PerModel", "PerModel");
 
-	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
-
+	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
+	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
+	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 	std::string		vars[] =
 	{
 		"projection",
 		"view"
 	};
 
-	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
+
+	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+
+	getInstance<Renderer>()->addUniform("cameraUniform")
+		->init(sky, "cameraUniform", vars);
+
+	getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 
-	_engine.getInstance<Renderer>()->getShader("cubemapShader");
-
-	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
-		init(&sky, "cameraUniform", vars);
-
-	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
-
-
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Space.cpd"));
-	auto music = _engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
+	auto music = getInstance<AudioManager>()->loadStream(File("../../Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 
 	// SERIALIZATION
@@ -217,8 +215,8 @@ bool 			SolarSystemDemoScene::userStart()
 		{
 			planets[i] = createPlanet((std::rand() % 200) / 100.0f
 				, (std::rand() % 200) / 100.0f,
-				glm::vec3(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150),
-				glm::vec3(std::rand() % 10 + 10), "basic", "texture__SunTexture");
+				glm::vec3(static_cast<float>(std::rand() % 300 - 150, std::rand() % 300 - 150, std::rand() % 300 - 150)),
+				glm::vec3(static_cast<float>(std::rand() % 10 + 10)), "basic", "texture__SunTexture");
 			if (i == 0)
 				sun->addChild(planets[i]);
 			else
@@ -240,7 +238,7 @@ bool 			SolarSystemDemoScene::userStart()
 	auto cameraComponent = camera->addComponent<Component::CameraComponent>();
 	camera->setLocalTransform(glm::translate(camera->getLocalTransform(), glm::vec3(30000, 0, 30000)));
 	auto trackBall = camera->addComponent<Component::TrackBall>(*(earth->getChildsBegin()), 50.0f, 3.0f, 1.0f);
-	auto screenSize = _engine.getInstance<IRenderContext>()->getScreenSize();
+	auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	cameraComponent->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
 	camera->addComponent<Component::AudioListener>();
@@ -250,8 +248,13 @@ bool 			SolarSystemDemoScene::userStart()
 
 bool 			SolarSystemDemoScene::userUpdate(double time)
 {
-	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
-		_engine.getInstance<Input>()->getInput(SDL_QUIT))
+	if (getInstance<Input>()->getInput(SDLK_l))
+	{
+		getInstance<SceneManager>()->enableScene("BulletDemo", 0);
+		getInstance<SceneManager>()->disableScene("SolarSystemDemo");
+	}
+	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
+		getInstance<Input>()->getInput(SDL_QUIT))
 	{
 		//SERIALIZATION
 		{

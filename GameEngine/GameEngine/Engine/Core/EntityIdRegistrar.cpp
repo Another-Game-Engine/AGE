@@ -77,7 +77,7 @@ void EntityIdRegistrar::updateEntityHandle(Entity e, std::size_t id)
 	{
 		e->_globalTransform = e->_localTransform;
 		auto key = PubSubKey("graphNodeSetAsRoot");
-		e->broadCast(key, e);
+		e->broadCast(std::move(key), e);
 	}
 	_graphNode.erase(id);
 }

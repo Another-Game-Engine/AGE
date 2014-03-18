@@ -18,37 +18,32 @@
 #include <cereal/archives/xml.hpp>
 #include <Components/ComponentRegistrar.hpp>
 
-class Engine;
 class System;
+class Engine;
 
-class AScene : public std::enable_shared_from_this<AScene>, public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
+class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
 {
 private:
 	std::multimap<std::size_t, std::shared_ptr<System> >   _systems;
 	std::vector<EntityData>                             _pool;
-	std::queue<unsigned int>                            _free;
-protected:
-	Engine                                              &_engine;
+	std::queue<std::size_t>                             _free;
+	std::size_t                                         _entityNumber;
 public:
-	AScene(Engine &engine);
+	AScene(std::weak_ptr<Engine> engine);
 	virtual ~AScene();
-
+	inline std::size_t getNumberOfEntities() { return _entityNumber; }
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
+	bool                    start();
 	Entity &createEntity();
 	void destroy(const Entity &h);
 	EntityData *get(const Entity &h);
 
-	Engine &getEngine()
-	{
-		return _engine;
-	}
-
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
 	{
-		std::shared_ptr<T> tmp{ new T(this) };
+		auto tmp = std::make_shared<T>(std::static_pointer_cast<AScene>(shared_from_this()));
 		_systems.insert(std::make_pair(priority, tmp));
 		tmp->init();
 		return tmp;
@@ -104,8 +99,6 @@ public:
 	template <typename Archive>
 	void load(std::ifstream &s)
 	{
-		std::map<unsigned int, unsigned int> unserializedId;
-
 		Archive ar(s);
 		unsigned int size = 0;
 		ar(size);

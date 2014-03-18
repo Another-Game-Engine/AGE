@@ -18,7 +18,7 @@ enum Shadow
 class MeshRendererSystem : public System
 {
 public:
-	MeshRendererSystem(AScene *scene)
+	MeshRendererSystem(std::weak_ptr<AScene> scene)
 		: System(scene),
 		_type(UNKNOW),
 		_shadow(false),
@@ -27,6 +27,7 @@ public:
 		_renderDebugMethod(false)
 	{
 		glEnable(GL_TEXTURE_CUBE_MAP);
+		_name = "mesh_renderer_system";
 		glGenTextures(1, &_texShadow);
 		glGenTextures(1, &_cubeMapShadow); 
 		glGenFramebuffers(1, &_frameBuffer);

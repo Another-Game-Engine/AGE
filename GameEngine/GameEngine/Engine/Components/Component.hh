@@ -17,7 +17,7 @@ namespace	Component
 		Base(std::size_t serId);
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
-		void			setEntity(Entity entity);
+		void			setEntity(const Entity &entity);
 		Entity		&getEntity();
 		virtual void reset() = 0;
 		std::size_t serializedID;
@@ -40,9 +40,9 @@ namespace	Component
 
 	protected:
 		Entity				_entity;
-		static int uniqueId()
+		static std::size_t uniqueId()
 		{
-			static int id = 0;
+			static std::size_t id = 0;
 			return id++;
 		}
 	};
@@ -60,9 +60,9 @@ namespace	Component
 		{
 		}
 
-		static unsigned int getTypeId()
+		static std::size_t getTypeId()
 		{
-			static unsigned int id = uniqueId();
+			static std::size_t id = uniqueId();
 			return id;
 		}
 

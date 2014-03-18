@@ -59,5 +59,8 @@
     <ClInclude Include="Managers\AConvertor.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Managers\FontConvertor.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

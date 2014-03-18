@@ -2,9 +2,8 @@
 #define		UNIFORMBUFFER_HH_
 
 #include "Utils/OpenGL.hh"
-
 #include "glm/glm.hpp"
-
+#include <memory>
 #include <map>
 
 namespace	OpenGLTools
@@ -47,8 +46,9 @@ public:
 	UniformBuffer(GLuint bindingPoint);
 	~UniformBuffer(void);
 
-	void			init(Shader *referent, std::string const &blockName, size_t size);
-	void			init(Shader *referent, std::string const &blockName, std::string const vars[]);
+
+	void			init(std::shared_ptr<Shader> referent, std::string const &blockName, size_t size);
+	void			init(std::shared_ptr<Shader> referent, std::string const &blockName, std::string const vars[]);
 
 	void			setBufferData(size_t size, const char *data);
 

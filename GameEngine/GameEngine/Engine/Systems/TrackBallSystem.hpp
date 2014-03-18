@@ -14,10 +14,12 @@
 class TrackBallSystem : public System
 {
 public:
-	TrackBallSystem(AScene *scene)
+	TrackBallSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
-	{}
+	{
+		_name = "trackball_system";
+	}
 
 	virtual ~TrackBallSystem(){}
 protected:
@@ -33,7 +35,8 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		auto inputs = _scene->getInstance<Input>();
+		auto scene = _scene.lock();
+		auto inputs = scene->getInstance<Input>();
 
 		for (auto e : _filter.getCollection())
 		{
@@ -51,7 +54,7 @@ protected:
 				else
 					trackBall->dist = 0.0001f;
 			}
-			pos.x = sin(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist;
+			pos.x = sin(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist; //-V537
 			pos.y = sin(trackBall->angles.y) * trackBall->dist;
 			pos.z = cos(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist;
 			e->setLocalTransform(glm::lookAt(glm::vec3(trackBall->toLook->getGlobalTransform()[3]) + pos,

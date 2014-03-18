@@ -5,9 +5,17 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -21,7 +29,20 @@
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
@@ -34,36 +55,77 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(ProjectDir)Engine;$(SolutionDir)Vendors/TinyThread;C:\boost\boost_1_55_0;C:\bullet\src</IncludePath>
-    <LibraryPath>$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;C:\local\boost_1_51_0\stage\lib;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)Builds\</OutDir>
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(ProjectDir)Engine;$(SolutionDir)Vendors/TinyThread;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/freetype-lib\include\freetype2</IncludePath>
+    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Release/x86;$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Vendors/OpenGL/lib/x86;$(SolutionDir)Vendors/fmod\lib;$(SolutionDir)Vendors/bullet\lib\Debug;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(ProjectDir)Engine;$(SolutionDir)Vendors/TinyThread;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/freetype-lib\include\freetype2</IncludePath>
+    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Debug/x64;$(LibraryPath);$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors/fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Debug</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)Builds\</OutDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)Packs/PhysicBulletPack/;$(SolutionDir)GameEngine;$(ProjectDir);C:\;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;C:\;$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);C:/boost/boost_1_55_0;C:\bullet\src</IncludePath>
-    <LibraryPath>$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Builds/;C:/boost/lib/$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(ProjectDir)Engine;$(SolutionDir)Vendors/TinyThread;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/freetype-lib\include\freetype2</IncludePath>
+    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Release/x86;$(SolutionDir)GameEngine/Vendors/Windows/lib;$(SolutionDir)Vendors/OpenGL/lib/x86;$(SolutionDir)Vendors/fmod\lib;$(SolutionDir)Vendors/bullet\lib\Release;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(ProjectDir)Engine;$(SolutionDir)Vendors/TinyThread;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/freetype-lib\include\freetype2</IncludePath>
+    <LibraryPath>$(SolutionDir)Vendors/freetype-lib\Release/x64;$(LibraryPath);$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors/fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Release</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories);C:\freetype-lib\include\freetype2;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4503;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <EntryPointSymbol>main</EntryPointSymbol>
-      <AdditionalLibraryDirectories>$(AssemblySearchPaths);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
       <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories);C:\freetype-lib\include\freetype2;</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4503;</DisableSpecificWarnings>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>freetype.lib;opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex64_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -76,14 +138,37 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4503;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex_vc.lib;BulletCollision.lib;BulletDynamics.lib;BulletFileLoader.lib;BulletWorldImporter.lib;ConvexDecomposition.lib;LinearMath.lib;%(AdditionalDependencies);%(AdditionalDependencies);freetype.lib;</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalLibraryDirectories>$(AssemblySearchPaths);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(AssemblySearchPaths);%(AdditionalLibraryDirectories);$(LibraryPath);</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/ConvexDecomposition;$(SolutionDir)Vendors/bullet-2.82-r2704/src;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletFileLoader;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/HACD;$(SolutionDir)Vendors/bullet-2.82-r2704/Extras/Serialize/BulletWorldImporter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4503;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>freetype.lib;opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex64_vc.lib;BulletCollision.lib;BulletDynamics.lib;BulletFileLoader.lib;BulletMultiThreaded.lib;BulletSoftBody.lib;BulletWorldImporter.lib;BulletXmlWorldImporter.lib;ConvexDecomposition.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>$(AssemblySearchPaths);%(AdditionalLibraryDirectories);$(LibraryPath);</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -91,6 +176,7 @@
     <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="Main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Managers\AConvertor.cpp" />
     <ClCompile Include="Managers\AssetsConvertorManager.cpp" />
@@ -102,6 +188,7 @@
     <ClInclude Include="DemoScene.hh" />
     <ClInclude Include="Managers\AConvertor.hh" />
     <ClInclude Include="Managers\AssetsConvertorManager.hh" />
+    <ClInclude Include="Managers\FontConvertor.hh" />
     <ClInclude Include="Managers\MaterialConvertor.hpp" />
     <ClInclude Include="Managers\ObjConvertor.hh" />
     <ClInclude Include="Managers\TgaConvertor.hpp" />
@@ -110,6 +197,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\..\Vendors\TinyObjLoader\TinyObjLoader.vcxproj">
       <Project>{99fc20c2-9ad1-4049-bb11-b369c42fd6a8}</Project>

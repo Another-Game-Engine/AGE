@@ -5,6 +5,7 @@
 # use the drop box :
 # https://www.dropbox.com/sh/b3zej58eusof9dt/rwImSYCUbj
 Assets/
+Vendors/
 
 # Vendors/Cereal -> Download it manualy : http://uscilab.github.io/cereal/
 Cereal/
@@ -12,6 +13,10 @@ Cereal/
 *.scenesave
 *.cpd
 *.bullet
+*.cpdFont
+*.CPDAnimation
+*.png
+*.zip
 
 # User-specific files
 *.suo

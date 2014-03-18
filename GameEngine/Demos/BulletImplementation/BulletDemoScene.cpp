@@ -10,6 +10,7 @@
 #include <Components/FirstPersonView.hpp>
 #include <Components/AudioEmitter.hpp>
 #include <Components/AudioListener.hpp>
+#include <Components/SpriteComponent.hh>
 
 #include <OpenGL/ComputeShader.hh>
 #include <OpenGL/Attribute.hh>
@@ -24,7 +25,11 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/AudioSystem.hpp>
+#include <Systems/SpriteSystem.hh>
 #include <BallSoundSystem.hpp>
+
+#include <Text/FontManager.hh>
+#include <Sprite/SpriteManager.hh>
 
 #include <Core/Engine.hh>
 
@@ -34,9 +39,10 @@
 
 #include <MyTags.hpp>
 
+
 Entity globalCamera;
 
-BulletDemoScene::BulletDemoScene(Engine &engine) : AScene(engine)
+BulletDemoScene::BulletDemoScene(std::weak_ptr<Engine> engine) : AScene(engine)
 {
 }
 
@@ -87,10 +93,10 @@ bool BulletDemoScene::userStart()
 {
 	std::srand(0);
 
-	OpenGLTools::Shader &s = _engine.getInstance<Renderer>()->addShader("MaterialBasic",
+	auto s = getInstance<Renderer>()->addShader("MaterialBasic",
 		"./Shaders/MaterialBasic.vp",
 		"./Shaders/MaterialBasic.fp");
-	OpenGLTools::Shader &shadowMap = _engine.getInstance<Renderer>()->addShader("ShadowDepth",
+	auto shadowMap = getInstance<Renderer>()->addShader("ShadowDepth",
 		"Shaders/ShadowMapping.vp",
 		"Shaders/ShadowMapping.fp");
 
@@ -104,6 +110,7 @@ bool BulletDemoScene::userStart()
 	addSystem<BallSoundSystem>(220);
 	addSystem<AudioSystem>(250);
 	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
+
 	addSystem<CameraSystem>(400); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<LightRenderingSystem>(1000); // Render with the lights
 
@@ -114,11 +121,16 @@ bool BulletDemoScene::userStart()
 	getSystem<LightRenderingSystem>()->setHDRMaxLightDiminution(0.3f);
 	getSystem<LightRenderingSystem>()->setHDRMaxDarkImprovement(1.2f);
 	getSystem<LightRenderingSystem>()->useHDR(false);
+
+	addSystem<RotationForceSystem>(320);
+	addSystem<SpriteSystem>(350); // DRAW SPRITES
+
 	//
 	//
 	// end System Test
 
-	std::string	perModelVars[] =
+
+	std::string		perModelVars[] =
 	{
 		"model"
 	};
@@ -132,7 +144,7 @@ bool BulletDemoScene::userStart()
 		"spotLightNbr"
 	};
 
-	std::string	materialBasic[] =
+	std::string		materialBasic[] =
 	{
 		"ambient",
 		"diffuse",
@@ -147,42 +159,42 @@ bool BulletDemoScene::userStart()
 		"lightVP"
 	};
 
-	_engine.getInstance<Renderer>()->addUniform("MaterialBasic")
-		.init(&s, "MaterialBasic", materialBasic);
-	_engine.getInstance<Renderer>()->addUniform("PerFrame")
-		.init(&s, "PerFrame", perFrameVars);
-	_engine.getInstance<Renderer>()->addUniform("PerModel")
-		.init(&s, "PerModel", perModelVars);
+	getInstance<Renderer>()->addUniform("MaterialBasic")
+		->init(s, "MaterialBasic", materialBasic);
+	getInstance<Renderer>()->addUniform("PerFrame")
+		->init(s, "PerFrame", perFrameVars);
+	getInstance<Renderer>()->addUniform("PerModel")
+		->init(s, "PerModel", perModelVars);
 
-	_engine.getInstance<Renderer>()->addUniform("PerLight")
-		.init(&shadowMap, "PerLight", perLightVars);
+	getInstance<Renderer>()->addUniform("PerLight")
+		->init(shadowMap, "PerLight", perLightVars);
 
 	// _engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
-	_engine.getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
+	getInstance<Renderer>()->addShader("basicLight", "Shaders/light.vp", "Shaders/light.fp");
 	// _engine.getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
 	// _engine.getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
-	_engine.getInstance<Renderer>()->addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
+	getInstance<Renderer>()->addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
+	getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
+	getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerLight", "PerLight");
 
-	_engine.getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerLight", "PerLight");
-
-	_engine.getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerModel", "PerModel");
+	getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
+	getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 
 	// _engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerFrame", "PerFrame");
 	// _engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerModel", "PerModel");
 
-	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
-	_engine.getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
+	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
+	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
+	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
 	// AMediaFile::loadFromList("./Assets/Serialized/export__SketchTest.cpd");
 	// AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
 
-	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
-	_engine.getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	_engine.getInstance<AudioManager>()->loadSound(File("./Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadSound(File("./Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadStream(File("./Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadSound(File("./Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+	getInstance<AudioManager>()->loadSound(File("./Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
 	//auto defaultBallMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
@@ -199,7 +211,8 @@ bool BulletDemoScene::userStart()
 	//getInstance<AssetsManager>()->saveToFile("my_planet", "./Assets/Serialized/");
 
 	// EXAMPLE LOAD FROM SAVE
-	getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/my_planet.cpd"));
+	getInstance<AssetsManager>()->loadFromFile(File("../../Assets/Serialized/my_planet.cpd"));
+
 
 //	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__ball.cpd"));
@@ -209,11 +222,44 @@ bool BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__galileo.cpd"));
 //	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
+
+	//File saveFile("BulletScene.scenesave");
+	//if (saveFile.exists())
+	//{
+	//	std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
+	//	load<cereal::BinaryInputArchive>(fileStream);
+	//	fileStream.close();
+	//	return true;
+	//}
+
+	// CREATE SPRITE ANIMATION
+	{
+		auto e = createEntity();
+		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "idle"),
+			getInstance<Renderer>()->getShader("SpriteBasic"));
+		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 300, 0)));
+		auto e2 = createEntity();
+		e2->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "walk"),
+			getInstance<Renderer>()->getShader("SpriteBasic"));
+		e2->setLocalTransform(glm::translate(e2->getLocalTransform(), glm::vec3(1700, 0, 0)));
+		auto e3 = createEntity();
+		e3->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "crouch_idle"),
+			getInstance<Renderer>()->getShader("SpriteBasic"));
+		e3->setLocalTransform(glm::translate(e3->getLocalTransform(), glm::vec3(1700, 400, 0)));
+		auto e4 = createEntity();
+		e4->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "kitten"),
+			getInstance<Renderer>()->getShader("SpriteBasic"));
+		e4->setLocalTransform(glm::translate(e4->getLocalTransform(), glm::vec3(1700, 800, 0)));
+		e4->setLocalTransform(glm::scale(e4->getLocalTransform(), glm::vec3(0.1)));
+	}
+
+
 	// CREATE SPONZA CHURCH
 	{
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
 		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
+
 		// e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
@@ -221,14 +267,17 @@ bool BulletDemoScene::userStart()
 		// rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
 		// rigidBody->setCollisionShape(Component::RigidBody::BOX);
 		// rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
+
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
 		rigidBody->getBody().setRestitution(0.9f);
+
 		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
 		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
 		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
+
 		mesh->setShader("MaterialBasic");
 	}
 
@@ -244,8 +293,8 @@ bool BulletDemoScene::userStart()
 		character->addComponent<Component::FirstPersonView>();
 		e->addComponent<Component::AudioListener>();
 		auto ae = e->addComponent<Component::AudioEmitter>();
-		auto arriveOnFloor = _engine.getInstance<AudioManager>()->getAudio("arriveOnFloor");
-		auto jump = _engine.getInstance<AudioManager>()->getAudio("jump");
+		auto arriveOnFloor = getInstance<AudioManager>()->getAudio("arriveOnFloor");
+		auto jump = getInstance<AudioManager>()->getAudio("jump");
 		ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
 		ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
 		globalCamera = e;
@@ -257,7 +306,7 @@ bool BulletDemoScene::userStart()
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 		auto audioCpt = e->addComponent<Component::AudioEmitter>();
-		audioCpt->setAudio(_engine.getInstance<AudioManager>()->getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
+		audioCpt->setAudio(getInstance<AudioManager>()->getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
 		audioCpt->play("ambiant", true);
 
 	}
@@ -272,16 +321,16 @@ bool BulletDemoScene::userStart()
 		"view"
 	};
 
-	OpenGLTools::Shader &sky = _engine.getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
+	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "Shaders/cubemap.vp", "Shaders/cubemap.fp");
 
-	_engine.getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 
-	_engine.getInstance<Renderer>()->addUniform("cameraUniform").
-		init(&sky, "cameraUniform", vars);
+	getInstance<Renderer>()->addUniform("cameraUniform")
+		->init(sky, "cameraUniform", vars);
 
-	_engine.getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+	getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
-	auto screenSize = _engine.getInstance<IRenderContext>()->getScreenSize();
+	auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
 	cameraComponent->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
 	return (true);
@@ -290,18 +339,19 @@ bool BulletDemoScene::userStart()
 bool BulletDemoScene::userUpdate(double time)
 {
 	static std::queue<Entity> stack;
+	float ftime = static_cast<float>(time);
 
-	if (_engine.getInstance<Input>()->getInput(SDLK_l))
+	if (getInstance<Input>()->getInput(SDLK_l))
 	{
-		_engine.getInstance<SceneManager>()->enableScene("SolarSystemDemo", 0);
-		_engine.getInstance<SceneManager>()->disableScene("BulletDemo");
+		getInstance<SceneManager>()->enableScene("SolarSystemDemo", 0);
+		getInstance<SceneManager>()->disableScene("BulletDemo");
 	}
 
-	if (_engine.getInstance<Input>()->getInput(SDL_BUTTON_RIGHT))
+	if (getInstance<Input>()->getInput(SDL_BUTTON_RIGHT))
 	{
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-		auto test = _engine.getInstance<BulletCollisionManager>()->rayCast(from, from + to * 1000.0f);
+		auto test = getInstance<BulletCollisionManager>()->rayCast(from, from + to * 1000.0f);
 		if (test.size() != 0)
 		{
 			for (auto e : test)
@@ -312,12 +362,13 @@ bool BulletDemoScene::userUpdate(double time)
 		}
 	}
 	static float delay = 0.0f;
-	if (_engine.getInstance<Input>()->getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
+	if (getInstance<Input>()->getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
 	{
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 10.0f);
 		auto rigidbody = e->getComponent<Component::RigidBody>();
+
 		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 80.0f));
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
@@ -327,7 +378,16 @@ bool BulletDemoScene::userUpdate(double time)
 		light->lightData.positionPower.w = 3.0f;
 		rigidbody->getBody().setFriction(1.0f);
 		rigidbody->getBody().setRestitution(0.9f);
-		e->addComponent<Component::AudioEmitter>()->setAudio(_engine.getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
+		e->addComponent<Component::AudioEmitter>()->setAudio(getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
+
+		auto &body = rigidbody->getBody();
+		body.applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
+		body.getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+		body.getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+		body.setFriction(1.0f);
+		body.setRestitution(0.9f);
+		e->addComponent<Component::AudioEmitter>()->setAudio(getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
+
 		e->addTag(BALL_TAG);
 		if (stack.size() > 50)
 		{
@@ -337,7 +397,7 @@ bool BulletDemoScene::userUpdate(double time)
 		stack.push(e);
 		delay = 0.1f;
 	}
-	if (_engine.getInstance<Input>()->getInput(SDL_BUTTON_MIDDLE) && delay <= 0.0f)
+	if (getInstance<Input>()->getInput(SDL_BUTTON_MIDDLE) && delay <= 0.0f)
 	{
 		auto e = createEntity();
 
@@ -352,38 +412,68 @@ bool BulletDemoScene::userUpdate(double time)
 	}
 	if (delay >= 0.0f)
 		delay -= time;
-	if (_engine.getInstance<Input>()->getInput(SDLK_ESCAPE) ||
-		_engine.getInstance<Input>()->getInput(SDL_QUIT))
+	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
+		getInstance<Input>()->getInput(SDL_QUIT))
+	{
+		//SERIALIZATION
+		{
+			std::ofstream s("BulletScene.scenesave", std::ios_base::binary);
+			save<cereal::BinaryOutputArchive>(s);
+			s.close();
+		}
 		return (false);
-	if (_engine.getInstance<Input>()->getInput(SDLK_h))
+	}
+	if (getInstance<Input>()->getInput(SDLK_h))
 		getSystem<LightRenderingSystem>()->useHDR(true);
-	if (_engine.getInstance<Input>()->getInput(SDLK_j))
+	if (getInstance<Input>()->getInput(SDLK_j))
 		getSystem<LightRenderingSystem>()->useHDR(false);
-	if (_engine.getInstance<Input>()->getInput(SDLK_f))
+	if (getInstance<Input>()->getInput(SDLK_f))
 		getSystem<LightRenderingSystem>()->useBloom(true);
-	if (_engine.getInstance<Input>()->getInput(SDLK_g))
+	if (getInstance<Input>()->getInput(SDLK_g))
 		getSystem<LightRenderingSystem>()->useBloom(false);
 	static float	sigma = 5.0f;
 	static float	glare = 1.0f;
-	if (_engine.getInstance<Input>()->getInput(SDLK_UP))
+	if (getInstance<Input>()->getInput(SDLK_UP))
 	{
 		sigma += 0.5f;
 		getSystem<LightRenderingSystem>()->setBloomSigma(sigma);
 	}
-	if (_engine.getInstance<Input>()->getInput(SDLK_DOWN))
+	if (getInstance<Input>()->getInput(SDLK_DOWN))
 	{
 		sigma -= 0.5f;
 		getSystem<LightRenderingSystem>()->setBloomSigma(sigma);
 	}
-	if (_engine.getInstance<Input>()->getInput(SDLK_LEFT))
+	if (getInstance<Input>()->getInput(SDLK_LEFT))
 	{
 		glare -= 0.2f;
 		getSystem<LightRenderingSystem>()->setBloomGlare(glare);
 	}
-	if (_engine.getInstance<Input>()->getInput(SDLK_RIGHT))
+	if (getInstance<Input>()->getInput(SDLK_RIGHT))
 	{
 		glare += 0.2f;
 		getSystem<LightRenderingSystem>()->setBloomGlare(glare);
 	}
+	static auto timeCounter = 0.0f;
+	static auto frameCounter = 0;
+	static auto lastFrame = 0;
+	timeCounter += ftime;
+	frameCounter += 1;
+	getInstance<FontManager>()->draw2DString("FPS : " + std::to_string(lastFrame), "myFont", 40, glm::ivec2(10, 10), glm::vec4(1), "2DText");
+
+	getInstance<FontManager>()->draw2DString("Entity Nbr : " + std::to_string(getNumberOfEntities()), "myFont", 30, glm::ivec2(10, 50), glm::vec4(1), "2DText");
+
+	getInstance<FontManager>()->draw2DString("This is test 1", "myFont", 30, glm::ivec2(10, 100), glm::vec4(1,0,1,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 2", "myFont", 35, glm::ivec2(10, 150), glm::vec4(0,1,1,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 3", "myFont", 40, glm::ivec2(10, 200), glm::vec4(1,1,0,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 4", "myFont", 45, glm::ivec2(10, 250), glm::vec4(0.5,0.2,0.4,1), "2DText");
+	getInstance<FontManager>()->draw2DString("This is test 5", "myFont", 50, glm::ivec2(10, 300), glm::vec4(1,1,1,0.5), "2DText");
+
+	if (timeCounter >= 1.0f)
+	{
+		lastFrame = frameCounter;
+		timeCounter = 0.0f;
+		frameCounter = 0;
+	}
+
 	return (true);
 }

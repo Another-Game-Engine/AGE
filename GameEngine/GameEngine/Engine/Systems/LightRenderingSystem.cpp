@@ -7,7 +7,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-LightRenderingSystem::LightRenderingSystem(AScene *scene) :
+LightRenderingSystem::LightRenderingSystem(std::weak_ptr<AScene> scene) :
 						System(scene),
 						_pointLightFilter(scene),
 						_spotLightFilter(scene),
@@ -40,9 +40,9 @@ LightRenderingSystem::~LightRenderingSystem()
 
 void LightRenderingSystem::initialize()
 {
-	_scene->getInstance<Renderer>()->addShader("fboToScreenMultisampled", "Shaders/fboToScreen.vp", "Shaders/fboToScreenMultisampled.fp");
-	_scene->getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
-	_quad.init(_scene->getEngine());
+	_scene.lock()->getInstance<Renderer>()->addShader("fboToScreenMultisampled", "Shaders/fboToScreen.vp", "Shaders/fboToScreenMultisampled.fp");
+	_scene.lock()->getInstance<Renderer>()->addShader("fboToScreen", "Shaders/fboToScreen.vp", "Shaders/fboToScreen.fp");
+	_quad.init(_scene);
 
 	_pointLightFilter.requireComponent<Component::PointLight>();
 	_spotLightFilter.requireComponent<Component::SpotLight>();
@@ -52,16 +52,16 @@ void LightRenderingSystem::initialize()
 	_modulateRender.init("./ComputeShaders/HighDynamicRange.kernel");
 	_bloom.init("./ComputeShaders/Bloom.kernel");
 
-	OpenGLTools::Shader *materialBasic = _scene->getInstance<Renderer>()->getShader("MaterialBasic");
+	auto materialBasic = _scene.lock()->getInstance<Renderer>()->getShader("MaterialBasic");
 
 	// And lights uniform buffer
-	_scene->getInstance<Renderer>()->addUniform("pointLightBuff")
-		.init(materialBasic, "pointLightBuff", POINT_LIGHT_BUFF_SIZE);
-	_scene->getInstance<Renderer>()->addUniform("spotLightBuff")
-		.init(materialBasic, "spotLightBuff", SPOT_LIGHT_BUFF_SIZE);
+	_scene.lock()->getInstance<Renderer>()->addUniform("pointLightBuff")
+		->init(materialBasic, "pointLightBuff", POINT_LIGHT_BUFF_SIZE);
+	_scene.lock()->getInstance<Renderer>()->addUniform("spotLightBuff")
+		->init(materialBasic, "spotLightBuff", SPOT_LIGHT_BUFF_SIZE);
 
-	_scene->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "pointLightBuff", "pointLightBuff");
-	_scene->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "spotLightBuff", "spotLightBuff");
+	_scene.lock()->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "pointLightBuff", "pointLightBuff");
+	_scene.lock()->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "spotLightBuff", "spotLightBuff");
 
 	glEnable(GL_CULL_FACE);
 
@@ -87,12 +87,12 @@ void LightRenderingSystem::initialize()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
-void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
+void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuffer> perFrame)
 {
 	// Update the lights buffers
-	auto		pointLightBuff = _scene->getInstance<Renderer>()->getUniform("pointLightBuff");
-	auto		spotLightBuff = _scene->getInstance<Renderer>()->getUniform("spotLightBuff");
-	auto		perLight = _scene->getInstance<Renderer>()->getUniform("PerLight");
+	auto		pointLightBuff = _scene.lock()->getInstance<Renderer>()->getUniform("pointLightBuff");
+	auto		spotLightBuff = _scene.lock()->getInstance<Renderer>()->getUniform("spotLightBuff");
+	auto		perLight = _scene.lock()->getInstance<Renderer>()->getUniform("PerLight");
 	size_t		i = 0;
 	size_t		shadowNbr = 0;
 
@@ -130,7 +130,7 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 		_spotShadowNbr = shadowNbr;
 	}
 
-	_scene->getInstance<Renderer>()->getShader("ShadowDepth")->use();
+	_scene.lock()->getInstance<Renderer>()->getShader("ShadowDepth")->use();
 	i = 0;
 	shadowNbr = 0;
 	glViewport(0, 0, _shadowDimensions.x, _shadowDimensions.y);
@@ -178,7 +178,7 @@ void	LightRenderingSystem::updateLights(OpenGLTools::UniformBuffer *perFrame)
 
 void	LightRenderingSystem::mainUpdate(double time)
 {
-	auto renderer = _scene->getInstance<Renderer>();
+	auto renderer = _scene.lock()->getInstance<Renderer>();
 	auto perFrame = renderer->getUniform("PerFrame");
 
 	// set all the lights in the GPU uniform buffers
@@ -195,7 +195,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 		// Set les uniforms du block PerFrame
 		perFrame->setUniform("projection", camera->getProjection());
 		perFrame->setUniform("view", camera->getLookAtTransform());
-		perFrame->setUniform("time", static_cast<float>(_scene->getSystem<CameraSystem>()->getLifeTime()));
+		perFrame->setUniform("time", static_cast<float>(_scene.lock()->getSystem<CameraSystem>()->getLifeTime()));
 
 		perFrame->flushChanges();
 
@@ -203,7 +203,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 
 		if (fbo.isInit() == false)
 		{
-			fbo.init(_scene->getInstance<IRenderContext>()->getScreenSize(), 4);
+			fbo.init(_scene.lock()->getInstance<IRenderContext>()->getScreenSize(), 4);
 			fbo.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
 			fbo.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
 			fbo.attachAll();
@@ -239,9 +239,9 @@ void	LightRenderingSystem::mainUpdate(double time)
 }
 
 void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo,
-													  OpenGLTools::UniformBuffer *perFrame)
+													  std::shared_ptr<OpenGLTools::UniformBuffer> perFrame)
 {
-	auto renderer = _scene->getInstance<Renderer>();
+	auto renderer = _scene.lock()->getInstance<Renderer>();
 
 	// ----------------------------------------------------
 	camFbo.bind();
@@ -316,13 +316,13 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	{
 		if (_curFactor < _targetFactor)
 		{
-			_curFactor += _adaptationSpeed * _scene->getInstance<Timer>()->getElapsed();
+			_curFactor += _adaptationSpeed * _scene.lock()->getInstance<Timer>()->getElapsed();
 			if (_curFactor > _targetFactor)
 				_curFactor = _targetFactor;
 		}
 		else
 		{
-			_curFactor -= _adaptationSpeed * _scene->getInstance<Timer>()->getElapsed();
+			_curFactor -= _adaptationSpeed * _scene.lock()->getInstance<Timer>()->getElapsed();
 			if (_curFactor < _targetFactor)
 				_curFactor = _targetFactor;
 		}
