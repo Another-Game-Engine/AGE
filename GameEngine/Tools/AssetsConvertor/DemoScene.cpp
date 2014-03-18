@@ -24,7 +24,6 @@
 
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/CameraSystem.hpp>
-#include <Systems/MeshRenderSystem.h>
 
 #include <Core/Engine.hh>
 
@@ -45,7 +44,6 @@ bool 			DemoScene::userStart()
 	// System Tests
 	//
 	//
-	addSystem<MeshRendererSystem>(0);
 	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
 
 
@@ -66,7 +64,7 @@ bool 			DemoScene::userStart()
 		convertor->serializeData("galileo");
 		convertor->clear();
 
-		convertor->load("./Assets/crytek-sponza/sponza.obj");
+		convertor->load("../../Assets/crytek-sponza/sponza.obj");
 		convertor->serializeData("sponza");
 		convertor->clear();
 

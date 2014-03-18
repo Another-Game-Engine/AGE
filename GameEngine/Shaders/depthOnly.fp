@@ -1,13 +1,13 @@
 #version 430
 
-layout (std140 shared) uniform PerFrame
+layout (std140) uniform PerFrame
 {
 	mat4 projection;
 	mat4 view;
 	float time;
 };
 
-layout (std140 shared) uniform PerModel
+layout (std140) uniform PerModel
 {
 	mat4 model;
 };

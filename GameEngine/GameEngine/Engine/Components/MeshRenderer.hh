@@ -35,10 +35,6 @@ namespace Component
 		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
-		void render(bool shadow, GLuint shadowTex, glm::mat4 const &lightVP);
-		void render_shadowmap(glm::mat4 const &lightVP);
-		void setShaderShadowMap(std::string const &shaderShadow);
-		std::string const &getShaderShadowMap() const;
 		void render(std::function<void(OpenGLTools::Shader&)> func = [](OpenGLTools::Shader &s){});
 		void renderRaw();
 		std::shared_ptr<ObjFile>	const &getMesh() const;
@@ -80,7 +76,6 @@ namespace Component
 		std::shared_ptr<ObjFile>	mesh;
 		std::string shader;
 	private:
-		std::string _shaderShadow;
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);
 	};

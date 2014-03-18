@@ -18,7 +18,6 @@
 
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/CameraSystem.hpp>
-#include <Systems/MeshRenderSystem.h>
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/FPControllerSystem.hpp>
 #include <Systems/FirstPersonViewSystem.hpp>
@@ -98,9 +97,8 @@ bool BulletDemoScene::userStart()
 	auto s = getInstance<Renderer>()->addShader("MaterialBasic",
 		"../../Shaders/MaterialBasic.vp",
 		"../../Shaders/MaterialBasic.fp");
-	auto shadowMap = getInstance<Renderer>()->addShader("ShadowDepth",
-		"../../Shaders/ShadowMapping.vp",
-		"../../Shaders/ShadowMapping.fp");
+
+	auto shadowDepth = getInstance<Renderer>()->addShader("ShadowDepth" , "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
 
 	// System Tests
 	//
@@ -115,6 +113,8 @@ bool BulletDemoScene::userStart()
 
 	addSystem<CameraSystem>(400); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<LightRenderingSystem>(1000); // Render with the lights
+	addSystem<RotationForceSystem>(320);
+	addSystem<SpriteSystem>(1500); // DRAW SPRITES
 
 
 	getSystem<LightRenderingSystem>()->setHDRIdealIllumination(0.3f);
@@ -123,9 +123,6 @@ bool BulletDemoScene::userStart()
 	getSystem<LightRenderingSystem>()->setHDRMaxLightDiminution(0.3f);
 	getSystem<LightRenderingSystem>()->setHDRMaxDarkImprovement(1.2f);
 	getSystem<LightRenderingSystem>()->useHDR(false);
-
-	addSystem<RotationForceSystem>(320);
-	addSystem<SpriteSystem>(350); // DRAW SPRITES
 
 	//
 	//
@@ -167,9 +164,16 @@ bool BulletDemoScene::userStart()
 		->init(s, "PerFrame", perFrameVars);
 	getInstance<Renderer>()->addUniform("PerModel")
 		->init(s, "PerModel", perModelVars);
-
 	getInstance<Renderer>()->addUniform("PerLight")
-		->init(shadowMap, "PerLight", perLightVars);
+		->init(shadowDepth, "PerLight", perLightVars);
+
+	getInstance<Renderer>()->addShader("2DText",
+		"../../Shaders/2DText.vp",
+		"../../Shaders/2DText.fp");
+
+	getInstance<Renderer>()->addShader("SpriteBasic",
+		"../../Shaders/SpriteBasic.vp",
+		"../../Shaders/SpriteBasic.fp");
 
 	// _engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 	getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
@@ -217,7 +221,7 @@ bool BulletDemoScene::userStart()
 	//getInstance<AssetsManager>()->saveToFile("my_planet", "./Assets/Serialized/");
 
 	// EXAMPLE LOAD FROM SAVE
-	getInstance<AssetsManager>()->loadFromFile(File("../../Assets/Serialized/my_planet.cpd"));
+	//getInstance<AssetsManager>()->loadFromFile(File("../../Assets/Serialized/my_planet.cpd"));
 
 
 //	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
