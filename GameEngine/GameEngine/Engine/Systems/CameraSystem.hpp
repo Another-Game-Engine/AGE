@@ -102,15 +102,7 @@ protected:
 			auto cameraPosition = camera->getLookAtTransform();
 			OpenGLTools::Framebuffer &camFbo = e->getComponent<Component::CameraComponent>()->frameBuffer;
 
-			if (camFbo.isInit() == true)
-			{
-				camFbo.bind();
-				glEnable(GL_DEPTH_TEST);
-				glDrawBuffer(GL_COLOR_ATTACHMENT0);
-				glClearColor(0, 0, 0, 1);
-				glClear(GL_COLOR_BUFFER_BIT);
-			}
-			if (skybox != nullptr)
+			if (skybox != nullptr && camFbo.isInit() == true)
 			{
 				std::shared_ptr<OpenGLTools::Shader> s = scene->getInstance<Renderer>()->getShader(camera->getSkyboxShader());
 				assert(s != nullptr && "Skybox does not have a shader associated");
@@ -125,6 +117,13 @@ protected:
 
 				scene->getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("view", t);
 				scene->getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
+
+				camFbo.bind();
+				glEnable(GL_DEPTH_TEST);
+				glDrawBuffer(GL_COLOR_ATTACHMENT0);
+				glClearColor(0, 0, 0, 1);
+				glClearDepth(1.0f);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 				s->use();
 

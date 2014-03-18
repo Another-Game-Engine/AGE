@@ -120,7 +120,7 @@ bool BulletDemoScene::userStart()
 	getSystem<LightRenderingSystem>()->setHDRIdealIllumination(0.3f);
 	getSystem<LightRenderingSystem>()->setHDRAdaptationSpeed(0.1f);
 
-	getSystem<LightRenderingSystem>()->setHDRMaxLightDiminution(0.3f);
+	getSystem<LightRenderingSystem>()->setHDRMaxLightDiminution(0.1f);
 	getSystem<LightRenderingSystem>()->setHDRMaxDarkImprovement(1.2f);
 	getSystem<LightRenderingSystem>()->useHDR(false);
 

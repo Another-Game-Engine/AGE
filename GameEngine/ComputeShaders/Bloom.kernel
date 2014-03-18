@@ -20,7 +20,7 @@ void	main()
 		position.y < inputSize.y)
 	{
 		float	glareThreshold = glareFactor * float(pass.x);
-		vec3	baseColor = texture(textureInput, vec2(position) / inputSize).rgb;
+		vec3	baseColor = texture(textureInput, (vec2(position) + vec2(0.5f)) / inputSize).rgb;
 		float	g0, g1, g2, coefSum;
 
 		g0 = 1.0 / (sqrt(2.0 * 3.1415926535) * sigma);
@@ -34,8 +34,8 @@ void	main()
 
 		for (uint i = 1; i < uint(3.0f * sigma); i++)
 		{
-			vec2	pxlPosition1 = vec2(position) + vec2(pass) * vec2(i) * vec2(spreading);
-			vec2	pxlPosition2 = vec2(position) - vec2(pass) * vec2(i) * vec2(spreading);
+			vec2	pxlPosition1 = vec2(position) + vec2(pass.xy) * vec2(i + 1) * vec2(spreading) + vec2(pass.yx) * vec2(0.5f);
+			vec2	pxlPosition2 = vec2(position) - vec2(pass.xy) * vec2(i) * vec2(spreading) + vec2(pass.yx) * vec2(0.5f);
 			finalColor += max(texture(textureInput, pxlPosition1 / vec2(inputSize)).rgb - vec3(glareThreshold), vec3(0)) * g0;
 			finalColor += max(texture(textureInput, pxlPosition2 / vec2(inputSize)).rgb - vec3(glareThreshold), vec3(0)) * g0;
 
