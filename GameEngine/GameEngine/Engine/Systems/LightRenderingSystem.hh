@@ -13,8 +13,8 @@
 #include <vector>
 
 #define		MAX_LIGHT_NBR	255
-#define		POINT_LIGHT_BUFF_SIZE	(MAX_LIGHT_NBR * sizeof(PointLightData) - 12)
-#define		SPOT_LIGHT_BUFF_SIZE	(MAX_LIGHT_NBR * sizeof(SpotLightData) - 12)
+#define		POINT_LIGHT_BUFF_SIZE	(MAX_LIGHT_NBR * sizeof(PointLightData))
+#define		SPOT_LIGHT_BUFF_SIZE	(MAX_LIGHT_NBR * sizeof(SpotLightData))
 
 class LightRenderingSystem : public System
 {
