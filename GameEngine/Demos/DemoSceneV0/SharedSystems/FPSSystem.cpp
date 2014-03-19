@@ -7,7 +7,9 @@ FPSSystem::FPSSystem(std::weak_ptr<AScene> scene)
 {}
 
 FPSSystem::~FPSSystem(void)
-{}
+{
+	std::cout << "dtor" << std::endl;
+}
 
 void FPSSystem::updateBegin(double time)
 {}
@@ -41,7 +43,7 @@ void FPSSystem::mainUpdate(double time)
 	_timeCounter += ftime;
 	_frameCounter += 1;
 
-    _scene.lock()->getInstance<FontManager>()->draw2DString("FPS : " + std::to_string(_lastFrame), "myFont", 40, glm::ivec2(10, 10), glm::vec4(1), "2DText");
+    _scene.lock()->getInstance<FontManager>()->draw2DString("FPS :\n" + std::to_string(_lastFrame), "myFont", 40, glm::ivec2(10, 10), glm::vec4(1), "2DText");
 
 	if (_timeCounter >= 1.0f)
 	{

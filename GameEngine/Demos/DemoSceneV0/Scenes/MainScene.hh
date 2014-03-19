@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Core/AScene.hh>
 
 class MainScene : public AScene	

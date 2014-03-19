@@ -62,6 +62,8 @@ int			main(int ac, char **av)
 	if (!e->getInstance<SceneManager>()->initScene("MainScene"))
 		return (EXIT_FAILURE);
 
+	e->getInstance<SceneManager>()->enableScene("MainScene", 0);
+
 	// launch engine
 	if (e->start() == false)
 		return (EXIT_FAILURE);
