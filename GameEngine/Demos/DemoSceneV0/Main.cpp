@@ -29,8 +29,16 @@ int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
+	e->setInstance<PubSub::Manager>();
 	e->setInstance<SdlContext, IRenderContext>();
+	e->setInstance<Input>();
+	e->setInstance<Timer>();
+	e->setInstance<AssetsManager>()->init();
 	e->setInstance<Renderer>();
+	e->setInstance<SceneManager>();
+	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
+	e->setInstance<AudioManager>()->init();
+
 
 	// init engine
 	if (e->init() == false)
@@ -44,13 +52,6 @@ int			main(int ac, char **av)
 		Attribute(GL_FLOAT, sizeof(float), 2),
 	};
 
-	e->setInstance<PubSub::Manager>();
-	e->setInstance<Input>();
-	e->setInstance<Timer>();
-	e->setInstance<AssetsManager>()->init();
-	e->setInstance<SceneManager>();
-	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
-	e->setInstance<AudioManager>()->init();
 	e->setInstance<VertexManager<4>>(param)->init();
 	e->setInstance<FontManager>(e)->init();
 	e->setInstance<SpriteManager>()->init();
