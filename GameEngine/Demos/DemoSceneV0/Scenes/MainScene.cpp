@@ -46,10 +46,10 @@ bool 			MainScene::userStart()
 	{
 		_heros = createEntity();
 
-		_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(0, 100, 0)));
+		_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(-8, 2, 0)));
 
 		auto fpc = _heros->addComponent<Component::FPController>();
-		fpc->getShape().setLocalScaling(btVector3(0.3f, 0.7f, 0.3f));
+		fpc->getShape().setLocalScaling(btVector3(0.3f, 0.3f, 0.3f));
 		auto camera = _heros->addComponent<Component::CameraComponent>();
 		camera->attachSkybox("skybox__space", "cubemapShader");
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();

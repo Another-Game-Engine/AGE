@@ -20,7 +20,7 @@
 	{
 		room = _scene.lock()->createEntity();
 		room->setLocalTransform(glm::translate(room->getLocalTransform(), glm::vec3(0)));
-		room->setLocalTransform(glm::scale(room->getLocalTransform(), glm::vec3(10.0f)));
+		room->setLocalTransform(glm::scale(room->getLocalTransform(), glm::vec3(100.0f)));
 		_scene.lock()->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__demoMuseum.cpd"));
 		auto meshObj = _scene.lock()->getInstance<AssetsManager>()->get<ObjFile>("obj__demoMuseum");
 		if (!meshObj)
