@@ -63,8 +63,6 @@ void LightRenderingSystem::initialize()
 	_scene.lock()->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "pointLightBuff", "pointLightBuff");
 	_scene.lock()->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "spotLightBuff", "spotLightBuff");
 
-	glEnable(GL_CULL_FACE);
-
 	// shadows fbo and textures
 	glGenTextures(1, &_spotShadowTextures);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
@@ -180,6 +178,8 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 
 void	LightRenderingSystem::mainUpdate(double time)
 {
+	glEnable(GL_CULL_FACE);
+
 	auto renderer = _scene.lock()->getInstance<Renderer>();
 	auto perFrame = renderer->getUniform("PerFrame");
 
@@ -238,6 +238,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		_quad.draw(current.getTextureAttachment(GL_COLOR_ATTACHMENT0), current.getSampleNbr(), current.getSize());
 	}
+	glDisable(GL_CULL_FACE);
 }
 
 void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo,
