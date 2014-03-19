@@ -74,14 +74,15 @@ void FontManager::_drawList()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDrawBuffer(GL_BACK);
-	glReadBuffer(GL_BACK);
-	glDisable(GL_DEPTH_TEST);
+	glDepthFunc(GL_ALWAYS);
+
 	for (auto &e : _toDraw)
 	{
 		_draw2DString(e.str, e.fontName, e.size, e.position, e.color, e.shader);
 	}
 	_toDraw.clear();
-	glEnable(GL_DEPTH_TEST);
+
+	glDepthFunc(GL_LESS);
 }
 
 void FontManager::_draw2DString(const std::string &text,
