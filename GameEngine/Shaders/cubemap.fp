@@ -19,7 +19,7 @@ in vec3 texcoords;
 
 out layout (location = 0) vec4 frag_colour;
 
-void main () {
-//  frag_colour = texture (cube_texture, texcoords);
-	frag_colour = vec4(1, 0, 0, 1);
+void main ()
+{
+	frag_colour = texture (cube_texture, texcoords);
 }
