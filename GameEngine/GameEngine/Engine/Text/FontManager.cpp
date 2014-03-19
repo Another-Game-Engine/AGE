@@ -134,7 +134,10 @@ void FontManager::_draw2DString(const std::string &text,
 	for (std::size_t i = 0; i < text.size(); ++i)
 	{
 		std::size_t l = std::size_t(text[i] - ASCII_BEGIN);
-		glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
+		if (l > ASCII_END)
+			glyphWidth = size;
+		else
+			glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
 		if (text[i] == ' ')
 		{
 			lastX = sz / 3.0f;
