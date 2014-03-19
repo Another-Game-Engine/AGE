@@ -58,6 +58,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetsConvertor", "Tools\As
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DemoSceneV0", "Demos\DemoSceneV0\DemoSceneV0.vcxproj", "{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

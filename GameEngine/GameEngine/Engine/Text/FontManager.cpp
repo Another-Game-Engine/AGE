@@ -130,6 +130,7 @@ void FontManager::_draw2DString(const std::string &text,
 	auto transformationID = glGetUniformLocation(s->getId(), "transformation");
 	auto glyphWidth = 0.0f;
 	float lastX = static_cast<float>(position.x);
+	float lineWidth = 0.0f;
 	for (std::size_t i = 0; i < text.size(); ++i)
 	{
 		std::size_t l = std::size_t(text[i] - ASCII_BEGIN);
@@ -138,10 +139,17 @@ void FontManager::_draw2DString(const std::string &text,
 		{
 			lastX = sz / 3.0f;
 		}
+		else if (text[i] == '\n')
+		{
+			transformation = glm::translate(transformation, glm::vec3(-lineWidth, f._glyphSize, 0));
+			lineWidth = 0;
+			continue;
+		}
 		else
 		{
 			lastX = glyphWidth;
 		}
+		lineWidth += lastX;
 		glUniformMatrix4fv(transformationID, 1, GL_FALSE, glm::value_ptr(transformation));
 		f._map[l].buffer->draw(GL_QUADS);
 		transformation = glm::translate(transformation, glm::vec3(lastX, 0, 0));
