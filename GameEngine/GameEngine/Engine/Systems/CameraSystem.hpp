@@ -121,6 +121,7 @@ protected:
 				camFbo.bind();
 				glEnable(GL_DEPTH_TEST);
 				glDrawBuffer(GL_COLOR_ATTACHMENT0);
+				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 				glClearColor(0, 0, 0, 1);
 				glClearDepth(1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -133,7 +134,6 @@ protected:
 				skybox->draw();
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 				glDepthMask(GL_TRUE);
-				glFinish();
 			}
 		}
 		_totalTime += time;

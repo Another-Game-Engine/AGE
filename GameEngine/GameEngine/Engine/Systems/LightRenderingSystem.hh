@@ -30,7 +30,7 @@ public:
 	void		useBloom(bool use) { _useBloom = use; }
 	void		setBloomSigma(float sigma) { _bloomSigma = sigma; }
 	void		setBloomGlare(float glare) { _bloomGlare = glare; }
-	void		setBloomSpreading(float spread) { _bloomSpreading = glm::max(spread, 1.0f); }
+	void		setBloomMipmap(uint32_t mipmap) { _bloomMipmap = mipmap; }
 	void		useHDR(bool use) { _useHDR = use; }
 	void		setHDRIdealIllumination(float idealIllum) { _idealIllum = idealIllum; }
 	void		setHDRAdaptationSpeed(float adaptSpeed) { _adaptationSpeed = adaptSpeed; }
@@ -96,7 +96,7 @@ private:
 	GLuint							_bloomTexture;
 	float							_bloomSigma;
 	float							_bloomGlare;
-	float							_bloomSpreading;
+	uint32_t						_bloomMipmap;
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
 	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, std::shared_ptr<OpenGLTools::UniformBuffer> perFrame);

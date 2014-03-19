@@ -27,7 +27,7 @@ LightRenderingSystem::LightRenderingSystem(std::weak_ptr<AScene> scene) :
 						_bloomTextureSize(0),
 						_bloomSigma(3.0f),
 						_bloomGlare(1.0f),
-						_bloomSpreading(2.0f)
+						_bloomMipmap(1)
 {
 }
 
@@ -205,7 +205,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 
 		if (fbo.isInit() == false)
 		{
-			fbo.init(_scene.lock()->getInstance<IRenderContext>()->getScreenSize(), 4);
+			fbo.init(_scene.lock()->getInstance<IRenderContext>()->getScreenSize(), 1);
 			fbo.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
 			fbo.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
 			fbo.attachAll();
@@ -265,7 +265,6 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	// ----------------------------------------------------
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glDepthFunc(GL_LEQUAL);
-	glColorMask(1, 1, 1, 1);
 
 	GLuint		spotShadowMap = _spotShadowTextures;
 
@@ -346,33 +345,42 @@ void		LightRenderingSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 		// Creating bloom texture
 		// ----------------------------------------------------
 
-		if (_bloomTextureSize != camFbo.getSize())
+		glm::uvec2		mipmapDim;
+
+		mipmapDim.x = static_cast<uint32_t>(glm::max(1.0f, glm::floor(camFbo.getSize().x / glm::pow(2.0f, static_cast<float>(_bloomMipmap)))));
+		mipmapDim.y = static_cast<uint32_t>(glm::max(1.0f, glm::floor(camFbo.getSize().y / glm::pow(2.0f, static_cast<float>(_bloomMipmap)))));
+
+		if (_bloomTextureSize != mipmapDim)
 		{
 			glBindTexture(GL_TEXTURE_2D, _bloomTexture);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, camFbo.getSize().x, camFbo.getSize().y, 0, GL_RGBA, GL_FLOAT, NULL);
-			_bloomTextureSize = camFbo.getSize();
+			_bloomTextureSize = mipmapDim;
 		}
 
 		// ----------------------------------------------------
 		_bloom.use();
 
 		GLint		sigmaLocation = glGetUniformLocation(_bloom.getId(), "sigma");
-		GLint		spreadingLocation = glGetUniformLocation(_bloom.getId(), "spreading");
 		GLint		passLocation = glGetUniformLocation(_bloom.getId(), "pass");
 		GLint		glareLocation = glGetUniformLocation(_bloom.getId(), "glareFactor");
 
 		glUniform1f(sigmaLocation, _bloomSigma);
-		glUniform1f(spreadingLocation, _bloomSpreading);
 		glUniform1f(glareLocation, _bloomGlare);
 		glUniform2i(passLocation, 1, 0);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, colorTexture);
+
+//		glGenerateMipmap(GL_TEXTURE_2D);
+//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, _bloomMipmap);
+
 		glBindImageTexture(1, _bloomTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 		glDispatchCompute(groupNbr.x, groupNbr.y, 1);
+
+//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 
 		glUniform2i(passLocation, 0, 1);
 
