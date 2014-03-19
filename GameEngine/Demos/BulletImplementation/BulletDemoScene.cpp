@@ -213,7 +213,7 @@ bool 			BulletDemoScene::userStart()
 	//getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
 	//	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Museum.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Conference.cpd"));
 
 	getInstance<FontManager>()->loadFont(File("../../Assets/Serialized/myFont.cpdFont"));
 
@@ -289,14 +289,14 @@ bool 			BulletDemoScene::userStart()
 	{
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
-		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
+		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(10)));
 		//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0.0f);
 		rigidBody->setMass(0);
 		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
 		//rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_conference-room");
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
@@ -304,7 +304,7 @@ bool 			BulletDemoScene::userStart()
 		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
 		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
 		//auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__conference-room"));
 		mesh->setShader("MaterialBasic");
 	}
 
