@@ -86,6 +86,10 @@ bool 			DemoScene::userStart()
 		convertor->serializeData("Museum");
 		convertor->clear();
 
+		convertor->load("../../Assets/conference-room.obj");
+		convertor->serializeData("Conference");
+		convertor->clear();
+
 		//convertor->load("../../Assets/elf/elf.obj");
 		//convertor->serializeData("Elf");
 		//convertor->clear();
