@@ -21,12 +21,18 @@
     <ClCompile Include="Scenes\MainScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SharedSystems\FPSSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyTags.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\MainScene.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedSystems\FPSSystem.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

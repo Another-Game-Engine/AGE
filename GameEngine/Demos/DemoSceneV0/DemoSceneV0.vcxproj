@@ -206,10 +206,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Scenes\MainScene.cpp" />
+    <ClCompile Include="SharedSystems\FPSSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyTags.hpp" />
     <ClInclude Include="Scenes\MainScene.hh" />
+    <ClInclude Include="SharedSystems\FPSSystem.hh" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
