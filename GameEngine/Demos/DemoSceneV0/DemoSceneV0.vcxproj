@@ -185,7 +185,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;_IRR_STATIC_LIB_;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -205,11 +205,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Rooms\Entrance.cpp" />
     <ClCompile Include="Scenes\MainScene.cpp" />
     <ClCompile Include="SharedSystems\FPSSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyTags.hpp" />
+    <ClInclude Include="Rooms\Entrance.hh" />
+    <ClInclude Include="Rooms\Room.hpp" />
     <ClInclude Include="Scenes\MainScene.hh" />
     <ClInclude Include="SharedSystems\FPSSystem.hh" />
   </ItemGroup>
