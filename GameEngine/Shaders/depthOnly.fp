@@ -1,10 +1,9 @@
-#version 330
+#version 430
 
 layout (std140) uniform PerFrame
 {
 	mat4 projection;
 	mat4 view;
-	vec4 light;
 	float time;
 };
 
@@ -17,5 +16,5 @@ out layout (location = 0) vec4 FragColor;
 
 void main(void)
 {
-  FragColor = vec4(0,0,0,0);
+  FragColor = vec4(1, 1, 1, 1);
 }

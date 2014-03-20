@@ -72,11 +72,17 @@ bool FontManager::isLoaded(const std::string &name)
 
 void FontManager::_drawList()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDrawBuffer(GL_BACK);
+	glDepthFunc(GL_ALWAYS);
+
 	for (auto &e : _toDraw)
 	{
 		_draw2DString(e.str, e.fontName, e.size, e.position, e.color, e.shader);
 	}
 	_toDraw.clear();
+
+	glDepthFunc(GL_LESS);
 }
 
 void FontManager::_draw2DString(const std::string &text,
@@ -121,7 +127,7 @@ void FontManager::_draw2DString(const std::string &text,
 
 	glUniform1i(glGetUniformLocation(s->getId(), "fTexture0"), 0);
 	glUniform4f(glGetUniformLocation(s->getId(), "color"), color.x, color.y, color.z, color.a);
-	glm::ivec2 screen = _dpyManager.lock()->getInstance<IRenderContext>()->getScreenSize();
+	auto screen = _dpyManager.lock()->getInstance<IRenderContext>()->getScreenSize();
 	glm::mat4 Projection = glm::mat4(1);
 	Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
 	glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, glm::value_ptr(Projection));

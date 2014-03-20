@@ -52,7 +52,6 @@ struct MaterialFile : public MediaFile<MaterialFile>
 		std::weak_ptr<DependenciesInjector> _dpyManager;
 		friend struct MaterialFile;
 	public:
-
 		Material();
 
 		void setUniforms(std::shared_ptr<OpenGLTools::UniformBuffer> buffer);
@@ -63,7 +62,6 @@ struct MaterialFile : public MediaFile<MaterialFile>
 
 		void save(cereal::PortableBinaryOutputArchive &ar) const;
 		void load(cereal::PortableBinaryInputArchive &ar);
-
 	};
 
 	std::vector<Material> materials;

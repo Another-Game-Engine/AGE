@@ -18,9 +18,9 @@ public:
 	virtual void updateEvents(Input &input) const = 0;
 	virtual void flush() const = 0;
 	virtual void stop() const = 0;
-	glm::ivec2 getScreenSize() const
+	glm::uvec2 getScreenSize() const
 	{
-		return glm::ivec2(_width, _height);
+		return glm::uvec2(_width, _height);
 	}
 protected:
 	unsigned int     _width;
