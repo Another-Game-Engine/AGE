@@ -152,6 +152,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 
 void	LightRenderingSystem::mainUpdate(double time)
 {
+	glEnable(GL_CULL_FACE);
 	auto renderer = _scene.lock()->getInstance<Renderer>();
 	auto perFrame = renderer->getUniform("PerFrame");
 
@@ -178,6 +179,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 		// First Pass
 		computeCameraRender(camera->frameBuffer, perFrame);
 	}
+	glDisable(GL_CULL_FACE);
 }
 
 void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo,

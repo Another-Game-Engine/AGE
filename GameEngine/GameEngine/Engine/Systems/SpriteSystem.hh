@@ -6,6 +6,7 @@
 #include <Components/SpriteComponent.hh>
 #include <Entities/EntityData.hh>
 #include <Context/IRenderContext.hh>
+#include <Components/CameraComponent.hpp>
 
 class SpriteSystem : public System
 {
@@ -32,8 +33,8 @@ private:
 	{
 		for (auto c : _cameras.getCollection())
 		{
-			glm::mat4 Projection = c->getComponent<Component::CameraComponent>()->getProjection();
-			auto View = c->getComponent<Component::CameraComponent>()->getLookAtTransform();
+			glm::mat4 Projection = c->getComponent<Component::CameraComponent>()->projection;
+			auto View = c->getComponent<Component::CameraComponent>()->lookAtTransform;
 			//auto glyphWidth = 0.0f;
 			//float lastX = position.x;
 
