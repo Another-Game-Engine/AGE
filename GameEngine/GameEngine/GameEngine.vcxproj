@@ -263,6 +263,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpotLight.hh" />
+    <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
