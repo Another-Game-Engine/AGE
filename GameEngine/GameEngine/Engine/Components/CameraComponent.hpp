@@ -20,10 +20,6 @@ namespace Component
 		virtual void reset(){}
 		void                 attachSkybox(const std::string &name, const std::string &cubeMapShader);
 		void                 dettachSkybox();
- 		glm::mat4            &setProjection();
-		glm::mat4            &getProjection();
-		inline glm::mat4            &setLookAtTransform() { return lookAtTransform; }
-		inline const glm::mat4      &getLookAtTransform() const { return lookAtTransform; }
 		std::shared_ptr<CubeMapFile> getSkybox();
 		const std::string &getSkyboxShader() const;
 
