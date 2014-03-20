@@ -119,6 +119,7 @@ protected:
 				scene->getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
 
 				camFbo.bind();
+				glViewport(0, 0, camFbo.getSize().x, camFbo.getSize().y);
 
 				glEnable(GL_DEPTH_TEST);
 				glDrawBuffer(GL_COLOR_ATTACHMENT0);
