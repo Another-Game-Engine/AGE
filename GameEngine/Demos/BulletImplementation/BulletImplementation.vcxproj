@@ -224,6 +224,17 @@
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ComputeShaders\AverageColorFirstPass.kernel" />
+    <None Include="..\..\ComputeShaders\HighDynamicRange.kernel" />
+    <None Include="..\..\Shaders\depthOnly.fp" />
+    <None Include="..\..\Shaders\depthOnly.vp" />
+    <None Include="..\..\Shaders\fboToScreen.fp" />
+    <None Include="..\..\Shaders\fboToScreen.vp" />
+    <None Include="..\..\Shaders\fboToScreenMultisampled.fp" />
+    <None Include="..\..\Shaders\MaterialBasic.fp" />
+    <None Include="..\..\Shaders\MaterialBasic.vp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

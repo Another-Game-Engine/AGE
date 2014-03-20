@@ -206,6 +206,11 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
+    <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
+    <ClCompile Include="Engine\Components\SpotLight.cpp" />
+    <ClCompile Include="Engine\Systems\PostFxSystem.cpp" />
+    <ClCompile Include="Engine\Utils\DrawQuad.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
@@ -249,6 +254,7 @@
     <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
+    <ClCompile Include="Engine\Systems\LightRenderingSystem.cpp" />
     <ClCompile Include="Engine\Physic\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Text\Font.cpp" />
@@ -259,6 +265,11 @@
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
+    <ClInclude Include="Engine\Systems\DownSampleSystem.hh" />
+    <ClInclude Include="Engine\Components\SpotLight.hh" />
+    <ClInclude Include="Engine\Systems\PostFxSystem.hh" />
+    <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
@@ -326,6 +337,7 @@
     <ClInclude Include="Engine\Systems\CollisionAdderSystem.hpp" />
     <ClInclude Include="Engine\Systems\CollisionCleanerSystem.hpp" />
     <ClInclude Include="Engine\Systems\FirstPersonViewSystem.hpp" />
+    <ClInclude Include="Engine\Systems\LightRenderingSystem.hh" />
     <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
@@ -351,6 +363,7 @@
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
+    <ClInclude Include="Engine\Components\PointLight.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

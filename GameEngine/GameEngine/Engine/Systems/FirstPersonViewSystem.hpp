@@ -35,7 +35,7 @@ protected:
 			auto lookAt = e->getGlobalTransform();
 			auto camera = e->getComponent<Component::CameraComponent>();
 			lookAt = glm::translate(lookAt, glm::vec3(0, 0, 1));
-			camera->setLookAtTransform() = glm::lookAt(posFromMat4(e->getGlobalTransform()), posFromMat4(lookAt), glm::vec3(0, 1, 0));
+			camera->lookAtTransform = glm::lookAt(posFromMat4(e->getGlobalTransform()), posFromMat4(lookAt), glm::vec3(0, 1, 0));
 		}
 	}
 

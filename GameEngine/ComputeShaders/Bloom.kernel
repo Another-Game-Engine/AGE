@@ -1,0 +1,52 @@
+#version 430 core
+
+#define		PI		3.1415926535f
+
+uniform float	sigma;
+uniform ivec2	pass;
+uniform float	glareFactor;
+
+layout (binding = 0) uniform sampler2D textureInput;
+layout (binding = 1, rgba16f) uniform image2D finalOutput;
+
+// we use 16 * 16 threads groups
+layout (local_size_x = 16, local_size_y = 16) in;
+
+void	main()
+{
+	ivec2		position = ivec2(gl_GlobalInvocationID.xy);
+	ivec2		inputSize = textureSize(textureInput, 0);
+	ivec2		outputSize = imageSize(finalOutput);
+
+	if (position.x < outputSize.x && position.y < outputSize.y)
+	{
+		float	glareThreshold = glareFactor * float(pass.x);
+		vec3	baseColor = texture(textureInput, (vec2(position) + vec2(0.5f)) / inputSize).rgb;
+		vec3	incremental;
+		float	coefSum;
+
+		incremental.x = 1.0 / (sqrt(2.0 * PI) * sigma);
+		incremental.y = exp(-0.5f / (sigma * sigma));
+		incremental.z = incremental.y * incremental.y;
+		coefSum = incremental.x;
+		incremental.xy *= incremental.yz;
+
+		vec3	finalColor = (baseColor - vec3(glareThreshold)) * incremental.x;
+
+		for (uint i = 1; i < uint(3.0f * sigma); i++)
+		{
+			vec2	pxlPosition1 = vec2(position) + vec2(pass.xy) * vec2(i) + vec2(0.5f);
+			vec2	pxlPosition2 = vec2(position) - vec2(pass.xy) * vec2(i) + vec2(0.5f);
+			finalColor += max(texture(textureInput, pxlPosition1 / vec2(outputSize)).rgb - vec3(glareThreshold), vec3(0)) * incremental.x;
+			finalColor += max(texture(textureInput, pxlPosition2 / vec2(outputSize)).rgb - vec3(glareThreshold), vec3(0)) * incremental.x;
+
+			coefSum += 2.0f * incremental.x;
+			incremental.xy *= incremental.yz;
+		}
+		vec3	pxlColor = vec3(0);
+
+		if (pass.y == 1)
+			pxlColor = imageLoad(finalOutput, position).rgb;
+		imageStore(finalOutput, position, vec4(pxlColor + max(finalColor / coefSum, vec3(0)), 1.0f));
+	}
+}
