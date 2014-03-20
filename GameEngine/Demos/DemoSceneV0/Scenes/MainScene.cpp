@@ -47,7 +47,6 @@ bool 			MainScene::userStart()
 	addSystem<FPSSystem>(40);
 	addSystem<EntityPlacingSystem>(50);
 
-	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO

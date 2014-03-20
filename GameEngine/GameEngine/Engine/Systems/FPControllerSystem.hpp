@@ -94,7 +94,7 @@ private:
 		forwardDir.normalize();
 		upDir.normalize();
 		sideDir.normalize();
-		btVector3 walkDirection = btVector3(0.0, 0.0, 0.0);
+		btVector3 walkDirection = btVector3(0.0, 0.0000001, 0.0);
 		bool isRunning = false;
 		if (controls[Component::FPController::RUN])
 			isRunning = true;
