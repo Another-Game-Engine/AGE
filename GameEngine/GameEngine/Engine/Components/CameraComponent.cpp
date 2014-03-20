@@ -29,16 +29,6 @@ namespace Component
 		skybox = nullptr;
 	}
 
-	glm::mat4         &CameraComponent::setProjection()
-	{
-		return (projection);
-}
-
-	glm::mat4 		  &CameraComponent::getProjection()
-	{
-		return (projection);
-	}
-
 	std::shared_ptr<CubeMapFile> CameraComponent::getSkybox()
 	{
 		return skybox;

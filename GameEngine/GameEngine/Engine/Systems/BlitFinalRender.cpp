@@ -29,7 +29,6 @@ void	BlitFinalRender::mainUpdate(double time)
 		
 		glViewport(camera->viewport.x, camera->viewport.y, camera->viewport.z, camera->viewport.w);
 
-		glFinish();
 		// Blit final result on back buffer:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glDrawBuffer(GL_BACK);
