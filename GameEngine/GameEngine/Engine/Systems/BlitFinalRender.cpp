@@ -15,7 +15,8 @@ BlitFinalRender::~BlitFinalRender()
 void	BlitFinalRender::initialize()
 {
 	_cameraFilter.requireComponent<Component::CameraComponent>();
-
+	_scene.lock()->getInstance<Renderer>()->addShader("fboToScreenMultisampled", "../../Shaders/fboToScreen.vp", "../../Shaders/fboToScreenMultisampled.fp");
+	_scene.lock()->getInstance<Renderer>()->addShader("fboToScreen", "../../Shaders/fboToScreen.vp", "../../Shaders/fboToScreen.fp");
 	_quad.init(_scene);
 }
 
