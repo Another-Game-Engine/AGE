@@ -28,7 +28,9 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		glm::ivec2 screen = _scene.lock()->getInstance<IRenderContext>()->getScreenSize();
+		glDepthFunc(GL_ALWAYS);
+
+		auto screen = _scene.lock()->getInstance<IRenderContext>()->getScreenSize();
 		glm::mat4 Projection = glm::mat4(1);
 		Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
 		//auto glyphWidth = 0.0f;
@@ -48,6 +50,8 @@ private:
 			s->animation->update(s->index);
 			s->animation->draw(s->index);
 		}
+
+		glDepthFunc(GL_LESS);
 	}
 
 	virtual void initialize()

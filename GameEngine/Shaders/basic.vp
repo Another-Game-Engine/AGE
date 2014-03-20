@@ -1,10 +1,9 @@
-#version 330
+#version 430 core
 
 layout (std140) uniform PerFrame
 {
 	mat4 projection;
 	mat4 view;
-	vec4 light;
 	float time;
 };
 
@@ -13,7 +12,7 @@ layout (std140) uniform PerModel
 	mat4 model;
 };
 
-uniform sampler2D fTexture0;
+layout(binding = 0) uniform sampler2D fTexture0;
 
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;
@@ -25,9 +24,7 @@ out vec2 gUv;
 
 void main(void)
 {
-  mat4 modelView = view * model;
-
   gColor = vColor;
   gUv = vTexCoord;
-  gl_Position = vPosition;
+  gl_Position = projection * view * model * vPosition;
 }

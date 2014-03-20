@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-
 #include <stdlib.h>
 #include <Core/Engine.hh>
 #include "BulletDemoScene.hh"
@@ -20,6 +19,7 @@
 #include <MediaFiles/AssetsManager.hpp>
 #include <Audio/AudioManager.hh>
 #include <OpenGL/VertexManager.hh>
+#include <Components/PointLight.hh>
 #include <Text/FontManager.hh>
 #include <Sprite/SpriteManager.hh>
 
@@ -58,13 +58,13 @@ int			main(int ac, char **av)
 
 	// add scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");
-	e->getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
+	//e->getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
 
 	// bind scene
 	if (!e->getInstance<SceneManager>()->initScene("BulletDemo"))
 		return false;
-	if (!e->getInstance<SceneManager>()->initScene("SolarSystemDemo"))
-		return false;
+	//if (!e->getInstance<SceneManager>()->initScene("SolarSystemDemo"))
+	//	return false;
 	e->getInstance<SceneManager>()->enableScene("BulletDemo", 0);
 
 	// lanch engine

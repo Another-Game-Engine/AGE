@@ -10,6 +10,7 @@ namespace Component
 {
 	CameraComponent::CameraComponent()
 		: ComponentBase<CameraComponent>(),
+		viewport(0),
 		projection(glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f)),
 		lookAtTransform(1)
 	{}
@@ -26,16 +27,6 @@ namespace Component
 	void CameraComponent::dettachSkybox()
 	{
 		skybox = nullptr;
-	}
-
-	glm::mat4         &CameraComponent::setProjection()
-	{
-		return (projection);
-}
-
-	glm::mat4 		  &CameraComponent::getProjection()
-	{
-		return (projection);
 	}
 
 	std::shared_ptr<CubeMapFile> CameraComponent::getSkybox()

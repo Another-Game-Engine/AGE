@@ -3,8 +3,6 @@
 #include "Core/Renderer.hh"
 #include "BulletDemoScene.hh"
 
-#include <MediaFiles/AssetsManager.hpp>
-
 #include <Components/RotationForce.hpp>
 #include <Components/CameraComponent.hpp>
 #include <Components/RigidBody.hpp>
@@ -20,7 +18,6 @@
 
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/CameraSystem.hpp>
-#include <Systems/MeshRenderSystem.h>
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/FPControllerSystem.hpp>
 #include <Systems/FirstPersonViewSystem.hpp>
@@ -28,6 +25,9 @@
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/AudioSystem.hpp>
 #include <Systems/SpriteSystem.hh>
+#include <Systems/DownSampleSystem.hh>
+#include <Systems/PostFxSystem.hh>
+#include <Systems/BlitFinalRender.hh>
 #include <BallSoundSystem.hpp>
 
 #include <Text/FontManager.hh>
@@ -35,9 +35,14 @@
 
 #include <Core/Engine.hh>
 
+#include <Systems\LightRenderingSystem.hh>
+
 #include <SDL\SDL.h>
 
 #include <MyTags.hpp>
+
+
+Entity globalCamera;
 
 BulletDemoScene::BulletDemoScene(std::weak_ptr<Engine> engine) : AScene(engine)
 {
@@ -47,13 +52,11 @@ BulletDemoScene::~BulletDemoScene(void)
 {
 }
 
-Entity  BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
+Entity BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	auto t = e->getLocalTransform();
-	t = glm::translate(t, pos);
-	t = glm::scale(t, scale);
-	e->setLocalTransform(t);
+	e->setLocalTransform(glm::translate(e->getLocalTransform(), pos));
+	e->setLocalTransform(glm::scale(e->getLocalTransform(), scale));
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 
@@ -62,15 +65,13 @@ Entity  BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::str
 	return e;
 }
 
-Entity  BulletDemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
+Entity BulletDemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	auto t = e->getLocalTransform();
-	t = glm::translate(t, pos);
-	t = glm::rotate(t, 0.0f, glm::vec3(1, 0, 0));
-	t = glm::rotate(t, 0.0f, glm::vec3(0, 1, 0));
-	t = glm::scale(t, scale);
-	e->setLocalTransform(t);
+	e->setLocalTransform(glm::translate(e->getLocalTransform(), pos));
+	e->setLocalTransform(glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(1, 0, 0)));
+	e->setLocalTransform(glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(0, 1, 0)));
+	e->setLocalTransform(glm::scale(e->getLocalTransform(), scale));
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::BOX);
 	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
@@ -78,13 +79,11 @@ Entity  BulletDemoScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::strin
 	return e;
 }
 
-Entity  BulletDemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
+Entity BulletDemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	auto t = e->getLocalTransform();
-	t = glm::translate(t, pos);
-	t = glm::scale(t, scale);
-	e->setLocalTransform(t);
+	e->setLocalTransform(glm::translate(e->getLocalTransform(), pos));
+	e->setLocalTransform(glm::scale(e->getLocalTransform(), scale));
 	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
 	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
 	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
@@ -92,50 +91,59 @@ Entity  BulletDemoScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::str
 	return e;
 }
 
-bool 			BulletDemoScene::userStart()
+bool BulletDemoScene::userStart()
 {
 	std::srand(0);
 
-	rct<Component::CameraComponent>()
-		.rct<Component::MeshRenderer>()
-		.rct<Component::RotationForce>()
-		.rct<Component::AudioListener>()
-		.rct<Component::AudioEmitter>()
-		.rct<Component::RigidBody>()
-		.rct<Component::Collision>()
-		.rct<Component::FirstPersonView>()
-		.rct<Component::FPController>();
+	std::cout << "OPENGL VERSION : " << glGetString(GL_VERSION) << std::endl;
 
+	auto s = getInstance<Renderer>()->addShader("MaterialBasic",
+		"../../Shaders/MaterialBasic.vp",
+		"../../Shaders/MaterialBasic.fp");
+
+	auto shadowDepth = getInstance<Renderer>()->addShader("ShadowDepth" , "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
 
 	// System Tests
 	//
 	//
-	addSystem<MeshRendererSystem>(0);
-	addSystem<BulletDynamicSystem>(10); // UPDATE PHYSIC WORLD
-	addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
-	addSystem<FPControllerSystem>(50); // UPDATE FIRST PERSON CONTROLLER
-	addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
-	addSystem<CameraSystem>(200); // UPDATE CAMERA AND RENDER TO SCREEN
-	addSystem<BallSoundSystem>(220);
-	addSystem<AudioSystem>(250);
-	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
-	addSystem<RotationForceSystem>(320);
-	addSystem<SpriteSystem>(350); // DRAW SPRITES
+	addSystem<BulletDynamicSystem>(0); // UPDATE PHYSIC WORLD
+	addSystem<CollisionAdder>(10); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
+	addSystem<FPControllerSystem>(20); // UPDATE FIRST PERSON CONTROLLER
+	addSystem<FirstPersonViewSystem>(30); // UPDATE FIRST PERSON CAMERA
+	addSystem<BallSoundSystem>(40);
+	addSystem<AudioSystem>(50);
+	addSystem<CollisionCleaner>(60); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
+
+	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	addSystem<LightRenderingSystem>(80); // Render with the lights
+	addSystem<SpriteSystem>(90); // DRAW SPRITES
+	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
+	addSystem<PostFxSystem>(110); // POST FXs
+	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
+
+	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
+	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
+	getSystem<PostFxSystem>()->useHDR(false);
+
 	//
 	//
 	// end System Test
+
 
 	std::string		perModelVars[] =
 	{
 		"model"
 	};
 
-	std::string		perFrameVars[] =
+	std::string	perFrameVars[] =
 	{
 		"projection",
 		"view",
-		"light",
-		"time"
+		"time",
+		"pointLightNbr",
+		"spotLightNbr"
 	};
 
 	std::string		materialBasic[] =
@@ -148,9 +156,10 @@ bool 			BulletDemoScene::userStart()
 		"shininess"
 	};
 
-	auto s = getInstance<Renderer>()->addShader("MaterialBasic",
-		"../../Shaders/MaterialBasic.vp",
-		"../../Shaders/MaterialBasic.fp");
+	std::string	perLightVars[] =
+	{
+		"lightVP"
+	};
 
 	getInstance<Renderer>()->addUniform("MaterialBasic")
 		->init(s, "MaterialBasic", materialBasic);
@@ -158,6 +167,8 @@ bool 			BulletDemoScene::userStart()
 		->init(s, "PerFrame", perFrameVars);
 	getInstance<Renderer>()->addUniform("PerModel")
 		->init(s, "PerModel", perModelVars);
+	getInstance<Renderer>()->addUniform("PerLight")
+		->init(shadowDepth, "PerLight", perLightVars);
 
 	getInstance<Renderer>()->addShader("2DText",
 		"../../Shaders/2DText.vp",
@@ -167,53 +178,26 @@ bool 			BulletDemoScene::userStart()
 		"../../Shaders/SpriteBasic.vp",
 		"../../Shaders/SpriteBasic.fp");
 
-	getInstance<Renderer>()->addShader("basic", "../../Shaders/basic.vp", "../../Shaders/basic.fp", "../../Shaders/basic.gp");
+	// _engine.getInstance<Renderer>()->addShader("basic", "Shaders/basic.vp", "Shaders/basic.fp", "Shaders/basic.gp");
 	getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
-	getInstance<Renderer>()->addShader("bump", "../../Shaders/bump.vp", "../../Shaders/bump.fp");
-	getInstance<Renderer>()->addShader("earth", "../../Shaders/earth.vp", "../../Shaders/earth.fp");
-	getInstance<Renderer>()->addShader("fboToScreen", "../../Shaders/fboToScreen.vp", "../../Shaders/fboToScreen.fp");
-	getInstance<Renderer>()->addShader("brightnessFilter", "../../Shaders/brightnessFilter.vp", "../../Shaders/brightnessFilter.fp");
-	getInstance<Renderer>()->addShader("blurY", "../../Shaders/brightnessFilter.vp", "../../Shaders/blur1.fp");
+	// _engine.getInstance<Renderer>()->addShader("brightnessFilter", "Shaders/brightnessFilter.vp", "Shaders/brightnessFilter.fp");
+	// _engine.getInstance<Renderer>()->addShader("blurY", "Shaders/brightnessFilter.vp", "Shaders/blur1.fp");
+	getInstance<Renderer>()->addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
+	getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
+	getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerLight", "PerLight");
 
-	getInstance<Renderer>()->getShader("basic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-	getInstance<Renderer>()->getShader("basicLight")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-	getInstance<Renderer>()->getShader("bump")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(2).build();
-	getInstance<Renderer>()->getShader("fboToScreen")->addTarget(GL_COLOR_ATTACHMENT0)
-		.addLayer(GL_COLOR_ATTACHMENT0).build();
-	getInstance<Renderer>()->getShader("MaterialBasic")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
-	getInstance<Renderer>()->getShader("2DText")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-	getInstance<Renderer>()->getShader("earth")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(4).build();
-	getInstance<Renderer>()->getShader("brightnessFilter")->addTarget(GL_COLOR_ATTACHMENT1)
-		.addLayer(GL_COLOR_ATTACHMENT0).build();
-	getInstance<Renderer>()->getShader("blurY")->addTarget(GL_COLOR_ATTACHMENT2)
-		.addLayer(GL_COLOR_ATTACHMENT0).addLayer(GL_COLOR_ATTACHMENT1).build();
+	getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
+	getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 
-	getInstance<Renderer>()->getUniform("PerFrame")->setUniform("light", glm::vec4(0, 0, 0, 1));
+	// _engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerFrame", "PerFrame");
+	// _engine.getInstance<Renderer>()->bindShaderToUniform("basic", "PerModel", "PerModel");
 
-	getInstance<Renderer>()->bindShaderToUniform("basicLight", "PerFrame", "PerFrame");
-	getInstance<Renderer>()->bindShaderToUniform("basicLight", "PerModel", "PerModel");
-	getInstance<Renderer>()->bindShaderToUniform("basicLight", "MaterialBasic", "MaterialBasic");
-	getInstance<Renderer>()->bindShaderToUniform("basic", "PerFrame", "PerFrame");
-	getInstance<Renderer>()->bindShaderToUniform("basic", "PerModel", "PerModel");
-	getInstance<Renderer>()->bindShaderToUniform("basic", "MaterialBasic", "MaterialBasic");
-	getInstance<Renderer>()->bindShaderToUniform("earth", "PerFrame", "PerFrame");
-	getInstance<Renderer>()->bindShaderToUniform("earth", "PerModel", "PerModel");
-	getInstance<Renderer>()->bindShaderToUniform("earth", "MaterialBasic", "MaterialBasic");
-	getInstance<Renderer>()->bindShaderToUniform("bump", "PerFrame", "PerFrame");
-	getInstance<Renderer>()->bindShaderToUniform("bump", "PerModel", "PerModel");
-	getInstance<Renderer>()->bindShaderToUniform("bump", "MaterialBasic", "MaterialBasic");
 	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
 
-
-	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
-	//getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
-	//	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__SketchTest.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Museum.cpd"));
+	// AMediaFile::loadFromList("./Assets/Serialized/export__SketchTest.cpd");
+	// AMediaFile::loadFromList("./Assets/Serialized/export__Museum.cpd");
 
 	getInstance<FontManager>()->loadFont(File("../../Assets/Serialized/myFont.cpdFont"));
 
@@ -224,35 +208,33 @@ bool 			BulletDemoScene::userStart()
 	getInstance<AudioManager>()->loadSound(File("../../Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 	getInstance<AudioManager>()->loadSound(File("../../Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
+
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
-	auto defaultBallMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
-	auto planetMesh = getInstance<AssetsManager>()->create<ObjFile>("my_planet", defaultBallMesh);
-	planetMesh->material = getInstance<AssetsManager>()->create<MaterialFile>("my_planet_material", defaultBallMesh->material);
-	auto testsss = planetMesh->material->materials[0];
-	planetMesh->material->materials[0].ambientTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTexture");
-	planetMesh->material->materials[0].diffuseTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthNightTexture");
-	planetMesh->material->materials[0].specularTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthClouds");
-	planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTextureBump");
+	//auto defaultBallMesh = getInstance<AssetsManager>()->get<ObjFile>("obj__ball");
+	//auto planetMesh = getInstance<AssetsManager>()->create<ObjFile>("my_planet", defaultBallMesh);
+	//planetMesh->material = getInstance<AssetsManager>()->create<MaterialFile>("my_planet_material", defaultBallMesh->material);
+	//auto testsss = planetMesh->material->materials[0];
+	//planetMesh->material->materials[0].ambientTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTexture");
+	//planetMesh->material->materials[0].diffuseTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthNightTexture");
+	//planetMesh->material->materials[0].specularTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthClouds");
+	//planetMesh->material->materials[0].normalTex = getInstance<AssetsManager>()->get<TextureFile>("texture__EarthTextureBump");
+
+	// EXAMPLE: HOW TO SAVE TO FILE A MEDIA FILE CREATED DYNAMICALY
+	//getInstance<AssetsManager>()->saveToFile("my_planet_material", "./Assets/Serialized/");
+	//getInstance<AssetsManager>()->saveToFile("my_planet", "./Assets/Serialized/");
 
 	// EXAMPLE LOAD FROM SAVE
-	getInstance<AssetsManager>()->loadFromFile(File("../../Assets/Serialized/my_planet.cpd"));
+	//getInstance<AssetsManager>()->loadFromFile(File("../../Assets/Serialized/my_planet.cpd"));
 
-	// SKYBOX SETTINGS
 
-	std::string		vars[] =
-	{
-		"projection",
-		"view"
-	};
+//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
+	//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
+//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
-	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
-
-	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-
-	getInstance<Renderer>()->addUniform("cameraUniform")
-		->init(sky, "cameraUniform", vars);
-
-	getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	//File saveFile("BulletScene.scenesave");
 	//if (saveFile.exists())
@@ -290,33 +272,38 @@ bool 			BulletDemoScene::userStart()
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
 		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
-		//		e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
-		auto rigidBody = e->addComponent<Component::RigidBody>(0.0f);
+
+		// e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
+		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
-		//rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
-		//rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		// rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
+		// rigidBody->setCollisionShape(Component::RigidBody::BOX);
+		// rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
+
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
 		rigidBody->getBody().setRestitution(0.9f);
-		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
-		//		auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-		//auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__museum"));
+
+		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
+		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
+		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
+
 		mesh->setShader("MaterialBasic");
 	}
 
 	Entity character;
-	std::shared_ptr<Component::CameraComponent> cameraComponent;
+	std::shared_ptr<Component::CameraComponent> cameraComponent1;
+	std::shared_ptr<Component::CameraComponent> cameraComponent2;
 
 	{
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 100, 0)));
 		auto fpc = e->addComponent<Component::FPController>();
 		character = e;
-		cameraComponent = character->addComponent<Component::CameraComponent>();
+		cameraComponent1 = character->addComponent<Component::CameraComponent>();
 		character->addComponent<Component::FirstPersonView>();
 		e->addComponent<Component::AudioListener>();
 		auto ae = e->addComponent<Component::AudioEmitter>();
@@ -324,6 +311,14 @@ bool 			BulletDemoScene::userStart()
 		auto jump = getInstance<AudioManager>()->getAudio("jump");
 		ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
 		ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
+		globalCamera = e;
+	}
+
+	{
+		auto e = createEntity();
+		character->addChild(e);
+		cameraComponent2 = e->addComponent<Component::CameraComponent>();
+		e->addComponent<Component::FirstPersonView>();
 	}
 
 	{
@@ -341,11 +336,32 @@ bool 			BulletDemoScene::userStart()
 	// Setting camera with skybox
 	// --
 
-	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
+	std::string	vars[] =
+	{
+		"projection",
+		"view"
+	};
+
+	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
+
+	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+
+	getInstance<Renderer>()->addUniform("cameraUniform")
+		->init(sky, "cameraUniform", vars);
+
+	getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
+	auto screenSize = getInstance<IRenderContext>()->getScreenSize();
+	cameraComponent1->attachSkybox("skybox__space", "cubemapShader");
+	cameraComponent1->viewport = glm::uvec4(0, 0, screenSize.x / 2, screenSize.y);
+	cameraComponent2->attachSkybox("skybox__space", "cubemapShader");
+	cameraComponent2->viewport = glm::uvec4(screenSize.x / 2, 0, screenSize.x / 2, screenSize.y);
+	cameraComponent1->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
+	cameraComponent2->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
 	return (true);
 }
 
-bool 			BulletDemoScene::userUpdate(double time)
+bool BulletDemoScene::userUpdate(double time)
 {
 	static std::queue<Entity> stack;
 	float ftime = static_cast<float>(time);
@@ -375,8 +391,20 @@ bool 			BulletDemoScene::userUpdate(double time)
 	{
 		glm::vec3 from, to;
 		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 1.0f);
+		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 10.0f);
 		auto rigidbody = e->getComponent<Component::RigidBody>();
+
+		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 80.0f));
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+
+		auto light = e->addComponent<Component::PointLight>();
+		light->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 5.0f);
+		light->lightData.positionPower.w = 3.0f;
+		rigidbody->getBody().setFriction(1.0f);
+		rigidbody->getBody().setRestitution(0.9f);
+		e->addComponent<Component::AudioEmitter>()->setAudio(getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
+
 		auto &body = rigidbody->getBody();
 		body.applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
 		body.getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
@@ -384,8 +412,9 @@ bool 			BulletDemoScene::userUpdate(double time)
 		body.setFriction(1.0f);
 		body.setRestitution(0.9f);
 		e->addComponent<Component::AudioEmitter>()->setAudio(getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
+
 		e->addTag(BALL_TAG);
-		if (stack.size() > 300)
+		if (stack.size() > 50)
 		{
 			destroy(stack.front());
 			stack.pop();
@@ -393,8 +422,21 @@ bool 			BulletDemoScene::userUpdate(double time)
 		stack.push(e);
 		delay = 0.1f;
 	}
+	if (getInstance<Input>()->getInput(SDL_BUTTON_MIDDLE) && delay <= 0.0f)
+	{
+		auto e = createEntity();
+
+		auto l = e->addComponent<Component::SpotLight>();
+		auto cam = globalCamera->getComponent<Component::CameraComponent>();
+		l->projection = glm::perspective(40.0f, 1.0f, 0.1f, 100.0f);
+		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
+		l->lightData.positionPower.w = 50.0f;
+		l->lightData.shadowId = 1;
+		e->setLocalTransform(glm::inverse(cam->lookAtTransform));
+		delay = 0.1f;
+	}
 	if (delay >= 0.0f)
-		delay -= ftime;
+		delay -= time;
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
 		getInstance<Input>()->getInput(SDL_QUIT))
 	{
@@ -405,6 +447,36 @@ bool 			BulletDemoScene::userUpdate(double time)
 			s.close();
 		}
 		return (false);
+	}
+	if (getInstance<Input>()->getInput(SDLK_h))
+		getSystem<PostFxSystem>()->useHDR(true);
+	if (getInstance<Input>()->getInput(SDLK_j))
+		getSystem<PostFxSystem>()->useHDR(false);
+	if (getInstance<Input>()->getInput(SDLK_f))
+		getSystem<PostFxSystem>()->useBloom(true);
+	if (getInstance<Input>()->getInput(SDLK_g))
+		getSystem<PostFxSystem>()->useBloom(false);
+	static float	sigma = 5.0f;
+	static float	glare = 1.0f;
+	if (getInstance<Input>()->getInput(SDLK_UP))
+	{
+		sigma += 0.5f;
+		getSystem<PostFxSystem>()->setBloomSigma(sigma);
+	}
+	if (getInstance<Input>()->getInput(SDLK_DOWN))
+	{
+		sigma -= 0.5f;
+		getSystem<PostFxSystem>()->setBloomSigma(sigma);
+	}
+	if (getInstance<Input>()->getInput(SDLK_LEFT))
+	{
+		glare -= 0.2f;
+		getSystem<PostFxSystem>()->setBloomGlare(glare);
+	}
+	if (getInstance<Input>()->getInput(SDLK_RIGHT))
+	{
+		glare += 0.2f;
+		getSystem<PostFxSystem>()->setBloomGlare(glare);
 	}
 	static auto timeCounter = 0.0f;
 	static auto frameCounter = 0;

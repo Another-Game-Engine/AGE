@@ -8,6 +8,7 @@
 #include <cereal/types/string.hpp>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/AssetsManager.hpp>
+#include <OpenGL\Framebuffer.hh>
 
 namespace Component
 {
@@ -19,10 +20,6 @@ namespace Component
 		virtual void reset(){}
 		void                 attachSkybox(const std::string &name, const std::string &cubeMapShader);
 		void                 dettachSkybox();
- 		glm::mat4            &setProjection();
-		glm::mat4            &getProjection();
-		inline glm::mat4            &setLookAtTransform() { return lookAtTransform; }
-		inline const glm::mat4      &getLookAtTransform() const { return lookAtTransform; }
 		std::shared_ptr<CubeMapFile> getSkybox();
 		const std::string &getSkyboxShader() const;
 
@@ -61,14 +58,38 @@ namespace Component
 				skybox = _entity->getScene()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
 		}
 
+		void	initFrameBuffer(glm::uvec2 const &fboSize, uint32_t sampleNbr)
+		{
+			if (frameBuffer.isInit() == false)
+			{
+				frameBuffer.init(fboSize, sampleNbr);
+				frameBuffer.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
+				frameBuffer.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
+				frameBuffer.attachAll();
+			}
+
+			if (frameBuffer.isMultisampled() && downSampling.getSize() != frameBuffer.getSize())
+			{
+				downSampling.init(fboSize, 1);
+				downSampling.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
+				downSampling.attachAll();
+			}
+
+		}
+
 		// !Serialization
 		////
 		//////
 
-		glm::mat4                        projection;
-		std::shared_ptr<CubeMapFile>     skybox;
-		std::string                      cubeMapShader;
-		glm::mat4                        lookAtTransform;
+		glm::uvec4						viewport;
+
+		glm::mat4                       projection;
+		std::shared_ptr<CubeMapFile>    skybox;
+		std::string                     cubeMapShader;
+		glm::mat4                       lookAtTransform;
+		OpenGLTools::Framebuffer		frameBuffer;
+		OpenGLTools::Framebuffer		downSampling;
+
 	private:
 		CameraComponent(CameraComponent const &);
 		CameraComponent	&operator=(CameraComponent const &);
