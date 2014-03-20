@@ -50,14 +50,14 @@ bool 			MainScene::userStart()
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
-	addSystem<PostFxSystem>(110); // POST FXs
+//	addSystem<PostFxSystem>(110); // POST FXs
 	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
 
-	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
-	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
-	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
-	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
-	getSystem<PostFxSystem>()->useHDR(false);
+	//getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
+	//getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
+	//getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
+	//getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
+	//getSystem<PostFxSystem>()->useHDR(false);
 
 	// create heros
 	{
