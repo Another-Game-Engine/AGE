@@ -12,7 +12,8 @@ namespace Component
 		: Component::ComponentBase<Sprite>()
 		, animation(nullptr)
 		, shader(nullptr)
-		, fps(60)
+		, delay(1.0f / 3.0f)
+		, timeCounter(0.0f)
 		, index(0)
 		{}
 
@@ -27,8 +28,20 @@ namespace Component
 		}
 		virtual void reset()
 		{
+			index = 0;
+			timeCounter = 0.0f;
 			animation = nullptr;
 			shader = nullptr;
+		}
+
+		void update(float time)
+		{
+			timeCounter += time;
+			if (timeCounter >= delay)
+			{
+				index = (index + static_cast<std::uint32_t>(timeCounter / delay)) % animation->getStepNumber();
+				timeCounter = 0;
+			}
 		}
 
 		//////
@@ -57,8 +70,9 @@ namespace Component
 
 		std::shared_ptr<SpriteAnimation> animation;
 		std::shared_ptr<OpenGLTools::Shader> shader;
-		float fps;
-		std::size_t index;
+		float delay;
+		float timeCounter;
+		std::uint32_t index;
 	private:
 		Sprite(Sprite const &);
 		Sprite &operator=(Sprite const &);

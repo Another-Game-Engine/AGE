@@ -50,7 +50,7 @@ private:
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, s->animation->getTexture()->getId());
 				glUniformMatrix4fv(transformationID, 1, GL_FALSE, glm::value_ptr(e->getGlobalTransform()));
-				s->animation->update(s->index);
+				s->update(static_cast<float>(time));
 				s->animation->draw(s->index);
 			}
 		}
