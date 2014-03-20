@@ -295,14 +295,15 @@ bool BulletDemoScene::userStart()
 	}
 
 	Entity character;
-	std::shared_ptr<Component::CameraComponent> cameraComponent;
+	std::shared_ptr<Component::CameraComponent> cameraComponent1;
+	std::shared_ptr<Component::CameraComponent> cameraComponent2;
 
 	{
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 100, 0)));
 		auto fpc = e->addComponent<Component::FPController>();
 		character = e;
-		cameraComponent = character->addComponent<Component::CameraComponent>();
+		cameraComponent1 = character->addComponent<Component::CameraComponent>();
 		character->addComponent<Component::FirstPersonView>();
 		e->addComponent<Component::AudioListener>();
 		auto ae = e->addComponent<Component::AudioEmitter>();
@@ -311,6 +312,13 @@ bool BulletDemoScene::userStart()
 		ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
 		ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
 		globalCamera = e;
+	}
+
+	{
+		auto e = createEntity();
+		character->addChild(e);
+		cameraComponent2 = e->addComponent<Component::CameraComponent>();
+		e->addComponent<Component::FirstPersonView>();
 	}
 
 	{
@@ -344,8 +352,12 @@ bool BulletDemoScene::userStart()
 	getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	auto screenSize = getInstance<IRenderContext>()->getScreenSize();
-	cameraComponent->attachSkybox("skybox__space", "cubemapShader");
-	cameraComponent->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
+	cameraComponent1->attachSkybox("skybox__space", "cubemapShader");
+	cameraComponent1->viewport = glm::uvec4(0, 0, screenSize.x / 2, screenSize.y);
+	cameraComponent2->attachSkybox("skybox__space", "cubemapShader");
+	cameraComponent2->viewport = glm::uvec4(screenSize.x / 2, 0, screenSize.x / 2, screenSize.y);
+	cameraComponent1->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
+	cameraComponent2->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
 	return (true);
 }
 
@@ -420,7 +432,7 @@ bool BulletDemoScene::userUpdate(double time)
 		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
 		l->lightData.positionPower.w = 50.0f;
 		l->lightData.shadowId = 1;
-		e->setLocalTransform(glm::inverse(cam->getLookAtTransform()));
+		e->setLocalTransform(glm::inverse(cam->lookAtTransform));
 		delay = 0.1f;
 	}
 	if (delay >= 0.0f)

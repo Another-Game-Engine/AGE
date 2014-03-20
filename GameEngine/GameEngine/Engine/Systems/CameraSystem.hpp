@@ -99,7 +99,7 @@ protected:
 			auto camera = e->getComponent<Component::CameraComponent>();
 			auto skybox = camera->getSkybox();
 
-			auto cameraPosition = camera->getLookAtTransform();
+			auto cameraPosition = camera->lookAtTransform;
 			OpenGLTools::Framebuffer &camFbo = e->getComponent<Component::CameraComponent>()->frameBuffer;
 
 			if (skybox != nullptr && camFbo.isInit() == true)
@@ -107,7 +107,7 @@ protected:
 				std::shared_ptr<OpenGLTools::Shader> s = scene->getInstance<Renderer>()->getShader(camera->getSkyboxShader());
 				assert(s != nullptr && "Skybox does not have a shader associated");
 
-				scene->getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("projection", camera->getProjection());
+				scene->getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("projection", camera->projection);
 
 				glm::mat4 t = cameraPosition;
 				t[3][0] = 0;
