@@ -62,6 +62,25 @@ namespace Component
 				skybox = _entity->getScene()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
 		}
 
+		void	initFrameBuffer(glm::uvec2 const &fboSize, uint32_t sampleNbr)
+		{
+			if (frameBuffer.isInit() == false)
+			{
+				frameBuffer.init(fboSize, sampleNbr);
+				frameBuffer.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
+				frameBuffer.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
+				frameBuffer.attachAll();
+			}
+
+			if (frameBuffer.isMultisampled() && downSampling.getSize() != frameBuffer.getSize())
+			{
+				downSampling.init(fboSize, 1);
+				downSampling.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
+				downSampling.attachAll();
+			}
+
+		}
+
 		// !Serialization
 		////
 		//////
@@ -73,6 +92,8 @@ namespace Component
 		std::string                     cubeMapShader;
 		glm::mat4                       lookAtTransform;
 		OpenGLTools::Framebuffer		frameBuffer;
+		OpenGLTools::Framebuffer		downSampling;
+
 	private:
 		CameraComponent(CameraComponent const &);
 		CameraComponent	&operator=(CameraComponent const &);

@@ -25,6 +25,9 @@
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/AudioSystem.hpp>
 #include <Systems/SpriteSystem.hh>
+#include <Systems/DownSampleSystem.hh>
+#include <Systems/PostFxSystem.hh>
+#include <Systems/BlitFinalRender.hh>
 #include <BallSoundSystem.hpp>
 
 #include <Text/FontManager.hh>
@@ -103,26 +106,26 @@ bool BulletDemoScene::userStart()
 	// System Tests
 	//
 	//
-	addSystem<BulletDynamicSystem>(10); // UPDATE PHYSIC WORLD
-	addSystem<CollisionAdder>(20); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
-	addSystem<FPControllerSystem>(50); // UPDATE FIRST PERSON CONTROLLER
-	addSystem<FirstPersonViewSystem>(150); // UPDATE FIRST PERSON CAMERA
-	addSystem<BallSoundSystem>(220);
-	addSystem<AudioSystem>(250);
-	addSystem<CollisionCleaner>(300); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
+	addSystem<BulletDynamicSystem>(0); // UPDATE PHYSIC WORLD
+	addSystem<CollisionAdder>(10); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
+	addSystem<FPControllerSystem>(20); // UPDATE FIRST PERSON CONTROLLER
+	addSystem<FirstPersonViewSystem>(30); // UPDATE FIRST PERSON CAMERA
+	addSystem<BallSoundSystem>(40);
+	addSystem<AudioSystem>(50);
+	addSystem<CollisionCleaner>(60); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
 
-	addSystem<CameraSystem>(400); // UPDATE CAMERA AND RENDER TO SCREEN
-	addSystem<LightRenderingSystem>(1000); // Render with the lights
-	addSystem<RotationForceSystem>(320);
-	addSystem<SpriteSystem>(1500); // DRAW SPRITES
+	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	addSystem<LightRenderingSystem>(80); // Render with the lights
+	addSystem<SpriteSystem>(90); // DRAW SPRITES
+	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
+	addSystem<PostFxSystem>(110); // POST FXs
+	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
 
-
-	getSystem<LightRenderingSystem>()->setHDRIdealIllumination(0.3f);
-	getSystem<LightRenderingSystem>()->setHDRAdaptationSpeed(0.1f);
-
-	getSystem<LightRenderingSystem>()->setHDRMaxLightDiminution(0.1f);
-	getSystem<LightRenderingSystem>()->setHDRMaxDarkImprovement(1.2f);
-	getSystem<LightRenderingSystem>()->useHDR(false);
+	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
+	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
+	getSystem<PostFxSystem>()->useHDR(false);
 
 	//
 	//
@@ -439,34 +442,34 @@ bool BulletDemoScene::userUpdate(double time)
 		return (false);
 	}
 	if (getInstance<Input>()->getInput(SDLK_h))
-		getSystem<LightRenderingSystem>()->useHDR(true);
+		getSystem<PostFxSystem>()->useHDR(true);
 	if (getInstance<Input>()->getInput(SDLK_j))
-		getSystem<LightRenderingSystem>()->useHDR(false);
+		getSystem<PostFxSystem>()->useHDR(false);
 	if (getInstance<Input>()->getInput(SDLK_f))
-		getSystem<LightRenderingSystem>()->useBloom(true);
+		getSystem<PostFxSystem>()->useBloom(true);
 	if (getInstance<Input>()->getInput(SDLK_g))
-		getSystem<LightRenderingSystem>()->useBloom(false);
+		getSystem<PostFxSystem>()->useBloom(false);
 	static float	sigma = 5.0f;
 	static float	glare = 1.0f;
 	if (getInstance<Input>()->getInput(SDLK_UP))
 	{
 		sigma += 0.5f;
-		getSystem<LightRenderingSystem>()->setBloomSigma(sigma);
+		getSystem<PostFxSystem>()->setBloomSigma(sigma);
 	}
 	if (getInstance<Input>()->getInput(SDLK_DOWN))
 	{
 		sigma -= 0.5f;
-		getSystem<LightRenderingSystem>()->setBloomSigma(sigma);
+		getSystem<PostFxSystem>()->setBloomSigma(sigma);
 	}
 	if (getInstance<Input>()->getInput(SDLK_LEFT))
 	{
 		glare -= 0.2f;
-		getSystem<LightRenderingSystem>()->setBloomGlare(glare);
+		getSystem<PostFxSystem>()->setBloomGlare(glare);
 	}
 	if (getInstance<Input>()->getInput(SDLK_RIGHT))
 	{
 		glare += 0.2f;
-		getSystem<LightRenderingSystem>()->setBloomGlare(glare);
+		getSystem<PostFxSystem>()->setBloomGlare(glare);
 	}
 	static auto timeCounter = 0.0f;
 	static auto frameCounter = 0;

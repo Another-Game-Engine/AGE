@@ -16,6 +16,9 @@
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/SpriteSystem.hh>
 #include <Systems/EntityPlacingSystem.hpp>
+#include <Systems/DownSampleSystem.hh>
+#include <Systems/PostFxSystem.hh>
+#include <Systems/BlitFinalRender.hh>
 
 // SDL
 #include <Context/SdlContext.hh>
@@ -43,15 +46,19 @@ bool 			MainScene::userStart()
 	addSystem<BulletDynamicSystem>(35);
 	addSystem<FPSSystem>(40);
 	addSystem<EntityPlacingSystem>(50);
-	addSystem<LightRenderingSystem>(1000); // Render with the lights
-	addSystem<SpriteSystem>(2000);
 
-	getSystem<LightRenderingSystem>()->setHDRIdealIllumination(0.3f);
-	getSystem<LightRenderingSystem>()->setHDRAdaptationSpeed(0.1f);
+	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	addSystem<LightRenderingSystem>(80); // Render with the lights
+	addSystem<SpriteSystem>(90); // DRAW SPRITES
+	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
+	addSystem<PostFxSystem>(110); // POST FXs
+	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
 
-	getSystem<LightRenderingSystem>()->setHDRMaxLightDiminution(0.1f);
-	getSystem<LightRenderingSystem>()->setHDRMaxDarkImprovement(1.2f);
-	getSystem<LightRenderingSystem>()->useHDR(false);
+	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
+	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
+	getSystem<PostFxSystem>()->useHDR(false);
 
 	// create heros
 	{
