@@ -55,6 +55,8 @@ void LightRenderingSystem::initialize()
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 
 	glGenFramebuffers(1, &_shadowsFbo);
+
+	glEnable(GL_CULL_FACE);
 }
 
 void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuffer> perFrame)
@@ -150,8 +152,6 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 
 void	LightRenderingSystem::mainUpdate(double time)
 {
-	glEnable(GL_CULL_FACE);
-
 	auto renderer = _scene.lock()->getInstance<Renderer>();
 	auto perFrame = renderer->getUniform("PerFrame");
 
@@ -164,8 +164,8 @@ void	LightRenderingSystem::mainUpdate(double time)
 	{
 		auto camera = c->getComponent<Component::CameraComponent>();
 		// Set les uniforms du block PerFrame
-		perFrame->setUniform("projection", camera->getProjection());
-		perFrame->setUniform("view", camera->getLookAtTransform());
+		perFrame->setUniform("projection", camera->projection);
+		perFrame->setUniform("view", camera->lookAtTransform);
 		perFrame->setUniform("time", static_cast<float>(_scene.lock()->getSystem<CameraSystem>()->getLifeTime()));
 
 		perFrame->flushChanges();
@@ -177,9 +177,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 
 		// First Pass
 		computeCameraRender(camera->frameBuffer, perFrame);
-		glFinish();
 	}
-	glDisable(GL_CULL_FACE);
 }
 
 void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo,
