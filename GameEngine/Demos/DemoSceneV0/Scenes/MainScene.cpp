@@ -73,8 +73,8 @@ bool 			MainScene::userStart()
 		camera->attachSkybox("skybox__space", "cubemapShader");
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
 		auto l = _heros->addComponent<Component::PointLight>();
-		l->lightData.colorRange = glm::vec4(1.0f,1.0f,1.0f, 50.0f);
-		l->lightData.positionPower.w = 3.0f;
+		l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
+		l->lightData.positionPower.w = 2.0f;
 
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));

@@ -7,12 +7,15 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <Components/SpriteComponent.hh>
+
 LightRenderingSystem::LightRenderingSystem(std::weak_ptr<AScene> scene) :
 						System(scene),
 						_pointLightFilter(scene),
 						_spotLightFilter(scene),
 						_meshRendererFilter(scene),
 						_cameraFilter(scene),
+						_spriteFilter(scene),
 						_spotShadowNbr(0),
 						_pointShadowNbr(0),
 						_shadowDimensions(2048, 2048)
@@ -31,6 +34,7 @@ void LightRenderingSystem::initialize()
 	_spotLightFilter.requireComponent<Component::SpotLight>();
 	_meshRendererFilter.requireComponent<Component::MeshRenderer>();
 	_cameraFilter.requireComponent<Component::CameraComponent>();
+	_spriteFilter.requireComponent<Component::Sprite>();
 
 	auto materialBasic = _scene.lock()->getInstance<Renderer>()->getShader("MaterialBasic");
 
@@ -217,5 +221,24 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 			glActiveTexture(GL_TEXTURE4);
 			glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
 		});
+	}
+
+
+	// draw sprite
+	std::shared_ptr<Component::Sprite> sprite;
+	auto perModelUniform = renderer->getUniform("PerModel");
+	auto materialUniform = renderer->getUniform("MaterialBasic");
+	auto s = renderer->getShader("MaterialBasic");
+	for (auto e : _spriteFilter.getCollection())
+	{
+		s->use();
+		perModelUniform->setUniform("model", e->getGlobalTransform());
+		perModelUniform->flushChanges();
+		sprite = e->getComponent<Component::Sprite>();
+		sprite->animation->getMaterial().setUniforms(materialUniform);
+		materialUniform->flushChanges();
+		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
+		sprite->animation->draw(sprite->index);
 	}
 }

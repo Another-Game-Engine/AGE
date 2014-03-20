@@ -32,6 +32,7 @@ private:
 	EntityFilter						_spotLightFilter;
 	EntityFilter						_meshRendererFilter;
 	EntityFilter						_cameraFilter;
+	EntityFilter                        _spriteFilter;
 
 	// Point lights uniform buffer
 	PointLightData						_contiguousPointLights[MAX_LIGHT_NBR];
