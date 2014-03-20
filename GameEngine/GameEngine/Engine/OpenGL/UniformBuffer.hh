@@ -38,7 +38,7 @@ private:
 
 	GLuint									_bindingPoint;
 	GLuint									_bufferId;
-	GLuint									_dataSize;
+	std::uint32_t							_dataSize;
 	std::map<std::string, SUniformVars>		_vars;
 	char									*_buffer;
 
@@ -46,7 +46,11 @@ public:
 	UniformBuffer(GLuint bindingPoint);
 	~UniformBuffer(void);
 
+
+	void			init(std::shared_ptr<Shader> referent, std::string const &blockName, std::uint32_t size);
 	void			init(std::shared_ptr<Shader> referent, std::string const &blockName, std::string const vars[]);
+
+	void			setBufferData(size_t size, const char *data);
 
 	void			setUniform(std::string const &name, int data);
 	void			setUniform(std::string const &name, unsigned int data);
