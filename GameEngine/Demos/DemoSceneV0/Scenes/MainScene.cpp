@@ -15,6 +15,7 @@
 #include <Systems/LightRenderingSystem.hh>
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/SpriteSystem.hh>
+#include <Systems/EntityPlacingSystem.hpp>
 
 // SDL
 #include <Context/SdlContext.hh>
@@ -41,6 +42,7 @@ bool 			MainScene::userStart()
 	addSystem<CameraSystem>(30);
 	addSystem<BulletDynamicSystem>(35);
 	addSystem<FPSSystem>(40);
+	addSystem<EntityPlacingSystem>(50);
 	addSystem<LightRenderingSystem>(1000); // Render with the lights
 	addSystem<SpriteSystem>(2000);
 
@@ -67,8 +69,13 @@ bool 			MainScene::userStart()
 		auto l = _heros->addComponent<Component::PointLight>();
 		l->lightData.colorRange = glm::vec4(1.0f,1.0f,1.0f, 50.0f);
 		l->lightData.positionPower.w = 3.0f;
-		_heros->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("Pong", "pong"),
+
+		auto e = createEntity();
+		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
+		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.01)));
+		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("Pong", "pong"),
 			getInstance<Renderer>()->getShader("SpriteBasic"));
+		getSystem<EntityPlacingSystem>()->setEntity(e);
 	}
 
 	// create Entrance room
@@ -89,23 +96,23 @@ bool 			MainScene::userUpdate(double time)
 {
 	float ftime = (float)(time);
 	static float delay = 0.0f;
-	if (getInstance<Input>()->getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
-	{
-		glm::vec3 from, to;
-		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-		auto e = createEntity();
-		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(from + to * 1.5f)));
-		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.3f)));
-//		e->setLocalTransform(glm::lookAt(from, to, glm::vec3(0,1,0)));
-		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
-		mesh->setShader("MaterialBasic");
-		auto rigidBody = e->addComponent<Component::RigidBody>(0.05f);
-		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-		//auto l = e->addComponent<Component::PointLight>();
-		//l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 5.0f);
-		//l->lightData.positionPower.w = 3.0f;
-		delay = 0.1f;
-	}
+//	if (getInstance<Input>()->getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
+//	{
+//		glm::vec3 from, to;
+//		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
+//		auto e = createEntity();
+//		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(from + to * 1.5f)));
+//		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.3f)));
+////		e->setLocalTransform(glm::lookAt(from, to, glm::vec3(0,1,0)));
+//		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+//		mesh->setShader("MaterialBasic");
+//		auto rigidBody = e->addComponent<Component::RigidBody>(0.05f);
+//		rigidBody->setCollisionShape(Component::RigidBody::BOX);
+//		//auto l = e->addComponent<Component::PointLight>();
+//		//l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 5.0f);
+//		//l->lightData.positionPower.w = 3.0f;
+//		delay = 0.1f;
+//	}
 	if (delay >= 0.0f)
 		delay -= ftime;
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||

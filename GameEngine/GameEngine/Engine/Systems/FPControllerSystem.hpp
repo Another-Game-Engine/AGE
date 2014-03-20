@@ -99,16 +99,16 @@ private:
 		if (controls[Component::FPController::RUN])
 			isRunning = true;
 		if (controls[Component::FPController::LEFT])
-			walkDirection += sideDir * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * ftime;
+			walkDirection += sideDir * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed);
 
 		if (controls[Component::FPController::RIGHT])
-			walkDirection -= sideDir  * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * ftime;
+			walkDirection -= sideDir  * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed);
 
 		if (controls[Component::FPController::FORWARD])
-			walkDirection += forwardDir * (isRunning ? fp->forwardRunSpeed : fp->forwardWalkSpeed) * ftime;
+			walkDirection += forwardDir * (isRunning ? fp->forwardRunSpeed : fp->forwardWalkSpeed);
 
 		if (controls[Component::FPController::BACKWARD])
-			walkDirection -= forwardDir * (isRunning ? fp->backwardRunSpeed : fp->backwardWalkSpeed) * ftime;
+			walkDirection -= forwardDir * (isRunning ? fp->backwardRunSpeed : fp->backwardWalkSpeed);
 
 
 		// HORIZONTAL ROTATION APPLIED ON GHOST
