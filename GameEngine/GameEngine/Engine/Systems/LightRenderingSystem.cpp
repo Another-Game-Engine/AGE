@@ -177,7 +177,6 @@ void	LightRenderingSystem::mainUpdate(double time)
 
 		// First Pass
 		computeCameraRender(camera->frameBuffer, perFrame);
-		glFinish();
 	}
 	glDisable(GL_CULL_FACE);
 }
