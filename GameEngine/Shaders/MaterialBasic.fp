@@ -179,7 +179,7 @@ vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 
 void main(void)
 {
-	vec3	ambientColor = 0.8f * texture2D(fTexture0, fTexCoord).rgb * ambient;
+	vec3	ambientColor = 0.05f * texture2D(fTexture0, fTexCoord).rgb * ambient;
 	vec3	diffuseColor = texture2D(fTexture1, fTexCoord).rgb * diffuse;
 	vec3	specularColor = texture2D(fTexture2, fTexCoord).rgb * specular;
 

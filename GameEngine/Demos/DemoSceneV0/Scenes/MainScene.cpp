@@ -14,6 +14,7 @@
 #include <Systems/CameraSystem.hpp>
 #include <Systems/LightRenderingSystem.hh>
 #include <Systems/BulletDynamicSystem.hpp>
+#include <Systems/SpriteSystem.hh>
 
 // SDL
 #include <Context/SdlContext.hh>
@@ -41,6 +42,7 @@ bool 			MainScene::userStart()
 	addSystem<BulletDynamicSystem>(35);
 	addSystem<FPSSystem>(40);
 	addSystem<LightRenderingSystem>(1000); // Render with the lights
+	addSystem<SpriteSystem>(2000);
 
 	getSystem<LightRenderingSystem>()->setHDRIdealIllumination(0.3f);
 	getSystem<LightRenderingSystem>()->setHDRAdaptationSpeed(0.1f);
@@ -64,7 +66,9 @@ bool 			MainScene::userStart()
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
 		auto l = _heros->addComponent<Component::PointLight>();
 		l->lightData.colorRange = glm::vec4(1.0f,1.0f,1.0f, 50.0f);
-		l->lightData.positionPower.w = 10.0f;
+		l->lightData.positionPower.w = 3.0f;
+		_heros->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("Pong", "pong"),
+			getInstance<Renderer>()->getShader("SpriteBasic"));
 	}
 
 	// create Entrance room
@@ -201,5 +205,6 @@ bool MainScene::loadAssets()
 {
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
+	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Pong.CPDAnimation"));
 	return true;
 }
