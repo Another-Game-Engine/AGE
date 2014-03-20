@@ -5,8 +5,6 @@
 #include "System.h"
 #include <Components/SpriteComponent.hh>
 #include <Entities/EntityData.hh>
-#include <Context/IRenderContext.hh>
-#include <Components/CameraComponent.hpp>
 
 class SpriteSystem : public System
 {
@@ -14,14 +12,12 @@ public:
 	SpriteSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _filter(scene)
-		, _cameras(scene)
 	{
 		_name = "sprite_system";
 	}
 	virtual ~SpriteSystem(){}
 private:
 	EntityFilter _filter;
-	EntityFilter _cameras;
 
 	virtual void updateBegin(double time)
 	{}
