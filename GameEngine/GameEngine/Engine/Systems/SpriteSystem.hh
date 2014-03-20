@@ -30,8 +30,6 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		glDepthFunc(GL_ALWAYS);
-
 		for (auto c : _cameras.getCollection())
 		{
 			glm::mat4 Projection = c->getComponent<Component::CameraComponent>()->getProjection();
@@ -55,7 +53,6 @@ private:
 				s->animation->draw(s->index);
 			}
 		}
-		glDepthFunc(GL_LESS);
 	}
 
 	virtual void initialize()

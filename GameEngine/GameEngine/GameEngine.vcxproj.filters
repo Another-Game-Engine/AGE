@@ -55,6 +55,12 @@
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
+    <ClCompile Include="Engine\Systems\PostFxSystem.cpp" />
+    <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
+>>>>>>> 889491b49d92f7e0caff05723ae101522c9fa41e
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpotLight.hh" />
@@ -153,7 +159,13 @@
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
+=======
+    <ClInclude Include="Engine\Systems\DownSampleSystem.hh" />
+    <ClInclude Include="Engine\Systems\PostFxSystem.hh" />
+    <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
+>>>>>>> 889491b49d92f7e0caff05723ae101522c9fa41e
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
