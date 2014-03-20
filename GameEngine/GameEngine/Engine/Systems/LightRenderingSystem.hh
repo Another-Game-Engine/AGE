@@ -6,7 +6,6 @@
 #include <Systems\System.h>
 #include <Systems\CameraSystem.hpp>
 #include <OpenGL\VertexManager.hh>
-#include <OpenGL\ComputeShader.hh>
 #include <OpenGL\Framebuffer.hh>
 #include <Utils\DrawQuad.hh>
 
@@ -26,16 +25,6 @@ public:
 	virtual void updateEnd(double time) { }
 	virtual void mainUpdate(double time);
 	virtual void initialize();
-
-	void		useBloom(bool use) { _useBloom = use; }
-	void		setBloomSigma(float sigma) { _bloomSigma = sigma; }
-	void		setBloomGlare(float glare) { _bloomGlare = glare; }
-	void		setBloomMipmap(uint32_t mipmap) { _bloomMipmap = mipmap; }
-	void		useHDR(bool use) { _useHDR = use; }
-	void		setHDRIdealIllumination(float idealIllum) { _idealIllum = idealIllum; }
-	void		setHDRAdaptationSpeed(float adaptSpeed) { _adaptationSpeed = adaptSpeed; }
-	void		setHDRMaxDarkImprovement(float maxDarkImprovement) { _maxDarkImprovement = maxDarkImprovement; }
-	void		setHDRMaxLightDiminution(float maxLightDiminution) { _maxLightDiminution = maxLightDiminution; }
 
 private:
 	// Filters
@@ -66,39 +55,6 @@ private:
 
 	GLuint								_shadowsFbo;
 
-	// HDR Utils
-	// ----------------------------------------
-	// HDR parameters
-	float							_idealIllum;
-	float							_adaptationSpeed;
-	float							_maxDarkImprovement;
-	float							_maxLightDiminution;
-
-	// HDR Compute shader
-	OpenGLTools::ComputeShader		_modulateRender;
-	OpenGLTools::ComputeShader		_bloom;
-
-	// HDR factors
-	float							_curFactor;
-	float							_targetFactor;
-
-	// Use HDR
-	bool							_useHDR;
-
-	// Final render quad
-	DrawQuad						_quad;
-
-	OpenGLTools::Framebuffer		_downSampling;
-
-	bool							_useBloom;
-
-	glm::uvec2						_bloomTextureSize;
-	GLuint							_bloomTexture;
-	float							_bloomSigma;
-	float							_bloomGlare;
-	uint32_t						_bloomMipmap;
-
-	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
 	void		computeCameraRender(OpenGLTools::Framebuffer &camFbo, std::shared_ptr<OpenGLTools::UniformBuffer> perFrame);
 };
 
