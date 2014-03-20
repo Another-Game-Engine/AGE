@@ -119,10 +119,12 @@ protected:
 				scene->getInstance<Renderer>()->getUniform("cameraUniform")->flushChanges();
 
 				camFbo.bind();
+
 				glEnable(GL_DEPTH_TEST);
 				glDrawBuffer(GL_COLOR_ATTACHMENT0);
 				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-				glClearColor(0, 0, 0, 1);
+				glDepthMask(GL_TRUE);
+				glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 				glClearDepth(1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
