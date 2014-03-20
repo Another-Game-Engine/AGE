@@ -71,6 +71,23 @@ bool 			MainScene::userStart()
 
 bool 			MainScene::userUpdate(double time)
 {
+	float ftime = (float)(time);
+	static float delay = 0.0f;
+	if (getInstance<Input>()->getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
+	{
+		glm::vec3 from, to;
+		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
+		auto e = createEntity();
+		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(from + to * 1.5f)));
+		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.3f)));
+		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+		mesh->setShader("MaterialBasic");
+		auto rigidBody = e->addComponent<Component::RigidBody>(0.05f);
+		rigidBody->setCollisionShape(Component::RigidBody::BOX);
+		delay = 0.1f;
+	}
+	if (delay >= 0.0f)
+		delay -= ftime;
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
 		getInstance<Input>()->getInput(SDL_QUIT))
 	{
@@ -141,5 +158,6 @@ bool MainScene::loadShaders()
 bool MainScene::loadAssets()
 {
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
 	return true;
 }
