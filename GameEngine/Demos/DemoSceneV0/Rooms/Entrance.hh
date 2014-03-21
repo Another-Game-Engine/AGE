@@ -8,6 +8,8 @@ struct Entrance : public Room
 	virtual ~Entrance();
 	virtual bool init();
 	Entity room;
+	Entity trololo;
+	Entity pong;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

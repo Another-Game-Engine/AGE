@@ -41,13 +41,13 @@ bool 			MainScene::userStart()
 		return false;
 
 	// add systems
+	addSystem<TransformationRegisterSystem>(0)->setFile(File("EntityTransformationSave.json"));
 	addSystem<FPControllerSystem>(10);
 	addSystem<FirstPersonViewSystem>(20);
 	addSystem<CameraSystem>(30);
 	addSystem<BulletDynamicSystem>(35);
 	addSystem<FPSSystem>(40);
 	addSystem<EntityPlacingSystem>(50);
-	addSystem<TransformationRegisterSystem>(60)->setFile(File("EntityTransformationSave.json"));
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
@@ -66,9 +66,6 @@ bool 			MainScene::userStart()
 		_heros = createEntity();
 
 		_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(-8, 2, 0)));
-
-		auto fpc = _heros->addComponent<Component::FPController>();
-		fpc->getShape().setLocalScaling(btVector3(0.3f, 0.3f, 0.3f));
 		auto camera = _heros->addComponent<Component::CameraComponent>();
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		camera->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
@@ -77,14 +74,12 @@ bool 			MainScene::userStart()
 		auto l = _heros->addComponent<Component::PointLight>();
 		l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
 		l->lightData.positionPower.w = 2.0f;
-
-		auto e = createEntity();
-		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
-		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.01)));
-		auto sprite = e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("Pong", "pong"));
-		sprite->delay = 1.0f / 10.0f;
-		getSystem<EntityPlacingSystem>()->setEntity(e);
-		e->addComponent<Component::TransformationRegister>("pong-tableau");
+//		_heros->addComponent<Component::TransformationRegister>("character-controller-museum");
+		auto fpc = _heros->addComponent<Component::FPController>();
+		fpc->getShape().setLocalScaling(btVector3(0.3f, 0.3f, 0.3f));
+		fpc->backwardRunSpeed = 0.001f;
+		fpc->forwardRunSpeed = 0.001f;
+		fpc->sideRunSpeed = 0.001f;
 	}
 
 	// create Entrance room
@@ -221,6 +216,5 @@ bool MainScene::loadAssets()
 {
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
-	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Pong.CPDAnimation"));
 	return true;
 }
