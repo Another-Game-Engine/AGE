@@ -97,6 +97,9 @@ bool BulletDemoScene::userStart()
 
 	std::cout << "OPENGL VERSION : " << glGetString(GL_VERSION) << std::endl;
 
+	getInstance<Renderer>()->addShader("fboToScreenMultisampled", "../../Shaders/fboToScreen.vp", "../../Shaders/fboToScreenMultisampled.fp");
+	getInstance<Renderer>()->addShader("fboToScreen", "../../Shaders/fboToScreen.vp", "../../Shaders/fboToScreen.fp");
+
 	auto s = getInstance<Renderer>()->addShader("MaterialBasic",
 		"../../Shaders/MaterialBasic.vp",
 		"../../Shaders/MaterialBasic.fp");
@@ -354,8 +357,12 @@ bool BulletDemoScene::userStart()
 	auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 	cameraComponent1->attachSkybox("skybox__space", "cubemapShader");
 	cameraComponent1->viewport = glm::uvec4(0, 0, screenSize.x / 2, screenSize.y);
+	cameraComponent1->fboSize = glm::uvec2(screenSize.x / 2, screenSize.y);
+	cameraComponent1->sampleNbr = 2;
 	cameraComponent2->attachSkybox("skybox__space", "cubemapShader");
 	cameraComponent2->viewport = glm::uvec4(screenSize.x / 2, 0, screenSize.x / 2, screenSize.y);
+	cameraComponent2->fboSize = glm::uvec2(screenSize.x / 2, screenSize.y);
+	cameraComponent2->sampleNbr = 2;
 	cameraComponent1->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
 	cameraComponent2->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
 	return (true);

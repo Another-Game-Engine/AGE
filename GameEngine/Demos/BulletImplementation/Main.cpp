@@ -41,7 +41,7 @@ int			main(int ac, char **av)
 	e->setInstance<AudioManager>()->init();
 
 	// init engine
-	if (e->init() == false)
+	if (e->init(0, 1920, 1080, "") == false)
 		return (EXIT_FAILURE);
 
 	std::array<Attribute, 4> param = //-V112

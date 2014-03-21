@@ -15,7 +15,7 @@ public:
   SdlContext() { }
   virtual ~SdlContext() { }
 
-  virtual bool    start(unsigned int swidth, unsigned int sheight, const char *name);
+  virtual bool    start(int mode, unsigned int swidth, unsigned int sheight, const char *name);
   virtual void    updateEvents(Input &input) const;
   virtual void 	  flush() const;
   virtual void    stop() const;

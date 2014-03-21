@@ -172,7 +172,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 		perFrame->flushChanges();
 
 		if (camera->frameBuffer.isInit() == false)
-			c->getComponent<Component::CameraComponent>()->initFrameBuffer(_scene.lock()->getInstance<IRenderContext>()->getScreenSize(), 1);
+			c->getComponent<Component::CameraComponent>()->initFrameBuffer();
 
 		glViewport(0, 0, camera->frameBuffer.getSize().x, camera->frameBuffer.getSize().y);
 
@@ -205,6 +205,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	// ----------------------------------------------------
 	// Final Lightning pass
 	// ----------------------------------------------------
+	glDepthMask(GL_FALSE);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glDepthFunc(GL_LEQUAL);
 
