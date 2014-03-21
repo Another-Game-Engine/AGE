@@ -48,7 +48,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	float max = 0.5f;
     for (size_t i = 0; i < shapes.size(); i++)
 	{
-		for (auto &e : shapes[i].mesh.positions)
+		for (float &e : shapes[i].mesh.positions)
 		{
 			if (e < min)
 				min = e;
@@ -57,25 +57,31 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		}
 	}
 
-	float minCof = min != -0.5f ? std::abs(min) * 2.0f : 1.0f;
-	float maxCof = min != 0.5f ? max * 2.0f : 1.0f;
-    for (size_t i = 0; i < shapes.size(); i++)
+	float minCof = min * -0.5f;
+	float maxCof = max * 0.5f;
+	float cof = max - min;
+	if (cof != 0.0f)
 	{
-		for (auto &e : shapes[i].mesh.positions)
+		for (size_t i = 0; i < shapes.size(); i++)
 		{
-			if (e < 0)
-				e /= minCof;
-			else if (e > 0)
-				e /= maxCof;
+			for (float &e : shapes[i].mesh.positions)
+			{
+				e /= cof;
+				//if (e < 0.0f)
+				//	e /= minCof;
+				//else if (e > 0.0f)
+				//	e /= maxCof;
+			}
 		}
 	}
-
 	/////////////
 	// Converting
 	//
     for (std::size_t i = 0; i < shapes.size(); i++)
 	{
 		mesh->geometries[i].name = shapes[i].name;
+		if (mesh->geometries[i].name.size() == 0)
+			mesh->geometries[i].name = mesh->name + "-" + std::to_string(i);
 		for (std::size_t v = 0; v < shapes[i].mesh.indices.size(); ++v)
 		{
 			std::size_t p = static_cast<std::size_t>(shapes[i].mesh.indices[v]) * std::size_t(3);
