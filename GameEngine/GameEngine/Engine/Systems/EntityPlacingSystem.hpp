@@ -17,13 +17,13 @@ public:
 	virtual ~EntityPlacingSystem()
 	{}
 
-	void setEntity(Entity &e)
+	void setEntity(Entity &e, const std::string &name)
 	{
-		_entity = e;
+		_entity.insert(std::make_pair(name, e));
 	}
 
 private:
-	Entity _entity;
+	std::map<std::string, Entity> _entity;
 	std::shared_ptr<Input> _input;
 	float _z;
 
@@ -38,6 +38,13 @@ private:
 
 		_z += _input->getMouseWheel().y * 0.1f;
 		
+		if (_input->getInput(SDLK_MINUS))
+		{
+		}
+		if (_input->getInput(SDLK_PLUS))
+		{
+		}
+
 		if (_input->getInput(SDL_BUTTON_LEFT))
 		{
 			glm::vec3 from, to;
