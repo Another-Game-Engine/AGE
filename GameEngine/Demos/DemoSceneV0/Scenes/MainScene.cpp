@@ -8,7 +8,7 @@
 #include <Components/FirstPersonView.hpp>
 
 //systems
-#include <SharedSystems/FPSSystem.hh>
+#include <Systems/FPSSystem.hh>
 #include <Systems/FPControllerSystem.hpp>
 #include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/CameraSystem.hpp>
@@ -19,6 +19,7 @@
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/BlitFinalRender.hh>
+#include <Systems/TransformationRegisterSystem.hpp>
 
 // SDL
 #include <Context/SdlContext.hh>
@@ -46,6 +47,7 @@ bool 			MainScene::userStart()
 	addSystem<BulletDynamicSystem>(35);
 	addSystem<FPSSystem>(40);
 	addSystem<EntityPlacingSystem>(50);
+	addSystem<TransformationRegisterSystem>(60)->setFile(File("EntityTransformationSave.json"));
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
@@ -82,6 +84,7 @@ bool 			MainScene::userStart()
 		auto sprite = e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("Pong", "pong"));
 		sprite->delay = 1.0f / 10.0f;
 		getSystem<EntityPlacingSystem>()->setEntity(e);
+		e->addComponent<Component::TransformationRegister>("pong-tableau");
 	}
 
 	// create Entrance room

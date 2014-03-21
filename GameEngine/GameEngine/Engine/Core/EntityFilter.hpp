@@ -50,6 +50,6 @@ protected:
 	Barcode _code;
 	std::weak_ptr<AScene> _scene;
 
-	void _componentAdded(Entity &e, std::size_t typeId);
-	void _componentRemoved(Entity &e, std::size_t typeId);
+	void virtual _componentAdded(Entity &e, std::size_t typeId);
+	void virtual _componentRemoved(Entity &e, std::size_t typeId);
 };
