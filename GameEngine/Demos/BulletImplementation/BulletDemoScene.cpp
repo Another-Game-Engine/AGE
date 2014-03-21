@@ -129,6 +129,7 @@ bool BulletDemoScene::userStart()
 	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
 	getSystem<PostFxSystem>()->useHDR(false);
+	getSystem<PostFxSystem>()->useBloom(false);
 
 	//
 	//
