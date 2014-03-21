@@ -183,8 +183,6 @@ void main(void)
 	vec3	diffuseColor = texture2D(fTexture1, fTexCoord).rgb * diffuse;
 	vec3	specularColor = texture2D(fTexture2, fTexCoord).rgb * specular;
 
-	vec3	fragNormal = normalize(fNormal.xyz);
-
 	vec4	finalColor = vec4(ambientColor, 1);
 	finalColor.xyz += computePointLightsInfluence(diffuseColor, specularColor);
 	finalColor.xyz += computeSpotLightsInfluence(diffuseColor, specularColor);

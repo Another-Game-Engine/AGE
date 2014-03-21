@@ -51,6 +51,8 @@ bool 			DemoScene::userStart()
 
 		auto convertor = getInstance<AssetsConvertorManager>();
 		convertor->setOutputDirectory("../../Assets/Serialized/");
+		convertor->setInputDirectory("../../Assets/");
+
 
 		//convertor->load("../../Assets/cube/cube.obj");
 		//convertor->serializeData("cube");
@@ -99,20 +101,32 @@ bool 			DemoScene::userStart()
 //		getInstance<FontConvertor>()->convertFont(File("./Assets/Montez-Regular.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./", "myFont");
 		getInstance<FontConvertor>()->convertFont(File("../../Assets/ContrailOne.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "../../Assets/Serialized/", "myFont");
 
-		convertor->load("../../Assets/cat/cat.obj");
-		convertor->serializeData("Cat");
-		convertor->clear();
+		//convertor->load("../../Assets/cat/cat.obj");
+		//convertor->serializeData("Cat");
+		//convertor->clear();
 
-		convertor->load("../../Assets/Pong.tga");
-		convertor->serializeData("Pong");
-		convertor->clear();
+		//convertor->load("../../Assets/house.obj");
+		//convertor->serializeData("House");
+		//convertor->clear();
 
-		convertor->load("../../Assets/Trololo.tga");
-		convertor->serializeData("Trololo");
-		convertor->clear();
+		//convertor->load("../../Assets/Pong.tga");
+		//convertor->serializeData("Pong");
+		//convertor->clear();
 
-		convertor->load("../../Assets/demoMuseum.obj");
-		convertor->serializeData("demoMuseum");
+		//convertor->load("../../Assets/Trololo.tga");
+		//convertor->serializeData("Trololo");
+		//convertor->clear();
+
+		//convertor->load("../../Assets/demoMuseum.obj");
+		//convertor->serializeData("demoMuseum");
+		//convertor->clear();
+
+		//convertor->load("../../Assets/Bear_Brown/Bear_Brown.obj");
+		//convertor->serializeData("bear");
+		//convertor->clear();
+
+		convertor->load("../../Assets/dragon.obj");
+		convertor->serializeData("dragon");
 		convertor->clear();
 
 	return (true);

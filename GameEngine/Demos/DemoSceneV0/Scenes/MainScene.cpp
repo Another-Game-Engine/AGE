@@ -85,7 +85,7 @@ bool 			MainScene::userStart()
 		auto herosLight = createEntity();
 		auto l = herosLight->addComponent<Component::PointLight>();
 		l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f);
-		l->lightData.positionPower.w = 20.0f;
+		l->lightData.positionPower.w = 10.0f;
 		herosLight->addComponent<Component::EntityPlacable>("HEROS-LIGHT");
 		herosLight->addComponent<Component::TransformationRegister>("HEROS-LIGHT");
 
