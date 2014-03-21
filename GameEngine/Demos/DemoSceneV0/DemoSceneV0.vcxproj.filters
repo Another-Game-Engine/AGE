@@ -59,5 +59,11 @@
     <ClInclude Include="Rooms\Entrance.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\EntityPlacable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\EntityPlacingSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

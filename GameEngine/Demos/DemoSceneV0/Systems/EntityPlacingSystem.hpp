@@ -3,12 +3,15 @@
 #include <Context/SdlContext.hh>
 #include <Systems/CameraSystem.hpp>
 #include <Utils/MatrixConversion.hpp>
+#include <Components/EntityPlacable.hpp>
 
 class EntityPlacingSystem : public System
 {
 public:
 	EntityPlacingSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
+		, _filter(scene)
+		, _name("NO SELECTION")
 		, _z(0.2f)
 	{
 		_input = _scene.lock()->getInstance<Input>();
@@ -17,14 +20,10 @@ public:
 	virtual ~EntityPlacingSystem()
 	{}
 
-	void setEntity(Entity &e, const std::string &name)
-	{
-		_entity.insert(std::make_pair(name, e));
-	}
-
 private:
-	std::map<std::string, Entity> _entity;
+	EntityFilter _filter;
 	std::shared_ptr<Input> _input;
+	std::string _name;
 	float _z;
 
 	virtual void updateBegin(double time)
@@ -33,17 +32,93 @@ private:
 	virtual void updateEnd(double time)
 	{}
 
+	Entity getEntity()
+	{
+		if (_filter.getCollection().size() == 0)
+			return Entity();
+		if (_filter.getCollection().size() == 1)
+		{
+			_name = _filter.getCollection().begin()->get()->getComponent<Component::EntityPlacable>()->name;
+			return *_filter.getCollection().begin();
+		}
+		for (auto e : _filter.getCollection())
+		{
+			if (e->getComponent<Component::EntityPlacable>()->name == _name)
+				return e;
+		}
+		_name = _filter.getCollection().begin()->get()->getComponent<Component::EntityPlacable>()->name;
+		return *_filter.getCollection().begin();
+	}
+
 	virtual void mainUpdate(double time)
 	{
-
 		_z += _input->getMouseWheel().y * 0.1f;
 		
-		if (_input->getInput(SDLK_MINUS))
+		if (_input->getInput(SDLK_MINUS) && !_filter.getCollection().empty())
 		{
+			auto &collection = _filter.getCollection();
+
+			if (collection.size() == 1)
+			{
+				_name = std::begin(collection)->get()->getComponent<Component::EntityPlacable>()->name;
+			}
+			else
+			{
+				for (auto it = std::begin(collection); it != std::end(collection); ++it)
+				{
+					auto c = it->get()->getComponent<Component::EntityPlacable>();
+					if (c->name != _name)
+						continue;
+					if (it != std::begin(collection))
+					{
+						_name = (--it)->get()->getComponent<Component::EntityPlacable>()->name;
+						break;
+					}
+					else
+					{
+						_name = (--(std::end(collection)))->get()->getComponent<Component::EntityPlacable>()->name;
+						break;
+					}
+				}
+			}
 		}
-		if (_input->getInput(SDLK_PLUS))
+
+		if (_input->getInput(SDLK_EQUALS) && !_filter.getCollection().empty())
 		{
+			auto &collection = _filter.getCollection();
+
+			if (collection.size() == 1)
+			{
+				_name = std::begin(collection)->get()->getComponent<Component::EntityPlacable>()->name;
+			}
+			else
+			{
+				for (auto it = std::begin(collection); it != std::end(collection); ++it)
+				{
+					auto c = it->get()->getComponent<Component::EntityPlacable>();
+					if (c->name != _name)
+						continue;
+					auto cit = it;
+					++cit;
+					if (cit != std::end(collection))
+					{
+						_name = cit->get()->getComponent<Component::EntityPlacable>()->name;
+						break;
+					}
+					else
+					{
+						_name = ((std::begin(collection)))->get()->getComponent<Component::EntityPlacable>()->name;
+						break;
+					}
+				}
+			}
 		}
+
+		_scene.lock()->getInstance<FontManager>()->draw2DString("Current entity : " + _name, "myFont", 30, glm::ivec2(10, 100), glm::vec4(1), "2DText");
+
+		Entity _entity = getEntity();
+		if (!_entity.get())
+			return;
 
 		if (_input->getInput(SDL_BUTTON_LEFT))
 		{
@@ -92,5 +167,6 @@ private:
 
 	virtual void initialize()
 	{
+		_filter.requireComponent<Component::EntityPlacable>();
 	}
 };
