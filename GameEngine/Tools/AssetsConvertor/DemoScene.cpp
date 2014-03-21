@@ -103,6 +103,10 @@ bool 			DemoScene::userStart()
 		convertor->serializeData("Pong");
 		convertor->clear();
 
+		convertor->load("../../Assets/Trololo.tga");
+		convertor->serializeData("Trololo");
+		convertor->clear();
+
 		convertor->load("../../Assets/demoMuseum.obj");
 		convertor->serializeData("demoMuseum");
 		convertor->clear();
