@@ -51,7 +51,7 @@ void TransformationRegisterSystem::loadEntity(Entity &e)
 	auto it = _loaded.find(compo->name);
 	if (it != std::end(_loaded))
 	{
-		e->setLocalTransform(it->second);
+		e->setLocalTransform(it->second, true);
 	}
 }
 

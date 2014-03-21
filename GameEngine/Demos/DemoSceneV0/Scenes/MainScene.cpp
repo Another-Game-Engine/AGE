@@ -42,12 +42,12 @@ bool 			MainScene::userStart()
 
 	// add systems
 	addSystem<TransformationRegisterSystem>(0)->setFile(File("EntityTransformationSave.json"));
+	addSystem<EntityPlacingSystem>(0);
 	addSystem<FPControllerSystem>(10);
 	addSystem<FirstPersonViewSystem>(20);
 	addSystem<CameraSystem>(30);
 	addSystem<BulletDynamicSystem>(35);
 	addSystem<FPSSystem>(40);
-	addSystem<EntityPlacingSystem>(50);
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
@@ -90,6 +90,16 @@ bool 			MainScene::userStart()
 		if (!_entrance->init())
 			return false;
 		_entrance->enable();
+	}
+
+	// create Engine room
+	{
+		_engineRoom = std::make_unique<EngineRoom>(
+			std::dynamic_pointer_cast<AScene>(shared_from_this())
+			);
+		if (!_engineRoom->init())
+			return false;
+		_engineRoom->enable();
 	}
 
 	return true;

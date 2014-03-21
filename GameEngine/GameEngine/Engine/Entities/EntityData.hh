@@ -94,7 +94,7 @@ public:
 
 	glm::mat4 const  		&getLocalTransform();
 	// TO DELETE
-	void        			setLocalTransform(const glm::mat4 &t);
+	void        			setLocalTransform(const glm::mat4 &t, bool forceMovedFlag = false);
 
 	glm::mat4 const			&getGlobalTransform() const;
 	// TO DELETE

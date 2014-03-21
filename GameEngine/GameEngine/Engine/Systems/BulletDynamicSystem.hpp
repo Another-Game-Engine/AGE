@@ -40,9 +40,15 @@ private:
 			auto a = e;
 			auto b = e->getComponent<Component::RigidBody>();
 			if (e->getComponent<Component::RigidBody>()->getBody().isStaticOrKinematicObject())
+			{
 				updateStatic(e);
+			}
 			else
+			{
+				if (e->getFlags() & EntityData::HAS_MOVED)
+					updateStatic(e);
 				updateDynamic(e);
+			}
 
 		}
 	}
