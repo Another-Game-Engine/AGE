@@ -7,6 +7,7 @@
 #include <Components/SpriteComponent.hh>
 #include <Systems/EntityPlacingSystem.hpp>
 #include <Systems/TransformationRegisterSystem.hpp>
+#include <Components/PointLight.hh>
 
 	Entrance::Entrance(std::weak_ptr<AScene> scene)
 		: Room(scene)
@@ -74,7 +75,12 @@
 			trololo->addComponent<Component::TransformationRegister>("trololo-tableau");
 		}
 		{
-
+			light1 = scene->createEntity();
+			auto l = light1->addComponent<Component::PointLight>();
+			l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f,30.0f);
+			l->lightData.positionPower.w = 5.0f;
+			scene->getSystem<EntityPlacingSystem>()->setEntity(light1);
+			room->addComponent<Component::TransformationRegister>("entrance-light-1");
 		}
 		return true;
 	}

@@ -40,10 +40,10 @@ FPController::~FPController()
 void FPController::init()
 {
 	_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene()->getInstance<BulletCollisionManager>());
-	setKey(LEFT, /*SDLK_a*/ SDLK_q);
-	setKey(RIGHT, /*SDLK_d*/SDLK_d);
-	setKey(FORWARD, /*SDLK_w*/SDLK_z);
-	setKey(BACKWARD, /*SDLK_s*/SDLK_s);
+	setKey(LEFT, SDLK_a);
+	setKey(RIGHT, SDLK_d);
+	setKey(FORWARD, SDLK_w);
+	setKey(BACKWARD, SDLK_s);
 	setKey(JUMP, SDLK_SPACE);
 	setKey(RUN, SDLK_LSHIFT);
 	controls.fill(false);

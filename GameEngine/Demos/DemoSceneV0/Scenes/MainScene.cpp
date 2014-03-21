@@ -71,9 +71,9 @@ bool 			MainScene::userStart()
 		camera->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
-		auto l = _heros->addComponent<Component::PointLight>();
-		l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
-		l->lightData.positionPower.w = 2.0f;
+		//auto l = _heros->addComponent<Component::PointLight>();
+		//l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
+		//l->lightData.positionPower.w = 2.0f;
 //		_heros->addComponent<Component::TransformationRegister>("character-controller-museum");
 		auto fpc = _heros->addComponent<Component::FPController>();
 		fpc->getShape().setLocalScaling(btVector3(0.3f, 0.3f, 0.3f));
