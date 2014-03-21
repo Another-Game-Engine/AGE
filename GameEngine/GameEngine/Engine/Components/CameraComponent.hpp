@@ -58,7 +58,7 @@ namespace Component
 				skybox = _entity->getScene()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
 		}
 
-		void	initFrameBuffer(glm::uvec2 const &fboSize, uint32_t sampleNbr)
+		void	initFrameBuffer()
 		{
 			if (frameBuffer.isInit() == false)
 			{
@@ -82,13 +82,16 @@ namespace Component
 		//////
 
 		glm::uvec4						viewport;
-
 		glm::mat4                       projection;
 		std::shared_ptr<CubeMapFile>    skybox;
 		std::string                     cubeMapShader;
 		glm::mat4                       lookAtTransform;
 		OpenGLTools::Framebuffer		frameBuffer;
 		OpenGLTools::Framebuffer		downSampling;
+
+		// Camera fbo infos
+		glm::uvec2						fboSize;
+		uint32_t						sampleNbr;
 
 	private:
 		CameraComponent(CameraComponent const &);
