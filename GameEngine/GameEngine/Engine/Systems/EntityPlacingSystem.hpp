@@ -2,12 +2,14 @@
 #include <Core/Input.hh>
 #include <Context/SdlContext.hh>
 #include <Systems/CameraSystem.hpp>
+#include <Utils/MatrixConversion.hpp>
 
 class EntityPlacingSystem : public System
 {
 public:
 	EntityPlacingSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
+		, _z(0.2f)
 	{
 		_input = _scene.lock()->getInstance<Input>();
 	}
@@ -23,6 +25,7 @@ public:
 private:
 	Entity _entity;
 	std::shared_ptr<Input> _input;
+	float _z;
 
 	virtual void updateBegin(double time)
 	{}
@@ -32,12 +35,16 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
+
+		_z += _input->getMouseWheel().y * 0.1f;
+		
 		if (_input->getInput(SDL_BUTTON_LEFT))
 		{
 			glm::vec3 from, to;
 			_scene.lock()->getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 			glm::mat4 t = _entity->getLocalTransform();
-			glm::vec3 pos = from + to * 1.5f;
+			glm::vec3 pos = from;
+			pos += to * _z;
 			t[3][0] = pos.x;
 			t[3][1] = pos.y;
 			t[3][2] = pos.z;

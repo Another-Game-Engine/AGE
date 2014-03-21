@@ -11,11 +11,6 @@
 	Entrance::Entrance(std::weak_ptr<AScene> scene)
 		: Room(scene)
 	{
-		// load
-		auto s = scene.lock();
-		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__demoMuseum.cpd"));
-		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Pong.CPDAnimation"));
-		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Trololo.CPDAnimation"));
 	}
 
 	Entrance::~Entrance()
@@ -30,6 +25,12 @@
 
 	bool Entrance::init()
 	{
+		// load
+		auto s = _scene.lock();
+		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__demoMuseum.cpd"));
+		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Pong.CPDAnimation"));
+		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Trololo.CPDAnimation"));
+
 		auto scene = _scene.lock();
 		{
 			room = scene->createEntity();
@@ -48,6 +49,13 @@
 			rigidBody->getBody().setFriction(1.0f);
 			rigidBody->getBody().setRestitution(0.9f);
 		}
+
+		return true;
+	}
+
+	bool Entrance::_enable()
+	{
+		auto scene = _scene.lock();
 		{
 			pong = scene->createEntity();
 			pong->setLocalTransform(glm::translate(pong->getLocalTransform(), glm::vec3(-8, 1, 0)));
@@ -62,17 +70,19 @@
 			trololo->setLocalTransform(glm::scale(trololo->getLocalTransform(), glm::vec3(0.01)));
 			auto sprite = trololo->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Trololo", "tmp"));
 			sprite->delay = 1.0f / 10.0f;
-			scene->getSystem<EntityPlacingSystem>()->setEntity(trololo);
+//			scene->getSystem<EntityPlacingSystem>()->setEntity(trololo);
 			trololo->addComponent<Component::TransformationRegister>("trololo-tableau");
 		}
-	}
+		{
 
-	bool Entrance::_enable()
-	{
+		}
 		return true;
 	}
 
 	bool Entrance::_disable()
 	{
+		auto scene = _scene.lock();
+		scene->destroy(pong);
+		scene->destroy(trololo);
 		return true;
 	}

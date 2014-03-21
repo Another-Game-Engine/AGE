@@ -20,6 +20,7 @@ struct Room
 	{
 		if (_enabled)
 			return false;
+		_enabled = true;
 		return _enable();
 	}
 
@@ -27,6 +28,7 @@ struct Room
 	{
 		if (!_enabled)
 			return false;
+		_enabled = false;
 		return _disable();
 	}
 protected:

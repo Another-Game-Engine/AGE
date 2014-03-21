@@ -100,8 +100,13 @@ bool 			MainScene::userUpdate(double time)
 {
 	float ftime = (float)(time);
 	static float delay = 0.0f;
-//	if (getInstance<Input>()->getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
-//	{
+	if (getInstance<Input>()->getInput(SDLK_r) && delay <= 0.0f)
+	{
+		if (_entrance->isEnable())
+			_entrance->disable();
+		else
+			_entrance->enable();
+
 //		glm::vec3 from, to;
 //		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 //		auto e = createEntity();
@@ -115,8 +120,8 @@ bool 			MainScene::userUpdate(double time)
 //		//auto l = e->addComponent<Component::PointLight>();
 //		//l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 5.0f);
 //		//l->lightData.positionPower.w = 3.0f;
-//		delay = 0.1f;
-//	}
+		delay = 0.1f;
+	}
 	if (delay >= 0.0f)
 		delay -= ftime;
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
