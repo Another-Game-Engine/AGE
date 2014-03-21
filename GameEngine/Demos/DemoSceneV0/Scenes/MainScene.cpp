@@ -50,15 +50,15 @@ bool 			MainScene::userStart()
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
-//	addSystem<PostFxSystem>(110); // POST FXs
+	addSystem<PostFxSystem>(110); // POST FXs
 	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
 
-	//getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
-	//getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
-	//getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
-	//getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
-	//getSystem<PostFxSystem>()->useHDR(false);
-
+	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
+	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
+	getSystem<PostFxSystem>()->useHDR(false);
+	getSystem<PostFxSystem>()->useBloom(false);
 	// create heros
 	{
 		_heros = createEntity();
@@ -79,8 +79,8 @@ bool 			MainScene::userStart()
 		auto e = createEntity();
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
 		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.01)));
-		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("Pong", "pong"),
-			getInstance<Renderer>()->getShader("SpriteBasic"));
+		auto sprite = e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("Pong", "pong"));
+		sprite->delay = 1.0f / 10.0f;
 		getSystem<EntityPlacingSystem>()->setEntity(e);
 	}
 

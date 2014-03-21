@@ -2,7 +2,6 @@
 
 #include "Component.hh"
 #include <Sprite/SpriteManager.hh>
-#include <OpenGL/Shader.hh>
 
 namespace Component
 {
@@ -11,7 +10,6 @@ namespace Component
 		Sprite()
 		: Component::ComponentBase<Sprite>()
 		, animation(nullptr)
-		, shader(nullptr)
 		, delay(1.0f / 3.0f)
 		, timeCounter(0.0f)
 		, index(0)
@@ -20,10 +18,9 @@ namespace Component
 		virtual ~Sprite(void)
 		{}
 
-		void init(std::shared_ptr<SpriteAnimation> _animation, std::shared_ptr<OpenGLTools::Shader> _shader)
+		void init(std::shared_ptr<SpriteAnimation> _animation)
 		{
 			animation = _animation;
-			shader = _shader;
 			index = 0;
 		}
 		virtual void reset()
@@ -31,7 +28,6 @@ namespace Component
 			index = 0;
 			timeCounter = 0.0f;
 			animation = nullptr;
-			shader = nullptr;
 		}
 
 		void update(float time)
@@ -69,7 +65,6 @@ namespace Component
 		//////
 
 		std::shared_ptr<SpriteAnimation> animation;
-		std::shared_ptr<OpenGLTools::Shader> shader;
 		float delay;
 		float timeCounter;
 		std::uint32_t index;
