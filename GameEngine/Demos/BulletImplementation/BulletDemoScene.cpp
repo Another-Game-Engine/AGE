@@ -253,20 +253,16 @@ bool BulletDemoScene::userStart()
 	// CREATE SPRITE ANIMATION
 	{
 		auto e = createEntity();
-		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "idle"),
-			getInstance<Renderer>()->getShader("SpriteBasic"));
+		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "idle"));
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 300, 0)));
 		auto e2 = createEntity();
-		e2->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "walk"),
-			getInstance<Renderer>()->getShader("SpriteBasic"));
+		e2->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "walk"));
 		e2->setLocalTransform(glm::translate(e2->getLocalTransform(), glm::vec3(1700, 0, 0)));
 		auto e3 = createEntity();
-		e3->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "crouch_idle"),
-			getInstance<Renderer>()->getShader("SpriteBasic"));
+		e3->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "crouch_idle"));
 		e3->setLocalTransform(glm::translate(e3->getLocalTransform(), glm::vec3(1700, 400, 0)));
 		auto e4 = createEntity();
-		e4->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "kitten"),
-			getInstance<Renderer>()->getShader("SpriteBasic"));
+		e4->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "kitten"));
 		e4->setLocalTransform(glm::translate(e4->getLocalTransform(), glm::vec3(1700, 800, 0)));
 		e4->setLocalTransform(glm::scale(e4->getLocalTransform(), glm::vec3(0.1)));
 	}

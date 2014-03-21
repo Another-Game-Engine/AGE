@@ -21,10 +21,13 @@
     <ClCompile Include="Scenes\MainScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SharedSystems\FPSSystem.cpp">
+    <ClCompile Include="Rooms\Entrance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rooms\Entrance.cpp">
+    <ClCompile Include="Systems\FPSSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\TransformationRegisterSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,13 +38,19 @@
     <ClInclude Include="Scenes\MainScene.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SharedSystems\FPSSystem.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Rooms\Room.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Rooms\Entrance.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\FPSSystem.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\TransformationRegister.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\TransformationRegisterSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
