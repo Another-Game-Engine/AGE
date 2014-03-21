@@ -64,6 +64,7 @@
 			auto sprite = pong->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Pong", "pong"));
 			sprite->delay = 1.0f / 10.0f;
 			pong->addComponent<Component::TransformationRegister>("pong-tableau");
+			pong->addComponent<Component::EntityPlacable>("pong-tableau");
 		}
 		{
 			trololo = scene->createEntity();
@@ -71,16 +72,19 @@
 			trololo->setLocalTransform(glm::scale(trololo->getLocalTransform(), glm::vec3(0.01)));
 			auto sprite = trololo->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Trololo", "tmp"));
 			sprite->delay = 1.0f / 10.0f;
-//			scene->getSystem<EntityPlacingSystem>()->setEntity(trololo);
 			trololo->addComponent<Component::TransformationRegister>("trololo-tableau");
+			trololo->addComponent<Component::EntityPlacable>("trololo-tableau");
 		}
 		{
-			light1 = scene->createEntity();
-			auto l = light1->addComponent<Component::PointLight>();
-			l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f,30.0f);
-			l->lightData.positionPower.w = 5.0f;
-			scene->getSystem<EntityPlacingSystem>()->setEntity(light1);
-			room->addComponent<Component::TransformationRegister>("entrance-light-1");
+			for (auto i = 0; i < 10; ++i)
+			{
+				auto light = scene->createEntity();
+				auto l = light->addComponent<Component::PointLight>();
+				l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 6.0f);
+				l->lightData.positionPower.w = 2.0f;
+				light->addComponent<Component::EntityPlacable>("entrance-light-" + std::to_string(i));
+				light->addComponent<Component::TransformationRegister>("entrance-light-" + std::to_string(i));
+			}
 		}
 		return true;
 	}
@@ -90,6 +94,10 @@
 		auto scene = _scene.lock();
 		scene->destroy(pong);
 		scene->destroy(trololo);
-		scene->destroy(light1);
+		for (auto e : lights)
+		{
+			scene->destroy(e);
+		}
+		lights.clear();
 		return true;
 	}

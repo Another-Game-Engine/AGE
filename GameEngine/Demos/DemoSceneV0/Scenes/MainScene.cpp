@@ -41,7 +41,7 @@ bool 			MainScene::userStart()
 		return false;
 
 	// add systems
-	addSystem<TransformationRegisterSystem>(0)->setFile(File("EntityTransformationSave.json"));
+	addSystem<TransformationRegisterSystem>(0)->setFile(File("../../EntityTransformationSave.json"));
 	addSystem<EntityPlacingSystem>(0);
 	addSystem<FPControllerSystem>(10);
 	addSystem<FirstPersonViewSystem>(20);
@@ -61,6 +61,7 @@ bool 			MainScene::userStart()
 	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
 	getSystem<PostFxSystem>()->useHDR(false);
 	getSystem<PostFxSystem>()->useBloom(false);
+
 	// create heros
 	{
 		_heros = createEntity();
@@ -80,6 +81,14 @@ bool 			MainScene::userStart()
 		fpc->backwardRunSpeed = 0.001f;
 		fpc->forwardRunSpeed = 0.001f;
 		fpc->sideRunSpeed = 0.001f;
+
+		auto herosLight = createEntity();
+		auto l = herosLight->addComponent<Component::PointLight>();
+		l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f);
+		l->lightData.positionPower.w = 20.0f;
+		herosLight->addComponent<Component::EntityPlacable>("HEROS-LIGHT");
+		herosLight->addComponent<Component::TransformationRegister>("HEROS-LIGHT");
+
 	}
 
 	// create Entrance room

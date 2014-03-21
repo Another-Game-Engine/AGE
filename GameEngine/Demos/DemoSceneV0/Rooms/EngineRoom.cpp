@@ -51,6 +51,8 @@
 		auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
 		rigidBody->setMass(0.0f);
 		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_cat");
+		room->addComponent<Component::EntityPlacable>("engine-room-gros-chat");
+		room->addComponent<Component::TransformationRegister>("engine-room-gros-chat");
 		//rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		//rigidBody->getShape().setMargin(0.001f);
 		//rigidBody->getBody().setFriction(1.0f);

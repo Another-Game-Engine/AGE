@@ -1,0 +1,372 @@
+{
+    "value0": [
+        {
+            "key": "HEROS-LIGHT",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -30.74064826965332,
+                    "value13": 3.5889072418212891,
+                    "value14": -25.106901168823242,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "cat-mesh",
+            "value": {
+                "mat4": {
+                    "value0": -7.1842222213745117,
+                    "value1": 0.00044774732668884099,
+                    "value2": -2.9366707801818848,
+                    "value3": 0,
+                    "value4": 0.00042950379429385066,
+                    "value5": 7.7612848281860352,
+                    "value6": 0.00013261415006127208,
+                    "value7": 0,
+                    "value8": 2.936671257019043,
+                    "value9": -3.975912113673985e-005,
+                    "value10": -7.184232234954834,
+                    "value11": 0,
+                    "value12": -14.410307884216309,
+                    "value13": -0.012923926115036011,
+                    "value14": -6.7063584327697754,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "character-controller-museum",
+            "value": {
+                "mat4": {
+                    "value0": 0.0007720370776951313,
+                    "value1": 0,
+                    "value2": 0.9999508261680603,
+                    "value3": 0,
+                    "value4": -0.99985009431838989,
+                    "value5": 0.0017450397135689855,
+                    "value6": 0.00077195925405249,
+                    "value7": 0,
+                    "value8": -0.0017450397135689855,
+                    "value9": -0.99985009431838989,
+                    "value10": 1.3473015769704944e-006,
+                    "value11": 0,
+                    "value12": -51.134353637695313,
+                    "value13": 0.29100000858306885,
+                    "value14": -1.9868592023849487,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "engine-room-gros-chat",
+            "value": {
+                "mat4": {
+                    "value0": 4.5152063369750977,
+                    "value1": 0,
+                    "value2": -4.5152063369750977,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 6.3854660987854004,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 4.5152063369750977,
+                    "value9": 0,
+                    "value10": 4.5152063369750977,
+                    "value11": 0,
+                    "value12": -10.506166458129883,
+                    "value13": 0.0177115797996521,
+                    "value14": -12.366287231445313,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-0",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -55.968837738037109,
+                    "value13": 2.9305648803710938,
+                    "value14": -6.1435151100158691,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-1",
+            "value": {
+                "mat4": {
+                    "value0": 150,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 150,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 150,
+                    "value11": 0,
+                    "value12": -57.079811096191406,
+                    "value13": 2.8588030338287354,
+                    "value14": 7.1148104667663574,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-2",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -57.727851867675781,
+                    "value13": 2.733675479888916,
+                    "value14": -0.052939474582672119,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-3",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -51.52764892578125,
+                    "value13": 1.5930957794189453,
+                    "value14": -0.34996354579925537,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-4",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -47.142864227294922,
+                    "value13": 0.58924448490142822,
+                    "value14": -0.22187632322311401,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-5",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -44.042495727539062,
+                    "value13": 2.7020611763000488,
+                    "value14": -5.6545162200927734,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-6",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -43.742660522460937,
+                    "value13": 3.574615478515625,
+                    "value14": 7.3513336181640625,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-7",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -44.442092895507812,
+                    "value13": 3.9302024841308594,
+                    "value14": -0.091093778610229492,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-8",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -50.03717041015625,
+                    "value13": 3.2284860610961914,
+                    "value14": -5.7761411666870117,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-light-9",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -50.299823760986328,
+                    "value13": 3.4811534881591797,
+                    "value14": 5.9994239807128906,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "pong-tableau",
+            "value": {
+                "mat4": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -0.0014418276259675622,
+                    "value3": 0,
+                    "value4": -0.0014418276259675622,
+                    "value5": 0,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0.0014418276259675622,
+                    "value10": 0,
+                    "value11": 0,
+                    "value12": -54.195270538330078,
+                    "value13": 0.016498386859893799,
+                    "value14": -0.28668791055679321,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "trololo-tableau",
+            "value": {
+                "mat4": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -0.011765364557504654,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 0.011765364557504654,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0.011765364557504654,
+                    "value9": 0,
+                    "value10": 0,
+                    "value11": 0,
+                    "value12": -59.615760803222656,
+                    "value13": 0.3677985668182373,
+                    "value14": 1.8768672943115234,
+                    "value15": 1
+                }
+            }
+        }
+    ]
+}

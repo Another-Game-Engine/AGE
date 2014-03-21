@@ -214,12 +214,14 @@
     <ClCompile Include="Systems\TransformationRegisterSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\EntityPlacable.hpp" />
     <ClInclude Include="Components\TransformationRegister.hpp" />
     <ClInclude Include="MyTags.hpp" />
     <ClInclude Include="Rooms\EngineRoom.hh" />
     <ClInclude Include="Rooms\Entrance.hh" />
     <ClInclude Include="Rooms\Room.hpp" />
     <ClInclude Include="Scenes\MainScene.hh" />
+    <ClInclude Include="Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Systems\FPSSystem.hh" />
     <ClInclude Include="Systems\TransformationRegisterSystem.hpp" />
   </ItemGroup>
