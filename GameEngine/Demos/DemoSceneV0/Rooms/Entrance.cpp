@@ -84,5 +84,6 @@
 		auto scene = _scene.lock();
 		scene->destroy(pong);
 		scene->destroy(trololo);
+		scene->destroy(light1);
 		return true;
 	}

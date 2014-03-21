@@ -2,6 +2,7 @@
 
 #include <Core/AScene.hh>
 #include <Rooms/Entrance.hh>
+#include <Rooms/EngineRoom.hh>
 
 
 
@@ -46,5 +47,6 @@ private:
 
 	Entity _heros;
 	std::unique_ptr<Entrance> _entrance;
+	std::unique_ptr<EngineRoom> _engineRoom;
 //	std::unique_ptr<ProjectionRoom> _projectionRoom;
 };

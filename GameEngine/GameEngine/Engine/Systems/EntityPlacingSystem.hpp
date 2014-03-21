@@ -49,37 +49,37 @@ private:
 			t[3][1] = pos.y;
 			t[3][2] = pos.z;
 			t[3][3] = 1;
-			_entity->setLocalTransform(t);
+			_entity->setLocalTransform(t, true);
 		}
 
 		if (_input->getInput(SDLK_t))
 		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -45.0f, glm::vec3(0, 1, 0)));
+			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -45.0f, glm::vec3(0, 1, 0)), true);
 		}
 
 		if (_input->getInput(SDLK_y))
 		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 45.0f, glm::vec3(0, 1, 0)));
+			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 45.0f, glm::vec3(0, 1, 0)), true);
 		}
 
 		if (_input->getInput(SDLK_b))
 		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -45.0f, glm::vec3(1, 0, 0)));
+			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -45.0f, glm::vec3(1, 0, 0)), true);
 		}
 
 		if (_input->getInput(SDLK_n))
 		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 45.0f, glm::vec3(1, 0, 0)));
+			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 45.0f, glm::vec3(1, 0, 0)), true);
 		}
 
 		if (_input->getInput(SDLK_g))
 		{
-			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(0.95f)));
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(0.95f)), true);
 		}
 
 		if (_input->getInput(SDLK_h))
 		{
-			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1.05f)));
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1.05f)), true);
 		}
 	}
 

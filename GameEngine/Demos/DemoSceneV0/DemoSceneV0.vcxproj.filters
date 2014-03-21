@@ -21,13 +21,16 @@
     <ClCompile Include="Scenes\MainScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rooms\Entrance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Systems\FPSSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Systems\TransformationRegisterSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rooms\EngineRoom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rooms\Entrance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,9 +44,6 @@
     <ClInclude Include="Rooms\Room.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rooms\Entrance.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Systems\FPSSystem.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -51,6 +51,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Systems\TransformationRegisterSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rooms\EngineRoom.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rooms\Entrance.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
