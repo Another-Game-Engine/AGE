@@ -5,6 +5,7 @@
 #include <Components/HotZone.hpp>
 #include <Components/Collision.hpp>
 #include <MyTags.hpp>
+#include <Rooms/Room.hpp>
 
 class HotZoneSystem : public System
 {
@@ -61,6 +62,10 @@ private:
 					curr->room->disable();
 				else
 					curr->room->enable();
+				_lastZone = e;
+			}
+			else
+			{
 				_lastZone = e;
 			}
 		}

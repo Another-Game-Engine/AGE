@@ -26,7 +26,7 @@ namespace Component
 		BT_DECLARE_ALIGNED_ALLOCATOR();
 		FPController();
 		virtual ~FPController();
-		void init();
+		void init(short filterGroup = 1, short filterMask = -1);
 		virtual void reset();
 		void clear();
 		btKinematicCharacterController &getController();

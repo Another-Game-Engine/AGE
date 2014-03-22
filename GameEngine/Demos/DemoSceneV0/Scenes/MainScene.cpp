@@ -116,7 +116,42 @@ bool 			MainScene::userStart()
 			);
 		if (!_engineRoom->init())
 			return false;
-		_engineRoom->enable();
+	}
+
+	// create Projection room
+	{
+		_projectionRoom = std::make_shared<ProjectionRoom>(
+			std::dynamic_pointer_cast<AScene>(shared_from_this())
+			);
+		if (!_projectionRoom->init())
+			return false;
+	}
+
+	// create Physics room
+	{
+		_physicsRoom = std::make_shared<PhysicsRoom>(
+			std::dynamic_pointer_cast<AScene>(shared_from_this())
+			);
+		if (!_physicsRoom->init())
+			return false;
+	}
+
+	// create Last room
+	{
+		_lastRoom = std::make_shared<LastRoom>(
+			std::dynamic_pointer_cast<AScene>(shared_from_this())
+			);
+		if (!_lastRoom->init())
+			return false;
+	}
+
+	// create Last room
+	{
+		_circleRoom = std::make_shared<CircleRoom>(
+			std::dynamic_pointer_cast<AScene>(shared_from_this())
+			);
+		if (!_circleRoom->init())
+			return false;
 	}
 
 	return true;

@@ -33,6 +33,18 @@
     <ClCompile Include="Rooms\Entrance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Rooms\ProjectionRoom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rooms\PhysicsRoom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rooms\CircleRoom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rooms\LastRoom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyTags.hpp">
@@ -69,6 +81,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Systems\HotZoneSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rooms\ProjectionRoom.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rooms\PhysicsRoom.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rooms\CircleRoom.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rooms\LastRoom.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

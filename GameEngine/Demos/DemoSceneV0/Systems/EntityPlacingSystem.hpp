@@ -163,6 +163,37 @@ private:
 		{
 			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1.05f)), true);
 		}
+
+		if (_input->getInput(SDLK_u))
+		{
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(0.95f,1,1)), true);
+		}
+
+		if (_input->getInput(SDLK_i))
+		{
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1.05f,1,1)), true);
+		}
+
+		if (_input->getInput(SDLK_j))
+		{
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1, 0.95f,1)), true);
+		}
+
+		if (_input->getInput(SDLK_k))
+		{
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1, 1.05f,1)), true);
+		}
+
+		if (_input->getInput(SDLK_m))
+		{
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1, 1, 0.95f)), true);
+		}
+
+		if (_input->getInput(SDLK_COMMA))
+		{
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1, 1, 1.05f)), true);
+		}
+
 	}
 
 	virtual void initialize()
