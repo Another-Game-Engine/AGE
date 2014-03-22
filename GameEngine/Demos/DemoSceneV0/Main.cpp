@@ -13,6 +13,7 @@
 
 // SCENES
 #include "Scenes/MainScene.hh"
+#include "SpaceGame.hh"
 
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
@@ -36,12 +37,11 @@ int			main(int ac, char **av)
 	e->setInstance<AssetsManager>()->init();
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
-	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 	e->setInstance<AudioManager>()->init();
 
 
 	// init engine
-	if (e->init() == false)
+	if (e->init(0, 1920, 1080, "PFA Présentation") == false)
 		return (EXIT_FAILURE);
 
 	std::array<Attribute, 4> param = //-V112
@@ -58,9 +58,12 @@ int			main(int ac, char **av)
 
 	// add main scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<MainScene>(e), "MainScene");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<SpaceGame>(e), "SpaceGame");
 
 	// bind scene
 	if (!e->getInstance<SceneManager>()->initScene("MainScene"))
+		return (EXIT_FAILURE);
+	if (!e->getInstance<SceneManager>()->initScene("SpaceGame"))
 		return (EXIT_FAILURE);
 
 	e->getInstance<SceneManager>()->enableScene("MainScene", 0);

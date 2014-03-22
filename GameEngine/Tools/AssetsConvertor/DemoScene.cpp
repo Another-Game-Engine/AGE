@@ -62,9 +62,9 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("ball");
 		//convertor->clear();
 
-		//convertor->load("../../Assets/galileo/galileo.obj");
-		//convertor->serializeData("galileo");
-		//convertor->clear();
+		convertor->load("../../Assets/torus.obj");
+		convertor->serializeData("torus");
+		convertor->clear();
 
 		//convertor->load("../../Assets/crytek-sponza/sponza.obj");
 		//convertor->serializeData("sponza");
@@ -99,7 +99,7 @@ bool 			DemoScene::userStart()
 		//convertor->clear();
 
 //		getInstance<FontConvertor>()->convertFont(File("./Assets/Montez-Regular.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "./", "myFont");
-		getInstance<FontConvertor>()->convertFont(File("../../Assets/ContrailOne.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "../../Assets/Serialized/", "myFont");
+//		getInstance<FontConvertor>()->convertFont(File("../../Assets/ContrailOne.ttf"), { 5, 10, 20, 30, 40, 50, 60, 70 }, "../../Assets/Serialized/", "myFont");
 
 		//convertor->load("../../Assets/cat/cat.obj");
 		//convertor->serializeData("Cat");
@@ -128,6 +128,7 @@ bool 			DemoScene::userStart()
 		//convertor->load("../../Assets/dragon.obj");
 		//convertor->serializeData("dragon");
 		//convertor->clear();
+
 
 	return (true);
 }

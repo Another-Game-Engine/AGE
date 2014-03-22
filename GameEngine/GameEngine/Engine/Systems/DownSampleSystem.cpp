@@ -14,6 +14,7 @@ DownSampleSystem::~DownSampleSystem()
 
 void	DownSampleSystem::initialize()
 {
+	_quad.init(_scene);
 	_cameraFilter.requireComponent<Component::CameraComponent>();
 }
 

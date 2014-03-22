@@ -214,7 +214,9 @@
     <ClCompile Include="Rooms\PhysicsRoom.cpp" />
     <ClCompile Include="Rooms\ProjectionRoom.cpp" />
     <ClCompile Include="Scenes\MainScene.cpp" />
+    <ClCompile Include="SpaceGame.cpp" />
     <ClCompile Include="Systems\FPSSystem.cpp" />
+    <ClCompile Include="Systems\SpaceshipControllerSystem.cpp" />
     <ClCompile Include="Systems\TransformationRegisterSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -230,9 +232,11 @@
     <ClInclude Include="Rooms\ProjectionRoom.hh" />
     <ClInclude Include="Rooms\Room.hpp" />
     <ClInclude Include="Scenes\MainScene.hh" />
+    <ClInclude Include="SpaceGame.hh" />
     <ClInclude Include="Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Systems\FPSSystem.hh" />
     <ClInclude Include="Systems\HotZoneSystem.hpp" />
+    <ClInclude Include="Systems\SpaceshipControllerSystem.hh" />
     <ClInclude Include="Systems\TransformationRegisterSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
