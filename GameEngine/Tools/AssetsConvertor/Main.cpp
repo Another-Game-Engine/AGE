@@ -36,7 +36,7 @@ int			main(int ac, char **av)
 		return EXIT_FAILURE;
 
 	// init engine
-	if (e->init() == false)
+	if (e->init(0, 50, 50, "Assert Converter") == false)
 		return (EXIT_FAILURE);
 
 	// add scene
