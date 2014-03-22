@@ -50,7 +50,7 @@ bool 			MainScene::userStart()
 
 	// add systems
 	addSystem<TransformationRegisterSystem>(0)->setFile(File("../../EntityTransformationSave.json"));
-//	addSystem<EntityPlacingSystem>(0);
+	addSystem<EntityPlacingSystem>(0);
 	addSystem<FPControllerSystem>(10);
 	addSystem<FirstPersonViewSystem>(20);
 	addSystem<CameraSystem>(30);

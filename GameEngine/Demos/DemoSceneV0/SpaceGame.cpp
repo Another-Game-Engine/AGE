@@ -14,6 +14,7 @@
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/BlitFinalRender.hh>
+#include <Systems/FPSSystem.hh>
 
 #include <glm/glm.hpp>
 
@@ -44,7 +45,7 @@ bool 			SpaceGame::userStart()
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
 	addSystem<PostFxSystem>(110); // POST FXs
 	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
-
+	addSystem<FPSSystem>(130);
 	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
 	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
@@ -122,7 +123,7 @@ bool 			SpaceGame::userStart()
 	cameraComponent->lookAtTransform = glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0), glm::vec3(0, 1, 0));
 	cameraComponent->fboSize = getInstance<IRenderContext>()->getScreenSize();
 	cameraComponent->viewport = glm::vec4(0, 0, cameraComponent->fboSize.x, cameraComponent->fboSize.y);
-	cameraComponent->sampleNbr = 8;
+	cameraComponent->sampleNbr = 1;
 
 	return (true);
 }
