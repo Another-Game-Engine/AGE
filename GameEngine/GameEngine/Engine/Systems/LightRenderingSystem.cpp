@@ -156,6 +156,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 
 void	LightRenderingSystem::mainUpdate(double time)
 {
+	glEnable(GL_CULL_FACE);
 	auto renderer = _scene.lock()->getInstance<Renderer>();
 	auto perFrame = renderer->getUniform("PerFrame");
 
@@ -175,13 +176,14 @@ void	LightRenderingSystem::mainUpdate(double time)
 		perFrame->flushChanges();
 
 		if (camera->frameBuffer.isInit() == false)
-			c->getComponent<Component::CameraComponent>()->initFrameBuffer(_scene.lock()->getInstance<IRenderContext>()->getScreenSize(), 1);
+			c->getComponent<Component::CameraComponent>()->initFrameBuffer();
 
 		glViewport(0, 0, camera->frameBuffer.getSize().x, camera->frameBuffer.getSize().y);
 
 		// First Pass
 		computeCameraRender(camera->frameBuffer, perFrame);
 	}
+	glDisable(GL_CULL_FACE);
 }
 
 void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo,
@@ -207,6 +209,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	// ----------------------------------------------------
 	// Final Lightning pass
 	// ----------------------------------------------------
+	glDepthMask(GL_FALSE);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glDepthFunc(GL_LEQUAL);
 
