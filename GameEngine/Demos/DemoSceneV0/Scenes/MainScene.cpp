@@ -90,12 +90,12 @@ bool 			MainScene::userStart()
 		fpc->sideRunSpeed = 0.001f;
 		_heros->addTag(MyTags::HEROS_TAG);
 
-		//auto herosLight = createEntity();
-		//auto l = herosLight->addComponent<Component::PointLight>();
-		//l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f);
-		//l->lightData.positionPower.w = 10.0f;
-		//herosLight->addComponent<Component::EntityPlacable>("HEROS-LIGHT");
-		//herosLight->addComponent<Component::TransformationRegister>("HEROS-LIGHT");
+		auto herosLight = createEntity();
+		l = herosLight->addComponent<Component::PointLight>();
+		l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f);
+		l->lightData.positionPower.w = 10.0f;
+		herosLight->addComponent<Component::EntityPlacable>("HEROS-LIGHT");
+		herosLight->addComponent<Component::TransformationRegister>("HEROS-LIGHT");
 
 	}
 
