@@ -35,9 +35,9 @@
 		auto scene = _scene.lock();
 		{
 			glm::mat4 t(1);
-			t = glm::translate(t, glm::vec3(-49, -0.2f, 3));
+			t = glm::translate(t, glm::vec3(-14.5, -0.1f, -27.1));
 			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
-			auto s = 5;
+			auto s = 3;
 			for (auto i = 0; i < s; i++)
 			{
 				for (auto j = 0; j < s; ++j)
