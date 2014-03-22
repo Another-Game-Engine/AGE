@@ -28,6 +28,7 @@
 		auto s = _scene.lock();
 		hotZoneEntranceProjection = createHotZone("Projection->Entrance", "HZ-entrance-projection");
 		hotZoneProjectionPhysics = createHotZone("Projection->Physics", "HZ-projection-physics");
+		hotZoneProjectionCircle = createHotZone("Projection->Circle", "HZ-projection-circle");
 		return true;
 	}
 

@@ -28,24 +28,10 @@
 		auto s = _scene.lock();
 		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Cat.cpd"));
 		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__House.cpd"));
-		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__dragon.cpd"));
 //		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 
-		auto scene = _scene.lock();
-		{
-			hotZone = scene->createEntity();
-			auto rb = hotZone->addComponent<Component::RigidBody>(0.0f);
-			rb->setCollisionShape(Component::RigidBody::BOX, "NULL");
-			hotZone->setLocalTransform(glm::scale(hotZone->getLocalTransform(), glm::vec3(1, 0.1, 1)));
-			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
-			if (!meshObj)
-				return false;
-			auto meshComponent = hotZone->addComponent<Component::MeshRenderer>(meshObj);
-			meshComponent->setShader("MaterialBasic");
-			hotZone->addComponent<Component::HotZone>("engine-room-hot-zone", "switch-hz-engine-room__entrance", shared_from_this());
-			hotZone->addComponent<Component::EntityPlacable>("engine-room-hot-zone");
-			hotZone->addComponent<Component::TransformationRegister>("engine-room-hot-zone");
-		}
+		hotZoneEngineCircle = createHotZone("Engine->Circle", "HZ-circle-engine");
+		hotZoneEngineLast = createHotZone("Engine->Last", "HZ-engine-last");
 
 		return true;
 	}
@@ -77,14 +63,14 @@
 			house = scene->createEntity();
 			house->setLocalTransform(glm::translate(house->getLocalTransform(), glm::vec3(0)));
 			house->setLocalTransform(glm::scale(house->getLocalTransform(), glm::vec3(1.0f)));
-			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__dragon");
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__house");
 			if (!meshObj)
 				return false;
 			auto meshComponent = house->addComponent<Component::MeshRenderer>(meshObj);
 			meshComponent->setShader("MaterialBasic");
 			auto rigidBody = house->addComponent<Component::RigidBody>(0.0f);
 			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_dragon");
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_house");
 			rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 			rigidBody->getShape().setMargin(0.001f);
 			rigidBody->getBody().setFriction(1.0f);

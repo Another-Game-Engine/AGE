@@ -73,15 +73,15 @@ bool 			MainScene::userStart()
 	{
 		_heros = createEntity();
 
-		_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(-8, 2, 0)));
+		_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(-49, 1, 0)));
 		auto camera = _heros->addComponent<Component::CameraComponent>();
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		camera->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
-		//auto l = _heros->addComponent<Component::PointLight>();
-		//l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
-		//l->lightData.positionPower.w = 2.0f;
+		auto l = _heros->addComponent<Component::PointLight>();
+		l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
+		l->lightData.positionPower.w = 2.0f;
 //		_heros->addComponent<Component::TransformationRegister>("character-controller-museum");
 		auto fpc = _heros->addComponent<Component::FPController>();
 		fpc->getShape().setLocalScaling(btVector3(0.3f, 0.3f, 0.3f));
@@ -90,12 +90,12 @@ bool 			MainScene::userStart()
 		fpc->sideRunSpeed = 0.001f;
 		_heros->addTag(MyTags::HEROS_TAG);
 
-		auto herosLight = createEntity();
-		auto l = herosLight->addComponent<Component::PointLight>();
-		l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f);
-		l->lightData.positionPower.w = 10.0f;
-		herosLight->addComponent<Component::EntityPlacable>("HEROS-LIGHT");
-		herosLight->addComponent<Component::TransformationRegister>("HEROS-LIGHT");
+		//auto herosLight = createEntity();
+		//auto l = herosLight->addComponent<Component::PointLight>();
+		//l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f);
+		//l->lightData.positionPower.w = 10.0f;
+		//herosLight->addComponent<Component::EntityPlacable>("HEROS-LIGHT");
+		//herosLight->addComponent<Component::TransformationRegister>("HEROS-LIGHT");
 
 	}
 

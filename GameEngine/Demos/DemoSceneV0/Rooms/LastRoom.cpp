@@ -26,7 +26,7 @@
 	{
 		// load
 		auto s = _scene.lock();
-
+		hotZoneLastEngine = createHotZone("Last->Engine", "HZ-engine-last");
 		return true;
 	}
 
