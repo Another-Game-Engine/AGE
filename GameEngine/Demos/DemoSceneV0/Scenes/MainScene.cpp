@@ -34,6 +34,10 @@ MainScene::~MainScene(void)
 
 bool 			MainScene::userStart()
 {
+	setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
+
+	std::dynamic_pointer_cast<BulletDynamicManager>(getInstance<BulletCollisionManager>())->getWorld()->setGravity(btVector3(0, -10, 0));
+
 	//load shaders
 	if (!loadShaders())
 		return false;
@@ -147,6 +151,11 @@ bool 			MainScene::userUpdate(double time)
 		getInstance<Input>()->getInput(SDL_QUIT))
 	{
 		return false;
+	}
+	if (getInstance<Input>()->getInput(SDLK_m))
+	{
+		getInstance<SceneManager>()->enableScene("SpaceGame", 0);
+		getInstance<SceneManager>()->disableScene("MainScene");
 	}
 	return true;
 }
