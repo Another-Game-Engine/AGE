@@ -8,6 +8,7 @@ struct PhysicsRoom : public Room
 	virtual ~PhysicsRoom();
 	virtual bool init();
 	Entity hotZonePhysicsProjection;
+	std::vector<Entity> cubes;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();
