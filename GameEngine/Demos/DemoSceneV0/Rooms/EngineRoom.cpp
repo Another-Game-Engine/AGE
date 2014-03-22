@@ -7,6 +7,7 @@
 #include <Components/SpriteComponent.hh>
 #include <Systems/EntityPlacingSystem.hpp>
 #include <Systems/TransformationRegisterSystem.hpp>
+#include <Components/SpaceshipController.hpp>
 
 	EngineRoom::EngineRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
