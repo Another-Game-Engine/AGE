@@ -38,6 +38,10 @@ MainScene::~MainScene(void)
 
 bool 			MainScene::userStart()
 {
+	setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
+
+	std::dynamic_pointer_cast<BulletDynamicManager>(getInstance<BulletCollisionManager>())->getWorld()->setGravity(btVector3(0, -10, 0));
+
 	//load shaders
 	if (!loadShaders())
 		return false;
@@ -46,7 +50,7 @@ bool 			MainScene::userStart()
 
 	// add systems
 	addSystem<TransformationRegisterSystem>(0)->setFile(File("../../EntityTransformationSave.json"));
-	addSystem<EntityPlacingSystem>(0);
+//	addSystem<EntityPlacingSystem>(0);
 	addSystem<FPControllerSystem>(10);
 	addSystem<FirstPersonViewSystem>(20);
 	addSystem<CameraSystem>(30);
@@ -190,6 +194,11 @@ bool 			MainScene::userUpdate(double time)
 		getInstance<Input>()->getInput(SDL_QUIT))
 	{
 		return false;
+	}
+	if (getInstance<Input>()->getInput(SDLK_m))
+	{
+		getInstance<SceneManager>()->enableScene("SpaceGame", 0);
+		getInstance<SceneManager>()->disableScene("MainScene");
 	}
 	return true;
 }
