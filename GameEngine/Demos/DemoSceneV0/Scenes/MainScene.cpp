@@ -20,6 +20,10 @@
 #include <Systems/PostFxSystem.hh>
 #include <Systems/BlitFinalRender.hh>
 #include <Systems/TransformationRegisterSystem.hpp>
+#include <Systems/CollisionAdderSystem.hpp>
+#include <Systems/CollisionCleanerSystem.hpp>
+#include <Systems/HotZoneSystem.hpp>
+#include <MyTags.hpp>
 
 // SDL
 #include <Context/SdlContext.hh>
@@ -47,6 +51,8 @@ bool 			MainScene::userStart()
 	addSystem<FirstPersonViewSystem>(20);
 	addSystem<CameraSystem>(30);
 	addSystem<BulletDynamicSystem>(35);
+	addSystem<CollisionAdder>(36);
+	addSystem<HotZoneSystem>(37);
 	addSystem<FPSSystem>(40);
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
@@ -54,6 +60,7 @@ bool 			MainScene::userStart()
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
 	addSystem<PostFxSystem>(110); // POST FXs
 	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
+	addSystem<CollisionCleaner>(180);
 
 	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
 	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
@@ -81,6 +88,7 @@ bool 			MainScene::userStart()
 		fpc->backwardRunSpeed = 0.001f;
 		fpc->forwardRunSpeed = 0.001f;
 		fpc->sideRunSpeed = 0.001f;
+		_heros->addTag(MyTags::HEROS_TAG);
 
 		auto herosLight = createEntity();
 		auto l = herosLight->addComponent<Component::PointLight>();
@@ -93,7 +101,7 @@ bool 			MainScene::userStart()
 
 	// create Entrance room
 	{
-		_entrance = std::make_unique<Entrance>(
+		_entrance = std::make_shared<Entrance>(
 			std::dynamic_pointer_cast<AScene>(shared_from_this())
 			);
 		if (!_entrance->init())
@@ -103,7 +111,7 @@ bool 			MainScene::userStart()
 
 	// create Engine room
 	{
-		_engineRoom = std::make_unique<EngineRoom>(
+		_engineRoom = std::make_shared<EngineRoom>(
 			std::dynamic_pointer_cast<AScene>(shared_from_this())
 			);
 		if (!_engineRoom->init())

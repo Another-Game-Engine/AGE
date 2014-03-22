@@ -3,7 +3,7 @@
 #include <memory>
 #include <Core/AScene.hh>
 
-struct Room
+struct Room : public std::enable_shared_from_this<Room>
 {
 	Room(std::weak_ptr<AScene> scene)
 		: _scene(scene)
