@@ -215,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\EntityPlacable.hpp" />
+    <ClInclude Include="Components\HotZone.hpp" />
     <ClInclude Include="Components\TransformationRegister.hpp" />
     <ClInclude Include="MyTags.hpp" />
     <ClInclude Include="Rooms\EngineRoom.hh" />
@@ -223,6 +224,7 @@
     <ClInclude Include="Scenes\MainScene.hh" />
     <ClInclude Include="Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Systems\FPSSystem.hh" />
+    <ClInclude Include="Systems\HotZoneSystem.hpp" />
     <ClInclude Include="Systems\TransformationRegisterSystem.hpp" />
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@ struct EngineRoom : public Room
 	virtual bool init();
 	Entity cat;
 	Entity house;
+	Entity hotZone;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

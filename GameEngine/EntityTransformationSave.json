@@ -93,6 +93,29 @@
             }
         },
         {
+            "key": "engine-room-hot-zone",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -7.1773853302001953,
+                    "value13": 0.22189441323280334,
+                    "value14": 2.253556489944458,
+                    "value15": 1
+                }
+            }
+        },
+        {
             "key": "entrance-light-0",
             "value": {
                 "mat4": {
@@ -318,6 +341,29 @@
                     "value12": -50.299823760986328,
                     "value13": 3.4811534881591797,
                     "value14": 5.9994239807128906,
+                    "value15": 1
+                }
+            }
+        },
+        {
+            "key": "entrance-room-hot-zone",
+            "value": {
+                "mat4": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0,
+                    "value4": 0,
+                    "value5": 1,
+                    "value6": 0,
+                    "value7": 0,
+                    "value8": 0,
+                    "value9": 0,
+                    "value10": 1,
+                    "value11": 0,
+                    "value12": -9.5087766647338867,
+                    "value13": 0.24073837697505951,
+                    "value14": 1.865757942199707,
                     "value15": 1
                 }
             }

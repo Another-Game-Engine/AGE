@@ -7,6 +7,8 @@
 #include <Components/SpriteComponent.hh>
 #include <Systems/EntityPlacingSystem.hpp>
 #include <Systems/TransformationRegisterSystem.hpp>
+#include <Systems/HotZoneSystem.hpp>
+#include <Components/CollisionBody.hpp>
 
 	EngineRoom::EngineRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
@@ -31,6 +33,19 @@
 
 		auto scene = _scene.lock();
 		{
+			hotZone = scene->createEntity();
+			auto rb = hotZone->addComponent<Component::CollisionBody>();
+			rb->setCollisionShape(Component::CollisionBody::BOX);
+			//rb->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
+			//rb->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
+			if (!meshObj)
+				return false;
+			auto meshComponent = hotZone->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			hotZone->addComponent<Component::HotZone>("engine-room-hot-zone", "switch-hz-engine-room__entrance", shared_from_this());
+			hotZone->addComponent<Component::EntityPlacable>("engine-room-hot-zone");
+			hotZone->addComponent<Component::TransformationRegister>("engine-room-hot-zone");
 		}
 
 		return true;
@@ -79,26 +94,6 @@
 			house->addComponent<Component::EntityPlacable>("medieval-house");
 			house->addComponent<Component::TransformationRegister>("medieval-house");
 		}
-//		{
-//			pong = scene->createEntity();
-//			pong->setLocalTransform(glm::translate(pong->getLocalTransform(), glm::vec3(-8, 1, 0)));
-//			pong->setLocalTransform(glm::scale(pong->getLocalTransform(), glm::vec3(0.01)));
-//			auto sprite = pong->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Pong", "pong"));
-//			sprite->delay = 1.0f / 10.0f;
-//			pong->addComponent<Component::TransformationRegister>("pong-tableau");
-//		}
-//		{
-//			trololo = scene->createEntity();
-//			trololo->setLocalTransform(glm::translate(trololo->getLocalTransform(), glm::vec3(-8, 1, 0)));
-//			trololo->setLocalTransform(glm::scale(trololo->getLocalTransform(), glm::vec3(0.01)));
-//			auto sprite = trololo->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Trololo", "tmp"));
-//			sprite->delay = 1.0f / 10.0f;
-////			scene->getSystem<EntityPlacingSystem>()->setEntity(trololo);
-//			trololo->addComponent<Component::TransformationRegister>("trololo-tableau");
-//		}
-//		{
-//
-//		}
 		return true;
 	}
 

@@ -10,6 +10,7 @@ struct Entrance : public Room
 	Entity room;
 	Entity trololo;
 	Entity pong;
+	Entity hotZone;
 	std::vector<Entity> lights;
 protected:
 	virtual bool _enable();
