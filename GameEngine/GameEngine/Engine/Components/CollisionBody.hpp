@@ -71,7 +71,7 @@ namespace Component
 			return *_body;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &_meshName = "NULL")
+		void setCollisionShape(CollisionShape c, const std::string &_meshName = "NULL", short filterGroup = 1, short filterMask = -1)
 		{
 			if (c == UNDEFINED)
 				return;

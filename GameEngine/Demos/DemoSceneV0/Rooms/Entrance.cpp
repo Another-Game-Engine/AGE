@@ -1,15 +1,5 @@
 #include "Entrance.hh"
-#include <MediaFiles/AssetsManager.hpp>
-#include <Components/MeshRenderer.hh>
-#include <glm/gtc/matrix_transform.hpp>
-#include <Components/RigidBody.hpp>
-#include <Components/CollisionBody.hpp>
-#include <Sprite/SpriteManager.hh>
-#include <Components/SpriteComponent.hh>
-#include <Systems/EntityPlacingSystem.hpp>
-#include <Systems/TransformationRegisterSystem.hpp>
-#include <Components/PointLight.hh>
-#include <Systems/HotZoneSystem.hpp>
+
 
 	Entrance::Entrance(std::weak_ptr<AScene> scene)
 		: Room(scene)
@@ -47,27 +37,11 @@
 			auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
 			rigidBody->setMass(0);
 			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_demoMuseum");
-			rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 			rigidBody->getShape().setMargin(0.001f);
 			rigidBody->getBody().setFriction(1.0f);
 			rigidBody->getBody().setRestitution(0.9f);
 		}
-
-		{
-			hotZone = scene->createEntity();
-			auto rb = hotZone->addComponent<Component::CollisionBody>();
-			rb->setCollisionShape(Component::CollisionBody::BOX);
-			//rb->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COL_HOTZONE;
-			//rb->getBody().getBroadphaseHandle()->m_collisionFilterMask = COL_CHARACTER ;
-			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
-			if (!meshObj)
-				return false;
-			auto meshComponent = hotZone->addComponent<Component::MeshRenderer>(meshObj);
-			meshComponent->setShader("MaterialBasic");
-			hotZone->addComponent<Component::HotZone>("entrance-room-hot-zone", "switch-hz-engine-room__entrance", shared_from_this());
-			hotZone->addComponent<Component::EntityPlacable>("entrance-room-hot-zone");
-			hotZone->addComponent<Component::TransformationRegister>("entrance-room-hot-zone");
-		}
+		hotZone = createHotZone("Entrance->Projection", "HZ-entrance-projection");
 
 		return true;
 	}

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <Rooms/Room.hpp>
+
+struct Room;
 
 namespace Component
 {

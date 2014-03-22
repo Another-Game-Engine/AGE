@@ -34,10 +34,9 @@
 		auto scene = _scene.lock();
 		{
 			hotZone = scene->createEntity();
-			auto rb = hotZone->addComponent<Component::CollisionBody>();
-			rb->setCollisionShape(Component::CollisionBody::BOX);
-			//rb->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
-			//rb->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
+			auto rb = hotZone->addComponent<Component::RigidBody>(0.0f);
+			rb->setCollisionShape(Component::RigidBody::BOX, "NULL");
+			hotZone->setLocalTransform(glm::scale(hotZone->getLocalTransform(), glm::vec3(1, 0.1, 1)));
 			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
 			if (!meshObj)
 				return false;

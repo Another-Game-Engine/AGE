@@ -37,7 +37,7 @@ FPController::~FPController()
 {
 }
 
-void FPController::init()
+void FPController::init(short filterGroup, short filterMask)
 {
 	_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene()->getInstance<BulletCollisionManager>());
 	setKey(LEFT, SDLK_a);
@@ -60,13 +60,13 @@ void FPController::init()
 	_shape = new btCylinderShape(convertGLMVectorToBullet(scale));
 
 	_ghost->setCollisionShape(_shape);
-	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+//	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
 	_ghost->setWorldTransform(transform);
 	_ghost->setRestitution(0);
 	_ghost->setActivationState(DISABLE_DEACTIVATION);
 	_ghost->setUserPointer(&(_entity));
 	_controller = new btKinematicCharacterController(_ghost, _shape, btScalar(0.1));
-	_manager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::KinematicFilter);
+	_manager->getWorld()->addCollisionObject(_ghost, filterGroup, filterMask);
 	_manager->getWorld()->addAction(_controller);
 	_manager->getWorld()->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 	justJump = false;

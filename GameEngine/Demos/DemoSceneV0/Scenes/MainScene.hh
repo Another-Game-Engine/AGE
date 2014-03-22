@@ -3,7 +3,10 @@
 #include <Core/AScene.hh>
 #include <Rooms/Entrance.hh>
 #include <Rooms/EngineRoom.hh>
-
+#include <Rooms/ProjectionRoom.hh>
+#include <Rooms/PhysicsRoom.hh>
+#include <Rooms/LastRoom.hh>
+#include <Rooms/CircleRoom.hh>
 
 
 //struct ProjectionRoom : public Room
@@ -48,5 +51,8 @@ private:
 	Entity _heros;
 	std::shared_ptr<Entrance> _entrance;
 	std::shared_ptr<EngineRoom> _engineRoom;
-//	std::unique_ptr<ProjectionRoom> _projectionRoom;
+	std::shared_ptr<ProjectionRoom> _projectionRoom;
+	std::shared_ptr<PhysicsRoom> _physicsRoom;
+	std::shared_ptr<LastRoom> _lastRoom;
+	std::shared_ptr<CircleRoom> _circleRoom;
 };
