@@ -105,9 +105,9 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("Cat");
 		//convertor->clear();
 
-		//convertor->load("../../Assets/house.obj");
-		//convertor->serializeData("House");
-		//convertor->clear();
+		convertor->load("../../Assets/house.obj");
+		convertor->serializeData("House");
+		convertor->clear();
 
 		//convertor->load("../../Assets/Pong.tga");
 		//convertor->serializeData("Pong");
@@ -125,9 +125,9 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("bear");
 		//convertor->clear();
 
-		convertor->load("../../Assets/dragon.obj");
-		convertor->serializeData("dragon");
-		convertor->clear();
+		//convertor->load("../../Assets/dragon.obj");
+		//convertor->serializeData("dragon");
+		//convertor->clear();
 
 	return (true);
 }

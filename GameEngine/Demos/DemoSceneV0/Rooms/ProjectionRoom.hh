@@ -9,6 +9,7 @@ struct ProjectionRoom : public Room
 	virtual bool init();
 	Entity hotZoneEntranceProjection;
 	Entity hotZoneProjectionPhysics;
+	Entity hotZoneProjectionCircle;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();
