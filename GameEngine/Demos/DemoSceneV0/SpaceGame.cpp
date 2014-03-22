@@ -120,6 +120,9 @@ bool 			SpaceGame::userStart()
 	cameraComponent->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
 	cameraComponent->projection = glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f);
 	cameraComponent->lookAtTransform = glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0), glm::vec3(0, 1, 0));
+	cameraComponent->fboSize = getInstance<IRenderContext>()->getScreenSize();
+	cameraComponent->viewport = glm::vec4(0, 0, cameraComponent->fboSize.x, cameraComponent->fboSize.y);
+	cameraComponent->sampleNbr = 8;
 
 	light = createEntity();
 	auto spotLightComponent = light->addComponent<Component::SpotLight>();
