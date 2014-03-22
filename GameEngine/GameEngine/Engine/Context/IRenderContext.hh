@@ -14,7 +14,7 @@ public:
 	{ }
 	virtual ~IRenderContext() { }
 
-	virtual bool start(unsigned int swidth, unsigned int sheight, const char *name) = 0;
+	virtual bool start(int mode, unsigned int swidth, unsigned int sheight, const char *name) = 0;
 	virtual void updateEvents(Input &input) const = 0;
 	virtual void flush() const = 0;
 	virtual void stop() const = 0;
