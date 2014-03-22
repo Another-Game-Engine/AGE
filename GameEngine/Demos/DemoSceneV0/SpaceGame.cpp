@@ -124,13 +124,6 @@ bool 			SpaceGame::userStart()
 	cameraComponent->viewport = glm::vec4(0, 0, cameraComponent->fboSize.x, cameraComponent->fboSize.y);
 	cameraComponent->sampleNbr = 8;
 
-	light = createEntity();
-	auto spotLightComponent = light->addComponent<Component::SpotLight>();
-	spaceShip->addChild(light);
-	spotLightComponent->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 200.0f);
-	spotLightComponent->projection = glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f);
-	spotLightComponent->lightData.colorRange.w = 3.0f;
-	spotLightComponent->lightData.shadowId = 1;
 	return (true);
 }
 
