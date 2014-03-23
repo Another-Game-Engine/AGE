@@ -1,113 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Rooms\CircleRoom.cpp" />
+    <ClCompile Include="Rooms\EngineRoom.cpp" />
+    <ClCompile Include="Rooms\Entrance.cpp" />
+    <ClCompile Include="Rooms\LastRoom.cpp" />
+    <ClCompile Include="Rooms\PhysicsRoom.cpp" />
+    <ClCompile Include="Rooms\ProjectionRoom.cpp" />
+    <ClCompile Include="Scenes\MainScene.cpp" />
+    <ClCompile Include="SpaceGame.cpp" />
+    <ClCompile Include="Systems\FPSSystem.cpp" />
+    <ClCompile Include="Systems\SpaceshipControllerSystem.cpp" />
+    <ClCompile Include="Systems\TransformationRegisterSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\MainScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\FPSSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\TransformationRegisterSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rooms\EngineRoom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rooms\Entrance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="Rooms\ProjectionRoom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rooms\PhysicsRoom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rooms\CircleRoom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rooms\LastRoom.cpp">
-=======
-    <ClCompile Include="SpaceGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\SpaceshipControllerSystem.cpp">
->>>>>>> a6c620bdfe655d4a1e3faddaddb3f67e9fb43a5d
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MyTags.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\MainScene.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rooms\Room.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\FPSSystem.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\TransformationRegister.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\TransformationRegisterSystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rooms\EngineRoom.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rooms\Entrance.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\EntityPlacable.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\EntityPlacingSystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="Components\HotZone.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\HotZoneSystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rooms\ProjectionRoom.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rooms\PhysicsRoom.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rooms\CircleRoom.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rooms\LastRoom.hh">
-=======
-    <ClInclude Include="SpaceGame.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\SpaceshipControllerSystem.hh">
->>>>>>> a6c620bdfe655d4a1e3faddaddb3f67e9fb43a5d
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="Components\EntityPlacable.hpp" />
+    <ClInclude Include="Components\HotZone.hpp" />
+    <ClInclude Include="Components\TransformationRegister.hpp" />
+    <ClInclude Include="MyTags.hpp" />
+    <ClInclude Include="Rooms\CircleRoom.hh" />
+    <ClInclude Include="Rooms\EngineRoom.hh" />
+    <ClInclude Include="Rooms\Entrance.hh" />
+    <ClInclude Include="Rooms\LastRoom.hh" />
+    <ClInclude Include="Rooms\PhysicsRoom.hh" />
+    <ClInclude Include="Rooms\ProjectionRoom.hh" />
+    <ClInclude Include="Rooms\Room.hpp" />
+    <ClInclude Include="Scenes\MainScene.hh" />
+    <ClInclude Include="SpaceGame.hh" />
+    <ClInclude Include="Systems\EntityPlacingSystem.hpp" />
+    <ClInclude Include="Systems\FPSSystem.hh" />
+    <ClInclude Include="Systems\HotZoneSystem.hpp" />
+    <ClInclude Include="Systems\SpaceshipControllerSystem.hh" />
+    <ClInclude Include="Systems\TransformationRegisterSystem.hpp" />
+    <ClInclude Include="Systems\PistolSystem.hpp" />
   </ItemGroup>
 </Project>

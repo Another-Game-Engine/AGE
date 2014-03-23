@@ -74,7 +74,6 @@
 				auto l = light->addComponent<Component::PointLight>();
 				l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 6.0f);
 				l->lightData.positionPower.w = 2.0f;
-				light->addComponent<Component::EntityPlacable>("entrance-light-" + std::to_string(i));
 				light->addComponent<Component::TransformationRegister>("entrance-light-" + std::to_string(i));
 				lights.push_back(light);
 			}
