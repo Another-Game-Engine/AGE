@@ -37,7 +37,7 @@ private:
 			auto isCharacter = false;
 			for (auto c : collision->getCollisions())
 			{
-				if (!c->isTagged(MyTags::HEROS_TAG))
+				if (!c.get() || !c->isTagged(MyTags::HEROS_TAG))
 					continue;
 				isCharacter = true;
 			}
