@@ -232,6 +232,10 @@ void EntityData::reset()
 	_globalTransform = glm::mat4(1);
 	_localTransform = glm::mat4(1);
 	_code.reset();
+	for (std::size_t i = 0; i < MAX_TAG_NUMBER; ++i)
+	{
+		broadCast("entityUntagged" + std::to_string(i), _handle);
+	}
 	for (std::size_t i = 0; i < _components.size(); ++i)
 	{
 		std::size_t id = i + MAX_TAG_NUMBER;
