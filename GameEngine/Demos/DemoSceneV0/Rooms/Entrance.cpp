@@ -25,7 +25,6 @@
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Pong.CPDAnimation"));
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Trololo.CPDAnimation"));
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/SceneReader.CPDAnimation"));
-		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/shoot.CPDAnimation"));
 		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__3DTexts.cpd"));
 
 		auto scene = _scene.lock();
