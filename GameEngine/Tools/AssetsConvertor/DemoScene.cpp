@@ -129,16 +129,20 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("dragon");
 		//convertor->clear();
 
-		convertor->load("../../Assets/TEXTS/boring-room.obj");
-		convertor->load("../../Assets/TEXTS/click-to-shoot.obj");
-		convertor->load("../../Assets/TEXTS/component.obj");
-		convertor->load("../../Assets/TEXTS/entity.obj");
-		convertor->load("../../Assets/TEXTS/sorry.obj");
-		convertor->load("../../Assets/TEXTS/system.obj");
-		convertor->load("../../Assets/TEXTS/welcome.obj");
-		convertor->load("../../Assets/TEXTS/why-age.obj");
+		//convertor->load("../../Assets/TEXTS/boring-room.obj");
+		//convertor->load("../../Assets/TEXTS/click-to-shoot.obj");
+		//convertor->load("../../Assets/TEXTS/component.obj");
+		//convertor->load("../../Assets/TEXTS/entity.obj");
+		//convertor->load("../../Assets/TEXTS/sorry.obj");
+		//convertor->load("../../Assets/TEXTS/system.obj");
+		//convertor->load("../../Assets/TEXTS/welcome.obj");
+		//convertor->load("../../Assets/TEXTS/why-age.obj");
 
-		convertor->serializeData("3Dtexts");
+		//convertor->serializeData("3Dtexts");
+		//convertor->clear();
+
+		convertor->load("../../Assets/TextsEngine.tga");
+		convertor->serializeData("TextsEngine");
 		convertor->clear();
 
 	return (true);
