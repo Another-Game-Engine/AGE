@@ -199,12 +199,14 @@ void                    EntityData::addTag(std::size_t tag)
 {
 	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.add(tag);
+	broadCast("entityTagged" + std::to_string(tag), _handle);
 }
 
 void                    EntityData::removeTag(std::size_t tag)
 {
 	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.remove(tag);
+	broadCast("entityUntagged" + std::to_string(tag), _handle);
 }
 bool                    EntityData::isTagged(std::size_t tag) const
 {
