@@ -134,6 +134,41 @@ private:
 			_entity->setLocalTransform(t, true);
 		}
 
+		if (_input->getInput(SDLK_o))
+		{
+			_entity->setLocalTransform(glm::translate(glm::mat4(1),glm::vec3(0)), true);
+		}
+
+		if (_input->getInput(SDLK_u))
+		{
+			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0,0.2,0)), true);
+		}
+
+		if (_input->getInput(SDLK_i))
+		{
+			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0, -0.2, 0)), true);
+		}
+
+		if (_input->getInput(SDLK_j))
+		{
+			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0.2, 0, 0)), true);
+		}
+
+		if (_input->getInput(SDLK_k))
+		{
+			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(-0.2, 0, 0)), true);
+		}
+
+		if (_input->getInput(SDLK_m))
+		{
+			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0, 0, 0.2)), true);
+		}
+
+		if (_input->getInput(SDLK_COMMA))
+		{
+			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0, 0, -0.2)), true);
+		}
+
 		if (_input->getInput(SDLK_t))
 		{
 			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -1.0f, glm::vec3(0, 1, 0)), true);

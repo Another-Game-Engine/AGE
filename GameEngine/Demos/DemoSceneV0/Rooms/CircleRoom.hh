@@ -10,6 +10,8 @@ struct CircleRoom : public Room
 	Entity hotZoneCircleProjection;
 	Entity hotZoneCircleEngine;
 	Entity dragon;
+	Entity rotationAxis;
+	std::vector<Entity> spotLights;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();
