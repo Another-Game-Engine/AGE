@@ -59,7 +59,25 @@
 			light->addComponent<Component::EntityPlacable>("projection-room-pointlight-" + std::to_string(i));
 			pointLights.push_back(light);
 		}
-
+		{
+			auto light = scene->createEntity();
+			auto l = light->addComponent<Component::PointLight>();
+			l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 20.0f); // distance
+			l->lightData.positionPower.w = 0.9f; // intensite
+			light->addComponent<Component::TransformationRegister>("projection-room-pointlight-6");
+			light->addComponent<Component::EntityPlacable>("projection-room-pointlight-6");
+			pointLights.push_back(light);
+		}
+		{
+			boringText = scene->createEntity();
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__boring-room");
+			if (!meshObj)
+				return false;
+			auto meshComponent = boringText->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			boringText->addComponent<Component::TransformationRegister>("boring-text");
+			boringText->addComponent<Component::EntityPlacable>("boring-text");
+		}
 		return true;
 	}
 
@@ -70,5 +88,6 @@
 		for (auto e : pointLights)
 			scene->destroy(e);
 		pointLights.clear();
+		scene->destroy(boringText);
 		return true;
 	}

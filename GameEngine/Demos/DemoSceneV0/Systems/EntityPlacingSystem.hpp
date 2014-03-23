@@ -134,10 +134,6 @@ private:
 			_entity->setLocalTransform(t, true);
 		}
 
-		if (_input->getInput(SDLK_o))
-		{
-			_entity->setLocalTransform(glm::translate(glm::mat4(1),glm::vec3(0)), true);
-		}
 
 		if (_input->getInput(SDLK_u))
 		{
@@ -192,6 +188,21 @@ private:
 		if (_input->getInput(SDLK_g))
 		{
 			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -1.0f, glm::vec3(0, 0, 1)), true);
+		}
+
+		if (_input->getInput(SDLK_h))
+		{
+			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 1.0f, glm::vec3(0, 0, 1)), true);
+		}
+
+		if (_input->getInput(SDLK_PERIOD))
+		{
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(0.95f)), true);
+		}
+
+		if (_input->getInput(SDLK_SLASH))
+		{
+			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1.05f)), true);
 		}
 
 		if (_input->getInput(SDLK_h))

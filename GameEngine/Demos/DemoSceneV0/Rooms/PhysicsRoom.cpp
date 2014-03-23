@@ -64,7 +64,6 @@ class PistolSystem;
 			for (auto i = 0; i < 3; ++i)
 			{
 				auto light = scene->createEntity();
-				//light->addComponent<Component::MeshRenderer>(meshObj)->setShader("MaterialBasic");
 				auto l = light->addComponent<Component::SpotLight>();
 				l->lightData.colorRange = glm::vec4(0.4f, 0.6f, 1.0f, 100.0f);
 				l->lightData.positionPower.w = 10.0f;
@@ -84,12 +83,19 @@ class PistolSystem;
 				light->addComponent<Component::EntityPlacable>("physics-room-pointlight-" + std::to_string(i));
 				lights.push_back(light);
 			}
-			//lights[0]->getComponent<Component::SpotLight>()->lightData.colorRange = glm::vec4(0.4f, 0.6f, 1.0f, 10.0f);
-			//lights[1]->getComponent<Component::SpotLight>()->lightData.colorRange = glm::vec4(0.9f, 0.4f, 0.3f, 10.0f);
-			//lights[2]->getComponent<Component::SpotLight>()->lightData.colorRange = glm::vec4(0.1f, 0.2f, 0.6f, 10.0f);
 			lights[3]->getComponent<Component::PointLight>()->lightData.colorRange = glm::vec4(0.6f, 0.6f, 0.2f, 16.0f);
 			lights[4]->getComponent<Component::PointLight>()->lightData.colorRange = glm::vec4(0.6f, 0.9f, 0.2f, 5.0f);
 
+		}
+		{
+			clickToShoot = scene->createEntity();
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__click-to-shoot");
+			if (!meshObj)
+				return false;
+			auto meshComponent = clickToShoot->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			clickToShoot->addComponent<Component::TransformationRegister>("click-to-shoot-text");
+			clickToShoot->addComponent<Component::EntityPlacable>("click-to-shoot-text");
 		}
 		return true;
 	}
@@ -108,5 +114,6 @@ class PistolSystem;
 		cubes.clear();
 		lights.clear();
 		scene->deactivateSystem<PistolSystem>();
+		scene->destroy(clickToShoot);
 		return true;
 	}

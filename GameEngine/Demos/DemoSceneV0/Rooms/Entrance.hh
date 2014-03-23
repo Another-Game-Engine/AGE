@@ -14,6 +14,7 @@ struct Entrance : public Room
 	std::vector<Entity> lights;
 	PubSub framebufferIdReceiver;
 	Entity fboTest;
+	Entity welcomeText;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

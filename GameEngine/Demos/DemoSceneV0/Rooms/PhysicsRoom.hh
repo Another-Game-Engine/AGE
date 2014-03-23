@@ -10,6 +10,7 @@ struct PhysicsRoom : public Room
 	Entity hotZonePhysicsProjection;
 	std::vector<Entity> cubes;
 	std::vector<Entity> lights;
+	Entity clickToShoot;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

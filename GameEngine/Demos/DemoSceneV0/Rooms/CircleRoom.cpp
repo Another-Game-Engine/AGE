@@ -55,7 +55,7 @@
 			rigidBody->getBody().setFriction(1.0f);
 			rigidBody->getBody().setRestitution(0.9f);
 
-			dragon->addComponent<Component::EntityPlacable>("mesh-dragon");
+//			dragon->addComponent<Component::EntityPlacable>("mesh-dragon");
 			dragon->addComponent<Component::TransformationRegister>("mesh-dragon");
 		}
 
@@ -65,7 +65,7 @@
 			rotForce->force = glm::vec3(0.0f, 10.0f, 0.0f);
 			//auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
 			//rotationAxis->addComponent<Component::MeshRenderer>(meshObj)->setShader("MaterialBasic");
-			rotationAxis->addComponent<Component::EntityPlacable>("circle-room-rotation-axi-1");
+//			rotationAxis->addComponent<Component::EntityPlacable>("circle-room-rotation-axi-1");
 			rotationAxis->addComponent<Component::TransformationRegister>("circle-room-rotation-axis-1");
 		}
 		{
@@ -76,7 +76,7 @@
 				l->lightData.positionPower.w = 3.0f;
 				l->projection = glm::perspective(120.0f, 1.0f, 0.1f, 100.0f);
 				l->lightData.shadowId = 1;
-				spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-1");
+//				spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-1");
 				spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-1");
 				spotLights.push_back(spotLight);
 		}
@@ -88,7 +88,7 @@
 			l->lightData.positionPower.w = 1.0f;
 			l->projection = glm::perspective(120.0f, 1.0f, 0.1f, 100.0f);
 			l->lightData.shadowId = 1;
-			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-2");
+//			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-2");
 			spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-2");
 			spotLights.push_back(spotLight);
 		}
@@ -100,11 +100,29 @@
 			l->lightData.positionPower.w = 2.0f;
 			l->projection = glm::perspective(120.0f, 1.0f, 0.1f, 100.0f);
 			l->lightData.shadowId = 1;
-			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-3");
+//			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-3");
 			spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-3");
 			spotLights.push_back(spotLight);
 		}
-
+		{
+			whyAge = scene->createEntity();
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__why-age");
+			if (!meshObj)
+				return false;
+			auto meshComponent = whyAge->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			whyAge->addComponent<Component::TransformationRegister>("why-age-text");
+			whyAge->addComponent<Component::EntityPlacable>("why-age-text");
+		}
+		{
+			auto light = scene->createEntity();
+			auto l = light->addComponent<Component::PointLight>();
+			l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 20.0f); // distance
+			l->lightData.positionPower.w = 0.9f; // intensite
+			light->addComponent<Component::TransformationRegister>("circle-room-corridor-light");
+			light->addComponent<Component::EntityPlacable>("circle-room-corridor-light");
+			corridorLight = light;
+		}
 
 
 
@@ -119,5 +137,7 @@
 		for (auto e : spotLights)
 			scene->destroy(e);
 		spotLights.clear();
+		scene->destroy(whyAge);
+		scene->destroy(corridorLight);
 		return true;
 	}

@@ -25,7 +25,8 @@
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Pong.CPDAnimation"));
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Trololo.CPDAnimation"));
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/SceneReader.CPDAnimation"));
-
+		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/shoot.CPDAnimation"));
+		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__3DTexts.cpd"));
 
 		auto scene = _scene.lock();
 		{
@@ -51,18 +52,17 @@
 		////
 		/// FBO id receiver
 		{
-			auto e = scene->createEntity();
-			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
-			e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.01)));
-			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("SceneReader", "basic"));
-			sprite->delay = 1.0f / 10.0f;
-			e->addComponent<Component::TransformationRegister>("test-fb-tableau");
-			e->addComponent<Component::EntityPlacable>("test-fb-tableau");
-			fboTest = e;
-			auto &_id = sprite->animation->getMaterial().ambientTex->id;
-			framebufferIdReceiver.globalSub(PubSubKey("myTextureKeyIs"), [&_id](GLuint id) {
-				_id = id;
-			});
+			//auto e = scene->createEntity();
+			//e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
+			//auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("shoot", "shoot"));
+			//sprite->delay = 1.0f / 10.0f;
+			//e->addComponent<Component::TransformationRegister>("test-fb-tableau");
+			//e->addComponent<Component::EntityPlacable>("test-fb-tableau");
+			//fboTest = e;
+			//auto &_id = sprite->animation->getMaterial().ambientTex->id;
+			//framebufferIdReceiver.globalSub(PubSubKey("myTextureKeyIs"), [&_id](GLuint id) {
+			//	_id = id;
+			//});
 		}
 
 		return true;
@@ -94,11 +94,22 @@
 			{
 				auto light = scene->createEntity();
 				auto l = light->addComponent<Component::PointLight>();
-				l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 6.0f);
-				l->lightData.positionPower.w = 2.0f;
+				l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 15.0f);
+				l->lightData.positionPower.w = 1.0f;
 				light->addComponent<Component::TransformationRegister>("entrance-light-" + std::to_string(i));
+				light->addComponent<Component::EntityPlacable>("entrance-light-" + std::to_string(i));
 				lights.push_back(light);
 			}
+		}
+		{
+			welcomeText = scene->createEntity();
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__welcome");
+			if (!meshObj)
+				return false;
+			auto meshComponent = welcomeText->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			welcomeText->addComponent<Component::TransformationRegister>("welcome-text");
+			welcomeText->addComponent<Component::EntityPlacable>("welcome-text");
 		}
 		return true;
 	}
@@ -113,5 +124,6 @@
 			scene->destroy(e);
 		}
 		lights.clear();
+		scene->destroy(welcomeText);
 		return true;
 	}

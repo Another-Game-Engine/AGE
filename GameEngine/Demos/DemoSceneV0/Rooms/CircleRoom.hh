@@ -12,6 +12,8 @@ struct CircleRoom : public Room
 	Entity dragon;
 	Entity rotationAxis;
 	std::vector<Entity> spotLights;
+	Entity corridorLight;
+	Entity whyAge;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();
