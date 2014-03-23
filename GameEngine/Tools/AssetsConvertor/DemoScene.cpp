@@ -105,12 +105,12 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("Cat");
 		//convertor->clear();
 
-		convertor->load("../../Assets/house.obj");
-		convertor->serializeData("House");
-		convertor->clear();
+		//convertor->load("../../Assets/house.obj");
+		//convertor->serializeData("House");
+		//convertor->clear();
 
-		//convertor->load("../../Assets/Pong.tga");
-		//convertor->serializeData("Pong");
+		//convertor->load("../../Assets/shoot.tga");
+		//convertor->serializeData("shoot");
 		//convertor->clear();
 
 		//convertor->load("../../Assets/Trololo.tga");
@@ -129,6 +129,17 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("dragon");
 		//convertor->clear();
 
+		convertor->load("../../Assets/TEXTS/boring-room.obj");
+		convertor->load("../../Assets/TEXTS/click-to-shoot.obj");
+		convertor->load("../../Assets/TEXTS/component.obj");
+		convertor->load("../../Assets/TEXTS/entity.obj");
+		convertor->load("../../Assets/TEXTS/sorry.obj");
+		convertor->load("../../Assets/TEXTS/system.obj");
+		convertor->load("../../Assets/TEXTS/welcome.obj");
+		convertor->load("../../Assets/TEXTS/why-age.obj");
+
+		convertor->serializeData("3Dtexts");
+		convertor->clear();
 
 	return (true);
 }

@@ -12,6 +12,7 @@ struct ProjectionRoom : public Room
 	Entity hotZoneProjectionCircle;
 	Entity spotLight;
 	std::vector<Entity> pointLights;
+	Entity boringText;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

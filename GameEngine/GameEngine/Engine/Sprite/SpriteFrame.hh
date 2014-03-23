@@ -36,20 +36,22 @@ public:
 		indices.resize(4); //-V112
 		indices = { 0, 1, 2, 3 };
 
-		vertices[0] = glm::vec4(_dimensions[0], _dimensions[1], 0, 1);
-		vertices[1] = glm::vec4(_dimensions[2], _dimensions[1], 0, 1);
-		vertices[2] = glm::vec4(_dimensions[2], _dimensions[3], 0, 1);
-		vertices[3] = glm::vec4(_dimensions[0], _dimensions[3], 0, 1);
+		float c = (float)_dimensions[3] / (float)_dimensions[2];
 
-		uvs[0] = glm::vec2(_uvs[0], _uvs[1]);
+		vertices[0] = glm::vec4(-0.5f, -0.5f * c, 0, 1);
+		vertices[1] = glm::vec4(-0.5f, 0.5f * c, 0, 1);
+		vertices[2] = glm::vec4(0.5f, 0.5f * c, 0, 1);
+		vertices[3] = glm::vec4(0.5f, -0.5f * c, 0, 1);
+
+		uvs[0] = glm::vec2(_uvs[2], _uvs[3]);
 		uvs[1] = glm::vec2(_uvs[2], _uvs[1]);
-		uvs[2] = glm::vec2(_uvs[2], _uvs[3]);
+		uvs[2] = glm::vec2(_uvs[0], _uvs[1]);
 		uvs[3] = glm::vec2(_uvs[0], _uvs[3]);
 
-		normals[0] = glm::vec4(0, 0, 1, 0);
-		normals[1] = glm::vec4(0, 0, 1, 0);
-		normals[2] = glm::vec4(0, 0, 1, 0);
-		normals[3] = glm::vec4(0, 0, 1, 0);
+		normals[0] = glm::vec4(0, 0, -1, 0);
+		normals[1] = glm::vec4(0, 0, -1, 0);
+		normals[2] = glm::vec4(0, 0, -1, 0);
+		normals[3] = glm::vec4(0, 0, -1, 0);
 
 		colors[0] = glm::vec4(1);
 		colors[1] = glm::vec4(1);

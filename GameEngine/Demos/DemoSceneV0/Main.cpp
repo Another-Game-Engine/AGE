@@ -58,16 +58,16 @@ int			main(int ac, char **av)
 
 	// add main scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<MainScene>(e), "MainScene");
-	e->getInstance<SceneManager>()->addScene(std::make_shared<SpaceGame>(e), "SpaceGame");
+//	e->getInstance<SceneManager>()->addScene(std::make_shared<SpaceGame>(e), "SpaceGame");
 
 	// bind scene
 	if (!e->getInstance<SceneManager>()->initScene("MainScene"))
 		return (EXIT_FAILURE);
-	if (!e->getInstance<SceneManager>()->initScene("SpaceGame"))
-		return (EXIT_FAILURE);
+//	if (!e->getInstance<SceneManager>()->initScene("SpaceGame"))
+//		return (EXIT_FAILURE);
 
 	e->getInstance<SceneManager>()->enableScene("MainScene", 2);
-	//e->getInstance<SceneManager>()->enableScene("SpaceGame", 1);
+//	e->getInstance<SceneManager>()->enableScene("SpaceGame", 1);
 
 
 	// launch engine
