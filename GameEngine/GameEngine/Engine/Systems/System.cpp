@@ -4,6 +4,7 @@
 System::System(std::weak_ptr<AScene> scene)
 : PubSub(scene.lock()->getInstance<PubSub::Manager>())
 , _scene(scene)
+, _activated(false)
 {}
 
 System::~System()
@@ -18,7 +19,34 @@ void System::update(double time)
 	updateEnd(time);
 }
 
-void System::init()
+bool System::init()
 {
-	initialize();
+	if (!initialize())
+		return false;
+	return setActivation(true);
+}
+
+bool System::setActivation(bool tof)
+{
+	auto res = false;
+	if (tof && _activated)
+		return true;
+	else if (tof && !_activated)
+	{
+		res = activate();
+		_activated = res == true ? res : false;
+	}
+	else if (!tof && !_activated)
+		 return true;
+	else if (!tof && _activated)
+	{
+		res = deactivate();
+		_activated = false;
+	}
+	return res;
+}
+
+bool System::isActivated() const
+{
+	return _activated;
 }

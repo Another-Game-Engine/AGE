@@ -107,10 +107,11 @@ private:
 		e->setLocalTransform(m);
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter1.requireComponent<Component::RigidBody>();
 		_filter2.requireComponent<Component::CollisionBody>();
+		return true;
 	}
 };
 

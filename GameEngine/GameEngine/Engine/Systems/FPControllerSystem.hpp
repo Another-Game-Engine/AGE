@@ -131,10 +131,11 @@ private:
 		controller.setWalkDirection(walkDirection);
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::FPController>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
+		return true;
 	}
 };
 

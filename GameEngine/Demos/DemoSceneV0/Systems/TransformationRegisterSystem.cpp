@@ -88,8 +88,9 @@ void TransformationRegisterSystem::mainUpdate(double time)
 	}
 }
 
-void TransformationRegisterSystem::initialize()
+bool TransformationRegisterSystem::initialize()
 {
 	_filter.requireComponent<Component::TransformationRegister>();
 	_filter._system = this;
+	return true;
 }

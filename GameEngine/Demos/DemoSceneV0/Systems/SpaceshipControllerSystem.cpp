@@ -18,10 +18,11 @@ SpaceshipControllerSystem::~SpaceshipControllerSystem()
 {
 }
 
-void SpaceshipControllerSystem::initialize()
+bool SpaceshipControllerSystem::initialize()
 {
 	_spaceshipsFilter.requireComponent<Component::SpaceshipController>();
 	_spaceshipsFilter.requireComponent<Component::CameraComponent>();
+	return true;
 }
 
 void SpaceshipControllerSystem::mainUpdate(double time)

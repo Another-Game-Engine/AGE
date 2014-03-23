@@ -54,8 +54,9 @@ private:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
+		return true;
 	}
 };
 

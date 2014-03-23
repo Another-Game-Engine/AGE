@@ -61,6 +61,7 @@ bool 			MainScene::userStart()
 	addSystem<FPSSystem>(40);
 	addSystem<PistolSystem>(41);
 	
+	deactivateSystem<PistolSystem>();
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
