@@ -13,7 +13,6 @@ class PistolSystem : public System
 public:
 	PistolSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
-		, _bullets(scene)
 		, _characterController(scene)
 	{}
 
@@ -21,8 +20,8 @@ public:
 	{}
 
 private:
-	EntityFilter _bullets;
 	EntityFilter _characterController;
+	std::queue<Entity> _shots;
 	std::shared_ptr<Input> _inputs;
 
 	virtual void updateBegin(double time)
@@ -53,16 +52,22 @@ private:
 				rigidBody->getBody().setFriction(1.0f);
 				rigidBody->getBody().setRestitution(0.9f);
 				e->addTag(MyTags::BULLET_TAG);
+				_shots.push(e);
 			}
 			delay = 0.1f;
 		}
 		if (delay >= 0.0f)
 			delay -= ftime;
+
+		while (_shots.size() > 50)
+		{
+			scene->destroy(_shots.front());
+			_shots.pop();
+		}
 	}
 
 	virtual bool initialize()
 	{
-		_bullets.requireTag(MyTags::BULLET_TAG);
 		_characterController.requireTag(MyTags::HEROS_TAG);
 		_inputs = _scene.lock()->getInstance<Input>();
 		if (!_inputs)
@@ -77,13 +82,11 @@ private:
 
 	virtual bool deactivate()
 	{
-		auto collection = _bullets.getCollection();
 		auto scene = _scene.lock();
-		for (auto &it = std::begin(collection); it != std::end(collection);)
+		while (_shots.size() > 0)
 		{
-			auto e = *it;
-			++it;
-			scene->destroy(e);
+			scene->destroy(_shots.front());
+			_shots.pop();
 		}
 		return true;
 	}
