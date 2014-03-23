@@ -12,7 +12,7 @@ private:
 	virtual void updateBegin(double time);
 	virtual void updateEnd(double time);
 	virtual void mainUpdate(double time);
-	virtual void initialize();
+	virtual bool initialize();
 	float _timeCounter = 0.0f;
 	std::size_t _frameCounter = 0;
 	std::size_t _lastFrame = 0;

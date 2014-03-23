@@ -196,8 +196,9 @@ private:
 
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::EntityPlacable>();
+		return true;
 	}
 };

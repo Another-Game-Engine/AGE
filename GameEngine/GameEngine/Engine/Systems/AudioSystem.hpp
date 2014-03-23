@@ -60,9 +60,10 @@ protected:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_listeners.requireComponent<Component::AudioListener>();
 		_emitters.requireComponent<Component::AudioEmitter>();
+		return true;
 	}
 };

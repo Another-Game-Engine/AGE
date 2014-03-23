@@ -28,7 +28,7 @@ LightRenderingSystem::~LightRenderingSystem()
 	glDeleteFramebuffers(1, &_shadowsFbo);
 }
 
-void LightRenderingSystem::initialize()
+bool LightRenderingSystem::initialize()
 {
 	_pointLightFilter.requireComponent<Component::PointLight>();
 	_spotLightFilter.requireComponent<Component::SpotLight>();
@@ -61,6 +61,7 @@ void LightRenderingSystem::initialize()
 	glGenFramebuffers(1, &_shadowsFbo);
 
 	glEnable(GL_CULL_FACE);
+	return true;
 }
 
 void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuffer> perFrame)

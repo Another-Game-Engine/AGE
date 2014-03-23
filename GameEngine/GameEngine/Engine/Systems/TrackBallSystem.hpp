@@ -64,11 +64,12 @@ protected:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::CameraComponent>();
 		_filter.requireComponent<Component::TrackBall>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
+		return true;
 	}
 };
 

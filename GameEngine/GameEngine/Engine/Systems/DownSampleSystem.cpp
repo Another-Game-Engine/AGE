@@ -12,10 +12,11 @@ DownSampleSystem::~DownSampleSystem()
 {
 }
 
-void	DownSampleSystem::initialize()
+bool	DownSampleSystem::initialize()
 {
 	_quad.init(_scene);
 	_cameraFilter.requireComponent<Component::CameraComponent>();
+	return true;
 }
 
 void	DownSampleSystem::mainUpdate(double time)

@@ -37,7 +37,7 @@
 			auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
 			rigidBody->setMass(0);
 			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_demoMuseum");
-			rigidBody->getShape().setMargin(0.001f);
+		//	rigidBody->getShape().setMargin(0.001f);
 			rigidBody->getBody().setFriction(1.0f);
 			rigidBody->getBody().setRestitution(0.9f);
 		}

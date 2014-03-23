@@ -11,6 +11,8 @@
 #include <Components/CollisionBody.hpp>
 #include <Components/SpotLight.hh>
 
+class PistolSystem;		
+
 	PhysicsRoom::PhysicsRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
 	{
@@ -34,6 +36,8 @@
 	bool PhysicsRoom::_enable()
 	{
 		auto scene = _scene.lock();
+		scene->activateSystem<PistolSystem>();
+
 		{
 			glm::mat4 t(1);
 			t = glm::translate(t, glm::vec3(-14.5, -0.1f, -34.0f));
@@ -103,5 +107,6 @@
 		}
 		cubes.clear();
 		lights.clear();
+		scene->deactivateSystem<PistolSystem>();
 		return true;
 	}

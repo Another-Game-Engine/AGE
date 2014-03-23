@@ -17,22 +17,16 @@ void FPSSystem::updateBegin(double time)
 void FPSSystem::updateEnd(double time)
 {}
 
-void FPSSystem::initialize()
+bool FPSSystem::initialize()
 {
 	if (!_scene.lock()->getInstance<FontManager>()->loadFont(File("../../Assets/Serialized/myFont.cpdFont")))
-	{
-		// exception
-		std::cout << "error" << std::endl;
-	}
+		return false;
 
 	if (_scene.lock()->getInstance<Renderer>()->addShader("2DText",
 		"../../Shaders/2DText.vp",
 		"../../Shaders/2DText.fp") == nullptr)
-	{
-		// exception
-		std::cout << "error" << std::endl;
-	}
-
+		return false;
+	return true;
 }
 
 

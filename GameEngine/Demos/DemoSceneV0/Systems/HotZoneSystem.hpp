@@ -71,9 +71,10 @@ private:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_zones.requireComponent<Component::HotZone>();
 		_zones.requireComponent<Component::Collision>();
+		return true;
 	}
 };

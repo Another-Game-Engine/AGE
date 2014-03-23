@@ -23,7 +23,8 @@ void 							AScene::update(double time)
 {
 	for (auto &e : _systems)
 	{
-		e.second->update(time);
+		if (e.second->isActivated())
+			e.second->update(time);
 	}
 }
 

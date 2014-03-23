@@ -25,14 +25,16 @@ PostFxSystem::~PostFxSystem()
 	glDeleteTextures(1, &_bloomTexture);
 }
 
-void	PostFxSystem::initialize()
+bool	PostFxSystem::initialize()
 {
 	_cameraFilter.requireComponent<Component::CameraComponent>();
 
 	_quad.init(_scene);
 
-	_modulateRender.init("../../ComputeShaders/HighDynamicRange.kernel");
-	_bloom.init("../../ComputeShaders/Bloom.kernel");
+	if (!_modulateRender.init("../../ComputeShaders/HighDynamicRange.kernel"))
+		return false;
+	if (!_bloom.init("../../ComputeShaders/Bloom.kernel"))
+		return false;
 
 	// Bloom texture
 	glGenTextures(1, &_bloomTexture);
@@ -41,6 +43,7 @@ void	PostFxSystem::initialize()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	return true;
 }
 
 void	PostFxSystem::mainUpdate(double time)

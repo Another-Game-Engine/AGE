@@ -52,6 +52,7 @@ private:
 				rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 8.0f));
 				rigidBody->getBody().setFriction(1.0f);
 				rigidBody->getBody().setRestitution(0.9f);
+				e->addTag(MyTags::BULLET_TAG);
 			}
 			delay = 0.1f;
 		}
@@ -59,10 +60,31 @@ private:
 			delay -= ftime;
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_bullets.requireTag(MyTags::BULLET_TAG);
 		_characterController.requireTag(MyTags::HEROS_TAG);
 		_inputs = _scene.lock()->getInstance<Input>();
+		if (!_inputs)
+			return false;
+		return true;
+	}
+
+	virtual bool activate()
+	{
+		return true;
+	}
+
+	virtual bool deactivate()
+	{
+		auto collection = _bullets.getCollection();
+		auto scene = _scene.lock();
+		for (auto &it = std::begin(collection); it != std::end(collection);)
+		{
+			auto e = *it;
+			++it;
+			scene->destroy(e);
+		}
+		return true;
 	}
 };
