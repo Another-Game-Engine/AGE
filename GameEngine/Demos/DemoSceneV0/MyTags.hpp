@@ -4,8 +4,9 @@
 
 enum MyTags
 {
-	BALL_TAG = 0
+	NO_TAG = 0
 	, HEROS_TAG = 1
+	, BULLET_TAG = 2
 };
 
 enum PhysicTags

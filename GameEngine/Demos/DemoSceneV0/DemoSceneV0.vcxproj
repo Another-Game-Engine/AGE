@@ -236,6 +236,7 @@
     <ClInclude Include="Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Systems\FPSSystem.hh" />
     <ClInclude Include="Systems\HotZoneSystem.hpp" />
+    <ClInclude Include="Systems\PistolSystem.hpp" />
     <ClInclude Include="Systems\SpaceshipControllerSystem.hh" />
     <ClInclude Include="Systems\TransformationRegisterSystem.hpp" />
   </ItemGroup>

@@ -9,6 +9,7 @@ struct PhysicsRoom : public Room
 	virtual bool init();
 	Entity hotZonePhysicsProjection;
 	std::vector<Entity> cubes;
+	std::vector<Entity> lights;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

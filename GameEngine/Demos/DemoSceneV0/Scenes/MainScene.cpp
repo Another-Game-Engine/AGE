@@ -23,6 +23,7 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/HotZoneSystem.hpp>
+#include <Systems/PistolSystem.hpp>
 #include <MyTags.hpp>
 
 // SDL
@@ -58,6 +59,8 @@ bool 			MainScene::userStart()
 	addSystem<CollisionAdder>(36);
 	addSystem<HotZoneSystem>(37);
 	addSystem<FPSSystem>(40);
+	addSystem<PistolSystem>(41);
+	
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
@@ -70,8 +73,8 @@ bool 			MainScene::userStart()
 	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
-	getSystem<PostFxSystem>()->useHDR(false);
-	getSystem<PostFxSystem>()->useBloom(false);
+	getSystem<PostFxSystem>()->useHDR(true);
+	getSystem<PostFxSystem>()->useBloom(true);
 
 	// create heros
 	{
@@ -80,12 +83,13 @@ bool 			MainScene::userStart()
 		_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(-49, 1, 0)));
 		auto camera = _heros->addComponent<Component::CameraComponent>();
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
-		camera->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
+		camera->fboSize = screenSize;
+		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
-		auto l = _heros->addComponent<Component::PointLight>();
-		l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
-		l->lightData.positionPower.w = 2.0f;
+		//auto l = _heros->addComponent<Component::PointLight>();
+		//l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
+		//l->lightData.positionPower.w = 2.0f;
 //		_heros->addComponent<Component::TransformationRegister>("character-controller-museum");
 		auto fpc = _heros->addComponent<Component::FPController>();
 		fpc->getShape().setLocalScaling(btVector3(0.3f, 0.3f, 0.3f));
@@ -95,7 +99,7 @@ bool 			MainScene::userStart()
 		_heros->addTag(MyTags::HEROS_TAG);
 
 		auto herosLight = createEntity();
-		l = herosLight->addComponent<Component::PointLight>();
+		auto l = herosLight->addComponent<Component::PointLight>();
 		l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f);
 		l->lightData.positionPower.w = 10.0f;
 		herosLight->addComponent<Component::EntityPlacable>("HEROS-LIGHT");
@@ -138,6 +142,7 @@ bool 			MainScene::userStart()
 			);
 		if (!_physicsRoom->init())
 			return false;
+		//_physicsRoom->enable();
 	}
 
 	// create Last room
@@ -168,24 +173,7 @@ bool 			MainScene::userUpdate(double time)
 	static float delay = 0.0f;
 	if (getInstance<Input>()->getInput(SDLK_r) && delay <= 0.0f)
 	{
-		if (_entrance->isEnable())
-			_entrance->disable();
-		else
-			_entrance->enable();
 
-//		glm::vec3 from, to;
-//		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-//		auto e = createEntity();
-//		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(from + to * 1.5f)));
-//		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.3f)));
-////		e->setLocalTransform(glm::lookAt(from, to, glm::vec3(0,1,0)));
-//		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
-//		mesh->setShader("MaterialBasic");
-//		auto rigidBody = e->addComponent<Component::RigidBody>(0.05f);
-//		rigidBody->setCollisionShape(Component::RigidBody::BOX);
-//		//auto l = e->addComponent<Component::PointLight>();
-//		//l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 5.0f);
-//		//l->lightData.positionPower.w = 3.0f;
 		delay = 0.1f;
 	}
 	if (delay >= 0.0f)
@@ -195,11 +183,11 @@ bool 			MainScene::userUpdate(double time)
 	{
 		return false;
 	}
-	if (getInstance<Input>()->getInput(SDLK_m))
-	{
-		getInstance<SceneManager>()->enableScene("SpaceGame", 0);
-		getInstance<SceneManager>()->disableScene("MainScene");
-	}
+	//if (getInstance<Input>()->getInput(SDLK_m))
+	//{
+	//	getInstance<SceneManager>()->enableScene("SpaceGame", 0);
+	//	getInstance<SceneManager>()->disableScene("MainScene");
+	//}
 	return true;
 }
 
@@ -292,5 +280,7 @@ bool MainScene::loadAssets()
 {
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
+
 	return true;
 }
