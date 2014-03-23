@@ -9,6 +9,8 @@
 #include <Systems/TransformationRegisterSystem.hpp>
 #include <Systems/HotZoneSystem.hpp>
 #include <Components/CollisionBody.hpp>
+#include <Components/RotationForce.hpp>
+#include <Components/SpotLight.hh>
 
 	CircleRoom::CircleRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
@@ -57,6 +59,55 @@
 			dragon->addComponent<Component::TransformationRegister>("mesh-dragon");
 		}
 
+		{
+			rotationAxis = scene->createEntity();
+			auto rotForce = rotationAxis->addComponent<Component::RotationForce>();
+			rotForce->force = glm::vec3(0.0f, 10.0f, 0.0f);
+			//auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
+			//rotationAxis->addComponent<Component::MeshRenderer>(meshObj)->setShader("MaterialBasic");
+			rotationAxis->addComponent<Component::EntityPlacable>("circle-room-rotation-axi-1");
+			rotationAxis->addComponent<Component::TransformationRegister>("circle-room-rotation-axis-1");
+		}
+		{
+				auto spotLight = scene->createEntity();
+				rotationAxis->addChild(spotLight);
+				auto l = spotLight->addComponent<Component::SpotLight>();
+				l->lightData.colorRange = glm::vec4(0.909f, 0.458f, 0.447f, 100.0f);
+				l->lightData.positionPower.w = 3.0f;
+				l->projection = glm::perspective(120.0f, 1.0f, 0.1f, 100.0f);
+				l->lightData.shadowId = 1;
+				spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-1");
+				spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-1");
+				spotLights.push_back(spotLight);
+		}
+		{
+			auto spotLight = scene->createEntity();
+			rotationAxis->addChild(spotLight);
+			auto l = spotLight->addComponent<Component::SpotLight>();
+			l->lightData.colorRange = glm::vec4(1.0f, 0.5333f, 0.0666f, 100.0f);
+			l->lightData.positionPower.w = 1.0f;
+			l->projection = glm::perspective(120.0f, 1.0f, 0.1f, 100.0f);
+			l->lightData.shadowId = 1;
+			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-2");
+			spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-2");
+			spotLights.push_back(spotLight);
+		}
+		{
+			auto spotLight = scene->createEntity();
+			rotationAxis->addChild(spotLight);
+			auto l = spotLight->addComponent<Component::SpotLight>();
+			l->lightData.colorRange = glm::vec4(0.6980f, 0.341f, 0.305f, 100.0f);
+			l->lightData.positionPower.w = 2.0f;
+			l->projection = glm::perspective(120.0f, 1.0f, 0.1f, 100.0f);
+			l->lightData.shadowId = 1;
+			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-3");
+			spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-3");
+			spotLights.push_back(spotLight);
+		}
+
+
+
+
 		return true;
 	}
 
@@ -64,5 +115,9 @@
 	{
 		auto scene = _scene.lock();
 		scene->destroy(dragon);
+		scene->destroy(rotationAxis);
+		for (auto e : spotLights)
+			scene->destroy(e);
+		spotLights.clear();
 		return true;
 	}

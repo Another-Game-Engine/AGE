@@ -24,6 +24,7 @@
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/HotZoneSystem.hpp>
 #include <Systems/PistolSystem.hpp>
+#include <Systems/RotationForceSystem.hpp>
 #include <MyTags.hpp>
 
 // SDL
@@ -60,6 +61,7 @@ bool 			MainScene::userStart()
 	addSystem<HotZoneSystem>(37);
 	addSystem<FPSSystem>(40);
 	addSystem<PistolSystem>(41);
+	addSystem<RotationForceSystem>(42);
 	
 	deactivateSystem<PistolSystem>();
 
@@ -102,7 +104,7 @@ bool 			MainScene::userStart()
 		auto herosLight = createEntity();
 		auto l = herosLight->addComponent<Component::PointLight>();
 		l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f);
-		l->lightData.positionPower.w = 10.0f;
+		l->lightData.positionPower.w = 2.0f;
 		herosLight->addComponent<Component::EntityPlacable>("HEROS-LIGHT");
 		herosLight->addComponent<Component::TransformationRegister>("HEROS-LIGHT");
 

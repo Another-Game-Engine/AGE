@@ -10,6 +10,8 @@ struct ProjectionRoom : public Room
 	Entity hotZoneEntranceProjection;
 	Entity hotZoneProjectionPhysics;
 	Entity hotZoneProjectionCircle;
+	Entity spotLight;
+	std::vector<Entity> pointLights;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();
