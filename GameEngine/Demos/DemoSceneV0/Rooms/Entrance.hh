@@ -12,6 +12,8 @@ struct Entrance : public Room
 	Entity pong;
 	Entity hotZone;
 	std::vector<Entity> lights;
+	PubSub framebufferIdReceiver;
+	Entity fboTest;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

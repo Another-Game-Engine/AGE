@@ -124,7 +124,12 @@ bool 			SpaceGame::userStart()
 	cameraComponent->fboSize = getInstance<IRenderContext>()->getScreenSize();
 	cameraComponent->viewport = glm::vec4(0, 0, cameraComponent->fboSize.x, cameraComponent->fboSize.y);
 	cameraComponent->sampleNbr = 1;
-
+	// init frame buffer and send texture id to other scene
+	cameraComponent->initFrameBuffer();
+	OpenGLTools::Framebuffer &current = cameraComponent->frameBuffer.isMultisampled() ? cameraComponent->downSampling : cameraComponent->frameBuffer;
+	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
+	auto t = PubSub(psm);
+	t.broadCast(PubSubKey("myTextureKeyIs"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
 	return (true);
 }
 
