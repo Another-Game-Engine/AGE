@@ -62,9 +62,9 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("ball");
 		//convertor->clear();
 
-		convertor->load("../../Assets/torus.obj");
-		convertor->serializeData("torus");
-		convertor->clear();
+		//convertor->load("../../Assets/torus.obj");
+		//convertor->serializeData("torus");
+		//convertor->clear();
 
 		//convertor->load("../../Assets/crytek-sponza/sponza.obj");
 		//convertor->serializeData("sponza");

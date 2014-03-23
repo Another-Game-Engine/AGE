@@ -66,7 +66,9 @@ int			main(int ac, char **av)
 	if (!e->getInstance<SceneManager>()->initScene("SpaceGame"))
 		return (EXIT_FAILURE);
 
-	e->getInstance<SceneManager>()->enableScene("MainScene", 0);
+	e->getInstance<SceneManager>()->enableScene("MainScene", 2);
+	//e->getInstance<SceneManager>()->enableScene("SpaceGame", 1);
+
 
 	// launch engine
 	if (e->start() == false)
