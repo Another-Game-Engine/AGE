@@ -34,6 +34,9 @@
 		hotZoneProjectionPhysics = createHotZone("Projection->Physics", "HZ-projection-physics");
 		hotZoneProjectionCircle = createHotZone("Projection->Circle", "HZ-projection-circle");
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Slides.CPDAnimation"));
+		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Powerpoint.CPDAnimation"));
+		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/PowerpointTroll.CPDAnimation"));
+
 		return true;
 	}
 
@@ -89,6 +92,53 @@
 			slides->addComponent<Component::EntityPlacable>("slides");
 			slides->addTag(MyTags::SLIDE_TAG);
 		}
+		{
+			powerpoint = scene->createEntity();
+			auto sprite = powerpoint->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Powerpoint", "frame"));
+			sprite->delay = 1.0f / 10.0f;
+			powerpoint->addComponent<Component::TransformationRegister>("powerpoint-gif");
+			powerpoint->addComponent<Component::EntityPlacable>("powerpoint-gif");
+		}
+		{
+			auto e = scene->createEntity();
+			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("PowerpointTroll", "troll5/frame"));
+			sprite->delay = 1.0f / 10.0f;
+			e->addComponent<Component::TransformationRegister>("powerpoint-troll-1");
+			e->addComponent<Component::EntityPlacable>("powerpoint-troll-1");
+			trolls.push_back(e);
+		}
+		{
+			auto e = scene->createEntity();
+			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("PowerpointTroll", "troll4/frame"));
+			sprite->delay = 1.0f / 10.0f;
+			e->addComponent<Component::TransformationRegister>("powerpoint-troll-2");
+			e->addComponent<Component::EntityPlacable>("powerpoint-troll-2");
+			trolls.push_back(e);
+		}
+		{
+			auto e = scene->createEntity();
+			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("PowerpointTroll", "troll3"));
+			sprite->delay = 1.0f / 10.0f;
+			e->addComponent<Component::TransformationRegister>("powerpoint-troll-3");
+			e->addComponent<Component::EntityPlacable>("powerpoint-troll-3");
+			trolls.push_back(e);
+		}
+		{
+			auto e = scene->createEntity();
+			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("PowerpointTroll", "troll2"));
+			sprite->delay = 1.0f / 10.0f;
+			e->addComponent<Component::TransformationRegister>("powerpoint-troll-4");
+			e->addComponent<Component::EntityPlacable>("powerpoint-troll-4");
+			trolls.push_back(e);
+		}
+		{
+			auto e = scene->createEntity();
+			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("PowerpointTroll", "troll1"));
+			sprite->delay = 1.0f / 10.0f;
+			e->addComponent<Component::TransformationRegister>("powerpoint-troll-5");
+			e->addComponent<Component::EntityPlacable>("powerpoint-troll-5");
+			trolls.push_back(e);
+		}
 		return true;
 	}
 
@@ -102,5 +152,9 @@
 		scene->destroy(boringText);
 		scene->destroy(slides);
 		scene->deactivateSystem<PistolSystem>();
+		scene->destroy(powerpoint);
+		for (auto e : trolls)
+			scene->destroy(e);
+		trolls.clear();
 		return true;
 	}
