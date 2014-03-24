@@ -25,6 +25,7 @@
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/BlitFinalRender.hh>
+#include <Systems/SponzaPistolSystem.hpp>
 
 #include <Text/FontManager.hh>
 #include <Sprite/SpriteManager.hh>
@@ -112,6 +113,7 @@ bool SponzaScene::userStart()
 	addSystem<BulletDynamicSystem>(0); // UPDATE PHYSIC WORLD
 	addSystem<CollisionAdder>(10); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
 	addSystem<FPControllerSystem>(20); // UPDATE FIRST PERSON CONTROLLER
+	addSystem<SponzaPistolSystem>(25);
 	addSystem<FirstPersonViewSystem>(30); // UPDATE FIRST PERSON CAMERA
 	addSystem<CollisionCleaner>(60); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
 
@@ -249,19 +251,19 @@ bool SponzaScene::userStart()
 
 	// CREATE SPRITE ANIMATION
 	{
-		auto e = createEntity();
-		e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "idle"));
-		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 300, 0)));
-		auto e2 = createEntity();
-		e2->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "walk"));
-		e2->setLocalTransform(glm::translate(e2->getLocalTransform(), glm::vec3(1700, 0, 0)));
-		auto e3 = createEntity();
-		e3->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "crouch_idle"));
-		e3->setLocalTransform(glm::translate(e3->getLocalTransform(), glm::vec3(1700, 400, 0)));
-		auto e4 = createEntity();
-		e4->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "kitten"));
-		e4->setLocalTransform(glm::translate(e4->getLocalTransform(), glm::vec3(1700, 800, 0)));
-		e4->setLocalTransform(glm::scale(e4->getLocalTransform(), glm::vec3(0.1)));
+		//auto e = createEntity();
+		//e->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "idle"));
+		//e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 300, 0)));
+		//auto e2 = createEntity();
+		//e2->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "walk"));
+		//e2->setLocalTransform(glm::translate(e2->getLocalTransform(), glm::vec3(1700, 0, 0)));
+		//auto e3 = createEntity();
+		//e3->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "crouch_idle"));
+		//e3->setLocalTransform(glm::translate(e3->getLocalTransform(), glm::vec3(1700, 400, 0)));
+		//auto e4 = createEntity();
+		//e4->addComponent<Component::Sprite>(getInstance<SpriteManager>()->getAnimation("GreyMan", "kitten"));
+		//e4->setLocalTransform(glm::translate(e4->getLocalTransform(), glm::vec3(1700, 800, 0)));
+		//e4->setLocalTransform(glm::scale(e4->getLocalTransform(), glm::vec3(0.1)));
 	}
 
 
@@ -302,6 +304,7 @@ bool SponzaScene::userStart()
 		character = e;
 		cameraComponent1 = character->addComponent<Component::CameraComponent>();
 		character->addComponent<Component::FirstPersonView>();
+		character->addTag(MyTags::HEROS_TAG);
 		globalCamera = e;
 	}
 
@@ -347,10 +350,12 @@ bool SponzaScene::userStart()
 
 	_globalPubSub->globalSub(PubSubKey("sponzaPause"), [&](){
 		deactivateSystem<FPControllerSystem>(); // UPDATE FIRST PERSON CONTROLLER
+		deactivateSystem<SponzaPistolSystem>();
 	});
 
 	_globalPubSub->globalSub(PubSubKey("sponzaPlay"), [&](){
 		activateSystem<FPControllerSystem>(); // UPDATE FIRST PERSON CONTROLLER
+		activateSystem<SponzaPistolSystem>();
 	});
 
 
@@ -359,134 +364,5 @@ bool SponzaScene::userStart()
 
 bool SponzaScene::userUpdate(double time)
 {
-	static std::queue<Entity> stack;
-	float ftime = static_cast<float>(time);
-
-	if (getInstance<Input>()->getInput(SDL_BUTTON_RIGHT))
-	{
-		glm::vec3 from, to;
-		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-		auto test = getInstance<BulletCollisionManager>()->rayCast(from, from + to * 1000.0f);
-		if (test.size() != 0)
-		{
-			for (auto e : test)
-			{
-				if (e->isTagged(BULLET_TAG))
-					destroy(e);
-			}
-		}
-	}
-	static float delay = 0.0f;
-	if (getInstance<Input>()->getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
-	{
-		glm::vec3 from, to;
-		getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-		auto e = createSphere(from + to * 1.5f, glm::vec3(0.2f), "on s'en bas la race", 10.0f);
-		auto rigidbody = e->getComponent<Component::RigidBody>();
-
-		rigidbody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 80.0f));
-		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
-		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
-
-		auto light = e->addComponent<Component::PointLight>();
-		light->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 5.0f);
-		light->lightData.positionPower.w = 3.0f;
-		rigidbody->getBody().setFriction(1.0f);
-		rigidbody->getBody().setRestitution(0.9f);
-
-		auto &body = rigidbody->getBody();
-		body.applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
-		body.getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
-		body.getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
-		body.setFriction(1.0f);
-		body.setRestitution(0.9f);
-
-		e->addTag(BULLET_TAG);
-		if (stack.size() > 50)
-		{
-			destroy(stack.front());
-			stack.pop();
-		}
-		stack.push(e);
-		delay = 0.1f;
-	}
-	if (getInstance<Input>()->getInput(SDL_BUTTON_MIDDLE) && delay <= 0.0f)
-	{
-		auto e = createEntity();
-
-		auto l = e->addComponent<Component::SpotLight>();
-		auto cam = globalCamera->getComponent<Component::CameraComponent>();
-		l->projection = glm::perspective(40.0f, 1.0f, 0.1f, 100.0f);
-		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
-		l->lightData.positionPower.w = 50.0f;
-		l->lightData.shadowId = 1;
-		e->setLocalTransform(glm::inverse(cam->lookAtTransform));
-		delay = 0.1f;
-	}
-	if (delay >= 0.0f)
-		delay -= time;
-	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
-		getInstance<Input>()->getInput(SDL_QUIT))
-	{
-		//SERIALIZATION
-		{
-			std::ofstream s("BulletScene.scenesave", std::ios_base::binary);
-			save<cereal::BinaryOutputArchive>(s);
-			s.close();
-		}
-		return (false);
-	}
-	if (getInstance<Input>()->getInput(SDLK_h))
-		getSystem<PostFxSystem>()->useHDR(true);
-	if (getInstance<Input>()->getInput(SDLK_j))
-		getSystem<PostFxSystem>()->useHDR(false);
-	if (getInstance<Input>()->getInput(SDLK_f))
-		getSystem<PostFxSystem>()->useBloom(true);
-	if (getInstance<Input>()->getInput(SDLK_g))
-		getSystem<PostFxSystem>()->useBloom(false);
-	static float	sigma = 5.0f;
-	static float	glare = 1.0f;
-	if (getInstance<Input>()->getInput(SDLK_UP))
-	{
-		sigma += 0.5f;
-		getSystem<PostFxSystem>()->setBloomSigma(sigma);
-	}
-	if (getInstance<Input>()->getInput(SDLK_DOWN))
-	{
-		sigma -= 0.5f;
-		getSystem<PostFxSystem>()->setBloomSigma(sigma);
-	}
-	if (getInstance<Input>()->getInput(SDLK_LEFT))
-	{
-		glare -= 0.2f;
-		getSystem<PostFxSystem>()->setBloomGlare(glare);
-	}
-	if (getInstance<Input>()->getInput(SDLK_RIGHT))
-	{
-		glare += 0.2f;
-		getSystem<PostFxSystem>()->setBloomGlare(glare);
-	}
-	static auto timeCounter = 0.0f;
-	static auto frameCounter = 0;
-	static auto lastFrame = 0;
-	timeCounter += ftime;
-	frameCounter += 1;
-	getInstance<FontManager>()->draw2DString("FPS : " + std::to_string(lastFrame), "myFont", 40, glm::ivec2(10, 10), glm::vec4(1), "2DText");
-
-	getInstance<FontManager>()->draw2DString("Entity Nbr : " + std::to_string(getNumberOfEntities()), "myFont", 30, glm::ivec2(10, 50), glm::vec4(1), "2DText");
-
-	getInstance<FontManager>()->draw2DString("This is test 1", "myFont", 30, glm::ivec2(10, 100), glm::vec4(1,0,1,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 2", "myFont", 35, glm::ivec2(10, 150), glm::vec4(0,1,1,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 3", "myFont", 40, glm::ivec2(10, 200), glm::vec4(1,1,0,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 4", "myFont", 45, glm::ivec2(10, 250), glm::vec4(0.5,0.2,0.4,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 5", "myFont", 50, glm::ivec2(10, 300), glm::vec4(1,1,1,0.5), "2DText");
-
-	if (timeCounter >= 1.0f)
-	{
-		lastFrame = frameCounter;
-		timeCounter = 0.0f;
-		frameCounter = 0;
-	}
-
 	return (true);
 }
