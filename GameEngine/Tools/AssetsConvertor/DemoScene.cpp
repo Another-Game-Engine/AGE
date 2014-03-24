@@ -125,9 +125,9 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("bear");
 		//convertor->clear();
 
-		//convertor->load("../../Assets/dragon.obj");
-		//convertor->serializeData("dragon");
-		//convertor->clear();
+		convertor->load("../../Assets/dragon.obj");
+		convertor->serializeData("dragon");
+		convertor->clear();
 
 		convertor->load("../../Assets/TEXTS/boring-room.obj");
 		convertor->load("../../Assets/TEXTS/click-to-shoot.obj");
