@@ -129,17 +129,23 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("dragon");
 		//convertor->clear();
 
-		//convertor->load("../../Assets/TEXTS/boring-room.obj");
-		//convertor->load("../../Assets/TEXTS/click-to-shoot.obj");
-		//convertor->load("../../Assets/TEXTS/component.obj");
-		//convertor->load("../../Assets/TEXTS/entity.obj");
-		//convertor->load("../../Assets/TEXTS/sorry.obj");
-		//convertor->load("../../Assets/TEXTS/system.obj");
-		//convertor->load("../../Assets/TEXTS/welcome.obj");
-		//convertor->load("../../Assets/TEXTS/why-age.obj");
+		convertor->load("../../Assets/TEXTS/boring-room.obj");
+		convertor->load("../../Assets/TEXTS/click-to-shoot.obj");
+		convertor->load("../../Assets/TEXTS/component.obj");
+		convertor->load("../../Assets/TEXTS/entity.obj");
+		convertor->load("../../Assets/TEXTS/sorry.obj");
+		convertor->load("../../Assets/TEXTS/system.obj");
+		convertor->load("../../Assets/TEXTS/welcome.obj");
+		convertor->load("../../Assets/TEXTS/why-age.obj");
+		convertor->load("../../Assets/TEXTS/asteroid-text.obj");
+		convertor->load("../../Assets/TEXTS/solarSystem-text.obj");
+		convertor->load("../../Assets/TEXTS/sponza-text-3d.obj");
+		convertor->serializeData("3Dtexts");
+		convertor->clear();
 
-		//convertor->serializeData("3Dtexts");
-		//convertor->clear();
+		convertor->load("../../Assets/TEXTS/spiral.obj");
+		convertor->serializeData("spiral");
+		convertor->clear();
 
 		convertor->load("../../Assets/TextsEngine.tga");
 		convertor->serializeData("TextsEngine");
