@@ -111,6 +111,105 @@ bool 			MainScene::userStart()
 
 	}
 
+	//create room mesh
+	{
+		auto room = createEntity();
+		room->setLocalTransform(glm::translate(room->getLocalTransform(), glm::vec3(0)));
+		room->setLocalTransform(glm::scale(room->getLocalTransform(), glm::vec3(150.0f)));
+		auto meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__demoMuseum");
+		if (!meshObj)
+			return false;
+		auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent->setShader("MaterialBasic");
+		auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+		rigidBody->setMass(0);
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_demoMuseum");
+		//	rigidBody->getShape().setMargin(0.001f);
+		rigidBody->getBody().setFriction(1.0f);
+		rigidBody->getBody().setRestitution(0.9f);
+	}
+
+	// create spiral sponza
+	{
+		auto room = createEntity();
+		room->addComponent<Component::TransformationRegister>("spiral-sub-room-sponza");
+		//room->addComponent<Component::EntityPlacable>("spiral-sub-room-sponza");
+		auto meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__spiral");
+		if (!meshObj)
+			return false;
+		auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent->setShader("MaterialBasic");
+		auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+		rigidBody->setMass(0);
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_spiral");
+		//	rigidBody->getShape().setMargin(0.001f);
+		rigidBody->getBody().setFriction(1.0f);
+		rigidBody->getBody().setRestitution(0.9f);
+
+		auto e = createEntity();
+		meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__sponza-text-3d");
+		if (!meshObj)
+			return false;
+		meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent->setShader("MaterialBasic");
+		e->addComponent<Component::TransformationRegister>("spiral-sponza-room-title");
+		//e->addComponent<Component::EntityPlacable>("spiral-sponza-room-title");
+	}
+
+	// Spiral room solarSystem
+	{
+		auto room = createEntity();
+		auto meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__spiral");
+		if (!meshObj)
+			return false;
+		auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent->setShader("MaterialBasic");
+		auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+		rigidBody->setMass(0);
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_spiral");
+		//	rigidBody->getShape().setMargin(0.001f);
+		rigidBody->getBody().setFriction(1.0f);
+		rigidBody->getBody().setRestitution(0.9f);
+		room->addComponent<Component::TransformationRegister>("spiral-sub-room-solar");
+		//room->addComponent<Component::EntityPlacable>("spiral-sub-room-solar");
+
+		auto e = createEntity();
+		meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__solarSystem-text");
+		if (!meshObj)
+			return false;
+		meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent->setShader("MaterialBasic");
+		e->addComponent<Component::TransformationRegister>("spiral-solar-room-title");
+		//e->addComponent<Component::EntityPlacable>("spiral-solar-room-title");
+	}
+
+	// Spiral room asteroid
+	{
+		auto room = createEntity();
+		auto meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__spiral");
+		if (!meshObj)
+			return false;
+		auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent->setShader("MaterialBasic");
+		auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+		rigidBody->setMass(0);
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_spiral");
+		//	rigidBody->getShape().setMargin(0.001f);
+		rigidBody->getBody().setFriction(1.0f);
+		rigidBody->getBody().setRestitution(0.9f);
+		room->addComponent<Component::TransformationRegister>("spiral-sub-room-asteroid");
+		//room->addComponent<Component::EntityPlacable>("spiral-sub-room-asteroid");
+
+		auto e = createEntity();
+		meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__asteroid-text");
+		if (!meshObj)
+			return false;
+		meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent->setShader("MaterialBasic");
+		e->addComponent<Component::TransformationRegister>("spiral-asteroid-room-title");
+		//e->addComponent<Component::EntityPlacable>("spiral-asteroid-room-title");
+	}
+
 	// create Entrance room
 	{
 		_entrance = std::make_shared<Entrance>(
@@ -287,9 +386,17 @@ bool MainScene::loadShaders()
 
 bool MainScene::loadAssets()
 {
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__demoMuseum.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Cat.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__3DTexts.cpd"));
+	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/TextsEngine.CPDAnimation"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__spiral.cpd"));
+	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fboasteroid.CPDAnimation"));
+	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fbosolar.CPDAnimation"));
+	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fbosponza.CPDAnimation"));
 
 	return true;
 }
