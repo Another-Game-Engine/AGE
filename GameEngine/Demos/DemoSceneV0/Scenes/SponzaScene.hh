@@ -16,6 +16,8 @@ public:
 
 	virtual bool 			userStart();
 	virtual bool 			userUpdate(double time);
+private:
+	std::unique_ptr<PubSub> _globalPubSub;
 };
 
 #endif
