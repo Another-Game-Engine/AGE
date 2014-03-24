@@ -72,7 +72,6 @@ public:
 		return n;
 	}
 
-
 protected:
 	std::map<std::string, std::shared_ptr<AMediaFile>> _files;
 };

@@ -13,6 +13,8 @@
     <ClCompile Include="Systems\SpaceshipControllerSystem.cpp" />
     <ClCompile Include="Systems\TransformationRegisterSystem.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Scenes\SolarSystemDemoScene.cpp" />
+    <ClCompile Include="Scenes\SponzaScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\EntityPlacable.hpp" />
@@ -34,5 +36,7 @@
     <ClInclude Include="Systems\SpaceshipControllerSystem.hh" />
     <ClInclude Include="Systems\TransformationRegisterSystem.hpp" />
     <ClInclude Include="Systems\PistolSystem.hpp" />
+    <ClInclude Include="Scenes\SolarSystemDemoScene.hh" />
+    <ClInclude Include="Scenes\SponzaScene.hh" />
   </ItemGroup>
 </Project>

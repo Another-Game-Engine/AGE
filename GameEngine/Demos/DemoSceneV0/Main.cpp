@@ -13,7 +13,9 @@
 
 // SCENES
 #include "Scenes/MainScene.hh"
-#include "SpaceGame.hh"
+#include "Scenes/SpaceGame.hh"
+#include "Scenes/SolarSystemDemoScene.hh"
+#include "Scenes/SponzaScene.hh"
 
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
@@ -58,15 +60,23 @@ int			main(int ac, char **av)
 
 	// add main scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<MainScene>(e), "MainScene");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<SpaceGame>(e), "Asteroid");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<SponzaScene>(e), "Sponza");
+
+
 //	e->getInstance<SceneManager>()->addScene(std::make_shared<SpaceGame>(e), "SpaceGame");
 
 	// bind scene
 	if (!e->getInstance<SceneManager>()->initScene("MainScene"))
 		return (EXIT_FAILURE);
-//	if (!e->getInstance<SceneManager>()->initScene("SpaceGame"))
-//		return (EXIT_FAILURE);
+	//if (!e->getInstance<SceneManager>()->initScene("SolarSystem"))
+	//	return (EXIT_FAILURE);
+	if (!e->getInstance<SceneManager>()->initScene("Asteroid"))
+		return (EXIT_FAILURE);
+	if (!e->getInstance<SceneManager>()->initScene("Sponza"))
+		return (EXIT_FAILURE);
 
-	e->getInstance<SceneManager>()->enableScene("MainScene", 2);
+	e->getInstance<SceneManager>()->enableScene("MainScene", 10);
 //	e->getInstance<SceneManager>()->enableScene("SpaceGame", 1);
 
 
