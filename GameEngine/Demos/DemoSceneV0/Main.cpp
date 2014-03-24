@@ -58,20 +58,19 @@ int			main(int ac, char **av)
 	e->setInstance<SpriteManager>()->init();
 
 	// add main scene
-	e->getInstance<SceneManager>()->addScene(std::make_shared<MainScene>(e), "MainScene0");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<MainScene>(e), "MainScene");
 	e->getInstance<SceneManager>()->addScene(std::make_shared<SpaceGame>(e), "Asteroid");
 	e->getInstance<SceneManager>()->addScene(std::make_shared<SponzaScene>(e), "Sponza");
 
-
 	// bind scene
-	if (!e->getInstance<SceneManager>()->initScene("MainScene0"))
+	if (!e->getInstance<SceneManager>()->initScene("MainScene"))
 		return (EXIT_FAILURE);
 	if (!e->getInstance<SceneManager>()->initScene("Asteroid"))
 		return (EXIT_FAILURE);
 	if (!e->getInstance<SceneManager>()->initScene("Sponza"))
 		return (EXIT_FAILURE);
 
-	e->getInstance<SceneManager>()->enableScene("MainScene0", 100);
+	e->getInstance<SceneManager>()->enableScene("MainScene", 100);
 
 
 	// launch engine

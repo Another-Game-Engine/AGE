@@ -32,6 +32,8 @@
 		hotZoneEngineLast = createHotZone("Engine->Last", "HZ-engine-last");
 		hotZoneEngineSponza = createHotZone("Engine->SpiralSponza", "HZ-engine-sponza");
 		hotZoneEngineAsteroid = createHotZone("Engine->Asteroid", "HZ-engine-asteroid");
+		hotZoneEngineInception = createHotZone("Engine->Inception", "HZ-engine-inception");
+
 
 		return true;
 	}

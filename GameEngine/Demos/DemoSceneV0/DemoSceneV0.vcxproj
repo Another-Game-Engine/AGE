@@ -234,6 +234,7 @@
     <ClInclude Include="Rooms\ProjectionRoom.hh" />
     <ClInclude Include="Rooms\Room.hpp" />
     <ClInclude Include="Rooms\SpiralRoomAsteroid.hpp" />
+    <ClInclude Include="Rooms\SpiralRoomInception.hpp" />
     <ClInclude Include="Rooms\SpiralRoomSponza.hpp" />
     <ClInclude Include="Scenes\SponzaScene.hh" />
     <ClInclude Include="Scenes\MainScene.hh" />

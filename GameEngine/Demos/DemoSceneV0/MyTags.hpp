@@ -17,5 +17,3 @@ enum PhysicTags
 	, COL_WORLD = BIT(1)
 	, COL_CHARACTER = BIT(2)
 };
-
-static unsigned int sceneCounter = 0;
