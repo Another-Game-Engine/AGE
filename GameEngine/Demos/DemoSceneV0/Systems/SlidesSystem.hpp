@@ -36,12 +36,12 @@ private:
 
 		auto scene = _scene.lock();
 		static std::size_t counter = 1;
-		std::size_t max = 6;
+		std::size_t max = 7;
 		if (_inputs->getInput(SDL_BUTTON_RIGHT) && _slide.getCollection().size() > 0 && delay <= 0.0f)
 		{
 			auto s = (*(_slide.getCollection().begin())).get()->getComponent<Component::Sprite>();
 			if (counter >= max)
-				counter = 1;
+				counter = 0;
 			s->animation = scene->getInstance<SpriteManager>()->getAnimation("Slides", "slide" + std::to_string(++counter));
 			delay = 0.5f;
 		}

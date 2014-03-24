@@ -12,6 +12,7 @@
 #include <Components/SpotLight.hh>
 #include <Components/EntityPlacable.hpp>
 #include <Components/TransformationRegister.hpp>
+#include <Systems/PistolSystem.hpp>
 
 	ProjectionRoom::ProjectionRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
@@ -39,6 +40,7 @@
 	bool ProjectionRoom::_enable()
 	{
 		auto scene = _scene.lock();
+		scene->activateSystem<PistolSystem>();
 		{
 			spotLight = scene->createEntity();
 			//light->addComponent<Component::MeshRenderer>(meshObj)->setShader("MaterialBasic");
@@ -99,5 +101,6 @@
 		pointLights.clear();
 		scene->destroy(boringText);
 		scene->destroy(slides);
+		scene->deactivateSystem<PistolSystem>();
 		return true;
 	}
