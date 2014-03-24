@@ -31,6 +31,7 @@
 		hotZoneEngineCircle = createHotZone("Engine->Circle", "HZ-circle-engine");
 		hotZoneEngineLast = createHotZone("Engine->Last", "HZ-engine-last");
 		hotZoneEngineSponza = createHotZone("Engine->SpiralSponza", "HZ-engine-sponza");
+		hotZoneEngineAsteroid = createHotZone("Engine->Asteroid", "HZ-engine-asteroid");
 
 		///
 		/// Asteroid Demo FBO
@@ -231,20 +232,6 @@
 			map["multiscene-text-sprite"] = e;
 		}
 
-		//// fbo asteroid
-		//{
-		//	scene->getInstance<SceneManager>()->enableScene("Asteroid", 1);
-		//	auto e = scene->createEntity();
-		//	e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
-		//	auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-asteroid", "asteroid"));
-		//	sprite->delay = 1.0f / 10.0f;
-		//	sprite->animation->getMaterial().diffuseTex->id = fboAsteroidId;
-		//	sprite->animation->_frames[0]->_uvs = glm::vec4(1, 0, 0, 1);
-		//	sprite->animation->_frames[0]->load(scene->getInstance < VertexManager<4> >());
-		//	e->addComponent<Component::TransformationRegister>("fbo-asteroid");
-		//	e->addComponent<Component::EntityPlacable>("fbo-asteroid");
-		//	map["fbo-asteroid"] = e;
-		//}
 		return true;
 	}
 

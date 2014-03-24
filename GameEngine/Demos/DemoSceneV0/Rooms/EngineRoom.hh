@@ -11,6 +11,8 @@ struct EngineRoom : public Room
 	Entity hotZoneEngineCircle;
 	Entity hotZoneEngineLast;
 	Entity hotZoneEngineSponza;
+	Entity hotZoneEngineAsteroid;
+
 	std::map<std::string, Entity> map;
 	//PubSub fboAsteroidReceiver;
 	//GLuint fboAsteroidId;

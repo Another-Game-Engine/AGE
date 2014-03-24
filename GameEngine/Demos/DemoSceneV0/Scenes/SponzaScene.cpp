@@ -294,7 +294,6 @@ bool SponzaScene::userStart()
 
 	Entity character;
 	std::shared_ptr<Component::CameraComponent> cameraComponent1;
-	std::shared_ptr<Component::CameraComponent> cameraComponent2;
 
 	{
 		auto e = createEntity();
@@ -362,12 +361,6 @@ bool SponzaScene::userUpdate(double time)
 {
 	static std::queue<Entity> stack;
 	float ftime = static_cast<float>(time);
-
-	if (getInstance<Input>()->getInput(SDLK_l))
-	{
-		getInstance<SceneManager>()->enableScene("SolarSystemDemo", 0);
-		getInstance<SceneManager>()->disableScene("BulletDemo");
-	}
 
 	if (getInstance<Input>()->getInput(SDL_BUTTON_RIGHT))
 	{
