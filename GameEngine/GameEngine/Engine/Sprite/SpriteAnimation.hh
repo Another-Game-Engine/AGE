@@ -21,6 +21,7 @@ public:
 
 	inline std::uint32_t getStepNumber() const { return _steps.size(); }
 //private:
+	bool _alphaTest = true;
 	std::vector<std::uint32_t> _steps;
 	std::vector<std::shared_ptr<SpriteFrame>> _frames;
 	//	std::shared_ptr<TextureFile> _texture;

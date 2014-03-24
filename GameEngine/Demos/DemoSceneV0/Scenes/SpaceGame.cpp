@@ -43,7 +43,6 @@ bool 			SpaceGame::userStart()
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
 	addSystem<PostFxSystem>(110); // POST FXs
-	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
 	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
 	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);

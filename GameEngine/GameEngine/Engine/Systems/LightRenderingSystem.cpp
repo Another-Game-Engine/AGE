@@ -137,6 +137,8 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 				e->getComponent<Component::MeshRenderer>()->renderRaw();
 			}
 
+			drawSprites();
+
 			_contiguousSpotLights[i].shadowId = shadowNbr;
 
 			++shadowNbr;
@@ -227,20 +229,40 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 
 	// draw sprite
+	glDepthMask(GL_TRUE);
+	auto s = renderer->getShader("MaterialBasic");
+	s->use();
+	drawSprites();
+}
+
+void LightRenderingSystem::drawSprites()
+{
 	std::shared_ptr<Component::Sprite> sprite;
+	auto renderer = _scene.lock()->getInstance<Renderer>();
 	auto perModelUniform = renderer->getUniform("PerModel");
 	auto materialUniform = renderer->getUniform("MaterialBasic");
-	auto s = renderer->getShader("MaterialBasic");
 	for (auto e : _spriteFilter.getCollection())
 	{
-		s->use();
 		perModelUniform->setUniform("model", e->getGlobalTransform());
 		perModelUniform->flushChanges();
 		sprite = e->getComponent<Component::Sprite>();
 		sprite->animation->getMaterial().setUniforms(materialUniform);
+		if (sprite->animation->_alphaTest)
+		{
+			glDisable(GL_BLEND);
+			glEnable(GL_ALPHA_TEST);
+		}
+		else
+		{
+			glDisable(GL_ALPHA_TEST);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
 		materialUniform->flushChanges();
 		glActiveTexture(GL_TEXTURE4);
-		glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
+		glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
 		sprite->animation->draw(sprite->index);
 	}
+	glDisable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
 }

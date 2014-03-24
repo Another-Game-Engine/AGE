@@ -72,14 +72,15 @@ bool FontManager::isLoaded(const std::string &name)
 
 void FontManager::_drawList()
 {
+	glDisable(GL_ALPHA_TEST);
 	glEnable(GL_BLEND);
 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	for (auto &e : _toDraw)
 	{
 		_draw2DString(e.str, e.fontName, e.size, e.position, e.color, e.shader);
 	}
 	_toDraw.clear();
+	glDisable(GL_BLEND);
 	glEnable(GL_ALPHA_TEST);
 }
 

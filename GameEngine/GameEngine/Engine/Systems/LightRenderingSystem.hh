@@ -25,6 +25,7 @@ public:
 	virtual void updateEnd(double time) { }
 	virtual void mainUpdate(double time);
 	virtual bool initialize();
+	void drawSprites();
 
 private:
 	// Filters
