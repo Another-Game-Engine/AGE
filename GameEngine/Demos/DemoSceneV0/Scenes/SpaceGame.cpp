@@ -14,7 +14,6 @@
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/BlitFinalRender.hh>
-#include <Systems/FPSSystem.hh>
 
 #include <glm/glm.hpp>
 
@@ -45,7 +44,6 @@ bool 			SpaceGame::userStart()
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
 	addSystem<PostFxSystem>(110); // POST FXs
 	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
-	addSystem<FPSSystem>(130);
 	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
 	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
@@ -129,7 +127,7 @@ bool 			SpaceGame::userStart()
 	OpenGLTools::Framebuffer &current = cameraComponent->frameBuffer.isMultisampled() ? cameraComponent->downSampling : cameraComponent->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	auto t = PubSub(psm);
-	t.broadCast(PubSubKey("myTextureKeyIs"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+	t.broadCast(PubSubKey("fboAsteroidSystemId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
 	return (true);
 }
 

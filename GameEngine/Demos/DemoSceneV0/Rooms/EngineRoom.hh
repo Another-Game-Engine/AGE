@@ -11,6 +11,10 @@ struct EngineRoom : public Room
 	Entity hotZoneEngineCircle;
 	Entity hotZoneEngineLast;
 	std::map<std::string, Entity> map;
+	PubSub fboAsteroidReceiver;
+	GLuint fboAsteroidId;
+	PubSub fboSponzaReceiver;
+	GLuint fboSponzaId;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

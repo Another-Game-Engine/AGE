@@ -186,6 +186,11 @@ bool 			MainScene::userUpdate(double time)
 	{
 		return false;
 	}
+	if (getInstance<Input>()->getInput(SDLK_q))
+	{
+		_engineRoom->enable();
+	}
+
 	//if (getInstance<Input>()->getInput(SDLK_m))
 	//{
 	//	getInstance<SceneManager>()->enableScene("SpaceGame", 0);

@@ -12,6 +12,10 @@
 
 	EngineRoom::EngineRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
+		, fboAsteroidReceiver(scene.lock()->getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>())
+		, fboAsteroidId(0)
+		, fboSponzaReceiver(scene.lock()->getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>())
+		, fboSponzaId(0)
 	{
 	}
 
@@ -30,10 +34,30 @@
 		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__3DTexts.cpd"));
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/TextsEngine.CPDAnimation"));
 		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__spiral.cpd"));
+		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fboasteroid.CPDAnimation"));
+		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fbosolar.CPDAnimation"));
+		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fbosponza.CPDAnimation"));
 
 
 		hotZoneEngineCircle = createHotZone("Engine->Circle", "HZ-circle-engine");
 		hotZoneEngineLast = createHotZone("Engine->Last", "HZ-engine-last");
+
+		///
+		/// Asteroid Demo FBO
+
+		{
+			auto &_id = fboAsteroidId;
+			fboAsteroidReceiver.globalSub(PubSubKey("fboAsteroidSystemId"), [&_id](GLuint id) {
+				_id = id;
+			});
+		}
+		{
+			auto &_sid = fboSponzaId;
+			fboSponzaReceiver.globalSub(PubSubKey("fboSponzaId"), [&_sid](GLuint id) {
+				_sid = id;
+			});
+		}
+
 
 		return true;
 	}
@@ -309,12 +333,40 @@
 			e->addComponent<Component::EntityPlacable>("spiral-asteroid-room-title");
 			map["spiral-asteroid-room-title"] = e;
 		}
+
+		// fbo asteroid
+		{
+			scene->getInstance<SceneManager>()->enableScene("Asteroid", 1);
+			auto e = scene->createEntity();
+			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
+			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-asteroid", "asteroid"));
+			sprite->delay = 1.0f / 10.0f;
+			sprite->animation->getMaterial().diffuseTex->id = fboAsteroidId;
+			e->addComponent<Component::TransformationRegister>("fbo-asteroid");
+			e->addComponent<Component::EntityPlacable>("fbo-asteroid");
+			map["fbo-asteroid"] = e;
+		}
+
+		// fbo sponza
+		{
+			scene->getInstance<SceneManager>()->enableScene("Sponza", 2);
+			auto e = scene->createEntity();
+			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
+			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-sponza", "sponza"));
+			sprite->delay = 1.0f / 10.0f;
+			sprite->animation->getMaterial().diffuseTex->id = fboSponzaId;
+			e->addComponent<Component::TransformationRegister>("fbo-sponza");
+			e->addComponent<Component::EntityPlacable>("fbo-sponza");
+			map["fbo-sponza"] = e;
+		}
 		return true;
 	}
 
 	bool EngineRoom::_disable()
 	{
 		auto scene = _scene.lock();
+		scene->getInstance<SceneManager>()->disableScene("Asteroid");
+
 		for (auto &e : map)
 		{
 			scene->destroy(e.second);
