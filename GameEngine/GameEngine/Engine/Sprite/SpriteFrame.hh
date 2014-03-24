@@ -72,7 +72,10 @@ public:
 	}
 	inline const glm::uvec4 &getDimensions() const { return _dimensions; }
 	inline const glm::vec4 &getUvs() const { return _uvs; }
-	inline void draw() const { _buffer->draw(GL_QUADS); }
+	inline void draw() const
+	{
+		_buffer->draw(GL_QUADS);
+	}
 //private:
 	glm::uvec4 _dimensions;
 	glm::vec4 _uvs;
