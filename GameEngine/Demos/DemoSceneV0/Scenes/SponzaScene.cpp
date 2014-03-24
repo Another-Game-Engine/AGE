@@ -200,7 +200,7 @@ bool SponzaScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
+	//getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
 	//	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Conference.cpd"));
@@ -274,7 +274,7 @@ bool SponzaScene::userStart()
 		// e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_galileo");
 		// rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
 		// rigidBody->setCollisionShape(Component::RigidBody::BOX);
 		// rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
@@ -286,7 +286,7 @@ bool SponzaScene::userStart()
 
 		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
 		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
 
 		mesh->setShader("MaterialBasic");
@@ -336,8 +336,7 @@ bool SponzaScene::userStart()
 
 	auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 	cameraComponent1->attachSkybox("skybox__space", "cubemapShader");
-	cameraComponent1->viewport = glm::uvec4(0, 0, screenSize.x / 2, screenSize.y);
-	cameraComponent1->fboSize = glm::uvec2(screenSize.x / 2, screenSize.y);
+	cameraComponent1->fboSize = glm::uvec2((float)(screenSize.x) / 1.5f, (float)(screenSize.y) / 1.5f);
 	cameraComponent1->sampleNbr = 2;
 
 	// init frame buffer and send texture id to other scene
