@@ -8,7 +8,6 @@ struct Entrance : public Room
 	virtual ~Entrance();
 	virtual bool init();
 	Entity room;
-	Entity trololo;
 	Entity pong;
 	Entity hotZone;
 	std::vector<Entity> lights;

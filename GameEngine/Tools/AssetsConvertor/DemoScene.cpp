@@ -66,8 +66,12 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("torus");
 		//convertor->clear();
 
-		convertor->load("../../Assets/crytek-sponza/sponza.obj");
-		convertor->serializeData("sponza");
+		//convertor->load("../../Assets/crytek-sponza/sponza.obj");
+		//convertor->serializeData("sponza");
+		//convertor->clear();
+		
+		convertor->load("../../Assets/Slides.tga");
+		convertor->serializeData("Slides");
 		convertor->clear();
 
 		//convertor->load("../../Assets/EarthCloud.tga");

@@ -32,6 +32,7 @@
 		hotZoneEntranceProjection = createHotZone("Projection->Entrance", "HZ-entrance-projection");
 		hotZoneProjectionPhysics = createHotZone("Projection->Physics", "HZ-projection-physics");
 		hotZoneProjectionCircle = createHotZone("Projection->Circle", "HZ-projection-circle");
+		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Slides.CPDAnimation"));
 		return true;
 	}
 
@@ -78,6 +79,14 @@
 			boringText->addComponent<Component::TransformationRegister>("boring-text");
 			boringText->addComponent<Component::EntityPlacable>("boring-text");
 		}
+		{
+			slides = scene->createEntity();
+			auto sprite = slides->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Slides", "slide1"));
+			sprite->delay = 1.0f / 10.0f;
+			slides->addComponent<Component::TransformationRegister>("slides");
+			slides->addComponent<Component::EntityPlacable>("slides");
+			slides->addTag(MyTags::SLIDE_TAG);
+		}
 		return true;
 	}
 
@@ -89,5 +98,6 @@
 			scene->destroy(e);
 		pointLights.clear();
 		scene->destroy(boringText);
+		scene->destroy(slides);
 		return true;
 	}

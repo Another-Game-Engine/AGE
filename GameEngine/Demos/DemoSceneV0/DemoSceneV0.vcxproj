@@ -244,6 +244,7 @@
     <ClInclude Include="Systems\HotZoneSystem.hpp" />
     <ClInclude Include="Systems\PistolSystem.hpp" />
     <ClInclude Include="Systems\SceneInSceneSystem.hpp" />
+    <ClInclude Include="Systems\SlidesSystem.hpp" />
     <ClInclude Include="Systems\SpaceshipControllerSystem.hh" />
     <ClInclude Include="Systems\SponzaPistolSystem.hpp" />
     <ClInclude Include="Systems\TransformationRegisterSystem.hpp" />
