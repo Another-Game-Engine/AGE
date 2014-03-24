@@ -71,6 +71,8 @@ bool 			DemoScene::userStart()
 		//convertor->clear();
 		
 		convertor->load("../../Assets/Slides.tga");
+		convertor->load("../../Assets/Powerpoint.tga");
+		convertor->load("../../Assets/PowerpointTroll.tga");
 		convertor->serializeData("Slides");
 		convertor->clear();
 

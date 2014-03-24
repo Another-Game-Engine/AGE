@@ -14,6 +14,8 @@ struct ProjectionRoom : public Room
 	std::vector<Entity> pointLights;
 	Entity boringText;
 	Entity slides;
+	Entity powerpoint;
+	std::vector<Entity> trolls;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();
