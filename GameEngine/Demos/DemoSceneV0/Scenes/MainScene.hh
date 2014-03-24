@@ -60,4 +60,6 @@ private:
 	std::shared_ptr<CircleRoom> _circleRoom;
 	std::shared_ptr<SpiralRoomSponza> _sponzaRoom;
 	std::shared_ptr<SpiralRoomAsteroid> _asteroidRoom;
+	std::shared_ptr<Room> _inceptionRoom;
+
 };

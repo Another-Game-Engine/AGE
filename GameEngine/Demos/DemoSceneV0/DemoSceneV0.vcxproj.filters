@@ -43,5 +43,6 @@
     <ClInclude Include="Rooms\SpiralRoomAsteroid.hpp" />
     <ClInclude Include="Systems\SponzaPistolSystem.hpp" />
     <ClInclude Include="Systems\SlidesSystem.hpp" />
+    <ClInclude Include="Rooms\SpiralRoomInception.hpp" />
   </ItemGroup>
 </Project>

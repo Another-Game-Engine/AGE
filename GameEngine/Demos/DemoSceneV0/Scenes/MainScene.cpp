@@ -7,6 +7,8 @@
 #include <Components/CameraComponent.hpp>
 #include <Components/FirstPersonView.hpp>
 
+#include <Rooms/SpiralRoomInception.hpp>
+
 //systems
 #include <Systems/FPSSystem.hh>
 #include <Systems/FPControllerSystem.hpp>
@@ -83,6 +85,7 @@ bool 			MainScene::userStart()
 	getSystem<PostFxSystem>()->useHDR(true);
 	getSystem<PostFxSystem>()->useBloom(true);
 
+
 	// create heros
 	{
 		_heros = createEntity();
@@ -93,6 +96,7 @@ bool 			MainScene::userStart()
 		camera->fboSize = screenSize;
 		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
+
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
 		//auto l = _heros->addComponent<Component::PointLight>();
 		//l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
@@ -287,6 +291,23 @@ bool 			MainScene::userStart()
 			return false;
 	}
 
+	// create Insception room
+	{
+		_inceptionRoom = std::make_shared<SpiralRoomInception>(
+			std::dynamic_pointer_cast<AScene>(shared_from_this())
+			);
+		if (!_inceptionRoom->init())
+			return false;
+	}
+
+	// init frame buffer and send texture id to other scene
+	auto camera = _heros->getComponent<Component::CameraComponent>();
+	camera->initFrameBuffer();
+	OpenGLTools::Framebuffer &current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;
+	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
+	PubSub t(getInstance<PubSub::Manager>());
+	t.broadCast(PubSubKey("fboInceptionId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+
 	return true;
 }
 
@@ -411,7 +432,7 @@ bool MainScene::loadAssets()
 	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/TextsEngine.CPDAnimation"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__spiral.cpd"));
 	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fboasteroid.CPDAnimation"));
-	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fbosolar.CPDAnimation"));
+	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fboinception.CPDAnimation"));
 	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/fbosponza.CPDAnimation"));
 
 	return true;
