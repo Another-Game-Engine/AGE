@@ -119,28 +119,25 @@ bool 			SpaceGame::userStart()
 	cameraComponent->projection = glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f);
 	cameraComponent->lookAtTransform = glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0), glm::vec3(0, 1, 0));
 	cameraComponent->fboSize = getInstance<IRenderContext>()->getScreenSize();
-	cameraComponent->viewport = glm::vec4(0, 0, cameraComponent->fboSize.x, cameraComponent->fboSize.y);
 	cameraComponent->sampleNbr = 1;
 	// init frame buffer and send texture id to other scene
 	cameraComponent->initFrameBuffer();
 	OpenGLTools::Framebuffer &current = cameraComponent->frameBuffer.isMultisampled() ? cameraComponent->downSampling : cameraComponent->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
-	auto t = PubSub(psm);
-	t.broadCast(PubSubKey("fboAsteroidSystemId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+	_globalPubSub = std::make_unique<PubSub>(psm);
+	_globalPubSub->broadCast(PubSubKey("fboAsteroidId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+
+	_globalPubSub->globalSub(PubSubKey("asteroidPause"), [&](){
+		deactivateSystem<SpaceshipControllerSystem>(); // UPDATE FIRST PERSON CONTROLLER
+	});
+
+	_globalPubSub->globalSub(PubSubKey("asteroidPlay"), [&](){
+		activateSystem<SpaceshipControllerSystem>(); // UPDATE FIRST PERSON CONTROLLER
+	});
 	return (true);
 }
 
 bool 			SpaceGame::userUpdate(double time)
 {
-	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
-		getInstance<Input>()->getInput(SDL_QUIT))
-	{
-		return false;
-	}
-	if (getInstance<Input>()->getInput(SDLK_l))
-	{
-		getInstance<SceneManager>()->enableScene("MainScene", 0);
-		getInstance<SceneManager>()->disableScene("SpaceGame");
-	}
 	return (true);
 }

@@ -276,6 +276,15 @@ bool 			MainScene::userStart()
 			return false;
 	}
 
+	// create Asteroid room
+	{
+		_asteroidRoom = std::make_shared<SpiralRoomAsteroid>(
+			std::dynamic_pointer_cast<AScene>(shared_from_this())
+			);
+		if (!_asteroidRoom->init())
+			return false;
+	}
+
 	return true;
 }
 

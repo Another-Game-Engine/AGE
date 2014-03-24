@@ -8,6 +8,8 @@
 #include <Rooms/LastRoom.hh>
 #include <Rooms/CircleRoom.hh>
 #include <Rooms/SpiralRoomSponza.hpp>
+#include <Rooms/SpiralRoomAsteroid.hpp>
+
 
 
 //struct ProjectionRoom : public Room
@@ -57,5 +59,5 @@ private:
 	std::shared_ptr<LastRoom> _lastRoom;
 	std::shared_ptr<CircleRoom> _circleRoom;
 	std::shared_ptr<SpiralRoomSponza> _sponzaRoom;
-
+	std::shared_ptr<SpiralRoomAsteroid> _asteroidRoom;
 };
