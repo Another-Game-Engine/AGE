@@ -33,16 +33,6 @@
 		hotZoneEngineSponza = createHotZone("Engine->SpiralSponza", "HZ-engine-sponza");
 		hotZoneEngineAsteroid = createHotZone("Engine->Asteroid", "HZ-engine-asteroid");
 
-		///
-		/// Asteroid Demo FBO
-
-		//{
-		//	auto &_id = fboAsteroidId;
-		//	fboAsteroidReceiver.globalSub(PubSubKey("fboAsteroidSystemId"), [&_id](GLuint id) {
-		//		_id = id;
-		//	});
-		//}
-
 		return true;
 	}
 

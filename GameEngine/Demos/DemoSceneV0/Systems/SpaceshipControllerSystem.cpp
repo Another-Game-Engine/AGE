@@ -35,13 +35,13 @@ void SpaceshipControllerSystem::mainUpdate(double time)
 
 		glm::mat4	transform = control->spaceShip->getLocalTransform();
 
-		if (_scene.lock()->getInstance<Input>()->getKey(SDLK_UP))
+		if (_scene.lock()->getInstance<Input>()->getKey(SDLK_w))
 			rigidBody->getBody().applyTorqueImpulse(convertGLMVectorToBullet(glm::vec3(transform * glm::vec4(0.1 * time * control->angularSpeed, 0, 0, 0))));
-		if (_scene.lock()->getInstance<Input>()->getKey(SDLK_DOWN))
+		if (_scene.lock()->getInstance<Input>()->getKey(SDLK_s))
 			rigidBody->getBody().applyTorqueImpulse(convertGLMVectorToBullet(glm::vec3(transform * glm::vec4(-0.1 * time * control->angularSpeed, 0, 0, 0))));
-		if (_scene.lock()->getInstance<Input>()->getKey(SDLK_LEFT))
+		if (_scene.lock()->getInstance<Input>()->getKey(SDLK_a))
 			rigidBody->getBody().applyTorqueImpulse(convertGLMVectorToBullet(glm::vec3(transform * glm::vec4(0, 0, -0.1 * time * control->angularSpeed, 0))));
-		if (_scene.lock()->getInstance<Input>()->getKey(SDLK_RIGHT))
+		if (_scene.lock()->getInstance<Input>()->getKey(SDLK_d))
 			rigidBody->getBody().applyTorqueImpulse(convertGLMVectorToBullet(glm::vec3(transform * glm::vec4(0, 0, 0.1 * time * control->angularSpeed, 0))));
 		if (_scene.lock()->getInstance<Input>()->getKey(SDLK_SPACE))
 		{
