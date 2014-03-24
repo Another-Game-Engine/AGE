@@ -6,9 +6,8 @@
 #include <Context/IRenderContext.hh>
 #include <glm/gtc/matrix_transform.hpp>
 
-FontManager::FontManager(std::weak_ptr<Engine> engine)
+FontManager::FontManager()
 : Dependency()
-, PubSub(engine.lock()->getInstance<PubSub::Manager>())
 {}
 
 FontManager::~FontManager()
@@ -16,7 +15,8 @@ FontManager::~FontManager()
 
 bool FontManager::init()
 {
-	globalSub(std::string("endOfFrame"), [&](){
+	_pubSub = std::make_unique<PubSub>(_dpyManager.lock()->getInstance<PubSub::Manager>());
+	_pubSub->globalSub(std::string("endOfFrame"), [&](){
 		_drawList();
 	});
 
@@ -72,12 +72,15 @@ bool FontManager::isLoaded(const std::string &name)
 
 void FontManager::_drawList()
 {
+	glEnable(GL_BLEND);
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	for (auto &e : _toDraw)
 	{
 		_draw2DString(e.str, e.fontName, e.size, e.position, e.color, e.shader);
 	}
 	_toDraw.clear();
-
+	glEnable(GL_ALPHA_TEST);
 }
 
 void FontManager::_draw2DString(const std::string &text,

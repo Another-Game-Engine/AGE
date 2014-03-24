@@ -216,7 +216,7 @@
     <ClCompile Include="Scenes\SponzaScene.cpp" />
     <ClCompile Include="Scenes\MainScene.cpp" />
     <ClCompile Include="Scenes\SolarSystemDemoScene.cpp" />
-    <ClCompile Include="SpaceGame.cpp" />
+    <ClCompile Include="Scenes\SpaceGame.cpp" />
     <ClCompile Include="Systems\FPSSystem.cpp" />
     <ClCompile Include="Systems\SpaceshipControllerSystem.cpp" />
     <ClCompile Include="Systems\TransformationRegisterSystem.cpp" />
@@ -236,7 +236,7 @@
     <ClInclude Include="Scenes\SponzaScene.hh" />
     <ClInclude Include="Scenes\MainScene.hh" />
     <ClInclude Include="Scenes\SolarSystemDemoScene.hh" />
-    <ClInclude Include="SpaceGame.hh" />
+    <ClInclude Include="Scenes\SpaceGame.hh" />
     <ClInclude Include="Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Systems\FPSSystem.hh" />
     <ClInclude Include="Systems\HotZoneSystem.hpp" />
