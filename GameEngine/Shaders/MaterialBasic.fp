@@ -183,7 +183,7 @@ void main(void)
 	vec4	diffuseColor = texture2D(fTexture1, fTexCoord) * vec4(diffuse, 1);
 	vec3	specularColor = texture2D(fTexture2, fTexCoord).rgb * specular;
 
-	if (diffuseColor.a < 0.99)
+	if (diffuseColor.a == 0)
 		discard;
 
 	vec4	finalColor = vec4(ambientColor, 1);

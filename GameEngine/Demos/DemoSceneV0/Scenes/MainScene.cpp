@@ -43,6 +43,7 @@ bool 			MainScene::userStart()
 	setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 
 	std::dynamic_pointer_cast<BulletDynamicManager>(getInstance<BulletCollisionManager>())->getWorld()->setGravity(btVector3(0, -10, 0));
+	setInstance<FontManager>()->init();
 
 	//load shaders
 	if (!loadShaders())

@@ -55,7 +55,6 @@ int			main(int ac, char **av)
 	};
 
 	e->setInstance<VertexManager<4>>(param)->init();
-	e->setInstance<FontManager>(e)->init();
 	e->setInstance<SpriteManager>()->init();
 
 	// add main scene

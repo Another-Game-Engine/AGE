@@ -342,6 +342,8 @@
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-asteroid", "asteroid"));
 			sprite->delay = 1.0f / 10.0f;
 			sprite->animation->getMaterial().diffuseTex->id = fboAsteroidId;
+			sprite->animation->_frames[0]->_uvs = glm::vec4(1, 0, 0, 1);
+			sprite->animation->_frames[0]->load(scene->getInstance < VertexManager<4> >());
 			e->addComponent<Component::TransformationRegister>("fbo-asteroid");
 			e->addComponent<Component::EntityPlacable>("fbo-asteroid");
 			map["fbo-asteroid"] = e;
@@ -355,6 +357,8 @@
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-sponza", "sponza"));
 			sprite->delay = 1.0f / 10.0f;
 			sprite->animation->getMaterial().diffuseTex->id = fboSponzaId;
+			sprite->animation->_frames[0]->_uvs = glm::vec4(1, 0, 0, 1);
+			sprite->animation->_frames[0]->load(scene->getInstance < VertexManager<4> >());
 			e->addComponent<Component::TransformationRegister>("fbo-sponza");
 			e->addComponent<Component::EntityPlacable>("fbo-sponza");
 			map["fbo-sponza"] = e;

@@ -48,6 +48,7 @@ bool	PostFxSystem::initialize()
 
 void	PostFxSystem::mainUpdate(double time)
 {
+	auto scene = _scene.lock();
 	for (auto c : _cameraFilter.getCollection())
 	{
 		std::shared_ptr<Component::CameraComponent>		camera = c->getComponent<Component::CameraComponent>();
@@ -62,6 +63,7 @@ void	PostFxSystem::mainUpdate(double time)
 			computeHdr(current);
 		if (_useBloom)
 			computeBloom(current);
+		scene->getInstance<PubSub::Manager>()->pub(PubSubKey(std::string("endOfFrame")));
 	}
 }
 

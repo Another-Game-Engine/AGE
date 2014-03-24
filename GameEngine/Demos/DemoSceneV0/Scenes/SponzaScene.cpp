@@ -95,8 +95,8 @@ bool SponzaScene::userStart()
 	std::srand(0);
 
 	setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
-
 	std::dynamic_pointer_cast<BulletDynamicManager>(getInstance<BulletCollisionManager>())->getWorld()->setGravity(btVector3(0, -10, 0));
+	setInstance<FontManager>()->init();
 
 	std::cout << "OPENGL VERSION : " << glGetString(GL_VERSION) << std::endl;
 
@@ -313,11 +313,11 @@ bool SponzaScene::userStart()
 		cameraComponent1 = character->addComponent<Component::CameraComponent>();
 		character->addComponent<Component::FirstPersonView>();
 		e->addComponent<Component::AudioListener>();
-		auto ae = e->addComponent<Component::AudioEmitter>();
+		//auto ae = e->addComponent<Component::AudioEmitter>();
 		auto arriveOnFloor = getInstance<AudioManager>()->getAudio("arriveOnFloor");
 		auto jump = getInstance<AudioManager>()->getAudio("jump");
-		ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
-		ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
+		//ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
+		//ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
 		globalCamera = e;
 	}
 
@@ -327,9 +327,9 @@ bool SponzaScene::userStart()
 		auto rigidbody = e->getComponent<Component::RigidBody>();
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
-		auto audioCpt = e->addComponent<Component::AudioEmitter>();
-		audioCpt->setAudio(getInstance<AudioManager>()->getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
-		audioCpt->play("ambiant", true);
+		//auto audioCpt = e->addComponent<Component::AudioEmitter>();
+		//audioCpt->setAudio(getInstance<AudioManager>()->getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
+		//audioCpt->play("ambiant", true);
 
 	}
 

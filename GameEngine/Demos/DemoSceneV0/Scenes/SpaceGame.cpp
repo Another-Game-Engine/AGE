@@ -1,4 +1,4 @@
-#include <SpaceGame.hh>
+#include <Scenes/SpaceGame.hh>
 
 // components
 #include <Components/FPController.hpp>
@@ -29,8 +29,8 @@ SpaceGame::~SpaceGame()
 bool 			SpaceGame::userStart()
 {
 	setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
-
 	std::dynamic_pointer_cast<BulletDynamicManager>(getInstance<BulletCollisionManager>())->getWorld()->setGravity(btVector3(0, 0, 0));
+	setInstance<FontManager>()->init();
 
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__torus.cpd"));
