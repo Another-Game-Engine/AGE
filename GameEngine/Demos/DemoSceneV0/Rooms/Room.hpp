@@ -53,9 +53,9 @@ protected:
 		auto rb = hotZone->addComponent<Component::RigidBody>(0.0f);
 		rb->setCollisionShape(Component::RigidBody::BOX, "NULL");
 		hotZone->setLocalTransform(glm::scale(hotZone->getLocalTransform(), glm::vec3(1, 0.1, 1)));
-		//auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
-		//if (!meshObj)
-		//	return false;
+		auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
+		if (!meshObj)
+			return false;
 		//auto meshComponent = hotZone->addComponent<Component::MeshRenderer>(meshObj);
 		//meshComponent->setShader("MaterialBasic");
 		hotZone->addComponent<Component::HotZone>(name, sharedName, shared_from_this());

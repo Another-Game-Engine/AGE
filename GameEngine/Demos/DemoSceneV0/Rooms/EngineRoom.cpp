@@ -29,6 +29,8 @@
 		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Cat.cpd"));
 		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__3DTexts.cpd"));
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/TextsEngine.CPDAnimation"));
+		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__spiral.cpd"));
+
 
 		hotZoneEngineCircle = createHotZone("Engine->Circle", "HZ-circle-engine");
 		hotZoneEngineLast = createHotZone("Engine->Last", "HZ-engine-last");
@@ -125,7 +127,7 @@
 
 			//	e->addComponent<Component::EntityPlacable>("engine-room-sorry");
 			e->addComponent<Component::TransformationRegister>("engine-room-system-title");
-			e->addComponent<Component::EntityPlacable>("engine-room-system-title");
+			//e->addComponent<Component::EntityPlacable>("engine-room-system-title");
 			map["system"] = e;
 		}
 
@@ -142,7 +144,7 @@
 
 			//	e->addComponent<Component::EntityPlacable>("engine-room-sorry");
 			e->addComponent<Component::TransformationRegister>("engine-room-entity-title");
-			e->addComponent<Component::EntityPlacable>("engine-room-entity-title");
+			//e->addComponent<Component::EntityPlacable>("engine-room-entity-title");
 			map["entity"] = e;
 		}
 
@@ -158,7 +160,7 @@
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "engine_desc"));
 			sprite->delay = 0.0f;
 			e->addComponent<Component::TransformationRegister>("engine-desc-text-sprite");
-			e->addComponent<Component::EntityPlacable>("engine-desc-text-sprite");
+			//e->addComponent<Component::EntityPlacable>("engine-desc-text-sprite");
 			map["engine-desc-text-sprite"] = e;
 		}
 
@@ -170,7 +172,7 @@
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "system"));
 			sprite->delay = 0.0f;
 			e->addComponent<Component::TransformationRegister>("system-code-sprite");
-			e->addComponent<Component::EntityPlacable>("system-code-sprite");
+			//e->addComponent<Component::EntityPlacable>("system-code-sprite");
 			map["system-code-sprite"] = e;
 		}
 
@@ -182,7 +184,7 @@
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "entity"));
 			sprite->delay = 0.0f;
 			e->addComponent<Component::TransformationRegister>("entity-code-sprite");
-			e->addComponent<Component::EntityPlacable>("entity-code-sprite");
+			//e->addComponent<Component::EntityPlacable>("entity-code-sprite");
 			map["entity-code-sprite"] = e;
 		}
 
@@ -194,7 +196,7 @@
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "component"));
 			sprite->delay = 0.0f;
 			e->addComponent<Component::TransformationRegister>("component-code-sprite");
-			e->addComponent<Component::EntityPlacable>("component-code-sprite");
+			//e->addComponent<Component::EntityPlacable>("component-code-sprite");
 			map["component-code-sprite"] = e;
 		}
 
@@ -206,7 +208,7 @@
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "age"));
 			sprite->delay = 0.0f;
 			e->addComponent<Component::TransformationRegister>("logo-sprite");
-			e->addComponent<Component::EntityPlacable>("logo-sprite");
+			//e->addComponent<Component::EntityPlacable>("logo-sprite");
 			map["logo-sprite"] = e;
 		}
 
@@ -218,8 +220,94 @@
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "multiscene"));
 			sprite->delay = 0.0f;
 			e->addComponent<Component::TransformationRegister>("multiscene-text-sprite");
-			e->addComponent<Component::EntityPlacable>("multiscene-text-sprite");
+			//e->addComponent<Component::EntityPlacable>("multiscene-text-sprite");
 			map["multiscene-text-sprite"] = e;
+		}
+		// Spiral room sponza
+		{
+			auto room = scene->createEntity();
+			room->addComponent<Component::TransformationRegister>("spiral-sub-room-sponza");
+			room->addComponent<Component::EntityPlacable>("spiral-sub-room-sponza");
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__spiral");
+			if (!meshObj)
+				return false;
+			auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+			rigidBody->setMass(0);
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_spiral");
+			//	rigidBody->getShape().setMargin(0.001f);
+			rigidBody->getBody().setFriction(1.0f);
+			rigidBody->getBody().setRestitution(0.9f);
+			map["spiral-sub-room-sponza"] = room;
+
+			auto e = scene->createEntity();
+			meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__sponza-text-3d");
+			if (!meshObj)
+				return false;
+			meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			e->addComponent<Component::TransformationRegister>("spiral-sponza-room-title");
+			e->addComponent<Component::EntityPlacable>("spiral-sponza-room-title");
+			map["spiral-sponza-room-title"] = e;
+		}
+
+		// Spiral room solarSystem
+		{
+			auto room = scene->createEntity();
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__spiral");
+			if (!meshObj)
+				return false;
+			auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+			rigidBody->setMass(0);
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_spiral");
+			//	rigidBody->getShape().setMargin(0.001f);
+			rigidBody->getBody().setFriction(1.0f);
+			rigidBody->getBody().setRestitution(0.9f);
+			room->addComponent<Component::TransformationRegister>("spiral-sub-room-solar");
+			room->addComponent<Component::EntityPlacable>("spiral-sub-room-solar");
+			map["spiral-sub-room-solar"] = room;
+
+			auto e = scene->createEntity();
+			meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__solarSystem-text");
+			if (!meshObj)
+				return false;
+			meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			e->addComponent<Component::TransformationRegister>("spiral-solar-room-title");
+			e->addComponent<Component::EntityPlacable>("spiral-solar-room-title");
+			map["spiral-solar-room-title"] = e;
+		}
+
+		// Spiral room asteroid
+		{
+			auto room = scene->createEntity();
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__spiral");
+			if (!meshObj)
+				return false;
+			auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+			rigidBody->setMass(0);
+			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_spiral");
+			//	rigidBody->getShape().setMargin(0.001f);
+			rigidBody->getBody().setFriction(1.0f);
+			rigidBody->getBody().setRestitution(0.9f);
+			room->addComponent<Component::TransformationRegister>("spiral-sub-room-asteroid");
+			room->addComponent<Component::EntityPlacable>("spiral-sub-room-asteroid");
+			map["spiral-sub-room-asteroid"] = room;
+
+			auto e = scene->createEntity();
+			meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__asteroid-text");
+			if (!meshObj)
+				return false;
+			meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			e->addComponent<Component::TransformationRegister>("spiral-asteroid-room-title");
+			e->addComponent<Component::EntityPlacable>("spiral-asteroid-room-title");
+			map["spiral-asteroid-room-title"] = e;
 		}
 		return true;
 	}
