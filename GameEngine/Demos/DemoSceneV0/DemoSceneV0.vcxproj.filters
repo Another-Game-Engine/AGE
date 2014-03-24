@@ -38,5 +38,6 @@
     <ClInclude Include="Scenes\SolarSystemDemoScene.hh" />
     <ClInclude Include="Scenes\SponzaScene.hh" />
     <ClInclude Include="Scenes\SpaceGame.hh" />
+    <ClInclude Include="Rooms\SpiralRoomSponza.hpp" />
   </ItemGroup>
 </Project>

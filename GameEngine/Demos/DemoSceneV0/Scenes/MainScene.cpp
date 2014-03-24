@@ -266,6 +266,15 @@ bool 			MainScene::userStart()
 			return false;
 	}
 
+	// create Sponza room
+	{
+		_sponzaRoom = std::make_shared<SpiralRoomSponza>(
+			std::dynamic_pointer_cast<AScene>(shared_from_this())
+			);
+		if (!_sponzaRoom->init())
+			return false;
+	}
+
 	return true;
 }
 
