@@ -167,12 +167,12 @@ private:
 
 		if (_input->getInput(SDLK_t))
 		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -1.0f, glm::vec3(0, 1, 0)), true);
+			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -1.0f, glm::vec3(0, 1, 0)), false);
 		}
 
 		if (_input->getInput(SDLK_y))
 		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 1.0f, glm::vec3(0, 1, 0)), true);
+			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 1.0f, glm::vec3(0, 1, 0)), false);
 		}
 
 		if (_input->getInput(SDLK_b))
