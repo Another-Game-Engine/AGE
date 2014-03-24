@@ -8,8 +8,6 @@
 #include <Components/RigidBody.hpp>
 #include <Components/FPController.hpp>
 #include <Components/FirstPersonView.hpp>
-#include <Components/AudioEmitter.hpp>
-#include <Components/AudioListener.hpp>
 #include <Components/SpriteComponent.hh>
 
 #include <OpenGL/ComputeShader.hh>
@@ -23,7 +21,6 @@
 #include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
-#include <Systems/AudioSystem.hpp>
 #include <Systems/SpriteSystem.hh>
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
@@ -116,7 +113,6 @@ bool SponzaScene::userStart()
 	addSystem<CollisionAdder>(10); // ADD COLLISION COMPONENT TO COLLIDING ENTITIES
 	addSystem<FPControllerSystem>(20); // UPDATE FIRST PERSON CONTROLLER
 	addSystem<FirstPersonViewSystem>(30); // UPDATE FIRST PERSON CAMERA
-	addSystem<AudioSystem>(50);
 	addSystem<CollisionCleaner>(60); // REMOVE COLLISION COMPONENTS FROM COLLIDING ENTITIES
 
 	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
@@ -204,7 +200,7 @@ bool SponzaScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
-	//getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
 	//	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Conference.cpd"));
@@ -213,10 +209,6 @@ bool SponzaScene::userStart()
 
 	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/GreyMan.CPDAnimation"));
 
-	getInstance<AudioManager>()->loadSound(File("../../Assets/switch19.wav"), Audio::AudioSpatialType::AUDIO_3D);
-	getInstance<AudioManager>()->loadStream(File("../../Assets/isolee.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	getInstance<AudioManager>()->loadSound(File("../../Assets/arriveOnFloor.mp3"), Audio::AudioSpatialType::AUDIO_3D);
-	getInstance<AudioManager>()->loadSound(File("../../Assets/jump.mp3"), Audio::AudioSpatialType::AUDIO_3D);
 
 
 	// EXAMPLE: HOW TO CREATE A MEDIA FILE DYNAMICALY
@@ -282,7 +274,7 @@ bool SponzaScene::userStart()
 		// e->setLocalTransform() = glm::scale(e->getLocalTransform(), glm::vec3(70, 1, 70));
 		auto rigidBody = e->addComponent<Component::RigidBody>(0);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_galileo");
+		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 		// rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sketch-test");
 		// rigidBody->setCollisionShape(Component::RigidBody::BOX);
 		// rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_museum");
@@ -294,7 +286,7 @@ bool SponzaScene::userStart()
 
 		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__sketch-test"));
 		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__cube"));
-		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
+		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
 		// auto mesh = e->addComponent<Component::MeshRenderer>(AMediaFile::get<ObjFile>("obj__museum"));
 
 		mesh->setShader("MaterialBasic");
@@ -311,12 +303,6 @@ bool SponzaScene::userStart()
 		character = e;
 		cameraComponent1 = character->addComponent<Component::CameraComponent>();
 		character->addComponent<Component::FirstPersonView>();
-		e->addComponent<Component::AudioListener>();
-		//auto ae = e->addComponent<Component::AudioEmitter>();
-		auto arriveOnFloor = getInstance<AudioManager>()->getAudio("arriveOnFloor");
-		auto jump = getInstance<AudioManager>()->getAudio("jump");
-		//ae->setAudio(arriveOnFloor, "arriveOnFloor", CHANNEL_GROUP_EFFECT);
-		//ae->setAudio(jump, "jump", CHANNEL_GROUP_EFFECT);
 		globalCamera = e;
 	}
 
@@ -326,9 +312,6 @@ bool SponzaScene::userStart()
 		auto rigidbody = e->getComponent<Component::RigidBody>();
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
-		//auto audioCpt = e->addComponent<Component::AudioEmitter>();
-		//audioCpt->setAudio(getInstance<AudioManager>()->getAudio("isolee"), "ambiant", CHANNEL_GROUP_MUSIC);
-		//audioCpt->play("ambiant", true);
 
 	}
 
@@ -361,8 +344,17 @@ bool SponzaScene::userStart()
 	cameraComponent1->initFrameBuffer();
 	OpenGLTools::Framebuffer &current = cameraComponent1->frameBuffer.isMultisampled() ? cameraComponent1->downSampling : cameraComponent1->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
-	auto t = PubSub(psm);
-	t.broadCast(PubSubKey("fboSponzaId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+	_globalPubSub = std::make_unique<PubSub>(psm);
+	_globalPubSub->broadCast(PubSubKey("fboSponzaId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+
+	_globalPubSub->globalSub(PubSubKey("sponzaPause"), [&](){
+		deactivateSystem<FPControllerSystem>(); // UPDATE FIRST PERSON CONTROLLER
+	});
+
+	_globalPubSub->globalSub(PubSubKey("sponzaPlay"), [&](){
+		activateSystem<FPControllerSystem>(); // UPDATE FIRST PERSON CONTROLLER
+	});
+
 
 	return (true);
 }
@@ -409,7 +401,6 @@ bool SponzaScene::userUpdate(double time)
 		light->lightData.positionPower.w = 3.0f;
 		rigidbody->getBody().setFriction(1.0f);
 		rigidbody->getBody().setRestitution(0.9f);
-		e->addComponent<Component::AudioEmitter>()->setAudio(getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 
 		auto &body = rigidbody->getBody();
 		body.applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
@@ -417,7 +408,6 @@ bool SponzaScene::userUpdate(double time)
 		body.getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 		body.setFriction(1.0f);
 		body.setRestitution(0.9f);
-		e->addComponent<Component::AudioEmitter>()->setAudio(getInstance<AudioManager>()->getAudio("switch19"), "collision", CHANNEL_GROUP_EFFECT);
 
 		e->addTag(BULLET_TAG);
 		if (stack.size() > 50)

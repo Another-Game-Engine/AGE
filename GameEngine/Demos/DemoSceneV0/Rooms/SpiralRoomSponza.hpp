@@ -55,6 +55,7 @@ protected:
 		// fbo sponza
 		{
 			scene->getInstance<SceneManager>()->enableScene("Sponza", 2);
+	//		fboSponzaReceiver.broadCast(PubSubKey("sponzaPause"));
 			auto e = scene->createEntity();
 			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-sponza", "sponza"));
