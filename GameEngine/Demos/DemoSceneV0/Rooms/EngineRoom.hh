@@ -10,11 +10,12 @@ struct EngineRoom : public Room
 	virtual bool init();
 	Entity hotZoneEngineCircle;
 	Entity hotZoneEngineLast;
+	Entity hotZoneEngineSponza;
 	std::map<std::string, Entity> map;
-	PubSub fboAsteroidReceiver;
-	GLuint fboAsteroidId;
-	PubSub fboSponzaReceiver;
-	GLuint fboSponzaId;
+	//PubSub fboAsteroidReceiver;
+	//GLuint fboAsteroidId;
+	//PubSub fboSponzaReceiver;
+	//GLuint fboSponzaId;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

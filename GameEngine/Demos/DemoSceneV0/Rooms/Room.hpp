@@ -56,10 +56,10 @@ protected:
 		auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
 		if (!meshObj)
 			return false;
-		//auto meshComponent = hotZone->addComponent<Component::MeshRenderer>(meshObj);
-		//meshComponent->setShader("MaterialBasic");
+		auto meshComponent = hotZone->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent->setShader("MaterialBasic");
 		hotZone->addComponent<Component::HotZone>(name, sharedName, shared_from_this());
-		//hotZone->addComponent<Component::EntityPlacable>(name);
+		hotZone->addComponent<Component::EntityPlacable>(name);
 		hotZone->addComponent<Component::TransformationRegister>(name);
 		return hotZone;
 	}
