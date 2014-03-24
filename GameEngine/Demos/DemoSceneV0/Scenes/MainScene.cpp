@@ -25,6 +25,7 @@
 #include <Systems/HotZoneSystem.hpp>
 #include <Systems/PistolSystem.hpp>
 #include <Systems/RotationForceSystem.hpp>
+#include <Systems/SceneInSceneSystem.hpp>
 #include <MyTags.hpp>
 
 // SDL
@@ -63,7 +64,7 @@ bool 			MainScene::userStart()
 	addSystem<FPSSystem>(40);
 	addSystem<PistolSystem>(41);
 	addSystem<RotationForceSystem>(42);
-	
+	addSystem<SceneInSceneSystem>(43);
 	deactivateSystem<PistolSystem>();
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
@@ -285,7 +286,6 @@ bool 			MainScene::userUpdate(double time)
 	static float delay = 0.0f;
 	if (getInstance<Input>()->getInput(SDLK_r) && delay <= 0.0f)
 	{
-
 		delay = 0.1f;
 	}
 	if (delay >= 0.0f)
@@ -294,10 +294,6 @@ bool 			MainScene::userUpdate(double time)
 		getInstance<Input>()->getInput(SDL_QUIT))
 	{
 		return false;
-	}
-	if (getInstance<Input>()->getInput(SDLK_q))
-	{
-		_engineRoom->enable();
 	}
 
 	//if (getInstance<Input>()->getInput(SDLK_m))
