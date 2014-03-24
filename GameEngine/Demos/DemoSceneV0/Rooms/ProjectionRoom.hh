@@ -13,6 +13,7 @@ struct ProjectionRoom : public Room
 	Entity spotLight;
 	std::vector<Entity> pointLights;
 	Entity boringText;
+	Entity slides;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();

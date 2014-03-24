@@ -13,7 +13,6 @@
 		if (!scene)
 			return;
 		scene->destroy(room);
-		scene->destroy(trololo);
 		scene->destroy(pong);
 	}
 
@@ -44,15 +43,6 @@
 			pong->addComponent<Component::EntityPlacable>("pong-tableau");
 		}
 		{
-			trololo = scene->createEntity();
-			trololo->setLocalTransform(glm::translate(trololo->getLocalTransform(), glm::vec3(-8, 1, 0)));
-			trololo->setLocalTransform(glm::scale(trololo->getLocalTransform(), glm::vec3(0.01)));
-			auto sprite = trololo->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Trololo", "tmp"));
-			sprite->delay = 1.0f / 10.0f;
-			trololo->addComponent<Component::TransformationRegister>("trololo-tableau");
-			trololo->addComponent<Component::EntityPlacable>("trololo-tableau");
-		}
-		{
 			for (auto i = 0; i < 10; ++i)
 			{
 				auto light = scene->createEntity();
@@ -81,7 +71,6 @@
 	{
 		auto scene = _scene.lock();
 		scene->destroy(pong);
-		scene->destroy(trololo);
 		for (auto e : lights)
 		{
 			scene->destroy(e);

@@ -7,6 +7,7 @@ enum MyTags
 	NO_TAG = 0
 	, HEROS_TAG = 1
 	, BULLET_TAG = 2
+	, SLIDE_TAG = 3
 };
 
 enum PhysicTags

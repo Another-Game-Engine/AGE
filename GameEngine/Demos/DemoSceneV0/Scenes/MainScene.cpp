@@ -26,6 +26,7 @@
 #include <Systems/PistolSystem.hpp>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/SceneInSceneSystem.hpp>
+#include <Systems/SlidesSystem.hpp>
 #include <MyTags.hpp>
 
 // SDL
@@ -65,6 +66,7 @@ bool 			MainScene::userStart()
 	addSystem<PistolSystem>(41);
 	addSystem<RotationForceSystem>(42);
 	addSystem<SceneInSceneSystem>(43);
+	addSystem<SlidesSystem>(44);
 	deactivateSystem<PistolSystem>();
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights

@@ -320,10 +320,10 @@ bool BulletDemoScene::userStart()
 	}
 
 	{
-		auto e = createEntity();
-		character->addChild(e);
-		cameraComponent2 = e->addComponent<Component::CameraComponent>();
-		e->addComponent<Component::FirstPersonView>();
+//		auto e = createEntity();
+//		character->addChild(e);
+//		cameraComponent2 = e->addComponent<Component::CameraComponent>();
+//		e->addComponent<Component::FirstPersonView>();
 	}
 
 	{
@@ -358,15 +358,15 @@ bool BulletDemoScene::userStart()
 
 	auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 	cameraComponent1->attachSkybox("skybox__space", "cubemapShader");
-	cameraComponent1->viewport = glm::uvec4(0, 0, screenSize.x / 2, screenSize.y);
-	cameraComponent1->fboSize = glm::uvec2(screenSize.x / 2, screenSize.y);
-	cameraComponent1->sampleNbr = 2;
-	cameraComponent2->attachSkybox("skybox__space", "cubemapShader");
-	cameraComponent2->viewport = glm::uvec4(screenSize.x / 2, 0, screenSize.x / 2, screenSize.y);
-	cameraComponent2->fboSize = glm::uvec2(screenSize.x / 2, screenSize.y);
-	cameraComponent2->sampleNbr = 2;
-	cameraComponent1->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
-	cameraComponent2->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
+	cameraComponent1->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
+	cameraComponent1->fboSize = glm::uvec2(screenSize.x, screenSize.y);
+	cameraComponent1->sampleNbr = 1;
+//	cameraComponent2->attachSkybox("skybox__space", "cubemapShader");
+//	cameraComponent2->viewport = glm::uvec4(screenSize.x / 2, 0, screenSize.x / 2, screenSize.y);
+//	cameraComponent2->fboSize = glm::uvec2(screenSize.x / 2, screenSize.y);
+//	cameraComponent2->sampleNbr = 8;
+	cameraComponent1->projection = glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f);
+//	cameraComponent2->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
 	return (true);
 }
 
@@ -439,7 +439,7 @@ bool BulletDemoScene::userUpdate(double time)
 		auto cam = globalCamera->getComponent<Component::CameraComponent>();
 		l->projection = glm::perspective(40.0f, 1.0f, 0.1f, 100.0f);
 		l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
-		l->lightData.positionPower.w = 50.0f;
+		l->lightData.positionPower.w = 3.0f;
 		l->lightData.shadowId = 1;
 		e->setLocalTransform(glm::inverse(cam->lookAtTransform));
 		delay = 0.1f;
@@ -492,15 +492,7 @@ bool BulletDemoScene::userUpdate(double time)
 	static auto lastFrame = 0;
 	timeCounter += ftime;
 	frameCounter += 1;
-	getInstance<FontManager>()->draw2DString("FPS : " + std::to_string(lastFrame), "myFont", 40, glm::ivec2(10, 10), glm::vec4(1), "2DText");
 
-	getInstance<FontManager>()->draw2DString("Entity Nbr : " + std::to_string(getNumberOfEntities()), "myFont", 30, glm::ivec2(10, 50), glm::vec4(1), "2DText");
-
-	getInstance<FontManager>()->draw2DString("This is test 1", "myFont", 30, glm::ivec2(10, 100), glm::vec4(1,0,1,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 2", "myFont", 35, glm::ivec2(10, 150), glm::vec4(0,1,1,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 3", "myFont", 40, glm::ivec2(10, 200), glm::vec4(1,1,0,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 4", "myFont", 45, glm::ivec2(10, 250), glm::vec4(0.5,0.2,0.4,1), "2DText");
-	getInstance<FontManager>()->draw2DString("This is test 5", "myFont", 50, glm::ivec2(10, 300), glm::vec4(1,1,1,0.5), "2DText");
 
 	if (timeCounter >= 1.0f)
 	{
