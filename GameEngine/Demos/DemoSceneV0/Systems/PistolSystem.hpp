@@ -14,7 +14,6 @@ public:
 	PistolSystem(std::weak_ptr<AScene> scene)
 		: System(scene)
 		, _characterController(scene)
-		, _balls(scene)
 	{}
 
 	virtual ~PistolSystem()
@@ -23,7 +22,6 @@ public:
 private:
 	EntityFilter _characterController;
 	std::queue<Entity> _shots;
-	EntityFilter _balls;
 	std::shared_ptr<Input> _inputs;
 
 	virtual void updateBegin(double time)
@@ -66,36 +64,10 @@ private:
 			scene->destroy(_shots.front());
 			_shots.pop();
 		}
-		for (auto e : _balls.getCollection())
-		{
-			if (e->hasComponent<Component::Collision>() && e->isTagged(MyTags::BULLET_TAG))
-			{
-				auto b = e->isTagged(MyTags::HEROS_TAG);
-				auto c = e->isTagged(MyTags::NO_TAG);
-				auto d = e->isTagged(MyTags::SLIDE_TAG);
-
-
-				auto a = e.get();
-				std::cout << a << std::endl;
-			}
-			if (e->hasComponent<Component::PointLight>())
-				e->removeComponent<Component::PointLight>();
-			else
-			{
-				auto c = e->addComponent<Component::PointLight>();
-				c->lightData.colorRange = glm::vec4(
-					(float)(std::rand() % 1000) / 1000.f,
-					(float)(std::rand() % 1000) / 1000.f,
-					(float)(std::rand() % 1000) / 1000.f, 20.0f); // distance
-				c->lightData.positionPower.w = 3.f; // intensite
-			}
-		}
 	}
 
 	virtual bool initialize()
 	{
-		_balls.requireTag(MyTags::BULLET_TAG);
-		_balls.requireComponent<Component::Collision>();
 		_characterController.requireTag(MyTags::HEROS_TAG);
 		_inputs = _scene.lock()->getInstance<Input>();
 		if (!_inputs)

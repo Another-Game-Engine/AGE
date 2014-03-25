@@ -155,17 +155,20 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("3Dtexts");
 		//convertor->clear();
 
-		//convertor->load("../../Assets/starship/starship.obj");
-		//convertor->serializeData("starship");
-		//convertor->clear();
+		//convertor->load("../../Assets/skelet/internal_skelout.obj");
+		//convertor->load("../../Assets/skelet/internal_skelout_full.obj");
+		convertor->load("../../Assets/Batman/Batman.obj");
+
+		convertor->serializeData("batman");
+		convertor->clear();
 
 		//convertor->load("../../Assets/coffee/coffee.obj");
 		//convertor->serializeData("coffee");
 		//convertor->clear();
 
-		convertor->load("../../Assets/Buttons.tga");
-		convertor->serializeData("Buttons");
-		convertor->clear();
+		//convertor->load("../../Assets/Buttons.tga");
+		//convertor->serializeData("Buttons");
+		//convertor->clear();
 
 		//convertor->load("../../Assets/fboasteroid.tga");
 		//convertor->load("../../Assets/fbosolar.tga");
