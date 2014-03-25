@@ -35,7 +35,7 @@ private:
 		float ftime = (float)(time);
 		static float delay = 0.0f;
 		auto scene = _scene.lock();
-		if (_inputs->getKey(SDLK_r) && delay <= 0.0f)
+		if (_inputs->getInput(SDL_BUTTON_LEFT) && delay <= 0.0f)
 		{
 			for (auto controller : _characterController.getCollection())
 			{
