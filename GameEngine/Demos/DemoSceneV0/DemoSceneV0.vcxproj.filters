@@ -15,6 +15,7 @@
     <ClCompile Include="Scenes\SolarSystemDemoScene.cpp" />
     <ClCompile Include="Scenes\SponzaScene.cpp" />
     <ClCompile Include="Scenes\SpaceGame.cpp" />
+    <ClCompile Include="Systems\AsteroidSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\EntityPlacable.hpp" />
@@ -44,5 +45,6 @@
     <ClInclude Include="Systems\SponzaPistolSystem.hpp" />
     <ClInclude Include="Systems\SlidesSystem.hpp" />
     <ClInclude Include="Rooms\SpiralRoomInception.hpp" />
+    <ClInclude Include="Systems\AsteroidSystem.hh" />
   </ItemGroup>
 </Project>
