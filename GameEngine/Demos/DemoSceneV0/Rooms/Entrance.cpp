@@ -21,7 +21,6 @@
 		// load
 		auto s = _scene.lock();
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Pong.CPDAnimation"));
-		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Trololo.CPDAnimation"));
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/SceneReader.CPDAnimation"));
 		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__3DTexts.cpd"));
 		hotZone = createHotZone("Entrance->Projection", "HZ-entrance-projection");

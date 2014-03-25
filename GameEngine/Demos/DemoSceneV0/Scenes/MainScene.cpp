@@ -110,6 +110,10 @@ bool 			MainScene::userStart()
 		fpc->sideRunSpeed = 0.001f;
 		auto al = _heros->addComponent<Component::AudioListener>();
 		_heros->addTag(MyTags::HEROS_TAG);
+		_heros->setLocalTransform(glm::rotate(_heros->getLocalTransform(), -90.0f, glm::vec3(0, 1, 0)));
+	//	_heros->addComponent<Component::TransformationRegister>("HEROS-POS");
+		//_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(-57.251132965087891f, 0.22000002861022949f, 0.39823031425476074f)));
+	//	camera->lookAtTransform = 
 
 	}
 
@@ -158,32 +162,6 @@ bool 			MainScene::userStart()
 		//e->addComponent<Component::EntityPlacable>("spiral-sponza-room-title");
 	}
 
-	// Spiral room solarSystem
-	{
-		auto room = createEntity();
-		auto meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__spiral");
-		if (!meshObj)
-			return false;
-		auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
-		meshComponent->setShader("MaterialBasic");
-		auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
-		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_spiral");
-		//	rigidBody->getShape().setMargin(0.001f);
-		rigidBody->getBody().setFriction(1.0f);
-		rigidBody->getBody().setRestitution(0.9f);
-		room->addComponent<Component::TransformationRegister>("spiral-sub-room-solar");
-		//room->addComponent<Component::EntityPlacable>("spiral-sub-room-solar");
-
-		auto e = createEntity();
-		meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__solarSystem-text");
-		if (!meshObj)
-			return false;
-		meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
-		meshComponent->setShader("MaterialBasic");
-		e->addComponent<Component::TransformationRegister>("spiral-solar-room-title");
-		//e->addComponent<Component::EntityPlacable>("spiral-solar-room-title");
-	}
 
 	// Spiral room asteroid
 	{
@@ -299,6 +277,7 @@ bool 			MainScene::userStart()
 	auto camera = _heros->getComponent<Component::CameraComponent>();
 	camera->initFrameBuffer();
 	OpenGLTools::Framebuffer &current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;
+	camera->lookAtTransform = glm::mat4(0.00920833f, 0.997272074f, -0.0732367858f, 0.0f, 0.999957561f, -0.00918360148f, 0.000674417242f, 0.0f, -0.0f, 0.0732398927f, 0.9973314394f, 0.0f, 0.120114207f, 57.09635993f, -4.41358471f, 1.0f);
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	PubSub t(getInstance<PubSub::Manager>());
 	t.broadCast(PubSubKey("fboInceptionId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));

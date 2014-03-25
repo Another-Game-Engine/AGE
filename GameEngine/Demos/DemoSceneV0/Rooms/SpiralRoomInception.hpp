@@ -49,21 +49,6 @@ protected:
 			e->addComponent<Component::EntityPlacable>("spiral-inception-pointlight-" + std::to_string(i));
 			map["spiral-inception-pointlight-" + std::to_string(i)] = e;
 		}
-
-		// fbo scene next
-		{
-			auto e = scene->createEntity();
-//scene->getSystem<SceneInSceneSystem>()->setScene("inception");
-			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
-			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-inception", "inception"));
-			sprite->delay = 1.0f / 10.0f;
-			sprite->animation->getMaterial().diffuseTex->id = fboId;
-			sprite->animation->_frames[0]->_uvs = glm::vec4(1,1,0,0);
-			sprite->animation->_frames[0]->load(scene->getInstance < VertexManager<4> >());
-			e->addComponent<Component::TransformationRegister>("fbo-inception");
-			e->addComponent<Component::EntityPlacable>("fbo-inception");
-			map["fbo-inception"] = e;
-		}
 		return true;
 	}
 
