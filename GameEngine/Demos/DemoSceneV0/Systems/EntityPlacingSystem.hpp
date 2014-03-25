@@ -52,9 +52,10 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
+		static float t = 0.3f;
 		_z += _input->getMouseWheel().y * 0.1f;
 		
-		if (_input->getInput(SDLK_MINUS) && !_filter.getCollection().empty())
+		if (_input->getInput(SDLK_MINUS) && !_filter.getCollection().empty() && t <= 0.0f)
 		{
 			auto &collection = _filter.getCollection();
 
@@ -81,9 +82,10 @@ private:
 					}
 				}
 			}
+			t = 0.3f;
 		}
 
-		if (_input->getInput(SDLK_EQUALS) && !_filter.getCollection().empty())
+		if (_input->getInput(SDLK_EQUALS) && !_filter.getCollection().empty() && t <= 0.0f)
 		{
 			auto &collection = _filter.getCollection();
 
@@ -112,8 +114,10 @@ private:
 					}
 				}
 			}
+			t = 0.3f;
 		}
-
+		if (t > 0.0f)
+			t -= (float)time;
 		_scene.lock()->getInstance<FontManager>()->draw2DString("Current entity : " + _name, "myFont", 30, glm::ivec2(10, 100), glm::vec4(1), "2DText");
 
 		Entity _entity = getEntity();

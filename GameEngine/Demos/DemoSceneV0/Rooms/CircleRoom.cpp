@@ -104,6 +104,17 @@
 			spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-3");
 			spotLights.push_back(spotLight);
 		}
+		{// fear spotlight
+			auto spotLight = scene->createEntity();
+			auto l = spotLight->addComponent<Component::SpotLight>();
+			l->lightData.colorRange = glm::vec4(1, 1, 1, 100);
+			l->lightData.positionPower.w = 5.0f;
+			l->projection = glm::perspective(40.0f, 1.0f, 0.1f, 100.0f);
+			l->lightData.shadowId = 1;
+			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-fear");
+			spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-fear");
+			spotLights.push_back(spotLight);
+		}
 		{
 			whyAge = scene->createEntity();
 			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__why-age");
@@ -112,7 +123,7 @@
 			auto meshComponent = whyAge->addComponent<Component::MeshRenderer>(meshObj);
 			meshComponent->setShader("MaterialBasic");
 			whyAge->addComponent<Component::TransformationRegister>("why-age-text");
-			whyAge->addComponent<Component::EntityPlacable>("why-age-text");
+		//	whyAge->addComponent<Component::EntityPlacable>("why-age-text");
 		}
 		{
 			auto light = scene->createEntity();
@@ -120,10 +131,19 @@
 			l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 20.0f); // distance
 			l->lightData.positionPower.w = 0.9f; // intensite
 			light->addComponent<Component::TransformationRegister>("circle-room-corridor-light");
-			light->addComponent<Component::EntityPlacable>("circle-room-corridor-light");
+			//light->addComponent<Component::EntityPlacable>("circle-room-corridor-light");
 			corridorLight = light;
 		}
-
+		{
+			roar = scene->createEntity();
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__roar");
+			if (!meshObj)
+				return false;
+			auto meshComponent = roar->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
+			roar->addComponent<Component::TransformationRegister>("roar");
+			roar->addComponent<Component::EntityPlacable>("roar");
+		}
 
 
 		return true;
@@ -139,5 +159,6 @@
 		spotLights.clear();
 		scene->destroy(whyAge);
 		scene->destroy(corridorLight);
+		scene->destroy(roar);
 		return true;
 	}

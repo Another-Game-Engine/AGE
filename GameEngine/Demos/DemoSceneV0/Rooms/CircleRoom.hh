@@ -14,6 +14,8 @@ struct CircleRoom : public Room
 	std::vector<Entity> spotLights;
 	Entity corridorLight;
 	Entity whyAge;
+	Entity roar;
+
 protected:
 	virtual bool _enable();
 	virtual bool _disable();
