@@ -64,7 +64,7 @@ bool 			MainScene::userStart()
 	addSystem<FirstPersonViewSystem>(20);
 	addSystem<CameraSystem>(30);
 	addSystem<BulletDynamicSystem>(35);
-	addSystem<CollisionAdder>(36);
+	addSystem<CollisionAdder>(10);
 	addSystem<HotZoneSystem>(37);
 	addSystem<FPSSystem>(40);
 	addSystem<PistolSystem>(41);
