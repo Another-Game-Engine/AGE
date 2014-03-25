@@ -29,6 +29,7 @@
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/SceneInSceneSystem.hpp>
 #include <Systems/SlidesSystem.hpp>
+#include <Systems/AudioSystem.hpp>
 #include <MyTags.hpp>
 
 // SDL
@@ -69,6 +70,7 @@ bool 			MainScene::userStart()
 	addSystem<RotationForceSystem>(42);
 	addSystem<SceneInSceneSystem>(43);
 	addSystem<SlidesSystem>(44);
+	addSystem<AudioSystem>(45);
 	deactivateSystem<PistolSystem>();
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
@@ -98,23 +100,13 @@ bool 			MainScene::userStart()
 		camera->attachSkybox("skybox__space", "cubemapShader");
 
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
-		//auto l = _heros->addComponent<Component::PointLight>();
-		//l->lightData.colorRange = glm::vec4(0.8f,1.0f,1.0f, 20.0f);
-		//l->lightData.positionPower.w = 2.0f;
-//		_heros->addComponent<Component::TransformationRegister>("character-controller-museum");
 		auto fpc = _heros->addComponent<Component::FPController>();
 		fpc->getShape().setLocalScaling(btVector3(0.3f, 0.3f, 0.3f));
 		fpc->backwardRunSpeed = 0.001f;
 		fpc->forwardRunSpeed = 0.001f;
 		fpc->sideRunSpeed = 0.001f;
+		auto al = _heros->addComponent<Component::AudioListener>();
 		_heros->addTag(MyTags::HEROS_TAG);
-
-		auto herosLight = createEntity();
-		auto l = herosLight->addComponent<Component::PointLight>();
-		l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f);
-		l->lightData.positionPower.w = 2.0f;
-		herosLight->addComponent<Component::EntityPlacable>("HEROS-LIGHT");
-		herosLight->addComponent<Component::TransformationRegister>("HEROS-LIGHT");
 
 	}
 

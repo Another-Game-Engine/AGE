@@ -10,6 +10,7 @@
 #include <Systems/HotZoneSystem.hpp>
 #include <Components/CollisionBody.hpp>
 #include <Components/SpotLight.hh>
+#include <Components/AudioEmitter.hpp>
 
 class PistolSystem;		
 
@@ -29,6 +30,7 @@ class PistolSystem;
 	{
 		// load
 		auto s = _scene.lock();
+		s->getInstance<AudioManager>()->loadStream(File("../../Assets/Sounds/the-wall.mp3"), Audio::AudioSpatialType::AUDIO_3D, "the-wall");
 		hotZonePhysicsProjection = createHotZone("Physics->Projection", "HZ-projection-physics");
 		return true;
 	}
@@ -72,6 +74,12 @@ class PistolSystem;
 				light->addComponent<Component::EntityPlacable>("physics-room-spotlight-" + std::to_string(i));
 				light->addComponent<Component::TransformationRegister>("physics-room-spotlight-" + std::to_string(i));
 				lights.push_back(light);
+			}
+			{
+				auto audioCpt = (*lights.begin())->addComponent<Component::AudioEmitter>();
+				audioCpt->setAudio(scene->getInstance<AudioManager>()->getAudio("the-wall"), "the-wall", CHANNEL_GROUP_MUSIC);
+				audioCpt->play("the-wall", false);
+				audioCpt->getAudio("the-wall")->channel->set3DMinMaxDistance(1.0f, 30.0f);
 			}
 			for (auto i = 3; i < 5; ++i)
 			{
