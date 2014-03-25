@@ -11,6 +11,7 @@
 #include <Components/CollisionBody.hpp>
 #include <Components/RotationForce.hpp>
 #include <Components/SpotLight.hh>
+#include <Components/AudioEmitter.hpp>
 
 	CircleRoom::CircleRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
@@ -31,6 +32,8 @@
 		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__dragon.cpd"));
 		hotZoneCircleProjection = createHotZone("Circle->Projection", "HZ-projection-circle");
 		hotZoneCircleEngine = createHotZone("Circle->Engine", "HZ-circle-engine");
+		s->getInstance<AudioManager>()->loadSound(File("../../Assets/Sounds/roar.mp3"), Audio::AudioSpatialType::AUDIO_3D);
+
 		return true;
 	}
 
@@ -54,7 +57,10 @@
 			rigidBody->getShape().setMargin(0.001f);
 			rigidBody->getBody().setFriction(1.0f);
 			rigidBody->getBody().setRestitution(0.9f);
-
+			auto ae = dragon->addComponent<Component::AudioEmitter>();
+			auto roarSound = scene->getInstance<AudioManager>()->getAudio("roar");
+			ae->setAudio(roarSound, "roar", CHANNEL_GROUP_EFFECT);
+			ae->play("roar", true);
 //			dragon->addComponent<Component::EntityPlacable>("mesh-dragon");
 			dragon->addComponent<Component::TransformationRegister>("mesh-dragon");
 		}

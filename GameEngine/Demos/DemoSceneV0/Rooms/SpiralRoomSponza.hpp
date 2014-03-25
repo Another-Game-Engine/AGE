@@ -69,6 +69,13 @@ protected:
 			e->addComponent<Component::EntityPlacable>("fbo-sponza");
 			map["fbo-sponza"] = e;
 		}
+		{
+			auto e = scene->createEntity();
+			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Buttons", "notice_sponza"));
+			e->addComponent<Component::TransformationRegister>("notice_sponza");
+			e->addComponent<Component::EntityPlacable>("notice_sponza");
+			map["notice_sponza"] = e;
+		}
 		return true;
 	}
 

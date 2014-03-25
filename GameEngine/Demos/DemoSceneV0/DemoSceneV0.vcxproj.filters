@@ -45,6 +45,10 @@
     <ClInclude Include="Systems\SponzaPistolSystem.hpp" />
     <ClInclude Include="Systems\SlidesSystem.hpp" />
     <ClInclude Include="Rooms\SpiralRoomInception.hpp" />
+<<<<<<< HEAD
     <ClInclude Include="Systems\AsteroidSystem.hh" />
+=======
+    <ClInclude Include="Systems\DemoCatSystem.hpp" />
+>>>>>>> 816589caadf4aa13d16f6c81a72e5279e2b495d0
   </ItemGroup>
 </Project>

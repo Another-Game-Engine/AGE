@@ -65,7 +65,7 @@ private:
 			auto light = e->addComponent<Component::PointLight>();
 			light->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 5.0f);
 			light->lightData.positionPower.w = 3.0f;
-			e->addTag(BULLET_TAG);
+			e->addTag(MyTags::BULLET_TAG);
 			if (stack.size() > 50)
 			{
 				scene->destroy(stack.front());

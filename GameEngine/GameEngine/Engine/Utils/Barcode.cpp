@@ -2,8 +2,9 @@
 #include <Engine/Entities/EntityData.hh>
 
 Barcode::Barcode()
-: code_(1)
+: code_(0)
 {
+	code_.clear();
 }
 
 Barcode::Barcode(EntityData &entity)
