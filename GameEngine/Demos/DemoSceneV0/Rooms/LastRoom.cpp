@@ -101,7 +101,6 @@
 			e->addComponent<Component::EntityPlacable>("using-text");
 			col.push_back(e);
 		}
-
 		return true;
 	}
 

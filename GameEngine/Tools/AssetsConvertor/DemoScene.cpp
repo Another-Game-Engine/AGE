@@ -135,40 +135,44 @@ bool 			DemoScene::userStart()
 		//convertor->serializeData("dragon");
 		//convertor->clear();
 
-		convertor->load("../../Assets/TEXTS/boring-room.obj");
-		convertor->load("../../Assets/TEXTS/click-to-shoot.obj");
-		convertor->load("../../Assets/TEXTS/component.obj");
-		convertor->load("../../Assets/TEXTS/entity.obj");
-		convertor->load("../../Assets/TEXTS/sorry.obj");
-		convertor->load("../../Assets/TEXTS/system.obj");
-		convertor->load("../../Assets/TEXTS/welcome.obj");
-		convertor->load("../../Assets/TEXTS/why-age.obj");
-		convertor->load("../../Assets/TEXTS/asteroid-text.obj");
-		convertor->load("../../Assets/TEXTS/solarSystem-text.obj");
-		convertor->load("../../Assets/TEXTS/sponza-text-3d.obj");
-		convertor->load("../../Assets/TEXTS/credits.obj");
-		convertor->load("../../Assets/TEXTS/inception.obj");
-		convertor->load("../../Assets/TEXTS/thanks.obj");
-		convertor->load("../../Assets/TEXTS/using.obj");
-		convertor->load("../../Assets/TEXTS/roar.obj");
+		//convertor->load("../../Assets/TEXTS/boring-room.obj");
+		//convertor->load("../../Assets/TEXTS/click-to-shoot.obj");
+		//convertor->load("../../Assets/TEXTS/component.obj");
+		//convertor->load("../../Assets/TEXTS/entity.obj");
+		//convertor->load("../../Assets/TEXTS/sorry.obj");
+		//convertor->load("../../Assets/TEXTS/system.obj");
+		//convertor->load("../../Assets/TEXTS/welcome.obj");
+		//convertor->load("../../Assets/TEXTS/why-age.obj");
+		//convertor->load("../../Assets/TEXTS/asteroid-text.obj");
+		//convertor->load("../../Assets/TEXTS/solarSystem-text.obj");
+		//convertor->load("../../Assets/TEXTS/sponza-text-3d.obj");
+		//convertor->load("../../Assets/TEXTS/credits.obj");
+		//convertor->load("../../Assets/TEXTS/inception.obj");
+		//convertor->load("../../Assets/TEXTS/thanks.obj");
+		//convertor->load("../../Assets/TEXTS/using.obj");
+		//convertor->load("../../Assets/TEXTS/roar.obj");
 
-		convertor->serializeData("3Dtexts");
-		convertor->clear();
-
-		//convertor->load("../../Assets/TEXTS/spiral.obj");
-		//convertor->serializeData("spiral");
+		//convertor->serializeData("3Dtexts");
 		//convertor->clear();
 
-		//convertor->load("../../Assets/TextsEngine.tga");
-		//convertor->serializeData("TextsEngine");
+		//convertor->load("../../Assets/starship/starship.obj");
+		//convertor->serializeData("starship");
 		//convertor->clear();
 
-		convertor->load("../../Assets/fboasteroid.tga");
-		convertor->load("../../Assets/fbosolar.tga");
-		convertor->load("../../Assets/fbosponza.tga");
+		//convertor->load("../../Assets/coffee/coffee.obj");
+		//convertor->serializeData("coffee");
+		//convertor->clear();
 
-		convertor->serializeData("fbotexture");
+		convertor->load("../../Assets/Buttons.tga");
+		convertor->serializeData("Buttons");
 		convertor->clear();
+
+		//convertor->load("../../Assets/fboasteroid.tga");
+		//convertor->load("../../Assets/fbosolar.tga");
+		//convertor->load("../../Assets/fbosponza.tga");
+
+		//convertor->serializeData("fbotexture");
+		//convertor->clear();
 
 	return (true);
 }

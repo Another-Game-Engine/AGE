@@ -240,6 +240,7 @@
     <ClInclude Include="Scenes\MainScene.hh" />
     <ClInclude Include="Scenes\SolarSystemDemoScene.hh" />
     <ClInclude Include="Scenes\SpaceGame.hh" />
+    <ClInclude Include="Systems\DemoCatSystem.hpp" />
     <ClInclude Include="Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Systems\FPSSystem.hh" />
     <ClInclude Include="Systems\HotZoneSystem.hpp" />
