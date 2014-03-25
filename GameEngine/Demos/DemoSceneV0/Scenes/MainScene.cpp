@@ -37,7 +37,9 @@
 #include <Context/SdlContext.hh>
 
 MainScene::MainScene(std::weak_ptr<Engine> engine)
-: AScene(engine)
+: AScene(engine),
+_sigma(4.0f),
+_glare(1.0f)
 {}
 
 MainScene::~MainScene(void)
@@ -59,7 +61,7 @@ bool 			MainScene::userStart()
 
 	// add systems
 	addSystem<TransformationRegisterSystem>(0)->setFile(File("../../EntityTransformationSave.json"));
-	addSystem<EntityPlacingSystem>(0);
+	//addSystem<EntityPlacingSystem>(0);
 	addSystem<FPControllerSystem>(10);
 	addSystem<FirstPersonViewSystem>(20);
 	addSystem<CameraSystem>(30);
@@ -300,6 +302,44 @@ bool 			MainScene::userUpdate(double time)
 		getInstance<Input>()->getInput(SDL_QUIT))
 	{
 		return false;
+	}
+
+	if (getInstance<Input>()->getInput(SDLK_r))
+	{
+		_sigma = 4.0f;
+		_glare = 1.0f;
+		getSystem<PostFxSystem>()->useHDR(true);
+		getSystem<PostFxSystem>()->useBloom(true);
+		getSystem<PostFxSystem>()->setBloomSigma(_sigma);
+		getSystem<PostFxSystem>()->setBloomGlare(_glare);
+	}
+	if (getInstance<Input>()->getInput(SDLK_h))
+		getSystem<PostFxSystem>()->useHDR(true);
+	if (getInstance<Input>()->getInput(SDLK_j))
+		getSystem<PostFxSystem>()->useHDR(false);
+	if (getInstance<Input>()->getInput(SDLK_f))
+		getSystem<PostFxSystem>()->useBloom(true);
+	if (getInstance<Input>()->getInput(SDLK_g))
+		getSystem<PostFxSystem>()->useBloom(false);
+	if (getInstance<Input>()->getInput(SDLK_UP))
+	{
+		_sigma += 0.5f;
+		getSystem<PostFxSystem>()->setBloomSigma(_sigma);
+	}
+	if (getInstance<Input>()->getInput(SDLK_DOWN))
+	{
+		_sigma -= 0.5f;
+		getSystem<PostFxSystem>()->setBloomSigma(_sigma);
+	}
+	if (getInstance<Input>()->getInput(SDLK_LEFT))
+	{
+		_glare -= 0.2f;
+		getSystem<PostFxSystem>()->setBloomGlare(_glare);
+	}
+	if (getInstance<Input>()->getInput(SDLK_RIGHT))
+	{
+		_glare += 0.2f;
+		getSystem<PostFxSystem>()->setBloomGlare(_glare);
 	}
 
 	//if (getInstance<Input>()->getInput(SDLK_m))
