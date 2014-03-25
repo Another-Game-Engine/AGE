@@ -3,11 +3,11 @@
 #include <Systems\System.h>
 #include <Core/EntityFilter.hpp>
 
-class SpaceshipControllerSystem : public System
+class AsteroidSystem : public System
 {
 public:
-	SpaceshipControllerSystem(std::weak_ptr<AScene> scene);
-	virtual ~SpaceshipControllerSystem();
+	AsteroidSystem(std::weak_ptr<AScene> scene);
+	virtual ~AsteroidSystem();
 
 	virtual void updateBegin(double time) { }
 	virtual void updateEnd(double time) { }
@@ -15,10 +15,7 @@ public:
 	virtual bool initialize();
 
 private:
-	EntityFilter						_spaceshipsFilter;
-
-	float _timer;
-
-	std::queue<Entity> _bullets;
+	EntityFilter						_asteroidFilter;
+	EntityFilter						_bulletFilter;
 };
 
