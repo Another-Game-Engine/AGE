@@ -88,6 +88,7 @@ namespace Component
 		glm::mat4                       lookAtTransform;
 		OpenGLTools::Framebuffer		frameBuffer;
 		OpenGLTools::Framebuffer		downSampling;
+		bool blitOnScreen;
 
 		// Camera fbo infos
 		glm::uvec2						fboSize;

@@ -14,8 +14,6 @@ struct EngineRoom : public Room
 	Entity hotZoneEngineLast;
 	Entity hotZoneEngineSponza;
 	Entity hotZoneEngineAsteroid;
-	Entity hotZoneEngineInception;
-
 
 	std::map<std::string, Entity> map;
 	//PubSub fboAsteroidReceiver;

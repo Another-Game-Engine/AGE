@@ -10,6 +10,7 @@
 #include <Systems/HotZoneSystem.hpp>
 #include <Components/CollisionBody.hpp>
 #include <Systems/PistolSystem.hpp>
+#include <Rooms/SpiralRoomInception.hpp>
 
 	EngineRoom::EngineRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
@@ -33,8 +34,7 @@
 		hotZoneEngineLast = createHotZone("Engine->Last", "HZ-engine-last");
 		hotZoneEngineSponza = createHotZone("Engine->SpiralSponza", "HZ-engine-sponza");
 		hotZoneEngineAsteroid = createHotZone("Engine->Asteroid", "HZ-engine-asteroid");
-		hotZoneEngineInception = createHotZone("Engine->Inception", "HZ-engine-inception");
-
+		_scene.lock()->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__lenin.cpd"));
 
 		return true;
 	}
@@ -62,16 +62,16 @@
 		// SORRY
 		//
 		{
-		//	auto e = scene->createEntity();
-		//	auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__sorry");
-		//	if (!meshObj)
-		//		return false;
-		//	auto meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
-		//	meshComponent->setShader("MaterialBasic");
+			auto e = scene->createEntity();
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__lenin");
+			if (!meshObj)
+				return false;
+			auto meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+			meshComponent->setShader("MaterialBasic");
 
-		////	e->addComponent<Component::EntityPlacable>("engine-room-sorry");
-		//	e->addComponent<Component::TransformationRegister>("engine-room-sorry");
-		//	map["sorry"] = e;
+			e->addComponent<Component::EntityPlacable>("engine-room-lenin");
+			e->addComponent<Component::TransformationRegister>("engine-room-lenin");
+			map["lenin"] = e;
 		}
 
 		//
@@ -200,9 +200,6 @@
 			map["multiscene-text-sprite"] = e;
 		}
 		scene->activateSystem<DemoCatSystem>();
-		scene->activateSystem<PistolSystem>();
-
-		return true;
 	}
 
 	bool EngineRoom::_disable()

@@ -71,7 +71,7 @@
 			rotForce->force = glm::vec3(0.0f, 10.0f, 0.0f);
 			//auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
 			//rotationAxis->addComponent<Component::MeshRenderer>(meshObj)->setShader("MaterialBasic");
-//			rotationAxis->addComponent<Component::EntityPlacable>("circle-room-rotation-axi-1");
+			rotationAxis->addComponent<Component::EntityPlacable>("circle-room-rotation-axi-1");
 			rotationAxis->addComponent<Component::TransformationRegister>("circle-room-rotation-axis-1");
 		}
 		{
@@ -82,7 +82,9 @@
 				l->lightData.positionPower.w = 3.0f;
 				l->projection = glm::perspective(120.0f, 1.0f, 0.1f, 100.0f);
 				l->lightData.shadowId = 1;
-//				spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-1");
+				//auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
+				//spotLight->addComponent<Component::MeshRenderer>(meshObj)->setShader("MaterialBasic");
+				spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-1");
 				spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-1");
 				spotLights.push_back(spotLight);
 		}
@@ -94,7 +96,9 @@
 			l->lightData.positionPower.w = 1.0f;
 			l->projection = glm::perspective(120.0f, 1.0f, 0.1f, 100.0f);
 			l->lightData.shadowId = 1;
-//			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-2");
+			//auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
+			//spotLight->addComponent<Component::MeshRenderer>(meshObj)->setShader("MaterialBasic");
+			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-2");
 			spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-2");
 			spotLights.push_back(spotLight);
 		}
@@ -106,7 +110,9 @@
 			l->lightData.positionPower.w = 2.0f;
 			l->projection = glm::perspective(120.0f, 1.0f, 0.1f, 100.0f);
 			l->lightData.shadowId = 1;
-//			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-3");
+			//auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cube");
+			//spotLight->addComponent<Component::MeshRenderer>(meshObj)->setShader("MaterialBasic");
+			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-3");
 			spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-3");
 			spotLights.push_back(spotLight);
 		}
@@ -117,7 +123,7 @@
 			l->lightData.positionPower.w = 5.0f;
 			l->projection = glm::perspective(40.0f, 1.0f, 0.1f, 100.0f);
 			l->lightData.shadowId = 1;
-			spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-fear");
+		//	spotLight->addComponent<Component::EntityPlacable>("circle-room-spotlight-fear");
 			spotLight->addComponent<Component::TransformationRegister>("circle-room-spotlight-fear");
 			spotLights.push_back(spotLight);
 		}
@@ -148,7 +154,7 @@
 			auto meshComponent = roar->addComponent<Component::MeshRenderer>(meshObj);
 			meshComponent->setShader("MaterialBasic");
 			roar->addComponent<Component::TransformationRegister>("roar");
-			roar->addComponent<Component::EntityPlacable>("roar");
+		//	roar->addComponent<Component::EntityPlacable>("roar");
 		}
 
 
