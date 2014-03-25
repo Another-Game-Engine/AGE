@@ -62,4 +62,6 @@ private:
 	std::shared_ptr<SpiralRoomAsteroid> _asteroidRoom;
 	std::shared_ptr<Room> _inceptionRoom;
 
+	float		_sigma;
+	float		_glare;
 };
