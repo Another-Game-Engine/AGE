@@ -14,8 +14,13 @@
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/BlitFinalRender.hh>
+#include <Systems/AsteroidSystem.hh>
+#include <Systems/CollisionAdderSystem.hpp>
+#include <Systems/CollisionCleanerSystem.hpp>
 
 #include <glm/glm.hpp>
+
+#include "MyTags.hpp"
 
 SpaceGame::SpaceGame(std::weak_ptr<Engine> engine) :
 							AScene(engine)
@@ -35,14 +40,21 @@ bool 			SpaceGame::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__torus.cpd"));
 
+	addSystem<CollisionAdder>(10);
+
 	addSystem<CameraSystem>(30);
 	addSystem<BulletDynamicSystem>(35);
 	addSystem<SpaceshipControllerSystem>(40);
+	addSystem<AsteroidSystem>(50);
+
+	addSystem<CollisionCleaner>(60);
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
 	addSystem<PostFxSystem>(110); // POST FXs
+//	addSystem<BlitFinalRender>(120);
+
 	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
 	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
@@ -75,11 +87,10 @@ bool 			SpaceGame::userStart()
 		return false;
 	auto meshComponent = spaceShip->addComponent<Component::MeshRenderer>(meshObj);
 	meshComponent->setShader("MaterialBasic");
-	auto rigidBody = spaceShip->addComponent<Component::RigidBody>(0.0f);
-	rigidBody->setMass(1.0f);
+	auto rigidBody = spaceShip->addComponent<Component::RigidBody>(1.0f);
 	rigidBody->setCollisionShape(Component::RigidBody::BOX);
 	rigidBody->getBody().setActivationState(DISABLE_DEACTIVATION);
-	rigidBody->getBody().setDamping(0.3f, 0.3f);
+	rigidBody->getBody().setDamping(0.5f, 1.0f);
 
 	auto torus = createEntity();
 	torus->setLocalTransform(glm::scale(torus->getLocalTransform(), glm::vec3(200.0f)));
@@ -96,8 +107,8 @@ bool 			SpaceGame::userStart()
 	auto controller = e->addComponent<Component::SpaceshipController>(spaceShip, 5.0f);
 
 	controller->dist = 5.0f;
-	controller->angularSpeed = 3.0f;
-	controller->acceleration = 0.2f;
+	controller->angularSpeed = 80.0f;
+	controller->acceleration = 20.0f;
 	controller->light = lightComponent;
 	controller->camSpeed = 5.0f;
 
@@ -134,6 +145,36 @@ bool 			SpaceGame::userStart()
 	_globalPubSub->globalSub(PubSubKey("asteroidPlay"), [&](){
 		activateSystem<SpaceshipControllerSystem>(); // UPDATE FIRST PERSON CONTROLLER
 	});
+
+
+	for (int i = 0; i < 30; ++i)
+	{
+		Entity e = createEntity();
+
+		glm::vec3 impulse = glm::vec3(rand() % 10000, rand() % 10000, rand() % 10000);
+
+		impulse = glm::normalize(impulse);
+		impulse *= 1000.0f;
+
+		glm::vec3 position = glm::vec3(cos(2 * 3.141592 / 100 * i), 0, sin(2 * 3.141592 / 100 * i));
+
+		position *= 50.0f;
+
+		e->setLocalTransform(glm::translate(glm::mat4(1), position));
+		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(10.0f)));
+
+		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+		mesh->setShader("MaterialBasic");
+		auto body = e->addComponent<Component::RigidBody>(50);
+		body->setCollisionShape(Component::RigidBody::SPHERE);
+		body->getBody().setRestitution(1.0f);
+		body->getBody().setActivationState(DISABLE_DEACTIVATION);
+		body->getBody().setDamping(0.0f, 0.0f);
+		body->getBody().applyCentralImpulse(convertGLMVectorToBullet(impulse));
+		e->addTag(MyTags::ASTEROID_TAG);
+	}
+
+
 	return (true);
 }
 
