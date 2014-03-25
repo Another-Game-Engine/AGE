@@ -217,6 +217,7 @@
     <ClCompile Include="Scenes\MainScene.cpp" />
     <ClCompile Include="Scenes\SolarSystemDemoScene.cpp" />
     <ClCompile Include="Scenes\SpaceGame.cpp" />
+    <ClCompile Include="Systems\AsteroidSystem.cpp" />
     <ClCompile Include="Systems\FPSSystem.cpp" />
     <ClCompile Include="Systems\SpaceshipControllerSystem.cpp" />
     <ClCompile Include="Systems\TransformationRegisterSystem.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="Scenes\MainScene.hh" />
     <ClInclude Include="Scenes\SolarSystemDemoScene.hh" />
     <ClInclude Include="Scenes\SpaceGame.hh" />
+    <ClInclude Include="Systems\AsteroidSystem.hh" />
     <ClInclude Include="Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Systems\FPSSystem.hh" />
     <ClInclude Include="Systems\HotZoneSystem.hpp" />
