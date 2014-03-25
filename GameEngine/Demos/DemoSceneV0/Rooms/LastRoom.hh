@@ -8,6 +8,7 @@ struct LastRoom : public Room
 	virtual ~LastRoom();
 	virtual bool init();
 	Entity hotZoneLastEngine;
+	std::vector<Entity> col;
 protected:
 	virtual bool _enable();
 	virtual bool _disable();
