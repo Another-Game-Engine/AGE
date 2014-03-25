@@ -101,7 +101,6 @@ bool 			MainScene::userStart()
 		auto camera = _heros->addComponent<Component::CameraComponent>();
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		camera->fboSize = screenSize;
-		camera->sampleNbr = 1; // TODO DELETE
 		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
 
@@ -292,10 +291,6 @@ bool 			MainScene::userUpdate(double time)
 {
 	float ftime = (float)(time);
 	static float delay = 0.0f;
-	if (getInstance<Input>()->getInput(SDLK_r) && delay <= 0.0f)
-	{
-		delay = 0.1f;
-	}
 	if (delay >= 0.0f)
 		delay -= ftime;
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE) ||
@@ -304,49 +299,44 @@ bool 			MainScene::userUpdate(double time)
 		return false;
 	}
 
-	if (getInstance<Input>()->getInput(SDLK_r))
-	{
-		_sigma = 4.0f;
-		_glare = 1.0f;
-		getSystem<PostFxSystem>()->useHDR(true);
-		getSystem<PostFxSystem>()->useBloom(true);
-		getSystem<PostFxSystem>()->setBloomSigma(_sigma);
-		getSystem<PostFxSystem>()->setBloomGlare(_glare);
-	}
-	if (getInstance<Input>()->getInput(SDLK_h))
-		getSystem<PostFxSystem>()->useHDR(true);
-	if (getInstance<Input>()->getInput(SDLK_j))
-		getSystem<PostFxSystem>()->useHDR(false);
-	if (getInstance<Input>()->getInput(SDLK_f))
-		getSystem<PostFxSystem>()->useBloom(true);
-	if (getInstance<Input>()->getInput(SDLK_g))
-		getSystem<PostFxSystem>()->useBloom(false);
-	if (getInstance<Input>()->getInput(SDLK_UP))
-	{
-		_sigma += 0.5f;
-		getSystem<PostFxSystem>()->setBloomSigma(_sigma);
-	}
-	if (getInstance<Input>()->getInput(SDLK_DOWN))
-	{
-		_sigma -= 0.5f;
-		getSystem<PostFxSystem>()->setBloomSigma(_sigma);
-	}
-	if (getInstance<Input>()->getInput(SDLK_LEFT))
-	{
-		_glare -= 0.2f;
-		getSystem<PostFxSystem>()->setBloomGlare(_glare);
-	}
-	if (getInstance<Input>()->getInput(SDLK_RIGHT))
-	{
-		_glare += 0.2f;
-		getSystem<PostFxSystem>()->setBloomGlare(_glare);
-	}
-
-	//if (getInstance<Input>()->getInput(SDLK_m))
+	//if (getInstance<Input>()->getInput(SDLK_r))
 	//{
-	//	getInstance<SceneManager>()->enableScene("SpaceGame", 0);
-	//	getInstance<SceneManager>()->disableScene("MainScene");
+	//	_sigma = 4.0f;
+	//	_glare = 1.0f;
+	//	getSystem<PostFxSystem>()->useHDR(true);
+	//	getSystem<PostFxSystem>()->useBloom(true);
+	//	getSystem<PostFxSystem>()->setBloomSigma(_sigma);
+	//	getSystem<PostFxSystem>()->setBloomGlare(_glare);
 	//}
+	//if (getInstance<Input>()->getInput(SDLK_h))
+	//	getSystem<PostFxSystem>()->useHDR(true);
+	//if (getInstance<Input>()->getInput(SDLK_j))
+	//	getSystem<PostFxSystem>()->useHDR(false);
+	//if (getInstance<Input>()->getInput(SDLK_f))
+	//	getSystem<PostFxSystem>()->useBloom(true);
+	//if (getInstance<Input>()->getInput(SDLK_g))
+	//	getSystem<PostFxSystem>()->useBloom(false);
+	//if (getInstance<Input>()->getInput(SDLK_UP))
+	//{
+	//	_sigma += 0.5f;
+	//	getSystem<PostFxSystem>()->setBloomSigma(_sigma);
+	//}
+	//if (getInstance<Input>()->getInput(SDLK_DOWN))
+	//{
+	//	_sigma -= 0.5f;
+	//	getSystem<PostFxSystem>()->setBloomSigma(_sigma);
+	//}
+	//if (getInstance<Input>()->getInput(SDLK_LEFT))
+	//{
+	//	_glare -= 0.2f;
+	//	getSystem<PostFxSystem>()->setBloomGlare(_glare);
+	//}
+	//if (getInstance<Input>()->getInput(SDLK_RIGHT))
+	//{
+	//	_glare += 0.2f;
+	//	getSystem<PostFxSystem>()->setBloomGlare(_glare);
+	//}
+
 	return true;
 }
 
@@ -441,7 +431,6 @@ bool MainScene::loadAssets()
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
-	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Cat.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__3DTexts.cpd"));
 	getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/TextsEngine.CPDAnimation"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__spiral.cpd"));

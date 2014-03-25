@@ -43,7 +43,7 @@ int			main(int ac, char **av)
 
 
 	// init engine
-	if (e->init(0, 1920, 1080, "PFA Présentation") == false)
+	if (e->init(0, 1920, 1080, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
 
 	std::array<Attribute, 4> param = //-V112
@@ -78,6 +78,6 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 	while (e->update())
 		;
-	//e.stop();
+	e->stop();
 	return (EXIT_SUCCESS);
 }
