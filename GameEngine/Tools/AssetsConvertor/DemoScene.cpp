@@ -157,9 +157,9 @@ bool 			DemoScene::userStart()
 
 		//convertor->load("../../Assets/skelet/internal_skelout.obj");
 		//convertor->load("../../Assets/skelet/internal_skelout_full.obj");
-		convertor->load("../../Assets/Batman/Batman.obj");
+		convertor->load("../../Assets/office_chair/office_chair.obj");
 
-		convertor->serializeData("batman");
+		convertor->serializeData("office_chair");
 		convertor->clear();
 
 		//convertor->load("../../Assets/coffee/coffee.obj");
