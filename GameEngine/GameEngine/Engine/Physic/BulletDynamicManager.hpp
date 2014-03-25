@@ -42,7 +42,7 @@ public:
 	world->setGravity(btVector3(0, -10, 0));
 
 	_world = world;
-	_world->getDispatchInfo().m_allowedCcdPenetration = 0.08f;
+	_world->getDispatchInfo().m_allowedCcdPenetration = 0.05f;
 	return true;
 	}
 
