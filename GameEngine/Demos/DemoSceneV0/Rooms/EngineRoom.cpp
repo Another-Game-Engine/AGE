@@ -14,8 +14,6 @@
 
 	EngineRoom::EngineRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
-		//, fboAsteroidReceiver(scene.lock()->getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>())
-		//, fboAsteroidId(0)
 	{
 	}
 
@@ -34,7 +32,7 @@
 		hotZoneEngineLast = createHotZone("Engine->Last", "HZ-engine-last");
 		hotZoneEngineSponza = createHotZone("Engine->SpiralSponza", "HZ-engine-sponza");
 		hotZoneEngineAsteroid = createHotZone("Engine->Asteroid", "HZ-engine-asteroid");
-		_scene.lock()->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__lenin.cpd"));
+		_scene.lock()->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__house.cpd"));
 
 		return true;
 	}
@@ -54,24 +52,23 @@
 			l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 30.0f); // distance
 			l->lightData.positionPower.w = 2.0f; // intensite
 			e->addComponent<Component::TransformationRegister>("engine-room-pointlight-" + std::to_string(i));
-	//		e->addComponent<Component::EntityPlacable>("engine-room-pointlight-" + std::to_string(i));
 			map["engine-room-pointlight-" + std::to_string(i)] = e;
 		}
 
 		//
-		// SORRY
+		// LENIN
 		//
 		{
 			auto e = scene->createEntity();
-			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__lenin");
+			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__house");
 			if (!meshObj)
 				return false;
 			auto meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
 			meshComponent->setShader("MaterialBasic");
 
-			e->addComponent<Component::EntityPlacable>("engine-room-lenin");
-			e->addComponent<Component::TransformationRegister>("engine-room-lenin");
-			map["lenin"] = e;
+			e->addComponent<Component::EntityPlacable>("engine-room-house");
+			e->addComponent<Component::TransformationRegister>("engine-room-house");
+			map["house"] = e;
 		}
 
 		//
@@ -131,14 +128,14 @@
 		//
 		// Age intro
 		//
-		{
-			auto e = scene->createEntity();
-			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "engine_desc"));
-			sprite->delay = 0.0f;
-			e->addComponent<Component::TransformationRegister>("engine-desc-text-sprite");
-			e->addComponent<Component::EntityPlacable>("engine-desc-text-sprite");
-			map["engine-desc-text-sprite"] = e;
-		}
+		//{
+		//	auto e = scene->createEntity();
+		//	auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "engine_desc"));
+		//	sprite->delay = 0.0f;
+		//	e->addComponent<Component::TransformationRegister>("engine-desc-text-sprite");
+		//	e->addComponent<Component::EntityPlacable>("engine-desc-text-sprite");
+		//	map["engine-desc-text-sprite"] = e;
+		//}
 
 		//
 		// Age system
@@ -191,14 +188,14 @@
 		//
 		// Age multiscene
 		//
-		{
-			auto e = scene->createEntity();
-			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "multiscene"));
-			sprite->delay = 0.0f;
-			e->addComponent<Component::TransformationRegister>("multiscene-text-sprite");
-			e->addComponent<Component::EntityPlacable>("multiscene-text-sprite");
-			map["multiscene-text-sprite"] = e;
-		}
+		//{
+		//	auto e = scene->createEntity();
+		//	auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("TextsEngine", "multiscene"));
+		//	sprite->delay = 0.0f;
+		//	e->addComponent<Component::TransformationRegister>("multiscene-text-sprite");
+		//	e->addComponent<Component::EntityPlacable>("multiscene-text-sprite");
+		//	map["multiscene-text-sprite"] = e;
+		//}
 		scene->activateSystem<DemoCatSystem>();
 	}
 

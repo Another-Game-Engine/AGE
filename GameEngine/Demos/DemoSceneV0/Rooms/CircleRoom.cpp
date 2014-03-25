@@ -50,13 +50,6 @@
 				return false;
 			auto meshComponent = dragon->addComponent<Component::MeshRenderer>(meshObj);
 			meshComponent->setShader("MaterialBasic");
-			auto rigidBody = dragon->addComponent<Component::RigidBody>(0.0f);
-			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_dragon");
-			rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
-			rigidBody->getShape().setMargin(0.001f);
-			rigidBody->getBody().setFriction(1.0f);
-			rigidBody->getBody().setRestitution(0.9f);
 			auto ae = dragon->addComponent<Component::AudioEmitter>();
 			auto roarSound = scene->getInstance<AudioManager>()->getAudio("roar");
 			ae->setAudio(roarSound, "roar", CHANNEL_GROUP_EFFECT);

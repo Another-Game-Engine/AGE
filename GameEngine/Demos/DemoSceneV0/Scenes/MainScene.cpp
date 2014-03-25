@@ -101,6 +101,7 @@ bool 			MainScene::userStart()
 		auto camera = _heros->addComponent<Component::CameraComponent>();
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		camera->fboSize = screenSize;
+		camera->sampleNbr = 1; // TODO DELETE
 		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
 
@@ -279,7 +280,6 @@ bool 			MainScene::userStart()
 	auto camera = _heros->getComponent<Component::CameraComponent>();
 	camera->initFrameBuffer();
 	OpenGLTools::Framebuffer &current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;
-	camera->lookAtTransform = glm::mat4(0.00920833f, 0.997272074f, -0.0732367858f, 0.0f, 0.999957561f, -0.00918360148f, 0.000674417242f, 0.0f, -0.0f, 0.0732398927f, 0.9973314394f, 0.0f, 0.120114207f, 57.09635993f, -4.41358471f, 1.0f);
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	PubSub t(getInstance<PubSub::Manager>());
 	t.broadCast(PubSubKey("fboInceptionId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
