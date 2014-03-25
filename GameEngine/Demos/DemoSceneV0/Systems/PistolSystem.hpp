@@ -42,7 +42,7 @@ private:
 				glm::vec3 from, to;
 				scene->getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 				auto e = scene->createEntity();
-				e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(from + to * 1.5f)));
+				e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(from + to * 3.0f)));
 				e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.23f)));
 				auto mesh = e->addComponent<Component::MeshRenderer>(scene->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
@@ -50,7 +50,7 @@ private:
 				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
 				rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 8.0f));
 				rigidBody->getBody().setFriction(1.0f);
-				rigidBody->getBody().setRestitution(0.9f);
+				rigidBody->getBody().setRestitution(1.0f);
 				e->addTag(MyTags::BULLET_TAG);
 				_shots.push(e);
 			}

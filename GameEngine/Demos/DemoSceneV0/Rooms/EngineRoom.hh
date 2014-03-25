@@ -2,6 +2,8 @@
 
 #include "Room.hpp"
 #include <map>
+class DemoCatSystem;
+
 
 struct EngineRoom : public Room
 {
