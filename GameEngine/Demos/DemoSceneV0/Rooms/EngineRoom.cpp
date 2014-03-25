@@ -9,6 +9,7 @@
 #include <Systems/TransformationRegisterSystem.hpp>
 #include <Systems/HotZoneSystem.hpp>
 #include <Components/CollisionBody.hpp>
+#include <Systems/PistolSystem.hpp>
 
 	EngineRoom::EngineRoom(std::weak_ptr<AScene> scene)
 		: Room(scene)
@@ -55,31 +56,6 @@
 			e->addComponent<Component::TransformationRegister>("engine-room-pointlight-" + std::to_string(i));
 	//		e->addComponent<Component::EntityPlacable>("engine-room-pointlight-" + std::to_string(i));
 			map["engine-room-pointlight-" + std::to_string(i)] = e;
-		}
-
-		///
-		/// CAT
-		///
-		{
-			auto cat = scene->createEntity();
-			cat->setLocalTransform(glm::translate(cat->getLocalTransform(), glm::vec3(0)));
-			cat->setLocalTransform(glm::scale(cat->getLocalTransform(), glm::vec3(1.0f)));
-			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__cat");
-			if (!meshObj)
-				return false;
-			auto meshComponent = cat->addComponent<Component::MeshRenderer>(meshObj);
-			meshComponent->setShader("MaterialBasic");
-			auto rigidBody = cat->addComponent<Component::RigidBody>(0.0f);
-			rigidBody->setMass(0.0f);
-			rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_cat");
-			rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
-			rigidBody->getShape().setMargin(0.001f);
-			rigidBody->getBody().setFriction(1.0f);
-			rigidBody->getBody().setRestitution(0.9f);
-
-		//	cat->addComponent<Component::EntityPlacable>("engine-room-gros-chat");
-			cat->addComponent<Component::TransformationRegister>("engine-room-gros-chat");
-			map["cat"] = cat;
 		}
 
 		//
@@ -223,6 +199,8 @@
 			e->addComponent<Component::EntityPlacable>("multiscene-text-sprite");
 			map["multiscene-text-sprite"] = e;
 		}
+		scene->activateSystem<DemoCatSystem>();
+		scene->activateSystem<PistolSystem>();
 
 		return true;
 	}
@@ -235,5 +213,6 @@
 		{
 			scene->destroy(e.second);
 		}
+		scene->deactivateSystem<DemoCatSystem>();
 		return true;
 	}

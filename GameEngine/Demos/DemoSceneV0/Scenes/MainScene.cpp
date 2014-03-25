@@ -30,6 +30,7 @@
 #include <Systems/SceneInSceneSystem.hpp>
 #include <Systems/SlidesSystem.hpp>
 #include <Systems/AudioSystem.hpp>
+#include <Systems/DemoCatSystem.hpp>
 #include <MyTags.hpp>
 
 // SDL
@@ -71,6 +72,8 @@ bool 			MainScene::userStart()
 	addSystem<SceneInSceneSystem>(43);
 	addSystem<SlidesSystem>(44);
 	addSystem<AudioSystem>(45);
+	addSystem<DemoCatSystem>(46);
+	deactivateSystem<DemoCatSystem>();
 	deactivateSystem<PistolSystem>();
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights

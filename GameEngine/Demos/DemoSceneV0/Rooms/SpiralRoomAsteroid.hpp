@@ -69,6 +69,13 @@ protected:
 			e->addComponent<Component::EntityPlacable>("fbo-asteroid");
 			map["fbo-asteroid"] = e;
 		}
+		{
+			auto e = scene->createEntity();
+			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Buttons", "notice_asteroid"));
+			e->addComponent<Component::TransformationRegister>("notice_asteroid");
+			e->addComponent<Component::EntityPlacable>("notice_asteroid");
+			map["notice_asteroid"] = e;
+		}
 		return true;
 	}
 
