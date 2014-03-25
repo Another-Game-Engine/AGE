@@ -36,6 +36,7 @@
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Slides.CPDAnimation"));
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Powerpoint.CPDAnimation"));
 		s->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/PowerpointTroll.CPDAnimation"));
+		s->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__office_chair.cpd"));
 
 		return true;
 	}
@@ -138,6 +139,24 @@
 			e->addComponent<Component::TransformationRegister>("powerpoint-troll-5");
 			e->addComponent<Component::EntityPlacable>("powerpoint-troll-5");
 			trolls.push_back(e);
+		}
+		{
+			for (auto i = 9; i < 10; ++i)
+			{
+				auto e = scene->createEntity();
+				e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.6f)));
+				auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__office_chair");
+				if (!meshObj)
+					return false;
+				auto meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+				meshComponent->setShader("MaterialBasic");
+				auto rigidBody = e->addComponent<Component::RigidBody>(0.0f);
+				rigidBody->setMass(0.0f);
+				rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_office_chair");
+				e->addComponent<Component::TransformationRegister>("office-chair-" + std::to_string(i));
+				e->addComponent<Component::EntityPlacable>("office-chair-" + std::to_string(i));
+				trolls.push_back(e);
+			}
 		}
 		return true;
 	}
