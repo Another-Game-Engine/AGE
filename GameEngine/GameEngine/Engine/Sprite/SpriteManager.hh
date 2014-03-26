@@ -15,7 +15,7 @@ class SpriteManager : public Dependency
 {
 public:
 	SpriteManager()
-		: _vertexManager(nullptr)
+//		: _vertexManager(nullptr)
 	{}
 
 	virtual ~SpriteManager()
@@ -23,13 +23,14 @@ public:
 
 	bool init()
 	{
-		std::array<Attribute, 2> param =
-		{
-			Attribute(GL_FLOAT, sizeof(float), 4),
-			Attribute(GL_FLOAT, sizeof(float), 2),
-		};
-		_vertexManager = std::make_unique<VertexManager<2>>(param);
-		return _vertexManager->init();
+		//std::array<Attribute, 2> param =
+		//{
+		//	Attribute(GL_FLOAT, sizeof(float), 4),
+		//	Attribute(GL_FLOAT, sizeof(float), 2),
+		//};
+		//_vertexManager = std::make_unique<VertexManager<2>>(param);
+		//return _vertexManager->init();
+		return true;
 	}
 
 	bool loadFile(const File &file)
@@ -124,8 +125,10 @@ public:
 				f->_dimensions[i] = dimensions[i].GetUint();
 			}
 
+			auto vm = _dpyManager.lock()->getInstance<VertexManager<4>>();
+
 			// LOAD FRAME
-			if (!f->load(_vertexManager))
+			if (!f->load(vm))
 			{
 				std::cerr << "Frame failed to load." << std::endl;
 			}
@@ -169,7 +172,11 @@ public:
 					ref = tmpRef.find(address->second);
 					animation->_frames.push_back(address->second);
 				}
-				animation->_texture = std::static_pointer_cast<TextureFile>(texture);
+				animation->_material.ambientTex = std::static_pointer_cast<TextureFile>(texture);
+				animation->_material.diffuseTex = std::static_pointer_cast<TextureFile>(texture);
+				animation->_material.specularTex = std::static_pointer_cast<TextureFile>(texture);
+				animation->_material.ambient = glm::vec3(0.8f);
+				animation->_material.diffuse = glm::vec3(0.9f);
 				animation->_steps.push_back(ref->second);
 			}
 			sprite->_animations.insert(std::make_pair(itr->name.GetString(), animation));
@@ -186,6 +193,6 @@ public:
 	}
 
 private:
-	std::unique_ptr<VertexManager<2>> _vertexManager;
+//	std::unique_ptr<VertexManager<2>> _vertexManager;
 	std::map<std::string, std::shared_ptr<Sprite>> _collection;
 };

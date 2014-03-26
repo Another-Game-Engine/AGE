@@ -112,7 +112,7 @@ namespace Component
 			inertia = v;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &_meshName = "NULL")
+		void setCollisionShape(CollisionShape c, const std::string &_meshName = "NULL", short filterGroup = 1, short filterMask = -1)
 		{
 			if (c == UNDEFINED)
 				return;
@@ -176,7 +176,7 @@ namespace Component
 			{
 				_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
-			_manager->getWorld()->addRigidBody(_rigidBody.get());
+			_manager->getWorld()->addRigidBody(_rigidBody.get(), filterGroup, filterMask);
 		}
 
 		void setRotationConstraint(bool x, bool y, bool z)

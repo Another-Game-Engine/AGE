@@ -12,7 +12,7 @@ public:
 	virtual void updateBegin(double time) { }
 	virtual void updateEnd(double time) { }
 	virtual void mainUpdate(double time);
-	virtual void initialize();
+	virtual bool initialize();
 
 	void		useBloom(bool use) { _useBloom = use; }
 	void		setBloomSigma(float sigma) { _bloomSigma = sigma; }

@@ -67,11 +67,13 @@ glm::mat4 const  		&EntityData::getLocalTransform()
 }
 
 //  TO DELETE
-void   			        EntityData::setLocalTransform(const glm::mat4 &t)
+void   			        EntityData::setLocalTransform(const glm::mat4 &t, bool forceMovedFlag)
 {
 	_flags |= HAS_MOVED;
 	_localTransform = t;
 	computeTransformAndUpdateGraphnode();
+	if (forceMovedFlag)
+		_flags |= HAS_MOVED;
 }
 
 glm::mat4 const			&EntityData::getGlobalTransform() const
@@ -197,12 +199,14 @@ void                    EntityData::addTag(std::size_t tag)
 {
 	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.add(tag);
+	broadCast("entityTagged" + std::to_string(tag), _handle);
 }
 
 void                    EntityData::removeTag(std::size_t tag)
 {
 	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.remove(tag);
+	broadCast("entityUntagged" + std::to_string(tag), _handle);
 }
 bool                    EntityData::isTagged(std::size_t tag) const
 {
@@ -228,6 +232,10 @@ void EntityData::reset()
 	_globalTransform = glm::mat4(1);
 	_localTransform = glm::mat4(1);
 	_code.reset();
+	for (std::size_t i = 0; i < MAX_TAG_NUMBER; ++i)
+	{
+		broadCast("entityUntagged" + std::to_string(i), _handle);
+	}
 	for (std::size_t i = 0; i < _components.size(); ++i)
 	{
 		std::size_t id = i + MAX_TAG_NUMBER;

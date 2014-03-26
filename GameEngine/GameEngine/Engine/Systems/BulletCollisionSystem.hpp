@@ -1,11 +1,11 @@
 #ifndef   __BULLET_COLLISION_SYSTEM_HPP__
 # define  __BULLET_COLLISION_SYSTEM_HPP__
 
-#include <Utils/BtConversion.hpp>
+#include <Physic/Utils/BtConversion.hpp>
 #include <Systems/System.h>
 #include <Components/CollisionBody.hpp>
 #include <Entities/EntityData.hh>
-#include <Managers/BulletCollisionManager.hpp>
+#include <Physic/BulletCollisionManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 
@@ -51,9 +51,10 @@ private:
 		_manager->getWorld()->performDiscreteCollisionDetection();
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::CollisionBody>();
+		return true;
 	}
 };
 

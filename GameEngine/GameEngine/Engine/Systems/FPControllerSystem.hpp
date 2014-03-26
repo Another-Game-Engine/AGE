@@ -10,6 +10,7 @@
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 #include <Context/SdlContext.hh>
+#include <Utils/MatrixConversion.hpp>
 
 
 class FPControllerSystem : public System
@@ -93,21 +94,21 @@ private:
 		forwardDir.normalize();
 		upDir.normalize();
 		sideDir.normalize();
-		btVector3 walkDirection = btVector3(0.0, 0.0000000001, 0.0);
+		btVector3 walkDirection = btVector3(0.0, 0.0000001, 0.0);
 		bool isRunning = false;
 		if (controls[Component::FPController::RUN])
 			isRunning = true;
 		if (controls[Component::FPController::LEFT])
-			walkDirection += sideDir * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * ftime;
+			walkDirection += sideDir * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed);
 
 		if (controls[Component::FPController::RIGHT])
-			walkDirection -= sideDir  * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed) * ftime;
+			walkDirection -= sideDir  * (isRunning ? fp->sideRunSpeed : fp->sideWalkSpeed);
 
 		if (controls[Component::FPController::FORWARD])
-			walkDirection += forwardDir * (isRunning ? fp->forwardRunSpeed : fp->forwardWalkSpeed) * ftime;
+			walkDirection += forwardDir * (isRunning ? fp->forwardRunSpeed : fp->forwardWalkSpeed);
 
 		if (controls[Component::FPController::BACKWARD])
-			walkDirection -= forwardDir * (isRunning ? fp->backwardRunSpeed : fp->backwardWalkSpeed) * ftime;
+			walkDirection -= forwardDir * (isRunning ? fp->backwardRunSpeed : fp->backwardWalkSpeed);
 
 
 		// HORIZONTAL ROTATION APPLIED ON GHOST
@@ -130,10 +131,11 @@ private:
 		controller.setWalkDirection(walkDirection);
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::FPController>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
+		return true;
 	}
 };
 

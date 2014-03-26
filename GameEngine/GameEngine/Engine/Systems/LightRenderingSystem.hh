@@ -24,7 +24,8 @@ public:
 	virtual void updateBegin(double time) { }
 	virtual void updateEnd(double time) { }
 	virtual void mainUpdate(double time);
-	virtual void initialize();
+	virtual bool initialize();
+	void drawSprites();
 
 private:
 	// Filters
@@ -32,6 +33,7 @@ private:
 	EntityFilter						_spotLightFilter;
 	EntityFilter						_meshRendererFilter;
 	EntityFilter						_cameraFilter;
+	EntityFilter                        _spriteFilter;
 
 	// Point lights uniform buffer
 	PointLightData						_contiguousPointLights[MAX_LIGHT_NBR];

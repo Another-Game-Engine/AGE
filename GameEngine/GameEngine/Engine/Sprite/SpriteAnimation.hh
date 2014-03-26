@@ -3,6 +3,7 @@
 #include <Sprite/SpriteFrame.hh>
 #include <memory>
 #include <MediaFiles/TextureFile.hpp>
+#include <MediaFiles/MaterialFile.hpp>
 
 class SpriteAnimation
 {
@@ -11,21 +12,20 @@ public:
 	~SpriteAnimation(){}
 
 	inline const std::string &getName() const { return _name; }
-	inline std::shared_ptr<TextureFile> getTexture() const { return _texture; }
+	inline MaterialFile::Material &getMaterial() { return _material; }
 
-	void update(std::size_t &index) const
+	void draw(std::uint32_t index) const
 	{
-		index = (index + 1) % _steps.size();
+		_frames[_steps[static_cast<std::size_t>(index)]]->draw();
 	}
 
-	void draw(std::size_t index) const
-	{
-		_frames[_steps[index]]->draw();
-	}
-private:
-	std::vector<std::size_t> _steps;
+	inline std::uint32_t getStepNumber() const { return _steps.size(); }
+//private:
+	bool _alphaTest = true;
+	std::vector<std::uint32_t> _steps;
 	std::vector<std::shared_ptr<SpriteFrame>> _frames;
-	std::shared_ptr<TextureFile> _texture;
+	//	std::shared_ptr<TextureFile> _texture;
+	MaterialFile::Material _material;
 	std::string _name;
 	friend class SpriteManager;
 };

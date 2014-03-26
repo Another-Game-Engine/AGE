@@ -6,9 +6,9 @@
 #include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/Engine.hh>
-#include <Managers/BulletCollisionManager.hpp>
+#include <Physic/BulletCollisionManager.hpp>
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
-#include <Utils/BtConversion.hpp>
+#include <Physic/Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Core/AScene.hh>
 #include <Components/CollisionLayers.hpp>
@@ -28,7 +28,8 @@ namespace Component
 			UNDEFINED
 		} CollisionShape;
 
-		CollisionBody() :
+		CollisionBody()
+			: ComponentBase(),
 			_manager(nullptr),
 			shapeType(UNDEFINED),
 			meshName(""),
@@ -37,28 +38,26 @@ namespace Component
 		{
 		}
 
+		void init(float _mass = 1.0f)
+		{
+			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene()->getInstance<BulletCollisionManager>());
+			assert(_manager != nullptr);
+		}
+
 		virtual void reset()
 		{
 			if (_body != nullptr)
 			{
-				_manager->getWorld()->removeCollisionObject(_body);
-				delete _body;
+				_manager->getWorld()->removeCollisionObject(_body.get());
 				_body = nullptr;
 			}
 			if (_collisionShape != nullptr)
 			{
-				delete _collisionShape;
 				_collisionShape = nullptr;
 			}
 			shapeType = UNDEFINED;
 		}
 
-		bool init()
-		{
-			_manager = _entity->getScene()->getInstance<BulletCollisionManager>();
-			assert(_manager != nullptr);
-			return true;
-		}
 
 		btCollisionShape &getShape()
 		{
@@ -68,80 +67,79 @@ namespace Component
 
 		btCollisionObject &getBody()
 		{
-			assert(_body != nullptr && "Collision body is NULL. Tips : Have you setAcollisionShape to Component ?.");
+			assert(_body != nullptr && "RigidBody is NULL. Tips : Have you setAcollisionShape to Component ?.");
 			return *_body;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &_meshName = "")
+		void setCollisionShape(CollisionShape c, const std::string &_meshName = "NULL", short filterGroup = 1, short filterMask = -1)
 		{
 			if (c == UNDEFINED)
 				return;
+			auto mediaManager = _entity->getScene()->getInstance<AssetsManager>();
 			meshName = _meshName;
-			reset();
+			_reset();
 			shapeType = c;
 			btTransform transform;
 			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
 			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
-			std::cout << scale.x << " " << scale.y << " " << scale.z << std::endl;
 			glm::vec3 rot = rotFromMat4(_entity->getLocalTransform(), true);
 			transform.setIdentity();
 			transform.setOrigin(convertGLMVectorToBullet(position));
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
+
 			if (c == BOX)
 			{
-				_collisionShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));//new btBoxShape(halfScale);
+				_collisionShape = std::shared_ptr<btCollisionShape>(new btBoxShape(btVector3(0.5, 0.5, 0.5)));
 			}
 			else if (c == SPHERE)
 			{
-				_collisionShape = new btSphereShape(1);//new btSphereShape(scale.x);
+				_collisionShape = std::shared_ptr<btCollisionShape>(new btSphereShape(0.5));
 			}
 			else if (c == MESH)
 			{
-				auto mesh = _entity->getScene()->getInstance<AssetsManager>()->get<ObjFile>(meshName);
-				auto &geo = mesh->geometries[0]; // DIRTY HACK TEMPORARY
-				// NEED TO REPLACE MESH BY MESH GROUP !
-				btScalar *t = new btScalar[geo.vertices.size() * 3]();
-				for (unsigned int i = 0; i < geo.vertices.size(); ++i)
+				auto media = mediaManager->get(_meshName);
+				if (!media)
+					return;
+				if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
 				{
-					t[i * 3] = geo.vertices[i].x;
-					t[i * 3 + 1] = geo.vertices[i].y;
-					t[i * 3 + 2] = geo.vertices[i].z;
+					auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(mediaManager->get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btConvexHullShape(*s->shape.get()));
 				}
-				btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
-				btShapeHull *hull = new btShapeHull(tmp);
-				btScalar margin = tmp->getMargin();
-				hull->buildHull(margin);
-				tmp->setUserPointer(hull);
-				btConvexHullShape *s = new btConvexHullShape();
-				for (int i = 0; i < hull->numVertices(); ++i)
+				else if (media->getType() == AMediaFile::COLLISION_SHAPE_STATIC)
 				{
-					s->addPoint(hull->getVertexPointer()[i], false);
+					auto s = std::dynamic_pointer_cast<CollisionShapeStaticFile>(mediaManager->get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btScaledBvhTriangleMeshShape(s->shape.get(), btVector3(1, 1, 1)));
 				}
-				s->recalcLocalAabb();
-				_collisionShape = s;
-				delete[] t;
-				delete hull;
-				delete tmp;
+				else if (media->getType() == AMediaFile::COLLISION_BOX)
+				{
+					auto s = std::dynamic_pointer_cast<CollisionBoxFile>(mediaManager->get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btBoxShape(*s->shape.get()));
+				}
+				else if (media->getType() == AMediaFile::COLLISION_SPHERE)
+				{
+					auto s = std::dynamic_pointer_cast<CollisionSphereFile>(mediaManager->get(_meshName));
+					_collisionShape = std::shared_ptr<btCollisionShape>(new btSphereShape(*s->shape.get()));
+				}
+				else
+					std::cerr << "Collision mesh not found." << std::endl;
 			}
 			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
-			_body = new btCollisionObject();
+			_body = std::shared_ptr<btCollisionObject>(new btCollisionObject());// (mass, _motionState.get(), _collisionShape.get(), inertia));
+			_body->setCollisionShape(_collisionShape.get());
 			_body->setUserPointer(&_entity);
-			_body->setCollisionShape(_collisionShape);
-			_body->setWorldTransform(transform);
-			_manager->getWorld()->addCollisionObject(_body, btCollisionObject::CF_STATIC_OBJECT, btCollisionObject::CF_STATIC_OBJECT);
+			_manager->getWorld()->addCollisionObject(_body.get());
 		}
 
 		virtual ~CollisionBody(void)
 		{
-			if (_body)
+			if (_body != nullptr)
 			{
-				_manager->getWorld()->removeCollisionObject(_body);
-				delete _body;
+				_manager->getWorld()->removeCollisionObject(_body.get());
+				_body = nullptr;
 			}
-			if (_collisionShape)
-				delete _collisionShape;
+			if (_collisionShape != nullptr)
+				_collisionShape = nullptr;
 		}
-
 
 		//////
 		////
@@ -152,6 +150,7 @@ namespace Component
 		{
 			auto res = new CollisionBody();
 			res->setEntity(e);
+			res->init();
 			ar(*res);
 			return res;
 		}
@@ -172,14 +171,27 @@ namespace Component
 
 		CollisionShape shapeType;
 		std::string meshName;
-	private:
 		std::shared_ptr<BulletCollisionManager> _manager;
-		btCollisionShape *_collisionShape;
-		btCollisionObject *_body;
+		std::shared_ptr<btCollisionShape> _collisionShape;
+		std::shared_ptr<btCollisionObject> _body;
+
+	private:
 		CollisionBody(CollisionBody const &);
 		CollisionBody &operator=(CollisionBody const &);
-	};
 
+		void _reset()
+		{
+			if (_body != nullptr)
+			{
+				_manager->getWorld()->removeCollisionObject(_body.get());
+				_body = nullptr;
+			}
+			if (_collisionShape != nullptr)
+			{
+				_collisionShape = nullptr;
+			}
+		}
+	};
 }
 
 #endif //!__COLLISION_BODY_HPP__

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -61,6 +61,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetsConvertor", "Tools\As
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8} = {99FC20C2-9AD1-4049-BB11-B369C42FD6A8}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DemoSceneV0", "Demos\DemoSceneV0\DemoSceneV0.vcxproj", "{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,13 +101,13 @@ Global
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Debug|x64.Build.0 = Debug|x64
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Release|Any CPU.ActiveCfg = Release|Win32
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Release|Mixed Platforms.Build.0 = Release|x64
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Release|Win32.ActiveCfg = Release|Win32
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Release|Win32.Build.0 = Release|Win32
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Release|x64.ActiveCfg = Release|x64
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F}.Release|x64.Build.0 = Release|x64
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8}.Debug|Win32.ActiveCfg = Debug|Win32
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8}.Debug|Win32.Build.0 = Debug|Win32
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8}.Debug|x64.ActiveCfg = Debug|x64
@@ -129,6 +134,20 @@ Global
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.Release|Win32.Build.0 = Release|Win32
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.Release|x64.ActiveCfg = Release|x64
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.Release|x64.Build.0 = Release|x64
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|Mixed Platforms.Build.0 = Debug|x64
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|Win32.Build.0 = Debug|Win32
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|x64.ActiveCfg = Debug|x64
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|x64.Build.0 = Debug|x64
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|Any CPU.ActiveCfg = Release|Win32
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|Mixed Platforms.Build.0 = Release|x64
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|Win32.ActiveCfg = Release|Win32
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|Win32.Build.0 = Release|Win32
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|x64.ActiveCfg = Release|x64
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,6 +155,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8} = {9D3EF6A3-621D-4807-90CB-705CCD3A8FB8}
 		{CE40F8DC-055E-424B-A0D0-1C020EB3632F} = {E92BB286-351B-420A-B152-DB0511195EFC}
+		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5} = {E92BB286-351B-420A-B152-DB0511195EFC}
 		{EB423B39-F564-498E-B291-0D9676AF09B5} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
 	EndGlobalSection
 EndGlobal

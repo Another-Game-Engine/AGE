@@ -180,14 +180,15 @@ vec3		computeSpotLightsInfluence(vec3 diffuseColor, vec3 specularColor)
 void main(void)
 {
 	vec3	ambientColor = 0.05f * texture2D(fTexture0, fTexCoord).rgb * ambient;
-	vec3	diffuseColor = texture2D(fTexture0, fTexCoord).rgb * diffuse;
-	vec3	specularColor = texture2D(fTexture0, fTexCoord).rgb * specular;
+	vec4	diffuseColor = texture2D(fTexture1, fTexCoord) * vec4(diffuse, 1);
+	vec3	specularColor = texture2D(fTexture2, fTexCoord).rgb * specular;
 
-	vec3	fragNormal = normalize(fNormal.xyz);
+	if (diffuseColor.a < 0.99)
+		discard;
 
 	vec4	finalColor = vec4(ambientColor, 1);
-	finalColor.xyz += computePointLightsInfluence(diffuseColor, specularColor);
-	finalColor.xyz += computeSpotLightsInfluence(diffuseColor, specularColor);
+	finalColor.xyz += computePointLightsInfluence(diffuseColor.xyz, specularColor);
+	finalColor.xyz += computeSpotLightsInfluence(diffuseColor.xyz, specularColor);
 
 	FragColor = finalColor;
 }

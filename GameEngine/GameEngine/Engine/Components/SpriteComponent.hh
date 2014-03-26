@@ -2,7 +2,6 @@
 
 #include "Component.hh"
 #include <Sprite/SpriteManager.hh>
-#include <OpenGL/Shader.hh>
 
 namespace Component
 {
@@ -11,24 +10,34 @@ namespace Component
 		Sprite()
 		: Component::ComponentBase<Sprite>()
 		, animation(nullptr)
-		, shader(nullptr)
-		, fps(60)
+		, delay(1.0f / 3.0f)
+		, timeCounter(0.0f)
 		, index(0)
 		{}
 
 		virtual ~Sprite(void)
 		{}
 
-		void init(std::shared_ptr<SpriteAnimation> _animation, std::shared_ptr<OpenGLTools::Shader> _shader)
+		void init(std::shared_ptr<SpriteAnimation> _animation)
 		{
 			animation = _animation;
-			shader = _shader;
 			index = 0;
 		}
 		virtual void reset()
 		{
+			index = 0;
+			timeCounter = 0.0f;
 			animation = nullptr;
-			shader = nullptr;
+		}
+
+		void update(float time)
+		{
+			timeCounter += time;
+			if (timeCounter >= delay)
+			{
+				index = (index + static_cast<std::uint32_t>(timeCounter / delay)) % animation->getStepNumber();
+				timeCounter = 0;
+			}
 		}
 
 		//////
@@ -56,9 +65,9 @@ namespace Component
 		//////
 
 		std::shared_ptr<SpriteAnimation> animation;
-		std::shared_ptr<OpenGLTools::Shader> shader;
-		float fps;
-		std::size_t index;
+		float delay;
+		float timeCounter;
+		std::uint32_t index;
 	private:
 		Sprite(Sprite const &);
 		Sprite &operator=(Sprite const &);

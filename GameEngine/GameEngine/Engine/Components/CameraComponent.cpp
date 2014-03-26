@@ -12,7 +12,10 @@ namespace Component
 		: ComponentBase<CameraComponent>(),
 		viewport(0),
 		projection(glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f)),
-		lookAtTransform(1)
+		lookAtTransform(1),
+		fboSize(800, 600),
+		sampleNbr(1),
+		blitOnScreen(true)
 	{}
 
 	CameraComponent::~CameraComponent(void)

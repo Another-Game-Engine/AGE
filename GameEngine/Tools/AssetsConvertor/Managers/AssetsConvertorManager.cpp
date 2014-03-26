@@ -26,10 +26,16 @@ void AssetsConvertorManager::setOutputDirectory(const std::string &directory)
 	_outputDirectory = File(directory);
 }
 
+void AssetsConvertorManager::setInputDirectory(const std::string &directory)
+{
+	_inputDirectory = File(directory);
+}
+
+
 std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string &filename)
 {
 	const File file(filename);
-
+	assert(file.exists() && "File do not exists.");
 	for (auto &e : _convertors)
 	{
 		if (e.second->supportFile(file))

@@ -44,8 +44,9 @@ public:
 	std::shared_ptr<T> addSystem(std::size_t priority)
 	{
 		auto tmp = std::make_shared<T>(std::static_pointer_cast<AScene>(shared_from_this()));
+		if (!tmp->init())
+			return nullptr;
 		_systems.insert(std::make_pair(priority, tmp));
-		tmp->init();
 		return tmp;
 	}
 
@@ -72,6 +73,29 @@ public:
 				return;
 			}
 		}
+	}
+
+
+	template <typename T>
+	bool activateSystem()
+	{
+		for (auto &e : _systems)
+		{
+			if (typeid(*e.second.get()).name() == typeid(T).name())
+				return e.second->setActivation(true);
+		}
+		return false;
+	}
+
+	template <typename T>
+	bool deactivateSystem()
+	{
+		for (auto &e : _systems)
+		{
+			if (typeid(*e.second.get()).name() == typeid(T).name())
+				return e.second->setActivation(false);
+		}
+		return false;
 	}
 
 	template <typename Archive>

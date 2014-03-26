@@ -128,7 +128,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -188,6 +188,7 @@
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -206,6 +207,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
     <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
@@ -265,9 +267,12 @@
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
+    <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
     <ClInclude Include="Engine\Systems\DownSampleSystem.hh" />
     <ClInclude Include="Engine\Components\SpotLight.hh" />
+    <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Engine\Systems\PostFxSystem.hh" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />

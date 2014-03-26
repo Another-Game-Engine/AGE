@@ -57,12 +57,13 @@ protected:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_balls.requireTag(BALL_TAG);
 //		_balls.requireComponent<Component::AudioEmitter>();
 		_balls.requireComponent<Component::Collision>();
 		_heros.requireComponent<Component::FPController>();
 		_heros.requireComponent<Component::AudioEmitter>();
+		return true;
 	}
 };

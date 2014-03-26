@@ -6,9 +6,8 @@
 #include <Context/IRenderContext.hh>
 #include <glm/gtc/matrix_transform.hpp>
 
-FontManager::FontManager(std::weak_ptr<Engine> engine)
+FontManager::FontManager()
 : Dependency()
-, PubSub(engine.lock()->getInstance<PubSub::Manager>())
 {}
 
 FontManager::~FontManager()
@@ -16,7 +15,8 @@ FontManager::~FontManager()
 
 bool FontManager::init()
 {
-	globalSub(std::string("endOfFrame"), [&](){
+	_pubSub = std::make_unique<PubSub>(_dpyManager.lock()->getInstance<PubSub::Manager>());
+	_pubSub->globalSub(std::string("endOfFrame"), [&](){
 		_drawList();
 	});
 
@@ -72,17 +72,16 @@ bool FontManager::isLoaded(const std::string &name)
 
 void FontManager::_drawList()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDrawBuffer(GL_BACK);
-	glDepthFunc(GL_ALWAYS);
+	glDisable(GL_ALPHA_TEST);
+	glEnable(GL_BLEND);
 
 	for (auto &e : _toDraw)
 	{
 		_draw2DString(e.str, e.fontName, e.size, e.position, e.color, e.shader);
 	}
 	_toDraw.clear();
-
-	glDepthFunc(GL_LESS);
+	glDisable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
 }
 
 void FontManager::_draw2DString(const std::string &text,
@@ -136,18 +135,29 @@ void FontManager::_draw2DString(const std::string &text,
 	auto transformationID = glGetUniformLocation(s->getId(), "transformation");
 	auto glyphWidth = 0.0f;
 	float lastX = static_cast<float>(position.x);
+	float lineWidth = 0.0f;
 	for (std::size_t i = 0; i < text.size(); ++i)
 	{
 		std::size_t l = std::size_t(text[i] - ASCII_BEGIN);
-		glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
+		if (l > ASCII_END)
+			glyphWidth = size;
+		else
+			glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
 		if (text[i] == ' ')
 		{
 			lastX = sz / 3.0f;
+		}
+		else if (text[i] == '\n')
+		{
+			transformation = glm::translate(transformation, glm::vec3(-lineWidth, f._glyphSize, 0));
+			lineWidth = 0;
+			continue;
 		}
 		else
 		{
 			lastX = glyphWidth;
 		}
+		lineWidth += lastX;
 		glUniformMatrix4fv(transformationID, 1, GL_FALSE, glm::value_ptr(transformation));
 		f._map[l].buffer->draw(GL_QUADS);
 		transformation = glm::translate(transformation, glm::vec3(lastX, 0, 0));
