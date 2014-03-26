@@ -14,12 +14,12 @@ FPController::FPController() : ComponentBase<FPController>()
 , _shape(nullptr)
 , _manager(nullptr)
 , yOrientation(0.0f)
-, forwardWalkSpeed(8.0f)
-, forwardRunSpeed(15.0f)
-, backwardWalkSpeed(8.0f)
-, backwardRunSpeed(15.0f)
-, sideWalkSpeed(5.0f)
-, sideRunSpeed(8.0f)
+, forwardWalkSpeed(0.1f)
+, forwardRunSpeed(0.3f)
+, backwardWalkSpeed(0.1f)
+, backwardRunSpeed(0.3f)
+, sideWalkSpeed(0.1f)
+, sideRunSpeed(0.3f)
 , rotateXSpeed(0.01f)
 , rotateYSpeed(0.15f)
 , jumpSpeed(2.0f)
@@ -37,13 +37,13 @@ FPController::~FPController()
 {
 }
 
-void FPController::init()
+void FPController::init(short filterGroup, short filterMask)
 {
 	_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene()->getInstance<BulletCollisionManager>());
-	setKey(LEFT, /*SDLK_a*/ SDLK_q);
-	setKey(RIGHT, /*SDLK_d*/SDLK_d);
-	setKey(FORWARD, /*SDLK_w*/SDLK_z);
-	setKey(BACKWARD, /*SDLK_s*/SDLK_s);
+	setKey(LEFT, SDLK_a);
+	setKey(RIGHT, SDLK_d);
+	setKey(FORWARD, SDLK_w);
+	setKey(BACKWARD, SDLK_s);
 	setKey(JUMP, SDLK_SPACE);
 	setKey(RUN, SDLK_LSHIFT);
 	controls.fill(false);
@@ -60,13 +60,13 @@ void FPController::init()
 	_shape = new btCylinderShape(convertGLMVectorToBullet(scale));
 
 	_ghost->setCollisionShape(_shape);
-	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+//	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
 	_ghost->setWorldTransform(transform);
 	_ghost->setRestitution(0);
 	_ghost->setActivationState(DISABLE_DEACTIVATION);
 	_ghost->setUserPointer(&(_entity));
 	_controller = new btKinematicCharacterController(_ghost, _shape, btScalar(0.1));
-	_manager->getWorld()->addCollisionObject(_ghost, btBroadphaseProxy::KinematicFilter);
+	_manager->getWorld()->addCollisionObject(_ghost, filterGroup, filterMask);
 	_manager->getWorld()->addAction(_controller);
 	_manager->getWorld()->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 	justJump = false;

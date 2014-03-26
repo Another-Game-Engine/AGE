@@ -11,7 +11,7 @@ public:
 	virtual void updateBegin(double time) { }
 	virtual void updateEnd(double time) { }
 	virtual void mainUpdate(double time);
-	virtual void initialize();
+	virtual bool initialize();
 
 private:
 	EntityFilter						_cameraFilter;

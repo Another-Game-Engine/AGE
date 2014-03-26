@@ -21,7 +21,9 @@ public:
 	virtual ~AssetsConvertorManager();
 
 	void setOutputDirectory(const std::string &directory);
+	void setInputDirectory(const std::string &directory);
 	inline const File &getOutputDirectory() const { return _outputDirectory; }
+	inline const File &getInputDirectory() const { return _inputDirectory; }
 
 	template <typename T>
 	void registerConvertor()
@@ -39,6 +41,7 @@ public:
 	void clear();
 private:
 	File _outputDirectory;
+	File _inputDirectory;
 	std::map < std::size_t, std::unique_ptr<AConvertor> > _convertors;
 };
 

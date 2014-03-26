@@ -18,11 +18,11 @@ Engine::~Engine()
 {
 }
 
-bool        Engine::init()
+bool        Engine::init(int mode, unsigned int swidth, unsigned int sheight, const char *name)
 {
 	auto context = getInstance<IRenderContext>();
 
-	if (!context->start(1920, 1080, "Mini solar system"))
+	if (!context->start(mode, swidth, sheight, name))
 		return (false);
 
 	if (glewInit() != GLEW_OK)
@@ -32,9 +32,7 @@ bool        Engine::init()
 	}
 	if (!getInstance<Renderer>()->init())
 		return false;
-//  	glClearColor(0, 0, 0, 1);
-//	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	return true;
 }
@@ -59,8 +57,6 @@ bool 		Engine::update()
     inputs->clearInputs();
 	context->updateEvents(*inputs.get());
 	sceneManager->update(time);
-
-	getInstance<PubSub::Manager>()->pub(PubSubKey(std::string("endOfFrame")));
 	context->flush();
 
 	return (sceneManager->userUpdate(time));

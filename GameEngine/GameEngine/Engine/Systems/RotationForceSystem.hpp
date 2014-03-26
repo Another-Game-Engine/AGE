@@ -39,9 +39,10 @@ private:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::RotationForce>();
+		return true;
 	}
 };
 

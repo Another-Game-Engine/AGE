@@ -26,6 +26,11 @@ public:
 		_instances.clear();
 	}
 
+	std::weak_ptr<DependenciesInjector> getDependenciesInjectorParent()
+	{
+		return _parent;
+	}
+
 	template <typename T>
 	std::shared_ptr<T> getInstance()
 	{

@@ -55,14 +55,14 @@ bool Font::FontSize::load(std::unique_ptr<VertexManager<2>> &vm)
 	{
 		auto glyphWidth = (float)glyph.width;
 		vertices[0] = glm::vec4(0, 0, 0, 1);
-		vertices[1] = glm::vec4(glyphWidth, 0, 0, 1);
+		vertices[1] = glm::vec4(0, (float)(_size), 0, 1);
 		vertices[2] = glm::vec4(glyphWidth, (float)(_size), 0, 1);
-		vertices[3] = glm::vec4(0, (float)(_size), 0, 1);
+		vertices[3] = glm::vec4(glyphWidth, 0, 0, 1);
 
 		uvs[0] = glm::vec2(glyph.uvs[0], glyph.uvs[1]);
-		uvs[1] = glm::vec2(glyph.uvs[2], glyph.uvs[1]);
+		uvs[1] = glm::vec2(glyph.uvs[0], glyph.uvs[3]);
 		uvs[2] = glm::vec2(glyph.uvs[2], glyph.uvs[3]);
-		uvs[3] = glm::vec2(glyph.uvs[0], glyph.uvs[3]);
+		uvs[3] = glm::vec2(glyph.uvs[2], glyph.uvs[1]);
 
 		std::array<Data, 2> data =
 		{

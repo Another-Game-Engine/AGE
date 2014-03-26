@@ -68,27 +68,42 @@ public:
 		{
 			auto path = file.getFolder() + m.ambient_texname;
 			material.ambientTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
-			p->incrementChilds();
+		}
+		else
+		{
+			material.ambientTex = std::static_pointer_cast<TextureFile>(_manager->load("../../Assets/white1px.tga"));
 		}
 		if (m.diffuse_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.diffuse_texname;
 			material.diffuseTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
-			p->incrementChilds();
 		}
-
+		else
+		{
+			material.diffuseTex = std::static_pointer_cast<TextureFile>(_manager->load("../../Assets/white1px.tga"));
+		}
 		if (m.specular_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.specular_texname;
 			material.specularTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
-			p->incrementChilds();
+		}
+		else
+		{
+			material.specularTex = std::static_pointer_cast<TextureFile>(_manager->load("../../Assets/white1px.tga"));
 		}
 		if (m.normal_texname.size() > 0)
 		{
 			auto path = file.getFolder() + m.normal_texname;
 			material.normalTex = std::static_pointer_cast<TextureFile>(_manager->load(path));
-			p->incrementChilds();
 		}
+		else
+		{
+			material.normalTex = std::static_pointer_cast<TextureFile>(_manager->load("../../Assets/white1px.tga"));
+		}
+		p->incrementChilds();
+		p->incrementChilds();
+		p->incrementChilds();
+		p->incrementChilds();
 	}
 
 };

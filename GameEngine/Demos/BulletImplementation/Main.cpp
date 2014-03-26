@@ -41,7 +41,7 @@ int			main(int ac, char **av)
 	e->setInstance<AudioManager>()->init();
 
 	// init engine
-	if (e->init() == false)
+	if (e->init(0, 1920, 1080, "") == false)
 		return (EXIT_FAILURE);
 
 	std::array<Attribute, 4> param = //-V112
@@ -53,19 +53,20 @@ int			main(int ac, char **av)
 	};
 
 	e->setInstance<VertexManager<4>>(param)->init();
-	e->setInstance<FontManager>(e)->init();
+	e->setInstance<FontManager>()->init();
 	e->setInstance<SpriteManager>()->init();
 
 	// add scene
-	e->getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");
-	//e->getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
+	//e->getInstance<SceneManager>()->addScene(std::make_shared<BulletDemoScene>(e), "BulletDemo");
+	e->getInstance<SceneManager>()->addScene(std::make_shared<SolarSystemDemoScene>(e), "SolarSystemDemo");
 
 	// bind scene
-	if (!e->getInstance<SceneManager>()->initScene("BulletDemo"))
-		return false;
-	//if (!e->getInstance<SceneManager>()->initScene("SolarSystemDemo"))
+	//if (!e->getInstance<SceneManager>()->initScene("BulletDemo"))
 	//	return false;
-	e->getInstance<SceneManager>()->enableScene("BulletDemo", 0);
+	if (!e->getInstance<SceneManager>()->initScene("SolarSystemDemo"))
+		return false;
+	//e->getInstance<SceneManager>()->enableScene("BulletDemo", 0);
+	e->getInstance<SceneManager>()->enableScene("SolarSystemDemo", 0);
 
 	// lanch engine
 	if (e->start() == false)

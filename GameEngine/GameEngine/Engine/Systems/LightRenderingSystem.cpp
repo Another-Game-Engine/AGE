@@ -7,12 +7,15 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <Components/SpriteComponent.hh>
+
 LightRenderingSystem::LightRenderingSystem(std::weak_ptr<AScene> scene) :
 						System(scene),
 						_pointLightFilter(scene),
 						_spotLightFilter(scene),
 						_meshRendererFilter(scene),
 						_cameraFilter(scene),
+						_spriteFilter(scene),
 						_spotShadowNbr(0),
 						_pointShadowNbr(0),
 						_shadowDimensions(2048, 2048)
@@ -25,12 +28,13 @@ LightRenderingSystem::~LightRenderingSystem()
 	glDeleteFramebuffers(1, &_shadowsFbo);
 }
 
-void LightRenderingSystem::initialize()
+bool LightRenderingSystem::initialize()
 {
 	_pointLightFilter.requireComponent<Component::PointLight>();
 	_spotLightFilter.requireComponent<Component::SpotLight>();
 	_meshRendererFilter.requireComponent<Component::MeshRenderer>();
 	_cameraFilter.requireComponent<Component::CameraComponent>();
+	_spriteFilter.requireComponent<Component::Sprite>();
 
 	auto materialBasic = _scene.lock()->getInstance<Renderer>()->getShader("MaterialBasic");
 
@@ -57,6 +61,7 @@ void LightRenderingSystem::initialize()
 	glGenFramebuffers(1, &_shadowsFbo);
 
 	glEnable(GL_CULL_FACE);
+	return true;
 }
 
 void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuffer> perFrame)
@@ -132,6 +137,8 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 				e->getComponent<Component::MeshRenderer>()->renderRaw();
 			}
 
+			drawSprites();
+
 			_contiguousSpotLights[i].shadowId = shadowNbr;
 
 			++shadowNbr;
@@ -172,7 +179,7 @@ void	LightRenderingSystem::mainUpdate(double time)
 		perFrame->flushChanges();
 
 		if (camera->frameBuffer.isInit() == false)
-			c->getComponent<Component::CameraComponent>()->initFrameBuffer(_scene.lock()->getInstance<IRenderContext>()->getScreenSize(), 1);
+			c->getComponent<Component::CameraComponent>()->initFrameBuffer();
 
 		glViewport(0, 0, camera->frameBuffer.getSize().x, camera->frameBuffer.getSize().y);
 
@@ -205,6 +212,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 	// ----------------------------------------------------
 	// Final Lightning pass
 	// ----------------------------------------------------
+	glDepthMask(GL_FALSE);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glDepthFunc(GL_LEQUAL);
 
@@ -218,4 +226,43 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 			glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
 		});
 	}
+
+
+	// draw sprite
+	glDepthMask(GL_TRUE);
+	auto s = renderer->getShader("MaterialBasic");
+	s->use();
+	drawSprites();
+}
+
+void LightRenderingSystem::drawSprites()
+{
+	std::shared_ptr<Component::Sprite> sprite;
+	auto renderer = _scene.lock()->getInstance<Renderer>();
+	auto perModelUniform = renderer->getUniform("PerModel");
+	auto materialUniform = renderer->getUniform("MaterialBasic");
+	for (auto e : _spriteFilter.getCollection())
+	{
+		perModelUniform->setUniform("model", e->getGlobalTransform());
+		perModelUniform->flushChanges();
+		sprite = e->getComponent<Component::Sprite>();
+		sprite->animation->getMaterial().setUniforms(materialUniform);
+		if (sprite->animation->_alphaTest)
+		{
+			glDisable(GL_BLEND);
+			glEnable(GL_ALPHA_TEST);
+		}
+		else
+		{
+			glDisable(GL_ALPHA_TEST);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
+		materialUniform->flushChanges();
+		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
+		sprite->animation->draw(sprite->index);
+	}
+	glDisable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
 }

@@ -101,7 +101,7 @@ void AudioEmitter::updatePosition()
 			e.second.channel = nullptr;
 			continue;
 		}
-		fmodError(e.second.channel->set3DMinMaxDistance(10, 100));
+		//fmodError(e.second.channel->set3DMinMaxDistance(10, 100));
 		glm::vec3 pos = posFromMat4(_entity->getGlobalTransform());
 		FMOD_VECTOR  sourcePos = { pos.x, pos.y, pos.z };
 		fmodError(e.second.channel->set3DAttributes(&sourcePos, 0));

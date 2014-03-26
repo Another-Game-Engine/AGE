@@ -39,10 +39,11 @@ protected:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::CameraComponent>();
 		_filter.requireComponent<Component::FirstPersonView>();
+		return true;
 	}
 protected:
 	EntityFilter _filter;
