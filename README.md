@@ -5,6 +5,10 @@ An OpenGL Game Engine made by computer science students in partnership with AMD
 
 Work is still in progress and many things have to be implemented, improved or fixed :D
 
+We are very far away to have a complete engine :D
+
+http://youtu.be/ebwDNA2wz-k
+
 - C++11, OpenGL 4.1
 - Entity component system based architecture
 - Flexible communication throught events
