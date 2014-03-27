@@ -7,7 +7,7 @@ Work is still in progress and many things have to be implemented, improved or fi
 
 We are very far away to have a complete engine :D
 
-http://youtu.be/ebwDNA2wz-k
+[![Video](http://img.youtube.com/vi/ebwDNA2wz-k/0.jpg)](http://www.youtube.com/watch?v=ebwDNA2wz-k)
 
 - C++11, OpenGL 4.1
 - Entity component system based architecture
@@ -19,4 +19,4 @@ http://youtu.be/ebwDNA2wz-k
 - Entities and component serialization (using [Cereal](https://github.com/USCiLab/cereal) )
 - Raycast (basic implementation for FP raycast)
 - 3D sound (basic implemetation using FMOD)
-- Post FX (not implemented yet)
+- Post FX
