@@ -6,8 +6,7 @@ bool defaultEntityComparaison(const Entity &e1, const Entity &e2)
 }
 
 EntityFilter::EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(const Entity&, const Entity&))
-: PubSub(scene.lock()->getInstance<PubSub::Manager>())
-, _collection(comparaisonFn)
+: _collection(comparaisonFn)
 , _scene(scene)
 {
 	assert(scene.lock() != nullptr && "System Scene is not valid.");
@@ -27,35 +26,25 @@ std::set<Entity, bool(*)(const Entity&, const Entity&)> const &EntityFilter::get
 	return _collection;
 }
 
-void EntityFilter::requireTag(std::size_t tag)
+void EntityFilter::requireTag(unsigned short tag)
 {
-	auto strId = std::to_string(tag);
-
 	_code.add(tag);
-	globalSub(std::string("entityTagged" + strId), [&](Entity entity){
-		_componentAdded(entity, tag);
-	});
-	globalSub(std::string("entityUntagged" + strId), [&](Entity entity){
-		_componentRemoved(entity, tag);
-	});
+	_scene.lock()->filterSubscribe(tag, this);
 }
 
-void EntityFilter::unRequireTag(std::size_t tag)
+void EntityFilter::unRequireTag(unsigned short tag)
 {
-	auto strId = std::to_string(tag);
-
 	_code.remove(tag);
-	unsub(std::string("entityTagger" + strId));
-	unsub(std::string("entityUntagged" + strId));
+	_scene.lock()->filterUnsubscribe(tag, this);
 }
 
-void EntityFilter::_componentAdded(Entity &e, std::size_t typeId)
+void EntityFilter::componentAdded(Entity &&e, unsigned short typeId)
 {
 	if (_code.match(e->getCode()))
 		_collection.insert(e);
 }
 
-void EntityFilter::_componentRemoved(Entity &e, std::size_t typeId)
+void EntityFilter::componentRemoved(Entity &&e, unsigned short typeId)
 {
 	if (!_code.match(e->getCode()))
 		_collection.erase(e);

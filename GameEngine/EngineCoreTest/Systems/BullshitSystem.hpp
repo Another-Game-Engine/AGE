@@ -85,8 +85,8 @@ private:
 		for (auto e : _filter.getCollection())
 		{
 			e->getComponent<Component::Bullshit>()->_t += t;
-			if (e->getComponent<Component::Bullshit>()->_t > 0.55f)
-				e->removeComponent<Component::Bullshit>();
+			//if (e->getComponent<Component::Bullshit>()->_t > 0.55f)
+			//	e->removeComponent<Component::Bullshit>();
 		}
 	}
 
