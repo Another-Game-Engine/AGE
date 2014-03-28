@@ -74,9 +74,13 @@ EntityData *AScene::get(const Entity &h)
 
 void AScene::filterSubscribe(unsigned short id, EntityFilter* filter)
 {
-	if (_filters.find(id) != std::end(_filters))
-		return;
-	_filters[id].push_back(filter);
+	if (_filters.find(id) == std::end(_filters))
+	{
+		_filters.insert(std::make_pair(id, std::list<EntityFilter*>()));
+	}
+	auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
+	if (findIter == std::end(_filters[id]))
+		_filters[id].push_back(filter);
 }
 
 void AScene::filterUnsubscribe(unsigned short id, EntityFilter* filter)
