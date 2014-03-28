@@ -8,6 +8,7 @@ bool defaultEntityComparaison(const Entity &e1, const Entity &e2)
 EntityFilter::EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(const Entity&, const Entity&))
 : _collection(comparaisonFn)
 , _scene(scene)
+, _locked(false)
 {
 	assert(scene.lock() != nullptr && "System Scene is not valid.");
 }
@@ -47,5 +48,38 @@ void EntityFilter::componentAdded(Entity &&e, unsigned short typeId)
 void EntityFilter::componentRemoved(Entity &&e, unsigned short typeId)
 {
 	if (!_code.match(e->getCode()))
+	{
+		if (!_locked)
+		{
+			_collection.erase(e);
+		}
+		else
+		{
+			_trash.insert(e);
+		}
+	}
+}
+
+void EntityFilter::lock()
+{
+	if (_locked)
+		return;
+	_locked = true;
+}
+
+void EntityFilter::unlock()
+{
+	if (!_locked)
+		return;
+	_locked = false;
+	for (auto &&e : _trash)
+	{
 		_collection.erase(e);
+	}
+	_trash.clear();
+}
+
+bool EntityFilter::isLocked() const
+{
+	return _locked;
 }
