@@ -1,8 +1,7 @@
 #pragma once
 
 #include <Core/AScene.hh>
-#include <Components/RotationForce.hpp>
-#include <Systems/RotationForceSystem.hpp>
+#include <Systems/BullshitSystem.hpp>
 
 class BenchmarkScene : public AScene	
 {
@@ -16,7 +15,7 @@ public:
 
 	virtual bool 			userStart()
 	{
-		addSystem<RotationForceSystem>(0);
+		addSystem<BullshitSystem>(0);
 		_logFile.open("LogFile.txt", std::ios::app);
 		return true;
 	}
@@ -28,23 +27,13 @@ public:
 		_timeCounter += time;
 		_chunkCounter += time;
 
-
-		if (_collection.size() > 4)
-		{
-			for (auto i = 0; i < 4; ++i)
-			{
-				destroy(_collection.front());
-				_collection.remove(_collection.front());
-			}
-		}
 		for (auto i = 0; i < 8; ++i)
 		{
 			auto e = createEntity();
 			if (i % 2)
 			{
-				e->addComponent<Component::RotationForce>(glm::vec3(2, 0, 4));
+				e->addComponent<Component::Bullshit>(0.3f);
 			}
-			_collection.push_back(e);
 		}
 
 		if (_chunkCounter >= _maxChunk)
@@ -55,7 +44,7 @@ public:
 		}
 		if (_timeCounter >= _maxTime)
 		{
-			_logFile << std::endl << "Total frames : " << _frameCounter << " -- Entity created : " << _collection.size() << std::endl << "----------------" << std::endl;
+			_logFile << std::endl << "Total frames : " << _frameCounter << " -- Entity created : " << this->getNumberOfEntities() << std::endl << "----------------" << std::endl;
 			_logFile.close();
 			return false;
 		}
@@ -69,5 +58,4 @@ private:
 	double _maxChunk = 0.25;
 	std::size_t _chunkFrame = 0;
 	std::ofstream _logFile;
-	std::list<Entity> _collection;
 };
