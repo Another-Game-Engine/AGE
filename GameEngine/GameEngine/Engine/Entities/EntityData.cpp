@@ -7,7 +7,6 @@
 #include <Core/AScene.hh>
 
 EntityData::EntityData(std::weak_ptr<AScene> scene) :
-    PubSub(scene.lock()->getInstance<PubSub::Manager>()),
     _scene(scene),
 	_flags(0),
 	_localTranslation(0),
@@ -27,7 +26,6 @@ EntityData::~EntityData()
 }
 
 EntityData::EntityData(EntityData &&o)
-: PubSub(std::forward<PubSub>(o))
 {
 	_handle = std::move(o._handle);
 	_scene = std::move(o._scene);
@@ -66,7 +64,6 @@ glm::mat4 const  		&EntityData::getLocalTransform()
 	return (_localTransform);
 }
 
-//  TO DELETE
 void   			        EntityData::setLocalTransform(const glm::mat4 &t, bool forceMovedFlag)
 {
 	_flags |= HAS_MOVED;
@@ -81,7 +78,6 @@ glm::mat4 const			&EntityData::getGlobalTransform() const
 	return (_globalTransform);
 }
 
-// TO DELETE
 void 					EntityData::computeGlobalTransform(glm::mat4 const &fatherTransform)
 {
 	_globalTransform = fatherTransform * _localTransform;
@@ -253,8 +249,6 @@ void EntityData::reset()
 	for (auto e : _childs)
 		e->removeParent(false);
 	_childs.clear();
-	auto key = PubSubKey("graphNodeNotARoot");
-	broadCast(std::move(key), _handle);
 }
 
 ////////////////
@@ -283,16 +277,6 @@ void 					EntityData::setParent(Entity &parent, bool notify)
 	}
 	if (notify)
 		parent->addChild(_handle, false);
-	if (!parent.get()) // if parent is null -> it's a root node
-	{
-		auto key = PubSubKey("graphNodeSetAsRoot");
-		broadCast(std::move(key), _handle);
-	}
-	else if (!_parent.get()) // if it was a root node
-	{
-		auto key = PubSubKey("graphNodeNotARoot");
-		broadCast(std::move(key), _handle);
-	}
 	computeTransformAndUpdateGraphnode();
 	_parent = parent;
 }
@@ -312,8 +296,6 @@ void                    EntityData::removeParent(bool notify)
 	{
 		_parent->removeChild(_handle);
 	}
-	auto key = PubSubKey("graphNodeSetAsRoot");
-	broadCast(std::move(key), _handle);
 	_parent = Entity(std::numeric_limits<unsigned int>::max(), nullptr);
 	computeTransformAndUpdateGraphnode();
 }
@@ -328,6 +310,3 @@ std::set<Entity>::iterator EntityData::getChildsEnd()
 	return std::end(_childs);
 }
 
-//
-//
-//////////////

@@ -3,6 +3,7 @@
 
 #include "Core\AScene.hh"
 #include "Core/Engine.hh"
+#include <Utils/PubSub.hpp>
 
 class SponzaScene : public AScene
 {
