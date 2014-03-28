@@ -195,20 +195,20 @@ Barcode                 &EntityData::getCode()
 	return _code;
 }
 
-void                    EntityData::addTag(std::size_t tag)
+void                    EntityData::addTag(unsigned short tag)
 {
 	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.add(tag);
-	broadCast("entityTagged" + std::to_string(tag), _handle);
+	_scene.lock()->informFilters(true, tag, std::move(_handle));
 }
 
-void                    EntityData::removeTag(std::size_t tag)
+void                    EntityData::removeTag(unsigned short tag)
 {
 	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.remove(tag);
-	broadCast("entityUntagged" + std::to_string(tag), _handle);
+	_scene.lock()->informFilters(false, tag, std::move(_handle));
 }
-bool                    EntityData::isTagged(std::size_t tag) const
+bool                    EntityData::isTagged(unsigned short tag) const
 {
 	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	return _code.isSet(tag);
@@ -232,16 +232,19 @@ void EntityData::reset()
 	_globalTransform = glm::mat4(1);
 	_localTransform = glm::mat4(1);
 	_code.reset();
+	auto scene = _scene.lock();
 	for (std::size_t i = 0; i < MAX_TAG_NUMBER; ++i)
 	{
-		broadCast("entityUntagged" + std::to_string(i), _handle);
+		if (scene)
+			scene->informFilters(false, i, std::move(_handle));
 	}
 	for (std::size_t i = 0; i < _components.size(); ++i)
 	{
 		std::size_t id = i + MAX_TAG_NUMBER;
 		if (_components[i].get())
 		{
-			broadCast(PubSubKey(std::string("componentRemoved" + std::to_string(id))), _handle);
+			if (scene)
+				scene->informFilters(false, id, std::move(_handle));
 			_components[i]->reset();
 		}
 		_components[i].reset();
