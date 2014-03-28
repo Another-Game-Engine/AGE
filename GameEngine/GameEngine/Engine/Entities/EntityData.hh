@@ -183,8 +183,8 @@ public:
 	std::shared_ptr<T> getComponent() const
 	{
 		std::size_t id = T::getTypeId();
-		if (!hasComponent<T>())
-			return nullptr;
+		// No more verification and static cast
+		// better performance but more dangerous
 		return std::static_pointer_cast<T>(_components[id]);
 	}
 
@@ -196,7 +196,7 @@ public:
 			return;
 		_code.remove(id + MAX_TAG_NUMBER);
 		_components[id].get()->reset();
-		_scene.lock()->informFilters(false, id + MAX_TAG_NUMBER);
+		_scene.lock()->informFilters(false, id + MAX_TAG_NUMBER, std::move(_handle));
 	}
 
 
