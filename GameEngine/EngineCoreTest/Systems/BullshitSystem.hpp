@@ -82,11 +82,11 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		float t = static_cast<float>(time);
-		for (auto e : _filter.getCollection())
+		for (auto &&e : _filter.getCollection())
 		{
 			e->getComponent<Component::Bullshit>()->_t += t;
-			//if (e->getComponent<Component::Bullshit>()->_t > 0.55f)
-			//	e->removeComponent<Component::Bullshit>();
+			if (e->getComponent<Component::Bullshit>()->_t > 0.55f)
+				e->removeComponent<Component::Bullshit>();
 		}
 	}
 

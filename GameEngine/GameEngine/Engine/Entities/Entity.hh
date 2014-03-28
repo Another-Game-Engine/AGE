@@ -15,6 +15,7 @@ public:
 	const std::size_t getId() const;
 	const unsigned short getVersion() const;
 	EntityData *operator->();
+	EntityData *operator->() const;
 	EntityData *get() const;
 	bool operator<(const Entity &o) const;
 	bool operator==(const Entity &o) const;

@@ -101,7 +101,7 @@ void AScene::informFilters(bool added, unsigned short id, Entity &&entity)
 	{
 		for (auto &&f : _filters[id])
 		{
-			f->componentAdded(std::move(entity), id);
+			f->componentRemoved(std::move(entity), id);
 		}
 	}
 }
