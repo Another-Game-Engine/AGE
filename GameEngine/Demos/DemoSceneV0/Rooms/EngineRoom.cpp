@@ -186,6 +186,7 @@
 		}
 
 		scene->activateSystem<DemoCatSystem>();
+		return true;
 	}
 
 	bool EngineRoom::_disable()

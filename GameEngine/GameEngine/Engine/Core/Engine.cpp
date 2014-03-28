@@ -30,6 +30,8 @@ bool        Engine::init(int mode, unsigned int swidth, unsigned int sheight, co
 		std::cerr << "glewInit Failed" << std::endl;
 		return (false);
 	}
+	if (!getInstance<Renderer>()->init())
+		return false;
 	glEnable(GL_ALPHA_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	return true;
@@ -37,8 +39,6 @@ bool        Engine::init(int mode, unsigned int swidth, unsigned int sheight, co
 
 bool 		Engine::start()
 {
-	//if (!getInstance<SceneManager>().startScene())
-	//	return (false);
 	return (true);
 }
 

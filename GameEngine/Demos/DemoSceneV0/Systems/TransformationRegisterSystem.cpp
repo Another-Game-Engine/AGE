@@ -13,7 +13,7 @@ TRSFilter::TRSFilter(std::weak_ptr<AScene> scene)
 
 TRSFilter::~TRSFilter(){}
 
-void TRSFilter::_componentAdded(Entity &e, std::size_t typeId)
+void TRSFilter::componentAdded(Entity &&e, unsigned short typeId)
 {
 	if (_code.match(e->getCode()))
 	{
