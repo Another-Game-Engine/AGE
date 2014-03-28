@@ -1,5 +1,6 @@
 #pragma once
 #include <Core\AScene.hh>
+#include <Utils/PubSub.hpp>
 
 class SpaceGame : public AScene
 {

@@ -9,7 +9,6 @@
 #include <memory>
 #include "OpenGL/Shader.hh"
 #include "Utils/Barcode.h"
-#include "Utils/PubSub.hpp"
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
@@ -22,7 +21,7 @@ class AScene;
 class EntityManager;
 class Entity;
 
-class EntityData : public PubSub
+class EntityData
 {
 private:
 	static size_t 					_currentId;
