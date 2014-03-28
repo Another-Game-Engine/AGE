@@ -82,6 +82,7 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		float t = static_cast<float>(time);
+		EntityFilter::Lock lock(_filter);
 		for (auto &&e : _filter.getCollection())
 		{
 			e->getComponent<Component::Bullshit>()->_t += t;

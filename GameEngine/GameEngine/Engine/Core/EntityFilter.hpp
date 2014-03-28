@@ -38,9 +38,36 @@ public:
 
 	void virtual componentAdded(Entity &&e, unsigned short typeId);
 	void virtual componentRemoved(Entity &&e, unsigned short typeId);
+	bool isLocked() const;
+
+	struct Lock
+	{
+		Lock(EntityFilter &filter)
+			: _filter(filter)
+		{
+			_filter.lock();
+		}
+
+		~Lock()
+		{
+			release();
+		}
+
+		void release()
+		{
+			_filter.unlock();
+		}
+	private:
+		EntityFilter &_filter;
+	};
 
 protected:
 	std::set<Entity, bool(*)(const Entity&, const Entity&)> _collection;
 	Barcode _code;
 	std::weak_ptr<AScene> _scene;
+	void lock();
+	void unlock();
+private:
+	bool _locked;
+	std::set<Entity> _trash;
 };
