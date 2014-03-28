@@ -232,7 +232,7 @@ void EntityData::reset()
 	for (std::size_t i = 0; i < MAX_TAG_NUMBER; ++i)
 	{
 		if (scene)
-			scene->informFilters(false, i, std::move(_handle));
+			scene->informFilters(false, static_cast<unsigned short>(i), std::move(_handle));
 	}
 	for (std::size_t i = 0; i < _components.size(); ++i)
 	{
@@ -240,7 +240,7 @@ void EntityData::reset()
 		if (_components[i].get())
 		{
 			if (scene)
-				scene->informFilters(false, id, std::move(_handle));
+				scene->informFilters(false, static_cast<unsigned short>(id), std::move(_handle));
 			_components[i]->reset();
 		}
 		_components[i].reset();
