@@ -1,5 +1,4 @@
-#ifndef		DEMOSCENE_HH_
-#define		DEMOSCENE_HH_
+#pragma once
 
 #include "Core\AScene.hh"
 #include "Core/Engine.hh"
@@ -20,5 +19,3 @@ public:
 private:
 	std::unique_ptr<PubSub> _globalPubSub;
 };
-
-#endif
