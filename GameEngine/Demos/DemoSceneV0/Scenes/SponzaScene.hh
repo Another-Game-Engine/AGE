@@ -1,8 +1,8 @@
-#ifndef		DEMOSCENE_HH_
-#define		DEMOSCENE_HH_
+#pragma once
 
 #include "Core\AScene.hh"
 #include "Core/Engine.hh"
+#include <Utils/PubSub.hpp>
 
 class SponzaScene : public AScene
 {
@@ -19,5 +19,3 @@ public:
 private:
 	std::unique_ptr<PubSub> _globalPubSub;
 };
-
-#endif
