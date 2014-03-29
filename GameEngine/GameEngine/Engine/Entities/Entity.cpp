@@ -34,6 +34,11 @@ EntityData *Entity::operator->()
 	return _manager->get(*this);
 }
 
+EntityData *Entity::operator->() const
+{
+	return _manager->get(*this);
+}
+
 EntityData *Entity::get() const
 {
 	static std::size_t max = std::numeric_limits<std::size_t>::max();

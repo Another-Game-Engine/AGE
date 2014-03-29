@@ -4,6 +4,7 @@
 #include <limits>
 #include <Core/AScene.hh>
 #include <Systems/System.h>
+#include <Core/EntityFilter.hpp>
 
 AScene::AScene(std::weak_ptr<Engine> engine) :
 DependenciesInjector(engine)
@@ -69,4 +70,42 @@ EntityData *AScene::get(const Entity &h)
 	if (res->getHandle() != h)
 		return nullptr;
 	return &_pool[h.getId()];
+}
+
+void AScene::filterSubscribe(unsigned short id, EntityFilter* filter)
+{
+	if (_filters.find(id) == std::end(_filters))
+	{
+		_filters.insert(std::make_pair(id, std::list<EntityFilter*>()));
+	}
+	auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
+	if (findIter == std::end(_filters[id]))
+		_filters[id].push_back(filter);
+}
+
+void AScene::filterUnsubscribe(unsigned short id, EntityFilter* filter)
+{
+	if (_filters.find(id) == std::end(_filters))
+		return;
+	_filters[id].remove(filter);
+}
+
+void AScene::informFilters(bool added, unsigned short id, Entity &&entity)
+{
+	if (_filters.find(id) == std::end(_filters))
+		return;
+	if (added)
+	{
+		for (auto &&f : _filters[id])
+		{
+			f->componentAdded(std::move(entity), id);
+		}
+	}
+	else
+	{
+		for (auto &&f : _filters[id])
+		{
+			f->componentRemoved(std::move(entity), id);
+		}
+	}
 }

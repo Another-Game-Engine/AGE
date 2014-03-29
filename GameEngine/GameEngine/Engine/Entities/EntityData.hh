@@ -9,7 +9,6 @@
 #include <memory>
 #include "OpenGL/Shader.hh"
 #include "Utils/Barcode.h"
-#include "Utils/PubSub.hpp"
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
@@ -22,7 +21,7 @@ class AScene;
 class EntityManager;
 class Entity;
 
-class EntityData : public PubSub
+class EntityData
 {
 private:
 	static size_t 					_currentId;
@@ -108,9 +107,9 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	void                    addTag(std::size_t tags);
-	void                    removeTag(std::size_t tags);
-	bool                    isTagged(std::size_t tags) const;
+	void                    addTag(unsigned short tags);
+	void                    removeTag(unsigned short tags);
+	bool                    isTagged(unsigned short tags) const;
 	bool                    isTagged(Barcode &code);
 
 	Barcode                 &getCode();
@@ -175,7 +174,7 @@ public:
 		//init component
 		std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);
 		_code.add(id + MAX_TAG_NUMBER);
-		broadCast(std::string("componentAdded" + std::to_string(id + MAX_TAG_NUMBER)), _handle);
+		_scene.lock()->informFilters(true, id + MAX_TAG_NUMBER, std::move(_handle));
 		return std::static_pointer_cast<T>(_components[id]);
 	}
 
@@ -183,8 +182,8 @@ public:
 	std::shared_ptr<T> getComponent() const
 	{
 		std::size_t id = T::getTypeId();
-		if (!hasComponent<T>())
-			return nullptr;
+		// No more verification and static cast
+		// better performance but more dangerous
 		return std::static_pointer_cast<T>(_components[id]);
 	}
 
@@ -196,8 +195,7 @@ public:
 			return;
 		_code.remove(id + MAX_TAG_NUMBER);
 		_components[id].get()->reset();
-		broadCast(std::string("componentRemoved" + std::to_string(id + MAX_TAG_NUMBER)), _handle);
-		// component remove -> signal to system
+		_scene.lock()->informFilters(false, id + MAX_TAG_NUMBER, std::move(_handle));
 	}
 
 
@@ -287,7 +285,7 @@ public:
 				_components.resize(typeId + 1);
 			_components[typeId] = std::shared_ptr<Component::Base>(cpt);
 			_code.add(typeId + MAX_TAG_NUMBER);
-			broadCast(std::string("componentAdded" + std::to_string(typeId + MAX_TAG_NUMBER)), _handle);
+			_scene.lock()->informFilters(true, id + MAX_TAG_NUMBER);
 		}
 		// unserialize graphnode
 		EntityIdRegistrar::GraphNodeUnserialize graphUnser;

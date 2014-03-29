@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Room.hpp"
+#include <Utils/PubSub.hpp>
 
 struct Entrance : public Room
 {

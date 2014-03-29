@@ -15,8 +15,7 @@ public:
 	TRSFilter(std::weak_ptr<AScene> scene);
 	virtual ~TRSFilter();
 	TransformationRegisterSystem *_system;
-protected:
-	virtual void _componentAdded(Entity &e, std::size_t typeId);
+	virtual void componentAdded(Entity &&e, unsigned short typeId);
 };
 
 class TransformationRegisterSystem : public System
