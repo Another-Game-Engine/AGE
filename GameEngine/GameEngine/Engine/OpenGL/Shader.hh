@@ -2,6 +2,7 @@
 # define SHADER_HH_
 
 # include <map>
+# include <array>
 # include <vector>
 # include <set>
 
@@ -12,34 +13,35 @@ namespace OpenGLTools
 	class Shader : public AShader
 	{
 	private:
-		GLuint						_vertexId;
-		GLuint						_fragId;
-		GLuint						_geometryId;
+		GLuint	_progId;
+		GLuint	_vertexId;
+		GLuint	_fragId;
+		GLuint	_geometryId;
+		bool	_valid;
 
-		GLenum                      *_targets;
-		GLuint                      _textureNumber;
-		std::set<GLenum>            _targetsList;
-		std::set<GLenum>            _layersList;
+		Shader();
+		void compileShader(GLuint shaderId, std::string const &file) const;
+		void linkProgram() const;
+		GLuint addShader(std::string &&path, GLenum type);
 
 	public:
-		Shader(void);
-		virtual ~Shader(void);
+		Shader(std::string &&vertex, std::string &&fragment);
+		Shader(std::string &&vertex, std::string &&fragment, std::string &&geometry);
+		~Shader(void);
+		Shader(Shader &&Shader);
+		Shader(Shader const &Shader);
+		Shader &operator=(Shader const &shader);
+		Shader &operator=(Shader &&shader);
 
-		bool	init(std::string const &vertex, std::string const &fragment, std::string const &geometry = "");
-
-		GLenum  *getTargets() const;
-		std::size_t getTargetsNumber() const;
-
-		Shader &addTarget(GLenum target);
-		Shader &removeTarget(GLenum target);
-		void clearTargets();
-		Shader &addLayer(GLenum layer);
-		Shader &removeLayer(GLenum layer);
-		void clearLayers();
-		inline const std::set<GLenum> &getLayers() const {return _layersList;}
-		inline Shader &setTextureNumber(unsigned int t){_textureNumber = t; return *this;}
-	private:
-		bool _build();
+		bool	addSampler(std::string &&sampler);
+		bool	deleteSampler(std::string &&sampler);
+		bool	addUniform(std::string &&uniform);
+		bool	deleteUniform(std::string &&uniform);
+		template <typename T>
+		bool	addUniformBlock(std::string &&uniformBlock, std::array<T, std::string> &&args);
+		void	deleteUniformBlock(std::string &&unifromBlock);
+		bool	isValid() const;
+		bool	operator!() const;
 	};
 
 }

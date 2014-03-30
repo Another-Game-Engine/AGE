@@ -18,18 +18,7 @@ namespace OpenGLTools
 	public:
 		AShader();
 		virtual ~AShader();
-		bool	bindUniformBlock(std::string const &blockName, std::shared_ptr<UniformBuffer> const &buff);
-		bool    build() {return _build();}
-		void	use(void);
-		GLuint	getId() const;
 	protected:
-		void compileShader(GLuint shaderId, std::string const &file) const;
-		void linkProgram() const;
-		GLuint addShader(std::string const &path, GLenum type);
-	private:
-		virtual bool _build() = 0;
-	protected:
-		GLuint						_progId;
 	};
 };
 #endif    //__ASHADER_HH__
