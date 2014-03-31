@@ -6,8 +6,8 @@
 #include <limits>
 #include <Core/AScene.hh>
 
-EntityData::EntityData(std::weak_ptr<AScene> scene) :
-    _scene(scene),
+EntityData::EntityData(std::weak_ptr<AScene> &&scene) :
+    _scene(std::move(scene)),
 	_flags(0),
 	_localTranslation(0),
 	_localRotation(0),

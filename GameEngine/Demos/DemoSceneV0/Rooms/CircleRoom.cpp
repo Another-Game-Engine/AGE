@@ -13,8 +13,8 @@
 #include <Components/SpotLight.hh>
 #include <Components/AudioEmitter.hpp>
 
-	CircleRoom::CircleRoom(std::weak_ptr<AScene> scene)
-		: Room(scene)
+	CircleRoom::CircleRoom(std::weak_ptr<AScene> &&scene)
+		: Room(std::move(scene))
 	{
 	}
 

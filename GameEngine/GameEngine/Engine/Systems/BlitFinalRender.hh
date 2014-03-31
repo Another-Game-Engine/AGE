@@ -6,7 +6,7 @@
 class BlitFinalRender : public System
 {
 public:
-	BlitFinalRender(std::weak_ptr<AScene> scene);
+	BlitFinalRender(std::weak_ptr<AScene> &&scene);
 	virtual ~BlitFinalRender();
 
 	virtual void updateBegin(double time) { }

@@ -6,8 +6,8 @@
 #include <Systems/System.h>
 #include <Core/EntityFilter.hpp>
 
-AScene::AScene(std::weak_ptr<Engine> engine) :
-DependenciesInjector(engine)
+AScene::AScene(std::weak_ptr<Engine> &&engine) :
+DependenciesInjector(std::move(engine))
 , _entityNumber(0)
 {
 }

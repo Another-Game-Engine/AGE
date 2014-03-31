@@ -12,8 +12,8 @@
 #include <Systems/PistolSystem.hpp>
 #include <Rooms/SpiralRoomInception.hpp>
 
-	EngineRoom::EngineRoom(std::weak_ptr<AScene> scene)
-		: Room(scene)
+	EngineRoom::EngineRoom(std::weak_ptr<AScene> &&scene)
+		: Room(std::move(scene))
 	{
 	}
 

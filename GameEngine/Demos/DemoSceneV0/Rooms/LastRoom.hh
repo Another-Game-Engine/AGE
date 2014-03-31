@@ -4,7 +4,7 @@
 
 struct LastRoom : public Room
 {
-	LastRoom(std::weak_ptr<AScene> scene);
+	LastRoom(std::weak_ptr<AScene> &&scene);
 	virtual ~LastRoom();
 	virtual bool init();
 	Entity hotZoneLastEngine;

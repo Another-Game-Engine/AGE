@@ -14,8 +14,8 @@
 #include <Components/TransformationRegister.hpp>
 #include <Systems/PistolSystem.hpp>
 
-	ProjectionRoom::ProjectionRoom(std::weak_ptr<AScene> scene)
-		: Room(scene)
+	ProjectionRoom::ProjectionRoom(std::weak_ptr<AScene> &&scene)
+		: Room(std::move(scene))
 	{
 	}
 

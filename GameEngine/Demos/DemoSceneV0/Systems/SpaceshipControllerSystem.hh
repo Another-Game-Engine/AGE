@@ -6,7 +6,7 @@
 class SpaceshipControllerSystem : public System
 {
 public:
-	SpaceshipControllerSystem(std::weak_ptr<AScene> scene);
+	SpaceshipControllerSystem(std::weak_ptr<AScene> &&scene);
 	virtual ~SpaceshipControllerSystem();
 
 	virtual void updateBegin(double time) { }

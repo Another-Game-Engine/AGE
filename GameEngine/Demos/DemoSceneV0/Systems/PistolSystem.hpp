@@ -11,9 +11,9 @@
 class PistolSystem : public System
 {
 public:
-	PistolSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _characterController(scene)
+	PistolSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _characterController(std::move(scene))
 	{}
 
 	virtual ~PistolSystem()

@@ -12,7 +12,7 @@ class TransformationRegisterSystem;
 class TRSFilter : public EntityFilter
 {
 public:
-	TRSFilter(std::weak_ptr<AScene> scene);
+	TRSFilter(std::weak_ptr<AScene> &&scene);
 	virtual ~TRSFilter();
 	TransformationRegisterSystem *_system;
 	virtual void componentAdded(Entity &&e, unsigned short typeId);
@@ -21,7 +21,7 @@ public:
 class TransformationRegisterSystem : public System
 {
 public:
-	TransformationRegisterSystem(std::weak_ptr<AScene> scene);
+	TransformationRegisterSystem(std::weak_ptr<AScene> &&scene);
 	void setFile(const File &file);
 	virtual ~TransformationRegisterSystem();
 	void loadEntity(Entity &e);

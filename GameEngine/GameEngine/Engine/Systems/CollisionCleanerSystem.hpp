@@ -9,9 +9,9 @@
 class CollisionCleaner : public System
 {
 public:
-	CollisionCleaner(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _filter(scene)
+	CollisionCleaner(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "collision_cleaner_system";
 	}

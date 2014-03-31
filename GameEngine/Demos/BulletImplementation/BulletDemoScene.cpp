@@ -44,7 +44,8 @@
 
 Entity globalCamera;
 
-BulletDemoScene::BulletDemoScene(std::weak_ptr<Engine> engine) : AScene(engine)
+BulletDemoScene::BulletDemoScene(std::weak_ptr<Engine> &&engine)
+: AScene(std::move(engine))
 {
 }
 

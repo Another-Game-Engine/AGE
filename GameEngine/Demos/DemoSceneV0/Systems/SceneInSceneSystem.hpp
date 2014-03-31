@@ -13,8 +13,8 @@ class FPControllerSystem;
 class SceneInSceneSystem : public System
 {
 public:
-	SceneInSceneSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
+	SceneInSceneSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
 	{}
 
 	virtual ~SceneInSceneSystem()

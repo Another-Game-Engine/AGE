@@ -11,8 +11,8 @@
 #include <Components/CollisionBody.hpp>
 #include <Components/SpotLight.hh>
 
-	LastRoom::LastRoom(std::weak_ptr<AScene> scene)
-		: Room(scene)
+	LastRoom::LastRoom(std::weak_ptr<AScene> &&scene)
+		: Room(std::move(scene))
 	{
 	}
 
