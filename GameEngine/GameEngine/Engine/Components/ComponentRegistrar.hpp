@@ -29,12 +29,12 @@ public:
 	}
 
 	template <class Archive>
-	Component::Base *createFromType(unsigned int type, Archive &ar, Entity e, std::size_t &typeId)
+	std::shared_ptr<Component::Base> createFromType(std::size_t type, Archive &ar, Entity e, std::size_t &typeId)
 	{
 		auto &it = _collection.find(type);
 		auto &typeIt = _typeId.find(type);
 		assert((it != std::end(_collection) || typeIt != std::end(_typeId)) && "Component has not been registered");
-		auto res = *(it->second)(e);
+		auto res = (it->second)(e);
 		res->unserialize(ar);
 		typeId = typeIt->second;
 		return res;
