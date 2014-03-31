@@ -56,7 +56,6 @@ namespace Component
 
 		void init(float _mass = 1.0f)
 		{
-			auto test = _entity->getScene()->getInstance<BulletCollisionManager>();
 			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 			mass = _mass;
@@ -217,16 +216,6 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new RigidBody();
-			res->setEntity(e);
-			res->init();
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void save(Archive &ar) const
 		{
 			float _mass = mass;
@@ -244,6 +233,7 @@ namespace Component
 		template <typename Archive>
 		void load(Archive &ar)
 		{
+			init();
 			float _mass;
 			glm::vec3 _inertia;
 			ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint, meshName);

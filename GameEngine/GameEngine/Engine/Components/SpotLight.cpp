@@ -41,13 +41,6 @@ namespace Component
 	}
 
 	template <typename Archive>
-	Base *SpotLight::unserialize(Archive &ar, Entity e)
-	{
-		auto res = new SpotLight();
-		return res;
-	}
-
-	template <typename Archive>
 	void SpotLight::serialize(Archive &ar)
 	{
 	}

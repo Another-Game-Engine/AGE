@@ -21,12 +21,12 @@ public:
 		addSystem<BullshitSystem>(0);
 		_logFile.open("LogFile.txt", std::ios::app);
 
-		if (File("SaveFile").exists())
-		{
-			std::ifstream saveFile("SaveFile", std::ios::binary);
-			load<cereal::JSONInputArchive>(saveFile);
-			return false;
-		}
+		//if (File("SaveFile").exists())
+		//{
+		//	std::ifstream saveFile("SaveFile", std::ios::binary);
+		//	load<cereal::PortableBinaryInputArchive>(saveFile);
+		//	return false;
+		//}
 
 		return true;
 	}
@@ -59,7 +59,7 @@ public:
 			_logFile.close();
 
 			std::ofstream saveFile("SaveFile", std::ios::binary);
-			save<cereal::JSONOutputArchive>(saveFile);
+			save<cereal::PortableBinaryOutputArchive>(saveFile);
 			return false;
 		}
 		return true;
