@@ -23,7 +23,7 @@ public:
 		auto it = _collection.find(key);
 		if (it != std::end(_collection))
 			return *this;
-		_collection.insert(std::make_pair(key, new T()));
+		_collection.insert(std::make_pair(key, [](Entity e){auto r = std::make_shared<T>(); r->setEntity(e); return r; }));
 		_typeId.insert(std::make_pair(key, T::getTypeId()));
 		return *this;
 	}
@@ -34,12 +34,13 @@ public:
 		auto &it = _collection.find(type);
 		auto &typeIt = _typeId.find(type);
 		assert((it != std::end(_collection) || typeIt != std::end(_typeId)) && "Component has not been registered");
-		auto res = it->second->unserialize(ar, e);
+		auto res = *(it->second)(e);
+		res->unserialize(ar);
 		typeId = typeIt->second;
 		return res;
 	}
 
 private:
-	std::map<std::size_t, Component::Base*> _collection;
+	std::map<std::size_t, std::function<std::shared_ptr<Component::Base>(Entity e)>> _collection;
 	std::map<std::size_t, std::size_t> _typeId;
 };
