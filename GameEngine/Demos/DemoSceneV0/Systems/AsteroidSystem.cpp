@@ -12,10 +12,10 @@
 #include <SDL/SDL.h>
 #include <glm/glm.hpp>
 
-AsteroidSystem::AsteroidSystem(std::weak_ptr<AScene> scene) :
-								System(scene),
-								_asteroidFilter(scene),
-								_bulletFilter(scene)
+AsteroidSystem::AsteroidSystem(std::weak_ptr<AScene> &&scene)
+: System(std::move(scene)),
+_asteroidFilter(std::move(scene)),
+_bulletFilter(std::move(scene))
 {
 }
 

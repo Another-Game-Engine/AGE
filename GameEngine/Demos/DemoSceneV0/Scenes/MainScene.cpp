@@ -36,8 +36,8 @@
 // SDL
 #include <Context/SdlContext.hh>
 
-MainScene::MainScene(std::weak_ptr<Engine> engine)
-: AScene(engine),
+MainScene::MainScene(std::weak_ptr<Engine> &&engine)
+: AScene(std::move(engine)),
 _sigma(4.0f),
 _glare(1.0f)
 {}

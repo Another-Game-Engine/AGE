@@ -6,7 +6,7 @@
 class AsteroidSystem : public System
 {
 public:
-	AsteroidSystem(std::weak_ptr<AScene> scene);
+	AsteroidSystem(std::weak_ptr<AScene> &&scene);
 	virtual ~AsteroidSystem();
 
 	virtual void updateBegin(double time) { }

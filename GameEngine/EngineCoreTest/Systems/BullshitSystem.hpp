@@ -63,9 +63,9 @@ namespace Component
 class BullshitSystem : public System
 {
 public:
-	BullshitSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _filter(scene)
+	BullshitSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "rotation_force_system";
 	}

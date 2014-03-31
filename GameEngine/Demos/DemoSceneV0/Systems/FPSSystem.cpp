@@ -2,8 +2,8 @@
 #include <Text/FontManager.hh>
 #include <Core/Renderer.hh>
 
-FPSSystem::FPSSystem(std::weak_ptr<AScene> scene)
-: System(scene)
+FPSSystem::FPSSystem(std::weak_ptr<AScene> &&scene)
+: System(std::move(scene))
 {}
 
 FPSSystem::~FPSSystem(void)

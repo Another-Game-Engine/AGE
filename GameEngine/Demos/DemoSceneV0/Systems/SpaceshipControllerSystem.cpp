@@ -11,9 +11,9 @@
 
 #include "MyTags.hpp"
 
-SpaceshipControllerSystem::SpaceshipControllerSystem(std::weak_ptr<AScene> scene) :
-								System(scene),
-								_spaceshipsFilter(scene)
+SpaceshipControllerSystem::SpaceshipControllerSystem(std::weak_ptr<AScene> &&scene)
+: System(std::move(scene))
+, _spaceshipsFilter(std::move(scene))
 {
 }
 

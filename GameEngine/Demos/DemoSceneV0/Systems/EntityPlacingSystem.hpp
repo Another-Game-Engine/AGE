@@ -8,9 +8,9 @@
 class EntityPlacingSystem : public System
 {
 public:
-	EntityPlacingSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _filter(scene)
+	EntityPlacingSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 		, _name("NO SELECTION")
 		, _z(0.2f)
 	{

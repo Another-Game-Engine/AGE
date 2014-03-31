@@ -5,7 +5,7 @@
 class FPSSystem : public System
 {
 public:
-	FPSSystem(std::weak_ptr<AScene> scene);
+	FPSSystem(std::weak_ptr<AScene> &&scene);
 	virtual ~FPSSystem(void);
 
 private:

@@ -72,7 +72,7 @@ void	DrawQuad::draw(GLuint texture, int sampleNbr, glm::uvec2 const &textureSize
 	glEnable(GL_DEPTH_TEST);
 }
 
-void DrawQuad::init(std::weak_ptr<DependenciesInjector> engine)
+void DrawQuad::init(std::weak_ptr<DependenciesInjector> &&engine)
 {
 	_renderer = engine.lock()->getInstance<Renderer>();
 	std::array<Attribute, 2> param =

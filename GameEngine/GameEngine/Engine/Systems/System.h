@@ -11,7 +11,7 @@
 class	System : public PubSub
 {
 public:
-	System(std::weak_ptr<AScene> scene);
+	System(std::weak_ptr<AScene> &&scene);
 	virtual ~System();
 	void update(double time);
 	bool init();

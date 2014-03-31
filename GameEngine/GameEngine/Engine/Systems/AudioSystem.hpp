@@ -12,10 +12,10 @@
 class AudioSystem : public System
 {
 public:
-	AudioSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _emitters(scene)
-		, _listeners(scene)
+	AudioSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _emitters(std::move(scene))
+		, _listeners(std::move(scene))
 		, _manager(scene.lock()->getInstance<AudioManager>())
 	{
 		_name = "audio_system";

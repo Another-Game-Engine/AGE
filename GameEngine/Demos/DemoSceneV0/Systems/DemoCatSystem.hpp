@@ -16,8 +16,8 @@
 class DemoCatSystem : public System
 {
 public:
-	DemoCatSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
+	DemoCatSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
 	{}
 
 	virtual ~DemoCatSystem()

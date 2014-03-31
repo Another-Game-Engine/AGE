@@ -10,9 +10,9 @@
 class RotationForceSystem : public System
 {
 public:
-	RotationForceSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _filter(scene)
+	RotationForceSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "rotation_force_system";
 	}

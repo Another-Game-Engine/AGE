@@ -22,8 +22,8 @@
 
 #include "MyTags.hpp"
 
-SpaceGame::SpaceGame(std::weak_ptr<Engine> engine) :
-							AScene(engine)
+SpaceGame::SpaceGame(std::weak_ptr<Engine> &&engine)
+: AScene(std::move(engine))
 {
 }
 

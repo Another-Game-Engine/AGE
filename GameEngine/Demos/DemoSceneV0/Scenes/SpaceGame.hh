@@ -5,7 +5,7 @@
 class SpaceGame : public AScene
 {
 public:
-	SpaceGame(std::weak_ptr<Engine> engine);
+	SpaceGame(std::weak_ptr<Engine> &&engine);
 	virtual ~SpaceGame();
 
 	virtual bool 			userStart();

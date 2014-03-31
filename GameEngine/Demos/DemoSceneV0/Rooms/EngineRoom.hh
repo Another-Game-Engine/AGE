@@ -7,7 +7,7 @@ class DemoCatSystem;
 
 struct EngineRoom : public Room
 {
-	EngineRoom(std::weak_ptr<AScene> scene);
+	EngineRoom(std::weak_ptr<AScene> &&scene);
 	virtual ~EngineRoom();
 	virtual bool init();
 	Entity hotZoneEngineCircle;

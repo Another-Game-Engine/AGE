@@ -16,9 +16,9 @@ private:
 	std::map<size_t, std::shared_ptr<Dependency>>         _instances;
 	std::weak_ptr<DependenciesInjector>                   _parent;
 public:
-	DependenciesInjector(std::weak_ptr<DependenciesInjector> parent = std::weak_ptr<DependenciesInjector>())
+	DependenciesInjector(std::weak_ptr<DependenciesInjector> &&parent = std::weak_ptr<DependenciesInjector>())
 		: std::enable_shared_from_this<DependenciesInjector>()
-		, _parent(parent)
+		, _parent(std::move(parent))
 	{}
 
 	virtual ~DependenciesInjector()
@@ -26,9 +26,9 @@ public:
 		_instances.clear();
 	}
 
-	std::weak_ptr<DependenciesInjector> getDependenciesInjectorParent()
+	std::weak_ptr<DependenciesInjector> &&getDependenciesInjectorParent()
 	{
-		return _parent;
+		return std::forward<std::weak_ptr<DependenciesInjector>>(_parent);
 	}
 
 	template <typename T>

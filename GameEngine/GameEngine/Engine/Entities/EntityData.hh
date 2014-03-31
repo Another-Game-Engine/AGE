@@ -70,7 +70,7 @@ private:
 
 	Barcode             _code;
 
-	EntityData(std::weak_ptr<AScene> scene);
+	EntityData(std::weak_ptr<AScene> &&scene);
 	EntityData();
 	EntityData(const EntityData &o);
 	const EntityData &operator=(const EntityData &o);

@@ -7,7 +7,7 @@
 class SponzaScene : public AScene
 {
 public:
-	SponzaScene(std::weak_ptr<Engine> engine);
+	SponzaScene(std::weak_ptr<Engine> &&engine);
 	virtual ~SponzaScene(void);
 
 	Entity  SponzaScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass);

@@ -5,12 +5,12 @@ bool defaultEntityComparaison(const Entity &e1, const Entity &e2)
 	return e1 < e2;
 }
 
-EntityFilter::EntityFilter(std::weak_ptr<AScene> scene, bool(*comparaisonFn)(const Entity&, const Entity&))
+EntityFilter::EntityFilter(std::weak_ptr<AScene> &&scene, bool(*comparaisonFn)(const Entity&, const Entity&))
 : _collection(comparaisonFn)
-, _scene(scene)
+, _scene(std::move(scene))
 , _locked(false)
 {
-	assert(scene.lock() != nullptr && "System Scene is not valid.");
+	assert(_scene.lock() != nullptr && "System Scene is not valid.");
 }
 
 EntityFilter::~EntityFilter()
