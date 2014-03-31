@@ -1,4 +1,4 @@
-#version 330
+#version 430
 
 uniform sampler2D fTexture0;
 uniform mat4 projection;
