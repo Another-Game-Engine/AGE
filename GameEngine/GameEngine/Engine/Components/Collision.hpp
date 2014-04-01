@@ -59,7 +59,7 @@ namespace Component
 			std::set<std::size_t> entityIds;
 			for (auto e : collisions)
 			{
-				entityIds.insert(_entity.get()->getScene()->registrarSerializedEntity(e.getId()));
+				entityIds.insert(_entity.get()->getScene().lock()->registrarSerializedEntity(e.getId()));
 			}
 			ar(cereal::make_nvp("Collisions", entityIds));
 		}
@@ -74,7 +74,7 @@ namespace Component
 			for (auto it = std::begin(collisions); it != std::end(collisions); ++it)
 			{ 
 				Entity *e = const_cast<Entity *>(&(*it));
-				_entity->getScene()->entityHandle(it->getId(), e);
+				_entity->getScene().lock()->entityHandle(it->getId(), e);
 			}
 		}
 

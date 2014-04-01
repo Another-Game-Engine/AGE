@@ -57,7 +57,7 @@ namespace Component
 			ar(shader);
 			std::string meshName;
 			ar(meshName);
-			mesh = std::static_pointer_cast<ObjFile>(_entity->getScene()->getInstance<AssetsManager>()->loadFromFile(File(meshName)));
+			mesh = std::static_pointer_cast<ObjFile>(_entity->getScene().lock()->getInstance<AssetsManager>()->loadFromFile(File(meshName)));
 		}
 
 		// !Serialization

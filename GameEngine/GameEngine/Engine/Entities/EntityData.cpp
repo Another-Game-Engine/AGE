@@ -49,9 +49,9 @@ Entity &EntityData::getHandle()
 	return _handle;
 }
 
-std::shared_ptr<AScene> EntityData::getScene() const
+std::weak_ptr<AScene> EntityData::getScene()
 {
-	return _scene.lock();
+	return _scene;
 }
 
 void EntityData::setHandle(Entity &handle)
