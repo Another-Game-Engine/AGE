@@ -55,9 +55,6 @@ namespace Component
 		void	init();
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e);
-
-		template <typename Archive>
 		void serialize(Archive &ar);
 
 	};

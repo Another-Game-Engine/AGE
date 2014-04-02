@@ -279,13 +279,12 @@ public:
 			std::size_t type = 0;
 			std::size_t typeId;
 			ar(type);
-			Component::Base *cpt = scene->createFromType(type, ar, _handle, typeId);
-			cpt->setEntity(_handle);
+			auto cpt = scene->createFromType(type, ar, _handle, typeId);
 			if (_components.size() <= typeId)
 				_components.resize(typeId + 1);
-			_components[typeId] = std::shared_ptr<Component::Base>(cpt);
+			_components[typeId] = cpt;
 			_code.add(typeId + MAX_TAG_NUMBER);
-			_scene.lock()->informFilters(true, id + MAX_TAG_NUMBER);
+			_scene.lock()->informFilters(true, typeId + MAX_TAG_NUMBER, std::move(_handle));
 		}
 		// unserialize graphnode
 		EntityIdRegistrar::GraphNodeUnserialize graphUnser;
