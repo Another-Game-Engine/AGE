@@ -7,8 +7,8 @@
 
 struct SpiralRoomSponza : public Room
 {
-	SpiralRoomSponza(std::weak_ptr<AScene> scene)
-	: Room(scene)
+	SpiralRoomSponza(std::weak_ptr<AScene> &&scene)
+	: Room(std::move(scene))
 	, fboSponzaReceiver(scene.lock()->getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>())
 	, fboSponzaId(0)
 	{}

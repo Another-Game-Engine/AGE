@@ -12,9 +12,9 @@
 class FirstPersonViewSystem : public System
 {
 public:
-	FirstPersonViewSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _filter(scene)
+	FirstPersonViewSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "first_person_view_system";
 	}

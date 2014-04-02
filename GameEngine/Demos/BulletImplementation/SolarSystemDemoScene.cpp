@@ -22,7 +22,8 @@
 
 #include <SDL\SDL.h>
 
-SolarSystemDemoScene::SolarSystemDemoScene(std::weak_ptr<Engine> engine) : AScene(engine)
+SolarSystemDemoScene::SolarSystemDemoScene(std::weak_ptr<Engine> &&engine)
+: AScene(std::move(engine))
 {
 }
 

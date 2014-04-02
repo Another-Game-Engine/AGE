@@ -8,8 +8,8 @@
 
 struct SpiralRoomInception : public Room
 {
-	SpiralRoomInception(std::weak_ptr<AScene> scene)
-	: Room(scene)
+	SpiralRoomInception(std::weak_ptr<AScene> &&scene)
+	: Room(std::move(scene))
 	, fboReceiver(scene.lock()->getInstance<PubSub::Manager>())
 	, fboId(0)
 	{}

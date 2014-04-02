@@ -56,7 +56,7 @@ namespace Component
 
 		void init(float _mass = 1.0f)
 		{
-			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene()->getInstance<BulletCollisionManager>());
+			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 			mass = _mass;
 		}
@@ -115,7 +115,7 @@ namespace Component
 		{
 			if (c == UNDEFINED)
 				return;
-			auto mediaManager = _entity->getScene()->getInstance<AssetsManager>();
+			auto mediaManager = _entity->getScene().lock()->getInstance<AssetsManager>();
 			meshName = _meshName;
 			_reset();
 			shapeType = c;

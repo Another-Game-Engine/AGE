@@ -31,7 +31,7 @@ private:
 	std::size_t                                         _entityNumber;
 	std::map<unsigned short, std::list<EntityFilter*>> _filters;
 public:
-	AScene(std::weak_ptr<Engine> engine);
+	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
 	inline std::size_t getNumberOfEntities() { return _entityNumber; }
 	virtual bool 			userStart() = 0;

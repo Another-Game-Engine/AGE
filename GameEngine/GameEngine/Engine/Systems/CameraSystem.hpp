@@ -16,9 +16,9 @@
 class CameraSystem : public System
 {
 public:
-	CameraSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _filter(scene)
+	CameraSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 		, _renderDebugMethod(false)
 		, _totalTime(0)
 	{

@@ -6,8 +6,8 @@
 class BenchmarkScene : public AScene	
 {
 public:
-	BenchmarkScene(std::weak_ptr<Engine> engine)
-		: AScene(engine)
+	BenchmarkScene(std::weak_ptr<Engine> &&engine)
+		: AScene(std::move(engine))
 	{}
 
 	virtual ~BenchmarkScene(void)

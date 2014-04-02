@@ -6,7 +6,7 @@
 class PostFxSystem : public System
 {
 public:
-	PostFxSystem(std::weak_ptr<AScene> scene);
+	PostFxSystem(std::weak_ptr<AScene> &&scene);
 	virtual ~PostFxSystem();
 
 	virtual void updateBegin(double time) { }

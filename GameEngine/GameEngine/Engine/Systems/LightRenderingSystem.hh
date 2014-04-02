@@ -18,7 +18,7 @@
 class LightRenderingSystem : public System
 {
 public:
-	LightRenderingSystem(std::weak_ptr<AScene> scene);
+	LightRenderingSystem(std::weak_ptr<AScene> &&scene);
 	virtual ~LightRenderingSystem();
 
 	virtual void updateBegin(double time) { }

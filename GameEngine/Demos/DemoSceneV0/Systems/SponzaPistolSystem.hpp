@@ -16,9 +16,9 @@
 class SponzaPistolSystem : public System
 {
 public:
-	SponzaPistolSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _cameras(scene)
+	SponzaPistolSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _cameras(std::move(scene))
 	{}
 
 	virtual ~SponzaPistolSystem()

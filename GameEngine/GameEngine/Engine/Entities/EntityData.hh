@@ -41,7 +41,7 @@ public:
 
 	};
 
-	typedef std::vector<std::shared_ptr<Component::Base> >	t_ComponentsList;
+	typedef std::vector<std::shared_ptr<Component::Base>>	t_ComponentsList;
 
 	Entity &getHandle();
 	void setHandle(Entity &handle);
@@ -70,7 +70,7 @@ private:
 
 	Barcode             _code;
 
-	EntityData(std::weak_ptr<AScene> scene);
+	EntityData(std::weak_ptr<AScene> &&scene);
 	EntityData();
 	EntityData(const EntityData &o);
 	const EntityData &operator=(const EntityData &o);
@@ -79,7 +79,7 @@ public:
 	virtual ~EntityData();
 	EntityData(EntityData &&o);
 
-	std::shared_ptr<AScene> getScene() const;
+	std::weak_ptr<AScene>   getScene();
 	void                    translate(const glm::vec3 &v);
 	void                    setTranslation(const glm::vec3 &v);
 	glm::vec3 const         &getTranslation() const;
@@ -162,12 +162,12 @@ public:
 		// else if entity components array is to small, resize it
 		else if (_components.size() <= id)
 		{
-			_components.resize(id + 1);
+			_components.resize(id + 4);
 		}
 		// if component has never been created, create one
 		if (!_components[id].get())
 		{
-			_components[id] = std::shared_ptr<T>(new T());
+			_components[id] = std::make_shared<T>();
 			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
 			_components[id]->setEntity(getHandle());
 		}
@@ -242,14 +242,14 @@ public:
 		std::set<std::size_t> childIds;
 		for (auto e : _childs)
 		{
-			childIds.insert(getScene()->registrarSerializedEntity(e.getId()));
+			childIds.insert(_scene.lock()->registrarSerializedEntity(e.getId()));
 		}
 		ar(CEREAL_NVP(childIds));
 		ar(cereal::make_nvp("haveParent", _parent.get() != nullptr));
 		if (_parent.get() != nullptr)
-			ar(cereal::make_nvp("parentID", getScene()->registrarSerializedEntity(_parent.getId())));
+			ar(cereal::make_nvp("parentID", _scene.lock()->registrarSerializedEntity(_parent.getId())));
 		else
-			ar(cereal::make_nvp("parentID", getScene()->registrarSerializedEntity(-1)));
+			ar(cereal::make_nvp("parentID", _scene.lock()->registrarSerializedEntity(-1)));
 	}
 
 	template <class Archive>

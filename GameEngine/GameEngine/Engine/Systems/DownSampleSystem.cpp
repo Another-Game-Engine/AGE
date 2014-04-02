@@ -2,9 +2,9 @@
 
 #include <Components/CameraComponent.hpp>
 
-DownSampleSystem::DownSampleSystem(std::weak_ptr<AScene> scene) :
-					System(scene),
-					_cameraFilter(scene)
+DownSampleSystem::DownSampleSystem(std::weak_ptr<AScene> &&scene) :
+					System(std::move(scene)),
+					_cameraFilter(std::move(scene))
 {
 }
 

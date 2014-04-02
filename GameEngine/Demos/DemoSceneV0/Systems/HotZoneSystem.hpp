@@ -10,9 +10,9 @@
 class HotZoneSystem : public System
 {
 public:
-	HotZoneSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _zones(scene)
+	HotZoneSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _zones(std::move(scene))
 		, _lastZone(Entity())
 	{}
 

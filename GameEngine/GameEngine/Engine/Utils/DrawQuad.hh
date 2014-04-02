@@ -12,7 +12,7 @@ public:
 	DrawQuad();
 	~DrawQuad();
 
-	void	init(std::weak_ptr<DependenciesInjector> engine);
+	void	init(std::weak_ptr<DependenciesInjector> &&engine);
 	void	draw(GLuint texture, int sampleNbr, glm::uvec2 const &textureSize);
 
 private:

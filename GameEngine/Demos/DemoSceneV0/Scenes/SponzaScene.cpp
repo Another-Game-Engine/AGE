@@ -41,7 +41,8 @@
 
 Entity globalCamera;
 
-SponzaScene::SponzaScene(std::weak_ptr<Engine> engine) : AScene(engine)
+SponzaScene::SponzaScene(std::weak_ptr<Engine> &&engine)
+: AScene(std::move(engine))
 {
 }
 

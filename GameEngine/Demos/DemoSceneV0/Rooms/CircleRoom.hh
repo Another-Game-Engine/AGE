@@ -4,7 +4,7 @@
 
 struct CircleRoom : public Room
 {
-	CircleRoom(std::weak_ptr<AScene> scene);
+	CircleRoom(std::weak_ptr<AScene> &&scene);
 	virtual ~CircleRoom();
 	virtual bool init();
 	Entity hotZoneCircleProjection;

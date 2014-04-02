@@ -11,9 +11,9 @@
 class SlidesSystem : public System
 {
 public:
-	SlidesSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _slide(scene)
+	SlidesSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _slide(std::move(scene))
 	{}
 
 	virtual ~SlidesSystem()

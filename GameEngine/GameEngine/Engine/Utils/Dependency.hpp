@@ -14,7 +14,7 @@ public:
 	virtual ~Dependency()
 	{}
 
-	inline std::weak_ptr<DependenciesInjector> _getDpyMAnager() { return _dpyManager; }
+	inline std::weak_ptr<DependenciesInjector> &&_getDpyMAnager() { return std::forward<std::weak_ptr<DependenciesInjector>>(_dpyManager); }
 protected:
 	std::weak_ptr<DependenciesInjector> _dpyManager;
 	friend DependenciesInjector;

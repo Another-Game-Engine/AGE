@@ -29,7 +29,8 @@
 
 #include <SDL\SDL.h>
 
-DemoScene::DemoScene(std::weak_ptr<Engine> engine) : AScene(engine)
+DemoScene::DemoScene(std::weak_ptr<Engine> &&engine)
+: AScene(std::move(engine))
 {
 }
 

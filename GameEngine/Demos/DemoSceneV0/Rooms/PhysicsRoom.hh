@@ -4,7 +4,7 @@
 
 struct PhysicsRoom : public Room
 {
-	PhysicsRoom(std::weak_ptr<AScene> scene);
+	PhysicsRoom(std::weak_ptr<AScene> &&scene);
 	virtual ~PhysicsRoom();
 	virtual bool init();
 	Entity hotZonePhysicsProjection;

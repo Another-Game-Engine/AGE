@@ -7,8 +7,8 @@
 
 struct SpiralRoomAsteroid : public Room
 {
-	SpiralRoomAsteroid(std::weak_ptr<AScene> scene)
-	: Room(scene)
+	SpiralRoomAsteroid(std::weak_ptr<AScene> &&scene)
+	: Room(std::move(scene))
 	, fboReceiver(scene.lock()->getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>())
 	, fboId(0)
 	{}

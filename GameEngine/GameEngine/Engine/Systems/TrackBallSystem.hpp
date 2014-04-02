@@ -14,9 +14,9 @@
 class TrackBallSystem : public System
 {
 public:
-	TrackBallSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _filter(scene)
+	TrackBallSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "trackball_system";
 	}

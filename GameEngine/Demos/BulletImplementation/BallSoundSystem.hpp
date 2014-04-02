@@ -14,10 +14,10 @@
 class BallSoundSystem : public System
 {
 public:
-	BallSoundSystem(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _balls(scene)
-		, _heros(scene)
+	BallSoundSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _balls(std::move(scene))
+		, _heros(std::move(scene))
 	{
 		_name = "ball_sound_system";
 	}
