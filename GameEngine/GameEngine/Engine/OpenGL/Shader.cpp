@@ -169,9 +169,11 @@ namespace OpenGLTools
 		return (true);
 	}
 
-	void Shader::addSampler(std::string &&uniform)
+	void Shader::addSampler(std::string &&sampler)
 	{
-		_samplersBind.push_back(uniform);
+		_samplersBind.push_back(sampler);
+		GLuint location = glGetUniformLocation(_progId, sampler.c_str());
+		glUniform1ui(location, _samplersBind.size() - 1);
 	}
 
 	bool Shader::deleteSampler(std::string &&sampler)
@@ -180,6 +182,8 @@ namespace OpenGLTools
 		if (it == _samplersBind.end())
 			return (false);
 		_samplersBind.erase(it);
+		GLuint location = glGetUniformLocation(_progId, sampler.c_str());
+		glUniform1ui(location, (int)(it - _samplersBind.begin()));
 		return (true);
 	}
 

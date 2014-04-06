@@ -111,7 +111,11 @@ bool		Renderer::bindShaderToUniform(std::string const &shader,
 	if (sh == std::end(_shaders) ||
 		un == std::end(_uniforms))
 		return (false);
-	//sh->second->bindUniformBlock(blockName, un->second);
+	GLuint blockId;
+	assert(sh->second->getId() != 0 && "Must initialize the shader...");
+	blockId = glGetUniformBlockIndex(sh->second->getId(), blockName.c_str());
+	assert(blockId != GL_INVALID_INDEX && "Cannot find the block in this shader");
+	glUniformBlockBinding(sh->second->getId(), blockId, un->second->getBindingPoint());
 	return (true);
 }
 
