@@ -16,7 +16,6 @@
 #include <Core/AScene.hh>
 #include <MediaFiles/AssetsManager.hpp>
 
-
 namespace Resources
 {
 	class Texture;

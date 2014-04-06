@@ -5,20 +5,13 @@
 # include "OpenGL/UniformBuffer.hh"
 # include "glm/glm.hpp"
 
+#include <Utils/File.hpp>
+#include <assert.h>
+
 # include <iostream>
 # include <fstream>
 # include <string>
 #include <memory>
 
 
-namespace OpenGLTools
-{
-	class AShader
-	{
-	public:
-		AShader();
-		virtual ~AShader();
-	protected:
-	};
-};
 #endif    //__ASHADER_HH__

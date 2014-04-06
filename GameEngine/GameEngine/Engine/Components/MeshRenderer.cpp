@@ -2,6 +2,13 @@
 #include "Core/Engine.hh"
 #include <Core/AScene.hh>	
 
+class Entity;
+class EntityData;
+class AScene;
+class AssetsManager;
+class Renderer;
+class OpenGLTools::Shader;
+
 namespace Component
 {
 	MeshRenderer::MeshRenderer() :

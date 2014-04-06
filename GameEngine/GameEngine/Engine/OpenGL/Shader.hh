@@ -1,30 +1,41 @@
 #ifndef SHADER_HH_
 # define SHADER_HH_
 
+
+# include "Utils/OpenGL.hh"
+# include <iostream>
+# include <string>
 # include <map>
 # include <array>
 # include <vector>
 # include <set>
-
-#include "AShader.hh"
+# include <utility>
+# include <memory>
+# include <Utils/File.hpp>
+# include <assert.h>
+# include "ErrorController.hh"
 
 namespace OpenGLTools
 {
-	class Shader : public AShader
+	class Shader
 	{
 	private:
 		GLuint	_progId;
 		GLuint	_vertexId;
 		GLuint	_fragId;
 		GLuint	_geometryId;
-		bool	_valid;
+		GLuint	_computeId;
+		std::map<std::string, std::vector<std::string>> _uniformBlockBind;
+		std::vector<std::string> _samplersBind;
+		std::vector<std::string> _uniformsBind;
 
 		Shader();
-		void compileShader(GLuint shaderId, std::string const &file) const;
+		void compileShader(GLuint shaderId, std::string &&file) const;
 		void linkProgram() const;
 		GLuint addShader(std::string &&path, GLenum type);
 
 	public:
+		Shader(std::string &&compute);
 		Shader(std::string &&vertex, std::string &&fragment);
 		Shader(std::string &&vertex, std::string &&fragment, std::string &&geometry);
 		~Shader(void);
@@ -33,15 +44,15 @@ namespace OpenGLTools
 		Shader &operator=(Shader const &shader);
 		Shader &operator=(Shader &&shader);
 
-		bool	addSampler(std::string &&sampler);
+		void	use();
+		void	addSampler(std::string &&sampler);
 		bool	deleteSampler(std::string &&sampler);
-		bool	addUniform(std::string &&uniform);
+		void	addUniform(std::string &&uniform);
 		bool	deleteUniform(std::string &&uniform);
-		template <typename T>
-		bool	addUniformBlock(std::string &&uniformBlock, std::array<T, std::string> &&args);
-		void	deleteUniformBlock(std::string &&unifromBlock);
-		bool	isValid() const;
-		bool	operator!() const;
+		void	addUniformBlock(std::string &&uniformBlock, std::vector<std::string> &&args);
+		bool	deleteUniformBlock(std::string &&unifromBlock);
+	
+		GLuint	getId() const;
 	};
 
 }

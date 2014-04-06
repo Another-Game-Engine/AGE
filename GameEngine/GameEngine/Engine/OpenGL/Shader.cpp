@@ -1,8 +1,4 @@
-#include "Utils/OpenGL.hh"
-
 #include "Shader.hh"
-#include <Utils/File.hpp>
-#include <assert.h>
 
 namespace OpenGLTools
 {
@@ -10,26 +6,36 @@ namespace OpenGLTools
 	:	_progId(0),
 		_vertexId(0),
 		_fragId(0),
-		_geometryId(0)
+		_geometryId(0),
+		_computeId(0)
 	{
+	}
+
+	Shader::Shader(std::string &&compute)
+	{
+		_computeId = addShader(std::move(compute), GL_COMPUTE_SHADER);
+		_progId = glCreateProgram();
+		glAttachShader(_progId, _computeId);
+		linkProgram();
 	}
 
 	Shader::Shader(std::string &&vertex, std::string &&fragment)
 		: Shader()
 	{
-		addShader(std::move(vertex), GL_VERTEX_SHADER);
-		addShader(std::move(fragment), GL_FRAGMENT_SHADER);
+		_vertexId = addShader(std::move(vertex), GL_VERTEX_SHADER);
+		_fragId = addShader(std::move(fragment), GL_FRAGMENT_SHADER);
 		_progId = glCreateProgram();
 		glAttachShader(_progId, _vertexId);
 		glAttachShader(_progId, _fragId);
+		linkProgram();
 	}
 
 	Shader::Shader(std::string &&vertex, std::string &&fragment, std::string &&geometry)
 		: Shader()
 	{
-		addShader(std::move(vertex), GL_VERTEX_SHADER);
-		addShader(std::move(fragment), GL_FRAGMENT_SHADER);
-		addShader(std::move(geometry), GL_GEOMETRY_SHADER);
+		_vertexId = addShader(std::move(vertex), GL_VERTEX_SHADER);
+		_fragId = addShader(std::move(fragment), GL_FRAGMENT_SHADER);
+		_geometryId = addShader(std::move(geometry), GL_GEOMETRY_SHADER);
 		_progId = glCreateProgram();
 		glAttachShader(_progId, _vertexId);
 		glAttachShader(_progId, _fragId);
@@ -37,37 +43,75 @@ namespace OpenGLTools
 		linkProgram();
 	}
 
+	Shader::Shader(Shader &&shader)
+		: _progId(shader._progId),
+		_vertexId(shader._vertexId),
+		_fragId(shader._fragId),
+		_geometryId(shader._geometryId),
+		_computeId(shader._computeId),
+		_uniformBlockBind(shader._uniformBlockBind),
+		_samplersBind(shader._samplersBind),
+		_uniformsBind(shader._uniformsBind)
+	{
+	}
+
+	Shader::Shader(Shader const &shader)
+		: _progId(shader._progId),
+		_vertexId(shader._vertexId),
+		_fragId(shader._fragId),
+		_geometryId(shader._geometryId),
+		_computeId(shader._computeId),
+		_uniformBlockBind(shader._uniformBlockBind),
+		_samplersBind(shader._samplersBind),
+		_uniformsBind(shader._uniformsBind)
+	{
+	}
+
 	Shader::~Shader()
 	{
+		glDetachShader(_progId, _vertexId);
+		glDetachShader(_progId, _fragId);
+		if (_geometryId)
+		{
+			glDetachShader(_progId, _geometryId);
+			glDeleteShader(_geometryId);
+		}
+		if (_computeId)
+		{
+			glDetachShader(_progId, _computeId);
+			glDeleteShader(_computeId);
+		}
+		glDeleteShader(_vertexId);
+		glDeleteShader(_fragId);
+		glDeleteProgram(_progId);
 	}
 
 	GLuint Shader::addShader(std::string &&path, GLenum type)
 	{
 		GLuint shaderId;
 		std::ifstream file(path.c_str(), std::ios_base::binary);
-		GLchar *content;
+		std::vector<GLchar> content;
 		GLint fileSize;
 
 		if (file.fail())
 		{
-			std::cerr << "Error : [" << path << "] does not exists." << std::endl;
-			_valid = false;
-			return;
+			std::cerr << std::string("Error: cannot find the file " + path + ".") << std::endl;
+			throw Error::Cannot_Compile;
 		}
 		file.seekg(0, file.end);
 		fileSize = static_cast<GLint>(file.tellg()) + 1;
 		file.seekg(0, file.beg);
-		content = new GLchar[fileSize];
-		file.read(content, fileSize - 1);
+		content = std::vector<GLchar>(fileSize);
+		file.read(content.data(), fileSize - 1);
 		content[fileSize - 1] = 0;
 		shaderId = glCreateShader(type);
-		glShaderSource(shaderId, 1, const_cast<const GLchar**>(&content), const_cast<const GLint*>(&fileSize));
-		compileShader(shaderId, path);
-		delete[] content;
+		GLchar *toShader = content.data();
+		glShaderSource(shaderId, 1, const_cast<const GLchar**>(&toShader), const_cast<const GLint*>(&fileSize));
+		compileShader(shaderId, std::move(path));
 		return (shaderId);
 	}
 
-	void AShader::compileShader(GLuint shaderId, std::string const &file) const
+	void Shader::compileShader(GLuint shaderId, std::string &&file) const
 	{
 		GLint         compileRet = 0;
 		GLsizei       msgLenght;
@@ -87,7 +131,7 @@ namespace OpenGLTools
 		}
 	}
 
-	void AShader::linkProgram() const
+	void Shader::linkProgram() const
 	{
 		GLint         linkRet = 0;
 		GLsizei       msgLenght;
@@ -107,146 +151,78 @@ namespace OpenGLTools
 		}
 	}
 
-bool Shader::init(std::string const &vertex, std::string const &fragment, std::string const &geometry)
-{
-	if (!File(vertex).exists() || !File(fragment).exists())
+	void Shader::use()
 	{
-		std::cerr << "Error : [" << vertex << "] and/or [" << fragment << "] does not exists." << std::endl;
-		return false;
-	}
-	if (!geometry.empty() && !File(geometry).exists())
-	{
-		std::cerr << "Error : [" << geometry << "] does not exists." << std::endl;
-		return false;
-	}
-  if ((_vertexId = addShader(vertex, GL_VERTEX_SHADER)) == 0)
-    {
-      std::cerr << "Error: vertex shader invalid" << std::endl;
-      return (false);
-    }
-  if ((_fragId = addShader(fragment, GL_FRAGMENT_SHADER)) == 0)
-    {
-      std::cerr << "Error: fragment shader invalid" << std::endl;
-      return (false);
-    }
-  if (geometry.empty() == false &&
-	  (_geometryId = addShader(geometry, GL_GEOMETRY_SHADER)) == 0)
-    {
-      std::cerr << "Error: geometry shader invalid" << std::endl;
-      return (false);
-    }
-  _progId = glCreateProgram();
-  glAttachShader(_progId, _vertexId);
-  glAttachShader(_progId, _fragId);
-  if (_geometryId != 0)
-  {
-	  glAttachShader(_progId, _geometryId);
-  }
-  linkProgram();
-
-  glDetachShader(_progId, _vertexId);
-  glDetachShader(_progId, _fragId);
-  if (_geometryId != 0)
-	  glDetachShader(_progId, _geometryId);
-  glDeleteShader(_vertexId);
-  glDeleteShader(_fragId);
-  if (_geometryId != 0)
-	  glDeleteShader(_geometryId);
-
-  return (true);
-}
-
-GLenum  *Shader::getTargets() const
-{
-	return _targets;
-}
-
-std::size_t Shader::getTargetsNumber() const
-{
-	return _targetsList.size();
-}
-
-bool Shader::_build()
-{
-	use();
-
-	// if there is no targets defined
-	if (_targetsList.size() == 0)
-	{
-		std::cout << "No targets defined for shader" << std::endl;
-		_targetsList.insert(GL_COLOR_ATTACHMENT0);
+		glUseProgram(_progId);
 	}
 
-	if (_targets)
-		delete _targets;
-	_targets = new GLenum[_targetsList.size()];
-
-	unsigned int i = 0;
-	for (auto &e : _targetsList)
+	void Shader::addUniformBlock(std::string  &&uniformBlock, std::vector<std::string> &&args)
 	{
-#pragma warning(suppress: 6386)
-		_targets[i] = static_cast<GLenum>(e);
-		++i;
+		_uniformBlockBind[uniformBlock] = std::vector<std::string>(args);
 	}
 
-	unsigned int destIndex = 0;
-	for (auto &e : _layersList)
+	bool Shader::deleteUniformBlock(std::string &&uniformBlock)
 	{
-		GLuint	location = glGetUniformLocation(_progId, std::string("layer" + std::to_string(destIndex)).c_str());
-
-		glUniform1i(location, destIndex);
-		if (glGetError() != GL_NO_ERROR)
-			std::cerr << "Bind active texture failed for uniform <layer" << e << ">." << std::endl;
-		++destIndex;
+		if (_uniformBlockBind.find(uniformBlock) == _uniformBlockBind.end())
+			return (false);
+		_uniformBlockBind.erase(uniformBlock);
+		return (true);
 	}
 
-	for (unsigned int it = 0; it < _textureNumber; ++it)
+	void Shader::addSampler(std::string &&uniform)
 	{
-		GLuint	location = glGetUniformLocation(_progId, std::string("fTexture" + std::to_string(it)).c_str());
-
-		glUniform1i(location, it);
-		if (glGetError() != GL_NO_ERROR)
-			std::cerr << "Bind active texture failed for uniform <fTexture" << it << ">." << std::endl;
-		++destIndex;
+		_samplersBind.push_back(uniform);
 	}
 
-	return true;
-}
-
-	Shader &Shader::addTarget(GLenum target)
+	bool Shader::deleteSampler(std::string &&sampler)
 	{
-		_targetsList.insert(target);
-		return *this;
+		std::vector<std::string>::iterator it = std::find(_samplersBind.begin(), _samplersBind.end(), sampler);
+		if (it == _samplersBind.end())
+			return (false);
+		_samplersBind.erase(it);
+		return (true);
 	}
 
-	Shader &Shader::removeTarget(GLenum target)
+	void Shader::addUniform(std::string &&uniform)
 	{
-		_targetsList.erase(target);
-		return *this;
+		_uniformsBind.push_back(uniform);
 	}
 
-	void Shader::clearTargets()
+	bool Shader::deleteUniform(std::string &&uniform)
 	{
-		_targetsList.clear();
-		if (_targets)
-			delete _targets;
+		std::vector<std::string>::iterator it = std::find(_uniformsBind.begin(), _uniformsBind.end(), uniform);
+		if (it == _uniformsBind.end())
+			return (false);
+		_uniformsBind.erase(it);
+		return (true);
 	}
 
-	Shader &Shader::addLayer(GLenum layer)
+	Shader &Shader::operator=(Shader const &other)
 	{
-		_layersList.insert(layer);
-		return *this;
+		_progId = other._progId;
+		_vertexId = other._vertexId;
+		_fragId = other._fragId;
+		_geometryId = other._geometryId;
+		_uniformBlockBind = other._uniformBlockBind;
+		_samplersBind = other._samplersBind;
+		_uniformsBind = other._uniformsBind;
+		return (*this);
 	}
 
-	Shader &Shader::removeLayer(GLenum layer)
+	Shader &Shader::operator=(Shader &&other)
 	{
-		_layersList.erase(layer);
-		return *this;
+		_progId = other._progId;
+		_vertexId = other._vertexId;
+		_fragId = other._fragId;
+		_geometryId = other._geometryId;
+		_uniformBlockBind = other._uniformBlockBind;
+		_samplersBind = other._samplersBind;
+		_uniformsBind = other._uniformsBind;
+		return (*this);
 	}
 
-	void Shader::clearLayers()
+	GLuint Shader::getId() const
 	{
-		_layersList.clear();
+		return (_progId);
 	}
-
 }

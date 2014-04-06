@@ -2,6 +2,7 @@
 #include <Systems/System.h>
 #include <Utils/DrawQuad.hh>
 #include <OpenGL/ComputeShader.hh>
+#include <utility>
 
 class PostFxSystem : public System
 {
@@ -39,8 +40,8 @@ private:
 	float							_maxLightDiminution;
 
 	// HDR Compute shader
-	OpenGLTools::ComputeShader		_modulateRender;
-	OpenGLTools::ComputeShader		_bloom;
+	OpenGLTools::Shader		_modulateRender;
+	OpenGLTools::Shader		_bloom;
 
 	// HDR factors
 	float							_curFactor;

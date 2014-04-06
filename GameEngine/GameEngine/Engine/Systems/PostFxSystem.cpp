@@ -9,6 +9,8 @@ PostFxSystem::PostFxSystem(std::weak_ptr<AScene> scene) :
 					_adaptationSpeed(0.15f),
 					_maxDarkImprovement(1.0f),
 					_maxLightDiminution(0),
+					_modulateRender(std::move(std::string("../../ComputeShaders/HighDynamicRange.kernel"))),
+					_bloom(std::move(std::string("../../ComputeShaders/Bloom.kernel"))),
 					_curFactor(1.0f),
 					_targetFactor(1.0f),
 					_useHDR(true),
@@ -30,11 +32,6 @@ bool	PostFxSystem::initialize()
 	_cameraFilter.requireComponent<Component::CameraComponent>();
 
 	_quad.init(_scene);
-
-	if (!_modulateRender.init("../../ComputeShaders/HighDynamicRange.kernel"))
-		return false;
-	if (!_bloom.init("../../ComputeShaders/Bloom.kernel"))
-		return false;
 
 	// Bloom texture
 	glGenTextures(1, &_bloomTexture);
