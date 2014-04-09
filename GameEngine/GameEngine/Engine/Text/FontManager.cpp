@@ -6,9 +6,8 @@
 #include <Context/IRenderContext.hh>
 #include <glm/gtc/matrix_transform.hpp>
 
-FontManager::FontManager(Engine *engine)
-: PubSub(engine->getInstance<PubSub::Manager>())
-, _engine(engine)
+FontManager::FontManager()
+: Dependency()
 {}
 
 FontManager::~FontManager()
@@ -16,13 +15,14 @@ FontManager::~FontManager()
 
 bool FontManager::init()
 {
-	globalSub(std::string("endOfFrame"), [&](){
+	_pubSub = std::make_unique<PubSub>(_dpyManager.lock()->getInstance<PubSub::Manager>());
+	_pubSub->globalSub(std::string("endOfFrame"), [&](){
 		_drawList();
 	});
 
 	std::array<Attribute, 2> param =
 	{
-		Attribute(GL_FLOAT, sizeof(float), 4),
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
 		Attribute(GL_FLOAT, sizeof(float), 2),
 	};
 	_vertexManager = std::make_unique<VertexManager<2>>(param);
@@ -43,7 +43,14 @@ bool FontManager::loadFont(const File &file, const std::string &name)
 	}
 
 	Font font;
-	std::ifstream s(file.getFileName(), std::ios_base::binary);
+
+	std::ifstream s(file.getFullName(), std::ios_base::binary);
+	if (!s.is_open())
+	{
+		std::cerr << "File " << file.getFullName() << " is not open." << std::endl;
+		return false;
+	}
+
 	cereal::PortableBinaryInputArchive ar(s);
 	ar(font);
 	s.close();
@@ -65,11 +72,16 @@ bool FontManager::isLoaded(const std::string &name)
 
 void FontManager::_drawList()
 {
+	glDisable(GL_ALPHA_TEST);
+	glEnable(GL_BLEND);
+
 	for (auto &e : _toDraw)
 	{
 		_draw2DString(e.str, e.fontName, e.size, e.position, e.color, e.shader);
 	}
 	_toDraw.clear();
+	glDisable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
 }
 
 void FontManager::_draw2DString(const std::string &text,
@@ -79,7 +91,7 @@ void FontManager::_draw2DString(const std::string &text,
 	const glm::vec4 &color,
 	const std::string &shader)
 {
-	auto s = _engine->getInstance<Renderer>()->getShader(shader);
+	auto s = _dpyManager.lock()->getInstance<Renderer>()->getShader(shader);
 	if (!s)
 		return;
 	s->use();
@@ -106,15 +118,15 @@ void FontManager::_draw2DString(const std::string &text,
 		return;
 	}
 	auto &f = fontSize->second;
-	float sz = f._size;
-	if (sz != (float)size)
-		sz = size;
+	float sz = static_cast<float>(f._size);
+	if (sz != static_cast<float>(size))
+		sz = static_cast<float>(size);
 	glm::mat4 transformation(1);
 	transformation = glm::translate(transformation, glm::vec3(position.x, position.y, 0));
 
 	glUniform1i(glGetUniformLocation(s->getId(), "fTexture0"), 0);
 	glUniform4f(glGetUniformLocation(s->getId(), "color"), color.x, color.y, color.z, color.a);
-	glm::ivec2 screen = _engine->getInstance<IRenderContext>()->getScreenSize();
+	auto screen = _dpyManager.lock()->getInstance<IRenderContext>()->getScreenSize();
 	glm::mat4 Projection = glm::mat4(1);
 	Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
 	glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, glm::value_ptr(Projection));
@@ -122,19 +134,30 @@ void FontManager::_draw2DString(const std::string &text,
 	glBindTexture(GL_TEXTURE_2D, f._textureId);
 	auto transformationID = glGetUniformLocation(s->getId(), "transformation");
 	auto glyphWidth = 0.0f;
-	float lastX = position.x;
-	for (auto i = 0; i < text.size(); ++i)
+	float lastX = static_cast<float>(position.x);
+	float lineWidth = 0.0f;
+	for (std::size_t i = 0; i < text.size(); ++i)
 	{
-		auto l = text[i] - ASCII_BEGIN;
-		glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
+		std::size_t l = std::size_t(text[i] - ASCII_BEGIN);
+		if (l > ASCII_END)
+			glyphWidth = size;
+		else
+			glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
 		if (text[i] == ' ')
 		{
 			lastX = sz / 3.0f;
+		}
+		else if (text[i] == '\n')
+		{
+			transformation = glm::translate(transformation, glm::vec3(-lineWidth, f._glyphSize, 0));
+			lineWidth = 0;
+			continue;
 		}
 		else
 		{
 			lastX = glyphWidth;
 		}
+		lineWidth += lastX;
 		glUniformMatrix4fv(transformationID, 1, GL_FALSE, glm::value_ptr(transformation));
 		f._map[l].buffer->draw(GL_QUADS);
 		transformation = glm::translate(transformation, glm::vec3(lastX, 0, 0));

@@ -7,7 +7,7 @@
 class BulletDemoScene : public AScene
 {
 public:
-	BulletDemoScene(Engine &engine);
+	BulletDemoScene(std::weak_ptr<Engine> &&engine);
 	virtual ~BulletDemoScene(void);
 
 	Entity  BulletDemoScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass);

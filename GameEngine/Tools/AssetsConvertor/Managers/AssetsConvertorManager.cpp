@@ -21,15 +21,21 @@ AssetsConvertorManager::AssetsConvertorManager()
 AssetsConvertorManager::~AssetsConvertorManager()
 {}
 
-void AssetsConvertorManager::setOutputDirectory(const std::string directory)
+void AssetsConvertorManager::setOutputDirectory(const std::string &directory)
 {
 	_outputDirectory = File(directory);
 }
 
-std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string filename)
+void AssetsConvertorManager::setInputDirectory(const std::string &directory)
+{
+	_inputDirectory = File(directory);
+}
+
+
+std::shared_ptr<AMediaFile> AssetsConvertorManager::load(const std::string &filename)
 {
 	const File file(filename);
-
+	assert(file.exists() && "File do not exists.");
 	for (auto &e : _convertors)
 	{
 		if (e.second->supportFile(file))
@@ -55,7 +61,7 @@ bool AssetsConvertorManager::serializeData(const std::string &exportName)
 	for (auto &e : _files)
 	{
 		std::ofstream ofs(e.second->path.getFullName(), std::ios::trunc | std::ios::binary);
-		e.second->serialize<cereal::BinaryOutputArchive>(ofs);
+		e.second->serialize(ofs);
 		ofs.close();
 		files.insert(std::make_pair(e.second->getChilds(), e.second->path.getFullName()));
 	}

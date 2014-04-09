@@ -11,10 +11,10 @@
 #include <Utils/PubSub.hpp>
 
 
-class FontManager : public Dependency, public PubSub
+class FontManager : public Dependency
 {
 public:
-	FontManager(Engine *e);
+	FontManager();
 	virtual ~FontManager();
 	bool init();
 
@@ -62,6 +62,6 @@ private:
 
 	std::vector<DrawStringSave> _toDraw;
 	std::map <std::string, Font> _collection;
-	Engine *_engine;
 	std::unique_ptr<VertexManager<2>> _vertexManager;
+	std::unique_ptr<PubSub> _pubSub;
 };

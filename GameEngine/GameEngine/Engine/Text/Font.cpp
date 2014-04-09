@@ -47,22 +47,22 @@ bool Font::FontSize::load(std::unique_ptr<VertexManager<2>> &vm)
 	std::vector<glm::vec2>		uvs;		// texture coordinates
 	std::vector<unsigned int>	indices;	// indices
 
-	vertices.resize(4);
-	uvs.resize(4);
-	indices.resize(4);
+	vertices.resize(4); //-V112
+	uvs.resize(4); //-V112
+	indices.resize(4); //-V112
 	indices = { 0, 1, 2, 3 };
 	for (auto &glyph : _map)
 	{
 		auto glyphWidth = (float)glyph.width;
 		vertices[0] = glm::vec4(0, 0, 0, 1);
-		vertices[1] = glm::vec4(glyphWidth, 0, 0, 1);
+		vertices[1] = glm::vec4(0, (float)(_size), 0, 1);
 		vertices[2] = glm::vec4(glyphWidth, (float)(_size), 0, 1);
-		vertices[3] = glm::vec4(0, (float)(_size), 0, 1);
+		vertices[3] = glm::vec4(glyphWidth, 0, 0, 1);
 
 		uvs[0] = glm::vec2(glyph.uvs[0], glyph.uvs[1]);
-		uvs[1] = glm::vec2(glyph.uvs[2], glyph.uvs[1]);
+		uvs[1] = glm::vec2(glyph.uvs[0], glyph.uvs[3]);
 		uvs[2] = glm::vec2(glyph.uvs[2], glyph.uvs[3]);
-		uvs[3] = glm::vec2(glyph.uvs[0], glyph.uvs[3]);
+		uvs[3] = glm::vec2(glyph.uvs[2], glyph.uvs[1]);
 
 		std::array<Data, 2> data =
 		{
@@ -85,8 +85,8 @@ bool Font::FontSize::load(std::unique_ptr<VertexManager<2>> &vm)
 		GL_TEXTURE_2D,
 		0,
 		GL_ALPHA,
-		_texW,
-		_texH,
+		static_cast<GLsizei>(_texW),
+		static_cast<GLsizei>(_texH),
 		0,
 		GL_ALPHA,
 		GL_UNSIGNED_BYTE,

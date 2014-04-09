@@ -15,9 +15,9 @@
 class TrackingCameraSystem : public System
 {
 public:
-	TrackingCameraSystem(AScene *scene)
-		: System(scene)
-		, _filter(scene)
+	TrackingCameraSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "tracking_camera_system";
 	}
@@ -52,11 +52,12 @@ protected:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::CameraComponent>();
 		_filter.requireComponent<Component::TrackingCamera>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
+		return true;
 	}
 };
 

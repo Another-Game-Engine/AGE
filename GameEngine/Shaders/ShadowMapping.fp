@@ -1,13 +1,22 @@
 #version 330
 
-layout (std140) uniform Light
+in vec4 fColor;
+
+layout (std140) uniform PerModel
 {
-	mat4 lightMVP;
+	mat4 model;
 };
 
-layout (location = 0) out float fDepth;
+layout (std140) uniform PerLight
+{
+	mat4 lightVP;
+};
+
+layout (location = 0) out vec4 FragColor;
 
 void main()
 {
-	fDepth = gl_FragCoord.z;
+	if (fColor.a == 0.0f)
+		discard;
+	FragColor = vec4(0);
 }

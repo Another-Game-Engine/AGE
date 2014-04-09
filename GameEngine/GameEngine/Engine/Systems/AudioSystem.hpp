@@ -12,11 +12,11 @@
 class AudioSystem : public System
 {
 public:
-	AudioSystem(AScene *scene)
-		: System(scene)
-		, _emitters(scene)
-		, _listeners(scene)
-		, _manager(scene->getInstance<AudioManager>())
+	AudioSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _emitters(std::move(scene))
+		, _listeners(std::move(scene))
+		, _manager(scene.lock()->getInstance<AudioManager>())
 	{
 		_name = "audio_system";
 		assert(_manager != nullptr && "No audio manager found.");
@@ -60,9 +60,10 @@ protected:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_listeners.requireComponent<Component::AudioListener>();
 		_emitters.requireComponent<Component::AudioEmitter>();
+		return true;
 	}
 };

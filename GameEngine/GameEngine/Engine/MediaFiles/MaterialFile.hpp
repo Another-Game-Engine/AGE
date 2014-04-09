@@ -18,29 +18,13 @@
 
 struct MaterialFile : public MediaFile<MaterialFile>
 {
-	MaterialFile() : MediaFile<MaterialFile>()
-	{
-		_type = MATERIAL;
-	}
+	MaterialFile();
 
-	virtual ~MaterialFile()
-	{
-	}
+	virtual ~MaterialFile();
 
-	MaterialFile(const MaterialFile &o)
-		: MediaFile<MaterialFile>(o)
-	{
-		materials = o.materials;
-	}
+	MaterialFile(const MaterialFile &o);
 
-	MaterialFile &operator=(const MaterialFile &o)
-	{
-		if (&o != this)
-		{
-			materials = o.materials;
-		}
-		return *this;
-	}
+	MaterialFile &operator=(const MaterialFile &o);
 
 	struct Material
 	{
@@ -64,142 +48,29 @@ struct MaterialFile : public MediaFile<MaterialFile>
 		std::map<std::string, int> paramInt;
 		std::map<std::string, float> paramFloat;
 		MaterialFile *file;
+	private:
+		std::weak_ptr<DependenciesInjector> _dpyManager;
+		friend struct MaterialFile;
 	public:
+		Material();
 
-		Material() :
-			name("noname"),
-			ambient(0),
-			diffuse(0),
-			specular(0),
-			transmittance(0),
-			emission(0),
-			shininess(0),
-			ambientTex(nullptr),
-			diffuseTex(nullptr),
-			specularTex(nullptr),
-			normalTex(nullptr),
-			file(nullptr)
-		{}
+		void setUniforms(std::shared_ptr<OpenGLTools::UniformBuffer> buffer);
 
-		void setUniforms(OpenGLTools::UniformBuffer *buffer)
-		{
-			buffer->setUniform("ambient", ambient);
-			buffer->setUniform("diffuse", diffuse);
-			buffer->setUniform("specular", specular);
-			buffer->setUniform("transmittance", transmittance);
-			buffer->setUniform("emission", emission);
-			buffer->setUniform("shininess", shininess);
-			if (ambientTex != nullptr)
-			{
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, ambientTex->getId());
-			}
-			if (diffuseTex != nullptr)
-			{
-				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, diffuseTex->getId());
-			}
-			if (specularTex != nullptr)
-			{
-				glActiveTexture(GL_TEXTURE2);
-				glBindTexture(GL_TEXTURE_2D, specularTex->getId());
-			}
-			if (normalTex != nullptr)
-			{
-				glActiveTexture(GL_TEXTURE3);
-				glBindTexture(GL_TEXTURE_2D, normalTex->getId());
-			}
-		}
+		Material &operator=(const Material &o);
 
-		Material &operator=(const Material &o)
-		{
-			name = o.name;
-			ambient = o.ambient;
-			diffuse = o.diffuse;
-			specular = o.specular;
-			transmittance = o.transmittance;
-			emission = o.emission;
-			shininess = o.shininess;
-			ambientTex = o.ambientTex;
-			diffuseTex = o.diffuseTex;
-			specularTex = o.specularTex;
-			normalTex = o.normalTex;
-			return *this;
-		}
+		Material(const Material &o);
 
-		Material(const Material &o)
-		{
-			name = o.name;
-			ambient = o.ambient;
-			diffuse = o.diffuse;
-			specular = o.specular;
-			transmittance = o.transmittance;
-			emission = o.emission;
-			shininess = o.shininess;
-			ambientTex = o.ambientTex;
-			diffuseTex = o.diffuseTex;
-			specularTex = o.specularTex;
-			normalTex = o.normalTex;
-		}
-
-		template <typename Archive>
-		void save(Archive &ar) const
-		{
-			ar(name, ambient, diffuse, specular, transmittance, emission, shininess, paramVec2, paramVec3, paramVec4, paramMat2, paramMat3, paramMat4, paramInt, paramFloat);
-			std::string a, b, c, d;
-			a = ambientTex != nullptr ? ambientTex->path.getFullName() : "NULL";
-			b = diffuseTex != nullptr ? diffuseTex->path.getFullName() : "NULL";
-			c = specularTex != nullptr ? specularTex->path.getFullName() : "NULL";
-			d = normalTex != nullptr ? normalTex->path.getFullName() : "NULL";
-			ar(a, b, c, d);
-		}
-
-		template <typename Archive>
-		void load(Archive &ar)
-		{
-			ar(name, ambient, diffuse, specular, transmittance, emission, shininess, paramVec2, paramVec3, paramVec4, paramMat2, paramMat3, paramMat4, paramInt, paramFloat);
-			std::string a, b, c, d;
-			ar(a, b, c, d);
-			if (a != "NULL")
-				ambientTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(a)));
-			if (b != "NULL")
-				diffuseTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(b)));
-			if (c != "NULL")
-				specularTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(c)));
-			if (d != "NULL")
-				normalTex = std::static_pointer_cast<TextureFile>(_manager->loadFromFile<Archive>(File(d)));
-		}
-
+		void save(cereal::PortableBinaryOutputArchive &ar) const;
+		void load(cereal::PortableBinaryInputArchive &ar);
 	};
 
 	std::vector<Material> materials;
 
-	template <typename Archive>
-	AMediaFile *unserialize(Archive &ar)
-	{
-		AMediaFile *res = new ObjFile();
-		res->manager = manager;
-		ar(static_cast<MaterialFile&>(*res));
-		return res;
-	}
+	//AMediaFile *unserialize(cereal::PortableBinaryInputArchive &ar);
 
-	template <typename Archive>
-	void save(Archive &ar) const
-	{
-		ar(cereal::make_nvp("material_size", materials.size()));
-		ar(materials);
-	}
+	void save(cereal::PortableBinaryOutputArchive &ar) const;
 
-	template <typename Archive>
-	void load(Archive &ar)
-	{
-		std::size_t size;
-		ar(size);
-		materials.resize(size);
-		for (auto &e : materials)
-			e.file = this;
-		ar(materials);
-	}
+	void load(cereal::PortableBinaryInputArchive &ar);
 
 };
 

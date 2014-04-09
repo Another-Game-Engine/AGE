@@ -20,7 +20,10 @@ public:
 	AssetsConvertorManager();
 	virtual ~AssetsConvertorManager();
 
-	void setOutputDirectory(const std::string directory);
+	void setOutputDirectory(const std::string &directory);
+	void setInputDirectory(const std::string &directory);
+	inline const File &getOutputDirectory() const { return _outputDirectory; }
+	inline const File &getInputDirectory() const { return _inputDirectory; }
 
 	template <typename T>
 	void registerConvertor()
@@ -31,13 +34,14 @@ public:
 		_convertors.emplace(key, std::make_unique<T>(this));
 	}
 
-	std::shared_ptr<AMediaFile> load(const std::string filename);
+	std::shared_ptr<AMediaFile> load(const std::string &filename);
 
 	bool serializeData(const std::string &exportName);
 
 	void clear();
 private:
 	File _outputDirectory;
+	File _inputDirectory;
 	std::map < std::size_t, std::unique_ptr<AConvertor> > _convertors;
 };
 

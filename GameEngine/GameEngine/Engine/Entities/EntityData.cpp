@@ -6,9 +6,8 @@
 #include <limits>
 #include <Core/AScene.hh>
 
-EntityData::EntityData(std::shared_ptr<AScene> scene) :
-    PubSub(scene->getInstance<PubSub::Manager>()),
-    _scene(scene),
+EntityData::EntityData(std::weak_ptr<AScene> &&scene) :
+    _scene(std::move(scene)),
 	_flags(0),
 	_localTranslation(0),
 	_localRotation(0),
@@ -27,7 +26,6 @@ EntityData::~EntityData()
 }
 
 EntityData::EntityData(EntityData &&o)
-: PubSub(std::forward<PubSub>(o))
 {
 	_handle = std::move(o._handle);
 	_scene = std::move(o._scene);
@@ -51,7 +49,7 @@ Entity &EntityData::getHandle()
 	return _handle;
 }
 
-std::shared_ptr<AScene> EntityData::getScene() const
+std::weak_ptr<AScene> EntityData::getScene()
 {
 	return _scene;
 }
@@ -66,12 +64,13 @@ glm::mat4 const  		&EntityData::getLocalTransform()
 	return (_localTransform);
 }
 
-//  TO DELETE
-void   			        EntityData::setLocalTransform(const glm::mat4 &t)
+void   			        EntityData::setLocalTransform(const glm::mat4 &t, bool forceMovedFlag)
 {
 	_flags |= HAS_MOVED;
 	_localTransform = t;
 	computeTransformAndUpdateGraphnode();
+	if (forceMovedFlag)
+		_flags |= HAS_MOVED;
 }
 
 glm::mat4 const			&EntityData::getGlobalTransform() const
@@ -79,7 +78,6 @@ glm::mat4 const			&EntityData::getGlobalTransform() const
 	return (_globalTransform);
 }
 
-// TO DELETE
 void 					EntityData::computeGlobalTransform(glm::mat4 const &fatherTransform)
 {
 	_globalTransform = fatherTransform * _localTransform;
@@ -193,20 +191,22 @@ Barcode                 &EntityData::getCode()
 	return _code;
 }
 
-void                    EntityData::addTag(unsigned int tag)
+void                    EntityData::addTag(unsigned short tag)
 {
-	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.add(tag);
+	_scene.lock()->informFilters(true, tag, std::move(_handle));
 }
 
-void                    EntityData::removeTag(unsigned int tag)
+void                    EntityData::removeTag(unsigned short tag)
 {
-	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	_code.remove(tag);
+	_scene.lock()->informFilters(false, tag, std::move(_handle));
 }
-bool                    EntityData::isTagged(unsigned int tag) const
+bool                    EntityData::isTagged(unsigned short tag) const
 {
-	assert(tag < MAX_TAG_NUMBER, "Tags limit is 31");
+	assert(tag < MAX_TAG_NUMBER && "Tags limit is 31");
 	return _code.isSet(tag);
 }
 
@@ -228,12 +228,19 @@ void EntityData::reset()
 	_globalTransform = glm::mat4(1);
 	_localTransform = glm::mat4(1);
 	_code.reset();
-	for (unsigned int i = 0; i < _components.size(); ++i)
+	auto scene = _scene.lock();
+	for (std::size_t i = 0; i < MAX_TAG_NUMBER; ++i)
 	{
-		unsigned int id = i + MAX_TAG_NUMBER;
+		if (scene)
+			scene->informFilters(false, static_cast<unsigned short>(i), std::move(_handle));
+	}
+	for (std::size_t i = 0; i < _components.size(); ++i)
+	{
+		std::size_t id = i + MAX_TAG_NUMBER;
 		if (_components[i].get())
 		{
-			broadCast(std::string("componentRemoved" + std::to_string(id)), _handle);
+			if (scene)
+				scene->informFilters(false, static_cast<unsigned short>(id), std::move(_handle));
 			_components[i]->reset();
 		}
 		_components[i].reset();
@@ -242,8 +249,6 @@ void EntityData::reset()
 	for (auto e : _childs)
 		e->removeParent(false);
 	_childs.clear();
-	auto key = PubSubKey("graphNodeNotARoot");
-	broadCast(key, _handle);
 }
 
 ////////////////
@@ -272,16 +277,6 @@ void 					EntityData::setParent(Entity &parent, bool notify)
 	}
 	if (notify)
 		parent->addChild(_handle, false);
-	if (!parent.get()) // if parent is null -> it's a root node
-	{
-		auto key = PubSubKey("graphNodeSetAsRoot");
-		broadCast(key, _handle);
-	}
-	else if (!_parent.get()) // if it was a root node
-	{
-		auto key = PubSubKey("graphNodeNotARoot");
-		broadCast(key, _handle);
-	}
 	computeTransformAndUpdateGraphnode();
 	_parent = parent;
 }
@@ -301,8 +296,6 @@ void                    EntityData::removeParent(bool notify)
 	{
 		_parent->removeChild(_handle);
 	}
-	auto key = PubSubKey("graphNodeSetAsRoot");
-	broadCast(key, _handle);
 	_parent = Entity(std::numeric_limits<unsigned int>::max(), nullptr);
 	computeTransformAndUpdateGraphnode();
 }
@@ -317,6 +310,3 @@ std::set<Entity>::iterator EntityData::getChildsEnd()
 	return std::end(_childs);
 }
 
-//
-//
-//////////////

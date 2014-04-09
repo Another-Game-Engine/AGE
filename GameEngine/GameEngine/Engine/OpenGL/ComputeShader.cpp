@@ -3,7 +3,7 @@
 using namespace OpenGLTools;
 
 ComputeShader::ComputeShader()
-	: _csId(0)
+: _csId(0)
 {}
 
 ComputeShader::~ComputeShader()
@@ -18,8 +18,15 @@ bool ComputeShader::init(const File &file)
 {
 	if (!file.exists())
 		return false;
-	_csId = addShader(file.getFullName(), GL_COMPUTE_SHADER);
-  _progId = glCreateProgram();
-  glAttachShader(_progId, _csId);
-  linkProgram();
+	if ((_csId = addShader(file.getFullName(), GL_COMPUTE_SHADER)) == 0)
+	{
+		std::cerr << "Error: compute shader invalid" << std::endl;
+		return (false);
+	}
+	_progId = glCreateProgram();
+	glAttachShader(_progId, _csId);
+	linkProgram();
+	glDetachShader(_progId, _csId);
+	glDeleteShader(_csId);
+	return true;
 }

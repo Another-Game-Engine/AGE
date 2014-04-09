@@ -14,9 +14,9 @@
 class TrackBallSystem : public System
 {
 public:
-	TrackBallSystem(AScene *scene)
-		: System(scene)
-		, _filter(scene)
+	TrackBallSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "trackball_system";
 	}
@@ -35,7 +35,8 @@ protected:
 
 	virtual void mainUpdate(double time)
 	{
-		auto inputs = _scene->getInstance<Input>();
+		auto scene = _scene.lock();
+		auto inputs = scene->getInstance<Input>();
 
 		for (auto e : _filter.getCollection())
 		{
@@ -53,21 +54,22 @@ protected:
 				else
 					trackBall->dist = 0.0001f;
 			}
-			pos.x = sin(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist;
+			pos.x = sin(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist; //-V537
 			pos.y = sin(trackBall->angles.y) * trackBall->dist;
 			pos.z = cos(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist;
 			e->setLocalTransform(glm::lookAt(glm::vec3(trackBall->toLook->getGlobalTransform()[3]) + pos,
 				glm::vec3(trackBall->toLook->getGlobalTransform()[3]),
 				glm::vec3(0, 1, 0)));
-			camera->setLookAtTransform() = e->getLocalTransform();
+			camera->lookAtTransform = e->getLocalTransform();
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::CameraComponent>();
 		_filter.requireComponent<Component::TrackBall>();
 		SDL_SetRelativeMouseMode(SDL_bool(true));
+		return true;
 	}
 };
 

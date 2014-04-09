@@ -18,40 +18,41 @@
 #include <cereal/archives/xml.hpp>
 #include <Components/ComponentRegistrar.hpp>
 
-class Engine;
 class System;
+class Engine;
+class EntityFilter;
 
-class AScene : public std::enable_shared_from_this<AScene>, public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
+class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
 {
 private:
-	std::multimap<std::size_t, std::shared_ptr<System> >   _systems;
+	std::multimap<std::size_t, std::shared_ptr<System> >_systems;
 	std::vector<EntityData>                             _pool;
-	std::queue<unsigned int>                            _free;
+	std::queue<std::size_t>                             _free;
 	std::size_t                                         _entityNumber;
-protected:
-	Engine                                              &_engine;
+	std::map<unsigned short, std::list<EntityFilter*>> _filters;
 public:
-	AScene(Engine &engine);
+	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
 	inline std::size_t getNumberOfEntities() { return _entityNumber; }
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
+	bool                    start();
+	void filterSubscribe(unsigned short, EntityFilter* filter);
+	void filterUnsubscribe(unsigned short, EntityFilter* filter);
+	void informFilters(bool added, unsigned short id, Entity &&entity);
+
 	Entity &createEntity();
 	void destroy(const Entity &h);
 	EntityData *get(const Entity &h);
 
-	Engine &getEngine()
-	{
-		return _engine;
-	}
-
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
 	{
-		std::shared_ptr<T> tmp{ new T(this) };
+		auto tmp = std::make_shared<T>(std::static_pointer_cast<AScene>(shared_from_this()));
+		if (!tmp->init())
+			return nullptr;
 		_systems.insert(std::make_pair(priority, tmp));
-		tmp->init();
 		return tmp;
 	}
 
@@ -80,6 +81,29 @@ public:
 		}
 	}
 
+
+	template <typename T>
+	bool activateSystem()
+	{
+		for (auto &e : _systems)
+		{
+			if (typeid(*e.second.get()).name() == typeid(T).name())
+				return e.second->setActivation(true);
+		}
+		return false;
+	}
+
+	template <typename T>
+	bool deactivateSystem()
+	{
+		for (auto &e : _systems)
+		{
+			if (typeid(*e.second.get()).name() == typeid(T).name())
+				return e.second->setActivation(false);
+		}
+		return false;
+	}
+
 	template <typename Archive>
 	void save(std::ofstream &s)
 	{
@@ -105,8 +129,6 @@ public:
 	template <typename Archive>
 	void load(std::ifstream &s)
 	{
-		std::map<unsigned int, unsigned int> unserializedId;
-
 		Archive ar(s);
 		unsigned int size = 0;
 		ar(size);
@@ -117,5 +139,4 @@ public:
 		}
 		updateEntityHandles();
 	}
-
 };

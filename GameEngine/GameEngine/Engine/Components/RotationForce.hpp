@@ -23,15 +23,6 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new RotationForce();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void serialize(Archive &ar)
 		{
 			ar(CEREAL_NVP(force));

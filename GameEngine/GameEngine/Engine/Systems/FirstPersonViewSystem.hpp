@@ -12,9 +12,9 @@
 class FirstPersonViewSystem : public System
 {
 public:
-	FirstPersonViewSystem(AScene *scene)
-		: System(scene)
-		, _filter(scene)
+	FirstPersonViewSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "first_person_view_system";
 	}
@@ -35,14 +35,15 @@ protected:
 			auto lookAt = e->getGlobalTransform();
 			auto camera = e->getComponent<Component::CameraComponent>();
 			lookAt = glm::translate(lookAt, glm::vec3(0, 0, 1));
-			camera->setLookAtTransform() = glm::lookAt(posFromMat4(e->getGlobalTransform()), posFromMat4(lookAt), glm::vec3(0, 1, 0));
+			camera->lookAtTransform = glm::lookAt(posFromMat4(e->getGlobalTransform()), posFromMat4(lookAt), glm::vec3(0, 1, 0));
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::CameraComponent>();
 		_filter.requireComponent<Component::FirstPersonView>();
+		return true;
 	}
 protected:
 	EntityFilter _filter;

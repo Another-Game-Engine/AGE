@@ -62,15 +62,6 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new AudioEmitter();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void save(Archive &ar) const
 		{
 			std::vector<SerializedAudioInstance> v;
@@ -105,7 +96,7 @@ namespace Component
 			ar(v);
 			for (auto e : v)
 			{
-				std::shared_ptr<Audio> a = _entity->getScene()->getInstance<AudioManager>()->getAudio(e.filename);
+				std::shared_ptr<Audio> a = _entity->getScene().lock()->getInstance<AudioManager>()->getAudio(e.filename);
 				if (!a)
 					continue;
 				setAudio(a, e.name, e.channelGroupType);

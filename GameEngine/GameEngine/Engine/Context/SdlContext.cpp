@@ -1,14 +1,14 @@
 #include "context/SdlContext.hh"
 #include <iostream>
 
-bool    SdlContext::start(unsigned int swidth, unsigned int sheight, const char *name)
+bool    SdlContext::start(int mode, unsigned int swidth, unsigned int sheight, const char *name)
 {
 	_width = swidth;
 	_height = sheight;
 	if (SDL_Init(SDL_INIT_VIDEO) != 0 ||
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0 ||
 		(_window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		swidth, sheight, SDL_WINDOW_OPENGL)) == NULL ||
+		swidth, sheight, SDL_WINDOW_OPENGL | mode)) == NULL ||
 		(_glContext = SDL_GL_CreateContext(_window)) == NULL)
 			return (false);
 	return (true);

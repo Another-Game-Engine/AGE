@@ -1,16 +1,7 @@
-//
-// Shader.cpp for  in /home/massora/GIT/amd_project/render/ShaderTool
-// 
-// Made by dorian pinaud
-// Login   <pinaud_d@epitech.net>
-// 
-// Started on  Mon Aug  5 00:37:46 2013 dorian pinaud
-// Last update Mon Aug 19 00:15:12 2013 dorian pinaud
-//
-
 #include "Utils/OpenGL.hh"
 
 #include "Shader.hh"
+#include <Utils/File.hpp>
 #include <assert.h>
 
 namespace OpenGLTools
@@ -33,6 +24,16 @@ Shader::~Shader(void)
 
 bool Shader::init(std::string const &vertex, std::string const &fragment, std::string const &geometry)
 {
+	if (!File(vertex).exists() || !File(fragment).exists())
+	{
+		std::cerr << "Error : [" << vertex << "] and/or [" << fragment << "] does not exists." << std::endl;
+		return false;
+	}
+	if (!geometry.empty() && !File(geometry).exists())
+	{
+		std::cerr << "Error : [" << geometry << "] does not exists." << std::endl;
+		return false;
+	}
   if ((_vertexId = addShader(vertex, GL_VERTEX_SHADER)) == 0)
     {
       std::cerr << "Error: vertex shader invalid" << std::endl;
@@ -53,7 +54,9 @@ bool Shader::init(std::string const &vertex, std::string const &fragment, std::s
   glAttachShader(_progId, _vertexId);
   glAttachShader(_progId, _fragId);
   if (_geometryId != 0)
+  {
 	  glAttachShader(_progId, _geometryId);
+  }
   linkProgram();
 
   glDetachShader(_progId, _vertexId);
@@ -73,7 +76,7 @@ GLenum  *Shader::getTargets() const
 	return _targets;
 }
 
-unsigned int Shader::getTargetsNumber() const
+std::size_t Shader::getTargetsNumber() const
 {
 	return _targetsList.size();
 }
@@ -92,8 +95,6 @@ bool Shader::_build()
 	if (_targets)
 		delete _targets;
 	_targets = new GLenum[_targetsList.size()];
-	if (!_targets)
-		return false;
 
 	unsigned int i = 0;
 	for (auto &e : _targetsList)

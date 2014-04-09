@@ -11,7 +11,7 @@ namespace Component
 	{
 		TrackBall();
 		virtual ~TrackBall(void);
-		void init(Entity _toLook, float _dist, float rotatingSpeed, float zoomingSpeed);
+		void init(const Entity &_toLook, float _dist, float rotatingSpeed, float zoomingSpeed);
 		virtual void reset();
 
 		//////
@@ -19,19 +19,10 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new TrackBall();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void save(Archive &ar) const
 		{
 			ar(CEREAL_NVP(dist), CEREAL_NVP(rotateSpeed), CEREAL_NVP(zoomSpeed), CEREAL_NVP(angles));
-			std::size_t toLookId = _entity.get()->getScene()->registrarSerializedEntity(toLook.getId());
+			std::size_t toLookId = _entity.get()->getScene().lock()->registrarSerializedEntity(toLook.getId());
 			ar(CEREAL_NVP(toLookId));
 		}
 
@@ -41,7 +32,7 @@ namespace Component
 			ar(dist, rotateSpeed, zoomSpeed, angles);
 			std::size_t toLookId = 42;
 			ar(toLookId);
-			_entity->getScene()->entityHandle(toLookId, &toLook);
+			_entity->getScene().lock()->entityHandle(toLookId, &toLook);
 		}
 
 		// !Serialization

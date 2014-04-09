@@ -10,9 +10,9 @@
 class RotationForceSystem : public System
 {
 public:
-	RotationForceSystem(AScene *scene)
-		: System(scene)
-		, _filter(scene)
+	RotationForceSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "rotation_force_system";
 	}
@@ -28,7 +28,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		float t = time;
+		float t = static_cast<float>(time);
 		for (auto e : _filter.getCollection())
 		{
 			glm::vec3 force = e->getComponent<Component::RotationForce>()->getForce();
@@ -39,9 +39,10 @@ private:
 		}
 	}
 
-	virtual void initialize()
+	virtual bool initialize()
 	{
 		_filter.requireComponent<Component::RotationForce>();
+		return true;
 	}
 };
 

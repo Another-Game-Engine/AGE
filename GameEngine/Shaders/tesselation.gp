@@ -1,4 +1,4 @@
-#version 430
+#version 330
 #extension GL_ARB_geometry_shader4 : enable
 
 layout(triangles) in;
@@ -6,10 +6,9 @@ layout(triangle_strip, max_vertices=6) out;
 
 layout (std140) uniform PerFrame
 {
-	mat4 projection;
-	mat4 view;
-	vec4 light;
-	float time;
+        mat4 projection;
+        mat4 view;
+        float time;
 };
 
 layout (std140) uniform PerModel

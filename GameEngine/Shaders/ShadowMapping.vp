@@ -1,16 +1,24 @@
-#version 330
+#version 430 core
+
+layout (shared) uniform PerModel
+{
+	mat4 model;
+};
+
+layout (shared) uniform PerLight
+{
+	mat4 lightVP;
+};
 
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;
 layout (location = 2) in vec4 vNormal;
 layout (location = 3) in vec2 vTexCoord;
 
-layout (std140) uniform Light
-{
-	mat4 lightMVP;
-};
+out vec4 fColor;
 
 void main()
 {
-	gl_Position = lightMVP * vPosition;
+fColor = vColor;
+	gl_Position = lightVP * model * vPosition;
 }

@@ -27,9 +27,6 @@ public:
 
 	virtual std::shared_ptr<AMediaFile> convert(const File &file)
 	{
-		//if (!file.exists())
-		//	return std::shared_ptr<AMediaFile>(nullptr);
-		std::string inputfile = file.getFullName();
 		std::shared_ptr<CubeMapFile> res{ new CubeMapFile };
 		res->px = std::static_pointer_cast<TextureFile>(_manager->load(file.getFullName() + "/posx.tga"));
 		res->py = std::static_pointer_cast<TextureFile>(_manager->load(file.getFullName() + "/posy.tga"));

@@ -10,21 +10,12 @@ namespace Component
 	{
 		TrackingCamera();
 		virtual ~TrackingCamera(void);
-		void init(Entity _toLook, glm::vec3 _dist);
+		void init(const Entity &_toLook, glm::vec3 _dist);
 		virtual void reset();
 
 		//////
 		////
 		// Serialization
-
-		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new TrackingCamera();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
 
 		template <typename Archive>
 		void serialize(Archive &ar)

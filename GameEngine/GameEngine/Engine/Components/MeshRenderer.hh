@@ -16,11 +16,13 @@
 #include <Core/AScene.hh>
 #include <MediaFiles/AssetsManager.hpp>
 
+
 namespace Resources
 {
 	class Texture;
 };
 
+enum Shadow;
 class Material;
 
 namespace Component
@@ -33,24 +35,13 @@ namespace Component
 		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
-		void render(bool shadow, GLuint shadowTex, glm::mat4 const &lightVP);
-		void render_shadowmap(GLuint shadowTex, glm::mat4 const &lightVP);
-		void setShaderShadowMap(std::string const &shaderShadow);
-		std::string const &getShaderShadowMap() const;
+		void render(std::function<void(OpenGLTools::Shader&)> func = [](OpenGLTools::Shader &s){});
+		void renderRaw();
 		std::shared_ptr<ObjFile>	const &getMesh() const;
 
 		//////
 		////
 		// Serialization
-
-		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new MeshRenderer();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
 
 		template <typename Archive>
 		void save(Archive &ar) const
@@ -66,7 +57,7 @@ namespace Component
 			ar(shader);
 			std::string meshName;
 			ar(meshName);
-			mesh = std::static_pointer_cast<ObjFile>(_entity->getScene()->getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File(meshName)));
+			mesh = std::static_pointer_cast<ObjFile>(_entity->getScene().lock()->getInstance<AssetsManager>()->loadFromFile(File(meshName)));
 		}
 
 		// !Serialization
@@ -76,7 +67,6 @@ namespace Component
 		std::shared_ptr<ObjFile>	mesh;
 		std::string shader;
 	private:
-		std::string _shaderShadow;
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);
 	};

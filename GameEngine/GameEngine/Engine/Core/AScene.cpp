@@ -4,13 +4,12 @@
 #include <limits>
 #include <Core/AScene.hh>
 #include <Systems/System.h>
+#include <Core/EntityFilter.hpp>
 
-AScene::AScene(Engine &engine) :
-DependenciesInjector(&engine),
-_engine(engine)
+AScene::AScene(std::weak_ptr<Engine> &&engine) :
+DependenciesInjector(std::move(engine))
 , _entityNumber(0)
 {
-	setInstance<PubSub::Manager>();
 }
 
 AScene::~AScene()
@@ -19,15 +18,21 @@ AScene::~AScene()
 	for (auto &e : _pool)
 		e.reset();
 	_pool.clear();
-
 }
 
 void 							AScene::update(double time)
 {
 	for (auto &e : _systems)
 	{
-		e.second->update(time);
+		if (e.second->isActivated())
+			e.second->update(time);
 	}
+}
+
+bool                           AScene::start()
+{
+	setInstance<PubSub::Manager>();
+	return userStart();
 }
 
 Entity &AScene::createEntity()
@@ -35,11 +40,11 @@ Entity &AScene::createEntity()
 	++_entityNumber;
 	if (_free.empty())
 	{
-		_pool.push_back(std::move(EntityData(shared_from_this())));
+		_pool.push_back(std::move(EntityData(std::static_pointer_cast<AScene>(shared_from_this()))));
 		_pool.back().setHandle(Entity(_pool.size() - 1, this));
 		_free.push(_pool.size() - 1);
 	}
-	unsigned int index = _free.front();
+	std::size_t index = _free.front();
 	_free.pop();
 	_pool[index].addFlags(EntityData::ACTIVE);
 	return _pool[index].getHandle();
@@ -65,4 +70,42 @@ EntityData *AScene::get(const Entity &h)
 	if (res->getHandle() != h)
 		return nullptr;
 	return &_pool[h.getId()];
+}
+
+void AScene::filterSubscribe(unsigned short id, EntityFilter* filter)
+{
+	if (_filters.find(id) == std::end(_filters))
+	{
+		_filters.insert(std::make_pair(id, std::list<EntityFilter*>()));
+	}
+	auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
+	if (findIter == std::end(_filters[id]))
+		_filters[id].push_back(filter);
+}
+
+void AScene::filterUnsubscribe(unsigned short id, EntityFilter* filter)
+{
+	if (_filters.find(id) == std::end(_filters))
+		return;
+	_filters[id].remove(filter);
+}
+
+void AScene::informFilters(bool added, unsigned short id, Entity &&entity)
+{
+	if (_filters.find(id) == std::end(_filters))
+		return;
+	if (added)
+	{
+		for (auto &&f : _filters[id])
+		{
+			f->componentAdded(std::move(entity), id);
+		}
+	}
+	else
+	{
+		for (auto &&f : _filters[id])
+		{
+			f->componentRemoved(std::move(entity), id);
+		}
+	}
 }

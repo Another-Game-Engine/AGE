@@ -17,7 +17,7 @@ template <uint8_t NBR_ATTRIBUTE>
 class VertexPoolElement
 {
 public:
-	VertexPoolElement(uint32_t nbrEntity, Vertice<NBR_ATTRIBUTE> const &vertices);
+	VertexPoolElement(std::size_t nbrEntity, Vertice<NBR_ATTRIBUTE> const &vertices);
 	VertexPoolElement(VertexPoolElement<NBR_ATTRIBUTE> const &copy);
 	~VertexPoolElement();
 	VertexPoolElement &operator=(VertexPoolElement<NBR_ATTRIBUTE> const &element);
@@ -26,21 +26,21 @@ public:
 	void deleteVertice();
 
 	bool isEmpty() const;
-	uint32_t getVertexOffset() const;
-	uint32_t getIndicesOffset() const;
-	uint32_t getByteOffset(uint8_t index) const;
-	uint32_t getNbrByte(uint8_t index) const;
+	std::size_t getVertexOffset() const;
+	std::size_t getIndicesOffset() const;
+	std::size_t getByteOffset(uint8_t index) const;
+	std::size_t getNbrByte(uint8_t index) const;
 	Vertice<NBR_ATTRIBUTE> const &getVertex() const;
 
-	inline void settingOffset(uint32_t vertexOffset, uint32_t indicesOffset, std::array<uint32_t, NBR_ATTRIBUTE> const &byteOffset, std::array<uint32_t, NBR_ATTRIBUTE> const &nbrByte);
+	inline void settingOffset(std::size_t vertexOffset, std::size_t indicesOffset, std::array<std::size_t, NBR_ATTRIBUTE> const &byteOffset, std::array<std::size_t, NBR_ATTRIBUTE> const &nbrByte);
 
 private:
-	uint32_t _nbrEntity;
+	std::size_t _nbrEntity;
 	Vertice<NBR_ATTRIBUTE> _vertices;
-	uint32_t _vertexOffset;
-	uint32_t _indicesOffset;
-	std::array<uint32_t, NBR_ATTRIBUTE> _byteOffset;
-	std::array<uint32_t, NBR_ATTRIBUTE> _nbrByte;
+	std::size_t _vertexOffset;
+	std::size_t _indicesOffset;
+	std::array<std::size_t, NBR_ATTRIBUTE> _byteOffset;
+	std::array<std::size_t, NBR_ATTRIBUTE> _nbrByte;
 };
 
 #include "VertexPoolElement.hpp"

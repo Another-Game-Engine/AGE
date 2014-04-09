@@ -5,7 +5,7 @@
 #include <limits>
 #include <Core/AScene.hh>
 
-Entity::Entity(unsigned int id, AScene *manager)
+Entity::Entity(std::size_t id, AScene *manager)
 : _id(id), _manager(manager), _version(0)
 {}
 
@@ -19,7 +19,7 @@ Entity::Entity(Entity &&o)
 	_manager = std::move(o._manager);
 }
 
-const unsigned int Entity::getId() const
+const std::size_t Entity::getId() const
 {
 	return _id;
 }
@@ -34,9 +34,14 @@ EntityData *Entity::operator->()
 	return _manager->get(*this);
 }
 
+EntityData *Entity::operator->() const
+{
+	return _manager->get(*this);
+}
+
 EntityData *Entity::get() const
 {
-	static unsigned int max = std::numeric_limits<unsigned int>::max();
+	static std::size_t max = std::numeric_limits<std::size_t>::max();
 	if (!_manager || _id == max)
 		return nullptr;
 	return _manager->get(*this);

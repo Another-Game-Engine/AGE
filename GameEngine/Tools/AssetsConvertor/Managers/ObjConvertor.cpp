@@ -48,7 +48,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	float max = 0.5f;
     for (size_t i = 0; i < shapes.size(); i++)
 	{
-		for (auto &e : shapes[i].mesh.positions)
+		for (float &e : shapes[i].mesh.positions)
 		{
 			if (e < min)
 				min = e;
@@ -57,43 +57,49 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		}
 	}
 
-	float minCof = min != -0.5f ? std::abs(min) * 2.0f : 1.0f;
-	float maxCof = min != 0.5f ? max * 2.0f : 1.0f;
-    for (size_t i = 0; i < shapes.size(); i++)
+	float minCof = min * -0.5f;
+	float maxCof = max * 0.5f;
+	float cof = max - min;
+	if (cof != 0.0f)
 	{
-		for (auto &e : shapes[i].mesh.positions)
+		for (size_t i = 0; i < shapes.size(); i++)
 		{
-			if (e < 0)
-				e /= minCof;
-			else if (e > 0)
-				e /= maxCof;
+			for (float &e : shapes[i].mesh.positions)
+			{
+				e /= cof;
+				//if (e < 0.0f)
+				//	e /= minCof;
+				//else if (e > 0.0f)
+				//	e /= maxCof;
+			}
 		}
 	}
-
 	/////////////
 	// Converting
 	//
-    for (size_t i = 0; i < shapes.size(); i++)
+    for (std::size_t i = 0; i < shapes.size(); i++)
 	{
 		mesh->geometries[i].name = shapes[i].name;
-		for (size_t v = 0; v < shapes[i].mesh.indices.size(); ++v)
+		if (mesh->geometries[i].name.size() == 0)
+			mesh->geometries[i].name = mesh->name + "-" + std::to_string(i);
+		for (std::size_t v = 0; v < shapes[i].mesh.indices.size(); ++v)
 		{
-			unsigned int p = shapes[i].mesh.indices[v] * 3;
-			unsigned int p2 = shapes[i].mesh.indices[v] * 2;
-
-			if (shapes[i].mesh.positions.size() > 0)
-				mesh->geometries[i].vertices.push_back(glm::vec4(shapes[i].mesh.positions[p],
-				shapes[i].mesh.positions[p + 1],
-				shapes[i].mesh.positions[p + 2], 1));
-			if (shapes[i].mesh.normals.size() > 0)
-				mesh->geometries[i].normals.push_back(glm::vec4(shapes[i].mesh.normals[p],
-				shapes[i].mesh.normals[p + 1],
-				shapes[i].mesh.normals[p + 2], 1));
-			if (shapes[i].mesh.texcoords.size() > 0)
-				mesh->geometries[i].uvs.push_back(glm::vec2(shapes[i].mesh.texcoords[p2],
-				shapes[i].mesh.texcoords[p2 + 1]));
+			std::size_t p = static_cast<std::size_t>(shapes[i].mesh.indices[v]) * std::size_t(3);
+			std::size_t p2 = static_cast<std::size_t>(shapes[i].mesh.indices[v]) * std::size_t(2);
+			auto &m = shapes[i].mesh;
+			if (m.positions.size() > 0)
+				mesh->geometries[i].vertices.push_back(glm::vec4(m.positions[p],
+				m.positions[p + std::size_t(1)],
+				m.positions[p + std::size_t(2)], 1));
+			if (m.normals.size() > 0)
+				mesh->geometries[i].normals.push_back(glm::vec4(m.normals[p],
+				m.normals[p + std::size_t(1)],
+				m.normals[p + std::size_t(2)], 1));
+			if (m.texcoords.size() > 0)
+				mesh->geometries[i].uvs.push_back(glm::vec2(m.texcoords[p2],
+				m.texcoords[p2 + std::size_t(1)]));
 			mesh->geometries[i].colors.push_back(glm::vec4(1));
-			mesh->geometries[i].indices.push_back(v);
+			mesh->geometries[i].indices.push_back(static_cast<unsigned int>(v));
 		}
 	}
 	auto mtl = file.getFullName().substr(0, file.getFullName().find_last_of("."));
@@ -112,14 +118,14 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		std::shared_ptr<btTriangleMesh> trimesh{new btTriangleMesh()};
 		auto &geos = mesh->geometries;
 
-		for (unsigned int j = 0; j < geos.size(); ++j)
+		for (std::size_t j = 0; j < geos.size(); ++j)
 		{
 			auto &geo = geos[j];
-			for (unsigned int i = 0; i < geo.vertices.size(); i += 3)
+			for (std::size_t i = 0; i < geo.vertices.size(); i += 3)
 			{
 				trimesh->addTriangle(btVector3(geo.vertices[i].x, geo.vertices[i].y, geo.vertices[i].z)
-					, btVector3(geo.vertices[i + 1].x, geo.vertices[i + 1].y, geo.vertices[i + 1].z)
-					, btVector3(geo.vertices[i + 2].x, geo.vertices[i + 2].y, geo.vertices[i + 2].z), true);
+					, btVector3(geo.vertices[i + std::size_t(1)].x, geo.vertices[i + std::size_t(1)].y, geo.vertices[i + std::size_t(1)].z)
+					, btVector3(geo.vertices[i + std::size_t(2)].x, geo.vertices[i + std::size_t(2)].y, geo.vertices[i + std::size_t(2)].z), true);
 			}
 		}
 		std::shared_ptr<btBvhTriangleMeshShape> bvh{ new btBvhTriangleMeshShape(trimesh.get(), true) };
@@ -128,7 +134,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		staticShape->shape = bvh;
 		staticShape->trimesh = trimesh;
 		staticShape->name = "collision_shape_static_" + file.getShortFileName();
-		staticShape->path = File("./Assets/Serialized/" + staticShape->name + ".bullet");
+		staticShape->path = File(_manager->getOutputDirectory().getFolder() + "/" + staticShape->name + ".bullet");
 		_manager->add(staticShape);
 	}
 
@@ -136,24 +142,24 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 	{
 		auto &geos = mesh->geometries;
 		std::shared_ptr<btConvexHullShape> s{ new btConvexHullShape() };
-		for (unsigned int i = 0; i < geos.size(); ++i)
+		for (std::size_t i = 0; i < geos.size(); ++i)
 		{
 			auto &geo = geos[i];
 			btScalar *t = new btScalar[geo.vertices.size() * 3]();
-			for (unsigned int it = 0; it < geo.vertices.size(); ++it)
+			for (std::size_t it = 0; it < geo.vertices.size(); ++it)
 			{
 				t[it * 3] = geo.vertices[it].x;
 				t[it * 3 + 1] = geo.vertices[it].y;
 				t[it * 3 + 2] = geo.vertices[it].z;
 			}
-			btConvexHullShape *tmp = new btConvexHullShape(t, geo.vertices.size(), 3 * sizeof(btScalar));
+			btConvexHullShape *tmp = new btConvexHullShape(t, static_cast<int>(geo.vertices.size()), 3 * sizeof(btScalar));
 			btShapeHull *hull = new btShapeHull(tmp);
 			btScalar margin = tmp->getMargin();
 			hull->buildHull(margin);
 			tmp->setUserPointer(hull);
 			for (int it = 0; it < hull->numVertices(); ++it)
 			{
-				s->addPoint(hull->getVertexPointer()[it], false);
+				s->addPoint(hull->getVertexPointer()[std::size_t(it)], false);
 			}
 			s->recalcLocalAabb();
 			btTransform localTrans;
@@ -164,13 +170,13 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		std::shared_ptr<CollisionShapeDynamicFile> dynamicShape{ new CollisionShapeDynamicFile() };
 		dynamicShape->shape = s;
 		dynamicShape->name = "collision_shape_dynamic_" + file.getShortFileName();
-		dynamicShape->path = File("./Assets/Serialized/" + dynamicShape->name + ".bullet");
+		dynamicShape->path = File(_manager->getOutputDirectory().getFolder() +  "/" + dynamicShape->name + ".bullet");
 		_manager->add(dynamicShape);
 	}
 
 	std::vector<std::tuple<float, float, float, float, float, float>> minAndMax;
 	minAndMax.resize(mesh->geometries.size());
-	std::tuple<float, float, float, float, float, float> totalMinMax;
+	std::tuple<float, float, float, float, float, float> totalMinMax{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
 
 	for (std::size_t i = 0; i < mesh->geometries.size(); ++i)
 	{
@@ -197,12 +203,12 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 			std::get<3>(minAndMax[i]) = std::get<3>(minAndMax[i]) > mesh->geometries[i].vertices[it].y ? std::get<3>(minAndMax[i]) : mesh->geometries[i].vertices[it].y;
 			std::get<4>(minAndMax[i]) = std::get<4>(minAndMax[i]) < mesh->geometries[i].vertices[it].z ? std::get<4>(minAndMax[i]) : mesh->geometries[i].vertices[it].z;
 			std::get<5>(minAndMax[i]) = std::get<5>(minAndMax[i]) > mesh->geometries[i].vertices[it].z ? std::get<5>(minAndMax[i]) : mesh->geometries[i].vertices[it].z;
-			std::get<0>(totalMinMax) = std::get<0>(totalMinMax) < mesh->geometries[i].vertices[it].x ? std::get<0>(totalMinMax) : mesh->geometries[i].vertices[it].x;
-			std::get<1>(totalMinMax) = std::get<1>(totalMinMax) > mesh->geometries[i].vertices[it].x ? std::get<1>(totalMinMax) : mesh->geometries[i].vertices[it].x;
-			std::get<2>(totalMinMax) = std::get<2>(totalMinMax) < mesh->geometries[i].vertices[it].y ? std::get<2>(totalMinMax) : mesh->geometries[i].vertices[it].y;
-			std::get<3>(totalMinMax) = std::get<3>(totalMinMax) > mesh->geometries[i].vertices[it].y ? std::get<3>(totalMinMax) : mesh->geometries[i].vertices[it].y;
-			std::get<4>(totalMinMax) = std::get<4>(totalMinMax) < mesh->geometries[i].vertices[it].z ? std::get<4>(totalMinMax) : mesh->geometries[i].vertices[it].z;
-			std::get<5>(totalMinMax) = std::get<5>(totalMinMax) > mesh->geometries[i].vertices[it].z ? std::get<5>(totalMinMax) : mesh->geometries[i].vertices[it].z;
+			std::get<0>(totalMinMax) = std::get<0>(totalMinMax) < mesh->geometries[i].vertices[it].x ? std::get<0>(totalMinMax) : mesh->geometries[i].vertices[it].x; //-V573
+			std::get<1>(totalMinMax) = std::get<1>(totalMinMax) > mesh->geometries[i].vertices[it].x ? std::get<1>(totalMinMax) : mesh->geometries[i].vertices[it].x; //-V573
+			std::get<2>(totalMinMax) = std::get<2>(totalMinMax) < mesh->geometries[i].vertices[it].y ? std::get<2>(totalMinMax) : mesh->geometries[i].vertices[it].y; //-V573
+			std::get<3>(totalMinMax) = std::get<3>(totalMinMax) > mesh->geometries[i].vertices[it].y ? std::get<3>(totalMinMax) : mesh->geometries[i].vertices[it].y; //-V573
+			std::get<4>(totalMinMax) = std::get<4>(totalMinMax) < mesh->geometries[i].vertices[it].z ? std::get<4>(totalMinMax) : mesh->geometries[i].vertices[it].z; //-V573
+			std::get<5>(totalMinMax) = std::get<5>(totalMinMax) > mesh->geometries[i].vertices[it].z ? std::get<5>(totalMinMax) : mesh->geometries[i].vertices[it].z; //-V573
 		}
 	}
 
@@ -216,7 +222,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		std::shared_ptr<CollisionBoxFile> shape{ new CollisionBoxFile() };
 		shape->shape = box;
 		shape->name = "collision_box_" + file.getShortFileName();
-		shape->path = File("./Assets/Serialized/" + shape->name + ".bullet");
+		shape->path = File(_manager->getOutputDirectory().getFolder() + "/" + shape->name + ".bullet");
 		_manager->add(shape);
 	}
 
@@ -230,7 +236,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		std::shared_ptr<CollisionSphereFile> shape{ new CollisionSphereFile() };
 		shape->shape = sphere;
 		shape->name = "collision_sphere_" + file.getShortFileName();
-		shape->path = File("./Assets/Serialized/" + shape->name + ".bullet");
+		shape->path = File(_manager->getOutputDirectory().getFolder() + "/" + shape->name + ".bullet");
 		_manager->add(shape);
 	}
 

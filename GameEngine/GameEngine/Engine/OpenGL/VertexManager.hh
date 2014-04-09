@@ -26,7 +26,6 @@ public:
 	void addVertice(Vertice<NBR_ATTRIBUTE> &vertice);
 	void deleteVertice(Vertice<NBR_ATTRIBUTE> &vertice);
 	void update();
-	void clear();
 	void callDraw(Vertice<NBR_ATTRIBUTE> const * const drawable, GLenum mode);
 
 private:

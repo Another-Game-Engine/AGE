@@ -4,8 +4,7 @@
 
 #include "glm/gtc/type_ptr.hpp"
 
-Renderer::Renderer(Engine *engine)
-: _engine(*engine)
+Renderer::Renderer()
 {
 }
 
@@ -17,7 +16,7 @@ Renderer::~Renderer(void)
 
 bool Renderer::init()
 {
-	addShader("depthOnly", "Shaders/depthOnly.vp", "Shaders/depthOnly.fp");
+	addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
 	bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
 	bindShaderToUniform("depthOnly", "PerModel", "PerModel");
 	getShader("depthOnly")->addTarget(GL_COLOR_ATTACHMENT0).build();
@@ -27,17 +26,17 @@ bool Renderer::init()
 	return true;
 }
 
-OpenGLTools::Shader		&Renderer::addShader(std::string const &name,
+std::shared_ptr<OpenGLTools::Shader>		Renderer::addShader(std::string const &name,
 											 std::string const &vp,
 											 std::string const &fp,
 											 std::string const &geo)
 {
-	std::map<std::string, OpenGLTools::Shader*>::iterator	it;
-   	OpenGLTools::Shader* shader;
+	auto it = _shaders.find(name);
+	std::shared_ptr<OpenGLTools::Shader> shader{nullptr};
 
-	if ((it = _shaders.find(name)) == _shaders.end())
+	if (it == std::end(_shaders))
 	{
-		shader = new OpenGLTools::Shader;
+		shader = std::make_shared<OpenGLTools::Shader>();
 		shader->init(vp, fp, geo);
 		_shaders[name] = shader;
 	}
@@ -46,54 +45,55 @@ OpenGLTools::Shader		&Renderer::addShader(std::string const &name,
 		it->second->init(vp, fp, geo);
 		shader = it->second;
 	}
-	return *shader;
+	return shader;
 }
 
 bool		Renderer::removeShader(std::string const &name)
 {
-	std::map<std::string, OpenGLTools::Shader*>::iterator	it;
+	auto it = _shaders.find(name);
 
-	if ((it = _shaders.find(name)) == _shaders.end())
+	if (it == std::end(_shaders))
 		return (false);
 	_shaders.erase(it);
 	return (true);
 }
 
-OpenGLTools::Shader		*Renderer::getShader(std::string const &name)
+std::shared_ptr<OpenGLTools::Shader>		Renderer::getShader(std::string const &name) const
 {
-	std::map<std::string, OpenGLTools::Shader*>::iterator	it;
+	auto it = _shaders.find(name);
 
-	if ((it = _shaders.find(name)) == _shaders.end())
-		return (NULL);
+	if (it == std::end(_shaders))
+		return (nullptr);
 	return (it->second);
 }
 
-OpenGLTools::UniformBuffer	&Renderer::addUniform(std::string const &name)
+std::shared_ptr<OpenGLTools::UniformBuffer>	Renderer::addUniform(std::string const &name)
 {
-	static GLuint					idx = 0;
-	OpenGLTools::UniformBuffer		*buff = new OpenGLTools::UniformBuffer(idx++);
-
+	static GLuint idx = 0;
+	auto it = _uniforms.find(name);
+	if (it != std::end(_uniforms))
+		return it->second;
+	auto buff = std::make_shared<OpenGLTools::UniformBuffer>(idx++);
 	_uniforms[name] = buff;
-	return (*buff);
+	return (buff);
 }
 
 bool		Renderer::removeUniform(std::string const &name)
 {
-	std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	it;
+	auto it = _uniforms.find(name);
 
-	if ((it = _uniforms.find(name)) == _uniforms.end())
+	if (it == std::end(_uniforms))
 		return (false);
-	delete it->second;
 	_uniforms.erase(it);
 	return (true);
 }
 
-OpenGLTools::UniformBuffer	*Renderer::getUniform(std::string const &name)
+std::shared_ptr<OpenGLTools::UniformBuffer>	Renderer::getUniform(std::string const &name) const
 {
-	std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	it;
+	auto it = _uniforms.find(name);
 
-	if ((it = _uniforms.find(name)) == _uniforms.end())
-		return (NULL);
+	if (it == std::end(_uniforms))
+		return (nullptr);
 	return (it->second);
 }
 
@@ -101,13 +101,13 @@ bool		Renderer::bindShaderToUniform(std::string const &shader,
 										std::string const &blockName,
 										std::string const &uniform)
 {
-	std::map<std::string, OpenGLTools::Shader*>::iterator			sh;
-	std::map<std::string, OpenGLTools::UniformBuffer*>::iterator	un;
+	auto sh = _shaders.find(shader);
+	auto un = _uniforms.find(uniform);
 
-	if ((sh = _shaders.find(shader)) == _shaders.end() ||
-		(un = _uniforms.find(uniform)) == _uniforms.end())
+	if (sh == std::end(_shaders) ||
+		un == std::end(_uniforms))
 		return (false);
-	sh->second->bindUniformBlock(blockName, *un->second);
+	sh->second->bindUniformBlock(blockName, un->second);
 	return (true);
 }
 
@@ -123,10 +123,6 @@ OpenGLTools::Framebuffer        &Renderer::getFbo()
 
 void Renderer::uninit()
 {
-	for (shadersIt it = _shaders.begin(); it != _shaders.end(); ++it)
-		delete it->second;
-	for (uniformsIt it = _uniforms.begin(); it != _uniforms.end(); ++it)
-		delete it->second;
 	_shaders.clear();
 	_uniforms.clear();
 	//_fbo.uninit();
