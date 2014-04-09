@@ -1,5 +1,4 @@
 #include "VertexArray.hh"
-# include "ErrorController.hh"
 
 namespace OpenGLTools
 {

@@ -11,6 +11,7 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/string.hpp>
+#include "glm/glm.hpp"
 
 class FontConvertor;
 

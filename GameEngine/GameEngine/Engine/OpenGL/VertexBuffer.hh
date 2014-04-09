@@ -8,8 +8,6 @@
 # include <map>
 # include <string>
 
-# include "UniformBuffer.hh"
-
 namespace OpenGLTools
 {
 	typedef unsigned char Byte;

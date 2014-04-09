@@ -4,7 +4,8 @@
 # include "Utils/OpenGL.hh"
 # include <iostream>
 # include <stdint.h>
-# include "Vertice.hh"
+
+template <uint8_t NBR_ATTRIBUTE> class Vertice;
 
 enum AddVerticesResult
 {

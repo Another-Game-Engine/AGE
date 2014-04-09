@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include "Utils/OpenGL.hh"
+#include "glm/glm.hpp"
 #include "VertexArray.hh"
 
 namespace OpenGLTools

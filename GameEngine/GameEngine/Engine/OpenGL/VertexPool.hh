@@ -7,8 +7,10 @@
 # include <utility>
 # include <stdint.h>
 # include <queue>
-# include "Vertice.hh"
+
 # include "VertexPoolElement.hh"
+
+template <uint8_t NBR_ATTRIBUTE> class Vertice;
 
 enum StateVertexPool
 {

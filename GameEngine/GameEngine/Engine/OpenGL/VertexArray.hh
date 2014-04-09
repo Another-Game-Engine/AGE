@@ -3,7 +3,6 @@
 
 # include "Utils/OpenGL.hh"
 # include <vector>
-
 # include "VertexBuffer.hh"
 
 namespace OpenGLTools

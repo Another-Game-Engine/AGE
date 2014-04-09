@@ -11,12 +11,13 @@
 # include <set>
 # include <utility>
 # include <memory>
-# include <Utils/File.hpp>
+# include <fstream>
 # include <assert.h>
-# include "ErrorController.hh"
+# include "OpenGL/ErrorController.hh"
 
 namespace OpenGLTools
 {
+
 	class Shader
 	{
 	private:

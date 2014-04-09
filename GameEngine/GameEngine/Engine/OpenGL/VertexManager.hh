@@ -9,8 +9,8 @@
 # include "Vertice.hh"
 # include "Attribute.hh"
 # include "VertexArray.hh"
-# include "VertexBuffer.hh"
 # include "VertexPool.hh"
+
 
 #include <Utils/Dependency.hpp>
 
