@@ -1,7 +1,6 @@
 #pragma once
 #include <Systems/System.h>
 #include <Utils/DrawQuad.hh>
-#include <OpenGL/ComputeShader.hh>
 
 class BlitFinalRender : public System
 {

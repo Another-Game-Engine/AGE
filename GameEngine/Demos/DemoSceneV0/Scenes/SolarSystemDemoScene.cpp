@@ -9,7 +9,6 @@
 #include <Components/TrackBallComponent.hpp>
 #include <Components/AudioListener.hpp>
 #include <Components/AudioEmitter.hpp>
-#include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>

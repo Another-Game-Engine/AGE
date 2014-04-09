@@ -10,7 +10,6 @@
 #include <Components/FirstPersonView.hpp>
 #include <Components/SpriteComponent.hh>
 
-#include <OpenGL/ComputeShader.hh>
 #include <OpenGL/Attribute.hh>
 #include <OpenGL/include/SDL/SDL_opengl.h>
 
