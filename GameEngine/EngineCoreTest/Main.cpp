@@ -16,12 +16,14 @@
 
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
+#include <Core/ConfigurationManager.hpp>
 
 
 int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
+	e->setInstance<ConfigurationManager>();
 	e->setInstance<PubSub::Manager>();
 	e->setInstance<SdlContext, IRenderContext>();
 	e->setInstance<Input>();
