@@ -27,15 +27,6 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new TransformationRegister();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void serialize(Archive &ar)
 		{
 			auto TODO = 0;

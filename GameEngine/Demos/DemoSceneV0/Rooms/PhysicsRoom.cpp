@@ -14,8 +14,8 @@
 
 class PistolSystem;		
 
-	PhysicsRoom::PhysicsRoom(std::weak_ptr<AScene> scene)
-		: Room(scene)
+	PhysicsRoom::PhysicsRoom(std::weak_ptr<AScene> &&scene)
+		: Room(std::move(scene))
 	{
 	}
 

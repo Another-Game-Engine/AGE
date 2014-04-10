@@ -1,10 +1,11 @@
 #pragma once
 #include <Core\AScene.hh>
+#include <Utils/PubSub.hpp>
 
 class SpaceGame : public AScene
 {
 public:
-	SpaceGame(std::weak_ptr<Engine> engine);
+	SpaceGame(std::weak_ptr<Engine> &&engine);
 	virtual ~SpaceGame();
 
 	virtual bool 			userStart();

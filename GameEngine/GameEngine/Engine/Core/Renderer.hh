@@ -1,8 +1,7 @@
-#ifndef RENDERER_H_
-# define RENDERER_H_
+#pragma once
 
-# include <vector>
 #include <map>
+
 #include "Entities/EntityData.hh"
 #include "Components/MeshRenderer.hh"
 #include "OpenGL/Shader.hh"
@@ -12,25 +11,6 @@
 #include <core/Engine.hh>
 #include <Utils/Dependency.hpp>
 #include <memory>
-
-/*class Renderer : public Dependency
-{
-private:
-	std::vector<OpenGLTools::Shader> _shaders;
-	std::vector<OpenGLTools::Pipeline> _pipelines;
-	std::vector<std::unique<OpenGLTools::ITexture>> _texture;
-
-public:
-	Renderer();
-	~Renderer();
-	void addShader(OpenGLTools::Shader &&shader);
-	void deleteShader(OpenGLTools::Shader &&shader);
-	void addPipeline(std::string &&pipelineName, std::string &&shader);
-	void deletePipeline(std::string &&pipelineName);
-	Pipeline getPipeline(std::string &&pipelineName);
-	template <TYPE> void addTexture(std::string &&textureName, Texture<TYPE> texture);
-	void deleteTexture(std::string &&textureName);
-};*/
 
 class Renderer : public Dependency
 {
@@ -75,5 +55,3 @@ private:
 	Renderer(const Renderer &o);
 	Renderer &operator=(const Renderer &o);
 };
-
-#endif /*!RENDERER_H_*/

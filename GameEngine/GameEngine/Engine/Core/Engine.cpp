@@ -39,8 +39,6 @@ bool        Engine::init(int mode, unsigned int swidth, unsigned int sheight, co
 
 bool 		Engine::start()
 {
-	//if (!getInstance<SceneManager>().startScene())
-	//	return (false);
 	return (true);
 }
 

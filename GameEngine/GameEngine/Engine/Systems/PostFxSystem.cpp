@@ -2,9 +2,9 @@
 #include	<Systems/PostFxSystem.hh>
 #include	<Components/CameraComponent.hpp>
 
-PostFxSystem::PostFxSystem(std::weak_ptr<AScene> scene) :
-					System(scene),
-					_cameraFilter(scene),
+PostFxSystem::PostFxSystem(std::weak_ptr<AScene> &&scene) :
+					System(std::move(scene)),
+					_cameraFilter(std::move(scene)),
 					_idealIllum(0.3f),
 					_adaptationSpeed(0.15f),
 					_maxDarkImprovement(1.0f),

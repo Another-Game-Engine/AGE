@@ -2,9 +2,9 @@
 #include	<Systems/BlitFinalRender.hh>
 #include	<Components/CameraComponent.hpp>
 
-BlitFinalRender::BlitFinalRender(std::weak_ptr<AScene> scene) :
-					System(scene),
-					_cameraFilter(scene)
+BlitFinalRender::BlitFinalRender(std::weak_ptr<AScene> &&scene) :
+					System(std::move(scene)),
+					_cameraFilter(std::move(scene))
 {
 }
 

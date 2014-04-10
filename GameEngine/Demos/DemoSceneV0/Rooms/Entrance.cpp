@@ -1,8 +1,8 @@
 #include "Entrance.hh"
 
 
-	Entrance::Entrance(std::weak_ptr<AScene> scene)
-		: Room(scene)
+	Entrance::Entrance(std::weak_ptr<AScene> &&scene)
+		: Room(std::move(scene))
 		, framebufferIdReceiver(scene.lock()->getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>())
 	{
 	}

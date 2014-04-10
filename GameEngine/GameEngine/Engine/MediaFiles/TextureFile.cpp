@@ -1,5 +1,4 @@
 #include "TextureFile.hpp"
-#include "OpenGL/Texture.hh"
 
 TextureFile::TextureFile()
 : MediaFile<TextureFile>()
@@ -61,10 +60,6 @@ void TextureFile::save(cereal::PortableBinaryOutputArchive &ar) const
 
 void TextureFile::load(cereal::PortableBinaryInputArchive &ar)
 {
-	//OpenGLTools::Texture<OpenGLTools::texture2D> toto;
-	//toto.bind();
-	//toto.unbind();
-
 	ar(cereal::make_nvp("datas", datas), CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(components), CEREAL_NVP(format));
 	glGenTextures(1, &id);
 	assert(id != 0 && "Error generating texture.");

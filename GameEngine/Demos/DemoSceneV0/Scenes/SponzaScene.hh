@@ -1,13 +1,13 @@
-#ifndef		DEMOSCENE_HH_
-#define		DEMOSCENE_HH_
+#pragma once
 
 #include "Core\AScene.hh"
 #include "Core/Engine.hh"
+#include <Utils/PubSub.hpp>
 
 class SponzaScene : public AScene
 {
 public:
-	SponzaScene(std::weak_ptr<Engine> engine);
+	SponzaScene(std::weak_ptr<Engine> &&engine);
 	virtual ~SponzaScene(void);
 
 	Entity  SponzaScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass);
@@ -19,5 +19,3 @@ public:
 private:
 	std::unique_ptr<PubSub> _globalPubSub;
 };
-
-#endif

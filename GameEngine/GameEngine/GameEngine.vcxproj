@@ -240,9 +240,7 @@
     <ClCompile Include="Engine\MediaFiles\MaterialFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\ObjFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\TextureFile.cpp" />
-    <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
-    <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
@@ -315,7 +313,6 @@
     <ClInclude Include="Engine\MediaFiles\MediaFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\ObjFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\TextureFile.hpp" />
-    <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\OpenGL\Attribute.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
@@ -380,7 +377,6 @@
     <None Include="Engine\Core\MaterialManager.hh" />
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
-    <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />

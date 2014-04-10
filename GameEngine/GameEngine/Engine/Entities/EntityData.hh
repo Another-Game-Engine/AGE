@@ -9,7 +9,6 @@
 #include <memory>
 #include "OpenGL/Shader.hh"
 #include "Utils/Barcode.h"
-#include "Utils/PubSub.hpp"
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
@@ -22,7 +21,7 @@ class AScene;
 class EntityManager;
 class Entity;
 
-class EntityData : public PubSub
+class EntityData
 {
 private:
 	static size_t 					_currentId;
@@ -42,7 +41,7 @@ public:
 
 	};
 
-	typedef std::vector<std::shared_ptr<Component::Base> >	t_ComponentsList;
+	typedef std::vector<std::shared_ptr<Component::Base>>	t_ComponentsList;
 
 	Entity &getHandle();
 	void setHandle(Entity &handle);
@@ -71,7 +70,7 @@ private:
 
 	Barcode             _code;
 
-	EntityData(std::weak_ptr<AScene> scene);
+	EntityData(std::weak_ptr<AScene> &&scene);
 	EntityData();
 	EntityData(const EntityData &o);
 	const EntityData &operator=(const EntityData &o);
@@ -80,7 +79,7 @@ public:
 	virtual ~EntityData();
 	EntityData(EntityData &&o);
 
-	std::shared_ptr<AScene> getScene() const;
+	std::weak_ptr<AScene>   getScene();
 	void                    translate(const glm::vec3 &v);
 	void                    setTranslation(const glm::vec3 &v);
 	glm::vec3 const         &getTranslation() const;
@@ -108,9 +107,9 @@ public:
 	void 					addFlags(size_t flags);
 	void 					removeFlags(size_t flags);
 
-	void                    addTag(std::size_t tags);
-	void                    removeTag(std::size_t tags);
-	bool                    isTagged(std::size_t tags) const;
+	void                    addTag(unsigned short tags);
+	void                    removeTag(unsigned short tags);
+	bool                    isTagged(unsigned short tags) const;
 	bool                    isTagged(Barcode &code);
 
 	Barcode                 &getCode();
@@ -163,19 +162,19 @@ public:
 		// else if entity components array is to small, resize it
 		else if (_components.size() <= id)
 		{
-			_components.resize(id + 1);
+			_components.resize(id + 4);
 		}
 		// if component has never been created, create one
 		if (!_components[id].get())
 		{
-			_components[id] = std::shared_ptr<T>(new T());
+			_components[id] = std::make_shared<T>();
 			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
 			_components[id]->setEntity(getHandle());
 		}
 		//init component
 		std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);
 		_code.add(id + MAX_TAG_NUMBER);
-		broadCast(std::string("componentAdded" + std::to_string(id + MAX_TAG_NUMBER)), _handle);
+		_scene.lock()->informFilters(true, id + MAX_TAG_NUMBER, std::move(_handle));
 		return std::static_pointer_cast<T>(_components[id]);
 	}
 
@@ -183,8 +182,8 @@ public:
 	std::shared_ptr<T> getComponent() const
 	{
 		std::size_t id = T::getTypeId();
-		if (!hasComponent<T>())
-			return nullptr;
+		// No more verification and static cast
+		// better performance but more dangerous
 		return std::static_pointer_cast<T>(_components[id]);
 	}
 
@@ -196,8 +195,7 @@ public:
 			return;
 		_code.remove(id + MAX_TAG_NUMBER);
 		_components[id].get()->reset();
-		broadCast(std::string("componentRemoved" + std::to_string(id + MAX_TAG_NUMBER)), _handle);
-		// component remove -> signal to system
+		_scene.lock()->informFilters(false, id + MAX_TAG_NUMBER, std::move(_handle));
 	}
 
 
@@ -244,14 +242,14 @@ public:
 		std::set<std::size_t> childIds;
 		for (auto e : _childs)
 		{
-			childIds.insert(getScene()->registrarSerializedEntity(e.getId()));
+			childIds.insert(_scene.lock()->registrarSerializedEntity(e.getId()));
 		}
 		ar(CEREAL_NVP(childIds));
 		ar(cereal::make_nvp("haveParent", _parent.get() != nullptr));
 		if (_parent.get() != nullptr)
-			ar(cereal::make_nvp("parentID", getScene()->registrarSerializedEntity(_parent.getId())));
+			ar(cereal::make_nvp("parentID", _scene.lock()->registrarSerializedEntity(_parent.getId())));
 		else
-			ar(cereal::make_nvp("parentID", getScene()->registrarSerializedEntity(-1)));
+			ar(cereal::make_nvp("parentID", _scene.lock()->registrarSerializedEntity(-1)));
 	}
 
 	template <class Archive>
@@ -281,13 +279,12 @@ public:
 			std::size_t type = 0;
 			std::size_t typeId;
 			ar(type);
-			Component::Base *cpt = scene->createFromType(type, ar, _handle, typeId);
-			cpt->setEntity(_handle);
+			auto cpt = scene->createFromType(type, ar, _handle, typeId);
 			if (_components.size() <= typeId)
 				_components.resize(typeId + 1);
-			_components[typeId] = std::shared_ptr<Component::Base>(cpt);
+			_components[typeId] = cpt;
 			_code.add(typeId + MAX_TAG_NUMBER);
-			broadCast(std::string("componentAdded" + std::to_string(typeId + MAX_TAG_NUMBER)), _handle);
+			_scene.lock()->informFilters(true, typeId + MAX_TAG_NUMBER, std::move(_handle));
 		}
 		// unserialize graphnode
 		EntityIdRegistrar::GraphNodeUnserialize graphUnser;

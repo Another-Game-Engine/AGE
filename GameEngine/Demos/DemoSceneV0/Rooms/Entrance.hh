@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Room.hpp"
+#include <Utils/PubSub.hpp>
 
 struct Entrance : public Room
 {
-	Entrance(std::weak_ptr<AScene> scene);
+	Entrance(std::weak_ptr<AScene> &&scene);
 	virtual ~Entrance();
 	virtual bool init();
 	Entity room;

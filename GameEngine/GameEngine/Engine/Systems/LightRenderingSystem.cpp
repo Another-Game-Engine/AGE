@@ -9,13 +9,13 @@
 
 #include <Components/SpriteComponent.hh>
 
-LightRenderingSystem::LightRenderingSystem(std::weak_ptr<AScene> scene) :
-						System(scene),
-						_pointLightFilter(scene),
-						_spotLightFilter(scene),
-						_meshRendererFilter(scene),
-						_cameraFilter(scene),
-						_spriteFilter(scene),
+LightRenderingSystem::LightRenderingSystem(std::weak_ptr<AScene> &&scene) :
+						System(std::move(scene)),
+						_pointLightFilter(std::move(scene)),
+						_spotLightFilter(std::move(scene)),
+						_meshRendererFilter(std::move(scene)),
+						_cameraFilter(std::move(scene)),
+						_spriteFilter(std::move(scene)),
 						_spotShadowNbr(0),
 						_pointShadowNbr(0),
 						_shadowDimensions(2048, 2048)

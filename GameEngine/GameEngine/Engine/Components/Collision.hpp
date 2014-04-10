@@ -1,5 +1,5 @@
-#ifndef   __COLLISION_HPP__
-# define  __COLLISION_HPP__
+#ifndef __COLLISION_HPP__
+# define __COLLISION_HPP__
 
 #include <Components/Component.hh>
 #include <cereal/archives/binary.hpp>
@@ -14,10 +14,10 @@ namespace Component
 	struct Collision : public ComponentBase<Collision>
 	{
 		Collision()
-			: ComponentBase<Collision>()
-			, force(0)
+		: ComponentBase<Collision>()
+		, force(0)
 		{
-				
+
 		}
 
 		virtual ~Collision()
@@ -54,21 +54,12 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new Collision();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void save(Archive &ar) const
 		{
 			std::set<std::size_t> entityIds;
 			for (auto e : collisions)
 			{
-				entityIds.insert(_entity.get()->getScene()->registrarSerializedEntity(e.getId()));
+				entityIds.insert(_entity.get()->getScene().lock()->registrarSerializedEntity(e.getId()));
 			}
 			ar(cereal::make_nvp("Collisions", entityIds));
 		}
@@ -81,9 +72,9 @@ namespace Component
 			for (auto e : entityIds)
 				collisions.insert(Entity(e));
 			for (auto it = std::begin(collisions); it != std::end(collisions); ++it)
-			{ 
+			{
 				Entity *e = const_cast<Entity *>(&(*it));
-				_entity->getScene()->entityHandle(it->getId(), e);
+				_entity->getScene().lock()->entityHandle(it->getId(), e);
 			}
 		}
 
@@ -95,4 +86,4 @@ namespace Component
 	};
 }
 
-#endif    //__COLLISION_HPP__
+#endif //__COLLISION_HPP__

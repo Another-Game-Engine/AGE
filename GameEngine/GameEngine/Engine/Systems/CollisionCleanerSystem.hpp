@@ -1,4 +1,4 @@
-#ifndef  __COLLISION_CLEANER_SYSTEM_HPP__
+#ifndef __COLLISION_CLEANER_SYSTEM_HPP__
 # define __COLLISION_CLEANER_SYSTEM_HPP__
 
 #include <Systems/System.h>
@@ -9,9 +9,9 @@
 class CollisionCleaner : public System
 {
 public:
-	CollisionCleaner(std::weak_ptr<AScene> scene)
-		: System(scene)
-		, _filter(scene)
+	CollisionCleaner(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
+		, _filter(std::move(scene))
 	{
 		_name = "collision_cleaner_system";
 	}
@@ -29,7 +29,7 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		auto collection = _filter.getCollection();
-		for (auto &it = std::begin(collection); it != std::end(collection); )
+		for (auto &it = std::begin(collection); it != std::end(collection);)
 		{
 			auto e = *it;
 			++it;
@@ -44,4 +44,4 @@ private:
 	}
 };
 
-#endif   //__COLLISION_CLEANER_SYSTEM_HPP__
+#endif //__COLLISION_CLEANER_SYSTEM_HPP__

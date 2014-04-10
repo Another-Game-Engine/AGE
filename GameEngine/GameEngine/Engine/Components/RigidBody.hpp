@@ -1,5 +1,5 @@
-#ifndef		__RIGID_BODY_HPP__
-#define		__RIGID_BODY_HPP__
+#ifndef __RIGID_BODY_HPP__
+#define __RIGID_BODY_HPP__
 
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
@@ -45,8 +45,8 @@ namespace Component
 			shapeType(UNDEFINED),
 			mass(0.0f),
 			inertia(btVector3(0.0f, 0.0f, 0.0f)),
-			rotationConstraint(glm::vec3(1,1,1)),
-			transformConstraint(glm::vec3(1,1,1)),
+			rotationConstraint(glm::vec3(1, 1, 1)),
+			transformConstraint(glm::vec3(1, 1, 1)),
 			meshName(""),
 			_collisionShape(nullptr),
 			_motionState(nullptr),
@@ -56,8 +56,7 @@ namespace Component
 
 		void init(float _mass = 1.0f)
 		{
-			auto test = _entity->getScene()->getInstance<BulletCollisionManager>();
-			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene()->getInstance<BulletCollisionManager>());
+			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 			mass = _mass;
 		}
@@ -116,7 +115,7 @@ namespace Component
 		{
 			if (c == UNDEFINED)
 				return;
-			auto mediaManager = _entity->getScene()->getInstance<AssetsManager>();
+			auto mediaManager = _entity->getScene().lock()->getInstance<AssetsManager>();
 			meshName = _meshName;
 			_reset();
 			shapeType = c;
@@ -217,16 +216,6 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new RigidBody();
-			res->setEntity(e);
-			res->init();
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void save(Archive &ar) const
 		{
 			float _mass = mass;
@@ -244,6 +233,7 @@ namespace Component
 		template <typename Archive>
 		void load(Archive &ar)
 		{
+			init();
 			float _mass;
 			glm::vec3 _inertia;
 			ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint, meshName);

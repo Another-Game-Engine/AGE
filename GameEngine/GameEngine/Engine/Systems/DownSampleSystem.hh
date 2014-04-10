@@ -5,7 +5,7 @@
 class DownSampleSystem : public System
 {
 public:
-	DownSampleSystem(std::weak_ptr<AScene> scene);
+	DownSampleSystem(std::weak_ptr<AScene> &&scene);
 	virtual ~DownSampleSystem();
 
 	virtual void updateBegin(double time) { }

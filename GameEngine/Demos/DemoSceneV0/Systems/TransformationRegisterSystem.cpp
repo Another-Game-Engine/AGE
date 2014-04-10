@@ -6,14 +6,14 @@
 #include <Utils/GlmSerialization.hpp>
 
 
-TRSFilter::TRSFilter(std::weak_ptr<AScene> scene)
-: EntityFilter(scene)
+TRSFilter::TRSFilter(std::weak_ptr<AScene> &&scene)
+: EntityFilter(std::move(scene))
 , _system(nullptr)
 {}
 
 TRSFilter::~TRSFilter(){}
 
-void TRSFilter::_componentAdded(Entity &e, std::size_t typeId)
+void TRSFilter::componentAdded(Entity &&e, unsigned short typeId)
 {
 	if (_code.match(e->getCode()))
 	{
@@ -24,9 +24,9 @@ void TRSFilter::_componentAdded(Entity &e, std::size_t typeId)
 }
 
 
-TransformationRegisterSystem::TransformationRegisterSystem(std::weak_ptr<AScene> scene)
-: System(scene)
-, _filter(scene)
+TransformationRegisterSystem::TransformationRegisterSystem(std::weak_ptr<AScene> &&scene)
+: System(std::move(scene))
+, _filter(std::move(scene))
 , _file("")
 {
 	_name = "transformation_register_system";

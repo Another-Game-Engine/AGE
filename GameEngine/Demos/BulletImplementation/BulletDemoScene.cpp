@@ -12,7 +12,44 @@
 #include <Components/AudioListener.hpp>
 #include <Components/SpriteComponent.hh>
 
-#include <OpenGL/ComputeShader.hh>
+#include <OpenGL/Attribute.hh>
+#include <OpenGL/include/SDL/SDL_opengl.h>
+
+#include <Systems/RotationForceSystem.hpp>
+#include <Systems/CameraSystem.hpp>
+#include <Systems/BulletDynamicSystem.hpp>
+#include <Systems/FPControllerSystem.hpp>
+#include <Systems/FirstPersonViewSystem.hpp>
+#include <Systems/CollisionAdderSystem.hpp>
+#include <Systems/CollisionCleanerSystem.hpp>
+#include <Systems/AudioSystem.hpp>
+#include <Systems/SpriteSystem.hh>
+#include <Systems/DownSampleSystem.hh>
+#include <Systems/PostFxSystem.hh>
+#include <Systems/BlitFinalRender.hh>
+#include <BallSoundSystem.hpp>
+
+#include <Text/FontManager.hh>
+#include <Sprite/SpriteManager.hh>
+
+#include <Core/Engine.hh>
+
+#include <Systems\LightRenderingSystem.hh>
+
+#include <glm/gtc/matrix_transform.hpp>
+#include "Core/Engine.hh"
+#include "Core/Renderer.hh"
+#include "BulletDemoScene.hh"
+
+#include <Components/RotationForce.hpp>
+#include <Components/CameraComponent.hpp>
+#include <Components/RigidBody.hpp>
+#include <Components/FPController.hpp>
+#include <Components/FirstPersonView.hpp>
+#include <Components/AudioEmitter.hpp>
+#include <Components/AudioListener.hpp>
+#include <Components/SpriteComponent.hh>
+
 #include <OpenGL/Attribute.hh>
 #include <OpenGL/include/SDL/SDL_opengl.h>
 
@@ -44,7 +81,8 @@
 
 Entity globalCamera;
 
-BulletDemoScene::BulletDemoScene(std::weak_ptr<Engine> engine) : AScene(engine)
+BulletDemoScene::BulletDemoScene(std::weak_ptr<Engine> &&engine)
+: AScene(std::move(engine))
 {
 }
 
@@ -104,7 +142,7 @@ bool BulletDemoScene::userStart()
 		"../../Shaders/MaterialBasic.vp",
 		"../../Shaders/MaterialBasic.fp");
 
-	auto shadowDepth = getInstance<Renderer>()->addShader("ShadowDepth" , "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
+	auto shadowDepth = getInstance<Renderer>()->addShader("ShadowDepth", "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
 
 	// System Tests
 	//
@@ -136,7 +174,7 @@ bool BulletDemoScene::userStart()
 	// end System Test
 
 
-	std::string		perModelVars[] =
+	std::string	perModelVars[] =
 	{
 		"model"
 	};
@@ -150,7 +188,7 @@ bool BulletDemoScene::userStart()
 		"spotLightNbr"
 	};
 
-	std::string		materialBasic[] =
+	std::string	materialBasic[] =
 	{
 		"ambient",
 		"diffuse",
@@ -204,7 +242,7 @@ bool BulletDemoScene::userStart()
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
 	//getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
-	//	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__SketchTest.cpd"));
+	// getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Conference.cpd"));
 
@@ -236,22 +274,22 @@ bool BulletDemoScene::userStart()
 	//getInstance<AssetsManager>()->loadFromFile(File("../../Assets/Serialized/my_planet.cpd"));
 
 
-//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
+	// getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__cube.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__sponza.cpd"));
-	//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
+	// getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__SketchTest.cpd"));
 	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
-//	getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
+	// getInstance<AssetsManager>()->loadFromList(File("./Assets/Serialized/export__Museum.cpd"));
 
 
 	//File saveFile("BulletScene.scenesave");
 	//if (saveFile.exists())
 	//{
-	//	std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
-	//	load<cereal::BinaryInputArchive>(fileStream);
-	//	fileStream.close();
-	//	return true;
+	// std::ifstream fileStream("BulletScene.scenesave", std::ios_base::binary);
+	// load<cereal::BinaryInputArchive>(fileStream);
+	// fileStream.close();
+	// return true;
 	//}
 
 	// CREATE SPRITE ANIMATION
@@ -320,10 +358,10 @@ bool BulletDemoScene::userStart()
 	}
 
 	{
-//		auto e = createEntity();
-//		character->addChild(e);
-//		cameraComponent2 = e->addComponent<Component::CameraComponent>();
-//		e->addComponent<Component::FirstPersonView>();
+		// auto e = createEntity();
+		// character->addChild(e);
+		// cameraComponent2 = e->addComponent<Component::CameraComponent>();
+		// e->addComponent<Component::FirstPersonView>();
 	}
 
 	{
@@ -349,7 +387,6 @@ bool BulletDemoScene::userStart()
 
 	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
 
-
 	getInstance<Renderer>()->addUniform("cameraUniform")
 		->init(sky, "cameraUniform", vars);
 
@@ -360,12 +397,12 @@ bool BulletDemoScene::userStart()
 	cameraComponent1->viewport = glm::uvec4(0, 0, screenSize.x, screenSize.y);
 	cameraComponent1->fboSize = glm::uvec2(screenSize.x, screenSize.y);
 	cameraComponent1->sampleNbr = 1;
-//	cameraComponent2->attachSkybox("skybox__space", "cubemapShader");
-//	cameraComponent2->viewport = glm::uvec4(screenSize.x / 2, 0, screenSize.x / 2, screenSize.y);
-//	cameraComponent2->fboSize = glm::uvec2(screenSize.x / 2, screenSize.y);
-//	cameraComponent2->sampleNbr = 8;
+	// cameraComponent2->attachSkybox("skybox__space", "cubemapShader");
+	// cameraComponent2->viewport = glm::uvec4(screenSize.x / 2, 0, screenSize.x / 2, screenSize.y);
+	// cameraComponent2->fboSize = glm::uvec2(screenSize.x / 2, screenSize.y);
+	// cameraComponent2->sampleNbr = 8;
 	cameraComponent1->projection = glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f);
-//	cameraComponent2->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
+	// cameraComponent2->projection = glm::perspective(55.0f, 8.0f / 9.0f, 0.1f, 2000.0f);
 	return (true);
 }
 

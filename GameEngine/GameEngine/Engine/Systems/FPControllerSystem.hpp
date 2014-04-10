@@ -16,9 +16,10 @@
 class FPControllerSystem : public System
 {
 public:
-	FPControllerSystem(std::weak_ptr<AScene> scene) : System(scene)
+	FPControllerSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
 		, _manager(scene.lock()->getInstance<BulletCollisionManager>())
-		, _filter(scene)
+		, _filter(std::move(scene))
 	{
 		_name = "FP_controller_system";
 	}

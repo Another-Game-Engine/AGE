@@ -15,26 +15,17 @@ namespace Component
 	struct CameraComponent : public ComponentBase<CameraComponent>
 	{
 		CameraComponent();
-		virtual              ~CameraComponent(void);
+		virtual ~CameraComponent(void);
 		void init(){}
 		virtual void reset(){}
-		void                 attachSkybox(const std::string &name, const std::string &cubeMapShader);
-		void                 dettachSkybox();
+		void attachSkybox(const std::string &name, const std::string &cubeMapShader);
+		void dettachSkybox();
 		std::shared_ptr<CubeMapFile> getSkybox();
 		const std::string &getSkyboxShader() const;
 
 		//////
 		////
 		// Serialization
-
-		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new CameraComponent();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
 
 		template <typename Archive>
 		void save(Archive &ar) const
@@ -55,7 +46,7 @@ namespace Component
 			std::string _skybox;
 			ar(_skybox);
 			if (_skybox != "NULL")
-				skybox = _entity->getScene()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
+				skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
 		}
 
 		void	initFrameBuffer()
@@ -81,18 +72,18 @@ namespace Component
 		////
 		//////
 
-		glm::uvec4						viewport;
-		glm::mat4                       projection;
-		std::shared_ptr<CubeMapFile>    skybox;
-		std::string                     cubeMapShader;
-		glm::mat4                       lookAtTransform;
-		OpenGLTools::Framebuffer		frameBuffer;
-		OpenGLTools::Framebuffer		downSampling;
+		glm::uvec4	viewport;
+		glm::mat4 projection;
+		std::shared_ptr<CubeMapFile> skybox;
+		std::string cubeMapShader;
+		glm::mat4 lookAtTransform;
+		OpenGLTools::Framebuffer	frameBuffer;
+		OpenGLTools::Framebuffer	downSampling;
 		bool blitOnScreen;
 
 		// Camera fbo infos
-		glm::uvec2						fboSize;
-		uint32_t						sampleNbr;
+		glm::uvec2	fboSize;
+		uint32_t	sampleNbr;
 
 	private:
 		CameraComponent(CameraComponent const &);

@@ -9,7 +9,6 @@
 #include <Components/TrackBallComponent.hpp>
 #include <Components/AudioListener.hpp>
 #include <Components/AudioEmitter.hpp>
-#include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
@@ -22,7 +21,8 @@
 
 #include <SDL\SDL.h>
 
-SolarSystemDemoScene::SolarSystemDemoScene(std::weak_ptr<Engine> engine) : AScene(engine)
+SolarSystemDemoScene::SolarSystemDemoScene(std::weak_ptr<Engine> &&engine)
+: AScene(std::move(engine))
 {
 }
 

@@ -21,15 +21,6 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new AudioListener();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void serialize(Archive &ar)
 		{
 		}

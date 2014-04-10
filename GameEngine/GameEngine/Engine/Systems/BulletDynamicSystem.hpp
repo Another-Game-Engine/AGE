@@ -1,5 +1,5 @@
-#ifndef   __BULLET_DYNAMIC_SYSTEM_HPP__
-# define  __BULLET_DYNAMIC_SYSTEM_HPP__
+#ifndef __BULLET_DYNAMIC_SYSTEM_HPP__
+# define __BULLET_DYNAMIC_SYSTEM_HPP__
 
 #include <Physic/Utils/BtConversion.hpp>
 #include <Systems/System.h>
@@ -14,10 +14,11 @@
 class BulletDynamicSystem : public System
 {
 public:
-	BulletDynamicSystem(std::weak_ptr<AScene> scene) : System(scene)
+	BulletDynamicSystem(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
 		, _manager(nullptr)
-		, _filter1(scene)
-		, _filter2(scene)
+		, _filter1(std::move(scene))
+		, _filter2(std::move(scene))
 	{
 		_name = "bullet_dynamic_system";
 		_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene.lock()->getInstance<BulletCollisionManager>());
@@ -115,4 +116,4 @@ private:
 	}
 };
 
-#endif    //__BULLET_DYNAMIC_SYSTEM_HPP__
+#endif //__BULLET_DYNAMIC_SYSTEM_HPP__

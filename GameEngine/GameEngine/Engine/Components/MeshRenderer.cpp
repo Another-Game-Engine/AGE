@@ -2,13 +2,6 @@
 #include "Core/Engine.hh"
 #include <Core/AScene.hh>	
 
-class Entity;
-class EntityData;
-class AScene;
-class AssetsManager;
-class Renderer;
-class OpenGLTools::Shader;
-
 namespace Component
 {
 	MeshRenderer::MeshRenderer() :
@@ -43,9 +36,9 @@ namespace Component
 
 	void MeshRenderer::render(std::function<void(OpenGLTools::Shader&)> func)
 	{
-		auto perModelUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("PerModel");
-		auto materialUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("MaterialBasic");
-		auto s = _entity->getScene()->getInstance<Renderer>()->getShader(shader);
+		auto perModelUniform = _entity->getScene().lock()->getInstance<Renderer>()->getUniform("PerModel");
+		auto materialUniform = _entity->getScene().lock()->getInstance<Renderer>()->getUniform("MaterialBasic");
+		auto s = _entity->getScene().lock()->getInstance<Renderer>()->getShader(shader);
 		if (s)
 			s->use();
 		func(*s);
@@ -61,7 +54,7 @@ namespace Component
 
 	void MeshRenderer::renderRaw()
 	{
-		std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = _entity->getScene()->getInstance<Renderer>()->getUniform("PerModel");
+		std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = _entity->getScene().lock()->getInstance<Renderer>()->getUniform("PerModel");
 
 		perModelUniform->setUniform("model", _entity->getGlobalTransform());
 		perModelUniform->flushChanges();

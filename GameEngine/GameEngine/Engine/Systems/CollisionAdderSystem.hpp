@@ -1,4 +1,4 @@
-#ifndef  __COLLISION_ADDER_SYSTEM_HPP__
+#ifndef __COLLISION_ADDER_SYSTEM_HPP__
 # define __COLLISION_ADDER_SYSTEM_HPP__
 
 #include <Systems/System.h>
@@ -11,7 +11,8 @@
 class CollisionAdder : public System
 {
 public:
-	CollisionAdder(std::weak_ptr<AScene> scene) : System(scene)
+	CollisionAdder(std::weak_ptr<AScene> &&scene)
+		: System(std::move(scene))
 		, _manager(scene.lock()->getInstance<BulletCollisionManager>())
 	{
 		_name = "collision_adder_system";
@@ -38,8 +39,8 @@ private:
 			const btCollisionObject *ob = static_cast<const btCollisionObject*>(contact->getBody1());
 			float maxContact = 0;
 			for (auto j = 0, mj = contact->getNumContacts(); j < mj; ++j)
-				if (contact->getContactPoint(j).m_appliedImpulse > maxContact)
-					maxContact = contact->getContactPoint(j).m_appliedImpulse;
+			if (contact->getContactPoint(j).m_appliedImpulse > maxContact)
+				maxContact = contact->getContactPoint(j).m_appliedImpulse;
 			Entity h1 = *(static_cast<Entity*>(oa->getUserPointer()));
 			EntityData *e1 = h1.get();
 			auto c1 = e1->addComponent<Component::Collision>();
@@ -60,4 +61,4 @@ private:
 	}
 };
 
-#endif   //__COLLISION_ADDER_SYSTEM_HPP__
+#endif //__COLLISION_ADDER_SYSTEM_HPP__

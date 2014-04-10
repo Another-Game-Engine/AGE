@@ -64,13 +64,6 @@ namespace Component
 		}
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new PointLight();
-			return res;
-		}
-
-		template <typename Archive>
 		void serialize(Archive &ar)
 		{
 		}

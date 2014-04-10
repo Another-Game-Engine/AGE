@@ -16,6 +16,7 @@
 #include <Core/AScene.hh>
 #include <MediaFiles/AssetsManager.hpp>
 
+
 namespace Resources
 {
 	class Texture;
@@ -43,15 +44,6 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new MeshRenderer();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void save(Archive &ar) const
 		{
 			ar(CEREAL_NVP(shader));
@@ -65,7 +57,7 @@ namespace Component
 			ar(shader);
 			std::string meshName;
 			ar(meshName);
-			mesh = std::static_pointer_cast<ObjFile>(_entity->getScene()->getInstance<AssetsManager>()->loadFromFile(File(meshName)));
+			mesh = std::static_pointer_cast<ObjFile>(_entity->getScene().lock()->getInstance<AssetsManager>()->loadFromFile(File(meshName)));
 		}
 
 		// !Serialization

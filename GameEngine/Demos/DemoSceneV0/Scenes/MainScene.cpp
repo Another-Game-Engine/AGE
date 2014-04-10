@@ -36,8 +36,8 @@
 // SDL
 #include <Context/SdlContext.hh>
 
-MainScene::MainScene(std::weak_ptr<Engine> engine)
-: AScene(engine),
+MainScene::MainScene(std::weak_ptr<Engine> &&engine)
+: AScene(std::move(engine)),
 _sigma(4.0f),
 _glare(1.0f)
 {}
@@ -103,6 +103,7 @@ bool 			MainScene::userStart()
 		camera->fboSize = screenSize;
 		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
+		camera->sampleNbr = 1;
 
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
 		auto fpc = _heros->addComponent<Component::FPController>();
@@ -414,8 +415,6 @@ bool MainScene::loadShaders()
 	};
 
 	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
-
-
 	getInstance<Renderer>()->addUniform("cameraUniform")
 		->init(sky, "cameraUniform", vars);
 
