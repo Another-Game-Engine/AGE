@@ -1,6 +1,6 @@
-#include <iostream>
 #include "FontManager.hh"
-
+#include <Utils/PubSub.hpp>
+#include <Text/Font.hh>
 #include <cereal/archives/xml.hpp>
 #include <Core/Renderer.hh>
 #include <Context/IRenderContext.hh>
@@ -140,7 +140,7 @@ void FontManager::_draw2DString(const std::string &text,
 	{
 		std::size_t l = std::size_t(text[i] - ASCII_BEGIN);
 		if (l > ASCII_END)
-			glyphWidth = size;
+			glyphWidth = static_cast<float>(size);
 		else
 			glyphWidth = f._size != size ? ((float)f._map[l].width / (float)f._size) * sz : f._map[l].width;
 		if (text[i] == ' ')

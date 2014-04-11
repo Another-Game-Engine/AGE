@@ -1,7 +1,4 @@
-#include <memory>
-#include <cmath>
 #include "Framebuffer.hh"
-#include "Shader.hh"
 
 namespace OpenGLTools
 {

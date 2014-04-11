@@ -1,6 +1,7 @@
-
 #include	<Systems/BlitFinalRender.hh>
+#include	<Core/AScene.hh>
 #include	<Components/CameraComponent.hpp>
+#include	<Core/Renderer.hh>
 
 BlitFinalRender::BlitFinalRender(std::weak_ptr<AScene> &&scene) :
 					System(std::move(scene)),

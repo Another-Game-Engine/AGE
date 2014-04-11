@@ -7,7 +7,7 @@
 #include "Core/Input.hh"
 #include "Core/Timer.hh"
 #include <memory>
-#include "OpenGL/Shader.hh"
+//#include "OpenGL/Shader.hh"
 #include "Utils/Barcode.h"
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
@@ -20,6 +20,7 @@
 class AScene;
 class EntityManager;
 class Entity;
+class Shader;
 
 class EntityData
 {

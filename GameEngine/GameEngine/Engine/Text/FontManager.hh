@@ -1,15 +1,18 @@
 #pragma once
 
+#include <Utils/OpenGL.hh>
 #include <Utils/Dependency.hpp>
+#include <iostream>
+#include <memory>
+#include <vector>
 #include <map>
 #include <string>
-#include <Utils/File.hpp>
-#include "FontGlyph.hh"
-#include "Font.hh"
 #include <glm/glm.hpp>
-#include <Core/Engine.hh>
-#include <Utils/PubSub.hpp>
 
+class File;
+class Font;
+class PubSub;
+template <uint8_t NBR_ATTRIBUTE> class VertexManager;
 
 class FontManager : public Dependency
 {

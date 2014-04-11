@@ -1,19 +1,23 @@
 #pragma once
 
-#include "FontGlyph.hh"
 #include <Utils/OpenGL.hh>
 #include <vector>
-#include <cereal/cereal.hpp>
-#include <cereal/archives/binary.hpp>
-#include <cereal/archives/json.hpp>
-#include <cereal/archives/portable_binary.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/base_class.hpp>
+#include <array>
 #include <cereal/types/map.hpp>
 #include <cereal/types/string.hpp>
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
+#include <Text/FontGlyph.hh>
+
+// Maybe Necessary ??
+//#include <cereal/cereal.hpp>
+//#include <cereal/archives/binary.hpp>
+//#include <cereal/archives/json.hpp>
+//#include <cereal/archives/portable_binary.hpp>
+//#include <cereal/types/vector.hpp>
+//#include <cereal/types/base_class.hpp>
 
 class FontConvertor;
+template <uint8_t NBR_ATTRIBUTE> class VertexManager;
 
 class Font
 {

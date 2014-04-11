@@ -3,11 +3,6 @@
 
 # include "Utils/OpenGL.hh"
 
-# include <iostream>
-# include <vector>
-# include <map>
-# include <string>
-
 namespace OpenGLTools
 {
 	typedef unsigned char Byte;

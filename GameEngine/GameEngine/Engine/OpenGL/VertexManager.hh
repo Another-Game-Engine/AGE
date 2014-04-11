@@ -1,18 +1,14 @@
 #ifndef VERTEXMANAGER_HH_
 # define VERTEXMANAGER_HH_
 
-# include "Utils/OpenGL.hh"
-# include <iostream>
-# include <unordered_map>
-# include <utility>
+# include <Utils/OpenGL.hh>
+# include <Utils/Dependency.hpp>
 # include <array>
-# include "Vertice.hh"
-# include "Attribute.hh"
-# include "VertexArray.hh"
-# include "VertexPool.hh"
-
-
-#include <Utils/Dependency.hpp>
+# include <OpenGL/Vertice.hh>
+# include <OpenGL/Attribute.hh>
+# include <OpenGL/VertexArray.hh>
+# include <OpenGL/VertexBuffer.hh>
+# include <OpenGL/VertexPool.hh>
 
 template <uint8_t NBR_ATTRIBUTE>
 class VertexManager : public Dependency

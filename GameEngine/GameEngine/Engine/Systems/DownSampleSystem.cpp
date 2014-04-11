@@ -1,5 +1,5 @@
 #include "DownSampleSystem.hh"
-
+#include <Core/AScene.hh>
 #include <Components/CameraComponent.hpp>
 
 DownSampleSystem::DownSampleSystem(std::weak_ptr<AScene> &&scene) :

@@ -1,6 +1,6 @@
-
 #include	<Systems/PostFxSystem.hh>
 #include	<Components/CameraComponent.hpp>
+#include	<OpenGL/Framebuffer.hh>
 
 PostFxSystem::PostFxSystem(std::weak_ptr<AScene> &&scene) :
 					System(std::move(scene)),
@@ -101,13 +101,13 @@ void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	{
 		if (_curFactor < _targetFactor)
 		{
-			_curFactor += _adaptationSpeed * _scene.lock()->getInstance<Timer>()->getElapsed();
+			_curFactor += float(_adaptationSpeed * _scene.lock()->getInstance<Timer>()->getElapsed());
 			if (_curFactor > _targetFactor)
 				_curFactor = _targetFactor;
 		}
 		else
 		{
-			_curFactor -= _adaptationSpeed * _scene.lock()->getInstance<Timer>()->getElapsed();
+			_curFactor -= float(_adaptationSpeed * _scene.lock()->getInstance<Timer>()->getElapsed());
 			if (_curFactor < _targetFactor)
 				_curFactor = _targetFactor;
 		}

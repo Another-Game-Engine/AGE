@@ -1,6 +1,18 @@
 #pragma once
+
+#include <stdint.h>
+#include <Utils/OpenGL.hh>
 #include <Systems/System.h>
 #include <Utils/DrawQuad.hh>
+#include <Core/EntityFilter.hpp>
+#include <OpenGL/Shader.hh>
+#include <glm/glm.hpp>
+
+class AScene;
+namespace OpenGLTools
+{
+	class Framebuffer;
+}
 
 class PostFxSystem : public System
 {

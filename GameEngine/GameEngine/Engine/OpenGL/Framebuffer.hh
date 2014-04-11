@@ -1,11 +1,9 @@
 #ifndef  __FRAMEBUFFER_HH__
 # define __FRAMEBUFFER_HH__
 
+#include <Utils/OpenGL.hh>
 #include <map>
-#include <vector>
-#include "Utils/OpenGL.hh"
-#include "glm/glm.hpp"
-#include "VertexArray.hh"
+#include <glm/glm.hpp>
 
 namespace OpenGLTools
 {

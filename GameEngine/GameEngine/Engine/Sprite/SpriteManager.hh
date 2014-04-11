@@ -177,7 +177,7 @@ public:
 				animation->_material.specularTex = std::static_pointer_cast<TextureFile>(texture);
 				animation->_material.ambient = glm::vec3(0.8f);
 				animation->_material.diffuse = glm::vec3(0.9f);
-				animation->_steps.push_back(ref->second);
+				animation->_steps.push_back(unsigned int(ref->second));
 			}
 			sprite->_animations.insert(std::make_pair(itr->name.GetString(), animation));
 		}

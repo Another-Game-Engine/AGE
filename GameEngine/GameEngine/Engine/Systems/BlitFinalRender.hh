@@ -1,6 +1,11 @@
 #pragma once
+
+#include <memory>
 #include <Systems/System.h>
+#include <Core/EntityFilter.hpp>
 #include <Utils/DrawQuad.hh>
+
+class AScene;
 
 class BlitFinalRender : public System
 {

@@ -1,6 +1,8 @@
 #include "Barcode.h"
 #include <Engine/Entities/EntityData.hh>
 
+class EntityData;
+
 Barcode::Barcode()
 : code_(0)
 {

@@ -19,7 +19,7 @@ public:
 		_frames[_steps[static_cast<std::size_t>(index)]]->draw();
 	}
 
-	inline std::uint32_t getStepNumber() const { return _steps.size(); }
+	inline size_t getStepNumber() const { return _steps.size(); }
 //private:
 	bool _alphaTest = true;
 	std::vector<std::uint32_t> _steps;

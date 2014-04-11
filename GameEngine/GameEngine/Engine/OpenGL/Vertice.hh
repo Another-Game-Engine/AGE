@@ -3,9 +3,9 @@
 
 # include <array>
 # include "Data.hh"
+# include "VertexManager.hh"
 
-template <uint8_t NBR_ATTRIBUTE>
-class VertexManager;
+template <uint8_t NBR_ATTRIBUTE> class VertexManager;
 
 template <uint8_t NBR_ATTRIBUTE>
 class Vertice

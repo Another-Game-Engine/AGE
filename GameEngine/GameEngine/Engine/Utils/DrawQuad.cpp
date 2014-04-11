@@ -1,6 +1,7 @@
 #include "DrawQuad.hh"
+#include <OpenGL/VertexManager.hh>
+#include <OpenGL/Shader.hh>
 #include <Core/Renderer.hh>
-#include <glm\glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 DrawQuad::DrawQuad() :
