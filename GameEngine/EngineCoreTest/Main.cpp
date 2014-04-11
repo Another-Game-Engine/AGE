@@ -23,7 +23,7 @@ int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
-	e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
+	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
 	e->setInstance<PubSub::Manager>();
 	e->setInstance<SdlContext, IRenderContext>();
 	e->setInstance<Input>();
@@ -31,18 +31,14 @@ int			main(int ac, char **av)
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
 
-	std::function<void(unsigned int &)> f = [](unsigned int &v){std::cout << "modified : " << v << std::endl; };
-	unsigned int o = 32;
-	e->getInstance<ConfigurationManager>()
-		->setConfiguration<unsigned int>("test", o, f);
-
-	o = 21;
-	e->getInstance<ConfigurationManager>()
-		->setValue<unsigned int>("test", o);
+	std::function<void(glm::uvec2 &&)> f = [](glm::uvec2 &&v){std::cout << "modified : " << v.x << std::endl; };
+	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), f);
+	config->setValue<glm::uvec2>("windowSize", glm::uvec2(840, 640));
 
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
+
 
 	// add main scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<BenchmarkScene>(e), "BenchmarkScene");

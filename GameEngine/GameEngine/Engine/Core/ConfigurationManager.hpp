@@ -44,7 +44,7 @@ struct ConfigurationValue : public Configuration
 	}
 
 	T value;
-	std::function<void(T &value)> callback;
+	std::function<void(T &&value)> callback;
 };
 
 class ConfigurationManager : public Dependency
@@ -78,7 +78,7 @@ public:
 	template <typename T>
 	void setConfiguration(
 		const std::string &name
-		, T &value)
+		, T &&value)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
@@ -90,8 +90,8 @@ public:
 	template <typename T>
 	void setConfiguration(
 		const std::string &name
-		, T &value
-		, std::function<void(T &v)> callback)
+		, T &&value
+		, std::function<void(T &&v)> callback)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
@@ -102,7 +102,7 @@ public:
 	}
 
 	template <typename T>
-	void setValue(const std::string &name, T &value)
+	void setValue(const std::string &name, T &&value)
 	{
 		auto it = _confs.find(name);
 		if (it == std::end(_confs))
@@ -112,7 +112,7 @@ public:
 			return;
 		ptr->value = value;
 		if (ptr->triggerCallback)
-			ptr->callback(value);
+			ptr->callback(std::move(value));
 	}
 
 private:
