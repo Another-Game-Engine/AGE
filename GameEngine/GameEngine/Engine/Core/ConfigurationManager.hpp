@@ -31,11 +31,6 @@ struct ConfigurationValue : public Configuration
 		return value;
 	}
 
-	T &&getValue()
-	{
-		return std::move(value);
-	}
-
 	template <typename Archive>
 	void save(Archive &ar) const
 	{
@@ -55,8 +50,8 @@ struct ConfigurationValue : public Configuration
 class ConfigurationManager : public Dependency
 {
 public:
-	ConfigurationManager()
-		: _saveFile(File("./ConfigurationSaveFile.conf"))
+	ConfigurationManager(const File &saveFile = File("./ConfigurationSaveFile.conf"))
+		: _saveFile(saveFile)
 	{
 	}
 
@@ -83,7 +78,7 @@ public:
 	template <typename T>
 	void setConfiguration(
 		const std::string &name
-		, const T &value)
+		, T &value)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
@@ -95,15 +90,29 @@ public:
 	template <typename T>
 	void setConfiguration(
 		const std::string &name
-		, const T &value
-		, std::function<void(const T &value)> &callback)
+		, T &value
+		, std::function<void(T &v)> callback)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
 		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(value));
 		ptr->triggerCallback = true;
 		ptr->callback = callback;
-		_confs.emplace(std::make_pair(name, ptr));
+		_confs.emplace(std::make_pair(name, std::move(ptr)));
+	}
+
+	template <typename T>
+	void setValue(const std::string &name, T &value)
+	{
+		auto it = _confs.find(name);
+		if (it == std::end(_confs))
+			return;
+		auto ptr = dynamic_cast<ConfigurationValue<T>*>(it->second.get());
+		if (!ptr)
+			return;
+		ptr->value = value;
+		if (ptr->triggerCallback)
+			ptr->callback(value);
 	}
 
 private:

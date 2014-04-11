@@ -23,13 +23,22 @@ int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
-	e->setInstance<ConfigurationManager>();
+	e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
 	e->setInstance<PubSub::Manager>();
 	e->setInstance<SdlContext, IRenderContext>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
+
+	std::function<void(unsigned int &)> f = [](unsigned int &v){std::cout << "modified : " << v << std::endl; };
+	unsigned int o = 32;
+	e->getInstance<ConfigurationManager>()
+		->setConfiguration<unsigned int>("test", o, f);
+
+	o = 21;
+	e->getInstance<ConfigurationManager>()
+		->setValue<unsigned int>("test", o);
 
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
