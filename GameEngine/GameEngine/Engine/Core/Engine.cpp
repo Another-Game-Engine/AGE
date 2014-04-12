@@ -18,11 +18,11 @@ Engine::~Engine()
 {
 }
 
-bool        Engine::init(int mode, unsigned int swidth, unsigned int sheight, const char *name)
+bool        Engine::init(int mode, unsigned int swidth, unsigned int sheight, std::string &&name)
 {
 	auto context = getInstance<IRenderContext>();
 
-	if (!context->start(mode, swidth, sheight, name))
+	if (!context->start(mode, swidth, sheight, std::move(name)))
 		return (false);
 
 	if (glewInit() != GLEW_OK)

@@ -11,11 +11,13 @@ class SdlContext : public IRenderContext
 private:
 	SDL_Window		*_window;
 	SDL_GLContext	_glContext;
+protected:
+	virtual void _setScreenSize(glm::uvec2 &&screenSize);
+	virtual bool _start(int mode);
 public:
   SdlContext() { }
   virtual ~SdlContext() { }
 
-  virtual bool    start(int mode, unsigned int swidth, unsigned int sheight, const char *name);
   virtual void    updateEvents(Input &input) const;
   virtual void 	  flush() const;
   virtual void    stop() const;

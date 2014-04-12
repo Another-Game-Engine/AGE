@@ -1,14 +1,18 @@
 #include "context/SdlContext.hh"
 #include <iostream>
 
-bool    SdlContext::start(int mode, unsigned int swidth, unsigned int sheight, const char *name)
+void SdlContext::_setScreenSize(glm::uvec2 &&screenSize)
 {
-	_width = swidth;
-	_height = sheight;
+	SDL_SetWindowSize(_window, _screenSize.x, _screenSize.y);
+}
+
+bool SdlContext::_start(int mode)
+{
+	_screenSize = glm::uvec2(_screenSize.x, _screenSize.y);
 	if (SDL_Init(SDL_INIT_VIDEO) != 0 ||
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0 ||
-		(_window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		swidth, sheight, SDL_WINDOW_OPENGL | mode)) == NULL ||
+		(_window = SDL_CreateWindow(_windowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+		_screenSize.x, _screenSize.y, SDL_WINDOW_OPENGL | mode)) == NULL ||
 		(_glContext = SDL_GL_CreateContext(_window)) == NULL)
 			return (false);
 	return (true);

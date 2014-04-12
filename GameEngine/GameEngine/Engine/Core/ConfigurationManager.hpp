@@ -77,7 +77,7 @@ public:
 
 	template <typename T>
 	void setConfiguration(
-		const std::string &name
+		const std::string &&name
 		, T &&value)
 	{
 		if (_confs.find(name) != std::end(_confs))
@@ -89,9 +89,9 @@ public:
 	// with callback at modification
 	template <typename T>
 	void setConfiguration(
-		const std::string &name
+		std::string &&name
 		, T &&value
-		, std::function<void(T &&v)> callback)
+		, std::function<void(T &&v)> &&callback)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
