@@ -4,26 +4,43 @@
 #include <Utils/File.hpp>
 #include <map>
 #include <functional>
+#include <cereal/cereal.hpp>
+#include <cereal/types/polymorphic.hpp>
+#include <cereal/archives/json.hpp>
+#include <Utils/GlmSerialization.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/types/string.hpp>
 
 struct Configuration
 {
-	Configuration()
+	Configuration(std::string &&_key)
 	: triggerCallback(false)
+	, key(_key)
 	{}
+
+	virtual void save(cereal::JSONOutputArchive &ar) const = 0;
+	virtual void load(cereal::JSONOutputArchive &ar) = 0;
 
 	virtual ~Configuration(){}
 	bool triggerCallback;
+	std::string key;
 };
 
 template <typename T>
 struct ConfigurationValue : public Configuration
 {
-	ConfigurationValue(const T &_value)
-	: value(_value)
+	ConfigurationValue()
 	{}
 
-	ConfigurationValue(T && _value)
-	: value(std::move(_value))
+	ConfigurationValue(std::string &&_key, const T &_value)
+		: Configuration(std::move(_key)) 
+		, value(_value)
+	{}
+
+	ConfigurationValue(std::string &&_key, T && _value)
+		: Configuration(std::move(_key))
+		, value(std::move(_value))
 	{}
 
 	T &getValue()
@@ -31,16 +48,14 @@ struct ConfigurationValue : public Configuration
 		return value;
 	}
 
-	template <typename Archive>
-	void save(Archive &ar) const
+	virtual void save(cereal::JSONOutputArchive &ar) const
 	{
-		ar(value);
+		ar(key, value);
 	}
 
-	template <typename Archive>
-	void load(Archive &ar)
+	virtual void load(cereal::JSONOutputArchive &ar)
 	{
-		ar(value);
+		ar(key, value);
 	}
 
 	T value;
@@ -63,13 +78,20 @@ public:
 		_saveFile = file;
 	}
 
-	template <typename ArchiveType>
 	bool saveToFile()
 	{
+		auto fileStream = std::ofstream(_saveFile.getFullName());
+		if (!fileStream.is_open())
+			return false;
+		cereal::JSONOutputArchive ar(fileStream);
+		for (auto &&e : _confs)
+		{
+			e.second->save(ar);
+		}
+
 		return true;
 	}
 
-	template <typename ArchiveType>
 	bool loadFile()
 	{
 		return true;
@@ -82,7 +104,7 @@ public:
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
-		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(value));
+		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(name), std::move(value));
 		_confs.emplace(std::make_pair(name, ptr));
 	}
 
@@ -95,7 +117,7 @@ public:
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
-		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(value));
+		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(name), std::move(value));
 		ptr->triggerCallback = true;
 		ptr->callback = callback;
 		_confs.emplace(std::make_pair(name, std::move(ptr)));

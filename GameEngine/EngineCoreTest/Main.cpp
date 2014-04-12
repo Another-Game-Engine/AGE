@@ -46,6 +46,8 @@ int			main(int ac, char **av)
 
 	//config->setValue<glm::uvec2>("windowSize", glm::uvec2(840, 640));
 
+	config->saveToFile();
+
 	// add main scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<BenchmarkScene>(e), "BenchmarkScene");
 
