@@ -263,6 +263,7 @@
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
     <ClCompile Include="Engine\Utils\Barcode.cpp" />
+    <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
   </ItemGroup>
@@ -363,6 +364,7 @@
     <ClInclude Include="Engine\Utils\File.hpp" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />

@@ -4,26 +4,24 @@
 #include <Utils/File.hpp>
 #include <map>
 #include <functional>
-#include <cereal/cereal.hpp>
-#include <cereal/archives/json.hpp>
+#include <Utils/JsonSerialization.hpp>
+#include <cereal/external/rapidjson/stringbuffer.h>
 
 struct Configuration
 {
-	Configuration(std::string &&_key)
+	Configuration(std::string &&_key = "NULL")
 	: triggerCallback(false)
 	, key(_key)
 	{}
 
-	void save(cereal::JSONOutputArchive &ar) const
+	void save(rapidjson::Value &json, rapidjson::Document &document) const
 	{
-		ar(CEREAL_NVP(key));
-		_save(ar);
+		_save(json, document);
 	}
 
-	void load(cereal::JSONOutputArchive &ar)
+	void load(rapidjson::Value &json, rapidjson::Document &document)
 	{
-		ar(key);
-		_save(ar);
+		_load(json, document);
 	}
 
 	virtual ~Configuration(){}
@@ -31,8 +29,8 @@ struct Configuration
 	std::string key;
 
 private:
-	virtual void _save(cereal::JSONOutputArchive &ar) const = 0;
-	virtual void _load(cereal::JSONOutputArchive &ar) = 0;
+	virtual void _save(rapidjson::Value &json, rapidjson::Document &document) const = 0;
+	virtual void _load(rapidjson::Value &json, rapidjson::Document &document) = 0;
 
 };
 
@@ -57,14 +55,14 @@ struct ConfigurationValue : public Configuration
 		return value;
 	}
 
-	virtual void _save(cereal::JSONOutputArchive &ar) const
+	virtual void _save(rapidjson::Value &json, rapidjson::Document &document) const
 	{
-		ar(CEREAL_NVP(value));
+		JsonSerialization::save<T>(std::ref(value), json, document);
 	}
 
-	virtual void _load(cereal::JSONOutputArchive &ar)
+	virtual void _load(rapidjson::Value &json, rapidjson::Document &document)
 	{
-		ar(value);
+		JsonSerialization::load<T>(value, json, document);
 	}
 
 	T value;
@@ -89,28 +87,62 @@ public:
 
 	bool saveToFile()
 	{
-		auto fileStream = std::ofstream(_saveFile.getFullName());
-		if (!fileStream.is_open())
-			return false;
-		cereal::JSONOutputArchive ar(fileStream);
+		rapidjson::Document document;
+		document.SetObject();
 		for (auto &&e : _confs)
 		{
-			ar(cereal::make_nvp(e.first, *(e.second.get())));
-//			e.second->save(ar);
+			rapidjson::Value v(rapidjson::kObjectType);
+//			v.AddMember("key", e.first, document.GetAllocator());
+			e.second->save(v, document);
+			document.AddMember(e.first.c_str(), v, document.GetAllocator());
 		}
+		rapidjson::StringBuffer buffer;
+		rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+		document.Accept(writer);
+		auto file = std::ofstream(_saveFile.getFullName());
+		file << buffer.GetString();
+
+		//auto fileStream = std::ofstream(_saveFile.getFullName());
+		//if (!fileStream.is_open())
+		//	return false;
+		//cereal::JSONOutputArchive ar(fileStream);
+		//for (auto &&e : _confs)
+		//{
+		//	ar(cereal::make_nvp(e.first, *(e.second.get())));
+		//}
 
 		return true;
 	}
 
 	bool loadFile()
 	{
-		auto fileStream = std::ifstream(_saveFile.getFullName());
-		if (!fileStream.is_open())
+		if (!_saveFile.exists())
 			return false;
-		cereal::JSONInputArchive ar(fileStream);
-		//for (auto &&e : _confs)
+		auto content = _saveFile.getFileContent();
+
+		rapidjson::Document document;
+		document.Parse<0>(content.c_str());
+
+		if (!document.IsObject())
+			return false;
+
+		for (auto &&e : _confs)
+		{
+			if (document.HasMember(e.first.c_str()))
+			{
+				//auto t = document[e.first.c_str()];
+				return false;
+			}
+		}
+		//cereal::JSONInputArchive ar(fileStream);
+		//std::map<std::string, Configuration> confs;
+		//ar(confs);
+		//for (auto &&e : confs)
 		//{
-		//	e.second->save(ar);
+		//	if (_confs.find(e.first) != std::end(_confs))
+		//	{
+		//		*_confs[e.first].get() = e.second;
+		//	}
 		//}
 
 		return true;
