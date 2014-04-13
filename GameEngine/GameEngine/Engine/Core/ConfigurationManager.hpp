@@ -5,12 +5,7 @@
 #include <map>
 #include <functional>
 #include <cereal/cereal.hpp>
-#include <cereal/types/polymorphic.hpp>
 #include <cereal/archives/json.hpp>
-#include <Utils/GlmSerialization.hpp>
-#include <cereal/types/memory.hpp>
-#include <cereal/types/map.hpp>
-#include <cereal/types/string.hpp>
 
 struct Configuration
 {
@@ -19,12 +14,26 @@ struct Configuration
 	, key(_key)
 	{}
 
-	virtual void save(cereal::JSONOutputArchive &ar) const = 0;
-	virtual void load(cereal::JSONOutputArchive &ar) = 0;
+	void save(cereal::JSONOutputArchive &ar) const
+	{
+		ar(CEREAL_NVP(key));
+		_save(ar);
+	}
+
+	void load(cereal::JSONOutputArchive &ar)
+	{
+		ar(key);
+		_save(ar);
+	}
 
 	virtual ~Configuration(){}
 	bool triggerCallback;
 	std::string key;
+
+private:
+	virtual void _save(cereal::JSONOutputArchive &ar) const = 0;
+	virtual void _load(cereal::JSONOutputArchive &ar) = 0;
+
 };
 
 template <typename T>
@@ -48,14 +57,14 @@ struct ConfigurationValue : public Configuration
 		return value;
 	}
 
-	virtual void save(cereal::JSONOutputArchive &ar) const
+	virtual void _save(cereal::JSONOutputArchive &ar) const
 	{
-		ar(key, value);
+		ar(CEREAL_NVP(value));
 	}
 
-	virtual void load(cereal::JSONOutputArchive &ar)
+	virtual void _load(cereal::JSONOutputArchive &ar)
 	{
-		ar(key, value);
+		ar(value);
 	}
 
 	T value;
@@ -86,7 +95,8 @@ public:
 		cereal::JSONOutputArchive ar(fileStream);
 		for (auto &&e : _confs)
 		{
-			e.second->save(ar);
+			ar(cereal::make_nvp(e.first, *(e.second.get())));
+//			e.second->save(ar);
 		}
 
 		return true;
@@ -94,18 +104,27 @@ public:
 
 	bool loadFile()
 	{
+		auto fileStream = std::ifstream(_saveFile.getFullName());
+		if (!fileStream.is_open())
+			return false;
+		cereal::JSONInputArchive ar(fileStream);
+		//for (auto &&e : _confs)
+		//{
+		//	e.second->save(ar);
+		//}
+
 		return true;
 	}
 
 	template <typename T>
 	void setConfiguration(
-		const std::string &&name
+		std::string &&name
 		, T &&value)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
 		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(name), std::move(value));
-		_confs.emplace(std::make_pair(name, ptr));
+		_confs.emplace(std::make_pair(name, std::move(ptr)));
 	}
 
 	// with callback at modification

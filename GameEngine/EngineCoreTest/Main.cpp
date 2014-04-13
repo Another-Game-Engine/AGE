@@ -33,6 +33,8 @@ int			main(int ac, char **av)
 		e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
 	});
 
+	config->setConfiguration<int>("thisIsATest", 42);
+
 	e->setInstance<PubSub::Manager>();
 	e->setInstance<SdlContext, IRenderContext>();
 	e->setInstance<Input>();
@@ -44,7 +46,7 @@ int			main(int ac, char **av)
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
 
-	//config->setValue<glm::uvec2>("windowSize", glm::uvec2(840, 640));
+	config->setValue<glm::uvec2>("windowSize", glm::uvec2(840, 640));
 
 	config->saveToFile();
 
