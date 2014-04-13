@@ -6,6 +6,7 @@
 #include <functional>
 #include <Utils/JsonSerialization.hpp>
 #include <cereal/external/rapidjson/stringbuffer.h>
+#include <cereal/external/rapidjson/prettywriter.h>
 
 struct Configuration
 {
@@ -57,12 +58,14 @@ struct ConfigurationValue : public Configuration
 
 	virtual void _save(rapidjson::Value &json, rapidjson::Document &document) const
 	{
-		JsonSerialization::save<T>(std::ref(value), json, document);
+		JsonSerialization::save<T>(value, json, document);
 	}
 
 	virtual void _load(rapidjson::Value &json, rapidjson::Document &document)
 	{
 		JsonSerialization::load<T>(value, json, document);
+		if (triggerCallback)
+			callback(std::move(value));
 	}
 
 	T value;
@@ -92,25 +95,14 @@ public:
 		for (auto &&e : _confs)
 		{
 			rapidjson::Value v(rapidjson::kObjectType);
-//			v.AddMember("key", e.first, document.GetAllocator());
 			e.second->save(v, document);
 			document.AddMember(e.first.c_str(), v, document.GetAllocator());
 		}
 		rapidjson::StringBuffer buffer;
-		rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+		rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
 		document.Accept(writer);
 		auto file = std::ofstream(_saveFile.getFullName());
 		file << buffer.GetString();
-
-		//auto fileStream = std::ofstream(_saveFile.getFullName());
-		//if (!fileStream.is_open())
-		//	return false;
-		//cereal::JSONOutputArchive ar(fileStream);
-		//for (auto &&e : _confs)
-		//{
-		//	ar(cereal::make_nvp(e.first, *(e.second.get())));
-		//}
-
 		return true;
 	}
 
@@ -130,21 +122,9 @@ public:
 		{
 			if (document.HasMember(e.first.c_str()))
 			{
-				//auto t = document[e.first.c_str()];
-				return false;
+				e.second->load(document[e.first.c_str()], document);
 			}
 		}
-		//cereal::JSONInputArchive ar(fileStream);
-		//std::map<std::string, Configuration> confs;
-		//ar(confs);
-		//for (auto &&e : confs)
-		//{
-		//	if (_confs.find(e.first) != std::end(_confs))
-		//	{
-		//		*_confs[e.first].get() = e.second;
-		//	}
-		//}
-
 		return true;
 	}
 
@@ -172,6 +152,7 @@ public:
 		ptr->triggerCallback = true;
 		ptr->callback = callback;
 		_confs.emplace(std::make_pair(name, std::move(ptr)));
+		callback(std::move(value));
 	}
 
 	template <typename T>

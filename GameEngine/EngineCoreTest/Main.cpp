@@ -26,15 +26,6 @@ int			main(int ac, char **av)
 	// Set Configurations
 	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
 
-	// Set default window size
-	// If config file has different value, it'll be changed automaticaly
-	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&e](glm::uvec2 &&v)
-	{
-		e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
-	});
-
-	config->setConfiguration<int>("thisIsATest", 42);
-
 	e->setInstance<PubSub::Manager>();
 	e->setInstance<SdlContext, IRenderContext>();
 	e->setInstance<Input>();
@@ -46,10 +37,14 @@ int			main(int ac, char **av)
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
 
-	config->setValue<glm::uvec2>("windowSize", glm::uvec2(840, 640));
-	config->saveToFile();
+	// Set default window size
+	// If config file has different value, it'll be changed automaticaly
+	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&e](glm::uvec2 &&v)
+	{
+		e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
+	});
 
-	//config->loadFile();
+	config->loadFile();
 
 	// add main scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<BenchmarkScene>(e), "BenchmarkScene");
@@ -65,6 +60,7 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 	while (e->update())
 		;
+	config->saveToFile();
 	e->stop();
 	return (EXIT_SUCCESS);
 }
