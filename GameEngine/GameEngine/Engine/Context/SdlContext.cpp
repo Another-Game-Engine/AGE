@@ -4,6 +4,7 @@
 void SdlContext::_setScreenSize(glm::uvec2 &&screenSize)
 {
 	SDL_SetWindowSize(_window, _screenSize.x, _screenSize.y);
+	SDL_SetWindowPosition(_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
 
 bool SdlContext::_start(int mode)
