@@ -12,7 +12,7 @@ public:
 	Engine();
 	virtual ~Engine();
 
-	bool        init(int mode, unsigned int swidth, unsigned int sheight, const char *name);
+	bool        init(int mode, unsigned int swidth, unsigned int sheight, std::string &&name);
 	bool 		start();
 	bool 		update();
 	void 		stop();
