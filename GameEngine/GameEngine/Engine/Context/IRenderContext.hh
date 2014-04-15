@@ -30,16 +30,16 @@ public:
 		return _screenSize;
 	}
 
-	void setScreenSize(glm::uvec2 &&screenSize)
+	void setScreenSize(const glm::uvec2 &screenSize)
 	{
 		_screenSize = screenSize;
-		_setScreenSize(std::move(screenSize));
+		_setScreenSize(screenSize);
 	}
 
 protected:
 	glm::uvec2 _screenSize;
 	std::string _windowName;
-	virtual void _setScreenSize(glm::uvec2 &&screenSize) = 0;
+	virtual void _setScreenSize(const glm::uvec2 &screenSize) = 0;
 	virtual bool _start(int mode) = 0;
 };
 

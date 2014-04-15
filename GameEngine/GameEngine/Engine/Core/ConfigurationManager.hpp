@@ -65,11 +65,11 @@ struct ConfigurationValue : public Configuration
 	{
 		JsonSerialization::load<T>(value, json, document);
 		if (triggerCallback)
-			callback(std::move(value));
+			callback(value);
 	}
 
 	T value;
-	std::function<void(T &&value)> callback;
+	std::function<void(const T &value)> callback;
 };
 
 class ConfigurationManager : public Dependency
@@ -131,11 +131,11 @@ public:
 	template <typename T>
 	void setConfiguration(
 		std::string &&name
-		, T &&value)
+		, const T &value)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
-		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(name), std::move(value));
+		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(name), value);
 		_confs.emplace(std::make_pair(name, std::move(ptr)));
 	}
 
@@ -143,20 +143,20 @@ public:
 	template <typename T>
 	void setConfiguration(
 		std::string &&name
-		, T &&value
-		, std::function<void(T &&v)> &&callback)
+		, const T &value
+		, std::function<void(const T &v)> &&callback)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
-		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(name), std::move(value));
+		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(name), value);
 		ptr->triggerCallback = true;
 		ptr->callback = callback;
 		_confs.emplace(std::make_pair(name, std::move(ptr)));
-		callback(std::move(value));
+		callback(value);
 	}
 
 	template <typename T>
-	void setValue(const std::string &name, T &&value)
+	void setValue(const std::string &name, const T &value)
 	{
 		auto it = _confs.find(name);
 		if (it == std::end(_confs))
@@ -166,7 +166,7 @@ public:
 			return;
 		ptr->value = value;
 		if (ptr->triggerCallback)
-			ptr->callback(std::move(value));
+			ptr->callback(value);
 	}
 
 private:
