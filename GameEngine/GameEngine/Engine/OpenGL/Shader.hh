@@ -2,18 +2,15 @@
 # define SHADER_HH_
 
 
-# include "Utils/OpenGL.hh"
+# include <Utils/OpenGL.hh>
 # include <iostream>
-# include <string>
 # include <map>
 # include <array>
 # include <vector>
-# include <set>
 # include <utility>
 # include <memory>
 # include <fstream>
-# include <assert.h>
-# include "OpenGL/ErrorController.hh"
+# include <OpenGL/ErrorController.hh>
 
 namespace OpenGLTools
 {

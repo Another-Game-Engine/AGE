@@ -1,4 +1,4 @@
-#include "Framebuffer.hh"
+#include <OpenGL/Framebuffer.hh>
 
 namespace OpenGLTools
 {

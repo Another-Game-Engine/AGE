@@ -16,6 +16,7 @@
 #include <Audio/AudioManager.hh>
 #include <Core/Engine.hh>
 #include <Systems\LightRenderingSystem.hh>
+#include <Core/SceneManager.hh>
 
 #include <MediaFiles/AssetsManager.hpp>
 

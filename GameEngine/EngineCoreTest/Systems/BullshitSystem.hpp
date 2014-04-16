@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Systems/System.h"
-
+#include <Core/EntityFilter.hpp>
 #include <Entities/EntityData.hh>
 
 namespace Component

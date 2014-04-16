@@ -1,3 +1,5 @@
+//#define GLM_FORCE_RADIANS
+
 #include "CircleRoom.hh"
 #include <MediaFiles/AssetsManager.hpp>
 #include <Components/MeshRenderer.hh>

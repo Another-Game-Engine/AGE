@@ -3,7 +3,8 @@
 #include <Components/CameraComponent.hpp>
 #include <Components/RigidBody.hpp>
 #include <Components/MeshRenderer.hh>
-
+#include <Components/PointLight.hh>
+#include <Entities/Entity.hh>
 #include <Physic/Utils/BtConversion.hpp>
 
 #include <SDL/SDL.h>

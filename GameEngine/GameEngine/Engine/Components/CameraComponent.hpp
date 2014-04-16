@@ -1,14 +1,12 @@
 #pragma once
 
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "Component.hh"
+#include <glm/glm.hpp>
+#include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
+#include <OpenGL/Framebuffer.hh>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/AssetsManager.hpp>
-#include <OpenGL\Framebuffer.hh>
 
 namespace Component
 {

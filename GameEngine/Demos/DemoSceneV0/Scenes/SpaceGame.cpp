@@ -1,5 +1,7 @@
 #include <Scenes/SpaceGame.hh>
 
+#include <Core/Renderer.hh>
+
 // components
 #include <Components/FPController.hpp>
 #include <Components/CameraComponent.hpp>
@@ -18,8 +20,8 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 
+#include <Text/FontManager.hh>
 #include <glm/glm.hpp>
-
 #include "MyTags.hpp"
 
 SpaceGame::SpaceGame(std::weak_ptr<Engine> &&engine)

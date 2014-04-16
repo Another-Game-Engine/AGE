@@ -4,6 +4,7 @@
 #include <Systems/CameraSystem.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Components/EntityPlacable.hpp>
+#include <Text/FontManager.hh>
 
 class EntityPlacingSystem : public System
 {

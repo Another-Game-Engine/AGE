@@ -1,4 +1,5 @@
 #include "Shader.hh"
+#include <string>
 
 namespace OpenGLTools
 {
@@ -173,7 +174,7 @@ namespace OpenGLTools
 	{
 		_samplersBind.push_back(sampler);
 		GLuint location = glGetUniformLocation(_progId, sampler.c_str());
-		glUniform1ui(location, _samplersBind.size() - 1);
+		glUniform1ui(location, GLuint(_samplersBind.size() - 1));
 	}
 
 	bool Shader::deleteSampler(std::string &&sampler)

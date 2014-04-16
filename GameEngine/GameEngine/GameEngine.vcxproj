@@ -128,7 +128,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -136,6 +136,7 @@
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <DisableSpecificWarnings>4503;</DisableSpecificWarnings>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -209,6 +210,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
+    <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
     <ClCompile Include="Engine\Systems\PostFxSystem.cpp" />
