@@ -114,8 +114,7 @@ private:
 		if (!_inputs)
 			return false;
 		if (_scene.lock()->getInstance<AudioManager>()->loadStream(File("../../Assets/Sounds/space-sound.mp3"), Audio::AudioSpatialType::AUDIO_3D, "space-sound") == nullptr);
-		;
-		//			return false;
+		{}
 		_scene.lock()->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__starship.cpd"));
 		if (!_scene.lock()->getInstance<SpriteManager>()->loadFile(File("../../Assets/Serialized/Buttons.CPDAnimation")))
 			return false;

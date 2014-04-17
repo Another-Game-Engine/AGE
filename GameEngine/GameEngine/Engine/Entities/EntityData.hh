@@ -152,7 +152,7 @@ public:
 	std::shared_ptr<T> addComponent(Args &&...args)
 	{
 		// get the component type ID
-		std::size_t id = T::getTypeId();
+		unsigned short id = T::getTypeId();
 
 		// if entity already have component, return it
 		if (_code.isSet(id + MAX_TAG_NUMBER))
