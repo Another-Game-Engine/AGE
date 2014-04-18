@@ -10,7 +10,7 @@
 
 struct Configuration
 {
-	Configuration(std::string &&_key = "NULL")
+	Configuration(const std::string &_key = "NULL")
 	: triggerCallback(false)
 	, key(_key)
 	{}
@@ -41,14 +41,9 @@ struct ConfigurationValue : public Configuration
 	ConfigurationValue()
 	{}
 
-	ConfigurationValue(std::string &&_key, const T &_value)
-		: Configuration(std::move(_key)) 
+	ConfigurationValue(const std::string &_key, const T &_value)
+		: Configuration(_key) 
 		, value(_value)
-	{}
-
-	ConfigurationValue(std::string &&_key, T && _value)
-		: Configuration(std::move(_key))
-		, value(std::move(_value))
 	{}
 
 	T &getValue()
@@ -130,25 +125,25 @@ public:
 
 	template <typename T>
 	void setConfiguration(
-		std::string &&name
+		std::string &name
 		, const T &value)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
-		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(name), value);
+		auto ptr = std::make_unique<ConfigurationValue<T>>(name, value);
 		_confs.emplace(std::make_pair(name, std::move(ptr)));
 	}
 
 	// with callback at modification
 	template <typename T>
 	void setConfiguration(
-		std::string &&name
+		const std::string &name
 		, const T &value
-		, std::function<void(const T &v)> &&callback)
+		, const std::function<void(const T &v)> callback)
 	{
 		if (_confs.find(name) != std::end(_confs))
 			return;
-		auto ptr = std::make_unique<ConfigurationValue<T>>(std::move(name), value);
+		auto ptr = std::make_unique<ConfigurationValue<T>>(name, value);
 		ptr->triggerCallback = true;
 		ptr->callback = callback;
 		_confs.emplace(std::make_pair(name, std::move(ptr)));

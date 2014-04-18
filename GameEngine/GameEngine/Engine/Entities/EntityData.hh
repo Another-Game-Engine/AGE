@@ -190,7 +190,7 @@ public:
 	template <typename T>
 	void removeComponent()
 	{
-		std::size_t id = T::getTypeId();
+		unsigned short id = T::getTypeId();
 		if (!hasComponent<T>())
 			return;
 		_code.remove(id + MAX_TAG_NUMBER);
