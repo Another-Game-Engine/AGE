@@ -1,80 +1,51 @@
 #ifndef TEXTURE_HH_
 # define TEXTURE_HH_
 
-# include "Utils/OpenGL.hh"
+# include <Utils/OpenGL.hh>
 
 namespace OpenGLTools
 {
-	enum class texture1D
-	{
-		type = GL_TEXTURE_1D
-	};
-
-	enum class texture1DArray
-	{
-		type = GL_TEXTURE_1D_ARRAY
-	};
-
-	enum class texture2D
-	{
-		type = GL_TEXTURE_2D
-	};
-
-	enum class texture2DArray
-	{
-		type = GL_TEXTURE_2D_ARRAY
-	};
-
-	enum class texture2DMS
-	{
-		type = GL_TEXTURE_2D_MULTISAMPLE
-	};
-
-	enum class texture2DMSArray
-	{
-		type = GL_TEXTURE_2D_MULTISAMPLE_ARRAY
-	};
-
-	enum class texture3D
-	{
-		type = GL_TEXTURE_3D
-	};
-
-	enum class textureCube
-	{
-		type = GL_TEXTURE_CUBE_MAP
-	};
-
-	enum class textureCubeArray
-	{
-		type = GL_TEXTURE_CUBE_MAP_ARRAY
-	};
-
-	enum class textureRect
-	{
-		type = GL_TEXTURE_RECTANGLE
-	};
-
-	enum class textureBuffer
-	{
-		type = GL_BUFFER
-	};
-
-	template <typename TYPE>
 	class Texture
 	{
-	private:
-		GLuint _id;
-		
 	public:
-		Texture();
-		Texture(size_t idnex, size_t fofo, GLenum foie, GLenum gop);
 		~Texture();
-		inline void bind() const;
-		inline void unbind() const;
-		inline GLuint getId() const;
+	protected:
+		Texture();
+		Texture(Texture const &copy);
+		Texture(Texture &&copy);
+		Texture &operator=(Texture const &t);
+		Texture &operator=(Texture &&t);
+
+		virtual inline void bind() const = 0;
+		virtual inline void unbind() const = 0;
+		virtual inline void write() const = 0;
+
+		GLuint getId() const;
+
+		GLuint _id;
+
+	};
+
+	class Texture2D : public Texture
+	{
+	private:
+		GLsizei _levels;
+		GLsizei _width;
+		GLsizei _height;
+		GLenum _internalFormat;
+	public:
+		Texture2D(GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height);
+		~Texture2D();
+		Texture2D(Texture2D const &copy);
+		Texture2D(Texture2D &&move);
+		Texture2D &operator=(Texture2D const &t);
+		Texture2D &operator=(Texture2D &&t);
+
+		inline void wrap(GLint param) const;
+		inline void filter(GLint param) const;
+		virtual inline void bind() const;
+		virtual inline void unbind() const;
 	};
 }
-# include "OpenGL/Texture.hpp"
 
 #endif /*!TEXTURE_HH_*/

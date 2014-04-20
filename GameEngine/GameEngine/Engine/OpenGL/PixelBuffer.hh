@@ -1,9 +1,8 @@
 #ifndef PIXELBUFFER_HH_
 # define PIXELBUFFER_HH_
 
-# include "Utils/OpenGL.hh"
-# include <utility>
-# include <glm/glm.hpp>
+# include <stdint.h>
+# include <Utils/OpenGL.hh>
 
 namespace OpenGLTools
 {
@@ -13,13 +12,12 @@ namespace OpenGLTools
 		PixelBuffer();
 		~PixelBuffer();
 		PixelBuffer(PixelBuffer const &copy);
-		PixelBuffer &operator=(PixelBuffer const &other);
-
-		void *getBuffer(glm::vec4 &&posDimension, GLenum format, GLenum component, GLenum buffer);
-		void set(void *data);
+		PixelBuffer(PixelBuffer &&move);
+		PixelBuffer &operator=(PixelBuffer const &p);
+		PixelBuffer &operator=(PixelBuffer &&p);
 	private:
-		std::pair<GLuint, bool> _buffer1;
-		std::pair<GLuint, bool> _buffer2;
+		GLuint _id[2];
+		uint8_t current;
 	};
 }
 
