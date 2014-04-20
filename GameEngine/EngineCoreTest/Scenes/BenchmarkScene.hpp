@@ -19,7 +19,7 @@ public:
 		rct<Component::Bullshit>();
 
 		addSystem<BullshitSystem>(0);
-		_logFile.open("LogFile.txt", std::ios::app);
+		_logFile.open("LogFile.log", std::ios::app);
 
 		//if (File("SaveFile").exists())
 		//{
@@ -58,7 +58,7 @@ public:
 			_logFile << std::endl << "Total frames : " << _frameCounter << " -- Entity created : " << this->getNumberOfEntities() << std::endl << "----------------" << std::endl;
 			_logFile.close();
 
-			std::ofstream saveFile("SaveFile", std::ios::binary);
+			std::ofstream saveFile("SaveFile.save", std::ios::binary);
 			save<cereal::PortableBinaryOutputArchive>(saveFile);
 			return false;
 		}

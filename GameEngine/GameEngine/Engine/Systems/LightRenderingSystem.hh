@@ -47,11 +47,11 @@ private:
 
 	// Point lights uniform buffer
 	PointLightData						_contiguousPointLights[MAX_LIGHT_NBR];
-	unsigned int						_pointLightNbr;
+	std::uint32_t						_pointLightNbr;
 
 	// Spot lights uniform buffer
 	SpotLightData						_contiguousSpotLights[MAX_LIGHT_NBR];
-	unsigned int						_spotLightNbr;
+	std::uint32_t						_spotLightNbr;
 
 	void								updateLights(std::shared_ptr<OpenGLTools::UniformBuffer> perFrame);
 

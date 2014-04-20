@@ -17,6 +17,7 @@ Cereal/
 *.CPDAnimation
 *.png
 *.zip
+*.save
 
 # User-specific files
 *.suo

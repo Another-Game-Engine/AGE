@@ -33,6 +33,24 @@ namespace cereal
 	}
 
 	template<typename Archive>
+	void save(Archive &ar, const glm::uvec2 &v)
+	{
+		std::uint32_t x, y;
+		x = v.x;
+		y = v.y;
+		ar(x, y);
+	}
+
+	template<typename Archive>
+	void load(Archive &ar, glm::uvec2 &v)
+	{
+		std::uint32_t x, y;
+		ar(x, y);
+		v = glm::uvec2(x, y);
+	}
+
+
+	template<typename Archive>
 	void save(Archive &ar, const glm::vec3 &v)
 	{
 		float x = v.x;

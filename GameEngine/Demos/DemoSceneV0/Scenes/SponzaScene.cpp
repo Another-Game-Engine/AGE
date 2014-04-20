@@ -263,7 +263,7 @@ bool SponzaScene::userStart()
 		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
 		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
 
-		auto rigidBody = e->addComponent<Component::RigidBody>(0);
+		auto rigidBody = e->addComponent<Component::RigidBody>(0.0f);
 		rigidBody->setMass(0);
 		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
 

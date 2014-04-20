@@ -59,6 +59,7 @@
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
+    <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
@@ -164,6 +165,9 @@
     <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
     <ClInclude Include="Engine\OpenGL\Texture.hh" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
+    <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
+    <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

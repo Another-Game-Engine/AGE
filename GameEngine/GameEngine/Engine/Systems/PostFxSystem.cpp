@@ -101,13 +101,13 @@ void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	{
 		if (_curFactor < _targetFactor)
 		{
-			_curFactor += float(_adaptationSpeed * _scene.lock()->getInstance<Timer>()->getElapsed());
+			_curFactor += _adaptationSpeed * static_cast<float>(_scene.lock()->getInstance<Timer>()->getElapsed());
 			if (_curFactor > _targetFactor)
 				_curFactor = _targetFactor;
 		}
 		else
 		{
-			_curFactor -= float(_adaptationSpeed * _scene.lock()->getInstance<Timer>()->getElapsed());
+			_curFactor -= _adaptationSpeed * static_cast<float>(_scene.lock()->getInstance<Timer>()->getElapsed());
 			if (_curFactor < _targetFactor)
 				_curFactor = _targetFactor;
 		}

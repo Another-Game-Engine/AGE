@@ -28,10 +28,14 @@
 #include <OpenGL/VertexManager.hh>
 #include <Text/FontManager.hh>
 #include <Sprite/SpriteManager.hh>
+#include <Core/ConfigurationManager.hpp>
 
 int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
+
+	// Set Configurations
+	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
 
 	e->setInstance<PubSub::Manager>();
 	e->setInstance<SdlContext, IRenderContext>();
@@ -46,6 +50,16 @@ int			main(int ac, char **av)
 	// init engine
 	if (e->init(0, 1920, 1080, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
+
+	// Set default window size
+	// If config file has different value, it'll be changed automaticaly
+	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&e](const glm::uvec2 &v)
+	{
+		e->getInstance<IRenderContext>()->setScreenSize(v);
+	});
+
+	// Load configs from file
+	config->loadFile();
 
 	std::array<Attribute, 4> param = //-V112
 	{
@@ -79,6 +93,8 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 	while (e->update())
 		;
+	// Save configs to file
+	config->saveToFile();
 	e->stop();
 	return (EXIT_SUCCESS);
 }

@@ -77,9 +77,9 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 	auto		spotLightBuff = _scene.lock()->getInstance<Renderer>()->getUniform("spotLightBuff");
 	auto		perLight = _scene.lock()->getInstance<Renderer>()->getUniform("PerLight");
 	size_t		i = 0;
-	size_t		shadowNbr = 0;
+	GLsizei		shadowNbr = 0;
 
-	_pointLightNbr = unsigned int(_pointLightFilter.getCollection().size());
+	_pointLightNbr = static_cast<std::uint32_t>(_pointLightFilter.getCollection().size());
 	assert(_pointLightNbr <= MAX_LIGHT_NBR && "to many point lights");
 	for (auto e : _pointLightFilter.getCollection())
 	{
@@ -93,7 +93,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 	// Fill the buffer datas
 	i = 0;
 	shadowNbr = 0;
-	_spotLightNbr = unsigned int(_spotLightFilter.getCollection().size());
+	_spotLightNbr = static_cast<std::uint32_t>(_spotLightFilter.getCollection().size());
 	assert(_spotLightNbr <= MAX_LIGHT_NBR && "to many spot lights");
 	for (auto e : _spotLightFilter.getCollection())
 	{

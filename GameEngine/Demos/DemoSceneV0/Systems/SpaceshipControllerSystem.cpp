@@ -94,7 +94,7 @@ void SpaceshipControllerSystem::mainUpdate(double time)
 			bullet->setLocalTransform(transform);
 			auto mesh = bullet->addComponent<Component::MeshRenderer>(_scene.lock()->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 			mesh->setShader("MaterialBasic");
-			auto body = bullet->addComponent<Component::RigidBody>(0.5);
+			auto body = bullet->addComponent<Component::RigidBody>(0.5f);
 			body->setCollisionShape(Component::RigidBody::SPHERE);
 			body->getBody().setRestitution(0.0f);
 			body->getBody().setActivationState(DISABLE_DEACTIVATION);
@@ -116,5 +116,5 @@ void SpaceshipControllerSystem::mainUpdate(double time)
 			}
 		}
 	}
-	_timer += _scene.lock()->getInstance<Timer>()->getElapsed();
+	_timer += static_cast<float>(_scene.lock()->getInstance<Timer>()->getElapsed());
 }
