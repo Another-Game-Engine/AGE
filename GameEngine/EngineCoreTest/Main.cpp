@@ -16,11 +16,15 @@
 
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
+#include <Core/ConfigurationManager.hpp>
 
 
 int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
+
+	// Set Configurations
+	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
 
 	e->setInstance<PubSub::Manager>();
 	e->setInstance<SdlContext, IRenderContext>();
@@ -32,6 +36,15 @@ int			main(int ac, char **av)
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
+
+	// Set default window size
+	// If config file has different value, it'll be changed automaticaly
+	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&e](const glm::uvec2 &v)
+	{
+		e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
+	});
+
+	config->loadFile();
 
 	// add main scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<BenchmarkScene>(e), "BenchmarkScene");
@@ -47,6 +60,7 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 	while (e->update())
 		;
+	config->saveToFile();
 	e->stop();
 	return (EXIT_SUCCESS);
 }

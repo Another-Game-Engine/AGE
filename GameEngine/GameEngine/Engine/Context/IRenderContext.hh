@@ -9,22 +9,38 @@ class IRenderContext : public Dependency
 {
 public:
 	IRenderContext()
-		: _width(0)
-		, _height(0)
+		: _screenSize(glm::uvec2(10,10))
+		, _windowName("<3 ~AGE~ <3")
 	{ }
 	virtual ~IRenderContext() { }
 
-	virtual bool start(int mode, unsigned int swidth, unsigned int sheight, const char *name) = 0;
+	bool start(int mode, unsigned int swidth, unsigned int sheight, std::string && name)
+	{
+		_windowName = name;
+		_screenSize = glm::uvec2(swidth, sheight);
+		return _start(mode);
+	}
+
 	virtual void updateEvents(Input &input) const = 0;
 	virtual void flush() const = 0;
 	virtual void stop() const = 0;
-	glm::uvec2 getScreenSize() const
+	
+	const glm::uvec2 &getScreenSize() const
 	{
-		return glm::uvec2(_width, _height);
+		return _screenSize;
 	}
+
+	void setScreenSize(const glm::uvec2 &screenSize)
+	{
+		_screenSize = screenSize;
+		_setScreenSize(screenSize);
+	}
+
 protected:
-	unsigned int     _width;
-	unsigned int     _height;
+	glm::uvec2 _screenSize;
+	std::string _windowName;
+	virtual void _setScreenSize(const glm::uvec2 &screenSize) = 0;
+	virtual bool _start(int mode) = 0;
 };
 
 #endif

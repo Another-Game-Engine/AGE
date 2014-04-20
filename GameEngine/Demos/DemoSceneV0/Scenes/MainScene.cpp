@@ -103,7 +103,7 @@ bool 			MainScene::userStart()
 		camera->fboSize = screenSize;
 		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
-		camera->sampleNbr = 1;
+		camera->sampleNbr = 8;
 
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
 		auto fpc = _heros->addComponent<Component::FPController>();

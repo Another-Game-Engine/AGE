@@ -123,7 +123,7 @@ private:
 			scene->getSystem<PostFxSystem>()->setBloomGlare(glare);
 		}
 		if (delay >= 0.0f)
-			delay -= time;
+			delay -= static_cast<float>(time);
 	}
 
 	virtual bool initialize()

@@ -40,9 +40,9 @@ namespace	Component
 
 	protected:
 		Entity				_entity;
-		static std::size_t uniqueId()
+		static unsigned short uniqueId()
 		{
-			static std::size_t id = 0;
+			static unsigned short id = 0;
 			return id++;
 		}
 	};
@@ -60,9 +60,9 @@ namespace	Component
 		{
 		}
 
-		static std::size_t getTypeId()
+		static unsigned short getTypeId()
 		{
-			static std::size_t id = uniqueId();
+			static unsigned short id = uniqueId();
 			return id;
 		}
 

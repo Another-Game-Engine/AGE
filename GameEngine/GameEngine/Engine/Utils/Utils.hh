@@ -1,7 +1,12 @@
+#pragma once
 
-#ifndef UTILS_HH_
-#define UTILS_HH_
+namespace AGE
+{
 
 #define INLINE  	inline
 
-#endif
+#ifndef           UNUSED
+    #define       UNUSED(v)((void*)(&v))
+#endif            //!UNUSED   
+
+}

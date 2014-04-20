@@ -160,7 +160,7 @@ public:
 			}
 
 			// LOAD ANIMATION
-			std::map<std::shared_ptr<SpriteFrame>, std::size_t> tmpRef;
+			std::map<std::shared_ptr<SpriteFrame>, std::uint32_t> tmpRef;
 			for (rapidjson::SizeType i = 0; i < itr->value.Size(); i++)
 			{
 				auto name = itr->value[i].GetString();
@@ -168,7 +168,7 @@ public:
 				auto ref = tmpRef.find(address->second);
 				if (ref == std::end(tmpRef))
 				{
-					tmpRef.insert(std::make_pair(address->second, animation->_frames.size()));
+					tmpRef.insert(std::make_pair(address->second, static_cast<std::uint32_t>(animation->_frames.size())));
 					ref = tmpRef.find(address->second);
 					animation->_frames.push_back(address->second);
 				}
