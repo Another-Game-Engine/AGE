@@ -165,7 +165,7 @@ bool 			SpaceGame::userStart()
 
 		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 		mesh->setShader("MaterialBasic");
-		auto body = e->addComponent<Component::RigidBody>(50);
+		auto body = e->addComponent<Component::RigidBody>(50.0f);
 		body->setCollisionShape(Component::RigidBody::SPHERE);
 		body->getBody().setRestitution(1.0f);
 		body->getBody().setActivationState(DISABLE_DEACTIVATION);
