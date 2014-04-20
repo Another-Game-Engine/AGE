@@ -60,6 +60,7 @@
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
+    <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />

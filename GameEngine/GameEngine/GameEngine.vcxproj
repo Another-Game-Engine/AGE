@@ -210,6 +210,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
+    <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
