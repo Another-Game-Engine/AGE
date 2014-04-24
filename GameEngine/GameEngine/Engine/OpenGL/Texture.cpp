@@ -1,6 +1,10 @@
 #include <OpenGL/Texture.hh>
 #include <utility>
 #include <cstdint>
+#include <iostream>
+#include <algorithm>
+#include <string>
+
 
 namespace OpenGLTools
 {
@@ -58,9 +62,6 @@ namespace OpenGLTools
 		_format(GL_BGRA),
 		_type(GL_UNSIGNED_BYTE)
 	{
-		glGenBuffers(1, &_id);
-		glBindBuffer(GL_TEXTURE_2D, _id);
-		glTexStorage2D(GL_TEXTURE_2D, levels, internalFormat, width, height);
 	}
 
 	Texture2D::~Texture2D()
@@ -116,33 +117,83 @@ namespace OpenGLTools
 		return (*this);
 	}
 
-	inline Texture2D const &Texture2D::wrap(GLint param) const
+	
+	Texture &Texture2D::init()
+	{
+		glGenTextures(1, &_id);
+		glBindTexture(GL_TEXTURE_2D, _id);
+		std::cout << _levels << std::endl;
+		std::cout << _width << std::endl;
+		glTexStorage2D(GL_TEXTURE_2D, _levels, _format, _width, _height);
+		GLenum mode = glGetError();
+		std::string error = (mode == GL_INVALID_VALUE) ? "storage invalid value" : "";
+		std::cout << error << std::endl;
+		return (*this);
+	}
+
+	void Texture2D::unload() const
+	{
+		glDeleteTextures(1, &_id);
+	}
+
+	Texture2D const &Texture2D::wrap(GLint param) const
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, param);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, param);
 		return (*this);
 	}
 
-	inline Texture2D const &Texture2D::filter(GLint param) const
+	Texture2D const &Texture2D::filter(GLint param) const
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
 		return (*this);
 	}
 
-	inline Texture const &Texture2D::bind() const
+	Texture2D const &Texture2D::filterMag(GLenum param) const
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
+		return (*this);
+	}
+
+	Texture2D const &Texture2D::filterMin(GLenum param) const
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
+		return (*this);
+	}
+
+	Texture2D const &Texture2D::storage(GLint param) const
+	{
+		glPixelStorei(GL_PACK_ALIGNMENT, param);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, param);
+		return (*this);
+	}
+
+	Texture2D const &Texture2D::storagePack(GLint param) const
+	{
+		glPixelStorei(GL_PACK_ALIGNMENT, param);
+		return (*this);
+	}
+
+	Texture2D const &Texture2D::storageUnPack(GLint param) const
+	{
+		glPixelStorei(GL_UNPACK_ALIGNMENT, param);
+		return (*this);
+	}
+
+	Texture const &Texture2D::bind() const
 	{
 		glBindTexture(GL_TEXTURE_2D, _id);
 		return (*this);
 	}
 
-	inline Texture const &Texture2D::unbind() const
+	Texture const &Texture2D::unbind() const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 		return (*this);
 	}
 
-	inline Texture2D const &Texture2D::setOptionReadWrite(GLenum level, GLenum format, GLenum type)
+	Texture2D &Texture2D::setOptionReadWrite(GLint level, GLenum format, GLenum type)
 	{
 		_level = level;
 		_format = format;
@@ -150,7 +201,7 @@ namespace OpenGLTools
 		return (*this);
 	}
 
-	inline Texture &Texture2D::startRead(void **read)
+	Texture &Texture2D::startRead(void **read)
 	{
 		_out.bind();
 		glGetTexImage(GL_TEXTURE_2D, _level, _format, _type, 0);
@@ -158,13 +209,13 @@ namespace OpenGLTools
 		return (*this);
 	}
 
-	inline Texture &Texture2D::stopRead(void **read)
+	Texture &Texture2D::stopRead(void **read)
 	{
 		_out.unmapBuffer(read).unbind();
 		return (*this);
 	}
 
-	inline Texture &Texture2D::write(void *write)
+	Texture &Texture2D::write(void *write)
 	{
 		std::uint32_t sizeWrite = _height * _width;
 
@@ -174,9 +225,26 @@ namespace OpenGLTools
 		return (*this);
 	}
 
-	inline Texture &Texture2D::writeFlush(void *write)
+	Texture &Texture2D::writeFlush(void *write)
 	{
+		std::cout << "level = " << _level << std::endl;
+		std::cout << "log max = " << std::log2(GL_MAX_TEXTURE_SIZE) << std::endl;
+		std::cout << "width = " << _width << std::endl;
+		std::cout << "height = " << _height << std::endl;
 		glTexSubImage2D(GL_TEXTURE_2D, _level, 0, 0, _width, _height, _format, _type, write);
+		GLenum mode = glGetError();
+		std::string error = (mode == GL_INVALID_VALUE) ? "write invalid value" : "";
+		std::cout << error << std::endl;
+		return (*this);
+	}
+
+	Texture2D const &Texture2D::generateMipMap() const
+	{
+		if (_levels > 1)
+			glGenerateMipmap(GL_TEXTURE_2D);
+		GLenum mode = glGetError();
+		std::string error = (mode == GL_INVALID_VALUE) ? "generate invalid value" : "";
+		std::cout << error << std::endl;
 		return (*this);
 	}
 

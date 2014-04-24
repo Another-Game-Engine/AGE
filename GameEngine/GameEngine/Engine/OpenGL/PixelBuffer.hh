@@ -15,8 +15,10 @@ namespace OpenGLTools
 		PixelBuffer &operator=(PixelBuffer const &p);
 		PixelBuffer &operator=(PixelBuffer &&p);
 
-		virtual inline PixelBuffer &bind() = 0;
-		virtual inline PixelBuffer &unbind() = 0;
+		virtual PixelBuffer &init() = 0;
+		virtual void unload() const = 0;
+		virtual PixelBuffer &bind() = 0;
+		virtual PixelBuffer &unbind() = 0;
 
 	protected:
 		PixelBuffer();
@@ -35,11 +37,13 @@ namespace OpenGLTools
 		PixelBufferPack(PixelBufferPack const &copy);
 		PixelBufferPack(PixelBufferPack &&move);
 
-		virtual inline PixelBuffer &bind();
-		virtual inline PixelBuffer &unbind();
+		virtual PixelBuffer &init();
+		virtual void unload() const;
+		virtual PixelBuffer &bind();
+		virtual PixelBuffer &unbind();
 		
-		inline PixelBuffer &mapBuffer(void **data);
-		inline PixelBuffer &unmapBuffer(void **data);
+		PixelBufferPack &mapBuffer(void **data);
+		PixelBufferPack &unmapBuffer(void **data);
 	};
 
 	class PixelBufferUnPack : public PixelBuffer
@@ -53,10 +57,12 @@ namespace OpenGLTools
 		PixelBufferUnPack(PixelBufferUnPack const &copy);
 		PixelBufferUnPack(PixelBufferUnPack &&move);
 
-		virtual inline PixelBuffer &bind();
-		virtual inline PixelBuffer &unbind();
+		virtual PixelBuffer &init();
+		virtual void unload() const;
+		virtual PixelBuffer &bind();
+		virtual PixelBuffer &unbind();
 		
-		inline PixelBuffer &setBuffer(void *data, std::uint32_t size_data = 0);
+		PixelBufferUnPack &setBuffer(void *data, std::uint32_t size_data = 0);
 	};
 }
 

@@ -11,12 +11,15 @@ namespace OpenGLTools
 	public:
 		virtual ~Texture();
 	
-		virtual inline Texture const &bind() const = 0;
-		virtual inline Texture const &unbind() const = 0;
-		virtual inline Texture &write(void *write) = 0;
-		virtual inline Texture &writeFlush(void *write) = 0;
-		virtual inline Texture &startRead(void **data) = 0;
-		virtual inline Texture &stopRead(void **data) = 0;
+		virtual Texture &init() = 0;
+		virtual void unload() const = 0;
+		virtual Texture const &bind() const = 0;
+		virtual Texture const &unbind() const = 0;
+		virtual Texture &write(void *write) = 0;
+		virtual Texture &writeFlush(void *write) = 0;
+		virtual Texture &startRead(void **data) = 0;
+		virtual Texture &stopRead(void **data) = 0;
+		GLuint getId() const;
 
 	protected:
 		Texture();
@@ -24,8 +27,6 @@ namespace OpenGLTools
 		Texture(Texture &&copy);
 		Texture &operator=(Texture const &t);
 		Texture &operator=(Texture &&t);
-
-		GLuint getId() const;
 
 		GLuint _id;
 		PixelBufferPack _out;
@@ -37,7 +38,7 @@ namespace OpenGLTools
 	{
 	private:
 		GLsizei _levels;
-		GLsizei _level;
+		GLint _level;
 		GLsizei _width;
 		GLsizei _height;
 		GLenum _internalFormat;
@@ -52,16 +53,24 @@ namespace OpenGLTools
 		Texture2D &operator=(Texture2D const &t);
 		Texture2D &operator=(Texture2D &&t);
 
-		inline Texture2D const &wrap(GLint param) const;
-		inline Texture2D const &filter(GLint param) const;
-		inline Texture2D const &setOptionReadWrite(GLenum level = 0, GLenum format = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE);
+		Texture2D const &wrap(GLint param) const;
+		Texture2D const &filter(GLint param) const;
+		Texture2D const &filterMag(GLenum param) const;
+		Texture2D const &filterMin(GLenum param) const;
+		Texture2D const &storage(GLint param) const;
+		Texture2D const &storagePack(GLint param) const;
+		Texture2D const &storageUnPack(GLint param) const;
+		Texture2D &setOptionReadWrite(GLint level = 0, GLenum format = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE);
+		Texture2D const &generateMipMap() const;
 
-		virtual inline Texture const &bind() const;
-		virtual inline Texture const &unbind() const;
-		virtual inline Texture &write(void *write);
-		virtual inline Texture &writeFlush(void *write);
-		virtual inline Texture &startRead(void **read);
-		virtual inline Texture &stopRead(void **read);
+		virtual Texture &init();
+		virtual void unload() const;
+		virtual Texture const &bind() const;
+		virtual Texture const &unbind() const;
+		virtual Texture &write(void *write);
+		virtual Texture &writeFlush(void *write);
+		virtual Texture &startRead(void **read);
+		virtual Texture &stopRead(void **read);
 	};
 }
 
