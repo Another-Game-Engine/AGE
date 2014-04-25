@@ -63,17 +63,13 @@ void TextureFile::save(cereal::PortableBinaryOutputArchive &ar) const
 void TextureFile::load(cereal::PortableBinaryInputArchive &ar)
 {
 	ar(cereal::make_nvp("datas", datas), CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(components), CEREAL_NVP(format));
-	GLenum mode = glGetError();
-	std::string error = (mode == GL_INVALID_VALUE) ? "after invalid value" : "";
-	std::cout << error << std::endl;
 	std::uint8_t levels = GLsizei(std::floor(std::log2(std::max<GLsizei>(width, height))) + 1);
 	_texture = std::make_unique<OpenGLTools::Texture2D>(levels, components, width, height);
-	_texture->init();
-	_texture->setOptionReadWrite(0, GL_RGBA, GL_UNSIGNED_BYTE);
-	_texture->writeFlush(datas.data());
+	_texture->setOptionTransfer(0, format, GL_UNSIGNED_BYTE);
+	_texture->write(datas.data());
 	_texture->generateMipMap();
-	_texture->filterMag(magFilter).filterMin(minFilter).wrap(wrap);
-	_texture->storageUnPack(1);
+	_texture->filter(minFilter, magFilter).wrap(wrap);
+	_texture->storage(1);
 }
 
 GLuint TextureFile::getId() const
