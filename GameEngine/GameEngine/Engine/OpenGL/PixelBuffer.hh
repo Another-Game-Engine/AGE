@@ -12,8 +12,8 @@ namespace OpenGLTools
 		virtual ~PixelBuffer();
 		PixelBuffer &operator=(PixelBuffer &&p);
 
-		virtual PixelBuffer &bind() = 0;
-		virtual PixelBuffer &unbind() = 0;
+		virtual PixelBuffer const &bind() const = 0;
+		virtual PixelBuffer const &unbind() const = 0;
 		GLint getId() const;
 
 	protected:
@@ -30,8 +30,8 @@ namespace OpenGLTools
 		virtual ~PixelBufferPack();
 		PixelBufferPack(PixelBufferPack &&move);
 
-		virtual PixelBuffer &bind();
-		virtual PixelBuffer &unbind();
+		virtual PixelBuffer const &bind() const;
+		virtual PixelBuffer const &unbind() const;
 		
 	};
 
@@ -42,8 +42,8 @@ namespace OpenGLTools
 		virtual ~PixelBufferUnPack();
 		PixelBufferUnPack(PixelBufferUnPack &&move);
 
-		virtual PixelBuffer &bind();
-		virtual PixelBuffer &unbind();
+		virtual PixelBuffer const &bind() const;
+		virtual PixelBuffer const &unbind() const;
 	};
 }
 

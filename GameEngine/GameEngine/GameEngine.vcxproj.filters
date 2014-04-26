@@ -61,6 +61,7 @@
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
+    <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

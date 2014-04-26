@@ -211,6 +211,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
@@ -273,6 +274,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
+    <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Texture.hh" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />

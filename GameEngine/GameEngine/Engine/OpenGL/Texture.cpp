@@ -176,7 +176,7 @@ namespace OpenGLTools
 		return (*this);
 	}
 
-	void *Texture2D::read(void *read)
+	void *Texture2D::read(void *read) const
 	{
 		glGetTexImage(GL_TEXTURE_2D, _level, _format, _type, read);
 		return (read);

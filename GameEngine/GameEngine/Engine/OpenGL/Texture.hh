@@ -14,7 +14,7 @@ namespace OpenGLTools
 		virtual Texture const &bind() const = 0;
 		virtual Texture const &unbind() const = 0;
 		virtual Texture const &write(void *write) const = 0;
-		virtual void *read(void *read) = 0;
+		virtual void *read(void *read) const = 0;
 		GLuint getId() const;
 
 	protected:
@@ -60,7 +60,7 @@ namespace OpenGLTools
 		virtual Texture const &bind() const;
 		virtual Texture const &unbind() const;
 		virtual Texture const &write(void *write) const;
-		virtual void *read(void *read);
+		virtual void *read(void *read) const;
 	};
 }
 

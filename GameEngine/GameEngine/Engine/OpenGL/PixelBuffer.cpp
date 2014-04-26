@@ -44,13 +44,13 @@ namespace OpenGLTools
 	{
 	}
 
-	PixelBuffer &PixelBufferPack::bind()
+	PixelBuffer const &PixelBufferPack::bind() const
 	{
 		glBindBuffer(GL_PIXEL_PACK_BUFFER, _id);
 		return (*this);
 	}
 
-	PixelBuffer &PixelBufferPack::unbind()
+	PixelBuffer const &PixelBufferPack::unbind() const
 	{
 		glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 		return (*this);
@@ -70,13 +70,13 @@ namespace OpenGLTools
 	{
 	}
 
-	PixelBuffer &PixelBufferUnPack::bind()
+	PixelBuffer const &PixelBufferUnPack::bind() const
 	{
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, _id);
 		return (*this);
 	}
 
-	PixelBuffer &PixelBufferUnPack::unbind()
+	PixelBuffer const &PixelBufferUnPack::unbind() const
 	{
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 		return (*this);
