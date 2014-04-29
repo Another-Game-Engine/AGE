@@ -10,11 +10,9 @@ namespace OpenGLTools
 	{
 	public:
 		virtual ~Texture();
-	
+
 		virtual Texture const &bind() const = 0;
 		virtual Texture const &unbind() const = 0;
-		virtual Texture const &write(void *write) const = 0;
-		virtual void *read(void *read) const = 0;
 		GLuint getId() const;
 
 	protected:
@@ -56,11 +54,33 @@ namespace OpenGLTools
 		Texture2D const &storage(GLint pack, GLint unpack) const;
 		Texture2D &setOptionTransfer(GLint level = 0, GLenum format = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE);
 		Texture2D const &generateMipMap() const;
+		Texture2D const &write(void *write) const;
+		void *read(void *read) const;
 
 		virtual Texture const &bind() const;
 		virtual Texture const &unbind() const;
-		virtual Texture const &write(void *write) const;
-		virtual void *read(void *read) const;
+
+	};
+
+	class TextureMultiSample : public Texture
+	{
+	private:
+		GLsizei _samples;
+		GLsizei _width;
+		GLsizei _height;
+		GLenum _internalFormat;
+		GLenum _format;
+		GLenum _type;
+		GLboolean _fixedSampleLocation;
+
+	public:
+		TextureMultiSample(GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation = GL_FALSE);
+		~TextureMultiSample();
+		TextureMultiSample(TextureMultiSample &&move);
+		TextureMultiSample &operator=(TextureMultiSample &&t);
+
+		virtual Texture const &bind() const;
+		virtual Texture const &unbind() const;
 	};
 }
 

@@ -182,7 +182,7 @@ namespace OpenGLTools
 		return (read);
 	}
 
-	Texture const &Texture2D::write(void *write) const
+	Texture2D const &Texture2D::write(void *write) const
 	{
 		glTexSubImage2D(GL_TEXTURE_2D, _level, 0, 0, _width, _height, _format, _type, write);
 		return (*this);
@@ -194,4 +194,27 @@ namespace OpenGLTools
 		return (*this);
 	}
 
+	TextureMultiSample::TextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation)
+		: Texture(),
+		_samples(samples),
+		_width(width),
+		_height(height),
+		_internalFormat(internalFormat),
+		_format(GL_BGRA),
+		_type(GL_UNSIGNED_BYTE),
+		_fixedSampleLocation(fixedSampleLocation)
+	{
+		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, _id);
+		glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, _samples, _internalFormat, _width, _height, _fixedSampleLocation);
+	}
+
+	Texture const &TextureMultiSample::bind() const
+	{
+		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, _id);
+	}
+
+	Texture const &TextureMultiSample::unbind() const
+	{
+		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+	}
 }

@@ -11,7 +11,7 @@ namespace OpenGLTools
 	{
 	private:
 		GLuint						_id;
-		std::map<GLenum, GLuint>	_attachments;
+		std::map<GLenum, Texture *>	_attachments;
 		glm::uvec2					_size;
 		int							_sampleNbr;
 		bool						_multiSample;
@@ -25,7 +25,7 @@ namespace OpenGLTools
 		void		addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment);
 		void		attachAll() const;
 		void		bind() const;
-		GLuint		getTextureAttachment(GLenum attachment) const;
+		Texture		*getTextureAttachment(GLenum attachment) const;
 		glm::uvec2	getSize();
 
 		bool		isInit() const { return (_id != 0); }
