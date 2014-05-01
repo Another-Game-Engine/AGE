@@ -51,19 +51,19 @@ int			main(int ac, char **av)
 
 	config->loadFile();
 
-	std::array<Attribute, 7> param =
+	std::array<Attribute, 8> param =
 	{
 		Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
-// 		, Attribute(GL_FLOAT, sizeof(float), 2)
+ 		, Attribute(GL_FLOAT, sizeof(float), 2)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
 	};
 
-	e->setInstance<VertexManager<7>>(param)->init();
+	e->setInstance<VertexManager<8>>(param)->init();
 
 	// launch engine
 	if (e->start() == false)

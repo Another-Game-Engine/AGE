@@ -140,28 +140,28 @@ namespace AGE
 				}
 			}
 
-			std::array<Data, 7> data =
+			std::array<Data, 8> data =
 			{
 				Data(positions.size() * 4 * sizeof(float), &positions[0].x)
 				, Data(normals.size() * 4 * sizeof(float), &normals[0].x)
 				, Data(tangents.size() * 4 * sizeof(float), &tangents[0].x)
 				, Data(binormals.size() * 4 * sizeof(float), &binormals[0].x)
-//				, Data(texCoords.size() * 2 * sizeof(float), &texCoords[0].x)
+				, Data(texCoords.size() * 2 * sizeof(float), &texCoords[0].x)
 				, Data(diffuses.size() * 4 * sizeof(float), &diffuses[0].x)
 				, Data(blendWeights.size() * 4 * sizeof(float), &blendWeights[0].x)
 				, Data(blendIndices.size() * 4 * sizeof(float), &blendIndices[0].x)
 			};
 			
 			Data *indicesData = new Data(indices.size() * sizeof(unsigned int), &indices[0]);
-			vertices = new Vertice<7>(positions.size(), data, indicesData);
-			this->_dpyManager.lock()->getInstance<VertexManager<7>>()->addVertice(*vertices);
+			vertices = new Vertice<8>(positions.size(), data, indicesData);
+			this->_dpyManager.lock()->getInstance<VertexManager<8>>()->addVertice(*vertices);
 
-			mesh = new AGE::Mesh<7>(*vertices);
+			mesh = new AGE::Mesh<8>(*vertices);
 			return true;
 		}
 public:
-	AGE::Mesh<7> *mesh;
-	Vertice<7> *vertices;
+	AGE::Mesh<8> *mesh;
+	Vertice<8> *vertices;
 	AGE::Node *skeletonBase;
 	std::vector<glm::mat4> bonesMatrix;
 private:
