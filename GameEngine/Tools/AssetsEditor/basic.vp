@@ -1,14 +1,36 @@
-#version 150
+#version 400
 
 uniform	mat4 projection;
 uniform	mat4 view;
 uniform	mat4 model;
 uniform vec4 color;
 
+uniform mat4 bones[166];
 
-in vec4 vPosition;
+layout (location = 0) in vec4 vPosition;
+layout (location = 1) in vec4 vNormal;
+layout (location = 2) in vec4 vTangent;
+layout (location = 3) in vec4 vBinormal;
+layout (location = 4) in vec4 vDiffuse;
+layout (location = 5) in vec4 vBlendWeight;
+layout (location = 6) in vec4 vBlendIndice;
+
+out vec4 boneColor;
 
 void main(void)
 {
-  gl_Position = projection * view * model * vPosition;
+	//mat4 lol = bones[vBlendIndice.x] + bones[vBlendIndice.y];
+	//vec4 test = vec4(1, 2, 3, 4);
+	//test = lol * test;
+
+	//mat4 boneTransform = bones[vBlendIndice.x] * 1.0f;//vBlendWeight.x;
+	//boneTransform += bones[int(vBlendIndice.y)] * vBlendWeight.y;
+	//boneTransform += bones[int(vBlendIndice.z)] * vBlendWeight.z;
+	//boneTransform += bones[int(vBlendIndice.w)] * vBlendWeight.w;
+
+  boneColor = vBlendIndice / vec4(166);
+  boneColor.w = 1;
+  //boneColor.w = 1;
+
+	gl_Position = projection * view * model * vPosition;// vPosition;
 }

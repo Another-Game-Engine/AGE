@@ -43,6 +43,15 @@ namespace AGE
 			return true;
 		}
 
+		void update()
+		{
+			bonesMatrix.clear();
+			for (auto e : _bones)
+			{
+				bonesMatrix.push_back(glm::mat4(1));
+			}
+		}
+
 	private:
 		bool _importNode(gameplay::Node *gpNode)
 		{
@@ -120,38 +129,41 @@ namespace AGE
 				blendWeights.push_back(glm::vec4(m->vertices[i].blendWeights.x, m->vertices[i].blendWeights.y, m->vertices[i].blendWeights.z, m->vertices[i].blendWeights.w));
 				blendIndices.push_back(glm::vec4(m->vertices[i].blendIndices.x, m->vertices[i].blendIndices.y, m->vertices[i].blendIndices.z, m->vertices[i].blendIndices.w));
 			}
-
+			std::size_t max = 0;
 			for (std::size_t p = 0; p < m->parts.size(); ++p)
 			{
 				for (std::size_t i = 0; i < m->parts[p]->getIndices().size(); ++i)
 				{
 					indices.push_back(m->parts[p]->getIndices()[i]);
+					if (m->parts[p]->getIndices()[i] > max)
+						max = m->parts[p]->getIndices()[i];
 				}
 			}
 
-			std::array<Data, 8> data =
+			std::array<Data, 7> data =
 			{
 				Data(positions.size() * 4 * sizeof(float), &positions[0].x)
 				, Data(normals.size() * 4 * sizeof(float), &normals[0].x)
 				, Data(tangents.size() * 4 * sizeof(float), &tangents[0].x)
 				, Data(binormals.size() * 4 * sizeof(float), &binormals[0].x)
-				, Data(texCoords.size() * 2 * sizeof(float), &texCoords[0].x)
+//				, Data(texCoords.size() * 2 * sizeof(float), &texCoords[0].x)
 				, Data(diffuses.size() * 4 * sizeof(float), &diffuses[0].x)
 				, Data(blendWeights.size() * 4 * sizeof(float), &blendWeights[0].x)
 				, Data(blendIndices.size() * 4 * sizeof(float), &blendIndices[0].x)
 			};
 			
-			Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
-			vertices = new Vertice<8>(indices.size(), data, &indicesData);
-			this->_dpyManager.lock()->getInstance<VertexManager<8>>()->addVertice(*vertices);
+			Data *indicesData = new Data(indices.size() * sizeof(unsigned int), &indices[0]);
+			vertices = new Vertice<7>(positions.size(), data, indicesData);
+			this->_dpyManager.lock()->getInstance<VertexManager<7>>()->addVertice(*vertices);
 
-			mesh = new AGE::Mesh<8>(*vertices);
+			mesh = new AGE::Mesh<7>(*vertices);
 			return true;
 		}
 public:
-	AGE::Mesh<8> *mesh;
-	Vertice<8> *vertices;
+	AGE::Mesh<7> *mesh;
+	Vertice<7> *vertices;
 	AGE::Node *skeletonBase;
+	std::vector<glm::mat4> bonesMatrix;
 private:
 		std::map<std::string, AGE::Node*> _bonesByName;
 		std::vector<AGE::Node*> _bones;

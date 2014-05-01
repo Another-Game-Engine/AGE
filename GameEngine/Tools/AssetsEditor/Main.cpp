@@ -51,24 +51,31 @@ int			main(int ac, char **av)
 
 	config->loadFile();
 
-	std::array<Attribute, 8> param =
+	std::array<Attribute, 7> param =
 	{
 		Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
- 		, Attribute(GL_FLOAT, sizeof(float), 2)
+// 		, Attribute(GL_FLOAT, sizeof(float), 2)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
  		, Attribute(GL_FLOAT, sizeof(float), 4)
 	};
 
-	e->setInstance<VertexManager<8>>(param)->init();
+	e->setInstance<VertexManager<7>>(param)->init();
 
 	// launch engine
 	if (e->start() == false)
 		return (EXIT_FAILURE);
 
+
+	auto s = e->getInstance<Renderer>()->addShader("basic",
+		"./basic.vp",
+		"./basic.fp");
+	if (s->getId() < 0)
+		return EXIT_FAILURE;
+	s->use();
 
 	FBXSceneEncoder fbxEncoder;
 	EncoderArguments args((size_t)(ac), (const char **)(av));
@@ -77,11 +84,6 @@ int			main(int ac, char **av)
 	auto file = fbxEncoder.getGameplayFile();
 
 	e->getInstance<AGE::GameplayConvertor>()->importGPFile(file);
-
-	auto s = e->getInstance<Renderer>()->addShader("basic",
-		"./basic.vp",
-		"./basic.fp");
-	s->use();
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	glm::mat4 Projection = glm::perspective(60.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
@@ -115,11 +117,13 @@ int			main(int ac, char **av)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		Model = glm::rotate(Model, 10.0f * (float)e->getInstance<Timer>()->getElapsed(), glm::vec3(0, 1, 0));
 		color = glm::vec4(1, 0, 1, 1);
+		//gameplayconvertor->update();
 		glUniform4fv(glGetUniformLocation(s->getId(), "color"), 1, &color[0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "model"), 1, GL_FALSE, &Model[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "view"), 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, &Projection[0][0]);
-		gameplayconvertor->mesh->_buffer.draw(GL_TRIANGLES);
+		//glUniformMatrix4fv(glGetUniformLocation(s->getId(), "bones"), gameplayconvertor->bonesMatrix.size(), GL_FALSE, &gameplayconvertor->bonesMatrix[0][0][0]);
+		gameplayconvertor->vertices->draw(GL_TRIANGLES);
 	} while (e->update());
 	config->saveToFile();
 	e->stop();
