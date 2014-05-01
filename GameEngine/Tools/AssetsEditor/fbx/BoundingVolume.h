@@ -1,7 +1,8 @@
 #ifndef BOUNDINGVOLUME_H_
 #define BOUNDINGVOLUME_H_
 
-#include <glm/glm.hpp>
+#include "Vector3.h"
+#include "Matrix.h"
 
 namespace gameplay
 {
@@ -22,17 +23,17 @@ public:
     /**
      * Center point of the bounding sphere.
      */
-    glm::vec3 center;
+    Vector3 center;
 
     /**
      * Minimum point of the AABB.
      */
-    glm::vec3 min;
+    Vector3 min;
 
     /**
      * Maximum point of the AABB.
      */
-    glm::vec3 max;
+    Vector3 max;
 
     /**
      * Constructor.
@@ -42,7 +43,7 @@ public:
     /**
      * Transforms this bounding volume by the specified matrix.
      */
-    void transform(const glm::mat4& m);
+    void transform(const Matrix& m);
 
     /**
      * Merges this bounding volume with the specified one and

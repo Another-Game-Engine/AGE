@@ -3,7 +3,7 @@
 
 #include "Base.h"
 #include "Object.h"
-#include <glm/glm.hpp>
+#include "Matrix.h"
 #include "Animation.h"
 #include "BoundingVolume.h"
 
@@ -36,7 +36,7 @@ public:
 
     unsigned int getJointCount() const;
 
-    void setBindShape(const glm::mat4 &m);
+    void setBindShape(const float data[]);
 
     void setVertexInfluenceCount(unsigned int count);
 
@@ -48,7 +48,7 @@ public:
 
     void setJoints(const std::vector<Node*>& list);
 
-    void setBindPoses(std::vector<glm::mat4>& list);
+    void setBindPoses(std::vector<Matrix>& list);
 
     /**
      * Returns true if the MeshSkin contains a joint with the given ID.
@@ -64,9 +64,9 @@ public:
 private:
 
     Mesh* _mesh;
-    glm::mat4 _bindShape;
+    float _bindShape[16];
     std::vector<Node*> _joints;
-    std::vector<glm::mat4> _bindPoses;
+    std::vector<Matrix> _bindPoses;
     std::vector<std::string> _jointNames;
     unsigned int _vertexInfluenceCount;
     std::vector<BoundingVolume> _jointBounds;

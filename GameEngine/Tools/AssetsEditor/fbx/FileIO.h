@@ -7,7 +7,9 @@
 #include <cstring>
 #include <string>
 
-#include <glm/glm.hpp>
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
 
 namespace gameplay
 {
@@ -50,7 +52,7 @@ void fprintfElement(FILE* file, const char* format, const char* elementName, std
     fprintf(file, "</%s>\n", elementName);
 }
 
-void fprintfMatrix4f(FILE* file, const glm::mat4 &m);
+void fprintfMatrix4f(FILE* file, const float* m);
 
 /**
  * Writes binary data to the given file stream.
@@ -123,17 +125,17 @@ void skipString(FILE* file);
 
 void skipUint(FILE* file);
 
-void writeVectorBinary(const glm::vec2& v, FILE* file);
+void writeVectorBinary(const Vector2& v, FILE* file);
 
-void writeVectorText(const glm::vec2& v, FILE* file);
+void writeVectorText(const Vector2& v, FILE* file);
 
-void writeVectorBinary(const glm::vec3& v, FILE* file);
+void writeVectorBinary(const Vector3& v, FILE* file);
 
-void writeVectorText(const glm::vec3& v, FILE* file);
+void writeVectorText(const Vector3& v, FILE* file);
 
-void writeVectorBinary(const glm::vec4& v, FILE* file);
+void writeVectorBinary(const Vector4& v, FILE* file);
 
-void writeVectorText(const glm::vec4& v, FILE* file);
+void writeVectorText(const Vector4& v, FILE* file);
 
 /**
  * Writes a number of white space indentations to the file.

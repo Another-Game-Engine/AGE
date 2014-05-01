@@ -67,10 +67,7 @@ public:
      */
     bool writeMaterial(const std::string& filepath);
 
-	GPBFile &getGameplayFile()
-	{
-		return _gamePlayFile;
-	}
+	const gameplay::GPBFile &getGameplayFile() const { return _gamePlayFile; }
 
 private:
 
@@ -274,7 +271,7 @@ private:
     /**
      * The list of child materials that were loaded.
      */
-    std::map<std::string, gameplay::Material*> _materials;
+	std::map<std::string, gameplay::Material*> _materials;
 
     /**
      * The list of base materials that the child materials are derived from.

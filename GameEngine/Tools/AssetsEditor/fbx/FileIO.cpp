@@ -103,29 +103,24 @@ void fprintfElement(FILE* file, const char* elementName, unsigned char value)
     fprintf(file, "<%s>%u</%s>\n", elementName, value, elementName);
 }
 
-void fprintfMatrix4f(FILE* file, const glm::mat4 &m)
+void fprintfMatrix4f(FILE* file, const float* m)
 {
-	// @CESAR !C Peut etre a l'envers, a verifier
-	for (size_t i = 0; i < 4; i++)
-	{
-		for (size_t j = 0; j < 4; j++)
-		{
-
-			float v = m[j][i];
-			if (v == 1.0f)
-			{
-				fprintf(file, "1.0 ");
-			}
-			else if (v == 0.0)
-			{
-				fprintf(file, "0.0 ");
-			}
-			else
-			{
-				fprintf(file, "%f ", v);
-			}
-		}
-	}
+    for (size_t i = 0; i < 16; i ++)
+    {
+        float v = m[i];
+        if (v == 1.0f)
+        {
+            fprintf(file, "1.0 ");
+        }
+        else if (v == 0.0)
+        {
+            fprintf(file, "0.0 ");
+        }
+        else
+        {
+            fprintf(file, "%f ",v);
+        }
+    }
 }
 void skipString(FILE* file)
 {
@@ -147,30 +142,30 @@ void skipUint(FILE* file)
     fseek(file, sizeof(unsigned int), SEEK_CUR);
 }
 
-void writeVectorBinary(const glm::vec2& v, FILE* file)
+void writeVectorBinary(const Vector2& v, FILE* file)
 {
     write(v.x, file);
     write(v.y, file);
 }
 
-void writeVectorText(const glm::vec2& v, FILE* file)
+void writeVectorText(const Vector2& v, FILE* file)
 {
     fprintf(file, "%f %f\n", v.x, v.y);
 }
 
-void writeVectorBinary(const glm::vec3& v, FILE* file)
+void writeVectorBinary(const Vector3& v, FILE* file)
 {
     write(v.x, file);
     write(v.y, file);
     write(v.z, file);
 }
 
-void writeVectorText(const glm::vec3& v, FILE* file)
+void writeVectorText(const Vector3& v, FILE* file)
 {
     fprintf(file, "%f %f %f\n", v.x, v.y, v.z);
 }
 
-void writeVectorBinary(const glm::vec4& v, FILE* file)
+void writeVectorBinary(const Vector4& v, FILE* file)
 {
     write(v.x, file);
     write(v.y, file);
@@ -178,7 +173,7 @@ void writeVectorBinary(const glm::vec4& v, FILE* file)
     write(v.w, file);
 }
 
-void writeVectorText(const glm::vec4& v, FILE* file)
+void writeVectorText(const Vector4& v, FILE* file)
 {
     fprintf(file, "%f %f %f %f\n", v.x, v.y, v.z, v.w);
 }

@@ -7,6 +7,12 @@
 
 #include <AGE_FBX/Node.hpp>
 
+
+static inline glm::mat4 GP_MAT_TO_GLM(const gameplay::Matrix &m)
+{
+	return glm::mat4(m.m[0], m.m[1], m.m[2], m.m[3], m.m[4], m.m[5], m.m[6], m.m[7], m.m[8], m.m[9], m.m[10], m.m[11], m.m[12], m.m[13], m.m[14], m.m[15]);
+}
+
 namespace AGE
 {
 	class GameplayConvertor : public Dependency
@@ -28,7 +34,7 @@ namespace AGE
 			{
 				return _importSkeletonNode(gpNode);
 			}
-			else if (gpNode->_model != nullptr)
+			else if (gpNode->getModel() != nullptr)
 			{
 				return _importModelNode(gpNode);
 				std::cout << "implement me here please cesar ! Or anybody else ! Ho ... wait, there's not anybody else :)" << std::endl;
@@ -43,8 +49,8 @@ namespace AGE
 
 			node->_id = _nodes.size();
 			node->_name = gpNode->getId();
-			node->_boneMatrixReference = gpNode->_transform;
-			node->_worldMatrixReference = gpNode->_worldTransform;
+			node->_boneMatrixReference = GP_MAT_TO_GLM(gpNode->getTransformMatrix());
+			node->_worldMatrixReference = GP_MAT_TO_GLM(gpNode->getWorldMatrix());
 
 			_nodes.insert(std::make_pair(node->_name, node));
 			_debugVector.push_back(node);
@@ -74,7 +80,7 @@ namespace AGE
 
 		bool _importModelNode(gameplay::Node *gpNode)
 		{
-			auto m = gpNode->_model->getMesh();
+			auto m = gpNode->getModel()->getMesh();
 
 			std::vector<glm::vec4> positions;
 			std::vector<glm::vec4> normals;
@@ -101,9 +107,9 @@ namespace AGE
 
 			for (std::size_t p = 0; p < m->parts.size(); ++p)
 			{
-				for (std::size_t i = 0; i < m->parts[p]->_indices.size(); ++i)
+				for (std::size_t i = 0; i < m->parts[p]->getIndices().size(); ++i)
 				{
-					indices.push_back(m->parts[p]->_indices[i]);
+					indices.push_back(m->parts[p]->getIndices()[i]);
 				}
 			}
 

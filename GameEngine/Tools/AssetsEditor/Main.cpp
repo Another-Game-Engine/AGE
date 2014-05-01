@@ -75,17 +75,9 @@ int			main(int ac, char **av)
 	fbxEncoder.write("../../Assets/catwoman/atk close front 6.fbx", args);
 
 	auto file = fbxEncoder.getGameplayFile();
-	gameplay::Object* object = file._objects.front();
-	auto scene = static_cast<gameplay::Scene*>(object);
-	auto node = scene->_nodes.front();
-	auto model = node->getModel();
-	auto mesh = model->getMesh();
+	gameplay::Object* object = file.getObjects().front();
 
-
-
-
-
-	for (auto n = file._nodes.begin(); n != std::end(file._nodes); ++n)
+	for (auto n = file.getNodes().begin(); n != std::end(file.getNodes()); ++n)
 	{
 		e->getInstance<AGE::GameplayConvertor>()->importNode(*n);
 	}

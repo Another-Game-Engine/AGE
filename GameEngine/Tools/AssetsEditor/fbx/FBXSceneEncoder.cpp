@@ -6,11 +6,6 @@
 #include "FBXUtil.h"
 #include "Sampler.h"
 
-
-#include <Utils/MatrixConversion.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
-
 using namespace gameplay;
 using std::string;
 using std::vector;
@@ -367,7 +362,7 @@ void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fb
 
     // Evaulate animation curve in increments of frameRate and populate channel data.
     FbxAMatrix fbxMatrix;
-    glm::mat4 matrix;
+    Matrix matrix;
     double increment = 1000.0 / (double)frameRate;
     int frameCount = (int)ceil((double)(stopTime - startTime) / increment) + 1; // +1 because stop time is inclusive
 
@@ -395,15 +390,11 @@ void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fb
 
         // Decompose the evalulated transformation matrix into separate
         // scale, rotation and translation.
-        glm::vec3 scale = scaleFromMat4(matrix);
-		// @CESAR !C IMPORTANT : Ici c'est du n importe quoi pour les quaternions A CORRIGER
-		glm::quat rotation = glm::quat(matrix);
-        glm::vec3 translation = posFromMat4(matrix);
-
-		rotation = glm::normalize(rotation);
-
-        //!C matrix.decompose(&scale, &rotation, &translation);
-        //!C rotation.normalize();
+        Vector3 scale;
+        Quaternion rotation;
+        Vector3 translation;
+        matrix.decompose(&scale, &rotation, &translation);
+        rotation.normalize();
 
         // Append keyframe data to all channels
         for (unsigned int i = channelStart, channelEnd = channelStart + channelCount; i < channelEnd; ++i)
@@ -546,7 +537,7 @@ void FBXSceneEncoder::print(const char* str)
 void FBXSceneEncoder::transformNode(FbxNode* fbxNode, Node* node)
 {
     FbxAMatrix matrix;
-    glm::mat4 m;
+    float m[16];
     
     if (fbxNode->GetCamera() || fbxNode->GetLight())
     {
@@ -693,7 +684,7 @@ Material* FBXSceneEncoder::createBaseMaterial(const string& baseMaterialName, Ma
 
 void FBXSceneEncoder::loadBindShapes(FbxScene* fbxScene)
 {
-    glm::mat4 m;
+    float m[16];
     const int poseCount = fbxScene->GetPoseCount();
     for (int i = 0; i < poseCount; ++i)
     {
@@ -1116,7 +1107,7 @@ void FBXSceneEncoder::loadSkin(FbxMesh* fbxMesh, Model* model)
 
             vector<string> jointNames;
             vector<Node*> joints;
-            vector<glm::mat4> bindPoses;
+            vector<Matrix> bindPoses;
 
             const int clusterCount = fbxSkin->GetClusterCount();
             for (int j = 0; j < clusterCount; ++j)
@@ -1135,7 +1126,7 @@ void FBXSceneEncoder::loadSkin(FbxMesh* fbxMesh, Model* model)
 
                     FbxAMatrix matrix;
                     cluster->GetTransformLinkMatrix(matrix);
-                    glm::mat4 m;
+                    Matrix m;
                     copyMatrix(matrix.Inverse(), m);
                     bindPoses.push_back(m);
                 }

@@ -27,6 +27,8 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
+	inline const std::list<Node*> &getNodes() const { return _nodes; }
+
     /**
      * Adds the given node as a child of this scene.
      * 
@@ -55,7 +57,7 @@ public:
      */
     void setAmbientColor(float red, float green, float blue);
 
-//private:
+private:
 
     /**
      * Recursively calculates the ambient color of the scene starting at the given node.
@@ -66,7 +68,7 @@ public:
      */
     void calcAmbientColor(const Node* node, float* values) const;
 
-//private:
+private:
     std::list<Node*> _nodes;
     Node* _cameraNode;
     float _ambientColor[Light::COLOR_SIZE];

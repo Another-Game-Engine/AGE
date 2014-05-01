@@ -126,17 +126,17 @@ public:
     /**
      * Returns the transform matrix for the node.
      */
-    const glm::mat4& getTransformMatrix() const;
+    const Matrix& getTransformMatrix() const;
 
     /**
      * Sets the transform for this node.
      */
-    void setTransformMatrix(const glm::mat4 &m);
+    void setTransformMatrix(float matrix[]);
 
     /**
      * Returns the resolved world matrix for the node.
      */
-    const glm::mat4& getWorldMatrix() const;
+    const Matrix& getWorldMatrix() const;
 
     /*
      * Resets the node's transform matrix to the identity matrix.
@@ -169,10 +169,10 @@ public:
      */
     bool hasLight() const;
     
-public:
+private:
 
-    glm::mat4 _transform;
-    mutable glm::mat4 _worldTransform;
+    Matrix _transform;
+    mutable Matrix _worldTransform;
 
     int _childCount;
     Node* _nextSibling;

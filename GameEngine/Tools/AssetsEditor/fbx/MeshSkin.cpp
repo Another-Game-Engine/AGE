@@ -7,10 +7,7 @@
 #include "Animations.h"
 #include "Transform.h"
 #include "Curve.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "Matrix.h"
 
 namespace gameplay
 {
@@ -18,7 +15,7 @@ namespace gameplay
 MeshSkin::MeshSkin(void) :
     _vertexInfluenceCount(0)
 {
-    _bindShape = glm::mat4(1);
+    Matrix::setIdentity(_bindShape);
 }
 
 MeshSkin::~MeshSkin(void)
@@ -38,16 +35,16 @@ const char* MeshSkin::getElementName(void) const
 void MeshSkin::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    write(glm::value_ptr(_bindShape), 16, file);
+    write(_bindShape, 16, file);
     write((unsigned int)_joints.size(), file);
     for (std::vector<Node*>::const_iterator i = _joints.begin(); i != _joints.end(); ++i)
     {
         (*i)->writeBinaryXref(file);
     }
     write((unsigned int)_bindPoses.size() * 16, file);
-    for (std::vector<glm::mat4>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); ++i)
+    for (std::vector<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); ++i)
     {
-        write(glm::value_ptr(*i), 16, file);
+        write(i->m, 16, file);
     }
 
     /*
@@ -77,15 +74,11 @@ void MeshSkin::writeText(FILE* file)
     }
     fprintf(file, "</joints>\n");
     fprintf(file, "<bindPoses count=\"%lu\">", _bindPoses.size() * 16);
-    for (std::vector<glm::mat4>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); ++i)
+    for (std::vector<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); ++i)
     {
-        for (unsigned int j = 0; j < 4; ++j)
+        for (unsigned int j = 0; j < 16; ++j)
         {
-			for (unsigned int k = 0; k < 4; ++k)
-			{
-				// @CESAR !C peut etre a l envers a verifier
-				fprintf(file, "%f ", (*i)[k][j]);
-			}
+            fprintf(file, "%f ", i->m[j]);
         }
     }
     fprintf(file, "</bindPoses>\n");
@@ -98,9 +91,12 @@ unsigned int MeshSkin::getJointCount() const
     return _joints.size();
 }
 
-void MeshSkin::setBindShape(const glm::mat4 &m)
+void MeshSkin::setBindShape(const float data[])
 {
-        _bindShape = m;
+    for (int i = 0; i < 16; ++i)
+    {
+        _bindShape[i] = data[i];
+    }
 }
 
 void MeshSkin::setVertexInfluenceCount(unsigned int count)
@@ -128,9 +124,9 @@ void MeshSkin::setJoints(const std::vector<Node*>& list)
     _joints = list;
 }
 
-void MeshSkin::setBindPoses(std::vector<glm::mat4>& list)
+void MeshSkin::setBindPoses(std::vector<Matrix>& list)
 {
-    for (std::vector<glm::mat4>::iterator i = list.begin(); i != list.end(); ++i)
+    for (std::vector<Matrix>::iterator i = list.begin(); i != list.end(); ++i)
     {
         _bindPoses.push_back(*i);
     }
@@ -204,7 +200,7 @@ void MeshSkin::computeBounds()
     std::vector<AnimationChannel*> channels;
     std::vector<Node*> channelTargets;
     std::vector<Curve*> curves;
-    std::vector<glm::vec3> vertices;
+    std::vector<Vector3> vertices;
     _jointBounds.resize(jointCount);
 
     // Construct a list of all animation channels that target the joints affecting this mesh skin
@@ -236,8 +232,8 @@ void MeshSkin::computeBounds()
         // Calculate the local bounding volume for this joint
         vertices.clear();
         BoundingVolume jointBounds;
-        jointBounds.min = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
-        jointBounds.max = glm::vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+        jointBounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
+        jointBounds.max.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
         for (unsigned int j = 0; j < vertexCount; ++j)
         {
             const Vertex& v = _mesh->getVertex(j);
@@ -266,13 +262,12 @@ void MeshSkin::computeBounds()
         if (vertices.size() > 0)
         {
             // Compute center point
-			jointBounds.center = jointBounds.min + jointBounds.max;
-            jointBounds.center *= 0.5f;
+            Vector3::add(jointBounds.min, jointBounds.max, &jointBounds.center);
+            jointBounds.center.scale(0.5f);
             // Compute radius
             for (unsigned int j = 0, jointVertexCount = vertices.size(); j < jointVertexCount; ++j)
             {
-                // C! float d = jointBounds.center.distanceSquared(vertices[j]);
-                float d = glm::distance(jointBounds.center, vertices[j]) * glm::distance(jointBounds.center, vertices[j]);
+                float d = jointBounds.center.distanceSquared(vertices[j]);
                 if (d > jointBounds.radius)
                     jointBounds.radius = d;
             }
@@ -358,23 +353,22 @@ void MeshSkin::computeBounds()
     // determination) efficiently at runtime.
 
     // Backup existing node transforms so we can restore them when we are finished
-    glm::mat4* oldTransforms = new glm::mat4[jointCount];
+    Matrix* oldTransforms = new Matrix[jointCount];
     for (unsigned int i = 0; i < jointCount; ++i)
     {
-		oldTransforms[i] = _joints[i]->getTransformMatrix();
-        //!Cmemcpy(oldTransforms[i], _joints[i]->getTransformMatrix().m, 16 * sizeof(float));
+        memcpy(oldTransforms[i].m, _joints[i]->getTransformMatrix().m, 16 * sizeof(float));
     }
 
     float time = 0.0f;
     float srt[10];
-    glm::mat4 temp(1);
-    glm::mat4* jointTransforms = new glm::mat4[jointCount];
-    _mesh->bounds.min = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
-    _mesh->bounds.max = glm::vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-    _mesh->bounds.center = glm::vec3(0, 0, 0);
+    Matrix temp;
+    Matrix* jointTransforms = new Matrix[jointCount];
+    _mesh->bounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
+    _mesh->bounds.max.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    _mesh->bounds.center.set(0, 0, 0);
     _mesh->bounds.radius = 0;
-    glm::vec3 skinnedPos;
-    glm::vec3 tempPos;
+    Vector3 skinnedPos;
+    Vector3 tempPos;
     LOG(3, "  Evaluating joints...\n");
     LOG(3, "  0%%\r");
     BoundingVolume finalBounds;
@@ -393,31 +387,23 @@ void MeshSkin::computeBounds()
             curve->evaluate(tn, srt);
 
             // Update the joint's local transform
-			temp = glm::translate(temp, glm::vec3(srt[7], srt[8], srt[9]));
-            // !C Matrix::createTranslation(srt[7], srt[8], srt[9], temp.m);
-
-			glm::quat q(glm::vec3(srt[3], srt[4], srt[5]));
-
-			temp *= glm::mat4_cast(q);
-            //!C temp.rotate(*((Quaternion*)&srt[3]));
-
-			temp = glm::scale(temp, glm::vec3(srt[0], srt[1], srt[2]));
-			// !C temp.scale(srt[0], srt[1], srt[2]);
-            joint->setTransformMatrix(temp);
+            Matrix::createTranslation(srt[7], srt[8], srt[9], temp.m);
+            temp.rotate(*((Quaternion*)&srt[3]));
+            temp.scale(srt[0], srt[1], srt[2]);
+            joint->setTransformMatrix(temp.m);
         }
 
         // Store the final matrix pallette of resovled world space joint matrices
-        std::vector<glm::mat4>::const_iterator bindPoseItr = _bindPoses.begin();
+        std::vector<Matrix>::const_iterator bindPoseItr = _bindPoses.begin();
         for (unsigned int i = 0; i < jointCount; ++i, bindPoseItr++)
         {
             BoundingVolume bounds = _jointBounds[i];
             if (ISZERO(bounds.radius))
                 continue;
 
-            glm::mat4& m = jointTransforms[i];
-			m = _joints[i]->getWorldMatrix() * (*bindPoseItr);
-            // !C Matrix::multiply(_joints[i]->getWorldMatrix().m, bindPoseItr->m, m.m);
-			m = m * _bindShape;
+            Matrix& m = jointTransforms[i];
+            Matrix::multiply(_joints[i]->getWorldMatrix().m, bindPoseItr->m, m.m);
+            Matrix::multiply(m.m, _bindShape, m.m);
 
             // Get a world-space bounding volume for this joint
             bounds.transform(m);
@@ -443,7 +429,7 @@ void MeshSkin::computeBounds()
     // Restore original joint transforms
     for (unsigned int i = 0; i < jointCount; ++i)
     {
-        _joints[i]->setTransformMatrix(oldTransforms[i]);
+        _joints[i]->setTransformMatrix(oldTransforms[i].m);
     }
 
     // Cleanup

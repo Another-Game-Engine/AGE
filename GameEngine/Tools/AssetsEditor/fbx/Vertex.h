@@ -2,44 +2,12 @@
 #define VERTEX_H_
 
 #include "FileIO.h"
-#include <glm/glm.hpp>
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
 
 // Maximum number of supported UV sets
 #define MAX_UV_SETS 8
-
-static bool isLessThan(const glm::vec2 &a, const glm::vec2 &b)
-{
-	auto r = glm::lessThan(a, b);
-
-	if (r.x)
-		return r.x;
-	return r.y;
-}
-
-static bool isLessThan(const glm::vec3 &a, const glm::vec3 &b)
-{
-	auto r = glm::lessThan(a, b);
-
-	if (r.x)
-		return r.x;
-	if (r.y)
-		return r.y;
-	return r.z;
-}
-
-static bool isLessThan(const glm::vec4 &a, const glm::vec4 &b)
-{
-	auto r = glm::lessThan(a, b);
-
-	if (r.x)
-		return r.x;
-	if (r.y)
-		return r.y;
-	if (r.z)
-		return r.z;
-	return r.w;
-}
-
 
 namespace gameplay
 {
@@ -67,15 +35,15 @@ public:
      */
     ~Vertex(void);
 
-    glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec3 tangent;
-    glm::vec3 binormal;
-    glm::vec2 texCoord[MAX_UV_SETS];
-    glm::vec4 diffuse;
+    Vector3 position;
+    Vector3 normal;
+    Vector3 tangent;
+    Vector3 binormal;
+    Vector2 texCoord[MAX_UV_SETS];
+    Vector4 diffuse;
 
-    glm::vec4 blendWeights;
-    glm::vec4 blendIndices;
+    Vector4 blendWeights;
+    Vector4 blendIndices;
 
     bool hasNormal, hasTangent, hasBinormal, hasTexCoord[MAX_UV_SETS], hasDiffuse, hasWeights;
 
@@ -97,24 +65,24 @@ public:
                                 {
                                     for (unsigned int i = 0; i < MAX_UV_SETS; ++i)
                                     {
-										if (!(texCoord[i] == v.texCoord[i]))
-											return isLessThan(texCoord[i], v.texCoord[i]);
+                                        if (!(texCoord[i] == v.texCoord[i]))
+                                            return texCoord[i] < v.texCoord[i];
                                     }
                                     return false;
                                 }
-								return isLessThan(blendIndices, v.blendIndices);
+                                return blendIndices < v.blendIndices;
                             }
-							return isLessThan(blendWeights, v.blendWeights);
+                            return blendWeights < v.blendWeights;
                         }
-						return isLessThan(diffuse, v.diffuse);
+                        return diffuse < v.diffuse;
                     }
-					return isLessThan(binormal, v.binormal);
+                    return binormal < v.binormal;
                 }
-				return isLessThan(tangent, v.tangent);
+                return tangent < v.tangent;
             }
-			return isLessThan(normal, v.normal);
+            return normal < v.normal;
         }
-		return isLessThan(position, v.position);
+        return position < v.position;
     }
 
     inline bool operator==(const Vertex& v) const

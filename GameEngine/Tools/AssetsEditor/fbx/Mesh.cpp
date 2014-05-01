@@ -161,7 +161,8 @@ unsigned int Mesh::addVertex(const Vertex& vertex)
 
 unsigned int Mesh::getVertexIndex(const Vertex& vertex)
 {
-    auto it = vertexLookupTable.find(vertex);
+    std::map<Vertex,unsigned int>::iterator it;
+    it = vertexLookupTable.find(vertex);
     return it->second;
 }
 
@@ -211,16 +212,14 @@ void Mesh::computeBounds()
     }
 
     // Compute center point
-    bounds.center = bounds.min + bounds.max;
-    bounds.center *= 0.5f;
+    Vector3::add(bounds.min, bounds.max, &bounds.center);
+    bounds.center.scale(0.5f);
 
     // Compute radius by looping through all points again and finding the max
     // distance between the center point and each vertex position
     for (std::vector<Vertex>::const_iterator i = vertices.begin(); i != vertices.end(); ++i)
     {
-		// !C        float d = bounds.center.distanceSquared(i->position);		
-        float d = glm::distance(bounds.center, i->position);
-		d *= d;
+        float d = bounds.center.distanceSquared(i->position);
         if (d > bounds.radius)
         {
             bounds.radius = d;

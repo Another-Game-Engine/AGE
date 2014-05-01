@@ -2,7 +2,6 @@
 #include "Node.h"
 #include "Matrix.h"
 #include "EncoderArguments.h"
-#include <glm/gtc/type_ptr.hpp>
 
 #define NODE 1
 #define JOINT 2
@@ -40,8 +39,7 @@ void Node::writeBinary(FILE* file)
     unsigned int type = _joint ? JOINT : NODE;
     write(type, file);
 
-	write(glm::value_ptr(_transform), 16, file);
-    // !C write(_transform, 16, file);
+    write(_transform.m, 16, file);
 
     // write parent's id
     write((_parent) ? _parent->getId() : std::string(), file);
@@ -93,7 +91,7 @@ void Node::writeText(FILE* file)
         fprintElementStart(file);
     }
     fprintf(file, "<transform>");
-    fprintfMatrix4f(file, _transform);
+    fprintfMatrix4f(file, _transform.m);
     fprintf(file, "</transform>\n");
 
     // children
@@ -243,27 +241,25 @@ void Node::setModel(Model* model)
     _model = model;
 }
 
-const glm::mat4& Node::getTransformMatrix() const
+const Matrix& Node::getTransformMatrix() const
 {
     return _transform;
 }
 
-void Node::setTransformMatrix(const glm::mat4 &m)
+void Node::setTransformMatrix(float matrix[])
 {
-	_transform = m;
+    memcpy(_transform.m, matrix, 16 * sizeof(float));
 }
 
-const glm::mat4& Node::getWorldMatrix() const
+const Matrix& Node::getWorldMatrix() const
 {
     if (_parent)
     {
-		_worldTransform = _parent->getWorldMatrix() * _transform;
-        // !C Matrix::multiply(_parent->getWorldMatrix().m, _transform.m, _worldTransform.m);
+        Matrix::multiply(_parent->getWorldMatrix().m, _transform.m, _worldTransform.m);
     }
     else
     {
-		_worldTransform = _transform;
-        // !C memcpy(_worldTransform.m, _transform.m, 16 * sizeof(float));
+        memcpy(_worldTransform.m, _transform.m, 16 * sizeof(float));
     }
 
     return _worldTransform;
@@ -271,8 +267,7 @@ const glm::mat4& Node::getWorldMatrix() const
 
 void Node::resetTransformMatrix()
 {
-	_transform = glm::mat4(1);
-    //!C Matrix::setIdentity(_transform.m);
+    Matrix::setIdentity(_transform.m);
 }
 
 void Node::setIsJoint(bool value)

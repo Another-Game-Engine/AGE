@@ -4,9 +4,8 @@
 
 #include "FBXUtil.h"
 #include "Transform.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "Vector3.h"
+#include "Vector2.h"
 
 using namespace gameplay;
 using std::string;
@@ -478,7 +477,7 @@ void findMinMaxTime(FbxAnimCurve* animCurve, float* startTime, float* stopTime, 
     *frameRate = std::max(*frameRate, (float)stop.GetFrameRate(FbxTime::eDefaultMode));
 }
 
-void appendKeyFrame(FbxNode* fbxNode, AnimationChannel* channel, float time, const glm::vec3& scale, const glm::quat& rotation, const glm::vec3& translation)
+void appendKeyFrame(FbxNode* fbxNode, AnimationChannel* channel, float time, const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
 {
     // Write key time
     channel->getKeyTimes().push_back(time);
@@ -608,13 +607,13 @@ void appendKeyFrame(FbxNode* fbxNode, AnimationChannel* channel, float time, con
 
 void decompose(FbxNode* fbxNode, float time, Vector3* scale, Quaternion* rotation, Vector3* translation)
 {
-    //FbxAMatrix fbxMatrix;
-    //Matrix matrix;
-    //FbxTime kTime;
-    //kTime.SetMilliSeconds((FbxLongLong)time);
-    //fbxMatrix = fbxNode->EvaluateLocalTransform(kTime);
-    //copyMatrix(fbxMatrix, matrix);
-    //matrix.decompose(scale, rotation, translation);
+    FbxAMatrix fbxMatrix;
+    Matrix matrix;
+    FbxTime kTime;
+    kTime.SetMilliSeconds((FbxLongLong)time);
+    fbxMatrix = fbxNode->EvaluateLocalTransform(kTime);
+    copyMatrix(fbxMatrix, matrix);
+    matrix.decompose(scale, rotation, translation);
 }
 
 AnimationChannel* createAnimationChannel(FbxNode* fbxNode, unsigned int targetAttrib, const vector<float>& keyTimes, const vector<float>& keyValues)
@@ -676,27 +675,26 @@ void addTranslateChannel(Animation* animation, FbxNode* fbxNode, float startTime
     animation->add(channel);
 }
 
-void copyMatrix(const FbxMatrix& fbxMatrix, glm::mat4 *matrix)
-{
-    for (int row = 0; row < 4; ++row)
-    {
-        for (int col = 0; col < 4; ++col)
-        {
-			// @CESAR !C peut etre a  lenvers
-            (*matrix)[row][col] = fbxMatrix.Get(row, col);
-        }
-    }
-}
-
-void copyMatrix(const FbxMatrix& fbxMatrix, glm::mat4& matrix)
+void copyMatrix(const FbxMatrix& fbxMatrix, float* matrix)
 {
     int i = 0;
     for (int row = 0; row < 4; ++row)
     {
         for (int col = 0; col < 4; ++col)
         {
-			// @CESAR !C peut etre a  lenvers
-            matrix[row][col] = (float)fbxMatrix.Get(row, col);
+            matrix[i++] = (float)fbxMatrix.Get(row, col);
+        }
+    }
+}
+
+void copyMatrix(const FbxMatrix& fbxMatrix, Matrix& matrix)
+{
+    int i = 0;
+    for (int row = 0; row < 4; ++row)
+    {
+        for (int col = 0; col < 4; ++col)
+        {
+            matrix.m[i++] = (float)fbxMatrix.Get(row, col);
         }
     }
 }

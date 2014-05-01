@@ -62,6 +62,11 @@ public:
      */
     unsigned int getIndex(unsigned int i) const;
 
+	const std::vector<unsigned int> getIndices() const
+	{
+		return _indices;
+	}
+
 private:
 
     /**
@@ -85,7 +90,7 @@ private:
      */
     void writeBinaryIndex(unsigned int index, FILE* file);
 
-public:
+private:
 
     unsigned int _primitiveType;
     IndexFormat _indexFormat;

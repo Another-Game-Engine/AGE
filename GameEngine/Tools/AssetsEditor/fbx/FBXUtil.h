@@ -115,12 +115,12 @@ bool loadBlendWeights(FbxMesh* fbxMesh, std::vector<std::vector<Vector2> >& weig
 /**
  * Copies from an FBX matrix to a float[16] array.
  */
-void copyMatrix(const FbxMatrix& fbxMatrix, glm::mat4* matrix);
+void copyMatrix(const FbxMatrix& fbxMatrix, float* matrix);
 
 /**
  * Copies from an FBX matrix to a gameplay matrix.
  */
-void copyMatrix(const FbxMatrix& fbxMatrix, glm::mat4& matrix);
+void copyMatrix(const FbxMatrix& fbxMatrix, Matrix& matrix);
 
 /**
  * Finds the min and max start time and stop time of the given animation curve.
@@ -147,7 +147,7 @@ void findMinMaxTime(FbxAnimCurve* animCurve, float* startTime, float* stopTime, 
  * @param translation The evalulated translation for the keyframe.
 
  */
-void appendKeyFrame(FbxNode* fbxNode, AnimationChannel* channel, float time, const glm::vec3& scale, const glm::quat& rotation, const glm::vec3& translation);
+void appendKeyFrame(FbxNode* fbxNode, AnimationChannel* channel, float time, const Vector3& scale, const Quaternion& rotation, const Vector3& translation);
 
 /**
  * Decomposes the given node's matrix transform at the given time and copies to scale, rotation and translation.

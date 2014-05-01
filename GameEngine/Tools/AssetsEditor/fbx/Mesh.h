@@ -6,26 +6,6 @@
 #include "MeshPart.h"
 #include "VertexElement.h"
 #include "BoundingVolume.h"
-#include <unordered_map>
-
-struct KeyFuncs
-{
-    size_t operator()(const gameplay::Vertex& k)const
-    {
-		return std::hash<float>()(k.position.x) ^ std::hash<float>()(k.position.y) ^ std::hash<float>()(k.position.z)
-			^ std::hash<float>()(k.normal.x) ^ std::hash<float>()(k.normal.y) ^ std::hash<float>()(k.normal.z)
-			^ std::hash<float>()(k.tangent.x) ^ std::hash<float>()(k.tangent.y) ^ std::hash<float>()(k.tangent.z)
-			^ std::hash<float>()(k.binormal.x) ^ std::hash<float>()(k.binormal.y) ^ std::hash<float>()(k.binormal.z)
-			^ std::hash<float>()(k.diffuse.x) ^ std::hash<float>()(k.diffuse.y) ^ std::hash<float>()(k.diffuse.z)
-			^ std::hash<float>()(k.blendWeights.x) ^ std::hash<float>()(k.blendWeights.y) ^ std::hash<float>()(k.blendWeights.z)
-			^ std::hash<float>()(k.blendIndices.x) ^ std::hash<float>()(k.blendIndices.y) ^ std::hash<float>()(k.blendIndices.z);
-    }
-
-    bool operator()(const gameplay::Vertex& a, const gameplay::Vertex& b)const
-    {
-		return a.position == b.position && a.normal == b.normal && a.tangent == b.tangent && a.binormal == b.binormal && a.diffuse == b.diffuse && a.blendWeights == b.blendWeights && a.blendIndices == b.blendIndices;
-    }
-};
 
 namespace gameplay
 {
@@ -56,7 +36,7 @@ public:
 
     virtual void writeText(FILE* file);
     void writeText(FILE* file, const Vertex& vertex);
-    void writeText(FILE* file, const glm::vec3& v);
+    void writeText(FILE* file, const Vector3& v);
 
     void addMeshPart(MeshPart* part);
     void addMeshPart(Vertex* vertex);
@@ -89,8 +69,9 @@ public:
     std::vector<Vertex> vertices;
     std::vector<MeshPart*> parts;
     BoundingVolume bounds;
-    std::unordered_map<Vertex, unsigned int, KeyFuncs, KeyFuncs> vertexLookupTable;
+    std::map<Vertex, unsigned int> vertexLookupTable;
 
+private:
     std::vector<VertexElement> _vertexFormat;
 
 };

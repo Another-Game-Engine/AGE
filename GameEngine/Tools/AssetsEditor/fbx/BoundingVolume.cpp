@@ -1,6 +1,5 @@
 #include "Base.h"
 #include "BoundingVolume.h"
-#include <Utils/MatrixConversion.hpp>
 
 namespace gameplay
 {
@@ -10,7 +9,7 @@ BoundingVolume::BoundingVolume()
 {
 }
 
-void updateMinMax(glm::vec3* point, glm::vec3* min, glm::vec3* max)
+void updateMinMax(Vector3* point, Vector3* min, Vector3* max)
 {
     // Leftmost point.
     if (point->x < min->x)
@@ -49,49 +48,42 @@ void updateMinMax(glm::vec3* point, glm::vec3* min, glm::vec3* max)
     }
 }
 
-void BoundingVolume::transform(const glm::mat4& m)
+void BoundingVolume::transform(const Matrix& m)
 {
     // Transform the bounding sphere
-	glm::vec4 tmp = glm::vec4(center.x, center.y, center.z, 1.0) * m;
-	center = glm::vec3(tmp.x, tmp.y, tmp.z);
-    //!C m.transformPoint(center, &center);
-	glm::vec3 translate = scaleFromMat4(m);
-    //!C m.decompose(&translate, NULL, NULL);
+    m.transformPoint(center, &center);
+    Vector3 translate;
+    m.decompose(&translate, NULL, NULL);
     float r = radius * translate.x;
     r = std::max(radius, radius * translate.y);
     r = std::max(radius, radius * translate.z);
     radius = r;
 
     // Transform the bounding box
-    glm::vec3 corners[8];
-    corners[0] = glm::vec3(min.x, max.y, max.z);
+    Vector3 corners[8];
+    corners[0].set(min.x, max.y, max.z);
     // Left-bottom-front.
-    corners[1] = glm::vec3(min.x, min.y, max.z);
+    corners[1].set(min.x, min.y, max.z);
     // Right-bottom-front.
-    corners[2] = glm::vec3(max.x, min.y, max.z);
+    corners[2].set(max.x, min.y, max.z);
     // Right-top-front.
-    corners[3] = glm::vec3(max.x, max.y, max.z);
+    corners[3].set(max.x, max.y, max.z);
     // Right-top-back.
-    corners[4] = glm::vec3(max.x, max.y, min.z);
+    corners[4].set(max.x, max.y, min.z);
     // Right-bottom-back.
-    corners[5] = glm::vec3(max.x, min.y, min.z);
+    corners[5].set(max.x, min.y, min.z);
     // Left-bottom-back.
-    corners[6] = glm::vec3(min.x, min.y, min.z);
+    corners[6].set(min.x, min.y, min.z);
     // Left-top-back.
-    corners[7] = glm::vec3(min.x, max.y, min.z);
+    corners[7].set(min.x, max.y, min.z);
 
     // Transform the corners, recalculating the min and max points along the way.
-	tmp = glm::vec4(corners[0].x, corners[0].y, corners[0].z, 1) * m;
-	corners[0] = glm::vec3(tmp.x, tmp.y, tmp.z);
-    //!C m.transformPoint(corners[0], &corners[0]);
-    glm::vec3 newMin = corners[0];
-    glm::vec3 newMax = corners[0];
-
-	for (int i = 1; i < 8; i++)
+    m.transformPoint(corners[0], &corners[0]);
+    Vector3 newMin = corners[0];
+    Vector3 newMax = corners[0];
+    for (int i = 1; i < 8; i++)
     {
-        //!C m.transformPoint(corners[i], &corners[i]);
-		tmp = glm::vec4(corners[i].x, corners[i].y, corners[i].z, 1) * m;
-		corners[i] = glm::vec3(tmp.x, tmp.y, tmp.z);
+        m.transformPoint(corners[i], &corners[i]);
         updateMinMax(&corners[i], &newMin, &newMax);
     }
     min = newMin;

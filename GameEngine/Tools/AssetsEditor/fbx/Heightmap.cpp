@@ -2,7 +2,6 @@
 #include "Heightmap.h"
 #include "GPBFile.h"
 #include "Thread.h"
-#include <glm/glm.hpp>
 
 namespace gameplay
 {
@@ -14,7 +13,7 @@ namespace gameplay
 struct HeightmapThreadData
 {
     float rayHeight;                    // [in]
-    const glm::vec3* rayDirection;        // [in]
+    const Vector3* rayDirection;        // [in]
     const std::vector<Mesh*>* meshes;   // [in]
     const BoundingVolume* bounds;       // [in]
     float minX;                         // [in]
@@ -38,9 +37,9 @@ int __failedRayCasts = 0;
 
 // Forward declarations
 int generateHeightmapChunk(void* threadData);
-bool intersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const glm::vec3& boxMin, const glm::vec3& boxMax, float* distance = NULL);
+bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const Vector3& boxMin, const Vector3& boxMax, float* distance = NULL);
 int intersect_triangle(const float orig[3], const float dir[3], const float vert0[3], const float vert1[3], const float vert2[3], float *t, float *u, float *v);
-bool intersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const std::vector<Vertex>& vertices, const std::vector<MeshPart*>& parts, glm::vec3* point);
+bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const std::vector<Vertex>& vertices, const std::vector<MeshPart*>& parts, Vector3* point);
 
 void Heightmap::generate(const std::vector<std::string>& nodeIds, int width, int height, const char* filename, bool highP)
 {
@@ -56,8 +55,8 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, int width, int
     // Lookup nodes in GPB file and compute a single bounding volume that encapsulates all meshes
     // to be included in the heightmap generation.
     BoundingVolume bounds;
-    bounds.min = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
-    bounds.max = glm::vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    bounds.min.set(FLT_MAX, FLT_MAX, FLT_MAX);
+    bounds.max.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
     std::vector<Mesh*> meshes;
     for (unsigned int j = 0, ncount = nodeIds.size(); j < ncount; ++j)
     {
@@ -95,8 +94,8 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, int width, int
     // Shoot rays down from a point just above the max Y position of the mesh.
     // Compute ray-triangle intersection tests against the ray and this mesh to 
     // generate heightmap data.
-    glm::vec3 rayOrigin(0, bounds.max.y + 10, 0);
-    glm::vec3 rayDirection(0, -1, 0);
+    Vector3 rayOrigin(0, bounds.max.y + 10, 0);
+    Vector3 rayDirection(0, -1, 0);
 
     float minX = bounds.min.x;
     float maxX = bounds.max.x;
@@ -265,12 +264,12 @@ int generateHeightmapChunk(void* threadData)
 {
     HeightmapThreadData* data = (HeightmapThreadData*)threadData;
 
-    glm::vec3 rayOrigin(0, data->rayHeight, 0);
-    const glm::vec3& rayDirection = *data->rayDirection;
+    Vector3 rayOrigin(0, data->rayHeight, 0);
+    const Vector3& rayDirection = *data->rayDirection;
     const std::vector<Mesh*>& meshes = *data->meshes;
     float* heights = data->heights;
 
-    glm::vec3 intersectionPoint;
+    Vector3 intersectionPoint;
     float minHeight = FLT_MAX;
     float maxHeight = -FLT_MAX;
     int index = data->heightIndex;
@@ -395,7 +394,7 @@ int intersect_triangle(const float orig[3], const float dir[3], const float vert
 }
 
 // Performs an intersection test between a ray and the given mesh part and stores the result in "point".
-bool intersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const std::vector<Vertex>& vertices, const std::vector<MeshPart*>& parts, glm::vec3* point)
+bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const std::vector<Vertex>& vertices, const std::vector<MeshPart*>& parts, Vector3* point)
 {
     const float* orig = &rayOrigin.x;
     const float* dir = &rayDirection.x;
@@ -432,10 +431,9 @@ bool intersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const 
 
                     if (point)
                     {
-                        glm::vec3 rd(rayDirection);
-                        rd *= t;
-						*point = rayOrigin + rd;
-                        // !C glm::vec3::add(rayOrigin, rd, point);
+                        Vector3 rd(rayDirection);
+                        rd.scale(t);
+                        Vector3::add(rayOrigin, rd, point);
                     }
                 }
                 //return true;
@@ -447,12 +445,12 @@ bool intersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const 
 }
 
 // Ray/Box intersection test.
-bool intersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const glm::vec3& boxMin, const glm::vec3& boxMax, float* distance)
+bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const Vector3& boxMin, const Vector3& boxMax, float* distance)
 {
-    const glm::vec3& origin = rayOrigin;
-    const glm::vec3& direction = rayDirection;
-    const glm::vec3& min = boxMin;
-    const glm::vec3& max = boxMax;
+    const Vector3& origin = rayOrigin;
+    const Vector3& direction = rayDirection;
+    const Vector3& min = boxMin;
+    const Vector3& max = boxMax;
 
     // Intermediate calculation variables.
     float dnear = 0.0f;

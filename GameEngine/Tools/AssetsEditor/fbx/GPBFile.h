@@ -45,6 +45,16 @@ public:
      */
     static GPBFile* getInstance();
 
+	inline const std::list<Object*> &getObjects() const
+	{
+		return _objects;
+	}
+
+	inline const std::list<Node*> &getNodes() const
+	{
+		return _nodes;
+	}
+
     /**
      * Saves the GPBFile as a binary file at filepath.
      *
@@ -120,7 +130,7 @@ public:
      */
     void renameAnimations(std::vector<std::string>& animationIds, const char* newId);
 
-//private:
+private:
 
     /**
      * Computes the bounds of all meshes in the node hierarchy.
@@ -149,7 +159,7 @@ public:
      */
     void moveAnimationChannels(Node* node, Animation* animation);
 
-//private:
+private:
 
     FILE* _file;
     std::list<Object*> _objects;
