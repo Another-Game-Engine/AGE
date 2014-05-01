@@ -15,6 +15,11 @@ static inline glm::mat4 GP_MAT_TO_GLM(const gameplay::Matrix &m)
 
 namespace AGE
 {
+	struct AnimationChannel
+	{
+
+	};
+
 	class GameplayConvertor : public Dependency
 	{
 	public:
@@ -24,11 +29,24 @@ namespace AGE
 		virtual ~GameplayConvertor()
 		{}
 
-		bool importNode(gameplay::Node *gpNode)
+		bool importGPFile(gameplay::GPBFile &file)
 		{
-			auto debug = _nodes.size();
+			gameplay::Object* object = file.getObjects().front();
 
-			if (_nodes.find(gpNode->getId()) != std::end(_nodes))
+			// Import bones and mesh
+			for (auto n = file.getNodes().begin(); n != std::end(file.getNodes()); ++n)
+			{
+				_importNode(*n);
+			}
+
+			// Import Animation channel
+			return true;
+		}
+
+	private:
+		bool _importNode(gameplay::Node *gpNode)
+		{
+			if (_bonesByName.find(gpNode->getId()) != std::end(_bonesByName))
 				return false;
 			if (gpNode->isJoint())
 			{
@@ -37,23 +55,21 @@ namespace AGE
 			else if (gpNode->getModel() != nullptr)
 			{
 				return _importModelNode(gpNode);
-				std::cout << "implement me here please cesar ! Or anybody else ! Ho ... wait, there's not anybody else :)" << std::endl;
 			}
 			return false;
 		}
 
-	private:
 		bool _importSkeletonNode(gameplay::Node *gpNode)
 		{
 			auto node = new AGE::Node();
 
-			node->_id = _nodes.size();
+			node->_id = _bonesByName.size();
 			node->_name = gpNode->getId();
 			node->_boneMatrixReference = GP_MAT_TO_GLM(gpNode->getTransformMatrix());
 			node->_worldMatrixReference = GP_MAT_TO_GLM(gpNode->getWorldMatrix());
 
-			_nodes.insert(std::make_pair(node->_name, node));
-			_debugVector.push_back(node);
+			_bonesByName.insert(std::make_pair(node->_name, node));
+			_bones.push_back(node);
 			if (gpNode->hasChildren())
 			{
 				auto child = gpNode->getFirstChild();
@@ -62,8 +78,8 @@ namespace AGE
 					assert(child != nullptr && child->isJoint());
 					if (_importSkeletonNode(child) == false)
 						return false;
-					auto siblingIt = _nodes.find(child->getId());
-					assert(siblingIt != std::end(_nodes));
+					auto siblingIt = _bonesByName.find(child->getId());
+					assert(siblingIt != std::end(_bonesByName));
 					auto sibling = siblingIt->second;
 					node->addChild(sibling->_id);
 					sibling->setParent(node->_id);
@@ -137,7 +153,7 @@ public:
 	Vertice<8> *vertices;
 	AGE::Node *skeletonBase;
 private:
-		std::map<std::string, AGE::Node*> _nodes;
-		std::vector<AGE::Node*> _debugVector;
+		std::map<std::string, AGE::Node*> _bonesByName;
+		std::vector<AGE::Node*> _bones;
 	};
 }

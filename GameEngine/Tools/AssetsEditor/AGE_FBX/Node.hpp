@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+#include "fbx/FBXSceneEncoder.h"
+
 namespace AGE
 {
 	class Node
