@@ -42,7 +42,6 @@ namespace AGE
 		std::vector<std::uint32_t> _children;
 		glm::mat4 _worldMatrixReference;
 		glm::mat4 _boneMatrixReference;
-		glm::mat4 _worldTransform;
-		glm::mat4 _boneTransform;
+		glm::mat4 _bindPose;
 	};
 }

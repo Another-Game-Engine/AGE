@@ -50,6 +50,8 @@ public:
 
     void setBindPoses(std::vector<Matrix>& list);
 
+	inline const std::vector<Matrix>& getBindPoses() const { return _bindPoses; }
+
     /**
      * Returns true if the MeshSkin contains a joint with the given ID.
      * 

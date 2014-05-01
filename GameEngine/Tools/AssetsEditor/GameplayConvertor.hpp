@@ -32,11 +32,20 @@ namespace AGE
 		bool importGPFile(gameplay::GPBFile &file)
 		{
 			gameplay::Object* object = file.getObjects().front();
-
+			_file = &file;
 			// Import bones and mesh
 			for (auto n = file.getNodes().begin(); n != std::end(file.getNodes()); ++n)
 			{
 				_importNode(*n);
+			}
+
+			// Sort bones
+			for (auto i = 0; i < _bonesNames.size(); ++i)
+			{
+				if (_bones.size() <= i)
+					_bones.resize(i + 1);
+				_bonesByName[_bonesNames[i]]->_bindPose  = GP_MAT_TO_GLM(_bindPoses[i]);
+				_bones[i] = _bonesByName[_bonesNames[i]];
 			}
 
 			// Import Animation channel
@@ -46,9 +55,17 @@ namespace AGE
 		void update()
 		{
 			bonesMatrix.clear();
+
+			auto r = rand() % 3;
+
 			for (auto e : _bones)
 			{
-				bonesMatrix.push_back(glm::mat4(1));
+				if (r == 0)
+					bonesMatrix.push_back(e->_boneMatrixReference);
+				else if (r == 1)
+					bonesMatrix.push_back(e->_worldMatrixReference);
+				else
+					bonesMatrix.push_back(e->_bindPose);
 			}
 		}
 
@@ -78,7 +95,6 @@ namespace AGE
 			node->_worldMatrixReference = GP_MAT_TO_GLM(gpNode->getWorldMatrix());
 
 			_bonesByName.insert(std::make_pair(node->_name, node));
-			_bones.push_back(node);
 			if (gpNode->hasChildren())
 			{
 				auto child = gpNode->getFirstChild();
@@ -157,6 +173,10 @@ namespace AGE
 			this->_dpyManager.lock()->getInstance<VertexManager<8>>()->addVertice(*vertices);
 
 			mesh = new AGE::Mesh<8>(*vertices);
+
+			_bonesNames = m->model->getSkin()->getJointNames();
+			_bindPoses = m->model->getSkin()->getBindPoses();
+
 			return true;
 		}
 public:
@@ -167,5 +187,8 @@ public:
 private:
 		std::map<std::string, AGE::Node*> _bonesByName;
 		std::vector<AGE::Node*> _bones;
+		std::vector<std::string> _bonesNames;
+		gameplay::GPBFile *_file;
+		std::vector<gameplay::Matrix> _bindPoses;
 	};
 }

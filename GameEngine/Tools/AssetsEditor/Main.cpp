@@ -89,7 +89,7 @@ int			main(int ac, char **av)
 	glm::mat4 Projection = glm::perspective(60.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
 	// Camera matrix
 	glm::mat4 View = glm::lookAt(
-		glm::vec3(10, 5, 100), // Camera is at (4,3,3), in World Space
+		glm::vec3(10, 5, 150), // Camera is at (4,3,3), in World Space
 		glm::vec3(0, 0, 0), // and looks at the origin
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 		);
@@ -115,14 +115,14 @@ int			main(int ac, char **av)
 		glm::vec4 color;
 		s->use();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Model = glm::rotate(Model, 10.0f * (float)e->getInstance<Timer>()->getElapsed(), glm::vec3(0, 1, 0));
+		Model = glm::rotate(Model, 20.0f * (float)e->getInstance<Timer>()->getElapsed(), glm::vec3(0, 1, 0));
 		color = glm::vec4(1, 0, 1, 1);
-		//gameplayconvertor->update();
+		gameplayconvertor->update();
 		glUniform4fv(glGetUniformLocation(s->getId(), "color"), 1, &color[0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "model"), 1, GL_FALSE, &Model[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "view"), 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, &Projection[0][0]);
-		//glUniformMatrix4fv(glGetUniformLocation(s->getId(), "bones"), gameplayconvertor->bonesMatrix.size(), GL_FALSE, &gameplayconvertor->bonesMatrix[0][0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "bones"), gameplayconvertor->bonesMatrix.size(), GL_FALSE, &gameplayconvertor->bonesMatrix[0][0][0]);
 		gameplayconvertor->vertices->draw(GL_TRIANGLES);
 	} while (e->update());
 	config->saveToFile();

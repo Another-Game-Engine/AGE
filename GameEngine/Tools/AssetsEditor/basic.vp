@@ -24,14 +24,14 @@ void main(void)
 	//vec4 test = vec4(1, 2, 3, 4);
 	//test = lol * test;
 
-	//mat4 boneTransform = bones[vBlendIndice.x] * 1.0f;//vBlendWeight.x;
-	//boneTransform += bones[int(vBlendIndice.y)] * vBlendWeight.y;
-	//boneTransform += bones[int(vBlendIndice.z)] * vBlendWeight.z;
-	//boneTransform += bones[int(vBlendIndice.w)] * vBlendWeight.w;
+	mat4 boneTransform = inverse(bones[int(vBlendIndice.x)]); //* vBlendWeight.x;
+//	boneTransform += bones[int(vBlendIndice.y)] * vBlendWeight.y;
+//	boneTransform += bones[int(vBlendIndice.z)] * vBlendWeight.z;
+//	boneTransform += bones[int(vBlendIndice.w)] * vBlendWeight.w;
 
   boneColor = vBlendIndice / vec4(166);
   boneColor.w = 1;
   //boneColor.w = 1;
 
-	gl_Position = projection * view * model * vPosition;// vPosition;
+	gl_Position = projection * view * model * boneTransform * vPosition;
 }
