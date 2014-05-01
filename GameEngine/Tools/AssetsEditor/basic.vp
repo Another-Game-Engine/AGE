@@ -1,0 +1,14 @@
+#version 150
+
+uniform	mat4 projection;
+uniform	mat4 view;
+uniform	mat4 model;
+uniform vec4 color;
+
+
+in vec4 vPosition;
+
+void main(void)
+{
+  gl_Position = projection * view * model * vPosition;
+}
