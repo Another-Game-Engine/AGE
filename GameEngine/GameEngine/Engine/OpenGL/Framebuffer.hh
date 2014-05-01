@@ -4,6 +4,7 @@
 #include <Utils/OpenGL.hh>
 #include <map>
 #include <glm/glm.hpp>
+#include <OpenGL/Texture.hh>
 
 namespace OpenGLTools
 {
@@ -22,16 +23,16 @@ namespace OpenGLTools
 
 		void		init(glm::uvec2 size, int sampleNbr);
 
-		void		addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment);
-		void		attachAll() const;
-		void		bind() const;
-		Texture		*getTextureAttachment(GLenum attachment) const;
+		void addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment);
+		void attachAll() const;
+		void bind() const;
+		Texture	const *getTextureAttachment(GLenum attachment) const;
 		glm::uvec2	getSize();
 
-		bool		isInit() const { return (_id != 0); }
-		bool		isMultisampled() const { return (_multiSample); }
-		int			getSampleNbr() const { return (_sampleNbr); }
-		GLuint		getId() const { return (_id); }
+		bool isInit() const { return (_id != 0); }
+		bool isMultisampled() const { return (_multiSample); }
+		int	getSampleNbr() const { return (_sampleNbr); }
+		GLuint getId() const { return (_id); }
 	private:
 		Framebuffer(const Framebuffer &o);
 		Framebuffer &operator=(const Framebuffer &o);

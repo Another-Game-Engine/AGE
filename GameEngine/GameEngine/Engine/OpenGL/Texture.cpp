@@ -182,10 +182,9 @@ namespace OpenGLTools
 		return (read);
 	}
 
-	Texture2D const &Texture2D::write(void *write) const
+	void Texture2D::write(void *write) const
 	{
 		glTexSubImage2D(GL_TEXTURE_2D, _level, 0, 0, _width, _height, _format, _type, write);
-		return (*this);
 	}
 
 	Texture2D const &Texture2D::generateMipMap() const
@@ -216,5 +215,15 @@ namespace OpenGLTools
 	Texture const &TextureMultiSample::unbind() const
 	{
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+	}
+
+	void TextureMultiSample::write(void *) const
+	{
+
+	}
+
+	void *TextureMultiSample::read(void *read) const
+	{
+		return (NULL);
 	}
 }
