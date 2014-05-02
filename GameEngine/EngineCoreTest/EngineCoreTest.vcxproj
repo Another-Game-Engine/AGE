@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="Scenes\BenchmarkScene.hpp" />
     <ClInclude Include="Systems\BullshitSystem.hpp" />
+    <ClInclude Include="Systems\LifetimeSystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

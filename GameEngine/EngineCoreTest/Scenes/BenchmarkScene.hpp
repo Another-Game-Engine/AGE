@@ -1,7 +1,8 @@
 #pragma once
 
 #include <Core/AScene.hh>
-#include <Systems/BullshitSystem.hpp>
+#include <Systems/LifetimeSystem.hpp>
+#include <Systems/BulletDynamicSystem.hpp>
 
 class BenchmarkScene : public AScene	
 {
@@ -16,17 +17,10 @@ public:
 	virtual bool 			userStart()
 	{
 
-		rct<Component::Bullshit>();
+		rct<Component::Lifetime>();
 
-		addSystem<BullshitSystem>(0);
+		addSystem<LifetimeSystem>(0);
 		_logFile.open("LogFile.log", std::ios::app);
-
-		//if (File("SaveFile").exists())
-		//{
-		//	std::ifstream saveFile("SaveFile", std::ios::binary);
-		//	load<cereal::PortableBinaryInputArchive>(saveFile);
-		//	return false;
-		//}
 
 		return true;
 	}
@@ -41,10 +35,10 @@ public:
 		for (auto i = 0; i < 8; ++i)
 		{
 			auto e = createEntity();
-			if (i % 2)
-			{
-				e->addComponent<Component::Bullshit>(0.3f);
-			}
+			e->addComponent<Component::Lifetime>();
+			auto rb = e->addComponent<Component::RigidBody>(1.0f);
+			rb->setCollisionShape(Component::RigidBody::CollisionShape::SPHERE);
+			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
 		}
 
 		if (_chunkCounter >= _maxChunk)

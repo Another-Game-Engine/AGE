@@ -17,6 +17,7 @@
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
 #include <Core/ConfigurationManager.hpp>
+#include <Physic/BulletDynamicManager.hpp>
 
 
 int			main(int ac, char **av)
@@ -32,7 +33,8 @@ int			main(int ac, char **av)
 	e->setInstance<Timer>();
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
-
+	e->setInstance<BulletDynamicManager, BulletCollisionManager>();
+	
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
@@ -54,7 +56,6 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
-
 	// launch engine
 	if (e->start() == false)
 		return (EXIT_FAILURE);

@@ -115,7 +115,6 @@ namespace Component
 		{
 			if (c == UNDEFINED)
 				return;
-			auto mediaManager = _entity->getScene().lock()->getInstance<AssetsManager>();
 			meshName = _meshName;
 			_reset();
 			shapeType = c;
@@ -138,6 +137,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
+				auto mediaManager = _entity->getScene().lock()->getInstance<AssetsManager>();
 				auto media = mediaManager->get(_meshName);
 				if (!media)
 					return;
