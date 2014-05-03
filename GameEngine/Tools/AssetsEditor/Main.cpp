@@ -96,6 +96,7 @@ int			main(int ac, char **av)
 	// Model matrix : an identity matrix (model will be at the origin)
 	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
 	Model = glm::scale(Model, glm::vec3(0.3f));
+//	Model *= glm::mat4(1,0,0,0,0,1,-6.61744490e-024, 0, 0, 6.61744490e-024, 1, 0,0,0,0,1);
 	// Our ModelViewProjection : multiplication of our 3 matrices
 
 
@@ -112,12 +113,13 @@ int			main(int ac, char **av)
 
 	do
 	{
+		auto time = e->getInstance<Timer>()->getElapsed();
 		glm::vec4 color;
 		s->use();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Model = glm::rotate(Model, 20.0f * (float)e->getInstance<Timer>()->getElapsed(), glm::vec3(0, 1, 0));
+		Model = glm::rotate(Model, 20.0f * (float)time, glm::vec3(0, 1, 0));
 		color = glm::vec4(1, 0, 1, 1);
-		gameplayconvertor->update();
+		gameplayconvertor->update(time);
 		glUniform4fv(glGetUniformLocation(s->getId(), "color"), 1, &color[0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "model"), 1, GL_FALSE, &Model[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "view"), 1, GL_FALSE, &View[0][0]);

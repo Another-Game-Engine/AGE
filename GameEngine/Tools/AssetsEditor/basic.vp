@@ -24,10 +24,15 @@ void main(void)
 	//vec4 test = vec4(1, 2, 3, 4);
 	//test = lol * test;
 
-	mat4 boneTransform = inverse(bones[int(vBlendIndice.x)]); //* vBlendWeight.x;
-//	boneTransform += bones[int(vBlendIndice.y)] * vBlendWeight.y;
-//	boneTransform += bones[int(vBlendIndice.z)] * vBlendWeight.z;
-//	boneTransform += bones[int(vBlendIndice.w)] * vBlendWeight.w;
+	mat4 boneTransform = mat4(1);
+	if (vBlendWeight.x != 0.0f)
+    	boneTransform = bones[int(vBlendIndice.x)] * vBlendWeight.x;
+	if (vBlendWeight.y != 0.0f)
+    	boneTransform += bones[int(vBlendIndice.y)] * vBlendWeight.y;
+	if (vBlendWeight.z != 0.0f)
+    	boneTransform += bones[int(vBlendIndice.z)] * vBlendWeight.z;
+  	if (vBlendWeight.w != 0.0f)
+    	boneTransform += bones[int(vBlendIndice.w)] * vBlendWeight.w;
 
   boneColor = vBlendIndice / vec4(166);
   boneColor.w = 1;

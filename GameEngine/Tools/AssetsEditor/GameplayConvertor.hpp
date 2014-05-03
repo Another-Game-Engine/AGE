@@ -11,6 +11,7 @@
 static inline glm::mat4 GP_MAT_TO_GLM(const gameplay::Matrix &m)
 {
 	return glm::mat4(m.m[0], m.m[1], m.m[2], m.m[3], m.m[4], m.m[5], m.m[6], m.m[7], m.m[8], m.m[9], m.m[10], m.m[11], m.m[12], m.m[13], m.m[14], m.m[15]);
+	//return glm::mat4(m.m[0], m.m[4], m.m[8], m.m[12], m.m[1], m.m[5], m.m[9], m.m[13], m.m[2], m.m[6], m.m[10], m.m[14], m.m[3], m.m[7], m.m[11], m.m[15]);
 }
 
 namespace AGE
@@ -31,98 +32,26 @@ namespace AGE
 
 		bool importGPFile(gameplay::GPBFile &file)
 		{
-			gameplay::Object* object = file.getObjects().front();
-			_file = &file;
-			// Import bones and mesh
-			for (auto n = file.getNodes().begin(); n != std::end(file.getNodes()); ++n)
-			{
-				_importNode(*n);
-			}
-
-			// Sort bones
-			for (auto i = 0; i < _bonesNames.size(); ++i)
-			{
-				if (_bones.size() <= i)
-					_bones.resize(i + 1);
-				_bonesByName[_bonesNames[i]]->_bindPose  = GP_MAT_TO_GLM(_bindPoses[i]);
-				_bones[i] = _bonesByName[_bonesNames[i]];
-			}
-
-			// Import Animation channel
+			if (!_importModelNode(file._geometry.front()))
+				return false;
 			return true;
 		}
 
-		void update()
+		void update(float time)
 		{
+			static float t = 0;
 			bonesMatrix.clear();
-
-			auto r = rand() % 3;
-
-			for (auto e : _bones)
+			bonesMatrix.resize(_bindPoses.size());
+			for (auto i = 0; i < _bindPoses.size(); ++i)
 			{
-				if (r == 0)
-					bonesMatrix.push_back(e->_boneMatrixReference);
-				else if (r == 1)
-					bonesMatrix.push_back(e->_worldMatrixReference);
-				else
-					bonesMatrix.push_back(e->_bindPose);
+				bonesMatrix[i] = _worldPoses[i] * _bindPoses[i] * _bindShape;
 			}
+			t += time;
 		}
 
 	private:
-		bool _importNode(gameplay::Node *gpNode)
+		bool _importModelNode(gameplay::Mesh *m)
 		{
-			if (_bonesByName.find(gpNode->getId()) != std::end(_bonesByName))
-				return false;
-			if (gpNode->isJoint())
-			{
-				return _importSkeletonNode(gpNode);
-			}
-			else if (gpNode->getModel() != nullptr)
-			{
-				return _importModelNode(gpNode);
-			}
-			return false;
-		}
-
-		bool _importSkeletonNode(gameplay::Node *gpNode)
-		{
-			auto node = new AGE::Node();
-
-			node->_id = _bonesByName.size();
-			node->_name = gpNode->getId();
-			node->_boneMatrixReference = GP_MAT_TO_GLM(gpNode->getTransformMatrix());
-			node->_worldMatrixReference = GP_MAT_TO_GLM(gpNode->getWorldMatrix());
-
-			_bonesByName.insert(std::make_pair(node->_name, node));
-			if (gpNode->hasChildren())
-			{
-				auto child = gpNode->getFirstChild();
-				do
-				{
-					assert(child != nullptr && child->isJoint());
-					if (_importSkeletonNode(child) == false)
-						return false;
-					auto siblingIt = _bonesByName.find(child->getId());
-					assert(siblingIt != std::end(_bonesByName));
-					auto sibling = siblingIt->second;
-					node->addChild(sibling->_id);
-					sibling->setParent(node->_id);
-
-					child = child->getNextSibling();
-				} while (child != nullptr);
-			}
-			else
-			{
-				skeletonBase = node;
-			}
-			return true;
-		}
-
-		bool _importModelNode(gameplay::Node *gpNode)
-		{
-			auto m = gpNode->getModel()->getMesh();
-
 			std::vector<glm::vec4> positions;
 			std::vector<glm::vec4> normals;
 			std::vector<glm::vec4> tangents;
@@ -174,21 +103,31 @@ namespace AGE
 
 			mesh = new AGE::Mesh<8>(*vertices);
 
-			_bonesNames = m->model->getSkin()->getJointNames();
-			_bindPoses = m->model->getSkin()->getBindPoses();
+
+			for (auto b : m->model->getSkin()->getBindPoses())
+			{
+				_bindPoses.push_back(GP_MAT_TO_GLM(b));
+			}
+
+			for (auto w : m->model->getSkin()->getJoints())
+			{
+				_worldPoses.push_back(GP_MAT_TO_GLM(w->getWorldMatrix()));
+//				_bonePoses.push_back(GP_MAT_TO_GLM(w->get))
+			}
+
+			auto t = m->model->getSkin()->_bindShape;
+			_bindShape = glm::mat4(t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], t[8], t[9], t[10], t[11], t[12], t[13], t[14], t[15]);
 
 			return true;
 		}
 public:
 	AGE::Mesh<8> *mesh;
 	Vertice<8> *vertices;
-	AGE::Node *skeletonBase;
 	std::vector<glm::mat4> bonesMatrix;
 private:
-		std::map<std::string, AGE::Node*> _bonesByName;
-		std::vector<AGE::Node*> _bones;
-		std::vector<std::string> _bonesNames;
 		gameplay::GPBFile *_file;
-		std::vector<gameplay::Matrix> _bindPoses;
+		std::vector<glm::mat4> _bindPoses;
+		std::vector<glm::mat4> _worldPoses;
+		glm::mat4 _bindShape;
 	};
 }

@@ -63,10 +63,11 @@ public:
 
     void computeBounds();
 
+    float _bindShape[16];
+
 private:
 
     Mesh* _mesh;
-    float _bindShape[16];
     std::vector<Node*> _joints;
     std::vector<Matrix> _bindPoses;
     std::vector<std::string> _jointNames;

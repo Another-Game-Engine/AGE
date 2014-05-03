@@ -162,6 +162,8 @@ private:
 private:
 
     FILE* _file;
+
+public:
     std::list<Object*> _objects;
     std::list<Camera*> _cameras;
     std::list<Light*> _lights;
@@ -173,7 +175,21 @@ private:
     Animations _animations;
     bool _animationsAdded;
 
-    ReferenceTable _refTable;
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+ReferenceTable _refTable;
 };
 
 }
