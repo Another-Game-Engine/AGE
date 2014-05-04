@@ -46,8 +46,8 @@ namespace Component
 
 		float _t;
 	private:
-		Lifetime(Lifetime const &);
-		Lifetime &operator=(Lifetime const &);
+		//Lifetime(Lifetime const &);
+		//Lifetime &operator=(Lifetime const &);
 	};
 }
 
@@ -73,12 +73,14 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		float t = static_cast<float>(time);
+		auto scene = this->_scene.lock();
 		EntityFilter::Lock lock(_filter);
 		for (auto &&e : _filter.getCollection())
 		{
-			e->getComponent<Component::Lifetime>()->_t -= t;
-			if (e->getComponent<Component::Lifetime>()->_t <= 0.0f)
-				e->removeComponent<Component::Lifetime>();
+			scene->getComponent<Component::Lifetime>(e.getId())->_t -= t;
+			if (scene->getComponent<Component::Lifetime>(e.getId())->_t <= 0.0f)
+				std::cout << "DEATH" << std::endl;
+				scene->removeComponent<Component::Lifetime>(e.getId());
 		}
 	}
 

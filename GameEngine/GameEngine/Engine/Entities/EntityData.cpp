@@ -42,6 +42,7 @@ EntityData::EntityData(EntityData &&o)
 	_code = std::move(o._code);
 	_childs = std::move(o._childs);
 	_parent = std::move(o._parent);
+	componentsTable = std::move(o.componentsTable);
 }
 
 Entity &EntityData::getHandle()

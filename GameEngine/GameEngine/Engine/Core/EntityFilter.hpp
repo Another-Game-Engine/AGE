@@ -34,7 +34,7 @@ public:
 	void unRequireTag(unsigned short tag);
 
 	const Barcode &getCode() const;
-	std::set<Entity, bool(*)(const Entity&, const Entity&)> const &getCollection();
+	std::set<Entity, bool(*)(const Entity&, const Entity&)> &getCollection();
 
 	void virtual componentAdded(Entity &&e, unsigned short typeId);
 	void virtual componentRemoved(Entity &&e, unsigned short typeId);

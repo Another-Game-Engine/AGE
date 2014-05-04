@@ -46,6 +46,9 @@ public:
 	Entity &getHandle();
 	void setHandle(Entity &handle);
 
+	// Components id in components tables;
+	std::vector<std::size_t> componentsTable;
+
 private:
 	friend class cereal::access;
 	friend class std::vector<EntityData>;

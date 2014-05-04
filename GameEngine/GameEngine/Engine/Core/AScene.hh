@@ -145,12 +145,13 @@ public:
 	// Component operation
 
 
-	std::vector<std::vector<Component::Base>> _components;
-	std::vector<std::vector<std::uint32_t>> _componentsRefs;
+	std::vector<void*> _components;
+	std::vector<std::vector<std::uint32_t /*index in _components table*/>> _componentsRefs;
+	std::vector<std::vector<std::pair<std::size_t /*entityId*/, std::size_t /*index in components refs*/>>> _componentsEntity;
 
 
 	template <typename T, typename... Args>
-	T *addComponent(Entity &&entity, Args &&...args)
+	T *addComponent(Entity &entity, Args &&...args)
 	{
 		// get the component type ID
 		unsigned short id = T::getTypeId();
@@ -159,23 +160,71 @@ public:
 		if (entity->hasComponent<T>())
 		{
 			// TODO -> Get component
-			return  nullptr;
+			return getComponent<T>(entity.getId());
 		}
 		// else if entity components array is to small, resize it
 		else if (_components.size() <= id)
 		{
 			_components.resize(id + 1);
+			_componentsRefs.resize(id + 1);
+			_componentsEntity.resize(id + 1);
+			_components[id] = new std::vector<T>();
 		}
 
-		_componentsRef[id].push_back(entity.getId());
-		_components[id].push_back(T);
+		std::vector<T> *TComponentList = static_cast<std::vector<T>*>(_components[id]);
+
+		auto position = TComponentList->size();
+		auto refPosition = _componentsRefs[id].size();
+		_componentsRefs[id].push_back(position);
+		if (_componentsEntity[id].size() <= position)
+			_componentsEntity[id].resize(position + 1);
+		_componentsEntity[id][position] = std::make_pair(entity.getId(), refPosition);
+		TComponentList->emplace_back(T());
+
+		auto &cptable = entity->componentsTable;
+		if (entity->componentsTable.size() <= id)
+			entity->componentsTable.resize(id + 1);// , (std::size_t)(-1));
+		entity->componentsTable[id] = refPosition;
+		entity->getCode().add(id + MAX_TAG_NUMBER);
 
 		//init component
-		auto &component = static_cast<T>(_components[id].back());
-		component.init(std::forward<Args>(args)...);
-		entity->getCode().add(id + MAX_TAG_NUMBER);
+		T *component = static_cast<T*>(&(TComponentList->back()));
+		component->init(std::forward<Args>(args)...);
 		informFilters(true, id + MAX_TAG_NUMBER, std::move(entity));
-		return &component;
+		auto ent = entity.get();
+		return component;
+	}
+
+	template <typename T>
+	T *getComponent(std::size_t eid) const
+	{
+		// get the component type ID
+		unsigned short id = T::getTypeId();
+
+		auto &e = this->_pool[eid];
+		if (!e.hasComponent<T>() || _components.size() <= id)
+			return nullptr;
+
+		std::vector<T> *TComponentList = static_cast<std::vector<T>*>(_components[id]);
+		return &(*TComponentList)[_componentsRefs[id][e.componentsTable[id]]];
+	}
+
+	template <typename T>
+	bool removeComponent(std::size_t eid)
+	{
+		// get the component type ID
+		unsigned short id = T::getTypeId();
+
+		auto &e = this->_pool[eid];
+		if (!e.hasComponent<T>() || _components.size() <= id)
+			return false;
+		(static_cast<std::vector<T>*>(_components[id]))->at(_componentsRefs[id][e.componentsTable[id]]).reset();
+		e.componentsTable[id] = (std::size_t)(-1);
+
+		e.getCode().remove(id + MAX_TAG_NUMBER);
+		informFilters(false, id + MAX_TAG_NUMBER, std::move(e.getHandle()));
+
+		return true;
 	}
 
 };
