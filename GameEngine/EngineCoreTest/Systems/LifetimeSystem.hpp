@@ -22,7 +22,7 @@ namespace Component
 
 		void init()
 		{
-			_t = static_cast<float>(rand() % 10000) / 10.0f;
+			_t = static_cast<float>(rand() % 100) / 10.0f;
 		}
 
 		virtual void reset()
@@ -79,7 +79,6 @@ private:
 		{
 			scene->getComponent<Component::Lifetime>(e.getId())->_t -= t;
 			if (scene->getComponent<Component::Lifetime>(e.getId())->_t <= 0.0f)
-				std::cout << "DEATH" << std::endl;
 				scene->removeComponent<Component::Lifetime>(e.getId());
 		}
 	}

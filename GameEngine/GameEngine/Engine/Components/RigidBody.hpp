@@ -275,8 +275,8 @@ namespace Component
 		std::shared_ptr<btRigidBody> _rigidBody;
 		Entity _entity;
 	private:
-		RigidBody(RigidBody const &);
-		RigidBody &operator=(RigidBody const &);
+		//RigidBody(RigidBody const &);
+		//RigidBody &operator=(RigidBody const &);
 
 		void _reset()
 		{

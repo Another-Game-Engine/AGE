@@ -178,7 +178,7 @@ public:
 	template <typename T, typename... Args>
 	T *addComponent(Entity &entity, Args &&...args)
 	{
-		return addComponent<T>(*this->get(entity), args...);
+		return addComponent<T>(*this->get(entity), std::forward<Args>(args)...);
 	}
 
 	template <typename T>

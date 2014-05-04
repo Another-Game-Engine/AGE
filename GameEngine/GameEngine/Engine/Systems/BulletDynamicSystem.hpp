@@ -39,6 +39,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
+		auto scene = _scene.lock();
 		for (auto e : _filter2.getCollection())
 		{
 			updateCollisionBody(e);
@@ -46,8 +47,8 @@ private:
 		for (auto e : _filter1.getCollection())
 		{
 			auto a = e;
-			auto b = e->getComponent<Component::RigidBody>();
-			if (e->getComponent<Component::RigidBody>()->getBody().isStaticOrKinematicObject())
+			auto b = scene->getComponent<Component::RigidBody>(e);
+			if (scene->getComponent<Component::RigidBody>(e)->getBody().isStaticOrKinematicObject())
 			{
 				updateStatic(e);
 			}
@@ -71,7 +72,7 @@ private:
 		transform.setOrigin(convertGLMVectorToBullet(position));
 		transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
-		auto c = e->getComponent<Component::CollisionBody>();
+		auto c = _scene.lock()->getComponent<Component::CollisionBody>(e);
 		c->getBody().setWorldTransform(transform);
 		c->getShape().setLocalScaling(convertGLMVectorToBullet(scale));
 	}
@@ -86,14 +87,14 @@ private:
 		transform.setOrigin(convertGLMVectorToBullet(position));
 		transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
-		auto c = e->getComponent<Component::RigidBody>();
+		auto c = _scene.lock()->getComponent<Component::RigidBody>(e);
 		c->getBody().setWorldTransform(transform);
 		c->getShape().setLocalScaling(convertGLMVectorToBullet(scale));
 	}
 
 	void updateDynamic(Entity &e)
 	{
-		btMotionState &state = e->getComponent<Component::RigidBody>()->getMotionState();
+		btMotionState &state = _scene.lock()->getComponent<Component::RigidBody>(e)->getMotionState();
 		glm::mat4 m;
 		btTransform trans;
 		state.getWorldTransform(trans);

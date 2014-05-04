@@ -29,11 +29,11 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		auto collection = _filter.getCollection();
-		for (auto &it = std::begin(collection); it != std::end(collection); )
+		auto scene = _scene.lock();
+		EntityFilter::Lock lock(_filter);
+		for (auto &&e : _filter.getCollection())
 		{
-			auto e = *it;
-			++it;
-			e->removeComponent<Component::Collision>();
+			scene->removeComponent<Component::Collision>(e.getId());
 		}
 	}
 

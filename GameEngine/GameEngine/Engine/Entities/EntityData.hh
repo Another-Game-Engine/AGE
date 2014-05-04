@@ -146,60 +146,60 @@ public:
 	//
 
 	template <typename T>
-	bool hasComponent() const
+	inline bool hasComponent() const
 	{
 		return _code.isSet(T::getTypeId() + MAX_TAG_NUMBER);
 	}
 
-	template <typename T, typename... Args>
-	std::shared_ptr<T> addComponent(Args &&...args)
-	{
-		// get the component type ID
-		unsigned short id = T::getTypeId();
+	//template <typename T, typename... Args>
+	//std::shared_ptr<T> addComponent(Args &&...args)
+	//{
+	//	// get the component type ID
+	//	unsigned short id = T::getTypeId();
 
-		// if entity already have component, return it
-		if (_code.isSet(id + MAX_TAG_NUMBER))
-		{
-			return  std::static_pointer_cast<T>(_components[id]);
-		}
-		// else if entity components array is to small, resize it
-		else if (_components.size() <= id)
-		{
-			_components.resize(id + 4);
-		}
-		// if component has never been created, create one
-		if (!_components[id].get())
-		{
-			_components[id] = std::make_shared<T>();
-			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
-			//_components[id]->setEntity(getHandle());
-		}
-		//init component
-		std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);
-		_code.add(id + MAX_TAG_NUMBER);
-		_scene.lock()->informFilters(true, id + MAX_TAG_NUMBER, std::move(_handle));
-		return std::static_pointer_cast<T>(_components[id]);
-	}
+	//	// if entity already have component, return it
+	//	if (_code.isSet(id + MAX_TAG_NUMBER))
+	//	{
+	//		return  std::static_pointer_cast<T>(_components[id]);
+	//	}
+	//	// else if entity components array is to small, resize it
+	//	else if (_components.size() <= id)
+	//	{
+	//		_components.resize(id + 4);
+	//	}
+	//	// if component has never been created, create one
+	//	if (!_components[id].get())
+	//	{
+	//		_components[id] = std::make_shared<T>();
+	//		assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
+	//		//_components[id]->setEntity(getHandle());
+	//	}
+	//	//init component
+	//	std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);
+	//	_code.add(id + MAX_TAG_NUMBER);
+	//	_scene.lock()->informFilters(true, id + MAX_TAG_NUMBER, std::move(_handle));
+	//	return std::static_pointer_cast<T>(_components[id]);
+	//}
 
-	template <typename T>
-	std::shared_ptr<T> getComponent() const
-	{
-		std::size_t id = T::getTypeId();
-		// No more verification and static cast
-		// better performance but more dangerous
-		return std::static_pointer_cast<T>(_components[id]);
-	}
+	//template <typename T>
+	//std::shared_ptr<T> getComponent() const
+	//{
+	//	std::size_t id = T::getTypeId();
+	//	// No more verification and static cast
+	//	// better performance but more dangerous
+	//	return std::static_pointer_cast<T>(_components[id]);
+	//}
 
-	template <typename T>
-	void removeComponent()
-	{
-		unsigned short id = T::getTypeId();
-		if (!hasComponent<T>())
-			return;
-		_code.remove(id + MAX_TAG_NUMBER);
-		_components[id].get()->reset();
-		_scene.lock()->informFilters(false, id + MAX_TAG_NUMBER, std::move(_handle));
-	}
+	//template <typename T>
+	//void removeComponent()
+	//{
+	//	unsigned short id = T::getTypeId();
+	//	if (!hasComponent<T>())
+	//		return;
+	//	_code.remove(id + MAX_TAG_NUMBER);
+	//	_components[id].get()->reset();
+	//	_scene.lock()->informFilters(false, id + MAX_TAG_NUMBER, std::move(_handle));
+	//}
 
 
 	//

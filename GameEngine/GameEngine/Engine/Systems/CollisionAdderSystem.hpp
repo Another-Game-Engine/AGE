@@ -30,7 +30,7 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		SpuGatheringCollisionDispatcher *dispatcher = static_cast<SpuGatheringCollisionDispatcher*>(_manager->getWorld()->getDispatcher());
-
+		auto scene = _scene.lock();
 		unsigned int max = dispatcher->getNumManifolds();
 		for (unsigned int i = 0; i < max; ++i)
 		{
@@ -42,16 +42,15 @@ private:
 				if (contact->getContactPoint(j).m_appliedImpulse > maxContact)
 					maxContact = contact->getContactPoint(j).m_appliedImpulse;
 			Entity h1 = *(static_cast<Entity*>(oa->getUserPointer()));
-			EntityData *e1 = h1.get();
-			auto c1 = e1->addComponent<Component::Collision>();
-
 			Entity h2 = *(static_cast<Entity*>(ob->getUserPointer()));
-			EntityData *e2 = h2.get();
-			auto c2 = e2->addComponent<Component::Collision>();
-			c1->addCollision(h2);
-			c1->force = c1->force < maxContact ? maxContact : c1->force;
+
+			auto c2 = scene->addComponent<Component::Collision>(h2);
 			c2->addCollision(h1);
 			c2->force = c2->force < maxContact ? maxContact : c2->force;
+
+			auto c1 = scene->addComponent<Component::Collision>(h1);
+			c1->addCollision(h2);
+			c1->force = c1->force < maxContact ? maxContact : c1->force;
 		}
 	}
 

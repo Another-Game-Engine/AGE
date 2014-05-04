@@ -21,9 +21,10 @@ bool	DownSampleSystem::initialize()
 
 void	DownSampleSystem::mainUpdate(double time)
 {
+	auto scene = _scene.lock();
 	for (auto c : _cameraFilter.getCollection())
 	{
-		std::shared_ptr<Component::CameraComponent>		camera = c->getComponent<Component::CameraComponent>();
+		Component::CameraComponent *camera = scene->getComponent<Component::CameraComponent>(c);
 
 		// If multisampled, downsample the texture
 		if (camera->frameBuffer.isInit() && camera->frameBuffer.isMultisampled())
