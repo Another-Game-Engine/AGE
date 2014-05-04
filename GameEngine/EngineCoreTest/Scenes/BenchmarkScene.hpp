@@ -47,7 +47,7 @@ public:
 			{
 				auto e = createEntity();
 				e->addComponent<Component::Lifetime>();
-				auto rb = e->addComponent<Component::RigidBody>(1.0f);
+				auto rb = e->addComponent<Component::RigidBody>(e, 1.0f);
 				rb->setCollisionShape(Component::RigidBody::CollisionShape::SPHERE);
 				e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
 			}

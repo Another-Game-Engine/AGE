@@ -37,8 +37,9 @@ FPController::~FPController()
 {
 }
 
-void FPController::init(short filterGroup, short filterMask)
+void FPController::init(const Entity &entity, short filterGroup, short filterMask)
 {
+	_entity = entity;
 	_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
 	setKey(LEFT, SDLK_a);
 	setKey(RIGHT, SDLK_d);

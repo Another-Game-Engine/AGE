@@ -139,4 +139,43 @@ public:
 		}
 		updateEntityHandles();
 	}
+
+	////////////////////////
+	//////
+	// Component operation
+
+
+	std::vector<std::vector<Component::Base>> _components;
+	std::vector<std::vector<std::uint32_t>> _componentsRefs;
+
+
+	template <typename T, typename... Args>
+	T *addComponent(Entity &&entity, Args &&...args)
+	{
+		// get the component type ID
+		unsigned short id = T::getTypeId();
+
+		// if entity already have component, return it
+		if (entity->hasComponent<T>())
+		{
+			// TODO -> Get component
+			return  nullptr;
+		}
+		// else if entity components array is to small, resize it
+		else if (_components.size() <= id)
+		{
+			_components.resize(id + 1);
+		}
+
+		_componentsRef[id].push_back(entity.getId());
+		_components[id].push_back(T);
+
+		//init component
+		auto &component = static_cast<T>(_components[id].back());
+		component.init(std::forward<Args>(args)...);
+		entity->getCode().add(id + MAX_TAG_NUMBER);
+		informFilters(true, id + MAX_TAG_NUMBER, std::move(entity));
+		return &component;
+	}
+
 };

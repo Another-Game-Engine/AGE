@@ -45,8 +45,9 @@ namespace Component
 			ar(projection, cubeMapShader, lookAtTransform);
 			std::string _skybox;
 			ar(_skybox);
-			if (_skybox != "NULL")
-				skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
+			// @CESAR TODO
+			//if (_skybox != "NULL")
+			//	skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
 		}
 
 		void	initFrameBuffer()

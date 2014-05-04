@@ -23,7 +23,8 @@ namespace Component
 
 	void CameraComponent::attachSkybox(const std::string &name, const std::string &_cubeMapShader)
 	{
-		skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->get<CubeMapFile>(name);
+		//@CESAR TODO
+		//skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->get<CubeMapFile>(name);
 		cubeMapShader = _cubeMapShader;
 	}
 

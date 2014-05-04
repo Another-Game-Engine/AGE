@@ -22,8 +22,9 @@ namespace Component
 		void save(Archive &ar) const
 		{
 			ar(CEREAL_NVP(dist), CEREAL_NVP(rotateSpeed), CEREAL_NVP(zoomSpeed), CEREAL_NVP(angles));
-			std::size_t toLookId = _entity.get()->getScene().lock()->registrarSerializedEntity(toLook.getId());
-			ar(CEREAL_NVP(toLookId));
+			// @CESAR TODO
+			//std::size_t toLookId = _entity.get()->getScene().lock()->registrarSerializedEntity(toLook.getId());
+			//ar(CEREAL_NVP(toLookId));
 		}
 
 		template <typename Archive>
@@ -32,7 +33,8 @@ namespace Component
 			ar(dist, rotateSpeed, zoomSpeed, angles);
 			std::size_t toLookId = 42;
 			ar(toLookId);
-			_entity->getScene().lock()->entityHandle(toLookId, &toLook);
+			// @CESAR TODO
+			//_entity->getScene().lock()->entityHandle(toLookId, &toLook);
 		}
 
 		// !Serialization

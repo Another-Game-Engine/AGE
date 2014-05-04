@@ -20,10 +20,11 @@ namespace Component
 
 	void		SpotLight::updateLightData()
 	{
-		lightData.lightVP = projection * glm::inverse(_entity->getGlobalTransform());
-		lightData.positionPower.x = _entity->getGlobalTransform()[3].x;
-		lightData.positionPower.y = _entity->getGlobalTransform()[3].y;
-		lightData.positionPower.z = _entity->getGlobalTransform()[3].z;
+		//@CESAR TODO
+		//lightData.lightVP = projection * glm::inverse(_entity->getGlobalTransform());
+		//lightData.positionPower.x = _entity->getGlobalTransform()[3].x;
+		//lightData.positionPower.y = _entity->getGlobalTransform()[3].y;
+		//lightData.positionPower.z = _entity->getGlobalTransform()[3].z;
 	}
 
 	void SpotLight::reset()

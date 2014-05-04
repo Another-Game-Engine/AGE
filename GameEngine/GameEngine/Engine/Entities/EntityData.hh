@@ -169,7 +169,7 @@ public:
 		{
 			_components[id] = std::make_shared<T>();
 			assert(_components[id].get() != nullptr && "Memory error : Component creation failed.");
-			_components[id]->setEntity(getHandle());
+			//_components[id]->setEntity(getHandle());
 		}
 		//init component
 		std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);

@@ -23,7 +23,7 @@ public:
 		auto it = _collection.find(key);
 		if (it != std::end(_collection))
 			return *this;
-		_collection.insert(std::make_pair(key, [](Entity e){auto r = std::make_shared<T>(); r->setEntity(e); return r; }));
+		_collection.insert(std::make_pair(key, [](Entity e){auto r = std::make_shared<T>(); return r; }));
 		_typeId.insert(std::make_pair(key, T::getTypeId()));
 		return *this;
 	}

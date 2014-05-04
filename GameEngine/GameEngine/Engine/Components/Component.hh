@@ -17,9 +17,7 @@ namespace	Component
 		Base(std::size_t serId);
 		virtual ~Base();
 		virtual Base &operator=(const Base &other);
-		void			setEntity(const Entity &entity);
-		Entity		&getEntity();
-		virtual void reset() = 0;
+		virtual void reset(){};
 		std::size_t serializedID;
 
 		virtual void unserialize(cereal::JSONInputArchive &ar) = 0;
@@ -39,7 +37,6 @@ namespace	Component
 		}
 
 	protected:
-		Entity				_entity;
 		static unsigned short uniqueId()
 		{
 			static unsigned short id = 0;

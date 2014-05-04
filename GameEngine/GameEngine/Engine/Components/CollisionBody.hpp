@@ -38,10 +38,11 @@ namespace Component
 		{
 		}
 
-		void init(float _mass = 1.0f)
+		void init(const Entity &entity, float _mass = 1.0f)
 		{
 			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
+			_entity = entity;
 		}
 
 		virtual void reset()
@@ -168,7 +169,7 @@ namespace Component
 		// !Serialization
 		////
 		//////
-
+		Entity _entity;
 		CollisionShape shapeType;
 		std::string meshName;
 		std::shared_ptr<BulletCollisionManager> _manager;

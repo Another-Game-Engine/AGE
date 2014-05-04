@@ -54,8 +54,9 @@ namespace Component
 		{
 		}
 
-		void init(float _mass = 1.0f)
+		void init(const Entity &entity, float _mass = 1.0f)
 		{
+			_entity = entity;
 			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 			mass = _mass;
@@ -233,7 +234,8 @@ namespace Component
 		template <typename Archive>
 		void load(Archive &ar)
 		{
-			init();
+			//@CESAR TODO
+			//init();
 			float _mass;
 			glm::vec3 _inertia;
 			ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint, meshName);
@@ -271,6 +273,7 @@ namespace Component
 		std::shared_ptr<btCollisionShape> _collisionShape;
 		std::shared_ptr<btMotionState> _motionState;
 		std::shared_ptr<btRigidBody> _rigidBody;
+		Entity _entity;
 	private:
 		RigidBody(RigidBody const &);
 		RigidBody &operator=(RigidBody const &);

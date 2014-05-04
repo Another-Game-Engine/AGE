@@ -26,7 +26,7 @@ namespace Component
 		BT_DECLARE_ALIGNED_ALLOCATOR();
 		FPController();
 		virtual ~FPController();
-		void init(short filterGroup = 1, short filterMask = -1);
+		void init(const Entity &entity, short filterGroup = 1, short filterMask = -1);
 		virtual void reset();
 		void clear();
 		btKinematicCharacterController &getController();
@@ -83,7 +83,8 @@ namespace Component
 				, justArriveOnFloor
 				, wasOnGround);
 			glm::mat4 m;
-			init();
+			//@CESAR TODO
+			//init();
 			ar(m);
 			_ghost->setWorldTransform(convertGLMTransformToBullet(m));
 		}
@@ -92,7 +93,7 @@ namespace Component
 		////
 		//////
 
-
+		Entity _entity;
 		float yOrientation;
 		float forwardWalkSpeed;
 		float backwardWalkSpeed;

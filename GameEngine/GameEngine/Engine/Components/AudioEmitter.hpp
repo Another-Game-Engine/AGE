@@ -96,16 +96,17 @@ namespace Component
 			ar(v);
 			for (auto e : v)
 			{
-				std::shared_ptr<Audio> a = _entity->getScene().lock()->getInstance<AudioManager>()->getAudio(e.filename);
-				if (!a)
-					continue;
-				setAudio(a, e.name, e.channelGroupType);
-				if (e.isPlaying)
-				{
-					play(e.name, false);
-					getAudio(e.name)->channel->setVolume(e.volume);
-					getAudio(e.name)->channel->setPosition(e.position, FMOD_TIMEUNIT_MS);
-				}
+				//@CESAR TODO
+				//std::shared_ptr<Audio> a = _entity->getScene().lock()->getInstance<AudioManager>()->getAudio(e.filename);
+				//if (!a)
+				//	continue;
+				//setAudio(a, e.name, e.channelGroupType);
+				//if (e.isPlaying)
+				//{
+				//	play(e.name, false);
+				//	getAudio(e.name)->channel->setVolume(e.volume);
+				//	getAudio(e.name)->channel->setPosition(e.position, FMOD_TIMEUNIT_MS);
+				//}
 
 			}
 		}
