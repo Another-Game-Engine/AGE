@@ -7,6 +7,8 @@
 
 #include <AGE_FBX/Node.hpp>
 
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 static inline glm::mat4 GP_MAT_TO_GLM(const gameplay::Matrix &m)
 {
@@ -34,6 +36,10 @@ namespace AGE
 		{
 			if (!_importModelNode(file._geometry.front()))
 				return false;
+			for (auto i = 0; i < file.getAnimations()->getAnimation(0)->getAnimationChannelCount(); ++i)
+			{
+				_channels.push_back(file.getAnimations()->getAnimation(0)->getAnimationChannel(i));
+			}
 			return true;
 		}
 
@@ -42,11 +48,101 @@ namespace AGE
 			static float t = 0;
 			bonesMatrix.clear();
 			bonesMatrix.resize(_bindPoses.size());
+			int random = (int)(t) / 4;
+			if (random > 7)
+				t = 0;
+			std::cout << random << std::endl;
 			for (auto i = 0; i < _bindPoses.size(); ++i)
 			{
-				bonesMatrix[i] = _worldPoses[i] * _bindPoses[i] * _bindShape;
+				if (random == 0)
+					bonesMatrix[i] = _worldPoses[i] * _bindPoses[i] * _bindShape;
+				else if (random == 1)
+					bonesMatrix[i] = _worldPoses[i] * _bindPoses[i];
+				else if (random == 2)
+					bonesMatrix[i] = _worldPoses[i];
+				else if (random == 3)
+					bonesMatrix[i] = _worldPoses[i] * _bindShape;
+				else if (random == 4)
+					bonesMatrix[i] = _bindShape;
+				else if (random == 5)
+					bonesMatrix[i] = _bindPoses[i] * _bindShape;
+				else if (random == 6)
+					bonesMatrix[i] = _bindPoses[i];
+				else
+					bonesMatrix[i] = glm::mat4(1);
 			}
+
+			for (auto i = 0; i < _channels.size(); ++i)
+			{
+				std::string targetName = _channels[i]->getTargetId();
+				auto targetIndex = 0;
+				while (targetIndex < _boneNames.size())
+				{
+					if (_boneNames[targetIndex] == targetName)
+						break;
+					++targetIndex;
+				}
+
+				auto &m = bonesMatrix[targetIndex];
+				auto &c = _channels[targetIndex];
+				switch (c->getTargetAttribute())
+				{
+				case gameplay::Transform::ANIMATE_TRANSLATE:
+					m = glm::translate(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+					break;
+				//case gameplay::Transform::ANIMATE_TRANSLATE_X:
+				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[0], 0, 0));
+				//	break;
+				//case gameplay::Transform::ANIMATE_TRANSLATE_Y:
+				//	m = glm::translate(m, glm::vec3(0, c->getKeyValues()[0], 0));
+				//	break;
+				//case gameplay::Transform::ANIMATE_TRANSLATE_Z:
+				//	m = glm::translate(m, glm::vec3(0, 0, c->getKeyValues()[0]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_ROTATE:
+				//	m *= glm::mat4_cast(glm::quat(c->getKeyValues()[3], c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_ROTATE_TRANSLATE:
+				//	m *= glm::mat4_cast(glm::quat(c->getKeyValues()[3], c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[4], c->getKeyValues()[5], c->getKeyValues()[6]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE:
+				//	m = glm::scale(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_ROTATE:
+				//	m = glm::scale(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	m *= glm::mat4_cast(glm::quat(c->getKeyValues()[6], c->getKeyValues()[3], c->getKeyValues()[4], c->getKeyValues()[5]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+				//	m = glm::scale(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	m *= glm::mat4_cast(glm::quat(c->getKeyValues()[6], c->getKeyValues()[3], c->getKeyValues()[4], c->getKeyValues()[5]));
+				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[7], c->getKeyValues()[8], c->getKeyValues()[9]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_TRANSLATE:
+				//	m = glm::scale(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[3], c->getKeyValues()[4], c->getKeyValues()[5]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_X:
+				//	m = glm::scale(m, glm::vec3(c->getKeyValues()[0], 1, 1));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_Y:
+				//	m = glm::scale(m, glm::vec3(1, c->getKeyValues()[0], 1));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_Z:
+				//	m = glm::scale(m, glm::vec3(1, 1, c->getKeyValues()[0]));
+				//	break;
+				default:
+					break;
+				}
+
+			}
+
 			t += time;
+
+			//for (auto i = 0; i < _boneNames.size(); ++i)
+			//{
+			//}
+
 		}
 
 	private:
@@ -112,6 +208,7 @@ namespace AGE
 			for (auto w : m->model->getSkin()->getJoints())
 			{
 				_worldPoses.push_back(GP_MAT_TO_GLM(w->getWorldMatrix()));
+				_boneNames.push_back(w->getId());
 //				_bonePoses.push_back(GP_MAT_TO_GLM(w->get))
 			}
 
@@ -129,5 +226,7 @@ private:
 		std::vector<glm::mat4> _bindPoses;
 		std::vector<glm::mat4> _worldPoses;
 		glm::mat4 _bindShape;
+		std::vector<std::string> _boneNames;
+		std::vector<gameplay::AnimationChannel*> _channels;
 	};
 }

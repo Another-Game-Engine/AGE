@@ -96,7 +96,7 @@ int			main(int ac, char **av)
 	// Model matrix : an identity matrix (model will be at the origin)
 	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
 	Model = glm::scale(Model, glm::vec3(0.3f));
-//	Model *= glm::mat4(1,0,0,0,0,1,-6.61744490e-024, 0, 0, 6.61744490e-024, 1, 0,0,0,0,1);
+	Model *= glm::mat4(1,0,0,0,0,1,-6.61744490e-024, 0, 0, 6.61744490e-024, 1, 0,0,0,0,1);
 	// Our ModelViewProjection : multiplication of our 3 matrices
 
 
