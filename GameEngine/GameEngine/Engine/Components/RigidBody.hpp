@@ -274,9 +274,25 @@ namespace Component
 		std::shared_ptr<btMotionState> _motionState;
 		std::shared_ptr<btRigidBody> _rigidBody;
 		Entity _entity;
+
+		RigidBody &operator=(RigidBody const &o)
+		{
+			_manager = o._manager;
+			shapeType = o.shapeType;
+			mass = o.mass;
+			inertia = o.inertia;
+			rotationConstraint = o.rotationConstraint;
+			transformConstraint = o.transformConstraint;
+			meshName = o.meshName;
+			_collisionShape = o._collisionShape;
+			_motionState = o._motionState;
+			_rigidBody = o._rigidBody;
+			_entity = o._entity;
+			return *this;
+		}
+
 	private:
 		//RigidBody(RigidBody const &);
-		//RigidBody &operator=(RigidBody const &);
 
 		void _reset()
 		{

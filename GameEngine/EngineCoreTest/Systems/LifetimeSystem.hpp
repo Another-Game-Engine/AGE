@@ -45,6 +45,13 @@ namespace Component
 		//////
 
 		float _t;
+
+		Lifetime &operator=(const Lifetime &o)
+		{
+			_t = o._t;
+			return *this;
+		}
+
 	private:
 		//Lifetime(Lifetime const &);
 		//Lifetime &operator=(Lifetime const &);

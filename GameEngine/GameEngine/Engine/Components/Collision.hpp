@@ -80,6 +80,14 @@ namespace Component
 			}
 		}
 
+		virtual Collision &operator=(const Collision &other)
+		{
+			force = other.force;
+			collisions = other.collisions;
+			return *this;
+		}
+
+
 		// !Serialization
 		////
 		//////

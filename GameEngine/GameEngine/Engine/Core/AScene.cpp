@@ -27,7 +27,7 @@ void 							AScene::update(double time)
 		if (e.second->isActivated())
 			e.second->update(time);
 	}
-	//reorganizeComponents();
+	reorganizeComponents();
 }
 
 bool                           AScene::start()
