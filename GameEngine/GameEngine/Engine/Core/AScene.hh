@@ -149,18 +149,68 @@ public:
 	std::vector<std::vector<std::uint32_t /*index in _components table*/>> _componentsRefs;
 	std::vector<std::vector<std::pair<std::size_t /*entityId*/, std::size_t /*index in components refs*/>>> _componentsEntity;
 
+	// Components operations with id
+	template <typename T, typename... Args>
+	inline T *addComponent(std::size_t entity, Args &&...args)
+	{
+		return addComponent<T>(_pool[entity], args...);
+	}
 
+	template <typename T>
+	inline T *getComponent(std::size_t entity)
+	{
+		return getComponent<T>(_pool[entity]);
+	}
+
+	template <typename T>
+	inline bool hasCompoment(std::size_t entity)
+	{
+		return hasComponent<T>(_pool[entity].hasComponent<T>());
+	}
+
+	template <typename T>
+	inline bool removeComponent(std::size_t entity)
+	{
+		return removeComponent<T>(_pool[entity]);
+	}
+
+	// Components operations with handle
 	template <typename T, typename... Args>
 	T *addComponent(Entity &entity, Args &&...args)
 	{
+		return addComponent<T>(*this->get(entity), args...);
+	}
+
+	template <typename T>
+	T *getComponent(Entity &entity)
+	{
+		return getComponent<T>(*this->get(entity));
+	}
+
+	template <typename T>
+	bool hasCompoment(Entity &entity)
+	{
+		return (this->get(entity)->hasComponent<T>());
+	}
+
+	template <typename T>
+	bool removeComponent(Entity &entity)
+	{
+		return removeComponent<T>(this->get(entity));
+	}
+
+	// Components operations with entitydata
+	template <typename T, typename... Args>
+	T *addComponent(EntityData &entity, Args &&...args)
+	{
 		// get the component type ID
-		unsigned short id = T::getTypeId();
+		std::size_t id = T::getTypeId();
 
 		// if entity already have component, return it
-		if (entity->hasComponent<T>())
+		if (entity.hasComponent<T>())
 		{
 			// TODO -> Get component
-			return getComponent<T>(entity.getId());
+			return getComponent<T>(entity);
 		}
 		// else if entity components array is to small, resize it
 		else if (_components.size() <= id)
@@ -178,30 +228,28 @@ public:
 		_componentsRefs[id].push_back(position);
 		if (_componentsEntity[id].size() <= position)
 			_componentsEntity[id].resize(position + 1);
-		_componentsEntity[id][position] = std::make_pair(entity.getId(), refPosition);
+		_componentsEntity[id][position] = std::make_pair(entity.getHandle().getId(), refPosition);
 		TComponentList->emplace_back(T());
 
-		auto &cptable = entity->componentsTable;
-		if (entity->componentsTable.size() <= id)
-			entity->componentsTable.resize(id + 1);// , (std::size_t)(-1));
-		entity->componentsTable[id] = refPosition;
-		entity->getCode().add(id + MAX_TAG_NUMBER);
+		auto &cptable = entity.componentsTable;
+		if (entity.componentsTable.size() <= id)
+			entity.componentsTable.resize(id + 1);// , (std::size_t)(-1));
+		entity.componentsTable[id] = refPosition;
+		entity.getCode().add(id + MAX_TAG_NUMBER);
 
 		//init component
 		T *component = static_cast<T*>(&(TComponentList->back()));
 		component->init(std::forward<Args>(args)...);
-		informFilters(true, id + MAX_TAG_NUMBER, std::move(entity));
-		auto ent = entity.get();
+		informFilters(true, id + MAX_TAG_NUMBER, std::move(entity.getHandle()));
 		return component;
 	}
 
 	template <typename T>
-	T *getComponent(std::size_t eid) const
+	T *getComponent(EntityData &e) const
 	{
 		// get the component type ID
 		unsigned short id = T::getTypeId();
 
-		auto &e = this->_pool[eid];
 		if (!e.hasComponent<T>() || _components.size() <= id)
 			return nullptr;
 
@@ -210,12 +258,11 @@ public:
 	}
 
 	template <typename T>
-	bool removeComponent(std::size_t eid)
+	bool removeComponent(EntityData &e)
 	{
 		// get the component type ID
 		unsigned short id = T::getTypeId();
 
-		auto &e = this->_pool[eid];
 		if (!e.hasComponent<T>() || _components.size() <= id)
 			return false;
 		(static_cast<std::vector<T>*>(_components[id]))->at(_componentsRefs[id][e.componentsTable[id]]).reset();
