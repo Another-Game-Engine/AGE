@@ -170,7 +170,7 @@ public:
 			auto id = T::getTypeId();
 			if (scene->_componentsEntity[id].size() <= 1)
 				return;
-			quickSort(0, scene->_componentsEntity.size(), scene);
+			quickSort(0, scene->_componentsEntity[id].size() - 1, scene);
 			this->reorder = false;
 		}
 
@@ -199,12 +199,12 @@ public:
 				do
 				{
 					--j;
-				} while (x > v[j].first);
+				} while (x < v[j].first);
 
 				do
 				{
 					++i;
-				} while (x < v[i].first);
+				} while (x > v[i].first);
 
 				if (i < j)
 				{
@@ -352,9 +352,8 @@ public:
 			component->init(std::forward<Args>(args)...);
 			informFilters(true, id + MAX_TAG_NUMBER, std::move(entity.getHandle()));
 
-			_componentsManagers[id]->reorder = true;
 		}
-
+		_componentsManagers[id]->reorder = true;
 		return component;
 	}
 
@@ -387,9 +386,7 @@ public:
 
 		e.getCode().remove(id + MAX_TAG_NUMBER);
 		informFilters(false, id + MAX_TAG_NUMBER, std::move(e.getHandle()));
-
 		_componentsManagers[id]->reorder = true;
-
 		return true;
 	}
 
