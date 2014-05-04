@@ -1,8 +1,11 @@
 #pragma once
 
 #include <Core/AScene.hh>
+
 #include <Systems/LifetimeSystem.hpp>
 #include <Systems/BulletDynamicSystem.hpp>
+#include <Systems/CollisionAdderSystem.hpp>
+#include <Systems/CollisionCleanerSystem.hpp>
 
 class BenchmarkScene : public AScene	
 {
@@ -19,7 +22,13 @@ public:
 
 		rct<Component::Lifetime>();
 
-		addSystem<LifetimeSystem>(0);
+		addSystem<BulletDynamicSystem>(0);
+		addSystem<CollisionAdder>(1);
+		addSystem<LifetimeSystem>(2);
+		addSystem<CollisionCleaner>(3);
+
+		srand(42);
+
 		_logFile.open("LogFile.log", std::ios::app);
 
 		return true;
@@ -32,17 +41,16 @@ public:
 		_timeCounter += time;
 		_chunkCounter += time;
 
-		for (auto i = 0; i < 8; ++i)
-		{
-			auto e = createEntity();
-			e->addComponent<Component::Lifetime>();
-			auto rb = e->addComponent<Component::RigidBody>(1.0f);
-			rb->setCollisionShape(Component::RigidBody::CollisionShape::SPHERE);
-			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
-		}
-
 		if (_chunkCounter >= _maxChunk)
 		{
+			for (auto i = 0; i < 14; ++i)
+			{
+				auto e = createEntity();
+				e->addComponent<Component::Lifetime>();
+				auto rb = e->addComponent<Component::RigidBody>(1.0f);
+				rb->setCollisionShape(Component::RigidBody::CollisionShape::SPHERE);
+				e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
+			}
 			_logFile << _chunkFrame << ", ";
 			_chunkCounter = 0.0;
 			_chunkFrame = 0;

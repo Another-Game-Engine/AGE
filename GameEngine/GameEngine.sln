@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -141,7 +141,6 @@ Global
 		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|Win32.ActiveCfg = Debug|Win32
 		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|Win32.Build.0 = Debug|Win32
 		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|x64.ActiveCfg = Debug|x64
-		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Debug|x64.Build.0 = Debug|x64
 		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|Any CPU.ActiveCfg = Release|Win32
 		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|Mixed Platforms.ActiveCfg = Release|x64
 		{CEAE5147-E33B-42D7-AC38-ECFBFDC776C5}.Release|Mixed Platforms.Build.0 = Release|x64

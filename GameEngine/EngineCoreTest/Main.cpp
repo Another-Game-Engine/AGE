@@ -33,7 +33,7 @@ int			main(int ac, char **av)
 	e->setInstance<Timer>();
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
-	e->setInstance<BulletDynamicManager, BulletCollisionManager>();
+	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 	
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
