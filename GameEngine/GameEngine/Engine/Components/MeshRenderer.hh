@@ -31,6 +31,8 @@ namespace Component
 	{
 		MeshRenderer();
 		virtual ~MeshRenderer(void);
+		MeshRenderer(MeshRenderer const &);
+		MeshRenderer	&operator=(MeshRenderer const &);
 		void init(std::shared_ptr<AMediaFile> file);
 		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
@@ -68,8 +70,6 @@ namespace Component
 		std::shared_ptr<ObjFile>	mesh;
 		std::string shader;
 	private:
-		MeshRenderer(MeshRenderer const &);
-		MeshRenderer	&operator=(MeshRenderer const &);
 	};
 
 }

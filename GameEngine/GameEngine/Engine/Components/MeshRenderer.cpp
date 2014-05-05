@@ -14,6 +14,20 @@ namespace Component
 	{
 	}
 
+	MeshRenderer::MeshRenderer(MeshRenderer const &o)
+	{
+		mesh = o.mesh;
+		shader = o.shader;
+	}
+
+	MeshRenderer &MeshRenderer::operator=(MeshRenderer const &o)
+	{
+		mesh = o.mesh;
+		shader = o.shader;
+		return *this;
+	}
+
+
 	void MeshRenderer::init(std::shared_ptr<AMediaFile> r)
 	{
 		mesh = std::static_pointer_cast<ObjFile>(r);
