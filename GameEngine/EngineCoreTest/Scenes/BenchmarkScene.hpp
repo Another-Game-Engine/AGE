@@ -62,9 +62,6 @@ public:
 
 			std::ofstream saveFile("SaveFile.save", std::ios::binary);
 			save<cereal::PortableBinaryOutputArchive>(saveFile);
-
-			auto lifetimelist = *static_cast<std::vector<Component::Lifetime>*>(_components[Component::Lifetime::getTypeId()]);
-
 			return false;
 		}
 		return true;

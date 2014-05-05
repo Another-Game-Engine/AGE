@@ -86,8 +86,30 @@ namespace Component
 		glm::uvec2						fboSize;
 		uint32_t						sampleNbr;
 
+		CameraComponent(CameraComponent const &o)
+		{
+			viewport = o.viewport;
+			projection = o.projection;
+			skybox = o.skybox;
+			cubeMapShader = o.cubeMapShader;
+			lookAtTransform = o.lookAtTransform;
+			//@CESAR TODO TODO COPY FRAMEBUFFER
+			blitOnScreen = o.blitOnScreen;
+		}
+
+		CameraComponent	&operator=(CameraComponent const &o)
+		{
+			viewport = o.viewport;
+			projection = o.projection;
+			skybox = o.skybox;
+			cubeMapShader = o.cubeMapShader;
+			lookAtTransform = o.lookAtTransform;
+			//@CESAR TODO TODO COPY FRAMEBUFFER
+			blitOnScreen = o.blitOnScreen;
+			return *this;
+		}
+
+
 	private:
-		CameraComponent(CameraComponent const &);
-		CameraComponent	&operator=(CameraComponent const &);
 	};
 }

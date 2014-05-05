@@ -167,6 +167,7 @@
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
+    <ClInclude Include="Engine\Core\ComponentManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

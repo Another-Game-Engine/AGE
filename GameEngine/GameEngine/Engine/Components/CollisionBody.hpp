@@ -38,6 +38,27 @@ namespace Component
 		{
 		}
 
+		CollisionBody &operator=(CollisionBody const &o)
+		{
+			_entity = o._entity;
+			shapeType = o.shapeType;
+			meshName = o.meshName;
+			_manager = o._manager;
+			_collisionShape = o._collisionShape;
+			_body = o._body;
+			return *this;
+		}
+
+		CollisionBody(CollisionBody const &o)
+		{
+			_entity = o._entity;
+			shapeType = o.shapeType;
+			meshName = o.meshName;
+			_manager = o._manager;
+			_collisionShape = o._collisionShape;
+			_body = o._body;
+		}
+
 		void init(const Entity &entity, float _mass = 1.0f)
 		{
 			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
@@ -177,8 +198,6 @@ namespace Component
 		std::shared_ptr<btCollisionObject> _body;
 
 	private:
-		CollisionBody(CollisionBody const &);
-		CollisionBody &operator=(CollisionBody const &);
 
 		void _reset()
 		{

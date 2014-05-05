@@ -18,6 +18,8 @@
 #include <cereal/archives/xml.hpp>
 #include <Components/ComponentRegistrar.hpp>
 
+#include <Core/ComponentManager.hpp>
+
 class System;
 class Engine;
 class EntityFilter;
@@ -144,86 +146,6 @@ public:
 	//////
 	// Component operation
 
-	std::vector<void*> _components;
-	std::vector<std::vector<std::uint32_t /*index in _components table*/>> _componentsRefs;
-	std::vector<std::vector<std::pair<std::size_t /*entityId*/, std::size_t /*index in components refs*/>>> _componentsEntity;
-	std::vector<std::vector<std::size_t>> _freeSlot;
-
-	struct AComponentManager
-	{
-		AComponentManager()
-			: reorder(false)
-		{}
-		virtual ~AComponentManager()
-		{}
-		virtual void refresh(AScene *scene) = 0;
-		bool reorder;
-	};
-
-	template <typename T>
-	struct ComponentManager : public AComponentManager
-	{
-		virtual void refresh(AScene *scene)
-		{
-			if (!reorder)
-				return;
-			auto id = T::getTypeId();
-			if (scene->_componentsEntity[id].size() <= 1)
-				return;
-			quickSort(0, scene->_componentsEntity[id].size() - 1, scene);
-			this->reorder = false;
-		}
-
-		void quickSort(std::size_t top, std::size_t bottom, AScene *scene)
-		{
-			std::size_t middle;
-			if (top < bottom)
-			{
-				middle = partition(top, bottom, scene);
-				quickSort(top, middle, scene);
-				quickSort(middle + 1, bottom, scene);
-			}
-		}
-
-		std::size_t partition(std::size_t top, std::size_t bottom, AScene *scene)
-		{
-			std::size_t id = T::getTypeId();
-			auto &v = scene->_componentsEntity[id];
-			auto &compoRef = scene->_componentsRefs[id];
-			auto x = v[top].first;
-			auto i = top - 1;
-			auto j = bottom + 1;
-			std::vector<T> *TComponentList = static_cast<std::vector<T>*>(scene->_components[id]);
-			do
-			{
-				do
-				{
-					--j;
-				} while (x < v[j].first);
-
-				do
-				{
-					++i;
-				} while (x > v[i].first);
-
-				if (i < j)
-				{
-					auto tmp = TComponentList->at(compoRef[v[i].second]);
-					TComponentList->at(compoRef[v[i].second]) = std::move(TComponentList->at(compoRef[v[j].second]));
-					TComponentList->at(compoRef[v[j].second]) = std::move(tmp);
-					auto tmpIndex = compoRef[v[i].second];
-					compoRef[v[i].second] = compoRef[v[j].second];
-					compoRef[v[j].second] = tmpIndex;
-					auto tmpEnt = v[i];
-					v[i] = v[j];
-					v[j] = tmpEnt;
-				}
-			} while (i < j);
-			return j;
-		}
-
-	};
-
 	std::vector<AComponentManager*> _componentsManagers;
 
 	// Components operations with id
@@ -280,114 +202,27 @@ public:
 	template <typename T, typename... Args>
 	T *addComponent(EntityData &entity, Args &&...args)
 	{
-		// get the component type ID
 		std::size_t id = T::getTypeId();
 
-		// if entity already have component, return it
-		if (entity.hasComponent<T>())
+		if (_componentsManagers.size() <= id)
 		{
-			// TODO -> Get component
-			return getComponent<T>(entity);
-		}
-
-		T *component = nullptr;
-
-		// else if entity components array is to small, resize it
-		if (_components.size() <= id)
-		{
-			_components.resize(id + 1);
-			_componentsRefs.resize(id + 1);
-			_componentsEntity.resize(id + 1);
 			_componentsManagers.resize(id + 1, nullptr);
-			_freeSlot.resize(id + 1);
-			_components[id] = new std::vector<T>();
-			_componentsManagers[id] = new ComponentManager<T>();
 		}
-
-		if (!_components[id])
-		{
-			_components[id] = new std::vector<T>();
-			_componentsManagers[id] = new ComponentManager<T>();
-		}
-
-
-		if (_freeSlot[id].size() != 0)
-		{
-			std::vector<T> *TComponentList = static_cast<std::vector<T>*>(_components[id]);
-			std::size_t position = _freeSlot[id].back();
-			_freeSlot[id].pop_back();
-
-			if (entity.componentsTable.size() <= id)
-				entity.componentsTable.resize(id + 1, (std::size_t)(-1));
-			entity.componentsTable[id] = position;
-			entity.getCode().add(id + MAX_TAG_NUMBER);
-
-			_componentsEntity[id][position].first = entity.getHandle().getId();
-
-			//init component
-			component = &(TComponentList->at(_componentsRefs[id][position]));
-			component->init(std::forward<Args>(args)...);
-			informFilters(true, id + MAX_TAG_NUMBER, std::move(entity.getHandle()));
-		}
-		else
-		{
-			std::vector<T> *TComponentList = static_cast<std::vector<T>*>(_components[id]);
-
-			auto position = TComponentList->size();
-			auto refPosition = _componentsRefs[id].size();
-			_componentsRefs[id].push_back(position);
-			if (_componentsEntity[id].size() <= position)
-				_componentsEntity[id].resize(position + 1);
-			_componentsEntity[id][position] = std::make_pair(entity.getHandle().getId(), refPosition);
-			TComponentList->emplace_back(T());
-
-			auto &cptable = entity.componentsTable;
-			if (entity.componentsTable.size() <= id)
-				entity.componentsTable.resize(id + 1, (std::size_t)(-1));
-			entity.componentsTable[id] = refPosition;
-			entity.getCode().add(id + MAX_TAG_NUMBER);
-
-			//init component
-			component = static_cast<T*>(&(TComponentList->back()));
-			component->init(std::forward<Args>(args)...);
-			informFilters(true, id + MAX_TAG_NUMBER, std::move(entity.getHandle()));
-
-		}
-		_componentsManagers[id]->reorder = true;
-		return component;
+		if (!_componentsManagers[id])
+			_componentsManagers[id] = new ComponentManager<T>(this);
+		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->addComponent(entity, std::forward<Args>(args)...);
 	}
 
 	template <typename T>
 	T *getComponent(EntityData &e) const
 	{
-		// get the component type ID
-		unsigned short id = T::getTypeId();
-
-		if (!e.hasComponent<T>() || _components.size() <= id)
-			return nullptr;
-
-		std::vector<T> *TComponentList = static_cast<std::vector<T>*>(_components[id]);
-		return &(*TComponentList)[_componentsRefs[id][e.componentsTable[id]]];
+		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->getComponent(e);
 	}
 
 	template <typename T>
 	bool removeComponent(EntityData &e)
 	{
-		// get the component type ID
-		unsigned short id = T::getTypeId();
-
-		if (!e.hasComponent<T>() || _components.size() <= id)
-			return false;
-		(static_cast<std::vector<T>*>(_components[id]))->at(_componentsRefs[id][e.componentsTable[id]]).reset();
-		_freeSlot[id].push_back(e.componentsTable[id]);
-		//		_componentsEntity[id][e.componentsTable[id]].first = (std::size_t)(-1);
-		e.componentsTable[id] = (std::size_t)(-1);
-
-
-		e.getCode().remove(id + MAX_TAG_NUMBER);
-		informFilters(false, id + MAX_TAG_NUMBER, std::move(e.getHandle()));
-		_componentsManagers[id]->reorder = true;
-		return true;
+		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->removeComponent(e);
 	}
 
 	void reorganizeComponents()
@@ -395,7 +230,7 @@ public:
 		for (auto &&e : _componentsManagers)
 		{
 			if (e != nullptr)
-				e->refresh(this);
+				e->reorder();
 		}
 	}
 
