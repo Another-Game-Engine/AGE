@@ -32,6 +32,7 @@ private:
 	std::queue<std::size_t>                             _free;
 	std::size_t                                         _entityNumber;
 	std::map<unsigned short, std::list<EntityFilter*>> _filters;
+	std::vector<AComponentManager*>                    _componentsManagers;
 public:
 	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
@@ -142,11 +143,46 @@ public:
 		updateEntityHandles();
 	}
 
+
+	////////////////////////
+	///////
+	// Component Manager Get / Set
+	template <typename T>
+	ComponentManager<T> &getComponentManager()
+	{
+		auto id = T::getTypeId();
+
+		if (_componentsManagers.size() <= id)
+		{
+			_componentsManagers.resize(id + 1, nullptr);
+			_componentsManagers[id] = new ComponentManager<T>(this);
+		}
+		return *static_cast<ComponentManager<T>*>(_componentsManagers[id]);
+	}
+
+	template <typename T>
+	void clearComponentsType()
+	{
+		auto &manager = getComponentManager<T>();
+		auto &componentTable = manager.getComponentRefs();
+		auto s = componentTable.size();
+		auto id = T::getTypeId() + MAX_TAG_NUMBER;
+
+		for (std::size_t i = 0; i < s; ++i)
+		{
+			auto position = componentTable[i];
+			_pool[position].getCode().remove(id);
+		}
+		manager.clearComponents();
+		for (auto filter : _filters[id])
+		{
+			filter->clearCollection();
+		}
+	}
+
 	////////////////////////
 	//////
 	// Component operation
-
-	std::vector<AComponentManager*> _componentsManagers;
 
 	// Components operations with id
 	template <typename T, typename... Args>

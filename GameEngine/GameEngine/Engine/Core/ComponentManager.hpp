@@ -35,6 +35,30 @@ public:
 		return T::getTypeId();
 	}
 
+	inline 	std::vector<std::size_t> &getComponentRefs()
+	{
+		return _componentsRefs;
+	}
+
+	inline 	std::vector<T> &getComponentArray()
+	{
+		return _components;
+	}
+
+	void clearComponents()
+	{
+		auto s = _componentsRefs.size();
+		if (_componentsRefs.size() == 0)
+			return;
+		std::size_t i = 0;
+		_freeSlot.clear();
+		for (auto &d : _components)
+		{
+			_freeSlot.push_back(i++);
+			d.reset();
+		}
+	}
+
 	template<typename... Args>
 	T *addComponent(EntityData &entity, Args &&...args)
 	{
@@ -105,11 +129,11 @@ public:
 	{
 		// get the component type ID
 		unsigned short id = T::getTypeId();
+		auto compoPosition = e.componentsTable[id];
 
 		if (!e.hasComponent<T>())
 			return false;
-		_components[_componentsRefs[e.componentsTable[id]]].reset();
-		_freeSlot.push_back(e.componentsTable[id]);
+		_freeSlot.push_back(compoPosition);
 		e.componentsTable[id] = (std::size_t)(-1);
 
 

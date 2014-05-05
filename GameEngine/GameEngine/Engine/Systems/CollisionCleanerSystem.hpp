@@ -28,13 +28,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		auto collection = _filter.getCollection();
-		auto scene = _scene.lock();
-		EntityFilter::Lock lock(_filter);
-		for (auto &&e : _filter.getCollection())
-		{
-			scene->removeComponent<Component::Collision>(e.getId());
-		}
+		_scene.lock()->clearComponentsType<Component::Collision>();
 	}
 
 	virtual bool initialize()

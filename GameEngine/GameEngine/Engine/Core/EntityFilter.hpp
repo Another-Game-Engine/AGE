@@ -36,6 +36,8 @@ public:
 	const Barcode &getCode() const;
 	std::set<Entity, bool(*)(const Entity&, const Entity&)> &getCollection();
 
+	inline void clearCollection() { _collection.clear(); }
+
 	void virtual componentAdded(Entity &&e, unsigned short typeId);
 	void virtual componentRemoved(Entity &&e, unsigned short typeId);
 	bool isLocked() const;
