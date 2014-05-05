@@ -4,10 +4,11 @@
 #include <Utils/OpenGL.hh>
 #include <map>
 #include <glm/glm.hpp>
-#include <OpenGL/Texture.hh>
 
 namespace OpenGLTools
 {
+	class Texture;
+
 	class Framebuffer
 	{
 	private:
@@ -26,7 +27,7 @@ namespace OpenGLTools
 		void addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment);
 		void attachAll() const;
 		void bind() const;
-		Texture	const *getTextureAttachment(GLenum attachment) const;
+		Texture *getTextureAttachment(GLenum attachment) const;
 		glm::uvec2	getSize();
 
 		bool isInit() const { return (_id != 0); }

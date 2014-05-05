@@ -1,4 +1,5 @@
 #include <OpenGL/Framebuffer.hh>
+#include <OpenGL/Texture.hh>
 
 namespace OpenGLTools
 {
@@ -34,7 +35,7 @@ namespace OpenGLTools
 	{
 		assert(_id != 0 && "Frame buffer not initialized");
 		Texture *texture = NULL;
-		if (_multiSample == GL_TEXTURE_2D_MULTISAMPLE)
+		if (_multiSample)
 			texture = new TextureMultiSample(_sampleNbr, textureInternalFormat, _size.x, _size.y);
 		else
 		{
@@ -66,14 +67,12 @@ namespace OpenGLTools
 		glBindFramebuffer(GL_FRAMEBUFFER, _id);
 	}
 
-	Texture	const *Framebuffer::getTextureAttachment(GLenum attachment) const
+	Texture *Framebuffer::getTextureAttachment(GLenum attachment) const
 	{
 		auto	attach = _attachments.find(attachment);
 
 		if (attach != _attachments.end())
-		{
 			return (attach->second);
-		}
 		return (NULL);
 	}
 

@@ -61,10 +61,11 @@ namespace OpenGLTools
 		_width(width),
 		_height(height),
 		_internalFormat(internalFormat),
-		_format(GL_BGRA),
+		_format(GL_RGBA),
 		_type(GL_UNSIGNED_BYTE)
 	{
 		glBindTexture(GL_TEXTURE_2D, _id);
+		_levels = _levels == 0 ? 1 : _levels;
 		glTexStorage2D(GL_TEXTURE_2D, _levels, _internalFormat, _width, _height);
 	}
 
@@ -207,14 +208,20 @@ namespace OpenGLTools
 		glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, _samples, _internalFormat, _width, _height, _fixedSampleLocation);
 	}
 
+	TextureMultiSample::~TextureMultiSample()
+	{
+	}
+
 	Texture const &TextureMultiSample::bind() const
 	{
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, _id);
+		return (*this);
 	}
 
 	Texture const &TextureMultiSample::unbind() const
 	{
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+		return (*this);
 	}
 
 	void TextureMultiSample::write(void *) const
