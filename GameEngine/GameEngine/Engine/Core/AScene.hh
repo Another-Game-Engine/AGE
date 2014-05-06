@@ -26,11 +26,16 @@ class AScene : public DependenciesInjector, public ComponentRegistrar, public En
 {
 private:
 	std::multimap<std::size_t, std::shared_ptr<System> >_systems;
+	std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER> _filters;
+	std::array<AComponentManager*, MAX_CPT_NUMBER>      _componentsManagers;
 	std::array<Entity, UINT16_MAX>                      _pool;
+	std::array<std::uint32_t, UINT16_MAX>               _infosIndices;
+	std::vector<std::array<std::uint32_t, MAX_CPT_NUMBER>>  _componentsRefs;
+	std::vector<glm::mat4>                              _localTransform;
+	std::vector<glm::mat4>                              _globalTransform;
+	std::vector<std::array<std::uint32_t, 255>>         _graphnode;
 	std::queue<std::uint16_t>                           _free;
 	std::uint16_t                                      _entityNumber;
-	std::map<unsigned short, std::list<EntityFilter*>> _filters;
-	std::vector<AComponentManager*>                    _componentsManagers;
 public:
 	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
@@ -41,7 +46,8 @@ public:
 	bool                    start();
 	void filterSubscribe(unsigned short, EntityFilter* filter);
 	void filterUnsubscribe(unsigned short, EntityFilter* filter);
-	void informFilters(bool added, unsigned short id, Entity &&entity);
+	void informFilters(bool added, std::uint8_t id, Entity &&entity);
+
 	Entity &createEntity();
 	void destroy(const Entity &h);
 
@@ -182,25 +188,19 @@ public:
 
 	// Components operations with id
 	template <typename T, typename... Args>
-	inline T *addComponent(std::size_t entity, Args &&...args)
+	inline T *addComponent(std::uint32_t entity, Args &&...args)
 	{
-		return addComponent<T>(_pool[entity], args...);
+		return addComponent<T>(_pool[entity], std::forward<Args>(args)...);
 	}
 
 	template <typename T>
-	inline T *getComponent(std::size_t entity)
+	inline T *getComponent(std::uint32_t entity)
 	{
 		return getComponent<T>(_pool[entity]);
 	}
 
 	template <typename T>
-	inline bool hasCompoment(std::size_t entity)
-	{
-		return hasComponent<T>(_pool[entity].hasComponent<T>());
-	}
-
-	template <typename T>
-	inline bool removeComponent(std::size_t entity)
+	inline bool removeComponent(std::uint32_t entity)
 	{
 		return removeComponent<T>(_pool[entity]);
 	}
@@ -209,50 +209,21 @@ public:
 	template <typename T, typename... Args>
 	T *addComponent(Entity &entity, Args &&...args)
 	{
-		return addComponent<T>(*this->get(entity), std::forward<Args>(args)...);
-	}
-
-	template <typename T>
-	T *getComponent(Entity &entity)
-	{
-		return getComponent<T>(*this->get(entity));
-	}
-
-	template <typename T>
-	bool hasCompoment(Entity &entity)
-	{
-		return (this->get(entity)->hasComponent<T>());
-	}
-
-	template <typename T>
-	bool removeComponent(Entity &entity)
-	{
-		return removeComponent<T>(this->get(entity));
-	}
-
-	// Components operations with entitydata
-	template <typename T, typename... Args>
-	T *addComponent(EntityData &entity, Args &&...args)
-	{
 		std::size_t id = T::getTypeId();
 
-		if (_componentsManagers.size() <= id)
-		{
-			_componentsManagers.resize(id + 1, nullptr);
-		}
 		if (!_componentsManagers[id])
 			_componentsManagers[id] = new ComponentManager<T>(this);
 		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->addComponent(entity, std::forward<Args>(args)...);
 	}
 
 	template <typename T>
-	T *getComponent(EntityData &e) const
+	T *getComponent(Entity &entity)
 	{
 		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->getComponent(e);
 	}
 
 	template <typename T>
-	bool removeComponent(EntityData &e)
+	bool removeComponent(Entity &entity)
 	{
 		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->removeComponent(e);
 	}

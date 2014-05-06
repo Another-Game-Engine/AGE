@@ -60,7 +60,7 @@ public:
 	}
 
 	template<typename... Args>
-	T *addComponent(EntityData &entity, Args &&...args)
+	T *addComponent(Entity &entity, Args &&...args)
 	{
 		// get the component type ID
 		std::size_t id = T::getTypeId();
@@ -115,7 +115,7 @@ public:
 		return component;
 	}
 
-	T *getComponent(EntityData &e)
+	T *getComponent(Entity &e)
 	{
 		// get the component type ID
 		unsigned short id = T::getTypeId();
@@ -125,7 +125,7 @@ public:
 		return &_components[_componentsRefs[e.componentsTable[id]]];
 	}
 
-	bool removeComponent(EntityData &e)
+	bool removeComponent(Entity &e)
 	{
 		// get the component type ID
 		unsigned short id = T::getTypeId();
@@ -136,8 +136,7 @@ public:
 		_freeSlot.push_back(compoPosition);
 		e.componentsTable[id] = (std::size_t)(-1);
 
-
-		e.getCode().remove(id + MAX_TAG_NUMBER);
+		e.unsetComponent(id);
 		_scene->informFilters(false, id + MAX_TAG_NUMBER, std::move(e.getHandle()));
 		_reorder = true;
 		return true;
