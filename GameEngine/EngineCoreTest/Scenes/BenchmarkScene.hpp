@@ -2,6 +2,8 @@
 
 #include <Core/AScene.hh>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <Systems/LifetimeSystem.hpp>
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
@@ -47,9 +49,9 @@ public:
 			{
 				auto e = createEntity();
 				addComponent<Component::Lifetime>(e);
-				auto rb = addComponent<Component::RigidBody>(e, e, 1.0f);
-				rb->setCollisionShape(Component::RigidBody::CollisionShape::SPHERE);
-				e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
+				auto rb = addComponent<Component::RigidBody>(e, shared_from_this(), 1.0f);
+				rb->setCollisionShape(e, Component::RigidBody::CollisionShape::SPHERE);
+				getLocalTransform(e) = glm::translate(getLocalTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10));
 			}
 			_logFile << _chunkFrame << ", ";
 			_chunkCounter = 0.0;

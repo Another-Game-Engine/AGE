@@ -1,8 +1,8 @@
 #pragma once
 
-enum Flags
+struct Flags
 {
-	struct Type
+	enum Type
 	{
 		Active = 0
 		, Locked = 1

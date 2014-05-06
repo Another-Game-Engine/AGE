@@ -23,6 +23,8 @@
 #include <Physic/Utils/BtConversion.hpp>
 #include <Entities/Entity.hh>
 
+#include <set>
+
 static btThreadSupportInterface *createSolverThreadSupport(int maxNumThreads)
 {
 	Win32ThreadSupport::Win32ThreadConstructionInfo threadConstructionInfo("solverThreads",SolverThreadFunc,SolverlsMemoryFunc,maxNumThreads);

@@ -1,23 +1,22 @@
 #pragma once
 
 #include    <set>
-#include	<Utils/Barcode.h>
-#include    <Utils/PubSub.hpp>
+
 #include    <Core/AScene.hh>
 
-bool defaultEntityComparaison(const Entity &e1, const Entity &e2);
+#include    <Entities/Entity.hh>
 
 class EntityFilter
 {
 public:
-	EntityFilter(std::weak_ptr<AScene> &&scene, bool(*comparaisonFn)(const Entity&, const Entity&) = defaultEntityComparaison);
+	EntityFilter(std::weak_ptr<AScene> &&scene);
 	virtual ~EntityFilter();
 
 	template <typename T>
 	void requireComponent()
 	{
 		auto id = T::getTypeId() + MAX_TAG_NUMBER;
-		_code.add(id);
+		BitsetManipulation::set(_componentsBarcode, id);
 		_scene.lock()->filterSubscribe(id, this);
 	}
 
@@ -25,20 +24,20 @@ public:
 	void unRequireComponent()
 	{
 		auto id = T::getTypeId() + MAX_TAG_NUMBER;
-		_code.remove(id);
+		BitsetManipulation::unset(_componentsBarcode, id);
 		_scene.lock()->filterUnsubscribe(id, this);
 	}
 
-	void requireTag(unsigned short tag);
-	void unRequireTag(unsigned short tag);
+	void requireTag(TAG_ID tag);
+	void unRequireTag(TAG_ID tag);
 
-	const Barcode &getCode() const;
-	std::set<Entity, bool(*)(const Entity&, const Entity&)> &getCollection();
+	const std::unordered_set<ENTITY_ID> &getCollection() const;
 
 	inline void clearCollection() { _collection.clear(); }
 
-	void virtual componentAdded(Entity &&e, unsigned short typeId);
-	void virtual componentRemoved(Entity &&e, unsigned short typeId);
+	void virtual componentAdded(Entity &&e, COMPONENT_ID typeId);
+	void virtual componentRemoved(Entity &&e, COMPONENT_ID typeId);
+
 	bool isLocked() const;
 
 	struct Lock
@@ -63,12 +62,15 @@ public:
 	};
 
 protected:
-	std::set<Entity, bool(*)(const Entity&, const Entity&)> _collection;
-	Barcode _code;
+	COMPONENTS_BARCODE _componentsBarcode;
+	TAGS_BARCODE _tagsBarcode;
+	std::unordered_set<ENTITY_ID> _collection;
 	std::weak_ptr<AScene> _scene;
+
 	void lock();
 	void unlock();
+
 private:
 	bool _locked;
-	std::set<Entity> _trash;
+	std::unordered_set<ENTITY_ID> _trash;
 };

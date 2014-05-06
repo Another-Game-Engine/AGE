@@ -4,7 +4,6 @@
 #include <Physic/Utils/BtConversion.hpp>
 #include <Systems/System.h>
 #include <Components/RigidBody.hpp>
-#include <Entities/EntityData.hh>
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
@@ -65,9 +64,10 @@ private:
 	void updateCollisionBody(Entity &e)
 	{
 		btTransform transform;
-		glm::vec3 position = posFromMat4(e->getGlobalTransform());
-		glm::vec3 scale = scaleFromMat4(e->getGlobalTransform());
-		glm::vec3 rot = rotFromMat4(e->getGlobalTransform(), true);
+		auto &entityTransform = _scene.lock()->getGlobalTransform(e);
+		glm::vec3 position = posFromMat4(entityTransform);
+		glm::vec3 scale = scaleFromMat4(entityTransform);
+		glm::vec3 rot = rotFromMat4(entityTransform, true);
 		transform.setIdentity();
 		transform.setOrigin(convertGLMVectorToBullet(position));
 		transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
@@ -80,9 +80,11 @@ private:
 	void updateStatic(Entity &e)
 	{
 		btTransform transform;
-		glm::vec3 position = posFromMat4(e->getGlobalTransform());
-		glm::vec3 scale = scaleFromMat4(e->getGlobalTransform());
-		glm::vec3 rot = rotFromMat4(e->getGlobalTransform(), true);
+		
+		auto &entityTransform = _scene.lock()->getLocalTransform(e);
+		glm::vec3 position = posFromMat4(entityTransform);
+		glm::vec3 scale = scaleFromMat4(entityTransform);
+		glm::vec3 rot = rotFromMat4(entityTransform, true);
 		transform.setIdentity();
 		transform.setOrigin(convertGLMVectorToBullet(position));
 		transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
@@ -97,6 +99,7 @@ private:
 		btMotionState &state = _scene.lock()->getComponent<Component::RigidBody>(e)->getMotionState();
 		glm::mat4 m;
 		btTransform trans;
+		auto &entityTransform = _scene.lock()->getLocalTransform(e);
 		state.getWorldTransform(trans);
 		glm::mat4 t = convertBulletTransformToGLM(trans);
 		m = glm::translate(m, posFromMat4(t));
@@ -104,9 +107,9 @@ private:
 		m = glm::rotate(m, rot.x, glm::vec3(1, 0, 0));
 		m = glm::rotate(m, rot.y, glm::vec3(0, 1, 0));
 		m = glm::rotate(m, rot.z, glm::vec3(0, 0, 1));
-		glm::vec3 scale = scaleFromMat4(e->getLocalTransform());
+		glm::vec3 scale = scaleFromMat4(entityTransform);
 		m = glm::scale(m, scale);
-		e->setLocalTransform(m);
+		entityTransform = m;
 	}
 
 	virtual bool initialize()

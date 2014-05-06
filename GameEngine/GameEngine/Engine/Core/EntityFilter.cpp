@@ -1,13 +1,7 @@
 #include <Core/EntityFilter.hpp>
 
-bool defaultEntityComparaison(const Entity &e1, const Entity &e2)
-{
-	return e1 < e2;
-}
-
-EntityFilter::EntityFilter(std::weak_ptr<AScene> &&scene, bool(*comparaisonFn)(const Entity&, const Entity&))
-: _collection(comparaisonFn)
-, _scene(std::move(scene))
+EntityFilter::EntityFilter(std::weak_ptr<AScene> &&scene)
+: _scene(std::move(scene))
 , _locked(false)
 {
 	assert(_scene.lock() != nullptr && "System Scene is not valid.");
@@ -17,45 +11,44 @@ EntityFilter::~EntityFilter()
 {
 }
 
-const Barcode &EntityFilter::getCode() const
-{
-	return _code;
-}
-
-std::set<Entity, bool(*)(const Entity&, const Entity&)> &EntityFilter::getCollection()
+const std::unordered_set<ENTITY_ID> &EntityFilter::getCollection() const
 {
 	return _collection;
 }
 
-void EntityFilter::requireTag(unsigned short tag)
+void EntityFilter::requireTag(TAG_ID id)
 {
-	_code.add(tag);
-	_scene.lock()->filterSubscribe(tag, this);
+	BitsetManipulation::set(_tagsBarcode, id);
+	_scene.lock()->filterSubscribe(id, this);
 }
 
-void EntityFilter::unRequireTag(unsigned short tag)
+void EntityFilter::unRequireTag(TAG_ID id)
 {
-	_code.remove(tag);
-	_scene.lock()->filterUnsubscribe(tag, this);
+	BitsetManipulation::unset(_tagsBarcode, id);
+	_scene.lock()->filterUnsubscribe(id, this);
 }
 
-void EntityFilter::componentAdded(Entity &&e, unsigned short typeId)
+void EntityFilter::componentAdded(Entity &&e, COMPONENT_ID typeId)
 {
-	if (_code.match(e->getCode()))
-		_collection.insert(e);
+	if (BitsetManipulation::match(e.components, _componentsBarcode)
+		&& BitsetManipulation::match(e.tags, _tagsBarcode))
+	{
+		_collection.insert(e.id);
+	}
 }
 
-void EntityFilter::componentRemoved(Entity &&e, unsigned short typeId)
+void EntityFilter::componentRemoved(Entity &&e, COMPONENT_ID typeId)
 {
-	if (!_code.match(e->getCode()))
+	if (BitsetManipulation::match(e.components, _componentsBarcode)
+		&& BitsetManipulation::match(e.tags, _tagsBarcode))
 	{
 		if (!_locked)
 		{
-			_collection.erase(e);
+			_collection.erase(e.id);
 		}
 		else
 		{
-			_trash.insert(e);
+			_trash.insert(e.id);
 		}
 	}
 }

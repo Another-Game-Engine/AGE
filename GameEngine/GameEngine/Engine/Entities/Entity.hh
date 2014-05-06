@@ -3,15 +3,29 @@
 #include <cstddef>
 #include <utility>
 
+#include <cstdint>
+
 #include "BitsetManipulation.hpp"
 #include "EntityFlags.hh"
 
 #define MAX_TAG_NUMBER (32)
 #define MAX_CPT_NUMBER (64)
 
+typedef std::uint64_t COMPONENTS_BARCODE;
+typedef std::uint32_t TAGS_BARCODE;
+typedef std::uint16_t ENTITY_ID;
+typedef std::uint8_t  COMPONENT_ID;
+typedef std::uint8_t  TAG_ID;
+
 class Entity
 {
 public:
+	COMPONENTS_BARCODE components;
+	TAGS_BARCODE tags;
+	ENTITY_ID id;
+	std::uint8_t version;
+	std::uint8_t flags;
+
 	Entity()
 		: components(0)
 		, tags(0)
@@ -84,49 +98,41 @@ public:
 		flags = 0;
 	}
 
-	void init(std::uint32_t _id)
+	void init(ENTITY_ID _id)
 	{
-		reset();
 		id = _id;
 	}
 
-	void setComponent(std::uint8_t cptId)
+	void setComponent(COMPONENT_ID cptId)
 	{
 		BitsetManipulation::set(components, cptId);
 	}
 
-	void unsetComponent(std::uint8_t cptId)
+	void unsetComponent(COMPONENT_ID cptId)
 	{
 		BitsetManipulation::unset(components, cptId);
 	}
 
 	// todo
-	//bool hasComponent(std::uint8_t cptId)
-	//{
+	bool hasComponent(COMPONENT_ID cptId)
+	{
+		return BitsetManipulation::isSet(components, cptId);
+	}
 
-	//}
-
-	void setTag(std::uint8_t tagId)
+	void setTag(TAG_ID tagId)
 	{
 		BitsetManipulation::set(tags, tagId);
 	}
 
-	void unsetTag(std::uint8_t tagId)
+	void unsetTag(TAG_ID tagId)
 	{
 		BitsetManipulation::unset(tags, tagId);
 	}
 
-	// todo
-	//bool isTagged(std::uint8_t tagId)
-	//{
-
-	//}
-
-	std::uint64_t components;
-	std::uint32_t tags;
-	std::uint16_t id;
-	std::uint8_t version;
-	std::uint8_t flags;
+	bool isTagged(TAG_ID tagId)
+	{
+		return BitsetManipulation::isSet(tags, tagId);
+	}
 };
 
 

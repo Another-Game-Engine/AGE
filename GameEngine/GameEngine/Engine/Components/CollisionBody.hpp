@@ -3,7 +3,6 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
-#include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/Engine.hh>
 #include <Physic/BulletCollisionManager.hpp>
@@ -40,7 +39,7 @@ namespace Component
 
 		CollisionBody &operator=(CollisionBody const &o)
 		{
-			_entity = o._entity;
+			_scene = o._scene;
 			shapeType = o.shapeType;
 			meshName = o.meshName;
 			_manager = o._manager;
@@ -51,7 +50,7 @@ namespace Component
 
 		CollisionBody(CollisionBody const &o)
 		{
-			_entity = o._entity;
+			_scene = o._scene;
 			shapeType = o.shapeType;
 			meshName = o.meshName;
 			_manager = o._manager;
@@ -59,11 +58,11 @@ namespace Component
 			_body = o._body;
 		}
 
-		void init(const Entity &entity, float _mass = 1.0f)
+		void init(std::weak_ptr<AScene> scene, float _mass = 1.0f)
 		{
-			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
+			_scene = scene;
+			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene.lock()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
-			_entity = entity;
 		}
 
 		virtual void reset()
@@ -93,18 +92,19 @@ namespace Component
 			return *_body;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &_meshName = "NULL", short filterGroup = 1, short filterMask = -1)
+		void setCollisionShape(const Entity &entity, CollisionShape c, const std::string &_meshName = "NULL", short filterGroup = 1, short filterMask = -1)
 		{
 			if (c == UNDEFINED)
 				return;
-			auto mediaManager = _entity->getScene().lock()->getInstance<AssetsManager>();
+			auto mediaManager = _scene.lock()->getInstance<AssetsManager>();
 			meshName = _meshName;
 			_reset();
 			shapeType = c;
 			btTransform transform;
-			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
-			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
-			glm::vec3 rot = rotFromMat4(_entity->getLocalTransform(), true);
+			auto &entityTransform = _scene.lock()->getLocalTransform(entity);
+			glm::vec3 position = posFromMat4(entityTransform);
+			glm::vec3 scale = scaleFromMat4(entityTransform);
+			glm::vec3 rot = rotFromMat4(entityTransform, true);
 			transform.setIdentity();
 			transform.setOrigin(convertGLMVectorToBullet(position));
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
@@ -148,7 +148,7 @@ namespace Component
 			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_body = std::shared_ptr<btCollisionObject>(new btCollisionObject());// (mass, _motionState.get(), _collisionShape.get(), inertia));
 			_body->setCollisionShape(_collisionShape.get());
-			_body->setUserPointer(&_entity);
+			_body->setUserIndex(entity.id);
 			_manager->getWorld()->addCollisionObject(_body.get());
 		}
 
@@ -190,7 +190,7 @@ namespace Component
 		// !Serialization
 		////
 		//////
-		Entity _entity;
+		std::weak_ptr<AScene> _scene;
 		CollisionShape shapeType;
 		std::string meshName;
 		std::shared_ptr<BulletCollisionManager> _manager;

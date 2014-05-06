@@ -230,7 +230,6 @@
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
     <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
-    <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\MediaFiles\AMediaFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\AssetsManager.cpp" />
     <ClCompile Include="Engine\MediaFiles\CollisionBoxFile.cpp" />

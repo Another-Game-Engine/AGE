@@ -2,7 +2,6 @@
 # define __COLLISION_ADDER_SYSTEM_HPP__
 
 #include <Systems/System.h>
-#include <Entities/EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 #include <Physic/BulletCollisionManager.hpp>

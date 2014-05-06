@@ -53,10 +53,10 @@ namespace Component
 		{
 		}
 
-		void init(const Entity &entity, float _mass = 1.0f)
+		void init(std::weak_ptr<AScene> scene, float _mass = 1.0f)
 		{
-			_entity = entity;
-			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
+			_scene = scene;
+			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene.lock()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 			mass = _mass;
 		}
@@ -111,7 +111,7 @@ namespace Component
 			inertia = v;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &_meshName = "NULL", short filterGroup = 1, short filterMask = -1)
+		void setCollisionShape(const Entity &entity, CollisionShape c, const std::string &_meshName = "NULL", short filterGroup = 1, short filterMask = -1)
 		{
 			if (c == UNDEFINED)
 				return;
@@ -119,9 +119,10 @@ namespace Component
 			_reset();
 			shapeType = c;
 			btTransform transform;
-			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
-			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
-			glm::vec3 rot = rotFromMat4(_entity->getLocalTransform(), true);
+			auto &entityTransform = _scene.lock()->getLocalTransform(entity);
+			glm::vec3 position = posFromMat4(entityTransform);
+			glm::vec3 scale = scaleFromMat4(entityTransform);
+			glm::vec3 rot = rotFromMat4(entityTransform, true);
 			transform.setIdentity();
 			transform.setOrigin(convertGLMVectorToBullet(position));
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
@@ -137,7 +138,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				auto mediaManager = _entity->getScene().lock()->getInstance<AssetsManager>();
+				auto mediaManager = _scene.lock()->getInstance<AssetsManager>();
 				auto media = mediaManager->get(_meshName);
 				if (!media)
 					return;
@@ -272,7 +273,7 @@ namespace Component
 		std::shared_ptr<btCollisionShape> _collisionShape;
 		std::shared_ptr<btMotionState> _motionState;
 		std::shared_ptr<btRigidBody> _rigidBody;
-		Entity _entity;
+		std::weak_ptr<AScene> _scene;
 
 		RigidBody &operator=(RigidBody const &o)
 		{
@@ -286,7 +287,7 @@ namespace Component
 			_collisionShape = o._collisionShape;
 			_motionState = o._motionState;
 			_rigidBody = o._rigidBody;
-			_entity = o._entity;
+			_scene = o._scene;
 			return *this;
 		}
 

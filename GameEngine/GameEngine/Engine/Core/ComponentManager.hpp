@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <Components/Component.hh>
+#include <Core/AScene.hh>
 
 class AComponentManager
 {

@@ -15,9 +15,6 @@ DependenciesInjector(std::move(engine))
 AScene::~AScene()
 {
 	_systems.clear();
-	for (auto &e : _pool)
-		e.reset();
-	_pool.clear();
 }
 
 void 							AScene::update(double time)
@@ -47,44 +44,40 @@ Entity &AScene::createEntity()
 	++_entityNumber;
 	if (_free.empty())
 	{
-		_pool.push_back(std::move(EntityData(std::static_pointer_cast<AScene>(shared_from_this()))));
-		_pool.back().setHandle(Entity(_pool.size() - 1, this));
-		_free.push(_pool.size() - 1);
+		auto &e = _pool[_entityNumber];
+		e.init(_entityNumber);
+		assert(++_entityNumber != UINT16_MAX);
+		return e;
 	}
-	std::size_t index = _free.front();
-	_free.pop();
-	_pool[index].addFlags(EntityData::ACTIVE);
-	return _pool[index].getHandle();
+	else
+	{
+		auto id = _free.back();
+		_free.pop();
+		return _pool[id];
+	}
 }
 
-void AScene::destroy(const Entity &h)
+void AScene::destroy(Entity &e)
 {
-	auto e = get(h);
-	if (!e)
-		return;
-	--_entityNumber;
-	e->reset();
-	e->removeFlags(EntityData::ACTIVE);
-	++(e->getHandle()._version);
-	_free.push(h.getId());
+	e.reset();
+	_pool[e.id].reset();
+	_free.push(e.id);
 }
 
-EntityData *AScene::get(const Entity &h)
+glm::mat4 &AScene::getLocalTransform(const Entity &e)
 {
-	if (h.getId() >= _pool.size())
-		return nullptr;
-	auto res = &_pool[h.getId()];
-	if (res->getHandle() != h)
-		return nullptr;
-	return &_pool[h.getId()];
+	//TODO
+	return glm::mat4(1);
+}
+
+glm::mat4 &AScene::getGlobalTransform(const Entity &e)
+{
+	//TODO
+	return glm::mat4(1);
 }
 
 void AScene::filterSubscribe(unsigned short id, EntityFilter* filter)
 {
-	if (_filters.find(id) == std::end(_filters))
-	{
-		_filters.insert(std::make_pair(id, std::list<EntityFilter*>()));
-	}
 	auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
 	if (findIter == std::end(_filters[id]))
 		_filters[id].push_back(filter);
@@ -92,15 +85,11 @@ void AScene::filterSubscribe(unsigned short id, EntityFilter* filter)
 
 void AScene::filterUnsubscribe(unsigned short id, EntityFilter* filter)
 {
-	if (_filters.find(id) == std::end(_filters))
-		return;
 	_filters[id].remove(filter);
 }
 
-void AScene::informFilters(bool added, unsigned short id, Entity &&entity)
+void AScene::informFilters(bool added, std::uint8_t id, Entity &&entity)
 {
-	if (_filters.find(id) == std::end(_filters))
-		return;
 	if (added)
 	{
 		for (auto &&f : _filters[id])
