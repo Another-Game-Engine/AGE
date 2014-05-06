@@ -2,7 +2,6 @@
 #include <Physic/Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Components/Extras/CustomCharacterController.hh>
-#include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 

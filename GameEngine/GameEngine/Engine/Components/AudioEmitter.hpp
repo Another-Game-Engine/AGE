@@ -7,7 +7,6 @@
 #include <Audio/ChannelGroupType.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Audio/AudioManager.hh>
-#include <Entities/EntityData.hh>
 #include <Core/AScene.hh>
 #include <vector>
 #include <cereal/types/base_class.hpp>

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Entities/EntityData.hh>
-//#include <Systems/System.h>
 #include <Utils/DependenciesInjector.hpp>
 #include <memory>
 #include <Components/ComponentRegistrar.hpp>
@@ -28,15 +26,15 @@ class AScene : public DependenciesInjector, public ComponentRegistrar, public En
 {
 private:
 	std::multimap<std::size_t, std::shared_ptr<System> >_systems;
-	std::vector<EntityData>                             _pool;
-	std::queue<std::size_t>                             _free;
-	std::size_t                                         _entityNumber;
+	std::array<Entity, UINT16_MAX>                      _pool;
+	std::queue<std::uint16_t>                           _free;
+	std::uint16_t                                      _entityNumber;
 	std::map<unsigned short, std::list<EntityFilter*>> _filters;
 	std::vector<AComponentManager*>                    _componentsManagers;
 public:
 	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
-	inline std::size_t getNumberOfEntities() { return _entityNumber; }
+	inline std::uint16_t    getNumberOfEntities() { return _entityNumber; }
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
@@ -44,10 +42,8 @@ public:
 	void filterSubscribe(unsigned short, EntityFilter* filter);
 	void filterUnsubscribe(unsigned short, EntityFilter* filter);
 	void informFilters(bool added, unsigned short id, Entity &&entity);
-
 	Entity &createEntity();
 	void destroy(const Entity &h);
-	EntityData *get(const Entity &h);
 
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)

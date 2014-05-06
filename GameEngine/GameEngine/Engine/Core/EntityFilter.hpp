@@ -3,7 +3,6 @@
 #include    <set>
 #include	<Utils/Barcode.h>
 #include    <Utils/PubSub.hpp>
-#include    <Entities/EntityData.hh>
 #include    <Core/AScene.hh>
 
 bool defaultEntityComparaison(const Entity &e1, const Entity &e2);

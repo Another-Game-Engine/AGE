@@ -1,5 +1,4 @@
 #include <Components/AudioEmitter.hpp>
-#include <Entities/EntityData.hh>
 
 using namespace Component;
 

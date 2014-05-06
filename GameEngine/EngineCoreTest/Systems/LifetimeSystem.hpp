@@ -4,8 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Systems/System.h"
 
-#include <Entities/EntityData.hh>
-
 namespace Component
 {
 	struct Lifetime : public Component::ComponentBase<Lifetime>

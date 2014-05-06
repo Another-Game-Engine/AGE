@@ -23,7 +23,6 @@ AScene::~AScene()
 void 							AScene::update(double time)
 {
 	static double reorderingTime = 0.0f;
-
 	for (auto &e : _systems)
 	{
 		if (e.second->isActivated())

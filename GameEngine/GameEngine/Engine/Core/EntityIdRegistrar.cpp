@@ -1,6 +1,5 @@
 #include <Core/EntityIdRegistrar.hh>
 #include <cassert>
-#include <Entities/EntityData.hh>
 
 EntityIdRegistrar::EntityIdRegistrar()
 {}

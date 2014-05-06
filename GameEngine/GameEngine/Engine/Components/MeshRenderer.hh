@@ -11,7 +11,6 @@
 #include "OpenGL/Shader.hh"
 #include <core/Renderer.hh>
 #include <cereal/types/string.hpp>
-#include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 #include <MediaFiles/AssetsManager.hpp>

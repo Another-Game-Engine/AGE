@@ -1,5 +1,4 @@
 #include <Entities\Entity.hh>
-#include <Entities\EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/Component.hh>
 #include <limits>

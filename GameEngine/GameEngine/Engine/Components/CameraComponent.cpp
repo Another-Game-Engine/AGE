@@ -2,7 +2,6 @@
 #include <Core/Engine.hh>
 #include <glm/gtc/matrix_inverse.hpp>
 #include <Entities/Entity.hh>
-#include <Entities/EntityData.hh>
 #include <MediaFiles/AssetsManager.hpp>
 #include <Core/AScene.hh>
 

@@ -4,9 +4,7 @@
 #include    <set>
 #include	<Utils/Barcode.h>
 #include    <Utils/PubSub.hpp>
-#include    <Entities/EntityData.hh>
 #include    <Core/EntityFilter.hpp>
-//#include    <Entities/Entity.hh>
 
 class	System : public PubSub
 {

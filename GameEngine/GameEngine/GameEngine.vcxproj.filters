@@ -22,7 +22,6 @@
     <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
-    <ClCompile Include="Engine\Entities\EntityData.cpp" />
     <ClCompile Include="Engine\MediaFiles\AMediaFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\AssetsManager.cpp" />
     <ClCompile Include="Engine\MediaFiles\CollisionBoxFile.cpp" />
@@ -95,7 +94,6 @@
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Tags.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
-    <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\MediaFiles\AMediaFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\AssetsManager.hpp" />
     <ClInclude Include="Engine\MediaFiles\CollisionBoxFile.hpp" />

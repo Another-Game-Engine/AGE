@@ -1,6 +1,5 @@
 
 #include <Components\SpotLight.hh>
-#include <Entities\EntityData.hh>
 
 namespace Component
 {

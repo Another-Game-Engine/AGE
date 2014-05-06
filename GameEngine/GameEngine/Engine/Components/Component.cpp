@@ -1,5 +1,4 @@
 #include <Components/Component.hh>
-#include <Entities/EntityData.hh>
 
 using namespace Component;
 
