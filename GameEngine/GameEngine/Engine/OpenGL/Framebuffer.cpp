@@ -67,7 +67,7 @@ namespace OpenGLTools
 		glBindFramebuffer(GL_FRAMEBUFFER, _id);
 	}
 
-	Texture *Framebuffer::getTextureAttachment(GLenum attachment) const
+	Texture *Framebuffer::operator[](GLenum attachment) const
 	{
 		auto	attach = _attachments.find(attachment);
 
@@ -75,6 +75,14 @@ namespace OpenGLTools
 			return (attach->second);
 		return (NULL);
 	}
+	//Texture *Framebuffer::getTextureAttachment(GLenum attachment) const
+	//{
+	//	auto	attach = _attachments.find(attachment);
+	//
+	//	if (attach != _attachments.end())
+	//		return (attach->second);
+	//	return (NULL);
+	//}
 
 	glm::uvec2	Framebuffer::getSize()
 	{

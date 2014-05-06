@@ -27,7 +27,8 @@ namespace OpenGLTools
 		void addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment);
 		void attachAll() const;
 		void bind() const;
-		Texture *getTextureAttachment(GLenum attachment) const;
+		Texture *operator[](GLenum attachment) const;
+		//Texture *getTextureAttachment(GLenum attachment) const;
 		glm::uvec2	getSize();
 
 		bool isInit() const { return (_id != 0); }
