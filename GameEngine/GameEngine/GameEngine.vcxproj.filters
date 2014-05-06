@@ -54,7 +54,6 @@
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
-    <ClCompile Include="Engine\Utils\Barcode.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
@@ -146,7 +145,6 @@
     <ClInclude Include="Engine\Text\FontManager.hh" />
     <ClInclude Include="Engine\Utils\Any.hpp" />
     <ClInclude Include="Engine\Utils\Archive.hpp" />
-    <ClInclude Include="Engine\Utils\Barcode.h" />
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Utils\Dependency.hpp" />
     <ClInclude Include="Engine\Utils\File.hpp" />
@@ -166,6 +164,8 @@
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
+    <ClInclude Include="Engine\Entities\EntityFlags.hh" />
+    <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

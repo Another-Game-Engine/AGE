@@ -1,9 +1,13 @@
-#ifndef   __HANDLE_HH__
-# define  __HANDLE_HH__
+#pragma once
 
 #include <cstddef>
-#include <cstdint>
 #include <utility>
+
+#include "BitsetManipulation.hpp"
+#include "EntityFlags.hh"
+
+#define MAX_TAG_NUMBER (32)
+#define MAX_CPT_NUMBER (64)
 
 class Entity
 {
@@ -47,6 +51,31 @@ public:
 		return *this;
 	}
 
+	bool operator==(const Entity &o)
+	{
+		return version == o.version && id == o.id;
+	}
+
+	bool operator<(const Entity &o)
+	{
+		return id < o.id;
+	}
+
+	bool operator<=(const Entity &o)
+	{
+		return id <= o.id;
+	}
+
+	bool operator>(const Entity &o)
+	{
+		return id > o.id;
+	}
+
+	bool operator>=(const Entity &o)
+	{
+		return id >= o.id;
+	}
+
 	void reset()
 	{
 		components = 0;
@@ -60,6 +89,38 @@ public:
 		reset();
 		id = _id;
 	}
+
+	void setComponent(std::uint8_t cptId)
+	{
+		BitsetManipulation::set(components, cptId);
+	}
+
+	void unsetComponent(std::uint8_t cptId)
+	{
+		BitsetManipulation::unset(components, cptId);
+	}
+
+	// todo
+	//bool hasComponent(std::uint8_t cptId)
+	//{
+
+	//}
+
+	void setTag(std::uint8_t tagId)
+	{
+		BitsetManipulation::set(tags, tagId);
+	}
+
+	void unsetTag(std::uint8_t tagId)
+	{
+		BitsetManipulation::unset(tags, tagId);
+	}
+
+	// todo
+	//bool isTagged(std::uint8_t tagId)
+	//{
+
+	//}
 
 	std::uint64_t components;
 	std::uint32_t tags;
@@ -91,5 +152,3 @@ public:
 //	AScene *_manager;
 //	unsigned short _version;
 //};
-
-#endif    //__HANDLE_HH__
