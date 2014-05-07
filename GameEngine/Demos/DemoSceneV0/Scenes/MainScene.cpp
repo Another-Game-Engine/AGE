@@ -282,8 +282,11 @@ bool 			MainScene::userStart()
 	OpenGLTools::Framebuffer &current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	PubSub t(getInstance<PubSub::Manager>());
+#if TEST_ARCHI
 	t.broadCast(PubSubKey("fboInceptionId"), current[GL_COLOR_ATTACHMENT0]->getId());
-
+#else
+	t.broadCast(PubSubKey("fboInceptionId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+#endif
 	return true;
 }
 

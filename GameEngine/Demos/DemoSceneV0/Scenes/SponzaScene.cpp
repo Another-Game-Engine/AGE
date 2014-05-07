@@ -327,8 +327,11 @@ bool SponzaScene::userStart()
 	OpenGLTools::Framebuffer &current = cameraComponent1->frameBuffer.isMultisampled() ? cameraComponent1->downSampling : cameraComponent1->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	_globalPubSub = std::make_unique<PubSub>(psm);
+#if TEST_ARCHI
 	_globalPubSub->broadCast(PubSubKey("fboSponzaId"), current[GL_COLOR_ATTACHMENT0]->getId());
-
+#else
+	_globalPubSub->broadCast(PubSubKey("fboSponzaId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+#endif
 	_globalPubSub->globalSub(PubSubKey("sponzaPause"), [&](){
 		deactivateSystem<FPControllerSystem>(); // UPDATE FIRST PERSON CONTROLLE
 		deactivateSystem<SponzaPistolSystem>();

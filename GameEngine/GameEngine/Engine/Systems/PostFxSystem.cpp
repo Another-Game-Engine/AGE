@@ -67,8 +67,11 @@ void	PostFxSystem::mainUpdate(double time)
 
 void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 {
+#if TEST_ARCHI
 	GLint colorTexture = camFbo[GL_COLOR_ATTACHMENT0]->getId();
-	//OpenGLTools::Texture2D *colorTexture = static_cast<OpenGLTools::Texture2D *>(camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0));
+#else
+	GLuint colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
+#endif
 	// ----------------------------------------------------
 	// HDR Pass
 	// ----------------------------------------------------
@@ -131,8 +134,11 @@ void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 
 void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 {
+#if TEST_ARCHI
 	OpenGLTools::Texture2D *colorTexture = static_cast<OpenGLTools::Texture2D *>(camFbo[GL_COLOR_ATTACHMENT0]);
-
+#else
+	GLuint colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
+#endif
 	size_t		WORK_GROUP_SIZE = 16;
 	glm::uvec2	groupNbr = glm::uvec2((camFbo.getSize().x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
 		(camFbo.getSize().y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
@@ -166,8 +172,11 @@ void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 	glUniform2i(passLocation, 1, 0);
 
 	glActiveTexture(GL_TEXTURE0);
+#if TEST_ARCHI
 	colorTexture->bind();
-
+#else
+	glBindTexture(GL_TEXTURE_2D, colorTexture);
+#endif
 	//		glGenerateMipmap(GL_TEXTURE_2D);
 	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, _bloomMipmap);
 
@@ -183,8 +192,11 @@ void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _bloomTexture);
+#if TEST_ARCHI
 	glBindImageTexture(1, colorTexture->getId(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
-
+#else
+	glBindImageTexture(1, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
+#endif
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
