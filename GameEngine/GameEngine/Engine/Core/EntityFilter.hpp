@@ -31,7 +31,7 @@ public:
 	void requireTag(TAG_ID tag);
 	void unRequireTag(TAG_ID tag);
 
-	const std::unordered_set<ENTITY_ID> &getCollection() const;
+	const std::set<Entity> &getCollection() const;
 
 	inline void clearCollection() { _collection.clear(); }
 
@@ -64,7 +64,7 @@ public:
 protected:
 	COMPONENTS_BARCODE _componentsBarcode;
 	TAGS_BARCODE _tagsBarcode;
-	std::unordered_set<ENTITY_ID> _collection;
+	std::set<Entity> _collection;
 	std::weak_ptr<AScene> _scene;
 
 	void lock();
@@ -72,5 +72,5 @@ protected:
 
 private:
 	bool _locked;
-	std::unordered_set<ENTITY_ID> _trash;
+	std::set<ENTITY_ID> _trash;
 };

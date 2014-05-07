@@ -18,6 +18,8 @@
 #include <Context/SdlContext.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Physic/BulletDynamicManager.hpp>
+#include <Core/Timer.hh>
+#include <Utils/PubSub.hpp>
 
 
 int			main(int ac, char **av)

@@ -43,7 +43,7 @@ public:
 		auto scene = _scene.lock();
 		auto mousePos = scene->getInstance<Input>()->getMousePosition();
 		auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
-		auto cameraCpt = scene->getComponent<Component::CameraComponent>(_filter.getCollection().begin()->getId());
+		auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
 		screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
 	}
 
@@ -54,7 +54,7 @@ public:
 		auto scene = _scene.lock();
 		auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
 		auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
-		auto cameraCpt = scene->getComponent<Component::CameraComponent>(_filter.getCollection().begin()->getId());
+		auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
 		screenPosToWorldRay(
 			static_cast<int>(centerPos.x),
 			static_cast<int>(centerPos.y),

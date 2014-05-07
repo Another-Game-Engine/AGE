@@ -4,6 +4,7 @@
 #include <Components/Extras/CustomCharacterController.hh>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
+#include <Physic/BulletDynamicManager.hpp>
 
 using namespace Component;
 

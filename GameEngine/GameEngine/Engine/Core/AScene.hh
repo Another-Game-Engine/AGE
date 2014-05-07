@@ -176,15 +176,15 @@ public:
 		auto &manager = getComponentManager<T>();
 		auto &componentTable = manager.getComponentRefs();
 		auto s = componentTable.size();
-		auto id = T::getTypeId() + MAX_TAG_NUMBER;
+		auto id = T::getTypeId();
 
 		for (std::size_t i = 0; i < s; ++i)
 		{
 			auto position = componentTable[i];
-			_pool[position].getCode().remove(id);
+			_pool[position].unsetComponent(id);
 		}
 		manager.clearComponents();
-		for (auto filter : _filters[id])
+		for (auto filter : _filters[id + MAX_TAG_NUMBER])
 		{
 			filter->clearCollection();
 		}
@@ -194,25 +194,6 @@ public:
 	//////
 	// Component operation
 
-	// Components operations with id
-	template <typename T, typename... Args>
-	inline T *addComponent(std::uint32_t entity, Args &&...args)
-	{
-		return addComponent<T>(_pool[entity], std::forward<Args>(args)...);
-	}
-
-	template <typename T>
-	inline T *getComponent(std::uint32_t entity)
-	{
-		return getComponent<T>(_pool[entity]);
-	}
-
-	template <typename T>
-	inline bool removeComponent(std::uint32_t entity)
-	{
-		return removeComponent<T>(_pool[entity]);
-	}
-
 	// Components operations with handle
 	template <typename T, typename... Args>
 	T *addComponent(Entity &entity, Args &&...args)
@@ -221,19 +202,27 @@ public:
 
 		if (!_componentsManagers[id])
 			_componentsManagers[id] = new ComponentManager<T>(this);
-		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->addComponent(entity, std::forward<Args>(args)...);
+		auto res = static_cast<ComponentManager<T>*>(_componentsManagers[id])->addComponent(entity, std::forward<Args>(args)...);
+		informFilters(true, T::getTypeId() + MAX_TAG_NUMBER);
+		return res;
 	}
 
 	template <typename T>
-	T *getComponent(Entity &entity)
+	T *getComponent(const Entity &entity)
 	{
-		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->getComponent(e);
+		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->getComponent(entity);
 	}
 
 	template <typename T>
 	bool removeComponent(Entity &entity)
 	{
-		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->removeComponent(e);
+		auto id = T::getTypeId();
+		auto index = _componentsRefs[_infosIndices[entity.id]];
+		auto res = static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->removeComponent(entity, index);
+		e.componentsTable[id] = (ENTITY_ID)(-1);
+		e.unsetComponent(id);
+		informFilters(false, id + MAX_TAG_NUMBER, std::move(entity));
+		return res;
 	}
 
 	void reorganizeComponents()

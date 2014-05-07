@@ -11,7 +11,7 @@ EntityFilter::~EntityFilter()
 {
 }
 
-const std::unordered_set<ENTITY_ID> &EntityFilter::getCollection() const
+const std::set<Entity> &EntityFilter::getCollection() const
 {
 	return _collection;
 }

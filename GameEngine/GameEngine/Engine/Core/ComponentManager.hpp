@@ -2,7 +2,8 @@
 
 #include <vector>
 #include <Components/Component.hh>
-#include <Core/AScene.hh>
+
+class AScene;
 
 class AComponentManager
 {
@@ -89,7 +90,6 @@ public:
 			//init component
 			component = &_components[_componentsRefs[position]];
 			component->init(std::forward<Args>(args)...);
-			_scene->informFilters(true, id + MAX_TAG_NUMBER, std::move(entity.getHandle()));
 		}
 		else
 		{
@@ -110,35 +110,22 @@ public:
 			//init component
 			component = &_components.back();
 			component->init(std::forward<Args>(args)...);
-			_scene->informFilters(true, id + MAX_TAG_NUMBER, std::move(entity.getHandle()));
 		}
 		_reorder = true;
 		return component;
 	}
 
-	T *getComponent(Entity &e)
+	T *getComponent(const Entity &e, ENTITY_ID index)
 	{
-		// get the component type ID
-		unsigned short id = T::getTypeId();
-
 		if (!e.hasComponent<T>())
 			return nullptr;
-		return &_components[_componentsRefs[e.componentsTable[id]]];
+		return &_components[_componentsRefs[index]];
 	}
 
-	bool removeComponent(Entity &e)
+	bool removeComponent(Entity &e, ENTITY_ID index)
 	{
-		// get the component type ID
-		unsigned short id = T::getTypeId();
-		auto compoPosition = e.componentsTable[id];
-
-		if (!e.hasComponent<T>())
-			return false;
+		auto compoPosition = e.componentsTable[index];
 		_freeSlot.push_back(compoPosition);
-		e.componentsTable[id] = (std::size_t)(-1);
-
-		e.unsetComponent(id);
-		_scene->informFilters(false, id + MAX_TAG_NUMBER, std::move(e.getHandle()));
 		_reorder = true;
 		return true;
 	}

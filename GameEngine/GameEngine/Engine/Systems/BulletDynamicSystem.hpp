@@ -53,8 +53,9 @@ private:
 			}
 			else
 			{
-				if (e->getFlags() & EntityData::HAS_MOVED)
-					updateStatic(e);
+				// TODO
+				//if (e.flags & EntityData::HAS_MOVED)
+				//	updateStatic(e);
 				updateDynamic(e);
 			}
 

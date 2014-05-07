@@ -78,10 +78,11 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 	assert(_pointLightNbr <= MAX_LIGHT_NBR && "to many point lights");
 	for (auto e : _pointLightFilter.getCollection())
 	{
+		auto &globalTransform = scene->getGlobalTransform(e);
 		_contiguousPointLights[i] = scene->getComponent<Component::PointLight>(e)->lightData;
-		_contiguousPointLights[i].positionPower.x = e->getGlobalTransform()[3].x;
-		_contiguousPointLights[i].positionPower.y = e->getGlobalTransform()[3].y;
-		_contiguousPointLights[i].positionPower.z = e->getGlobalTransform()[3].z;
+		_contiguousPointLights[i].positionPower.x = globalTransform[3].x;
+		_contiguousPointLights[i].positionPower.y = globalTransform[3].y;
+		_contiguousPointLights[i].positionPower.z = globalTransform[3].z;
 		++i;
 	}
 
@@ -247,7 +248,7 @@ void LightRenderingSystem::drawSprites()
 	auto materialUniform = renderer->getUniform("MaterialBasic");
 	for (auto e : _spriteFilter.getCollection())
 	{
-		perModelUniform->setUniform("model", e->getGlobalTransform());
+		perModelUniform->setUniform("model", scene->getGlobalTransform(e));
 		perModelUniform->flushChanges();
 		sprite = scene->getComponent<Component::Sprite>(e);
 		sprite->animation->getMaterial().setUniforms(materialUniform);

@@ -11,7 +11,7 @@ namespace BitsetManipulation
 	template <typename T>
 	static void unset(T &v, std::uint8_t t)
 	{
-		components &= ~((T)(-1) << t);
+		v &= ~((T)(-1) << t);
 	}
 
 	template <typename T>

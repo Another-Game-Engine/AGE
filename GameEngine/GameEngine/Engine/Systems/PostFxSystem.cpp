@@ -2,6 +2,7 @@
 #include	<Systems/PostFxSystem.hh>
 #include	<Components/CameraComponent.hpp>
 #include    <Utils/PubSub.hpp>
+#include    <Core/Timer.hh>
 
 PostFxSystem::PostFxSystem(std::weak_ptr<AScene> &&scene) :
 					System(std::move(scene)),

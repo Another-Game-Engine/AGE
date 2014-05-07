@@ -90,7 +90,7 @@ void AScene::filterUnsubscribe(unsigned short id, EntityFilter* filter)
 
 void AScene::informFilters(bool added, std::uint8_t id, Entity &&entity)
 {
-	if (added)
+	if (added && id)
 	{
 		for (auto &&f : _filters[id])
 		{

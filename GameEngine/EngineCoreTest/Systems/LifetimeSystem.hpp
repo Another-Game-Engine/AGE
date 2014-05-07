@@ -82,9 +82,9 @@ private:
 		EntityFilter::Lock lock(_filter);
 		for (auto &&e : _filter.getCollection())
 		{
-			scene->getComponent<Component::Lifetime>(e.getId())->_t -= t;
-			if (scene->getComponent<Component::Lifetime>(e.getId())->_t <= 0.0f)
-				scene->removeComponent<Component::Lifetime>(e.getId());
+			scene->getComponent<Component::Lifetime>(e)->_t -= t;
+			if (scene->getComponent<Component::Lifetime>(e)->_t <= 0.0f)
+				scene->removeComponent<Component::Lifetime>(const_cast<Entity&>(e));
 		}
 	}
 
