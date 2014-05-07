@@ -203,24 +203,24 @@ public:
 		if (!_componentsManagers[id])
 			_componentsManagers[id] = new ComponentManager<T>(this);
 		auto res = static_cast<ComponentManager<T>*>(_componentsManagers[id])->addComponent(entity, std::forward<Args>(args)...);
-		informFilters(true, T::getTypeId() + MAX_TAG_NUMBER);
+		informFilters(true, T::getTypeId() + MAX_TAG_NUMBER, std::move(entity));
 		return res;
 	}
 
 	template <typename T>
 	T *getComponent(const Entity &entity)
 	{
-		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->getComponent(entity);
+		auto index = _componentsRefs[T::getTypeId()][_infosIndices[entity.id]];
+		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->getComponent(entity, index);
 	}
 
 	template <typename T>
 	bool removeComponent(Entity &entity)
 	{
 		auto id = T::getTypeId();
-		auto index = _componentsRefs[_infosIndices[entity.id]];
+		auto index = _componentsRefs[id][_infosIndices[entity.id]];
 		auto res = static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->removeComponent(entity, index);
-		e.componentsTable[id] = (ENTITY_ID)(-1);
-		e.unsetComponent(id);
+		entity.unsetComponent(id);
 		informFilters(false, id + MAX_TAG_NUMBER, std::move(entity));
 		return res;
 	}

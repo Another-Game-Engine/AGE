@@ -9,6 +9,7 @@
 #include "Context/SdlContext.hh"
 #include <Physic/BulletDynamicManager.hpp>
 #include <array>
+#include <Core/AScene.hh>
 
 namespace Component
 {

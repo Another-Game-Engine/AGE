@@ -83,7 +83,7 @@ public:
 			if (entity.componentsTable.size() <= id)
 				entity.componentsTable.resize(id + 1, (std::size_t)(-1));
 			entity.componentsTable[id] = position;
-			entity.getCode().add(id + MAX_TAG_NUMBER);
+			entity.setComponent(id + MAX_TAG_NUMBER);
 
 			_componentsEntity[position].first = entity.getHandle().getId();
 
@@ -105,7 +105,7 @@ public:
 			if (entity.componentsTable.size() <= id)
 				entity.componentsTable.resize(id + 1, (std::size_t)(-1));
 			entity.componentsTable[id] = refPosition;
-			entity.getCode().add(id + MAX_TAG_NUMBER);
+			entity.setComponent(id + MAX_TAG_NUMBER);
 
 			//init component
 			component = &_components.back();
@@ -117,15 +117,14 @@ public:
 
 	T *getComponent(const Entity &e, ENTITY_ID index)
 	{
-		if (!e.hasComponent<T>())
+		if (!e.hasComponent(T::getTypeId()))
 			return nullptr;
 		return &_components[_componentsRefs[index]];
 	}
 
 	bool removeComponent(Entity &e, ENTITY_ID index)
 	{
-		auto compoPosition = e.componentsTable[index];
-		_freeSlot.push_back(compoPosition);
+		_freeSlot.push_back(index);
 		_reorder = true;
 		return true;
 	}

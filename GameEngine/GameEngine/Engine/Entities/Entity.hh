@@ -114,7 +114,7 @@ public:
 	}
 
 	// todo
-	bool hasComponent(COMPONENT_ID cptId)
+	bool hasComponent(COMPONENT_ID cptId) const
 	{
 		return BitsetManipulation::isSet(components, cptId);
 	}
@@ -129,7 +129,7 @@ public:
 		BitsetManipulation::unset(tags, tagId);
 	}
 
-	bool isTagged(TAG_ID tagId)
+	bool isTagged(TAG_ID tagId) const
 	{
 		return BitsetManipulation::isSet(tags, tagId);
 	}

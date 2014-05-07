@@ -44,11 +44,11 @@ void EntityFilter::componentRemoved(Entity &&e, COMPONENT_ID typeId)
 	{
 		if (!_locked)
 		{
-			_collection.erase(e.id);
+			_collection.erase(e);
 		}
 		else
 		{
-			_trash.insert(e.id);
+			_trash.insert(e);
 		}
 	}
 }
