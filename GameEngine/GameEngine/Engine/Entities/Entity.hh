@@ -2,34 +2,27 @@
 
 #include <cstddef>
 #include <utility>
-
 #include <cstdint>
-
-#include "BitsetManipulation.hpp"
-#include "EntityFlags.hh"
+#include <bitset>
 
 #define MAX_TAG_NUMBER (32)
-#define MAX_CPT_NUMBER (64)
+#define MAX_CPT_NUMBER (96)
 
 typedef std::uint64_t COMPONENTS_BARCODE;
 typedef std::uint32_t TAGS_BARCODE;
 typedef std::uint16_t ENTITY_ID;
 typedef std::uint8_t  COMPONENT_ID;
 typedef std::uint8_t  TAG_ID;
+typedef std::uint8_t  ENTITY_VERSION;
+typedef std::uint8_t  ENTITY_FLAGS;
+
+#define MAX_ENTITY_NUMBER ((ENTITY_ID)(-1))
 
 class Entity
 {
 public:
-	COMPONENTS_BARCODE components;
-	TAGS_BARCODE tags;
-	ENTITY_ID id;
-	std::uint8_t version;
-	std::uint8_t flags;
-
 	Entity()
-		: components(0)
-		, tags(0)
-		, id(0)
+		: id(0)
 		, version(0)
 		, flags(0)
 	{}
@@ -39,8 +32,6 @@ public:
 
 	Entity(const Entity &o)
 	{
-		components = o.components;
-		tags = o.tags;
 		id = o.id;
 		version = o.version;
 		flags = o.flags;
@@ -48,8 +39,6 @@ public:
 
 	Entity(Entity &&o)
 	{
-		components = std::move(o.components);
-		tags = std::move(o.tags);
 		id = std::move(o.id);
 		version = std::move(o.version);
 		flags = std::move(o.flags);
@@ -57,8 +46,6 @@ public:
 
 	Entity &operator=(const Entity &o)
 	{
-		components = o.components;
-		tags = o.tags;
 		id = o.id;
 		version = o.version;
 		flags = o.flags;
@@ -67,7 +54,7 @@ public:
 
 	bool operator==(const Entity &o)
 	{
-		return version == o.version && id == o.id;
+		return version == o.version && id == o.id && flags == o.flags;
 	}
 
 	bool operator<(const Entity &o)
@@ -90,71 +77,101 @@ public:
 		return id >= o.id;
 	}
 
-	void reset()
+	inline ENTITY_ID getId()
 	{
-		components = 0;
-		tags = 0;
-		++version;
-		flags = 0;
+		return id;
 	}
 
-	void init(ENTITY_ID _id)
+	inline ENTITY_VERSION getVersion()
 	{
-		id = _id;
+		return version;
 	}
 
-	void setComponent(COMPONENT_ID cptId)
+	inline ENTITY_FLAGS getFlags()
 	{
-		BitsetManipulation::set(components, cptId);
+		return flags;
 	}
 
-	void unsetComponent(COMPONENT_ID cptId)
-	{
-		BitsetManipulation::unset(components, cptId);
-	}
-
-	// todo
-	bool hasComponent(COMPONENT_ID cptId) const
-	{
-		return BitsetManipulation::isSet(components, cptId);
-	}
-
-	void setTag(TAG_ID tagId)
-	{
-		BitsetManipulation::set(tags, tagId);
-	}
-
-	void unsetTag(TAG_ID tagId)
-	{
-		BitsetManipulation::unset(tags, tagId);
-	}
-
-	bool isTagged(TAG_ID tagId) const
-	{
-		return BitsetManipulation::isSet(tags, tagId);
-	}
+private:
+	ENTITY_ID id;
+	ENTITY_VERSION version;
+	ENTITY_FLAGS flags;
 };
 
+class Barcode
+{
+public:
+	Barcode()
+		: code(0)
+	{}
 
-//class Entity
-//{
-//public:
-//	Entity(std::size_t id = 0, AScene *manager = nullptr);
-//	~Entity();
-//	Entity(Entity &&o);
-//	const std::size_t getId() const;
-//	const unsigned short getVersion() const;
-//	EntityData *operator->();
-//	EntityData *operator->() const;
-//	EntityData *get() const;
-//	bool operator<(const Entity &o) const;
-//	bool operator==(const Entity &o) const;
-//	bool operator!=(const Entity &o) const;
-//	Entity(const Entity &o);
-//	Entity &operator=(const Entity &o);
-//private:
-//	friend class AScene;
-//	std::size_t _id;
-//	AScene *_manager;
-//	unsigned short _version;
-//};
+	~Barcode()
+	{}
+
+	Barcode &operator=(const Barcode& o)
+	{
+		code = o.code;
+		return *this;
+	}
+
+	Barcode(const Barcode& o)
+	{
+		code = o.code;
+	}
+
+	Barcode(Barcode&& o)
+	{
+		code = std::move(o.code);
+	}
+
+	bool operator==(const Barcode& o)
+	{
+		return (code == o.code);
+	}
+
+	bool match(const Barcode &model)
+	{
+		return (code & model.code) == model.code;
+	}
+
+	inline void setTag(TAG_ID id)
+	{
+		code.set(id + MAX_CPT_NUMBER);
+	}
+
+	inline void unsetTag(TAG_ID id)
+	{
+		code.reset(id + MAX_CPT_NUMBER);
+	}
+
+	inline bool hasTag(TAG_ID id)
+	{
+		return code.test(id + MAX_CPT_NUMBER);
+	}
+
+	inline void setComponent(COMPONENT_ID id)
+	{
+		code.set(id);
+	}
+
+	inline void unsetComponent(COMPONENT_ID id)
+	{
+		code.reset(id);
+	}
+
+	inline bool hasComponent(COMPONENT_ID id)
+	{
+		return code.test(id);
+	}
+private:
+	std::bitset<MAX_CPT_NUMBER + MAX_TAG_NUMBER> code;
+};
+
+class EntityData
+{
+public:
+private:
+	Entity entity;
+	uint32_t crap;
+	Barcode barcode;
+};
