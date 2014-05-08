@@ -31,12 +31,12 @@ private:
 	std::multimap<std::size_t, std::shared_ptr<System> >                    _systems;
 	std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 	std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
-	std::array<Entity, UINT16_MAX>                                          _pool;
-	std::array<std::uint16_t, UINT16_MAX>                                   _infosIndices;
-	std::vector<std::array<std::uint16_t, MAX_CPT_NUMBER>>                  _componentsRefs;
+	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
+//	std::array<ENTITY_ID, MAX_ENTITY_NUMBER>                                _infosIndices;
+//	std::vector<std::array<ENTITY_ID, MAX_CPT_NUMBER>>                      _componentsRefs;
 	std::vector<glm::mat4>                                                  _localTransform;
 	std::vector<glm::mat4>                                                  _globalTransform;
-	std::vector<std::array<std::uint16_t, 255>>                             _graphnode;
+	std::vector<std::array<ENTITY_ID, 255>>                                 _graphnode;
 	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
 public:
@@ -47,12 +47,52 @@ public:
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
 	bool                    start();
-	void                    filterSubscribe(unsigned short, EntityFilter* filter);
-	void                    filterUnsubscribe(unsigned short, EntityFilter* filter);
-	void                    informFilters(bool added, std::uint8_t id, Entity &&entity);
 
-	Entity &createEntity();
-	void destroy(Entity &h);
+	void                    filterSubscribe(COMPONENT_ID id, EntityFilter* filter)
+	{
+		auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
+		if (findIter == std::end(_filters[id]))
+			_filters[id].push_back(filter);
+	}
+
+	void                    filterUnsubscribe(COMPONENT_ID id, EntityFilter* filter)
+	{
+		_filters[id].remove(filter);
+	}
+
+	void                    informFiltersTagAddition(TAG_ID id, EntityData &&entity);
+	void                    informFiltersTagDeletion(TAG_ID id, EntityData &&entity);
+	void                    informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity);
+	void                    informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity);
+
+	Entity &createEntity()
+	{
+		if (_free.empty())
+		{
+			auto &e = _pool[_entityNumber];
+			e.entity.id = _entityNumber;
+			assert(++_entityNumber != UINT16_MAX);
+			return e.entity;
+		}
+		else
+		{
+			auto id = _free.back();
+			_free.pop();
+			return _pool[id].entity;
+		}
+	}
+
+	void destroy(Entity &e)
+	{
+		auto &data = _pool[e.id];
+		if (data.entity != e)
+			return;
+		++e.version;
+		e.flags = 0;
+		data.entity = e;
+		data.barcode.reset();
+		_free.push(e.id);
+	}
 
 	glm::mat4 &getLocalTransform(const Entity &e);
 	glm::mat4 &getGlobalTransform(const Entity &e);
@@ -173,21 +213,22 @@ public:
 	template <typename T>
 	void clearComponentsType()
 	{
-		auto &manager = getComponentManager<T>();
-		auto &componentTable = manager.getComponentRefs();
-		auto s = componentTable.size();
-		auto id = T::getTypeId();
+		//TODO
+		//auto &manager = getComponentManager<T>();
+		//auto &componentTable = manager.getComponentRefs();
+		//auto s = componentTable.size();
+		//auto id = T::getTypeId();
 
-		for (std::size_t i = 0; i < s; ++i)
-		{
-			auto position = componentTable[i];
-			_pool[position].unsetComponent(id);
-		}
-		manager.clearComponents();
-		for (auto filter : _filters[id + MAX_TAG_NUMBER])
-		{
-			filter->clearCollection();
-		}
+		//for (std::size_t i = 0; i < s; ++i)
+		//{
+		//	auto position = componentTable[i];
+		//	_pool[position].barcode.unsetComponent(id);
+		//}
+		//manager.clearComponents();
+		//for (auto filter : _filters[id + MAX_TAG_NUMBER])
+		//{
+		//	filter->clearCollection();
+		//}
 	}
 
 	////////////////////////
@@ -198,31 +239,54 @@ public:
 	template <typename T, typename... Args>
 	T *addComponent(Entity &entity, Args &&...args)
 	{
-		std::size_t id = T::getTypeId();
-
-		if (!_componentsManagers[id])
+		COMPONENT_ID id = T::getTypeId();
+		auto &e = _pool[entity.id];
+		if (e.entity != entity)
+			return nullptr;
+		if (_componentsManagers[id] == nullptr)
+		{
 			_componentsManagers[id] = new ComponentManager<T>(this);
+		}
+		if (e.barcode.hasComponent(id))
+		{
+			return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->getComponent(entity);
+		}
+
 		auto res = static_cast<ComponentManager<T>*>(_componentsManagers[id])->addComponent(entity, std::forward<Args>(args)...);
-		informFilters(true, T::getTypeId() + MAX_TAG_NUMBER, std::move(entity));
+
+		e.barcode.setComponent(id);
+
+		informFiltersComponentAddition(T::getTypeId(), std::move(e));
 		return res;
 	}
 
 	template <typename T>
 	T *getComponent(const Entity &entity)
 	{
-		auto index = _componentsRefs[T::getTypeId()][_infosIndices[entity.id]];
-		return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->getComponent(entity, index);
+		COMPONENT_ID id = T::getTypeId();
+		auto &e = _pool[entity.id];
+		if (e.entity != entity)
+			return nullptr;
+		if (!e.barcode.hasComponent(id))
+			return nullptr;
+		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->getComponent(entity);
 	}
 
 	template <typename T>
 	bool removeComponent(Entity &entity)
 	{
-		auto id = T::getTypeId();
-		auto index = _componentsRefs[id][_infosIndices[entity.id]];
-		auto res = static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->removeComponent(entity, index);
-		entity.unsetComponent(id);
-		informFilters(false, id + MAX_TAG_NUMBER, std::move(entity));
-		return res;
+		COMPONENT_ID id = T::getTypeId();
+		auto &e = _pool[entity.id];
+		if (e.entity != entity)
+			return false;
+		if (!e.barcode.hasComponent(id))
+		{
+			return false;
+		}
+		static_cast<ComponentManager<T>*>(_componentsManagers[id])->removeComponent(entity);
+		e.barcode.unsetComponent(id);
+		informFiltersComponentDeletion(id, std::move(e));
+		return true;
 	}
 
 	void reorganizeComponents()
@@ -234,4 +298,6 @@ public:
 		}
 	}
 
+private:
+	friend EntityFilter;
 };

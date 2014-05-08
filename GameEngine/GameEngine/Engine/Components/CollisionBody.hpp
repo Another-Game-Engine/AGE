@@ -148,7 +148,7 @@ namespace Component
 			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_body = std::shared_ptr<btCollisionObject>(new btCollisionObject());// (mass, _motionState.get(), _collisionShape.get(), inertia));
 			_body->setCollisionShape(_collisionShape.get());
-			_body->setUserIndex(entity.id);
+			_body->setUserIndex(entity.getId());
 			_manager->getWorld()->addCollisionObject(_body.get());
 		}
 

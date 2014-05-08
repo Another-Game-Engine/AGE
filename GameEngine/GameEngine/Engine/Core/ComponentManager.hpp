@@ -37,15 +37,15 @@ public:
 		return T::getTypeId();
 	}
 
-	inline 	std::vector<std::size_t> &getComponentRefs()
-	{
-		return _componentsRefs;
-	}
+	//inline 	std::vector<std::size_t> &getComponentRefs()
+	//{
+	//	return _componentsRefs;
+	//}
 
-	inline 	std::vector<T> &getComponentArray()
-	{
-		return _components;
-	}
+	//inline 	std::vector<T> &getComponentArray()
+	//{
+	//	return _components;
+	//}
 
 	void clearComponents()
 	{
@@ -67,45 +67,26 @@ public:
 		// get the component type ID
 		std::size_t id = T::getTypeId();
 
-		// if entity already have component, return it
-		if (entity.hasComponent<T>())
-		{
-			return getComponent(entity);
-		}
-
 		T *component = nullptr;
 
 		if (_freeSlot.size() != 0)
 		{
 			std::size_t position = _freeSlot.back();
 			_freeSlot.pop_back();
-
-			if (entity.componentsTable.size() <= id)
-				entity.componentsTable.resize(id + 1, (std::size_t)(-1));
-			entity.componentsTable[id] = position;
-			entity.setComponent(id + MAX_TAG_NUMBER);
-
-			_componentsEntity[position].first = entity.getHandle().getId();
+			_componentsEntity.emplace_back(std::make_pair(entity.getId(), position));
+			_componentsRefs[entity.getId()] = position;
 
 			//init component
-			component = &_components[_componentsRefs[position]];
+			component = &_components[position];
 			component->init(std::forward<Args>(args)...);
 		}
 		else
 		{
 			auto position = _components.size();
-			auto refPosition = _componentsRefs.size();
-			_componentsRefs.push_back(position);
-			if (_componentsEntity.size() <= position)
-				_componentsEntity.resize(position + 1);
-			_componentsEntity[position] = std::make_pair(entity.getHandle().getId(), refPosition);
-			_components.emplace_back(T());
 
-			auto &cptable = entity.componentsTable;
-			if (entity.componentsTable.size() <= id)
-				entity.componentsTable.resize(id + 1, (std::size_t)(-1));
-			entity.componentsTable[id] = refPosition;
-			entity.setComponent(id + MAX_TAG_NUMBER);
+			_componentsRefs[entity.getId()] = position;
+			_componentsEntity.emplace_back(std::make_pair(entity.getId(), position));
+			_components.emplace_back(T());
 
 			//init component
 			component = &_components.back();
@@ -115,16 +96,16 @@ public:
 		return component;
 	}
 
-	T *getComponent(const Entity &e, ENTITY_ID index)
+	T *getComponent(const Entity &e)
 	{
-		if (!e.hasComponent(T::getTypeId()))
-			return nullptr;
-		return &_components[_componentsRefs[index]];
+		return &_components[_componentsRefs[e.getId()]];
 	}
 
-	bool removeComponent(Entity &e, ENTITY_ID index)
+	bool removeComponent(Entity &e)
 	{
-		_freeSlot.push_back(index);
+		_freeSlot.push_back(_componentsRefs[e.getId()]);
+		_componentsEntity[_componentsRefs[e.getId()]] = _componentsEntity.back();
+		_componentsEntity.pop_back();
 		_reorder = true;
 		return true;
 	}
@@ -186,8 +167,8 @@ private:
 	}
 
 	std::vector<T> _components;
-	std::vector<std::size_t> _componentsRefs;
-	std::vector<std::pair<std::size_t, std::size_t>> _componentsEntity;
-	std::vector<std::size_t> _freeSlot;
+	std::array<ENTITY_ID, MAX_ENTITY_NUMBER> _componentsRefs;
+	std::vector<std::pair<ENTITY_ID, ENTITY_ID>> _componentsEntity;
+	std::vector<ENTITY_ID> _freeSlot;
 	AScene *_scene;
 };

@@ -4,7 +4,6 @@
 #include <Physic/Utils/BtConversion.hpp>
 #include <Systems/System.h>
 #include <Components/CollisionBody.hpp>
-#include <Entities/EntityData.hh>
 #include <Physic/BulletCollisionManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
@@ -34,17 +33,19 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		// UPDATE POSITION OF CollisionBodies
+		auto scene = _scene.lock();
 		for (auto e : _filter.getCollection())
 		{
 			btTransform transform;
-			glm::vec3 position = posFromMat4(e->getGlobalTransform());
-			glm::vec3 scale = scaleFromMat4(e->getGlobalTransform());
-			glm::vec3 rot = rotFromMat4(e->getGlobalTransform(), true);
+			auto &globalTrans = scene->getGlobalTransform(e);
+			glm::vec3 position = posFromMat4(globalTrans);
+			glm::vec3 scale = scaleFromMat4(globalTrans);
+			glm::vec3 rot = rotFromMat4(globalTrans, true);
 			transform.setIdentity();
 			transform.setOrigin(convertGLMVectorToBullet(position));
 			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
-			auto c = e->getComponent<Component::CollisionBody>();
+			auto c = scene->getComponent<Component::CollisionBody>(e);
 			c->getBody().setWorldTransform(transform);
 			c->getShape().setLocalScaling(convertGLMVectorToBullet(scale));
 		}

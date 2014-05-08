@@ -169,7 +169,7 @@ namespace Component
 				_collisionShape->calculateLocalInertia(mass, inertia);
 			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_rigidBody = std::shared_ptr<btRigidBody>(new btRigidBody(mass, _motionState.get(), _collisionShape.get(), inertia));
-			_rigidBody->setUserIndex(entity.id);
+			_rigidBody->setUserIndex(entity.getId());
 			_rigidBody->setAngularFactor(convertGLMVectorToBullet(rotationConstraint));
 			_rigidBody->setLinearFactor(convertGLMVectorToBullet(transformConstraint));
 			if (_rigidBody->isStaticObject())
@@ -241,7 +241,8 @@ namespace Component
 			ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint, meshName);
 			mass = btScalar(_mass);
 			inertia = convertGLMVectorToBullet(_inertia);
-			setCollisionShape(shapeType, meshName);
+			//@CESAR TODO
+			//setCollisionShape(shapeType, meshName);
 			short int layer;
 			short int mask;
 			ar(layer, mask);

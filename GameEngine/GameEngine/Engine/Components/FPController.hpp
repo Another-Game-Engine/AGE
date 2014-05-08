@@ -10,6 +10,7 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <array>
 #include <Core/AScene.hh>
+#include <Utils/GlmSerialization.hpp>
 
 namespace Component
 {

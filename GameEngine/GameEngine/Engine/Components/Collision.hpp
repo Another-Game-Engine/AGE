@@ -70,8 +70,9 @@ namespace Component
 		{
 			std::set<std::size_t> entityIds;
 			ar(entityIds);
-			for (auto e : entityIds)
-				collisions.insert(Entity(e));
+			//@CESAR TODO
+			//for (auto e : entityIds)
+			//	collisions.insert(Entity(e));
 			for (auto it = std::begin(collisions); it != std::end(collisions); ++it)
 			{ 
 				//@CESAR TODO

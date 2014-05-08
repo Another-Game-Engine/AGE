@@ -39,69 +39,48 @@ bool                           AScene::start()
 	return userStart();
 }
 
-Entity &AScene::createEntity()
+
+void                    AScene::informFiltersTagAddition(TAG_ID id, EntityData &&entity)
 {
-	++_entityNumber;
-	if (_free.empty())
+	for (auto &&f : _filters[id])
 	{
-		auto &e = _pool[_entityNumber];
-		e.init(_entityNumber);
-		assert(++_entityNumber != UINT16_MAX);
-		return e;
+		f->tagAdded(std::move(entity), id);
 	}
-	else
+}
+void                    AScene::informFiltersTagDeletion(TAG_ID id, EntityData &&entity)
+{
+	for (auto &&f : _filters[id])
 	{
-		auto id = _free.back();
-		_free.pop();
-		return _pool[id];
+		f->tagRemoved(std::move(entity), id);
 	}
 }
 
-void AScene::destroy(Entity &e)
+void                    AScene::informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity)
 {
-	e.reset();
-	_pool[e.id].reset();
-	_free.push(e.id);
+	for (auto &&f : _filters[id])
+	{
+		f->componentAdded(std::move(entity), id);
+	}
 }
 
-glm::mat4 &AScene::getLocalTransform(const Entity &e)
+void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity)
 {
-	//TODO
-	return glm::mat4(1);
+	for (auto &&f : _filters[id])
+	{
+		f->componentRemoved(std::move(entity), id);
+	}
 }
 
 glm::mat4 &AScene::getGlobalTransform(const Entity &e)
 {
 	//TODO
-	return glm::mat4(1);
+	static glm::mat4 t = glm::mat4(1);
+	return t;
 }
 
-void AScene::filterSubscribe(unsigned short id, EntityFilter* filter)
+glm::mat4 &AScene::getLocalTransform(const Entity &e)
 {
-	auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
-	if (findIter == std::end(_filters[id]))
-		_filters[id].push_back(filter);
-}
-
-void AScene::filterUnsubscribe(unsigned short id, EntityFilter* filter)
-{
-	_filters[id].remove(filter);
-}
-
-void AScene::informFilters(bool added, std::uint8_t id, Entity &&entity)
-{
-	if (added && id)
-	{
-		for (auto &&f : _filters[id])
-		{
-			f->componentAdded(std::move(entity), id);
-		}
-	}
-	else
-	{
-		for (auto &&f : _filters[id])
-		{
-			f->componentRemoved(std::move(entity), id);
-		}
-	}
+	//TODO
+	static glm::mat4 t = glm::mat4(1);
+	return t;
 }

@@ -8,8 +8,6 @@
 #define MAX_TAG_NUMBER (32)
 #define MAX_CPT_NUMBER (96)
 
-typedef std::uint64_t COMPONENTS_BARCODE;
-typedef std::uint32_t TAGS_BARCODE;
 typedef std::uint16_t ENTITY_ID;
 typedef std::uint8_t  COMPONENT_ID;
 typedef std::uint8_t  TAG_ID;
@@ -17,6 +15,10 @@ typedef std::uint8_t  ENTITY_VERSION;
 typedef std::uint8_t  ENTITY_FLAGS;
 
 #define MAX_ENTITY_NUMBER ((ENTITY_ID)(-1))
+
+class AScene;
+class AComponentManager;
+class EntityFilter;
 
 class Entity
 {
@@ -52,42 +54,47 @@ public:
 		return *this;
 	}
 
-	bool operator==(const Entity &o)
+	bool operator==(const Entity &o) const
 	{
 		return version == o.version && id == o.id && flags == o.flags;
 	}
 
-	bool operator<(const Entity &o)
+	bool operator!=(const Entity &o) const
+	{
+		return !(version == o.version && id == o.id && flags == o.flags);
+	}
+
+	bool operator<(const Entity &o) const
 	{
 		return id < o.id;
 	}
 
-	bool operator<=(const Entity &o)
+	bool operator<=(const Entity &o) const
 	{
 		return id <= o.id;
 	}
 
-	bool operator>(const Entity &o)
+	bool operator>(const Entity &o) const
 	{
 		return id > o.id;
 	}
 
-	bool operator>=(const Entity &o)
+	bool operator>=(const Entity &o) const
 	{
 		return id >= o.id;
 	}
 
-	inline ENTITY_ID getId()
+	inline ENTITY_ID getId() const
 	{
 		return id;
 	}
 
-	inline ENTITY_VERSION getVersion()
+	inline ENTITY_VERSION getVersion() const
 	{
 		return version;
 	}
 
-	inline ENTITY_FLAGS getFlags()
+	inline ENTITY_FLAGS getFlags() const
 	{
 		return flags;
 	}
@@ -96,6 +103,10 @@ private:
 	ENTITY_ID id;
 	ENTITY_VERSION version;
 	ENTITY_FLAGS flags;
+
+	friend AScene;
+	friend AComponentManager;
+	friend EntityFilter;
 };
 
 class Barcode
@@ -163,8 +174,16 @@ public:
 	{
 		return code.test(id);
 	}
+
+	inline void reset()
+	{
+		code.reset();
+	}
 private:
 	std::bitset<MAX_CPT_NUMBER + MAX_TAG_NUMBER> code;
+
+	friend AScene;
+	friend AComponentManager;
 };
 
 class EntityData
@@ -174,4 +193,9 @@ private:
 	Entity entity;
 	uint32_t crap;
 	Barcode barcode;
+
+public:
+	friend AScene;
+	friend AComponentManager;
+	friend EntityFilter;
 };

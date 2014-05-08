@@ -18,38 +18,45 @@ const std::set<Entity> &EntityFilter::getCollection() const
 
 void EntityFilter::requireTag(TAG_ID id)
 {
-	BitsetManipulation::set(_tagsBarcode, id);
+	_barcode.setTag(id);
 	_scene.lock()->filterSubscribe(id, this);
 }
 
 void EntityFilter::unRequireTag(TAG_ID id)
 {
-	BitsetManipulation::unset(_tagsBarcode, id);
+	_barcode.unsetTag(id);
 	_scene.lock()->filterUnsubscribe(id, this);
 }
 
-void EntityFilter::componentAdded(Entity &&e, COMPONENT_ID typeId)
+void EntityFilter::componentAdded(EntityData &&e, COMPONENT_ID typeId)
 {
-	if (BitsetManipulation::match(e.components, _componentsBarcode)
-		&& BitsetManipulation::match(e.tags, _tagsBarcode))
+	if (e.barcode.match(_barcode))
 	{
-		_collection.insert(e.id);
+		_collection.insert(e.entity);
 	}
 }
 
-void EntityFilter::componentRemoved(Entity &&e, COMPONENT_ID typeId)
+void EntityFilter::componentRemoved(EntityData &&e, COMPONENT_ID typeId)
 {
-	if (BitsetManipulation::match(e.components, _componentsBarcode)
-		&& BitsetManipulation::match(e.tags, _tagsBarcode))
+	if (!e.barcode.match(_barcode))
 	{
-		if (!_locked)
-		{
-			_collection.erase(e);
-		}
-		else
-		{
-			_trash.insert(e);
-		}
+		_collection.insert(e.entity);
+	}
+}
+
+void EntityFilter::tagAdded(EntityData &&e, TAG_ID typeId)
+{
+	if (e.barcode.match(_barcode))
+	{
+		_collection.insert(e.entity);
+	}
+}
+
+void EntityFilter::tagRemoved(EntityData &&e, TAG_ID typeId)
+{
+	if (!e.barcode.match(_barcode))
+	{
+		_collection.insert(e.entity);
 	}
 }
 

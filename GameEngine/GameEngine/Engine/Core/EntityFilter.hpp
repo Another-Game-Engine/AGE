@@ -15,17 +15,15 @@ public:
 	template <typename T>
 	void requireComponent()
 	{
-		auto id = T::getTypeId() + MAX_TAG_NUMBER;
-		BitsetManipulation::set(_componentsBarcode, id);
-		_scene.lock()->filterSubscribe(id, this);
+		_barcode.setComponent(T::getTypeId());
+		_scene.lock()->filterSubscribe(T::getTypeId(), this);
 	}
 
 	template <typename T>
 	void unRequireComponent()
 	{
-		auto id = T::getTypeId() + MAX_TAG_NUMBER;
-		BitsetManipulation::unset(_componentsBarcode, id);
-		_scene.lock()->filterUnsubscribe(id, this);
+		_barcode.unsetComponent(T::getTypeId());
+		_scene.lock()->filterUnsubscribe(T::getTypeId(), this);
 	}
 
 	void requireTag(TAG_ID tag);
@@ -35,8 +33,10 @@ public:
 
 	inline void clearCollection() { _collection.clear(); }
 
-	void virtual componentAdded(Entity &&e, COMPONENT_ID typeId);
-	void virtual componentRemoved(Entity &&e, COMPONENT_ID typeId);
+	void virtual componentAdded(EntityData &&e, COMPONENT_ID typeId);
+	void virtual componentRemoved(EntityData &&e, COMPONENT_ID typeId);
+	void virtual tagAdded(EntityData &&e, TAG_ID typeId);
+	void virtual tagRemoved(EntityData &&e, TAG_ID typeId);
 
 	bool isLocked() const;
 
@@ -62,8 +62,7 @@ public:
 	};
 
 protected:
-	COMPONENTS_BARCODE _componentsBarcode;
-	TAGS_BARCODE _tagsBarcode;
+	Barcode _barcode;
 	std::set<Entity> _collection;
 	std::weak_ptr<AScene> _scene;
 
