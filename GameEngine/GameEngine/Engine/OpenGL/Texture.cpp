@@ -194,6 +194,11 @@ namespace OpenGLTools
 		return (*this);
 	}
 
+	GLenum Texture2D::getType() const
+	{
+		return (GL_TEXTURE_2D);
+	}
+
 	TextureMultiSample::TextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation)
 		: Texture(),
 		_samples(samples),
@@ -232,5 +237,10 @@ namespace OpenGLTools
 	void *TextureMultiSample::read(void *read) const
 	{
 		return (NULL);
+	}
+
+	GLenum TextureMultiSample::getType() const
+	{
+		return (GL_TEXTURE_2D_MULTISAMPLE);
 	}
 }

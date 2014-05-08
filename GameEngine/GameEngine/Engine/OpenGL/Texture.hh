@@ -6,6 +6,7 @@
 
 namespace OpenGLTools
 {
+
 	class Texture
 	{
 	public:
@@ -15,6 +16,8 @@ namespace OpenGLTools
 		virtual void write(void *data) const = 0;
 		virtual Texture const &bind() const = 0;
 		virtual Texture const &unbind() const = 0;
+		virtual GLenum getType() const = 0;
+
 		GLuint getId() const;
 
 	protected:
@@ -61,6 +64,7 @@ namespace OpenGLTools
 		virtual void *read(void *read) const;
 		virtual Texture const &bind() const;
 		virtual Texture const &unbind() const;
+		virtual GLenum getType() const;
 
 	};
 
@@ -85,6 +89,7 @@ namespace OpenGLTools
 		virtual void *read(void *read) const;
 		virtual Texture const &bind() const;
 		virtual Texture const &unbind() const;
+		virtual GLenum getType() const;
 	};
 }
 
