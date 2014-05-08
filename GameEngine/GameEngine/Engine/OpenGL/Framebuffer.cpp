@@ -42,7 +42,8 @@ namespace OpenGLTools
 			texture = new TextureMultiSample(_sampleNbr, textureInternalFormat, _size.x, _size.y);
 		else
 		{
-			texture = new Texture2D(0, textureInternalFormat, _size.x, _size.y);
+			float maxDimension = glm::max(static_cast<float>(_size.x), static_cast<float>(_size.y));
+			texture = new Texture2D(static_cast<GLsizei>(glm::floor(glm::log2(maxDimension)) + 1), textureInternalFormat, _size.x, _size.y);
 			static_cast<Texture2D *>(texture)->filter(GL_LINEAR).wrap(GL_CLAMP_TO_EDGE);
 
 		}
@@ -141,8 +142,10 @@ namespace OpenGLTools
 		if (_multiSample)
 			glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, _sampleNbr, textureInternalFormat, _size.x, _size.y, GL_FALSE);
 		else
+		{
+			float maxDimension = glm::max(static_cast<float>(_size.x), static_cast<float>(_size.y));
 			glTexImage2D(GL_TEXTURE_2D, 0, textureInternalFormat, _size.x, _size.y, 0, textureFormat, GL_FLOAT, NULL);
-
+		}
 		auto	attach = _attachments.find(attachment);
 		if (attach != _attachments.end())
 		{

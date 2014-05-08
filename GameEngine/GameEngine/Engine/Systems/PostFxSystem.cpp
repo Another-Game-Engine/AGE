@@ -68,7 +68,7 @@ void	PostFxSystem::mainUpdate(double time)
 void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 {
 #if TEST_ARCHI
-	GLint colorTexture = camFbo[GL_COLOR_ATTACHMENT0]->getId();
+	GLuint colorTexture = camFbo[GL_COLOR_ATTACHMENT0]->getId();
 #else
 	GLuint colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
 #endif
