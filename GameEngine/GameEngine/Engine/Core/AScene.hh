@@ -32,8 +32,6 @@ private:
 	std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 	std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
-//	std::array<ENTITY_ID, MAX_ENTITY_NUMBER>                                _infosIndices;
-//	std::vector<std::array<ENTITY_ID, MAX_CPT_NUMBER>>                      _componentsRefs;
 	std::vector<glm::mat4>                                                  _localTransform;
 	std::vector<glm::mat4>                                                  _globalTransform;
 	std::vector<std::array<ENTITY_ID, 255>>                                 _graphnode;
@@ -197,38 +195,23 @@ public:
 	////////////////////////
 	///////
 	// Component Manager Get / Set
-	template <typename T>
-	ComponentManager<T> &getComponentManager()
-	{
-		auto id = T::getTypeId();
-
-		if (_componentsManagers.size() <= id)
-		{
-			_componentsManagers.resize(id + 1, nullptr);
-			_componentsManagers[id] = new ComponentManager<T>(this);
-		}
-		return *static_cast<ComponentManager<T>*>(_componentsManagers[id]);
-	}
 
 	template <typename T>
 	void clearComponentsType()
 	{
 		//TODO
-		//auto &manager = getComponentManager<T>();
-		//auto &componentTable = manager.getComponentRefs();
-		//auto s = componentTable.size();
-		//auto id = T::getTypeId();
-
-		//for (std::size_t i = 0; i < s; ++i)
-		//{
-		//	auto position = componentTable[i];
-		//	_pool[position].barcode.unsetComponent(id);
-		//}
-		//manager.clearComponents();
-		//for (auto filter : _filters[id + MAX_TAG_NUMBER])
-		//{
-		//	filter->clearCollection();
-		//}
+		auto id = T::getTypeId();
+		if (_componentsManagers[id] == nullptr)
+			return;
+		auto &manager = *static_cast<ComponentManager<T>*>(_componentsManagers[id]);
+		auto &col = manager.getEntityIdCollection();
+		for (auto &&c : col)
+			_pool[c.first].barcode.unsetComponent(id);
+		manager.clearComponents();
+		for (auto filter : _filters[id + MAX_TAG_NUMBER])
+		{
+			filter->clearCollection();
+		}
 	}
 
 	////////////////////////

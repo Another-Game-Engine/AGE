@@ -42,10 +42,10 @@ public:
 	//	return _componentsRefs;
 	//}
 
-	//inline 	std::vector<T> &getComponentArray()
-	//{
-	//	return _components;
-	//}
+	inline 	std::vector<std::pair<ENTITY_ID, ENTITY_ID>> &getEntityIdCollection()
+	{
+		return _componentsEntity;
+	}
 
 	void clearComponents()
 	{
@@ -73,7 +73,7 @@ public:
 		{
 			std::size_t position = _freeSlot.back();
 			_freeSlot.pop_back();
-			//_componentsEntity.emplace_back(std::make_pair(entity.getId(), position));
+			_componentsEntity[position] = std::make_pair(entity.getId(), position);
 			_componentsRefs[entity.getId()] = position;
 
 			//init component
@@ -85,7 +85,9 @@ public:
 			auto position = _components.size();
 
 			_componentsRefs[entity.getId()] = position;
-			//_componentsEntity.emplace_back(std::make_pair(entity.getId(), position));
+			if (_componentsEntity.size() <= position)
+				_componentsEntity.resize(position + 1);
+			_componentsEntity[position] = std::make_pair(entity.getId(), position);
 			_components.emplace_back(T());
 
 			//init component
@@ -103,22 +105,23 @@ public:
 
 	bool removeComponent(Entity &e)
 	{
-		_freeSlot.push_back(_componentsRefs[e.getId()]);
-		//_componentsEntity[_componentsRefs[e.getId()]] = _componentsEntity.back();
-		//_componentsEntity.pop_back();
+		auto id = _componentsRefs[e.getId()];
+		_freeSlot.push_back(_componentsEntity.back().second);
+		_componentsEntity[id].first = _componentsEntity.back().first;
+		_componentsRefs[_componentsEntity.back().first] = id;
 		_reorder = true;
 		return true;
 	}
 
 	virtual void reorder()
 	{
-		//if (!_reorder)
-		//	return;
-		//auto id = T::getTypeId();
-		//if (_componentsEntity.size() <= 1)
-		//	return;
-		//quickSort(0, _componentsEntity.size() - 1);
-		//this->_reorder = false;
+		if (!_reorder)
+			return;
+		auto id = T::getTypeId();
+		if (_componentsEntity.size() <= 1)
+			return;
+		quickSort(0, _componentsEntity.size() - 1);
+		this->_reorder = false;
 	}
 private:
 	void quickSort(std::size_t top, std::size_t bottom)
