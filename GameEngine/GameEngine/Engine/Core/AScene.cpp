@@ -74,14 +74,10 @@ void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, 
 
 glm::mat4 &AScene::getGlobalTransform(const Entity &e)
 {
-	//TODO
-	static glm::mat4 t = glm::mat4(1);
-	return t;
+	return _globalTransform[e.id];
 }
 
 glm::mat4 &AScene::getLocalTransform(const Entity &e)
 {
-	//TODO
-	static glm::mat4 t = glm::mat4(1);
-	return t;
+	return _localTransform[e.id];
 }

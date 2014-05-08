@@ -69,6 +69,8 @@ public:
 		{
 			auto &e = _pool[_entityNumber];
 			e.entity.id = _entityNumber;
+			_localTransform.resize(_entityNumber + 1);
+			_globalTransform.resize(_entityNumber + 1);
 			assert(++_entityNumber != UINT16_MAX);
 			return e.entity;
 		}
