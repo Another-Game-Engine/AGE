@@ -72,4 +72,5 @@ protected:
 private:
 	bool _locked;
 	std::set<Entity> _trash;
+	std::set<Entity> _toAdd;
 };

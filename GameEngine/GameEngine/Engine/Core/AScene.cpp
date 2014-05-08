@@ -10,6 +10,7 @@ AScene::AScene(std::weak_ptr<Engine> &&engine) :
 DependenciesInjector(std::move(engine))
 , _entityNumber(0)
 {
+	_componentsManagers.assign(nullptr);
 }
 
 AScene::~AScene()

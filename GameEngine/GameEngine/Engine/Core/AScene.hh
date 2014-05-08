@@ -298,6 +298,14 @@ public:
 		}
 	}
 
+	const Entity *getEntityPtr(const Entity &e) const
+	{
+		auto &entity = _pool[e.id];
+		if (entity.entity != e)
+			return nullptr;
+		return &(entity.entity);
+	}
+
 private:
 	friend EntityFilter;
 };

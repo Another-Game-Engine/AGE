@@ -32,7 +32,12 @@ void EntityFilter::componentAdded(EntityData &&e, COMPONENT_ID typeId)
 {
 	if (e.barcode.match(_barcode))
 	{
-		_collection.insert(e.entity);
+		if (_locked)
+		{
+			_toAdd.insert(e.entity);
+		}
+		else
+			_collection.insert(e.entity);
 	}
 }
 
@@ -40,7 +45,12 @@ void EntityFilter::componentRemoved(EntityData &&e, COMPONENT_ID typeId)
 {
 	if (!e.barcode.match(_barcode))
 	{
-		_collection.insert(e.entity);
+		if (_locked)
+		{
+			_trash.insert(e.entity);
+		}
+		else
+			_collection.erase(e.entity);
 	}
 }
 
@@ -48,7 +58,12 @@ void EntityFilter::tagAdded(EntityData &&e, TAG_ID typeId)
 {
 	if (e.barcode.match(_barcode))
 	{
-		_collection.insert(e.entity);
+		if (_locked)
+		{
+			_toAdd.insert(e.entity);
+		}
+		else
+			_collection.insert(e.entity);
 	}
 }
 
@@ -56,7 +71,12 @@ void EntityFilter::tagRemoved(EntityData &&e, TAG_ID typeId)
 {
 	if (!e.barcode.match(_barcode))
 	{
-		_collection.insert(e.entity);
+		if (_locked)
+		{
+			_trash.insert(e.entity);
+		}
+		else
+			_collection.erase(e.entity);
 	}
 }
 
@@ -72,11 +92,16 @@ void EntityFilter::unlock()
 	if (!_locked)
 		return;
 	_locked = false;
+	for (auto &&e : _toAdd)
+	{
+		_collection.insert(e);
+	}
 	for (auto &&e : _trash)
 	{
 		_collection.erase(e);
 	}
 	_trash.clear();
+	_toAdd.clear();
 }
 
 bool EntityFilter::isLocked() const
