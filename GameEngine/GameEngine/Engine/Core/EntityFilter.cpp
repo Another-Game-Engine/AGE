@@ -11,7 +11,7 @@ EntityFilter::~EntityFilter()
 {
 }
 
-const std::set<Entity> &EntityFilter::getCollection() const
+std::set<Entity> &EntityFilter::getCollection()
 {
 	return _collection;
 }

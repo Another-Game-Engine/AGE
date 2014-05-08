@@ -80,12 +80,14 @@ private:
 		float t = static_cast<float>(time);
 		auto scene = this->_scene.lock();
 		EntityFilter::Lock lock(_filter);
-		for (auto &e : _filter.getCollection())
+		auto &collection = _filter.getCollection();
+		for (Entity e : _filter.getCollection())
 		{
 			auto lifetime = scene->getComponent<Component::Lifetime>(e);
 			lifetime->_t -= t;
 			if (scene->getComponent<Component::Lifetime>(e)->_t <= 0.0f)
-				scene->removeComponent<Component::Lifetime>(const_cast<Entity&>(e));
+				scene->destroy(e);
+				//scene->removeComponent<Component::Lifetime>(const_cast<Entity&>(e));
 		}
 	}
 

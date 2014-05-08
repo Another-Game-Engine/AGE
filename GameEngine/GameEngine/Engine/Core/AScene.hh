@@ -82,13 +82,22 @@ public:
 
 	void destroy(Entity &e)
 	{
+		static Barcode cachedCode;
 		auto &data = _pool[e.id];
 		if (data.entity != e)
 			return;
 		++e.version;
 		e.flags = 0;
 		data.entity = e;
+		cachedCode = data.barcode;
 		data.barcode.reset();
+		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
+		{
+			if (cachedCode.code.test(i) && i < MAX_CPT_NUMBER)
+				informFiltersComponentDeletion(i, std::move(data));
+			else if (cachedCode.code.test(i) && i >= MAX_CPT_NUMBER)
+				informFiltersTagDeletion(i - MAX_CPT_NUMBER, std::move(data));
+		}
 		_free.push(e.id);
 	}
 

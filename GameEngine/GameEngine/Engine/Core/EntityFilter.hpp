@@ -29,7 +29,7 @@ public:
 	void requireTag(TAG_ID tag);
 	void unRequireTag(TAG_ID tag);
 
-	const std::set<Entity> &getCollection() const;
+	std::set<Entity> &getCollection();
 
 	inline void clearCollection() { _collection.clear(); }
 
