@@ -81,13 +81,12 @@ private:
 		auto scene = this->_scene.lock();
 		EntityFilter::Lock lock(_filter);
 		auto &collection = _filter.getCollection();
-		for (Entity e : _filter.getCollection())
+		for (Entity e : collection)
 		{
 			auto lifetime = scene->getComponent<Component::Lifetime>(e);
 			lifetime->_t -= t;
 			if (scene->getComponent<Component::Lifetime>(e)->_t <= 0.0f)
-				scene->destroy(e);
-				//scene->removeComponent<Component::Lifetime>(const_cast<Entity&>(e));
+				scene->removeComponent<Component::Lifetime>(e);
 		}
 	}
 
