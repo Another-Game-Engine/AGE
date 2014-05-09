@@ -104,7 +104,7 @@ bool 			MainScene::userStart()
 		camera->fboSize = screenSize;
 		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
-		camera->sampleNbr = 0;
+		camera->sampleNbr = 1;
 
 		auto fpv = addComponent<Component::FirstPersonView>(_heros);
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());

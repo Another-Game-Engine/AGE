@@ -94,7 +94,12 @@ namespace Component
 			cubeMapShader = o.cubeMapShader;
 			lookAtTransform = o.lookAtTransform;
 			//@CESAR TODO TODO COPY FRAMEBUFFER
+			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
+			frameBuffer = o.frameBuffer;
+			downSampling = o.downSampling;
 			blitOnScreen = o.blitOnScreen;
+			fboSize = o.fboSize;
+			sampleNbr = o.sampleNbr;
 		}
 
 		CameraComponent	&operator=(CameraComponent const &o)
@@ -105,7 +110,13 @@ namespace Component
 			cubeMapShader = o.cubeMapShader;
 			lookAtTransform = o.lookAtTransform;
 			//@CESAR TODO TODO COPY FRAMEBUFFER
+			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
+			frameBuffer = o.frameBuffer;
+			downSampling = o.downSampling;
 			blitOnScreen = o.blitOnScreen;
+			fboSize = o.fboSize;
+			sampleNbr = o.sampleNbr;
+
 			return *this;
 		}
 

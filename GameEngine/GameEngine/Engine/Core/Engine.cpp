@@ -50,7 +50,7 @@ bool 		Engine::update()
 	auto inputs = getInstance<Input>();
 	auto sceneManager = getInstance<SceneManager>();
 	auto time = timer->getElapsed();
-	std::cout << time << std::endl;
+
 	timer->update();
     inputs->clearInputs();
 	context->updateEvents(*inputs.get());

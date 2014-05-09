@@ -41,6 +41,7 @@ void FPSSystem::mainUpdate(double time)
 
 	if (_timeCounter >= 1.0f)
 	{
+		std::cout << _lastFrame << std::endl;
 		_lastFrame = _frameCounter;
 		_timeCounter = 0.0f;
 		_frameCounter = 0;
