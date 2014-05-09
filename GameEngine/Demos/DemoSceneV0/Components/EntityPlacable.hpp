@@ -20,6 +20,17 @@ namespace Component
 		{
 		}
 
+		EntityPlacable(EntityPlacable const &o)
+		{
+			name = o.name;
+		}
+
+		EntityPlacable &operator=(EntityPlacable const &o)
+		{
+			name = o.name;
+			return *this;
+		}
+
 		std::string name;
 
 		//////
@@ -37,7 +48,5 @@ namespace Component
 		////
 		//////
 	private:
-		EntityPlacable(EntityPlacable const &);
-		EntityPlacable &operator=(EntityPlacable const &);
 	};
 }

@@ -34,63 +34,65 @@ bool AsteroidSystem::initialize()
 
 void AsteroidSystem::mainUpdate(double time)
 {
-	std::set<Entity, bool(*)(const Entity&, const Entity&)>::iterator eIt = _asteroidFilter.getCollection().begin();
+// @CESAR TODO
 
-	while (eIt != _asteroidFilter.getCollection().end())
-	{
-		bool toRm = false;
-		Entity e = *eIt;
-		std::set<Entity>::iterator cIt = e->getComponent<Component::Collision>()->collisions.begin();
 
-		float mass = 1.0f / e->getComponent<Component::RigidBody>()->getBody().getInvMass();
+	//std::set<Entity, bool(*)(const Entity&, const Entity&)>::iterator eIt = _asteroidFilter.getCollection().begin();
 
-		while (cIt != e->getComponent<Component::Collision>()->collisions.end())
-		{
-			Entity c = *cIt;
-			if (c.get() != NULL && c->isTagged(MyTags::BULLET_TAG))
-			{
-				toRm = true;
-				glm::vec3 impulse = glm::vec3(rand() % 10000, rand() % 10000, rand() % 10000);
+	//while (eIt != _asteroidFilter.getCollection().end())
+	//{
+	//	bool toRm = false;
+	//	Entity e = *eIt;
+	//	std::set<Entity>::iterator cIt = e->getComponent<Component::Collision>()->collisions.begin();
 
-				impulse = glm::normalize(impulse);
-				impulse *= 1000.0f;
+	//	float mass = 1.0f / e->getComponent<Component::RigidBody>()->getBody().getInvMass();
 
-				Entity asteroid1, asteroid2;
+	//	while (cIt != e->getComponent<Component::Collision>()->collisions.end())
+	//	{
+	//		Entity c = *cIt;
+	//		if (c.get() != NULL && c->isTagged(MyTags::BULLET_TAG))
+	//		{
+	//			toRm = true;
+	//			glm::vec3 impulse = glm::vec3(rand() % 10000, rand() % 10000, rand() % 10000);
 
-				asteroid1 = _scene.lock()->createEntity();
-				asteroid2 = _scene.lock()->createEntity();
+	//			impulse = glm::normalize(impulse);
+	//			impulse *= 1000.0f;
 
-				asteroid1->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.5f)));
-				asteroid2->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.5f)));
+	//			Entity asteroid1, asteroid2;
 
-				auto mesh = asteroid1->addComponent<Component::MeshRenderer>(_scene.lock()->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
-				mesh->setShader("MaterialBasic");
-				auto body = asteroid1->addComponent<Component::RigidBody>(mass / 2.0f);
-				body->setCollisionShape(Component::RigidBody::SPHERE);
-				body->getBody().setRestitution(1.0f);
-				body->getBody().setActivationState(DISABLE_DEACTIVATION);
-				body->getBody().setDamping(0.0f, 0.0f);
-				body->getBody().applyCentralImpulse(convertGLMVectorToBullet(impulse));
-				asteroid1->addTag(MyTags::ASTEROID_TAG);
+	//			asteroid1 = _scene.lock()->createEntity();
+	//			asteroid2 = _scene.lock()->createEntity();
 
-				mesh = asteroid2->addComponent<Component::MeshRenderer>(_scene.lock()->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
-				mesh->setShader("MaterialBasic");
-				body = asteroid2->addComponent<Component::RigidBody>(mass / 2.0f);
-				body->setCollisionShape(Component::RigidBody::SPHERE);
-				body->getBody().setRestitution(1.0f);
-				body->getBody().setActivationState(DISABLE_DEACTIVATION);
-				body->getBody().setDamping(0.0f, 0.0f);
-				body->getBody().applyCentralImpulse(convertGLMVectorToBullet(impulse));
-				asteroid2->addTag(MyTags::ASTEROID_TAG);
+	//			asteroid1->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.5f)));
+	//			asteroid2->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.5f)));
 
-				cIt = e->getComponent<Component::Collision>()->collisions.erase(cIt);
-				_scene.lock()->destroy(c);
-			}
-			else
-				++cIt;
-		}
-		++eIt;
-		if (toRm)
-			_scene.lock()->destroy(e);
-	}
+	//			auto mesh = asteroid1->addComponent<Component::MeshRenderer>(_scene.lock()->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+	//			mesh->setShader("MaterialBasic");
+	//			auto body = asteroid1->addComponent<Component::RigidBody>(mass / 2.0f);
+	//			body->setCollisionShape(Component::RigidBody::SPHERE);
+	//			body->getBody().setRestitution(1.0f);
+	//			body->getBody().setActivationState(DISABLE_DEACTIVATION);
+	//			body->getBody().setDamping(0.0f, 0.0f);
+	//			body->getBody().applyCentralImpulse(convertGLMVectorToBullet(impulse));
+	//			asteroid1->addTag(MyTags::ASTEROID_TAG);
+
+	//			mesh = asteroid2->addComponent<Component::MeshRenderer>(_scene.lock()->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+	//			mesh->setShader("MaterialBasic");
+	//			body = asteroid2->addComponent<Component::RigidBody>(mass / 2.0f);
+	//			body->setCollisionShape(Component::RigidBody::SPHERE);
+	//			body->getBody().setRestitution(1.0f);
+	//			body->getBody().setActivationState(DISABLE_DEACTIVATION);
+	//			body->getBody().setDamping(0.0f, 0.0f);
+	//			body->getBody().applyCentralImpulse(convertGLMVectorToBullet(impulse));
+	//			asteroid2->addTag(MyTags::ASTEROID_TAG);
+
+	//			cIt = e->getComponent<Component::Collision>()->collisions.erase(cIt);
+	//			_scene.lock()->destroy(c);
+	//		}
+	//		else
+	//			++cIt;
+	//	}
+	//	++eIt;
+	//	if (toRm)
+	//		_scene.lock()->destroy(e);
 }

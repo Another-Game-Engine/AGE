@@ -50,7 +50,7 @@ protected:
 	{
 		auto scene = _scene.lock();
 		auto hotZone = scene->createEntity();
-		auto rb = scene->addComponent<Component::RigidBody>(hotZone, 0.0f);
+		auto rb = scene->addComponent<Component::RigidBody>(hotZone, _scene, 0.0f);
 		rb->setCollisionShape(hotZone, Component::RigidBody::BOX, "NULL");
 		auto &transform = scene->getLocalTransform(hotZone);
 		transform = glm::scale(transform, glm::vec3(1, 0.1, 1));

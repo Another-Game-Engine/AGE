@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Systems/System.h>
-#include <Entities/EntityData.hh>
 #include <Components/TransformationRegister.hpp>
 #include <Utils/File.hpp>
 
@@ -15,7 +14,7 @@ public:
 	TRSFilter(std::weak_ptr<AScene> &&scene);
 	virtual ~TRSFilter();
 	TransformationRegisterSystem *_system;
-	virtual void componentAdded(Entity &&e, unsigned short typeId);
+	void virtual componentAdded(EntityData &&e, COMPONENT_ID typeId);
 };
 
 class TransformationRegisterSystem : public System

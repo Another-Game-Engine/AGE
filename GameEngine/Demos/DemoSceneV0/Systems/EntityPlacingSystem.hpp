@@ -38,15 +38,15 @@ private:
 			return Entity();
 		if (_filter.getCollection().size() == 1)
 		{
-			_name = _filter.getCollection().begin()->get()->getComponent<Component::EntityPlacable>()->name;
+			_name = _scene.lock()->getComponent<Component::EntityPlacable>(*(_filter.getCollection().begin()->get()))->name;
 			return *_filter.getCollection().begin();
 		}
 		for (auto e : _filter.getCollection())
 		{
-			if (e->getComponent<Component::EntityPlacable>()->name == _name)
+			if (_scene.lock()->getComponent<Component::EntityPlacable>(e)->name == _name)
 				return e;
 		}
-		_name = _filter.getCollection().begin()->get()->getComponent<Component::EntityPlacable>()->name;
+		_name = _scene.lock()->getComponent<Component::EntityPlacable>(*(_filter.getCollection().begin()))->name;
 		return *_filter.getCollection().begin();
 	}
 
@@ -55,37 +55,39 @@ private:
 		static float t = 0.3f;
 		_z += _input->getMouseWheel().y * 0.1f;
 		
-		if (_input->getInput(SDLK_MINUS) && !_filter.getCollection().empty() && t <= 0.0f)
-		{
-			auto &collection = _filter.getCollection();
+		//if (_input->getInput(SDLK_MINUS) && !_filter.getCollection().empty() && t <= 0.0f)
+		//{
+		//	auto &collection = _filter.getCollection();
 
-			if (collection.size() == 1)
-			{
-				_name = std::begin(collection)->get()->getComponent<Component::EntityPlacable>()->name;
-			}
-			else
-			{
-				for (auto it = std::begin(collection); it != std::end(collection); ++it)
-				{
-					auto c = it->get()->getComponent<Component::EntityPlacable>();
-					if (c->name != _name)
-						continue;
-					if (it != std::begin(collection))
-					{
-						_name = (--it)->get()->getComponent<Component::EntityPlacable>()->name;
-						break;
-					}
-					else
-					{
-						_name = (--(std::end(collection)))->get()->getComponent<Component::EntityPlacable>()->name;
-						break;
-					}
-				}
-			}
-			t = 0.3f;
-		}
+		//	if (collection.size() == 1)
+		//	{
+		//		_name = std::begin(collection)->get()->getComponent<Component::EntityPlacable>()->name;
+		//	}
+		//	else
+		//	{
+		//		for (auto it = std::begin(collection); it != std::end(collection); ++it)
+		//		{
+		//			auto c = it->get()->getComponent<Component::EntityPlacable>();
+		//			if (c->name != _name)
+		//				continue;
+		//			if (it != std::begin(collection))
+		//			{
+		//				_name = (--it)->get()->getComponent<Component::EntityPlacable>()->name;
+		//				break;
+		//			}
+		//			else
+		//			{
+		//				_name = (--(std::end(collection)))->get()->getComponent<Component::EntityPlacable>()->name;
+		//				break;
+		//			}
+		//		}
+		//	}
+		//	t = 0.3f;
+		//}
 
-		if (_input->getInput(SDLK_EQUALS) && !_filter.getCollection().empty() && t <= 0.0f)
+	//@CESAR TODO
+
+		/*if (_input->getInput(SDLK_EQUALS) && !_filter.getCollection().empty() && t <= 0.0f)
 		{
 			auto &collection = _filter.getCollection();
 
@@ -118,127 +120,101 @@ private:
 		}
 		if (t > 0.0f)
 			t -= (float)time;
-		_scene.lock()->getInstance<FontManager>()->draw2DString("Current entity : " + _name, "myFont", 30, glm::ivec2(10, 100), glm::vec4(1), "2DText");
+		_scene.lock()->getInstance<FontManager>()->draw2DString("Current entity : " + _name, "myFont", 30, glm::ivec2(10, 100), glm::vec4(1), "2DText");*/
 
-		Entity _entity = getEntity();
-		if (!_entity.get())
-			return;
+		//@CESAR TODO
+//		Entity _entity = getEntity();
+		//if (!_entity.get())
+		//	return;
 
-		if (_input->getInput(SDL_BUTTON_LEFT))
-		{
-			glm::vec3 from, to;
-			_scene.lock()->getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
-			glm::mat4 t = _entity->getLocalTransform();
-			glm::vec3 pos = from;
-			pos += to * _z;
-			t[3][0] = pos.x;
-			t[3][1] = pos.y;
-			t[3][2] = pos.z;
-			t[3][3] = 1;
-			_entity->setLocalTransform(t, true);
-		}
+//		auto &transform = _scene.lock()->getLocalTransform(_entity);
 
+		//if (_input->getInput(SDL_BUTTON_LEFT))
+		//{
+		//	glm::vec3 from, to;
+		//	_scene.lock()->getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
+		//	glm::mat4 t = transform;
+		//	glm::vec3 pos = from;
+		//	pos += to * _z;
+		//	t[3][0] = pos.x;
+		//	t[3][1] = pos.y;
+		//	t[3][2] = pos.z;
+		//	t[3][3] = 1;
+		//	//@CESAR TODO
+		//	//_entity->setLocalTransform(t, true);
+		//	transform = t;
+		//}
 
-		if (_input->getInput(SDLK_u))
-		{
-			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0,0.2,0)), true);
-		}
-
-		if (_input->getInput(SDLK_i))
-		{
-			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0, -0.2, 0)), true);
-		}
-
-		if (_input->getInput(SDLK_j))
-		{
-			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0.2, 0, 0)), true);
-		}
-
-		if (_input->getInput(SDLK_k))
-		{
-			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(-0.2, 0, 0)), true);
-		}
-
-		if (_input->getInput(SDLK_m))
-		{
-			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0, 0, 0.2)), true);
-		}
-
-		if (_input->getInput(SDLK_COMMA))
-		{
-			_entity->setLocalTransform(glm::translate(_entity->getLocalTransform(), glm::vec3(0, 0, -0.2)), true);
-		}
-
-		if (_input->getInput(SDLK_t))
-		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -1.0f, glm::vec3(0, 1, 0)), false);
-		}
-
-		if (_input->getInput(SDLK_y))
-		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 1.0f, glm::vec3(0, 1, 0)), false);
-		}
-
-		if (_input->getInput(SDLK_b))
-		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -1.0f, glm::vec3(1, 0, 0)), true);
-		}
-
-		if (_input->getInput(SDLK_n))
-		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 1.0f, glm::vec3(1, 0, 0)), true);
-		}
-
-		if (_input->getInput(SDLK_g))
-		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), -1.0f, glm::vec3(0, 0, 1)), true);
-		}
-
-		if (_input->getInput(SDLK_h))
-		{
-			_entity->setLocalTransform(glm::rotate(_entity->getLocalTransform(), 1.0f, glm::vec3(0, 0, 1)), true);
-		}
-
-		if (_input->getInput(SDLK_PERIOD))
-		{
-			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(0.95f)), true);
-		}
-
-		if (_input->getInput(SDLK_SLASH))
-		{
-			_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1.05f)), true);
-		}
 
 		//if (_input->getInput(SDLK_u))
 		//{
-		//	_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(0.95f,1,1)), true);
+		//	transform = glm::translate(transform, glm::vec3(0, 0.2, 0)); // TODO
 		//}
 
 		//if (_input->getInput(SDLK_i))
 		//{
-		//	_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1.05f,1,1)), true);
+		//	transform = glm::translate(transform, glm::vec3(0, -0.2, 0)); // TODO
 		//}
 
 		//if (_input->getInput(SDLK_j))
 		//{
-		//	_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1, 0.95f,1)), true);
+		//	transform = glm::translate(transform, glm::vec3(0.2, 0, 0)); // TODO
 		//}
 
 		//if (_input->getInput(SDLK_k))
 		//{
-		//	_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1, 1.05f,1)), true);
+		//	transform = glm::translate(transform, glm::vec3(-0.2, 0, 0)); // TODO
 		//}
 
 		//if (_input->getInput(SDLK_m))
 		//{
-		//	_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1, 1, 0.95f)), true);
+		//	transform = glm::translate(transform, glm::vec3(0, 0, 0.2)); // TODO
 		//}
 
 		//if (_input->getInput(SDLK_COMMA))
 		//{
-		//	_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1, 1, 1.05f)), true);
+		//	transform = glm::translate(transform, glm::vec3(0, 0, -0.2)); // TODO
 		//}
 
+		//if (_input->getInput(SDLK_t))
+		//{
+		//	transform = glm::rotate(transform, -1.0f, glm::vec3(0, 1, 0)); //TODO FALSE
+		//}
+
+		//if (_input->getInput(SDLK_y))
+		//{
+		//	transform = glm::rotate(transform, 1.0f, glm::vec3(0, 1, 0)); //TODO FALSE
+		//}
+
+		//if (_input->getInput(SDLK_b))
+		//{
+		//	transform = glm::rotate(transform, -1.0f, glm::vec3(1, 0, 0)); //TODO TRUE
+		//}
+
+		//if (_input->getInput(SDLK_n))
+		//{
+		//	transform = glm::rotate(transform, 1.0f, glm::vec3(1, 0, 0)); //TODO TRUE
+		//}
+
+		//if (_input->getInput(SDLK_g))
+		//{
+		//	transform = glm::rotate(transform, -1.0f, glm::vec3(0, 0, 1)); //TODO TRUE
+		//}
+
+		//if (_input->getInput(SDLK_h))
+		//{
+		//	transform = glm::rotate(transform, 1.0f, glm::vec3(0, 0, 1)); //TODO TRUE
+		//}
+
+		//if (_input->getInput(SDLK_PERIOD))
+		//{
+		//	_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(0.95f)), true);
+		//}
+
+		//if (_input->getInput(SDLK_SLASH))
+		//{
+		//	_entity->setLocalTransform(glm::scale(_entity->getLocalTransform(), glm::vec3(1.05f)), true);
+		//}
 	}
 
 	virtual bool initialize()

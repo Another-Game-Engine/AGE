@@ -14,6 +14,21 @@ namespace Component
 		virtual ~HotZone(void)
 		{}
 
+		HotZone(HotZone const &o)
+		{
+			uniqueName = o.uniqueName;
+			sharedName = o.sharedName;
+			room = o.room;
+		}
+
+		HotZone &operator=(HotZone const &o)
+		{
+			uniqueName = o.uniqueName;
+			sharedName = o.sharedName;
+			room = o.room;
+			return *this;
+		}
+
 		void init(const std::string &_uniqueName, const std::string &_sharedName, std::shared_ptr<Room> _room)
 		{
 			uniqueName = _uniqueName;
@@ -47,7 +62,5 @@ namespace Component
 		////
 		//////
 	private:
-		HotZone(HotZone const &);
-		HotZone &operator=(HotZone const &);
 	};
 }

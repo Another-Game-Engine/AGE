@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Systems/System.h>
-#include <Entities/EntityData.hh>
 #include <Components/HotZone.hpp>
 #include <Components/Collision.hpp>
 #include <MyTags.hpp>

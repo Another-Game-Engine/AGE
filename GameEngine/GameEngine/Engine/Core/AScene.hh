@@ -225,6 +225,25 @@ public:
 		}
 	}
 
+
+	void addTag(Entity &e, TAG_ID tag)
+	{
+		auto &data = _pool[e.id];
+		if (data.entity != e)
+			return;
+		data.barcode.setTag(tag);
+		informFiltersTagAddition(tag, std::move(data));
+	}
+
+	void removeTag(Entity &e, TAG_ID tag)
+	{
+		auto &data = _pool[e.id];
+		if (data.entity != e)
+			return;
+		data.barcode.unsetTag(tag);
+		informFiltersTagDeletion(tag, std::move(data));
+	}
+
 	////////////////////////
 	//////
 	// Component operation

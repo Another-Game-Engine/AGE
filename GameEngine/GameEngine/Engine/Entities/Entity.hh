@@ -189,6 +189,8 @@ private:
 class EntityData
 {
 public:
+	const Entity &getEntity() const { return entity; }
+	const Barcode &getBarcode() const { return barcode; }
 private:
 	Entity entity;
 	uint32_t crap;

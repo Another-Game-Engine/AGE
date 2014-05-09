@@ -33,22 +33,23 @@
 		auto scene = _scene.lock();
 		{
 			pong = scene->createEntity();
-			pong->setLocalTransform(glm::translate(pong->getLocalTransform(), glm::vec3(-8, 1, 0)));
-			pong->setLocalTransform(glm::scale(pong->getLocalTransform(), glm::vec3(0.01)));
-			auto sprite = pong->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Pong", "pong"));
+			auto &transform = scene->getLocalTransform(pong);
+			transform  = glm::translate(transform, glm::vec3(-8, 1, 0));
+			transform = glm::scale(transform, glm::vec3(0.01));
+			auto sprite = scene->addComponent<Component::Sprite>(pong, scene->getInstance<SpriteManager>()->getAnimation("Pong", "pong"));
 			sprite->delay = 1.0f / 10.0f;
-			pong->addComponent<Component::TransformationRegister>("pong-tableau");
-			pong->addComponent<Component::EntityPlacable>("pong-tableau");
+			scene->addComponent<Component::TransformationRegister>(pong, "pong-tableau");
+			scene->addComponent<Component::EntityPlacable>(pong, "pong-tableau");
 		}
 		{
 			for (auto i = 0; i < 10; ++i)
 			{
 				auto light = scene->createEntity();
-				auto l = light->addComponent<Component::PointLight>();
+				auto l = scene->addComponent<Component::PointLight>(light);
 				l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 15.0f);
 				l->lightData.positionPower.w = 1.0f;
-				light->addComponent<Component::TransformationRegister>("entrance-light-" + std::to_string(i));
-				light->addComponent<Component::EntityPlacable>("entrance-light-" + std::to_string(i));
+				scene->addComponent<Component::TransformationRegister>(light, "entrance-light-" + std::to_string(i));
+				scene->addComponent<Component::EntityPlacable>(light, "entrance-light-" + std::to_string(i));
 				lights.push_back(light);
 			}
 		}
@@ -57,10 +58,10 @@
 			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__welcome");
 			if (!meshObj)
 				return false;
-			auto meshComponent = welcomeText->addComponent<Component::MeshRenderer>(meshObj);
+			auto meshComponent = scene->addComponent<Component::MeshRenderer>(welcomeText, meshObj);
 			meshComponent->setShader("MaterialBasic");
-			welcomeText->addComponent<Component::TransformationRegister>("welcome-text");
-			welcomeText->addComponent<Component::EntityPlacable>("welcome-text");
+			scene->addComponent<Component::TransformationRegister>(welcomeText, "welcome-text");
+			scene->addComponent<Component::EntityPlacable>(welcomeText, "welcome-text");
 		}
 		return true;
 	}

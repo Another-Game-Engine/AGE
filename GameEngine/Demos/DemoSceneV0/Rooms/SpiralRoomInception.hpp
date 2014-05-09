@@ -42,11 +42,11 @@ protected:
 		for (auto i = 0; i < 2; ++i)
 		{
 			auto e = scene->createEntity();
-			auto l = e->addComponent<Component::PointLight>();
+			auto l = scene->addComponent<Component::PointLight>(e);
 			l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f); // distance
 			l->lightData.positionPower.w = 1.0f; // intensite
-			e->addComponent<Component::TransformationRegister>("spiral-inception-pointlight-" + std::to_string(i));
-			e->addComponent<Component::EntityPlacable>("spiral-inception-pointlight-" + std::to_string(i));
+			scene->addComponent<Component::TransformationRegister>(e, "spiral-inception-pointlight-" + std::to_string(i));
+			scene->addComponent<Component::EntityPlacable>(e, "spiral-inception-pointlight-" + std::to_string(i));
 			map["spiral-inception-pointlight-" + std::to_string(i)] = e;
 		}
 		return true;

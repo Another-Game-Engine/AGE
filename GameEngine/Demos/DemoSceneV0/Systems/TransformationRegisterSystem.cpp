@@ -13,16 +13,16 @@ TRSFilter::TRSFilter(std::weak_ptr<AScene> &&scene)
 
 TRSFilter::~TRSFilter(){}
 
-void TRSFilter::componentAdded(Entity &&e, unsigned short typeId)
+void TRSFilter::componentAdded(EntityData &&e, COMPONENT_ID typeId)
 {
-	if (_code.match(e->getCode()))
-	{
-		_collection.insert(e);
-		assert(_system != nullptr && "You forgot to link system.");
-		_system->loadEntity(e);
-	}
+	// @CESAR TODO
+	//if (e.getBarcode().match(_barcode))
+	//{
+	//	_collection.insert(e.getEntity());
+	//	assert(_system != nullptr && "You forgot to link system.");
+	//	_system->loadEntity(e.getEntity());
+	//}
 }
-
 
 TransformationRegisterSystem::TransformationRegisterSystem(std::weak_ptr<AScene> &&scene)
 : System(std::move(scene))
@@ -47,21 +47,21 @@ TransformationRegisterSystem::~TransformationRegisterSystem()
 
 void TransformationRegisterSystem::loadEntity(Entity &e)
 {
-	auto compo = e->getComponent<Component::TransformationRegister>();
+	auto compo = _scene.lock()->getComponent<Component::TransformationRegister>(e);
 	auto it = _loaded.find(compo->name);
 	if (it != std::end(_loaded))
 	{
-		e->setLocalTransform(it->second, true);
+		_scene.lock()->getLocalTransform(e) = it->second;
 	}
 }
 
 void TransformationRegisterSystem::saveToFile()
 {
-	std::shared_ptr<Component::TransformationRegister> compo;
+	Component::TransformationRegister *compo = nullptr;
 	for (auto e : _filter.getCollection())
 	{
-		compo = e->getComponent<Component::TransformationRegister>();
-		_loaded[compo->name] = e->getLocalTransform();
+		compo = _scene.lock()->getComponent<Component::TransformationRegister>(e);
+		_loaded[compo->name] = _scene.lock()->getLocalTransform(e);
 	}
 	assert(_file.getFullName().size() != 0 && "File path is not defined.");
 	std::ofstream s(_file.getFullName());

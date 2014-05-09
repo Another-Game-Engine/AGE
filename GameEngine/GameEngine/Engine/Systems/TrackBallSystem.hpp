@@ -5,7 +5,6 @@
 #include "System.h"
 #include <Components/CameraComponent.hpp>
 #include <Components/TrackBallComponent.hpp>
-#include <Entities/EntityData.hh>
 #include <Core/Input.hh>
 #include <Core/Engine.hh>
 #include <Context/SdlContext.hh>

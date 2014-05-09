@@ -20,6 +20,17 @@ namespace Component
 		{
 		}
 
+		TransformationRegister(TransformationRegister const &o)
+		{
+			name = o.name;
+		}
+
+		TransformationRegister &operator=(TransformationRegister const &o)
+		{
+			name = o.name;
+			return *this;
+		}
+
 		std::string name;
 
 		//////
@@ -37,7 +48,5 @@ namespace Component
 		////
 		//////
 	private:
-		TransformationRegister(TransformationRegister const &);
-		TransformationRegister &operator=(TransformationRegister const &);
 	};
 }
