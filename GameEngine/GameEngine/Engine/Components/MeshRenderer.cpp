@@ -48,34 +48,31 @@ namespace Component
 		mesh = nullptr;
 	}
 
-	void MeshRenderer::render(std::function<void(OpenGLTools::Shader&)> func)
+	void MeshRenderer::render(std::shared_ptr<Renderer> renderer, const glm::mat4 &globalTrans, std::function<void(OpenGLTools::Shader&)> func)
 	{
-		//@CESAR TODO
-		//auto perModelUniform = _entity->getScene().lock()->getInstance<Renderer>()->getUniform("PerModel");
-		//auto materialUniform = _entity->getScene().lock()->getInstance<Renderer>()->getUniform("MaterialBasic");
+		auto perModelUniform = renderer->getUniform("PerModel");
+		auto materialUniform = renderer->getUniform("MaterialBasic");
 
-		//auto s = _entity->getScene().lock()->getInstance<Renderer>()->getShader(shader);
-		//if (s)
-		//	s->use();
-		//func(*s);
-		//perModelUniform->setUniform("model", _entity->getGlobalTransform());
-		//perModelUniform->flushChanges();
-		//for (std::size_t i = 0; i < mesh->material->materials.size(); ++i)
-		//{
-		//	mesh->material->materials[i].setUniforms(materialUniform);
-		//	materialUniform->flushChanges();
-		//	mesh->geometries[i].buffer.draw(GL_TRIANGLES);
-		//}
-		_CRT_UNUSED(func);
+		auto s = renderer->getShader(shader);
+		if (s)
+			s->use();
+		func(*s);
+		perModelUniform->setUniform("model", globalTrans);
+		perModelUniform->flushChanges();
+		for (std::size_t i = 0; i < mesh->material->materials.size(); ++i)
+		{
+			mesh->material->materials[i].setUniforms(materialUniform);
+			materialUniform->flushChanges();
+			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
+		}
 	}
 
-	void MeshRenderer::renderRaw()
+	void MeshRenderer::renderRaw(std::shared_ptr<Renderer> renderer, const glm::mat4 &trans)
 	{
-		//@CESAR TODO
-		//std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = _entity->getScene().lock()->getInstance<Renderer>()->getUniform("PerModel");
+		std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = renderer->getUniform("PerModel");
 
-		//perModelUniform->setUniform("model", _entity->getGlobalTransform());
-		//perModelUniform->flushChanges();
+		perModelUniform->setUniform("model", trans);
+		perModelUniform->flushChanges();
 		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 		{
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);

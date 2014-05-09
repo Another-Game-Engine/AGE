@@ -24,7 +24,7 @@ namespace Component
 	{
 		//@CESAR TODO
 		//skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->get<CubeMapFile>(name);
-		cubeMapShader = _cubeMapShader;
+		//cubeMapShader = _cubeMapShader;
 	}
 
 	void CameraComponent::dettachSkybox()

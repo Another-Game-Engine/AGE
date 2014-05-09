@@ -109,6 +109,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 		_spotShadowNbr = shadowNbr;
 	}
 
+	auto renderer = _scene.lock()->getInstance<Renderer>();
 	_scene.lock()->getInstance<Renderer>()->getShader("ShadowDepth")->use();
 	i = 0;
 	shadowNbr = 0;
@@ -136,7 +137,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 			
 			for (auto e : _meshRendererFilter.getCollection())
 			{
-				scene->getComponent<Component::MeshRenderer>(e)->renderRaw();
+				scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getGlobalTransform(e));
 			}
 
 			drawSprites();
@@ -210,7 +211,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	for (auto e : _meshRendererFilter.getCollection())
 	{
-		scene->getComponent<Component::MeshRenderer>(e)->renderRaw();
+		scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getGlobalTransform(e));
 	}
 
 	// ----------------------------------------------------
@@ -224,7 +225,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	for (auto e : _meshRendererFilter.getCollection())
 	{
-		scene->getComponent<Component::MeshRenderer>(e)->render([&](OpenGLTools::Shader &s)
+		scene->getComponent<Component::MeshRenderer>(e)->render(renderer, scene->getGlobalTransform(e), [&](OpenGLTools::Shader &s)
 		{
 			glActiveTexture(GL_TEXTURE4);
 			glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
