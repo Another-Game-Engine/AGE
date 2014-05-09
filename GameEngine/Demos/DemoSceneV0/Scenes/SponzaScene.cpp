@@ -53,12 +53,13 @@ SponzaScene::~SponzaScene(void)
 Entity SponzaScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	e->setLocalTransform(glm::translate(e->getLocalTransform(), pos));
-	e->setLocalTransform(glm::scale(e->getLocalTransform(), scale));
-	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
+	auto &transform = getLocalTransform(e);
+	transform = glm::translate(transform, pos);
+	transform = glm::scale(transform, scale);
+	auto rigidBody = addComponent<Component::RigidBody>(e, shared_from_this(), mass);
+	rigidBody->setCollisionShape(e, Component::RigidBody::SPHERE);
 
-	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+	auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -66,13 +67,16 @@ Entity SponzaScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string c
 Entity SponzaScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	e->setLocalTransform(glm::translate(e->getLocalTransform(), pos));
-	e->setLocalTransform(glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(1, 0, 0)));
-	e->setLocalTransform(glm::rotate(e->getLocalTransform(), 0.0f, glm::vec3(0, 1, 0)));
-	e->setLocalTransform(glm::scale(e->getLocalTransform(), scale));
-	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::BOX);
-	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+	auto &transform = getLocalTransform(e);
+
+	transform = glm::translate(transform, pos);
+	transform = glm::rotate(transform, 0.0f, glm::vec3(1, 0, 0));
+	transform = glm::rotate(transform, 0.0f, glm::vec3(0, 1, 0));
+	transform = glm::scale(transform, scale);
+
+	auto rigidBody = addComponent<Component::RigidBody>(e, shared_from_this(), mass);
+	rigidBody->setCollisionShape(e, Component::RigidBody::BOX);
+	auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -80,11 +84,12 @@ Entity SponzaScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string con
 Entity SponzaScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	e->setLocalTransform(glm::translate(e->getLocalTransform(), pos));
-	e->setLocalTransform(glm::scale(e->getLocalTransform(), scale));
-	auto rigidBody = e->addComponent<Component::RigidBody>(mass);
-	rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
-	auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
+	auto &transform = getLocalTransform(e);
+	transform = glm::translate(transform, pos);
+	transform = glm::scale(transform, scale);
+	auto rigidBody = addComponent<Component::RigidBody>(e, shared_from_this(), mass);
+	rigidBody->setCollisionShape(e, Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
+	auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 	mesh->setShader("MaterialBasic");
 	return e;
 }
@@ -261,41 +266,44 @@ bool SponzaScene::userStart()
 	// CREATE SPONZA CHURCH
 	{
 		auto e = createEntity();
-		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0)));
-		e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(70)));
+		auto &transform = getLocalTransform(e);
 
-		auto rigidBody = e->addComponent<Component::RigidBody>(0.0f);
+		transform = glm::translate(transform, glm::vec3(0));
+		transform = glm::scale(transform, glm::vec3(70));
+
+		auto rigidBody = addComponent<Component::RigidBody>(e, shared_from_this(), 0.0f);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_sponza");
+		rigidBody->setCollisionShape(e, Component::RigidBody::MESH, "collision_shape_static_sponza");
 
 		rigidBody->getBody().setFlags(COLLISION_LAYER_STATIC);
 		rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
 		rigidBody->getBody().setRestitution(0.9f);
 
-		auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
+		auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__sponza"));
 
 		mesh->setShader("MaterialBasic");
 	}
 
 	Entity character;
-	std::shared_ptr<Component::CameraComponent> cameraComponent1;
+	Component::CameraComponent *cameraComponent1;
 
 	{
 		auto e = createEntity();
-		e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, 100, 0)));
-		auto fpc = e->addComponent<Component::FPController>();
+		auto &transform = getLocalTransform(e);
+		transform = glm::translate(transform, glm::vec3(0, 100, 0));
+		auto fpc = addComponent<Component::FPController>(e);
 		character = e;
-		cameraComponent1 = character->addComponent<Component::CameraComponent>();
-		character->addComponent<Component::FirstPersonView>();
-		character->addTag(MyTags::HEROS_TAG);
+		cameraComponent1 = addComponent<Component::CameraComponent>(character);
+		addComponent<Component::FirstPersonView>(character);
+		addTag(character, MyTags::HEROS_TAG);
 		globalCamera = e;
 	}
 
 
 	{
 		auto e = createMonkey(glm::vec3(19, 0.9, -0.59), glm::vec3(1.5), "texture__SunTexture", 1.0f);
-		auto rigidbody = e->getComponent<Component::RigidBody>();
+		auto rigidbody = getComponent<Component::RigidBody>(e);
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 		rigidbody->getBody().getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 

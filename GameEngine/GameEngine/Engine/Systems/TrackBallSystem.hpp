@@ -39,8 +39,8 @@ protected:
 
 		for (auto e : _filter.getCollection())
 		{
-			auto camera = e->getComponent<Component::CameraComponent>();
-			auto trackBall = e->getComponent<Component::TrackBall>();
+			auto camera = scene->getComponent<Component::CameraComponent>(e);
+			auto trackBall = scene->getComponent<Component::TrackBall>(e);
 
 			glm::vec3		pos;
 
@@ -56,10 +56,13 @@ protected:
 			pos.x = sin(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist; //-V537
 			pos.y = sin(trackBall->angles.y) * trackBall->dist;
 			pos.z = cos(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist;
-			e->setLocalTransform(glm::lookAt(glm::vec3(trackBall->toLook->getGlobalTransform()[3]) + pos,
-				glm::vec3(trackBall->toLook->getGlobalTransform()[3]),
-				glm::vec3(0, 1, 0)));
-			camera->lookAtTransform = e->getLocalTransform();
+			auto &transform = scene->getLocalTransform(e);
+			auto &tbTransform = scene->getGlobalTransform(trackBall->toLook);
+
+			transform = glm::lookAt(glm::vec3(tbTransform[3]) + pos,
+				glm::vec3(tbTransform[3]),
+				glm::vec3(0, 1, 0));
+			camera->lookAtTransform = transform;
 		}
 	}
 

@@ -30,27 +30,23 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
+		auto scene = _scene.lock();
 		for (auto e : _zones.getCollection())
 		{
-			auto collision = e->getComponent<Component::Collision>();
+			auto collision = scene->getComponent<Component::Collision>(e);
 			auto isCharacter = false;
 			for (auto c : collision->getCollisions())
 			{
-				if (!c.get() || !c->isTagged(MyTags::HEROS_TAG))
+				if (scene->isTagged(c, MyTags::HEROS_TAG))
 					continue;
 				isCharacter = true;
 			}
 			if (!isCharacter)
 				return;
-			if (!_lastZone.get())
-			{
-				_lastZone = e;
-				return;
-			}
 			if (_lastZone == e)
 				return;
-			auto prev = _lastZone->getComponent<Component::HotZone>();
-			auto curr = e->getComponent<Component::HotZone>();
+			auto prev = scene->getComponent<Component::HotZone>(_lastZone);
+			auto curr = scene->getComponent<Component::HotZone>(e);
 			if (prev->sharedName == curr->sharedName)
 			{
 				if (prev->room->isEnable())

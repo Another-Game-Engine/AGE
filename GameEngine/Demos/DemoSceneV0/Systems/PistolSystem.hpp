@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Systems/System.h>
-#include <Entities/EntityData.hh>
 #include <Components/Collision.hpp>
 #include <Context/SdlContext.hh>
 #include <Systems/CameraSystem.hpp>
@@ -42,16 +41,17 @@ private:
 				glm::vec3 from, to;
 				scene->getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 				auto e = scene->createEntity();
-				e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(from + to * 1.2f)));
-				e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.23f)));
-				auto mesh = e->addComponent<Component::MeshRenderer>(scene->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+				auto &trans = scene->getLocalTransform(e);
+				trans = glm::translate(trans, glm::vec3(from + to * 1.2f));
+				trans = glm::scale(trans, glm::vec3(0.23f));
+				auto mesh = scene->addComponent<Component::MeshRenderer>(e, scene->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
-				auto rigidBody = e->addComponent<Component::RigidBody>(0.4f);
-				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
+				auto rigidBody = scene->addComponent<Component::RigidBody>(e, _scene, 0.4f);
+				rigidBody->setCollisionShape(e, Component::RigidBody::SPHERE);
 				rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(to * 8.0f));
 				rigidBody->getBody().setFriction(1.0f);
 				rigidBody->getBody().setRestitution(1.0f);
-				e->addTag(MyTags::BULLET_TAG);
+				scene->addTag(e, MyTags::BULLET_TAG);
 				_shots.push(e);
 			}
 			delay = 0.1f;

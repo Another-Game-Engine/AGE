@@ -244,6 +244,14 @@ public:
 		informFiltersTagDeletion(tag, std::move(data));
 	}
 
+	bool isTagged(Entity &e, TAG_ID tag)
+	{
+		auto &data = _pool[e.id];
+		if (data.entity != e)
+			return false;
+		return data.barcode.hasTag(tag);
+	}
+
 	////////////////////////
 	//////
 	// Component operation

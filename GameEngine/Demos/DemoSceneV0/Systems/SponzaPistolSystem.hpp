@@ -48,23 +48,24 @@ private:
 			scene->getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 
 			auto e = scene->createEntity();
-			e->setLocalTransform(glm::translate(e->getLocalTransform(), (from + to * 1.5f)));
-			e->setLocalTransform(glm::scale(e->getLocalTransform(), glm::vec3(0.2f)));
-			auto rigidbody = e->addComponent<Component::RigidBody>(10.0f);
-			rigidbody->setCollisionShape(Component::RigidBody::SPHERE);
+			auto &transform = scene->getLocalTransform(e);
+			transform = glm::translate(transform, (from + to * 1.5f));
+			transform = glm::scale(transform, glm::vec3(0.2f));
+			auto rigidbody = scene->addComponent<Component::RigidBody>(e, _scene, 10.0f);
+			rigidbody->setCollisionShape(e, Component::RigidBody::SPHERE);
 			auto &body = rigidbody->getBody();
 			body.applyCentralImpulse(convertGLMVectorToBullet(to * 10.0f));
 			body.getBroadphaseHandle()->m_collisionFilterGroup = COLLISION_LAYER_STATIC | COLLISION_LAYER_DYNAMIC;
 			body.getBroadphaseHandle()->m_collisionFilterMask = COLLISION_LAYER_DYNAMIC;
 			body.setFriction(1.0f);
 			body.setRestitution(0.9f);
-			auto mesh = e->addComponent<Component::MeshRenderer>(scene->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+			auto mesh = scene->addComponent<Component::MeshRenderer>(e, scene->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 			mesh->setShader("MaterialBasic");
 
-			auto light = e->addComponent<Component::PointLight>();
+			auto light = scene->addComponent<Component::PointLight>(e);
 			light->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 5.0f);
-			light->lightData.positionPower.w = 3.0f;
-			e->addTag(MyTags::BULLET_TAG);
+
+			scene->addTag(e, MyTags::BULLET_TAG);
 			if (stack.size() > 50)
 			{
 				scene->destroy(stack.front());
@@ -78,15 +79,16 @@ private:
 		{
 			auto e = scene->createEntity();
 
-			auto l = e->addComponent<Component::SpotLight>();
+			auto l = scene->addComponent<Component::SpotLight>(e);
 			if (_cameras.getCollection().size() != 0)
 			{
-				auto cam = _cameras.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
+				auto cam = scene->getComponent<Component::CameraComponent>(*_cameras.getCollection().begin());
 				l->projection = glm::perspective(40.0f, 1.0f, 0.1f, 100.0f);
 				l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
 				l->lightData.positionPower.w = 50.0f;
 				l->lightData.shadowId = 1;
-				e->setLocalTransform(glm::inverse(cam->lookAtTransform));
+				auto &transform = scene->getLocalTransform(e);
+				transform = glm::inverse(cam->lookAtTransform);
 			}
 			delay = 0.1f;	
 		}

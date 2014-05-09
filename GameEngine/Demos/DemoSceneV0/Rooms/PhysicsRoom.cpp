@@ -51,11 +51,12 @@ class PistolSystem;
 				for (auto j = 0; j < w; ++j)
 				{
 						auto e = scene->createEntity();
-						e->setLocalTransform(t);
-						e->setLocalTransform(glm::scale(t, glm::vec3(0.6f)));
-						e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(0, h - i + 0.001f, ((float)(w)-(float)(j)) + 4.0f)));
-						e->addComponent<Component::MeshRenderer>(meshObj)->setShader("MaterialBasic");
-						e->addComponent<Component::RigidBody>(1.0f)->setCollisionShape(Component::RigidBody::BOX);
+						auto &trans = scene->getGlobalTransform(e);
+						trans = t;
+						trans = glm::scale(t, glm::vec3(0.6f));
+						trans = glm::translate(trans, glm::vec3(0, h - i + 0.001f, ((float)(w)-(float)(j)) + 4.0f));
+						scene->addComponent<Component::MeshRenderer>(e, meshObj)->setShader("MaterialBasic");
+						scene->addComponent<Component::RigidBody>(e, _scene, 1.0f)->setCollisionShape(e, Component::RigidBody::BOX);
 						cubes.push_back(e);
 				}
 			}
@@ -66,17 +67,17 @@ class PistolSystem;
 			for (auto i = 0; i < 3; ++i)
 			{
 				auto light = scene->createEntity();
-				auto l = light->addComponent<Component::SpotLight>();
+				auto l = scene->addComponent<Component::SpotLight>(light);
 				l->lightData.colorRange = glm::vec4(0.4f, 0.6f, 1.0f, 100.0f);
 				l->lightData.positionPower.w = 10.0f;
 				l->projection = glm::perspective(40.0f, 1.0f, 0.1f, 100.0f);
 				l->lightData.shadowId = 1;
-				light->addComponent<Component::EntityPlacable>("physics-room-spotlight-" + std::to_string(i));
-				light->addComponent<Component::TransformationRegister>("physics-room-spotlight-" + std::to_string(i));
+				scene->addComponent<Component::EntityPlacable>(light, "physics-room-spotlight-" + std::to_string(i));
+				scene->addComponent<Component::TransformationRegister>(light, "physics-room-spotlight-" + std::to_string(i));
 				lights.push_back(light);
 			}
 			{
-				auto audioCpt = (*lights.begin())->addComponent<Component::AudioEmitter>();
+				auto audioCpt = scene->addComponent<Component::AudioEmitter>(*lights.begin());
 				audioCpt->setAudio(scene->getInstance<AudioManager>()->getAudio("the-wall"), "the-wall", CHANNEL_GROUP_MUSIC);
 				audioCpt->play("the-wall", false);
 				audioCpt->getAudio("the-wall")->channel->set3DMinMaxDistance(1.0f, 30.0f);
@@ -84,15 +85,15 @@ class PistolSystem;
 			for (auto i = 3; i < 5; ++i)
 			{
 				auto light = scene->createEntity();
-				auto l = light->addComponent<Component::PointLight>();
+				auto l = scene->addComponent<Component::PointLight>(light);
 				l->lightData.colorRange = glm::vec4(0.4f, 0.6f, 1.0f, 6.0f); // distance
 				l->lightData.positionPower.w = 3.0f; // intensite
-				light->addComponent<Component::TransformationRegister>("physics-room-pointlight-" + std::to_string(i));
-				light->addComponent<Component::EntityPlacable>("physics-room-pointlight-" + std::to_string(i));
+				scene->addComponent<Component::TransformationRegister>(light, "physics-room-pointlight-" + std::to_string(i));
+				scene->addComponent<Component::EntityPlacable>(light, "physics-room-pointlight-" + std::to_string(i));
 				lights.push_back(light);
 			}
-			lights[3]->getComponent<Component::PointLight>()->lightData.colorRange = glm::vec4(0.6f, 0.6f, 0.2f, 16.0f);
-			lights[4]->getComponent<Component::PointLight>()->lightData.colorRange = glm::vec4(0.6f, 0.9f, 0.2f, 5.0f);
+			scene->getComponent<Component::PointLight>(lights[3])->lightData.colorRange = glm::vec4(0.6f, 0.6f, 0.2f, 16.0f);
+			scene->getComponent<Component::PointLight>(lights[4])->lightData.colorRange = glm::vec4(0.6f, 0.9f, 0.2f, 5.0f);
 
 		}
 		{
@@ -100,10 +101,10 @@ class PistolSystem;
 			auto meshObj = scene->getInstance<AssetsManager>()->get<ObjFile>("obj__click-to-shoot");
 			if (!meshObj)
 				return false;
-			auto meshComponent = clickToShoot->addComponent<Component::MeshRenderer>(meshObj);
+			auto meshComponent = scene->addComponent<Component::MeshRenderer>(clickToShoot, meshObj);
 			meshComponent->setShader("MaterialBasic");
-			clickToShoot->addComponent<Component::TransformationRegister>("click-to-shoot-text");
-			clickToShoot->addComponent<Component::EntityPlacable>("click-to-shoot-text");
+			scene->addComponent<Component::TransformationRegister>(clickToShoot, "click-to-shoot-text");
+			scene->addComponent<Component::EntityPlacable>(clickToShoot, "click-to-shoot-text");
 		}
 		return true;
 	}

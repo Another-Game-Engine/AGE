@@ -35,18 +35,19 @@ protected:
 	virtual void mainUpdate(double time)
 	{
 		_manager->update();
+		auto scene = _scene.lock();
 
 		for (auto e : _emitters.getCollection())
 		{
-			auto ae = e->getComponent<Component::AudioEmitter>();
+			auto ae = scene->getComponent<Component::AudioEmitter>(e);
 			ae->updatePosition();
 		}
 
 		for (auto e : _listeners.getCollection())
 		{
-			auto l = e->getComponent<Component::AudioListener>();
-			auto pos = posFromMat4(e->getGlobalTransform());
-			glm::mat4 m = e->getGlobalTransform();
+			auto l = scene->getComponent<Component::AudioListener>(e);
+			auto pos = posFromMat4(scene->getGlobalTransform(e));
+			glm::mat4 m = scene->getGlobalTransform(e);
 			glm::vec4 u(0,-1,0,0);
 			u = m * u;
 			glm::vec4 f(0,0,1,0);

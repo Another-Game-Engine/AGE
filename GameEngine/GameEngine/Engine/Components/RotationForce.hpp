@@ -17,6 +17,16 @@ namespace Component
 
 		void setForce(const glm::vec3 &force);
 		const glm::vec3 &getForce() const;
+		
+		RotationForce(RotationForce const &o)
+		{
+			force = o.force;
+		}
+		RotationForce &operator=(RotationForce const &o)
+		{
+			force = o.force;
+			return *this;
+		}
 
 		//////
 		////
@@ -34,8 +44,6 @@ namespace Component
 
 		glm::vec3 force;
 	private:
-		RotationForce(RotationForce const &);
-		RotationForce &operator=(RotationForce const &);
 	};
 
 }
