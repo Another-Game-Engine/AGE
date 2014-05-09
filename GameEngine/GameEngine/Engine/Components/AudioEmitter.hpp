@@ -17,6 +17,18 @@ namespace Component
 {
 	struct AudioEmitter : public Component::ComponentBase<AudioEmitter>
 	{
+
+		AudioEmitter(AudioEmitter const &o)
+		{
+			audios = o.audios;
+		}
+
+		AudioEmitter &operator=(AudioEmitter const &o)
+		{
+			audios = o.audios;
+			return *this;
+		}
+
 		struct AudioInstance
 		{
 			AudioInstance();
@@ -116,7 +128,5 @@ namespace Component
 		//////
 	private:
 		std::map<std::string, AudioInstance> audios;
-		AudioEmitter(AudioEmitter const &);
-		AudioEmitter &operator=(AudioEmitter const &);
 	};
 }

@@ -56,7 +56,8 @@ Entity SponzaScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string c
 	auto &transform = getLocalTransform(e);
 	transform = glm::translate(transform, pos);
 	transform = glm::scale(transform, scale);
-	auto rigidBody = addComponent<Component::RigidBody>(e, shared_from_this(), mass);
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, mass);
 	rigidBody->setCollisionShape(e, Component::RigidBody::SPHERE);
 
 	auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
@@ -74,7 +75,8 @@ Entity SponzaScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string con
 	transform = glm::rotate(transform, 0.0f, glm::vec3(0, 1, 0));
 	transform = glm::scale(transform, scale);
 
-	auto rigidBody = addComponent<Component::RigidBody>(e, shared_from_this(), mass);
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, mass);
 	rigidBody->setCollisionShape(e, Component::RigidBody::BOX);
 	auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 	mesh->setShader("MaterialBasic");
@@ -87,7 +89,8 @@ Entity SponzaScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string c
 	auto &transform = getLocalTransform(e);
 	transform = glm::translate(transform, pos);
 	transform = glm::scale(transform, scale);
-	auto rigidBody = addComponent<Component::RigidBody>(e, shared_from_this(), mass);
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, mass);
 	rigidBody->setCollisionShape(e, Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
 	auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 	mesh->setShader("MaterialBasic");
@@ -271,7 +274,8 @@ bool SponzaScene::userStart()
 		transform = glm::translate(transform, glm::vec3(0));
 		transform = glm::scale(transform, glm::vec3(70));
 
-		auto rigidBody = addComponent<Component::RigidBody>(e, shared_from_this(), 0.0f);
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, 0.0f);
 		rigidBody->setMass(0);
 		rigidBody->setCollisionShape(e, Component::RigidBody::MESH, "collision_shape_static_sponza");
 
@@ -292,7 +296,8 @@ bool SponzaScene::userStart()
 		auto e = createEntity();
 		auto &transform = getLocalTransform(e);
 		transform = glm::translate(transform, glm::vec3(0, 100, 0));
-		auto fpc = addComponent<Component::FPController>(e);
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		auto fpc = addComponent<Component::FPController>(e, e, weakOnThis);
 		character = e;
 		cameraComponent1 = addComponent<Component::CameraComponent>(character);
 		addComponent<Component::FirstPersonView>(character);

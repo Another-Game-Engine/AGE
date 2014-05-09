@@ -38,7 +38,7 @@ private:
 			return Entity();
 		if (_filter.getCollection().size() == 1)
 		{
-			_name = _scene.lock()->getComponent<Component::EntityPlacable>(*(_filter.getCollection().begin()->get()))->name;
+			_name = _scene.lock()->getComponent<Component::EntityPlacable>(*(_filter.getCollection().begin()))->name;
 			return *_filter.getCollection().begin();
 		}
 		for (auto e : _filter.getCollection())

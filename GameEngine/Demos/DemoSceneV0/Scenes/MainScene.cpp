@@ -89,31 +89,33 @@ bool 			MainScene::userStart()
 	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
-	getSystem<PostFxSystem>()->useHDR(true);
-	getSystem<PostFxSystem>()->useBloom(true);
+	getSystem<PostFxSystem>()->useHDR(false);
+	getSystem<PostFxSystem>()->useBloom(false);
 
 
 	// create heros
 	{
 		_heros = createEntity();
 
-		_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(-49, 1, 0)));
-		auto camera = _heros->addComponent<Component::CameraComponent>();
+		auto &trans = getLocalTransform(_heros);
+		trans = glm::translate(trans, glm::vec3(-49, 1, 0));
+		auto camera = addComponent<Component::CameraComponent>(_heros);
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		camera->fboSize = screenSize;
 		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
-		camera->sampleNbr = 8;
+		camera->sampleNbr = 0;
 
-		auto fpv = _heros->addComponent<Component::FirstPersonView>();
-		auto fpc = _heros->addComponent<Component::FPController>();
+		auto fpv = addComponent<Component::FirstPersonView>(_heros);
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		auto fpc = addComponent<Component::FPController>(_heros, _heros, weakOnThis);
 		fpc->getShape().setLocalScaling(btVector3(0.3f, 0.3f, 0.3f));
 		fpc->backwardRunSpeed = 0.001f;
 		fpc->forwardRunSpeed = 0.001f;
 		fpc->sideRunSpeed = 0.001f;
-		auto al = _heros->addComponent<Component::AudioListener>();
-		_heros->addTag(MyTags::HEROS_TAG);
-		_heros->setLocalTransform(glm::rotate(_heros->getLocalTransform(), -90.0f, glm::vec3(0, 1, 0)));
+		auto al = addComponent<Component::AudioListener>(_heros);
+		addTag(_heros, MyTags::HEROS_TAG);
+		trans = glm::rotate(trans, -90.0f, glm::vec3(0, 1, 0));
 	//	_heros->addComponent<Component::TransformationRegister>("HEROS-POS");
 		//_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(-57.251132965087891f, 0.22000002861022949f, 0.39823031425476074f)));
 	//	camera->lookAtTransform = 
@@ -123,16 +125,18 @@ bool 			MainScene::userStart()
 	//create room mesh
 	{
 		auto room = createEntity();
-		room->setLocalTransform(glm::translate(room->getLocalTransform(), glm::vec3(0)));
-		room->setLocalTransform(glm::scale(room->getLocalTransform(), glm::vec3(150.0f)));
+		auto &trans = getLocalTransform(room);
+		trans = glm::translate(trans, glm::vec3(0));
+		trans = glm::scale(trans, glm::vec3(150.0f));
 		auto meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__demoMuseum");
 		if (!meshObj)
 			return false;
-		auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+		auto meshComponent = addComponent<Component::MeshRenderer>(room, meshObj);
 		meshComponent->setShader("MaterialBasic");
-		auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		auto rigidBody = addComponent<Component::RigidBody>(room, weakOnThis, 0.0f);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_demoMuseum");
+		rigidBody->setCollisionShape(room, Component::RigidBody::MESH, "collision_shape_static_demoMuseum");
 		//	rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
 		rigidBody->getBody().setRestitution(0.9f);
@@ -141,16 +145,17 @@ bool 			MainScene::userStart()
 	// create spiral sponza
 	{
 		auto room = createEntity();
-		room->addComponent<Component::TransformationRegister>("spiral-sub-room-sponza");
+		addComponent<Component::TransformationRegister>(room, "spiral-sub-room-sponza");
 		//room->addComponent<Component::EntityPlacable>("spiral-sub-room-sponza");
 		auto meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__spiral");
 		if (!meshObj)
 			return false;
-		auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+		auto meshComponent = addComponent<Component::MeshRenderer>(room, meshObj);
 		meshComponent->setShader("MaterialBasic");
-		auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+		std::weak_ptr<AScene> weakFromThis = std::static_pointer_cast<AScene>(shared_from_this());
+		auto rigidBody = addComponent<Component::RigidBody>(room, weakFromThis, 0.0f);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_spiral");
+		rigidBody->setCollisionShape(room, Component::RigidBody::MESH, "collision_shape_static_spiral");
 		//	rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
 		rigidBody->getBody().setRestitution(0.9f);
@@ -159,9 +164,9 @@ bool 			MainScene::userStart()
 		meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__sponza-text-3d");
 		if (!meshObj)
 			return false;
-		meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent = addComponent<Component::MeshRenderer>(e, meshObj);
 		meshComponent->setShader("MaterialBasic");
-		e->addComponent<Component::TransformationRegister>("spiral-sponza-room-title");
+		addComponent<Component::TransformationRegister>(e, "spiral-sponza-room-title");
 		//e->addComponent<Component::EntityPlacable>("spiral-sponza-room-title");
 	}
 
@@ -172,24 +177,25 @@ bool 			MainScene::userStart()
 		auto meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__spiral");
 		if (!meshObj)
 			return false;
-		auto meshComponent = room->addComponent<Component::MeshRenderer>(meshObj);
+		auto meshComponent = addComponent<Component::MeshRenderer>(room, meshObj);
 		meshComponent->setShader("MaterialBasic");
-		auto rigidBody = room->addComponent<Component::RigidBody>(0.0f);
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		auto rigidBody = addComponent<Component::RigidBody>(room, weakOnThis, 0.0f);
 		rigidBody->setMass(0);
-		rigidBody->setCollisionShape(Component::RigidBody::MESH, "collision_shape_static_spiral");
+		rigidBody->setCollisionShape(room, Component::RigidBody::MESH, "collision_shape_static_spiral");
 		//	rigidBody->getShape().setMargin(0.001f);
 		rigidBody->getBody().setFriction(1.0f);
 		rigidBody->getBody().setRestitution(0.9f);
-		room->addComponent<Component::TransformationRegister>("spiral-sub-room-asteroid");
+		addComponent<Component::TransformationRegister>(room, "spiral-sub-room-asteroid");
 		//room->addComponent<Component::EntityPlacable>("spiral-sub-room-asteroid");
 
 		auto e = createEntity();
 		meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__asteroid-text");
 		if (!meshObj)
 			return false;
-		meshComponent = e->addComponent<Component::MeshRenderer>(meshObj);
+		meshComponent = addComponent<Component::MeshRenderer>(e, meshObj);
 		meshComponent->setShader("MaterialBasic");
-		e->addComponent<Component::TransformationRegister>("spiral-asteroid-room-title");
+		addComponent<Component::TransformationRegister>(e, "spiral-asteroid-room-title");
 		//e->addComponent<Component::EntityPlacable>("spiral-asteroid-room-title");
 	}
 
@@ -277,7 +283,7 @@ bool 			MainScene::userStart()
 	}
 
 	// init frame buffer and send texture id to other scene
-	auto camera = _heros->getComponent<Component::CameraComponent>();
+	auto camera = getComponent<Component::CameraComponent>(_heros);
 	camera->initFrameBuffer();
 	OpenGLTools::Framebuffer &current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();

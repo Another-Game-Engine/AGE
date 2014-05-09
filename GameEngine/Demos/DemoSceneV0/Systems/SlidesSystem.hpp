@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Systems/System.h>
-#include <Entities/EntityData.hh>
 #include <Components/HotZone.hpp>
 #include <Components/Collision.hpp>
 #include <MyTags.hpp>
@@ -39,7 +38,7 @@ private:
 		std::size_t max = 7;
 		if (_inputs->getInput(SDL_BUTTON_RIGHT) && _slide.getCollection().size() > 0 && delay <= 0.0f)
 		{
-			auto s = (*(_slide.getCollection().begin())).get()->getComponent<Component::Sprite>();
+			auto s = scene->getComponent<Component::Sprite>(*(_slide.getCollection().begin()));
 			if (counter >= max)
 				counter = 0;
 			s->animation = scene->getInstance<SpriteManager>()->getAnimation("Slides", "slide" + std::to_string(++counter));
