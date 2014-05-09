@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Systems/System.h>
-#include <Entities/EntityData.hh>
 #include <Components/Collision.hpp>
 #include <Context/SdlContext.hh>
 #include <Systems/CameraSystem.hpp>

@@ -45,11 +45,11 @@ protected:
 		for (auto i = 0; i < 2; ++i)
 		{
 			auto e = scene->createEntity();
-			auto l = e->addComponent<Component::PointLight>();
+			auto l = scene->addComponent<Component::PointLight>(e);
 			l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f); // distance
 			l->lightData.positionPower.w = 1.0f; // intensite
-			e->addComponent<Component::TransformationRegister>("spiral-asteroid-pointlight-" + std::to_string(i));
-			e->addComponent<Component::EntityPlacable>("spiral-asteroid-pointlight-" + std::to_string(i));
+			scene->addComponent<Component::TransformationRegister>(e, "spiral-asteroid-pointlight-" + std::to_string(i));
+			scene->addComponent<Component::EntityPlacable>(e, "spiral-asteroid-pointlight-" + std::to_string(i));
 			map["spiral-asteroid-pointlight-" + std::to_string(i)] = e;
 		}
 
@@ -59,21 +59,22 @@ protected:
 			fboReceiver.broadCast(PubSubKey("asteroidPause"));
 			auto e = scene->createEntity();
 			scene->getSystem<SceneInSceneSystem>()->setScene("asteroid");
-			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
-			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-asteroid", "asteroid"));
+			auto &transform = scene->getLocalTransform(e);
+			transform = glm::translate(transform, glm::vec3(-8, 1, 0));
+			auto sprite = scene->addComponent<Component::Sprite>(e, scene->getInstance<SpriteManager>()->getAnimation("FBO-asteroid", "asteroid"));
 			sprite->delay = 1.0f / 10.0f;
 			sprite->animation->getMaterial().diffuseTex->id = fboId;
 			sprite->animation->_frames[0]->_uvs = glm::vec4(1, 0, 0, 1);
 			sprite->animation->_frames[0]->load(scene->getInstance < VertexManager<4> >());
-			e->addComponent<Component::TransformationRegister>("fbo-asteroid");
-			e->addComponent<Component::EntityPlacable>("fbo-asteroid");
+			scene->addComponent<Component::TransformationRegister>(e, "fbo-asteroid");
+			scene->addComponent<Component::EntityPlacable>(e, "fbo-asteroid");
 			map["fbo-asteroid"] = e;
 		}
 		{
 			auto e = scene->createEntity();
-			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Buttons", "notice_asteroid"));
-			e->addComponent<Component::TransformationRegister>("notice_asteroid");
-			e->addComponent<Component::EntityPlacable>("notice_asteroid");
+			auto sprite = scene->addComponent<Component::Sprite>(e, scene->getInstance<SpriteManager>()->getAnimation("Buttons", "notice_asteroid"));
+			scene->addComponent<Component::TransformationRegister>(e, "notice_asteroid");
+			scene->addComponent<Component::EntityPlacable>(e, "notice_asteroid");
 			map["notice_asteroid"] = e;
 		}
 		return true;

@@ -45,11 +45,11 @@ protected:
 		for (auto i = 0; i < 2; ++i)
 		{
 			auto e = scene->createEntity();
-			auto l = e->addComponent<Component::PointLight>();
+			auto l = scene->addComponent<Component::PointLight>(e);
 			l->lightData.colorRange = glm::vec4(1.0f, 1.0f, 1.0f, 10.0f); // distance
 			l->lightData.positionPower.w = 1.0f; // intensite
-			e->addComponent<Component::TransformationRegister>("spiral-sponza-pointlight-" + std::to_string(i));
-			e->addComponent<Component::EntityPlacable>("spiral-sponza-pointlight-" + std::to_string(i));
+			scene->addComponent<Component::TransformationRegister>(e, "spiral-sponza-pointlight-" + std::to_string(i));
+			scene->addComponent<Component::EntityPlacable>(e, "spiral-sponza-pointlight-" + std::to_string(i));
 			map["spiral-sponza-pointlight-" + std::to_string(i)] = e;
 		}
 
@@ -59,21 +59,22 @@ protected:
 			fboSponzaReceiver.broadCast(PubSubKey("sponzaPause"));
 			auto e = scene->createEntity();
 			scene->getSystem<SceneInSceneSystem>()->setScene("sponza");
-			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
-			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-sponza", "sponza"));
+			auto &transform = scene->getLocalTransform(e);
+			transform = glm::translate(transform, glm::vec3(-8, 1, 0));
+			auto sprite = scene->addComponent<Component::Sprite>(e, scene->getInstance<SpriteManager>()->getAnimation("FBO-sponza", "sponza"));
 			sprite->delay = 1.0f / 10.0f;
 			sprite->animation->getMaterial().diffuseTex->id = fboSponzaId;
 			sprite->animation->_frames[0]->_uvs = glm::vec4(1, 0, 0, 1);
 			sprite->animation->_frames[0]->load(scene->getInstance < VertexManager<4> >());
-			e->addComponent<Component::TransformationRegister>("fbo-sponza");
-			e->addComponent<Component::EntityPlacable>("fbo-sponza");
+			scene->addComponent<Component::TransformationRegister>(e, "fbo-sponza");
+			scene->addComponent<Component::EntityPlacable>(e, "fbo-sponza");
 			map["fbo-sponza"] = e;
 		}
 		{
 			auto e = scene->createEntity();
-			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("Buttons", "notice_sponza"));
-			e->addComponent<Component::TransformationRegister>("notice_sponza");
-			e->addComponent<Component::EntityPlacable>("notice_sponza");
+			auto sprite = scene->addComponent<Component::Sprite>(e, scene->getInstance<SpriteManager>()->getAnimation("Buttons", "notice_sponza"));
+			scene->addComponent<Component::TransformationRegister>(e, "notice_sponza");
+			scene->addComponent<Component::EntityPlacable>(e, "notice_sponza");
 			map["notice_sponza"] = e;
 		}
 		return true;

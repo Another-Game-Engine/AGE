@@ -28,6 +28,7 @@
 #include <Text/FontManager.hh>
 #include <Sprite/SpriteManager.hh>
 #include <Core/ConfigurationManager.hpp>
+#include <Core/Timer.hh>
 
 int			main(int ac, char **av)
 {
