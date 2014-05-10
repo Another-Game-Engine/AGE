@@ -4,8 +4,8 @@ struct Flags
 {
 	enum Type
 	{
-		Active = 0
-		, Locked = 1
+		None = 0
+		, HasMoved = 1
 		, Todo1 = 2
 		, Todo2 = 3
 		, Todo3 = 4

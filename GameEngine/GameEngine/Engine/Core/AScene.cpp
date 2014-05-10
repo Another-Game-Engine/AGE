@@ -5,6 +5,7 @@
 #include <Core/AScene.hh>
 #include <Systems/System.h>
 #include <Core/EntityFilter.hpp>
+#include <Entities/EntityFlags.hh>
 
 AScene::AScene(std::weak_ptr<Engine> &&engine) :
 DependenciesInjector(std::move(engine))
@@ -82,8 +83,10 @@ const glm::mat4 &AScene::getLocalTransform(const Entity &e) const
 	return _localTransform[e.id];
 }
 
-void AScene::setLocalTransform(const Entity &e, const glm::mat4 &trans)
+void AScene::setLocalTransform(Entity &e, const glm::mat4 &trans, bool notifyTransformation)
 {
+	if (notifyTransformation)
+		e.setFlags() |= Flags::HasMoved;
 	_localTransform[e.id] = trans;
 	_globalTransform[e.id] *= trans;
 }

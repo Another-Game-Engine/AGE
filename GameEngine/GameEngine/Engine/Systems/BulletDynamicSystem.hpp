@@ -8,6 +8,7 @@
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 #include <Components/CollisionBody.hpp>
+#include <Entities/EntityFlags.hh>
 
 
 class BulletDynamicSystem : public System
@@ -55,9 +56,13 @@ private:
 			{
 				// TODO
 				//if (e.flags & EntityData::HAS_MOVED)
-				//updateStatic(e);
+				if (e.getFlags() & Flags::HasMoved)
+				{
+					updateStatic(e);
+					e.setFlags() ^ Flags::HasMoved;
+				}
 
-				//updateDynamic(e);
+				updateDynamic(e);
 			}
 
 		}

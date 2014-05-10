@@ -56,12 +56,12 @@ public:
 
 	bool operator==(const Entity &o) const
 	{
-		return version == o.version && id == o.id && flags == o.flags;
+		return version == o.version && id == o.id;
 	}
 
 	bool operator!=(const Entity &o) const
 	{
-		return !(version == o.version && id == o.id && flags == o.flags);
+		return !(version == o.version && id == o.id);
 	}
 
 	bool operator<(const Entity &o) const
@@ -94,7 +94,12 @@ public:
 		return version;
 	}
 
-	inline ENTITY_FLAGS getFlags() const
+	inline const ENTITY_FLAGS &getFlags()
+	{
+		return flags;
+	}
+
+	inline ENTITY_FLAGS &setFlags()
 	{
 		return flags;
 	}

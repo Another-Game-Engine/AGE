@@ -76,7 +76,7 @@ bool 			MainScene::userStart()
 	addSystem<AudioSystem>(45);
 	addSystem<DemoCatSystem>(46);
 	deactivateSystem<DemoCatSystem>();
-	deactivateSystem<PistolSystem>();
+	//deactivateSystem<PistolSystem>();
 
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<SpriteSystem>(90); // DRAW SPRITES

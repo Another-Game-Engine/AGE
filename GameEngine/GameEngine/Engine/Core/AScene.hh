@@ -105,7 +105,7 @@ public:
 
 	const glm::mat4 &getLocalTransform(const Entity &e) const;
 	const glm::mat4 &getGlobalTransform(const Entity &e) const;
-	void setLocalTransform(const Entity &e, const glm::mat4 &trans);
+	void setLocalTransform(Entity &e, const glm::mat4 &trans, bool notifyTransformation = false);
 
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
