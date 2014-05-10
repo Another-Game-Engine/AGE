@@ -283,7 +283,7 @@ bool 			MainScene::userStart()
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	PubSub t(getInstance<PubSub::Manager>());
 #if TEST_ARCHI
-	t.broadCast(PubSubKey("fboInceptionId"), current[GL_COLOR_ATTACHMENT0]->getId());
+	t.broadCast(PubSubKey("fboInceptionId"), current[GL_COLOR_ATTACHMENT0]);
 #else
 	t.broadCast(PubSubKey("fboInceptionId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
 #endif

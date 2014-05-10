@@ -28,9 +28,6 @@ namespace OpenGLTools
 		Texture &operator=(Texture &&t);
 
 		GLuint _id;
-		PixelBufferPack _out;
-		PixelBufferUnPack _in;
-
 	};
 
 	class Texture2D : public Texture

@@ -22,6 +22,7 @@ struct TextureFile : public MediaFile<TextureFile>
 	virtual ~TextureFile();
 	TextureFile(const TextureFile &o);
 	TextureFile &operator=(const TextureFile &o);
+	TextureFile &operator=(OpenGLTools::Texture2D &t);
 
 	void save(cereal::PortableBinaryOutputArchive &ar) const;
 	void load(cereal::PortableBinaryInputArchive &ar);
@@ -36,7 +37,6 @@ struct TextureFile : public MediaFile<TextureFile>
 	GLint		width, height;
 	GLint		components;
 	GLenum		format;
-	GLuint      id;
 	GLenum		wrap;
 	GLenum		minFilter;
 	GLenum		magFilter;

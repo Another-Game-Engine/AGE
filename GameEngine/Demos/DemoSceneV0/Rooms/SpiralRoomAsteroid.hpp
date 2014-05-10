@@ -10,7 +10,6 @@ struct SpiralRoomAsteroid : public Room
 	SpiralRoomAsteroid(std::weak_ptr<AScene> &&scene)
 	: Room(std::move(scene))
 	, fboReceiver(scene.lock()->getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>())
-	, fboId(0)
 	{}
 
 	virtual ~SpiralRoomAsteroid()
@@ -24,8 +23,9 @@ struct SpiralRoomAsteroid : public Room
 
 		{
 			auto &_sid = fboId;
-			fboReceiver.globalSub(PubSubKey("fboAsteroidId"), [&_sid](GLuint id) {
-				_sid = id;
+			fboReceiver.globalSub(PubSubKey("fboAsteroidId"), [&_sid](OpenGLTools::Texture2D &id) 
+			{
+				_sid = std::make_unique<OpenGLTools::Texture2D>(id);
 			});
 		}
 		return true;
@@ -36,7 +36,7 @@ struct SpiralRoomAsteroid : public Room
 	//PubSub fboAsteroidReceiver;
 	//GLuint fboAsteroidId;
 	PubSub fboReceiver;
-	GLuint fboId;
+	std::unique_ptr<OpenGLTools::Texture2D> fboId;
 protected:
 	virtual bool _enable()
 	{
@@ -62,7 +62,7 @@ protected:
 			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-asteroid", "asteroid"));
 			sprite->delay = 1.0f / 10.0f;
-			sprite->animation->getMaterial().diffuseTex->id = fboId;
+			*sprite->animation->getMaterial().diffuseTex = *fboId;
 			sprite->animation->_frames[0]->_uvs = glm::vec4(1, 0, 0, 1);
 			sprite->animation->_frames[0]->load(scene->getInstance < VertexManager<4> >());
 			e->addComponent<Component::TransformationRegister>("fbo-asteroid");

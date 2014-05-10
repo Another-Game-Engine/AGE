@@ -20,32 +20,24 @@ namespace OpenGLTools
 	}
 
 	Texture::Texture(Texture const &copy)
-		: _id(copy._id),
-		_out(copy._out),
-		_in(copy._in)
+		: _id(copy._id)
 	{
 	}
 
 	Texture::Texture(Texture &&move)
-		: _id(std::move(move._id)),
-		_out(std::move(move._out)),
-		_in(std::move(move._in))
+		: _id(std::move(move._id))
 	{
 	}
 
 	Texture &Texture::operator=(Texture const &t)
 	{
 		_id = t._id;
-		_out = t._out;
-		_in = t._in;
 		return (*this);
 	}
 
 	Texture &Texture::operator=(Texture &&t)
 	{
 		_id = std::move(t._id);
-		_out = std::move(t._out);
-		_in = std::move(t._in);
 		return (*this);
 	}
 

@@ -139,7 +139,7 @@ bool 			SpaceGame::userStart()
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	_globalPubSub = std::make_unique<PubSub>(psm);
 #if TEST_ARCHI
-	_globalPubSub->broadCast(PubSubKey("fboAsteroidId"), current[GL_COLOR_ATTACHMENT0]->getId());
+	_globalPubSub->broadCast(PubSubKey("fboAsteroidId"), current[GL_COLOR_ATTACHMENT0]);
 #else
 	_globalPubSub->broadCast(PubSubKey("fboAsteroidId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
 #endif

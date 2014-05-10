@@ -5,7 +5,7 @@
 #include <map>
 #include <glm/glm.hpp>
 
-# define TEST_ARCHI 0
+# define TEST_ARCHI 1
 
 #if TEST_ARCHI
 

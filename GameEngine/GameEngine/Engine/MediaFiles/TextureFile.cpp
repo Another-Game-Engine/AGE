@@ -17,7 +17,6 @@ TextureFile::TextureFile()
 
 TextureFile::~TextureFile()
 {
-	glDeleteTextures(1, &id);
 }
 
 TextureFile::TextureFile(const TextureFile &o)
@@ -54,6 +53,11 @@ TextureFile &TextureFile::operator=(const TextureFile &o)
 	return *this;
 }
 
+TextureFile &TextureFile::operator=(OpenGLTools::Texture2D &t)
+{
+	_texture = std::make_unique<OpenGLTools::Texture2D>(t);
+	return *this;
+}
 
 void TextureFile::save(cereal::PortableBinaryOutputArchive &ar) const
 {
