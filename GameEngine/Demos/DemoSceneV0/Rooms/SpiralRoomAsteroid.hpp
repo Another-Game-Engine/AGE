@@ -23,9 +23,9 @@ struct SpiralRoomAsteroid : public Room
 
 		{
 			auto &_sid = fboId;
-			fboReceiver.globalSub(PubSubKey("fboAsteroidId"), [&_sid](OpenGLTools::Texture2D &id) 
+			fboReceiver.globalSub(PubSubKey("fboAsteroidId"), [&_sid](OpenGLTools::Texture2D *id) 
 			{
-				_sid = std::make_unique<OpenGLTools::Texture2D>(id);
+				_sid = std::make_unique<OpenGLTools::Texture2D>(*id);
 			});
 		}
 		return true;
@@ -33,8 +33,6 @@ struct SpiralRoomAsteroid : public Room
 
 	Entity hotZoneSpiralEngine;
 	std::map<std::string, Entity> map;
-	//PubSub fboAsteroidReceiver;
-	//GLuint fboAsteroidId;
 	PubSub fboReceiver;
 	std::unique_ptr<OpenGLTools::Texture2D> fboId;
 protected:

@@ -3,6 +3,8 @@
 #include	<OpenGL/Framebuffer.hh>
 #include	<OpenGL/Texture.hh>
 
+# define TEST_STREAM_GPU 1
+
 PostFxSystem::PostFxSystem(std::weak_ptr<AScene> &&scene) :
 					System(std::move(scene)),
 					_cameraFilter(std::move(scene)),
@@ -67,11 +69,7 @@ void	PostFxSystem::mainUpdate(double time)
 
 void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 {
-#if TEST_ARCHI
-	GLuint colorTexture = camFbo[GL_COLOR_ATTACHMENT0]->getId();
-#else
-	GLuint colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
-#endif
+	OpenGLTools::Texture2D *colorTexture = static_cast<OpenGLTools::Texture2D *>(camFbo[GL_COLOR_ATTACHMENT0]);
 	// ----------------------------------------------------
 	// HDR Pass
 	// ----------------------------------------------------
@@ -79,17 +77,21 @@ void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	// ----------------------------------------------------
 	glm::vec4	avgColor(0);
 
-	//colorTexture->bind();
-	//colorTexture->generateMipMap();
-	glBindTexture(GL_TEXTURE_2D, colorTexture);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	colorTexture->bind();
+	colorTexture->generateMipMap();
 
 	float	maxDimension = glm::max(static_cast<float>(camFbo.getSize().x), static_cast<float>(camFbo.getSize().y));
 	int		mipMapNbr = static_cast<int>(glm::floor(glm::log2(maxDimension)));
 
-	glGetTexImage(GL_TEXTURE_2D, mipMapNbr, GL_RGBA, GL_FLOAT, &avgColor);
-	//colorTexture->setOptionTransfer(mipMapNbr, GL_RGBA, GL_FLOAT);
-	//colorTexture->read(&avgColor);
+	colorTexture->setOptionTransfer(mipMapNbr, GL_RGBA, GL_FLOAT);
+#if TEST_STREAM_GPU
+	void *readData = _stream.beginReadBack(colorTexture, sizeof(avgColor));
+	if (readData)
+		memcpy(&avgColor, readData, sizeof(avgColor));
+	_stream.endReadBack(readData);
+#else
+	colorTexture->read(&avgColor);
+#endif
 	// ----------------------------------------------------
 	// Modulate colors:
 	// ----------------------------------------------------
@@ -127,18 +129,14 @@ void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	glUniform1f(avgIllumLocation, _curFactor);
 
 	// Bind color texture to modulate
-	glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
+	glBindImageTexture(0, colorTexture->getId(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
 }
 
 void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 {
-#if TEST_ARCHI
 	OpenGLTools::Texture2D *colorTexture = static_cast<OpenGLTools::Texture2D *>(camFbo[GL_COLOR_ATTACHMENT0]);
-#else
-	GLuint colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
-#endif
 	size_t		WORK_GROUP_SIZE = 16;
 	glm::uvec2	groupNbr = glm::uvec2((camFbo.getSize().x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
 		(camFbo.getSize().y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
@@ -172,11 +170,7 @@ void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 	glUniform2i(passLocation, 1, 0);
 
 	glActiveTexture(GL_TEXTURE0);
-#if TEST_ARCHI
 	colorTexture->bind();
-#else
-	glBindTexture(GL_TEXTURE_2D, colorTexture);
-#endif
 	//		glGenerateMipmap(GL_TEXTURE_2D);
 	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, _bloomMipmap);
 
@@ -192,11 +186,7 @@ void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _bloomTexture);
-#if TEST_ARCHI
 	glBindImageTexture(1, colorTexture->getId(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
-#else
-	glBindImageTexture(1, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
-#endif
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);

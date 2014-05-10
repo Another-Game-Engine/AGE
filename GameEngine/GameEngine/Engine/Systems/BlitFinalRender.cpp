@@ -38,11 +38,7 @@ void	BlitFinalRender::mainUpdate(double time)
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			glDrawBuffer(GL_BACK);
 			glDepthFunc(GL_ALWAYS);
-#if TEST_ARCHI
 			_quad.draw(current[GL_COLOR_ATTACHMENT0]->getId(), current.getSampleNbr(), current.getSize());
-#else
-			_quad.draw(current.getTextureAttachment(GL_COLOR_ATTACHMENT0), current.getSampleNbr(), current.getSize());
-#endif
 		}
 	}
 }

@@ -67,8 +67,7 @@ void TextureFile::save(cereal::PortableBinaryOutputArchive &ar) const
 void TextureFile::load(cereal::PortableBinaryInputArchive &ar)
 {
 	ar(cereal::make_nvp("datas", datas), CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(components), CEREAL_NVP(format));
-	std::uint8_t levels = GLsizei(std::floor(std::log2(std::max<GLsizei>(width, height))) + 1);
-	_texture = std::make_unique<OpenGLTools::Texture2D>(levels, components, width, height);
+	_texture = std::make_unique<OpenGLTools::Texture2D>(components, width, height, true);
 	_texture->setOptionTransfer(0, format, GL_UNSIGNED_BYTE);
 	_texture->write(datas.data());
 	_texture->generateMipMap();
@@ -79,5 +78,4 @@ void TextureFile::load(cereal::PortableBinaryInputArchive &ar)
 GLuint TextureFile::getId() const
 {
 	return _texture->getId();
-	//return id;
 }

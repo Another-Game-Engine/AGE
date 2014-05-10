@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <glm/glm.hpp>
 
 
 namespace OpenGLTools
@@ -46,9 +47,9 @@ namespace OpenGLTools
 		return (_id);
 	}
 
-	Texture2D::Texture2D(GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height)
+	Texture2D::Texture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping)
 		: Texture(),
-		_levels(levels),
+		_levels(0),
 		_level(0),
 		_width(width),
 		_height(height),
@@ -56,8 +57,14 @@ namespace OpenGLTools
 		_format(GL_RGBA),
 		_type(GL_UNSIGNED_BYTE)
 	{
+		if (mipmapping)
+		{
+			float maxDimension = glm::max(static_cast<float>(_width), static_cast<float>(_height));
+			_levels = static_cast<int>(glm::floor(glm::log2(maxDimension)) + 1);
+		}
+		else
+			_level = 1;
 		glBindTexture(GL_TEXTURE_2D, _id);
-		_levels = _levels == 0 ? 1 : _levels;
 		glTexStorage2D(GL_TEXTURE_2D, _levels, _internalFormat, _width, _height);
 	}
 
@@ -171,7 +178,10 @@ namespace OpenGLTools
 
 	void *Texture2D::read(void *read) const
 	{
-		glGetTexImage(GL_TEXTURE_2D, _level, _format, _type, read);
+		if (read != NULL)
+			glGetTexImage(GL_TEXTURE_2D, _level, _format, _type, read);
+		else
+			glGetTexImage(GL_TEXTURE_2D, _level, _format, _type, 0);
 		return (read);
 	}
 
@@ -189,6 +199,11 @@ namespace OpenGLTools
 	GLenum Texture2D::getType() const
 	{
 		return (GL_TEXTURE_2D);
+	}
+
+	std::uint8_t Texture2D::getMaxLevelMipMap() const
+	{
+		return (_levels);
 	}
 
 	TextureMultiSample::TextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation)

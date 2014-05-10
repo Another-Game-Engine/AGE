@@ -14,6 +14,8 @@ namespace OpenGLTools
 
 		virtual PixelBuffer const &bind() const = 0;
 		virtual PixelBuffer const &unbind() const = 0;
+		virtual PixelBuffer const &allocate(std::uint32_t size) = 0;
+
 		GLint getId() const;
 
 	protected:
@@ -21,6 +23,7 @@ namespace OpenGLTools
 		PixelBuffer(PixelBuffer &&move);
 
 		GLuint _id;
+		std::uint32_t _memorySize;
 	};
 
 	class PixelBufferPack : public PixelBuffer
@@ -32,7 +35,8 @@ namespace OpenGLTools
 
 		virtual PixelBuffer const &bind() const;
 		virtual PixelBuffer const &unbind() const;
-		
+		virtual PixelBuffer const &allocate(std::uint32_t size);
+
 	};
 
 	class PixelBufferUnPack : public PixelBuffer
@@ -44,6 +48,8 @@ namespace OpenGLTools
 
 		virtual PixelBuffer const &bind() const;
 		virtual PixelBuffer const &unbind() const;
+		virtual PixelBuffer const &allocate(std::uint32_t size);
+
 	};
 }
 

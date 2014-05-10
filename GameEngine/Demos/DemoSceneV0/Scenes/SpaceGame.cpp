@@ -138,11 +138,7 @@ bool 			SpaceGame::userStart()
 	OpenGLTools::Framebuffer &current = cameraComponent->frameBuffer.isMultisampled() ? cameraComponent->downSampling : cameraComponent->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	_globalPubSub = std::make_unique<PubSub>(psm);
-#if TEST_ARCHI
-	_globalPubSub->broadCast(PubSubKey("fboAsteroidId"), current[GL_COLOR_ATTACHMENT0]);
-#else
-	_globalPubSub->broadCast(PubSubKey("fboAsteroidId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
-#endif
+	_globalPubSub->broadCast(PubSubKey("fboAsteroidId"), static_cast<OpenGLTools::Texture2D *>(current[GL_COLOR_ATTACHMENT0]));
 	_globalPubSub->globalSub(PubSubKey("asteroidPause"), [&](){
 		deactivateSystem<SpaceshipControllerSystem>(); // UPDATE FIRST PERSON CONTROLLER
 	});

@@ -7,6 +7,7 @@
 #include <Core/EntityFilter.hpp>
 #include <OpenGL/Shader.hh>
 #include <glm/glm.hpp>
+#include <OpenGL/StreamGPU.hh>
 
 class AScene;
 namespace OpenGLTools
@@ -67,6 +68,8 @@ private:
 	float							_bloomSigma;
 	float							_bloomGlare;
 	uint32_t						_bloomMipmap;
+	OpenGLTools::StreamGPU			_stream;
+
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
 	void		computeBloom(OpenGLTools::Framebuffer &camFbo);

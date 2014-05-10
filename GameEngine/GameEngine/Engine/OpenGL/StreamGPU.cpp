@@ -32,7 +32,7 @@ namespace OpenGLTools
 		return (*this);
 	}
 
-	StreamGPU &StreamGPU::upload(void const *data, Texture const *texture, uint32_t size, uint32_t offset)
+	StreamGPU &StreamGPU::upload(void const *data, Texture const *texture, uint32_t size)
 	{
 		_pboUnPack[_currentPBOUnPack].bind();
 		GLubyte *ptr = (GLubyte *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, (GLsizeiptr)size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
@@ -45,13 +45,14 @@ namespace OpenGLTools
 		return (*this);
 	}
 
-	void *StreamGPU::beginReadBack(Texture const *texture, uint32_t size, uint32_t offset) const
+	void *StreamGPU::beginReadBack(Texture const *texture, uint32_t size)
 	{
-		_pboPack[_currentPBOPack].bind();
 		texture->bind();
+		_pboPack[_currentPBOPack].bind();
+		_pboPack[_currentPBOPack].allocate(size);
 		texture->read(0);
 		_pboPack[1 - _currentPBOPack].bind();
-		void *ptr = glMapBufferRange(GL_PIXEL_PACK_BUFFER, offset, (GLsizeiptr)size, GL_MAP_READ_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+		void *ptr = glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
 		return (ptr);
 	}
 

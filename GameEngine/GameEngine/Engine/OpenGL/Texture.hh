@@ -42,7 +42,7 @@ namespace OpenGLTools
 		GLenum _type;
 
 	public:
-		Texture2D(GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height);
+		Texture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping = true);
 		virtual ~Texture2D();
 		Texture2D(Texture2D const &copy);
 		Texture2D(Texture2D &&move);
@@ -56,6 +56,7 @@ namespace OpenGLTools
 		Texture2D const &storage(GLint pack, GLint unpack) const;
 		Texture2D &setOptionTransfer(GLint level = 0, GLenum format = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE);
 		Texture2D const &generateMipMap() const;
+		std::uint8_t getMaxLevelMipMap() const;
 		
 		virtual void write(void *write) const;
 		virtual void *read(void *read) const;
@@ -77,7 +78,7 @@ namespace OpenGLTools
 		GLboolean _fixedSampleLocation;
 
 	public:
-		TextureMultiSample(GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation = GL_FALSE);
+		TextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation = GL_FALSE);
 		virtual ~TextureMultiSample();
 		TextureMultiSample(TextureMultiSample &&move);
 		TextureMultiSample &operator=(TextureMultiSample &&t);
