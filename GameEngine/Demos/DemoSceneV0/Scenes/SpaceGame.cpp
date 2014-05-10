@@ -67,14 +67,14 @@ bool 			SpaceGame::userStart()
 	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 50);
 	lightComponent->lightData.positionPower.w = 2.0f;
 	lightComponent->lightData.hasShadow = -1;
-	getLocalTransform(light) = glm::translate(glm::mat4(1), glm::vec3(0, 2, 0));
+	setLocalTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 2, 0)));
 
 	light = createEntity();
 	lightComponent = addComponent<Component::PointLight>(light);
 	lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
 	lightComponent->lightData.positionPower.w = 0;
 	lightComponent->lightData.hasShadow = -1;
-	getLocalTransform(light) = glm::translate(glm::mat4(1), glm::vec3(0, 0, -2));
+	setLocalTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
 
 	auto spaceShip = createEntity();
 

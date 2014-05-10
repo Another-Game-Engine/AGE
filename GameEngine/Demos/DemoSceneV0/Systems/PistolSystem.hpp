@@ -41,9 +41,10 @@ private:
 				glm::vec3 from, to;
 				scene->getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 				auto e = scene->createEntity();
-				auto &trans = scene->getLocalTransform(e);
+				auto trans = scene->getLocalTransform(e);
 				trans = glm::translate(trans, glm::vec3(from + to * 1.2f));
 				trans = glm::scale(trans, glm::vec3(0.23f));
+				scene->setLocalTransform(e, trans);
 				auto mesh = scene->addComponent<Component::MeshRenderer>(e, scene->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
 				auto rigidBody = scene->addComponent<Component::RigidBody>(e, _scene, 0.4f);

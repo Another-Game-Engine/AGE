@@ -33,9 +33,10 @@
 		auto scene = _scene.lock();
 		{
 			pong = scene->createEntity();
-			auto &transform = scene->getLocalTransform(pong);
+			auto transform = scene->getLocalTransform(pong);
 			transform  = glm::translate(transform, glm::vec3(-8, 1, 0));
 			transform = glm::scale(transform, glm::vec3(0.01));
+			scene->setLocalTransform(pong, transform);
 			auto sprite = scene->addComponent<Component::Sprite>(pong, scene->getInstance<SpriteManager>()->getAnimation("Pong", "pong"));
 			sprite->delay = 1.0f / 10.0f;
 			scene->addComponent<Component::TransformationRegister>(pong, "pong-tableau");

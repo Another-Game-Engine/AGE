@@ -60,7 +60,7 @@ protected:
 			auto e = scene->createEntity();
 			scene->getSystem<SceneInSceneSystem>()->setScene("asteroid");
 			auto &transform = scene->getLocalTransform(e);
-			transform = glm::translate(transform, glm::vec3(-8, 1, 0));
+			scene->setLocalTransform(e, glm::translate(transform, glm::vec3(-8, 1, 0)));
 			auto sprite = scene->addComponent<Component::Sprite>(e, scene->getInstance<SpriteManager>()->getAnimation("FBO-asteroid", "asteroid"));
 			sprite->delay = 1.0f / 10.0f;
 			sprite->animation->getMaterial().diffuseTex->id = fboId;

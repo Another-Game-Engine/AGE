@@ -20,11 +20,10 @@ namespace Component
 	CameraComponent::~CameraComponent(void)
 	{}
 
-	void CameraComponent::attachSkybox(const std::string &name, const std::string &_cubeMapShader)
+	void CameraComponent::attachSkybox(std::shared_ptr<CubeMapFile> texture, const std::string &_cubeMapShader)
 	{
-		//@CESAR TODO
-		//skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->get<CubeMapFile>(name);
-		//cubeMapShader = _cubeMapShader;
+		skybox = texture;
+		cubeMapShader = _cubeMapShader;
 	}
 
 	void CameraComponent::dettachSkybox()

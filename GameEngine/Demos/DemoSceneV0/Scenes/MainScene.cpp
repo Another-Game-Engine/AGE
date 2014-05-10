@@ -97,13 +97,13 @@ bool 			MainScene::userStart()
 	{
 		_heros = createEntity();
 
-		auto &trans = getLocalTransform(_heros);
+		auto trans = getLocalTransform(_heros);
 		trans = glm::translate(trans, glm::vec3(-49, 1, 0));
 		auto camera = addComponent<Component::CameraComponent>(_heros);
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		camera->fboSize = screenSize;
 		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
-		camera->attachSkybox("skybox__space", "cubemapShader");
+		camera->attachSkybox(getInstance<AssetsManager>()->get<CubeMapFile>("skybox__space"), "cubemapShader");
 		camera->sampleNbr = 1;
 
 		auto fpv = addComponent<Component::FirstPersonView>(_heros);
@@ -116,18 +116,16 @@ bool 			MainScene::userStart()
 		auto al = addComponent<Component::AudioListener>(_heros);
 		addTag(_heros, MyTags::HEROS_TAG);
 		trans = glm::rotate(trans, -90.0f, glm::vec3(0, 1, 0));
-	//	_heros->addComponent<Component::TransformationRegister>("HEROS-POS");
-		//_heros->setLocalTransform(glm::translate(_heros->getLocalTransform(), glm::vec3(-57.251132965087891f, 0.22000002861022949f, 0.39823031425476074f)));
-	//	camera->lookAtTransform = 
-
+		setLocalTransform(_heros, trans);
 	}
 
 	//create room mesh
 	{
 		auto room = createEntity();
-		auto &trans = getLocalTransform(room);
+		auto trans = getLocalTransform(room);
 		trans = glm::translate(trans, glm::vec3(0));
 		trans = glm::scale(trans, glm::vec3(150.0f));
+		setLocalTransform(room, trans);
 		auto meshObj = getInstance<AssetsManager>()->get<ObjFile>("obj__demoMuseum");
 		if (!meshObj)
 			return false;

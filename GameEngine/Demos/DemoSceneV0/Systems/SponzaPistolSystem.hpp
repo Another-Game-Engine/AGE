@@ -48,9 +48,10 @@ private:
 			scene->getSystem<CameraSystem>()->getRayFromCenterOfScreen(from, to);
 
 			auto e = scene->createEntity();
-			auto &transform = scene->getLocalTransform(e);
+			auto transform = scene->getLocalTransform(e);
 			transform = glm::translate(transform, (from + to * 1.5f));
 			transform = glm::scale(transform, glm::vec3(0.2f));
+			scene->setLocalTransform(e, transform);
 			auto rigidbody = scene->addComponent<Component::RigidBody>(e, _scene, 10.0f);
 			rigidbody->setCollisionShape(e, Component::RigidBody::SPHERE);
 			auto &body = rigidbody->getBody();
@@ -87,8 +88,7 @@ private:
 				l->lightData.colorRange = glm::vec4(rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, rand() % 10000 / 10000.0f, 100.0f);
 				l->lightData.positionPower.w = 50.0f;
 				l->lightData.shadowId = 1;
-				auto &transform = scene->getLocalTransform(e);
-				transform = glm::inverse(cam->lookAtTransform);
+				scene->setLocalTransform(e, glm::inverse(cam->lookAtTransform));
 			}
 			delay = 0.1f;	
 		}

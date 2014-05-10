@@ -16,12 +16,12 @@ TRSFilter::~TRSFilter(){}
 void TRSFilter::componentAdded(EntityData &&e, COMPONENT_ID typeId)
 {
 	// @CESAR TODO
-	//if (e.getBarcode().match(_barcode))
-	//{
-	//	_collection.insert(e.getEntity());
-	//	assert(_system != nullptr && "You forgot to link system.");
-	//	_system->loadEntity(e.getEntity());
-	//}
+	if (e.getBarcode().match(_barcode))
+	{
+		_collection.insert(e.getEntity());
+		assert(_system != nullptr && "You forgot to link system.");
+		_system->loadEntity(const_cast<Entity&>(e.getEntity()));
+	}
 }
 
 TransformationRegisterSystem::TransformationRegisterSystem(std::weak_ptr<AScene> &&scene)
@@ -51,7 +51,7 @@ void TransformationRegisterSystem::loadEntity(Entity &e)
 	auto it = _loaded.find(compo->name);
 	if (it != std::end(_loaded))
 	{
-		_scene.lock()->getLocalTransform(e) = it->second;
+		_scene.lock()->setLocalTransform(e, it->second);
 	}
 }
 

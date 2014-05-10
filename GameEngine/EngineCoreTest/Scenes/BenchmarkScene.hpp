@@ -52,7 +52,7 @@ public:
 				std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 				auto rb = addComponent<Component::RigidBody>(e, weakOnThis, 1.0f);
 				rb->setCollisionShape(e, Component::RigidBody::CollisionShape::SPHERE);
-				getLocalTransform(e) = glm::translate(getLocalTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10));
+				setLocalTransform(e, glm::translate(getLocalTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
 			}
 			_logFile << _chunkFrame << ", ";
 			_chunkCounter = 0.0;

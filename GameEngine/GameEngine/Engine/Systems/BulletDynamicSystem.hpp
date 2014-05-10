@@ -55,8 +55,9 @@ private:
 			{
 				// TODO
 				//if (e.flags & EntityData::HAS_MOVED)
-				//	updateStatic(e);
-				updateDynamic(e);
+				//updateStatic(e);
+
+				//updateDynamic(e);
 			}
 
 		}
@@ -110,7 +111,7 @@ private:
 		m = glm::rotate(m, rot.z, glm::vec3(0, 0, 1));
 		glm::vec3 scale = scaleFromMat4(entityTransform);
 		m = glm::scale(m, scale);
-		entityTransform = m;
+		_scene.lock()->setLocalTransform(e, m);
 	}
 
 	virtual bool initialize()

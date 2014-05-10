@@ -94,7 +94,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 	for (auto e : _spotLightFilter.getCollection())
 	{
 		Component::SpotLight *spot = scene->getComponent<Component::SpotLight>(e);
-		spot->updateLightData();
+		spot->updateLightData(scene->getGlobalTransform(e));
 		_contiguousSpotLights[i] = spot->lightData;
 		if (_contiguousSpotLights[i].shadowId != -1)
 			++shadowNbr;

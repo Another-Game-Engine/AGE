@@ -53,9 +53,10 @@ SponzaScene::~SponzaScene(void)
 Entity SponzaScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	auto &transform = getLocalTransform(e);
+	auto transform = getLocalTransform(e);
 	transform = glm::translate(transform, pos);
 	transform = glm::scale(transform, scale);
+	setLocalTransform(e, transform);
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, mass);
 	rigidBody->setCollisionShape(e, Component::RigidBody::SPHERE);
@@ -68,12 +69,13 @@ Entity SponzaScene::createSphere(glm::vec3 &pos, glm::vec3 &scale, std::string c
 Entity SponzaScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	auto &transform = getLocalTransform(e);
+	auto transform = getLocalTransform(e);
 
 	transform = glm::translate(transform, pos);
 	transform = glm::rotate(transform, 0.0f, glm::vec3(1, 0, 0));
 	transform = glm::rotate(transform, 0.0f, glm::vec3(0, 1, 0));
 	transform = glm::scale(transform, scale);
+	setLocalTransform(e, transform);
 
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, mass);
@@ -86,9 +88,10 @@ Entity SponzaScene::createCube(glm::vec3 &pos, glm::vec3 &scale, std::string con
 Entity SponzaScene::createMonkey(glm::vec3 &pos, glm::vec3 &scale, std::string const &tex, float mass)
 {
 	auto e = createEntity();
-	auto &transform = getLocalTransform(e);
+	auto transform = getLocalTransform(e);
 	transform = glm::translate(transform, pos);
 	transform = glm::scale(transform, scale);
+	setLocalTransform(e, transform);
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, mass);
 	rigidBody->setCollisionShape(e, Component::RigidBody::MESH, "collision_shape_dynamic_galileo");
@@ -269,11 +272,11 @@ bool SponzaScene::userStart()
 	// CREATE SPONZA CHURCH
 	{
 		auto e = createEntity();
-		auto &transform = getLocalTransform(e);
+		auto transform = getLocalTransform(e);
 
 		transform = glm::translate(transform, glm::vec3(0));
 		transform = glm::scale(transform, glm::vec3(70));
-
+		setLocalTransform(e, transform);
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 		auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, 0.0f);
 		rigidBody->setMass(0);
@@ -294,8 +297,9 @@ bool SponzaScene::userStart()
 
 	{
 		auto e = createEntity();
-		auto &transform = getLocalTransform(e);
+		auto transform = getLocalTransform(e);
 		transform = glm::translate(transform, glm::vec3(0, 100, 0));
+		setLocalTransform(e, transform);
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 		auto fpc = addComponent<Component::FPController>(e, e, weakOnThis);
 		character = e;
@@ -334,7 +338,7 @@ bool SponzaScene::userStart()
 	getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	auto screenSize = getInstance<IRenderContext>()->getScreenSize();
-	cameraComponent1->attachSkybox("skybox__space", "cubemapShader");
+	cameraComponent1->attachSkybox(getInstance<AssetsManager>()->get<CubeMapFile>("skybox__space"), "cubemapShader");
 	cameraComponent1->fboSize = glm::uvec2((float)(screenSize.x) / 1.5f, (float)(screenSize.y) / 1.5f);
 	cameraComponent1->sampleNbr = 2;
 

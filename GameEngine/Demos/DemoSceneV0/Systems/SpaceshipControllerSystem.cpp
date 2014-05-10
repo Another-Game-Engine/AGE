@@ -41,7 +41,7 @@ void SpaceshipControllerSystem::mainUpdate(double time)
 		auto control = scene->getComponent<Component::SpaceshipController>(e);
 		auto rigidBody = scene->getComponent<Component::RigidBody>(control->spaceShip);
 
-		glm::mat4	&transform = scene->getLocalTransform(control->spaceShip);
+		glm::mat4	transform = scene->getLocalTransform(control->spaceShip);
 
 		if (scene->getInstance<Input>()->getKey(SDLK_w))
 		{
@@ -94,7 +94,7 @@ void SpaceshipControllerSystem::mainUpdate(double time)
 			impulse *= 50.0f;
 
 			transform[3] = glm::vec4(glm::vec3(transform * glm::vec4(0, 0, 3, 1)), 1);
-			scene->getLocalTransform(bullet) = transform;
+			scene->setLocalTransform(bullet, transform);
 			auto mesh = scene->addComponent<Component::MeshRenderer>(bullet, _scene.lock()->getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 			mesh->setShader("MaterialBasic");
 			auto body = scene->addComponent<Component::RigidBody>(bullet, _scene, 0.5f);
@@ -117,6 +117,7 @@ void SpaceshipControllerSystem::mainUpdate(double time)
 				_scene.lock()->destroy(_bullets.front());
 				_bullets.pop();
 			}
+			scene->setLocalTransform(e, transform);
 		}
 	}
 	_timer += static_cast<float>(_scene.lock()->getInstance<Timer>()->getElapsed());

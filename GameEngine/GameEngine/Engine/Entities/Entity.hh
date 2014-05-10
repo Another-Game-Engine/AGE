@@ -135,12 +135,12 @@ public:
 		code = std::move(o.code);
 	}
 
-	bool operator==(const Barcode& o)
+	bool operator==(const Barcode& o) const
 	{
 		return (code == o.code);
 	}
 
-	bool match(const Barcode &model)
+	bool match(const Barcode &model) const
 	{
 		return (code & model.code) == model.code;
 	}
@@ -155,7 +155,7 @@ public:
 		code.reset(id + MAX_CPT_NUMBER);
 	}
 
-	inline bool hasTag(TAG_ID id)
+	inline bool hasTag(TAG_ID id) const
 	{
 		return code.test(id + MAX_CPT_NUMBER);
 	}
@@ -170,7 +170,7 @@ public:
 		code.reset(id);
 	}
 
-	inline bool hasComponent(COMPONENT_ID id)
+	inline bool hasComponent(COMPONENT_ID id) const
 	{
 		return code.test(id);
 	}

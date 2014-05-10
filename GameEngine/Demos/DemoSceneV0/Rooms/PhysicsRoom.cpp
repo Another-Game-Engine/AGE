@@ -51,10 +51,11 @@ class PistolSystem;
 				for (auto j = 0; j < w; ++j)
 				{
 						auto e = scene->createEntity();
-						auto &trans = scene->getGlobalTransform(e);
+						auto trans = scene->getGlobalTransform(e);
 						trans = t;
 						trans = glm::scale(t, glm::vec3(0.6f));
 						trans = glm::translate(trans, glm::vec3(0, h - i + 0.001f, ((float)(w)-(float)(j)) + 4.0f));
+						scene->setLocalTransform(e, trans);
 						scene->addComponent<Component::MeshRenderer>(e, meshObj)->setShader("MaterialBasic");
 						scene->addComponent<Component::RigidBody>(e, _scene, 1.0f)->setCollisionShape(e, Component::RigidBody::BOX);
 						cubes.push_back(e);
