@@ -46,6 +46,7 @@ namespace Component
 	void MeshRenderer::reset()
 	{
 		mesh = nullptr;
+		shader = "";
 	}
 
 	void MeshRenderer::render(std::shared_ptr<Renderer> renderer, const glm::mat4 &globalTrans, std::function<void(OpenGLTools::Shader&)> func)

@@ -6,7 +6,7 @@
 
 #define LIFETIME_ACTIVATED
 
-#define RENDERING_ACTIVATED
+//#define RENDERING_ACTIVATED
 
 //#define COMPLEX_MESH
 

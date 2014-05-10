@@ -126,7 +126,7 @@ public:
 		//if (_componentsEntity.size() <= 1)
 		//	return;
 		//quickSort(0, _componentsEntity.size() - 1);
-		//this->_reorder = false;
+		this->_reorder = false;
 	}
 private:
 	void quickSort(std::size_t top, std::size_t bottom)
