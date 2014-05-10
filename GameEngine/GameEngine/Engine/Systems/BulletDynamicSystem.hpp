@@ -88,7 +88,7 @@ private:
 	{
 		btTransform transform;
 		
-		auto &entityTransform = _scene.lock()->getLocalTransform(e);
+		auto &entityTransform = _scene.lock()->getGlobalTransform(e);
 		glm::vec3 position = posFromMat4(entityTransform);
 		glm::vec3 scale = scaleFromMat4(entityTransform);
 		glm::vec3 rot = rotFromMat4(entityTransform, true);
