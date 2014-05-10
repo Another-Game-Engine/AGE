@@ -292,8 +292,53 @@ namespace Component
 			return *this;
 		}
 
+		RigidBody(RigidBody const &o)
+		{
+			_manager = o._manager;
+			shapeType = o.shapeType;
+			mass = o.mass;
+			inertia = o.inertia;
+			rotationConstraint = o.rotationConstraint;
+			transformConstraint = o.transformConstraint;
+			meshName = o.meshName;
+			_collisionShape = o._collisionShape;
+			_motionState = o._motionState;
+			_rigidBody = o._rigidBody;
+			_scene = o._scene;
+		}
+
+		RigidBody(RigidBody &&o)
+		{
+			_manager = std::move(o._manager);
+			shapeType = std::move(o.shapeType);
+			mass = std::move(o.mass);
+			inertia = std::move(o.inertia);
+			rotationConstraint = std::move(o.rotationConstraint);
+			transformConstraint = std::move(o.transformConstraint);
+			meshName = std::move(o.meshName);
+			_collisionShape = std::move(o._collisionShape);
+			_motionState = std::move(o._motionState);
+			_rigidBody = std::move(o._rigidBody);
+			_scene = std::move(o._scene);
+		}
+
+		RigidBody &operator=(RigidBody &&o)
+		{
+			_manager = std::move(o._manager);
+			shapeType = std::move(o.shapeType);
+			mass = std::move(o.mass);
+			inertia = std::move(o.inertia);
+			rotationConstraint = std::move(o.rotationConstraint);
+			transformConstraint = std::move(o.transformConstraint);
+			meshName = std::move(o.meshName);
+			_collisionShape = std::move(o._collisionShape);
+			_motionState = std::move(o._motionState);
+			_rigidBody = std::move(o._rigidBody);
+			_scene = std::move(o._scene);
+			return *this;
+		}
+
 	private:
-		//RigidBody(RigidBody const &);
 
 		void _reset()
 		{

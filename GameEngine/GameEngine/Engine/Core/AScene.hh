@@ -37,6 +37,7 @@ private:
 	std::vector<std::array<ENTITY_ID, 255>>                                 _graphnode;
 	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
+	int test = 0;
 public:
 	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
@@ -76,7 +77,7 @@ public:
 		}
 		else
 		{
-			auto id = _free.back();
+			auto id = _free.front();
 			_free.pop();
 			return _pool[id].entity;
 		}
@@ -92,12 +93,16 @@ public:
 		data.entity.flags = 0;
 		cachedCode = data.barcode;
 		data.barcode.reset();
+		_localTransform[e.id] = glm::mat4(1);
+		_globalTransform[e.id] = glm::mat4(1);
 		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
 		{
 			if (cachedCode.code.test(i) && i < MAX_CPT_NUMBER)
 				informFiltersComponentDeletion(i, std::move(data));
 			else if (cachedCode.code.test(i) && i >= MAX_CPT_NUMBER)
 				informFiltersTagDeletion(i - MAX_CPT_NUMBER, std::move(data));
+			if (i < MAX_CPT_NUMBER && _componentsManagers[i] != nullptr)
+				_componentsManagers[i]->removeComponent(data.entity);
 		}
 		_free.push(e.id);
 	}

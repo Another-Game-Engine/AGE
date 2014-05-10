@@ -58,8 +58,8 @@ private:
 				//if (e.flags & EntityData::HAS_MOVED)
 				if (e.getFlags() & Flags::HasMoved)
 				{
-					updateStatic(e);
-					e.setFlags() ^ Flags::HasMoved;
+					//updateStatic(e);
+					//e.setFlags() ^ Flags::HasMoved;
 				}
 
 				updateDynamic(e);

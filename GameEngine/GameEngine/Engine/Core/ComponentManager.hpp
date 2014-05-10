@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <Components/Component.hh>
+#include <utility>
 
 class AScene;
 
@@ -17,6 +18,7 @@ public:
 	inline bool getReorder() const { return _reorder; }
 	inline void setReorder(bool v) { _reorder = v; }
 	virtual void reorder() = 0;
+	virtual bool removeComponent(Entity &e) = 0;
 protected:
 	bool _reorder;
 };
@@ -103,25 +105,28 @@ public:
 		return &_components[_componentsRefs[e.getId()]];
 	}
 
-	bool removeComponent(Entity &e)
+	virtual bool removeComponent(Entity &e)
 	{
 		auto id = _componentsRefs[e.getId()];
-		_freeSlot.push_back(_componentsEntity.back().second);
-		_componentsEntity[id].first = _componentsEntity.back().first;
-		_componentsRefs[_componentsEntity.back().first] = id;
+		_components[id].reset();
+		_freeSlot.push_back(id);
+		//std::swap(_components[id], _components[_componentsRefs[_componentsEntity.back().first]]);
+		//_freeSlot.push_back(_componentsEntity.back().second);
+		//_componentsEntity[id].first = _componentsEntity.back().first;
+		//_componentsRefs[_componentsEntity.back().first] = id;
 		_reorder = true;
 		return true;
 	}
 
 	virtual void reorder()
 	{
-		if (!_reorder)
-			return;
-		auto id = T::getTypeId();
-		if (_componentsEntity.size() <= 1)
-			return;
-		quickSort(0, _componentsEntity.size() - 1);
-		this->_reorder = false;
+		//if (!_reorder)
+		//	return;
+		//auto id = T::getTypeId();
+		//if (_componentsEntity.size() <= 1)
+		//	return;
+		//quickSort(0, _componentsEntity.size() - 1);
+		//this->_reorder = false;
 	}
 private:
 	void quickSort(std::size_t top, std::size_t bottom)
@@ -155,15 +160,10 @@ private:
 
 			if (i < j)
 			{
-				auto tmp = _components[_componentsRefs[_componentsEntity[i].second]];
-				_components[_componentsRefs[_componentsEntity[i].second]] = std::move(_components[_componentsRefs[_componentsEntity[j].second]]);
-				_components[_componentsRefs[_componentsEntity[j].second]] = std::move(tmp);
-				auto tmpIndex = _componentsRefs[_componentsEntity[i].second];
-				_componentsRefs[_componentsEntity[i].second] = _componentsRefs[_componentsEntity[j].second];
-				_componentsRefs[_componentsEntity[j].second] = tmpIndex;
-				auto tmpEnt = _componentsEntity[i];
-				_componentsEntity[i] = _componentsEntity[j];
-				_componentsEntity[j] = tmpEnt;
+
+				std::swap(_components[_componentsRefs[_componentsEntity[i].second]], _components[_componentsRefs[_componentsEntity[j].second]]);
+				std::swap(_componentsRefs[_componentsEntity[i].second], _componentsRefs[_componentsEntity[j].second]);
+				std::swap(_componentsEntity[i], _componentsEntity[j]);
 			}
 		} while (i < j);
 		return j;

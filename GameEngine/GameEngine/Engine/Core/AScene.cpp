@@ -88,5 +88,5 @@ void AScene::setLocalTransform(Entity &e, const glm::mat4 &trans, bool notifyTra
 	if (notifyTransformation)
 		e.setFlags() |= Flags::HasMoved;
 	_localTransform[e.id] = trans;
-	_globalTransform[e.id] *= trans;
+	_globalTransform[e.id] = trans;
 }
