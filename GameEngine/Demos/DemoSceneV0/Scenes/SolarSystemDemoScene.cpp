@@ -9,7 +9,6 @@
 #include <Components/TrackBallComponent.hpp>
 #include <Components/AudioListener.hpp>
 #include <Components/AudioEmitter.hpp>
-#include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
@@ -17,6 +16,7 @@
 #include <Audio/AudioManager.hh>
 #include <Core/Engine.hh>
 #include <Systems\LightRenderingSystem.hh>
+#include <Core/SceneManager.hh>
 
 #include <MediaFiles/AssetsManager.hpp>
 
@@ -55,7 +55,7 @@ Entity	SolarSystemDemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	//planetMesh->saveToFile();
 	//planetMesh->material->saveToFile();
 
-	
+
 	//auto planetMesh = getInstance<AssetsManager>()->loadFromFile<cereal::BinaryInputArchive>(File("./Assets/Serialized/" + tex1/* + tex2 + tex3 + tex4*/ + ".cpd"));
 
 	std::shared_ptr<Component::MeshRenderer>	r = e->addComponent<Component::MeshRenderer>(planetMesh);
@@ -68,7 +68,7 @@ Entity	SolarSystemDemoScene::createPlanet(float rotSpeed, float orbitSpeed,
 	return (p);
 }
 
-bool 			SolarSystemDemoScene::userStart()
+bool SolarSystemDemoScene::userStart()
 {
 	rct<Component::CameraComponent>()
 		.rct<Component::MeshRenderer>()
@@ -92,12 +92,12 @@ bool 			SolarSystemDemoScene::userStart()
 	//
 	// end System Test
 
-	std::string		perModelVars[] =
+	std::string	perModelVars[] =
 	{
 		"model"
 	};
 
-	std::string		perFrameVars[] =
+	std::string	perFrameVars[] =
 	{
 		"projection",
 		"view",
@@ -106,7 +106,7 @@ bool 			SolarSystemDemoScene::userStart()
 		"spotLightNbr"
 	};
 
-	std::string		materialBasic[] =
+	std::string	materialBasic[] =
 	{
 		"ambient",
 		"diffuse",
@@ -151,15 +151,13 @@ bool 			SolarSystemDemoScene::userStart()
 	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
 	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
 	getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
-	std::string		vars[] =
+	std::string	vars[] =
 	{
 		"projection",
 		"view"
 	};
 
 	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
-
-	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 
 	getInstance<Renderer>()->addUniform("cameraUniform")
 		->init(sky, "cameraUniform", vars);
@@ -176,10 +174,10 @@ bool 			SolarSystemDemoScene::userStart()
 	//File saveFile("SolarSystem.scenesave");
 	//if (saveFile.exists())
 	//{
-	//	std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
-	//	load<cereal::JSONInputArchive>(fileStream);
-	//	fileStream.close();
-	//	return true;
+	// std::ifstream fileStream("SolarSystem.scenesave", std::ios_base::binary);
+	// load<cereal::JSONInputArchive>(fileStream);
+	// fileStream.close();
+	// return true;
 	//}
 
 	auto sun = createPlanet(0, 0, glm::vec3(0), glm::vec3(100), "basic", "texture__SunTexture");
@@ -246,7 +244,7 @@ bool 			SolarSystemDemoScene::userStart()
 	return (true);
 }
 
-bool 			SolarSystemDemoScene::userUpdate(double time)
+bool SolarSystemDemoScene::userUpdate(double time)
 {
 	if (getInstance<Input>()->getInput(SDLK_l))
 	{

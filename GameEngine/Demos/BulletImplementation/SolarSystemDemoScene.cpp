@@ -9,13 +9,13 @@
 #include <Components/TrackBallComponent.hpp>
 #include <Components/AudioListener.hpp>
 #include <Components/AudioEmitter.hpp>
-#include <OpenGL/ComputeShader.hh>
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/TrackBallSystem.hpp>
 #include <Systems/AudioSystem.hpp>
 #include <Audio/AudioManager.hh>
 #include <Core/Engine.hh>
+#include <Core/SceneManager.hh>
 #include <Systems\LightRenderingSystem.hh>
 
 #include <MediaFiles/AssetsManager.hpp>
@@ -159,7 +159,6 @@ bool 			SolarSystemDemoScene::userStart()
 
 	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
 
-	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
 
 	getInstance<Renderer>()->addUniform("cameraUniform")
 		->init(sky, "cameraUniform", vars);

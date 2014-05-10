@@ -7,7 +7,7 @@
 #include "Core/Input.hh"
 #include "Core/Timer.hh"
 #include <memory>
-#include "OpenGL/Shader.hh"
+//#include "OpenGL/Shader.hh"
 #include "Utils/Barcode.h"
 #include "glm/glm.hpp"
 #include <Components/Component.hh>
@@ -20,6 +20,7 @@
 class AScene;
 class EntityManager;
 class Entity;
+class Shader;
 
 class EntityData
 {
@@ -174,7 +175,7 @@ public:
 		//init component
 		std::static_pointer_cast<T>(_components[id])->init(std::forward<Args>(args)...);
 		_code.add(id + MAX_TAG_NUMBER);
-		_scene.lock()->informFilters(true, id + MAX_TAG_NUMBER, std::move(_handle));
+		_scene.lock()->informFilters(true, unsigned short(id + MAX_TAG_NUMBER), std::move(_handle));
 		return std::static_pointer_cast<T>(_components[id]);
 	}
 

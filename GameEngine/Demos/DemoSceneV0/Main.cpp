@@ -3,6 +3,7 @@
 #define GLM_FORCE_INLINE 
 #define GLM_FORCE_SSE2 
 #define GLM_FORCE_AVX
+//#define GLM_FORCE_RADIANS
 
 #include <stdlib.h>
 #include <crtdbg.h>

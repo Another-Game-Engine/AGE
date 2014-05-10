@@ -10,7 +10,6 @@ struct SpiralRoomSponza : public Room
 	SpiralRoomSponza(std::weak_ptr<AScene> &&scene)
 	: Room(std::move(scene))
 	, fboSponzaReceiver(scene.lock()->getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>())
-	, fboSponzaId(0)
 	{}
 
 	virtual ~SpiralRoomSponza()
@@ -23,9 +22,9 @@ struct SpiralRoomSponza : public Room
 		hotZoneSpiralEngine = createHotZone("SpiralSponza->Engine", "HZ-engine-sponza");
 
 		{
-			auto &_sid = fboSponzaId;
-			fboSponzaReceiver.globalSub(PubSubKey("fboSponzaId"), [&_sid](GLuint id) {
-				_sid = id;
+			auto &_sid = fboSponza;
+			fboSponzaReceiver.globalSub(PubSubKey("fboSponzaId"), [&_sid](OpenGLTools::Texture2D *t) {
+				_sid = std::make_unique<OpenGLTools::Texture2D>(*t);
 			});
 		}
 		return true;
@@ -33,10 +32,9 @@ struct SpiralRoomSponza : public Room
 
 	Entity hotZoneSpiralEngine;
 	std::map<std::string, Entity> map;
-	//PubSub fboAsteroidReceiver;
-	//GLuint fboAsteroidId;
+
 	PubSub fboSponzaReceiver;
-	GLuint fboSponzaId;
+	std::unique_ptr<OpenGLTools::Texture2D> fboSponza;
 protected:
 	virtual bool _enable()
 	{
@@ -62,7 +60,8 @@ protected:
 			e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3(-8, 1, 0)));
 			auto sprite = e->addComponent<Component::Sprite>(scene->getInstance<SpriteManager>()->getAnimation("FBO-sponza", "sponza"));
 			sprite->delay = 1.0f / 10.0f;
-			sprite->animation->getMaterial().diffuseTex->id = fboSponzaId;
+			if (fboSponza.get() != nullptr)
+				*sprite->animation->getMaterial().diffuseTex = *fboSponza;
 			sprite->animation->_frames[0]->_uvs = glm::vec4(1, 0, 0, 1);
 			sprite->animation->_frames[0]->load(scene->getInstance < VertexManager<4> >());
 			e->addComponent<Component::TransformationRegister>("fbo-sponza");

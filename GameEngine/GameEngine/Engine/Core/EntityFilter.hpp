@@ -17,7 +17,7 @@ public:
 	template <typename T>
 	void requireComponent()
 	{
-		auto id = T::getTypeId() + MAX_TAG_NUMBER;
+		auto id = unsigned short(T::getTypeId() + MAX_TAG_NUMBER);
 		_code.add(id);
 		_scene.lock()->filterSubscribe(id, this);
 	}

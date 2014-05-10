@@ -31,7 +31,6 @@
     <ClInclude Include="Rooms\SpiralRoomSponza.hpp" />
     <ClInclude Include="Scenes\SponzaScene.hh" />
     <ClInclude Include="Scenes\MainScene.hh" />
-    <ClInclude Include="Scenes\SolarSystemDemoScene.hh" />
     <ClInclude Include="Scenes\SpaceGame.hh" />
     <ClInclude Include="Systems\AsteroidSystem.hh" />
     <ClInclude Include="Systems\DemoCatSystem.hpp" />
@@ -47,5 +46,9 @@
     <ClInclude Include="Components\EntityPlacable.hpp" />
     <ClInclude Include="Components\HotZone.hpp" />
     <ClInclude Include="Components\TransformationRegister.hpp" />
+    <ClInclude Include="Scenes\SolarSystemDemoScene.hh" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scenes\SolarSystemDemoScene.hh~master" />
   </ItemGroup>
 </Project>

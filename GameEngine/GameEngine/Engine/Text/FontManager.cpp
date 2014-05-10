@@ -1,6 +1,6 @@
-#include <iostream>
 #include "FontManager.hh"
-
+#include <Utils/PubSub.hpp>
+#include <Text/Font.hh>
 #include <cereal/archives/xml.hpp>
 #include <Core/Renderer.hh>
 #include <Context/IRenderContext.hh>

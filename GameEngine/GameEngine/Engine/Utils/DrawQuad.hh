@@ -1,10 +1,16 @@
 #pragma once
 
-#include <OpenGL\Shader.hh>
-#include <OpenGL\VertexManager.hh>
-#include <Core\Engine.hh>
-#include <Core\Renderer.hh>
-#include <Utils/DependenciesInjector.hpp>
+# include <Utils/OpenGL.hh>
+# include <glm/glm.hpp>
+# include <memory>
+# include <OpenGL/Vertice.hh>
+
+namespace OpenGLTools
+{
+	class Shader;
+}
+class Renderer;
+template <uint8_t SIZE_ATTRIBUTE> class VertexManager;
 
 class DrawQuad
 {

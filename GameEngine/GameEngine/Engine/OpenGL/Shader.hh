@@ -1,45 +1,56 @@
 #ifndef SHADER_HH_
 # define SHADER_HH_
 
-# include <map>
-# include <vector>
-# include <set>
 
-#include "AShader.hh"
+# include <Utils/OpenGL.hh>
+# include <iostream>
+# include <map>
+# include <array>
+# include <vector>
+# include <utility>
+# include <memory>
+# include <fstream>
+# include <OpenGL/ErrorController.hh>
 
 namespace OpenGLTools
 {
-	class Shader : public AShader
+
+	class Shader
 	{
 	private:
-		GLuint						_vertexId;
-		GLuint						_fragId;
-		GLuint						_geometryId;
+		GLuint	_progId;
+		GLuint	_vertexId;
+		GLuint	_fragId;
+		GLuint	_geometryId;
+		GLuint	_computeId;
+		std::map<std::string, std::vector<std::string>> _uniformBlockBind;
+		std::vector<std::string> _samplersBind;
+		std::vector<std::string> _uniformsBind;
 
-		GLenum                      *_targets;
-		GLuint                      _textureNumber;
-		std::set<GLenum>            _targetsList;
-		std::set<GLenum>            _layersList;
+		Shader();
+		void compileShader(GLuint shaderId, std::string &&file) const;
+		void linkProgram() const;
+		GLuint addShader(std::string &&path, GLenum type);
 
 	public:
-		Shader(void);
-		virtual ~Shader(void);
+		Shader(std::string &&compute);
+		Shader(std::string &&vertex, std::string &&fragment);
+		Shader(std::string &&vertex, std::string &&fragment, std::string &&geometry);
+		~Shader(void);
+		Shader(Shader &&Shader);
+		Shader(Shader const &Shader);
+		Shader &operator=(Shader const &shader);
+		Shader &operator=(Shader &&shader);
 
-		bool	init(std::string const &vertex, std::string const &fragment, std::string const &geometry = "");
-
-		GLenum  *getTargets() const;
-		std::size_t getTargetsNumber() const;
-
-		Shader &addTarget(GLenum target);
-		Shader &removeTarget(GLenum target);
-		void clearTargets();
-		Shader &addLayer(GLenum layer);
-		Shader &removeLayer(GLenum layer);
-		void clearLayers();
-		inline const std::set<GLenum> &getLayers() const {return _layersList;}
-		inline Shader &setTextureNumber(unsigned int t){_textureNumber = t; return *this;}
-	private:
-		bool _build();
+		void	use();
+		void	addSampler(std::string &&sampler);
+		bool	deleteSampler(std::string &&sampler);
+		void	addUniform(std::string &&uniform);
+		bool	deleteUniform(std::string &&uniform);
+		void	addUniformBlock(std::string &&uniformBlock, std::vector<std::string> &&args);
+		bool	deleteUniformBlock(std::string &&unifromBlock);
+	
+		GLuint	getId() const;
 	};
 
 }

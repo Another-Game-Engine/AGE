@@ -6,6 +6,8 @@
 #include "System.h"
 #include <Components/RotationForce.hpp>
 #include <Entities/EntityData.hh>
+#include <Core/AScene.hh>
+#include <Core/EntityFilter.hpp>
 
 class RotationForceSystem : public System
 {

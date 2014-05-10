@@ -2,7 +2,6 @@
 
 #include <list>
 #include <Utils/Dependency.hpp>
-
 #include "glm/gtc/type_precision.hpp"
 
 class Input : public Dependency
