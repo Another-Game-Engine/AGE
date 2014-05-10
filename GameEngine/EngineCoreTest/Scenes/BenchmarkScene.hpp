@@ -2,12 +2,23 @@
 
 #include <Core/AScene.hh>
 
+#include <Systems/LifetimeSystem.hpp>
+
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <Systems/LifetimeSystem.hpp>
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
+
+#include <Systems/CameraSystem.hpp>
+#include <Systems/DownSampleSystem.hh>
+#include <Systems/PostFxSystem.hh>
+#include <Systems/LightRenderingSystem.hh>
+#include <Systems/FirstPersonViewSystem.hpp>
+#include <Systems/BlitFinalRender.hh>
+
+#include <CONFIGS.hpp>
+
 
 class BenchmarkScene : public AScene	
 {
@@ -21,17 +32,90 @@ public:
 
 	virtual bool 			userStart()
 	{
-
-		rct<Component::Lifetime>();
-
+#ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
 		addSystem<CollisionAdder>(1);
+		addSystem<CollisionCleaner>(1000);
+#endif //!PHYSIC
+
+#ifdef RENDERING_ACTIVATED
+	addSystem<FirstPersonViewSystem>(2);
+	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	addSystem<LightRenderingSystem>(80); // Render with the lights
+	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
+	addSystem<PostFxSystem>(110); // POST FXs
+	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
+
+	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
+	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
+	getSystem<PostFxSystem>()->useHDR(false);
+	getSystem<PostFxSystem>()->useBloom(false);
+
+#endif
+
+#ifdef LIFETIME_ACTIVATED
 		addSystem<LifetimeSystem>(2);
-		addSystem<CollisionCleaner>(3);
+#endif //!LIFETIME_ACTIVATED
 
 		srand(42);
 
+#ifdef LOG_FRAMERATE
 		_logFile.open("LogFile.log", std::ios::app);
+		_logFile << "\n\nNew test in ";
+#ifdef _DEBUG
+		_logFile << "DEBUG . With :";
+#else
+		_logFile << "RELEASE . With :";
+#endif
+#ifdef LIFETIME_ACTIVATED
+		_logFile << " Lifetime, ";
+#endif
+#ifdef COMPLEX_MESH
+			_logFile << " Complex mesh, ";
+#elif defined RENDERING_ACTIVATED
+			_logFile << " Rendering, ";
+#endif
+#ifdef PHYSIC_SIMULATION
+		_logFile << " Physics, ";
+#endif
+		_logFile << "\n";
+
+
+#endif
+
+#ifdef RENDERING_ACTIVATED
+
+		auto camera = createEntity();
+		auto cam = addComponent<Component::CameraComponent>(camera);
+		addComponent<Component::FirstPersonView>(camera);
+
+		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
+		cam->fboSize = screenSize;
+		cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
+		cam->attachSkybox(getInstance<AssetsManager>()->get<CubeMapFile>("skybox__space"), "cubemapShader");
+		cam->sampleNbr = 0;
+
+		setLocalTransform(camera, glm::translate(glm::mat4(1), glm::vec3(0, 0, -40)));
+
+
+	auto light = createEntity();
+	auto lightComponent = addComponent<Component::PointLight>(light);
+	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 50);
+	lightComponent->lightData.positionPower.w = 2.0f;
+	lightComponent->lightData.hasShadow = -1;
+	setLocalTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 2, 0)));
+
+	light = createEntity();
+	lightComponent = addComponent<Component::PointLight>(light);
+	lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
+	lightComponent->lightData.positionPower.w = 0;
+	lightComponent->lightData.hasShadow = -1;
+	setLocalTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
+
+#endif
+
 
 		return true;
 	}
@@ -45,15 +129,38 @@ public:
 
 		if (_chunkCounter >= _maxChunk)
 		{
+			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 			for (auto i = 0; i < 14; ++i)
 			{
 				auto e = createEntity();
-				addComponent<Component::Lifetime>(e);
-				std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-				auto rb = addComponent<Component::RigidBody>(e, weakOnThis, 1.0f);
-				rb->setCollisionShape(e, Component::RigidBody::CollisionShape::SPHERE);
+
+#ifdef LIFETIME_ACTIVATED
+				addComponent<Component::Lifetime>(e, 0.5f);
+#endif
+
+#ifdef PHYSIC_SIMULATION
+				auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, 1.0f);
+				rigidBody->setCollisionShape(e, Component::RigidBody::SPHERE);
+				rigidBody->getBody().setFriction(1.0f);
+				rigidBody->getBody().setRestitution(1.0f);
+#endif
+#ifdef RENDERING_ACTIVATED
+
+
+
+#ifndef COMPLEX_MESH
+						auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+						mesh->setShader("MaterialBasic");
+#else
+						auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
+						mesh->setShader("MaterialBasic");
+#endif
+
+#endif
 				setLocalTransform(e, glm::translate(getLocalTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
 			}
+#ifdef LOG_FRAMERATE
+
 			_logFile << _chunkFrame << ", ";
 			_chunkCounter = 0.0;
 			_chunkFrame = 0;
@@ -62,11 +169,9 @@ public:
 		{
 			_logFile << std::endl << "Total frames : " << _frameCounter << " -- Entity created : " << this->getNumberOfEntities() << std::endl << "----------------" << std::endl;
 			_logFile.close();
-
-			std::ofstream saveFile("SaveFile.save", std::ios::binary);
-			save<cereal::PortableBinaryOutputArchive>(saveFile);
 			return false;
 		}
+#endif
 		return true;
 	}
 private:

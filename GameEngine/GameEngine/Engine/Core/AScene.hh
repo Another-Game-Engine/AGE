@@ -82,15 +82,14 @@ public:
 		}
 	}
 
-	void destroy(Entity &e)
+	void destroy(const Entity &e)
 	{
 		static Barcode cachedCode;
 		auto &data = _pool[e.id];
 		if (data.entity != e)
 			return;
-		++e.version;
-		e.flags = 0;
-		data.entity = e;
+		++data.entity.version;
+		data.entity.flags = 0;
 		cachedCode = data.barcode;
 		data.barcode.reset();
 		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)

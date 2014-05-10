@@ -9,8 +9,8 @@ namespace Component
 	struct Lifetime : public Component::ComponentBase<Lifetime>
 	{
 		Lifetime()
-		: _t(0.0f)
 		{
+
 		}
 
 		virtual ~Lifetime(void)
@@ -18,9 +18,9 @@ namespace Component
 
 		}
 
-		void init()
+		void init(float t)
 		{
-			_t = static_cast<float>(rand() % 100) / 10.0f;
+			_t = t;
 		}
 
 		virtual void reset()
@@ -44,15 +44,10 @@ namespace Component
 
 		float _t;
 
-		Lifetime &operator=(const Lifetime &o)
-		{
-			_t = o._t;
-			return *this;
-		}
+		Lifetime(Lifetime const &o) { _t = o._t; }
+		Lifetime &operator=(Lifetime const &o) { _t = o._t; return *this; }
 
 	private:
-		//Lifetime(Lifetime const &);
-		//Lifetime &operator=(Lifetime const &);
 	};
 }
 
@@ -78,15 +73,13 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		float t = static_cast<float>(time);
-		auto scene = this->_scene.lock();
+		auto scene = _scene.lock();
 		EntityFilter::Lock lock(_filter);
-		auto &collection = _filter.getCollection();
-		for (Entity e : collection)
+		for (auto &&e : _filter.getCollection())
 		{
-			auto lifetime = scene->getComponent<Component::Lifetime>(e);
-			lifetime->_t -= t;
+			scene->getComponent<Component::Lifetime>(e)->_t -= t;
 			if (scene->getComponent<Component::Lifetime>(e)->_t <= 0.0f)
-				scene->removeComponent<Component::Lifetime>(e);
+				scene->destroy(e);
 		}
 	}
 

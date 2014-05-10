@@ -21,6 +21,106 @@
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
 
+//CONFIGS
+#include <CONFIGS.hpp>
+
+bool loadShaders(std::shared_ptr<Engine> e)
+{
+	std::string		perModelVars[] =
+	{
+		"model"
+	};
+
+	std::string	perFrameVars[] =
+	{
+		"projection",
+		"view",
+		"time",
+		"pointLightNbr",
+		"spotLightNbr"
+	};
+
+	std::string		materialBasic[] =
+	{
+		"ambient",
+		"diffuse",
+		"specular",
+		"transmittance",
+		"emission",
+		"shininess"
+	};
+
+	std::string	perLightVars[] =
+	{
+		"lightVP"
+	};
+
+	auto s = e->getInstance<Renderer>()->addShader("MaterialBasic",
+		"../../Shaders/MaterialBasic.vp",
+		"../../Shaders/MaterialBasic.fp");
+
+	auto shadowDepth = e->getInstance<Renderer>()->addShader("ShadowDepth" , "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
+
+	e->getInstance<Renderer>()->addUniform("MaterialBasic")
+		->init(s, "MaterialBasic", materialBasic);
+	e->getInstance<Renderer>()->addUniform("PerFrame")
+		->init(s, "PerFrame", perFrameVars);
+	e->getInstance<Renderer>()->addUniform("PerModel")
+		->init(s, "PerModel", perModelVars);
+	e->getInstance<Renderer>()->addUniform("PerLight")
+		->init(shadowDepth, "PerLight", perLightVars);
+
+	e->getInstance<Renderer>()->addShader("2DText",
+		"../../Shaders/2DText.vp",
+		"../../Shaders/2DText.fp");
+
+	e->getInstance<Renderer>()->addShader("SpriteBasic",
+		"../../Shaders/SpriteBasic.vp",
+		"../../Shaders/SpriteBasic.fp");
+
+
+	e->getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
+	e->getInstance<Renderer>()->addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
+	e->getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
+	e->getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerLight", "PerLight");
+
+	e->getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
+	e->getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerModel", "PerModel");
+
+	e->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
+	e->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
+	e->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
+
+	std::string	vars[] =
+	{
+		"projection",
+		"view"
+	};
+
+	auto sky = e->getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
+
+	e->getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
+
+	e->getInstance<Renderer>()->addUniform("cameraUniform")
+		->init(sky, "cameraUniform", vars);
+
+	e->getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+
+	return true;
+}
+
+bool loadAssets(std::shared_ptr<Engine> e)
+{
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
+#ifndef COMPLEX_MESH
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
+#else
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
+#endif
+
+	return true;
+}
 
 int			main(int ac, char **av)
 {
@@ -35,8 +135,13 @@ int			main(int ac, char **av)
 	e->setInstance<Timer>();
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
+	e->setInstance<AssetsManager>()->init();
+
+#ifdef PHYSIC_SIMULATION
 	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
-	
+#endif
+
+
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
@@ -50,6 +155,23 @@ int			main(int ac, char **av)
 
 	config->loadFile();
 
+#ifdef RENDERING_ACTIVATED
+
+	std::array<Attribute, 4> param = //-V112
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
+		Attribute(GL_FLOAT, sizeof(float), 2),
+	};
+
+	e->setInstance<VertexManager<4>>(param)->init();
+	if (!loadShaders(e))
+		return EXIT_FAILURE;
+	if (!loadAssets(e))
+		return EXIT_FAILURE;
+#endif
+
 	// add main scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<BenchmarkScene>(e), "BenchmarkScene");
 
@@ -58,6 +180,7 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
+
 	// launch engine
 	if (e->start() == false)
 		return (EXIT_FAILURE);

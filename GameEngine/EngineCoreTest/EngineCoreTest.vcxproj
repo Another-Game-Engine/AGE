@@ -151,8 +151,8 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CONFIGS.hpp" />
     <ClInclude Include="Scenes\BenchmarkScene.hpp" />
-    <ClInclude Include="Systems\BullshitSystem.hpp" />
     <ClInclude Include="Systems\LifetimeSystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
