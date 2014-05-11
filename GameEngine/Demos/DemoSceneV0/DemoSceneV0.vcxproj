@@ -238,9 +238,9 @@
     <ClInclude Include="Rooms\SpiralRoomAsteroid.hpp" />
     <ClInclude Include="Rooms\SpiralRoomInception.hpp" />
     <ClInclude Include="Rooms\SpiralRoomSponza.hpp" />
+    <ClInclude Include="Scenes\SolarSystemDemoScene.hh" />
     <ClInclude Include="Scenes\SponzaScene.hh" />
     <ClInclude Include="Scenes\MainScene.hh" />
-    <ClInclude Include="Scenes\SolarSystemDemoScene.hh" />
     <ClInclude Include="Scenes\SpaceGame.hh" />
     <ClInclude Include="Systems\AsteroidSystem.hh" />
     <ClInclude Include="Systems\DemoCatSystem.hpp" />
@@ -263,6 +263,9 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scenes\SolarSystemDemoScene.hh~master" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,14 +1,14 @@
 #ifndef		__BARCODE_H__
 # define	__BARCODE_H__
 
-#include   <bitset>
-#include   <assert.h>
+//#include   <bitset>
 #include   <boost/dynamic_bitset/dynamic_bitset.hpp>
+//#include   <assert.h>
 
-namespace   Component
-{
-	struct  Base;
-};
+//namespace   Component
+//{
+//	struct  Base;
+//};
 
 class	EntityData;
 
@@ -17,13 +17,13 @@ class Barcode
 public:
 
 	Barcode();
-	Barcode(::EntityData &entity);
+	Barcode(EntityData &entity);
 	Barcode(Barcode &&o);
 	Barcode(Barcode &other);
 	Barcode &operator=(const Barcode &other);
 	~Barcode();
 	bool match(boost::dynamic_bitset<> &set);
-	bool match(::EntityData &entity);
+	bool match(EntityData &entity);
 	bool match(Barcode &entity);
 	void reset();
 	void add(std::size_t componentId);

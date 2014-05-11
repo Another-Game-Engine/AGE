@@ -1,13 +1,16 @@
 #pragma once
 
+#include <memory>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
 #include <Systems/System.h>
-#include <Entities/EntityData.hh>
-#include <Components/TransformationRegister.hpp>
+#include <Core/EntityFilter.hpp>
+//#include <Entities/EntityData.hh>
 #include <Utils/File.hpp>
 
 class TransformationRegisterSystem;
+class AScene;
+class Entity;
 
 class TRSFilter : public EntityFilter
 {

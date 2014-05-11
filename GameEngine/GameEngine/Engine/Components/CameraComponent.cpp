@@ -1,9 +1,11 @@
+//# define GLM_FORCE_RADIANS
+
 #include <Components/CameraComponent.hpp>
-#include <Core/Engine.hh>
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <Entities/Entity.hh>
 #include <Entities/EntityData.hh>
-#include <MediaFiles/AssetsManager.hpp>
 #include <Core/AScene.hh>
 
 namespace Component

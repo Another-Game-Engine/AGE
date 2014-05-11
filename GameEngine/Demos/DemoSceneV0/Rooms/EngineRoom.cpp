@@ -1,3 +1,5 @@
+//# define GLM_FORCE_RADIANS
+
 #include "EngineRoom.hh"
 #include <MediaFiles/AssetsManager.hpp>
 #include <Components/MeshRenderer.hh>

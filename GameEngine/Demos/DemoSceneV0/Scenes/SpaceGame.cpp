@@ -1,5 +1,7 @@
 #include <Scenes/SpaceGame.hh>
 
+#include <Core/Renderer.hh>
+
 // components
 #include <Components/FPController.hpp>
 #include <Components/CameraComponent.hpp>
@@ -18,8 +20,8 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 
+#include <Text/FontManager.hh>
 #include <glm/glm.hpp>
-
 #include "MyTags.hpp"
 
 SpaceGame::SpaceGame(std::weak_ptr<Engine> &&engine)
@@ -136,8 +138,7 @@ bool 			SpaceGame::userStart()
 	OpenGLTools::Framebuffer &current = cameraComponent->frameBuffer.isMultisampled() ? cameraComponent->downSampling : cameraComponent->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	_globalPubSub = std::make_unique<PubSub>(psm);
-	_globalPubSub->broadCast(PubSubKey("fboAsteroidId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
-
+	_globalPubSub->broadCast(PubSubKey("fboAsteroidId"), static_cast<OpenGLTools::Texture2D *>(current[GL_COLOR_ATTACHMENT0]));
 	_globalPubSub->globalSub(PubSubKey("asteroidPause"), [&](){
 		deactivateSystem<SpaceshipControllerSystem>(); // UPDATE FIRST PERSON CONTROLLER
 	});

@@ -1,15 +1,25 @@
 #pragma once
 
-#include <Components\PointLight.hh>
-#include <Components\SpotLight.hh>
+#include <Utils/OpenGL.hh>
+//#include <Systems\CameraSystem.hpp>
+//#include <OpenGL\VertexManager.hh>
+//#include <OpenGL\Framebuffer.hh>
+//#include <Utils\DrawQuad.hh>
 
-#include <Systems\System.h>
-#include <Systems\CameraSystem.hpp>
-#include <OpenGL\VertexManager.hh>
-#include <OpenGL\Framebuffer.hh>
-#include <Utils\DrawQuad.hh>
+#include <iostream>
+#include <memory>
+#include <Systems/System.h>
+#include <Core/EntityFilter.hpp>
+#include <Components/PointLight.hh>
+#include <Components/SpotLight.hh>
+#include <glm/glm.hpp>
 
-#include <vector>
+class AScene;
+namespace OpenGLTools
+{
+	class UniformBuffer;
+	class Framebuffer;
+}
 
 #define		MAX_LIGHT_NBR	255
 #define		POINT_LIGHT_BUFF_SIZE	(MAX_LIGHT_NBR * sizeof(PointLightData))

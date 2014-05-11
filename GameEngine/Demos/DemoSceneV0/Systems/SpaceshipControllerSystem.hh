@@ -1,7 +1,10 @@
 #pragma once
 
-#include <Systems\System.h>
+#include <memory>
+#include <Systems/System.h>
 #include <Core/EntityFilter.hpp>
+
+class Entity;
 
 class SpaceshipControllerSystem : public System
 {

@@ -1,12 +1,11 @@
 #ifndef		__SYSTEM_H__
 # define	__SYSTEM_H__
 
-#include    <set>
-#include	<Utils/Barcode.h>
+#include	<iostream>
+#include	<memory>
 #include    <Utils/PubSub.hpp>
-#include    <Entities/EntityData.hh>
-#include    <Core/EntityFilter.hpp>
-//#include    <Entities/Entity.hh>
+
+class AScene;
 
 class	System : public PubSub
 {

@@ -10,7 +10,6 @@
 #include <Components/FirstPersonView.hpp>
 #include <Components/SpriteComponent.hh>
 
-#include <OpenGL/ComputeShader.hh>
 #include <OpenGL/Attribute.hh>
 #include <OpenGL/include/SDL/SDL_opengl.h>
 
@@ -313,8 +312,6 @@ bool SponzaScene::userStart()
 
 	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
 
-	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-
 	getInstance<Renderer>()->addUniform("cameraUniform")
 		->init(sky, "cameraUniform", vars);
 
@@ -330,8 +327,7 @@ bool SponzaScene::userStart()
 	OpenGLTools::Framebuffer &current = cameraComponent1->frameBuffer.isMultisampled() ? cameraComponent1->downSampling : cameraComponent1->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	_globalPubSub = std::make_unique<PubSub>(psm);
-	_globalPubSub->broadCast(PubSubKey("fboSponzaId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
-
+	_globalPubSub->broadCast(PubSubKey("fboSponzaId"), static_cast<OpenGLTools::Texture2D *>(current[GL_COLOR_ATTACHMENT0]));
 	_globalPubSub->globalSub(PubSubKey("sponzaPause"), [&](){
 		deactivateSystem<FPControllerSystem>(); // UPDATE FIRST PERSON CONTROLLE
 		deactivateSystem<SponzaPistolSystem>();

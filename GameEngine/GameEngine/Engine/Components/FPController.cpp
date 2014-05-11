@@ -60,7 +60,7 @@ void FPController::init(short filterGroup, short filterMask)
 	_shape = new btCylinderShape(convertGLMVectorToBullet(scale));
 
 	_ghost->setCollisionShape(_shape);
-//	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+	// _ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
 	_ghost->setWorldTransform(transform);
 	_ghost->setRestitution(0);
 	_ghost->setActivationState(DISABLE_DEACTIVATION);

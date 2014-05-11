@@ -89,8 +89,8 @@ bool 			MainScene::userStart()
 	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
 	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
-	getSystem<PostFxSystem>()->useHDR(true);
-	getSystem<PostFxSystem>()->useBloom(true);
+	getSystem<PostFxSystem>()->useHDR(false);
+	getSystem<PostFxSystem>()->useBloom(false);
 
 
 	// create heros
@@ -103,7 +103,7 @@ bool 			MainScene::userStart()
 		camera->fboSize = screenSize;
 		camera->viewport = glm::uvec4(0, 0, camera->fboSize.x, camera->fboSize.y);
 		camera->attachSkybox("skybox__space", "cubemapShader");
-		camera->sampleNbr = 8;
+		camera->sampleNbr = 0;
 
 		auto fpv = _heros->addComponent<Component::FirstPersonView>();
 		auto fpc = _heros->addComponent<Component::FPController>();
@@ -282,8 +282,7 @@ bool 			MainScene::userStart()
 	OpenGLTools::Framebuffer &current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	PubSub t(getInstance<PubSub::Manager>());
-	t.broadCast(PubSubKey("fboInceptionId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
-
+	t.broadCast(PubSubKey("fboInceptionId"), current[GL_COLOR_ATTACHMENT0]);
 	return true;
 }
 
@@ -415,9 +414,6 @@ bool MainScene::loadShaders()
 	};
 
 	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
-
-	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-
 	getInstance<Renderer>()->addUniform("cameraUniform")
 		->init(sky, "cameraUniform", vars);
 
