@@ -1,7 +1,5 @@
 #include "VertexBuffer.hh"
 
-#include <assert.h>
-
 namespace OpenGLTools
 {
 	VertexBuffer::VertexBuffer(bool isIndices)

@@ -1,14 +1,19 @@
 #pragma once
 
+#include <memory>
 #include <Systems/System.h>
 #include <Entities/EntityData.hh>
 #include <Components/Collision.hpp>
 #include <Context/SdlContext.hh>
 #include <Systems/CameraSystem.hpp>
 #include <Components/RigidBody.hpp>
+#include <Systems/FPControllerSystem.hpp>
 #include <MyTags.hpp>
+#include <MediaFiles/CubeMapFile.hpp>
+#include <MediaFiles/AssetsManager.hpp>
+#include <Text/FontManager.hh>
 
-class FPControllerSystem;
+class AScene;
 
 class SceneInSceneSystem : public System
 {

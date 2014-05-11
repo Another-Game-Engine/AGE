@@ -1,11 +1,9 @@
 #ifndef VERTICE_HH_
 # define VERTICE_HH_
 
-# include <array>
 # include "Data.hh"
 
-template <uint8_t NBR_ATTRIBUTE>
-class VertexManager;
+template <uint8_t NBR_ATTRIBUTE> class VertexManager;
 
 template <uint8_t NBR_ATTRIBUTE>
 class Vertice

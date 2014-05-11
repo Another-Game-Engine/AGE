@@ -14,6 +14,8 @@
 #include <Components/PointLight.hh>
 #include <Components/HotZone.hpp>
 
+//# define GLM_FORCE_RADIANS
+
 struct Room : public std::enable_shared_from_this<Room>
 {
 	Room(std::weak_ptr<AScene> &&scene)

@@ -128,7 +128,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -210,7 +210,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
+    <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\Texture.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
+    <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
     <ClCompile Include="Engine\Systems\PostFxSystem.cpp" />
@@ -242,9 +246,7 @@
     <ClCompile Include="Engine\MediaFiles\MaterialFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\ObjFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\TextureFile.cpp" />
-    <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
-    <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
@@ -271,6 +273,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
+    <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
+    <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
+    <ClInclude Include="Engine\OpenGL\Texture.hh" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
@@ -320,7 +325,6 @@
     <ClInclude Include="Engine\MediaFiles\MediaFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\ObjFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\TextureFile.hpp" />
-    <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\OpenGL\Attribute.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
@@ -386,7 +390,6 @@
     <None Include="Engine\Core\MaterialManager.hh" />
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
-    <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />

@@ -282,8 +282,7 @@ bool 			MainScene::userStart()
 	OpenGLTools::Framebuffer &current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;
 	auto psm = getDependenciesInjectorParent().lock()->getInstance<PubSub::Manager>();
 	PubSub t(getInstance<PubSub::Manager>());
-	t.broadCast(PubSubKey("fboInceptionId"), current.getTextureAttachment(GL_COLOR_ATTACHMENT0));
-
+	t.broadCast(PubSubKey("fboInceptionId"), current[GL_COLOR_ATTACHMENT0]);
 	return true;
 }
 
@@ -415,9 +414,6 @@ bool MainScene::loadShaders()
 	};
 
 	auto sky = getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
-
-	getInstance<Renderer>()->getShader("cubemapShader")->addTarget(GL_COLOR_ATTACHMENT0).setTextureNumber(1).build();
-
 	getInstance<Renderer>()->addUniform("cameraUniform")
 		->init(sky, "cameraUniform", vars);
 

@@ -1,7 +1,19 @@
 #pragma once
+
+#include <stdint.h>
+#include <Utils/OpenGL.hh>
 #include <Systems/System.h>
 #include <Utils/DrawQuad.hh>
-#include <OpenGL/ComputeShader.hh>
+#include <Core/EntityFilter.hpp>
+#include <OpenGL/Shader.hh>
+#include <glm/glm.hpp>
+#include <OpenGL/StreamGPU.hh>
+
+class AScene;
+namespace OpenGLTools
+{
+	class Framebuffer;
+}
 
 class PostFxSystem : public System
 {
@@ -39,8 +51,8 @@ private:
 	float							_maxLightDiminution;
 
 	// HDR Compute shader
-	OpenGLTools::ComputeShader		_modulateRender;
-	OpenGLTools::ComputeShader		_bloom;
+	OpenGLTools::Shader		_modulateRender;
+	OpenGLTools::Shader		_bloom;
 
 	// HDR factors
 	float							_curFactor;
@@ -56,6 +68,8 @@ private:
 	float							_bloomSigma;
 	float							_bloomGlare;
 	uint32_t						_bloomMipmap;
+	OpenGLTools::StreamGPU			_stream;
+
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);
 	void		computeBloom(OpenGLTools::Framebuffer &camFbo);

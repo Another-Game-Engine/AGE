@@ -41,6 +41,15 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
+		Base *unserialize(Archive &ar, Entity e)
+		{
+			auto res = new FPController();
+			res->setEntity(e);
+			ar(*res);
+			return res;
+		}
+
+		template <typename Archive>
 		void save(Archive &ar) const
 		{
 			ar(yOrientation
