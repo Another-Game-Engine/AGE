@@ -276,40 +276,9 @@ namespace Component
 		std::shared_ptr<btRigidBody> _rigidBody;
 		std::weak_ptr<AScene> _scene;
 
-		RigidBody &operator=(RigidBody const &o)
-		{
-			_manager = o._manager;
-			shapeType = o.shapeType;
-			mass = o.mass;
-			inertia = o.inertia;
-			rotationConstraint = o.rotationConstraint;
-			transformConstraint = o.transformConstraint;
-			meshName = o.meshName;
-			_collisionShape = o._collisionShape;
-			_motionState = o._motionState;
-			_rigidBody = o._rigidBody;
-			_scene = o._scene;
-			return *this;
-		}
-
-		RigidBody(RigidBody const &o)
-		{
-			_manager = o._manager;
-			shapeType = o.shapeType;
-			mass = o.mass;
-			inertia = o.inertia;
-			rotationConstraint = o.rotationConstraint;
-			transformConstraint = o.transformConstraint;
-			meshName = o.meshName;
-			_collisionShape = o._collisionShape;
-			_motionState = o._motionState;
-			_rigidBody = o._rigidBody;
-			_scene = o._scene;
-		}
-
 		RigidBody(RigidBody &&o)
+			: ComponentBase<RigidBody>(std::move(o))
 		{
-			_manager = std::move(o._manager);
 			shapeType = std::move(o.shapeType);
 			mass = std::move(o.mass);
 			inertia = std::move(o.inertia);
@@ -320,11 +289,11 @@ namespace Component
 			_motionState = std::move(o._motionState);
 			_rigidBody = std::move(o._rigidBody);
 			_scene = std::move(o._scene);
+			_manager = std::move(o._manager);
 		}
 
 		RigidBody &operator=(RigidBody &&o)
 		{
-			_manager = std::move(o._manager);
 			shapeType = std::move(o.shapeType);
 			mass = std::move(o.mass);
 			inertia = std::move(o.inertia);
@@ -335,10 +304,13 @@ namespace Component
 			_motionState = std::move(o._motionState);
 			_rigidBody = std::move(o._rigidBody);
 			_scene = std::move(o._scene);
+			_manager = std::move(o._manager);
 			return *this;
 		}
 
 	private:
+		RigidBody &operator=(RigidBody const &o);
+		RigidBody(RigidBody const &o);
 
 		void _reset()
 		{

@@ -24,6 +24,20 @@ namespace Component
 		{
 		}
 
+		Collision &operator=(Collision &&other)
+		{
+			force = std::move(other.force);
+			collisions = std::move(other.collisions);
+			return *this;
+		}
+
+		Collision(Collision &&other)
+			: ComponentBase<Collision>(std::move(other))
+		{
+			force = std::move(other.force);
+			collisions = std::move(other.collisions);
+		}
+
 		void init()
 		{
 			force = 0;
@@ -81,19 +95,15 @@ namespace Component
 			}
 		}
 
-		virtual Collision &operator=(const Collision &other)
-		{
-			force = other.force;
-			collisions = other.collisions;
-			return *this;
-		}
-
-
 		// !Serialization
 		////
 		//////
 		float force;
 		std::set<Entity> collisions;
+
+	private:
+		Collision &operator=(Collision const &o);
+		Collision(Collision const &o);
 	};
 }
 
