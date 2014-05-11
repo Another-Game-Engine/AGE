@@ -1,8 +1,11 @@
-
 #include	<Systems/PostFxSystem.hh>
 #include	<Components/CameraComponent.hpp>
+#include	<OpenGL/Framebuffer.hh>
+#include	<OpenGL/Texture.hh>
 #include    <Utils/PubSub.hpp>
 #include    <Core/Timer.hh>
+
+# define TEST_STREAM_GPU 1
 
 PostFxSystem::PostFxSystem(std::weak_ptr<AScene> &&scene) :
 					System(std::move(scene)),
@@ -11,6 +14,8 @@ PostFxSystem::PostFxSystem(std::weak_ptr<AScene> &&scene) :
 					_adaptationSpeed(0.15f),
 					_maxDarkImprovement(1.0f),
 					_maxLightDiminution(0),
+					_modulateRender(std::move(std::string("../../ComputeShaders/HighDynamicRange.kernel"))),
+					_bloom(std::move(std::string("../../ComputeShaders/Bloom.kernel"))),
 					_curFactor(1.0f),
 					_targetFactor(1.0f),
 					_useHDR(true),
@@ -32,11 +37,6 @@ bool	PostFxSystem::initialize()
 	_cameraFilter.requireComponent<Component::CameraComponent>();
 
 	_quad.init(_scene);
-
-	if (!_modulateRender.init("../../ComputeShaders/HighDynamicRange.kernel"))
-		return false;
-	if (!_bloom.init("../../ComputeShaders/Bloom.kernel"))
-		return false;
 
 	// Bloom texture
 	glGenTextures(1, &_bloomTexture);
@@ -71,7 +71,7 @@ void	PostFxSystem::mainUpdate(double time)
 
 void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 {
-	GLuint	colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
+	OpenGLTools::Texture2D *colorTexture = static_cast<OpenGLTools::Texture2D *>(camFbo[GL_COLOR_ATTACHMENT0]);
 	// ----------------------------------------------------
 	// HDR Pass
 	// ----------------------------------------------------
@@ -79,14 +79,21 @@ void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	// ----------------------------------------------------
 	glm::vec4	avgColor(0);
 
-	glBindTexture(GL_TEXTURE_2D, colorTexture);
-
-	glGenerateMipmap(GL_TEXTURE_2D);
+	colorTexture->bind();
+	colorTexture->generateMipMap();
 
 	float	maxDimension = glm::max(static_cast<float>(camFbo.getSize().x), static_cast<float>(camFbo.getSize().y));
 	int		mipMapNbr = static_cast<int>(glm::floor(glm::log2(maxDimension)));
 
-	glGetTexImage(GL_TEXTURE_2D, mipMapNbr, GL_RGBA, GL_FLOAT, &avgColor);
+	colorTexture->setOptionTransfer(mipMapNbr, GL_RGBA, GL_FLOAT);
+#if TEST_STREAM_GPU
+	void *readData = _stream.beginReadBack(colorTexture, sizeof(avgColor));
+	if (readData)
+		memcpy(&avgColor, readData, sizeof(avgColor));
+	_stream.endReadBack(readData);
+#else
+	colorTexture->read(&avgColor);
+#endif
 	// ----------------------------------------------------
 	// Modulate colors:
 	// ----------------------------------------------------
@@ -124,15 +131,14 @@ void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 	glUniform1f(avgIllumLocation, _curFactor);
 
 	// Bind color texture to modulate
-	glBindImageTexture(0, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
+	glBindImageTexture(0, colorTexture->getId(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);
 }
 
 void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 {
-	GLuint	colorTexture = camFbo.getTextureAttachment(GL_COLOR_ATTACHMENT0);
-
+	OpenGLTools::Texture2D *colorTexture = static_cast<OpenGLTools::Texture2D *>(camFbo[GL_COLOR_ATTACHMENT0]);
 	size_t		WORK_GROUP_SIZE = 16;
 	glm::uvec2	groupNbr = glm::uvec2((camFbo.getSize().x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
 		(camFbo.getSize().y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
@@ -166,8 +172,7 @@ void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 	glUniform2i(passLocation, 1, 0);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, colorTexture);
-
+	colorTexture->bind();
 	//		glGenerateMipmap(GL_TEXTURE_2D);
 	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, _bloomMipmap);
 
@@ -183,8 +188,7 @@ void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _bloomTexture);
-	glBindImageTexture(1, colorTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
-
+	glBindImageTexture(1, colorTexture->getId(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA16F);
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 	glDispatchCompute(groupNbr.x, groupNbr.y, 1);

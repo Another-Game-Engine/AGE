@@ -1,5 +1,5 @@
-#ifndef   __COLLISION_HPP__
-# define  __COLLISION_HPP__
+#ifndef __COLLISION_HPP__
+# define __COLLISION_HPP__
 
 #include <Components/Component.hh>
 #include <cereal/archives/binary.hpp>
@@ -14,10 +14,10 @@ namespace Component
 	struct Collision : public ComponentBase<Collision>
 	{
 		Collision()
-			: ComponentBase<Collision>()
-			, force(0)
+		: ComponentBase<Collision>()
+		, force(0)
 		{
-				
+
 		}
 
 		virtual ~Collision()
@@ -107,4 +107,4 @@ namespace Component
 	};
 }
 
-#endif    //__COLLISION_HPP__
+#endif //__COLLISION_HPP__

@@ -1,5 +1,5 @@
-#ifndef		__RIGID_BODY_HPP__
-#define		__RIGID_BODY_HPP__
+#ifndef __RIGID_BODY_HPP__
+#define __RIGID_BODY_HPP__
 
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
@@ -44,8 +44,8 @@ namespace Component
 			shapeType(UNDEFINED),
 			mass(0.0f),
 			inertia(btVector3(0.0f, 0.0f, 0.0f)),
-			rotationConstraint(glm::vec3(1,1,1)),
-			transformConstraint(glm::vec3(1,1,1)),
+			rotationConstraint(glm::vec3(1, 1, 1)),
+			transformConstraint(glm::vec3(1, 1, 1)),
 			meshName(""),
 			_collisionShape(nullptr),
 			_motionState(nullptr),

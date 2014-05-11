@@ -1,4 +1,4 @@
-#ifndef  __COLLISION_ADDER_SYSTEM_HPP__
+#ifndef __COLLISION_ADDER_SYSTEM_HPP__
 # define __COLLISION_ADDER_SYSTEM_HPP__
 
 #include <Systems/System.h>
@@ -38,8 +38,8 @@ private:
 			const btCollisionObject *ob = static_cast<const btCollisionObject*>(contact->getBody1());
 			float maxContact = 0;
 			for (auto j = 0, mj = contact->getNumContacts(); j < mj; ++j)
-				if (contact->getContactPoint(j).m_appliedImpulse > maxContact)
-					maxContact = contact->getContactPoint(j).m_appliedImpulse;
+			if (contact->getContactPoint(j).m_appliedImpulse > maxContact)
+				maxContact = contact->getContactPoint(j).m_appliedImpulse;
 			Entity h1 = *(static_cast<Entity*>(oa->getUserPointer()));
 			Entity h2 = *(static_cast<Entity*>(ob->getUserPointer()));
 
@@ -59,4 +59,4 @@ private:
 	}
 };
 
-#endif   //__COLLISION_ADDER_SYSTEM_HPP__
+#endif //__COLLISION_ADDER_SYSTEM_HPP__

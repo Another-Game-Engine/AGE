@@ -1,22 +1,23 @@
 #pragma once
 
+#include <array>
+#include <cstddef>
 #include <cereal/cereal.hpp>
-#include <cereal/archives/binary.hpp>
-#include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/types/vector.hpp>
-#include <cereal/types/base_class.hpp>
-#include <cereal/types/map.hpp>
 #include <cereal/types/array.hpp>
-#include <OpenGL/VertexManager.hh>
-#include <OpenGL/Vertice.hh>
+
+// Maybe necessary ??
+//#include <cereal/archives/binary.hpp>
+//#include <cereal/archives/json.hpp>
+//#include <cereal/types/base_class.hpp>
+//#include <cereal/types/map.hpp>
+
+template <uint8_t NBR_ATTRIBUTE> class Vertice;
 
 #define ASCII_BEGIN 32   //space
 #define ASCII_END   127  //DEL
 #define GLYPH_PADDING 4
-
-#include <array>
-#include <cstddef>
 
 struct FontGlyph
 {

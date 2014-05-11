@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Components\Component.hh>
-#include <glm\glm.hpp>
+#include <Components/Component.hh>
+#include <glm/glm.hpp>
 
 struct SpotLightData
 {

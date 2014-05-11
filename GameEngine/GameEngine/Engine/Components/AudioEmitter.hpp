@@ -1,17 +1,16 @@
 #pragma once
 
+#include <memory>
 #include <Components/Component.hh>
-#include <glm/glm.hpp>
-#include <Utils/GlmSerialization.hpp>
-#include <Audio/Audio.hh>
 #include <Audio/ChannelGroupType.hpp>
-#include <Utils/MatrixConversion.hpp>
-#include <Audio/AudioManager.hh>
-#include <Core/AScene.hh>
-#include <vector>
+#include <fmod/inc/fmod.hpp>
+#include <map>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
+#include <Audio/Audio.hh>
+#include <Core/AScene.hh>
+#include <Audio/AudioManager.hh>
 
 namespace Component
 {

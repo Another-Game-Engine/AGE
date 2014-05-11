@@ -1,21 +1,19 @@
 #pragma once
 
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "Component.hh"
+#include <glm/glm.hpp>
+#include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
+#include <OpenGL/Framebuffer.hh>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/AssetsManager.hpp>
-#include <OpenGL\Framebuffer.hh>
 
 namespace Component
 {
 	struct CameraComponent : public ComponentBase<CameraComponent>
 	{
 		CameraComponent();
-		virtual              ~CameraComponent(void);
+		virtual ~CameraComponent(void);
 		void init(){}
 		virtual void reset(){}
 		void                 attachSkybox(std::shared_ptr<CubeMapFile> texture, const std::string &cubeMapShader);
@@ -73,18 +71,18 @@ namespace Component
 		////
 		//////
 
-		glm::uvec4						viewport;
-		glm::mat4                       projection;
-		std::shared_ptr<CubeMapFile>    skybox;
-		std::string                     cubeMapShader;
-		glm::mat4                       lookAtTransform;
-		OpenGLTools::Framebuffer		frameBuffer;
-		OpenGLTools::Framebuffer		downSampling;
+		glm::uvec4	viewport;
+		glm::mat4 projection;
+		std::shared_ptr<CubeMapFile> skybox;
+		std::string cubeMapShader;
+		glm::mat4 lookAtTransform;
+		OpenGLTools::Framebuffer	frameBuffer;
+		OpenGLTools::Framebuffer	downSampling;
 		bool blitOnScreen;
 
 		// Camera fbo infos
-		glm::uvec2						fboSize;
-		uint32_t						sampleNbr;
+		glm::uvec2	fboSize;
+		uint32_t	sampleNbr;
 
 		CameraComponent(CameraComponent const &o)
 		{

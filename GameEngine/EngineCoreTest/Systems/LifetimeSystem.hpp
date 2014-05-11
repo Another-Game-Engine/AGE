@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Systems/System.h"
+#include <Components/Component.hh>
 
 namespace Component
 {

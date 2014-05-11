@@ -1,5 +1,5 @@
-#ifndef   __BULLET_DYNAMIC_SYSTEM_HPP__
-# define  __BULLET_DYNAMIC_SYSTEM_HPP__
+#ifndef __BULLET_DYNAMIC_SYSTEM_HPP__
+# define __BULLET_DYNAMIC_SYSTEM_HPP__
 
 #include <Physic/Utils/BtConversion.hpp>
 #include <Systems/System.h>
@@ -123,4 +123,4 @@ private:
 	}
 };
 
-#endif    //__BULLET_DYNAMIC_SYSTEM_HPP__
+#endif //__BULLET_DYNAMIC_SYSTEM_HPP__

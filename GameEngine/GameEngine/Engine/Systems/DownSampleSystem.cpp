@@ -1,5 +1,5 @@
 #include "DownSampleSystem.hh"
-
+#include <Core/AScene.hh>
 #include <Components/CameraComponent.hpp>
 
 DownSampleSystem::DownSampleSystem(std::weak_ptr<AScene> &&scene) :
@@ -31,7 +31,7 @@ void	DownSampleSystem::mainUpdate(double time)
 		{
 			// Down sample before post Fx
 			camera->downSampling.bind();
-			_quad.draw(camera->frameBuffer.getTextureAttachment(GL_COLOR_ATTACHMENT0), camera->frameBuffer.getSampleNbr(), camera->frameBuffer.getSize());
+			_quad.draw(camera->frameBuffer[GL_COLOR_ATTACHMENT0]->getId(), camera->frameBuffer.getSampleNbr(), camera->frameBuffer.getSize());
 		}
 	}
 }

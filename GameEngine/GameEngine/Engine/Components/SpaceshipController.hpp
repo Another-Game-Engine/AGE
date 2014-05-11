@@ -1,9 +1,14 @@
 #pragma once
 
-#include "Component.hh"
+#include <Components/Component.hh>
 #include <glm/glm.hpp>
 #include <Utils/GlmSerialization.hpp>
-#include <Components/PointLight.hh>
+#include <Entities/Entity.hh>
+
+namespace Component
+{
+	class PointLight;
+}
 
 namespace Component
 {

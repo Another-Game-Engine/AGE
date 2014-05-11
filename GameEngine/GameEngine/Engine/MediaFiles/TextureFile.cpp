@@ -1,4 +1,6 @@
 #include "TextureFile.hpp"
+#include <math.h>
+#include <algorithm>
 
 TextureFile::TextureFile()
 : MediaFile<TextureFile>()
@@ -15,7 +17,6 @@ TextureFile::TextureFile()
 
 TextureFile::~TextureFile()
 {
-	glDeleteTextures(1, &id);
 }
 
 TextureFile::TextureFile(const TextureFile &o)
@@ -52,6 +53,11 @@ TextureFile &TextureFile::operator=(const TextureFile &o)
 	return *this;
 }
 
+TextureFile &TextureFile::operator=(OpenGLTools::Texture2D &t)
+{
+	_texture = std::make_unique<OpenGLTools::Texture2D>(t);
+	return *this;
+}
 
 void TextureFile::save(cereal::PortableBinaryOutputArchive &ar) const
 {
@@ -61,21 +67,15 @@ void TextureFile::save(cereal::PortableBinaryOutputArchive &ar) const
 void TextureFile::load(cereal::PortableBinaryInputArchive &ar)
 {
 	ar(cereal::make_nvp("datas", datas), CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(components), CEREAL_NVP(format));
-	glGenTextures(1, &id);
-	assert(id != 0 && "Error generating texture.");
-	glBindTexture(GL_TEXTURE_2D, id);
+	_texture = std::make_unique<OpenGLTools::Texture2D>(components, width, height, true);
+	_texture->setOptionTransfer(0, format, GL_UNSIGNED_BYTE);
+	_texture->write(datas.data());
+	_texture->generateMipMap();
+	_texture->filter(minFilter, magFilter).wrap(wrap);
+	_texture->storage(1);
+}
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexImage2D(GL_TEXTURE_2D, 0, components, width, height, 0, format, GL_UNSIGNED_BYTE, datas.data());
-
-	if (minFilter == GL_LINEAR_MIPMAP_LINEAR ||
-		minFilter == GL_LINEAR_MIPMAP_NEAREST ||
-		minFilter == GL_NEAREST_MIPMAP_LINEAR ||
-		minFilter == GL_NEAREST_MIPMAP_NEAREST)
-		glGenerateMipmap(GL_TEXTURE_2D);
+GLuint TextureFile::getId() const
+{
+	return _texture->getId();
 }

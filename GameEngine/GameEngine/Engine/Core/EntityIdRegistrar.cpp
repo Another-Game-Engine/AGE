@@ -83,6 +83,7 @@ void EntityIdRegistrar::updateEntityHandle(Entity e, std::size_t id)
 
 void EntityIdRegistrar::registrarGraphNode(std::size_t e, GraphNodeUnserialize g)
 {
+
 	//TODO
 	//_graphNode.insert(std::make_pair(e, g));
 }

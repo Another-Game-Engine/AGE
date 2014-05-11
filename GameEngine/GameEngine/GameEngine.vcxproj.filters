@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
+    <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\Texture.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
     <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
@@ -31,9 +35,7 @@
     <ClCompile Include="Engine\MediaFiles\MaterialFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\ObjFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\TextureFile.cpp" />
-    <ClCompile Include="Engine\OpenGL\AShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
-    <ClCompile Include="Engine\OpenGL\ComputeShader.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
@@ -53,12 +55,21 @@
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
+    <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
-    <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
-    <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
+    <ClInclude Include="Engine\Core\ComponentManager.hpp" />
+    <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
+    <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
+    <ClInclude Include="Engine\OpenGL\Texture.hh" />
+    <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
+    <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
+    <ClInclude Include="Engine\Entities\EntityFlags.hh" />
+    <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
     <ClInclude Include="Engine\Systems\DownSampleSystem.hh" />
     <ClInclude Include="Engine\Components\SpotLight.hh" />
@@ -104,7 +115,6 @@
     <ClInclude Include="Engine\MediaFiles\MediaFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\ObjFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\TextureFile.hpp" />
-    <ClInclude Include="Engine\OpenGL\AShader.hh" />
     <ClInclude Include="Engine\OpenGL\Attribute.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
@@ -149,6 +159,7 @@
     <ClInclude Include="Engine\Utils\File.hpp" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
@@ -157,14 +168,6 @@
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
-    <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
-    <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
-    <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
-    <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
-    <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
-    <ClInclude Include="Engine\Core\ComponentManager.hpp" />
-    <ClInclude Include="Engine\Entities\EntityFlags.hh" />
-    <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -176,7 +179,6 @@
     <None Include="Engine\Core\MaterialManager.hh" />
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
-    <None Include="Engine\OpenGL\ComputeShader.hh" />
     <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />

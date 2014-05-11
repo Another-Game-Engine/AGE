@@ -17,8 +17,9 @@
 #include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/BlitFinalRender.hh>
 
-#include <CONFIGS.hpp>
+#include <Context/IRenderContext.hh>
 
+#include <CONFIGS.hpp>
 
 class BenchmarkScene : public AScene	
 {

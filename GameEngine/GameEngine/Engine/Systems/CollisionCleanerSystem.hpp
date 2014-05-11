@@ -1,4 +1,4 @@
-#ifndef  __COLLISION_CLEANER_SYSTEM_HPP__
+#ifndef __COLLISION_CLEANER_SYSTEM_HPP__
 # define __COLLISION_CLEANER_SYSTEM_HPP__
 
 #include <Systems/System.h>
@@ -37,4 +37,4 @@ private:
 	}
 };
 
-#endif   //__COLLISION_CLEANER_SYSTEM_HPP__
+#endif //__COLLISION_CLEANER_SYSTEM_HPP__

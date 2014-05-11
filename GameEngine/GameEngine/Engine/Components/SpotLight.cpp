@@ -1,4 +1,3 @@
-
 #include <Components\SpotLight.hh>
 
 namespace Component

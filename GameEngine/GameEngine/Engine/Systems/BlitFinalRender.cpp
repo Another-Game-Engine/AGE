@@ -1,6 +1,7 @@
-
 #include	<Systems/BlitFinalRender.hh>
+#include	<Core/AScene.hh>
 #include	<Components/CameraComponent.hpp>
+#include	<Core/Renderer.hh>
 
 BlitFinalRender::BlitFinalRender(std::weak_ptr<AScene> &&scene) :
 					System(std::move(scene)),
@@ -38,7 +39,7 @@ void	BlitFinalRender::mainUpdate(double time)
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			glDrawBuffer(GL_BACK);
 			glDepthFunc(GL_ALWAYS);
-			_quad.draw(current.getTextureAttachment(GL_COLOR_ATTACHMENT0), current.getSampleNbr(), current.getSize());
+			_quad.draw(current[GL_COLOR_ATTACHMENT0]->getId(), current.getSampleNbr(), current.getSize());
 		}
 	}
 }

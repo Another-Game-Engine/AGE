@@ -1,13 +1,19 @@
 #include "LightRenderingSystem.hh"
-
-#include <Components\MeshRenderer.hh>
-#include <Components\CameraComponent.hpp>
-#include <Context\IRenderContext.hh>
-#include <OpenGL\VertexBuffer.hh>
-
-#include <glm/gtc/matrix_transform.hpp>
-
+#include <Core/Renderer.hh>
+#include <Components/MeshRenderer.hh>
+#include <Components/CameraComponent.hpp>
 #include <Components/SpriteComponent.hh>
+#include <Systems/CameraSystem.hpp>
+#include <OpenGL/Framebuffer.hh>
+#include <OpenGL/UniformBuffer.hh>
+#include <Core/AScene.hh>
+
+//#include <Context\IRenderContext.hh>
+//#include <OpenGL\VertexBuffer.hh>
+
+//#include <glm/gtc/matrix_transform.hpp>
+
+//#include <Components/SpriteComponent.hh>
 
 LightRenderingSystem::LightRenderingSystem(std::weak_ptr<AScene> &&scene) :
 						System(std::move(scene)),
@@ -105,8 +111,8 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 	if (_spotShadowNbr != shadowNbr)
 	{
 		glBindTexture(GL_TEXTURE_2D_ARRAY, _spotShadowTextures);
-		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT24, _shadowDimensions.x, _shadowDimensions.y, shadowNbr, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		_spotShadowNbr = shadowNbr;
+		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT24, _shadowDimensions.x, _shadowDimensions.y, GLsizei(shadowNbr), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		_spotShadowNbr = unsigned int(shadowNbr);
 	}
 
 	auto renderer = _scene.lock()->getInstance<Renderer>();
@@ -130,7 +136,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 			perLight->flushChanges();
 
 			glBindFramebuffer(GL_FRAMEBUFFER, _shadowsFbo);
-			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _spotShadowTextures, 0, shadowNbr);
+			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _spotShadowTextures, 0, GLint(shadowNbr));
 			
 			glDrawBuffer(GL_NONE);
 			glClear(GL_DEPTH_BUFFER_BIT);
@@ -142,7 +148,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 
 			drawSprites();
 
-			_contiguousSpotLights[i].shadowId = shadowNbr;
+			_contiguousSpotLights[i].shadowId = int(shadowNbr);
 
 			++shadowNbr;
 		}

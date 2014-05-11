@@ -62,7 +62,7 @@ void FPController::init(const Entity &entity, std::weak_ptr<AScene> scene, short
 	_shape = new btCylinderShape(convertGLMVectorToBullet(scale));
 
 	_ghost->setCollisionShape(_shape);
-//	_ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+	// _ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
 	_ghost->setWorldTransform(transform);
 	_ghost->setRestitution(0);
 	_ghost->setActivationState(DISABLE_DEACTIVATION);
