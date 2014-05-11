@@ -29,6 +29,7 @@ class ComponentManager : public AComponentManager
 public:
 	ComponentManager(AScene *scene)
 		: _scene(scene)
+		, _size(0)
 	{}
 
 	virtual ~ComponentManager()
@@ -39,63 +40,36 @@ public:
 		return T::getTypeId();
 	}
 
-	//inline 	std::vector<std::size_t> &getComponentRefs()
-	//{
-	//	return _componentsRefs;
-	//}
-
-	inline 	std::vector<std::pair<ENTITY_ID, ENTITY_ID>> &getEntityIdCollection()
+	const std::vector<T> &getComponents() const
 	{
-		return _componentsEntity;
+		return _components;
+	}
+
+	const std::size_t getSize() const
+	{
+		return _size;
 	}
 
 	void clearComponents()
 	{
-		auto s = _componentsRefs.size();
-		if (_componentsRefs.size() == 0)
-			return;
-		std::size_t i = 0;
-		_freeSlot.clear();
-		for (auto &d : _components)
-		{
-			_freeSlot.push_back(i++);
-			d.reset();
-		}
+		for (auto &&e : _components)
+			e.reset();
+		_size = 0;
 	}
 
 	template<typename... Args>
 	T *addComponent(Entity &entity, Args &&...args)
 	{
-		// get the component type ID
-		std::size_t id = T::getTypeId();
-
 		T *component = nullptr;
-
-		if (_freeSlot.size() != 0)
-		{
-			std::size_t position = _freeSlot.back();
-			_freeSlot.pop_back();
-			_componentsEntity[position] = std::make_pair(entity.getId(), position);
-			_componentsRefs[entity.getId()] = position;
-
-			//init component
-			component = &_components[position];
-			component->init(std::forward<Args>(args)...);
-		}
-		else
-		{
-			auto position = _components.size();
-
-			_componentsRefs[entity.getId()] = position;
-			if (_componentsEntity.size() <= position)
-				_componentsEntity.resize(position + 1);
-			_componentsEntity[position] = std::make_pair(entity.getId(), position);
-			_components.emplace_back(T());
-
-			//init component
-			component = &_components.back();
-			component->init(std::forward<Args>(args)...);
-		}
+		if (_components.size() <= _size)
+			_components.resize(_size + 1);
+		_componentsRefs[entity.getId()] = _size;
+		_components[_size] = std::move(T());
+		_components[_size].entityId = entity.getId();
+		component = &_components[_size];
+		++_size;
+		//init component
+		component->init(std::forward<Args>(args)...);
 		_reorder = true;
 		return component;
 	}
@@ -109,11 +83,12 @@ public:
 	{
 		auto id = _componentsRefs[e.getId()];
 		_components[id].reset();
-		_freeSlot.push_back(id);
-		//std::swap(_components[id], _components[_componentsRefs[_componentsEntity.back().first]]);
-		//_freeSlot.push_back(_componentsEntity.back().second);
-		//_componentsEntity[id].first = _componentsEntity.back().first;
-		//_componentsRefs[_componentsEntity.back().first] = id;
+		if (_size > 0 && id < _size - 1)
+		{
+			_componentsRefs[_components[_size - 1].entityId] = id;
+			std::swap(_components[id], _components[_size - 1]);
+			--_size;
+		}
 		_reorder = true;
 		return true;
 	}
@@ -123,10 +98,10 @@ public:
 		//if (!_reorder)
 		//	return;
 		//auto id = T::getTypeId();
-		//if (_componentsEntity.size() <= 1)
+		//if (_size <= 1)
 		//	return;
-		//quickSort(0, _componentsEntity.size() - 1);
-		this->_reorder = false;
+		//quickSort(0, _size - 1);
+		//this->_reorder = false;
 	}
 private:
 	void quickSort(std::size_t top, std::size_t bottom)
@@ -142,7 +117,7 @@ private:
 
 	std::size_t partition(std::size_t top, std::size_t bottom)
 	{
-		auto x = _componentsEntity[top].first;
+		auto x = _components[top].entityId;
 		auto i = top - 1;
 		auto j = bottom + 1;
 
@@ -151,19 +126,18 @@ private:
 			do
 			{
 				--j;
-			} while (x < _componentsEntity[j].first);
+			} while (x < _components[j].entityId);
 
 			do
 			{
 				++i;
-			} while (x > _componentsEntity[i].first);
+			} while (x > _components[i].entityId);
 
 			if (i < j)
 			{
 
-				std::swap(_components[_componentsRefs[_componentsEntity[i].second]], _components[_componentsRefs[_componentsEntity[j].second]]);
-				std::swap(_componentsRefs[_componentsEntity[i].second], _componentsRefs[_componentsEntity[j].second]);
-				std::swap(_componentsEntity[i], _componentsEntity[j]);
+				std::swap(_components[i], _components[j]);
+				std::swap(_componentsRefs[_components[i].entityId], _componentsRefs[_components[j].entityId]);
 			}
 		} while (i < j);
 		return j;
@@ -171,7 +145,6 @@ private:
 
 	std::vector<T> _components;
 	std::array<ENTITY_ID, MAX_ENTITY_NUMBER> _componentsRefs;
-	std::vector<std::pair<ENTITY_ID, ENTITY_ID>> _componentsEntity;
-	std::vector<ENTITY_ID> _freeSlot;
+	std::size_t _size;
 	AScene *_scene;
 };

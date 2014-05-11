@@ -97,12 +97,15 @@ public:
 		_globalTransform[e.id] = glm::mat4(1);
 		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
 		{
-			if (cachedCode.code.test(i) && i < MAX_CPT_NUMBER)
+			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))
+			{
 				informFiltersComponentDeletion(i, std::move(data));
-			else if (cachedCode.code.test(i) && i >= MAX_CPT_NUMBER)
-				informFiltersTagDeletion(i - MAX_CPT_NUMBER, std::move(data));
-			if (i < MAX_CPT_NUMBER && _componentsManagers[i] != nullptr)
 				_componentsManagers[i]->removeComponent(data.entity);
+			}
+			if (i >= MAX_CPT_NUMBER && cachedCode.code.test(i))
+			{
+				informFiltersTagDeletion(i - MAX_CPT_NUMBER, std::move(data));
+			}
 		}
 		_free.push(e.id);
 	}
@@ -220,11 +223,13 @@ public:
 		if (_componentsManagers[id] == nullptr)
 			return;
 		auto &manager = *static_cast<ComponentManager<T>*>(_componentsManagers[id]);
-		auto &col = manager.getEntityIdCollection();
-		for (auto &&c : col)
-			_pool[c.first].barcode.unsetComponent(id);
+		auto &col = manager.getComponents();
+		for (std::size_t i = 0; i < manager.getSize(); ++i)
+		{
+			_pool[col[i].entityId].barcode.unsetComponent(id);
+		}
 		manager.clearComponents();
-		for (auto filter : _filters[id + MAX_TAG_NUMBER])
+		for (auto filter : _filters[id])
 		{
 			filter->clearCollection();
 		}

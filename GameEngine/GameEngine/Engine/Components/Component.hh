@@ -16,9 +16,13 @@ namespace	Component
 	{
 		Base(std::size_t serId);
 		virtual ~Base();
-		virtual Base &operator=(const Base &other);
+		Base &operator=(const Base &other);
+		Base(const Base &other);
+		Base(Base &&other);
+
 		virtual void reset(){};
 		std::size_t serializedID;
+		ENTITY_ID entityId;
 
 		virtual void unserialize(cereal::JSONInputArchive &ar) = 0;
 		virtual void unserialize(cereal::BinaryInputArchive &ar) = 0;
