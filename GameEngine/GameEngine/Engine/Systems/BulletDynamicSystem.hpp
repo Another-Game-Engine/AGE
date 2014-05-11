@@ -104,19 +104,15 @@ private:
 	void updateDynamic(Entity &e)
 	{
 		btMotionState &state = _scene.lock()->getComponent<Component::RigidBody>(e)->getMotionState();
-		glm::mat4 m;
-		btTransform trans;
-		auto &entityTransform = _scene.lock()->getLocalTransform(e);
-		state.getWorldTransform(trans);
-		glm::mat4 t = convertBulletTransformToGLM(trans);
-		m = glm::translate(m, posFromMat4(t));
-		glm::vec3 rot = rotFromMat4(t, false);
-		m = glm::rotate(m, rot.x, glm::vec3(1, 0, 0));
-		m = glm::rotate(m, rot.y, glm::vec3(0, 1, 0));
-		m = glm::rotate(m, rot.z, glm::vec3(0, 0, 1));
-		glm::vec3 scale = scaleFromMat4(entityTransform);
-		m = glm::scale(m, scale);
-		_scene.lock()->setLocalTransform(e, m);
+		auto &shape = _scene.lock()->getComponent<Component::RigidBody>(e)->getShape();
+
+		btTransform wt;
+		state.getWorldTransform(wt);
+
+		glm::mat4 ATTRIBUTE_ALIGNED16(worldTrans);
+		wt.getOpenGLMatrix(glm::value_ptr(worldTrans));
+		worldTrans = glm::scale(worldTrans, convertBulletVectorToGLM(shape.getLocalScaling()));
+		_scene.lock()->setLocalTransform(e, worldTrans);
 	}
 
 	virtual bool initialize()

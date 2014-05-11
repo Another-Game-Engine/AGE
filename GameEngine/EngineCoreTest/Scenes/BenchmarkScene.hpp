@@ -114,6 +114,17 @@ public:
 	lightComponent->lightData.hasShadow = -1;
 	setLocalTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
 
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	auto plane = createEntity();
+	setLocalTransform(plane, glm::translate(getLocalTransform(plane), glm::vec3(0, -10, 0)));
+	setLocalTransform(plane, glm::scale(getLocalTransform(plane), glm::vec3(100, 1, 100)));
+	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+	mesh->setShader("MaterialBasic");
+	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
+	rigidBody->setCollisionShape(plane, Component::RigidBody::BOX);
+	rigidBody->getBody().setFriction(1.0f);
+	rigidBody->getBody().setRestitution(1.0f);
+
 #endif
 
 
@@ -134,6 +145,7 @@ public:
 			{
 				auto e = createEntity();
 				setLocalTransform(e, glm::translate(getLocalTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
+//				setLocalTransform(e, glm::scale(getLocalTransform(e), glm::vec3(2.0f)));
 #ifdef LIFETIME_ACTIVATED
 				addComponent<Component::Lifetime>(e, 0.5f);
 #endif
@@ -149,7 +161,7 @@ public:
 
 
 #ifndef COMPLEX_MESH
-						auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+						auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 						mesh->setShader("MaterialBasic");
 #else
 						auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
@@ -178,7 +190,7 @@ private:
 	double _timeCounter = 0.0;
 	double _maxTime = 60.0;
 	double _chunkCounter = 0.0;
-	double _maxChunk = 0.25;
+	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;
 	std::ofstream _logFile;
 };

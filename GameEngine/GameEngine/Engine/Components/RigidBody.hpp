@@ -118,14 +118,10 @@ namespace Component
 			meshName = _meshName;
 			_reset();
 			shapeType = c;
-			btTransform transform;
+
 			auto &entityTransform = _scene.lock()->getLocalTransform(entity);
-			glm::vec3 position = posFromMat4(entityTransform);
-			glm::vec3 scale = scaleFromMat4(entityTransform);
-			glm::vec3 rot = rotFromMat4(entityTransform, true);
-			transform.setIdentity();
-			transform.setOrigin(convertGLMVectorToBullet(position));
-			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
+			btTransform transform;
+			transform.setFromOpenGLMatrix(glm::value_ptr(entityTransform));
 
 			_motionState = std::shared_ptr<btMotionState>(new btDefaultMotionState(transform));
 			if (c == BOX)
@@ -167,6 +163,8 @@ namespace Component
 			}
 			if (mass != 0)
 				_collisionShape->calculateLocalInertia(mass, inertia);
+			_motionState->setWorldTransform(transform);
+			glm::vec3 scale = scaleFromMat4(entityTransform);
 			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_rigidBody = std::shared_ptr<btRigidBody>(new btRigidBody(mass, _motionState.get(), _collisionShape.get(), inertia));
 			_rigidBody->setUserPointer((void*)(_scene.lock()->getEntityPtr(entity)));
