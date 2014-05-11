@@ -1,0 +1,12 @@
+#pragma once
+
+#define PHYSIC_SIMULATION
+
+#define LOG_FRAMERATE
+
+#define LIFETIME_ACTIVATED
+
+#define RENDERING_ACTIVATED
+
+#define COMPLEX_MESH
+

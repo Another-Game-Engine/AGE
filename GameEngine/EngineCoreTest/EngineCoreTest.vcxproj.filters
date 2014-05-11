@@ -23,7 +23,10 @@
     <ClInclude Include="Scenes\BenchmarkScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\BullshitSystem.hpp">
+    <ClInclude Include="Systems\LifetimeSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CONFIGS.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

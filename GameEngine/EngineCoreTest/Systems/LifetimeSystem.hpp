@@ -8,14 +8,14 @@
 
 namespace Component
 {
-	struct Bullshit : public Component::ComponentBase<Bullshit>
+	struct Lifetime : public Component::ComponentBase<Lifetime>
 	{
-		Bullshit()
+		Lifetime()
 		{
 
 		}
 
-		virtual ~Bullshit(void)
+		virtual ~Lifetime(void)
 		{
 
 		}
@@ -35,15 +35,6 @@ namespace Component
 		// Serialization
 
 		template <typename Archive>
-		Base *unserialize(Archive &ar, Entity e)
-		{
-			auto res = new Bullshit();
-			res->setEntity(e);
-			ar(*res);
-			return res;
-		}
-
-		template <typename Archive>
 		void serialize(Archive &ar)
 		{
 			ar(CEREAL_NVP(_t));
@@ -55,21 +46,21 @@ namespace Component
 
 		float _t;
 	private:
-		Bullshit(Bullshit const &);
-		Bullshit &operator=(Bullshit const &);
+		Lifetime(Lifetime const &);
+		Lifetime &operator=(Lifetime const &);
 	};
 }
 
-class BullshitSystem : public System
+class LifetimeSystem : public System
 {
 public:
-	BullshitSystem(std::weak_ptr<AScene> &&scene)
+	LifetimeSystem(std::weak_ptr<AScene> &&scene)
 		: System(std::move(scene))
 		, _filter(std::move(scene))
 	{
-		_name = "rotation_force_system";
+		_name = "lifetime_system";
 	}
-	virtual ~BullshitSystem(){}
+	virtual ~LifetimeSystem(){}
 private:
 	EntityFilter _filter;
 
@@ -82,18 +73,19 @@ private:
 	virtual void mainUpdate(double time)
 	{
 		float t = static_cast<float>(time);
+		auto scene = _scene.lock();
 		EntityFilter::Lock lock(_filter);
 		for (auto &&e : _filter.getCollection())
 		{
-			e->getComponent<Component::Bullshit>()->_t += t;
-			if (e->getComponent<Component::Bullshit>()->_t > 0.55f)
-				e->removeComponent<Component::Bullshit>();
+			e->getComponent<Component::Lifetime>()->_t -= t;
+			if (e->getComponent<Component::Lifetime>()->_t <= 0.0f)
+				scene->destroy(e);
 		}
 	}
 
 	virtual bool initialize()
 	{
-		_filter.requireComponent<Component::Bullshit>();
+		_filter.requireComponent<Component::Lifetime>();
 		return true;
 	}
 };
