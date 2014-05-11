@@ -18,6 +18,18 @@ namespace Component
 
 		}
 
+		Lifetime(Lifetime &&o)
+			: ComponentBase<Lifetime>(std::move(o))
+		{
+				_t = std::move(o._t);
+		}
+
+		Lifetime &operator=(Lifetime &&o)
+		{
+			_t = std::move(o._t);
+			return *this;
+		}
+
 		void init(float t)
 		{
 			_t = t;
@@ -43,11 +55,9 @@ namespace Component
 		//////
 
 		float _t;
-
-		Lifetime(Lifetime const &o) { _t = o._t; }
-		Lifetime &operator=(Lifetime const &o) { _t = o._t; return *this; }
-
 	private:
+		Lifetime &operator=(Lifetime const &o);
+		Lifetime(Lifetime const &o);
 	};
 }
 

@@ -14,16 +14,17 @@ namespace Component
 	{
 	}
 
-	MeshRenderer::MeshRenderer(MeshRenderer const &o)
+	MeshRenderer::MeshRenderer(MeshRenderer &&o)
+		: ComponentBase<MeshRenderer>(std::move(o))
 	{
-		mesh = o.mesh;
-		shader = o.shader;
+		mesh = std::move(o.mesh);
+		shader = std::move(o.shader);
 	}
 
-	MeshRenderer &MeshRenderer::operator=(MeshRenderer const &o)
+	MeshRenderer &MeshRenderer::operator=(MeshRenderer &&o)
 	{
-		mesh = o.mesh;
-		shader = o.shader;
+		mesh = std::move(o.mesh);
+		shader = std::move(o.shader);
 		return *this;
 	}
 

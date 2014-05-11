@@ -133,7 +133,7 @@ public:
 			for (auto i = 0; i < 14; ++i)
 			{
 				auto e = createEntity();
-
+				setLocalTransform(e, glm::translate(getLocalTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
 #ifdef LIFETIME_ACTIVATED
 				addComponent<Component::Lifetime>(e, 0.5f);
 #endif
@@ -157,7 +157,6 @@ public:
 #endif
 
 #endif
-				setLocalTransform(e, glm::translate(getLocalTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
 			}
 #ifdef LOG_FRAMERATE
 
@@ -177,7 +176,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 8.0;
+	double _maxTime = 60.0;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25;
 	std::size_t _chunkFrame = 0;

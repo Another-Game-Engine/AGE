@@ -62,7 +62,7 @@ public:
 	{
 		T *component = nullptr;
 		if (_components.size() <= _size)
-			_components.resize(_size + 1);
+			_components.resize(_size + 16);
 		_componentsRefs[entity.getId()] = _size;
 		_components[_size] = std::move(T());
 		_components[_size].entityId = entity.getId();
@@ -86,24 +86,64 @@ public:
 		if (_size > 0 && id < _size - 1)
 		{
 			_componentsRefs[_components[_size - 1].entityId] = id;
+			std::swap(_components[id].entityId, _components[_size - 1].entityId);
 			std::swap(_components[id], _components[_size - 1]);
-			--_size;
 		}
+		--_size;
 		_reorder = true;
 		return true;
 	}
 
 	virtual void reorder()
 	{
-		//if (!_reorder)
-		//	return;
-		//auto id = T::getTypeId();
-		//if (_size <= 1)
-		//	return;
-		//quickSort(0, _size - 1);
-		//this->_reorder = false;
+		if (!_reorder)
+			return;
+		if (_size <= 1)
+			return;
+		quicksort(0, _size - 1);
+		this->_reorder = false;
 	}
 private:
+	// The partition function
+	int partition(int p, int r)
+	{
+		int pivot = _components[r].entityId;
+
+		while (p < r)
+		{
+			while (_components[p].entityId < pivot)
+				p++;
+
+			while (_components[r].entityId > pivot)
+				r--;
+
+			if (_components[p].entityId == _components[r].entityId)
+				p++;
+			else if (p < r)
+			{
+				std::swap(_componentsRefs[_components[p].entityId], _componentsRefs[_components[r].entityId]);
+				std::swap(_components[p].entityId, _components[r].entityId);
+				std::swap(_components[p], _components[r]);
+				//int tmp = input[p];
+				//input[p] = input[r];
+				//input[r] = tmp;
+			}
+		}
+
+		return r;
+	}
+
+	// The quicksort recursive function
+	void quicksort(int p, int r)
+	{
+		if (p < r)
+		{
+			int j = partition(p, r);
+			quicksort(p, j - 1);
+			quicksort(j + 1, r);
+		}
+	}
+
 	void quickSort(std::size_t top, std::size_t bottom)
 	{
 		std::size_t middle;
