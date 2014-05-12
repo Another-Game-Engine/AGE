@@ -10,6 +10,7 @@
 #include <Components/CollisionBody.hpp>
 #include <Entities/EntityFlags.hh>
 
+#include <future>
 
 class BulletDynamicSystem : public System
 {
@@ -44,6 +45,43 @@ private:
 		{
 			updateCollisionBody(e);
 		}
+//		auto &ff = _filter1.createFilterFast();
+//
+//static auto fn = std::function<void()>([&](){
+//			auto b = ff.getComponent<Component::RigidBody>();
+//			auto e = ff.getEntity();
+//			if (b->getBody().isStaticOrKinematicObject())
+//			{
+//				btTransform transform;
+//				
+//				auto &entityTransform = _scene.lock()->getGlobalTransform(e);
+//				glm::vec3 position = posFromMat4(entityTransform);
+//				glm::vec3 scale = scaleFromMat4(entityTransform);
+//				glm::vec3 rot = rotFromMat4(entityTransform, true);
+//				transform.setIdentity();
+//				transform.setOrigin(convertGLMVectorToBullet(position));
+//				transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
+//
+//				b->getBody().setWorldTransform(transform);
+//				b->getShape().setLocalScaling(convertGLMVectorToBullet(scale));
+//			}
+//			else
+//			{
+//				btMotionState &state = b->getMotionState();
+//				auto &shape = b->getShape();
+//
+//				btTransform wt;
+//				state.getWorldTransform(wt);
+//
+//				glm::mat4 ATTRIBUTE_ALIGNED16(worldTrans);
+//				wt.getOpenGLMatrix(glm::value_ptr(worldTrans));
+//				worldTrans = glm::scale(worldTrans, convertBulletVectorToGLM(shape.getLocalScaling()));
+//				scene->setLocalTransform(e, worldTrans);
+//			}
+//});
+//
+//		ff.forEach(fn);
+
 		for (auto e : _filter1.getCollection())
 		{
 			auto a = e;

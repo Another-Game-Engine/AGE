@@ -337,6 +337,11 @@ public:
 		return &(entity.entity);
 	}
 
+	AComponentManager *getComponentManager(COMPONENT_ID componentId)
+	{
+		return _componentsManagers[componentId];
+	}
+
 private:
 	friend EntityFilter;
 };

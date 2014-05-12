@@ -35,8 +35,8 @@ public:
 	{
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
-		addSystem<CollisionAdder>(1);
-		addSystem<CollisionCleaner>(1000);
+//		addSystem<CollisionAdder>(1);
+//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
 
 #ifdef RENDERING_ACTIVATED
@@ -142,7 +142,7 @@ public:
 		if (_chunkCounter >= _maxChunk)
 		{
 			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-			for (auto i = 0; i < 14; ++i)
+			for (auto i = 0; i < 50; ++i)
 			{
 				auto e = createEntity();
 				setLocalTransform(e, glm::translate(getLocalTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
@@ -189,7 +189,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 60.0;
+	double _maxTime = 8.0;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;

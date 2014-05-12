@@ -19,6 +19,7 @@ public:
 	inline void setReorder(bool v) { _reorder = v; }
 	virtual void reorder() = 0;
 	virtual bool removeComponent(Entity &e) = 0;
+	virtual void *getComponentPtr(const Entity &e) = 0;
 protected:
 	bool _reorder;
 };
@@ -103,6 +104,12 @@ public:
 		quicksort(0, _size - 1);
 		this->_reorder = false;
 	}
+
+	virtual void *getComponentPtr(const Entity &e)
+	{
+		return static_cast<void*>(getComponent(e));
+	}
+
 private:
 	// The partition function
 	int partition(int p, int r)
