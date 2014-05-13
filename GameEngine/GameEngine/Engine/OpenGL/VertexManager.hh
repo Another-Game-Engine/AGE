@@ -1,7 +1,7 @@
 #ifndef VERTEXMANAGER_HH_
 # define VERTEXMANAGER_HH_
 
-#define TEST_NEW_VERTEXMANAGER 0
+#define TEST_NEW_VERTEXMANAGER 1
 
 #if TEST_NEW_VERTEXMANAGER
 
@@ -35,6 +35,7 @@ namespace gl
 		void clearVertices();
 		
 	private:
+		template <typename TYPE> friend Key<TYPE>::Key(size_t index);
 		std::vector<std::pair<bool, VerticesPool>> _pools;
 		std::vector<std::pair<bool, Vertices>> _vertices;
 	};
