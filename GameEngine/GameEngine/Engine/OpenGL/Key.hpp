@@ -3,55 +3,39 @@
 namespace gl
 {
 	template <typename TYPE>
-	Key<TYPE>::Key(std::size_t *id, uint8_t countId)
-		: _id(new std::size[countId]),
-		_countId(countId)
+	Key<TYPE>::Key(std::size_t id)
+		: _id(id),
 	{
-		memcpy(_id, id, sizeof(std::size_t) * countId);
 	}
 
 	template <typename TYPE>
 	Key<TYPE>::~Key()
 	{
-		if (_id)
-			delete[] _id;
 	}
 
 	template <typename TYPE>
 	Key<TYPE>::Key(Key<TYPE> const &copy) 
-		: _id(new std::size_t[copy._countId]),
-		_countId(copy._countId)
+		: _id(copy._id)
 	{
-		memcpy(_id, copy._id, sizeof(std::size_t) * copy._countId);
 	}
 
 	template <typename TYPE>
 	Key<TYPE>::Key(Key<TYPE> &&move)
-		: _id(std::move(move._id)),
-		_countId(std::move(move._countId))
+		: _id(std::move(move._id))
 	{
 	}
 
 	template <typename TYPE>
 	Key<TYPE> &Key<TYPE>::operator=(Key<TYPE> const &k)
 	{
-		memcpy(_id, k._id, sizeof(std::size_t) * k._countId);
-		_countId = k._countId;
+		_id = k._id;
 		return (*this);
 	}
 
 	template <typename TYPE>
-	std::size_t Key<TYPE>::getId(uint8_t index) const
+	std::size_t Key<TYPE>::getId() const
 	{
-		if (index >= _countId)
-			_return (-1);
-		return (_id[index]);
-	}
-
-	template <typename TYPE>
-	uint8_t Key<TYPE>::getCountId() const
-	{
-		return (_countId);
+		return (_id);
 	}
 }
 

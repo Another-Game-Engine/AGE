@@ -14,11 +14,9 @@ namespace gl
 		Key(Key<TYPE> const &copy);
 		key(Key<TYPE> &&move);
 		Key<TYPE> &operator=(Key<TYPE> const &t);
-		std::size_t getId(uint8_t index) const;
-		uint8_t getCountId() const;
+		std::size_t getId() const;
 	private:
-		std::size_t *_id;
-		uint8_t _countId;
+		std::size_t _id;
 	};
 }
 
