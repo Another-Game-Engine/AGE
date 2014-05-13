@@ -62,6 +62,7 @@
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\VerticesManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />

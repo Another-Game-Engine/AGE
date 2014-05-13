@@ -213,6 +213,7 @@
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
+    <ClCompile Include="Engine\OpenGL\VerticesManager.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
