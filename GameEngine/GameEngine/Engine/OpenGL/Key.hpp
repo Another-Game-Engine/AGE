@@ -37,6 +37,15 @@ namespace gl
 	{
 		return (_id);
 	}
+
+	template <typename TYPE>
+	bool Key<TYPE>::empty() const
+	{
+		if (_id == -1)
+			return (true);
+		else
+			return (false);
+	}
 }
 
 #endif

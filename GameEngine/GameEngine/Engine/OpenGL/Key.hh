@@ -15,6 +15,7 @@ namespace gl
 		key(Key<TYPE> &&move);
 		Key<TYPE> &operator=(Key<TYPE> const &t);
 		std::size_t getId() const;
+		bool empty();
 	private:
 		std::size_t _id;
 	};

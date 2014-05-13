@@ -7,6 +7,8 @@
 
 #include <OpenGL/Key.hh>
 #include <Utils/Dependency.hpp>
+#include <vector>
+#include <utility>
 
 namespace gl
 {
@@ -20,19 +22,33 @@ namespace gl
 		VerticesManager();
 		~VerticesManager();
 
-		Key<VerticesPool> addPool(VerticesPool const &key);
-		Key<VerticesPool> const &getPool(uint8_t index) const;
-		uint8_t nbrPool() const;
+		Key<VerticesPool> const &addPool(VerticesPool const &pool);
+		Key<VerticesPool> const &getPool(size_t index) const;
+		size_t nbrPool() const;
 		void rmPool(Key<VerticesPool> const &key);
-		Key<Vertices> const &addVertice(Vertices const &vertices, Key<VerticesPool> const &target);
-		void rmVertice(Key<Vertices> const &key, Key<VerticesPool> const &target);
-		Key<Vertices> const &getVertice(Key<VerticesPool> const &key, Key<VerticesPool> const &target) const;
-		void rmVertices(Key<Vertices> const &vertices, Key<VerticePool> const &target);
+		void clearPool();
 
+		Key<Vertices> const &addVertices(Vertices const &vertices);
+		void rmVertices(Key<Vertices> const &key);
+		Key<Vertices> const &getVertices(size_t index) const;
+		size_t nbrVertices() const;
+		void clearVertices();
+		
 	private:
-		std::vector<VerticesPool> _pools;
+		std::vector<std::pair<bool, VerticesPool>> _pools;
+		std::vector<std::pair<bool, Vertices>> _vertices;
+	};
+
+	class VerticesPool
+	{
+	};
+
+	class Vertices
+	{
+
 	};
 }
+
 #else
 # include <queue>
 # include <Utils/OpenGL.hh>
