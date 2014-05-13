@@ -2,9 +2,14 @@
 # define VERTEXMANAGER_HH_
 
 #define TEST_NEW_VERTEXMANAGER 1
+#define WARNING_MESSAGE_ATTRIBUTE_SETTING(type) \
+std::cerr << "Warning: setting of [" << type << "] attribute out of attribute range" << std::endl;
+#define WARNING_MESSAGE_ATTRIBUTE_GETTING(type) \
+std::cerr << "Warning: getting of [" << type << "] attribute out of attribute range" << std::endl;
 
 #if TEST_NEW_VERTEXMANAGER
 
+#include <Utils/OpenGL.hh>
 #include <OpenGL/Key.hh>
 #include <Utils/Dependency.hpp>
 #include <vector>
@@ -16,18 +21,26 @@ namespace gl
 	class VerticesPool;
 	class Vertices;
 
+	//!\file VerticesManager.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class VerticesManager
+	//!\brief Handle the geometry of the render
 	class VerticesManager : public Dependency
 	{
 	public:
+		// constructor
 		VerticesManager();
 		~VerticesManager();
 
+		// handle pools
 		Key<VerticesPool> const &addPool(VerticesPool const &pool);
 		Key<VerticesPool> const &getPool(size_t index) const;
 		size_t nbrPool() const;
 		void rmPool(Key<VerticesPool> const &key);
 		void clearPool();
 
+		// handle vertices
 		Key<Vertices> const &addVertices(Vertices const &vertices);
 		void rmVertices(Key<Vertices> const &key);
 		Key<Vertices> const &getVertices(size_t index) const;
@@ -35,13 +48,53 @@ namespace gl
 		void clearVertices();
 		
 	private:
-		template <typename TYPE> friend Key<TYPE>::Key(size_t index);
+	
+		// data represent pools
 		std::vector<std::pair<bool, VerticesPool>> _pools;
+		// data represent vertices
 		std::vector<std::pair<bool, Vertices>> _vertices;
 	};
 
+	//!\file VerticesManager.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class VerticesPool
+	//!\brief Handle one kind of vertices for the VertexManager
 	class VerticesPool
 	{
+		struct PoolElement
+		{
+			size_t nbrVertices;
+			Key<Vertices> vertices;
+		};
+	public:
+		// constructor
+		VerticesPool();
+		~VerticesPool();
+		VerticesPool(VerticesPool const &copy);
+		VerticesPool &operator=(VerticesPool const &p);
+
+		// setter
+		VerticesPool &setNbrAttribute(uint8_t nbrAttribute);
+		VerticesPool &setTypeComponent(uint8_t index, GLenum type);
+		VerticesPool &setSizeTypeComponent(uint8_t index, uint8_t sizeType);
+		VerticesPool &setNbrComponent(uint8_t index, uint8_t nbrComponent);
+
+		// getter
+		uint8_t getNbrAttribute() const;
+		GLenum getTypeComponent(uint8_t index) const;
+		uint8_t getSizeTypeComponent(uint8_t index) const;
+		uint8_t getNbrComponent(uint8_t index) const;
+	
+	private:
+		// data represent attributes
+		GLenum *_typeComponent;
+		uint8_t *_sizeTypeComponent;
+		uint8_t *_nbrComponent;
+		uint8_t _nbrAttribute;
+
+		// data represent all vertices
+		std::vector<PoolElement> _poolElement;
 	};
 
 	class Vertices
