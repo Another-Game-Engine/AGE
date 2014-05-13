@@ -10,7 +10,7 @@
 #include <Core/Engine.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
-
+#include <Utils/PubSub.hpp>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
 

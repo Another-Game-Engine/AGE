@@ -273,6 +273,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
+    <ClInclude Include="Engine\OpenGL\Key.hh" />
+    <ClInclude Include="Engine\OpenGL\Key.hpp" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
     <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Texture.hh" />

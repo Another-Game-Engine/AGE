@@ -1,6 +1,39 @@
 #ifndef VERTEXMANAGER_HH_
 # define VERTEXMANAGER_HH_
 
+#define TEST_NEW_VERTEXMANAGER 0
+
+#if TEST_NEW_VERTEXMANAGER
+
+#include <OpenGL/Key.hh>
+#include <Utils/Dependency.hpp>
+
+namespace gl
+{
+
+	class VerticesPool;
+	class Vertices;
+
+	class VerticesManager : public Dependency
+	{
+	public:
+		VerticesManager();
+		~VerticesManager();
+
+		Key<VerticesPool> addPool(VerticesPool const &key);
+		Key<VerticesPool> const &getPool(uint8_t index) const;
+		uint8_t nbrPool() const;
+		void rmPool(Key<VerticesPool> const &key);
+		Key<Vertices> const &addVertice(Vertices const &vertices, Key<VerticesPool> const &target);
+		void rmVertice(Key<Vertices> const &key, Key<VerticesPool> const &target);
+		Key<Vertices> const &getVertice(Key<VerticesPool> const &key, Key<VerticesPool> const &target) const;
+		void rmVertices(Key<Vertices> const &vertices, Key<VerticePool> const &target);
+
+	private:
+		std::vector<VerticesPool> _pools;
+	};
+}
+#else
 # include <queue>
 # include <Utils/OpenGL.hh>
 # include <Utils/Dependency.hpp>
@@ -121,5 +154,7 @@ private:
 };
 
 # include "VertexManager.hpp"
+
+#endif
 
 #endif /*!VERTEXMANAGER_HH_*/
