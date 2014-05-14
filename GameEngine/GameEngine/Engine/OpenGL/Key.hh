@@ -14,13 +14,17 @@ namespace gl
 	public:
 		~Key();
 		Key(Key<TYPE> const &copy);
-		key(Key<TYPE> &&move);
 		Key<TYPE> &operator=(Key<TYPE> const &t);
 		std::size_t getId() const;
+		std::size_t getKey() const;
 		bool empty() const;
+		bool operator!() const;
+		bool operator==(Key<TYPE> const &compare) const;
+		bool operator!=(Key<TYPE> const &compare) const;
 	private:
 		Key(std::size_t id);
 		std::size_t _id;
+		std::size_t _key;
 
 		CLASS_ACCESS
 	};
