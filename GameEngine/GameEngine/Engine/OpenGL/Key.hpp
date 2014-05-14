@@ -2,12 +2,12 @@
 
 namespace gl
 {
+	// generete a unique key
 	template <typename TYPE>
-	Key<TYPE>::Key(std::size_t id)
-		: _id(id),
+	Key<TYPE>::Key()
 	{
-		static size_t key = 0;
-		_key = ++key;
+		static size_t id = 0;
+		_id = ++id;
 	}
 
 	template <typename TYPE>
@@ -17,7 +17,7 @@ namespace gl
 
 	template <typename TYPE>
 	Key<TYPE>::Key(Key<TYPE> const &copy) 
-		: _id(copy._id)
+		: _id(copy._id),
 	{
 	}
 
@@ -34,16 +34,11 @@ namespace gl
 		return (_id);
 	}
 
-	template <typename TYPE>
-	std::size_t Key<TYPE>::getKey() const
-	{
-		return (_key);
-	}
-
+	// Test the validity of the key
 	template <typename TYPE>
 	bool Key<TYPE>::empty() const
 	{
-		if (_key == -1)
+		if (_id == -1)
 			return (true);
 		else
 			return (false);
@@ -58,7 +53,7 @@ namespace gl
 	template <typename TYPE>
 	bool Key<TYPE>::operator==(Key<TYPE> const &compare) const
 	{
-		if (_key == compare._key)
+		if (_id == compare._id)
 			return (true);
 		return (false);
 	}
@@ -67,6 +62,13 @@ namespace gl
 	bool Key<TYPE>::operator!=(Key<TYPE> const &compare) const
 	{
 		return (!(*this == compare));
+	}
+
+	// render the key invalid to the use
+	template <typename TYPE>
+	void Key<TYPE>::destroy()
+	{
+		_id = -1;
 	}
 }
 

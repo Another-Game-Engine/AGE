@@ -34,25 +34,16 @@ namespace gl
 		~VerticesManager();
 
 		// handle pools
-		Key<VerticesPool> const &addPool(VerticesPool const &pool);
-		Key<VerticesPool> const &getPool(size_t index) const;
+		Key<VerticesPool> const &addPool();
+		Key<VerticesPool> const &addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
+		Key<VerticesPool> getPool(size_t index) const;
+		VerticesPool const *getPool(Key<VerticesPool> const &key) const;
 		size_t nbrPool() const;
 		void rmPool(Key<VerticesPool> const &key);
-		void clearPool();
-
-		// handle vertices
-		Key<Vertices> const &addVertices(Vertices const &vertices);
-		void rmVertices(Key<Vertices> const &key);
-		Key<Vertices> const &getVertices(size_t index) const;
-		size_t nbrVertices() const;
-		void clearVertices();
 		
 	private:
-	
 		// data represent pools
-		std::vector<std::pair<bool, VerticesPool>> _pools;
-		// data represent vertices
-		std::vector<std::pair<bool, Vertices>> _vertices;
+		std::vector<std::pair<Key<VerticesPool>, VerticesPool>> _pools;
 	};
 
 	//!\file VerticesManager.hh
@@ -70,6 +61,7 @@ namespace gl
 	public:
 		// constructor
 		VerticesPool();
+		VerticesPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
 		~VerticesPool();
 		VerticesPool(VerticesPool const &copy);
 		VerticesPool &operator=(VerticesPool const &p);

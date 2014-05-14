@@ -14,26 +14,45 @@ namespace gl
 
 	}
 
-	Key<VerticesPool> const &VerticesManager::addPool(VerticesPool const &pool)
+	Key<VerticesPool> const &VerticesManager::addPool()
 	{
 		for (size_t index = 0; index < _pools.size(); ++index)
 		{
-			if (_pools[index].first == false)
+			if (!_pools[index].first)
 			{
-				_pools[index].first = true;
-				_pools[index].second = pool;
-				return (Key<VerticesPool>(index));
+				_pools[index].first = Key<VerticesPool>();
+				_pools[index].second = VerticesPool();
+				return (_pools[index].first);
 			}
 		}
-		_pools.push_back(std::make_pair(true, pool));
-		return (Key<VerticesPool>(_pools.size() - 1));
+		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool()));
+		return (_pools[_pools.size() - 1].first);
 	}
 
-	Key<VerticesPool> const &VerticesManager::getPool(size_t index) const
+	Key<VerticesPool> const &VerticesManager::addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
+	{
+		for (size_t index = 0; index < _pools.size(); ++index)
+		{
+			if (!_pools[index].first)
+			{
+				_pools[index].first = Key<VerticesPool>();
+				_pools[index].second = VerticesPool();
+				return (_pools[index].first);
+			}
+		}
+		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(nbrAttributes, typeComponent, sizeTypeComponent, nbrComponent)));
+		return (_pools[_pools.size() - 1].first);
+	}
+
+	Key<VerticesPool> VerticesManager::getPool(size_t index) const
 	{
 		if (index >= _pools.size())
-			return (Key<VerticesPool>(-1));
-		return (Key<VerticesPool>(index));
+		{
+			Key<VerticesPool> corruptKey;
+			corruptKey.destroy();
+			return (corruptKey);
+		}
+		return (_pools[index].first);
 	}
 
 	size_t VerticesManager::nbrPool() const
@@ -41,53 +60,46 @@ namespace gl
 		return (_pools.size());
 	}
 
+	VerticesPool const * VerticesManager::getPool(Key<VerticesPool> const &key) const
+	{
+		for (size_t index = 0; index < _pools.size(); ++index)
+		{
+			if (_pools[index].first == key)
+				return (&_pools[index].second);
+		}
+		return (NULL);
+	}
+
+	// the key will be set to empty
 	void VerticesManager::rmPool(Key<VerticesPool> const &key)
 	{
-		if ((key.getId() < _pools.size()) && key.empty() == false)
-			_pools[key.getId()].first = false;
-	}
-
-	void VerticesManager::clearPool()
-	{
-		_pools.clear();
-	}
-
-	Key<Vertices> const &VerticesManager::addVertices(Vertices const &vertices)
-	{
-		for (size_t index = 0; index < _vertices.size(); ++index)
+		if (!key)
+			return;
+		for (size_t index = 0; index < _pools.size(); ++index)
 		{
-			if (_vertices[index].first == false)
+			if (_pools[index].first == key)
 			{
-				_vertices[index].first = true;
-				_vertices[index].second = vertices;
-				return (Key<Vertices>(index));
+				_pools[index].first.destroy();
+				return;
 			}
 		}
-		_vertices.push_back(std::make_pair(true, vertices));
-		return (Key<Vertices>(_vertices.size() - 1));
 	}
 
-	void VerticesManager::rmVertices(Key<Vertices> const &key)
+	VerticesPool::VerticesPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
+		: _nbrAttribute(nbrAttributes),
+		_typeComponent(NULL),
+		_sizeTypeComponent(NULL),
+		_nbrComponent(NULL)
 	{
-		if ((key.getId() < _vertices.size()) && key.empty() == false)
-			_vertices[key.getId()].first = false;
-	}
-
-	Key<Vertices> const &VerticesManager::getVertices(size_t index) const
-	{
-		if (index >= _vertices.size())
-			return (Key<Vertices>(-1));
-		return (Key<Vertices>(index));
-	}
-
-	size_t VerticesManager::nbrVertices() const
-	{
-		return (_vertices.size());
-	}
-
-	void VerticesManager::clearVertices()
-	{
-		_vertices.clear();
+		if (_nbrAttribute)
+		{
+			_typeComponent = new GLenum[_nbrAttribute];
+			_sizeTypeComponent = new uint8_t[_nbrAttribute];
+			_nbrComponent = new uint8_t[_nbrAttribute];
+			memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
+			memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+		}
 	}
 
 	VerticesPool::VerticesPool()
