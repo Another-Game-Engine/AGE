@@ -1,6 +1,12 @@
 #include <OpenGL/MemoryBlocksGPU.hh>
 #include <iostream>
 
+# define WARNING_MESSAGE_SETTING(type, index) \
+	std::cerr << "warning: tentative to set value to the index : [" << index << "] which is out of range on a object MemoryBlocksGPU for " << type << std::endl;\
+
+# define WARNING_MESSAGE_GETTING(type, index) \
+	std::cerr << "warning: tentative to get value to the index : [" << index << "] which is out of range on a object MemoryBlocksGPU for " << type << std::endl;\
+
 namespace gl
 {
 	// the data into startblocks and sizeblocks must have nbrblock allocate
@@ -93,14 +99,20 @@ namespace gl
 	size_t MemoryBlocksGPU::getSizeBlock(size_t index) const
 	{
 		if (index >= _nbrBlock)
+		{
+			WARNING_MESSAGE_GETTING("size", index);
 			return (-1);
+		}
 		return (_sizeBlocks[index]);
 	}
 
 	size_t MemoryBlocksGPU::getStartBlock(size_t index) const
 	{
 		if (index >= _nbrBlock)
+		{
+			WARNING_MESSAGE_GETTING("start", index);
 			return (-1);
+		}
 		return (_startBlocks[index]);
 	}
 
@@ -133,14 +145,20 @@ namespace gl
 	void MemoryBlocksGPU::setStartBlock(size_t index, size_t startBlock)
 	{
 		if (index >= _nbrBlock)
-			return ;
+		{
+			WARNING_MESSAGE_SETTING("start", index);
+			return;
+		}
 		_startBlocks[index] = startBlock;
 	}
 
 	void MemoryBlocksGPU::setSizeBlock(size_t index, size_t sizeBlock)
 	{
 		if (index >= _nbrBlock)
-			return ;
+		{
+			WARNING_MESSAGE_SETTING("size", index);
+			return;
+		}
 		_sizeBlocks[index] = sizeBlock;
 	}
 }

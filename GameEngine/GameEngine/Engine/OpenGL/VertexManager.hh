@@ -2,10 +2,6 @@
 # define VERTEXMANAGER_HH_
 
 #define TEST_NEW_VERTEXMANAGER 1
-#define WARNING_MESSAGE_ATTRIBUTE_SETTING(type) \
-std::cerr << "Warning: setting of [" << type << "] attribute out of attribute range" << std::endl;
-#define WARNING_MESSAGE_ATTRIBUTE_GETTING(type) \
-std::cerr << "Warning: getting of [" << type << "] attribute out of attribute range" << std::endl;
 
 #if TEST_NEW_VERTEXMANAGER
 

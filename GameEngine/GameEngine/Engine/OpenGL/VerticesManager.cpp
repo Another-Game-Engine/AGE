@@ -2,6 +2,12 @@
 
 #if TEST_NEW_VERTEXMANAGER
 
+#define WARNING_MESSAGE_ATTRIBUTE_SETTING(type) \
+	std::cerr << "Warning: setting of [" << type << "] attribute out of attribute range" << std::endl;
+#define WARNING_MESSAGE_ATTRIBUTE_GETTING(type) \
+	std::cerr << "Warning: getting of [" << type << "] attribute out of attribute range" << std::endl;
+
+
 namespace gl
 {
 	VerticesManager::VerticesManager()
