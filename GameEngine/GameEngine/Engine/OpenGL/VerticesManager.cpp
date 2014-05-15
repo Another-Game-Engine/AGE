@@ -127,7 +127,7 @@ namespace gl
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
-		_poolElement(copy._poolElement)
+		_poolVertices(copy._poolVertices)
 	{
 		if (_nbrAttribute)
 		{
@@ -155,7 +155,7 @@ namespace gl
 	{
 		if (this != &p)
 		{
-			if (_nbrAttribute != p._nbrAttribute && p._nbrAttribute)
+			if (_nbrAttribute != p._nbrAttribute)
 			{
 				if (_nbrAttribute)
 				{
@@ -163,15 +163,24 @@ namespace gl
 					delete[] _sizeTypeComponent;
 					delete[] _nbrComponent;
 				}
-				_typeComponent = new GLenum[p._nbrAttribute];
-				_sizeTypeComponent = new uint8_t[p._nbrAttribute];
-				_nbrComponent = new uint8_t[p._nbrAttribute];
+				_nbrAttribute = p._nbrAttribute;
+				if (_nbrAttribute)
+				{
+					_typeComponent = new GLenum[p._nbrAttribute];
+					_sizeTypeComponent = new uint8_t[p._nbrAttribute];
+					_nbrComponent = new uint8_t[p._nbrAttribute];
+				}
+				else
+				{
+					_typeComponent = NULL;
+					_sizeTypeComponent = NULL;
+					_nbrComponent = NULL;
+				}
 			}
-			_nbrAttribute = p._nbrAttribute;
 			memcpy(_typeComponent, p._typeComponent, sizeof(GLenum)* _nbrAttribute);
 			memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
 			memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
-			_poolElement = p._poolElement;
+			_poolVertices = p._poolVertices;
 		}
 		return (*this);
 	}
@@ -189,7 +198,7 @@ namespace gl
 				delete[] _nbrComponent;
 			}
 			_nbrAttribute = nbrAttribute;
-			if (nbrAttribute)
+			if (_nbrAttribute)
 			{
 				_typeComponent = new GLenum[_nbrAttribute];
 				_sizeTypeComponent = new uint8_t[_nbrAttribute];
@@ -201,6 +210,12 @@ namespace gl
 					_nbrComponent[index] = (index == 2) ? 2 : 4;
 				}
 			}
+			else
+			{
+				_typeComponent = NULL;
+				_sizeTypeComponent = NULL;
+				_nbrComponent = NULL;
+			}
 		}
 		return (*this);
 	}
@@ -208,7 +223,7 @@ namespace gl
 	// set type at the attribute index, check the validity of data
 	VerticesPool &VerticesPool::setTypeComponent(uint8_t index, GLenum type)
 	{
-		if (index <= _nbrAttribute)
+		if (index >= _nbrAttribute)
 		{
 			WARNING_MESSAGE_ATTRIBUTE_SETTING("type")
 			return (*this);
@@ -220,7 +235,7 @@ namespace gl
 	// set size type in byte at the attribute index, check the validity of data
 	VerticesPool &VerticesPool::setSizeTypeComponent(uint8_t index, uint8_t sizeType)
 	{
-		if (index <= _nbrAttribute)
+		if (index >= _nbrAttribute)
 		{
 			WARNING_MESSAGE_ATTRIBUTE_SETTING("size type")
 			return (*this);
@@ -232,7 +247,7 @@ namespace gl
 	// set nbr Component at the attribute index, check the validity of data
 	VerticesPool &VerticesPool::setNbrComponent(uint8_t index, uint8_t nbrComponent)
 	{
-		if (index <= _nbrAttribute)
+		if (index >= _nbrAttribute)
 		{
 			WARNING_MESSAGE_ATTRIBUTE_SETTING("numbre component")
 			return (*this);
@@ -248,7 +263,7 @@ namespace gl
 
 	GLenum VerticesPool::getTypeComponent(uint8_t index) const
 	{
-		if (index <= _nbrAttribute)
+		if (index >= _nbrAttribute)
 		{
 			WARNING_MESSAGE_ATTRIBUTE_GETTING("type")
 			return (-1);
@@ -258,7 +273,7 @@ namespace gl
 
 	uint8_t VerticesPool::getSizeTypeComponent(uint8_t index) const
 	{
-		if (index <= _nbrAttribute)
+		if (index >= _nbrAttribute)
 		{
 			WARNING_MESSAGE_ATTRIBUTE_SETTING("size type")
 				return (-1);
@@ -268,7 +283,7 @@ namespace gl
 
 	uint8_t VerticesPool::getNbrComponent(uint8_t index) const
 	{
-		if (index <= _nbrAttribute)
+		if (index >= _nbrAttribute)
 		{
 			WARNING_MESSAGE_ATTRIBUTE_SETTING("numbre component")
 			return (-1);

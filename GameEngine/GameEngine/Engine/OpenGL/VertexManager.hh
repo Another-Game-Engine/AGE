@@ -86,13 +86,9 @@ namespace gl
 		uint8_t _nbrAttribute;
 
 		// data represent all vertices
-		std::vector<PoolElement> _poolElement;
+		std::vector<Vertices> _poolVertices;
 	};
 
-	class Vertices
-	{
-
-	};
 }
 
 #else
