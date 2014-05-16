@@ -63,7 +63,7 @@
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\VerticesManager.cpp" />
-    <ClCompile Include="Engine\OpenGL\BlockMemoryGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
@@ -175,7 +175,7 @@
     <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
-    <ClInclude Include="Engine\OpenGL\BlockMemoryGPU.hh" />
+    <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

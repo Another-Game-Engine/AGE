@@ -210,7 +210,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
-    <ClCompile Include="Engine\OpenGL\BlockMemoryGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
@@ -275,9 +275,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
-    <ClInclude Include="Engine\OpenGL\BlockMemoryGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
+    <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
     <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Texture.hh" />

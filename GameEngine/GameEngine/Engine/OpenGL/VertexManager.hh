@@ -13,9 +13,8 @@
 
 namespace gl
 {
-
-	class VerticesPool;
 	class Vertices;
+	class MemoryBlocksGPU;
 
 	//!\file VerticesManager.hh
 	//!\author Dorian Pinaud
@@ -24,6 +23,56 @@ namespace gl
 	//!\brief Handle the geometry of the render
 	class VerticesManager : public Dependency
 	{
+	private:
+		//!\file VerticesManager.hh
+		//!\author Dorian Pinaud
+		//!\version v1.0
+		//!\class VerticesPool
+		//!\brief Handle one kind of vertices for the VertexManager
+		class VerticesPool
+		{
+		public:
+			typedef VerticesManager::VerticesPool VerticesPool;
+
+		public:
+			// constructor
+			VerticesPool(VerticesManager const &database);
+			~VerticesPool();
+			VerticesPool(VerticesPool const &copy);
+			VerticesPool &operator=(VerticesPool const &p);
+
+			// setter
+			VerticesPool &setData(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
+			VerticesPool &setNbrAttribute(uint8_t nbrAttribute);
+			VerticesPool &setTypeComponent(uint8_t index, GLenum type);
+			VerticesPool &setSizeTypeComponent(uint8_t index, uint8_t sizeType);
+			VerticesPool &setNbrComponent(uint8_t index, uint8_t nbrComponent);
+
+			// getter
+			uint8_t getNbrAttribute() const;
+			GLenum getTypeComponent(uint8_t index) const;
+			uint8_t getSizeTypeComponent(uint8_t index) const;
+			uint8_t getNbrComponent(uint8_t index) const;
+
+			// Vertices handler
+			void addVertices(Key<Vertices> const &vertices);
+			void rmVertices(Key<Vertices> const &vertices);
+			Key<Vertices> const &getVertice(size_t index) const;
+			size_t nbrVertices() const;
+
+		private:
+			// data represent attributes
+			GLenum *_typeComponent;
+			uint8_t *_sizeTypeComponent;
+			uint8_t *_nbrComponent;
+			uint8_t _nbrAttribute;
+
+			VerticesManager const &_database;
+
+			// data represent all vertices
+			std::vector<Key<Vertices>> _poolVertices;
+			std::vector<MemoryBlocksGPU> _memoryPool;
+		};
 	public:
 		// constructor
 		VerticesManager();
@@ -41,50 +90,6 @@ namespace gl
 		// data represent pools
 		std::vector<std::pair<Key<VerticesPool>, VerticesPool>> _pools;
 	};
-
-	//!\file VerticesManager.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class VerticesPool
-	//!\brief Handle one kind of vertices for the VertexManager
-	class VerticesPool
-	{
-		struct PoolElement
-		{
-			size_t nbrVertices;
-			Key<Vertices> vertices;
-		};
-	public:
-		// constructor
-		VerticesPool();
-		VerticesPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
-		~VerticesPool();
-		VerticesPool(VerticesPool const &copy);
-		VerticesPool &operator=(VerticesPool const &p);
-
-		// setter
-		VerticesPool &setNbrAttribute(uint8_t nbrAttribute);
-		VerticesPool &setTypeComponent(uint8_t index, GLenum type);
-		VerticesPool &setSizeTypeComponent(uint8_t index, uint8_t sizeType);
-		VerticesPool &setNbrComponent(uint8_t index, uint8_t nbrComponent);
-
-		// getter
-		uint8_t getNbrAttribute() const;
-		GLenum getTypeComponent(uint8_t index) const;
-		uint8_t getSizeTypeComponent(uint8_t index) const;
-		uint8_t getNbrComponent(uint8_t index) const;
-	
-	private:
-		// data represent attributes
-		GLenum *_typeComponent;
-		uint8_t *_sizeTypeComponent;
-		uint8_t *_nbrComponent;
-		uint8_t _nbrAttribute;
-
-		// data represent all vertices
-		std::vector<Vertices> _poolVertices;
-	};
-
 }
 
 #else

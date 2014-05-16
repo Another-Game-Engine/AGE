@@ -1,4 +1,5 @@
 #include <OpenGL/VertexManager.hh>
+#include <OpenGL/MemoryBlocksGPU.hh>
 
 #if TEST_NEW_VERTEXMANAGER
 
@@ -20,37 +21,38 @@ namespace gl
 
 	}
 
-	Key<VerticesPool> const &VerticesManager::addPool()
+	Key<VerticesManager::VerticesPool> const &VerticesManager::addPool()
 	{
 		for (size_t index = 0; index < _pools.size(); ++index)
 		{
 			if (!_pools[index].first)
 			{
 				_pools[index].first = Key<VerticesPool>();
-				_pools[index].second = VerticesPool();
+				_pools[index].second = VerticesPool(*this);
 				return (_pools[index].first);
 			}
 		}
-		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool()));
+		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(*this)));
 		return (_pools[_pools.size() - 1].first);
 	}
 
-	Key<VerticesPool> const &VerticesManager::addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
+	Key<VerticesManager::VerticesPool> const &VerticesManager::addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
 	{
 		for (size_t index = 0; index < _pools.size(); ++index)
 		{
 			if (!_pools[index].first)
 			{
 				_pools[index].first = Key<VerticesPool>();
-				_pools[index].second = VerticesPool();
+				_pools[index].second = VerticesPool(*this);
 				return (_pools[index].first);
 			}
 		}
-		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(nbrAttributes, typeComponent, sizeTypeComponent, nbrComponent)));
+		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(*this)));
+		_pools.back().second.setData(nbrAttributes, typeComponent, sizeTypeComponent, nbrComponent);
 		return (_pools[_pools.size() - 1].first);
 	}
 
-	Key<VerticesPool> VerticesManager::getPool(size_t index) const
+	Key<VerticesManager::VerticesPool> VerticesManager::getPool(size_t index) const
 	{
 		if (index >= _pools.size())
 		{
@@ -66,7 +68,7 @@ namespace gl
 		return (_pools.size());
 	}
 
-	VerticesPool const * VerticesManager::getPool(Key<VerticesPool> const &key) const
+	VerticesManager::VerticesPool const * VerticesManager::getPool(Key<VerticesPool> const &key) const
 	{
 		for (size_t index = 0; index < _pools.size(); ++index)
 		{
@@ -91,28 +93,12 @@ namespace gl
 		}
 	}
 
-	VerticesPool::VerticesPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
-		: _nbrAttribute(nbrAttributes),
-		_typeComponent(NULL),
-		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL)
-	{
-		if (_nbrAttribute)
-		{
-			_typeComponent = new GLenum[_nbrAttribute];
-			_sizeTypeComponent = new uint8_t[_nbrAttribute];
-			_nbrComponent = new uint8_t[_nbrAttribute];
-			memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
-			memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
-		}
-	}
-
-	VerticesPool::VerticesPool()
+	VerticesManager::VerticesPool::VerticesPool(VerticesManager const &database)
 		: _nbrAttribute(4),
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL)
+		_nbrComponent(NULL),
+		_database(database)
 	{
 		if (_nbrAttribute)
 		{
@@ -128,12 +114,13 @@ namespace gl
 		}
 	}
 
-	VerticesPool::VerticesPool(VerticesPool const &copy)
+	VerticesManager::VerticesPool::VerticesPool(VerticesPool const &copy)
 		: _nbrAttribute(copy._nbrAttribute),
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
-		_poolVertices(copy._poolVertices)
+		_poolVertices(copy._poolVertices),
+		_database(copy._database)
 	{
 		if (_nbrAttribute)
 		{
@@ -146,7 +133,7 @@ namespace gl
 		}
 	}
 
-	VerticesPool::~VerticesPool()
+	VerticesManager::VerticesPool::~VerticesPool()
 	{
 		if (_nbrAttribute)
 		{
@@ -157,7 +144,7 @@ namespace gl
 	}
 
 	// set all data with "p" data
-	VerticesPool &VerticesPool::operator=(VerticesPool const &p)
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::operator=(VerticesPool const &p)
 	{
 		if (this != &p)
 		{
@@ -193,7 +180,7 @@ namespace gl
 
 	// permit too set the nbr of attribute, set by default all data into it
 	// execpt if the nbrAttribute is equal of the value initial
-	VerticesPool &VerticesPool::setNbrAttribute(uint8_t nbrAttribute)
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::setNbrAttribute(uint8_t nbrAttribute)
 	{
 		if (_nbrAttribute != nbrAttribute)
 		{
@@ -227,7 +214,7 @@ namespace gl
 	}
 
 	// set type at the attribute index, check the validity of data
-	VerticesPool &VerticesPool::setTypeComponent(uint8_t index, GLenum type)
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::setTypeComponent(uint8_t index, GLenum type)
 	{
 		if (index >= _nbrAttribute)
 		{
@@ -239,7 +226,7 @@ namespace gl
 	}
 
 	// set size type in byte at the attribute index, check the validity of data
-	VerticesPool &VerticesPool::setSizeTypeComponent(uint8_t index, uint8_t sizeType)
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::setSizeTypeComponent(uint8_t index, uint8_t sizeType)
 	{
 		if (index >= _nbrAttribute)
 		{
@@ -251,7 +238,7 @@ namespace gl
 	}
 
 	// set nbr Component at the attribute index, check the validity of data
-	VerticesPool &VerticesPool::setNbrComponent(uint8_t index, uint8_t nbrComponent)
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::setNbrComponent(uint8_t index, uint8_t nbrComponent)
 	{
 		if (index >= _nbrAttribute)
 		{
@@ -262,12 +249,43 @@ namespace gl
 		return (*this);
 	}
 
-	uint8_t VerticesPool::getNbrAttribute() const
+	// warning the typeComponent and other array send in paramter must have nbrAttribute element
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::setData(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
+	{
+		if (_nbrAttribute != nbrAttributes)
+		{
+			if (_nbrAttribute)
+			{
+				delete[] _sizeTypeComponent;
+				delete[] _typeComponent;
+				delete[] _nbrComponent;
+			}
+			_nbrAttribute = nbrAttributes;
+			if (_nbrAttribute)
+			{
+				_sizeTypeComponent = new uint8_t[_nbrAttribute];
+				_typeComponent = new GLenum[_nbrAttribute];
+				_nbrComponent = new uint8_t[_nbrAttribute];
+			}
+			else
+			{
+				_sizeTypeComponent = NULL;
+				_typeComponent = NULL;
+				_nbrComponent = NULL;
+			}
+		}
+		memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t) * _nbrAttribute);
+		memcpy(_typeComponent, typeComponent, sizeof(GLenum) * nbrAttributes);
+		memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t) * nbrAttributes);
+		return (*this);
+	}
+
+	uint8_t VerticesManager::VerticesPool::getNbrAttribute() const
 	{
 		return (_nbrAttribute);
 	}
 
-	GLenum VerticesPool::getTypeComponent(uint8_t index) const
+	GLenum VerticesManager::VerticesPool::getTypeComponent(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
 		{
@@ -277,7 +295,7 @@ namespace gl
 		return (_typeComponent[index]);
 	}
 
-	uint8_t VerticesPool::getSizeTypeComponent(uint8_t index) const
+	uint8_t VerticesManager::VerticesPool::getSizeTypeComponent(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
 		{
@@ -287,7 +305,7 @@ namespace gl
 		return (_sizeTypeComponent[index]);
 	}
 
-	uint8_t VerticesPool::getNbrComponent(uint8_t index) const
+	uint8_t VerticesManager::VerticesPool::getNbrComponent(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
 		{
@@ -296,6 +314,7 @@ namespace gl
 		}
 		return (_nbrComponent[index]);
 	}
+
 
 }
 

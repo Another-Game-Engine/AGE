@@ -16,9 +16,9 @@ namespace gl
 		~MemoryBlocksGPU();
 		MemoryBlocksGPU &operator=(MemoryBlocksGPU const &b);
 
-		void setNbrBlock(size_t nbrBlock);
-		void setStartBlock(size_t index, size_t startBock);
-		void setSizeBlock(size_t index, size_t sizeBlock);
+		MemoryBlocksGPU &setNbrBlock(size_t nbrBlock);
+		MemoryBlocksGPU &setStartBlock(size_t index, size_t startBock);
+		MemoryBlocksGPU &setSizeBlock(size_t index, size_t sizeBlock);
 		size_t getNbrBlock() const;
 		size_t getStartBlock(size_t index) const;
 		size_t getSizeBlock(size_t index) const;

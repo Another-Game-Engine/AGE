@@ -117,7 +117,7 @@ namespace gl
 	}
 
 	// the values into the new storage are set to 0.
-	void MemoryBlocksGPU::setNbrBlock(size_t nbrBlock)
+	MemoryBlocksGPU &MemoryBlocksGPU::setNbrBlock(size_t nbrBlock)
 	{
 		if (nbrBlock != _nbrBlock)
 		{
@@ -142,7 +142,7 @@ namespace gl
 		}
 	}
 
-	void MemoryBlocksGPU::setStartBlock(size_t index, size_t startBlock)
+	MemoryBlocksGPU &MemoryBlocksGPU::setStartBlock(size_t index, size_t startBlock)
 	{
 		if (index >= _nbrBlock)
 		{
@@ -152,7 +152,7 @@ namespace gl
 		_startBlocks[index] = startBlock;
 	}
 
-	void MemoryBlocksGPU::setSizeBlock(size_t index, size_t sizeBlock)
+	MemoryBlocksGPU &MemoryBlocksGPU::setSizeBlock(size_t index, size_t sizeBlock)
 	{
 		if (index >= _nbrBlock)
 		{
