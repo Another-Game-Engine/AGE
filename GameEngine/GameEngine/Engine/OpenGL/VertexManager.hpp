@@ -50,8 +50,6 @@ template <uint8_t NBR_ATTRIBUTE>
 bool VertexManager<NBR_ATTRIBUTE>::init()
 {
 	_vertexArray.init();
-	_indexBuffer.init();
-	_dataBuffer.init();
 	return (true);
 }
 

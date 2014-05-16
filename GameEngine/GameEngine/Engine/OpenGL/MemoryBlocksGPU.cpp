@@ -9,6 +9,14 @@
 
 namespace gl
 {
+	MemoryBlocksGPU::MemoryBlocksGPU()
+		: _nbrBlock(0),
+		_startBlocks(NULL),
+		_sizeBlocks(NULL)
+	{
+
+	}
+
 	// the data into startblocks and sizeblocks must have nbrblock allocate
 	MemoryBlocksGPU::MemoryBlocksGPU(size_t nbrBlock, size_t *startBlocks, size_t *sizeBlocks)
 		: _nbrBlock(nbrBlock),
@@ -140,6 +148,7 @@ namespace gl
 				_startBlocks = NULL;
 			}
 		}
+		return (*this);
 	}
 
 	MemoryBlocksGPU &MemoryBlocksGPU::setStartBlock(size_t index, size_t startBlock)
@@ -147,9 +156,10 @@ namespace gl
 		if (index >= _nbrBlock)
 		{
 			WARNING_MESSAGE_SETTING("start", index);
-			return;
+			return (*this);
 		}
 		_startBlocks[index] = startBlock;
+		return (*this);
 	}
 
 	MemoryBlocksGPU &MemoryBlocksGPU::setSizeBlock(size_t index, size_t sizeBlock)
@@ -157,8 +167,9 @@ namespace gl
 		if (index >= _nbrBlock)
 		{
 			WARNING_MESSAGE_SETTING("size", index);
-			return;
+			return (*this);
 		}
 		_sizeBlocks[index] = sizeBlock;
+		return (*this);
 	}
 }

@@ -3,7 +3,7 @@
 
 # include "Utils/OpenGL.hh"
 
-namespace OpenGLTools
+namespace gl
 {
 	typedef unsigned char Byte;
 

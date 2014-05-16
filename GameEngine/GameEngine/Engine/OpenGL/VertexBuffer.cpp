@@ -1,12 +1,13 @@
 #include "VertexBuffer.hh"
 
-namespace OpenGLTools
+namespace gl
 {
 	VertexBuffer::VertexBuffer(bool isIndices)
 		: _id(0),
 		_isBind(false)
 	{
 		_mode = isIndices ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER;
+		glGenBuffers(1, &_id);
 	}
 
 	 VertexBuffer::~VertexBuffer()
@@ -21,11 +22,6 @@ namespace OpenGLTools
 		 _isBind(copy._isBind)
 	 {
 
-	 }
-
-	 void VertexBuffer::init()
-	 {
-		 glGenBuffers(1, &_id);
 	 }
 
 	 VertexBuffer &VertexBuffer::operator=(VertexBuffer const &vertexbuffer)

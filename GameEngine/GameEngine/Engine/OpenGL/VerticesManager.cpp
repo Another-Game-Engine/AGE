@@ -28,11 +28,11 @@ namespace gl
 			if (!_pools[index].first)
 			{
 				_pools[index].first = Key<VerticesPool>();
-				_pools[index].second = VerticesPool(*this);
+				_pools[index].second = VerticesPool(*this, TypePool::Vertices);
 				return (_pools[index].first);
 			}
 		}
-		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(*this)));
+		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(*this, TypePool::Vertices)));
 		return (_pools[_pools.size() - 1].first);
 	}
 
@@ -43,11 +43,11 @@ namespace gl
 			if (!_pools[index].first)
 			{
 				_pools[index].first = Key<VerticesPool>();
-				_pools[index].second = VerticesPool(*this);
+				_pools[index].second = VerticesPool(*this, TypePool::Vertices);
 				return (_pools[index].first);
 			}
 		}
-		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(*this)));
+		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(*this, TypePool::Vertices)));
 		_pools.back().second.setData(nbrAttributes, typeComponent, sizeTypeComponent, nbrComponent);
 		return (_pools[_pools.size() - 1].first);
 	}
@@ -93,12 +93,13 @@ namespace gl
 		}
 	}
 
-	VerticesManager::VerticesPool::VerticesPool(VerticesManager const &database)
+	VerticesManager::VerticesPool::VerticesPool(VerticesManager const &database, TypePool type)
 		: _nbrAttribute(4),
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
-		_database(database)
+		_database(database),
+		_type(type)
 	{
 		if (_nbrAttribute)
 		{
@@ -119,8 +120,8 @@ namespace gl
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
-		_poolVertices(copy._poolVertices),
-		_database(copy._database)
+		_database(copy._database),
+		_type(copy._type)
 	{
 		if (_nbrAttribute)
 		{
@@ -173,8 +174,8 @@ namespace gl
 			memcpy(_typeComponent, p._typeComponent, sizeof(GLenum)* _nbrAttribute);
 			memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
 			memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
-			_poolVertices = p._poolVertices;
 		}
+		_type = p._type;
 		return (*this);
 	}
 
@@ -315,7 +316,10 @@ namespace gl
 		return (_nbrComponent[index]);
 	}
 
-
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::addVertices(Key<Vertices> const &vertices)
+	{
+		return (*this);
+	}
 }
 
 #endif /*!TEST_NEW_VERTEXMANAGER*/

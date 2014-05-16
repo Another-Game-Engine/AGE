@@ -7,6 +7,7 @@
 
 #include <Utils/OpenGL.hh>
 #include <OpenGL/Key.hh>
+#include <OpenGL/VertexBuffer.hh>
 #include <Utils/Dependency.hpp>
 #include <vector>
 #include <utility>
@@ -24,6 +25,11 @@ namespace gl
 	class VerticesManager : public Dependency
 	{
 	private:
+		enum class TypePool
+		{
+			Vertices,
+			Indices
+		};
 		//!\file VerticesManager.hh
 		//!\author Dorian Pinaud
 		//!\version v1.0
@@ -32,11 +38,8 @@ namespace gl
 		class VerticesPool
 		{
 		public:
-			typedef VerticesManager::VerticesPool VerticesPool;
-
-		public:
 			// constructor
-			VerticesPool(VerticesManager const &database);
+			VerticesPool(VerticesManager const &database, TypePool type);
 			~VerticesPool();
 			VerticesPool(VerticesPool const &copy);
 			VerticesPool &operator=(VerticesPool const &p);
@@ -55,8 +58,8 @@ namespace gl
 			uint8_t getNbrComponent(uint8_t index) const;
 
 			// Vertices handler
-			void addVertices(Key<Vertices> const &vertices);
-			void rmVertices(Key<Vertices> const &vertices);
+			VerticesPool &addVertices(Key<Vertices> const &vertices);
+			VerticesPool &rmVertices(Key<Vertices> const &vertices);
 			Key<Vertices> const &getVertice(size_t index) const;
 			size_t nbrVertices() const;
 
@@ -67,11 +70,14 @@ namespace gl
 			uint8_t *_nbrComponent;
 			uint8_t _nbrAttribute;
 
+			// database
 			VerticesManager const &_database;
-
+			TypePool _type;
+		
 			// data represent all vertices
-			std::vector<Key<Vertices>> _poolVertices;
-			std::vector<MemoryBlocksGPU> _memoryPool;
+			VertexBuffer _vbo;
+			std::vector<std::pair<Key<Vertices>, MemoryBlocksGPU>> _pool;
+	
 		};
 	public:
 		// constructor
@@ -120,8 +126,8 @@ public:
 
 private:
 	OpenGLTools::VertexArray _vertexArray;
-	OpenGLTools::VertexBuffer _indexBuffer;
-	OpenGLTools::VertexBuffer _dataBuffer;
+	gl::VertexBuffer _indexBuffer;
+	gl::VertexBuffer _dataBuffer;
 	VertexPool<NBR_ATTRIBUTE> _pool;
 	std::array<bool, NBR_ATTRIBUTE> _isAttributeActivate;
 	std::array<Attribute, NBR_ATTRIBUTE> _attributes;

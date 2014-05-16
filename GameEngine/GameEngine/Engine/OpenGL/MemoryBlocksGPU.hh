@@ -11,6 +11,7 @@ namespace gl
 	class MemoryBlocksGPU
 	{
 	public:
+		MemoryBlocksGPU();
 		MemoryBlocksGPU(size_t nbrBlock, size_t *startBlocks, size_t *sizeBlocks);
 		MemoryBlocksGPU(MemoryBlocksGPU const &copy);
 		~MemoryBlocksGPU();
