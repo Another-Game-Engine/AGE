@@ -1,6 +1,46 @@
 #ifndef VERTICE_HH_
 # define VERTICE_HH_
 
+#define TEST_ARCHI 1
+
+#if TEST_ARCHI
+
+# define WARNING_MESSAGE_BUFFER(index) \
+	std::cerr << "Warning: the index to get the buffer into vertices [" << index << "] is out of range." << std::endl;\
+
+# define WARNING_MESSAGE_SIZEBUFFER(index) \
+	std::cerr << "Warning: the index to get the size buffer into vertices [" << index << "] is out of range." << std::endl;\
+
+#include <stdint.h>
+
+namespace gl
+{
+	//!\file Vertices.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class Vertices
+	//!\brief contain vertices information
+	class Vertices
+	{
+	public:
+		Vertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
+		~Vertices();
+		Vertices(Vertices const &copy);
+		Vertices &operator=(Vertices const &v);
+
+		void const *getBuffer(uint8_t index) const;
+		size_t getSizeBuffer(uint8_t index) const;
+		uint8_t getNbrBuffers() const;
+		size_t getNbrVertices() const;
+	private:
+		void **_buffers;
+		size_t *_sizeBuffers;
+		size_t _nbrVertices;
+		uint8_t _nbrBuffers;
+	};
+}
+
+#else
 # include "Data.hh"
 
 template <uint8_t NBR_ATTRIBUTE> class VertexManager;
@@ -41,5 +81,6 @@ private:
 
 # include "Vertice.hpp"
 # include "VertexManager.hh"
+#endif
 
 #endif /* !VERTICE_HH_ */

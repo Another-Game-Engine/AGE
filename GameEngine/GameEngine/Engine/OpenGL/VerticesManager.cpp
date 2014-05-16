@@ -320,6 +320,22 @@ namespace gl
 	{
 		return (*this);
 	}
+
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::rmVertices(Key<Vertices> const &vertices)
+	{
+		return (*this);
+	}
+
+	Key<Vertices> const &VerticesManager::VerticesPool::getVertice(size_t index) const
+	{
+		if (index >= _pool.size())
+		{
+			Key<Vertices> corrupt;
+			corrupt.destroy();
+			return (corrupt);
+		}
+		return (_pool[index].first);
+	}
 }
 
 #endif /*!TEST_NEW_VERTEXMANAGER*/
