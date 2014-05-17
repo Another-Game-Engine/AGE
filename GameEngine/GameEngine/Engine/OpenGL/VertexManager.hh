@@ -58,7 +58,7 @@ namespace gl
 			uint8_t getNbrComponent(uint8_t index) const;
 
 			// Vertices handler
-			VerticesPool &addVertices(Key<Vertices> const &vertices);
+			VerticesPool &addVertices(Vertices const &vertices);
 			VerticesPool &rmVertices(Key<Vertices> const &vertices);
 			Key<Vertices> const &getVertice(size_t index) const;
 			size_t nbrVertices() const;
@@ -70,12 +70,7 @@ namespace gl
 			uint8_t *_nbrComponent;
 			uint8_t _nbrAttribute;
 
-			// database
-			VerticesManager const &_database;
-			TypePool _type;
-		
 			// data represent all vertices
-			VertexBuffer _vbo;
 			std::vector<std::pair<Key<Vertices>, MemoryBlocksGPU>> _pool;
 	
 		};

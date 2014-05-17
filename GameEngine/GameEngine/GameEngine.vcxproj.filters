@@ -64,6 +64,7 @@
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\VerticesManager.cpp" />
     <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\Vertices.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />

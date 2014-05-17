@@ -83,6 +83,7 @@ namespace gl
 		return (*this);
 	}
 
+	// warning of the index, must be between 0 and index
 	void const *Vertices::getBuffer(uint8_t index) const
 	{
 		if (index >= _nbrBuffers)
@@ -93,6 +94,7 @@ namespace gl
 		return (_buffers[index]);
 	}
 
+	// warning of the index, must be between 0 and index
 	size_t Vertices::getSizeBuffer(uint8_t index) const
 	{
 		if (index >= _nbrBuffers)

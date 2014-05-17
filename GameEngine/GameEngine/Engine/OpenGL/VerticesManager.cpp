@@ -1,5 +1,6 @@
 #include <OpenGL/VertexManager.hh>
 #include <OpenGL/MemoryBlocksGPU.hh>
+#include <OpenGL/Vertice.hh>
 
 #if TEST_NEW_VERTEXMANAGER
 
@@ -316,8 +317,14 @@ namespace gl
 		return (_nbrComponent[index]);
 	}
 
-	VerticesManager::VerticesPool &VerticesManager::VerticesPool::addVertices(Key<Vertices> const &vertices)
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::addVertices(Vertices const &vertices)
 	{
+
+		MemoryBlocksGPU memory;
+
+		memory.setNbrBlock(_nbrAttribute);
+		for (size_t index = 0; index < _nbrAttribute; ++index)
+			memory.setSizeBlock(index, _sizeTypeComponent[index] * _nbrComponent[index] * vertices);
 		return (*this);
 	}
 
