@@ -83,13 +83,18 @@ namespace gl
 		Key<VerticesPool> getPool(size_t index) const;
 		VerticesPool const *getPool(Key<VerticesPool> const &key) const;
 		size_t nbrPool() const;
-		void rmPool(Key<VerticesPool> const &key);
+		VerticesManager &rmPool(Key<VerticesPool> const &key);
 
 		//handle Vertices
+		Key<Vertices> const &addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
+		VerticesManager &rmVertices(Key<Vertices> const &key);
+		Key<Vertices> const &getVertices(size_t index) const;
+		size_t getNbrVertices() const;
 		
 	private:
 		// data represent pools
 		std::vector<std::pair<Key<VerticesPool>, VerticesPool>> _pools;
+		std::vector<std::pair<Key<Vertices>, Vertices>> _vertices;
 	};
 }
 
