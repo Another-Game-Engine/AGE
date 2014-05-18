@@ -54,21 +54,24 @@ namespace AGE
 			std::cout << random << std::endl;
 			for (auto i = 0; i < _bindPoses.size(); ++i)
 			{
-				if (random == 0)
-					bonesMatrix[i] = _worldPoses[i] * _bindPoses[i] * _bindShape;
-				else if (random == 1)
-					bonesMatrix[i] = _worldPoses[i] * _bindPoses[i];
-				else if (random == 2)
-					bonesMatrix[i] = _worldPoses[i];
-				else if (random == 3)
-					bonesMatrix[i] = _worldPoses[i] * _bindShape;
-				else if (random == 4)
-					bonesMatrix[i] = _bindShape;
-				else if (random == 5)
-					bonesMatrix[i] = _bindPoses[i] * _bindShape;
-				else if (random == 6)
-					bonesMatrix[i] = _bindPoses[i];
-				else
+				//if (random == 0)
+				//	bonesMatrix[i] = _worldPoses[i] * _bindPoses[i] * _bindShape;
+				//else if (random == 1)
+				//	bonesMatrix[i] = _worldPoses[i] * _bindPoses[i];
+				//else if (random == 2)
+				//	bonesMatrix[i] = _worldPoses[i];
+				//else if (random == 3)
+				//	bonesMatrix[i] = _worldPoses[i] * _bindShape;
+				//else if (random == 4)
+				//else if (random == 5)
+				//	bonesMatrix[i] = _bindPoses[i] * _bindShape;
+				//else if (random == 6)
+				//	bonesMatrix[i] = _bindPoses[i];
+				//else
+
+				//that
+				//	bonesMatrix[i] = _bindShape;
+					//or that
 					bonesMatrix[i] = glm::mat4(1);
 			}
 
@@ -87,9 +90,9 @@ namespace AGE
 				auto &c = _channels[targetIndex];
 				switch (c->getTargetAttribute())
 				{
-				case gameplay::Transform::ANIMATE_TRANSLATE:
-					m = glm::translate(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
-					break;
+				//case gameplay::Transform::ANIMATE_TRANSLATE:
+				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	break;
 				//case gameplay::Transform::ANIMATE_TRANSLATE_X:
 				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[0], 0, 0));
 				//	break;

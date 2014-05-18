@@ -158,8 +158,10 @@ void FBXSceneEncoder::loadScene(FbxScene* fbxScene)
     FbxNode* rootNode = fbxScene->GetRootNode();
     if (rootNode)
     {
-        print("Triangulate.");
-        triangulateRecursive(rootNode);
+        print("Triangulate.");		
+		FbxGeometryConverter converter(rootNode->GetFbxManager());
+		converter.Triangulate(fbxScene, true);
+        //triangulateRecursive(rootNode);
 
         print("Load nodes.");
         // Don't include the FBX root node in the GPB.
@@ -1302,7 +1304,8 @@ void FBXSceneEncoder::triangulateRecursive(FbxNode* fbxNode)
             type == FbxNodeAttribute::ePatch)
         {
             FbxGeometryConverter converter(fbxNode->GetFbxManager());
-            converter.TriangulateInPlace(fbxNode);
+			//converter.Triangulate(fbxNode, true);
+            //converter.TriangulateInPlace(fbxNode);
         }
     }
 
