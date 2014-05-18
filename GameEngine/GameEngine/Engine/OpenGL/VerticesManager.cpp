@@ -370,7 +370,6 @@ namespace gl
 		// no field is free, push a new field to store data
 		_needSync = true;
 		MemoryBlocksGPU memory;
-
 		memory.setNbrElement(vertices.getNbrVertices());
 		memory.setNbrBlock(_nbrAttribute);
 		for (size_t index = 0; index < _nbrAttribute; ++index)
@@ -381,9 +380,11 @@ namespace gl
 		}
 		if (_nbrAttribute)
 		{
+			// set start of attribute
 			memory.setStartBlock(0, 0);
 			for (size_t index = 1; index < _nbrAttribute; ++index)
 				memory.setStartBlock(index, memory.getStartBlock(index - 1) + memory.getSizeBlock(index - 1));
+			// set the base where start the attribute
 			memory.setOffset(0, 0);
 			for (size_t index = 1; index < _nbrAttribute; ++index)
 				memory.setOffset(index, memory.getOffset(index) + (_sizeTypeComponent[index - 1] * _nbrComponent[index - 1] * vertices.getNbrVertices()));

@@ -199,6 +199,7 @@ namespace gl
 	MemoryBlocksGPU &MemoryBlocksGPU::setNbrElement(size_t nbrElement)
 	{
 		_nbrElement = nbrElement;
+		return (*this);
 	}
 
 	size_t MemoryBlocksGPU::getNbrElement() const
