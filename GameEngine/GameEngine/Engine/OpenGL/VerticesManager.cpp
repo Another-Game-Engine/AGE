@@ -98,9 +98,7 @@ namespace gl
 		: _nbrAttribute(4),
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL),
-		_database(database),
-		_type(type)
+		_nbrComponent(NULL)
 	{
 		if (_nbrAttribute)
 		{
@@ -120,9 +118,7 @@ namespace gl
 		: _nbrAttribute(copy._nbrAttribute),
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL),
-		_database(copy._database),
-		_type(copy._type)
+		_nbrComponent(NULL)
 	{
 		if (_nbrAttribute)
 		{
@@ -176,7 +172,6 @@ namespace gl
 			memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
 			memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
 		}
-		_type = p._type;
 		return (*this);
 	}
 
@@ -324,7 +319,16 @@ namespace gl
 
 		memory.setNbrBlock(_nbrAttribute);
 		for (size_t index = 0; index < _nbrAttribute; ++index)
-			memory.setSizeBlock(index, _sizeTypeComponent[index] * _nbrComponent[index] * vertices);
+			memory.setSizeBlock(index, _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrVertices());
+		if (_nbrAttribute)
+		{
+			memory.setStartBlock(0, 0);
+			for (size_t index = 1; index < _nbrAttribute; ++index)
+				memory.setStartBlock(index, memory.getStartBlock(index - 1) + memory.getSizeBlock(index - 1));
+			memory.setOffset(0, 0);
+			for (size_t index = 1; index < _nbrAttribute; ++index)
+				memory.setOffset(index, memory.getOffset(index) + (_sizeTypeComponent[index - 1] * _nbrComponent[index - 1] * vertices.getNbrVertices()));
+		}
 		return (*this);
 	}
 

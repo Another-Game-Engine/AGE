@@ -12,7 +12,8 @@ namespace gl
 	MemoryBlocksGPU::MemoryBlocksGPU()
 		: _nbrBlock(0),
 		_startBlocks(NULL),
-		_sizeBlocks(NULL)
+		_sizeBlocks(NULL),
+		_baseOffset(NULL)
 	{
 
 	}
@@ -21,14 +22,17 @@ namespace gl
 	MemoryBlocksGPU::MemoryBlocksGPU(size_t nbrBlock, size_t *startBlocks, size_t *sizeBlocks)
 		: _nbrBlock(nbrBlock),
 		_startBlocks(NULL),
-		_sizeBlocks(NULL)
+		_sizeBlocks(NULL),
+		_baseOffset(NULL)
 	{
 		if (nbrBlock)
 		{
 			_startBlocks = new size_t[nbrBlock];
 			_sizeBlocks = new size_t[nbrBlock];
+			_baseOffset = new size_t[nbrBlock];
 			memcpy(_startBlocks, startBlocks, sizeof(size_t) * nbrBlock);
 			memcpy(_sizeBlocks, sizeBlocks, sizeof(size_t) * nbrBlock);
+			memset(_baseOffset, 0, sizeof(size_t) * nbrBlock);
 		}
 	}
 
@@ -38,35 +42,25 @@ namespace gl
 		{
 			delete[] _sizeBlocks;
 			delete[] _startBlocks;
+			delete[] _baseOffset;
 		}
 	}
 
 	MemoryBlocksGPU::MemoryBlocksGPU(MemoryBlocksGPU const &copy)
+		: _nbrBlock(copy._nbrBlock),
+		_startBlocks(NULL),
+		_sizeBlocks(NULL),
+		_baseOffset(NULL)
 	{
-		if (copy._nbrBlock)
+		if (_nbrBlock)
 		{
-			if (copy._nbrBlock != _nbrBlock)
-			{
-				if (_nbrBlock)
-				{
-					delete[] _sizeBlocks;
-					delete[] _startBlocks;
-				}
-				_nbrBlock = copy._nbrBlock;
-				if (_nbrBlock)
-				{
-					_sizeBlocks = new size_t[_nbrBlock];
-					_startBlocks = new size_t[_nbrBlock];
-				}
-				else
-				{
-					_sizeBlocks = NULL;
-					_startBlocks = NULL;
-				}
-			}
-			memcpy(_sizeBlocks, copy._sizeBlocks, sizeof(size_t) * copy._nbrBlock);
-			memcpy(_startBlocks, copy._startBlocks, sizeof(size_t)* copy._nbrBlock);
+			_sizeBlocks = new size_t[_nbrBlock];
+			_startBlocks = new size_t[_nbrBlock];
+			_baseOffset = new size_t[_nbrBlock];
 		}
+		memcpy(_sizeBlocks, copy._sizeBlocks, sizeof(size_t) * copy._nbrBlock);
+		memcpy(_startBlocks, copy._startBlocks, sizeof(size_t) * copy._nbrBlock);
+		memcpy(_baseOffset, copy._baseOffset, sizeof(size_t) * copy._nbrBlock);
 	}
 
 	MemoryBlocksGPU &MemoryBlocksGPU::operator=(MemoryBlocksGPU const &b)
@@ -79,21 +73,25 @@ namespace gl
 				{
 					delete[] _sizeBlocks;
 					delete[] _startBlocks;
+					delete[] _baseOffset;
 				}
 				_nbrBlock = b._nbrBlock;
 				if (_nbrBlock)
 				{
 					_sizeBlocks = new size_t[_nbrBlock];
 					_startBlocks = new size_t[_nbrBlock];
+					_baseOffset = new size_t[_nbrBlock];
 				}
 				else
 				{
 					_sizeBlocks = NULL;
 					_startBlocks = NULL;
+					_baseOffset = NULL;
 				}
 			}
-			memcpy(_sizeBlocks, b._sizeBlocks, sizeof(size_t)* b._nbrBlock);
-			memcpy(_startBlocks, b._startBlocks, sizeof(size_t)* b._nbrBlock);
+			memcpy(_sizeBlocks, b._sizeBlocks, sizeof(size_t) * b._nbrBlock);
+			memcpy(_startBlocks, b._startBlocks, sizeof(size_t) * b._nbrBlock);
+			memcpy(_baseOffset, b._baseOffset, sizeof(size_t) * b._nbrBlock);
 		}
 		return (*this);
 	}
@@ -122,6 +120,16 @@ namespace gl
 			return (-1);
 		}
 		return (_startBlocks[index]);
+	}
+
+	size_t MemoryBlocksGPU::getOffset(size_t index) const
+	{
+		if (index >= _nbrBlock)
+		{
+			WARNING_MESSAGE_GETTING("start", index);
+			return (-1);
+		}
+		return (_baseOffset[index]);
 	}
 
 	// the values into the new storage are set to 0.
@@ -170,6 +178,17 @@ namespace gl
 			return (*this);
 		}
 		_sizeBlocks[index] = sizeBlock;
+		return (*this);
+	}
+
+	MemoryBlocksGPU &MemoryBlocksGPU::setOffset(size_t index, size_t offset)
+	{
+		if (index >= _nbrBlock)
+		{
+			WARNING_MESSAGE_SETTING("size", index);
+			return (*this);
+		}
+		_baseOffset[index] = offset;
 		return (*this);
 	}
 }
