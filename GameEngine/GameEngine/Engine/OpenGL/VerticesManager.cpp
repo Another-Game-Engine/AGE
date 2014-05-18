@@ -29,11 +29,11 @@ namespace gl
 			if (!_pools[index].first)
 			{
 				_pools[index].first = Key<VerticesPool>();
-				_pools[index].second = VerticesPool(*this, TypePool::Vertices);
+				_pools[index].second = VerticesPool();
 				return (_pools[index].first);
 			}
 		}
-		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(*this, TypePool::Vertices)));
+		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool()));
 		return (_pools[_pools.size() - 1].first);
 	}
 
@@ -44,11 +44,11 @@ namespace gl
 			if (!_pools[index].first)
 			{
 				_pools[index].first = Key<VerticesPool>();
-				_pools[index].second = VerticesPool(*this, TypePool::Vertices);
+				_pools[index].second = VerticesPool();
 				return (_pools[index].first);
 			}
 		}
-		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool(*this, TypePool::Vertices)));
+		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool()));
 		_pools.back().second.setData(nbrAttributes, typeComponent, sizeTypeComponent, nbrComponent);
 		return (_pools[_pools.size() - 1].first);
 	}
@@ -85,7 +85,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Vertices> const &VerticesManager::getVertices(size_t index) const
+	Key<Vertices> VerticesManager::getVertices(size_t index) const
 	{
 		if (index >= _vertices.size())
 		{
@@ -131,11 +131,13 @@ namespace gl
 		return (*this);
 	}
 
-	VerticesManager::VerticesPool::VerticesPool(VerticesManager const &database, TypePool type)
+	VerticesManager::VerticesPool::VerticesPool()
 		: _nbrAttribute(4),
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL)
+		_nbrComponent(NULL),
+		_nbrBytePool(0),
+		_needSync(false)
 	{
 		if (_nbrAttribute)
 		{
@@ -155,7 +157,9 @@ namespace gl
 		: _nbrAttribute(copy._nbrAttribute),
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL)
+		_nbrComponent(NULL),
+		_nbrBytePool(copy._nbrBytePool),
+		_needSync(copy._needSync)
 	{
 		if (_nbrAttribute)
 		{
@@ -183,6 +187,8 @@ namespace gl
 	{
 		if (this != &p)
 		{
+			_nbrBytePool = p._nbrBytePool;
+			_needSync = p._needSync;
 			if (_nbrAttribute != p._nbrAttribute)
 			{
 				if (_nbrAttribute)
@@ -351,12 +357,28 @@ namespace gl
 
 	VerticesManager::VerticesPool &VerticesManager::VerticesPool::addVertices(Vertices &vertices)
 	{
-
+		// test if a field is empty
+		for (size_t index = 0; index < _pool.size(); ++index)
+		{
+			if (_pool[index].first && vertices.getNbrVertices() == _pool[index].second.getNbrElement())
+			{
+				_pool[index].first = true;
+				vertices.setMemoryBlocksGPU(&(_pool[_pool.size() - 1].second));
+				return (*this);
+			}
+		}
+		// no field is free, push a new field to store data
+		_needSync = true;
 		MemoryBlocksGPU memory;
 
+		memory.setNbrElement(vertices.getNbrVertices());
 		memory.setNbrBlock(_nbrAttribute);
 		for (size_t index = 0; index < _nbrAttribute; ++index)
-			memory.setSizeBlock(index, _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrVertices());
+		{
+			size_t nbrByteAttributes = _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrVertices();
+			_nbrBytePool += nbrByteAttributes;
+			memory.setSizeBlock(index, nbrByteAttributes);
+		}
 		if (_nbrAttribute)
 		{
 			memory.setStartBlock(0, 0);
@@ -366,8 +388,8 @@ namespace gl
 			for (size_t index = 1; index < _nbrAttribute; ++index)
 				memory.setOffset(index, memory.getOffset(index) + (_sizeTypeComponent[index - 1] * _nbrComponent[index - 1] * vertices.getNbrVertices()));
 		}
-		_pool.push_back(memory);
-		vertices.setMemoryBlocksGPU(&(_pool[_pool.size() - 1]));
+		_pool.push_back(std::make_pair(true, memory));
+		vertices.setMemoryBlocksGPU(&(_pool[_pool.size() - 1].second));
 		return (*this);
 	}
 
@@ -378,9 +400,9 @@ namespace gl
 		vertices.setMemoryBlocksGPU(NULL);
 		for (size_t index = 0; index < _pool.size(); ++index)
 		{
-			if (memory == &_pool[index])
+			if (memory == &_pool[index].second)
 			{
-				_pool.erase(_pool.begin() + index);
+				_pool[index].first = false;
 				return (*this);
 			}
 		}

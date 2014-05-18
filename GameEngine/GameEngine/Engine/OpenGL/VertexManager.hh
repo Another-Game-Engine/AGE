@@ -39,7 +39,7 @@ namespace gl
 		{
 		public:
 			// constructor
-			VerticesPool(VerticesManager const &database, TypePool type);
+			VerticesPool();
 			~VerticesPool();
 			VerticesPool(VerticesPool const &copy);
 			VerticesPool &operator=(VerticesPool const &p);
@@ -69,7 +69,9 @@ namespace gl
 			uint8_t _nbrAttribute;
 
 			// data represent all vertices
-			std::vector<MemoryBlocksGPU> _pool;
+			std::vector<std::pair<bool, MemoryBlocksGPU>> _pool;
+			size_t _nbrBytePool;
+			bool _needSync;
 	
 		};
 	public:
@@ -81,14 +83,13 @@ namespace gl
 		Key<VerticesPool> const &addPool();
 		Key<VerticesPool> const &addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
 		Key<VerticesPool> getPool(size_t index) const;
-		VerticesPool const *getPool(Key<VerticesPool> const &key) const;
 		size_t nbrPool() const;
 		VerticesManager &rmPool(Key<VerticesPool> const &key);
 
 		//handle Vertices
 		Key<Vertices> const &addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
 		VerticesManager &rmVertices(Key<Vertices> const &key);
-		Key<Vertices> const &getVertices(size_t index) const;
+		Key<Vertices> getVertices(size_t index) const;
 		size_t getNbrVertices() const;
 		
 	private:

@@ -10,7 +10,8 @@
 namespace gl
 {
 	MemoryBlocksGPU::MemoryBlocksGPU()
-		: _nbrBlock(0),
+		: _nbrElement(0),
+		_nbrBlock(0),
 		_startBlocks(NULL),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL)
@@ -19,8 +20,9 @@ namespace gl
 	}
 
 	// the data into startblocks and sizeblocks must have nbrblock allocate
-	MemoryBlocksGPU::MemoryBlocksGPU(size_t nbrBlock, size_t *startBlocks, size_t *sizeBlocks)
-		: _nbrBlock(nbrBlock),
+	MemoryBlocksGPU::MemoryBlocksGPU(size_t nbrElement, size_t nbrBlock, size_t *startBlocks, size_t *sizeBlocks)
+		: _nbrElement(nbrElement),
+		_nbrBlock(nbrBlock),
 		_startBlocks(NULL),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL)
@@ -47,7 +49,8 @@ namespace gl
 	}
 
 	MemoryBlocksGPU::MemoryBlocksGPU(MemoryBlocksGPU const &copy)
-		: _nbrBlock(copy._nbrBlock),
+		: _nbrElement(copy._nbrElement),
+		_nbrBlock(copy._nbrBlock),
 		_startBlocks(NULL),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL)
@@ -67,6 +70,7 @@ namespace gl
 	{
 		if (&b != this)
 		{
+			_nbrElement = b._nbrElement;
 			if (b._nbrBlock != _nbrBlock)
 			{
 				if (_nbrBlock)
@@ -190,5 +194,15 @@ namespace gl
 		}
 		_baseOffset[index] = offset;
 		return (*this);
+	}
+
+	MemoryBlocksGPU &MemoryBlocksGPU::setNbrElement(size_t nbrElement)
+	{
+		_nbrElement = nbrElement;
+	}
+
+	size_t MemoryBlocksGPU::getNbrElement() const
+	{
+		return (_nbrElement);
 	}
 }
