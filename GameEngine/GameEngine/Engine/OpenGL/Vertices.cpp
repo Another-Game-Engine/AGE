@@ -11,7 +11,8 @@ namespace gl
 		: _buffers(NULL),
 		_sizeBuffers(NULL),
 		_nbrVertices(nbrVertices),
-		_nbrBuffers(nbrBuffers)
+		_nbrBuffers(nbrBuffers),
+		_locations(NULL)
 	{
 		if (_nbrBuffers)
 		{
@@ -30,7 +31,8 @@ namespace gl
 		: _buffers(NULL),
 		_sizeBuffers(NULL),
 		_nbrVertices(copy._nbrVertices),
-		_nbrBuffers(copy._nbrBuffers)
+		_nbrBuffers(copy._nbrBuffers),
+		_locations(copy._locations)
 	{
 		if (_nbrBuffers)
 		{
@@ -80,7 +82,7 @@ namespace gl
 		memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
 		for (size_t index = 0; index < _nbrBuffers; ++index)
 			memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
-		return (*this);
+		_locations = v._locations;
 	}
 
 	// warning of the index, must be between 0 and index
@@ -113,6 +115,16 @@ namespace gl
 	size_t Vertices::getNbrVertices() const
 	{
 		return (_nbrVertices);
+	}
+
+	Vertices &Vertices::setMemoryBlocksGPU(MemoryBlocksGPU *location)
+	{
+		_location = location;
+	}
+
+	MemoryBlocksGPU const *Vertices::getMemoryBlocksGPU() const
+	{
+		return (_location);
 	}
 }
 #endif

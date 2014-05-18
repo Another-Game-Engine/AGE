@@ -3,6 +3,8 @@
 
 namespace gl
 {
+	class Vertices;
+
 	//!\file MemoryBlocksGPU.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
@@ -27,6 +29,7 @@ namespace gl
 		size_t getOffset(size_t index) const;
 
 	private:
+
 		size_t _nbrBlock;
 		size_t *_startBlocks;
 		size_t *_sizeBlocks;

@@ -312,7 +312,7 @@ namespace gl
 		return (_nbrComponent[index]);
 	}
 
-	VerticesManager::VerticesPool &VerticesManager::VerticesPool::addVertices(Vertices const &vertices)
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::addVertices(Vertices &vertices)
 	{
 
 		MemoryBlocksGPU memory;
@@ -329,24 +329,27 @@ namespace gl
 			for (size_t index = 1; index < _nbrAttribute; ++index)
 				memory.setOffset(index, memory.getOffset(index) + (_sizeTypeComponent[index - 1] * _nbrComponent[index - 1] * vertices.getNbrVertices()));
 		}
+		_pool.push_back(memory);
+		vertices.setMemoryBlocksGPU(&(_pool[_pool.size() - 1]));
 		return (*this);
 	}
 
-	VerticesManager::VerticesPool &VerticesManager::VerticesPool::rmVertices(Key<Vertices> const &vertices)
+	VerticesManager::VerticesPool &VerticesManager::VerticesPool::rmVertices(Vertices &vertices)
 	{
-		return (*this);
-	}
-
-	Key<Vertices> const &VerticesManager::VerticesPool::getVertice(size_t index) const
-	{
-		if (index >= _pool.size())
+		MemoryBlocksGPU const *memory = vertices.getMemoryBlocksGPU();
+		
+		vertices.setMemoryBlocksGPU(NULL);
+		for (size_t index = 0; index < _pool.size(); ++index)
 		{
-			Key<Vertices> corrupt;
-			corrupt.destroy();
-			return (corrupt);
+			if (memory == &_pool[index])
+			{
+				_pool.erase(_pool.begin() + index);
+				return (*this);
+			}
 		}
-		return (_pool[index].first);
+		return (*this);
 	}
+
 }
 
 #endif /*!TEST_NEW_VERTEXMANAGER*/

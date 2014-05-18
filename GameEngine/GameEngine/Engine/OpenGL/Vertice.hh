@@ -12,9 +12,11 @@
 	std::cerr << "Warning: the index to get the size buffer into vertices [" << index << "] is out of range." << std::endl;\
 
 #include <stdint.h>
+#include <OpenGL/MemoryBlocksGPU.hh>
 
 namespace gl
 {
+	class MemoryBlocksGPU;
 	//!\file Vertices.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
@@ -32,11 +34,17 @@ namespace gl
 		size_t getSizeBuffer(uint8_t index) const;
 		uint8_t getNbrBuffers() const;
 		size_t getNbrVertices() const;
+
+		Vertices &setMemoryBlocksGPU(MemoryBlocksGPU *location);
+		MemoryBlocksGPU const *getMemoryBlocksGPU() const;
+		
 	private:
 		void **_buffers;
 		size_t *_sizeBuffers;
 		size_t _nbrVertices;
 		uint8_t _nbrBuffers;
+
+		MemoryBlocksGPU *_location;
 	};
 }
 
