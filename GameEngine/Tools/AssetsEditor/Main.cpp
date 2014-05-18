@@ -13,6 +13,8 @@
 
 #include <AGE_FBX/Mesh.hpp>
 
+#include <Context/SdlContext.hh>
+
 
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
@@ -88,15 +90,12 @@ int			main(int ac, char **av)
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	glm::mat4 Projection = glm::perspective(60.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
 	// Camera matrix
-	glm::mat4 View = glm::lookAt(
-		glm::vec3(10, 5, 150), // Camera is at (4,3,3), in World Space
-		glm::vec3(0, 0, 0), // and looks at the origin
-		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		);
+	float lookAtX = 0;
+	float lookAtY = 0;
 	// Model matrix : an identity matrix (model will be at the origin)
 	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
+	Model = glm::translate(Model, glm::vec3(0, 10, 0));
 	Model = glm::scale(Model, glm::vec3(0.3f));
-	Model *= glm::mat4(1,0,0,0,0,1,-6.61744490e-024, 0, 0, 6.61744490e-024, 1, 0,0,0,0,1);
 	// Our ModelViewProjection : multiplication of our 3 matrices
 
 
@@ -120,6 +119,22 @@ int			main(int ac, char **av)
 		Model = glm::rotate(Model, 20.0f * (float)time, glm::vec3(0, 1, 0));
 		color = glm::vec4(1, 0, 1, 1);
 		gameplayconvertor->update(time);
+
+		if (e->getInstance<Input>()->getKey(SDLK_w))
+			lookAtY += 1;
+		if (e->getInstance<Input>()->getKey(SDLK_s))
+			lookAtY -= 1;
+		if (e->getInstance<Input>()->getKey(SDLK_a))
+			lookAtX -= 1;
+		if (e->getInstance<Input>()->getKey(SDLK_d))
+			lookAtX += 1;
+
+		glm::mat4 View = glm::lookAt(
+		glm::vec3(lookAtX, lookAtY, 150), // Camera is at (4,3,3), in World Space
+		glm::vec3(lookAtX, lookAtY, 0), // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);	
+
 		glUniform4fv(glGetUniformLocation(s->getId(), "color"), 1, &color[0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "model"), 1, GL_FALSE, &Model[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "view"), 1, GL_FALSE, &View[0][0]);

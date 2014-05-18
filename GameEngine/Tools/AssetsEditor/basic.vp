@@ -25,13 +25,15 @@ void main(void)
 	//test = lol * test;
 
 	vec4 position  = vec4(0.0f);
+
+
 	if (vBlendWeight.x > 0.0f)
     	position = (bones[int(vBlendIndice.x)] * vPosition) * vBlendWeight.x;
 	if (vBlendWeight.y > 0.0f)
     	position += (bones[int(vBlendIndice.y)] * vPosition) * vBlendWeight.y;
 	if (vBlendWeight.z > 0.0f)
     	position += (bones[int(vBlendIndice.z)] * vPosition) * vBlendWeight.z;
-  	if (vBlendWeight.w > 0.0f)
+ 	if (vBlendWeight.w > 0.0f)
     	position += (bones[int(vBlendIndice.w)] * vPosition) * vBlendWeight.w;
 
   boneColor = vBlendIndice / vec4(166);
