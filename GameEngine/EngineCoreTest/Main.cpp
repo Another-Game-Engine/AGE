@@ -152,6 +152,7 @@ int			main(int ac, char **av)
 
 #ifdef RENDERING_ACTIVATED
 
+#if	!TEST_NEW_VERTEXMANAGER
 	std::array<Attribute, 4> param = //-V112
 	{
 		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
@@ -159,8 +160,11 @@ int			main(int ac, char **av)
 		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
 		Attribute(GL_FLOAT, sizeof(float), 2),
 	};
+#endif
 
+#if !TEST_NEW_VERTEXMANAGER
 	e->setInstance<VertexManager<4>>(param)->init();
+#endif
 	if (!loadShaders(e))
 		return EXIT_FAILURE;
 	if (!loadAssets(e))

@@ -84,6 +84,8 @@ namespace gl
 		VerticesPool const *getPool(Key<VerticesPool> const &key) const;
 		size_t nbrPool() const;
 		void rmPool(Key<VerticesPool> const &key);
+
+		//handle Vertices
 		
 	private:
 		// data represent pools

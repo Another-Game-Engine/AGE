@@ -48,7 +48,9 @@ namespace Component
 		{
 			mesh->material->materials[i].setUniforms(materialUniform);
 			materialUniform->flushChanges();
+#if !TEST_NEW_VERTEXMANAGER
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
+#endif
 		}
 	}
 
@@ -60,7 +62,9 @@ namespace Component
 		perModelUniform->flushChanges();
 		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 		{
+#if !TEST_NEW_VERTEXMANAGER
 			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
+#endif
 		}
 	}
 

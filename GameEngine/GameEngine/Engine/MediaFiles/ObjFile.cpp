@@ -85,8 +85,9 @@ void ObjFile::Geometry::load(cereal::PortableBinaryInputArchive &ar)
 		ar(name, vertices, normals, colors, uvs, indices);
 	}
 
-void ObjFile::Geometry::init()
+	void ObjFile::Geometry::init()
 	{
+#if !TEST_NEW_VERTEXMANAGER
 		std::array<Data, 4> data =  //-V112
 		{
 			Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
@@ -97,6 +98,7 @@ void ObjFile::Geometry::init()
 		Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
 		buffer = Vertice<4>(vertices.size(), data, &indicesData);
 		_dpyManager.lock()->getInstance<VertexManager<4>>()->addVertice(buffer);
+#endif
 	}
 
 void ObjFile::save(cereal::PortableBinaryOutputArchive &ar) const

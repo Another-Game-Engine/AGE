@@ -13,14 +13,20 @@ Font::~Font()
 {
 }
 
+#if !TEST_NEW_VERTEXMANAGER
 bool Font::load(std::unique_ptr<VertexManager<2>> &vm)
+#else
+bool Font::load()
+#endif
 {
 	if (_isLoaded)
 		return true;
 	for (auto &e : _sizes)
 	{
+#if !TEST_NEW_VERTEXMANAGER
 		if (!e.second.load(vm))
 			return false;
+#endif
 	}
 	_isLoaded = true;
 	return true;
@@ -39,7 +45,11 @@ Font::FontSize::FontSize()
 , _texH(0)
 {}
 
+#if !TEST_NEW_VERTEXMANAGER
 bool Font::FontSize::load(std::unique_ptr<VertexManager<2>> &vm)
+#else
+bool Font::FontSize::load()
+#endif
 {
 	if (_textureDatas.size() == 0)
 		return false;
@@ -73,8 +83,10 @@ bool Font::FontSize::load(std::unique_ptr<VertexManager<2>> &vm)
 			Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
 		};
 		Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
+#if !TEST_NEW_VERTEXMANAGER
 		glyph.buffer = new Vertice<2>(vertices.size(), data, &indicesData);
 		vm->addVertice(*(glyph.buffer));
+#endif
 	}
 
 	glGenTextures(1, &_textureId);

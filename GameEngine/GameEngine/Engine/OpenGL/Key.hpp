@@ -17,7 +17,7 @@ namespace gl
 
 	template <typename TYPE>
 	Key<TYPE>::Key(Key<TYPE> const &copy) 
-		: _id(copy._id),
+		: _id(copy._id)
 	{
 	}
 

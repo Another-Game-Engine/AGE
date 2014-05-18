@@ -8,6 +8,8 @@
 #include <glm/glm.hpp>
 #include <Text/FontGlyph.hh>
 
+#include <OpenGL/VertexManager.hh>
+
 // Maybe Necessary ??
 //#include <cereal/cereal.hpp>
 //#include <cereal/archives/binary.hpp>
@@ -17,14 +19,20 @@
 //#include <cereal/types/base_class.hpp>
 
 class FontConvertor;
+#if !TEST_NEW_VERTEXMANAGER
 template <uint8_t NBR_ATTRIBUTE> class VertexManager;
+#endif
 
 class Font
 {
 public:
 	Font();
 	~Font();
+#if !TEST_NEW_VERTEXMANAGER
 	bool load(std::unique_ptr<VertexManager<2>> &vm);
+#else
+	bool load();
+#endif
 	bool isLoaded();
 
 	template <class Archive>
@@ -44,7 +52,11 @@ private:
 		std::array<FontGlyph, ASCII_END - ASCII_BEGIN> _map;
 
 		FontSize();
+#if !TEST_NEW_VERTEXMANAGER
 		bool load(std::unique_ptr<VertexManager<2>> &vm);
+#else
+		bool load();
+#endif
 		bool isLoaded();
 
 		template <class Archive>

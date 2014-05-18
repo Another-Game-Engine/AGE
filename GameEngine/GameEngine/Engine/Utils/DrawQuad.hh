@@ -9,8 +9,11 @@ namespace OpenGLTools
 {
 	class Shader;
 }
+class DependenciesInjector;
 class Renderer;
+#if !TEST_NEW_VERTEXMANAGER
 template <uint8_t SIZE_ATTRIBUTE> class VertexManager;
+#endif
 
 class DrawQuad
 {
@@ -23,9 +26,10 @@ public:
 
 private:
 	void						initShaders();
-
+#if	!TEST_ARCHI
 	VertexManager<2>			*_vertexManager;
 	Vertice<2>					_quad;
+#endif
 	std::shared_ptr<OpenGLTools::Shader>			_fboToScreen;
 	std::shared_ptr<OpenGLTools::Shader>			_fboToScreenMultisampled;
 	std::shared_ptr<Renderer>	_renderer;
