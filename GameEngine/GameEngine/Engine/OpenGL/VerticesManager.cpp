@@ -8,7 +8,8 @@
 	std::cerr << "Warning: setting of [" << type << "] attribute out of attribute range" << std::endl;
 #define WARNING_MESSAGE_ATTRIBUTE_GETTING(type) \
 	std::cerr << "Warning: getting of [" << type << "] attribute out of attribute range" << std::endl;
-
+#define WARNING_NOT_FOUND(thing) \
+	std::cerr << "Warning: cannot find " << thing << "." << std::endl; \
 
 namespace gl
 {
@@ -128,6 +129,40 @@ namespace gl
 				return (*this);
 			}
 		}
+		return (*this);
+	}
+
+	VerticesManager &VerticesManager::attachVerticesToPool(Key<Vertices> const &vertices, Key<VerticesManager::VerticesPool> const &pool)
+	{
+		Vertices *verticesfound = NULL;
+		VerticesPool *poolfound = NULL;
+
+		for (size_t index = 0; index < _vertices.size(); ++index)
+		{
+			if (_vertices[index].first == vertices)
+				verticesfound = &_vertices[index].second;
+		}
+		if (verticesfound == NULL)
+		{
+			WARNING_NOT_FOUND("vertices")
+			return (*this);
+		}	
+		for (size_t index = 0; index < _pools.size(); ++index)
+		{
+			if (_pools[index].first == pool)
+				poolfound = &_pools[index].second;
+		}
+		if (poolfound == NULL)
+		{
+			WARNING_NOT_FOUND("pools");
+			return (*this);
+		}
+		_attach.push_back(std::make_pair(poolfound, verticesfound));
+		return (*this);
+	}
+
+	VerticesManager &VerticesManager::detachVerticesToPool(Key<Vertices> const &vertices)
+	{
 		return (*this);
 	}
 

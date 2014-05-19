@@ -91,11 +91,16 @@ namespace gl
 		VerticesManager &rmVertices(Key<Vertices> const &key);
 		Key<Vertices> getVertices(size_t index) const;
 		size_t getNbrVertices() const;
-		
+
+		// attach vertices to pools
+		VerticesManager &attachVerticesToPool(Key<Vertices> const &vertices, Key<VerticesPool> const &pool);
+		VerticesManager &detachVerticesToPool(Key<Vertices> const &vertices, Key<VerticesPool> const &pool);
+
 	private:
 		// data represent pools
 		std::vector<std::pair<Key<VerticesPool>, VerticesPool>> _pools;
 		std::vector<std::pair<Key<Vertices>, Vertices>> _vertices;
+		std::vector<std::pair<Vertices *, VerticesPool *>> _attach;
 	};
 }
 
