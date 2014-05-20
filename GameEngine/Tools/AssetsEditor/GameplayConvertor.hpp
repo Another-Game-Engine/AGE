@@ -12,6 +12,9 @@
 
 #include <Context/SdlContext.hh>
 
+//for test
+#include<set>
+#include<string>
 static inline glm::mat4 GP_MAT_TO_GLM(const gameplay::Matrix &m)
 {
 	return glm::mat4(m.m[0], m.m[1], m.m[2], m.m[3], m.m[4], m.m[5], m.m[6], m.m[7], m.m[8], m.m[9], m.m[10], m.m[11], m.m[12], m.m[13], m.m[14], m.m[15]);
@@ -161,6 +164,7 @@ namespace AGE
 			static glm::mat4 lol(1);
 			lol = glm::rotate(lol, 0.05f, glm::vec3(1, 1, 1));
 //			root->getFirstChild()->getFirstChild()->setTransformMatrix(glm::value_ptr(lol));
+			_test.clear();
 			UpdateSkeleton(root, glm::mat4(1));
 			//while (root->getChildCount() > 0)
 			//{
@@ -172,9 +176,10 @@ namespace AGE
 			//}
 
 		}
-
+		std::vector<std::string> _test;
 		void UpdateSkeleton(gameplay::Node *node, const glm::mat4 &parentTransform)
 		{
+			_test.push_back(node->getId());
 			auto targetIndex = 0;
 			while (targetIndex < _boneNames.size())
 			{
@@ -186,9 +191,13 @@ namespace AGE
 				return;
 
 			auto &m = bonesMatrix[targetIndex];
-			//if (node->getId() == "Bip01_L_Thigh")
-			//	m = glm::rotate(glm::inverse(_bindPoses[targetIndex]) * _worldPoses[targetIndex] * parentTransform, 180.0f, glm::vec3(1, 0, 0));// _bindPoses[targetIndex] * m;// *glm::inverse(_bindPoses[targetIndex]) * m * _bindPoses[targetIndex];//_worldPoses[targetIndex];
-			//else
+			static float testAngle = 0;
+			testAngle += 0.01f;
+			if (testAngle > 360)
+				testAngle = 0;
+			if (node->getId() == "Bip01_L_Thigh")
+				m = parentTransform * glm::rotate(_bindPoses[targetIndex], testAngle, glm::vec3(1, 0, 0)) * glm::inverse(_bindPoses[targetIndex]);// _bindPoses[targetIndex] * m;// *glm::inverse(_bindPoses[targetIndex]) * m * _bindPoses[targetIndex];//_worldPoses[targetIndex];
+			else
 			m = parentTransform * m * glm::inverse(_bindPoses[targetIndex]);//_worldPoses[targetIndex];
 			if (node->getNextSibling() != nullptr)
 			{
