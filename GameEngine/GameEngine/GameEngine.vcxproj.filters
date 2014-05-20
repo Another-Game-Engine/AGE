@@ -65,6 +65,7 @@
     <ClCompile Include="Engine\OpenGL\VerticesManager.cpp" />
     <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Vertices.cpp" />
+    <ClCompile Include="Engine\OpenGL\VerticesPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
     <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
+    <ClInclude Include="Engine\OpenGL\VerticesPool.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

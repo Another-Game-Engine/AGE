@@ -38,7 +38,7 @@ namespace gl
 		{
 			_buffers = new void*[_nbrBuffers];
 			_sizeBuffers = new size_t[_nbrBuffers];
-			memcpy(_sizeBuffers,  copy._sizeBuffers, sizeof(size_t)* _nbrBuffers);
+			memcpy(_sizeBuffers, copy._sizeBuffers, sizeof(size_t)* _nbrBuffers);
 			for (size_t index = 0; index < _nbrBuffers; ++index)
 			{
 				_buffers[index] = new uint8_t[_sizeBuffers[index]];
