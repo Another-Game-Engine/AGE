@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdint.h>
 #include <OpenGL/MemoryBlocksGPU.hh>
-#include <OpenGL/Vertice.hh>
+#include <OpenGL/Vertices.hh>
 
 #define WARNING_MESSAGE_ATTRIBUTE_SETTING(type) \
 	std::cerr << "Warning: setting of [" << type << "] attribute out of attribute range" << std::endl;

@@ -1,8 +1,7 @@
-#include <OpenGL/VertexManager.hh>
-#include <OpenGL/Vertice.hh>
+#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/Vertices.hh>
 #include <OpenGL/VerticesPool.hh>
 
-#if TEST_NEW_VERTEXMANAGER
 
 #define WARNING_NOT_FOUND(thing) \
 	std::cerr << "Warning: cannot find " << thing << "." << std::endl; \
@@ -129,5 +128,3 @@ namespace gl
 	}
 
 }
-
-#endif /*!TEST_NEW_VERTEXMANAGER*/

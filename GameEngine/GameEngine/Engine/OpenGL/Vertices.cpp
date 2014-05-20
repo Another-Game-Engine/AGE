@@ -1,7 +1,5 @@
-#include "Vertice.hh"
+#include "Vertices.hh"
 #include <iostream>
-
-#if TEST_ARCHI
 
 namespace gl
 {
@@ -129,4 +127,3 @@ namespace gl
 		return (_location);
 	}
 }
-#endif

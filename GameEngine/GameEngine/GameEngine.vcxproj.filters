@@ -33,8 +33,6 @@
     <ClCompile Include="Engine\MediaFiles\MaterialFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\ObjFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\TextureFile.cpp" />
-    <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
-    <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexArray.cpp" />
@@ -114,18 +112,11 @@
     <ClInclude Include="Engine\MediaFiles\MediaFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\ObjFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\TextureFile.hpp" />
-    <ClInclude Include="Engine\OpenGL\Attribute.hh" />
-    <ClInclude Include="Engine\OpenGL\Data.hh" />
-    <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hh" />
     <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
-    <ClInclude Include="Engine\OpenGL\VertexManager.hh" />
-    <ClInclude Include="Engine\OpenGL\VertexManager.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexPool.hh" />
     <ClInclude Include="Engine\OpenGL\VertexPool.hpp" />
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hpp" />
-    <ClInclude Include="Engine\OpenGL\Vertice.hh" />
-    <ClInclude Include="Engine\OpenGL\Vertice.hpp" />
     <ClInclude Include="Engine\Physic\BulletCollisionManager.hpp" />
     <ClInclude Include="Engine\Physic\BulletDynamicManager.hpp" />
     <ClInclude Include="Engine\Physic\Utils\BtConversion.hpp" />
@@ -179,6 +170,8 @@
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
     <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
     <ClInclude Include="Engine\OpenGL\VerticesPool.hh" />
+    <ClInclude Include="Engine\OpenGL\Vertices.hh" />
+    <ClInclude Include="Engine\OpenGL\VerticesManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

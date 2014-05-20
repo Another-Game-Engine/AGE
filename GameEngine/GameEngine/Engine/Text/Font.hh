@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <Text/FontGlyph.hh>
 
-#include <OpenGL/VertexManager.hh>
+#include <OpenGL/VerticesManager.hh>
 
 // Maybe Necessary ??
 //#include <cereal/cereal.hpp>
@@ -28,11 +28,8 @@ class Font
 public:
 	Font();
 	~Font();
-#if !TEST_NEW_VERTEXMANAGER
-	bool load(std::unique_ptr<VertexManager<2>> &vm);
-#else
+
 	bool load();
-#endif
 	bool isLoaded();
 
 	template <class Archive>
@@ -52,11 +49,7 @@ private:
 		std::array<FontGlyph, ASCII_END - ASCII_BEGIN> _map;
 
 		FontSize();
-#if !TEST_NEW_VERTEXMANAGER
-		bool load(std::unique_ptr<VertexManager<2>> &vm);
-#else
 		bool load();
-#endif
 		bool isLoaded();
 
 		template <class Archive>

@@ -5,8 +5,8 @@
 #include <MediaFiles/MaterialFile.hpp>
 #include <vector>
 #include <glm/glm.hpp>
-#include <OpenGL/Vertice.hh>
-#include <OpenGL/VertexManager.hh>
+#include <OpenGL/Vertices.hh>
+#include <OpenGL/VerticesManager.hh>
 #include <Utils/DependenciesInjector.hpp>
 
 struct ObjFile : public MediaFile<ObjFile>

@@ -13,8 +13,9 @@ class File;
 class Font;
 class PubSub;
 
-#include <OpenGL/VertexManager.hh>
+
 #if !TEST_NEW_VERTEXMANAGER
+#include <OpenGL/VerticesManager.hh>
 template <uint8_t NBR_ATTRIBUTE> class VertexManager;
 #endif
 
@@ -69,8 +70,6 @@ private:
 
 	std::vector<DrawStringSave> _toDraw;
 	std::map <std::string, Font> _collection;
-#if !TEST_NEW_VERTEXMANAGER
-	std::unique_ptr<VertexManager<2>> _vertexManager;
-#endif
+//	std::unique_ptr<VertexManager<2>> _vertexManager;
 	std::unique_ptr<PubSub> _pubSub;
 };

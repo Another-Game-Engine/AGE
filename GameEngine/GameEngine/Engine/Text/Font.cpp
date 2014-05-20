@@ -1,7 +1,6 @@
 #include "Font.hh"
-#include <OpenGL/VertexManager.hh>
-#include <OpenGL/Data.hh>
-#include <OpenGL/Vertice.hh>
+#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/Vertices.hh>
 
 Font::Font()
 : _name("")
@@ -13,20 +12,15 @@ Font::~Font()
 {
 }
 
-#if !TEST_NEW_VERTEXMANAGER
-bool Font::load(std::unique_ptr<VertexManager<2>> &vm)
-#else
+//bool Font::load(std::unique_ptr<VertexManager<2>> &vm)
 bool Font::load()
-#endif
 {
 	if (_isLoaded)
 		return true;
 	for (auto &e : _sizes)
 	{
-#if !TEST_NEW_VERTEXMANAGER
-		if (!e.second.load(vm))
-			return false;
-#endif
+//		if (!e.second.load(vm))
+//			return false;
 	}
 	_isLoaded = true;
 	return true;
@@ -45,11 +39,7 @@ Font::FontSize::FontSize()
 , _texH(0)
 {}
 
-#if !TEST_NEW_VERTEXMANAGER
-bool Font::FontSize::load(std::unique_ptr<VertexManager<2>> &vm)
-#else
 bool Font::FontSize::load()
-#endif
 {
 	if (_textureDatas.size() == 0)
 		return false;
@@ -77,16 +67,14 @@ bool Font::FontSize::load()
 		uvs[2] = glm::vec2(glyph.uvs[2], glyph.uvs[3]);
 		uvs[3] = glm::vec2(glyph.uvs[2], glyph.uvs[1]);
 
-		std::array<Data, 2> data =
-		{
-			Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
-			Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
-		};
-		Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
-#if !TEST_NEW_VERTEXMANAGER
-		glyph.buffer = new Vertice<2>(vertices.size(), data, &indicesData);
-		vm->addVertice(*(glyph.buffer));
-#endif
+		//std::array<Data, 2> data =
+		//{
+		//	Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
+		//	Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
+		//};
+		//Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
+		//glyph.buffer = new Vertice<2>(vertices.size(), data, &indicesData);
+		//vm->addVertice(*(glyph.buffer));
 	}
 
 	glGenTextures(1, &_textureId);

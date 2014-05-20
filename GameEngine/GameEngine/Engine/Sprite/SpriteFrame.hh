@@ -1,8 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <OpenGL/VertexManager.hh>
-#include <OpenGL/Vertice.hh>
+#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/Vertices.hh>
 #include <array>
 
 class SpriteManager;
@@ -13,23 +13,17 @@ public:
 	SpriteFrame()
 		: _dimensions(0)
 		, _uvs(0)
-#if !TEST_NEW_VERTEXMANAGER
-		, _buffer(nullptr)
-#endif
+//		, _buffer(nullptr)
 	{}
 
 	~SpriteFrame()
 	{
-#if !TEST_NEW_VERTEXMANAGER
-		if (_buffer)
-			delete _buffer;
-#endif
+	//	if (_buffer)
+		//	delete _buffer;
 	}
-#if !TEST_NEW_VERTEXMANAGER
-	bool load(std::shared_ptr<VertexManager<4>> vm) 
-#else
+//	bool load(std::shared_ptr<VertexManager<4>> vm) 
+
 	bool load()
-#endif
 	{
 		std::vector<glm::vec4>		vertices;	// vertices positions
 		std::vector<glm::vec2>		uvs;		// texture coordinates
@@ -65,33 +59,27 @@ public:
 		colors[1] = glm::vec4(1);
 		colors[2] = glm::vec4(1);
 		colors[3] = glm::vec4(1);
-#if	!TEST_NEW_VERTEXMANAGER
-		std::array<Data, 4> data =
-		{
-			Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
-			Data(colors.size() * 4 * sizeof(float), &colors[0].x),
-			Data(normals.size() * 4 * sizeof(float), &normals[0].x),
-			Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
-		};
-		Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
-		_buffer = new Vertice<4>(vertices.size(), data, &indicesData);
-		vm->addVertice(*(_buffer));
-#endif
+		//std::array<Data, 4> data =
+		//{
+		//	Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
+		//	Data(colors.size() * 4 * sizeof(float), &colors[0].x),
+		//	Data(normals.size() * 4 * sizeof(float), &normals[0].x),
+		//	Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
+		//};
+		//Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
+		//_buffer = new Vertice<4>(vertices.size(), data, &indicesData);
+		//vm->addVertice(*(_buffer));
 		return true;
 	}
 	inline const glm::uvec4 &getDimensions() const { return _dimensions; }
 	inline const glm::vec4 &getUvs() const { return _uvs; }
 	inline void draw() const
 	{
-#if	!TEST_NEW_VERTEXMANAGER
-		_buffer->draw(GL_QUADS);
-#endif
+	//	_buffer->draw(GL_QUADS);
 	}
 //private:
 	glm::uvec4 _dimensions;
 	glm::vec4 _uvs;
-#if !TEST_NEW_VERTEXMANAGER
-	Vertice<4> *_buffer;
-#endif
+	//Vertice<4> *_buffer;
 	friend class SpriteManager;
 };

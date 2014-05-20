@@ -10,7 +10,6 @@
 # include <utility>
 # include <memory>
 # include <fstream>
-# include <OpenGL/ErrorController.hh>
 
 namespace OpenGLTools
 {

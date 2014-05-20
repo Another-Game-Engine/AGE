@@ -3,7 +3,7 @@
 # include <Utils/OpenGL.hh>
 # include <glm/glm.hpp>
 # include <memory>
-# include <OpenGL/Vertice.hh>
+# include <OpenGL/Vertices.hh>
 
 namespace OpenGLTools
 {
@@ -26,10 +26,8 @@ public:
 
 private:
 	void						initShaders();
-#if	!TEST_ARCHI
-	VertexManager<2>			*_vertexManager;
-	Vertice<2>					_quad;
-#endif
+	//VertexManager<2>			*_vertexManager;
+	//Vertice<2>					_quad;
 	std::shared_ptr<OpenGLTools::Shader>			_fboToScreen;
 	std::shared_ptr<OpenGLTools::Shader>			_fboToScreenMultisampled;
 	std::shared_ptr<Renderer>	_renderer;
