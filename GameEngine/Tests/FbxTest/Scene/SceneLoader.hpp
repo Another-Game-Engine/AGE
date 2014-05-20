@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 
+#include "../FbxMesh.hpp"
+
 namespace AGE
 {
 	class SceneLoader
@@ -44,6 +46,34 @@ namespace AGE
 				_status = "Error: Unable to create FBX scene!\n";
 				return false;
 			}
+
+			mImporter = FbxImporter::Create(mSdkManager, "AGE FBX IMPORTER");
+			if (!mImporter)
+			{
+				_status = "Error: Unable to create an FBX importer!\n";
+				return false;
+			}
+
+
+			int lFileFormat = -1;
+			if (!mSdkManager->GetIOPluginRegistry()->DetectReaderFileFormat(_filePath.c_str(), lFileFormat))
+			{
+				// Unrecognizable file format. Try to fall back to FbxImporter::eFBX_BINARY
+				lFileFormat = mSdkManager->GetIOPluginRegistry()->FindReaderIDByDescription("FBX binary (*.fbx)");;
+			}
+
+			// Initialize the importer by providing a filename.
+			if (mImporter->Initialize(_filePath.c_str(), lFileFormat) == true)
+			{
+				// The file is going to be imported at
+				// the end of the first display callback.
+			}
+			else
+			{
+				_status = "Importer failed to import file\n";
+				return false;
+			}
+
 			if (mImporter->Import(mScene) == true)
 			{
 				// Convert Axis System to what is used in this example, if needed
@@ -55,12 +85,12 @@ namespace AGE
 				}
 
 				// Convert Unit System to what is used in this example, if needed
-				FbxSystemUnit SceneSystemUnit = mScene->GetGlobalSettings().GetSystemUnit();
-				if (SceneSystemUnit.GetScaleFactor() != 1.0)
-				{
-					//The unit in this example is centimeter.
-					FbxSystemUnit::cm.ConvertScene(mScene);
-				}
+				//FbxSystemUnit SceneSystemUnit = mScene->GetGlobalSettings().GetSystemUnit();
+				//if (SceneSystemUnit.GetScaleFactor() != 1.0)
+				//{
+				//	//The unit in this example is centimeter.
+				//	FbxSystemUnit::cm.ConvertScene(mScene);
+				//}
 
 				// Get the list of all the animation stack.
 				mScene->FillAnimStackNameArray(mAnimStackNameArray);
@@ -78,162 +108,161 @@ namespace AGE
 				// Bake the scene for one frame
 				LoadCacheRecursive(mScene, mCurrentAnimLayer, _filePath.c_str());
 
-				// Convert any .PC2 point cache data into the .MC format for 
-				// vertex cache deformer playback.
-				PreparePointCacheData(mScene, mCache_Start, mCache_Stop);
+				//// Convert any .PC2 point cache data into the .MC format for 
+				//// vertex cache deformer playback.
+				//PreparePointCacheData(mScene, mCache_Start, mCache_Stop);
 
-				// Get the list of pose in the scene
-				FillPoseArray(mScene, mPoseArray);
+				//// Get the list of pose in the scene
+				//FillPoseArray(mScene, mPoseArray);
 
 				return true;
 			}
+			return false;
 		}
-	private:
-    void FillCameraArray(FbxScene* pScene, FbxArray<FbxNode*>& pCameraArray)
-    {
-        pCameraArray.Clear();
 
-        FillCameraArrayRecursive(pScene->GetRootNode(), pCameraArray);
-    }
 
-    // Find all the cameras under this node recursively.
-    void FillCameraArrayRecursive(FbxNode* pNode, FbxArray<FbxNode*>& pCameraArray)
-    {
-        if (pNode)
-        {
-            if (pNode->GetNodeAttribute())
-            {
-                if (pNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eCamera)
-                {
-                    pCameraArray.Add(pNode);
-                }
-            }
-
-            const int lCount = pNode->GetChildCount();
-            for (int i = 0; i < lCount; i++)
-            {
-                FillCameraArrayRecursive(pNode->GetChild(i), pCameraArray);
-            }
-        }
-    }
-
-    // Bake node attributes and materials under this node recursively.
-    // Currently only mesh, light and material.
-	void LoadCacheRecursive(FbxNode * pNode, FbxAnimLayer * pAnimLayer)
-	{
-		//// Bake material and hook as user data.
-		//const int lMaterialCount = pNode->GetMaterialCount();
-		//for (int lMaterialIndex = 0; lMaterialIndex < lMaterialCount; ++lMaterialIndex)
-		//{
-		//    FbxSurfaceMaterial * lMaterial = pNode->GetMaterial(lMaterialIndex);
-		//    if (lMaterial && !lMaterial->GetUserDataPtr())
-		//    {
-		//        FbxAutoPtr<MaterialCache> lMaterialCache(new MaterialCache);
-		//        if (lMaterialCache->Initialize(lMaterial))
-		//        {
-		//            lMaterial->SetUserDataPtr(lMaterialCache.Release());
-		//        }
-		//    }
-		//}
-
-		FbxNodeAttribute* lNodeAttribute = pNode->GetNodeAttribute();
-		if (lNodeAttribute)
+		void FillCameraArray(FbxScene* pScene, FbxArray<FbxNode*>& pCameraArray)
 		{
-			// Bake mesh as VBO(vertex buffer object) into GPU.
-			if (lNodeAttribute->GetAttributeType() == FbxNodeAttribute::eMesh)
-			{
-				//FbxMesh * lMesh = pNode->GetMesh();
-				//if (pSupportVBO && lMesh && !lMesh->GetUserDataPtr())
-				//{
-				//    FbxAutoPtr<VBOMesh> lMeshCache(new VBOMesh);
-				//    if (lMeshCache->Initialize(lMesh))
-				//    {
-				//        lMesh->SetUserDataPtr(lMeshCache.Release());
-				//    }
-				//}
-			}
-			// Bake light properties.
-			else if (lNodeAttribute->GetAttributeType() == FbxNodeAttribute::eLight)
-			{
-				//    FbxLight * lLight = pNode->GetLight();
-				//    if (lLight && !lLight->GetUserDataPtr())
-				//    {
-				//        FbxAutoPtr<LightCache> lLightCache(new LightCache);
-				//        if (lLightCache->Initialize(lLight, pAnimLayer))
-				//        {
-				//            lLight->SetUserDataPtr(lLightCache.Release());
-				//        }
-				//    }
-				//}
-			}
+			pCameraArray.Clear();
 
-			const int lChildCount = pNode->GetChildCount();
-			for (int lChildIndex = 0; lChildIndex < lChildCount; ++lChildIndex)
+			FillCameraArrayRecursive(pScene->GetRootNode(), pCameraArray);
+		}
+
+		// Find all the cameras under this node recursively.
+		void FillCameraArrayRecursive(FbxNode* pNode, FbxArray<FbxNode*>& pCameraArray)
+		{
+			if (pNode)
 			{
-				LoadCacheRecursive(pNode->GetChild(lChildIndex), pAnimLayer);
+				if (pNode->GetNodeAttribute())
+				{
+					if (pNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eCamera)
+					{
+						pCameraArray.Add(pNode);
+					}
+				}
+
+				const int lCount = pNode->GetChildCount();
+				for (int i = 0; i < lCount; i++)
+				{
+					FillCameraArrayRecursive(pNode->GetChild(i), pCameraArray);
+				}
 			}
 		}
-	}
 
-    // Bake node attributes and materials for this scene and load the textures.
-    void LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLayer, const char * pFbxFileName)
-    {
-        // Load the textures into GPU, only for file texture now
-        //const int lTextureCount = pScene->GetTextureCount();
-        //for (int lTextureIndex = 0; lTextureIndex < lTextureCount; ++lTextureIndex)
-        //{
-        //    FbxTexture * lTexture = pScene->GetTexture(lTextureIndex);
-        //    FbxFileTexture * lFileTexture = FbxCast<FbxFileTexture>(lTexture);
-        //    if (lFileTexture && !lFileTexture->GetUserDataPtr())
-        //    {
-        //        // Try to load the texture from absolute path
-        //        const FbxString lFileName = lFileTexture->GetFileName();
-        //        
-        //        // Only TGA textures are supported now.
-        //        if (lFileName.Right(3).Upper() != "TGA")
-        //        {
-        //            FBXSDK_printf("Only TGA textures are supported now: %s\n", lFileName.Buffer());
-        //            continue;
-        //        }
+		// Bake node attributes and materials under this node recursively.
+		// Currently only mesh, light and material.
+		void LoadCacheRecursive(FbxNode * pNode, FbxAnimLayer * pAnimLayer)
+		{
+			//// Bake material and hook as user data.
+			//const int lMaterialCount = pNode->GetMaterialCount();
+			//for (int lMaterialIndex = 0; lMaterialIndex < lMaterialCount; ++lMaterialIndex)
+			//{
+			//    FbxSurfaceMaterial * lMaterial = pNode->GetMaterial(lMaterialIndex);
+			//    if (lMaterial && !lMaterial->GetUserDataPtr())
+			//    {
+			//        FbxAutoPtr<MaterialCache> lMaterialCache(new MaterialCache);
+			//        if (lMaterialCache->Initialize(lMaterial))
+			//        {
+			//            lMaterial->SetUserDataPtr(lMaterialCache.Release());
+			//        }
+			//    }
+			//}
 
-        //        GLuint lTextureObject = 0;
-        //        bool lStatus = LoadTextureFromFile(lFileName, lTextureObject);
+			FbxNodeAttribute* lNodeAttribute = pNode->GetNodeAttribute();
+			if (lNodeAttribute)
+			{
+				// Bake mesh as VBO(vertex buffer object) into GPU.
+				if (lNodeAttribute->GetAttributeType() == FbxNodeAttribute::eMesh)
+				{
+					FbxMesh * lMesh = pNode->GetMesh();
+					if (lMesh && !lMesh->GetUserDataPtr())
+					{
+						FbxAutoPtr<AGE::FBXMesh> lMeshCache(new AGE::FBXMesh);
+						if (lMeshCache->Initialize(lMesh))
+						{
+							lMesh->SetUserDataPtr(lMeshCache.Release());
+						}
+					}
+				}
+				// Bake light properties.
+				//else if (lNodeAttribute->GetAttributeType() == FbxNodeAttribute::eLight)
+				//{
+				//	    FbxLight * lLight = pNode->GetLight();
+				//	    if (lLight && !lLight->GetUserDataPtr())
+				//	    {
+				//	        FbxAutoPtr<LightCache> lLightCache(new LightCache);
+				//	        if (lLightCache->Initialize(lLight, pAnimLayer))
+				//	        {
+				//	            lLight->SetUserDataPtr(lLightCache.Release());
+				//	        }
+				//	    }
+				//	}
+				//}
 
-        //        const FbxString lAbsFbxFileName = FbxPathUtils::Resolve(pFbxFileName);
-        //        const FbxString lAbsFolderName = FbxPathUtils::GetFolderName(lAbsFbxFileName);
-        //        if (!lStatus)
-        //        {
-        //            // Load texture from relative file name (relative to FBX file)
-        //            const FbxString lResolvedFileName = FbxPathUtils::Bind(lAbsFolderName, lFileTexture->GetRelativeFileName());
-        //            lStatus = LoadTextureFromFile(lResolvedFileName, lTextureObject);
-        //        }
+				const int lChildCount = pNode->GetChildCount();
+				for (int lChildIndex = 0; lChildIndex < lChildCount; ++lChildIndex)
+				{
+					LoadCacheRecursive(pNode->GetChild(lChildIndex), pAnimLayer);
+				}
+			}
+		}
 
-        //        if (!lStatus)
-        //        {
-        //            // Load texture from file name only (relative to FBX file)
-        //            const FbxString lTextureFileName = FbxPathUtils::GetFileName(lFileName);
-        //            const FbxString lResolvedFileName = FbxPathUtils::Bind(lAbsFolderName, lTextureFileName);
-        //            lStatus = LoadTextureFromFile(lResolvedFileName, lTextureObject);
-        //        }
+		// Bake node attributes and materials for this scene and load the textures.
+		void LoadCacheRecursive(FbxScene * pScene, FbxAnimLayer * pAnimLayer, const char * pFbxFileName)
+		{
+			//// Load the textures into GPU, only for file texture now
+			//const int lTextureCount = pScene->GetTextureCount();
+			//for (int lTextureIndex = 0; lTextureIndex < lTextureCount; ++lTextureIndex)
+			//{
+			//    FbxTexture * lTexture = pScene->GetTexture(lTextureIndex);
+			//    FbxFileTexture * lFileTexture = FbxCast<FbxFileTexture>(lTexture);
+			//    if (lFileTexture && !lFileTexture->GetUserDataPtr())
+			//    {
+			//        // Try to load the texture from absolute path
+			//        const FbxString lFileName = lFileTexture->GetFileName();
+			//        
+			//        // Only TGA textures are supported now.
+			//        if (lFileName.Right(3).Upper() != "TGA")
+			//        {
+			//            FBXSDK_printf("Only TGA textures are supported now: %s\n", lFileName.Buffer());
+			//            continue;
+			//        }
 
-        //        if (!lStatus)
-        //        {
-        //            FBXSDK_printf("Failed to load texture file: %s\n", lFileName.Buffer());
-        //            continue;
-        //        }
+			//        GLuint lTextureObject = 0;
+			//        bool lStatus = LoadTextureFromFile(lFileName, lTextureObject);
 
-        //        if (lStatus)
-        //        {
-        //            GLuint * lTextureName = new GLuint(lTextureObject);
-        //            lFileTexture->SetUserDataPtr(lTextureName);
-        //        }
-        //    }
-        //}
+			//        const FbxString lAbsFbxFileName = FbxPathUtils::Resolve(pFbxFileName);
+			//        const FbxString lAbsFolderName = FbxPathUtils::GetFolderName(lAbsFbxFileName);
+			//        if (!lStatus)
+			//        {
+			//            // Load texture from relative file name (relative to FBX file)
+			//            const FbxString lResolvedFileName = FbxPathUtils::Bind(lAbsFolderName, lFileTexture->GetRelativeFileName());
+			//            lStatus = LoadTextureFromFile(lResolvedFileName, lTextureObject);
+			//        }
 
-        LoadCacheRecursive(pScene->GetRootNode(), pAnimLayer, pSupportVBO);
-    }
+			//        if (!lStatus)
+			//        {
+			//            // Load texture from file name only (relative to FBX file)
+			//            const FbxString lTextureFileName = FbxPathUtils::GetFileName(lFileName);
+			//            const FbxString lResolvedFileName = FbxPathUtils::Bind(lAbsFolderName, lTextureFileName);
+			//            lStatus = LoadTextureFromFile(lResolvedFileName, lTextureObject);
+			//        }
 
+			//        if (!lStatus)
+			//        {
+			//            FBXSDK_printf("Failed to load texture file: %s\n", lFileName.Buffer());
+			//            continue;
+			//        }
 
+			//        if (lStatus)
+			//        {
+			//            GLuint * lTextureName = new GLuint(lTextureObject);
+			//            lFileTexture->SetUserDataPtr(lTextureName);
+			//        }
+			//    }
+			//}
+			LoadCacheRecursive(pScene->GetRootNode(), pAnimLayer);
+		}
 
 	private:
 		const std::string _filePath;
@@ -248,5 +277,5 @@ namespace AGE
 		FbxArray<FbxString*> mAnimStackNameArray;
 		FbxArray<FbxNode*> mCameraArray;
 		FbxArray<FbxPose*> mPoseArray;
-	}
+	};
 }
