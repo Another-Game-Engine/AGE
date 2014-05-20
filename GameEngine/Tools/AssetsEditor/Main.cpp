@@ -139,7 +139,7 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "model"), 1, GL_FALSE, &Model[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "view"), 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, &Projection[0][0]);
-		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "bones"), gameplayconvertor->bonesMatrix.size(), GL_FALSE, &gameplayconvertor->bonesMatrix[0][0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "bones"), gameplayconvertor->bonesMatrix.size(), GL_FALSE, glm::value_ptr(gameplayconvertor->bonesMatrix[0]));
 		gameplayconvertor->vertices->draw(GL_TRIANGLES);
 	} while (e->update());
 	config->saveToFile();

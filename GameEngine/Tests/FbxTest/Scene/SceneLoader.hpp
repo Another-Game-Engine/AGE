@@ -3,7 +3,7 @@
 #include <fbxsdk.h>
 #include <string>
 #include <iostream>
-
+#include <vector>
 #include "../FbxMesh.hpp"
 
 namespace AGE
@@ -177,10 +177,11 @@ namespace AGE
 					FbxMesh * lMesh = pNode->GetMesh();
 					if (lMesh && !lMesh->GetUserDataPtr())
 					{
-						FbxAutoPtr<AGE::FBXMesh> lMeshCache(new AGE::FBXMesh);
-						if (lMeshCache->Initialize(lMesh))
+						_mesh.resize(_mesh.size() + 1);
+						auto &mesh = _mesh.back();
+						if (!mesh.Initialize(lMesh))
 						{
-							lMesh->SetUserDataPtr(lMeshCache.Release());
+							_status += "Mesh failed to load.\n";
 						}
 					}
 				}
@@ -198,12 +199,11 @@ namespace AGE
 				//	    }
 				//	}
 				//}
-
-				const int lChildCount = pNode->GetChildCount();
-				for (int lChildIndex = 0; lChildIndex < lChildCount; ++lChildIndex)
-				{
-					LoadCacheRecursive(pNode->GetChild(lChildIndex), pAnimLayer);
-				}
+			}
+			const int lChildCount = pNode->GetChildCount();
+			for (int lChildIndex = 0; lChildIndex < lChildCount; ++lChildIndex)
+			{
+				LoadCacheRecursive(pNode->GetChild(lChildIndex), pAnimLayer);
 			}
 		}
 
@@ -277,5 +277,6 @@ namespace AGE
 		FbxArray<FbxString*> mAnimStackNameArray;
 		FbxArray<FbxNode*> mCameraArray;
 		FbxArray<FbxPose*> mPoseArray;
+		std::vector<AGE::FBXMesh> _mesh;
 	};
 }

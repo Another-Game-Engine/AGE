@@ -73,7 +73,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Vendors/FBX/2015.1/include/;$(SolutionDir)Vendors/OpenGL/include/;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Vendors/FBX/2015.1/include/;$(SolutionDir)Vendors/OpenGL/include/;$(SolutionDir)Vendors;$(IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)Vendors/FBX/2015.1/lib/vs2013/x64/debug/;$(SolutionDir)Vendors/OpenGL/lib/x64;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
