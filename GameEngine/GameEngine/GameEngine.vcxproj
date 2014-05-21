@@ -277,6 +277,7 @@
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
+    <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
     <ClInclude Include="Engine\Systems\DownSampleSystem.hh" />

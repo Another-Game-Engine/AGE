@@ -32,9 +32,7 @@ private:
 	std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 	std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
-	std::vector<glm::mat4>                                                  _localTransform;
-	std::vector<glm::mat4>                                                  _globalTransform;
-	std::vector<std::array<ENTITY_ID, 255>>                                 _graphnode;
+	std::array<glm::mat4, MAX_ENTITY_NUMBER>                                _entityTransform;
 	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
 	int test = 0;
@@ -70,8 +68,6 @@ public:
 		{
 			auto &e = _pool[_entityNumber];
 			e.entity.id = _entityNumber;
-			_localTransform.resize(_entityNumber + 1);
-			_globalTransform.resize(_entityNumber + 1);
 			assert(++_entityNumber != UINT16_MAX);
 			return e.entity;
 		}
@@ -93,8 +89,7 @@ public:
 		data.entity.flags = 0;
 		cachedCode = data.barcode;
 		data.barcode.reset();
-		_localTransform[e.id] = glm::mat4(1);
-		_globalTransform[e.id] = glm::mat4(1);
+		_entityTransform[e.id] = glm::mat4(1);
 		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
 		{
 			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))
@@ -110,9 +105,9 @@ public:
 		_free.push(e.id);
 	}
 
-	const glm::mat4 &getLocalTransform(const Entity &e) const;
-	const glm::mat4 &getGlobalTransform(const Entity &e) const;
-	void setLocalTransform(Entity &e, const glm::mat4 &trans, bool notifyTransformation = false);
+	const glm::mat4 &getTransform(const Entity &e) const;
+	glm::mat4 &getTransformRef(const Entity &e);
+	void setTransform(Entity &e, const glm::mat4 &trans);
 
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)

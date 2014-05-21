@@ -101,7 +101,7 @@ namespace Component
 			_reset();
 			shapeType = c;
 			btTransform transform;
-			auto &entityTransform = _scene.lock()->getLocalTransform(entity);
+			auto &entityTransform = _scene.lock()->getTransform(entity);
 			glm::vec3 position = posFromMat4(entityTransform);
 			glm::vec3 scale = scaleFromMat4(entityTransform);
 			glm::vec3 rot = rotFromMat4(entityTransform, true);

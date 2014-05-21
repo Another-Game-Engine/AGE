@@ -98,7 +98,7 @@ public:
 		cam->attachSkybox(getInstance<AssetsManager>()->get<CubeMapFile>("skybox__space"), "cubemapShader");
 		cam->sampleNbr = 0;
 
-		setLocalTransform(camera, glm::translate(glm::mat4(1), glm::vec3(0, 0, -40)));
+		setTransform(camera, glm::translate(glm::mat4(1), glm::vec3(0, 0, -40)));
 
 
 	auto light = createEntity();
@@ -106,19 +106,19 @@ public:
 	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 50);
 	lightComponent->lightData.positionPower.w = 2.0f;
 	lightComponent->lightData.hasShadow = -1;
-	setLocalTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 2, 0)));
+	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 2, 0)));
 
 	light = createEntity();
 	lightComponent = addComponent<Component::PointLight>(light);
 	lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
 	lightComponent->lightData.positionPower.w = 0;
 	lightComponent->lightData.hasShadow = -1;
-	setLocalTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
+	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
 
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto plane = createEntity();
-	setLocalTransform(plane, glm::translate(getLocalTransform(plane), glm::vec3(0, -10, 0)));
-	setLocalTransform(plane, glm::scale(getLocalTransform(plane), glm::vec3(100, 1, 100)));
+	setTransform(plane, glm::translate(getTransform(plane), glm::vec3(0, -10, 0)));
+	setTransform(plane, glm::scale(getTransform(plane), glm::vec3(100, 1, 100)));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 	mesh->setShader("MaterialBasic");
 	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
@@ -145,8 +145,7 @@ public:
 			for (auto i = 0; i < 50; ++i)
 			{
 				auto e = createEntity();
-				setLocalTransform(e, glm::translate(getLocalTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
-//				setLocalTransform(e, glm::scale(getLocalTransform(e), glm::vec3(2.0f)));
+//				setTransform(e, glm::scale(getTransform(e), glm::vec3(2.0f)));
 #ifdef LIFETIME_ACTIVATED
 				addComponent<Component::Lifetime>(e, 0.5f);
 #endif
@@ -159,7 +158,11 @@ public:
 #endif
 #ifdef RENDERING_ACTIVATED
 
+				setTransform(e, glm::translate(getTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
 
+#ifdef PHYSIC_SIMULATION
+				rigidBody->setTransformation(getTransform(e));
+#endif
 
 #ifndef COMPLEX_MESH
 						auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));

@@ -46,8 +46,8 @@ protected:
 		for (auto e : _listeners.getCollection())
 		{
 			auto l = scene->getComponent<Component::AudioListener>(e);
-			auto pos = posFromMat4(scene->getGlobalTransform(e));
-			glm::mat4 m = scene->getGlobalTransform(e);
+			auto pos = posFromMat4(scene->getTransform(e));
+			glm::mat4 m = scene->getTransform(e);
 			glm::vec4 u(0,-1,0,0);
 			u = m * u;
 			glm::vec4 f(0,0,1,0);

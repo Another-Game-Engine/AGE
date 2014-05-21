@@ -101,7 +101,7 @@ void AudioEmitter::updatePosition()
 			continue;
 		}
 		//@CESAR TODO
-		//glm::vec3 pos = posFromMat4(_entity->getGlobalTransform());
+		//glm::vec3 pos = posFromMat4(_entity->getTransform());
 		//FMOD_VECTOR  sourcePos = { pos.x, pos.y, pos.z };
 		//fmodError(e.second.channel->set3DAttributes(&sourcePos, 0));
 	}

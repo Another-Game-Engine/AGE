@@ -56,8 +56,8 @@ protected:
 			pos.x = sin(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist; //-V537
 			pos.y = sin(trackBall->angles.y) * trackBall->dist;
 			pos.z = cos(trackBall->angles.x) * cos(trackBall->angles.y) * trackBall->dist;
-			auto &transform = scene->getLocalTransform(e);
-			auto &tbTransform = scene->getGlobalTransform(trackBall->toLook);
+			auto &transform = scene->getTransform(e);
+			auto &tbTransform = scene->getTransform(trackBall->toLook);
 
 			transform = glm::lookAt(glm::vec3(tbTransform[3]) + pos,
 				glm::vec3(tbTransform[3]),

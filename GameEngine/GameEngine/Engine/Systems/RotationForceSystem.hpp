@@ -31,12 +31,12 @@ private:
 		auto scene = _scene.lock();
 		for (auto e : _filter.getCollection())
 		{
-			auto tr = scene->getLocalTransform(e);
+			auto tr = scene->getTransform(e);
 			glm::vec3 force = scene->getComponent<Component::RotationForce>(e)->getForce();
 			tr = glm::rotate(tr, force.x * t, glm::vec3(1, 0, 0));
 			tr = glm::rotate(tr, force.y * t, glm::vec3(0, 1, 0));
 			tr = glm::rotate(tr, force.z * t, glm::vec3(0, 0, 1));
-			scene->setLocalTransform(e, tr);
+			scene->setTransform(e, tr);
 		}
 	}
 

@@ -39,7 +39,7 @@ private:
 		auto scene = _scene.lock();
 		for (auto e : _filter.getCollection())
 		{
-			auto &entityTrans = scene->getLocalTransform(e);
+			auto &entityTrans = scene->getTransform(e);
 			auto fp = scene->getComponent<Component::FPController>(e);
 			updateComponent(e, fp, time);
 			auto inputs = scene->getInstance<Input>();
@@ -55,7 +55,7 @@ private:
 			m = glm::rotate(m, rot.z, glm::vec3(0, 0, 1));
 			glm::vec3 scale = scaleFromMat4(entityTrans);
 			m = glm::scale(m, scale);
-			scene->setLocalTransform(e, m, true);
+			scene->setTransform(e, m, true);
 
 			float yAngle = inputs->getMouseDelta().y;
 			fp->yOrientation = fp->yOrientation + yAngle * fp->rotateYSpeed;
@@ -64,7 +64,7 @@ private:
 			else if (fp->yOrientation <= -90.0f)
 				fp->yOrientation = -89.9f;
 
-			scene->setLocalTransform(e, glm::rotate(m, fp->yOrientation, glm::vec3(1, 0, 0)), true);
+			scene->setTransform(e, glm::rotate(m, fp->yOrientation, glm::vec3(1, 0, 0)), true);
 		}
 	}
 

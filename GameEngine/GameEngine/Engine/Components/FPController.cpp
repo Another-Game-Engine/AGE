@@ -50,7 +50,7 @@ void FPController::init(const Entity &entity, std::weak_ptr<AScene> scene, short
 	controls.fill(false);
 
 	btTransform transform;
-	auto &entityTransform = scene.lock()->getLocalTransform(entity);
+	auto &entityTransform = scene.lock()->getTransform(entity);
 	glm::vec3 position = posFromMat4(entityTransform);
 	glm::vec3 scale = scaleFromMat4(entityTransform);
 	glm::vec3 rot = rotFromMat4(entityTransform, true);

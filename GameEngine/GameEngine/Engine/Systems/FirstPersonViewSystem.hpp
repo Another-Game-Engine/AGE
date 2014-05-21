@@ -32,10 +32,10 @@ protected:
 		auto scene = _scene.lock();
 		for (auto e : _filter.getCollection())
 		{
-			auto lookAt = scene->getGlobalTransform(e);
+			auto lookAt = scene->getTransform(e);
 			auto camera = scene->getComponent<Component::CameraComponent>(e);
 			lookAt = glm::translate(lookAt, glm::vec3(0, 0, 1));
-			camera->lookAtTransform = glm::lookAt(posFromMat4(scene->getGlobalTransform(e)), posFromMat4(lookAt), glm::vec3(0, 1, 0));
+			camera->lookAtTransform = glm::lookAt(posFromMat4(scene->getTransform(e)), posFromMat4(lookAt), glm::vec3(0, 1, 0));
 		}
 	}
 

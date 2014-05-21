@@ -25,6 +25,9 @@
 #include <cereal/types/set.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/string.hpp>
+
+#include <Physic/DynamicMotionState.hpp>
+
 namespace Component
 {
 	ATTRIBUTE_ALIGNED16(struct) RigidBody : public Component::ComponentBase<RigidBody>
@@ -83,6 +86,20 @@ namespace Component
 			transformConstraint = glm::vec3(1, 1, 1);
 		}
 
+		void setTransformation(const glm::mat4 &transformation)
+		{
+			if (_rigidBody->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT || mass == 0.0f)
+			{
+				std::cout << "Rigidbody is static or kinematic, <setTransformation> does not at effect, you can transform directly the entity" << std::endl;
+				return;
+			}
+			btTransform tt = _rigidBody->getCenterOfMassTransform();
+			tt.setOrigin(convertGLMVectorToBullet(posFromMat4(transformation)));
+			glm::quat rot = glm::quat(rotFromMat4(transformation, true));
+			tt.setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
+			_rigidBody->setCenterOfMassTransform(tt);
+		}
+
 		btMotionState &getMotionState()
 		{
 			assert(_motionState != nullptr && "Motion state is NULL, RigidBody error. Tips : Have you setAcollisionShape to Component ?.");
@@ -119,11 +136,9 @@ namespace Component
 			_reset();
 			shapeType = c;
 
-			auto &entityTransform = _scene.lock()->getLocalTransform(entity);
-			btTransform transform;
-			transform.setFromOpenGLMatrix(glm::value_ptr(entityTransform));
+			auto &entityTransform = _scene.lock()->getTransform(entity);
 
-			_motionState = std::shared_ptr<btMotionState>(new btDefaultMotionState(transform));
+			_motionState = std::shared_ptr<btMotionState>(new DynamicMotionState(_scene.lock()->getTransformRef(entity)));
 			if (c == BOX)
 			{
 				_collisionShape = std::shared_ptr<btCollisionShape>(new btBoxShape(btVector3(0.5, 0.5, 0.5)));
@@ -163,7 +178,6 @@ namespace Component
 			}
 			if (mass != 0)
 				_collisionShape->calculateLocalInertia(mass, inertia);
-			_motionState->setWorldTransform(transform);
 			glm::vec3 scale = scaleFromMat4(entityTransform);
 			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_rigidBody = std::shared_ptr<btRigidBody>(new btRigidBody(mass, _motionState.get(), _collisionShape.get(), inertia));
@@ -327,7 +341,6 @@ namespace Component
 			}
 		}
 	};
-
 }
 
 #endif //!__RIGID_BODY_HPP__
