@@ -21,6 +21,7 @@ namespace gl
 		// constructor
 		VerticesPool();
 		~VerticesPool();
+		VerticesPool(uint8_t nbrAttribute, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
 		VerticesPool(VerticesPool const &copy);
 		VerticesPool &operator=(VerticesPool const &p);
 

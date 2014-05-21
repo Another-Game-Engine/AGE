@@ -34,6 +34,25 @@ namespace gl
 		}
 	}
 
+	VerticesPool::VerticesPool(uint8_t nbrAttribute, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
+		: _nbrAttribute(nbrAttribute),
+		_typeComponent(NULL),
+		_sizeTypeComponent(NULL),
+		_nbrComponent(NULL),
+		_nbrBytePool(0),
+		_needSync(0)
+	{
+		if (_nbrAttribute)
+		{
+			_typeComponent = new GLenum[_nbrAttribute];
+			_sizeTypeComponent = new uint8_t[_nbrAttribute];
+			_nbrComponent = new uint8_t[_nbrAttribute];
+			memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
+			memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+		}
+	}
+
 	VerticesPool::VerticesPool(VerticesPool const &copy)
 		: _nbrAttribute(copy._nbrAttribute),
 		_typeComponent(NULL),

@@ -5,8 +5,7 @@
 #include <OpenGL/Key.hh>
 #include <OpenGL/VertexBuffer.hh>
 #include <Utils/Dependency.hpp>
-#include <vector>
-#include <utility>
+#include <map>
 
 namespace gl
 {
@@ -26,14 +25,14 @@ namespace gl
 		~VerticesManager();
 
 		// handle pools
-		Key<VerticesPool> const &addPool();
-		Key<VerticesPool> const &addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
+		Key<VerticesPool> addPool();
+		Key<VerticesPool> addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
 		Key<VerticesPool> getPool(size_t index) const;
 		size_t nbrPool() const;
 		VerticesManager &rmPool(Key<VerticesPool> const &key);
 
 		//handle Vertices
-		Key<Vertices> const &addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
+		Key<Vertices> addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
 		VerticesManager &rmVertices(Key<Vertices> const &key);
 		Key<Vertices> getVertices(size_t index) const;
 		size_t getNbrVertices() const;
@@ -44,8 +43,8 @@ namespace gl
 
 	private:
 		// data represent pools
-		std::vector<std::pair<Key<VerticesPool>, VerticesPool>> _pools;
-		std::vector<std::pair<Key<Vertices>, Vertices>> _vertices;
+		std::map<Key<VerticesPool>, VerticesPool> _pools;
+		std::map<Key<Vertices>, Vertices> _vertices;
 	};
 }
 

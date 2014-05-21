@@ -18,46 +18,33 @@ namespace gl
 
 	}
 
-	Key<VerticesPool> const &VerticesManager::addPool()
+	Key<VerticesPool> VerticesManager::addPool()
 	{
-		for (size_t index = 0; index < _pools.size(); ++index)
-		{
-			if (!_pools[index].first)
-			{
-				_pools[index].first = Key<VerticesPool>();
-				_pools[index].second = VerticesPool();
-				return (_pools[index].first);
-			}
-		}
-		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool()));
-		return (_pools[_pools.size() - 1].first);
+		Key<VerticesPool> key;
+		_pools[key] = VerticesPool();
+		return (key);
 	}
 
-	Key<VerticesPool> const &VerticesManager::addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
+	Key<VerticesPool> VerticesManager::addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
 	{
-		for (size_t index = 0; index < _pools.size(); ++index)
-		{
-			if (!_pools[index].first)
-			{
-				_pools[index].first = Key<VerticesPool>();
-				_pools[index].second = VerticesPool();
-				return (_pools[index].first);
-			}
-		}
-		_pools.push_back(std::make_pair(Key<VerticesPool>(), VerticesPool()));
-		_pools.back().second.setData(nbrAttributes, typeComponent, sizeTypeComponent, nbrComponent);
-		return (_pools[_pools.size() - 1].first);
+		Key<VerticesPool> key;
+
+		_pools[key] = VerticesPool(nbrAttributes, typeComponent, sizeTypeComponent, nbrComponent);
+		return (key);
 	}
 
-	Key<VerticesPool> VerticesManager::getPool(size_t index) const
+	Key<VerticesPool> VerticesManager::getPool(size_t target) const
 	{
-		if (index >= _pools.size())
+		if (target >= _pools.size())
 		{
 			Key<VerticesPool> corruptKey;
 			corruptKey.destroy();
 			return (corruptKey);
 		}
-		return (_pools[index].first);
+		auto &element = _pools.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
 	}
 
 	size_t VerticesManager::nbrPool() const
@@ -70,26 +57,22 @@ namespace gl
 	{
 		if (!key)
 			return (*this);
-		for (size_t index = 0; index < _pools.size(); ++index)
-		{
-			if (_pools[index].first == key)
-			{
-				_pools[index].first.destroy();
-				return (*this);
-			}
-		}
+		_pools.erase(key);
 		return (*this);
 	}
 
-	Key<Vertices> VerticesManager::getVertices(size_t index) const
+	Key<Vertices> VerticesManager::getVertices(size_t target) const
 	{
-		if (index >= _vertices.size())
+		if (target >= _vertices.size())
 		{
 			Key<Vertices> corruptKey;
 			corruptKey.destroy();
 			return (corruptKey);
 		}
-		return (_vertices[index].first);
+		auto &element = _vertices.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
 	}
 
 	size_t VerticesManager::getNbrVertices() const
@@ -97,33 +80,19 @@ namespace gl
 		return (_vertices.size());
 	}
 
-	Key<Vertices> const &VerticesManager::addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers)
+	Key<Vertices> VerticesManager::addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers)
 	{
-		for (size_t index = 0; index < _vertices.size(); ++index)
-		{
-			if (!_vertices[index].first)
-			{
-				_vertices[index].second = Vertices(nbrVertices, nbrBuffers, sizeBuffers, buffers);
-				_vertices[index].first = Key<Vertices>();
-				return (_vertices[index].first);
-			}
-		}
-		_vertices.push_back(std::make_pair(Key<Vertices>(), Vertices(nbrVertices, nbrBuffers, sizeBuffers, buffers)));
-		return (_vertices[_vertices.size() - 1].first);
+		Key<Vertices> key;
+
+		_vertices[key] = Vertices(nbrVertices, nbrBuffers, sizeBuffers, buffers);
+		return (key);
 	}
 
 	VerticesManager &VerticesManager::rmVertices(Key<Vertices> const &key)
 	{
 		if (!key)
 			return (*this);
-		for (size_t index = 0; index < _vertices.size(); ++index)
-		{
-			if (_vertices[index].first == key)
-			{
-				_vertices[index].first.destroy();
-				return (*this);
-			}
-		}
+		_vertices.erase(key);
 		return (*this);
 	}
 
