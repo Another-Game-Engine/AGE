@@ -26,6 +26,8 @@ namespace gl
 		bool operator!() const;
 		bool operator==(Key<TYPE> const &compare) const;
 		bool operator!=(Key<TYPE> const &compare) const;
+		bool operator<(Key<TYPE> const &compare) const;
+		bool operator>(Key<TYPE> const &compare) const;
 		void destroy();
 	private:
 		std::size_t _id;

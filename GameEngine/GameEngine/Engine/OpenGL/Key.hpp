@@ -70,6 +70,23 @@ namespace gl
 	{
 		_id = -1;
 	}
+
+	template <typename TYPE>
+	bool Key<TYPE>::operator<(Key<TYPE> const &compare) const
+	{
+		if (_id < compare._id)
+			return (true);
+		return (false);
+	}
+
+	template <typename TYPE>
+	bool Key<TYPE>::operator>(Key<TYPE> const &compare) const
+	{
+		if (_id > compare._id)
+			return (true);
+		return (false);
+	}
+
 }
 
 #endif

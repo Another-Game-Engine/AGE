@@ -39,7 +39,7 @@ namespace gl
 
 		// attach vertices to pools
 		VerticesManager &attachVerticesToPool(Key<Vertices> const &vertices, Key<VerticesPool> const &pool);
-		VerticesManager &detachVerticesToPool(Key<Vertices> const &vertices, Key<VerticesPool> const &pool);
+		VerticesManager &dettachVerticesToPool(Key<Vertices> const &vertices);
 
 	private:
 		// data represent pools

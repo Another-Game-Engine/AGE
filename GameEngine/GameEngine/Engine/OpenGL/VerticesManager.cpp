@@ -96,4 +96,20 @@ namespace gl
 		return (*this);
 	}
 
+	VerticesManager &VerticesManager::attachVerticesToPool(Key<Vertices> const &keyvertices, Key<VerticesPool> const &keypool)
+	{
+		auto vertices = _vertices.find(keyvertices);
+		if (vertices == _vertices.end())
+			return (*this);
+		auto pool = _pools.find(keypool);
+		if (pool == _pools.end())
+			return (*this);
+		return (*this);
+	}
+
+	VerticesManager &VerticesManager::dettachVerticesToPool(Key<Vertices> const &vertice)
+	{
+
+		return (*this);
+	}
 }
