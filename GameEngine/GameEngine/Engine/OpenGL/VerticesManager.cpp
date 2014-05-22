@@ -83,7 +83,7 @@ namespace gl
 	Key<Vertices> VerticesManager::addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers)
 	{
 		Key<Vertices> key;
-
+		
 		_vertices[key] = Vertices(nbrVertices, nbrBuffers, sizeBuffers, buffers);
 		return (key);
 	}
@@ -98,18 +98,27 @@ namespace gl
 
 	VerticesManager &VerticesManager::attachVerticesToPool(Key<Vertices> const &keyvertices, Key<VerticesPool> const &keypool)
 	{
-		auto vertices = _vertices.find(keyvertices);
+		auto &vertices = _vertices.find(keyvertices);
 		if (vertices == _vertices.end())
 			return (*this);
-		auto pool = _pools.find(keypool);
+		auto &pool = _pools.find(keypool);
 		if (pool == _pools.end())
 			return (*this);
+		vertices->second._pool = &pool->second;
+		pool->second.addVertices(vertices->second);
 		return (*this);
 	}
 
-	VerticesManager &VerticesManager::dettachVerticesToPool(Key<Vertices> const &vertice)
+	VerticesManager &VerticesManager::dettachVerticesToPool(Key<Vertices> const &keyvertices)
 	{
-
+		auto &vertices = _vertices.find(keyvertices);
+		if (vertices == _vertices.end())
+			return (*this);
+		if (vertices->second._pool)
+		{
+			vertices->second._pool->rmVertices(vertices->second);
+			vertices->second._pool = NULL;
+		}
 		return (*this);
 	}
 }

@@ -3,6 +3,16 @@
 
 namespace gl
 {
+	Vertices::Vertices()
+		: _buffers(NULL),
+		_sizeBuffers(NULL),
+		_nbrVertices(0),
+		_nbrBuffers(0),
+		_indexOnPool(0),
+		_pool(NULL)
+	{
+	}
+
 	// nbrVertices is the number will be draw during a render, nbrBuffers is each buffer use for each attribute,
 	// sizeBuffer indicate for each buffer is size in byte, buffers contain all data use for the draw for the attribute.
 	Vertices::Vertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers)
@@ -10,7 +20,8 @@ namespace gl
 		_sizeBuffers(NULL),
 		_nbrVertices(nbrVertices),
 		_nbrBuffers(nbrBuffers),
-		_location(NULL)
+		_indexOnPool(0),
+		_pool(NULL)
 	{
 		if (_nbrBuffers)
 		{
@@ -30,7 +41,8 @@ namespace gl
 		_sizeBuffers(NULL),
 		_nbrVertices(copy._nbrVertices),
 		_nbrBuffers(copy._nbrBuffers),
-		_location(copy._location)
+		_indexOnPool(copy._indexOnPool),
+		_pool(copy._pool)
 	{
 		if (_nbrBuffers)
 		{
@@ -80,7 +92,8 @@ namespace gl
 		memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
 		for (size_t index = 0; index < _nbrBuffers; ++index)
 			memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
-		_location = v._location;
+		_indexOnPool = v._indexOnPool;
+		_pool = v._pool;
 		return (*this);
 	}
 
@@ -116,14 +129,4 @@ namespace gl
 		return (_nbrVertices);
 	}
 
-	Vertices &Vertices::setMemoryBlocksGPU(MemoryBlocksGPU *location)
-	{
-		_location = location;
-		return (*this);
-	}
-
-	MemoryBlocksGPU const *Vertices::getMemoryBlocksGPU() const
-	{
-		return (_location);
-	}
 }

@@ -37,20 +37,26 @@ namespace gl
 		GLenum getTypeComponent(uint8_t index) const;
 		uint8_t getSizeTypeComponent(uint8_t index) const;
 		uint8_t getNbrComponent(uint8_t index) const;
+		size_t getSizeAttribute(uint8_t index) const;
+		size_t getOffsetAttribute(uint8_t index) const;
+		size_t getNbrBytePool() const;
 
 		// Vertices handler
 		VerticesPool &addVertices(Vertices &vertices);
 		VerticesPool &rmVertices(Vertices &vertices);
+		VerticesPool &clearPool();
 
 	private:
 		// data represent attributes
+		uint8_t _nbrAttribute;
 		GLenum *_typeComponent;
 		uint8_t *_sizeTypeComponent;
 		uint8_t *_nbrComponent;
-		uint8_t _nbrAttribute;
 
 		// data represent all vertices
-		std::vector<std::pair<bool, MemoryBlocksGPU>> _pool;
+		std::vector<std::pair<Vertices *, MemoryBlocksGPU>> _pool;
+		size_t *_sizeAttribute;
+		size_t *_offsetAttribute;
 		size_t _nbrBytePool;
 		bool _needSync;
 

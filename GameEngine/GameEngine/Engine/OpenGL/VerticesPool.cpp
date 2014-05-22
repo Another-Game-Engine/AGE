@@ -17,6 +17,8 @@ namespace gl
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
+		_sizeAttribute(NULL),
+		_offsetAttribute(NULL),
 		_nbrBytePool(0),
 		_needSync(false)
 	{
@@ -25,6 +27,10 @@ namespace gl
 			_typeComponent = new GLenum[_nbrAttribute];
 			_sizeTypeComponent = new uint8_t[_nbrAttribute];
 			_nbrComponent = new uint8_t[_nbrAttribute];
+			_sizeAttribute = new size_t[_nbrAttribute];
+			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
+			_offsetAttribute = new size_t[_nbrAttribute];
+			memset(_offsetAttribute, 0, sizeof(size_t) * _nbrAttribute);
 			for (uint8_t index = 0; index < _nbrAttribute; ++index)
 			{
 				_typeComponent[index] = GL_FLOAT;
@@ -39,6 +45,8 @@ namespace gl
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
+		_sizeAttribute(NULL),
+		_offsetAttribute(NULL),
 		_nbrBytePool(0),
 		_needSync(0)
 	{
@@ -47,6 +55,10 @@ namespace gl
 			_typeComponent = new GLenum[_nbrAttribute];
 			_sizeTypeComponent = new uint8_t[_nbrAttribute];
 			_nbrComponent = new uint8_t[_nbrAttribute];
+			_sizeAttribute = new size_t[_nbrAttribute];
+			_offsetAttribute = new size_t[_nbrAttribute];
+			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
+			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 			memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
 			memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
 			memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
@@ -58,6 +70,8 @@ namespace gl
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
+		_sizeAttribute(NULL),
+		_offsetAttribute(NULL),
 		_nbrBytePool(copy._nbrBytePool),
 		_needSync(copy._needSync)
 	{
@@ -66,6 +80,10 @@ namespace gl
 			_typeComponent = new GLenum[_nbrAttribute];
 			_sizeTypeComponent = new uint8_t[_nbrAttribute];
 			_nbrComponent = new uint8_t[_nbrAttribute];
+			_sizeAttribute = new size_t[_nbrAttribute];
+			_offsetAttribute = new size_t[_nbrAttribute];
+			memcpy(_sizeAttribute, copy._sizeAttribute, sizeof(size_t)* _nbrAttribute);
+			memcpy(_offsetAttribute, copy._offsetAttribute, sizeof(size_t)* _nbrAttribute);
 			memcpy(_typeComponent, copy._typeComponent, sizeof(GLenum)* _nbrAttribute);
 			memcpy(_sizeTypeComponent, copy._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
 			memcpy(_nbrComponent, copy._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
@@ -74,11 +92,14 @@ namespace gl
 
 	VerticesPool::~VerticesPool()
 	{
+		clearPool();
 		if (_nbrAttribute)
 		{
 			delete[] _typeComponent;
 			delete[] _sizeTypeComponent;
 			delete[] _nbrComponent;
+			delete[] _sizeAttribute;
+			delete[] _offsetAttribute;
 		}
 	}
 
@@ -96,6 +117,8 @@ namespace gl
 					delete[] _typeComponent;
 					delete[] _sizeTypeComponent;
 					delete[] _nbrComponent;
+					delete[] _sizeAttribute;
+					delete[] _offsetAttribute;
 				}
 				_nbrAttribute = p._nbrAttribute;
 				if (_nbrAttribute)
@@ -103,14 +126,20 @@ namespace gl
 					_typeComponent = new GLenum[p._nbrAttribute];
 					_sizeTypeComponent = new uint8_t[p._nbrAttribute];
 					_nbrComponent = new uint8_t[p._nbrAttribute];
+					_sizeAttribute = new size_t[_nbrAttribute];
+					_offsetAttribute = new size_t[_nbrAttribute];
 				}
 				else
 				{
 					_typeComponent = NULL;
 					_sizeTypeComponent = NULL;
 					_nbrComponent = NULL;
+					_sizeAttribute = NULL;
+					_offsetAttribute = NULL;
 				}
 			}
+			memcpy(_sizeAttribute, p._sizeAttribute, sizeof(size_t)* _nbrAttribute);
+			memcpy(_offsetAttribute, p._offsetAttribute, sizeof(size_t)* _nbrAttribute);
 			memcpy(_typeComponent, p._typeComponent, sizeof(GLenum)* _nbrAttribute);
 			memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
 			memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
@@ -129,6 +158,8 @@ namespace gl
 				delete[] _typeComponent;
 				delete[] _sizeTypeComponent;
 				delete[] _nbrComponent;
+				delete[] _sizeAttribute;
+				delete[] _offsetAttribute;
 			}
 			_nbrAttribute = nbrAttribute;
 			if (_nbrAttribute)
@@ -136,6 +167,8 @@ namespace gl
 				_typeComponent = new GLenum[_nbrAttribute];
 				_sizeTypeComponent = new uint8_t[_nbrAttribute];
 				_nbrComponent = new uint8_t[_nbrAttribute];
+				_sizeAttribute = new size_t[_nbrAttribute];
+				_offsetAttribute = new size_t[_nbrAttribute];
 				for (uint8_t index = 0; index < _nbrAttribute; ++index)
 				{
 					_typeComponent[index] = GL_FLOAT;
@@ -147,8 +180,12 @@ namespace gl
 			{
 				_typeComponent = NULL;
 				_sizeTypeComponent = NULL;
+				_typeComponent = NULL;
+				_sizeTypeComponent = NULL;
 				_nbrComponent = NULL;
 			}
+			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
+			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		}
 		return (*this);
 	}
@@ -199,6 +236,8 @@ namespace gl
 				delete[] _sizeTypeComponent;
 				delete[] _typeComponent;
 				delete[] _nbrComponent;
+				delete[] _sizeAttribute;
+				delete[] _offsetAttribute;
 			}
 			_nbrAttribute = nbrAttributes;
 			if (_nbrAttribute)
@@ -206,14 +245,20 @@ namespace gl
 				_sizeTypeComponent = new uint8_t[_nbrAttribute];
 				_typeComponent = new GLenum[_nbrAttribute];
 				_nbrComponent = new uint8_t[_nbrAttribute];
+				_sizeAttribute = new size_t[_nbrAttribute];
+				_offsetAttribute = new size_t[_nbrAttribute];
 			}
 			else
 			{
+				_sizeAttribute = NULL;
+				_offsetAttribute = NULL;
 				_sizeTypeComponent = NULL;
 				_typeComponent = NULL;
 				_nbrComponent = NULL;
 			}
 		}
+		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
+		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
 		memcpy(_typeComponent, typeComponent, sizeof(GLenum)* nbrAttributes);
 		memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* nbrAttributes);
@@ -255,6 +300,32 @@ namespace gl
 		return (_nbrComponent[index]);
 	}
 
+	size_t VerticesPool::getSizeAttribute(uint8_t index) const
+	{
+		if (index >= _nbrAttribute)
+		{
+			WARNING_MESSAGE_ATTRIBUTE_GETTING("size attribute")
+				return (-1);
+		}
+		return (_sizeAttribute[index]);
+	}
+
+	size_t VerticesPool::getOffsetAttribute(uint8_t index) const
+	{
+		if (index >= _nbrAttribute)
+		{
+			WARNING_MESSAGE_ATTRIBUTE_GETTING("offset attribute")
+			return (-1);
+		}
+		return (_offsetAttribute[index]);
+	}
+
+	size_t VerticesPool::getNbrBytePool() const
+	{
+		return (_nbrBytePool);
+	}
+
+
 	VerticesPool &VerticesPool::addVertices(Vertices &vertices)
 	{
 		// test if a field is empty
@@ -262,52 +333,51 @@ namespace gl
 		{
 			if (_pool[index].first && vertices.getNbrVertices() == _pool[index].second.getNbrElement())
 			{
-				_pool[index].first = true;
-				vertices.setMemoryBlocksGPU(&(_pool[_pool.size() - 1].second));
+				vertices._indexOnPool = index;
+				_pool[index].first = &vertices;
 				return (*this);
 			}
 		}
-		// no field is free, push a new field to store data
+		// no one field is free, push a new field to store data
 		_needSync = true;
 		MemoryBlocksGPU memory;
 		memory.setNbrElement(vertices.getNbrVertices());
 		memory.setNbrBlock(_nbrAttribute);
 		for (size_t index = 0; index < _nbrAttribute; ++index)
 		{
-			size_t nbrByteAttributes = _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrVertices();
-			_nbrBytePool += nbrByteAttributes;
-			memory.setSizeBlock(index, nbrByteAttributes);
+			size_t sizeAttribute = _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrVertices();
+			_nbrBytePool += sizeAttribute;
+			_sizeAttribute[index] += sizeAttribute;
+			memory.setSizeBlock(index, sizeAttribute);
+			if (index > 0)
+				_offsetAttribute[index] = _sizeAttribute[index - 1];
 		}
-		if (_nbrAttribute)
-		{
-			// set start of attribute
-			memory.setStartBlock(0, 0);
-			for (size_t index = 1; index < _nbrAttribute; ++index)
-				memory.setStartBlock(index, memory.getStartBlock(index - 1) + memory.getSizeBlock(index - 1));
-			// set the base where start the attribute
-			memory.setOffset(0, 0);
-			for (size_t index = 1; index < _nbrAttribute; ++index)
-				memory.setOffset(index, memory.getOffset(index) + (_sizeTypeComponent[index - 1] * _nbrComponent[index - 1] * vertices.getNbrVertices()));
-		}
-		_pool.push_back(std::make_pair(true, memory));
-		vertices.setMemoryBlocksGPU(&(_pool[_pool.size() - 1].second));
+		
+		_pool.push_back(std::make_pair(&vertices, memory));
+		vertices._indexOnPool = _pool.size() - 1;
 		return (*this);
 	}
 
 	VerticesPool &VerticesPool::rmVertices(Vertices &vertices)
 	{
-		MemoryBlocksGPU const *memory = vertices.getMemoryBlocksGPU();
+		_pool[vertices._indexOnPool].first->_indexOnPool = 0;
+		_pool[vertices._indexOnPool].first->_pool = NULL;
+		_pool[vertices._indexOnPool].first = NULL;
+		return (*this);
+	}
 
-		vertices.setMemoryBlocksGPU(NULL);
+	VerticesPool &VerticesPool::clearPool()
+	{
+		_needSync = false;
+		_nbrBytePool = 0;
+		memset(_sizeAttribute, 0, sizeof(size_t) * _nbrAttribute);
+		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		for (size_t index = 0; index < _pool.size(); ++index)
 		{
-			if (memory == &_pool[index].second)
-			{
-				_pool[index].first = false;
-				return (*this);
-			}
+			_pool[index].first->_indexOnPool = NULL;
+			_pool[index].first->_pool = NULL;
 		}
-		return (*this);
+		_pool.clear();
 	}
 
 }

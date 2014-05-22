@@ -1,23 +1,29 @@
 #ifndef VERTICE_HH_
 # define VERTICE_HH_
 
-#define TEST_ARCHI 1
-
-#if TEST_ARCHI
-
-# define WARNING_MESSAGE_BUFFER(index) \
+#define WARNING_MESSAGE_BUFFER(index) \
 	std::cerr << "Warning: the index to get the buffer into vertices [" << index << "] is out of range." << std::endl;\
 
-# define WARNING_MESSAGE_SIZEBUFFER(index) \
+#define WARNING_MESSAGE_SIZEBUFFER(index) \
 	std::cerr << "Warning: the index to get the size buffer into vertices [" << index << "] is out of range." << std::endl;\
 
 #include <stdint.h>
+#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/VerticesPool.hh>
 
 namespace gl
 {
 	class MemoryBlocksGPU;
-	class VerticesPool;
-	
+	class Vertices;
+	template<typename TYPE> class Key;
+
+#define METHODE_ACCESS \
+	friend VerticesManager &VerticesManager::attachVerticesToPool(Key<Vertices> const &, Key<VerticesPool> const &); \
+	friend VerticesManager &VerticesManager::dettachVerticesToPool(Key<Vertices> const &); \
+	friend VerticesPool &VerticesPool::addVertices(Vertices &); \
+	friend VerticesPool &VerticesPool::rmVertices(Vertices &); \
+	friend void VerticesPool::clearPool();
+
 	//!\file VerticesManager.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
@@ -26,6 +32,7 @@ namespace gl
 	class Vertices
 	{
 	public:
+		Vertices();
 		Vertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
 		~Vertices();
 		Vertices(Vertices const &copy);
@@ -36,8 +43,6 @@ namespace gl
 		uint8_t getNbrBuffers() const;
 		size_t getNbrVertices() const;
 
-		Vertices &setMemoryBlocksGPU(MemoryBlocksGPU *location);
-		MemoryBlocksGPU const *getMemoryBlocksGPU() const;
 		Vertices &setPool(VerticesPool const *pool);
 		VerticesPool const *getPool() const;
 
@@ -46,52 +51,13 @@ namespace gl
 		size_t *_sizeBuffers;
 		size_t _nbrVertices;
 		uint8_t _nbrBuffers;
+		
+		size_t _indexOnPool;
+		VerticesPool *_pool;
 
-		MemoryBlocksGPU *_location;
+		METHODE_ACCESS
 	};
+
 }
-
-#else
-# include "Data.hh"
-
-template <uint8_t NBR_ATTRIBUTE> class VertexManager;
-
-template <uint8_t NBR_ATTRIBUTE>
-class Vertice
-{
-public:
-	Vertice();
-	Vertice(std::size_t nbrVertex, std::array<Data, NBR_ATTRIBUTE> attribData, Data const * const indices = NULL);
-	~Vertice();
-	Vertice(Vertice const &copy);
-	Vertice<NBR_ATTRIBUTE> &operator=(Vertice<NBR_ATTRIBUTE> const &vertex);
-	bool operator==(Vertice<NBR_ATTRIBUTE> const &vertex) const;
-	std::size_t getSizeVertexBuffer() const;
-	std::size_t getSizeIndicesBuffer() const;
-	std::size_t getNbrIndices() const;
-	std::size_t getNbrVertex() const;
-	std::size_t getIndexPool() const;
-	void const * const getBuffer(uint8_t index) const;
-	void const * const getIndices() const;
-	bool isDrawable() const;
-	bool hasIndices() const;
-	void draw(GLenum mode = GL_TRIANGLES) const;
-	friend void VertexManager<NBR_ATTRIBUTE>::addVertice(Vertice<NBR_ATTRIBUTE> &vertice);
-	friend void VertexManager<NBR_ATTRIBUTE>::deleteVertice(Vertice<NBR_ATTRIBUTE> &vertice);
-
-private:
-	std::array<Data, NBR_ATTRIBUTE> _bufferData;
-	std::size_t _sizeVertexBuffer;
-	std::size_t _sizeIndicesBuffer;
-	std::size_t _nbrVertex;
-	std::size_t _nbrIndices;
-	Data *_indices;
-	VertexManager<NBR_ATTRIBUTE> *_vertexManager;
-	std::size_t _index;
-};
-
-# include "Vertice.hpp"
-# include "VertexManager.hh"
-#endif
 
 #endif /* !VERTICE_HH_ */
