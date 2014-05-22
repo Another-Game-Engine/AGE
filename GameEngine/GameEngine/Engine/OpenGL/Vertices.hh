@@ -22,7 +22,7 @@ namespace gl
 	friend VerticesManager &VerticesManager::dettachVerticesToPool(Key<Vertices> const &); \
 	friend VerticesPool &VerticesPool::addVertices(Vertices &); \
 	friend VerticesPool &VerticesPool::rmVertices(Vertices &); \
-	friend void VerticesPool::clearPool();
+	friend VerticesPool &VerticesPool::clearPool();
 
 	//!\file VerticesManager.hh
 	//!\author Dorian Pinaud
