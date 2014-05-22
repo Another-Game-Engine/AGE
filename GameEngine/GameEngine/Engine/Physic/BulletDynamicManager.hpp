@@ -23,39 +23,22 @@ public:
 		if (!BulletCollisionManager::init(false))
 			return false;
 
-		//btThreadSupportInterface *m_threadSupportSolver = nullptr;
-		//int maxNumOutstandingTasks = 4;
-
-//	m_threadSupportSolver = createSolverThreadSupport(maxNumOutstandingTasks);
-	_constraintSolver = new btSequentialImpulseConstraintSolver();
-	//this solver requires the contacts to be in a contiguous pool, so avoid dynamic allocation
-//	_dispatcher->setDispatcherFlags(btCollisionDispatcher::CD_DISABLE_CONTACTPOOL_DYNAMIC_ALLOCATION);
-
-
-	btDiscreteDynamicsWorld* world = new btDiscreteDynamicsWorld(_dispatcher, _broadphase, _constraintSolver, _collisionConfiguration);
-
-//	world->getSimulationIslandManager()->setSplitIslands(false);
-//	world->getSolverInfo().m_numIterations = 4;
-//	world->getSolverInfo().m_solverMode = SOLVER_SIMD + SOLVER_USE_WARMSTARTING;//+SOLVER_RANDMIZE_ORDER;
-
-//	world->getDispatchInfo().m_enableSPU = true;
-	world->setGravity(btVector3(0, -10, 0));
-
-	_world = world;
-	_world->getDispatchInfo().m_allowedCcdPenetration = 0.05f;
-	return true;
+		_constraintSolver = new btSequentialImpulseConstraintSolver();
+		_world = std::make_shared<btDiscreteDynamicsWorld>(_dispatcher, _broadphase, _constraintSolver, _collisionConfiguration);
+		std::dynamic_pointer_cast<btDiscreteDynamicsWorld>(_world)->setGravity(btVector3(0, -10, 0));
+		_world->getDispatchInfo().m_allowedCcdPenetration = 0.05f;
+		return true;
 	}
 
 	virtual void uninit()
 	{
 		if (_constraintSolver)
+		{
 			delete _constraintSolver;
+			_constraintSolver = nullptr;
+		}
 	}
-	inline btDynamicsWorld * getWorld() const { return static_cast<btDynamicsWorld *>(_world); }
-
-
-
-
+	inline btDynamicsWorld * getWorld() const { return std::dynamic_pointer_cast<btDynamicsWorld>(_world).get(); }
 private:
 
 };
