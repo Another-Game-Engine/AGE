@@ -103,17 +103,17 @@ public:
 
 	auto light = createEntity();
 	auto lightComponent = addComponent<Component::PointLight>(light);
-	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 50);
-	lightComponent->lightData.positionPower.w = 2.0f;
+	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 30);
+	lightComponent->lightData.positionPower.w = 0.5f;
 	lightComponent->lightData.hasShadow = -1;
-	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 2, 0)));
+	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 3, 0)));
 
-	light = createEntity();
-	lightComponent = addComponent<Component::PointLight>(light);
-	lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
-	lightComponent->lightData.positionPower.w = 0;
-	lightComponent->lightData.hasShadow = -1;
-	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
+	//light = createEntity();
+	//lightComponent = addComponent<Component::PointLight>(light);
+	//lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
+	//lightComponent->lightData.positionPower.w = 0;
+	//lightComponent->lightData.hasShadow = -1;
+	//setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
 
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto plane = createEntity();
@@ -123,8 +123,9 @@ public:
 	mesh->setShader("MaterialBasic");
 	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
 	rigidBody->setCollisionShape(plane, Component::RigidBody::BOX);
-	rigidBody->getBody().setFriction(1.0f);
-	rigidBody->getBody().setRestitution(1.0f);
+//	rigidBody->setTransformation(getTransform(plane));
+	rigidBody->getBody().setFriction(0.8f);
+	//rigidBody->getBody().setRestitution(1.0f);
 
 #endif
 
@@ -142,34 +143,52 @@ public:
 		if (_chunkCounter >= _maxChunk)
 		{
 			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-			for (auto i = 0; i < 50; ++i)
+			for (auto i = 0; i < 7; ++i)
 			{
 				auto e = createEntity();
-//				setTransform(e, glm::scale(getTransform(e), glm::vec3(2.0f)));
+
 #ifdef LIFETIME_ACTIVATED
-				addComponent<Component::Lifetime>(e, 0.5f);
+				addComponent<Component::Lifetime>(e, 10.5f);
 #endif
 
 #ifdef PHYSIC_SIMULATION
 				auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, 1.0f);
-				rigidBody->setCollisionShape(e, Component::RigidBody::SPHERE);
-				rigidBody->getBody().setFriction(1.0f);
-				rigidBody->getBody().setRestitution(1.0f);
+				if (i % 4 == 0)
+					rigidBody->setCollisionShape(e, Component::RigidBody::SPHERE);
+				else
+					rigidBody->setCollisionShape(e, Component::RigidBody::BOX);
+				rigidBody->getBody().setFriction(0.5f);
+				rigidBody->getBody().setRestitution(0.5f);
 #endif
-#ifdef RENDERING_ACTIVATED
 
 				setTransform(e, glm::translate(getTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
+				setTransform(e, glm::scale(getTransform(e), glm::vec3(0.5f)));
+
+#ifdef RENDERING_ACTIVATED
+
+				if (i == 0)
+				{
+					auto lightComponent = addComponent<Component::PointLight>(e);
+					lightComponent->lightData.colorRange = glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 13);
+					lightComponent->lightData.positionPower.w = 1;
+					lightComponent->lightData.hasShadow = 1;
+				}
+
 
 #ifdef PHYSIC_SIMULATION
 				rigidBody->setTransformation(getTransform(e));
 #endif
 
 #ifndef COMPLEX_MESH
-						auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
-						mesh->setShader("MaterialBasic");
+				Component::MeshRenderer *mesh;
+				if (i % 4 == 0)
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+				else
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+				mesh->setShader("MaterialBasic");
 #else
-						auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
-						mesh->setShader("MaterialBasic");
+				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
+				mesh->setShader("MaterialBasic");
 #endif
 
 #endif
@@ -192,7 +211,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 8.0;
+	double _maxTime = 8.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;

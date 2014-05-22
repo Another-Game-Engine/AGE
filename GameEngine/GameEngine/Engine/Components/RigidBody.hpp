@@ -88,16 +88,18 @@ namespace Component
 
 		void setTransformation(const glm::mat4 &transformation)
 		{
-			if (_rigidBody->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT || mass == 0.0f)
-			{
-				std::cout << "Rigidbody is static or kinematic, <setTransformation> does not at effect, you can transform directly the entity" << std::endl;
-				return;
-			}
+			//if (_rigidBody->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT || mass == 0.0f)
+			//{
+			//	std::cout << "Rigidbody is static or kinematic, <setTransformation> does not at effect, you can transform directly the entity" << std::endl;
+			//	return;
+			//}
 			btTransform tt = _rigidBody->getCenterOfMassTransform();
 			tt.setOrigin(convertGLMVectorToBullet(posFromMat4(transformation)));
 			glm::quat rot = glm::quat(rotFromMat4(transformation, true));
 			tt.setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
 			_rigidBody->setCenterOfMassTransform(tt);
+			_rigidBody->setWorldTransform(tt);
+			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scaleFromMat4(transformation)));
 		}
 
 		btMotionState &getMotionState()
@@ -137,6 +139,7 @@ namespace Component
 			shapeType = c;
 
 			auto &entityTransform = _scene.lock()->getTransform(entity);
+
 
 			_motionState = std::shared_ptr<btMotionState>(new DynamicMotionState(_scene.lock()->getTransformRef(entity)));
 			if (c == BOX)
@@ -178,17 +181,17 @@ namespace Component
 			}
 			if (mass != 0)
 				_collisionShape->calculateLocalInertia(mass, inertia);
-			glm::vec3 scale = scaleFromMat4(entityTransform);
-			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_rigidBody = std::shared_ptr<btRigidBody>(new btRigidBody(mass, _motionState.get(), _collisionShape.get(), inertia));
 			_rigidBody->setUserPointer((void*)(_scene.lock()->getEntityPtr(entity)));
 			_rigidBody->setAngularFactor(convertGLMVectorToBullet(rotationConstraint));
 			_rigidBody->setLinearFactor(convertGLMVectorToBullet(transformConstraint));
+
 			if (_rigidBody->isStaticObject())
 			{
 				_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
 			_manager->getWorld()->addRigidBody(_rigidBody.get(), filterGroup, filterMask);
+			setTransformation(entityTransform);
 		}
 
 		void setRotationConstraint(bool x, bool y, bool z)
