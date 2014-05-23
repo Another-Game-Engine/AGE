@@ -32,6 +32,10 @@ public:
 
 	virtual void uninit()
 	{
+		if (_world.get())
+		{
+			_world.reset();
+		}
 		if (_constraintSolver)
 		{
 			delete _constraintSolver;

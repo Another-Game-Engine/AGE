@@ -136,8 +136,25 @@ namespace Component
 		{
 			if (c == UNDEFINED)
 				return;
+
+			if (_rigidBody != nullptr)
+			{
+				_manager.lock()->getWorld()->removeRigidBody(_rigidBody);
+				delete _rigidBody;
+				_rigidBody = nullptr;
+			}
+			if (_motionState != nullptr)
+			{
+				delete _motionState;
+				_motionState = nullptr;
+			}
+			if (_collisionShape != nullptr)
+			{
+				delete _collisionShape;
+				_collisionShape = nullptr;
+			}
+
 			_shapeName = shapeName;
-			reset();
 			_shapeType = c;
 
 			auto &entityTransform = scene.lock()->getTransform(entity);
