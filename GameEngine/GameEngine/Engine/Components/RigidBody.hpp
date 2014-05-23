@@ -235,15 +235,6 @@ namespace Component
 
 		virtual ~RigidBody(void)
 		{
-			if (_rigidBody != nullptr)
-			{
-				_manager.lock()->getWorld()->removeRigidBody(_rigidBody);
-				_rigidBody = nullptr;
-			}
-			if (_motionState != nullptr)
-				_motionState = nullptr;
-			if (_collisionShape != nullptr)
-				_collisionShape = nullptr;
 		}
 
 		RigidBody(RigidBody &&o)
