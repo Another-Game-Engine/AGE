@@ -2,7 +2,6 @@
 #include <OpenGL/Vertices.hh>
 #include <OpenGL/VerticesPool.hh>
 
-
 #define WARNING_NOT_FOUND(thing) \
 	std::cerr << "Warning: cannot find " << thing << "." << std::endl; \
 

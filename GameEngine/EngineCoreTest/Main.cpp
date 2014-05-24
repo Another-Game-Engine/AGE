@@ -4,13 +4,15 @@
 
 #include <stdlib.h>
 #include <crtdbg.h>
-
+#include <stdint.h>
 
 #include <stdlib.h>
 #include <Core/Engine.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Utils/PubSub.hpp>
+
+#include <OpenGL/VerticesManager.hh>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
 
@@ -159,6 +161,49 @@ int			main(int ac, char **av)
 //		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
 //		Attribute(GL_FLOAT, sizeof(float), 2),
 //	};
+
+	void *buffer[4] = {NULL, NULL, NULL, NULL};
+	size_t sizeBuffer[4] = {0, 0, 0, 0};
+
+	float position[4 * 6] = {1, 0, 0, 1,	// pos1
+							 0, 1, 0, 1,	// pos2
+							 0, 0, 1, 1,	// pos3
+							 1, 0, 1, 1,	// pos4
+							 1, 1, 0, 1,	// pos5
+							 0, 1, 1, 1};	// pos6
+	float color[4 * 6] = { 2, 0, 0, 2,		// color1
+						   0, 2, 0, 2,		// color2
+						   0, 0, 2, 2,		// color3
+						   2, 0, 2, 2,		// color4
+						   2, 2, 0, 2,		// color5
+						   0, 2, 2, 2 };	// color6
+	float normal[4 * 6] = { 3, 0, 0, 3,		// normal1
+							0, 3, 0, 3,		// normal2
+							0, 0, 3, 3,		// normal3
+							3, 0, 3, 3,		// normal4
+							3, 3, 0, 3,		// normal5
+							0, 3, 3, 3 };	// normal6
+	float uv[2 * 6] = { 4, 0,				// uv1
+						0, 4,				// uv2
+						0, 0,				// uv3
+						4, 0,				// uv4
+						4, 4,				// uv5
+						0, 4 };				// uv6
+
+	buffer[0] = position;
+	buffer[1] = color;
+	buffer[2] = normal;
+	buffer[3] = uv;
+	sizeBuffer[0] = sizeof(position);
+	sizeBuffer[1] = sizeof(color);
+	sizeBuffer[2] = sizeof(normal);
+	sizeBuffer[3] = sizeof(uv);
+
+	e->setInstance<gl::VerticesManager>();
+	auto &m = e->getInstance<gl::VerticesManager>();
+	gl::Key<gl::VerticesPool> p = m->addPool();
+	gl::Key<gl::Vertices> v = m->addVertices(6, 4, sizeBuffer, buffer);
+	m->attachVerticesToPool(v, p);
 
 	//e->setInstance<VertexManager<4>>(param)->init();
 	if (!loadShaders(e))

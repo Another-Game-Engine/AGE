@@ -1,5 +1,8 @@
 #include <OpenGL/MemoryBlocksGPU.hh>
 #include <iostream>
+#include <stdint.h>
+
+void *  __cdecl memcpy(_Out_writes_bytes_all_(_Size) void * _Dst, _In_reads_bytes_(_Size) const void * _Src, _In_ size_t _Size);
 
 # define WARNING_MESSAGE_SETTING(type, index) \
 	std::cerr << "warning: tentative to set value to the index : [" << index << "] which is out of range on a object MemoryBlocksGPU for " << type << std::endl;\
@@ -61,9 +64,12 @@ namespace gl
 			_startBlocks = new size_t[_nbrBlock];
 			_baseOffset = new size_t[_nbrBlock];
 		}
-		memcpy(_sizeBlocks, copy._sizeBlocks, sizeof(size_t) * copy._nbrBlock);
-		memcpy(_startBlocks, copy._startBlocks, sizeof(size_t) * copy._nbrBlock);
-		memcpy(_baseOffset, copy._baseOffset, sizeof(size_t) * copy._nbrBlock);
+		for (size_t index = 0; index < copy._nbrBlock; ++index)
+		{
+			_sizeBlocks[index] = copy._sizeBlocks[index];
+			_startBlocks[index] = copy._startBlocks[index];
+			_baseOffset[index] = copy._baseOffset[index];
+		}
 	}
 
 	MemoryBlocksGPU &MemoryBlocksGPU::operator=(MemoryBlocksGPU const &b)
@@ -93,9 +99,12 @@ namespace gl
 					_baseOffset = NULL;
 				}
 			}
-			memcpy(_sizeBlocks, b._sizeBlocks, sizeof(size_t) * b._nbrBlock);
-			memcpy(_startBlocks, b._startBlocks, sizeof(size_t) * b._nbrBlock);
-			memcpy(_baseOffset, b._baseOffset, sizeof(size_t) * b._nbrBlock);
+			for (size_t index = 0; index < b._nbrBlock; ++index)
+			{
+				_sizeBlocks[index] = b._sizeBlocks[index];
+				_startBlocks[index] = b._startBlocks[index];
+				_baseOffset[index] = b._baseOffset[index];
+			}
 		}
 		return (*this);
 	}
@@ -145,19 +154,23 @@ namespace gl
 			{
 				delete[] _startBlocks;
 				delete[] _sizeBlocks;
+				delete[] _baseOffset;
 			}
 			_nbrBlock = nbrBlock;
 			if (nbrBlock)
 			{
 				_sizeBlocks = new size_t[_nbrBlock];
 				_startBlocks = new size_t[_nbrBlock];
+				_baseOffset = new size_t[_nbrBlock];
 				memset(_sizeBlocks, 0, sizeof(size_t) * _nbrBlock);
 				memset(_startBlocks, 0, sizeof(size_t) * _nbrBlock);
+				memset(_baseOffset, 0, sizeof(size_t)* _nbrBlock);
 			}
 			else
 			{
 				_sizeBlocks = NULL;
 				_startBlocks = NULL;
+				_baseOffset = NULL;
 			}
 		}
 		return (*this);

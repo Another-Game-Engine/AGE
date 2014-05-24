@@ -1,10 +1,10 @@
 #ifndef MEMORYBLOCKSGPU_H_
 # define MEMORYBLOCKSGPU_H_
 
+#include <cstdint>
+
 namespace gl
 {
-	class Vertices;
-
 	//!\file MemoryBlocksGPU.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0

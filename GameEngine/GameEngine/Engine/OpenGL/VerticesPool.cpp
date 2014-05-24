@@ -1,8 +1,8 @@
 #include <OpenGL/VerticesPool.hh>
-#include <iostream>
-#include <stdint.h>
 #include <OpenGL/MemoryBlocksGPU.hh>
 #include <OpenGL/Vertices.hh>
+#include <stdint.h>
+#include <iostream>
 
 #define WARNING_MESSAGE_ATTRIBUTE_SETTING(type) \
 	std::cerr << "Warning: setting of [" << type << "] attribute out of attribute range" << std::endl;
@@ -59,9 +59,9 @@ namespace gl
 			_offsetAttribute = new size_t[_nbrAttribute];
 			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
-			memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+			std::memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
+			std::memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			std::memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
 		}
 	}
 
@@ -82,11 +82,11 @@ namespace gl
 			_nbrComponent = new uint8_t[_nbrAttribute];
 			_sizeAttribute = new size_t[_nbrAttribute];
 			_offsetAttribute = new size_t[_nbrAttribute];
-			memcpy(_sizeAttribute, copy._sizeAttribute, sizeof(size_t)* _nbrAttribute);
-			memcpy(_offsetAttribute, copy._offsetAttribute, sizeof(size_t)* _nbrAttribute);
-			memcpy(_typeComponent, copy._typeComponent, sizeof(GLenum)* _nbrAttribute);
-			memcpy(_sizeTypeComponent, copy._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			memcpy(_nbrComponent, copy._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+			std::memcpy(_sizeAttribute, copy._sizeAttribute, sizeof(size_t)* _nbrAttribute);
+			std::memcpy(_offsetAttribute, copy._offsetAttribute, sizeof(size_t)* _nbrAttribute);
+			std::memcpy(_typeComponent, copy._typeComponent, sizeof(GLenum)* _nbrAttribute);
+			std::memcpy(_sizeTypeComponent, copy._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			std::memcpy(_nbrComponent, copy._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
 		}
 	}
 
@@ -138,11 +138,11 @@ namespace gl
 					_offsetAttribute = NULL;
 				}
 			}
-			memcpy(_sizeAttribute, p._sizeAttribute, sizeof(size_t)* _nbrAttribute);
-			memcpy(_offsetAttribute, p._offsetAttribute, sizeof(size_t)* _nbrAttribute);
-			memcpy(_typeComponent, p._typeComponent, sizeof(GLenum)* _nbrAttribute);
-			memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+			std::memcpy(_sizeAttribute, p._sizeAttribute, sizeof(size_t)* _nbrAttribute);
+			std::memcpy(_offsetAttribute, p._offsetAttribute, sizeof(size_t)* _nbrAttribute);
+			std::memcpy(_typeComponent, p._typeComponent, sizeof(GLenum)* _nbrAttribute);
+			std::memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			std::memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
 		}
 		return (*this);
 	}
@@ -259,9 +259,9 @@ namespace gl
 		}
 		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-		memcpy(_typeComponent, typeComponent, sizeof(GLenum)* nbrAttributes);
-		memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* nbrAttributes);
+		std::memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+		std::memcpy(_typeComponent, typeComponent, sizeof(GLenum)* nbrAttributes);
+		std::memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* nbrAttributes);
 		return (*this);
 	}
 
@@ -352,8 +352,7 @@ namespace gl
 			if (index > 0)
 				_offsetAttribute[index] = _sizeAttribute[index - 1];
 		}
-		
-		_pool.push_back(std::make_pair(&vertices, memory));
+		_pool.push_back(std::make_pair(&vertices, MemoryBlocksGPU(memory)));// &vertices, memory);
 		vertices._indexOnPool = _pool.size() - 1;
 		return (*this);
 	}
@@ -378,6 +377,7 @@ namespace gl
 			_pool[index].first->_pool = NULL;
 		}
 		_pool.clear();
+		return (*this);
 	}
 
 }
