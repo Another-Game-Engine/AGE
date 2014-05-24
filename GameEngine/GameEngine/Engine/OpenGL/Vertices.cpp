@@ -66,6 +66,8 @@ namespace gl
 			delete[] _sizeBuffers;
 			delete[] _buffers;
 		}
+		if (_pool != NULL)
+			_pool->rmVertices(*this);
 	}
 
 	Vertices &Vertices::operator=(Vertices const &v)

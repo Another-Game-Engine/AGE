@@ -373,8 +373,11 @@ namespace gl
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		for (size_t index = 0; index < _pool.size(); ++index)
 		{
-			_pool[index].first->_indexOnPool = NULL;
-			_pool[index].first->_pool = NULL;
+			if (_pool[index].first)
+			{
+				_pool[index].first->_indexOnPool = NULL;
+				_pool[index].first->_pool = NULL;
+			}
 		}
 		_pool.clear();
 		return (*this);

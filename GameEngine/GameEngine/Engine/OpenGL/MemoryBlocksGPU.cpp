@@ -15,9 +15,6 @@ namespace gl
 	MemoryBlocksGPU::MemoryBlocksGPU()
 		: _nbrElement(0),
 		_nbrBlock(0),
-		_startBlocks(NULL),
-		_sizeBlocks(NULL),
-		_baseOffset(NULL)
 	{
 
 	}
@@ -26,50 +23,29 @@ namespace gl
 	MemoryBlocksGPU::MemoryBlocksGPU(size_t nbrElement, size_t nbrBlock, size_t *startBlocks, size_t *sizeBlocks)
 		: _nbrElement(nbrElement),
 		_nbrBlock(nbrBlock),
-		_startBlocks(NULL),
-		_sizeBlocks(NULL),
-		_baseOffset(NULL)
 	{
 		if (nbrBlock)
 		{
-			_startBlocks = new size_t[nbrBlock];
 			_sizeBlocks = new size_t[nbrBlock];
-			_baseOffset = new size_t[nbrBlock];
-			memcpy(_startBlocks, startBlocks, sizeof(size_t) * nbrBlock);
 			memcpy(_sizeBlocks, sizeBlocks, sizeof(size_t) * nbrBlock);
-			memset(_baseOffset, 0, sizeof(size_t) * nbrBlock);
 		}
 	}
 
 	MemoryBlocksGPU::~MemoryBlocksGPU()
 	{
 		if (_nbrBlock)
-		{
 			delete[] _sizeBlocks;
-			delete[] _startBlocks;
-			delete[] _baseOffset;
-		}
 	}
 
 	MemoryBlocksGPU::MemoryBlocksGPU(MemoryBlocksGPU const &copy)
 		: _nbrElement(copy._nbrElement),
 		_nbrBlock(copy._nbrBlock),
-		_startBlocks(NULL),
-		_sizeBlocks(NULL),
-		_baseOffset(NULL)
+		_sizeBlocks(NULL)
 	{
 		if (_nbrBlock)
-		{
 			_sizeBlocks = new size_t[_nbrBlock];
-			_startBlocks = new size_t[_nbrBlock];
-			_baseOffset = new size_t[_nbrBlock];
-		}
 		for (size_t index = 0; index < copy._nbrBlock; ++index)
-		{
 			_sizeBlocks[index] = copy._sizeBlocks[index];
-			_startBlocks[index] = copy._startBlocks[index];
-			_baseOffset[index] = copy._baseOffset[index];
-		}
 	}
 
 	MemoryBlocksGPU &MemoryBlocksGPU::operator=(MemoryBlocksGPU const &b)
@@ -80,31 +56,15 @@ namespace gl
 			if (b._nbrBlock != _nbrBlock)
 			{
 				if (_nbrBlock)
-				{
 					delete[] _sizeBlocks;
-					delete[] _startBlocks;
-					delete[] _baseOffset;
-				}
 				_nbrBlock = b._nbrBlock;
 				if (_nbrBlock)
-				{
 					_sizeBlocks = new size_t[_nbrBlock];
-					_startBlocks = new size_t[_nbrBlock];
-					_baseOffset = new size_t[_nbrBlock];
-				}
 				else
-				{
 					_sizeBlocks = NULL;
-					_startBlocks = NULL;
-					_baseOffset = NULL;
-				}
 			}
 			for (size_t index = 0; index < b._nbrBlock; ++index)
-			{
 				_sizeBlocks[index] = b._sizeBlocks[index];
-				_startBlocks[index] = b._startBlocks[index];
-				_baseOffset[index] = b._baseOffset[index];
-			}
 		}
 		return (*this);
 	}
@@ -125,65 +85,22 @@ namespace gl
 		return (_sizeBlocks[index]);
 	}
 
-	size_t MemoryBlocksGPU::getStartBlock(size_t index) const
-	{
-		if (index >= _nbrBlock)
-		{
-			WARNING_MESSAGE_GETTING("start", index);
-			return (-1);
-		}
-		return (_startBlocks[index]);
-	}
-
-	size_t MemoryBlocksGPU::getOffset(size_t index) const
-	{
-		if (index >= _nbrBlock)
-		{
-			WARNING_MESSAGE_GETTING("start", index);
-			return (-1);
-		}
-		return (_baseOffset[index]);
-	}
-
 	// the values into the new storage are set to 0.
 	MemoryBlocksGPU &MemoryBlocksGPU::setNbrBlock(size_t nbrBlock)
 	{
 		if (nbrBlock != _nbrBlock)
 		{
 			if (_nbrBlock)
-			{
-				delete[] _startBlocks;
 				delete[] _sizeBlocks;
-				delete[] _baseOffset;
-			}
 			_nbrBlock = nbrBlock;
 			if (nbrBlock)
 			{
 				_sizeBlocks = new size_t[_nbrBlock];
-				_startBlocks = new size_t[_nbrBlock];
-				_baseOffset = new size_t[_nbrBlock];
 				memset(_sizeBlocks, 0, sizeof(size_t) * _nbrBlock);
-				memset(_startBlocks, 0, sizeof(size_t) * _nbrBlock);
-				memset(_baseOffset, 0, sizeof(size_t)* _nbrBlock);
 			}
 			else
-			{
 				_sizeBlocks = NULL;
-				_startBlocks = NULL;
-				_baseOffset = NULL;
-			}
 		}
-		return (*this);
-	}
-
-	MemoryBlocksGPU &MemoryBlocksGPU::setStartBlock(size_t index, size_t startBlock)
-	{
-		if (index >= _nbrBlock)
-		{
-			WARNING_MESSAGE_SETTING("start", index);
-			return (*this);
-		}
-		_startBlocks[index] = startBlock;
 		return (*this);
 	}
 
@@ -195,17 +112,6 @@ namespace gl
 			return (*this);
 		}
 		_sizeBlocks[index] = sizeBlock;
-		return (*this);
-	}
-
-	MemoryBlocksGPU &MemoryBlocksGPU::setOffset(size_t index, size_t offset)
-	{
-		if (index >= _nbrBlock)
-		{
-			WARNING_MESSAGE_SETTING("size", index);
-			return (*this);
-		}
-		_baseOffset[index] = offset;
 		return (*this);
 	}
 
