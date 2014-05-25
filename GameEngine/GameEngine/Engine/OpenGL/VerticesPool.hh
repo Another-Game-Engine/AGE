@@ -4,6 +4,8 @@
 #include <Utils/OpenGL.hh>
 #include <vector>
 #include <stdint.h>
+#include <OpenGL/VertexBuffer.hh>
+#include <OpenGL/VertexArray.hh>
 
 namespace gl
 {
@@ -46,7 +48,15 @@ namespace gl
 		VerticesPool &rmVertices(Vertices &vertices);
 		VerticesPool &clearPool();
 
+		//draw and synchronisation
+		VerticesManager &indiceSyncronisation();
+		VerticesManager &syncronisation(VerticesPool const &indicesPool);
+
 	private:
+		// opengl data
+		gl::VertexBuffer _vbo;
+		gl::VertexArray _vao;
+
 		// data represent attributes
 		uint8_t _nbrAttribute;
 		GLenum *_typeComponent;
@@ -58,8 +68,9 @@ namespace gl
 		size_t *_sizeAttribute;
 		size_t *_offsetAttribute;
 		size_t _nbrBytePool;
-		bool _needSync;
 
+		bool _needSyncMajor;
+		bool _needSyncMinor;
 	};
 }
 

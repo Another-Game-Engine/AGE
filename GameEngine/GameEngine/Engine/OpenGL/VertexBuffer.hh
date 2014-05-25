@@ -11,13 +11,14 @@ namespace gl
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer(bool isIndices = false);
+		VertexBuffer();
 		~VertexBuffer();
 		VertexBuffer(VertexBuffer const &copy);
 		VertexBuffer &operator=(VertexBuffer const &vertexbuffer);
-		void init();
-		void bind();
-		void unbind();
+		VertexBuffer const &bind() const;
+		VertexBuffer const &unbind() const;
+		VertexBuffer const &unbind() const;
+		VertexBuffer &useElementArray(bool iselmentarray);
 		GLuint getId() const;
 		GLenum getMode() const;
 	private:

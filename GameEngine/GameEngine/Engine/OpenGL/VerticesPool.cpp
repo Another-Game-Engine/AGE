@@ -20,7 +20,8 @@ namespace gl
 		_sizeAttribute(NULL),
 		_offsetAttribute(NULL),
 		_nbrBytePool(0),
-		_needSync(false)
+		_needSyncMajor(false),
+		_needSyncMinor(false)
 	{
 		if (_nbrAttribute)
 		{
@@ -48,7 +49,8 @@ namespace gl
 		_sizeAttribute(NULL),
 		_offsetAttribute(NULL),
 		_nbrBytePool(0),
-		_needSync(0)
+		_needSyncMajor(false),
+		_needSyncMinor(false)
 	{
 		if (_nbrAttribute)
 		{
@@ -73,7 +75,8 @@ namespace gl
 		_sizeAttribute(NULL),
 		_offsetAttribute(NULL),
 		_nbrBytePool(copy._nbrBytePool),
-		_needSync(copy._needSync)
+		_needSyncMajor(copy._needSyncMajor),
+		_needSyncMinor(copy._needSyncMinor)
 	{
 		if (_nbrAttribute)
 		{
@@ -109,7 +112,8 @@ namespace gl
 		if (this != &p)
 		{
 			_nbrBytePool = p._nbrBytePool;
-			_needSync = p._needSync;
+			_needSyncMajor = p._needSyncMajor;
+			_needSyncMinor = p._needSyncMinor;
 			if (_nbrAttribute != p._nbrAttribute)
 			{
 				if (_nbrAttribute)
@@ -151,6 +155,7 @@ namespace gl
 	// execpt if the nbrAttribute is equal of the value initial
 	VerticesPool &VerticesPool::setNbrAttribute(uint8_t nbrAttribute)
 	{
+		clearPool();
 		if (_nbrAttribute != nbrAttribute)
 		{
 			if (_nbrAttribute)
@@ -198,6 +203,7 @@ namespace gl
 			WARNING_MESSAGE_ATTRIBUTE_SETTING("type")
 				return (*this);
 		}
+		clearPool();
 		_typeComponent[index] = type;
 		return (*this);
 	}
@@ -210,6 +216,7 @@ namespace gl
 			WARNING_MESSAGE_ATTRIBUTE_SETTING("size type")
 				return (*this);
 		}
+		clearPool();
 		_sizeTypeComponent[index] = sizeType;
 		return (*this);
 	}
@@ -222,13 +229,15 @@ namespace gl
 			WARNING_MESSAGE_ATTRIBUTE_SETTING("numbre component")
 				return (*this);
 		}
+		clearPool();
 		_nbrComponent[index] = nbrComponent;
 		return (*this);
 	}
 
-	// warning the typeComponent and other array send in paramter must have nbrAttribute element
+	// warning suppress all data in pool for the new
 	VerticesPool &VerticesPool::setData(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
 	{
+		clearPool();
 		if (_nbrAttribute != nbrAttributes)
 		{
 			if (_nbrAttribute)
@@ -333,13 +342,14 @@ namespace gl
 		{
 			if (_pool[index].first && vertices.getNbrVertices() == _pool[index].second.getNbrElement())
 			{
+				_needSyncMinor = true;
 				vertices._indexOnPool = index;
 				_pool[index].first = &vertices;
 				return (*this);
 			}
 		}
 		// no one field is free, push a new field to store data
-		_needSync = true;
+		_needSyncMajor = true;
 		MemoryBlocksGPU memory;
 		memory.setNbrElement(vertices.getNbrVertices());
 		memory.setNbrBlock(_nbrAttribute);
@@ -367,7 +377,8 @@ namespace gl
 
 	VerticesPool &VerticesPool::clearPool()
 	{
-		_needSync = false;
+		_needSyncMinor = false;
+		_needSyncMajor = true;
 		_nbrBytePool = 0;
 		memset(_sizeAttribute, 0, sizeof(size_t) * _nbrAttribute);
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
@@ -382,5 +393,7 @@ namespace gl
 		_pool.clear();
 		return (*this);
 	}
+
+
 
 }

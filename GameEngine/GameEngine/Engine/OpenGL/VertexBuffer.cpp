@@ -2,11 +2,11 @@
 
 namespace gl
 {
-	VertexBuffer::VertexBuffer(bool isIndices)
+	VertexBuffer::VertexBuffer()
 		: _id(0),
 		_isBind(false)
 	{
-		_mode = isIndices ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER;
+		_mode = GL_ARRAY_BUFFER;
 		glGenBuffers(1, &_id);
 	}
 
@@ -32,14 +32,16 @@ namespace gl
 		 return (*this);
 	 }
 
-	 void VertexBuffer::bind()
+	 VertexBuffer const &VertexBuffer::bind() const
 	 {
 		glBindBuffer(_mode, _id);
+		return (*this);
 	 }
 
-	 void VertexBuffer::unbind()
+	 VertexBuffer const &VertexBuffer::unbind() const
 	 {
 		glBindBuffer(_mode, 0);
+		return (*this);
 	 }
 
 	 GLenum VertexBuffer::getMode() const
@@ -50,5 +52,11 @@ namespace gl
 	 GLuint VertexBuffer::getId() const
 	 {
 		 return (_id);
+	 }
+
+	 VertexBuffer &VertexBuffer::useElementArray(bool iselementarray)
+	 {
+		 _mode = iselementarray ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER;
+		 return (*this);
 	 }
 }

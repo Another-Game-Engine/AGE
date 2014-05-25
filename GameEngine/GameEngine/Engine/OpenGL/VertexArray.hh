@@ -3,7 +3,7 @@
 
 # include "Utils/OpenGL.hh"
 
-namespace OpenGLTools
+namespace gl
 {
 	/// Class representing vertexArray
 	class VertexArray

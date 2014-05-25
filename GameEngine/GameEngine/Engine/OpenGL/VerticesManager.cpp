@@ -5,11 +5,18 @@
 #define WARNING_NOT_FOUND(thing) \
 	std::cerr << "Warning: cannot find " << thing << "." << std::endl; \
 
+#define WARNING_KEY(in) \
+	std::cerr << "Warning: the key send to " in << " is broken." << std::endl;
+
 namespace gl
 {
 	VerticesManager::VerticesManager()
+		: _indicesPool()
 	{
-
+		GLenum typeComponent = GL_UNSIGNED_INT;
+		uint8_t sizeTypeComponent = sizeof(unsigned int);
+		uint8_t nbrComponent = 1;
+		_indicesPool.setData(1, &typeComponent, &sizeTypeComponent, &nbrComponent);
 	}
 
 	VerticesManager::~VerticesManager()
@@ -82,7 +89,7 @@ namespace gl
 	Key<Vertices> VerticesManager::addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers)
 	{
 		Key<Vertices> key;
-		
+
 		_vertices[key] = Vertices(nbrVertices, nbrBuffers, sizeBuffers, buffers);
 		return (key);
 	}
@@ -90,19 +97,29 @@ namespace gl
 	VerticesManager &VerticesManager::rmVertices(Key<Vertices> const &key)
 	{
 		if (!key)
+		{
+			WARNING_KEY("rmVertices")
 			return (*this);
+		}
 		_vertices.erase(key);
 		return (*this);
 	}
 
 	VerticesManager &VerticesManager::attachVerticesToPool(Key<Vertices> const &keyvertices, Key<VerticesPool> const &keypool)
 	{
+		if (!keyvertices || !keypool)
+		{
+			WARNING_KEY("attachVerticesToPool")
+			return (*this);
+		}
 		auto &vertices = _vertices.find(keyvertices);
 		if (vertices == _vertices.end())
 			return (*this);
 		auto &pool = _pools.find(keypool);
 		if (pool == _pools.end())
 			return (*this);
+		if (vertices->second._pool)
+			vertices->second._pool->rmVertices(vertices->second);
 		vertices->second._pool = &pool->second;
 		pool->second.addVertices(vertices->second);
 		return (*this);
@@ -110,6 +127,11 @@ namespace gl
 
 	VerticesManager &VerticesManager::dettachVerticesToPool(Key<Vertices> const &keyvertices)
 	{
+		if (!keyvertices)
+		{
+			WARNING_KEY("dettachVerticesToPool")
+			return (*this);
+		}
 		auto &vertices = _vertices.find(keyvertices);
 		if (vertices == _vertices.end())
 			return (*this);
@@ -120,4 +142,53 @@ namespace gl
 		}
 		return (*this);
 	}
+
+	VerticesManager &VerticesManager::attachVerticesToIndicesPool(Key<Vertices> const &keyvertices)
+	{
+		if (!keyvertices)
+		{
+			WARNING_KEY("attachVerticesToIndicesPool")
+			return (*this);
+		}
+		auto &vertices = _vertices.find(keyvertices);
+		if (vertices == _vertices.end())
+			return (*this);
+		if (vertices->second._pool)
+			vertices->second._pool->rmVertices(vertices->second);
+		vertices->second._pool = &_indicesPool;
+		_indicesPool.addVertices(vertices->second);
+		return (*this);
+	}
+
+	VerticesManager &VerticesManager::drawByIndices(Key<Vertices> const &keyindices, Key<VerticesPool> const &keypool)
+	{
+		if (!keyindices || !keypool)
+		{
+			WARNING_KEY("drawByIndices")
+			return (*this);
+		}
+		auto &vertices = _vertices.find(keyindices);
+		if (vertices == _vertices.end())
+			return (*this);
+		auto &pool = _pools.find(keypool);
+		if (pool == _pools.end())
+			return (*this);
+		//_indicesPool.indiceSyncronisation();
+		//pool->second.syncronisation(_indicesPool);
+		//pool->second.syncronisation();
+		
+		//???
+		return (*this);
+	}
+
+	VerticesManager &VerticesManager::draw(Key<Vertices> const &keyvertices)
+	{
+		if (!keyvertices)
+		{
+			WARNING_KEY("draw")
+			return (*this);
+		}
+		return (*this);
+	}
+
 }

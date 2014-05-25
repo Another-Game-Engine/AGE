@@ -38,11 +38,16 @@ namespace gl
 		size_t getNbrVertices() const;
 
 		// attach vertices to pools
+		VerticesManager &attachVerticesToIndicesPool(Key<Vertices> const &vertices);
 		VerticesManager &attachVerticesToPool(Key<Vertices> const &vertices, Key<VerticesPool> const &pool);
 		VerticesManager &dettachVerticesToPool(Key<Vertices> const &vertices);
 
+		// draw
+		VerticesManager &drawByIndices(Key<Vertices> const &keyindices, Key<VerticesPool> const &keypool);
+		VerticesManager &draw(Key<Vertices> const &keyvertices);
 	private:
 		// data represent pools
+		VerticesPool _indicesPool;
 		std::map<Key<VerticesPool>, VerticesPool> _pools;
 		std::map<Key<Vertices>, Vertices> _vertices;
 	};
