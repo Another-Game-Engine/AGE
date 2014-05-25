@@ -22,7 +22,8 @@
 #include <Utils/Dependency.hpp>
 #include <Physic/Utils/BtConversion.hpp>
 #include <Entities/Entity.hh>
-#include <Entities/EntityData.hh>
+
+#include <set>
 
 static btThreadSupportInterface *createSolverThreadSupport(int maxNumThreads)
 {

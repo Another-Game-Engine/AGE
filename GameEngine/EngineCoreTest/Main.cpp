@@ -18,6 +18,8 @@
 #include <Context/SdlContext.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Physic/BulletDynamicManager.hpp>
+#include <Core/Timer.hh>
+#include <Utils/PubSub.hpp>
 
 //CONFIGS
 #include <CONFIGS.hpp>
@@ -107,11 +109,12 @@ bool loadShaders(std::shared_ptr<Engine> e)
 
 bool loadAssets(std::shared_ptr<Engine> e)
 {
+#ifdef RENDERING_ACTIVATED
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
-#ifndef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
-#else
+#endif
+#ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 #endif
 
@@ -136,6 +139,7 @@ int			main(int ac, char **av)
 #ifdef PHYSIC_SIMULATION
 	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 #endif
+
 
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
@@ -175,7 +179,6 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
-
 
 	// launch engine
 	if (e->start() == false)

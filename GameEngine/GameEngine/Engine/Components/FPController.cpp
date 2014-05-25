@@ -2,9 +2,9 @@
 #include <Physic/Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Components/Extras/CustomCharacterController.hh>
-#include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
+#include <Physic/BulletDynamicManager.hpp>
 
 using namespace Component;
 
@@ -37,9 +37,10 @@ FPController::~FPController()
 {
 }
 
-void FPController::init(short filterGroup, short filterMask)
+void FPController::init(const Entity &entity, std::weak_ptr<AScene> scene, short filterGroup, short filterMask)
 {
-	_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
+	_entity = entity;
+	_manager = std::dynamic_pointer_cast<BulletDynamicManager>(scene.lock()->getInstance<BulletCollisionManager>());
 	setKey(LEFT, SDLK_a);
 	setKey(RIGHT, SDLK_d);
 	setKey(FORWARD, SDLK_w);
@@ -49,9 +50,10 @@ void FPController::init(short filterGroup, short filterMask)
 	controls.fill(false);
 
 	btTransform transform;
-	glm::vec3 position = posFromMat4(_entity->getLocalTransform());
-	glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
-	glm::vec3 rot = rotFromMat4(_entity->getLocalTransform(), true);
+	auto &entityTransform = scene.lock()->getTransform(entity);
+	glm::vec3 position = posFromMat4(entityTransform);
+	glm::vec3 scale = scaleFromMat4(entityTransform);
+	glm::vec3 rot = rotFromMat4(entityTransform, true);
 	transform.setIdentity();
 	transform.setOrigin(convertGLMVectorToBullet(position));
 	transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));

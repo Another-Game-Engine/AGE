@@ -52,6 +52,12 @@ public:
 			delete _constraintSolver;
 	}
 	inline btDynamicsWorld * getWorld() const { return static_cast<btDynamicsWorld *>(_world); }
+
+
+
+
+private:
+
 };
 
 #endif   //__BULLET_MANAGER_HPP__

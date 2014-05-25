@@ -24,10 +24,11 @@ bool	BlitFinalRender::initialize()
 
 void	BlitFinalRender::mainUpdate(double time)
 {
-	std::shared_ptr<Component::CameraComponent>		camera;
+	Component::CameraComponent *camera = nullptr;
+	auto scene = _scene.lock();
 	for (auto c : _cameraFilter.getCollection())
 	{
-		camera = c->getComponent<Component::CameraComponent>();
+		camera = scene->getComponent<Component::CameraComponent>(c);
 		if (camera->blitOnScreen)
 		{
 			OpenGLTools::Framebuffer	&current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;

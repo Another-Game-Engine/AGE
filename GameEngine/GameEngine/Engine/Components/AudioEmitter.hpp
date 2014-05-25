@@ -16,6 +16,18 @@ namespace Component
 {
 	struct AudioEmitter : public Component::ComponentBase<AudioEmitter>
 	{
+
+		AudioEmitter(AudioEmitter const &o)
+		{
+			audios = o.audios;
+		}
+
+		AudioEmitter &operator=(AudioEmitter const &o)
+		{
+			audios = o.audios;
+			return *this;
+		}
+
 		struct AudioInstance
 		{
 			AudioInstance();
@@ -94,16 +106,17 @@ namespace Component
 			ar(v);
 			for (auto e : v)
 			{
-				std::shared_ptr<Audio> a = _entity->getScene().lock()->getInstance<AudioManager>()->getAudio(e.filename);
-				if (!a)
-					continue;
-				setAudio(a, e.name, e.channelGroupType);
-				if (e.isPlaying)
-				{
-					play(e.name, false);
-					getAudio(e.name)->channel->setVolume(e.volume);
-					getAudio(e.name)->channel->setPosition(e.position, FMOD_TIMEUNIT_MS);
-				}
+				//@CESAR TODO
+				//std::shared_ptr<Audio> a = _entity->getScene().lock()->getInstance<AudioManager>()->getAudio(e.filename);
+				//if (!a)
+				//	continue;
+				//setAudio(a, e.name, e.channelGroupType);
+				//if (e.isPlaying)
+				//{
+				//	play(e.name, false);
+				//	getAudio(e.name)->channel->setVolume(e.volume);
+				//	getAudio(e.name)->channel->setPosition(e.position, FMOD_TIMEUNIT_MS);
+				//}
 
 			}
 		}
@@ -114,7 +127,5 @@ namespace Component
 		//////
 	private:
 		std::map<std::string, AudioInstance> audios;
-		AudioEmitter(AudioEmitter const &);
-		AudioEmitter &operator=(AudioEmitter const &);
 	};
 }

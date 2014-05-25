@@ -17,6 +17,10 @@ namespace Component
 		void init(){}
 		virtual void reset(){}
 
+		FirstPersonView(FirstPersonView const &){}
+		FirstPersonView	&operator=(FirstPersonView const &){ return *this; }
+
+
 		//////
 		////
 		// Serialization
@@ -31,7 +35,5 @@ namespace Component
 		//////
 
 	private:
-		FirstPersonView(FirstPersonView const &);
-		FirstPersonView	&operator=(FirstPersonView const &);
 	};
 }

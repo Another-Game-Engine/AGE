@@ -2,7 +2,6 @@
 
 #include <map>
 
-#include "Entities/EntityData.hh"
 #include "Components/MeshRenderer.hh"
 #include "OpenGL/Shader.hh"
 #include "OpenGL/UniformBuffer.hh"

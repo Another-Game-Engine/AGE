@@ -1,7 +1,10 @@
 #pragma once
 
 #include <Core/AScene.hh>
+
 #include <Systems/LifetimeSystem.hpp>
+
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
@@ -18,9 +21,6 @@
 
 #include <CONFIGS.hpp>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 class BenchmarkScene : public AScene	
 {
 public:
@@ -35,8 +35,8 @@ public:
 	{
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
-		addSystem<CollisionAdder>(1);
-		addSystem<CollisionCleaner>(1000);
+//		addSystem<CollisionAdder>(1);
+//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
 
 #ifdef RENDERING_ACTIVATED
@@ -89,33 +89,46 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 		auto camera = createEntity();
-		auto cam = camera->addComponent<Component::CameraComponent>();
-		camera->addComponent<Component::FirstPersonView>();
+		auto cam = addComponent<Component::CameraComponent>(camera);
+		addComponent<Component::FirstPersonView>(camera);
 
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		cam->fboSize = screenSize;
 		cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
-		cam->attachSkybox("skybox__space", "cubemapShader");
+		cam->attachSkybox(getInstance<AssetsManager>()->get<CubeMapFile>("skybox__space"), "cubemapShader");
 		cam->sampleNbr = 0;
 
-		camera->setLocalTransform(glm::translate(glm::mat4(1), glm::vec3(0, 0, -40)));
+		setTransform(camera, glm::translate(glm::mat4(1), glm::vec3(0, 0, -40)));
 
 
 	auto light = createEntity();
-	auto lightComponent = light->addComponent<Component::PointLight>();
-	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 50);
-	lightComponent->lightData.positionPower.w = 2.0f;
+	auto lightComponent = addComponent<Component::PointLight>(light);
+	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 30);
+	lightComponent->lightData.positionPower.w = 0.5f;
 	lightComponent->lightData.hasShadow = -1;
-	light->setLocalTransform(glm::translate(glm::mat4(1), glm::vec3(0, 2, 0)));
+	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 3, 0)));
 
-	light = createEntity();
-	lightComponent = light->addComponent<Component::PointLight>();
-	lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
-	lightComponent->lightData.positionPower.w = 0;
-	lightComponent->lightData.hasShadow = -1;
-	light->setLocalTransform(glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
+	//light = createEntity();
+	//lightComponent = addComponent<Component::PointLight>(light);
+	//lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
+	//lightComponent->lightData.positionPower.w = 0;
+	//lightComponent->lightData.hasShadow = -1;
+	//setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
+
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	auto plane = createEntity();
+	setTransform(plane, glm::translate(getTransform(plane), glm::vec3(0, -10, 0)));
+	setTransform(plane, glm::scale(getTransform(plane), glm::vec3(100, 1, 100)));
+	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+	mesh->setShader("MaterialBasic");
+	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
+	rigidBody->setCollisionShape(plane, Component::RigidBody::BOX);
+//	rigidBody->setTransformation(getTransform(plane));
+	rigidBody->getBody().setFriction(0.8f);
+	//rigidBody->getBody().setRestitution(1.0f);
 
 #endif
+
 
 		return true;
 	}
@@ -129,35 +142,59 @@ public:
 
 		if (_chunkCounter >= _maxChunk)
 		{
-			for (auto i = 0; i < 14; ++i)
+			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+			for (auto i = 0; i < 7; ++i)
 			{
 				auto e = createEntity();
+
 #ifdef LIFETIME_ACTIVATED
-				e->addComponent<Component::Lifetime>(0.5f);
+				addComponent<Component::Lifetime>(e, 10.5f);
 #endif
 
 #ifdef PHYSIC_SIMULATION
-				auto rigidBody = e->addComponent<Component::RigidBody>(1.0f);
-				rigidBody->setCollisionShape(Component::RigidBody::SPHERE);
-				rigidBody->getBody().setFriction(1.0f);
-				rigidBody->getBody().setRestitution(1.0f);
+				auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, 1.0f);
+				if (i % 4 == 0)
+					rigidBody->setCollisionShape(e, Component::RigidBody::SPHERE);
+				else
+					rigidBody->setCollisionShape(e, Component::RigidBody::BOX);
+				rigidBody->getBody().setFriction(0.5f);
+				rigidBody->getBody().setRestitution(0.5f);
 #endif
+
+				setTransform(e, glm::translate(getTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
+				setTransform(e, glm::scale(getTransform(e), glm::vec3(0.5f)));
+
 #ifdef RENDERING_ACTIVATED
 
+				if (i == 0)
+				{
+					auto lightComponent = addComponent<Component::PointLight>(e);
+					lightComponent->lightData.colorRange = glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 13);
+					lightComponent->lightData.positionPower.w = 1;
+					lightComponent->lightData.hasShadow = 1;
+				}
 
+
+#ifdef PHYSIC_SIMULATION
+				rigidBody->setTransformation(getTransform(e));
+#endif
 
 #ifndef COMPLEX_MESH
-						auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
-						mesh->setShader("MaterialBasic");
+				Component::MeshRenderer *mesh;
+				if (i % 4 == 0)
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+				else
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+				mesh->setShader("MaterialBasic");
 #else
-						auto mesh = e->addComponent<Component::MeshRenderer>(getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
-						mesh->setShader("MaterialBasic");
+				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
+				mesh->setShader("MaterialBasic");
 #endif
 
 #endif
-				e->setLocalTransform(glm::translate(e->getLocalTransform(), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
 			}
 #ifdef LOG_FRAMERATE
+
 			_logFile << _chunkFrame << ", ";
 			_chunkCounter = 0.0;
 			_chunkFrame = 0;
@@ -174,9 +211,9 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 8.0;
+	double _maxTime = 8.0f;
 	double _chunkCounter = 0.0;
-	double _maxChunk = 0.25;
+	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;
 	std::ofstream _logFile;
 };

@@ -16,8 +16,8 @@ namespace Component
 		virtual ~CameraComponent(void);
 		void init(){}
 		virtual void reset(){}
-		void attachSkybox(const std::string &name, const std::string &cubeMapShader);
-		void dettachSkybox();
+		void                 attachSkybox(std::shared_ptr<CubeMapFile> texture, const std::string &cubeMapShader);
+		void                 dettachSkybox();
 		std::shared_ptr<CubeMapFile> getSkybox();
 		const std::string &getSkyboxShader() const;
 
@@ -43,8 +43,9 @@ namespace Component
 			ar(projection, cubeMapShader, lookAtTransform);
 			std::string _skybox;
 			ar(_skybox);
-			if (_skybox != "NULL")
-				skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
+			// @CESAR TODO
+			//if (_skybox != "NULL")
+			//	skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
 		}
 
 		void	initFrameBuffer()
@@ -83,8 +84,41 @@ namespace Component
 		glm::uvec2	fboSize;
 		uint32_t	sampleNbr;
 
+		CameraComponent(CameraComponent const &o)
+		{
+			viewport = o.viewport;
+			projection = o.projection;
+			skybox = o.skybox;
+			cubeMapShader = o.cubeMapShader;
+			lookAtTransform = o.lookAtTransform;
+			//@CESAR TODO TODO COPY FRAMEBUFFER
+			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
+			frameBuffer = o.frameBuffer;
+			downSampling = o.downSampling;
+			blitOnScreen = o.blitOnScreen;
+			fboSize = o.fboSize;
+			sampleNbr = o.sampleNbr;
+		}
+
+		CameraComponent	&operator=(CameraComponent const &o)
+		{
+			viewport = o.viewport;
+			projection = o.projection;
+			skybox = o.skybox;
+			cubeMapShader = o.cubeMapShader;
+			lookAtTransform = o.lookAtTransform;
+			//@CESAR TODO TODO COPY FRAMEBUFFER
+			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
+			frameBuffer = o.frameBuffer;
+			downSampling = o.downSampling;
+			blitOnScreen = o.blitOnScreen;
+			fboSize = o.fboSize;
+			sampleNbr = o.sampleNbr;
+
+			return *this;
+		}
+
+
 	private:
-		CameraComponent(CameraComponent const &);
-		CameraComponent	&operator=(CameraComponent const &);
 	};
 }

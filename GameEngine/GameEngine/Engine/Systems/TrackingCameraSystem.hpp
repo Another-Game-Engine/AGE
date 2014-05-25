@@ -39,16 +39,16 @@ protected:
 			auto c = e->getComponent<Component::CameraComponent>();
 			auto t = e->getComponent<Component::TrackingCamera>();
 
-			auto mat = t->toLook->getLocalTransform();
+			auto mat = t->toLook->getTransform();
 			mat = glm::translate(mat, t->dist);
 
-//			mat = glm::interpolate(e->getLocalTransform(), mat, 0.05f);
+//			mat = glm::interpolate(e->getTransform(), mat, 0.05f);
 
 			glm::vec3 pos = posFromMat4(mat);
-			e->setLocalTransform(mat);
+			e->setTransform(mat);
 			c->setLookAtTransform() = glm::lookAt(pos,
-				glm::vec3(t->toLook->getGlobalTransform()[3]),
-				glm::vec3(0, 1, 0));//e->getLocalTransform();
+				glm::vec3(t->toLook->getTransform()[3]),
+				glm::vec3(0, 1, 0));//e->getTransform();
 		}
 	}
 

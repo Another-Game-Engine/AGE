@@ -3,7 +3,6 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
-#include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/Engine.hh>
 #include <Physic/BulletDynamicManager.hpp>
@@ -26,6 +25,9 @@
 #include <cereal/types/set.hpp>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/string.hpp>
+
+#include <Physic/DynamicMotionState.hpp>
+
 namespace Component
 {
 	ATTRIBUTE_ALIGNED16(struct) RigidBody : public Component::ComponentBase<RigidBody>
@@ -54,9 +56,10 @@ namespace Component
 		{
 		}
 
-		void init(float _mass = 1.0f)
+		void init(std::weak_ptr<AScene> scene, float _mass = 1.0f)
 		{
-			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_entity->getScene().lock()->getInstance<BulletCollisionManager>());
+			_scene = scene;
+			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene.lock()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 			mass = _mass;
 		}
@@ -81,6 +84,22 @@ namespace Component
 			inertia = btVector3(0.0f, 0.0f, 0.0f);
 			rotationConstraint = glm::vec3(1, 1, 1);
 			transformConstraint = glm::vec3(1, 1, 1);
+		}
+
+		void setTransformation(const glm::mat4 &transformation)
+		{
+			//if (_rigidBody->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT || mass == 0.0f)
+			//{
+			//	std::cout << "Rigidbody is static or kinematic, <setTransformation> does not at effect, you can transform directly the entity" << std::endl;
+			//	return;
+			//}
+			btTransform tt = _rigidBody->getCenterOfMassTransform();
+			tt.setOrigin(convertGLMVectorToBullet(posFromMat4(transformation)));
+			glm::quat rot = glm::quat(rotFromMat4(transformation, true));
+			tt.setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
+			_rigidBody->setCenterOfMassTransform(tt);
+			_rigidBody->setWorldTransform(tt);
+			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scaleFromMat4(transformation)));
 		}
 
 		btMotionState &getMotionState()
@@ -111,23 +130,18 @@ namespace Component
 			inertia = v;
 		}
 
-		void setCollisionShape(CollisionShape c, const std::string &_meshName = "NULL", short filterGroup = 1, short filterMask = -1)
+		void setCollisionShape(const Entity &entity, CollisionShape c, const std::string &_meshName = "NULL", short filterGroup = 1, short filterMask = -1)
 		{
 			if (c == UNDEFINED)
 				return;
-			auto mediaManager = _entity->getScene().lock()->getInstance<AssetsManager>();
 			meshName = _meshName;
 			_reset();
 			shapeType = c;
-			btTransform transform;
-			glm::vec3 position = posFromMat4(_entity->getLocalTransform());
-			glm::vec3 scale = scaleFromMat4(_entity->getLocalTransform());
-			glm::vec3 rot = rotFromMat4(_entity->getLocalTransform(), true);
-			transform.setIdentity();
-			transform.setOrigin(convertGLMVectorToBullet(position));
-			transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
-			_motionState = std::shared_ptr<btMotionState>(new btDefaultMotionState(transform));
+			auto &entityTransform = _scene.lock()->getTransform(entity);
+
+
+			_motionState = std::shared_ptr<btMotionState>(new DynamicMotionState(_scene.lock()->getTransformRef(entity)));
 			if (c == BOX)
 			{
 				_collisionShape = std::shared_ptr<btCollisionShape>(new btBoxShape(btVector3(0.5, 0.5, 0.5)));
@@ -138,6 +152,7 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
+				auto mediaManager = _scene.lock()->getInstance<AssetsManager>();
 				auto media = mediaManager->get(_meshName);
 				if (!media)
 					return;
@@ -166,16 +181,17 @@ namespace Component
 			}
 			if (mass != 0)
 				_collisionShape->calculateLocalInertia(mass, inertia);
-			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scale));
 			_rigidBody = std::shared_ptr<btRigidBody>(new btRigidBody(mass, _motionState.get(), _collisionShape.get(), inertia));
-			_rigidBody->setUserPointer(&_entity);
+			_rigidBody->setUserPointer((void*)(_scene.lock()->getEntityPtr(entity)));
 			_rigidBody->setAngularFactor(convertGLMVectorToBullet(rotationConstraint));
 			_rigidBody->setLinearFactor(convertGLMVectorToBullet(transformConstraint));
+
 			if (_rigidBody->isStaticObject())
 			{
 				_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
 			_manager->getWorld()->addRigidBody(_rigidBody.get(), filterGroup, filterMask);
+			setTransformation(entityTransform);
 		}
 
 		void setRotationConstraint(bool x, bool y, bool z)
@@ -233,13 +249,15 @@ namespace Component
 		template <typename Archive>
 		void load(Archive &ar)
 		{
-			init();
+			//@CESAR TODO
+			//init();
 			float _mass;
 			glm::vec3 _inertia;
 			ar(_mass, shapeType, _inertia, rotationConstraint, transformConstraint, meshName);
 			mass = btScalar(_mass);
 			inertia = convertGLMVectorToBullet(_inertia);
-			setCollisionShape(shapeType, meshName);
+			//@CESAR TODO
+			//setCollisionShape(shapeType, meshName);
 			short int layer;
 			short int mask;
 			ar(layer, mask);
@@ -271,9 +289,43 @@ namespace Component
 		std::shared_ptr<btCollisionShape> _collisionShape;
 		std::shared_ptr<btMotionState> _motionState;
 		std::shared_ptr<btRigidBody> _rigidBody;
+		std::weak_ptr<AScene> _scene;
+
+		RigidBody(RigidBody &&o)
+			: ComponentBase<RigidBody>(std::move(o))
+		{
+			shapeType = std::move(o.shapeType);
+			mass = std::move(o.mass);
+			inertia = std::move(o.inertia);
+			rotationConstraint = std::move(o.rotationConstraint);
+			transformConstraint = std::move(o.transformConstraint);
+			meshName = std::move(o.meshName);
+			_collisionShape = std::move(o._collisionShape);
+			_motionState = std::move(o._motionState);
+			_rigidBody = std::move(o._rigidBody);
+			_scene = std::move(o._scene);
+			_manager = std::move(o._manager);
+		}
+
+		RigidBody &operator=(RigidBody &&o)
+		{
+			shapeType = std::move(o.shapeType);
+			mass = std::move(o.mass);
+			inertia = std::move(o.inertia);
+			rotationConstraint = std::move(o.rotationConstraint);
+			transformConstraint = std::move(o.transformConstraint);
+			meshName = std::move(o.meshName);
+			_collisionShape = std::move(o._collisionShape);
+			_motionState = std::move(o._motionState);
+			_rigidBody = std::move(o._rigidBody);
+			_scene = std::move(o._scene);
+			_manager = std::move(o._manager);
+			return *this;
+		}
+
 	private:
-		RigidBody(RigidBody const &);
-		RigidBody &operator=(RigidBody const &);
+		RigidBody &operator=(RigidBody const &o);
+		RigidBody(RigidBody const &o);
 
 		void _reset()
 		{
@@ -292,7 +344,6 @@ namespace Component
 			}
 		}
 	};
-
 }
 
 #endif //!__RIGID_BODY_HPP__

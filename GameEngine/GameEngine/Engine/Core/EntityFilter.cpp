@@ -1,13 +1,7 @@
 #include <Core/EntityFilter.hpp>
 
-bool defaultEntityComparaison(const Entity &e1, const Entity &e2)
-{
-	return e1 < e2;
-}
-
-EntityFilter::EntityFilter(std::weak_ptr<AScene> &&scene, bool(*comparaisonFn)(const Entity&, const Entity&))
-: _collection(comparaisonFn)
-, _scene(std::move(scene))
+EntityFilter::EntityFilter(std::weak_ptr<AScene> &&scene)
+: _scene(std::move(scene))
 , _locked(false)
 {
 	assert(_scene.lock() != nullptr && "System Scene is not valid.");
@@ -17,46 +11,72 @@ EntityFilter::~EntityFilter()
 {
 }
 
-const Barcode &EntityFilter::getCode() const
-{
-	return _code;
-}
-
-std::set<Entity, bool(*)(const Entity&, const Entity&)> const &EntityFilter::getCollection()
+std::set<Entity> &EntityFilter::getCollection()
 {
 	return _collection;
 }
 
-void EntityFilter::requireTag(unsigned short tag)
+void EntityFilter::requireTag(TAG_ID id)
 {
-	_code.add(tag);
-	_scene.lock()->filterSubscribe(tag, this);
+	_barcode.setTag(id);
+	_scene.lock()->filterSubscribe(id, this);
 }
 
-void EntityFilter::unRequireTag(unsigned short tag)
+void EntityFilter::unRequireTag(TAG_ID id)
 {
-	_code.remove(tag);
-	_scene.lock()->filterUnsubscribe(tag, this);
+	_barcode.unsetTag(id);
+	_scene.lock()->filterUnsubscribe(id, this);
 }
 
-void EntityFilter::componentAdded(Entity &&e, unsigned short typeId)
+void EntityFilter::componentAdded(EntityData &&e, COMPONENT_ID typeId)
 {
-	if (_code.match(e->getCode()))
-		_collection.insert(e);
-}
-
-void EntityFilter::componentRemoved(Entity &&e, unsigned short typeId)
-{
-	if (!_code.match(e->getCode()))
+	if (e.barcode.match(_barcode))
 	{
-		if (!_locked)
+		if (_locked)
 		{
-			_collection.erase(e);
+			_toAdd.insert(e.entity);
 		}
 		else
+			_collection.insert(e.entity);
+	}
+}
+
+void EntityFilter::componentRemoved(EntityData &&e, COMPONENT_ID typeId)
+{
+	if (!e.barcode.match(_barcode))
+	{
+		if (_locked)
 		{
-			_trash.insert(e);
+			_trash.insert(e.entity);
 		}
+		else
+			_collection.erase(e.entity);
+	}
+}
+
+void EntityFilter::tagAdded(EntityData &&e, TAG_ID typeId)
+{
+	if (e.barcode.match(_barcode))
+	{
+		if (_locked)
+		{
+			_toAdd.insert(e.entity);
+		}
+		else
+			_collection.insert(e.entity);
+	}
+}
+
+void EntityFilter::tagRemoved(EntityData &&e, TAG_ID typeId)
+{
+	if (!e.barcode.match(_barcode))
+	{
+		if (_locked)
+		{
+			_trash.insert(e.entity);
+		}
+		else
+			_collection.erase(e.entity);
 	}
 }
 
@@ -72,11 +92,16 @@ void EntityFilter::unlock()
 	if (!_locked)
 		return;
 	_locked = false;
+	for (auto &&e : _toAdd)
+	{
+		_collection.insert(e);
+	}
 	for (auto &&e : _trash)
 	{
 		_collection.erase(e);
 	}
 	_trash.clear();
+	_toAdd.clear();
 }
 
 bool EntityFilter::isLocked() const
