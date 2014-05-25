@@ -122,7 +122,7 @@ public:
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 	mesh->setShader("MaterialBasic");
 	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
-	rigidBody->setCollisionShape(plane, Component::RigidBody::BOX);
+	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
 //	rigidBody->setTransformation(getTransform(plane));
 	rigidBody->getBody().setFriction(0.8f);
 	//rigidBody->getBody().setRestitution(1.0f);
@@ -154,9 +154,9 @@ public:
 #ifdef PHYSIC_SIMULATION
 				auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, 1.0f);
 				if (i % 4 == 0)
-					rigidBody->setCollisionShape(e, Component::RigidBody::SPHERE);
+					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::SPHERE);
 				else
-					rigidBody->setCollisionShape(e, Component::RigidBody::BOX);
+					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
 				rigidBody->getBody().setFriction(0.5f);
 				rigidBody->getBody().setRestitution(0.5f);
 #endif
