@@ -17,7 +17,6 @@ namespace gl
 		VertexBuffer &operator=(VertexBuffer const &vertexbuffer);
 		VertexBuffer const &bind() const;
 		VertexBuffer const &unbind() const;
-		VertexBuffer const &unbind() const;
 		VertexBuffer &useElementArray(bool iselmentarray);
 		GLuint getId() const;
 		GLenum getMode() const;

@@ -4,13 +4,14 @@
 #include <Utils/OpenGL.hh>
 #include <OpenGL/Key.hh>
 #include <OpenGL/VertexBuffer.hh>
+#include <OpenGL/VertexArray.hh>
+#include <OpenGL/VerticesPool.hh>
 #include <Utils/Dependency.hpp>
 #include <map>
 
 namespace gl
 {
 	class Vertices;
-	class VerticesPool;
 
 	//!\file VerticesManager.hh
 	//!\author Dorian Pinaud
@@ -39,6 +40,7 @@ namespace gl
 
 		// attach vertices to pools
 		VerticesManager &attachVerticesToIndicesPool(Key<Vertices> const &vertices);
+		VerticesManager &dettachVerticesToIndicesPool(Key<Vertices> const &vertices);
 		VerticesManager &attachVerticesToPool(Key<Vertices> const &vertices, Key<VerticesPool> const &pool);
 		VerticesManager &dettachVerticesToPool(Key<Vertices> const &vertices);
 

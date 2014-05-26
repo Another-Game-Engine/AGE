@@ -1,11 +1,8 @@
 #ifndef VERTICE_HH_
 # define VERTICE_HH_
 
-#define WARNING_MESSAGE_BUFFER(index) \
-	std::cerr << "Warning: the index to get the buffer into vertices [" << index << "] is out of range." << std::endl;\
-
-#define WARNING_MESSAGE_SIZEBUFFER(index) \
-	std::cerr << "Warning: the index to get the size buffer into vertices [" << index << "] is out of range." << std::endl;\
+#define WARNING_MESSAGE_INDEX(in) \
+	std::cerr << "Warning: the index to get something into " << in << " is out of range." << std::endl;\
 
 #include <stdint.h>
 #include <OpenGL/VerticesManager.hh>
@@ -19,6 +16,8 @@ namespace gl
 
 #define METHODE_ACCESS \
 	friend VerticesManager &VerticesManager::attachVerticesToPool(Key<Vertices> const &, Key<VerticesPool> const &); \
+	friend VerticesManager &VerticesManager::attachVerticesToIndicesPool(Key<Vertices> const &); \
+	friend VerticesManager &VerticesManager::dettachVerticesToIndicesPool(Key<Vertices> const &); \
 	friend VerticesManager &VerticesManager::dettachVerticesToPool(Key<Vertices> const &); \
 	friend VerticesPool &VerticesPool::addVertices(Vertices &); \
 	friend VerticesPool &VerticesPool::rmVertices(Vertices &); \

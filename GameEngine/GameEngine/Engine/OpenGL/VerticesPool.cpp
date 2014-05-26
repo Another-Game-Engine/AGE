@@ -353,7 +353,7 @@ namespace gl
 		MemoryBlocksGPU memory;
 		memory.setNbrElement(vertices.getNbrVertices());
 		memory.setNbrBlock(_nbrAttribute);
-		for (size_t index = 0; index < _nbrAttribute; ++index)
+		for (uint8_t index = 0; index < _nbrAttribute; ++index)
 		{
 			size_t sizeAttribute = _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrVertices();
 			_nbrBytePool += sizeAttribute;
@@ -394,6 +394,38 @@ namespace gl
 		return (*this);
 	}
 
+	void VerticesPool::syncronizeVertices(Vertices &vertices, MemoryBlocksGPU &memory)
+	{
+		if (_nbrAttribute)
+			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
+		for (uint8_t index = 0; index < _nbrAttribute; ++index)
+		{
+			size_t base = _offsetAttribute[index] + _sizeAttribute[index];
+			memory.setOffset(index, base + _sizeAttribute[index]);
+			glBufferSubData(_vbo.getMode(), memory.getOffset(index), memory.getSizeBlock(index), vertices.getBuffer(index));
+			_sizeAttribute[index] += memory.getSizeBlock(index);
+		}
+	}
 
+	VerticesPool &VerticesPool::indiceSyncronisation()
+	{
+		_vbo.useElementArray(true);
+		if (_needSyncMajor)
+		{
+			_vbo.bind();
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _nbrBytePool, NULL, GL_STREAM_DRAW);
+			for (size_t index = 0; index < _pool.size(); ++index)
+			{
+				if (_pool[index].first)
+					syncronizeVertices(*(_pool[index].first), _pool[index].second);
+			}
+			_needSyncMajor = !_needSyncMajor;
+		}
+		else if (_needSyncMinor)
+		{
+			_needSyncMinor = !_needSyncMinor;
+		}
+		return (*this);
+	}
 
 }

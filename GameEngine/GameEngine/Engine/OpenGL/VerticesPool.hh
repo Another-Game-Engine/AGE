@@ -49,8 +49,8 @@ namespace gl
 		VerticesPool &clearPool();
 
 		//draw and synchronisation
-		VerticesManager &indiceSyncronisation();
-		VerticesManager &syncronisation(VerticesPool const &indicesPool);
+		VerticesPool &indiceSyncronisation();
+		VerticesPool &syncronisation(VerticesPool const &indicesPool);
 
 	private:
 		// opengl data
@@ -68,6 +68,9 @@ namespace gl
 		size_t *_sizeAttribute;
 		size_t *_offsetAttribute;
 		size_t _nbrBytePool;
+
+		//function associate to syncronisation
+		void syncronizeVertices(Vertices &vertices, MemoryBlocksGPU &memory);
 
 		bool _needSyncMajor;
 		bool _needSyncMinor;

@@ -143,6 +143,24 @@ namespace gl
 		return (*this);
 	}
 
+	VerticesManager &VerticesManager::dettachVerticesToIndicesPool(Key<Vertices> const &keyvertices)
+	{
+		if (!keyvertices)
+		{
+			WARNING_KEY("dettachVerticesToPoolIndicesPool")
+				return (*this);
+		}
+		auto &vertices = _vertices.find(keyvertices);
+		if (vertices == _vertices.end())
+			return (*this);
+		if (vertices->second._pool)
+		{
+			vertices->second._pool->rmVertices(vertices->second);
+			vertices->second._pool = NULL;
+		}
+		return (*this);
+	}
+
 	VerticesManager &VerticesManager::attachVerticesToIndicesPool(Key<Vertices> const &keyvertices)
 	{
 		if (!keyvertices)

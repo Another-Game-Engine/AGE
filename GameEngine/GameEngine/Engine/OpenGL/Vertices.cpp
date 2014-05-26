@@ -27,7 +27,7 @@ namespace gl
 		{
 			_buffers = new void*[_nbrBuffers];
 			_sizeBuffers = new size_t[_nbrBuffers];
-			std::memcpy(_sizeBuffers, sizeBuffers, sizeof(size_t)* _nbrBuffers);
+			memcpy(_sizeBuffers, sizeBuffers, sizeof(size_t)* _nbrBuffers);
 			for (size_t index = 0; index < _nbrBuffers; ++index)
 			{
 				_buffers[index] = new uint8_t[sizeBuffers[index]];
@@ -48,11 +48,11 @@ namespace gl
 		{
 			_buffers = new void*[_nbrBuffers];
 			_sizeBuffers = new size_t[_nbrBuffers];
-			std::memcpy(_sizeBuffers, copy._sizeBuffers, sizeof(size_t)* _nbrBuffers);
+			memcpy(_sizeBuffers, copy._sizeBuffers, sizeof(size_t)* _nbrBuffers);
 			for (size_t index = 0; index < _nbrBuffers; ++index)
 			{
 				_buffers[index] = new uint8_t[_sizeBuffers[index]];
-				std::memcpy(_buffers[index], copy._buffers[index], _sizeBuffers[index]);
+				memcpy(_buffers[index], copy._buffers[index], _sizeBuffers[index]);
 			}
 		}
 	}
@@ -91,9 +91,9 @@ namespace gl
 					_buffers[index] = new uint8_t[v._sizeBuffers[index]];
 			}
 		}
-		std::memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
+		memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
 		for (size_t index = 0; index < _nbrBuffers; ++index)
-			std::memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
+			memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
 		_indexOnPool = v._indexOnPool;
 		_pool = v._pool;
 		return (*this);
@@ -104,7 +104,7 @@ namespace gl
 	{
 		if (index >= _nbrBuffers)
 		{
-			WARNING_MESSAGE_BUFFER(index);
+			WARNING_MESSAGE_INDEX("getBuffer");
 			return (NULL);
 		}
 		return (_buffers[index]);
@@ -115,7 +115,7 @@ namespace gl
 	{
 		if (index >= _nbrBuffers)
 		{
-			WARNING_MESSAGE_SIZEBUFFER(index);
+			WARNING_MESSAGE_INDEX("getSizeBuffer");
 			return (NULL);
 		}
 		return (_sizeBuffers[index]);
@@ -131,4 +131,5 @@ namespace gl
 		return (_nbrVertices);
 	}
 
+	
 }

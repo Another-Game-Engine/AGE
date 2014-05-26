@@ -1,6 +1,6 @@
 #include "VertexArray.hh"
 
-namespace OpenGLTools
+namespace gl
 {
 	VertexArray::VertexArray()
 		: _id(0),
