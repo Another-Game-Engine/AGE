@@ -183,4 +183,15 @@ namespace gl
 	{
 		return (_nbrElement);
 	}
+
+	MemoryBlocksGPU &MemoryBlocksGPU::setSync(bool sync)
+	{
+		_sync = sync;
+		return (*this);
+	}
+
+	bool MemoryBlocksGPU::getSync() const
+	{
+		return (_sync);
+	}
 }

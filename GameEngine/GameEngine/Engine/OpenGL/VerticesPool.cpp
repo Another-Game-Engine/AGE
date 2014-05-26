@@ -416,8 +416,8 @@ namespace gl
 			indices._vbo.bind();
 			for (size_t index = 0; index < _nbrAttribute; ++index)
 			{
-				glEnableVertexAttribArray(index);
-				glVertexAttribPointer(index, _nbrComponent[index], _typeComponent[index], GL_FALSE, 0, (const GLvoid *)_offsetAttribute[index]);
+				glEnableVertexAttribArray(GLuint(index));
+				glVertexAttribPointer(GLuint(index), GLint(_nbrComponent[index]), _typeComponent[index], GL_FALSE, 0, (const GLvoid *)_offsetAttribute[index]);
 			}
 			_vao.unbind();
 		}
@@ -432,12 +432,12 @@ namespace gl
 			_vbo.bind();
 			for (size_t index = 0; index < _nbrAttribute; ++index)
 			{
-				glEnableVertexAttribArray(index);
-				glVertexAttribPointer(index, _nbrComponent[index], _typeComponent[index], GL_FALSE, 0, (const GLvoid *)_offsetAttribute[index]);
+				glEnableVertexAttribArray(GLuint(index));
+				glVertexAttribPointer(GLuint(index), GLint(_nbrComponent[index]), _typeComponent[index], GL_FALSE, 0, (const GLvoid *)_offsetAttribute[index]);
 			}
 			_vao.unbind();
-			return (*this);
 		}
+		return (*this);
 	}
 
 	VerticesPool &VerticesPool::syncronisation()
