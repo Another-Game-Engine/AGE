@@ -257,6 +257,11 @@ public:
 		return data.barcode.hasTag(tag);
 	}
 
+	EntityData &getEntityData(const Entity &e)
+	{
+		return _pool[e.getId()];
+	}
+
 	////////////////////////
 	//////
 	// Component operation

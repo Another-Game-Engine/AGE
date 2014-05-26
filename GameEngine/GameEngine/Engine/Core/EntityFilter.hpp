@@ -14,6 +14,9 @@ public:
 	EntityFilter(std::weak_ptr<AScene> &&scene);
 	virtual ~EntityFilter();
 
+	std::function<void(std::weak_ptr<AScene>, Entity &&e)> entityAdded;
+	std::function<void(std::weak_ptr<AScene>, Entity &&e)> entityRemoved;
+
 	template <typename T>
 	void requireComponent()
 	{
@@ -59,6 +62,7 @@ public:
 		{
 			_filter.unlock();
 		}
+
 	private:
 		EntityFilter &_filter;
 	};

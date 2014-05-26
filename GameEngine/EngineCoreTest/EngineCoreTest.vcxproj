@@ -156,6 +156,7 @@
     <ClInclude Include="CONFIGS.hpp" />
     <ClInclude Include="Scenes\BenchmarkScene.hpp" />
     <ClInclude Include="Systems\LifetimeSystem.hpp" />
+    <ClInclude Include="Systems\ParticleSystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,8 @@
 EntityFilter::EntityFilter(std::weak_ptr<AScene> &&scene)
 : _scene(std::move(scene))
 , _locked(false)
+, entityAdded(nullptr)
+, entityRemoved(nullptr)
 {
 	assert(_scene.lock() != nullptr && "System Scene is not valid.");
 }
@@ -37,7 +39,11 @@ void EntityFilter::componentAdded(EntityData &&e, COMPONENT_ID typeId)
 			_toAdd.insert(e.entity);
 		}
 		else
+		{
 			_collection.insert(e.entity);
+			if (entityAdded != nullptr)
+				entityAdded(_scene, std::move(e.entity));
+		}
 	}
 }
 
@@ -50,7 +56,11 @@ void EntityFilter::componentRemoved(EntityData &&e, COMPONENT_ID typeId)
 			_trash.insert(e.entity);
 		}
 		else
+		{
 			_collection.erase(e.entity);
+			if (entityRemoved != nullptr)
+				entityRemoved(_scene, std::move(e.entity));			
+		}
 	}
 }
 
@@ -63,7 +73,12 @@ void EntityFilter::tagAdded(EntityData &&e, TAG_ID typeId)
 			_toAdd.insert(e.entity);
 		}
 		else
+		{
 			_collection.insert(e.entity);
+			if (entityAdded != nullptr)
+				entityAdded(_scene, std::move(e.entity));
+
+		}
 	}
 }
 
@@ -76,7 +91,11 @@ void EntityFilter::tagRemoved(EntityData &&e, TAG_ID typeId)
 			_trash.insert(e.entity);
 		}
 		else
+		{
 			_collection.erase(e.entity);
+			if (entityRemoved != nullptr)
+				entityRemoved(_scene, std::move(e.entity));	
+		}
 	}
 }
 
@@ -95,10 +114,14 @@ void EntityFilter::unlock()
 	for (auto &&e : _toAdd)
 	{
 		_collection.insert(e);
+		if (entityAdded != nullptr)
+			entityAdded(_scene, std::move(const_cast<Entity&>(e)));
 	}
 	for (auto &&e : _trash)
 	{
 		_collection.erase(e);
+		if (entityRemoved != nullptr)
+			entityRemoved(_scene, std::move(const_cast<Entity&>(e)));
 	}
 	_trash.clear();
 	_toAdd.clear();

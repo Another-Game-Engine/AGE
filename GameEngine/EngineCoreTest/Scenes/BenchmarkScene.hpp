@@ -16,6 +16,7 @@
 #include <Systems/LightRenderingSystem.hh>
 #include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/BlitFinalRender.hh>
+#include <Systems/ParticleSystem.hpp>
 
 #include <Context/IRenderContext.hh>
 
@@ -35,9 +36,9 @@ public:
 	{
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
-//		addSystem<CollisionAdder>(1);
-//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
+
+		addSystem<ParticleSystem>(121);
 
 #ifdef RENDERING_ACTIVATED
 	addSystem<FirstPersonViewSystem>(2);
@@ -108,13 +109,6 @@ public:
 	lightComponent->lightData.hasShadow = -1;
 	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 3, 0)));
 
-	//light = createEntity();
-	//lightComponent = addComponent<Component::PointLight>(light);
-	//lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
-	//lightComponent->lightData.positionPower.w = 0;
-	//lightComponent->lightData.hasShadow = -1;
-	//setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
-
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto plane = createEntity();
 	setTransform(plane, glm::translate(getTransform(plane), glm::vec3(0, -10, 0)));
@@ -123,9 +117,9 @@ public:
 	mesh->setShader("MaterialBasic");
 	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
-//	rigidBody->setTransformation(getTransform(plane));
 	rigidBody->getBody().setFriction(0.8f);
-	//rigidBody->getBody().setRestitution(1.0f);
+	addComponent<Component::ParticleEmitter>(plane);
+
 
 #endif
 
