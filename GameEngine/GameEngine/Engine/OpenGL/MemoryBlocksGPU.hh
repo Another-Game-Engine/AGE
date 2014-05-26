@@ -28,6 +28,8 @@ namespace gl
 		size_t getSizeBlock(uint8_t index) const;
 		size_t getOffset(uint8_t index) const;
 
+		bool sync;
+
 	private:
 		size_t _nbrElement;
 		size_t _nbrBlock;

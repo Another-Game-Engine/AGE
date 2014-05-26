@@ -345,6 +345,7 @@ namespace gl
 				_needSyncMinor = true;
 				vertices._indexOnPool = index;
 				_pool[index].first = &vertices;
+				_pool[index].second.sync = false;
 				return (*this);
 			}
 		}
@@ -400,6 +401,7 @@ namespace gl
 			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		for (uint8_t index = 0; index < _nbrAttribute; ++index)
 		{
+			memory.sync = true;
 			size_t base = _offsetAttribute[index] + _sizeAttribute[index];
 			memory.setOffset(index, base + _sizeAttribute[index]);
 			glBufferSubData(_vbo.getMode(), memory.getOffset(index), memory.getSizeBlock(index), vertices.getBuffer(index));
@@ -423,6 +425,12 @@ namespace gl
 		}
 		else if (_needSyncMinor)
 		{
+			_vbo.bind();
+			for (size_t index = 0; index < _pool.size(); ++index)
+			{
+				if (_pool[index].first && _pool[index].second.sync)
+					syncronizeVertices(*(_pool[index].first), _pool[index].second);
+			}
 			_needSyncMinor = !_needSyncMinor;
 		}
 		return (*this);
