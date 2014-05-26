@@ -61,9 +61,9 @@ namespace gl
 			_offsetAttribute = new size_t[_nbrAttribute];
 			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			std::memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
-			std::memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			std::memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+			memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
+			memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
 		}
 	}
 
@@ -74,9 +74,9 @@ namespace gl
 		_nbrComponent(NULL),
 		_sizeAttribute(NULL),
 		_offsetAttribute(NULL),
-		_nbrBytePool(copy._nbrBytePool),
-		_needSyncMajor(copy._needSyncMajor),
-		_needSyncMinor(copy._needSyncMinor)
+		_nbrBytePool(0),
+		_needSyncMajor(false),
+		_needSyncMinor(false)
 	{
 		if (_nbrAttribute)
 		{
@@ -85,11 +85,11 @@ namespace gl
 			_nbrComponent = new uint8_t[_nbrAttribute];
 			_sizeAttribute = new size_t[_nbrAttribute];
 			_offsetAttribute = new size_t[_nbrAttribute];
-			std::memcpy(_sizeAttribute, copy._sizeAttribute, sizeof(size_t)* _nbrAttribute);
-			std::memcpy(_offsetAttribute, copy._offsetAttribute, sizeof(size_t)* _nbrAttribute);
-			std::memcpy(_typeComponent, copy._typeComponent, sizeof(GLenum)* _nbrAttribute);
-			std::memcpy(_sizeTypeComponent, copy._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			std::memcpy(_nbrComponent, copy._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
+			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
+			memcpy(_typeComponent, copy._typeComponent, sizeof(GLenum)* _nbrAttribute);
+			memcpy(_sizeTypeComponent, copy._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			memcpy(_nbrComponent, copy._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
 		}
 	}
 
@@ -111,9 +111,7 @@ namespace gl
 	{
 		if (this != &p)
 		{
-			_nbrBytePool = p._nbrBytePool;
-			_needSyncMajor = p._needSyncMajor;
-			_needSyncMinor = p._needSyncMinor;
+			clearPool();
 			if (_nbrAttribute != p._nbrAttribute)
 			{
 				if (_nbrAttribute)
@@ -142,11 +140,11 @@ namespace gl
 					_offsetAttribute = NULL;
 				}
 			}
-			std::memcpy(_sizeAttribute, p._sizeAttribute, sizeof(size_t)* _nbrAttribute);
-			std::memcpy(_offsetAttribute, p._offsetAttribute, sizeof(size_t)* _nbrAttribute);
-			std::memcpy(_typeComponent, p._typeComponent, sizeof(GLenum)* _nbrAttribute);
-			std::memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			std::memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
+			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
+			memcpy(_typeComponent, p._typeComponent, sizeof(GLenum)* _nbrAttribute);
+			memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
 		}
 		return (*this);
 	}
@@ -268,9 +266,9 @@ namespace gl
 		}
 		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		std::memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-		std::memcpy(_typeComponent, typeComponent, sizeof(GLenum)* nbrAttributes);
-		std::memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* nbrAttributes);
+		memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+		memcpy(_typeComponent, typeComponent, sizeof(GLenum)* nbrAttributes);
+		memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* nbrAttributes);
 		return (*this);
 	}
 
@@ -345,7 +343,7 @@ namespace gl
 				_needSyncMinor = true;
 				vertices._indexOnPool = index;
 				_pool[index].first = &vertices;
-				_pool[index].second.sync = false;
+				_pool[index].second.setSync(false);
 				return (*this);
 			}
 		}
@@ -379,7 +377,7 @@ namespace gl
 	VerticesPool &VerticesPool::clearPool()
 	{
 		_needSyncMinor = false;
-		_needSyncMajor = true;
+		_needSyncMajor = false;
 		_nbrBytePool = 0;
 		memset(_sizeAttribute, 0, sizeof(size_t) * _nbrAttribute);
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
@@ -401,7 +399,7 @@ namespace gl
 			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		for (uint8_t index = 0; index < _nbrAttribute; ++index)
 		{
-			memory.sync = true;
+			memory.setSync(true);
 			size_t base = _offsetAttribute[index] + _sizeAttribute[index];
 			memory.setOffset(index, base + _sizeAttribute[index]);
 			glBufferSubData(_vbo.getMode(), memory.getOffset(index), memory.getSizeBlock(index), vertices.getBuffer(index));
@@ -409,9 +407,41 @@ namespace gl
 		}
 	}
 
-	VerticesPool &VerticesPool::indiceSyncronisation()
+	VerticesPool &VerticesPool::attributesSyncronisation(VerticesPool const &indices)
 	{
-		_vbo.useElementArray(true);
+		if (_needSyncMajor)
+		{
+			_vao.bind();
+			_vbo.bind();
+			indices._vbo.bind();
+			for (size_t index = 0; index < _nbrAttribute; ++index)
+			{
+				glEnableVertexAttribArray(index);
+				glVertexAttribPointer(index, _nbrComponent[index], _typeComponent[index], GL_FALSE, 0, (const GLvoid *)_offsetAttribute[index]);
+			}
+			_vao.unbind();
+		}
+		return (*this);
+	}
+
+	VerticesPool &VerticesPool::attributesSyncronisation()
+	{
+		if (_needSyncMajor)
+		{
+			_vao.bind();
+			_vbo.bind();
+			for (size_t index = 0; index < _nbrAttribute; ++index)
+			{
+				glEnableVertexAttribArray(index);
+				glVertexAttribPointer(index, _nbrComponent[index], _typeComponent[index], GL_FALSE, 0, (const GLvoid *)_offsetAttribute[index]);
+			}
+			_vao.unbind();
+			return (*this);
+		}
+	}
+
+	VerticesPool &VerticesPool::syncronisation()
+	{
 		if (_needSyncMajor)
 		{
 			_vbo.bind();
@@ -421,19 +451,37 @@ namespace gl
 				if (_pool[index].first)
 					syncronizeVertices(*(_pool[index].first), _pool[index].second);
 			}
-			_needSyncMajor = !_needSyncMajor;
 		}
 		else if (_needSyncMinor)
 		{
 			_vbo.bind();
 			for (size_t index = 0; index < _pool.size(); ++index)
 			{
-				if (_pool[index].first && _pool[index].second.sync)
+				if (_pool[index].first && _pool[index].second.getSync())
 					syncronizeVertices(*(_pool[index].first), _pool[index].second);
 			}
-			_needSyncMinor = !_needSyncMinor;
 		}
 		return (*this);
 	}
 
+	VerticesPool &VerticesPool::setIsIndicesPool(bool isIndices)
+	{
+		if (isIndices)
+			_vbo.useElementArray(true);
+		else
+			_vbo.useElementArray(false);
+		return (*this);
+	}
+
+	bool VerticesPool::getIsIndicesPool() const
+	{
+		return (_vbo.getMode() == GL_ELEMENT_ARRAY_BUFFER ? true : false);
+	}
+
+	VerticesPool &VerticesPool::endSyncronisation()
+	{
+		_needSyncMajor = false;
+		_needSyncMinor = false;
+		return (*this);
+	}
 }

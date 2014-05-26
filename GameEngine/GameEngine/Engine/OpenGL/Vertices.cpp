@@ -31,7 +31,7 @@ namespace gl
 			for (size_t index = 0; index < _nbrBuffers; ++index)
 			{
 				_buffers[index] = new uint8_t[sizeBuffers[index]];
-				std::memcpy(_buffers[index], buffers[index], _sizeBuffers[index]);
+				memcpy(_buffers[index], buffers[index], _sizeBuffers[index]);
 			}
 		}
 	}

@@ -17,6 +17,7 @@ namespace gl
 		uint8_t sizeTypeComponent = sizeof(unsigned int);
 		uint8_t nbrComponent = 1;
 		_indicesPool.setData(1, &typeComponent, &sizeTypeComponent, &nbrComponent);
+		_indicesPool.setIsIndicesPool(true);
 	}
 
 	VerticesManager::~VerticesManager()
@@ -59,11 +60,12 @@ namespace gl
 	}
 
 	// the key will be set to empty
-	VerticesManager &VerticesManager::rmPool(Key<VerticesPool> const &key)
+	VerticesManager &VerticesManager::rmPool(Key<VerticesPool> &key)
 	{
 		if (!key)
 			return (*this);
 		_pools.erase(key);
+		key.destroy();
 		return (*this);
 	}
 
@@ -94,7 +96,7 @@ namespace gl
 		return (key);
 	}
 
-	VerticesManager &VerticesManager::rmVertices(Key<Vertices> const &key)
+	VerticesManager &VerticesManager::rmVertices(Key<Vertices> &key)
 	{
 		if (!key)
 		{
@@ -102,6 +104,7 @@ namespace gl
 			return (*this);
 		}
 		_vertices.erase(key);
+		key.destroy();
 		return (*this);
 	}
 
@@ -191,9 +194,9 @@ namespace gl
 		auto &pool = _pools.find(keypool);
 		if (pool == _pools.end())
 			return (*this);
-		//_indicesPool.indiceSyncronisation();
-		//pool->second.syncronisation(_indicesPool);
-		//pool->second.syncronisation();
+		_indicesPool.syncronisation();
+		pool->second.syncronisation();
+		pool->second.attributesSyncronisation(_indicesPool);
 		
 		//???
 		return (*this);

@@ -30,11 +30,11 @@ namespace gl
 		Key<VerticesPool> addPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
 		Key<VerticesPool> getPool(size_t index) const;
 		size_t nbrPool() const;
-		VerticesManager &rmPool(Key<VerticesPool> const &key);
+		VerticesManager &rmPool(Key<VerticesPool> &key);
 
 		//handle Vertices
 		Key<Vertices> addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
-		VerticesManager &rmVertices(Key<Vertices> const &key);
+		VerticesManager &rmVertices(Key<Vertices> &key);
 		Key<Vertices> getVertices(size_t index) const;
 		size_t getNbrVertices() const;
 

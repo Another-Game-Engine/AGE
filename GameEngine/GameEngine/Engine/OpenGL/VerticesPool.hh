@@ -28,6 +28,7 @@ namespace gl
 		VerticesPool &operator=(VerticesPool const &p);
 
 		// setter
+		VerticesPool &setIsIndicesPool(bool isindices);
 		VerticesPool &setData(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
 		VerticesPool &setNbrAttribute(uint8_t nbrAttribute);
 		VerticesPool &setTypeComponent(uint8_t index, GLenum type);
@@ -35,6 +36,7 @@ namespace gl
 		VerticesPool &setNbrComponent(uint8_t index, uint8_t nbrComponent);
 
 		// getter
+		bool getIsIndicesPool() const;
 		uint8_t getNbrAttribute() const;
 		GLenum getTypeComponent(uint8_t index) const;
 		uint8_t getSizeTypeComponent(uint8_t index) const;
@@ -49,8 +51,10 @@ namespace gl
 		VerticesPool &clearPool();
 
 		//draw and synchronisation
-		VerticesPool &indiceSyncronisation();
-		VerticesPool &syncronisation(VerticesPool const &indicesPool);
+		VerticesPool &attributesSyncronisation(VerticesPool const &indices);
+		VerticesPool &attributesSyncronisation();
+		VerticesPool &syncronisation();
+		VerticesPool &endSyncronisation();
 
 	private:
 		// opengl data
@@ -68,12 +72,11 @@ namespace gl
 		size_t *_sizeAttribute;
 		size_t *_offsetAttribute;
 		size_t _nbrBytePool;
+		bool _needSyncMajor;
+		bool _needSyncMinor;
 
 		//function associate to syncronisation
 		void syncronizeVertices(Vertices &vertices, MemoryBlocksGPU &memory);
-
-		bool _needSyncMajor;
-		bool _needSyncMinor;
 	};
 }
 

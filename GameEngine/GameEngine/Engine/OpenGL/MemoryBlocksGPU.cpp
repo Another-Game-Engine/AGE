@@ -15,7 +15,7 @@ namespace gl
 		_nbrBlock(0),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL),
-		sync(false)
+		_sync(false)
 	{
 
 	}
@@ -26,7 +26,7 @@ namespace gl
 		_nbrBlock(nbrBlock),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL),
-		sync(false)
+		_sync(false)
 	{
 		if (nbrBlock)
 		{
@@ -51,7 +51,7 @@ namespace gl
 		_nbrBlock(copy._nbrBlock),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL),
-		sync(false)
+		_sync(false)
 	{
 		if (_nbrBlock)
 		{
@@ -69,7 +69,7 @@ namespace gl
 	{
 		if (&b != this)
 		{
-			sync = false;
+			_sync = false;
 			_nbrElement = b._nbrElement;
 			if (b._nbrBlock != _nbrBlock)
 			{
