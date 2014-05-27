@@ -5,6 +5,7 @@
 #include "Systems/System.h"
 #include <Components/Component.hh>
 #include <Utils/OpenGL.hh>
+#include <OpenGL/AShader.hh>
 
 namespace Component
 {
@@ -85,9 +86,9 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 
 		for (std::uint64_t i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i].x = (float)((std::rand() % 1000) - 500.0f) / 100.0f;
-			points[i].y = (float)((std::rand() % 1000) - 500.0f) / 100.0f;
-			points[i].z = (float)((std::rand() % 1000) - 500.0f) / 100.0f;
+			points[i].x = (float)((std::rand() % 1000) - 500.0f);
+			points[i].y = (float)((std::rand() % 1000) - 500.0f);
+			points[i].z = 10.0f;
 			points[i].w = 1.0f;
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
@@ -141,12 +142,16 @@ public:
 	ParticleSystem(std::weak_ptr<AScene> &&scene)
 		: System(std::move(scene))
 		, _filter(std::move(scene))
+		, _computeShader(std::move(std::string("../../ComputeShaders/Particles.kernel")))
+		, _renderShader(std::move(std::string("../../Shaders/Particles.vp")), std::move(std::string("../../Shaders/Particles.fp")))
 	{
 		_name = "particle_system";
 	}
 	virtual ~ParticleSystem(){}
 private:
 	EntityFilter _filter;
+	OpenGLTools::Shader		_computeShader;
+	OpenGLTools::Shader		_renderShader;
 
 	virtual void updateBegin(double time)
 	{}
@@ -158,18 +163,19 @@ private:
 	{
 		auto scene = _scene.lock();
 		EntityFilter::Lock lock(_filter);
+		
+		_computeShader.use();
 
-		//glUseProgram() // particleProgram;
 		for (auto &&e : _filter.getCollection())
 		{
 			auto emitter = scene->getComponent<Component::ParticleEmitter>(e);
-			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, emitter->posSSbo);
-			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, emitter->velSSbo);
-			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, emitter->colSSbo);
-			glDispatchCompute(emitter->particleNumber / emitter->workGroupSize, 1, 1);
-			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+			//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, emitter->posSSbo);
+			//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, emitter->velSSbo);
+			//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, emitter->colSSbo);
+			//glDispatchCompute(emitter->particleNumber / emitter->workGroupSize, 1, 1);
+			//glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
-			//glUseProgram(); // my rendering program
+			_renderShader.use();
 			glBindBuffer(GL_ARRAY_BUFFER, emitter->posSSbo);
 			glVertexPointer(4, GL_FLOAT, 0, (void*)0);
 			glEnableClientState(GL_VERTEX_ARRAY);
