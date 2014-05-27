@@ -80,18 +80,19 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, emitter->posSSbo);
 		glBufferData(GL_SHADER_STORAGE_BUFFER, emitter->particleNumber * sizeof(glm::vec4), NULL, GL_STATIC_DRAW);
 
-		GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+		GLint bufMask = GL_MAP_WRITE_BIT;
 
 		glm::vec4 *points = (glm::vec4*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, emitter->particleNumber * sizeof(glm::vec4), bufMask);
 
-		for (std::uint64_t i = 0; i < emitter->particleNumber; ++i)
+		for (int i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i].x = (float)((std::rand() % 1000) - 500.0f);
-			points[i].y = (float)((std::rand() % 1000) - 500.0f);
-			points[i].z = 10.0f;
-			points[i].w = 1.0f;
+			points[i] = glm::vec4((float)(rand() % 1000) - 500.0f, (float)(rand() % 1000) - 500.0f,0,1);// (float)((std::rand() % 1000) - 500.0f);
+			//points[i].y = (float)i / 100.0f;// (float)((std::rand() % 1000) - 500.0f);
+			//points[i].z = (float)i / 100.0f;// (float)((std::rand() % 1000) - 500.0f);//10.0f;
+			//points[i].w = 1.0f;
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	}
 
 	// VEL
@@ -104,14 +105,12 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 
 		glm::vec4 *points = (glm::vec4*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, emitter->particleNumber * sizeof(glm::vec4), bufMask);
 
-		for (std::uint64_t i = 0; i < emitter->particleNumber; ++i)
+		for (int i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i].x = (float)((std::rand() % 10) - 5.0f) / 10.0f;
-			points[i].y = (float)((std::rand() % 10) - 5.0f) / 10.0f;
-			points[i].z = (float)((std::rand() % 10) - 5.0f) / 10.0f;
-			points[i].w = 1.0f;
+			points[i] = glm::vec4(((float)(std::rand() % 10) - 5.0f) / 10.0f, ((float)(std::rand() % 10) - 5.0f) / 10.0f, ((float)(std::rand() % 10) - 5.0f) / 10.0f, 1.0f);
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	}
 
 	// COL
@@ -120,18 +119,16 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, emitter->colSSbo);
 		glBufferData(GL_SHADER_STORAGE_BUFFER, emitter->particleNumber * sizeof(glm::vec4), NULL, GL_STATIC_DRAW);
 
-		GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+		GLint bufMask = GL_MAP_WRITE_BIT;
 
 		glm::vec4 *points = (glm::vec4*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, emitter->particleNumber * sizeof(glm::vec4), bufMask);
 
 		for (std::uint64_t i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i].x = (float)((std::rand() % 1000)) / 1000.0f;
-			points[i].y = (float)((std::rand() % 1000)) / 1000.0f;
-			points[i].z = (float)((std::rand() % 1000)) / 1000.0f;
-			points[i].w = 1.0f;
+			points[i] = glm::vec4((float)((std::rand() % 1000)) / 1000.0f, (float)((std::rand() % 1000)) / 1000.0f, (float)((std::rand() % 1000)) / 1000.0f, 1.0f);
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	}
 
 }
@@ -163,25 +160,58 @@ private:
 	{
 		auto scene = _scene.lock();
 		EntityFilter::Lock lock(_filter);
-		
-		_computeShader.use();
+	   
+		// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+		glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+		// Camera matrix
+		glm::mat4 View = glm::lookAt(
+			glm::vec3(4, 3, 3), // Camera is at (4,3,3), in World Space
+			glm::vec3(0, 0, 0), // and looks at the origin
+			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+);
+		// Model matrix : an identity matrix (model will be at the origin)
+		glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
 
 		for (auto &&e : _filter.getCollection())
 		{
 			auto emitter = scene->getComponent<Component::ParticleEmitter>(e);
-			//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, emitter->posSSbo);
-			//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, emitter->velSSbo);
-			//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, emitter->colSSbo);
-			//glDispatchCompute(emitter->particleNumber / emitter->workGroupSize, 1, 1);
-			//glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, emitter->posSSbo);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, emitter->velSSbo);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, emitter->colSSbo);
+
+			_computeShader.use();
+
+			glDispatchCompute(emitter->particleNumber / emitter->workGroupSize, 1, 1);
+			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 
 			_renderShader.use();
+			glFlush();
+			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "Model"), 1, GL_FALSE, &Model[0][0]);
+			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "View"), 1, GL_FALSE, &View[0][0]);
+			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "Projection"), 1, GL_FALSE, &Projection[0][0]);
+
 			glBindBuffer(GL_ARRAY_BUFFER, emitter->posSSbo);
-			glVertexPointer(4, GL_FLOAT, 0, (void*)0);
-			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 3 * sizeof(glm::vec4), (void*)0);
+			//glEnableClientState(GL_VERTEX_ARRAY);
 			glDrawArrays(GL_POINTS, 0, emitter->particleNumber);
-			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableVertexAttribArray(0);
+			//glDisableClientState(GL_VERTEX_ARRAY);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+			//static int toto = 0;
+			//++toto;
+			//	std::vector<glm::vec4> titi;
+			//	glBindBuffer(GL_SHADER_STORAGE_BUFFER, emitter->posSSbo);
+			//	glBufferData(GL_SHADER_STORAGE_BUFFER, emitter->particleNumber * sizeof(glm::vec4), NULL, GL_STATIC_DRAW);
+
+			//	GLint bufMask = GL_READ_ONLY;
+
+			//	glm::vec4 *points = (glm::vec4*)glMapBuffer(GL_SHADER_STORAGE_BUFFER, bufMask);
+			//	for (std::uint64_t i = 0; i < emitter->particleNumber; ++i)
+			//	{
+			//		titi.push_back(points[i]);
+			//	}
 		}
 	}
 
