@@ -12,6 +12,7 @@ namespace gl
 {
 	MemoryBlocksGPU::MemoryBlocksGPU()
 		: _nbrElement(0),
+		_startElement(0),
 		_nbrBlock(0),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL),
@@ -23,6 +24,7 @@ namespace gl
 	// the data into startblocks and sizeblocks must have nbrblock allocate
 	MemoryBlocksGPU::MemoryBlocksGPU(size_t nbrElement, size_t nbrBlock, size_t *startBlocks, size_t *sizeBlocks)
 		: _nbrElement(nbrElement),
+		_startElement(0),
 		_nbrBlock(nbrBlock),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL),
@@ -48,6 +50,7 @@ namespace gl
 
 	MemoryBlocksGPU::MemoryBlocksGPU(MemoryBlocksGPU const &copy)
 		: _nbrElement(copy._nbrElement),
+		_startElement(copy._startElement),
 		_nbrBlock(copy._nbrBlock),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL),
@@ -70,6 +73,7 @@ namespace gl
 		if (&b != this)
 		{
 			_sync = false;
+			_startElement = b._startElement;
 			_nbrElement = b._nbrElement;
 			if (b._nbrBlock != _nbrBlock)
 			{
@@ -99,6 +103,11 @@ namespace gl
 		return (*this);
 	}
 
+	size_t MemoryBlocksGPU::getElementStart() const
+	{
+		return (_startElement);
+	}
+
 	size_t MemoryBlocksGPU::getOffset(uint8_t index) const
 	{
 		if (index >= _nbrBlock)
@@ -122,6 +131,12 @@ namespace gl
 			return (-1);
 		}
 		return (_sizeBlocks[index]);
+	}
+
+	MemoryBlocksGPU &MemoryBlocksGPU::setStartElement(size_t start)
+	{
+		_startElement = start;
+		return (*this);
 	}
 
 	MemoryBlocksGPU &MemoryBlocksGPU::setOffset(uint8_t index, size_t offset)

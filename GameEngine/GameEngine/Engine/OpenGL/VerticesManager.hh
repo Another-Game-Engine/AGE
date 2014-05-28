@@ -45,7 +45,7 @@ namespace gl
 		VerticesManager &dettachVerticesToPool(Key<Vertices> const &vertices);
 
 		// draw
-		VerticesManager &drawByIndices(Key<Vertices> const &keyindices, Key<VerticesPool> const &keypool);
+		VerticesManager &drawByIndices(Key<Vertices> const &keyindices, Key<Vertices> const &keyVertice);
 		VerticesManager &draw(Key<Vertices> const &keyvertices);
 	private:
 		// data represent pools
