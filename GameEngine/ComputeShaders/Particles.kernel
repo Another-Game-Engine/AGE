@@ -19,25 +19,18 @@ layout(std430, binding = 6) buffer Col
 
 layout (local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
-const vec3 G = vec3(0.0f, -0.098f, 0.0f);
-const float DT = 0.00001f;
+const vec3 G = vec3(0.0f, -0.0098f, 0.0f);
+const float DT = 0.01f;
 
 void main()
 {
 	uint gid = gl_GlobalInvocationID.x;
 	vec3 p = Positions[gid].xyz;
 	vec3 v = Velocities[gid].xyz;
-	vec3 pp = p + v;// * DT + 0.5f * DT * DT * G;
+	vec3 pp = p + v * DT + 0.5f * DT * DT * G;
 	vec3 vp = v + G * DT;
-	/*if (pp.y < -0.3)
-	{
-		vp.y = vp.y * -0.89f;
-	}
 
-	if (pp.x < -0.2 || pp.x > 0.7)
-	{
-		vp.x = vp.x * -0.89f;
-	}*/
+
 
 	Positions[gid].xyz = pp;
 	Velocities[gid].xyz = vp;

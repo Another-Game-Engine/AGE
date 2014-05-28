@@ -86,7 +86,7 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 
 		for (int i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i] = glm::vec4(((float)(rand() % 1000) - 500.0f) / 1000.0f, ((float)(rand() % 1000) - 500.0f)/ 1000.0f,0,1);// (float)((std::rand() % 1000) - 500.0f);
+			points[i] = glm::vec4(0, 0, 0, 1);//glm::vec4(((float)(rand() % 1000) - 500.0f) / 1000.0f, ((float)(rand() % 1000) - 500.0f)/ 1000.0f,0,1);// (float)((std::rand() % 1000) - 500.0f);
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -104,7 +104,7 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 
 		for (int i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i] = glm::vec4(((float)(std::rand() % 10) - 5.0f) / 10000.0f, ((float)(std::rand() % 10) - 3.0f) / 10000.0f, 0.0f, 1.0f);
+			points[i] = glm::vec4(((float)(std::rand() % 1000) - 500.0f) / 1000.0f, ((float)(std::rand() % 1000) - 500.0f) / 1000.0f, 0.0f, 1.0f);
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -120,9 +120,9 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 
 		glm::vec4 *points = (glm::vec4*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, emitter->particleNumber * sizeof(glm::vec4), bufMask);
 
-		for (std::uint64_t i = 0; i < emitter->particleNumber; ++i)
+		for (int i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i] = glm::vec4((float)((std::rand() % 1000)) / 1000.0f, (float)((std::rand() % 1000)) / 1000.0f, (float)((std::rand() % 1000)) / 1000.0f, 1.0f);
+			points[i] = glm::vec4((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, 1.0f);
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -188,21 +188,19 @@ private:
 			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "View"), 1, GL_FALSE, &View[0][0]);
 			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "Projection"), 1, GL_FALSE, &Projection[0][0]);
 
-//			glEnableVertexAttribArray(0);
-			glBindBuffer(GL_ARRAY_BUFFER, emitter->posSSbo);
-			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
+			glEnableVertexAttribArray(0);
+			glEnableVertexAttribArray(1);
 
-			//glEnableVertexAttribArray(1);
+			glBindBuffer(GL_ARRAY_BUFFER, emitter->posSSbo);
+			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
 			glBindBuffer(GL_ARRAY_BUFFER, emitter->colSSbo);
-			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
+			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 			glDrawArrays(GL_POINTS, 0, emitter->particleNumber);
-//			glDisableVertexAttribArray(0);
-
-			//glDisableVertexAttribArray(1);
-
+			glDisableVertexAttribArray(0);
+			glDisableVertexAttribArray(1);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 		}
 	}
 
