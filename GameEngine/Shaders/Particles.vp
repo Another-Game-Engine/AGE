@@ -1,16 +1,12 @@
 #version 430
 
 layout (location=0) in vec4 inPos;
-layout (location=1) in vec4 inCol;
 
 uniform mat4 Model;
 uniform mat4 View;
 uniform mat4 Projection;
 
-out vec4 outCol;
-
 void main()
 {
-	gl_Position = inPos;//Model * View * Projection * inPos;
-	outCol = inCol;
+	gl_Position = inPos;
 }

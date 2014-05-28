@@ -80,16 +80,13 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, emitter->posSSbo);
 		glBufferData(GL_SHADER_STORAGE_BUFFER, emitter->particleNumber * sizeof(glm::vec4), NULL, GL_STATIC_DRAW);
 
-		GLint bufMask = GL_MAP_WRITE_BIT;
+		GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
 		glm::vec4 *points = (glm::vec4*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, emitter->particleNumber * sizeof(glm::vec4), bufMask);
 
 		for (int i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i] = glm::vec4((float)(rand() % 1000) - 500.0f, (float)(rand() % 1000) - 500.0f,0,1);// (float)((std::rand() % 1000) - 500.0f);
-			//points[i].y = (float)i / 100.0f;// (float)((std::rand() % 1000) - 500.0f);
-			//points[i].z = (float)i / 100.0f;// (float)((std::rand() % 1000) - 500.0f);//10.0f;
-			//points[i].w = 1.0f;
+			points[i] = glm::vec4(((float)(rand() % 1000) - 500.0f) / 1000.0f, ((float)(rand() % 1000) - 500.0f)/ 1000.0f,0,1);// (float)((std::rand() % 1000) - 500.0f);
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -107,7 +104,7 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 
 		for (int i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i] = glm::vec4(((float)(std::rand() % 10) - 5.0f) / 10.0f, ((float)(std::rand() % 10) - 5.0f) / 10.0f, ((float)(std::rand() % 10) - 5.0f) / 10.0f, 1.0f);
+			points[i] = glm::vec4(((float)(std::rand() % 10) - 5.0f) / 10000.0f, ((float)(std::rand() % 10) - 3.0f) / 10000.0f, 0.0f, 1.0f);
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -119,7 +116,7 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, emitter->colSSbo);
 		glBufferData(GL_SHADER_STORAGE_BUFFER, emitter->particleNumber * sizeof(glm::vec4), NULL, GL_STATIC_DRAW);
 
-		GLint bufMask = GL_MAP_WRITE_BIT;
+		GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
 		glm::vec4 *points = (glm::vec4*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, emitter->particleNumber * sizeof(glm::vec4), bufMask);
 
@@ -171,7 +168,7 @@ private:
 );
 		// Model matrix : an identity matrix (model will be at the origin)
 		glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
-
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (auto &&e : _filter.getCollection())
 		{
 			auto emitter = scene->getComponent<Component::ParticleEmitter>(e);
@@ -185,33 +182,27 @@ private:
 			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 
 			_renderShader.use();
-			glFlush();
+
+
 			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "Model"), 1, GL_FALSE, &Model[0][0]);
 			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "View"), 1, GL_FALSE, &View[0][0]);
 			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "Projection"), 1, GL_FALSE, &Projection[0][0]);
 
+//			glEnableVertexAttribArray(0);
 			glBindBuffer(GL_ARRAY_BUFFER, emitter->posSSbo);
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 3 * sizeof(glm::vec4), (void*)0);
-			//glEnableClientState(GL_VERTEX_ARRAY);
+			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
+
+			//glEnableVertexAttribArray(1);
+			glBindBuffer(GL_ARRAY_BUFFER, emitter->colSSbo);
+			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
+
 			glDrawArrays(GL_POINTS, 0, emitter->particleNumber);
-			glDisableVertexAttribArray(0);
-			//glDisableClientState(GL_VERTEX_ARRAY);
+//			glDisableVertexAttribArray(0);
+
+			//glDisableVertexAttribArray(1);
+
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-			//static int toto = 0;
-			//++toto;
-			//	std::vector<glm::vec4> titi;
-			//	glBindBuffer(GL_SHADER_STORAGE_BUFFER, emitter->posSSbo);
-			//	glBufferData(GL_SHADER_STORAGE_BUFFER, emitter->particleNumber * sizeof(glm::vec4), NULL, GL_STATIC_DRAW);
-
-			//	GLint bufMask = GL_READ_ONLY;
-
-			//	glm::vec4 *points = (glm::vec4*)glMapBuffer(GL_SHADER_STORAGE_BUFFER, bufMask);
-			//	for (std::uint64_t i = 0; i < emitter->particleNumber; ++i)
-			//	{
-			//		titi.push_back(points[i]);
-			//	}
 		}
 	}
 
