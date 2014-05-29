@@ -14,17 +14,21 @@ namespace gl
 	{
 	public:
 		MemoryBlocksGPU();
-		MemoryBlocksGPU(size_t nbrElement, size_t nbrBlock, size_t *startBlocks, size_t *sizeBlocks);
 		MemoryBlocksGPU(MemoryBlocksGPU const &copy);
 		~MemoryBlocksGPU();
 		MemoryBlocksGPU &operator=(MemoryBlocksGPU const &b);
 
+		//setter
+		MemoryBlocksGPU &setNbrObject(size_t nbrObject);
 		MemoryBlocksGPU &setSync(bool sync);
 		MemoryBlocksGPU &setStartElement(size_t start);
 		MemoryBlocksGPU &setNbrElement(size_t nbrElement);
 		MemoryBlocksGPU &setNbrBlock(size_t nbrBlock);
 		MemoryBlocksGPU &setSizeBlock(uint8_t index, size_t sizeBlock);
 		MemoryBlocksGPU &setOffset(uint8_t index, size_t offset);
+		
+		// getter
+		size_t getNbrObject() const;
 		bool getSync() const;
 		size_t getElementStart() const;
 		size_t getNbrElement() const;
@@ -34,6 +38,7 @@ namespace gl
 
 
 	private:
+		size_t _nbrObject;
 		size_t _nbrElement;
 		size_t _startElement;
 		size_t _nbrBlock;

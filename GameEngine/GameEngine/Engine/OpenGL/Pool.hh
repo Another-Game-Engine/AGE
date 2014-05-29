@@ -5,7 +5,7 @@
 #include <OpenGL/Key.hh>
 #include <OpenGL/VertexArray.hh>
 #include <OpenGL/Buffer.hh>
-#include <map>
+#include <vector>
 #include <stdint.h>
 
 namespace gl
@@ -61,7 +61,7 @@ namespace gl
 		uint8_t *_nbrComponent;
 
 		// data represent all vertices
-		std::map<Key<Vertices>, MemoryBlocksGPU> _pool;
+		std::vector<std::pair<Key<Vertices>, MemoryBlocksGPU>> _pool;
 		size_t *_sizeAttribute;
 		size_t *_offsetAttribute;
 		size_t _nbrBytePool;

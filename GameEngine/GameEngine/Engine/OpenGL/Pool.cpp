@@ -1,5 +1,6 @@
 #include <OpenGL/Pool.hh>
 #include <OpenGL/MemoryBlocksGPU.hh>
+#include <OpenGL/Vertices.hh>
 #include <iostream>
 #include <string>
 
@@ -231,7 +232,7 @@ namespace gl
 		// test if a field is empty
 		for (size_t index = 0; index < _pool.size(); ++index)
 		{
-			if (_pool[index].first && vertices.getNbrVertices() == _pool[index].second.getNbrElement())
+			if (vertices.getNbrVertices() == _pool[index].second.getNbrElement())
 			{
 				_needSyncMinor = true;
 				vertices._indexOnPool = index;
