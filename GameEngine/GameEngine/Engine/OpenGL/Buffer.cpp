@@ -60,11 +60,6 @@ namespace gl
 		return (GL_ARRAY_BUFFER);
 	}
 
-	GLuint VertexBuffer::getId() const
-	{
-		return (_id);
-	}
-
 	IndexBuffer::IndexBuffer()
 		: Buffer()
 	{
@@ -94,10 +89,5 @@ namespace gl
 	GLenum IndexBuffer::getMode() const
 	{
 		return (GL_ELEMENT_ARRAY_BUFFER);
-	}
-
-	GLuint IndexBuffer::getId() const
-	{
-		return (_id);
 	}
 }

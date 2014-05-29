@@ -33,8 +33,6 @@ namespace gl
 		virtual Buffer const &bind() const;
 		virtual Buffer const &unbind() const;
 		virtual GLenum getMode() const;
-
-		GLuint getId() const;
 	};
 
 	/// Buffer containing on the GPU the vertex
@@ -47,8 +45,6 @@ namespace gl
 		virtual Buffer const &bind() const;
 		virtual Buffer const &unbind() const;
 		virtual GLenum getMode() const;
-
-		GLuint getId() const;
 	};
 }
 
