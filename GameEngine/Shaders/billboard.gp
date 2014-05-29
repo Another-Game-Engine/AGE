@@ -1,0 +1,49 @@
+#version 430
+#extension GL_ARB_geometry_shader4 : enable
+
+layout(points) in;
+
+layout(triangle_strip, max_vertices=4) out;
+
+uniform vec3 CameraPos;
+
+uniform mat4 View;
+uniform mat4 Projection;
+
+in vec4 MyColor[1];
+out vec4 fMyColor;
+
+
+void main()
+{
+  mat4 mvp = Projection * View;
+  vec3 pos = gl_PositionIn[0].xyz;
+
+  vec3 toCamera = normalize(CameraPos - pos);
+  vec3 up = vec3(0.0, 1.0, 0.0);
+  vec3 right = cross(toCamera, up);
+
+  pos -= (right * 0.5);
+  gl_Position = mvp * vec4(pos, 1.0);
+  fMyColor = MyColor[0];
+  EmitVertex();
+
+  pos.y += 1.0;
+  gl_Position = mvp * vec4(pos, 1.0);
+  fMyColor = MyColor[0];
+  EmitVertex();
+
+  pos.y -= 1.0;
+  pos += right;
+  gl_Position = mvp * vec4(pos, 1.0);
+  fMyColor = MyColor[0];
+  EmitVertex();
+
+  pos.y += 1.0;
+  gl_Position = mvp * vec4(pos, 1.0);
+  fMyColor = MyColor[0];
+  EmitVertex();
+
+  EndPrimitive();
+}
+

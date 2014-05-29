@@ -37,7 +37,7 @@ namespace Component
 
 		void init()
 		{
-			particleNumber = 1024 * 1024;
+			particleNumber = 1024*1024;
 			workGroupSize = 128;
 		}
 
@@ -86,7 +86,7 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 
 		for (int i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i] = glm::vec4(0, 0, 0, 1);//glm::vec4(((float)(rand() % 1000) - 500.0f) / 1000.0f, ((float)(rand() % 1000) - 500.0f)/ 1000.0f,0,1);// (float)((std::rand() % 1000) - 500.0f);
+			points[i] = glm::vec4(((float)(rand() % 1000) - 500.0f), ((float)(rand() % 1000) - 500.0f), ((float)(rand() % 1000) - 500.0f),1);// (float)((std::rand() % 1000) - 500.0f);
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -104,7 +104,7 @@ void ParticleEntityAdded(std::weak_ptr<AScene> scene, Entity &&e)
 
 		for (int i = 0; i < emitter->particleNumber; ++i)
 		{
-			points[i] = glm::vec4(((float)(std::rand() % 1000) - 500.0f) / 1000.0f, ((float)(std::rand() % 1000) - 500.0f) / 1000.0f, 0.0f, 1.0f);
+			points[i] = glm::vec4(((float)(std::rand() % 1000) - 500.0f) / 1000.0f, ((float)(std::rand() % 1000) - 500.0f) / 1000.0f, ((float)(std::rand() % 1000) - 500.0f) / 1000.0f, 1.0f);
 		}
 		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -137,7 +137,7 @@ public:
 		: System(std::move(scene))
 		, _filter(std::move(scene))
 		, _computeShader(std::move(std::string("../../ComputeShaders/Particles.kernel")))
-		, _renderShader(std::move(std::string("../../Shaders/Particles.vp")), std::move(std::string("../../Shaders/Particles.fp")))
+		, _renderShader(std::move(std::string("../../Shaders/Particles.vp")), std::move(std::string("../../Shaders/Particles.fp")), std::move(std::string("../../Shaders/Billboard.gp")))
 	{
 		_name = "particle_system";
 	}
@@ -147,8 +147,15 @@ private:
 	OpenGLTools::Shader		_computeShader;
 	OpenGLTools::Shader		_renderShader;
 
+	glm::mat4 Projection = glm::perspective(65.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
+	glm::vec3 camPos = glm::vec3(0.3f, 0.3f, -1000);
+	glm::mat4 View;
+	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
+
 	virtual void updateBegin(double time)
-	{}
+	{
+
+	}
 
 	virtual void updateEnd(double time)
 	{}
@@ -157,17 +164,16 @@ private:
 	{
 		auto scene = _scene.lock();
 		EntityFilter::Lock lock(_filter);
-	   
-		// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-		glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
-		// Camera matrix
-		glm::mat4 View = glm::lookAt(
-			glm::vec3(4, 3, 3), // Camera is at (4,3,3), in World Space
-			glm::vec3(0, 0, 0), // and looks at the origin
-			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-);
-		// Model matrix : an identity matrix (model will be at the origin)
-		glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
+
+		camPos += glm::vec3(0, 0, 0.5f);
+
+		View = glm::lookAt(
+			camPos,
+			camPos + glm::vec3(0,0,1),
+			glm::vec3(0, 1, 0)
+			);
+		glEnable(GL_DEPTH_TEST);
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (auto &&e : _filter.getCollection())
 		{
@@ -183,10 +189,15 @@ private:
 
 			_renderShader.use();
 
+			auto m = glGetUniformLocation(_renderShader.getId(), "Model");
+			auto v = glGetUniformLocation(_renderShader.getId(), "View");
+			auto p = glGetUniformLocation(_renderShader.getId(), "Projection");
+			auto cp = glGetUniformLocation(_renderShader.getId(), "CameraPos");
 
-			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "Model"), 1, GL_FALSE, &Model[0][0]);
-			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "View"), 1, GL_FALSE, &View[0][0]);
-			glUniformMatrix4fv(glGetUniformLocation(_renderShader.getId(), "Projection"), 1, GL_FALSE, &Projection[0][0]);
+			glUniformMatrix4fv(m, 1, GL_FALSE, &Model[0][0]);
+			glUniformMatrix4fv(v, 1, GL_FALSE, &View[0][0]);
+			glUniformMatrix4fv(p, 1, GL_FALSE, &Projection[0][0]);
+			glUniform3fv(cp, 1, glm::value_ptr(camPos));
 
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);

@@ -3,9 +3,9 @@
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;
 
-/*uniform mat4 Model;
+uniform mat4 Model;
 uniform mat4 View;
-uniform mat4 Projection;*/
+uniform mat4 Projection;
 
 out vec4 MyColor;
 

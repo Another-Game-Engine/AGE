@@ -41,19 +41,19 @@ public:
 		addSystem<ParticleSystem>(121);
 
 #ifdef RENDERING_ACTIVATED
-	addSystem<FirstPersonViewSystem>(2);
-	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
-	addSystem<LightRenderingSystem>(80); // Render with the lights
-	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
-	addSystem<PostFxSystem>(110); // POST FXs
-	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
+	//addSystem<FirstPersonViewSystem>(2);
+	//addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	//addSystem<LightRenderingSystem>(80); // Render with the lights
+	//addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
+	//addSystem<PostFxSystem>(110); // POST FXs
+	//addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
 
-	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
-	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
-	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
-	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
-	getSystem<PostFxSystem>()->useHDR(false);
-	getSystem<PostFxSystem>()->useBloom(false);
+	//getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
+	//getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
+	//getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
+	//getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
+	//getSystem<PostFxSystem>()->useHDR(false);
+	//getSystem<PostFxSystem>()->useBloom(false);
 
 #endif
 
