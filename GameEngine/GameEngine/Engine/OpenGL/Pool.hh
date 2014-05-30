@@ -49,7 +49,7 @@ namespace gl
 
 		// Vertices handler
 		Key<PoolElement> const &addVertices(Vertices const &vertices);
-		Pool &rmVertices(Key<MemoryBlocksGPU> const &key, Vertices const &vertices);
+		Pool &rmVertices(Key<PoolElement> const &key);
 		Pool &clearPool();
 
 		//draw and synchronisation

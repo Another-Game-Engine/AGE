@@ -254,32 +254,37 @@ namespace gl
 				return (keyElement);
 			}
 		}
+		// Udpate major is require cause of size pool changement
 		_needSyncMajor = true;
-		PoolElement element;
-		element.cpuData = &vertices;
-		element.gpuData.setNbrElement(vertices.getNbrVertices());
-		element.gpuData.setNbrBlock(_nbrAttribute);
+		MemoryBlocksGPU memory;
+		memory.setNbrElement(vertices.getNbrVertices());
+		memory.setNbrBlock(_nbrAttribute);
 		for (uint8_t index = 0; index < _nbrAttribute; ++index)
 		{
 			size_t sizeAttribute = _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrVertices();
 			_nbrBytePool += sizeAttribute;
 			_sizeAttribute[index] += sizeAttribute;
-			element.gpuData.setSizeBlock(index, sizeAttribute);
+			memory.setSizeBlock(index, sizeAttribute);
 			if (index > 0)
 				_offsetAttribute[index] = _sizeAttribute[index - 1];
 		}
-		_pool.push_back(element);// &vertices, memory);
-		return (element.key);
+		PoolElement element;
+		Key<PoolElement> keyElement;
+		element.vertices = &vertices;
+		_poolElement.push_back(std::make_pair(keyElement, element));// &vertices, memory);
+		return (keyElement);
 	}
 
-	Pool &Pool::rmVertices(Key<MemoryBlocksGPU> const &key, Vertices const &vertices)
+	Pool &Pool::rmVertices(Key<PoolElement> const &key)
 	{
-		for (size_t index = 0; index < _pool.size(); ++index)
+		for (size_t index = 0; index < _poolElement.size(); ++index)
 		{
-			PoolElement element = _pool[index];
-			if (key == element.key)
+			if (_poolElement[index].first == key)
 			{
-				element.gpuData.setNbrObject(element.gpuData.getNbrObject() - 1);
+				MemoryBlocksGPU &memory = _poolMemory[_poolElement[index].second.memoryKey];
+				memory.setNbrObject(memory.getNbrObject() - 1);
+				_poolElement.erase(_poolElement.begin() + index);
+				return (*this);
 			}
 		}
 		return (*this);
@@ -292,15 +297,8 @@ namespace gl
 		_nbrBytePool = 0;
 		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		for (size_t index = 0; index < _pool.size(); ++index)
-		{
-			if (_pool[index].first)
-			{
-				_pool[index].first->_indexOnPool = NULL;
-				_pool[index].first->_pool = NULL;
-			}
-		}
-		_pool.clear();
+		_poolElement.clear();
+		_poolMemory.clear();
 		return (*this);
 	}
 
