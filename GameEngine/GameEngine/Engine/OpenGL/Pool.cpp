@@ -227,44 +227,61 @@ namespace gl
 	}
 
 
-	Pool &Pool::addVertices(Key<Vertices> const &key, Vertices const &vertices)
+	Key<Pool::PoolElement> const &Pool::addVertices(Vertices const &vertices)
 	{
-		// test if a field is empty
-		for (size_t index = 0; index < _pool.size(); ++index)
+		// Check if the vertices is not already in the pool
+		for (size_t index = 0; index != _poolElement.size(); ++index)
 		{
-			if (vertices.getNbrVertices() == _pool[index].second.getNbrElement())
+			if (_poolElement[index].second.vertices == &vertices)
 			{
-				_needSyncMinor = true;
-				vertices._indexOnPool = index;
-				_pool[index].first = &vertices;
-				_pool[index].second.setSync(false);
-				return (*this);
+				MemoryBlocksGPU &memoryfind = _poolMemory[_poolElement[index].second.memoryKey];
+				memoryfind.setNbrElement(memoryfind.getNbrObject() + 1);
+				return (_poolElement[index].first);
 			}
 		}
-		// no one field is free, push a new field to store data
+		// Next check in memory pool if a field is free
+		for (auto &index = _poolMemory.begin(); index != _poolMemory.end(); ++index)
+		{
+			MemoryBlocksGPU &memory = index->second;
+			if (memory.getNbrObject() == 0 && memory.getNbrElement() == vertices.getNbrVertices())
+			{
+				_needSyncMinor = true;
+				Key<PoolElement> keyElement;
+				PoolElement newElement;
+				newElement.memoryKey = index->first;
+				newElement.vertices = &vertices;
+				_poolElement.push_back(std::make_pair(keyElement, newElement));
+				return (keyElement);
+			}
+		}
 		_needSyncMajor = true;
-		MemoryBlocksGPU memory;
-		memory.setNbrElement(vertices.getNbrVertices());
-		memory.setNbrBlock(_nbrAttribute);
+		PoolElement element;
+		element.cpuData = &vertices;
+		element.gpuData.setNbrElement(vertices.getNbrVertices());
+		element.gpuData.setNbrBlock(_nbrAttribute);
 		for (uint8_t index = 0; index < _nbrAttribute; ++index)
 		{
 			size_t sizeAttribute = _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrVertices();
 			_nbrBytePool += sizeAttribute;
 			_sizeAttribute[index] += sizeAttribute;
-			memory.setSizeBlock(index, sizeAttribute);
+			element.gpuData.setSizeBlock(index, sizeAttribute);
 			if (index > 0)
 				_offsetAttribute[index] = _sizeAttribute[index - 1];
 		}
-		_pool.push_back(std::make_pair(&vertices, MemoryBlocksGPU(memory)));// &vertices, memory);
-		vertices._indexOnPool = _pool.size() - 1;
-		return (*this);
+		_pool.push_back(element);// &vertices, memory);
+		return (element.key);
 	}
 
-	Pool &Pool::rmVertices(Key<Vertices> const &vertices)
+	Pool &Pool::rmVertices(Key<MemoryBlocksGPU> const &key, Vertices const &vertices)
 	{
-		_pool[vertices._indexOnPool].first->_indexOnPool = 0;
-		_pool[vertices._indexOnPool].first->_pool = NULL;
-		_pool[vertices._indexOnPool].first = NULL;
+		for (size_t index = 0; index < _pool.size(); ++index)
+		{
+			PoolElement element = _pool[index];
+			if (key == element.key)
+			{
+				element.gpuData.setNbrObject(element.gpuData.getNbrObject() - 1);
+			}
+		}
 		return (*this);
 	}
 

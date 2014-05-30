@@ -23,6 +23,12 @@ namespace gl
 	class Pool
 	{
 	public:
+		struct PoolElement
+		{
+			Key<MemoryBlocksGPU> memoryKey;
+			Vertices const *vertices;
+		};
+	public:
 		// constructor
 		Pool();
 		~Pool();
@@ -42,8 +48,8 @@ namespace gl
 		size_t getNbrBytePool() const;
 
 		// Vertices handler
-		Pool &addVertices(Key<Vertices> const &key, Vertices const &vertices);
-		Pool &rmVertices(Key<Vertices> const &key);
+		Key<PoolElement> const &addVertices(Vertices const &vertices);
+		Pool &rmVertices(Key<MemoryBlocksGPU> const &key, Vertices const &vertices);
 		Pool &clearPool();
 
 		//draw and synchronisation
@@ -51,6 +57,7 @@ namespace gl
 		Pool &endSyncronisation();
 
 	protected:
+
 		// gl data
 		gl::VertexBuffer _vbo;
 
@@ -61,7 +68,8 @@ namespace gl
 		uint8_t *_nbrComponent;
 
 		// data represent all vertices
-		std::vector<std::pair<Key<Vertices>, MemoryBlocksGPU>> _pool;
+		std::map<Key<MemoryBlocksGPU>, MemoryBlocksGPU> _poolMemory;
+		std::vector<std::pair<Key<PoolElement>, PoolElement>> _poolElement;
 		size_t *_sizeAttribute;
 		size_t *_offsetAttribute;
 		size_t _nbrBytePool;
