@@ -42,12 +42,16 @@ bool IsInsideSphere(vec3 p, vec4 s)
 const vec3 G = vec3(0.0f, -0.0098f, 0.0f);
 const float DT = 0.3f;
 
+const  vec3 Center = vec3(0,0,0);
+
 void main()
 {
 	uint gid = gl_GlobalInvocationID.x;
 
+
 	vec3 p = Positions[gid].xyz;
 	vec3 v = Velocities[gid].xyz;
+	/*
 	vec3 pp = p + v * DT + 0.5f * DT * DT * G;
 	vec3 vp = v + G * DT;
 
@@ -55,9 +59,11 @@ void main()
 	{
 		vp = BounceSphere(p, v, Sphere);
 		pp = p + vp * DT + 0.5 * DT * DT * G;
-	}
+	} */
+
+	vec3 pp = p + v * DT;
+	vec3 vp = v - normalize(p - Center) * 0.01 * DT;
 
 	Positions[gid].xyz = pp;
 	Velocities[gid].xyz = vp;
-	Colors[gid].w -= 0.05f;
 }
