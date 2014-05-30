@@ -148,7 +148,7 @@ private:
 	OpenGLTools::Shader		_renderShader;
 
 	glm::mat4 Projection = glm::perspective(65.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
-	glm::vec3 camPos = glm::vec3(0.3f, 0.3f, -1000);
+	glm::vec3 camPos = glm::vec3(0.f, 0.f, -1000);
 	glm::mat4 View;
 	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
 
@@ -165,7 +165,7 @@ private:
 		auto scene = _scene.lock();
 		EntityFilter::Lock lock(_filter);
 
-		camPos += glm::vec3(0, 0, 0.5f);
+		//camPos += glm::vec3(0, 0, 0.5f);
 
 		View = glm::lookAt(
 			camPos,

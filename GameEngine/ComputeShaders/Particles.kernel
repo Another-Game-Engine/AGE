@@ -19,19 +19,45 @@ layout(std430, binding = 6) buffer Col
 
 layout (local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
+const vec4 Sphere = vec4(0, 0, 0, 300);
+
+vec3 Bounce(vec3 vin, vec3 n)
+{
+	vec3 vout = reflect(vin, n);
+	return vout;
+}
+
+vec3 BounceSphere(vec3 p, vec3 v, vec4 s)
+{
+	vec3 n = normalize(p - s.xyz);
+	return Bounce(v, n);
+}
+
+bool IsInsideSphere(vec3 p, vec4 s)
+{
+	float r = length(p - s.xyz);
+	return (r < s.w);
+}
+
 const vec3 G = vec3(0.0f, -0.0098f, 0.0f);
-const float DT = 0.01f;
+const float DT = 0.3f;
 
 void main()
 {
 	uint gid = gl_GlobalInvocationID.x;
+
 	vec3 p = Positions[gid].xyz;
 	vec3 v = Velocities[gid].xyz;
 	vec3 pp = p + v * DT + 0.5f * DT * DT * G;
 	vec3 vp = v + G * DT;
 
-
+	if (IsInsideSphere(pp, Sphere))
+	{
+		vp = BounceSphere(p, v, Sphere);
+		pp = p + vp * DT + 0.5 * DT * DT * G;
+	}
 
 	Positions[gid].xyz = pp;
 	Velocities[gid].xyz = vp;
+	Colors[gid].w -= 0.05f;
 }
