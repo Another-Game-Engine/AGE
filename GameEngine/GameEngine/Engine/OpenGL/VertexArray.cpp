@@ -32,12 +32,12 @@ namespace gl
 		return (*this);
 	}
 
-	void VertexArray::bind()
+	void VertexArray::bind() const
 	{
 		glBindVertexArray(_id);
 	}
 
-	void VertexArray::unbind()
+	void VertexArray::unbind() const
 	{
 		glBindVertexArray(0);
 	}

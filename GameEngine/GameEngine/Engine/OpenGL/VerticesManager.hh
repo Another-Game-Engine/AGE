@@ -3,9 +3,9 @@
 
 #include <Utils/OpenGL.hh>
 #include <OpenGL/Key.hh>
-#include <OpenGL/VertexBuffer.hh>
+#include <OpenGL/Buffer.hh>
 #include <OpenGL/VertexArray.hh>
-#include <OpenGL/VerticesPool.hh>
+#include <OpenGL/Pool.hh>
 #include <Utils/Dependency.hpp>
 #include <map>
 

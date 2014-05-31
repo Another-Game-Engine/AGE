@@ -46,6 +46,7 @@ namespace gl
 		size_t getSizeAttribute(uint8_t index) const;
 		size_t getOffsetAttribute(uint8_t index) const;
 		size_t getNbrBytePool() const;
+		VertexBuffer const &getVertexBuffer() const;
 
 		// Vertices handler
 		Key<PoolElement> const &addVertices(Vertices const &vertices);
@@ -53,7 +54,7 @@ namespace gl
 		Pool &clearPool();
 
 		//draw and synchronisation
-		Pool &syncronisation();
+		virtual Pool &syncronisation() = 0;
 		Pool &endSyncronisation();
 
 	protected:
@@ -69,15 +70,14 @@ namespace gl
 
 		// data represent all vertices
 		std::map<Key<MemoryBlocksGPU>, MemoryBlocksGPU> _poolMemory;
-		std::vector<std::pair<Key<PoolElement>, PoolElement>> _poolElement;
+		std::map<Key<PoolElement>, PoolElement> _poolElement;
 		size_t *_sizeAttribute;
 		size_t *_offsetAttribute;
 		size_t _nbrBytePool;
-		bool _needSyncMajor;
-		bool _needSyncMinor;
+		bool _syncronized;
 
 		//function associate to syncronisation
-		void syncronizeVertices(Vertices &vertices, MemoryBlocksGPU &memory);
+		void syncronizeVertices(Vertices const &vertices, MemoryBlocksGPU &memory);
 	};
 
 	class VertexPool : public Pool
@@ -100,13 +100,13 @@ namespace gl
 		VertexPool &dettachIndexPoolToVertexPool();
 
 		//draw and synchronisation
-		VertexPool &attributesSyncronisation();
-		VertexPool &draw(Key<Vertices> const &drawWithIt, Key<Vertices> const &drawOnIt);
-		VertexPool &draw(Key<Vertices> const &drawIt);
+		virtual Pool &syncronisation();
+		VertexPool const &draw(Key<PoolElement> const &drawWithIt, Key<PoolElement> const &drawOnIt) const;
+		VertexPool const &draw(Key<PoolElement> const &drawIt) const;
 
 	private:
-		gl::VertexArray _vao;
-		gl::IndexPool *_indexPoolattach;
+		VertexArray _vao;
+		IndexPool const *_indexPoolattach;
 		
 	};
 
@@ -117,6 +117,9 @@ namespace gl
 		virtual ~IndexPool();
 		IndexPool(IndexPool const &copy);
 		virtual Pool &operator=(Pool const &p);
+		virtual Pool &syncronisation();
+		IndexPool const &draw(Key<PoolElement> const &key, MemoryBlocksGPU const &vertices) const;
+		IndexPool const &draw(Key<PoolElement> const &key) const;
 	};
 }
 

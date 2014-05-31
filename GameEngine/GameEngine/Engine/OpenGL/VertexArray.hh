@@ -14,8 +14,8 @@ namespace gl
 		 VertexArray(VertexArray const &vertexarray);
 		 VertexArray &operator=(VertexArray const &vertexarray);
 		 void init();
-		 void bind();
-		 void unbind();
+		 void bind() const;
+		 void unbind() const;
 		 GLuint getId() const;
 	private:
 		GLuint _id;
