@@ -75,6 +75,7 @@ namespace gl
 		size_t *_offsetAttribute;
 		size_t _nbrBytePool;
 		bool _syncronized;
+		bool _internalSyncronized;
 
 		//function associate to syncronisation
 		void syncronizeVertices(Vertices const &vertices, MemoryBlocksGPU &memory);

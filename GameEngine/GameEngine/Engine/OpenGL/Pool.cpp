@@ -18,7 +18,8 @@ namespace gl
 		_sizeAttribute(NULL),
 		_offsetAttribute(NULL),
 		_nbrBytePool(0),
-		_syncronized(true)
+		_syncronized(true),
+		_internalSyncronized(true)
 	{
 		_typeComponent = new GLenum[_nbrAttribute];
 		_sizeTypeComponent = new uint8_t[_nbrAttribute];
@@ -43,7 +44,8 @@ namespace gl
 		_sizeAttribute(NULL),
 		_offsetAttribute(NULL),
 		_nbrBytePool(0),
-		_syncronized(true)
+		_syncronized(true),
+		_internalSyncronized(true)
 	{
 		_typeComponent = new GLenum;
 		_sizeTypeComponent = new uint8_t;
@@ -65,7 +67,8 @@ namespace gl
 		_sizeAttribute(NULL),
 		_offsetAttribute(NULL),
 		_nbrBytePool(0),
-		_syncronized(true)
+		_syncronized(true),
+		_internalSyncronized(true)
 	{
 		if (_nbrAttribute)
 		{
@@ -241,6 +244,7 @@ namespace gl
 			MemoryBlocksGPU &memory = index->second;
 			if (memory.getNbrObject() == 0 && memory.getNbrElement() == vertices.getNbrVertices())
 			{
+				_internalSyncronized = false;
 				memory.setSync(false);
 				Key<PoolElement> keyElement;
 				PoolElement newElement;
@@ -289,6 +293,7 @@ namespace gl
 	Pool &Pool::clearPool()
 	{
 		_syncronized = true;
+		_internalSyncronized = true;
 		_nbrBytePool = 0;
 		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
@@ -461,14 +466,17 @@ namespace gl
 	Pool &VertexPool::syncronisation()
 	{
 		_vbo.bind();
-		if (_syncronized)
+		if (!_syncronized)
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _nbrBytePool, NULL, GL_STREAM_DRAW);
-		for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
+		if (!_internalSyncronized)
 		{
-			if (index->second.vertices && _poolMemory[index->second.memoryKey].getSync() == false)
-				syncronizeVertices(*(index->second.vertices), _poolMemory[index->second.memoryKey]);
+			for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
+			{
+				if (index->second.vertices && _poolMemory[index->second.memoryKey].getSync() == false)
+					syncronizeVertices(*(index->second.vertices), _poolMemory[index->second.memoryKey]);
+			}
 		}
-		if (_syncronized)
+		if (!_syncronized)
 		{
 			_vao.bind();
 			_vbo.bind();
@@ -481,6 +489,7 @@ namespace gl
 			}
 			_vao.unbind();
 		}
+		_internalSyncronized = true;
 		_syncronized = true;
 		return (*this);
 	}
@@ -546,13 +555,17 @@ namespace gl
 	Pool &IndexPool::syncronisation()
 	{
 		_vbo.bind();
-		if (_syncronized)
+		if (!_syncronized)
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _nbrBytePool, NULL, GL_STREAM_DRAW);
-		for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
+		if (!_internalSyncronized)
 		{
-			if (index->second.vertices && _poolMemory[index->second.memoryKey].getSync() == false)
-				syncronizeVertices(*(index->second.vertices), _poolMemory[index->second.memoryKey]);
+			for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
+			{
+				if (index->second.vertices && _poolMemory[index->second.memoryKey].getSync() == false)
+					syncronizeVertices(*(index->second.vertices), _poolMemory[index->second.memoryKey]);
+			}
 		}
+		_internalSyncronized = true;
 		_syncronized = true;
 		return (*this);
 	}
