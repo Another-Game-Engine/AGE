@@ -6,22 +6,13 @@
 
 #include <stdint.h>
 #include <OpenGL/VerticesManager.hh>
-#include <OpenGL/VerticesPool.hh>
+#include <OpenGL/Pool.hh>
 
 namespace gl
 {
 	class MemoryBlocksGPU;
 	class Vertices;
 	template<typename TYPE> class Key;
-
-#define METHODE_ACCESS \
-	friend VerticesManager &VerticesManager::attachVerticesToPool(Key<Vertices> const &, Key<VerticesPool> const &); \
-	friend VerticesManager &VerticesManager::attachVerticesToIndicesPool(Key<Vertices> const &); \
-	friend VerticesManager &VerticesManager::dettachVerticesToIndicesPool(Key<Vertices> const &); \
-	friend VerticesManager &VerticesManager::dettachVerticesToPool(Key<Vertices> const &); \
-	friend VerticesPool &VerticesPool::addVertices(Vertices &); \
-	friend VerticesPool &VerticesPool::rmVertices(Vertices &); \
-	friend VerticesPool &VerticesPool::clearPool();
 
 	//!\file VerticesManager.hh
 	//!\author Dorian Pinaud

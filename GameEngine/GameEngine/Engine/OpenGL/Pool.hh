@@ -5,7 +5,7 @@
 #include <OpenGL/Key.hh>
 #include <OpenGL/VertexArray.hh>
 #include <OpenGL/Buffer.hh>
-#include <vector>
+#include <map>
 #include <stdint.h>
 
 namespace gl
@@ -108,6 +108,8 @@ namespace gl
 	private:
 		VertexArray _vao;
 		IndexPool const *_indexPoolattach;
+
+		//friend IndexPool const &IndexPool::draw(Key<PoolElement> const &key, MemoryBlocksGPU const &target) const;
 		
 	};
 
@@ -119,8 +121,8 @@ namespace gl
 		IndexPool(IndexPool const &copy);
 		virtual Pool &operator=(Pool const &p);
 		virtual Pool &syncronisation();
-		IndexPool const &draw(Key<PoolElement> const &key, MemoryBlocksGPU const &vertices) const;
 		IndexPool const &draw(Key<PoolElement> const &key) const;
+		IndexPool const &draw(Key<PoolElement> const &key, MemoryBlocksGPU const &target) const;
 	};
 }
 
