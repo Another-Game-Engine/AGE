@@ -183,7 +183,8 @@ private:
 			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, emitter->colSSbo);
 
 			_computeShader.use();
-
+			auto t = glGetUniformLocation(_renderShader.getId(), "Time");
+			glUniform1f(t, (float)time);
 			glDispatchCompute(emitter->particleNumber / emitter->workGroupSize, 1, 1);
 			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 
