@@ -1,5 +1,5 @@
 #include "Font.hh"
-#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/GeometryManager.hh>
 #include <OpenGL/Vertices.hh>
 
 Font::Font()

@@ -32,7 +32,7 @@ namespace gl
 		// constructor
 		Pool();
 		~Pool();
-		Pool(IndexPool const &pool);
+		Pool(int);
 		Pool(uint8_t nbrAttribute, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
 		Pool(Pool const &copy);
 		virtual Pool &operator=(Pool const &p);
@@ -49,7 +49,7 @@ namespace gl
 		VertexBuffer const &getVertexBuffer() const;
 
 		// Vertices handler
-		Key<PoolElement> const &addVertices(Vertices const &vertices);
+		Key<PoolElement> addVertices(Vertices const &vertices);
 		Pool &rmVertices(Key<PoolElement> const &key);
 		Pool &clearPool();
 

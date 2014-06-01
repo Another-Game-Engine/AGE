@@ -7,9 +7,7 @@ namespace gl
 		: _buffers(NULL),
 		_sizeBuffers(NULL),
 		_nbrVertices(0),
-		_nbrBuffers(0),
-		_indexOnPool(0),
-		_pool(NULL)
+		_nbrBuffers(0)
 	{
 	}
 
@@ -19,9 +17,7 @@ namespace gl
 		: _buffers(NULL),
 		_sizeBuffers(NULL),
 		_nbrVertices(nbrVertices),
-		_nbrBuffers(nbrBuffers),
-		_indexOnPool(0),
-		_pool(NULL)
+		_nbrBuffers(nbrBuffers)
 	{
 		if (_nbrBuffers)
 		{
@@ -40,9 +36,7 @@ namespace gl
 		: _buffers(NULL),
 		_sizeBuffers(NULL),
 		_nbrVertices(copy._nbrVertices),
-		_nbrBuffers(copy._nbrBuffers),
-		_indexOnPool(copy._indexOnPool),
-		_pool(copy._pool)
+		_nbrBuffers(copy._nbrBuffers)
 	{
 		if (_nbrBuffers)
 		{
@@ -66,8 +60,6 @@ namespace gl
 			delete[] _sizeBuffers;
 			delete[] _buffers;
 		}
-		if (_pool != NULL)
-			_pool->rmVertices(*this);
 	}
 
 	Vertices &Vertices::operator=(Vertices const &v)
@@ -94,8 +86,6 @@ namespace gl
 		memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
 		for (size_t index = 0; index < _nbrBuffers; ++index)
 			memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
-		_indexOnPool = v._indexOnPool;
-		_pool = v._pool;
 		return (*this);
 	}
 

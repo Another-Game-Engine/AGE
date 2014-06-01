@@ -6,7 +6,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <OpenGL/Vertices.hh>
-#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/GeometryManager.hh>
 #include <Utils/DependenciesInjector.hpp>
 
 struct ObjFile : public MediaFile<ObjFile>

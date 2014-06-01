@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+#define INDEXPOOL 1
 #define DEBUG_MESSAGE(type, from, key_word, reason) \
 	std::cerr << std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]" << std::endl;
 
@@ -36,7 +37,7 @@ namespace gl
 		}
 	}
 
-	Pool::Pool(IndexPool const &pool)
+	Pool::Pool(int)
 		: _nbrAttribute(1),
 		_typeComponent(NULL),
 		_sizeTypeComponent(NULL),
@@ -226,7 +227,7 @@ namespace gl
 	}
 
 
-	Key<Pool::PoolElement> const &Pool::addVertices(Vertices const &vertices)
+	Key<Pool::PoolElement> Pool::addVertices(Vertices const &vertices)
 	{
 		// Check if the vertices is not already in the pool
 		for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
@@ -515,7 +516,7 @@ namespace gl
 		if (element == _poolElement.end())
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory.find(element->second.memoryKey)->second;
-		glDrawArrays(GL_TRIANGLES, memory.getElementStart(), memory.getNbrElement());
+		glDrawArrays(GL_TRIANGLES, GLint(memory.getElementStart()), GLsizei(memory.getNbrElement()));
 		_vao.unbind();
 		return (*this);
 	}
@@ -533,7 +534,7 @@ namespace gl
 	}
 
 	IndexPool::IndexPool()
-		: Pool(IndexPool())
+		: Pool(INDEXPOOL)
 	{
 	}
 
@@ -547,7 +548,7 @@ namespace gl
 
 	}
 
-	IndexPool &IndexPool::operator=(IndexPool const &i)
+	Pool &IndexPool::operator=(Pool const &i)
 	{
 		return (*this);
 	}
@@ -576,7 +577,7 @@ namespace gl
 		if (element != _poolElement.end())
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory.find(element->second.memoryKey)->second;
-		glDrawElementsBaseVertex(GL_TRIANGLES, memory.getNbrElement(), GL_UNSIGNED_INT, (GLvoid const *)memory.getElementStart(), target.getElementStart());
+		glDrawElementsBaseVertex(GL_TRIANGLES, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (GLvoid const *)memory.getElementStart(), GLint(target.getElementStart()));
 		return (*this);
 	}
 
@@ -587,6 +588,7 @@ namespace gl
 		if (element != _poolElement.end())
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory.find(element->second.memoryKey)->second;
-		glDrawElements(GL_TRIANGLES, memory.getNbrElement(), GL_UNSIGNED_INT, (GLvoid const *)memory.getElementStart());
+		glDrawElements(GL_TRIANGLES, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (GLvoid const *)memory.getElementStart());
+		return (*this);
 	}
 }

@@ -5,7 +5,7 @@
 	std::cerr << "Warning: the index to get something into " << in << " is out of range." << std::endl;\
 
 #include <stdint.h>
-#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/GeometryManager.hh>
 #include <OpenGL/Pool.hh>
 
 namespace gl
@@ -33,19 +33,11 @@ namespace gl
 		uint8_t getNbrBuffers() const;
 		size_t getNbrVertices() const;
 
-		Vertices &setPool(VerticesPool const *pool);
-		VerticesPool const *getPool() const;
-
 	private:
 		void **_buffers;
 		size_t *_sizeBuffers;
 		size_t _nbrVertices;
 		uint8_t _nbrBuffers;
-		
-		size_t _indexOnPool;
-		VerticesPool *_pool;
-
-		METHODE_ACCESS
 	};
 
 }

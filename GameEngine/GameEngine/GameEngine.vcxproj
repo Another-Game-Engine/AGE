@@ -211,13 +211,13 @@
   <ItemGroup>
     <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
+    <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
     <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
     <ClCompile Include="Engine\OpenGL\Vertices.cpp" />
-    <ClCompile Include="Engine\OpenGL\VerticesManager.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
@@ -276,6 +276,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\OpenGL\Buffer.hh" />
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
+    <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
     <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
@@ -286,7 +287,6 @@
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\OpenGL\Vertices.hh" />
-    <ClInclude Include="Engine\OpenGL\VerticesManager.hh" />
     <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
     <ClInclude Include="Engine\Systems\DownSampleSystem.hh" />

@@ -1,5 +1,5 @@
 #include "DrawQuad.hh"
-#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/GeometryManager.hh>
 #include <OpenGL/Shader.hh>
 #include <Core/Renderer.hh>
 #include <glm/gtc/matrix_transform.hpp>

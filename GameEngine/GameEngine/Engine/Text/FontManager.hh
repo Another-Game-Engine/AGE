@@ -15,7 +15,7 @@ class PubSub;
 
 
 #if !TEST_NEW_VERTEXMANAGER
-#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/GeometryManager.hh>
 template <uint8_t NBR_ATTRIBUTE> class VertexManager;
 #endif
 

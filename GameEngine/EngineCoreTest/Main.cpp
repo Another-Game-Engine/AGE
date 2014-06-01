@@ -12,7 +12,7 @@
 #include <Core/Renderer.hh>
 #include <Utils/PubSub.hpp>
 
-#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/GeometryManager.hh>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
 
@@ -199,11 +199,12 @@ int			main(int ac, char **av)
 	sizeBuffer[2] = sizeof(normal);
 	sizeBuffer[3] = sizeof(uv);
 
-	e->setInstance<gl::VerticesManager>();
-	auto &m = e->getInstance<gl::VerticesManager>();
-	gl::Key<gl::VerticesPool> p = m->addPool();
+	e->setInstance<gl::GeometryManager>();
+	auto &m = e->getInstance<gl::GeometryManager>();
+	gl::Key<gl::IndexPool> i = m->addIndexPool();
+	gl::Key<gl::VertexPool> p = m->addVertexPool();
 	gl::Key<gl::Vertices> v = m->addVertices(6, 4, sizeBuffer, buffer);
-	m->attachVerticesToPool(v, p);
+	m->attachVerticesToVertexPool(v, p);
 
 	//e->setInstance<VertexManager<4>>(param)->init();
 	if (!loadShaders(e))

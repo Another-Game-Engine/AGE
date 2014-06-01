@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <OpenGL/VerticesManager.hh>
+#include <OpenGL/GeometryManager.hh>
 #include <OpenGL/Vertices.hh>
 #include <array>
 
