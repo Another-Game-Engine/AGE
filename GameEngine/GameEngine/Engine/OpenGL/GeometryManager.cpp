@@ -5,7 +5,7 @@
 #include <string>
 
 #define DEBUG_MESSAGE(type, from, key_word, reason) \
-	std::cerr << std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]" << std::endl;
+	{ std::cerr << std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]" << std::endl; return (*this); }
 
 
 namespace gl
@@ -128,10 +128,7 @@ namespace gl
 	GeometryManager &GeometryManager::rmVertices(Key<Vertices> &key)
 	{
 		if (!key)
-		{
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "rmVertices", "key not valid")
-			return (*this);
-		}
 		_vertices.erase(key);
 		key.destroy();
 		return (*this);
@@ -139,42 +136,38 @@ namespace gl
 
 	void GeometryManager::attachVerticesToPool(Key<Vertices> const &keyvertices, Pool &wherefind)
 	{
+		auto &attach = _attach.find(keyvertices);
 		Attach newAttach;
 		auto &vertices = _vertices.find(keyvertices)->second;
 		auto &pool = wherefind;
-		for (size_t index = 0; index < _attach.size(); ++index)
-		{
-			if (_attach[index].pool == &pool &&_attach[index].vertices == &vertices)
-				return;
-		}
 		newAttach.element = pool.addVertices(vertices);
 		newAttach.pool = &pool;
 		newAttach.vertices = &vertices;
-		_attach.push_back(newAttach);
+		if (attach != _attach.end())
+		{
+			attach->second.pool->rmVertices(attach->second.element);
+			attach->second = newAttach;
+		}
+		else
+			_attach.insert(std::make_pair(keyvertices, newAttach));
 	}
 
 	void GeometryManager::dettachVerticesToPool(Key<Vertices> const &keyvertices, Pool &wherefind)
 	{
 		auto &vertices = _vertices.find(keyvertices)->second;
 		auto &pool = wherefind;
-		for (size_t index = 0; index < _attach.size(); ++index)
+		auto &attach = _attach.find(keyvertices);
+		if (attach != _attach.end())
 		{
-			if (_attach[index].pool == &pool &&_attach[index].vertices == &vertices)
-			{
-				_attach[index].pool->rmVertices(_attach[index].element);
-				_attach.erase(_attach.begin() + index);
-				return;
-			}
+			attach->second.pool->rmVertices(attach->second.element);
+			_attach.erase(keyvertices);
 		}
 	}
 
 	GeometryManager &GeometryManager::attachVerticesToVertexPool(Key<Vertices> const &keyvertices, Key<VertexPool> const &keypool)
 	{
 		if (!keyvertices || !keypool)
-		{
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "attachVerticesToVertexPool", "key not valid")
-			return (*this);
-		}
 		attachVerticesToPool(keyvertices, _vertexPool.find(keypool)->second);
 		return (*this);
 	}
@@ -182,10 +175,7 @@ namespace gl
 	GeometryManager &GeometryManager::dettachVerticesToVertexPool(Key<Vertices> const &keyvertices, Key<VertexPool> const &keypool)
 	{
 		if (!keyvertices || !keypool)
-		{
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "dettachVerticesToVertexPool", "key not valid")
-			return (*this);
-		}
 		dettachVerticesToPool(keyvertices, _vertexPool.find(keypool)->second);
 		return (*this);
 	}
@@ -193,10 +183,7 @@ namespace gl
 	GeometryManager &GeometryManager::attachVerticesToIndexPool(Key<Vertices> const &keyvertices, Key<IndexPool> const &keypool)
 	{
 		if (!keyvertices || !keypool)
-		{
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "attachVerticesToIndexPool", "key not valid")
-				return (*this);
-		}
 		auto &pool = _indexPool.find(keypool)->second;
 		attachVerticesToPool(keyvertices, pool);
 		return (*this);
@@ -205,21 +192,39 @@ namespace gl
 	GeometryManager &GeometryManager::dettachVerticesToIndexPool(Key<Vertices> const &keyvertices, Key<IndexPool> const &keypool)
 	{
 		if (!keyvertices || !keypool)
-		{
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "dettachVerticesToVertexPool", "key not valid")
-				return (*this);
-		}
 		dettachVerticesToPool(keyvertices, _indexPool.find(keypool)->second);
 		return (*this);
 	}
 
 	GeometryManager &GeometryManager::draw(Key<Vertices> const &keyindices, Key<Vertices> const &keyVertice)
 	{
+		if (!keyindices || !keyVertice)
+		{
+			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "key not valid")
+			return (*this);
+		};
+		auto &indiceAttach = _attach.find(keyindices);
+		auto &vertexAttach = _attach.find(keyVertice);
+		if (indiceAttach == _attach.end() || vertexAttach == _attach.end())
+			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "keyindices have no attach")
+		VertexPool *vertexPool = static_cast<VertexPool *>(vertexAttach->second.pool);
+		indiceAttach->second.pool->syncronisation();
+		vertexAttach->second.pool->syncronisation();
+		vertexPool->draw(indiceAttach->second.element, vertexAttach->second.element);
 		return (*this);
 	}
 
 	GeometryManager &GeometryManager::draw(Key<Vertices> const &keyvertices)
 	{
+		if (!keyvertices)
+			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "key not valid")
+		auto &vertexAttach = _attach.find(keyvertices);
+		if (vertexAttach == _attach.end())
+			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "keyindices have no attach")
+		VertexPool *vertexPool = static_cast<VertexPool *>(vertexAttach->second.pool);
+		vertexAttach->second.pool->syncronisation();
+		vertexPool->draw(vertexAttach->second.element);
 		return (*this);
 	}
 }

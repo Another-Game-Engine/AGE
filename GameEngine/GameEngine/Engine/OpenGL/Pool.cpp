@@ -5,8 +5,8 @@
 #include <string>
 
 #define INDEXPOOL 1
-#define DEBUG_MESSAGE(type, from, key_word, reason) \
-	std::cerr << std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]" << std::endl;
+#define DEBUG_MESSAGE(type, from, key_word, reason, end) \
+	{ std::cerr << std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]" << std::endl; return (end); }
 
 namespace gl
 {
@@ -174,50 +174,35 @@ namespace gl
 	GLenum Pool::getTypeComponent(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-		{
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getTypeComponent", "Index out of range")
-			return (-1);
-		}
+			DEBUG_MESSAGE("Warning", "Pool.cpp", "getTypeComponent", "Index out of range", -1)
 		return (_typeComponent[index]);
 	}
 
 	uint8_t Pool::getSizeTypeComponent(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-		{
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getSizeTypeComponent", "Index out of range")
-			return (-1);
-		}
+			DEBUG_MESSAGE("Warning", "Pool.cpp", "getSizeTypeComponent", "Index out of range", -1)
 		return (_sizeTypeComponent[index]);
 	}
 
 	uint8_t Pool::getNbrComponent(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-		{
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getNbrComponent", "Index out of range")
-			return (-1);
-		}
+			DEBUG_MESSAGE("Warning", "Pool.cpp", "getNbrComponent", "Index out of range", -1)
 		return (_nbrComponent[index]);
 	}
 
 	size_t Pool::getSizeAttribute(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-		{
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getSizeAttribute", "Index out of range")
-			return (-1);
-		}
+			DEBUG_MESSAGE("Warning", "Pool.cpp", "getSizeAttribute", "Index out of range", -1)
 		return (_sizeAttribute[index]);
 	}
 
 	size_t Pool::getOffsetAttribute(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-		{
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getOffsetAttribute", "Index out of range")
-			return (-1);
-		}
+			DEBUG_MESSAGE("Warning", "Pool.cpp", "getOffsetAttribute", "Index out of range", -1)
 		return (_offsetAttribute[index]);
 	}
 
@@ -389,10 +374,7 @@ namespace gl
 	VertexPool &VertexPool::setTypeComponent(uint8_t index, GLenum type)
 	{
 		if (index >= _nbrAttribute)
-		{
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "setTypeComponent", "index out of range")
-			return (*this);
-		}
+			DEBUG_MESSAGE("Warning", "Pool.cpp", "setTypeComponent", "index out of range", *this)
 		clearPool();
 		_typeComponent[index] = type;
 		return (*this);
@@ -402,10 +384,7 @@ namespace gl
 	VertexPool &VertexPool::setSizeTypeComponent(uint8_t index, uint8_t sizeType)
 	{
 		if (index >= _nbrAttribute)
-		{
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "setSizeTypeComponent", "index out of range")
-			return (*this);
-		}
+			DEBUG_MESSAGE("Warning", "Pool.cpp", "setSizeTypeComponent", "index out of range", *this)
 		clearPool();
 		_sizeTypeComponent[index] = sizeType;
 		return (*this);
@@ -415,10 +394,7 @@ namespace gl
 	VertexPool &VertexPool::setNbrComponent(uint8_t index, uint8_t nbrComponent)
 	{
 		if (index >= _nbrAttribute)
-		{
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "setNbrComponent", "index out of range")
-			return (*this);
-		}
+			DEBUG_MESSAGE("Warning", "Pool.cpp", "setNbrComponent", "index out of range", *this)
 		clearPool();
 		_nbrComponent[index] = nbrComponent;
 		return (*this);

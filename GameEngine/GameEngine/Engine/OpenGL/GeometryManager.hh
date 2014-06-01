@@ -68,7 +68,7 @@ namespace gl
 		std::map<Key<IndexPool>, IndexPool> _indexPool;
 		std::map<Key<VertexPool>, VertexPool> _vertexPool;
 		std::map<Key<Vertices>, Vertices> _vertices;
-		std::vector<Attach> _attach;
+		std::map<Key<Vertices>, Attach> _attach;
 	};
 }
 

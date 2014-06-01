@@ -78,7 +78,6 @@ bool loadShaders(std::shared_ptr<Engine> e)
 		"../../Shaders/SpriteBasic.vp",
 		"../../Shaders/SpriteBasic.fp");
 
-
 	e->getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
 	e->getInstance<Renderer>()->addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
 	e->getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
