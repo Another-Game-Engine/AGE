@@ -12,6 +12,8 @@
 
 #include <Context/SdlContext.hh>
 
+#include <Utils/MatrixConversion.hpp>
+
 //for test
 #include<set>
 #include<string>
@@ -54,33 +56,6 @@ namespace AGE
 			static float t = 0;
 			bonesMatrix.clear();
 			bonesMatrix.resize(_bindPoses.size());
-			static int r = 0;
-			if (this->_dpyManager.lock()->getInstance<Input>()->getKey(SDLK_r))
-			{
-				++r;
-				if (r > 700)
-					r = 0;
-			}
-			auto random = r / 100;
-			for (auto i = 0; i < _bindPoses.size(); ++i)
-			{
-				//if (random == 0)
-				//	bonesMatrix[i] = _worldPoses[i] * _bindPoses[i] * _bindShape;
-				//else if (random == 1)
-				//	bonesMatrix[i] = _worldPoses[i] * _bindPoses[i];
-				//else if (random == 2)
-				//	bonesMatrix[i] = _worldPoses[i];
-				//else if (random == 3)
-				//	bonesMatrix[i] = _worldPoses[i] * _bindShape;
-				//else if (random == 4)
-				//	bonesMatrix[i] = _bindShape;
-				//else if (random == 5)
-				//	bonesMatrix[i] = _bindPoses[i] * _bindShape;
-				//else if (random == 6)
-					bonesMatrix[i] = _bindPoses[i];
-				//else
-					//bonesMatrix[i] = glm::mat4(1);
-			}
 
 			for (auto i = 0; i < _channels.size(); ++i)
 			{
@@ -107,79 +82,66 @@ namespace AGE
 				}
 
 				index *= c->getKeyValues().size() / c->getKeyTimes().size();
-				glm::mat4 mat(1);
-				switch (c->getTargetAttribute())
-				{
-				case gameplay::Transform::ANIMATE_TRANSLATE:
-					//mat = glm::translate(mat, glm::vec3(c->getKeyValues()[index + 0], c->getKeyValues()[index + 1], c->getKeyValues()[index + 2]));
-					break;
-				case gameplay::Transform::ANIMATE_SCALE:
-					mat = glm::scale(mat, glm::vec3(c->getKeyValues()[index + 0], c->getKeyValues()[index + 1], c->getKeyValues()[index + 2]));
-					break;
-				case gameplay::Transform::ANIMATE_SCALE_ROTATE:
-					mat = glm::scale(mat, glm::vec3(c->getKeyValues()[index + 0], c->getKeyValues()[index + 1], c->getKeyValues()[index + 2]));
-					mat = mat * glm::toMat4(glm::quat(c->getKeyValues()[index + 6], c->getKeyValues()[index + 3], c->getKeyValues()[index + 4], c->getKeyValues()[index + 5]));
-					break;
-				case gameplay::Transform::ANIMATE_TRANSLATE_X:
-					m = glm::translate(m, glm::vec3(c->getKeyValues()[0], 0, 0));
-					break;
-				case gameplay::Transform::ANIMATE_TRANSLATE_Y:
-					m = glm::translate(m, glm::vec3(0, c->getKeyValues()[0], 0));
-					break;
-				case gameplay::Transform::ANIMATE_TRANSLATE_Z:
-					m = glm::translate(m, glm::vec3(0, 0, c->getKeyValues()[0]));
-					break;
-				case gameplay::Transform::ANIMATE_ROTATE:
-					//m *= glm::toMat4(glm::quat(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2], c->getKeyValues()[3]));
-					break;
-				case gameplay::Transform::ANIMATE_ROTATE_TRANSLATE:
-					//m *= glm::toMat4(glm::quat(c->getKeyValues()[3], c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
-					m = glm::translate(m, glm::vec3(c->getKeyValues()[4], c->getKeyValues()[5], c->getKeyValues()[6]));
-					break;
-				case gameplay::Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
-					m = glm::scale(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
-					//m *= glm::toMat4(glm::quat(c->getKeyValues()[6], c->getKeyValues()[3], c->getKeyValues()[4], c->getKeyValues()[5]));
-					m = glm::translate(m, glm::vec3(c->getKeyValues()[7], c->getKeyValues()[8], c->getKeyValues()[9]));
-					break;
-				case gameplay::Transform::ANIMATE_SCALE_TRANSLATE:
-					m = glm::scale(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
-					m = glm::translate(m, glm::vec3(c->getKeyValues()[3], c->getKeyValues()[4], c->getKeyValues()[5]));
-					break;
-				case gameplay::Transform::ANIMATE_SCALE_X:
-					m = glm::scale(m, glm::vec3(c->getKeyValues()[0], 1, 1));
-					break;
-				case gameplay::Transform::ANIMATE_SCALE_Y:
-					m = glm::scale(m, glm::vec3(1, c->getKeyValues()[0], 1));
-					break;
-				case gameplay::Transform::ANIMATE_SCALE_Z:
-					m = glm::scale(m, glm::vec3(1, 1, c->getKeyValues()[0]));
-					break;
-				default:
-					break;
-				}
-				m = mat * m;
+
+				//switch (c->getTargetAttribute())
+				//{
+				//case gameplay::Transform::ANIMATE_TRANSLATE:
+				//	//mat = glm::translate(mat, glm::vec3(c->getKeyValues()[index + 0], c->getKeyValues()[index + 1], c->getKeyValues()[index + 2]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE:
+				//	mat = glm::scale(mat, glm::vec3(c->getKeyValues()[index + 0], c->getKeyValues()[index + 1], c->getKeyValues()[index + 2]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_ROTATE:
+				//	mat = glm::scale(mat, glm::vec3(c->getKeyValues()[index + 0], c->getKeyValues()[index + 1], c->getKeyValues()[index + 2]));
+				//	mat = mat * glm::toMat4(glm::quat(c->getKeyValues()[index + 6], c->getKeyValues()[index + 3], c->getKeyValues()[index + 4], c->getKeyValues()[index + 5]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_TRANSLATE_X:
+				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[0], 0, 0));
+				//	break;
+				//case gameplay::Transform::ANIMATE_TRANSLATE_Y:
+				//	m = glm::translate(m, glm::vec3(0, c->getKeyValues()[0], 0));
+				//	break;
+				//case gameplay::Transform::ANIMATE_TRANSLATE_Z:
+				//	m = glm::translate(m, glm::vec3(0, 0, c->getKeyValues()[0]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_ROTATE:
+				//	//m *= glm::toMat4(glm::quat(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2], c->getKeyValues()[3]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_ROTATE_TRANSLATE:
+				//	//m *= glm::toMat4(glm::quat(c->getKeyValues()[3], c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[4], c->getKeyValues()[5], c->getKeyValues()[6]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+				//	m = glm::scale(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	//m *= glm::toMat4(glm::quat(c->getKeyValues()[6], c->getKeyValues()[3], c->getKeyValues()[4], c->getKeyValues()[5]));
+				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[7], c->getKeyValues()[8], c->getKeyValues()[9]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_TRANSLATE:
+				//	m = glm::scale(m, glm::vec3(c->getKeyValues()[0], c->getKeyValues()[1], c->getKeyValues()[2]));
+				//	m = glm::translate(m, glm::vec3(c->getKeyValues()[3], c->getKeyValues()[4], c->getKeyValues()[5]));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_X:
+				//	m = glm::scale(m, glm::vec3(c->getKeyValues()[0], 1, 1));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_Y:
+				//	m = glm::scale(m, glm::vec3(1, c->getKeyValues()[0], 1));
+				//	break;
+				//case gameplay::Transform::ANIMATE_SCALE_Z:
+				//	m = glm::scale(m, glm::vec3(1, 1, c->getKeyValues()[0]));
+				//	break;
+				//default:
+				//	break;
+				//}
+				//m = mat * m;
 			}
 			t += time;
 			auto root = *(++_file->_nodes.begin());
-			static glm::mat4 lol(1);
-			lol = glm::rotate(lol, 0.05f, glm::vec3(1, 1, 1));
-//			root->getFirstChild()->getFirstChild()->setTransformMatrix(glm::value_ptr(lol));
-			_test.clear();
 			UpdateSkeleton(root, glm::mat4(1));
-			//while (root->getChildCount() > 0)
-			//{
-
-			//}
-
-			//for (auto i = 0; i < _boneNames.size(); ++i)
-			//{
-			//}
 
 		}
-		std::vector<std::string> _test;
+
 		void UpdateSkeleton(gameplay::Node *node, const glm::mat4 &parentTransform)
 		{
-			_test.push_back(node->getId());
 			auto targetIndex = 0;
 			while (targetIndex < _boneNames.size())
 			{
@@ -188,7 +150,11 @@ namespace AGE
 				++targetIndex;
 			}
 			if (targetIndex == _boneNames.size())
+			{
+				if (node->hasChildren())
+					UpdateSkeleton(node->getFirstChild(), parentTransform);
 				return;
+			}
 
 			auto &m = bonesMatrix[targetIndex];
 			static float testAngle = 0;
@@ -196,9 +162,17 @@ namespace AGE
 			if (testAngle > 360)
 				testAngle = 0;
 			if (node->getId() == "Bip01_L_Thigh")
-				m = parentTransform * glm::rotate(_bindPoses[targetIndex], testAngle, glm::vec3(1, 0, 0)) * glm::inverse(_bindPoses[targetIndex]);// _bindPoses[targetIndex] * m;// *glm::inverse(_bindPoses[targetIndex]) * m * _bindPoses[targetIndex];//_worldPoses[targetIndex];
-			else
-			m = parentTransform * m * glm::inverse(_bindPoses[targetIndex]);//_worldPoses[targetIndex];
+			{
+				auto pute = posFromMat4(GP_MAT_TO_GLM(node->getTransformMatrix()));
+				auto chien = rotFromMat4(GP_MAT_TO_GLM(node->getTransformMatrix()), true);
+				auto idiot = rotFromMat4(GP_MAT_TO_GLM(node->getTransformMatrix()), false);
+				auto merde = scaleFromMat4(GP_MAT_TO_GLM(node->getTransformMatrix()));
+				//auto rot = node->getTransformMatrix();
+				//rot.rotateX(testAngle);
+				//node->setTransformMatrix(rot.getArray());
+			}
+
+			m = GP_MAT_TO_GLM(node->getWorldMatrix()) * _bindPoses[targetIndex] * _bindShape;
 			if (node->getNextSibling() != nullptr)
 			{
 				UpdateSkeleton(node->getNextSibling(), parentTransform);

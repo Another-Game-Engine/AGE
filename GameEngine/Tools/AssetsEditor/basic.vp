@@ -24,8 +24,7 @@ void main(void)
 	//vec4 test = vec4(1, 2, 3, 4);
 	//test = lol * test;
 
-	vec4 position  = vec4(0.0f);
-
+	vec4 position  = vPosition;
 
 	if (vBlendWeight.x > 0.0f)
     	position = (bones[int(vBlendIndice.x)] * vPosition) * vBlendWeight.x;
