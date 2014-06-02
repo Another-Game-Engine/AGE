@@ -140,6 +140,11 @@ public:
 		, _renderShader(std::move(std::string("../../Shaders/Particles.vp")), std::move(std::string("../../Shaders/Particles.fp")), std::move(std::string("../../Shaders/Billboard.gp")))
 	{
 		_name = "particle_system";
+		View = glm::lookAt(
+			camPos,
+			camPos + glm::vec3(0,0,1),
+			glm::vec3(0, 1, 0)
+			);
 	}
 	virtual ~ParticleSystem(){}
 private:
@@ -148,9 +153,15 @@ private:
 	OpenGLTools::Shader		_renderShader;
 
 	glm::mat4 Projection = glm::perspective(65.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
-	glm::vec3 camPos = glm::vec3(0.f, 0.f, -1000);
+	glm::vec3 camPos = glm::vec3(0.f, 0.f, 0.f);
 	glm::mat4 View;
 	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
+	glm::vec3 lookAt = glm::vec3(0);
+
+	float dist = -1000;
+	glm::vec2 angles;
+	float zoomSpeed = 2.0f;
+	float rotateSpeed = 1.0f;
 
 	virtual void updateBegin(double time)
 	{
@@ -165,13 +176,26 @@ private:
 		auto scene = _scene.lock();
 		EntityFilter::Lock lock(_filter);
 
-		//camPos += glm::vec3(0, 0, 0.5f);
+		glm::vec3		pos;
 
-		View = glm::lookAt(
-			camPos,
-			camPos + glm::vec3(0,0,1),
-			glm::vec3(0, 1, 0)
-			);
+		auto inputs = scene->getInstance<Input>();
+		dist += inputs->getMouseWheel().y * zoomSpeed;
+		angles -= glm::vec2((float)inputs->getMouseDelta().x / float(1000 / rotateSpeed), -(float)inputs->getMouseDelta().y / float(1000 / rotateSpeed));
+		if (abs(dist) < 0.0001f)
+		{
+			if (dist < 0)
+				dist = -0.0001f;
+			else
+				dist = 0.0001f;
+		}
+		pos.x = sin(angles.x) * cos(angles.y) * dist; //-V537
+		pos.y = sin(angles.y) * dist;
+		pos.z = cos(angles.x) * cos(angles.y) * dist;
+
+		View = glm::lookAt(pos,
+			lookAt,
+			glm::vec3(0, 1, 0));
+
 		glEnable(GL_DEPTH_TEST);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -194,11 +218,17 @@ private:
 			auto v = glGetUniformLocation(_renderShader.getId(), "View");
 			auto p = glGetUniformLocation(_renderShader.getId(), "Projection");
 			auto cp = glGetUniformLocation(_renderShader.getId(), "CameraPos");
+			auto texture = glGetUniformLocation(_renderShader.getId(), "fTexture0");
+
+			glActiveTexture(GL_TEXTURE0);
+			glUniform1i(texture, 0);
+			glBindTexture(GL_TEXTURE_2D, scene->getInstance<AssetsManager>()->get<TextureFile>("texture__fire")->getId());
 
 			glUniformMatrix4fv(m, 1, GL_FALSE, &Model[0][0]);
 			glUniformMatrix4fv(v, 1, GL_FALSE, &View[0][0]);
 			glUniformMatrix4fv(p, 1, GL_FALSE, &Projection[0][0]);
 			glUniform3fv(cp, 1, glm::value_ptr(camPos));
+
 
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);

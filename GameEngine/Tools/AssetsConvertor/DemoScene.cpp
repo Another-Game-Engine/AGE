@@ -154,13 +154,13 @@ bool 			DemoScene::userStart()
 		//convertor->load("../../Assets/TEXTS/roar.obj");
 
 		//convertor->serializeData("3Dtexts");
-		//convertor->clear();
+		//convertor->clear();7
 
 		//convertor->load("../../Assets/skelet/internal_skelout.obj");
 		//convertor->load("../../Assets/skelet/internal_skelout_full.obj");
-		convertor->load("../../Assets/office_chair/office_chair.obj");
+		convertor->load("../../Assets/fire.tga");
 
-		convertor->serializeData("office_chair");
+		convertor->serializeData("fire");
 		convertor->clear();
 
 		//convertor->load("../../Assets/coffee/coffee.obj");

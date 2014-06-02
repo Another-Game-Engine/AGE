@@ -16,7 +16,7 @@
 #include <Core/Renderer.hh>
 #include <Managers/AssetsConvertorManager.hh>
 #include <Managers/FontConvertor.hh>
-
+#include <Core/Timer.hh>
 #include <cereal/archives/json.hpp>
 
 int			main(int ac, char **av)

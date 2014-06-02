@@ -117,7 +117,7 @@ bool loadAssets(std::shared_ptr<Engine> e)
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 #endif
-
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__fire.cpd"));
 	return true;
 }
 

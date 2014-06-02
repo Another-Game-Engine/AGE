@@ -53,7 +53,7 @@ void main()
 
 
 	vec3 p = Positions[gid].xyz;
-	vec3 v = Velocities[gid].xyz;
+	vec3 v = Velocities[gid].xyz * 0.1f;
 	/*
 	vec3 pp = p + v * DT + 0.5f * DT * DT * G;
 	vec3 vp = v + G * DT;
