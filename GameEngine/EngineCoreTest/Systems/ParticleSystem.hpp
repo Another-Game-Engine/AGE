@@ -177,7 +177,8 @@ private:
 		EntityFilter::Lock lock(_filter);
 
 		glm::vec3		pos;
-
+		static float totalTime = 0;
+		totalTime += time;
 		auto inputs = scene->getInstance<Input>();
 		dist += inputs->getMouseWheel().y * zoomSpeed;
 		angles -= glm::vec2((float)inputs->getMouseDelta().x / float(1000 / rotateSpeed), -(float)inputs->getMouseDelta().y / float(1000 / rotateSpeed));
@@ -219,6 +220,7 @@ private:
 			auto p = glGetUniformLocation(_renderShader.getId(), "Projection");
 			auto cp = glGetUniformLocation(_renderShader.getId(), "CameraPos");
 			auto texture = glGetUniformLocation(_renderShader.getId(), "fTexture0");
+			auto utime = glGetUniformLocation(_renderShader.getId(), "Time");
 
 			glActiveTexture(GL_TEXTURE0);
 			glUniform1i(texture, 0);
@@ -227,7 +229,8 @@ private:
 			glUniformMatrix4fv(m, 1, GL_FALSE, &Model[0][0]);
 			glUniformMatrix4fv(v, 1, GL_FALSE, &View[0][0]);
 			glUniformMatrix4fv(p, 1, GL_FALSE, &Projection[0][0]);
-			glUniform3fv(cp, 1, glm::value_ptr(camPos));
+			glUniform3fv(cp, 1, glm::value_ptr(pos));
+			glUniform1f(utime, totalTime);
 
 
 			glEnableVertexAttribArray(0);

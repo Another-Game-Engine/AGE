@@ -15,6 +15,7 @@ out vec4 fMyColor;
 
 out vec2 fTexCoord;
 
+in float MyTime[1];
 
 void main()
 {
@@ -37,10 +38,10 @@ void main()
 
   pos.y += 1.0;
 
-  gl_Position = mvp * vec4(pos, 1.0);
+  gl_Position = mvp * vec4(pos.x - cos(MyTime[0]) * sin(MyTime[0]) , pos.y, pos.z, 1.0);
 
   fMyColor = MyColor[0];
-    fTexCoord = vec2(0,1);
+  fTexCoord = vec2(0,1);
   EmitVertex();
 
 
@@ -49,7 +50,7 @@ void main()
 
   pos += right;
 
-  gl_Position = mvp * vec4(pos, 1.0);
+  gl_Position = mvp * vec4(pos, 1.0f);// vec4(pos , 1.0);
 
   fMyColor = MyColor[0];
   fTexCoord = vec2(1,0);
@@ -59,7 +60,7 @@ void main()
 
   pos.y += 1.0;
 
-  gl_Position = mvp * vec4(pos, 1.0);
+  gl_Position = mvp * vec4(pos.x - cos(MyTime[0]) * sin(MyTime[0]) , pos.y, pos.z, 1.0);
 
   fMyColor = MyColor[0];
   fTexCoord = vec2(1,1);
@@ -69,4 +70,6 @@ void main()
 
   EndPrimitive();
 }
+
+
 
