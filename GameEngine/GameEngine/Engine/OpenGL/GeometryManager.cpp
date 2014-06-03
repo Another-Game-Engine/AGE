@@ -6,7 +6,8 @@
 
 #define DEBUG_MESSAGE(type, from, key_word, reason) \
 	{ std::cerr << std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]" << std::endl; return (*this); }
-
+#define RETURN_KEY_CORRUPT(type) \
+	{Key<type> key_corrupt; key_corrupt.destroy(); return (key_corrupt); }
 
 namespace gl
 {
@@ -44,11 +45,7 @@ namespace gl
 	Key<VertexPool> GeometryManager::getVertexPool(size_t target) const
 	{
 		if (target >= _vertexPool.size())
-		{
-			Key<VertexPool> corruptKey;
-			corruptKey.destroy();
-			return (corruptKey);
-		}
+			RETURN_KEY_CORRUPT(VertexPool)
 		auto &element = _vertexPool.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -58,11 +55,7 @@ namespace gl
 	Key<IndexPool> GeometryManager::getIndexPool(size_t target) const
 	{
 		if (target >= _vertexPool.size())
-		{
-			Key<IndexPool> corruptKey;
-			corruptKey.destroy();
-			return (corruptKey);
-		}
+			RETURN_KEY_CORRUPT(IndexPool)
 		auto &element = _indexPool.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -101,11 +94,7 @@ namespace gl
 	Key<Vertices> GeometryManager::getVertices(size_t target) const
 	{
 		if (target >= _vertices.size())
-		{
-			Key<Vertices> corruptKey;
-			corruptKey.destroy();
-			return (corruptKey);
-		}
+			RETURN_KEY_CORRUPT(Vertices)
 		auto &element = _vertices.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -200,10 +189,7 @@ namespace gl
 	GeometryManager &GeometryManager::draw(Key<Vertices> const &keyindices, Key<Vertices> const &keyVertice)
 	{
 		if (!keyindices || !keyVertice)
-		{
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "key not valid")
-			return (*this);
-		};
 		auto &indiceAttach = _attach.find(keyindices);
 		auto &vertexAttach = _attach.find(keyVertice);
 		if (indiceAttach == _attach.end() || vertexAttach == _attach.end())

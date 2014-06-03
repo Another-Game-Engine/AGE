@@ -6,6 +6,7 @@
 #include <OpenGL/VertexArray.hh>
 #include <OpenGL/Buffer.hh>
 #include <map>
+#include <vector>
 #include <stdint.h>
 
 namespace gl
@@ -25,7 +26,7 @@ namespace gl
 	public:
 		struct PoolElement
 		{
-			Key<MemoryBlocksGPU> memoryKey;
+			size_t memoryIndex;
 			Vertices const *vertices;
 		};
 	public:
@@ -69,7 +70,7 @@ namespace gl
 		uint8_t *_nbrComponent;
 
 		// data represent all vertices
-		std::map<Key<MemoryBlocksGPU>, MemoryBlocksGPU> _poolMemory;
+		std::vector<MemoryBlocksGPU> _poolMemory;
 		std::map<Key<PoolElement>, PoolElement> _poolElement;
 		size_t *_sizeAttribute;
 		size_t *_offsetAttribute;

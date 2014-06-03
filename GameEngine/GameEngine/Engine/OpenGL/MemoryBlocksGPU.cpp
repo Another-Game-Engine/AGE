@@ -11,13 +11,13 @@
 namespace gl
 {
 	MemoryBlocksGPU::MemoryBlocksGPU()
-		: _nbrObject(0),
-		_nbrElement(0),
+		: _nbrElement(0),
 		_startElement(0),
 		_nbrBlock(0),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL),
-		_sync(false)
+		_sync(false),
+		_isUsed(true)
 	{
 
 	}
@@ -32,13 +32,13 @@ namespace gl
 	}
 
 	MemoryBlocksGPU::MemoryBlocksGPU(MemoryBlocksGPU const &copy)
-		: _nbrObject(copy._nbrObject),
-		_nbrElement(copy._nbrElement),
+		: _nbrElement(copy._nbrElement),
 		_startElement(copy._startElement),
 		_nbrBlock(copy._nbrBlock),
 		_sizeBlocks(NULL),
 		_baseOffset(NULL),
-		_sync(false)
+		_sync(false),
+		_isUsed(copy._isUsed)
 	{
 		if (_nbrBlock)
 		{
@@ -56,8 +56,8 @@ namespace gl
 	{
 		if (&b != this)
 		{
+			_isUsed = b._isUsed;
 			_sync = false;
-			_nbrObject = b._nbrObject;
 			_startElement = b._startElement;
 			_nbrElement = b._nbrElement;
 			if (b._nbrBlock != _nbrBlock)
@@ -86,11 +86,6 @@ namespace gl
 			}
 		}
 		return (*this);
-	}
-
-	size_t MemoryBlocksGPU::getNbrObject() const
-	{
-		return (_nbrObject);
 	}
 
 	size_t MemoryBlocksGPU::getElementStart() const
@@ -123,12 +118,6 @@ namespace gl
 		return (_sizeBlocks[index]);
 	}
 
-	MemoryBlocksGPU &MemoryBlocksGPU::setNbrObject(size_t nbrObject)
-	{
-		_nbrObject = nbrObject;
-		return (*this);
-	}
-
 	MemoryBlocksGPU &MemoryBlocksGPU::setStartElement(size_t start)
 	{
 		_startElement = start;
@@ -143,6 +132,12 @@ namespace gl
 			return (*this);
 		}
 		_baseOffset[index] = offset;
+		return (*this);
+	}
+
+	MemoryBlocksGPU &MemoryBlocksGPU::setIsUsed(bool isused)
+	{
+		_isUsed = isused;
 		return (*this);
 	}
 
@@ -204,5 +199,10 @@ namespace gl
 	bool MemoryBlocksGPU::getSync() const
 	{
 		return (_sync);
+	}
+	
+	bool MemoryBlocksGPU::getIsUsed() const
+	{
+		return (_isUsed);
 	}
 }
