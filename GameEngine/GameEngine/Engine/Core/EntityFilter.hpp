@@ -17,8 +17,8 @@ public:
 	template <typename T>
 	void requireComponent()
 	{
-		_barcode.setComponent(T::getTypeId());
-		_scene.lock()->filterSubscribe(T::getTypeId(), this);
+		_barcode.setComponent(COMPONENT_ID(T::getTypeId()));
+		_scene.lock()->filterSubscribe(COMPONENT_ID(T::getTypeId()), this);
 	}
 
 	template <typename T>

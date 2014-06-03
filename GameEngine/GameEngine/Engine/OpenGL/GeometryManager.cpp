@@ -129,16 +129,19 @@ namespace gl
 		Attach newAttach;
 		auto &vertices = _vertices.find(keyvertices)->second;
 		auto &pool = wherefind;
-		newAttach.element = pool.addVertices(vertices);
 		newAttach.pool = &pool;
 		newAttach.vertices = &vertices;
 		if (attach != _attach.end())
 		{
 			attach->second.pool->rmVertices(attach->second.element);
+			newAttach.element = pool.addVertices(vertices);
 			attach->second = newAttach;
 		}
 		else
+		{
+			newAttach.element = pool.addVertices(vertices);
 			_attach.insert(std::make_pair(keyvertices, newAttach));
+		}
 	}
 
 	void GeometryManager::dettachVerticesToPool(Key<Vertices> const &keyvertices, Pool &wherefind)

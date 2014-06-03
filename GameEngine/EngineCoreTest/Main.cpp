@@ -167,7 +167,7 @@ int			main(int ac, char **av)
 
 	void *buffer[4] = {NULL, NULL, NULL, NULL};
 	size_t sizeBuffer[4] = {0, 0, 0, 0};
-
+	
 	float position[4 * 6] = {1, 0, 0, 1,	// pos1
 							 0, 1, 0, 1,	// pos2
 							 0, 0, 1, 1,	// pos3
@@ -192,7 +192,8 @@ int			main(int ac, char **av)
 						4, 0,				// uv4
 						4, 4,				// uv5
 						0, 4 };				// uv6
-
+	unsigned int indices[6] = { 0, 1, 2, 3, 4, 5 };
+	
 	buffer[0] = position;
 	buffer[1] = color;
 	buffer[2] = normal;
@@ -201,13 +202,19 @@ int			main(int ac, char **av)
 	sizeBuffer[1] = sizeof(color);
 	sizeBuffer[2] = sizeof(normal);
 	sizeBuffer[3] = sizeof(uv);
-
+	
 	e->setInstance<gl::GeometryManager>();
 	auto &m = e->getInstance<gl::GeometryManager>();
 	gl::Key<gl::IndexPool> i = m->addIndexPool();
 	gl::Key<gl::VertexPool> p = m->addVertexPool();
 	gl::Key<gl::Vertices> v = m->addVertices(6, 4, sizeBuffer, buffer);
+	sizeBuffer[0] = sizeof(indices);
+	buffer[0] = indices;
+	gl::Key<gl::Vertices> iv = m->addVertices(6, 1, sizeBuffer, buffer);
 	m->attachVerticesToVertexPool(v, p);
+	m->attachVerticesToIndexPool(iv, i);
+	m->draw(iv, v);
+
 
 	//e->setInstance<VertexManager<4>>(param)->init();
 	if (!loadShaders(e))

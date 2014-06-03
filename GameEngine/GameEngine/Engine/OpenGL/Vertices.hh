@@ -34,6 +34,7 @@ namespace gl
 		size_t getNbrVertices() const;
 
 	private:
+
 		void **_buffers;
 		size_t *_sizeBuffers;
 		size_t _nbrVertices;

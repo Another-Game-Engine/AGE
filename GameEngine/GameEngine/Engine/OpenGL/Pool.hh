@@ -109,8 +109,6 @@ namespace gl
 	private:
 		VertexArray _vao;
 		IndexPool const *_indexPoolattach;
-
-		//friend IndexPool const &IndexPool::draw(Key<PoolElement> const &key, MemoryBlocksGPU const &target) const;
 		
 	};
 
@@ -118,12 +116,15 @@ namespace gl
 	{
 	public:
 		IndexPool();
-		virtual ~IndexPool();
 		IndexPool(IndexPool const &copy);
+		virtual ~IndexPool();
 		virtual Pool &operator=(Pool const &p);
 		virtual Pool &syncronisation();
 		IndexPool const &draw(Key<PoolElement> const &key) const;
 		IndexPool const &draw(Key<PoolElement> const &key, MemoryBlocksGPU const &target) const;
+
+		friend class GeometryManager;
+
 	};
 }
 

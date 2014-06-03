@@ -247,9 +247,11 @@ namespace gl
 			if (index > 0)
 				_offsetAttribute[index] = _sizeAttribute[index - 1];
 		}
+		_poolMemory.push_back(memory);
 		PoolElement element;
 		Key<PoolElement> keyElement;
 		element.vertices = &vertices;
+		element.memoryIndex = _poolMemory.size() - 1;
 		_poolElement[keyElement] = element;// &vertices, memory);
 		return (keyElement);
 	}
@@ -300,17 +302,20 @@ namespace gl
 	}
 
 	VertexPool::VertexPool()
-		: Pool()
+		: Pool(),
+		_indexPoolattach(NULL)
 	{
 	}
 
 	VertexPool::VertexPool(VertexPool const &copy)
-		: Pool(copy)
+		: Pool(copy),
+		_indexPoolattach(copy._indexPoolattach)
 	{
 	}
 
 	VertexPool::VertexPool(uint8_t nbrAttribute, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
-		: Pool(nbrAttribute, typeComponent, sizeTypeComponent, nbrComponent)
+		: Pool(nbrAttribute, typeComponent, sizeTypeComponent, nbrComponent),
+		_indexPoolattach(NULL)
 	{
 	}
 
@@ -436,7 +441,7 @@ namespace gl
 	{
 		_vbo.bind();
 		if (!_syncronized)
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _nbrBytePool, NULL, GL_STREAM_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, _nbrBytePool, NULL, GL_STREAM_DRAW);
 		if (!_internalSyncronized)
 		{
 			for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
