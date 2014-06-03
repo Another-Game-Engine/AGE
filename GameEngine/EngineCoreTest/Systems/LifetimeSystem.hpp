@@ -3,8 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Systems/System.h"
-#include <Core/EntityFilter.hpp>
-#include <Entities/EntityData.hh>
+#include <Components/Component.hh>
 
 namespace Component
 {
@@ -18,6 +17,18 @@ namespace Component
 		virtual ~Lifetime(void)
 		{
 
+		}
+
+		Lifetime(Lifetime &&o)
+			: ComponentBase<Lifetime>(std::move(o))
+		{
+				_t = std::move(o._t);
+		}
+
+		Lifetime &operator=(Lifetime &&o)
+		{
+			_t = std::move(o._t);
+			return *this;
 		}
 
 		void init(float t)
@@ -46,8 +57,8 @@ namespace Component
 
 		float _t;
 	private:
-		Lifetime(Lifetime const &);
-		Lifetime &operator=(Lifetime const &);
+		Lifetime &operator=(Lifetime const &o);
+		Lifetime(Lifetime const &o);
 	};
 }
 
@@ -77,8 +88,8 @@ private:
 		EntityFilter::Lock lock(_filter);
 		for (auto &&e : _filter.getCollection())
 		{
-			e->getComponent<Component::Lifetime>()->_t -= t;
-			if (e->getComponent<Component::Lifetime>()->_t <= 0.0f)
+			scene->getComponent<Component::Lifetime>(e)->_t -= t;
+			if (scene->getComponent<Component::Lifetime>(e)->_t <= 0.0f)
 				scene->destroy(e);
 		}
 	}

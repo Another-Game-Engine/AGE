@@ -46,7 +46,7 @@ namespace Component
 
 		virtual ~SpotLight();
 
-		void		updateLightData();
+		void		updateLightData(const glm::mat4 &globalTransform);
 
 		virtual void reset();
 

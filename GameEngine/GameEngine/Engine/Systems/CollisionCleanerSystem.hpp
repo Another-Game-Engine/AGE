@@ -2,7 +2,6 @@
 # define __COLLISION_CLEANER_SYSTEM_HPP__
 
 #include <Systems/System.h>
-#include <Entities/EntityData.hh>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
 
@@ -28,13 +27,7 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		auto collection = _filter.getCollection();
-		for (auto &it = std::begin(collection); it != std::end(collection);)
-		{
-			auto e = *it;
-			++it;
-			e->removeComponent<Component::Collision>();
-		}
+		_scene.lock()->clearComponentsType<Component::Collision>();
 	}
 
 	virtual bool initialize()

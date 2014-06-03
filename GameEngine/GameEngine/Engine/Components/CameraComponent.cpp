@@ -5,7 +5,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/matrix_inverse.hpp>
 #include <Entities/Entity.hh>
-#include <Entities/EntityData.hh>
 #include <Core/AScene.hh>
 
 namespace Component
@@ -23,9 +22,9 @@ namespace Component
 	CameraComponent::~CameraComponent(void)
 	{}
 
-	void CameraComponent::attachSkybox(const std::string &name, const std::string &_cubeMapShader)
+	void CameraComponent::attachSkybox(std::shared_ptr<CubeMapFile> texture, const std::string &_cubeMapShader)
 	{
-		skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->get<CubeMapFile>(name);
+		skybox = texture;
 		cubeMapShader = _cubeMapShader;
 	}
 

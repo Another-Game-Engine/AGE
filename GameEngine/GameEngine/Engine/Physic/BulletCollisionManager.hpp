@@ -7,30 +7,17 @@
 #include <BulletMultiThreaded/SpuGatheringCollisionDispatcher.h>
 #include <BulletMultiThreaded/PlatformDefinitions.h>
 
-#include "BulletCollision/CollisionDispatch/btSphereSphereCollisionAlgorithm.h"
-#include "BulletCollision/CollisionDispatch/btSphereTriangleCollisionAlgorithm.h"
-#include "BulletCollision/CollisionDispatch/btSimulationIslandManager.h"
-
-#include <BulletMultiThreaded/Win32ThreadSupport.h>
-#include <BulletMultiThreaded/SpuNarrowPhaseCollisionTask/SpuGatheringCollisionTask.h>
-
-#include <BulletMultiThreaded/btParallelConstraintSolver.h>
-#include <BulletMultiThreaded/SequentialThreadSupport.h>
 
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 #include <Utils/Dependency.hpp>
 #include <Physic/Utils/BtConversion.hpp>
 #include <Entities/Entity.hh>
-#include <Entities/EntityData.hh>
 
-static btThreadSupportInterface *createSolverThreadSupport(int maxNumThreads)
-{
-	Win32ThreadSupport::Win32ThreadConstructionInfo threadConstructionInfo("solverThreads",SolverThreadFunc,SolverlsMemoryFunc,maxNumThreads);
-	Win32ThreadSupport* threadSupport = new Win32ThreadSupport(threadConstructionInfo);
-	threadSupport->startSPU();
-	return threadSupport;
-}
+#include <set>
+
+#include <memory>
+
 
 class BulletCollisionManager : public Dependency
 {
@@ -46,12 +33,6 @@ public:
 		btDefaultCollisionConstructionInfo cci;
 		cci.m_defaultMaxPersistentManifoldPoolSize = 32768;
 		btCollisionConfiguration *_collisionConfiguration = new btDefaultCollisionConfiguration(cci);
-//		int maxNumOutstandingTasks = 4;
-
-		//SequentialThreadSupport::SequentialThreadConstructionInfo colCI("collision", processCollisionTask, createCollisionLocalStoreMemory);
-		//auto m_threadSupportCollision = new SequentialThreadSupport(colCI);
-
-		//_dispatcher = new	SpuGatheringCollisionDispatcher(m_threadSupportCollision, maxNumOutstandingTasks, _collisionConfiguration);
 
 		_dispatcher = new btCollisionDispatcher(_collisionConfiguration);
 
@@ -62,13 +43,13 @@ public:
 		_broadphase = new btAxisSweep3(worldAabbMin, worldAabbMax, maxProxies);
 
 
-	if (init) // init is false when called by Dynamic World
-	{
-		_world = new btCollisionWorld(_dispatcher, _broadphase, _collisionConfiguration);
-		btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher*>(_world->getDispatcher());
-		btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
-	}
-	return true;
+		if (init) // init is false when called by Dynamic World
+		{
+			_world = std::make_shared<btCollisionWorld>(_dispatcher, _broadphase, _collisionConfiguration);
+			btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher*>(_world->getDispatcher());
+			btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
+		}
+		return true;
 	}
 
 	virtual ~BulletCollisionManager()
@@ -79,11 +60,15 @@ public:
 	virtual void uninit()
 	{
 		if (_broadphase)
+		{
 			delete _broadphase;
+			_broadphase = nullptr;
+		}
 		if (_dispatcher)
+		{
 			delete _dispatcher;
-		if (_world)
-			delete _world;
+			_dispatcher = nullptr;
+		}
 	}
 
 	void addObject(btCollisionObject *object, int filterGroup, int collisionFilter)
@@ -113,9 +98,9 @@ public:
 		return std::move(r);
 	}
 
-	inline btCollisionWorld *getWorld() const { return _world; }
+	inline btCollisionWorld *getWorld() const { return _world.get(); }
 protected:
-	btCollisionWorld *_world;
+	std::shared_ptr<btCollisionWorld> _world;
 	btCollisionDispatcher *_dispatcher;
 	btBroadphaseInterface *_broadphase;
 	btCollisionConfiguration *_collisionConfiguration;

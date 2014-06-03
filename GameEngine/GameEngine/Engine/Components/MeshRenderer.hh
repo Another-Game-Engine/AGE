@@ -11,7 +11,6 @@
 #include "OpenGL/Shader.hh"
 #include <core/Renderer.hh>
 #include <cereal/types/string.hpp>
-#include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 #include <MediaFiles/AssetsManager.hpp>
@@ -24,6 +23,7 @@ namespace Resources
 
 enum Shadow;
 class Material;
+class Renderer;
 
 namespace Component
 {
@@ -31,12 +31,14 @@ namespace Component
 	{
 		MeshRenderer();
 		virtual ~MeshRenderer(void);
+		MeshRenderer(MeshRenderer &&o);
+		MeshRenderer &operator=(MeshRenderer &&o);
 		void init(std::shared_ptr<AMediaFile> file);
 		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
-		void render(std::function<void(OpenGLTools::Shader&)> func = [](OpenGLTools::Shader &s){});
-		void renderRaw();
+		void render(std::shared_ptr<Renderer> renderer, const glm::mat4 &globalTrans, std::function<void(OpenGLTools::Shader&)> func);
+		void renderRaw(std::shared_ptr<Renderer> renderer, const glm::mat4 &trans);
 		std::shared_ptr<ObjFile>	const &getMesh() const;
 
 		//////
@@ -57,7 +59,8 @@ namespace Component
 			ar(shader);
 			std::string meshName;
 			ar(meshName);
-			mesh = std::static_pointer_cast<ObjFile>(_entity->getScene().lock()->getInstance<AssetsManager>()->loadFromFile(File(meshName)));
+			// TODO @CESAR
+			//mesh = std::static_pointer_cast<ObjFile>(_entity->getScene().lock()->getInstance<AssetsManager>()->loadFromFile(File(meshName)));
 		}
 
 		// !Serialization

@@ -22,6 +22,25 @@ namespace OpenGLTools
 		Framebuffer();
 		~Framebuffer();
 
+		Framebuffer(const Framebuffer &o)
+		{
+			_id = o._id;
+			_attachments = o._attachments;
+			_size = o._size;
+			_sampleNbr = o._sampleNbr;
+			_multiSample = o._multiSample;
+		}
+
+		Framebuffer &operator=(const Framebuffer &o)
+		{
+			_id = o._id;
+			_attachments = o._attachments;
+			_size = o._size;
+			_sampleNbr = o._sampleNbr;
+			_multiSample = o._multiSample;
+			return *this;
+		}
+
 		void		init(glm::uvec2 size, int sampleNbr);
 
 		void addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment);
@@ -35,8 +54,6 @@ namespace OpenGLTools
 		int	getSampleNbr() const { return (_sampleNbr); }
 		GLuint getId() const { return (_id); }
 	private:
-		Framebuffer(const Framebuffer &o);
-		Framebuffer &operator=(const Framebuffer &o);
 	};
 }
 

@@ -1,43 +1,45 @@
 #pragma once
 
 #include    <set>
-#include	<Utils/Barcode.h>
-#include    <Utils/PubSub.hpp>
-#include    <Entities/EntityData.hh>
+
 #include    <Core/AScene.hh>
 
-bool defaultEntityComparaison(const Entity &e1, const Entity &e2);
+#include    <Entities/Entity.hh>
+
+#include <functional>
 
 class EntityFilter
 {
 public:
-	EntityFilter(std::weak_ptr<AScene> &&scene, bool(*comparaisonFn)(const Entity&, const Entity&) = defaultEntityComparaison);
+	EntityFilter(std::weak_ptr<AScene> &&scene);
 	virtual ~EntityFilter();
 
 	template <typename T>
 	void requireComponent()
 	{
-		auto id = unsigned short(T::getTypeId() + MAX_TAG_NUMBER);
-		_code.add(id);
-		_scene.lock()->filterSubscribe(id, this);
+		_barcode.setComponent(T::getTypeId());
+		_scene.lock()->filterSubscribe(T::getTypeId(), this);
 	}
 
 	template <typename T>
 	void unRequireComponent()
 	{
-		auto id = T::getTypeId() + MAX_TAG_NUMBER;
-		_code.remove(id);
-		_scene.lock()->filterUnsubscribe(id, this);
+		_barcode.unsetComponent(T::getTypeId());
+		_scene.lock()->filterUnsubscribe(T::getTypeId(), this);
 	}
 
-	void requireTag(unsigned short tag);
-	void unRequireTag(unsigned short tag);
+	void requireTag(TAG_ID tag);
+	void unRequireTag(TAG_ID tag);
 
-	const Barcode &getCode() const;
-	std::set<Entity, bool(*)(const Entity&, const Entity&)> const &getCollection();
+	std::set<Entity> &getCollection();
 
-	void virtual componentAdded(Entity &&e, unsigned short typeId);
-	void virtual componentRemoved(Entity &&e, unsigned short typeId);
+	inline void clearCollection() { _collection.clear(); }
+
+	void virtual componentAdded(EntityData &&e, COMPONENT_ID typeId);
+	void virtual componentRemoved(EntityData &&e, COMPONENT_ID typeId);
+	void virtual tagAdded(EntityData &&e, TAG_ID typeId);
+	void virtual tagRemoved(EntityData &&e, TAG_ID typeId);
+
 	bool isLocked() const;
 
 	struct Lock
@@ -62,12 +64,15 @@ public:
 	};
 
 protected:
-	std::set<Entity, bool(*)(const Entity&, const Entity&)> _collection;
-	Barcode _code;
+	Barcode _barcode;
+	std::set<Entity> _collection;
 	std::weak_ptr<AScene> _scene;
+
 	void lock();
 	void unlock();
+
 private:
 	bool _locked;
 	std::set<Entity> _trash;
+	std::set<Entity> _toAdd;
 };

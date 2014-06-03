@@ -2,6 +2,8 @@
 #include	<Components/CameraComponent.hpp>
 #include	<OpenGL/Framebuffer.hh>
 #include	<OpenGL/Texture.hh>
+#include    <Utils/PubSub.hpp>
+#include    <Core/Timer.hh>
 
 # define TEST_STREAM_GPU 1
 
@@ -51,7 +53,7 @@ void	PostFxSystem::mainUpdate(double time)
 	auto scene = _scene.lock();
 	for (auto c : _cameraFilter.getCollection())
 	{
-		std::shared_ptr<Component::CameraComponent>		camera = c->getComponent<Component::CameraComponent>();
+		Component::CameraComponent *camera = scene->getComponent<Component::CameraComponent>(c);
 
 		OpenGLTools::Framebuffer	&current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;
 

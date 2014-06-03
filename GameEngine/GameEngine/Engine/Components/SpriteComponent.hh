@@ -18,6 +18,24 @@ namespace Component
 		virtual ~Sprite(void)
 		{}
 
+		Sprite(Sprite const &o)
+		{
+			animation = o.animation;
+			delay = o.delay;
+			timeCounter = o.timeCounter;
+			index = o.index;
+		}
+
+		Sprite &operator=(Sprite const &o)
+		{
+			animation = o.animation;
+			delay = o.delay;
+			timeCounter = o.timeCounter;
+			index = o.index;
+			return *this;
+		}
+
+
 		void init(std::shared_ptr<SpriteAnimation> _animation)
 		{
 			animation = _animation;
@@ -60,8 +78,6 @@ namespace Component
 		float timeCounter;
 		std::uint32_t index;
 	private:
-		Sprite(Sprite const &);
-		Sprite &operator=(Sprite const &);
 	};
 
 }

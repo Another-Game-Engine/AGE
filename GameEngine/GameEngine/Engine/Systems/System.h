@@ -1,13 +1,9 @@
 #ifndef		__SYSTEM_H__
 # define	__SYSTEM_H__
 
-#include	<iostream>
-#include	<memory>
-#include    <Utils/PubSub.hpp>
+#include    <Core/EntityFilter.hpp>
 
-class AScene;
-
-class	System : public PubSub
+class	System
 {
 public:
 	System(std::weak_ptr<AScene> &&scene);
