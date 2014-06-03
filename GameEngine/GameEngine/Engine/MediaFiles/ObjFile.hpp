@@ -23,6 +23,8 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec4>		colors;		// vertices colors
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
+		gl::Key<gl::Vertices>		glvertices;	// vertices
+		gl::Key<gl::Vertices>		glindices;	// indices
 		//Vertice<4>					buffer; //-V112
 	private:
 		std::weak_ptr<DependenciesInjector> _dpyManager;

@@ -29,12 +29,15 @@ namespace gl
 		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		_offsetAttribute = new size_t[_nbrAttribute];
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		for (uint8_t index = 0; index < _nbrAttribute; ++index)
+		for (uint8_t index = 0; index < _nbrAttribute - 1; ++index)
 		{
 			_typeComponent[index] = GL_FLOAT;
 			_sizeTypeComponent[index] = sizeof(float);
-			_nbrComponent[index] = (index == 2) ? 2 : 4;
+			_nbrComponent[index] = 4;
 		}
+		_typeComponent[_nbrAttribute - 1] = GL_FLOAT;
+		_sizeTypeComponent[_nbrAttribute - 1] = sizeof(float);
+		_nbrComponent[_nbrAttribute - 1] = 2;
 	}
 
 	Pool::Pool(int)

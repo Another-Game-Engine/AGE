@@ -87,16 +87,22 @@ void ObjFile::Geometry::load(cereal::PortableBinaryInputArchive &ar)
 
 	void ObjFile::Geometry::init()
 	{
-		//std::array<Data, 4> data =  //-V112
-		//{
-		//	Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
-		//	Data(colors.size() * 4 * sizeof(float), &colors[0].x),
-		//	Data(normals.size() * 4 * sizeof(float), &normals[0].x),
-		//	Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
-		//};
-		//Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
-		//buffer = Vertice<4>(vertices.size(), data, &indicesData);
-		//_dpyManager.lock()->getInstance<VertexManager<4>>()->addVertice(buffer);
+		gl::GeometryManager &geomanager = *_dpyManager.lock()->getInstance<gl::GeometryManager>();
+		void *buffer[4] = { &vertices[0].x ,
+							&colors[0].x,
+							&normals[0].x,
+							&uvs[0].x };
+		size_t nbrBuffer[4] = {vertices.size() * 4 * sizeof(float),
+								colors.size() * 4 * sizeof(float),
+								normals.size() * 4 * sizeof(float),
+								uvs.size() * 2 * sizeof(float)};
+
+		glvertices = geomanager.addVertices(vertices.size(), 4, nbrBuffer, buffer);
+		buffer[0] = &indices[0];
+		nbrBuffer[0] = indices.size() * sizeof(unsigned int);
+		glindices = geomanager.addVertices(indices.size(), 1, nbrBuffer, buffer);
+		geomanager.attachVerticesToVertexPool(glvertices, geomanager.getVertexPool(0));
+		geomanager.attachVerticesToIndexPool(glindices, geomanager.getIndexPool(0));
 	}
 
 void ObjFile::save(cereal::PortableBinaryOutputArchive &ar) const
