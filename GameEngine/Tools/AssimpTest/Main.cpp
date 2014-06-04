@@ -12,7 +12,10 @@ namespace AGE
 	{
 		std::vector<glm::vec4> positions;
 		std::vector<glm::vec4> normals;
+		std::vector<glm::vec4> tangents;
+		std::vector<glm::vec4> biTangents;
 		std::vector<std::vector<glm::vec2>> uvs;
+		std::vector<std::uint32_t> indices;
 	};
 }
 
@@ -72,6 +75,16 @@ void main(void)
 						auto &aiUvs = mesh->mTextureCoords[texCoordIndex][face.mIndices[k]];
 						meshs[meshIndex].uvs[texCoordIndex].push_back(glm::vec2(aiUvs.x, aiUvs.y));
 					}
+				}
+			}
+			if (mesh->HasTangentsAndBitangents())
+			{
+				for (unsigned int k = 0; k < 3; ++k)
+				{
+					auto &aiTangents = mesh->mTangents[face.mIndices[k]];
+					meshs[meshIndex].tangents.push_back(glm::vec4(aiTangents.x, aiTangents.y, aiTangents.y, 1));
+					auto &aiBiTangents = mesh->mBitangents[face.mIndices[k]];
+					meshs[meshIndex].biTangents.push_back(glm::vec4(aiBiTangents.x, aiBiTangents.y, aiBiTangents.y, 1));
 				}
 			}
 		}
