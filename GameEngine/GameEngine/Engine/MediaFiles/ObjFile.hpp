@@ -25,6 +25,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<unsigned int>	indices;	// indices
 		gl::Key<gl::Vertices>		glvertices;	// vertices
 		gl::Key<gl::Vertices>		glindices;	// indices
+		std::shared_ptr<gl::GeometryManager> geomanager; //manager
 		//Vertice<4>					buffer; //-V112
 	private:
 		std::weak_ptr<DependenciesInjector> _dpyManager;

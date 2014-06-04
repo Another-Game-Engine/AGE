@@ -175,7 +175,7 @@ namespace gl
 	GeometryManager &GeometryManager::attachVerticesToIndexPool(Key<Vertices> const &keyvertices, Key<IndexPool> const &keypool)
 	{
 		if (!keyvertices || !keypool)
-			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "attachVerticesToIndexPool", "key not valid")
+			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "attachVerticesToIndexPool", "key not valid")
 		auto &pool = _indexPool.find(keypool)->second;
 		attachVerticesToPool(keyvertices, pool);
 		return (*this);
@@ -184,8 +184,29 @@ namespace gl
 	GeometryManager &GeometryManager::dettachVerticesToIndexPool(Key<Vertices> const &keyvertices, Key<IndexPool> const &keypool)
 	{
 		if (!keyvertices || !keypool)
-			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "dettachVerticesToVertexPool", "key not valid")
+			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "dettachVerticesToVertexPool", "key not valid")
 		dettachVerticesToPool(keyvertices, _indexPool.find(keypool)->second);
+		return (*this);
+	}
+
+	GeometryManager &GeometryManager::attachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indicespool)
+	{
+		auto &vp = _vertexPool.find(vertexpool);
+		if (vp == _vertexPool.end())
+			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "attachIndexPoolToVertexPool", "vertex pool doesn't exist")
+		auto &ip = _indexPool.find(indicespool);
+		if (ip == _indexPool.end())
+			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "attachIndexPoolToVertexPool", "indices pool doesn't exist")
+		vp->second.attachIndexPoolToVertexPool(ip->second);
+		return (*this);
+	}
+
+	GeometryManager &GeometryManager::dettachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool)
+	{
+		auto &vp = _vertexPool.find(vertexpool);
+		if (vp == _vertexPool.end())
+			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "dettachIndexPoolToVertexPool", "vertex pool doesn't exist")
+		vp->second.dettachIndexPoolToVertexPool();
 		return (*this);
 	}
 

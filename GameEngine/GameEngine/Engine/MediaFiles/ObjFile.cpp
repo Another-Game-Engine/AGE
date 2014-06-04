@@ -80,14 +80,14 @@ void ObjFile::Geometry::save(cereal::PortableBinaryOutputArchive &ar) const
 		ar(name, vertices, normals, colors, uvs, indices);
 	}
 
-void ObjFile::Geometry::load(cereal::PortableBinaryInputArchive &ar)
+	void ObjFile::Geometry::load(cereal::PortableBinaryInputArchive &ar)
 	{
 		ar(name, vertices, normals, colors, uvs, indices);
 	}
 
 	void ObjFile::Geometry::init()
 	{
-		gl::GeometryManager &geomanager = *_dpyManager.lock()->getInstance<gl::GeometryManager>();
+		geomanager = _dpyManager.lock()->getInstance<gl::GeometryManager>();
 		void *buffer[4] = { &vertices[0].x ,
 							&colors[0].x,
 							&normals[0].x,
@@ -97,12 +97,13 @@ void ObjFile::Geometry::load(cereal::PortableBinaryInputArchive &ar)
 								normals.size() * 4 * sizeof(float),
 								uvs.size() * 2 * sizeof(float)};
 
-		glvertices = geomanager.addVertices(vertices.size(), 4, nbrBuffer, buffer);
+		glvertices = geomanager->addVertices(vertices.size(), 4, nbrBuffer, buffer);
 		buffer[0] = &indices[0];
 		nbrBuffer[0] = indices.size() * sizeof(unsigned int);
-		glindices = geomanager.addVertices(indices.size(), 1, nbrBuffer, buffer);
-		geomanager.attachVerticesToVertexPool(glvertices, geomanager.getVertexPool(0));
-		geomanager.attachVerticesToIndexPool(glindices, geomanager.getIndexPool(0));
+		glindices = geomanager->addVertices(indices.size(), 1, nbrBuffer, buffer);
+		geomanager->attachVerticesToVertexPool(glvertices, geomanager->getVertexPool(0));
+		geomanager->attachVerticesToIndexPool(glindices, geomanager->getIndexPool(0));
+		geomanager->attachIndexPoolToVertexPool(geomanager->getVertexPool(0), geomanager->getIndexPool(0));
 	}
 
 void ObjFile::save(cereal::PortableBinaryOutputArchive &ar) const

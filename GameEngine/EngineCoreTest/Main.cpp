@@ -161,7 +161,6 @@ int			main(int ac, char **av)
 	m->addVertexPool();
 
 
-	//e->setInstance<VertexManager<4>>(param)->init();
 	if (!loadShaders(e))
 		return EXIT_FAILURE;
 	if (!loadAssets(e))

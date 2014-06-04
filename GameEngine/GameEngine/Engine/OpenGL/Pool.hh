@@ -47,7 +47,7 @@ namespace gl
 		size_t getSizeAttribute(uint8_t index) const;
 		size_t getOffsetAttribute(uint8_t index) const;
 		size_t getNbrBytePool() const;
-		VertexBuffer const &getVertexBuffer() const;
+		
 
 		// Vertices handler
 		Key<PoolElement> addVertices(Vertices const &vertices);
@@ -56,12 +56,9 @@ namespace gl
 
 		//draw and synchronisation
 		virtual Pool &syncronisation() = 0;
-		Pool &endSyncronisation();
+		virtual Buffer const &getBuffer() const = 0;
 
 	protected:
-
-		// gl data
-		gl::VertexBuffer _vbo;
 
 		// data represent attributes
 		uint8_t _nbrAttribute;
@@ -79,7 +76,7 @@ namespace gl
 		bool _internalSyncronized;
 
 		//function associate to syncronisation
-		void syncronizeVertices(Vertices const &vertices, MemoryBlocksGPU &memory);
+		void syncronizeVertices(GLenum mode, Vertices const &vertices, MemoryBlocksGPU &memory);
 	};
 
 	class VertexPool : public Pool
@@ -103,10 +100,12 @@ namespace gl
 
 		//draw and synchronisation
 		virtual Pool &syncronisation();
+		virtual Buffer const &getBuffer() const;
 		VertexPool const &draw(Key<PoolElement> const &drawWithIt, Key<PoolElement> const &drawOnIt) const;
 		VertexPool const &draw(Key<PoolElement> const &drawIt) const;
 
 	private:
+		VertexBuffer _vbo;
 		VertexArray _vao;
 		IndexPool const *_indexPoolattach;
 		
@@ -119,11 +118,15 @@ namespace gl
 		IndexPool(IndexPool const &copy);
 		virtual ~IndexPool();
 		virtual Pool &operator=(Pool const &p);
+		
 		virtual Pool &syncronisation();
+		virtual Buffer const &getBuffer() const;
+
 		IndexPool const &draw(Key<PoolElement> const &key) const;
 		IndexPool const &draw(Key<PoolElement> const &key, MemoryBlocksGPU const &target) const;
-
-		friend class GeometryManager;
+	
+	private:
+		gl::IndexBuffer _ibo;
 
 	};
 }

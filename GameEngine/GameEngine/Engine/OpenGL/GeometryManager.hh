@@ -55,6 +55,8 @@ namespace gl
 		GeometryManager &dettachVerticesToVertexPool(Key<Vertices> const &vertices, Key<VertexPool> const &pool);
 		GeometryManager &attachVerticesToIndexPool(Key<Vertices> const &vertices, Key<IndexPool> const &pool);
 		GeometryManager &dettachVerticesToIndexPool(Key<Vertices> const &vertices, Key<IndexPool> const &pool);
+		GeometryManager &attachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indicespool);
+		GeometryManager &dettachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool);
 	private:
 		void attachVerticesToPool(Key<Vertices> const &vertices, Pool &wherefind);
 		void dettachVerticesToPool(Key<Vertices> const &vertices, Pool &wherefind);
