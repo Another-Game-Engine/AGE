@@ -8,11 +8,14 @@ namespace gl
 	/// Buffer containing on the GPU the vertex
 	class Buffer
 	{
+	private:
+		Buffer(Buffer const &copy);
+		Buffer &operator=(Buffer const &vertexbuffer);
+
 	public:
 		Buffer();
 		~Buffer();
-		Buffer(Buffer const &copy);
-		Buffer &operator=(Buffer const &vertexbuffer);
+
 		virtual Buffer const &bind() const = 0;
 		virtual Buffer const &unbind() const = 0;
 		virtual GLenum getMode() const = 0;
@@ -26,10 +29,12 @@ namespace gl
 	/// Buffer containing on the GPU the vertex
 	class VertexBuffer : public Buffer
 	{
+	private:
+		VertexBuffer(VertexBuffer const &copy);
 	public:
 		VertexBuffer();
 		virtual ~VertexBuffer();
-		VertexBuffer(VertexBuffer const &copy);
+
 		virtual Buffer const &bind() const;
 		virtual Buffer const &unbind() const;
 		virtual GLenum getMode() const;
@@ -38,10 +43,12 @@ namespace gl
 	/// Buffer containing on the GPU the vertex
 	class IndexBuffer : public Buffer
 	{
+	private:
+		IndexBuffer(IndexBuffer const &copy);
 	public:
 		IndexBuffer();
 		virtual ~IndexBuffer();
-		IndexBuffer(IndexBuffer const &copy);
+
 		virtual Buffer const &bind() const;
 		virtual Buffer const &unbind() const;
 		virtual GLenum getMode() const;

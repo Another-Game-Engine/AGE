@@ -96,7 +96,6 @@ void ObjFile::Geometry::save(cereal::PortableBinaryOutputArchive &ar) const
 								colors.size() * 4 * sizeof(float),
 								normals.size() * 4 * sizeof(float),
 								uvs.size() * 2 * sizeof(float)};
-
 		glvertices = geomanager->addVertices(vertices.size(), 4, nbrBuffer, buffer);
 		buffer[0] = &indices[0];
 		nbrBuffer[0] = indices.size() * sizeof(unsigned int);

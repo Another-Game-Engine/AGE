@@ -70,6 +70,7 @@ namespace gl
 		std::vector<MemoryBlocksGPU> _poolMemory;
 		std::map<Key<PoolElement>, PoolElement> _poolElement;
 		size_t *_sizeAttribute;
+		size_t _nbrElementPool;
 		size_t *_offsetAttribute;
 		size_t _nbrBytePool;
 		bool _syncronized;
@@ -86,6 +87,7 @@ namespace gl
 		VertexPool(uint8_t nbrAttribute, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
 		VertexPool(VertexPool const &copy);
 		virtual ~VertexPool();
+		VertexPool &operator=(VertexPool const &pool);
 
 		// attribute setter
 		VertexPool &setData(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
@@ -117,7 +119,7 @@ namespace gl
 		IndexPool();
 		IndexPool(IndexPool const &copy);
 		virtual ~IndexPool();
-		virtual Pool &operator=(Pool const &p);
+		virtual IndexPool &operator=(IndexPool const &p);
 		
 		virtual Pool &syncronisation();
 		virtual Buffer const &getBuffer() const;

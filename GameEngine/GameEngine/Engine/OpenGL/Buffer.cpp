@@ -13,17 +13,6 @@ namespace gl
 			glDeleteBuffers(1, &_id);
 	}
 
-	Buffer::Buffer(Buffer const &copy)
-		: _id(copy._id)
-	{
-	}
-
-	Buffer &Buffer::operator=(Buffer const &vertexbuffer)
-	{
-		_id = vertexbuffer._id;
-		return (*this);
-	}
-
 	GLuint Buffer::getId() const
 	{
 		return (_id);
@@ -35,11 +24,6 @@ namespace gl
 	}
 
 	VertexBuffer::~VertexBuffer()
-	{
-	}
-
-	VertexBuffer::VertexBuffer(VertexBuffer const &copy)
-		: Buffer(copy)
 	{
 	}
 
@@ -66,11 +50,6 @@ namespace gl
 	}
 
 	IndexBuffer::~IndexBuffer()
-	{
-	}
-
-	IndexBuffer::IndexBuffer(IndexBuffer const &copy)
-		: Buffer(copy)
 	{
 	}
 

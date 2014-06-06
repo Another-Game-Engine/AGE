@@ -85,7 +85,7 @@ namespace gl
 		}
 		memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
 		for (size_t index = 0; index < _nbrBuffers; ++index)
-			memcpy(_sizeBuffers, v._sizeBuffers, sizeof(size_t)* _nbrBuffers);
+			memcpy(_buffers[index], v._buffers[index], _sizeBuffers[index]);
 		return (*this);
 	}
 

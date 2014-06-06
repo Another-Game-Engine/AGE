@@ -11,15 +11,14 @@ namespace gl
 	public:
 		 VertexArray();
 		~VertexArray();
-		 VertexArray(VertexArray const &vertexarray);
-		 VertexArray &operator=(VertexArray const &vertexarray);
-		 void init();
 		 void bind() const;
 		 void unbind() const;
 		 GLuint getId() const;
 	private:
 		GLuint _id;
-		bool _isBind;
+
+		VertexArray(VertexArray const &vertexarray);
+		VertexArray &operator=(VertexArray const &vertexarray);
 	};
 }
 
