@@ -293,15 +293,15 @@ namespace gl
 
 	void Pool::syncronizeVertices(GLenum mode, Vertices const &vertices, MemoryBlocksGPU &memory)
 	{
+		memory.setStartElement(_nbrElementPool);
 		for (uint8_t index = 0; index < _nbrAttribute; ++index)
 		{
 			memory.setSync(true);
 			memory.setOffset(index, _offsetAttribute[index] + _sizeAttribute[index]);
-			memory.setStartElement(_nbrElementPool);
 			glBufferSubData(mode, memory.getOffset(index), memory.getSizeBlock(index), vertices.getBuffer(index));
 			_sizeAttribute[index] += memory.getSizeBlock(index);
-			_nbrElementPool += memory.getNbrElement();
 		}
+		_nbrElementPool += memory.getNbrElement();
 	}
 
 	VertexPool::VertexPool()
@@ -442,7 +442,8 @@ namespace gl
 
 	Pool &VertexPool::syncronisation()
 	{
-		_vbo.bind();
+		if (!_syncronized || !_internalSyncronized)
+			_vbo.bind();
 		if (!_syncronized)
 			glBufferData(GL_ARRAY_BUFFER, _nbrBytePool, NULL, GL_STATIC_DRAW);
 		if (!_internalSyncronized)
@@ -454,7 +455,6 @@ namespace gl
 				if (index->second.vertices && _poolMemory[index->second.memoryIndex].getSync() == false)
 					syncronizeVertices(_vbo.getMode(), *(index->second.vertices), _poolMemory[index->second.memoryIndex]);
 		}
-		_vbo.unbind();
 		if (!_syncronized)
 		{
 			_vao.bind();
@@ -550,7 +550,8 @@ namespace gl
 
 	Pool &IndexPool::syncronisation()
 	{
-		_ibo.bind();
+		if (!_syncronized || !_internalSyncronized)
+			_ibo.bind();
 		if (!_syncronized)
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _nbrBytePool, NULL, GL_STREAM_DRAW);
 		if (!_internalSyncronized)
@@ -562,7 +563,6 @@ namespace gl
 				if (index->second.vertices && _poolMemory[index->second.memoryIndex].getSync() == false)
 					syncronizeVertices(_ibo.getMode(), *(index->second.vertices), _poolMemory[index->second.memoryIndex]);
 		}
-		_ibo.unbind();
 		_internalSyncronized = true;
 		_syncronized = true;
 		return (*this);
@@ -579,7 +579,7 @@ namespace gl
 		if (element == _poolElement.end())
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
-		glDrawElementsBaseVertex(GL_TRIANGLES, GLsizei(memory.getNbrElement()), GL_UNSIGNED_BYTE, (GLvoid const *)memory.getElementStart(), GLint(target.getElementStart()));
+		glDrawElementsBaseVertex(GL_TRIANGLES, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), GLint(target.getElementStart()));
 		return (*this);
 	}
 
