@@ -1,5 +1,9 @@
 #include "Vertices.hh"
 #include <iostream>
+#include <string>
+
+#define DEBUG_MESSAGE(type, from, key_word, reason, end) \
+	{ std::cerr << std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]" << std::endl; return (end); }
 
 namespace gl
 {
@@ -93,10 +97,7 @@ namespace gl
 	void const *Vertices::getBuffer(uint8_t index) const
 	{
 		if (index >= _nbrBuffers)
-		{
-			WARNING_MESSAGE_INDEX("getBuffer");
-			return (NULL);
-		}
+			DEBUG_MESSAGE("Warning", "Vertices", "getBuffer", "the index is out of range", NULL)
 		return (_buffers[index]);
 	}
 
@@ -104,10 +105,7 @@ namespace gl
 	size_t Vertices::getSizeBuffer(uint8_t index) const
 	{
 		if (index >= _nbrBuffers)
-		{
-			WARNING_MESSAGE_INDEX("getSizeBuffer");
-			return (NULL);
-		}
+			DEBUG_MESSAGE("Warning", "Vertices", "getSizeBuffer", "the index is out of range", NULL);
 		return (_sizeBuffers[index]);
 	}
 

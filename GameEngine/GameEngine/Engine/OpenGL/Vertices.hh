@@ -1,9 +1,6 @@
 #ifndef VERTICE_HH_
 # define VERTICE_HH_
 
-#define WARNING_MESSAGE_INDEX(in) \
-	std::cerr << "Warning: the index to get something into " << in << " is out of range." << std::endl;\
-
 #include <stdint.h>
 #include <OpenGL/GeometryManager.hh>
 #include <OpenGL/Pool.hh>

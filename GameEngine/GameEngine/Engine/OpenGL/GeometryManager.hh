@@ -63,8 +63,8 @@ namespace gl
 	public:
 
 		// draw
-		GeometryManager &draw(Key<Vertices> const &keyindices, Key<Vertices> const &keyVertice);
-		GeometryManager &draw(Key<Vertices> const &keyvertices);
+		GeometryManager &draw(GLenum mode, Key<Vertices> const &keyindices, Key<Vertices> const &keyVertice);
+		GeometryManager &draw(GLenum mode, Key<Vertices> const &keyvertices);
 	private:
 		// data represent pools
 		std::map<Key<IndexPool>, IndexPool> _indexPool;

@@ -103,8 +103,8 @@ namespace gl
 		//draw and synchronisation
 		virtual Pool &syncronisation();
 		virtual Buffer const &getBuffer() const;
-		VertexPool const &draw(Key<PoolElement> const &drawWithIt, Key<PoolElement> const &drawOnIt) const;
-		VertexPool const &draw(Key<PoolElement> const &drawIt) const;
+		VertexPool const &draw(GLenum mode, Key<PoolElement> const &drawWithIt, Key<PoolElement> const &drawOnIt) const;
+		VertexPool const &draw(GLenum mode, Key<PoolElement> const &drawIt) const;
 
 	private:
 		VertexBuffer _vbo;
@@ -124,8 +124,8 @@ namespace gl
 		virtual Pool &syncronisation();
 		virtual Buffer const &getBuffer() const;
 
-		IndexPool const &draw(Key<PoolElement> const &key) const;
-		IndexPool const &draw(Key<PoolElement> const &key, MemoryBlocksGPU const &target) const;
+		IndexPool const &draw(GLenum mode, Key<PoolElement> const &key) const;
+		IndexPool const &draw(GLenum mode, Key<PoolElement> const &key, MemoryBlocksGPU const &target) const;
 	
 	private:
 		gl::IndexBuffer _ibo;

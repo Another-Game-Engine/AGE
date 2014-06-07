@@ -159,7 +159,10 @@ int			main(int ac, char **av)
 	auto &m = e->setInstance<gl::GeometryManager>();
 	m->addIndexPool();
 	m->addVertexPool();
-
+	GLenum typeComponent[2] = {GL_FLOAT, GL_FLOAT};
+	uint8_t sizeTypeComponent[2] = { sizeof(float), sizeof(float) };
+	uint8_t nbrComponent[2] = {2, 2};
+	m->addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
 
 	if (!loadShaders(e))
 		return EXIT_FAILURE;

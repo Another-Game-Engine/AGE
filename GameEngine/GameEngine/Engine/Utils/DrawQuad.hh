@@ -26,8 +26,10 @@ public:
 
 private:
 	void						initShaders();
-	//VertexManager<2>			*_vertexManager;
-	//Vertice<2>					_quad;
+	gl::GeometryManager			*_m;
+	gl::Key<gl::Vertices>		_quadvertices;
+	gl::Key<gl::Vertices>		_quadindices;
+	gl::Key<gl::VertexPool>		_pool;
 	std::shared_ptr<OpenGLTools::Shader>			_fboToScreen;
 	std::shared_ptr<OpenGLTools::Shader>			_fboToScreenMultisampled;
 	std::shared_ptr<Renderer>	_renderer;

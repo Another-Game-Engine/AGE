@@ -69,25 +69,14 @@ void	DrawQuad::draw(GLuint texture, int sampleNbr, glm::uvec2 const &textureSize
 	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(textureType, texture);
-//	_quad.draw();
+	_m->draw(GL_QUADS, _quadindices, _quadvertices);
 	glEnable(GL_DEPTH_TEST);
 }
 
 void DrawQuad::init(std::weak_ptr<DependenciesInjector> &&engine)
 {
 	_renderer = engine.lock()->getInstance<Renderer>();
-	//std::array<Attribute, 2> param =
-	//{
-	//	Attribute(GL_FLOAT, sizeof(float), 2),
-	//	Attribute(GL_FLOAT, sizeof(float), 2)
-	//};
-	//
-	//_vertexManager = new VertexManager<2>(param);
-	//_vertexManager->init();
-
-	// Init the Quad:
-	// ------------------------------------
-	// x,y vertex positions
+	_m = engine.lock()->getInstance<gl::GeometryManager>().get();
 	float quadPos[] = {
 		-1.0, -1.0,
 		1.0, -1.0,
@@ -97,7 +86,6 @@ void DrawQuad::init(std::weak_ptr<DependenciesInjector> &&engine)
 		-1.0, -1.0
 	};
 
-	// per-vertex texture coordinates
 	float quadUvs[] = {
 		0.0, 0.0,
 		1.0, 0.0,
@@ -107,14 +95,14 @@ void DrawQuad::init(std::weak_ptr<DependenciesInjector> &&engine)
 		0.0, 0.0
 	};
 
+	void *buffer[2] = {quadPos, quadUvs};
+	size_t nbrBuffer[2] = {sizeof(quadPos), sizeof(quadUvs)};
 	unsigned int indice[] = { 0, 1, 2, 3, 4, 5 };
-	//std::array<Data, 2> data =
-	//{
-	//	Data(6 * 2 * sizeof(float), quadPos),
-	//	Data(6 * 2 * sizeof(float), quadUvs)
-	//};
-	//Data indicesData(6 * sizeof(unsigned int), indice);
-	//_quad = Vertice<2>(6, data, &indicesData);
-	//_vertexManager->addVertice(_quad);
-	// ------------------------------------
+	_quadvertices = _m->addVertices(6, 2, nbrBuffer, buffer);
+	buffer[0] = indice;
+	nbrBuffer[0] = sizeof(indice);
+	_quadindices = _m->addVertices(6, 1, nbrBuffer, buffer);
+	_m->attachVerticesToVertexPool(_quadvertices, _m->getVertexPool(1));
+	_m->attachVerticesToIndexPool(_quadindices, _m->getIndexPool(0));
+	_m->attachIndexPoolToVertexPool(_m->getVertexPool(1), _m->getIndexPool(0));
 }

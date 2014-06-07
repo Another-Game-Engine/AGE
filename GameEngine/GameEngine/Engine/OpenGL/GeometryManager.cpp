@@ -210,7 +210,7 @@ namespace gl
 		return (*this);
 	}
 
-	GeometryManager &GeometryManager::draw(Key<Vertices> const &keyindices, Key<Vertices> const &keyVertice)
+	GeometryManager &GeometryManager::draw(GLenum mode, Key<Vertices> const &keyindices, Key<Vertices> const &keyVertice)
 	{
 		if (!keyindices || !keyVertice)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "key not valid")
@@ -221,11 +221,11 @@ namespace gl
 		VertexPool *vertexPool = static_cast<VertexPool *>(vertexAttach->second.pool);
 		indiceAttach->second.pool->syncronisation();
 		vertexAttach->second.pool->syncronisation();
-		vertexPool->draw(indiceAttach->second.element, vertexAttach->second.element);
+		vertexPool->draw(mode, indiceAttach->second.element, vertexAttach->second.element);
 		return (*this);
 	}
 
-	GeometryManager &GeometryManager::draw(Key<Vertices> const &keyvertices)
+	GeometryManager &GeometryManager::draw(GLenum mode, Key<Vertices> const &keyvertices)
 	{
 		if (!keyvertices)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "key not valid")
@@ -234,7 +234,7 @@ namespace gl
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "keyindices have no attach")
 		VertexPool *vertexPool = static_cast<VertexPool *>(vertexAttach->second.pool);
 		vertexAttach->second.pool->syncronisation();
-		vertexPool->draw(vertexAttach->second.element);
+		vertexPool->draw(mode, vertexAttach->second.element);
 		return (*this);
 	}
 }

@@ -473,7 +473,7 @@ namespace gl
 		return (*this);
 	}
 
-	VertexPool const &VertexPool::draw(Key<PoolElement> const &drawWithIt, Key<PoolElement> const &drawOnIt) const
+	VertexPool const &VertexPool::draw(GLenum mode, Key<PoolElement> const &drawWithIt, Key<PoolElement> const &drawOnIt) const
 	{
 		if (!_indexPoolattach)
 			DEBUG_MESSAGE("Warning", "Pool.cpp", "draw", "no indexpool attach", *this)
@@ -482,7 +482,7 @@ namespace gl
 		if (element == _poolElement.end())
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
-		_indexPoolattach->draw(drawWithIt, memory);
+		_indexPoolattach->draw(mode, drawWithIt, memory);
 		_vao.unbind();
 		return (*this);
 	}
@@ -498,14 +498,14 @@ namespace gl
 		return (*this);
 	}
 
-	VertexPool const &VertexPool::draw(Key<PoolElement> const &drawIt) const
+	VertexPool const &VertexPool::draw(GLenum mode, Key<PoolElement> const &drawIt) const
 	{
 		_vao.bind();
 		auto &element = _poolElement.find(drawIt);
 		if (element == _poolElement.end())
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
-		glDrawArrays(GL_TRIANGLES, GLint(memory.getElementStart()), GLsizei(memory.getNbrElement()));
+		glDrawArrays(mode, GLint(memory.getElementStart()), GLsizei(memory.getNbrElement()));
 		_vao.unbind();
 		return (*this);
 	}
@@ -573,24 +573,24 @@ namespace gl
 		return (_ibo);
 	}
 
-	IndexPool const &IndexPool::draw(Key<PoolElement> const &key, MemoryBlocksGPU const &target) const
+	IndexPool const &IndexPool::draw(GLenum mode, Key<PoolElement> const &key, MemoryBlocksGPU const &target) const
 	{
 		auto &element = _poolElement.find(key);
 		if (element == _poolElement.end())
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
-		glDrawElementsBaseVertex(GL_TRIANGLES, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), GLint(target.getElementStart()));
+		glDrawElementsBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), GLint(target.getElementStart()));
 		return (*this);
 	}
 
-	IndexPool const &IndexPool::draw(Key<PoolElement> const &key) const
+	IndexPool const &IndexPool::draw(GLenum mode, Key<PoolElement> const &key) const
 	{
 		_ibo.bind();
 		auto &element = _poolElement.find(key);
 		if (element == _poolElement.end())
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
-		glDrawElements(GL_TRIANGLES, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (GLvoid const *)memory.getElementStart());
+		glDrawElements(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (GLvoid const *)memory.getElementStart());
 		return (*this);
 	}
 }
