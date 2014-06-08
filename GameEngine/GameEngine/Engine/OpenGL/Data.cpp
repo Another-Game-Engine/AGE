@@ -119,5 +119,46 @@ namespace gl
 		return (_nbrVertices);
 	}
 
+	Indices::Indices()
+		: _nbrIndices(0),
+		_buffer(NULL)
+	{
+
+	}
+
+	Indices::Indices(Indices const &copy)
+		: _nbrIndices(copy._nbrIndices),
+		_buffer(NULL)
+	{
+		if (copy._buffer)
+		{
+			_buffer = new uint32_t[_nbrIndices];
+			memcpy(_buffer, copy._buffer, sizeof(uint32_t) * _nbrIndices);
+		}
+	}
+
+	Indices &Indices::operator=(Indices const &i)
+	{
+		if (this != &i)
+		{
+			_nbrIndices = i._nbrIndices;
+			if (i._buffer)
+			{
+				_buffer = new uint32_t[_nbrIndices];
+				memcpy(_buffer, i._buffer, sizeof(uint32_t)* _nbrIndices);
+			}
+		}
+		return (*this);
+	}
+
+	size_t Indices::getNbrIndices() const
+	{
+		return (_nbrIndices);
+	}
+
+	uint32_t const *Indices::getBuffer() const
+	{
+		return (_buffer);
+	}
 	
 }

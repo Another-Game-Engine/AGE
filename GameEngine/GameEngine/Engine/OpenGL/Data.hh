@@ -1,5 +1,4 @@
-#ifndef VERTICE_HH_
-# define VERTICE_HH_
+#pragma once
 
 #include <stdint.h>
 #include <OpenGL/GeometryManager.hh>
@@ -11,9 +10,9 @@ namespace gl
 	class Vertices;
 	template<typename TYPE> class Key;
 
-	//!\file VerticesManager.hh
+	//!\file Data.hh
 	//!\author Dorian Pinaud
-	//!\version v1.0
+	//!\version v2.0
 	//!\class Vertices
 	//!\brief contain vertices information
 	class Vertices
@@ -38,6 +37,25 @@ namespace gl
 		uint8_t _nbrBuffers;
 	};
 
-}
+	//!\file Data.hh
+	//!\author Dorian Pinaud
+	//!\version v2.0
+	//!\class Indices
+	//!\brief Indices data
+	class Indices
+	{
+	public:
+		Indices();
+		Indices(Indices const &copy);
+		Indices(size_t nbrIndices, uint32_t *buffer);
+		Indices &operator=(Indices const &i);
 
-#endif /* !VERTICE_HH_ */
+		size_t getNbrIndices() const;
+		uint32_t const *getBuffer() const;
+
+	private:
+		size_t _nbrIndices;
+		uint32_t *_buffer;
+	};
+
+}

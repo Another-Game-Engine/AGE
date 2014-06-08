@@ -1,5 +1,4 @@
-#ifndef POOL_HH_
-# define POOL_HH_
+#pragma once
 
 #include <Utils/OpenGL.hh>
 #include <OpenGL/Key.hh>
@@ -132,5 +131,3 @@ namespace gl
 
 	};
 }
-
-#endif /*!POOL_HH_*/
