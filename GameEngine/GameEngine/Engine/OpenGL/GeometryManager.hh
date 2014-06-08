@@ -1,5 +1,4 @@
-#ifndef GEOMETRYMANAGER_HH_
-# define GEOMETRYMANAGER_HH_
+#pragma once
 
 #include <Utils/OpenGL.hh>
 #include <OpenGL/Key.hh>
@@ -22,10 +21,11 @@ namespace gl
 	class GeometryManager : public Dependency
 	{
 	public:
+		template <typename TYPE, typename POOL>
 		struct Attach
 		{
-			Vertices const *vertices;
-			Pool *pool;
+			TYPE const *data;
+			POOL *pool;
 			Key<Pool::PoolElement> element;
 		};
 	public:
@@ -44,34 +44,34 @@ namespace gl
 		size_t nbrIndexPool() const;
 		GeometryManager &rmIndexPool(Key<IndexPool> &key);
 
-		//handle Vertices
+		//handle Vertices and Indices
 		Key<Vertices> addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
+		Key<Indices> addIndices(size_t nbrIndices, uint32_t *buffers);
 		GeometryManager &rmVertices(Key<Vertices> &key);
+		GeometryManager &rmIndices(Key<Indices> &key);
 		Key<Vertices> getVertices(size_t index) const;
+		Key<Indices> getIndices(size_t index) const;
 		size_t getNbrVertices() const;
+		size_t getNbrIndices() const;
 
 		// attach vertices to pools
 		GeometryManager &attachVerticesToVertexPool(Key<Vertices> const &vertices, Key<VertexPool> const &pool);
 		GeometryManager &dettachVerticesToVertexPool(Key<Vertices> const &vertices, Key<VertexPool> const &pool);
-		GeometryManager &attachVerticesToIndexPool(Key<Vertices> const &vertices, Key<IndexPool> const &pool);
-		GeometryManager &dettachVerticesToIndexPool(Key<Vertices> const &vertices, Key<IndexPool> const &pool);
+		GeometryManager &attachIndicesToIndexPool(Key<Indices> const &vertices, Key<IndexPool> const &pool);
+		GeometryManager &dettachIndicesToIndexPool(Key<Indices> const &vertices, Key<IndexPool> const &pool);
 		GeometryManager &attachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indicespool);
-		GeometryManager &dettachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool);
-	private:
-		void attachVerticesToPool(Key<Vertices> const &vertices, Pool &wherefind);
-		void dettachVerticesToPool(Key<Vertices> const &vertices, Pool &wherefind);
-	public:
+		GeometryManager &dettachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indexpool);
 
 		// draw
-		GeometryManager &draw(GLenum mode, Key<Vertices> const &keyindices, Key<Vertices> const &keyVertice);
+		GeometryManager &draw(GLenum mode, Key<Indices> const &keyindices, Key<Vertices> const &keyVertice);
 		GeometryManager &draw(GLenum mode, Key<Vertices> const &keyvertices);
 	private:
 		// data represent pools
 		std::map<Key<IndexPool>, IndexPool> _indexPool;
 		std::map<Key<VertexPool>, VertexPool> _vertexPool;
+		std::map<Key<Indices>, Indices>	_indices;
 		std::map<Key<Vertices>, Vertices> _vertices;
-		std::map<Key<Vertices>, Attach> _attach;
+		std::map<Key<Vertices>, Attach<Vertices, VertexPool>> _vertexAttach;
+		std::map<Key<Indices>, Attach<Indices, IndexPool>> _indexAttach;
 	};
 }
-
-#endif

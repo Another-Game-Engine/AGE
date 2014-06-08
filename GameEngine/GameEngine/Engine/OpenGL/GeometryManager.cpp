@@ -1,5 +1,5 @@
 #include <OpenGL/GeometryManager.hh>
-#include <OpenGL/Vertices.hh>
+#include <OpenGL/Data.hh>
 #include <OpenGL/Pool.hh>
 #include <iostream>
 #include <string>
@@ -114,6 +114,14 @@ namespace gl
 		return (key);
 	}
 
+	Key<Indices> GeometryManager::addIndices(size_t nbrIndices, uint32_t *buffers)
+	{
+		Key<Indices> key;
+
+		_indices[key] = Indices(nbrIndices, buffers);
+		return (key);
+	}
+
 	GeometryManager &GeometryManager::rmVertices(Key<Vertices> &key)
 	{
 		if (!key)
@@ -123,15 +131,26 @@ namespace gl
 		return (*this);
 	}
 
-	void GeometryManager::attachVerticesToPool(Key<Vertices> const &keyvertices, Pool &wherefind)
+	GeometryManager &GeometryManager::rmIndices(Key<Indices> &key)
 	{
-		auto &attach = _attach.find(keyvertices);
-		Attach newAttach;
+		if (!key)
+			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "rmVertices", "key not valid")
+			_indices.erase(key);
+		key.destroy();
+		return (*this);
+	}
+
+	GeometryManager &GeometryManager::attachVerticesToVertexPool(Key<Vertices> const &keyvertices, Key<VertexPool> const &keypool)
+	{
+		if (!keyvertices || !keypool)
+			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "attachVerticesToVertexPool", "key not valid")
+		auto &attach = _vertexAttach.find(keyvertices);
+		Attach<Vertices, VertexPool> newAttach;
 		auto &vertices = _vertices.find(keyvertices)->second;
-		auto &pool = wherefind;
+		auto &pool = _vertexPool.find(keypool)->second;
 		newAttach.pool = &pool;
-		newAttach.vertices = &vertices;
-		if (attach != _attach.end())
+		newAttach.data = &vertices;
+		if (attach != _vertexAttach.end())
 		{
 			attach->second.pool->rmVertices(attach->second.element);
 			newAttach.element = pool.addVertices(vertices);
@@ -140,27 +159,8 @@ namespace gl
 		else
 		{
 			newAttach.element = pool.addVertices(vertices);
-			_attach.insert(std::make_pair(keyvertices, newAttach));
+			_vertexAttach.insert(std::make_pair(keyvertices, newAttach));
 		}
-	}
-
-	void GeometryManager::dettachVerticesToPool(Key<Vertices> const &keyvertices, Pool &wherefind)
-	{
-		auto &vertices = _vertices.find(keyvertices)->second;
-		auto &pool = wherefind;
-		auto &attach = _attach.find(keyvertices);
-		if (attach != _attach.end())
-		{
-			attach->second.pool->rmVertices(attach->second.element);
-			_attach.erase(keyvertices);
-		}
-	}
-
-	GeometryManager &GeometryManager::attachVerticesToVertexPool(Key<Vertices> const &keyvertices, Key<VertexPool> const &keypool)
-	{
-		if (!keyvertices || !keypool)
-			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "attachVerticesToVertexPool", "key not valid")
-		attachVerticesToPool(keyvertices, _vertexPool.find(keypool)->second);
 		return (*this);
 	}
 
@@ -168,55 +168,89 @@ namespace gl
 	{
 		if (!keyvertices || !keypool)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "dettachVerticesToVertexPool", "key not valid")
-		dettachVerticesToPool(keyvertices, _vertexPool.find(keypool)->second);
+		auto &vertices = _vertices.find(keyvertices)->second;
+		auto &pool = _vertexPool.find(keypool)->second;
+		auto &attach = _vertexAttach.find(keyvertices);
+		if (attach != _vertexAttach.end())
+		{
+			attach->second.pool->rmVertices(attach->second.element);
+			_vertexAttach.erase(keyvertices);
+		}
 		return (*this);
 	}
 
-	GeometryManager &GeometryManager::attachVerticesToIndexPool(Key<Vertices> const &keyvertices, Key<IndexPool> const &keypool)
+	GeometryManager &GeometryManager::attachIndicesToIndexPool(Key<Indices> const &keyindices, Key<IndexPool> const &keypool)
 	{
-		if (!keyvertices || !keypool)
+		if (!keyindices || !keypool)
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "attachVerticesToIndexPool", "key not valid")
+			auto &attach = _indexAttach.find(keyindices);
+		Attach<Indices, IndexPool> newAttach;
+		auto &indices = _indices.find(keyindices)->second;
 		auto &pool = _indexPool.find(keypool)->second;
-		attachVerticesToPool(keyvertices, pool);
+		newAttach.pool = &pool;
+		newAttach.data = &indices;
+		if (attach != _indexAttach.end())
+		{
+			attach->second.pool->rmIndices(attach->second.element);
+			newAttach.element = pool.addIndices(indices);
+			attach->second = newAttach;
+		}
+		else
+		{
+			newAttach.element = pool.addIndices(indices);
+			_indexAttach.insert(std::make_pair(keyindices, newAttach));
+		}
 		return (*this);
 	}
 
-	GeometryManager &GeometryManager::dettachVerticesToIndexPool(Key<Vertices> const &keyvertices, Key<IndexPool> const &keypool)
+	GeometryManager &GeometryManager::dettachIndicesToIndexPool(Key<Indices> const &keyindices, Key<IndexPool> const &keypool)
 	{
-		if (!keyvertices || !keypool)
+		if (!keyindices || !keypool)
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "dettachVerticesToVertexPool", "key not valid")
-		dettachVerticesToPool(keyvertices, _indexPool.find(keypool)->second);
+		auto &indices = _indices.find(keyindices)->second;
+		auto &pool = _indexPool.find(keypool)->second;
+		auto &attach = _indexAttach.find(keyindices);
+		if (attach != _indexAttach.end())
+		{
+			attach->second.pool->rmVertices(attach->second.element);
+			_indexAttach.erase(keyindices);
+		}
 		return (*this);
 	}
 
-	GeometryManager &GeometryManager::attachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indicespool)
+	GeometryManager &GeometryManager::attachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indexpool)
 	{
 		auto &vp = _vertexPool.find(vertexpool);
 		if (vp == _vertexPool.end())
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "attachIndexPoolToVertexPool", "vertex pool doesn't exist")
-		auto &ip = _indexPool.find(indicespool);
+		auto &ip = _indexPool.find(indexpool);
 		if (ip == _indexPool.end())
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "attachIndexPoolToVertexPool", "indices pool doesn't exist")
 		vp->second.attachIndexPoolToVertexPool(ip->second);
+		ip->second.attachVertexPoolToIndexPool(vp->second);
 		return (*this);
 	}
 
-	GeometryManager &GeometryManager::dettachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool)
+	GeometryManager &GeometryManager::dettachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indexpool)
 	{
 		auto &vp = _vertexPool.find(vertexpool);
 		if (vp == _vertexPool.end())
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "dettachIndexPoolToVertexPool", "vertex pool doesn't exist")
+		auto &ip = _indexPool.find(indexpool);
+		if (ip == _indexPool.end())
+			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "attachIndexPoolToVertexPool", "indices pool doesn't exist")
 		vp->second.dettachIndexPoolToVertexPool();
+		ip->second.dettachVertexPoolToIndexPool();
 		return (*this);
 	}
 
-	GeometryManager &GeometryManager::draw(GLenum mode, Key<Vertices> const &keyindices, Key<Vertices> const &keyVertice)
+	GeometryManager &GeometryManager::draw(GLenum mode, Key<Indices> const &keyindices, Key<Vertices> const &keyVertice)
 	{
 		if (!keyindices || !keyVertice)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "key not valid")
-		auto &indiceAttach = _attach.find(keyindices);
-		auto &vertexAttach = _attach.find(keyVertice);
-		if (indiceAttach == _attach.end() || vertexAttach == _attach.end())
+		auto &indiceAttach = _indexAttach.find(keyindices);
+		auto &vertexAttach = _vertexAttach.find(keyVertice);
+		if (indiceAttach == _indexAttach.end() || vertexAttach == _vertexAttach.end())
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "keyindices have no attach")
 		VertexPool *vertexPool = static_cast<VertexPool *>(vertexAttach->second.pool);
 		indiceAttach->second.pool->syncronisation();
@@ -229,10 +263,10 @@ namespace gl
 	{
 		if (!keyvertices)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "key not valid")
-		auto &vertexAttach = _attach.find(keyvertices);
-		if (vertexAttach == _attach.end())
+		auto &vertexAttach = _vertexAttach.find(keyvertices);
+		if (vertexAttach == _vertexAttach.end())
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "keyindices have no attach")
-		VertexPool *vertexPool = static_cast<VertexPool *>(vertexAttach->second.pool);
+		VertexPool *vertexPool = vertexAttach->second.pool;
 		vertexAttach->second.pool->syncronisation();
 		vertexPool->draw(mode, vertexAttach->second.element);
 		return (*this);
