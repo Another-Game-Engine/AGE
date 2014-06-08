@@ -1,6 +1,6 @@
 #include "Font.hh"
 #include <OpenGL/GeometryManager.hh>
-#include <OpenGL/Vertices.hh>
+#include <OpenGL/Data.hh>
 
 Font::Font()
 : _name("")

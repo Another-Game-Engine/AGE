@@ -1,5 +1,4 @@
-#ifndef  __FRAMEBUFFER_HH__
-# define __FRAMEBUFFER_HH__
+# pragma once
 
 #include <Utils/OpenGL.hh>
 #include <map>
@@ -56,5 +55,3 @@ namespace OpenGLTools
 	private:
 	};
 }
-
-#endif   //!__FRAMEBUFFER_HH__

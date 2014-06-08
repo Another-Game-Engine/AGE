@@ -119,7 +119,7 @@ public:
 		auto plane = createEntity();
 		setTransform(plane, glm::translate(getTransform(plane), glm::vec3(0, -10, 0)));
 		setTransform(plane, glm::scale(getTransform(plane), glm::vec3(100, 1, 100)));
-		auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+		auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 		mesh->setShader("MaterialBasic");
 		auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
 		rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
@@ -187,8 +187,9 @@ public:
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 				mesh->setShader("MaterialBasic");
 #else
-				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
+				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 				mesh->setShader("MaterialBasic");
+
 #endif
 
 #endif
@@ -211,7 +212,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 8.0f;
+	double _maxTime = 50.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;

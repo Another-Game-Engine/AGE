@@ -1,5 +1,4 @@
-#ifndef BUFFER_HH_
-# define BUFFER_HH_
+#pragma once
 
 # include "Utils/OpenGL.hh"
 
@@ -54,5 +53,3 @@ namespace gl
 		virtual GLenum getMode() const;
 	};
 }
-
-#endif

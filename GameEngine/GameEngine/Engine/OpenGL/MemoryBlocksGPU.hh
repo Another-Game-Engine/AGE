@@ -1,5 +1,4 @@
-#ifndef MEMORYBLOCKSGPU_H_
-# define MEMORYBLOCKSGPU_H_
+#pragma once
 
 #include <cstdint>
 
@@ -48,5 +47,3 @@ namespace gl
 
 	};
 }
-
-#endif /*!MEMORYBLOCKSGPU_H_*/

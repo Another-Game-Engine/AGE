@@ -5,7 +5,7 @@
 #include <MediaFiles/MaterialFile.hpp>
 #include <vector>
 #include <glm/glm.hpp>
-#include <OpenGL/Vertices.hh>
+#include <OpenGL/Data.hh>
 #include <OpenGL/GeometryManager.hh>
 #include <Utils/DependenciesInjector.hpp>
 
@@ -24,7 +24,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<unsigned int>	indices;	// indices
 		gl::Key<gl::Vertices>		glvertices;	// vertices
-		gl::Key<gl::Vertices>		glindices;	// indices
+		gl::Key<gl::Indices>		glindices;	// indices
 		std::shared_ptr<gl::GeometryManager> geomanager; //manager
 		//Vertice<4>					buffer; //-V112
 	private:

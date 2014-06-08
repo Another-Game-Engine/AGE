@@ -29,6 +29,7 @@ public:
 	Font();
 	~Font();
 
+	//bool load(std::unique_ptr<VertexManager<2>> &vm);
 	bool load();
 	bool isLoaded();
 

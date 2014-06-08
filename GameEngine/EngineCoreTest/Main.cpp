@@ -157,12 +157,18 @@ int			main(int ac, char **av)
 
 #ifdef RENDERING_ACTIVATED
 	auto &m = e->setInstance<gl::GeometryManager>();
+	
+	// create pool
 	m->addIndexPool();
 	m->addVertexPool();
 	GLenum typeComponent[2] = {GL_FLOAT, GL_FLOAT};
 	uint8_t sizeTypeComponent[2] = { sizeof(float), sizeof(float) };
 	uint8_t nbrComponent[2] = {2, 2};
 	m->addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
+	
+	// attach pool which be create
+	m->attachIndexPoolToVertexPool(m->getVertexPool(0), m->getIndexPool(0));
+	m->attachIndexPoolToVertexPool(m->getVertexPool(1), m->getIndexPool(0));
 
 	if (!loadShaders(e))
 		return EXIT_FAILURE;

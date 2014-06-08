@@ -59,7 +59,7 @@
     <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
     <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
-    <ClCompile Include="Engine\OpenGL\Vertices.cpp" />
+    <ClCompile Include="Engine\OpenGL\Data.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -175,7 +175,7 @@
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
     <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Pool.hh" />
-    <ClInclude Include="Engine\OpenGL\Vertices.hh" />
+    <ClInclude Include="Engine\OpenGL\Data.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -1,5 +1,4 @@
-#ifndef PIXELBUFFER_HH_
-# define PIXELBUFFER_HH_
+#pragma once
 
 # include <cstdint>
 # include <Utils/OpenGL.hh>
@@ -52,5 +51,3 @@ namespace OpenGLTools
 
 	};
 }
-
-#endif /*!PIXELBUFFER_HH_*/

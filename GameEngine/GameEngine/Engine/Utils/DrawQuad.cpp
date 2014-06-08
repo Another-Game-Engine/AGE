@@ -99,10 +99,8 @@ void DrawQuad::init(std::weak_ptr<DependenciesInjector> &&engine)
 	size_t nbrBuffer[2] = {sizeof(quadPos), sizeof(quadUvs)};
 	unsigned int indice[] = { 0, 1, 2, 3, 4, 5 };
 	_quadvertices = _m->addVertices(6, 2, nbrBuffer, buffer);
-	buffer[0] = indice;
-	nbrBuffer[0] = sizeof(indice);
-	_quadindices = _m->addVertices(6, 1, nbrBuffer, buffer);
+	_quadindices = _m->addIndices(6, indice);
 	_m->attachVerticesToVertexPool(_quadvertices, _m->getVertexPool(1));
-	_m->attachVerticesToIndexPool(_quadindices, _m->getIndexPool(0));
+	_m->attachIndicesToIndexPool(_quadindices, _m->getIndexPool(0));
 	_m->attachIndexPoolToVertexPool(_m->getVertexPool(1), _m->getIndexPool(0));
 }

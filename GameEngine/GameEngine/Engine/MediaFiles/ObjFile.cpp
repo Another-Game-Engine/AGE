@@ -97,12 +97,9 @@ void ObjFile::Geometry::save(cereal::PortableBinaryOutputArchive &ar) const
 								normals.size() * 4 * sizeof(float),
 								uvs.size() * 2 * sizeof(float)};
 		glvertices = geomanager->addVertices(vertices.size(), 4, nbrBuffer, buffer);
-		buffer[0] = &indices[0];
-		nbrBuffer[0] = indices.size() * sizeof(unsigned int);
-		glindices = geomanager->addVertices(indices.size(), 1, nbrBuffer, buffer);
+		glindices = geomanager->addIndices(indices.size(), &indices[0]);
 		geomanager->attachVerticesToVertexPool(glvertices, geomanager->getVertexPool(0));
-		geomanager->attachVerticesToIndexPool(glindices, geomanager->getIndexPool(0));
-		geomanager->attachIndexPoolToVertexPool(geomanager->getVertexPool(0), geomanager->getIndexPool(0));
+		geomanager->attachIndicesToIndexPool(glindices, geomanager->getIndexPool(0));
 	}
 
 void ObjFile::save(cereal::PortableBinaryOutputArchive &ar) const
