@@ -77,7 +77,8 @@ namespace Component
 		perModelUniform->flushChanges();
 		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 		{
-			mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glindices, mesh->geometries[i].glvertices);
+			mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glvertices);
+			//mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glindices, mesh->geometries[i].glvertices);
 		}
 	}
 

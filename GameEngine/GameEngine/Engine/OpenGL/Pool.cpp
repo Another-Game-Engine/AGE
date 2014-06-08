@@ -548,7 +548,7 @@ namespace gl
 
 	VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const
 	{
-		if (!_indexPoolattach)
+		if (!_indexPoolattach && _indexPoolattach->_vertexPoolattach)
 			DEBUG_MESSAGE("Warning", "Pool.cpp", "draw", "no indexpool attach", *this)
 		_vao.bind();
 		auto &element = _poolElement.find(drawOnIt);

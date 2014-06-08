@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 DrawQuad::DrawQuad() :
-	//_vertexManager(NULL),
 	_fboToScreen(NULL)
 {
 }
@@ -13,8 +12,10 @@ DrawQuad::DrawQuad() :
 
 DrawQuad::~DrawQuad()
 {
-//	if (_vertexManager != NULL)
-//		delete _vertexManager;
+	_m->dettachVerticesToVertexPool(_quadvertices, _m->getVertexPool(1));
+	_m->dettachIndicesToIndexPool(_quadindices, _m->getIndexPool(0));
+	_m->rmIndices(_quadindices);
+	_m->rmVertices(_quadvertices);
 }
 
 void	DrawQuad::initShaders()
@@ -102,5 +103,4 @@ void DrawQuad::init(std::weak_ptr<DependenciesInjector> &&engine)
 	_quadindices = _m->addIndices(6, indice);
 	_m->attachVerticesToVertexPool(_quadvertices, _m->getVertexPool(1));
 	_m->attachIndicesToIndexPool(_quadindices, _m->getIndexPool(0));
-	_m->attachIndexPoolToVertexPool(_m->getVertexPool(1), _m->getIndexPool(0));
 }

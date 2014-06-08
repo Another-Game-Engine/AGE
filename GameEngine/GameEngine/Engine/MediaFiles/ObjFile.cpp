@@ -17,7 +17,8 @@ ObjFile::ObjFile() : MediaFile<ObjFile>()
 }
 
 ObjFile::~ObjFile()
-{}
+{
+}
 
 ObjFile::ObjFile(const ObjFile &o)
 : MediaFile<ObjFile>(o)
@@ -39,8 +40,15 @@ ObjFile &ObjFile::operator=(const ObjFile &o)
 
 ObjFile::Geometry::Geometry()
 		: name("")
-	{
-	}
+{
+		if (geomanager)
+		{
+			geomanager->dettachVerticesToVertexPool(glvertices, geomanager->getVertexPool(0));
+			geomanager->dettachIndicesToIndexPool(glindices, geomanager->getIndexPool(0));
+			geomanager->rmIndices(glindices);
+			geomanager->rmVertices(glvertices);
+		}
+}
 
 ObjFile::Geometry::~Geometry()
 	{

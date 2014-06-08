@@ -187,7 +187,7 @@ public:
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 				mesh->setShader("MaterialBasic");
 #else
-				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__dragon"));
 				mesh->setShader("MaterialBasic");
 
 #endif
