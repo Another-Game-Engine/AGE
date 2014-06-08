@@ -13,20 +13,22 @@ namespace gl
 	class VertexPool;
 	class IndexPool;
 	class Vertices;
+	class Indices;
 	class MemoryBlocksGPU;
 
-	//!\file VerticesManager.hh
+	//!\file Pool.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
-	//!\class VerticesPool
-	//!\brief Handle one kind of vertices for the VertexManager
+	//!\class Pool
+	//!\brief Handle one kind of element for the GeometryManager
 	class Pool
 	{
 	public:
-		struct PoolElement
+		template <typename TYPE>
+		struct Element
 		{
 			size_t memoryIndex;
-			Vertices const *vertices;
+			TYPE const *data;
 		};
 	public:
 		// constructor
@@ -45,13 +47,8 @@ namespace gl
 		uint8_t getNbrComponent(uint8_t index) const;
 		size_t getSizeAttribute(uint8_t index) const;
 		size_t getOffsetAttribute(uint8_t index) const;
-		size_t getNbrBytePool() const;
-		
 
-		// Vertices handler
-		Key<PoolElement> addVertices(Vertices const &vertices);
-		Pool &rmVertices(Key<PoolElement> const &key);
-		Pool &clearPool();
+		size_t getNbrBytePool() const;
 
 		//draw and synchronisation
 		virtual Pool &syncronisation() = 0;
@@ -64,21 +61,25 @@ namespace gl
 		GLenum *_typeComponent;
 		uint8_t *_sizeTypeComponent;
 		uint8_t *_nbrComponent;
-
-		// data represent all vertices
-		std::vector<MemoryBlocksGPU> _poolMemory;
-		std::map<Key<PoolElement>, PoolElement> _poolElement;
 		size_t *_sizeAttribute;
-		size_t _nbrElementPool;
 		size_t *_offsetAttribute;
+
+		// represent all data
+		std::vector<MemoryBlocksGPU> _poolMemory;
 		size_t _nbrBytePool;
+		size_t _nbrElementPool;
 		bool _syncronized;
 		bool _internalSyncronized;
 
 		//function associate to syncronisation
-		void syncronizeVertices(GLenum mode, Vertices const &vertices, MemoryBlocksGPU &memory);
+		void clearPool();
 	};
 
+	//!\file Pool.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class VertexPool
+	//!\brief Handle Vertices for the GeometryManager
 	class VertexPool : public Pool
 	{
 	public:
@@ -95,6 +96,11 @@ namespace gl
 		VertexPool &setSizeTypeComponent(uint8_t index, uint8_t sizeType);
 		VertexPool &setNbrComponent(uint8_t index, uint8_t nbrComponent);
 
+		// Vertices handler
+		Key<Element<Vertices>> addVertices(Vertices const &vertices);
+		VertexPool &rmVertices(Key<Element<Vertices>> const &key);
+		VertexPool &clearPool();
+
 		// tool for link index pool and  vertex pool (usefull for draw with indices ;p)
 		VertexPool &attachIndexPoolToVertexPool(IndexPool const &pool);
 		VertexPool &dettachIndexPoolToVertexPool();
@@ -102,16 +108,24 @@ namespace gl
 		//draw and synchronisation
 		virtual Pool &syncronisation();
 		virtual Buffer const &getBuffer() const;
-		VertexPool const &draw(GLenum mode, Key<PoolElement> const &drawWithIt, Key<PoolElement> const &drawOnIt) const;
-		VertexPool const &draw(GLenum mode, Key<PoolElement> const &drawIt) const;
+		VertexPool const &draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const;
+		VertexPool const &draw(GLenum mode, Key<Element<Vertices>> const &drawIt) const;
 
 	private:
 		VertexBuffer _vbo;
 		VertexArray _vao;
 		IndexPool const *_indexPoolattach;
-		
+
+		// reprensent data in vbo
+		std::map<Key<Element<Vertices>>, Element<Vertices>> _poolElement;
+
 	};
 
+	//!\file Pool.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class IndexPool
+	//!\brief Handle Indices for the GeometryManager
 	class IndexPool : public Pool
 	{
 	public:
@@ -123,11 +137,24 @@ namespace gl
 		virtual Pool &syncronisation();
 		virtual Buffer const &getBuffer() const;
 
-		IndexPool const &draw(GLenum mode, Key<PoolElement> const &key) const;
-		IndexPool const &draw(GLenum mode, Key<PoolElement> const &key, MemoryBlocksGPU const &target) const;
-	
+		// Vertices handler
+		Key<Element<Indices>> addIndices(Indices const &indices);
+		IndexPool &rmIndices(Key<Element<Indices>> const &key);
+		IndexPool &clearPool();
+
+		// tool for link index pool and  vertex pool (usefull for draw with indices ;p)
+		IndexPool &attachVertexPoolToIndexPool(VertexPool const &pool);
+		IndexPool &dettachVertexPoolToIndexPool();
+
 	private:
 		gl::IndexBuffer _ibo;
+		VertexPool const *_vertexPoolattach;
 
+		// reprsent data in ibo
+		std::map<Key<Element<Indices>>, Element<Indices>> _poolElement;
+
+		// Warning must be call only by VertexPool
+		IndexPool const &onDrawCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target) const;
+		friend VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const;
 	};
 }

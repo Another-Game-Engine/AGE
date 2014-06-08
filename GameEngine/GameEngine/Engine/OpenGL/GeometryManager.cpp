@@ -30,7 +30,7 @@ namespace gl
 	Key<IndexPool> GeometryManager::addIndexPool()
 	{
 		Key<IndexPool> key;
-		_indexPool[key] = IndexPool();
+		_indexPool[key];
 		return (key);
 	}
 
@@ -114,11 +114,11 @@ namespace gl
 		return (key);
 	}
 
-	Key<Indices> GeometryManager::addIndices(size_t nbrIndices, uint32_t *buffers)
+	Key<Indices> GeometryManager::addIndices(size_t nbrIndices, uint32_t *buffer)
 	{
 		Key<Indices> key;
 
-		_indices[key] = Indices(nbrIndices, buffers);
+		_indices[key] = Indices(nbrIndices, buffer);
 		return (key);
 	}
 
@@ -212,7 +212,7 @@ namespace gl
 		auto &attach = _indexAttach.find(keyindices);
 		if (attach != _indexAttach.end())
 		{
-			attach->second.pool->rmVertices(attach->second.element);
+			attach->second.pool->rmIndices(attach->second.element);
 			_indexAttach.erase(keyindices);
 		}
 		return (*this);

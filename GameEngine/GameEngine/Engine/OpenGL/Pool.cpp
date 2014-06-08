@@ -1,6 +1,6 @@
 #include <OpenGL/Pool.hh>
 #include <OpenGL/MemoryBlocksGPU.hh>
-#include <OpenGL/Vertices.hh>
+#include <OpenGL/Data.hh>
 #include <iostream>
 #include <string>
 
@@ -17,9 +17,9 @@ namespace gl
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
 		_sizeAttribute(NULL),
-		_nbrElementPool(0),
 		_offsetAttribute(NULL),
 		_nbrBytePool(0),
+		_nbrElementPool(0),
 		_syncronized(true),
 		_internalSyncronized(true)
 	{
@@ -27,8 +27,8 @@ namespace gl
 		_sizeTypeComponent = new uint8_t[_nbrAttribute];
 		_nbrComponent = new uint8_t[_nbrAttribute];
 		_sizeAttribute = new size_t[_nbrAttribute];
-		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		_offsetAttribute = new size_t[_nbrAttribute];
+		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		for (uint8_t index = 0; index < _nbrAttribute - 1; ++index)
 		{
@@ -47,9 +47,9 @@ namespace gl
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
 		_sizeAttribute(NULL),
-		_nbrElementPool(0),
 		_offsetAttribute(NULL),
 		_nbrBytePool(0),
+		_nbrElementPool(0),
 		_syncronized(true),
 		_internalSyncronized(true)
 	{
@@ -71,24 +71,24 @@ namespace gl
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
 		_sizeAttribute(NULL),
-		_nbrElementPool(0),
 		_offsetAttribute(NULL),
 		_nbrBytePool(0),
+		_nbrElementPool(0),
 		_syncronized(true),
 		_internalSyncronized(true)
 	{
 		if (_nbrAttribute)
 		{
 			_typeComponent = new GLenum[_nbrAttribute];
-			_sizeTypeComponent = new uint8_t[_nbrAttribute];
-			_nbrComponent = new uint8_t[_nbrAttribute];
-			_sizeAttribute = new size_t[_nbrAttribute];
-			_offsetAttribute = new size_t[_nbrAttribute];
-			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 			memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
+			_sizeTypeComponent = new uint8_t[_nbrAttribute];
 			memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			_nbrComponent = new uint8_t[_nbrAttribute];
 			memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+			_sizeAttribute = new size_t[_nbrAttribute];
+			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
+			_offsetAttribute = new size_t[_nbrAttribute];
+			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		}
 	}
 
@@ -98,29 +98,28 @@ namespace gl
 		_sizeTypeComponent(NULL),
 		_nbrComponent(NULL),
 		_sizeAttribute(NULL),
-		_nbrElementPool(0),
 		_offsetAttribute(NULL),
 		_nbrBytePool(0),
+		_nbrElementPool(0),
 		_syncronized(true)
 	{
 		if (_nbrAttribute)
 		{
 			_typeComponent = new GLenum[_nbrAttribute];
-			_sizeTypeComponent = new uint8_t[_nbrAttribute];
-			_nbrComponent = new uint8_t[_nbrAttribute];
-			_sizeAttribute = new size_t[_nbrAttribute];
-			_offsetAttribute = new size_t[_nbrAttribute];
-			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 			memcpy(_typeComponent, copy._typeComponent, sizeof(GLenum)* _nbrAttribute);
+			_sizeTypeComponent = new uint8_t[_nbrAttribute];
 			memcpy(_sizeTypeComponent, copy._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
+			_nbrComponent = new uint8_t[_nbrAttribute];
 			memcpy(_nbrComponent, copy._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+			_sizeAttribute = new size_t[_nbrAttribute];
+			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
+			_offsetAttribute = new size_t[_nbrAttribute];
+			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		}
 	}
 
 	Pool::~Pool()
 	{
-		clearPool();
 		if (_nbrAttribute)
 		{
 			delete[] _typeComponent;
@@ -136,7 +135,6 @@ namespace gl
 	{
 		if (this != &p)
 		{
-			clearPool();
 			if (_nbrAttribute != p._nbrAttribute)
 			{
 				if (_nbrAttribute)
@@ -153,8 +151,8 @@ namespace gl
 					_typeComponent = new GLenum[p._nbrAttribute];
 					_sizeTypeComponent = new uint8_t[p._nbrAttribute];
 					_nbrComponent = new uint8_t[p._nbrAttribute];
-					_sizeAttribute = new size_t[_nbrAttribute];
-					_offsetAttribute = new size_t[_nbrAttribute];
+					_sizeAttribute = new size_t[p._nbrAttribute];
+					_offsetAttribute = new size_t[p._nbrAttribute];
 				}
 				else
 				{
@@ -165,11 +163,11 @@ namespace gl
 					_offsetAttribute = NULL;
 				}
 			}
-			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 			memcpy(_typeComponent, p._typeComponent, sizeof(GLenum)* _nbrAttribute);
 			memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
 			memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
+			memset(_sizeAttribute, 0, sizeof(size_t) * _nbrAttribute);
+			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		}
 		return (*this);
 	}
@@ -204,22 +202,23 @@ namespace gl
 	{
 		if (index >= _nbrAttribute)
 			DEBUG_MESSAGE("Warning", "Pool.cpp", "getSizeAttribute", "Index out of range", -1)
-		return (_sizeAttribute[index]);
+			return (_sizeAttribute[index]);
 	}
 
 	size_t Pool::getOffsetAttribute(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
 			DEBUG_MESSAGE("Warning", "Pool.cpp", "getOffsetAttribute", "Index out of range", -1)
-		return (_offsetAttribute[index]);
+			return (_offsetAttribute[index]);
 	}
+
 
 	size_t Pool::getNbrBytePool() const
 	{
 		return (_nbrBytePool);
 	}
 
-	Key<Pool::PoolElement> Pool::addVertices(Vertices const &vertices)
+	Key<Pool::Element<Vertices>> VertexPool::addVertices(Vertices const &vertices)
 	{
 		// Check in memory pool if a field is free
 		for (size_t index = 0; index < _poolMemory.size(); ++index)
@@ -230,10 +229,10 @@ namespace gl
 				_internalSyncronized = false;
 				memory.setSync(false);
 				memory.setIsUsed(true);
-				Key<PoolElement> keyElement;
-				PoolElement newElement;
+				Key<Element<Vertices>> keyElement;
+				Element<Vertices> newElement;
 				newElement.memoryIndex = index;
-				newElement.vertices = &vertices;
+				newElement.data = &vertices;
 				_poolElement[keyElement] = newElement;
 				return (keyElement);
 			}
@@ -256,15 +255,60 @@ namespace gl
 				_offsetAttribute[index] = _offsetAttribute[index - 1] + _sizeAttribute[index - 1];
 		}
 		_poolMemory.push_back(memory);
-		PoolElement element;
-		Key<PoolElement> keyElement;
-		element.vertices = &vertices;
+		Element<Vertices> element;
+		Key<Element<Vertices>> keyElement;
+		element.data = &vertices;
 		element.memoryIndex = _poolMemory.size() - 1;
 		_poolElement[keyElement] = element;// &vertices, memory);
 		return (keyElement);
 	}
 
-	Pool &Pool::rmVertices(Key<PoolElement> const &key)
+	Key<Pool::Element<Indices>> IndexPool::addIndices(Indices const &indices)
+	{
+		// Check in memory pool if a field is free
+		for (size_t index = 0; index < _poolMemory.size(); ++index)
+		{
+			MemoryBlocksGPU &memory = _poolMemory[index];
+			if (_poolMemory[index].getIsUsed() == false && memory.getNbrElement() == indices.getNbrIndices())
+			{
+				_internalSyncronized = false;
+				memory.setSync(false);
+				memory.setIsUsed(true);
+				Key<Element<Indices>> keyElement;
+				Element<Indices> newElement;
+				newElement.memoryIndex = index;
+				newElement.data = &indices;
+				_poolElement[keyElement] = newElement;
+				return (keyElement);
+			}
+		}
+		// Udpate major is require cause of size pool changement
+		_syncronized = false; // cause reset of buffer on gpu
+		_internalSyncronized = false;
+		for (int index = 0; index < _poolMemory.size(); ++index)
+			_poolMemory[index].setSync(false); // ask an update of all element of memory gpu
+		MemoryBlocksGPU memory;
+		memory.setNbrElement(indices.getNbrIndices());
+		memory.setNbrBlock(_nbrAttribute);
+		for (uint8_t index = 0; index < _nbrAttribute; ++index)
+		{
+			size_t sizeAttribute = _sizeTypeComponent[index] * _nbrComponent[index] * indices.getNbrIndices();
+			_nbrBytePool += sizeAttribute;
+			_sizeAttribute[index] += sizeAttribute;
+			memory.setSizeBlock(index, sizeAttribute);
+			if (index > 0)
+				_offsetAttribute[index] = _offsetAttribute[index - 1] + _sizeAttribute[index - 1];
+		}
+		_poolMemory.push_back(memory);
+		Element<Indices> element;
+		Key<Element<Indices>> keyElement;
+		element.data = &indices;
+		element.memoryIndex = _poolMemory.size() - 1;
+		_poolElement[keyElement] = element;// &vertices, memory);
+		return (keyElement);
+	}
+
+	VertexPool &VertexPool::rmVertices(Key<Pool::Element<Vertices>> const &key)
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "Pool.cpp", "rmVertices", "key invalid", *this)
@@ -278,30 +322,45 @@ namespace gl
 		return (*this);
 	}
 
-	Pool &Pool::clearPool()
+	IndexPool &IndexPool::rmIndices(Key<Pool::Element<Indices>> const &key)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Pool.cpp", "rmVertices", "key invalid", *this)
+			auto &element = _poolElement.find(key);
+		if (element == _poolElement.end())
+			return (*this);
+		MemoryBlocksGPU &memory = _poolMemory[element->second.memoryIndex];
+		memory.setSync(true);
+		memory.setIsUsed(false);
+		_poolElement.erase(element);
+		return (*this);
+	}
+
+	void Pool::clearPool()
 	{
 		_syncronized = true;
 		_internalSyncronized = true;
 		_nbrBytePool = 0;
 		_nbrElementPool = 0;
+		_poolMemory.clear();
+	}
+
+	VertexPool &VertexPool::clearPool()
+	{
+		Pool::clearPool();
 		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
 		_poolElement.clear();
-		_poolMemory.clear();
 		return (*this);
 	}
 
-	void Pool::syncronizeVertices(GLenum mode, Vertices const &vertices, MemoryBlocksGPU &memory)
+	IndexPool &IndexPool::clearPool()
 	{
-		memory.setStartElement(_nbrElementPool);
-		for (uint8_t index = 0; index < _nbrAttribute; ++index)
-		{
-			memory.setSync(true);
-			memory.setOffset(index, _offsetAttribute[index] + _sizeAttribute[index]);
-			glBufferSubData(mode, memory.getOffset(index), memory.getSizeBlock(index), vertices.getBuffer(index));
-			_sizeAttribute[index] += memory.getSizeBlock(index);
-		}
-		_nbrElementPool += memory.getNbrElement();
+		Pool::clearPool();
+		*_sizeAttribute = 0;
+		*_offsetAttribute = 0;
+		_poolElement.clear();
+		return (*this);
 	}
 
 	VertexPool::VertexPool()
@@ -452,8 +511,22 @@ namespace gl
 				memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 			_nbrElementPool = 0;
 			for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
-				if (index->second.vertices && _poolMemory[index->second.memoryIndex].getSync() == false)
-					syncronizeVertices(_vbo.getMode(), *(index->second.vertices), _poolMemory[index->second.memoryIndex]);
+			{
+				Vertices const *vertices = index->second.data;
+				MemoryBlocksGPU &memory = _poolMemory[index->second.memoryIndex];
+				if (vertices && memory.getSync() == false)
+				{
+					memory.setStartElement(_nbrElementPool);
+					for (uint8_t index = 0; index < _nbrAttribute; ++index)
+					{
+						memory.setSync(true);
+						memory.setOffset(index, _offsetAttribute[index] + _sizeAttribute[index]);
+						glBufferSubData(GL_ARRAY_BUFFER, memory.getOffset(index), memory.getSizeBlock(index), vertices->getBuffer(index));
+						_sizeAttribute[index] += memory.getSizeBlock(index);
+					}
+					_nbrElementPool += memory.getNbrElement();
+				}
+			}
 		}
 		if (!_syncronized)
 		{
@@ -473,7 +546,7 @@ namespace gl
 		return (*this);
 	}
 
-	VertexPool const &VertexPool::draw(GLenum mode, Key<PoolElement> const &drawWithIt, Key<PoolElement> const &drawOnIt) const
+	VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const
 	{
 		if (!_indexPoolattach)
 			DEBUG_MESSAGE("Warning", "Pool.cpp", "draw", "no indexpool attach", *this)
@@ -482,15 +555,16 @@ namespace gl
 		if (element == _poolElement.end())
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
-		_indexPoolattach->draw(mode, drawWithIt, memory);
+		_indexPoolattach->onDrawCall(mode, drawWithIt, memory);
 		_vao.unbind();
 		return (*this);
 	}
 
 	VertexPool &VertexPool::operator=(VertexPool const &v)
 	{
-		if (this == &v)
+		if (this != &v)
 		{
+			clearPool();
 			Pool::operator=(v);
 			_indexPoolattach = v._indexPoolattach;
 			return (*this);
@@ -498,7 +572,7 @@ namespace gl
 		return (*this);
 	}
 
-	VertexPool const &VertexPool::draw(GLenum mode, Key<PoolElement> const &drawIt) const
+	VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Vertices>> const &drawIt) const
 	{
 		_vao.bind();
 		auto &element = _poolElement.find(drawIt);
@@ -528,7 +602,8 @@ namespace gl
 	}
 
 	IndexPool::IndexPool()
-		: Pool(INDEXPOOL)
+		: Pool(INDEXPOOL),
+		_vertexPoolattach(NULL)
 	{
 	}
 
@@ -537,14 +612,20 @@ namespace gl
 	}
 
 	IndexPool::IndexPool(IndexPool const &copy)
-		: Pool(copy)
+		: Pool(copy),
+		_vertexPoolattach(copy._vertexPoolattach)
 	{
 
 	}
 
 	IndexPool &IndexPool::operator=(IndexPool const &i)
 	{
-		Pool::operator=(i);
+		if (this != &i)
+		{
+			clearPool();
+			Pool::operator=(i);
+			_vertexPoolattach = i._vertexPoolattach;
+		}
 		return (*this);
 	}
 
@@ -560,8 +641,22 @@ namespace gl
 				memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
 			_nbrElementPool = 0;
 			for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
-				if (index->second.vertices && _poolMemory[index->second.memoryIndex].getSync() == false)
-					syncronizeVertices(_ibo.getMode(), *(index->second.vertices), _poolMemory[index->second.memoryIndex]);
+			{
+				Indices const *indices = index->second.data;
+				MemoryBlocksGPU &memory = _poolMemory[index->second.memoryIndex];
+				if (indices && memory.getSync() == false)
+				{
+					memory.setStartElement(_nbrElementPool);
+					for (uint8_t index = 0; index < _nbrAttribute; ++index)
+					{
+						memory.setSync(true);
+						memory.setOffset(index, _offsetAttribute[index] + _sizeAttribute[index]);
+						glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, memory.getOffset(index), memory.getSizeBlock(index), indices->getBuffer());
+						_sizeAttribute[index] += memory.getSizeBlock(index);
+					}
+					_nbrElementPool += memory.getNbrElement();
+				}
+			}
 		}
 		_internalSyncronized = true;
 		_syncronized = true;
@@ -573,7 +668,7 @@ namespace gl
 		return (_ibo);
 	}
 
-	IndexPool const &IndexPool::draw(GLenum mode, Key<PoolElement> const &key, MemoryBlocksGPU const &target) const
+	IndexPool const &IndexPool::onDrawCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target) const
 	{
 		auto &element = _poolElement.find(key);
 		if (element == _poolElement.end())
@@ -583,14 +678,15 @@ namespace gl
 		return (*this);
 	}
 
-	IndexPool const &IndexPool::draw(GLenum mode, Key<PoolElement> const &key) const
+	IndexPool &IndexPool::attachVertexPoolToIndexPool(VertexPool const &pool)
 	{
-		_ibo.bind();
-		auto &element = _poolElement.find(key);
-		if (element == _poolElement.end())
-			return (*this);
-		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
-		glDrawElements(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (GLvoid const *)memory.getElementStart());
+		_vertexPoolattach = &pool;
+		return (*this);
+	}
+
+	IndexPool &IndexPool::dettachVertexPoolToIndexPool()
+	{
+		_vertexPoolattach = NULL;
 		return (*this);
 	}
 }

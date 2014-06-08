@@ -26,7 +26,7 @@ namespace gl
 		{
 			TYPE const *data;
 			POOL *pool;
-			Key<Pool::PoolElement> element;
+			Key<Pool::Element<TYPE>> element;
 		};
 	public:
 		// constructor

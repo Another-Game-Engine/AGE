@@ -126,6 +126,17 @@ namespace gl
 
 	}
 
+	Indices::Indices(size_t nbrIndices, uint32_t *buffer)
+		: _nbrIndices(nbrIndices),
+		_buffer(NULL)
+	{
+		if (buffer)
+		{
+			_buffer = new uint32_t[nbrIndices];
+			memcpy(_buffer, buffer, sizeof(uint32_t)* nbrIndices);
+		}
+	}
+
 	Indices::Indices(Indices const &copy)
 		: _nbrIndices(copy._nbrIndices),
 		_buffer(NULL)
