@@ -81,7 +81,7 @@ public:
 
 	void destroy(const Entity &e)
 	{
-		static Barcode cachedCode;
+		Barcode cachedCode;
 		auto &data = _pool[e.id];
 		if (data.entity != e)
 			return;

@@ -17,7 +17,8 @@ ObjFile::ObjFile() : MediaFile<ObjFile>()
 }
 
 ObjFile::~ObjFile()
-{}
+{
+}
 
 ObjFile::ObjFile(const ObjFile &o)
 : MediaFile<ObjFile>(o)
