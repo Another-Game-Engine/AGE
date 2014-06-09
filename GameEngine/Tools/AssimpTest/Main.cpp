@@ -5,9 +5,17 @@
 #include <iostream>
 #include <glm.hpp>
 #include <vector>
+#include <map>
 
 namespace AGE
 {
+	struct Bone
+	{
+		std::string name;
+		glm::mat4 offset;
+		unsigned int index;
+	};
+
 	struct Mesh
 	{
 		std::vector<glm::vec4> positions;
@@ -17,8 +25,14 @@ namespace AGE
 		std::vector<std::vector<glm::vec2>> uvs;
 		std::vector<std::uint32_t> indices;
 		std::vector<glm::vec4> weights;
-		std::vector<glm::ivec4> indices;
+		std::vector<glm::ivec4> boneIndices;
+		std::vector<AGE::Bone> bones;
 	};
+}
+
+static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
+{
+	return glm::mat4(m.a1, m.a2, m.a3, m.a4, m.b1, m.b2, m.b3, m.b4, m.c1, m.c2, m.c3, m.c4, m.d1, m.d2, m.d3, m.d4);
 }
 
 void main(void)
@@ -91,9 +105,55 @@ void main(void)
 			}
 		}
 
+		std::map<std::string, unsigned int> bonesIndices;
+		unsigned int numBone = 0;
+
+		meshs[meshIndex].weights.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
+		meshs[meshIndex].boneIndices.resize(meshs[meshIndex].positions.size(), glm::ivec4(0));
+
 		for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 		{
-			
+			unsigned int boneIndex = 0;
+			std::string boneName = mesh->mBones[i]->mName.data;			
+
+			if (bonesIndices.find(boneName) == std::end(bonesIndices))
+			{
+				boneIndex = numBone;
+				bonesIndices.insert(std::make_pair(boneName, numBone));
+				if (meshs[meshIndex].bones.size() <= boneIndex)
+					meshs[meshIndex].bones.resize(boneIndex + 1);
+				meshs[meshIndex].bones[boneIndex].name = boneName;
+				meshs[meshIndex].bones[boneIndex].index = boneIndex;
+				meshs[meshIndex].bones[boneIndex].offset = aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
+				++numBone;
+			}
+			else
+				boneIndex = bonesIndices[boneName];
+			for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; ++j)
+			{
+				float weight = mesh->mBones[i]->mWeights[j].mWeight;
+				float vid = mesh->mBones[i]->mWeights[j].mVertexId;
+				if (meshs[meshIndex].weights[vid].r == 0.0f)
+				{
+					meshs[meshIndex].weights[vid].r = weight;
+					meshs[meshIndex].boneIndices[vid].r = boneIndex;
+				}
+				else if (meshs[meshIndex].weights[vid].g == 0.0f)
+				{
+					meshs[meshIndex].weights[vid].g = weight;
+					meshs[meshIndex].boneIndices[vid].g = boneIndex;
+				}
+				else if (meshs[meshIndex].weights[vid].b == 0.0f)
+				{
+					meshs[meshIndex].weights[vid].b = weight;
+					meshs[meshIndex].boneIndices[vid].b = boneIndex;
+				}
+				else if (meshs[meshIndex].weights[vid].a == 0.0f)
+				{
+					meshs[meshIndex].weights[vid].a = weight;
+					meshs[meshIndex].boneIndices[vid].a = boneIndex;
+				}
+			}
 		}
 
 	}
