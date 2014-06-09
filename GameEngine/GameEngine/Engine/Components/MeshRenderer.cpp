@@ -29,11 +29,6 @@ namespace Component
 	}
 
 
-	void MeshRenderer::init(std::shared_ptr<AMediaFile> r)
-	{
-		mesh = std::static_pointer_cast<ObjFile>(r);
-	}
-
 	void MeshRenderer::init(std::shared_ptr<ObjFile> r)
 	{
 		mesh = r;

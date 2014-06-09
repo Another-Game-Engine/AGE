@@ -40,7 +40,7 @@ public:
 #endif //!PHYSIC
 
 #ifdef RENDERING_ACTIVATED
-		addSystem<FirstPersonViewSystem>(2);
+		addSystem<FirstPersonViewSystem>(1);
 		addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 		addSystem<LightRenderingSystem>(80); // Render with the lights
 		addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
@@ -119,7 +119,7 @@ public:
 		auto plane = createEntity();
 		setTransform(plane, glm::translate(getTransform(plane), glm::vec3(0, -10, 0)));
 		setTransform(plane, glm::scale(getTransform(plane), glm::vec3(100, 1, 100)));
-		auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+		auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 		mesh->setShader("MaterialBasic");
 		auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
 		rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);

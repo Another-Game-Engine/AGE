@@ -33,7 +33,6 @@ namespace Component
 		virtual ~MeshRenderer(void);
 		MeshRenderer(MeshRenderer &&o);
 		MeshRenderer &operator=(MeshRenderer &&o);
-		void init(std::shared_ptr<AMediaFile> file);
 		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }

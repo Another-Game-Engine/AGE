@@ -81,7 +81,7 @@ public:
 
 	void destroy(const Entity &e)
 	{
-		static Barcode cachedCode;
+		Barcode cachedCode;
 		auto &data = _pool[e.id];
 		if (data.entity != e)
 			return;
@@ -291,10 +291,10 @@ public:
 	{
 		COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
 		auto &e = _pool[entity.id];
-		if (e.entity != entity)
-			return nullptr;
-		if (!e.barcode.hasComponent(id))
-			return nullptr;
+		assert(e.entity == entity);
+			//return nullptr;
+		assert(e.barcode.hasComponent(id));
+			//return nullptr;
 		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->getComponent(entity);
 	}
 
