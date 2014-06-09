@@ -36,7 +36,7 @@ namespace AGE
 		std::vector<std::vector<glm::vec2>> uvs;
 		std::vector<std::uint32_t> indices;
 		std::vector<glm::vec4> weights;
-		std::vector<glm::uvec4> boneIndices;
+		std::vector<glm::vec4> boneIndices;
 		std::vector<AGE::Bone> bones;
 	};
 }
@@ -76,15 +76,15 @@ int			main(int ac, char **av)
 
 	config->loadFile();
 
-	std::array<Attribute, 4> param = //-V112
+	std::array<Attribute, 3> param =		
 	{
-		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
-		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
-		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
-		Attribute(GL_FLOAT, sizeof(float), 2),
+		Attribute(GL_FLOAT, sizeof(float), 4), //Positions
+		Attribute(GL_FLOAT, sizeof(float), 4), //Weights
+		Attribute(GL_FLOAT, sizeof(float), 4) //Bone indices
 	};
 
-	e->setInstance<VertexManager<4>>(param)->init();
+	e->setInstance<VertexManager<3>>(param)->init();
+
 	//if (!loadShaders(e))
 	//	return EXIT_FAILURE;
 	//if (!loadAssets(e))
@@ -117,6 +117,7 @@ int			main(int ac, char **av)
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
 		aiMesh *mesh = scene->mMeshes[meshIndex];
+		std::uint32_t indice = 0;
 
 		unsigned int meshFacesNbr = mesh->mNumFaces;
 		for (unsigned int faceIndex = 0; faceIndex < meshFacesNbr; ++faceIndex)
@@ -162,11 +163,14 @@ int			main(int ac, char **av)
 			}
 		}
 
+		meshs[meshIndex].indices.push_back(indice);
+		++indice;
+
 		std::map<std::string, unsigned int> bonesIndices;
 		unsigned int numBone = 0;
 
 		meshs[meshIndex].weights.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
-		meshs[meshIndex].boneIndices.resize(meshs[meshIndex].positions.size(), glm::uvec4(0));
+		meshs[meshIndex].boneIndices.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
 
 		for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 		{
@@ -212,6 +216,26 @@ int			main(int ac, char **av)
 				}
 			}
 		}
+	}
+
+	auto shader = e->getInstance<Renderer>()->addShader("basic",
+		"./basic.vp",
+		"./basic.fp");
+	if (shader->getId() < 0)
+		return EXIT_FAILURE;
+	shader->use();
+
+	std::vector<Vertice<3>> vertices;
+	vertices.resize(meshs.size());
+
+	for (unsigned int i = 0; i < meshs.size(); ++i)
+	{
+		std::array<Data, 3> data =
+		{
+			Data(meshs[i].positions.size() * 4 * sizeof(float), &meshs[i].positions[0].x)
+			, Data(meshs[i].weights.size() * 4 * sizeof(float), &meshs[i].weights[0].x)
+			, Data(meshs[i].boneIndices.size() * 4 * sizeof(float), &meshs[i].boneIndices[0].x)
+		};
 	}
 
 	//while (e->update())
