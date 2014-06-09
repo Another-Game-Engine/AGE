@@ -36,7 +36,7 @@ namespace AGE
 		std::vector<std::vector<glm::vec2>> uvs;
 		std::vector<std::uint32_t> indices;
 		std::vector<glm::vec4> weights;
-		std::vector<glm::ivec4> boneIndices;
+		std::vector<glm::uvec4> boneIndices;
 		std::vector<AGE::Bone> bones;
 	};
 }
@@ -48,6 +48,52 @@ static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
 
 int			main(int ac, char **av)
 {
+
+	
+	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
+
+	// Set Configurations
+	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
+
+	e->setInstance<PubSub::Manager>();
+	e->setInstance<SdlContext, IRenderContext>();
+	e->setInstance<Input>();
+	e->setInstance<Timer>();
+	e->setInstance<Renderer>();
+	e->setInstance<SceneManager>();
+	e->setInstance<AssetsManager>()->init();
+
+	// init engine
+	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
+		return (EXIT_FAILURE);
+
+	// Set default window size
+	// If config file has different value, it'll be changed automaticaly
+	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&e](const glm::uvec2 &v)
+	{
+		e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
+	});
+
+	config->loadFile();
+
+	std::array<Attribute, 4> param = //-V112
+	{
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
+		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
+		Attribute(GL_FLOAT, sizeof(float), 2),
+	};
+
+	e->setInstance<VertexManager<4>>(param)->init();
+	//if (!loadShaders(e))
+	//	return EXIT_FAILURE;
+	//if (!loadAssets(e))
+	//	return EXIT_FAILURE;
+
+	// launch engine
+	if (e->start() == false)
+		return (EXIT_FAILURE);
+
 	Assimp::Importer importer;
 
 	const aiScene *scene = importer.ReadFile("../../Assets/catwoman/atk close front 6.fbx"
@@ -120,7 +166,7 @@ int			main(int ac, char **av)
 		unsigned int numBone = 0;
 
 		meshs[meshIndex].weights.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
-		meshs[meshIndex].boneIndices.resize(meshs[meshIndex].positions.size(), glm::ivec4(0));
+		meshs[meshIndex].boneIndices.resize(meshs[meshIndex].positions.size(), glm::uvec4(0));
 
 		for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 		{
@@ -167,5 +213,12 @@ int			main(int ac, char **av)
 			}
 		}
 	}
+
+	//while (e->update())
+	//	;
+
+	config->saveToFile();
+	e->stop();
+
 	return EXIT_SUCCESS;
 }
