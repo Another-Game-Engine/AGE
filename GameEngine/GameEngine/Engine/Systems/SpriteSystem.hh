@@ -4,7 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "System.h"
 #include <Components/SpriteComponent.hh>
-#include <Entities/EntityData.hh>
 
 class SpriteSystem : public System
 {
@@ -27,10 +26,11 @@ private:
 
 	virtual void mainUpdate(double time)
 	{
-		std::shared_ptr<Component::Sprite> sprite;
+		auto scene = _scene.lock();
+		Component::Sprite *sprite = nullptr;
 		for (auto e : _filter.getCollection())
 		{
-			sprite = e->getComponent<Component::Sprite>();
+			sprite = scene->getComponent<Component::Sprite>(e);
 			sprite->update(static_cast<float>(time));
 		}
 	}

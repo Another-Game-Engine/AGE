@@ -5,7 +5,6 @@
 #include "System.h"
 #include <Components/MeshRenderer.hh>
 #include <Components/CameraComponent.hpp>
-#include <Entities/EntityData.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
 #include <Utils/ScreenPosToWorldRay.hpp>
@@ -44,7 +43,7 @@ public:
 		auto scene = _scene.lock();
 		auto mousePos = scene->getInstance<Input>()->getMousePosition();
 		auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
-		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
+		auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
 		screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
 	}
 
@@ -55,7 +54,7 @@ public:
 		auto scene = _scene.lock();
 		auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
 		auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
-		auto cameraCpt = _filter.getCollection().begin()->get()->getComponent<Component::CameraComponent>();
+		auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
 		screenPosToWorldRay(
 			static_cast<int>(centerPos.x),
 			static_cast<int>(centerPos.y),
@@ -96,11 +95,11 @@ protected:
 
 		for (auto e : _filter.getCollection())
 		{
-			auto camera = e->getComponent<Component::CameraComponent>();
+			auto camera = scene->getComponent<Component::CameraComponent>(e);
 			auto skybox = camera->getSkybox();
 
 			auto cameraPosition = camera->lookAtTransform;
-			OpenGLTools::Framebuffer &camFbo = e->getComponent<Component::CameraComponent>()->frameBuffer;
+			OpenGLTools::Framebuffer &camFbo = scene->getComponent<Component::CameraComponent>(e)->frameBuffer;
 
 			if (skybox != nullptr && camFbo.isInit() == true)
 			{

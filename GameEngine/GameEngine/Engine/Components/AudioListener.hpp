@@ -15,7 +15,8 @@ namespace Component
 		virtual ~AudioListener(void);
 		void init();
 		virtual void reset();
-
+		AudioListener(AudioListener const &){}
+		AudioListener &operator=(AudioListener const &){ return *this; }
 		//////
 		////
 		// Serialization
@@ -29,7 +30,5 @@ namespace Component
 		////
 		//////
 	private:
-		AudioListener(AudioListener const &);
-		AudioListener &operator=(AudioListener const &);
 	};
 }

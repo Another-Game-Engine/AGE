@@ -1,9 +1,11 @@
 #ifndef  __BT_CONVERSION_HPP__
 # define __BT_CONVERSION_HPP__
 
-#include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
+class btVertor3;
+class btTransform;
+class btVector3;
 
 glm::mat4 convertBulletTransformToGLM(const btTransform& transform);
 btTransform convertGLMTransformToBullet(const glm::mat4 &transform);

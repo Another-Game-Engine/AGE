@@ -2,9 +2,6 @@
 # define VERTEXARRAY_HH_
 
 # include "Utils/OpenGL.hh"
-# include <vector>
-
-# include "VertexBuffer.hh"
 
 namespace OpenGLTools
 {

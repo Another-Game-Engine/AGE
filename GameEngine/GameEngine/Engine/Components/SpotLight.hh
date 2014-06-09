@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Components\Component.hh>
-#include <glm\glm.hpp>
+#include <Components/Component.hh>
+#include <glm/glm.hpp>
 
 struct SpotLightData
 {
@@ -46,7 +46,7 @@ namespace Component
 
 		virtual ~SpotLight();
 
-		void		updateLightData();
+		void		updateLightData(const glm::mat4 &globalTransform);
 
 		virtual void reset();
 

@@ -1,5 +1,5 @@
-#ifndef   __COLLISION_HPP__
-# define  __COLLISION_HPP__
+#ifndef __COLLISION_HPP__
+# define __COLLISION_HPP__
 
 #include <Components/Component.hh>
 #include <cereal/archives/binary.hpp>
@@ -14,14 +14,28 @@ namespace Component
 	struct Collision : public ComponentBase<Collision>
 	{
 		Collision()
-			: ComponentBase<Collision>()
-			, force(0)
+		: ComponentBase<Collision>()
+		, force(0)
 		{
-				
+
 		}
 
 		virtual ~Collision()
 		{
+		}
+
+		Collision &operator=(Collision &&other)
+		{
+			force = std::move(other.force);
+			collisions = std::move(other.collisions);
+			return *this;
+		}
+
+		Collision(Collision &&other)
+			: ComponentBase<Collision>(std::move(other))
+		{
+			force = std::move(other.force);
+			collisions = std::move(other.collisions);
 		}
 
 		void init()
@@ -59,7 +73,8 @@ namespace Component
 			std::set<std::size_t> entityIds;
 			for (auto e : collisions)
 			{
-				entityIds.insert(_entity.get()->getScene().lock()->registrarSerializedEntity(e.getId()));
+				//@CESAR TODO
+				/*entityIds.insert(_entity.get()->getScene().lock()->registrarSerializedEntity(e.getId()));*/
 			}
 			ar(cereal::make_nvp("Collisions", entityIds));
 		}
@@ -69,12 +84,14 @@ namespace Component
 		{
 			std::set<std::size_t> entityIds;
 			ar(entityIds);
-			for (auto e : entityIds)
-				collisions.insert(Entity(e));
+			//@CESAR TODO
+			//for (auto e : entityIds)
+			//	collisions.insert(Entity(e));
 			for (auto it = std::begin(collisions); it != std::end(collisions); ++it)
 			{ 
-				Entity *e = const_cast<Entity *>(&(*it));
-				_entity->getScene().lock()->entityHandle(it->getId(), e);
+				//@CESAR TODO
+				//Entity *e = const_cast<Entity *>(&(*it));
+				//_entity->getScene().lock()->entityHandle(it->getId(), e);
 			}
 		}
 
@@ -83,7 +100,11 @@ namespace Component
 		//////
 		float force;
 		std::set<Entity> collisions;
+
+	private:
+		Collision &operator=(Collision const &o);
+		Collision(Collision const &o);
 	};
 }
 
-#endif    //__COLLISION_HPP__
+#endif //__COLLISION_HPP__

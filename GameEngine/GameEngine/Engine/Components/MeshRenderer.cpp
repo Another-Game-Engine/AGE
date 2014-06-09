@@ -14,6 +14,21 @@ namespace Component
 	{
 	}
 
+	MeshRenderer::MeshRenderer(MeshRenderer &&o)
+		: ComponentBase<MeshRenderer>(std::move(o))
+	{
+		mesh = std::move(o.mesh);
+		shader = std::move(o.shader);
+	}
+
+	MeshRenderer &MeshRenderer::operator=(MeshRenderer &&o)
+	{
+		mesh = std::move(o.mesh);
+		shader = std::move(o.shader);
+		return *this;
+	}
+
+
 	void MeshRenderer::init(std::shared_ptr<AMediaFile> r)
 	{
 		mesh = std::static_pointer_cast<ObjFile>(r);
@@ -32,17 +47,19 @@ namespace Component
 	void MeshRenderer::reset()
 	{
 		mesh = nullptr;
+		shader = "";
 	}
 
-	void MeshRenderer::render(std::function<void(OpenGLTools::Shader&)> func)
+	void MeshRenderer::render(std::shared_ptr<Renderer> renderer, const glm::mat4 &globalTrans, std::function<void(OpenGLTools::Shader&)> func)
 	{
-		auto perModelUniform = _entity->getScene().lock()->getInstance<Renderer>()->getUniform("PerModel");
-		auto materialUniform = _entity->getScene().lock()->getInstance<Renderer>()->getUniform("MaterialBasic");
-		auto s = _entity->getScene().lock()->getInstance<Renderer>()->getShader(shader);
+		auto perModelUniform = renderer->getUniform("PerModel");
+		auto materialUniform = renderer->getUniform("MaterialBasic");
+
+		auto s = renderer->getShader(shader);
 		if (s)
 			s->use();
 		func(*s);
-		perModelUniform->setUniform("model", _entity->getGlobalTransform());
+		perModelUniform->setUniform("model", globalTrans);
 		perModelUniform->flushChanges();
 		for (std::size_t i = 0; i < mesh->material->materials.size(); ++i)
 		{
@@ -52,11 +69,11 @@ namespace Component
 		}
 	}
 
-	void MeshRenderer::renderRaw()
+	void MeshRenderer::renderRaw(std::shared_ptr<Renderer> renderer, const glm::mat4 &trans)
 	{
-		std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = _entity->getScene().lock()->getInstance<Renderer>()->getUniform("PerModel");
+		std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = renderer->getUniform("PerModel");
 
-		perModelUniform->setUniform("model", _entity->getGlobalTransform());
+		perModelUniform->setUniform("model", trans);
 		perModelUniform->flushChanges();
 		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 		{

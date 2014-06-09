@@ -14,13 +14,9 @@ namespace	Component
 {
 	struct Base
 	{
-		Base(std::size_t serId);
+		Base();
 		virtual ~Base();
-		virtual Base &operator=(const Base &other);
-		void			setEntity(const Entity &entity);
-		Entity		&getEntity();
-		virtual void reset() = 0;
-		std::size_t serializedID;
+		virtual void reset(){};
 
 		virtual void unserialize(cereal::JSONInputArchive &ar) = 0;
 		virtual void unserialize(cereal::BinaryInputArchive &ar) = 0;
@@ -39,7 +35,6 @@ namespace	Component
 		}
 
 	protected:
-		Entity				_entity;
 		static unsigned short uniqueId()
 		{
 			static unsigned short id = 0;
@@ -51,13 +46,24 @@ namespace	Component
 	struct ComponentBase : public Base
 	{
 		ComponentBase()
-			: Base(typeid(T).hash_code())
+			: Base()
 			, _name(typeid(T).name())
 		{
 		}
 
 		virtual ~ComponentBase()
 		{
+		}
+
+		ComponentBase(ComponentBase &&other)
+			: Base()
+		{
+			entityId = std::move(other.entityId);
+		}
+
+		ComponentBase &operator=(ComponentBase &&o)
+		{
+			entityId = std::move(other.entityId);
 		}
 
 		static unsigned short getTypeId()
@@ -106,7 +112,13 @@ namespace	Component
 			ar(*dynamic_cast<T*>(this));
 		}
 
+		ENTITY_ID entityId;
+
 	private:
+		ComponentBase(ComponentBase &other);
+		ComponentBase &operator=(ComponentBase const &o);
+
+
 		const std::string _name;
 	};
 }

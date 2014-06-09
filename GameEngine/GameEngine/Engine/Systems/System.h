@@ -1,14 +1,9 @@
 #ifndef		__SYSTEM_H__
 # define	__SYSTEM_H__
 
-#include    <set>
-#include	<Utils/Barcode.h>
-#include    <Utils/PubSub.hpp>
-#include    <Entities/EntityData.hh>
 #include    <Core/EntityFilter.hpp>
-//#include    <Entities/Entity.hh>
 
-class	System : public PubSub
+class	System
 {
 public:
 	System(std::weak_ptr<AScene> &&scene);

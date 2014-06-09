@@ -1,15 +1,47 @@
 #pragma once
 
-#include "Component.hh"
+#include <Components/Component.hh>
 #include <glm/glm.hpp>
 #include <Utils/GlmSerialization.hpp>
-#include <Components/PointLight.hh>
+#include <Entities/Entity.hh>
+
+namespace Component
+{
+	class PointLight;
+}
 
 namespace Component
 {
 	struct SpaceshipController : public Component::ComponentBase<SpaceshipController>
 	{
 		SpaceshipController();
+		SpaceshipController(SpaceshipController const &o)
+		{
+			dist = o.dist;
+			camSpeed = o.camSpeed;
+			angularSpeed = o.angularSpeed;
+			acceleration = o.acceleration;
+			spaceShip = o.spaceShip;
+			currentVelocity = o.currentVelocity;
+			currentLookAt = o.currentLookAt;
+			currentPosition = o.currentPosition;
+			light = o.light;
+		}
+
+		SpaceshipController &operator=(SpaceshipController const &o)
+		{
+			dist = o.dist;
+			camSpeed = o.camSpeed;
+			angularSpeed = o.angularSpeed;
+			acceleration = o.acceleration;
+			spaceShip = o.spaceShip;
+			currentVelocity = o.currentVelocity;
+			currentLookAt = o.currentLookAt;
+			currentPosition = o.currentPosition;
+			light = o.light;
+			return *this;
+		}
+
 		virtual ~SpaceshipController(void);
 		void init(const Entity &e, float dist);
 		virtual void reset();
@@ -41,7 +73,5 @@ namespace Component
 
 		std::shared_ptr<Component::PointLight>	light;
 	private:
-		SpaceshipController(SpaceshipController const &);
-		SpaceshipController &operator=(SpaceshipController const &);
 	};
 }

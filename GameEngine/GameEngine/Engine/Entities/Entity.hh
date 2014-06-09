@@ -1,32 +1,208 @@
-#ifndef   __HANDLE_HH__
-# define  __HANDLE_HH__
+#pragma once
 
 #include <cstddef>
+#include <utility>
+#include <cstdint>
+#include <bitset>
 
-class EntityData;
+#define MAX_TAG_NUMBER (32)
+#define MAX_CPT_NUMBER (96)
+
+typedef std::uint16_t ENTITY_ID;
+typedef std::uint8_t  COMPONENT_ID;
+typedef std::uint8_t  TAG_ID;
+typedef std::uint8_t  ENTITY_VERSION;
+typedef std::uint8_t  ENTITY_FLAGS;
+
+#define MAX_ENTITY_NUMBER ((ENTITY_ID)(-1))
+
 class AScene;
+class AComponentManager;
+class EntityFilter;
 
 class Entity
 {
 public:
-	Entity(std::size_t id = 0, AScene *manager = nullptr);
-	~Entity();
-	Entity(Entity &&o);
-	const std::size_t getId() const;
-	const unsigned short getVersion() const;
-	EntityData *operator->();
-	EntityData *operator->() const;
-	EntityData *get() const;
-	bool operator<(const Entity &o) const;
-	bool operator==(const Entity &o) const;
-	bool operator!=(const Entity &o) const;
-	Entity(const Entity &o);
-	Entity &operator=(const Entity &o);
+	Entity()
+		: id(0)
+		, version(0)
+		, flags(0)
+	{}
+
+	~Entity()
+	{}
+
+	Entity(const Entity &o)
+	{
+		id = o.id;
+		version = o.version;
+		flags = o.flags;
+	}
+
+	Entity(Entity &&o)
+	{
+		id = std::move(o.id);
+		version = std::move(o.version);
+		flags = std::move(o.flags);
+	}
+
+	Entity &operator=(const Entity &o)
+	{
+		id = o.id;
+		version = o.version;
+		flags = o.flags;
+		return *this;
+	}
+
+	bool operator==(const Entity &o) const
+	{
+		return version == o.version && id == o.id;
+	}
+
+	bool operator!=(const Entity &o) const
+	{
+		return !(version == o.version && id == o.id);
+	}
+
+	bool operator<(const Entity &o) const
+	{
+		return id < o.id;
+	}
+
+	bool operator<=(const Entity &o) const
+	{
+		return id <= o.id;
+	}
+
+	bool operator>(const Entity &o) const
+	{
+		return id > o.id;
+	}
+
+	bool operator>=(const Entity &o) const
+	{
+		return id >= o.id;
+	}
+
+	inline ENTITY_ID getId() const
+	{
+		return id;
+	}
+
+	inline ENTITY_VERSION getVersion() const
+	{
+		return version;
+	}
+
+	inline const ENTITY_FLAGS &getFlags()
+	{
+		return flags;
+	}
+
+	inline ENTITY_FLAGS &setFlags()
+	{
+		return flags;
+	}
+
 private:
-	friend class AScene;
-	std::size_t _id;
-	AScene *_manager;
-	unsigned short _version;
+	ENTITY_ID id;
+	ENTITY_VERSION version;
+	ENTITY_FLAGS flags;
+
+	friend AScene;
+	friend AComponentManager;
+	friend EntityFilter;
 };
 
-#endif    //__HANDLE_HH__
+class Barcode
+{
+public:
+	Barcode()
+		: code(0)
+	{}
+
+	~Barcode()
+	{}
+
+	Barcode &operator=(const Barcode& o)
+	{
+		code = o.code;
+		return *this;
+	}
+
+	Barcode(const Barcode& o)
+	{
+		code = o.code;
+	}
+
+	Barcode(Barcode&& o)
+	{
+		code = std::move(o.code);
+	}
+
+	bool operator==(const Barcode& o) const
+	{
+		return (code == o.code);
+	}
+
+	bool match(const Barcode &model) const
+	{
+		return (code & model.code) == model.code;
+	}
+
+	inline void setTag(TAG_ID id)
+	{
+		code.set(id + MAX_CPT_NUMBER);
+	}
+
+	inline void unsetTag(TAG_ID id)
+	{
+		code.reset(id + MAX_CPT_NUMBER);
+	}
+
+	inline bool hasTag(TAG_ID id) const
+	{
+		return code.test(id + MAX_CPT_NUMBER);
+	}
+
+	inline void setComponent(COMPONENT_ID id)
+	{
+		code.set(id);
+	}
+
+	inline void unsetComponent(COMPONENT_ID id)
+	{
+		code.reset(id);
+	}
+
+	inline bool hasComponent(COMPONENT_ID id) const
+	{
+		return code.test(id);
+	}
+
+	inline void reset()
+	{
+		code.reset();
+	}
+private:
+	std::bitset<MAX_CPT_NUMBER + MAX_TAG_NUMBER> code;
+
+	friend AScene;
+	friend AComponentManager;
+};
+
+class EntityData
+{
+public:
+	const Entity &getEntity() const { return entity; }
+	const Barcode &getBarcode() const { return barcode; }
+private:
+	Entity entity;
+	uint32_t crap;
+	Barcode barcode;
+
+public:
+	friend AScene;
+	friend AComponentManager;
+	friend EntityFilter;
+};

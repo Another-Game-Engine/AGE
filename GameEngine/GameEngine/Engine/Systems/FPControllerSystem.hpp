@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Systems/System.h>
 #include <Components/FPController.hpp>
-#include <Entities/EntityData.hh>
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
 #include <Components/Collision.hpp>
@@ -40,7 +39,8 @@ private:
 		auto scene = _scene.lock();
 		for (auto e : _filter.getCollection())
 		{
-			auto fp = e->getComponent<Component::FPController>();
+			auto &entityTrans = scene->getTransform(e);
+			auto fp = scene->getComponent<Component::FPController>(e);
 			updateComponent(e, fp, time);
 			auto inputs = scene->getInstance<Input>();
 			auto &ghost = fp->getGhost();
@@ -53,9 +53,9 @@ private:
 			m = glm::rotate(m, rot.x, glm::vec3(1, 0, 0));
 			m = glm::rotate(m, rot.y, glm::vec3(0, 1, 0));
 			m = glm::rotate(m, rot.z, glm::vec3(0, 0, 1));
-			glm::vec3 scale = scaleFromMat4(e->getLocalTransform());
+			glm::vec3 scale = scaleFromMat4(entityTrans);
 			m = glm::scale(m, scale);
-			e->setLocalTransform(m);
+			scene->setTransform(e, m, true);
 
 			float yAngle = inputs->getMouseDelta().y;
 			fp->yOrientation = fp->yOrientation + yAngle * fp->rotateYSpeed;
@@ -64,11 +64,11 @@ private:
 			else if (fp->yOrientation <= -90.0f)
 				fp->yOrientation = -89.9f;
 
-			e->setLocalTransform(glm::rotate(e->getLocalTransform(), fp->yOrientation, glm::vec3(1, 0, 0)));
+			scene->setTransform(e, glm::rotate(m, fp->yOrientation, glm::vec3(1, 0, 0)), true);
 		}
 	}
 
-	void updateComponent(Entity &entity, std::shared_ptr<Component::FPController> fp, double time)
+	void updateComponent(Entity &entity, Component::FPController *fp, double time)
 	{
 		float ftime = static_cast<float>(time);
 		fp->resetControls();

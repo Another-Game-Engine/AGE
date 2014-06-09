@@ -1,24 +1,22 @@
 #pragma once
 
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "Component.hh"
+#include <glm/glm.hpp>
+#include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
+#include <OpenGL/Framebuffer.hh>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/AssetsManager.hpp>
-#include <OpenGL\Framebuffer.hh>
 
 namespace Component
 {
 	struct CameraComponent : public ComponentBase<CameraComponent>
 	{
 		CameraComponent();
-		virtual              ~CameraComponent(void);
+		virtual ~CameraComponent(void);
 		void init(){}
 		virtual void reset(){}
-		void                 attachSkybox(const std::string &name, const std::string &cubeMapShader);
+		void                 attachSkybox(std::shared_ptr<CubeMapFile> texture, const std::string &cubeMapShader);
 		void                 dettachSkybox();
 		std::shared_ptr<CubeMapFile> getSkybox();
 		const std::string &getSkyboxShader() const;
@@ -45,8 +43,9 @@ namespace Component
 			ar(projection, cubeMapShader, lookAtTransform);
 			std::string _skybox;
 			ar(_skybox);
-			if (_skybox != "NULL")
-				skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
+			// @CESAR TODO
+			//if (_skybox != "NULL")
+			//	skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
 		}
 
 		void	initFrameBuffer()
@@ -72,21 +71,54 @@ namespace Component
 		////
 		//////
 
-		glm::uvec4						viewport;
-		glm::mat4                       projection;
-		std::shared_ptr<CubeMapFile>    skybox;
-		std::string                     cubeMapShader;
-		glm::mat4                       lookAtTransform;
-		OpenGLTools::Framebuffer		frameBuffer;
-		OpenGLTools::Framebuffer		downSampling;
+		glm::uvec4	viewport;
+		glm::mat4 projection;
+		std::shared_ptr<CubeMapFile> skybox;
+		std::string cubeMapShader;
+		glm::mat4 lookAtTransform;
+		OpenGLTools::Framebuffer	frameBuffer;
+		OpenGLTools::Framebuffer	downSampling;
 		bool blitOnScreen;
 
 		// Camera fbo infos
-		glm::uvec2						fboSize;
-		uint32_t						sampleNbr;
+		glm::uvec2	fboSize;
+		uint32_t	sampleNbr;
+
+		CameraComponent(CameraComponent const &o)
+		{
+			viewport = o.viewport;
+			projection = o.projection;
+			skybox = o.skybox;
+			cubeMapShader = o.cubeMapShader;
+			lookAtTransform = o.lookAtTransform;
+			//@CESAR TODO TODO COPY FRAMEBUFFER
+			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
+			frameBuffer = o.frameBuffer;
+			downSampling = o.downSampling;
+			blitOnScreen = o.blitOnScreen;
+			fboSize = o.fboSize;
+			sampleNbr = o.sampleNbr;
+		}
+
+		CameraComponent	&operator=(CameraComponent const &o)
+		{
+			viewport = o.viewport;
+			projection = o.projection;
+			skybox = o.skybox;
+			cubeMapShader = o.cubeMapShader;
+			lookAtTransform = o.lookAtTransform;
+			//@CESAR TODO TODO COPY FRAMEBUFFER
+			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
+			frameBuffer = o.frameBuffer;
+			downSampling = o.downSampling;
+			blitOnScreen = o.blitOnScreen;
+			fboSize = o.fboSize;
+			sampleNbr = o.sampleNbr;
+
+			return *this;
+		}
+
 
 	private:
-		CameraComponent(CameraComponent const &);
-		CameraComponent	&operator=(CameraComponent const &);
 	};
 }

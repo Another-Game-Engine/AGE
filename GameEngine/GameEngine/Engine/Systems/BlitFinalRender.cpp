@@ -1,6 +1,7 @@
-
 #include	<Systems/BlitFinalRender.hh>
+#include	<Core/AScene.hh>
 #include	<Components/CameraComponent.hpp>
+#include	<Core/Renderer.hh>
 
 BlitFinalRender::BlitFinalRender(std::weak_ptr<AScene> &&scene) :
 					System(std::move(scene)),
@@ -23,10 +24,11 @@ bool	BlitFinalRender::initialize()
 
 void	BlitFinalRender::mainUpdate(double time)
 {
-	std::shared_ptr<Component::CameraComponent>		camera;
+	Component::CameraComponent *camera = nullptr;
+	auto scene = _scene.lock();
 	for (auto c : _cameraFilter.getCollection())
 	{
-		camera = c->getComponent<Component::CameraComponent>();
+		camera = scene->getComponent<Component::CameraComponent>(c);
 		if (camera->blitOnScreen)
 		{
 			OpenGLTools::Framebuffer	&current = camera->frameBuffer.isMultisampled() ? camera->downSampling : camera->frameBuffer;
@@ -37,7 +39,7 @@ void	BlitFinalRender::mainUpdate(double time)
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			glDrawBuffer(GL_BACK);
 			glDepthFunc(GL_ALWAYS);
-			_quad.draw(current.getTextureAttachment(GL_COLOR_ATTACHMENT0), current.getSampleNbr(), current.getSize());
+			_quad.draw(current[GL_COLOR_ATTACHMENT0]->getId(), current.getSampleNbr(), current.getSize());
 		}
 	}
 }

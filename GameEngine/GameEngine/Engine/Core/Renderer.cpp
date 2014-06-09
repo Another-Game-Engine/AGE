@@ -19,7 +19,6 @@ bool Renderer::init()
 	addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
 	bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
 	bindShaderToUniform("depthOnly", "PerModel", "PerModel");
-	getShader("depthOnly")->addTarget(GL_COLOR_ATTACHMENT0).build();
 
 
 	//return _fbo.init(1920, 1080, 4);
@@ -36,13 +35,18 @@ std::shared_ptr<OpenGLTools::Shader>		Renderer::addShader(std::string const &nam
 
 	if (it == std::end(_shaders))
 	{
-		shader = std::make_shared<OpenGLTools::Shader>();
-		shader->init(vp, fp, geo);
+		if (geo == std::string(""))
+			shader = std::make_shared<OpenGLTools::Shader>(std::move(std::string(vp)), std::move(std::string(fp)));
+		else
+			shader = std::make_shared<OpenGLTools::Shader>(std::move(std::string(vp)), std::move(std::string(fp)), std::move(std::string(geo)));
 		_shaders[name] = shader;
 	}
 	else
 	{
-		it->second->init(vp, fp, geo);
+		if (geo == std::string(""))
+			it->second = std::make_shared<OpenGLTools::Shader>(std::move(std::string(vp)), std::move(std::string(fp)));
+		else
+			it->second = std::make_shared<OpenGLTools::Shader>(std::move(std::string(vp)), std::move(std::string(fp)), std::move(std::string(geo)));
 		shader = it->second;
 	}
 	return shader;
@@ -107,7 +111,11 @@ bool		Renderer::bindShaderToUniform(std::string const &shader,
 	if (sh == std::end(_shaders) ||
 		un == std::end(_uniforms))
 		return (false);
-	sh->second->bindUniformBlock(blockName, un->second);
+	GLuint blockId;
+	assert(sh->second->getId() != 0 && "Must initialize the shader...");
+	blockId = glGetUniformBlockIndex(sh->second->getId(), blockName.c_str());
+	assert(blockId != GL_INVALID_INDEX && "Cannot find the block in this shader");
+	glUniformBlockBinding(sh->second->getId(), blockId, un->second->getBindingPoint());
 	return (true);
 }
 

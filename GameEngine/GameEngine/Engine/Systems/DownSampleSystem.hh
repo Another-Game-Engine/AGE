@@ -1,6 +1,11 @@
 #pragma once
-#include <Systems\System.h>
+
+#include <memory>
+#include <Systems/System.h>
+#include <Core/EntityFilter.hpp>
 #include <Utils/DrawQuad.hh>
+
+class AScene;
 
 class DownSampleSystem : public System
 {

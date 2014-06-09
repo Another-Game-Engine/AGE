@@ -5,27 +5,33 @@
 #include <Core/AScene.hh>
 #include <Systems/System.h>
 #include <Core/EntityFilter.hpp>
+#include <Entities/EntityFlags.hh>
 
 AScene::AScene(std::weak_ptr<Engine> &&engine) :
 DependenciesInjector(std::move(engine))
 , _entityNumber(0)
 {
+	_componentsManagers.assign(nullptr);
 }
 
 AScene::~AScene()
 {
 	_systems.clear();
-	for (auto &e : _pool)
-		e.reset();
-	_pool.clear();
 }
 
 void 							AScene::update(double time)
 {
+	static double reorderingTime = 0.0f;
 	for (auto &e : _systems)
 	{
 		if (e.second->isActivated())
 			e.second->update(time);
+	}
+	reorderingTime += time;
+	if (reorderingTime > 0.4)
+	{
+		reorganizeComponents();
+		reorderingTime = 0;
 	}
 }
 
@@ -35,77 +41,50 @@ bool                           AScene::start()
 	return userStart();
 }
 
-Entity &AScene::createEntity()
+
+void                    AScene::informFiltersTagAddition(TAG_ID id, EntityData &&entity)
 {
-	++_entityNumber;
-	if (_free.empty())
+	for (auto &&f : _filters[id])
 	{
-		_pool.push_back(std::move(EntityData(std::static_pointer_cast<AScene>(shared_from_this()))));
-		_pool.back().setHandle(Entity(_pool.size() - 1, this));
-		_free.push(_pool.size() - 1);
+		f->tagAdded(std::move(entity), id);
 	}
-	std::size_t index = _free.front();
-	_free.pop();
-	_pool[index].addFlags(EntityData::ACTIVE);
-	return _pool[index].getHandle();
 }
-
-void AScene::destroy(const Entity &h)
+void                    AScene::informFiltersTagDeletion(TAG_ID id, EntityData &&entity)
 {
-	auto e = get(h);
-	if (!e)
-		return;
-	--_entityNumber;
-	e->reset();
-	e->removeFlags(EntityData::ACTIVE);
-	++(e->getHandle()._version);
-	_free.push(h.getId());
-}
-
-EntityData *AScene::get(const Entity &h)
-{
-	if (h.getId() >= _pool.size())
-		return nullptr;
-	auto res = &_pool[h.getId()];
-	if (res->getHandle() != h)
-		return nullptr;
-	return &_pool[h.getId()];
-}
-
-void AScene::filterSubscribe(unsigned short id, EntityFilter* filter)
-{
-	if (_filters.find(id) == std::end(_filters))
+	for (auto &&f : _filters[id])
 	{
-		_filters.insert(std::make_pair(id, std::list<EntityFilter*>()));
+		f->tagRemoved(std::move(entity), id);
 	}
-	auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
-	if (findIter == std::end(_filters[id]))
-		_filters[id].push_back(filter);
 }
 
-void AScene::filterUnsubscribe(unsigned short id, EntityFilter* filter)
+void                    AScene::informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity)
 {
-	if (_filters.find(id) == std::end(_filters))
-		return;
-	_filters[id].remove(filter);
+	for (auto &&f : _filters[id])
+	{
+		f->componentAdded(std::move(entity), id);
+	}
 }
 
-void AScene::informFilters(bool added, unsigned short id, Entity &&entity)
+void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity)
 {
-	if (_filters.find(id) == std::end(_filters))
-		return;
-	if (added)
+	for (auto &&f : _filters[id])
 	{
-		for (auto &&f : _filters[id])
-		{
-			f->componentAdded(std::move(entity), id);
-		}
+		f->componentRemoved(std::move(entity), id);
 	}
-	else
-	{
-		for (auto &&f : _filters[id])
-		{
-			f->componentRemoved(std::move(entity), id);
-		}
-	}
+}
+
+const glm::mat4 &AScene::getTransform(const Entity &e) const
+{
+	return _entityTransform[e.id];
+}
+
+glm::mat4 &AScene::getTransformRef(const Entity &e)
+{
+	return _entityTransform[e.id];
+}
+
+void AScene::setTransform(Entity &e, const glm::mat4 &trans)
+{
+	e.setFlags() |= Flags::HasMoved;
+	_entityTransform[e.id] = trans;
 }

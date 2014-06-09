@@ -1,23 +1,33 @@
 #pragma once
 
+#include <memory>
 #include <Components/Component.hh>
-#include <glm/glm.hpp>
-#include <Utils/GlmSerialization.hpp>
-#include <Audio/Audio.hh>
 #include <Audio/ChannelGroupType.hpp>
-#include <Utils/MatrixConversion.hpp>
-#include <Audio/AudioManager.hh>
-#include <Entities/EntityData.hh>
-#include <Core/AScene.hh>
-#include <vector>
+#include <fmod/inc/fmod.hpp>
+#include <map>
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
+#include <Audio/Audio.hh>
+#include <Core/AScene.hh>
+#include <Audio/AudioManager.hh>
 
 namespace Component
 {
 	struct AudioEmitter : public Component::ComponentBase<AudioEmitter>
 	{
+
+		AudioEmitter(AudioEmitter const &o)
+		{
+			audios = o.audios;
+		}
+
+		AudioEmitter &operator=(AudioEmitter const &o)
+		{
+			audios = o.audios;
+			return *this;
+		}
+
 		struct AudioInstance
 		{
 			AudioInstance();
@@ -96,16 +106,17 @@ namespace Component
 			ar(v);
 			for (auto e : v)
 			{
-				std::shared_ptr<Audio> a = _entity->getScene().lock()->getInstance<AudioManager>()->getAudio(e.filename);
-				if (!a)
-					continue;
-				setAudio(a, e.name, e.channelGroupType);
-				if (e.isPlaying)
-				{
-					play(e.name, false);
-					getAudio(e.name)->channel->setVolume(e.volume);
-					getAudio(e.name)->channel->setPosition(e.position, FMOD_TIMEUNIT_MS);
-				}
+				//@CESAR TODO
+				//std::shared_ptr<Audio> a = _entity->getScene().lock()->getInstance<AudioManager>()->getAudio(e.filename);
+				//if (!a)
+				//	continue;
+				//setAudio(a, e.name, e.channelGroupType);
+				//if (e.isPlaying)
+				//{
+				//	play(e.name, false);
+				//	getAudio(e.name)->channel->setVolume(e.volume);
+				//	getAudio(e.name)->channel->setPosition(e.position, FMOD_TIMEUNIT_MS);
+				//}
 
 			}
 		}
@@ -116,7 +127,5 @@ namespace Component
 		//////
 	private:
 		std::map<std::string, AudioInstance> audios;
-		AudioEmitter(AudioEmitter const &);
-		AudioEmitter &operator=(AudioEmitter const &);
 	};
 }
