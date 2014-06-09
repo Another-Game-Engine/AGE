@@ -16,6 +16,8 @@ namespace AGE
 		std::vector<glm::vec4> biTangents;
 		std::vector<std::vector<glm::vec2>> uvs;
 		std::vector<std::uint32_t> indices;
+		std::vector<glm::vec4> weights;
+		std::vector<glm::ivec4> indices;
 	};
 }
 
@@ -88,5 +90,11 @@ void main(void)
 				}
 			}
 		}
+
+		for (unsigned int i = 0; i < mesh->mNumBones; ++i)
+		{
+			
+		}
+
 	}
 }
