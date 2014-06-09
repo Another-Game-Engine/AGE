@@ -64,7 +64,7 @@ public:
 		T *component = nullptr;
 		if (_components.size() <= _size)
 			_components.resize(_size + 16);
-		_componentsRefs[entity.getId()] = COMPONENT_ID(_size);
+		_componentsRefs[entity.getId()] = ENTITY_ID(_size);
 		_components[_size] = std::move(T());
 		_components[_size].entityId = entity.getId();
 		component = &_components[_size];
