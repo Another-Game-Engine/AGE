@@ -4,6 +4,8 @@
 #include <assimp/scene.h>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 #include <vector>
 #include <map>
 
@@ -97,12 +99,12 @@ int			main(int ac, char **av)
 	Assimp::Importer importer;
 
 	const aiScene *scene = importer.ReadFile("../../Assets/catwoman/atk close front 6.fbx"
-		, aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate |
+		, aiProcess_Triangulate
+		/*aiProcess_CalcTangentSpace |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_SortByPType |
 		aiProcess_ImproveCacheLocality |
-		aiProcess_OptimizeMeshes);
+		aiProcess_OptimizeMeshes*/);
 
 	if (!scene)
 	{
@@ -128,7 +130,7 @@ int			main(int ac, char **av)
 				for (unsigned int k = 0; k < 3; ++k)
 				{
 					auto &aiPositions = mesh->mVertices[face.mIndices[k]];
-					meshs[meshIndex].positions.push_back(glm::vec4(aiPositions.x, aiPositions.y, aiPositions.y, 1));
+					meshs[meshIndex].positions.push_back(glm::vec4(aiPositions.x, aiPositions.y, aiPositions.z, 1));
 				}
 			}
 			if (mesh->HasNormals())
@@ -136,7 +138,7 @@ int			main(int ac, char **av)
 				for (unsigned int k = 0; k < 3; ++k)
 				{
 					auto &aiNormals = mesh->mNormals[face.mIndices[k]];
-					meshs[meshIndex].normals.push_back(glm::vec4(aiNormals.x, aiNormals.y, aiNormals.y, 1));
+					meshs[meshIndex].normals.push_back(glm::vec4(aiNormals.x, aiNormals.y, aiNormals.z, 1));
 				}
 			}
 			for (unsigned int texCoordIndex = 0; texCoordIndex < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++texCoordIndex)
@@ -156,15 +158,18 @@ int			main(int ac, char **av)
 				for (unsigned int k = 0; k < 3; ++k)
 				{
 					auto &aiTangents = mesh->mTangents[face.mIndices[k]];
-					meshs[meshIndex].tangents.push_back(glm::vec4(aiTangents.x, aiTangents.y, aiTangents.y, 1));
+					meshs[meshIndex].tangents.push_back(glm::vec4(aiTangents.x, aiTangents.y, aiTangents.z, 1));
 					auto &aiBiTangents = mesh->mBitangents[face.mIndices[k]];
-					meshs[meshIndex].biTangents.push_back(glm::vec4(aiBiTangents.x, aiBiTangents.y, aiBiTangents.y, 1));
+					meshs[meshIndex].biTangents.push_back(glm::vec4(aiBiTangents.x, aiBiTangents.y, aiBiTangents.z, 1));
 				}
 			}
-		}
 
-		meshs[meshIndex].indices.push_back(indice);
-		++indice;
+			for (unsigned int i = 0; i < 3; ++i)
+			{
+				meshs[meshIndex].indices.push_back(indice);
+				++indice;
+			}
+		}
 
 		std::map<std::string, unsigned int> bonesIndices;
 		unsigned int numBone = 0;
@@ -225,7 +230,7 @@ int			main(int ac, char **av)
 		return EXIT_FAILURE;
 	shader->use();
 
-	std::vector<Vertice<3>> vertices;
+	std::vector<Vertice<3>*> vertices;
 	vertices.resize(meshs.size());
 
 	for (unsigned int i = 0; i < meshs.size(); ++i)
@@ -236,10 +241,72 @@ int			main(int ac, char **av)
 			, Data(meshs[i].weights.size() * 4 * sizeof(float), &meshs[i].weights[0].x)
 			, Data(meshs[i].boneIndices.size() * 4 * sizeof(float), &meshs[i].boneIndices[0].x)
 		};
+
+		Data *indicesData = new Data(meshs[i].indices.size() * sizeof(unsigned int), &meshs[i].indices[0]);
+		vertices[i] = new Vertice<3>(meshs[i].positions.size(), data, indicesData);
+		e->getInstance<VertexManager<3>>()->addVertice(*vertices[i]);
 	}
 
-	//while (e->update())
-	//	;
+
+	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	glm::mat4 Projection = glm::perspective(60.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
+	// Camera matrix
+	float lookAtX = 0;
+	float lookAtY = 0;
+	// Model matrix : an identity matrix (model will be at the origin)
+	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
+	Model = glm::scale(Model, glm::vec3(0.3f));
+
+
+	// On enable la depth car par defaut elle est pas active
+	// Conseil : la mettre dans son game engine
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	// la depth de clear par defaut sera 1
+	glClearDepth(1.0f);
+	// la couleur de clear par defaut sera du noir
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+
+	do
+	{
+		auto time = e->getInstance<Timer>()->getElapsed();
+		glm::vec4 color;
+		shader->use();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		Model = glm::rotate(Model, 20.0f * (float)time, glm::vec3(0, 1, 0));
+		color = glm::vec4(1, 0, 1, 1);
+
+		if (e->getInstance<Input>()->getKey(SDLK_w))
+			lookAtY += 1;
+		if (e->getInstance<Input>()->getKey(SDLK_s))
+			lookAtY -= 1;
+		if (e->getInstance<Input>()->getKey(SDLK_a))
+			lookAtX -= 1;
+		if (e->getInstance<Input>()->getKey(SDLK_d))
+			lookAtX += 1;
+
+		glm::mat4 View = glm::lookAt(
+		glm::vec3(lookAtX, lookAtY, 150), // Camera is at (4,3,3), in World Space
+		glm::vec3(lookAtX, lookAtY, 0), // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);	
+
+		auto colorId = glGetUniformLocation(shader->getId(), "color");
+		auto modelId = glGetUniformLocation(shader->getId(), "model");
+		auto viewId = glGetUniformLocation(shader->getId(), "view");
+		auto projectionId = glGetUniformLocation(shader->getId(), "projection");
+
+		glUniform4fv(colorId, 1, &color[0]);
+		glUniformMatrix4fv(modelId, 1, GL_FALSE, &Model[0][0]);
+		glUniformMatrix4fv(viewId, 1, GL_FALSE, &View[0][0]);
+		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
+
+//		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "bones"), gameplayconvertor->bonesMatrix.size(), GL_FALSE, glm::value_ptr(gameplayconvertor->bonesMatrix[0]));
+		for (unsigned int i = 0; i < vertices.size(); ++i)
+		{
+			vertices[i]->draw(GL_TRIANGLES);
+		}
+	} while (e->update());
 
 	config->saveToFile();
 	e->stop();
