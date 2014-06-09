@@ -3,9 +3,20 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <iostream>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <vector>
 #include <map>
+
+#include <Core/Engine.hh>
+#include <Core/SceneManager.hh>
+#include <Core/Renderer.hh>
+
+// DEPENDENCIES
+#include <Context/SdlContext.hh>
+#include <Core/ConfigurationManager.hpp>
+#include <Physic/BulletDynamicManager.hpp>
+#include <Core/Timer.hh>
+#include <Utils/PubSub.hpp>
 
 namespace AGE
 {
@@ -35,7 +46,7 @@ static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
 	return glm::mat4(m.a1, m.a2, m.a3, m.a4, m.b1, m.b2, m.b3, m.b4, m.c1, m.c2, m.c3, m.c4, m.d1, m.d2, m.d3, m.d4);
 }
 
-void main(void)
+int			main(int ac, char **av)
 {
 	Assimp::Importer importer;
 
@@ -50,7 +61,7 @@ void main(void)
 	if (!scene)
 	{
 		std::cerr << "Scene load error" << std::endl;
-		return;
+		return EXIT_FAILURE;
 	}
 
 	std::vector<AGE::Mesh> meshs;
@@ -155,6 +166,6 @@ void main(void)
 				}
 			}
 		}
-
 	}
+	return EXIT_SUCCESS;
 }
