@@ -2,6 +2,7 @@
 #include <assimp/types.h>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -27,6 +28,9 @@ namespace AGE
 		std::string name;
 		glm::mat4 offset;
 		unsigned int index;
+		glm::mat4 transformation;
+		std::vector<unsigned int> children;
+		unsigned int parent = (unsigned int)(-1);
 	};
 
 	struct Mesh
@@ -39,7 +43,7 @@ namespace AGE
 		std::vector<std::uint32_t> indices;
 		std::vector<glm::vec4> weights;
 		std::vector<glm::vec4> boneIndices;
-		std::vector<AGE::Bone> bones;
+		std::vector<std::string>bones;
 	};
 }
 
@@ -49,37 +53,23 @@ static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
 }
 
 
-void readNodeHierarchy(const aiNode *node, const glm::mat4 &parentTrans, std::vector<AGE::Bone> &bones, std::vector<glm::mat4> &trans, const aiScene *scene)
+void readNodeHierarchy(unsigned int boneID, const glm::mat4 &parentTrans, std::vector<AGE::Bone> &bones, std::vector<glm::mat4> &trans)
 {
 	trans.resize(bones.size());
 
-	glm::mat4 t = parentTrans * aiMat4ToGlm(node->mTransformation);
-	unsigned int index = 0;
-	while (index < bones.size())
-	{
-		if (bones[index].name == std::string(node->mName.data))
-			break;
-		++index;
-	}
-	if (index < bones.size())
-	{
-		trans[index] = t * bones[index].offset;
-	}
-	for (unsigned int i = 0; i < node->mNumChildren; ++i)
-	{
-		readNodeHierarchy(node->mChildren[i], t, bones, trans, scene);
-	}
-}
+	glm::mat4 t = parentTrans * bones[boneID].transformation;
+	trans[boneID] = t * bones[boneID].offset;
 
-void computeBonesTrans(std::vector<AGE::Bone> &bones, std::vector<glm::mat4> &trans, const aiScene *scene)
-{
-	readNodeHierarchy(scene->mRootNode, glm::mat4(1), bones, trans, scene);
+	for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)
+	{
+		readNodeHierarchy(bones[boneID].children[i], t, bones, trans);
+	}
 }
 
 int			main(int ac, char **av)
 {
 
-	
+
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
 	// Set Configurations
@@ -106,7 +96,7 @@ int			main(int ac, char **av)
 
 	config->loadFile();
 
-	std::array<Attribute, 3> param =		
+	std::array<Attribute, 3> param =
 	{
 		Attribute(GL_FLOAT, sizeof(float), 4), //Positions
 		Attribute(GL_FLOAT, sizeof(float), 4), //Weights
@@ -127,12 +117,12 @@ int			main(int ac, char **av)
 	Assimp::Importer importer;
 
 	const aiScene *scene = importer.ReadFile("../../Assets/catwoman/atk close front 6.fbx"
-		, aiProcess_Triangulate
-		/*aiProcess_CalcTangentSpace |
-		aiProcess_JoinIdenticalVertices |
+		, aiProcess_Triangulate |
+		aiProcess_CalcTangentSpace |
+		/*aiProcess_JoinIdenticalVertices |*/
 		aiProcess_SortByPType |
 		aiProcess_ImproveCacheLocality |
-		aiProcess_OptimizeMeshes*/);
+		aiProcess_OptimizeMeshes);
 
 	if (!scene)
 	{
@@ -141,8 +131,97 @@ int			main(int ac, char **av)
 	}
 
 	std::vector<AGE::Mesh> meshs;
+	std::vector<AGE::Bone> bones;
+	unsigned int skeletonRoot = 0;
 
 	meshs.resize(scene->mNumMeshes);
+
+	// we reference all bones
+	unsigned int boneCounter = 0;
+	std::map<std::string, unsigned int> bonesTable;
+	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
+	{
+		aiMesh *mesh = scene->mMeshes[meshIndex];
+
+		for (unsigned int i = 0; i < mesh->mNumBones; ++i)
+		{
+			std::string boneName = mesh->mBones[i]->mName.data;
+			if (bonesTable.find(boneName) != std::end(bonesTable))
+				continue;
+			if (meshs[meshIndex].bones.size() <= boneCounter)
+				meshs[meshIndex].bones.resize(boneCounter + 1);
+			meshs[meshIndex].bones[boneCounter] = boneName;
+			bones.push_back(AGE::Bone());
+			bones.back().index = boneCounter;
+			bones.back().name = boneName;
+			bones.back().offset = aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
+			bonesTable.insert(std::make_pair(boneName, boneCounter));
+			boneCounter++;
+		}
+	}
+
+	for (unsigned int animIndex = 0; animIndex < scene->mNumAnimations; ++animIndex)
+	{
+		aiAnimation *animation = scene->mAnimations[animIndex];
+
+		for (unsigned int i = 0; i < animation->mNumChannels; ++i)
+		{
+			auto channel = animation->mChannels[i];
+			std::string boneName = channel->mNodeName.data;
+			if (bonesTable.find(boneName) != std::end(bonesTable))
+				continue;
+			bones.push_back(AGE::Bone());
+			bones.back().index = boneCounter;
+			bones.back().name = boneName;
+			bones.back().offset = glm::mat4(1);
+			bonesTable.insert(std::make_pair(boneName, boneCounter));
+			boneCounter++;
+		}
+	}
+
+	//we fill bone hierarchy
+	for (unsigned int i = 0; i < bones.size(); ++i)
+	{
+		aiNode *bonenode = scene->mRootNode->FindNode(aiString(bones[i].name));
+		if (!bonenode)
+			continue;
+
+		//we set bone transformation
+		bones[i].transformation = aiMat4ToGlm(bonenode->mTransformation);
+
+		// we set parent
+		if (bonenode->mParent != nullptr && bonesTable.find(bonenode->mParent->mName.data) == std::end(bonesTable))
+		{
+			auto parent = bonenode->mParent;
+			while (parent && bonesTable.find(parent->mName.data) == std::end(bonesTable))
+			{
+				bones[i].transformation = aiMat4ToGlm(parent->mTransformation) * bones[i].transformation;
+				parent = parent->mParent;
+			}
+			if (parent)
+			{
+				bones[i].parent = bonesTable.find(parent->mName.data)->second;				
+			}
+			else
+			{
+				skeletonRoot = i;
+			}
+		}
+		else if (bonenode->mParent)
+		{
+			bones[i].parent = bonesTable.find(bonenode->mParent->mName.data)->second;
+		}
+
+		//we set children
+		for (unsigned int c = 0; c < bonenode->mNumChildren; ++c)
+		{
+			auto f = bonesTable.find(bonenode->mChildren[c]->mName.data);
+			if (f == std::end(bonesTable))
+				continue;
+			bones[i].children.push_back(f->second);
+		}
+	}
+
 
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
@@ -207,22 +286,8 @@ int			main(int ac, char **av)
 
 		for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 		{
-			unsigned int boneIndex = 0;
-			std::string boneName = mesh->mBones[i]->mName.data;			
+			unsigned int boneIndex = bonesTable.find(mesh->mBones[i]->mName.data)->second;
 
-			if (bonesIndices.find(boneName) == std::end(bonesIndices))
-			{
-				boneIndex = numBone;
-				bonesIndices.insert(std::make_pair(boneName, numBone));
-				if (meshs[meshIndex].bones.size() <= boneIndex)
-					meshs[meshIndex].bones.resize(boneIndex + 1);
-				meshs[meshIndex].bones[boneIndex].name = boneName;
-				meshs[meshIndex].bones[boneIndex].index = boneIndex;
-				meshs[meshIndex].bones[boneIndex].offset = aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
-				++numBone;
-			}
-			else
-				boneIndex = bonesIndices[boneName];
 			for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; ++j)
 			{
 				float weight = mesh->mBones[i]->mWeights[j].mWeight;
@@ -329,13 +394,13 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(viewId, 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
 
-//		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "bones"), gameplayconvertor->bonesMatrix.size(), GL_FALSE, glm::value_ptr(gameplayconvertor->bonesMatrix[0]));
+		std::vector<glm::mat4> bonesTrans;
+		bonesTrans.resize(bones.size());
+		readNodeHierarchy(skeletonRoot, glm::mat4(1), bones, bonesTrans);
+		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
+
 		for (unsigned int i = 0; i < vertices.size(); ++i)
 		{
-			std::vector<glm::mat4> bonesTrans;
-			bonesTrans.resize(meshs[i].bones.size());
-			computeBonesTrans(meshs[i].bones, bonesTrans, scene);
-			glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
 			vertices[i]->draw(GL_TRIANGLES);
 		}
 	} while (e->update());
