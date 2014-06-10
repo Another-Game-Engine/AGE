@@ -135,7 +135,7 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "rmVertices", "key not valid")
-			_indices.erase(key);
+		_indices.erase(key);
 		key.destroy();
 		return (*this);
 	}
