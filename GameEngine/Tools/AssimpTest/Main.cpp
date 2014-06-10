@@ -45,7 +45,35 @@ namespace AGE
 
 static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
 {
-	return glm::mat4(m.a1, m.a2, m.a3, m.a4, m.b1, m.b2, m.b3, m.b4, m.c1, m.c2, m.c3, m.c4, m.d1, m.d2, m.d3, m.d4);
+	return glm::mat4(m.a1, m.b1, m.c1, m.d1, m.a2, m.b2, m.c2, m.d2, m.a3, m.b3, m.c3, m.d3, m.a4, m.b4, m.c4, m.d4);
+}
+
+
+void readNodeHierarchy(const aiNode *node, const glm::mat4 &parentTrans, std::vector<AGE::Bone> &bones, std::vector<glm::mat4> &trans, const aiScene *scene)
+{
+	trans.resize(bones.size());
+
+	glm::mat4 t = parentTrans * aiMat4ToGlm(node->mTransformation);
+	unsigned int index = 0;
+	while (index < bones.size())
+	{
+		if (bones[index].name == std::string(node->mName.data))
+			break;
+		++index;
+	}
+	if (index < bones.size())
+	{
+		trans[index] = t * bones[index].offset;
+	}
+	for (unsigned int i = 0; i < node->mNumChildren; ++i)
+	{
+		readNodeHierarchy(node->mChildren[i], t, bones, trans, scene);
+	}
+}
+
+void computeBonesTrans(std::vector<AGE::Bone> &bones, std::vector<glm::mat4> &trans, const aiScene *scene)
+{
+	readNodeHierarchy(scene->mRootNode, glm::mat4(1), bones, trans, scene);
 }
 
 int			main(int ac, char **av)
@@ -304,6 +332,10 @@ int			main(int ac, char **av)
 //		glUniformMatrix4fv(glGetUniformLocation(s->getId(), "bones"), gameplayconvertor->bonesMatrix.size(), GL_FALSE, glm::value_ptr(gameplayconvertor->bonesMatrix[0]));
 		for (unsigned int i = 0; i < vertices.size(); ++i)
 		{
+			std::vector<glm::mat4> bonesTrans;
+			bonesTrans.resize(meshs[i].bones.size());
+			computeBonesTrans(meshs[i].bones, bonesTrans, scene);
+			glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
 			vertices[i]->draw(GL_TRIANGLES);
 		}
 	} while (e->update());
