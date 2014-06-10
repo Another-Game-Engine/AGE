@@ -70,7 +70,7 @@ void	DrawQuad::draw(GLuint texture, int sampleNbr, glm::uvec2 const &textureSize
 	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(textureType, texture);
-	_m->draw(GL_QUADS, _quadindices, _quadvertices);
+	_m->draw(GL_TRIANGLES, _quadindices, _quadvertices);
 	glEnable(GL_DEPTH_TEST);
 }
 
