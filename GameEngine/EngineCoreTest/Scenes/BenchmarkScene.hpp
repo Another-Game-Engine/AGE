@@ -16,6 +16,7 @@
 #include <Systems/LightRenderingSystem.hh>
 #include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/BlitFinalRender.hh>
+#include <Systems/SimpleMeshRenderer.hpp>
 
 #include <Context/IRenderContext.hh>
 
@@ -40,8 +41,13 @@ public:
 #endif //!PHYSIC
 
 #ifdef RENDERING_ACTIVATED
+
 	addSystem<FirstPersonViewSystem>(2);
 	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+
+#ifdef SIMPLE_RENDERING
+		addSystem<SimpleMeshRenderer>(80);
+#else
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
 	addSystem<PostFxSystem>(110); // POST FXs
@@ -53,7 +59,7 @@ public:
 	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
 	getSystem<PostFxSystem>()->useHDR(false);
 	getSystem<PostFxSystem>()->useBloom(false);
-
+#endif
 #endif
 
 #ifdef LIFETIME_ACTIVATED

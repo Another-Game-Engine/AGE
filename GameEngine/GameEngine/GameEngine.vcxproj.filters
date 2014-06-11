@@ -169,6 +169,7 @@
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
+    <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
