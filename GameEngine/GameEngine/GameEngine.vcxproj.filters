@@ -176,6 +176,7 @@
     <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Pool.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
+    <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
