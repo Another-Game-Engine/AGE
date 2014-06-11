@@ -1,56 +1,39 @@
 #ifndef SHADER_HH_
 # define SHADER_HH_
 
-
 # include <Utils/OpenGL.hh>
-# include <iostream>
-# include <map>
-# include <array>
-# include <vector>
-# include <utility>
-# include <memory>
-# include <fstream>
-# include <OpenGL/ErrorController.hh>
 
 namespace OpenGLTools
 {
 
 	class Shader
 	{
+	public:
+		Shader(std::string const &compute);
+		Shader(std::string const &vertex, std::string const &fragment);
+		Shader(std::string const &vertex, std::string const &fragment, std::string const &geometry);
+		~Shader(void);
+		Shader(Shader &&Shader);
+		Shader(Shader const &Shader);
+
+		void use();
+		bool isValid() const;
+		GLuint	getId() const;
+
 	private:
 		GLuint	_progId;
 		GLuint	_vertexId;
 		GLuint	_fragId;
 		GLuint	_geometryId;
 		GLuint	_computeId;
-		std::map<std::string, std::vector<std::string>> _uniformBlockBind;
-		std::vector<std::string> _samplersBind;
-		std::vector<std::string> _uniformsBind;
 
 		Shader();
-		void compileShader(GLuint shaderId, std::string &&file) const;
+		void compileShader(GLuint shaderId, std::string const &file) const;
 		void linkProgram() const;
-		GLuint addShader(std::string &&path, GLenum type);
-
-	public:
-		Shader(std::string &&compute);
-		Shader(std::string &&vertex, std::string &&fragment);
-		Shader(std::string &&vertex, std::string &&fragment, std::string &&geometry);
-		~Shader(void);
-		Shader(Shader &&Shader);
-		Shader(Shader const &Shader);
+		GLuint addShader(std::string const &path, GLenum type);
 		Shader &operator=(Shader const &shader);
 		Shader &operator=(Shader &&shader);
 
-		void	use();
-		void	addSampler(std::string &&sampler);
-		bool	deleteSampler(std::string &&sampler);
-		void	addUniform(std::string &&uniform);
-		bool	deleteUniform(std::string &&uniform);
-		void	addUniformBlock(std::string &&uniformBlock, std::vector<std::string> &&args);
-		bool	deleteUniformBlock(std::string &&unifromBlock);
-	
-		GLuint	getId() const;
 	};
 
 }
