@@ -12,7 +12,12 @@
 class File;
 class Font;
 class PubSub;
+
+
+#if !TEST_NEW_VERTEXMANAGER
+#include <OpenGL/GeometryManager.hh>
 template <uint8_t NBR_ATTRIBUTE> class VertexManager;
+#endif
 
 class FontManager : public Dependency
 {
@@ -65,6 +70,6 @@ private:
 
 	std::vector<DrawStringSave> _toDraw;
 	std::map <std::string, Font> _collection;
-	std::unique_ptr<VertexManager<2>> _vertexManager;
+//	std::unique_ptr<VertexManager<2>> _vertexManager;
 	std::unique_ptr<PubSub> _pubSub;
 };

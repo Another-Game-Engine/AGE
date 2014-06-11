@@ -5,6 +5,8 @@
 #include <Text/Font.hh>
 #include <Text/FontGlyph.hh>
 #include <ft2build.h>
+#include <iostream>
+
 #include FT_FREETYPE_H
 
 static void drawBitmap(unsigned char* dstBitmap,

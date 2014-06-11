@@ -1,26 +1,61 @@
-#ifndef DATA_HH_
-# define DATA_HH_
+#pragma once
 
-# include <iostream>
-# include <stdint.h>
-# include <array>
+#include <stdint.h>
+#include <OpenGL/GeometryManager.hh>
+#include <OpenGL/Pool.hh>
 
-class Data
+namespace gl
 {
-private:
-	std::size_t _sizeBuffer;
-	void *_buffer;
-public:
-	Data();
-	Data(std::size_t sizeBuffer, void *buffer);
-	Data(Data const &copy);
-	~Data();
-	Data &operator=(Data const &data);
-	std::size_t getSizeBuffer() const;
-	void const * const getBuffer() const;
-	bool operator==(Data const &data) const;
-	bool operator!=(Data const &data) const;
-	Data &operator()(std::size_t sizeBuffer, void *buffer);
-};
+	class MemoryBlocksGPU;
+	class Vertices;
+	template<typename TYPE> class Key;
 
-#endif /*DATA_HH_*/
+	//!\file Data.hh
+	//!\author Dorian Pinaud
+	//!\version v2.0
+	//!\class Vertices
+	//!\brief contain vertices information
+	class Vertices
+	{
+	public:
+		Vertices();
+		Vertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
+		~Vertices();
+		Vertices(Vertices const &copy);
+		Vertices &operator=(Vertices const &v);
+
+		void const *getBuffer(uint8_t index) const;
+		size_t getSizeBuffer(uint8_t index) const;
+		uint8_t getNbrBuffers() const;
+		size_t getNbrVertices() const;
+
+	private:
+
+		void **_buffers;
+		size_t *_sizeBuffers;
+		size_t _nbrVertices;
+		uint8_t _nbrBuffers;
+	};
+
+	//!\file Data.hh
+	//!\author Dorian Pinaud
+	//!\version v2.0
+	//!\class Indices
+	//!\brief Indices data
+	class Indices
+	{
+	public:
+		Indices();
+		Indices(Indices const &copy);
+		Indices(size_t nbrIndices, uint32_t *buffer);
+		Indices &operator=(Indices const &i);
+
+		size_t getNbrIndices() const;
+		uint32_t const *getBuffer() const;
+
+	private:
+		size_t _nbrIndices;
+		uint32_t *_buffer;
+	};
+
+}
