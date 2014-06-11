@@ -3,14 +3,17 @@
 # include <Utils/OpenGL.hh>
 # include <glm/glm.hpp>
 # include <memory>
-# include <OpenGL/Vertice.hh>
+# include <OpenGL/Data.hh>
 
-namespace OpenGLTools
+namespace gl
 {
 	class Shader;
 }
+class DependenciesInjector;
 class Renderer;
+#if !TEST_NEW_VERTEXMANAGER
 template <uint8_t SIZE_ATTRIBUTE> class VertexManager;
+#endif
 
 class DrawQuad
 {
@@ -23,11 +26,12 @@ public:
 
 private:
 	void						initShaders();
-
-	VertexManager<2>			*_vertexManager;
-	Vertice<2>					_quad;
-	std::shared_ptr<OpenGLTools::Shader>			_fboToScreen;
-	std::shared_ptr<OpenGLTools::Shader>			_fboToScreenMultisampled;
+	gl::GeometryManager			*_m;
+	gl::Key<gl::Vertices>		_quadvertices;
+	gl::Key<gl::Indices>		_quadindices;
+	gl::Key<gl::VertexPool>		_pool;
+	std::shared_ptr<gl::Shader>			_fboToScreen;
+	std::shared_ptr<gl::Shader>			_fboToScreenMultisampled;
 	std::shared_ptr<Renderer>	_renderer;
 };
 

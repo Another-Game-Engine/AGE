@@ -103,7 +103,7 @@ protected:
 
 			if (skybox != nullptr && camFbo.isInit() == true)
 			{
-				std::shared_ptr<OpenGLTools::Shader> s = scene->getInstance<Renderer>()->getShader(camera->getSkyboxShader());
+				std::shared_ptr<gl::Shader> s = scene->getInstance<Renderer>()->getShader(camera->getSkyboxShader());
 				assert(s != nullptr && "Skybox does not have a shader associated");
 
 				scene->getInstance<Renderer>()->getUniform("cameraUniform")->setUniform("projection", camera->projection);

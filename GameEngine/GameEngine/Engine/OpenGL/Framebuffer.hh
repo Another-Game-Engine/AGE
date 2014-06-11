@@ -1,19 +1,19 @@
-#ifndef  __FRAMEBUFFER_HH__
-# define __FRAMEBUFFER_HH__
+# pragma once
 
 #include <Utils/OpenGL.hh>
 #include <map>
 #include <glm/glm.hpp>
 
+namespace gl { class Texture; }
+
 namespace OpenGLTools
 {
-	class Texture;
 
 	class Framebuffer
 	{
 	private:
 		GLuint						_id;
-		std::map<GLenum, Texture *>	_attachments;
+		std::map<GLenum, gl::Texture *>	_attachments;
 		glm::uvec2					_size;
 		int							_sampleNbr;
 		bool						_multiSample;
@@ -46,7 +46,7 @@ namespace OpenGLTools
 		void addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment);
 		void attachAll() const;
 		void bind() const;
-		Texture *operator[](GLenum attachment) const;
+		gl::Texture *operator[](GLenum attachment) const;
 		glm::uvec2	getSize();
 
 		bool isInit() const { return (_id != 0); }
@@ -56,5 +56,3 @@ namespace OpenGLTools
 	private:
 	};
 }
-
-#endif   //!__FRAMEBUFFER_HH__

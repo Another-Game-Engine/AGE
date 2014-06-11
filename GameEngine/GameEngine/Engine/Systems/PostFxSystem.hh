@@ -51,8 +51,8 @@ private:
 	float							_maxLightDiminution;
 
 	// HDR Compute shader
-	OpenGLTools::Shader		_modulateRender;
-	OpenGLTools::Shader		_bloom;
+	gl::Shader		_modulateRender;
+	gl::Shader		_bloom;
 
 	// HDR factors
 	float							_curFactor;
@@ -68,7 +68,7 @@ private:
 	float							_bloomSigma;
 	float							_bloomGlare;
 	uint32_t						_bloomMipmap;
-	OpenGLTools::StreamGPU			_stream;
+	gl::StreamGPU			_stream;
 
 
 	void		computeHdr(OpenGLTools::Framebuffer &camFbo);

@@ -6,8 +6,7 @@
 #include <string>
 #include <glm/glm.hpp>
 
-
-namespace OpenGLTools
+namespace gl
 {
 	Texture::Texture()
 		: _id(0)
@@ -18,28 +17,6 @@ namespace OpenGLTools
 	Texture::~Texture()
 	{
 		glDeleteTextures(1, &_id);
-	}
-
-	Texture::Texture(Texture const &copy)
-		: _id(copy._id)
-	{
-	}
-
-	Texture::Texture(Texture &&move)
-		: _id(std::move(move._id))
-	{
-	}
-
-	Texture &Texture::operator=(Texture const &t)
-	{
-		_id = t._id;
-		return (*this);
-	}
-
-	Texture &Texture::operator=(Texture &&t)
-	{
-		_id = std::move(t._id);
-		return (*this);
 	}
 
 	GLuint Texture::getId() const
@@ -68,12 +45,8 @@ namespace OpenGLTools
 		glTexStorage2D(GL_TEXTURE_2D, _levels, _internalFormat, _width, _height);
 	}
 
-	Texture2D::~Texture2D()
-	{
-	}
-
 	Texture2D::Texture2D(Texture2D const &copy)
-		:Texture(copy),
+		:Texture(),
 		_levels(copy._levels),
 		_level(copy._level),
 		_width(copy._width),
@@ -85,7 +58,7 @@ namespace OpenGLTools
 	}
 
 	Texture2D::Texture2D(Texture2D &&move)
-		: Texture(std::move(move)),
+		: Texture(),
 		_levels(std::move(move._levels)),
 		_level(std::move(move._level)),
 		_width(std::move(move._width)),
@@ -96,29 +69,9 @@ namespace OpenGLTools
 	{
 	}
 
-	Texture2D &Texture2D::operator=(Texture2D const &t)
-	{
-		_id = t._id;
-		_levels = t._levels;
-		_level = t._level;
-		_width = t._width;
-		_height = t._height;
-		_internalFormat = t._internalFormat;
-		_format = t._format;
-		_type = t._type;
-		return (*this);
-	}
 
-	Texture2D &Texture2D::operator=(Texture2D &&t)
+	Texture2D::~Texture2D()
 	{
-		_id = std::move(t._id);
-		_levels = std::move(t._levels);
-		_level = std::move(t._level);
-		_width = std::move(t._width);
-		_height = std::move(t._height);
-		_internalFormat = std::move(t._internalFormat);
-		_internalFormat = std::move(t._internalFormat);
-		return (*this);
 	}
 
 	Texture2D const &Texture2D::wrap(GLint param) const

@@ -1,11 +1,15 @@
-#ifndef SHADER_HH_
-# define SHADER_HH_
+#pragma once
 
 # include <Utils/OpenGL.hh>
+# include <iostream>
 
-namespace OpenGLTools
+namespace gl
 {
-
+	//!\file Shader.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class Shader
+	//!\brief Handle Opengl Shader
 	class Shader
 	{
 	public:
@@ -13,12 +17,10 @@ namespace OpenGLTools
 		Shader(std::string const &vertex, std::string const &fragment);
 		Shader(std::string const &vertex, std::string const &fragment, std::string const &geometry);
 		~Shader(void);
-		Shader(Shader &&Shader);
-		Shader(Shader const &Shader);
 
 		void use();
 		bool isValid() const;
-		GLuint	getId() const;
+		GLuint getId() const;
 
 	private:
 		GLuint	_progId;
@@ -27,15 +29,17 @@ namespace OpenGLTools
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
+		// tools use inside shader class
 		Shader();
 		void compileShader(GLuint shaderId, std::string const &file) const;
 		void linkProgram() const;
 		GLuint addShader(std::string const &path, GLenum type);
+		
+		// invalid it
 		Shader &operator=(Shader const &shader);
 		Shader &operator=(Shader &&shader);
-
+		Shader(Shader &&Shader);
+		Shader(Shader const &Shader);
 	};
 
 }
-
-#endif /*!SHADER_HH_*/

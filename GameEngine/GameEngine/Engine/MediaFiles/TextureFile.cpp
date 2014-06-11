@@ -53,9 +53,9 @@ TextureFile &TextureFile::operator=(const TextureFile &o)
 	return *this;
 }
 
-TextureFile &TextureFile::operator=(OpenGLTools::Texture2D &t)
+TextureFile &TextureFile::operator=(gl::Texture2D &t)
 {
-	_texture = std::make_unique<OpenGLTools::Texture2D>(t);
+	_texture = std::make_unique<gl::Texture2D>(t);
 	return *this;
 }
 
@@ -67,7 +67,7 @@ void TextureFile::save(cereal::PortableBinaryOutputArchive &ar) const
 void TextureFile::load(cereal::PortableBinaryInputArchive &ar)
 {
 	ar(cereal::make_nvp("datas", datas), CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(components), CEREAL_NVP(format));
-	_texture = std::make_unique<OpenGLTools::Texture2D>(components, width, height, true);
+	_texture = std::make_unique<gl::Texture2D>(components, width, height, true);
 	_texture->setOptionTransfer(0, format, GL_UNSIGNED_BYTE);
 	_texture->write(datas.data());
 	_texture->generateMipMap();

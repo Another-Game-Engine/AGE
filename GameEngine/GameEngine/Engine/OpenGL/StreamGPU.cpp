@@ -1,6 +1,8 @@
 #include <OpenGL/StreamGPU.hh>
+#include <iostream>
+#include <OpenGL/Texture.hh>
 
-namespace OpenGLTools
+namespace gl
 {
 	StreamGPU::StreamGPU()
 		: _currentPBOPack(0),

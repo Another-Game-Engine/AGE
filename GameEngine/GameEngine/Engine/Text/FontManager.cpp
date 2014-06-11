@@ -20,13 +20,14 @@ bool FontManager::init()
 		_drawList();
 	});
 
-	std::array<Attribute, 2> param =
-	{
-		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
-		Attribute(GL_FLOAT, sizeof(float), 2),
-	};
-	_vertexManager = std::make_unique<VertexManager<2>>(param);
-	return _vertexManager->init();
+//	std::array<Attribute, 2> param =
+//	{
+//		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
+//		Attribute(GL_FLOAT, sizeof(float), 2),
+//	};
+//	_vertexManager = std::make_unique<VertexManager<2>>(param);
+//	return _vertexManager->init();
+	return (true);
 }
 
 bool FontManager::loadFont(const File &file, const std::string &name)
@@ -55,11 +56,11 @@ bool FontManager::loadFont(const File &file, const std::string &name)
 	ar(font);
 	s.close();
 
-	if (!font.load(_vertexManager))
-	{
-		std::cerr << "Fail to load font: " << file.getFullName() << std::endl;
-		return false;
-	}
+	//if (!font.load(_vertexManager))
+	//{
+	//	std::cerr << "Fail to load font: " << file.getFullName() << std::endl;
+	//	return false;
+	//}
 	_collection.insert(std::make_pair(font._name, font));
 
 	return true;
@@ -159,7 +160,7 @@ void FontManager::_draw2DString(const std::string &text,
 		}
 		lineWidth += lastX;
 		glUniformMatrix4fv(transformationID, 1, GL_FALSE, glm::value_ptr(transformation));
-		f._map[l].buffer->draw(GL_QUADS);
+	//	f._map[l].buffer->draw(GL_QUADS);
 		transformation = glm::translate(transformation, glm::vec3(lastX, 0, 0));
 	}
 }

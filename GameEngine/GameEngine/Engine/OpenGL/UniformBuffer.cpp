@@ -3,7 +3,7 @@
 #include "Shader.hh"
 #include "Utils/OpenGL.hh"
 #include "glm/gtc/type_ptr.hpp"
-#include <memory.h>
+#include <iostream>
 #include <list>
 #include <cstdint>
 
@@ -25,7 +25,7 @@ UniformBuffer::~UniformBuffer(void)
 		delete[] _buffer;
 }
 
-void	UniformBuffer::init(std::shared_ptr<Shader> referent, std::string const &blockName, std::uint32_t bufferSize)
+void	UniformBuffer::init(std::shared_ptr<gl::Shader> referent, std::string const &blockName, std::uint32_t bufferSize)
 {
 	glGenBuffers(1, &_bufferId);
 	glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, _bufferId);
@@ -45,7 +45,7 @@ void	UniformBuffer::setBufferData(size_t size, const char *data)
 	memcpy(_buffer, data, size);
 }
 
-void	UniformBuffer::init(std::shared_ptr<Shader> referent, std::string const &blockName, std::string const vars[])
+void	UniformBuffer::init(std::shared_ptr<gl::Shader> referent, std::string const &blockName, std::string const vars[])
 {
 	GLint		blockIdx, varNbr;
 	GLint		*varsInfos;

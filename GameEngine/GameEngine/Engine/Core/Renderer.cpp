@@ -25,28 +25,28 @@ bool Renderer::init()
 	return true;
 }
 
-std::shared_ptr<OpenGLTools::Shader>		Renderer::addShader(std::string const &name,
+std::shared_ptr<gl::Shader>		Renderer::addShader(std::string const &name,
 											 std::string const &vp,
 											 std::string const &fp,
 											 std::string const &geo)
 {
 	auto it = _shaders.find(name);
-	std::shared_ptr<OpenGLTools::Shader> shader{nullptr};
+	std::shared_ptr<gl::Shader> shader{nullptr};
 
 	if (it == std::end(_shaders))
 	{
 		if (geo == std::string(""))
-			shader = std::make_shared<OpenGLTools::Shader>(std::move(std::string(vp)), std::move(std::string(fp)));
+			shader = std::make_shared<gl::Shader>(std::move(std::string(vp)), std::move(std::string(fp)));
 		else
-			shader = std::make_shared<OpenGLTools::Shader>(std::move(std::string(vp)), std::move(std::string(fp)), std::move(std::string(geo)));
+			shader = std::make_shared<gl::Shader>(std::move(std::string(vp)), std::move(std::string(fp)), std::move(std::string(geo)));
 		_shaders[name] = shader;
 	}
 	else
 	{
 		if (geo == std::string(""))
-			it->second = std::make_shared<OpenGLTools::Shader>(std::move(std::string(vp)), std::move(std::string(fp)));
+			it->second = std::make_shared<gl::Shader>(std::move(std::string(vp)), std::move(std::string(fp)));
 		else
-			it->second = std::make_shared<OpenGLTools::Shader>(std::move(std::string(vp)), std::move(std::string(fp)), std::move(std::string(geo)));
+			it->second = std::make_shared<gl::Shader>(std::move(std::string(vp)), std::move(std::string(fp)), std::move(std::string(geo)));
 		shader = it->second;
 	}
 	return shader;
@@ -62,7 +62,7 @@ bool		Renderer::removeShader(std::string const &name)
 	return (true);
 }
 
-std::shared_ptr<OpenGLTools::Shader>		Renderer::getShader(std::string const &name) const
+std::shared_ptr<gl::Shader>		Renderer::getShader(std::string const &name) const
 {
 	auto it = _shaders.find(name);
 

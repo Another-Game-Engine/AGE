@@ -22,13 +22,13 @@ struct TextureFile : public MediaFile<TextureFile>
 	virtual ~TextureFile();
 	TextureFile(const TextureFile &o);
 	TextureFile &operator=(const TextureFile &o);
-	TextureFile &operator=(OpenGLTools::Texture2D &t);
+	TextureFile &operator=(gl::Texture2D &t);
 
 	void save(cereal::PortableBinaryOutputArchive &ar) const;
 	void load(cereal::PortableBinaryInputArchive &ar);
 
 	GLuint getId() const;
-	//inline const std::shared_ptr<OpenGLTools::Texture2D> &getTexture() const
+	//inline const std::shared_ptr<gl::Texture2D> &getTexture() const
 	//{
 	//	return _texture;
 	//}
@@ -40,7 +40,7 @@ struct TextureFile : public MediaFile<TextureFile>
 	GLenum		wrap;
 	GLenum		minFilter;
 	GLenum		magFilter;
-	std::unique_ptr<OpenGLTools::Texture2D> _texture;
+	std::unique_ptr<gl::Texture2D> _texture;
 };
 
 #endif   //__TEXTURE_FILE_HPP__

@@ -1,14 +1,20 @@
-#ifndef STREAMGPU_H_
-# define STREAMGPU_H_
+#pragma once
 
 #include <array>
+#include <stdint.h>
 #include <OpenGL/PixelBuffer.hh>
-#include <OpenGL/Texture.hh>
 
 # define PINGPONG_SIZE 2
 
-namespace OpenGLTools
+namespace gl
 {
+	class Texture;
+
+	//!\file StreamGPU.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class StreamGPU
+	//!\brief Handle Stream CPU memory through GPU memory and reverse
 	class StreamGPU
 	{
 	public:
@@ -28,5 +34,3 @@ namespace OpenGLTools
 
 	};
 }
-
-#endif /*!STREAM_GPU_*/

@@ -1,5 +1,0 @@
-#ifdef VERTEXPOOLELEMENT_HH_
-
-
-
-#endif /*VERTEXMANAGER_HH_*/
