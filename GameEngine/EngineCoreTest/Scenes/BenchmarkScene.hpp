@@ -21,7 +21,7 @@
 
 #include <CONFIGS.hpp>
 
-class BenchmarkScene : public AScene
+class BenchmarkScene : public AScene	
 {
 public:
 	BenchmarkScene(std::weak_ptr<Engine> &&engine)
@@ -31,28 +31,28 @@ public:
 	virtual ~BenchmarkScene(void)
 	{}
 
-	virtual bool userStart()
+	virtual bool 			userStart()
 	{
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
-		// addSystem<CollisionAdder>(1);
-		// addSystem<CollisionCleaner>(1000);
+//		addSystem<CollisionAdder>(1);
+//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
 
 #ifdef RENDERING_ACTIVATED
-		addSystem<FirstPersonViewSystem>(1);
-		addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
-		addSystem<LightRenderingSystem>(80); // Render with the lights
-		addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
-		addSystem<PostFxSystem>(110); // POST FXs
-		addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
+	addSystem<FirstPersonViewSystem>(2);
+	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	addSystem<LightRenderingSystem>(80); // Render with the lights
+	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
+	addSystem<PostFxSystem>(110); // POST FXs
+	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
 
-		getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
-		getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
-		getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
-		getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
-		getSystem<PostFxSystem>()->useHDR(false);
-		getSystem<PostFxSystem>()->useBloom(false);
+	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
+	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
+	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
+	getSystem<PostFxSystem>()->useHDR(false);
+	getSystem<PostFxSystem>()->useBloom(false);
 
 #endif
 
@@ -74,9 +74,9 @@ public:
 		_logFile << " Lifetime, ";
 #endif
 #ifdef COMPLEX_MESH
-		_logFile << " Complex mesh, ";
+			_logFile << " Complex mesh, ";
 #elif defined RENDERING_ACTIVATED
-		_logFile << " Rendering, ";
+			_logFile << " Rendering, ";
 #endif
 #ifdef PHYSIC_SIMULATION
 		_logFile << " Physics, ";
@@ -101,31 +101,31 @@ public:
 		setTransform(camera, glm::translate(glm::mat4(1), glm::vec3(0, 0, -40)));
 
 
-		auto light = createEntity();
-		auto lightComponent = addComponent<Component::PointLight>(light);
-		lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 30);
-		lightComponent->lightData.positionPower.w = 0.5f;
-		lightComponent->lightData.hasShadow = -1;
-		setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 3, 0)));
+	auto light = createEntity();
+	auto lightComponent = addComponent<Component::PointLight>(light);
+	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 30);
+	lightComponent->lightData.positionPower.w = 0.5f;
+	lightComponent->lightData.hasShadow = -1;
+	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 3, 0)));
 
-		//light = createEntity();
-		//lightComponent = addComponent<Component::PointLight>(light);
-		//lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
-		//lightComponent->lightData.positionPower.w = 0;
-		//lightComponent->lightData.hasShadow = -1;
-		//setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
+	//light = createEntity();
+	//lightComponent = addComponent<Component::PointLight>(light);
+	//lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
+	//lightComponent->lightData.positionPower.w = 0;
+	//lightComponent->lightData.hasShadow = -1;
+	//setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
 
-		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		auto plane = createEntity();
-		setTransform(plane, glm::translate(getTransform(plane), glm::vec3(0, -10, 0)));
-		setTransform(plane, glm::scale(getTransform(plane), glm::vec3(100, 1, 100)));
-		auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
-		mesh->setShader("MaterialBasic");
-		auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
-		rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
-		// rigidBody->setTransformation(getTransform(plane));
-		rigidBody->getBody().setFriction(0.8f);
-		//rigidBody->getBody().setRestitution(1.0f);
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	auto plane = createEntity();
+	setTransform(plane, glm::translate(getTransform(plane), glm::vec3(0, -10, 0)));
+	setTransform(plane, glm::scale(getTransform(plane), glm::vec3(100, 1, 100)));
+	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+	mesh->setShader("MaterialBasic");
+	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
+	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
+//	rigidBody->setTransformation(getTransform(plane));
+	rigidBody->getBody().setFriction(0.8f);
+	//rigidBody->getBody().setRestitution(1.0f);
 
 #endif
 
@@ -133,7 +133,7 @@ public:
 		return true;
 	}
 
-	virtual bool userUpdate(double time)
+	virtual bool 			userUpdate(double time)
 	{
 		++_frameCounter;
 		++_chunkFrame;
@@ -187,9 +187,8 @@ public:
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 				mesh->setShader("MaterialBasic");
 #else
-				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");
-
 #endif
 
 #endif
@@ -212,7 +211,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 5.0f;
+	double _maxTime = 8.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;
