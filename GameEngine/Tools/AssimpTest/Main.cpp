@@ -73,12 +73,63 @@ namespace AGE
 		std::vector<AnimationKey<glm::vec3>> scale;
 		std::vector<AnimationKey<glm::quat>> rotation;
 		std::vector<AnimationKey<glm::vec3>> translation;
+
+		void findKeyIndex(float t, glm::uvec3 &keys, glm::uvec3 &nextKeys)
+		{
+			for (unsigned int i = 0; i < scale.size() - 1; i++)
+			{
+				if (t < scale[i + 1].time) {
+					keys.x = i;
+					nextKeys.x = i + 1;
+					break;
+				}
+			}
+			for (unsigned int i = 0; i < rotation.size() - 1; i++)
+			{
+				if (t < rotation[i + 1].time) {
+					keys.y = i;
+					nextKeys.y = i + 1;
+					break;
+				}
+			}
+			for (unsigned int i = 0; i < translation.size() - 1; i++)
+			{
+				auto p = translation[i + 1];
+				if (t < translation[i + 1].time) {
+					keys.z = i;
+					nextKeys.z = i + 1;
+					break;
+				}
+			}
+		}
+
+		glm::mat4 getInterpolatedTransform(float t, float total)
+		{
+			glm::uvec3 keys, nextKeys;
+			findKeyIndex(t, keys, nextKeys);
+			auto sca = glm::scale(glm::mat4(1), glm::mix(scale[keys.x].value, scale[nextKeys.x].value, (total - scale[nextKeys.x].time) / t));
+			auto rot = glm::toMat4(glm::slerp(rotation[keys.y].value, rotation[nextKeys.y].value, (total - rotation[nextKeys.y].time) / t));
+			auto tra = glm::translate(glm::mat4(1), glm::mix(translation[keys.z].value, translation[nextKeys.z].value, (total - translation[nextKeys.z].time) / t));
+
+			return tra * rot * sca;
+
+			//auto sca1 = glm::scale(glm::mat4(1), scale[keys.x].value);
+			//auto rot1 = glm::toMat4(rotation[keys.y].value);
+			//auto tra1 = glm::translate(glm::mat4(1), translation[keys.z].value);
+
+			//auto sca2 = glm::scale(glm::mat4(1), scale[nextKeys.x].value);
+			//auto rot2 = glm::toMat4(rotation[nextKeys.y].value);
+			//auto tra2 = glm::translate(glm::mat4(1), translation[nextKeys.z].value);
+
+			//return glm::interpolate(tra1 * rot1 * sca1, tra2 * rot2 * sca2, factor);
+		}
 	};
 
 	struct Animation
 	{
 		std::string name;
 		std::vector<AnimationChannel> channels;
+		float duration;
 	};
 }
 
@@ -100,17 +151,12 @@ void readNodeHierarchy(unsigned int boneID
 
 	if (animation)
 	{
+		auto localTime = std::fmodf(time, animation->duration);
 		for (unsigned int i = 0; i < animation->channels.size(); ++i)
 		{
 			if (animation->channels[i].boneIndex != boneID)
 				continue;			
-			auto id = (int)(time * 4.0f) % animation->channels[i].scale.size();
-			auto s = glm::scale(glm::mat4(1), animation->channels[i].scale[id].value);
-			id = (int)(time * 4.0f) % animation->channels[i].rotation.size();
-			auto r = glm::toMat4(animation->channels[i].rotation[id].value);
-			id = (int)(time * 4.0f) % animation->channels[i].translation.size();
-			auto tr = glm::translate(glm::mat4(1), animation->channels[i].translation[id].value);
-			nodeT = tr * r * s;
+			nodeT = animation->channels[i].getInterpolatedTransform(localTime, animation->duration);
 		}
 	}
 
@@ -386,6 +432,7 @@ int			main(int ac, char **av)
 			auto &anim = animations[animNum];
 			anim.name = aiAnim->mName.data;
 			anim.channels.resize(aiAnim->mNumChannels);
+			anim.duration = aiAnim->mDuration;
 			for (unsigned int channelNbr = 0; channelNbr < aiAnim->mNumChannels; ++channelNbr)
 			{
 				auto aiChannel = aiAnim->mChannels[channelNbr];
@@ -400,21 +447,21 @@ int			main(int ac, char **av)
 				{
 					channel.translation.emplace_back(
 						glm::vec3(aiChannel->mPositionKeys[i].mValue.x, aiChannel->mPositionKeys[i].mValue.y, aiChannel->mPositionKeys[i].mValue.z)
-						, aiChannel->mPositionKeys->mTime);
+						, aiChannel->mPositionKeys[i].mTime);
 				}
 				// we push scale
 				for (unsigned int i = 0; i < aiChannel->mNumScalingKeys; ++i)
 				{
 					channel.scale.emplace_back(
 						glm::vec3(aiChannel->mScalingKeys[i].mValue.x, aiChannel->mScalingKeys[i].mValue.y, aiChannel->mScalingKeys[i].mValue.z)
-						, aiChannel->mScalingKeys->mTime);
+						, aiChannel->mScalingKeys[i].mTime);
 				}
 				// we push rotation
 				for (unsigned int i = 0; i < aiChannel->mNumRotationKeys; ++i)
 				{
 					channel.rotation.emplace_back(
 						glm::quat(aiChannel->mRotationKeys[i].mValue.w, aiChannel->mRotationKeys[i].mValue.x, aiChannel->mRotationKeys[i].mValue.y, aiChannel->mRotationKeys[i].mValue.z)
-						, aiChannel->mRotationKeys->mTime);
+						, aiChannel->mRotationKeys[i].mTime);
 				}
 			}
 		}
