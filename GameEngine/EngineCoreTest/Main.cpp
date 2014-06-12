@@ -111,8 +111,6 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto &m = e->getInstance<gl::ShadingManager>();
 
 	gl::Key<gl::Shader> basic = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
-	if (!basic)
-		std::cerr << "We Have a fucking EROOR"<< std::endl;
 	return true;
 }
 

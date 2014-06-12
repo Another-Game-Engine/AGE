@@ -43,8 +43,6 @@ ObjFile::Geometry::Geometry()
 {
 		if (geomanager)
 		{
-			geomanager->dettachVerticesToVertexPool(glvertices, geomanager->getVertexPool(0));
-			geomanager->dettachIndicesToIndexPool(glindices, geomanager->getIndexPool(0));
 			geomanager->rmIndices(glindices);
 			geomanager->rmVertices(glvertices);
 		}
