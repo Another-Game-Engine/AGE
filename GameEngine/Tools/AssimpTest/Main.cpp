@@ -78,14 +78,71 @@ namespace AGE
 		std::vector<AnimationKey<glm::quat>> rotation;
 		std::vector<AnimationKey<glm::vec3>> translation;
 
+		void findKeyIndex(float t, glm::uvec3 &keys, glm::uvec3 &nextKeys)
+		{
+			if (scale.size() <= 1)
+			{
+				keys.x = 0;
+				nextKeys.x = 0;
+			}
+			else
+			{
+				for (unsigned int i = 0; i < scale.size() - 1; i++)
+				{
+					if (t < scale[i + 1].time) {
+						keys.x = i;
+						nextKeys.x = i + 1;
+						break;
+					}
+				}
+			}
+
+			if (rotation.size() <= 1)
+			{
+				keys.y = 0;
+				nextKeys.y = 0;
+			}
+			else
+			{
+				for (unsigned int i = 0; i < rotation.size() - 1; i++)
+				{
+					if (t < rotation[i + 1].time) {
+						keys.y = i;
+						nextKeys.y = i + 1;
+						break;
+					}
+				}
+			}
+
+			if (translation.size() <= 1)
+			{
+				keys.z = 0;
+				nextKeys.z = 0;
+			}
+			else
+			{
+				for (unsigned int i = 0; i < translation.size() - 1; i++)
+				{
+					if (t < translation[i + 1].time) {
+						keys.z = i;
+						nextKeys.z = i + 1;
+						break;
+					}
+				}
+			}
+		}
+
 		void getInterpolatedTransform(float t, glm::mat4 &res)
 		{
-			unsigned int key = static_cast<unsigned int>(t);
-			unsigned int nextKey = key + 1;
+			glm::uvec3 key = glm::uvec3(static_cast<unsigned int>(t));
+			glm::uvec3 nextKey = glm::uvec3(key.x + 1);
 
-			res = glm::translate(glm::mat4(1), glm::mix(translation[key].value, translation[nextKey].value, (t - translation[key].time) / translation[key].deltaTime));
-			res *= glm::scale(glm::mat4(1), glm::mix(scale[key].value, scale[nextKey].value, (t - scale[key].time) / scale[key].deltaTime));
-			res *= glm::toMat4(glm::slerp(rotation[key].value, rotation[nextKey].value, (t - rotation[key].time) / rotation[key].deltaTime));
+			if (nextKey.z >= translation.size() || nextKey.x >= scale.size() || nextKey.y >= rotation.size())
+				findKeyIndex(t, key, nextKey);
+
+			res = glm::translate(glm::mat4(1), glm::mix(translation[key.z].value, translation[nextKey.z].value, (t - translation[key.z].time) / translation[key.z].deltaTime));
+			res *= glm::scale(glm::mat4(1), glm::mix(scale[key.x].value, scale[nextKey.x].value, (t - scale[key.x].time) / scale[key.x].deltaTime));
+			res *= glm::toMat4(glm::slerp(rotation[key.y].value, rotation[nextKey.y].value, (t - rotation[key.y].time) / rotation[key.y].deltaTime));
 		}
 	};
 
@@ -184,6 +241,7 @@ int			main(int ac, char **av)
 	Assimp::Importer importer;
 
 	const aiScene *scene = importer.ReadFile("../../Assets/catwoman/atk close front 6.fbx"
+//	const aiScene *scene = importer.ReadFile("../../Assets/marvin.fbx"
 		, aiProcess_Triangulate |
 		aiProcess_CalcTangentSpace |
 		/*aiProcess_JoinIdenticalVertices |*/
