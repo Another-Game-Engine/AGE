@@ -27,10 +27,10 @@ namespace gl
 		return (key);
 	}
 
-	Key<Shader> ShadingManager::addShader(std::string const &frag, std::string const &vertex)
+	Key<Shader> ShadingManager::addShader(std::string const &vertex, std::string const &frag)
 	{
 		Key<Shader> key;
-		Shader shader(frag, vertex);
+		Shader shader(vertex, frag);
 
 		if (!shader.isValid())
 			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &frag, string const &vertex)", "frag and vertex invalid", Key<Shader>(KEY_DESTROY))
@@ -38,10 +38,10 @@ namespace gl
 		return (key);
 	}
 
-	Key<Shader> ShadingManager::addShader(std::string const &frag, std::string const &vertex, std::string const &geo)
+	Key<Shader> ShadingManager::addShader(std::string const &geo, std::string const &vertex, std::string const &frag)
 	{
 		Key<Shader> key;
-		Shader shader(frag, vertex, geo);
+		Shader shader(vertex, frag, geo);
 
 		if (!shader.isValid())
 			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &frag, string const &vertex, string const &geo)", "frag, vertex or geo invalid", Key<Shader>(KEY_DESTROY))

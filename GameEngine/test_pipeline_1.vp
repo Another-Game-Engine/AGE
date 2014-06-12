@@ -3,7 +3,7 @@
 layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 color;
 layout (location = 2) in vec4 normal;
-layout (location = 3) in vec2 texCoords;
+layout (location = 3) in vec2 texCoord;
 
 out vec4 interpolated_position;
 out vec4 interpolated_color;
@@ -12,9 +12,9 @@ out vec2 interpolated_texCoord;
 
 void main(void)
 {
-	interpolation_position = position;
-	interpolation_color = color;
-	interpolation_normal = normal;
-	interpolation_texCoord = texCoord;
-	gl_Position = position;
+	interpolated_position = position;
+	interpolated_color = color;
+	interpolated_normal = normal;
+	interpolated_texCoord = texCoord;
+	gl_Position = interpolated_position;
 }

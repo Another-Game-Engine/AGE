@@ -27,7 +27,8 @@ namespace gl
 		_computeId = addShader(compute, GL_COMPUTE_SHADER);
 		_progId = glCreateProgram();
 		glAttachShader(_progId, _computeId);
-		linkProgram();
+		if (linkProgram() == false)
+			_vertexId = _fragId = _computeId = _geometryId = -1;
 	}
 
 	Shader::Shader(std::string const &vertex, std::string const &fragment)
@@ -40,7 +41,8 @@ namespace gl
 		_progId = glCreateProgram();
 		glAttachShader(_progId, _vertexId);
 		glAttachShader(_progId, _fragId);
-		linkProgram();
+		if (linkProgram() == false)
+			_vertexId = _fragId = _computeId = _geometryId = -1;
 	}
 
 	Shader::Shader(std::string const &vertex, std::string const &fragment, std::string const &geometry)
@@ -56,7 +58,8 @@ namespace gl
 		glAttachShader(_progId, _vertexId);
 		glAttachShader(_progId, _fragId);
 		glAttachShader(_progId, _geometryId);
-		linkProgram();
+		if (linkProgram() == false)
+			_vertexId = _fragId = _computeId = _geometryId = -1;
 	}
 
 	Shader::Shader(Shader const &shader)
@@ -65,14 +68,18 @@ namespace gl
 		_vertexName = shader._vertexName;
 		_fragName = shader._fragName;
 		_geometryName = shader._geometryName;
-		_vertexId = addShader(_vertexName, GL_VERTEX_SHADER);
-		_fragId = addShader(_fragName, GL_FRAGMENT_SHADER);
-		_geometryId = addShader(_geometryName, GL_GEOMETRY_SHADER);
+		_computeName = shader._computeName;
+
 		_progId = glCreateProgram();
-		glAttachShader(_progId, _vertexId);
-		glAttachShader(_progId, _fragId);
-		glAttachShader(_progId, _geometryId);
-		linkProgram();
+
+		if (_vertexName != "") { _vertexId = addShader(_vertexName, GL_VERTEX_SHADER); glAttachShader(_progId, _vertexId); }
+		if (_fragName != "") { _fragId = addShader(_fragName, GL_FRAGMENT_SHADER); glAttachShader(_progId, _fragId); }
+		if (_geometryName != "") { _geometryId = addShader(_geometryName, GL_GEOMETRY_SHADER); glAttachShader(_progId, _geometryId); }
+		if (_computeName != "") { _computeId = addShader(_computeName, GL_COMPUTE_SHADER); glAttachShader(_progId, _computeId); }
+
+
+		if (linkProgram() == false)
+			_vertexId = _fragId = _computeId = _geometryId = -1;
 	}
 
 	Shader &Shader::operator=(Shader const &s)
@@ -90,14 +97,17 @@ namespace gl
 			_vertexName = s._vertexName;
 			_fragName = s._fragName;
 			_geometryName = s._geometryName;
-			_vertexId = addShader(_vertexName, GL_VERTEX_SHADER);
-			_fragId = addShader(_fragName, GL_FRAGMENT_SHADER);
-			_geometryId = addShader(_geometryName, GL_GEOMETRY_SHADER);
+			_computeName = s._computeName;
+			
 			_progId = glCreateProgram();
-			glAttachShader(_progId, _vertexId);
-			glAttachShader(_progId, _fragId);
-			glAttachShader(_progId, _geometryId);
-			linkProgram();
+
+			if (_vertexName != "") { _vertexId = addShader(_vertexName, GL_VERTEX_SHADER); glAttachShader(_progId, _vertexId);}
+			if (_fragName != "") { _fragId = addShader(_fragName, GL_FRAGMENT_SHADER); glAttachShader(_progId, _fragId); }
+			if (_geometryName != "") { _geometryId = addShader(_geometryName, GL_GEOMETRY_SHADER); glAttachShader(_progId, _geometryId); }
+			if (_computeName != "") { _computeId = addShader(_computeName, GL_COMPUTE_SHADER); glAttachShader(_progId, _computeId); }
+
+			if (linkProgram() == false)
+				_vertexId = _fragId = _computeId = _geometryId = -1;
 		}
 		return (*this);
 	}
@@ -131,11 +141,12 @@ namespace gl
 		content[fileSize - 1] = 0;
 		shaderId = glCreateShader(type);
 		glShaderSource(shaderId, 1, const_cast<const GLchar**>(&content), const_cast<const GLint*>(&fileSize));
-		compileShader(shaderId, path);
+		if (compileShader(shaderId, path) == false)
+			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't compile", -1);
 		return (shaderId);
 	}
 
-	void Shader::compileShader(GLuint shaderId, std::string const &file) const
+	bool Shader::compileShader(GLuint shaderId, std::string const &file) const
 	{
 		GLint         compileRet = 0;
 		GLsizei       msgLenght;
@@ -150,12 +161,14 @@ namespace gl
 			errorMsg = new GLchar[msgLenght];
 			glGetShaderInfoLog(shaderId, msgLenght, &msgLenght, errorMsg);
 			std::cerr << "Compile error on " << file.data() << ": " << std::endl;
-			std::cerr << errorMsg << std::endl;
+			std::cerr << std::endl << errorMsg << std::endl << std::endl;
 			delete[] errorMsg;
+			DEBUG_MESSAGE("Error", "Shader.cpp-compileShader(shaderId, file)", "File doesn't compile", false);
 		}
+		return (true);
 	}
 
-	void Shader::linkProgram() const
+	bool Shader::linkProgram() const
 	{
 		GLint         linkRet = 0;
 		GLsizei       msgLenght;
@@ -170,9 +183,11 @@ namespace gl
 			glGetProgramInfoLog(_progId, msgLenght,
 				&msgLenght, errorMsg);
 			std::cerr << "Link error on program : " << std::endl;
-			std::cerr << std::string(errorMsg).data() << std::endl;
+			std::cerr << std::endl << errorMsg << std::endl << std::endl;
 			delete[] errorMsg;
+			DEBUG_MESSAGE("Error", "Shader.cpp-linkProgram()", "File doesn't link", false);
 		}
+		return (true);
 	}
 
 	void Shader::use()
@@ -188,6 +203,8 @@ namespace gl
 	bool Shader::isValid() const
 	{
 		if (_vertexId == -1 || _fragId == -1 || _geometryId == -1 || _computeId == -1)
+			return (false);
+		if ((_vertexId + _fragId + _geometryId + _computeId) == 0)
 			return (false);
 		return (true);
 	}

@@ -41,8 +41,8 @@ namespace gl
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
-		void compileShader(GLuint shaderId, std::string const &file) const;
-		void linkProgram() const;
+		bool compileShader(GLuint shaderId, std::string const &file) const;
+		bool linkProgram() const;
 		GLuint addShader(std::string const &path, GLenum type);
 		
 	};

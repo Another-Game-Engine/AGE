@@ -24,8 +24,8 @@ namespace gl
 
 		// shader handling
 		Key<Shader> addShader(std::string const &compute);
-		Key<Shader> addShader(std::string const &frag, std::string const &vert);
-		Key<Shader> addShader(std::string const &frag, std::string const &vert, std::string const &geometry);
+		Key<Shader> addShader(std::string const &vert, std::string const &frag);
+		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
 		ShadingManager &rmShader(Key<Shader> const &shader);
 		Key<Shader> getShader(size_t index) const;
 		

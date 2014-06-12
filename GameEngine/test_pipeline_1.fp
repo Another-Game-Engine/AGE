@@ -1,13 +1,13 @@
-#version 440x
+#version 440
 
-in vec4 interpolation_position;
-in vec4 interpolation_color;
-in vec4 interpolation_normal;
-in vec2 interpolation_texCoord;
+in vec4 interpolated_position;
+in vec4 interpolated_color;
+in vec4 interpolated_normal;
+in vec2 interpolated_texCoord;
 
-layout (location = 0) out fragcolor;
+layout (location = 0) out vec4 fragcolor;
 
-void main()
+void main(void)
 {
 	fragcolor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 }

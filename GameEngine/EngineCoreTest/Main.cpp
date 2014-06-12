@@ -13,6 +13,7 @@
 #include <Utils/PubSub.hpp>
 
 #include <OpenGL/GeometryManager.hh>
+#include <OpenGL/ShadingManager.hh>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
 
@@ -105,6 +106,13 @@ bool loadShaders(std::shared_ptr<Engine> e)
 
 	e->getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
+	//NEW VERSION OF SHADING
+
+	auto &m = e->getInstance<gl::ShadingManager>();
+
+	gl::Key<gl::Shader> basic = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
+	if (!basic)
+		std::cerr << "We Have a fucking EROOR"<< std::endl;
 	return true;
 }
 
@@ -161,8 +169,8 @@ int			main(int ac, char **av)
 	config->loadFile();
 
 #ifdef RENDERING_ACTIVATED
+
 	auto &m = e->setInstance<gl::GeometryManager>();
-	
 	// create pool
 	m->addIndexPool();
 	m->addVertexPool();
@@ -174,6 +182,8 @@ int			main(int ac, char **av)
 	// attach pool which be create
 	m->attachIndexPoolToVertexPool(m->getVertexPool(0), m->getIndexPool(0));
 	m->attachIndexPoolToVertexPool(m->getVertexPool(1), m->getIndexPool(0));
+
+	e->setInstance<gl::ShadingManager>();
 
 	if (!loadShaders(e))
 		return EXIT_FAILURE;
