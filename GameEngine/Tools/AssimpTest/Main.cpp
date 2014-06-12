@@ -244,10 +244,11 @@ int			main(int ac, char **av)
 //	const aiScene *scene = importer.ReadFile("../../Assets/marvin.fbx"
 		, aiProcess_Triangulate |
 		aiProcess_CalcTangentSpace |
-		/*aiProcess_JoinIdenticalVertices |*/
+		aiProcess_JoinIdenticalVertices |
 		aiProcess_SortByPType |
 		aiProcess_ImproveCacheLocality |
-		aiProcess_OptimizeMeshes);
+		aiProcess_OptimizeMeshes |
+		aiProcess_Debone);
 
 	if (!scene)
 	{
@@ -355,53 +356,43 @@ int			main(int ac, char **av)
 		aiMesh *mesh = scene->mMeshes[meshIndex];
 		std::uint32_t indice = 0;
 
-		unsigned int meshFacesNbr = mesh->mNumFaces;
-		for (unsigned int faceIndex = 0; faceIndex < meshFacesNbr; ++faceIndex)
+		for (size_t i = 0; i < mesh->mNumVertices; i++)
 		{
-			const aiFace &face = mesh->mFaces[faceIndex];
 			if (mesh->HasPositions())
 			{
-				for (unsigned int k = 0; k < 3; ++k)
-				{
-					auto &aiPositions = mesh->mVertices[face.mIndices[k]];
-					meshs[meshIndex].positions.push_back(glm::vec4(aiPositions.x, aiPositions.y, aiPositions.z, 1));
-				}
+				auto &aiPositions = mesh->mVertices[i];
+				meshs[meshIndex].positions.push_back(glm::vec4(aiPositions.x, aiPositions.y, aiPositions.z, 1));
 			}
 			if (mesh->HasNormals())
 			{
-				for (unsigned int k = 0; k < 3; ++k)
-				{
-					auto &aiNormals = mesh->mNormals[face.mIndices[k]];
+					auto &aiNormals = mesh->mNormals[i];
 					meshs[meshIndex].normals.push_back(glm::vec4(aiNormals.x, aiNormals.y, aiNormals.z, 1));
-				}
 			}
 			for (unsigned int texCoordIndex = 0; texCoordIndex < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++texCoordIndex)
 			{
 				if (mesh->HasTextureCoords(texCoordIndex))
 				{
 					meshs[meshIndex].uvs.resize(texCoordIndex + 1);
-					for (unsigned int k = 0; k < 3; ++k)
-					{
-						auto &aiUvs = mesh->mTextureCoords[texCoordIndex][face.mIndices[k]];
-						meshs[meshIndex].uvs[texCoordIndex].push_back(glm::vec2(aiUvs.x, aiUvs.y));
-					}
+					auto &aiUvs = mesh->mTextureCoords[texCoordIndex][i];
+					meshs[meshIndex].uvs[texCoordIndex].push_back(glm::vec2(aiUvs.x, aiUvs.y));
 				}
 			}
 			if (mesh->HasTangentsAndBitangents())
 			{
-				for (unsigned int k = 0; k < 3; ++k)
-				{
-					auto &aiTangents = mesh->mTangents[face.mIndices[k]];
-					meshs[meshIndex].tangents.push_back(glm::vec4(aiTangents.x, aiTangents.y, aiTangents.z, 1));
-					auto &aiBiTangents = mesh->mBitangents[face.mIndices[k]];
-					meshs[meshIndex].biTangents.push_back(glm::vec4(aiBiTangents.x, aiBiTangents.y, aiBiTangents.z, 1));
-				}
+				auto &aiTangents = mesh->mTangents[i];
+				meshs[meshIndex].tangents.push_back(glm::vec4(aiTangents.x, aiTangents.y, aiTangents.z, 1));
+				auto &aiBiTangents = mesh->mBitangents[i];
+				meshs[meshIndex].biTangents.push_back(glm::vec4(aiBiTangents.x, aiBiTangents.y, aiBiTangents.z, 1));
 			}
+		}
 
-			for (unsigned int i = 0; i < 3; ++i)
+		unsigned int meshFacesNbr = mesh->mNumFaces;
+		for (unsigned int faceIndex = 0; faceIndex < meshFacesNbr; ++faceIndex)
+		{
+			const aiFace &face = mesh->mFaces[faceIndex];
+			for (unsigned int k = 0; k < 3; ++k)
 			{
-				meshs[meshIndex].indices.push_back(indice);
-				++indice;
+				meshs[meshIndex].indices.push_back(face.mIndices[k]);
 			}
 		}
 
