@@ -9,7 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/matrix_interpolation.hpp>
 
 #include <vector>
 #include <map>
@@ -55,6 +56,7 @@ namespace AGE
 	{
 		T value;
 		float time;
+		float deltaTime;
 
 		AnimationKey(const T &_value, float _time)
 			: value(_value)
@@ -103,25 +105,13 @@ namespace AGE
 			}
 		}
 
-		glm::mat4 getInterpolatedTransform(float t, float total)
+		void getInterpolatedTransform(float t, glm::mat4 &res)
 		{
 			glm::uvec3 keys, nextKeys;
 			findKeyIndex(t, keys, nextKeys);
-			auto sca = glm::scale(glm::mat4(1), glm::mix(scale[keys.x].value, scale[nextKeys.x].value, (total - scale[nextKeys.x].time) / t));
-			auto rot = glm::toMat4(glm::slerp(rotation[keys.y].value, rotation[nextKeys.y].value, (total - rotation[nextKeys.y].time) / t));
-			auto tra = glm::translate(glm::mat4(1), glm::mix(translation[keys.z].value, translation[nextKeys.z].value, (total - translation[nextKeys.z].time) / t));
-
-			return tra * rot * sca;
-
-			//auto sca1 = glm::scale(glm::mat4(1), scale[keys.x].value);
-			//auto rot1 = glm::toMat4(rotation[keys.y].value);
-			//auto tra1 = glm::translate(glm::mat4(1), translation[keys.z].value);
-
-			//auto sca2 = glm::scale(glm::mat4(1), scale[nextKeys.x].value);
-			//auto rot2 = glm::toMat4(rotation[nextKeys.y].value);
-			//auto tra2 = glm::translate(glm::mat4(1), translation[nextKeys.z].value);
-
-			//return glm::interpolate(tra1 * rot1 * sca1, tra2 * rot2 * sca2, factor);
+			res = glm::translate(glm::mat4(1), glm::mix(translation[keys.z].value, translation[nextKeys.z].value, (t - translation[keys.z].time) / translation[keys.z].deltaTime));
+			res *= glm::scale(glm::mat4(1), glm::mix(scale[keys.x].value, scale[nextKeys.x].value, (t - scale[keys.x].time) / scale[keys.x].deltaTime));
+			res *= glm::toMat4(glm::slerp(rotation[keys.y].value, rotation[nextKeys.y].value, (t - rotation[keys.y].time) / rotation[keys.y].deltaTime));
 		}
 	};
 
@@ -156,7 +146,7 @@ void readNodeHierarchy(unsigned int boneID
 		{
 			if (animation->channels[i].boneIndex != boneID)
 				continue;			
-			nodeT = animation->channels[i].getInterpolatedTransform(localTime, animation->duration);
+			animation->channels[i].getInterpolatedTransform(localTime, nodeT);
 		}
 	}
 
@@ -448,6 +438,8 @@ int			main(int ac, char **av)
 					channel.translation.emplace_back(
 						glm::vec3(aiChannel->mPositionKeys[i].mValue.x, aiChannel->mPositionKeys[i].mValue.y, aiChannel->mPositionKeys[i].mValue.z)
 						, aiChannel->mPositionKeys[i].mTime);
+					if (i > 0)
+						channel.translation[i - 1].deltaTime = channel.translation[i].time - channel.translation[i - 1].time;
 				}
 				// we push scale
 				for (unsigned int i = 0; i < aiChannel->mNumScalingKeys; ++i)
@@ -455,6 +447,8 @@ int			main(int ac, char **av)
 					channel.scale.emplace_back(
 						glm::vec3(aiChannel->mScalingKeys[i].mValue.x, aiChannel->mScalingKeys[i].mValue.y, aiChannel->mScalingKeys[i].mValue.z)
 						, aiChannel->mScalingKeys[i].mTime);
+					if (i > 0)
+						channel.scale[i - 1].deltaTime = channel.scale[i].time - channel.scale[i - 1].time;
 				}
 				// we push rotation
 				for (unsigned int i = 0; i < aiChannel->mNumRotationKeys; ++i)
@@ -462,6 +456,8 @@ int			main(int ac, char **av)
 					channel.rotation.emplace_back(
 						glm::quat(aiChannel->mRotationKeys[i].mValue.w, aiChannel->mRotationKeys[i].mValue.x, aiChannel->mRotationKeys[i].mValue.y, aiChannel->mRotationKeys[i].mValue.z)
 						, aiChannel->mRotationKeys[i].mTime);
+					if (i > 0)
+						channel.rotation[i - 1].deltaTime = channel.rotation[i].time - channel.rotation[i - 1].time;
 				}
 			}
 		}
@@ -520,7 +516,6 @@ int			main(int ac, char **av)
 		glm::vec4 color;
 		shader->use();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Model = glm::rotate(Model, 20.0f * (float)time, glm::vec3(0, 1, 0));
 		color = glm::vec4(1, 0, 1, 1);
 
 		if (e->getInstance<Input>()->getKey(SDLK_w))
@@ -551,7 +546,7 @@ int			main(int ac, char **av)
 		std::vector<glm::mat4> bonesTrans;
 		bonesTrans.resize(bones.size());
 
-		readNodeHierarchy(skeletonRoot, glm::mat4(1), bones, bonesTrans, &(animations[0]), totalTime);
+		readNodeHierarchy(skeletonRoot, glm::mat4(1), bones, bonesTrans, &(animations[0]), totalTime * 10.0f);
 
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
 
