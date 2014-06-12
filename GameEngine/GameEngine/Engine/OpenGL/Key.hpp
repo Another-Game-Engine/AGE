@@ -11,6 +11,12 @@ namespace gl
 	}
 
 	template <typename TYPE>
+	Key<TYPE>::Key(int destroy)
+	{
+		_id = -1;
+	}
+
+	template <typename TYPE>
 	Key<TYPE>::~Key()
 	{
 	}

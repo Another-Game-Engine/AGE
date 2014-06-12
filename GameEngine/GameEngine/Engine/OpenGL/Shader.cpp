@@ -12,12 +12,18 @@ namespace gl
 		_vertexId(0),
 		_fragId(0),
 		_geometryId(0),
-		_computeId(0)
+		_computeId(0),
+		_vertexName(""),
+		_fragName(""),
+		_geometryName(""),
+		_computeName("")
 	{
 	}
 
 	Shader::Shader(std::string const &compute)
+		: Shader()
 	{
+		_computeName = compute;
 		_computeId = addShader(compute, GL_COMPUTE_SHADER);
 		_progId = glCreateProgram();
 		glAttachShader(_progId, _computeId);
@@ -27,6 +33,8 @@ namespace gl
 	Shader::Shader(std::string const &vertex, std::string const &fragment)
 		: Shader()
 	{
+		_vertexName = vertex;
+		_fragName = fragment;
 		_vertexId = addShader(vertex, GL_VERTEX_SHADER);
 		_fragId = addShader(fragment, GL_FRAGMENT_SHADER);
 		_progId = glCreateProgram();
@@ -38,6 +46,9 @@ namespace gl
 	Shader::Shader(std::string const &vertex, std::string const &fragment, std::string const &geometry)
 		: Shader()
 	{
+		_vertexName = vertex;
+		_fragName = fragment;
+		_geometryName = geometry;
 		_vertexId = addShader(vertex, GL_VERTEX_SHADER);
 		_fragId = addShader(fragment, GL_FRAGMENT_SHADER);
 		_geometryId = addShader(geometry, GL_GEOMETRY_SHADER);
@@ -48,41 +59,59 @@ namespace gl
 		linkProgram();
 	}
 
-	Shader::Shader(Shader &&shader)
-		: _progId(shader._progId),
-		_vertexId(shader._vertexId),
-		_fragId(shader._fragId),
-		_geometryId(shader._geometryId),
-		_computeId(shader._computeId)
+	Shader::Shader(Shader const &shader)
+		: Shader()
 	{
+		_vertexName = shader._vertexName;
+		_fragName = shader._fragName;
+		_geometryName = shader._geometryName;
+		_vertexId = addShader(_vertexName, GL_VERTEX_SHADER);
+		_fragId = addShader(_fragName, GL_FRAGMENT_SHADER);
+		_geometryId = addShader(_geometryName, GL_GEOMETRY_SHADER);
+		_progId = glCreateProgram();
+		glAttachShader(_progId, _vertexId);
+		glAttachShader(_progId, _fragId);
+		glAttachShader(_progId, _geometryId);
+		linkProgram();
 	}
 
-	Shader::Shader(Shader const &shader)
-		: _progId(shader._progId),
-		_vertexId(shader._vertexId),
-		_fragId(shader._fragId),
-		_geometryId(shader._geometryId),
-		_computeId(shader._computeId)
+	Shader &Shader::operator=(Shader const &s)
 	{
+		if (this != &s)
+		{
+			if (_progId > 0)
+			{
+				if (_vertexId > 0) { glDetachShader(_progId, _vertexId); glDeleteShader(_vertexId); }
+				if (_geometryId > 0) { glDetachShader(_progId, _geometryId); glDeleteShader(_geometryId); }
+				if (_computeId > 0) { glDetachShader(_progId, _computeId); glDeleteShader(_computeId); }
+				if (_fragId > 0) { glDetachShader(_progId, _fragId); glDeleteShader(_fragId); }
+				glDeleteProgram(_progId);
+			}
+			_vertexName = s._vertexName;
+			_fragName = s._fragName;
+			_geometryName = s._geometryName;
+			_vertexId = addShader(_vertexName, GL_VERTEX_SHADER);
+			_fragId = addShader(_fragName, GL_FRAGMENT_SHADER);
+			_geometryId = addShader(_geometryName, GL_GEOMETRY_SHADER);
+			_progId = glCreateProgram();
+			glAttachShader(_progId, _vertexId);
+			glAttachShader(_progId, _fragId);
+			glAttachShader(_progId, _geometryId);
+			linkProgram();
+		}
+		return (*this);
 	}
 
 	Shader::~Shader()
 	{
-		glDetachShader(_progId, _vertexId);
-		glDetachShader(_progId, _fragId);
-		if (_geometryId)
+		if (_progId > 0)
 		{
-			glDetachShader(_progId, _geometryId);
-			glDeleteShader(_geometryId);
+			if (_vertexId > 0) { glDetachShader(_progId, _vertexId); glDeleteShader(_vertexId); }
+			if (_geometryId > 0) { glDetachShader(_progId, _geometryId); glDeleteShader(_geometryId); }
+			if (_computeId > 0) { glDetachShader(_progId, _computeId); glDeleteShader(_computeId); }
+			if (_fragId > 0) { glDetachShader(_progId, _fragId); glDeleteShader(_fragId); }
+			glDeleteProgram(_progId);
 		}
-		if (_computeId)
-		{
-			glDetachShader(_progId, _computeId);
-			glDeleteShader(_computeId);
-		}
-		glDeleteShader(_vertexId);
-		glDeleteShader(_fragId);
-		glDeleteProgram(_progId);
 	}
 
 	GLuint Shader::addShader(std::string const &path, GLenum type)
@@ -161,5 +190,25 @@ namespace gl
 		if (_vertexId == -1 || _fragId == -1 || _geometryId == -1 || _computeId == -1)
 			return (false);
 		return (true);
+	}
+
+	std::string const &Shader::getVertexName() const
+	{
+		return (_vertexName);
+	}
+
+	std::string const &Shader::getFragName() const
+	{
+		return (_fragName);
+	}
+
+	std::string const &Shader::getGeoName() const
+	{
+		return (_geometryName);
+	}
+
+	std::string const &Shader::getComputeName() const
+	{
+		return (_computeName);
 	}
 }

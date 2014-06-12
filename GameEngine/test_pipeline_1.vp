@@ -1,14 +1,14 @@
-#version 330
+#version 440
 
 layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 color;
 layout (location = 2) in vec4 normal;
 layout (location = 3) in vec2 texCoords;
 
-out vec4 interpolation_position;
-out vec4 interpolation_color;
-out vec4 interpolation_normal;
-out vec2 interpolation_texCoord;
+out vec4 interpolated_position;
+out vec4 interpolated_color;
+out vec4 interpolated_normal;
+out vec2 interpolated_texCoord;
 
 void main(void)
 {

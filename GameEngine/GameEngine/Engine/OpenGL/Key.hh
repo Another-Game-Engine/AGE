@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#define KEY_DESTROY -1
+
 # define CLASS_ACCESS \
 	friend VerticesManager;\
 
@@ -17,6 +19,7 @@ namespace gl
 	class Key
 	{
 	public:
+		Key(int);
 		Key();
 		~Key();
 		Key(Key<TYPE> const &copy);
