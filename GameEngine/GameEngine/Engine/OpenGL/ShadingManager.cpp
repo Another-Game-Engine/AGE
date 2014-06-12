@@ -49,11 +49,12 @@ namespace gl
 		return (key);
 	}
 
-	ShadingManager &ShadingManager::rmShader(Key<Shader> const &shader)
+	ShadingManager &ShadingManager::rmShader(Key<Shader> &shader)
 	{
 		if (!shader)
 			return (*this);
 		_shaders.erase(shader);
+		shader.destroy();
 		return (*this);
 	}
 
