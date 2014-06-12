@@ -1,0 +1,20 @@
+#version 330
+
+layout (location = 0) in vec4 position;
+layout (location = 1) in vec4 color;
+layout (location = 2) in vec4 normal;
+layout (location = 3) in vec2 texCoords;
+
+out vec4 interpolation_position;
+out vec4 interpolation_color;
+out vec4 interpolation_normal;
+out vec2 interpolation_texCoord;
+
+void main(void)
+{
+	interpolation_position = position;
+	interpolation_color = color;
+	interpolation_normal = normal;
+	interpolation_texCoord = texCoord;
+	gl_Position = position;
+}

@@ -29,11 +29,11 @@ namespace gl
 		ShadingManager &rmShader(Key<Shader> const &shader);
 		Key<Shader> const &getShader(size_t index) const;
 		
-		//Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
-		//template <typename TYPE> Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, T const &data);
-		//ShadingManager &rmShaderUniform(Key<Shader> const &shader, Key<Uniform> const &uniform);
-		//Key<Uniform> const &getShaderUniform(Key<Shader> const &shader, size_t index);
-		//template <typename TYPE> ShadingManager &setShaderUniform(Key<Shader> const &shader; Key<Uniform> const &uniform, TYPE const &data);
+		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
+		template <typename TYPE> Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, T const &data);
+		ShadingManager &rmShaderUniform(Key<Shader> const &shader, Key<Uniform> const &uniform);
+		Key<Uniform> const &getShaderUniform(Key<Shader> const &shader, size_t index);
+		template <typename TYPE> ShadingManager &setShaderUniform(Key<Shader> const &shader; Key<Uniform> const &uniform, TYPE const &data);
 		
 		//Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		//template <typename TYPE> Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag, TYPE const &data);
