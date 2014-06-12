@@ -4,9 +4,13 @@
 #include <assimp/scene.h>
 
 #include <iostream>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #include <vector>
 #include <map>
 
@@ -45,6 +49,37 @@ namespace AGE
 		std::vector<glm::vec4> boneIndices;
 		std::vector<std::string>bones;
 	};
+
+	template <typename T>
+	struct AnimationKey
+	{
+		T value;
+		float time;
+
+		AnimationKey(const T &_value, float _time)
+			: value(_value)
+			, time(_time)
+		{}
+		AnimationKey(T &&_value, float _time)
+			: value(std::move(_value))
+			, time(_time)
+		{}
+
+	};
+
+	struct AnimationChannel
+	{
+		unsigned int boneIndex;
+		std::vector<AnimationKey<glm::vec3>> scale;
+		std::vector<AnimationKey<glm::quat>> rotation;
+		std::vector<AnimationKey<glm::vec3>> translation;
+	};
+
+	struct Animation
+	{
+		std::string name;
+		std::vector<AnimationChannel> channels;
+	};
 }
 
 static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
@@ -53,16 +88,38 @@ static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
 }
 
 
-void readNodeHierarchy(unsigned int boneID, const glm::mat4 &parentTrans, std::vector<AGE::Bone> &bones, std::vector<glm::mat4> &trans)
+void readNodeHierarchy(unsigned int boneID
+	, const glm::mat4 &parentTrans
+	, std::vector<AGE::Bone> &bones
+	, std::vector<glm::mat4> &trans
+	, AGE::Animation *animation = nullptr
+	, float time = 0.0f)
 {
 	trans.resize(bones.size());
+	glm::mat4 nodeT = bones[boneID].transformation;
 
-	glm::mat4 t = parentTrans * bones[boneID].transformation;
+	if (animation)
+	{
+		for (unsigned int i = 0; i < animation->channels.size(); ++i)
+		{
+			if (animation->channels[i].boneIndex != boneID)
+				continue;			
+			auto id = (int)(time * 4.0f) % animation->channels[i].scale.size();
+			auto s = glm::scale(glm::mat4(1), animation->channels[i].scale[id].value);
+			id = (int)(time * 4.0f) % animation->channels[i].rotation.size();
+			auto r = glm::toMat4(animation->channels[i].rotation[id].value);
+			id = (int)(time * 4.0f) % animation->channels[i].translation.size();
+			auto tr = glm::translate(glm::mat4(1), animation->channels[i].translation[id].value);
+			nodeT = tr * r * s;
+		}
+	}
+
+	glm::mat4 t = parentTrans * nodeT;
 	trans[boneID] = t * bones[boneID].offset;
 
 	for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)
 	{
-		readNodeHierarchy(bones[boneID].children[i], t, bones, trans);
+		readNodeHierarchy(bones[boneID].children[i], t, bones, trans, animation, time);
 	}
 }
 
@@ -132,6 +189,8 @@ int			main(int ac, char **av)
 
 	std::vector<AGE::Mesh> meshs;
 	std::vector<AGE::Bone> bones;
+	std::vector<AGE::Animation> animations;
+
 	unsigned int skeletonRoot = 0;
 
 	meshs.resize(scene->mNumMeshes);
@@ -316,6 +375,51 @@ int			main(int ac, char **av)
 		}
 	}
 
+	// we load animations
+
+	if (scene->HasAnimations())
+	{
+		animations.resize(scene->mNumAnimations);
+		for (unsigned int animNum = 0; animNum < scene->mNumAnimations; ++animNum)
+		{
+			auto aiAnim = scene->mAnimations[animNum];
+			auto &anim = animations[animNum];
+			anim.name = aiAnim->mName.data;
+			anim.channels.resize(aiAnim->mNumChannels);
+			for (unsigned int channelNbr = 0; channelNbr < aiAnim->mNumChannels; ++channelNbr)
+			{
+				auto aiChannel = aiAnim->mChannels[channelNbr];
+				auto &channel = anim.channels[channelNbr];
+				auto findBoneName = bonesTable.find(aiChannel->mNodeName.data);
+				assert(findBoneName != std::end(bonesTable));
+				unsigned int boneIndex = findBoneName->second;
+
+				channel.boneIndex = boneIndex;
+				// we push positions
+				for (unsigned int i = 0; i < aiChannel->mNumPositionKeys; ++i)
+				{
+					channel.translation.emplace_back(
+						glm::vec3(aiChannel->mPositionKeys[i].mValue.x, aiChannel->mPositionKeys[i].mValue.y, aiChannel->mPositionKeys[i].mValue.z)
+						, aiChannel->mPositionKeys->mTime);
+				}
+				// we push scale
+				for (unsigned int i = 0; i < aiChannel->mNumScalingKeys; ++i)
+				{
+					channel.scale.emplace_back(
+						glm::vec3(aiChannel->mScalingKeys[i].mValue.x, aiChannel->mScalingKeys[i].mValue.y, aiChannel->mScalingKeys[i].mValue.z)
+						, aiChannel->mScalingKeys->mTime);
+				}
+				// we push rotation
+				for (unsigned int i = 0; i < aiChannel->mNumRotationKeys; ++i)
+				{
+					channel.rotation.emplace_back(
+						glm::quat(aiChannel->mRotationKeys[i].mValue.w, aiChannel->mRotationKeys[i].mValue.x, aiChannel->mRotationKeys[i].mValue.y, aiChannel->mRotationKeys[i].mValue.z)
+						, aiChannel->mRotationKeys->mTime);
+				}
+			}
+		}
+	}
+
 	auto shader = e->getInstance<Renderer>()->addShader("basic",
 		"./basic.vp",
 		"./basic.fp");
@@ -363,6 +467,9 @@ int			main(int ac, char **av)
 	do
 	{
 		auto time = e->getInstance<Timer>()->getElapsed();
+		static float totalTime = 0.0f;
+		totalTime += time;
+
 		glm::vec4 color;
 		shader->use();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -396,7 +503,9 @@ int			main(int ac, char **av)
 
 		std::vector<glm::mat4> bonesTrans;
 		bonesTrans.resize(bones.size());
-		readNodeHierarchy(skeletonRoot, glm::mat4(1), bones, bonesTrans);
+
+		readNodeHierarchy(skeletonRoot, glm::mat4(1), bones, bonesTrans, &(animations[0]), totalTime);
+
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
 
 		for (unsigned int i = 0; i < vertices.size(); ++i)
