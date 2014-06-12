@@ -28,6 +28,8 @@
 
 namespace AGE
 {
+	struct AnimationChannel;
+
 	struct Bone
 	{
 		std::string name;
@@ -36,6 +38,7 @@ namespace AGE
 		glm::mat4 transformation;
 		std::vector<unsigned int> children;
 		unsigned int parent = (unsigned int)(-1);
+		std::vector<std::vector<AnimationChannel*>> animations;
 	};
 
 	struct Mesh
@@ -66,7 +69,6 @@ namespace AGE
 			: value(std::move(_value))
 			, time(_time)
 		{}
-
 	};
 
 	struct AnimationChannel
@@ -76,42 +78,14 @@ namespace AGE
 		std::vector<AnimationKey<glm::quat>> rotation;
 		std::vector<AnimationKey<glm::vec3>> translation;
 
-		void findKeyIndex(float t, glm::uvec3 &keys, glm::uvec3 &nextKeys)
-		{
-			for (unsigned int i = 0; i < scale.size() - 1; i++)
-			{
-				if (t < scale[i + 1].time) {
-					keys.x = i;
-					nextKeys.x = i + 1;
-					break;
-				}
-			}
-			for (unsigned int i = 0; i < rotation.size() - 1; i++)
-			{
-				if (t < rotation[i + 1].time) {
-					keys.y = i;
-					nextKeys.y = i + 1;
-					break;
-				}
-			}
-			for (unsigned int i = 0; i < translation.size() - 1; i++)
-			{
-				auto p = translation[i + 1];
-				if (t < translation[i + 1].time) {
-					keys.z = i;
-					nextKeys.z = i + 1;
-					break;
-				}
-			}
-		}
-
 		void getInterpolatedTransform(float t, glm::mat4 &res)
 		{
-			glm::uvec3 keys, nextKeys;
-			findKeyIndex(t, keys, nextKeys);
-			res = glm::translate(glm::mat4(1), glm::mix(translation[keys.z].value, translation[nextKeys.z].value, (t - translation[keys.z].time) / translation[keys.z].deltaTime));
-			res *= glm::scale(glm::mat4(1), glm::mix(scale[keys.x].value, scale[nextKeys.x].value, (t - scale[keys.x].time) / scale[keys.x].deltaTime));
-			res *= glm::toMat4(glm::slerp(rotation[keys.y].value, rotation[nextKeys.y].value, (t - rotation[keys.y].time) / rotation[keys.y].deltaTime));
+			unsigned int key = static_cast<unsigned int>(t);
+			unsigned int nextKey = key + 1;
+
+			res = glm::translate(glm::mat4(1), glm::mix(translation[key].value, translation[nextKey].value, (t - translation[key].time) / translation[key].deltaTime));
+			res *= glm::scale(glm::mat4(1), glm::mix(scale[key].value, scale[nextKey].value, (t - scale[key].time) / scale[key].deltaTime));
+			res *= glm::toMat4(glm::slerp(rotation[key].value, rotation[nextKey].value, (t - rotation[key].time) / rotation[key].deltaTime));
 		}
 	};
 
@@ -120,6 +94,7 @@ namespace AGE
 		std::string name;
 		std::vector<AnimationChannel> channels;
 		float duration;
+		unsigned int id;
 	};
 }
 
@@ -138,15 +113,14 @@ void readNodeHierarchy(unsigned int boneID
 {
 	trans.resize(bones.size());
 	glm::mat4 nodeT = bones[boneID].transformation;
+	auto &bone = bones[boneID];
 
 	if (animation)
 	{
 		auto localTime = std::fmodf(time, animation->duration);
-		for (unsigned int i = 0; i < animation->channels.size(); ++i)
+		for (unsigned int i = 0; i < bone.animations[animation->id].size() ; ++i)
 		{
-			if (animation->channels[i].boneIndex != boneID)
-				continue;			
-			animation->channels[i].getInterpolatedTransform(localTime, nodeT);
+			bone.animations[animation->id][i]->getInterpolatedTransform(localTime, nodeT);
 		}
 	}
 
@@ -423,6 +397,7 @@ int			main(int ac, char **av)
 			anim.name = aiAnim->mName.data;
 			anim.channels.resize(aiAnim->mNumChannels);
 			anim.duration = aiAnim->mDuration;
+			anim.id = animNum;
 			for (unsigned int channelNbr = 0; channelNbr < aiAnim->mNumChannels; ++channelNbr)
 			{
 				auto aiChannel = aiAnim->mChannels[channelNbr];
@@ -460,6 +435,18 @@ int			main(int ac, char **av)
 						channel.rotation[i - 1].deltaTime = channel.rotation[i].time - channel.rotation[i - 1].time;
 				}
 			}
+		}
+	}
+
+	//We set animation channel to Bones
+	for (unsigned int animationNb = 0; animationNb < animations.size(); ++animationNb)
+	{
+		for (unsigned int channelNb = 0; channelNb < animations[animationNb].channels.size(); ++channelNb)
+		{
+			auto &channel = animations[animationNb].channels[channelNb];
+			auto boneId = channel.boneIndex;
+			bones[boneId].animations.resize(animationNb + 1);
+			bones[boneId].animations[animationNb].push_back(&channel);
 		}
 	}
 
