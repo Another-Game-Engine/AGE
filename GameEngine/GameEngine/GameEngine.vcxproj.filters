@@ -35,8 +35,6 @@
     <ClCompile Include="Engine\MediaFiles\MaterialFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\ObjFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\TextureFile.cpp" />
-    <ClCompile Include="Engine\OpenGL\Attribute.cpp" />
-    <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexArray.cpp" />
@@ -46,7 +44,6 @@
     <ClCompile Include="Engine\Core\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\OpenGL\Shader.cpp" />
-    <ClCompile Include="Engine\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="Engine\Systems\LightRenderingSystem.cpp" />
@@ -58,6 +55,11 @@
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
+    <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
+    <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\Pool.cpp" />
+    <ClCompile Include="Engine\OpenGL\Data.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -115,8 +117,6 @@
     <ClInclude Include="Engine\MediaFiles\MediaFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\ObjFile.hpp" />
     <ClInclude Include="Engine\MediaFiles\TextureFile.hpp" />
-    <ClInclude Include="Engine\OpenGL\Attribute.hh" />
-    <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\ErrorController.hh" />
     <ClInclude Include="Engine\OpenGL\VertexPoolElement.hh" />
     <ClInclude Include="Engine\OpenGL\VertexArray.hh" />
@@ -169,6 +169,14 @@
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
+    <ClInclude Include="Engine\OpenGL\Buffer.hh" />
+    <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
+    <ClInclude Include="Engine\OpenGL\Key.hh" />
+    <ClInclude Include="Engine\OpenGL\Key.hpp" />
+    <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
+    <ClInclude Include="Engine\OpenGL\Pool.hh" />
+    <ClInclude Include="Engine\OpenGL\Data.hh" />
+    <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -183,7 +191,6 @@
     <None Include="Engine\OpenGL\Framebuffer.hh" />
     <None Include="Engine\OpenGL\Shader.hh" />
     <None Include="Engine\OpenGL\UniformBuffer.hh" />
-    <None Include="Engine\OpenGL\VertexBuffer.hh" />
     <None Include="Engine\Parsers\Parsers.hh" />
     <None Include="Engine\Utils\OpenGL.hh" />
     <None Include="Engine\Utils\Singleton.hh" />

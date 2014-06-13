@@ -3,7 +3,7 @@
 
 # include "Utils/OpenGL.hh"
 
-namespace OpenGLTools
+namespace gl
 {
 	/// Class representing vertexArray
 	class VertexArray
@@ -11,15 +11,14 @@ namespace OpenGLTools
 	public:
 		 VertexArray();
 		~VertexArray();
-		 VertexArray(VertexArray const &vertexarray);
-		 VertexArray &operator=(VertexArray const &vertexarray);
-		 void init();
-		 void bind();
-		 void unbind();
+		 void bind() const;
+		 void unbind() const;
 		 GLuint getId() const;
 	private:
 		GLuint _id;
-		bool _isBind;
+
+		VertexArray(VertexArray const &vertexarray);
+		VertexArray &operator=(VertexArray const &vertexarray);
 	};
 }
 
