@@ -1,9 +1,7 @@
 #include "Shader.hh"
 #include <string>
-# include <fstream>
-
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
+#include <fstream>
+#include <OpenGL/Uniform.hh>
 
 namespace gl
 {
@@ -227,5 +225,32 @@ namespace gl
 	std::string const &Shader::getComputeName() const
 	{
 		return (_computeName);
+	}
+
+	Key<Uniform> Shader::addUniform(std::string const &flag)
+	{
+		Key<Uniform> key;
+
+		_uniforms[key] = Uniform(flag);
+		return (key);
+	}
+
+	Shader &Shader::rmUniform(Key<Uniform> &key)
+	{
+		if (!key)
+			return (*this);
+		_uniforms.erase(key);
+		key.destroy();
+		return (*this);
+	}
+
+	Key<Uniform> Shader::getUniform(size_t target) const
+	{
+		if (target >= _uniforms.size())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - getUniform(size_t target)", "the target is out of range", Key<Uniform>(KEY_DESTROY))
+		auto &element = _uniforms.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
 	}
 }

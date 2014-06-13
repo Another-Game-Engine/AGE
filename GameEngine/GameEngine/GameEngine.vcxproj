@@ -219,6 +219,7 @@
     <ClCompile Include="Engine\OpenGL\ShadingManager.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
+    <ClCompile Include="Engine\OpenGL\Uniform.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
     <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
@@ -288,6 +289,7 @@
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
+    <ClInclude Include="Engine\OpenGL\Uniform.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />

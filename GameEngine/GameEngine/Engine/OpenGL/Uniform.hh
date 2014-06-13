@@ -12,6 +12,7 @@ namespace gl
 	class Uniform
 	{
 	public:
+		Uniform();
 		Uniform(std::string const &flag);
 		~Uniform();
 		template <typename TYPE> Uniform(std::string const &flag, TYPE const &data);

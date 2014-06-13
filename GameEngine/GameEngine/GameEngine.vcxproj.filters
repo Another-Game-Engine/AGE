@@ -61,6 +61,7 @@
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\ShadingManager.cpp" />
+    <ClCompile Include="Engine\OpenGL\Uniform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
     <ClInclude Include="Engine\OpenGL\ShadingManager.hh" />
+    <ClInclude Include="Engine\OpenGL\Uniform.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

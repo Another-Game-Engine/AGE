@@ -11,6 +11,12 @@ namespace gl
 
 	}
 
+	Uniform::Uniform()
+		: Uniform("")
+	{
+
+	}
+
 	Uniform::Uniform(Uniform const &uniform)
 		: Uniform(uniform._flag)
 	{

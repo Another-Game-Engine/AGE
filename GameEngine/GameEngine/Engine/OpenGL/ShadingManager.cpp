@@ -67,4 +67,39 @@ namespace gl
 			++element;
 		return (element->first);
 	}
+
+	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &shader, std::string const &flag)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "key aldreadt destroy", Key<Uniform>(KEY_DESTROY))
+			auto &element = _shaders.find(shader);
+		if (element != _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
+		auto &s = element->second;
+		return (s.addUniform(flag));
+	}
+
+	ShadingManager &ShadingManager::rmShaderUniform(Key<Shader> const &shader, Key<Uniform> &uniform)
+	{
+		if (!shader && !uniform)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderUniform", "key aldreadt destroy", *this)
+		auto &element = _shaders.find(shader);
+		if (element != _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderUniform", "shader not find", *this)
+		auto &s = element->second;
+		s.rmUniform(uniform);
+		return (*this);
+	}
+
+	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &shader, size_t target)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderUniform", "target is out of range", Key<Uniform>(KEY_DESTROY))
+		auto &element = _shaders.find(shader);
+		if (element != _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
+		auto &s = element->second; 
+		return (s.getUniform(target));
+	}
+
 }
