@@ -70,7 +70,7 @@ namespace gl
 	{
 		Key<Uniform> key;
 
-		_uniform[key] = Uniform(flag, value);
+		_uniform[key] = Uniform(flag, this, value);
 		return (key);
 	}
 

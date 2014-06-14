@@ -4,6 +4,7 @@
 
 namespace gl
 {
+	class Shader;
 	//!\file Uniform.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
@@ -13,9 +14,9 @@ namespace gl
 	{
 	public:
 		Uniform();
-		Uniform(std::string const &flag);
+		Uniform(std::string const &flag, Shader const *attach);
 		~Uniform();
-		template <typename TYPE> Uniform(std::string const &flag, TYPE const &data);
+		template <typename TYPE> Uniform(std::string const &flag, Shader const *attach, TYPE const &data);
 		Uniform(Uniform const &uniform);
 		Uniform &operator=(Uniform const &uniform);
 		template <typename TYPE> TYPE getData() const;
@@ -25,18 +26,20 @@ namespace gl
 		std::string const _flag;
 		void *_data;
 		size_t _sizeData;
+		Shader const *_attach;
 	};
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
 	{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
 
 	template <typename TYPE>
-	Uniform::Uniform(std::string const &flag, TYPE const &data)
+	Uniform::Uniform(std::string const &flag, Shader const *attach, TYPE const &data)
 		: Uniform(flag)
 	{
 		_data = new TYPE;
 		_sizeData = sizeof(TYPE);
 		memcpy(_data, &data, _sizeData);
+		_attach = attach;
 	}
 
 	template <typename TYPE>

@@ -1,4 +1,4 @@
-#include "Shader.hh"
+#include <OpenGL/Shader.hh>
 #include <string>
 #include <fstream>
 #include <OpenGL/Uniform.hh>
@@ -231,7 +231,7 @@ namespace gl
 	{
 		Key<Uniform> key;
 
-		_uniforms[key] = Uniform(flag);
+		_uniforms[key] = Uniform(flag, this);
 		return (key);
 	}
 

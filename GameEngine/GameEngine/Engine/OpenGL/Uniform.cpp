@@ -1,24 +1,26 @@
 #include <OpenGL/Uniform.hh>
 #include <stdint.h>
+#include <OpenGL/Shader.hh>
 
 namespace gl
 {
-	Uniform::Uniform(std::string const &flag)
+	Uniform::Uniform(std::string const &flag, Shader const *attach)
 		: _flag(flag),
 		_data(NULL),
-		_sizeData(0)
+		_sizeData(0),
+		_attach(attach)
 	{
 
 	}
 
 	Uniform::Uniform()
-		: Uniform("")
+		: Uniform("", NULL)
 	{
 
 	}
 
 	Uniform::Uniform(Uniform const &uniform)
-		: Uniform(uniform._flag)
+		: Uniform(uniform._flag, uniform._attach)
 	{
 		_sizeData = uniform._sizeData;
 		_data = new uint8_t[_sizeData];
@@ -37,6 +39,7 @@ namespace gl
 				_data = new uint8_t[_sizeData];
 			}
 			memcpy(_data, u._data, _sizeData);
+			_attach = u._attach;
 		}
 		return (*this);
 	}

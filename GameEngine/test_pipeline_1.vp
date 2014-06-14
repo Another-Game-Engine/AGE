@@ -1,5 +1,8 @@
 #version 440
 
+uniform mat4 projection_matrix;
+uniform mat4 modelview_matrix;
+
 layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 color;
 layout (location = 2) in vec4 normal;
@@ -16,5 +19,5 @@ void main(void)
 	interpolated_color = color;
 	interpolated_normal = normal;
 	interpolated_texCoord = texCoord;
-	gl_Position = interpolated_position;
+	gl_Position = projection_matrix * modelview_matrix * interpolated_position;
 }
