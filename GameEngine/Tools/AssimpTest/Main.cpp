@@ -30,6 +30,7 @@
 namespace AGE
 {
 	struct AnimationChannel;
+	struct Animation;
 
 	struct Bone
 	{
@@ -40,6 +41,12 @@ namespace AGE
 		std::vector<unsigned int> children;
 		unsigned int parent = (unsigned int)(-1);
 		std::vector<std::vector<AnimationChannel*>> animations;
+	};
+
+	struct Skeleton
+	{
+		std::vector<Bone> bones;
+		std::vector<Animation*> animations;
 	};
 
 	struct Mesh
@@ -154,6 +161,46 @@ namespace AGE
 		float duration;
 		unsigned int id;
 	};
+
+	struct BoneSorter
+	{
+		BoneSorter(std::vector<Bone>& _bones, std::size_t start, std::map<std::string, std::uint32_t> &refs)
+			: bones(_bones)
+		{
+			sort(start);
+			bones.clear();
+			bones = copy;
+			refs.clear();
+			for (auto &b : bones)
+			{
+				auto it = hist[b.index];
+				refs.insert(std::make_pair(b.name, it));
+				b.index = it;
+				if (b.parent != (unsigned int)(-1))
+					b.parent = hist[b.parent];
+				for (auto &c : b.children)
+				{
+					c = hist[c];
+				}
+			}
+		}
+		std::vector<Bone>& bones;
+	private:
+		std::map<unsigned int, unsigned int> hist;
+		std::vector<Bone> copy;
+		void sort(std::size_t id)
+		{
+			auto index = copy.size();
+			copy.push_back(bones[id]);
+			bones[id].index = index;
+
+			hist.insert(std::make_pair(id, index));
+			for (auto i : bones[id].children)
+			{
+				sort(i);
+			}
+		}
+	};
 }
 
 static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
@@ -267,7 +314,7 @@ int			main(int ac, char **av)
 
 	// we reference all bones
 	unsigned int boneCounter = 0;
-	std::map<std::string, unsigned int> bonesTable;
+	std::map<std::string, std::uint32_t> bonesTable;
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
 		aiMesh *mesh = scene->mMeshes[meshIndex];
@@ -351,6 +398,7 @@ int			main(int ac, char **av)
 		}
 	}
 
+//	AGE::BoneSorter(bones, skeletonRoot, bonesTable);
 
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
@@ -584,15 +632,19 @@ int			main(int ac, char **av)
 		bonesTrans.resize(bones.size());
 
 		auto before = std::chrono::system_clock::now();
-		for (auto i = 0; i < 100; ++i)
-			readNodeHierarchy(skeletonRoot, glm::mat4(1), bones, bonesTrans, &(animations[0]), totalTime * 10.0f);
+		for (auto i = 0; i < 10000; ++i)
+			readNodeHierarchy(0, glm::mat4(1), bones, bonesTrans, &(animations[0]), totalTime * 10.0f);
 		auto after = std::chrono::system_clock::now();
-		std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count() << " milliseconds" << std::endl;
-		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
+		static float median = 0.0f;
+		median = median <= 0
+			? std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()
+			: (median + std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()) / 2.0f;
+		std::cout << median << " milliseconds" << std::endl;
+//		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
 
 		for (unsigned int i = 0; i < vertices.size(); ++i)
 		{
-			vertices[i]->draw(GL_TRIANGLES);
+//			vertices[i]->draw(GL_TRIANGLES);
 		}
 	} while (e->update());
 
