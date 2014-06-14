@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <map>
+#include <chrono>
 
 #include <Core/Engine.hh>
 #include <Core/SceneManager.hh>
@@ -582,8 +583,11 @@ int			main(int ac, char **av)
 		std::vector<glm::mat4> bonesTrans;
 		bonesTrans.resize(bones.size());
 
-		readNodeHierarchy(skeletonRoot, glm::mat4(1), bones, bonesTrans, &(animations[0]), totalTime * 10.0f);
-
+		auto before = std::chrono::system_clock::now();
+		for (auto i = 0; i < 100; ++i)
+			readNodeHierarchy(skeletonRoot, glm::mat4(1), bones, bonesTrans, &(animations[0]), totalTime * 10.0f);
+		auto after = std::chrono::system_clock::now();
+		std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count() << " milliseconds" << std::endl;
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
 
 		for (unsigned int i = 0; i < vertices.size(); ++i)
