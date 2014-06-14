@@ -31,36 +31,7 @@ namespace AGE
 {
 	struct AnimationChannel;
 	struct Animation;
-
-	struct Bone
-	{
-		std::string name;
-		glm::mat4 offset;
-		unsigned int index;
-		glm::mat4 transformation;
-		std::vector<unsigned int> children;
-		unsigned int parent = (unsigned int)(-1);
-		std::vector<std::vector<AnimationChannel*>> animations;
-	};
-
-	struct Skeleton
-	{
-		std::vector<Bone> bones;
-		std::vector<Animation*> animations;
-	};
-
-	struct Mesh
-	{
-		std::vector<glm::vec4> positions;
-		std::vector<glm::vec4> normals;
-		std::vector<glm::vec4> tangents;
-		std::vector<glm::vec4> biTangents;
-		std::vector<std::vector<glm::vec2>> uvs;
-		std::vector<std::uint32_t> indices;
-		std::vector<glm::vec4> weights;
-		std::vector<glm::vec4> boneIndices;
-		std::vector<std::string>bones;
-	};
+	struct Skeleton;
 
 	template <typename T>
 	struct AnimationKey
@@ -77,6 +48,17 @@ namespace AGE
 			: value(std::move(_value))
 			, time(_time)
 		{}
+	};
+
+	struct Bone
+	{
+		std::string name;
+		glm::mat4 offset;
+		unsigned int index;
+		glm::mat4 transformation;
+		std::vector<unsigned int> children;
+		unsigned int parent = (unsigned int)(-1);
+		std::vector<std::vector<AnimationChannel*>> animations;
 	};
 
 	struct AnimationChannel
@@ -162,10 +144,78 @@ namespace AGE
 		unsigned int id;
 	};
 
+	struct SkinnedInstance
+	{
+		SkinnedInstance(Skeleton *_skeleton, Animation *_animation = nullptr)
+		: skeleton(_skeleton)
+		, animation(_animation)
+		{
+			_skeleton->animations.push_back(this);
+		}
+
+		Animation *animation;
+		float time;
+		Skeleton *skeleton;
+		std::vector<glm::mat4> transformations;
+	};
+
+	struct Skeleton
+	{
+		std::vector<Bone> bones;
+		std::vector<SkinnedInstance*> animations;
+
+		void updateSkinning(float time)
+		{
+			for (auto &a : animations)
+			{
+				readNodeHierarchy(0, glm::mat4(1), a->transformations, a->animation, time);
+			}
+		}
+
+		void readNodeHierarchy(unsigned int boneID
+			, const glm::mat4 &parentTrans
+			, std::vector<glm::mat4> &trans
+			, AGE::Animation *animation = nullptr
+			, float time = 0.0f)
+		{
+			glm::mat4 nodeT = bones[boneID].transformation;
+			auto &bone = bones[boneID];
+
+			if (animation)
+			{
+				auto localTime = std::fmodf(time, animation->duration);
+				for (unsigned int i = 0; i < bone.animations[animation->id].size(); ++i)
+				{
+					bone.animations[animation->id][i]->getInterpolatedTransform(localTime, nodeT);
+				}
+			}
+
+			glm::mat4 t = parentTrans * nodeT;
+			trans[boneID] = t * bones[boneID].offset;
+
+			for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)
+			{
+				readNodeHierarchy(bones[boneID].children[i], t,  trans, animation, time);
+			}
+		}
+	};
+
+	struct Mesh
+	{
+		std::vector<glm::vec4> positions;
+		std::vector<glm::vec4> normals;
+		std::vector<glm::vec4> tangents;
+		std::vector<glm::vec4> biTangents;
+		std::vector<std::vector<glm::vec2>> uvs;
+		std::vector<std::uint32_t> indices;
+		std::vector<glm::vec4> weights;
+		std::vector<glm::vec4> boneIndices;
+	};
+
 	struct BoneSorter
 	{
 		BoneSorter(std::vector<Bone>& _bones, std::size_t start, std::map<std::string, std::uint32_t> &refs)
-			: bones(_bones)
+		: bones(_bones)
 		{
 			sort(start);
 			bones.clear();
@@ -208,35 +258,6 @@ static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
 	return glm::mat4(m.a1, m.b1, m.c1, m.d1, m.a2, m.b2, m.c2, m.d2, m.a3, m.b3, m.c3, m.d3, m.a4, m.b4, m.c4, m.d4);
 }
 
-
-void readNodeHierarchy(unsigned int boneID
-	, const glm::mat4 &parentTrans
-	, std::vector<AGE::Bone> &bones
-	, std::vector<glm::mat4> &trans
-	, AGE::Animation *animation = nullptr
-	, float time = 0.0f)
-{
-	trans.resize(bones.size());
-	glm::mat4 nodeT = bones[boneID].transformation;
-	auto &bone = bones[boneID];
-
-	if (animation)
-	{
-		auto localTime = std::fmodf(time, animation->duration);
-		for (unsigned int i = 0; i < bone.animations[animation->id].size() ; ++i)
-		{
-			bone.animations[animation->id][i]->getInterpolatedTransform(localTime, nodeT);
-		}
-	}
-
-	glm::mat4 t = parentTrans * nodeT;
-	trans[boneID] = t * bones[boneID].offset;
-
-	for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)
-	{
-		readNodeHierarchy(bones[boneID].children[i], t, bones, trans, animation, time);
-	}
-}
 
 int			main(int ac, char **av)
 {
@@ -289,7 +310,7 @@ int			main(int ac, char **av)
 	Assimp::Importer importer;
 
 	const aiScene *scene = importer.ReadFile("../../Assets/catwoman/atk close front 6.fbx"
-//	const aiScene *scene = importer.ReadFile("../../Assets/marvin.fbx"
+		//	const aiScene *scene = importer.ReadFile("../../Assets/marvin.fbx"
 		, aiProcess_Triangulate |
 		aiProcess_CalcTangentSpace |
 		aiProcess_JoinIdenticalVertices |
@@ -305,8 +326,8 @@ int			main(int ac, char **av)
 	}
 
 	std::vector<AGE::Mesh> meshs;
-	std::vector<AGE::Bone> bones;
 	std::vector<AGE::Animation> animations;
+	AGE::Skeleton skeleton;
 
 	unsigned int skeletonRoot = 0;
 
@@ -324,13 +345,10 @@ int			main(int ac, char **av)
 			std::string boneName = mesh->mBones[i]->mName.data;
 			if (bonesTable.find(boneName) != std::end(bonesTable))
 				continue;
-			if (meshs[meshIndex].bones.size() <= boneCounter)
-				meshs[meshIndex].bones.resize(boneCounter + 1);
-			meshs[meshIndex].bones[boneCounter] = boneName;
-			bones.push_back(AGE::Bone());
-			bones.back().index = boneCounter;
-			bones.back().name = boneName;
-			bones.back().offset = aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
+			skeleton.bones.push_back(AGE::Bone());
+			skeleton.bones.back().index = boneCounter;
+			skeleton.bones.back().name = boneName;
+			skeleton.bones.back().offset = aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
 			bonesTable.insert(std::make_pair(boneName, boneCounter));
 			boneCounter++;
 		}
@@ -346,24 +364,24 @@ int			main(int ac, char **av)
 			std::string boneName = channel->mNodeName.data;
 			if (bonesTable.find(boneName) != std::end(bonesTable))
 				continue;
-			bones.push_back(AGE::Bone());
-			bones.back().index = boneCounter;
-			bones.back().name = boneName;
-			bones.back().offset = glm::mat4(1);
+			skeleton.bones.push_back(AGE::Bone());
+			skeleton.bones.back().index = boneCounter;
+			skeleton.bones.back().name = boneName;
+			skeleton.bones.back().offset = glm::mat4(1);
 			bonesTable.insert(std::make_pair(boneName, boneCounter));
 			boneCounter++;
 		}
 	}
 
 	//we fill bone hierarchy
-	for (unsigned int i = 0; i < bones.size(); ++i)
+	for (unsigned int i = 0; i < skeleton.bones.size(); ++i)
 	{
-		aiNode *bonenode = scene->mRootNode->FindNode(aiString(bones[i].name));
+		aiNode *bonenode = scene->mRootNode->FindNode(aiString(skeleton.bones[i].name));
 		if (!bonenode)
 			continue;
 
 		//we set bone transformation
-		bones[i].transformation = aiMat4ToGlm(bonenode->mTransformation);
+		skeleton.bones[i].transformation = aiMat4ToGlm(bonenode->mTransformation);
 
 		// we set parent
 		if (bonenode->mParent != nullptr && bonesTable.find(bonenode->mParent->mName.data) == std::end(bonesTable))
@@ -371,12 +389,12 @@ int			main(int ac, char **av)
 			auto parent = bonenode->mParent;
 			while (parent && bonesTable.find(parent->mName.data) == std::end(bonesTable))
 			{
-				bones[i].transformation = aiMat4ToGlm(parent->mTransformation) * bones[i].transformation;
+				skeleton.bones[i].transformation = aiMat4ToGlm(parent->mTransformation) * skeleton.bones[i].transformation;
 				parent = parent->mParent;
 			}
 			if (parent)
 			{
-				bones[i].parent = bonesTable.find(parent->mName.data)->second;				
+				skeleton.bones[i].parent = bonesTable.find(parent->mName.data)->second;
 			}
 			else
 			{
@@ -385,7 +403,7 @@ int			main(int ac, char **av)
 		}
 		else if (bonenode->mParent)
 		{
-			bones[i].parent = bonesTable.find(bonenode->mParent->mName.data)->second;
+			skeleton.bones[i].parent = bonesTable.find(bonenode->mParent->mName.data)->second;
 		}
 
 		//we set children
@@ -394,11 +412,11 @@ int			main(int ac, char **av)
 			auto f = bonesTable.find(bonenode->mChildren[c]->mName.data);
 			if (f == std::end(bonesTable))
 				continue;
-			bones[i].children.push_back(f->second);
+			skeleton.bones[i].children.push_back(f->second);
 		}
 	}
 
-//	AGE::BoneSorter(bones, skeletonRoot, bonesTable);
+	//	AGE::BoneSorter(bones, skeletonRoot, bonesTable);
 
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
@@ -414,8 +432,8 @@ int			main(int ac, char **av)
 			}
 			if (mesh->HasNormals())
 			{
-					auto &aiNormals = mesh->mNormals[i];
-					meshs[meshIndex].normals.push_back(glm::vec4(aiNormals.x, aiNormals.y, aiNormals.z, 1));
+				auto &aiNormals = mesh->mNormals[i];
+				meshs[meshIndex].normals.push_back(glm::vec4(aiNormals.x, aiNormals.y, aiNormals.z, 1));
 			}
 			for (unsigned int texCoordIndex = 0; texCoordIndex < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++texCoordIndex)
 			{
@@ -543,8 +561,8 @@ int			main(int ac, char **av)
 		{
 			auto &channel = animations[animationNb].channels[channelNb];
 			auto boneId = channel.boneIndex;
-			bones[boneId].animations.resize(animationNb + 1);
-			bones[boneId].animations[animationNb].push_back(&channel);
+			skeleton.bones[boneId].animations.resize(animationNb + 1);
+			skeleton.bones[boneId].animations[animationNb].push_back(&channel);
 		}
 	}
 
@@ -613,10 +631,10 @@ int			main(int ac, char **av)
 			lookAtX += 1;
 
 		glm::mat4 View = glm::lookAt(
-		glm::vec3(lookAtX, lookAtY, 150), // Camera is at (4,3,3), in World Space
-		glm::vec3(lookAtX, lookAtY, 0), // and looks at the origin
-		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		);	
+			glm::vec3(lookAtX, lookAtY, 150), // Camera is at (4,3,3), in World Space
+			glm::vec3(lookAtX, lookAtY, 0), // and looks at the origin
+			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+			);
 
 		auto colorId = glGetUniformLocation(shader->getId(), "color");
 		auto modelId = glGetUniformLocation(shader->getId(), "model");
@@ -628,23 +646,20 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(viewId, 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
 
-		std::vector<glm::mat4> bonesTrans;
-		bonesTrans.resize(bones.size());
-
 		auto before = std::chrono::system_clock::now();
 		for (auto i = 0; i < 10000; ++i)
-			readNodeHierarchy(0, glm::mat4(1), bones, bonesTrans, &(animations[0]), totalTime * 10.0f);
+			skeleton.updateSkinning(totalTime * 10.0f);
 		auto after = std::chrono::system_clock::now();
 		static float median = 0.0f;
 		median = median <= 0
 			? std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()
 			: (median + std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()) / 2.0f;
 		std::cout << median << " milliseconds" << std::endl;
-//		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
+		//		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), bonesTrans.size(), GL_FALSE, glm::value_ptr(bonesTrans[0]));
 
 		for (unsigned int i = 0; i < vertices.size(); ++i)
 		{
-//			vertices[i]->draw(GL_TRIANGLES);
+			//			vertices[i]->draw(GL_TRIANGLES);
 		}
 	} while (e->update());
 
