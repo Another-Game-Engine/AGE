@@ -60,6 +60,7 @@
     <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
+    <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Engine\OpenGL\Pool.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
+    <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

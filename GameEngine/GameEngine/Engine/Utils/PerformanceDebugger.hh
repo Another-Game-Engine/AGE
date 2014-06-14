@@ -15,6 +15,10 @@ public:
 	// DTOR
 	virtual ~PerformanceDebugger();
 
+	// Delete coplien's form
+	PerformanceDebugger(const PerformanceDebugger &) = delete;
+	PerformanceDebugger & operator=(const PerformanceDebugger &) = delete;
+
 	// Add a counter to the list of available counter
 	// logFileName : name of the file use to store the counter
 	// name : name of the counter
@@ -61,7 +65,7 @@ private:
 		std::chrono::high_resolution_clock::time_point start;
 		std::chrono::high_resolution_clock::time_point stop;
 		std::string file;
-		Counter(int averageCounter, std::string const &file);
+		Counter(int averageCounter = 1, std::string const &file = "default.log");
 		Counter(const Counter &counter) = delete;
 		Counter &operator=(Counter const &counter);
 		~Counter();
