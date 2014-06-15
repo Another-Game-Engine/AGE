@@ -159,11 +159,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Skinning\AnimationChannel.cpp" />
+    <ClCompile Include="Skinning\AnimationChannel.hpp" />
+    <ClCompile Include="Skinning\AnimationInstance.cpp" />
+    <ClCompile Include="Skinning\Skeleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Skinning\Animation.hpp" />
+    <ClInclude Include="Skinning\AnimationInstance.hpp" />
+    <ClInclude Include="Skinning\AnimationKey.hpp" />
+    <ClInclude Include="Skinning\Bone.hpp" />
+    <ClInclude Include="Skinning\Skeleton.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

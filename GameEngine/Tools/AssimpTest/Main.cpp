@@ -27,179 +27,16 @@
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
 
+//SKINNING
+#include <Skinning/Animation.hpp>
+#include <Skinning/AnimationChannel.hpp>
+#include <Skinning/AnimationInstance.hpp>
+#include <Skinning/AnimationKey.hpp>
+#include <Skinning/Bone.hpp>
+#include <Skinning/Skeleton.hpp>
+
 namespace AGE
 {
-	struct AnimationChannel;
-	struct Animation;
-	struct Skeleton;
-
-	template <typename T>
-	struct AnimationKey
-	{
-		T value;
-		float time;
-		float deltaTime;
-
-		AnimationKey(const T &_value, float _time)
-			: value(_value)
-			, time(_time)
-		{}
-		AnimationKey(T &&_value, float _time)
-			: value(std::move(_value))
-			, time(_time)
-		{}
-	};
-
-	struct Bone
-	{
-		std::string name;
-		glm::mat4 offset;
-		unsigned int index;
-		glm::mat4 transformation;
-		std::vector<unsigned int> children;
-		unsigned int parent = (unsigned int)(-1);
-		std::vector<std::vector<AnimationChannel*>> animations;
-	};
-
-	struct AnimationChannel
-	{
-		unsigned int boneIndex;
-		std::vector<AnimationKey<glm::vec3>> scale;
-		std::vector<AnimationKey<glm::quat>> rotation;
-		std::vector<AnimationKey<glm::vec3>> translation;
-
-		void findKeyIndex(float t, glm::uvec3 &keys, glm::uvec3 &nextKeys)
-		{
-			if (scale.size() <= 1)
-			{
-				keys.x = 0;
-				nextKeys.x = 0;
-			}
-			else
-			{
-				for (unsigned int i = 0; i < scale.size() - 1; i++)
-				{
-					if (t < scale[i + 1].time) {
-						keys.x = i;
-						nextKeys.x = i + 1;
-						break;
-					}
-				}
-			}
-
-			if (rotation.size() <= 1)
-			{
-				keys.y = 0;
-				nextKeys.y = 0;
-			}
-			else
-			{
-				for (unsigned int i = 0; i < rotation.size() - 1; i++)
-				{
-					if (t < rotation[i + 1].time) {
-						keys.y = i;
-						nextKeys.y = i + 1;
-						break;
-					}
-				}
-			}
-
-			if (translation.size() <= 1)
-			{
-				keys.z = 0;
-				nextKeys.z = 0;
-			}
-			else
-			{
-				for (unsigned int i = 0; i < translation.size() - 1; i++)
-				{
-					if (t < translation[i + 1].time) {
-						keys.z = i;
-						nextKeys.z = i + 1;
-						break;
-					}
-				}
-			}
-		}
-
-		void getInterpolatedTransform(float t, glm::mat4 &res)
-		{
-			glm::uvec3 key = glm::uvec3(static_cast<unsigned int>(t));
-			glm::uvec3 nextKey = glm::uvec3(key.x + 1);
-
-			if (nextKey.z >= translation.size() || nextKey.x >= scale.size() || nextKey.y >= rotation.size())
-				findKeyIndex(t, key, nextKey);
-
-			res = glm::translate(glm::mat4(1), glm::mix(translation[key.z].value, translation[nextKey.z].value, (t - translation[key.z].time) / translation[key.z].deltaTime));
-			res *= glm::scale(glm::mat4(1), glm::mix(scale[key.x].value, scale[nextKey.x].value, (t - scale[key.x].time) / scale[key.x].deltaTime));
-			res *= glm::toMat4(glm::slerp(rotation[key.y].value, rotation[nextKey.y].value, (t - rotation[key.y].time) / rotation[key.y].deltaTime));
-		}
-	};
-
-	struct Animation
-	{
-		std::string name;
-		std::vector<AnimationChannel> channels;
-		float duration;
-		unsigned int id;
-	};
-
-	struct SkinnedInstance
-	{
-		SkinnedInstance(Skeleton *_skeleton, Animation *_animation = nullptr)
-		: skeleton(_skeleton)
-		, animation(_animation)
-		{
-			_skeleton->animations.push_back(this);
-		}
-
-		Animation *animation;
-		float time;
-		Skeleton *skeleton;
-		std::vector<glm::mat4> transformations;
-	};
-
-	struct Skeleton
-	{
-		std::vector<Bone> bones;
-		std::vector<SkinnedInstance*> animations;
-
-		void updateSkinning(float time)
-		{
-			for (auto &a : animations)
-			{
-				readNodeHierarchy(0, glm::mat4(1), a->transformations, a->animation, time);
-			}
-		}
-
-		void readNodeHierarchy(unsigned int boneID
-			, const glm::mat4 &parentTrans
-			, std::vector<glm::mat4> &trans
-			, AGE::Animation *animation = nullptr
-			, float time = 0.0f)
-		{
-			glm::mat4 nodeT = bones[boneID].transformation;
-			auto &bone = bones[boneID];
-
-			if (animation)
-			{
-				auto localTime = std::fmodf(time, animation->duration);
-				for (unsigned int i = 0; i < bone.animations[animation->id].size(); ++i)
-				{
-					bone.animations[animation->id][i]->getInterpolatedTransform(localTime, nodeT);
-				}
-			}
-
-			glm::mat4 t = parentTrans * nodeT;
-			trans[boneID] = t * bones[boneID].offset;
-
-			for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)
-			{
-				readNodeHierarchy(bones[boneID].children[i], t,  trans, animation, time);
-			}
-		}
-	};
-
 	struct Mesh
 	{
 		std::vector<glm::vec4> positions;
@@ -210,46 +47,6 @@ namespace AGE
 		std::vector<std::uint32_t> indices;
 		std::vector<glm::vec4> weights;
 		std::vector<glm::vec4> boneIndices;
-	};
-
-	struct BoneSorter
-	{
-		BoneSorter(std::vector<Bone>& _bones, std::size_t start, std::map<std::string, std::uint32_t> &refs)
-		: bones(_bones)
-		{
-			sort(start);
-			bones.clear();
-			bones = copy;
-			refs.clear();
-			for (auto &b : bones)
-			{
-				auto it = hist[b.index];
-				refs.insert(std::make_pair(b.name, it));
-				b.index = it;
-				if (b.parent != (unsigned int)(-1))
-					b.parent = hist[b.parent];
-				for (auto &c : b.children)
-				{
-					c = hist[c];
-				}
-			}
-		}
-		std::vector<Bone>& bones;
-	private:
-		std::map<unsigned int, unsigned int> hist;
-		std::vector<Bone> copy;
-		void sort(std::size_t id)
-		{
-			auto index = copy.size();
-			copy.push_back(bones[id]);
-			bones[id].index = index;
-
-			hist.insert(std::make_pair(id, index));
-			for (auto i : bones[id].children)
-			{
-				sort(i);
-			}
-		}
 	};
 }
 
@@ -415,8 +212,6 @@ int			main(int ac, char **av)
 			skeleton.bones[i].children.push_back(f->second);
 		}
 	}
-
-	//	AGE::BoneSorter(bones, skeletonRoot, bonesTable);
 
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
