@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Utils/OpenGL.hh>
 #include <string>
 
 namespace gl
@@ -27,6 +28,9 @@ namespace gl
 		void *_data;
 		size_t _sizeData;
 		Shader const *_attach;
+		GLuint _location;
+
+		bool getLocation();
 	};
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -63,4 +67,11 @@ namespace gl
 	}
 
 	// code all syncronisation func you need
+	template <typename TYPE>
+	Uniform &Uniform::syncronisation()
+	{
+		if (getLocation() == false)
+			return (*this);
+		return (*this);
+	}
 }

@@ -110,7 +110,9 @@ bool loadShaders(std::shared_ptr<Engine> e)
 
 	auto &m = e->getInstance<gl::ShadingManager>();
 
-	gl::Key<gl::Shader> basic = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
+	gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
+	m->addShaderUniform(test_pipeline_1, "projection_matrix");
+	m->addShaderUniform(test_pipeline_1, "modelview_matrix");
 	return true;
 }
 

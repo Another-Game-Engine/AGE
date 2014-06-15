@@ -8,9 +8,9 @@ namespace gl
 		: _flag(flag),
 		_data(NULL),
 		_sizeData(0),
-		_attach(attach)
+		_attach(attach),
+		_location(0)
 	{
-
 	}
 
 	Uniform::Uniform()
@@ -31,6 +31,7 @@ namespace gl
 	{
 		if (this != &u)
 		{
+			_location = u._location;
 			if (u._sizeData != _sizeData)
 			{
 				_sizeData = u._sizeData;
@@ -48,5 +49,14 @@ namespace gl
 	{
 		if (_data)
 			delete _data;
+	}
+
+	bool Uniform::getLocation()
+	{
+		if (_attach == NULL)
+			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "No attach on this uniform", false);
+		if ((_location = glGetUniformLocation(_attach->getId(), _flag.c_str())) == -1)
+			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
+		return (true);
 	}
 }
