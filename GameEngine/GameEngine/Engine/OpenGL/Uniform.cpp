@@ -59,4 +59,15 @@ namespace gl
 			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
 		return (true);
 	}
+
+	// code all syncronisation func you need
+	Uniform &Uniform::syncToMat4()
+	{
+		if (getLocation() == false)
+			return (*this);
+		if (_sizeData != sizeof(glm::mat4))
+			DEBUG_MESSAGE("Error", "Uniform.hh - syncronisation()", "the size of data is not the same of mat4", *this);
+		glUniformMatrix4fv(_attach->getId(), 1, GL_FALSE, (float *)_data);
+		return (*this);
+	}
 }

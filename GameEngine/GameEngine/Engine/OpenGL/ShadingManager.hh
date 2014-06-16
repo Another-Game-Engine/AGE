@@ -7,6 +7,11 @@
 #include <map>
 #include <vector>
 
+namespace glm
+{
+	class mat4;
+}
+
 namespace gl
 {
 	class Shader;
@@ -31,9 +36,11 @@ namespace gl
 		Key<Shader> getShader(size_t index) const;
 		
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
+		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &mat4);
 		ShadingManager &rmShaderUniform(Key<Shader> const &shader, Key<Uniform> &uniform);
 		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
-		
+		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
+
 		//Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		//template <typename TYPE> Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag, TYPE const &data);
 		//ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> const &sampler);

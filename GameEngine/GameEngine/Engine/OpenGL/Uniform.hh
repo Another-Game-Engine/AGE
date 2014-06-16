@@ -2,6 +2,7 @@
 
 #include <Utils/OpenGL.hh>
 #include <string>
+#include <glm/glm.hpp>
 
 namespace gl
 {
@@ -22,7 +23,9 @@ namespace gl
 		Uniform &operator=(Uniform const &uniform);
 		template <typename TYPE> TYPE getData() const;
 		template <typename TYPE> Uniform &setData(TYPE const &data);
-		template <typename TYPE> Uniform &syncronisation();
+		
+		Uniform &syncToMat4();
+
 	private:
 		std::string const _flag;
 		void *_data;
@@ -66,12 +69,4 @@ namespace gl
 		return (*this);
 	}
 
-	// code all syncronisation func you need
-	template <typename TYPE>
-	Uniform &Uniform::syncronisation()
-	{
-		if (getLocation() == false)
-			return (*this);
-		return (*this);
-	}
 }
