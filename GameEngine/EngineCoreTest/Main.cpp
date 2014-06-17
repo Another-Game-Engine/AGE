@@ -22,7 +22,6 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
-#include <Utils/PerformanceDebugger.hh>
 
 //CONFIGS
 #include <CONFIGS.hpp>
@@ -194,7 +193,7 @@ int			main(int ac, char **av)
 	if (e->start() == false)
 		return (EXIT_FAILURE);
 	while (e->update())
-		e->getInstance<PerformanceDebugger>()->logAverage("test1", "update the time");
+		;
 	config->saveToFile();
 	e->stop();
 	return (EXIT_SUCCESS);
