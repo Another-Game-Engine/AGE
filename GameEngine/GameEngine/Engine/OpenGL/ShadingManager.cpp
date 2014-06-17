@@ -73,7 +73,7 @@ namespace gl
 		if (!shader)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "key aldreadt destroy", Key<Uniform>(KEY_DESTROY))
 			auto &element = _shaders.find(shader);
-		if (element != _shaders.end())
+		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
 		auto &s = element->second;
 		return (s.addUniform(flag));
@@ -84,7 +84,7 @@ namespace gl
 		if (!shader && !uniform)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderUniform", "key already destroy", *this)
 		auto &element = _shaders.find(shader);
-		if (element != _shaders.end())
+		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderUniform", "shader not find", *this)
 		auto &s = element->second;
 		s.rmUniform(uniform);
@@ -96,7 +96,7 @@ namespace gl
 		if (!shader)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderUniform", "key destroy", Key<Uniform>(KEY_DESTROY))
 		auto &element = _shaders.find(shader);
-		if (element != _shaders.end())
+		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
 		auto &s = element->second; 
 		return (s.getUniform(target));
@@ -106,10 +106,10 @@ namespace gl
 	{
 		if (!shader)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "key aldreadt destroy", Key<Uniform>(KEY_DESTROY))
-			auto &element = _shaders.find(shader);
-		if (element != _shaders.end())
+		auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
-			auto &s = element->second;
+		auto &s = element->second;
 		return (s.addUniform(flag, value));
 	}
 
@@ -118,7 +118,7 @@ namespace gl
 		if (!shader)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(mat4)", "key destroy", *this)
 			auto &element = _shaders.find(shader);
-		if (element != _shaders.end())
+		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform", "shader not find", *this)
 			auto &s = element->second;
 		s.setUniform(key, mat4);

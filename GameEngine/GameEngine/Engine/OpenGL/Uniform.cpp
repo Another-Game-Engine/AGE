@@ -35,6 +35,7 @@ namespace gl
 	{
 		if (this != &u)
 		{
+			_flag = u._flag;
 			_location = u._location;
 			if (u._sizeData != _sizeData)
 			{
@@ -66,7 +67,7 @@ namespace gl
 	}
 
 	template <typename TYPE>
-	static void *setAllocation(size_t sizeData, void *data)
+	static void *setAllocation(size_t &sizeData, void *data)
 	{
 		if (sizeof(TYPE) != sizeData)
 		{
@@ -85,8 +86,6 @@ namespace gl
 		memcpy(_data, &value, _sizeData);
 		if (getLocation() == false)
 			return (*this);
-		if (_sizeData != sizeof(glm::mat4))
-			DEBUG_MESSAGE("Error", "Uniform.hh - syncronisation()", "the size of data is not the same of mat4", *this);
 		glUniformMatrix4fv(_attach->getId(), 1, GL_FALSE, (float *)_data);
 		return (*this);
 	}

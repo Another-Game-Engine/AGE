@@ -111,8 +111,8 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto &m = e->getInstance<gl::ShadingManager>();
 
 	gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
-	gl::Key<gl::Uniform> pm = m->addShaderUniform(test_pipeline_1, "projection_matrix");
-	gl::Key<gl::Uniform> mm = m->addShaderUniform(test_pipeline_1, "modelview_matrix");
+	gl::Key<gl::Uniform> pm = m->addShaderUniform(test_pipeline_1, "projection_matrix", glm::perspective<float>(60.f, 1.0f, 1.0f, 100.0f));
+	gl::Key<gl::Uniform> mm = m->addShaderUniform(test_pipeline_1, "modelview_matrix", glm::mat4(1.f));
 	return true;
 }
 
