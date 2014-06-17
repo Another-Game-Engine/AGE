@@ -8,5 +8,5 @@
 
 #define RENDERING_ACTIVATED
 
-//#define COMPLEX_MESH
+#define COMPLEX_MESH
 

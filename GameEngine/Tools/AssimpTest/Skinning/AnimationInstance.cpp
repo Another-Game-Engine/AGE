@@ -19,9 +19,13 @@ void AnimationInstance::update(float t)
 {
 	if (!animation)
 		return;
-	//ATTENTION COPY TMP
-	for (AnimationChannel &channel : animation->channels)
+	auto localTime = std::fmodf(t, animation->duration);
+
+	for (auto i = 0; i < transformations.size(); ++i)
+		transformations[i] = glm::mat4(1);
+
+	for (std::size_t i = 0; i < animation->channels.size(); ++i)
 	{
-		channel.getInterpolatedTransform(t, bindPoses[channel.boneIndex]);
+		animation->channels[i].getInterpolatedTransform(localTime, bindPoses[animation->channels[i].boneIndex]);
 	}
 }

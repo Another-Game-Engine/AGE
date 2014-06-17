@@ -1,7 +1,6 @@
 #include "Skeleton.hpp"
 #include <glm/glm.hpp>
 
-#include "Animation.hpp"
 #include "Bone.hpp"
 #include "AnimationInstance.hpp"
 
@@ -9,9 +8,14 @@ using namespace AGE;
 
 void Skeleton::updateSkinning(float time)
 {
-	for (auto &a : animations)
+	readNodeHierarchy(0);
+
+	for (std::size_t j = 0; j < this->animations.size(); ++j)
 	{
-		readNodeHierarchy(0);
+		for (std::size_t i = 0; i < bones.size(); ++i)
+		{
+			this->animations[j]->transformations[i] = this->animations[j]->transformations[i] * this->bones[i].offset;
+		}
 	}
 }
 
@@ -24,9 +28,9 @@ void Skeleton::readNodeHierarchy(
 	for (unsigned int i = 0; i < this->animations.size(); ++i)
 	{
 		nodeT = this->animations[i]->bindPoses[boneID];
-		glm::mat4 t = this->animations[i]->transformations[bone.parent] * nodeT;
-		this->animations[i]->transformations[boneID]
-			= t * bone.offset * this->animations[i]->transformations[boneID];
+		if (boneID == 0)
+			continue;
+		this->animations[i]->transformations[boneID] = this->animations[i]->transformations[bone.parent] * nodeT;
 	}
 
 	for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)

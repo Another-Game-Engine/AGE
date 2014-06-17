@@ -162,7 +162,7 @@ public:
 #endif
 
 				setTransform(e, glm::translate(getTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
-				setTransform(e, glm::scale(getTransform(e), glm::vec3(0.5f)));
+				setTransform(e, glm::scale(getTransform(e), glm::vec3(3.0f)));
 
 #ifdef RENDERING_ACTIVATED
 
