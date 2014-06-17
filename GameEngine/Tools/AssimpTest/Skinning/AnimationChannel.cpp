@@ -72,7 +72,7 @@ void AnimationChannel::getInterpolatedTransform(float t, glm::mat4 &res)
 	if (nextKey.z >= translation.size() || nextKey.x >= scale.size() || nextKey.y >= rotation.size())
 		findKeyIndex(t, key, nextKey);
 	
-	res = glm::translate(glm::mat4(1), glm::mix(translation[key.z].value, translation[nextKey.z].value, (t - translation[key.z].time) / translation[key.z].deltaTime));
+	res *= glm::translate(glm::mat4(1), glm::mix(translation[key.z].value, translation[nextKey.z].value, (t - translation[key.z].time) / translation[key.z].deltaTime));
 	res *= glm::scale(glm::mat4(1), glm::mix(scale[key.x].value, scale[nextKey.x].value, (t - scale[key.x].time) / scale[key.x].deltaTime));
 	res *= glm::toMat4(glm::slerp(rotation[key.y].value, rotation[nextKey.y].value, (t - rotation[key.y].time) / rotation[key.y].deltaTime));
 }

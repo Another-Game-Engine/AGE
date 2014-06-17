@@ -11,33 +11,26 @@ void Skeleton::updateSkinning(float time)
 {
 	for (auto &a : animations)
 	{
-		readNodeHierarchy(0, glm::mat4(1), a->transformations, a->animation, time);
+		readNodeHierarchy(0);
 	}
 }
 
-void Skeleton::readNodeHierarchy(unsigned int boneID
-	, const glm::mat4 &parentTrans
-	, std::vector<glm::mat4> &trans
-	, AGE::Animation *animation = nullptr
-	, float time = 0.0f)
+void Skeleton::readNodeHierarchy(
+	unsigned int boneID)
 {
 	glm::mat4 nodeT = bones[boneID].transformation;
 	auto &bone = bones[boneID];
 
-	if (animation)
+	for (unsigned int i = 0; i < this->animations.size(); ++i)
 	{
-		auto localTime = std::fmodf(time, animation->duration);
-		for (unsigned int i = 0; i < bone.animations[animation->id].size(); ++i)
-		{
-			bone.animations[animation->id][i]->getInterpolatedTransform(localTime, nodeT);
-		}
+		nodeT = this->animations[i]->bindPoses[boneID];
+		glm::mat4 t = this->animations[i]->transformations[bone.parent] * nodeT;
+		this->animations[i]->transformations[boneID]
+			= t * bone.offset * this->animations[i]->transformations[boneID];
 	}
-
-	glm::mat4 t = parentTrans * nodeT;
-	trans[boneID] = t * bones[boneID].offset;
 
 	for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)
 	{
-		readNodeHierarchy(bones[boneID].children[i], t, trans, animation, time);
+		readNodeHierarchy(bones[boneID].children[i]);
 	}
 }

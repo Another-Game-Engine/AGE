@@ -10,6 +10,5 @@ namespace AGE
 		glm::mat4 transformation;
 		std::vector<unsigned int> children;
 		unsigned int parent = (unsigned int)(-1);
-		std::vector<std::vector<AnimationChannel*>> animations;
 	};
 }

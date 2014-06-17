@@ -354,10 +354,10 @@ int			main(int ac, char **av)
 	{
 		for (unsigned int channelNb = 0; channelNb < animations[animationNb].channels.size(); ++channelNb)
 		{
-			auto &channel = animations[animationNb].channels[channelNb];
-			auto boneId = channel.boneIndex;
-			skeleton.bones[boneId].animations.resize(animationNb + 1);
-			skeleton.bones[boneId].animations[animationNb].push_back(&channel);
+			//auto &channel = animations[animationNb].channels[channelNb];
+			//auto boneId = channel.boneIndex;
+			//skeleton.bones[boneId].animations.resize(animationNb + 1);
+			//skeleton.bones[boneId].animations[animationNb].push_back(&channel);
 		}
 	}
 

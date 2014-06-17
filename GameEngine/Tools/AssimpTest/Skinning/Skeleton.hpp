@@ -17,10 +17,6 @@ namespace AGE
 
 		void updateSkinning(float time);
 	private:
-		void readNodeHierarchy(unsigned int boneID
-			, const glm::mat4 &parentTrans
-			, std::vector<glm::mat4> &trans
-			, AGE::Animation *animation = nullptr
-			, float time = 0.0f);
+		void readNodeHierarchy(unsigned int boneID);
 	};
 }

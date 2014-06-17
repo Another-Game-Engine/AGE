@@ -16,6 +16,8 @@ namespace AGE
 		float time;
 		Skeleton *skeleton;
 		std::vector<glm::mat4> transformations;
+		std::vector<glm::mat4> bindPoses;
+		void update(float t);
 	};
 
 }
