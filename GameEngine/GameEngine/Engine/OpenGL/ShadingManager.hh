@@ -6,11 +6,7 @@
 #include <OpenGL/MemoryBlocksGPU.hh>
 #include <map>
 #include <vector>
-
-namespace glm
-{
-	class mat4;
-}
+#include <glm/glm.hpp>
 
 namespace gl
 {
@@ -36,7 +32,7 @@ namespace gl
 		Key<Shader> getShader(size_t index) const;
 		
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
-		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &mat4);
+		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &value);
 		ShadingManager &rmShaderUniform(Key<Shader> const &shader, Key<Uniform> &uniform);
 		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);

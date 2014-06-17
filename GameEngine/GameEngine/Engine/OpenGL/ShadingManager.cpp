@@ -102,6 +102,17 @@ namespace gl
 		return (s.getUniform(target));
 	}
 
+	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &value)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "key aldreadt destroy", Key<Uniform>(KEY_DESTROY))
+			auto &element = _shaders.find(shader);
+		if (element != _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
+			auto &s = element->second;
+		return (s.addUniform(flag, value));
+	}
+
 	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4)
 	{
 		if (!shader)
@@ -110,7 +121,7 @@ namespace gl
 		if (element != _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform", "shader not find", *this)
 			auto &s = element->second;
-		s.setUniform<glm::mat4>(key, mat4);
+		s.setUniform(key, mat4);
 		return (*this);
 	}
 }

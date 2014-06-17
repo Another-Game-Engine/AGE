@@ -3,6 +3,10 @@
 #include <fstream>
 #include <OpenGL/Uniform.hh>
 
+# define DEBUG_MESSAGE(type, from, reason, return_type) \
+	{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
+
+
 namespace gl
 {
 	Shader::Shader()
@@ -74,8 +78,6 @@ namespace gl
 		if (_fragName != "") { _fragId = addShader(_fragName, GL_FRAGMENT_SHADER); glAttachShader(_progId, _fragId); }
 		if (_geometryName != "") { _geometryId = addShader(_geometryName, GL_GEOMETRY_SHADER); glAttachShader(_progId, _geometryId); }
 		if (_computeName != "") { _computeId = addShader(_computeName, GL_COMPUTE_SHADER); glAttachShader(_progId, _computeId); }
-
-
 		if (linkProgram() == false)
 			_vertexId = _fragId = _computeId = _geometryId = -1;
 	}
@@ -188,9 +190,15 @@ namespace gl
 		return (true);
 	}
 
-	void Shader::use()
+	void Shader::use() const
 	{
-		glUseProgram(_progId);
+		static GLint idbind = 0;
+		
+		if (idbind != _progId)
+		{
+			glUseProgram(_progId);
+			idbind = _progId;
+		}
 	}
 
 	GLuint Shader::getId() const
@@ -252,5 +260,25 @@ namespace gl
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
+	}
+
+	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat4 const &value)
+	{
+		Key<Uniform> key;
+
+		auto &element = _uniforms[key] = Uniform(flag, this);
+		element.set(value);
+		return (key);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &value)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "key destroy use", *this);
+		auto &element = _uniforms.find(key);
+		if (element == _uniforms.end())
+			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "element in not find", *this);
+		element->second.set(value);
+		return (*this);
 	}
 }

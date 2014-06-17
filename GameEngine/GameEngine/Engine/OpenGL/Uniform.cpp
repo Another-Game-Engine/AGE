@@ -1,6 +1,10 @@
 #include <OpenGL/Uniform.hh>
 #include <stdint.h>
 #include <OpenGL/Shader.hh>
+#include <glm/glm.hpp>
+
+# define DEBUG_MESSAGE(type, from, reason, return_type) \
+	{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
 
 namespace gl
 {
@@ -55,14 +59,30 @@ namespace gl
 	{
 		if (_attach == NULL)
 			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "No attach on this uniform", false);
+		_attach->use();
 		if ((_location = glGetUniformLocation(_attach->getId(), _flag.c_str())) == -1)
 			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
 		return (true);
 	}
 
-	// code all syncronisation func you need
-	Uniform &Uniform::syncToMat4()
+	template <typename TYPE>
+	static void *setAllocation(size_t sizeData, void *data)
 	{
+		if (sizeof(TYPE) != sizeData)
+		{
+			sizeData = sizeof(TYPE);
+			if (data)
+				delete data;
+			data = new TYPE;
+		}
+		return (data);
+	}
+
+	// code all set syncronisation func you need
+	Uniform &Uniform::set(glm::mat4 const &value)
+	{
+		_data = setAllocation<glm::mat4>(_sizeData, _data);
+		memcpy(_data, &value, _sizeData);
 		if (getLocation() == false)
 			return (*this);
 		if (_sizeData != sizeof(glm::mat4))
