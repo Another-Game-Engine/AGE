@@ -22,7 +22,7 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
-#include <Utils/PerformanceDebugger.hpp>
+#include <Utils/PerformanceDebugger.hh>
 
 //CONFIGS
 #include <CONFIGS.hpp>
@@ -147,11 +147,6 @@ int			main(int ac, char **av)
 	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 #endif
 
-	auto counter = e->setInstance<PerformanceDebugger>()->setCounter("test1.log", "test1");
-	counter->start();
-	counter->stop();
-	counter->logNow("test1");
-
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
@@ -199,7 +194,7 @@ int			main(int ac, char **av)
 	if (e->start() == false)
 		return (EXIT_FAILURE);
 	while (e->update())
-		;
+		e->getInstance<PerformanceDebugger>()->logAverage("test1", "update the time");
 	config->saveToFile();
 	e->stop();
 	return (EXIT_SUCCESS);

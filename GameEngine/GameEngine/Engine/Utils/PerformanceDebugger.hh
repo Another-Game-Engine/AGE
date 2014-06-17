@@ -1,12 +1,12 @@
 #pragma once
 
 #include <chrono>
-#include <map>
 #include "Utils/Dependency.hpp"
 
 class string;
 template <class T1, class T2> struct pair;
-
+template <class T, class Alloc = allocator<T>> class vector;
+template <class Key, class T, class Compare = less<Key>, class Alloc = allocator<pair<const Key, T>>> class map;
 class PerformanceDebugger : public Dependency
 {
 public:
@@ -60,13 +60,14 @@ private:
 	{
 		int averageTime;
 		int nbIter;
-		std::chrono::duration<float> *average;
+		std::vector<std::chrono::duration<float>> average;
 		std::chrono::high_resolution_clock::time_point prev;
 		std::chrono::high_resolution_clock::time_point start;
 		std::chrono::high_resolution_clock::time_point stop;
-		std::string file;
+		std::string fileName;
+		std::ofstream file;
 		Counter(int averageCounter = 1, std::string const &file = "default.log");
-		Counter(const Counter &counter) = delete;
+		Counter(const Counter &counter);
 		Counter &operator=(Counter const &counter);
 		~Counter();
 	};
