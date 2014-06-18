@@ -1,8 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <OpenGL/VertexManager.hh>
-#include <OpenGL/Vertice.hh>
+#include <OpenGL/GeometryManager.hh>
+#include <OpenGL/Data.hh>
 #include <array>
 
 class SpriteManager;
@@ -13,16 +13,15 @@ public:
 	SpriteFrame()
 		: _dimensions(0)
 		, _uvs(0)
-		, _buffer(nullptr)
 	{}
 
 	~SpriteFrame()
 	{
-		if (_buffer)
-			delete _buffer;
 	}
-	bool load(std::shared_ptr<VertexManager<4>> vm) 
+
+	bool load(gl::GeometryManager *vm) 
 	{
+		_m = vm;
 		std::vector<glm::vec4>		vertices;	// vertices positions
 		std::vector<glm::vec2>		uvs;		// texture coordinates
 		std::vector<glm::vec4>		normals;
@@ -58,27 +57,28 @@ public:
 		colors[2] = glm::vec4(1);
 		colors[3] = glm::vec4(1);
 
-		std::array<Data, 4> data =
-		{
-			Data(vertices.size() * 4 * sizeof(float), &vertices[0].x),
-			Data(colors.size() * 4 * sizeof(float), &colors[0].x),
-			Data(normals.size() * 4 * sizeof(float), &normals[0].x),
-			Data(uvs.size() * 2 * sizeof(float), &uvs[0].x)
-		};
-		Data indicesData(indices.size() * sizeof(unsigned int), &indices[0]);
-		_buffer = new Vertice<4>(vertices.size(), data, &indicesData);
-		vm->addVertice(*(_buffer));
+		void *buffer[4] = { &vertices[0], &colors[0], &normals[0], &uvs[0] };
+		size_t sizeBuffer[4] = { vertices.size() * 4 * sizeof(float),
+								colors.size() * 4 * sizeof(float),
+								normals.size() * 4 * sizeof(float),
+								uvs.size() * 2 * sizeof(float) };
+		_verticesbuffer = _m->addVertices(vertices.size(), 4, sizeBuffer, buffer);
+		_indicesbuffer = _m->addIndices(indices.size(), &indices[0]);
+		_m->attachIndicesToIndexPool(_indicesbuffer, _m->getIndexPool(0));
+		_m->attachVerticesToVertexPool(_verticesbuffer, _m->getVertexPool(1));
 		return true;
 	}
 	inline const glm::uvec4 &getDimensions() const { return _dimensions; }
 	inline const glm::vec4 &getUvs() const { return _uvs; }
 	inline void draw() const
 	{
-		_buffer->draw(GL_QUADS);
+		_m->draw(GL_QUADS, _indicesbuffer, _verticesbuffer);
 	}
 //private:
 	glm::uvec4 _dimensions;
 	glm::vec4 _uvs;
-	Vertice<4> *_buffer;
+	gl::GeometryManager *_m;
+	gl::Key<gl::Vertices> _verticesbuffer;
+	gl::Key<gl::Indices> _indicesbuffer;
 	friend class SpriteManager;
 };

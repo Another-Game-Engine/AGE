@@ -26,6 +26,7 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
+#include <OpenGL/GeometryManager.hh>
 
 //SKINNING
 #include <Skinning/Animation.hpp>
@@ -72,6 +73,7 @@ int			main(int ac, char **av)
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
 	e->setInstance<AssetsManager>()->init();
+	auto geometryManager = e->setInstance<gl::GeometryManager>();
 
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
@@ -86,19 +88,23 @@ int			main(int ac, char **av)
 
 	config->loadFile();
 
-	std::array<Attribute, 3> param =
-	{
-		Attribute(GL_FLOAT, sizeof(float), 4), //Positions
-		Attribute(GL_FLOAT, sizeof(float), 4), //Weights
-		Attribute(GL_FLOAT, sizeof(float), 4) //Bone indices
-	};
+	geometryManager->addIndexPool();
+	GLenum typeComponent[3] = {GL_FLOAT, GL_FLOAT, GL_FLOAT};
+	uint8_t sizeTypeComponent[3] = { sizeof(float), sizeof(float), sizeof(float) };
+	uint8_t nbrComponent[3] = {4,4,4};
+	geometryManager->addVertexPool(3, typeComponent, sizeTypeComponent, nbrComponent);
+	
+	// attach pool which be create
+	geometryManager->attachIndexPoolToVertexPool(geometryManager->getVertexPool(0), geometryManager->getIndexPool(0));
 
-	e->setInstance<VertexManager<3>>(param)->init();
+	//std::array<Attribute, 3> param =
+	//{
+	//	Attribute(GL_FLOAT, sizeof(float), 4), //Positions
+	//	Attribute(GL_FLOAT, sizeof(float), 4), //Weights
+	//	Attribute(GL_FLOAT, sizeof(float), 4) //Bone indices
+	//};
 
-	//if (!loadShaders(e))
-	//	return EXIT_FAILURE;
-	//if (!loadAssets(e))
-	//	return EXIT_FAILURE;
+	//e->setInstance<VertexManager>();
 
 	// launch engine
 	if (e->start() == false)
@@ -368,21 +374,28 @@ int			main(int ac, char **av)
 		return EXIT_FAILURE;
 	shader->use();
 
-	std::vector<Vertice<3>*> vertices;
+	std::vector<gl::Key<gl::Vertices>> vertices;
+	std::vector<gl::Key<gl::Indices>> indices;
 	vertices.resize(meshs.size());
+	indices.resize(meshs.size());
 
 	for (unsigned int i = 0; i < meshs.size(); ++i)
 	{
-		std::array<Data, 3> data =
-		{
-			Data(meshs[i].positions.size() * 4 * sizeof(float), &meshs[i].positions[0].x)
-			, Data(meshs[i].weights.size() * 4 * sizeof(float), &meshs[i].weights[0].x)
-			, Data(meshs[i].boneIndices.size() * 4 * sizeof(float), &meshs[i].boneIndices[0].x)
+		void *buffer[3] = {
+			&meshs[i].positions[0].x,
+			&meshs[i].weights[0].x,
+			&meshs[i].boneIndices[0].x,
 		};
-
-		Data *indicesData = new Data(meshs[i].indices.size() * sizeof(unsigned int), &meshs[i].indices[0]);
-		vertices[i] = new Vertice<3>(meshs[i].positions.size(), data, indicesData);
-		e->getInstance<VertexManager<3>>()->addVertice(*vertices[i]);
+		size_t nbrBuffer[3] = { meshs[i].positions.size() * 4 * sizeof(float),
+			meshs[i].weights.size() * 4 * sizeof(float),
+			meshs[i].boneIndices.size() * 4 * sizeof(float)
+		};
+		auto glvertices = geometryManager->addVertices(meshs[i].positions.size(), 3, nbrBuffer, buffer);
+		auto glindices = geometryManager->addIndices(meshs[i].indices.size(), &meshs[i].indices[0]);
+		vertices[i] = glvertices;
+		indices[i] = glindices;
+		geometryManager->attachVerticesToVertexPool(vertices[i], geometryManager->getVertexPool(0));
+		geometryManager->attachIndicesToIndexPool(indices[i], geometryManager->getIndexPool(0));
 	}
 
 
@@ -455,12 +468,12 @@ int			main(int ac, char **av)
 		median = median <= 0
 			? std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()
 			: (median + std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()) / 2.0f;
-		std::cout << median << " milliseconds" << std::endl;
+		//std::cout << median << " milliseconds" << std::endl;
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), animationInstances[0]->transformations.size(), GL_FALSE, glm::value_ptr(animationInstances[0]->transformations[0]));
 
 		for (unsigned int i = 0; i < vertices.size(); ++i)
 		{
-			vertices[i]->draw(GL_TRIANGLES);
+			geometryManager->draw(GL_TRIANGLES, indices[i], vertices[i]);
 		}
 	} while (e->update());
 

@@ -29,11 +29,6 @@ namespace Component
 	}
 
 
-	void MeshRenderer::init(std::shared_ptr<AMediaFile> r)
-	{
-		mesh = std::static_pointer_cast<ObjFile>(r);
-	}
-
 	void MeshRenderer::init(std::shared_ptr<ObjFile> r)
 	{
 		mesh = r;
@@ -65,7 +60,7 @@ namespace Component
 		{
 			mesh->material->materials[i].setUniforms(materialUniform);
 			materialUniform->flushChanges();
-			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
+			mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glindices, mesh->geometries[i].glvertices);
 		}
 	}
 
@@ -77,7 +72,8 @@ namespace Component
 		perModelUniform->flushChanges();
 		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
 		{
-			mesh->geometries[i].buffer.draw(GL_TRIANGLES);
+			mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glvertices);
+			//mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glindices, mesh->geometries[i].glvertices);
 		}
 	}
 

@@ -81,7 +81,7 @@ public:
 
 	void destroy(const Entity &e)
 	{
-		static Barcode cachedCode;
+		Barcode cachedCode;
 		auto &data = _pool[e.id];
 		if (data.entity != e)
 			return;
@@ -94,12 +94,12 @@ public:
 		{
 			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))
 			{
-				informFiltersComponentDeletion(i, std::move(data));
+				informFiltersComponentDeletion(COMPONENT_ID(i), std::move(data));
 				_componentsManagers[i]->removeComponent(data.entity);
 			}
 			if (i >= MAX_CPT_NUMBER && cachedCode.code.test(i))
 			{
-				informFiltersTagDeletion(i - MAX_CPT_NUMBER, std::move(data));
+				informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), std::move(data));
 			}
 		}
 		_free.push(e.id);
@@ -221,7 +221,7 @@ public:
 		auto &col = manager.getComponents();
 		for (std::size_t i = 0; i < manager.getSize(); ++i)
 		{
-			_pool[col[i].entityId].barcode.unsetComponent(id);
+			_pool[col[i].entityId].barcode.unsetComponent(COMPONENT_ID(id));
 		}
 		manager.clearComponents();
 		for (auto filter : _filters[id])
@@ -265,7 +265,7 @@ public:
 	template <typename T, typename... Args>
 	T *addComponent(Entity &entity, Args &&...args)
 	{
-		COMPONENT_ID id = T::getTypeId();
+		COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
 		auto &e = _pool[entity.id];
 		if (e.entity != entity)
 			return nullptr;
@@ -282,19 +282,19 @@ public:
 
 		e.barcode.setComponent(id);
 
-		informFiltersComponentAddition(T::getTypeId(), std::move(e));
+		informFiltersComponentAddition(COMPONENT_ID(T::getTypeId()), std::move(e));
 		return res;
 	}
 
 	template <typename T>
 	T *getComponent(const Entity &entity)
 	{
-		COMPONENT_ID id = T::getTypeId();
+		COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
 		auto &e = _pool[entity.id];
-		if (e.entity != entity)
-			return nullptr;
-		if (!e.barcode.hasComponent(id))
-			return nullptr;
+		assert(e.entity == entity);
+			//return nullptr;
+		assert(e.barcode.hasComponent(id));
+			//return nullptr;
 		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->getComponent(entity);
 	}
 

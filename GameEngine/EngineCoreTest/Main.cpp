@@ -4,13 +4,15 @@
 
 #include <stdlib.h>
 #include <crtdbg.h>
-
+#include <stdint.h>
 
 #include <stdlib.h>
 #include <Core/Engine.hh>
 #include <Core/SceneManager.hh>
 #include <Core/Renderer.hh>
+#include <Utils/PubSub.hpp>
 
+#include <OpenGL/GeometryManager.hh>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
 
@@ -78,7 +80,6 @@ bool loadShaders(std::shared_ptr<Engine> e)
 		"../../Shaders/SpriteBasic.vp",
 		"../../Shaders/SpriteBasic.fp");
 
-
 	e->getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
 	e->getInstance<Renderer>()->addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
 	e->getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
@@ -113,9 +114,14 @@ bool loadAssets(std::shared_ptr<Engine> e)
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 #endif
 #ifdef COMPLEX_MESH
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__dragon.cpd"));
 #endif
 
 	return true;
@@ -155,16 +161,20 @@ int			main(int ac, char **av)
 	config->loadFile();
 
 #ifdef RENDERING_ACTIVATED
+	auto &m = e->setInstance<gl::GeometryManager>();
+	
+	// create pool
+	m->addIndexPool();
+	m->addVertexPool();
+	GLenum typeComponent[2] = {GL_FLOAT, GL_FLOAT};
+	uint8_t sizeTypeComponent[2] = { sizeof(float), sizeof(float) };
+	uint8_t nbrComponent[2] = {2, 2};
+	m->addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
+	
+	// attach pool which be create
+	m->attachIndexPoolToVertexPool(m->getVertexPool(0), m->getIndexPool(0));
+	m->attachIndexPoolToVertexPool(m->getVertexPool(1), m->getIndexPool(0));
 
-	std::array<Attribute, 4> param = //-V112
-	{
-		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
-		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
-		Attribute(GL_FLOAT, sizeof(float), 4), //-V112
-		Attribute(GL_FLOAT, sizeof(float), 2),
-	};
-
-	e->setInstance<VertexManager<4>>(param)->init();
 	if (!loadShaders(e))
 		return EXIT_FAILURE;
 	if (!loadAssets(e))

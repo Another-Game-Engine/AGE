@@ -3,7 +3,7 @@
 #include "Shader.hh"
 #include "Utils/OpenGL.hh"
 #include "glm/gtc/type_ptr.hpp"
-#include <memory.h>
+#include <iostream>
 #include <list>
 #include <cstdint>
 

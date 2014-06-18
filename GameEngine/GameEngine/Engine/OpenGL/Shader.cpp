@@ -97,7 +97,6 @@ namespace OpenGLTools
 		if (file.fail())
 		{
 			std::cerr << std::string("Error: cannot find the file " + path + ".") << std::endl;
-			throw Error::Cannot_Compile;
 		}
 		file.seekg(0, file.end);
 		fileSize = static_cast<GLint>(file.tellg()) + 1;

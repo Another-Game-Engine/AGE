@@ -125,14 +125,12 @@ public:
 				f->_dimensions[i] = dimensions[i].GetUint();
 			}
 
-			auto vm = _dpyManager.lock()->getInstance<VertexManager<4>>();
-
+//			auto vm = _dpyManager.lock()->getInstance<VertexManager<4>>();
 			// LOAD FRAME
-			if (!f->load(vm))
-			{
-				std::cerr << "Frame failed to load." << std::endl;
-			}
-
+		//if (!f->load(vm))
+		//{
+		//	std::cerr << "Frame failed to load." << std::endl;
+		//}
 			// LOAD ALIAS
 			const rapidjson::Value& alias = itr->value["alias"];
 			if (!alias.IsArray())

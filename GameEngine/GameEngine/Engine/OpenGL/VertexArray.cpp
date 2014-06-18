@@ -1,14 +1,9 @@
-#include "VertexArray.hh"
+#include <OpenGL/VertexArray.hh>
 
-namespace OpenGLTools
+namespace gl
 {
 	VertexArray::VertexArray()
-		: _id(0),
-		_isBind(false)
-	{
-	}
-
-	void VertexArray::init()
+		: _id(0)
 	{
 		glGenVertexArrays(1, &_id);
 	}
@@ -19,25 +14,12 @@ namespace OpenGLTools
 			glDeleteVertexArrays(1, &_id);
 	}
 
-	VertexArray::VertexArray(VertexArray const &copy)
-		: _id(copy._id),
-		_isBind(copy._isBind)
-	{
-	}
-
-	VertexArray &VertexArray::operator=(VertexArray const &vertexarray)
-	{
-		_id = vertexarray._id;
-		_isBind = vertexarray._isBind;
-		return (*this);
-	}
-
-	void VertexArray::bind()
+	void VertexArray::bind() const
 	{
 		glBindVertexArray(_id);
 	}
 
-	void VertexArray::unbind()
+	void VertexArray::unbind() const
 	{
 		glBindVertexArray(0);
 	}

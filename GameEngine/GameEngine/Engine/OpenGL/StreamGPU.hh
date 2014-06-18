@@ -2,13 +2,15 @@
 # define STREAMGPU_H_
 
 #include <array>
+#include <stdint.h>
 #include <OpenGL/PixelBuffer.hh>
-#include <OpenGL/Texture.hh>
 
 # define PINGPONG_SIZE 2
 
 namespace OpenGLTools
 {
+	class Texture;
+
 	class StreamGPU
 	{
 	public:
