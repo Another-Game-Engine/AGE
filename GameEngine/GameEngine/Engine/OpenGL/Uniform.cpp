@@ -86,7 +86,7 @@ namespace gl
 		memcpy(_data, &value, _sizeData);
 		if (getLocation() == false)
 			return (*this);
-		glUniformMatrix4fv(_attach->getId(), 1, GL_FALSE, (float *)_data);
+		glUniformMatrix4fv(_location, 1, GL_FALSE, &(*(glm::mat4 *)_data)[0].x);
 		return (*this);
 	}
 }
