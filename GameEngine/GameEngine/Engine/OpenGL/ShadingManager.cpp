@@ -53,6 +53,9 @@ namespace gl
 	{
 		if (!shader)
 			return (*this);
+		auto element = _shaders.find(shader);
+		if (element == _shaders.end())
+			return (*this);
 		_shaders.erase(shader);
 		shader.destroy();
 		return (*this);

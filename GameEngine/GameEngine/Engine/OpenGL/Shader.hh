@@ -48,7 +48,7 @@ namespace gl
 		Key<Sampler> addSampler(std::string const &flag);
 		Shader &rmSampler(Key<Sampler> key);
 		Key<Sampler> getSampler(size_t index) const;
-		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
+		//Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 
 	private:
 		std::string _vertexName;

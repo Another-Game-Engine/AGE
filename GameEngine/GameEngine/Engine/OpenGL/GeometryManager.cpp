@@ -77,6 +77,9 @@ namespace gl
 	{
 		if (!key)
 			return (*this);
+		auto element = _vertexPool.find(key);
+		if (element == _vertexPool.end())
+			return (*this);
 		_vertexPool.erase(key);
 		key.destroy();
 		return (*this);
@@ -85,6 +88,9 @@ namespace gl
 	GeometryManager &GeometryManager::rmIndexPool(Key<IndexPool> &key)
 	{
 		if (!key)
+			return (*this);
+		auto element = _indexPool.find(key);
+		if (element == _indexPool.end())
 			return (*this);
 		_indexPool.erase(key);
 		key.destroy();
@@ -127,6 +133,8 @@ namespace gl
 		if (!key)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "rmVertices", "key not valid")
 		auto &attach = _vertexAttach.find(key);
+		if (attach == _vertexAttach.end())
+			return (*this);
 		dettachVerticesToVertexPool(key);
 		key.destroy();
 		return (*this);
@@ -137,6 +145,8 @@ namespace gl
 		if (!key)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "rmVertices", "key not valid")
 		auto &attach = _indexAttach.find(key);
+		if (attach == _indexAttach.end())
+			return (*this);
 		dettachIndicesToIndexPool(key);
 		key.destroy();
 		return (*this);
