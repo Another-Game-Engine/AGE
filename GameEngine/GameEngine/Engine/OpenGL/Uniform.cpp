@@ -89,4 +89,14 @@ namespace gl
 		glUniformMatrix4fv(_location, 1, GL_FALSE, &(*(glm::mat4 *)_data)[0].x);
 		return (*this);
 	}
+
+	Uniform &Uniform::set(int value)
+	{
+		_data = setAllocation<glm::mat4>(_sizeData, _data);
+		memcpy(_data, &value, _sizeData);
+		if (getLocation() == false)
+			return (*this);
+		glUniform1i(_location, *((int *)value));
+		return (*this);
+	}
 }

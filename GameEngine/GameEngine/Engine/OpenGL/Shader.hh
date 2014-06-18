@@ -9,6 +9,9 @@
 namespace gl
 {
 	class Uniform;
+	class Texture;
+
+	struct Sampler{};
 
 	//!\file Shader.hh
 	//!\author Dorian Pinaud
@@ -41,6 +44,11 @@ namespace gl
 		Shader &rmUniform(Key<Uniform> &key);
 		Key<Uniform> getUniform(size_t index) const;
 		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &value);
+		// sampler 
+		Key<Sampler> addSampler(std::string const &flag);
+		Shader &rmSampler(Key<Sampler> key);
+		Key<Sampler> getSampler(size_t index) const;
+		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 
 	private:
 		std::string _vertexName;
@@ -54,6 +62,9 @@ namespace gl
 		GLuint	_computeId;
 
 		std::map<Key<Uniform>, Uniform> _uniforms;
+
+		std::map<Key<Sampler>, Uniform> _samplers;
+		Uniform *_units[GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS];
 
 		// some private function usefull for internal functionement
 		bool compileShader(GLuint shaderId, std::string const &file) const;

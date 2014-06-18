@@ -20,8 +20,9 @@ namespace gl
 		~Uniform();
 		Uniform(Uniform const &uniform);
 		Uniform &operator=(Uniform const &uniform);
-		
+
 		Uniform &set(glm::mat4 const &value);
+		Uniform &set(int value);
 
 	private:
 		std::string _flag;

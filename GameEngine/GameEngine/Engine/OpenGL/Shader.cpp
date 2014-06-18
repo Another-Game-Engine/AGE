@@ -20,6 +20,8 @@ namespace gl
 		_geometryName(""),
 		_computeName("")
 	{
+		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
+			_units[index] = NULL;
 	}
 
 	Shader::Shader(std::string const &compute)
@@ -67,6 +69,10 @@ namespace gl
 	Shader::Shader(Shader const &shader)
 		: Shader()
 	{
+		_uniforms = shader._uniforms;
+		_samplers = shader._samplers;
+		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
+			_units[index] = shader._units[index];
 		_vertexName = shader._vertexName;
 		_fragName = shader._fragName;
 		_geometryName = shader._geometryName;
@@ -86,6 +92,10 @@ namespace gl
 	{
 		if (this != &s)
 		{
+			_uniforms = s._uniforms;
+			_samplers = s._samplers;
+			for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
+				_units[index] = s._units[index];
 			if (_progId > 0)
 			{
 				if (_vertexId > 0) { glDetachShader(_progId, _vertexId); glDeleteShader(_vertexId); }
@@ -247,7 +257,10 @@ namespace gl
 	{
 		if (!key)
 			return (*this);
-		_uniforms.erase(key);
+		auto element = _uniforms.find(key);
+		if (element == _uniforms.end())
+			return (*this);
+		_uniforms.erase(element);
 		key.destroy();
 		return (*this);
 	}
@@ -280,5 +293,52 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "element in not find", *this);
 		element->second.set(value);
 		return (*this);
+	}
+
+	Key<Sampler> Shader::addSampler(std::string const &flag)
+	{
+		Key<Sampler> key;
+
+		auto &element = _samplers[key] = Uniform(flag, this);
+		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
+		{
+			if (_units[index] == NULL)
+			{
+				_units[index] = &element;
+				element.set(index);
+				return (key);
+			}
+		}
+		DEBUG_MESSAGE("Warning", "Shader.cpp - addSampler()", "You have not enougth texture unit for this sampler", Key<Sampler>(KEY_DESTROY));
+	}
+
+	Shader &Shader::rmSampler(Key<Sampler> key)
+	{
+		if (!key)
+			return (*this);
+		auto element = _samplers.find(key);
+		if (element == _samplers.end())
+			return (*this);
+		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
+		{
+			if (_units[index] == &element->second)
+			{
+				_units[index] = NULL;
+				_samplers.erase(element);
+				key.destroy();
+				return (*this);
+			}
+		}
+		DEBUG_MESSAGE("Warning", "Shader.cpp - rmSampler()", "You have not enougth texture unit for this sampler", *this);
+	}
+
+	Key<Sampler> Shader::getSampler(size_t target) const
+	{
+		if (target >= _samplers.size())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - getSampler(size_t target)", "the target is out of range", Key<Sampler>(KEY_DESTROY))
+		auto &element = _samplers.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
 	}
 }
