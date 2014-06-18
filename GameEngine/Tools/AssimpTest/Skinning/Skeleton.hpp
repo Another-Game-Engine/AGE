@@ -14,8 +14,9 @@ namespace AGE
 	public:
 		std::vector<Bone> bones;
 		std::vector<AnimationInstance*> animations;
+		unsigned int firstBone;
 
-		void updateSkinning(float time);
+		void updateSkinning();
 	private:
 		void readNodeHierarchy(unsigned int boneID);
 	};

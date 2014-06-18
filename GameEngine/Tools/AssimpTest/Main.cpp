@@ -212,7 +212,7 @@ int			main(int ac, char **av)
 			skeleton.bones[i].children.push_back(f->second);
 		}
 	}
-
+	skeleton.firstBone = skeletonRoot;
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
 		aiMesh *mesh = scene->mMeshes[meshIndex];
@@ -405,7 +405,8 @@ int			main(int ac, char **av)
 	// la couleur de clear par defaut sera du noir
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-	AGE::AnimationInstance animationInstance(&skeleton, &animations[0]);
+	std::array<AGE::AnimationInstance*, 1> animationInstances;
+	animationInstances.fill(new AGE::AnimationInstance(&skeleton, &animations[0]));
 
 	do
 	{
@@ -444,23 +445,22 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
 
 		auto before = std::chrono::system_clock::now();
-		for (auto i = 0; i < 10000; ++i)
+		for (auto &&a : animationInstances)
 		{
-			//	skeleton.updateSkinning(totalTime * 10.0f);
-			animationInstance.update(totalTime);
-			skeleton.updateSkinning(totalTime);
+			a->update(totalTime * 10.0f);
 		}
+		skeleton.updateSkinning();
 		auto after = std::chrono::system_clock::now();
 		static float median = 0.0f;
 		median = median <= 0
 			? std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()
 			: (median + std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()) / 2.0f;
 		std::cout << median << " milliseconds" << std::endl;
-		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), animationInstance.transformations.size(), GL_FALSE, glm::value_ptr(animationInstance.transformations[0]));
+		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), animationInstances[0]->transformations.size(), GL_FALSE, glm::value_ptr(animationInstances[0]->transformations[0]));
 
 		for (unsigned int i = 0; i < vertices.size(); ++i)
 		{
-						vertices[i]->draw(GL_TRIANGLES);
+			vertices[i]->draw(GL_TRIANGLES);
 		}
 	} while (e->update());
 

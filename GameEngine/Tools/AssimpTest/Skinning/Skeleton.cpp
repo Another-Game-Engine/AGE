@@ -6,9 +6,9 @@
 
 using namespace AGE;
 
-void Skeleton::updateSkinning(float time)
+void Skeleton::updateSkinning()
 {
-	readNodeHierarchy(0);
+	readNodeHierarchy(this->firstBone);
 
 	for (std::size_t j = 0; j < this->animations.size(); ++j)
 	{
@@ -28,8 +28,9 @@ void Skeleton::readNodeHierarchy(
 	for (unsigned int i = 0; i < this->animations.size(); ++i)
 	{
 		nodeT = this->animations[i]->bindPoses[boneID];
-		if (boneID == 0)
-			continue;
+		if (boneID == firstBone)
+			this->animations[i]->transformations[boneID] = nodeT;
+		else
 		this->animations[i]->transformations[boneID] = this->animations[i]->transformations[bone.parent] * nodeT;
 	}
 
