@@ -12,6 +12,8 @@ namespace gl
 {
 	class Shader;
 	class Uniform;
+	struct Sampler;
+	class Texture;
 
 	//!\file ShadingManager.hh
 	//!\author Dorian Pinaud
@@ -37,6 +39,11 @@ namespace gl
 		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
 
+		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
+		ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> &uniform);
+		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
+		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Texture const &texture);
+
 		//Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		//template <typename TYPE> Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag, TYPE const &data);
 		//ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> const &sampler);
@@ -60,5 +67,6 @@ namespace gl
 		//std::map<key<UniformBlock>, UniformBuffer> _uniformBlocks;
 		std::vector<MemoryBlocksGPU> _memoryUniformBlock;
 		//std::map<Key<Pipeline>, Pipeline> _pipelines;
+
 	};
 }

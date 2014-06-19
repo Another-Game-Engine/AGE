@@ -11,7 +11,7 @@
 namespace gl
 {
 	Shader::Shader()
-	:	_progId(0),
+		: _progId(0),
 		_vertexId(0),
 		_fragId(0),
 		_geometryId(0),
@@ -109,10 +109,10 @@ namespace gl
 			_fragName = s._fragName;
 			_geometryName = s._geometryName;
 			_computeName = s._computeName;
-			
+
 			_progId = glCreateProgram();
 
-			if (_vertexName != "") { _vertexId = addShader(_vertexName, GL_VERTEX_SHADER); glAttachShader(_progId, _vertexId);}
+			if (_vertexName != "") { _vertexId = addShader(_vertexName, GL_VERTEX_SHADER); glAttachShader(_progId, _vertexId); }
 			if (_fragName != "") { _fragId = addShader(_fragName, GL_FRAGMENT_SHADER); glAttachShader(_progId, _fragId); }
 			if (_geometryName != "") { _geometryId = addShader(_geometryName, GL_GEOMETRY_SHADER); glAttachShader(_progId, _geometryId); }
 			if (_computeName != "") { _computeId = addShader(_computeName, GL_COMPUTE_SHADER); glAttachShader(_progId, _computeId); }
@@ -204,7 +204,7 @@ namespace gl
 	void Shader::use() const
 	{
 		static GLint idbind = 0;
-		
+
 		if (idbind != _progId)
 		{
 			glUseProgram(_progId);
@@ -270,7 +270,7 @@ namespace gl
 	{
 		if (target >= _uniforms.size())
 			DEBUG_MESSAGE("Warning", "Shader.cpp - getUniform(size_t target)", "the target is out of range", Key<Uniform>(KEY_DESTROY))
-		auto &element = _uniforms.begin();
+			auto &element = _uniforms.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
@@ -330,7 +330,7 @@ namespace gl
 	{
 		if (target >= _samplers.size())
 			DEBUG_MESSAGE("Warning", "Shader.cpp - getSampler(size_t target)", "the target is out of range", Key<Sampler>(KEY_DESTROY))
-		auto &element = _samplers.begin();
+			auto &element = _samplers.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
@@ -345,6 +345,7 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "Shader.cpp - setSampler", "the key correspond of any element in samplers list", *this);
 		glActiveTexture(GL_TEXTURE0 + element->second.get<int>());
 		texture.bind();
+		return (*this);
 	}
 
 }

@@ -45,9 +45,10 @@ namespace gl
 	{
 		TYPE value;
 
+		memset(&value, 0, sizeof(TYPE));
 		if (sizeof(TYPE) != _sizeData)
 			DEBUG_MESSAGE("Error", "Uniform.hh - get()", "The size of type ask is different of data size into this uniform", value);
-		memset(&value, _data, _sizeData);
+		memcpy(&value, _data, _sizeData);
 		return (value);
 	}
 }

@@ -74,7 +74,7 @@ namespace gl
 	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &shader, std::string const &flag)
 	{
 		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "key aldreadt destroy", Key<Uniform>(KEY_DESTROY))
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "key already destroy", Key<Uniform>(KEY_DESTROY))
 			auto &element = _shaders.find(shader);
 		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
@@ -127,4 +127,51 @@ namespace gl
 		s.setUniform(key, mat4);
 		return (*this);
 	}
+
+	Key<Sampler> ShadingManager::addShaderSampler(Key<Shader> const &shader, std::string const &flag)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderSampler", "key already destroy", Key<Sampler>(KEY_DESTROY))
+		auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderSampler", "shader not find", Key<Sampler>(KEY_DESTROY))
+			auto &s = element->second;
+		return (s.addSampler(flag));
+	}
+
+	ShadingManager &ShadingManager::rmShaderSampler(Key<Shader> const &shader, Key<Sampler> &uniform)
+	{
+		if (!shader && !uniform)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderSampler", "key already destroy", *this)
+			auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderSampler", "shader not find", *this)
+		auto &s = element->second;
+		s.rmSampler(uniform);
+		return (*this);
+	}
+
+	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &shader, size_t target)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderSampler", "key destroy", Key<Sampler>(KEY_DESTROY))
+			auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderSampler", "shader not find", Key<Sampler>(KEY_DESTROY))
+		auto &s = element->second;
+		return (s.getSampler(target));
+	}
+
+	ShadingManager &ShadingManager::setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Texture const &texture)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderSampler()", "key destroy", *this)
+			auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderSampler", "shader not find", *this)
+		auto &s = element->second;
+		s.setSampler(key, texture);
+		return (*this);
+	}
+	
 }
