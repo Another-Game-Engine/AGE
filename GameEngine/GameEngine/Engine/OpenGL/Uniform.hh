@@ -9,7 +9,7 @@
 namespace gl
 {
 	class Shader;
-	class MemoryBlocksGPU;
+	class MemoryGPU;
 
 	//!\file Uniform.hh
 	//!\author Dorian Pinaud
@@ -75,10 +75,13 @@ namespace gl
 	private:
 		std::string _flag;
 		std::string *_elements;
+		MemoryGPU *_memoryElement;
 		size_t _nbrElement;
 		Shader const *_attach;
 		GLuint _location;
 
+		// use in intern
 		void clean();
+		void allocate();
 	};
 }

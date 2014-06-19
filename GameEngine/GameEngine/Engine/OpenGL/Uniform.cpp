@@ -123,6 +123,8 @@ namespace gl
 			_elements = new std::string[_nbrElement];
 			for (size_t index = 0; index < _nbrElement; ++index)
 				_elements[index] = copy._elements[index];
+			_memoryElement = new MemoryGPU[_nbrElement];
+			memcpy(_memoryElement, copy._memoryElement, sizeof(MemoryGPU)* _nbrElement);
 		}
 	}
 
@@ -144,17 +146,11 @@ namespace gl
 			{
 				_nbrElement = u._nbrElement;
 				clean();
-				if (_nbrElement != 0)
-				{
-					_elements = new std::string[_nbrElement];
-				}
-				else
-				{
-					_elements = NULL;
-				}
+				allocate();
 			}
 			for (size_t index = 0; index < _nbrElement; ++index)
 				_elements[index] = u._elements[index];
+			memcpy(_memoryElement, u._memoryElement, sizeof(MemoryGPU)* _nbrElement);
 		}
 		return (*this);
 	}
@@ -165,20 +161,15 @@ namespace gl
 		{
 			_nbrElement = nbrElement;
 			clean();
-			if (_nbrElement != 0)
-			{
-				_elements = new std::string[_nbrElement];
-			}
-			else
-			{
-				_elements = NULL;
-				return;
-			}
+			allocate();
 		}
 		for (size_t index = 0; index < _nbrElement; ++index)
 		{
 			size_t cumulOffset = 0;
+			_memoryElement[index].size = sizeData[index];
+			_memoryElement[index].offset = cumulOffset;
 			_elements[index] = elements[index];
+			cumulOffset = _memoryElement[index].size;
 		}
 	}
 
@@ -186,5 +177,21 @@ namespace gl
 	{
 		if (_elements)
 			delete _elements;
+		if (_memoryElement)
+			delete _memoryElement;
+	}
+
+	void UniformBlock::allocate()
+	{
+		if (_nbrElement != 0)
+		{
+			_elements = new std::string[_nbrElement];
+			_memoryElement = new MemoryGPU[_nbrElement];
+		}
+		else
+		{
+			_elements = NULL;
+			_memoryElement = NULL;
+		}
 	}
 }
