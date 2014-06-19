@@ -4,9 +4,12 @@
 #include "Utils/Dependency.hpp"
 
 class string;
-template <class T1, class T2> struct pair;
-template <class T, class Alloc = allocator<T>> class vector;
-template <class Key, class T, class Compare = less<Key>, class Alloc = allocator<pair<const Key, T>>> class map;
+template <class T1, class T2>
+struct pair;
+template <class T, class Alloc = allocator<T>>
+class vector;
+template <class Key, class T, class Compare = less<Key>, class Alloc = allocator<pair<const Key, T>>>
+class map;
 class PerformanceDebugger : public Dependency
 {
 public:

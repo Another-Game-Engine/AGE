@@ -37,7 +37,10 @@ void PerformanceDebugger::start(std::string const &counterName)
 {
 	auto &it = _counters.find(counterName);
 	if (it == _counters.end())
+	{
+		std::cerr << "Error counter " << counterName << " does not exist.";
 		return;
+	}
 	it->second.start = std::chrono::high_resolution_clock::now();
 }
 
@@ -47,7 +50,10 @@ void PerformanceDebugger::stop(std::string const &counterName)
 	auto &time = std::chrono::high_resolution_clock::now();
 	auto &it = _counters.find(counterName);
 	if (it == _counters.end())
+	{
+		std::cerr << "Error counter " << counterName << " does not exist.";
 		return;
+	}
 	it->second.stop = time;
 }
 
@@ -55,7 +61,10 @@ void PerformanceDebugger::changeFile(std::string const &logFileName, std::string
 {
 	auto &it = _counters.find(counterName);
 	if (it == _counters.end())
+	{
+		std::cerr << "Error counter " << counterName << " does not exist.";
 		return;
+	}
 	it->second.fileName = logFileName;
 	if (it->second.file.is_open())
 		it->second.file.close();
@@ -67,7 +76,10 @@ bool PerformanceDebugger::logNow(std::string const &counterName, std::string con
 	auto &time = std::chrono::high_resolution_clock::now();
 	auto &it = _counters.find(counterName);
 	if (it == _counters.end())
+	{
+		std::cerr << "Error counter " << counterName << " does not exist.";
 		return false;
+	}
 	if (it->second.file.is_open())
 	{
 		if (it->second.start < it->second.stop)
@@ -103,7 +115,10 @@ bool PerformanceDebugger::logAverage(std::string const &counterName, std::string
 {
 	auto &it = _counters.find(counterName);
 	if (it == _counters.end())
+	{
+		std::cerr << "Error counter " << counterName << " does not exist.";
 		return false;
+	}
 	++it->second.nbIter;
 	if (it->second.nbIter < it->second.averageTime)
 	{
