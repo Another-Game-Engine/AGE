@@ -1,5 +1,6 @@
 #include "Skeleton.hpp"
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Bone.hpp"
 #include "AnimationInstance.hpp"
@@ -14,7 +15,8 @@ void Skeleton::updateSkinning()
 	{
 		for (std::size_t i = 0; i < bones.size(); ++i)
 		{
-			this->animations[j]->transformations[i] = this->animations[j]->transformations[i] * this->bones[i].offset;
+			//hardcoded rotation
+			this->animations[j]->transformations[i] = glm::rotate(glm::mat4(1), 90.f, glm::vec3(0,0,1)) * this->animations[j]->transformations[i] * this->bones[i].offset;
 		}
 	}
 }

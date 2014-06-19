@@ -202,6 +202,7 @@ int			main(int ac, char **av)
 			else
 			{
 				skeletonRoot = i;
+//				skeleton.bones[i].transformation = glm::rotate(skeleton.bones[i].transformation, -90.0f, glm::vec3(1, 1, 1));
 			}
 		}
 		else if (bonenode->mParent)
@@ -418,7 +419,7 @@ int			main(int ac, char **av)
 	// la couleur de clear par defaut sera du noir
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-	std::array<AGE::AnimationInstance*, 1> animationInstances;
+	std::array<AGE::AnimationInstance*, 100> animationInstances;
 	animationInstances.fill(new AGE::AnimationInstance(&skeleton, &animations[0]));
 
 	do
