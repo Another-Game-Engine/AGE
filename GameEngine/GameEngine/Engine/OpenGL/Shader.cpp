@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <OpenGL/Uniform.hh>
+#include <OpenGL/Texture.hh>
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
 	{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
@@ -256,10 +257,10 @@ namespace gl
 	Shader &Shader::rmUniform(Key<Uniform> &key)
 	{
 		if (!key)
-			return (*this);
+			DEBUG_MESSAGE("Warning", "Shader.cpp - rmUniform", "the key is destroy", *this);
 		auto element = _uniforms.find(key);
 		if (element == _uniforms.end())
-			return (*this);
+			DEBUG_MESSAGE("Warning", "Shader.cpp - rmUniform", "the key correspond of any element in uniform list", *this);
 		_uniforms.erase(element);
 		key.destroy();
 		return (*this);
@@ -302,9 +303,9 @@ namespace gl
 		auto &element = _samplers[key] = Uniform(flag, this);
 		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
 		{
-			if (_units[index] == NULL)
+			if (_units[index] == false)
 			{
-				_units[index] = &element;
+				_units[index] = true;
 				element.set(index);
 				return (key);
 			}
@@ -315,21 +316,14 @@ namespace gl
 	Shader &Shader::rmSampler(Key<Sampler> key)
 	{
 		if (!key)
-			return (*this);
+			DEBUG_MESSAGE("Warning", "Shader.cpp - rmSampler", "the key is destroy", *this);
 		auto element = _samplers.find(key);
 		if (element == _samplers.end())
-			return (*this);
-		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
-		{
-			if (_units[index] == &element->second)
-			{
-				_units[index] = NULL;
-				_samplers.erase(element);
-				key.destroy();
-				return (*this);
-			}
-		}
-		DEBUG_MESSAGE("Warning", "Shader.cpp - rmSampler()", "You have not enougth texture unit for this sampler", *this);
+			DEBUG_MESSAGE("Warning", "Shader.cpp - rmSampler", "the key correspond of any element in samplers list", *this);
+		_units[element->second.get<int>()] = false;
+		_samplers.erase(element);
+		key.destroy();
+		return (*this);
 	}
 
 	Key<Sampler> Shader::getSampler(size_t target) const
@@ -342,5 +336,15 @@ namespace gl
 		return (element->first);
 	}
 
+	Shader &Shader::setSampler(Key<Sampler> const &key, Texture const &texture)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - setSampler(key, value)", "key destroy use", *this);
+		auto element = _samplers.find(key);
+		if (element == _samplers.end())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - setSampler", "the key correspond of any element in samplers list", *this);
+		glActiveTexture(GL_TEXTURE0 + element->second.get<int>());
+		texture.bind();
+	}
 
 }

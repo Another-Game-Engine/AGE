@@ -48,7 +48,7 @@ namespace gl
 		Key<Sampler> addSampler(std::string const &flag);
 		Shader &rmSampler(Key<Sampler> key);
 		Key<Sampler> getSampler(size_t index) const;
-		//Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
+		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 
 	private:
 		std::string _vertexName;
@@ -64,7 +64,7 @@ namespace gl
 		std::map<Key<Uniform>, Uniform> _uniforms;
 
 		std::map<Key<Sampler>, Uniform> _samplers;
-		Uniform *_units[GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS];
+		bool _units[GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS];
 
 		// some private function usefull for internal functionement
 		bool compileShader(GLuint shaderId, std::string const &file) const;

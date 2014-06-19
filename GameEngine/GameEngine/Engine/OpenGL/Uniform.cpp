@@ -3,9 +3,6 @@
 #include <OpenGL/Shader.hh>
 #include <glm/glm.hpp>
 
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
-
 namespace gl
 {
 	Uniform::Uniform(std::string const &flag, Shader const *attach)

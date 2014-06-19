@@ -21,6 +21,8 @@ namespace gl
 		Uniform(Uniform const &uniform);
 		Uniform &operator=(Uniform const &uniform);
 
+		template <typename TYPE> TYPE get() const;
+
 		Uniform &set(glm::mat4 const &value);
 		Uniform &set(int value);
 
@@ -34,4 +36,18 @@ namespace gl
 		bool getLocation();
 	};
 
+# define DEBUG_MESSAGE(type, from, reason, return_type) \
+	{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
+
+
+	template <typename TYPE>
+	TYPE Uniform::get() const
+	{
+		TYPE value;
+
+		if (sizeof(TYPE) != _sizeData)
+			DEBUG_MESSAGE("Error", "Uniform.hh - get()", "The size of type ask is different of data size into this uniform", value);
+		memset(&value, _data, _sizeData);
+		return (value);
+	}
 }
