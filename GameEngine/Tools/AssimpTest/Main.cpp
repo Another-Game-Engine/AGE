@@ -57,6 +57,23 @@ static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
 }
 
 
+void loadSkeletonFromAssimp(AGE::Skeleton &_skeleton, aiNode *_node, unsigned int _parent, std::map<std::string, uint32_t> &boneRef)
+{
+	if (boneRef.find(_node->mName.data) != std::end(boneRef))
+		return;
+	auto index = _skeleton.bones.size();
+	_skeleton.bones.push_back(AGE::Bone());
+	_skeleton.bones.back().index = index;
+	_skeleton.bones.back().name = _node->mName.data;
+	_skeleton.bones.back().offset = glm::mat4(1);
+	boneRef.insert(std::make_pair(_node->mName.data, index));
+
+	for (unsigned int a = 0; a < _node->mNumChildren; a++)
+	{
+		loadSkeletonFromAssimp(_skeleton, _node->mChildren[a], index, boneRef);
+	}
+}
+
 int			main(int ac, char **av)
 {
 
@@ -139,6 +156,12 @@ int			main(int ac, char **av)
 	// we reference all bones
 	unsigned int boneCounter = 0;
 	std::map<std::string, std::uint32_t> bonesTable;
+
+	for (auto i = 0; i < scene->mRootNode->mNumChildren; ++i)
+	{
+		loadSkeletonFromAssimp(skeleton, scene->mRootNode->mChildren[i], (unsigned int)(-1), bonesTable);
+	}
+
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
 		aiMesh *mesh = scene->mMeshes[meshIndex];
@@ -146,35 +169,35 @@ int			main(int ac, char **av)
 		for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 		{
 			std::string boneName = mesh->mBones[i]->mName.data;
-			if (bonesTable.find(boneName) != std::end(bonesTable))
+			if (bonesTable.find(boneName) == std::end(bonesTable))
 				continue;
-			skeleton.bones.push_back(AGE::Bone());
-			skeleton.bones.back().index = boneCounter;
-			skeleton.bones.back().name = boneName;
-			skeleton.bones.back().offset = aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
-			bonesTable.insert(std::make_pair(boneName, boneCounter));
-			boneCounter++;
+			//skeleton.bones.push_back(AGE::Bone());
+			//skeleton.bones.back().index = boneCounter;
+			//skeleton.bones.back().name = boneName;
+			skeleton.bones[bonesTable[boneName]].offset = aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
+			//bonesTable.insert(std::make_pair(boneName, boneCounter));
+			//boneCounter++;
 		}
 	}
 
-	for (unsigned int animIndex = 0; animIndex < scene->mNumAnimations; ++animIndex)
-	{
-		aiAnimation *animation = scene->mAnimations[animIndex];
+	//for (unsigned int animIndex = 0; animIndex < scene->mNumAnimations; ++animIndex)
+	//{
+	//	aiAnimation *animation = scene->mAnimations[animIndex];
 
-		for (unsigned int i = 0; i < animation->mNumChannels; ++i)
-		{
-			auto channel = animation->mChannels[i];
-			std::string boneName = channel->mNodeName.data;
-			if (bonesTable.find(boneName) != std::end(bonesTable))
-				continue;
-			skeleton.bones.push_back(AGE::Bone());
-			skeleton.bones.back().index = boneCounter;
-			skeleton.bones.back().name = boneName;
-			skeleton.bones.back().offset = glm::mat4(1);
-			bonesTable.insert(std::make_pair(boneName, boneCounter));
-			boneCounter++;
-		}
-	}
+	//	for (unsigned int i = 0; i < animation->mNumChannels; ++i)
+	//	{
+	//		auto channel = animation->mChannels[i];
+	//		std::string boneName = channel->mNodeName.data;
+	//		if (bonesTable.find(boneName) != std::end(bonesTable))
+	//			continue;
+	//		skeleton.bones.push_back(AGE::Bone());
+	//		skeleton.bones.back().index = boneCounter;
+	//		skeleton.bones.back().name = boneName;
+	//		skeleton.bones.back().offset = glm::mat4(1);
+	//		bonesTable.insert(std::make_pair(boneName, boneCounter));
+	//		boneCounter++;
+	//	}
+	//}
 
 	//we fill bone hierarchy
 	for (unsigned int i = 0; i < skeleton.bones.size(); ++i)
@@ -187,8 +210,7 @@ int			main(int ac, char **av)
 		skeleton.bones[i].transformation = aiMat4ToGlm(bonenode->mTransformation);
 
 		// we set parent
-		if (bonenode->mParent != nullptr
-			&& bonesTable.find(bonenode->mParent->mName.data) == std::end(bonesTable))
+		if (bonenode->mParent != nullptr && bonesTable.find(bonenode->mParent->mName.data) == std::end(bonesTable))
 		{
 			auto parent = bonenode->mParent;
 			while (parent && bonesTable.find(parent->mName.data) == std::end(bonesTable))
@@ -357,18 +379,6 @@ int			main(int ac, char **av)
 		}
 	}
 
-	//We set animation channel to Bones
-	for (unsigned int animationNb = 0; animationNb < animations.size(); ++animationNb)
-	{
-		for (unsigned int channelNb = 0; channelNb < animations[animationNb].channels.size(); ++channelNb)
-		{
-			//auto &channel = animations[animationNb].channels[channelNb];
-			//auto boneId = channel.boneIndex;
-			//skeleton.bones[boneId].animations.resize(animationNb + 1);
-			//skeleton.bones[boneId].animations[animationNb].push_back(&channel);
-		}
-	}
-
 	auto shader = e->getInstance<Renderer>()->addShader("basic",
 		"./basic.vp",
 		"./basic.fp");
@@ -420,7 +430,7 @@ int			main(int ac, char **av)
 	// la couleur de clear par defaut sera du noir
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-	std::array<AGE::AnimationInstance*, 100> animationInstances;
+	std::array<AGE::AnimationInstance*, 1> animationInstances;
 	animationInstances.fill(new AGE::AnimationInstance(&skeleton, &animations[0]));
 
 	do
