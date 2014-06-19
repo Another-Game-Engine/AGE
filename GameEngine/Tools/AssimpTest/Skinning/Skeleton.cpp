@@ -31,7 +31,7 @@ void Skeleton::readNodeHierarchy(
 		if (boneID == firstBone)
 			this->animations[i]->transformations[boneID] = nodeT;
 		else
-		this->animations[i]->transformations[boneID] = this->animations[i]->transformations[bone.parent] * nodeT;
+			this->animations[i]->transformations[boneID] = this->animations[i]->transformations[bone.parent] * nodeT;
 	}
 
 	for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)
