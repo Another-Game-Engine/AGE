@@ -3,10 +3,14 @@
 #include <Utils/OpenGL.hh>
 #include <string>
 #include <glm/glm.hpp>
+#include <array>
+
 
 namespace gl
 {
 	class Shader;
+	class MemoryBlocksGPU;
+
 	//!\file Uniform.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
@@ -51,4 +55,30 @@ namespace gl
 		memcpy(&value, _data, _sizeData);
 		return (value);
 	}
+
+	//!\file Uniform.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class UniformBlock
+	//!\brief Handle the uniformBlock using in shader
+	class UniformBlock
+	{
+	public:
+		UniformBlock();
+		UniformBlock(std::string const &flag, Shader const *attach);
+		~UniformBlock();
+		UniformBlock(UniformBlock const &uniform);
+		UniformBlock &operator=(UniformBlock const &uniform);
+
+		void set(size_t nbrElement, std::string const *elements, size_t const *sizeData);
+
+	private:
+		std::string _flag;
+		std::string *_elements;
+		size_t _nbrElement;
+		Shader const *_attach;
+		GLuint _location;
+
+		void clean();
+	};
 }

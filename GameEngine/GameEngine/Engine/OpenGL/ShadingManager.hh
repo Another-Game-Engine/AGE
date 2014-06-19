@@ -14,6 +14,7 @@ namespace gl
 	class Uniform;
 	struct Sampler;
 	class Texture;
+	class UniformBuffer;
 
 	//!\file ShadingManager.hh
 	//!\author Dorian Pinaud
@@ -63,7 +64,6 @@ namespace gl
 		//Key<Pipeline> const &getPipeline(size_t index) const;
 	private:
 		std::map<Key<Shader>, Shader> _shaders;
-
 		//std::map<key<UniformBlock>, UniformBuffer> _uniformBlocks;
 		std::vector<MemoryBlocksGPU> _memoryUniformBlock;
 		//std::map<Key<Pipeline>, Pipeline> _pipelines;

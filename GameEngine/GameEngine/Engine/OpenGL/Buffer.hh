@@ -64,4 +64,22 @@ namespace gl
 		virtual Buffer const &unbind() const;
 		virtual GLenum getMode() const;
 	};
+
+	//!\file Buffer.hh
+	//!\author Dorian Pinaud
+	//!\version v2.0
+	//!\class UniformBuffer
+	//!\brief Handle Opengl Uniform Buffer Object
+	class UniformBuffer : public Buffer
+	{
+	private:
+		UniformBuffer(UniformBuffer const &copy);
+	public:
+		UniformBuffer();
+		virtual ~UniformBuffer();
+
+		virtual Buffer const &bind() const;
+		virtual Buffer const &unbind() const;
+		virtual GLenum getMode() const;
+	};
 }

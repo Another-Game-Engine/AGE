@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <OpenGL/Shader.hh>
 #include <glm/glm.hpp>
+#include <OpenGL/MemoryBlocksGPU.hh>
 
 namespace gl
 {
@@ -95,5 +96,95 @@ namespace gl
 			return (*this);
 		glUniform1i(_location, *((int *)value));
 		return (*this);
+	}
+
+	UniformBlock::UniformBlock()
+		: _elements(NULL),
+		_nbrElement(0),
+		_attach(NULL),
+		_location(0)
+	{
+	}
+
+	UniformBlock::~UniformBlock()
+	{
+		clean();
+	}
+
+	UniformBlock::UniformBlock(UniformBlock const &copy)
+		: UniformBlock()
+	{
+		_location = copy._location;
+		_flag = copy._flag;
+		_attach = copy._attach;
+		_nbrElement = copy._nbrElement;
+		if (_nbrElement != 0)
+		{
+			_elements = new std::string[_nbrElement];
+			for (size_t index = 0; index < _nbrElement; ++index)
+				_elements[index] = copy._elements[index];
+		}
+	}
+
+	UniformBlock::UniformBlock(std::string const &flag, Shader const *attach)
+		: UniformBlock()
+	{
+		_flag = flag;
+		_attach = attach;
+	}
+
+	UniformBlock &UniformBlock::operator=(UniformBlock const &u)
+	{
+		if (this == &u)
+		{
+			_location = u._location;
+			_flag = u._flag;
+			_attach = u._attach;
+			if (_nbrElement != u._nbrElement)
+			{
+				_nbrElement = u._nbrElement;
+				clean();
+				if (_nbrElement != 0)
+				{
+					_elements = new std::string[_nbrElement];
+				}
+				else
+				{
+					_elements = NULL;
+				}
+			}
+			for (size_t index = 0; index < _nbrElement; ++index)
+				_elements[index] = u._elements[index];
+		}
+		return (*this);
+	}
+
+	void UniformBlock::set(size_t nbrElement, std::string const *elements, size_t const *sizeData)
+	{
+		if (nbrElement != _nbrElement)
+		{
+			_nbrElement = nbrElement;
+			clean();
+			if (_nbrElement != 0)
+			{
+				_elements = new std::string[_nbrElement];
+			}
+			else
+			{
+				_elements = NULL;
+				return;
+			}
+		}
+		for (size_t index = 0; index < _nbrElement; ++index)
+		{
+			size_t cumulOffset = 0;
+			_elements[index] = elements[index];
+		}
+	}
+
+	void UniformBlock::clean()
+	{
+		if (_elements)
+			delete _elements;
 	}
 }

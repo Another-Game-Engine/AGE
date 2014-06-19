@@ -69,4 +69,28 @@ namespace gl
 	{
 		return (GL_ELEMENT_ARRAY_BUFFER);
 	}
+
+	UniformBuffer::UniformBuffer()
+		: Buffer()
+	{
+	}
+
+	UniformBuffer::~UniformBuffer()
+	{
+	}
+
+	Buffer const &UniformBuffer::bind() const
+	{
+		glBindBuffer(GL_UNIFORM_BUFFER, _id);
+	}
+
+	Buffer const &UniformBuffer::unbind() const
+	{
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	GLenum UniformBuffer::getMode() const
+	{
+		return (GL_UNIFORM_BUFFER);
+	}
 }
