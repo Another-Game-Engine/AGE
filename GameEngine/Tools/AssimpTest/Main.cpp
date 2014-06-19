@@ -112,8 +112,8 @@ int			main(int ac, char **av)
 
 	Assimp::Importer importer;
 
-	const aiScene *scene = importer.ReadFile("../../Assets/catwoman/atk close front 6.fbx"
-		//	const aiScene *scene = importer.ReadFile("../../Assets/marvin.fbx"
+//	const aiScene *scene = importer.ReadFile("../../Assets/catwoman/atk close front 6.fbx"
+		const aiScene *scene = importer.ReadFile("../../Assets/marvin.fbx"
 		, aiProcess_Triangulate |
 		aiProcess_CalcTangentSpace |
 		aiProcess_JoinIdenticalVertices |
@@ -187,7 +187,8 @@ int			main(int ac, char **av)
 		skeleton.bones[i].transformation = aiMat4ToGlm(bonenode->mTransformation);
 
 		// we set parent
-		if (bonenode->mParent != nullptr && bonesTable.find(bonenode->mParent->mName.data) == std::end(bonesTable))
+		if (bonenode->mParent != nullptr
+			&& bonesTable.find(bonenode->mParent->mName.data) == std::end(bonesTable))
 		{
 			auto parent = bonenode->mParent;
 			while (parent && bonesTable.find(parent->mName.data) == std::end(bonesTable))
