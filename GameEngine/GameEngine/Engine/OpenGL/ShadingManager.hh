@@ -3,7 +3,7 @@
 #include <Utils/OpenGL.hh>
 #include <Utils/Dependency.hpp>
 #include <OpenGL/Key.hh>
-#include <OpenGL/MemoryBlocksGPU.hh>
+#include <OpenGL/MemoryGPU.hh>
 #include <map>
 #include <vector>
 #include <glm/glm.hpp>
@@ -23,6 +23,13 @@ namespace gl
 	//!\brief Handle the shading of the object
 	class ShadingManager : public Dependency
 	{
+	public:
+		struct Attach
+		{
+			Shader const *shaderAttach;
+			UniformBuffer *buffer;
+			//UniformBlock *uniformblock;
+		};
 	public:
 		ShadingManager();
 		~ShadingManager();

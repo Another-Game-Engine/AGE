@@ -1,4 +1,4 @@
-#include <OpenGL/MemoryBlocksGPU.hh>
+#include <OpenGL/MemoryGPU.hh>
 #include <iostream>
 #include <stdint.h>
 
@@ -10,6 +10,38 @@
 
 namespace gl
 {
+	MemoryGPU::MemoryGPU()
+		: size(0),
+		offset(0)
+	{
+	}
+
+	MemoryGPU::MemoryGPU(MemoryGPU const &copy)
+		: size(copy.size),
+		offset(copy.offset)
+	{
+	}
+
+	MemoryGPU::~MemoryGPU()
+	{
+	}
+
+	MemoryGPU::MemoryGPU(size_t size, size_t offset)
+		: size(size),
+		offset(offset)
+	{
+	}
+
+	MemoryGPU &MemoryGPU::operator=(MemoryGPU const &m)
+	{
+		if (this != &m)
+		{
+			size = m.size;
+			offset = m.offset;
+		}
+		return (*this);
+	}
+
 	MemoryBlocksGPU::MemoryBlocksGPU()
 		: _nbrElement(0),
 		_startElement(0),

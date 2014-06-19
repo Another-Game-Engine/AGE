@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <OpenGL/Shader.hh>
 #include <glm/glm.hpp>
-#include <OpenGL/MemoryBlocksGPU.hh>
+#include <OpenGL/MemoryGPU.hh>
 
 namespace gl
 {
@@ -135,7 +135,7 @@ namespace gl
 
 	UniformBlock &UniformBlock::operator=(UniformBlock const &u)
 	{
-		if (this == &u)
+		if (this != &u)
 		{
 			_location = u._location;
 			_flag = u._flag;

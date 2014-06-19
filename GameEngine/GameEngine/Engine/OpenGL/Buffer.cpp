@@ -82,11 +82,13 @@ namespace gl
 	Buffer const &UniformBuffer::bind() const
 	{
 		glBindBuffer(GL_UNIFORM_BUFFER, _id);
+		return (*this);
 	}
 
 	Buffer const &UniformBuffer::unbind() const
 	{
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		return (*this);
 	}
 
 	GLenum UniformBuffer::getMode() const
