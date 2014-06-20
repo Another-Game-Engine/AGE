@@ -2,10 +2,6 @@
 #include <OpenGL/Shader.hh>
 #include <iostream>
 #include <string>
-#include <OpenGL/UniformBlock.hh>
-
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
 
 namespace gl
 {

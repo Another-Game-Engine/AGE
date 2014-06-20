@@ -5,7 +5,8 @@ namespace gl
 	UniformBlock::UniformBlock()
 		: _update(true),
 		_data(NULL),
-		_nbrElement(0)
+		_nbrElement(0),
+		_sizeBlock(0)
 	{
 	}
 
@@ -24,17 +25,18 @@ namespace gl
 			_data = new MemoryGPU[_nbrElement];
 		for (size_t index = 0; index < _nbrElement; ++index)
 		{
-			size_t cumulOffset = 0;
+			_sizeBlock = 0;
 			_data[index].size = sizeElement[index];
-			_data[index].offset = cumulOffset;
-			cumulOffset += _data[index].size;
+			_data[index].offset = _sizeBlock;
+			_sizeBlock += _data[index].size;
 		}
 	}
 
 	UniformBlock::UniformBlock(UniformBlock const &copy)
 		: _update(true),
 		_data(NULL),
-		_nbrElement(copy._nbrElement)
+		_nbrElement(copy._nbrElement),
+		_sizeBlock(copy._sizeBlock)
 	{
 		if (_nbrElement != 0)
 			_data = new MemoryGPU[_nbrElement];
@@ -46,6 +48,7 @@ namespace gl
 		if (this != &u)
 		{
 			_update = true;
+			_sizeBlock = _sizeBlock;
 			if (_nbrElement != u._nbrElement)
 			{
 				_nbrElement = u._nbrElement;
@@ -74,5 +77,17 @@ namespace gl
 	size_t UniformBlock::getOffsetElement(size_t index) const
 	{
 		return (_data[index].offset);
+	}
+
+	size_t UniformBlock::getSizeBlock(size_t index) const
+	{
+		return (_sizeBlock);
+	}
+
+	void UniformBlock::GPUallocation()
+	{
+		_update = false;
+		_ubo.bind();
+		glBufferData(GL_UNIFORM_BUFFER, _sizeBlock, NULL, GL_STREAM_DRAW);
 	}
 }

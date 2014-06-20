@@ -7,6 +7,7 @@
 #include <map>
 #include <vector>
 #include <glm/glm.hpp>
+#include <OpenGL/UniformBlock.hh>
 
 namespace gl
 {
@@ -15,7 +16,6 @@ namespace gl
 	struct Sampler;
 	class Texture;
 	class UniformBuffer;
-	class UniformBlock;
 
 	//!\file ShadingManager.hh
 	//!\author Dorian Pinaud
@@ -53,11 +53,11 @@ namespace gl
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Texture const &texture);
 
-
 		// uniform Block
 		Key<UniformBlock> addUniformBlock(size_t nbrElement, size_t *sizeElement);
 		ShadingManager &rmUniformBlock(Key<UniformBlock> &uniformBlock);
 		Key<UniformBlock> getUniformBlock(size_t index);
+		template <typename TYPE> ShadingManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
 
 		//pipeline handling
 		//Key<Pipeline> addPipeline(size_t nbrShader, Key<Shader> *shaders);
@@ -69,4 +69,20 @@ namespace gl
 		//std::map<Key<Pipeline>, Pipeline> _pipelines;
 
 	};
+
+# define DEBUG_MESSAGE(type, from, reason, return_type) \
+	{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
+
+	template <typename TYPE>
+	ShadingManager &ShadingManager::setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.hh - setUniformBlock()", "key is destroy", *this);
+		auto &element = _uniformBlock.find(key);
+		if (element->second == _uniformBlock.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.hh - setUniformBlock()", "the uniformBlock ask is not in list", *this);
+		UniformBlock &uniformblock = element->second;
+		uniformblock.set<TYPE>(index, value);
+		return (*this);
+	}
 }
