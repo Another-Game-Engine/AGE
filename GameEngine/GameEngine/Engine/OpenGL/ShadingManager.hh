@@ -15,6 +15,7 @@ namespace gl
 	struct Sampler;
 	class Texture;
 	class UniformBuffer;
+	class UniformBlock;
 
 	//!\file ShadingManager.hh
 	//!\author Dorian Pinaud
@@ -40,30 +41,23 @@ namespace gl
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
 		ShadingManager &rmShader(Key<Shader> &shader);
 		Key<Shader> getShader(size_t index) const;
-		
+		// uniform
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &value);
 		ShadingManager &rmShaderUniform(Key<Shader> const &shader, Key<Uniform> &uniform);
 		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
-
+		// sampler
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> &uniform);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Texture const &texture);
 
-		//Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
-		//template <typename TYPE> Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag, TYPE const &data);
-		//ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> const &sampler);
-		//Key<Sampler> const &getShaderSampler(Key<Shader> const &shader, size_t index);
-		//template <typename TYPE> ShadingManager &setShaderSampler(Key<Shader> const &shader; Key<Sampler> const &sampler, TYPE const &data);
 
-		// handling Uniform Block
-		//Key<UniformBlock> addUniformBlock();
-		//ShadingManager &rmUniformBlock(Key<UniformBlock> const &uniformBlock)
-		//Key<UniformBlock> const &getUniformBlock(size_t index) const;
-		//template <typename TYPE> Key<UniformBlock> const &setUniformBlock(size_t index, TYPE const &data) const;
-
+		// uniform Block
+		Key<UniformBlock> addUniformBlock(size_t nbrElement, size_t *sizeElement);
+		ShadingManager &rmUniformBlock(Key<UniformBlock> &uniformBlock);
+		Key<UniformBlock> getUniformBlock(size_t index);
 
 		//pipeline handling
 		//Key<Pipeline> addPipeline(size_t nbrShader, Key<Shader> *shaders);
@@ -71,8 +65,7 @@ namespace gl
 		//Key<Pipeline> const &getPipeline(size_t index) const;
 	private:
 		std::map<Key<Shader>, Shader> _shaders;
-		//std::map<key<UniformBlock>, UniformBuffer> _uniformBlocks;
-		std::vector<MemoryBlocksGPU> _memoryUniformBlock;
+		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		//std::map<Key<Pipeline>, Pipeline> _pipelines;
 
 	};

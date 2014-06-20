@@ -2,6 +2,7 @@
 #include <OpenGL/Shader.hh>
 #include <iostream>
 #include <string>
+#include <OpenGL/UniformBlock.hh>
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
 {	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
@@ -52,10 +53,10 @@ namespace gl
 	ShadingManager &ShadingManager::rmShader(Key<Shader> &shader)
 	{
 		if (!shader)
-			return (*this);
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShader", "the key is destroy", *this)
 		auto element = _shaders.find(shader);
 		if (element == _shaders.end())
-			return (*this);
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShader", "the shader ask can't be find", *this)
 		_shaders.erase(shader);
 		shader.destroy();
 		return (*this);
@@ -173,5 +174,32 @@ namespace gl
 		s.setSampler(key, texture);
 		return (*this);
 	}
-	
+
+	Key<UniformBlock> ShadingManager::addUniformBlock(size_t nbrElement, size_t *sizeElement)
+	{
+		Key<UniformBlock> key;
+
+		_uniformBlock[key] = UniformBlock(nbrElement, sizeElement);
+		return (key);
+	}
+
+	ShadingManager &ShadingManager::rmUniformBlock(Key<UniformBlock> &key)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmUniformBlock", "the key is destroy", *this)
+		_uniformBlock.erase(key);
+		key.destroy();
+		return (*this);
+	}
+
+	Key<UniformBlock> ShadingManager::getUniformBlock(size_t target)
+	{
+		if (target >= _uniformBlock.size())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getUniformBlock(size_t target)", "the target is out of range", Key<UniformBlock>(KEY_DESTROY));
+		auto &element = _uniformBlock.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
+	}
+
 }
