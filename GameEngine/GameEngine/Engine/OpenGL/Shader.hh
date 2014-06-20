@@ -8,10 +8,11 @@
 
 namespace gl
 {
-	class Uniform;
+	class ShaderResource;
 	class Texture;
 
 	struct Sampler{};
+	struct Uniform{};
 
 	//!\file Shader.hh
 	//!\author Dorian Pinaud
@@ -61,9 +62,9 @@ namespace gl
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
-		std::map<Key<Uniform>, Uniform> _uniforms;
+		std::map<Key<Uniform>, ShaderResource> _uniforms;
+		std::map<Key<Sampler>, ShaderResource> _samplers;
 
-		std::map<Key<Sampler>, Uniform> _samplers;
 		bool _units[GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS];
 
 		// some private function usefull for internal functionement

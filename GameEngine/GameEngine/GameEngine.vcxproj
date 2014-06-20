@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -213,13 +213,14 @@
     <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
-    <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
+    <ClCompile Include="Engine\OpenGL\ShaderResource.cpp" />
     <ClCompile Include="Engine\OpenGL\ShadingManager.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
-    <ClCompile Include="Engine\OpenGL\Uniform.cpp" />
+    <ClCompile Include="Engine\OpenGL\UniformBlock.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
     <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
@@ -279,9 +280,10 @@
     <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
-    <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
+    <ClInclude Include="Engine\OpenGL\MemoryGPU.hh" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
     <ClInclude Include="Engine\OpenGL\Pool.hh" />
+    <ClInclude Include="Engine\OpenGL\ShaderResource.hh" />
     <ClInclude Include="Engine\OpenGL\ShadingManager.hh" />
     <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Texture.hh" />
@@ -289,7 +291,7 @@
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
-    <ClInclude Include="Engine\OpenGL\Uniform.hh" />
+    <ClInclude Include="Engine\OpenGL\UniformBlock.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />

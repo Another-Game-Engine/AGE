@@ -11,7 +11,7 @@
 namespace gl
 {
 	class Shader;
-	class Uniform;
+	struct Uniform;
 	struct Sampler;
 	class Texture;
 	class UniformBuffer;

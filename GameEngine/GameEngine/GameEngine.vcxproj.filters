@@ -56,12 +56,13 @@
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
     <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
-    <ClCompile Include="Engine\OpenGL\MemoryBlocksGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\ShadingManager.cpp" />
-    <ClCompile Include="Engine\OpenGL\Uniform.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\UniformBlock.cpp" />
+    <ClCompile Include="Engine\OpenGL\ShaderResource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -175,12 +176,13 @@
     <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
-    <ClInclude Include="Engine\OpenGL\MemoryBlocksGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Pool.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
     <ClInclude Include="Engine\OpenGL\ShadingManager.hh" />
-    <ClInclude Include="Engine\OpenGL\Uniform.hh" />
+    <ClInclude Include="Engine\OpenGL\MemoryGPU.hh" />
+    <ClInclude Include="Engine\OpenGL\UniformBlock.hh" />
+    <ClInclude Include="Engine\OpenGL\ShaderResource.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

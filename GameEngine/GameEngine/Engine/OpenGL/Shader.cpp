@@ -1,7 +1,7 @@
 #include <OpenGL/Shader.hh>
 #include <string>
 #include <fstream>
-#include <OpenGL/Uniform.hh>
+#include <OpenGL/ShaderResource.hh>
 #include <OpenGL/Texture.hh>
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -250,7 +250,7 @@ namespace gl
 	{
 		Key<Uniform> key;
 
-		_uniforms[key] = Uniform(flag, this);
+		_uniforms[key] = ShaderResource(flag, this);
 		return (key);
 	}
 
@@ -280,7 +280,7 @@ namespace gl
 	{
 		Key<Uniform> key;
 
-		auto &element = _uniforms[key] = Uniform(flag, this);
+		auto &element = _uniforms[key] = ShaderResource(flag, this);
 		element.set(value);
 		return (key);
 	}
@@ -300,7 +300,7 @@ namespace gl
 	{
 		Key<Sampler> key;
 
-		auto &element = _samplers[key] = Uniform(flag, this);
+		auto &element = _samplers[key] = ShaderResource(flag, this);
 		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
 		{
 			if (_units[index] == false)
