@@ -9,6 +9,7 @@
 namespace gl
 {
 	class Shader;
+	class UniformBlock;
 
 	//!\file Uniform.hh
 	//!\author Dorian Pinaud
@@ -28,6 +29,7 @@ namespace gl
 
 		ShaderResource &set(glm::mat4 const &value);
 		ShaderResource &set(int value);
+		ShaderResource &set(UniformBlock const &uniformblock);
 
 	private:
 		std::string _flag;
@@ -37,6 +39,7 @@ namespace gl
 		GLuint _location;
 
 		bool getUniformLocation();
+		bool getUniformBlockLocation();
 	};
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \

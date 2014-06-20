@@ -21,6 +21,9 @@ namespace gl
 		_data(NULL),
 		_nbrElement(nbrElement)
 	{
+		static int bindingPoint = 0;
+		_bindingPoint = bindingPoint;
+		++bindingPoint;
 		if (_nbrElement != 0)
 			_data = new MemoryGPU[_nbrElement];
 		for (size_t index = 0; index < _nbrElement; ++index)
@@ -34,6 +37,7 @@ namespace gl
 
 	UniformBlock::UniformBlock(UniformBlock const &copy)
 		: _update(true),
+		_bindingPoint(copy._bindingPoint),
 		_data(NULL),
 		_nbrElement(copy._nbrElement),
 		_sizeBlock(copy._sizeBlock)
@@ -49,6 +53,7 @@ namespace gl
 		{
 			_update = true;
 			_sizeBlock = _sizeBlock;
+			_bindingPoint = u._bindingPoint;
 			if (_nbrElement != u._nbrElement)
 			{
 				_nbrElement = u._nbrElement;
@@ -84,10 +89,27 @@ namespace gl
 		return (_sizeBlock);
 	}
 
+	int UniformBlock::getBindingPoint() const
+	{
+		return (_bindingPoint);
+	}
+
 	void UniformBlock::GPUallocation()
 	{
 		_update = false;
 		_ubo.bind();
 		glBufferData(GL_UNIFORM_BUFFER, _sizeBlock, NULL, GL_STREAM_DRAW);
+	}
+
+	UniformBlock const &UniformBlock::bind() const
+	{
+		glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, _ubo.getId());
+		return (*this);
+	}
+
+	UniformBlock const &UniformBlock::unbind() const
+	{
+		glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, 0);
+		return (*this);
 	}
 }

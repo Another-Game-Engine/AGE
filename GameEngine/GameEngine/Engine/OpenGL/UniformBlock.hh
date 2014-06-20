@@ -24,10 +24,15 @@ namespace gl
 		size_t getSizeElement(size_t index) const;
 		size_t getOffsetElement(size_t index) const;
 		size_t getSizeBlock(size_t index) const;
+		int getBindingPoint() const;
+
+		UniformBlock const &bind() const;
+		UniformBlock const &unbind() const;
 
 		template <typename TYPE> UniformBlock &set(size_t index, TYPE const &value);
 	private:
 		bool _update;
+		int _bindingPoint;
 		MemoryGPU *_data;
 		size_t _nbrElement;
 		size_t _sizeBlock;

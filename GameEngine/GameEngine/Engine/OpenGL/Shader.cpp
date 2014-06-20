@@ -258,7 +258,7 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "Shader.cpp - rmUniform", "the key is destroy", *this);
-		auto element = _uniforms.find(key);
+		auto &element = _uniforms.find(key);
 		if (element == _uniforms.end())
 			DEBUG_MESSAGE("Warning", "Shader.cpp - rmUniform", "the key correspond of any element in uniform list", *this);
 		_uniforms.erase(element);
@@ -313,11 +313,11 @@ namespace gl
 		DEBUG_MESSAGE("Warning", "Shader.cpp - addSampler()", "You have not enougth texture unit for this sampler", Key<Sampler>(KEY_DESTROY));
 	}
 
-	Shader &Shader::rmSampler(Key<Sampler> key)
+	Shader &Shader::rmSampler(Key<Sampler> &key)
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "Shader.cpp - rmSampler", "the key is destroy", *this);
-		auto element = _samplers.find(key);
+		auto &element = _samplers.find(key);
 		if (element == _samplers.end())
 			DEBUG_MESSAGE("Warning", "Shader.cpp - rmSampler", "the key correspond of any element in samplers list", *this);
 		_units[element->second.get<int>()] = false;
@@ -340,7 +340,7 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "Shader.hh - setSampler(key, value)", "key destroy use", *this);
-		auto element = _samplers.find(key);
+		auto &element = _samplers.find(key);
 		if (element == _samplers.end())
 			DEBUG_MESSAGE("Warning", "Shader.cpp - setSampler", "the key correspond of any element in samplers list", *this);
 		glActiveTexture(GL_TEXTURE0 + element->second.get<int>());
@@ -348,4 +348,54 @@ namespace gl
 		return (*this);
 	}
 
+	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag)
+	{
+		Key<InterfaceBlock> key;
+
+		_interfaceBlock[key] = ShaderResource(flag, this);
+		return (key);
+	}
+
+	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock)
+	{
+		Key<InterfaceBlock> key;
+
+		auto &element = _interfaceBlock[key] = ShaderResource(flag, this);
+		element.set(uniformblock);
+		return (key);
+	}
+
+	Shader &Shader::rmInterfaceBlock(Key<InterfaceBlock> &key)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.cpp - rmInterfaceBlock", "the key is destroy", *this);
+		auto &element = _interfaceBlock.find(key);
+		if (element == _interfaceBlock.end())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - rmInterfaceBlock", "the interface block ask is not present", *this);
+		_interfaceBlock.erase(element);
+		key.destroy();
+		return (*this);
+	}
+
+	Key<InterfaceBlock> Shader::getInterfaceBlock(size_t target) const
+	{
+		if (target >= _interfaceBlock.size())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - getInterfaceBlock(size_t target)", "the target is out of range", Key<InterfaceBlock>(KEY_DESTROY))
+			auto &element = _interfaceBlock.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
+	}
+
+	Shader &Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - setSampler(key, value)", "key destroy use", *this);
+		auto &element = _interfaceBlock.find(key);
+		if (element == _interfaceBlock.end())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - setSampler", "the key correspond of any element in samplers list", *this);
+		auto &interfaceblock = element->second;
+		interfaceblock.set(uniformblock);
+		return (*this);
+	}
 }

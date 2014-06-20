@@ -10,9 +10,11 @@ namespace gl
 {
 	class ShaderResource;
 	class Texture;
+	class UniformBlock;
 
 	struct Sampler{};
 	struct Uniform{};
+	struct InterfaceBlock{};
 
 	//!\file Shader.hh
 	//!\author Dorian Pinaud
@@ -47,9 +49,15 @@ namespace gl
 		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &value);
 		// sampler 
 		Key<Sampler> addSampler(std::string const &flag);
-		Shader &rmSampler(Key<Sampler> key);
+		Shader &rmSampler(Key<Sampler> &key);
 		Key<Sampler> getSampler(size_t index) const;
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
+		// InterfaceBlock
+		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag);
+		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock);
+		Shader &rmInterfaceBlock(Key<InterfaceBlock> &key);
+		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
+		Shader &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
 
 	private:
 		std::string _vertexName;
@@ -64,6 +72,7 @@ namespace gl
 
 		std::map<Key<Uniform>, ShaderResource> _uniforms;
 		std::map<Key<Sampler>, ShaderResource> _samplers;
+		std::map<Key<InterfaceBlock>, ShaderResource> _interfaceBlock;
 
 		bool _units[GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS];
 

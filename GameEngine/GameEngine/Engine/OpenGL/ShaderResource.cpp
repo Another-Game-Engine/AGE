@@ -3,6 +3,7 @@
 #include <OpenGL/Shader.hh>
 #include <glm/glm.hpp>
 #include <OpenGL/MemoryGPU.hh>
+#include <OpenGL/UniformBlock.hh>
 
 namespace gl
 {
@@ -64,6 +65,16 @@ namespace gl
 		return (true);
 	}
 
+	bool ShaderResource::getUniformBlockLocation()
+	{
+		if (_attach == NULL)
+			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "No attach on this uniform", false);
+		_attach->use();
+		if ((_location = glGetUniformBlockIndex(_attach->getId(), _flag.c_str())) == -1)
+			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
+		return (true);
+	}
+
 	template <typename TYPE>
 	static void *setAllocation(size_t &sizeData, void *data)
 	{
@@ -98,4 +109,13 @@ namespace gl
 		return (*this);
 	}
 
+	ShaderResource &ShaderResource::set(UniformBlock const &value)
+	{
+		_data = setAllocation<UniformBlock>(_sizeData, _data);
+		memcpy(_data, &value, _sizeData);
+		if (getUniformBlockLocation() == false)
+			return (*this);
+		glUniformBlockBinding(_attach->getId(), _location, value.getBindingPoint());
+		return (*this);
+	}
 }
