@@ -22,6 +22,7 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
+#include <Utils/PerformanceDebugger.hh>
 
 //CONFIGS
 #include <CONFIGS.hpp>
@@ -141,6 +142,7 @@ int			main(int ac, char **av)
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
 	e->setInstance<AssetsManager>()->init();
+	e->setInstance<PerformanceDebugger>("Developper Name");
 
 #ifdef PHYSIC_SIMULATION
 	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
@@ -156,6 +158,11 @@ int			main(int ac, char **av)
 	{
 		e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
 	});
+	config->setConfiguration<std::string>("debuggerDevelopperName", "Modify MyConfigurationFile.conf with your name", [&e](const std::string &name)
+	{
+		e->getInstance<PerformanceDebugger>()->setDevelopperName(name);
+	});
+
 
 	config->loadFile();
 

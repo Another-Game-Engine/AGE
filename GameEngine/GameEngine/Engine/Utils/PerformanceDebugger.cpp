@@ -6,9 +6,8 @@
 #include <algorithm>
 #include "PerformanceDebugger.hh"
 
-static const char *DEV_NAME = "Anthony";
-
-PerformanceDebugger::PerformanceDebugger()
+PerformanceDebugger::PerformanceDebugger(const std::string &developperName /* = "UNKNOWN DEVELOPPER" */)
+: _developper(developperName)
 {
 }
 
@@ -87,7 +86,7 @@ bool PerformanceDebugger::logNow(std::string const &counterName, std::string con
 			it->second.file << '['
 							<< it->first
 							<< "] ("
-							<< DEV_NAME
+							<< _developper
 							<< ") now -> "
 							<< (it->second.stop - it->second.start).count() / 1000
 							<< " ms : "
@@ -99,7 +98,7 @@ bool PerformanceDebugger::logNow(std::string const &counterName, std::string con
 			it->second.file << '['
 							<< it->first
 							<< "] ("
-							<< DEV_NAME
+							<< _developper
 							<< ") now -> "
 							<< (time - it->second.start).count() / 1000
 							<< " ms : "
@@ -136,7 +135,7 @@ bool PerformanceDebugger::logAverage(std::string const &counterName, std::string
 		it->second.file << '['
 						<< it->first
 						<< "] ("
-						<< DEV_NAME
+						<< _developper
 						<< ") average on "
 						<< it->second.averageTime
 						<< " -> "
@@ -198,4 +197,9 @@ PerformanceDebugger::Counter::~Counter()
 {
 	if (file.is_open())
 		file.close();
+}
+
+void PerformanceDebugger::setDevelopperName(const std::string &developperName)
+{
+	_developper = developperName;
 }
