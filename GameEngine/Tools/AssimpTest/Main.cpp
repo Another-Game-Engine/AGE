@@ -92,7 +92,7 @@ int			main(int ac, char **av)
 	e->setInstance<SceneManager>();
 	e->setInstance<AssetsManager>()->init();
 	e->setInstance<PerformanceDebugger>();
-	e->getInstance<PerformanceDebugger>()->setCounter("PerformanceDebugger.log", "Skinning", 1000);
+	e->getInstance<PerformanceDebugger>()->setCounter("PerformanceDebugger.log", "Skinning", 1);
 	auto geometryManager = e->setInstance<gl::GeometryManager>();
 
 	// init engine
@@ -480,8 +480,9 @@ int			main(int ac, char **av)
 		{
 			a->update(totalTime * 10.0f);
 		}
-		e->getInstance<PerformanceDebugger>()->stop("Skinning");
 		skeleton.updateSkinning();
+		e->getInstance<PerformanceDebugger>()->stop("Skinning");
+		e->getInstance<PerformanceDebugger>()->logNow("Skinning");
 		static float median = 0.0f;
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), animationInstances[0]->transformations.size(), GL_FALSE, glm::value_ptr(animationInstances[0]->transformations[0]));
 
@@ -493,6 +494,5 @@ int			main(int ac, char **av)
 
 	config->saveToFile();
 	e->stop();
-	e->getInstance<PerformanceDebugger>()->logNow("Skinning", "Coucou");
 	return EXIT_SUCCESS;
 }
