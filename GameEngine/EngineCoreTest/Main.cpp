@@ -113,8 +113,8 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
 	auto &pm = m->addShaderUniform(test_pipeline_1, "projection_matrix", glm::perspective<float>(60.f, 600.f / 800.f, 1.0f, 100.0f));
 	auto &mm = m->addShaderUniform(test_pipeline_1, "modelview_matrix", glm::mat4(1.f));
-	//size_t sizeData[2] = {sizeof(glm::vec4), sizeof(glm::mat4)};
-	//auto &ib = m->addUniformBlock(2, sizeData);
+	size_t sizeData[2] = {sizeof(glm::vec4), sizeof(glm::mat4)};
+	auto &ib = m->addUniformBlock(2, sizeData);
 	
 	return true;
 }

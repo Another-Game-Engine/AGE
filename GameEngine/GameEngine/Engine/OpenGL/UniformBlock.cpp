@@ -13,7 +13,7 @@ namespace gl
 	UniformBlock::~UniformBlock()
 	{
 		if (_data)
-			delete _data;
+			delete[] _data;
 	}
 
 	UniformBlock::UniformBlock(size_t nbrElement, size_t *sizeElement)
@@ -64,7 +64,7 @@ namespace gl
 				else
 					_data = NULL;
 			}
-			memcpy(&_data, &u._data, sizeof(MemoryGPU)* _nbrElement);
+			memcpy(_data, u._data, sizeof(MemoryGPU)* _nbrElement);
 		}
 		return (*this);
 	}
