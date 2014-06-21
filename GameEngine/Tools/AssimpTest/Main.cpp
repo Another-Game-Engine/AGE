@@ -439,9 +439,16 @@ int			main(int ac, char **av)
 	std::array<AGE::AnimationInstance*, 100> animationInstances;
 	animationInstances.fill(new AGE::AnimationInstance(&skeleton, &animations[0]));
 
-	std::ofstream ofs("skeletonSaveTest.save", std::ios::trunc | std::ios::binary);
-	cereal::JSONOutputArchive ar(ofs);
-	ar(skeleton);
+	{
+		std::ofstream ofs("skeletonSaveTest.save", std::ios::trunc | std::ios::binary);
+		cereal::BinaryOutputArchive ar(ofs);
+		ar(skeleton);
+	}
+	{
+		std::ofstream ofs("animationSaveTest.save", std::ios::trunc | std::ios::binary);
+		cereal::BinaryOutputArchive ar(ofs);
+		ar(animations[0]);
+	}
 
 	do
 	{

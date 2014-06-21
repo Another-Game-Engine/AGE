@@ -1,5 +1,10 @@
 #pragma once
 
+
+#include <Utils/GlmSerialization.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/string.hpp>
+
 namespace AGE
 {
 	template <typename T>
@@ -18,4 +23,13 @@ namespace AGE
 			, time(_time)
 		{}
 	};
+
+	template <class Archive, class T>
+	void serialize(Archive &ar, AnimationKey<T> &value)
+	{
+		ar(cereal::make_nvp("value", value.value));
+		ar(cereal::make_nvp("time", value.time));
+		ar(cereal::make_nvp("deltaTime", value.deltaTime));
+	}
+
 }
