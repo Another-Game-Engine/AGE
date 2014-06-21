@@ -14,7 +14,7 @@ class PerformanceDebugger : public Dependency
 {
 public:
 	// CTOR
-	PerformanceDebugger();
+	PerformanceDebugger(const std::string &developperName = "UNKNOWN DEVELOPPER");
 	// DTOR
 	virtual ~PerformanceDebugger();
 
@@ -57,7 +57,9 @@ public:
 	// counterName : name of the counter
 	// comment : whatever you wanna say
 	bool logAverage(std::string const &counterName, std::string const &comment = "");
-
+	// set the developper name
+	// developperName : name of the developper
+	void setDevelopperName(const std::string &developperName);
 private:
 	struct Counter
 	{
@@ -76,4 +78,5 @@ private:
 	};
 
 	std::map<std::string, Counter> _counters;
+	std::string _developper;
 };
