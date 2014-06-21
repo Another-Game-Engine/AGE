@@ -198,4 +198,49 @@ namespace gl
 		return (element->first);
 	}
 
+	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, UniformBlock const &u)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "key destroy", Key<InterfaceBlock>(KEY_DESTROY))
+			auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "shader not find", Key<InterfaceBlock>(KEY_DESTROY))
+			auto &s = element->second;
+		return (s.addInterfaceBlock(flag, u));
+	}
+
+	ShadingManager &ShadingManager::rmShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> &interfaceblock)
+	{
+		if (!shader && !interfaceblock)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderInterfaceBlock(uniformBlock)", "key already destroy", *this)
+			auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderInterfaceBlock(uniformBlock)", "shader not find", *this)
+			auto &s = element->second;
+		s.rmInterfaceBlock(interfaceblock);
+		return (*this);
+	}
+
+	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &shader, size_t target)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderInterfaceBlock(uniformBlock)", "key destroy", Key<InterfaceBlock>(KEY_DESTROY))
+			auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderInterfaceBlock(uniformBlock)", "shader not find", Key<InterfaceBlock>(KEY_DESTROY))
+			auto &s = element->second;
+		return (s.getInterfaceBlock(target));
+	}
+
+	ShadingManager &ShadingManager::setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &key, UniformBlock const &u)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "key destroy", *this)
+			auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "shader not find", *this)
+			auto &s = element->second;
+		s.setInterfaceBlock(key, u);
+		return (*this);
+	}
 }

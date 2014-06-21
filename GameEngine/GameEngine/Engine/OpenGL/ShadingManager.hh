@@ -14,6 +14,7 @@ namespace gl
 	class Shader;
 	struct Uniform;
 	struct Sampler;
+	struct InterfaceBlock;
 	class Texture;
 	class UniformBuffer;
 
@@ -52,6 +53,11 @@ namespace gl
 		ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> &uniform);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Texture const &texture);
+		// Interface
+		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, UniformBlock const &u);
+		ShadingManager &rmShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> &key);
+		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
+		ShadingManager &setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &key, UniformBlock const &u);
 
 		// uniform Block
 		Key<UniformBlock> addUniformBlock(size_t nbrElement, size_t *sizeElement);
