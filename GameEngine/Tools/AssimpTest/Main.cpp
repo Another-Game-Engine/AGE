@@ -439,6 +439,10 @@ int			main(int ac, char **av)
 	std::array<AGE::AnimationInstance*, 100> animationInstances;
 	animationInstances.fill(new AGE::AnimationInstance(&skeleton, &animations[0]));
 
+	std::ofstream ofs("skeletonSaveTest.save", std::ios::trunc | std::ios::binary);
+	cereal::JSONOutputArchive ar(ofs);
+	ar(skeleton);
+
 	do
 	{
 		auto time = e->getInstance<Timer>()->getElapsed();
