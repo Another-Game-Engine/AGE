@@ -54,10 +54,10 @@ namespace gl
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Texture const &texture);
 		// Interface
-		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, UniformBlock const &u);
+		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
 		ShadingManager &rmShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> &key);
 		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
-		ShadingManager &setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &key, UniformBlock const &u);
+		ShadingManager &setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &key, Key<UniformBlock> const &keyUniformBlock);
 
 		// uniform Block
 		Key<UniformBlock> addUniformBlock(size_t nbrElement, size_t *sizeElement);

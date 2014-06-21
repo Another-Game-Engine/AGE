@@ -198,7 +198,7 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, UniformBlock const &u)
+	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
 	{
 		if (!shader)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "key destroy", Key<InterfaceBlock>(KEY_DESTROY))
@@ -206,6 +206,12 @@ namespace gl
 		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "shader not find", Key<InterfaceBlock>(KEY_DESTROY))
 			auto &s = element->second;
+		if (!keyUniformBlock)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(uniformBlock)", "uniformBuffer key destroy", Key<InterfaceBlock>(KEY_DESTROY))
+			auto &ubElement = _uniformBlock.find(keyUniformBlock);
+		if (ubElement == _uniformBlock.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(uniformBlock)", "uniformBuffer key is not found", Key<InterfaceBlock>(KEY_DESTROY))
+		auto &u = ubElement->second;
 		return (s.addInterfaceBlock(flag, u));
 	}
 
@@ -232,14 +238,20 @@ namespace gl
 		return (s.getInterfaceBlock(target));
 	}
 
-	ShadingManager &ShadingManager::setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &key, UniformBlock const &u)
+	ShadingManager &ShadingManager::setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &key, Key<UniformBlock> const &keyUniformBlock)
 	{
 		if (!shader)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "key destroy", *this)
 			auto &element = _shaders.find(shader);
 		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "shader not find", *this)
-			auto &s = element->second;
+		auto &s = element->second;
+		if (!keyUniformBlock)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "uniformBuffer key destroy", *this)
+			auto &ubElement = _uniformBlock.find(keyUniformBlock);
+		if (ubElement == _uniformBlock.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "uniformBuffer key is not found", *this)
+		auto &u = ubElement->second;
 		s.setInterfaceBlock(key, u);
 		return (*this);
 	}
