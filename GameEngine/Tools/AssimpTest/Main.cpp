@@ -129,15 +129,15 @@ int			main(int ac, char **av)
 
 	Assimp::Importer importer;
 
-//	const aiScene *scene = importer.ReadFile("../../Assets/catwoman/atk close front 6.fbx"
-		const aiScene *scene = importer.ReadFile("../../Assets/marvin.fbx"
+	const aiScene *scene = importer.ReadFile("../../Assets/catwoman/atk close front 6.fbx"
+//		const aiScene *scene = importer.ReadFile("../../Assets/marvin.fbx"
 		, aiProcess_Triangulate |
 		aiProcess_CalcTangentSpace |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_SortByPType |
 		aiProcess_ImproveCacheLocality |
-		aiProcess_OptimizeMeshes |
-		aiProcess_Debone);
+		aiProcess_OptimizeMeshes/* |
+		aiProcess_Debone*/);
 
 	if (!scene)
 	{
@@ -157,10 +157,11 @@ int			main(int ac, char **av)
 	unsigned int boneCounter = 0;
 	std::map<std::string, std::uint32_t> bonesTable;
 
-	for (auto i = 0; i < scene->mRootNode->mNumChildren; ++i)
-	{
-		loadSkeletonFromAssimp(skeleton, scene->mRootNode->mChildren[i], (unsigned int)(-1), bonesTable);
-	}
+	//for (auto i = 0; i < scene->mRootNode->mNumChildren; ++i)
+	//{
+	auto boneOrigin = scene->mRootNode;//scene->mRootNode->FindNode("atk_close_front_6");
+	loadSkeletonFromAssimp(skeleton, boneOrigin, (unsigned int)(-1), bonesTable);
+	//}
 
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
@@ -336,17 +337,19 @@ int			main(int ac, char **av)
 			auto aiAnim = scene->mAnimations[animNum];
 			auto &anim = animations[animNum];
 			anim.name = aiAnim->mName.data;
-			anim.channels.resize(aiAnim->mNumChannels);
 			anim.duration = aiAnim->mDuration;
 			anim.id = animNum;
+			auto channelCounter = 0;
 			for (unsigned int channelNbr = 0; channelNbr < aiAnim->mNumChannels; ++channelNbr)
 			{
 				auto aiChannel = aiAnim->mChannels[channelNbr];
-				auto &channel = anim.channels[channelNbr];
 				auto findBoneName = bonesTable.find(aiChannel->mNodeName.data);
-				assert(findBoneName != std::end(bonesTable));
+				if (findBoneName == std::end(bonesTable))
+					continue;
+				anim.channels.resize(channelCounter + 1);
+				auto &channel = anim.channels[channelCounter];
 				unsigned int boneIndex = findBoneName->second;
-
+				++channelCounter;
 				channel.boneIndex = boneIndex;
 				// we push positions
 				for (unsigned int i = 0; i < aiChannel->mNumPositionKeys; ++i)
@@ -430,7 +433,7 @@ int			main(int ac, char **av)
 	// la couleur de clear par defaut sera du noir
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-	std::array<AGE::AnimationInstance*, 1> animationInstances;
+	std::array<AGE::AnimationInstance*, 100> animationInstances;
 	animationInstances.fill(new AGE::AnimationInstance(&skeleton, &animations[0]));
 
 	do

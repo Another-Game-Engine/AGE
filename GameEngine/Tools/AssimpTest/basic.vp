@@ -12,7 +12,7 @@ uniform vec4 color;
 
 
 
-uniform mat4 bones[166];
+uniform mat4 bones[169];
 
 
 
