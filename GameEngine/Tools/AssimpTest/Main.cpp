@@ -27,6 +27,7 @@
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
 #include <OpenGL/GeometryManager.hh>
+#include <Utils/PerformanceDebugger.hh>
 
 //SKINNING
 #include <Skinning/Animation.hpp>
@@ -90,6 +91,8 @@ int			main(int ac, char **av)
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
 	e->setInstance<AssetsManager>()->init();
+	e->setInstance<PerformanceDebugger>();
+	e->getInstance<PerformanceDebugger>()->setCounter("PerformanceDebugger.log", "Skinning", 1000);
 	auto geometryManager = e->setInstance<gl::GeometryManager>();
 
 	// init engine
@@ -472,18 +475,14 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(viewId, 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
 
-		auto before = std::chrono::system_clock::now();
+		e->getInstance<PerformanceDebugger>()->start("Skinning");
 		for (auto &&a : animationInstances)
 		{
 			a->update(totalTime * 10.0f);
 		}
+		e->getInstance<PerformanceDebugger>()->stop("Skinning");
 		skeleton.updateSkinning();
-		auto after = std::chrono::system_clock::now();
 		static float median = 0.0f;
-		median = median <= 0
-			? std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()
-			: (median + std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count()) / 2.0f;
-		//std::cout << median << " milliseconds" << std::endl;
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), animationInstances[0]->transformations.size(), GL_FALSE, glm::value_ptr(animationInstances[0]->transformations[0]));
 
 		for (unsigned int i = 0; i < vertices.size(); ++i)
@@ -494,6 +493,6 @@ int			main(int ac, char **av)
 
 	config->saveToFile();
 	e->stop();
-
+	e->getInstance<PerformanceDebugger>()->logNow("Skinning", "Coucou");
 	return EXIT_SUCCESS;
 }

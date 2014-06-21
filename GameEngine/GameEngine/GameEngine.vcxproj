@@ -271,6 +271,7 @@
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
+    <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -394,6 +395,7 @@
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
+    <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -63,6 +63,7 @@
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
+    <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Engine\Skinning\AnimationKey.hpp" />
     <ClInclude Include="Engine\Skinning\Bone.hpp" />
     <ClInclude Include="Engine\Skinning\Skeleton.hpp" />
+    <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

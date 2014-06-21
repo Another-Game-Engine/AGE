@@ -146,7 +146,6 @@ int			main(int ac, char **av)
 	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 #endif
 
-
 	// init engine
 	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
 		return (EXIT_FAILURE);
