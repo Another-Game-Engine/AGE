@@ -175,33 +175,10 @@ int			main(int ac, char **av)
 			std::string boneName = mesh->mBones[i]->mName.data;
 			if (bonesTable.find(boneName) == std::end(bonesTable))
 				continue;
-			//skeleton.bones.push_back(AGE::Bone());
-			//skeleton.bones.back().index = boneCounter;
-			//skeleton.bones.back().name = boneName;
 			skeleton.bones[bonesTable[boneName]].offset = aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
-			//bonesTable.insert(std::make_pair(boneName, boneCounter));
-			//boneCounter++;
 		}
 	}
 
-	//for (unsigned int animIndex = 0; animIndex < scene->mNumAnimations; ++animIndex)
-	//{
-	//	aiAnimation *animation = scene->mAnimations[animIndex];
-
-	//	for (unsigned int i = 0; i < animation->mNumChannels; ++i)
-	//	{
-	//		auto channel = animation->mChannels[i];
-	//		std::string boneName = channel->mNodeName.data;
-	//		if (bonesTable.find(boneName) != std::end(bonesTable))
-	//			continue;
-	//		skeleton.bones.push_back(AGE::Bone());
-	//		skeleton.bones.back().index = boneCounter;
-	//		skeleton.bones.back().name = boneName;
-	//		skeleton.bones.back().offset = glm::mat4(1);
-	//		bonesTable.insert(std::make_pair(boneName, boneCounter));
-	//		boneCounter++;
-	//	}
-	//}
 
 	//we fill bone hierarchy
 	for (unsigned int i = 0; i < skeleton.bones.size(); ++i)

@@ -5,40 +5,55 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
+#include <glm/glm.hpp>
+
 #include <iostream>
 
 #include <Utils/File.hpp>
 
 namespace AGE
 {
-	typedef const aiScene* AssimpFileData;
+	struct Skeleton;
+
+	struct AssetDataSet
+	{
+		aiScene* assimpScene = nullptr;
+		Skeleton * skeleton = nullptr;
+		File filePath = "";
+		std::string name = "";
+		Assimp::Importer assimpImporter;
+	};
 
 	namespace AssimpLoader
 	{
-		AssimpFileData LoadWithAssimp(const File &path)
+		static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
 		{
-			if (!path.exists())
-			{
-				std::cerr << "File [" << path.getFullName() << "] does not exists." << std::endl;
-				return nullptr;
-			}
-			Assimp::Importer importer;
+			return glm::mat4(m.a1, m.b1, m.c1, m.d1, m.a2, m.b2, m.c2, m.d2, m.a3, m.b3, m.c3, m.d3, m.a4, m.b4, m.c4, m.d4);
+		}
 
-			const aiScene *scene = importer.ReadFile(
-				path.getFullName()
+		bool Load(AssetDataSet &dataSet)
+		{
+			if (!dataSet.filePath.exists())
+			{
+				std::cerr << "File [" << dataSet.filePath.getFullName() << "] does not exists." << std::endl;
+				return false;
+			}
+
+			dataSet.assimpScene = const_cast<aiScene*>(dataSet.assimpImporter.ReadFile(
+				dataSet.filePath.getFullName()
 				, aiProcess_Triangulate |
 				aiProcess_CalcTangentSpace |
 				aiProcess_JoinIdenticalVertices |
 				aiProcess_SortByPType |
 				aiProcess_ImproveCacheLocality |
-				aiProcess_OptimizeMeshes);
+				aiProcess_OptimizeMeshes));
 
-			if (scene == nullptr)
+			if (dataSet.assimpScene == nullptr)
 			{
-				std::cerr << "Assimp fail to load file [" << path.getFullName() << "]" << std::endl;
-				return nullptr;
+				std::cerr << "Assimp fail to load file [" << dataSet.filePath.getFullName() << "] : " << dataSet.assimpImporter.GetErrorString() << std::endl;
+				return false;
 			}
-			return scene;
+			return true;
 		}
 	}
 }

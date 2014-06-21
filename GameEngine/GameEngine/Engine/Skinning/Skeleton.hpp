@@ -9,6 +9,8 @@
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
+#include <cereal/types/map.hpp>
+#include <map>
 
 namespace AGE
 {
@@ -23,6 +25,7 @@ namespace AGE
 		std::vector<AnimationInstance*> animations;
 		std::uint32_t firstBone;
 		glm::mat4 inverseGlobal;
+		std::map<std::string, std::uint32_t> bonesReferences;
 
 		void updateSkinning();
 
@@ -33,9 +36,10 @@ namespace AGE
 	template <class Archive>
 	void serialize(Archive &ar, Skeleton &value)
 	{
-		ar(CEREAL_NVP(value.name));
-		ar(CEREAL_NVP(value.bones));
-		ar(CEREAL_NVP(value.firstBone));
-		ar(CEREAL_NVP(value.inverseGlobal));
+		ar(cereal::make_nvp("name", value.name));
+		ar(cereal::make_nvp("bones", value.bones));
+		ar(cereal::make_nvp("firstBone", value.firstBone));
+		ar(cereal::make_nvp("inverseGlobal", value.inverseGlobal));
+		ar(cereal::make_nvp("bonesReferences", value.bonesReferences));
 	}
 }
