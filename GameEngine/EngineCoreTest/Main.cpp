@@ -109,15 +109,17 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	//NEW VERSION OF SHADING
 
 	auto &m = e->getInstance<gl::ShadingManager>();
-
-	gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
-	auto &pm = m->addShaderUniform(test_pipeline_1, "projection_matrix", glm::perspective<float>(60.f, 600.f / 800.f, 1.0f, 100.0f));
-	auto &mm = m->addShaderUniform(test_pipeline_1, "modelview_matrix", glm::mat4(1.f));
-	size_t sizeData[2] = {sizeof(glm::vec4), sizeof(glm::mat4)};
-	auto &ub = m->addUniformBlock(2, sizeData);
-	auto &ib = m->addShaderInterfaceBlock(test_pipeline_1, "test", ub);
-	m->setUniformBlock(ub, 0, glm::vec4(1.0, 0.0, 1.0, 2.0));
-	m->setUniformBlock(ub, 1, glm::mat4(1.0));
+	auto &materialBasic = m->addShader("../../Shaders/MaterialBasic.vp", "../../Shaders/MaterialBasic.fp"); // 0
+	auto &shadow = m->addShader("../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp"); // 1
+	//
+	//gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
+	//auto &pm = m->addShaderUniform(test_pipeline_1, "projection_matrix", glm::perspective<float>(60.f, 600.f / 800.f, 1.0f, 100.0f));
+	//auto &mm = m->addShaderUniform(test_pipeline_1, "modelview_matrix", glm::mat4(1.f));
+	//size_t sizeData[2] = {sizeof(glm::vec4), sizeof(glm::mat4)};
+	//auto &ub = m->addUniformBlock(2, sizeData);
+	//auto &ib = m->addShaderInterfaceBlock(test_pipeline_1, "test", ub);
+	//m->setUniformBlock(ub, 0, glm::vec4(1.0, 0.0, 1.0, 2.0));
+	//m->setUniformBlock(ub, 1, glm::mat4(1.0));
 	return true;
 }
 

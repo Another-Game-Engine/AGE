@@ -2,6 +2,7 @@
 
 #include <OpenGL/Buffer.hh>
 #include <OpenGL/MemoryGPU.hh>
+#include <array>
 
 namespace gl
 {
@@ -30,6 +31,7 @@ namespace gl
 		UniformBlock const &unbind() const;
 
 		template <typename TYPE> UniformBlock &set(size_t index, TYPE const &value);
+	
 	private:
 		bool _update;
 		int _bindingPoint;
@@ -56,5 +58,14 @@ namespace gl
 		_ubo.bind();
 		glBufferSubData(GL_UNIFORM_BUFFER, _data[index].offset, _data[index].size, &value);
 		return (*this);
+	}
+
+
+	// tool function
+	template <typename TYPE1, class... OTHER_TYPE> 
+	void setSizeElement(size_t *sizeElement, size_t pos = 0)
+	{
+		sizeElement[pos] = sizeof(TYPE1);
+		setSizeElement<OTHER_TYPE>(sizeElement, pos + 1);
 	}
 }
