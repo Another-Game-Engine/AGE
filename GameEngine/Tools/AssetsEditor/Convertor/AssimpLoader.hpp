@@ -11,18 +11,11 @@
 
 #include <Utils/File.hpp>
 
+#include "AssetDataSet.hpp"
+
 namespace AGE
 {
 	struct Skeleton;
-
-	struct AssetDataSet
-	{
-		aiScene* assimpScene = nullptr;
-		Skeleton * skeleton = nullptr;
-		File filePath = "";
-		std::string name = "";
-		Assimp::Importer assimpImporter;
-	};
 
 	namespace AssimpLoader
 	{

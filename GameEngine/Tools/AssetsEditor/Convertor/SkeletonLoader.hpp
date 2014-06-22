@@ -18,7 +18,7 @@ namespace AGE
 					return false;
 			}
 			auto boneOrigin = dataSet.assimpScene->mRootNode;
-			if (dataSet.skeleton)
+			if (dataSet.skeletonLoaded)
 			{
 				std::cerr << "Skeleton loader : skeleton [" << dataSet.skeleton->name << "] already exists." << std::endl;
 				return false;
@@ -89,8 +89,10 @@ namespace AGE
 			{
 				std::cerr << "Skeleton loader : assets does not contain any skeleton." << std::endl;
 				delete dataSet.skeleton;
+				dataSet.skeletonLoaded = false;
 				return false;
 			}
+			dataSet.skeletonLoaded = true;
 			return true;
 		}
 	private:
