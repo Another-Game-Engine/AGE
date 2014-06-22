@@ -152,6 +152,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
     <ClInclude Include="Convertor\AssimpLoader.hpp" />
     <ClInclude Include="Convertor\SkeletonLoader.hpp" />
