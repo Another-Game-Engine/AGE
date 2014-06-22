@@ -10,7 +10,7 @@ layout (location = 3) in vec2 texCoord;
 
 uniform test
 {
-	vec3 pos;
+	vec4 pos;
 	mat4 model;
 };
 

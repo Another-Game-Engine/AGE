@@ -26,9 +26,9 @@ namespace gl
 		++bindingPoint;
 		if (_nbrElement != 0)
 			_data = new MemoryGPU[_nbrElement];
+		_sizeBlock = 0;
 		for (size_t index = 0; index < _nbrElement; ++index)
 		{
-			_sizeBlock = 0;
 			_data[index].size = sizeElement[index];
 			_data[index].offset = _sizeBlock;
 			_sizeBlock += _data[index].size;
@@ -52,7 +52,7 @@ namespace gl
 		if (this != &u)
 		{
 			_update = true;
-			_sizeBlock = _sizeBlock;
+			_sizeBlock = u._sizeBlock;
 			_bindingPoint = u._bindingPoint;
 			if (_nbrElement != u._nbrElement)
 			{

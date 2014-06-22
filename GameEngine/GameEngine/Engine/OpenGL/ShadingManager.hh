@@ -85,7 +85,7 @@ namespace gl
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.hh - setUniformBlock()", "key is destroy", *this);
 		auto &element = _uniformBlock.find(key);
-		if (element->second == _uniformBlock.end())
+		if (element == _uniformBlock.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.hh - setUniformBlock()", "the uniformBlock ask is not in list", *this);
 		UniformBlock &uniformblock = element->second;
 		uniformblock.set<TYPE>(index, value);

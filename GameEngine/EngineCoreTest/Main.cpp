@@ -116,7 +116,8 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	size_t sizeData[2] = {sizeof(glm::vec4), sizeof(glm::mat4)};
 	auto &ub = m->addUniformBlock(2, sizeData);
 	auto &ib = m->addShaderInterfaceBlock(test_pipeline_1, "test", ub);
-
+	m->setUniformBlock(ub, 0, glm::vec4(1.0, 0.0, 1.0, 2.0));
+	m->setUniformBlock(ub, 1, glm::mat4(1.0));
 	return true;
 }
 
