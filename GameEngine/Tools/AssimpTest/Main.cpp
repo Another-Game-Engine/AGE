@@ -117,15 +117,6 @@ int			main(int ac, char **av)
 	// attach pool which be create
 	geometryManager->attachIndexPoolToVertexPool(geometryManager->getVertexPool(0), geometryManager->getIndexPool(0));
 
-	//std::array<Attribute, 3> param =
-	//{
-	//	Attribute(GL_FLOAT, sizeof(float), 4), //Positions
-	//	Attribute(GL_FLOAT, sizeof(float), 4), //Weights
-	//	Attribute(GL_FLOAT, sizeof(float), 4) //Bone indices
-	//};
-
-	//e->setInstance<VertexManager>();
-
 	// launch engine
 	if (e->start() == false)
 		return (EXIT_FAILURE);

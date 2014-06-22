@@ -32,5 +32,8 @@
     <ClInclude Include="Convertor\AnimationsLoader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Convertor\MeshLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

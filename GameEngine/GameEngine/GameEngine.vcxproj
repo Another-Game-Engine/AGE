@@ -276,6 +276,8 @@
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
+    <ClInclude Include="Engine\Geometry\Mesh.hpp" />
+    <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\OpenGL\Buffer.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
