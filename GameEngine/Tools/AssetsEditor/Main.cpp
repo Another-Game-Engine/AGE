@@ -21,13 +21,11 @@
 #include <Utils/PubSub.hpp>
 #include <OpenGL/GeometryManager.hh>
 #include <Utils/PerformanceDebugger.hh>
-#include <Geometry/MeshManager.hpp>
+#include <Core/AssetsManager.hpp>
 
 #include <Convertor/SkeletonLoader.hpp>
 #include <Convertor/AnimationsLoader.hpp>
 #include <Convertor/MeshLoader.hpp>
-
-#include <Geometry/MeshManager.hpp>
 
 //SKINNING
 #include <Skinning/Animation.hpp>
@@ -51,9 +49,8 @@ int			main(int ac, char **av)
 	e->setInstance<Timer>();
 	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
-	e->setInstance<AssetsManager>()->init();
+	e->setInstance<AGE::AssetsManager>();
 	e->setInstance<PerformanceDebugger>();
-	e->setInstance<AGE::MeshManager>();
 	auto geometryManager = e->setInstance<gl::GeometryManager>();
 
 	// init engine
@@ -78,34 +75,34 @@ int			main(int ac, char **av)
 	//
 
 	//Convert fbx to AGE data structure
-   	AGE::AssetDataSet dataSet;
-	dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
-	dataSet.name = "catwoman";
-	auto isSkeleton = AGE::SkeletonLoader::load(dataSet);
-	auto isAnimations = AGE::AnimationsLoader::load(dataSet);
-	auto isMesh = AGE::MeshLoader::load(dataSet);
-	
-	//Save AGE assets data structure to filesystem
-	{
-		std::ofstream ofs("catwoman.skage", std::ios::trunc | std::ios::binary);
-		cereal::BinaryOutputArchive ar(ofs);
-		ar(*dataSet.skeleton);
-	}
-	{
-		std::ofstream ofs("roulade.aage", std::ios::trunc | std::ios::binary);
-		cereal::BinaryOutputArchive ar(ofs);
-		ar(*dataSet.animations[0]);
-	}
-	{
-		std::ofstream ofs("catwoman.sage", std::ios::trunc | std::ios::binary);
-		cereal::BinaryOutputArchive ar(ofs);
-		ar(*dataSet.mesh);
-	}
+	// 	AGE::AssetDataSet dataSet;
+	//dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
+	//dataSet.name = "catwoman";
+	//auto isSkeleton = AGE::SkeletonLoader::load(dataSet);
+	//auto isAnimations = AGE::AnimationsLoader::load(dataSet);
+	//auto isMesh = AGE::MeshLoader::load(dataSet);
+	//
+	////Save AGE assets data structure to filesystem
+	//{
+	//	std::ofstream ofs("catwoman.skage", std::ios::trunc | std::ios::binary);
+	//	cereal::PortableBinaryOutputArchive ar(ofs);
+	//	ar(*dataSet.skeleton);
+	//}
+	//{
+	//	std::ofstream ofs("roulade.aage", std::ios::trunc | std::ios::binary);
+	//	cereal::PortableBinaryOutputArchive ar(ofs);
+	//	ar(*dataSet.animations[0]);
+	//}
+	//{
+	//	std::ofstream ofs("catwoman.sage", std::ios::trunc | std::ios::binary);
+	//	cereal::PortableBinaryOutputArchive ar(ofs);
+	//	ar(*dataSet.mesh);
+	//}
 
 	//Load assets from serialized file
-	auto meshManager = e->getInstance<AGE::MeshManager>();
+	auto assetsManager = e->getInstance<AGE::AssetsManager>();
 
-	//meshManager->load("catwoman.sage"); // load mesh
+	auto catwomanMesh = assetsManager->loadMesh("catwoman.sage"); // load mesh
 	//meshManager->load("roulade.aage"); // load animation
 	//meshManager->load("catwoman.skage"); // load skeleton
 
@@ -182,18 +179,20 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(viewId, 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
 
-		e->getInstance<PerformanceDebugger>()->start("Skinning");
-		for (auto &&a : animationInstances)
-		{
-			a->update(totalTime * 10.0f);
-		}
+		//for (auto &&a : animationInstances)
+		//{
+		//	a->update(totalTime * 10.0f);
+		//}
 		//skeleton.updateSkinning();
 		static float median = 0.0f;
-		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), animationInstances[0]->transformations.size(), GL_FALSE, glm::value_ptr(animationInstances[0]->transformations[0]));
+		std::vector<glm::mat4> coucou(200);
+		coucou.resize(200, glm::mat4(1));
+		//glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), animationInstances[0]->transformations.size(), GL_FALSE, glm::value_ptr(animationInstances[0]->transformations[0]));
+		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), coucou.size(), GL_FALSE, glm::value_ptr(coucou[0]));
 
-		//for (unsigned int i = 0; i < vertices.size(); ++i)
+		for (unsigned int i = 0; i < catwomanMesh->subMeshs.size(); ++i)
 		{
-			//geometryManager->draw(GL_TRIANGLES, indices[i], vertices[i]);
+			geometryManager->draw(GL_TRIANGLES, catwomanMesh->subMeshs[i].indices, catwomanMesh->subMeshs[i].vertices);
 		}
 	} while (e->update());
 
