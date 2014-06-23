@@ -60,12 +60,24 @@ namespace gl
 		return (*this);
 	}
 
+	template <typename HEAD, typename... QUEUE>
+	static void setSizeElement(size_t *elements, size_t pos)
+	{
+		elements[pos] = sizeof(HEAD);
+
+		setSizeElement< QUEUE... >(elements, pos + 1);
+	}
+
+	template <typename HEAD>
+	static void setSizeElement(size_t *element, size_t pos)
+	{
+
+	}
 
 	// tool function
-	template <typename TYPE1, class... OTHER_TYPE> 
-	void setSizeElement(size_t *sizeElement, size_t pos = 0)
+	template <typename... Args> 
+	void setSizeElements(size_t *sizeElements, size_t pos = 0)
 	{
-		sizeElement[pos] = sizeof(TYPE1);
-		setSizeElement<OTHER_TYPE>(sizeElement, pos + 1);
+		setSizeElement<Args... >(sizeElements, pos + 1);
 	}
 }

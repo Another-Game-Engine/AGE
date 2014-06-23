@@ -61,7 +61,7 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto s = e->getInstance<Renderer>()->addShader("MaterialBasic",
 		"../../Shaders/MaterialBasic.vp",
 		"../../Shaders/MaterialBasic.fp");
-
+	
 	auto shadowDepth = e->getInstance<Renderer>()->addShader("ShadowDepth" , "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
 
 	e->getInstance<Renderer>()->addUniform("MaterialBasic")
@@ -109,8 +109,15 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	//NEW VERSION OF SHADING
 
 	auto &m = e->getInstance<gl::ShadingManager>();
-	auto &materialBasic = m->addShader("../../Shaders/MaterialBasic.vp", "../../Shaders/MaterialBasic.fp"); // 0
+	auto &basic = m->addShader("../../Shaders/MaterialBasic.vp", "../../Shaders/MaterialBasic.fp"); // 0
 	auto &shadow = m->addShader("../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp"); // 1
+	size_t sizeBlock[6];
+	gl::setSizeElements<glm::vec3, glm::vec3, glm::vec3, glm::vec3, glm::vec3, float>(sizeBlock);
+	auto &ubMaterialBasic = m->addUniformBlock(6, sizeBlock);
+	gl::setSizeElements<glm::mat4, glm::mat4, float, unsigned int, unsigned int>(sizeBlock);
+	auto &ubPerFrame = m->addUniformBlock(5, sizeBlock);
+//	gl::setSizeElements<glm::mat4>(sizeBlock);
+	auto &ubPerModel = m->addUniformBlock(1, sizeBlock);
 	//
 	//gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
 	//auto &pm = m->addShaderUniform(test_pipeline_1, "projection_matrix", glm::perspective<float>(60.f, 600.f / 800.f, 1.0f, 100.0f));
