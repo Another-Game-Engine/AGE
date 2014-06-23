@@ -107,17 +107,26 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	e->getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
 
 	//NEW VERSION OF SHADING
-
+	// create the shader
 	auto &m = e->getInstance<gl::ShadingManager>();
 	auto &basic = m->addShader("../../Shaders/MaterialBasic.vp", "../../Shaders/MaterialBasic.fp"); // 0
 	auto &shadow = m->addShader("../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp"); // 1
+	
+	// create the uniform block
 	size_t sizeBlock[6];
-	gl::setSizeElements<glm::vec3, glm::vec3, glm::vec3, glm::vec3, glm::vec3, float>(sizeBlock);
+	gl::set_tab_sizetype<glm::vec3, glm::vec3, glm::vec3, glm::vec3, glm::vec3, float>(sizeBlock);
 	auto &ubMaterialBasic = m->addUniformBlock(6, sizeBlock);
-	gl::setSizeElements<glm::mat4, glm::mat4, float, unsigned int, unsigned int>(sizeBlock);
+	gl::set_tab_sizetype<glm::mat4, glm::mat4, float, unsigned int, unsigned int>(sizeBlock);
 	auto &ubPerFrame = m->addUniformBlock(5, sizeBlock);
-//	gl::setSizeElements<glm::mat4>(sizeBlock);
 	auto &ubPerModel = m->addUniformBlock(1, sizeBlock);
+	auto &ubPerLighting = m->addUniformBlock(1, sizeBlock);
+
+	// create and set the interface present into basic material
+	auto &imbmb = m->addShaderInterfaceBlock(basic, "MaterialBasic", ubMaterialBasic);
+	auto &imbpf = m->addShaderInterfaceBlock(basic, "PerFrame", ubPerFrame);
+	auto &imbpm = m->addShaderInterfaceBlock(basic, "PerModel", ubPerModel);
+	auto &ismpm = m->addShaderInterfaceBlock(shadow, "PerModel", ubPerModel);
+	auto &ismpl = m->addShaderInterfaceBlock(shadow, "PerModel", ubPerModel);
 	//
 	//gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
 	//auto &pm = m->addShaderUniform(test_pipeline_1, "projection_matrix", glm::perspective<float>(60.f, 600.f / 800.f, 1.0f, 100.0f));

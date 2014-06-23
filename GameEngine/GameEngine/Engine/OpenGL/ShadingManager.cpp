@@ -198,6 +198,17 @@ namespace gl
 		return (element->first);
 	}
 
+	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "key destroy", Key<InterfaceBlock>(KEY_DESTROY))
+			auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "shader not find", Key<InterfaceBlock>(KEY_DESTROY))
+			auto &s = element->second;
+		return (s.addInterfaceBlock(flag));
+	}
+
 	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
 	{
 		if (!shader)
