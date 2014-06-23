@@ -38,7 +38,7 @@
 #include <Skinning/Skeleton.hpp>
 
 
-int			main(void)
+int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
@@ -86,6 +86,21 @@ int			main(void)
 	auto isMesh = AGE::MeshLoader::load(dataSet);
 	
 	//Save AGE assets data structure to filesystem
+	{
+		std::ofstream ofs("catwoman.skage", std::ios::trunc | std::ios::binary);
+		cereal::BinaryOutputArchive ar(ofs);
+		ar(*dataSet.skeleton);
+	}
+	{
+		std::ofstream ofs("roulade.aage", std::ios::trunc | std::ios::binary);
+		cereal::BinaryOutputArchive ar(ofs);
+		ar(*dataSet.animations[0]);
+	}
+	{
+		std::ofstream ofs("catwoman.sage", std::ios::trunc | std::ios::binary);
+		cereal::BinaryOutputArchive ar(ofs);
+		ar(*dataSet.mesh);
+	}
 
 	//Load assets from serialized file
 	auto meshManager = e->getInstance<AGE::MeshManager>();
