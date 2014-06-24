@@ -58,20 +58,20 @@ namespace gl
 	bool ShaderResource::getUniformLocation()
 	{
 		if (_attach == NULL)
-			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "No attach on this uniform", false);
+			DEBUG_MESSAGE("Error", "Uniform.cpp - getUniformLocation()", "No attach on this uniform", false);
 		_attach->use();
 		if ((_location = glGetUniformLocation(_attach->getId(), _flag.c_str())) == -1)
-			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
+			DEBUG_MESSAGE("Error", "Uniform.cpp - getUniformLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
 		return (true);
 	}
 
 	bool ShaderResource::getUniformBlockLocation()
 	{
 		if (_attach == NULL)
-			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "No attach on this uniform", false);
+			DEBUG_MESSAGE("Error", "Uniform.cpp - getUniformBlockLocation()", "No attach on this uniform", false);
 		_attach->use();
 		if ((_location = glGetUniformBlockIndex(_attach->getId(), _flag.c_str())) == -1)
-			DEBUG_MESSAGE("Error", "Uniform.cpp - getLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
+			DEBUG_MESSAGE("Error", "Uniform.cpp - getUniformBlockLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
 		return (true);
 	}
 
@@ -105,7 +105,7 @@ namespace gl
 		memcpy(_data, &value, _sizeData);
 		if (getUniformLocation() == false)
 			return (*this);
-		glUniform1i(_location, *((int *)value));
+		glUniform1i(_location, value);
 		return (*this);
 	}
 

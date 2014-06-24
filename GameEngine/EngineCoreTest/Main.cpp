@@ -29,7 +29,7 @@
 
 bool loadShaders(std::shared_ptr<Engine> e)
 {
-	std::string		perModelVars[] =
+	std::string	perModelVars[] =
 	{
 		"model"
 	};
@@ -43,7 +43,7 @@ bool loadShaders(std::shared_ptr<Engine> e)
 		"spotLightNbr"
 	};
 
-	std::string		materialBasic[] =
+	std::string	materialBasic[] =
 	{
 		"ambient",
 		"diffuse",
@@ -61,8 +61,8 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto s = e->getInstance<Renderer>()->addShader("MaterialBasic",
 		"../../Shaders/MaterialBasic.vp",
 		"../../Shaders/MaterialBasic.fp");
-	
-	auto shadowDepth = e->getInstance<Renderer>()->addShader("ShadowDepth" , "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
+
+	auto shadowDepth = e->getInstance<Renderer>()->addShader("ShadowDepth", "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
 
 	e->getInstance<Renderer>()->addUniform("MaterialBasic")
 		->init(s, "MaterialBasic", materialBasic);
@@ -114,7 +114,7 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto &text2d = m->addShader("../../Shaders/2DText.vp", "../../Shaders/2DText.fp"); // 2
 	auto &sprite = m->addShader("../../Shaders/SpriteBasic.vp", "../../Shaders/SpriteBasic.fp"); // 3
 	auto &depthonly = m->addShader("../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp"); // 4
-	
+
 	// create the uniform block
 	size_t sizeBlock[6];
 	gl::set_tab_sizetype<glm::vec3, glm::vec3, glm::vec3, glm::vec3, glm::vec3, float>(sizeBlock);
@@ -132,6 +132,47 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto &ismpl = m->addShaderInterfaceBlock(shadow, "PerLight", ubPerLighting);
 	auto &idopm = m->addShaderInterfaceBlock(depthonly, "PerModel", ubPerModel);
 	auto &idopf = m->addShaderInterfaceBlock(depthonly, "PerFrame", ubPerFrame);
+
+	return true;
+//	//NEW VERSION OF SHADING
+//	// create the shader
+//	auto &m = e->getInstance<gl::ShadingManager>();
+//	auto &basic = m->addShader("../../Shaders/MaterialBasic.vp", "../../Shaders/MaterialBasic.fp"); // 0
+//	auto &shadow = m->addShader("../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp"); // 1
+//	auto &text2d = m->addShader("../../Shaders/2DText.vp", "../../Shaders/2DText.fp"); // 2
+//	auto &sprite = m->addShader("../../Shaders/SpriteBasic.vp", "../../Shaders/SpriteBasic.fp"); // 3
+//	auto &depthonly = m->addShader("../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp"); // 4
+//	auto &cubemap = m->addShader("../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp"); // 5
+//
+//	// create the uniform block
+//	size_t sizeBlock[6];
+//	gl::set_tab_sizetype<glm::vec3, glm::vec3, glm::vec3, glm::vec3, glm::vec3, float>(sizeBlock);
+//	auto &ubMaterialBasic = m->addUniformBlock(6, sizeBlock);
+//	gl::set_tab_sizetype<glm::mat4, glm::mat4, float, unsigned int, unsigned int>(sizeBlock);
+//	auto &ubPerFrame = m->addUniformBlock(5, sizeBlock);
+//	auto &ubPerModel = m->addUniformBlock(1, sizeBlock);
+//	auto &ubPerLighting = m->addUniformBlock(1, sizeBlock);
+//	gl::set_tab_sizetype<glm::mat4, glm::mat4>(sizeBlock);
+//	auto &ubCameraUniform = m->addUniformBlock(2, sizeBlock);
+//
+//	// create and set the interface
+//	auto &imbmb = m->addShaderInterfaceBlock(basic, "MaterialBasic", ubMaterialBasic);
+//	auto &imbpf = m->addShaderInterfaceBlock(basic, "PerFrame", ubPerFrame);
+//	auto &imbpm = m->addShaderInterfaceBlock(basic, "PerModel", ubPerModel);
+//	auto &ismpm = m->addShaderInterfaceBlock(shadow, "PerModel", ubPerModel);
+//	auto &ismpl = m->addShaderInterfaceBlock(shadow, "PerLight", ubPerLighting);
+//	auto &idopm = m->addShaderInterfaceBlock(depthonly, "PerModel", ubPerModel);
+//	auto &idopf = m->addShaderInterfaceBlock(depthonly, "PerFrame", ubPerFrame);
+//	auto &icu = m->addShaderInterfaceBlock(cubemap, "cameraUniform", ubCameraUniform);
+//	auto &us2dtt = m->addShaderSampler(text2d, "fTexture0");
+//	auto &u2dtp = m->addShaderUniform(text2d, "projection");
+//	auto &u2dtt = m->addShaderUniform(text2d, "transformation");
+//	auto &u2dtc = m->addShaderUniform(text2d, "color");
+//	auto &ussbt = m->addShaderSampler(sprite, "fTexture0");
+//	auto &usbp = m->addShaderUniform(sprite, "projection");
+//	auto &usbv = m->addShaderUniform(sprite, "view");
+//	auto &usbt = m->addShaderUniform(sprite, "transformation");
+//	auto &usbc = m->addShaderUniform(sprite, "color");
 
 	// set uniform and sampler
 
