@@ -103,7 +103,7 @@ int			main(int ac, char **av)
 	auto assetsManager = e->getInstance<AGE::AssetsManager>();
 
 	auto catwomanMesh = assetsManager->loadMesh("catwoman.sage"); // load mesh
-	//auto catwomanSkeleton = meshManager->loadSkeleton("roulade.skage"); // load skeleton
+	auto catwomanSkeleton = assetsManager->loadSkeleton("catwoman.skage"); // load skeleton
 	//meshManager->load("catwoman.aage"); // load animation
 
 	//

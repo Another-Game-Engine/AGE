@@ -9,6 +9,7 @@
 #include <OpenGL/GeometryManager.hh>
 
 #include <Geometry/Mesh.hpp>
+#include <Skinning/Skeleton.hpp>
 
 namespace AGE
 {
@@ -22,13 +23,32 @@ namespace AGE
 			}
 		};
 	public:
+		std::shared_ptr<Skeleton> loadSkeleton(const File &filePath)
+		{
+			if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
+				return _skeletons[filePath.getFullName()];
+			if (!filePath.exists())
+			{
+				std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
+				assert(false);
+			}
+
+			auto skeleton = std::make_shared<Skeleton>();
+
+			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			cereal::PortableBinaryInputArchive ar(ifs);
+			ar(*skeleton.get());
+			_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
+			return skeleton;
+		}
+
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath)
 		{
 			if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
 				return _meshs[filePath.getFullName()];
 			if (!filePath.exists())
 			{
-				std::cerr << "MeshManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
+				std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
 				assert(false);
 			}
 
@@ -60,6 +80,9 @@ namespace AGE
 
 		// Mesh collection
 		std::map<std::string, std::shared_ptr<MeshInstance>> _meshs;
+
+		//Skeleton collection
+		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
 
 		void loadSubmesh(SubMeshData &data, SubMeshInstance &mesh)
 		{
