@@ -7,7 +7,7 @@
 
 using namespace AGE;
 
-AnimationInstance::AnimationInstance(Skeleton *_skeleton, Animation *_animation /* = nullptr */)
+AnimationInstance::AnimationInstance(std::shared_ptr<Skeleton> _skeleton, std::shared_ptr<Animation> _animation /* = nullptr */)
 : skeleton(_skeleton)
 , animation(_animation)
 {

@@ -20,6 +20,7 @@ namespace AGE
 	struct Skeleton
 	{
 	public:
+		Skeleton();
 		std::string name;
 		std::vector<Bone> bones;
 		std::vector<AnimationInstance*> animations;

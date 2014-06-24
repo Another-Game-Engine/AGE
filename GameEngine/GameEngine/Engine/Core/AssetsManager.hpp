@@ -23,6 +23,25 @@ namespace AGE
 			}
 		};
 	public:
+		std::shared_ptr<Animation> loadAnimation(const File &filePath)
+		{
+			if (_animations.find(filePath.getFullName()) != std::end(_animations))
+				return _animations[filePath.getFullName()];
+			if (!filePath.exists())
+			{
+				std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
+				assert(false);
+			}
+
+			auto animation = std::make_shared<Animation>();
+
+			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			cereal::PortableBinaryInputArchive ar(ifs);
+			ar(*animation.get());
+			_animations.insert(std::make_pair(filePath.getFullName(), animation));
+			return animation;
+		}
+
 		std::shared_ptr<Skeleton> loadSkeleton(const File &filePath)
 		{
 			if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
@@ -83,6 +102,9 @@ namespace AGE
 
 		//Skeleton collection
 		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
+
+		//Animation collection
+		std::map<std::string, std::shared_ptr<Animation>> _animations;
 
 		void loadSubmesh(SubMeshData &data, SubMeshInstance &mesh)
 		{

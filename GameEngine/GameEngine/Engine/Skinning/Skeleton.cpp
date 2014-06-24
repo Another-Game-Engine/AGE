@@ -6,6 +6,12 @@
 
 using namespace AGE;
 
+Skeleton::Skeleton()
+: name("noname")
+, firstBone(0)
+, inverseGlobal(1)
+{}
+
 void Skeleton::updateSkinning()
 {
 	readNodeHierarchy(this->firstBone);

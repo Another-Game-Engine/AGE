@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <glm/glm.hpp>
 
 namespace AGE
@@ -10,11 +11,11 @@ namespace AGE
 
 	struct AnimationInstance
 	{
-		AnimationInstance(Skeleton *_skeleton, Animation *_animation = nullptr);
+		AnimationInstance(std::shared_ptr<Skeleton> _skeleton, std::shared_ptr<Animation> _animation = nullptr);
 
-		Animation *animation;
+		std::shared_ptr<Animation> animation;
 		float time;
-		Skeleton *skeleton;
+		std::shared_ptr<Skeleton> skeleton;
 		std::vector<glm::mat4> transformations;
 		std::vector<glm::mat4> bindPoses;
 		void update(float t);

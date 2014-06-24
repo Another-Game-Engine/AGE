@@ -74,15 +74,15 @@ int			main(int ac, char **av)
 	/////
 	//
 
-	//Convert fbx to AGE data structure
-	// 	AGE::AssetDataSet dataSet;
-	//dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
-	//dataSet.name = "catwoman";
-	//auto isSkeleton = AGE::SkeletonLoader::load(dataSet);
-	//auto isAnimations = AGE::AnimationsLoader::load(dataSet);
-	//auto isMesh = AGE::MeshLoader::load(dataSet);
-	//
-	////Save AGE assets data structure to filesystem
+	///////Convert fbx to AGE data structure
+	AGE::AssetDataSet dataSet;
+	dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
+	dataSet.name = "catwoman";
+	auto isSkeleton = AGE::SkeletonLoader::load(dataSet);
+	auto isAnimations = AGE::AnimationsLoader::load(dataSet);
+	auto isMesh = AGE::MeshLoader::load(dataSet);
+	
+	//Save AGE assets data structure to filesystem
 	//{
 	//	std::ofstream ofs("catwoman.skage", std::ios::trunc | std::ios::binary);
 	//	cereal::PortableBinaryOutputArchive ar(ofs);
@@ -104,7 +104,9 @@ int			main(int ac, char **av)
 
 	auto catwomanMesh = assetsManager->loadMesh("catwoman.sage"); // load mesh
 	auto catwomanSkeleton = assetsManager->loadSkeleton("catwoman.skage"); // load skeleton
-	//meshManager->load("catwoman.aage"); // load animation
+	auto catwomanRoulade = assetsManager->loadAnimation("roulade.aage"); // load animation
+
+	AGE::AnimationInstance catwomanAnimationInstance(catwomanSkeleton, catwomanRoulade);
 
 	//
 	/////
@@ -139,9 +141,6 @@ int			main(int ac, char **av)
 	glClearDepth(1.0f);
 	// la couleur de clear par defaut sera du noir
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-
-	std::array<AGE::AnimationInstance*, 100> animationInstances;
-	//animationInstances.fill(new AGE::AnimationInstance(&skeleton, &animations[0]));
 
 	do
 	{
@@ -179,16 +178,9 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(viewId, 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
 
-		//for (auto &&a : animationInstances)
-		//{
-		//	a->update(totalTime * 10.0f);
-		//}
-		//skeleton.updateSkinning();
-		static float median = 0.0f;
-		std::vector<glm::mat4> coucou(200);
-		coucou.resize(200, glm::mat4(1));
-		//glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), animationInstances[0]->transformations.size(), GL_FALSE, glm::value_ptr(animationInstances[0]->transformations[0]));
-		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), coucou.size(), GL_FALSE, glm::value_ptr(coucou[0]));
+		catwomanAnimationInstance.update(totalTime * 10.0f);
+		catwomanSkeleton->updateSkinning();
+		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), catwomanAnimationInstance.transformations.size(), GL_FALSE, glm::value_ptr(catwomanAnimationInstance.transformations[0]));
 
 		for (unsigned int i = 0; i < catwomanMesh->subMeshs.size(); ++i)
 		{

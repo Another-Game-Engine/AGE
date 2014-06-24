@@ -22,6 +22,9 @@ namespace AGE
 			: value(std::move(_value))
 			, time(_time)
 		{}
+		AnimationKey()
+			: time(0)
+		{}
 	};
 
 	template <class Archive, class T>
