@@ -37,7 +37,6 @@ namespace gl
 	class VertexBuffer : public Buffer
 	{
 	private:
-		static GLuint _currentId;
 		VertexBuffer(VertexBuffer const &copy);
 	public:
 		VertexBuffer();
@@ -57,7 +56,6 @@ namespace gl
 	{
 	private:
 		IndexBuffer(IndexBuffer const &copy);
-		static GLuint _currentId;
 	public:
 		IndexBuffer();
 		virtual ~IndexBuffer();
@@ -76,7 +74,6 @@ namespace gl
 	{
 	private:
 		UniformBuffer(UniformBuffer const &copy);
-		static GLuint _currentId;
 
 	public:
 		UniformBuffer();

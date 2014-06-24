@@ -2,10 +2,6 @@
 
 namespace gl
 {
-	GLuint VertexBuffer::_currentId = 0;
-	GLuint IndexBuffer::_currentId = 0;
-	GLuint UniformBuffer::_currentId = 0;
-
 	Buffer::Buffer()
 	{
 		glGenBuffers(1, &_id);
@@ -33,18 +29,13 @@ namespace gl
 
 	Buffer const &VertexBuffer::bind() const
 	{
-		if (_currentId != _id)
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, _id);
-			_currentId = _id;
-		}
+		glBindBuffer(GL_ARRAY_BUFFER, _id);
 		return (*this);
 	}
 
 	Buffer const &VertexBuffer::unbind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		_currentId = 0;
 		return (*this);
 	}
 
@@ -64,18 +55,13 @@ namespace gl
 
 	Buffer const &IndexBuffer::bind() const
 	{
-		if (_currentId != _id)
-		{
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
-			_currentId = _id;
-		}
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
 		return (*this);
 	}
 
 	Buffer const &IndexBuffer::unbind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		_currentId = 0;
 		return (*this);
 	}
 
@@ -95,18 +81,13 @@ namespace gl
 
 	Buffer const &UniformBuffer::bind() const
 	{
-		if (_currentId != _id)
-		{
-			glBindBuffer(GL_UNIFORM_BUFFER, _id);
-			_currentId = _id;
-		}
+		glBindBuffer(GL_UNIFORM_BUFFER, _id);
 		return (*this);
 	}
 
 	Buffer const &UniformBuffer::unbind() const
 	{
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-		_currentId = 0;
 		return (*this);
 	}
 
