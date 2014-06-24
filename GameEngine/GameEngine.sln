@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\Ga
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6823E483-DFC6-4750-920C-35DA2E87B060}"
 	ProjectSection(SolutionItems) = preProject
+		Shaders\2DText.fp = Shaders\2DText.fp
+		Shaders\2DText.vp = Shaders\2DText.vp
 		Shaders\basic.fp = Shaders\basic.fp
 		Shaders\basic.gp = Shaders\basic.gp
 		Shaders\basic.vp = Shaders\basic.vp
@@ -38,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Shaders\MaterialBasic.vp = Shaders\MaterialBasic.vp
 		Shaders\ShadowMapping.fp = Shaders\ShadowMapping.fp
 		Shaders\ShadowMapping.vp = Shaders\ShadowMapping.vp
+		Shaders\SpriteBasic.fp = Shaders\SpriteBasic.fp
+		Shaders\SpriteBasic.vp = Shaders\SpriteBasic.vp
 		Shaders\tesselation.gp = Shaders\tesselation.gp
 		Shaders\test.cp = Shaders\test.cp
 		test_pipeline_1.fp = test_pipeline_1.fp

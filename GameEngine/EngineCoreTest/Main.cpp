@@ -111,6 +111,9 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto &m = e->getInstance<gl::ShadingManager>();
 	auto &basic = m->addShader("../../Shaders/MaterialBasic.vp", "../../Shaders/MaterialBasic.fp"); // 0
 	auto &shadow = m->addShader("../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp"); // 1
+	auto &text2d = m->addShader("../../Shaders/2DText.vp", "../../Shaders/2DText.fp"); // 2
+	auto &sprite = m->addShader("../../Shaders/SpriteBasic.vp", "../../Shaders/SpriteBasic.fp"); // 3
+	auto &depthonly = m->addShader("../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp"); // 4
 	
 	// create the uniform block
 	size_t sizeBlock[6];
@@ -121,12 +124,18 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto &ubPerModel = m->addUniformBlock(1, sizeBlock);
 	auto &ubPerLighting = m->addUniformBlock(1, sizeBlock);
 
-	// create and set the interface present into basic material
+	// create and set the interface
 	auto &imbmb = m->addShaderInterfaceBlock(basic, "MaterialBasic", ubMaterialBasic);
 	auto &imbpf = m->addShaderInterfaceBlock(basic, "PerFrame", ubPerFrame);
 	auto &imbpm = m->addShaderInterfaceBlock(basic, "PerModel", ubPerModel);
 	auto &ismpm = m->addShaderInterfaceBlock(shadow, "PerModel", ubPerModel);
-	auto &ismpl = m->addShaderInterfaceBlock(shadow, "PerModel", ubPerModel);
+	auto &ismpl = m->addShaderInterfaceBlock(shadow, "PerLight", ubPerLighting);
+	auto &idopm = m->addShaderInterfaceBlock(depthonly, "PerModel", ubPerModel);
+	auto &idopf = m->addShaderInterfaceBlock(depthonly, "PerFrame", ubPerFrame);
+
+	// set uniform and sampler
+
+
 	//
 	//gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
 	//auto &pm = m->addShaderUniform(test_pipeline_1, "projection_matrix", glm::perspective<float>(60.f, 600.f / 800.f, 1.0f, 100.0f));
