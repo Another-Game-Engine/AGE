@@ -54,7 +54,7 @@ namespace AGE
 						meshs[meshIndex].normals.push_back(glm::vec4(aiNormals.x, aiNormals.y, aiNormals.z, 1));
 						meshs[meshIndex].infos.set(MeshInfos::Normals);
 					}
-					for (unsigned int texCoordIndex = 0; texCoordIndex < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++texCoordIndex)
+					for (unsigned int texCoordIndex = 0; texCoordIndex < 1 /*AI_MAX_NUMBER_OF_TEXTURECOORDS*/; ++texCoordIndex)
 					{
 						if (mesh->HasTextureCoords(texCoordIndex))
 						{
@@ -94,6 +94,9 @@ namespace AGE
 				for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 				{
 					unsigned int boneIndex = dataSet.skeleton->bonesReferences.find(mesh->mBones[i]->mName.data)->second;
+
+					meshs[meshIndex].infos.set(MeshInfos::Weights);
+					meshs[meshIndex].infos.set(MeshInfos::BoneIndices);
 
 					for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; ++j)
 					{
