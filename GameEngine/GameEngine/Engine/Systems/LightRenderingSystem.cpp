@@ -3,7 +3,7 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/CameraComponent.hpp>
 #include <Components/SpriteComponent.hh>
-#include <Systems/CameraSystem.hpp>
+#include <Systems/CameraSystem.hh>
 #include <OpenGL/Framebuffer.hh>
 #include <OpenGL/UniformBuffer.hh>
 #include <Core/AScene.hh>

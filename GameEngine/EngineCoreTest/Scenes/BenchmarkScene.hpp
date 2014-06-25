@@ -10,7 +10,7 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 
-#include <Systems/CameraSystem.hpp>
+#include <Systems/CameraSystem.hh>
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/LightRenderingSystem.hh>

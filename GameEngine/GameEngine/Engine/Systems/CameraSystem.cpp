@@ -1,4 +1,4 @@
-#include <Systems/CameraSystem.hpp>
+#include <Systems/CameraSystem.hh>
 #include <Utils/MatrixConversion.hpp>
 
 # define NEW_SHADER 0
