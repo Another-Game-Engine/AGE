@@ -73,13 +73,13 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	e->getInstance<Renderer>()->addUniform("PerLight")
 		->init(shadowDepth, "PerLight", perLightVars);
 
-	e->getInstance<Renderer>()->addShader("2DText",
-		"../../Shaders/2DText.vp",
-		"../../Shaders/2DText.fp");
-
-	e->getInstance<Renderer>()->addShader("SpriteBasic",
-		"../../Shaders/SpriteBasic.vp",
-		"../../Shaders/SpriteBasic.fp");
+	//e->getInstance<Renderer>()->addShader("2DText",
+	//	"../../Shaders/2DText.vp",
+	//	"../../Shaders/2DText.fp");
+	//
+	//e->getInstance<Renderer>()->addShader("SpriteBasic",
+	//	"../../Shaders/SpriteBasic.vp",
+	//	"../../Shaders/SpriteBasic.fp");
 
 	e->getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
 	e->getInstance<Renderer>()->addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
@@ -111,8 +111,6 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto &m = e->getInstance<gl::ShadingManager>();
 	auto &basic = m->addShader("../../Shaders/MaterialBasic.vp", "../../Shaders/MaterialBasic.fp"); // 0
 	auto &shadow = m->addShader("../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp"); // 1
-	auto &text2d = m->addShader("../../Shaders/2DText.vp", "../../Shaders/2DText.fp"); // 2
-	auto &sprite = m->addShader("../../Shaders/SpriteBasic.vp", "../../Shaders/SpriteBasic.fp"); // 3
 	auto &depthonly = m->addShader("../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp"); // 4
 	auto &cubemap = m->addShader("../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp"); // 5
 
@@ -136,15 +134,6 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	auto &idopm = m->addShaderInterfaceBlock(depthonly, "PerModel", ubPerModel);
 	auto &idopf = m->addShaderInterfaceBlock(depthonly, "PerFrame", ubPerFrame);
 	auto &icu = m->addShaderInterfaceBlock(cubemap, "cameraUniform", ubCameraUniform);
-	auto &us2dtt = m->addShaderSampler(text2d, "fTexture0");
-	auto &u2dtp = m->addShaderUniform(text2d, "projection");
-	auto &u2dtt = m->addShaderUniform(text2d, "transformation");
-	auto &u2dtc = m->addShaderUniform(text2d, "color");
-	auto &ussbt = m->addShaderSampler(sprite, "fTexture0");
-	auto &usbp = m->addShaderUniform(sprite, "projection");
-	auto &usbv = m->addShaderUniform(sprite, "view");
-	auto &usbt = m->addShaderUniform(sprite, "transformation");
-	auto &usbc = m->addShaderUniform(sprite, "color");
 
 	// set uniform and sampler
 
