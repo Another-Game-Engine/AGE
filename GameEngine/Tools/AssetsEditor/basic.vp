@@ -16,13 +16,14 @@ uniform mat4 bones[169];
 
 
 
+
 layout (location = 0) in vec4 vPosition;
-
-layout (location = 1) in vec4 vBlendWeight;
-
-layout (location = 2) in vec4 vBlendIndice;
-
-
+layout (location = 1) in vec4 vNormal;
+layout (location = 2) in vec4 vTangents;
+layout (location = 3) in vec4 vBiTangents;
+layout (location = 4) in vec2 vTexCoord;
+layout (location = 5) in vec4 vBlendWeight;
+layout (location = 6) in vec4 vBlendIndice;
 
 out vec4 boneColor;
 
