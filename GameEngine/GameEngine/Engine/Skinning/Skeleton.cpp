@@ -9,7 +9,7 @@ using namespace AGE;
 Skeleton::Skeleton()
 : name("noname")
 , firstBone(0)
-, inverseGlobal(1)
+, inverseGlobal(glm::mat4(1))
 {}
 
 void Skeleton::updateSkinning()
@@ -20,8 +20,7 @@ void Skeleton::updateSkinning()
 	{
 		for (std::size_t i = 0; i < bones.size(); ++i)
 		{
-			//hardcoded rotation
-			this->animations[j]->transformations[i] = this->animations[j]->transformations[i] * this->bones[i].offset;
+			this->animations[j]->transformations[i] *= this->bones[i].offset;
 		}
 	}
 }

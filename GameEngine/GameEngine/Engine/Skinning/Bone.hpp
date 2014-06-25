@@ -15,8 +15,8 @@ namespace AGE
 		glm::mat4 offset;
 		std::uint32_t index;
 		glm::mat4 transformation;
-		std::vector<unsigned int> children;
-		unsigned int parent = (unsigned int)(-1);
+		std::vector<std::uint32_t> children;
+		std::uint32_t parent = (std::uint32_t)(-1);
 	};
 
 	template <class Archive>
