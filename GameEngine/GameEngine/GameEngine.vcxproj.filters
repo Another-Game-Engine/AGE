@@ -63,6 +63,7 @@
     <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\UniformBlock.cpp" />
     <ClCompile Include="Engine\OpenGL\ShaderResource.cpp" />
+    <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />

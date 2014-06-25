@@ -9,5 +9,5 @@ layout (location = 0) out vec4 fragcolor;
 
 void main(void)
 {
-	fragcolor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	fragcolor = interpolated_color;
 }

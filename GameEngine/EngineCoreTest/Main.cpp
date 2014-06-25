@@ -27,8 +27,11 @@
 //CONFIGS
 #include <CONFIGS.hpp>
 
+# define NEW_SHADER 0
+
 bool loadShaders(std::shared_ptr<Engine> e)
 {
+#if !NEW_SHADER
 	std::string	perModelVars[] =
 	{
 		"model"
@@ -105,36 +108,7 @@ bool loadShaders(std::shared_ptr<Engine> e)
 		->init(sky, "cameraUniform", vars);
 
 	e->getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
-
-	//NEW VERSION OF SHADING
-	// create the shader
-	auto &m = e->getInstance<gl::ShadingManager>();
-	auto &basic = m->addShader("../../Shaders/MaterialBasic.vp", "../../Shaders/MaterialBasic.fp"); // 0
-	auto &shadow = m->addShader("../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp"); // 1
-	auto &depthonly = m->addShader("../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp"); // 4
-	auto &cubemap = m->addShader("../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp"); // 5
-
-	// create the uniform block
-	size_t sizeBlock[6];
-	gl::set_tab_sizetype<glm::vec3, glm::vec3, glm::vec3, glm::vec3, glm::vec3, float>(sizeBlock);
-	auto &ubMaterialBasic = m->addUniformBlock(6, sizeBlock);
-	gl::set_tab_sizetype<glm::mat4, glm::mat4, float, unsigned int, unsigned int>(sizeBlock);
-	auto &ubPerFrame = m->addUniformBlock(5, sizeBlock);
-	auto &ubPerModel = m->addUniformBlock(1, sizeBlock);
-	auto &ubPerLighting = m->addUniformBlock(1, sizeBlock);
-	gl::set_tab_sizetype<glm::mat4, glm::mat4>(sizeBlock);
-	auto &ubCameraUniform = m->addUniformBlock(2, sizeBlock);
-
-	// create and set the interface
-	auto &imbmb = m->addShaderInterfaceBlock(basic, "MaterialBasic", ubMaterialBasic);
-	auto &imbpf = m->addShaderInterfaceBlock(basic, "PerFrame", ubPerFrame);
-	auto &imbpm = m->addShaderInterfaceBlock(basic, "PerModel", ubPerModel);
-	auto &ismpm = m->addShaderInterfaceBlock(shadow, "PerModel", ubPerModel);
-	auto &ismpl = m->addShaderInterfaceBlock(shadow, "PerLight", ubPerLighting);
-	auto &idopm = m->addShaderInterfaceBlock(depthonly, "PerModel", ubPerModel);
-	auto &idopf = m->addShaderInterfaceBlock(depthonly, "PerFrame", ubPerFrame);
-	auto &icu = m->addShaderInterfaceBlock(cubemap, "cameraUniform", ubCameraUniform);
-
+#endif
 	// set uniform and sampler
 
 
