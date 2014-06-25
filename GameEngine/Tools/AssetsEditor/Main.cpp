@@ -180,6 +180,8 @@ int			main(int ac, char **av)
 
 		catwomanAnimationInstance.update(totalTime * 10.0f);
 		catwomanSkeleton->updateSkinning();
+		//catwomanAnimationInstance.transformations.resize(0);
+		//catwomanAnimationInstance.transformations.resize(200, glm::mat4(1));
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), catwomanAnimationInstance.transformations.size(), GL_FALSE, glm::value_ptr(catwomanAnimationInstance.transformations[0]));
 
 		for (unsigned int i = 0; i < catwomanMesh->subMeshs.size(); ++i)

@@ -22,16 +22,6 @@ void AnimationInstance::update(float t)
 		return;
 	auto localTime = std::fmodf(t, animation->duration);
 
-	for (std::size_t i = 0; i < skeleton->bones.size(); ++i)
-	{
-		bindPoses[i] = skeleton->bones[i].transformation;
-		transformations[i] = skeleton->bones[i].transformation;
-	}
-
-
-	//for (auto i = 0; i < transformations.size(); ++i)
-	//	transformations[i] = glm::mat4(1);
-
 	for (std::size_t i = 0; i < animation->channels.size(); ++i)
 	{
 		animation->channels[i].getInterpolatedTransform(localTime, bindPoses[animation->channels[i].boneIndex]);
