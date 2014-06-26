@@ -45,7 +45,9 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 	addSystem<FirstPersonViewSystem>(2);
-	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	auto &m = *getInstance<gl::ShadingManager>();
+	camerasystem->setManager(m);
 
 #ifdef SIMPLE_RENDERING
 		addSystem<SimpleMeshRenderer>(80);

@@ -10,9 +10,10 @@ namespace gl { class Shader; class ShadingManager; struct Uniform; class Uniform
 class CameraSystem : public System
 {
 public:
-	CameraSystem(std::weak_ptr<AScene> &&scene, gl::ShadingManager &shaderManager);
+	CameraSystem(std::weak_ptr<AScene> &&scene);
 	virtual ~CameraSystem(){}
 
+	void setManager(gl::ShadingManager &m);
 	void setRenderDebugMode(bool t);
 	bool getRenderDebugMode() const;
 	void getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to);
@@ -20,7 +21,7 @@ public:
 	double getLifeTime() const;
 
 protected:
-	gl::ShadingManager &_manager;
+	gl::ShadingManager *_manager;
 	bool _renderDebugMethod;
 	double	_totalTime;
 	EntityFilter _drawable;

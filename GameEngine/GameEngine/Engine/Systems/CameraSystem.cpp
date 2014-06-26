@@ -12,9 +12,9 @@
 # define VERTEX_SHADER "../../test_pipeline_1.vp"
 # define FRAG_SHADER "../../test_pipeline_1.fp"
 
-CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene, gl::ShadingManager &m)
+CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene)
 	: System(std::move(scene)),
-	_manager(m),
+	_manager(NULL),
 	_renderDebugMethod(false),
 	_totalTime(0),
 	_camera(std::move(scene)),
@@ -61,6 +61,18 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 		cameraCpt->projection,
 		from,
 		to);
+}
+
+void CameraSystem::setManager(gl::ShadingManager &m)
+{
+	_manager = &m;
+	if (_manager == NULL)
+		std::cerr << "Warning: No manager set for the camerasystem" << std::endl;
+	_shader = _manager->addShader(VERTEX_SHADER, FRAG_SHADER);
+	size_t sizeElement = sizeof(glm::mat4);
+	_global_state = _manager->addUniformBlock(1, &sizeElement);
+	_manager->addShaderInterfaceBlock(_shader, "global_state", _global_state);
+	_modelview_matrix = _manager->addShaderUniform(_shader, "modelview_matrix");
 }
 
 // Returns the number of seconds since the component creation
@@ -138,10 +150,5 @@ bool CameraSystem::initialize()
 {
 	_camera.requireComponent<Component::CameraComponent>();
 	_drawable.requireComponent<Component::MeshRenderer>();
-	_shader = _manager.addShader(VERTEX_SHADER, FRAG_SHADER);
-	size_t sizeElement = sizeof(glm::mat4);
-	_global_state = _manager.addUniformBlock(1, &sizeElement);
-	_manager.addShaderInterfaceBlock(_shader, "global_state", _global_state);
-	_modelview_matrix = _manager.addShaderUniform(_shader, "modelview_matrix");
 	return true;
 }
