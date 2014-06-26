@@ -1,20 +1,16 @@
 #pragma once
 
-#include <Utils/MatrixConversion.hpp>
-#include "System.h"
-#include <Components/MeshRenderer.hh>
-#include <Components/CameraComponent.hpp>
-#include <Core/SceneManager.hh>
-#include <Core/Renderer.hh>
-#include <Utils/ScreenPosToWorldRay.hpp>
-#include <Context/IRenderContext.hh>
-#include <Utils/MatrixConversion.hpp>
-#include <Text/FontManager.hh>
+#include <Systems/System.h>
+#include <Core/EntityFilter.hpp>
+#include <glm/glm.hpp>
+#include <OpenGL/Key.hh>
+
+namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; }
 
 class CameraSystem : public System
 {
 public:
-	CameraSystem(std::weak_ptr<AScene> &&scene);
+	CameraSystem(std::weak_ptr<AScene> &&scene, gl::ShadingManager &shaderManager);
 	virtual ~CameraSystem(){}
 
 	void setRenderDebugMode(bool t);
@@ -24,9 +20,14 @@ public:
 	double getLifeTime() const;
 
 protected:
+	gl::ShadingManager &_manager;
 	bool _renderDebugMethod;
 	double	_totalTime;
-	EntityFilter _filter;
+	EntityFilter _drawable;
+	EntityFilter _camera;
+	gl::Key<gl::Shader> _shader;
+	gl::Key<gl::UniformBlock> _global_state;
+	gl::Key<gl::Uniform> _modelview_matrix;
 
 	virtual void updateBegin(double time);
 	virtual void updateEnd(double time);

@@ -22,6 +22,8 @@
 
 #include <CONFIGS.hpp>
 
+#define NEW_SHADER 1
+
 class BenchmarkScene : public AScene	
 {
 public:
@@ -48,6 +50,7 @@ public:
 #ifdef SIMPLE_RENDERING
 		addSystem<SimpleMeshRenderer>(80);
 #else
+#if !NEW_SHADER
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
 	addSystem<PostFxSystem>(110); // POST FXs
@@ -59,6 +62,7 @@ public:
 	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
 	getSystem<PostFxSystem>()->useHDR(false);
 	getSystem<PostFxSystem>()->useBloom(false);
+#endif
 #endif
 #endif
 

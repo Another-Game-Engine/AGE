@@ -1,13 +1,24 @@
 #include <Systems/CameraSystem.hh>
 #include <Utils/MatrixConversion.hpp>
+#include <Context/IRenderContext.hh>
+#include <Utils/ScreenPosToWorldRay.hpp>
+#include <Core/Renderer.hh>
+#include <Components/MeshRenderer.hh>
+#include <Components/CameraComponent.hpp>
+#include <Core/SceneManager.hh>
+#include <OpenGL/ShadingManager.hh>
 
-# define NEW_SHADER 0
+# define NEW_SHADER 1
+# define VERTEX_SHADER "../../test_pipeline_1.vp"
+# define FRAG_SHADER "../../test_pipeline_1.fp"
 
-CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene)
+CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene, gl::ShadingManager &m)
 	: System(std::move(scene)),
+	_manager(m),
 	_renderDebugMethod(false),
 	_totalTime(0),
-	_filter(std::move(scene))
+	_camera(std::move(scene)),
+	_drawable(std::move(scene))
 {
 	_name = "camera_system";
 }
@@ -24,23 +35,23 @@ bool CameraSystem::getRenderDebugMode() const
 
 void CameraSystem::getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
 {
-	if (_filter.getCollection().size() == 0)
+	if (_camera.getCollection().size() == 0)
 		return;
 	auto scene = _scene.lock();
 	auto mousePos = scene->getInstance<Input>()->getMousePosition();
 	auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
-	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
+	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
 	screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
 }
 
 void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 {
-	if (_filter.getCollection().size() == 0)
+	if (_camera.getCollection().size() == 0)
 		return;
 	auto scene = _scene.lock();
 	auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
 	auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
-	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
+	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
 	screenPosToWorldRay(
 		static_cast<int>(centerPos.x),
 		static_cast<int>(centerPos.y),
@@ -125,6 +136,12 @@ void CameraSystem::mainUpdate(double time)
 
 bool CameraSystem::initialize()
 {
-	_filter.requireComponent<Component::CameraComponent>();
+	_camera.requireComponent<Component::CameraComponent>();
+	_drawable.requireComponent<Component::MeshRenderer>();
+	_shader = _manager.addShader(VERTEX_SHADER, FRAG_SHADER);
+	size_t sizeElement = sizeof(glm::mat4);
+	_global_state = _manager.addUniformBlock(1, &sizeElement);
+	_manager.addShaderInterfaceBlock(_shader, "global_state", _global_state);
+	_modelview_matrix = _manager.addShaderUniform(_shader, "modelview_matrix");
 	return true;
 }

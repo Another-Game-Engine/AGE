@@ -27,7 +27,7 @@
 //CONFIGS
 #include <CONFIGS.hpp>
 
-# define NEW_SHADER 0
+# define NEW_SHADER 1
 
 bool loadShaders(std::shared_ptr<Engine> e)
 {
