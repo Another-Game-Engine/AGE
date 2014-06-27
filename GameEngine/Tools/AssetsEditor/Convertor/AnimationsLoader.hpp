@@ -71,7 +71,7 @@ namespace AGE
 						for (unsigned int i = 0; i < aiChannel->mNumRotationKeys; ++i)
 						{
 							channel.rotation.emplace_back(
-								glm::quat(aiChannel->mRotationKeys[i].mValue.w, aiChannel->mRotationKeys[i].mValue.x, aiChannel->mRotationKeys[i].mValue.y, aiChannel->mRotationKeys[i].mValue.z)
+								glm::normalize(glm::quat(aiChannel->mRotationKeys[i].mValue.w, aiChannel->mRotationKeys[i].mValue.x, aiChannel->mRotationKeys[i].mValue.y, aiChannel->mRotationKeys[i].mValue.z))
 								, aiChannel->mRotationKeys[i].mTime);
 							if (i > 0)
 								channel.rotation[i - 1].deltaTime = channel.rotation[i].time - channel.rotation[i - 1].time;

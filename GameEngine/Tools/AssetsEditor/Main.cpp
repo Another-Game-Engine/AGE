@@ -74,30 +74,30 @@ int			main(int ac, char **av)
 	/////
 	//
 
-	///////Convert fbx to AGE data structure
-	//AGE::AssetDataSet dataSet;
-	//dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
-	//dataSet.name = "catwoman";
-	//auto isSkeleton = AGE::SkeletonLoader::load(dataSet);
-	//auto isAnimations = AGE::AnimationsLoader::load(dataSet);
-	//auto isMesh = AGE::MeshLoader::load(dataSet);
+	/////Convert fbx to AGE data structure
+	AGE::AssetDataSet dataSet;
+	dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
+	dataSet.name = "catwoman";
+	auto isSkeleton = AGE::SkeletonLoader::load(dataSet);
+	auto isAnimations = AGE::AnimationsLoader::load(dataSet);
+	auto isMesh = AGE::MeshLoader::load(dataSet);
 	
-	//Save AGE assets data structure to filesystem
-	//{
-	//	std::ofstream ofs("catwoman.skage", std::ios::trunc | std::ios::binary);
-	//	cereal::PortableBinaryOutputArchive ar(ofs);
-	//	ar(*dataSet.skeleton);
-	//}
-	//{
-	//	std::ofstream ofs("roulade.aage", std::ios::trunc | std::ios::binary);
-	//	cereal::PortableBinaryOutputArchive ar(ofs);
-	//	ar(*dataSet.animations[0]);
-	//}
-	//{
-	//	std::ofstream ofs("catwoman.sage", std::ios::trunc | std::ios::binary);
-	//	cereal::PortableBinaryOutputArchive ar(ofs);
-	//	ar(*dataSet.mesh);
-	//}
+	////Save AGE assets data structure to filesystem
+	{
+		std::ofstream ofs("catwoman.skage", std::ios::trunc | std::ios::binary);
+		cereal::PortableBinaryOutputArchive ar(ofs);
+		ar(*dataSet.skeleton);
+	}
+	{
+		std::ofstream ofs("roulade.aage", std::ios::trunc | std::ios::binary);
+		cereal::PortableBinaryOutputArchive ar(ofs);
+		ar(*dataSet.animations[0]);
+	}
+	{
+		std::ofstream ofs("catwoman.sage", std::ios::trunc | std::ios::binary);
+		cereal::PortableBinaryOutputArchive ar(ofs);
+		ar(*dataSet.mesh);
+	}
 
 	//Load assets from serialized file
 	auto assetsManager = e->getInstance<AGE::AssetsManager>();
@@ -130,7 +130,8 @@ int			main(int ac, char **av)
 	float lookAtY = 0;
 	// Model matrix : an identity matrix (model will be at the origin)
 	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
-	Model = glm::scale(Model, glm::vec3(0.3f));
+	Model = glm::scale(Model, glm::vec3(0.2f));
+//	Model = glm::rotate(Model, 90.0f, glm::vec3(0, 0, 1));
 
 
 	// On enable la depth car par defaut elle est pas active
@@ -178,7 +179,7 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(viewId, 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
 
-		catwomanAnimationInstance.update(totalTime * 10.0f);
+		catwomanAnimationInstance.update(totalTime);
 		catwomanSkeleton->updateSkinning();
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), catwomanAnimationInstance.transformations.size(), GL_FALSE, glm::value_ptr(catwomanAnimationInstance.transformations[0]));
 
