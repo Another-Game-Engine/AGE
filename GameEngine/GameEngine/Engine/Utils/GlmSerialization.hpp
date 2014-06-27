@@ -110,7 +110,7 @@ namespace cereal
 	{
 		float x, y, z, w;
 		ar(x, y, z, w);
-		v = glm::quat(x, y, z, w);
+		v = glm::quat(w, x, y, z);
 	}
 
 	template<typename Archive>

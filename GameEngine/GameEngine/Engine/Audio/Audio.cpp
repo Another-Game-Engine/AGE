@@ -23,7 +23,7 @@ bool Audio::load(AudioSpatialType type)
 {
 	if (_audio)
 		return true;
-	FMOD::Sound *audio;
+	FMOD::Sound *audio = nullptr;
 	if (_audioType == AUDIO_SOUND)
 	{
 		_manager->getSystem()->createSound(_file.getFullName().c_str(), type, 0, &audio);

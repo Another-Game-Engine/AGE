@@ -75,12 +75,12 @@ int			main(int ac, char **av)
 	//
 
 	///////Convert fbx to AGE data structure
-	AGE::AssetDataSet dataSet;
-	dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
-	dataSet.name = "catwoman";
-	auto isSkeleton = AGE::SkeletonLoader::load(dataSet);
-	auto isAnimations = AGE::AnimationsLoader::load(dataSet);
-	auto isMesh = AGE::MeshLoader::load(dataSet);
+	//AGE::AssetDataSet dataSet;
+	//dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
+	//dataSet.name = "catwoman";
+	//auto isSkeleton = AGE::SkeletonLoader::load(dataSet);
+	//auto isAnimations = AGE::AnimationsLoader::load(dataSet);
+	//auto isMesh = AGE::MeshLoader::load(dataSet);
 	
 	//Save AGE assets data structure to filesystem
 	//{
@@ -106,7 +106,7 @@ int			main(int ac, char **av)
 	auto catwomanSkeleton = assetsManager->loadSkeleton("catwoman.skage"); // load skeleton
 	auto catwomanRoulade = assetsManager->loadAnimation("roulade.aage"); // load animation
 
-	AGE::AnimationInstance catwomanAnimationInstance(catwomanSkeleton, catwomanRoulade);
+ 	AGE::AnimationInstance catwomanAnimationInstance(catwomanSkeleton, catwomanRoulade);
 
 	//
 	/////
@@ -180,8 +180,6 @@ int			main(int ac, char **av)
 
 		catwomanAnimationInstance.update(totalTime * 10.0f);
 		catwomanSkeleton->updateSkinning();
-		//catwomanAnimationInstance.transformations.resize(0);
-		//catwomanAnimationInstance.transformations.resize(200, glm::mat4(1));
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), catwomanAnimationInstance.transformations.size(), GL_FALSE, glm::value_ptr(catwomanAnimationInstance.transformations[0]));
 
 		for (unsigned int i = 0; i < catwomanMesh->subMeshs.size(); ++i)

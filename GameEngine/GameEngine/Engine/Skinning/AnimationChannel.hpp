@@ -11,7 +11,7 @@ namespace AGE
 {
 	struct AnimationChannel
 	{
-		unsigned int boneIndex;
+		std::uint32_t boneIndex;
 		std::vector<AnimationKey<glm::vec3>> scale;
 		std::vector<AnimationKey<glm::quat>> rotation;
 		std::vector<AnimationKey<glm::vec3>> translation;
