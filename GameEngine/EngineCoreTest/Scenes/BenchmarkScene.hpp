@@ -47,7 +47,8 @@ public:
 	addSystem<FirstPersonViewSystem>(2);
 	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::ShadingManager>();
-	camerasystem->setManager(m);
+	auto &g = *getInstance<gl::GeometryManager>();
+	camerasystem->setManager(m, g);
 
 #ifdef SIMPLE_RENDERING
 		addSystem<SimpleMeshRenderer>(80);

@@ -70,7 +70,8 @@ namespace gl
 
 	ShadingManager &ShadingManager::useShader(Key<Shader> const &shader)
 	{
-		DEBUG_MESSAGE("Warning", "ShadingManager.cpp - useShader", "key already destroy", *this)
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - useShader", "key already destroy", *this)
 		auto &element = _shaders.find(shader);
 		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - useShader", "shader not find", *this)
@@ -83,7 +84,7 @@ namespace gl
 	{
 		if (!shader)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "key already destroy", Key<Uniform>(KEY_DESTROY))
-			auto &element = _shaders.find(shader);
+		auto &element = _shaders.find(shader);
 		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
 		auto &s = element->second;

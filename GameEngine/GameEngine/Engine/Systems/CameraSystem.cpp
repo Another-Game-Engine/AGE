@@ -7,6 +7,7 @@
 #include <Components/CameraComponent.hpp>
 #include <Core/SceneManager.hh>
 #include <OpenGL/ShadingManager.hh>
+#include <OpenGL/GeometryManager.hh>
 
 # define NEW_SHADER 1
 # define VERTEX_SHADER "../../test_pipeline_1.vp"
@@ -14,7 +15,8 @@
 
 CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene)
 	: System(std::move(scene)),
-	_manager(NULL),
+	_render(NULL),
+	_geometry(NULL),
 	_renderDebugMethod(false),
 	_totalTime(0),
 	_camera(std::move(scene)),
@@ -63,16 +65,20 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 		to);
 }
 
-void CameraSystem::setManager(gl::ShadingManager &m)
+void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 {
-	_manager = &m;
-	if (_manager == NULL)
+	_render = &m;
+	_geometry = &g;
+	if (_render == NULL)
 		std::cerr << "Warning: No manager set for the camerasystem" << std::endl;
-	_shader = _manager->addShader(VERTEX_SHADER, FRAG_SHADER);
-	size_t sizeElement = sizeof(glm::mat4);
-	_global_state = _manager->addUniformBlock(1, &sizeElement);
-	_manager->addShaderInterfaceBlock(_shader, "global_state", _global_state);
-	_modelview_matrix = _manager->addShaderUniform(_shader, "modelview_matrix");
+	_shader = _render->addShader(VERTEX_SHADER, FRAG_SHADER);
+	size_t sizeElement[2];
+	gl::set_tab_sizetype<glm::mat4, glm::mat4>(sizeElement);
+	_global_state = _render->addUniformBlock(2, sizeElement);
+	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
+	_model_matrix = _render->addShaderUniform(_shader, "model_matrix");
+	_projection_matrix = _render->addShaderUniform(_shader, "projection_matrix");
+	_view_matrix = _render->addShaderUniform(_shader, "view_matrix");
 }
 
 // Returns the number of seconds since the component creation
@@ -144,11 +150,31 @@ void CameraSystem::mainUpdate(double time)
 	}
 	_totalTime += time;
 #endif
+	auto &scene = _scene.lock();
+	for (auto &e : _camera.getCollection())
+	{
+
+		auto camera = scene->getComponent<Component::CameraComponent>(e);
+		_render->useShader(_shader);
+		_render->setUniformBlock(_global_state, 0, camera->projection);
+		_render->setUniformBlock(_global_state, 1, camera->lookAtTransform);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		for (auto m : _drawable.getCollection())
+		{
+			auto mesh = scene->getComponent<Component::MeshRenderer>(m);
+			_render->setShaderUniform(_shader, _model_matrix, scene->getTransform(m));
+			_render->setShaderUniform(_shader, _projection_matrix, camera->projection);
+			_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
+			_geometry->draw(GL_TRIANGLES, mesh->mesh->geometries[0].glindices, mesh->mesh->geometries[0].glvertices);
+		}
+	}
 }
 
 bool CameraSystem::initialize()
 {
 	_camera.requireComponent<Component::CameraComponent>();
 	_drawable.requireComponent<Component::MeshRenderer>();
+	glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+	glClearDepth(1.0f);
 	return true;
 }
