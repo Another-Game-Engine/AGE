@@ -26,7 +26,7 @@ namespace AGE
 			dataSet.skeleton = new Skeleton();
 			Skeleton *skeleton = dataSet.skeleton;
 			skeleton->name = dataSet.name;
-
+			skeleton->inverseGlobal = glm::inverse(AssimpLoader::aiMat4ToGlm(boneOrigin->mTransformation));
 			loadSkeletonFromAssimp(skeleton, boneOrigin, (unsigned int)(-1));
 
 			for (unsigned int meshIndex = 0; meshIndex < dataSet.assimpScene->mNumMeshes; ++meshIndex)
@@ -59,6 +59,7 @@ namespace AGE
 					auto parent = bonenode->mParent;
 					while (parent && skeleton->bonesReferences.find(parent->mName.data) == std::end(skeleton->bonesReferences))
 					{
+						skeleton->bones[i].offset = glm::inverse(AssimpLoader::aiMat4ToGlm(parent->mTransformation)) * skeleton->bones[i].offset;
 						skeleton->bones[i].transformation = AssimpLoader::aiMat4ToGlm(parent->mTransformation) * skeleton->bones[i].transformation;
 						parent = parent->mParent;
 					}
@@ -104,7 +105,8 @@ namespace AGE
 			_skeleton->bones.push_back(AGE::Bone());
 			_skeleton->bones.back().index = index;
 			_skeleton->bones.back().name = _node->mName.data;
-			_skeleton->bones.back().offset = glm::mat4(1);
+			_skeleton->bones.back().transformation = AssimpLoader::aiMat4ToGlm(_node->mTransformation);
+			_skeleton->bones.back().offset = glm::inverse(AssimpLoader::aiMat4ToGlm(_node->mTransformation));
 			_skeleton->bonesReferences.insert(std::make_pair(_node->mName.data, index));
 
 			for (unsigned int a = 0; a < _node->mNumChildren; a++)

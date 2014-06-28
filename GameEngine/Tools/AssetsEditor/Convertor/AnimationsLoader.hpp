@@ -13,14 +13,14 @@ namespace AGE
 	public:
 		static bool load(AssetDataSet &dataSet)
 		{
+			dataSet.animationLoaded = false;
 			if (!dataSet.assimpScene)
 			{
 				if (!AssimpLoader::Load(dataSet))
 					return false;
 			}
-			dataSet.animationLoaded = false;
 			if (!dataSet.assimpScene->HasAnimations())
-				return true;
+				return false;
 			if (!dataSet.skeletonLoaded)
 			{
 				std::cerr << "AnimationLoader : Skeleton has not been loaded" << std::endl;

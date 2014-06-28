@@ -75,28 +75,39 @@ int			main(int ac, char **av)
 	//
 
 	/////Convert fbx to AGE data structure
-	AGE::AssetDataSet dataSet;
-	dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
-	dataSet.name = "catwoman";
-	auto isSkeleton = AGE::SkeletonLoader::load(dataSet);
-	auto isAnimations = AGE::AnimationsLoader::load(dataSet);
-	auto isMesh = AGE::MeshLoader::load(dataSet);
-	
-	////Save AGE assets data structure to filesystem
+
+	bool isSkeleton = false;
+	bool isAnimations = false;
+	bool isMesh = false;
+	bool convert = true;
+	if (convert)
 	{
-		std::ofstream ofs("catwoman.skage", std::ios::trunc | std::ios::binary);
-		cereal::PortableBinaryOutputArchive ar(ofs);
-		ar(*dataSet.skeleton);
-	}
-	{
-		std::ofstream ofs("roulade.aage", std::ios::trunc | std::ios::binary);
-		cereal::PortableBinaryOutputArchive ar(ofs);
-		ar(*dataSet.animations[0]);
-	}
-	{
-		std::ofstream ofs("catwoman.sage", std::ios::trunc | std::ios::binary);
-		cereal::PortableBinaryOutputArchive ar(ofs);
-		ar(*dataSet.mesh);
+		AGE::AssetDataSet dataSet;
+		dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
+		dataSet.name = "catwoman";
+		isSkeleton = AGE::SkeletonLoader::load(dataSet);
+		isAnimations = AGE::AnimationsLoader::load(dataSet);
+		isMesh = AGE::MeshLoader::load(dataSet);
+
+		////Save AGE assets data structure to filesystem
+		if (isSkeleton)
+		{
+			std::ofstream ofs("catwoman.skage", std::ios::trunc | std::ios::binary);
+			cereal::PortableBinaryOutputArchive ar(ofs);
+			ar(*dataSet.skeleton);
+		}
+		if (isAnimations)
+		{
+			std::ofstream ofs("roulade.aage", std::ios::trunc | std::ios::binary);
+			cereal::PortableBinaryOutputArchive ar(ofs);
+			ar(*dataSet.animations[0]);
+		}
+		if (isMesh)
+		{
+			std::ofstream ofs("catwoman.sage", std::ios::trunc | std::ios::binary);
+			cereal::PortableBinaryOutputArchive ar(ofs);
+			ar(*dataSet.mesh);
+		}
 	}
 
 	//Load assets from serialized file
@@ -104,7 +115,9 @@ int			main(int ac, char **av)
 
 	auto catwomanMesh = assetsManager->loadMesh("catwoman.sage"); // load mesh
 	auto catwomanSkeleton = assetsManager->loadSkeleton("catwoman.skage"); // load skeleton
-	auto catwomanRoulade = assetsManager->loadAnimation("roulade.aage"); // load animation
+	std::shared_ptr<AGE::Animation> catwomanRoulade = nullptr;
+	//if (isAnimations)
+	//	catwomanRoulade = assetsManager->loadAnimation("roulade.aage"); // load animation
 
  	AGE::AnimationInstance catwomanAnimationInstance(catwomanSkeleton, catwomanRoulade);
 

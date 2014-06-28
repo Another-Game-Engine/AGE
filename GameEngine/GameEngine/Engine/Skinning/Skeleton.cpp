@@ -14,13 +14,18 @@ Skeleton::Skeleton()
 
 void Skeleton::updateSkinning()
 {
+	if (this->animations.size() == 0)
+		return;
 	readNodeHierarchy(this->firstBone);
 
 	for (std::size_t j = 0; j < this->animations.size(); ++j)
 	{
-		for (std::size_t i = 0; i < bones.size(); ++i)
+		if (this->animations[j]->animation)
 		{
-			this->animations[j]->transformations[i] *= this->bones[i].offset;
+			for (std::size_t i = 0; i < bones.size(); ++i)
+			{
+				this->animations[j]->transformations[i] *= this->bones[i].offset;
+			}
 		}
 	}
 }
@@ -35,7 +40,7 @@ void Skeleton::readNodeHierarchy(
 	{
 		nodeT = this->animations[i]->bindPoses[boneID];
 		if (boneID == firstBone)
-			this->animations[i]->transformations[boneID] = nodeT;
+			this->animations[i]->transformations[boneID] = this->inverseGlobal * nodeT;
 		else
 			this->animations[i]->transformations[boneID] = this->animations[i]->transformations[bone.parent] * nodeT;
 	}

@@ -14,6 +14,13 @@ AnimationInstance::AnimationInstance(std::shared_ptr<Skeleton> _skeleton, std::s
 	_skeleton->animations.push_back(this);	
 	bindPoses.resize(_skeleton->bones.size(), glm::mat4(1));
 	transformations.resize(_skeleton->bones.size(), glm::mat4(1));
+	if (!animation)
+	{
+		for (auto i = 0; i < transformations.size(); ++i)
+		{
+			transformations[i] = skeleton->bones[i].transformation;
+		}
+	}
 }
 
 void AnimationInstance::update(float t)

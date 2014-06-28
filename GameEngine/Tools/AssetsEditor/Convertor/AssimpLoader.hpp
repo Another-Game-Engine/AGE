@@ -39,7 +39,7 @@ namespace AGE
 				aiProcess_JoinIdenticalVertices |
 				aiProcess_SortByPType |
 				aiProcess_ImproveCacheLocality |
-				aiProcess_OptimizeMeshes | aiProcessPreset_TargetRealtime_MaxQuality));
+				aiProcess_OptimizeMeshes));
 
 			if (dataSet.assimpScene == nullptr)
 			{
