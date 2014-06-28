@@ -116,8 +116,8 @@ int			main(int ac, char **av)
 	auto catwomanMesh = assetsManager->loadMesh("catwoman.sage"); // load mesh
 	auto catwomanSkeleton = assetsManager->loadSkeleton("catwoman.skage"); // load skeleton
 	std::shared_ptr<AGE::Animation> catwomanRoulade = nullptr;
-	//if (isAnimations)
-	//	catwomanRoulade = assetsManager->loadAnimation("roulade.aage"); // load animation
+	if (isAnimations)
+		catwomanRoulade = assetsManager->loadAnimation("roulade.aage"); // load animation
 
  	AGE::AnimationInstance catwomanAnimationInstance(catwomanSkeleton, catwomanRoulade);
 
@@ -192,7 +192,8 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(viewId, 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
 
-		catwomanAnimationInstance.update(totalTime);
+		for (auto i = 0; i < 500; ++i)
+			catwomanAnimationInstance.update(totalTime);
 		catwomanSkeleton->updateSkinning();
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), catwomanAnimationInstance.transformations.size(), GL_FALSE, glm::value_ptr(catwomanAnimationInstance.transformations[0]));
 

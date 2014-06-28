@@ -40,7 +40,7 @@ void Skeleton::readNodeHierarchy(
 	{
 		nodeT = this->animations[i]->bindPoses[boneID];
 		if (boneID == firstBone)
-			this->animations[i]->transformations[boneID] = this->inverseGlobal * nodeT;
+			this->animations[i]->transformations[boneID] = /*this->inverseGlobal * */ nodeT;
 		else
 			this->animations[i]->transformations[boneID] = this->animations[i]->transformations[bone.parent] * nodeT;
 	}
