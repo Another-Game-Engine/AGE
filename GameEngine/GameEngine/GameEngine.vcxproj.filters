@@ -65,6 +65,7 @@
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
     <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
+    <ClCompile Include="Engine\Core\AssetManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
