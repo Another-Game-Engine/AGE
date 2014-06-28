@@ -33,4 +33,18 @@ namespace JsonSerialization
 		value.x = json["uvec2"][(rapidjson::SizeType)(0)].GetUint();
 		value.y = json["uvec2"][(rapidjson::SizeType)(1)].GetUint();
 	}
+
+	void save(const std::string &value, rapidjson::Value &json, rapidjson::Document &document)
+	{
+		rapidjson::Value v(rapidjson::kArrayType);
+		json.AddMember("string", value.c_str(), document.GetAllocator());
+	}
+
+	void load(std::string &value, rapidjson::Value &json, rapidjson::Document &document)
+	{
+		if (!json.HasMember("string"))
+			return;
+		value = json["string"].GetString();
+	}
+
 }
