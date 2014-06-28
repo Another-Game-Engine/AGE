@@ -10,8 +10,8 @@
 #include <OpenGL/GeometryManager.hh>
 
 # define NEW_SHADER 1
-# define VERTEX_SHADER "../../test_pipeline_1.vp"
-# define FRAG_SHADER "../../test_pipeline_1.fp"
+# define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
+# define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
 
 CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene)
 	: System(std::move(scene)),
@@ -163,8 +163,6 @@ void CameraSystem::mainUpdate(double time)
 		{
 			auto mesh = scene->getComponent<Component::MeshRenderer>(m);
 			_render->setShaderUniform(_shader, _model_matrix, scene->getTransform(m));
-			_render->setShaderUniform(_shader, _projection_matrix, camera->projection);
-			_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
 			_geometry->draw(GL_TRIANGLES, mesh->mesh->geometries[0].glindices, mesh->mesh->geometries[0].glvertices);
 		}
 	}
