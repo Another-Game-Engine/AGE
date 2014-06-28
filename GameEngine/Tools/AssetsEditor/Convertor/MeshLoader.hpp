@@ -35,9 +35,12 @@ namespace AGE
 
 			auto &meshs = dataSet.mesh->subMeshs;
 
+			std::vector<BoundingInfos> subMeshBoundings;
+
 			for (unsigned int meshIndex = 0; meshIndex < dataSet.assimpScene->mNumMeshes; ++meshIndex)
 			{
 				aiMesh *mesh = dataSet.assimpScene->mMeshes[meshIndex];
+
 				std::uint32_t indice = 0;
 
 				for (size_t i = 0; i < mesh->mNumVertices; i++)
@@ -45,6 +48,7 @@ namespace AGE
 					if (mesh->HasPositions())
 					{
 						auto &aiPositions = mesh->mVertices[i];
+						meshs[meshIndex].boundingInfos.addPosition(glm::vec3(aiPositions.x, aiPositions.y, aiPositions.z));
 						meshs[meshIndex].positions.push_back(glm::vec4(aiPositions.x, aiPositions.y, aiPositions.z, 1));
 						meshs[meshIndex].infos.set(MeshInfos::Positions);
 					}
@@ -74,6 +78,8 @@ namespace AGE
 						meshs[meshIndex].infos.set(MeshInfos::BiTangents);
 					}
 				}
+
+				subMeshBoundings.push_back(meshs[meshIndex].boundingInfos);
 
 				unsigned int meshFacesNbr = mesh->mNumFaces;
 				for (unsigned int faceIndex = 0; faceIndex < meshFacesNbr; ++faceIndex)
@@ -125,7 +131,7 @@ namespace AGE
 					}
 				}
 			}
-
+			dataSet.mesh->boundingInfos.initFromList(subMeshBoundings);
 			dataSet.meshLoaded = true;
 			return true;
 		}

@@ -6,7 +6,8 @@
 
 #include <OpenGL/GeometryManager.hh>
 
-#include <Utils/GlmSerialization.hpp>
+#include <Utils/BoundingInfos.hpp>
+
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/bitset.hpp>
@@ -39,11 +40,12 @@ namespace AGE
 		std::vector<glm::vec4> weights;
 		std::vector<glm::vec4> boneIndices;
 		std::vector<glm::vec4> colors;
+		AGE::BoundingInfos boundingInfos;
 
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors);
+			ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors, boundingInfos);
 		}
 	};
 
@@ -51,11 +53,12 @@ namespace AGE
 	{
 		std::string name;
 		std::vector<SubMeshData> subMeshs;
+		AGE::BoundingInfos boundingInfos;
 
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(name, subMeshs);
+			ar(name, subMeshs, boundingInfos);
 		}
 	};
 
