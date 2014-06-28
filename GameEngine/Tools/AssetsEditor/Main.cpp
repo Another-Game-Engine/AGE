@@ -192,7 +192,7 @@ int			main(int ac, char **av)
 		glUniformMatrix4fv(viewId, 1, GL_FALSE, &View[0][0]);
 		glUniformMatrix4fv(projectionId, 1, GL_FALSE, &Projection[0][0]);
 
-		for (auto i = 0; i < 500; ++i)
+//		for (auto i = 0; i < 500; ++i)
 			catwomanAnimationInstance.update(totalTime);
 		catwomanSkeleton->updateSkinning();
 		glUniformMatrix4fv(glGetUniformLocation(shader->getId(), "bones"), catwomanAnimationInstance.transformations.size(), GL_FALSE, glm::value_ptr(catwomanAnimationInstance.transformations[0]));
