@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <cereal/cereal.hpp>
 #include <cereal/types/common.hpp>
 #include <cereal/archives/binary.hpp>
@@ -90,6 +91,26 @@ namespace cereal
 		float x, y, z, w;
 		ar(x, y, z, w);
 		v = glm::vec4(x, y, z, w);
+	}
+
+	template<typename Archive>
+	void save(Archive &ar, const glm::quat &v)
+	{
+		float x = v.x;
+		float y = v.y;
+		float z = v.z;
+		float w = v.w;
+		ar(x,y,z,w);
+
+		//ar(cereal::make_nvp("x", v.x), cereal::make_nvp("y", v.y), cereal::make_nvp("z", v.z), cereal::make_nvp("w", v.w));
+	}
+
+	template<typename Archive>
+	void load(Archive &ar, glm::quat &v)
+	{
+		float x, y, z, w;
+		ar(x, y, z, w);
+		v = glm::quat(w, x, y, z);
 	}
 
 	template<typename Archive>
