@@ -24,10 +24,10 @@
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
 
+#include <Systems/CameraSystem.hh> // just for the define... to rm for the future
+
 //CONFIGS
 #include <CONFIGS.hpp>
-
-# define NEW_SHADER 1
 
 bool loadShaders(std::shared_ptr<Engine> e)
 {

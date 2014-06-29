@@ -9,18 +9,24 @@
 #include <OpenGL/ShadingManager.hh>
 #include <OpenGL/GeometryManager.hh>
 
-# define NEW_SHADER 1
+
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
 
 CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene)
 	: System(std::move(scene)),
+#if NEW_SHADER
 	_render(NULL),
 	_geometry(NULL),
+#endif
 	_renderDebugMethod(false),
 	_totalTime(0),
+#if NEW_SHADER
 	_camera(std::move(scene)),
 	_drawable(std::move(scene))
+#else
+	_filter(std::move(scene))
+#endif
 {
 	_name = "camera_system";
 }
@@ -37,23 +43,41 @@ bool CameraSystem::getRenderDebugMode() const
 
 void CameraSystem::getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
 {
+#if NEW_SHADER
 	if (_camera.getCollection().size() == 0)
 		return;
+#else
+	if (_filter.getCollection().size() == 0)
+		return;
+#endif
 	auto scene = _scene.lock();
 	auto mousePos = scene->getInstance<Input>()->getMousePosition();
 	auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
+#if NEW_SHADER
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
+#else
+	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
+#endif
 	screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
 }
 
 void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 {
+#if NEW_SHADER
 	if (_camera.getCollection().size() == 0)
 		return;
+#else
+	if (_filter.getCollection().size() == 0)
+		return;
+#endif
 	auto scene = _scene.lock();
 	auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
 	auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
+#if NEW_SHADER
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
+#else
+	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
+#endif
 	screenPosToWorldRay(
 		static_cast<int>(centerPos.x),
 		static_cast<int>(centerPos.y),
@@ -64,6 +88,8 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 		from,
 		to);
 }
+
+#if NEW_SHADER
 
 void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 {
@@ -83,6 +109,7 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
 }
+#endif
 
 // Returns the number of seconds since the component creation
 double CameraSystem::getLifeTime() const
@@ -152,7 +179,7 @@ void CameraSystem::mainUpdate(double time)
 		}
 	}
 	_totalTime += time;
-#endif
+#else
 	auto &scene = _scene.lock();
 	for (auto &e : _camera.getCollection())
 	{
@@ -172,13 +199,18 @@ void CameraSystem::mainUpdate(double time)
 			_geometry->draw(GL_TRIANGLES, mesh->mesh->geometries[0].glindices, mesh->mesh->geometries[0].glvertices);
 		}
 	}
+#endif
 }
 
 bool CameraSystem::initialize()
 {
+#if !NEW_SHADER
+	_filter.requireComponent<Component::CameraComponent>();
+#else
 	_camera.requireComponent<Component::CameraComponent>();
 	_drawable.requireComponent<Component::MeshRenderer>();
-	glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClearDepth(1.0f);
+#endif
 	return true;
 }
