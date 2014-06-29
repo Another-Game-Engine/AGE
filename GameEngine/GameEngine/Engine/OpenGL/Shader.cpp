@@ -296,6 +296,17 @@ namespace gl
 		return (*this);
 	}
 
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat3 const &mat3)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "key destroy use", *this);
+		auto &element = _uniforms.find(key);
+		if (element == _uniforms.end())
+			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "element in not find", *this);
+		element->second.set(mat3);
+		return (*this);
+	}
+
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec4 const &vec4)
 	{
 		if (!key)

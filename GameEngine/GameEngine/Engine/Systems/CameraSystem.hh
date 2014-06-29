@@ -41,7 +41,7 @@ protected:
 	gl::Key<gl::UniformBlock> _global_state;
 	gl::Key<gl::Uniform> _model_matrix;
 	gl::Key<gl::Uniform> _view_matrix;
-	gl::Key<gl::Uniform> _projection_matrix;
+	gl::Key<gl::Uniform> _normal_matrix;
 	gl::Key<gl::Uniform> _diffuse_color;
 	gl::Key<gl::Uniform> _diffuse_ratio;
 	gl::Key<gl::Sampler> _diffuse_texture;

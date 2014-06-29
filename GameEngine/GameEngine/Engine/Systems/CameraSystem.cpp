@@ -99,12 +99,12 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 		std::cerr << "Warning: No manager set for the camerasystem" << std::endl;
 	_shader = _render->addShader(VERTEX_SHADER, FRAG_SHADER);
 	size_t sizeElement[2];
-	gl::set_tab_sizetype<glm::mat4, glm::mat4>(sizeElement);
+	gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
 	_global_state = _render->addUniformBlock(2, sizeElement);
 	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
 	_model_matrix = _render->addShaderUniform(_shader, "model_matrix");
-	_projection_matrix = _render->addShaderUniform(_shader, "projection_matrix");
 	_view_matrix = _render->addShaderUniform(_shader, "view_matrix");
+	_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix");
 	_diffuse_texture = _render->addShaderSampler(_shader, "diffuse_texture");
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
@@ -187,7 +187,8 @@ void CameraSystem::mainUpdate(double time)
 		auto camera = scene->getComponent<Component::CameraComponent>(e);
 		_render->useShader(_shader);
 		_render->setUniformBlock(_global_state, 0, camera->projection);
-		_render->setUniformBlock(_global_state, 1, camera->lookAtTransform);
+		_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
+		_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -196,6 +197,7 @@ void CameraSystem::mainUpdate(double time)
 			auto mesh = scene->getComponent<Component::MeshRenderer>(m);
 			_render->setShaderSampler(_shader, _diffuse_texture, mesh->mesh->material->materials[0].diffuseTex->getTexture());
 			_render->setShaderUniform(_shader, _model_matrix, scene->getTransform(m));
+			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * scene->getTransform(m)))));
 			_geometry->draw(GL_TRIANGLES, mesh->mesh->geometries[0].glindices, mesh->mesh->geometries[0].glvertices);
 		}
 	}

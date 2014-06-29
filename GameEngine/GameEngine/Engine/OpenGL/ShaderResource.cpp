@@ -12,7 +12,7 @@ namespace gl
 		_data(NULL),
 		_sizeData(0),
 		_attach(attach),
-		_location(0)
+		_location(-1)
 	{
 	}
 
@@ -58,10 +58,10 @@ namespace gl
 	bool ShaderResource::getUniformLocation()
 	{
 		if (_attach == NULL)
-			DEBUG_MESSAGE("Error", "Uniform.cpp - getUniformLocation()", "No attach on this uniform", false);
+			DEBUG_MESSAGE("Error", "ShaderResource.cpp - getUniformLocation()", "No attach on this uniform", false);
 		_attach->use();
 		if ((_location = glGetUniformLocation(_attach->getId(), _flag.c_str())) == -1)
-			DEBUG_MESSAGE("Error", "Uniform.cpp - getUniformLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
+			DEBUG_MESSAGE("Error", "ShaderResource.cpp - getUniformLocation()", "the location [" + _flag + "] doesn't exist on the shader", false)
 		return (true);
 	}
 
@@ -93,9 +93,19 @@ namespace gl
 	{
 		_data = setAllocation<glm::mat4>(_sizeData, _data);
 		memcpy(_data, &value, _sizeData);
-		if (getUniformLocation() == false)
+		if (_location == -1 && getUniformLocation() == false)
 			return (*this);
 		glUniformMatrix4fv(_location, 1, GL_FALSE, &(*(glm::mat4 *)_data)[0].x);
+		return (*this);
+	}
+
+	ShaderResource &ShaderResource::set(glm::mat3 const &value)
+	{
+		_data = setAllocation<glm::mat3>(_sizeData, _data);
+		memcpy(_data, &value, _sizeData);
+		if (_location == -1 && getUniformLocation() == false)
+			return (*this);
+		glUniformMatrix3fv(_location, 1, GL_FALSE, &(*(glm::mat3 *)_data)[0].x);
 		return (*this);
 	}
 
@@ -103,7 +113,7 @@ namespace gl
 	{
 		_data = setAllocation<int>(_sizeData, _data);
 		memcpy(_data, &value, _sizeData);
-		if (getUniformLocation() == false)
+		if (_location == -1 && getUniformLocation() == false)
 			return (*this);
 		glUniform1i(_location, value);
 		return (*this);
@@ -124,7 +134,7 @@ namespace gl
 	{
 		_data = setAllocation<float>(_sizeData, _data);
 		memcpy(_data, &value, _sizeData);
-		if (getUniformLocation() == false)
+		if (_location == -1 && getUniformLocation() == false)
 			return (*this);
 		glUniform1f(_location, value);
 		return (*this);
@@ -134,7 +144,7 @@ namespace gl
 	{
 		_data = setAllocation<glm::vec4>(_sizeData, _data);
 		memcpy(_data, &value, _sizeData);
-		if (getUniformLocation() == false)
+		if (_location == -1 && getUniformLocation() == false)
 			return (*this);
 		glUniform4f(_location, value[0], value[1], value[2], value[3]);
 		return (*this);

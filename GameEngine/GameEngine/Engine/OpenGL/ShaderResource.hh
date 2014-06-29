@@ -28,6 +28,7 @@ namespace gl
 		template <typename TYPE> TYPE get() const;
 
 		ShaderResource &set(glm::mat4 const &value);
+		ShaderResource &set(glm::mat3 const &value);
 		ShaderResource &set(int value);
 		ShaderResource &set(UniformBlock const &uniformblock);
 		ShaderResource &set(float v);

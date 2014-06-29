@@ -132,7 +132,7 @@ namespace gl
 			auto &element = _shaders.find(shader);
 		if (element == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(mat4)", "shader not find", *this)
-			auto &s = element->second;
+		auto &s = element->second;
 		s.setUniform(key, mat4);
 		return (*this);
 	}
@@ -158,6 +158,18 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(float)", "shader not find", *this)
 			auto &s = element->second;
 		s.setUniform(key, v);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3)
+	{
+		if (!shader)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(mat3)", "key destroy", *this)
+			auto &element = _shaders.find(shader);
+		if (element == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(mat3)", "shader not find", *this)
+			auto &s = element->second;
+		s.setUniform(key, mat3);
 		return (*this);
 	}
 

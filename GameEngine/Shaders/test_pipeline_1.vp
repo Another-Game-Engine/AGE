@@ -7,22 +7,26 @@ layout (location = 3) in vec2 texCoord;
 
 uniform global_state
 {
-	uniform mat4 projection_matrix;
-	uniform mat4 view_matrix;
+	mat4 projection_matrix;
+	vec4 pos_light;
 };
 
+uniform mat3 normal_matrix;
+uniform mat4 view_matrix;
 uniform mat4 model_matrix;
 
 out vec4 interpolated_position;
 out vec4 interpolated_color;
-out vec4 interpolated_normal;
+out vec3 interpolated_normal;
 out vec2 interpolated_texCoord;
+out vec4 pos_light_viewspace;
 
 void main(void)
 {
-	interpolated_position = position;
+	interpolated_position = view_matrix * model_matrix * position;
 	interpolated_color = color;
-	interpolated_normal = normal;
+	interpolated_normal = normalize(normal_matrix * vec3(normal));
 	interpolated_texCoord = texCoord;
-	gl_Position = projection_matrix * view_matrix * model_matrix * interpolated_position;
+	pos_light_viewspace = view_matrix * pos_light;
+	gl_Position = projection_matrix * interpolated_position;
 }
