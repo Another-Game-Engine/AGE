@@ -57,7 +57,6 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "UniformBlock.hh - set(TYPE)", "the type of value size is different of fiels target into uniformBlock", *this);
 		_ubo.bind();
 		glBufferSubData(GL_UNIFORM_BUFFER, _data[index].offset, _data[index].size, &value);
-		bind();
 		return (*this);
 	}
 

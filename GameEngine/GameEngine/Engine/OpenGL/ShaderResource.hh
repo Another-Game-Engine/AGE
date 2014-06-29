@@ -30,6 +30,8 @@ namespace gl
 		ShaderResource &set(glm::mat4 const &value);
 		ShaderResource &set(int value);
 		ShaderResource &set(UniformBlock const &uniformblock);
+		ShaderResource &set(float v);
+		ShaderResource &set(glm::vec4 const &vec4);
 
 	private:
 		std::string _flag;

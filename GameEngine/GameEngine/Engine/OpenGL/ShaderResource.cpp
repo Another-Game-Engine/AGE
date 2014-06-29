@@ -101,7 +101,7 @@ namespace gl
 
 	ShaderResource &ShaderResource::set(int value)
 	{
-		_data = setAllocation<glm::mat4>(_sizeData, _data);
+		_data = setAllocation<int>(_sizeData, _data);
 		memcpy(_data, &value, _sizeData);
 		if (getUniformLocation() == false)
 			return (*this);
@@ -116,6 +116,28 @@ namespace gl
 		if (getUniformBlockLocation() == false)
 			return (*this);
 		glUniformBlockBinding(_attach->getId(), _location, value.getBindingPoint());
+		value.bind();
 		return (*this);
 	}
+
+	ShaderResource &ShaderResource::set(float value)
+	{
+		_data = setAllocation<float>(_sizeData, _data);
+		memcpy(_data, &value, _sizeData);
+		if (getUniformLocation() == false)
+			return (*this);
+		glUniform1f(_location, value);
+		return (*this);
+	}
+
+	ShaderResource &ShaderResource::set(glm::vec4 const &value)
+	{
+		_data = setAllocation<glm::vec4>(_sizeData, _data);
+		memcpy(_data, &value, _sizeData);
+		if (getUniformLocation() == false)
+			return (*this);
+		glUniform4f(_location, value[0], value[1], value[2], value[3]);
+		return (*this);
+	}
+
 }

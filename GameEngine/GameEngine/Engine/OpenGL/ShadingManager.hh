@@ -50,6 +50,8 @@ namespace gl
 		ShadingManager &rmShaderUniform(Key<Shader> const &shader, Key<Uniform> &uniform);
 		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
+		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
+		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
 		// sampler
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> &uniform);

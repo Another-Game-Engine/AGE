@@ -79,3 +79,8 @@ GLuint TextureFile::getId() const
 {
 	return _texture->getId();
 }
+
+gl::Texture const &TextureFile::getTexture() const
+{
+	return (*_texture);
+}

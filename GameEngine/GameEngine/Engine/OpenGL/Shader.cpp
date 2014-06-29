@@ -296,6 +296,28 @@ namespace gl
 		return (*this);
 	}
 
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec4 const &vec4)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "key destroy use", *this);
+		auto &element = _uniforms.find(key);
+		if (element == _uniforms.end())
+			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "element in not find", *this);
+		element->second.set(vec4);
+		return (*this);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, float v)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "key destroy use", *this);
+		auto &element = _uniforms.find(key);
+		if (element == _uniforms.end())
+			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "element in not find", *this);
+		element->second.set(v);
+		return (*this);
+	}
+
 	Key<Sampler> Shader::addSampler(std::string const &flag)
 	{
 		Key<Sampler> key;

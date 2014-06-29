@@ -79,6 +79,9 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 	_model_matrix = _render->addShaderUniform(_shader, "model_matrix");
 	_projection_matrix = _render->addShaderUniform(_shader, "projection_matrix");
 	_view_matrix = _render->addShaderUniform(_shader, "view_matrix");
+	_diffuse_texture = _render->addShaderSampler(_shader, "diffuse_texture");
+	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
+	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
 }
 
 // Returns the number of seconds since the component creation
@@ -158,10 +161,13 @@ void CameraSystem::mainUpdate(double time)
 		_render->useShader(_shader);
 		_render->setUniformBlock(_global_state, 0, camera->projection);
 		_render->setUniformBlock(_global_state, 1, camera->lookAtTransform);
+		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (auto m : _drawable.getCollection())
 		{
 			auto mesh = scene->getComponent<Component::MeshRenderer>(m);
+			_render->setShaderSampler(_shader, _diffuse_texture, mesh->mesh->material->materials[0].diffuseTex->getTexture());
 			_render->setShaderUniform(_shader, _model_matrix, scene->getTransform(m));
 			_geometry->draw(GL_TRIANGLES, mesh->mesh->geometries[0].glindices, mesh->mesh->geometries[0].glvertices);
 		}

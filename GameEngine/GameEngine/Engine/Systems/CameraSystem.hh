@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <OpenGL/Key.hh>
 
-namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; class GeometryManager; }
+namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; }
 
 class CameraSystem : public System
 {
@@ -32,6 +32,9 @@ protected:
 	gl::Key<gl::Uniform> _model_matrix;
 	gl::Key<gl::Uniform> _view_matrix;
 	gl::Key<gl::Uniform> _projection_matrix;
+	gl::Key<gl::Uniform> _diffuse_color;
+	gl::Key<gl::Uniform> _diffuse_ratio;
+	gl::Key<gl::Sampler> _diffuse_texture;
 
 	virtual void updateBegin(double time);
 	virtual void updateEnd(double time);

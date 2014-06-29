@@ -28,10 +28,7 @@ struct TextureFile : public MediaFile<TextureFile>
 	void load(cereal::PortableBinaryInputArchive &ar);
 
 	GLuint getId() const;
-	//inline const std::shared_ptr<gl::Texture2D> &getTexture() const
-	//{
-	//	return _texture;
-	//}
+	gl::Texture const &getTexture() const;
 
 	std::vector<GLbyte> datas;
 	GLint		width, height;
