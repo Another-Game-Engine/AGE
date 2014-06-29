@@ -198,7 +198,8 @@ void CameraSystem::mainUpdate(double time)
 			_render->setShaderSampler(_shader, _diffuse_texture, mesh->mesh->material->materials[0].diffuseTex->getTexture());
 			_render->setShaderUniform(_shader, _model_matrix, scene->getTransform(m));
 			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * scene->getTransform(m)))));
-			_geometry->draw(GL_TRIANGLES, mesh->mesh->geometries[0].glindices, mesh->mesh->geometries[0].glvertices);
+			for (std::size_t i = 0; i < mesh->mesh->material->materials.size(); ++i)
+				mesh->mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->mesh->geometries[i].glindices, mesh->mesh->geometries[i].glvertices);
 		}
 	}
 #endif

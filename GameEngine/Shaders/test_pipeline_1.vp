@@ -25,7 +25,7 @@ void main(void)
 {
 	interpolated_position = view_matrix * model_matrix * position;
 	interpolated_color = color;
-	interpolated_normal = normalize(normal_matrix * vec3(normal));
+	interpolated_normal = normal_matrix * vec3(normal);
 	interpolated_texCoord = texCoord;
 	pos_light_viewspace = view_matrix * pos_light;
 	gl_Position = projection_matrix * interpolated_position;
