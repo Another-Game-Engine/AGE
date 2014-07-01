@@ -191,6 +191,7 @@ void CameraSystem::mainUpdate(double time)
 		_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
+		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (auto m : _drawable.getCollection())
 		{
