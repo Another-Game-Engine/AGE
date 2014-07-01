@@ -18,6 +18,11 @@ Cereal/
 *.png
 *.zip
 *.save
+*.age
+*.mage
+*.skage
+*.sage
+*.aage
 
 # User-specific files
 *.suo

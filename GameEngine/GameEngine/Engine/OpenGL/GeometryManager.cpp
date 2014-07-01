@@ -244,7 +244,7 @@ namespace gl
 		auto &indiceAttach = _indexAttach.find(keyindices);
 		auto &vertexAttach = _vertexAttach.find(keyVertice);
 		if (indiceAttach == _indexAttach.end() || vertexAttach == _vertexAttach.end())
-			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "keyindices have no attach")
+			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "draw", "keyindices of keyvertices have no attach")
 		VertexPool *vertexPool = static_cast<VertexPool *>(vertexAttach->second.pool);
 		indiceAttach->second.pool->syncronisation();
 		vertexAttach->second.pool->syncronisation();
