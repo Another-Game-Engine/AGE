@@ -75,7 +75,7 @@ void	DrawQuad::draw(GLuint texture, int sampleNbr, glm::uvec2 const &textureSize
 void DrawQuad::init(std::weak_ptr<DependenciesInjector> &&engine)
 {
 	_renderer = engine.lock()->getInstance<Renderer>();
-	_m = engine.lock()->getInstance<gl::GeometryManager>().get();
+	_m = engine.lock()->getInstance<gl::GeometryManager>();
 	float quadPos[] = {
 		-1.0, -1.0,
 		1.0, -1.0,

@@ -26,7 +26,7 @@ public:
 	//
 	//
 
-	class Manager : public Dependency
+	class Manager : public Dependency<Manager>
 	{
 	public:
 		template <typename ...Args>
@@ -161,7 +161,7 @@ public:
 		(*function)(args...);
 	}
 
-	PubSub(std::shared_ptr<Manager> manager)
+	PubSub(Manager *manager)
 		: _manager(manager)
 	{}
 
@@ -200,7 +200,7 @@ public:
 		unsubAll();
 	}
 
-	std::shared_ptr<Manager> getPubSubManager()
+	Manager *getPubSubManager()
 	{
 		return _manager;
 	}
@@ -242,7 +242,7 @@ private:
 	std::map<PubSubKey, Callback> _callbacks;
 	std::map<PubSubKey, std::unordered_set<PubSub*> > _subscribers;
 	std::unordered_set<PubSub*> _emitters;
-	std::shared_ptr<Manager> _manager;
+	Manager *_manager;
 };
 
 #endif    //__PUBSUB_HPP__

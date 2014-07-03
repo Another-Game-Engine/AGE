@@ -40,6 +40,7 @@ ObjFile &ObjFile::operator=(const ObjFile &o)
 
 ObjFile::Geometry::Geometry()
 		: name("")
+		, geomanager(nullptr)
 {
 		if (geomanager)
 		{

@@ -18,7 +18,7 @@ namespace gl
 	//!\version v1.0
 	//!\class GeometryManager
 	//!\brief Handle the geometry of the render
-	class GeometryManager : public Dependency
+	class GeometryManager : public Dependency<GeometryManager>
 	{
 	public:
 		template <typename TYPE, typename POOL>

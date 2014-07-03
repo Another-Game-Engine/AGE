@@ -19,7 +19,7 @@ class PubSub;
 template <uint8_t NBR_ATTRIBUTE> class VertexManager;
 #endif
 
-class FontManager : public Dependency
+class FontManager : public Dependency<FontManager>
 {
 public:
 	FontManager();

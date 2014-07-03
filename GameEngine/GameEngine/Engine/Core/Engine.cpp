@@ -53,7 +53,7 @@ bool 		Engine::update()
 
 	timer->update();
     inputs->clearInputs();
-	context->updateEvents(*inputs.get());
+	context->updateEvents(*inputs);
 	sceneManager->update(time);
 	context->flush();
 

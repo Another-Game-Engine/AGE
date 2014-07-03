@@ -5,7 +5,7 @@
 #include "Core/Input.hh"
 #include <Utils/Dependency.hpp>
 
-class IRenderContext : public Dependency
+class IRenderContext : public Dependency<IRenderContext>
 {
 public:
 	IRenderContext()

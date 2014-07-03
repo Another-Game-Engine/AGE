@@ -11,7 +11,7 @@
 #include <MediaFiles/AssetsManager.hpp>
 #include <Sprite/Sprite.hh>
 
-class SpriteManager : public Dependency
+class SpriteManager : public Dependency<SpriteManager>
 {
 public:
 	SpriteManager()

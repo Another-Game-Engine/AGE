@@ -10,7 +10,7 @@ template <class T, class Alloc = allocator<T>>
 class vector;
 template <class Key, class T, class Compare = less<Key>, class Alloc = allocator<pair<const Key, T>>>
 class map;
-class PerformanceDebugger : public Dependency
+class PerformanceDebugger : public Dependency<PerformanceDebugger>
 {
 public:
 	// CTOR

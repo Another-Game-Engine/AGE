@@ -57,8 +57,8 @@ namespace Component
 
 		void init(std::weak_ptr<AScene> scene, float mass = 1.0f)
 		{
-			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(scene.lock()->getInstance<BulletCollisionManager>());
-			assert(_manager.lock() != nullptr);
+			_manager = dynamic_cast<BulletDynamicManager*>(scene.lock()->getInstance<BulletCollisionManager>());
+			assert(_manager != nullptr);
 			_mass = mass;
 		}
 
@@ -66,7 +66,7 @@ namespace Component
 		{
 			if (_rigidBody != nullptr)
 			{
-				_manager.lock()->getWorld()->removeRigidBody(_rigidBody);
+				_manager->getWorld()->removeRigidBody(_rigidBody);
 				delete _rigidBody;
 				_rigidBody = nullptr;
 			}
@@ -139,7 +139,7 @@ namespace Component
 
 			if (_rigidBody != nullptr)
 			{
-				_manager.lock()->getWorld()->removeRigidBody(_rigidBody);
+				_manager->getWorld()->removeRigidBody(_rigidBody);
 				delete _rigidBody;
 				_rigidBody = nullptr;
 			}
@@ -209,7 +209,7 @@ namespace Component
 			{
 				_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
-			_manager.lock()->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
+			_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
 			setTransformation(entityTransform);
 		}
 
@@ -288,7 +288,7 @@ namespace Component
 
 
 	private:
-		std::weak_ptr<BulletDynamicManager> _manager;
+		BulletDynamicManager *_manager;
 		CollisionShape _shapeType;
 		btScalar _mass;
 		btVector3 _inertia;

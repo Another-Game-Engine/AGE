@@ -26,7 +26,7 @@ static void drawBitmap(unsigned char* dstBitmap,
     }
 }
 
-class FontConvertor : public Dependency
+class FontConvertor : public Dependency<FontConvertor>
 {
 public:
 	FontConvertor()

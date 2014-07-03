@@ -184,7 +184,7 @@ int			main(int ac, char **av)
 
 #ifdef RENDERING_ACTIVATED
 
-	auto &m = e->setInstance<gl::GeometryManager>();
+	auto m = e->setInstance<gl::GeometryManager>();
 	// create pool
 	m->addIndexPool();
 	m->addVertexPool();

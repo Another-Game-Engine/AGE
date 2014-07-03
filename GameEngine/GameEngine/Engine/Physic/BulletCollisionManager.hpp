@@ -19,7 +19,7 @@
 #include <memory>
 
 
-class BulletCollisionManager : public Dependency
+class BulletCollisionManager : public Dependency<BulletCollisionManager>
 {
 public:
 	BulletCollisionManager()
