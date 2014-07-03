@@ -155,7 +155,9 @@ int			main(int ac, char **av)
 	e->setInstance<SdlContext, IRenderContext>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
+#ifdef RENDERING_ACTIVATED
 	e->setInstance<Renderer>();
+#endif
 	e->setInstance<SceneManager>();
 	e->setInstance<AssetsManager>()->init();
 	e->setInstance<PerformanceDebugger>("Developper Name");
