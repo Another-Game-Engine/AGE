@@ -15,7 +15,8 @@ AssetsManager::AssetsManager()
 }
 
 AssetsManager::~AssetsManager()
-{}
+{
+}
 
 void AssetsManager::init()
 {

@@ -12,7 +12,7 @@ private:
 	DependenciesInjector(DependenciesInjector const &);
 	DependenciesInjector &operator=(DependenciesInjector const &);
 
-	std::vector<std::shared_ptr<IDependency>>             _instances;
+	std::vector<IDependency*>             _instances;
 	std::weak_ptr<DependenciesInjector>                   _parent;
 public:
 	DependenciesInjector(std::weak_ptr<DependenciesInjector> &&parent = std::weak_ptr<DependenciesInjector>())
@@ -22,6 +22,11 @@ public:
 
 	virtual ~DependenciesInjector()
 	{
+		for (auto &e : _instances)
+		{
+			if (e != nullptr)
+				delete e;
+		}
 		_instances.clear();
 	}
 
@@ -42,7 +47,7 @@ public:
 			else
 				assert(false && "Engine Instance is not set !");
 		}
-		return dynamic_cast<T*>(_instances[id].get());
+		return dynamic_cast<T*>(_instances[id]);
 	}
 
 	template <typename T, typename TypeSelector = T, typename ...Args>
@@ -51,12 +56,14 @@ public:
 		std::uint16_t id = TypeSelector::getTypeId();
 		if (_instances.size() <= id || _instances[id] == nullptr)
 		{
-			_instances.resize(id + 1, nullptr);
-			auto n = std::make_shared<T>(args...);
+			if (_instances.size() <= id)
+				_instances.resize(id + 1, nullptr);
+			assert(_instances[id] == nullptr); // instance already defined
+			auto n = new T(args...);
 			n->_dpyManager = shared_from_this();
 			_instances[id] = n;
 		}
-		return dynamic_cast<T*>(_instances[id].get());
+		return dynamic_cast<T*>(_instances[id]);
 	}
 
 	template <typename T>
