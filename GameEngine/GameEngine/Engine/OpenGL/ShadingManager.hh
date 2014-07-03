@@ -71,6 +71,13 @@ namespace gl
 		Key<UniformBlock> getUniformBlock(size_t index);
 		template <typename TYPE> ShadingManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
 
+		// Texture
+		Key<Texture> addTexture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping);
+		Key<Texture> addTextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation);
+		ShadingManager &rmTexture(Key<Texture> &key);
+		Key<Texture> getTexture(size_t target);
+		GLenum getTypeTexture(Key<Texture> const &key);
+
 		//pipeline handling
 		//Key<Pipeline> addPipeline(size_t nbrShader, Key<Shader> *shaders);
 		//ShadingManager &rmPipeline(Key<Pipeline> const &pipeline);
@@ -78,6 +85,7 @@ namespace gl
 	private:
 		std::map<Key<Shader>, Shader> _shaders;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
+		std::map<Key<Texture>, Texture *> _textures;
 		//std::map<Key<Pipeline>, Pipeline> _pipelines;
 
 	};

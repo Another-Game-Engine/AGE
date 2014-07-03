@@ -1,5 +1,6 @@
 #include <OpenGL/ShadingManager.hh>
 #include <OpenGL/Shader.hh>
+#include <OpenGL/Texture.hh>
 #include <iostream>
 #include <string>
 
@@ -313,5 +314,44 @@ namespace gl
 		auto &u = ubElement->second;
 		s.setInterfaceBlock(key, u);
 		return (*this);
+	}
+
+	Key<Texture> ShadingManager::addTexture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping)
+	{
+		Key<Texture> key;
+
+		_textures[key] = new Texture2D(internalFormat, width, height, mipmapping);
+		return (key);
+	}
+
+	Key<Texture> ShadingManager::addTextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation)
+	{
+		Key<Texture> key;
+
+		_textures[key] = new TextureMultiSample(samples, internalFormat, width, height, fixedSampleLocation);
+		return (key);
+	}
+
+	ShadingManager &ShadingManager::rmTexture(Key<Texture> &key)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmTexture()", "Key invalid", *this);
+		auto &find = _textures.find(key);
+		if (find == _textures.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmTexture()", "element not found", *this);
+		delete find->second;
+		_textures.erase(find);
+		key.destroy();
+		return (*this);
+	}
+
+	Key<Texture> ShadingManager::getTexture(size_t target)
+	{
+		if (target >= _textures.size())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getTexture(size_t target)", "the target is out of range", Key<Texture>(KEY_DESTROY));
+		auto &element = _textures.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
 	}
 }
