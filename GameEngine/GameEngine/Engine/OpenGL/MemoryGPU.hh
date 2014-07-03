@@ -4,11 +4,28 @@
 
 namespace gl
 {
-	//!\file MemoryBlocksGPU.hh
+	//!\file MemoryGPU.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class MemoryGPU
+	//!\brief Representing data on GPU
+	struct MemoryGPU
+	{
+	public:
+		MemoryGPU();
+		MemoryGPU(size_t size, size_t offset);
+		~MemoryGPU();
+		MemoryGPU(MemoryGPU const &copy);
+		MemoryGPU &operator=(MemoryGPU const &m);
+		size_t size;
+		size_t offset;
+	};
+
+	//!\file MemoryGPU.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
 	//!\class MemoryBlocksGPU
-	//!\brief Representing data on GPU
+	//!\brief Representing data on GPU in blocks
 	class MemoryBlocksGPU
 	{
 	public:

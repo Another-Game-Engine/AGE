@@ -16,7 +16,7 @@ class Renderer : public Dependency
 private:
 	OpenGLTools::Framebuffer                        _fbo;
 	std::map<std::string,
-		std::shared_ptr<OpenGLTools::Shader>>		_shaders;
+		std::shared_ptr<gl::Shader>>		_shaders;
 	std::map<std::string,
 		std::shared_ptr<OpenGLTools::UniformBuffer>> _uniforms;
 	std::multimap<unsigned int, std::string>         _postEffects;
@@ -27,14 +27,14 @@ public:
 	bool init();
 
 	// Shaders
-	std::shared_ptr<OpenGLTools::Shader>		addShader(
+	std::shared_ptr<gl::Shader>		addShader(
 		std::string const &name,
 		std::string const &vp,
 		std::string const &fp,
 		std::string const &geo = "");
 
 	bool                    					removeShader(std::string const &name);
-	std::shared_ptr<OpenGLTools::Shader>		getShader(std::string const &name) const;
+	std::shared_ptr<gl::Shader>		getShader(std::string const &name) const;
 	// Uniform buffers
 	std::shared_ptr<OpenGLTools::UniformBuffer>	addUniform(std::string const &name);
 	bool            							removeUniform(std::string const &name);

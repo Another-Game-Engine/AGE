@@ -10,7 +10,7 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 
-#include <Systems/CameraSystem.hpp>
+#include <Systems/CameraSystem.hh>
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/LightRenderingSystem.hh>
@@ -43,11 +43,17 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 	addSystem<FirstPersonViewSystem>(2);
-	addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	auto &m = *getInstance<gl::ShadingManager>();
+	auto &g = *getInstance<gl::GeometryManager>();
+#if NEW_SHADER
+	camerasystem->setManager(m, g);
+#endif
 
 #ifdef SIMPLE_RENDERING
 		addSystem<SimpleMeshRenderer>(80);
 #else
+#if !NEW_SHADER
 	addSystem<LightRenderingSystem>(80); // Render with the lights
 	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
 	addSystem<PostFxSystem>(110); // POST FXs
@@ -59,6 +65,7 @@ public:
 	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
 	getSystem<PostFxSystem>()->useHDR(false);
 	getSystem<PostFxSystem>()->useBloom(false);
+#endif
 #endif
 #endif
 

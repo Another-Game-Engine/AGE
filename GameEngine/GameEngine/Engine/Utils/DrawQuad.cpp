@@ -12,8 +12,6 @@ DrawQuad::DrawQuad() :
 
 DrawQuad::~DrawQuad()
 {
-	_m->dettachVerticesToVertexPool(_quadvertices, _m->getVertexPool(1));
-	_m->dettachIndicesToIndexPool(_quadindices, _m->getIndexPool(0));
 	_m->rmIndices(_quadindices);
 	_m->rmVertices(_quadvertices);
 }

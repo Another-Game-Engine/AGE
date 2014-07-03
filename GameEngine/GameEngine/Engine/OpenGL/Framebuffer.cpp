@@ -35,14 +35,14 @@ namespace OpenGLTools
 	void Framebuffer::addTextureAttachment(GLenum textureInternalFormat, GLenum textureFormat, GLenum attachment)
 	{
 		assert(_id != 0 && "Frame buffer not initialized");
-		Texture *texture = NULL;
+		gl::Texture *texture = NULL;
 		if (_multiSample)
-			texture = new TextureMultiSample(_sampleNbr, textureInternalFormat, _size.x, _size.y);
+			texture = new gl::TextureMultiSample(_sampleNbr, textureInternalFormat, _size.x, _size.y);
 		else
 		{
 			float maxDimension = glm::max(static_cast<float>(_size.x), static_cast<float>(_size.y));
-			texture = new Texture2D(textureInternalFormat, _size.x, _size.y, true);
-			static_cast<Texture2D *>(texture)->filter(GL_LINEAR).wrap(GL_CLAMP_TO_EDGE);
+			texture = new gl::Texture2D(textureInternalFormat, _size.x, _size.y, true);
+			static_cast<gl::Texture2D *>(texture)->filter(GL_LINEAR).wrap(GL_CLAMP_TO_EDGE);
 
 		}
 		auto attach = _attachments.find(attachment);
@@ -69,7 +69,7 @@ namespace OpenGLTools
 		glBindFramebuffer(GL_FRAMEBUFFER, _id);
 	}
 
-	Texture *Framebuffer::operator[](GLenum attachment) const
+	gl::Texture *Framebuffer::operator[](GLenum attachment) const
 	{
 		auto	attach = _attachments.find(attachment);
 

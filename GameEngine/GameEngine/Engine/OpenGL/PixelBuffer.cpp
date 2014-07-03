@@ -2,7 +2,7 @@
 #include <utility>
 
 
-namespace OpenGLTools
+namespace gl
 {
 	PixelBuffer::PixelBuffer()
 		: _memorySize(0)

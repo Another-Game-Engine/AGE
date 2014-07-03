@@ -6,10 +6,10 @@
 #include <memory>
 #include <map>
 
+namespace gl { class Shader; }
+
 namespace	OpenGLTools
 {
-
-class Shader;
 
 class UniformBuffer
 {
@@ -47,8 +47,8 @@ public:
 	~UniformBuffer(void);
 
 
-	void			init(std::shared_ptr<Shader> referent, std::string const &blockName, std::uint32_t size);
-	void			init(std::shared_ptr<Shader> referent, std::string const &blockName, std::string const vars[]);
+	void			init(std::shared_ptr<gl::Shader> referent, std::string const &blockName, std::uint32_t size);
+	void			init(std::shared_ptr<gl::Shader> referent, std::string const &blockName, std::string const vars[]);
 
 	void			setBufferData(size_t size, const char *data);
 

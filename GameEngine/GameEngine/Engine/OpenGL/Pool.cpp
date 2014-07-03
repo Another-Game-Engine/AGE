@@ -1,5 +1,5 @@
 #include <OpenGL/Pool.hh>
-#include <OpenGL/MemoryBlocksGPU.hh>
+#include <OpenGL/MemoryGPU.hh>
 #include <OpenGL/Data.hh>
 #include <iostream>
 #include <string>

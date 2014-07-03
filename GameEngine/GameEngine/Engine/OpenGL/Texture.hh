@@ -1,12 +1,15 @@
-#ifndef TEXTURE_HH_
-# define TEXTURE_HH_
+#pragma once
 
 # include <Utils/OpenGL.hh>
 # include <OpenGL/PixelBuffer.hh>
 
-namespace OpenGLTools
+namespace gl
 {
-
+	//!\file Texture.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class Texture
+	//!\brief Handle generic Texture
 	class Texture
 	{
 	public:
@@ -20,16 +23,22 @@ namespace OpenGLTools
 
 		GLuint getId() const;
 
+		// avoid copylian form
+		Texture(Texture const &copy) = delete;
+		Texture(Texture &&copy) = delete;
+		Texture &operator=(Texture const &t) = delete;
+		Texture &operator=(Texture &&t) = delete;
 	protected:
 		Texture();
-		Texture(Texture const &copy);
-		Texture(Texture &&copy);
-		Texture &operator=(Texture const &t);
-		Texture &operator=(Texture &&t);
 
 		GLuint _id;
 	};
 
+	//!\file Texture.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class Texture2D
+	//!\brief Handle Texture 2D
 	class Texture2D : public Texture
 	{
 	private:
@@ -41,13 +50,14 @@ namespace OpenGLTools
 		GLenum _format;
 		GLenum _type;
 
+		// avoid operator =
+		Texture2D &operator=(Texture2D const &t) = delete;
+		Texture2D &operator=(Texture2D &&t) = delete;
 	public:
 		Texture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping = true);
 		virtual ~Texture2D();
 		Texture2D(Texture2D const &copy);
 		Texture2D(Texture2D &&move);
-		Texture2D &operator=(Texture2D const &t);
-		Texture2D &operator=(Texture2D &&t);
 
 		Texture2D const &wrap(GLint param) const;
 		Texture2D const &filter(GLint param) const;
@@ -66,6 +76,11 @@ namespace OpenGLTools
 
 	};
 
+	//!\file Texture.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class TextureMultiSample
+	//!\brief Handle Texture 2D multi sample
 	class TextureMultiSample : public Texture
 	{
 	private:
@@ -90,5 +105,3 @@ namespace OpenGLTools
 		virtual GLenum getType() const;
 	};
 }
-
-#endif /*!TEXTURE_HH_*/

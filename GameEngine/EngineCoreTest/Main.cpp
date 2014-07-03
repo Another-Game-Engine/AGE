@@ -13,6 +13,7 @@
 #include <Utils/PubSub.hpp>
 
 #include <OpenGL/GeometryManager.hh>
+#include <OpenGL/ShadingManager.hh>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
 
@@ -24,12 +25,15 @@
 #include <Utils/PubSub.hpp>
 #include <Utils/PerformanceDebugger.hh>
 
+#include <Systems/CameraSystem.hh> // just for the define... to rm for the future
+
 //CONFIGS
 #include <CONFIGS.hpp>
 
 bool loadShaders(std::shared_ptr<Engine> e)
 {
-	std::string		perModelVars[] =
+#if !NEW_SHADER
+	std::string	perModelVars[] =
 	{
 		"model"
 	};
@@ -43,7 +47,7 @@ bool loadShaders(std::shared_ptr<Engine> e)
 		"spotLightNbr"
 	};
 
-	std::string		materialBasic[] =
+	std::string	materialBasic[] =
 	{
 		"ambient",
 		"diffuse",
@@ -62,7 +66,7 @@ bool loadShaders(std::shared_ptr<Engine> e)
 		"../../Shaders/MaterialBasic.vp",
 		"../../Shaders/MaterialBasic.fp");
 
-	auto shadowDepth = e->getInstance<Renderer>()->addShader("ShadowDepth" , "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
+	auto shadowDepth = e->getInstance<Renderer>()->addShader("ShadowDepth", "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
 
 	e->getInstance<Renderer>()->addUniform("MaterialBasic")
 		->init(s, "MaterialBasic", materialBasic);
@@ -73,13 +77,13 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	e->getInstance<Renderer>()->addUniform("PerLight")
 		->init(shadowDepth, "PerLight", perLightVars);
 
-	e->getInstance<Renderer>()->addShader("2DText",
-		"../../Shaders/2DText.vp",
-		"../../Shaders/2DText.fp");
-
-	e->getInstance<Renderer>()->addShader("SpriteBasic",
-		"../../Shaders/SpriteBasic.vp",
-		"../../Shaders/SpriteBasic.fp");
+	//e->getInstance<Renderer>()->addShader("2DText",
+	//	"../../Shaders/2DText.vp",
+	//	"../../Shaders/2DText.fp");
+	//
+	//e->getInstance<Renderer>()->addShader("SpriteBasic",
+	//	"../../Shaders/SpriteBasic.vp",
+	//	"../../Shaders/SpriteBasic.fp");
 
 	e->getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
 	e->getInstance<Renderer>()->addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
@@ -105,7 +109,19 @@ bool loadShaders(std::shared_ptr<Engine> e)
 		->init(sky, "cameraUniform", vars);
 
 	e->getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
+#endif
+	// set uniform and sampler
 
+
+	//
+	//gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
+	//auto &pm = m->addShaderUniform(test_pipeline_1, "projection_matrix", glm::perspective<float>(60.f, 600.f / 800.f, 1.0f, 100.0f));
+	//auto &mm = m->addShaderUniform(test_pipeline_1, "modelview_matrix", glm::mat4(1.f));
+	//size_t sizeData[2] = {sizeof(glm::vec4), sizeof(glm::mat4)};
+	//auto &ub = m->addUniformBlock(2, sizeData);
+	//auto &ib = m->addShaderInterfaceBlock(test_pipeline_1, "test", ub);
+	//m->setUniformBlock(ub, 0, glm::vec4(1.0, 0.0, 1.0, 2.0));
+	//m->setUniformBlock(ub, 1, glm::mat4(1.0));
 	return true;
 }
 
@@ -115,7 +131,7 @@ bool loadAssets(std::shared_ptr<Engine> e)
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
+//	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
 #endif
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
@@ -167,8 +183,8 @@ int			main(int ac, char **av)
 	config->loadFile();
 
 #ifdef RENDERING_ACTIVATED
+
 	auto &m = e->setInstance<gl::GeometryManager>();
-	
 	// create pool
 	m->addIndexPool();
 	m->addVertexPool();
@@ -180,6 +196,8 @@ int			main(int ac, char **av)
 	// attach pool which be create
 	m->attachIndexPoolToVertexPool(m->getVertexPool(0), m->getIndexPool(0));
 	m->attachIndexPoolToVertexPool(m->getVertexPool(1), m->getIndexPool(0));
+
+	e->setInstance<gl::ShadingManager>();
 
 	if (!loadShaders(e))
 		return EXIT_FAILURE;

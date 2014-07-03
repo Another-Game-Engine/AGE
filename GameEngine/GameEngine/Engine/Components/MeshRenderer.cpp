@@ -45,7 +45,7 @@ namespace Component
 		shader = "";
 	}
 
-	void MeshRenderer::render(std::shared_ptr<Renderer> renderer, const glm::mat4 &globalTrans, std::function<void(OpenGLTools::Shader&)> func)
+	void MeshRenderer::render(std::shared_ptr<Renderer> renderer, const glm::mat4 &globalTrans, std::function<void(gl::Shader&)> func)
 	{
 		auto perModelUniform = renderer->getUniform("PerModel");
 		auto materialUniform = renderer->getUniform("MaterialBasic");

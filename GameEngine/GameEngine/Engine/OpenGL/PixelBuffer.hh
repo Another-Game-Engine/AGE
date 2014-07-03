@@ -3,8 +3,13 @@
 # include <cstdint>
 # include <Utils/OpenGL.hh>
 
-namespace OpenGLTools
+namespace gl
 {
+	//!\file PixelBuffer.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class PixelBuffer
+	//!\brief Handle Opengl Pixel Buffer
 	class PixelBuffer
 	{
 	public:
@@ -25,6 +30,11 @@ namespace OpenGLTools
 		std::uint32_t _memorySize;
 	};
 
+	//!\file PixelBuffer.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class PixelBufferPack
+	//!\brief Handle Opengl Pixel Pack Buffer
 	class PixelBufferPack : public PixelBuffer
 	{
 	public:
@@ -38,6 +48,11 @@ namespace OpenGLTools
 
 	};
 
+	//!\file PixelBuffer.hh
+	//!\author Dorian Pinaud
+	//!\version v1.0
+	//!\class PixelBufferUnPack
+	//!\brief Handle Opengl Pixel UnPack Buffer
 	class PixelBufferUnPack : public PixelBuffer
 	{
 	public:
