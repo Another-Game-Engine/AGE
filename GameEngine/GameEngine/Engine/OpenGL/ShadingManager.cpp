@@ -47,15 +47,13 @@ namespace gl
 		return (key);
 	}
 
-	ShadingManager &ShadingManager::rmShader(Key<Shader> &shader)
+	ShadingManager &ShadingManager::rmShader(Key<Shader> &key)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShader", "the key is destroy", *this)
-		auto element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShader", "the shader ask can't be find", *this)
-		_shaders.erase(shader);
-		shader.destroy();
+		Shader *shader;
+		if ((shader = getShader(key, "rmShader()")) == NULL)
+			return (*this);
+		_shaders.erase(key);
+		key.destroy();
 		return (*this);
 	}
 
@@ -69,154 +67,118 @@ namespace gl
 		return (element->first);
 	}
 
-	ShadingManager &ShadingManager::useShader(Key<Shader> const &shader)
+	ShadingManager &ShadingManager::useShader(Key<Shader> const &key)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - useShader", "key already destroy", *this)
-		auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - useShader", "shader not find", *this)
-		auto &s = element->second;
-		s.use();
+		Shader *shader;
+		if ((shader = getShader(key, "useShader()")) == NULL)
+			return (*this); 
+		shader->use();
 		return (*this);
 	}
 
-	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &shader, std::string const &flag)
+	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "key already destroy", Key<Uniform>(KEY_DESTROY))
-		auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
-		auto &s = element->second;
-		return (s.addUniform(flag));
+		Shader *shader;
+		if ((shader = getShader(key, "addShaderUniform()")) == NULL)
+			return (Key<Uniform>(KEY_DESTROY));
+		return (shader->addUniform(flag));
 	}
 
-	ShadingManager &ShadingManager::rmShaderUniform(Key<Shader> const &shader, Key<Uniform> &uniform)
+	ShadingManager &ShadingManager::rmShaderUniform(Key<Shader> const &key, Key<Uniform> &uniform)
 	{
-		if (!shader && !uniform)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderUniform", "key already destroy", *this)
-		auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderUniform", "shader not find", *this)
-		auto &s = element->second;
-		s.rmUniform(uniform);
+		Shader *shader;
+		if ((shader = getShader(key, "rmShaderUniform()")) == NULL)
+			return (*this);
+		shader->rmUniform(uniform);
 		return (*this);
 	}
 
-	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &shader, size_t target)
+	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &key, size_t target)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderUniform", "key destroy", Key<Uniform>(KEY_DESTROY))
-		auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
-		auto &s = element->second; 
-		return (s.getUniform(target));
+		Shader *shader;
+		if ((shader = getShader(key, "getShaderUniform()")) == NULL)
+			return (Key<Uniform>(KEY_DESTROY));
+		return (shader->getUniform(target));
 	}
 
-	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &value)
+	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat4 const &value)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "key aldreadt destroy", Key<Uniform>(KEY_DESTROY))
-		auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderUniform", "shader not find", Key<Uniform>(KEY_DESTROY))
-		auto &s = element->second;
-		return (s.addUniform(flag, value));
+		Shader *shader;
+		if ((shader = getShader(key, "addShaderUniform(mat4)")) == NULL)
+			return (Key<Uniform>(KEY_DESTROY));
+		return (shader->addUniform(flag, value));
 	}
 
-	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4)
+	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat4 const &mat4)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(mat4)", "key destroy", *this)
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(mat4)", "shader not find", *this)
-		auto &s = element->second;
-		s.setUniform(key, mat4);
+		Shader *shader;
+		if ((shader = getShader(keyShader, "setShaderUniform(mat4)")) == NULL)
+			return (*this);
+		shader->setUniform(key, mat4);
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4)
+	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec4 const &vec4)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(vec4)", "key destroy", *this)
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(vec4)", "shader not find", *this)
-			auto &s = element->second;
-		s.setUniform(key, vec4);
+		Shader *shader;
+		if ((shader = getShader(keyShader, "setShaderUniform(vec4)")) == NULL)
+			return (*this);
+		shader->setUniform(key, vec4);
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v)
+	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, float v)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(float)", "key destroy", *this)
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(float)", "shader not find", *this)
-			auto &s = element->second;
-		s.setUniform(key, v);
+		Shader *shader;
+		if ((shader = getShader(keyShader, "setShaderUniform(float)")) == NULL)
+			return (*this);
+		shader->setUniform(key, v);
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3)
+	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat3 const &mat3)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(mat3)", "key destroy", *this)
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderUniform(mat3)", "shader not find", *this)
-			auto &s = element->second;
-		s.setUniform(key, mat3);
+		Shader *shader;
+		if ((shader = getShader(keyShader, "setShaderUniform(mat3)")) == NULL)
+			return (*this);
+		shader->setUniform(key, mat3);
 		return (*this);
 	}
 
-	Key<Sampler> ShadingManager::addShaderSampler(Key<Shader> const &shader, std::string const &flag)
+	Key<Sampler> ShadingManager::addShaderSampler(Key<Shader> const &keyShader, std::string const &flag)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderSampler", "key already destroy", Key<Sampler>(KEY_DESTROY))
-		auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderSampler", "shader not find", Key<Sampler>(KEY_DESTROY))
-			auto &s = element->second;
-		return (s.addSampler(flag));
+		Shader *shader;
+		if ((shader = getShader(keyShader, "addShaderSampler()")) == NULL)
+			return (Key<Sampler>(KEY_DESTROY));
+		return (shader->addSampler(flag));
 	}
 
-	ShadingManager &ShadingManager::rmShaderSampler(Key<Shader> const &shader, Key<Sampler> &uniform)
+	ShadingManager &ShadingManager::rmShaderSampler(Key<Shader> const &key, Key<Sampler> &uniform)
 	{
-		if (!shader && !uniform)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderSampler", "key already destroy", *this)
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderSampler", "shader not find", *this)
-		auto &s = element->second;
-		s.rmSampler(uniform);
+		Shader *shader;
+		if ((shader = getShader(key, "rmShaderSampler()")) == NULL)
+			return (*this);
+		shader->rmSampler(uniform);
 		return (*this);
 	}
 
-	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &shader, size_t target)
+	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderSampler", "key destroy", Key<Sampler>(KEY_DESTROY))
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderSampler", "shader not find", Key<Sampler>(KEY_DESTROY))
-		auto &s = element->second;
-		return (s.getSampler(target));
+		Shader *shader;
+		if ((shader = getShader(keyShader, "getShaderSampler()")) == NULL)
+			return (Key<Sampler>(KEY_DESTROY));
+		return (shader->getSampler(target));
 	}
 
-	ShadingManager &ShadingManager::setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Texture const &texture)
+	ShadingManager &ShadingManager::setShaderSampler(Key<Shader> const &keyShader, Key<Sampler> const &keySampler, Key<Texture> const &keyTexture)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderSampler()", "key destroy", *this)
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderSampler", "shader not find", *this)
-		auto &s = element->second;
-		s.setSampler(key, texture);
+		Shader *shader;
+		if ((shader = getShader(keyShader, "setShaderSampler()")) == NULL)
+			return (*this);
+		Texture *texture;
+		if ((texture = getTexture(keyTexture, "setShaderSampler()")) == NULL)
+			return (*this);
+		shader->setSampler(keySampler, *texture);
 		return (*this);
 	}
 
@@ -247,72 +209,51 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag)
+	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "key destroy", Key<InterfaceBlock>(KEY_DESTROY))
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "shader not find", Key<InterfaceBlock>(KEY_DESTROY))
-			auto &s = element->second;
-		return (s.addInterfaceBlock(flag));
+		Shader *shader;
+		if ((shader = getShader(keyShader, "getShaderInterfaceBlock()")) == NULL)
+			return (Key<InterfaceBlock>(KEY_DESTROY));
+		return (shader->addInterfaceBlock(flag));
 	}
 
-	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
+	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "key destroy", Key<InterfaceBlock>(KEY_DESTROY))
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(UniformBlock)", "shader not find", Key<InterfaceBlock>(KEY_DESTROY))
-			auto &s = element->second;
-		if (!keyUniformBlock)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(uniformBlock)", "uniformBuffer key destroy", Key<InterfaceBlock>(KEY_DESTROY))
-			auto &ubElement = _uniformBlock.find(keyUniformBlock);
-		if (ubElement == _uniformBlock.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - addShaderInterfaceBlock(uniformBlock)", "uniformBuffer key is not found", Key<InterfaceBlock>(KEY_DESTROY))
-		auto &u = ubElement->second;
-		return (s.addInterfaceBlock(flag, u));
+		Shader *shader;
+		if ((shader = getShader(keyShader, "addShaderInterfaceBlock()")) == NULL)
+			return (Key<InterfaceBlock>(KEY_DESTROY));
+		UniformBlock *uniformBlock;
+		if ((uniformBlock = getUniformBlock(keyUniformBlock, "addShaderInterfaceBlock()")) == NULL)
+			return (Key<InterfaceBlock>(KEY_DESTROY));
+		return (shader->addInterfaceBlock(flag, *uniformBlock));
 	}
 
-	ShadingManager &ShadingManager::rmShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> &interfaceblock)
+	ShadingManager &ShadingManager::rmShaderInterfaceBlock(Key<Shader> const &keyShader, Key<InterfaceBlock> &interfaceblock)
 	{
-		if (!shader && !interfaceblock)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderInterfaceBlock(uniformBlock)", "key already destroy", *this)
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmShaderInterfaceBlock(uniformBlock)", "shader not find", *this)
-			auto &s = element->second;
-		s.rmInterfaceBlock(interfaceblock);
+		Shader *shader;
+		if ((shader = getShader(keyShader, "rmShaderInterfaceBlock()")) == NULL)
+			return (*this);
+		shader->rmInterfaceBlock(interfaceblock);
 		return (*this);
 	}
 
-	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &shader, size_t target)
+	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderInterfaceBlock(uniformBlock)", "key destroy", Key<InterfaceBlock>(KEY_DESTROY))
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getShaderInterfaceBlock(uniformBlock)", "shader not find", Key<InterfaceBlock>(KEY_DESTROY))
-			auto &s = element->second;
-		return (s.getInterfaceBlock(target));
+		Shader *shader;
+		if ((shader = getShader(keyShader, "getShaderInterfaceBlock()")) == NULL)
+			return (Key<InterfaceBlock>(KEY_DESTROY));
+		return (shader->getInterfaceBlock(target));
 	}
 
-	ShadingManager &ShadingManager::setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &key, Key<UniformBlock> const &keyUniformBlock)
+	ShadingManager &ShadingManager::setShaderInterfaceBlock(Key<Shader> const &keyShader, Key<InterfaceBlock> const &keyInterfaceBlock, Key<UniformBlock> const &keyUniformBlock)
 	{
-		if (!shader)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "key destroy", *this)
-			auto &element = _shaders.find(shader);
-		if (element == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "shader not find", *this)
-		auto &s = element->second;
-		if (!keyUniformBlock)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "uniformBuffer key destroy", *this)
-			auto &ubElement = _uniformBlock.find(keyUniformBlock);
-		if (ubElement == _uniformBlock.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - setShaderInterfaceBlock(uniformBlock)", "uniformBuffer key is not found", *this)
-		auto &u = ubElement->second;
-		s.setInterfaceBlock(key, u);
+		Shader *shader;
+		if ((shader = getShader(keyShader, "setShaderInterfaceBlock()")) == NULL)
+			return (*this);
+		UniformBlock *uniformBlock;
+		if ((uniformBlock = getUniformBlock(keyUniformBlock, "setShaderInterfaceBlock()")) == NULL)
+			return (*this);
+		shader->setInterfaceBlock(keyInterfaceBlock, *uniformBlock);
 		return (*this);
 	}
 
@@ -334,13 +275,11 @@ namespace gl
 
 	ShadingManager &ShadingManager::rmTexture(Key<Texture> &key)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmTexture()", "Key invalid", *this);
-		auto &find = _textures.find(key);
-		if (find == _textures.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmTexture()", "element not found", *this);
-		delete find->second;
-		_textures.erase(find);
+		Texture *texture;
+		if ((texture = getTexture(key, "rmTexture()")) == NULL)
+			return (*this);
+		delete texture;
+		_textures.erase(key);
 		key.destroy();
 		return (*this);
 	}
@@ -353,5 +292,43 @@ namespace gl
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
+	}
+
+	GLenum ShadingManager::getTypeTexture(Key<Texture> const &key)
+	{
+		Texture *texture;
+		if ((texture = getTexture(key, "getTypeTexture()")) == NULL)
+			return (GL_NONE);
+		return (texture->getType());
+	}
+
+	Shader *ShadingManager::getShader(Key<Shader> const &key, std::string const &in)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		auto &shader = _shaders.find(key);
+		if (shader == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "shader not find", NULL);
+		return (&shader->second);
+	}
+
+	Texture *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		auto &texture = _textures.find(key);
+		if (texture == _textures.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "texture not find", NULL);
+		return (texture->second);
+	}
+
+	UniformBlock *ShadingManager::getUniformBlock(Key<UniformBlock> const &key, std::string const &in)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		auto &uniformBlock = _uniformBlock.find(key);
+		if (uniformBlock == _uniformBlock.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+		return (&uniformBlock->second);
 	}
 }

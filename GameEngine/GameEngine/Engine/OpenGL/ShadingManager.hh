@@ -27,13 +27,6 @@ namespace gl
 	class ShadingManager : public Dependency
 	{
 	public:
-		struct Attach
-		{
-			Shader const *shaderAttach;
-			UniformBuffer *buffer;
-			//UniformBlock *uniformblock;
-		};
-	public:
 		ShadingManager();
 		~ShadingManager();
 
@@ -44,6 +37,7 @@ namespace gl
 		ShadingManager &rmShader(Key<Shader> &shader);
 		Key<Shader> getShader(size_t index) const;
 		ShadingManager &useShader(Key<Shader> const &s);
+		
 		// uniform
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &value);
@@ -53,11 +47,13 @@ namespace gl
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3);
+		
 		// sampler
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> &uniform);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
-		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Texture const &texture);
+		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
+	
 		// Interface
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag);
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
@@ -87,7 +83,11 @@ namespace gl
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
 		//std::map<Key<Pipeline>, Pipeline> _pipelines;
-
+	private:
+		// tool use in intern
+		Shader *getShader(Key<Shader> const &key, std::string const &in);
+		UniformBlock *getUniformBlock(Key<UniformBlock> const &key, std::string const &in);
+		Texture *getTexture(Key<Texture> const &key, std::string const &in);
 	};
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \

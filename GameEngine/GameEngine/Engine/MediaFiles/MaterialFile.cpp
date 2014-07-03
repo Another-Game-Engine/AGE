@@ -54,25 +54,25 @@ void MaterialFile::Material::setUniforms(std::shared_ptr<OpenGLTools::UniformBuf
 	{
 		glActiveTexture(GL_TEXTURE0);
 		//glBindTexture(GL_TEXTURE_2D, ambientTex->getTexture()->getId());
-		glBindTexture(GL_TEXTURE_2D, ambientTex->getId());
+	//	glBindTexture(GL_TEXTURE_2D, ambientTex->getId());
 	}
 	if (diffuseTex != nullptr)
 	{
 		glActiveTexture(GL_TEXTURE1);
 		//glBindTexture(GL_TEXTURE_2D, diffuseTex->getTexture()->getId());
-		glBindTexture(GL_TEXTURE_2D, diffuseTex->getId());
+	//	glBindTexture(GL_TEXTURE_2D, diffuseTex->getId());
 	}
 	if (specularTex != nullptr)
 	{
 		glActiveTexture(GL_TEXTURE2);
 		//glBindTexture(GL_TEXTURE_2D, specularTex->getTexture()->getId());
-		glBindTexture(GL_TEXTURE_2D, specularTex->getId());
+	//	glBindTexture(GL_TEXTURE_2D, specularTex->getId());
 	}
 	if (normalTex != nullptr)
 	{
 		glActiveTexture(GL_TEXTURE3);
 		//glBindTexture(GL_TEXTURE_2D, normalTex->getTexture()->getId());
-		glBindTexture(GL_TEXTURE_2D, normalTex->getId());
+	//	glBindTexture(GL_TEXTURE_2D, normalTex->getId());
 	}
 }
 
