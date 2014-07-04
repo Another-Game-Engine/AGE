@@ -93,9 +93,9 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &key, size_t target)
+	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &key, size_t target) const
 	{
-		Shader *shader;
+		Shader const *shader;
 		if ((shader = getShader(key, "getShaderUniform()")) == NULL)
 			return (Key<Uniform>(KEY_DESTROY));
 		return (shader->getUniform(target));
@@ -162,9 +162,9 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
+	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target) const
 	{
-		Shader *shader;
+		Shader const *shader;
 		if ((shader = getShader(keyShader, "getShaderSampler()")) == NULL)
 			return (Key<Sampler>(KEY_DESTROY));
 		return (shader->getSampler(target));
@@ -176,7 +176,7 @@ namespace gl
 		if ((shader = getShader(keyShader, "setShaderSampler()")) == NULL)
 			return (*this);
 		Texture *texture;
-		if ((texture = getTexture(keyTexture, "setShaderSampler()")) == NULL)
+		if ((texture = getTexture(keyTexture, "setShaderSampler()", GL_NONE)) == NULL)
 			return (*this);
 		shader->setSampler(keySampler, *texture);
 		return (*this);
@@ -199,7 +199,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<UniformBlock> ShadingManager::getUniformBlock(size_t target)
+	Key<UniformBlock> ShadingManager::getUniformBlock(size_t target) const
 	{
 		if (target >= _uniformBlock.size())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getUniformBlock(size_t target)", "the target is out of range", Key<UniformBlock>(KEY_DESTROY));
@@ -237,9 +237,9 @@ namespace gl
 		return (*this);
 	}
 
-	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
+	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target) const
 	{
-		Shader *shader;
+		Shader const *shader;
 		if ((shader = getShader(keyShader, "getShaderInterfaceBlock()")) == NULL)
 			return (Key<InterfaceBlock>(KEY_DESTROY));
 		return (shader->getInterfaceBlock(target));
@@ -276,7 +276,7 @@ namespace gl
 	ShadingManager &ShadingManager::rmTexture(Key<Texture> &key)
 	{
 		Texture *texture;
-		if ((texture = getTexture(key, "rmTexture()")) == NULL)
+		if ((texture = getTexture(key, "rmTexture()", GL_NONE)) == NULL)
 			return (*this);
 		delete texture;
 		_textures.erase(key);
@@ -284,7 +284,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Texture> ShadingManager::getTexture(size_t target)
+	Key<Texture> ShadingManager::getTexture(size_t target) const
 	{
 		if (target >= _textures.size())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getTexture(size_t target)", "the target is out of range", Key<Texture>(KEY_DESTROY));
@@ -294,10 +294,10 @@ namespace gl
 		return (element->first);
 	}
 
-	GLenum ShadingManager::getTypeTexture(Key<Texture> const &key)
+	GLenum ShadingManager::getTypeTexture(Key<Texture> const &key) const
 	{
-		Texture *texture;
-		if ((texture = getTexture(key, "getTypeTexture()")) == NULL)
+		Texture const *texture;
+		if ((texture = getTexture(key, "getTypeTexture()", GL_NONE)) == NULL)
 			return (GL_NONE);
 		return (texture->getType());
 	}
@@ -312,13 +312,37 @@ namespace gl
 		return (&shader->second);
 	}
 
-	Texture *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in)
+	Shader const *ShadingManager::getShader(Key<Shader> const &key, std::string const &in) const
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		auto &shader = _shaders.find(key);
+		if (shader == _shaders.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "shader not find", NULL);
+		return (&shader->second);
+	}
+
+	Texture const *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in, GLenum type) const
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
 		auto &texture = _textures.find(key);
 		if (texture == _textures.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "texture not find", NULL);
+		if (texture->second->getType() != type && texture->second->getType() != GL_NONE)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "error cast on texture", NULL);
+		return (texture->second);
+	}
+	
+	Texture *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in, GLenum type)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		auto &texture = _textures.find(key);
+		if (texture == _textures.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "texture not find", NULL);
+		if (texture->second->getType() != type && texture->second->getType() != GL_NONE)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "error cast on texture", NULL);
 		return (texture->second);
 	}
 
@@ -330,5 +354,122 @@ namespace gl
 		if (uniformBlock == _uniformBlock.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
 		return (&uniformBlock->second);
+	}
+
+	UniformBlock const *ShadingManager::getUniformBlock(Key<UniformBlock> const &key, std::string const &in) const
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		auto &uniformBlock = _uniformBlock.find(key);
+		if (uniformBlock == _uniformBlock.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+		return (&uniformBlock->second);
+	}
+
+	ShadingManager const &ShadingManager::wrapTexture2D(Key<Texture> const &key, GLint param) const
+	{
+		Texture2D const *texture;
+		if ((texture = (Texture2D *)getTexture(key, "wrapTexture2D", GL_TEXTURE_2D)) == NULL)
+			return (*this);
+		texture->wrap(param);
+		return (*this);
+	}
+
+	ShadingManager const &ShadingManager::filterTexture2D(Key<Texture> const &key, GLint param) const
+	{
+		Texture2D const *texture;
+		if ((texture = (Texture2D *)getTexture(key, "filterTexture2D", GL_TEXTURE_2D)) == NULL)
+			return (*this);
+		texture->filter(param);
+		return (*this);
+	}
+	
+	ShadingManager const &ShadingManager::filterTexture2D(Key<Texture> const &key, GLint minFilter, GLint magFilter) const
+	{
+		Texture2D const *texture;
+		if ((texture = (Texture2D *)getTexture(key, "filterTexture2D", GL_TEXTURE_2D)) == NULL)
+			return (*this);
+		texture->filter(minFilter, magFilter);
+		return (*this);
+	}
+
+	ShadingManager const &ShadingManager::storageTexture2D(Key<Texture> const &key, GLint param) const
+	{
+		Texture2D const *texture;
+		if ((texture = (Texture2D *)getTexture(key, "storageTexture2D", GL_TEXTURE_2D)) == NULL)
+			return (*this);
+		texture->storage(param);
+		return (*this);
+	}
+
+	ShadingManager const &ShadingManager::storageTexture2D(Key<Texture> const &key, GLint pack, GLint unpack) const
+	{
+		Texture2D const *texture;
+		if ((texture = (Texture2D *)getTexture(key, "storageTexture2D", GL_TEXTURE_2D)) == NULL)
+			return (*this);
+		texture->storage(pack, unpack);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setOptionTransferTexture2D(Key<Texture> const &key, GLint level, GLenum format, GLenum type)
+	{
+		Texture2D *texture;
+		if ((texture = (Texture2D *)getTexture(key, "setOptionTransferTexture2D", GL_TEXTURE_2D)) == NULL)
+			return (*this);
+		texture->setOptionTransfer(level, format, type);
+		return (*this);
+	}
+
+	ShadingManager const &ShadingManager::generateMipMapTexture2D(Key<Texture> const &key) const
+	{
+		Texture2D *texture;
+		if ((texture = (Texture2D *)getTexture(key, "generateMipMapTexture2D", GL_TEXTURE_2D)) == NULL)
+			return (*this);
+		texture->generateMipMap();
+		return (*this);
+	}
+
+	ShadingManager const &ShadingManager::writeTexture(Key<Texture> const &key, void *write) const
+	{
+		Texture2D const *texture;
+		if ((texture = (Texture2D *)getTexture(key, "writeTexture", GL_TEXTURE_2D)) == NULL)
+			return (*this);
+		texture->write(write);
+		return (*this);
+	}
+
+	ShadingManager const &ShadingManager::readTexture(Key<Texture> const &key, void *read) const
+	{
+		Texture2D const *texture;
+		if ((texture = (Texture2D *)getTexture(key, "readTexture", GL_TEXTURE_2D)) == NULL)
+			return (*this);
+		texture->read(read);
+		return (*this);
+	}
+
+	ShadingManager const &ShadingManager::bindTexture(Key<Texture> const &key) const
+	{
+		Texture const *texture;
+		if ((texture = getTexture(key, "bindTexture", GL_NONE)) == NULL)
+			return (*this);
+		texture->bind();
+		return (*this);
+	}
+
+	ShadingManager const &ShadingManager::unbindTexture(Key<Texture> const &key) const
+	{
+		Texture const *texture;
+		if ((texture = getTexture(key, "unbindTexture", GL_NONE)) == NULL)
+			return (*this);
+		texture->unbind();
+		return (*this);
+	}
+
+	std::uint8_t ShadingManager::getMaxLevelMipMapTexture2D(Key<Texture> const &key) const
+	{
+		Texture2D *texture;
+		if ((texture = (Texture2D *)getTexture(key, "getMaxLevelMipMapTexture2D", GL_TEXTURE_2D)) == NULL)
+			return (-1);
+		return (texture->getMaxLevelMipMap());
 	}
 }
