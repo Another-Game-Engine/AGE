@@ -32,7 +32,7 @@ public:
 protected:
 	std::size_t _childs;
 	MEDIA_TYPE _type;
-	std::weak_ptr<DependenciesInjector> _dpyManager;
+	std::weak_ptr<DependenciesInjector> _dependencyManager;
 public:
 	AMediaFile();
 	virtual ~AMediaFile();

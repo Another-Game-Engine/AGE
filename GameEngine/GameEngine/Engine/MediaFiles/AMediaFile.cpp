@@ -36,7 +36,7 @@ AMediaFile::AMediaFile(const AMediaFile &o)
 	auto tmpPath = o.path.getFolder() + o.path.getShortFileName();
 	tmpPath += "_copy.cpd";
 	path = File(tmpPath);
-	_dpyManager = o._dpyManager;
+	_dependencyManager = o._dependencyManager;
 }
 
 AMediaFile &AMediaFile::operator=(const AMediaFile &o)
@@ -46,7 +46,7 @@ AMediaFile &AMediaFile::operator=(const AMediaFile &o)
 		_type = o._type;
 		name = o.name;
 		name += "_copy";
-		_dpyManager = o._dpyManager;
+		_dependencyManager = o._dependencyManager;
 	}
 	return *this;
 }

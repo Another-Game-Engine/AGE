@@ -78,7 +78,7 @@ namespace AGE
 	void AssetsManager::loadSubmesh(SubMeshData &data, SubMeshInstance &mesh)
 	{
 		auto &pools = _pools.find(data.infos)->second;
-		auto geometryManager = _dpyManager.lock()->getInstance<gl::GeometryManager>();
+		auto geometryManager = _dependencyManager.lock()->getInstance<gl::GeometryManager>();
 		assert(geometryManager != nullptr);
 
 		std::size_t size = data.infos.count();
@@ -158,7 +158,7 @@ namespace AGE
 	// Create pool for meshs
 	void AssetsManager::createPool(const std::bitset<MeshInfos::END> &infos)
 	{
-		auto geometryManager = _dpyManager.lock()->getInstance<gl::GeometryManager>();
+		auto geometryManager = _dependencyManager.lock()->getInstance<gl::GeometryManager>();
 		assert(geometryManager != nullptr);
 
 		std::size_t size = infos.count();

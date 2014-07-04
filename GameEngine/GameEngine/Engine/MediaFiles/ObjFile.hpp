@@ -28,7 +28,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		gl::GeometryManager *geomanager; //manager
 		//Vertice<4>					buffer; //-V112
 	private:
-		std::weak_ptr<DependenciesInjector> _dpyManager;
+		std::weak_ptr<DependenciesInjector> _dependencyManager;
 		friend struct ObjFile;
 	public:
 		Geometry();

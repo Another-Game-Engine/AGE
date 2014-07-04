@@ -60,7 +60,7 @@ public:
 				_instances.resize(id + 1, nullptr);
 			assert(_instances[id] == nullptr); // instance already defined
 			auto n = new T(args...);
-			n->_dpyManager = shared_from_this();
+			n->_dependencyManager = shared_from_this();
 			_instances[id] = n;
 		}
 		return dynamic_cast<T*>(_instances[id]);
