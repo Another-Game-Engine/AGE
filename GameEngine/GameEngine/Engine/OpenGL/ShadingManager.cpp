@@ -93,7 +93,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &key, size_t target) const
+	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &key, size_t target)
 	{
 		Shader const *shader;
 		if ((shader = getShader(key, "getShaderUniform()")) == NULL)
@@ -162,7 +162,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target) const
+	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
 	{
 		Shader const *shader;
 		if ((shader = getShader(keyShader, "getShaderSampler()")) == NULL)
@@ -237,7 +237,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target) const
+	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
 	{
 		Shader const *shader;
 		if ((shader = getShader(keyShader, "getShaderInterfaceBlock()")) == NULL)
@@ -294,7 +294,7 @@ namespace gl
 		return (element->first);
 	}
 
-	GLenum ShadingManager::getTypeTexture(Key<Texture> const &key) const
+	GLenum ShadingManager::getTypeTexture(Key<Texture> const &key)
 	{
 		Texture const *texture;
 		if ((texture = getTexture(key, "getTypeTexture()", GL_NONE)) == NULL)
@@ -308,49 +308,31 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
 		if (_shaders.size() == 0)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no shader present in pool", NULL);
+		if (key == _optimizeShaderSearch.first)
+			return (_optimizeShaderSearch.second);
 		auto &shader = _shaders.find(key);
 		if (shader == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "shader not find", NULL);
+		_optimizeShaderSearch.first = key;
+		_optimizeShaderSearch.second = &shader->second;
 		return (&shader->second);
 	}
 
-	Shader const *ShadingManager::getShader(Key<Shader> const &key, std::string const &in) const
-	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
-		if (_shaders.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no shader present in pool", NULL);
-		auto &shader = _shaders.find(key);
-		if (shader == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "shader not find", NULL);
-		return (&shader->second);
-	}
-
-	Texture const *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in, GLenum type) const
-	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
-		if (_textures.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no texture present in pool", NULL);
-		auto &texture = _textures.find(key);
-		if (texture == _textures.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "texture not find", NULL);
-		if (texture->second->getType() != type && type != GL_NONE)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "error cast on texture", NULL);
-		return (texture->second);
-	}
-	
 	Texture *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in, GLenum type)
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
 		if (_textures.size() == 0)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no texture present in pool", NULL);
+		if (key == _optimizeTextureSearch.first)
+			return (_optimizeTextureSearch.second);
 		auto &texture = _textures.find(key);
 		if (texture == _textures.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "texture not find", NULL);
 		if (texture->second->getType() != type && type != GL_NONE)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "error cast on texture", NULL);
+		_optimizeTextureSearch.first = key;
+		_optimizeTextureSearch.second = texture->second;
 		return (texture->second);
 	}
 
@@ -360,25 +342,17 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
 		if (_uniformBlock.size() == 0)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+		if (key == _optimizeUniformBlockSearch.first)
+			return (_optimizeUniformBlockSearch.second);
 		auto &uniformBlock = _uniformBlock.find(key);
 		if (uniformBlock == _uniformBlock.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+		_optimizeUniformBlockSearch.first = key;
+		_optimizeUniformBlockSearch.second = &uniformBlock->second;
 		return (&uniformBlock->second);
 	}
 
-	UniformBlock const *ShadingManager::getUniformBlock(Key<UniformBlock> const &key, std::string const &in) const
-	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
-		if (_uniformBlock.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
-		auto &uniformBlock = _uniformBlock.find(key);
-		if (uniformBlock == _uniformBlock.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
-		return (&uniformBlock->second);
-	}
-
-	ShadingManager const &ShadingManager::wrapTexture2D(Key<Texture> const &key, GLint param) const
+	ShadingManager &ShadingManager::wrapTexture2D(Key<Texture> const &key, GLint param)
 	{
 		Texture2D const *texture;
 		if ((texture = (Texture2D *)getTexture(key, "wrapTexture2D", GL_TEXTURE_2D)) == NULL)
@@ -387,7 +361,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager const &ShadingManager::filterTexture2D(Key<Texture> const &key, GLint param) const
+	ShadingManager &ShadingManager::filterTexture2D(Key<Texture> const &key, GLint param)
 	{
 		Texture2D const *texture;
 		if ((texture = (Texture2D *)getTexture(key, "filterTexture2D", GL_TEXTURE_2D)) == NULL)
@@ -396,7 +370,7 @@ namespace gl
 		return (*this);
 	}
 	
-	ShadingManager const &ShadingManager::filterTexture2D(Key<Texture> const &key, GLint minFilter, GLint magFilter) const
+	ShadingManager &ShadingManager::filterTexture2D(Key<Texture> const &key, GLint minFilter, GLint magFilter)
 	{
 		Texture2D const *texture;
 		if ((texture = (Texture2D *)getTexture(key, "filterTexture2D", GL_TEXTURE_2D)) == NULL)
@@ -405,7 +379,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager const &ShadingManager::storageTexture2D(Key<Texture> const &key, GLint param) const
+	ShadingManager &ShadingManager::storageTexture2D(Key<Texture> const &key, GLint param)
 	{
 		Texture2D const *texture;
 		if ((texture = (Texture2D *)getTexture(key, "storageTexture2D", GL_TEXTURE_2D)) == NULL)
@@ -414,7 +388,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager const &ShadingManager::storageTexture2D(Key<Texture> const &key, GLint pack, GLint unpack) const
+	ShadingManager &ShadingManager::storageTexture2D(Key<Texture> const &key, GLint pack, GLint unpack)
 	{
 		Texture2D const *texture;
 		if ((texture = (Texture2D *)getTexture(key, "storageTexture2D", GL_TEXTURE_2D)) == NULL)
@@ -432,7 +406,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager const &ShadingManager::generateMipMapTexture2D(Key<Texture> const &key) const
+	ShadingManager &ShadingManager::generateMipMapTexture2D(Key<Texture> const &key)
 	{
 		Texture2D *texture;
 		if ((texture = (Texture2D *)getTexture(key, "generateMipMapTexture2D", GL_TEXTURE_2D)) == NULL)
@@ -441,7 +415,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager const &ShadingManager::writeTexture(Key<Texture> const &key, void *write) const
+	ShadingManager &ShadingManager::writeTexture(Key<Texture> const &key, void *write)
 	{
 		Texture2D const *texture;
 		if ((texture = (Texture2D *)getTexture(key, "writeTexture", GL_TEXTURE_2D)) == NULL)
@@ -450,7 +424,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager const &ShadingManager::readTexture(Key<Texture> const &key, void *read) const
+	ShadingManager &ShadingManager::readTexture(Key<Texture> const &key, void *read)
 	{
 		Texture2D const *texture;
 		if ((texture = (Texture2D *)getTexture(key, "readTexture", GL_TEXTURE_2D)) == NULL)
@@ -459,7 +433,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager const &ShadingManager::bindTexture(Key<Texture> const &key) const
+	ShadingManager &ShadingManager::bindTexture(Key<Texture> const &key)
 	{
 		Texture const *texture;
 		if ((texture = getTexture(key, "bindTexture", GL_NONE)) == NULL)
@@ -468,7 +442,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager const &ShadingManager::unbindTexture(Key<Texture> const &key) const
+	ShadingManager &ShadingManager::unbindTexture(Key<Texture> const &key) 
 	{
 		Texture const *texture;
 		if ((texture = getTexture(key, "unbindTexture", GL_NONE)) == NULL)
@@ -477,7 +451,7 @@ namespace gl
 		return (*this);
 	}
 
-	std::uint8_t ShadingManager::getMaxLevelMipMapTexture2D(Key<Texture> const &key) const
+	std::uint8_t ShadingManager::getMaxLevelMipMapTexture2D(Key<Texture> const &key)
 	{
 		Texture2D *texture;
 		if ((texture = (Texture2D *)getTexture(key, "getMaxLevelMipMapTexture2D", GL_TEXTURE_2D)) == NULL)

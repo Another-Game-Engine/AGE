@@ -42,7 +42,7 @@ namespace gl
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &value);
 		ShadingManager &rmShaderUniform(Key<Shader> const &shader, Key<Uniform> &uniform);
-		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index) const;
+		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
@@ -51,14 +51,14 @@ namespace gl
 		// sampler
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> &uniform);
-		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index) const;
+		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
 	
 		// Interface
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag);
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
 		ShadingManager &rmShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> &key);
-		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index) const;
+		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &key, Key<UniformBlock> const &keyUniformBlock);
 
 		// uniform Block
@@ -70,34 +70,36 @@ namespace gl
 		// Texture
 		Key<Texture> addTexture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping);
 		Key<Texture> addTextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation);
-		ShadingManager const &wrapTexture2D(Key<Texture> const &key, GLint param) const;
-		ShadingManager const &filterTexture2D(Key<Texture> const &key, GLint param) const;
-		ShadingManager const &filterTexture2D(Key<Texture> const &key, GLint minFilter, GLint magFilter) const;
-		ShadingManager const &storageTexture2D(Key<Texture> const &key, GLint param) const;
-		ShadingManager const &storageTexture2D(Key<Texture> const &key, GLint pack, GLint unpack) const;
+		ShadingManager &wrapTexture2D(Key<Texture> const &key, GLint param);
+		ShadingManager &filterTexture2D(Key<Texture> const &key, GLint param);
+		ShadingManager &filterTexture2D(Key<Texture> const &key, GLint minFilter, GLint magFilter);
+		ShadingManager &storageTexture2D(Key<Texture> const &key, GLint param);
+		ShadingManager &storageTexture2D(Key<Texture> const &key, GLint pack, GLint unpack) ;
 		ShadingManager &setOptionTransferTexture2D(Key<Texture> const &key, GLint level = 0, GLenum format = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE);
-		ShadingManager const &generateMipMapTexture2D(Key<Texture> const &key) const;
-		std::uint8_t getMaxLevelMipMapTexture2D(Key<Texture> const &key) const;
-		ShadingManager const &writeTexture(Key<Texture> const &key, void *write) const;
-		ShadingManager const &readTexture(Key<Texture> const &key, void *read) const;
-		ShadingManager const &bindTexture(Key<Texture> const &key) const;
-		ShadingManager const &unbindTexture(Key<Texture> const &key) const;
+		ShadingManager &generateMipMapTexture2D(Key<Texture> const &key);
+		std::uint8_t getMaxLevelMipMapTexture2D(Key<Texture> const &key);
+		ShadingManager &writeTexture(Key<Texture> const &key, void *write);
+		ShadingManager &readTexture(Key<Texture> const &key, void *read);
+		ShadingManager &bindTexture(Key<Texture> const &key);
+		ShadingManager &unbindTexture(Key<Texture> const &key);
 		ShadingManager &rmTexture(Key<Texture> &key);
 		Key<Texture> getTexture(size_t target) const;
-		GLenum getTypeTexture(Key<Texture> const &key) const;
+		GLenum getTypeTexture(Key<Texture> const &key);
 
 	private:
 		std::map<Key<Shader>, Shader> _shaders;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
 
+		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
+		std::pair<Key<UniformBlock>, UniformBlock *> _optimizeUniformBlockSearch;
+		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
+
+
 		// tool use in intern
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
-		Shader const *getShader(Key<Shader> const &key, std::string const &in) const;
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key, std::string const &in);
-		UniformBlock const *getUniformBlock(Key<UniformBlock> const &key, std::string const &in) const;
 		Texture *getTexture(Key<Texture> const &key, std::string const &in, GLenum type);
-		Texture const *getTexture(Key<Texture> const &key, std::string const &in, GLenum type) const;
 	};
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
