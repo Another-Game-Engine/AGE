@@ -76,7 +76,9 @@ public:
 	}
 
 	virtual ~ConfigurationManager()
-	{}
+	{
+
+	}
 
 	void setConfigurationFilePath(const File &file)
 	{
