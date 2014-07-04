@@ -306,6 +306,8 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_shaders.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no shader present in pool", NULL);
 		auto &shader = _shaders.find(key);
 		if (shader == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "shader not find", NULL);
@@ -316,6 +318,8 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_shaders.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no shader present in pool", NULL);
 		auto &shader = _shaders.find(key);
 		if (shader == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "shader not find", NULL);
@@ -326,10 +330,12 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_textures.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no texture present in pool", NULL);
 		auto &texture = _textures.find(key);
 		if (texture == _textures.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "texture not find", NULL);
-		if (texture->second->getType() != type && texture->second->getType() != GL_NONE)
+		if (texture->second->getType() != type && type != GL_NONE)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "error cast on texture", NULL);
 		return (texture->second);
 	}
@@ -338,10 +344,12 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_textures.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no texture present in pool", NULL);
 		auto &texture = _textures.find(key);
 		if (texture == _textures.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "texture not find", NULL);
-		if (texture->second->getType() != type && texture->second->getType() != GL_NONE)
+		if (texture->second->getType() != type && type != GL_NONE)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "error cast on texture", NULL);
 		return (texture->second);
 	}
@@ -350,6 +358,8 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_uniformBlock.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
 		auto &uniformBlock = _uniformBlock.find(key);
 		if (uniformBlock == _uniformBlock.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
@@ -360,6 +370,8 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_uniformBlock.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
 		auto &uniformBlock = _uniformBlock.find(key);
 		if (uniformBlock == _uniformBlock.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);

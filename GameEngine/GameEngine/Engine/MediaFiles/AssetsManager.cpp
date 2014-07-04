@@ -30,7 +30,7 @@ void AssetsManager::add(std::shared_ptr<AMediaFile> f)
 	_files.insert(std::make_pair(f->name, f));
 }
 
-std::shared_ptr<AMediaFile> AssetsManager::loadFromFile(const File &file)
+std::shared_ptr<AMediaFile> AssetsManager::loadFromFile(const File &file, gl::ShadingManager &manager)
 {
 	if (file.getExtension() == "bullet")
 		return loadBulletFile(file);
@@ -76,7 +76,7 @@ std::shared_ptr<AMediaFile> AssetsManager::loadFromFile(const File &file)
 	return res;
 }
 
-void AssetsManager::loadFromList(const File &file)
+void AssetsManager::loadFromList(const File &file, gl::ShadingManager &manager)
 {
 	assert(file.exists() == true && "File does not exist.");
 
@@ -87,7 +87,7 @@ void AssetsManager::loadFromList(const File &file)
 
 	for (auto &e : list)
 	{
-		loadFromFile(File(e.second));
+		loadFromFile(File(e.second), manager);
 	}
 }
 

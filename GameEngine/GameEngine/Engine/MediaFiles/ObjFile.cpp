@@ -10,6 +10,7 @@
 #include <Utils/GlmSerialization.hpp>
 #include <memory>
 #include "AssetsManager.hpp"
+#include <OpenGL/ShadingManager.hh>
 
 ObjFile::ObjFile() : MediaFile<ObjFile>()
 {
@@ -124,6 +125,7 @@ void ObjFile::load(cereal::PortableBinaryInputArchive &ar)
 	}
 	std::string matName;
 	ar(matName);
+	auto manager = _dpyManager.lock()->getInstance<gl::ShadingManager>();
 	if (matName != "NULL")
-		material = std::static_pointer_cast<MaterialFile>(_dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile(File(matName)));
+		material = std::static_pointer_cast<MaterialFile>(_dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile(File(matName), *manager));
 }

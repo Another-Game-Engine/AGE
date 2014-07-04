@@ -16,7 +16,6 @@
 #include <Utils/GlmSerialization.hpp>
 #include <OpenGL/Key.hh>
 #include <OpenGL/Texture.hh>
-#include <OpenGL/ShadingManager.hh>
 
 struct TextureFile : public MediaFile<TextureFile>
 {
@@ -30,7 +29,6 @@ struct TextureFile : public MediaFile<TextureFile>
 	void load(cereal::PortableBinaryInputArchive &ar);
 
 	gl::Key<gl::Texture> const &getTexture() const;
-	void setManager(gl::ShadingManager &manager);
 
 	std::vector<GLbyte> datas;
 	GLint		width, height;
@@ -40,8 +38,6 @@ struct TextureFile : public MediaFile<TextureFile>
 	GLenum		minFilter;
 	GLenum		magFilter;
 	gl::Key<gl::Texture> key;
-private:
-	gl::ShadingManager *_manager;
 
 };
 

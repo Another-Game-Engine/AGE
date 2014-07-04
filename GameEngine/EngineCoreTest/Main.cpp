@@ -125,25 +125,6 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	return true;
 }
 
-bool loadAssets(std::shared_ptr<Engine> e)
-{
-#ifdef RENDERING_ACTIVATED
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
-//	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
-#endif
-#ifdef COMPLEX_MESH
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__dragon.cpd"));
-#endif
-
-	return true;
-}
-
 int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
@@ -200,8 +181,6 @@ int			main(int ac, char **av)
 	e->setInstance<gl::ShadingManager>();
 
 	if (!loadShaders(e))
-		return EXIT_FAILURE;
-	if (!loadAssets(e))
 		return EXIT_FAILURE;
 #endif
 

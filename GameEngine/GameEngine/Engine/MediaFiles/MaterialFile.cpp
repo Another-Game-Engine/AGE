@@ -1,6 +1,7 @@
 #include "MaterialFile.hpp"
 #include "AssetsManager.hpp"
 #include "ObjFile.hpp"
+#include <OpenGL/ShadingManager.hh>
 
 MaterialFile::MaterialFile() : MediaFile<MaterialFile>()
 {
@@ -123,15 +124,19 @@ void MaterialFile::Material::load(cereal::PortableBinaryInputArchive &ar)
 	ar(name, ambient, diffuse, specular, transmittance, emission, shininess, paramVec2, paramVec3, paramVec4, paramMat2, paramMat3, paramMat4, paramInt, paramFloat);
 	std::string a, b, c, d;
 	auto manager = _dpyManager.lock()->getInstance<AssetsManager>();
+	auto shading = _dpyManager.lock()->getInstance<gl::ShadingManager>();
 	ar(a, b, c, d);
-	if (a != "NULL")
-		ambientTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(a)));
-	if (b != "NULL")
-		diffuseTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(b)));
-	if (c != "NULL")
-		specularTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(c)));
-	if (d != "NULL")
-		normalTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(d)));
+	if (shading)
+	{
+		if (a != "NULL")
+			ambientTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(a), *shading));
+		if (b != "NULL")
+			diffuseTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(b), *shading));
+		if (c != "NULL")
+			specularTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(c), *shading));
+		if (d != "NULL")
+			normalTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(d), *shading));
+	}
 }
 
 

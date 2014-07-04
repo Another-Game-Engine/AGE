@@ -90,7 +90,7 @@ namespace gl
 		std::map<Key<Shader>, Shader> _shaders;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
-	
+
 		// tool use in intern
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
 		Shader const *getShader(Key<Shader> const &key, std::string const &in) const;

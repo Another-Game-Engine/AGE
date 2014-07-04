@@ -17,6 +17,7 @@
 
 struct AMediaFile;
 class Engine;
+namespace gl { class ShadingManager; }
 
 class AssetsManager : public Dependency, public std::enable_shared_from_this<AssetsManager>
 {
@@ -45,8 +46,8 @@ public:
 		return std::static_pointer_cast<T>(it->second);
 	}
 
-	std::shared_ptr<AMediaFile> loadFromFile(const File &file);
-	void loadFromList(const File &file);
+	std::shared_ptr<AMediaFile> loadFromFile(const File &file, gl::ShadingManager &manager);
+	void loadFromList(const File &file, gl::ShadingManager &manager);
 	std::shared_ptr<AMediaFile> loadBulletFile(const File &file);
 
 	template <class T>

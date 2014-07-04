@@ -34,6 +34,7 @@ public:
 
 	virtual bool 			userStart()
 	{
+
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
 //		addSystem<CollisionAdder>(1);
@@ -48,6 +49,20 @@ public:
 	auto &g = *getInstance<gl::GeometryManager>();
 #if NEW_SHADER
 	camerasystem->setManager(m, g);
+#endif
+
+#ifdef RENDERING_ACTIVATED
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"), m);
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"), m);
+	getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"), m);
+	//	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
+#endif
+#ifdef COMPLEX_MESH
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
+	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__dragon.cpd"));
 #endif
 
 #ifdef SIMPLE_RENDERING
