@@ -4,7 +4,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <array>
-
+#include <cassert>
 
 namespace gl
 {
@@ -46,7 +46,7 @@ namespace gl
 	};
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
+	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
 
 
 	template <typename TYPE>

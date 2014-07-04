@@ -3,10 +3,11 @@
 #include <OpenGL/Data.hh>
 #include <iostream>
 #include <string>
+#include <cassert>
 
 #define INDEXPOOL 1
 #define DEBUG_MESSAGE(type, from, key_word, reason, end) \
-	{ std::cerr << std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]" << std::endl; return (end); }
+	{ assert(0 && std::string(std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]").c_str()); return end; }
 
 namespace gl
 {
