@@ -241,9 +241,13 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
 		if (_vertexPool.size() == 0)
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "no element into vertex pool", NULL);
+		if (_optimizerVertexPoolSearch.first == key)
+			return (_optimizerVertexPoolSearch.second);
 		auto &vertexPool = _vertexPool.find(key);
 		if (vertexPool == _vertexPool.end())
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "element not found", NULL);
+		_optimizerVertexPoolSearch.first = key;
+		_optimizerVertexPoolSearch.second = &vertexPool->second;
 		return (&vertexPool->second);
 	}
 
@@ -253,9 +257,13 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
 		if (_indexPool.size() == 0)
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "no element into index pool", NULL);
+		if (_optimizerIndexPoolSearch.first == key)
+			return (_optimizerIndexPoolSearch.second);
 		auto &indexPool = _indexPool.find(key);
 		if (indexPool == _indexPool.end())
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "element not found", NULL);
+		_optimizerIndexPoolSearch.first = key;
+		_optimizerIndexPoolSearch.second = &indexPool->second;
 		return (&indexPool->second);
 	}
 
@@ -265,9 +273,13 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
 		if (_indices.size() == 0)
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "no element into indices", NULL);
+		if (_optimizerIndicesSearch.first == key)
+			return (_optimizerIndicesSearch.second);
 		auto &indices = _indices.find(key);
 		if (indices == _indices.end())
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "element not found", NULL);
+		_optimizerIndicesSearch.first = key;
+		_optimizerIndicesSearch.second = &indices->second;
 		return (&indices->second);
 	}
 
@@ -277,9 +289,13 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
 		if (_vertices.size() == 0)
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "no element into vertices", NULL);
+		if (_optimizerVerticesSearch.first == key)
+			return (_optimizerVerticesSearch.second);
 		auto &vertices = _vertices.find(key);
 		if (vertices == _vertices.end())
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "element not found", NULL);
+		_optimizerVerticesSearch.first = key;
+		_optimizerVerticesSearch.second = &vertices->second;
 		return (&vertices->second);
 	}
 
@@ -287,11 +303,15 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
+		if (_optimizerVertexAttachSearch.first == key)
+			return (_optimizerVertexAttachSearch.second);
 		if (_vertexAttach.size() == 0)
 			return (NULL);
 		auto &verticesAttach = _vertexAttach.find(key);
 		if (verticesAttach == _vertexAttach.end())
 			return (NULL);
+		_optimizerVertexAttachSearch.first = key;
+		_optimizerVertexAttachSearch.second = &verticesAttach->second;
 		return (&verticesAttach->second);
 	}
 
@@ -301,9 +321,13 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
 		if (_indexAttach.size() == 0)
 			return (NULL);
+		if (_optimizerIndexAttachSearch.first == key)
+			return (_optimizerIndexAttachSearch.second);
 		auto &indexAttach = _indexAttach.find(key);
 		if (indexAttach == _indexAttach.end())
 			return (NULL);
+		_optimizerIndexAttachSearch.first = key;
+		_optimizerIndexAttachSearch.second = &indexAttach->second;
 		return (&indexAttach->second);
 	}
 }
