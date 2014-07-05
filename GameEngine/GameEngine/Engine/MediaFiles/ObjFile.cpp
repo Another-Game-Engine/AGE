@@ -40,6 +40,7 @@ ObjFile &ObjFile::operator=(const ObjFile &o)
 
 ObjFile::Geometry::Geometry()
 		: name("")
+		, geomanager(nullptr)
 {
 		if (geomanager)
 		{
@@ -61,7 +62,7 @@ ObjFile::Geometry::Geometry(const ObjFile::Geometry &o)
 		colors = o.colors;
 		uvs = o.uvs;
 		indices = o.indices;
-		_dpyManager = o._dpyManager;
+		_dependencyManager = o._dependencyManager;
 		init();
 	}
 
@@ -75,7 +76,7 @@ ObjFile::Geometry &ObjFile::Geometry::operator=(const ObjFile::Geometry &o)
 			colors = o.colors;
 			uvs = o.uvs;
 			indices = o.indices;
-			_dpyManager = o._dpyManager;
+			_dependencyManager = o._dependencyManager;
 			init();
 		}
 		return *this;
@@ -93,7 +94,7 @@ void ObjFile::Geometry::save(cereal::PortableBinaryOutputArchive &ar) const
 
 	void ObjFile::Geometry::init()
 	{
-		geomanager = _dpyManager.lock()->getInstance<gl::GeometryManager>();
+		geomanager = _dependencyManager.lock()->getInstance<gl::GeometryManager>();
 		void *buffer[4] = { &vertices[0].x ,
 							&colors[0].x,
 							&normals[0].x,
@@ -119,11 +120,11 @@ void ObjFile::load(cereal::PortableBinaryInputArchive &ar)
 	ar(geometries);
 	for (auto &e : geometries)
 	{
-		e._dpyManager = _dpyManager;
+		e._dependencyManager = _dependencyManager;
 		e.init();
 	}
 	std::string matName;
 	ar(matName);
 	if (matName != "NULL")
-		material = std::static_pointer_cast<MaterialFile>(_dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile(File(matName)));
+		material = std::static_pointer_cast<MaterialFile>(_dependencyManager.lock()->getInstance<AssetsManager>()->loadFromFile(File(matName)));
 }

@@ -186,7 +186,7 @@ namespace Component
 		btKinematicCharacterController *_controller;
 		btPairCachingGhostObject *_ghost;
 		btConvexShape *_shape;
-		std::shared_ptr<BulletDynamicManager> _manager;
+		BulletDynamicManager *_manager;
 	};
 }
 

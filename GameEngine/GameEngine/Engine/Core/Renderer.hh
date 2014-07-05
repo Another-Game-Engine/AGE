@@ -11,7 +11,7 @@
 #include <Utils/Dependency.hpp>
 #include <memory>
 
-class Renderer : public Dependency
+class Renderer : public Dependency<Renderer>
 {
 private:
 	OpenGLTools::Framebuffer                        _fbo;

@@ -67,7 +67,7 @@ struct ConfigurationValue : public Configuration
 	std::function<void(const T &value)> callback;
 };
 
-class ConfigurationManager : public Dependency
+class ConfigurationManager : public Dependency<ConfigurationManager>
 {
 public:
 	ConfigurationManager(const File &saveFile = File("./ConfigurationSaveFile.conf"))
@@ -76,7 +76,9 @@ public:
 	}
 
 	virtual ~ConfigurationManager()
-	{}
+	{
+
+	}
 
 	void setConfigurationFilePath(const File &file)
 	{

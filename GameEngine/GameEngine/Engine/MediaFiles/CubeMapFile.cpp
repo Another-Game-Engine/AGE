@@ -70,7 +70,7 @@ void CubeMapFile::load(cereal::PortableBinaryInputArchive &ar)
 {
 	std::string _px, _py, _pz, _nx, _ny, _nz;
 	ar(_px, _py, _pz, _nx, _ny, _nz);
-	auto assetsManager = _dpyManager.lock()->getInstance<AssetsManager>();
+	auto assetsManager = _dependencyManager.lock()->getInstance<AssetsManager>();
 	px = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_px)));
 	py = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_py)));
 	pz = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_pz)));

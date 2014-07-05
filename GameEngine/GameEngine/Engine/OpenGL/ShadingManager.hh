@@ -24,7 +24,7 @@ namespace gl
 	//!\version v1.0
 	//!\class ShadingManager
 	//!\brief Handle the shading of the object
-	class ShadingManager : public Dependency
+	class ShadingManager : public Dependency<ShadingManager>
 	{
 	public:
 		struct Attach

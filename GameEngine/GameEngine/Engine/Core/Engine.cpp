@@ -30,7 +30,7 @@ bool        Engine::init(int mode, unsigned int swidth, unsigned int sheight, st
 		std::cerr << "glewInit Failed" << std::endl;
 		return (false);
 	}
-	if (!getInstance<Renderer>()->init())
+	if (hasInstance<Renderer>() && !getInstance<Renderer>()->init())
 		return false;
 	glEnable(GL_ALPHA_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -53,7 +53,7 @@ bool 		Engine::update()
 
 	timer->update();
     inputs->clearInputs();
-	context->updateEvents(*inputs.get());
+	context->updateEvents(*inputs);
 	sceneManager->update(time);
 	context->flush();
 
@@ -62,9 +62,11 @@ bool 		Engine::update()
 
 void 		Engine::stop()
 {
-	auto renderer = getInstance<Renderer>();
-	auto context = getInstance<IRenderContext>();
+	auto renderer = hasInstance<Renderer>() ? getInstance<Renderer>() : nullptr;
+	auto context = hasInstance<IRenderContext>() ? getInstance<IRenderContext>() : nullptr;
 
-	renderer->uninit();
-	context->stop();
+	if (renderer)
+		renderer->uninit();
+	if (context)
+		context->stop();
 }

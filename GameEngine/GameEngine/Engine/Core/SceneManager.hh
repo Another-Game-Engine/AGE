@@ -7,7 +7,7 @@
 
 class AScene;
 
-class SceneManager : public Dependency
+class SceneManager : public Dependency<SceneManager>
 {
 private:
 	std::map<std::string, std::shared_ptr<AScene>>	_scenes;

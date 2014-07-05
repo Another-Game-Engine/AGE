@@ -1,11 +1,10 @@
 #ifndef   __DEPENDENCIES_INJECTOR_HPP__
 # define  __DEPENDENCIES_INJECTOR_HPP__
 
-#include <map>
-#include <typeinfo>
 #include <cassert>
 #include <Utils/Dependency.hpp>
 #include <memory>
+#include <vector>
 
 class DependenciesInjector : public std::enable_shared_from_this<DependenciesInjector>
 {
@@ -13,7 +12,7 @@ private:
 	DependenciesInjector(DependenciesInjector const &);
 	DependenciesInjector &operator=(DependenciesInjector const &);
 
-	std::map<size_t, std::shared_ptr<Dependency>>         _instances;
+	std::vector<IDependency*>             _instances;
 	std::weak_ptr<DependenciesInjector>                   _parent;
 public:
 	DependenciesInjector(std::weak_ptr<DependenciesInjector> &&parent = std::weak_ptr<DependenciesInjector>())
@@ -23,6 +22,11 @@ public:
 
 	virtual ~DependenciesInjector()
 	{
+		for (auto &e : _instances)
+		{
+			if (e != nullptr)
+				delete e;
+		}
 		_instances.clear();
 	}
 
@@ -32,10 +36,10 @@ public:
 	}
 
 	template <typename T>
-	std::shared_ptr<T> getInstance()
+	T *getInstance()
 	{
-		size_t id = typeid(T).hash_code();
-		if (_instances.find(id) == std::end(_instances))
+		std::uint16_t id = T::getTypeId();
+		if (!hasInstance<T>())
 		{
 			auto p = _parent.lock();
 			if (p)
@@ -43,42 +47,30 @@ public:
 			else
 				assert(false && "Engine Instance is not set !");
 		}
-		return std::dynamic_pointer_cast<T>(_instances[id]);
+		return dynamic_cast<T*>(_instances[id]);
 	}
 
 	template <typename T, typename TypeSelector = T, typename ...Args>
-	std::shared_ptr<T> setInstance(Args ...args)
+	T *setInstance(Args ...args)
 	{
-		size_t id = typeid(TypeSelector).hash_code();
-		if (_instances.find(id) == std::end(_instances))
+		std::uint16_t id = TypeSelector::getTypeId();
+		if (_instances.size() <= id || _instances[id] == nullptr)
 		{
-			auto n = std::make_shared<T>(args...);
-			n->_dpyManager = shared_from_this();
-			_instances.insert(std::make_pair(id, n));
+			if (_instances.size() <= id)
+				_instances.resize(id + 1, nullptr);
+			assert(_instances[id] == nullptr); // instance already defined
+			auto n = new T(args...);
+			n->_dependencyManager = shared_from_this();
+			_instances[id] = n;
 		}
-		return std::dynamic_pointer_cast<T>(_instances[id]);
-	}
-
-	template <typename T>
-	void unsetInstance()
-	{
-		auto p = _parent.lock();
-		if (p && p->hasInstance<T>())
-		{
-			p->unsetInstance();
-			return;
-		}
-		size_t id = typeid(TypeSelector).hash_code();
-		if (_instances.find(id) == std::end(_instances))
-			return;
-		_instances.erase(id);
+		return dynamic_cast<T*>(_instances[id]);
 	}
 
 	template <typename T>
 	bool hasInstance()
 	{
-		size_t id = typeid(T).hash_code();
-		return _instances.find(id) != std::end(_instances);
+		std::uint16_t id = T::getTypeId();
+		return _instances.size() > id && _instances[id] != nullptr;
 	}
 };
 

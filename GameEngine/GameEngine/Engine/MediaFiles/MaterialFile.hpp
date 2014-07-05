@@ -49,7 +49,7 @@ struct MaterialFile : public MediaFile<MaterialFile>
 		std::map<std::string, float> paramFloat;
 		MaterialFile *file;
 	private:
-		std::weak_ptr<DependenciesInjector> _dpyManager;
+		std::weak_ptr<DependenciesInjector> _dependencyManager;
 		friend struct MaterialFile;
 	public:
 		Material();

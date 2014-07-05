@@ -2,7 +2,7 @@
 
 #include <Utils/Dependency.hpp>
 
-class Timer : public Dependency
+class Timer : public Dependency<Timer>
 {
 private:
 	unsigned int 		_oldTime;

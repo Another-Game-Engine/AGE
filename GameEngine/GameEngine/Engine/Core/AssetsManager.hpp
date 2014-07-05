@@ -12,7 +12,7 @@ namespace AGE
 	struct Skeleton;
 	struct Animation;
 
-	class AssetsManager : public Dependency
+	class AssetsManager : public Dependency<AssetsManager>
 	{
 	private:
 		struct BitsetComparer {

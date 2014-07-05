@@ -61,7 +61,7 @@ namespace Component
 		void init(std::weak_ptr<AScene> scene, float _mass = 1.0f)
 		{
 			_scene = scene;
-			_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene.lock()->getInstance<BulletCollisionManager>());
+			_manager = dynamic_cast<BulletDynamicManager*>(_scene.lock()->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 		}
 
@@ -193,7 +193,7 @@ namespace Component
 		std::weak_ptr<AScene> _scene;
 		CollisionShape shapeType;
 		std::string meshName;
-		std::shared_ptr<BulletCollisionManager> _manager;
+		BulletCollisionManager* _manager;
 		std::shared_ptr<btCollisionShape> _collisionShape;
 		std::shared_ptr<btCollisionObject> _body;
 

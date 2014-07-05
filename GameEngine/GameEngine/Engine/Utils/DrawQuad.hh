@@ -32,6 +32,6 @@ private:
 	gl::Key<gl::VertexPool>		_pool;
 	std::shared_ptr<gl::Shader>			_fboToScreen;
 	std::shared_ptr<gl::Shader>			_fboToScreenMultisampled;
-	std::shared_ptr<Renderer>	_renderer;
+	Renderer*	_renderer;
 };
 
