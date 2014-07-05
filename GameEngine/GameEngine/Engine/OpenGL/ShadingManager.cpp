@@ -49,8 +49,7 @@ namespace gl
 
 	ShadingManager &ShadingManager::rmShader(Key<Shader> &key)
 	{
-		Shader *shader;
-		if ((shader = getShader(key, "rmShader()")) == NULL)
+		if (getShader(key, "rmShader()") == NULL)
 			return (*this);
 		_shaders.erase(key);
 		key.destroy();
@@ -192,8 +191,8 @@ namespace gl
 
 	ShadingManager &ShadingManager::rmUniformBlock(Key<UniformBlock> &key)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - rmUniformBlock", "the key is destroy", *this)
+		if (getUniformBlock(key, "rmUniformBlock") == NULL)
+			return (*this);
 		_uniformBlock.erase(key);
 		key.destroy();
 		return (*this);
