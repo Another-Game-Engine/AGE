@@ -103,6 +103,7 @@ namespace gl
 		Texture *getTexture(Key<Texture> const &key, std::string const &in, GLenum type);
 	};
 
+# undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
 	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
 

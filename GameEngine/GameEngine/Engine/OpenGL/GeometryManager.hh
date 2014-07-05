@@ -73,5 +73,13 @@ namespace gl
 		std::map<Key<Vertices>, Vertices> _vertices;
 		std::map<Key<Vertices>, Attach<Vertices, VertexPool>> _vertexAttach;
 		std::map<Key<Indices>, Attach<Indices, IndexPool>> _indexAttach;
+	
+		// tool use in intern
+		VertexPool *getVertexPool(Key<VertexPool> const &key, std::string const &in);
+		IndexPool *getIndexPool(Key<IndexPool> const &key, std::string const &in);
+		Indices *getIndices(Key<Indices> const &key, std::string const &in);
+		Vertices *getVertices(Key<Vertices> const &key, std::string const &in);
+		Attach<Vertices, VertexPool> *getVertexAttach(Key<Vertices> const &key, std::string const &in);
+		Attach<Indices, IndexPool> *getIndexAttach(Key<Indices> const &key, std::string const &in);
 	};
 }
