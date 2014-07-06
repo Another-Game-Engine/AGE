@@ -9,7 +9,7 @@
 #include <iostream>
 #include <Audio/Audio.hh>
 
-class AudioManager : public std::enable_shared_from_this<AudioManager>, public Dependency
+class AudioManager : public std::enable_shared_from_this<AudioManager>, public Dependency<AudioManager>
 {
 public:
 	AudioManager();

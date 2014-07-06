@@ -122,7 +122,7 @@ void MaterialFile::Material::load(cereal::PortableBinaryInputArchive &ar)
 {
 	ar(name, ambient, diffuse, specular, transmittance, emission, shininess, paramVec2, paramVec3, paramVec4, paramMat2, paramMat3, paramMat4, paramInt, paramFloat);
 	std::string a, b, c, d;
-	auto manager = _dpyManager.lock()->getInstance<AssetsManager>();
+	auto manager = _dependencyManager.lock()->getInstance<AssetsManager>();
 	ar(a, b, c, d);
 	if (a != "NULL")
 		ambientTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(a)));
@@ -158,7 +158,7 @@ void MaterialFile::load(cereal::PortableBinaryInputArchive &ar)
 	for (auto &e : materials)
 	{
 		e.file = this;
-		e._dpyManager = _dpyManager;
+		e._dependencyManager = _dependencyManager;
 	}
 	ar(materials);
 }

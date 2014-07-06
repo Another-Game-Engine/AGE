@@ -40,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Shaders\ShadowMapping.vp = Shaders\ShadowMapping.vp
 		Shaders\tesselation.gp = Shaders\tesselation.gp
 		Shaders\test.cp = Shaders\test.cp
+		Shaders\test_pipeline_1.fp = Shaders\test_pipeline_1.fp
+		Shaders\test_pipeline_1.vp = Shaders\test_pipeline_1.vp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vendors", "Vendors", "{9D3EF6A3-621D-4807-90CB-705CCD3A8FB8}"
@@ -123,6 +125,7 @@ Global
 		{1133660B-897C-4237-9E3B-15C10A3A2942}.Release|Win32.ActiveCfg = Release|Win32
 		{1133660B-897C-4237-9E3B-15C10A3A2942}.Release|Win32.Build.0 = Release|Win32
 		{1133660B-897C-4237-9E3B-15C10A3A2942}.Release|x64.ActiveCfg = Release|x64
+		{1133660B-897C-4237-9E3B-15C10A3A2942}.Release|x64.Build.0 = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Mixed Platforms.Build.0 = Debug|Win32

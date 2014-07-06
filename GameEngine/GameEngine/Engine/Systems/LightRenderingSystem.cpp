@@ -3,7 +3,7 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/CameraComponent.hpp>
 #include <Components/SpriteComponent.hh>
-#include <Systems/CameraSystem.hpp>
+#include <Systems/CameraSystem.hh>
 #include <OpenGL/Framebuffer.hh>
 #include <OpenGL/UniformBuffer.hh>
 #include <Core/AScene.hh>
@@ -231,7 +231,7 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	for (auto e : _meshRendererFilter.getCollection())
 	{
-		scene->getComponent<Component::MeshRenderer>(e)->render(renderer, scene->getTransform(e), [&](OpenGLTools::Shader &s)
+		scene->getComponent<Component::MeshRenderer>(e)->render(renderer, scene->getTransform(e), [&](gl::Shader &s)
 		{
 			glActiveTexture(GL_TEXTURE4);
 			glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);

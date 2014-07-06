@@ -5,7 +5,7 @@
 # include <memory>
 # include <OpenGL/Data.hh>
 
-namespace OpenGLTools
+namespace gl
 {
 	class Shader;
 }
@@ -30,8 +30,8 @@ private:
 	gl::Key<gl::Vertices>		_quadvertices;
 	gl::Key<gl::Indices>		_quadindices;
 	gl::Key<gl::VertexPool>		_pool;
-	std::shared_ptr<OpenGLTools::Shader>			_fboToScreen;
-	std::shared_ptr<OpenGLTools::Shader>			_fboToScreenMultisampled;
-	std::shared_ptr<Renderer>	_renderer;
+	std::shared_ptr<gl::Shader>			_fboToScreen;
+	std::shared_ptr<gl::Shader>			_fboToScreenMultisampled;
+	Renderer*	_renderer;
 };
 

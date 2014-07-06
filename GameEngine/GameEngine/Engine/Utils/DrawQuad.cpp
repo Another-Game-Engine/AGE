@@ -12,8 +12,6 @@ DrawQuad::DrawQuad() :
 
 DrawQuad::~DrawQuad()
 {
-	_m->dettachVerticesToVertexPool(_quadvertices, _m->getVertexPool(1));
-	_m->dettachIndicesToIndexPool(_quadindices, _m->getIndexPool(0));
 	_m->rmIndices(_quadindices);
 	_m->rmVertices(_quadvertices);
 }
@@ -77,7 +75,7 @@ void	DrawQuad::draw(GLuint texture, int sampleNbr, glm::uvec2 const &textureSize
 void DrawQuad::init(std::weak_ptr<DependenciesInjector> &&engine)
 {
 	_renderer = engine.lock()->getInstance<Renderer>();
-	_m = engine.lock()->getInstance<gl::GeometryManager>().get();
+	_m = engine.lock()->getInstance<gl::GeometryManager>();
 	float quadPos[] = {
 		-1.0, -1.0,
 		1.0, -1.0,

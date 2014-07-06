@@ -18,7 +18,7 @@
 struct AMediaFile;
 class Engine;
 
-class AssetsManager : public Dependency, public std::enable_shared_from_this<AssetsManager>
+class AssetsManager : public std::enable_shared_from_this<AssetsManager>, public Dependency<AssetsManager>
 {
 public:
 	AssetsManager();

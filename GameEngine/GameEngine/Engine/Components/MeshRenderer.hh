@@ -36,8 +36,8 @@ namespace Component
 		void init(std::shared_ptr<ObjFile> file);
 		virtual void reset();
 		inline void setShader(const std::string &_shader) { shader = _shader; }
-		void render(std::shared_ptr<Renderer> renderer, const glm::mat4 &globalTrans, std::function<void(OpenGLTools::Shader&)> func);
-		void renderRaw(std::shared_ptr<Renderer> renderer, const glm::mat4 &trans);
+		void render(Renderer *renderer, const glm::mat4 &globalTrans, std::function<void(gl::Shader&)> func);
+		void renderRaw(Renderer *renderer, const glm::mat4 &trans);
 		std::shared_ptr<ObjFile>	const &getMesh() const;
 
 		//////

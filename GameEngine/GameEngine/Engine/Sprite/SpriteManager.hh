@@ -11,7 +11,7 @@
 #include <MediaFiles/AssetsManager.hpp>
 #include <Sprite/Sprite.hh>
 
-class SpriteManager : public Dependency
+class SpriteManager : public Dependency<SpriteManager>
 {
 public:
 	SpriteManager()
@@ -65,7 +65,7 @@ public:
 		std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
 
 		std::string image = document["image"].GetString();
-		auto texture = _dpyManager.lock()->getInstance<AssetsManager>()->loadFromFile(file.getFolder() + "/" + image);
+		auto texture = _dependencyManager.lock()->getInstance<AssetsManager>()->loadFromFile(file.getFolder() + "/" + image);
 
 		if (!texture.get())
 		{
@@ -125,7 +125,7 @@ public:
 				f->_dimensions[i] = dimensions[i].GetUint();
 			}
 
-//			auto vm = _dpyManager.lock()->getInstance<VertexManager<4>>();
+//			auto vm = _dependencyManager.lock()->getInstance<VertexManager<4>>();
 			// LOAD FRAME
 		//if (!f->load(vm))
 		//{

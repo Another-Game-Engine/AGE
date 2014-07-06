@@ -180,3 +180,6 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+/GameEngine/Tools/AssetsEditor/*.sage
+/GameEngine/Tools/AssetsEditor/catwoman.skage
+/GameEngine/Tools/AssetsEditor/roulade.aage

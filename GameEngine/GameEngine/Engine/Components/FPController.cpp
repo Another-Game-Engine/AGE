@@ -40,7 +40,7 @@ FPController::~FPController()
 void FPController::init(const Entity &entity, std::weak_ptr<AScene> scene, short filterGroup, short filterMask)
 {
 	_entity = entity;
-	_manager = std::dynamic_pointer_cast<BulletDynamicManager>(scene.lock()->getInstance<BulletCollisionManager>());
+	_manager = dynamic_cast<BulletDynamicManager*>(scene.lock()->getInstance<BulletCollisionManager>());
 	setKey(LEFT, SDLK_a);
 	setKey(RIGHT, SDLK_d);
 	setKey(FORWARD, SDLK_w);

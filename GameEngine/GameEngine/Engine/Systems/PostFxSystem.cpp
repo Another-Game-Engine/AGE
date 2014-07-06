@@ -71,7 +71,7 @@ void	PostFxSystem::mainUpdate(double time)
 
 void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 {
-	OpenGLTools::Texture2D *colorTexture = static_cast<OpenGLTools::Texture2D *>(camFbo[GL_COLOR_ATTACHMENT0]);
+	gl::Texture2D *colorTexture = static_cast<gl::Texture2D *>(camFbo[GL_COLOR_ATTACHMENT0]);
 	// ----------------------------------------------------
 	// HDR Pass
 	// ----------------------------------------------------
@@ -138,7 +138,7 @@ void		PostFxSystem::computeHdr(OpenGLTools::Framebuffer &camFbo)
 
 void		PostFxSystem::computeBloom(OpenGLTools::Framebuffer &camFbo)
 {
-	OpenGLTools::Texture2D *colorTexture = static_cast<OpenGLTools::Texture2D *>(camFbo[GL_COLOR_ATTACHMENT0]);
+	gl::Texture2D *colorTexture = static_cast<gl::Texture2D *>(camFbo[GL_COLOR_ATTACHMENT0]);
 	size_t		WORK_GROUP_SIZE = 16;
 	glm::uvec2	groupNbr = glm::uvec2((camFbo.getSize().x + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE,
 		(camFbo.getSize().y + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);

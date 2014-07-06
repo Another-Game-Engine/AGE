@@ -15,7 +15,8 @@ AssetsManager::AssetsManager()
 }
 
 AssetsManager::~AssetsManager()
-{}
+{
+}
 
 void AssetsManager::init()
 {
@@ -48,22 +49,22 @@ std::shared_ptr<AMediaFile> AssetsManager::loadFromFile(const File &file)
 	{
 	case AMediaFile::OBJ:
 		res = std::make_shared<ObjFile>();
-		res->_dpyManager = _dpyManager;
+		res->_dependencyManager = _dependencyManager;
 		ar(static_cast<ObjFile&>(*res.get()));
 		break;
 	case AMediaFile::MATERIAL:
 		res = std::make_shared<MaterialFile>();
-		res->_dpyManager = _dpyManager;
+		res->_dependencyManager = _dependencyManager;
 		ar(static_cast<MaterialFile&>(*res.get()));
 		break;
 	case AMediaFile::TEXTURE:
 		res = std::make_shared<TextureFile>();
-		res->_dpyManager = _dpyManager;
+		res->_dependencyManager = _dependencyManager;
 		ar(static_cast<TextureFile&>(*res.get()));
 		break;
 	case AMediaFile::CUBEMAP:
 		res = std::make_shared<CubeMapFile>();
-		res->_dpyManager = _dpyManager;
+		res->_dependencyManager = _dependencyManager;
 		ar(static_cast<CubeMapFile&>(*res.get()));
 		break;
 	default:
@@ -101,26 +102,26 @@ std::shared_ptr<AMediaFile> AssetsManager::loadBulletFile(const File &file)
 	if (file.getShortFileName().find("collision_shape_static") != std::string::npos)
 	{
 		res = std::make_shared<CollisionShapeStaticFile>();
-		res->_dpyManager = _dpyManager;
+		res->_dependencyManager = _dependencyManager;
 		static_cast<CollisionShapeStaticFile&>(*res.get()).unserialize(file);
 	}
 	else if (file.getShortFileName().find("collision_shape_dynamic") != std::string::npos)
 	{
 		res = std::make_shared<CollisionShapeDynamicFile>();
-		res->_dpyManager = _dpyManager;
+		res->_dependencyManager = _dependencyManager;
 		static_cast<CollisionShapeDynamicFile&>(*res.get()).unserialize(file);
 	}
 	else if (file.getShortFileName().find("collision_sphere") != std::string::npos)
 	{
 		res = std::make_shared<CollisionSphereFile>();
-		res->_dpyManager = _dpyManager;
+		res->_dependencyManager = _dependencyManager;
 		auto uuu = std::dynamic_pointer_cast<CollisionSphereFile>(res);
 		uuu->unserialize(file);
 	}
 	else if (file.getShortFileName().find("collision_box") != std::string::npos)
 	{
 		res = std::make_shared<CollisionBoxFile>();
-		res->_dpyManager = _dpyManager;
+		res->_dependencyManager = _dependencyManager;
 		static_cast<CollisionBoxFile&>(*res.get()).unserialize(file);
 	}
 	assert(res != nullptr && "Unknown MediaFile type.");

@@ -4,7 +4,7 @@
 #include <Utils/Dependency.hpp>
 #include "glm/gtc/type_precision.hpp"
 
-class Input : public Dependency
+class Input : public Dependency<Input>
 {
 private:
 	std::list<int>	_inputs;

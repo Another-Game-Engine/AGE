@@ -19,6 +19,6 @@ out vec4 fColor;
 
 void main()
 {
-fColor = vColor;
+	fColor = vColor;
 	gl_Position = lightVP * model * vPosition;
 }

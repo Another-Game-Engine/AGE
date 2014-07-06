@@ -13,12 +13,12 @@ namespace gl
 {
 	class Vertices;
 
-	//!\file VerticesManager.hh
+	//!\file GeometryManager.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
-	//!\class VerticesManager
+	//!\class GeometryManager
 	//!\brief Handle the geometry of the render
-	class GeometryManager : public Dependency
+	class GeometryManager : public Dependency<GeometryManager>
 	{
 	public:
 		template <typename TYPE, typename POOL>
@@ -56,9 +56,9 @@ namespace gl
 
 		// attach vertices to pools
 		GeometryManager &attachVerticesToVertexPool(Key<Vertices> const &vertices, Key<VertexPool> const &pool);
-		GeometryManager &dettachVerticesToVertexPool(Key<Vertices> const &vertices, Key<VertexPool> const &pool);
+		GeometryManager &dettachVerticesToVertexPool(Key<Vertices> const &vertices);
 		GeometryManager &attachIndicesToIndexPool(Key<Indices> const &vertices, Key<IndexPool> const &pool);
-		GeometryManager &dettachIndicesToIndexPool(Key<Indices> const &vertices, Key<IndexPool> const &pool);
+		GeometryManager &dettachIndicesToIndexPool(Key<Indices> const &vertices);
 		GeometryManager &attachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indicespool);
 		GeometryManager &dettachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indexpool);
 

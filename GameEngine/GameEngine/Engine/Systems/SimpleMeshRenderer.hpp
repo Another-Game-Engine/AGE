@@ -23,7 +23,7 @@ protected:
 
 	EntityFilter _meshs;
 	EntityFilter _cameras;
-	std::shared_ptr<OpenGLTools::Shader> _shader;
+	std::shared_ptr<gl::Shader> _shader;
 
 	virtual void updateBegin(double time)
 	{

@@ -77,6 +77,9 @@ namespace gl
 	{
 		if (!key)
 			return (*this);
+		auto element = _vertexPool.find(key);
+		if (element == _vertexPool.end())
+			return (*this);
 		_vertexPool.erase(key);
 		key.destroy();
 		return (*this);
@@ -85,6 +88,9 @@ namespace gl
 	GeometryManager &GeometryManager::rmIndexPool(Key<IndexPool> &key)
 	{
 		if (!key)
+			return (*this);
+		auto element = _indexPool.find(key);
+		if (element == _indexPool.end())
 			return (*this);
 		_indexPool.erase(key);
 		key.destroy();
@@ -126,7 +132,10 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "rmVertices", "key not valid")
-		_vertices.erase(key);
+		auto &attach = _vertexAttach.find(key);
+		if (attach == _vertexAttach.end())
+			return (*this);
+		dettachVerticesToVertexPool(key);
 		key.destroy();
 		return (*this);
 	}
@@ -135,7 +144,10 @@ namespace gl
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "rmVertices", "key not valid")
-		_indices.erase(key);
+		auto &attach = _indexAttach.find(key);
+		if (attach == _indexAttach.end())
+			return (*this);
+		dettachIndicesToIndexPool(key);
 		key.destroy();
 		return (*this);
 	}
@@ -150,26 +162,16 @@ namespace gl
 		auto &pool = _vertexPool.find(keypool)->second;
 		newAttach.pool = &pool;
 		newAttach.data = &vertices;
-		if (attach != _vertexAttach.end())
-		{
-			attach->second.pool->rmVertices(attach->second.element);
-			newAttach.element = pool.addVertices(vertices);
-			attach->second = newAttach;
-		}
-		else
-		{
-			newAttach.element = pool.addVertices(vertices);
-			_vertexAttach.insert(std::make_pair(keyvertices, newAttach));
-		}
+		dettachVerticesToVertexPool(keyvertices);
+		newAttach.element = pool.addVertices(vertices);
+		_vertexAttach.insert(std::make_pair(keyvertices, newAttach));
 		return (*this);
 	}
 
-	GeometryManager &GeometryManager::dettachVerticesToVertexPool(Key<Vertices> const &keyvertices, Key<VertexPool> const &keypool)
+	GeometryManager &GeometryManager::dettachVerticesToVertexPool(Key<Vertices> const &keyvertices)
 	{
-		if (!keyvertices || !keypool)
+		if (!keyvertices)
 			DEBUG_MESSAGE("Warning:", "GeometryManager.cpp", "dettachVerticesToVertexPool", "key not valid")
-		auto &vertices = _vertices.find(keyvertices)->second;
-		auto &pool = _vertexPool.find(keypool)->second;
 		auto &attach = _vertexAttach.find(keyvertices);
 		if (attach != _vertexAttach.end())
 		{
@@ -189,26 +191,17 @@ namespace gl
 		auto &pool = _indexPool.find(keypool)->second;
 		newAttach.pool = &pool;
 		newAttach.data = &indices;
-		if (attach != _indexAttach.end())
-		{
-			attach->second.pool->rmIndices(attach->second.element);
-			newAttach.element = pool.addIndices(indices);
-			attach->second = newAttach;
-		}
-		else
-		{
-			newAttach.element = pool.addIndices(indices);
-			_indexAttach.insert(std::make_pair(keyindices, newAttach));
-		}
+		dettachIndicesToIndexPool(keyindices);
+		newAttach.element = pool.addIndices(indices);
+		newAttach.element = pool.addIndices(indices);
+		_indexAttach.insert(std::make_pair(keyindices, newAttach));
 		return (*this);
 	}
 
-	GeometryManager &GeometryManager::dettachIndicesToIndexPool(Key<Indices> const &keyindices, Key<IndexPool> const &keypool)
+	GeometryManager &GeometryManager::dettachIndicesToIndexPool(Key<Indices> const &keyindices)
 	{
-		if (!keyindices || !keypool)
+		if (!keyindices)
 			DEBUG_MESSAGE("Warning", "GeometryManager.cpp", "dettachVerticesToVertexPool", "key not valid")
-		auto &indices = _indices.find(keyindices)->second;
-		auto &pool = _indexPool.find(keypool)->second;
 		auto &attach = _indexAttach.find(keyindices);
 		if (attach != _indexAttach.end())
 		{

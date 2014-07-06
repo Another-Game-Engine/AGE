@@ -4,7 +4,11 @@
 
 namespace gl
 {
-	/// Buffer containing on the GPU the vertex
+	//!\file Buffer.hh
+	//!\author Dorian Pinaud
+	//!\version v2.0
+	//!\class Buffer
+	//!\brief Handle Opengl Buffer Object
 	class Buffer
 	{
 	private:
@@ -25,7 +29,11 @@ namespace gl
 		GLuint _id;
 	};
 
-	/// Buffer containing on the GPU the vertex
+	//!\file Buffer.hh
+	//!\author Dorian Pinaud
+	//!\version v2.0
+	//!\class VertexBuffer
+	//!\brief Handle Opengl Vertex Buffer Object
 	class VertexBuffer : public Buffer
 	{
 	private:
@@ -39,7 +47,11 @@ namespace gl
 		virtual GLenum getMode() const;
 	};
 
-	/// Buffer containing on the GPU the vertex
+	//!\file Buffer.hh
+	//!\author Dorian Pinaud
+	//!\version v2.0
+	//!\class IndexBuffer
+	//!\brief Handle Opengl Index Buffer Object
 	class IndexBuffer : public Buffer
 	{
 	private:
@@ -47,6 +59,25 @@ namespace gl
 	public:
 		IndexBuffer();
 		virtual ~IndexBuffer();
+
+		virtual Buffer const &bind() const;
+		virtual Buffer const &unbind() const;
+		virtual GLenum getMode() const;
+	};
+
+	//!\file Buffer.hh
+	//!\author Dorian Pinaud
+	//!\version v2.0
+	//!\class UniformBuffer
+	//!\brief Handle Opengl Uniform Buffer Object
+	class UniformBuffer : public Buffer
+	{
+	private:
+		UniformBuffer(UniformBuffer const &copy);
+
+	public:
+		UniformBuffer();
+		virtual ~UniformBuffer();
 
 		virtual Buffer const &bind() const;
 		virtual Buffer const &unbind() const;

@@ -19,11 +19,11 @@ public:
 		, _manager(nullptr)
 	{
 		_name = "bullet_dynamic_system";
-		_manager = std::dynamic_pointer_cast<BulletDynamicManager>(_scene.lock()->getInstance<BulletCollisionManager>());
+		_manager = dynamic_cast<BulletDynamicManager*>(_scene.lock()->getInstance<BulletCollisionManager>());
 	}
 	virtual ~BulletDynamicSystem(){}
 private:
-	std::shared_ptr<BulletDynamicManager> _manager;
+	BulletDynamicManager* _manager;
 
 	virtual void updateBegin(double time)
 	{

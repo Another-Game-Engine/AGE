@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils/DependenciesInjector.hpp"
+#include <string>
 
 class Engine : public DependenciesInjector
 {
