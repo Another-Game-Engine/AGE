@@ -55,14 +55,14 @@ namespace Component
 		{
 		}
 
-		void init(std::weak_ptr<AScene> scene, float mass = 1.0f)
+		void init(AScene *scene, float mass = 1.0f)
 		{
-			_manager = dynamic_cast<BulletDynamicManager*>(scene.lock()->getInstance<BulletCollisionManager>());
+			_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 			_mass = mass;
 		}
 
-		virtual void reset()
+		virtual void reset(AScene *)
 		{
 			if (_rigidBody != nullptr)
 			{

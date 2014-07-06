@@ -51,7 +51,7 @@ namespace Component
 		{
 		}
 
-		virtual void reset() { }
+		virtual void reset(AScene *) { }
 
 		PointLight &operator=(PointLight const &o)
 		{
@@ -59,7 +59,7 @@ namespace Component
 			return (*this);
 		}
 
-		void	init()
+		void	init(AScene *)
 		{
 		}
 

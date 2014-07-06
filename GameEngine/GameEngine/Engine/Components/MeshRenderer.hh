@@ -33,8 +33,8 @@ namespace Component
 		virtual ~MeshRenderer(void);
 		MeshRenderer(MeshRenderer &&o);
 		MeshRenderer &operator=(MeshRenderer &&o);
-		void init(std::shared_ptr<ObjFile> file);
-		virtual void reset();
+		void init(AScene *, std::shared_ptr<ObjFile> file);
+		virtual void reset(AScene *);
 		inline void setShader(const std::string &_shader) { shader = _shader; }
 		void render(Renderer *renderer, const glm::mat4 &globalTrans, std::function<void(gl::Shader&)> func);
 		void renderRaw(Renderer *renderer, const glm::mat4 &trans);

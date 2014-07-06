@@ -35,12 +35,12 @@ Component::ComponentBase<Component::AudioEmitter>()
 AudioEmitter::~AudioEmitter(void)
 {}
 
-void AudioEmitter::init()
+void AudioEmitter::init(AScene *)
 {
 	clearAllAudios();
 }
 
-void AudioEmitter::reset()
+void AudioEmitter::reset(AScene *)
 {
 	clearAllAudios();
 }

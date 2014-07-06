@@ -48,11 +48,11 @@ namespace Component
 
 		void		updateLightData(const glm::mat4 &globalTransform);
 
-		virtual void reset();
+		virtual void reset(AScene *);
 
 		SpotLight &operator=(SpotLight const &o);
 
-		void	init();
+		void	init(AScene *);
 
 		template <typename Archive>
 		void serialize(Archive &ar);

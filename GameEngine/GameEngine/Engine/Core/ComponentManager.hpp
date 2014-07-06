@@ -54,7 +54,7 @@ public:
 	void clearComponents()
 	{
 		for (auto &&e : _components)
-			e.reset();
+			e.reset(_scene);
 		_size = 0;
 	}
 
@@ -70,7 +70,7 @@ public:
 		component = &_components[_size];
 		++_size;
 		//init component
-		component->init(std::forward<Args>(args)...);
+		component->init(_scene, std::forward<Args>(args)...);
 		_reorder = true;
 		return component;
 	}
@@ -83,7 +83,7 @@ public:
 	virtual bool removeComponent(Entity &e)
 	{
 		auto id = _componentsRefs[e.getId()];
-		_components[id].reset();
+		_components[id].reset(_scene);
 		if (_size > 0 && id < _size - 1)
 		{
 			_componentsRefs[_components[_size - 1].entityId] = id;

@@ -38,12 +38,12 @@ namespace Component
 			collisions = std::move(other.collisions);
 		}
 
-		void init()
+		void init(AScene *)
 		{
 			force = 0;
 		}
 
-		virtual void reset()
+		virtual void reset(AScene *)
 		{
 			collisions.clear();
 		}

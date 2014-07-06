@@ -24,7 +24,7 @@ namespace Component
 		lightData.positionPower.z = globalTransform[3].z;
 	}
 
-	void SpotLight::reset()
+	void SpotLight::reset(AScene *)
 	{
 	}
 
@@ -34,7 +34,7 @@ namespace Component
 		return (*this);
 	}
 
-	void	SpotLight::init()
+	void	SpotLight::init(AScene *)
 	{
 	}
 

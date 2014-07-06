@@ -29,7 +29,7 @@ namespace Component
 	}
 
 
-	void MeshRenderer::init(std::shared_ptr<ObjFile> r)
+	void MeshRenderer::init(AScene *, std::shared_ptr<ObjFile> r)
 	{
 		mesh = r;
 	}
@@ -39,7 +39,7 @@ namespace Component
 		return (mesh);
 	}
 
-	void MeshRenderer::reset()
+	void MeshRenderer::reset(AScene *)
 	{
 		mesh = nullptr;
 		shader = "";

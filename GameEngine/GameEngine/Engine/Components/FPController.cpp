@@ -37,10 +37,10 @@ FPController::~FPController()
 {
 }
 
-void FPController::init(const Entity &entity, std::weak_ptr<AScene> scene, short filterGroup, short filterMask)
+void FPController::init(AScene *scene, const Entity &entity, short filterGroup, short filterMask)
 {
 	_entity = entity;
-	_manager = dynamic_cast<BulletDynamicManager*>(scene.lock()->getInstance<BulletCollisionManager>());
+	_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
 	setKey(LEFT, SDLK_a);
 	setKey(RIGHT, SDLK_d);
 	setKey(FORWARD, SDLK_w);
@@ -58,7 +58,7 @@ void FPController::init(const Entity &entity, std::weak_ptr<AScene> scene, short
 	//transform.setOrigin(convertGLMVectorToBullet(position));
 	//transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
-	auto link = scene.lock()->getLink(entity);
+	auto link = scene->getLink(entity);
 	transform.setIdentity();
 	transform.setOrigin(convertGLMVectorToBullet(link->getPosition()));
 	transform.setRotation(convertGLMQuatToBullet(link->getOrientation()));
@@ -81,7 +81,7 @@ void FPController::init(const Entity &entity, std::weak_ptr<AScene> scene, short
 	wasOnGround = true;
 }
 
-void FPController::reset()
+void FPController::reset(AScene *)
 {
 	if (_controller)
 	{

@@ -47,7 +47,6 @@ namespace	Component
 	{
 		ComponentBase()
 			: Base()
-			, _name(typeid(T).name())
 		{
 		}
 
@@ -94,7 +93,7 @@ namespace	Component
 
 		virtual void _serialize(cereal::JSONOutputArchive &ar)
 		{
-			ar(cereal::make_nvp(_name, *dynamic_cast<T*>(this)));
+			ar(cereal::make_nvp(name(), *dynamic_cast<T*>(this)));
 		}
 
 		virtual void _serialize(cereal::BinaryOutputArchive &ar)
@@ -104,7 +103,7 @@ namespace	Component
 
 		virtual void _serialize(cereal::XMLOutputArchive &ar)
 		{
-			ar(cereal::make_nvp(_name, *dynamic_cast<T*>(this)));
+			ar(cereal::make_nvp(name(), *dynamic_cast<T*>(this)));
 		}
 
 		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar)
@@ -119,6 +118,10 @@ namespace	Component
 		ComponentBase &operator=(ComponentBase const &o);
 
 
-		const std::string _name;
+		static std::string &name()
+		{
+			static std::string _name = typeid(T).name();
+			return _name;
+		}
 	};
 }

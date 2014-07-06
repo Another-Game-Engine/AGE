@@ -129,7 +129,7 @@ public:
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 	mesh->setShader("MaterialBasic");
-	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
+	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
 //	rigidBody->setTransformation(getTransform(plane));
 	rigidBody->getBody().setFriction(0.8f);
@@ -160,7 +160,7 @@ public:
 #endif
 
 #ifdef PHYSIC_SIMULATION
-				auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, 1.0f);
+				auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
 				if (i % 4 == 0)
 					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::SPHERE);
 				else

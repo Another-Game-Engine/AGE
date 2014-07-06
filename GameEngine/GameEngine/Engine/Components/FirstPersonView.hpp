@@ -14,8 +14,8 @@ namespace Component
 			ComponentBase<FirstPersonView>()
 		{}
 		virtual ~FirstPersonView(void){}
-		void init(){}
-		virtual void reset(){}
+		void init(AScene *){}
+		virtual void reset(AScene *){}
 
 		FirstPersonView(FirstPersonView const &){}
 		FirstPersonView	&operator=(FirstPersonView const &){ return *this; }

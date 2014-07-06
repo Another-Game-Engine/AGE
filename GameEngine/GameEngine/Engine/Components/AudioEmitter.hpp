@@ -57,8 +57,8 @@ namespace Component
 
 		AudioEmitter();
 		virtual ~AudioEmitter(void);
-		void init();
-		virtual void reset();
+		void init(AScene *);
+		virtual void reset(AScene *);
 		void clearAllAudios();
 		void clearAudio(const std::string &name);
 		AudioInstance *getAudio(const std::string &name);

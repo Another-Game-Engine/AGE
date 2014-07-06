@@ -14,8 +14,8 @@ namespace Component
 	{
 		CameraComponent();
 		virtual ~CameraComponent(void);
-		void init(){}
-		virtual void reset(){}
+		void init(AScene *){}
+		virtual void reset(AScene *){}
 		void                 attachSkybox(std::shared_ptr<CubeMapFile> texture, const std::string &cubeMapShader);
 		void                 dettachSkybox();
 		std::shared_ptr<CubeMapFile> getSkybox();
