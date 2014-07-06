@@ -218,6 +218,7 @@
     <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
+    <ClCompile Include="Engine\OpenGL\RenderPass.cpp" />
     <ClCompile Include="Engine\OpenGL\ShaderResource.cpp" />
     <ClCompile Include="Engine\OpenGL\ShadingManager.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="Engine\OpenGL\MemoryGPU.hh" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
     <ClInclude Include="Engine\OpenGL\Pool.hh" />
+    <ClInclude Include="Engine\OpenGL\RenderPass.hh" />
     <ClInclude Include="Engine\OpenGL\ShaderResource.hh" />
     <ClInclude Include="Engine\OpenGL\ShadingManager.hh" />
     <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
