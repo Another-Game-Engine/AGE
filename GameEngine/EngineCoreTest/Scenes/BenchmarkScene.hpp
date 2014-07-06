@@ -18,6 +18,8 @@
 #include <Systems/BlitFinalRender.hh>
 #include <Systems/SimpleMeshRenderer.hpp>
 
+#include <Core/Octree.hpp>
+
 #include <Context/IRenderContext.hh>
 
 #include <CONFIGS.hpp>
@@ -34,6 +36,9 @@ public:
 
 	virtual bool 			userStart()
 	{
+
+		setInstance<AGE::Octree>();
+
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
 //		addSystem<CollisionAdder>(1);

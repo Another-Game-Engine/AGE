@@ -21,6 +21,8 @@
 
 #include <Core/ComponentManager.hpp>
 
+#include <Core/Octree.hpp>
+
 class System;
 class Engine;
 class EntityFilter;
@@ -67,6 +69,7 @@ public:
 		{
 			auto &e = _pool[_entityNumber];
 			e.entity.id = _entityNumber;
+			e.link._octree = getInstance<AGE::Octree>();
 			assert(++_entityNumber != UINT16_MAX);
 			return e.entity;
 		}
@@ -338,6 +341,11 @@ public:
 	AGE::Link *getLink(const Entity &e)
 	{
 		return &_pool[e.id].link;
+	}
+
+	AGE::Link *getLink(const ENTITY_ID &id)
+	{
+		return &_pool[id].link;
 	}
 
 private:

@@ -31,7 +31,8 @@ public:
 	ComponentManager(AScene *scene)
 		: _scene(scene)
 		, _size(0)
-	{}
+	{
+	}
 
 	virtual ~ComponentManager()
 	{}

@@ -29,8 +29,9 @@ namespace Component
 	}
 
 
-	void MeshRenderer::init(AScene *, std::shared_ptr<ObjFile> r)
+	void MeshRenderer::init(AScene *scene, std::shared_ptr<ObjFile> r)
 	{
+		AGE::ComponentBehavior::Cullable::init(scene, entityId, MeshRenderer::getTypeId());
 		mesh = r;
 	}
 
@@ -39,8 +40,9 @@ namespace Component
 		return (mesh);
 	}
 
-	void MeshRenderer::reset(AScene *)
+	void MeshRenderer::reset(AScene *scene)
 	{
+		AGE::ComponentBehavior::Cullable::reset(scene, entityId);
 		mesh = nullptr;
 		shader = "";
 	}

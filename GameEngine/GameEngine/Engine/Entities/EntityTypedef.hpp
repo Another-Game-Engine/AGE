@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #define MAX_TAG_NUMBER (32)
 #define MAX_CPT_NUMBER (96)
 

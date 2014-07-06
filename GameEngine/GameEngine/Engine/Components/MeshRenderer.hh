@@ -15,6 +15,8 @@
 #include <Core/AScene.hh>
 #include <MediaFiles/AssetsManager.hpp>
 
+#include "Behaviors/Cullable.hpp"
+
 
 namespace Resources
 {
@@ -27,7 +29,7 @@ class Renderer;
 
 namespace Component
 {
-	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>
+	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>, public AGE::ComponentBehavior::Cullable
 	{
 		MeshRenderer();
 		virtual ~MeshRenderer(void);
