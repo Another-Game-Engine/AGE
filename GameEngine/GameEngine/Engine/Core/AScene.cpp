@@ -33,6 +33,9 @@ void 							AScene::update(double time)
 		reorganizeComponents();
 		reorderingTime = 0;
 	}
+
+	// hardcoded update
+	getInstance<AGE::Octree>()->update();
 }
 
 bool                           AScene::start()

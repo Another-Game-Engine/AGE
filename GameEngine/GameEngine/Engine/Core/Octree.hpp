@@ -15,6 +15,14 @@ namespace AGE
 	class Octree : public Dependency<Octree>
 	{
 	public:
+		struct Command
+		{
+			glm::vec3 position;
+			glm::vec3 scale;
+			glm::quat orientation;
+			std::size_t pushedId;
+		};
+
 		struct Element
 		{
 		public:
@@ -26,20 +34,12 @@ namespace AGE
 			COMPONENT_ID componentTypeId;
 			std::size_t id;
 			std::size_t updateId;
+			Command command;
 		};
-
-		struct Command
-		{
-			glm::vec3 position;
-			glm::vec3 scale;
-			glm::quat orientation;
-			std::size_t id;
-		};
-
 	private:
 		std::size_t _updateId; 
 		std::vector<Element> _elements;
-		std::stack<Command> _commands;
+		std::stack<std::size_t> _commands;
 		std::stack<std::size_t> _free;
 	public:
 		std::size_t addElement(COMPONENT_ID componentType)
@@ -69,11 +69,17 @@ namespace AGE
 			, const glm::quat &orientation
 			, std::size_t id)
 		{
-			_commands.push(Command());
-			_commands.top().id = id;
-			_commands.top().position = position;
-			_commands.top().scale = scale;
-			_commands.top().orientation = orientation;
+			auto &element = _elements[id];
+			auto &command = element.command;
+
+			command.position = position;
+			command.orientation = orientation;
+			command.scale = scale;
+			if (_updateId != command.pushedId)
+			{
+				element.command.pushedId = _updateId;
+				_commands.push(id);
+			}
 		}
 
 		void pushCommand(const glm::vec3 &position
@@ -87,6 +93,16 @@ namespace AGE
 				if (l == max)
 					return;
 				pushCommand(position, scale, orientation, l);
+			}
+		}
+
+		void update()
+		{
+			++_updateId;
+			while (!_commands.empty())
+			{
+				//process command
+				_commands.pop();
 			}
 		}
 	};

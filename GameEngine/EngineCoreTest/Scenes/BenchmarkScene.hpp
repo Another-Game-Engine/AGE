@@ -174,7 +174,7 @@ public:
 				rigidBody->getBody().setRestitution(0.5f);
 #endif
 				auto link = getLink(e);
-				link->setPosition(glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10));
+				link->setPosition(glm::vec3((rand() % 200) - 100, (rand() % 20) - 5, (rand() % 200) - 100));
 				link->setScale(glm::vec3(3.0f));
 
 #ifdef RENDERING_ACTIVATED
