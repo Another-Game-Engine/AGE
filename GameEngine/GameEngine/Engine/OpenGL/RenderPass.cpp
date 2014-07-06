@@ -1,6 +1,7 @@
 #include <OpenGL/RenderPass.hh>
 #include <cassert>
 #include <string>
+#include <OpenGL/Shader.hh>
 
 # undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -10,161 +11,140 @@
 namespace gl
 {
 	RenderPass::RenderPass()
-		: _scissorTest(false),
-		_multisampling(false),
-		_leftScissor(0),
-		_bottomScissor(0),
-		_widthScissor(0),
-		_heightScissor(0),
-		_red(0.0f),
-		_green(0.0f),
-		_blue(0.0f),
-		_alpha(0.0f),
-		_depth(1.0f),
-		_stencil(1),
-		_maskDepth(GL_TRUE),
-		_maskStencilBack(GL_TRUE),
-		_maskStencilFront(GL_TRUE)
+		: _shader(NULL),
+		_clearColor(),
+		_clearDepth(0),
+		_clearStencil(0),
+		_color(glm::vec4(0.f, 0.f, 0.f, 1.f)),
+		_depth(1.f),
+		_stencil(0),
+		_maskDepth(true),
+		_maskStencilBack(true),
+		_maskStencilFront(0xFF),
+		_scissorTest(false),
+		_stencilTest(false),
+		_depthTest(true)
 	{
+		for (GLint index = 0; index < GL_MAX_COLOR_ATTACHMENTS; ++index)
+			_maskColor[index] = glm::bvec4(true, true, true, true);
+	}
 
+	RenderPass::RenderPass(Shader &shader)
+		: RenderPass()
+	{
+		_shader = &shader;
+		for (GLint index = 0; index < GL_MAX_COLOR_ATTACHMENTS; ++index)
+			_maskColor[index] = glm::bvec4(true, true, true, true);
 	}
 
 	RenderPass::~RenderPass()
 	{
-
 	}
 
 	RenderPass::RenderPass(RenderPass const &copy)
-		: _scissorTest(copy._scissorTest),
-		_leftScissor(copy._leftScissor),
-		_bottomScissor(copy._bottomScissor),
-		_widthScissor(copy._widthScissor),
-		_heightScissor(copy._heightScissor)
+		: _shader(copy._shader),
+		_clearColor(copy._clearColor),
+		_clearDepth(copy._clearDepth),
+		_clearStencil(copy._clearStencil),
+		_color(copy._color),
+		_depth(copy._depth),
+		_stencil(copy._stencil),
+		_maskDepth(copy._maskDepth),
+		_maskStencilBack(copy._maskStencilBack),
+		_maskStencilFront(copy._maskStencilFront)
 	{
+		for (GLint index = 0; index < GL_MAX_COLOR_ATTACHMENTS; ++index)
+			_maskColor[index] = copy._maskColor[index];
 	}
 
 	RenderPass &RenderPass::operator=(RenderPass const &r)
 	{
-		if (this == &r)
+		if (this != &r)
 		{
-			_scissorTest = r._scissorTest;
-			_leftScissor = r._leftScissor;
-			_bottomScissor = r._bottomScissor;
-			_widthScissor = r._widthScissor;
-			_heightScissor = r._heightScissor;
+			_shader = r._shader;
+			_clearColor = r._clearColor;
+			_clearDepth = r._clearDepth;
+			_clearStencil = r._clearStencil;
+			_color = r._color;
+			_depth = r._depth;
+			_stencil = r._stencil;
+			_maskDepth = r._maskDepth;
+			_maskStencilBack = r._maskStencilBack;
+			_maskStencilFront = r._maskStencilFront;
+			for (GLint index = 0; index < GL_MAX_COLOR_ATTACHMENTS; ++index)
+				_maskColor[index] = r._maskColor[index];
 		}
 		return (*this);
 	}
 
-	RenderPass &RenderPass::setScissorTest(bool state)
+	RenderPass &RenderPass::setScissorArea(glm::ivec4 const &area)
 	{
-		_scissorTest = state;
+		_area = area;
 		return (*this);
 	}
 
-	RenderPass &RenderPass::setMultiSampling(bool state, float ratio)
+	RenderPass &RenderPass::setClearValue(glm::vec4 const &color, float depth, unsigned char stencil)
 	{
-		GLint param; glGetIntegerv(GL_SAMPLE_BUFFERS, &param);
-		if (param != 1)
-			DEBUG_MESSAGE("Warning", "RenderPass - setMultiSampling", "No multisampler possible", *this);
-		_multisampling = state;
-		_multisampleRatio = ratio;
-		return (*this);
-	}
-
-	RenderPass &RenderPass::setScissor(GLint left, GLint bottom, GLsizei width, GLsizei height)
-	{
-		_leftScissor = left;
-		_bottomScissor = bottom;
-		_widthScissor = width;
-		_heightScissor = height;
-		return (*this);
-	};
-
-	RenderPass &RenderPass::setColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
-	{
-		_red = red;
-		_blue = blue;
-		_green = green;
-		_alpha = alpha;
-		return (*this);
-	}
-
-	RenderPass &RenderPass::setDepth(GLclampd depth)
-	{
+		_color = color;
 		_depth = depth;
-		return (*this);
-	}
-
-	RenderPass &RenderPass::setStencil(GLint stencil)
-	{
 		_stencil = stencil;
 		return (*this);
 	}
 
-	RenderPass &RenderPass::setMaskColor(GLuint index, GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
+	RenderPass &RenderPass::setColorMask(GLuint index, glm::bvec4 const &color)
 	{
-		_maskRed[index] = red;
-		_maskGreen[index] = green;
-		_maskBlue[index] = blue;
-		_maskAlpha[index] = green;
+		_maskColor[index] = color;
 		return (*this);
 	}
 
-	RenderPass &RenderPass::setMaskDepth(GLboolean depth)
+	RenderPass &RenderPass::setDepthStencilMask(bool depth, uint8_t front, uint8_t back)
 	{
 		_maskDepth = depth;
+		_maskStencilFront = front;
+		_maskStencilBack = back;
 		return (*this);
 	}
 
-	RenderPass &RenderPass::setStencilMaskBackFace(GLboolean state)
+	RenderPass &RenderPass::setClearOption(bool color, bool depth, bool stencil)
 	{
-		_maskStencilBack = state;
+		_clearColor = color ? GL_COLOR_BUFFER_BIT : 0;
+		_clearDepth = depth ? GL_DEPTH_BUFFER_BIT : 0;
+		_clearStencil = stencil ? GL_STENCIL_BUFFER_BIT : 0;
 		return (*this);
 	}
 
-	RenderPass &RenderPass::setStencilMaskFrontFace(GLboolean state)
+	RenderPass &RenderPass::setTest(bool scissor, bool stencil, bool depth)
 	{
-		_maskStencilFront = state;
-		return (*this);
-	}
-
-	RenderPass &RenderPass::setClearColor(bool state)
-	{
-		_clearColor = state ? GL_COLOR_BUFFER_BIT : 0;
-		return (*this);
-	}
-
-	RenderPass &RenderPass::setClearDepth(bool state)
-	{
-		_clearDepth = state ? GL_DEPTH_BUFFER_BIT : 0;
-		return (*this);
-	}
-
-	RenderPass &RenderPass::setClearStencil(bool state)
-	{
-		_clearStencil = state ? GL_STENCIL_BUFFER_BIT : 0;
+		_scissorTest = scissor;
+		_stencilTest = stencil;
+		_depthTest = depth;
 		return (*this);
 	}
 
 	RenderPass &RenderPass::use()
 	{
-		glClear(_clearColor | _clearDepth | _clearStencil);
-		if (_multisampling)
-		{
-			glEnable(GL_MULTISAMPLE);
-			glEnable(GL_SAMPLE_SHADING);
-			glMinSampleShading(_multisampleRatio);
-		}
-		glClearColor(_red, _green, _blue, _alpha);
+		if (_scissorTest) { glEnable(GL_SCISSOR_TEST); glScissor(_area[0], _area[1], _area[2], _area[3]); }
+		if (_stencilTest) { glEnable(GL_STENCIL_TEST); }
+		if (_depthTest) { glEnable(GL_DEPTH_TEST); }
+
+		// set clear setup
+		glClearColor(_color[0], _color[1], _color[2], _color[3]);
 		glClearDepth(_depth);
 		glClearStencil(_stencil);
+		
+		// set mask
 		for (GLuint index = 0; index < GL_MAX_COLOR_ATTACHMENTS; ++index)
-			glColorMaski(index, _maskRed[index], _maskGreen[index], _maskBlue[index], _maskAlpha[index]);
+			glColorMaski(index, _maskColor[index][0], _maskColor[index][1], _maskColor[index][2], _maskColor[index][3]);
 		glDepthMask(_maskDepth);
 		glStencilMaskSeparate(GL_FRONT, _maskStencilFront);
 		glStencilMaskSeparate(GL_BACK, _maskStencilBack);
-		if (_scissorTest) glScissor(_leftScissor, _bottomScissor, _widthScissor, _heightScissor);
+		
+		// clear
+		glClear(_clearColor | _clearDepth | _clearStencil);
+
+		if (!_shader)
+			DEBUG_MESSAGE("Warning", "RenderPass - use", "no shader assign on this renderPass", *this);
+		_shader->use();
 		return (*this);
 	}
 

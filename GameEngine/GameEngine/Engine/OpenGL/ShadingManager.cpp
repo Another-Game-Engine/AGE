@@ -1,6 +1,7 @@
 #include <OpenGL/ShadingManager.hh>
 #include <OpenGL/Shader.hh>
 #include <OpenGL/Texture.hh>
+#include <OpenGL/RenderPass.hh>
 #include <iostream>
 #include <string>
 
@@ -64,15 +65,6 @@ namespace gl
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
-	}
-
-	ShadingManager &ShadingManager::useShader(Key<Shader> const &key)
-	{
-		Shader *shader;
-		if ((shader = getShader(key, "useShader()")) == NULL)
-			return (*this); 
-		shader->use();
-		return (*this);
 	}
 
 	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
@@ -351,6 +343,22 @@ namespace gl
 		return (&uniformBlock->second);
 	}
 
+	RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key, std::string const &in)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_renderPass.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+		if (key == _optimizeRenderPassSearch.first)
+			return (_optimizeRenderPassSearch.second);
+		auto &renderPass = _renderPass.find(key);
+		if (renderPass == _renderPass.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+		_optimizeRenderPassSearch.first = key;
+		_optimizeRenderPassSearch.second = &renderPass->second;
+		return (&renderPass->second);
+	}
+
 	ShadingManager &ShadingManager::wrapTexture2D(Key<Texture> const &key, GLint param)
 	{
 		Texture2D const *texture;
@@ -456,5 +464,98 @@ namespace gl
 		if ((texture = (Texture2D *)getTexture(key, "getMaxLevelMipMapTexture2D", GL_TEXTURE_2D)) == NULL)
 			return (-1);
 		return (texture->getMaxLevelMipMap());
+	}
+
+	Key<RenderPass> ShadingManager::addRenderPass(Key<Shader> const &keyShader)
+	{
+		Key<RenderPass> key;
+		Shader *shader;
+
+		if ((shader = getShader(keyShader, "addRenderPass")) == NULL)
+			return (Key<RenderPass>(KEY_DESTROY));
+		_renderPass[key] = RenderPass(*shader);
+		return (key);
+	}
+
+	ShadingManager &ShadingManager::rmRenderPass(Key<RenderPass> &key)
+	{
+		if (getRenderPass(key, "rmRenderPass") == NULL)
+			return (*this);
+		_renderPass.erase(key);
+		key.destroy();
+		return (*this);
+	}
+
+	Key<RenderPass> ShadingManager::getRenderPass(size_t target) const
+	{
+		if (target >= _renderPass.size())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getRenderPass(size_t target)", "the target is out of range", Key<RenderPass>(KEY_DESTROY));
+		auto &element = _renderPass.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
+	}
+
+	ShadingManager &ShadingManager::setClearOptionRenderPass(Key<RenderPass> const &key, bool color, bool depth, bool stencil)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setClearOptionRenderPass")) == NULL)
+			return (*this);
+		renderPass->setClearOption(color, depth, stencil);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setClearValueRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth, uint8_t stencil)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setClearValueRenderPass")) == NULL)
+			return (*this);
+		renderPass->setClearValue(color, depth, stencil);
+		return (*this);
+	}
+	
+	ShadingManager &ShadingManager::setColorMaskRenderPass(Key<RenderPass> const &key, GLuint index, glm::bvec4 const &color)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setColorMaskRenderPass")) == NULL)
+			return (*this);
+		renderPass->setColorMask(index, color);
+		return (*this);
+	}
+	
+	ShadingManager &ShadingManager::setDepthStencilMaskRenderPass(Key<RenderPass> const &key, bool depth, uint8_t front, uint8_t back)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
+			return (*this);
+		renderPass->setDepthStencilMask(depth, front, back);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setTestRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
+			return (*this);
+		renderPass->setTest(scissor, stencil, depth);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setScissorRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
+			return (*this);
+		renderPass->setScissorArea(area);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::useRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "useRenderPass")) == NULL)
+			return (*this);
+		renderPass->use();
+		return (*this);
 	}
 }

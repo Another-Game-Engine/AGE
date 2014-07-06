@@ -18,7 +18,7 @@ namespace gl
 	struct InterfaceBlock;
 	class Texture;
 	class UniformBuffer;
-
+	class RenderPass;
 
 	//!\file ShadingManager.hh
 	//!\author Dorian Pinaud
@@ -37,7 +37,6 @@ namespace gl
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
 		ShadingManager &rmShader(Key<Shader> &shader);
 		Key<Shader> getShader(size_t index) const;
-		ShadingManager &useShader(Key<Shader> const &s);
 		
 		// uniform
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
@@ -87,20 +86,35 @@ namespace gl
 		Key<Texture> getTexture(size_t target) const;
 		GLenum getTypeTexture(Key<Texture> const &key);
 
+		// RenderPass
+		Key<RenderPass> addRenderPass(Key<Shader> const &shader);
+		ShadingManager &rmRenderPass(Key<RenderPass> &key);
+		Key<RenderPass> getRenderPass(size_t target) const;
+		ShadingManager &setClearOptionRenderPass(Key<RenderPass> const &key, bool color = true, bool depth = true, bool stencil = false);
+		ShadingManager &setClearValueRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth, uint8_t stencil);
+		ShadingManager &setColorMaskRenderPass(Key<RenderPass> const &key, GLuint index, glm::bvec4 const &color);
+		ShadingManager &setDepthStencilMaskRenderPass(Key<RenderPass> const &key, bool depth, uint8_t front, uint8_t back);
+		ShadingManager &setTestRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth);
+		ShadingManager &setScissorRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area);
+		ShadingManager &useRenderPass(Key<RenderPass> const &key);
+
 	private:
 		std::map<Key<Shader>, Shader> _shaders;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
+		std::map<Key<RenderPass>, RenderPass> _renderPass;
 
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
 		std::pair<Key<UniformBlock>, UniformBlock *> _optimizeUniformBlockSearch;
 		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
+		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
 
 
 		// tool use in intern
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key, std::string const &in);
 		Texture *getTexture(Key<Texture> const &key, std::string const &in, GLenum type);
+		RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
 	};
 
 # undef DEBUG_MESSAGE

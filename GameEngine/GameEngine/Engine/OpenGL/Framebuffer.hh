@@ -56,3 +56,8 @@ namespace OpenGLTools
 	private:
 	};
 }
+
+namespace gl
+{
+
+}
