@@ -2,6 +2,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <bullet/src/LinearMath/btTransform.h>
 #include <bullet/src/LinearMath/btVector3.h>
+#include <bullet/src/LinearMath/btQuaternion.h>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 glm::mat4 convertBulletTransformToGLM(const btTransform& transform)
 {
@@ -23,4 +26,14 @@ btVector3 convertGLMVectorToBullet(const glm::vec3 &vector)
 glm::vec3 convertBulletVectorToGLM(const btVector3& vector)
 {
 	return glm::vec3(vector.getX(), vector.getY(), vector.getZ());
+}
+
+glm::quat convertBulletQuatToGLM(const btQuaternion& quat)
+{
+	return glm::quat(quat.getW(), quat.getX(), quat.getY(), quat.getZ());
+}
+
+btQuaternion convertGLMQuatToBullet(const glm::quat& quat)
+{
+	return btQuaternion(quat.x, quat.y, quat.z, quat.w);
 }

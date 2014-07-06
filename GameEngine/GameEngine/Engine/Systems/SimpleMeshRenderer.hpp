@@ -56,7 +56,7 @@ protected:
 
 			for (auto &&mesh : _meshs.getCollection())
 			{
-				scene->getComponent<Component::MeshRenderer>(mesh)->renderRaw(renderer, scene->getTransform(mesh));
+				scene->getComponent<Component::MeshRenderer>(mesh)->renderRaw(renderer, scene->getLink(mesh)->getTransform());
 			}
 		}
 	}

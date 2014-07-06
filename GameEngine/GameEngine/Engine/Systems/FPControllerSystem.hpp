@@ -39,7 +39,7 @@ private:
 		auto scene = _scene.lock();
 		for (auto e : _filter.getCollection())
 		{
-			auto &entityTrans = scene->getTransform(e);
+			auto &entityTrans = scene->getLink(e)->getTransform();
 			auto fp = scene->getComponent<Component::FPController>(e);
 			updateComponent(e, fp, time);
 			auto inputs = scene->getInstance<Input>();

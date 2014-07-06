@@ -32,7 +32,6 @@ private:
 	std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 	std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
-	std::array<glm::mat4, MAX_ENTITY_NUMBER>                                _entityTransform;
 	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
 	int test = 0;
@@ -89,7 +88,6 @@ public:
 		data.entity.flags = 0;
 		cachedCode = data.barcode;
 		data.barcode.reset();
-		_entityTransform[e.id] = glm::mat4(1);
 		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
 		{
 			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))
@@ -105,9 +103,9 @@ public:
 		_free.push(e.id);
 	}
 
-	const glm::mat4 &getTransform(const Entity &e) const;
-	glm::mat4 &getTransformRef(const Entity &e);
-	void setTransform(Entity &e, const glm::mat4 &trans);
+	//const glm::mat4 &getTransform(const Entity &e) const;
+	//glm::mat4 &getTransformRef(const Entity &e);
+	//void setTransform(Entity &e, const glm::mat4 &trans);
 
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
@@ -335,6 +333,11 @@ public:
 	AComponentManager *getComponentManager(COMPONENT_ID componentId)
 	{
 		return _componentsManagers[componentId];
+	}
+
+	AGE::Link *getLink(const Entity &e)
+	{
+		return &_pool[e.id].link;
 	}
 
 private:

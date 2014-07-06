@@ -7,6 +7,8 @@
 
 #include "EntityTypedef.hpp"
 
+#include <Core/Link.hpp>
+
 class AScene;
 class AComponentManager;
 class EntityFilter;
@@ -189,7 +191,7 @@ public:
 	const Barcode &getBarcode() const { return barcode; }
 private:
 	Entity entity;
-	uint32_t crap;
+	AGE::Link link;
 	Barcode barcode;
 
 public:

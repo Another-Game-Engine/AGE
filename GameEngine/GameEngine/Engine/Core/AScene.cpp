@@ -72,19 +72,3 @@ void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, 
 		f->componentRemoved(std::move(entity), id);
 	}
 }
-
-const glm::mat4 &AScene::getTransform(const Entity &e) const
-{
-	return _entityTransform[e.id];
-}
-
-glm::mat4 &AScene::getTransformRef(const Entity &e)
-{
-	return _entityTransform[e.id];
-}
-
-void AScene::setTransform(Entity &e, const glm::mat4 &trans)
-{
-	e.setFlags() |= Flags::HasMoved;
-	_entityTransform[e.id] = trans;
-}

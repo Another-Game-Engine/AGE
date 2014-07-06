@@ -50,16 +50,21 @@ void FPController::init(const Entity &entity, std::weak_ptr<AScene> scene, short
 	controls.fill(false);
 
 	btTransform transform;
-	auto &entityTransform = scene.lock()->getTransform(entity);
-	glm::vec3 position = posFromMat4(entityTransform);
-	glm::vec3 scale = scaleFromMat4(entityTransform);
-	glm::vec3 rot = rotFromMat4(entityTransform, true);
+	//auto &entityTransform = scene.lock()->getTransform(entity);
+	//glm::vec3 position = posFromMat4(entityTransform);
+	//glm::vec3 scale = scaleFromMat4(entityTransform);
+	//glm::vec3 rot = rotFromMat4(entityTransform, true);
+	//transform.setIdentity();
+	//transform.setOrigin(convertGLMVectorToBullet(position));
+	//transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
+
+	auto link = scene.lock()->getLink(entity);
 	transform.setIdentity();
-	transform.setOrigin(convertGLMVectorToBullet(position));
-	transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
+	transform.setOrigin(convertGLMVectorToBullet(link->getPosition()));
+	transform.setRotation(convertGLMQuatToBullet(link->getOrientation()));
 
 	_ghost = new btPairCachingGhostObject();
-	_shape = new btCylinderShape(convertGLMVectorToBullet(scale));
+	_shape = new btCylinderShape(convertGLMVectorToBullet(link->getScale()));
 
 	_ghost->setCollisionShape(_shape);
 	// _ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);

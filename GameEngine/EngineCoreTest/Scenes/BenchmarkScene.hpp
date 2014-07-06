@@ -111,27 +111,22 @@ public:
 		cam->attachSkybox(getInstance<AssetsManager>()->get<CubeMapFile>("skybox__space"), "cubemapShader");
 		cam->sampleNbr = 0;
 
-		setTransform(camera, glm::translate(glm::mat4(1), glm::vec3(0, 0, -40)));
-
+		auto camLink = getLink(camera);
+		camLink->setPosition(glm::vec3(0, 0, -40));
 
 	auto light = createEntity();
+	auto lightLink = getLink(light);
 	auto lightComponent = addComponent<Component::PointLight>(light);
 	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 30);
 	lightComponent->lightData.positionPower.w = 0.5f;
 	lightComponent->lightData.hasShadow = -1;
-	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 3, 0)));
-
-	//light = createEntity();
-	//lightComponent = addComponent<Component::PointLight>(light);
-	//lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
-	//lightComponent->lightData.positionPower.w = 0;
-	//lightComponent->lightData.hasShadow = -1;
-	//setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
+	lightLink->setPosition(glm::vec3(0, 3, 0));
 
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto plane = createEntity();
-	setTransform(plane, glm::translate(getTransform(plane), glm::vec3(0, -10, 0)));
-	setTransform(plane, glm::scale(getTransform(plane), glm::vec3(100, 1, 100)));
+	auto link = getLink(plane);
+	link->setPosition(glm::vec3(0, -10, 0));
+	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 	mesh->setShader("MaterialBasic");
 	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
@@ -173,9 +168,9 @@ public:
 				rigidBody->getBody().setFriction(0.5f);
 				rigidBody->getBody().setRestitution(0.5f);
 #endif
-
-				setTransform(e, glm::translate(getTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
-				setTransform(e, glm::scale(getTransform(e), glm::vec3(3.0f)));
+				auto link = getLink(e);
+				link->setPosition(glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10));
+				link->setScale(glm::vec3(3.0f));
 
 #ifdef RENDERING_ACTIVATED
 
@@ -189,7 +184,7 @@ public:
 
 
 #ifdef PHYSIC_SIMULATION
-				rigidBody->setTransformation(getTransform(e));
+				rigidBody->setTransformation(link->getTransform());
 #endif
 
 #ifndef COMPLEX_MESH
