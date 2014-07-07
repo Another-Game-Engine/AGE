@@ -3,6 +3,7 @@
 #include <Utils/OpenGL.hh>
 #include <glm/glm.hpp>
 #include <stdint.h>
+#include <tuple>
 
 namespace gl
 {
@@ -27,6 +28,13 @@ namespace gl
 		RenderPass &setDepthStencilMask(bool depth, uint8_t front, uint8_t back);
 		RenderPass &setClearOption(bool color, bool depth, bool stencil);
 		RenderPass &setScissorArea(glm::ivec4 const &area);
+		RenderPass &setStencilFunctionFrontFace(GLenum func, int ref, uint8_t mask);
+		RenderPass &setStencilOperationFrontFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		RenderPass &setStencilFunctionBackFace(GLenum func, int ref, uint8_t mask);
+		RenderPass &setStencilOperationBackFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		RenderPass &setStencilFunction(GLenum func, int ref, uint8_t mask);
+		RenderPass &setStencilOperation(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+
 		RenderPass &setTest(bool scissor, bool stencil, bool depth);
 		RenderPass &use();
 
@@ -50,6 +58,10 @@ namespace gl
 
 		// scissor
 		glm::ivec4 _area;
+
+		// stencil
+		std::tuple<GLenum, int, uint8_t, GLenum, GLenum, GLenum> _faceBackStencil;
+		std::tuple<GLenum, int, uint8_t, GLenum, GLenum, GLenum> _faceFrontStencil;
 
 		// Test
 		bool _scissorTest;

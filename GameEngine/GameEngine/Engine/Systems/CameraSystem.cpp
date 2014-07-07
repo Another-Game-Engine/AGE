@@ -109,9 +109,11 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
 	_renderPass = _render->addRenderPass(_shader);
-	_render->setClearOptionRenderPass(_renderPass, true, true);
-	_render->setTestRenderPass(_renderPass, true, false, true);
-	_render->setScissorRenderPass(_renderPass, glm::ivec4(10, 10, 600, 800));
+	_render->setClearOptionRenderPass(_renderPass, true, true, true);
+	_render->setTestRenderPass(_renderPass, false, true, true);
+	_render->setStencilFunctionRenderPass(_renderPass, GL_NEVER, 0);
+	_render->setStencilOperationRenderPass(_renderPass, GL_ZERO, GL_ZERO, GL_ZERO);
+
 }
 #endif
 

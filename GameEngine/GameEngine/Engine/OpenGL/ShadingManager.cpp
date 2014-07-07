@@ -558,4 +558,56 @@ namespace gl
 		renderPass->use();
 		return (*this);
 	}
+	ShadingManager &ShadingManager::setStencilFunctionFrontFaceRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setStencilFunctionFrontFaceRenderPass")) == NULL)
+			return (*this);
+		renderPass->setStencilFunctionFrontFace(func, ref, mask);
+		return (*this);
+	}
+	ShadingManager &ShadingManager::setStencilOperationFrontFaceRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setStencilOperationFrontFaceRenderPass")) == NULL)
+			return (*this);
+		renderPass->setStencilOperationFrontFace(opStencilFail, opDepthFail, opDepthPass);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setStencilFunctionBackFaceRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setStencilFunctionBackFaceRenderPass")) == NULL)
+			return (*this);
+		renderPass->setStencilFunctionBackFace(func, ref, mask);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setStencilOperationBackFaceRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setStencilOperationBackFaceRenderPass")) == NULL)
+			return (*this);
+		renderPass->setStencilOperationBackFace(opStencilFail, opDepthFail, opDepthPass);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setStencilFunctionRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setStencilFunctionRenderPass")) == NULL)
+			return (*this);
+		renderPass->setStencilFunction(func, ref, mask);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setStencilOperationRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setStencilOperationRenderPass")) == NULL)
+			return (*this);
+		renderPass->setStencilOperation(opStencilFail, opDepthFail, opDepthPass);
+		return (*this);
+	}
 }

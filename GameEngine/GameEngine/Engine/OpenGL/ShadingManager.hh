@@ -91,11 +91,18 @@ namespace gl
 		ShadingManager &rmRenderPass(Key<RenderPass> &key);
 		Key<RenderPass> getRenderPass(size_t target) const;
 		ShadingManager &setClearOptionRenderPass(Key<RenderPass> const &key, bool color = true, bool depth = true, bool stencil = false);
-		ShadingManager &setClearValueRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth, uint8_t stencil);
+		ShadingManager &setClearValueRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
 		ShadingManager &setColorMaskRenderPass(Key<RenderPass> const &key, GLuint index, glm::bvec4 const &color);
 		ShadingManager &setDepthStencilMaskRenderPass(Key<RenderPass> const &key, bool depth, uint8_t front, uint8_t back);
 		ShadingManager &setTestRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth);
 		ShadingManager &setScissorRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area);
+		ShadingManager &setStencilFunctionFrontFaceRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		ShadingManager &setStencilOperationFrontFaceRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		ShadingManager &setStencilFunctionBackFaceRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		ShadingManager &setStencilOperationBackFaceRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		ShadingManager &setStencilFunctionRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		ShadingManager &setStencilOperationRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+
 		ShadingManager &useRenderPass(Key<RenderPass> const &key);
 
 	private:
