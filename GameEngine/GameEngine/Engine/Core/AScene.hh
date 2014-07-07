@@ -299,6 +299,14 @@ public:
 		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->getComponent(entity);
 	}
 
+	Component::Base *getComponent(const Entity &entity, COMPONENT_ID componentId)
+	{
+		auto &e = _pool[entity.id];
+		assert(e.entity == entity);
+		assert(e.barcode.hasComponent(componentId));
+		return this->_componentsManagers[componentId]->getComponentPtr(entity);
+	}
+
 	template <typename T>
 	bool removeComponent(Entity &entity)
 	{

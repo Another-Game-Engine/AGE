@@ -37,10 +37,10 @@ namespace Component
 		MeshRenderer &operator=(MeshRenderer &&o);
 		void init(AScene *, std::shared_ptr<ObjFile> file);
 		virtual void reset(AScene *);
-		inline void setShader(const std::string &_shader) { shader = _shader; }
+//		inline void setShader(const std::string &_shader) { shader = _shader; }
 		void render(Renderer *renderer, const glm::mat4 &globalTrans, std::function<void(gl::Shader&)> func);
 		void renderRaw(Renderer *renderer, const glm::mat4 &trans);
-		std::shared_ptr<ObjFile>	const &getMesh() const;
+//		std::shared_ptr<ObjFile>	const &getMesh() const;
 
 		//////
 		////
@@ -49,17 +49,17 @@ namespace Component
 		template <typename Archive>
 		void save(Archive &ar) const
 		{
-			ar(CEREAL_NVP(shader));
-			std::string meshName = mesh->path.getFullName();
-			ar(cereal::make_nvp("meshName", meshName));
+			//ar(CEREAL_NVP(shader));
+			//std::string meshName = mesh->path.getFullName();
+			//ar(cereal::make_nvp("meshName", meshName));
 		}
 
 		template <typename Archive>
 		void load(Archive &ar)
 		{
-			ar(shader);
-			std::string meshName;
-			ar(meshName);
+			//ar(shader);
+			//std::string meshName;
+			//ar(meshName);
 			// TODO @CESAR
 			//mesh = std::static_pointer_cast<ObjFile>(_entity->getScene().lock()->getInstance<AssetsManager>()->loadFromFile(File(meshName)));
 		}
@@ -68,8 +68,8 @@ namespace Component
 		////
 		//////
 
-		std::shared_ptr<ObjFile>	mesh;
-		std::string shader;
+		//std::shared_ptr<ObjFile>	mesh;
+		//std::string shader;
 	private:
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);

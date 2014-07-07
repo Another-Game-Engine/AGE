@@ -5,8 +5,7 @@
 namespace Component
 {
 	MeshRenderer::MeshRenderer() :
-		Component::ComponentBase<MeshRenderer>(),
-		mesh(nullptr)
+		Component::ComponentBase<MeshRenderer>()
 	{
 	}
 
@@ -35,10 +34,10 @@ namespace Component
 		mesh = r;
 	}
 
-	std::shared_ptr<ObjFile> const &MeshRenderer::getMesh() const
-	{
-		return (mesh);
-	}
+	//std::shared_ptr<ObjFile> const &MeshRenderer::getMesh() const
+	//{
+	//	return (mesh);
+	//}
 
 	void MeshRenderer::reset(AScene *scene)
 	{

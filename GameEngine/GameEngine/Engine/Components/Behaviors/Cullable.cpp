@@ -15,5 +15,30 @@ namespace AGE
 		{
 			scene->getLink(entityId)->unregisterCullableId(_cullableId);
 		}
+
+		//temporary
+		//
+		//
+
+		void Cullable::setShader(const std::string &_shader)
+		{
+			shader = _shader;
+		}
+
+		void Cullable::setMesh(const std::shared_ptr<ObjFile> &_mesh)
+		{
+			mesh = _mesh;
+		}
+
+		std::shared_ptr<ObjFile> Cullable::getMesh()
+		{
+			return mesh;
+		}
+
+		const std::string &Cullable::getShader()
+		{
+			return shader;
+		}
+
 	}
 }
