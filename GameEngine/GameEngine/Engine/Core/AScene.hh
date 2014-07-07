@@ -77,6 +77,7 @@ public:
 		{
 			auto id = _free.front();
 			_free.pop();
+			_pool[id].link.reset();
 			return _pool[id].entity;
 		}
 	}

@@ -7,10 +7,11 @@
 #include <OpenGL/Framebuffer.hh>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/AssetsManager.hpp>
+#include "Behaviors/Camera.hpp"
 
 namespace Component
 {
-	struct CameraComponent : public ComponentBase<CameraComponent>
+	struct CameraComponent : public ComponentBase<CameraComponent>, public AGE::ComponentBehavior::Camera
 	{
 		CameraComponent();
 		virtual ~CameraComponent(void);
@@ -72,10 +73,8 @@ namespace Component
 		//////
 
 		glm::uvec4	viewport;
-		glm::mat4 projection;
 		std::shared_ptr<CubeMapFile> skybox;
 		std::string cubeMapShader;
-		glm::mat4 lookAtTransform;
 		OpenGLTools::Framebuffer	frameBuffer;
 		OpenGLTools::Framebuffer	downSampling;
 		bool blitOnScreen;

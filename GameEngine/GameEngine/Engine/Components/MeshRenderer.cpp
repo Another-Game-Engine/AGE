@@ -5,7 +5,8 @@
 namespace Component
 {
 	MeshRenderer::MeshRenderer() :
-		Component::ComponentBase<MeshRenderer>()
+		Component::ComponentBase<MeshRenderer>(),
+		Cullable()
 	{
 	}
 
@@ -15,9 +16,8 @@ namespace Component
 
 	MeshRenderer::MeshRenderer(MeshRenderer &&o)
 		: ComponentBase<MeshRenderer>(std::move(o))
+, 		Cullable(std::move(o))
 	{
-		mesh = std::move(o.mesh);
-		shader = std::move(o.shader);
 	}
 
 	MeshRenderer &MeshRenderer::operator=(MeshRenderer &&o)

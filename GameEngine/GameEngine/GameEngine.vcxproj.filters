@@ -71,6 +71,7 @@
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
+    <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Components\Behaviors\Cullable.hpp" />
     <ClInclude Include="Engine\Core\Octree.hpp" />
+    <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

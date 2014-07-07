@@ -22,6 +22,25 @@ namespace AGE
 			void init(::AScene *scene, ENTITY_ID entityId, COMPONENT_ID componentTypeId);
 			void reset(::AScene *scene, ENTITY_ID entityId);
 
+			Cullable::Cullable()
+			{}
+
+			Cullable::Cullable(Cullable &&o)
+			{
+				mesh = std::move(o.mesh);
+				shader = std::move(o.shader);
+				_cullableId = std::move(o._cullableId);
+			}
+
+			Cullable &Cullable::operator=(Cullable &&o)
+			{
+				mesh = std::move(o.mesh);
+				shader = std::move(o.shader);
+				_cullableId = std::move(_cullableId);
+				return *this;
+			}
+
+
 			//TEMPORARY FOR TEST
 			void setShader(const std::string &_shader);
 			void setMesh(const std::shared_ptr<ObjFile> &_mesh);

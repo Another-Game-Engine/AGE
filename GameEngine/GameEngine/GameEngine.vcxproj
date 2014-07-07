@@ -210,6 +210,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
@@ -282,6 +283,7 @@
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
     <ClInclude Include="Engine\Components\Behaviors\Cullable.hpp" />
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
