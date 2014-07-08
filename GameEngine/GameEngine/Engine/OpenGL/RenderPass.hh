@@ -25,9 +25,10 @@ namespace gl
 
 		RenderPass &setClearValue(glm::vec4 const &color, float depth, uint8_t stencil);
 		RenderPass &setColorMask(GLuint index, glm::bvec4 const &color);
-		RenderPass &setDepthStencilMask(bool depth, uint8_t front, uint8_t back);
-		RenderPass &setClearOption(bool color, bool depth, bool stencil);
-		RenderPass &setScissorArea(glm::ivec4 const &area);
+		RenderPass &setDepthMask(bool depth);
+		RenderPass &setStencilMask(uint8_t front, uint8_t back);
+		RenderPass &clear(bool color, bool depth, bool stencil);
+		RenderPass &setScissor(glm::ivec4 const &area);
 		RenderPass &setStencilFunctionFrontFace(GLenum func, int ref, uint8_t mask);
 		RenderPass &setStencilOperationFrontFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
 		RenderPass &setStencilFunctionBackFace(GLenum func, int ref, uint8_t mask);
@@ -40,33 +41,6 @@ namespace gl
 
 	private:
 		Shader *_shader;
-		// clean buffer
-		GLbitfield _clearColor;
-		GLbitfield _clearDepth;
-		GLbitfield _clearStencil;
-		
-		// clear color
-		glm::vec4 _color;
-		float _depth;
-		uint8_t _stencil;
-		
-		// mask
-		glm::bvec4 _maskColor[GL_MAX_COLOR_ATTACHMENTS];
-		bool _maskDepth;
-		uint8_t _maskStencilBack;
-		uint8_t _maskStencilFront;
 
-		// scissor
-		glm::ivec4 _area;
-
-		// stencil
-		std::tuple<GLenum, int, uint8_t, GLenum, GLenum, GLenum> _faceBackStencil;
-		std::tuple<GLenum, int, uint8_t, GLenum, GLenum, GLenum> _faceFrontStencil;
-
-		// Test
-		bool _scissorTest;
-		bool _stencilTest;
-		bool _depthTest;
-		
 	};
 }

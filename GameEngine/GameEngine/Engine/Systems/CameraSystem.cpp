@@ -9,7 +9,6 @@
 #include <OpenGL/ShadingManager.hh>
 #include <OpenGL/GeometryManager.hh>
 
-
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
 
@@ -109,11 +108,6 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
 	_renderPass = _render->addRenderPass(_shader);
-	_render->setClearOptionRenderPass(_renderPass, true, true, true);
-	_render->setTestRenderPass(_renderPass, false, true, true);
-	_render->setStencilFunctionRenderPass(_renderPass, GL_NEVER, 0);
-	_render->setStencilOperationRenderPass(_renderPass, GL_ZERO, GL_ZERO, GL_ZERO);
-
 }
 #endif
 
@@ -197,6 +191,7 @@ void CameraSystem::mainUpdate(double time)
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 		_render->useRenderPass(_renderPass);
+		// draw
 		for (auto m : _drawable.getCollection())
 		{
 			auto mesh = scene->getComponent<Component::MeshRenderer>(m);

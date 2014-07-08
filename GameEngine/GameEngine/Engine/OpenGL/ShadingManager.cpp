@@ -496,12 +496,12 @@ namespace gl
 		return (element->first);
 	}
 
-	ShadingManager &ShadingManager::setClearOptionRenderPass(Key<RenderPass> const &key, bool color, bool depth, bool stencil)
+	ShadingManager &ShadingManager::clearRenderPass(Key<RenderPass> const &key, bool color, bool depth, bool stencil)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setClearOptionRenderPass")) == NULL)
 			return (*this);
-		renderPass->setClearOption(color, depth, stencil);
+		renderPass->clear(color, depth, stencil);
 		return (*this);
 	}
 
@@ -514,7 +514,7 @@ namespace gl
 		return (*this);
 	}
 	
-	ShadingManager &ShadingManager::setColorMaskRenderPass(Key<RenderPass> const &key, GLuint index, glm::bvec4 const &color)
+	ShadingManager &ShadingManager::setColorMaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setColorMaskRenderPass")) == NULL)
@@ -523,12 +523,21 @@ namespace gl
 		return (*this);
 	}
 	
-	ShadingManager &ShadingManager::setDepthStencilMaskRenderPass(Key<RenderPass> const &key, bool depth, uint8_t front, uint8_t back)
+	ShadingManager &ShadingManager::setStencilMaskRenderPass(Key<RenderPass> const &key, uint8_t front, uint8_t back)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
 			return (*this);
-		renderPass->setDepthStencilMask(depth, front, back);
+		renderPass->setStencilMask(front, back);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setDepthMaskRenderPass(Key<RenderPass> const &key, bool depth)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
+			return (*this);
+		renderPass->setDepthMask(depth);
 		return (*this);
 	}
 
@@ -546,7 +555,7 @@ namespace gl
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
 			return (*this);
-		renderPass->setScissorArea(area);
+		renderPass->setScissor(area);
 		return (*this);
 	}
 
