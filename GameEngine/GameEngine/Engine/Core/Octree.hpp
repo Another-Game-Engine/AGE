@@ -61,6 +61,7 @@ namespace AGE
 		void removeElement(std::size_t id)
 		{
 			_free.push(id);
+			assert(id != (std::size_t)(-1));
 			//todo, remove from tree
 		}
 

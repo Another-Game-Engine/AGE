@@ -43,7 +43,7 @@ namespace AGE
 					return;
 				}
 			}
-			assert(false);
+			//assert(false);
 		}
 
 	private:

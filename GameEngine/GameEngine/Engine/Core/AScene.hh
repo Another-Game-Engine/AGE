@@ -92,6 +92,7 @@ public:
 		data.entity.flags = 0;
 		cachedCode = data.barcode;
 		data.barcode.reset();
+		getLink(e)->reset();
 		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
 		{
 			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))

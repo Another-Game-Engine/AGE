@@ -48,11 +48,11 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 	addSystem<FirstPersonViewSystem>(2);
-	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	//auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::ShadingManager>();
 	auto &g = *getInstance<gl::GeometryManager>();
 #if NEW_SHADER
-	camerasystem->setManager(m, g);
+	//camerasystem->setManager(m, g);
 #endif
 
 #ifdef SIMPLE_RENDERING
@@ -161,7 +161,7 @@ public:
 				auto e = createEntity();
 
 #ifdef LIFETIME_ACTIVATED
-				addComponent<Component::Lifetime>(e, 5.0f);
+				addComponent<Component::Lifetime>(e, 0.2f);
 #endif
 
 #ifdef PHYSIC_SIMULATION

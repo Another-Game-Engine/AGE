@@ -16,14 +16,12 @@ namespace Component
 
 	MeshRenderer::MeshRenderer(MeshRenderer &&o)
 		: ComponentBase<MeshRenderer>(std::move(o))
-, 		Cullable(std::move(o))
+		, Cullable(std::move(o))
 	{
 	}
 
 	MeshRenderer &MeshRenderer::operator=(MeshRenderer &&o)
 	{
-		mesh = std::move(o.mesh);
-		shader = std::move(o.shader);
 		Cullable::operator=(std::move(o));
 		return *this;
 	}
@@ -43,8 +41,6 @@ namespace Component
 	void MeshRenderer::reset(AScene *scene)
 	{
 		AGE::ComponentBehavior::Cullable::reset(scene, entityId);
-		mesh = nullptr;
-		shader = "";
 	}
 
 	void MeshRenderer::render(Renderer *renderer, const glm::mat4 &globalTrans, std::function<void(gl::Shader&)> func)

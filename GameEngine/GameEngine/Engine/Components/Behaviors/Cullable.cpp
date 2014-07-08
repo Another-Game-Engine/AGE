@@ -7,12 +7,17 @@ namespace AGE
 	{
 		void Cullable::init(::AScene *scene, ENTITY_ID entityId, COMPONENT_ID componentTypeId)
 		{
+			assert(_cullableId == (std::size_t)(-1));
 			_cullableId = scene->getInstance<AGE::Octree>()->addElement(componentTypeId);
 			scene->getLink(entityId)->registerCullableId(_cullableId);
+			assert(_cullableId != (std::size_t)(-1));
 		}
 
 		void Cullable::reset(::AScene *scene, ENTITY_ID entityId)
 		{
+			assert(_cullableId != (std::size_t)(-1));
+			mesh = nullptr;
+			shader = "";
 			scene->getLink(entityId)->unregisterCullableId(_cullableId);
 			scene->getInstance<AGE::Octree>()->removeElement(_cullableId);
 			_cullableId = (std::size_t)(-1);

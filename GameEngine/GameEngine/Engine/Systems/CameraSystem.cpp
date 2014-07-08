@@ -193,7 +193,7 @@ void CameraSystem::mainUpdate(double time)
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		for (auto m : _drawable.getCollection())
+		for (auto &m : _drawable.getCollection())
 		{
 			auto mesh = scene->getComponent<Component::MeshRenderer>(m);
 			_render->setShaderSampler(_shader, _diffuse_texture, mesh->getMesh()->material->materials[0].diffuseTex->getTexture());
