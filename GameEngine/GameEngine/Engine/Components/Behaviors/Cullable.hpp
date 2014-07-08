@@ -40,7 +40,7 @@ namespace AGE
 			{
 				mesh = std::move(o.mesh);
 				shader = std::move(o.shader);
-				_cullableId = _cullableId;
+				_cullableId = o._cullableId;
 				return *this;
 			}
 

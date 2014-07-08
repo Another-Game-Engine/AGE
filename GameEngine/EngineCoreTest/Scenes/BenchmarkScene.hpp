@@ -48,11 +48,11 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 	addSystem<FirstPersonViewSystem>(2);
-	//auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::ShadingManager>();
 	auto &g = *getInstance<gl::GeometryManager>();
 #if NEW_SHADER
-	//camerasystem->setManager(m, g);
+	camerasystem->setManager(m, g);
 #endif
 
 #ifdef SIMPLE_RENDERING
@@ -134,12 +134,13 @@ public:
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
 	mesh->setShader("MaterialBasic");
+#ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
 //	rigidBody->setTransformation(getTransform(plane));
 	rigidBody->getBody().setFriction(0.8f);
 	//rigidBody->getBody().setRestitution(1.0f);
-
+#endif //PHYSIC_SIMULATION
 #endif
 
 
@@ -161,7 +162,7 @@ public:
 				auto e = createEntity();
 
 #ifdef LIFETIME_ACTIVATED
-				addComponent<Component::Lifetime>(e, 0.2f);
+				addComponent<Component::Lifetime>(e, 15.0f);
 #endif
 
 #ifdef PHYSIC_SIMULATION
