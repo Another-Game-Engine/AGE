@@ -24,6 +24,7 @@ namespace Component
 	{
 		mesh = std::move(o.mesh);
 		shader = std::move(o.shader);
+		Cullable::operator=(std::move(o));
 		return *this;
 	}
 

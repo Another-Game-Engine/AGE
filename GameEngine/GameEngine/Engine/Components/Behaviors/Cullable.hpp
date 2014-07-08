@@ -23,6 +23,7 @@ namespace AGE
 			void reset(::AScene *scene, ENTITY_ID entityId);
 
 			Cullable::Cullable()
+				:_cullableId(std::size_t(-1))
 			{}
 
 			Cullable::Cullable(Cullable &&o)

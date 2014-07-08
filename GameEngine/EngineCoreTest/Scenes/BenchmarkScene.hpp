@@ -161,7 +161,7 @@ public:
 				auto e = createEntity();
 
 #ifdef LIFETIME_ACTIVATED
-				addComponent<Component::Lifetime>(e, 10.5f);
+				addComponent<Component::Lifetime>(e, 5.0f);
 #endif
 
 #ifdef PHYSIC_SIMULATION
@@ -174,7 +174,8 @@ public:
 				rigidBody->getBody().setRestitution(0.5f);
 #endif
 				auto link = getLink(e);
-				link->setPosition(glm::vec3((rand() % 200) - 100, (rand() % 20) - 5, (rand() % 200) - 100));
+				link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+				link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
 				link->setScale(glm::vec3(3.0f));
 
 #ifdef RENDERING_ACTIVATED
@@ -224,7 +225,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 8.0f;
+	double _maxTime = 800000.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;

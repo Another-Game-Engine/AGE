@@ -14,6 +14,8 @@ namespace AGE
 		void Cullable::reset(::AScene *scene, ENTITY_ID entityId)
 		{
 			scene->getLink(entityId)->unregisterCullableId(_cullableId);
+			scene->getInstance<AGE::Octree>()->removeElement(_cullableId);
+			_cullableId = (std::size_t)(-1);
 		}
 
 		//temporary
