@@ -120,15 +120,13 @@ namespace gl
 
 	RenderPass &RenderPass::setStencilFunction(GLenum func, int ref, uint8_t mask)
 	{
-		glStencilFuncSeparate(GL_FRONT, func, ref, mask);
-		glStencilFuncSeparate(GL_BACK, func, ref, mask);
+		glStencilFunc(func, ref, mask);
 		return (*this);
 	}
 
 	RenderPass &RenderPass::setStencilOperation(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
-		glStencilOpSeparate(GL_FRONT, opStencilFail, opDepthFail, opDepthPass);
-		glStencilOpSeparate(GL_BACK, opStencilFail, opDepthFail, opDepthPass);
+		glStencilOp(opStencilFail, opDepthFail, opDepthPass);
 		return (*this);
 	}
 	
@@ -146,15 +144,37 @@ namespace gl
 			glEnablei(GL_BLEND, drawBuffer);
 		else
 			glDisablei(GL_BLEND, drawBuffer);
+		return (*this);
 	}
 
 	RenderPass &RenderPass::setBlendEquation(GLenum colorMode, GLenum alphaMode)
 	{
 		glBlendEquationSeparate(colorMode, alphaMode);
+		return (*this);
+	}
+
+	RenderPass &RenderPass::setBlendEquation(GLenum mode)
+	{
+		glBlendEquation(mode);
+		return (*this);
 	}
 
 	RenderPass &RenderPass::setBlendFunc(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
 	{
 		glBlendFuncSeparate(srcRGB, destRGB, srcAlpha, destRGB);
+		return (*this);
 	}
+	
+	RenderPass &RenderPass::setBlendFunc(GLenum src, GLenum dest)
+	{
+		glBlendFunc(src, dest);
+		return (*this);
+	}
+
+	RenderPass &RenderPass::setBlendConstant(glm::vec4 const &blendColor)
+	{
+		glBlendColor(blendColor[0], blendColor[1], blendColor[2], blendColor[4]);
+		return (*this);
+	}
+
 }

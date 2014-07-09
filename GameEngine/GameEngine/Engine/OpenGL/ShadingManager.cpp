@@ -629,12 +629,39 @@ namespace gl
 		return (*this);
 	}
 
+	ShadingManager &ShadingManager::setBlendEquationRenderPass(Key<RenderPass> const &key, GLenum mode)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setBlendEquationRenderPass")) == NULL)
+			return (*this);
+		renderPass->setBlendEquation(mode);
+		return (*this);
+	}
+
 	ShadingManager &ShadingManager::setBlendFuncRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setBlendFuncRenderPass")) == NULL)
 			return (*this);
 		renderPass->setBlendFunc(srcRGB, destRGB, srcAlpha, destAlpha);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setBlendFuncRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setBlendFuncRenderPass")) == NULL)
+			return (*this);
+		renderPass->setBlendFunc(src, dest);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setBlendConstantRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendColor)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setBlendConstantRenderPass")) == NULL)
+			return (*this);
+		renderPass->setBlendConstant(blendColor);
 		return (*this);
 	}
 

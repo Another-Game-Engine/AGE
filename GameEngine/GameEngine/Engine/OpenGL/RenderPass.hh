@@ -37,7 +37,10 @@ namespace gl
 		RenderPass &setStencilOperation(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
 		RenderPass &setBlend(int drawBuffer, bool state);
 		RenderPass &setBlendEquation(GLenum colorMode, GLenum alphaMode);
+		RenderPass &setBlendEquation(GLenum mode);
 		RenderPass &setBlendFunc(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
+		RenderPass &setBlendFunc(GLenum src, GLenum dest);
+		RenderPass &setBlendConstant(glm::vec4 const &blendColor);
 
 		RenderPass &setTest(bool scissor, bool stencil, bool depth);
 		RenderPass &use();
