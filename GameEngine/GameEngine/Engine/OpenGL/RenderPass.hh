@@ -35,6 +35,9 @@ namespace gl
 		RenderPass &setStencilOperationBackFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
 		RenderPass &setStencilFunction(GLenum func, int ref, uint8_t mask);
 		RenderPass &setStencilOperation(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		RenderPass &setBlend(int drawBuffer, bool state);
+		RenderPass &setBlendEquation(GLenum colorMode, GLenum alphaMode);
+		RenderPass &setBlendFunc(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
 
 		RenderPass &setTest(bool scissor, bool stencil, bool depth);
 		RenderPass &use();

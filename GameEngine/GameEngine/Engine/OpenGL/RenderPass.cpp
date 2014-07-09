@@ -139,4 +139,22 @@ namespace gl
 		_shader->use();
 		return (*this);
 	}
+
+	RenderPass &RenderPass::setBlend(int drawBuffer, bool state)
+	{
+		if (state)
+			glEnablei(GL_BLEND, drawBuffer);
+		else
+			glDisablei(GL_BLEND, drawBuffer);
+	}
+
+	RenderPass &RenderPass::setBlendEquation(GLenum colorMode, GLenum alphaMode)
+	{
+		glBlendEquationSeparate(colorMode, alphaMode);
+	}
+
+	RenderPass &RenderPass::setBlendFunc(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
+	{
+		glBlendFuncSeparate(srcRGB, destRGB, srcAlpha, destRGB);
+	}
 }

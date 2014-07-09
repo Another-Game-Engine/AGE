@@ -103,6 +103,8 @@ namespace gl
 		ShadingManager &setStencilOperationBackFaceRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
 		ShadingManager &setStencilFunctionRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
 		ShadingManager &setStencilOperationRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		ShadingManager &setBlendEquationRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode);
+		ShadingManager &setBlendFuncRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
 
 		ShadingManager &useRenderPass(Key<RenderPass> const &key);
 

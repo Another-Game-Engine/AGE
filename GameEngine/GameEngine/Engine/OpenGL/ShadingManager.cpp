@@ -619,4 +619,23 @@ namespace gl
 		renderPass->setStencilOperation(opStencilFail, opDepthFail, opDepthPass);
 		return (*this);
 	}
+
+	ShadingManager &ShadingManager::setBlendEquationRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setBlendEquationRenderPass")) == NULL)
+			return (*this);
+		renderPass->setBlendEquation(colorMode, alphaMode);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setBlendFuncRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "setBlendFuncRenderPass")) == NULL)
+			return (*this);
+		renderPass->setBlendFunc(srcRGB, destRGB, srcAlpha, destAlpha);
+		return (*this);
+	}
+
 }
