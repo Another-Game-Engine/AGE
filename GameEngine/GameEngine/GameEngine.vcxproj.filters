@@ -207,6 +207,8 @@
     <ClInclude Include="Engine\Components\Behaviors\Cullable.hpp" />
     <ClInclude Include="Engine\Core\Octree.hpp" />
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
+    <ClInclude Include="Engine\Utils\Plane.hpp" />
+    <ClInclude Include="Engine\Utils\Frustum.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
