@@ -22,6 +22,10 @@ namespace AGE
 		void setNormal(const glm::vec3 normal) { _normal = normal; }
 		void setDistance(float distance) { _distance = distance; }
 		void set(float x, float y, float z, float w) { _normal = glm::vec3(x, y, z); _distance = w; }
+		float dot(const glm::vec3 &point) const
+		{
+			return glm::dot(_normal, point) + _distance;
+		}
 	private:
 		glm::vec3 _normal;
 		float _distance;

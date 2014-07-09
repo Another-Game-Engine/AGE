@@ -50,6 +50,9 @@ namespace AGE
 			void setMesh(const std::shared_ptr<ObjFile> &_mesh);
 			std::shared_ptr<ObjFile> getMesh();
 			const std::string &getShader();
+
+			// TEMPORARY
+			bool draw = true;
 		protected:
 			std::shared_ptr<ObjFile> mesh;
 			std::string shader;

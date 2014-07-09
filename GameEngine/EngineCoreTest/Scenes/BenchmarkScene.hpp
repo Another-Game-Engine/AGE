@@ -38,6 +38,7 @@ public:
 	{
 
 		setInstance<AGE::Octree>();
+		getInstance<AGE::Octree>()->scene = this;
 
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
@@ -221,6 +222,7 @@ public:
 			return false;
 		}
 #endif
+		getInstance<AGE::Octree>()->update();
 		return true;
 	}
 private:

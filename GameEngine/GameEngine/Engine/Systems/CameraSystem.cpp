@@ -196,6 +196,9 @@ void CameraSystem::mainUpdate(double time)
 		for (auto &m : _drawable.getCollection())
 		{
 			auto mesh = scene->getComponent<Component::MeshRenderer>(m);
+			if (mesh->draw == false)
+				continue;
+			mesh->draw = false;
 			_render->setShaderSampler(_shader, _diffuse_texture, mesh->getMesh()->material->materials[0].diffuseTex->getTexture());
 			_render->setShaderUniform(_shader, _model_matrix, scene->getLink(m)->getTransform());
 			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * scene->getLink(m)->getTransform()))));

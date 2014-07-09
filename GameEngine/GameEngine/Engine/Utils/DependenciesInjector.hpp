@@ -1,5 +1,4 @@
-#ifndef   __DEPENDENCIES_INJECTOR_HPP__
-# define  __DEPENDENCIES_INJECTOR_HPP__
+#pragma once
 
 #include <cassert>
 #include <Utils/Dependency.hpp>
@@ -73,5 +72,3 @@ public:
 		return _instances.size() > id && _instances[id] != nullptr;
 	}
 };
-
-#endif    //__DEPENDENCIES_INJECTOR_HPP__

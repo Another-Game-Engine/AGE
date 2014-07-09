@@ -214,6 +214,8 @@
     <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
+    <ClCompile Include="Engine\Core\Link.cpp" />
+    <ClCompile Include="Engine\Core\Octree.cpp" />
     <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />

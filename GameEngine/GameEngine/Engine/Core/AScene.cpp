@@ -6,6 +6,7 @@
 #include <Systems/System.h>
 #include <Core/EntityFilter.hpp>
 #include <Entities/EntityFlags.hh>
+#include <Core/Octree.hpp>
 
 AScene::AScene(std::weak_ptr<Engine> &&engine) :
 DependenciesInjector(std::move(engine))
@@ -33,9 +34,6 @@ void 							AScene::update(double time)
 		reorganizeComponents();
 		reorderingTime = 0;
 	}
-
-	// hardcoded update
-	getInstance<AGE::Octree>()->update();
 }
 
 bool                           AScene::start()
@@ -75,3 +73,48 @@ void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, 
 		f->componentRemoved(std::move(entity), id);
 	}
 }
+
+Entity &AScene::createEntity()
+	{
+		if (_free.empty())
+		{
+			auto &e = _pool[_entityNumber];
+			e.entity.id = _entityNumber;
+			e.link._octree = getInstance<AGE::Octree>();
+			assert(++_entityNumber != UINT16_MAX);
+			return e.entity;
+		}
+		else
+		{
+			auto id = _free.front();
+			_free.pop();
+			_pool[id].link.reset();
+			return _pool[id].entity;
+		}
+	}
+
+	void AScene::destroy(const Entity &e)
+	{
+		Barcode cachedCode;
+		auto &data = _pool[e.id];
+		if (data.entity != e)
+			return;
+		++data.entity.version;
+		data.entity.flags = 0;
+		cachedCode = data.barcode;
+		data.barcode.reset();
+		getLink(e)->reset();
+		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
+		{
+			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))
+			{
+				informFiltersComponentDeletion(COMPONENT_ID(i), std::move(data));
+				_componentsManagers[i]->removeComponent(data.entity);
+			}
+			if (i >= MAX_CPT_NUMBER && cachedCode.code.test(i))
+			{
+				informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), std::move(data));
+			}
+		}
+		_free.push(e.id);
+	}

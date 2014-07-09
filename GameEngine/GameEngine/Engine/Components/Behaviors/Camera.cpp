@@ -1,5 +1,6 @@
 #include "Camera.hpp"
 #include <Core/AScene.hh>
+#include <Core/Octree.hpp>
 
 namespace AGE
 {
@@ -7,7 +8,7 @@ namespace AGE
 	{
 		void Camera::init(::AScene *scene, ENTITY_ID entityId, COMPONENT_ID componentTypeId)
 		{
-			_cameraId = scene->getInstance<AGE::Octree>()->addElement(componentTypeId);
+			_cameraId = scene->getInstance<AGE::Octree>()->addElement(componentTypeId, scene->getEntityFromId(entityId));
 			scene->getLink(entityId)->registerCullableId(_cameraId);
 		}
 

@@ -1,5 +1,4 @@
-#ifndef    __DEPENDENCY_HPP__
-# define   __DEPENDENCY_HPP__
+#pragma once
 
 #include <memory>
 #include <cstdint>
@@ -44,5 +43,3 @@ protected:
 	std::weak_ptr<DependenciesInjector> _dependencyManager;
 	friend DependenciesInjector;
 };
-
-#endif     //__DEPENDENCY_HPP__

@@ -72,6 +72,8 @@
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
+    <ClCompile Include="Engine\Core\Link.cpp" />
+    <ClCompile Include="Engine\Core\Octree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />

@@ -1,5 +1,6 @@
 #include "Cullable.hpp"
 #include <Core/AScene.hh>
+#include <Core/Octree.hpp>
 
 namespace AGE
 {
@@ -8,7 +9,7 @@ namespace AGE
 		void Cullable::init(::AScene *scene, ENTITY_ID entityId, COMPONENT_ID componentTypeId)
 		{
 			assert(_cullableId == (std::size_t)(-1));
-			_cullableId = scene->getInstance<AGE::Octree>()->addElement(componentTypeId);
+			_cullableId = scene->getInstance<AGE::Octree>()->addElement(componentTypeId, scene->getEntityFromId(entityId));
 			scene->getLink(entityId)->registerCullableId(_cullableId);
 			assert(_cullableId != (std::size_t)(-1));
 		}

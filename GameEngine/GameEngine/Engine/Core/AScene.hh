@@ -21,8 +21,6 @@
 
 #include <Core/ComponentManager.hpp>
 
-#include <Core/Octree.hpp>
-
 class System;
 class Engine;
 class EntityFilter;
@@ -63,50 +61,8 @@ public:
 	void                    informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity);
 	void                    informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity);
 
-	Entity &createEntity()
-	{
-		if (_free.empty())
-		{
-			auto &e = _pool[_entityNumber];
-			e.entity.id = _entityNumber;
-			e.link._octree = getInstance<AGE::Octree>();
-			assert(++_entityNumber != UINT16_MAX);
-			return e.entity;
-		}
-		else
-		{
-			auto id = _free.front();
-			_free.pop();
-			_pool[id].link.reset();
-			return _pool[id].entity;
-		}
-	}
-
-	void destroy(const Entity &e)
-	{
-		Barcode cachedCode;
-		auto &data = _pool[e.id];
-		if (data.entity != e)
-			return;
-		++data.entity.version;
-		data.entity.flags = 0;
-		cachedCode = data.barcode;
-		data.barcode.reset();
-		getLink(e)->reset();
-		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
-		{
-			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))
-			{
-				informFiltersComponentDeletion(COMPONENT_ID(i), std::move(data));
-				_componentsManagers[i]->removeComponent(data.entity);
-			}
-			if (i >= MAX_CPT_NUMBER && cachedCode.code.test(i))
-			{
-				informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), std::move(data));
-			}
-		}
-		_free.push(e.id);
-	}
+	Entity &createEntity();
+	void destroy(const Entity &e);
 
 	//const glm::mat4 &getTransform(const Entity &e) const;
 	//glm::mat4 &getTransformRef(const Entity &e);
@@ -341,6 +297,11 @@ public:
 		if (entity.entity != e)
 			return nullptr;
 		return &(entity.entity);
+	}
+
+	const Entity &getEntityFromId(ENTITY_ID id) const
+	{
+		return _pool[id].entity;
 	}
 
 	AComponentManager *getComponentManager(COMPONENT_ID componentId)
