@@ -168,21 +168,6 @@ public:
 #ifdef LIFETIME_ACTIVATED
 				addComponent<Component::Lifetime>(e, 15.0f);
 #endif
-
-#ifdef PHYSIC_SIMULATION
-				auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
-				if (i % 4 == 0)
-					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::SPHERE);
-				else
-					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
-				rigidBody->getBody().setFriction(0.5f);
-				rigidBody->getBody().setRestitution(0.5f);
-#endif
-				auto link = getLink(e);
-				link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
-				link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-				link->setScale(glm::vec3(3.0f));
-
 #ifdef RENDERING_ACTIVATED
 
 				if (i == 0)
@@ -192,11 +177,6 @@ public:
 					lightComponent->lightData.positionPower.w = 1;
 					lightComponent->lightData.hasShadow = 1;
 				}
-
-
-#ifdef PHYSIC_SIMULATION
-				rigidBody->setTransformation(link->getTransform());
-#endif
 
 #ifndef COMPLEX_MESH
 				Component::MeshRenderer *mesh;
@@ -211,6 +191,23 @@ public:
 #endif
 
 #endif
+
+#ifdef PHYSIC_SIMULATION
+				rigidBody->setTransformation(link->getTransform());
+				auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
+				if (i % 4 == 0)
+					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::SPHERE);
+				else
+					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
+				rigidBody->getBody().setFriction(0.5f);
+				rigidBody->getBody().setRestitution(0.5f);
+#endif
+
+				auto link = getLink(e);
+				link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+				link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+				link->setScale(glm::vec3(3.0f));
+
 			}
 #ifdef LOG_FRAMERATE
 

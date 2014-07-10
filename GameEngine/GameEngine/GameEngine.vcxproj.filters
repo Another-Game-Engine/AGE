@@ -211,6 +211,7 @@
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
     <ClInclude Include="Engine\Utils\Plane.hpp" />
     <ClInclude Include="Engine\Utils\Frustum.hpp" />
+    <ClInclude Include="Engine\Utils\Worker.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
