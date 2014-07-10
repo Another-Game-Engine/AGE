@@ -14,7 +14,7 @@
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 #include <MediaFiles/AssetsManager.hpp>
-
+#include <OpenGL/Drawable.hh>
 
 namespace Resources
 {
@@ -27,7 +27,7 @@ class Renderer;
 
 namespace Component
 {
-	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>
+	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>, public gl::Drawable
 	{
 		MeshRenderer();
 		virtual ~MeshRenderer(void);

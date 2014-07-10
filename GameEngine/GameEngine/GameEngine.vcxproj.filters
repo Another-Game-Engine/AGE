@@ -71,6 +71,7 @@
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
     <ClCompile Include="Engine\OpenGL\RenderPass.cpp" />
+    <ClCompile Include="Engine\OpenGL\Drawable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\OpenGL\RenderPass.hh" />
+    <ClInclude Include="Engine\OpenGL\Drawable.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
