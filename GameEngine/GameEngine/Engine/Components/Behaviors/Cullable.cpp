@@ -11,6 +11,7 @@ namespace AGE
 			assert(_cullableId == (std::size_t)(-1));
 			_cullableId = scene->getInstance<AGE::Octree>()->addElement(componentTypeId, scene->getEntityFromId(entityId));
 			scene->getLink(entityId)->registerCullableId(_cullableId);
+			draw = false;
 			assert(_cullableId != (std::size_t)(-1));
 		}
 
@@ -22,6 +23,7 @@ namespace AGE
 			scene->getLink(entityId)->unregisterCullableId(_cullableId);
 			scene->getInstance<AGE::Octree>()->removeElement(_cullableId);
 			_cullableId = (std::size_t)(-1);
+			draw = false;
 		}
 
 		//temporary

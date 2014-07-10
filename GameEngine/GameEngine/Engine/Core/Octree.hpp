@@ -19,10 +19,12 @@ namespace AGE
 {
 	class Octree : public Dependency<Octree>
 	{
-	public:
+	private:
 		//TMP
-		AScene *scene;
-
+		std::weak_ptr<AScene> scene;
+	public:
+		void setScene(std::weak_ptr<AScene> _scene) { scene = _scene; }
+	public:
 		struct Command
 		{
 			glm::vec3 position;

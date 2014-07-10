@@ -34,6 +34,7 @@ namespace AGE
 				mesh = std::move(o.mesh);
 				shader = std::move(o.shader);
 				_cullableId = o._cullableId;
+				draw = o.draw;
 			}
 
 			Cullable &operator=(Cullable &&o)
@@ -41,6 +42,7 @@ namespace AGE
 				mesh = std::move(o.mesh);
 				shader = std::move(o.shader);
 				_cullableId = o._cullableId;
+				draw = o.draw;
 				return *this;
 			}
 
@@ -52,7 +54,7 @@ namespace AGE
 			const std::string &getShader();
 
 			// TEMPORARY
-			bool draw = true;
+			bool draw = false;
 		protected:
 			std::shared_ptr<ObjFile> mesh;
 			std::string shader;

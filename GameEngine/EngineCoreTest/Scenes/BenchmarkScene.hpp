@@ -38,7 +38,9 @@ public:
 	{
 
 		setInstance<AGE::Octree>();
-		getInstance<AGE::Octree>()->scene = this;
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		getInstance<AGE::Octree>()->setScene(weakOnThis);
+		getInstance<AGE::Octree>()->update();
 
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
@@ -118,7 +120,7 @@ public:
 		cam->sampleNbr = 0;
 
 		auto camLink = getLink(camera);
-		camLink->setPosition(glm::vec3(0, 0, -40));
+		camLink->setPosition(glm::vec3(0, 0, -10));
 
 	auto light = createEntity();
 	auto lightLink = getLink(light);
@@ -128,7 +130,6 @@ public:
 	lightComponent->lightData.hasShadow = -1;
 	lightLink->setPosition(glm::vec3(0, 3, 0));
 
-	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto plane = createEntity();
 	auto link = getLink(plane);
 	link->setPosition(glm::vec3(0, -10, 0));
@@ -154,6 +155,8 @@ public:
 		++_chunkFrame;
 		_timeCounter += time;
 		_chunkCounter += time;
+
+		getInstance<AGE::Octree>()->update();
 
 		if (_chunkCounter >= _maxChunk)
 		{
@@ -222,7 +225,6 @@ public:
 			return false;
 		}
 #endif
-		getInstance<AGE::Octree>()->update();
 		return true;
 	}
 private:

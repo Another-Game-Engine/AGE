@@ -3,6 +3,8 @@
 
 #include <Core/AScene.hh>
 #include <Components/MeshRenderer.hh>
+#include <Core/EntityFilter.hpp>
+#include <Components/CameraComponent.hpp>
 
 using namespace AGE;
 
@@ -79,23 +81,42 @@ using namespace AGE;
 				_commands.pop();
 			}
 
+			static EntityFilter *filter = nullptr;
+			if (!filter)
+			{
+				filter = new EntityFilter(std::move(scene));
+				filter->requireComponent<Component::CameraComponent>();
+			}
+
+			if (filter->getCollection().size() == 0)
+				return;
+			auto cameraEntity = *(filter->getCollection().begin());
+			auto camera = scene.lock()->getComponent<Component::CameraComponent>(cameraEntity);
 			auto projection = glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f);
 			auto trans = glm::mat4(1);
 			trans = glm::translate(trans, glm::vec3(0, 0, -40));
 			auto lookAtTransform = glm::mat4(1);
 
 			Frustum frustum;
-			frustum.setMatrix(projection, true);
-
+			static float rot = 0.0f;
+			rot += 1.0f;
+			auto m = camera->projection * camera->lookAtTransform;
+			frustum.setMatrix(m, true);
+			std::uint64_t drawed = 0;
+			std::uint64_t total = 0;
 			for (auto &e : _elements)
 			{
-				if (e.active && frustum.pointIn(e.position) != true)
+				if (e.active)
+					++total;
+				if (e.active && frustum.pointIn(e.position) == true)
 				{
-					std::cout << e.entity.getId() << "  ";
-					auto cpt = scene->getComponent(e.entity, e.componentTypeId);
+					//std::cout << e.entity.getId() << "  ";
+					auto cpt = scene.lock()->getComponent(e.entity, e.componentTypeId);
 					if (cpt)
 					{
-						((AGE::ComponentBehavior::Cullable*)(cpt))->draw = true;
+						auto c = dynamic_cast<AGE::ComponentBehavior::Cullable*>(cpt);
+						c->draw = true;
+						++drawed;
 					}
 					else
 					{
@@ -103,4 +124,5 @@ using namespace AGE;
 					}
 				}
 			}
+			std::cout << "Drawed : " << drawed << " / " << total << std::endl;
 		}

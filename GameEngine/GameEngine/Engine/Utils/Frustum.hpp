@@ -27,45 +27,45 @@ namespace AGE
 			Plane *p = nullptr;
 
 			p = &(_planes[NEAR]);
-			p->set(_matrix[0][3] + _matrix[0][2]
-				, _matrix[1][3] + _matrix[1][2]
-				, _matrix[2][3] + _matrix[2][2]
-				, _matrix[3][3] + _matrix[3][2]);
+			p->set(_matrix[0][3] + _matrix[0][2],
+							_matrix[1][3] + _matrix[1][2],
+							_matrix[2][3] + _matrix[2][2],
+							_matrix[3][3] + _matrix[3][2]);
 			p->normalize();
 
 			p = &(_planes[FAR]);
-			p->set(_matrix[0][3] - _matrix[0][2]
-				, _matrix[1][3] - _matrix[1][2]
-				, _matrix[2][3] - _matrix[2][2]
-				, _matrix[3][3] - _matrix[3][2]);
+			p->set(_matrix[0][3] - _matrix[0][2],
+							_matrix[1][3] - _matrix[1][2],
+							_matrix[2][3] - _matrix[2][2],
+							_matrix[3][3] - _matrix[3][2]);
 			p->normalize();
 
 			p = &_planes[LEFT];
-			p->set(_matrix[0][3] + _matrix[0][0]
-				, _matrix[1][3] + _matrix[1][0]
-				, _matrix[2][3] + _matrix[2][0]
-				, _matrix[3][3] + _matrix[3][0]);
+			p->set(_matrix[0][3] + _matrix[0][0],
+							_matrix[1][3] + _matrix[1][0],
+							_matrix[2][3] + _matrix[2][0],
+							_matrix[3][3] + _matrix[3][0]);
 			p->normalize();
 
 			p = &_planes[RIGHT];
-			p->set(_matrix[0][3] - _matrix[0][0]
-				, _matrix[1][3] - _matrix[1][0]
-				, _matrix[2][3] - _matrix[2][0]
-				, _matrix[3][3] - _matrix[3][0]);
+			p->set(_matrix[0][3] - _matrix[0][0],
+							_matrix[1][3] - _matrix[1][0],
+							_matrix[2][3] - _matrix[2][0],
+							_matrix[3][3] - _matrix[3][0]);
 			p->normalize();
 
 			p = &_planes[BOTTOM];
-			p->set(_matrix[0][3] + _matrix[0][1]
-				, _matrix[1][3] + _matrix[1][1]
-				, _matrix[2][3] + _matrix[2][1]
-				, _matrix[3][3] + _matrix[3][1]);
+			p->set(_matrix[0][3] + _matrix[0][1],
+							_matrix[1][3] + _matrix[1][1],
+							_matrix[2][3] + _matrix[2][1],
+							_matrix[3][3] + _matrix[3][1]);
 			p->normalize();
 
 			p = &_planes[TOP];
-			p->set(_matrix[0][3] - _matrix[0][1]
-				, _matrix[1][3] - _matrix[1][1]
-				, _matrix[2][3] - _matrix[2][1]
-				, _matrix[3][3] - _matrix[3][1]);
+			p->set(_matrix[0][3] - _matrix[0][1],
+							_matrix[1][3] - _matrix[1][1],
+							_matrix[2][3] - _matrix[2][1],
+							_matrix[3][3] - _matrix[3][1]);
 			p->normalize();
 		}
 
@@ -80,7 +80,8 @@ namespace AGE
 		{
 			for (int i = 0; i < END; ++i)
 			{
-				if (_planes[i].dot(point) <= 0.0f)
+				auto v = _planes[i].dot(point);
+				if (v <= 0.0f)
 					return false;
 			}
 			return true;

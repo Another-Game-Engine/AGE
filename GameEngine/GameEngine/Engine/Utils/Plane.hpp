@@ -12,9 +12,9 @@ namespace AGE
 
 		void normalize()
 		{
-			float divider = glm::length(_normal);
-			_normal /= divider;
-			_distance /= divider;
+			float divider = 1 / glm::length(_normal);
+			_normal = _normal * divider;
+			_distance = _distance * divider;
 		}
 
 		const glm::vec3 &getNormal() const { return _normal; }
