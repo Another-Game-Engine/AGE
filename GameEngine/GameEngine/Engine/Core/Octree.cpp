@@ -10,22 +10,26 @@ using namespace AGE;
 
 		Octree::USER_OBJECT_ID Octree::addElement(COMPONENT_ID componentType, const Entity &entity)
 		{
+			USER_OBJECT_ID res = USER_OBJECT_ID(-1);
+			UserObject *ue = nullptr;
 			if (!_freeUserObjects.empty())
 			{
-				auto res = _freeUserObjects.top();
+				res = _freeUserObjects.top();
 				_freeUserObjects.pop();
-				_userObjects[res].componentType = componentType;
-				_userObjects[res].entity = entity;
-				_userObjects[res].active = true;
-				return res;
+				ue = &(_userObjects[res]);
 			}
-			auto res = _userObjects.size();
-			_userObjects.emplace_back(UserObject());
-			auto &ue = _userObjects.back();
-			ue.id = res;
-			ue.commandType = componentType;
-			ue.entity = entity;
-			ue.active = true;
+			else
+			{
+				res = _userObjects.size();
+				_userObjects.emplace_back(UserObject());
+				ue = &(_userObjects.back());
+			}
+
+			ue->id = res;
+			ue->commandType = componentType;
+			ue->entity = entity;
+			ue->active = true;
+			ue->collection.clear();
 			return res;
 		}
 
@@ -37,36 +41,49 @@ using namespace AGE;
 			//todo, remove from tree
 		}
 
-		void Octree::pushCommand(const glm::vec3 &position
-			, const glm::vec3 &scale
-			, const glm::quat &orientation
-			, std::size_t id)
+		void Octree::pushCommand(UserObject &ue, CommandType cm)
 		{
-			auto &element = _elements[id];
-			auto &command = element.command;
-
-			command.position = position;
-			command.orientation = orientation;
-			command.scale = scale;
-			if (_updateId != command.pushedId)
-			{
-				element.command.pushedId = _updateId;
-				_commands.push(id);
-			}
+			if (ue.commandType.none())
+				_commands.push(ue.id);
+			ue.commandType.set(cm, true);			
 		}
 
-		void Octree::pushCommand(const glm::vec3 &position
-			, const glm::vec3 &scale
-			, const glm::quat &orientation
-			, const std::array<std::size_t, MAX_CPT_NUMBER> _cullableLinks)
+		void Octree::setPosition(const glm::vec3 &v, USER_OBJECT_ID id)
 		{
-			std::size_t max = (std::size_t)(-1);
-			for (auto &l : _cullableLinks)
-			{
-				if (l == max)
-					return;
-				pushCommand(position, scale, orientation, l);
-			}
+			auto &ue = _userObjects[id];
+			pushCommand(ue, CommandType::Position);
+			ue.position = v;
+		}
+		void Octree::setOrientation(const glm::quat &v, USER_OBJECT_ID id)
+		{
+			auto &ue = _userObjects[id];
+			pushCommand(ue, CommandType::Orientation);
+			ue.orientation = v;
+		}
+
+		void Octree::setScale(const glm::vec3 &v, USER_OBJECT_ID id)
+		{
+			auto &ue = _userObjects[id];
+			pushCommand(ue, CommandType::Scale);
+			ue.scale = v;
+		}
+
+		void Octree::setPosition(const glm::vec3 &v, const std::array<USER_OBJECT_ID, MAX_CPT_NUMBER> ids)
+		{
+			for (auto &e : ids)
+				setPosition(v, e);
+		}
+
+		void Octree::setOrientation(const glm::quat &v, const std::array<USER_OBJECT_ID, MAX_CPT_NUMBER> ids)
+		{
+			for (auto &e : ids)
+				setOrientation(v, e);
+		}
+
+		void Octree::setScale(const glm::vec3 &v, const std::array<USER_OBJECT_ID, MAX_CPT_NUMBER> ids)
+		{
+			for (auto &e : ids)
+				setScale(v, e);
 		}
 
 		void Octree::update()

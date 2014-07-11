@@ -55,7 +55,7 @@ namespace AGE
 			// for command
 			glm::vec3 position;
 			glm::vec3 scale;
-			glm::quat rot;
+			glm::quat orientation;
 			BoundingInfos bounding;
 			std::bitset<CommandType::END> commandType;
 		};
@@ -97,5 +97,7 @@ namespace AGE
 		//void setGeometry(TODO)
 
 		void update();
+	private:
+		void pushCommand(UserObject &ue, CommandType cm);
 	};
 }

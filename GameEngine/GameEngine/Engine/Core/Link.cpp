@@ -16,6 +16,10 @@ void Link::registerCullableId(std::size_t id)
 	assert(false);
 }
 
+void Link::setPosition(const glm::vec3 &v) { _computeTrans = true; _position = v; static_cast<Octree*>(_octree)->setPosition(_position, _cullableLinks); }
+void Link::setScale(const glm::vec3 &v) { _computeTrans = true; _scale = v; static_cast<Octree*>(_octree)->setScale(_scale, _cullableLinks); }
+void Link::setOrientation(const glm::quat &v) { _computeTrans = true; _orientation = v; static_cast<Octree*>(_octree)->setOrientation(_orientation, _cullableLinks); }
+
 void Link::unregisterCullableId(std::size_t id)
 {
 	for (auto &b : _cullableLinks)
@@ -28,11 +32,6 @@ void Link::unregisterCullableId(std::size_t id)
 	}
 }
 
-
-void Link::pushCommand()
-{
-	static_cast<Octree*>(_octree)->pushCommand(_position, _scale, _orientation, _cullableLinks);
-}
 const glm::mat4 &Link::getTransform()
 {
 	if (_computeTrans)

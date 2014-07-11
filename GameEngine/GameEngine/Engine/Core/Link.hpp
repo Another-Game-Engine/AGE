@@ -18,15 +18,12 @@ namespace AGE
 		const glm::vec3 &getScale() const { return _scale; }
 		const glm::quat &getOrientation() const { return _orientation; }
 
-		void setPosition(const glm::vec3 &v) { _computeTrans = true; _position = v; pushCommand(); }
-		void setScale(const glm::vec3 &v) { _computeTrans = true; _scale = v; pushCommand(); }
-		void setOrientation(const glm::quat &v) { _computeTrans = true; _orientation = v; pushCommand(); }
+		void setPosition(const glm::vec3 &v);
+		void setScale(const glm::vec3 &v);
+		void setOrientation(const glm::quat &v);
 
 		void registerCullableId(std::size_t id);
 		void unregisterCullableId(std::size_t id);
-
-	private:
-		void pushCommand();
 	public:
 		const glm::mat4 &getTransform();
 	private:
