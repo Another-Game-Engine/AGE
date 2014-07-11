@@ -8,30 +8,31 @@
 
 using namespace AGE;
 
-		std::size_t Octree::addElement(COMPONENT_ID componentType, const Entity &entity)
+		Octree::USER_OBJECT_ID Octree::addElement(COMPONENT_ID componentType, const Entity &entity)
 		{
-			if (!_free.empty())
+			if (!_freeUserObjects.empty())
 			{
-				auto res = _free.top();
-				_free.pop();
-				_elements[res].componentTypeId = componentType;
-				_elements[res].entity = entity;
-				_elements[res].active = true;
+				auto res = _freeUserObjects.top();
+				_freeUserObjects.pop();
+				_userObjects[res].componentType = componentType;
+				_userObjects[res].entity = entity;
+				_userObjects[res].active = true;
 				return res;
 			}
-			auto res = _elements.size();
-			_elements.emplace_back(Element());
-			_elements.back().id = res;
-			_elements.back().componentTypeId = componentType;
-			_elements.back().entity = entity;
-			_elements.back().active = true;
+			auto res = _userObjects.size();
+			_userObjects.emplace_back(UserObject());
+			auto &ue = _userObjects.back();
+			ue.id = res;
+			ue.commandType = componentType;
+			ue.entity = entity;
+			ue.active = true;
 			return res;
 		}
 
 		void Octree::removeElement(std::size_t id)
 		{
-			_free.push(id);
-			_elements[id].active = false;
+			_freeUserObjects.push(id);
+			_userObjects[id].active = false;
 			assert(id != (std::size_t)(-1));
 			//todo, remove from tree
 		}
@@ -124,5 +125,5 @@ using namespace AGE;
 					}
 				}
 			}
-			std::cout << "Drawed : " << drawed << " / " << total << std::endl;
+			//std::cout << "Drawed : " << drawed << " / " << total << std::endl;
 		}
