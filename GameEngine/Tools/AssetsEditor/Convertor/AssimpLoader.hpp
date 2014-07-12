@@ -24,6 +24,21 @@ namespace AGE
 			return glm::mat4(m.a1, m.b1, m.c1, m.d1, m.a2, m.b2, m.c2, m.d2, m.a3, m.b3, m.c3, m.d3, m.a4, m.b4, m.c4, m.d4);
 		}
 
+		static glm::vec4 aiColorToGlm(const aiColor4D &m)
+		{
+			return glm::vec4(m.r, m.g, m.b, m.a);
+		}
+
+		static glm::vec4 aiColorToGlm(const aiColor3D &m)
+		{
+			return glm::vec4(m.r, m.g, m.b, 1.0f);
+		}
+
+		static std::string aiStringToStd(const aiString &m)
+		{
+			return std::string(m.C_Str());
+		}
+
 		bool Load(AssetDataSet &dataSet)
 		{
 			if (!dataSet.filePath.exists())

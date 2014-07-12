@@ -26,6 +26,7 @@
 #include <Convertor/SkeletonLoader.hpp>
 #include <Convertor/AnimationsLoader.hpp>
 #include <Convertor/MeshLoader.hpp>
+#include <Convertor/MaterialConvertor.hpp>
 
 //SKINNING
 #include <Skinning/Animation.hpp>
@@ -79,15 +80,17 @@ int			main(int ac, char **av)
 	bool isSkeleton = false;
 	bool isAnimations = false;
 	bool isMesh = false;
+	bool isMaterial = false;
 	bool convert = true;
 	if (convert)
 	{
 		AGE::AssetDataSet dataSet;
 		dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
 		dataSet.name = "catwoman";
-		isSkeleton = AGE::SkeletonLoader::load(dataSet);
-		isAnimations = AGE::AnimationsLoader::load(dataSet);
-		isMesh = AGE::MeshLoader::load(dataSet);
+		//isSkeleton = AGE::SkeletonLoader::load(dataSet);
+		//isAnimations = AGE::AnimationsLoader::load(dataSet);
+		//isMesh = AGE::MeshLoader::load(dataSet);
+		isMaterial = AGE::MaterialLoader::load(dataSet);
 
 		////Save AGE assets data structure to filesystem
 		if (isSkeleton)

@@ -11,6 +11,7 @@ namespace AGE
 	struct Skeleton;
 	struct Animation;
 	struct MeshData;
+	struct MaterialData;
 
 	struct AssetDataSet
 	{
@@ -35,9 +36,10 @@ namespace AGE
 		std::string name = "";
 
 		//Ptrs
-		Skeleton * skeleton = nullptr;
+		Skeleton *skeleton = nullptr;
 		std::vector<Animation*> animations;
 		MeshData *mesh;
+		std::vector<MaterialData*> materials;
 		//std::vector<Material*> material;
 		//std::vector<Texture*> textures
 
