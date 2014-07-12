@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AssimpLoader.hpp"
-
+#include "ImageLoader.hpp"
 #include <map>
 
 namespace AGE
@@ -84,12 +84,19 @@ namespace AGE
 				material->specularTexPath = AssimpLoader::aiStringToStd(specularTexPath);
 				material->normalTexPath = AssimpLoader::aiStringToStd(normalTexPath);
 
+				dataSet.texturesPath.push_back(material->diffuseTexPath);
+				dataSet.texturesPath.push_back(material->ambientTexPath);
+				dataSet.texturesPath.push_back(material->emissiveTexPath);
+				dataSet.texturesPath.push_back(material->reflectiveTexPath);
+				dataSet.texturesPath.push_back(material->specularTexPath);
+				dataSet.texturesPath.push_back(material->normalTexPath);
+
 				dataSet.materials.push_back(material);
             }
 
-			if (!dataSet.materials.size() == 0)
+			if (dataSet.materials.size() == 0)
 			{
-				std::cerr << "AnimationLoader : Skeleton has not been loaded" << std::endl;
+				std::cerr << "MaterialLoader : Materials has not been loaded" << std::endl;
 				return false;
 			}
 			dataSet.materialsLoaded = true;

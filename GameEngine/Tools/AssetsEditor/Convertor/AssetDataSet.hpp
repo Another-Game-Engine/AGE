@@ -12,6 +12,7 @@ namespace AGE
 	struct Animation;
 	struct MeshData;
 	struct MaterialData;
+	struct TextureData;
 
 	struct AssetDataSet
 	{
@@ -31,7 +32,7 @@ namespace AGE
 
 		//Paths
 		File filePath = "";
-		std::vector<File> texturesPath;
+		std::vector<std::string> texturesPath;
 
 		std::string name = "";
 
@@ -40,8 +41,7 @@ namespace AGE
 		std::vector<Animation*> animations;
 		MeshData *mesh;
 		std::vector<MaterialData*> materials;
-		//std::vector<Material*> material;
-		//std::vector<Texture*> textures
+		std::vector<TextureData*> textures;
 
 		//Assimp
 		aiScene* assimpScene = nullptr;

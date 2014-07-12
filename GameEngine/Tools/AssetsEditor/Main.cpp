@@ -27,6 +27,7 @@
 #include <Convertor/AnimationsLoader.hpp>
 #include <Convertor/MeshLoader.hpp>
 #include <Convertor/MaterialConvertor.hpp>
+#include <Convertor/ImageLoader.hpp>
 
 //SKINNING
 #include <Skinning/Animation.hpp>
@@ -81,6 +82,7 @@ int			main(int ac, char **av)
 	bool isAnimations = false;
 	bool isMesh = false;
 	bool isMaterial = false;
+	bool isTexture = false;
 	bool convert = true;
 	if (convert)
 	{
@@ -91,7 +93,7 @@ int			main(int ac, char **av)
 		//isAnimations = AGE::AnimationsLoader::load(dataSet);
 		//isMesh = AGE::MeshLoader::load(dataSet);
 		isMaterial = AGE::MaterialLoader::load(dataSet);
-
+		isTexture = AGE::ImageLoader::load(dataSet);
 		////Save AGE assets data structure to filesystem
 		if (isSkeleton)
 		{
