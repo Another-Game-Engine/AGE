@@ -36,12 +36,15 @@ namespace AGE
 		{
 			glm::vec3 position;
 			glm::vec3 scale;
-			glm::quat rot;
+			glm::quat orientation;
 			BoundingInfos bounding;
 			CULLABLE_ID id;
 			bool active;
 			//std::shared_ptr<geometry> geo;
 			//std::shared_ptr<material> material;
+
+			//TEMP
+			USER_OBJECT_ID userObjectId;
 		};
 
 		struct UserObject
@@ -99,5 +102,7 @@ namespace AGE
 		void update();
 	private:
 		void pushCommand(UserObject &ue, CommandType cm);
+		CULLABLE_ID addCullableObject(Octree::USER_OBJECT_ID uid);
+		void removeCullableObject(CULLABLE_ID id);
 	};
 }

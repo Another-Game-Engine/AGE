@@ -51,11 +51,11 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 	addSystem<FirstPersonViewSystem>(2);
-	//	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::ShadingManager>();
 	auto &g = *getInstance<gl::GeometryManager>();
 #if NEW_SHADER
-//	camerasystem->setManager(m, g);
+	camerasystem->setManager(m, g);
 #endif
 
 #ifdef SIMPLE_RENDERING
@@ -192,9 +192,14 @@ public:
 
 #endif
 
+				auto link = getLink(e);
+				link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+				link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+				link->setScale(glm::vec3(3.0f));
+
 #ifdef PHYSIC_SIMULATION
-				rigidBody->setTransformation(link->getTransform());
 				auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
+//				rigidBody->setTransformation(link->getTransform());
 				if (i % 4 == 0)
 					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::SPHERE);
 				else
@@ -203,10 +208,6 @@ public:
 				rigidBody->getBody().setRestitution(0.5f);
 #endif
 
-				auto link = getLink(e);
-				link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
-				link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-				link->setScale(glm::vec3(3.0f));
 
 			}
 #ifdef LOG_FRAMERATE

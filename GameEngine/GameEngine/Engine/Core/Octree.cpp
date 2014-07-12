@@ -26,17 +26,52 @@ using namespace AGE;
 			}
 
 			ue->id = res;
-			ue->commandType = componentType;
+			ue->componentType = componentType;
 			ue->entity = entity;
 			ue->active = true;
 			ue->collection.clear();
+			ue->commandType.reset();
+			//Hardcoded temporary
+			ue->collection.push_back(addCullableObject(res));
 			return res;
 		}
 
-		void Octree::removeElement(std::size_t id)
+		void Octree::removeElement(USER_OBJECT_ID id)
 		{
 			_freeUserObjects.push(id);
 			_userObjects[id].active = false;
+			for (auto &e : _userObjects[id].collection)
+				removeCullableObject(e);
+			assert(id != (std::size_t)(-1));
+			//todo, remove from tree
+		}
+
+		Octree::CULLABLE_ID Octree::addCullableObject(Octree::USER_OBJECT_ID uid)
+		{
+			CULLABLE_ID res = CULLABLE_ID(-1);
+			CullableObject *co = nullptr;
+			if (!_freeCullableObjects.empty())
+			{
+				res = _freeCullableObjects.top();
+				_freeCullableObjects.pop();
+				co = &(_cullableObjects[res]);
+			}
+			else
+			{
+				res = _cullableObjects.size();
+				_cullableObjects.emplace_back(CullableObject());
+				co = &(_cullableObjects.back());
+			}
+			co->userObjectId = uid;
+			co->id = res;
+			co->active = true;
+			return res;
+		}
+
+		void Octree::removeCullableObject(CULLABLE_ID id)
+		{
+			_freeCullableObjects.push(id);
+			_cullableObjects[id].active = false;
 			assert(id != (std::size_t)(-1));
 			//todo, remove from tree
 		}
@@ -91,12 +126,33 @@ using namespace AGE;
 			while (!_commands.empty())
 			{
 				//process command
-				auto &element = _elements[_commands.top()];
-				auto &command = element.command;
-				element.orientation = command.orientation;
-				element.position = command.position;
-				element.scale = command.scale;
+				auto &element = _userObjects[_commands.top()];
 				_commands.pop();
+				if (!element.active)
+				{
+				}
+				if (element.commandType.at(CommandType::Position))
+				{
+					for (auto &e : element.collection)
+					{
+						_cullableObjects[e].position = element.position;
+					}
+				}
+				if (element.commandType.at(CommandType::Scale))
+				{
+					for (auto &e : element.collection)
+					{
+						_cullableObjects[e].scale = element.scale;
+					}
+				}
+				if (element.commandType.at(CommandType::Orientation))
+				{
+					for (auto &e : element.collection)
+					{
+						_cullableObjects[e].orientation = element.orientation;
+					}
+				}
+				element.commandType.reset();
 			}
 
 			static EntityFilter *filter = nullptr;
@@ -122,14 +178,15 @@ using namespace AGE;
 			frustum.setMatrix(m, true);
 			std::uint64_t drawed = 0;
 			std::uint64_t total = 0;
-			for (auto &e : _elements)
+			for (auto &e : _cullableObjects)
 			{
 				if (e.active)
 					++total;
 				if (e.active && frustum.pointIn(e.position) == true)
 				{
 					//std::cout << e.entity.getId() << "  ";
-					auto cpt = scene.lock()->getComponent(e.entity, e.componentTypeId);
+					auto &uo = _userObjects[e.userObjectId];
+					auto cpt = scene.lock()->getComponent(uo.entity, uo.componentType);
 					if (cpt)
 					{
 						auto c = dynamic_cast<AGE::ComponentBehavior::Cullable*>(cpt);

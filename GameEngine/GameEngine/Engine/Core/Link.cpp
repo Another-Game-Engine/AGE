@@ -16,9 +16,41 @@ void Link::registerCullableId(std::size_t id)
 	assert(false);
 }
 
-void Link::setPosition(const glm::vec3 &v) { _computeTrans = true; _position = v; static_cast<Octree*>(_octree)->setPosition(_position, _cullableLinks); }
-void Link::setScale(const glm::vec3 &v) { _computeTrans = true; _scale = v; static_cast<Octree*>(_octree)->setScale(_scale, _cullableLinks); }
-void Link::setOrientation(const glm::quat &v) { _computeTrans = true; _orientation = v; static_cast<Octree*>(_octree)->setOrientation(_orientation, _cullableLinks); }
+void Link::setPosition(const glm::vec3 &v)
+{
+	_computeTrans = true;
+	_position = v;
+	auto ot = static_cast<Octree*>(_octree);
+	for(auto &e : _cullableLinks)
+	{
+		if (e == std::size_t(-1))
+			return;
+		ot->setPosition(_position, e);
+	}
+}
+
+void Link::setScale(const glm::vec3 &v) {
+	_computeTrans = true;
+	_scale = v;
+	auto ot = static_cast<Octree*>(_octree);
+	for (auto &e : _cullableLinks)
+	{
+		if (e == std::size_t(-1))
+			return;
+		ot->setScale(_scale, e);
+	}
+}
+void Link::setOrientation(const glm::quat &v) {
+	_computeTrans = true;
+	_orientation = v;
+	auto ot = static_cast<Octree*>(_octree);
+	for (auto &e : _cullableLinks)
+	{
+		if (e == std::size_t(-1))
+			return;
+		ot->setOrientation(_orientation, e);
+	}
+}
 
 void Link::unregisterCullableId(std::size_t id)
 {
