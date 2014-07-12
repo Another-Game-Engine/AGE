@@ -212,6 +212,7 @@
     <ClInclude Include="Engine\Utils\Plane.hpp" />
     <ClInclude Include="Engine\Utils\Frustum.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
+    <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
