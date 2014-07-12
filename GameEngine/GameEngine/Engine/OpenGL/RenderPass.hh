@@ -14,55 +14,31 @@ namespace gl
 	class Drawable;
 
 	// set buffer config
-	void setClearValue(glm::vec4 const &color, float depth, uint8_t stencil);
-	void setColorMask(GLuint index, glm::bvec4 const &color);
-	void setDepthMask(bool depth);
-	void setStencilMask(uint8_t front, uint8_t back);
-	void clear(bool color, bool depth, bool stencil);
-	void setScissor(glm::ivec4 const &area);
-	void setStencilFunctionFrontFace(GLenum func, int ref, uint8_t mask);
-	void setStencilOperationFrontFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-	void setStencilFunctionBackFace(GLenum func, int ref, uint8_t mask);
-	void setStencilOperationBackFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-	void setStencilFunction(GLenum func, int ref, uint8_t mask);
-	void setStencilOperation(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-	void setBlend(int drawBuffer, bool state);
-	void setBlendEquation(GLenum colorMode, GLenum alphaMode);
-	void setBlendEquation(GLenum mode);
-	void setBlendFunc(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
-	void setBlendFunc(GLenum src, GLenum dest);
-	void setBlendConstant(glm::vec4 const &blendColor);
-	void setTest(bool scissor, bool stencil, bool depth);
+	//void setClearValue(glm::vec4 const &color, float depth, uint8_t stencil);
+	//void setColorMask(GLuint index, glm::bvec4 const &color);
+	//void setDepthMask(bool depth);
+	//void setStencilMask(uint8_t front, uint8_t back);
+	//void clear(bool color, bool depth, bool stencil);
+	//void setScissor(glm::ivec4 const &area);
+	//void setStencilFunctionFrontFace(GLenum func, int ref, uint8_t mask);
+	//void setStencilOperationFrontFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+	//void setStencilFunctionBackFace(GLenum func, int ref, uint8_t mask);
+	//void setStencilOperationBackFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+	//void setStencilFunction(GLenum func, int ref, uint8_t mask);
+	//void setStencilOperation(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+	//void setBlend(int drawBuffer, bool state);
+	//void setBlendEquation(GLenum colorMode, GLenum alphaMode);
+	//void setBlendEquation(GLenum mode);
+	//void setBlendFunc(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
+	//void setBlendFunc(GLenum src, GLenum dest);
+	//void setBlendConstant(glm::vec4 const &blendColor);
+	//void setTest(bool scissor, bool stencil, bool depth);
 
-	enum TypeCommand
+	struct Task
 	{
-		CLEAR_VALUE = 0,
-		COLOR_MASK,
-		DEPTH_MASK,
-		STENCIL_MASK,
-		CLEAR,
-		SCISSOR,
-		STENCIL_FUNCTION_FRONT,
-		STENCIL_OPERATION_FRONT,
-		STENCIL_FUNCTION_BACK,
-		STENCIL_OPERATION_BACK,
-		STENCIL_FUNCTION,
-		STENCIL_OPERATION,
-		BLEND,
-		BLEND_EQUATION_S,
-		BLEND_EQUATION,
-		BLEND_FUNC_S,
-		BLEND_FUNC,
-		BLEND_CONSTANT,
-		TEST
-	};
-
-	struct Command
-	{
-		TypeCommand type;
 		int nbrParams;
 		void **params;
-		std::function<void(void **)> func;
+		void(*func)(void **);
 	};
 
 	//!\file RenderPass.hh
@@ -84,7 +60,7 @@ namespace gl
 
 	private:
 		Shader *_shader;
-		std::vector<Command> _task;
+		std::vector<Task> _tasks;
 	};
 
 }
