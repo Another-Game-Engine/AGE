@@ -2,13 +2,27 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
+    <ClCompile Include="Engine\Core\AssetManager.cpp" />
+    <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\Data.cpp" />
+    <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
+    <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\Pool.cpp" />
+    <ClCompile Include="Engine\OpenGL\ShaderResource.cpp" />
+    <ClCompile Include="Engine\OpenGL\ShadingManager.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\Texture.cpp" />
+    <ClCompile Include="Engine\OpenGL\UniformBlock.cpp" />
+    <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
+    <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
+    <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
     <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
+    <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
     <ClCompile Include="Engine\Systems\PostFxSystem.cpp" />
+    <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
     <ClCompile Include="Engine\Utils\DrawQuad.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
@@ -36,6 +50,7 @@
     <ClCompile Include="Engine\MediaFiles\ObjFile.cpp" />
     <ClCompile Include="Engine\MediaFiles\TextureFile.cpp" />
     <ClCompile Include="Engine\OpenGL\Framebuffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\VertexArray.cpp" />
     <ClCompile Include="Engine\Context\SdlContext.cpp" />
     <ClCompile Include="Engine\Core\AScene.cpp" />
@@ -54,39 +69,47 @@
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
-    <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
-    <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
-    <ClCompile Include="Engine\OpenGL\Pool.cpp" />
-    <ClCompile Include="Engine\OpenGL\Data.cpp" />
-    <ClCompile Include="Engine\OpenGL\ShadingManager.cpp" />
-    <ClCompile Include="Engine\OpenGL\UniformBuffer.cpp" />
-    <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
-    <ClCompile Include="Engine\OpenGL\UniformBlock.cpp" />
-    <ClCompile Include="Engine\OpenGL\ShaderResource.cpp" />
-    <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
-    <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
-    <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
-    <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
-    <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
-    <ClCompile Include="Engine\Core\AssetManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
+    <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
+    <ClInclude Include="Engine\Geometry\Mesh.hpp" />
+    <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
+    <ClInclude Include="Engine\OpenGL\Buffer.hh" />
+    <ClInclude Include="Engine\OpenGL\Data.hh" />
+    <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
+    <ClInclude Include="Engine\OpenGL\Key.hh" />
+    <ClInclude Include="Engine\OpenGL\Key.hpp" />
+    <ClInclude Include="Engine\OpenGL\MemoryGPU.hh" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
+    <ClInclude Include="Engine\OpenGL\Pool.hh" />
+    <ClInclude Include="Engine\OpenGL\ShaderResource.hh" />
+    <ClInclude Include="Engine\OpenGL\ShadingManager.hh" />
     <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
     <ClInclude Include="Engine\OpenGL\Texture.hh" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
+    <ClInclude Include="Engine\OpenGL\UniformBlock.hh" />
+    <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
+    <ClInclude Include="Engine\Skinning\Animation.hpp" />
+    <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />
+    <ClInclude Include="Engine\Skinning\AnimationInstance.hpp" />
+    <ClInclude Include="Engine\Skinning\AnimationKey.hpp" />
+    <ClInclude Include="Engine\Skinning\Bone.hpp" />
+    <ClInclude Include="Engine\Skinning\Skeleton.hpp" />
     <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
     <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
+    <ClInclude Include="Engine\Systems\CameraSystem.hh" />
     <ClInclude Include="Engine\Systems\DownSampleSystem.hh" />
     <ClInclude Include="Engine\Components\SpotLight.hh" />
     <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Engine\Systems\PostFxSystem.hh" />
+    <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
+    <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
@@ -177,33 +200,8 @@
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
-    <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
-    <ClInclude Include="Engine\OpenGL\Buffer.hh" />
-    <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
-    <ClInclude Include="Engine\OpenGL\Key.hh" />
-    <ClInclude Include="Engine\OpenGL\Key.hpp" />
-    <ClInclude Include="Engine\OpenGL\Pool.hh" />
-    <ClInclude Include="Engine\OpenGL\Data.hh" />
-    <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
-<<<<<<< HEAD
-    <ClInclude Include="Engine\OpenGL\ShadingManager.hh" />
-    <ClInclude Include="Engine\OpenGL\MemoryGPU.hh" />
-    <ClInclude Include="Engine\OpenGL\UniformBlock.hh" />
-    <ClInclude Include="Engine\OpenGL\ShaderResource.hh" />
-    <ClInclude Include="Engine\Systems\CameraSystem.hh" />
-=======
-    <ClInclude Include="Engine\Skinning\Animation.hpp" />
-    <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />
-    <ClInclude Include="Engine\Skinning\AnimationInstance.hpp" />
-    <ClInclude Include="Engine\Skinning\AnimationKey.hpp" />
-    <ClInclude Include="Engine\Skinning\Bone.hpp" />
-    <ClInclude Include="Engine\Skinning\Skeleton.hpp" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
-    <ClInclude Include="Engine\Geometry\Mesh.hpp" />
-    <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
-    <ClInclude Include="Engine\Core\AssetsManager.hpp" />
-    <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
->>>>>>> master
+    <ClInclude Include="Engine\Texture\TextureData.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

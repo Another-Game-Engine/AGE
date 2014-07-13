@@ -89,11 +89,17 @@ int			main(int ac, char **av)
 		AGE::AssetDataSet dataSet;
 		dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
 		dataSet.name = "catwoman";
-		//isSkeleton = AGE::SkeletonLoader::load(dataSet);
-		//isAnimations = AGE::AnimationsLoader::load(dataSet);
-		//isMesh = AGE::MeshLoader::load(dataSet);
+		dataSet.destination = "../../Assets/NewSerialized";
+
 		isMaterial = AGE::MaterialLoader::load(dataSet);
 		isTexture = AGE::ImageLoader::load(dataSet);
+		isSkeleton = AGE::SkeletonLoader::load(dataSet);
+		isAnimations = AGE::AnimationsLoader::load(dataSet);
+		isMesh = AGE::MeshLoader::load(dataSet);
+
+		AGE::MaterialLoader::save(dataSet);
+		AGE::ImageLoader::save(dataSet);
+
 		////Save AGE assets data structure to filesystem
 		if (isSkeleton)
 		{

@@ -4,6 +4,10 @@
 #include "ImageLoader.hpp"
 #include <map>
 
+#include <Utils/GlmSerialization.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/string.hpp>
+
 namespace AGE
 {
 		struct MaterialData
@@ -13,7 +17,7 @@ namespace AGE
 			glm::vec4 diffuse;
 			glm::vec4 ambient;
 			glm::vec4 emissive;
-			glm::vec4 relfective;
+			glm::vec4 reflective;
 			glm::vec4 specular;
 
 			std::string diffuseTexPath;
@@ -22,11 +26,42 @@ namespace AGE
 			std::string reflectiveTexPath;
 			std::string specularTexPath;
 			std::string normalTexPath;
+
+			template <class Archive>
+			void serialize(Archive &ar)
+			{
+				ar(name, diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath);
+			}
+		};
+
+		struct MaterialDataSet
+		{
+			std::vector<MaterialData> collection;
+
+			template <class Archive>
+			void serialize(Archive &ar)
+			{
+				ar(collection);
+			}
 		};
 
 	class MaterialLoader
 	{
 	public:
+		static bool save(AssetDataSet &dataSet)
+		{
+			if (dataSet.materialsLoaded == false)
+				return false;
+			auto name = dataSet.destination.getFullName() + "/" + dataSet.filePath.getFolder() + dataSet.filePath.getShortFileName() + ".mage";
+			MaterialDataSet materialDataSet;
+			for (auto &m : dataSet.materials)
+			{
+				materialDataSet.collection.push_back(*m);
+			}
+			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
+			cereal::PortableBinaryOutputArchive ar(ofs);
+			ar(materialDataSet);			
+		}
 		static bool load(AssetDataSet &dataSet)
 		{
 			dataSet.materialsLoaded = false;
@@ -74,7 +109,7 @@ namespace AGE
 				material->diffuse = AssimpLoader::aiColorToGlm(diffuse);
 				material->ambient = AssimpLoader::aiColorToGlm(ambient);
 				material->emissive = AssimpLoader::aiColorToGlm(emissive);
-				material->relfective = AssimpLoader::aiColorToGlm(reflective);
+				material->reflective = AssimpLoader::aiColorToGlm(reflective);
 				material->specular = AssimpLoader::aiColorToGlm(specular);
 
 				material->diffuseTexPath = AssimpLoader::aiStringToStd(diffuseTexPath);

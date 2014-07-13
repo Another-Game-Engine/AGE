@@ -30,10 +30,12 @@ namespace AGE
 		bool materialsLoaded = false;
 		bool texturesLoaded = false;
 
+		File destination = "";
+
 		//Paths
 		File filePath = "";
-		std::vector<std::string> texturesPath;
 
+		std::vector<std::string> texturesPath;
 		std::string name = "";
 
 		//Ptrs

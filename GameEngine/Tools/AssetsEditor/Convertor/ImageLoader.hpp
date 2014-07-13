@@ -1,21 +1,27 @@
 #pragma once
 
 #include "AssimpLoader.hpp"
+#include <Texture/TextureData.hpp>
 #include <SOIL.h>
 
 namespace AGE
 {
-	struct TextureData
-	{
-		std::string rawPath;
-		std::uint32_t width;
-		std::uint32_t height;
-		std::vector<unsigned char> data;
-	};
-
 	class ImageLoader
 	{
 	public:
+		static bool save(AssetDataSet &dataSet)
+		{
+			if (dataSet.texturesLoaded == false)
+				return false;
+			for (auto &m : dataSet.textures)
+			{
+				auto name = dataSet.destination.getFullName() + "/" + File(m->rawPath).getFolder() + "/" + File(m->rawPath).getShortFileName() + ".tage";
+				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
+				cereal::PortableBinaryOutputArchive ar(ofs);
+				ar(*m);
+			}
+		}
+
 		static bool load(AssetDataSet &dataSet)
 		{
 			dataSet.texturesLoaded = false;
