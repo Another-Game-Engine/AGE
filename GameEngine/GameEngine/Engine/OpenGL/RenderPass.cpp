@@ -229,7 +229,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::draw(Drawable *objectRender, size_t nbrObjectRender)
+	RenderPass &RenderPass::draw(Drawable const *objectRender, size_t nbrObjectRender)
 	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);

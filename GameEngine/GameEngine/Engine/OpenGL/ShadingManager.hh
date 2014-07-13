@@ -19,6 +19,7 @@ namespace gl
 	class Texture;
 	class UniformBuffer;
 	class RenderPass;
+	class Drawable;
 
 	//!\file ShadingManager.hh
 	//!\author Dorian Pinaud
@@ -90,24 +91,29 @@ namespace gl
 		Key<RenderPass> addRenderPass(Key<Shader> const &shader);
 		ShadingManager &rmRenderPass(Key<RenderPass> &key);
 		Key<RenderPass> getRenderPass(size_t target) const;
-		ShadingManager &clearRenderPass(Key<RenderPass> const &key, bool color = true, bool depth = true, bool stencil = false);
-		ShadingManager &setClearValueRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
-		ShadingManager &setColorMaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index = 0);
-		ShadingManager &setDepthMaskRenderPass(Key<RenderPass> const &key, bool depth);
-		ShadingManager &setStencilMaskRenderPass(Key<RenderPass> const &key, uint8_t front, uint8_t back);
-		ShadingManager &setTestRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth);
-		ShadingManager &setScissorRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area);
-		ShadingManager &setStencilFunctionFrontFaceRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
-		ShadingManager &setStencilOperationFrontFaceRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		ShadingManager &setStencilFunctionBackFaceRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
-		ShadingManager &setStencilOperationBackFaceRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		ShadingManager &setStencilFunctionRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
-		ShadingManager &setStencilOperationRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		ShadingManager &setBlendEquationRenderPass(Key<RenderPass> const &key, GLenum mode);
-		ShadingManager &setBlendEquationRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode);
-		ShadingManager &setBlendFuncRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
-		ShadingManager &setBlendFuncRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest);
-		ShadingManager &setBlendConstantRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendPass);
+		
+		ShadingManager &pushClearTaskRenderPass(Key<RenderPass> const &key, bool color = true, bool depth = true, bool stencil = false);
+		ShadingManager &pushSetClearValueTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
+		ShadingManager &pushSetColorMaskTaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index = 0);
+		ShadingManager &pushSetDepthMaskTaskRenderPass(Key<RenderPass> const &key, bool depth);
+		ShadingManager &pushSetStencilMaskTaskRenderPass(Key<RenderPass> const &key, uint8_t front, uint8_t back);
+		ShadingManager &pushSetTestTaskRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth);
+		ShadingManager &pushSetScissorTaskRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area);
+		ShadingManager &pushSetStencilFunctionFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		ShadingManager &pushSetStencilOperationFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		ShadingManager &pushSetStencilFunctionBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		ShadingManager &pushSetStencilOperationBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		ShadingManager &pushSetStencilFunctionTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		ShadingManager &pushSetStencilOperationTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		ShadingManager &pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum mode);
+		ShadingManager &pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode);
+		ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
+		ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest);
+		ShadingManager &pushSetBlendConstantTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendPass);
+		
+		ShadingManager &popTaskRenderPass(Key<RenderPass> const &key);
+
+		ShadingManager &draw(Key<RenderPass> const &key, Drawable const *objectRender, size_t nbrObjectRender);
 
 
 	private:

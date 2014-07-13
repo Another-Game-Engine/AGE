@@ -56,7 +56,7 @@ namespace gl
 		RenderPass(RenderPass const &copy);
 		RenderPass &operator=(RenderPass const &r);
 
-		RenderPass &draw(Drawable *objectRender, size_t nbrObjectRender);
+		RenderPass &draw(Drawable const *objectRender, size_t nbrObjectRender);
 		
 		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
 		RenderPass &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);

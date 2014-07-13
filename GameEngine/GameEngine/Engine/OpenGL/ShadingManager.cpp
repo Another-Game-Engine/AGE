@@ -496,7 +496,7 @@ namespace gl
 		return (element->first);
 	}
 
-	ShadingManager &ShadingManager::clearRenderPass(Key<RenderPass> const &key, bool color, bool depth, bool stencil)
+	ShadingManager &ShadingManager::pushClearTaskRenderPass(Key<RenderPass> const &key, bool color, bool depth, bool stencil)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setClearOptionRenderPass")) == NULL)
@@ -505,7 +505,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setClearValueRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth, uint8_t stencil)
+	ShadingManager &ShadingManager::pushSetClearValueTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth, uint8_t stencil)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setClearValueRenderPass")) == NULL)
@@ -514,7 +514,7 @@ namespace gl
 		return (*this);
 	}
 	
-	ShadingManager &ShadingManager::setColorMaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index)
+	ShadingManager &ShadingManager::pushSetColorMaskTaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setColorMaskRenderPass")) == NULL)
@@ -523,7 +523,7 @@ namespace gl
 		return (*this);
 	}
 	
-	ShadingManager &ShadingManager::setStencilMaskRenderPass(Key<RenderPass> const &key, uint8_t front, uint8_t back)
+	ShadingManager &ShadingManager::pushSetStencilMaskTaskRenderPass(Key<RenderPass> const &key, uint8_t front, uint8_t back)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
@@ -532,7 +532,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setDepthMaskRenderPass(Key<RenderPass> const &key, bool depth)
+	ShadingManager &ShadingManager::pushSetDepthMaskTaskRenderPass(Key<RenderPass> const &key, bool depth)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
@@ -541,7 +541,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setTestRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth)
+	ShadingManager &ShadingManager::pushSetTestTaskRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
@@ -550,7 +550,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setScissorRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area)
+	ShadingManager &ShadingManager::pushSetScissorTaskRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
@@ -559,7 +559,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setStencilFunctionFrontFaceRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
+	ShadingManager &ShadingManager::pushSetStencilFunctionFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setStencilFunctionFrontFaceRenderPass")) == NULL)
@@ -567,7 +567,7 @@ namespace gl
 		renderPass->pushSetStencilFunctionFrontFaceTask(func, ref, mask);
 		return (*this);
 	}
-	ShadingManager &ShadingManager::setStencilOperationFrontFaceRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	ShadingManager &ShadingManager::pushSetStencilOperationFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setStencilOperationFrontFaceRenderPass")) == NULL)
@@ -576,7 +576,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setStencilFunctionBackFaceRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
+	ShadingManager &ShadingManager::pushSetStencilFunctionBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setStencilFunctionBackFaceRenderPass")) == NULL)
@@ -585,7 +585,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setStencilOperationBackFaceRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	ShadingManager &ShadingManager::pushSetStencilOperationBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setStencilOperationBackFaceRenderPass")) == NULL)
@@ -594,7 +594,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setStencilFunctionRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
+	ShadingManager &ShadingManager::pushSetStencilFunctionTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setStencilFunctionRenderPass")) == NULL)
@@ -603,7 +603,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setStencilOperationRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	ShadingManager &ShadingManager::pushSetStencilOperationTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setStencilOperationRenderPass")) == NULL)
@@ -612,7 +612,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setBlendEquationRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode)
+	ShadingManager &ShadingManager::pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setBlendEquationRenderPass")) == NULL)
@@ -621,7 +621,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setBlendEquationRenderPass(Key<RenderPass> const &key, GLenum mode)
+	ShadingManager &ShadingManager::pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum mode)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setBlendEquationRenderPass")) == NULL)
@@ -630,7 +630,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setBlendFuncRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
+	ShadingManager &ShadingManager::pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setBlendFuncRenderPass")) == NULL)
@@ -639,7 +639,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setBlendFuncRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest)
+	ShadingManager &ShadingManager::pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setBlendFuncRenderPass")) == NULL)
@@ -648,7 +648,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setBlendConstantRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendColor)
+	ShadingManager &ShadingManager::pushSetBlendConstantTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendColor)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "setBlendConstantRenderPass")) == NULL)
@@ -657,4 +657,21 @@ namespace gl
 		return (*this);
 	}
 
+	ShadingManager &ShadingManager::popTaskRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "popTaskRenderPass")) == NULL)
+			return (*this);
+		renderPass->popTask();
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::draw(Key<RenderPass> const &key, Drawable const *objectRender, size_t nbrObjectRender)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "popTaskRenderPass")) == NULL)
+			return (*this);
+		renderPass->draw(objectRender, nbrObjectRender);
+		return (*this);
+	}
 }
