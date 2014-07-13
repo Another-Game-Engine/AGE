@@ -359,6 +359,22 @@ namespace gl
 		return (&renderPass->second);
 	}
 
+	Material *ShadingManager::getMaterial(Key<Material> const &key, std::string const &in)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_materials.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+		if (key == _optimizeMaterialSearch.first)
+			return (_optimizeMaterialSearch.second);
+		auto &material = _materials.find(key);
+		if (material == _materials.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+		_optimizeMaterialSearch.first = key;
+		_optimizeMaterialSearch.second = &material->second;
+		return (&material->second);
+	}
+
 	ShadingManager &ShadingManager::wrapTexture2D(Key<Texture> const &key, GLint param)
 	{
 		Texture2D const *texture;
@@ -674,4 +690,33 @@ namespace gl
 		renderPass->draw(objectRender, nbrObjectRender);
 		return (*this);
 	}
+
+	Key<Material> ShadingManager::addMaterial()
+	{
+		Key<Material> key;
+
+		_materials[key];
+		return (key);
+	}
+
+	ShadingManager &ShadingManager::rmMaterial(Key<Material> &key)
+	{
+		Material *material;
+		if ((material = getMaterial(key, "rmMaterial()")) == NULL)
+			return (*this);
+		_materials.erase(key);
+		key.destroy();
+		return (*this);
+	}
+
+	Key<Material> ShadingManager::getMaterial(size_t target) const
+	{
+		if (target >= _materials.size())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getMaterial(size_t target)", "the target is out of range", Key<Material>(KEY_DESTROY));
+		auto &element = _materials.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
+	}
+
 }

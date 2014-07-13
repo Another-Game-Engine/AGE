@@ -8,7 +8,13 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <OpenGL/UniformBlock.hh>
+#include <OpenGL/Material.hh>
 #include <cassert>
+
+# undef DEBUG_MESSAGE
+# define DEBUG_MESSAGE(type, from, reason, return_type) \
+	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
+
 
 namespace gl
 {
@@ -68,6 +74,14 @@ namespace gl
 		Key<UniformBlock> getUniformBlock(size_t index) const;
 		template <typename TYPE> ShadingManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
 
+		// Material
+		Key<Material> addMaterial();
+		ShadingManager &rmMaterial(Key<Material> &key);
+		Key<Material> getMaterial(size_t index) const;
+		template <typename TYPE> ShadingManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
+		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key) const;
+
+
 		// Texture
 		Key<Texture> addTexture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping);
 		Key<Texture> addTextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation);
@@ -121,36 +135,53 @@ namespace gl
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
 		std::map<Key<RenderPass>, RenderPass> _renderPass;
+		std::map<Key<Material>, Material> _materials;
 
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
 		std::pair<Key<UniformBlock>, UniformBlock *> _optimizeUniformBlockSearch;
 		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
 		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
-
+		std::pair<Key<Material>, Material *> _optimizeMaterialSearch;
 
 		// tool use in intern
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key, std::string const &in);
 		Texture *getTexture(Key<Texture> const &key, std::string const &in, GLenum type);
 		RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
+		Material *getMaterial(Key<Material> const &key, std::string const &in);
 	};
-
-# undef DEBUG_MESSAGE
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
 
 	template <typename TYPE>
 	ShadingManager &ShadingManager::setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.hh - setUniformBlock()", "key is destroy", *this);
-		auto &element = _uniformBlock.find(key);
-		if (element == _uniformBlock.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.hh - setUniformBlock()", "the uniformBlock ask is not in list", *this);
-		UniformBlock &uniformblock = element->second;
-		uniformblock.set<TYPE>(index, value);
+		UniformBlock *uniformBlock;
+
+		if ((uniformBlock = getUniformBlock(key, "setUniformBlock")) == NULL)
+			return (*this);
+		uniformBlock->set<TYPE>(index, value);
 		return (*this);
 	}
+
+	template <typename TYPE> 
+	ShadingManager &ShadingManager::setMaterial(Key<Material> const &key, typename TYPE::return_type const &value)
+	{
+		Material *material;
+
+		if ((material = getMaterial(key, "setMaterial")) == NULL)
+			return (*this);
+		return (material->set<TYPE>(value));
+		return (*this);
+	}
+
+	template <typename TYPE> 
+	typename TYPE::return_type ShadingManager::getMaterial(Key<Material> const &key) const
+	{
+		Material *material;
+
+		material = getMaterial(key, "getMaterial");
+		return (material->get<TYPE>());
+	}
+
 
 	template <typename TYPE1>
 	inline void set_tab_sizetype(size_t *tab)
