@@ -217,6 +217,7 @@
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Drawable.cpp" />
     <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
+    <ClCompile Include="Engine\OpenGL\Material.cpp" />
     <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
+    <ClInclude Include="Engine\OpenGL\Material.hh" />
     <ClInclude Include="Engine\OpenGL\MemoryGPU.hh" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
     <ClInclude Include="Engine\OpenGL\Pool.hh" />
