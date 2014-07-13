@@ -39,6 +39,7 @@ namespace gl
 		int nbrParams;
 		void **params;
 		void(*func)(void **);
+		Task() : nbrParams(0), params(NULL), func(NULL){}
 	};
 
 	//!\file RenderPass.hh
@@ -57,10 +58,52 @@ namespace gl
 
 		RenderPass &draw(Drawable *objectRender, size_t nbrObjectRender);
 		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
+		RenderPass &pushSetColorValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
+		RenderPass &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
+		RenderPass &pushSetDepthMaskTask(bool depth);
+		RenderPass &pushSetStencilMaskTask(uint8_t front, uint8_t back);
+		RenderPass &pushClearTask(bool color, bool depth, bool stencil);
+		RenderPass &pushSetStencilFunctionFrontFaceTask(GLenum func, int ref, uint8_t mask);
+		RenderPass &pushSetStencilOperationFrontFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		RenderPass &pushSetStencilFunctionBackFaceTask(GLenum func, int ref, uint8_t mask);
+		RenderPass &pushSetStencilOperationBackFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		RenderPass &pushSetStencilFunctionTask(GLenum func, int ref, uint8_t mask);
+		RenderPass &pushSetStencilOperationTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		RenderPass &pushSetBlendTask(int drawBuffer, bool state);
+		RenderPass &pushSetBlendEquationTask(GLenum colorMode, GLenum alphaMode);
+		RenderPass &pushSetBlendEquationTask(GLenum mode);
+		RenderPass &pushSetBlendFuncTask(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
+		RenderPass &pushSetBlendFuncTask(GLenum src, GLenum dest);
+		RenderPass &pushSetBlendConstantTask(glm::vec4 const &blendColor);
+		RenderPass &pushSetTestTask(bool scissor, bool stencil, bool depth);
 
 	private:
 		Shader *_shader;
 		std::vector<Task> _tasks;
+
+		// Tool use in intern
+		template <typename TYPE, typename... TYPES> void setAllocation(Task &task, TYPE &elements);
+		template <typename TYPE> void setAllocation(Task &task, TYPE &element, TYPES... &elements);
 	};
+
+	template <typename TYPE>
+	void RenderPass::setAllocation(Task &task, TYPE element)
+	{
+		int index = task.nbrParams;
+		task.nbrParams = task.nbrParams + 1;
+		task.params = new void *[task.nbrParams];
+		task.params[index] = new TYPE;
+		memcpy(task.params[index], &element, sizeof(TYPE));
+	}
+
+	template <typename TYPE, typename... TYPES>
+	void RenderPass::setAllocation(Task &task, TYPE element, TYPES... elements)
+	{
+		int index = task.nbrParams;
+		task.nbrParams = task.nbrParams + 1;
+		setAllocation(task, elements...);
+		task.params[index] = new TYPE;
+		memcpy(task.params[index], &element, sizeof(TYPE));
+	}
 
 }

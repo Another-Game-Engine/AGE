@@ -100,7 +100,7 @@ namespace gl
 			glDisablei(GL_BLEND, CONVERT(int, 0));
 	}
 
-	void setBlendEquation(void **data)
+	void setBlendEquationSeparate(void **data)
 	{
 		glBlendEquationSeparate(CONVERT(GLenum, 0), CONVERT(GLenum, 1));
 	}
@@ -110,7 +110,7 @@ namespace gl
 		glBlendEquation(CONVERT(GLenum, 0));
 	}
 
-	void setBlendFunc(void **data)
+	void setBlendFuncSeparate(void **data)
 	{
 		glBlendFuncSeparate(CONVERT(GLenum, 0), CONVERT(GLenum, 1), CONVERT(GLenum, 2), CONVERT(GLenum, 3));
 	}

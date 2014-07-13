@@ -15,9 +15,9 @@ namespace gl
 	void setStencilFunction(void **);
 	void setStencilOperation(void **);
 	void setBlend(void **);
+	void setBlendEquationSeparate(void **);
 	void setBlendEquation(void **);
-	void setBlendEquation(void **);
-	void setBlendFunc(void **);
+	void setBlendFuncSeparate(void **);
 	void setBlendFunc(void **);
 	void setBlendConstant(void **);
 	void setTest(void **);
