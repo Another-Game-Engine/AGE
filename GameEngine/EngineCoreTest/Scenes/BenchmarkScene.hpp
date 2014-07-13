@@ -135,7 +135,6 @@ public:
 	link->setPosition(glm::vec3(0, -10, 0));
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
-	mesh->setShader("MaterialBasic");
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
@@ -166,7 +165,7 @@ public:
 				auto e = createEntity();
 
 #ifdef LIFETIME_ACTIVATED
-				addComponent<Component::Lifetime>(e, 5.0f);
+				addComponent<Component::Lifetime>(e, 0.1f);
 #endif
 #ifdef RENDERING_ACTIVATED
 
@@ -184,7 +183,6 @@ public:
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
 				else
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
-				mesh->setShader("MaterialBasic");
 #else
 				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");

@@ -7,7 +7,6 @@
 #include <MediaFiles/ObjFile.hpp>
 #include <memory>
 
-
 class AScene;
 
 namespace AGE
@@ -32,33 +31,33 @@ namespace AGE
 			Cullable(Cullable &&o)
 			{
 				mesh = std::move(o.mesh);
-				shader = std::move(o.shader);
 				_cullableId = o._cullableId;
+				_scene = o._scene;
 				draw = o.draw;
 			}
 
 			Cullable &operator=(Cullable &&o)
 			{
 				mesh = std::move(o.mesh);
-				shader = std::move(o.shader);
 				_cullableId = o._cullableId;
+				_scene = o._scene;
 				draw = o.draw;
 				return *this;
 			}
 
 
 			//TEMPORARY FOR TEST
-			void setShader(const std::string &_shader);
 			void setMesh(const std::shared_ptr<ObjFile> &_mesh);
 			std::shared_ptr<ObjFile> getMesh();
-			const std::string &getShader();
 
 			// TEMPORARY
 			bool draw = false;
 		protected:
 			std::shared_ptr<ObjFile> mesh;
-			std::string shader;
+
+			void sendMeshInfos();
 		private:
+			AScene *_scene = nullptr;
 			Cullable(const Cullable &o);
 			Cullable &operator=(const Cullable &o);
 		};

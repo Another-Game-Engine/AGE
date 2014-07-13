@@ -149,6 +149,7 @@ void Octree::update()
 		else if (command.commandType.at(CommandType::Delete))
 		{
 			auto &ue = _userObjects[command.id];
+			auto debugId = ue.entity.getId();
 			_freeUserObjects.push(command.id);
 			for (auto &e : ue.collection)
 			{

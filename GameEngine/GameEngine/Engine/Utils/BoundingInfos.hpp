@@ -21,6 +21,8 @@ namespace AGE
 		glm::vec3 _size;
 		glm::mat4 _transform;
 
+		//temporary to pass in private
+	public:
 		void initFromList(const std::vector<BoundingInfos> &col);
 		void addPosition(const glm::vec3 &v);
 

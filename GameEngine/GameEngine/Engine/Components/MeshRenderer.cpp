@@ -45,34 +45,34 @@ namespace Component
 
 	void MeshRenderer::render(Renderer *renderer, const glm::mat4 &globalTrans, std::function<void(gl::Shader&)> func)
 	{
-		auto perModelUniform = renderer->getUniform("PerModel");
-		auto materialUniform = renderer->getUniform("MaterialBasic");
+		//auto perModelUniform = renderer->getUniform("PerModel");
+		//auto materialUniform = renderer->getUniform("MaterialBasic");
 
-		auto s = renderer->getShader(shader);
-		if (s)
-			s->use();
-		func(*s);
-		perModelUniform->setUniform("model", globalTrans);
-		perModelUniform->flushChanges();
-		for (std::size_t i = 0; i < mesh->material->materials.size(); ++i)
-		{
-			mesh->material->materials[i].setUniforms(materialUniform);
-			materialUniform->flushChanges();
-			mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glindices, mesh->geometries[i].glvertices);
-		}
+		//auto s = renderer->getShader(shader);
+		//if (s)
+		//	s->use();
+		//func(*s);
+		//perModelUniform->setUniform("model", globalTrans);
+		//perModelUniform->flushChanges();
+		//for (std::size_t i = 0; i < mesh->material->materials.size(); ++i)
+		//{
+		//	mesh->material->materials[i].setUniforms(materialUniform);
+		//	materialUniform->flushChanges();
+		//	mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glindices, mesh->geometries[i].glvertices);
+		//}
 	}
 
 	void MeshRenderer::renderRaw(Renderer *renderer, const glm::mat4 &trans)
 	{
-		std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = renderer->getUniform("PerModel");
+		//std::shared_ptr<OpenGLTools::UniformBuffer> perModelUniform = renderer->getUniform("PerModel");
 
-		perModelUniform->setUniform("model", trans);
-		perModelUniform->flushChanges();
-		for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
-		{
-			mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glvertices);
-			//mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glindices, mesh->geometries[i].glvertices);
-		}
+		//perModelUniform->setUniform("model", trans);
+		//perModelUniform->flushChanges();
+		//for (unsigned int i = 0; i < mesh->material->materials.size(); ++i)
+		//{
+		//	mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glvertices);
+		//	//mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->geometries[i].glindices, mesh->geometries[i].glvertices);
+		//}
 	}
 
 }
