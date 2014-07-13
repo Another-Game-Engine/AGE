@@ -213,6 +213,7 @@
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\BufferSettings.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\Drawable.cpp" />
     <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\OpenGL\Buffer.hh" />
+    <ClInclude Include="Engine\OpenGL\BufferSettings.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\Drawable.hh" />
     <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />

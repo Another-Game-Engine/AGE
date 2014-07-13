@@ -72,6 +72,7 @@
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
     <ClCompile Include="Engine\OpenGL\RenderPass.cpp" />
     <ClCompile Include="Engine\OpenGL\Drawable.cpp" />
+    <ClCompile Include="Engine\OpenGL\BufferSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\OpenGL\RenderPass.hh" />
     <ClInclude Include="Engine\OpenGL\Drawable.hh" />
+    <ClInclude Include="Engine\OpenGL\BufferSettings.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
