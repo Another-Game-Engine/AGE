@@ -108,7 +108,6 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
 	_renderPass = _render->addRenderPass(_shader);
-	_render->setTestRenderPass(_renderPass, false, false, true);
 }
 #endif
 
@@ -191,8 +190,6 @@ void CameraSystem::mainUpdate(double time)
 		_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		_render->clearRenderPass(_renderPass, true, true, false);
-		_render->useRenderPass(_renderPass);
 		// draw
 		for (auto m : _drawable.getCollection())
 		{

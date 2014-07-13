@@ -57,8 +57,9 @@ namespace gl
 		RenderPass &operator=(RenderPass const &r);
 
 		RenderPass &draw(Drawable *objectRender, size_t nbrObjectRender);
+		
 		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
-		RenderPass &pushSetColorValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
+		RenderPass &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
 		RenderPass &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
 		RenderPass &pushSetDepthMaskTask(bool depth);
 		RenderPass &pushSetStencilMaskTask(uint8_t front, uint8_t back);
@@ -76,14 +77,15 @@ namespace gl
 		RenderPass &pushSetBlendFuncTask(GLenum src, GLenum dest);
 		RenderPass &pushSetBlendConstantTask(glm::vec4 const &blendColor);
 		RenderPass &pushSetTestTask(bool scissor, bool stencil, bool depth);
+		RenderPass &popTask();
 
 	private:
 		Shader *_shader;
 		std::vector<Task> _tasks;
 
 		// Tool use in intern
-		template <typename TYPE, typename... TYPES> void setAllocation(Task &task, TYPE &elements);
-		template <typename TYPE> void setAllocation(Task &task, TYPE &element, TYPES... &elements);
+		template <typename TYPE> void setAllocation(Task &task, TYPE elements);
+		template <typename TYPE, typename... TYPES> void setAllocation(Task &task, TYPE element, TYPES... elements);
 	};
 
 	template <typename TYPE>

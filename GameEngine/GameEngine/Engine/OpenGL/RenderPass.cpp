@@ -25,6 +25,12 @@ namespace gl
 
 	RenderPass::~RenderPass()
 	{
+		for (size_t index = 0; index < _tasks.size(); ++index)
+		{	
+			for (uint8_t param = 0; param < _tasks[index].nbrParams; ++param)
+				delete _tasks[index].params[param];
+			delete[] _tasks[index].params;
+		}
 	}
 
 	RenderPass::RenderPass(RenderPass const &copy)
@@ -50,7 +56,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetColorValueTask(glm::vec4 const &color, float depth, uint8_t stencil)
+	RenderPass &RenderPass::pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil)
 	{
 		Task task;
 		setAllocation(task, color, depth, stencil);
@@ -211,8 +217,22 @@ namespace gl
 		return (*this);
 	}
 
+	RenderPass &RenderPass::popTask()
+	{
+		if (!(_tasks.size() > 0))
+			DEBUG_MESSAGE("Warning", "RenderPass - popTask", "No task to pop", *this);
+		auto &element = _tasks.back();
+		for (uint8_t index = 0; index < element.nbrParams; ++index)
+			delete element.params[index];
+		delete[] element.params;
+		_tasks.pop_back();
+		return (*this);
+	}
+
 	RenderPass &RenderPass::draw(Drawable *objectRender, size_t nbrObjectRender)
 	{
+		for (size_t index = 0; index < _tasks.size(); ++index)
+			_tasks[index].func(_tasks[index].params);
 		if (!_shader)
 			DEBUG_MESSAGE("Warning", "RenderPass - use", "no shader assign on this renderPass", *this);
 		_shader->use();

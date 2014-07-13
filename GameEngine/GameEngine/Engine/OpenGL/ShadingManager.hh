@@ -109,7 +109,6 @@ namespace gl
 		ShadingManager &setBlendFuncRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest);
 		ShadingManager &setBlendConstantRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendPass);
 
-		ShadingManager &useRenderPass(Key<RenderPass> const &key);
 
 	private:
 		std::map<Key<Shader>, Shader> _shaders;

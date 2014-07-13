@@ -42,11 +42,11 @@ namespace gl
 		glStencilMaskSeparate(GL_BACK, CONVERT(uint8_t, 1));
 	}
 
-	void clear(bool color, bool depth, bool stencil)
+	void clear(void **data)
 	{
-		GLenum colorBit = color ? GL_COLOR_BUFFER_BIT : 0;
-		GLenum depthBit = depth ? GL_DEPTH_BUFFER_BIT : 0;
-		GLenum stencilBit = stencil ? GL_STENCIL_BUFFER_BIT : 0;
+		GLenum colorBit = CONVERT(bool, 0) ? GL_COLOR_BUFFER_BIT : 0;
+		GLenum depthBit = CONVERT(bool, 1) ? GL_DEPTH_BUFFER_BIT : 0;
+		GLenum stencilBit = CONVERT(bool, 2) ? GL_STENCIL_BUFFER_BIT : 0;
 		glClear(colorBit | depthBit | stencilBit);
 	}
 
