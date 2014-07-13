@@ -108,6 +108,9 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
 	_renderPass = _render->addRenderPass(_shader);
+	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
+	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
 }
 #endif
 
@@ -190,7 +193,7 @@ void CameraSystem::mainUpdate(double time)
 		_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		// draw
+		_render->draw(_renderPass, NULL, 0);
 		for (auto m : _drawable.getCollection())
 		{
 			auto mesh = scene->getComponent<Component::MeshRenderer>(m);
