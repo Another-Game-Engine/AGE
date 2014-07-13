@@ -112,12 +112,12 @@ namespace AGE
 				material->reflective = AssimpLoader::aiColorToGlm(reflective);
 				material->specular = AssimpLoader::aiColorToGlm(specular);
 
-				material->diffuseTexPath = AssimpLoader::aiStringToStd(diffuseTexPath);
-				material->ambientTexPath = AssimpLoader::aiStringToStd(ambientTexPath);
-				material->emissiveTexPath = AssimpLoader::aiStringToStd(emissiveTexPath);
-				material->reflectiveTexPath = AssimpLoader::aiStringToStd(reflexionTexPath);
-				material->specularTexPath = AssimpLoader::aiStringToStd(specularTexPath);
-				material->normalTexPath = AssimpLoader::aiStringToStd(normalTexPath);
+				material->diffuseTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(diffuseTexPath);
+				material->ambientTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(ambientTexPath);
+				material->emissiveTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(emissiveTexPath);
+				material->reflectiveTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath);
+				material->specularTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath);
+				material->normalTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath);
 
 				dataSet.texturesPath.push_back(material->diffuseTexPath);
 				dataSet.texturesPath.push_back(material->ambientTexPath);

@@ -53,7 +53,7 @@ namespace AGE
 				}
 				if (found)
 					continue;
-				auto path = dataSet.filePath.getFolder() + "/" + e;
+				auto path = e;
 				int width, height, channels;
 				auto imgData = SOIL_load_image(path.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
 				if (imgData)
