@@ -225,6 +225,23 @@ void Octree::update()
 	frustum.setMatrix(m, true);
 	std::uint64_t drawed = 0;
 	std::uint64_t total = 0;
+
+	//TMP
+	for (auto &e : _userObjects)
+	{
+		if (e.active)
+		{
+			auto cpt = scene.lock()->getComponent(e.entity, e.componentType);
+			if (cpt)
+			{
+				auto c = dynamic_cast<AGE::ComponentBehavior::Cullable*>(cpt);
+				c->draw = true;
+				++drawed;
+			}
+		}
+	}
+	//!TMP
+
 	for (auto &e : _cullableObjects)
 	{
 		if (e.active)
