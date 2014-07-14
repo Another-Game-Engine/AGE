@@ -119,6 +119,7 @@ void Octree::removeCullableObject(CULLABLE_ID id)
 {
 	_freeCullableObjects.push(id);
 	_cullableObjects[id].active = false;
+	_cullableObjects[id].userObjectId = USER_OBJECT_ID(-1);
 	assert(id != (std::size_t)(-1));
 }
 
@@ -160,6 +161,7 @@ void Octree::update()
 		else if (command.commandType.at(CommandType::Geometry))
 		{
 			auto &ue = _userObjects[command.id];
+			assert(ue.active != false);
 			for (auto &e : ue.collection)
 			{
 				removeCullableObject(e);
@@ -168,6 +170,7 @@ void Octree::update()
 			for (std::size_t i = 0; i < command.glindices.size(); ++i)
 			{
 				auto id = addCullableObject(command.id);
+				ue.collection.push_back(id);
 				_cullableObjects[id].bounding = command.boundings[i];
 				_cullableObjects[id].glvertices = command.glvertices[i];
 				_cullableObjects[id].glindices = command.glindices[i];
@@ -226,27 +229,11 @@ void Octree::update()
 	std::uint64_t drawed = 0;
 	std::uint64_t total = 0;
 
-	//TMP
-	for (auto &e : _userObjects)
-	{
-		if (e.active)
-		{
-			auto cpt = scene.lock()->getComponent(e.entity, e.componentType);
-			if (cpt)
-			{
-				auto c = dynamic_cast<AGE::ComponentBehavior::Cullable*>(cpt);
-				c->draw = true;
-				++drawed;
-			}
-		}
-	}
-	//!TMP
-
 	for (auto &e : _cullableObjects)
 	{
 		if (e.active)
 			++total;
-		if (e.active && frustum.pointIn(e.position) == true)
+		if (e.active && frustum.pointIn(e.position + e.bounding.getCenter()) == true)
 		{
 			//std::cout << e.entity.getId() << "  ";
 			auto &uo = _userObjects[e.userObjectId];
@@ -263,5 +250,5 @@ void Octree::update()
 			}
 		}
 	}
-//	std::cout << "Drawed : " << drawed << " / " << total << std::endl;
+	std::cout << "Drawed : " << drawed << " / " << total << std::endl;
 }

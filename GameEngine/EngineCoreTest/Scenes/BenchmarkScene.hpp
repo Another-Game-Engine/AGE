@@ -165,7 +165,7 @@ public:
 				auto e = createEntity();
 
 #ifdef LIFETIME_ACTIVATED
-				addComponent<Component::Lifetime>(e, 0.1f);
+				addComponent<Component::Lifetime>(e, 5.0f);
 #endif
 #ifdef RENDERING_ACTIVATED
 

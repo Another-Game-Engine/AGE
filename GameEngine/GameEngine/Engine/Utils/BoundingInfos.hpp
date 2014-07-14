@@ -13,7 +13,7 @@ namespace AGE
 		BoundingInfos();
 		void recompute();
 		template <class Archive> void serialize(Archive &ar);
-
+		const glm::vec3 &getCenter() const { return _center; }
 	private:
 		glm::vec3 _center;
 		glm::vec3 _min;

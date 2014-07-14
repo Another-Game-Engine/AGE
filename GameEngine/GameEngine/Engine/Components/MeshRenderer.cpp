@@ -30,7 +30,7 @@ namespace Component
 	void MeshRenderer::init(AScene *scene, std::shared_ptr<ObjFile> r)
 	{
 		AGE::ComponentBehavior::Cullable::init(scene, entityId, MeshRenderer::getTypeId());
-		mesh = r;
+		setMesh(r);
 	}
 
 	//std::shared_ptr<ObjFile> const &MeshRenderer::getMesh() const
