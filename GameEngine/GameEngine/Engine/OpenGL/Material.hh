@@ -51,14 +51,14 @@ namespace gl
 	template <typename TYPE>
 	typename TYPE::return_type Material::get() const
 	{
-		TYPE::return_type *data = &_data[TYPE::offset];
+		TYPE::return_type *data = (TYPE::return_type *)&_data[TYPE::offset];
 		return (*data);
 	}
 
 	template <typename TYPE>
 	Material &Material::set(typename TYPE::return_type const &value)
 	{
-		TYPE::return_type *data = &_data[TYPE::offset];
+		TYPE::return_type *data = (TYPE::return_type *)&_data[TYPE::offset];
 		memcpy(data, &value, sizeof(TYPE::return_type));
 		return (*this);
 	}

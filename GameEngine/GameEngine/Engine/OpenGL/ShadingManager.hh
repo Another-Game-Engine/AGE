@@ -79,7 +79,7 @@ namespace gl
 		ShadingManager &rmMaterial(Key<Material> &key);
 		Key<Material> getMaterial(size_t index) const;
 		template <typename TYPE> ShadingManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
-		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key) const;
+		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
 
 
 		// Texture
@@ -169,12 +169,12 @@ namespace gl
 
 		if ((material = getMaterial(key, "setMaterial")) == NULL)
 			return (*this);
-		return (material->set<TYPE>(value));
+		material->set<TYPE>(value);
 		return (*this);
 	}
 
 	template <typename TYPE> 
-	typename TYPE::return_type ShadingManager::getMaterial(Key<Material> const &key) const
+	typename TYPE::return_type ShadingManager::getMaterial(Key<Material> const &key)
 	{
 		Material *material;
 

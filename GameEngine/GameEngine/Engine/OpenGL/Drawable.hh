@@ -9,6 +9,7 @@ namespace gl
 	class Indices;
 	class VertexPool;
 	class IndexPool;
+	class Material;
 
 	//!\file Data.hh
 	//!\author Dorian Pinaud
@@ -21,13 +22,18 @@ namespace gl
 		Drawable();
 		~Drawable();
 
-		glm::mat4 const &getModel() const;
+		//setter
 		Drawable &setModel(glm::mat4 const &m);
 		Drawable &setGeometry(Key<Vertices> const &, Key<Indices> const &, Key<VertexPool> const &, Key<IndexPool> const &);
+		Drawable &setMaterial(Key<Material> const &);
+
+		//getter
+		glm::mat4 const &getModel() const;
 		Key<Vertices> const &getVertices() const;
 		Key<Indices> const &getIndices() const;
 		Key<VertexPool> const &getVertexPool() const;
 		Key<IndexPool> const &getIndexPool() const;
+		Key<Material> const &getMaterial() const;
 	private:
 
 		glm::mat4 _model;
@@ -35,6 +41,7 @@ namespace gl
 		Key<Indices> _indices;
 		Key<VertexPool> _vertexPool;
 		Key<IndexPool> _indexPool;
+		Key<Material> _material;
 
 	};
 }

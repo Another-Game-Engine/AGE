@@ -53,4 +53,15 @@ namespace gl
 	{
 		return (_indices);
 	}
+
+	Key<Material> const &Drawable::getMaterial() const
+	{
+		return (_material);
+	}
+
+	Drawable &Drawable::setMaterial(Key<Material> const &m)
+	{
+		_material = m;
+		return (*this);
+	}
 }
