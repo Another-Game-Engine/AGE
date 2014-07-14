@@ -143,7 +143,8 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 			
 			for (auto e : _meshRendererFilter.getCollection())
 			{
-				scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getLink(e)->getTransform());
+				// DEPRECATED
+				//scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getLink(e)->getTransform());
 			}
 
 			drawSprites();
@@ -217,7 +218,8 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	for (auto e : _meshRendererFilter.getCollection())
 	{
-		scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getLink(e)->getTransform());
+		// DEPRECATED
+		//scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getLink(e)->getTransform());
 	}
 
 	// ----------------------------------------------------
@@ -231,11 +233,12 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	for (auto e : _meshRendererFilter.getCollection())
 	{
-		scene->getComponent<Component::MeshRenderer>(e)->render(renderer, scene->getLink(e)->getTransform(), [&](gl::Shader &s)
-		{
-			glActiveTexture(GL_TEXTURE4);
-			glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
-		});
+		// DEPRECATED
+		//scene->getComponent<Component::MeshRenderer>(e)->render(renderer, scene->getLink(e)->getTransform(), [&](gl::Shader &s)
+		//{
+		//	glActiveTexture(GL_TEXTURE4);
+		//	glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
+		//});
 	}
 
 

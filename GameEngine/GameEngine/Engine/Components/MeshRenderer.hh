@@ -37,10 +37,6 @@ namespace Component
 		MeshRenderer &operator=(MeshRenderer &&o);
 		void init(AScene *, std::shared_ptr<ObjFile> file);
 		virtual void reset(AScene *);
-//		inline void setShader(const std::string &_shader) { shader = _shader; }
-		void render(Renderer *renderer, const glm::mat4 &globalTrans, std::function<void(gl::Shader&)> func);
-		void renderRaw(Renderer *renderer, const glm::mat4 &trans);
-//		std::shared_ptr<ObjFile>	const &getMesh() const;
 
 		//////
 		////
@@ -68,8 +64,6 @@ namespace Component
 		////
 		//////
 
-		//std::shared_ptr<ObjFile>	mesh;
-		//std::string shader;
 	private:
 		MeshRenderer(MeshRenderer const &);
 		MeshRenderer	&operator=(MeshRenderer const &);

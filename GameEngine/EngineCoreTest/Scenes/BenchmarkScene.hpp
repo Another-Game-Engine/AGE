@@ -16,7 +16,6 @@
 #include <Systems/LightRenderingSystem.hh>
 #include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/BlitFinalRender.hh>
-#include <Systems/SimpleMeshRenderer.hpp>
 
 #include <Core/Octree.hpp>
 

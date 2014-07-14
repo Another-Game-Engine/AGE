@@ -7,6 +7,16 @@
 
 using namespace AGE;
 
+Octree::Octree()
+{
+	_octreeCommands = &_commandsBuffer[0];
+	_mainThreadCommands = &_commandsBuffer[1];
+}
+
+Octree::~Octree(void)
+{}
+
+
 Octree::USER_OBJECT_ID Octree::addElement(COMPONENT_ID componentType, const Entity &entity)
 {
 	Octree::USER_OBJECT_ID res = USER_OBJECT_ID(-1);
@@ -20,44 +30,44 @@ Octree::USER_OBJECT_ID Octree::addElement(COMPONENT_ID componentType, const Enti
 		res = _userObjectCounter++;
 	}
 	
-	_commands.push(Command());
-	_commands.back().entity = entity;
-	_commands.back().commandType.set(CommandType::Create);
-	_commands.back().id = res;
-	_commands.back().componentType = componentType;
+	_mainThreadCommands->push(Command());
+	_mainThreadCommands->back().entity = entity;
+	_mainThreadCommands->back().commandType.set(CommandType::Create);
+	_mainThreadCommands->back().id = res;
+	_mainThreadCommands->back().componentType = componentType;
 	return res;
 }
 
 void Octree::removeElement(Octree::USER_OBJECT_ID id)
 {
 	_freeUserObjects.push(id);
-	_commands.push(Command());
-	_commands.back().id = id;
-	_commands.back().commandType.set(CommandType::Delete);
+	_mainThreadCommands->push(Command());
+	_mainThreadCommands->back().id = id;
+	_mainThreadCommands->back().commandType.set(CommandType::Delete);
 	assert(id != (std::size_t)(-1));
 }
 
 void Octree::setPosition(const glm::vec3 &v, Octree::USER_OBJECT_ID id)
 {
-	_commands.push(Command());
-	_commands.back().id = id;
-	_commands.back().position = v;
-	_commands.back().commandType.set(CommandType::Position);
+	_mainThreadCommands->push(Command());
+	_mainThreadCommands->back().id = id;
+	_mainThreadCommands->back().position = v;
+	_mainThreadCommands->back().commandType.set(CommandType::Position);
 }
 void Octree::setOrientation(const glm::quat &v, Octree::USER_OBJECT_ID id)
 {
-	_commands.push(Command());
-	_commands.back().id = id;
-	_commands.back().orientation = v;
-	_commands.back().commandType.set(CommandType::Orientation);
+	_mainThreadCommands->push(Command());
+	_mainThreadCommands->back().id = id;
+	_mainThreadCommands->back().orientation = v;
+	_mainThreadCommands->back().commandType.set(CommandType::Orientation);
 }
 
 void Octree::setScale(const glm::vec3 &v, Octree::USER_OBJECT_ID id)
 {
-	_commands.push(Command());
-	_commands.back().id = id;
-	_commands.back().scale = v;
-	_commands.back().commandType.set(CommandType::Scale);
+	_mainThreadCommands->push(Command());
+	_mainThreadCommands->back().id = id;
+	_mainThreadCommands->back().scale = v;
+	_mainThreadCommands->back().commandType.set(CommandType::Scale);
 }
 
 void Octree::setPosition(const glm::vec3 &v, const std::array<Octree::USER_OBJECT_ID, MAX_CPT_NUMBER> &ids)
@@ -83,12 +93,12 @@ void Octree::updateGeometry(USER_OBJECT_ID id
 	, const std::vector<gl::Key<gl::Indices>> &glindices
 	, const std::vector<BoundingInfos> &boundings)
 {
-	_commands.push(Command());
-	_commands.back().id = id;
-	_commands.back().glindices = glindices;
-	_commands.back().glvertices = glvertices;
-	_commands.back().boundings = boundings;
-	_commands.back().commandType.set(CommandType::Geometry);
+	_mainThreadCommands->push(Command());
+	_mainThreadCommands->back().id = id;
+	_mainThreadCommands->back().glindices = glindices;
+	_mainThreadCommands->back().glvertices = glvertices;
+	_mainThreadCommands->back().boundings = boundings;
+	_mainThreadCommands->back().commandType.set(CommandType::Geometry);
 }
 
 //-----------------------------------------------------------------
@@ -125,10 +135,11 @@ void Octree::removeCullableObject(CULLABLE_ID id)
 
 void Octree::update()
 {
-	while (!_commands.empty())
+	std::swap(_octreeCommands, _mainThreadCommands);
+	while (!_octreeCommands->empty())
 	{
 		//process command
-		auto &command = _commands.front();
+		auto &command = _octreeCommands->front();
 
 		if (command.commandType.at(CommandType::Create))
 		{
@@ -206,7 +217,7 @@ void Octree::update()
 				_cullableObjects[e].orientation = ue.orientation;
 			}
 		}
-		_commands.pop();
+		_octreeCommands->pop();
 	}
 
 	static EntityFilter *filter = nullptr;
@@ -250,5 +261,5 @@ void Octree::update()
 			}
 		}
 	}
-	std::cout << "Drawed : " << drawed << " / " << total << std::endl;
+	//std::cout << "Drawed : " << drawed << " / " << total << std::endl;
 }

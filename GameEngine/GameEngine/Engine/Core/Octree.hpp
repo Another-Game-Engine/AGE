@@ -87,13 +87,8 @@ namespace AGE
 	public:
 		void setScene(std::weak_ptr<AScene> _scene) { scene = _scene; }
 	public:
-		Octree()
-		{
-		}
-
-		virtual ~Octree(void)
-		{
-		}
+		Octree();
+		virtual ~Octree(void);
 
 	private:
 		std::vector<UserObject> _userObjects;
@@ -102,7 +97,9 @@ namespace AGE
 		std::stack<std::size_t> _freeCullableObjects;
 		std::size_t _userObjectCounter = 0;
 
-		std::queue<Command> _commands;
+		std::queue<Command> _commandsBuffer[2];
+		std::queue<Command> *_octreeCommands;
+		std::queue<Command> *_mainThreadCommands;
 	public:
 		USER_OBJECT_ID addElement(COMPONENT_ID componentType, const Entity &entity);
 		void removeElement(USER_OBJECT_ID id);
