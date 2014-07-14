@@ -132,7 +132,7 @@ void Octree::update()
 		if (command.commandType.at(CommandType::Create))
 		{
 			UserObject *ue = nullptr;
-			if (command.id <= _userObjects.size())
+			if (command.id >= _userObjects.size())
 			{
 				_userObjects.push_back(UserObject());
 				ue = &_userObjects.back();
@@ -150,7 +150,6 @@ void Octree::update()
 		{
 			auto &ue = _userObjects[command.id];
 			auto debugId = ue.entity.getId();
-			_freeUserObjects.push(command.id);
 			for (auto &e : ue.collection)
 			{
 				removeCullableObject(e);
