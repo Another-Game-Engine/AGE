@@ -52,7 +52,15 @@ namespace AGE
 		{
 			if (dataSet.materialsLoaded == false)
 				return false;
-			auto name = dataSet.destination.getFullName() + "/" + dataSet.filePath.getFolder() + dataSet.filePath.getShortFileName() + ".mage";
+			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+
+			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
+			{
+					std::cerr << "Material convertor error : creating directory" << std::endl;
+					return false;
+			}
+			auto fileName = dataSet.materialName.empty() ? dataSet.filePath.getShortFileName() + ".mage" : dataSet.materialName + ".mage";
+			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
 			MaterialDataSet materialDataSet;
 			for (auto &m : dataSet.materials)
 			{
@@ -60,7 +68,8 @@ namespace AGE
 			}
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
-			ar(materialDataSet);			
+			ar(materialDataSet);
+			return true;
 		}
 		static bool load(AssetDataSet &dataSet)
 		{
@@ -90,12 +99,12 @@ namespace AGE
 				aiGetMaterialColor(aiMat, AI_MATKEY_COLOR_REFLECTIVE, &reflective);
 				aiGetMaterialColor(aiMat, AI_MATKEY_COLOR_SPECULAR, &specular);
 
-				aiString diffuseTexPath("__DEFAULT");
-				aiString ambientTexPath("__DEFAULT");
-				aiString emissiveTexPath("__DEFAULT");
-				aiString reflexionTexPath("__DEFAULT");
-				aiString specularTexPath("__DEFAULT");
-				aiString normalTexPath("__DEFAULT");
+				aiString diffuseTexPath;
+				aiString ambientTexPath;
+				aiString emissiveTexPath;
+				aiString reflexionTexPath;
+				aiString specularTexPath;
+				aiString normalTexPath;
 
 				aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &diffuseTexPath);
 				aiMat->GetTexture(aiTextureType_AMBIENT, 0, &ambientTexPath);
@@ -112,12 +121,12 @@ namespace AGE
 				material->reflective = AssimpLoader::aiColorToGlm(reflective);
 				material->specular = AssimpLoader::aiColorToGlm(specular);
 
-				material->diffuseTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(diffuseTexPath);
-				material->ambientTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(ambientTexPath);
-				material->emissiveTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(emissiveTexPath);
-				material->reflectiveTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath);
-				material->specularTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath);
-				material->normalTexPath = dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath);
+				material->diffuseTexPath = diffuseTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(diffuseTexPath) : "default.jpg";
+				material->ambientTexPath = ambientTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(ambientTexPath) : "default.jpg";
+				material->emissiveTexPath = emissiveTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(emissiveTexPath) : "default.jpg";
+				material->reflectiveTexPath = reflexionTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath) : "default.jpg";
+				material->specularTexPath = specularTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath) : "default.jpg";
+				material->normalTexPath = normalTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath) : "default.jpg";
 
 				dataSet.texturesPath.push_back(material->diffuseTexPath);
 				dataSet.texturesPath.push_back(material->ambientTexPath);

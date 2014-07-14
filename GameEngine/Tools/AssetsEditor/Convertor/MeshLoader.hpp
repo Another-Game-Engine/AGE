@@ -12,6 +12,26 @@ namespace AGE
 	class MeshLoader
 	{
 	public:
+		static bool save(AssetDataSet &dataSet)
+		{
+			if (dataSet.meshLoaded == false)
+				return false;
+			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+
+			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
+			{
+					std::cerr << "Mesh convertor error : creating directory" << std::endl;
+					return false;
+			}
+			auto fileName = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() + ".sage" : dataSet.skinName + ".sage";
+			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+
+			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
+			cereal::PortableBinaryOutputArchive ar(ofs);
+			ar(*dataSet.mesh);
+			return true;
+		}
+
 		static bool load(AssetDataSet &dataSet)
 		{
 			if (!dataSet.assimpScene)
@@ -30,7 +50,7 @@ namespace AGE
 
 			dataSet.mesh = new MeshData();
 
-			dataSet.mesh->name = dataSet.name;
+			dataSet.mesh->name = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() : dataSet.skinName;
 			dataSet.mesh->subMeshs.resize(dataSet.assimpScene->mNumMeshes);
 
 			auto &meshs = dataSet.mesh->subMeshs;

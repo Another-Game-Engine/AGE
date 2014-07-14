@@ -15,11 +15,19 @@ namespace AGE
 				return false;
 			for (auto &m : dataSet.textures)
 			{
-				auto name = dataSet.destination.getFullName() + "/" + File(m->rawPath).getFolder() + "/" + File(m->rawPath).getShortFileName() + ".tage";
+				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + File(m->rawPath).getFolder());
+
+				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
+				{
+					std::cerr << "Material convertor error : creating directory" << std::endl;
+					return false;
+				}
+				auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + File(m->rawPath).getFolder() + "\\" + File(m->rawPath).getShortFileName() + ".tage";
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 				cereal::PortableBinaryOutputArchive ar(ofs);
 				ar(*m);
 			}
+			return true;
 		}
 
 		static bool load(AssetDataSet &dataSet)
@@ -53,7 +61,7 @@ namespace AGE
 				}
 				if (found)
 					continue;
-				auto path = e;
+				auto path = dataSet.rawDirectory.path().string() + "\\" + e;
 				int width, height, channels;
 				auto imgData = SOIL_load_image(path.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
 				if (imgData)
@@ -62,7 +70,7 @@ namespace AGE
 					dataSet.textures.push_back(t);
 					t->width = width;
 					t->height = height;
-					t->rawPath = path;
+					t->rawPath = e;
 					t->data.assign(imgData, imgData + (sizeof(unsigned char) * width * height * channels));
 					SOIL_free_image_data(imgData);
 				}

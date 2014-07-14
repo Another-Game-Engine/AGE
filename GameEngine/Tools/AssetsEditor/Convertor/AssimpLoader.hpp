@@ -41,14 +41,15 @@ namespace AGE
 
 		bool Load(AssetDataSet &dataSet)
 		{
-			if (!dataSet.filePath.exists())
+			auto path = dataSet.rawDirectory.path().string() + "\\" + dataSet.filePath.getFullName();
+			if (!File(path).exists())
 			{
-				std::cerr << "File [" << dataSet.filePath.getFullName() << "] does not exists." << std::endl;
+				std::cerr << "File [" << path << "] does not exists." << std::endl;
 				return false;
 			}
 
 			dataSet.assimpScene = const_cast<aiScene*>(dataSet.assimpImporter.ReadFile(
-				dataSet.filePath.getFullName()
+				path
 				, aiProcess_Triangulate |
 				aiProcess_CalcTangentSpace |
 				aiProcess_JoinIdenticalVertices |
@@ -58,7 +59,7 @@ namespace AGE
 
 			if (dataSet.assimpScene == nullptr)
 			{
-				std::cerr << "Assimp fail to load file [" << dataSet.filePath.getFullName() << "] : " << dataSet.assimpImporter.GetErrorString() << std::endl;
+				std::cerr << "Assimp fail to load file [" << path << "] : " << dataSet.assimpImporter.GetErrorString() << std::endl;
 				return false;
 			}
 			return true;

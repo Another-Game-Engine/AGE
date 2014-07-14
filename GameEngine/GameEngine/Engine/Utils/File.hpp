@@ -53,7 +53,7 @@ public:
 		if (pos != std::string::npos)
 			return path.substr(0, pos + 1);
 		else
-			return path;
+			return "";
 	}
 
 	std::string				getShortFileName() const

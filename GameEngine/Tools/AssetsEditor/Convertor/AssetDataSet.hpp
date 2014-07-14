@@ -6,6 +6,8 @@
 #include <Utils/File.hpp>
 #include <assimp/Importer.hpp>
 
+#include <filesystem>
+
 namespace AGE
 {
 	struct Skeleton;
@@ -30,13 +32,19 @@ namespace AGE
 		bool materialsLoaded = false;
 		bool texturesLoaded = false;
 
-		File destination = "";
+		//Directory
+		std::tr2::sys::directory_entry rawDirectory;
+		std::tr2::sys::directory_entry serializedDirectory;
 
 		//Paths
 		File filePath = "";
 
 		std::vector<std::string> texturesPath;
-		std::string name = "";
+
+		std::string animationName = ""; //if empty -> same name as file (fbx, collada)
+		std::string skinName = ""; //if empty -> same name as file (fbx, collada)
+		std::string skeletonName = ""; //if empty -> same name as file (fbx, collada)
+		std::string materialName = ""; //if empty -> same name as file (fbx, collada)
 
 		//Ptrs
 		Skeleton *skeleton = nullptr;

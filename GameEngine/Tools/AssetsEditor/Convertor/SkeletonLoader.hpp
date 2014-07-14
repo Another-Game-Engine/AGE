@@ -10,6 +10,26 @@ namespace AGE
 	class SkeletonLoader
 	{
 	public:
+		static bool save(AssetDataSet &dataSet)
+		{
+			if (dataSet.skeletonLoaded == false)
+				return false;
+			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+
+			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
+			{
+					std::cerr << "Skeleton convertor error : creating directory" << std::endl;
+					return false;
+			}
+			auto fileName = dataSet.skeletonName.empty() ? dataSet.filePath.getShortFileName() + ".skage" : dataSet.skeletonName + ".skage";
+			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+
+			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
+			cereal::PortableBinaryOutputArchive ar(ofs);
+			ar(*dataSet.skeleton);
+			return true;
+		}
+
 		static bool load(AssetDataSet &dataSet)
 		{
 			if (!dataSet.assimpScene)
@@ -27,7 +47,7 @@ namespace AGE
 			Skeleton *skeleton = dataSet.skeleton;
 			std::uint32_t minDepth = std::uint32_t(-1);
 			skeleton->firstBone = 0;
-			skeleton->name = dataSet.name;
+			skeleton->name = dataSet.skeletonName.empty() == true ? dataSet.filePath.getShortFileName() : dataSet.skeletonName;
 
 			for (unsigned int meshIndex = 0; meshIndex < dataSet.assimpScene->mNumMeshes; ++meshIndex)
 			{

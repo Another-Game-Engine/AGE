@@ -87,9 +87,14 @@ int			main(int ac, char **av)
 	if (convert)
 	{
 		AGE::AssetDataSet dataSet;
-		dataSet.filePath = File("../../Assets/catwoman/atk close front 6.fbx");
-		dataSet.name = "catwoman";
-		dataSet.destination = "../../Assets/NewSerialized";
+		dataSet.filePath = File("catwoman/atk close front 6.fbx");
+		dataSet.skeletonName = "catwoman";
+		dataSet.skinName = "catwoman";
+		dataSet.materialName = "catwoman";
+		dataSet.animationName = "catwoman-roulade";		
+
+		dataSet.serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/NewSerialized");
+		dataSet.rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Raw");
 
 		isMaterial = AGE::MaterialLoader::load(dataSet);
 		isTexture = AGE::ImageLoader::load(dataSet);
@@ -99,36 +104,53 @@ int			main(int ac, char **av)
 
 		AGE::MaterialLoader::save(dataSet);
 		AGE::ImageLoader::save(dataSet);
+		AGE::SkeletonLoader::save(dataSet);
+		AGE::AnimationsLoader::save(dataSet);
+		AGE::MeshLoader::save(dataSet);
+	}
+	{
+		AGE::AssetDataSet dataSet;
+		dataSet.filePath = File("ball/ball.obj");
+		dataSet.skinName = "ball";
+		dataSet.materialName = "ball";
 
-		////Save AGE assets data structure to filesystem
-		if (isSkeleton)
-		{
-			std::ofstream ofs("catwoman.skage", std::ios::trunc | std::ios::binary);
-			cereal::PortableBinaryOutputArchive ar(ofs);
-			ar(*dataSet.skeleton);
-		}
-		if (isAnimations)
-		{
-			std::ofstream ofs("roulade.aage", std::ios::trunc | std::ios::binary);
-			cereal::PortableBinaryOutputArchive ar(ofs);
-			ar(*dataSet.animations[0]);
-		}
-		if (isMesh)
-		{
-			std::ofstream ofs("catwoman.sage", std::ios::trunc | std::ios::binary);
-			cereal::PortableBinaryOutputArchive ar(ofs);
-			ar(*dataSet.mesh);
-		}
+		dataSet.serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/NewSerialized");
+		dataSet.rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Raw");
+
+		AGE::MaterialLoader::load(dataSet);
+		AGE::ImageLoader::load(dataSet);
+		AGE::MeshLoader::load(dataSet);
+
+		AGE::MaterialLoader::save(dataSet);
+		AGE::ImageLoader::save(dataSet);
+		AGE::MeshLoader::save(dataSet);
+	}
+	{
+		AGE::AssetDataSet dataSet;
+		dataSet.filePath = File("cube/cube.obj");
+		dataSet.skinName = "cube";
+		dataSet.materialName = "cube";
+
+		dataSet.serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/NewSerialized");
+		dataSet.rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Raw");
+
+		AGE::MaterialLoader::load(dataSet);
+		AGE::ImageLoader::load(dataSet);
+		AGE::MeshLoader::load(dataSet);
+
+		AGE::MaterialLoader::save(dataSet);
+		AGE::ImageLoader::save(dataSet);
+		AGE::MeshLoader::save(dataSet);
 	}
 
 	//Load assets from serialized file
 	auto assetsManager = e->getInstance<AGE::AssetsManager>();
 
-	auto catwomanMesh = assetsManager->loadMesh("catwoman.sage"); // load mesh
-	auto catwomanSkeleton = assetsManager->loadSkeleton("catwoman.skage"); // load skeleton
+	auto catwomanMesh = assetsManager->loadMesh("../../Assets/NewSerialized/catwoman/catwoman.sage"); // load mesh
+	auto catwomanSkeleton = assetsManager->loadSkeleton("../../Assets/NewSerialized/catwoman/catwoman.skage"); // load skeleton
 	std::shared_ptr<AGE::Animation> catwomanRoulade = nullptr;
 	if (isAnimations)
-		catwomanRoulade = assetsManager->loadAnimation("roulade.aage"); // load animation
+		catwomanRoulade = assetsManager->loadAnimation("../../Assets/NewSerialized/catwoman/catwoman-roulade.aage"); // load animation
 
  	AGE::AnimationInstance catwomanAnimationInstance(catwomanSkeleton, catwomanRoulade);
 
@@ -155,7 +177,6 @@ int			main(int ac, char **av)
 	// Model matrix : an identity matrix (model will be at the origin)
 	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model !
 	Model = glm::scale(Model, glm::vec3(0.2f));
-//	Model = glm::rotate(Model, 90.0f, glm::vec3(0, 0, 1));
 
 
 	// On enable la depth car par defaut elle est pas active
