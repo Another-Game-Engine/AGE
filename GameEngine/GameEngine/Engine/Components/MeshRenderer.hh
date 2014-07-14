@@ -35,7 +35,7 @@ namespace Component
 		virtual ~MeshRenderer(void);
 		MeshRenderer(MeshRenderer &&o);
 		MeshRenderer &operator=(MeshRenderer &&o);
-		void init(AScene *, std::shared_ptr<ObjFile> file);
+		void init(AScene *, std::shared_ptr<AGE::MeshInstance> file);
 		virtual void reset(AScene *);
 
 		//////

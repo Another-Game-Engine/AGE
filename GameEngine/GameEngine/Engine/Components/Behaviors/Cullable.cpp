@@ -33,13 +33,13 @@ namespace AGE
 		//
 		//
 
-		void Cullable::setMesh(const std::shared_ptr<ObjFile> &_mesh)
+		void Cullable::setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh)
 		{
 			mesh = _mesh;
 			sendMeshInfos();
 		}
 
-		std::shared_ptr<ObjFile> Cullable::getMesh()
+		std::shared_ptr<AGE::MeshInstance> Cullable::getMesh()
 		{
 			return mesh;
 		}
@@ -56,16 +56,11 @@ namespace AGE
 				_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableId, glvertices, glindices, boundings);
 				return;
 			}
-			for (auto &e : mesh->geometries)
+			for (auto &e : mesh->subMeshs)
 			{
-				BoundingInfos temp;
-				temp.addPosition(glm::vec3(-1, -1, -1));
-				temp.addPosition(glm::vec3(1, 1, 1));
-				temp.recompute();
-
-				glvertices.push_back(e.glvertices);
-				glindices.push_back(e.glindices);
-				boundings.push_back(temp);
+				glvertices.push_back(e.vertices);
+				glindices.push_back(e.indices);
+				boundings.push_back(e.bounding);
 			}
 			_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableId, glvertices, glindices, boundings);
 		}

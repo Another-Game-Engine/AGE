@@ -1,6 +1,7 @@
 #include "MeshRenderer.hh"
 #include "Core/Engine.hh"
-#include <Core/AScene.hh>	
+#include <Core/AScene.hh>
+#include <Geometry/Mesh.hpp>
 
 namespace Component
 {
@@ -26,7 +27,7 @@ namespace Component
 		return *this;
 	}
 
-	void MeshRenderer::init(AScene *scene, std::shared_ptr<ObjFile> r)
+	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r)
 	{
 		AGE::ComponentBehavior::Cullable::init(scene, entityId, MeshRenderer::getTypeId());
 		setMesh(r);

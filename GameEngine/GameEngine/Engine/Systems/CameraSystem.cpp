@@ -9,6 +9,8 @@
 #include <OpenGL/ShadingManager.hh>
 #include <OpenGL/GeometryManager.hh>
 
+//TEMP
+#include <Core/Octree.hpp>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -193,18 +195,32 @@ void CameraSystem::mainUpdate(double time)
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		for (auto &m : _drawable.getCollection())
+
+		///////////////
+		///////////////
+		// test with culling output
+		auto octree = _scene.lock()->getInstance<AGE::Octree>();
+		for (auto &c : octree->TO_DRAW)
 		{
-			auto mesh = scene->getComponent<Component::MeshRenderer>(m);
-			if (mesh->draw == false)
-				continue;
-			mesh->draw = false;
-			_render->setShaderSampler(_shader, _diffuse_texture, mesh->getMesh()->material->materials[0].diffuseTex->getTexture());
-			_render->setShaderUniform(_shader, _model_matrix, scene->getLink(m)->getTransform());
-			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * scene->getLink(m)->getTransform()))));
-			for (std::size_t i = 0; i < mesh->getMesh()->material->materials.size(); ++i)
-				mesh->getMesh()->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->getMesh()->geometries[i].glindices, mesh->getMesh()->geometries[i].glvertices);
+			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
+			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * c.transformation))));
+			_geometry->draw(GL_TRIANGLES, c.glindices, c.glvertices);
 		}
+
+
+		//for (auto &m : _drawable.getCollection())
+		//{
+		//	auto mesh = scene->getComponent<Component::MeshRenderer>(m);
+		//	if (mesh->draw == false)
+		//		continue;
+		//	mesh->draw = false;
+		//	//_render->setShaderSampler(_shader, _diffuse_texture, mesh->getMesh()->material->materials[0].diffuseTex->getTexture());
+		//	_render->setShaderUniform(_shader, _model_matrix, scene->getLink(m)->getTransform());
+		//	_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * scene->getLink(m)->getTransform()))));
+		//	//for (std::size_t i = 0; i < mesh->getMesh()->material->materials.size(); ++i)
+		//	for (auto &c : mesh->getMesh()->subMeshs)
+		//		_geometry->draw(GL_TRIANGLES, c.indices, c.vertices);
+		//}
 	}
 #endif
 }

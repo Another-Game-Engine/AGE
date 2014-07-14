@@ -66,6 +66,7 @@ namespace AGE
 	{
 		gl::Key<gl::Indices> indices;
 		gl::Key<gl::Vertices> vertices;
+		AGE::BoundingInfos bounding;
 		std::string name;
 	};
 

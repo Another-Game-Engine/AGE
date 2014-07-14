@@ -240,25 +240,37 @@ void Octree::update()
 	std::uint64_t drawed = 0;
 	std::uint64_t total = 0;
 
+	TO_DRAW.clear();
+
 	for (auto &e : _cullableObjects)
 	{
 		if (e.active)
 			++total;
-		if (e.active && frustum.pointIn(e.position + e.bounding.getCenter()) == true)
+		if (e.active && frustum.pointIn(e.position) == true)
 		{
-			//std::cout << e.entity.getId() << "  ";
-			auto &uo = _userObjects[e.userObjectId];
-			auto cpt = scene.lock()->getComponent(uo.entity, uo.componentType);
-			if (cpt)
-			{
-				auto c = dynamic_cast<AGE::ComponentBehavior::Cullable*>(cpt);
-				c->draw = true;
-				++drawed;
-			}
-			else
-			{
-				assert(false);
-			}
+			ToDraw t;
+			t.glindices = e.glindices;
+			t.glvertices = e.glvertices;
+			t.transformation = glm::mat4(1);
+			t.transformation = glm::translate(t.transformation, e.position);
+			t.transformation = t.transformation * glm::toMat4(e.orientation);
+			t.transformation = glm::scale(t.transformation, e.scale);
+			TO_DRAW.push_back(t);
+
+
+
+			//auto &uo = _userObjects[e.userObjectId];
+			//auto cpt = scene.lock()->getComponent(uo.entity, uo.componentType);
+			//if (cpt)
+			//{
+			//	auto c = dynamic_cast<AGE::ComponentBehavior::Cullable*>(cpt);
+			//	c->draw = true;
+			//	++drawed;
+			//}
+			//else
+			//{
+			//	assert(false);
+			//}
 		}
 	}
 	//std::cout << "Drawed : " << drawed << " / " << total << std::endl;

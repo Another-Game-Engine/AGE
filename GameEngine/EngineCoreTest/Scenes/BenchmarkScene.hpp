@@ -17,6 +17,8 @@
 #include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/BlitFinalRender.hh>
 
+#include <Core/AssetsManager.hpp>
+
 #include <Core/Octree.hpp>
 
 #include <Context/IRenderContext.hh>
@@ -115,7 +117,6 @@ public:
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		cam->fboSize = screenSize;
 		cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
-		cam->attachSkybox(getInstance<AssetsManager>()->get<CubeMapFile>("skybox__space"), "cubemapShader");
 		cam->sampleNbr = 0;
 
 		auto camLink = getLink(camera);
@@ -133,13 +134,11 @@ public:
 	auto link = getLink(plane);
 	link->setPosition(glm::vec3(0, -10, 0));
 	link->setScale(glm::vec3(100, 1, 100));
-	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("../../Assets/NewSerialized/cube/cube.sage"));
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
-//	rigidBody->setTransformation(getTransform(plane));
 	rigidBody->getBody().setFriction(0.8f);
-	//rigidBody->getBody().setRestitution(1.0f);
 #endif //PHYSIC_SIMULATION
 #endif
 
@@ -179,9 +178,9 @@ public:
 #ifndef COMPLEX_MESH
 				Component::MeshRenderer *mesh;
 				if (i % 4 == 0)
-					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("../../Assets/NewSerialized/ball/ball.sage"));
 				else
-					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("../../Assets/NewSerialized/cube/cube.sage"));
 #else
 				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");

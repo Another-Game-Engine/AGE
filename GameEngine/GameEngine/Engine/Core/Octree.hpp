@@ -118,6 +118,19 @@ namespace AGE
 			, const std::vector<BoundingInfos> &boundings);
 
 		void update();
+
+		//TMP HARDCODED
+		//
+		struct ToDraw
+		{
+			gl::Key<gl::Vertices> glvertices;
+			gl::Key<gl::Indices> glindices;
+			glm::mat4 transformation;
+		};
+
+		std::vector<ToDraw> TO_DRAW;
+		//
+		// END
 	private:
 		CULLABLE_ID addCullableObject(Octree::USER_OBJECT_ID uid);
 		void removeCullableObject(CULLABLE_ID id);

@@ -2,10 +2,7 @@
 
 #include <Entities/EntityTypedef.hpp>
 #include <cstddef>
-
-//TEMP
-#include <MediaFiles/ObjFile.hpp>
-#include <memory>
+#include <Geometry/Mesh.hpp>
 
 class AScene;
 
@@ -47,13 +44,13 @@ namespace AGE
 
 
 			//TEMPORARY FOR TEST
-			void setMesh(const std::shared_ptr<ObjFile> &_mesh);
-			std::shared_ptr<ObjFile> getMesh();
+			void setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh);
+			std::shared_ptr<AGE::MeshInstance> getMesh();
 
 			// TEMPORARY
 			bool draw = false;
 		protected:
-			std::shared_ptr<ObjFile> mesh;
+			std::shared_ptr<AGE::MeshInstance> mesh;
 
 			void sendMeshInfos();
 		private:

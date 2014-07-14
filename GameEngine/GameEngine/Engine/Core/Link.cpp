@@ -10,6 +10,10 @@ void Link::registerCullableId(std::size_t id)
 		if (b == std::size_t(-1))
 		{
 			b = id;
+			auto ot = static_cast<Octree*>(_octree);
+			ot->setPosition(_position, id);
+			ot->setScale(_scale, id);
+			ot->setOrientation(_orientation, id);
 			return;
 		}
 	}

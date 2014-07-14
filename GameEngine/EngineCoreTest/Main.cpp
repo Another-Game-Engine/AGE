@@ -24,6 +24,7 @@
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
 #include <Utils/PerformanceDebugger.hh>
+#include <Core/AssetsManager.hpp>
 
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
 
@@ -128,10 +129,8 @@ bool loadShaders(std::shared_ptr<Engine> e)
 bool loadAssets(std::shared_ptr<Engine> e)
 {
 #ifdef RENDERING_ACTIVATED
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
-//	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("../../Assets/NewSerialized/cube/cube.sage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("../../Assets/NewSerialized/ball/ball.sage"));
 #endif
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
@@ -159,7 +158,7 @@ int			main(int ac, char **av)
 	e->setInstance<Renderer>();
 #endif
 	e->setInstance<SceneManager>();
-	e->setInstance<AssetsManager>()->init();
+	e->setInstance<AGE::AssetsManager>();
 	e->setInstance<PerformanceDebugger>("Developper Name");
 
 #ifdef PHYSIC_SIMULATION
