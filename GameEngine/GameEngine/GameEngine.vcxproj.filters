@@ -70,17 +70,23 @@
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\Octree.cpp" />
+=======
+>>>>>>> 57637204e5336a11eb71a1601793b92c770c9c51
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
+=======
+>>>>>>> 57637204e5336a11eb71a1601793b92c770c9c51
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\OpenGL\Buffer.hh" />
@@ -114,6 +120,10 @@
     <ClInclude Include="Engine\Components\SpotLight.hh" />
     <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Engine\Systems\PostFxSystem.hh" />
+<<<<<<< HEAD
+=======
+    <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
+>>>>>>> 57637204e5336a11eb71a1601793b92c770c9c51
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
@@ -205,6 +215,7 @@
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\Components\Behaviors\Cullable.hpp" />
     <ClInclude Include="Engine\Core\Octree.hpp" />
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
@@ -212,6 +223,9 @@
     <ClInclude Include="Engine\Utils\Frustum.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
+=======
+    <ClInclude Include="Engine\Texture\TextureData.hpp" />
+>>>>>>> 57637204e5336a11eb71a1601793b92c770c9c51
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
