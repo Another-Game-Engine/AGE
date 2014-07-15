@@ -213,11 +213,8 @@ void CameraSystem::mainUpdate(double time)
 		///////////////
 		// test with culling output
 		auto octree = _scene.lock()->getInstance<AGE::Octree>();
+		_render->draw(_renderPass, NULL, 0);
 		while (!octree->TO_DRAW.empty())
-//=======
-//		_render->draw(_renderPass, NULL, 0);
-//		for (auto m : _drawable.getCollection())
-//>>>>>>> origin/Opengl_render_pipeline
 		{
 			auto &c = octree->TO_DRAW.front();
 			_render->setShaderUniform(_shader, _model_matrix, c.transformation);

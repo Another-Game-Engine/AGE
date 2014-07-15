@@ -152,6 +152,8 @@ namespace AGE
 		mesh.vertices = geometryManager->addVertices(maxSize, size, nbrBuffer.data(), buffer.data());
 		mesh.indices = geometryManager->addIndices(data.indices.size(), &data.indices[0]);
 		mesh.bounding = data.boundingInfos;
+		mesh.vertexPool = _pools.find(data.infos)->second.first;
+		mesh.indexPool = _pools.find(data.infos)->second.second;
 		geometryManager->attachVerticesToVertexPool(mesh.vertices, pools.first);
 		geometryManager->attachIndicesToIndexPool(mesh.indices, pools.second);
 	}
