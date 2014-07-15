@@ -22,52 +22,37 @@ Octree::USER_OBJECT_ID Octree::addElement(COMPONENT_ID componentType, const Enti
 	Octree::USER_OBJECT_ID res = USER_OBJECT_ID(-1);
 	if (!_freeUserObjects.empty())
 	{
-		res = _freeUserObjects.top();
+		res = _freeUserObjects.front();
 		_freeUserObjects.pop();
 	}
 	else
 	{
 		res = _userObjectCounter++;
 	}
-	
-	_mainThreadCommands->push(Command());
-	_mainThreadCommands->back().entity = entity;
-	_mainThreadCommands->back().commandType.set(CommandType::Create);
-	_mainThreadCommands->back().id = res;
-	_mainThreadCommands->back().componentType = componentType;
+
+	_mainThreadCommands->emplace(res, componentType, entity, CommandType::Create);
 	return res;
 }
 
 void Octree::removeElement(Octree::USER_OBJECT_ID id)
 {
 	_freeUserObjects.push(id);
-	_mainThreadCommands->push(Command());
-	_mainThreadCommands->back().id = id;
-	_mainThreadCommands->back().commandType.set(CommandType::Delete);
+	_mainThreadCommands->emplace(id, CommandType::Delete);
 	assert(id != (std::size_t)(-1));
 }
 
 void Octree::setPosition(const glm::vec3 &v, Octree::USER_OBJECT_ID id)
 {
-	_mainThreadCommands->push(Command());
-	_mainThreadCommands->back().id = id;
-	_mainThreadCommands->back().position = v;
-	_mainThreadCommands->back().commandType.set(CommandType::Position);
+	_mainThreadCommands->emplace(id, v, CommandType::Position);
 }
 void Octree::setOrientation(const glm::quat &v, Octree::USER_OBJECT_ID id)
 {
-	_mainThreadCommands->push(Command());
-	_mainThreadCommands->back().id = id;
-	_mainThreadCommands->back().orientation = v;
-	_mainThreadCommands->back().commandType.set(CommandType::Orientation);
+	_mainThreadCommands->emplace(id, v, CommandType::Orientation);
 }
 
 void Octree::setScale(const glm::vec3 &v, Octree::USER_OBJECT_ID id)
 {
-	_mainThreadCommands->push(Command());
-	_mainThreadCommands->back().id = id;
-	_mainThreadCommands->back().scale = v;
-	_mainThreadCommands->back().commandType.set(CommandType::Scale);
+	_mainThreadCommands->emplace(id, v, CommandType::Scale);
 }
 
 void Octree::setPosition(const glm::vec3 &v, const std::array<Octree::USER_OBJECT_ID, MAX_CPT_NUMBER> &ids)
@@ -93,12 +78,7 @@ void Octree::updateGeometry(USER_OBJECT_ID id
 	, const std::vector<gl::Key<gl::Indices>> &glindices
 	, const std::vector<BoundingInfos> &boundings)
 {
-	_mainThreadCommands->push(Command());
-	_mainThreadCommands->back().id = id;
-	_mainThreadCommands->back().glindices = glindices;
-	_mainThreadCommands->back().glvertices = glvertices;
-	_mainThreadCommands->back().boundings = boundings;
-	_mainThreadCommands->back().commandType.set(CommandType::Geometry);
+	_mainThreadCommands->emplace(id, glvertices, glindices, boundings, CommandType::Geometry);
 }
 
 //-----------------------------------------------------------------
@@ -109,7 +89,7 @@ Octree::CULLABLE_ID Octree::addCullableObject(Octree::USER_OBJECT_ID uid)
 	CullableObject *co = nullptr;
 	if (!_freeCullableObjects.empty())
 	{
-		res = _freeCullableObjects.top();
+		res = _freeCullableObjects.front();
 		_freeCullableObjects.pop();
 		co = &(_cullableObjects[res]);
 	}
@@ -141,9 +121,11 @@ void Octree::update()
 		//process command
 		auto &command = _octreeCommands->front();
 
-		if (command.commandType.at(CommandType::Create))
+		UserObject *ue = nullptr;
+		switch (command.commandType)
 		{
-			UserObject *ue = nullptr;
+		case (CommandType::Create) :
+
 			if (command.id >= _userObjects.size())
 			{
 				_userObjects.push_back(UserObject());
@@ -157,65 +139,69 @@ void Octree::update()
 			ue->componentType = command.componentType;
 			ue->entity = command.entity;
 			ue->active = true;
-		}
-		else if (command.commandType.at(CommandType::Delete))
-		{
-			auto &ue = _userObjects[command.id];
-			auto debugId = ue.entity.getId();
-			for (auto &e : ue.collection)
+			break;
+
+		case (CommandType::Delete) :
+
+			ue = &_userObjects[command.id];
+			for (auto &e : ue->collection)
 			{
 				removeCullableObject(e);
 			}
-			ue.collection.clear();
-			ue.active = false;
-		}
-		else if (command.commandType.at(CommandType::Geometry))
-		{
-			auto &ue = _userObjects[command.id];
-			assert(ue.active != false);
-			for (auto &e : ue.collection)
+			ue->collection.clear();
+			ue->active = false;
+			break;
+
+		case (CommandType::Geometry) :
+
+			ue = &_userObjects[command.id];
+			assert(ue->active != false);
+			for (auto &e : ue->collection)
 			{
 				removeCullableObject(e);
 			}
-			ue.collection.clear();
+			ue->collection.clear();
 			for (std::size_t i = 0; i < command.glindices.size(); ++i)
 			{
 				auto id = addCullableObject(command.id);
-				ue.collection.push_back(id);
+				ue->collection.push_back(id);
 				_cullableObjects[id].bounding = command.boundings[i];
 				_cullableObjects[id].glvertices = command.glvertices[i];
 				_cullableObjects[id].glindices = command.glindices[i];
-				_cullableObjects[id].position = ue.position;
-				_cullableObjects[id].orientation = ue.orientation;
-				_cullableObjects[id].scale = ue.scale;
+				_cullableObjects[id].position = ue->position;
+				_cullableObjects[id].orientation = ue->orientation;
+				_cullableObjects[id].scale = ue->scale;
 			}
-		}
-		else if (command.commandType.at(CommandType::Position))
-		{
-			auto &ue = _userObjects[command.id];
-			ue.position = command.position;
-			for (auto &e : ue.collection)
+			break;
+		case (CommandType::Position) :
+
+			ue = &_userObjects[command.id];
+			ue->position = command.position;
+			for (auto &e : ue->collection)
 			{
-				_cullableObjects[e].position = ue.position;
+				_cullableObjects[e].position = ue->position;
 			}
-		}
-		else if (command.commandType.at(CommandType::Scale))
-		{
-			auto &ue = _userObjects[command.id];
-			ue.scale = command.scale;
-			for (auto &e : ue.collection)
+			break;
+
+		case (CommandType::Scale) :
+
+			ue = &_userObjects[command.id];
+			ue->scale = command.scale;
+			for (auto &e : ue->collection)
 			{
-				_cullableObjects[e].scale = ue.scale;
+				_cullableObjects[e].scale = ue->scale;
 			}
-		}
-		else if (command.commandType.at(CommandType::Orientation))
-		{
-			auto &ue = _userObjects[command.id];
-			ue.orientation = command.orientation;
-			for (auto &e : ue.collection)
+			break;
+
+		case (CommandType::Orientation) :
+
+			ue = &_userObjects[command.id];
+			ue->orientation = command.orientation;
+			for (auto &e : ue->collection)
 			{
-				_cullableObjects[e].orientation = ue.orientation;
+				_cullableObjects[e].orientation = ue->orientation;
 			}
+			break;
 		}
 		_octreeCommands->pop();
 	}

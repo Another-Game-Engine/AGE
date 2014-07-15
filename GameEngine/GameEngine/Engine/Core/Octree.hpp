@@ -14,8 +14,9 @@
 #include <OpenGL/Key.hh>
 #include <OpenGL/Data.hh>
 
-#include <queue>
 #include <stack>
+
+#include <Utils/Containers/Queue.hpp>
 
 class AScene;
 
@@ -64,8 +65,77 @@ namespace AGE
 			USER_OBJECT_ID id;
 			Entity entity;
 			COMPONENT_ID componentType;
-			
-			std::bitset<CommandType::END> commandType;
+			CommandType commandType;
+
+			Command()
+				: position(0)
+				, scale(0)
+				, orientation(0,0,0,1)
+				, id(USER_OBJECT_ID(-1))
+				, componentType(COMPONENT_ID(-1))
+				, commandType(CommandType::END)
+			{}
+
+			Command(USER_OBJECT_ID _id, COMPONENT_ID _componentType, const Entity &_entity, CommandType _cmdType)
+				: position(0)
+				, scale(0)
+				, orientation(0, 0, 0, 1)
+				, id(_id)
+				, entity(_entity)
+				, componentType(_componentType)
+				, commandType(_cmdType)
+			{
+			}
+
+			Command(USER_OBJECT_ID _id, CommandType _cmdType)
+				: position(0)
+				, scale(0)
+				, orientation(0, 0, 0, 1)
+				, id(_id)
+				, componentType(0)
+				, commandType(_cmdType)
+			{
+			}
+
+			Command(USER_OBJECT_ID _id, const glm::vec3& pos, CommandType _cmdType)
+				: position(0)
+				, scale(0)
+				, orientation(0, 0, 0, 1)
+				, id(_id)
+				, componentType(0)
+				, commandType(_cmdType)
+			{
+				if (_cmdType == CommandType::Position)
+					position = pos;
+				else
+					scale = pos;
+			}
+			Command(USER_OBJECT_ID _id, const glm::quat& ori, CommandType _cmdType)
+				: position(0)
+				, scale(0)
+				, orientation(ori)
+				, id(_id)
+				, componentType(0)
+				, commandType(_cmdType)
+			{
+			}
+
+			Command(USER_OBJECT_ID _id
+				, const std::vector<gl::Key<gl::Vertices>> &_glvertices
+				, const std::vector<gl::Key<gl::Indices>> &_glindices
+				, const std::vector<BoundingInfos> &_boundings
+				, CommandType _cmdType)
+				: position(0)
+				, scale(0)
+				, orientation(0,0,0,1)
+				, glvertices(_glvertices)
+				, glindices(_glindices)
+				, boundings(_boundings)
+				, id(_id)
+				, componentType(0)
+				, commandType(_cmdType)
+			{}
+
 		};
 
 		struct UserObject
@@ -92,14 +162,14 @@ namespace AGE
 
 	private:
 		std::vector<UserObject> _userObjects;
-		std::stack<std::size_t> _freeUserObjects;
+		AGE::Queue<std::size_t> _freeUserObjects;
 		std::vector<CullableObject> _cullableObjects;
-		std::stack<std::size_t> _freeCullableObjects;
+		AGE::Queue<std::size_t> _freeCullableObjects;
 		std::size_t _userObjectCounter = 0;
 
-		std::queue<Command> _commandsBuffer[2];
-		std::queue<Command> *_octreeCommands;
-		std::queue<Command> *_mainThreadCommands;
+		AGE::Queue<Command> _commandsBuffer[2];
+		AGE::Queue<Command> *_octreeCommands;
+		AGE::Queue<Command> *_mainThreadCommands;
 	public:
 		USER_OBJECT_ID addElement(COMPONENT_ID componentType, const Entity &entity);
 		void removeElement(USER_OBJECT_ID id);

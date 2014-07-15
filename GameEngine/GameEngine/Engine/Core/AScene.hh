@@ -6,7 +6,6 @@
 #include <Core/EntityIdRegistrar.hh>
 
 #include <list>
-#include <queue>
 #include <map>
 #include <array>
 
@@ -20,6 +19,7 @@
 #include <Components/ComponentRegistrar.hpp>
 
 #include <Core/ComponentManager.hpp>
+#include <Utils/Containers/Queue.hpp>
 
 class System;
 class Engine;
@@ -32,7 +32,7 @@ private:
 	std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 	std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
-	std::queue<std::uint16_t>                                               _free;
+	AGE::Queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
 	int test = 0;
 public:
