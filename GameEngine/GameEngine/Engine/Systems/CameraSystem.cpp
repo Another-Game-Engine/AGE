@@ -8,6 +8,7 @@
 #include <Core/SceneManager.hh>
 #include <OpenGL/ShadingManager.hh>
 #include <OpenGL/GeometryManager.hh>
+#include <Core/Drawable.hh>
 
 //tmp
 #include <Core/Octree.hpp>
@@ -115,15 +116,16 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
 	auto material = _render->addMaterial();
+
 	// test if material works
 	_render->setMaterial<gl::COLOR_DIFFUSE>(material, glm::vec4(1.0f, 0.0f, 1.0f, 0.0f));
 	_render->setMaterial<gl::COLOR_EMISSIVE>(material, glm::vec4(2.0f, 1.0f, 1.0f, 1.0f));
 	_render->setMaterial<gl::SHININESS>(material, 5.f);
 	_render->setMaterial<gl::COLOR_SPECULAR>(material, glm::vec4(0, 0, 0, 0));
-	std::cout << _render->getMaterial<gl::COLOR_DIFFUSE>(material)[0] << std::endl;;
-	std::cout << _render->getMaterial<gl::COLOR_EMISSIVE>(material)[0] << std::endl;;
-	std::cout << _render->getMaterial<gl::SHININESS>(material) << std::endl;;
-	std::cout << _render->getMaterial<gl::COLOR_SPECULAR>(material)[0] << std::endl;;
+	std::cout << _render->getMaterial<gl::COLOR_DIFFUSE>(material)[0] << std::endl;
+	std::cout << _render->getMaterial<gl::COLOR_EMISSIVE>(material)[0] << std::endl;
+	std::cout << _render->getMaterial<gl::SHININESS>(material) << std::endl;
+	std::cout << _render->getMaterial<gl::COLOR_SPECULAR>(material)[0] << std::endl;
 }
 #endif
 
@@ -206,21 +208,19 @@ void CameraSystem::mainUpdate(double time)
 		_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		glEnable(GL_DEPTH_TEST);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		///////////////
 		///////////////
 		// test with culling output
 		auto octree = _scene.lock()->getInstance<AGE::Octree>();
 		_render->draw(_renderPass, NULL, 0);
-		while (!octree->TO_DRAW.empty())
+		while (!octree->drawList.empty())
 		{
-			auto &c = octree->TO_DRAW.front();
+			auto &c = octree->drawList.front();
 			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
 			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * c.transformation))));
 			_geometry->draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
-			octree->TO_DRAW.pop();
+			octree->drawList.pop();
 		}
 
 

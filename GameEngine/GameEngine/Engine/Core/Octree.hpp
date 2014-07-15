@@ -24,6 +24,8 @@ class AScene;
 
 namespace AGE
 {
+	class Drawable;
+
 	class Octree : public Dependency<Octree>
 	{
 		enum CommandType
@@ -180,28 +182,7 @@ namespace AGE
 
 		void update();
 
-		//TMP HARDCODED
-		//
-		struct ToDraw
-		{
-			SubMeshInstance mesh;
-			glm::mat4 transformation;
-
-			ToDraw()
-			{}
-
-			ToDraw(const SubMeshInstance &_m, const glm::mat4 &_t)
-				: mesh(_m)
-				, transformation(_t)
-			{}
-
-			ToDraw(SubMeshInstance &&_m, glm::mat4 &&_t)
-				: mesh(_m)
-				, transformation(_t)
-			{}
-		};
-
-		AGE::Queue<ToDraw> TO_DRAW;
+		Queue<Drawable> drawList;
 		//
 		// END
 	private:

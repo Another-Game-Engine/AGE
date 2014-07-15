@@ -214,12 +214,12 @@
     <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
+    <ClCompile Include="Engine\Core\Drawable.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\Octree.cpp" />
     <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
     <ClCompile Include="Engine\OpenGL\BufferSettings.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
-    <ClCompile Include="Engine\OpenGL\Drawable.cpp" />
     <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
     <ClCompile Include="Engine\OpenGL\Material.cpp" />
     <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
@@ -294,6 +294,7 @@
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
+    <ClInclude Include="Engine\Core\Drawable.hh" />
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\Octree.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
@@ -303,7 +304,6 @@
     <ClInclude Include="Engine\OpenGL\Buffer.hh" />
     <ClInclude Include="Engine\OpenGL\BufferSettings.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
-    <ClInclude Include="Engine\OpenGL\Drawable.hh" />
     <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />

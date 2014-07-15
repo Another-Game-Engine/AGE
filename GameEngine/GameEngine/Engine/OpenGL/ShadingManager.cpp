@@ -4,6 +4,7 @@
 #include <OpenGL/RenderPass.hh>
 #include <iostream>
 #include <string>
+#include <Core/Drawable.hh>
 
 namespace gl
 {
@@ -682,7 +683,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::draw(Key<RenderPass> const &key, Drawable const *objectRender, size_t nbrObjectRender)
+	ShadingManager &ShadingManager::draw(Key<RenderPass> const &key, AGE::Drawable const *objectRender, size_t nbrObjectRender)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "popTaskRenderPass")) == NULL)

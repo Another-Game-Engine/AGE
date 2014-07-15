@@ -8,10 +8,11 @@
 #include <vector>
 #include <functional>
 
+namespace AGE { class Drawable; }
+
 namespace gl
 {
 	class Shader;
-	class Drawable;
 
 	// set buffer config
 	//void setClearValue(glm::vec4 const &color, float depth, uint8_t stencil);
@@ -56,7 +57,7 @@ namespace gl
 		RenderPass(RenderPass const &copy);
 		RenderPass &operator=(RenderPass const &r);
 
-		RenderPass &draw(Drawable const *objectRender, size_t nbrObjectRender);
+		RenderPass &draw(AGE::Drawable const *objectRender, size_t nbrObjectRender);
 		
 		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
 		RenderPass &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);

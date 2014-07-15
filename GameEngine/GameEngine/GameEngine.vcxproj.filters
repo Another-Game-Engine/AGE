@@ -8,11 +8,14 @@
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\Octree.cpp" />
     <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
+    <ClCompile Include="Engine\OpenGL\BufferSettings.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
+    <ClCompile Include="Engine\OpenGL\Material.cpp" />
     <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
+    <ClCompile Include="Engine\OpenGL\RenderPass.cpp" />
     <ClCompile Include="Engine\OpenGL\ShaderResource.cpp" />
     <ClCompile Include="Engine\OpenGL\ShadingManager.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
@@ -74,13 +77,7 @@
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
-<<<<<<< HEAD
-=======
-    <ClCompile Include="Engine\OpenGL\RenderPass.cpp" />
-    <ClCompile Include="Engine\OpenGL\Drawable.cpp" />
-    <ClCompile Include="Engine\OpenGL\BufferSettings.cpp" />
-    <ClCompile Include="Engine\OpenGL\Material.cpp" />
->>>>>>> origin/Opengl_render_pipeline
+    <ClCompile Include="Engine\Core\Drawable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
@@ -95,13 +92,16 @@
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\OpenGL\Buffer.hh" />
+    <ClInclude Include="Engine\OpenGL\BufferSettings.hh" />
     <ClInclude Include="Engine\OpenGL\Data.hh" />
     <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
+    <ClInclude Include="Engine\OpenGL\Material.hh" />
     <ClInclude Include="Engine\OpenGL\MemoryGPU.hh" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
     <ClInclude Include="Engine\OpenGL\Pool.hh" />
+    <ClInclude Include="Engine\OpenGL\RenderPass.hh" />
     <ClInclude Include="Engine\OpenGL\ShaderResource.hh" />
     <ClInclude Include="Engine\OpenGL\ShadingManager.hh" />
     <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
@@ -128,6 +128,7 @@
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
     <ClInclude Include="Engine\Texture\TextureData.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
@@ -221,11 +222,7 @@
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
-    <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
-    <ClInclude Include="Engine\OpenGL\RenderPass.hh" />
-    <ClInclude Include="Engine\OpenGL\Drawable.hh" />
-    <ClInclude Include="Engine\OpenGL\BufferSettings.hh" />
-    <ClInclude Include="Engine\OpenGL\Material.hh" />
+    <ClInclude Include="Engine\Core\Drawable.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
