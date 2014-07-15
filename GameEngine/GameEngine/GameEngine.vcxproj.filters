@@ -74,6 +74,13 @@
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="Engine\OpenGL\RenderPass.cpp" />
+    <ClCompile Include="Engine\OpenGL\Drawable.cpp" />
+    <ClCompile Include="Engine\OpenGL\BufferSettings.cpp" />
+    <ClCompile Include="Engine\OpenGL\Material.cpp" />
+>>>>>>> origin/Opengl_render_pipeline
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
@@ -215,6 +222,10 @@
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
+    <ClInclude Include="Engine\OpenGL\RenderPass.hh" />
+    <ClInclude Include="Engine\OpenGL\Drawable.hh" />
+    <ClInclude Include="Engine\OpenGL\BufferSettings.hh" />
+    <ClInclude Include="Engine\OpenGL\Material.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

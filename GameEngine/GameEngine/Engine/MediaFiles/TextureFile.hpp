@@ -14,6 +14,7 @@
 #include <cereal/types/base_class.hpp>
 //#include <cereal/types/memory.hpp>
 #include <Utils/GlmSerialization.hpp>
+#include <OpenGL/Key.hh>
 #include <OpenGL/Texture.hh>
 
 struct TextureFile : public MediaFile<TextureFile>
@@ -22,13 +23,12 @@ struct TextureFile : public MediaFile<TextureFile>
 	virtual ~TextureFile();
 	TextureFile(const TextureFile &o);
 	TextureFile &operator=(const TextureFile &o);
-	TextureFile &operator=(gl::Texture2D &t);
+
 
 	void save(cereal::PortableBinaryOutputArchive &ar) const;
 	void load(cereal::PortableBinaryInputArchive &ar);
 
-	GLuint getId() const;
-	gl::Texture const &getTexture() const;
+	gl::Key<gl::Texture> const &getTexture() const;
 
 	std::vector<GLbyte> datas;
 	GLint		width, height;
@@ -37,7 +37,8 @@ struct TextureFile : public MediaFile<TextureFile>
 	GLenum		wrap;
 	GLenum		minFilter;
 	GLenum		magFilter;
-	std::unique_ptr<gl::Texture2D> _texture;
+	gl::Key<gl::Texture> key;
+
 };
 
 #endif   //__TEXTURE_FILE_HPP__

@@ -1,6 +1,7 @@
 #include "MaterialFile.hpp"
 #include "AssetsManager.hpp"
 #include "ObjFile.hpp"
+#include <OpenGL/ShadingManager.hh>
 
 MaterialFile::MaterialFile() : MediaFile<MaterialFile>()
 {
@@ -54,25 +55,25 @@ void MaterialFile::Material::setUniforms(std::shared_ptr<OpenGLTools::UniformBuf
 	{
 		glActiveTexture(GL_TEXTURE0);
 		//glBindTexture(GL_TEXTURE_2D, ambientTex->getTexture()->getId());
-		glBindTexture(GL_TEXTURE_2D, ambientTex->getId());
+	//	glBindTexture(GL_TEXTURE_2D, ambientTex->getId());
 	}
 	if (diffuseTex != nullptr)
 	{
 		glActiveTexture(GL_TEXTURE1);
 		//glBindTexture(GL_TEXTURE_2D, diffuseTex->getTexture()->getId());
-		glBindTexture(GL_TEXTURE_2D, diffuseTex->getId());
+	//	glBindTexture(GL_TEXTURE_2D, diffuseTex->getId());
 	}
 	if (specularTex != nullptr)
 	{
 		glActiveTexture(GL_TEXTURE2);
 		//glBindTexture(GL_TEXTURE_2D, specularTex->getTexture()->getId());
-		glBindTexture(GL_TEXTURE_2D, specularTex->getId());
+	//	glBindTexture(GL_TEXTURE_2D, specularTex->getId());
 	}
 	if (normalTex != nullptr)
 	{
 		glActiveTexture(GL_TEXTURE3);
 		//glBindTexture(GL_TEXTURE_2D, normalTex->getTexture()->getId());
-		glBindTexture(GL_TEXTURE_2D, normalTex->getId());
+	//	glBindTexture(GL_TEXTURE_2D, normalTex->getId());
 	}
 }
 
@@ -123,15 +124,19 @@ void MaterialFile::Material::load(cereal::PortableBinaryInputArchive &ar)
 	ar(name, ambient, diffuse, specular, transmittance, emission, shininess, paramVec2, paramVec3, paramVec4, paramMat2, paramMat3, paramMat4, paramInt, paramFloat);
 	std::string a, b, c, d;
 	auto manager = _dependencyManager.lock()->getInstance<AssetsManager>();
+	auto shading = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
 	ar(a, b, c, d);
-	if (a != "NULL")
-		ambientTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(a)));
-	if (b != "NULL")
-		diffuseTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(b)));
-	if (c != "NULL")
-		specularTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(c)));
-	if (d != "NULL")
-		normalTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(d)));
+	if (shading)
+	{
+		if (a != "NULL")
+			ambientTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(a), *shading));
+		if (b != "NULL")
+			diffuseTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(b), *shading));
+		if (c != "NULL")
+			specularTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(c), *shading));
+		if (d != "NULL")
+			normalTex = std::static_pointer_cast<TextureFile>(manager->loadFromFile(File(d), *shading));
+	}
 }
 
 

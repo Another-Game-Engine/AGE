@@ -126,6 +126,7 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	return true;
 }
 
+
 bool loadAssets(std::shared_ptr<Engine> e)
 {
 #ifdef RENDERING_ACTIVATED
@@ -201,8 +202,6 @@ int			main(int ac, char **av)
 	e->setInstance<gl::ShadingManager>();
 
 	if (!loadShaders(e))
-		return EXIT_FAILURE;
-	if (!loadAssets(e))
 		return EXIT_FAILURE;
 #endif
 

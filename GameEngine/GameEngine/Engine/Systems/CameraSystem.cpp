@@ -9,7 +9,7 @@
 #include <OpenGL/ShadingManager.hh>
 #include <OpenGL/GeometryManager.hh>
 
-//TEMP
+//tmp
 #include <Core/Octree.hpp>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
@@ -110,6 +110,20 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 	_diffuse_texture = _render->addShaderSampler(_shader, "diffuse_texture");
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
+	_renderPass = _render->addRenderPass(_shader);
+	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
+	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
+	auto material = _render->addMaterial();
+	// test if material works
+	_render->setMaterial<gl::COLOR_DIFFUSE>(material, glm::vec4(1.0f, 0.0f, 1.0f, 0.0f));
+	_render->setMaterial<gl::COLOR_EMISSIVE>(material, glm::vec4(2.0f, 1.0f, 1.0f, 1.0f));
+	_render->setMaterial<gl::SHININESS>(material, 5.f);
+	_render->setMaterial<gl::COLOR_SPECULAR>(material, glm::vec4(0, 0, 0, 0));
+	std::cout << _render->getMaterial<gl::COLOR_DIFFUSE>(material)[0] << std::endl;;
+	std::cout << _render->getMaterial<gl::COLOR_EMISSIVE>(material)[0] << std::endl;;
+	std::cout << _render->getMaterial<gl::SHININESS>(material) << std::endl;;
+	std::cout << _render->getMaterial<gl::COLOR_SPECULAR>(material)[0] << std::endl;;
 }
 #endif
 
@@ -187,7 +201,6 @@ void CameraSystem::mainUpdate(double time)
 	{
 
 		auto camera = scene->getComponent<Component::CameraComponent>(e);
-		_render->useShader(_shader);
 		_render->setUniformBlock(_global_state, 0, camera->projection);
 		_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
 		_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
@@ -201,6 +214,10 @@ void CameraSystem::mainUpdate(double time)
 		// test with culling output
 		auto octree = _scene.lock()->getInstance<AGE::Octree>();
 		while (!octree->TO_DRAW.empty())
+//=======
+//		_render->draw(_renderPass, NULL, 0);
+//		for (auto m : _drawable.getCollection())
+//>>>>>>> origin/Opengl_render_pipeline
 		{
 			auto &c = octree->TO_DRAW.front();
 			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
