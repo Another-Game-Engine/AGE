@@ -200,11 +200,13 @@ void CameraSystem::mainUpdate(double time)
 		///////////////
 		// test with culling output
 		auto octree = _scene.lock()->getInstance<AGE::Octree>();
-		for (auto &c : octree->TO_DRAW)
+		while (!octree->TO_DRAW.empty())
 		{
+			auto &c = octree->TO_DRAW.front();
 			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
 			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * c.transformation))));
 			_geometry->draw(GL_TRIANGLES, c.glindices, c.glvertices);
+			octree->TO_DRAW.pop();
 		}
 
 

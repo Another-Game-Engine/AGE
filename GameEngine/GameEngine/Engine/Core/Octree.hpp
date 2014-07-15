@@ -196,9 +196,24 @@ namespace AGE
 			gl::Key<gl::Vertices> glvertices;
 			gl::Key<gl::Indices> glindices;
 			glm::mat4 transformation;
+
+			ToDraw()
+			{}
+
+			ToDraw(const gl::Key<gl::Vertices> &_v, const gl::Key<gl::Indices> &_i, const glm::mat4 &_t)
+				: glvertices(_v)
+				, glindices(_i)
+				, transformation(_t)
+			{}
+
+			ToDraw(gl::Key<gl::Vertices> &&_v, gl::Key<gl::Indices> &&_i, glm::mat4 &&_t)
+				: glvertices(_v)
+				, glindices(_i)
+				, transformation(_t)
+			{}
 		};
 
-		std::vector<ToDraw> TO_DRAW;
+		AGE::Queue<ToDraw> TO_DRAW;
 		//
 		// END
 	private:

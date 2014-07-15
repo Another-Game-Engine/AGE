@@ -103,10 +103,19 @@ namespace AGE
 			}
 		}
 
+		//Reset queue, do not release memory
 		void clear()
 		{
 			_start = 0;
 			_end = 0;
+		}
+
+		//Release memory
+		void release()
+		{
+			if (_data)
+				delete[] data;
+			_start = _end = _size = 0;
 		}
 
 	private:

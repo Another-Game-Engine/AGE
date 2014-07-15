@@ -234,14 +234,11 @@ void Octree::update()
 			++total;
 		if (e.active && frustum.pointIn(e.position) == true)
 		{
-			ToDraw t;
-			t.glindices = e.glindices;
-			t.glvertices = e.glvertices;
-			t.transformation = glm::mat4(1);
-			t.transformation = glm::translate(t.transformation, e.position);
-			t.transformation = t.transformation * glm::toMat4(e.orientation);
-			t.transformation = glm::scale(t.transformation, e.scale);
-			TO_DRAW.push_back(t);
+			TO_DRAW.emplace(
+				e.glvertices
+				, e.glindices
+				, glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale)
+				);
 
 
 
