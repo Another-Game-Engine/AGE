@@ -148,7 +148,6 @@ namespace AGE
 			}
 			++ctr;
 		}
-		mesh.name = data.name;
 		mesh.vertices = geometryManager->addVertices(maxSize, size, nbrBuffer.data(), buffer.data());
 		mesh.indices = geometryManager->addIndices(data.indices.size(), &data.indices[0]);
 		mesh.bounding = data.boundingInfos;

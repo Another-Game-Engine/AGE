@@ -18,6 +18,8 @@
 
 #include <Utils/Containers/Queue.hpp>
 
+#include <Geometry/Mesh.hpp>
+
 class AScene;
 
 namespace AGE
@@ -44,14 +46,11 @@ namespace AGE
 			glm::vec3 position;
 			glm::vec3 scale;
 			glm::quat orientation;
-			BoundingInfos bounding;
 			CULLABLE_ID id;
 			bool active;
-			gl::Key<gl::Vertices> glvertices;
-			gl::Key<gl::Indices> glindices;
-
-			//TEMP
-			USER_OBJECT_ID userObjectId;
+			SubMeshInstance mesh;
+			bool hasMoved;
+			glm::mat4 transformation;
 		};
 
 		struct Command
@@ -59,9 +58,7 @@ namespace AGE
 			glm::vec3 position;
 			glm::vec3 scale;
 			glm::quat orientation;
-			std::vector<BoundingInfos> boundings;
-			std::vector<gl::Key<gl::Vertices>> glvertices;
-			std::vector<gl::Key<gl::Indices>> glindices;
+			std::vector<SubMeshInstance> submeshInstances;
 			USER_OBJECT_ID id;
 			Entity entity;
 			COMPONENT_ID componentType;
@@ -121,16 +118,12 @@ namespace AGE
 			}
 
 			Command(USER_OBJECT_ID _id
-				, const std::vector<gl::Key<gl::Vertices>> &_glvertices
-				, const std::vector<gl::Key<gl::Indices>> &_glindices
-				, const std::vector<BoundingInfos> &_boundings
+				, std::vector<SubMeshInstance> _submeshInstances // copy
 				, CommandType _cmdType)
 				: position(0)
 				, scale(0)
 				, orientation(0,0,0,1)
-				, glvertices(_glvertices)
-				, glindices(_glindices)
-				, boundings(_boundings)
+				, submeshInstances(_submeshInstances)
 				, id(_id)
 				, componentType(0)
 				, commandType(_cmdType)
@@ -183,9 +176,7 @@ namespace AGE
 		void setScale(const glm::vec3 &v, const std::array<USER_OBJECT_ID, MAX_CPT_NUMBER> &ids);
 
 		void updateGeometry(USER_OBJECT_ID id
-			, const std::vector<gl::Key<gl::Vertices>> &glvertices
-			, const std::vector<gl::Key<gl::Indices>> &glindices
-			, const std::vector<BoundingInfos> &boundings);
+			, const std::vector<AGE::SubMeshInstance> &meshs);
 
 		void update();
 
@@ -193,22 +184,19 @@ namespace AGE
 		//
 		struct ToDraw
 		{
-			gl::Key<gl::Vertices> glvertices;
-			gl::Key<gl::Indices> glindices;
+			SubMeshInstance mesh;
 			glm::mat4 transformation;
 
 			ToDraw()
 			{}
 
-			ToDraw(const gl::Key<gl::Vertices> &_v, const gl::Key<gl::Indices> &_i, const glm::mat4 &_t)
-				: glvertices(_v)
-				, glindices(_i)
+			ToDraw(const SubMeshInstance &_m, const glm::mat4 &_t)
+				: mesh(_m)
 				, transformation(_t)
 			{}
 
-			ToDraw(gl::Key<gl::Vertices> &&_v, gl::Key<gl::Indices> &&_i, glm::mat4 &&_t)
-				: glvertices(_v)
-				, glindices(_i)
+			ToDraw(SubMeshInstance &&_m, glm::mat4 &&_t)
+				: mesh(_m)
 				, transformation(_t)
 			{}
 		};

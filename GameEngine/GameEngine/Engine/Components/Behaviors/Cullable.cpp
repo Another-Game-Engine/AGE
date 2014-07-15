@@ -47,22 +47,14 @@ namespace AGE
 		void Cullable::sendMeshInfos()
 		{
 			assert(_scene != nullptr);
-			std::vector<gl::Key<gl::Vertices>> glvertices;
-			std::vector<gl::Key<gl::Indices>> glindices;
-			std::vector<BoundingInfos> boundings;
 
 			if (this->mesh == nullptr)
 			{
-				_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableId, glvertices, glindices, boundings);
+				std::vector<SubMeshInstance> subMeshs;
+				_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableId, subMeshs);
 				return;
 			}
-			for (auto &e : mesh->subMeshs)
-			{
-				glvertices.push_back(e.vertices);
-				glindices.push_back(e.indices);
-				boundings.push_back(e.bounding);
-			}
-			_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableId, glvertices, glindices, boundings);
+			_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableId, mesh->subMeshs);
 		}
 
 

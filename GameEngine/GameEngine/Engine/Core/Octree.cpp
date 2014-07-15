@@ -74,11 +74,9 @@ void Octree::setScale(const glm::vec3 &v, const std::array<Octree::USER_OBJECT_I
 }
 
 void Octree::updateGeometry(USER_OBJECT_ID id
-	, const std::vector<gl::Key<gl::Vertices>> &glvertices
-	, const std::vector<gl::Key<gl::Indices>> &glindices
-	, const std::vector<BoundingInfos> &boundings)
+	, const std::vector<AGE::SubMeshInstance> &meshs)
 {
-	_mainThreadCommands->emplace(id, glvertices, glindices, boundings, CommandType::Geometry);
+	_mainThreadCommands->emplace(id, meshs, CommandType::Geometry);
 }
 
 //-----------------------------------------------------------------
@@ -99,7 +97,6 @@ Octree::CULLABLE_ID Octree::addCullableObject(Octree::USER_OBJECT_ID uid)
 		_cullableObjects.emplace_back(CullableObject());
 		co = &(_cullableObjects.back());
 	}
-	co->userObjectId = uid;
 	co->id = res;
 	co->active = true;
 	return res;
@@ -109,7 +106,6 @@ void Octree::removeCullableObject(CULLABLE_ID id)
 {
 	_freeCullableObjects.push(id);
 	_cullableObjects[id].active = false;
-	_cullableObjects[id].userObjectId = USER_OBJECT_ID(-1);
 	assert(id != (std::size_t)(-1));
 }
 
@@ -161,13 +157,11 @@ void Octree::update()
 				removeCullableObject(e);
 			}
 			ue->collection.clear();
-			for (std::size_t i = 0; i < command.glindices.size(); ++i)
+			for (std::size_t i = 0; i < command.submeshInstances.size(); ++i)
 			{
 				auto id = addCullableObject(command.id);
 				ue->collection.push_back(id);
-				_cullableObjects[id].bounding = command.boundings[i];
-				_cullableObjects[id].glvertices = command.glvertices[i];
-				_cullableObjects[id].glindices = command.glindices[i];
+				_cullableObjects[id].mesh = command.submeshInstances[i];
 				_cullableObjects[id].position = ue->position;
 				_cullableObjects[id].orientation = ue->orientation;
 				_cullableObjects[id].scale = ue->scale;
@@ -180,6 +174,7 @@ void Octree::update()
 			for (auto &e : ue->collection)
 			{
 				_cullableObjects[e].position = ue->position;
+				_cullableObjects[e].hasMoved = true;
 			}
 			break;
 
@@ -190,6 +185,7 @@ void Octree::update()
 			for (auto &e : ue->collection)
 			{
 				_cullableObjects[e].scale = ue->scale;
+				_cullableObjects[e].hasMoved = true;
 			}
 			break;
 
@@ -200,6 +196,7 @@ void Octree::update()
 			for (auto &e : ue->collection)
 			{
 				_cullableObjects[e].orientation = ue->orientation;
+				_cullableObjects[e].hasMoved = true;
 			}
 			break;
 		}
@@ -234,26 +231,14 @@ void Octree::update()
 			++total;
 		if (e.active && frustum.pointIn(e.position) == true)
 		{
-			TO_DRAW.emplace(
-				e.glvertices
-				, e.glindices
-				, glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale)
+			if (e.hasMoved)
+			{
+				e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
+				e.hasMoved = false;
+			}
+			TO_DRAW.emplace(e.mesh
+				, e.transformation
 				);
-
-
-
-			//auto &uo = _userObjects[e.userObjectId];
-			//auto cpt = scene.lock()->getComponent(uo.entity, uo.componentType);
-			//if (cpt)
-			//{
-			//	auto c = dynamic_cast<AGE::ComponentBehavior::Cullable*>(cpt);
-			//	c->draw = true;
-			//	++drawed;
-			//}
-			//else
-			//{
-			//	assert(false);
-			//}
 		}
 	}
 	//std::cout << "Drawed : " << drawed << " / " << total << std::endl;
