@@ -1,9 +1,61 @@
 #include <Core/AssetsManager.hpp>
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
+#include <Geometry/Mesh.hpp>
+#include <Geometry/Material.hpp>
+#include <Texture/Texture.hpp>
 
 namespace AGE
 {
+	std::shared_ptr<MaterialSetInstance> AssetsManager::loadMaterial(const File &filePath)
+	{
+		if (_materials.find(filePath.getFullName()) != std::end(_materials))
+			return _materials[filePath.getFullName()];
+		if (!filePath.exists())
+		{
+			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
+			assert(false);
+		}
+
+		MaterialDataSet data;
+		auto material = std::make_shared<MaterialSetInstance>();
+
+		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+		cereal::PortableBinaryInputArchive ar(ifs);
+		ar(data);
+
+		for (auto &e : data.collection)
+		{
+			// TODO fill material with material key
+		}
+
+		_materials.insert(std::make_pair(filePath.getFullName(), material));
+		return material;
+	}
+
+	std::shared_ptr<TextureInstance> AssetsManager::loadTexture(const File &filePath)
+	{
+		if (_textures.find(filePath.getFullName()) != std::end(_textures))
+			return _textures[filePath.getFullName()];
+		if (!filePath.exists())
+		{
+			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
+			assert(false);
+		}
+
+		TextureData data;
+		auto texture = std::make_shared<TextureInstance>();
+
+		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+		cereal::PortableBinaryInputArchive ar(ifs);
+		ar(data);
+
+		// TODO fill texture with texture key
+
+		_textures.insert(std::make_pair(filePath.getFullName(), texture));
+		return texture;
+	}
+
 	std::shared_ptr<Animation> AssetsManager::loadAnimation(const File &filePath)
 	{
 		if (_animations.find(filePath.getFullName()) != std::end(_animations))

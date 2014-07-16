@@ -132,6 +132,7 @@ bool loadAssets(std::shared_ptr<Engine> e)
 #ifdef RENDERING_ACTIVATED
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("../../Assets/NewSerialized/cube/cube.sage"));
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("../../Assets/NewSerialized/ball/ball.sage"));
+	auto t = e->getInstance<AGE::AssetsManager>()->loadMaterial(File("../../Assets/NewSerialized/ball/ball.mage"));
 #endif
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
@@ -201,7 +202,7 @@ int			main(int ac, char **av)
 
 	e->setInstance<gl::ShadingManager>();
 
-	if (!loadShaders(e))
+	if (!loadShaders(e) || !loadAssets(e))
 		return EXIT_FAILURE;
 #endif
 

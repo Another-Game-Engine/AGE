@@ -4,13 +4,17 @@
 #include <Utils/Dependency.hpp>
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/File.hpp>
-#include <Geometry/Mesh.hpp>
 #include <OpenGL/GeometryManager.hh>
+#include <bitset>
+#include <Geometry/Mesh.hpp>
 
 namespace AGE
 {
 	struct Skeleton;
 	struct Animation;
+	struct TextureInstance;
+	struct MaterialInstance;
+	struct MaterialSetInstance;
 
 	class AssetsManager : public Dependency<AssetsManager>
 	{
@@ -25,6 +29,8 @@ namespace AGE
 		std::shared_ptr<Animation> loadAnimation(const File &filePath);
 		std::shared_ptr<Skeleton> loadSkeleton(const File &filePath);
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
+		std::shared_ptr<MaterialSetInstance> loadMaterial(const File &filePath);
+		std::shared_ptr<TextureInstance> loadTexture(const File &filepath);
 
 	private:
 		// Vertices pools used by meshs
@@ -35,6 +41,10 @@ namespace AGE
 		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
 		//Animation collection
 		std::map<std::string, std::shared_ptr<Animation>> _animations;
+		//Material collection
+		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
+		//Texture collection
+		std::map<std::string, std::shared_ptr<TextureInstance>> _textures;
 
 		void loadSubmesh(SubMeshData &data, SubMeshInstance &mesh);
 		// Create pool for meshs

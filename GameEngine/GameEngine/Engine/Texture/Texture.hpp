@@ -19,4 +19,9 @@ namespace AGE
 			ar(rawPath, width, height, data);
 		}
 	};
+
+	struct TextureInstance
+	{
+
+	};
 }
