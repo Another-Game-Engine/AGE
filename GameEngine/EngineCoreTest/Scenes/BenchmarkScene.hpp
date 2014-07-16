@@ -134,7 +134,7 @@ public:
 	auto link = getLink(plane);
 	link->setPosition(glm::vec3(0, -10, 0));
 	link->setScale(glm::vec3(100, 1, 100));
-	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("../../Assets/NewSerialized/cube/cube.sage"));
+	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
@@ -178,9 +178,9 @@ public:
 #ifndef COMPLEX_MESH
 				Component::MeshRenderer *mesh;
 				if (i % 4 == 0)
-					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("../../Assets/NewSerialized/ball/ball.sage"));
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("ball/ball.sage"));
 				else
-					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("../../Assets/NewSerialized/cube/cube.sage"));
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 #else
 				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");

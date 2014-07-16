@@ -129,7 +129,7 @@ bool loadShaders(std::shared_ptr<Engine> e)
 
 bool loadAssets(std::shared_ptr<Engine> e)
 {
-	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/NewSerialized/");
+	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"));
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"));
