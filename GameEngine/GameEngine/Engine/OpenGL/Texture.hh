@@ -32,7 +32,6 @@ namespace gl
 		Texture();
 
 		GLuint _id;
-		friend class AGE::AssetsManager;
 	};
 
 	//!\file Texture.hh
@@ -54,7 +53,6 @@ namespace gl
 		// avoid operator =
 		Texture2D &operator=(Texture2D const &t) = delete;
 		Texture2D &operator=(Texture2D &&t) = delete;
-		friend class AGE::AssetsManager;
 	public:
 		Texture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping = true);
 		virtual ~Texture2D();
@@ -93,7 +91,6 @@ namespace gl
 		GLenum _format;
 		GLenum _type;
 		GLboolean _fixedSampleLocation;
-		friend class AGE::AssetsManager;
 	public:
 		TextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation = GL_FALSE);
 		virtual ~TextureMultiSample();

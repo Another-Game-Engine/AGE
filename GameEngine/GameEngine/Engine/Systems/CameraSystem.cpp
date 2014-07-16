@@ -115,17 +115,6 @@ void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
 	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
 	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
-	auto material = _render->addMaterial();
-
-	// test if material works
-	_render->setMaterial<gl::COLOR_DIFFUSE>(material, glm::vec4(1.0f, 0.0f, 1.0f, 0.0f));
-	_render->setMaterial<gl::COLOR_EMISSIVE>(material, glm::vec4(2.0f, 1.0f, 1.0f, 1.0f));
-	_render->setMaterial<gl::SHININESS>(material, 5.f);
-	_render->setMaterial<gl::COLOR_SPECULAR>(material, glm::vec4(0, 0, 0, 0));
-	std::cout << _render->getMaterial<gl::COLOR_DIFFUSE>(material)[0] << std::endl;
-	std::cout << _render->getMaterial<gl::COLOR_EMISSIVE>(material)[0] << std::endl;
-	std::cout << _render->getMaterial<gl::SHININESS>(material) << std::endl;
-	std::cout << _render->getMaterial<gl::COLOR_SPECULAR>(material)[0] << std::endl;
 }
 #endif
 

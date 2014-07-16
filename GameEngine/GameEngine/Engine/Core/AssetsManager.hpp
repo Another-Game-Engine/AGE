@@ -30,9 +30,10 @@ namespace AGE
 		std::shared_ptr<Skeleton> loadSkeleton(const File &filePath);
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
 		std::shared_ptr<MaterialSetInstance> loadMaterial(const File &filePath);
-		std::shared_ptr<gl::Texture> loadTexture(const File &filepath);
-
+		gl::Key<gl::Texture> loadTexture(const File &filepath);
+		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 	private:
+		std::string _assetsDirectory;
 		// Vertices pools used by meshs
 		std::map<std::bitset<MeshInfos::END>, std::pair<gl::Key<gl::VertexPool> , gl::Key<gl::IndexPool>>, BitsetComparer> _pools;
 		// Mesh collection
@@ -44,7 +45,7 @@ namespace AGE
 		//Material collection
 		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
 		//Texture collection
-		std::map<std::string, std::shared_ptr<gl::Texture>> _textures;
+		std::map<std::string, gl::Key<gl::Texture>> _textures;
 
 		void loadSubmesh(SubMeshData &data, SubMeshInstance &mesh);
 		// Create pool for meshs

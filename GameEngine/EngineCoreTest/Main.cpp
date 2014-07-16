@@ -129,10 +129,11 @@ bool loadShaders(std::shared_ptr<Engine> e)
 
 bool loadAssets(std::shared_ptr<Engine> e)
 {
+	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/NewSerialized/");
 #ifdef RENDERING_ACTIVATED
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("../../Assets/NewSerialized/cube/cube.sage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("../../Assets/NewSerialized/ball/ball.sage"));
-	auto t = e->getInstance<AGE::AssetsManager>()->loadMaterial(File("../../Assets/NewSerialized/ball/ball.mage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"));
+	auto t = e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
 #endif
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));

@@ -8,8 +8,10 @@
 
 namespace AGE
 {
-	std::shared_ptr<MaterialSetInstance> AssetsManager::loadMaterial(const File &filePath)
+	std::shared_ptr<MaterialSetInstance> AssetsManager::loadMaterial(const File &_filePath)
 	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+
 		if (_materials.find(filePath.getFullName()) != std::end(_materials))
 			return _materials[filePath.getFullName()];
 		if (!filePath.exists())
@@ -25,8 +27,21 @@ namespace AGE
 		cereal::PortableBinaryInputArchive ar(ifs);
 		ar(data);
 
+		auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
 		for (auto &e : data.collection)
 		{
+			auto key = manager->addMaterial();
+			manager->setMaterial<gl::COLOR_DIFFUSE>(key, e.diffuse);
+			manager->setMaterial<gl::COLOR_EMISSIVE>(key, e.emissive);
+			manager->setMaterial<gl::SHININESS>(key, 0.5f); // harcoded
+			manager->setMaterial<gl::COLOR_SPECULAR>(key, e.specular);
+			manager->setMaterial<gl::COLOR_AMBIANT>(key, e.ambient);
+
+			manager->setMaterial<gl::TEXTURE_AMBIENT>(key, loadTexture(File(e.ambientTexPath)));
+			manager->setMaterial<gl::TEXTURE_DIFFUSE>(key, loadTexture(File(e.diffuseTexPath)));
+			manager->setMaterial<gl::TEXTURE_EMISSIVE>(key, loadTexture(File(e.emissiveTexPath)));
+			manager->setMaterial<gl::TEXTURE_SPECULAR>(key, loadTexture(File(e.specularTexPath)));
+
 			// TODO fill material with material key
 		}
 
@@ -34,8 +49,9 @@ namespace AGE
 		return material;
 	}
 
-	std::shared_ptr<gl::Texture> AssetsManager::loadTexture(const File &filePath)
+	gl::Key<gl::Texture> AssetsManager::loadTexture(const File &_filePath)
 	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_textures.find(filePath.getFullName()) != std::end(_textures))
 			return _textures[filePath.getFullName()];
 		if (!filePath.exists())
@@ -51,23 +67,22 @@ namespace AGE
 		ar(data);
 
 		// TODO fill texture with texture key
-		auto texture = std::make_shared<gl::Texture2D>();
-
 		auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
-		 = manager->addTexture2D(4, data.width, data.height, true);
-	manager->setOptionTransferTexture2D(key, 0, format, GL_UNSIGNED_BYTE);
-	manager->writeTexture(key, datas.data());
-	manager->generateMipMapTexture2D(key);
-	manager->filterTexture2D(key, minFilter, magFilter);
-	manager->wrapTexture2D(key, wrap);
-	manager->storageTexture2D(key, 1);
+		auto key = manager->addTexture2D(3, data.width, data.height, true);
+		manager->setOptionTransferTexture2D(key, 0, GL_RGBA32F, GL_UNSIGNED_BYTE);
+		manager->writeTexture(key, data.data.data());
+		manager->generateMipMapTexture2D(key);
+		manager->filterTexture2D(key, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+		manager->wrapTexture2D(key, GL_REPEAT);
+		manager->storageTexture2D(key, 1);
 
-		_textures.insert(std::make_pair(filePath.getFullName(), texture));
-		return texture;
+		_textures.insert(std::make_pair(filePath.getFullName(), key));
+		return key;
 	}
 
-	std::shared_ptr<Animation> AssetsManager::loadAnimation(const File &filePath)
+	std::shared_ptr<Animation> AssetsManager::loadAnimation(const File &_filePath)
 	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_animations.find(filePath.getFullName()) != std::end(_animations))
 			return _animations[filePath.getFullName()];
 		if (!filePath.exists())
@@ -85,8 +100,9 @@ namespace AGE
 		return animation;
 	}
 
-	std::shared_ptr<Skeleton> AssetsManager::loadSkeleton(const File &filePath)
+	std::shared_ptr<Skeleton> AssetsManager::loadSkeleton(const File &_filePath)
 	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
 			return _skeletons[filePath.getFullName()];
 		if (!filePath.exists())
@@ -104,8 +120,9 @@ namespace AGE
 		return skeleton;
 	}
 
-	std::shared_ptr<MeshInstance> AssetsManager::loadMesh(const File &filePath)
+	std::shared_ptr<MeshInstance> AssetsManager::loadMesh(const File &_filePath)
 	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
 			return _meshs[filePath.getFullName()];
 		if (!filePath.exists())

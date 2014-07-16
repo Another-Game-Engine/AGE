@@ -39,7 +39,7 @@ namespace AGE
 		//Paths
 		File filePath = "";
 
-		std::vector<std::string> texturesPath;
+		std::set<std::string> texturesPath;
 
 		std::string animationName = ""; //if empty -> same name as file (fbx, collada)
 		std::string skinName = ""; //if empty -> same name as file (fbx, collada)
