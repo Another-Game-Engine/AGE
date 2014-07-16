@@ -4,6 +4,7 @@
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <Texture/Texture.hpp>
+#include <OpenGL/ShadingManager.hh>
 
 namespace AGE
 {
@@ -33,7 +34,7 @@ namespace AGE
 		return material;
 	}
 
-	std::shared_ptr<TextureInstance> AssetsManager::loadTexture(const File &filePath)
+	std::shared_ptr<gl::Texture> AssetsManager::loadTexture(const File &filePath)
 	{
 		if (_textures.find(filePath.getFullName()) != std::end(_textures))
 			return _textures[filePath.getFullName()];
@@ -44,13 +45,22 @@ namespace AGE
 		}
 
 		TextureData data;
-		auto texture = std::make_shared<TextureInstance>();
 
 		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 		cereal::PortableBinaryInputArchive ar(ifs);
 		ar(data);
 
 		// TODO fill texture with texture key
+		auto texture = std::make_shared<gl::Texture2D>();
+
+		auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
+		 = manager->addTexture2D(4, data.width, data.height, true);
+	manager->setOptionTransferTexture2D(key, 0, format, GL_UNSIGNED_BYTE);
+	manager->writeTexture(key, datas.data());
+	manager->generateMipMapTexture2D(key);
+	manager->filterTexture2D(key, minFilter, magFilter);
+	manager->wrapTexture2D(key, wrap);
+	manager->storageTexture2D(key, 1);
 
 		_textures.insert(std::make_pair(filePath.getFullName(), texture));
 		return texture;

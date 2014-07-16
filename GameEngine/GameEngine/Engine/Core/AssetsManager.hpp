@@ -7,12 +7,12 @@
 #include <OpenGL/GeometryManager.hh>
 #include <bitset>
 #include <Geometry/Mesh.hpp>
+#include <OpenGL/Texture.hh>
 
 namespace AGE
 {
 	struct Skeleton;
 	struct Animation;
-	struct TextureInstance;
 	struct MaterialInstance;
 	struct MaterialSetInstance;
 
@@ -30,7 +30,7 @@ namespace AGE
 		std::shared_ptr<Skeleton> loadSkeleton(const File &filePath);
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
 		std::shared_ptr<MaterialSetInstance> loadMaterial(const File &filePath);
-		std::shared_ptr<TextureInstance> loadTexture(const File &filepath);
+		std::shared_ptr<gl::Texture> loadTexture(const File &filepath);
 
 	private:
 		// Vertices pools used by meshs
@@ -44,7 +44,7 @@ namespace AGE
 		//Material collection
 		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
 		//Texture collection
-		std::map<std::string, std::shared_ptr<TextureInstance>> _textures;
+		std::map<std::string, std::shared_ptr<gl::Texture>> _textures;
 
 		void loadSubmesh(SubMeshData &data, SubMeshInstance &mesh);
 		// Create pool for meshs
