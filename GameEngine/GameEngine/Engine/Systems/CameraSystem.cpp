@@ -9,6 +9,7 @@
 #include <OpenGL/ShadingManager.hh>
 #include <OpenGL/GeometryManager.hh>
 #include <Core/Drawable.hh>
+#include <Core/AssetsManager.hpp>
 
 //tmp
 #include <Core/Octree.hpp>
@@ -202,6 +203,8 @@ void CameraSystem::mainUpdate(double time)
 		///////////////
 		// test with culling output
 		auto octree = _scene.lock()->getInstance<AGE::Octree>();
+		auto material = _scene.lock()->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
+
 		_render->draw(_renderPass, NULL, 0);
 		while (!octree->drawList.empty())
 		{

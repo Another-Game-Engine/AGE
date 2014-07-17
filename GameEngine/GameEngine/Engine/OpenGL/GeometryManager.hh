@@ -7,7 +7,6 @@
 #include <OpenGL/Pool.hh>
 #include <Utils/Dependency.hpp>
 #include <map>
-#include <unordered_map>
 #include <vector>
 
 namespace gl
