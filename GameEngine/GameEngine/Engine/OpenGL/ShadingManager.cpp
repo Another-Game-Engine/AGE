@@ -490,7 +490,7 @@ namespace gl
 
 		if ((shader = getShader(keyShader, "addRenderPass")) == NULL)
 			return (Key<RenderPass>(KEY_DESTROY));
-		_renderPass[key] = RenderPass(*shader);
+		_renderPass[key] = RenderPass(*shader, geometryManager);
 		return (key);
 	}
 
@@ -683,12 +683,12 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::draw(Key<RenderPass> const &key, AGE::Drawable const *objectRender, size_t nbrObjectRender)
+	ShadingManager &ShadingManager::draw(GLenum mode, Key<RenderPass> const &key, AGE::Drawable const *objectRender, size_t nbrObjectRender)
 	{
 		RenderPass *renderPass;
 		if ((renderPass = getRenderPass(key, "popTaskRenderPass")) == NULL)
 			return (*this);
-		renderPass->draw(objectRender, nbrObjectRender);
+		renderPass->draw(mode, objectRender, nbrObjectRender);
 		return (*this);
 	}
 

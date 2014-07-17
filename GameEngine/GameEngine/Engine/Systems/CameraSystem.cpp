@@ -20,7 +20,6 @@ CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene)
 	: System(std::move(scene)),
 #if NEW_SHADER
 	_render(NULL),
-	_geometry(NULL),
 #endif
 	_renderDebugMethod(false),
 	_totalTime(0),
@@ -94,12 +93,13 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 
 #if NEW_SHADER
 
-void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
+void CameraSystem::setManager(gl::ShadingManager &m)
 {
 	_render = &m;
-	_geometry = &g;
+
 	if (_render == NULL)
 		std::cerr << "Warning: No manager set for the camerasystem" << std::endl;
+	
 	_shader = _render->addShader(VERTEX_SHADER, FRAG_SHADER);
 	size_t sizeElement[2];
 	gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
@@ -213,13 +213,13 @@ void CameraSystem::mainUpdate(double time)
 		///////////////
 		// test with culling output
 		auto octree = _scene.lock()->getInstance<AGE::Octree>();
-		_render->draw(_renderPass, NULL, 0);
+		_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
 		while (!octree->drawList.empty())
 		{
 			auto &c = octree->drawList.front();
 			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
 			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * c.transformation))));
-			_geometry->draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
+			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
 			octree->drawList.pop();
 		}
 

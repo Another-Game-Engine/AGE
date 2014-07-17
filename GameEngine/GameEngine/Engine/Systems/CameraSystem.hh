@@ -18,7 +18,7 @@ public:
 	virtual ~CameraSystem(){}
 
 #if NEW_SHADER
-	void setManager(gl::ShadingManager &m, gl::GeometryManager &g);
+	void setManager(gl::ShadingManager &m);
 #endif
 	void setRenderDebugMode(bool t);
 	bool getRenderDebugMode() const;
@@ -36,7 +36,6 @@ protected:
 	EntityFilter _drawable;
 	EntityFilter _camera;
 	gl::ShadingManager *_render;
-	gl::GeometryManager *_geometry;
 	gl::Key<gl::Shader> _shader;
 	gl::Key<gl::UniformBlock> _global_state;
 	gl::Key<gl::Uniform> _model_matrix;

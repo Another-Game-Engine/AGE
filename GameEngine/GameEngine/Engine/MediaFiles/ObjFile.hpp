@@ -6,8 +6,9 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <OpenGL/Data.hh>
-#include <OpenGL/GeometryManager.hh>
 #include <Utils/DependenciesInjector.hpp>
+
+namespace gl { class GeometryManager; }
 
 struct ObjFile : public MediaFile<ObjFile>
 {

@@ -1,6 +1,7 @@
 #include <Core/AssetsManager.hpp>
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
+#include <OpenGL/ShadingManager.hh>
 
 namespace AGE
 {
@@ -78,8 +79,7 @@ namespace AGE
 	void AssetsManager::loadSubmesh(SubMeshData &data, SubMeshInstance &mesh)
 	{
 		auto &pools = _pools.find(data.infos)->second;
-		auto geometryManager = _dependencyManager.lock()->getInstance<gl::GeometryManager>();
-		assert(geometryManager != nullptr);
+		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::ShadingManager>()->geometryManager;
 
 		std::size_t size = data.infos.count();
 
@@ -148,19 +148,19 @@ namespace AGE
 			}
 			++ctr;
 		}
-		mesh.vertices = geometryManager->addVertices(maxSize, size, nbrBuffer.data(), buffer.data());
-		mesh.indices = geometryManager->addIndices(data.indices.size(), &data.indices[0]);
+		mesh.vertices = geometryManager.addVertices(maxSize, size, nbrBuffer.data(), buffer.data());
+		mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
 		mesh.bounding = data.boundingInfos;
 		mesh.vertexPool = _pools.find(data.infos)->second.first;
 		mesh.indexPool = _pools.find(data.infos)->second.second;
-		geometryManager->attachVerticesToVertexPool(mesh.vertices, pools.first);
-		geometryManager->attachIndicesToIndexPool(mesh.indices, pools.second);
+		geometryManager.attachVerticesToVertexPool(mesh.vertices, pools.first);
+		geometryManager.attachIndicesToIndexPool(mesh.indices, pools.second);
 	}
 
 	// Create pool for meshs
 	void AssetsManager::createPool(const std::bitset<MeshInfos::END> &infos)
 	{
-		auto geometryManager = _dependencyManager.lock()->getInstance<gl::GeometryManager>();
+		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::ShadingManager>()->geometryManager;
 		assert(geometryManager != nullptr);
 
 		std::size_t size = infos.count();

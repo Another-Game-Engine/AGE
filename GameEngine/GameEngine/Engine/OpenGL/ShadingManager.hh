@@ -10,6 +10,7 @@
 #include <OpenGL/UniformBlock.hh>
 #include <OpenGL/Material.hh>
 #include <cassert>
+#include <OpenGL/GeometryManager.hh>
 
 # undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -35,6 +36,9 @@ namespace gl
 	//!\brief Handle the shading of the object
 	class ShadingManager : public Dependency<ShadingManager>
 	{
+	public:
+		GeometryManager geometryManager;
+
 	public:
 		ShadingManager();
 		~ShadingManager();
@@ -128,7 +132,7 @@ namespace gl
 		
 		ShadingManager &popTaskRenderPass(Key<RenderPass> const &key);
 
-		ShadingManager &draw(Key<RenderPass> const &key, AGE::Drawable const *objectRender, size_t nbrObjectRender);
+		ShadingManager &draw(GLenum mode, Key<RenderPass> const &key, AGE::Drawable const *objectRender, size_t nbrObjectRender);
 
 
 	private:

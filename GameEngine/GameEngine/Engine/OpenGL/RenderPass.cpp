@@ -4,6 +4,7 @@
 #include <OpenGL/Shader.hh>
 #include <Core/Drawable.hh>
 #include <OpenGL/BufferSettings.hh>
+#include <OpenGL/GeometryManager.hh>
 
 # undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -13,14 +14,16 @@
 namespace gl
 {
 	RenderPass::RenderPass()
-		: _shader(NULL)
+		: _shader(NULL),
+		_geoManager(NULL)
 	{
 	}
 
-	RenderPass::RenderPass(Shader &shader)
+	RenderPass::RenderPass(Shader &shader, GeometryManager &geoManager)
 		: RenderPass()
 	{
 		_shader = &shader;
+		_geoManager = &geoManager;
 	}
 
 	RenderPass::~RenderPass()
@@ -34,7 +37,8 @@ namespace gl
 	}
 
 	RenderPass::RenderPass(RenderPass const &copy)
-		: _shader(copy._shader)
+		: _shader(copy._shader),
+		_geoManager(copy._geoManager)
 	{
 	}
 
@@ -43,6 +47,7 @@ namespace gl
 		if (this != &r)
 		{
 			_shader = r._shader;
+			_geoManager = r._geoManager;
 		}
 		return (*this);
 	}
@@ -229,13 +234,17 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::draw(AGE::Drawable const *objectRender, size_t nbrObjectRender)
+	RenderPass &RenderPass::draw(GLenum mode, AGE::Drawable const *objectRender, size_t nbrObjectRender)
 	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		if (!_shader)
 			DEBUG_MESSAGE("Warning", "RenderPass - use", "no shader assign on this renderPass", *this);
 		_shader->use();
+		for (size_t index = 0; index < nbrObjectRender; ++index)
+		{
+			_geoManager->draw(mode, objectRender->mesh.indices, objectRender->mesh.vertices);
+		}
 		return (*this);
 	}
 

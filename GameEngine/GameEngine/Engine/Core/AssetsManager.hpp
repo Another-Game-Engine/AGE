@@ -5,7 +5,6 @@
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/File.hpp>
 #include <Geometry/Mesh.hpp>
-#include <OpenGL/GeometryManager.hh>
 
 namespace AGE
 {

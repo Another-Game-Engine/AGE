@@ -95,7 +95,7 @@ void ObjFile::Geometry::save(cereal::PortableBinaryOutputArchive &ar) const
 
 	void ObjFile::Geometry::init()
 	{
-		geomanager = _dependencyManager.lock()->getInstance<gl::GeometryManager>();
+		geomanager = &_dependencyManager.lock()->getInstance<gl::ShadingManager>()->geometryManager;
 		void *buffer[4] = { &vertices[0].x ,
 							&colors[0].x,
 							&normals[0].x,

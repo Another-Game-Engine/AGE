@@ -13,27 +13,7 @@ namespace AGE { class Drawable; }
 namespace gl
 {
 	class Shader;
-
-	// set buffer config
-	//void setClearValue(glm::vec4 const &color, float depth, uint8_t stencil);
-	//void setColorMask(GLuint index, glm::bvec4 const &color);
-	//void setDepthMask(bool depth);
-	//void setStencilMask(uint8_t front, uint8_t back);
-	//void clear(bool color, bool depth, bool stencil);
-	//void setScissor(glm::ivec4 const &area);
-	//void setStencilFunctionFrontFace(GLenum func, int ref, uint8_t mask);
-	//void setStencilOperationFrontFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-	//void setStencilFunctionBackFace(GLenum func, int ref, uint8_t mask);
-	//void setStencilOperationBackFace(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-	//void setStencilFunction(GLenum func, int ref, uint8_t mask);
-	//void setStencilOperation(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-	//void setBlend(int drawBuffer, bool state);
-	//void setBlendEquation(GLenum colorMode, GLenum alphaMode);
-	//void setBlendEquation(GLenum mode);
-	//void setBlendFunc(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
-	//void setBlendFunc(GLenum src, GLenum dest);
-	//void setBlendConstant(glm::vec4 const &blendColor);
-	//void setTest(bool scissor, bool stencil, bool depth);
+	class GeometryManager;
 
 	struct Task
 	{
@@ -52,12 +32,12 @@ namespace gl
 	{
 	public:
 		RenderPass();
-		RenderPass(Shader &shader);
+		RenderPass(Shader &shader, GeometryManager &geometryManager);
 		~RenderPass();
 		RenderPass(RenderPass const &copy);
 		RenderPass &operator=(RenderPass const &r);
 
-		RenderPass &draw(AGE::Drawable const *objectRender, size_t nbrObjectRender);
+		RenderPass &draw(GLenum mode, AGE::Drawable const *objectRender, size_t nbrObjectRender);
 		
 		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
 		RenderPass &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
@@ -82,6 +62,7 @@ namespace gl
 
 	private:
 		Shader *_shader;
+		GeometryManager *_geoManager;
 		std::vector<Task> _tasks;
 
 		// Tool use in intern
