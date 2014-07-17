@@ -7,6 +7,7 @@
 #include <OpenGL/Pool.hh>
 #include <Utils/Dependency.hpp>
 #include <map>
+#include <unordered_map>
 #include <vector>
 
 namespace gl
@@ -67,12 +68,12 @@ namespace gl
 		GeometryManager &draw(GLenum mode, Key<Vertices> const &keyvertices);
 	private:
 		// data represent pools
-		std::map<Key<IndexPool>, IndexPool> _indexPool;
-		std::map<Key<VertexPool>, VertexPool> _vertexPool;
-		std::map<Key<Indices>, Indices>	_indices;
-		std::map<Key<Vertices>, Vertices> _vertices;
-		std::map<Key<Vertices>, Attach<Vertices, VertexPool>> _vertexAttach;
-		std::map<Key<Indices>, Attach<Indices, IndexPool>> _indexAttach;
+		std::unordered_map<Key<IndexPool>, IndexPool, Key<IndexPool>::hash_fn> _indexPool;
+		std::unordered_map<Key<VertexPool>, VertexPool, Key<VertexPool>::hash_fn> _vertexPool;
+		std::unordered_map<Key<Indices>, Indices, Key<Indices>::hash_fn>	_indices;
+		std::unordered_map<Key<Vertices>, Vertices, Key<Vertices>::hash_fn> _vertices;
+		std::unordered_map<Key<Vertices>, Attach<Vertices, VertexPool>, Key<Vertices>::hash_fn> _vertexAttach;
+		std::unordered_map<Key<Indices>, Attach<Indices, IndexPool>, Key<Indices>::hash_fn> _indexAttach;
 	
 		std::pair<Key<IndexPool>, IndexPool *> _optimizerIndexPoolSearch;
 		std::pair<Key<VertexPool>, VertexPool *> _optimizerVertexPoolSearch;
