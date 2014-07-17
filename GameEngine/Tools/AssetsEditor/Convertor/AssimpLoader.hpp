@@ -19,6 +19,15 @@ namespace AGE
 
 	namespace AssimpLoader
 	{
+		static void replaceExtension(std::string &path, const std::string &extension)
+		{
+			auto lastindex = path.find_last_of(".");
+			if (lastindex == std::string::npos)
+				return;
+			path = path.substr(0, lastindex);
+			path += extension;
+		}
+
 		static glm::mat4 aiMat4ToGlm(const aiMatrix4x4 &m)
 		{
 			return glm::mat4(m.a1, m.b1, m.c1, m.d1, m.a2, m.b2, m.c2, m.d2, m.a3, m.b3, m.c3, m.d3, m.a4, m.b4, m.c4, m.d4);

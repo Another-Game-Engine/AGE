@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AssimpLoader.hpp"
-#include <Texture/TextureData.hpp>
+#include <Texture/Texture.hpp>
 #include <SOIL.h>
 
 namespace AGE

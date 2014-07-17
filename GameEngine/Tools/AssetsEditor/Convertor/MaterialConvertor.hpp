@@ -4,47 +4,10 @@
 #include "ImageLoader.hpp"
 #include <map>
 
-#include <Utils/GlmSerialization.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/string.hpp>
+#include <Geometry/Material.hpp>
 
 namespace AGE
 {
-		struct MaterialData
-		{
-			std::string name;
-
-			glm::vec4 diffuse;
-			glm::vec4 ambient;
-			glm::vec4 emissive;
-			glm::vec4 reflective;
-			glm::vec4 specular;
-
-			std::string diffuseTexPath;
-			std::string ambientTexPath;
-			std::string emissiveTexPath;
-			std::string reflectiveTexPath;
-			std::string specularTexPath;
-			std::string normalTexPath;
-
-			template <class Archive>
-			void serialize(Archive &ar)
-			{
-				ar(name, diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath);
-			}
-		};
-
-		struct MaterialDataSet
-		{
-			std::vector<MaterialData> collection;
-
-			template <class Archive>
-			void serialize(Archive &ar)
-			{
-				ar(collection);
-			}
-		};
-
 	class MaterialLoader
 	{
 	public:
@@ -128,12 +91,19 @@ namespace AGE
 				material->specularTexPath = specularTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath) : "default.jpg";
 				material->normalTexPath = normalTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath) : "default.jpg";
 
-				dataSet.texturesPath.push_back(material->diffuseTexPath);
-				dataSet.texturesPath.push_back(material->ambientTexPath);
-				dataSet.texturesPath.push_back(material->emissiveTexPath);
-				dataSet.texturesPath.push_back(material->reflectiveTexPath);
-				dataSet.texturesPath.push_back(material->specularTexPath);
-				dataSet.texturesPath.push_back(material->normalTexPath);
+				dataSet.texturesPath.insert(material->diffuseTexPath);
+				dataSet.texturesPath.insert(material->ambientTexPath);
+				dataSet.texturesPath.insert(material->emissiveTexPath);
+				dataSet.texturesPath.insert(material->reflectiveTexPath);
+				dataSet.texturesPath.insert(material->specularTexPath);
+				dataSet.texturesPath.insert(material->normalTexPath);
+
+				AssimpLoader::replaceExtension(material->diffuseTexPath, ".tage");
+				AssimpLoader::replaceExtension(material->ambientTexPath, ".tage");
+				AssimpLoader::replaceExtension(material->emissiveTexPath, ".tage");
+				AssimpLoader::replaceExtension(material->reflectiveTexPath, ".tage");
+				AssimpLoader::replaceExtension(material->specularTexPath, ".tage");
+				AssimpLoader::replaceExtension(material->normalTexPath, ".tage");
 
 				dataSet.materials.push_back(material);
             }

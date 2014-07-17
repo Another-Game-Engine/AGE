@@ -129,9 +129,12 @@ bool loadShaders(std::shared_ptr<Engine> e)
 
 bool loadAssets(std::shared_ptr<Engine> e)
 {
+
+	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("../../Assets/NewSerialized/cube/cube.sage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("../../Assets/NewSerialized/ball/ball.sage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"));
+	auto t = e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
 #endif
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
@@ -194,7 +197,7 @@ int			main(int ac, char **av)
 	uint8_t nbrComponent[2] = { 2, 2 };
 	geo.addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
 
-	if (!loadShaders(e))
+	if (!loadShaders(e) || !loadAssets(e))
 		return EXIT_FAILURE;
 #endif
 
