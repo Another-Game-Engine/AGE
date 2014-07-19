@@ -177,9 +177,15 @@ public:
 #ifndef COMPLEX_MESH
 				Component::MeshRenderer *mesh;
 				if (i % 4 == 0)
+				{
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("ball/ball.sage"));
+					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
+				}
 				else
+				{
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
+					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+				}
 #else
 				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");

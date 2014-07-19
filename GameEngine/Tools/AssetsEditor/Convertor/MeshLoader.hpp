@@ -116,7 +116,8 @@ namespace AGE
 
 				meshs[meshIndex].weights.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
 				meshs[meshIndex].boneIndices.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
-
+				meshs[meshIndex].name = mesh->mName.C_Str();
+				meshs[meshIndex].defaultMaterialIndex = mesh->mMaterialIndex > 0 ? mesh->mMaterialIndex : std::uint16_t(-1);
 				for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 				{
 					unsigned int boneIndex = dataSet.skeleton->bonesReferences.find(mesh->mBones[i]->mName.data)->second;
