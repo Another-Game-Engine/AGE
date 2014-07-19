@@ -241,9 +241,10 @@ namespace gl
 		if (!_shader)
 			DEBUG_MESSAGE("Warning", "RenderPass - use", "no shader assign on this renderPass", *this);
 		_shader->use();
-		for (size_t index = 0; index < nbrObjectRender; ++index)
+
+		for (size_t index_object = 0; index_object < nbrObjectRender; ++index_object)
 		{
-			_geoManager->draw(mode, objectRender->mesh.indices, objectRender->mesh.vertices);
+			_geoManager->draw(mode, objectRender[index_object].mesh.indices, objectRender[index_object].mesh.vertices);
 		}
 		return (*this);
 	}

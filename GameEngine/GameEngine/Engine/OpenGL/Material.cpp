@@ -5,8 +5,8 @@ namespace gl
 {
 	Material::Material()
 	{
-		_data = new uint8_t[LAST::size];
-		memset(_data, 0, LAST::size);
+		_data = new uint8_t[Last::size];
+		memset(_data, 0, Last::size);
 	}
 
 	Material::~Material()
@@ -16,13 +16,13 @@ namespace gl
 
 	Material::Material(Material const &copy)
 	{
-		_data = new uint8_t[LAST::size];
-		memcpy(_data, copy._data, LAST::size);
+		_data = new uint8_t[Last::size];
+		memcpy(_data, copy._data, Last::size);
 	}
 
 	Material &Material::operator=(Material const &m)
 	{
-		memcpy(_data, m._data, LAST::size);
+		memcpy(_data, m._data, Last::size);
 		return (*this);
 	}
 }

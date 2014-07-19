@@ -4,29 +4,47 @@
 #include <stdint.h>
 #include <OpenGL/Key.hh>
 
-#define DECL_MATERIAL(name, type, start) struct name { typedef type return_type; enum { offset = start::size + start::offset, size = sizeof(return_type) }; };
+#define DECL_MATERIAL(name, type, start, v) struct name { typedef type return_type; enum { offset = start::size + start::offset, size = sizeof(return_type), value = v }; };
 
 namespace gl
 {
 	class Texture;
 
+	enum TypeMaterial
+	{
+		COLOR_DIFFUSE = 0,
+		RATIO_DIFFUSE,
+		TEXTURE_DIFFUSE,
+		COLOR_SPECULAR,
+		RATIO_SPECULAR,
+		TEXTURE_SPECULAR,
+		COLOR_AMBIANT,
+		RATIO_AMBIANT,
+		TEXTURE_AMBIENT,
+		COLOR_EMISSIVE,
+		RATIO_EMISSIVE,
+		TEXTURE_EMISSIVE,
+		OPACITY,
+		SHININESS
+	};
+
 	// definition of material handle by the engine
-	struct START { enum { size = 0, offset = 0 }; };
-	DECL_MATERIAL(COLOR_DIFFUSE, glm::vec4, START);
-	DECL_MATERIAL(RATIO_DIFFUSE, float, COLOR_DIFFUSE);
-	DECL_MATERIAL(TEXTURE_DIFFUSE, Key<Texture>, COLOR_DIFFUSE);
-	DECL_MATERIAL(COLOR_SPECULAR, glm::vec4, TEXTURE_DIFFUSE);
-	DECL_MATERIAL(RATIO_SPECULAR, float, COLOR_SPECULAR);
-	DECL_MATERIAL(TEXTURE_SPECULAR, Key<Texture>, RATIO_SPECULAR);
-	DECL_MATERIAL(COLOR_AMBIANT, glm::vec4, TEXTURE_SPECULAR);
-	DECL_MATERIAL(RATIO_AMBIANT, float, COLOR_AMBIANT);
-	DECL_MATERIAL(TEXTURE_AMBIENT, Key<Texture>, RATIO_AMBIANT);
-	DECL_MATERIAL(COLOR_EMISSIVE, glm::vec4, TEXTURE_AMBIENT);
-	DECL_MATERIAL(RATIO_EMISSIVE, float, COLOR_EMISSIVE);
-	DECL_MATERIAL(TEXTURE_EMISSIVE, Key<Texture>, RATIO_EMISSIVE);
-	DECL_MATERIAL(OPACITY, float, TEXTURE_EMISSIVE);
-	DECL_MATERIAL(SHININESS, float, OPACITY);
-	struct LAST { enum { size = SHININESS::offset + SHININESS::size }; };
+	struct Start { enum { size = 0, offset = 0 }; };
+	DECL_MATERIAL(Color_diffuse, glm::vec4, Start, COLOR_DIFFUSE);
+	DECL_MATERIAL(Ratio_diffuse, float, Color_diffuse, RATIO_DIFFUSE);
+	DECL_MATERIAL(Texture_diffuse, Key<Texture>, Ratio_diffuse, TEXTURE_DIFFUSE);
+	DECL_MATERIAL(Color_specular, glm::vec4, Texture_diffuse, COLOR_SPECULAR);
+	DECL_MATERIAL(Ratio_specular, float, Color_specular, RATIO_SPECULAR);
+	DECL_MATERIAL(Texture_specular, Key<Texture>, Ratio_specular, TEXTURE_SPECULAR);
+	DECL_MATERIAL(Color_ambiant, glm::vec4, Texture_specular, COLOR_AMBIANT);
+	DECL_MATERIAL(Ratio_ambiant, float, Color_ambiant, RATIO_AMBIANT);
+	DECL_MATERIAL(Texture_ambiant, Key<Texture>, Ratio_ambiant, TEXTURE_AMBIENT);
+	DECL_MATERIAL(Color_emissive, glm::vec4, Texture_ambiant, COLOR_EMISSIVE);
+	DECL_MATERIAL(Ratio_emissive, float, Color_emissive, RATIO_EMISSIVE);
+	DECL_MATERIAL(Texture_emissive, Key<Texture>, Ratio_emissive, TEXTURE_EMISSIVE);
+	DECL_MATERIAL(Opacity, float, Texture_emissive, OPACITY);
+	DECL_MATERIAL(Shininess, float, Opacity, SHININESS);
+	struct Last { enum { size = Shininess::offset + Shininess::size }; };
 
 	//!\file Material.hh
 	//!\author Dorian Pinaud

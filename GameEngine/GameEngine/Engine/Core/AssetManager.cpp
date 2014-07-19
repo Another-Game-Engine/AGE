@@ -31,17 +31,6 @@ namespace AGE
 		for (auto &e : data.collection)
 		{
 			auto key = manager->addMaterial();
-			manager->setMaterial<gl::COLOR_DIFFUSE>(key, e.diffuse);
-			manager->setMaterial<gl::COLOR_EMISSIVE>(key, e.emissive);
-			manager->setMaterial<gl::SHININESS>(key, 0.5f); // harcoded
-			manager->setMaterial<gl::COLOR_SPECULAR>(key, e.specular);
-			manager->setMaterial<gl::COLOR_AMBIANT>(key, e.ambient);
-
-			manager->setMaterial<gl::TEXTURE_AMBIENT>(key, loadTexture(File(e.ambientTexPath)));
-			manager->setMaterial<gl::TEXTURE_DIFFUSE>(key, loadTexture(File(e.diffuseTexPath)));
-			manager->setMaterial<gl::TEXTURE_EMISSIVE>(key, loadTexture(File(e.emissiveTexPath)));
-			manager->setMaterial<gl::TEXTURE_SPECULAR>(key, loadTexture(File(e.specularTexPath)));
-			
 			material->datas.push_back(key);
 
 			// TODO fill material with material key

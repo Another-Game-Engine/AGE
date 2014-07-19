@@ -8,6 +8,7 @@
 
 namespace gl
 {
+
 	class ShaderResource;
 	class Texture;
 	class UniformBlock;
@@ -23,6 +24,14 @@ namespace gl
 	//!\brief Handle Opengl Shader
 	class Shader
 	{
+	public:
+		enum ValueSetting
+		{
+			FLOAT = 0,
+			VEC3,
+			VEC4,
+			SAMPLING
+		};
 	public:
 		Shader();
 		Shader(std::string const &compute);
@@ -50,6 +59,7 @@ namespace gl
 		Shader &setUniform(Key<Uniform> const &key, glm::mat3 const &mat3);
 		Shader &setUniform(Key<Uniform> const &key, glm::vec4 const &vec4);
 		Shader &setUniform(Key<Uniform> const &key, float v);
+
 		// sampler 
 		Key<Sampler> addSampler(std::string const &flag);
 		Shader &rmSampler(Key<Sampler> &key);
@@ -83,6 +93,9 @@ namespace gl
 		bool compileShader(GLuint shaderId, std::string const &file) const;
 		bool linkProgram() const;
 		GLuint addShader(std::string const &path, GLenum type);
-		
+		ShaderResource *getUniform(Key<Uniform> const &key, std::string const &msg);
+		ShaderResource *getSampler(Key<Sampler> const &key, std::string const &msg);
+		ShaderResource *getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
+
 	};
 }

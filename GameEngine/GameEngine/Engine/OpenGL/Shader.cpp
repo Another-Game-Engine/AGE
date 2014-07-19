@@ -257,12 +257,11 @@ namespace gl
 
 	Shader &Shader::rmUniform(Key<Uniform> &key)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.cpp - rmUniform", "the key is destroy", *this);
-		auto &element = _uniforms.find(key);
-		if (element == _uniforms.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - rmUniform", "the key correspond of any element in uniform list", *this);
-		_uniforms.erase(element);
+		ShaderResource *uniform;
+
+		if ((uniform = getUniform(key, "rmUniform")) == NULL)
+			return (*this);
+		_uniforms.erase(key);
 		key.destroy();
 		return (*this);
 	}
@@ -288,45 +287,41 @@ namespace gl
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &value)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "key destroy use", *this);
-		auto &element = _uniforms.find(key);
-		if (element == _uniforms.end())
-			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "element in not find", *this);
-		element->second.set(value);
+		ShaderResource *uniform;
+
+		if ((uniform = getUniform(key, "setUniform")) == NULL)
+			return (*this);
+		uniform->set(value);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat3 const &mat3)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "key destroy use", *this);
-		auto &element = _uniforms.find(key);
-		if (element == _uniforms.end())
-			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "element in not find", *this);
-		element->second.set(mat3);
+		ShaderResource *uniform;
+
+		if ((uniform = getUniform(key, "setUniform")) == NULL)
+			return (*this);
+		uniform->set(mat3);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec4 const &vec4)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "key destroy use", *this);
-		auto &element = _uniforms.find(key);
-		if (element == _uniforms.end())
-			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "element in not find", *this);
-		element->second.set(vec4);
+		ShaderResource *uniform;
+
+		if ((uniform = getUniform(key, "setUniform")) == NULL)
+			return (*this);
+		uniform->set(vec4);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, float v)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "key destroy use", *this);
-		auto &element = _uniforms.find(key);
-		if (element == _uniforms.end())
-			DEBUG_MESSAGE("Warning", "Shader.hh - setUniform(key, value)", "element in not find", *this);
-		element->second.set(v);
+		ShaderResource *uniform;
+
+		if ((uniform = getUniform(key, "setUniform")) == NULL)
+			return (*this);
+		uniform->set(v);
 		return (*this);
 	}
 
@@ -349,13 +344,12 @@ namespace gl
 
 	Shader &Shader::rmSampler(Key<Sampler> &key)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.cpp - rmSampler", "the key is destroy", *this);
-		auto &element = _samplers.find(key);
-		if (element == _samplers.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - rmSampler", "the key correspond of any element in samplers list", *this);
-		_units[element->second.get<int>()] = false;
-		_samplers.erase(element);
+		ShaderResource *sampler;
+
+		if ((sampler = getSampler(key, "rmSampler")) == NULL)
+			return (*this);		
+		_units[sampler->get<int>()] = false;
+		_samplers.erase(key);
 		key.destroy();
 		return (*this);
 	}
@@ -372,12 +366,11 @@ namespace gl
 
 	Shader &Shader::setSampler(Key<Sampler> const &key, Texture const &texture)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - setSampler(key, value)", "key destroy use", *this);
-		auto &element = _samplers.find(key);
-		if (element == _samplers.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - setSampler", "the key correspond of any element in samplers list", *this);
-		glActiveTexture(GL_TEXTURE0 + element->second.get<int>());
+		ShaderResource *sampler;
+
+		if ((sampler = getSampler(key, "setSampler")) == NULL)
+			return (*this);
+		glActiveTexture(GL_TEXTURE0 + sampler->get<int>());
 		texture.bind();
 		return (*this);
 	}
@@ -401,12 +394,11 @@ namespace gl
 
 	Shader &Shader::rmInterfaceBlock(Key<InterfaceBlock> &key)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.cpp - rmInterfaceBlock", "the key is destroy", *this);
-		auto &element = _interfaceBlock.find(key);
-		if (element == _interfaceBlock.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - rmInterfaceBlock", "the interface block ask is not present", *this);
-		_interfaceBlock.erase(element);
+		ShaderResource *interfaceBlock;
+
+		if ((interfaceBlock = getInterfaceBlock(key, "rmInterfaceBlock")) == NULL)
+			return (*this);
+		_interfaceBlock.erase(key);
 		key.destroy();
 		return (*this);
 	}
@@ -423,13 +415,42 @@ namespace gl
 
 	Shader &Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - setSampler(key, value)", "key destroy use", *this);
-		auto &element = _interfaceBlock.find(key);
-		if (element == _interfaceBlock.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - setSampler", "the key correspond of any element in samplers list", *this);
-		auto &interfaceblock = element->second;
-		interfaceblock.set(uniformblock);
+		ShaderResource *interfaceBlock;
+		
+		if ((interfaceBlock = getInterfaceBlock(key, "setInterfaceBlock")) == NULL)
+			return (*this);
+		interfaceBlock->set(uniformblock);
 		return (*this);
 	}
+
+	ShaderResource *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", NULL);
+		auto &element = _uniforms.find(key);
+		if (element == _uniforms.end())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", NULL);
+		return (&element->second);
+	}
+
+	ShaderResource *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", NULL);
+		auto &element = _samplers.find(key);
+		if (element == _samplers.end())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", NULL);
+		return (&element->second);
+	}
+
+	ShaderResource *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", NULL);
+		auto &element = _interfaceBlock.find(key);
+		if (element == _interfaceBlock.end())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", NULL);
+		return (&element->second);
+	}
+
 }

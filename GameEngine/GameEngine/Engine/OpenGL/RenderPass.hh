@@ -7,12 +7,16 @@
 #include <utility>
 #include <vector>
 #include <functional>
+#include <OpenGL/Material.hh>
+#include <OpenGL/UniformBlock.hh>
 
 namespace AGE { class Drawable; }
 
 namespace gl
 {
 	class Shader;
+	struct Uniform;
+	struct Sampler;
 	class GeometryManager;
 
 	struct Task
@@ -38,7 +42,7 @@ namespace gl
 		RenderPass &operator=(RenderPass const &r);
 
 		RenderPass &draw(GLenum mode, AGE::Drawable const *objectRender, size_t nbrObjectRender);
-		
+
 		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
 		RenderPass &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
 		RenderPass &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
@@ -59,10 +63,6 @@ namespace gl
 		RenderPass &pushSetBlendConstantTask(glm::vec4 const &blendColor);
 		RenderPass &pushSetTestTask(bool scissor, bool stencil, bool depth);
 		RenderPass &popTask();
-		//
-		//RenderPass &bindUniformBlockOnMaterial();
-		//RenderPass &bindUniformOnMaterial();
-		//RenderPass &bindSamplerOnMaterial();
 
 	private:
 		Shader *_shader;
