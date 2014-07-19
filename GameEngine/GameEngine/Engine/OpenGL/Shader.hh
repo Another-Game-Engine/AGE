@@ -43,8 +43,10 @@ namespace gl
 		std::string const &getComputeName() const;
 
 		// handling uniform management
-		Key<Uniform> addUniform(std::string const &flag);
 		Key<Uniform> addUniform(std::string const &flag, glm::mat4 const &value);
+		Key<Uniform> addUniform(std::string const &flag, glm::mat3 const &value);
+		Key<Uniform> addUniform(std::string const &flag, glm::vec4 const &value);
+		Key<Uniform> addUniform(std::string const &flag, float value);
 		Shader &rmUniform(Key<Uniform> &key);
 		Key<Uniform> getUniform(size_t index) const;
 		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &mat4);
@@ -58,11 +60,9 @@ namespace gl
 		Key<Sampler> getSampler(size_t index) const;
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 		// InterfaceBlock
-		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag);
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock);
 		Shader &rmInterfaceBlock(Key<InterfaceBlock> &key);
 		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
-		Shader &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
 
 	private:
 		std::string _vertexName;
@@ -75,9 +75,9 @@ namespace gl
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
-		std::map<Key<Uniform>, ShaderResource> _uniforms;
-		std::map<Key<Sampler>, ShaderResource> _samplers;
-		std::map<Key<InterfaceBlock>, ShaderResource> _interfaceBlock;
+		std::map<Key<Uniform>, Task> _uniforms;
+		std::map<Key<Sampler>, Task> _samplers;
+		std::map<Key<InterfaceBlock>, Task> _interfaceBlock;
 
 		bool _units[GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS];
 
@@ -85,9 +85,9 @@ namespace gl
 		bool compileShader(GLuint shaderId, std::string const &file) const;
 		bool linkProgram() const;
 		GLuint addShader(std::string const &path, GLenum type);
-		ShaderResource *getUniform(Key<Uniform> const &key, std::string const &msg);
-		ShaderResource *getSampler(Key<Sampler> const &key, std::string const &msg);
-		ShaderResource *getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
+		Task *getUniform(Key<Uniform> const &key, std::string const &msg);
+		Task *getSampler(Key<Sampler> const &key, std::string const &msg);
+		Task *getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
 		GLuint getUniformLocation(char const *flag);
 		GLuint getUniformBlockLocation(char const *flag);
 	};

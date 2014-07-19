@@ -1,13 +1,9 @@
-#include <OpenGL/BufferSettings.hh>
+#include <OpenGL/OpenGLTask.hh>
 #include <Utils/OpenGL.hh>
 #include <glm/glm.hpp>
 #include <assert.h>
 #include <memory>
 #include <string>
-
-# undef DEBUG_MESSAGE
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
 
 #define CONVERT(type, index) (*((type *)data[index]))
 

@@ -5,20 +5,10 @@
 #include <glm/glm.hpp>
 #include <array>
 #include <cassert>
+#include <OpenGL/OpenGLTask.hh>
 
 namespace gl
 {
-	enum ResourceType
-	{
-		NONE = 0,
-		FLOAT,
-		VEC3,
-		VEC4,
-		MAT3,
-		MAT4,
-		SAMPLER,
-		POINTER_UBO
-	};
 
 	//class Shader;
 	//class UniformBlock;
@@ -41,10 +31,8 @@ namespace gl
 		template <typename TYPE> void set(ResourceType setting, TYPE const &value);
 
 	private:
-		ResourceType _setting;
 		GLuint _location;
-		void *_data;
-		size_t _sizeData;
+		Task _task;
 	};
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \

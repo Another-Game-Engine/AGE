@@ -4,6 +4,7 @@
 #include <OpenGL/ShaderResource.hh>
 #include <OpenGL/Texture.hh>
 #include <cassert>
+#include <OpenGL/UniformBlock.hh>
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
 	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
@@ -267,19 +268,9 @@ namespace gl
 		return (_computeName);
 	}
 
-	Key<Uniform> Shader::addUniform(std::string const &flag)
-	{
-		Key<Uniform> key;
-
-		_uniforms[key] = ShaderResource(getUniformLocation(flag.c_str()));
-		return (key);
-	}
-
 	Shader &Shader::rmUniform(Key<Uniform> &key)
 	{
-		ShaderResource *uniform;
-
-		if ((uniform = getUniform(key, "rmUniform")) == NULL)
+		if (getUniform(key, "rmUniform") == NULL)
 			return (*this);
 		_uniforms.erase(key);
 		key.destroy();
@@ -290,7 +281,7 @@ namespace gl
 	{
 		if (target >= _uniforms.size())
 			DEBUG_MESSAGE("Warning", "Shader.cpp - getUniform(size_t target)", "the target is out of range", Key<Uniform>(KEY_DESTROY))
-			auto &element = _uniforms.begin();
+		auto &element = _uniforms.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
@@ -299,63 +290,98 @@ namespace gl
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat4 const &value)
 	{
 		Key<Uniform> key;
+		auto &task = _uniforms[key];
+		task.nbrParams = 2;
+		task.func = setUniformMat4;
+		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
+		return (key);
+	}
+	
+	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat3 const &value)
+	{
+		Key<Uniform> key;
+		auto &task = _uniforms[key];
+		task.nbrParams = 2;
+		task.func = setUniformMat3;
+		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
+		return (key);
+	}
+	
+	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec4 const &value)
+	{
+		Key<Uniform> key;
+		auto &task = _uniforms[key];
+		task.nbrParams = 2;
+		task.func = setUniformVec4;
+		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
+		return (key);
+	}
 
-		auto &element = _uniforms[key] = ShaderResource(getUniformLocation(flag.c_str()));
-		element.set(MAT4, value);
+	Key<Uniform> Shader::addUniform(std::string const &flag, float value)
+	{
+		Key<Uniform> key;
+		auto &task = _uniforms[key];
+		task.nbrParams = 2;
+		task.func = setUniformFloat;
+		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
 		return (key);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &value)
 	{
-		ShaderResource *uniform;
+		Task *task;
 
-		if ((uniform = getUniform(key, "setUniform")) == NULL)
+		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		uniform->set(MAT4, value);
+		memcpy(&task->params[1], &value, sizeof(glm::mat4));
 		return (*this);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat3 const &mat3)
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat3 const &value)
 	{
-		ShaderResource *uniform;
+		Task *task;
 
-		if ((uniform = getUniform(key, "setUniform")) == NULL)
+		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		uniform->set(MAT3, mat3);
+		memcpy(&task->params[1], &value, sizeof(glm::mat3));
 		return (*this);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec4 const &vec4)
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec4 const &value)
 	{
-		ShaderResource *uniform;
+		Task *task;
 
-		if ((uniform = getUniform(key, "setUniform")) == NULL)
+		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		uniform->set(VEC4, vec4);
+		memcpy(&task->params[1], &value, sizeof(glm::vec4));
 		return (*this);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, float v)
+	Shader &Shader::setUniform(Key<Uniform> const &key, float value)
 	{
-		ShaderResource *uniform;
+		Task *task;
 
-		if ((uniform = getUniform(key, "setUniform")) == NULL)
+		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		uniform->set(FLOAT, v);
+		memcpy(&task->params[1], &value, sizeof(float));
 		return (*this);
 	}
 
 	Key<Sampler> Shader::addSampler(std::string const &flag)
 	{
+		Task task;
 		Key<Sampler> key;
 
-		auto &element = _samplers[key] = ShaderResource(getUniformLocation(flag.c_str()));
+		auto &element = _samplers[key];
 		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
 		{
 			if (_units[index] == false)
 			{
 				_units[index] = true;
-				element.set(SAMPLER, index);
+				task.func = setUniformUint;
+				task.nbrParams = 2;
+				setTaskAllocation(task, getUniformLocation(flag.c_str()), index);
+				element = task;
 				return (key);
 			}
 		}
@@ -364,11 +390,11 @@ namespace gl
 
 	Shader &Shader::rmSampler(Key<Sampler> &key)
 	{
-		ShaderResource *sampler;
+		Task *task;
 
-		if ((sampler = getSampler(key, "rmSampler")) == NULL)
+		if ((task = getSampler(key, "rmSampler")) == NULL)
 			return (*this);		
-		_units[sampler->get<int>()] = false;
+		_units[(int)task->params[1]] = false;
 		_samplers.erase(key);
 		key.destroy();
 		return (*this);
@@ -386,29 +412,30 @@ namespace gl
 
 	Shader &Shader::setSampler(Key<Sampler> const &key, Texture const &texture)
 	{
-		ShaderResource *sampler;
+		Task *task;
 
-		if ((sampler = getSampler(key, "setSampler")) == NULL)
+		if ((task = getSampler(key, "setSampler")) == NULL)
 			return (*this);
-		glActiveTexture(GL_TEXTURE0 + sampler->get<int>());
+		glActiveTexture(GL_TEXTURE0 + (int)(task->params[1]));
 		texture.bind();
 		return (*this);
 	}
 
-	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock)
+	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag, UniformBlock const &uniformBlock)
 	{
 		Key<InterfaceBlock> key;
+		Task task;
 
-		auto &element = _interfaceBlock[key] = ShaderResource(getUniformBlockLocation(flag.c_str()));
-		element.set(POINTER_UBO, uniformblock);
+		auto &element = _interfaceBlock[key];
+		task.nbrParams = 3;
+		setTaskAllocation(task, _progId, getUniformBlockLocation(flag.c_str()), uniformBlock.getBindingPoint);
+		task.func = setBlockPointerUBO;
 		return (key);
 	}
 
 	Shader &Shader::rmInterfaceBlock(Key<InterfaceBlock> &key)
 	{
-		ShaderResource *interfaceBlock;
-
-		if ((interfaceBlock = getInterfaceBlock(key, "rmInterfaceBlock")) == NULL)
+		if ((getInterfaceBlock(key, "rmInterfaceBlock")) == NULL)
 			return (*this);
 		_interfaceBlock.erase(key);
 		key.destroy();
@@ -425,7 +452,7 @@ namespace gl
 		return (element->first);
 	}
 
-	ShaderResource *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)
+	Task *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", NULL);
@@ -435,7 +462,7 @@ namespace gl
 		return (&element->second);
 	}
 
-	ShaderResource *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
+	Task *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", NULL);
@@ -445,7 +472,7 @@ namespace gl
 		return (&element->second);
 	}
 
-	ShaderResource *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)
+	Task *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", NULL);
