@@ -16,7 +16,7 @@ namespace AGE
 		private:
 			std::size_t _cullableId;
 		public:
-			void init(::AScene *scene, ENTITY_ID entityId, COMPONENT_ID componentTypeId);
+			void init(::AScene *scene, ENTITY_ID entityId);
 			void reset(::AScene *scene, ENTITY_ID entityId);
 
 			Cullable()

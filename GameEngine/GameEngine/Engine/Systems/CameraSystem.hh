@@ -4,6 +4,7 @@
 #include <Core/EntityFilter.hpp>
 #include <glm/glm.hpp>
 #include <OpenGL/Key.hh>
+#include <Components/CameraComponent.hpp>
 
 # define NEW_SHADER 1
 

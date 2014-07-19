@@ -20,6 +20,7 @@
 
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
+#include <Core/Drawable.hh>
 
 class AScene;
 
@@ -29,6 +30,10 @@ namespace AGE
 
 	class Octree : public Dependency<Octree>
 	{
+	public:
+		typedef std::uint32_t CAMERA_ID;		
+		typedef std::uint64_t USER_OBJECT_ID;
+	private:
 		enum CommandType
 		{
 			Position = 0
@@ -37,11 +42,12 @@ namespace AGE
 			, Geometry // Update geo, material and bounding box
 			, Create
 			, Delete
+			, CameraInfos
 			, END // <- should always be the last
 		};
 
-		typedef std::uint64_t CULLABLE_ID;
-		typedef std::uint64_t USER_OBJECT_ID;
+	private:
+		typedef std::uint64_t DRAWABLE_ID;
 
 	private:
 		struct CullableObject
@@ -49,15 +55,27 @@ namespace AGE
 			glm::vec3 position;
 			glm::vec3 scale;
 			glm::quat orientation;
-			CULLABLE_ID id;
+			DRAWABLE_ID id;
 			bool active;
 			SubMeshInstance mesh;
 			MaterialInstance material;
 			bool hasMoved;
+			BoundingInfos boundingInfo;
 			glm::mat4 transformation;
 		};
 
-		struct Command
+		struct CameraObject
+		{
+			CAMERA_ID id;
+			glm::vec3 position;
+			glm::vec3 scale;
+			glm::quat orientation;			
+			bool active;
+			bool hasMoved;
+			glm::mat4 projection;
+		};
+
+		struct OctreeCommand
 		{
 			glm::vec3 position;
 			glm::vec3 scale;
@@ -65,46 +83,32 @@ namespace AGE
 			std::vector<SubMeshInstance> submeshInstances;
 			std::vector<MaterialInstance> materialInstances;
 			USER_OBJECT_ID id;
-			Entity entity;
-			COMPONENT_ID componentType;
 			CommandType commandType;
+			BoundingInfos boundingInfo;
+			glm::mat4 projection;
 
-			Command()
+			OctreeCommand()
 				: position(0)
 				, scale(0)
 				, orientation(0,0,0,1)
 				, id(USER_OBJECT_ID(-1))
-				, componentType(COMPONENT_ID(-1))
 				, commandType(CommandType::END)
 			{}
 
-			Command(USER_OBJECT_ID _id, COMPONENT_ID _componentType, const Entity &_entity, CommandType _cmdType)
+			OctreeCommand(USER_OBJECT_ID _id, CommandType _cmdType)
 				: position(0)
 				, scale(0)
 				, orientation(0, 0, 0, 1)
 				, id(_id)
-				, entity(_entity)
-				, componentType(_componentType)
 				, commandType(_cmdType)
 			{
 			}
 
-			Command(USER_OBJECT_ID _id, CommandType _cmdType)
+			OctreeCommand(USER_OBJECT_ID _id, const glm::vec3& pos, CommandType _cmdType)
 				: position(0)
 				, scale(0)
 				, orientation(0, 0, 0, 1)
 				, id(_id)
-				, componentType(0)
-				, commandType(_cmdType)
-			{
-			}
-
-			Command(USER_OBJECT_ID _id, const glm::vec3& pos, CommandType _cmdType)
-				: position(0)
-				, scale(0)
-				, orientation(0, 0, 0, 1)
-				, id(_id)
-				, componentType(0)
 				, commandType(_cmdType)
 			{
 				if (_cmdType == CommandType::Position)
@@ -112,17 +116,25 @@ namespace AGE
 				else
 					scale = pos;
 			}
-			Command(USER_OBJECT_ID _id, const glm::quat& ori, CommandType _cmdType)
+			OctreeCommand(USER_OBJECT_ID _id, const glm::quat& ori, CommandType _cmdType)
 				: position(0)
 				, scale(0)
 				, orientation(ori)
 				, id(_id)
-				, componentType(0)
 				, commandType(_cmdType)
 			{
 			}
+			OctreeCommand(USER_OBJECT_ID _id, const glm::mat4& projection, CommandType _cmdType)
+				: position(0)
+				, scale(0)
+				, orientation(0, 0, 0, 1)
+				, id(_id)
+				, commandType(_cmdType)
+				, projection(projection)
+			{
+			}
 
-			Command(USER_OBJECT_ID _id
+			OctreeCommand(USER_OBJECT_ID _id
 				, std::vector<SubMeshInstance> _submeshInstances // copy
 				, std::vector<MaterialInstance> _materialInstances // copy
 				, CommandType _cmdType)
@@ -132,7 +144,6 @@ namespace AGE
 				, submeshInstances(_submeshInstances)
 				, materialInstances(_materialInstances)
 				, id(_id)
-				, componentType(0)
 				, commandType(_cmdType)
 			{}
 
@@ -140,9 +151,7 @@ namespace AGE
 
 		struct UserObject
 		{
-			std::vector<CULLABLE_ID> collection;
-			Entity entity;
-			COMPONENT_ID componentType;
+			std::vector<DRAWABLE_ID> drawableCollection;
 			USER_OBJECT_ID id;
 			glm::vec3 position;
 			glm::vec3 scale;
@@ -165,14 +174,26 @@ namespace AGE
 		AGE::Queue<std::size_t> _freeUserObjects;
 		std::vector<CullableObject> _cullableObjects;
 		AGE::Queue<std::size_t> _freeCullableObjects;
+		std::vector<CameraObject> _cameraObjects;
+		AGE::Queue<std::size_t> _freeCameraObjects;
 		std::size_t _userObjectCounter = 0;
 
-		AGE::Queue<Command> _commandsBuffer[2];
-		AGE::Queue<Command> *_octreeCommands;
-		AGE::Queue<Command> *_mainThreadCommands;
+		AGE::Queue<OctreeCommand> _commandsBuffer[2];
+		AGE::Queue<OctreeCommand> *_octreeCommands;
+		AGE::Queue<OctreeCommand> *_mainThreadCommands;
+
+		Queue<DrawableCollection> _drawLists[2];
+		AGE::Queue<DrawableCollection> *_octreeDrawList;
+		AGE::Queue<DrawableCollection> *_mainThreadDrawList;
+
+
+		std::list<USER_OBJECT_ID> _cameras;
 	public:
-		USER_OBJECT_ID addElement(COMPONENT_ID componentType, const Entity &entity);
+		USER_OBJECT_ID addElement();
 		void removeElement(USER_OBJECT_ID id);
+		CAMERA_ID addCamera();
+		void removeCamera(CAMERA_ID id);
+
 
 		void setPosition(const glm::vec3 &v, USER_OBJECT_ID id);
 		void setOrientation(const glm::quat &v, USER_OBJECT_ID id);
@@ -186,13 +207,15 @@ namespace AGE
 			, const std::vector<AGE::SubMeshInstance> &meshs
 			, const std::vector<AGE::MaterialInstance> &materials);
 
-		void update();
+		void setCameraInfos(USER_OBJECT_ID id
+			, const glm::mat4 &projection);
 
-		Queue<Drawable> drawList;
+		void update();
+		AGE::Queue<DrawableCollection> *getDrawableList() { return _mainThreadDrawList; }
 		//
 		// END
 	private:
-		CULLABLE_ID addCullableObject(Octree::USER_OBJECT_ID uid);
-		void removeCullableObject(CULLABLE_ID id);
+		DRAWABLE_ID addDrawableObject(Octree::USER_OBJECT_ID uid);
+		void removeDrawableObject(DRAWABLE_ID id);
 	};
 }

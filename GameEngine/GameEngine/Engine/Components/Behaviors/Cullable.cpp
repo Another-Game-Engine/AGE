@@ -9,11 +9,11 @@ namespace AGE
 {
 	namespace ComponentBehavior
 	{
-		void Cullable::init(::AScene *scene, ENTITY_ID entityId, COMPONENT_ID componentTypeId)
+		void Cullable::init(::AScene *scene, ENTITY_ID entityId)
 		{
 			_scene = scene;
 			assert(_cullableId == (std::size_t)(-1));
-			_cullableId = scene->getInstance<AGE::Octree>()->addElement(componentTypeId, scene->getEntityFromId(entityId));
+			_cullableId = scene->getInstance<AGE::Octree>()->addElement();
 			scene->getLink(entityId)->registerCullableId(_cullableId);
 			assert(_cullableId != (std::size_t)(-1));
 		}

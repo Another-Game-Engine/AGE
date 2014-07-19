@@ -9,12 +9,10 @@
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
-
 #include <Systems/CameraSystem.hh>
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/LightRenderingSystem.hh>
-#include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/BlitFinalRender.hh>
 
 #include <Core/AssetsManager.hpp>
@@ -51,7 +49,6 @@ public:
 
 #ifdef RENDERING_ACTIVATED
 
-	addSystem<FirstPersonViewSystem>(2);
 		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::ShadingManager>();
 #if NEW_SHADER
@@ -111,7 +108,6 @@ public:
 
 		auto camera = createEntity();
 		auto cam = addComponent<Component::CameraComponent>(camera);
-		addComponent<Component::FirstPersonView>(camera);
 
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		cam->fboSize = screenSize;

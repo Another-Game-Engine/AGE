@@ -183,8 +183,8 @@ void	LightRenderingSystem::mainUpdate(double time)
 	{
 		auto camera = scene->getComponent<Component::CameraComponent>(c);
 		// Set les uniforms du block PerFrame
-		perFrame->setUniform("projection", camera->projection);
-		perFrame->setUniform("view", camera->lookAtTransform);
+		perFrame->setUniform("projection", camera->getProjection());
+		perFrame->setUniform("view", glm::mat4(1));//HARDCODED
 		perFrame->setUniform("time", static_cast<float>(_scene.lock()->getSystem<CameraSystem>()->getLifeTime()));
 
 		perFrame->flushChanges();

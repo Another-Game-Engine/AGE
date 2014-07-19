@@ -61,7 +61,8 @@ void CameraSystem::getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
 #else
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
 #endif
-	screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
+	// TODO
+	//screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
 }
 
 void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
@@ -81,15 +82,16 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 #else
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
 #endif
-	screenPosToWorldRay(
-		static_cast<int>(centerPos.x),
-		static_cast<int>(centerPos.y),
-		static_cast<int>(screenSize.x),
-		static_cast<int>(screenSize.y),
-		cameraCpt->lookAtTransform,
-		cameraCpt->projection,
-		from,
-		to);
+	//TODO
+	//screenPosToWorldRay(
+	//	static_cast<int>(centerPos.x),
+	//	static_cast<int>(centerPos.y),
+	//	static_cast<int>(screenSize.x),
+	//	static_cast<int>(screenSize.y),
+	//	cameraCpt->lookAtTransform,
+	//	cameraCpt->projection,
+	//	from,
+	//	to);
 }
 
 #if NEW_SHADER
@@ -188,47 +190,71 @@ void CameraSystem::mainUpdate(double time)
 	}
 	_totalTime += time;
 #else
-	auto &scene = _scene.lock();
-	for (auto &e : _camera.getCollection())
+	auto drawList = _scene.lock()->getInstance<AGE::Octree>()->getDrawableList();
+	while (!drawList->empty())
 	{
+		auto &camera = drawList->front();
 
-		auto camera = scene->getComponent<Component::CameraComponent>(e);
-		_render->setUniformBlock(_global_state, 0, camera->projection);
+		_render->setUniformBlock(_global_state, 0, camera.projection);
 		_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
-		_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
+		_render->setShaderUniform(_shader, _view_matrix, glm::mat4(1)); // look at hardcoded TODO
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 
-		///////////////
-		///////////////
-		// test with culling output
-		auto octree = _scene.lock()->getInstance<AGE::Octree>();
-		auto material = _scene.lock()->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
-		_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
-		while (!octree->drawList.empty())
+		while (!camera.drawables.empty())
 		{
-			auto &c = octree->drawList.front();
-			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
-			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * c.transformation))));
+			auto &c = camera.drawables.front();
+			_render->setShaderUniform(_shader, _model_matrix, camera.transformation * camera.projection);                    //TODO
+			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(/*camera->lookAtTransform * */camera.transformation * camera.projection))));
 			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
-			octree->drawList.pop();
+
+			camera.drawables.pop();
 		}
-
-
-		//for (auto &m : _drawable.getCollection())
-		//{
-		//	auto mesh = scene->getComponent<Component::MeshRenderer>(m);
-		//	if (mesh->draw == false)
-		//		continue;
-		//	mesh->draw = false;
-		//	//_render->setShaderSampler(_shader, _diffuse_texture, mesh->getMesh()->material->materials[0].diffuseTex->getTexture());
-		//	_render->setShaderUniform(_shader, _model_matrix, scene->getLink(m)->getTransform());
-		//	_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * scene->getLink(m)->getTransform()))));
-		//	//for (std::size_t i = 0; i < mesh->getMesh()->material->materials.size(); ++i)
-		//	for (auto &c : mesh->getMesh()->subMeshs)
-		//		_geometry->draw(GL_TRIANGLES, c.indices, c.vertices);
-		//}
+		drawList->pop();
 	}
+
+
+
+	//for (auto &e : _camera.getCollection())
+	//{
+
+	//	auto camera = scene->getComponent<Component::CameraComponent>(e);
+	//	_render->setUniformBlock(_global_state, 0, camera->getProjection());
+	//	_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
+	//	_render->setShaderUniform(_shader, _view_matrix, glm::mat4(1)); // look at hardcoded TODO
+	//	_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	//	_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
+
+	//	///////////////
+	//	///////////////
+	//	// test with culling output
+	//	auto material = _scene.lock()->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
+	//	_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
+	//	auto drawList = octree->getDrawableList();
+	//	while (!octree->drawList.empty())
+	//	{
+	//		auto &c = octree->drawList.front();
+	//		_render->setShaderUniform(_shader, _model_matrix, c.transformation);                    //TODO
+	//		_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(/*camera->lookAtTransform * */c.transformation))));
+	//		_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
+	//		octree->drawList.pop();
+	//	}
+
+
+	//	//for (auto &m : _drawable.getCollection())
+	//	//{
+	//	//	auto mesh = scene->getComponent<Component::MeshRenderer>(m);
+	//	//	if (mesh->draw == false)
+	//	//		continue;
+	//	//	mesh->draw = false;
+	//	//	//_render->setShaderSampler(_shader, _diffuse_texture, mesh->getMesh()->material->materials[0].diffuseTex->getTexture());
+	//	//	_render->setShaderUniform(_shader, _model_matrix, scene->getLink(m)->getTransform());
+	//	//	_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * scene->getLink(m)->getTransform()))));
+	//	//	//for (std::size_t i = 0; i < mesh->getMesh()->material->materials.size(); ++i)
+	//	//	for (auto &c : mesh->getMesh()->subMeshs)
+	//	//		_geometry->draw(GL_TRIANGLES, c.indices, c.vertices);
+	//	//}
+	//}
 #endif
 }
 

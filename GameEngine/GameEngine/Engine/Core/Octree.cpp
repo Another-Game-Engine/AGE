@@ -4,7 +4,6 @@
 #include <Core/EntityFilter.hpp>
 #include <Components/CameraComponent.hpp>
 #include <Utils/Frustum.hpp>
-#include <Core/Drawable.hh>
 
 namespace AGE
 {
@@ -12,6 +11,8 @@ namespace AGE
 	{
 		_octreeCommands = &_commandsBuffer[0];
 		_mainThreadCommands = &_commandsBuffer[1];
+		_octreeDrawList = &_drawLists[0];
+		_mainThreadDrawList = &_drawLists[1];
 	}
 
 	Octree::~Octree(void)
@@ -19,7 +20,7 @@ namespace AGE
 	}
 
 
-	Octree::USER_OBJECT_ID Octree::addElement(COMPONENT_ID componentType, const Entity &entity)
+	Octree::USER_OBJECT_ID Octree::addElement()
 	{
 		Octree::USER_OBJECT_ID res = USER_OBJECT_ID(-1);
 		if (!_freeUserObjects.empty())
@@ -32,7 +33,7 @@ namespace AGE
 			res = _userObjectCounter++;
 		}
 
-		_mainThreadCommands->emplace(res, componentType, entity, CommandType::Create);
+		_mainThreadCommands->emplace(res, CommandType::Create);
 		return res;
 	}
 
@@ -41,6 +42,16 @@ namespace AGE
 		_freeUserObjects.push(id);
 		_mainThreadCommands->emplace(id, CommandType::Delete);
 		assert(id != (std::size_t)(-1));
+	}
+
+	Octree::CAMERA_ID Octree::addCamera()
+	{
+		return -1; // TODO
+	}
+
+	void Octree::removeCamera(CAMERA_ID id)
+	{
+		// TODO
 	}
 
 	void Octree::setPosition(const glm::vec3 &v, Octree::USER_OBJECT_ID id)
@@ -55,6 +66,12 @@ namespace AGE
 	void Octree::setScale(const glm::vec3 &v, Octree::USER_OBJECT_ID id)
 	{
 		_mainThreadCommands->emplace(id, v, CommandType::Scale);
+	}
+
+	void Octree::setCameraInfos(USER_OBJECT_ID id
+		, const glm::mat4 &projection)
+	{
+		_mainThreadCommands->emplace(id, projection, CommandType::CameraInfos);
 	}
 
 	void Octree::setPosition(const glm::vec3 &v, const std::array<Octree::USER_OBJECT_ID, MAX_CPT_NUMBER> &ids)
@@ -84,9 +101,9 @@ namespace AGE
 
 	//-----------------------------------------------------------------
 
-	Octree::CULLABLE_ID Octree::addCullableObject(Octree::USER_OBJECT_ID uid)
+	Octree::DRAWABLE_ID Octree::addDrawableObject(Octree::USER_OBJECT_ID uid)
 	{
-		CULLABLE_ID res = CULLABLE_ID(-1);
+		DRAWABLE_ID res = DRAWABLE_ID(-1);
 		CullableObject *co = nullptr;
 		if (!_freeCullableObjects.empty())
 		{
@@ -105,7 +122,7 @@ namespace AGE
 		return res;
 	}
 
-	void Octree::removeCullableObject(CULLABLE_ID id)
+	void Octree::removeDrawableObject(DRAWABLE_ID id)
 	{
 		_freeCullableObjects.push(id);
 		_cullableObjects[id].active = false;
@@ -115,6 +132,7 @@ namespace AGE
 	void Octree::update()
 	{
 		std::swap(_octreeCommands, _mainThreadCommands);
+		std::swap(_octreeDrawList, _mainThreadDrawList);
 		while (!_octreeCommands->empty())
 		{
 			//process command
@@ -135,19 +153,17 @@ namespace AGE
 					ue = &_userObjects[command.id];
 				}
 				ue->id = command.id;
-				ue->componentType = command.componentType;
-				ue->entity = command.entity;
 				ue->active = true;
 				break;
 
 			case (CommandType::Delete) :
 
 				ue = &_userObjects[command.id];
-				for (auto &e : ue->collection)
+				for (auto &e : ue->drawableCollection)
 				{
-					removeCullableObject(e);
+					removeDrawableObject(e);
 				}
-				ue->collection.clear();
+				ue->drawableCollection.clear();
 				ue->active = false;
 				break;
 
@@ -155,15 +171,15 @@ namespace AGE
 
 				ue = &_userObjects[command.id];
 				assert(ue->active != false);
-				for (auto &e : ue->collection)
+				for (auto &e : ue->drawableCollection)
 				{
-					removeCullableObject(e);
+					removeDrawableObject(e);
 				}
-				ue->collection.clear();
+				ue->drawableCollection.clear();
 				for (std::size_t i = 0; i < command.submeshInstances.size(); ++i)
 				{
-					auto id = addCullableObject(command.id);
-					ue->collection.push_back(id);
+					auto id = addDrawableObject(command.id);
+					ue->drawableCollection.push_back(id);
 					_cullableObjects[id].mesh = command.submeshInstances[i];
 					_cullableObjects[id].position = ue->position;
 					_cullableObjects[id].orientation = ue->orientation;
@@ -174,7 +190,7 @@ namespace AGE
 
 				ue = &_userObjects[command.id];
 				ue->position = command.position;
-				for (auto &e : ue->collection)
+				for (auto &e : ue->drawableCollection)
 				{
 					_cullableObjects[e].position = ue->position;
 					_cullableObjects[e].hasMoved = true;
@@ -185,7 +201,7 @@ namespace AGE
 
 				ue = &_userObjects[command.id];
 				ue->scale = command.scale;
-				for (auto &e : ue->collection)
+				for (auto &e : ue->drawableCollection)
 				{
 					_cullableObjects[e].scale = ue->scale;
 					_cullableObjects[e].hasMoved = true;
@@ -196,50 +212,54 @@ namespace AGE
 
 				ue = &_userObjects[command.id];
 				ue->orientation = command.orientation;
-				for (auto &e : ue->collection)
+				for (auto &e : ue->drawableCollection)
 				{
 					_cullableObjects[e].orientation = ue->orientation;
 					_cullableObjects[e].hasMoved = true;
 				}
 				break;
+			case (CommandType::CameraInfos) :
+
+				ue = &_userObjects[command.id];
+				break;
+			default:
+				break;
 			}
 			_octreeCommands->pop();
 		}
 
-		static EntityFilter *filter = nullptr;
-		if (!filter)
+		_octreeDrawList->clear();
+		for (auto &camera : _cameraObjects)
 		{
-			filter = new EntityFilter(std::move(scene));
-			filter->requireComponent<Component::CameraComponent>();
-		}
+			if (!camera.active)
+				continue;
+			Frustum frustum;
+			auto transformation = glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale);
+			frustum.setMatrix(camera.projection * transformation, true);
 
-		if (filter->getCollection().size() == 0)
-			return;
-		auto cameraEntity = *(filter->getCollection().begin());
-		auto camera = scene.lock()->getComponent<Component::CameraComponent>(cameraEntity);
+			std::uint64_t drawed = 0;
+			std::uint64_t total = 0;
 
-		Frustum frustum;
-		static float rot = 0.0f;
-		rot += 1.0f;
-		auto m = camera->projection * camera->lookAtTransform;
-		frustum.setMatrix(m, true);
-		std::uint64_t drawed = 0;
-		std::uint64_t total = 0;
+			_octreeDrawList->push(DrawableCollection());
+			auto &drawList = _octreeDrawList->back();
+			drawList.drawables.clear();
 
-		drawList.clear();
+			drawList.transformation = transformation;
+			drawList.projection = camera.projection;
 
-		for (auto &e : _cullableObjects)
-		{
-			if (e.active)
-				++total;
-			if (e.active && frustum.pointIn(e.position) == true)
+			for (auto &e : _cullableObjects)
 			{
-				if (e.hasMoved)
+				if (e.active)
+					++total;
+				if (e.active && frustum.pointIn(e.position) == true)
 				{
-					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
-					e.hasMoved = false;
+					if (e.hasMoved)
+					{
+						e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
+						e.hasMoved = false;
+					}
+					drawList.drawables.emplace(e.mesh, e.transformation);
 				}
-				drawList.emplace(e.mesh, e.transformation);
 			}
 		}
 		//std::cout << "Drawed : " << drawed << " / " << total << std::endl;
