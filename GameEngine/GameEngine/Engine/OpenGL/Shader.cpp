@@ -202,6 +202,26 @@ namespace gl
 		return (true);
 	}
 
+	GLuint Shader::getUniformLocation(char const *flag)
+	{
+		GLuint location;
+
+		use();
+		if ((location = glGetUniformLocation(_progId, flag)) == -1)
+			DEBUG_MESSAGE("Error", "Shader - getUniformLocation", "the location [" + std::string(flag) + "] doesn't exist on the shader", -1);
+		return (location);
+	}
+
+	GLuint Shader::getUniformBlockLocation(char const *flag)
+	{
+		GLuint location;
+		
+		use();
+		if ((location = glGetUniformBlockIndex(_progId, flag)) == -1)
+			DEBUG_MESSAGE("Error", "Shader - getUniformBlockLocation", "the location [" + std::string(flag) + "] doesn't exist on the shader", -1);
+		return (location);
+	}
+
 	void Shader::use() const
 	{
 		static GLint idbind = 0;
@@ -251,7 +271,7 @@ namespace gl
 	{
 		Key<Uniform> key;
 
-		_uniforms[key] = ShaderResource(flag, this);
+		_uniforms[key] = ShaderResource(getUniformLocation(flag.c_str()));
 		return (key);
 	}
 
@@ -280,8 +300,8 @@ namespace gl
 	{
 		Key<Uniform> key;
 
-		auto &element = _uniforms[key] = ShaderResource(flag, this);
-		element.set(value);
+		auto &element = _uniforms[key] = ShaderResource(getUniformLocation(flag.c_str()));
+		element.set(MAT4, value);
 		return (key);
 	}
 
@@ -291,7 +311,7 @@ namespace gl
 
 		if ((uniform = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		uniform->set(value);
+		uniform->set(MAT4, value);
 		return (*this);
 	}
 
@@ -301,7 +321,7 @@ namespace gl
 
 		if ((uniform = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		uniform->set(mat3);
+		uniform->set(MAT3, mat3);
 		return (*this);
 	}
 
@@ -311,7 +331,7 @@ namespace gl
 
 		if ((uniform = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		uniform->set(vec4);
+		uniform->set(VEC4, vec4);
 		return (*this);
 	}
 
@@ -321,7 +341,7 @@ namespace gl
 
 		if ((uniform = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		uniform->set(v);
+		uniform->set(FLOAT, v);
 		return (*this);
 	}
 
@@ -329,13 +349,13 @@ namespace gl
 	{
 		Key<Sampler> key;
 
-		auto &element = _samplers[key] = ShaderResource(flag, this);
+		auto &element = _samplers[key] = ShaderResource(getUniformLocation(flag.c_str()));
 		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
 		{
 			if (_units[index] == false)
 			{
 				_units[index] = true;
-				element.set(index);
+				element.set(SAMPLER, index);
 				return (key);
 			}
 		}
@@ -375,20 +395,12 @@ namespace gl
 		return (*this);
 	}
 
-	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag)
-	{
-		Key<InterfaceBlock> key;
-
-		_interfaceBlock[key] = ShaderResource(flag, this);
-		return (key);
-	}
-
 	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock)
 	{
 		Key<InterfaceBlock> key;
 
-		auto &element = _interfaceBlock[key] = ShaderResource(flag, this);
-		element.set(uniformblock);
+		auto &element = _interfaceBlock[key] = ShaderResource(getUniformBlockLocation(flag.c_str()));
+		element.set(POINTER_UBO, uniformblock);
 		return (key);
 	}
 
@@ -411,16 +423,6 @@ namespace gl
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
-	}
-
-	Shader &Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock)
-	{
-		ShaderResource *interfaceBlock;
-		
-		if ((interfaceBlock = getInterfaceBlock(key, "setInterfaceBlock")) == NULL)
-			return (*this);
-		interfaceBlock->set(uniformblock);
-		return (*this);
 	}
 
 	ShaderResource *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)

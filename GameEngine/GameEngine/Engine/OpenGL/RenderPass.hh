@@ -19,14 +19,6 @@ namespace gl
 	struct Sampler;
 	class GeometryManager;
 
-	struct Task
-	{
-		int nbrParams;
-		void **params;
-		void(*func)(void **);
-		Task() : nbrParams(0), params(NULL), func(NULL){}
-	};
-
 	//!\file RenderPass.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
@@ -69,29 +61,6 @@ namespace gl
 		GeometryManager *_geoManager;
 		std::vector<Task> _tasks;
 
-		// Tool use in intern
-		template <typename TYPE> void setAllocation(Task &task, TYPE elements);
-		template <typename TYPE, typename... TYPES> void setAllocation(Task &task, TYPE element, TYPES... elements);
 	};
-
-	template <typename TYPE>
-	void RenderPass::setAllocation(Task &task, TYPE element)
-	{
-		int index = task.nbrParams;
-		task.nbrParams = task.nbrParams + 1;
-		task.params = new void *[task.nbrParams];
-		task.params[index] = new TYPE;
-		memcpy(task.params[index], &element, sizeof(TYPE));
-	}
-
-	template <typename TYPE, typename... TYPES>
-	void RenderPass::setAllocation(Task &task, TYPE element, TYPES... elements)
-	{
-		int index = task.nbrParams;
-		task.nbrParams = task.nbrParams + 1;
-		setAllocation(task, elements...);
-		task.params[index] = new TYPE;
-		memcpy(task.params[index], &element, sizeof(TYPE));
-	}
 
 }

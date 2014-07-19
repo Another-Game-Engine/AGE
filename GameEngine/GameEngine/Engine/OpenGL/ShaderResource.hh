@@ -8,8 +8,20 @@
 
 namespace gl
 {
-	class Shader;
-	class UniformBlock;
+	enum ResourceType
+	{
+		NONE = 0,
+		FLOAT,
+		VEC3,
+		VEC4,
+		MAT3,
+		MAT4,
+		SAMPLER,
+		POINTER_UBO
+	};
+
+	//class Shader;
+	//class UniformBlock;
 
 	//!\file Uniform.hh
 	//!\author Dorian Pinaud
@@ -20,29 +32,19 @@ namespace gl
 	{
 	public:
 		ShaderResource();
-		ShaderResource(std::string const &flag, Shader const *attach);
+		ShaderResource(GLuint location);
 		~ShaderResource();
-		ShaderResource(ShaderResource const &uniform);
-		ShaderResource &operator=(ShaderResource const &uniform);
+		ShaderResource(ShaderResource const &copy);
+		ShaderResource &operator=(ShaderResource const &s);
 
 		template <typename TYPE> TYPE get() const;
-
-		ShaderResource &set(glm::mat4 const &value);
-		ShaderResource &set(glm::mat3 const &value);
-		ShaderResource &set(int value);
-		ShaderResource &set(UniformBlock const &uniformblock);
-		ShaderResource &set(float v);
-		ShaderResource &set(glm::vec4 const &vec4);
+		template <typename TYPE> void set(ResourceType setting, TYPE const &value);
 
 	private:
-		std::string _flag;
+		ResourceType _setting;
+		GLuint _location;
 		void *_data;
 		size_t _sizeData;
-		Shader const *_attach;
-		GLuint _location;
-
-		bool getUniformLocation();
-		bool getUniformBlockLocation();
 	};
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -61,4 +63,16 @@ namespace gl
 		return (value);
 	}
 
+	template <typename TYPE>
+	void ShaderResource::set(ResourceType setting, TYPE const &value)
+	{
+		_setting = setting;
+		if (sizeof(TYPE) != _sizeData)
+		{
+			_sizeData = sizeof(TYPE);
+			if (_data)
+				delete _data;
+			_data = new TYPE;
+		}
+	}
 }

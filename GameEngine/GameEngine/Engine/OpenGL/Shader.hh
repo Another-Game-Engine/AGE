@@ -25,14 +25,6 @@ namespace gl
 	class Shader
 	{
 	public:
-		enum ValueSetting
-		{
-			FLOAT = 0,
-			VEC3,
-			VEC4,
-			SAMPLING
-		};
-	public:
 		Shader();
 		Shader(std::string const &compute);
 		Shader(std::string const &vertex, std::string const &fragment);
@@ -96,6 +88,7 @@ namespace gl
 		ShaderResource *getUniform(Key<Uniform> const &key, std::string const &msg);
 		ShaderResource *getSampler(Key<Sampler> const &key, std::string const &msg);
 		ShaderResource *getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
-
+		GLuint getUniformLocation(char const *flag);
+		GLuint getUniformBlockLocation(char const *flag);
 	};
 }

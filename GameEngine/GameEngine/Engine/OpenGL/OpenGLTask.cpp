@@ -125,4 +125,34 @@ namespace gl
 		glBlendColor(CONVERT(glm::vec4, 0)[0], CONVERT(glm::vec4, 0)[1], CONVERT(glm::vec4, 0)[2], CONVERT(glm::vec4, 0)[4]);
 	}
 
+	void setUniformMat4(void **data)
+	{
+		glUniformMatrix4fv(CONVERT(unsigned int, 0), 1, GL_FALSE, (const float *)&(CONVERT(glm::mat4, 1)));
+	}
+
+	void setUniformMat3(void **data)
+	{
+		glUniformMatrix3fv(CONVERT(unsigned int, 0), 1, GL_FALSE, (const float *)&(CONVERT(glm::mat3, 1)));
+	}
+
+	void setUniformUint(void **data)
+	{
+		glUniform1i(CONVERT(unsigned int, 0), CONVERT(int, 1));
+	}
+
+	void setBlockPointerUBO(void **data)
+	{
+		glUniformBlockBinding(CONVERT(unsigned int, 0), CONVERT(unsigned int, 1), CONVERT(unsigned int, 2));
+	}
+
+	void setUniformFloat(void **data)
+	{
+		glUniform1f(CONVERT(unsigned int, 0), CONVERT(float, 1));
+	}
+
+	void setUniformVec4(void **data)
+	{
+		glUniform4f(CONVERT(unsigned int, 0), CONVERT(float, 1), CONVERT(float, 2), CONVERT(float, 3), CONVERT(float, 4));
+	}
+
 }

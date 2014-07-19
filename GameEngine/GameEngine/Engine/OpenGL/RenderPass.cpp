@@ -55,7 +55,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetScissorTask(glm::ivec4 const &area)
 	{
 		Task task;
-		setAllocation(task, area);
+
+		setTaskAllocation(task, area);
 		task.func = setScissor;
 		_tasks.push_back(task);
 		return (*this);
@@ -64,7 +65,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil)
 	{
 		Task task;
-		setAllocation(task, color, depth, stencil);
+
+		setTaskAllocation(task, color, depth, stencil);
 		task.func = setClearValue;
 		_tasks.push_back(task);
 		return (*this);
@@ -73,7 +75,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetColorMaskTask(GLuint index, glm::bvec4 const &color)
 	{
 		Task task;
-		setAllocation(task, index, color);
+
+		setTaskAllocation(task, index, color);
 		task.func = setColorMask;
 		_tasks.push_back(task);
 		return (*this);
@@ -82,7 +85,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetDepthMaskTask(bool depth)
 	{
 		Task task;
-		setAllocation(task, depth);
+
+		setTaskAllocation(task, depth);
 		task.func = setDepthMask;
 		_tasks.push_back(task);
 		return (*this);	return (*this);
@@ -91,7 +95,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetStencilMaskTask(uint8_t front, uint8_t back)
 	{
 		Task task;
-		setAllocation(task, front, back);
+
+		setTaskAllocation(task, front, back);
 		task.func = setStencilMask;
 		_tasks.push_back(task);
 		return (*this);
@@ -100,7 +105,8 @@ namespace gl
 	RenderPass &RenderPass::pushClearTask(bool color, bool depth, bool stencil)
 	{
 		Task task;
-		setAllocation(task, color, depth, stencil);
+
+		setTaskAllocation(task, color, depth, stencil);
 		task.func = clear;
 		_tasks.push_back(task);
 		return (*this);
@@ -109,7 +115,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetStencilFunctionFrontFaceTask(GLenum func, int ref, uint8_t mask)
 	{
 		Task task;
-		setAllocation(task, func, ref, mask);
+
+		setTaskAllocation(task, func, ref, mask);
 		task.func = setStencilFunctionFrontFace;
 		_tasks.push_back(task);
 		return (*this);
@@ -118,7 +125,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetStencilOperationFrontFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
 		Task task;
-		setAllocation(task, opStencilFail, opDepthFail, opDepthPass);
+
+		setTaskAllocation(task, opStencilFail, opDepthFail, opDepthPass);
 		task.func = setStencilOperationFrontFace;
 		_tasks.push_back(task);
 		return (*this);
@@ -127,7 +135,7 @@ namespace gl
 	RenderPass &RenderPass::pushSetStencilFunctionBackFaceTask(GLenum func, int ref, uint8_t mask)
 	{
 		Task task;
-		setAllocation(task, func, ref, mask);
+		setTaskAllocation(task, func, ref, mask);
 		task.func = setStencilFunctionBackFace;
 		_tasks.push_back(task);
 		return (*this);
@@ -136,7 +144,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetStencilOperationBackFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
 		Task task;
-		setAllocation(task, opStencilFail, opDepthFail, opDepthPass);
+
+		setTaskAllocation(task, opStencilFail, opDepthFail, opDepthPass);
 		task.func = setStencilOperationBackFace;
 		_tasks.push_back(task);
 		return (*this);
@@ -145,7 +154,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetStencilFunctionTask(GLenum func, int ref, uint8_t mask)
 	{
 		Task task;
-		setAllocation(task, func, ref, mask);
+
+		setTaskAllocation(task, func, ref, mask);
 		task.func = setStencilFunction;
 		_tasks.push_back(task);
 		return (*this);
@@ -154,7 +164,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetStencilOperationTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
 		Task task;
-		setAllocation(task, opStencilFail, opDepthFail, opDepthPass);
+
+		setTaskAllocation(task, opStencilFail, opDepthFail, opDepthPass);
 		task.func = setStencilOperation;
 		_tasks.push_back(task);
 		return (*this);
@@ -163,7 +174,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetBlendTask(int drawBuffer, bool state)
 	{
 		Task task;
-		setAllocation(task, drawBuffer, state);
+
+		setTaskAllocation(task, drawBuffer, state);
 		task.func = setBlend;
 		_tasks.push_back(task);
 		return (*this);
@@ -172,7 +184,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetBlendEquationTask(GLenum colorMode, GLenum alphaMode)
 	{
 		Task task;
-		setAllocation(task, colorMode, alphaMode);
+
+		setTaskAllocation(task, colorMode, alphaMode);
 		task.func = setBlendEquationSeparate;
 		_tasks.push_back(task);
 		return (*this);
@@ -181,7 +194,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetBlendEquationTask(GLenum mode)
 	{
 		Task task;
-		setAllocation(task, mode);
+
+		setTaskAllocation(task, mode);
 		task.func = setBlendEquation;
 		_tasks.push_back(task);
 		return (*this);
@@ -190,7 +204,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetBlendFuncTask(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
 	{
 		Task task;
-		setAllocation(task, srcRGB, destRGB, srcAlpha, destAlpha);
+
+		setTaskAllocation(task, srcRGB, destRGB, srcAlpha, destAlpha);
 		task.func = setBlendFuncSeparate;
 		_tasks.push_back(task);
 		return (*this);
@@ -198,7 +213,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetBlendFuncTask(GLenum src, GLenum dest)
 	{
 		Task task;
-		setAllocation(task, src, dest);
+
+		setTaskAllocation(task, src, dest);
 		task.func = setBlendFunc;
 		_tasks.push_back(task);
 		return (*this);
@@ -207,7 +223,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetBlendConstantTask(glm::vec4 const &blendColor)
 	{
 		Task task;
-		setAllocation(task, blendColor);
+
+		setTaskAllocation(task, blendColor);
 		task.func = setBlendConstant;
 		_tasks.push_back(task);
 		return (*this);
@@ -216,7 +233,8 @@ namespace gl
 	RenderPass &RenderPass::pushSetTestTask(bool scissor, bool stencil, bool depth)
 	{
 		Task task;
-		setAllocation(task, scissor, stencil, depth);
+
+		setTaskAllocation(task, scissor, stencil, depth);
 		task.func = setTest;
 		_tasks.push_back(task);
 		return (*this);
