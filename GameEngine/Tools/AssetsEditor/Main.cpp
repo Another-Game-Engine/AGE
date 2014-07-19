@@ -93,8 +93,8 @@ int			main(int ac, char **av)
 		//dataSet.materialName = "catwoman";
 		//dataSet.animationName = "catwoman-roulade";		
 
-		//dataSet.serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/NewSerialized");
-		//dataSet.rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+		//dataSet.serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+		//dataSet.rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Raw");
 
 		//isMaterial = AGE::MaterialLoader::load(dataSet);
 		//isTexture = AGE::ImageLoader::load(dataSet);

@@ -40,12 +40,13 @@ namespace AGE
 		std::vector<glm::vec4> weights;
 		std::vector<glm::vec4> boneIndices;
 		std::vector<glm::vec4> colors;
-		AGE::BoundingInfos boundingInfos;
+		BoundingInfos boundingInfos;
+		std::uint16_t defaultMaterialIndex;
 
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors, boundingInfos);
+			ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors, boundingInfos, defaultMaterialIndex);
 		}
 	};
 
@@ -69,6 +70,8 @@ namespace AGE
 		gl::Key<gl::VertexPool> vertexPool;
 		gl::Key<gl::IndexPool> indexPool;
 		AGE::BoundingInfos bounding;
+		std::string name;
+		std::uint16_t defaultMaterialIndex;
 	};
 
 	struct MeshInstance

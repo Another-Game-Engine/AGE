@@ -10,8 +10,6 @@ namespace AGE
 {
 	struct MaterialData
 	{
-		std::string name;
-
 		glm::vec4 diffuse;
 		glm::vec4 ambient;
 		glm::vec4 emissive;
@@ -28,7 +26,7 @@ namespace AGE
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(name, diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath);
+			ar(diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath);
 		}
 	};
 
@@ -61,6 +59,6 @@ namespace AGE
 
 	struct MaterialSetInstance
 	{
-		std::map<std::string, MaterialInstance> datas;
+		std::vector<MaterialInstance> datas;
 	};
 }
