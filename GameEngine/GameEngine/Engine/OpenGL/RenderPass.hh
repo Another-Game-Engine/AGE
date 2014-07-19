@@ -59,6 +59,10 @@ namespace gl
 		RenderPass &pushSetBlendConstantTask(glm::vec4 const &blendColor);
 		RenderPass &pushSetTestTask(bool scissor, bool stencil, bool depth);
 		RenderPass &popTask();
+		//
+		//RenderPass &bindUniformBlockOnMaterial();
+		//RenderPass &bindUniformOnMaterial();
+		//RenderPass &bindSamplerOnMaterial();
 
 	private:
 		Shader *_shader;
