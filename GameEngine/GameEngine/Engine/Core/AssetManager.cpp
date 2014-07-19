@@ -41,6 +41,8 @@ namespace AGE
 			manager->setMaterial<gl::TEXTURE_DIFFUSE>(key, loadTexture(File(e.diffuseTexPath)));
 			manager->setMaterial<gl::TEXTURE_EMISSIVE>(key, loadTexture(File(e.emissiveTexPath)));
 			manager->setMaterial<gl::TEXTURE_SPECULAR>(key, loadTexture(File(e.specularTexPath)));
+			
+			material->datas.push_back(key);
 
 			// TODO fill material with material key
 		}

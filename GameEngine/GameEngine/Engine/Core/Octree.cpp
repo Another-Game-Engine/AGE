@@ -76,9 +76,10 @@ namespace AGE
 	}
 
 	void Octree::updateGeometry(USER_OBJECT_ID id
-		, const std::vector<AGE::SubMeshInstance> &meshs)
+		, const std::vector<AGE::SubMeshInstance> &meshs
+		, const std::vector<AGE::MaterialInstance> &materials)
 	{
-		_mainThreadCommands->emplace(id, meshs, CommandType::Geometry);
+		_mainThreadCommands->emplace(id, meshs, materials, CommandType::Geometry);
 	}
 
 	//-----------------------------------------------------------------

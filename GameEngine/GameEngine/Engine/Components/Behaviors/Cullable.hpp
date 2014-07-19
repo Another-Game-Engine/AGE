@@ -3,6 +3,7 @@
 #include <Entities/EntityTypedef.hpp>
 #include <cstddef>
 #include <Geometry/Mesh.hpp>
+#include <Geometry/Material.hpp>
 
 class AScene;
 
@@ -20,6 +21,8 @@ namespace AGE
 
 			Cullable()
 				:_cullableId(std::size_t(-1))
+				, mesh(nullptr)
+				, material(nullptr)
 			{}
 
 			virtual ~Cullable()
@@ -28,29 +31,28 @@ namespace AGE
 			Cullable(Cullable &&o)
 			{
 				mesh = std::move(o.mesh);
+				material = std::move(o.material);
 				_cullableId = o._cullableId;
 				_scene = o._scene;
-				draw = o.draw;
 			}
 
 			Cullable &operator=(Cullable &&o)
 			{
 				mesh = std::move(o.mesh);
+				material = std::move(o.material);
 				_cullableId = o._cullableId;
 				_scene = o._scene;
-				draw = o.draw;
 				return *this;
 			}
 
 
-			//TEMPORARY FOR TEST
 			void setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh);
 			std::shared_ptr<AGE::MeshInstance> getMesh();
-
-			// TEMPORARY
-			bool draw = false;
+			void setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_mesh);
+			std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
 		protected:
 			std::shared_ptr<AGE::MeshInstance> mesh;
+			std::shared_ptr<AGE::MaterialSetInstance> material;
 
 			void sendMeshInfos();
 		private:

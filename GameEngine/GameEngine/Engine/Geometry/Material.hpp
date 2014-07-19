@@ -5,6 +5,7 @@
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
+#include <OpenGL/Material.hh>
 
 namespace AGE
 {
@@ -41,21 +42,7 @@ namespace AGE
 		}
 	};
 
-	struct MaterialInstance
-	{
-		glm::vec4 diffuse;
-		glm::vec4 ambient;
-		glm::vec4 emissive;
-		glm::vec4 reflective;
-		glm::vec4 specular;
-
-		std::string diffuseTexPath;
-		std::string ambientTexPath;
-		std::string emissiveTexPath;
-		std::string reflectiveTexPath;
-		std::string specularTexPath;
-		std::string normalTexPath;		
-	};
+	typedef gl::Key<gl::Material> MaterialInstance;
 
 	struct MaterialSetInstance
 	{

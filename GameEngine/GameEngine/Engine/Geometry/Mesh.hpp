@@ -14,6 +14,8 @@
 
 namespace AGE
 {
+	typedef std::uint16_t MaterialIndex;
+
 	enum MeshInfos
 	{
 		Positions = 0
@@ -41,7 +43,7 @@ namespace AGE
 		std::vector<glm::vec4> boneIndices;
 		std::vector<glm::vec4> colors;
 		BoundingInfos boundingInfos;
-		std::uint16_t defaultMaterialIndex;
+		MaterialIndex defaultMaterialIndex;
 
 		template <class Archive>
 		void serialize(Archive &ar)
@@ -71,7 +73,7 @@ namespace AGE
 		gl::Key<gl::IndexPool> indexPool;
 		AGE::BoundingInfos bounding;
 		std::string name;
-		std::uint16_t defaultMaterialIndex;
+		MaterialIndex defaultMaterialIndex;
 	};
 
 	struct MeshInstance

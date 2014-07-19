@@ -13,7 +13,6 @@ namespace AGE
 {
 	struct Skeleton;
 	struct Animation;
-	struct MaterialInstance;
 	struct MaterialSetInstance;
 
 	class AssetsManager : public Dependency<AssetsManager>

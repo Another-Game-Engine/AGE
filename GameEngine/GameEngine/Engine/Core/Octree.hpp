@@ -19,6 +19,7 @@
 #include <Utils/Containers/Queue.hpp>
 
 #include <Geometry/Mesh.hpp>
+#include <Geometry/Material.hpp>
 
 class AScene;
 
@@ -51,6 +52,7 @@ namespace AGE
 			CULLABLE_ID id;
 			bool active;
 			SubMeshInstance mesh;
+			MaterialInstance material;
 			bool hasMoved;
 			glm::mat4 transformation;
 		};
@@ -61,6 +63,7 @@ namespace AGE
 			glm::vec3 scale;
 			glm::quat orientation;
 			std::vector<SubMeshInstance> submeshInstances;
+			std::vector<MaterialInstance> materialInstances;
 			USER_OBJECT_ID id;
 			Entity entity;
 			COMPONENT_ID componentType;
@@ -121,11 +124,13 @@ namespace AGE
 
 			Command(USER_OBJECT_ID _id
 				, std::vector<SubMeshInstance> _submeshInstances // copy
+				, std::vector<MaterialInstance> _materialInstances // copy
 				, CommandType _cmdType)
 				: position(0)
 				, scale(0)
 				, orientation(0,0,0,1)
 				, submeshInstances(_submeshInstances)
+				, materialInstances(_materialInstances)
 				, id(_id)
 				, componentType(0)
 				, commandType(_cmdType)
@@ -178,7 +183,8 @@ namespace AGE
 		void setScale(const glm::vec3 &v, const std::array<USER_OBJECT_ID, MAX_CPT_NUMBER> &ids);
 
 		void updateGeometry(USER_OBJECT_ID id
-			, const std::vector<AGE::SubMeshInstance> &meshs);
+			, const std::vector<AGE::SubMeshInstance> &meshs
+			, const std::vector<AGE::MaterialInstance> &materials);
 
 		void update();
 
