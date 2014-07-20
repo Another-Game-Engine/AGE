@@ -14,6 +14,7 @@ namespace AGE
 			, _start(0)
 			, _end(0)
 			, _chunkSize(124)
+			, _data(nullptr)
 		{}
 
 		~Queue()
@@ -23,13 +24,30 @@ namespace AGE
 		}
 
 		Queue(const Queue &o)
-		{}
+		{
+			_size = o._size;
+			_start = o._start;
+			_end = o._end;
+			_chunkSize = o._chunkSize;
+			_data = o._data;
+		}
 
 		Queue(Queue &&o)
-		{}
+		{
+			_size = std::move(o._size);
+			_start = std::move(o._start);
+			_end = std::move(o._end);
+			_chunkSize = std::move(o._chunkSize);
+			_data = std::move(o._data);
+		}
 
 		Queue &operator=(const Queue &o)
 		{
+			_size = std::move(o._size);
+			_start = std::move(o._start);
+			_end = std::move(o._end);
+			_chunkSize = std::move(o._chunkSize);
+			_data = std::move(o._data);
 			return *this;
 		}
 

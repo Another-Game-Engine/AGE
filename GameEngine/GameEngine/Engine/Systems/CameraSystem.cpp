@@ -197,15 +197,15 @@ void CameraSystem::mainUpdate(double time)
 
 		_render->setUniformBlock(_global_state, 0, camera.projection);
 		_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
-		_render->setShaderUniform(_shader, _view_matrix, glm::mat4(1)); // look at hardcoded TODO
+		_render->setShaderUniform(_shader, _view_matrix, glm::mat4(1)); // lookat hardcoded TODO
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-
+		_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
 		while (!camera.drawables.empty())
 		{
 			auto &c = camera.drawables.front();
-			_render->setShaderUniform(_shader, _model_matrix, camera.transformation * camera.projection);                    //TODO
-			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(/*camera->lookAtTransform * */camera.transformation * camera.projection))));
+			_render->setShaderUniform(_shader, _model_matrix, c.transformation);                    //TODO
+			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(c.transformation))));
 			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
 
 			camera.drawables.pop();

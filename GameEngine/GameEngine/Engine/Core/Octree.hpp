@@ -31,7 +31,6 @@ namespace AGE
 	class Octree : public Dependency<Octree>
 	{
 	public:
-		typedef std::uint32_t CAMERA_ID;		
 		typedef std::uint64_t USER_OBJECT_ID;
 	private:
 		enum CommandType
@@ -40,8 +39,10 @@ namespace AGE
 			, Orientation
 			, Scale
 			, Geometry // Update geo, material and bounding box
-			, Create
-			, Delete
+			, CreateDrawable
+			, DeleteDrawable
+			, CreateCamera
+			, DeleteCamera
 			, CameraInfos
 			, END // <- should always be the last
 		};
@@ -66,7 +67,7 @@ namespace AGE
 
 		struct CameraObject
 		{
-			CAMERA_ID id;
+			USER_OBJECT_ID  id;
 			glm::vec3 position;
 			glm::vec3 scale;
 			glm::quat orientation;			
@@ -177,6 +178,7 @@ namespace AGE
 		std::vector<CameraObject> _cameraObjects;
 		AGE::Queue<std::size_t> _freeCameraObjects;
 		std::size_t _userObjectCounter = 0;
+		std::size_t _cameraCounter = 0;
 
 		AGE::Queue<OctreeCommand> _commandsBuffer[2];
 		AGE::Queue<OctreeCommand> *_octreeCommands;
@@ -186,13 +188,11 @@ namespace AGE
 		AGE::Queue<DrawableCollection> *_octreeDrawList;
 		AGE::Queue<DrawableCollection> *_mainThreadDrawList;
 
-
-		std::list<USER_OBJECT_ID> _cameras;
 	public:
 		USER_OBJECT_ID addElement();
 		void removeElement(USER_OBJECT_ID id);
-		CAMERA_ID addCamera();
-		void removeCamera(CAMERA_ID id);
+		USER_OBJECT_ID addCamera();
+		void removeCamera(USER_OBJECT_ID id);
 
 
 		void setPosition(const glm::vec3 &v, USER_OBJECT_ID id);

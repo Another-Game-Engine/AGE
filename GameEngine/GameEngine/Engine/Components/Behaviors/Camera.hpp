@@ -16,7 +16,7 @@ namespace AGE
 		struct Camera
 		{
 		private:
-			Octree::CAMERA_ID _cameraId;
+			Octree::USER_OBJECT_ID _cameraId;
 		public:
 			void init(::AScene *scene, ENTITY_ID entityId);
 			void reset(::AScene *scene, ENTITY_ID entityId);
@@ -27,6 +27,7 @@ namespace AGE
 			const glm::mat4 &getProjection() const;
 		private:
 			glm::mat4 _projection;
+			AScene *_scene = nullptr;
 		};
 	}
 }
