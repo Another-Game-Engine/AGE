@@ -58,7 +58,7 @@ namespace gl
 	{
 		int index = task.nbrParams;
 		task.nbrParams = task.nbrParams + 1;
-		setAllocation(task, elements...);
+		setTaskAllocation(task, elements...);
 		task.params[index] = new TYPE;
 		memcpy(task.params[index], &element, sizeof(TYPE));
 	}

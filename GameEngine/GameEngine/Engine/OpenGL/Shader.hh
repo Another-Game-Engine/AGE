@@ -5,6 +5,7 @@
 # include <map>
 # include <OpenGL/Key.hh>
 # include <glm/glm.hpp>
+# include <OpenGL/OpenGLTask.hh>
 
 namespace gl
 {

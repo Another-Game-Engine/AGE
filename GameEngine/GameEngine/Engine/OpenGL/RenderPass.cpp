@@ -3,7 +3,7 @@
 #include <string>
 #include <OpenGL/Shader.hh>
 #include <Core/Drawable.hh>
-#include <OpenGL/BufferSettings.hh>
+#include <OpenGL/OpenGLTask.hh>
 #include <OpenGL/GeometryManager.hh>
 
 # undef DEBUG_MESSAGE

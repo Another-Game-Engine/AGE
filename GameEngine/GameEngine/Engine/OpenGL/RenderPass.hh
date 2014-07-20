@@ -9,6 +9,7 @@
 #include <functional>
 #include <OpenGL/Material.hh>
 #include <OpenGL/UniformBlock.hh>
+#include <OpenGL/OpenGLTask.hh>
 
 namespace AGE { class Drawable; }
 

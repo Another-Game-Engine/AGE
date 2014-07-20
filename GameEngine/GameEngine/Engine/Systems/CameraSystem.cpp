@@ -106,12 +106,12 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
 	_global_state = _render->addUniformBlock(2, sizeElement);
 	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
-	_model_matrix = _render->addShaderUniform(_shader, "model_matrix");
-	_view_matrix = _render->addShaderUniform(_shader, "view_matrix");
-	_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix");
+	_model_matrix = _render->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
+	_view_matrix = _render->addShaderUniform(_shader, "view_matrix", glm::mat4(1.f));
+	_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix", glm::mat4(1.f));
 	_diffuse_texture = _render->addShaderSampler(_shader, "diffuse_texture");
-	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
-	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
+	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color", glm::vec4(1.0f));
+	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio", 1.0f);
 	_renderPass = _render->addRenderPass(_shader);
 	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
 	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));

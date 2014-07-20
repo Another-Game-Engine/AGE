@@ -1,10 +1,10 @@
 #include <OpenGL/Shader.hh>
 #include <string>
 #include <fstream>
-#include <OpenGL/ShaderResource.hh>
 #include <OpenGL/Texture.hh>
 #include <cassert>
 #include <OpenGL/UniformBlock.hh>
+#include <OpenGL/OpenGLTask.hh>
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
 	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
@@ -424,11 +424,10 @@ namespace gl
 	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag, UniformBlock const &uniformBlock)
 	{
 		Key<InterfaceBlock> key;
-		Task task;
 
-		auto &element = _interfaceBlock[key];
+		auto &task = _interfaceBlock[key];
 		task.nbrParams = 3;
-		setTaskAllocation(task, _progId, getUniformBlockLocation(flag.c_str()), uniformBlock.getBindingPoint);
+		setTaskAllocation(task, _progId, getUniformBlockLocation(flag.c_str()), uniformBlock.getBindingPoint());
 		task.func = setBlockPointerUBO;
 		return (key);
 	}
