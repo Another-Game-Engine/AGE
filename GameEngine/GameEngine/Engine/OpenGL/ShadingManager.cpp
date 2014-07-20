@@ -68,6 +68,15 @@ namespace gl
 		return (element->first);
 	}
 
+	ShadingManager &ShadingManager::updateMemoryShader(Key<Shader> const &key)
+	{
+		Shader *shader;
+		if ((shader = getShader(key, "updateMemoryShader")) == NULL)
+			return (*this);
+		shader->updateMemory();
+		return (*this);
+	}
+
 	ShadingManager &ShadingManager::rmShaderUniform(Key<Shader> const &key, Key<Uniform> &uniform)
 	{
 		Shader *shader;

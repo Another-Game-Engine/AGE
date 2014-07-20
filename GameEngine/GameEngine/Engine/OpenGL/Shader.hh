@@ -65,6 +65,7 @@ namespace gl
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock);
 		Shader &rmInterfaceBlock(Key<InterfaceBlock> &key);
 		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
+		Key<InterfaceBlock> setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
 
 		//
 		void updateMemory();

@@ -39,8 +39,9 @@ namespace gl
 	{
 		int nbrParams;
 		void **params;
+		int *sizeParams;
 		void(*func)(void **);
-		Task() : nbrParams(0), params(NULL), func(NULL){}
+		Task() : nbrParams(0), params(NULL), sizeParams(NULL), func(NULL){}
 	};
 
 	template <typename TYPE>
@@ -49,8 +50,10 @@ namespace gl
 		int index = task.nbrParams;
 		task.nbrParams = task.nbrParams + 1;
 		task.params = new void *[task.nbrParams];
+		task.sizeParams = new int *[task.nbrParams];
 		task.params[index] = new TYPE;
 		memcpy(task.params[index], &element, sizeof(TYPE));
+		task.sizeParams[index] = sizeof(TYPE);
 	}
 
 	template <typename TYPE, typename... TYPES>
@@ -61,5 +64,6 @@ namespace gl
 		setTaskAllocation(task, elements...);
 		task.params[index] = new TYPE;
 		memcpy(task.params[index], &element, sizeof(TYPE));
+		task.sizeParams[index] = sizeof(TYPE);
 	}
 }

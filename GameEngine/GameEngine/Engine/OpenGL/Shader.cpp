@@ -329,6 +329,8 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
+		if (sizeof(glm::mat4) != task->sizeParams[1])
+			DEBUG_MESSAGE("Warning", "Shader - setUniform", "memory size is not adapted", *this);
 		memcpy(task->params[1], &value, sizeof(glm::mat4));
 		return (*this);
 	}
@@ -339,6 +341,8 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
+		if (sizeof(glm::mat3) != task->sizeParams[1])
+			DEBUG_MESSAGE("Warning", "Shader - setUniform", "memory size is not adapted", *this);
 		memcpy(task->params[1], &value, sizeof(glm::mat3));
 		return (*this);
 	}
@@ -349,6 +353,8 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
+		if (sizeof(glm::vec4) != (task->sizeParams[1] + task->sizeParams[2] + task->sizeParams[3] + task->sizeParams[4]))
+			DEBUG_MESSAGE("Warning", "Shader - setUniform", "memory size is not adapted", *this);
 		memcpy(task->params[1], &value[0], sizeof(float));
 		memcpy(task->params[2], &value[1], sizeof(float));
 		memcpy(task->params[3], &value[2], sizeof(float));
@@ -362,6 +368,8 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
+		if (sizeof(float) != task->sizeParams[1])
+			DEBUG_MESSAGE("Warning", "Shader - setUniform", "memory size is not adapted", *this);
 		memcpy(task->params[1], &value, sizeof(float));
 		return (*this);
 	}
@@ -478,6 +486,16 @@ namespace gl
 		return (&element->second);
 	}
 
+	Key<InterfaceBlock> Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformBlock)
+	{
+		Key<InterfaceBlock> key;
+
+		auto &task = _interfaceBlock[key];
+		if (sizeof(UniformBlock const &) == task.sizeParams[1])
+			DEBUG_MESSAGE("Warning", "Shader - setInterfaceBlock", "", Key<InterfaceBlock>(KEY_DESTROY));
+		memcpy(&task.params[1], &uniformBlock, sizeof(UniformBlock const &));
+		return (key);
+	}
 
 	void Shader::updateMemory()
 	{
