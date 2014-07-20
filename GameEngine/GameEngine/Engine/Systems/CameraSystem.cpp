@@ -195,17 +195,26 @@ void CameraSystem::mainUpdate(double time)
 	{
 		auto &camera = drawList->front();
 
-		_render->setUniformBlock(_global_state, 0, camera.projection);
+		auto tmpPos = glm::translate(glm::mat4(1), glm::vec3(0, 0, -10));
+		auto lookat = glm::lookAt(
+			glm::vec3(0,0,-10), // Camera is at (0,0,-10), in World Space
+			glm::vec3(0, 0, 0), // and looks at the origin
+			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+			);
+		auto projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
+
+		auto material = _scene.lock()->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
+		_render->setUniformBlock(_global_state, 0, projection);
 		_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
-		_render->setShaderUniform(_shader, _view_matrix, glm::mat4(1)); // lookat hardcoded TODO
+		_render->setShaderUniform(_shader, _view_matrix, lookat); // lookat hardcoded TODO
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 		_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
 		while (!camera.drawables.empty())
 		{
 			auto &c = camera.drawables.front();
-			_render->setShaderUniform(_shader, _model_matrix, c.transformation);                    //TODO
-			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(c.transformation))));
+			_render->setShaderUniform(_shader, _model_matrix, glm::mat4(1));                    //TODO
+			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(lookat * c.transformation))));
 			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
 
 			camera.drawables.pop();
