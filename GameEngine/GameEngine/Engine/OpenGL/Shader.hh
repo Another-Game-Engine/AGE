@@ -60,11 +60,14 @@ namespace gl
 		Shader &rmSampler(Key<Sampler> &key);
 		Key<Sampler> getSampler(size_t index) const;
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
+		
 		// InterfaceBlock
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock);
 		Shader &rmInterfaceBlock(Key<InterfaceBlock> &key);
 		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
 
+		//
+		void updateMemory();
 	private:
 		std::string _vertexName;
 		std::string _fragName;

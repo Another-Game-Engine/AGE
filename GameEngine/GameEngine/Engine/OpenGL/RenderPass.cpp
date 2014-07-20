@@ -258,8 +258,7 @@ namespace gl
 			_tasks[index].func(_tasks[index].params);
 		if (!_shader)
 			DEBUG_MESSAGE("Warning", "RenderPass - use", "no shader assign on this renderPass", *this);
-		_shader->use();
-
+		_shader->updateMemory();
 		for (size_t index_object = 0; index_object < nbrObjectRender; ++index_object)
 		{
 			_geoManager->draw(mode, objectRender[index_object].mesh.indices, objectRender[index_object].mesh.vertices);

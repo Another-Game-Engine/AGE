@@ -291,7 +291,6 @@ namespace gl
 	{
 		Key<Uniform> key;
 		auto &task = _uniforms[key];
-		task.nbrParams = 2;
 		task.func = setUniformMat4;
 		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
 		return (key);
@@ -301,7 +300,6 @@ namespace gl
 	{
 		Key<Uniform> key;
 		auto &task = _uniforms[key];
-		task.nbrParams = 2;
 		task.func = setUniformMat3;
 		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
 		return (key);
@@ -311,9 +309,8 @@ namespace gl
 	{
 		Key<Uniform> key;
 		auto &task = _uniforms[key];
-		task.nbrParams = 2;
 		task.func = setUniformVec4;
-		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
+		setTaskAllocation(task, getUniformLocation(flag.c_str()), value[0], value[1], value[2], value[3]);
 		return (key);
 	}
 
@@ -321,7 +318,6 @@ namespace gl
 	{
 		Key<Uniform> key;
 		auto &task = _uniforms[key];
-		task.nbrParams = 2;
 		task.func = setUniformFloat;
 		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
 		return (key);
@@ -333,7 +329,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		memcpy(&task->params[1], &value, sizeof(glm::mat4));
+		memcpy(task->params[1], &value, sizeof(glm::mat4));
 		return (*this);
 	}
 
@@ -343,7 +339,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		memcpy(&task->params[1], &value, sizeof(glm::mat3));
+		memcpy(task->params[1], &value, sizeof(glm::mat3));
 		return (*this);
 	}
 
@@ -353,7 +349,10 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		memcpy(&task->params[1], &value, sizeof(glm::vec4));
+		memcpy(task->params[1], &value[0], sizeof(float));
+		memcpy(task->params[2], &value[1], sizeof(float));
+		memcpy(task->params[3], &value[2], sizeof(float));
+		memcpy(task->params[4], &value[3], sizeof(float));
 		return (*this);
 	}
 
@@ -363,7 +362,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		memcpy(&task->params[1], &value, sizeof(float));
+		memcpy(task->params[1], &value, sizeof(float));
 		return (*this);
 	}
 
@@ -379,7 +378,6 @@ namespace gl
 			{
 				_units[index] = true;
 				task.func = setUniformUint;
-				task.nbrParams = 2;
 				setTaskAllocation(task, getUniformLocation(flag.c_str()), index);
 				element = task;
 				return (key);
@@ -426,7 +424,6 @@ namespace gl
 		Key<InterfaceBlock> key;
 
 		auto &task = _interfaceBlock[key];
-		task.nbrParams = 3;
 		setTaskAllocation(task, _progId, getUniformBlockLocation(flag.c_str()), uniformBlock.getBindingPoint());
 		task.func = setBlockPointerUBO;
 		return (key);
@@ -444,8 +441,8 @@ namespace gl
 	Key<InterfaceBlock> Shader::getInterfaceBlock(size_t target) const
 	{
 		if (target >= _interfaceBlock.size())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - getInterfaceBlock(size_t target)", "the target is out of range", Key<InterfaceBlock>(KEY_DESTROY))
-			auto &element = _interfaceBlock.begin();
+			DEBUG_MESSAGE("Warning", "Shader.cpp - getInterfaceBlock(size_t target)", "the target is out of range", Key<InterfaceBlock>(KEY_DESTROY));
+		auto &element = _interfaceBlock.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
@@ -481,4 +478,15 @@ namespace gl
 		return (&element->second);
 	}
 
+
+	void Shader::updateMemory()
+	{
+		use();
+		for (auto &index = _uniforms.begin(); index != _uniforms.end(); ++index)
+			index->second.func(index->second.params);
+		for (auto &index = _samplers.begin(); index != _samplers.end(); ++index)
+			index->second.func(index->second.params);
+		for (auto &index = _interfaceBlock.begin(); index != _interfaceBlock.end(); ++index)
+			index->second.func(index->second.params);
+	}
 }
