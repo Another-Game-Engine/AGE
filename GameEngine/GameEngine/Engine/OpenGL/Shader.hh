@@ -44,6 +44,7 @@ namespace gl
 		std::string const &getComputeName() const;
 
 		// handling uniform management
+		Key<Uniform> addUniform(std::string const &flag);
 		Key<Uniform> addUniform(std::string const &flag, glm::mat4 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::mat3 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::vec4 const &value);
@@ -95,5 +96,22 @@ namespace gl
 		Task *getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
 		GLuint getUniformLocation(char const *flag);
 		GLuint getUniformBlockLocation(char const *flag);
+		void createUniformTask(Task &task, std::string const &flag);
+		void createSamplerTask(Task &task, std::string const &flag);
+		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **), void *data);
 	};
+
+	template <typename TYPE>
+	void Shader::setUniformTask(Task &task, void(*func)(void **), void *data)
+	{
+		if (task.params[1])
+		{
+			task.params[1] = new TYPE;
+			task.sizeParams[1] = sizeof(TYPE);
+		}
+		task.func = func;
+		if (task.sizeParams[1] != sizeof(TYPE))
+			DEBUG_MESSAGE("Warning", "Shader - setUniformTask", "size of setting different of dest", );
+		memcpy(task.params[1], data, sizeData);
+	}
 }

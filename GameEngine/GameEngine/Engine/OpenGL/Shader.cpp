@@ -287,12 +287,34 @@ namespace gl
 		return (element->first);
 	}
 
+	void Shader::createUniformTask(Task &task, std::string const &flag)
+	{
+		task.func = NULL;
+		task.nbrParams = 2;
+		task.sizeParams = new size_t[task.nbrParams];
+		task.params = new void *[task.nbrParams];
+		task.params[0] = new GLuint;
+		task.sizeParams[0] = sizeof(GLuint);
+		GLuint location = getUniformLocation(flag.c_str());
+		*(GLuint *)task.params[0] = location;
+		task.params[1] = NULL;
+		task.sizeParams[1] = 0;
+	}
+
+	Key<Uniform> Shader::addUniform(std::string const &flag)
+	{
+		Key<Uniform> key;
+		auto &task = _uniforms[key];
+		createUniformTask(task, flag);
+		return (key);
+	}
+
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat4 const &value)
 	{
 		Key<Uniform> key;
 		auto &task = _uniforms[key];
-		task.func = setUniformMat4;
-		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
+		createUniformTask(task, flag);
+		setUniformTask<glm::mat4>(task, setUniformMat4, (void *)&value);
 		return (key);
 	}
 	
@@ -300,8 +322,8 @@ namespace gl
 	{
 		Key<Uniform> key;
 		auto &task = _uniforms[key];
-		task.func = setUniformMat3;
-		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
+		createUniformTask(task, flag);
+		setUniformTask<glm::mat3>(task, setUniformMat3, (void *)&value);
 		return (key);
 	}
 	
@@ -309,8 +331,8 @@ namespace gl
 	{
 		Key<Uniform> key;
 		auto &task = _uniforms[key];
-		task.func = setUniformVec4;
-		setTaskAllocation(task, getUniformLocation(flag.c_str()), value[0], value[1], value[2], value[3]);
+		createUniformTask(task, flag);
+		setUniformTask<glm::vec4>(task, setUniformVec4, (void *)&value);		return (key);
 		return (key);
 	}
 
@@ -318,8 +340,8 @@ namespace gl
 	{
 		Key<Uniform> key;
 		auto &task = _uniforms[key];
-		task.func = setUniformFloat;
-		setTaskAllocation(task, getUniformLocation(flag.c_str()), value);
+		createUniformTask(task, flag);
+		setUniformTask<float>(task, setUniformFloat, (void *)&value);
 		return (key);
 	}
 
@@ -329,9 +351,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		if (sizeof(glm::mat4) != task->sizeParams[1])
-			DEBUG_MESSAGE("Warning", "Shader - setUniform", "memory size is not adapted", *this);
-		memcpy(task->params[1], &value, sizeof(glm::mat4));
+		setUniformTask<glm::mat4>(*task, NULL, (void *)&value);
 		return (*this);
 	}
 
@@ -341,9 +361,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		if (sizeof(glm::mat3) != task->sizeParams[1])
-			DEBUG_MESSAGE("Warning", "Shader - setUniform", "memory size is not adapted", *this);
-		memcpy(task->params[1], &value, sizeof(glm::mat3));
+		setUniformTask<glm::mat3>(*task, NULL, (void *)&value);
 		return (*this);
 	}
 
@@ -353,12 +371,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		if (sizeof(glm::vec4) != (task->sizeParams[1] + task->sizeParams[2] + task->sizeParams[3] + task->sizeParams[4]))
-			DEBUG_MESSAGE("Warning", "Shader - setUniform", "memory size is not adapted", *this);
-		memcpy(task->params[1], &value[0], sizeof(float));
-		memcpy(task->params[2], &value[1], sizeof(float));
-		memcpy(task->params[3], &value[2], sizeof(float));
-		memcpy(task->params[4], &value[3], sizeof(float));
+		setUniformTask<glm::vec4>(*task, NULL, (void *)&value);
 		return (*this);
 	}
 
@@ -368,9 +381,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		if (sizeof(float) != task->sizeParams[1])
-			DEBUG_MESSAGE("Warning", "Shader - setUniform", "memory size is not adapted", *this);
-		memcpy(task->params[1], &value, sizeof(float));
+		setUniformTask<float>(*task, NULL, (void *)&value);
 		return (*this);
 	}
 

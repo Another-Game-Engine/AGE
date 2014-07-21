@@ -148,7 +148,7 @@ namespace gl
 
 	void setUniformVec4(void **data)
 	{
-		glUniform4f(CONVERT(unsigned int, 0), CONVERT(float, 1), CONVERT(float, 2), CONVERT(float, 3), CONVERT(float, 4));
+		glUniform4f(CONVERT(unsigned int, 0), CONVERT(glm::vec4, 1).x, CONVERT(glm::vec4, 1).y, CONVERT(glm::vec4, 1).z, CONVERT(glm::vec4, 1).w);
 	}
 
 }
