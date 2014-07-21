@@ -151,4 +151,9 @@ namespace gl
 		glUniform4f(CONVERT(unsigned int, 0), CONVERT(glm::vec4, 1).x, CONVERT(glm::vec4, 1).y, CONVERT(glm::vec4, 1).z, CONVERT(glm::vec4, 1).w);
 	}
 
+	void setUniformSampler(void **data)
+	{
+		glActiveTexture(GL_TEXTURE0 + CONVERT(GLuint, 0));
+		glBindTexture(CONVERT(GLenum, 1), CONVERT(GLint, 2));
+	}
 }

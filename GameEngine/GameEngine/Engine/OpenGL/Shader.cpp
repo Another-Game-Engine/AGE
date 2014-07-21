@@ -23,8 +23,6 @@ namespace gl
 		_geometryName(""),
 		_computeName("")
 	{
-		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
-			_units[index] = NULL;
 	}
 
 	Shader::Shader(std::string const &compute)
@@ -74,8 +72,6 @@ namespace gl
 	{
 		_uniforms = shader._uniforms;
 		_samplers = shader._samplers;
-		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
-			_units[index] = shader._units[index];
 		_vertexName = shader._vertexName;
 		_fragName = shader._fragName;
 		_geometryName = shader._geometryName;
@@ -97,8 +93,6 @@ namespace gl
 		{
 			_uniforms = s._uniforms;
 			_samplers = s._samplers;
-			for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
-				_units[index] = s._units[index];
 			if (_progId > 0)
 			{
 				if (_vertexId > 0) { glDetachShader(_progId, _vertexId); glDeleteShader(_vertexId); }
@@ -301,6 +295,30 @@ namespace gl
 		task.sizeParams[1] = 0;
 	}
 
+	void Shader::createSamplerTask(Task &task, std::string const &flag)
+	{
+		task.func = setUniformSampler;
+		task.nbrParams = 3;
+		task.sizeParams = new size_t[task.nbrParams];
+		task.params = new void *[task.nbrParams];
+		task.params[0] = new GLuint;
+		task.sizeParams[0] = sizeof(GLuint);
+		GLuint location = getUniformLocation(flag.c_str());
+		*(GLuint *)task.params[0] = location;
+		task.params[1] = new GLint;
+		*(GLenum *)task.params[1] = GL_TEXTURE_2D;
+		task.sizeParams[1] = sizeof(GLenum);
+		task.params[2] = new GLint;
+		*(GLint *)task.params[2] = 0;
+		task.sizeParams[2] = sizeof(GLint);
+	}
+
+	void Shader::setSamplerTask(Task &task, Texture const &texture)
+	{
+		*(GLenum *)task.params[1] = texture.getType();
+		*(GLint *)task.params[2] = texture.getId();
+	}
+
 	Key<Uniform> Shader::addUniform(std::string const &flag)
 	{
 		Key<Uniform> key;
@@ -387,22 +405,11 @@ namespace gl
 
 	Key<Sampler> Shader::addSampler(std::string const &flag)
 	{
-		Task task;
 		Key<Sampler> key;
 
-		auto &element = _samplers[key];
-		for (int index = 0; index < GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS; ++index)
-		{
-			if (_units[index] == false)
-			{
-				_units[index] = true;
-				task.func = setUniformUint;
-				setTaskAllocation(task, getUniformLocation(flag.c_str()), index);
-				element = task;
-				return (key);
-			}
-		}
-		DEBUG_MESSAGE("Warning", "Shader.cpp - addSampler()", "You have not enougth texture unit for this sampler", Key<Sampler>(KEY_DESTROY));
+		auto &task = _samplers[key];
+		createSamplerTask(task, flag);
+		return (key);
 	}
 
 	Shader &Shader::rmSampler(Key<Sampler> &key)
@@ -411,7 +418,6 @@ namespace gl
 
 		if ((task = getSampler(key, "rmSampler")) == NULL)
 			return (*this);		
-		_units[(int)task->params[1]] = false;
 		_samplers.erase(key);
 		key.destroy();
 		return (*this);
@@ -420,8 +426,8 @@ namespace gl
 	Key<Sampler> Shader::getSampler(size_t target) const
 	{
 		if (target >= _samplers.size())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - getSampler(size_t target)", "the target is out of range", Key<Sampler>(KEY_DESTROY))
-			auto &element = _samplers.begin();
+			DEBUG_MESSAGE("Warning", "Shader.cpp - getSampler(size_t target)", "the target is out of range", Key<Sampler>(KEY_DESTROY));
+		auto &element = _samplers.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
@@ -433,8 +439,7 @@ namespace gl
 
 		if ((task = getSampler(key, "setSampler")) == NULL)
 			return (*this);
-		glActiveTexture(GL_TEXTURE0 + (int)(task->params[1]));
-		texture.bind();
+		
 		return (*this);
 	}
 

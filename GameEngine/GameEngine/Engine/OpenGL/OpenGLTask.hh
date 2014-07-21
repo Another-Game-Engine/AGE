@@ -34,6 +34,7 @@ namespace gl
 	void setBlockPointerUBO(void **);
 	void setUniformFloat(void **);
 	void setUniformVec4(void **);
+	void setUniformSampler(void **);
 
 	struct Task
 	{

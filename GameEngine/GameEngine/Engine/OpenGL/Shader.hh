@@ -85,8 +85,6 @@ namespace gl
 		std::map<Key<Sampler>, Task> _samplers;
 		std::map<Key<InterfaceBlock>, Task> _interfaceBlock;
 
-		bool _units[GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS];
-
 		// some private function usefull for internal functionement
 		bool compileShader(GLuint shaderId, std::string const &file) const;
 		bool linkProgram() const;
@@ -98,6 +96,7 @@ namespace gl
 		GLuint getUniformBlockLocation(char const *flag);
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
+		void setSamplerTask(Task &task, Texture const &texture);
 		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **), void *data);
 	};
 
