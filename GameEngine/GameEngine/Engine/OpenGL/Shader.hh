@@ -83,9 +83,9 @@ namespace gl
 		GLuint	_computeId;
 
 		std::vector<Task> _tasks;
-		std::map<Key<Uniform>, Task> _uniforms;
-		std::map<Key<Sampler>, Task> _samplers;
-		std::map<Key<InterfaceBlock>, Task> _interfaceBlock;
+		std::map<Key<Uniform>, size_t> _uniforms;
+		std::map<Key<Sampler>, size_t> _samplers;
+		std::map<Key<InterfaceBlock>, size_t> _interfaceBlock;
 
 		// some private function usefull for internal functionement
 		bool compileShader(GLuint shaderId, std::string const &file) const;

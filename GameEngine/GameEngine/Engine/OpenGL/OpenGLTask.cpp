@@ -156,4 +156,31 @@ namespace gl
 		glActiveTexture(GL_TEXTURE0 + CONVERT(GLuint, 0));
 		glBindTexture(CONVERT(GLenum, 1), CONVERT(GLint, 2));
 	}
+
+	Task::Task()
+		: nbrParams(0), 
+		params(NULL), 
+		sizeParams(NULL), 
+		func(NULL)
+	{
+	}
+
+	void Task::clear()
+	{
+		func = NULL;
+		for (size_t index = 0; index < nbrParams; ++index)
+			delete params[index];
+		if (params)
+			delete[] params;
+		params = NULL;
+		if (sizeParams)
+			delete[] sizeParams;
+		sizeParams = NULL;
+		nbrParams = 0;
+	}
+
+	bool Task::isExec()
+	{
+		return (func == NULL ? false : true);
+	}
 }

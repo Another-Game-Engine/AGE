@@ -128,6 +128,8 @@ namespace gl
 			if (_computeId > 0) { glDetachShader(_progId, _computeId); glDeleteShader(_computeId); }
 			if (_fragId > 0) { glDetachShader(_progId, _fragId); glDeleteShader(_fragId); }
 			glDeleteProgram(_progId);
+			for (size_t index = 0; index < _tasks.size(); ++index)
+				_tasks.clear();
 		}
 	}
 
@@ -264,8 +266,11 @@ namespace gl
 
 	Shader &Shader::rmUniform(Key<Uniform> &key)
 	{
-		if (getUniform(key, "rmUniform") == NULL)
+		Task *task;
+
+		if ((task = getUniform(key, "rmUniform")) == NULL)
 			return (*this);
+		task->clear();
 		_uniforms.erase(key);
 		key.destroy();
 		return (*this);
@@ -322,44 +327,54 @@ namespace gl
 	Key<Uniform> Shader::addUniform(std::string const &flag)
 	{
 		Key<Uniform> key;
-		auto &task = _uniforms[key];
-		createUniformTask(task, flag);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		_uniforms[key] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
 		return (key);
 	}
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat4 const &value)
 	{
 		Key<Uniform> key;
-		auto &task = _uniforms[key];
-		createUniformTask(task, flag);
-		setUniformTask<glm::mat4>(task, setUniformMat4, (void *)&value);
+		_tasks.push_back(Task());
+		Task *task = &_tasks[_tasks.size() - 1];
+		_uniforms[key] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&value);
 		return (key);
 	}
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat3 const &value)
 	{
 		Key<Uniform> key;
-		auto &task = _uniforms[key];
-		createUniformTask(task, flag);
-		setUniformTask<glm::mat3>(task, setUniformMat3, (void *)&value);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		_uniforms[key] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask<glm::mat3>(*task, setUniformMat3, (void *)&value);
 		return (key);
 	}
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec4 const &value)
 	{
 		Key<Uniform> key;
-		auto &task = _uniforms[key];
-		createUniformTask(task, flag);
-		setUniformTask<glm::vec4>(task, setUniformVec4, (void *)&value);		return (key);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		_uniforms[key] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask<glm::vec4>(*task, setUniformVec4, (void *)&value);		return (key);
 		return (key);
 	}
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, float value)
 	{
 		Key<Uniform> key;
-		auto &task = _uniforms[key];
-		createUniformTask(task, flag);
-		setUniformTask<float>(task, setUniformFloat, (void *)&value);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		_uniforms[key] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask<float>(*task, setUniformFloat, (void *)&value);
 		return (key);
 	}
 
@@ -407,8 +422,10 @@ namespace gl
 	{
 		Key<Sampler> key;
 
-		auto &task = _samplers[key];
-		createSamplerTask(task, flag);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		_samplers[key] = _tasks.size() - 1;
+		createSamplerTask(*task, flag);
 		return (key);
 	}
 
@@ -417,7 +434,8 @@ namespace gl
 		Task *task;
 
 		if ((task = getSampler(key, "rmSampler")) == NULL)
-			return (*this);		
+			return (*this);
+		task->clear();
 		_samplers.erase(key);
 		key.destroy();
 		return (*this);
@@ -439,7 +457,7 @@ namespace gl
 
 		if ((task = getSampler(key, "setSampler")) == NULL)
 			return (*this);
-		
+		setSamplerTask(*task, texture);
 		return (*this);
 	}
 
@@ -447,9 +465,9 @@ namespace gl
 	{
 		Key<InterfaceBlock> key;
 
-		auto &task = _interfaceBlock[key];
-		setTaskAllocation(task, _progId, getUniformBlockLocation(flag.c_str()), uniformBlock.getBindingPoint());
-		task.func = setBlockPointerUBO;
+		//auto &task = _interfaceBlock[key];
+		//setTaskAllocation(*task, _progId, getUniformBlockLocation(flag.c_str()), uniformBlock.getBindingPoint());
+		//task->func = setBlockPointerUBO;
 		return (key);
 	}
 
@@ -479,7 +497,7 @@ namespace gl
 		auto &element = _uniforms.find(key);
 		if (element == _uniforms.end())
 			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", NULL);
-		return (&element->second);
+		return (&_tasks[element->second]);
 	}
 
 	Task *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
@@ -489,7 +507,7 @@ namespace gl
 		auto &element = _samplers.find(key);
 		if (element == _samplers.end())
 			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", NULL);
-		return (&element->second);
+		return (&_tasks[element->second]);
 	}
 
 	Task *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)
@@ -499,7 +517,7 @@ namespace gl
 		auto &element = _interfaceBlock.find(key);
 		if (element == _interfaceBlock.end())
 			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", NULL);
-		return (&element->second);
+		return (&_tasks[element->second]);
 	}
 
 	Key<InterfaceBlock> Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformBlock)
@@ -516,11 +534,17 @@ namespace gl
 	void Shader::updateMemory()
 	{
 		use();
-		for (auto &index = _uniforms.begin(); index != _uniforms.end(); ++index)
-			index->second.func(index->second.params);
-		for (auto &index = _samplers.begin(); index != _samplers.end(); ++index)
-			index->second.func(index->second.params);
-		for (auto &index = _interfaceBlock.begin(); index != _interfaceBlock.end(); ++index)
-			index->second.func(index->second.params);
+		for (size_t index = 0; index < _tasks.size(); ++index)
+		{
+			if (!_tasks[index].isExec())
+				DEBUG_MESSAGE("Warning", "Shader - updateMemory", "function pointer not set");
+			_tasks[index].func(_tasks[index].params);
+		}
+		//for (auto &index = _uniforms.begin(); index != _uniforms.end(); ++index)
+		//	index->second.func(index->second.params);
+		//for (auto &index = _samplers.begin(); index != _samplers.end(); ++index)
+		//	index->second.func(index->second.params);
+		//for (auto &index = _interfaceBlock.begin(); index != _interfaceBlock.end(); ++index)
+		//	index->second.func(index->second.params);
 	}
 }

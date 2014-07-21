@@ -42,7 +42,9 @@ namespace gl
 		void **params;
 		size_t *sizeParams;
 		void(*func)(void **);
-		Task() : nbrParams(0), params(NULL), sizeParams(NULL), func(NULL){}
+		Task();
+		void clear();
+		bool isExec();
 	};
 
 	template <typename TYPE>
