@@ -24,7 +24,7 @@ namespace AGE
 	{
 	}
 
-	Drawable &Drawable::operator=(Drawable const &d)
+	/*Drawable &Drawable::operator=(Drawable const &d)
 	{
 		mesh = d.mesh;
 		material = d.material;
@@ -37,5 +37,5 @@ namespace AGE
 		mesh = d.mesh;
 		material = d.material;
 		transformation = d.transformation;
-	}
+	}*/
 }

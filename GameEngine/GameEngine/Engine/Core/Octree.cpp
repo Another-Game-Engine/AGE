@@ -146,7 +146,6 @@ namespace AGE
 	void Octree::update()
 	{
 		std::swap(_octreeCommands, _mainThreadCommands);
-		std::swap(_octreeDrawList, _mainThreadDrawList);
 		while (!_octreeCommands->empty())
 		{
 			//process command
@@ -307,5 +306,6 @@ namespace AGE
 			//std::cout << "Camera n[" << cameraCounter << "] : " << drawed << " / " << total << std::endl;
 			++cameraCounter;
 		}
+		std::swap(_octreeDrawList, _mainThreadDrawList);
 	}
 }

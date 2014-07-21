@@ -38,7 +38,7 @@ namespace AGE
 			_start = std::move(o._start);
 			_end = std::move(o._end);
 			_chunkSize = std::move(o._chunkSize);
-			_data = std::move(o._data);
+			_data = o._data;
 		}
 
 		Queue &operator=(const Queue &o)
@@ -47,7 +47,7 @@ namespace AGE
 			_start = std::move(o._start);
 			_end = std::move(o._end);
 			_chunkSize = std::move(o._chunkSize);
-			_data = std::move(o._data);
+			_data = o._data;
 			return *this;
 		}
 

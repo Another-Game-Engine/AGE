@@ -17,8 +17,6 @@ namespace AGE
 		~Drawable();
 		Drawable(const SubMeshInstance &_m, const MaterialInstance &_mat, const glm::mat4 &_t);
 		Drawable(SubMeshInstance &&_m, MaterialInstance &&_mat, glm::mat4 &&_t);
-		Drawable &operator=(Drawable const &d);
-		Drawable(Drawable const &d);
 	};
 
 	struct DrawableCollection
