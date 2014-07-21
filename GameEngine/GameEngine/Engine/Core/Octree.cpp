@@ -295,11 +295,11 @@ namespace AGE
 					continue;
 				if (/*frustum.pointIn(e.position) ==*/ true)
 				{
-					if (e.hasMoved)
-					{
+					//if (e.hasMoved)
+					//{
 						e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 						e.hasMoved = false;
-					}
+					//}
 					drawList.drawables.emplace(e.mesh, e.material, e.transformation);
 					++drawed;
 				}
