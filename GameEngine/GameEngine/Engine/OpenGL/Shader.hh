@@ -2,6 +2,7 @@
 
 # include <Utils/OpenGL.hh>
 # include <iostream>
+# include <vector>
 # include <map>
 # include <OpenGL/Key.hh>
 # include <glm/glm.hpp>
@@ -81,6 +82,7 @@ namespace gl
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
+		std::vector<Task> _tasks;
 		std::map<Key<Uniform>, Task> _uniforms;
 		std::map<Key<Sampler>, Task> _samplers;
 		std::map<Key<InterfaceBlock>, Task> _interfaceBlock;
@@ -103,14 +105,14 @@ namespace gl
 	template <typename TYPE>
 	void Shader::setUniformTask(Task &task, void(*func)(void **), void *data)
 	{
-		if (task.params[1])
+		if (task.params[1] == NULL)
 		{
 			task.params[1] = new TYPE;
 			task.sizeParams[1] = sizeof(TYPE);
+			task.func = func;
 		}
-		task.func = func;
 		if (task.sizeParams[1] != sizeof(TYPE))
 			DEBUG_MESSAGE("Warning", "Shader - setUniformTask", "size of setting different of dest", );
-		memcpy(task.params[1], data, sizeData);
+		memcpy(task.params[1], data, sizeof(TYPE));
 	}
 }

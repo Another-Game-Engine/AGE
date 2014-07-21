@@ -369,7 +369,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		setUniformTask<glm::mat4>(*task, NULL, (void *)&value);
+		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&value);
 		return (*this);
 	}
 
@@ -379,7 +379,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		setUniformTask<glm::mat3>(*task, NULL, (void *)&value);
+		setUniformTask<glm::mat3>(*task, setUniformMat3, (void *)&value);
 		return (*this);
 	}
 
@@ -389,7 +389,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		setUniformTask<glm::vec4>(*task, NULL, (void *)&value);
+		setUniformTask<glm::vec4>(*task, setUniformVec4, (void *)&value);
 		return (*this);
 	}
 
@@ -399,7 +399,7 @@ namespace gl
 
 		if ((task = getUniform(key, "setUniform")) == NULL)
 			return (*this);
-		setUniformTask<float>(*task, NULL, (void *)&value);
+		setUniformTask<float>(*task, setUniformFloat, (void *)&value);
 		return (*this);
 	}
 
@@ -504,13 +504,13 @@ namespace gl
 
 	Key<InterfaceBlock> Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformBlock)
 	{
-		Key<InterfaceBlock> key;
-
-		auto &task = _interfaceBlock[key];
-		if (sizeof(UniformBlock const &) == task.sizeParams[1])
-			DEBUG_MESSAGE("Warning", "Shader - setInterfaceBlock", "", Key<InterfaceBlock>(KEY_DESTROY));
-		memcpy(&task.params[1], &uniformBlock, sizeof(UniformBlock const &));
-		return (key);
+		Key<InterfaceBlock> key_interfaceBlock;
+		//
+		//auto &task = _interfaceBlock[key_interfaceBlock];
+		//if (sizeof(UniformBlock const &) == task.sizeParams[1])
+		//	DEBUG_MESSAGE("Warning", "Shader - setInterfaceBlock", "", Key<InterfaceBlock>(KEY_DESTROY));
+		//memcpy(&task.params[1], &uniformBlock, sizeof(UniformBlock const &));
+		return (key_interfaceBlock);
 	}
 
 	void Shader::updateMemory()

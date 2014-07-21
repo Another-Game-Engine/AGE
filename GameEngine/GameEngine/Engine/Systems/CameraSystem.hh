@@ -38,6 +38,7 @@ protected:
 	gl::ShadingManager *_render;
 	gl::Key<gl::Shader> _shader;
 	gl::Key<gl::UniformBlock> _global_state;
+	gl::Key<gl::Uniform> _pro_matrix;
 	gl::Key<gl::Uniform> _model_matrix;
 	gl::Key<gl::Uniform> _view_matrix;
 	gl::Key<gl::Uniform> _normal_matrix;

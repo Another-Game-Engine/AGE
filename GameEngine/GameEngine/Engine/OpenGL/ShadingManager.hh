@@ -52,6 +52,7 @@ namespace gl
 		ShadingManager &updateMemoryShader(Key<Shader> const &shader);
 		
 		// uniform
+		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat3 const &value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, float value);

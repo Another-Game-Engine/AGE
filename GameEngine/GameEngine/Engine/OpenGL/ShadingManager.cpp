@@ -94,6 +94,14 @@ namespace gl
 		return (shader->getUniform(target));
 	}
 
+	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
+	{
+		Shader *shader;
+		if ((shader = getShader(key, "addShaderUniform(mat4)")) == NULL)
+			return (Key<Uniform>(KEY_DESTROY));
+		return (shader->addUniform(flag));
+	}
+
 	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat4 const &value)
 	{
 		Shader *shader;
