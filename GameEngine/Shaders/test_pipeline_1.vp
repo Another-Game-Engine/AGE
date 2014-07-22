@@ -5,12 +5,8 @@ layout (location = 1) in vec4 color;
 layout (location = 2) in vec4 normal;
 layout (location = 3) in vec2 texCoord;
 
-uniform global_state
-{
-	mat4 projection_matrix;
-	vec4 pos_light;
-};
-
+uniform mat4 projection_matrix;
+uniform vec4 pos_light;
 uniform mat3 normal_matrix;
 uniform mat4 view_matrix;
 uniform mat4 model_matrix;

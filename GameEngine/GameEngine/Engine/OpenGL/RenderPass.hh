@@ -7,21 +7,18 @@
 #include <utility>
 #include <vector>
 #include <functional>
+#include <OpenGL/Material.hh>
+#include <OpenGL/UniformBlock.hh>
+#include <OpenGL/OpenGLTask.hh>
 
 namespace AGE { class Drawable; }
 
 namespace gl
 {
 	class Shader;
+	struct Uniform;
+	struct Sampler;
 	class GeometryManager;
-
-	struct Task
-	{
-		int nbrParams;
-		void **params;
-		void(*func)(void **);
-		Task() : nbrParams(0), params(NULL), func(NULL){}
-	};
 
 	//!\file RenderPass.hh
 	//!\author Dorian Pinaud
@@ -38,7 +35,7 @@ namespace gl
 		RenderPass &operator=(RenderPass const &r);
 
 		RenderPass &draw(GLenum mode, AGE::Drawable const *objectRender, size_t nbrObjectRender);
-		
+
 		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
 		RenderPass &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
 		RenderPass &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
@@ -65,29 +62,6 @@ namespace gl
 		GeometryManager *_geoManager;
 		std::vector<Task> _tasks;
 
-		// Tool use in intern
-		template <typename TYPE> void setAllocation(Task &task, TYPE elements);
-		template <typename TYPE, typename... TYPES> void setAllocation(Task &task, TYPE element, TYPES... elements);
 	};
-
-	template <typename TYPE>
-	void RenderPass::setAllocation(Task &task, TYPE element)
-	{
-		int index = task.nbrParams;
-		task.nbrParams = task.nbrParams + 1;
-		task.params = new void *[task.nbrParams];
-		task.params[index] = new TYPE;
-		memcpy(task.params[index], &element, sizeof(TYPE));
-	}
-
-	template <typename TYPE, typename... TYPES>
-	void RenderPass::setAllocation(Task &task, TYPE element, TYPES... elements)
-	{
-		int index = task.nbrParams;
-		task.nbrParams = task.nbrParams + 1;
-		setAllocation(task, elements...);
-		task.params[index] = new TYPE;
-		memcpy(task.params[index], &element, sizeof(TYPE));
-	}
 
 }

@@ -68,12 +68,13 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
+	ShadingManager &ShadingManager::updateMemoryShader(Key<Shader> const &key)
 	{
 		Shader *shader;
-		if ((shader = getShader(key, "addShaderUniform()")) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
-		return (shader->addUniform(flag));
+		if ((shader = getShader(key, "updateMemoryShader")) == NULL)
+			return (*this);
+		shader->updateMemory();
+		return (*this);
 	}
 
 	ShadingManager &ShadingManager::rmShaderUniform(Key<Shader> const &key, Key<Uniform> &uniform)
@@ -93,10 +94,42 @@ namespace gl
 		return (shader->getUniform(target));
 	}
 
+	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
+	{
+		Shader *shader;
+		if ((shader = getShader(key, "addShaderUniform(mat4)")) == NULL)
+			return (Key<Uniform>(KEY_DESTROY));
+		return (shader->addUniform(flag));
+	}
+
 	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat4 const &value)
 	{
 		Shader *shader;
 		if ((shader = getShader(key, "addShaderUniform(mat4)")) == NULL)
+			return (Key<Uniform>(KEY_DESTROY));
+		return (shader->addUniform(flag, value));
+	}
+
+	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat3 const &value)
+	{
+		Shader *shader;
+		if ((shader = getShader(key, "addShaderUniform(mat3)")) == NULL)
+			return (Key<Uniform>(KEY_DESTROY));
+		return (shader->addUniform(flag, value));
+	}
+
+	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec4 const &value)
+	{
+		Shader *shader;
+		if ((shader = getShader(key, "addShaderUniform(vec4)")) == NULL)
+			return (Key<Uniform>(KEY_DESTROY));
+		return (shader->addUniform(flag, value));
+	}
+
+	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, float value)
+	{
+		Shader *shader;
+		if ((shader = getShader(key, "addShaderUniform(float)")) == NULL)
 			return (Key<Uniform>(KEY_DESTROY));
 		return (shader->addUniform(flag, value));
 	}
@@ -201,14 +234,6 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag)
-	{
-		Shader *shader;
-		if ((shader = getShader(keyShader, "getShaderInterfaceBlock()")) == NULL)
-			return (Key<InterfaceBlock>(KEY_DESTROY));
-		return (shader->addInterfaceBlock(flag));
-	}
-
 	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
 	{
 		Shader *shader;
@@ -235,18 +260,6 @@ namespace gl
 		if ((shader = getShader(keyShader, "getShaderInterfaceBlock()")) == NULL)
 			return (Key<InterfaceBlock>(KEY_DESTROY));
 		return (shader->getInterfaceBlock(target));
-	}
-
-	ShadingManager &ShadingManager::setShaderInterfaceBlock(Key<Shader> const &keyShader, Key<InterfaceBlock> const &keyInterfaceBlock, Key<UniformBlock> const &keyUniformBlock)
-	{
-		Shader *shader;
-		if ((shader = getShader(keyShader, "setShaderInterfaceBlock()")) == NULL)
-			return (*this);
-		UniformBlock *uniformBlock;
-		if ((uniformBlock = getUniformBlock(keyUniformBlock, "setShaderInterfaceBlock()")) == NULL)
-			return (*this);
-		shader->setInterfaceBlock(keyInterfaceBlock, *uniformBlock);
-		return (*this);
 	}
 
 	Key<Texture> ShadingManager::addTexture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping)

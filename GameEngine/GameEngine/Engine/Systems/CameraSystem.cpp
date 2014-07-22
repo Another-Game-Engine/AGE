@@ -104,16 +104,18 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 		std::cerr << "Warning: No manager set for the camerasystem" << std::endl;
 	
 	_shader = _render->addShader(VERTEX_SHADER, FRAG_SHADER);
-	size_t sizeElement[2];
-	gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
-	_global_state = _render->addUniformBlock(2, sizeElement);
-	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
-	_model_matrix = _render->addShaderUniform(_shader, "model_matrix");
-	_view_matrix = _render->addShaderUniform(_shader, "view_matrix");
-	_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix");
+	//size_t sizeElement[2];
+	//gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
+	//_global_state = _render->addUniformBlock(2, sizeElement);
+	//_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
+	_pro_matrix = _render->addShaderUniform(_shader, "projection_matrix");
+	_render->addShaderUniform(_shader, "pos_light", glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
+	_model_matrix = _render->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
+	_view_matrix = _render->addShaderUniform(_shader, "view_matrix", glm::mat4(1.f));
+	_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix", glm::mat3(1.f));
 	_diffuse_texture = _render->addShaderSampler(_shader, "diffuse_texture");
-	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
-	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
+	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color", glm::vec4(1.0f));
+	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio", 1.0f);
 	_renderPass = _render->addRenderPass(_shader);
 	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
 	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
@@ -195,90 +197,26 @@ void CameraSystem::mainUpdate(double time)
 	{
 		auto &camera = drawList->front();
 
-		auto lookat = camera.transformation;
-			//glm::lookAt(
-			//glm::vec3(0,0,-10), // Camera is at (0,0,-10), in World Space
-			//glm::vec3(0, 0, 0), // and looks at the origin
-			//glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-			//);
+		_render->setShaderUniform(_shader, _pro_matrix, camera.projection);
+		//_render->setUniformBlock(_global_state, 0, camera->projection);
+		//_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
+		_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
 
-//		auto material = _scene.lock()->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
-		_render->setUniformBlock(_global_state, 0, camera.projection);
-		_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
-
-		_render->setShaderUniform(_shader, _view_matrix, lookat); // lookat hardcoded TODO
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 		_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
 		while (!camera.drawables.empty())
 		{
 			auto &c = camera.drawables.front();
-			_render->setShaderUniform(_shader, _model_matrix, c.transformation);                    //TODO
-			_render->setShaderUniform(_shader, _normal_matrix, glm::mat3(1));// glm::transpose(glm::inverse(glm::mat3(lookat * c.transformation))));
+			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
+			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera.transformation * c.transformation))));
+			_render->updateMemoryShader(_shader);
 			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
-
 			camera.drawables.pop();
 		}
 		drawList->pop();
 	}
 
-//auto lookat = glm::lookAt(
-//			glm::vec3(0,0,-10), // Camera is at (0,0,-10), in World Space
-//			glm::vec3(0, 0, 0), // and looks at the origin
-//			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-//			);
-//
-//
-//	for (auto &e : _camera.getCollection())
-//	{
-//		auto scene = _scene.lock();
-//		auto camera = scene->getComponent<Component::CameraComponent>(e);
-//		_render->setUniformBlock(_global_state, 0, camera->getProjection());
-//		_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
-//		_render->setShaderUniform(_shader, _view_matrix, lookat); // look at hardcoded TODO
-//		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-//		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-//		_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
-//
-//		auto lol = scene->getInstance<AGE::Octree>()->getDrawableList();
-//		if (lol->empty())
-//			return;
-//		while (!lol->front().drawables.empty())
-//		{
-//			auto &c = lol->front().drawables.front();
-//			_render->setShaderUniform(_shader, _model_matrix, glm::mat4(1));                    //TODO
-//			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
-//
-//			lol->front().drawables.pop();
-//		}
-//
-
-		//for (auto &m : _drawable.getCollection())
-		//{
-		//	auto mesh = scene->getComponent<Component::MeshRenderer>(m);
-		//	_render->setShaderUniform(_shader, _model_matrix, glm::mat4(1)); //scene->getLink(m)->getTransform()
-		//	for (auto &c : mesh->getMesh()->subMeshs)
-		//		_render->geometryManager.draw(GL_TRIANGLES, c.indices, c.vertices);
-		//}
-
-
-	//}
-
-
-	//	//for (auto &m : _drawable.getCollection())
-	//	//{
-	//	//	auto mesh = scene->getComponent<Component::MeshRenderer>(m);
-	//	//	if (mesh->draw == false)
-	//	//		continue;
-	//	//	mesh->draw = false;
-	//	//	//_render->setShaderSampler(_shader, _diffuse_texture, mesh->getMesh()->material->materials[0].diffuseTex->getTexture());
-	//	//	_render->setShaderUniform(_shader, _model_matrix, scene->getLink(m)->getTransform());
-	//	//	_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * scene->getLink(m)->getTransform()))));
-	//	//	//for (std::size_t i = 0; i < mesh->getMesh()->material->materials.size(); ++i)
-	//	//	for (auto &c : mesh->getMesh()->subMeshs)
-	//	//		_geometry->draw(GL_TRIANGLES, c.indices, c.vertices);
-	//	//}
-	//}
 #endif
 }
 

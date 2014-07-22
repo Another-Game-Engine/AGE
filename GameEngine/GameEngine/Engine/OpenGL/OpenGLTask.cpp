@@ -1,13 +1,9 @@
-#include <OpenGL/BufferSettings.hh>
+#include <OpenGL/OpenGLTask.hh>
 #include <Utils/OpenGL.hh>
 #include <glm/glm.hpp>
 #include <assert.h>
 #include <memory>
 #include <string>
-
-# undef DEBUG_MESSAGE
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
 
 #define CONVERT(type, index) (*((type *)data[index]))
 
@@ -125,4 +121,66 @@ namespace gl
 		glBlendColor(CONVERT(glm::vec4, 0)[0], CONVERT(glm::vec4, 0)[1], CONVERT(glm::vec4, 0)[2], CONVERT(glm::vec4, 0)[4]);
 	}
 
+	void setUniformMat4(void **data)
+	{
+		glUniformMatrix4fv(CONVERT(unsigned int, 0), 1, GL_FALSE, (const float *)&(CONVERT(glm::mat4, 1)));
+	}
+
+	void setUniformMat3(void **data)
+	{
+		glUniformMatrix3fv(CONVERT(unsigned int, 0), 1, GL_FALSE, (const float *)&(CONVERT(glm::mat3, 1)));
+	}
+
+	void setUniformUint(void **data)
+	{
+		glUniform1i(CONVERT(unsigned int, 0), CONVERT(int, 1));
+	}
+
+	void setBlockPointerUBO(void **data)
+	{
+		glUniformBlockBinding(CONVERT(unsigned int, 0), CONVERT(unsigned int, 1), CONVERT(unsigned int, 2));
+	}
+
+	void setUniformFloat(void **data)
+	{
+		glUniform1f(CONVERT(unsigned int, 0), CONVERT(float, 1));
+	}
+
+	void setUniformVec4(void **data)
+	{
+		glUniform4f(CONVERT(unsigned int, 0), CONVERT(glm::vec4, 1).x, CONVERT(glm::vec4, 1).y, CONVERT(glm::vec4, 1).z, CONVERT(glm::vec4, 1).w);
+	}
+
+	void setUniformSampler(void **data)
+	{
+		glActiveTexture(GL_TEXTURE0 + CONVERT(GLuint, 0));
+		glBindTexture(CONVERT(GLenum, 1), CONVERT(GLint, 2));
+	}
+
+	Task::Task()
+		: nbrParams(0), 
+		params(NULL), 
+		sizeParams(NULL), 
+		func(NULL)
+	{
+	}
+
+	void Task::clear()
+	{
+		func = NULL;
+		for (size_t index = 0; index < nbrParams; ++index)
+			delete params[index];
+		if (params)
+			delete[] params;
+		params = NULL;
+		if (sizeParams)
+			delete[] sizeParams;
+		sizeParams = NULL;
+		nbrParams = 0;
+	}
+
+	bool Task::isExec()
+	{
+		return (func == NULL ? false : true);
+	}
 }
