@@ -22,6 +22,9 @@
 #include <Geometry/Material.hpp>
 #include <Core/Drawable.hh>
 
+#include <Core/OctreeKey.hpp>
+
+
 class AScene;
 
 namespace AGE
@@ -32,6 +35,7 @@ namespace AGE
 	{
 	public:
 		typedef std::uint64_t USER_OBJECT_ID;
+
 	private:
 		enum CommandType
 		{
@@ -67,7 +71,7 @@ namespace AGE
 
 		struct CameraObject
 		{
-			USER_OBJECT_ID  id;
+			OctreeKey key;
 			glm::vec3 position;
 			glm::vec3 scale;
 			glm::quat orientation;			
@@ -83,7 +87,7 @@ namespace AGE
 			glm::quat orientation;
 			std::vector<SubMeshInstance> submeshInstances;
 			std::vector<MaterialInstance> materialInstances;
-			USER_OBJECT_ID id;
+			OctreeKey key;
 			CommandType commandType;
 			BoundingInfos boundingInfo;
 			glm::mat4 projection;
@@ -92,24 +96,23 @@ namespace AGE
 				: position(0)
 				, scale(0)
 				, orientation(0,0,0,1)
-				, id(USER_OBJECT_ID(-1))
 				, commandType(CommandType::END)
 			{}
 
-			OctreeCommand(USER_OBJECT_ID _id, CommandType _cmdType)
+			OctreeCommand(const OctreeKey &_key, CommandType _cmdType)
 				: position(0)
 				, scale(0)
 				, orientation(0, 0, 0, 1)
-				, id(_id)
+				, key(_key)
 				, commandType(_cmdType)
 			{
 			}
 
-			OctreeCommand(USER_OBJECT_ID _id, const glm::vec3& pos, CommandType _cmdType)
+			OctreeCommand(const OctreeKey &_key, const glm::vec3& pos, CommandType _cmdType)
 				: position(0)
 				, scale(0)
 				, orientation(0, 0, 0, 1)
-				, id(_id)
+				, key(_key)
 				, commandType(_cmdType)
 			{
 				if (_cmdType == CommandType::Position)
@@ -117,25 +120,25 @@ namespace AGE
 				else
 					scale = pos;
 			}
-			OctreeCommand(USER_OBJECT_ID _id, const glm::quat& ori, CommandType _cmdType)
+			OctreeCommand(const OctreeKey &_key, const glm::quat& ori, CommandType _cmdType)
 				: position(0)
 				, scale(0)
 				, orientation(ori)
-				, id(_id)
+				, key(_key)
 				, commandType(_cmdType)
 			{
 			}
-			OctreeCommand(USER_OBJECT_ID _id, const glm::mat4& projection, CommandType _cmdType)
+			OctreeCommand(const OctreeKey &_key, const glm::mat4& projection, CommandType _cmdType)
 				: position(0)
 				, scale(0)
 				, orientation(0, 0, 0, 1)
-				, id(_id)
+				, key(_key)
 				, commandType(_cmdType)
 				, projection(projection)
 			{
 			}
 
-			OctreeCommand(USER_OBJECT_ID _id
+			OctreeCommand(const OctreeKey &_key
 				, std::vector<SubMeshInstance> _submeshInstances // copy
 				, std::vector<MaterialInstance> _materialInstances // copy
 				, CommandType _cmdType)
@@ -144,7 +147,7 @@ namespace AGE
 				, orientation(0,0,0,1)
 				, submeshInstances(_submeshInstances)
 				, materialInstances(_materialInstances)
-				, id(_id)
+				, key(_key)
 				, commandType(_cmdType)
 			{}
 
@@ -172,11 +175,11 @@ namespace AGE
 
 	private:
 		std::vector<UserObject> _userObjects;
-		AGE::Queue<std::size_t> _freeUserObjects;
+		AGE::Queue<OctreeKey::OctreeObjectId> _freeUserObjects;
 		std::vector<CullableObject> _cullableObjects;
-		AGE::Queue<std::size_t> _freeCullableObjects;
+		AGE::Queue<OctreeKey::OctreeObjectId> _freeCullableObjects;
 		std::vector<CameraObject> _cameraObjects;
-		AGE::Queue<std::size_t> _freeCameraObjects;
+		AGE::Queue<OctreeKey::OctreeObjectId> _freeCameraObjects;
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
 
@@ -189,25 +192,25 @@ namespace AGE
 		AGE::Queue<DrawableCollection> *_mainThreadDrawList;
 
 	public:
-		USER_OBJECT_ID addElement();
-		void removeElement(USER_OBJECT_ID id);
-		USER_OBJECT_ID addCamera();
-		void removeCamera(USER_OBJECT_ID id);
+		const OctreeKey &addCullableElement();
+		const OctreeKey &addCameraElement();
+
+		void removeElement(const OctreeKey &key);
 
 
-		void setPosition(const glm::vec3 &v, USER_OBJECT_ID id);
-		void setOrientation(const glm::quat &v, USER_OBJECT_ID id);
-		void setScale(const glm::vec3 &v, USER_OBJECT_ID id);
+		void setPosition(const glm::vec3 &v, const OctreeKey &key);
+		void setOrientation(const glm::quat &v, const OctreeKey &key);
+		void setScale(const glm::vec3 &v, const OctreeKey &key);
 
-		void setPosition(const glm::vec3 &v, const std::array<USER_OBJECT_ID, MAX_CPT_NUMBER> &ids);
-		void setOrientation(const glm::quat &v, const std::array<USER_OBJECT_ID, MAX_CPT_NUMBER> &ids);
-		void setScale(const glm::vec3 &v, const std::array<USER_OBJECT_ID, MAX_CPT_NUMBER> &ids);
+		void setPosition(const glm::vec3 &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids);
+		void setOrientation(const glm::quat &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids);
+		void setScale(const glm::vec3 &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids);
 
-		void updateGeometry(USER_OBJECT_ID id
+		void updateGeometry(const OctreeKey &id
 			, const std::vector<AGE::SubMeshInstance> &meshs
 			, const std::vector<AGE::MaterialInstance> &materials);
 
-		void setCameraInfos(USER_OBJECT_ID id
+		void setCameraInfos(const OctreeKey &id
 			, const glm::mat4 &projection);
 
 		void update();

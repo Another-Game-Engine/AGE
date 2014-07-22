@@ -16,7 +16,7 @@ namespace AGE
 		struct Camera
 		{
 		private:
-			Octree::USER_OBJECT_ID _cameraId;
+			OctreeKey _cameraOTKey;
 		public:
 			void init(::AScene *scene, ENTITY_ID entityId);
 			void reset(::AScene *scene, ENTITY_ID entityId);

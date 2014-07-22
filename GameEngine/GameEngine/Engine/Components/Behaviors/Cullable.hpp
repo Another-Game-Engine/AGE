@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
+#include <Core/Octree.hpp>
 
 class AScene;
 
@@ -14,14 +15,13 @@ namespace AGE
 		struct Cullable
 		{
 		private:
-			std::size_t _cullableId;
+			OctreeKey _cullableOTKey;
 		public:
 			void init(::AScene *scene, ENTITY_ID entityId);
 			void reset(::AScene *scene, ENTITY_ID entityId);
 
 			Cullable()
-				:_cullableId(std::size_t(-1))
-				, mesh(nullptr)
+				: mesh(nullptr)
 				, material(nullptr)
 			{}
 
@@ -32,7 +32,7 @@ namespace AGE
 			{
 				mesh = std::move(o.mesh);
 				material = std::move(o.material);
-				_cullableId = o._cullableId;
+				_cullableOTKey = o._cullableOTKey;
 				_scene = o._scene;
 			}
 
@@ -40,7 +40,7 @@ namespace AGE
 			{
 				mesh = std::move(o.mesh);
 				material = std::move(o.material);
-				_cullableId = o._cullableId;
+				_cullableOTKey = o._cullableOTKey;
 				_scene = o._scene;
 				return *this;
 			}

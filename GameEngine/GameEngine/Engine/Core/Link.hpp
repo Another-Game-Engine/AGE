@@ -5,6 +5,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Entities/EntityTypedef.hpp>
+#include <Core/OctreeKey.hpp>
 #include <cstring>
 #include <array>
 
@@ -22,8 +23,8 @@ namespace AGE
 		void setScale(const glm::vec3 &v);
 		void setOrientation(const glm::quat &v);
 
-		void registerCullableId(std::size_t id);
-		void unregisterCullableId(std::size_t id);
+		void registerOctreeObject(const OctreeKey &key);
+		void unregisterOctreeObject(const OctreeKey &key);
 	public:
 		const glm::mat4 &getTransform();
 	private:
@@ -32,7 +33,7 @@ namespace AGE
 		glm::quat _orientation;
 		glm::mat4 _trans;
 		bool _computeTrans;
-		std::array<std::size_t, MAX_CPT_NUMBER> _cullableLinks;
+		std::array<OctreeKey, MAX_CPT_NUMBER> _octreeObjects;
 	public:
 		void *_octree;
 	public:

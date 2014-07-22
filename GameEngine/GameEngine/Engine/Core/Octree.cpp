@@ -20,97 +20,104 @@ namespace AGE
 	}
 
 
-	Octree::USER_OBJECT_ID Octree::addElement()
+	const OctreeKey &Octree::addCullableElement()
 	{
-		Octree::USER_OBJECT_ID res = USER_OBJECT_ID(-1);
+		OctreeKey res;
+		res.type = OctreeKey::Type::Cullable;
 		if (!_freeUserObjects.empty())
 		{
-			res = _freeUserObjects.front();
+			res.id = _freeUserObjects.front();
 			_freeUserObjects.pop();
 		}
 		else
 		{
-			res = _userObjectCounter++;
+			res.id = _userObjectCounter++;
 		}
 
 		_mainThreadCommands->emplace(res, CommandType::CreateDrawable);
 		return res;
 	}
 
-	void Octree::removeElement(Octree::USER_OBJECT_ID id)
+	void Octree::removeElement(const OctreeKey &key)
 	{
-		_freeUserObjects.push(id);
-		_mainThreadCommands->emplace(id, CommandType::DeleteDrawable);
-		assert(id != (std::size_t)(-1));
+		assert(!key.invalid());
+		switch (key.type)
+		{
+		case(OctreeKey::Type::Camera):
+			_freeCameraObjects.push(key.id);
+			_mainThreadCommands->emplace(key, CommandType::DeleteCamera);
+			break;
+		case(OctreeKey::Type::Cullable):
+			_freeUserObjects.push(key.id);
+			_mainThreadCommands->emplace(key, CommandType::DeleteDrawable);
+			break;
+		default:
+			break;
+		}
 	}
 
-	Octree::USER_OBJECT_ID Octree::addCamera()
+	const OctreeKey &Octree::addCameraElement()
 	{
-		Octree::USER_OBJECT_ID res = USER_OBJECT_ID(-1);
+		OctreeKey res;
+		res.type = OctreeKey::Type::Camera;
 		if (!_freeCameraObjects.empty())
 		{
-			res = _freeCameraObjects.front();
+			res.id = _freeCameraObjects.front();
 			_freeCameraObjects.pop();
 		}
 		else
 		{
-			res = _cameraCounter++;
+			res.id = _cameraCounter++;
 		}
 
 		_mainThreadCommands->emplace(res, CommandType::CreateCamera);
 		return res;
 	}
 
-	void Octree::removeCamera(Octree::USER_OBJECT_ID id)
-	{
-		_freeCameraObjects.push(id);
-		_mainThreadCommands->emplace(id, CommandType::DeleteCamera);
-		assert(id != (std::size_t)(-1));
-	}
-
-	void Octree::setPosition(const glm::vec3 &v, Octree::USER_OBJECT_ID id)
+	void Octree::setPosition(const glm::vec3 &v, const OctreeKey &id)
 	{
 		_mainThreadCommands->emplace(id, v, CommandType::Position);
 	}
-	void Octree::setOrientation(const glm::quat &v, Octree::USER_OBJECT_ID id)
+	void Octree::setOrientation(const glm::quat &v, const OctreeKey &id)
 	{
 		_mainThreadCommands->emplace(id, v, CommandType::Orientation);
 	}
 
-	void Octree::setScale(const glm::vec3 &v, Octree::USER_OBJECT_ID id)
+	void Octree::setScale(const glm::vec3 &v, const OctreeKey &id)
 	{
 		_mainThreadCommands->emplace(id, v, CommandType::Scale);
 	}
 
-	void Octree::setCameraInfos(USER_OBJECT_ID id
+	void Octree::setCameraInfos(const OctreeKey &id
 		, const glm::mat4 &projection)
 	{
 		_mainThreadCommands->emplace(id, projection, CommandType::CameraInfos);
 	}
 
-	void Octree::setPosition(const glm::vec3 &v, const std::array<Octree::USER_OBJECT_ID, MAX_CPT_NUMBER> &ids)
+	void Octree::setPosition(const glm::vec3 &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setPosition(v, e);
 	}
 
-	void Octree::setOrientation(const glm::quat &v, const std::array<Octree::USER_OBJECT_ID, MAX_CPT_NUMBER> &ids)
+	void Octree::setOrientation(const glm::quat &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setOrientation(v, e);
 	}
 
-	void Octree::setScale(const glm::vec3 &v, const std::array<Octree::USER_OBJECT_ID, MAX_CPT_NUMBER> &ids)
+	void Octree::setScale(const glm::vec3 &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setScale(v, e);
 	}
 
-	void Octree::updateGeometry(USER_OBJECT_ID id
+	void Octree::updateGeometry(const OctreeKey &key
 		, const std::vector<AGE::SubMeshInstance> &meshs
 		, const std::vector<AGE::MaterialInstance> &materials)
 	{
-		_mainThreadCommands->emplace(id, meshs, materials, CommandType::Geometry);
+		assert(!key.invalid() || key.type != OctreeKey::Type::Cullable);
+		_mainThreadCommands->emplace(key, meshs, materials, CommandType::Geometry);
 	}
 
 	//-----------------------------------------------------------------
@@ -157,22 +164,22 @@ namespace AGE
 			{
 			case (CommandType::CreateDrawable) :
 
-				if (command.id >= _userObjects.size())
+				if (command.key.id >= _userObjects.size())
 				{
 					_userObjects.push_back(UserObject());
 					uo = &_userObjects.back();
 				}
 				else
 				{
-					uo = &_userObjects[command.id];
+					uo = &_userObjects[command.key.id];
 				}
-				uo->id = command.id;
+				uo->id = command.key.id;
 				uo->active = true;
 				break;
 
 			case (CommandType::DeleteDrawable) :
 
-				uo = &_userObjects[command.id];
+				uo = &_userObjects[command.key.id];
 				for (auto &e : uo->drawableCollection)
 				{
 					removeDrawableObject(e);
@@ -183,28 +190,28 @@ namespace AGE
 
 			case (CommandType::CreateCamera) :
 
-				if (command.id >= _cameraObjects.size())
+				if (command.key.id >= _cameraObjects.size())
 				{
 					_cameraObjects.push_back(CameraObject());
 					co = &_cameraObjects.back();
 				}
 				else
 				{
-					co = &_cameraObjects[command.id];
+					co = &_cameraObjects[command.key.id];
 				}
-				co->id = command.id;
+				co->key.id = command.key.id;
 				co->active = true;
 				break;
 
 			case (CommandType::DeleteCamera) :
 
-				co = &_cameraObjects[command.id];
+				co = &_cameraObjects[command.key.id];
 				co->active = false;
 				break;
 
 			case (CommandType::Geometry) :
 
-				uo = &_userObjects[command.id];
+				uo = &_userObjects[command.key.id];
 				assert(uo->active != false);
 				for (auto &e : uo->drawableCollection)
 				{
@@ -213,7 +220,7 @@ namespace AGE
 				uo->drawableCollection.clear();
 				for (std::size_t i = 0; i < command.submeshInstances.size(); ++i)
 				{
-					auto id = addDrawableObject(command.id);
+					auto id = addDrawableObject(command.key.id);
 					uo->drawableCollection.push_back(id);
 					_cullableObjects[id].mesh = command.submeshInstances[i];
 					_cullableObjects[id].position = uo->position;
@@ -222,40 +229,72 @@ namespace AGE
 				}
 				break;
 			case (CommandType::Position) :
-
-				uo = &_userObjects[command.id];
-				uo->position = command.position;
-				for (auto &e : uo->drawableCollection)
-				{
-					_cullableObjects[e].position = uo->position;
-					_cullableObjects[e].hasMoved = true;
-				}
+				switch (command.key.type)
+			{
+				case(OctreeKey::Type::Camera) :
+					co = &_cameraObjects[command.key.id];
+					co->position = command.position;
+					co->hasMoved = true;
+					break;
+				case(OctreeKey::Type::Cullable) :
+					uo = &_userObjects[command.key.id];
+					uo->position = command.position;
+					for (auto &e : uo->drawableCollection)
+					{
+						_cullableObjects[e].position = uo->position;
+						_cullableObjects[e].hasMoved = true;
+					}
+					break;
+				default:
+					break;
+			}
 				break;
-
 			case (CommandType::Scale) :
-
-				uo = &_userObjects[command.id];
-				uo->scale = command.scale;
-				for (auto &e : uo->drawableCollection)
-				{
-					_cullableObjects[e].scale = uo->scale;
-					_cullableObjects[e].hasMoved = true;
-				}
+				switch (command.key.type)
+			{
+				case(OctreeKey::Type::Camera) :
+					co = &_cameraObjects[command.key.id];
+					co->scale = command.scale;
+					co->hasMoved = true;
+					break;
+				case(OctreeKey::Type::Cullable) :
+					uo = &_userObjects[command.key.id];
+					uo->scale = command.scale;
+					for (auto &e : uo->drawableCollection)
+					{
+						_cullableObjects[e].scale = uo->scale;
+						_cullableObjects[e].hasMoved = true;
+					}
+					break;
+				default:
+					break;
+			}
 				break;
 
 			case (CommandType::Orientation) :
-
-				uo = &_userObjects[command.id];
-				uo->orientation = command.orientation;
-				for (auto &e : uo->drawableCollection)
-				{
-					_cullableObjects[e].orientation = uo->orientation;
-					_cullableObjects[e].hasMoved = true;
-				}
+				switch (command.key.type)
+			{
+				case(OctreeKey::Type::Camera) :
+					co = &_cameraObjects[command.key.id];
+					co->orientation = command.orientation;
+					co->hasMoved = true;
+					break;
+				case(OctreeKey::Type::Cullable) :
+					uo = &_userObjects[command.key.id];
+					uo->orientation = command.orientation;
+					for (auto &e : uo->drawableCollection)
+					{
+						_cullableObjects[e].orientation = uo->orientation;
+						_cullableObjects[e].hasMoved = true;
+					}
+					break;
+				default:
+					break;
+			}
 				break;
 			case (CommandType::CameraInfos) :
 
-				co = &_cameraObjects[command.id];
+				co = &_cameraObjects[command.key.id];
 				co->hasMoved = true;
 				co->projection = command.projection;
 				break;

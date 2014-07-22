@@ -12,20 +12,20 @@ namespace AGE
 		void Cullable::init(::AScene *scene, ENTITY_ID entityId)
 		{
 			_scene = scene;
-			assert(_cullableId == (std::size_t)(-1));
-			_cullableId = scene->getInstance<AGE::Octree>()->addElement();
-			scene->getLink(entityId)->registerCullableId(_cullableId);
-			assert(_cullableId != (std::size_t)(-1));
+			assert(_cullableOTKey.invalid());
+			_cullableOTKey = scene->getInstance<AGE::Octree>()->addCullableElement();
+			scene->getLink(entityId)->registerOctreeObject(_cullableOTKey);
+			assert(!_cullableOTKey.invalid());
 		}
 
 		void Cullable::reset(::AScene *scene, ENTITY_ID entityId)
 		{
-			assert(_cullableId != (std::size_t)(-1));
+			assert(!_cullableOTKey.invalid());
 			mesh = nullptr;
 			material = nullptr;
-			scene->getLink(entityId)->unregisterCullableId(_cullableId);
-			scene->getInstance<AGE::Octree>()->removeElement(_cullableId);
-			_cullableId = (std::size_t)(-1);
+			scene->getLink(entityId)->unregisterOctreeObject(_cullableOTKey);
+			scene->getInstance<AGE::Octree>()->removeElement(_cullableOTKey);
+			_cullableOTKey = OctreeKey();
 		}
 
 		//temporary
@@ -74,7 +74,7 @@ namespace AGE
 				//else
 				//	materials.push_back(material->datas[e.defaultMaterialIndex]);
 			}
-			_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableId, mesh->subMeshs, materials);
+			_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableOTKey, mesh->subMeshs, materials);
 		}
 
 

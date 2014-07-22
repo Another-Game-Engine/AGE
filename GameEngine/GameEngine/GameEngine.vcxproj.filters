@@ -222,6 +222,7 @@
     <ClInclude Include="Engine\Core\Drawable.hh" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Texture\Texture.hpp" />
+    <ClInclude Include="Engine\Core\OctreeKey.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
