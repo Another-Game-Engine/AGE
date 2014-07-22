@@ -3,17 +3,17 @@
 
 using namespace AGE;
 
-void Link::registerCullableId(std::size_t id)
+void Link::registerOctreeObject(const OctreeKey &key)
 {
-	for (auto &b : _cullableLinks)
+	for (auto &b : _octreeObjects)
 	{
-		if (b == std::size_t(-1))
+		if (b.invalid())
 		{
-			b = id;
+			b = key;
 			auto ot = static_cast<Octree*>(_octree);
-			ot->setPosition(_position, id);
-			ot->setScale(_scale, id);
-			ot->setOrientation(_orientation, id);
+			ot->setPosition(_position, key);
+			ot->setScale(_scale, key);
+			ot->setOrientation(_orientation, key);
 			return;
 		}
 	}
@@ -25,9 +25,9 @@ void Link::setPosition(const glm::vec3 &v)
 	_computeTrans = true;
 	_position = v;
 	auto ot = static_cast<Octree*>(_octree);
-	for(auto &e : _cullableLinks)
+	for(auto &e : _octreeObjects)
 	{
-		if (e == std::size_t(-1))
+		if (e.invalid())
 			return;
 		ot->setPosition(_position, e);
 	}
@@ -37,9 +37,9 @@ void Link::setScale(const glm::vec3 &v) {
 	_computeTrans = true;
 	_scale = v;
 	auto ot = static_cast<Octree*>(_octree);
-	for (auto &e : _cullableLinks)
+	for (auto &e : _octreeObjects)
 	{
-		if (e == std::size_t(-1))
+		if (e.invalid())
 			return;
 		ot->setScale(_scale, e);
 	}
@@ -48,21 +48,21 @@ void Link::setOrientation(const glm::quat &v) {
 	_computeTrans = true;
 	_orientation = v;
 	auto ot = static_cast<Octree*>(_octree);
-	for (auto &e : _cullableLinks)
+	for (auto &e : _octreeObjects)
 	{
-		if (e == std::size_t(-1))
+		if (e.invalid())
 			return;
 		ot->setOrientation(_orientation, e);
 	}
 }
 
-void Link::unregisterCullableId(std::size_t id)
+void Link::unregisterOctreeObject(const OctreeKey &key)
 {
-	for (auto &b : _cullableLinks)
+	for (auto &b : _octreeObjects)
 	{
-		if (b == id)
+		if (b == key)
 		{
-			b = std::size_t(-1);
+			b = OctreeKey();
 			return;
 		}
 	}
@@ -93,5 +93,5 @@ const glm::mat4 &Link::getTransform()
 			_orientation = glm::quat(glm::mat4(1));
 			_trans = glm::mat4(1);
 			_computeTrans = true;
-			_cullableLinks.fill(std::size_t(-1));
+			_octreeObjects.fill(OctreeKey());
 		}

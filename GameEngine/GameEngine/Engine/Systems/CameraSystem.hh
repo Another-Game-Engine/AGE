@@ -4,6 +4,7 @@
 #include <Core/EntityFilter.hpp>
 #include <glm/glm.hpp>
 #include <OpenGL/Key.hh>
+#include <Components/CameraComponent.hpp>
 
 # define NEW_SHADER 1
 
@@ -46,6 +47,8 @@ protected:
 	gl::Key<gl::Uniform> _diffuse_ratio;
 	gl::Key<gl::Sampler> _diffuse_texture;
 	gl::Key<gl::RenderPass> _renderPass;
+
+	gl::Key<gl::Uniform> _transformation;
 #endif
 	virtual void updateBegin(double time);
 	virtual void updateEnd(double time);

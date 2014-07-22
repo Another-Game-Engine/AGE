@@ -9,12 +9,10 @@
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
-
 #include <Systems/CameraSystem.hh>
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/LightRenderingSystem.hh>
-#include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/BlitFinalRender.hh>
 
 #include <Core/AssetsManager.hpp>
@@ -24,6 +22,8 @@
 #include <Context/IRenderContext.hh>
 
 #include <CONFIGS.hpp>
+
+Entity GLOBAL_CAMERA;
 
 class BenchmarkScene : public AScene	
 {
@@ -51,7 +51,6 @@ public:
 
 #ifdef RENDERING_ACTIVATED
 
-	addSystem<FirstPersonViewSystem>(2);
 		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::ShadingManager>();
 #if NEW_SHADER
@@ -110,8 +109,8 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 		auto camera = createEntity();
+		GLOBAL_CAMERA = camera;
 		auto cam = addComponent<Component::CameraComponent>(camera);
-		addComponent<Component::FirstPersonView>(camera);
 
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		cam->fboSize = screenSize;
@@ -154,6 +153,8 @@ public:
 
 		getInstance<AGE::Octree>()->update();
 
+		getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 0.3f, glm::vec3(0, 1, 0)));
+
 		if (_chunkCounter >= _maxChunk)
 		{
 			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
@@ -179,12 +180,12 @@ public:
 				if (i % 4 == 0)
 				{
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("ball/ball.sage"));
-					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
+//					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
 				}
 				else
 				{
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
-					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+//					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
 				}
 #else
 				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
@@ -229,7 +230,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 15.0f;
+	double _maxTime = 1500.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;

@@ -6,30 +6,58 @@
 namespace AGE
 {
 	template <class T>
-	class Queue
+	class Age_Queue
 	{
 	public:
-		Queue()
+		Age_Queue()
 			: _size(0)
 			, _start(0)
 			, _end(0)
 			, _chunkSize(124)
+			, _data(nullptr)
 		{}
 
-		~Queue()
+		~Age_Queue()
 		{
 			if (_data)
 				delete[] _data;
+			_data = nullptr;
 		}
 
-		Queue(const Queue &o)
-		{}
-
-		Queue(Queue &&o)
-		{}
-
-		Queue &operator=(const Queue &o)
+		Age_Queue(const Age_Queue &o)
 		{
+			_size = o._size;
+			_start = o._start;
+			_end = o._end;
+			_chunkSize = o._chunkSize;
+			release();
+			for (auto i = o._start; i < o._end; ++i)
+				push(o._data[i]);
+			/*_data = std::move(o._data);*/
+		}
+
+		Age_Queue(Age_Queue &&o)
+		{
+			_size = std::move(o._size);
+			_start = std::move(o._start);
+			_end = std::move(o._end);
+			_chunkSize = std::move(o._chunkSize);
+			release();
+			for (auto i = o._start; i < o._end; ++i)
+				push(o._data[i]);
+			//_data = std::move(o._data);
+		}
+
+		Age_Queue &operator=(const Age_Queue &o)
+		{
+			_size = std::move(o._size);
+			_start = std::move(o._start);
+			_end = std::move(o._end);
+			_chunkSize = std::move(o._chunkSize);
+			release();
+			for (auto i = o._start; i < o._end; ++i)
+				push(o._data[i]);
+			//_data = std::move(o._data);
 			return *this;
 		}
 
@@ -114,8 +142,9 @@ namespace AGE
 		void release()
 		{
 			if (_data)
-				delete[] data;
+				delete[] _data;
 			_start = _end = _size = 0;
+			_data = nullptr;
 		}
 
 	private:
@@ -148,3 +177,33 @@ namespace AGE
 		T *_data;
 	};
 }
+
+
+#ifndef AGE_CONTAINER
+namespace AGE
+{
+	template<typename T>
+	using Queue = AGE::Age_Queue<T>;
+
+	template<typename T>
+	static void clearQueue(Queue<T> &q)
+	{
+		q.clear();
+	}
+
+}
+#else
+	#include <queue>
+namespace AGE
+{
+	template<typename T>
+	using Queue = ::std::queue<T>;
+
+	template<typename T>
+	static void clearQueue(Queue<T> &q)
+	{
+		while (!q.empty())
+			q.pop();
+	}
+}
+#endif

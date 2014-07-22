@@ -298,6 +298,7 @@
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\Octree.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
+    <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
@@ -351,7 +352,6 @@
     <ClInclude Include="Engine\Components\Collision.hpp" />
     <ClInclude Include="Engine\Components\CollisionLayers.hpp" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
-    <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
     <ClInclude Include="Engine\Components\FPController.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
@@ -401,7 +401,6 @@
     <ClInclude Include="Engine\Systems\BulletDynamicSystem.hpp" />
     <ClInclude Include="Engine\Systems\CollisionAdderSystem.hpp" />
     <ClInclude Include="Engine\Systems\CollisionCleanerSystem.hpp" />
-    <ClInclude Include="Engine\Systems\FirstPersonViewSystem.hpp" />
     <ClInclude Include="Engine\Systems\LightRenderingSystem.hh" />
     <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />

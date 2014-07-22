@@ -29,7 +29,7 @@ namespace Component
 
 	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r)
 	{
-		AGE::ComponentBehavior::Cullable::init(scene, entityId, MeshRenderer::getTypeId());
+		AGE::ComponentBehavior::Cullable::init(scene, entityId);
 		setMesh(r);
 	}
 

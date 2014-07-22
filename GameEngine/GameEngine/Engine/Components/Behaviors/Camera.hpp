@@ -3,7 +3,9 @@
 #include <Entities/EntityTypedef.hpp>
 #include <cstddef>
 
+#include <Utils/Frustum.hpp>
 #include <glm/glm.hpp>
+#include <Core/Octree.hpp>
 
 class AScene;
 
@@ -14,16 +16,18 @@ namespace AGE
 		struct Camera
 		{
 		private:
-			std::size_t _cameraId;
+			OctreeKey _cameraOTKey;
 		public:
-			void init(::AScene *scene, ENTITY_ID entityId, COMPONENT_ID componentTypeId);
+			void init(::AScene *scene, ENTITY_ID entityId);
 			void reset(::AScene *scene, ENTITY_ID entityId);
 
-			//TEMPORARY FOR TEST
-			// have to be passed as private
-		public:
-			glm::mat4 lookAtTransform;
-			glm::mat4 projection;
+			//void setLookAtTransform(const glm::mat4 &lookAt);
+			//const glm::mat4& getLookAtTransform() const;
+			void setProjection(const glm::mat4 &);
+			const glm::mat4 &getProjection() const;
+		private:
+			glm::mat4 _projection;
+			AScene *_scene = nullptr;
 		};
 	}
 }
