@@ -67,7 +67,7 @@ namespace gl
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock);
 		Shader &rmInterfaceBlock(Key<InterfaceBlock> &key);
 		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
-		Key<InterfaceBlock> setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
+		Shader setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
 
 		//
 		void updateMemory();
@@ -98,8 +98,10 @@ namespace gl
 		GLuint getUniformBlockLocation(char const *flag);
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
+		void createUniformBlockTask(Task &task, std::string const &flag, UniformBlock const &ubo);
 		void setSamplerTask(Task &task, Texture const &texture);
 		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **), void *data);
+		void setUniformBlockTask(Task &task, UniformBlock const &ubo);
 	};
 
 	template <typename TYPE>

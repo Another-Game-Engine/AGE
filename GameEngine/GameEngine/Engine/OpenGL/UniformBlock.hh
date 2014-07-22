@@ -26,10 +26,8 @@ namespace gl
 		size_t getSizeElement(size_t index) const;
 		size_t getOffsetElement(size_t index) const;
 		size_t getSizeBlock(size_t index) const;
-		int getBindingPoint() const;
-
-		UniformBlock const &bind() const;
-		UniformBlock const &unbind() const;
+		GLuint getBindingPoint() const;
+		GLuint getBufferId() const;
 
 		template <typename TYPE> UniformBlock &set(size_t index, TYPE const &value);
 	
@@ -39,7 +37,7 @@ namespace gl
 		MemoryGPU *_data;
 		size_t _nbrElement;
 		size_t _sizeBlock;
-		UniformBuffer _ubo;
+		UniformBuffer _buffer;
 
 		void GPUallocation();
 	};

@@ -213,7 +213,6 @@ void CameraSystem::mainUpdate(double time)
 			auto &c = octree->drawList.front();
 			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
 			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * c.transformation))));
-			//_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
 			_render->updateMemoryShader(_shader);
 			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
 			octree->drawList.pop();

@@ -318,10 +318,37 @@ namespace gl
 		task.sizeParams[2] = sizeof(GLint);
 	}
 
+	void Shader::createUniformBlockTask(Task &task, std::string const &flag, UniformBlock const &ubo)
+	{
+		task.func = setBlockPointerUBO;
+		task.nbrParams = 4;
+		task.sizeParams = new size_t[task.nbrParams];
+		task.params = new void *[task.nbrParams];
+		task.params[0] = new GLuint;
+		*(GLuint *)task.params[0] = _progId;
+		task.sizeParams[0] = sizeof(GLuint);
+		task.params[1] = new GLuint;
+		GLuint location = getUniformBlockLocation(flag.c_str());
+		*(GLuint *)task.params[1] = location;
+		task.sizeParams[1] = sizeof(GLuint);
+		task.params[2] = new GLuint;
+		*(GLuint *)task.params[2] = ubo.getBindingPoint();
+		task.sizeParams[2] = sizeof(GLuint);
+		task.params[3] = new GLuint;
+		*(GLuint *)task.params[3] = ubo.getBufferId();
+		task.sizeParams[3] = sizeof(GLuint);
+	}
+
 	void Shader::setSamplerTask(Task &task, Texture const &texture)
 	{
 		*(GLenum *)task.params[1] = texture.getType();
 		*(GLint *)task.params[2] = texture.getId();
+	}
+
+	void Shader::setUniformBlockTask(Task &task, UniformBlock const &ubo)
+	{
+		*(GLuint *)task.params[2] = ubo.getBindingPoint();
+		*(GLuint *)task.params[3] = ubo.getBufferId();
 	}
 
 	Key<Uniform> Shader::addUniform(std::string const &flag)
@@ -465,16 +492,18 @@ namespace gl
 	{
 		Key<InterfaceBlock> key;
 
-		//auto &task = _interfaceBlock[key];
-		//setTaskAllocation(*task, _progId, getUniformBlockLocation(flag.c_str()), uniformBlock.getBindingPoint());
-		//task->func = setBlockPointerUBO;
+		_tasks.push_back(Task());
+		_interfaceBlock[key] = _tasks.size() - 1;
+		Task *task = &_tasks.back();
 		return (key);
 	}
 
 	Shader &Shader::rmInterfaceBlock(Key<InterfaceBlock> &key)
 	{
-		if ((getInterfaceBlock(key, "rmInterfaceBlock")) == NULL)
+		Task *task;
+		if ((task = getInterfaceBlock(key, "rmInterfaceBlock")) == NULL)
 			return (*this);
+		task->clear();
 		_interfaceBlock.erase(key);
 		key.destroy();
 		return (*this);
@@ -520,15 +549,14 @@ namespace gl
 		return (&_tasks[element->second]);
 	}
 
-	Key<InterfaceBlock> Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformBlock)
+	Shader Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformBlock)
 	{
-		Key<InterfaceBlock> key_interfaceBlock;
-		//
-		//auto &task = _interfaceBlock[key_interfaceBlock];
-		//if (sizeof(UniformBlock const &) == task.sizeParams[1])
-		//	DEBUG_MESSAGE("Warning", "Shader - setInterfaceBlock", "", Key<InterfaceBlock>(KEY_DESTROY));
-		//memcpy(&task.params[1], &uniformBlock, sizeof(UniformBlock const &));
-		return (key_interfaceBlock);
+		Task *task;
+
+		if ((task = getInterfaceBlock(key, "setUniform")) == NULL)
+			return (*this);
+		setUniformBlockTask(*task, uniformBlock);
+		return (*this);
 	}
 
 	void Shader::updateMemory()
