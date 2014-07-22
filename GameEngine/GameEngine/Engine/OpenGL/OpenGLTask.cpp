@@ -137,7 +137,7 @@ namespace gl
 	void setBlockPointerUBO(void **data)
 	{
 		glUniformBlockBinding(CONVERT(GLuint, 0), CONVERT(GLuint, 1), CONVERT(GLuint, 2));
-		glBindBufferBase(GL_UNIFORM_BLOCK, CONVERT(GLuint, 2), CONVERT(GLuint, 3));
+		glBindBufferBase(GL_UNIFORM_BUFFER, CONVERT(GLuint, 2), CONVERT(GLuint, 3));
 	}
 
 	void setUniformFloat(void **data)

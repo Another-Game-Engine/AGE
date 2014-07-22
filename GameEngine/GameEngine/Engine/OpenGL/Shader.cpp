@@ -495,6 +495,7 @@ namespace gl
 		_tasks.push_back(Task());
 		_interfaceBlock[key] = _tasks.size() - 1;
 		Task *task = &_tasks.back();
+		createUniformBlockTask(*task, flag, uniformBlock);
 		return (key);
 	}
 
@@ -565,7 +566,7 @@ namespace gl
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
 			if (!_tasks[index].isExec())
-				DEBUG_MESSAGE("Warning", "Shader - updateMemory", "function pointer not set");
+				DEBUG_MESSAGE("Warning", "Shader - updateMemory", "function pointer not set",);
 			_tasks[index].func(_tasks[index].params);
 		}
 		//for (auto &index = _uniforms.begin(); index != _uniforms.end(); ++index)

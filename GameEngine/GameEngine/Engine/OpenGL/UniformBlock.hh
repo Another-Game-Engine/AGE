@@ -55,7 +55,7 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "UniformBlock.hh - set(TYPE)", "index is equal or superior of nbr element into uniformBlock", *this);
 		if (sizeof(TYPE) != _data[index].size)
 			DEBUG_MESSAGE("Warning", "UniformBlock.hh - set(TYPE)", "the type of value size is different of fiels target into uniformBlock", *this);
-		_ubo.bind();
+		_buffer.bind();
 		glBufferSubData(GL_UNIFORM_BUFFER, _data[index].offset, _data[index].size, &value);
 		return (*this);
 	}
