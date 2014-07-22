@@ -203,8 +203,6 @@ void CameraSystem::mainUpdate(double time)
 		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 		_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
-		glUseProgram(0);
-		_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
 		while (!camera.drawables.empty())
 		{
 			auto &c = camera.drawables.front();
