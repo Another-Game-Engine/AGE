@@ -23,6 +23,8 @@
 
 #include <CONFIGS.hpp>
 
+Entity GLOBAL_CAMERA;
+
 class BenchmarkScene : public AScene	
 {
 public:
@@ -107,6 +109,7 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 		auto camera = createEntity();
+		GLOBAL_CAMERA = camera;
 		auto cam = addComponent<Component::CameraComponent>(camera);
 
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
@@ -149,6 +152,8 @@ public:
 		_chunkCounter += time;
 
 		getInstance<AGE::Octree>()->update();
+
+		getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 0.3f, glm::vec3(0, 1, 0)));
 
 		if (_chunkCounter >= _maxChunk)
 		{
@@ -225,7 +230,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 15.0f;
+	double _maxTime = 1500.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;

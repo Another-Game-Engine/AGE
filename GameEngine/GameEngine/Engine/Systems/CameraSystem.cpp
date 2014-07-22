@@ -195,12 +195,12 @@ void CameraSystem::mainUpdate(double time)
 	{
 		auto &camera = drawList->front();
 
-		auto tmpPos = glm::translate(glm::mat4(1), glm::vec3(0, 0, -10));
-		auto lookat = glm::lookAt(
-			glm::vec3(0,0,-10), // Camera is at (0,0,-10), in World Space
-			glm::vec3(0, 0, 0), // and looks at the origin
-			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-			);
+		auto lookat = camera.transformation;
+			//glm::lookAt(
+			//glm::vec3(0,0,-10), // Camera is at (0,0,-10), in World Space
+			//glm::vec3(0, 0, 0), // and looks at the origin
+			//glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+			//);
 
 //		auto material = _scene.lock()->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
 		_render->setUniformBlock(_global_state, 0, camera.projection);

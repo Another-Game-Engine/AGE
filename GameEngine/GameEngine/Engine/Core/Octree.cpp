@@ -313,8 +313,8 @@ namespace AGE
 			if (!camera.active)
 				continue;
 			Frustum frustum;
-			auto transformation = glm::translate(glm::mat4(1), glm::vec3(0, 0, -10)); /*glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale) * */;
-			frustum.setMatrix(camera.projection, true);
+			auto transformation = glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale);
+			frustum.setMatrix(camera.projection * transformation, true);
 
 			_octreeDrawList->push(DrawableCollection());
 			auto &drawList = _octreeDrawList->back();
@@ -331,18 +331,18 @@ namespace AGE
 					++total;
 				else
 					continue;
-				if (/*frustum.pointIn(e.position) ==*/ true)
+				if (frustum.pointIn(e.position) == true)
 				{
-					//if (e.hasMoved)
-					//{
+					if (e.hasMoved)
+					{
 						e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 						e.hasMoved = false;
-					//}
+					}
 					drawList.drawables.emplace(e.mesh, e.material, e.transformation);
 					++drawed;
 				}
 			}
-			//std::cout << "Camera n[" << cameraCounter << "] : " << drawed << " / " << total << std::endl;
+			std::cout << "Camera n[" << cameraCounter << "] : " << drawed << " / " << total << std::endl;
 			++cameraCounter;
 		}
 		std::swap(_octreeDrawList, _mainThreadDrawList);
