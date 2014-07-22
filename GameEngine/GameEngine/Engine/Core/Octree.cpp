@@ -304,7 +304,8 @@ namespace AGE
 			_octreeCommands->pop();
 		}
 
-		_octreeDrawList->clear();
+		AGE::clearQueue(*_octreeDrawList);
+		AGE::clearQueue(*_octreeDrawList);
 
 		static std::size_t cameraCounter = 0; cameraCounter = 0;
 
@@ -318,7 +319,8 @@ namespace AGE
 
 			_octreeDrawList->push(DrawableCollection());
 			auto &drawList = _octreeDrawList->back();
-			drawList.drawables.clear();
+
+			AGE::clearQueue(drawList.drawables);
 
 			drawList.transformation = transformation;
 			drawList.projection = camera.projection;
@@ -342,7 +344,7 @@ namespace AGE
 					++drawed;
 				}
 			}
-			std::cout << "Camera n[" << cameraCounter << "] : " << drawed << " / " << total << std::endl;
+			//std::cout << "Camera n[" << cameraCounter << "] : " << drawed << " / " << total << std::endl;
 			++cameraCounter;
 		}
 		std::swap(_octreeDrawList, _mainThreadDrawList);
