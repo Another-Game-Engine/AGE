@@ -57,10 +57,14 @@ namespace gl
 		RenderPass &pushSetTestTask(bool scissor, bool stencil, bool depth);
 		RenderPass &popTask();
 
+		bool stencilSizeValid();
+
 	private:
 		Shader *_shader;
 		GeometryManager *_geoManager;
 		std::vector<Task> _tasks;
+
+		GLint _stencilSize;
 
 	};
 

@@ -15,7 +15,8 @@ namespace gl
 {
 	RenderPass::RenderPass()
 		: _shader(NULL),
-		_geoManager(NULL)
+		_geoManager(NULL),
+		_stencilSize(-1)
 	{
 	}
 
@@ -38,7 +39,8 @@ namespace gl
 
 	RenderPass::RenderPass(RenderPass const &copy)
 		: _shader(copy._shader),
-		_geoManager(copy._geoManager)
+		_geoManager(copy._geoManager),
+		_stencilSize(copy._stencilSize)
 	{
 	}
 
@@ -48,6 +50,7 @@ namespace gl
 		{
 			_shader = r._shader;
 			_geoManager = r._geoManager;
+			_stencilSize = r._stencilSize;
 		}
 		return (*this);
 	}
@@ -260,6 +263,13 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "RenderPass - use", "no shader assign on this renderPass", *this);
 		_shader->use();
 		return (*this);
+	}
+
+	bool RenderPass::stencilSizeValid()
+	{
+		if (_stencilSize == -1)
+			glGetIntegerv(GL_STENCIL_BITS, &_stencilSize);
+		return (_stencilSize < 8) ? false : true;
 	}
 
 	

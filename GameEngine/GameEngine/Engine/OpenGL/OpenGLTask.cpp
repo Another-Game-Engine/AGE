@@ -48,8 +48,6 @@ namespace gl
 
 	void setTest(void **data)
 	{
-		GLint bits; glGetIntegerv(GL_STENCIL_BITS, &bits);
-		if (bits < 8) DEBUG_MESSAGE("warning", "BufferSettings - setTest", "stencil < 8", );
 		if (CONVERT(bool, 0)) { glEnable(GL_SCISSOR_TEST); }
 		else { glDisable(GL_SCISSOR_TEST); }
 		if (CONVERT(bool, 1)) { glEnable(GL_STENCIL_TEST); }
