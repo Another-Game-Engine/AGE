@@ -42,6 +42,7 @@ namespace gl
 		void **params;
 		size_t *sizeParams;
 		void(*func)(void **);
+		bool update;
 		Task();
 		void clear();
 		bool isExec();

@@ -113,6 +113,7 @@ namespace gl
 			task.sizeParams[1] = sizeof(TYPE);
 			task.func = func;
 		}
+		task.update = true;
 		if (task.sizeParams[1] != sizeof(TYPE))
 			DEBUG_MESSAGE("Warning", "Shader - setUniformTask", "size of setting different of dest", );
 		memcpy(task.params[1], data, sizeof(TYPE));

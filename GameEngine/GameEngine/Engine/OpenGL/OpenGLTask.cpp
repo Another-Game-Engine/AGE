@@ -160,7 +160,8 @@ namespace gl
 		: nbrParams(0), 
 		params(NULL), 
 		sizeParams(NULL), 
-		func(NULL)
+		func(NULL),
+		update(true)
 	{
 	}
 

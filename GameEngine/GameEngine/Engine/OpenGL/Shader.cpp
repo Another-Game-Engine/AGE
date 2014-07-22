@@ -222,7 +222,7 @@ namespace gl
 	void Shader::use() const
 	{
 		static GLint idbind = 0;
-
+		
 		if (idbind != _progId)
 		{
 			glUseProgram(_progId);
@@ -341,12 +341,14 @@ namespace gl
 
 	void Shader::setSamplerTask(Task &task, Texture const &texture)
 	{
+		task.update = true;
 		*(GLenum *)task.params[1] = texture.getType();
 		*(GLint *)task.params[2] = texture.getId();
 	}
 
 	void Shader::setUniformBlockTask(Task &task, UniformBlock const &ubo)
 	{
+		task.update = true;
 		*(GLuint *)task.params[2] = ubo.getBindingPoint();
 		*(GLuint *)task.params[3] = ubo.getBufferId();
 	}
@@ -567,13 +569,11 @@ namespace gl
 		{
 			if (!_tasks[index].isExec())
 				DEBUG_MESSAGE("Warning", "Shader - updateMemory", "function pointer not set",);
-			_tasks[index].func(_tasks[index].params);
+			if (_tasks[index].update)
+			{
+				_tasks[index].func(_tasks[index].params);
+				_tasks[index].update = false;
+			}
 		}
-		//for (auto &index = _uniforms.begin(); index != _uniforms.end(); ++index)
-		//	index->second.func(index->second.params);
-		//for (auto &index = _samplers.begin(); index != _samplers.end(); ++index)
-		//	index->second.func(index->second.params);
-		//for (auto &index = _interfaceBlock.begin(); index != _interfaceBlock.end(); ++index)
-		//	index->second.func(index->second.params);
 	}
 }
