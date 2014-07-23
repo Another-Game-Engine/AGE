@@ -7,6 +7,7 @@
 # include <OpenGL/Key.hh>
 # include <glm/glm.hpp>
 # include <OpenGL/OpenGLTask.hh>
+# include <OpenGL/Material.hh>
 
 namespace gl
 {
@@ -18,6 +19,12 @@ namespace gl
 	struct Sampler{};
 	struct Uniform{};
 	struct InterfaceBlock{};
+
+	struct MaterialBind
+	{
+		size_t indexTask;
+		size_t offsetMaterial;
+	};
 
 	//!\file Shader.hh
 	//!\author Dorian Pinaud
@@ -69,8 +76,12 @@ namespace gl
 		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
 		Shader setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
 
-		//
+		// update memory
 		void updateMemory();
+
+		template <typename TYPE>
+		Shader bindingMaterial(Key<Uniform> const &key);
+
 	private:
 		std::string _vertexName;
 		std::string _fragName;
@@ -82,6 +93,7 @@ namespace gl
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
+		std::vector<MaterialBind> _bindingMaterial;
 		std::vector<Task> _tasks;
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
@@ -117,5 +129,22 @@ namespace gl
 		if (task.sizeParams[1] != sizeof(TYPE))
 			DEBUG_MESSAGE("Warning", "Shader - setUniformTask", "size of setting different of dest", );
 		memcpy(task.params[1], data, sizeof(TYPE));
+	}
+
+	template <typename TYPE>
+	Shader Shader::bindingMaterial(Key<Uniform> const &key)
+	{
+		MaterialBind mb;
+
+		auto &element = _uniforms.find(key);
+		if (element == _uniforms.end())
+			DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "key not found in uniform", *this);
+		size_t const index = element->second;
+		Task const &task = _tasks[index];
+		if (task.sizeParams[task.indexToTarget] == TYPE::size)
+			DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "The size of material is not adapt with the uniform target", *this);
+		mb.indexTask = index;
+		mb.offsetMaterial = TYPE::offset;
+		return (*this);
 	}
 }

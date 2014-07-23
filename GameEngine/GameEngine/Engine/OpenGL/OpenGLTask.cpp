@@ -161,7 +161,8 @@ namespace gl
 		params(NULL), 
 		sizeParams(NULL), 
 		func(NULL),
-		update(true)
+		update(true),
+		indexToTarget(0)
 	{
 	}
 
@@ -177,6 +178,8 @@ namespace gl
 			delete[] sizeParams;
 		sizeParams = NULL;
 		nbrParams = 0;
+		update = false;
+		indexToTarget = 0;
 	}
 
 	bool Task::isExec()

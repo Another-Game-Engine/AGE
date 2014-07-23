@@ -43,6 +43,7 @@ namespace gl
 		size_t *sizeParams;
 		void(*func)(void **);
 		bool update;
+		uint8_t indexToTarget;
 		Task();
 		void clear();
 		bool isExec();
