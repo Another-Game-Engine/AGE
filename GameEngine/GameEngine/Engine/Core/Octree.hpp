@@ -25,8 +25,12 @@
 
 #include <Core/OctreeKey.hpp>
 
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 class AScene;
+
 
 namespace AGE
 {
@@ -173,7 +177,6 @@ namespace AGE
 	public:
 		Octree();
 		virtual ~Octree(void);
-
 	private:
 		AGE::Vector<UserObject> _userObjects;
 		AGE::Queue<OctreeKey::OctreeObjectId> _freeUserObjects;
@@ -188,9 +191,9 @@ namespace AGE
 		AGE::Queue<OctreeCommand> *_octreeCommands;
 		AGE::Queue<OctreeCommand> *_mainThreadCommands;
 
-		Vector<DrawableCollection> _drawLists[2];
-		AGE::Vector<DrawableCollection> *_octreeDrawList;
-		AGE::Vector<DrawableCollection> *_mainThreadDrawList;
+
+		AGE::Vector<DrawableCollection> _octreeDrawList;
+		AGE::Vector<DrawableCollection> _mainThreadDrawList;
 
 	public:
 		const OctreeKey &addCullableElement();
@@ -215,11 +218,18 @@ namespace AGE
 			, const glm::mat4 &projection);
 
 		void update();
-		AGE::Vector<DrawableCollection> *getDrawableList() { return _mainThreadDrawList; }
+		AGE::Vector<DrawableCollection> &getDrawableList();
+
 		//
 		// END
 	private:
+		void _update();
 		DRAWABLE_ID addDrawableObject(Octree::USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
+		void _run();
+
+		std::mutex _mutex;
+		std::condition_variable _cond;
+		std::thread *_thread;
 	};
 }

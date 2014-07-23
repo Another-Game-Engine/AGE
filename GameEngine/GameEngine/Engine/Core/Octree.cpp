@@ -4,6 +4,8 @@
 #include <Core/EntityFilter.hpp>
 #include <Components/CameraComponent.hpp>
 #include <Utils/Frustum.hpp>
+#include <thread>
+#include <chrono>
 
 namespace AGE
 {
@@ -11,12 +13,22 @@ namespace AGE
 	{
 		_octreeCommands = &_commandsBuffer[0];
 		_mainThreadCommands = &_commandsBuffer[1];
-		_octreeDrawList = &_drawLists[0];
-		_mainThreadDrawList = &_drawLists[1];
+		_mainThreadDrawList = AGE::Vector<DrawableCollection>();
+		_thread = new std::thread(&Octree::_run, std::ref(*this));
 	}
 
 	Octree::~Octree(void)
 	{
+		_thread->join();
+	}
+
+	void Octree::_run()
+	{
+		_octreeDrawList = AGE::Vector<DrawableCollection>();
+		while (true)
+		{
+			_update();
+		}
 	}
 
 
@@ -152,7 +164,27 @@ namespace AGE
 
 	void Octree::update()
 	{
+		_cond.notify_one();
+	}
+
+		AGE::Vector<DrawableCollection> &Octree::getDrawableList()
+		{
+			std::unique_lock<std::mutex> lock(_mutex);
+			_mainThreadDrawList = std::move(_octreeDrawList);
+			if (!_mainThreadCommands->empty())
+				_cond.notify_one();
+			lock.unlock();
+			return _mainThreadDrawList;
+		}
+
+
+	void Octree::_update()
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+		_cond.wait(lock);
+
 		std::swap(_octreeCommands, _mainThreadCommands);
+
 		while (!_octreeCommands->empty())
 		{
 			//process command
@@ -305,8 +337,7 @@ namespace AGE
 			_octreeCommands->pop();
 		}
 
-		std::swap(_octreeDrawList, _mainThreadDrawList);
-		_octreeDrawList->clear();
+		_octreeDrawList.clear();
 
 		static std::size_t cameraCounter = 0; cameraCounter = 0;
 
@@ -318,8 +349,8 @@ namespace AGE
 			auto transformation = glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale);
 			frustum.setMatrix(camera.projection * transformation, true);
 
-			_octreeDrawList->emplace_back();
-			auto &drawList = _octreeDrawList->back();
+			_octreeDrawList.emplace_back();
+			auto &drawList = _octreeDrawList.back();
 
 			drawList.drawables.clear();
 
@@ -348,5 +379,6 @@ namespace AGE
 			//std::cout << "Camera n[" << cameraCounter << "] : " << drawed << " / " << total << std::endl;
 			++cameraCounter;
 		}
+		lock.unlock();
 	}
 }
