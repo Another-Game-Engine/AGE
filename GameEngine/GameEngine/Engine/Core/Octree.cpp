@@ -223,6 +223,7 @@ namespace AGE
 					auto id = addDrawableObject(command.key.id);
 					uo->drawableCollection.push_back(id);
 					_cullableObjects[id].mesh = command.submeshInstances[i];
+					_cullableObjects[id].material = command.materialInstances[i];
 					_cullableObjects[id].position = uo->position;
 					_cullableObjects[id].orientation = uo->orientation;
 					_cullableObjects[id].scale = uo->scale;
