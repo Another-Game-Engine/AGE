@@ -17,6 +17,7 @@
 #include <stack>
 
 #include <Utils/Containers/Queue.hpp>
+#include <Utils/Containers/Vector.hpp>
 
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
@@ -187,9 +188,9 @@ namespace AGE
 		AGE::Queue<OctreeCommand> *_octreeCommands;
 		AGE::Queue<OctreeCommand> *_mainThreadCommands;
 
-		Queue<DrawableCollection> _drawLists[2];
-		AGE::Queue<DrawableCollection> *_octreeDrawList;
-		AGE::Queue<DrawableCollection> *_mainThreadDrawList;
+		Vector<DrawableCollection> _drawLists[2];
+		AGE::Vector<DrawableCollection> *_octreeDrawList;
+		AGE::Vector<DrawableCollection> *_mainThreadDrawList;
 
 	public:
 		const OctreeKey &addCullableElement();
@@ -214,7 +215,7 @@ namespace AGE
 			, const glm::mat4 &projection);
 
 		void update();
-		AGE::Queue<DrawableCollection> *getDrawableList() { return _mainThreadDrawList; }
+		AGE::Vector<DrawableCollection> *getDrawableList() { return _mainThreadDrawList; }
 		//
 		// END
 	private:
