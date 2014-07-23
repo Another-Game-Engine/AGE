@@ -48,7 +48,7 @@ public:
 
 
 	bool convertFont(const File &file,
-		const std::vector<std::size_t> &sizes,
+		const AGE::Vector<std::size_t> &sizes,
 		const std::string &outputDirectory,
 		const std::string &name)
 	{

@@ -74,7 +74,7 @@ namespace Component
 		template <typename Archive>
 		void save(Archive &ar) const
 		{
-			std::vector<SerializedAudioInstance> v;
+			AGE::Vector<SerializedAudioInstance> v;
 			for (auto &e : audios)
 			{
 				SerializedAudioInstance a;
@@ -102,7 +102,7 @@ namespace Component
 		template <typename Archive>
 		void load(Archive &ar)
 		{
-			std::vector<SerializedAudioInstance> v;
+			AGE::Vector<SerializedAudioInstance> v;
 			ar(v);
 			for (auto e : v)
 			{

@@ -223,6 +223,8 @@
     <ClInclude Include="Engine\Texture\Texture.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\OpenGL\OpenGLTask.hh" />
+    <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

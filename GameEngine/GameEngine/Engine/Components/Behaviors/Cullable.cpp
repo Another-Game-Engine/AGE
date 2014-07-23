@@ -66,7 +66,7 @@ namespace AGE
 
 			//assert(material->datas.size() > 0);
 
-			std::vector<MaterialInstance> materials;
+			AGE::Vector<MaterialInstance> materials;
 			for (auto &e : mesh->subMeshs)
 			{
 				//if (e.defaultMaterialIndex >= material->datas.size())

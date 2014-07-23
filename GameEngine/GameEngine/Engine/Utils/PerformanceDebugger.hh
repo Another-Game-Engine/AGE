@@ -65,7 +65,7 @@ private:
 	{
 		int averageTime;
 		int nbIter;
-		std::vector<std::chrono::duration<float>> average;
+		AGE::Vector<std::chrono::duration<float>> average;
 		std::chrono::high_resolution_clock::time_point prev;
 		std::chrono::high_resolution_clock::time_point start;
 		std::chrono::high_resolution_clock::time_point stop;

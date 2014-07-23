@@ -2,7 +2,7 @@
 
 # include <Utils/OpenGL.hh>
 # include <iostream>
-# include <vector>
+# include <Utils/Containers/Vector.hpp>
 # include <map>
 # include <OpenGL/Key.hh>
 # include <glm/glm.hpp>
@@ -82,7 +82,7 @@ namespace gl
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
-		std::vector<Task> _tasks;
+		AGE::Vector<Task> _tasks;
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
 		std::map<Key<InterfaceBlock>, size_t> _interfaceBlock;

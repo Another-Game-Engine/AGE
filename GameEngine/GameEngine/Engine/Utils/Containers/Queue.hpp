@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Config.hpp"
+
 #include <crtdefs.h>
 #include <cassert>
 
@@ -179,7 +181,7 @@ namespace AGE
 }
 
 
-#ifndef AGE_CONTAINER
+#ifdef USE_AGE_CONTAINER
 namespace AGE
 {
 	template<typename T>

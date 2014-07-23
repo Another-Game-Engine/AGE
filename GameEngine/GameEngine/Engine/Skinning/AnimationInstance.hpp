@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <memory>
 #include <glm/glm.hpp>
 
@@ -16,8 +16,8 @@ namespace AGE
 		std::shared_ptr<Animation> animation;
 		float time;
 		std::shared_ptr<Skeleton> skeleton;
-		std::vector<glm::mat4> transformations;
-		std::vector<glm::mat4> bindPoses;
+		AGE::Vector<glm::mat4> transformations;
+		AGE::Vector<glm::mat4> bindPoses;
 		void update(float t);
 	};
 

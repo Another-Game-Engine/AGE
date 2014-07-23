@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Utils/OpenGL.hh>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <array>
 #include <cereal/types/map.hpp>
 #include <cereal/types/string.hpp>
@@ -43,7 +43,7 @@ private:
 	{
 		std::size_t _size;
 		std::size_t _glyphSize;
-		std::vector<unsigned char> _textureDatas;
+		AGE::Vector<unsigned char> _textureDatas;
 		GLuint _textureId;
 		std::size_t _texW;
 		std::size_t _texH;

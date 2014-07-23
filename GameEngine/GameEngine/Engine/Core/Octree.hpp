@@ -85,8 +85,8 @@ namespace AGE
 			glm::vec3 position;
 			glm::vec3 scale;
 			glm::quat orientation;
-			std::vector<SubMeshInstance> submeshInstances;
-			std::vector<MaterialInstance> materialInstances;
+			AGE::Vector<SubMeshInstance> submeshInstances;
+			AGE::Vector<MaterialInstance> materialInstances;
 			OctreeKey key;
 			CommandType commandType;
 			BoundingInfos boundingInfo;
@@ -139,8 +139,8 @@ namespace AGE
 			}
 
 			OctreeCommand(const OctreeKey &_key
-				, std::vector<SubMeshInstance> _submeshInstances // copy
-				, std::vector<MaterialInstance> _materialInstances // copy
+				, AGE::Vector<SubMeshInstance> _submeshInstances // copy
+				, AGE::Vector<MaterialInstance> _materialInstances // copy
 				, CommandType _cmdType)
 				: position(0)
 				, scale(0)
@@ -155,7 +155,7 @@ namespace AGE
 
 		struct UserObject
 		{
-			std::vector<DRAWABLE_ID> drawableCollection;
+			AGE::Vector<DRAWABLE_ID> drawableCollection;
 			USER_OBJECT_ID id;
 			glm::vec3 position;
 			glm::vec3 scale;
@@ -174,11 +174,11 @@ namespace AGE
 		virtual ~Octree(void);
 
 	private:
-		std::vector<UserObject> _userObjects;
+		AGE::Vector<UserObject> _userObjects;
 		AGE::Queue<OctreeKey::OctreeObjectId> _freeUserObjects;
-		std::vector<CullableObject> _cullableObjects;
+		AGE::Vector<CullableObject> _cullableObjects;
 		AGE::Queue<OctreeKey::OctreeObjectId> _freeCullableObjects;
-		std::vector<CameraObject> _cameraObjects;
+		AGE::Vector<CameraObject> _cameraObjects;
 		AGE::Queue<OctreeKey::OctreeObjectId> _freeCameraObjects;
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
@@ -207,8 +207,8 @@ namespace AGE
 		void setScale(const glm::vec3 &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids);
 
 		void updateGeometry(const OctreeKey &id
-			, const std::vector<AGE::SubMeshInstance> &meshs
-			, const std::vector<AGE::MaterialInstance> &materials);
+			, const AGE::Vector<AGE::SubMeshInstance> &meshs
+			, const AGE::Vector<AGE::MaterialInstance> &materials);
 
 		void setCameraInfos(const OctreeKey &id
 			, const glm::mat4 &projection);

@@ -5,7 +5,7 @@
 #include <OpenGL/VertexArray.hh>
 #include <OpenGL/Buffer.hh>
 #include <map>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <stdint.h>
 
 namespace gl
@@ -65,7 +65,7 @@ namespace gl
 		size_t *_offsetAttribute;
 
 		// represent all data
-		std::vector<MemoryBlocksGPU> _poolMemory;
+		AGE::Vector<MemoryBlocksGPU> _poolMemory;
 		size_t _nbrBytePool;
 		size_t _nbrElementPool;
 		bool _syncronized;

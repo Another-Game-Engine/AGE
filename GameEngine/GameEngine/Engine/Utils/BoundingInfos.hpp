@@ -2,6 +2,7 @@
 
 #include <Utils/GlmSerialization.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <Utils/Containers/Vector.hpp>
 
 namespace AGE
 {
@@ -23,7 +24,7 @@ namespace AGE
 
 		//temporary to pass in private
 	public:
-		void initFromList(const std::vector<BoundingInfos> &col);
+		void initFromList(const AGE::Vector<BoundingInfos> &col);
 		void addPosition(const glm::vec3 &v);
 
 		friend class MeshLoader;

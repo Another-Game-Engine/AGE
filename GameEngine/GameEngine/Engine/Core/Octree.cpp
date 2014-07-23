@@ -113,8 +113,8 @@ namespace AGE
 	}
 
 	void Octree::updateGeometry(const OctreeKey &key
-		, const std::vector<AGE::SubMeshInstance> &meshs
-		, const std::vector<AGE::MaterialInstance> &materials)
+		, const AGE::Vector<AGE::SubMeshInstance> &meshs
+		, const AGE::Vector<AGE::MaterialInstance> &materials)
 	{
 		assert(!key.invalid() || key.type != OctreeKey::Type::Cullable);
 		_mainThreadCommands->emplace(key, meshs, materials, CommandType::Geometry);
