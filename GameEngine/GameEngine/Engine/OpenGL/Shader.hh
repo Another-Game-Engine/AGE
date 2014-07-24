@@ -1,8 +1,8 @@
 #pragma once
 
 # include <Utils/OpenGL.hh>
-# include <iostream>
 # include <vector>
+# include <iostream>
 # include <map>
 # include <OpenGL/Key.hh>
 # include <glm/glm.hpp>
@@ -24,6 +24,7 @@ namespace gl
 	{
 		size_t indexTask;
 		size_t offsetMaterial;
+		bool isUse;
 	};
 
 	//!\file Shader.hh
@@ -57,7 +58,6 @@ namespace gl
 		Key<Uniform> addUniform(std::string const &flag, glm::mat3 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::vec4 const &value);
 		Key<Uniform> addUniform(std::string const &flag, float value);
-		Shader &rmUniform(Key<Uniform> &key);
 		Key<Uniform> getUniform(size_t index) const;
 		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &mat4);
 		Shader &setUniform(Key<Uniform> const &key, glm::mat3 const &mat3);
@@ -66,13 +66,11 @@ namespace gl
 
 		// sampler 
 		Key<Sampler> addSampler(std::string const &flag);
-		Shader &rmSampler(Key<Sampler> &key);
 		Key<Sampler> getSampler(size_t index) const;
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 		
 		// InterfaceBlock
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock);
-		Shader &rmInterfaceBlock(Key<InterfaceBlock> &key);
 		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
 		Shader setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
 
@@ -81,6 +79,7 @@ namespace gl
 
 		template <typename TYPE>
 		Shader bindingMaterial(Key<Uniform> const &key);
+		Shader unbindMaterial(Key<Uniform> const &key);
 
 	private:
 		std::string _vertexName;
@@ -93,8 +92,11 @@ namespace gl
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
-		std::vector<MaterialBind> _bindingMaterial;
 		std::vector<Task> _tasks;
+		std::vector<MaterialBind> _bind;
+		std::map<Key<Uniform>, size_t> _bindUniform;
+		std::map<Key<Uniform>, size_t> _bindUniform;
+		std::map<Key<Uniform>, size_t> _bindUniform;
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
 		std::map<Key<InterfaceBlock>, size_t> _interfaceBlock;
@@ -134,17 +136,30 @@ namespace gl
 	template <typename TYPE>
 	Shader Shader::bindingMaterial(Key<Uniform> const &key)
 	{
-		MaterialBind mb;
-
 		auto &element = _uniforms.find(key);
 		if (element == _uniforms.end())
 			DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "key not found in uniform", *this);
 		size_t const index = element->second;
 		Task const &task = _tasks[index];
-		if (task.sizeParams[task.indexToTarget] == TYPE::size)
+		if (task.sizeParams[task.indexToTarget] != TYPE::size)
 			DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "The size of material is not adapt with the uniform target", *this);
+		for (size_t index = 0; index < _bind.size(); ++index)
+		{
+			if (_bind[index].isUse == false)
+			{
+				_bind[index].indexTask = index;
+				_bind[index].offsetMaterial = TYPE::offset;
+				_bind.isUse = true;
+				_bindUniform[key] = index;
+				return (*this);
+			}
+		}
+		MaterialBind mb;
 		mb.indexTask = index;
+		mb.isUse = true;
 		mb.offsetMaterial = TYPE::offset;
+		_bind.push_back(mb);
+		_bindUniform[key] = _bind.size() - 1;
 		return (*this);
 	}
 }
