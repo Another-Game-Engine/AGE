@@ -11,21 +11,29 @@ namespace AGE
 {
 	Octree::Octree()
 	{
-		_octreeCommands = &_commandsBuffer[0];
-		_mainThreadCommands = &_commandsBuffer[1];
+		// init in main thread
+		_isRunning = false;
+		_mainThreadCommands = AGE::Queue<OctreeCommand>();
 		_mainThreadDrawList = AGE::Vector<DrawableCollection>();
+
+		// launch thread
 		_thread = new std::thread(&Octree::_run, std::ref(*this));
 	}
 
 	Octree::~Octree(void)
 	{
+		_isRunning = false;
+		_hasSomeWork.notify_one();
 		_thread->join();
+		delete _thread;
 	}
 
 	void Octree::_run()
 	{
+		_isRunning = true;
 		_octreeDrawList = AGE::Vector<DrawableCollection>();
-		while (true)
+		_octreeCommands = AGE::Queue<OctreeCommand>();
+		while (_isRunning)
 		{
 			_update();
 		}
@@ -46,7 +54,7 @@ namespace AGE
 			res.id = _userObjectCounter++;
 		}
 
-		_mainThreadCommands->emplace(res, CommandType::CreateDrawable);
+		_mainThreadCommands.emplace(res, CommandType::CreateDrawable);
 		return res;
 	}
 
@@ -57,11 +65,11 @@ namespace AGE
 		{
 		case(OctreeKey::Type::Camera):
 			_freeCameraObjects.push(key.id);
-			_mainThreadCommands->emplace(key, CommandType::DeleteCamera);
+			_mainThreadCommands.emplace(key, CommandType::DeleteCamera);
 			break;
 		case(OctreeKey::Type::Cullable):
 			_freeUserObjects.push(key.id);
-			_mainThreadCommands->emplace(key, CommandType::DeleteDrawable);
+			_mainThreadCommands.emplace(key, CommandType::DeleteDrawable);
 			break;
 		default:
 			break;
@@ -82,28 +90,28 @@ namespace AGE
 			res.id = _cameraCounter++;
 		}
 
-		_mainThreadCommands->emplace(res, CommandType::CreateCamera);
+		_mainThreadCommands.emplace(res, CommandType::CreateCamera);
 		return res;
 	}
 
 	void Octree::setPosition(const glm::vec3 &v, const OctreeKey &id)
 	{
-		_mainThreadCommands->emplace(id, v, CommandType::Position);
+		_mainThreadCommands.emplace(id, v, CommandType::Position);
 	}
 	void Octree::setOrientation(const glm::quat &v, const OctreeKey &id)
 	{
-		_mainThreadCommands->emplace(id, v, CommandType::Orientation);
+		_mainThreadCommands.emplace(id, v, CommandType::Orientation);
 	}
 
 	void Octree::setScale(const glm::vec3 &v, const OctreeKey &id)
 	{
-		_mainThreadCommands->emplace(id, v, CommandType::Scale);
+		_mainThreadCommands.emplace(id, v, CommandType::Scale);
 	}
 
 	void Octree::setCameraInfos(const OctreeKey &id
 		, const glm::mat4 &projection)
 	{
-		_mainThreadCommands->emplace(id, projection, CommandType::CameraInfos);
+		_mainThreadCommands.emplace(id, projection, CommandType::CameraInfos);
 	}
 
 	void Octree::setPosition(const glm::vec3 &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids)
@@ -129,7 +137,7 @@ namespace AGE
 		, const AGE::Vector<AGE::MaterialInstance> &materials)
 	{
 		assert(!key.invalid() || key.type != OctreeKey::Type::Cullable);
-		_mainThreadCommands->emplace(key, meshs, materials, CommandType::Geometry);
+		_mainThreadCommands.emplace(key, meshs, materials, CommandType::Geometry);
 	}
 
 	//-----------------------------------------------------------------
@@ -164,31 +172,32 @@ namespace AGE
 
 	void Octree::update()
 	{
-		_cond.notify_one();
+		_hasSomeWork.notify_one();
 	}
 
-		AGE::Vector<DrawableCollection> &Octree::getDrawableList()
-		{
-			std::unique_lock<std::mutex> lock(_mutex);
-			_mainThreadDrawList = std::move(_octreeDrawList);
-			if (!_mainThreadCommands->empty())
-				_cond.notify_one();
-			lock.unlock();
-			return _mainThreadDrawList;
-		}
+	AGE::Vector<DrawableCollection> &Octree::getDrawableList()
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+		_mainThreadDrawList = std::move(_octreeDrawList);
+		_octreeCommands = std::move(_mainThreadCommands);
+		_mainThreadCommands.clear();
+		_hasSomeWork.notify_one();
+		lock.unlock();
+		return _mainThreadDrawList;
+	}
 
 
 	void Octree::_update()
 	{
 		std::unique_lock<std::mutex> lock(_mutex);
-		_cond.wait(lock);
+		_hasSomeWork.wait(lock);
+		if (!_isRunning)
+			return;
 
-		std::swap(_octreeCommands, _mainThreadCommands);
-
-		while (!_octreeCommands->empty())
+		while (!_octreeCommands.empty())
 		{
 			//process command
-			auto &command = _octreeCommands->front();
+			auto &command = _octreeCommands.front();
 
 			UserObject *uo = nullptr;
 			CameraObject *co = nullptr;
@@ -334,7 +343,7 @@ namespace AGE
 			default:
 				break;
 			}
-			_octreeCommands->pop();
+			_octreeCommands.pop();
 		}
 
 		_octreeDrawList.clear();
@@ -380,5 +389,9 @@ namespace AGE
 			++cameraCounter;
 		}
 		lock.unlock();
+		//std::unique_lock<std::mutex> lock2(_mutex);
+		//lock2.lock();
+		//std::swap(_octreeDrawList, _mainThreadDrawList);
+		//lock2.unlock();
 	}
 }

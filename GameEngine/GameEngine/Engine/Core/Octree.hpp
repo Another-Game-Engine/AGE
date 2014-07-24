@@ -28,6 +28,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <atomic>
 
 class AScene;
 
@@ -187,9 +188,8 @@ namespace AGE
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
 
-		AGE::Queue<OctreeCommand> _commandsBuffer[2];
-		AGE::Queue<OctreeCommand> *_octreeCommands;
-		AGE::Queue<OctreeCommand> *_mainThreadCommands;
+		AGE::Queue<OctreeCommand> _octreeCommands;
+		AGE::Queue<OctreeCommand> _mainThreadCommands;
 
 
 		AGE::Vector<DrawableCollection> _octreeDrawList;
@@ -229,7 +229,8 @@ namespace AGE
 		void _run();
 
 		std::mutex _mutex;
-		std::condition_variable _cond;
+		std::condition_variable _hasSomeWork;
 		std::thread *_thread;
+		std::atomic_bool _isRunning;
 	};
 }
