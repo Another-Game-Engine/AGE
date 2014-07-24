@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <glm/glm.hpp>
 
 #include "Bone.hpp"
@@ -22,8 +22,8 @@ namespace AGE
 	public:
 		Skeleton();
 		std::string name;
-		std::vector<Bone> bones;
-		std::vector<AnimationInstance*> animations;
+		AGE::Vector<Bone> bones;
+		AGE::Vector<AnimationInstance*> animations;
 		std::uint32_t firstBone;
 		glm::mat4 inverseGlobal;
 		std::map<std::string, std::uint32_t> bonesReferences;

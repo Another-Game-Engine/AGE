@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <tuple>
 #include <utility>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <functional>
 #include <OpenGL/Material.hh>
 #include <OpenGL/UniformBlock.hh>
@@ -62,7 +62,7 @@ namespace gl
 	private:
 		Shader *_shader;
 		GeometryManager *_geoManager;
-		std::vector<Task> _tasks;
+		AGE::Vector<Task> _tasks;
 
 		GLint _stencilSize;
 

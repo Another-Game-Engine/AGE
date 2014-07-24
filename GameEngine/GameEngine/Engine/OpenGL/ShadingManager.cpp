@@ -77,15 +77,6 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::rmShaderUniform(Key<Shader> const &key, Key<Uniform> &uniform)
-	{
-		Shader *shader;
-		if ((shader = getShader(key, "rmShaderUniform()")) == NULL)
-			return (*this);
-		shader->rmUniform(uniform);
-		return (*this);
-	}
-
 	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &key, size_t target)
 	{
 		Shader const *shader;
@@ -178,15 +169,6 @@ namespace gl
 		return (shader->addSampler(flag));
 	}
 
-	ShadingManager &ShadingManager::rmShaderSampler(Key<Shader> const &key, Key<Sampler> &uniform)
-	{
-		Shader *shader;
-		if ((shader = getShader(key, "rmShaderSampler()")) == NULL)
-			return (*this);
-		shader->rmSampler(uniform);
-		return (*this);
-	}
-
 	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
 	{
 		Shader const *shader;
@@ -243,15 +225,6 @@ namespace gl
 		if ((uniformBlock = getUniformBlock(keyUniformBlock, "addShaderInterfaceBlock()")) == NULL)
 			return (Key<InterfaceBlock>(KEY_DESTROY));
 		return (shader->addInterfaceBlock(flag, *uniformBlock));
-	}
-
-	ShadingManager &ShadingManager::rmShaderInterfaceBlock(Key<Shader> const &keyShader, Key<InterfaceBlock> &interfaceblock)
-	{
-		Shader *shader;
-		if ((shader = getShader(keyShader, "rmShaderInterfaceBlock()")) == NULL)
-			return (*this);
-		shader->rmInterfaceBlock(interfaceblock);
-		return (*this);
 	}
 
 	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)

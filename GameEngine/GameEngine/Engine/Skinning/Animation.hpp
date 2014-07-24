@@ -11,7 +11,7 @@ namespace AGE
 	struct Animation
 	{
 		std::string name;
-		std::vector<AnimationChannel> channels;
+		AGE::Vector<AnimationChannel> channels;
 		float duration;
 		std::uint32_t id;
 	};

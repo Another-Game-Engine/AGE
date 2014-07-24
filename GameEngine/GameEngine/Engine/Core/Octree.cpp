@@ -113,8 +113,8 @@ namespace AGE
 	}
 
 	void Octree::updateGeometry(const OctreeKey &key
-		, const std::vector<AGE::SubMeshInstance> &meshs
-		, const std::vector<AGE::MaterialInstance> &materials)
+		, const AGE::Vector<AGE::SubMeshInstance> &meshs
+		, const AGE::Vector<AGE::MaterialInstance> &materials)
 	{
 		assert(!key.invalid() || key.type != OctreeKey::Type::Cullable);
 		_mainThreadCommands->emplace(key, meshs, materials, CommandType::Geometry);
@@ -223,6 +223,7 @@ namespace AGE
 					auto id = addDrawableObject(command.key.id);
 					uo->drawableCollection.push_back(id);
 					_cullableObjects[id].mesh = command.submeshInstances[i];
+					_cullableObjects[id].material = command.materialInstances[i];
 					_cullableObjects[id].position = uo->position;
 					_cullableObjects[id].orientation = uo->orientation;
 					_cullableObjects[id].scale = uo->scale;
@@ -304,8 +305,8 @@ namespace AGE
 			_octreeCommands->pop();
 		}
 
-		AGE::clearQueue(*_octreeDrawList);
-		AGE::clearQueue(*_octreeDrawList);
+		std::swap(_octreeDrawList, _mainThreadDrawList);
+		_octreeDrawList->clear();
 
 		static std::size_t cameraCounter = 0; cameraCounter = 0;
 
@@ -317,10 +318,10 @@ namespace AGE
 			auto transformation = glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale);
 			frustum.setMatrix(camera.projection * transformation, true);
 
-			_octreeDrawList->push(DrawableCollection());
+			_octreeDrawList->emplace_back();
 			auto &drawList = _octreeDrawList->back();
 
-			AGE::clearQueue(drawList.drawables);
+			drawList.drawables.clear();
 
 			drawList.transformation = transformation;
 			drawList.projection = camera.projection;
@@ -340,13 +341,12 @@ namespace AGE
 						e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 						e.hasMoved = false;
 					}
-					drawList.drawables.emplace(e.mesh, e.material, e.transformation);
+					drawList.drawables.emplace_back(e.mesh, e.material, e.transformation);
 					++drawed;
 				}
 			}
 			//std::cout << "Camera n[" << cameraCounter << "] : " << drawed << " / " << total << std::endl;
 			++cameraCounter;
 		}
-		std::swap(_octreeDrawList, _mainThreadDrawList);
 	}
 }

@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <MediaFiles/MediaFile.hpp>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <glm/glm.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/vector.hpp>
@@ -30,7 +30,7 @@ struct TextureFile : public MediaFile<TextureFile>
 
 	gl::Key<gl::Texture> const &getTexture() const;
 
-	std::vector<GLbyte> datas;
+	AGE::Vector<GLbyte> datas;
 	GLint		width, height;
 	GLint		components;
 	GLenum		format;

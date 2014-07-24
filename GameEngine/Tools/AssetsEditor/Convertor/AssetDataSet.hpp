@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 
 #include <Utils/File.hpp>
 #include <assimp/Importer.hpp>
@@ -48,10 +48,10 @@ namespace AGE
 
 		//Ptrs
 		Skeleton *skeleton = nullptr;
-		std::vector<Animation*> animations;
+		AGE::Vector<Animation*> animations;
 		MeshData *mesh;
-		std::vector<MaterialData*> materials;
-		std::vector<TextureData*> textures;
+		AGE::Vector<MaterialData*> materials;
+		AGE::Vector<TextureData*> textures;
 
 		//Assimp
 		aiScene* assimpScene = nullptr;

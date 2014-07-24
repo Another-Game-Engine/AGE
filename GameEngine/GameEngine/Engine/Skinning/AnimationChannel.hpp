@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -12,9 +12,9 @@ namespace AGE
 	struct AnimationChannel
 	{
 		std::uint32_t boneIndex;
-		std::vector<AnimationKey<glm::vec3>> scale;
-		std::vector<AnimationKey<glm::quat>> rotation;
-		std::vector<AnimationKey<glm::vec3>> translation;
+		AGE::Vector<AnimationKey<glm::vec3>> scale;
+		AGE::Vector<AnimationKey<glm::quat>> rotation;
+		AGE::Vector<AnimationKey<glm::vec3>> translation;
 
 		void findKeyIndex(float t, glm::uvec3 &keys, glm::uvec3 &nextKeys);
 		void getInterpolatedTransform(float t, glm::mat4 &res);

@@ -55,7 +55,7 @@ namespace AGE
 
 			auto &meshs = dataSet.mesh->subMeshs;
 
-			std::vector<BoundingInfos> subMeshBoundings;
+			AGE::Vector<BoundingInfos> subMeshBoundings;
 
 			for (unsigned int meshIndex = 0; meshIndex < dataSet.assimpScene->mNumMeshes; ++meshIndex)
 			{

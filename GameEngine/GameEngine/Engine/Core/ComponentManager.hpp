@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <Components/Component.hh>
 #include <utility>
 
@@ -43,7 +43,7 @@ public:
 		return T::getTypeId();
 	}
 
-	const std::vector<T> &getComponents() const
+	const AGE::Vector<T> &getComponents() const
 	{
 		return _components;
 	}
@@ -203,7 +203,7 @@ private:
 		return j;
 	}
 
-	std::vector<T> _components;
+	AGE::Vector<T> _components;
 	std::array<ENTITY_ID, MAX_ENTITY_NUMBER> _componentsRefs;
 	std::size_t _size;
 	AScene *_scene;

@@ -152,9 +152,9 @@ namespace AGE
 
 		std::size_t size = data.infos.count();
 
-		std::vector<void*> buffer;
+		AGE::Vector<void*> buffer;
 		buffer.resize(size);
-		std::vector<std::size_t> nbrBuffer;
+		AGE::Vector<std::size_t> nbrBuffer;
 		nbrBuffer.resize(size);
 
 		std::size_t ctr = 0;

@@ -264,18 +264,6 @@ namespace gl
 		return (_computeName);
 	}
 
-	Shader &Shader::rmUniform(Key<Uniform> &key)
-	{
-		Task *task;
-
-		if ((task = getUniform(key, "rmUniform")) == NULL)
-			return (*this);
-		task->clear();
-		_uniforms.erase(key);
-		key.destroy();
-		return (*this);
-	}
-
 	Key<Uniform> Shader::getUniform(size_t target) const
 	{
 		if (target >= _uniforms.size())
@@ -458,18 +446,6 @@ namespace gl
 		return (key);
 	}
 
-	Shader &Shader::rmSampler(Key<Sampler> &key)
-	{
-		Task *task;
-
-		if ((task = getSampler(key, "rmSampler")) == NULL)
-			return (*this);
-		task->clear();
-		_samplers.erase(key);
-		key.destroy();
-		return (*this);
-	}
-
 	Key<Sampler> Shader::getSampler(size_t target) const
 	{
 		if (target >= _samplers.size())
@@ -499,17 +475,6 @@ namespace gl
 		Task *task = &_tasks.back();
 		createUniformBlockTask(*task, flag, uniformBlock);
 		return (key);
-	}
-
-	Shader &Shader::rmInterfaceBlock(Key<InterfaceBlock> &key)
-	{
-		Task *task;
-		if ((task = getInterfaceBlock(key, "rmInterfaceBlock")) == NULL)
-			return (*this);
-		task->clear();
-		_interfaceBlock.erase(key);
-		key.destroy();
-		return (*this);
 	}
 
 	Key<InterfaceBlock> Shader::getInterfaceBlock(size_t target) const
@@ -576,4 +541,6 @@ namespace gl
 			}
 		}
 	}
+
+
 }

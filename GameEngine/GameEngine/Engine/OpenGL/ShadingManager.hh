@@ -5,7 +5,7 @@
 #include <OpenGL/Key.hh>
 #include <OpenGL/MemoryGPU.hh>
 #include <map>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <glm/glm.hpp>
 #include <OpenGL/UniformBlock.hh>
 #include <OpenGL/Material.hh>
@@ -57,7 +57,6 @@ namespace gl
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat3 const &value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, float value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::vec4 const &value);
-		ShadingManager &rmShaderUniform(Key<Shader> const &shader, Key<Uniform> &uniform);
 		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
@@ -66,13 +65,11 @@ namespace gl
 		
 		// sampler
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
-		ShadingManager &rmShaderSampler(Key<Shader> const &shader, Key<Sampler> &uniform);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
 	
 		// Interface
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
-		ShadingManager &rmShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> &key);
 		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
 
 		// uniform Block

@@ -59,20 +59,20 @@ namespace AGE
 		{
 			assert(_scene != nullptr);
 
-			//if (this->mesh == nullptr || this->material == nullptr)
-			//{
-			//	return;
-			//}
+			if (this->mesh == nullptr || this->material == nullptr)
+			{
+				return;
+			}
 
-			//assert(material->datas.size() > 0);
+			assert(material->datas.size() > 0);
 
-			std::vector<MaterialInstance> materials;
+			AGE::Vector<MaterialInstance> materials;
 			for (auto &e : mesh->subMeshs)
 			{
-				//if (e.defaultMaterialIndex >= material->datas.size())
-				//	materials.push_back(material->datas[0]);
-				//else
-				//	materials.push_back(material->datas[e.defaultMaterialIndex]);
+				if (e.defaultMaterialIndex >= material->datas.size())
+					materials.push_back(material->datas[0]);
+				else
+					materials.push_back(material->datas[e.defaultMaterialIndex]);
 			}
 			_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableOTKey, mesh->subMeshs, materials);
 		}

@@ -1,8 +1,8 @@
 #pragma once
 
 # include <Utils/OpenGL.hh>
-# include <vector>
 # include <iostream>
+# include <Utils/Containers/Vector.hpp>
 # include <map>
 # include <OpenGL/Key.hh>
 # include <glm/glm.hpp>
@@ -92,11 +92,9 @@ namespace gl
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
-		std::vector<Task> _tasks;
 		std::vector<MaterialBind> _bind;
-		std::map<Key<Uniform>, size_t> _bindUniform;
-		std::map<Key<Uniform>, size_t> _bindUniform;
-		std::map<Key<Uniform>, size_t> _bindUniform;
+		AGE::Vector<Task> _tasks;
+
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
 		std::map<Key<InterfaceBlock>, size_t> _interfaceBlock;

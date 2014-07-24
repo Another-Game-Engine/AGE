@@ -46,9 +46,9 @@ bool Font::FontSize::load()
 	if (isLoaded())
 		return true;
 
-	std::vector<glm::vec4>		vertices;	// vertices positions
-	std::vector<glm::vec2>		uvs;		// texture coordinates
-	std::vector<unsigned int>	indices;	// indices
+	AGE::Vector<glm::vec4>		vertices;	// vertices positions
+	AGE::Vector<glm::vec2>		uvs;		// texture coordinates
+	AGE::Vector<unsigned int>	indices;	// indices
 
 	vertices.resize(4); //-V112
 	uvs.resize(4); //-V112

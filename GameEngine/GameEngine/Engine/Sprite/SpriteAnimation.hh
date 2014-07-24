@@ -22,8 +22,8 @@ public:
 	inline std::uint32_t getStepNumber() const { return static_cast<std::uint32_t>(_steps.size()); }
 //private:
 	bool _alphaTest = true;
-	std::vector<std::uint32_t> _steps;
-	std::vector<std::shared_ptr<SpriteFrame>> _frames;
+	AGE::Vector<std::uint32_t> _steps;
+	AGE::Vector<std::shared_ptr<SpriteFrame>> _frames;
 	//	std::shared_ptr<TextureFile> _texture;
 	MaterialFile::Material _material;
 	std::string _name;

@@ -33,7 +33,7 @@ namespace AGE
 
 	struct MaterialDataSet
 	{
-		std::vector<MaterialData> collection;
+		AGE::Vector<MaterialData> collection;
 
 		template <class Archive>
 		void serialize(Archive &ar)
@@ -46,6 +46,6 @@ namespace AGE
 
 	struct MaterialSetInstance
 	{
-		std::vector<MaterialInstance> datas;
+		AGE::Vector<MaterialInstance> datas;
 	};
 }

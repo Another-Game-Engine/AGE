@@ -3,7 +3,7 @@
 #include <cassert>
 #include <Utils/Dependency.hpp>
 #include <memory>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 
 class DependenciesInjector : public std::enable_shared_from_this<DependenciesInjector>
 {
@@ -11,7 +11,7 @@ private:
 	DependenciesInjector(DependenciesInjector const &);
 	DependenciesInjector &operator=(DependenciesInjector const &);
 
-	std::vector<IDependency*>             _instances;
+	AGE::Vector<IDependency*>             _instances;
 	std::weak_ptr<DependenciesInjector>                   _parent;
 public:
 	DependenciesInjector(std::weak_ptr<DependenciesInjector> &&parent = std::weak_ptr<DependenciesInjector>())

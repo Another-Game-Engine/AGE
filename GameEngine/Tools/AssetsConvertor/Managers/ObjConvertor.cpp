@@ -33,7 +33,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		return std::shared_ptr<AMediaFile>(nullptr);
 
     std::string inputfile = file.getFullName();
-    std::vector<tinyobj::shape_t> shapes;
+    AGE::Vector<tinyobj::shape_t> shapes;
     std::string err = tinyobj::LoadObj(shapes, inputfile.c_str(), file.getFolder().c_str());
 	assert(err.empty() && "Tiny Obj error loading file.");
 
@@ -174,7 +174,7 @@ std::shared_ptr<AMediaFile> ObjConvertor::convert(const File &file)
 		_manager->add(dynamicShape);
 	}
 
-	std::vector<std::tuple<float, float, float, float, float, float>> minAndMax;
+	AGE::Vector<std::tuple<float, float, float, float, float, float>> minAndMax;
 	minAndMax.resize(mesh->geometries.size());
 	std::tuple<float, float, float, float, float, float> totalMinMax{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
 

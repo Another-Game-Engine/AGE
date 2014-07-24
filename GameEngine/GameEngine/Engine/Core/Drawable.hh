@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
-#include <Utils/Containers/Queue.hpp>
+#include <Utils/Containers/Vector.hpp>
 
 namespace AGE
 {
@@ -23,6 +23,6 @@ namespace AGE
 	{
 		glm::mat4 transformation;
 		glm::mat4 projection;
-		AGE::Queue<Drawable> drawables;
+		AGE::Vector<Drawable> drawables;
 	};
 }

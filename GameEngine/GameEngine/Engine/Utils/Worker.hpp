@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <cstdint>
 
 namespace AGE
@@ -9,7 +9,7 @@ namespace AGE
 	class IWorker
 	{
 	private:
-		std::vector<T> _pool;
+		AGE::Vector<T> _pool;
 		std::uint64_t  _cursor;
 	public:
 		IWorker()
