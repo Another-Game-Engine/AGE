@@ -327,20 +327,6 @@ namespace gl
 		task.sizeParams[3] = sizeof(GLuint);
 	}
 
-	void Shader::setSamplerTask(Task &task, Texture const &texture)
-	{
-		task.update = true;
-		*(GLenum *)task.params[1] = texture.getType();
-		*(GLint *)task.params[2] = texture.getId();
-	}
-
-	void Shader::setUniformBlockTask(Task &task, UniformBlock const &ubo)
-	{
-		task.update = true;
-		*(GLuint *)task.params[2] = ubo.getBindingPoint();
-		*(GLuint *)task.params[3] = ubo.getBufferId();
-	}
-
 	Key<Uniform> Shader::addUniform(std::string const &flag)
 	{
 		Key<Uniform> key;
@@ -489,12 +475,38 @@ namespace gl
 
 	Task *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)
 	{
+		size_t index = getIndexUniform(key, msg);
+		if (index == -1)
+			return (&_tasks[index]);
+		return (NULL);
+	}
+
+	size_t Shader::getIndexUniform(Key<Uniform> const &key, std::string const &msg)
+	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", NULL);
+			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", -1);
 		auto &element = _uniforms.find(key);
 		if (element == _uniforms.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", NULL);
-		return (&_tasks[element->second]);
+			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", -1);
+		return (element->second);
+	}
+
+	Task *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
+	{
+		size_t index = getIndexSampler(key, msg);
+		if (index == -1)
+			return (&_tasks[index]);
+		return (NULL);
+	}
+
+	size_t Shader::getIndexSampler(Key<Sampler> const &key, std::string const &msg)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", -1);
+		auto &element = _samplers.find(key);
+		if (element == _samplers.end())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", -1);
+		return (element->second);
 	}
 
 	Task *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
@@ -507,14 +519,32 @@ namespace gl
 		return (&_tasks[element->second]);
 	}
 
-	Task *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)
+	size_t Shader::getIndexInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", NULL);
+			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", -1);
 		auto &element = _interfaceBlock.find(key);
 		if (element == _interfaceBlock.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", NULL);
-		return (&_tasks[element->second]);
+			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", -1);
+		return (element->second);
+	}
+
+	Task *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)
+	{
+		size_t index = getIndexInterfaceBlock(key, msg);
+		if (index == -1)
+			return (&_tasks[index]);
+		return (NULL);
+	}
+
+	size_t Shader::getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", -1);
+		auto &element = _bindUniform.find(key);
+		if (element == _bindUniform.end())
+			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", -1);
+		return (element->second);
 	}
 
 	Shader Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformBlock)
@@ -527,9 +557,12 @@ namespace gl
 		return (*this);
 	}
 
-	void Shader::updateMemory()
+	void Shader::postDraw(Material const &material)
 	{
 		use();
+		for (size_t index = 0; index < _bind.size(); ++index)
+			if (_bind[index].isUse)
+				setTaskWithMaterial(_bind[index], material);
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
 			if (!_tasks[index].isExec())
@@ -542,5 +575,27 @@ namespace gl
 		}
 	}
 
+	size_t Shader::createMaterialBind(size_t offset, size_t indexTask)
+	{
+		for (size_t index = 0; index < _bind.size(); ++index)
+		{
+			if (_bind[index].isUse == false)
+			{
+				setMaterialBinding(_bind[index], indexTask, offset);
+				return (index);
+			}
+		}
+		MaterialBind mb;
+		setMaterialBinding(mb, indexTask, offset);
+		_bind.push_back(mb);
+		return (_bind.size() - 1);
+	}
 
+	Shader Shader::unbindMaterial(Key<Uniform> const &key)
+	{
+		size_t binding;
+		if ((binding = getUniformBindMaterial(key, "unbindMaterial")) == -1)
+			return (*this);
+		_bind[binding].isUse = false;
+	}
 }

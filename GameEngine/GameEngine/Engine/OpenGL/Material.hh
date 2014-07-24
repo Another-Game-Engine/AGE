@@ -61,6 +61,7 @@ namespace gl
 
 		template <typename TYPE> typename TYPE::return_type get() const;
 		template <typename TYPE> Material &set(typename TYPE::return_type const &value);
+		uint8_t const *getData(size_t offset) const;
 
 	private:
 		uint8_t *_data;

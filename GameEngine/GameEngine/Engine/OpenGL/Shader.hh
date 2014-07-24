@@ -75,10 +75,9 @@ namespace gl
 		Shader setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
 
 		// update memory
-		void updateMemory();
+		void postDraw(Material const &material);
 
-		template <typename TYPE>
-		Shader bindingMaterial(Key<Uniform> const &key);
+		template <typename TYPE> Shader bindingMaterial(Key<Uniform> const &key);
 		Shader unbindMaterial(Key<Uniform> const &key);
 
 	private:
@@ -95,6 +94,7 @@ namespace gl
 		std::vector<MaterialBind> _bind;
 		AGE::Vector<Task> _tasks;
 
+		std::map<Key<Uniform>, size_t> _bindUniform;
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
 		std::map<Key<InterfaceBlock>, size_t> _interfaceBlock;
@@ -103,17 +103,28 @@ namespace gl
 		bool compileShader(GLuint shaderId, std::string const &file) const;
 		bool linkProgram() const;
 		GLuint addShader(std::string const &path, GLenum type);
+		
 		Task *getUniform(Key<Uniform> const &key, std::string const &msg);
+		size_t getIndexUniform(Key<Uniform> const &key, std::string const &msg);
 		Task *getSampler(Key<Sampler> const &key, std::string const &msg);
+		size_t getIndexSampler(Key<Sampler> const &key, std::string const &msg);
 		Task *getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
+		size_t getIndexInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
 		GLuint getUniformLocation(char const *flag);
 		GLuint getUniformBlockLocation(char const *flag);
+		size_t getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg);
+
+		size_t createMaterialBind(size_t offset, size_t indexTask);
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
 		void createUniformBlockTask(Task &task, std::string const &flag, UniformBlock const &ubo);
+		
 		void setSamplerTask(Task &task, Texture const &texture);
+		void setMaterialBinding(MaterialBind &bind, size_t index, size_t offset);
 		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **), void *data);
+		//template <typename TYPE> void setSamplerTask(Task &task, void(*func)(void **), void *data);
 		void setUniformBlockTask(Task &task, UniformBlock const &ubo);
+		void setTaskWithMaterial(MaterialBind const &bind, Material const &material);
 	};
 
 	template <typename TYPE>
@@ -134,30 +145,58 @@ namespace gl
 	template <typename TYPE>
 	Shader Shader::bindingMaterial(Key<Uniform> const &key)
 	{
-		auto &element = _uniforms.find(key);
-		if (element == _uniforms.end())
-			DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "key not found in uniform", *this);
-		size_t const index = element->second;
-		Task const &task = _tasks[index];
+		size_t indexTask;
+		if ((indexTask = getIndexUniform(key, "bindingMaterial")) == -1)
+			return (*this);
+		Task const &task = _tasks[indexTask];
 		if (task.sizeParams[task.indexToTarget] != TYPE::size)
 			DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "The size of material is not adapt with the uniform target", *this);
-		for (size_t index = 0; index < _bind.size(); ++index)
-		{
-			if (_bind[index].isUse == false)
-			{
-				_bind[index].indexTask = index;
-				_bind[index].offsetMaterial = TYPE::offset;
-				_bind.isUse = true;
-				_bindUniform[key] = index;
-				return (*this);
-			}
-		}
-		MaterialBind mb;
-		mb.indexTask = index;
-		mb.isUse = true;
-		mb.offsetMaterial = TYPE::offset;
-		_bind.push_back(mb);
-		_bindUniform[key] = _bind.size() - 1;
+		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
+	}
+
+	//template <typename TYPE>
+	//Shader Shader::bindingMaterial(Key<Sampler> const &key)
+	//{
+	//	auto &element = _uniforms.find(key);
+	//	if (element == _uniforms.end())
+	//		DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "key not found in uniform", *this);
+	//	size_t const indexTask = element->second;
+	//	Task const &task = _tasks[indexTask];
+	//	if (task.sizeParams[task.indexToTarget] != TYPE::size)
+	//		DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "The size of material is not adapt with the uniform target", *this);
+	//	_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
+	//	return (*this);
+	//}
+
+	inline void Shader::setSamplerTask(Task &task, Texture const &texture)
+	{
+		task.update = true;
+		*(GLenum *)task.params[1] = texture.getType();
+		*(GLint *)task.params[2] = texture.getId();
+	}
+
+	inline void Shader::setUniformBlockTask(Task &task, UniformBlock const &ubo)
+	{
+		task.update = true;
+		*(GLuint *)task.params[2] = ubo.getBindingPoint();
+		*(GLuint *)task.params[3] = ubo.getBufferId();
+	}
+
+	inline void Shader::setMaterialBinding(MaterialBind &bind, size_t index, size_t offset)
+	{
+		bind.indexTask = index;
+		bind.isUse = true;
+		bind.offsetMaterial = offset;
+	}
+
+	inline void Shader::setTaskWithMaterial(MaterialBind const &bind, Material const &material)
+	{
+		Task &task = _tasks[bind.indexTask];
+		size_t sizeParam = task.sizeParams[task.indexToTarget];
+		if (memcmp(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam) == 0)
+			return;
+		memcpy(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam);
+		task.update = true;
 	}
 }

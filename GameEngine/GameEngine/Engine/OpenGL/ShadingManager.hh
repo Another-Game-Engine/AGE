@@ -11,6 +11,7 @@
 #include <OpenGL/Material.hh>
 #include <cassert>
 #include <OpenGL/GeometryManager.hh>
+#include <OpenGL/Shader.hh>
 
 # undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -20,7 +21,6 @@ namespace AGE { class Drawable; }
 
 namespace gl
 {
-	class Shader;
 	struct Uniform;
 	struct Sampler;
 	struct InterfaceBlock;
@@ -49,7 +49,7 @@ namespace gl
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
 		ShadingManager &rmShader(Key<Shader> &shader);
 		Key<Shader> getShader(size_t index) const;
-		ShadingManager &updateMemoryShader(Key<Shader> const &shader);
+		ShadingManager &postDraw(Key<Shader> const &shader, Material const &material);
 		
 		// uniform
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
@@ -84,7 +84,8 @@ namespace gl
 		Key<Material> getMaterial(size_t index) const;
 		template <typename TYPE> ShadingManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
 		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
-
+		template <typename TYPE> ShadingManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+		ShadingManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
 
 		// Texture
 		Key<Texture> addTexture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping);
@@ -186,6 +187,15 @@ namespace gl
 		return (material->get<TYPE>());
 	}
 
+	template <typename TYPE>
+	ShadingManager &ShadingManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	{
+		Shader *shader;
+		if ((shader = getShader(shaderKey, "bindMaterialToShader")) == NULL)
+			return (*this);
+		shader->bindingMaterial<TYPE>(uniformKey);
+		return (*this);
+	}
 
 	template <typename TYPE1>
 	inline void set_tab_sizetype(size_t *tab)

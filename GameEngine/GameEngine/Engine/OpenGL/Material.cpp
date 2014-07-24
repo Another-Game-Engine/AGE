@@ -25,4 +25,9 @@ namespace gl
 		memcpy(_data, m._data, Last::size);
 		return (*this);
 	}
+
+	uint8_t const *Material::getData(size_t offset) const
+	{
+		return (&_data[offset]);
+	}
 }
