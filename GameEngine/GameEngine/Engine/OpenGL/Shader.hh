@@ -8,13 +8,13 @@
 # include <glm/glm.hpp>
 # include <OpenGL/OpenGLTask.hh>
 # include <OpenGL/Material.hh>
+#include <OpenGL/Texture.hh>
+#include <OpenGL/UniformBlock.hh>
 
 namespace gl
 {
 
 	class ShaderResource;
-	class Texture;
-	class UniformBlock;
 
 	struct Sampler{};
 	struct Uniform{};

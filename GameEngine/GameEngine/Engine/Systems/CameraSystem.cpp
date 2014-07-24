@@ -208,7 +208,7 @@ void CameraSystem::mainUpdate(double time)
 			auto &c = camera.drawables.back();
 			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
 			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera.transformation * c.transformation))));
-			_render->updateMemoryShader(_shader);
+		//	_render->postDraw(_shader, c.mesh.defaultMaterialIndex);
 			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
 			camera.drawables.pop_back();
 		}

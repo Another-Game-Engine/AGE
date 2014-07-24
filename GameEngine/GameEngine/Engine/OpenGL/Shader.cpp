@@ -1,9 +1,8 @@
 #include <OpenGL/Shader.hh>
 #include <string>
 #include <fstream>
-#include <OpenGL/Texture.hh>
 #include <cassert>
-#include <OpenGL/UniformBlock.hh>
+
 #include <OpenGL/OpenGLTask.hh>
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -473,14 +472,6 @@ namespace gl
 		return (element->first);
 	}
 
-	Task *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)
-	{
-		size_t index = getIndexUniform(key, msg);
-		if (index == -1)
-			return (&_tasks[index]);
-		return (NULL);
-	}
-
 	size_t Shader::getIndexUniform(Key<Uniform> const &key, std::string const &msg)
 	{
 		if (!key)
@@ -491,9 +482,9 @@ namespace gl
 		return (element->second);
 	}
 
-	Task *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
+	Task *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)
 	{
-		size_t index = getIndexSampler(key, msg);
+		size_t index = getIndexUniform(key, msg);
 		if (index == -1)
 			return (&_tasks[index]);
 		return (NULL);
@@ -511,12 +502,10 @@ namespace gl
 
 	Task *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", NULL);
-		auto &element = _samplers.find(key);
-		if (element == _samplers.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", NULL);
-		return (&_tasks[element->second]);
+		size_t index = getIndexSampler(key, msg);
+		if (index == -1)
+			return (&_tasks[index]);
+		return (NULL);
 	}
 
 	size_t Shader::getIndexInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)

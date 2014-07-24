@@ -68,12 +68,15 @@ namespace gl
 		return (element->first);
 	}
 
-	ShadingManager &ShadingManager::postDraw(Key<Shader> const &key, Material const &material)
+	ShadingManager &ShadingManager::postDraw(Key<Shader> const &key, Key<Material> const &materialKey)
 	{
 		Shader *shader;
+		Material *material;
 		if ((shader = getShader(key, "updateMemoryShader")) == NULL)
 			return (*this);
-		shader->postDraw(material);
+		if ((material = getMaterial(materialKey, "updateMemoryShader")) == NULL)
+			return (*this);
+		shader->postDraw(*material);
 		return (*this);
 	}
 

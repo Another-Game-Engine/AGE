@@ -49,7 +49,7 @@ namespace gl
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
 		ShadingManager &rmShader(Key<Shader> &shader);
 		Key<Shader> getShader(size_t index) const;
-		ShadingManager &postDraw(Key<Shader> const &shader, Material const &material);
+		ShadingManager &postDraw(Key<Shader> const &shader, Key<Material> const &material);
 		
 		// uniform
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
