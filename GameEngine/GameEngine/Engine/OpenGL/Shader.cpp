@@ -485,7 +485,7 @@ namespace gl
 	Task *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)
 	{
 		size_t index = getIndexUniform(key, msg);
-		if (index == -1)
+		if (index != -1)
 			return (&_tasks[index]);
 		return (NULL);
 	}
@@ -503,7 +503,7 @@ namespace gl
 	Task *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
 	{
 		size_t index = getIndexSampler(key, msg);
-		if (index == -1)
+		if (index != -1)
 			return (&_tasks[index]);
 		return (NULL);
 	}
@@ -521,7 +521,7 @@ namespace gl
 	Task *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)
 	{
 		size_t index = getIndexInterfaceBlock(key, msg);
-		if (index == -1)
+		if (index != -1)
 			return (&_tasks[index]);
 		return (NULL);
 	}
@@ -549,9 +549,9 @@ namespace gl
 	void Shader::postDraw(Material const &material)
 	{
 		use();
-		for (size_t index = 0; index < _bind.size(); ++index)
-			if (_bind[index].isUse)
-				setTaskWithMaterial(_bind[index], material);
+		//for (size_t index = 0; index < _bind.size(); ++index)
+		//	if (_bind[index].isUse)
+		//		setTaskWithMaterial(_bind[index], material);
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
 			if (!_tasks[index].isExec())
@@ -586,5 +586,6 @@ namespace gl
 		if ((binding = getUniformBindMaterial(key, "unbindMaterial")) == -1)
 			return (*this);
 		_bind[binding].isUse = false;
+		return (*this);
 	}
 }

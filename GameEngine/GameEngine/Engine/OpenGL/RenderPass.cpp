@@ -257,7 +257,6 @@ namespace gl
 
 	RenderPass &RenderPass::draw(GLenum mode, AGE::Drawable const *objectRender, size_t nbrObjectRender)
 	{
-
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		if (!_shader)
