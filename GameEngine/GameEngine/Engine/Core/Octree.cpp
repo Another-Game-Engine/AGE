@@ -170,19 +170,14 @@ namespace AGE
 		assert(id != (std::size_t)(-1));
 	}
 
-	void Octree::update()
-	{
-		_hasSomeWork.notify_one();
-	}
-
 	AGE::Vector<DrawableCollection> &Octree::getDrawableList()
 	{
 		std::unique_lock<std::mutex> lock(_mutex);
 		_mainThreadDrawList = std::move(_octreeDrawList);
 		_octreeCommands = std::move(_mainThreadCommands);
 		_mainThreadCommands.clear();
-		_hasSomeWork.notify_one();
 		lock.unlock();
+		_hasSomeWork.notify_one();
 		return _mainThreadDrawList;
 	}
 

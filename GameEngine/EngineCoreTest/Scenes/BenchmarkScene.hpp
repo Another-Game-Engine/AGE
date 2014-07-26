@@ -41,7 +41,6 @@ public:
 		setInstance<AGE::Octree>();
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 		getInstance<AGE::Octree>()->setScene(weakOnThis);
-		getInstance<AGE::Octree>()->update();
 
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
@@ -151,8 +150,6 @@ public:
 		++_chunkFrame;
 		_timeCounter += time;
 		_chunkCounter += time;
-
-		getInstance<AGE::Octree>()->update();
 
 		getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 100.0f * (float)time, glm::vec3(0, 1, 0)));
 

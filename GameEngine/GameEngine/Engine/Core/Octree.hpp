@@ -217,7 +217,6 @@ namespace AGE
 		void setCameraInfos(const OctreeKey &id
 			, const glm::mat4 &projection);
 
-		void update();
 		AGE::Vector<DrawableCollection> &getDrawableList();
 
 		//
