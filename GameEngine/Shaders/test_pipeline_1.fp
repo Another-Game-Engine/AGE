@@ -20,5 +20,5 @@ void main(void)
 	float lambert_intensity = clamp(dot(lightVec, interpolated_normal), 0.0f, 1.0f);
 	vec4 diffuse = interpolated_color * texture2D(diffuse_texture, interpolated_texCoord) * diffuse_color * diffuse_ratio * lambert_intensity;
 	fragcolor = diffuse;
-	fragcolor += vec4(0.3f,0.0f,0.3f,0.3f);
+	fragcolor += diffuse_color * diffuse_ratio;
 }

@@ -181,6 +181,7 @@ namespace gl
 		task.update = true;
 		*(GLuint *)task.params[2] = ubo.getBindingPoint();
 		*(GLuint *)task.params[3] = ubo.getBufferId();
+		*((UniformBlock const **)task.params[4]) = &ubo;
 	}
 
 	inline void Shader::setMaterialBinding(MaterialBind &bind, size_t index, size_t offset)

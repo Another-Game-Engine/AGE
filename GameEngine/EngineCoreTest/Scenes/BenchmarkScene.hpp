@@ -182,11 +182,23 @@ public:
 				{
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("ball/ball.sage"));
 					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
+					for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
+					{
+						gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 1.0f, 0.f, 0.f));
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, 0.5f);
+					}
 				}
 				else
 				{
 					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+					for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
+					{
+						gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
+					}
 				}
 #else
 				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));

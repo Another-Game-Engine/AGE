@@ -30,7 +30,7 @@ class AScene;
 
 namespace AGE
 {
-	class Drawable;
+	struct Drawable;
 
 	class Octree : public Dependency<Octree>
 	{

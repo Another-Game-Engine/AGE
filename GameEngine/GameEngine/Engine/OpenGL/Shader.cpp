@@ -277,6 +277,7 @@ namespace gl
 	{
 		task.func = NULL;
 		task.nbrParams = 2;
+		task.indexToTarget = 1;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
 		task.params[0] = new GLuint;
@@ -290,6 +291,7 @@ namespace gl
 	void Shader::createSamplerTask(Task &task, std::string const &flag)
 	{
 		task.func = setUniformSampler;
+		task.indexToTarget = 1;
 		task.nbrParams = 3;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
@@ -308,7 +310,8 @@ namespace gl
 	void Shader::createUniformBlockTask(Task &task, std::string const &flag, UniformBlock const &ubo)
 	{
 		task.func = setBlockPointerUBO;
-		task.nbrParams = 4;
+		task.indexToTarget = 4;
+		task.nbrParams = 5;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
 		task.params[0] = new GLuint;
@@ -324,6 +327,9 @@ namespace gl
 		task.params[3] = new GLuint;
 		*(GLuint *)task.params[3] = ubo.getBufferId();
 		task.sizeParams[3] = sizeof(GLuint);
+		task.params[4] = new UniformBlock const *;
+		*(UniformBlock const **)task.params[4] = &ubo;
+		task.sizeParams[4] = sizeof(UniformBlock *);
 	}
 
 	Key<Uniform> Shader::addUniform(std::string const &flag)
@@ -549,9 +555,9 @@ namespace gl
 	void Shader::postDraw(Material const &material)
 	{
 		use();
-		//for (size_t index = 0; index < _bind.size(); ++index)
-		//	if (_bind[index].isUse)
-		//		setTaskWithMaterial(_bind[index], material);
+		for (size_t index = 0; index < _bind.size(); ++index)
+			if (_bind[index].isUse)
+				setTaskWithMaterial(_bind[index], material);
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
 			if (!_tasks[index].isExec())
