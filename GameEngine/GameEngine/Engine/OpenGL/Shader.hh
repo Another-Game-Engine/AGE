@@ -75,10 +75,12 @@ namespace gl
 		Shader setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
 
 		// update memory
-		void postDraw(Material const &material);
+		void postDraw(Material const &material, glm::mat4 const &transform);
 
-		template <typename TYPE> Shader bindingMaterial(Key<Uniform> const &key);
-		Shader unbindMaterial(Key<Uniform> const &key);
+		Shader &bindingTransformation(Key<Uniform> const &key);
+		template <typename TYPE> Shader &bindingMaterial(Key<Uniform> const &key);
+		template <typename TYPE> Shader &bindingMaterial(Key<Sampler> const &key);
+		Shader &unbindMaterial(Key<Uniform> const &key);
 
 	private:
 		std::string _vertexName;
@@ -91,6 +93,7 @@ namespace gl
 		GLuint	_geometryId;
 		GLuint	_computeId;
 
+		Key<Uniform> _bindTransformation;
 		std::vector<MaterialBind> _bind;
 		AGE::Vector<Task> _tasks;
 
@@ -119,12 +122,12 @@ namespace gl
 		void createSamplerTask(Task &task, std::string const &flag);
 		void createUniformBlockTask(Task &task, std::string const &flag, UniformBlock const &ubo);
 		
-		void setSamplerTask(Task &task, Texture const &texture);
 		void setMaterialBinding(MaterialBind &bind, size_t index, size_t offset);
 		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **), void *data);
-		//template <typename TYPE> void setSamplerTask(Task &task, void(*func)(void **), void *data);
+		void setSamplerTask(Task &task, Texture const &texture);
 		void setUniformBlockTask(Task &task, UniformBlock const &ubo);
 		void setTaskWithMaterial(MaterialBind const &bind, Material const &material);
+		void setTransformationTask(glm::mat4 const &mat);
 	};
 
 	template <typename TYPE>
@@ -136,14 +139,17 @@ namespace gl
 			task.sizeParams[1] = sizeof(TYPE);
 			task.func = func;
 		}
-		task.update = true;
 		if (task.sizeParams[1] != sizeof(TYPE))
 			DEBUG_MESSAGE("Warning", "Shader - setUniformTask", "size of setting different of dest", );
-		memcpy(task.params[1], data, sizeof(TYPE));
+		if (memcmp(task.params[1], data, sizeof(TYPE)) != 0)
+		{
+			task.update = true;
+			memcpy(task.params[1], data, sizeof(TYPE));
+		}
 	}
 
 	template <typename TYPE>
-	Shader Shader::bindingMaterial(Key<Uniform> const &key)
+	Shader &Shader::bindingMaterial(Key<Uniform> const &key)
 	{
 		size_t indexTask;
 		if ((indexTask = getIndexUniform(key, "bindingMaterial")) == -1)
@@ -156,7 +162,7 @@ namespace gl
 	}
 
 	template <typename TYPE>
-	Shader Shader::bindingMaterial(Key<Sampler> const &key)
+	Shader &Shader::bindingMaterial(Key<Sampler> const &key)
 	{
 		size_t indexTask;
 		if ((indexTask = getIndexSampler(key, "bindingMaterial")) == -1)
@@ -170,17 +176,39 @@ namespace gl
 
 	inline void Shader::setSamplerTask(Task &task, Texture const &texture)
 	{
-		task.update = true;
-		*(GLenum *)task.params[1] = texture.getType();
-		*(GLint *)task.params[2] = texture.getId();
+		GLint id = texture.getId();
+		GLenum type = texture.getType();
+		if (memcmp(task.params[1], &type, sizeof(GLenum)) != 0)
+		{
+			*(GLenum *)task.params[1] = texture.getType();
+			task.update = true;
+		}
+		if (memcmp(task.params[2], &id, sizeof(GLint)) != 0)
+		{
+			*(GLint *)task.params[2] = texture.getId();
+			task.update = true;
+		}
 	}
 
 	inline void Shader::setUniformBlockTask(Task &task, UniformBlock const &ubo)
 	{
-		task.update = true;
-		*(GLuint *)task.params[2] = ubo.getBindingPoint();
-		*(GLuint *)task.params[3] = ubo.getBufferId();
-		*((UniformBlock const **)task.params[4]) = &ubo;
+		GLuint bindingPoint = ubo.getBindingPoint();
+		GLuint id = ubo.getBufferId();
+		if (memcmp(task.params[2], &bindingPoint, sizeof(GLuint)) != 0)
+		{
+			*(GLuint *)task.params[2] = bindingPoint;
+			task.update = true;
+		}
+		if (memcmp(task.params[3], &id, sizeof(GLuint)) != 0)
+		{
+			*(GLuint *)task.params[3] = ubo.getBufferId();
+			task.update = true;
+		}
+		if (memcmp(task.params[4], &ubo, sizeof(UniformBlock const *)) != 0)
+		{
+			*((UniformBlock const **)task.params[4]) = &ubo;
+			task.update = true;
+		}
 	}
 
 	inline void Shader::setMaterialBinding(MaterialBind &bind, size_t index, size_t offset)
@@ -199,4 +227,5 @@ namespace gl
 		memcpy(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam);
 		task.update = true;
 	}
+
 }

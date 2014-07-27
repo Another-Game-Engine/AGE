@@ -49,7 +49,7 @@ namespace gl
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
 		ShadingManager &rmShader(Key<Shader> &shader);
 		Key<Shader> getShader(size_t index) const;
-		ShadingManager &postDraw(Key<Shader> const &shader, Key<Material> const &material);
+		ShadingManager &postDraw(Key<Shader> const &shader, Key<Material> const &material, glm::mat4 const &mat);
 		
 		// uniform
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
@@ -86,6 +86,7 @@ namespace gl
 		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
 		template <typename TYPE> ShadingManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
 		ShadingManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+		ShadingManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
 
 		// Texture
 		Key<Texture> addTexture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping);

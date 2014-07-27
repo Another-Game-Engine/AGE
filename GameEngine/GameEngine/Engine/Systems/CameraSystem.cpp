@@ -120,6 +120,7 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	_renderPass = _render->addRenderPass(_shader);
 	_render->bindMaterialToShader<gl::Color_diffuse>(_shader, _diffuse_color);
 	_render->bindMaterialToShader<gl::Ratio_diffuse>(_shader, _diffuse_ratio);
+	_render->bindTransformationToShader(_shader, _model_matrix);
 	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
 	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
@@ -210,7 +211,7 @@ void CameraSystem::mainUpdate(double time)
 			auto &c = camera.drawables.back();
 			_render->setShaderUniform(_shader, _model_matrix, c.transformation);
 			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera.transformation * c.transformation))));
-			_render->postDraw(_shader, c.material);
+			_render->postDraw(_shader, c.material, c.transformation);
 			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
 			camera.drawables.pop_back();
 		}

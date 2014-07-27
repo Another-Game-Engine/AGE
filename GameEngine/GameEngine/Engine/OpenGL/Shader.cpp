@@ -552,9 +552,19 @@ namespace gl
 		return (*this);
 	}
 
-	void Shader::postDraw(Material const &material)
+	void Shader::setTransformationTask(glm::mat4 const &mat)
+	{
+		Task *task;
+		
+		if ((task = getUniform(_bindTransformation, "setTransformationTask")) == NULL)
+			return;
+		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&mat);
+	}
+
+	void Shader::postDraw(Material const &material, glm::mat4 const &transform)
 	{
 		use();
+		setTransformationTask(transform);
 		for (size_t index = 0; index < _bind.size(); ++index)
 			if (_bind[index].isUse)
 				setTaskWithMaterial(_bind[index], material);
@@ -586,12 +596,18 @@ namespace gl
 		return (_bind.size() - 1);
 	}
 
-	Shader Shader::unbindMaterial(Key<Uniform> const &key)
+	Shader &Shader::unbindMaterial(Key<Uniform> const &key)
 	{
 		size_t binding;
 		if ((binding = getUniformBindMaterial(key, "unbindMaterial")) == -1)
 			return (*this);
 		_bind[binding].isUse = false;
+		return (*this);
+	}
+
+	Shader &Shader::bindingTransformation(Key<Uniform> const &key)
+	{
+		_bindTransformation = key;
 		return (*this);
 	}
 }

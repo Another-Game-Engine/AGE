@@ -68,7 +68,7 @@ namespace gl
 		return (element->first);
 	}
 
-	ShadingManager &ShadingManager::postDraw(Key<Shader> const &key, Key<Material> const &materialKey)
+	ShadingManager &ShadingManager::postDraw(Key<Shader> const &key, Key<Material> const &materialKey, glm::mat4 const &mat)
 	{
 		Shader *shader;
 		Material *material;
@@ -76,7 +76,7 @@ namespace gl
 			return (*this);
 		if ((material = getMaterial(materialKey, "updateMemoryShader")) == NULL)
 			return (*this);
-		shader->postDraw(*material);
+		shader->postDraw(*material, mat);
 		return (*this);
 	}
 
@@ -715,6 +715,15 @@ namespace gl
 		if ((shader = getShader(shaderKey, "unbindMaterialToShader")) == NULL)
 			return (*this);
 		shader->unbindMaterial(uniformKey);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::bindTransformationToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	{
+		Shader *shader;
+		if ((shader = getShader(shaderKey, "unbindMaterialToShader")) == NULL)
+			return (*this);
+		shader->bindingTransformation(uniformKey);
 		return (*this);
 	}
 }
