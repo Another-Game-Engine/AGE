@@ -220,7 +220,7 @@ namespace AGE
 		mesh.vertices = geometryManager.addVertices(maxSize, size, nbrBuffer.data(), buffer.data());
 		mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
 		mesh.bounding = data.boundingInfos;
-		mesh.name = data.name;
+//		mesh.name = data.name; // TODO
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
 		mesh.vertexPool = _pools.find(data.infos)->second.first;
 		mesh.indexPool = _pools.find(data.infos)->second.second;

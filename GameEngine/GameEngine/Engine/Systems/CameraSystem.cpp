@@ -195,12 +195,12 @@ void CameraSystem::mainUpdate(double time)
 	}
 	_totalTime += time;
 #else
-	auto drawList = _scene.lock()->getInstance<AGE::Octree>()->getDrawableList();
-	while (!drawList->empty())
+	auto &drawList = _scene.lock()->getInstance<AGE::Octree>()->getDrawableList();
+	while (!drawList.empty())
 	{
-		auto &camera = drawList->back();
-
-		//_render->setShaderUniform(_shader, _pro_matrix, camera.projection);
+		auto &camera = drawList.back();
+		if (camera.drawables.empty())
+			return;
 		_render->setUniformBlock(_global_state, 0, camera.projection);
 		_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
@@ -214,9 +214,8 @@ void CameraSystem::mainUpdate(double time)
 			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
 			camera.drawables.pop_back();
 		}
-		drawList->pop_back();
+		drawList.pop_back();
 	}
-
 #endif
 }
 
