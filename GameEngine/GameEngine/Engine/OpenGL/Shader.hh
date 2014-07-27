@@ -155,19 +155,18 @@ namespace gl
 		return (*this);
 	}
 
-	//template <typename TYPE>
-	//Shader Shader::bindingMaterial(Key<Sampler> const &key)
-	//{
-	//	auto &element = _uniforms.find(key);
-	//	if (element == _uniforms.end())
-	//		DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "key not found in uniform", *this);
-	//	size_t const indexTask = element->second;
-	//	Task const &task = _tasks[indexTask];
-	//	if (task.sizeParams[task.indexToTarget] != TYPE::size)
-	//		DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "The size of material is not adapt with the uniform target", *this);
-	//	_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
-	//	return (*this);
-	//}
+	template <typename TYPE>
+	Shader Shader::bindingMaterial(Key<Sampler> const &key)
+	{
+		size_t indexTask;
+		if ((indexTask = getIndexSampler(key, "bindingMaterial")) == -1)
+			return (*this);
+		Task const &task = _tasks[indexTask];
+		if (task.sizeParams[task.indexToTarget] != TYPE::size)
+			DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "The size of material is not adapt with the uniform target", *this);
+		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
+		return (*this);
+	}
 
 	inline void Shader::setSamplerTask(Task &task, Texture const &texture)
 	{

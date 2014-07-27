@@ -185,8 +185,8 @@ public:
 					for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
 					{
 						gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-						getInstance<gl::ShadingManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 1.0f, 0.f, 0.f));
-						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, 0.5f);
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
 					}
 				}
 				else
@@ -197,7 +197,7 @@ public:
 					{
 						gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
 						getInstance<gl::ShadingManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
-						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
 					}
 				}
 #else
