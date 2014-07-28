@@ -113,7 +113,7 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	//_render->addShaderUniform(_shader, "pos_light", glm::vec4(1.0f));
 	_model_matrix = _render->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
 	_view_matrix = _render->addShaderUniform(_shader, "view_matrix", glm::mat4(1.f));
-	_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix", glm::mat3(1.f));
+	//_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix", glm::mat3(1.f));
 	_diffuse_texture = _render->addShaderSampler(_shader, "diffuse_texture");
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color", glm::vec4(1.0f));
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio", 1.0f);
@@ -205,16 +205,8 @@ void CameraSystem::mainUpdate(double time)
 		_render->setUniformBlock(_global_state, 0, camera.projection);
 		_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		_render->draw(GL_TRIANGLES, _renderPass, NULL, 0);
-		while (!camera.drawables.empty())
-		{
-			auto &c = camera.drawables.back();
-		//	_render->setShaderUniform(_shader, _model_matrix, c.transformation);
-			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera.transformation * c.transformation))));
-			_render->postDraw(_shader, c.material, c.transformation);
-			_render->geometryManager.draw(GL_TRIANGLES, c.mesh.indices, c.mesh.vertices);
-			camera.drawables.pop_back();
-		}
+		_render->draw(GL_TRIANGLES, _shader, _renderPass, camera.drawables);
+		camera.drawables.clear();
 		drawList.pop_back();
 	}
 #endif

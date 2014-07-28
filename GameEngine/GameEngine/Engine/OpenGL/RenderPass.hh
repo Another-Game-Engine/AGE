@@ -29,12 +29,11 @@ namespace gl
 	{
 	public:
 		RenderPass();
-		RenderPass(Shader &shader, GeometryManager &geometryManager);
 		~RenderPass();
 		RenderPass(RenderPass const &copy);
 		RenderPass &operator=(RenderPass const &r);
 
-		RenderPass &draw(GLenum mode, AGE::Drawable const *objectRender, size_t nbrObjectRender);
+		RenderPass &updateBuffer();
 
 		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
 		RenderPass &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
@@ -60,8 +59,6 @@ namespace gl
 		bool stencilSizeValid();
 
 	private:
-		Shader *_shader;
-		GeometryManager *_geoManager;
 		AGE::Vector<Task> _tasks;
 
 		GLint _stencilSize;

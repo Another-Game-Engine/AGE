@@ -479,7 +479,7 @@ namespace gl
 
 		if ((shader = getShader(keyShader, "addRenderPass")) == NULL)
 			return (Key<RenderPass>(KEY_DESTROY));
-		_renderPass[key] = RenderPass(*shader, geometryManager);
+		_renderPass[key] = RenderPass();
 		return (key);
 	}
 
@@ -672,12 +672,24 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::draw(GLenum mode, Key<RenderPass> const &key, AGE::Drawable const *objectRender, size_t nbrObjectRender)
+	ShadingManager &ShadingManager::draw(GLenum mode, Key<Shader> const &keyShader, Key<RenderPass> const &keyRenderPass, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
+		Shader *shader;
 		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "popTaskRenderPass")) == NULL)
+		if ((shader = getShader(keyShader, "draw")) == NULL)
 			return (*this);
-		renderPass->draw(mode, objectRender, nbrObjectRender);
+		if ((renderPass = getRenderPass(keyRenderPass, "draw")) == NULL)
+			return (*this);
+		shader->use();
+		renderPass->updateBuffer();
+		for (size_t index = 0; index < objectRender.size(); ++index)
+		{
+			Material *material;
+			if ((material = getMaterial(objectRender[index].material, "draw")) == NULL)
+				return (*this);
+			shader->postDraw(*material, objectRender[index].transformation);
+			geometryManager.draw(mode, objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
+		}
 		return (*this);
 	}
 
