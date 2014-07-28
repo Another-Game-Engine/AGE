@@ -14,18 +14,10 @@
 namespace gl
 {
 	RenderPass::RenderPass()
-		: _shader(NULL),
-		_geoManager(NULL),
-		_stencilSize(-1)
+		: _stencilSize(-1)
 	{
 	}
 
-	RenderPass::RenderPass(Shader &shader, GeometryManager &geoManager)
-		: RenderPass()
-	{
-		_shader = &shader;
-		_geoManager = &geoManager;
-	}
 
 	RenderPass::~RenderPass()
 	{
@@ -38,9 +30,7 @@ namespace gl
 	}
 
 	RenderPass::RenderPass(RenderPass const &copy)
-		: _shader(copy._shader),
-		_geoManager(copy._geoManager),
-		_stencilSize(copy._stencilSize)
+		: _stencilSize(copy._stencilSize)
 	{
 	}
 
@@ -48,8 +38,6 @@ namespace gl
 	{
 		if (this != &r)
 		{
-			_shader = r._shader;
-			_geoManager = r._geoManager;
 			_stencilSize = r._stencilSize;
 		}
 		return (*this);
@@ -255,13 +243,10 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::draw(GLenum mode, AGE::Drawable const *objectRender, size_t nbrObjectRender)
+	RenderPass &RenderPass::updateBuffer()
 	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		if (!_shader)
-			DEBUG_MESSAGE("Warning", "RenderPass - use", "no shader assign on this renderPass", *this);
-		_shader->use();
 		return (*this);
 	}
 

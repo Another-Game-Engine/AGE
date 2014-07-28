@@ -133,15 +133,14 @@ namespace gl
 		
 		ShadingManager &popTaskRenderPass(Key<RenderPass> const &key);
 
-		ShadingManager &draw(GLenum mode, Key<RenderPass> const &key, AGE::Drawable const *objectRender, size_t nbrObjectRender);
-
+		ShadingManager &draw(GLenum mode, Key<Shader> const &key, Key<RenderPass> const &renderPass, AGE::Vector<AGE::Drawable> const &objectRender);
 
 	private:
 		std::map<Key<Shader>, Shader> _shaders;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
-		std::map<Key<RenderPass>, RenderPass> _renderPass;
 		std::map<Key<Material>, Material> _materials;
+		std::map<Key<RenderPass>, RenderPass> _renderPass;
 
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
 		std::pair<Key<UniformBlock>, UniformBlock *> _optimizeUniformBlockSearch;
