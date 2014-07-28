@@ -25,8 +25,13 @@
 
 #include <Core/OctreeKey.hpp>
 
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 class AScene;
+
 
 namespace AGE
 {
@@ -173,7 +178,6 @@ namespace AGE
 	public:
 		Octree();
 		virtual ~Octree(void);
-
 	private:
 		AGE::Vector<UserObject> _userObjects;
 		AGE::Queue<OctreeKey::OctreeObjectId> _freeUserObjects;
@@ -184,13 +188,12 @@ namespace AGE
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
 
-		AGE::Queue<OctreeCommand> _commandsBuffer[2];
-		AGE::Queue<OctreeCommand> *_octreeCommands;
-		AGE::Queue<OctreeCommand> *_mainThreadCommands;
+		AGE::Queue<OctreeCommand> _octreeCommands;
+		AGE::Queue<OctreeCommand> _mainThreadCommands;
 
-		Vector<DrawableCollection> _drawLists[2];
-		AGE::Vector<DrawableCollection> *_octreeDrawList;
-		AGE::Vector<DrawableCollection> *_mainThreadDrawList;
+
+		AGE::Vector<DrawableCollection> _octreeDrawList;
+		AGE::Vector<DrawableCollection> _mainThreadDrawList;
 
 	public:
 		const OctreeKey &addCullableElement();
@@ -214,12 +217,19 @@ namespace AGE
 		void setCameraInfos(const OctreeKey &id
 			, const glm::mat4 &projection);
 
-		void update();
-		AGE::Vector<DrawableCollection> *getDrawableList() { return _mainThreadDrawList; }
+		AGE::Vector<DrawableCollection> &getDrawableList();
+
 		//
 		// END
 	private:
+		void _update();
 		DRAWABLE_ID addDrawableObject(Octree::USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
+		void _run();
+
+		std::mutex _mutex;
+		std::condition_variable _hasSomeWork;
+		std::thread *_thread;
+		std::atomic_bool _isRunning;
 	};
 }

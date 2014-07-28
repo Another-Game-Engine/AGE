@@ -46,7 +46,7 @@ public:
 			else
 				assert(false && "Engine Instance is not set !");
 		}
-		return dynamic_cast<T*>(_instances[id]);
+		return static_cast<T*>(_instances[id]);
 	}
 
 	template <typename T, typename TypeSelector = T, typename ...Args>
@@ -62,7 +62,7 @@ public:
 			n->_dependencyManager = shared_from_this();
 			_instances[id] = n;
 		}
-		return dynamic_cast<T*>(_instances[id]);
+		return static_cast<T*>(_instances[id]);
 	}
 
 	template <typename T>
