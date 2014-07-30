@@ -73,6 +73,9 @@ namespace gl
 
 		//function associate to syncronisation
 		void clearPool();
+
+		// tool use in intern
+		void clear();
 	};
 
 	//!\file Pool.hh

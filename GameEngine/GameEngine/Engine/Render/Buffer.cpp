@@ -39,6 +39,18 @@ namespace gl
 		return (*this);
 	}
 
+	Buffer const &VertexBuffer::BufferData(size_t size) const
+	{
+		glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_STATIC_DRAW);
+		return (*this);
+	}
+
+	Buffer const &VertexBuffer::BufferSubData(size_t offset, size_t size, void *buffer) const
+	{
+		glBufferSubData(GL_ARRAY_BUFFER, offset, size, buffer);
+		return (*this);
+	}
+
 	GLenum VertexBuffer::getMode() const
 	{
 		return (GL_ARRAY_BUFFER);
@@ -70,6 +82,18 @@ namespace gl
 		return (GL_ELEMENT_ARRAY_BUFFER);
 	}
 
+	Buffer const &IndexBuffer::BufferData(size_t size) const
+	{
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, NULL, GL_STATIC_DRAW);
+		return (*this);
+	}
+
+	Buffer const &IndexBuffer::BufferSubData(size_t offset, size_t size, void *buffer) const
+	{
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, buffer);
+		return (*this);
+	}
+
 	UniformBuffer::UniformBuffer()
 		: Buffer()
 	{
@@ -94,5 +118,17 @@ namespace gl
 	GLenum UniformBuffer::getMode() const
 	{
 		return (GL_UNIFORM_BUFFER);
+	}
+
+	Buffer const &UniformBuffer::BufferData(size_t size) const
+	{
+		glBufferData(GL_UNIFORM_BUFFER, size, NULL, GL_STATIC_DRAW);
+		return (*this);
+	}
+
+	Buffer const &UniformBuffer::BufferSubData(size_t offset, size_t size, void *buffer) const
+	{
+		glBufferSubData(GL_UNIFORM_BUFFER, offset, size, buffer);
+		return (*this);
 	}
 }

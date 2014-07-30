@@ -22,6 +22,8 @@ namespace gl
 		virtual Buffer const &bind() const = 0;
 		virtual Buffer const &unbind() const = 0;
 		virtual GLenum getMode() const = 0;
+		virtual Buffer const &BufferData(size_t size) const = 0;
+		virtual Buffer const &BufferSubData(size_t offset, size_t size, void *buffer) const = 0;
 
 		GLuint getId() const;
 
@@ -45,6 +47,9 @@ namespace gl
 		virtual Buffer const &bind() const;
 		virtual Buffer const &unbind() const;
 		virtual GLenum getMode() const;
+		virtual Buffer const &BufferData(size_t size) const;
+		virtual Buffer const &BufferSubData(size_t offset, size_t size, void *buffer) const;
+	
 	};
 
 	//!\file Buffer.hh
@@ -63,6 +68,9 @@ namespace gl
 		virtual Buffer const &bind() const;
 		virtual Buffer const &unbind() const;
 		virtual GLenum getMode() const;
+		virtual Buffer const &BufferData(size_t size) const;
+		virtual Buffer const &BufferSubData(size_t offset, size_t size, void *buffer) const;
+
 	};
 
 	//!\file Buffer.hh
@@ -82,5 +90,8 @@ namespace gl
 		virtual Buffer const &bind() const;
 		virtual Buffer const &unbind() const;
 		virtual GLenum getMode() const;
+		virtual Buffer const &BufferData(size_t size) const;
+		virtual Buffer const &BufferSubData(size_t offset, size_t size, void *buffer) const;
+
 	};
 }

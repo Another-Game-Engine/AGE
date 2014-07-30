@@ -121,6 +121,11 @@ namespace gl
 
 	Pool::~Pool()
 	{
+		clear();
+	}
+
+	void Pool::clear()
+	{
 		if (_nbrAttribute)
 		{
 			delete[] _typeComponent;
@@ -138,14 +143,7 @@ namespace gl
 		{
 			if (_nbrAttribute != p._nbrAttribute)
 			{
-				if (_nbrAttribute)
-				{
-					delete[] _typeComponent;
-					delete[] _sizeTypeComponent;
-					delete[] _nbrComponent;
-					delete[] _sizeAttribute;
-					delete[] _offsetAttribute;
-				}
+				clear();
 				_nbrAttribute = p._nbrAttribute;
 				if (_nbrAttribute)
 				{
@@ -505,7 +503,7 @@ namespace gl
 		if (!_syncronized || !_internalSyncronized)
 			_vbo.bind();
 		if (!_syncronized)
-			glBufferData(GL_ARRAY_BUFFER, _nbrBytePool, NULL, GL_STATIC_DRAW);
+			_vbo.BufferData(_nbrBytePool);
 		if (!_internalSyncronized)
 		{
 			if (_nbrAttribute)
@@ -522,7 +520,7 @@ namespace gl
 					{
 						memory.setSync(true);
 						memory.setOffset(index, _offsetAttribute[index] + _sizeAttribute[index]);
-						glBufferSubData(GL_ARRAY_BUFFER, memory.getOffset(index), memory.getSizeBlock(index), vertices->getBuffer(index));
+						_vbo.BufferSubData(memory.getOffset(index), memory.getSizeBlock(index), (void *)vertices->getBuffer(index));
 						_sizeAttribute[index] += memory.getSizeBlock(index);
 					}
 					_nbrElementPool += memory.getNbrElement();
@@ -537,8 +535,8 @@ namespace gl
 				_indexPoolattach->getBuffer().bind();
 			for (size_t index = 0; index < _nbrAttribute; ++index)
 			{
-				glEnableVertexAttribArray(GLuint(index));
-				glVertexAttribPointer(GLuint(index), GLint(_nbrComponent[index]), _typeComponent[index], GL_FALSE, 0, (const GLvoid *)_offsetAttribute[index]);
+				_vao.activateAttribute(index);
+				_vao.attribute(index, _nbrComponent[index], _typeComponent[index], _offsetAttribute[index]);
 			}
 			_vao.unbind();
 		}
@@ -635,7 +633,7 @@ namespace gl
 		if (!_syncronized || !_internalSyncronized)
 			_ibo.bind();
 		if (!_syncronized)
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _nbrBytePool, NULL, GL_STREAM_DRAW);
+			_ibo.BufferData(_nbrBytePool);
 		if (!_internalSyncronized)
 		{
 			if (_nbrAttribute)
@@ -652,7 +650,7 @@ namespace gl
 					{
 						memory.setSync(true);
 						memory.setOffset(index, _offsetAttribute[index] + _sizeAttribute[index]);
-						glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, memory.getOffset(index), memory.getSizeBlock(index), indices->getBuffer());
+						_ibo.BufferSubData(memory.getOffset(index), memory.getSizeBlock(index), (void *)indices->getBuffer());
 						_sizeAttribute[index] += memory.getSizeBlock(index);
 					}
 					_nbrElementPool += memory.getNbrElement();

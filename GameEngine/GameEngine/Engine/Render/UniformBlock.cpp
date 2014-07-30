@@ -103,7 +103,7 @@ namespace gl
 	{
 		_update = false;
 		_buffer.bind();
-		glBufferData(GL_UNIFORM_BUFFER, _sizeBlock, NULL, GL_STREAM_DRAW);
+		_buffer.BufferData(_sizeBlock);
 	}
 
 }
