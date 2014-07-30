@@ -219,119 +219,57 @@ namespace gl
 
 	Key<Pool::Element<Vertices>> VertexPool::addVertices(Vertices const &vertices)
 	{
-		// Check in memory pool if a field is free
-		for (size_t index = 0; index < _poolMemory.size(); ++index)
-		{
-			MemoryBlocksGPU &memory = _poolMemory[index];
-			if (_poolMemory[index].getIsUsed() == false && memory.getNbrElement() == vertices.getNbrVertices())
-			{
-				_internalSyncronized = false;
-				memory.setSync(false);
-				memory.setIsUsed(true);
-				Key<Element<Vertices>> keyElement;
-				Element<Vertices> newElement;
-				newElement.memoryIndex = index;
-				newElement.data = &vertices;
-				_poolElement[keyElement] = newElement;
-				return (keyElement);
-			}
-		}
-		// Udpate major is require cause of size pool changement
-		_syncronized = false; // cause reset of buffer on gpu
-		_internalSyncronized = false;
-		for (int index = 0; index < _poolMemory.size(); ++index)
-			_poolMemory[index].setSync(false); // ask an update of all element of memory gpu
-		MemoryBlocksGPU memory;
-		memory.setNbrElement(vertices.getNbrVertices());
-		memory.setNbrBlock(_nbrAttribute);
-		for (uint8_t index = 0; index < _nbrAttribute; ++index)
-		{
-			size_t sizeAttribute = _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrVertices();
-			_nbrBytePool += sizeAttribute;
-			_sizeAttribute[index] += sizeAttribute;
-			memory.setSizeBlock(index, sizeAttribute);
-			if (index > 0)
-				_offsetAttribute[index] = _offsetAttribute[index - 1] + _sizeAttribute[index - 1];
-		}
-		_poolMemory.push_back(memory);
-		Element<Vertices> element;
-		Key<Element<Vertices>> keyElement;
-		element.data = &vertices;
-		element.memoryIndex = _poolMemory.size() - 1;
-		_poolElement[keyElement] = element;// &vertices, memory);
-		return (keyElement);
+		return (addElementPool<Vertices>(_poolElement, vertices));
 	}
 
 	Key<Pool::Element<Indices>> IndexPool::addIndices(Indices const &indices)
 	{
-		// Check in memory pool if a field is free
-		for (size_t index = 0; index < _poolMemory.size(); ++index)
-		{
-			MemoryBlocksGPU &memory = _poolMemory[index];
-			if (_poolMemory[index].getIsUsed() == false && memory.getNbrElement() == indices.getNbrIndices())
-			{
-				_internalSyncronized = false;
-				memory.setSync(false);
-				memory.setIsUsed(true);
-				Key<Element<Indices>> keyElement;
-				Element<Indices> newElement;
-				newElement.memoryIndex = index;
-				newElement.data = &indices;
-				_poolElement[keyElement] = newElement;
-				return (keyElement);
-			}
-		}
-		// Udpate major is require cause of size pool changement
-		_syncronized = false; // cause reset of buffer on gpu
-		_internalSyncronized = false;
-		for (int index = 0; index < _poolMemory.size(); ++index)
-			_poolMemory[index].setSync(false); // ask an update of all element of memory gpu
-		MemoryBlocksGPU memory;
-		memory.setNbrElement(indices.getNbrIndices());
-		memory.setNbrBlock(_nbrAttribute);
-		for (uint8_t index = 0; index < _nbrAttribute; ++index)
-		{
-			size_t sizeAttribute = _sizeTypeComponent[index] * _nbrComponent[index] * indices.getNbrIndices();
-			_nbrBytePool += sizeAttribute;
-			_sizeAttribute[index] += sizeAttribute;
-			memory.setSizeBlock(index, sizeAttribute);
-			if (index > 0)
-				_offsetAttribute[index] = _offsetAttribute[index - 1] + _sizeAttribute[index - 1];
-		}
-		_poolMemory.push_back(memory);
-		Element<Indices> element;
-		Key<Element<Indices>> keyElement;
-		element.data = &indices;
-		element.memoryIndex = _poolMemory.size() - 1;
-		_poolElement[keyElement] = element;// &vertices, memory);
-		return (keyElement);
+		return (addElementPool<Indices>(_poolElement, indices));
 	}
 
-	VertexPool &VertexPool::rmVertices(Key<Pool::Element<Vertices>> const &key)
+	Pool::Element<Vertices> const *VertexPool::getVerticesPoolElement(Key<Element<Vertices>> const &key, std::string const &msg) const
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "rmVertices", "key invalid", *this)
+			DEBUG_MESSAGE("Warning", "Pool.cpp", msg, "key invalid", NULL);
 		auto &element = _poolElement.find(key);
 		if (element == _poolElement.end())
+			return (NULL);
+		return (&element->second);
+	}
+
+	Pool::Element<Indices> const *IndexPool::getIndicesPoolElement(Key<Element<Indices>> const &key, std::string const &msg) const
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "Pool.cpp", msg, "key invalid", NULL);
+		auto &element = _poolElement.find(key);
+		if (element == _poolElement.end())
+			return (NULL);
+		return (&element->second);
+	}
+
+	VertexPool &VertexPool::rmVertices(Key<Pool::Element<Vertices>> &key)
+	{
+		Pool::Element<Vertices> const *element;
+		if ((element = getVerticesPoolElement(key, "rmVertices")) == NULL)
 			return (*this);
-		MemoryBlocksGPU &memory = _poolMemory[element->second.memoryIndex];
+		MemoryBlocksGPU &memory = _poolMemory[element->memoryIndex];
 		memory.setSync(true);
 		memory.setIsUsed(false);
-		_poolElement.erase(element);
+		_poolElement.erase(key);
+		key.destroy();
 		return (*this);
 	}
 
-	IndexPool &IndexPool::rmIndices(Key<Pool::Element<Indices>> const &key)
+	IndexPool &IndexPool::rmIndices(Key<Pool::Element<Indices>> &key)
 	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "rmVertices", "key invalid", *this)
-			auto &element = _poolElement.find(key);
-		if (element == _poolElement.end())
+		Pool::Element<Indices> const *element;
+		if ((element = getIndicesPoolElement(key, "rmIndices")) == NULL)
 			return (*this);
-		MemoryBlocksGPU &memory = _poolMemory[element->second.memoryIndex];
+		MemoryBlocksGPU &memory = _poolMemory[element->memoryIndex];
 		memory.setSync(true);
 		memory.setIsUsed(false);
-		_poolElement.erase(element);
+		_poolElement.erase(key);
+		key.destroy();
 		return (*this);
 	}
 
@@ -391,14 +329,7 @@ namespace gl
 		clearPool();
 		if (_nbrAttribute != nbrAttribute)
 		{
-			if (_nbrAttribute)
-			{
-				delete[] _typeComponent;
-				delete[] _sizeTypeComponent;
-				delete[] _nbrComponent;
-				delete[] _sizeAttribute;
-				delete[] _offsetAttribute;
-			}
+			clear();
 			_nbrAttribute = nbrAttribute;
 			if (_nbrAttribute)
 			{
@@ -464,14 +395,7 @@ namespace gl
 		clearPool();
 		if (_nbrAttribute != nbrAttributes)
 		{
-			if (_nbrAttribute)
-			{
-				delete[] _sizeTypeComponent;
-				delete[] _typeComponent;
-				delete[] _nbrComponent;
-				delete[] _sizeAttribute;
-				delete[] _offsetAttribute;
-			}
+			clear();
 			_nbrAttribute = nbrAttributes;
 			if (_nbrAttribute)
 			{
@@ -573,11 +497,11 @@ namespace gl
 
 	VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Vertices>> const &drawIt) const
 	{
-		_vao.bind();
-		auto &element = _poolElement.find(drawIt);
-		if (element == _poolElement.end())
+		Pool::Element<Vertices> const *element;
+		if ((element = getVerticesPoolElement(drawIt, "draw")) == NULL)
 			return (*this);
-		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
+		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
+		_vao.bind();
 		glDrawArrays(mode, GLint(memory.getElementStart()), GLsizei(memory.getNbrElement()));
 		_vao.unbind();
 		return (*this);
@@ -669,10 +593,10 @@ namespace gl
 
 	IndexPool const &IndexPool::onDrawCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target) const
 	{
-		auto &element = _poolElement.find(key);
-		if (element == _poolElement.end())
+		Pool::Element<Indices> const *element;
+		if ((element = getIndicesPoolElement(key, "rmIndices")) == NULL)
 			return (*this);
-		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
+		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
 		glDrawElementsBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), GLint(target.getElementStart()));
 		return (*this);
 	}

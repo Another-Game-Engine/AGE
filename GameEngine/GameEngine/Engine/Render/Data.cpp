@@ -115,7 +115,7 @@ namespace gl
 		return (_nbrBuffers);
 	}
 
-	size_t Vertices::getNbrVertices() const
+	size_t Vertices::getNbrElement() const
 	{
 		return (_nbrVertices);
 	}
@@ -163,7 +163,7 @@ namespace gl
 		return (*this);
 	}
 
-	size_t Indices::getNbrIndices() const
+	size_t Indices::getNbrElement() const
 	{
 		return (_nbrIndices);
 	}

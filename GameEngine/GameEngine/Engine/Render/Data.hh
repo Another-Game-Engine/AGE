@@ -27,7 +27,7 @@ namespace gl
 		void const *getBuffer(uint8_t index) const;
 		size_t getSizeBuffer(uint8_t index) const;
 		uint8_t getNbrBuffers() const;
-		size_t getNbrVertices() const;
+		size_t getNbrElement() const;
 
 	private:
 
@@ -50,7 +50,7 @@ namespace gl
 		Indices(size_t nbrIndices, uint32_t *buffer);
 		Indices &operator=(Indices const &i);
 
-		size_t getNbrIndices() const;
+		size_t getNbrElement() const;
 		uint32_t const *getBuffer() const;
 
 	private:

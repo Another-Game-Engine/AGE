@@ -76,6 +76,7 @@ namespace gl
 
 		// tool use in intern
 		void clear();
+		template <typename TYPE> Key<Element<TYPE>> addElementPool(std::map<Key<Pool::Element<TYPE>>, Element<TYPE>> &poolElement, TYPE const &vertices);
 	};
 
 	//!\file Pool.hh
@@ -101,7 +102,7 @@ namespace gl
 
 		// Vertices handler
 		Key<Element<Vertices>> addVertices(Vertices const &vertices);
-		VertexPool &rmVertices(Key<Element<Vertices>> const &key);
+		VertexPool &rmVertices(Key<Element<Vertices>> &key);
 		VertexPool &clearPool();
 
 		// tool for link index pool and  vertex pool (usefull for draw with indices ;p)
@@ -121,7 +122,8 @@ namespace gl
 
 		// reprensent data in vbo
 		std::map<Key<Element<Vertices>>, Element<Vertices>> _poolElement;
-
+		// tool use in intern
+		Element<Vertices> const *getVerticesPoolElement(Key<Element<Vertices>> const &key, std::string const &msg) const;
 	};
 
 	//!\file Pool.hh
@@ -142,7 +144,7 @@ namespace gl
 
 		// Vertices handler
 		Key<Element<Indices>> addIndices(Indices const &indices);
-		IndexPool &rmIndices(Key<Element<Indices>> const &key);
+		IndexPool &rmIndices(Key<Element<Indices>> &key);
 		IndexPool &clearPool();
 
 		// tool for link index pool and  vertex pool (usefull for draw with indices ;p)
@@ -159,5 +161,52 @@ namespace gl
 		// Warning must be call only by VertexPool
 		IndexPool const &onDrawCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target) const;
 		friend VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const;
+	
+		// tool use in intern
+		Element<Indices> const *getIndicesPoolElement(Key<Element<Indices>> const &key, std::string const &msg) const;
 	};
+
+	template <typename TYPE>
+	Key<Pool::Element<TYPE>> Pool::addElementPool(std::map<Key<Pool::Element<TYPE>>, Element<TYPE>> &poolElement, TYPE const &vertices)
+	{
+		for (size_t index = 0; index < _poolMemory.size(); ++index)
+		{
+			MemoryBlocksGPU &memory = _poolMemory[index];
+			if (_poolMemory[index].getIsUsed() == false && memory.getNbrElement() == vertices.getNbrElement())
+			{
+				_internalSyncronized = false;
+				memory.setSync(false);
+				memory.setIsUsed(true);
+				Key<Pool::Element<TYPE>> keyElement;
+				Pool::Element<TYPE> newElement;
+				newElement.memoryIndex = index;
+				newElement.data = &vertices;
+				poolElement[keyElement] = newElement;
+				return (keyElement);
+			}
+		}
+		_syncronized = false; // cause reset of buffer on gpu
+		_internalSyncronized = false;
+		for (int index = 0; index < _poolMemory.size(); ++index)
+			_poolMemory[index].setSync(false);
+		MemoryBlocksGPU memory;
+		memory.setNbrElement(vertices.getNbrElement());
+		memory.setNbrBlock(_nbrAttribute);
+		for (uint8_t index = 0; index < _nbrAttribute; ++index)
+		{
+			size_t sizeAttribute = _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrElement();
+			_nbrBytePool += sizeAttribute;
+			_sizeAttribute[index] += sizeAttribute;
+			memory.setSizeBlock(index, sizeAttribute);
+			if (index > 0)
+				_offsetAttribute[index] = _offsetAttribute[index - 1] + _sizeAttribute[index - 1];
+		}
+		_poolMemory.push_back(memory);
+		Element<TYPE> element;
+		Key<Element<TYPE>> keyElement;
+		element.data = &vertices;
+		element.memoryIndex = _poolMemory.size() - 1;
+		poolElement[keyElement] = element;
+		return (keyElement);
+	}
 }
