@@ -8,7 +8,11 @@
 #include <Core/SceneManager.hh>
 #include <OpenGL/ShadingManager.hh>
 #include <OpenGL/GeometryManager.hh>
+#include <Core/Drawable.hh>
+#include <Core/AssetsManager.hpp>
 
+//tmp
+#include <Core/Octree.hpp>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -17,7 +21,6 @@ CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene)
 	: System(std::move(scene)),
 #if NEW_SHADER
 	_render(NULL),
-	_geometry(NULL),
 #endif
 	_renderDebugMethod(false),
 	_totalTime(0),
@@ -58,7 +61,8 @@ void CameraSystem::getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
 #else
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
 #endif
-	screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
+	// TODO
+	//screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
 }
 
 void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
@@ -78,36 +82,48 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 #else
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_filter.getCollection().begin()));
 #endif
-	screenPosToWorldRay(
-		static_cast<int>(centerPos.x),
-		static_cast<int>(centerPos.y),
-		static_cast<int>(screenSize.x),
-		static_cast<int>(screenSize.y),
-		cameraCpt->lookAtTransform,
-		cameraCpt->projection,
-		from,
-		to);
+	//TODO
+	//screenPosToWorldRay(
+	//	static_cast<int>(centerPos.x),
+	//	static_cast<int>(centerPos.y),
+	//	static_cast<int>(screenSize.x),
+	//	static_cast<int>(screenSize.y),
+	//	cameraCpt->lookAtTransform,
+	//	cameraCpt->projection,
+	//	from,
+	//	to);
 }
 
 #if NEW_SHADER
 
-void CameraSystem::setManager(gl::ShadingManager &m, gl::GeometryManager &g)
+void CameraSystem::setManager(gl::ShadingManager &m)
 {
 	_render = &m;
-	_geometry = &g;
+
 	if (_render == NULL)
 		std::cerr << "Warning: No manager set for the camerasystem" << std::endl;
+	
 	_shader = _render->addShader(VERTEX_SHADER, FRAG_SHADER);
 	size_t sizeElement[2];
 	gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
 	_global_state = _render->addUniformBlock(2, sizeElement);
-	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
-	_model_matrix = _render->addShaderUniform(_shader, "model_matrix");
-	_view_matrix = _render->addShaderUniform(_shader, "view_matrix");
-	_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix");
+    	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
+	_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
+	//_pro_matrix = _render->addShaderUniform(_shader, "projection_matrix");
+	//_render->addShaderUniform(_shader, "pos_light", glm::vec4(1.0f));
+	_model_matrix = _render->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
+	_view_matrix = _render->addShaderUniform(_shader, "view_matrix", glm::mat4(1.f));
+	//_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix", glm::mat3(1.f));
 	_diffuse_texture = _render->addShaderSampler(_shader, "diffuse_texture");
-	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color");
-	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio");
+	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color", glm::vec4(1.0f));
+	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio", 1.0f);
+	_renderPass = _render->addRenderPass(_shader);
+	_render->bindMaterialToShader<gl::Color_diffuse>(_shader, _diffuse_color);
+	_render->bindMaterialToShader<gl::Ratio_diffuse>(_shader, _diffuse_ratio);
+	_render->bindTransformationToShader(_shader, _model_matrix);
+	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
+	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
 }
 #endif
 
@@ -180,28 +196,18 @@ void CameraSystem::mainUpdate(double time)
 	}
 	_totalTime += time;
 #else
-	auto &scene = _scene.lock();
-	for (auto &e : _camera.getCollection())
+	auto &drawList = _scene.lock()->getInstance<AGE::Octree>()->getDrawableList();
+	while (!drawList.empty())
 	{
-
-		auto camera = scene->getComponent<Component::CameraComponent>(e);
-		_render->useShader(_shader);
-		_render->setUniformBlock(_global_state, 0, camera->projection);
-		_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
-		_render->setShaderUniform(_shader, _view_matrix, camera->lookAtTransform);
-		_render->setShaderUniform(_shader, _diffuse_color, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		auto &camera = drawList.back();
+		if (camera.drawables.empty())
+			return;
+		_render->setUniformBlock(_global_state, 0, camera.projection);
+		_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		glEnable(GL_DEPTH_TEST);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		for (auto m : _drawable.getCollection())
-		{
-			auto mesh = scene->getComponent<Component::MeshRenderer>(m);
-			_render->setShaderSampler(_shader, _diffuse_texture, mesh->mesh->material->materials[0].diffuseTex->getTexture());
-			_render->setShaderUniform(_shader, _model_matrix, scene->getTransform(m));
-			_render->setShaderUniform(_shader, _normal_matrix, glm::transpose(glm::inverse(glm::mat3(camera->lookAtTransform * scene->getTransform(m)))));
-			for (std::size_t i = 0; i < mesh->mesh->material->materials.size(); ++i)
-				mesh->mesh->geometries[i].geomanager->draw(GL_TRIANGLES, mesh->mesh->geometries[i].glindices, mesh->mesh->geometries[i].glvertices);
-		}
+		_render->draw(GL_TRIANGLES, _shader, _renderPass, camera.drawables);
+		camera.drawables.clear();
+		drawList.pop_back();
 	}
 #endif
 }

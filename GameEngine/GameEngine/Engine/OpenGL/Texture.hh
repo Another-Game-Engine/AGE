@@ -91,7 +91,6 @@ namespace gl
 		GLenum _format;
 		GLenum _type;
 		GLboolean _fixedSampleLocation;
-
 	public:
 		TextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation = GL_FALSE);
 		virtual ~TextureMultiSample();

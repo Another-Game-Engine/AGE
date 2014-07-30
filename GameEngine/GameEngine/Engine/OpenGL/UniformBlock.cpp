@@ -89,27 +89,21 @@ namespace gl
 		return (_sizeBlock);
 	}
 
-	int UniformBlock::getBindingPoint() const
+	GLuint UniformBlock::getBindingPoint() const
 	{
 		return (_bindingPoint);
+	}
+
+	GLuint UniformBlock::getBufferId() const
+	{
+		return (_buffer.getId());
 	}
 
 	void UniformBlock::GPUallocation()
 	{
 		_update = false;
-		_ubo.bind();
+		_buffer.bind();
 		glBufferData(GL_UNIFORM_BUFFER, _sizeBlock, NULL, GL_STREAM_DRAW);
 	}
 
-	UniformBlock const &UniformBlock::bind() const
-	{
-		glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, _ubo.getId());
-		return (*this);
-	}
-
-	UniformBlock const &UniformBlock::unbind() const
-	{
-		glBindBufferBase(GL_UNIFORM_BUFFER, _bindingPoint, 0);
-		return (*this);
-	}
 }

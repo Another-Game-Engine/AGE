@@ -210,14 +210,22 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
+    <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
+    <ClCompile Include="Engine\Core\Drawable.cpp" />
+    <ClCompile Include="Engine\Core\Link.cpp" />
+    <ClCompile Include="Engine\Core\Octree.cpp" />
     <ClCompile Include="Engine\OpenGL\Buffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Data.cpp" />
     <ClCompile Include="Engine\OpenGL\GeometryManager.cpp" />
+    <ClCompile Include="Engine\OpenGL\Material.cpp" />
     <ClCompile Include="Engine\OpenGL\MemoryGPU.cpp" />
+    <ClCompile Include="Engine\OpenGL\OpenGLTask.cpp" />
     <ClCompile Include="Engine\OpenGL\PixelBuffer.cpp" />
     <ClCompile Include="Engine\OpenGL\Pool.cpp" />
+    <ClCompile Include="Engine\OpenGL\RenderPass.cpp" />
     <ClCompile Include="Engine\OpenGL\ShaderResource.cpp" />
     <ClCompile Include="Engine\OpenGL\ShadingManager.cpp" />
     <ClCompile Include="Engine\OpenGL\StreamGPU.cpp" />
@@ -281,9 +289,18 @@
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
+    <ClInclude Include="Engine\Components\Behaviors\Cullable.hpp" />
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
+    <ClInclude Include="Engine\Core\Drawable.hh" />
+    <ClInclude Include="Engine\Core\Link.hpp" />
+    <ClInclude Include="Engine\Core\Octree.hpp" />
+    <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
+    <ClInclude Include="Engine\Core\OctreeKey.hpp" />
+    <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
+    <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\OpenGL\Buffer.hh" />
@@ -291,9 +308,12 @@
     <ClInclude Include="Engine\OpenGL\GeometryManager.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hh" />
     <ClInclude Include="Engine\OpenGL\Key.hpp" />
+    <ClInclude Include="Engine\OpenGL\Material.hh" />
     <ClInclude Include="Engine\OpenGL\MemoryGPU.hh" />
+    <ClInclude Include="Engine\OpenGL\OpenGLTask.hh" />
     <ClInclude Include="Engine\OpenGL\PixelBuffer.hh" />
     <ClInclude Include="Engine\OpenGL\Pool.hh" />
+    <ClInclude Include="Engine\OpenGL\RenderPass.hh" />
     <ClInclude Include="Engine\OpenGL\ShaderResource.hh" />
     <ClInclude Include="Engine\OpenGL\ShadingManager.hh" />
     <ClInclude Include="Engine\OpenGL\StreamGPU.hh" />
@@ -318,7 +338,11 @@
     <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Engine\Systems\PostFxSystem.hh" />
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
+    <ClInclude Include="Engine\Texture\Texture.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
@@ -328,10 +352,8 @@
     <ClInclude Include="Engine\Components\CameraComponent.hpp" />
     <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
     <ClInclude Include="Engine\Components\Collision.hpp" />
-    <ClInclude Include="Engine\Components\CollisionBody.hpp" />
     <ClInclude Include="Engine\Components\CollisionLayers.hpp" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
-    <ClInclude Include="Engine\Components\FirstPersonView.hpp" />
     <ClInclude Include="Engine\Components\FPController.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
@@ -381,7 +403,6 @@
     <ClInclude Include="Engine\Systems\BulletDynamicSystem.hpp" />
     <ClInclude Include="Engine\Systems\CollisionAdderSystem.hpp" />
     <ClInclude Include="Engine\Systems\CollisionCleanerSystem.hpp" />
-    <ClInclude Include="Engine\Systems\FirstPersonViewSystem.hpp" />
     <ClInclude Include="Engine\Systems\LightRenderingSystem.hh" />
     <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
@@ -398,11 +419,13 @@
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Utils\Dependency.hpp" />
     <ClInclude Include="Engine\Utils\File.hpp" />
+    <ClInclude Include="Engine\Utils\Frustum.hpp" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
+    <ClInclude Include="Engine\Utils\Plane.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
@@ -410,6 +433,7 @@
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
+    <ClInclude Include="Engine\Utils\Worker.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

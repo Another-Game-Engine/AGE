@@ -6,17 +6,18 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <Core/Link.hpp>
 
 class DynamicMotionState : public btMotionState
 {
 protected:
-    glm::mat4 &_ageTransform;
+    AGE::Link *_link;
     btTransform mInitialPosition;
 public:
-    DynamicMotionState(glm::mat4 &transform)
-		: _ageTransform(transform)
+    DynamicMotionState(AGE::Link *link)
+		: _link(link)
     {
-		mInitialPosition.setFromOpenGLMatrix(glm::value_ptr(transform));
+		mInitialPosition.setFromOpenGLMatrix(glm::value_ptr(link->getTransform()));
     }
 
     virtual ~DynamicMotionState()
@@ -25,13 +26,15 @@ public:
 
     virtual void getWorldTransform(btTransform &worldTrans) const
     {
-        worldTrans.setFromOpenGLMatrix(glm::value_ptr(_ageTransform));
+        worldTrans.setFromOpenGLMatrix(glm::value_ptr(_link->getTransform()));
     }
 
     virtual void setWorldTransform(const btTransform &worldTrans)
     {
-		auto scale = scaleFromMat4(_ageTransform);
-		worldTrans.getOpenGLMatrix(glm::value_ptr(_ageTransform));
-		_ageTransform = glm::scale(_ageTransform, scale);
+		_link->setPosition(convertBulletVectorToGLM(worldTrans.getOrigin()));
+		_link->setOrientation(convertBulletQuatToGLM(worldTrans.getRotation()));
+		//auto scale = scaleFromMat4(_ageTransform);
+		//worldTrans.getOpenGLMatrix(glm::value_ptr(_ageTransform));
+		//_ageTransform = glm::scale(_ageTransform, scale);
     }
 };

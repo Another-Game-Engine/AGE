@@ -1,16 +1,18 @@
 #include "TextureFile.hpp"
 #include <math.h>
 #include <algorithm>
+#include <OpenGL/ShadingManager.hh>
+#include <OpenGL/Texture.hh>
 
 TextureFile::TextureFile()
-: MediaFile<TextureFile>()
-, width(0)
-, height(0)
-, components(0)
-, format(0)
-, wrap(GL_REPEAT)
-, minFilter(GL_LINEAR_MIPMAP_LINEAR)
-, magFilter(GL_LINEAR)
+: MediaFile<TextureFile>(),
+  width(0),
+  height(0),
+  components(0),
+  format(0),
+  wrap(GL_REPEAT),
+  minFilter(GL_LINEAR_MIPMAP_LINEAR),
+  magFilter(GL_LINEAR)
 {
 	_type = TEXTURE;
 }
@@ -20,14 +22,15 @@ TextureFile::~TextureFile()
 }
 
 TextureFile::TextureFile(const TextureFile &o)
-: MediaFile<TextureFile>(o)
-, width(0)
-, height(0)
-, components(0)
-, format(0)
-, wrap(GL_REPEAT)
-, minFilter(GL_LINEAR_MIPMAP_LINEAR)
-, magFilter(GL_LINEAR)
+: MediaFile<TextureFile>(o),
+  width(0),
+  height(0),
+  components(0),
+  format(0),
+  wrap(GL_REPEAT),
+  minFilter(GL_LINEAR_MIPMAP_LINEAR),
+  magFilter(GL_LINEAR),
+  key(KEY_DESTROY)
 {
 	width = o.width;
 	height = o.height;
@@ -49,13 +52,8 @@ TextureFile &TextureFile::operator=(const TextureFile &o)
 		wrap = o.wrap;
 		minFilter = o.minFilter;
 		magFilter = o.magFilter;
+		key = o.key;
 	}
-	return *this;
-}
-
-TextureFile &TextureFile::operator=(gl::Texture2D &t)
-{
-	_texture = std::make_unique<gl::Texture2D>(t);
 	return *this;
 }
 
@@ -67,20 +65,17 @@ void TextureFile::save(cereal::PortableBinaryOutputArchive &ar) const
 void TextureFile::load(cereal::PortableBinaryInputArchive &ar)
 {
 	ar(cereal::make_nvp("datas", datas), CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(components), CEREAL_NVP(format));
-	_texture = std::make_unique<gl::Texture2D>(components, width, height, true);
-	_texture->setOptionTransfer(0, format, GL_UNSIGNED_BYTE);
-	_texture->write(datas.data());
-	_texture->generateMipMap();
-	_texture->filter(minFilter, magFilter).wrap(wrap);
-	_texture->storage(1);
+	auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
+	key = manager->addTexture2D(components, width, height, true);
+	manager->setOptionTransferTexture2D(key, 0, format, GL_UNSIGNED_BYTE);
+	manager->writeTexture(key, datas.data());
+	manager->generateMipMapTexture2D(key);
+	manager->filterTexture2D(key, minFilter, magFilter);
+	manager->wrapTexture2D(key, wrap);
+	manager->storageTexture2D(key, 1);
 }
 
-GLuint TextureFile::getId() const
+gl::Key<gl::Texture> const &TextureFile::getTexture() const
 {
-	return _texture->getId();
-}
-
-gl::Texture const &TextureFile::getTexture() const
-{
-	return (*_texture);
+	return (key);
 }

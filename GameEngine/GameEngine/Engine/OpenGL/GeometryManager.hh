@@ -7,7 +7,7 @@
 #include <OpenGL/Pool.hh>
 #include <Utils/Dependency.hpp>
 #include <map>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 
 namespace gl
 {
@@ -18,7 +18,7 @@ namespace gl
 	//!\version v1.0
 	//!\class GeometryManager
 	//!\brief Handle the geometry of the render
-	class GeometryManager : public Dependency<GeometryManager>
+	class GeometryManager
 	{
 	public:
 		template <typename TYPE, typename POOL>
@@ -73,5 +73,20 @@ namespace gl
 		std::map<Key<Vertices>, Vertices> _vertices;
 		std::map<Key<Vertices>, Attach<Vertices, VertexPool>> _vertexAttach;
 		std::map<Key<Indices>, Attach<Indices, IndexPool>> _indexAttach;
+	
+		std::pair<Key<IndexPool>, IndexPool *> _optimizerIndexPoolSearch;
+		std::pair<Key<VertexPool>, VertexPool *> _optimizerVertexPoolSearch;
+		std::pair<Key<Vertices>, Vertices *> _optimizerVerticesSearch;
+		std::pair<Key<Indices>, Indices *> _optimizerIndicesSearch;
+		std::pair<Key<Vertices>, Attach<Vertices, VertexPool> *> _optimizerVertexAttachSearch;
+		std::pair<Key<Indices>, Attach<Indices, IndexPool> *> _optimizerIndexAttachSearch;
+
+		// tool use in intern
+		VertexPool *getVertexPool(Key<VertexPool> const &key, std::string const &in);
+		IndexPool *getIndexPool(Key<IndexPool> const &key, std::string const &in);
+		Indices *getIndices(Key<Indices> const &key, std::string const &in);
+		Vertices *getVertices(Key<Vertices> const &key, std::string const &in);
+		Attach<Vertices, VertexPool> *getVertexAttach(Key<Vertices> const &key, std::string const &in);
+		Attach<Indices, IndexPool> *getIndexAttach(Key<Indices> const &key, std::string const &in);
 	};
 }

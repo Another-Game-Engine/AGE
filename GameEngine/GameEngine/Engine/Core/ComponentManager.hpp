@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <Components/Component.hh>
 #include <utility>
 
@@ -19,7 +19,8 @@ public:
 	inline void setReorder(bool v) { _reorder = v; }
 	virtual void reorder() = 0;
 	virtual bool removeComponent(Entity &e) = 0;
-	virtual void *getComponentPtr(const Entity &e) = 0;
+	virtual Component::Base *getComponentPtr(const Entity &e) = 0;
+	virtual Component::Base *getComponentPtr(ENTITY_ID e) = 0;
 protected:
 	bool _reorder;
 };
@@ -31,7 +32,8 @@ public:
 	ComponentManager(AScene *scene)
 		: _scene(scene)
 		, _size(0)
-	{}
+	{
+	}
 
 	virtual ~ComponentManager()
 	{}
@@ -41,7 +43,7 @@ public:
 		return T::getTypeId();
 	}
 
-	const std::vector<T> &getComponents() const
+	const AGE::Vector<T> &getComponents() const
 	{
 		return _components;
 	}
@@ -54,7 +56,7 @@ public:
 	void clearComponents()
 	{
 		for (auto &&e : _components)
-			e.reset();
+			e.reset(_scene);
 		_size = 0;
 	}
 
@@ -70,7 +72,7 @@ public:
 		component = &_components[_size];
 		++_size;
 		//init component
-		component->init(std::forward<Args>(args)...);
+		component->init(_scene, std::forward<Args>(args)...);
 		_reorder = true;
 		return component;
 	}
@@ -80,10 +82,16 @@ public:
 		return &_components[_componentsRefs[e.getId()]];
 	}
 
+	T *getComponent(ENTITY_ID e)
+	{
+		return &_components[_componentsRefs[e]];
+	}
+  
+
 	virtual bool removeComponent(Entity &e)
 	{
 		auto id = _componentsRefs[e.getId()];
-		_components[id].reset();
+		_components[id].reset(_scene);
 		if (_size > 0 && id < _size - 1)
 		{
 			_componentsRefs[_components[_size - 1].entityId] = id;
@@ -105,9 +113,14 @@ public:
 		this->_reorder = false;
 	}
 
-	virtual void *getComponentPtr(const Entity &e)
+	virtual Component::Base *getComponentPtr(const Entity &e)
 	{
-		return static_cast<void*>(getComponent(e));
+		return static_cast<Component::Base*>(getComponent(e));
+	}
+
+	virtual Component::Base *getComponentPtr(ENTITY_ID e)
+	{
+		return static_cast<Component::Base*>(getComponent(e));
 	}
 
 private:
@@ -190,7 +203,7 @@ private:
 		return j;
 	}
 
-	std::vector<T> _components;
+	AGE::Vector<T> _components;
 	std::array<ENTITY_ID, MAX_ENTITY_NUMBER> _componentsRefs;
 	std::size_t _size;
 	AScene *_scene;

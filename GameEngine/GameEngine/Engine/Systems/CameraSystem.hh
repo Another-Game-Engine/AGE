@@ -4,11 +4,12 @@
 #include <Core/EntityFilter.hpp>
 #include <glm/glm.hpp>
 #include <OpenGL/Key.hh>
+#include <Components/CameraComponent.hpp>
 
 # define NEW_SHADER 1
 
 #if NEW_SHADER
-namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; }
+namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; class RenderPass; }
 #endif
 
 class CameraSystem : public System
@@ -18,7 +19,7 @@ public:
 	virtual ~CameraSystem(){}
 
 #if NEW_SHADER
-	void setManager(gl::ShadingManager &m, gl::GeometryManager &g);
+	void setManager(gl::ShadingManager &m);
 #endif
 	void setRenderDebugMode(bool t);
 	bool getRenderDebugMode() const;
@@ -36,15 +37,18 @@ protected:
 	EntityFilter _drawable;
 	EntityFilter _camera;
 	gl::ShadingManager *_render;
-	gl::GeometryManager *_geometry;
 	gl::Key<gl::Shader> _shader;
 	gl::Key<gl::UniformBlock> _global_state;
+	gl::Key<gl::Uniform> _pro_matrix;
 	gl::Key<gl::Uniform> _model_matrix;
 	gl::Key<gl::Uniform> _view_matrix;
 	gl::Key<gl::Uniform> _normal_matrix;
 	gl::Key<gl::Uniform> _diffuse_color;
 	gl::Key<gl::Uniform> _diffuse_ratio;
 	gl::Key<gl::Sampler> _diffuse_texture;
+	gl::Key<gl::RenderPass> _renderPass;
+
+	gl::Key<gl::Uniform> _transformation;
 #endif
 	virtual void updateBegin(double time);
 	virtual void updateEnd(double time);

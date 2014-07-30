@@ -6,7 +6,7 @@
 #include <cereal/external/rapidjson/document.h>
 #include <iostream>
 #include <Core/Engine.hh>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <set>
 #include <MediaFiles/AssetsManager.hpp>
 #include <Sprite/Sprite.hh>
@@ -35,151 +35,96 @@ public:
 
 	bool loadFile(const File &file)
 	{
-		if (!file.exists())
-			return false;
+		//if (!file.exists())
+		//	return false;
 
-		auto content = file.getFileContent();
+		//auto content = file.getFileContent();
 
-		rapidjson::Document document;
-		document.Parse<0>(content.c_str());
+		//rapidjson::Document document;
+		//document.Parse<0>(content.c_str());
 
-		if (!document.IsObject())
-		{
-			std::cerr << "Document is not an object." << std::endl;
-			return false;
-		}
-
-		if (!document.HasMember("name") || !document["name"].IsString())
-		{
-			std::cerr << "Document don't have member [name]." << std::endl;
-			return false;
-		}
-
-
-		if (!document.HasMember("image") || !document["image"].IsString())
-		{
-			std::cerr << "Document don't have member [image]." << std::endl;
-			return false;
-		}
-
-		std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
-
-		std::string image = document["image"].GetString();
-		auto texture = _dependencyManager.lock()->getInstance<AssetsManager>()->loadFromFile(file.getFolder() + "/" + image);
-
-		if (!texture.get())
-		{
-			std::cerr << "Texture [" << image << "] not found.";
-			return false;
-		}
-
-		sprite->_name = document["name"].GetString();
-
-		if (!document.HasMember("frames") || !document["frames"].IsObject())
-		{
-			std::cerr << "Document don't have member [frames]." << std::endl;
-			return false;
-		}
-
-		if (!document.HasMember("animations") || !document["animations"].IsObject())
-		{
-			std::cerr << "Document don't have member [frames]." << std::endl;
-			return false;
-		}
-
-		std::map<std::string, std::shared_ptr<SpriteFrame>> frames;
-
-		for (rapidjson::Value::ConstMemberIterator itr = document["frames"].MemberBegin(); itr != document["frames"].MemberEnd(); ++itr)
-		{
-			if (!itr->value.HasMember("uvs") || !itr->value.HasMember("dimensions") || !itr->value.HasMember("alias"))
-			{
-				std::cerr << "Frame [" << itr->name.GetString() << "] is not valid." << std::endl;
-				return false;
-			}
-
-			std::shared_ptr<SpriteFrame> f = std::make_shared<SpriteFrame>();
-
-			// LOAD UVS
-			const rapidjson::Value& uvs = itr->value["uvs"];
-			if (!uvs.IsArray() || uvs.Size() != 4)
-			{
-				std::cerr << "uvs is not valid." << std::endl;
-				return false;
-			}
-
-			for (rapidjson::SizeType i = 0; i < uvs.Size(); i++)
-			{
-				f->_uvs[i] = static_cast<float>(uvs[i].GetDouble());
-			}
-
-			// LOAD DIMENSIONS
-			const rapidjson::Value& dimensions = itr->value["dimensions"];
-			if (!dimensions.IsArray() || dimensions.Size() != 4)
-			{
-				std::cerr << "dimensions is not valid." << std::endl;
-				return false;
-			}
-
-			for (rapidjson::SizeType i = 0; i < dimensions.Size(); i++)
-			{
-				f->_dimensions[i] = dimensions[i].GetUint();
-			}
-
-//			auto vm = _dependencyManager.lock()->getInstance<VertexManager<4>>();
-			// LOAD FRAME
-		//if (!f->load(vm))
+		//if (!document.IsObject())
 		//{
-		//	std::cerr << "Frame failed to load." << std::endl;
+		//	std::cerr << "Document is not an object." << std::endl;
+		//	return false;
 		//}
-			// LOAD ALIAS
-			const rapidjson::Value& alias = itr->value["alias"];
-			if (!alias.IsArray())
-			{
-				std::cerr << "alias is not valid." << std::endl;
-				return false;
-			}
 
-			for (rapidjson::SizeType i = 0; i < alias.Size(); i++)
-			{
-				frames.insert(std::make_pair(alias[i].GetString(), f));
-			}
-			frames.insert(std::make_pair(itr->name.GetString(), f));
-		}
+		//if (!document.HasMember("name") || !document["name"].IsString())
+		//{
+		//	std::cerr << "Document don't have member [name]." << std::endl;
+		//	return false;
+		//}
 
-		// LOAD ANIMATIONS
 
-		for (rapidjson::Value::ConstMemberIterator itr = document["animations"].MemberBegin(); itr != document["animations"].MemberEnd(); ++itr)
-		{
-			auto animation = std::make_shared<SpriteAnimation>();
-			if (!itr->value.IsArray())
-			{
-				std::cerr << "Animation [" << itr->name.GetString() << "] is not valid." << std::endl;
-				return false;
-			}
+		//if (!document.HasMember("image") || !document["image"].IsString())
+		//{
+		//	std::cerr << "Document don't have member [image]." << std::endl;
+		//	return false;
+		//}
 
-			// LOAD ANIMATION
-			std::map<std::shared_ptr<SpriteFrame>, std::uint32_t> tmpRef;
-			for (rapidjson::SizeType i = 0; i < itr->value.Size(); i++)
-			{
-				auto name = itr->value[i].GetString();
-				auto address = frames.find(name);
-				auto ref = tmpRef.find(address->second);
-				if (ref == std::end(tmpRef))
-				{
-					tmpRef.insert(std::make_pair(address->second, static_cast<std::uint32_t>(animation->_frames.size())));
-					ref = tmpRef.find(address->second);
-					animation->_frames.push_back(address->second);
-				}
-				animation->_material.ambientTex = std::static_pointer_cast<TextureFile>(texture);
-				animation->_material.diffuseTex = std::static_pointer_cast<TextureFile>(texture);
-				animation->_material.specularTex = std::static_pointer_cast<TextureFile>(texture);
-				animation->_material.ambient = glm::vec3(0.8f);
-				animation->_material.diffuse = glm::vec3(0.9f);
-				animation->_steps.push_back(unsigned int(ref->second));
-			}
-			sprite->_animations.insert(std::make_pair(itr->name.GetString(), animation));
-		}
-		_collection.insert(std::make_pair(sprite->_name, sprite));
+		//std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
+
+		//std::string image = document["image"].GetString();
+		//auto texture = _dependencyManager.lock()->getInstance<AssetsManager>()->loadFromFile(file.getFolder() + "/" + image);
+
+		//if (!texture.get())
+		//{
+		//	std::cerr << "Texture [" << image << "] not found.";
+		//	return false;
+		//}
+
+		//sprite->_name = document["name"].GetString();
+
+		//if (!document.HasMember("frames") || !document["frames"].IsObject())
+		//{
+		//	std::cerr << "Document don't have member [frames]." << std::endl;
+		//	return false;
+		//}
+
+		//if (!document.HasMember("animations") || !document["animations"].IsObject())
+		//{
+		//	std::cerr << "Document don't have member [frames]." << std::endl;
+		//	return false;
+		//}
+
+		//std::map<std::string, std::shared_ptr<SpriteFrame>> frames;
+
+		//for (rapidjson::Value::ConstMemberIterator itr = document["frames"].MemberBegin(); itr != document["frames"].MemberEnd(); ++itr)
+		//{
+		//	if (!itr->value.HasMember("uvs") || !itr->value.HasMember("dimensions") || !itr->value.HasMember("alias"))
+		//	{
+		//		std::cerr << "Frame [" << itr->name.GetString() << "] is not valid." << std::endl;
+		//		return false;
+		//	}
+
+		//	std::shared_ptr<SpriteFrame> f = std::make_shared<SpriteFrame>();
+
+		//	// LOAD UVS
+		//	const rapidjson::Value& uvs = itr->value["uvs"];
+		//	if (!uvs.IsArray() || uvs.Size() != 4)
+		//	{
+		//		std::cerr << "uvs is not valid." << std::endl;
+		//		return false;
+		//	}
+
+		//	for (rapidjson::SizeType i = 0; i < uvs.Size(); i++)
+		//	{
+		//		f->_uvs[i] = static_cast<float>(uvs[i].GetDouble());
+		//	}
+
+		//	// LOAD DIMENSIONS
+		//	const rapidjson::Value& dimensions = itr->value["dimensions"];
+		//	if (!dimensions.IsArray() || dimensions.Size() != 4)
+		//	{
+		//		std::cerr << "dimensions is not valid." << std::endl;
+		//		return false;
+		//	}
+
+		//	for (rapidjson::SizeType i = 0; i < dimensions.Size(); i++)
+		//	{
+		//		f->_dimensions[i] = dimensions[i].GetUint();
+		//	}
+		//}
 		return true;
 	}
 

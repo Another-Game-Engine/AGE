@@ -43,8 +43,8 @@ namespace Component
 		}
 
 		virtual ~SpaceshipController(void);
-		void init(const Entity &e, float dist);
-		virtual void reset();
+		void init(AScene *, const Entity &e, float dist);
+		virtual void reset(AScene *);
 
 		//////
 		////

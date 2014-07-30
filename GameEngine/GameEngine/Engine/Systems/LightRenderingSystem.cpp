@@ -84,7 +84,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 	assert(_pointLightNbr <= MAX_LIGHT_NBR && "to many point lights");
 	for (auto e : _pointLightFilter.getCollection())
 	{
-		auto &globalTransform = scene->getTransform(e);
+		auto &globalTransform = scene->getLink(e)->getTransform();
 		_contiguousPointLights[i] = scene->getComponent<Component::PointLight>(e)->lightData;
 		_contiguousPointLights[i].positionPower.x = globalTransform[3].x;
 		_contiguousPointLights[i].positionPower.y = globalTransform[3].y;
@@ -100,7 +100,7 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 	for (auto e : _spotLightFilter.getCollection())
 	{
 		Component::SpotLight *spot = scene->getComponent<Component::SpotLight>(e);
-		spot->updateLightData(scene->getTransform(e));
+		spot->updateLightData(scene->getLink(e)->getTransform());
 		_contiguousSpotLights[i] = spot->lightData;
 		if (_contiguousSpotLights[i].shadowId != -1)
 			++shadowNbr;
@@ -143,7 +143,8 @@ void	LightRenderingSystem::updateLights(std::shared_ptr<OpenGLTools::UniformBuff
 			
 			for (auto e : _meshRendererFilter.getCollection())
 			{
-				scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getTransform(e));
+				// DEPRECATED
+				//scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getLink(e)->getTransform());
 			}
 
 			drawSprites();
@@ -182,8 +183,8 @@ void	LightRenderingSystem::mainUpdate(double time)
 	{
 		auto camera = scene->getComponent<Component::CameraComponent>(c);
 		// Set les uniforms du block PerFrame
-		perFrame->setUniform("projection", camera->projection);
-		perFrame->setUniform("view", camera->lookAtTransform);
+		perFrame->setUniform("projection", camera->getProjection());
+		perFrame->setUniform("view", glm::mat4(1));//HARDCODED
 		perFrame->setUniform("time", static_cast<float>(_scene.lock()->getSystem<CameraSystem>()->getLifeTime()));
 
 		perFrame->flushChanges();
@@ -217,7 +218,8 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	for (auto e : _meshRendererFilter.getCollection())
 	{
-		scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getTransform(e));
+		// DEPRECATED
+		//scene->getComponent<Component::MeshRenderer>(e)->renderRaw(renderer, scene->getLink(e)->getTransform());
 	}
 
 	// ----------------------------------------------------
@@ -231,11 +233,12 @@ void		LightRenderingSystem::computeCameraRender(OpenGLTools::Framebuffer &camFbo
 
 	for (auto e : _meshRendererFilter.getCollection())
 	{
-		scene->getComponent<Component::MeshRenderer>(e)->render(renderer, scene->getTransform(e), [&](gl::Shader &s)
-		{
-			glActiveTexture(GL_TEXTURE4);
-			glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
-		});
+		// DEPRECATED
+		//scene->getComponent<Component::MeshRenderer>(e)->render(renderer, scene->getLink(e)->getTransform(), [&](gl::Shader &s)
+		//{
+		//	glActiveTexture(GL_TEXTURE4);
+		//	glBindTexture(GL_TEXTURE_2D_ARRAY, spotShadowMap);
+		//});
 	}
 
 
@@ -255,7 +258,7 @@ void LightRenderingSystem::drawSprites()
 	auto materialUniform = renderer->getUniform("MaterialBasic");
 	for (auto e : _spriteFilter.getCollection())
 	{
-		perModelUniform->setUniform("model", scene->getTransform(e));
+		perModelUniform->setUniform("model", scene->getLink(e)->getTransform());
 		perModelUniform->flushChanges();
 		sprite = scene->getComponent<Component::Sprite>(e);
 		sprite->animation->getMaterial().setUniforms(materialUniform);

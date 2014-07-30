@@ -22,11 +22,11 @@ public:
 	bool load(gl::GeometryManager *vm) 
 	{
 		_m = vm;
-		std::vector<glm::vec4>		vertices;	// vertices positions
-		std::vector<glm::vec2>		uvs;		// texture coordinates
-		std::vector<glm::vec4>		normals;
-		std::vector<glm::vec4>		colors;
-		std::vector<unsigned int>	indices;	// indices
+		AGE::Vector<glm::vec4>		vertices;	// vertices positions
+		AGE::Vector<glm::vec2>		uvs;		// texture coordinates
+		AGE::Vector<glm::vec4>		normals;
+		AGE::Vector<glm::vec4>		colors;
+		AGE::Vector<unsigned int>	indices;	// indices
 
 		vertices.resize(4); //-V112
 		uvs.resize(4); //-V112

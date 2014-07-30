@@ -31,12 +31,12 @@ namespace Component
 			return *this;
 		}
 
-		void init(float t)
+		void init(AScene *, float t)
 		{
 			_t = t;
 		}
 
-		virtual void reset()
+		virtual void reset(AScene *)
 		{
 			_t = 0.0f;
 		}

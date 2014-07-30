@@ -11,6 +11,26 @@ namespace AGE
 	class AnimationsLoader
 	{
 	public:
+		static bool save(AssetDataSet &dataSet)
+		{
+			if (dataSet.animationLoaded == false)
+				return false;
+			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+
+			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
+			{
+					std::cerr << "Animation convertor error : creating directory" << std::endl;
+					return false;
+			}
+			auto fileName = dataSet.animationName.empty() ? dataSet.filePath.getShortFileName() + ".aage" : dataSet.animationName + ".aage";
+			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+
+			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
+			cereal::PortableBinaryOutputArchive ar(ofs);
+			ar(*dataSet.animations[0]);
+			return true;
+		}
+
 		static bool load(AssetDataSet &dataSet)
 		{
 			dataSet.animationLoaded = false;

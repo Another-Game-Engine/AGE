@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <glm/glm.hpp>
 
 #include <Utils/GlmSerialization.hpp>
@@ -15,7 +15,7 @@ namespace AGE
 		glm::mat4 offset;
 		std::uint32_t index;
 		glm::mat4 transformation;
-		std::vector<std::uint32_t> children;
+		AGE::Vector<std::uint32_t> children;
 		std::uint32_t parent = (std::uint32_t)(-1);
 	};
 

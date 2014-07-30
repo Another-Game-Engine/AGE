@@ -3,11 +3,12 @@
 
 #include <MediaFiles/MediaFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <glm/glm.hpp>
 #include <OpenGL/Data.hh>
-#include <OpenGL/GeometryManager.hh>
 #include <Utils/DependenciesInjector.hpp>
+
+namespace gl { class GeometryManager; }
 
 struct ObjFile : public MediaFile<ObjFile>
 {
@@ -18,11 +19,11 @@ struct ObjFile : public MediaFile<ObjFile>
 	struct Geometry
 	{
 		std::string                 name;
-		std::vector<glm::vec4>		vertices;	// vertices positions
-		std::vector<glm::vec4>		normals;	// normals
-		std::vector<glm::vec4>		colors;		// vertices colors
-		std::vector<glm::vec2>		uvs;		// texture coordinates
-		std::vector<unsigned int>	indices;	// indices
+		AGE::Vector<glm::vec4>		vertices;	// vertices positions
+		AGE::Vector<glm::vec4>		normals;	// normals
+		AGE::Vector<glm::vec4>		colors;		// vertices colors
+		AGE::Vector<glm::vec2>		uvs;		// texture coordinates
+		AGE::Vector<unsigned int>	indices;	// indices
 		gl::Key<gl::Vertices>		glvertices;	// vertices
 		gl::Key<gl::Indices>		glindices;	// indices
 		gl::GeometryManager *geomanager; //manager
@@ -40,7 +41,7 @@ struct ObjFile : public MediaFile<ObjFile>
 		void init();
 	};
 
-	std::vector<Geometry> geometries;
+	AGE::Vector<Geometry> geometries;
 	std::shared_ptr<MaterialFile> material;
 
 	void save(cereal::PortableBinaryOutputArchive &ar) const;

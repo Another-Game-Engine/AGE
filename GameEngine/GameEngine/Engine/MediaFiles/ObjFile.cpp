@@ -10,6 +10,7 @@
 #include <Utils/GlmSerialization.hpp>
 #include <memory>
 #include "AssetsManager.hpp"
+#include <OpenGL/ShadingManager.hh>
 
 ObjFile::ObjFile() : MediaFile<ObjFile>()
 {
@@ -94,7 +95,7 @@ void ObjFile::Geometry::save(cereal::PortableBinaryOutputArchive &ar) const
 
 	void ObjFile::Geometry::init()
 	{
-		geomanager = _dependencyManager.lock()->getInstance<gl::GeometryManager>();
+		geomanager = &_dependencyManager.lock()->getInstance<gl::ShadingManager>()->geometryManager;
 		void *buffer[4] = { &vertices[0].x ,
 							&colors[0].x,
 							&normals[0].x,
@@ -125,6 +126,7 @@ void ObjFile::load(cereal::PortableBinaryInputArchive &ar)
 	}
 	std::string matName;
 	ar(matName);
+	auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
 	if (matName != "NULL")
-		material = std::static_pointer_cast<MaterialFile>(_dependencyManager.lock()->getInstance<AssetsManager>()->loadFromFile(File(matName)));
+		material = std::static_pointer_cast<MaterialFile>(_dependencyManager.lock()->getInstance<AssetsManager>()->loadFromFile(File(matName), *manager));
 }

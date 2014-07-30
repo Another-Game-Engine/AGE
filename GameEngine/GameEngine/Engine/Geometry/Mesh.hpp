@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <bitset>
 #include <glm/glm.hpp>
 
@@ -14,6 +14,8 @@
 
 namespace AGE
 {
+	typedef std::uint16_t MaterialIndex;
+
 	enum MeshInfos
 	{
 		Positions = 0
@@ -31,28 +33,29 @@ namespace AGE
 	{
 		std::string name;
 		std::bitset<MeshInfos::END> infos;
-		std::vector<glm::vec4> positions;
-		std::vector<glm::vec4> normals;
-		std::vector<glm::vec4> tangents;
-		std::vector<glm::vec4> biTangents;
-		std::vector<std::vector<glm::vec2>> uvs;
-		std::vector<std::uint32_t> indices;
-		std::vector<glm::vec4> weights;
-		std::vector<glm::vec4> boneIndices;
-		std::vector<glm::vec4> colors;
-		AGE::BoundingInfos boundingInfos;
+		AGE::Vector<glm::vec4> positions;
+		AGE::Vector<glm::vec4> normals;
+		AGE::Vector<glm::vec4> tangents;
+		AGE::Vector<glm::vec4> biTangents;
+		AGE::Vector<AGE::Vector<glm::vec2>> uvs;
+		AGE::Vector<std::uint32_t> indices;
+		AGE::Vector<glm::vec4> weights;
+		AGE::Vector<glm::vec4> boneIndices;
+		AGE::Vector<glm::vec4> colors;
+		BoundingInfos boundingInfos;
+		MaterialIndex defaultMaterialIndex;
 
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors, boundingInfos);
+			ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors, boundingInfos, defaultMaterialIndex);
 		}
 	};
 
 	struct MeshData
 	{
 		std::string name;
-		std::vector<SubMeshData> subMeshs;
+		AGE::Vector<SubMeshData> subMeshs;
 		AGE::BoundingInfos boundingInfos;
 
 		template <class Archive>
@@ -66,13 +69,17 @@ namespace AGE
 	{
 		gl::Key<gl::Indices> indices;
 		gl::Key<gl::Vertices> vertices;
-		std::string name;
+		gl::Key<gl::VertexPool> vertexPool;
+		gl::Key<gl::IndexPool> indexPool;
+		AGE::BoundingInfos bounding;
+//		std::string name;
+		MaterialIndex defaultMaterialIndex;
 	};
 
 	struct MeshInstance
 	{
 		std::string name;
-		std::vector<SubMeshInstance> subMeshs;
+		AGE::Vector<SubMeshInstance> subMeshs;
 	};
 
 }

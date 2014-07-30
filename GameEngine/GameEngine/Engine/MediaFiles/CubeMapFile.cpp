@@ -1,5 +1,6 @@
 #include "CubeMapFile.hpp"
 #include "AssetsManager.hpp"
+#include <OpenGL/ShadingManager.hh>
 
 CubeMapFile::CubeMapFile()
 : MediaFile<CubeMapFile>()
@@ -71,12 +72,16 @@ void CubeMapFile::load(cereal::PortableBinaryInputArchive &ar)
 	std::string _px, _py, _pz, _nx, _ny, _nz;
 	ar(_px, _py, _pz, _nx, _ny, _nz);
 	auto assetsManager = _dependencyManager.lock()->getInstance<AssetsManager>();
-	px = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_px)));
-	py = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_py)));
-	pz = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_pz)));
-	nx = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_nx)));
-	ny = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_ny)));
-	nz = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_nz)));
+	auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
+	if (manager)
+	{
+		px = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_px), *manager));
+		py = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_py), *manager));
+		pz = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_pz), *manager));
+		nx = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_nx), *manager));
+		ny = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_ny), *manager));
+		nz = std::static_pointer_cast<TextureFile>(assetsManager->loadFromFile(File(_nz), *manager));
+	}
 	init();
 }
 

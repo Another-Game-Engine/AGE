@@ -2,7 +2,7 @@
 # define __CUBE_MAP_FILE_HPP__
 
 #include <MediaFiles/MediaFile.hpp>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/common.hpp>

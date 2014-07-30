@@ -1,10 +1,9 @@
-#ifndef   __DEPENDENCIES_INJECTOR_HPP__
-# define  __DEPENDENCIES_INJECTOR_HPP__
+#pragma once
 
 #include <cassert>
 #include <Utils/Dependency.hpp>
 #include <memory>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 
 class DependenciesInjector : public std::enable_shared_from_this<DependenciesInjector>
 {
@@ -12,7 +11,7 @@ private:
 	DependenciesInjector(DependenciesInjector const &);
 	DependenciesInjector &operator=(DependenciesInjector const &);
 
-	std::vector<IDependency*>             _instances;
+	AGE::Vector<IDependency*>             _instances;
 	std::weak_ptr<DependenciesInjector>                   _parent;
 public:
 	DependenciesInjector(std::weak_ptr<DependenciesInjector> &&parent = std::weak_ptr<DependenciesInjector>())
@@ -47,7 +46,7 @@ public:
 			else
 				assert(false && "Engine Instance is not set !");
 		}
-		return dynamic_cast<T*>(_instances[id]);
+		return static_cast<T*>(_instances[id]);
 	}
 
 	template <typename T, typename TypeSelector = T, typename ...Args>
@@ -63,7 +62,7 @@ public:
 			n->_dependencyManager = shared_from_this();
 			_instances[id] = n;
 		}
-		return dynamic_cast<T*>(_instances[id]);
+		return static_cast<T*>(_instances[id]);
 	}
 
 	template <typename T>
@@ -73,5 +72,3 @@ public:
 		return _instances.size() > id && _instances[id] != nullptr;
 	}
 };
-
-#endif    //__DEPENDENCIES_INJECTOR_HPP__

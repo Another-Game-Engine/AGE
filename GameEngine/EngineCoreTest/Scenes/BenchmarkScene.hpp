@@ -9,18 +9,21 @@
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
-
 #include <Systems/CameraSystem.hh>
 #include <Systems/DownSampleSystem.hh>
 #include <Systems/PostFxSystem.hh>
 #include <Systems/LightRenderingSystem.hh>
-#include <Systems/FirstPersonViewSystem.hpp>
 #include <Systems/BlitFinalRender.hh>
-#include <Systems/SimpleMeshRenderer.hpp>
+
+#include <Core/AssetsManager.hpp>
+
+#include <Core/Octree.hpp>
 
 #include <Context/IRenderContext.hh>
 
 #include <CONFIGS.hpp>
+
+Entity GLOBAL_CAMERA;
 
 class BenchmarkScene : public AScene	
 {
@@ -34,6 +37,11 @@ public:
 
 	virtual bool 			userStart()
 	{
+
+		setInstance<AGE::Octree>();
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		getInstance<AGE::Octree>()->setScene(weakOnThis);
+
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
 //		addSystem<CollisionAdder>(1);
@@ -42,12 +50,10 @@ public:
 
 #ifdef RENDERING_ACTIVATED
 
-	addSystem<FirstPersonViewSystem>(2);
-	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
+		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::ShadingManager>();
-	auto &g = *getInstance<gl::GeometryManager>();
 #if NEW_SHADER
-	camerasystem->setManager(m, g);
+	camerasystem->setManager(m);
 #endif
 
 #ifdef SIMPLE_RENDERING
@@ -102,44 +108,36 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 		auto camera = createEntity();
+		GLOBAL_CAMERA = camera;
 		auto cam = addComponent<Component::CameraComponent>(camera);
-		addComponent<Component::FirstPersonView>(camera);
 
 		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
 		cam->fboSize = screenSize;
 		cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
-		cam->attachSkybox(getInstance<AssetsManager>()->get<CubeMapFile>("skybox__space"), "cubemapShader");
 		cam->sampleNbr = 0;
 
-		setTransform(camera, glm::translate(glm::mat4(1), glm::vec3(0, 0, -40)));
-
+		auto camLink = getLink(camera);
+		camLink->setPosition(glm::vec3(0, 0, -10));
 
 	auto light = createEntity();
+	auto lightLink = getLink(light);
 	auto lightComponent = addComponent<Component::PointLight>(light);
 	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 30);
 	lightComponent->lightData.positionPower.w = 0.5f;
 	lightComponent->lightData.hasShadow = -1;
-	setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 3, 0)));
+	lightLink->setPosition(glm::vec3(0, 3, 0));
 
-	//light = createEntity();
-	//lightComponent = addComponent<Component::PointLight>(light);
-	//lightComponent->lightData.colorRange = glm::vec4(1, 0.5, 0.5, 3);
-	//lightComponent->lightData.positionPower.w = 0;
-	//lightComponent->lightData.hasShadow = -1;
-	//setTransform(light, glm::translate(glm::mat4(1), glm::vec3(0, 0, -2)));
-
-	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto plane = createEntity();
-	setTransform(plane, glm::translate(getTransform(plane), glm::vec3(0, -10, 0)));
-	setTransform(plane, glm::scale(getTransform(plane), glm::vec3(100, 1, 100)));
-	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
-	mesh->setShader("MaterialBasic");
-	auto rigidBody = addComponent<Component::RigidBody>(plane, weakOnThis, 0.0f);
+	auto link = getLink(plane);
+	link->setPosition(glm::vec3(0, -10, 0));
+	link->setScale(glm::vec3(100, 1, 100));
+	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
+	mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+#ifdef PHYSIC_SIMULATION
+	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
-//	rigidBody->setTransformation(getTransform(plane));
 	rigidBody->getBody().setFriction(0.8f);
-	//rigidBody->getBody().setRestitution(1.0f);
-
+#endif //PHYSIC_SIMULATION
 #endif
 
 
@@ -153,30 +151,18 @@ public:
 		_timeCounter += time;
 		_chunkCounter += time;
 
+		getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 100.0f * (float)time, glm::vec3(0, 1, 0)));
+
 		if (_chunkCounter >= _maxChunk)
 		{
 			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-			for (auto i = 0; i < 7; ++i)
+			for (auto i = 0; i < 30; ++i)
 			{
 				auto e = createEntity();
 
 #ifdef LIFETIME_ACTIVATED
-				addComponent<Component::Lifetime>(e, 10.5f);
+				addComponent<Component::Lifetime>(e, 5.0f);
 #endif
-
-#ifdef PHYSIC_SIMULATION
-				auto rigidBody = addComponent<Component::RigidBody>(e, weakOnThis, 1.0f);
-				if (i % 4 == 0)
-					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::SPHERE);
-				else
-					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
-				rigidBody->getBody().setFriction(0.5f);
-				rigidBody->getBody().setRestitution(0.5f);
-#endif
-
-				setTransform(e, glm::translate(getTransform(e), glm::vec3((rand() % 20) - 10, (rand() % 20) - 5, (rand() % 20) - 10)));
-				setTransform(e, glm::scale(getTransform(e), glm::vec3(3.0f)));
-
 #ifdef RENDERING_ACTIVATED
 
 				if (i == 0)
@@ -187,24 +173,54 @@ public:
 					lightComponent->lightData.hasShadow = 1;
 				}
 
-
-#ifdef PHYSIC_SIMULATION
-				rigidBody->setTransformation(getTransform(e));
-#endif
-
 #ifndef COMPLEX_MESH
 				Component::MeshRenderer *mesh;
 				if (i % 4 == 0)
-					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__ball"));
+				{
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("ball/ball.sage"));
+					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
+					for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
+					{
+						gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
+					}
+				}
 				else
-					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__cube"));
-				mesh->setShader("MaterialBasic");
+				{
+					mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
+					mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+					for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
+					{
+						gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
+						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
+					}
+				}
 #else
 				auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 				mesh->setShader("MaterialBasic");
 #endif
 
 #endif
+
+				auto link = getLink(e);
+				link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+				link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+				link->setScale(glm::vec3(3.0f));
+
+#ifdef PHYSIC_SIMULATION
+				auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
+//				rigidBody->setTransformation(link->getTransform());
+				if (i % 4 == 0)
+					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::SPHERE);
+				else
+					rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
+				rigidBody->getBody().setFriction(0.5f);
+				rigidBody->getBody().setRestitution(0.5f);
+#endif
+
+
 			}
 #ifdef LOG_FRAMERATE
 
@@ -224,7 +240,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 8.0f;
+	double _maxTime = 15.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;

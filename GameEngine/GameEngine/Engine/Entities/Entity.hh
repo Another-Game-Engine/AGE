@@ -5,16 +5,9 @@
 #include <cstdint>
 #include <bitset>
 
-#define MAX_TAG_NUMBER (32)
-#define MAX_CPT_NUMBER (96)
+#include "EntityTypedef.hpp"
 
-typedef std::uint16_t ENTITY_ID;
-typedef std::uint8_t  COMPONENT_ID;
-typedef std::uint8_t  TAG_ID;
-typedef std::uint8_t  ENTITY_VERSION;
-typedef std::uint8_t  ENTITY_FLAGS;
-
-#define MAX_ENTITY_NUMBER ((ENTITY_ID)(-1))
+#include <Core/Link.hpp>
 
 class AScene;
 class AComponentManager;
@@ -198,7 +191,7 @@ public:
 	const Barcode &getBarcode() const { return barcode; }
 private:
 	Entity entity;
-	uint32_t crap;
+	AGE::Link link;
 	Barcode barcode;
 
 public:

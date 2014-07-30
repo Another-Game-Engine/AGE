@@ -1,8 +1,8 @@
 #include "DrawQuad.hh"
-#include <OpenGL/GeometryManager.hh>
 #include <OpenGL/Shader.hh>
 #include <Core/Renderer.hh>
 #include <glm/gtc/matrix_transform.hpp>
+#include <OpenGL/ShadingManager.hh>
 
 DrawQuad::DrawQuad() :
 	_fboToScreen(NULL)
@@ -75,7 +75,7 @@ void	DrawQuad::draw(GLuint texture, int sampleNbr, glm::uvec2 const &textureSize
 void DrawQuad::init(std::weak_ptr<DependenciesInjector> &&engine)
 {
 	_renderer = engine.lock()->getInstance<Renderer>();
-	_m = engine.lock()->getInstance<gl::GeometryManager>();
+	_m = &engine.lock()->getInstance<gl::ShadingManager>()->geometryManager;
 	float quadPos[] = {
 		-1.0, -1.0,
 		1.0, -1.0,

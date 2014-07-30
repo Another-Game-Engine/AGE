@@ -3,6 +3,7 @@
 #include <OpenGL/Buffer.hh>
 #include <OpenGL/MemoryGPU.hh>
 #include <array>
+#include <cassert>
 
 namespace gl
 {
@@ -25,10 +26,8 @@ namespace gl
 		size_t getSizeElement(size_t index) const;
 		size_t getOffsetElement(size_t index) const;
 		size_t getSizeBlock(size_t index) const;
-		int getBindingPoint() const;
-
-		UniformBlock const &bind() const;
-		UniformBlock const &unbind() const;
+		GLuint getBindingPoint() const;
+		GLuint getBufferId() const;
 
 		template <typename TYPE> UniformBlock &set(size_t index, TYPE const &value);
 	
@@ -38,13 +37,14 @@ namespace gl
 		MemoryGPU *_data;
 		size_t _nbrElement;
 		size_t _sizeBlock;
-		UniformBuffer _ubo;
+		UniformBuffer _buffer;
 
 		void GPUallocation();
 	};
 
+# undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	std::cerr << std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "]." << std::endl; return return_type; }
+	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
 
 	template <typename TYPE>
 	UniformBlock &UniformBlock::set(size_t index, TYPE const &value)
@@ -55,7 +55,7 @@ namespace gl
 			DEBUG_MESSAGE("Warning", "UniformBlock.hh - set(TYPE)", "index is equal or superior of nbr element into uniformBlock", *this);
 		if (sizeof(TYPE) != _data[index].size)
 			DEBUG_MESSAGE("Warning", "UniformBlock.hh - set(TYPE)", "the type of value size is different of fiels target into uniformBlock", *this);
-		_ubo.bind();
+		_buffer.bind();
 		glBufferSubData(GL_UNIFORM_BUFFER, _data[index].offset, _data[index].size, &value);
 		return (*this);
 	}

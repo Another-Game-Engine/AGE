@@ -36,12 +36,12 @@ namespace Component
 		}
 
 
-		void init(std::shared_ptr<SpriteAnimation> _animation)
+		void init(AScene *, std::shared_ptr<SpriteAnimation> _animation)
 		{
 			animation = _animation;
 			index = 0;
 		}
-		virtual void reset()
+		virtual void reset(AScene *)
 		{
 			index = 0;
 			timeCounter = 0.0f;

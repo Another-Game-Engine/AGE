@@ -41,6 +41,7 @@ struct MediaFile : public AMediaFile
 	{
 		ar(*dynamic_cast<MediaType*>(this));
 	}
+
 };
 
 #endif    //__MEDIA_FILE_HPP__

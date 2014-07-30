@@ -13,8 +13,8 @@ namespace Component
 	{
 		AudioListener();
 		virtual ~AudioListener(void);
-		void init();
-		virtual void reset();
+		void init(AScene *);
+		virtual void reset(AScene *);
 		AudioListener(AudioListener const &){}
 		AudioListener &operator=(AudioListener const &){ return *this; }
 		//////

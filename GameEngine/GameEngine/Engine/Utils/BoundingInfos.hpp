@@ -2,6 +2,7 @@
 
 #include <Utils/GlmSerialization.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <Utils/Containers/Vector.hpp>
 
 namespace AGE
 {
@@ -13,7 +14,7 @@ namespace AGE
 		BoundingInfos();
 		void recompute();
 		template <class Archive> void serialize(Archive &ar);
-
+		const glm::vec3 &getCenter() const { return _center; }
 	private:
 		glm::vec3 _center;
 		glm::vec3 _min;
@@ -21,7 +22,9 @@ namespace AGE
 		glm::vec3 _size;
 		glm::mat4 _transform;
 
-		void initFromList(const std::vector<BoundingInfos> &col);
+		//temporary to pass in private
+	public:
+		void initFromList(const AGE::Vector<BoundingInfos> &col);
 		void addPosition(const glm::vec3 &v);
 
 		friend class MeshLoader;

@@ -4,7 +4,7 @@
 #include <Utils/Dependency.hpp>
 #include <iostream>
 #include <memory>
-#include <vector>
+#include <Utils/Containers/Vector.hpp>
 #include <map>
 #include <string>
 #include <glm/glm.hpp>
@@ -68,7 +68,7 @@ private:
 		std::string shader;
 	};
 
-	std::vector<DrawStringSave> _toDraw;
+	AGE::Vector<DrawStringSave> _toDraw;
 	std::map <std::string, Font> _collection;
 //	std::unique_ptr<VertexManager<2>> _vertexManager;
 	std::unique_ptr<PubSub> _pubSub;

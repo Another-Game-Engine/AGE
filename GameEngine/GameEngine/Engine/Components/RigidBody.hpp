@@ -55,14 +55,14 @@ namespace Component
 		{
 		}
 
-		void init(std::weak_ptr<AScene> scene, float mass = 1.0f)
+		void init(AScene *scene, float mass = 1.0f)
 		{
-			_manager = dynamic_cast<BulletDynamicManager*>(scene.lock()->getInstance<BulletCollisionManager>());
+			_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
 			assert(_manager != nullptr);
 			_mass = mass;
 		}
 
-		virtual void reset()
+		virtual void reset(AScene *)
 		{
 			if (_rigidBody != nullptr)
 			{
@@ -157,9 +157,9 @@ namespace Component
 			_shapeName = shapeName;
 			_shapeType = c;
 
-			auto &entityTransform = scene.lock()->getTransform(entity);
+			auto link = scene.lock()->getLink(entity);
 
-			_motionState = new DynamicMotionState(scene.lock()->getTransformRef(entity));
+			_motionState = new DynamicMotionState(link);
 			if (c == BOX)
 			{
 				_collisionShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));
@@ -210,7 +210,7 @@ namespace Component
 				_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
 			_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
-			setTransformation(entityTransform);
+			setTransformation(link->getTransform());
 		}
 
 		void setRotationConstraint(bool x, bool y, bool z)

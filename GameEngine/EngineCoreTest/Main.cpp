@@ -24,6 +24,7 @@
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
 #include <Utils/PerformanceDebugger.hh>
+#include <Core/AssetsManager.hpp>
 
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
 
@@ -125,13 +126,15 @@ bool loadShaders(std::shared_ptr<Engine> e)
 	return true;
 }
 
+
 bool loadAssets(std::shared_ptr<Engine> e)
 {
+
+	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
-//	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"));
+	auto t = e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
 #endif
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
@@ -159,7 +162,7 @@ int			main(int ac, char **av)
 	e->setInstance<Renderer>();
 #endif
 	e->setInstance<SceneManager>();
-	e->setInstance<AssetsManager>()->init();
+	e->setInstance<AGE::AssetsManager>();
 	e->setInstance<PerformanceDebugger>("Developper Name");
 
 #ifdef PHYSIC_SIMULATION
@@ -186,24 +189,15 @@ int			main(int ac, char **av)
 
 #ifdef RENDERING_ACTIVATED
 
-	auto m = e->setInstance<gl::GeometryManager>();
-	// create pool
-	m->addIndexPool();
-	m->addVertexPool();
-	GLenum typeComponent[2] = {GL_FLOAT, GL_FLOAT};
+	auto &geo = e->setInstance<gl::ShadingManager>()->geometryManager;
+	geo.addIndexPool();
+	geo.addVertexPool();
+	GLenum typeComponent[2] = { GL_FLOAT, GL_FLOAT };
 	uint8_t sizeTypeComponent[2] = { sizeof(float), sizeof(float) };
-	uint8_t nbrComponent[2] = {2, 2};
-	m->addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
-	
-	// attach pool which be create
-	m->attachIndexPoolToVertexPool(m->getVertexPool(0), m->getIndexPool(0));
-	m->attachIndexPoolToVertexPool(m->getVertexPool(1), m->getIndexPool(0));
+	uint8_t nbrComponent[2] = { 2, 2 };
+	geo.addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
 
-	e->setInstance<gl::ShadingManager>();
-
-	if (!loadShaders(e))
-		return EXIT_FAILURE;
-	if (!loadAssets(e))
+	if (!loadShaders(e) || !loadAssets(e))
 		return EXIT_FAILURE;
 #endif
 

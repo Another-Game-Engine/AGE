@@ -7,15 +7,24 @@
 #include <OpenGL/Framebuffer.hh>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/AssetsManager.hpp>
+#include "Behaviors/Camera.hpp"
 
 namespace Component
 {
-	struct CameraComponent : public ComponentBase<CameraComponent>
+	struct CameraComponent : public ComponentBase<CameraComponent>, public AGE::ComponentBehavior::Camera
 	{
 		CameraComponent();
 		virtual ~CameraComponent(void);
-		void init(){}
-		virtual void reset(){}
+		void init(AScene *scene)
+		{
+			::AGE::ComponentBehavior::Camera::init(scene, this->entityId);
+		}
+
+		virtual void reset(AScene *scene)
+		{
+			::AGE::ComponentBehavior::Camera::reset(scene, this->entityId);
+		}
+
 		void                 attachSkybox(std::shared_ptr<CubeMapFile> texture, const std::string &cubeMapShader);
 		void                 dettachSkybox();
 		std::shared_ptr<CubeMapFile> getSkybox();
@@ -28,24 +37,11 @@ namespace Component
 		template <typename Archive>
 		void save(Archive &ar) const
 		{
-			ar(CEREAL_NVP(projection), CEREAL_NVP(cubeMapShader), CEREAL_NVP(lookAtTransform));
-			if (skybox != nullptr)
-			{
-				ar(skybox->path.getFullName());
-			}
-			else
-				ar(std::string("NULL"));
 		}
 
 		template <typename Archive>
 		void load(Archive &ar)
 		{
-			ar(projection, cubeMapShader, lookAtTransform);
-			std::string _skybox;
-			ar(_skybox);
-			// @CESAR TODO
-			//if (_skybox != "NULL")
-			//	skybox = _entity->getScene().lock()->getInstance<AssetsManager>()->getFromFile<CubeMapFile>(File(_skybox));
 		}
 
 		void	initFrameBuffer()
@@ -72,10 +68,8 @@ namespace Component
 		//////
 
 		glm::uvec4	viewport;
-		glm::mat4 projection;
 		std::shared_ptr<CubeMapFile> skybox;
 		std::string cubeMapShader;
-		glm::mat4 lookAtTransform;
 		OpenGLTools::Framebuffer	frameBuffer;
 		OpenGLTools::Framebuffer	downSampling;
 		bool blitOnScreen;
@@ -85,12 +79,11 @@ namespace Component
 		uint32_t	sampleNbr;
 
 		CameraComponent(CameraComponent const &o)
+			: AGE::ComponentBehavior::Camera(o)
 		{
 			viewport = o.viewport;
-			projection = o.projection;
 			skybox = o.skybox;
 			cubeMapShader = o.cubeMapShader;
-			lookAtTransform = o.lookAtTransform;
 			//@CESAR TODO TODO COPY FRAMEBUFFER
 			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
 			frameBuffer = o.frameBuffer;
@@ -103,10 +96,8 @@ namespace Component
 		CameraComponent	&operator=(CameraComponent const &o)
 		{
 			viewport = o.viewport;
-			projection = o.projection;
 			skybox = o.skybox;
 			cubeMapShader = o.cubeMapShader;
-			lookAtTransform = o.lookAtTransform;
 			//@CESAR TODO TODO COPY FRAMEBUFFER
 			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
 			frameBuffer = o.frameBuffer;
@@ -114,11 +105,9 @@ namespace Component
 			blitOnScreen = o.blitOnScreen;
 			fboSize = o.fboSize;
 			sampleNbr = o.sampleNbr;
-
+			AGE::ComponentBehavior::Camera::operator=(o);
 			return *this;
 		}
-
-
 	private:
 	};
 }

@@ -9,9 +9,9 @@ Component::ComponentBase<Component::AudioListener>()
 AudioListener::~AudioListener(void)
 {}
 
-void AudioListener::init()
+void AudioListener::init(AScene *)
 {
 }
 
-void AudioListener::reset()
+void AudioListener::reset(AScene *)
 {}

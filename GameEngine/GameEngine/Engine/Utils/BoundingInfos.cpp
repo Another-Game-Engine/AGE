@@ -17,7 +17,7 @@ namespace AGE
 		_transform = glm::translate(glm::mat4(1), _center) * glm::scale(glm::mat4(1), _size);
 	}
 
-	void BoundingInfos::initFromList(const std::vector<BoundingInfos> &col)
+	void BoundingInfos::initFromList(const AGE::Vector<BoundingInfos> &col)
 	{
 		_center = glm::vec3(0);
 		_min = glm::vec3(std::numeric_limits<float>::max());

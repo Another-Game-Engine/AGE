@@ -36,7 +36,7 @@ public:
 			return std::shared_ptr<AMediaFile>(nullptr);
 
 		std::string inputfile = fileMaterial.getFullName();
-		std::vector<tinyobj::shape_t> shapes;
+		AGE::Vector<tinyobj::shape_t> shapes;
 		std::string err = tinyobj::LoadObj(shapes, inputfile.c_str(), fileMaterial.getFolder().c_str());
 		assert(err.empty() && "Tiny Obj error loading file.");
 

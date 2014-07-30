@@ -13,12 +13,12 @@ namespace Component
 	RotationForce::~RotationForce(void)
 	{}
 	
-	void RotationForce::init(const glm::vec3 &_force)
+	void RotationForce::init(AScene *, const glm::vec3 &_force)
 	{
 		force = _force;
 	}
 
-	void RotationForce::reset()
+	void RotationForce::reset(AScene *)
 	{}
 
 

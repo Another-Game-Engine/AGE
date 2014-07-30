@@ -32,6 +32,14 @@ namespace gl
 		bool operator<(Key<TYPE> const &compare) const;
 		bool operator>(Key<TYPE> const &compare) const;
 		void destroy();
+
+		////Hash function
+		//struct hash_fn {
+		//	size_t operator()(const Key<TYPE> &v) const
+		//	{
+		//		return v._id;
+		//	}
+		//};
 	private:
 		std::size_t _id;
 	};

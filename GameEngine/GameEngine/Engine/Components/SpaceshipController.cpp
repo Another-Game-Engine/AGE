@@ -11,13 +11,13 @@ namespace Component
 	SpaceshipController::~SpaceshipController(void)
 	{}
 
-	void SpaceshipController::init(const Entity &e, float distance)
+	void SpaceshipController::init(AScene *, const Entity &e, float distance)
 	{
 		spaceShip = e;
 		dist = distance;
 	}
 
-	void SpaceshipController::reset()
+	void SpaceshipController::reset(AScene *)
 	{}
 
 }
