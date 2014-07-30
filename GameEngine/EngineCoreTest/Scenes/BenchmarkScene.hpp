@@ -23,6 +23,9 @@
 
 #include <CONFIGS.hpp>
 
+//for test
+#include <Utils/Containers/CommandQueue.hpp>
+
 Entity GLOBAL_CAMERA;
 
 class BenchmarkScene : public AScene	
@@ -140,9 +143,32 @@ public:
 #endif //PHYSIC_SIMULATION
 #endif
 
+	auto test = new AGE::CommandQueue<AGE::BaseCommand>();
 
-		return true;
+	for (auto i = 0; i < 10000; ++i)
+	{
+		auto a = test->create<AGE::TestCommand>();
+		auto b = test->create<AGE::TestCommand>();
+		auto c = test->create<AGE::TestCommand>();
+		auto d = test->create<AGE::TestCommand>();
+		auto e = test->create<AGE::TestCommand>();
+		auto f = test->create<AGE::TestCommand>();
+		auto g = test->create<AGE::TestCommand>();
 	}
+	test->execute();
+	for (auto i = 0; i < 10000; ++i)
+	{
+		auto a = test->create<AGE::TestCommand>();
+		auto b = test->create<AGE::TestCommand>();
+		auto c = test->create<AGE::TestCommand>();
+		auto d = test->create<AGE::TestCommand>();
+		auto e = test->create<AGE::TestCommand>();
+		auto f = test->create<AGE::TestCommand>();
+		auto g = test->create<AGE::TestCommand>();
+	}
+	test->execute();
+	return true;
+}
 
 	virtual bool 			userUpdate(double time)
 	{
