@@ -4,7 +4,7 @@
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <Texture/Texture.hpp>
-#include <OpenGL/ShadingManager.hh>
+#include <Render/ShadingManager.hh>
 
 namespace AGE
 {

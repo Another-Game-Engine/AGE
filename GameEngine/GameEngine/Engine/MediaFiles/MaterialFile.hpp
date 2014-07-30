@@ -12,7 +12,7 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/memory.hpp>
 #include <Utils/GlmSerialization.hpp>
-#include <OpenGL/UniformBuffer.hh>
+#include <Render/UniformBuffer.hh>
 #include <tiny_obj_loader.h>
 #include <MediaFiles/TextureFile.hpp>
 

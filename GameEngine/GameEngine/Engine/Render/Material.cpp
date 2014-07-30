@@ -1,4 +1,4 @@
-#include <OpenGL/Material.hh>
+#include <Render/Material.hh>
 #include <memory>
 
 namespace gl

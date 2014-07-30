@@ -1,6 +1,6 @@
 #include "CubeMapFile.hpp"
 #include "AssetsManager.hpp"
-#include <OpenGL/ShadingManager.hh>
+#include <Render/ShadingManager.hh>
 
 CubeMapFile::CubeMapFile()
 : MediaFile<CubeMapFile>()

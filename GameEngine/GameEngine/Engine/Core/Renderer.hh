@@ -3,9 +3,9 @@
 #include <map>
 
 #include "Components/MeshRenderer.hh"
-#include "OpenGL/Shader.hh"
-#include "OpenGL/UniformBuffer.hh"
-#include "OpenGL/Framebuffer.hh"
+#include <Render/Shader.hh>
+#include <Render/UniformBuffer.hh>
+#include <Render/Framebuffer.hh>
 #include "Utils/Any.hpp"
 #include <core/Engine.hh>
 #include <Utils/Dependency.hpp>

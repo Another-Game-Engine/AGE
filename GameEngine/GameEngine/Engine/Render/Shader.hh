@@ -4,12 +4,12 @@
 # include <iostream>
 # include <Utils/Containers/Vector.hpp>
 # include <map>
-# include <OpenGL/Key.hh>
+# include <Render/Key.hh>
 # include <glm/glm.hpp>
-# include <OpenGL/OpenGLTask.hh>
-# include <OpenGL/Material.hh>
-#include <OpenGL/Texture.hh>
-#include <OpenGL/UniformBlock.hh>
+# include <Render/OpenGLTask.hh>
+# include <Render/Material.hh>
+#include <Render/Texture.hh>
+#include <Render/UniformBlock.hh>
 
 namespace gl
 {

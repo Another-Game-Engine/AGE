@@ -1,7 +1,7 @@
 #pragma once
 
 # include <Utils/OpenGL.hh>
-# include <OpenGL/PixelBuffer.hh>
+# include <Render/PixelBuffer.hh>
 
 namespace gl
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <OpenGL/Buffer.hh>
-#include <OpenGL/MemoryGPU.hh>
+#include <Render/Buffer.hh>
+#include <Render/MemoryGPU.hh>
 #include <array>
 #include <cassert>
 

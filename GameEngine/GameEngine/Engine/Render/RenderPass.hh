@@ -7,9 +7,9 @@
 #include <utility>
 #include <Utils/Containers/Vector.hpp>
 #include <functional>
-#include <OpenGL/Material.hh>
-#include <OpenGL/UniformBlock.hh>
-#include <OpenGL/OpenGLTask.hh>
+#include <Render/Material.hh>
+#include <Render/UniformBlock.hh>
+#include <Render/OpenGLTask.hh>
 
 namespace AGE { class Drawable; }
 

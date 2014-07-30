@@ -14,8 +14,8 @@
 #include <cereal/types/base_class.hpp>
 //#include <cereal/types/memory.hpp>
 #include <Utils/GlmSerialization.hpp>
-#include <OpenGL/Key.hh>
-#include <OpenGL/Texture.hh>
+#include <Render/Key.hh>
+#include <Render/Texture.hh>
 
 struct TextureFile : public MediaFile<TextureFile>
 {

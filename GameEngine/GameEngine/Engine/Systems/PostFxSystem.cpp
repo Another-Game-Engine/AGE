@@ -1,7 +1,7 @@
 #include	<Systems/PostFxSystem.hh>
 #include	<Components/CameraComponent.hpp>
-#include	<OpenGL/Framebuffer.hh>
-#include	<OpenGL/Texture.hh>
+#include	<Render/Framebuffer.hh>
+#include	<Render/Texture.hh>
 #include    <Utils/PubSub.hpp>
 #include    <Core/Timer.hh>
 

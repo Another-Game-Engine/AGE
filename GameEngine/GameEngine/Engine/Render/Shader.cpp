@@ -1,9 +1,9 @@
-#include <OpenGL/Shader.hh>
+#include <Render/Shader.hh>
 #include <string>
 #include <fstream>
 #include <cassert>
 
-#include <OpenGL/OpenGLTask.hh>
+#include <Render/OpenGLTask.hh>
 
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
 	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Utils/OpenGL.hh>
-#include <OpenGL/Key.hh>
-#include <OpenGL/VertexArray.hh>
-#include <OpenGL/Buffer.hh>
+#include <Render/Key.hh>
+#include <Render/VertexArray.hh>
+#include <Render/Buffer.hh>
 #include <map>
 #include <Utils/Containers/Vector.hpp>
 #include <stdint.h>

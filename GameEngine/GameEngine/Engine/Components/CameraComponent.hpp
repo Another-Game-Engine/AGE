@@ -4,7 +4,7 @@
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
-#include <OpenGL/Framebuffer.hh>
+#include <Render/Framebuffer.hh>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/AssetsManager.hpp>
 #include "Behaviors/Camera.hpp"

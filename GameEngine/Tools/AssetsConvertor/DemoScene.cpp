@@ -18,9 +18,9 @@
 #include <Components/RotationForce.hpp>
 #include <Components/CameraComponent.hpp>
 
-#include <OpenGL/ComputeShader.hh>
-#include <OpenGL/Attribute.hh>
-#include <OpenGL/include/SDL/SDL_opengl.h>
+#include <Render/ComputeShader.hh>
+#include <Render/Attribute.hh>
+#include <Render/include/SDL/SDL_opengl.h>
 
 #include <Systems/RotationForceSystem.hpp>
 #include <Systems/CameraSystem.hpp>

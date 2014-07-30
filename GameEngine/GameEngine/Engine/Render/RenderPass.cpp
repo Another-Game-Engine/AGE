@@ -1,10 +1,10 @@
-#include <OpenGL/RenderPass.hh>
+#include <Render/RenderPass.hh>
 #include <cassert>
 #include <string>
-#include <OpenGL/Shader.hh>
+#include <Render/Shader.hh>
 #include <Core/Drawable.hh>
-#include <OpenGL/OpenGLTask.hh>
-#include <OpenGL/GeometryManager.hh>
+#include <Render/OpenGLTask.hh>
+#include <Render/GeometryManager.hh>
 
 # undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \

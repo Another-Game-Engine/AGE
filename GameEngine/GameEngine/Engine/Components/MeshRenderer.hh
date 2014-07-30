@@ -8,7 +8,7 @@
 #include <MediaFiles/ObjFile.hpp>
 #include <MediaFiles/MaterialFile.hpp>
 #include <MediaFiles/CubeMapFile.hpp>
-#include "OpenGL/Shader.hh"
+#include <Render/Shader.hh>
 #include <core/Renderer.hh>
 #include <cereal/types/string.hpp>
 #include <Entities/Entity.hh>

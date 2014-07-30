@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <Text/FontGlyph.hh>
 
-#include <OpenGL/GeometryManager.hh>
+#include <Render/GeometryManager.hh>
 
 // Maybe Necessary ??
 //#include <cereal/cereal.hpp>

@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <stdint.h>
-#include <OpenGL/Key.hh>
+#include <Render/Key.hh>
 
 #define DECL_MATERIAL(name, type, start, v) struct name { typedef type return_type; enum { offset = start::size + start::offset, size = sizeof(return_type), value = v }; };
 

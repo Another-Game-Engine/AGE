@@ -10,7 +10,7 @@
 #include <Utils/GlmSerialization.hpp>
 #include <memory>
 #include "AssetsManager.hpp"
-#include <OpenGL/ShadingManager.hh>
+#include <Render/ShadingManager.hh>
 
 ObjFile::ObjFile() : MediaFile<ObjFile>()
 {

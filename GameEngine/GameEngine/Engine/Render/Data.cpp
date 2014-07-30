@@ -1,4 +1,4 @@
-#include <OpenGL/Data.hh>
+#include <Render/Data.hh>
 #include <iostream>
 #include <string>
 #include <cassert>

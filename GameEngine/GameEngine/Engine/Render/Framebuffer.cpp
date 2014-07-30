@@ -1,6 +1,6 @@
-#include <OpenGL/Framebuffer.hh>
+#include <Render/Framebuffer.hh>
 
-#include <OpenGL/Texture.hh>
+#include <Render/Texture.hh>
 
 namespace OpenGLTools
 {

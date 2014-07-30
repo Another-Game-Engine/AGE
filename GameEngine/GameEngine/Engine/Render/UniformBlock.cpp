@@ -1,4 +1,4 @@
-#include <OpenGL/UniformBlock.hh>
+#include <Render/UniformBlock.hh>
 
 namespace gl
 {

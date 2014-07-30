@@ -5,9 +5,9 @@
 #include <Systems/System.h>
 #include <Utils/DrawQuad.hh>
 #include <Core/EntityFilter.hpp>
-#include <OpenGL/Shader.hh>
+#include <Render/Shader.hh>
 #include <glm/glm.hpp>
-#include <OpenGL/StreamGPU.hh>
+#include <Render/StreamGPU.hh>
 
 class AScene;
 namespace OpenGLTools

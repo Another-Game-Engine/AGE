@@ -12,8 +12,8 @@
 #include <Core/Renderer.hh>
 #include <Utils/PubSub.hpp>
 
-#include <OpenGL/GeometryManager.hh>
-#include <OpenGL/ShadingManager.hh>
+#include <Render/GeometryManager.hh>
+#include <Render/ShadingManager.hh>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
 

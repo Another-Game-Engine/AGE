@@ -5,7 +5,7 @@
 #include <MediaFiles/MaterialFile.hpp>
 #include <Utils/Containers/Vector.hpp>
 #include <glm/glm.hpp>
-#include <OpenGL/Data.hh>
+#include <Render/Data.hh>
 #include <Utils/DependenciesInjector.hpp>
 
 namespace gl { class GeometryManager; }

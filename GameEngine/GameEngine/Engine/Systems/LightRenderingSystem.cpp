@@ -4,8 +4,8 @@
 #include <Components/CameraComponent.hpp>
 #include <Components/SpriteComponent.hh>
 #include <Systems/CameraSystem.hh>
-#include <OpenGL/Framebuffer.hh>
-#include <OpenGL/UniformBuffer.hh>
+#include <Render/Framebuffer.hh>
+#include <Render/UniformBuffer.hh>
 #include <Core/AScene.hh>
 
 //#include <Context\IRenderContext.hh>

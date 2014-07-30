@@ -2,16 +2,16 @@
 
 #include <Utils/OpenGL.hh>
 #include <Utils/Dependency.hpp>
-#include <OpenGL/Key.hh>
-#include <OpenGL/MemoryGPU.hh>
+#include <Render/Key.hh>
+#include <Render/MemoryGPU.hh>
 #include <map>
 #include <Utils/Containers/Vector.hpp>
 #include <glm/glm.hpp>
-#include <OpenGL/UniformBlock.hh>
-#include <OpenGL/Material.hh>
+#include <Render/UniformBlock.hh>
+#include <Render/Material.hh>
 #include <cassert>
-#include <OpenGL/GeometryManager.hh>
-#include <OpenGL/Shader.hh>
+#include <Render/GeometryManager.hh>
+#include <Render/Shader.hh>
 
 # undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \

@@ -1,7 +1,7 @@
 #include "MaterialFile.hpp"
 #include "AssetsManager.hpp"
 #include "ObjFile.hpp"
-#include <OpenGL/ShadingManager.hh>
+#include <Render/ShadingManager.hh>
 
 MaterialFile::MaterialFile() : MediaFile<MaterialFile>()
 {

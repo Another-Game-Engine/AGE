@@ -1,7 +1,7 @@
-#include <OpenGL/ShadingManager.hh>
-#include <OpenGL/Shader.hh>
-#include <OpenGL/Texture.hh>
-#include <OpenGL/RenderPass.hh>
+#include <Render/ShadingManager.hh>
+#include <Render/Shader.hh>
+#include <Render/Texture.hh>
+#include <Render/RenderPass.hh>
 #include <iostream>
 #include <string>
 #include <Core/Drawable.hh>

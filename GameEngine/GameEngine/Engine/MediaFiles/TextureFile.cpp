@@ -1,8 +1,8 @@
 #include "TextureFile.hpp"
 #include <math.h>
 #include <algorithm>
-#include <OpenGL/ShadingManager.hh>
-#include <OpenGL/Texture.hh>
+#include <Render/ShadingManager.hh>
+#include <Render/Texture.hh>
 
 TextureFile::TextureFile()
 : MediaFile<TextureFile>(),

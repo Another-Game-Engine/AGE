@@ -1,8 +1,8 @@
 #pragma once
 
 #include <stdint.h>
-#include <OpenGL/GeometryManager.hh>
-#include <OpenGL/Pool.hh>
+#include <Render/GeometryManager.hh>
+#include <Render/Pool.hh>
 
 namespace gl
 {

@@ -45,6 +45,6 @@ namespace gl
 	};
 }
 
-#include <OpenGL/Key.hpp>
+#include <Render/Key.hpp>
 
 #endif /*KEY_HK_*/

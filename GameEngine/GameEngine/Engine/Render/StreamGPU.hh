@@ -2,7 +2,7 @@
 
 #include <array>
 #include <stdint.h>
-#include <OpenGL/PixelBuffer.hh>
+#include <Render/PixelBuffer.hh>
 
 # define PINGPONG_SIZE 2
 

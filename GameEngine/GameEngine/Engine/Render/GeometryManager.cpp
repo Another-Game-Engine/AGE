@@ -1,6 +1,6 @@
-#include <OpenGL/GeometryManager.hh>
-#include <OpenGL/Data.hh>
-#include <OpenGL/Pool.hh>
+#include <Render/GeometryManager.hh>
+#include <Render/Data.hh>
+#include <Render/Pool.hh>
 #include <iostream>
 #include <string>
 #include <cassert>

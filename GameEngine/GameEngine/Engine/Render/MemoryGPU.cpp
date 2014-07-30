@@ -1,4 +1,4 @@
-#include <OpenGL/MemoryGPU.hh>
+#include <Render/MemoryGPU.hh>
 #include <iostream>
 #include <stdint.h>
 

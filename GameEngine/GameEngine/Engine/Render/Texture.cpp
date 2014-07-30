@@ -1,4 +1,4 @@
-#include <OpenGL/Texture.hh>
+#include <Render/Texture.hh>
 #include <utility>
 #include <cstdint>
 #include <iostream>

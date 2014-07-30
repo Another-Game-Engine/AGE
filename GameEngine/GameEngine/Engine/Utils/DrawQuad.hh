@@ -3,7 +3,7 @@
 # include <Utils/OpenGL.hh>
 # include <glm/glm.hpp>
 # include <memory>
-# include <OpenGL/Data.hh>
+# include <Render/Data.hh>
 
 namespace gl
 {

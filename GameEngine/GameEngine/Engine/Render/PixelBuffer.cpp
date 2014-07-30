@@ -1,4 +1,4 @@
-#include <OpenGL/PixelBuffer.hh>
+#include <Render/PixelBuffer.hh>
 #include <utility>
 
 

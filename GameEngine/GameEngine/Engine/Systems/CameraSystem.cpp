@@ -6,8 +6,8 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/CameraComponent.hpp>
 #include <Core/SceneManager.hh>
-#include <OpenGL/ShadingManager.hh>
-#include <OpenGL/GeometryManager.hh>
+#include <Render/ShadingManager.hh>
+#include <Render/GeometryManager.hh>
 #include <Core/Drawable.hh>
 #include <Core/AssetsManager.hpp>
 

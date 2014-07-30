@@ -1,6 +1,6 @@
-#include <OpenGL/StreamGPU.hh>
+#include <Render/StreamGPU.hh>
 #include <iostream>
-#include <OpenGL/Texture.hh>
+#include <Render/Texture.hh>
 
 namespace gl
 {

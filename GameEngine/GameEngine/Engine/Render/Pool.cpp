@@ -1,6 +1,6 @@
-#include <OpenGL/Pool.hh>
-#include <OpenGL/MemoryGPU.hh>
-#include <OpenGL/Data.hh>
+#include <Render/Pool.hh>
+#include <Render/MemoryGPU.hh>
+#include <Render/Data.hh>
 #include <iostream>
 #include <string>
 #include <cassert>

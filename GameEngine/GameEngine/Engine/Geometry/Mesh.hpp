@@ -4,7 +4,7 @@
 #include <bitset>
 #include <glm/glm.hpp>
 
-#include <OpenGL/GeometryManager.hh>
+#include <Render/GeometryManager.hh>
 
 #include <Utils/BoundingInfos.hpp>
 

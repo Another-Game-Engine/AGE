@@ -1,8 +1,8 @@
 #include "DrawQuad.hh"
-#include <OpenGL/Shader.hh>
+#include <Render/Shader.hh>
 #include <Core/Renderer.hh>
 #include <glm/gtc/matrix_transform.hpp>
-#include <OpenGL/ShadingManager.hh>
+#include <Render/ShadingManager.hh>
 
 DrawQuad::DrawQuad() :
 	_fboToScreen(NULL)

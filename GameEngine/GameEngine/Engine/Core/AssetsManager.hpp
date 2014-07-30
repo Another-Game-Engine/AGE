@@ -4,10 +4,10 @@
 #include <Utils/Dependency.hpp>
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/File.hpp>
-#include <OpenGL/GeometryManager.hh>
+#include <Render/GeometryManager.hh>
 #include <bitset>
 #include <Geometry/Mesh.hpp>
-#include <OpenGL/Texture.hh>
+#include <Render/Texture.hh>
 
 namespace AGE
 {

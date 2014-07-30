@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Utils/OpenGL.hh>
-#include <OpenGL/Key.hh>
-#include <OpenGL/Buffer.hh>
-#include <OpenGL/VertexArray.hh>
-#include <OpenGL/Pool.hh>
+#include <Render/Key.hh>
+#include <Render/Buffer.hh>
+#include <Render/VertexArray.hh>
+#include <Render/Pool.hh>
 #include <Utils/Dependency.hpp>
 #include <map>
 #include <Utils/Containers/Vector.hpp>
