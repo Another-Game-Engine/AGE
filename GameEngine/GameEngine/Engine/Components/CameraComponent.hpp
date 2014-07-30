@@ -4,7 +4,6 @@
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
-#include <Render/Framebuffer.hh>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <MediaFiles/AssetsManager.hpp>
 #include "Behaviors/Camera.hpp"
@@ -44,25 +43,6 @@ namespace Component
 		{
 		}
 
-		void	initFrameBuffer()
-		{
-			if (frameBuffer.isInit() == false)
-			{
-				frameBuffer.init(fboSize, sampleNbr);
-				frameBuffer.addTextureAttachment(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
-				frameBuffer.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
-				frameBuffer.attachAll();
-			}
-
-			if (frameBuffer.isMultisampled() && downSampling.getSize() != frameBuffer.getSize())
-			{
-				downSampling.init(fboSize, 1);
-				downSampling.addTextureAttachment(GL_RGBA16F, GL_RGBA, GL_COLOR_ATTACHMENT0);
-				downSampling.attachAll();
-			}
-
-		}
-
 		// !Serialization
 		////
 		//////
@@ -70,8 +50,6 @@ namespace Component
 		glm::uvec4	viewport;
 		std::shared_ptr<CubeMapFile> skybox;
 		std::string cubeMapShader;
-		OpenGLTools::Framebuffer	frameBuffer;
-		OpenGLTools::Framebuffer	downSampling;
 		bool blitOnScreen;
 
 		// Camera fbo infos
@@ -86,8 +64,6 @@ namespace Component
 			cubeMapShader = o.cubeMapShader;
 			//@CESAR TODO TODO COPY FRAMEBUFFER
 			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
-			frameBuffer = o.frameBuffer;
-			downSampling = o.downSampling;
 			blitOnScreen = o.blitOnScreen;
 			fboSize = o.fboSize;
 			sampleNbr = o.sampleNbr;
@@ -100,8 +76,6 @@ namespace Component
 			cubeMapShader = o.cubeMapShader;
 			//@CESAR TODO TODO COPY FRAMEBUFFER
 			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
-			frameBuffer = o.frameBuffer;
-			downSampling = o.downSampling;
 			blitOnScreen = o.blitOnScreen;
 			fboSize = o.fboSize;
 			sampleNbr = o.sampleNbr;

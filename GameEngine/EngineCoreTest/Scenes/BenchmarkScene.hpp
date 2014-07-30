@@ -10,10 +10,8 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/CameraSystem.hh>
-#include <Systems/DownSampleSystem.hh>
-#include <Systems/PostFxSystem.hh>
-#include <Systems/LightRenderingSystem.hh>
-#include <Systems/BlitFinalRender.hh>
+#include <Components\/MeshRenderer.hh>
+#include <Components/PointLight.hh>
 
 #include <Core/AssetsManager.hpp>
 

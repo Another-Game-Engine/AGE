@@ -9,7 +9,6 @@
 #include <MediaFiles/MaterialFile.hpp>
 #include <MediaFiles/CubeMapFile.hpp>
 #include <Render/Shader.hh>
-#include <core/Renderer.hh>
 #include <cereal/types/string.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>

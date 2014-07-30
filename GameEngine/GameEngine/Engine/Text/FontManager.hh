@@ -1,5 +1,9 @@
 #pragma once
 
+#define ACTIVATE 0
+
+#if ACTIVATE
+
 #include <Utils/OpenGL.hh>
 #include <Utils/Dependency.hpp>
 #include <iostream>
@@ -73,3 +77,5 @@ private:
 //	std::unique_ptr<VertexManager<2>> _vertexManager;
 	std::unique_ptr<PubSub> _pubSub;
 };
+
+#endif

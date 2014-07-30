@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <Core/Engine.hh>
 #include <Core/SceneManager.hh>
-#include <Core/Renderer.hh>
 #include <Utils/PubSub.hpp>
 
 #include <Render/GeometryManager.hh>
@@ -158,9 +157,6 @@ int			main(int ac, char **av)
 	e->setInstance<SdlContext, IRenderContext>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
-#ifdef RENDERING_ACTIVATED
-	e->setInstance<Renderer>();
-#endif
 	e->setInstance<SceneManager>();
 	e->setInstance<AGE::AssetsManager>();
 	e->setInstance<PerformanceDebugger>("Developper Name");

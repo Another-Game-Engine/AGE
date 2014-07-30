@@ -219,7 +219,6 @@
     <ClCompile Include="Engine\Core\Octree.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />
-    <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManager.cpp" />
     <ClCompile Include="Engine\Render\Material.cpp" />
     <ClCompile Include="Engine\Render\MemoryGPU.cpp" />
@@ -238,13 +237,9 @@
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
-    <ClCompile Include="Engine\Systems\BlitFinalRender.cpp" />
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
-    <ClCompile Include="Engine\Systems\DownSampleSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
-    <ClCompile Include="Engine\Systems\PostFxSystem.cpp" />
     <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
-    <ClCompile Include="Engine\Utils\DrawQuad.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
@@ -275,9 +270,7 @@
     <ClCompile Include="Engine\Core\Engine.cpp" />
     <ClCompile Include="Engine\Core\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
-    <ClCompile Include="Engine\Core\Renderer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
-    <ClCompile Include="Engine\Systems\LightRenderingSystem.cpp" />
     <ClCompile Include="Engine\Physic\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Text\Font.cpp" />
@@ -310,7 +303,6 @@
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Render\Buffer.hh" />
     <ClInclude Include="Engine\Render\Data.hh" />
-    <ClInclude Include="Engine\Render\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManager.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />
@@ -335,19 +327,15 @@
     <ClInclude Include="Engine\Skinning\Bone.hpp" />
     <ClInclude Include="Engine\Skinning\Skeleton.hpp" />
     <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
-    <ClInclude Include="Engine\Systems\BlitFinalRender.hh" />
     <ClInclude Include="Engine\Systems\CameraSystem.hh" />
-    <ClInclude Include="Engine\Systems\DownSampleSystem.hh" />
     <ClInclude Include="Engine\Components\SpotLight.hh" />
     <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
-    <ClInclude Include="Engine\Systems\PostFxSystem.hh" />
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
     <ClInclude Include="Engine\Texture\Texture.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
-    <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
@@ -397,7 +385,6 @@
     <ClInclude Include="Engine\Systems\BulletDynamicSystem.hpp" />
     <ClInclude Include="Engine\Systems\CollisionAdderSystem.hpp" />
     <ClInclude Include="Engine\Systems\CollisionCleanerSystem.hpp" />
-    <ClInclude Include="Engine\Systems\LightRenderingSystem.hh" />
     <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
     <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
@@ -446,7 +433,6 @@
     <None Include="Engine\Utils\Utils.hh" />
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
-    <None Include="Engine\Core\Renderer.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
