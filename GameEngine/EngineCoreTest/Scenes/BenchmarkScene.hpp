@@ -145,26 +145,39 @@ public:
 
 	auto test = new AGE::CommandQueue<AGE::BaseCommand>();
 
-	for (auto i = 0; i < 10000; ++i)
+	for (auto i = 0; i < 10; ++i)
 	{
 		auto a = test->create<AGE::TestCommand>();
-		auto b = test->create<AGE::TestCommand>();
-		auto c = test->create<AGE::TestCommand>();
-		auto d = test->create<AGE::TestCommand>();
-		auto e = test->create<AGE::TestCommand>();
-		auto f = test->create<AGE::TestCommand>();
-		auto g = test->create<AGE::TestCommand>();
+		a->a = 'A';
+		a->b = i;
 	}
 	test->execute();
-	for (auto i = 0; i < 10000; ++i)
+	for (auto i = 0; i < 10; ++i)
 	{
 		auto a = test->create<AGE::TestCommand>();
-		auto b = test->create<AGE::TestCommand>();
-		auto c = test->create<AGE::TestCommand>();
-		auto d = test->create<AGE::TestCommand>();
-		auto e = test->create<AGE::TestCommand>();
-		auto f = test->create<AGE::TestCommand>();
-		auto g = test->create<AGE::TestCommand>();
+		a->a = 'B';
+		a->b = i;
+	}
+	test->execute();
+	for (auto i = 0; i < 10; ++i)
+	{
+		auto a = test->create<AGE::TestCommand>();
+		a->a = 'C';
+		a->b = i;
+	}
+	test->execute();
+	for (auto i = 0; i < 10; ++i)
+	{
+		auto a = test->create<AGE::TestCommand>();
+		a->a = 'D';
+		a->b = i;
+	}
+	test->execute();
+	for (auto i = 0; i < 10; ++i)
+	{
+		auto a = test->create<AGE::TestCommand>();
+		a->a = 'E';
+		a->b = i;
 	}
 	test->execute();
 	return true;
