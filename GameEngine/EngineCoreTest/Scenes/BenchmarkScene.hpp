@@ -145,35 +145,35 @@ public:
 
 	auto test = new AGE::CommandQueue<AGE::BaseCommand>();
 
-	for (auto i = 0; i < 10; ++i)
+	for (auto i = 0; i < 2; ++i)
 	{
 		auto a = test->create<AGE::TestCommand>();
 		a->a = 'A';
 		a->b = i;
 	}
 	test->execute();
-	for (auto i = 0; i < 10; ++i)
+	for (auto i = 0; i < 2; ++i)
 	{
 		auto a = test->create<AGE::TestCommand>();
 		a->a = 'B';
 		a->b = i;
 	}
 	test->execute();
-	for (auto i = 0; i < 10; ++i)
+	for (auto i = 0; i < 2; ++i)
 	{
 		auto a = test->create<AGE::TestCommand>();
 		a->a = 'C';
 		a->b = i;
 	}
 	test->execute();
-	for (auto i = 0; i < 10; ++i)
+	for (auto i = 0; i < 2; ++i)
 	{
 		auto a = test->create<AGE::TestCommand>();
 		a->a = 'D';
 		a->b = i;
 	}
 	test->execute();
-	for (auto i = 0; i < 10; ++i)
+	for (auto i = 0; i < 2; ++i)
 	{
 		auto a = test->create<AGE::TestCommand>();
 		a->a = 'E';

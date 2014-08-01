@@ -37,11 +37,8 @@ namespace AGE
 		CommandQueue(std::size_t chunkSize = 1024)
 			: _chunkSize(chunkSize)
 			, _thread(nullptr)
-			, _mt_Data(nullptr)
-			, _wt_Data(nullptr)
 		{
 			_isRunning = false;
-			_mt_Data = new ThreadData();
 			_thread = new std::thread(&CommandQueue<Base>::worker, std::ref(*this));
 		}
 
@@ -51,28 +48,24 @@ namespace AGE
 			_hasSomeWork.notify_one();
 			_thread->join();
 			delete _thread;
-			if (_mt_Data != nullptr)
-				delete _mt_Data;
-			if (_wt_Data != nullptr)
-				delete _wt_Data;
 		}
 
 		template <typename T>
 		T* create()
 		{
-			if (_mt_Data->data == nullptr
-				|| _mt_Data->size - _mt_Data->cursor < sizeof(T)+sizeof(std::size_t))
+			if (_mt_Data.data == nullptr
+				|| _mt_Data.size - _mt_Data.cursor < sizeof(T)+sizeof(std::size_t))
 			{
 				allocate<T>();
 			}
 			std::size_t s = sizeof(T);
 
-			char *tmp = _mt_Data->data;
-			tmp += _mt_Data->cursor;
+			char *tmp = _mt_Data.data;
+			tmp += _mt_Data.cursor;
 			memcpy(tmp, &s, sizeof(std::size_t));
 			tmp += sizeof(std::size_t);
 			T* res = new(tmp)T();
-			_mt_Data->cursor += sizeof(std::size_t) + sizeof(T);
+			_mt_Data.cursor += sizeof(std::size_t) + sizeof(T);
 			return res;
 		}
 
@@ -87,24 +80,23 @@ namespace AGE
 		void worker()
 		{
 			_isRunning = true;
-			_wt_Data = new ThreadData();
-			while (_isRunning)
+			while (true)
 			{
 				std::unique_lock<std::mutex> lock(_mutex);
-				_hasSomeWork.wait_for(lock, std::chrono::milliseconds(10));
+				_hasSomeWork.wait(lock);
 				if (!_isRunning)
 				{
-					lock.unlock();
 					return;
 				}
-
 				std::size_t c = 0;
-				char *tmp = _wt_Data->data;
+				char *tmp = _wt_Data.data;
 				std::size_t soi = sizeof(std::size_t);
 
-				while (c != _wt_Data->cursor)
+				auto test = 0;
+				while (c != _wt_Data.cursor)
 				{
-					tmp = _wt_Data->data;
+					std::cout << "test : " << test++ << "    ";
+					tmp = _wt_Data.data;
 					tmp += c;
 					std::size_t s = *reinterpret_cast<std::size_t*>(tmp);
 					tmp += soi;
@@ -112,9 +104,10 @@ namespace AGE
 					b->execute();
 					tmp += s;
 					c += s + soi;
+					if (c >= _wt_Data.cursor)
+						int ioo = 0;
 				}
-				_wt_Data->cursor = 0;
-				lock.unlock();
+				_wt_Data.cursor = 0;
 			}
 		}
 
@@ -123,11 +116,11 @@ namespace AGE
 		{
 			std::size_t sizeOfType = sizeof(T);
 			
-			while (_mt_Data->size - _mt_Data->cursor <= sizeOfType + sizeof(std::size_t)
-				|| _mt_Data->size <= _mt_Data->cursor)
+			while (_mt_Data.size - _mt_Data.cursor <= sizeOfType + sizeof(std::size_t)
+				|| _mt_Data.size <= _mt_Data.cursor)
 			{
-				_mt_Data->size += _chunkSize;
-				_mt_Data->data = (char*)(realloc(_mt_Data->data, _mt_Data->size));
+				_mt_Data.size += _chunkSize;
+				_mt_Data.data = (char*)(realloc(_mt_Data.data, _mt_Data.size));
 			}
 		}
 	private:
@@ -141,6 +134,23 @@ namespace AGE
 				, cursor(0)
 				, size(0)
 			{}
+
+			ThreadData(ThreadData &&o)
+			{
+				data = std::move(o.data);
+				cursor = std::move(o.cursor);
+				size = std::move(o.size);
+				o.data = nullptr;
+			}
+
+			ThreadData&& operator=(ThreadData &&o)
+			{
+				data = std::move(o.data);
+				cursor = std::move(o.cursor);
+				size = std::move(o.size);
+				o.data = nullptr;
+				return std::move(*this);
+			}
 
 			~ThreadData()
 			{
@@ -156,7 +166,7 @@ namespace AGE
 		std::mutex _mutex;
 		std::condition_variable _hasSomeWork;
 
-		ThreadData *_mt_Data;
-		ThreadData *_wt_Data;
+		ThreadData _mt_Data;
+		ThreadData _wt_Data;
 	};
 }
