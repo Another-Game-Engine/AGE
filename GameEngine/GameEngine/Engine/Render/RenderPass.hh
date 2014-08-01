@@ -10,6 +10,7 @@
 #include <Render/Material.hh>
 #include <Render/UniformBlock.hh>
 #include <Render/OpenGLTask.hh>
+#include <Render/Framebuffer.hh>
 
 namespace AGE { class Drawable; }
 
@@ -60,8 +61,8 @@ namespace gl
 
 	private:
 		AGE::Vector<Task> _tasks;
-
 		GLint _stencilSize;
+		Framebuffer _fbo;
 
 	};
 

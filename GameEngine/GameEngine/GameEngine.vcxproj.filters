@@ -71,6 +71,7 @@
     <ClCompile Include="Engine\Render\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\UniformBuffer.cpp" />
     <ClCompile Include="Engine\Render\VertexArray.cpp" />
+    <ClCompile Include="Engine\Render\Framebuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Engine\Render\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\UniformBuffer.hh" />
     <ClInclude Include="Engine\Render\VertexArray.hh" />
+    <ClInclude Include="Engine\Render\Framebuffer.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
