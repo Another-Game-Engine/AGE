@@ -72,7 +72,10 @@ namespace AGE
 		void execute()
 		{
 			std::unique_lock<std::mutex> lock(_mutex);
-			std::swap(_wt_Data, _mt_Data);
+			auto tmp = std::move(_wt_Data);
+			_wt_Data = std::move(_mt_Data);
+			_mt_Data = std::move(tmp);
+//			std::swap(_wt_Data, _mt_Data);
 			lock.unlock();
 			_hasSomeWork.notify_one();
 		}
@@ -83,7 +86,7 @@ namespace AGE
 			while (true)
 			{
 				std::unique_lock<std::mutex> lock(_mutex);
-				_hasSomeWork.wait(lock);
+				_hasSomeWork.wait(lock, [&]{ return _wt_Data.cursor != 0; });
 				if (!_isRunning)
 				{
 					return;
@@ -92,10 +95,8 @@ namespace AGE
 				char *tmp = _wt_Data.data;
 				std::size_t soi = sizeof(std::size_t);
 
-				auto test = 0;
 				while (c != _wt_Data.cursor)
 				{
-					std::cout << "test : " << test++ << "    ";
 					tmp = _wt_Data.data;
 					tmp += c;
 					std::size_t s = *reinterpret_cast<std::size_t*>(tmp);
@@ -104,8 +105,6 @@ namespace AGE
 					b->execute();
 					tmp += s;
 					c += s + soi;
-					if (c >= _wt_Data.cursor)
-						int ioo = 0;
 				}
 				_wt_Data.cursor = 0;
 			}
