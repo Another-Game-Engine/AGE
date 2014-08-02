@@ -7,7 +7,7 @@
 #include <Render/GeometryManager.hh>
 #include <bitset>
 #include <Geometry/Mesh.hpp>
-#include <Render/Texture.hh>
+#include <Render/Storage.hh>
 
 namespace AGE
 {

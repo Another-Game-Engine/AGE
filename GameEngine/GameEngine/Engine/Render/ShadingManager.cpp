@@ -1,6 +1,6 @@
 #include <Render/ShadingManager.hh>
 #include <Render/Shader.hh>
-#include <Render/Texture.hh>
+#include <Render/Storage.hh>
 #include <Render/RenderPass.hh>
 #include <iostream>
 #include <string>

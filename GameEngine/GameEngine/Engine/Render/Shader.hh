@@ -8,7 +8,7 @@
 # include <glm/glm.hpp>
 # include <Render/OpenGLTask.hh>
 # include <Render/Material.hh>
-#include <Render/Texture.hh>
+#include <Render/Storage.hh>
 #include <Render/UniformBlock.hh>
 
 namespace gl
