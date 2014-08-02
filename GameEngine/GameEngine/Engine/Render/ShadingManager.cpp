@@ -364,22 +364,31 @@ namespace gl
 		return (&material->second);
 	}
 
-	ShadingManager &ShadingManager::uploadTexture(Key<Texture> const &key, GLint level, GLenum format, GLenum type, GLvoid *img)
+	ShadingManager &ShadingManager::uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "writeTexture")) == NULL)
+		if ((texture = getTexture(key, "uploadTexture")) == NULL)
 			return (*this);
-		texture->upload(level, format, type, img);
+		texture->upload(format, type, img);
 		texture->generateMipMap();
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::downloadTexture(Key<Texture> const &key, GLint level, GLenum format, GLenum type, GLvoid *img)
+	ShadingManager &ShadingManager::downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "readTexture")) == NULL)
+		if ((texture = getTexture(key, "downloadTexture")) == NULL)
 			return (*this);
-		texture->download(level, format, type, img);
+		texture->download(format, type, img);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setlevelTargetTexture(Key<Texture> const &key, uint8_t levelTarget)
+	{
+		Texture *texture;
+		if ((texture = getTexture(key, "levelTargetTexture")) == NULL)
+			return (*this);
+		texture->setLevelTarget(levelTarget);
 		return (*this);
 	}
 

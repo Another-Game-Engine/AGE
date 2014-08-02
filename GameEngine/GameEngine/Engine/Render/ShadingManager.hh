@@ -90,11 +90,13 @@ namespace gl
 
 		// Texture
 		Key<Texture> addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping);
-		ShadingManager &uploadTexture(Key<Texture> const &key, GLint level, GLenum format, GLenum type, GLvoid *img);
-		ShadingManager &downloadTexture(Key<Texture> const &key, GLint level, GLenum format, GLenum type, GLvoid *img);
+		ShadingManager &uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
+		ShadingManager &downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
+		ShadingManager &setlevelTargetTexture(Key<Texture> const &key, uint8_t level);
 		ShadingManager &bindTexture(Key<Texture> const &key);
 		ShadingManager &unbindTexture(Key<Texture> const &key);
 		ShadingManager &configUploadTexture2D(Key<Texture> const &key, glm::ivec4 const &rect);
+		
 		ShadingManager &parameterTexture(Key<Texture> const &key, GLenum pname, GLint param);
 		ShadingManager &rmTexture(Key<Texture> &key);
 		Key<Texture> getTexture(size_t target) const;

@@ -1,4 +1,5 @@
 #include <Render/Storage.hh>
+#include <Render/Framebuffer.hh>
 #include <utility>
 #include <cstdint>
 #include <iostream>
@@ -20,10 +21,15 @@ namespace gl
 	{
 	}
 
+	GLuint Storage::getId() const
+	{
+		return (_id);
+	}
 
 	Texture::Texture(GLsizei width, GLsizei height, GLenum internalFormat, bool mipMapping)
 		: Storage(width, height, internalFormat),
-		_mipMapLevels(mipMapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(_width), float(_height))) + 1))) : 1)
+		_mipMapLevels(mipMapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(_width), float(_height))) + 1))) : 1),
+		_levelTarget(0)
 	{
 		glGenTextures(1, &_id);
 	}
@@ -36,6 +42,12 @@ namespace gl
 	uint8_t Texture::getMaxLevelMipMap() const
 	{
 		return (_mipMapLevels);
+	}
+
+	Texture &Texture::setLevelTarget(uint8_t target)
+	{
+		_levelTarget = target;
+		return (*this);
 	}
 
 	Texture2D::Texture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipMapping)
@@ -61,11 +73,6 @@ namespace gl
 		return (GL_TEXTURE_2D);
 	}
 
-	GLuint Texture2D::getId() const
-	{
-		return (_id);
-	}
-
 	Texture const &Texture2D::bind() const
 	{
 		glBindTexture(GL_TEXTURE_2D, _id);
@@ -78,9 +85,9 @@ namespace gl
 		return (*this);
 	}
 
-	Texture const &Texture2D::download(GLint level, GLenum format, GLenum type, GLvoid *img) const
+	Texture const &Texture2D::download(GLenum format, GLenum type, GLvoid *img) const
 	{
-		glGetTexImage(GL_TEXTURE_2D, level, format, type, img);
+		glGetTexImage(GL_TEXTURE_2D, _levelTarget, format, type, img);
 		return (*this);
 	}
 
@@ -90,9 +97,9 @@ namespace gl
 		return (*this);
 	}
 
-	Texture const &Texture2D::upload(GLint level, GLenum format, GLenum type, GLvoid *img) const
+	Texture const &Texture2D::upload(GLenum format, GLenum type, GLvoid *img) const
 	{
-		glTexSubImage2D(GL_TEXTURE_2D, level, _rect.x, _rect.y, _rect.z, _rect.w, format, type, img);
+		glTexSubImage2D(GL_TEXTURE_2D, _levelTarget, _rect.x, _rect.y, _rect.z, _rect.w, format, type, img);
 		return (*this);
 	}
 
@@ -102,5 +109,33 @@ namespace gl
 		return (*this);
 	}
 
+	Storage const &Texture2D::attachement(Framebuffer const &fbo, GLenum attach) const
+	{
+		glFramebufferTexture2D(fbo.getType(), attach, GL_TEXTURE_2D, _id, _levelTarget);
+		return (*this);
+	}
 
+	RenderBuffer::RenderBuffer(GLsizei width, GLsizei height, GLenum internalFormat)
+		: Storage(width, height, internalFormat)
+	{
+		glGenRenderbuffers(1, &_id);
+		glBindRenderbuffer(GL_RENDERBUFFER, _id);
+		glRenderbufferStorage(GL_RENDERBUFFER, internalFormat, width, height);
+	}
+
+	RenderBuffer::~RenderBuffer()
+	{
+		glDeleteRenderbuffers(1, &_id);
+	}
+
+	GLenum RenderBuffer::getType() const
+	{
+		return (GL_RENDERBUFFER);
+	}
+
+	Storage const &RenderBuffer::attachement(Framebuffer const &fbo, GLenum attach) const
+	{
+		glFramebufferRenderbuffer(fbo.getType(), attach, GL_RENDERBUFFER, _id);
+		return (*this);
+	}
 }

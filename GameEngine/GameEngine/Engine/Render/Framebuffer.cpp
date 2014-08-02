@@ -43,4 +43,14 @@ namespace gl
 		glViewport(rect.x, rect.y, rect.z, rect.w);
 		return (*this);
 	}
+
+	GLuint Framebuffer::getId() const
+	{
+		return (_id);
+	}
+
+	GLenum Framebuffer::getType() const
+	{
+		return (_mode);
+	}
 }

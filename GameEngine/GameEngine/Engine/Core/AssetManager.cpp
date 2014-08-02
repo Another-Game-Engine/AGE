@@ -60,7 +60,7 @@ namespace AGE
 		// TODO fill texture with texture key
 		auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
 		auto key = manager->addTexture2D(3, data.width, data.height, true);
-		manager->uploadTexture(key, 0, GL_RGBA32F, GL_UNSIGNED_BYTE, data.data.data());
+		manager->uploadTexture(key, GL_RGBA32F, GL_UNSIGNED_BYTE, data.data.data());
 		manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);

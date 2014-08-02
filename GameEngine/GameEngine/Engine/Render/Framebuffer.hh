@@ -16,6 +16,8 @@ namespace gl
 		Framebuffer const &size(GLint width, GLint height, GLint sample = 1) const;
 		Framebuffer const &bind() const;
 		Framebuffer const &unbind() const;
+		GLuint getId() const;
+		GLenum getType() const;
 
 	private:
 		GLuint _id;
