@@ -8,8 +8,22 @@
 
 namespace gl
 {
-	Texture::Texture()
-		: _id(0)
+	Storage::Storage(GLsizei width, GLsizei height, GLenum internalFormat)
+		: _id(0),
+		_width(width),
+		_height(height),
+		_internalFormat(internalFormat)
+	{
+	}
+
+	Storage::~Storage()
+	{
+	}
+
+
+	Texture::Texture(GLsizei width, GLsizei height, GLenum internalFormat, bool mipMapping)
+		: Storage(width, height, internalFormat),
+		_mipMapLevels(mipMapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(_width), float(_height))) + 1))) : 1)
 	{
 		glGenTextures(1, &_id);
 	}
@@ -19,94 +33,37 @@ namespace gl
 		glDeleteTextures(1, &_id);
 	}
 
-	GLuint Texture::getId() const
+	uint8_t Texture::getMaxLevelMipMap() const
 	{
-		return (_id);
+		return (_mipMapLevels);
 	}
 
-	Texture2D::Texture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping)
-		: Texture(),
-		_levels(0),
-		_level(0),
-		_width(width),
-		_height(height),
-		_internalFormat(internalFormat),
-		_format(GL_RGBA),
-		_type(GL_UNSIGNED_BYTE)
+	Texture2D::Texture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipMapping)
+		: Texture(width, height, internalFormat, mipMapping),
+		_rect(glm::ivec4(0, 0, width, height))
 	{
-		if (mipmapping)
-		{
-			float maxDimension = glm::max(static_cast<float>(_width), static_cast<float>(_height));
-			_levels = static_cast<int>(glm::floor(glm::log2(maxDimension)) + 1);
-		}
-		else
-			_level = 1;
 		glBindTexture(GL_TEXTURE_2D, _id);
-		glTexStorage2D(GL_TEXTURE_2D, _levels, _internalFormat, _width, _height);
+		glTexStorage2D(GL_TEXTURE_2D, getMaxLevelMipMap(), _internalFormat, _width, _height);
 	}
-
-	Texture2D::Texture2D(Texture2D const &copy)
-		:Texture(),
-		_levels(copy._levels),
-		_level(copy._level),
-		_width(copy._width),
-		_height(copy._height),
-		_internalFormat(copy._internalFormat),
-		_format(copy._format),
-		_type(copy._type)
-	{
-	}
-
-	Texture2D::Texture2D(Texture2D &&move)
-		: Texture(),
-		_levels(std::move(move._levels)),
-		_level(std::move(move._level)),
-		_width(std::move(move._width)),
-		_height(std::move(move._height)),
-		_internalFormat(std::move(move._internalFormat)),
-		_format(std::move(move._format)),
-		_type(std::move(move._type))
-	{
-	}
-
 
 	Texture2D::~Texture2D()
 	{
 	}
 
-	Texture2D const &Texture2D::wrap(GLint param) const
+	Texture const &Texture2D::generateMipMap() const
 	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, param);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, param);
+		glGenerateMipmap(GL_TEXTURE_2D);
 		return (*this);
 	}
 
-	Texture2D const &Texture2D::filter(GLint minFilter, GLint magFilter) const
+	GLenum Texture2D::getType() const
 	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
-		return (*this);
+		return (GL_TEXTURE_2D);
 	}
 
-	Texture2D const &Texture2D::filter(GLint param) const
+	GLuint Texture2D::getId() const
 	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
-		return (*this);
-	}
-
-	Texture2D const &Texture2D::storage(GLint param) const
-	{
-		glPixelStorei(GL_PACK_ALIGNMENT, param);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, param);
-		return (*this);
-	}
-
-	Texture2D const &Texture2D::storage(GLint pack, GLint unpack) const
-	{
-		glPixelStorei(GL_PACK_ALIGNMENT, pack);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, unpack);
-		return (*this);
+		return (_id);
 	}
 
 	Texture const &Texture2D::bind() const
@@ -121,86 +78,29 @@ namespace gl
 		return (*this);
 	}
 
-	Texture2D &Texture2D::setOptionTransfer(GLint level, GLenum format, GLenum type)
+	Texture const &Texture2D::download(GLint level, GLenum format, GLenum type, GLvoid *img) const
 	{
-		_level = level;
-		_format = format;
-		_type = type;
+		glGetTexImage(GL_TEXTURE_2D, level, format, type, img);
 		return (*this);
 	}
 
-	void *Texture2D::read(void *read) const
+	Texture2D &Texture2D::configUpload(glm::ivec4 const &rect)
 	{
-		if (read != NULL)
-			glGetTexImage(GL_TEXTURE_2D, _level, _format, _type, read);
-		else
-			glGetTexImage(GL_TEXTURE_2D, _level, _format, _type, 0);
-		return (read);
-	}
-
-	void Texture2D::write(void *write) const
-	{
-		glTexSubImage2D(GL_TEXTURE_2D, _level, 0, 0, _width, _height, _format, _type, write);
-	}
-
-	Texture2D const &Texture2D::generateMipMap() const
-	{
-		glGenerateMipmap(GL_TEXTURE_2D);
+		_rect = rect;
 		return (*this);
 	}
 
-	GLenum Texture2D::getType() const
+	Texture const &Texture2D::upload(GLint level, GLenum format, GLenum type, GLvoid *img) const
 	{
-		return (GL_TEXTURE_2D);
-	}
-
-	std::uint8_t Texture2D::getMaxLevelMipMap() const
-	{
-		return (_levels);
-	}
-
-	TextureMultiSample::TextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation)
-		: Texture(),
-		_samples(samples),
-		_width(width),
-		_height(height),
-		_internalFormat(internalFormat),
-		_format(GL_BGRA),
-		_type(GL_UNSIGNED_BYTE),
-		_fixedSampleLocation(fixedSampleLocation)
-	{
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, _id);
-		glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, _samples, _internalFormat, _width, _height, _fixedSampleLocation);
-	}
-
-	TextureMultiSample::~TextureMultiSample()
-	{
-	}
-
-	Texture const &TextureMultiSample::bind() const
-	{
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, _id);
+		glTexSubImage2D(GL_TEXTURE_2D, level, _rect.x, _rect.y, _rect.z, _rect.w, format, type, img);
 		return (*this);
 	}
 
-	Texture const &TextureMultiSample::unbind() const
+	Texture const &Texture2D::parameter(GLenum pname, GLint param) const
 	{
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+		glTexParameteri(GL_TEXTURE_2D, pname, param);
 		return (*this);
 	}
 
-	void TextureMultiSample::write(void *) const
-	{
 
-	}
-
-	void *TextureMultiSample::read(void *read) const
-	{
-		return (NULL);
-	}
-
-	GLenum TextureMultiSample::getType() const
-	{
-		return (GL_TEXTURE_2D_MULTISAMPLE);
-	}
 }

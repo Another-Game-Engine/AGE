@@ -89,20 +89,13 @@ namespace gl
 		ShadingManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
 
 		// Texture
-		Key<Texture> addTexture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping);
-		Key<Texture> addTextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation);
-		ShadingManager &wrapTexture2D(Key<Texture> const &key, GLint param);
-		ShadingManager &filterTexture2D(Key<Texture> const &key, GLint param);
-		ShadingManager &filterTexture2D(Key<Texture> const &key, GLint minFilter, GLint magFilter);
-		ShadingManager &storageTexture2D(Key<Texture> const &key, GLint param);
-		ShadingManager &storageTexture2D(Key<Texture> const &key, GLint pack, GLint unpack) ;
-		ShadingManager &setOptionTransferTexture2D(Key<Texture> const &key, GLint level = 0, GLenum format = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE);
-		ShadingManager &generateMipMapTexture2D(Key<Texture> const &key);
-		std::uint8_t getMaxLevelMipMapTexture2D(Key<Texture> const &key);
-		ShadingManager &writeTexture(Key<Texture> const &key, void *write);
-		ShadingManager &readTexture(Key<Texture> const &key, void *read);
+		Key<Texture> addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping);
+		ShadingManager &uploadTexture(Key<Texture> const &key, GLint level, GLenum format, GLenum type, GLvoid *img);
+		ShadingManager &downloadTexture(Key<Texture> const &key, GLint level, GLenum format, GLenum type, GLvoid *img);
 		ShadingManager &bindTexture(Key<Texture> const &key);
 		ShadingManager &unbindTexture(Key<Texture> const &key);
+		ShadingManager &configUploadTexture2D(Key<Texture> const &key, glm::ivec4 const &rect);
+		ShadingManager &parameterTexture(Key<Texture> const &key, GLenum pname, GLint param);
 		ShadingManager &rmTexture(Key<Texture> &key);
 		Key<Texture> getTexture(size_t target) const;
 		GLenum getTypeTexture(Key<Texture> const &key);
@@ -130,7 +123,8 @@ namespace gl
 		ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
 		ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest);
 		ShadingManager &pushSetBlendConstantTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendPass);
-		
+		ShadingManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLint sample = 1);
+
 		ShadingManager &popTaskRenderPass(Key<RenderPass> const &key);
 
 		ShadingManager &draw(GLenum mode, Key<Shader> const &key, Key<RenderPass> const &renderPass, AGE::Vector<AGE::Drawable> const &objectRender);
@@ -151,7 +145,7 @@ namespace gl
 		// tool use in intern
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key, std::string const &in);
-		Texture *getTexture(Key<Texture> const &key, std::string const &in, GLenum type);
+		Texture *getTexture(Key<Texture> const &key, std::string const &in);
 		RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
 		Material *getMaterial(Key<Material> const &key, std::string const &in);
 	};

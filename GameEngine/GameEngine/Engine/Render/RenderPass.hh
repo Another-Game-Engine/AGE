@@ -34,7 +34,7 @@ namespace gl
 		RenderPass(RenderPass const &copy);
 		RenderPass &operator=(RenderPass const &r);
 
-		RenderPass &updateBuffer();
+		RenderPass &update();
 
 		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
 		RenderPass &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
@@ -58,11 +58,14 @@ namespace gl
 		RenderPass &popTask();
 
 		bool stencilSizeValid();
+		RenderPass &config(glm::ivec4 const &rect, GLint sample = 1);
 
 	private:
 		AGE::Vector<Task> _tasks;
 		GLint _stencilSize;
 		Framebuffer _fbo;
+		glm::ivec4 _rect;
+		GLint _sample;
 
 	};
 

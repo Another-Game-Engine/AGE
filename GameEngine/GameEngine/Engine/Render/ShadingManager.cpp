@@ -186,7 +186,7 @@ namespace gl
 		if ((shader = getShader(keyShader, "setShaderSampler()")) == NULL)
 			return (*this);
 		Texture *texture;
-		if ((texture = getTexture(keyTexture, "setShaderSampler()", GL_NONE)) == NULL)
+		if ((texture = getTexture(keyTexture, "setShaderSampler()")) == NULL)
 			return (*this);
 		shader->setSampler(keySampler, *texture);
 		return (*this);
@@ -238,26 +238,27 @@ namespace gl
 		return (shader->getInterfaceBlock(target));
 	}
 
-	Key<Texture> ShadingManager::addTexture2D(GLenum internalFormat, GLsizei width, GLsizei height, bool mipmapping)
+	Key<Texture> ShadingManager::addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping)
 	{
 		Key<Texture> key;
 
-		_textures[key] = new Texture2D(internalFormat, width, height, mipmapping);
+		_textures[key] = new Texture2D(width, height, internalFormat, mipmapping);
 		return (key);
 	}
 
-	Key<Texture> ShadingManager::addTextureMultiSample(GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocation)
+	ShadingManager &ShadingManager::parameterTexture(Key<Texture> const &key, GLenum pname, GLint param)
 	{
-		Key<Texture> key;
-
-		_textures[key] = new TextureMultiSample(samples, internalFormat, width, height, fixedSampleLocation);
-		return (key);
+		Texture *texture;
+		if ((texture = getTexture(key, "rmTexture()")) == NULL)
+			return (*this);
+		texture->parameter(pname, param);
+		return (*this);
 	}
 
 	ShadingManager &ShadingManager::rmTexture(Key<Texture> &key)
 	{
 		Texture *texture;
-		if ((texture = getTexture(key, "rmTexture()", GL_NONE)) == NULL)
+		if ((texture = getTexture(key, "rmTexture()")) == NULL)
 			return (*this);
 		delete texture;
 		_textures.erase(key);
@@ -278,7 +279,7 @@ namespace gl
 	GLenum ShadingManager::getTypeTexture(Key<Texture> const &key)
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "getTypeTexture()", GL_NONE)) == NULL)
+		if ((texture = getTexture(key, "getTypeTexture()")) == NULL)
 			return (GL_NONE);
 		return (texture->getType());
 	}
@@ -299,7 +300,7 @@ namespace gl
 		return (&shader->second);
 	}
 
-	Texture *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in, GLenum type)
+	Texture *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in)
 	{
 		if (!key)
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
@@ -310,8 +311,6 @@ namespace gl
 		auto &texture = _textures.find(key);
 		if (texture == _textures.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "texture not find", NULL);
-		if (texture->second->getType() != type && type != GL_NONE)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "error cast on texture", NULL);
 		_optimizeTextureSearch.first = key;
 		_optimizeTextureSearch.second = texture->second;
 		return (texture->second);
@@ -365,91 +364,29 @@ namespace gl
 		return (&material->second);
 	}
 
-	ShadingManager &ShadingManager::wrapTexture2D(Key<Texture> const &key, GLint param)
+	ShadingManager &ShadingManager::uploadTexture(Key<Texture> const &key, GLint level, GLenum format, GLenum type, GLvoid *img)
 	{
-		Texture2D const *texture;
-		if ((texture = (Texture2D *)getTexture(key, "wrapTexture2D", GL_TEXTURE_2D)) == NULL)
+		Texture const *texture;
+		if ((texture = getTexture(key, "writeTexture")) == NULL)
 			return (*this);
-		texture->wrap(param);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::filterTexture2D(Key<Texture> const &key, GLint param)
-	{
-		Texture2D const *texture;
-		if ((texture = (Texture2D *)getTexture(key, "filterTexture2D", GL_TEXTURE_2D)) == NULL)
-			return (*this);
-		texture->filter(param);
-		return (*this);
-	}
-	
-	ShadingManager &ShadingManager::filterTexture2D(Key<Texture> const &key, GLint minFilter, GLint magFilter)
-	{
-		Texture2D const *texture;
-		if ((texture = (Texture2D *)getTexture(key, "filterTexture2D", GL_TEXTURE_2D)) == NULL)
-			return (*this);
-		texture->filter(minFilter, magFilter);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::storageTexture2D(Key<Texture> const &key, GLint param)
-	{
-		Texture2D const *texture;
-		if ((texture = (Texture2D *)getTexture(key, "storageTexture2D", GL_TEXTURE_2D)) == NULL)
-			return (*this);
-		texture->storage(param);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::storageTexture2D(Key<Texture> const &key, GLint pack, GLint unpack)
-	{
-		Texture2D const *texture;
-		if ((texture = (Texture2D *)getTexture(key, "storageTexture2D", GL_TEXTURE_2D)) == NULL)
-			return (*this);
-		texture->storage(pack, unpack);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::setOptionTransferTexture2D(Key<Texture> const &key, GLint level, GLenum format, GLenum type)
-	{
-		Texture2D *texture;
-		if ((texture = (Texture2D *)getTexture(key, "setOptionTransferTexture2D", GL_TEXTURE_2D)) == NULL)
-			return (*this);
-		texture->setOptionTransfer(level, format, type);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::generateMipMapTexture2D(Key<Texture> const &key)
-	{
-		Texture2D *texture;
-		if ((texture = (Texture2D *)getTexture(key, "generateMipMapTexture2D", GL_TEXTURE_2D)) == NULL)
-			return (*this);
+		texture->upload(level, format, type, img);
 		texture->generateMipMap();
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::writeTexture(Key<Texture> const &key, void *write)
+	ShadingManager &ShadingManager::downloadTexture(Key<Texture> const &key, GLint level, GLenum format, GLenum type, GLvoid *img)
 	{
-		Texture2D const *texture;
-		if ((texture = (Texture2D *)getTexture(key, "writeTexture", GL_TEXTURE_2D)) == NULL)
+		Texture const *texture;
+		if ((texture = getTexture(key, "readTexture")) == NULL)
 			return (*this);
-		texture->write(write);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::readTexture(Key<Texture> const &key, void *read)
-	{
-		Texture2D const *texture;
-		if ((texture = (Texture2D *)getTexture(key, "readTexture", GL_TEXTURE_2D)) == NULL)
-			return (*this);
-		texture->read(read);
+		texture->download(level, format, type, img);
 		return (*this);
 	}
 
 	ShadingManager &ShadingManager::bindTexture(Key<Texture> const &key)
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "bindTexture", GL_NONE)) == NULL)
+		if ((texture = getTexture(key, "bindTexture")) == NULL)
 			return (*this);
 		texture->bind();
 		return (*this);
@@ -458,18 +395,10 @@ namespace gl
 	ShadingManager &ShadingManager::unbindTexture(Key<Texture> const &key) 
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "unbindTexture", GL_NONE)) == NULL)
+		if ((texture = getTexture(key, "unbindTexture")) == NULL)
 			return (*this);
 		texture->unbind();
 		return (*this);
-	}
-
-	std::uint8_t ShadingManager::getMaxLevelMipMapTexture2D(Key<Texture> const &key)
-	{
-		Texture2D *texture;
-		if ((texture = (Texture2D *)getTexture(key, "getMaxLevelMipMapTexture2D", GL_TEXTURE_2D)) == NULL)
-			return (-1);
-		return (texture->getMaxLevelMipMap());
 	}
 
 	Key<RenderPass> ShadingManager::addRenderPass(Key<Shader> const &keyShader)
@@ -681,7 +610,7 @@ namespace gl
 		if ((renderPass = getRenderPass(keyRenderPass, "draw")) == NULL)
 			return (*this);
 		shader->use();
-		renderPass->updateBuffer();
+		renderPass->update();
 		for (size_t index = 0; index < objectRender.size(); ++index)
 		{
 			Material *material;
@@ -736,6 +665,16 @@ namespace gl
 		if ((shader = getShader(shaderKey, "unbindMaterialToShader")) == NULL)
 			return (*this);
 		shader->bindingTransformation(uniformKey);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::configRenderPass(Key<RenderPass> const &key, glm::ivec4 const &rect, GLint sample)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "configRenderPass")) == NULL)
+			return (*this);
+		renderPass->config(rect, sample);
 		return (*this);
 	}
 }

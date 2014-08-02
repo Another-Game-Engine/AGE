@@ -37,4 +37,10 @@ namespace gl
 		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_SAMPLES, sample);
 		return (*this);
 	}
+
+	Framebuffer const &Framebuffer::viewPort(glm::ivec4 const &rect) const
+	{
+		glViewport(rect.x, rect.y, rect.z, rect.w);
+		return (*this);
+	}
 }

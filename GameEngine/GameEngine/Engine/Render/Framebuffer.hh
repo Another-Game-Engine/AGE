@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Utils/OpenGL.hh>
+#include <glm/glm.hpp>
 
 namespace gl
 {
@@ -11,6 +12,7 @@ namespace gl
 		~Framebuffer();
 
 		// bind
+		Framebuffer const &viewPort(glm::ivec4 const &rect) const;
 		Framebuffer const &size(GLint width, GLint height, GLint sample = 1) const;
 		Framebuffer const &bind() const;
 		Framebuffer const &unbind() const;

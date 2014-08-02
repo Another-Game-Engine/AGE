@@ -14,7 +14,9 @@
 namespace gl
 {
 	RenderPass::RenderPass()
-		: _stencilSize(-1)
+		: _stencilSize(-1),
+		_rect(glm::ivec4(0, 0, 512, 512)),
+		_sample(1)
 	{
 	}
 
@@ -30,7 +32,9 @@ namespace gl
 	}
 
 	RenderPass::RenderPass(RenderPass const &copy)
-		: _stencilSize(copy._stencilSize)
+		: _stencilSize(copy._stencilSize),
+		_rect(copy._rect),
+		_sample(copy._sample)
 	{
 	}
 
@@ -39,6 +43,8 @@ namespace gl
 		if (this != &r)
 		{
 			_stencilSize = r._stencilSize;
+			_rect = r._rect;
+			_sample = r._sample;
 		}
 		return (*this);
 	}
@@ -243,8 +249,11 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::updateBuffer()
+	RenderPass &RenderPass::update()
 	{
+		//_fbo.bind();
+		//_fbo.size(_rect.z, _rect.w, _sample);
+		_fbo.viewPort(_rect);
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		return (*this);
@@ -257,5 +266,11 @@ namespace gl
 		return (_stencilSize < 8) ? false : true;
 	}
 
+	RenderPass &RenderPass::config(glm::ivec4 const &rect, GLint sample)
+	{
+		_rect = rect;
+		_sample = sample;
+		return (*this);
+	}
 	
 }
