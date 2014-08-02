@@ -25,6 +25,8 @@
 
 #include <Core/OctreeKey.hpp>
 
+#include <Utils/Containers/PtrQueue.hpp>
+
 #include <thread>
 #include <mutex>
 #include <condition_variable>
@@ -32,30 +34,68 @@
 
 class AScene;
 
-
 namespace AGE
 {
 	struct Drawable;
+
+	namespace OctreeCommand
+	{
+		struct Position : public PtrQueueType::BaseUid<Position>
+		{
+			OctreeKey key;
+			glm::vec3 position;
+		};
+
+		struct Scale : public PtrQueueType::BaseUid<Scale>
+		{
+			OctreeKey key;
+			glm::vec3 scale;
+		};
+
+		struct Orientation : public PtrQueueType::BaseUid<Orientation>
+		{
+			OctreeKey key;
+			glm::quat orientation;
+		};
+
+		struct Geometry : public PtrQueueType::BaseUid<Geometry>
+		{
+			OctreeKey key;
+			AGE::Vector<SubMeshInstance> submeshInstances;
+			AGE::Vector<MaterialInstance> materialInstances;
+		};
+
+		struct CreateDrawable : public PtrQueueType::BaseUid<CreateDrawable>
+		{
+			OctreeKey key;
+		};
+
+		struct DeleteDrawable : public PtrQueueType::BaseUid<DeleteDrawable>
+		{
+			OctreeKey key;
+		};
+
+		struct CreateCamera : public PtrQueueType::BaseUid<CreateCamera>
+		{
+			OctreeKey key;
+		};
+
+		struct DeleteCamera : public PtrQueueType::BaseUid<DeleteCamera>
+		{
+			OctreeKey key;
+		};
+
+		struct CameraInfos : public PtrQueueType::BaseUid<CameraInfos>
+		{
+			OctreeKey key;
+			glm::mat4 projection;
+		};
+	}
 
 	class Octree : public Dependency<Octree>
 	{
 	public:
 		typedef std::uint64_t USER_OBJECT_ID;
-
-	private:
-		enum CommandType
-		{
-			Position = 0
-			, Orientation
-			, Scale
-			, Geometry // Update geo, material and bounding box
-			, CreateDrawable
-			, DeleteDrawable
-			, CreateCamera
-			, DeleteCamera
-			, CameraInfos
-			, END // <- should always be the last
-		};
 
 	private:
 		typedef std::uint64_t DRAWABLE_ID;
@@ -80,83 +120,10 @@ namespace AGE
 			OctreeKey key;
 			glm::vec3 position;
 			glm::vec3 scale;
-			glm::quat orientation;			
+			glm::quat orientation;
 			bool active;
 			bool hasMoved;
 			glm::mat4 projection;
-		};
-
-		struct OctreeCommand
-		{
-			glm::vec3 position;
-			glm::vec3 scale;
-			glm::quat orientation;
-			AGE::Vector<SubMeshInstance> submeshInstances;
-			AGE::Vector<MaterialInstance> materialInstances;
-			OctreeKey key;
-			CommandType commandType;
-			BoundingInfos boundingInfo;
-			glm::mat4 projection;
-
-			OctreeCommand()
-				: position(0)
-				, scale(0)
-				, orientation(0,0,0,1)
-				, commandType(CommandType::END)
-			{}
-
-			OctreeCommand(const OctreeKey &_key, CommandType _cmdType)
-				: position(0)
-				, scale(0)
-				, orientation(0, 0, 0, 1)
-				, key(_key)
-				, commandType(_cmdType)
-			{
-			}
-
-			OctreeCommand(const OctreeKey &_key, const glm::vec3& pos, CommandType _cmdType)
-				: position(0)
-				, scale(0)
-				, orientation(0, 0, 0, 1)
-				, key(_key)
-				, commandType(_cmdType)
-			{
-				if (_cmdType == CommandType::Position)
-					position = pos;
-				else
-					scale = pos;
-			}
-			OctreeCommand(const OctreeKey &_key, const glm::quat& ori, CommandType _cmdType)
-				: position(0)
-				, scale(0)
-				, orientation(ori)
-				, key(_key)
-				, commandType(_cmdType)
-			{
-			}
-			OctreeCommand(const OctreeKey &_key, const glm::mat4& projection, CommandType _cmdType)
-				: position(0)
-				, scale(0)
-				, orientation(0, 0, 0, 1)
-				, key(_key)
-				, commandType(_cmdType)
-				, projection(projection)
-			{
-			}
-
-			OctreeCommand(const OctreeKey &_key
-				, AGE::Vector<SubMeshInstance> _submeshInstances // copy
-				, AGE::Vector<MaterialInstance> _materialInstances // copy
-				, CommandType _cmdType)
-				: position(0)
-				, scale(0)
-				, orientation(0,0,0,1)
-				, submeshInstances(_submeshInstances)
-				, materialInstances(_materialInstances)
-				, key(_key)
-				, commandType(_cmdType)
-			{}
-
 		};
 
 		struct UserObject
@@ -188,8 +155,8 @@ namespace AGE
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
 
-		AGE::Queue<OctreeCommand> _octreeCommands;
-		AGE::Queue<OctreeCommand> _mainThreadCommands;
+		AGE::PtrQueue<PtrQueueType::Base> _octreeCommands;
+		AGE::PtrQueue<PtrQueueType::Base> _mainThreadCommands;
 
 
 		AGE::Vector<DrawableCollection> _octreeDrawList;
@@ -231,5 +198,168 @@ namespace AGE
 		std::condition_variable _hasSomeWork;
 		std::thread *_thread;
 		std::atomic_bool _isRunning;
+
+		/*void _executeCommand(OctreeCommand::CreateDrawable *command)
+		{
+		UserObject *uo = nullptr;
+
+		if (command->key.id >= _userObjects.size())
+		{
+		_userObjects.push_back(UserObject());
+		uo = &_userObjects.back();
+		}
+		else
+		{
+		uo = &_userObjects[command->key.id];
+		}
+		uo->id = command->key.id;
+		uo->active = true;
+		}
+
+		void _executeCommand(OctreeCommand::DeleteDrawable *command)
+		{
+		UserObject *uo = nullptr;
+		uo = &_userObjects[command->key.id];
+		for (auto &e : uo->drawableCollection)
+		{
+		removeDrawableObject(e);
+		}
+		uo->drawableCollection.clear();
+		uo->active = false;
+		}
+
+		void _executeCommand(OctreeCommand::CreateCamera *command)
+		{
+		CameraObject *co = nullptr;
+		if (command->key.id >= _cameraObjects.size())
+		{
+		_cameraObjects.push_back(CameraObject());
+		co = &_cameraObjects.back();
+		}
+		else
+		{
+		co = &_cameraObjects[command->key.id];
+		}
+		co->key.id = command->key.id;
+		co->active = true;
+		}
+
+		void _executeCommand(OctreeCommand::DeleteCamera *command)
+		{
+		CameraObject *co = nullptr;
+		co = &_cameraObjects[command->key.id];
+		co->active = false;
+		}
+
+		void _executeCommand(OctreeCommand::Geometry *command)
+		{
+		UserObject *uo = nullptr;
+
+		uo = &_userObjects[command->key.id];
+		assert(uo->active != false);
+		for (auto &e : uo->drawableCollection)
+		{
+		removeDrawableObject(e);
+		}
+		uo->drawableCollection.clear();
+		for (std::size_t i = 0; i < command->submeshInstances.size(); ++i)
+		{
+		auto id = addDrawableObject(command->key.id);
+		uo->drawableCollection.push_back(id);
+		_cullableObjects[id].mesh = command->submeshInstances[i];
+		_cullableObjects[id].material = command->materialInstances[i];
+		_cullableObjects[id].position = uo->position;
+		_cullableObjects[id].orientation = uo->orientation;
+		_cullableObjects[id].scale = uo->scale;
+		}
+		}
+
+		void _executeCommand(OctreeCommand::Position *command)
+		{
+		UserObject *uo = nullptr;
+		CameraObject *co = nullptr;
+
+		switch (command->key.type)
+		{
+		case(OctreeKey::Type::Camera) :
+		co = &_cameraObjects[command->key.id];
+		co->position = command->position;
+		co->hasMoved = true;
+		break;
+		case(OctreeKey::Type::Cullable) :
+		uo = &_userObjects[command->key.id];
+		uo->position = command->position;
+		for (auto &e : uo->drawableCollection)
+		{
+		_cullableObjects[e].position = uo->position;
+		_cullableObjects[e].hasMoved = true;
+		}
+		break;
+		default:
+		break;
+		}
+		}
+
+		void _executeCommand(OctreeCommand::Scale *command)
+		{
+		UserObject *uo = nullptr;
+		CameraObject *co = nullptr;
+
+		switch (command->key.type)
+		{
+		case(OctreeKey::Type::Camera) :
+		co = &_cameraObjects[command->key.id];
+		co->scale = command->scale;
+		co->hasMoved = true;
+		break;
+		case(OctreeKey::Type::Cullable) :
+		uo = &_userObjects[command->key.id];
+		uo->scale = command->scale;
+		for (auto &e : uo->drawableCollection)
+		{
+		_cullableObjects[e].scale = uo->scale;
+		_cullableObjects[e].hasMoved = true;
+		}
+		break;
+		default:
+		break;
+		}
+		}
+
+		void _executeCommand(OctreeCommand::Orientation *command)
+		{
+		UserObject *uo = nullptr;
+		CameraObject *co = nullptr;
+
+		switch (command->key.type)
+		{
+		case(OctreeKey::Type::Camera) :
+		co = &_cameraObjects[command->key.id];
+		co->orientation = command->orientation;
+		co->hasMoved = true;
+		break;
+		case(OctreeKey::Type::Cullable) :
+		uo = &_userObjects[command->key.id];
+		uo->orientation = command->orientation;
+		for (auto &e : uo->drawableCollection)
+		{
+		_cullableObjects[e].orientation = uo->orientation;
+		_cullableObjects[e].hasMoved = true;
+		}
+		break;
+		default:
+		break;
+		}
+		}
+
+		void _executeCommand(OctreeCommand::CameraInfos *command)
+		{
+
+		CameraObject *co = nullptr;
+
+		co = &_cameraObjects[command->key.id];
+		co->hasMoved = true;
+		co->projection = command->projection;
+		}*/
 	};
 }

@@ -226,6 +226,8 @@
     <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
     <ClInclude Include="Engine\Utils\Containers\CommandQueue.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\ThreadedCommandQueue.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\PtrQueue.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
