@@ -4,8 +4,6 @@
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
-#include <MediaFiles/CubeMapFile.hpp>
-#include <MediaFiles/AssetsManager.hpp>
 #include "Behaviors/Camera.hpp"
 
 namespace Component
@@ -24,9 +22,7 @@ namespace Component
 			::AGE::ComponentBehavior::Camera::reset(scene, this->entityId);
 		}
 
-		void                 attachSkybox(std::shared_ptr<CubeMapFile> texture, const std::string &cubeMapShader);
 		void                 dettachSkybox();
-		std::shared_ptr<CubeMapFile> getSkybox();
 		const std::string &getSkyboxShader() const;
 
 		//////
@@ -48,7 +44,6 @@ namespace Component
 		//////
 
 		glm::uvec4	viewport;
-		std::shared_ptr<CubeMapFile> skybox;
 		std::string cubeMapShader;
 		bool blitOnScreen;
 
@@ -60,7 +55,6 @@ namespace Component
 			: AGE::ComponentBehavior::Camera(o)
 		{
 			viewport = o.viewport;
-			skybox = o.skybox;
 			cubeMapShader = o.cubeMapShader;
 			//@CESAR TODO TODO COPY FRAMEBUFFER
 			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
@@ -72,7 +66,6 @@ namespace Component
 		CameraComponent	&operator=(CameraComponent const &o)
 		{
 			viewport = o.viewport;
-			skybox = o.skybox;
 			cubeMapShader = o.cubeMapShader;
 			//@CESAR TODO TODO COPY FRAMEBUFFER
 			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!

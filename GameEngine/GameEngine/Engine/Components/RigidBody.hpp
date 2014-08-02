@@ -10,14 +10,14 @@
 #include <HACD/hacdHACD.h>
 #include <Physic/Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
-#include <MediaFiles/CollisionShapeStaticFile.hpp>
-#include <MediaFiles/CollisionShapeDynamicFile.hpp>
-#include <MediaFiles/CollisionBoxFile.hpp>
-#include <MediaFiles/CollisionSphereFile.hpp>
+//#include <MediaFiles/CollisionShapeStaticFile.hpp>
+//#include <MediaFiles/CollisionShapeDynamicFile.hpp>
+//#include <MediaFiles/CollisionBoxFile.hpp>
+//#include <MediaFiles/CollisionSphereFile.hpp>
 #include <memory>
 #include <Components/CollisionLayers.hpp>
 #include <Serialize/BulletWorldImporter/btBulletWorldImporter.h>
-#include <MediaFiles/AssetsManager.hpp>
+//#include <MediaFiles/AssetsManager.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
@@ -170,32 +170,32 @@ namespace Component
 			}
 			else if (c == MESH)
 			{
-				auto mediaManager = scene.lock()->getInstance<AssetsManager>();
-				auto media = mediaManager->get(_shapeName);
-				if (!media)
-					return;
-				if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
-				{
-					auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(mediaManager->get(_shapeName));
-					_collisionShape = new btConvexHullShape(*s->shape.get());
-				}
-				else if (media->getType() == AMediaFile::COLLISION_SHAPE_STATIC)
-				{
-					auto s = std::dynamic_pointer_cast<CollisionShapeStaticFile>(mediaManager->get(_shapeName));
-					_collisionShape = new btScaledBvhTriangleMeshShape(s->shape.get(), btVector3(1, 1, 1));
-				}
-				else if (media->getType() == AMediaFile::COLLISION_BOX)
-				{
-					auto s = std::dynamic_pointer_cast<CollisionBoxFile>(mediaManager->get(_shapeName));
-					_collisionShape = new btBoxShape(*s->shape.get());
-				}
-				else if (media->getType() == AMediaFile::COLLISION_SPHERE)
-				{
-					auto s = std::dynamic_pointer_cast<CollisionSphereFile>(mediaManager->get(_shapeName));
-					_collisionShape = new btSphereShape(*s->shape.get());
-				}
-				else
-					assert(false && "Collision mesh not found.");
+				//auto mediaManager = scene.lock()->getInstance<AssetsManager>();
+				//auto media = mediaManager->get(_shapeName);
+				//if (!media)
+				//	return;
+				//if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
+				//{
+				//	auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(mediaManager->get(_shapeName));
+				//	_collisionShape = new btConvexHullShape(*s->shape.get());
+				//}
+				//else if (media->getType() == AMediaFile::COLLISION_SHAPE_STATIC)
+				//{
+				//	auto s = std::dynamic_pointer_cast<CollisionShapeStaticFile>(mediaManager->get(_shapeName));
+				//	_collisionShape = new btScaledBvhTriangleMeshShape(s->shape.get(), btVector3(1, 1, 1));
+				//}
+				//else if (media->getType() == AMediaFile::COLLISION_BOX)
+				//{
+				//	auto s = std::dynamic_pointer_cast<CollisionBoxFile>(mediaManager->get(_shapeName));
+				//	_collisionShape = new btBoxShape(*s->shape.get());
+				//}
+				//else if (media->getType() == AMediaFile::COLLISION_SPHERE)
+				//{
+				//	auto s = std::dynamic_pointer_cast<CollisionSphereFile>(mediaManager->get(_shapeName));
+				//	_collisionShape = new btSphereShape(*s->shape.get());
+				//}
+				//else
+				//	assert(false && "Collision mesh not found.");
 			}
 
 			if (_mass != 0)
