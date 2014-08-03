@@ -662,13 +662,17 @@ namespace gl
 
 	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
 	{
-		for (size_t index = 0; index < objectRender.size(); ++index)
+		if (objectRender.size() == 0)
+			return (*this);
+		Material *material;
+		if ((material = getMaterial(objectRender[0].material, "draw")) == NULL)
+			return (*this);
+		RenderPass *renderPass = material->get<Render_Pass>();
+		renderPass->update();
+		for (size_t index = 1; index < objectRender.size(); ++index)
 		{
-			Material *material;
 			if ((material = getMaterial(objectRender[index].material, "draw")) == NULL)
 				return (*this);
-			RenderPass *renderPass = material->get<Render_Pass>();
-			renderPass->update();
 			renderPass->accessShader()->preDraw(*material, objectRender[index].transformation);
 			geometryManager.draw(renderPass->getMode(), objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
 		}
