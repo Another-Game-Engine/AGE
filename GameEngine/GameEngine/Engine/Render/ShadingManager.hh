@@ -29,11 +29,14 @@ namespace gl
 	class RenderPass;
 	class Drawable;
 
-	//!\file ShadingManager.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class ShadingManager
-	//!\brief Handle the shading of the object
+	struct BindingShader
+	{
+		Key<RenderPass> r;
+		Key<Shader> s;
+		BindingShader(Key<RenderPass> const &r, Key<Shader> const &s) : r(r), s(s) 
+		{}
+	};
+
 	class ShadingManager : public Dependency<ShadingManager>
 	{
 	public:
@@ -49,7 +52,6 @@ namespace gl
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
 		ShadingManager &rmShader(Key<Shader> &shader);
 		Key<Shader> getShader(size_t index) const;
-		ShadingManager &postDraw(Key<Shader> const &shader, Key<Material> const &material, glm::mat4 const &mat);
 		
 		// uniform
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
@@ -82,6 +84,7 @@ namespace gl
 		Key<Material> addMaterial();
 		ShadingManager &rmMaterial(Key<Material> &key);
 		Key<Material> getMaterial(size_t index) const;
+		ShadingManager &setRenderPassMaterial(Key<Material> const &m, Key<RenderPass> const &r);
 		template <typename TYPE> ShadingManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
 		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
 		template <typename TYPE> ShadingManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
@@ -106,7 +109,8 @@ namespace gl
 		Key<RenderPass> addRenderPass(Key<Shader> const &shader);
 		ShadingManager &rmRenderPass(Key<RenderPass> &key);
 		Key<RenderPass> getRenderPass(size_t target) const;
-		
+		ShadingManager &bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s);
+
 		ShadingManager &pushClearTaskRenderPass(Key<RenderPass> const &key, bool color = true, bool depth = true, bool stencil = false);
 		ShadingManager &pushSetClearValueTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
 		ShadingManager &pushSetColorMaskTaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index = 0);
@@ -126,10 +130,11 @@ namespace gl
 		ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest);
 		ShadingManager &pushSetBlendConstantTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendPass);
 		ShadingManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLint sample = 1);
+		ShadingManager &setModeRenderPass(Key<RenderPass> const &renderPass, GLenum mode);
 
 		ShadingManager &popTaskRenderPass(Key<RenderPass> const &key);
 
-		ShadingManager &draw(GLenum mode, Key<Shader> const &key, Key<RenderPass> const &renderPass, AGE::Vector<AGE::Drawable> const &objectRender);
+		ShadingManager &draw(AGE::Vector<AGE::Drawable> const &objectRender);
 
 	private:
 		std::map<Key<Shader>, Shader> _shaders;
@@ -143,6 +148,7 @@ namespace gl
 		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
 		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
 		std::pair<Key<Material>, Material *> _optimizeMaterialSearch;
+		AGE::Vector<BindingShader> _bindShader;
 
 		// tool use in intern
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
@@ -150,6 +156,9 @@ namespace gl
 		Texture *getTexture(Key<Texture> const &key, std::string const &in);
 		RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
 		Material *getMaterial(Key<Material> const &key, std::string const &in);
+		void bindShaderToRenderPass(Key<RenderPass> const &r, Key<Shader> const &s);
+		void unbindShaderToRenderPass(Key<Shader> const &s);
+		void unbindRenderPassToShader(Key<RenderPass> const &r);
 	};
 
 	template <typename TYPE>

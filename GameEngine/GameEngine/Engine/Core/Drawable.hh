@@ -4,6 +4,12 @@
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <Utils/Containers/Vector.hpp>
+#include <Render/Key.hh>
+
+namespace gl
+{
+	class RenderPass;
+}
 
 namespace AGE
 {

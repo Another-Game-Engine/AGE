@@ -5,6 +5,8 @@
 
 namespace gl
 {
+	class Storage;
+
 	class Framebuffer
 	{
 	public:
@@ -16,6 +18,7 @@ namespace gl
 		Framebuffer const &size(GLint width, GLint height, GLint sample = 1) const;
 		Framebuffer const &bind() const;
 		Framebuffer const &unbind() const;
+		Framebuffer const &attachement(Storage const &storage, GLenum attach) const;
 		GLuint getId() const;
 		GLenum getType() const;
 

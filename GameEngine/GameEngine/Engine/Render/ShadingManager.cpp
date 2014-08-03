@@ -54,6 +54,7 @@ namespace gl
 		if (getShader(key, "rmShader()") == NULL)
 			return (*this);
 		_shaders.erase(key);
+		unbindShaderToRenderPass(key);
 		key.destroy();
 		return (*this);
 	}
@@ -66,18 +67,6 @@ namespace gl
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
-	}
-
-	ShadingManager &ShadingManager::postDraw(Key<Shader> const &key, Key<Material> const &materialKey, glm::mat4 const &mat)
-	{
-		Shader *shader;
-		Material *material;
-		if ((shader = getShader(key, "updateMemoryShader")) == NULL)
-			return (*this);
-		if ((material = getMaterial(materialKey, "updateMemoryShader")) == NULL)
-			return (*this);
-		shader->postDraw(*material, mat);
-		return (*this);
 	}
 
 	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &key, size_t target)
@@ -425,6 +414,7 @@ namespace gl
 	{
 		if (getRenderPass(key, "rmRenderPass") == NULL)
 			return (*this);
+		unbindRenderPassToShader(key);
 		_renderPass.erase(key);
 		key.destroy();
 		return (*this);
@@ -438,6 +428,56 @@ namespace gl
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
+	}
+
+	void ShadingManager::bindShaderToRenderPass(Key<RenderPass> const &r, Key<Shader> const &s)
+	{
+		Shader *shader;
+		RenderPass *renderPass;
+
+		if ((shader = getShader(s, "bindShaderToRenderPass")) == NULL)
+			return;
+		if ((renderPass = getRenderPass(r, "bindShaderToRenderPass")) == NULL)
+			return;
+		renderPass->bindShader(shader);
+	}
+
+	void ShadingManager::unbindRenderPassToShader(Key<RenderPass> const &r)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(r, "unbindRenderPassToShader")) == NULL)
+			return ;
+		renderPass->bindShader(NULL);
+	}
+
+	void ShadingManager::unbindShaderToRenderPass(Key<Shader> const &s)
+	{
+		for (size_t index = 0; index < _bindShader.size(); ++index)
+		{
+			if (_bindShader[index].s == s)
+			{
+				RenderPass *renderPass;
+				if ((renderPass = getRenderPass(_bindShader[index].r, "unbindRenderPassToShader")) == NULL)
+					return;
+				renderPass->bindShader(NULL);
+			}
+		}
+	}
+
+	ShadingManager &ShadingManager::bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s)
+	{
+		for (size_t index = 0; index < _bindShader.size(); ++index)
+		{
+			if (_bindShader[index].s == s)
+			{
+				_bindShader[index].r = r;
+				bindShaderToRenderPass(r, s);
+				return (*this);
+			}
+		}
+		_bindShader.push_back(BindingShader(r, s));
+		bindShaderToRenderPass(r, s);
+		return (*this);
 	}
 
 	ShadingManager &ShadingManager::pushClearTaskRenderPass(Key<RenderPass> const &key, bool color, bool depth, bool stencil)
@@ -610,23 +650,27 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::draw(GLenum mode, Key<Shader> const &keyShader, Key<RenderPass> const &keyRenderPass, AGE::Vector<AGE::Drawable> const &objectRender)
+	ShadingManager &ShadingManager::setModeRenderPass(Key<RenderPass> const &key, GLenum mode)
 	{
-		Shader *shader;
 		RenderPass *renderPass;
-		if ((shader = getShader(keyShader, "draw")) == NULL)
+
+		if ((renderPass = getRenderPass(key, "setModeRenderPass")) == NULL)
 			return (*this);
-		if ((renderPass = getRenderPass(keyRenderPass, "draw")) == NULL)
-			return (*this);
-		shader->use();
-		renderPass->update();
+		renderPass->setMode(mode);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
+	{
 		for (size_t index = 0; index < objectRender.size(); ++index)
 		{
 			Material *material;
 			if ((material = getMaterial(objectRender[index].material, "draw")) == NULL)
 				return (*this);
-			shader->postDraw(*material, objectRender[index].transformation);
-			geometryManager.draw(mode, objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
+			RenderPass *renderPass = material->get<Render_Pass>();
+			renderPass->update();
+			renderPass->accessShader()->preDraw(*material, objectRender[index].transformation);
+			geometryManager.draw(renderPass->getMode(), objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
 		}
 		return (*this);
 	}
@@ -657,6 +701,19 @@ namespace gl
 		for (size_t index = 0; index < target; ++index)
 			++element;
 		return (element->first);
+	}
+
+	ShadingManager &ShadingManager::setRenderPassMaterial(Key<Material> const &m, Key<RenderPass> const &r)
+	{
+		RenderPass *renderPass;
+		Material *material;
+
+		if ((renderPass = getRenderPass(r, "setRenderPassMaterial")) == NULL)
+			return (*this);
+		if ((material = getMaterial(m, "setRenderPassMaterial")) == NULL)
+			return (*this);
+		material->set<Render_Pass>(renderPass);
+		return (*this);
 	}
 
 	ShadingManager &ShadingManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)

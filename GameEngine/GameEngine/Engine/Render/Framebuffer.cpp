@@ -1,4 +1,5 @@
 #include <Render/Framebuffer.hh>
+#include <Render/Storage.hh>
 
 namespace gl
 {
@@ -52,5 +53,11 @@ namespace gl
 	GLenum Framebuffer::getType() const
 	{
 		return (_mode);
+	}
+
+	Framebuffer const &Framebuffer::attachement(Storage const &storage, GLenum attach) const
+	{
+		storage.attachement(*this, attach);
+		return (*this);
 	}
 }

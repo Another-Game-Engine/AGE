@@ -16,7 +16,9 @@ namespace gl
 	RenderPass::RenderPass()
 		: _stencilSize(-1),
 		_rect(glm::ivec4(0, 0, 512, 512)),
-		_sample(1)
+		_sample(1),
+		_shader(NULL),
+		_mode(GL_TRIANGLES)
 	{
 	}
 
@@ -34,7 +36,9 @@ namespace gl
 	RenderPass::RenderPass(RenderPass const &copy)
 		: _stencilSize(copy._stencilSize),
 		_rect(copy._rect),
-		_sample(copy._sample)
+		_sample(copy._sample),
+		_shader(copy._shader),
+		_mode(copy._mode)
 	{
 	}
 
@@ -45,6 +49,8 @@ namespace gl
 			_stencilSize = r._stencilSize;
 			_rect = r._rect;
 			_sample = r._sample;
+			_shader = r._shader;
+			_mode = r._mode;
 		}
 		return (*this);
 	}
@@ -251,6 +257,8 @@ namespace gl
 
 	RenderPass &RenderPass::update()
 	{
+		if (_shader == NULL)
+			DEBUG_MESSAGE("Warning", "RenderPass - update", "shader bind to renderPass assign to NULL", *this);
 		//_fbo.bind();
 		//_fbo.size(_rect.z, _rect.w, _sample);
 		_fbo.viewPort(_rect);
@@ -272,5 +280,26 @@ namespace gl
 		_sample = sample;
 		return (*this);
 	}
+
+	RenderPass &RenderPass::bindShader(Shader *shader)
+	{
+		_shader = shader;
+		return (*this);
+	}
 	
+	Shader *RenderPass::accessShader() const
+	{
+		return (_shader);
+	}
+
+	RenderPass &RenderPass::setMode(GLenum mode)
+	{
+		_mode = mode;
+		return (*this);
+	}
+
+	GLenum RenderPass::getMode() const
+	{
+		return (_mode);
+	}
 }

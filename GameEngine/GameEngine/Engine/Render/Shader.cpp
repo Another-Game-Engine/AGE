@@ -561,7 +561,7 @@ namespace gl
 		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&mat);
 	}
 
-	void Shader::postDraw(Material const &material, glm::mat4 const &transform)
+	void Shader::preDraw(Material const &material, glm::mat4 const &transform)
 	{
 		use();
 		setTransformationTask(transform);

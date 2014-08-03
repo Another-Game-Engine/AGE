@@ -59,6 +59,13 @@ namespace gl
 
 		bool stencilSizeValid();
 		RenderPass &config(glm::ivec4 const &rect, GLint sample = 1);
+		RenderPass &bindShader(Shader *shader);
+		Shader *accessShader() const;
+		RenderPass &setMode(GLenum mode);
+		GLenum getMode() const;
+
+		//RenderPass &addInput(Storage const &storage);
+		//RenderPass &addOutput(Storage const &storage);
 
 	private:
 		AGE::Vector<Task> _tasks;
@@ -66,7 +73,8 @@ namespace gl
 		Framebuffer _fbo;
 		glm::ivec4 _rect;
 		GLint _sample;
-
+		Shader *_shader;
+		GLenum _mode;
 	};
 
 }
