@@ -19,6 +19,7 @@ namespace gl
 	struct Sampler{};
 	struct Uniform{};
 	struct InterfaceBlock{};
+	struct Output{};
 
 	struct MaterialBind
 	{
@@ -113,6 +114,10 @@ namespace gl
 		size_t getIndexSampler(Key<Sampler> const &key, std::string const &msg);
 		Task *getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
 		size_t getIndexInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
+		Task *getOutput(Key<Output> const &key, std::string const &msg);
+		size_t getIndexOutput(Key<Output> const &key, std::string const &msg);
+
+
 		GLuint getUniformLocation(char const *flag);
 		GLuint getUniformBlockLocation(char const *flag);
 		size_t getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg);
@@ -121,7 +126,6 @@ namespace gl
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
 		void createUniformBlockTask(Task &task, std::string const &flag, UniformBlock const &ubo);
-		
 		void setMaterialBinding(MaterialBind &bind, size_t index, size_t offset);
 		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **), void *data);
 		void setSamplerTask(Task &task, Texture const &texture);

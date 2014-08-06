@@ -280,10 +280,12 @@ namespace gl
 		task.indexToTarget = 1;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
+		
 		task.params[0] = new GLuint;
 		task.sizeParams[0] = sizeof(GLuint);
 		GLuint location = getUniformLocation(flag.c_str());
 		*(GLuint *)task.params[0] = location;
+		
 		task.params[1] = NULL;
 		task.sizeParams[1] = 0;
 	}

@@ -36,6 +36,7 @@ namespace gl
 	void setUniformFloat(void **);
 	void setUniformVec4(void **);
 	void setUniformSampler(void **);
+	void setFragDataLocation(void **);
 
 	struct Task
 	{

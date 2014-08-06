@@ -321,20 +321,28 @@ namespace gl
 		return (&uniformBlock->second);
 	}
 
-	RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key, std::string const &in)
+	size_t ShadingManager::getRenderPassIndex(Key<RenderPass> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", -1);
 		if (_renderPass.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", -1);
 		if (key == _optimizeRenderPassSearch.first)
 			return (_optimizeRenderPassSearch.second);
-		auto &renderPass = _renderPass.find(key);
-		if (renderPass == _renderPass.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+		auto &renderPassIndex = _renderPass.find(key);
+		if (renderPassIndex == _renderPass.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", -1);
 		_optimizeRenderPassSearch.first = key;
-		_optimizeRenderPassSearch.second = &renderPass->second;
-		return (&renderPass->second);
+		_optimizeRenderPassSearch.second = renderPassIndex->second;
+		return (renderPassIndex->second);
+	}
+
+	RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key, std::string const &in)
+	{
+		size_t index;
+		if ((index = getRenderPassIndex(key, in)) == -1)
+			return (NULL);
+		return (&_renderPassPool[index]);
 	}
 
 	Material *ShadingManager::getMaterial(Key<Material> const &key, std::string const &in)
@@ -402,11 +410,19 @@ namespace gl
 	Key<RenderPass> ShadingManager::addRenderPass(Key<Shader> const &keyShader)
 	{
 		Key<RenderPass> key;
-		Shader *shader;
 
-		if ((shader = getShader(keyShader, "addRenderPass")) == NULL)
-			return (Key<RenderPass>(KEY_DESTROY));
-		_renderPass[key] = RenderPass();
+		_renderPassPool.push_back(RenderPass());
+		_renderPass[key] = _renderPassPool.size() - 1;
+		bindShaderRenderPass(key, keyShader);
+		return (key);
+	}
+
+	Key<RenderPass> ShadingManager::addRenderPass()
+	{
+		Key<RenderPass> key;
+
+		_renderPassPool.push_back(RenderPass());
+		_renderPass[key] = _renderPassPool.size() - 1;
 		return (key);
 	}
 
@@ -662,17 +678,14 @@ namespace gl
 
 	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
 	{
-		if (objectRender.size() == 0)
-			return (*this);
-		Material *material;
-		if ((material = getMaterial(objectRender[0].material, "draw")) == NULL)
-			return (*this);
-		RenderPass *renderPass = material->get<Render_Pass>();
-		renderPass->update();
-		for (size_t index = 1; index < objectRender.size(); ++index)
+		for (size_t index = 0; index < _renderPassPool.size(); ++index)
+			_renderPassPool[index].update();
+		for (size_t index = 0; index < objectRender.size(); ++index)
 		{
+			Material *material;
 			if ((material = getMaterial(objectRender[index].material, "draw")) == NULL)
 				return (*this);
+			RenderPass *renderPass = material->get<Render_Pass>();
 			renderPass->accessShader()->preDraw(*material, objectRender[index].transformation);
 			geometryManager.draw(renderPass->getMode(), objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
 		}

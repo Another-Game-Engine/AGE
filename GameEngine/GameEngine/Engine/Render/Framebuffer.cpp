@@ -3,14 +3,11 @@
 
 namespace gl
 {
-	Framebuffer::Framebuffer(GLenum mode, GLint width, GLint height, GLint sampler)
+	Framebuffer::Framebuffer(GLenum mode)
 		: _id(0),
 		_mode(mode)
 	{
 		glGenFramebuffers(1, &_id);
-		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_WIDTH, width);
-		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_HEIGHT, height);
-		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_SAMPLES, sampler);
 	}
 
 	Framebuffer::~Framebuffer()

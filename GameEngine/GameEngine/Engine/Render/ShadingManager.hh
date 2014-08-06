@@ -64,7 +64,7 @@ namespace gl
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3);
-		
+
 		// sampler
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
@@ -106,6 +106,7 @@ namespace gl
 		GLenum getTypeTexture(Key<Texture> const &key);
 
 		// RenderPass
+		Key<RenderPass> addRenderPass();
 		Key<RenderPass> addRenderPass(Key<Shader> const &shader);
 		ShadingManager &rmRenderPass(Key<RenderPass> &key);
 		Key<RenderPass> getRenderPass(size_t target) const;
@@ -141,19 +142,21 @@ namespace gl
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
 		std::map<Key<Material>, Material> _materials;
-		std::map<Key<RenderPass>, RenderPass> _renderPass;
+		std::map<Key<RenderPass>, size_t> _renderPass;
 
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
 		std::pair<Key<UniformBlock>, UniformBlock *> _optimizeUniformBlockSearch;
 		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
-		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
+		std::pair<Key<RenderPass>, size_t> _optimizeRenderPassSearch;
 		std::pair<Key<Material>, Material *> _optimizeMaterialSearch;
 		AGE::Vector<BindingShader> _bindShader;
+		AGE::Vector<RenderPass> _renderPassPool;
 
 		// tool use in intern
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key, std::string const &in);
 		Texture *getTexture(Key<Texture> const &key, std::string const &in);
+		size_t getRenderPassIndex(Key<RenderPass> const &key, std::string const &in);
 		RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
 		Material *getMaterial(Key<Material> const &key, std::string const &in);
 		void bindShaderToRenderPass(Key<RenderPass> const &r, Key<Shader> const &s);

@@ -10,7 +10,7 @@ namespace gl
 	class Framebuffer
 	{
 	public:
-		Framebuffer(GLenum mode = GL_FRAMEBUFFER, GLint width = 512, GLint height = 512, GLint sampler = 1);
+		Framebuffer(GLenum mode = GL_FRAMEBUFFER);
 		~Framebuffer();
 
 		// bind

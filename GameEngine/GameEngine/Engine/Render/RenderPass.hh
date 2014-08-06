@@ -64,9 +64,6 @@ namespace gl
 		RenderPass &setMode(GLenum mode);
 		GLenum getMode() const;
 
-		//RenderPass &addInput(Storage const &storage);
-		//RenderPass &addOutput(Storage const &storage);
-
 	private:
 		AGE::Vector<Task> _tasks;
 		GLint _stencilSize;
