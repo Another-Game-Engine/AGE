@@ -14,6 +14,8 @@ namespace gl
 
 	ShadingManager::~ShadingManager()
 	{
+		for (auto it = _textures.begin(); it != _textures.end(); ++it)
+			delete it->second;
 	}
 
 	Key<Shader> ShadingManager::addShader(std::string const &compute)

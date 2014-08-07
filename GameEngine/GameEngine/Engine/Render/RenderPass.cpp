@@ -18,7 +18,8 @@ namespace gl
 		_rect(glm::ivec4(0, 0, 512, 512)),
 		_sample(1),
 		_shader(NULL),
-		_mode(GL_TRIANGLES)
+		_mode(GL_TRIANGLES),
+		_colorOutputTarget(NULL)
 	{
 	}
 
@@ -31,6 +32,9 @@ namespace gl
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
 		}
+		delete[] _colorOutputTarget;
+		for (size_t index = 0; index < _colorOutput.size(); ++index)
+			delete _colorOutput[index].second;
 	}
 
 	RenderPass::RenderPass(RenderPass const &copy)
@@ -38,7 +42,8 @@ namespace gl
 		_rect(copy._rect),
 		_sample(copy._sample),
 		_shader(copy._shader),
-		_mode(copy._mode)
+		_mode(copy._mode),
+		_colorOutputTarget(NULL)
 	{
 	}
 
@@ -259,8 +264,8 @@ namespace gl
 	{
 		if (_shader == NULL)
 			DEBUG_MESSAGE("Warning", "RenderPass - update", "shader bind to renderPass assign to NULL", *this);
-		//_fbo.bind();
-		//_fbo.size(_rect.z, _rect.w, _sample);
+		_fbo.bind();
+		_fbo.size(_rect.z, _rect.w, _sample);
 		_fbo.viewPort(_rect);
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
@@ -301,5 +306,22 @@ namespace gl
 	GLenum RenderPass::getMode() const
 	{
 		return (_mode);
+	}
+
+	RenderPass &RenderPass::addColorOutput(GLenum target, GLenum internalFormat)
+	{
+		_colorOutput.push_back(std::make_pair(target, new Texture2D(_rect.z, _rect.w, internalFormat, false)));
+		_fbo.bind();
+		if (_colorOutputTarget)
+			delete _colorOutputTarget;
+		_colorOutputTarget = new GLenum[_colorOutput.size()];
+		for (size_t index = 0; index < _colorOutput.size(); ++index)
+		{
+			_colorOutputTarget[index] = _colorOutput[index].first;
+			_colorOutput[index].second->attachement(_fbo, _colorOutputTarget[index]);
+		}
+		glDrawBuffers(_colorOutput.size(), _colorOutputTarget);
+		_fbo.unbind();
+		return (*this);
 	}
 }

@@ -57,12 +57,15 @@ namespace gl
 		RenderPass &pushSetTestTask(bool scissor, bool stencil, bool depth);
 		RenderPass &popTask();
 
+		RenderPass &addColorOutput(GLenum target, GLenum internalFormat);
+
 		bool stencilSizeValid();
 		RenderPass &config(glm::ivec4 const &rect, GLint sample = 1);
 		RenderPass &bindShader(Shader *shader);
 		Shader *accessShader() const;
 		RenderPass &setMode(GLenum mode);
 		GLenum getMode() const;
+
 
 	private:
 		AGE::Vector<Task> _tasks;
@@ -72,6 +75,8 @@ namespace gl
 		GLint _sample;
 		Shader *_shader;
 		GLenum _mode;
+		GLenum *_colorOutputTarget;
+		AGE::Vector<std::pair<GLenum, Texture2D *>> _colorOutput;
 	};
 
 }
