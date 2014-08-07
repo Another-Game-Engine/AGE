@@ -5,6 +5,7 @@
 #include <Core/Drawable.hh>
 #include <Render/OpenGLTask.hh>
 #include <Render/GeometryManager.hh>
+#include <Render/Storage.hh>
 
 # undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -19,7 +20,7 @@ namespace gl
 		_sample(1),
 		_shader(NULL),
 		_mode(GL_TRIANGLES),
-		_colorOutputTarget(NULL)
+		_updateColorOutput(false)
 	{
 	}
 
@@ -32,7 +33,6 @@ namespace gl
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
 		}
-		delete[] _colorOutputTarget;
 		for (size_t index = 0; index < _colorOutput.size(); ++index)
 			delete _colorOutput[index].second;
 	}
@@ -43,7 +43,7 @@ namespace gl
 		_sample(copy._sample),
 		_shader(copy._shader),
 		_mode(copy._mode),
-		_colorOutputTarget(NULL)
+		_updateColorOutput(false)
 	{
 	}
 
@@ -269,6 +269,18 @@ namespace gl
 		_fbo.viewPort(_rect);
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
+		if (_updateColorOutput)
+		{
+			GLenum *targeted;
+			targeted = new GLenum[_colorOutput.size()];
+			for (size_t index = 0; index < _colorOutput.size(); ++index)
+			{
+				targeted[index] = _colorOutput[index].first;
+				_colorOutput[index].second->attachement(_fbo, targeted[index]);
+			}
+			glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
+			_updateColorOutput = true;
+		}
 		return (*this);
 	}
 
@@ -310,18 +322,8 @@ namespace gl
 
 	RenderPass &RenderPass::addColorOutput(GLenum target, GLenum internalFormat)
 	{
-		_colorOutput.push_back(std::make_pair(target, new Texture2D(_rect.z, _rect.w, internalFormat, false)));
-		_fbo.bind();
-		if (_colorOutputTarget)
-			delete _colorOutputTarget;
-		_colorOutputTarget = new GLenum[_colorOutput.size()];
-		for (size_t index = 0; index < _colorOutput.size(); ++index)
-		{
-			_colorOutputTarget[index] = _colorOutput[index].first;
-			_colorOutput[index].second->attachement(_fbo, _colorOutputTarget[index]);
-		}
-		glDrawBuffers(_colorOutput.size(), _colorOutputTarget);
-		_fbo.unbind();
+		_colorOutput.push_back(std::make_pair(target, new Texture2D(_rect.z, _rect.w, internalFormat, true)));
+		_updateColorOutput = true;
 		return (*this);
 	}
 }

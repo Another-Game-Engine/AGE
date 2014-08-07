@@ -3,7 +3,6 @@
 #include <Utils/OpenGL.hh>
 #include <glm/glm.hpp>
 #include <stdint.h>
-#include <tuple>
 #include <utility>
 #include <Utils/Containers/Vector.hpp>
 #include <functional>
@@ -20,6 +19,7 @@ namespace gl
 	struct Uniform;
 	struct Sampler;
 	class GeometryManager;
+	class Texture2D;
 
 	//!\file RenderPass.hh
 	//!\author Dorian Pinaud
@@ -75,7 +75,7 @@ namespace gl
 		GLint _sample;
 		Shader *_shader;
 		GLenum _mode;
-		GLenum *_colorOutputTarget;
+		bool _updateColorOutput;
 		AGE::Vector<std::pair<GLenum, Texture2D *>> _colorOutput;
 	};
 

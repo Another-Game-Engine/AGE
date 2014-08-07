@@ -130,10 +130,11 @@ namespace gl
 		ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
 		ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest);
 		ShadingManager &pushSetBlendConstantTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendPass);
+		ShadingManager &popTaskRenderPass(Key<RenderPass> const &key);
 		ShadingManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLint sample = 1);
 		ShadingManager &setModeRenderPass(Key<RenderPass> const &renderPass, GLenum mode);
+		ShadingManager &addColorOutputRenderPass(Key<RenderPass> const &renderPass, GLenum target, GLenum internalFormat);
 
-		ShadingManager &popTaskRenderPass(Key<RenderPass> const &key);
 
 		ShadingManager &draw(AGE::Vector<AGE::Drawable> const &objectRender);
 

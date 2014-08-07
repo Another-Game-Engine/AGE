@@ -55,7 +55,7 @@ namespace gl
 		_rect(glm::ivec4(0, 0, width, height))
 	{
 		glBindTexture(GL_TEXTURE_2D, _id);
-		glTexStorage2D(GL_TEXTURE_2D, getMaxLevelMipMap(), _internalFormat, _width, _height);
+		glTexStorage2D(GL_TEXTURE_2D, _mipMapLevels, _internalFormat, _width, _height);
 	}
 
 	Texture2D::~Texture2D()

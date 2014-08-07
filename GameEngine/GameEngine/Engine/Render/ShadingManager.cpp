@@ -668,6 +668,15 @@ namespace gl
 		return (*this);
 	}
 
+	ShadingManager &ShadingManager::addColorOutputRenderPass(Key<RenderPass> const &key, GLenum target, GLenum internalFormat)
+	{
+		RenderPass *renderPass;
+		if ((renderPass = getRenderPass(key, "addColorOutputRenderPass")) == NULL)
+			return (*this);
+		renderPass->addColorOutput(target, internalFormat);
+		return (*this);
+	}
+
 	ShadingManager &ShadingManager::setModeRenderPass(Key<RenderPass> const &key, GLenum mode)
 	{
 		RenderPass *renderPass;

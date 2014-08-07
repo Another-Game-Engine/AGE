@@ -124,6 +124,7 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
 	_render->configRenderPass(_renderPass, glm::ivec4(0, 0, 800, 600));
+	_render->addColorOutputRenderPass(_renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
 }
 #endif
 
