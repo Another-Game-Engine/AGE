@@ -58,6 +58,8 @@ namespace gl
 		RenderPass &popTask();
 
 		RenderPass &addColorOutput(GLenum target, GLenum internalFormat);
+		RenderPass &attachInput(RenderPass const &input);
+		RenderPass &dettachInput();
 
 		bool stencilSizeValid();
 		RenderPass &config(glm::ivec4 const &rect, GLint sample = 1);
@@ -74,8 +76,10 @@ namespace gl
 		glm::ivec4 _rect;
 		GLint _sample;
 		Shader *_shader;
+		RenderPass const *_input;
 		GLenum _mode;
 		bool _updateColorOutput;
+		bool _updateInput;
 		AGE::Vector<std::pair<GLenum, Texture2D *>> _colorOutput;
 	};
 

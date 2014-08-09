@@ -269,6 +269,7 @@ namespace gl
 		_fbo.viewPort(_rect);
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
+		// update output
 		if (_updateColorOutput)
 		{
 			GLenum *targeted;
@@ -280,6 +281,15 @@ namespace gl
 			}
 			glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
 			_updateColorOutput = true;
+		}
+		// update input
+		if (_updateInput)
+		{
+			for (size_t index = 0; index < _input->_colorOutput.size(); ++index)
+			{
+				Key<InputSampler> const &key = _shader->getInputSampler(index);
+				_shader->setInputSampler(key, *(_input->_colorOutput[index].second));
+			}
 		}
 		return (*this);
 	}
@@ -324,6 +334,20 @@ namespace gl
 	{
 		_colorOutput.push_back(std::make_pair(target, new Texture2D(_rect.z, _rect.w, internalFormat, true)));
 		_updateColorOutput = true;
+		return (*this);
+	}
+
+	RenderPass &RenderPass::attachInput(RenderPass const &input)
+	{
+		_input = &input;
+		_updateInput = true;
+		return (*this);
+	}
+
+	RenderPass &RenderPass::dettachInput()
+	{
+		_updateInput = false;
+		_input = NULL;
 		return (*this);
 	}
 }

@@ -135,7 +135,6 @@ namespace gl
 		ShadingManager &setModeRenderPass(Key<RenderPass> const &renderPass, GLenum mode);
 		ShadingManager &addColorOutputRenderPass(Key<RenderPass> const &renderPass, GLenum target, GLenum internalFormat);
 
-
 		ShadingManager &draw(AGE::Vector<AGE::Drawable> const &objectRender);
 
 	private:
