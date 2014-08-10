@@ -137,7 +137,7 @@ namespace gl
 		ShadingManager &rmRender(Key<Render> &key);
 		Key<Render> getRender(size_t target) const;
 		ShadingManager &bindShaderRender(Key<Render> const &r, Key<Shader> const &s);
-		ShadingManager &setInputRender(Key<Render> const &target, Key<RenderPass> const &input);
+		ShadingManager &bindInputRender(Key<Render> const &target, Key<RenderPass> const &input);
 
 		ShadingManager &pushClearTaskRender(Key<Render> const &key, bool color = true, bool depth = true, bool stencil = false);
 		ShadingManager &pushSetClearValueTaskRender(Key<Render> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
@@ -158,10 +158,10 @@ namespace gl
 		ShadingManager &pushSetBlendFuncTaskRender(Key<Render> const &key, GLenum src, GLenum dest);
 		ShadingManager &pushSetBlendConstantTaskRender(Key<Render> const &key, glm::vec4 const &blendPass);
 		ShadingManager &popTaskRender(Key<Render> const &key);
-		ShadingManager &configRender(Key<Render> const &renderPass, glm::ivec4 const &rect);
-		ShadingManager &setModeRender(Key<Render> const &renderPass, GLenum mode);
+		ShadingManager &configRender(Key<Render> const &render, glm::ivec4 const &rect);
+		ShadingManager &setModeRender(Key<Render> const &render, GLenum mode);
 
-
+		// drawing
 		ShadingManager &draw(AGE::Vector<AGE::Drawable> const &objectRender);
 
 	private:
@@ -204,7 +204,7 @@ namespace gl
 		void unbindShaderToRendering(Shader *s);
 
 		// tool use in intern for bind render and renderPass
-		void addBindTargetToTarget(Render *t, RenderPass *i);
+		void addBindTargetToInput(Render *t, RenderPass *i);
 		void unbindRenderingTarget(Render *r);
 		void unbindRenderingInput(RenderPass *r);
 	};

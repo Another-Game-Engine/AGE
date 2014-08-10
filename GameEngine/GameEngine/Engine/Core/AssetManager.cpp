@@ -215,7 +215,7 @@ namespace AGE
 			}
 			++ctr;
 		}
-		mesh.vertices = geometryManager.addVertices(maxSize, size, nbrBuffer.data(), buffer.data());
+		mesh.vertices = geometryManager.addVertices(maxSize, uint8_t(size), nbrBuffer.data(), buffer.data());
 		mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
 		mesh.bounding = data.boundingInfos;
 //		mesh.name = data.name; // TODO
@@ -292,7 +292,7 @@ namespace AGE
 			++ctr;
 		}
 
-		auto vpKey = geometryManager->addVertexPool(size, typeComponent, sizeTypeComponent, nbrComponent);
+		auto vpKey = geometryManager->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
 		auto indKey = geometryManager->addIndexPool();
 
 		geometryManager->attachIndexPoolToVertexPool(vpKey, indKey);
