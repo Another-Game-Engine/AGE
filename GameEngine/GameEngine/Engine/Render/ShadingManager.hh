@@ -200,9 +200,11 @@ namespace gl
 		Material *getMaterial(Key<Material> const &key, std::string const &in);
 		
 		// tool use in intern for bind shader to render/renderPass
+		void addBindShaderToRendering(Render *r, Shader *s);
 		void unbindShaderToRendering(Shader *s);
 
 		// tool use in intern for bind render and renderPass
+		void addBindTargetToTarget(Render *t, RenderPass *i);
 		void unbindRenderingTarget(Render *r);
 		void unbindRenderingInput(RenderPass *r);
 	};

@@ -12,7 +12,7 @@
 #include <Render/Framebuffer.hh>
 #include <Render/Shader.hh>
 
-namespace AGE { class Drawable; }
+namespace AGE { struct Drawable; }
 
 namespace gl
 {

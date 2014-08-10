@@ -525,16 +525,21 @@ namespace gl
 		if ((shader = getShader(s, "bindShaderRenderPass")) == NULL)
 			return (*this);
 		render->bindShader(shader);
+		addBindShaderToRendering(render, shader);
+		return (*this);
+	}
+
+	void ShadingManager::addBindShaderToRendering(Render *r, Shader *s)
+	{
 		for (size_t index = 0; index < _bindShader.size(); ++index)
 		{
-			if (_bindShader[index].s == shader)
+			if (_bindShader[index].s == s)
 			{
-				_bindShader[index].r = render;
-				return (*this);
+				_bindShader[index].r = r;
+				return ;
 			}
 		}
-		_bindShader.push_back(BindingShader(render, shader));
-		return (*this);
+		_bindShader.push_back(BindingShader(r, s));
 	}
 
 	ShadingManager &ShadingManager::bindInputRenderPass(Key<RenderPass> const &t, Key<RenderPass> const &i)
@@ -546,16 +551,21 @@ namespace gl
 		if ((input = getRenderPass(i, "bindInputRenderPass")) == NULL)
 			return (*this);
 		target->bindInput(*input);
+		addBindTargetToInput(target, input);
+		return (*this);
+	}
+
+	void ShadingManager::addBindTargetToInput(Render *t, RenderPass *i)
+	{
 		for (size_t index = 0; index < _bindRendering.size(); ++index)
 		{
-			if (_bindRendering[index].target == target)
+			if (_bindRendering[index].target == t)
 			{
-				_bindRendering[index].input = input;
-				return (*this);
+				_bindRendering[index].input = i;
+				return ;
 			}
 		}
-		_bindRendering.push_back(BindingRenderPass(target, input));
-		return (*this);
+		_bindRendering.push_back(BindingRenderPass(t, i));
 	}
 
 	ShadingManager &ShadingManager::pushClearTaskRenderPass(Key<RenderPass> const &key, bool color, bool depth, bool stencil)
