@@ -10,12 +10,12 @@
 #include <Render/UniformBlock.hh>
 #include <Render/OpenGLTask.hh>
 #include <Render/Framebuffer.hh>
+#include <Render/Shader.hh>
 
 namespace AGE { class Drawable; }
 
 namespace gl
 {
-	class Shader;
 	struct Uniform;
 	struct Sampler;
 	class GeometryManager;
@@ -26,7 +26,62 @@ namespace gl
 	//!\version v1.0
 	//!\class RenderPass
 	//!\brief Handle one of opengl render pass
-	class RenderPass
+	class Render
+	{
+	public:
+		Render();
+		~Render();
+		Render(Render const &copy);
+		Render &operator=(Render const &r);
+
+		virtual Render &update();
+
+		Render &pushSetScissorTask(glm::ivec4 const &area);
+		Render &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
+		Render &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
+		Render &pushSetDepthMaskTask(bool depth);
+		Render &pushSetStencilMaskTask(uint8_t front, uint8_t back);
+		Render &pushClearTask(bool color, bool depth, bool stencil);
+		Render &pushSetStencilFunctionFrontFaceTask(GLenum func, int ref, uint8_t mask);
+		Render &pushSetStencilOperationFrontFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		Render &pushSetStencilFunctionBackFaceTask(GLenum func, int ref, uint8_t mask);
+		Render &pushSetStencilOperationBackFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		Render &pushSetStencilFunctionTask(GLenum func, int ref, uint8_t mask);
+		Render &pushSetStencilOperationTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		Render &pushSetBlendTask(int drawBuffer, bool state);
+		Render &pushSetBlendEquationTask(GLenum colorMode, GLenum alphaMode);
+		Render &pushSetBlendEquationTask(GLenum mode);
+		Render &pushSetBlendFuncTask(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
+		Render &pushSetBlendFuncTask(GLenum src, GLenum dest);
+		Render &pushSetBlendConstantTask(glm::vec4 const &blendColor);
+		Render &pushSetTestTask(bool scissor, bool stencil, bool depth);
+		Render &popTask();
+
+		bool stencilSizeValid();
+		Render &configRect(glm::ivec4 const &rect);
+		Render &bindShader(Shader *shader);
+		Shader *accessShader() const;
+		Render &setMode(GLenum mode);
+		GLenum getMode() const;
+
+		Render &attachInput(RenderPass const &input);
+		Render &dettachInput();
+
+	protected:
+		AGE::Vector<Task> _tasks;
+		GLint _stencilSize;
+		glm::ivec4 _rect;
+		Shader *_shader;
+		GLenum _mode;
+
+		RenderPass const *_input;
+		bool _updateInput;
+
+		void updateInput();
+
+	};
+
+	class RenderPass : public Render
 	{
 	public:
 		RenderPass();
@@ -34,53 +89,51 @@ namespace gl
 		RenderPass(RenderPass const &copy);
 		RenderPass &operator=(RenderPass const &r);
 
-		RenderPass &update();
+		virtual Render &update();
 
-		RenderPass &pushSetScissorTask(glm::ivec4 const &area);
-		RenderPass &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
-		RenderPass &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
-		RenderPass &pushSetDepthMaskTask(bool depth);
-		RenderPass &pushSetStencilMaskTask(uint8_t front, uint8_t back);
-		RenderPass &pushClearTask(bool color, bool depth, bool stencil);
-		RenderPass &pushSetStencilFunctionFrontFaceTask(GLenum func, int ref, uint8_t mask);
-		RenderPass &pushSetStencilOperationFrontFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		RenderPass &pushSetStencilFunctionBackFaceTask(GLenum func, int ref, uint8_t mask);
-		RenderPass &pushSetStencilOperationBackFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		RenderPass &pushSetStencilFunctionTask(GLenum func, int ref, uint8_t mask);
-		RenderPass &pushSetStencilOperationTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		RenderPass &pushSetBlendTask(int drawBuffer, bool state);
-		RenderPass &pushSetBlendEquationTask(GLenum colorMode, GLenum alphaMode);
-		RenderPass &pushSetBlendEquationTask(GLenum mode);
-		RenderPass &pushSetBlendFuncTask(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
-		RenderPass &pushSetBlendFuncTask(GLenum src, GLenum dest);
-		RenderPass &pushSetBlendConstantTask(glm::vec4 const &blendColor);
-		RenderPass &pushSetTestTask(bool scissor, bool stencil, bool depth);
-		RenderPass &popTask();
-
+		RenderPass &configSample(GLint sample);
 		RenderPass &addColorOutput(GLenum target, GLenum internalFormat);
-		RenderPass &attachInput(RenderPass const &input);
-		RenderPass &dettachInput();
-
-		bool stencilSizeValid();
-		RenderPass &config(glm::ivec4 const &rect, GLint sample = 1);
-		RenderPass &bindShader(Shader *shader);
-		Shader *accessShader() const;
-		RenderPass &setMode(GLenum mode);
-		GLenum getMode() const;
-
-
+		Texture2D const &getColorOutput(size_t index) const;
+		size_t getNbrColorOuput() const;
+	
 	private:
-		AGE::Vector<Task> _tasks;
-		GLint _stencilSize;
 		Framebuffer _fbo;
-		glm::ivec4 _rect;
 		GLint _sample;
-		Shader *_shader;
-		RenderPass const *_input;
-		GLenum _mode;
 		bool _updateColorOutput;
-		bool _updateInput;
 		AGE::Vector<std::pair<GLenum, Texture2D *>> _colorOutput;
+
+		void updateOutput();
 	};
 
+	__forceinline void RenderPass::updateOutput()
+	{
+		// update output
+		if (_updateColorOutput)
+		{
+			GLenum *targeted;
+			targeted = new GLenum[_colorOutput.size()];
+			for (size_t index = 0; index < _colorOutput.size(); ++index)
+			{
+				targeted[index] = _colorOutput[index].first;
+				_colorOutput[index].second->attachement(_fbo, targeted[index]);
+			}
+			glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
+			_updateColorOutput = true;
+		}
+	}
+
+	__forceinline void Render::updateInput()
+	{
+		// update input
+		if (_updateInput && _input != NULL)
+		{
+			if (_input->getNbrColorOuput() != _shader->getNbrInputSampler())
+				DEBUG_MESSAGE("Warning", "RenderPass - update", "attach invalid", );
+			for (size_t index = 0; index < _input->getNbrColorOuput(); ++index)
+			{
+				Key<InputSampler> const &key = _shader->getInputSampler(index);
+				_shader->setInputSampler(key, _input->getColorOutput(index));
+			}
+		}
+	}
 }

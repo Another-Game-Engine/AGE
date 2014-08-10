@@ -36,12 +36,6 @@ namespace gl
 		return (*this);
 	}
 
-	Framebuffer const &Framebuffer::viewPort(glm::ivec4 const &rect) const
-	{
-		glViewport(rect.x, rect.y, rect.z, rect.w);
-		return (*this);
-	}
-
 	GLuint Framebuffer::getId() const
 	{
 		return (_id);

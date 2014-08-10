@@ -121,7 +121,7 @@ namespace gl
 		ShadingManager &rmRenderPass(Key<RenderPass> &key);
 		Key<RenderPass> getRenderPass(size_t target) const;
 		ShadingManager &bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s);
-		ShadingManager &setInputRenderPass(Key<RenderPass> const &dest, Key<RenderPass> const &input);
+		ShadingManager &setInputRenderPass(Key<RenderPass> const &target, Key<RenderPass> const &input);
 
 		ShadingManager &pushClearTaskRenderPass(Key<RenderPass> const &key, bool color = true, bool depth = true, bool stencil = false);
 		ShadingManager &pushSetClearValueTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
@@ -175,7 +175,7 @@ namespace gl
 		void unbindShaderToRenderPass(Key<Shader> const &s);
 		void unbindRenderPassToShader(Key<RenderPass> const &r);
 		
-		void bindRenderPassToRenderPass(Key<RenderPass> const &src, Key<RenderPass> const &dest);
+		void bindRenderPassToRenderPass(Key<RenderPass> const &target, Key<RenderPass> const &input);
 		void unbindRenderPassTarget(Key<RenderPass> const &r);
 		void unbindRenderPassInput(Key<RenderPass> const &r);
 	};

@@ -1,7 +1,6 @@
 #include <Render/RenderPass.hh>
 #include <cassert>
 #include <string>
-#include <Render/Shader.hh>
 #include <Core/Drawable.hh>
 #include <Render/OpenGLTask.hh>
 #include <Render/GeometryManager.hh>
@@ -14,20 +13,24 @@
 
 namespace gl
 {
-	RenderPass::RenderPass()
+	Render::Render()
 		: _stencilSize(-1),
 		_rect(glm::ivec4(0, 0, 512, 512)),
-		_sample(1),
 		_shader(NULL),
 		_input(NULL),
 		_mode(GL_TRIANGLES),
-		_updateColorOutput(false),
 		_updateInput(false)
 	{
 	}
 
+	RenderPass::RenderPass()
+		: Render(),
+		_sample(1),
+		_updateColorOutput(false)
+	{
+	}
 
-	RenderPass::~RenderPass()
+	Render::~Render()
 	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{	
@@ -35,38 +38,56 @@ namespace gl
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
 		}
+	}
+
+	RenderPass::~RenderPass()
+	{
 		for (size_t index = 0; index < _colorOutput.size(); ++index)
 			delete _colorOutput[index].second;
 	}
 
-	RenderPass::RenderPass(RenderPass const &copy)
+	Render::Render(Render const &copy)
 		: _stencilSize(copy._stencilSize),
 		_rect(copy._rect),
-		_sample(copy._sample),
-		_shader(copy._shader),
 		_input(copy._input),
+		_shader(copy._shader),
 		_mode(copy._mode),
-		_updateColorOutput(false),
 		_updateInput(true)
 	{
+	}
+
+	RenderPass::RenderPass(RenderPass const &copy)
+		: Render(copy),
+		_sample(copy._sample),
+		_updateColorOutput(false)
+	{
+	}
+
+	Render &Render::operator=(Render const &r)
+	{
+		if (this != &r)
+		{
+			_stencilSize = r._stencilSize;
+			_rect = r._rect;
+			_shader = r._shader;
+			_mode = r._mode;
+		}
+		return (*this);
 	}
 
 	RenderPass &RenderPass::operator=(RenderPass const &r)
 	{
 		if (this != &r)
 		{
-			_stencilSize = r._stencilSize;
-			_rect = r._rect;
+			operator=(r);
 			_sample = r._sample;
-			_shader = r._shader;
 			_input = r._input;
 			_updateInput = true;
-			_mode = r._mode;
 		}
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetScissorTask(glm::ivec4 const &area)
+	Render &Render::pushSetScissorTask(glm::ivec4 const &area)
 	{
 		Task task;
 
@@ -76,7 +97,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil)
+	Render &Render::pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil)
 	{
 		Task task;
 
@@ -86,7 +107,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetColorMaskTask(GLuint index, glm::bvec4 const &color)
+	Render &Render::pushSetColorMaskTask(GLuint index, glm::bvec4 const &color)
 	{
 		Task task;
 
@@ -96,7 +117,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetDepthMaskTask(bool depth)
+	Render &Render::pushSetDepthMaskTask(bool depth)
 	{
 		Task task;
 
@@ -106,7 +127,7 @@ namespace gl
 		return (*this);	return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetStencilMaskTask(uint8_t front, uint8_t back)
+	Render &Render::pushSetStencilMaskTask(uint8_t front, uint8_t back)
 	{
 		Task task;
 
@@ -116,7 +137,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushClearTask(bool color, bool depth, bool stencil)
+	Render &Render::pushClearTask(bool color, bool depth, bool stencil)
 	{
 		Task task;
 
@@ -126,7 +147,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetStencilFunctionFrontFaceTask(GLenum func, int ref, uint8_t mask)
+	Render &Render::pushSetStencilFunctionFrontFaceTask(GLenum func, int ref, uint8_t mask)
 	{
 		Task task;
 
@@ -136,7 +157,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetStencilOperationFrontFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	Render &Render::pushSetStencilOperationFrontFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
 		Task task;
 
@@ -146,7 +167,7 @@ namespace gl
 		return (*this);
 	}
 	
-	RenderPass &RenderPass::pushSetStencilFunctionBackFaceTask(GLenum func, int ref, uint8_t mask)
+	Render &Render::pushSetStencilFunctionBackFaceTask(GLenum func, int ref, uint8_t mask)
 	{
 		Task task;
 		setTaskAllocation(task, func, ref, mask);
@@ -155,7 +176,7 @@ namespace gl
 		return (*this);
 	}
 	
-	RenderPass &RenderPass::pushSetStencilOperationBackFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	Render &Render::pushSetStencilOperationBackFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
 		Task task;
 
@@ -165,7 +186,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetStencilFunctionTask(GLenum func, int ref, uint8_t mask)
+	Render &Render::pushSetStencilFunctionTask(GLenum func, int ref, uint8_t mask)
 	{
 		Task task;
 
@@ -175,7 +196,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetStencilOperationTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	Render &Render::pushSetStencilOperationTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
 	{
 		Task task;
 
@@ -185,7 +206,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetBlendTask(int drawBuffer, bool state)
+	Render &Render::pushSetBlendTask(int drawBuffer, bool state)
 	{
 		Task task;
 
@@ -195,7 +216,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetBlendEquationTask(GLenum colorMode, GLenum alphaMode)
+	Render &Render::pushSetBlendEquationTask(GLenum colorMode, GLenum alphaMode)
 	{
 		Task task;
 
@@ -205,7 +226,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetBlendEquationTask(GLenum mode)
+	Render &Render::pushSetBlendEquationTask(GLenum mode)
 	{
 		Task task;
 
@@ -215,7 +236,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetBlendFuncTask(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
+	Render &Render::pushSetBlendFuncTask(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
 	{
 		Task task;
 
@@ -224,7 +245,7 @@ namespace gl
 		_tasks.push_back(task);
 		return (*this);
 	}
-	RenderPass &RenderPass::pushSetBlendFuncTask(GLenum src, GLenum dest)
+	Render &Render::pushSetBlendFuncTask(GLenum src, GLenum dest)
 	{
 		Task task;
 
@@ -234,7 +255,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetBlendConstantTask(glm::vec4 const &blendColor)
+	Render &Render::pushSetBlendConstantTask(glm::vec4 const &blendColor)
 	{
 		Task task;
 
@@ -244,7 +265,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::pushSetTestTask(bool scissor, bool stencil, bool depth)
+	Render &Render::pushSetTestTask(bool scissor, bool stencil, bool depth)
 	{
 		Task task;
 
@@ -254,7 +275,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::popTask()
+	Render &Render::popTask()
 	{
 		if (!(_tasks.size() > 0))
 			DEBUG_MESSAGE("Warning", "RenderPass - popTask", "No task to pop", *this);
@@ -266,74 +287,69 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::update()
+	Render &Render::update()
+	{
+		if (_shader == NULL)
+			DEBUG_MESSAGE("Warning", "RenderPass - update", "shader bind to renderPass assign to NULL", *this);
+		glViewport(_rect.x, _rect.y, _rect.z, _rect.w);
+		for (size_t index = 0; index < _tasks.size(); ++index)
+			_tasks[index].func(_tasks[index].params);
+		updateInput();
+		return (*this);
+	}
+
+	Render &RenderPass::update()
 	{
 		if (_shader == NULL)
 			DEBUG_MESSAGE("Warning", "RenderPass - update", "shader bind to renderPass assign to NULL", *this);
 		_fbo.bind();
 		_fbo.size(_rect.z, _rect.w, _sample);
-		_fbo.viewPort(_rect);
+		glViewport(_rect.x, _rect.y, _rect.z, _rect.w);
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		// update output
-		if (_updateColorOutput)
-		{
-			GLenum *targeted;
-			targeted = new GLenum[_colorOutput.size()];
-			for (size_t index = 0; index < _colorOutput.size(); ++index)
-			{
-				targeted[index] = _colorOutput[index].first;
-				_colorOutput[index].second->attachement(_fbo, targeted[index]);
-			}
-			glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
-			_updateColorOutput = true;
-		}
-		// update input
-		if (_updateInput && _input != NULL)
-		{
-			if (_colorOutput.size() != _shader->getNbrInputSampler())
-				DEBUG_MESSAGE("Warning", "RenderPass - update", "attach invalid", *this);
-			for (size_t index = 0; index < _input->_colorOutput.size(); ++index)
-			{
-				Key<InputSampler> const &key = _shader->getInputSampler(index);
-				_shader->setInputSampler(key, *(_input->_colorOutput[index].second));
-			}
-		}
+		updateOutput();
+		updateInput();
 		return (*this);
 	}
 
-	bool RenderPass::stencilSizeValid()
+
+	bool Render::stencilSizeValid()
 	{
 		if (_stencilSize == -1)
 			glGetIntegerv(GL_STENCIL_BITS, &_stencilSize);
 		return (_stencilSize < 8) ? false : true;
 	}
 
-	RenderPass &RenderPass::config(glm::ivec4 const &rect, GLint sample)
+	Render &Render::configRect(glm::ivec4 const &rect)
 	{
 		_rect = rect;
+		return (*this);
+	}
+
+	RenderPass &RenderPass::configSample(GLint sample)
+	{
 		_sample = sample;
 		return (*this);
 	}
 
-	RenderPass &RenderPass::bindShader(Shader *shader)
+	Render &Render::bindShader(Shader *shader)
 	{
 		_shader = shader;
 		return (*this);
 	}
 	
-	Shader *RenderPass::accessShader() const
+	Shader *Render::accessShader() const
 	{
 		return (_shader);
 	}
 
-	RenderPass &RenderPass::setMode(GLenum mode)
+	Render &Render::setMode(GLenum mode)
 	{
 		_mode = mode;
 		return (*this);
 	}
 
-	GLenum RenderPass::getMode() const
+	GLenum Render::getMode() const
 	{
 		return (_mode);
 	}
@@ -345,14 +361,24 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::attachInput(RenderPass const &input)
+	Texture2D const &RenderPass::getColorOutput(size_t index) const
+	{
+		return (*_colorOutput[index].second);
+	}
+
+	size_t RenderPass::getNbrColorOuput() const
+	{
+		return (_colorOutput.size());
+	}
+
+	Render &Render::attachInput(RenderPass const &input)
 	{
 		_input = &input;
 		_updateInput = true;
 		return (*this);
 	}
 
-	RenderPass &RenderPass::dettachInput()
+	Render &Render::dettachInput()
 	{
 		_updateInput = false;
 		_input = NULL;

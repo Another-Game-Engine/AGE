@@ -528,16 +528,16 @@ namespace gl
 		}
 	}
 
-	void ShadingManager::bindRenderPassToRenderPass(Key<RenderPass> const &srcKey, Key<RenderPass> const &destKey)
+	void ShadingManager::bindRenderPassToRenderPass(Key<RenderPass> const &targetKey, Key<RenderPass> const &inputKey)
 	{
-		RenderPass *src;
-		RenderPass *dest;
+		RenderPass *target;
+		RenderPass *input;
 
-		if ((src = getRenderPass(srcKey, "bindShaderToRenderPass")) == NULL)
+		if ((target = getRenderPass(targetKey, "bindShaderToRenderPass")) == NULL)
 			return;
-		if ((dest = getRenderPass(destKey, "bindShaderToRenderPass")) == NULL)
+		if ((input = getRenderPass(inputKey, "bindShaderToRenderPass")) == NULL)
 			return;
-		src->attachInput(*dest);
+		target->attachInput(*input);
 	}
 
 	ShadingManager &ShadingManager::bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s)
@@ -843,7 +843,8 @@ namespace gl
 
 		if ((renderPass = getRenderPass(key, "configRenderPass")) == NULL)
 			return (*this);
-		renderPass->config(rect, sample);
+		renderPass->configRect(rect);
+		renderPass->configSample(sample);
 		return (*this);
 	}
 }
