@@ -19,8 +19,10 @@ namespace gl
 		_rect(glm::ivec4(0, 0, 512, 512)),
 		_sample(1),
 		_shader(NULL),
+		_input(NULL),
 		_mode(GL_TRIANGLES),
-		_updateColorOutput(false)
+		_updateColorOutput(false),
+		_updateInput(false)
 	{
 	}
 
@@ -42,8 +44,10 @@ namespace gl
 		_rect(copy._rect),
 		_sample(copy._sample),
 		_shader(copy._shader),
+		_input(copy._input),
 		_mode(copy._mode),
-		_updateColorOutput(false)
+		_updateColorOutput(false),
+		_updateInput(true)
 	{
 	}
 
@@ -55,6 +59,8 @@ namespace gl
 			_rect = r._rect;
 			_sample = r._sample;
 			_shader = r._shader;
+			_input = r._input;
+			_updateInput = true;
 			_mode = r._mode;
 		}
 		return (*this);
@@ -283,7 +289,7 @@ namespace gl
 			_updateColorOutput = true;
 		}
 		// update input
-		if (_updateInput)
+		if (_updateInput && _input != NULL)
 		{
 			for (size_t index = 0; index < _input->_colorOutput.size(); ++index)
 			{

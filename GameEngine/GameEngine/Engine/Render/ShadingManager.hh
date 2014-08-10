@@ -37,6 +37,14 @@ namespace gl
 		{}
 	};
 
+	struct BindingRenderPass
+	{
+		Key<RenderPass> dst;
+		Key<RenderPass> src;
+		BindingRenderPass(Key<RenderPass> const &dst, Key<RenderPass> const &src) : dst(dst), src(src)
+		{}
+	};
+
 	class ShadingManager : public Dependency<ShadingManager>
 	{
 	public:
@@ -69,7 +77,9 @@ namespace gl
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
-	
+		Key<InputSampler> addShaderInputSampler(Key<Shader> const &shader, std::string const &flag);
+		Key<InputSampler> getShaderInputSampler(Key<Shader> const &shader, size_t index);
+
 		// Interface
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
 		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
@@ -150,6 +160,7 @@ namespace gl
 		std::pair<Key<RenderPass>, size_t> _optimizeRenderPassSearch;
 		std::pair<Key<Material>, Material *> _optimizeMaterialSearch;
 		AGE::Vector<BindingShader> _bindShader;
+		AGE::Vector<BindingRenderPass> _bindRenderPass;
 		AGE::Vector<RenderPass> _renderPassPool;
 
 		// tool use in intern
@@ -162,6 +173,9 @@ namespace gl
 		void bindShaderToRenderPass(Key<RenderPass> const &r, Key<Shader> const &s);
 		void unbindShaderToRenderPass(Key<Shader> const &s);
 		void unbindRenderPassToShader(Key<RenderPass> const &r);
+		
+		void bindRenderPass(Key<RenderPass> const &src, Key<Shader> const &dest);
+		void unbindRenderPass(Key<RenderPass> const &src);
 	};
 
 	template <typename TYPE>

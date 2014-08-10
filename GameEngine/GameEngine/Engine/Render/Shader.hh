@@ -20,7 +20,7 @@ namespace gl
 	struct Uniform{};
 	struct InterfaceBlock{};
 	struct Output{};
-	typedef Sampler InputSampler;
+	struct InputSampler{};
 
 	struct MaterialBind
 	{
@@ -72,7 +72,7 @@ namespace gl
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 	
 		Key<InputSampler> addInputSampler(std::string const &flag);
-		Key<InputSampler> getInputSampler(size_t index);
+		Key<InputSampler> getInputSampler(size_t index) const;
 		size_t getNbrInputSampler() const;
 		Shader &setInputSampler(Key<InputSampler> const &key, Texture2D const &bind);
 

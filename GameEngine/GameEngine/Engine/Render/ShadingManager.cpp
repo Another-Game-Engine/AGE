@@ -163,6 +163,22 @@ namespace gl
 		return (shader->addSampler(flag));
 	}
 
+	Key<InputSampler> ShadingManager::addShaderInputSampler(Key<Shader> const &keyShader, std::string const &flag)
+	{
+		Shader *shader;
+		if ((shader = getShader(keyShader, "addShaderInputSampler()")) == NULL)
+			return (Key<InputSampler>(KEY_DESTROY));
+		return (shader->addInputSampler(flag));
+	}
+
+	Key<InputSampler> ShadingManager::getShaderInputSampler(Key<Shader> const &keyShader, size_t target)
+	{
+		Shader const *shader;
+		if ((shader = getShader(keyShader, "getShaderInputSampler()")) == NULL)
+			return (Key<InputSampler>(KEY_DESTROY));
+		return (shader->getInputSampler(target));
+	}
+
 	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
 	{
 		Shader const *shader;
