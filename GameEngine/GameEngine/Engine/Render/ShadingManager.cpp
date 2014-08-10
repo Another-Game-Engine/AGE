@@ -449,6 +449,7 @@ namespace gl
 		if (getRenderPass(key, "rmRenderPass") == NULL)
 			return (*this);
 		unbindRenderPassToShader(key);
+		unbindRenderPassInput(key);
 		_renderPass.erase(key);
 		key.destroy();
 		return (*this);
@@ -491,11 +492,52 @@ namespace gl
 			if (_bindShader[index].s == s)
 			{
 				RenderPass *renderPass;
-				if ((renderPass = getRenderPass(_bindShader[index].r, "unbindRenderPassToShader")) == NULL)
+				if ((renderPass = getRenderPass(_bindShader[index].r, "unbindShaderToRenderPass")) == NULL)
 					return;
 				renderPass->bindShader(NULL);
 			}
 		}
+	}
+
+	void ShadingManager::unbindRenderPassTarget(Key<RenderPass> const &r)
+	{
+		for (size_t index = 0; index < _bindRenderPass.size(); ++index)
+		{
+			if (_bindRenderPass[index].target == r)
+			{
+				RenderPass *renderPass;
+				if ((renderPass = getRenderPass(_bindRenderPass[index].target, "unbindRenderPassToRenderPass")) == NULL)
+					return;
+				renderPass->dettachInput();
+				return;
+			}
+		}
+	}
+
+	void ShadingManager::unbindRenderPassInput(Key<RenderPass> const &r)
+	{
+		for (size_t index = 0; index < _bindRenderPass.size(); ++index)
+		{
+			if (_bindRenderPass[index].input == r)
+			{
+				RenderPass *renderPass;
+				if ((renderPass = getRenderPass(_bindRenderPass[index].target, "unbindRenderPassToRenderPass")) == NULL)
+					return;
+				renderPass->dettachInput();
+			}
+		}
+	}
+
+	void ShadingManager::bindRenderPassToRenderPass(Key<RenderPass> const &srcKey, Key<RenderPass> const &destKey)
+	{
+		RenderPass *src;
+		RenderPass *dest;
+
+		if ((src = getRenderPass(srcKey, "bindShaderToRenderPass")) == NULL)
+			return;
+		if ((dest = getRenderPass(destKey, "bindShaderToRenderPass")) == NULL)
+			return;
+		src->attachInput(*dest);
 	}
 
 	ShadingManager &ShadingManager::bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s)
@@ -511,6 +553,23 @@ namespace gl
 		}
 		_bindShader.push_back(BindingShader(r, s));
 		bindShaderToRenderPass(r, s);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setInputRenderPass(Key<RenderPass> const &target, Key<RenderPass> const &input)
+	{
+		for (size_t index = 0; index < _bindRenderPass.size(); ++index)
+		{
+			if (_bindRenderPass[index].target == target)
+			{
+				_bindRenderPass[index].input = input;
+				bindRenderPassToRenderPass(target, input);
+				return (*this);
+			}
+			_bindRenderPass.push_back(BindingRenderPass(target, input));
+			bindRenderPassToRenderPass(target, input);
+			return (*this);
+		}
 		return (*this);
 	}
 

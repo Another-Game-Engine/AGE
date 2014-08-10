@@ -39,9 +39,9 @@ namespace gl
 
 	struct BindingRenderPass
 	{
-		Key<RenderPass> dst;
-		Key<RenderPass> src;
-		BindingRenderPass(Key<RenderPass> const &dst, Key<RenderPass> const &src) : dst(dst), src(src)
+		Key<RenderPass> target;
+		Key<RenderPass> input;
+		BindingRenderPass(Key<RenderPass> const &target, Key<RenderPass> const &input) : target(target), input(input)
 		{}
 	};
 
@@ -121,6 +121,7 @@ namespace gl
 		ShadingManager &rmRenderPass(Key<RenderPass> &key);
 		Key<RenderPass> getRenderPass(size_t target) const;
 		ShadingManager &bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s);
+		ShadingManager &setInputRenderPass(Key<RenderPass> const &dest, Key<RenderPass> const &input);
 
 		ShadingManager &pushClearTaskRenderPass(Key<RenderPass> const &key, bool color = true, bool depth = true, bool stencil = false);
 		ShadingManager &pushSetClearValueTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
@@ -174,8 +175,9 @@ namespace gl
 		void unbindShaderToRenderPass(Key<Shader> const &s);
 		void unbindRenderPassToShader(Key<RenderPass> const &r);
 		
-		void bindRenderPass(Key<RenderPass> const &src, Key<Shader> const &dest);
-		void unbindRenderPass(Key<RenderPass> const &src);
+		void bindRenderPassToRenderPass(Key<RenderPass> const &src, Key<RenderPass> const &dest);
+		void unbindRenderPassTarget(Key<RenderPass> const &r);
+		void unbindRenderPassInput(Key<RenderPass> const &r);
 	};
 
 	template <typename TYPE>

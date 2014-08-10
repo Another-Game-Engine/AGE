@@ -291,6 +291,8 @@ namespace gl
 		// update input
 		if (_updateInput && _input != NULL)
 		{
+			if (_colorOutput.size() != _shader->getNbrInputSampler())
+				DEBUG_MESSAGE("Warning", "RenderPass - update", "attach invalid", *this);
 			for (size_t index = 0; index < _input->_colorOutput.size(); ++index)
 			{
 				Key<InputSampler> const &key = _shader->getInputSampler(index);
