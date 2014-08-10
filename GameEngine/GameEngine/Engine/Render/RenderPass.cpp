@@ -371,14 +371,14 @@ namespace gl
 		return (_colorOutput.size());
 	}
 
-	Render &Render::attachInput(RenderPass const &input)
+	Render &Render::bindInput(RenderPass const &input)
 	{
 		_input = &input;
 		_updateInput = true;
 		return (*this);
 	}
 
-	Render &Render::dettachInput()
+	Render &Render::unbindInput()
 	{
 		_updateInput = false;
 		_input = NULL;

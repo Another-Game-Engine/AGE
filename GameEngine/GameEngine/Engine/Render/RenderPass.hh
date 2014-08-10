@@ -64,8 +64,8 @@ namespace gl
 		Render &setMode(GLenum mode);
 		GLenum getMode() const;
 
-		Render &attachInput(RenderPass const &input);
-		Render &dettachInput();
+		Render &bindInput(RenderPass const &input);
+		Render &unbindInput();
 
 	protected:
 		AGE::Vector<Task> _tasks;

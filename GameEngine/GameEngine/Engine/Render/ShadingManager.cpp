@@ -1,10 +1,7 @@
 #include <Render/ShadingManager.hh>
-#include <Render/Shader.hh>
 #include <Render/Storage.hh>
-#include <Render/RenderPass.hh>
 #include <iostream>
 #include <string>
-#include <Core/Drawable.hh>
 
 namespace gl
 {
@@ -53,10 +50,11 @@ namespace gl
 
 	ShadingManager &ShadingManager::rmShader(Key<Shader> &key)
 	{
-		if (getShader(key, "rmShader()") == NULL)
+		Shader *shader;
+		if ((shader = getShader(key, "rmShader()")) == NULL)
 			return (*this);
 		_shaders.erase(key);
-		unbindShaderToRenderPass(key);
+		unbindShaderToRendering(shader);
 		key.destroy();
 		return (*this);
 	}
@@ -355,12 +353,36 @@ namespace gl
 		return (renderPassIndex->second);
 	}
 
+	size_t ShadingManager::getRenderIndex(Key<Render> const &key, std::string const &in)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", -1);
+		if (_render.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", -1);
+		if (key == _optimizeRenderSearch.first)
+			return (_optimizeRenderSearch.second);
+		auto &renderIndex = _render.find(key);
+		if (renderIndex == _render.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", -1);
+		_optimizeRenderSearch.first = key;
+		_optimizeRenderSearch.second = renderIndex->second;
+		return (renderIndex->second);
+	}
+
 	RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key, std::string const &in)
 	{
 		size_t index;
 		if ((index = getRenderPassIndex(key, in)) == -1)
 			return (NULL);
 		return (&_renderPassPool[index]);
+	}
+
+	Render *ShadingManager::getRender(Key<Render> const &key, std::string const &in)
+	{
+		size_t index;
+		if ((index = getRenderIndex(key, in)) == -1)
+			return (NULL);
+		return (&_renderPool[index]);
 	}
 
 	Material *ShadingManager::getMaterial(Key<Material> const &key, std::string const &in)
@@ -446,10 +468,10 @@ namespace gl
 
 	ShadingManager &ShadingManager::rmRenderPass(Key<RenderPass> &key)
 	{
-		if (getRenderPass(key, "rmRenderPass") == NULL)
+		RenderPass *render;
+		if ((render = getRenderPass(key, "rmRenderPass")) == NULL)
 			return (*this);
-		unbindRenderPassToShader(key);
-		unbindRenderPassInput(key);
+		unbindRenderingInput(render);
 		_renderPass.erase(key);
 		key.destroy();
 		return (*this);
@@ -465,111 +487,74 @@ namespace gl
 		return (element->first);
 	}
 
-	void ShadingManager::bindShaderToRenderPass(Key<RenderPass> const &r, Key<Shader> const &s)
-	{
-		Shader *shader;
-		RenderPass *renderPass;
-
-		if ((shader = getShader(s, "bindShaderToRenderPass")) == NULL)
-			return;
-		if ((renderPass = getRenderPass(r, "bindShaderToRenderPass")) == NULL)
-			return;
-		renderPass->bindShader(shader);
-	}
-
-	void ShadingManager::unbindRenderPassToShader(Key<RenderPass> const &r)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(r, "unbindRenderPassToShader")) == NULL)
-			return ;
-		renderPass->bindShader(NULL);
-	}
-
-	void ShadingManager::unbindShaderToRenderPass(Key<Shader> const &s)
+	void ShadingManager::unbindShaderToRendering(Shader *s)
 	{
 		for (size_t index = 0; index < _bindShader.size(); ++index)
-		{
 			if (_bindShader[index].s == s)
-			{
-				RenderPass *renderPass;
-				if ((renderPass = getRenderPass(_bindShader[index].r, "unbindShaderToRenderPass")) == NULL)
-					return;
-				renderPass->bindShader(NULL);
-			}
-		}
+				_bindShader[index].r->bindShader(NULL);
 	}
 
-	void ShadingManager::unbindRenderPassTarget(Key<RenderPass> const &r)
+	void ShadingManager::unbindRenderingTarget(Render *r)
 	{
-		for (size_t index = 0; index < _bindRenderPass.size(); ++index)
+		for (size_t index = 0; index < _bindRendering.size(); ++index)
 		{
-			if (_bindRenderPass[index].target == r)
+			if (_bindRendering[index].target == r)
 			{
-				RenderPass *renderPass;
-				if ((renderPass = getRenderPass(_bindRenderPass[index].target, "unbindRenderPassToRenderPass")) == NULL)
-					return;
-				renderPass->dettachInput();
+				r->unbindInput();
 				return;
 			}
 		}
 	}
 
-	void ShadingManager::unbindRenderPassInput(Key<RenderPass> const &r)
+	void ShadingManager::unbindRenderingInput(RenderPass *r)
 	{
-		for (size_t index = 0; index < _bindRenderPass.size(); ++index)
+		for (size_t index = 0; index < _bindRendering.size(); ++index)
 		{
-			if (_bindRenderPass[index].input == r)
-			{
-				RenderPass *renderPass;
-				if ((renderPass = getRenderPass(_bindRenderPass[index].target, "unbindRenderPassToRenderPass")) == NULL)
-					return;
-				renderPass->dettachInput();
-			}
+			if (_bindRendering[index].input == r)
+				_bindRendering[index].target->unbindInput();
 		}
-	}
-
-	void ShadingManager::bindRenderPassToRenderPass(Key<RenderPass> const &targetKey, Key<RenderPass> const &inputKey)
-	{
-		RenderPass *target;
-		RenderPass *input;
-
-		if ((target = getRenderPass(targetKey, "bindShaderToRenderPass")) == NULL)
-			return;
-		if ((input = getRenderPass(inputKey, "bindShaderToRenderPass")) == NULL)
-			return;
-		target->attachInput(*input);
 	}
 
 	ShadingManager &ShadingManager::bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s)
 	{
+		RenderPass *render;
+		Shader *shader;
+
+		if ((render = getRenderPass(r, "bindShaderRenderPass")) == NULL)
+			return (*this);
+		if ((shader = getShader(s, "bindShaderRenderPass")) == NULL)
+			return (*this);
+		render->bindShader(shader);
 		for (size_t index = 0; index < _bindShader.size(); ++index)
 		{
-			if (_bindShader[index].s == s)
+			if (_bindShader[index].s == shader)
 			{
-				_bindShader[index].r = r;
-				bindShaderToRenderPass(r, s);
+				_bindShader[index].r = render;
 				return (*this);
 			}
 		}
-		_bindShader.push_back(BindingShader(r, s));
-		bindShaderToRenderPass(r, s);
+		_bindShader.push_back(BindingShader(render, shader));
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setInputRenderPass(Key<RenderPass> const &target, Key<RenderPass> const &input)
+	ShadingManager &ShadingManager::bindInputRenderPass(Key<RenderPass> const &t, Key<RenderPass> const &i)
 	{
-		for (size_t index = 0; index < _bindRenderPass.size(); ++index)
+		RenderPass *target;
+		RenderPass *input;
+		if ((target = getRenderPass(t, "bindInputRenderPass")) == NULL)
+			return (*this);
+		if ((input = getRenderPass(i, "bindInputRenderPass")) == NULL)
+			return (*this);
+		target->bindInput(*input);
+		for (size_t index = 0; index < _bindRendering.size(); ++index)
 		{
-			if (_bindRenderPass[index].target == target)
+			if (_bindRendering[index].target == target)
 			{
-				_bindRenderPass[index].input = input;
-				bindRenderPassToRenderPass(target, input);
+				_bindRendering[index].input = input;
 				return (*this);
 			}
-			_bindRenderPass.push_back(BindingRenderPass(target, input));
-			bindRenderPassToRenderPass(target, input);
-			return (*this);
 		}
+		_bindRendering.push_back(BindingRenderPass(target, input));
 		return (*this);
 	}
 
@@ -847,4 +832,6 @@ namespace gl
 		renderPass->configSample(sample);
 		return (*this);
 	}
+
+
 }
