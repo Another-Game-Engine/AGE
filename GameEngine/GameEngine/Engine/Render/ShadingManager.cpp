@@ -1016,15 +1016,32 @@ namespace gl
 	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		for (size_t index = 0; index < _renderPassPool.size(); ++index)
-			_renderPassPool[index].update();
-		for (size_t index = 0; index < objectRender.size(); ++index)
 		{
-			Material *material;
-			if ((material = getMaterial(objectRender[index].material, "draw")) == NULL)
-				return (*this);
-			RenderPass *renderPass = material->get<Render_Pass>();
-			renderPass->accessShader()->preDraw(*material, objectRender[index].transformation);
-			geometryManager.draw(renderPass->getMode(), objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
+			_renderPassPool[index].update();
+			for (size_t index = 0; index < objectRender.size(); ++index)
+			{
+				Material *material;
+				if ((material = getMaterial(objectRender[index].material, "draw")) == NULL)
+					return (*this);
+				RenderPass *renderPass = material->get<Render_Pass>();
+				renderPass->accessShader()->preDraw(*material, objectRender[index].transformation);
+				geometryManager.draw(renderPass->getMode(), objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
+			}
+		}
+		for (size_t index = 0; index < _renderPool.size(); ++index)
+		{
+			Render &render = _renderPool[index];
+			render.update();
+			for (size_t index = 0; index < objectRender.size(); ++index)
+			{
+				Material *material;
+				if ((material = getMaterial(objectRender[index].material, "draw")) == NULL)
+					return (*this);
+			//	RenderPass *renderPass = material->get<Render_Pass>();
+			//	renderPass->accessShader()->preDraw(*material, objectRender[index].transformation);
+				render.accessShader()->preDraw(*material, objectRender[index].transformation);
+				geometryManager.draw(render.getMode(), objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
+			}
 		}
 		return (*this);
 	}

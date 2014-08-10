@@ -119,12 +119,12 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	_render->bindMaterialToShader<gl::Color_diffuse>(_shader, _diffuse_color);
 	_render->bindMaterialToShader<gl::Ratio_diffuse>(_shader, _diffuse_ratio);
 	_render->bindTransformationToShader(_shader, _model_matrix);
-	_renderPass = _render->addRenderPass(_shader);
-	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
-	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
-	_render->configRenderPass(_renderPass, glm::ivec4(0, 0, 800, 600));
-	_render->addColorOutputRenderPass(_renderPass, GL_COLOR_ATTACHMENT0, GL_RGB8);
+	_renderPass = _render->addRender(_shader);
+	_render->pushSetTestTaskRender(_renderPass, false, false, true);
+	_render->pushSetClearValueTaskRender(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+	_render->pushClearTaskRender(_renderPass, true, true, false);
+	_render->configRender(_renderPass, glm::ivec4(0, 0, 800, 600));
+	//_render->addColorOutputRender(_renderPass, GL_COLOR_ATTACHMENT0, GL_RGB8);
 }
 #endif
 
@@ -153,8 +153,8 @@ void CameraSystem::mainUpdate(double time)
 		_render->setUniformBlock(_global_state, 0, camera.projection);
 		_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		for (size_t index = 0; index < camera.drawables.size(); ++index)
-			_render->setRenderPassMaterial(camera.drawables[index].material, _renderPass);
+		//for (size_t index = 0; index < camera.drawables.size(); ++index)
+		//	_render->setRenderPassMaterial(camera.drawables[index].material, _renderPass);
 		_render->draw(camera.drawables);
 		camera.drawables.clear();
 		drawList.pop_back();
