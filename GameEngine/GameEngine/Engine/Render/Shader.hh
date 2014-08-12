@@ -37,22 +37,19 @@ namespace gl
 	class Shader
 	{
 	public:
-		Shader();
-		Shader(std::string const &compute);
-		Shader(std::string const &vertex, std::string const &fragment);
-		Shader(std::string const &vertex, std::string const &fragment, std::string const &geometry);
-		Shader(Shader const &Shader);
-		Shader &operator=(Shader const &shader);
 		~Shader(void);
+		
+		static Shader *createComputeShader(std::string const &name);
+		static Shader *createShader(std::string const &v, std::string const &f);
+		static Shader *createShader(std::string const &v, std::string const &f, std::string const &g);
 
 		void use() const;
-		bool isValid() const;
 		GLuint getId() const;
 
-		std::string const &getVertexName() const;
-		std::string const &getFragName() const;
-		std::string const &getGeoName() const;
-		std::string const &getComputeName() const;
+		//std::string const &getVertexName() const;
+		//std::string const &getFragName() const;
+		//std::string const &getGeoName() const;
+		//std::string const &getComputeName() const;
 
 		// handling uniform management
 		Key<Uniform> addUniform(std::string const &flag);
@@ -71,6 +68,7 @@ namespace gl
 		Key<Sampler> getSampler(size_t index) const;
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 	
+		// add input sampler
 		Key<InputSampler> addInputSampler(std::string const &flag);
 		Key<InputSampler> getInputSampler(size_t index) const;
 		size_t getNbrInputSampler() const;
@@ -90,31 +88,32 @@ namespace gl
 		Shader &unbindMaterial(Key<Uniform> const &key);
 
 	private:
-		std::string _vertexName;
-		std::string _fragName;
-		std::string _geometryName;
-		std::string _computeName;
+		GLuint *_unitProgId;
 		GLuint	_progId;
-		GLuint	_vertexId;
-		GLuint	_fragId;
-		GLuint	_geometryId;
-		GLuint	_computeId;
+		uint8_t _nbrUnitProgId;
 
+		// binding for object in shader
 		Key<Uniform> _bindTransformation;
-		std::vector<MaterialBind> _bind;
+		std::vector<MaterialBind> _bindMaterial;
+		
+		// pool stack
 		AGE::Vector<Task> _tasks;
 
+		// map of task
 		std::map<Key<Uniform>, size_t> _bindUniform;
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
 		std::map<Key<InterfaceBlock>, size_t> _interfaceBlock;
 		std::map<Key<InputSampler>, size_t> _inputSampler;
 
-		// some private function usefull for internal functionement
-		bool compileShader(GLuint shaderId, std::string const &file) const;
+		/// some private function usefull for internal functionement
+		// use to create the shader
+		static bool compileShader(GLuint shaderId, std::string const &file);
+		static GLuint addUnitProg(std::string const &path, GLenum type);
+		bool createProgram();
 		bool linkProgram() const;
-		GLuint addShader(std::string const &path, GLenum type);
-		
+
+		// search function
 		Task *getUniform(Key<Uniform> const &key, std::string const &msg);
 		size_t getIndexUniform(Key<Uniform> const &key, std::string const &msg);
 		Task *getSampler(Key<Sampler> const &key, std::string const &msg);
@@ -131,6 +130,7 @@ namespace gl
 		GLuint getUniformBlockLocation(char const *flag);
 		size_t getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg);
 
+		// use to create/set task and binding
 		size_t createMaterialBind(size_t offset, size_t indexTask);
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
@@ -241,4 +241,64 @@ namespace gl
 		task.update = true;
 	}
 
+	Shader *Shader::createShader(std::string const &v, std::string const &f, std::string const &g)
+	{
+		Shader *s = new Shader;
+
+		s->_nbrUnitProgId = 3;
+		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
+		if (s->_unitProgId[0] = addUnitProg(v, GL_VERTEX_SHADER) == -1)
+			return (NULL);
+		if (s->_unitProgId[1] = addUnitProg(f, GL_FRAGMENT_SHADER) == -1)
+			return (NULL);
+		if (s->_unitProgId[2] = addUnitProg(g, GL_GEOMETRY_SHADER) == -1)
+			return (NULL);
+		if (s->createProgram() == true)
+			return (NULL);
+		return (s);
+	}
+
+	GLuint Shader::addUnitProg(std::string const &path, GLenum type)
+	{
+		GLuint shaderId;
+		std::ifstream file(path.c_str(), std::ios_base::binary);
+		GLchar *content;
+		GLint fileSize;
+
+		if (file.fail())
+			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't exist", -1);
+		file.seekg(0, file.end);
+		fileSize = static_cast<GLint>(file.tellg()) + 1;
+		file.seekg(0, file.beg);
+		content = new GLchar[fileSize];
+		file.read(content, fileSize - 1);
+		content[fileSize - 1] = 0;
+		shaderId = glCreateShader(type);
+		glShaderSource(shaderId, 1, const_cast<const GLchar**>(&content), const_cast<const GLint*>(&fileSize));
+		if (compileShader(shaderId, path) == false)
+			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't compile", -1);
+		return (shaderId);
+	}
+
+	bool Shader::compileShader(GLuint shaderId, std::string const &file)
+	{
+		GLint         compileRet = 0;
+		GLsizei       msgLenght;
+		GLchar        *errorMsg;
+
+		glCompileShader(shaderId);
+		glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileRet);
+		// write error shader message
+		if (compileRet == GL_FALSE)
+		{
+			glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &msgLenght);
+			errorMsg = new GLchar[msgLenght];
+			glGetShaderInfoLog(shaderId, msgLenght, &msgLenght, errorMsg);
+			std::cerr << "Compile error on " << file.data() << ": " << std::endl;
+			std::cerr << std::endl << errorMsg << std::endl << std::endl;
+			delete[] errorMsg;
+			DEBUG_MESSAGE("Error", "Shader.cpp-compileShader(shaderId, file)", "File doesn't compile", false);
+		}
+		return (true);
+	}
 }
