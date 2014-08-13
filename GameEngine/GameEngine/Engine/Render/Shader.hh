@@ -8,8 +8,8 @@
 # include <glm/glm.hpp>
 # include <Render/OpenGLTask.hh>
 # include <Render/Material.hh>
-#include <Render/Storage.hh>
-#include <Render/UniformBlock.hh>
+# include <Render/Storage.hh>
+# include <Render/UniformBlock.hh>
 
 namespace gl
 {
@@ -37,6 +37,8 @@ namespace gl
 	class Shader
 	{
 	public:
+		Shader(Shader const &) = delete;
+		Shader &operator=(Shader const &) = delete;
 		~Shader(void);
 		
 		static Shader *createComputeShader(std::string const &name);
@@ -45,11 +47,6 @@ namespace gl
 
 		void use() const;
 		GLuint getId() const;
-
-		//std::string const &getVertexName() const;
-		//std::string const &getFragName() const;
-		//std::string const &getGeoName() const;
-		//std::string const &getComputeName() const;
 
 		// handling uniform management
 		Key<Uniform> addUniform(std::string const &flag);
@@ -77,7 +74,7 @@ namespace gl
 		// InterfaceBlock
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock);
 		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
-		Shader setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
+		Shader &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
 
 		// update memory
 		void preDraw(Material const &material, glm::mat4 const &transform);
@@ -88,6 +85,8 @@ namespace gl
 		Shader &unbindMaterial(Key<Uniform> const &key);
 
 	private:
+		Shader();
+
 		GLuint *_unitProgId;
 		GLuint	_progId;
 		uint8_t _nbrUnitProgId;
@@ -239,66 +238,5 @@ namespace gl
 			return;
 		memcpy(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam);
 		task.update = true;
-	}
-
-	Shader *Shader::createShader(std::string const &v, std::string const &f, std::string const &g)
-	{
-		Shader *s = new Shader;
-
-		s->_nbrUnitProgId = 3;
-		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
-		if (s->_unitProgId[0] = addUnitProg(v, GL_VERTEX_SHADER) == -1)
-			return (NULL);
-		if (s->_unitProgId[1] = addUnitProg(f, GL_FRAGMENT_SHADER) == -1)
-			return (NULL);
-		if (s->_unitProgId[2] = addUnitProg(g, GL_GEOMETRY_SHADER) == -1)
-			return (NULL);
-		if (s->createProgram() == true)
-			return (NULL);
-		return (s);
-	}
-
-	GLuint Shader::addUnitProg(std::string const &path, GLenum type)
-	{
-		GLuint shaderId;
-		std::ifstream file(path.c_str(), std::ios_base::binary);
-		GLchar *content;
-		GLint fileSize;
-
-		if (file.fail())
-			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't exist", -1);
-		file.seekg(0, file.end);
-		fileSize = static_cast<GLint>(file.tellg()) + 1;
-		file.seekg(0, file.beg);
-		content = new GLchar[fileSize];
-		file.read(content, fileSize - 1);
-		content[fileSize - 1] = 0;
-		shaderId = glCreateShader(type);
-		glShaderSource(shaderId, 1, const_cast<const GLchar**>(&content), const_cast<const GLint*>(&fileSize));
-		if (compileShader(shaderId, path) == false)
-			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't compile", -1);
-		return (shaderId);
-	}
-
-	bool Shader::compileShader(GLuint shaderId, std::string const &file)
-	{
-		GLint         compileRet = 0;
-		GLsizei       msgLenght;
-		GLchar        *errorMsg;
-
-		glCompileShader(shaderId);
-		glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileRet);
-		// write error shader message
-		if (compileRet == GL_FALSE)
-		{
-			glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &msgLenght);
-			errorMsg = new GLchar[msgLenght];
-			glGetShaderInfoLog(shaderId, msgLenght, &msgLenght, errorMsg);
-			std::cerr << "Compile error on " << file.data() << ": " << std::endl;
-			std::cerr << std::endl << errorMsg << std::endl << std::endl;
-			delete[] errorMsg;
-			DEBUG_MESSAGE("Error", "Shader.cpp-compileShader(shaderId, file)", "File doesn't compile", false);
-		}
-		return (true);
 	}
 }

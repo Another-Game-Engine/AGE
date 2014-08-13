@@ -40,7 +40,7 @@ namespace gl
 		~ShadingManager();
 
 		// shader handling
-		Key<Shader> addShader(std::string const &compute);
+		Key<Shader> addComputeShader(std::string const &compute);
 		Key<Shader> addShader(std::string const &vert, std::string const &frag);
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
 		ShadingManager &rmShader(Key<Shader> &shader);
@@ -166,7 +166,7 @@ namespace gl
 
 	private:
 		// all map
-		std::map<Key<Shader>, Shader> _shaders;
+		std::map<Key<Shader>, Shader *> _shaders;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
 		std::map<Key<Material>, Material> _materials;

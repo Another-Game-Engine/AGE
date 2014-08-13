@@ -11,17 +11,19 @@ namespace gl
 
 	ShadingManager::~ShadingManager()
 	{
+		for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
+			delete it->second;
 		for (auto it = _textures.begin(); it != _textures.end(); ++it)
 			delete it->second;
 	}
 
-	Key<Shader> ShadingManager::addShader(std::string const &compute)
+	Key<Shader> ShadingManager::addComputeShader(std::string const &compute)
 	{
 		Key<Shader> key;
-		Shader shader(compute);
+		Shader *shader;
 
-		if (!shader.isValid())
-			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &compute)", "compute invalid", Key<Shader>(KEY_DESTROY))
+		if ((shader = Shader::createComputeShader(compute)) == NULL)
+			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &compute)", "compute invalid", Key<Shader>(KEY_DESTROY));
 		_shaders[key] = shader;
 		return (key);
 	}
@@ -29,10 +31,10 @@ namespace gl
 	Key<Shader> ShadingManager::addShader(std::string const &vertex, std::string const &frag)
 	{
 		Key<Shader> key;
-		Shader shader(vertex, frag);
+		Shader *shader;
 
-		if (!shader.isValid())
-			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &frag, string const &vertex)", "frag and vertex invalid", Key<Shader>(KEY_DESTROY))
+		if ((shader = Shader::createShader(vertex, frag)) == NULL)
+			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &frag, string const &vertex)", "frag and vertex invalid", Key<Shader>(KEY_DESTROY));
 		_shaders[key] = shader;
 		return (key);
 	}
@@ -40,9 +42,9 @@ namespace gl
 	Key<Shader> ShadingManager::addShader(std::string const &geo, std::string const &vertex, std::string const &frag)
 	{
 		Key<Shader> key;
-		Shader shader(vertex, frag, geo);
+		Shader *shader;
 
-		if (!shader.isValid())
+		if ((shader = Shader::createShader(vertex, frag, geo)) == NULL)
 			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &frag, string const &vertex, string const &geo)", "frag, vertex or geo invalid", Key<Shader>(KEY_DESTROY))
 		_shaders[key] = shader;
 		return (key);
@@ -53,6 +55,7 @@ namespace gl
 		Shader *shader;
 		if ((shader = getShader(key, "rmShader()")) == NULL)
 			return (*this);
+		delete shader;
 		_shaders.erase(key);
 		unbindShaderToRendering(shader);
 		key.destroy();
@@ -301,8 +304,8 @@ namespace gl
 		if (shader == _shaders.end())
 			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "shader not find", NULL);
 		_optimizeShaderSearch.first = key;
-		_optimizeShaderSearch.second = &shader->second;
-		return (&shader->second);
+		_optimizeShaderSearch.second = shader->second;
+		return (shader->second);
 	}
 
 	Texture *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in)
