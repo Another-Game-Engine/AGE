@@ -226,6 +226,7 @@
     <ClCompile Include="Engine\Render\OpenGLTask.cpp" />
     <ClCompile Include="Engine\Render\PixelBuffer.cpp" />
     <ClCompile Include="Engine\Render\Pool.cpp" />
+    <ClCompile Include="Engine\Render\PreShader.cpp" />
     <ClCompile Include="Engine\Render\RenderPass.cpp" />
     <ClCompile Include="Engine\Render\Shader.cpp" />
     <ClCompile Include="Engine\Render\ShadingManager.cpp" />

@@ -106,7 +106,8 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	size_t sizeElement[2];
 	gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
 	_global_state = _render->addUniformBlock(2, sizeElement);
-    	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
+	_render->addPreShaderQuad();
+	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
 	_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
 	//_pro_matrix = _render->addShaderUniform(_shader, "projection_matrix");
 	//_render->addShaderUniform(_shader, "pos_light", glm::vec4(1.0f));
@@ -153,8 +154,6 @@ void CameraSystem::mainUpdate(double time)
 		_render->setUniformBlock(_global_state, 0, camera.projection);
 		_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		//for (size_t index = 0; index < camera.drawables.size(); ++index)
-		//	_render->setRenderPassMaterial(camera.drawables[index].material, _renderPass);
 		_render->draw(camera.drawables);
 		camera.drawables.clear();
 		drawList.pop_back();

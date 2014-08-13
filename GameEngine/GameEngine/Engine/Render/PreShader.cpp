@@ -1,28 +1,4 @@
 #include <string>
 
-char const *quad_shader_vertex = 
-"#version 440											\n \
-														\
- const vec2 madd = vec2(0.5f, 0.5f);					\n \
-														\
- layout (location = 0) in vec2 position;				\n \
-														\
- out vec2 interpolated_texCoord;						\n \
-														\
- void main()											\n \
- {														\n \
-    interpolated_texCoord = position * madd + madd;		\n \
-    gl_Position = vec4(position, 0.0f, 1.0f);			\n \
- }														\n ";
-
-char const *quad_shader_fragment = 
-"#version 440													\n \
-																\
- in vec2 interpolated_texCoord;									\n \
-																\
- layout (location = 0) out vec4 colorOutput;					\n \
-																\
- void main()													\n \
- {																\n \
- 	colorOutput = texture2D(texture, interpolated_texCoord);	\n \
- }																\n";
+char const quad_shader_vertex[] = "#version 440\nconst vec2 madd = vec2(0.5f, 0.5f);\nlayout (location = 0) in vec2 position;\nout vec2 interpolated_texCoord;\nvoid main(){\ninterpolated_texCoord = position * madd + madd;\ngl_Position = vec4(position, 0.0f, 1.0f);\n}\0";
+char const quad_shader_fragment[] = "#version 440\nuniform sampler2D texture;\nin vec2 interpolated_texCoord;\nlayout (location = 0) out vec4 colorOutput;\nvoid main(){\ncolorOutput = texture2D(texture, interpolated_texCoord);\n}\0";

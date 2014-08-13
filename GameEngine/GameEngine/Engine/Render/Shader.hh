@@ -110,7 +110,7 @@ namespace gl
 		// use to create the shader
 		static bool compileShader(GLuint shaderId, std::string const &file);
 		static GLuint addUnitProgByFile(std::string const &path, GLenum type);
-		static GLuint addUnitProg(std::string const &source, GLenum type);
+		static GLuint addUnitProg(char const *source, GLenum type);
 		bool createProgram();
 		bool linkProgram() const;
 

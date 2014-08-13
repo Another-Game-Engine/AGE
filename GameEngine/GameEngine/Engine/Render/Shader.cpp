@@ -73,9 +73,9 @@ namespace gl
 
 		s->_nbrUnitProgId = 2;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
-		if ((s->_unitProgId[0] = addUnitProg(std::string(quad_shader_vertex), GL_VERTEX_SHADER)) == -1)
+		if ((s->_unitProgId[0] = addUnitProg(quad_shader_vertex, GL_VERTEX_SHADER)) == -1)
 			return (NULL);
-		if ((s->_unitProgId[1] = addUnitProg(std::string(quad_shader_fragment), GL_FRAGMENT_SHADER)) == -1)
+		if ((s->_unitProgId[1] = addUnitProg(quad_shader_fragment, GL_FRAGMENT_SHADER)) == -1)
 			return (NULL);
 		if (s->createProgram() == false)
 			return (NULL);
@@ -584,12 +584,11 @@ namespace gl
 		return (shaderId);
 	}
 
-	GLuint Shader::addUnitProg(std::string const &source, GLenum type)
+	GLuint Shader::addUnitProg(char const *source, GLenum type)
 	{
 		GLuint shaderId;
-		GLint sizeSource = (GLint)source.size();
 		shaderId = glCreateShader(type);
-		glShaderSource(shaderId, 1, (const GLchar**)(source.c_str()), (const GLint*)(&sizeSource));
+		glShaderSource(shaderId, 1, (const GLchar**)(&source), NULL);
 		if (compileShader(shaderId, "") == false)
 			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't compile", -1);
 		return (shaderId);
