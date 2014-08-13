@@ -8,6 +8,8 @@
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
 	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
 
+#include <Render/PreShader.cpp>
+
 
 namespace gl
 {
@@ -26,11 +28,11 @@ namespace gl
 
 		s->_nbrUnitProgId = 3;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
-		if ((s->_unitProgId[0] = addUnitProg(v, GL_VERTEX_SHADER)) == -1)
+		if ((s->_unitProgId[0] = addUnitProgByFile(v, GL_VERTEX_SHADER)) == -1)
 			return (NULL);
-		if ((s->_unitProgId[1] = addUnitProg(f, GL_FRAGMENT_SHADER)) == -1)
+		if ((s->_unitProgId[1] = addUnitProgByFile(f, GL_FRAGMENT_SHADER)) == -1)
 			return (NULL);
-		if ((s->_unitProgId[2] = addUnitProg(g, GL_GEOMETRY_SHADER)) == -1)
+		if ((s->_unitProgId[2] = addUnitProgByFile(g, GL_GEOMETRY_SHADER)) == -1)
 			return (NULL);
 		if (s->createProgram() == false)
 			return (NULL);
@@ -43,9 +45,9 @@ namespace gl
 
 		s->_nbrUnitProgId = 2;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
-		if ((s->_unitProgId[0] = addUnitProg(v, GL_VERTEX_SHADER)) == -1)
+		if ((s->_unitProgId[0] = addUnitProgByFile(v, GL_VERTEX_SHADER)) == -1)
 			return (NULL);
-		if ((s->_unitProgId[1] = addUnitProg(f, GL_FRAGMENT_SHADER)) == -1)
+		if ((s->_unitProgId[1] = addUnitProgByFile(f, GL_FRAGMENT_SHADER)) == -1)
 			return (NULL);
 		if (s->createProgram() == false)
 			return (NULL);
@@ -58,13 +60,27 @@ namespace gl
 
 		s->_nbrUnitProgId = 1;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
-		if ((s->_unitProgId[0] = addUnitProg(c, GL_VERTEX_SHADER)) == -1)
+		if ((s->_unitProgId[0] = addUnitProgByFile(c, GL_VERTEX_SHADER)) == -1)
 			return (NULL);
 		if (s->createProgram() == false)
 			return (NULL);
 		return (s);
 	}
 
+	Shader *Shader::createPreShaderQuad()
+	{
+		Shader *s = new Shader;
+
+		s->_nbrUnitProgId = 2;
+		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
+		if ((s->_unitProgId[0] = addUnitProg(std::string(quad_shader_vertex), GL_VERTEX_SHADER)) == -1)
+			return (NULL);
+		if ((s->_unitProgId[1] = addUnitProg(std::string(quad_shader_fragment), GL_FRAGMENT_SHADER)) == -1)
+			return (NULL);
+		if (s->createProgram() == false)
+			return (NULL);
+		return (s);
+	}
 
 	Shader::~Shader()
 	{
@@ -545,7 +561,7 @@ namespace gl
 		return (*this);
 	}
 
-	GLuint Shader::addUnitProg(std::string const &path, GLenum type)
+	GLuint Shader::addUnitProgByFile(std::string const &path, GLenum type)
 	{
 		GLuint shaderId;
 		std::ifstream file(path.c_str(), std::ios_base::binary);
@@ -563,6 +579,18 @@ namespace gl
 		shaderId = glCreateShader(type);
 		glShaderSource(shaderId, 1, const_cast<const GLchar**>(&content), const_cast<const GLint*>(&fileSize));
 		if (compileShader(shaderId, path) == false)
+			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't compile", -1);
+		delete[] content;
+		return (shaderId);
+	}
+
+	GLuint Shader::addUnitProg(std::string const &source, GLenum type)
+	{
+		GLuint shaderId;
+		GLint sizeSource = (GLint)source.size();
+		shaderId = glCreateShader(type);
+		glShaderSource(shaderId, 1, (const GLchar**)(source.c_str()), (const GLint*)(&sizeSource));
+		if (compileShader(shaderId, "") == false)
 			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't compile", -1);
 		return (shaderId);
 	}

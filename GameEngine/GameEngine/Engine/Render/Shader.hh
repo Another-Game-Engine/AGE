@@ -44,6 +44,7 @@ namespace gl
 		static Shader *createComputeShader(std::string const &name);
 		static Shader *createShader(std::string const &v, std::string const &f);
 		static Shader *createShader(std::string const &v, std::string const &f, std::string const &g);
+		static Shader *createPreShaderQuad();
 
 		void use() const;
 		GLuint getId() const;
@@ -108,7 +109,8 @@ namespace gl
 		/// some private function usefull for internal functionement
 		// use to create the shader
 		static bool compileShader(GLuint shaderId, std::string const &file);
-		static GLuint addUnitProg(std::string const &path, GLenum type);
+		static GLuint addUnitProgByFile(std::string const &path, GLenum type);
+		static GLuint addUnitProg(std::string const &source, GLenum type);
 		bool createProgram();
 		bool linkProgram() const;
 

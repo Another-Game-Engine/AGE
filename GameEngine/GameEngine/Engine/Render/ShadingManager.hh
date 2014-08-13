@@ -40,6 +40,7 @@ namespace gl
 		~ShadingManager();
 
 		// shader handling
+		Key<Shader> addPreShaderQuad();
 		Key<Shader> addComputeShader(std::string const &compute);
 		Key<Shader> addShader(std::string const &vert, std::string const &frag);
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);

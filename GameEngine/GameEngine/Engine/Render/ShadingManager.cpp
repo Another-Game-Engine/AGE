@@ -17,6 +17,17 @@ namespace gl
 			delete it->second;
 	}
 
+	Key<Shader> ShadingManager::addPreShaderQuad()
+	{
+		Key<Shader> key;
+		Shader *shader;
+
+		if ((shader = Shader::createPreShaderQuad()) == NULL)
+			DEBUG_MESSAGE("Warning", "ShadingManager-addPreShaderQuad()", "compute invalid", Key<Shader>(KEY_DESTROY));
+		_shaders[key] = shader;
+		return (key);
+	}
+
 	Key<Shader> ShadingManager::addComputeShader(std::string const &compute)
 	{
 		Key<Shader> key;
