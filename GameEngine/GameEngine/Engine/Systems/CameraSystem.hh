@@ -38,6 +38,7 @@ protected:
 	EntityFilter _camera;
 	gl::ShadingManager *_render;
 	gl::Key<gl::Shader> _shader;
+	gl::Key<gl::Shader> _quadShader;
 	gl::Key<gl::UniformBlock> _global_state;
 	gl::Key<gl::Uniform> _pro_matrix;
 	gl::Key<gl::Uniform> _model_matrix;
@@ -46,7 +47,10 @@ protected:
 	gl::Key<gl::Uniform> _diffuse_color;
 	gl::Key<gl::Uniform> _diffuse_ratio;
 	gl::Key<gl::Sampler> _diffuse_texture;
-	gl::Key<gl::Render> _renderPass;
+	gl::Key<gl::RenderPass> _renderPass;
+	
+	gl::Key<gl::Render> _renderQuad;
+	gl::Key<gl::Uniform> _textureQuad;
 
 	gl::Key<gl::Uniform> _transformation;
 #endif

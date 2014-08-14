@@ -354,24 +354,24 @@ namespace gl
 		return (_mode);
 	}
 
-	RenderPass &RenderPass::addColorOutput(GLenum target, GLenum internalFormat)
+	Render &Render::addColorOutput(GLenum target, GLenum internalFormat)
 	{
 		_colorOutput.push_back(std::make_pair(target, new Texture2D(_rect.z, _rect.w, internalFormat, true)));
 		_updateColorOutput = true;
 		return (*this);
 	}
 
-	Texture2D const &RenderPass::getColorOutput(size_t index) const
+	Texture2D const &Render::getColorOutput(size_t index) const
 	{
 		return (*_colorOutput[index].second);
 	}
 
-	size_t RenderPass::getNbrColorOuput() const
+	size_t Render::getNbrColorOuput() const
 	{
 		return (_colorOutput.size());
 	}
 
-	Render &Render::bindInput(RenderPass const &input)
+	Render &Render::bindInput(Render const &input)
 	{
 		_input = &input;
 		_updateInput = true;
@@ -383,5 +383,40 @@ namespace gl
 		_updateInput = false;
 		_input = NULL;
 		return (*this);
+	}
+
+
+	void RenderPass::updateOutput()
+	{
+		// update output
+		if (_updateColorOutput)
+		{
+			GLenum *targeted;
+			targeted = new GLenum[_colorOutput.size()];
+			for (size_t index = 0; index < _colorOutput.size(); ++index)
+			{
+				targeted[index] = _colorOutput[index].first;
+				_colorOutput[index].second->attachement(_fbo, targeted[index]);
+			}
+			glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
+			_updateColorOutput = true;
+		}
+	}
+
+	void RenderPostEffect::updateOutput()
+	{
+	//	// update output
+	//	if (_updateColorOutput)
+	//	{
+	//		GLenum *targeted;
+	//		targeted = new GLenum[_colorOutput.size()];
+	//		for (size_t index = 0; index < _colorOutput.size(); ++index)
+	//		{
+	//			targeted[index] = _colorOutput[index].first;
+	//			_colorOutput[index].second->attachement(_fbo, targeted[index]);
+	//		}
+	//		glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
+	//		_updateColorOutput = true;
+	//	}
 	}
 }

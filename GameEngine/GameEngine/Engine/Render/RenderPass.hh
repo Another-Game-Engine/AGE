@@ -29,12 +29,13 @@ namespace gl
 	class Render
 	{
 	public:
-		Render();
 		~Render();
-		Render(Render const &copy);
-		Render &operator=(Render const &r);
 
-		virtual Render &update();
+		Render() = delete;
+		Render(Render const &copy) = delete;
+		Render &operator=(Render const &r) = delete;
+
+		virtual Render &update() = 0;
 
 		Render &pushSetScissorTask(glm::ivec4 const &area);
 		Render &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
@@ -59,53 +60,81 @@ namespace gl
 
 		bool stencilSizeValid();
 		Render &configRect(glm::ivec4 const &rect);
+		
+		// shader attach to this render
 		Render &bindShader(Shader *shader);
 		Shader *accessShader() const;
+
+		//  drawing mode
 		Render &setMode(GLenum mode);
 		GLenum getMode() const;
 
-		Render &bindInput(RenderPass const &input);
+		// Render attach to this render
+		Render &bindInput(Render const &input);
 		Render &unbindInput();
+
+		// color ouput
+		Render &addColorOutput(GLenum target, GLenum internalFormat);
+		Texture2D const &getColorOutput(size_t index) const;
+		size_t getNbrColorOuput() const;
 
 	protected:
 		AGE::Vector<Task> _tasks;
+		AGE::Vector<std::pair<GLenum, Texture2D *>> _colorOutput;
 		GLint _stencilSize;
 		glm::ivec4 _rect;
 		Shader *_shader;
 		GLenum _mode;
+		
+		bool _updateColorOutput;
 
-		RenderPass const *_input;
+		Render const *_input;
 		bool _updateInput;
 
 		void updateInput();
-
+		virtual void updateOutput() = 0;
 	};
 
 	class RenderPass : public Render
 	{
 	public:
 		RenderPass();
-		~RenderPass();
+		virtual ~RenderPass();
 		RenderPass(RenderPass const &copy);
 		RenderPass &operator=(RenderPass const &r);
 
 		virtual Render &update();
 
 		RenderPass &configSample(GLint sample);
-		RenderPass &addColorOutput(GLenum target, GLenum internalFormat);
-		Texture2D const &getColorOutput(size_t index) const;
-		size_t getNbrColorOuput() const;
 	
 	private:
 		Framebuffer _fbo;
 		GLint _sample;
-		bool _updateColorOutput;
-		AGE::Vector<std::pair<GLenum, Texture2D *>> _colorOutput;
 
-		void updateOutput();
+		virtual void updateOutput();
+
 	};
 
-	__forceinline void RenderPass::updateOutput()
+	class RenderPostEffect : public Render
+	{
+	public:
+		RenderPostEffect();
+		virtual ~RenderPostEffect();
+		RenderPostEffect(RenderPostEffect const &copy);
+		RenderPostEffect &operator=(RenderPostEffect const &r);
+
+		virtual Render &update();
+
+	private:
+		gl::Key<Vertices> _quad;
+		gl::Key<Indices> _indicesQuad;
+		gl::Key<VertexPool> _quadPool;
+		gl::Key<IndexPool> _indicesQuadPool;
+
+		virtual void updateOutput();
+	};
+
+	__forceinline void Render::updateOutput()
 	{
 		// update output
 		if (_updateColorOutput)

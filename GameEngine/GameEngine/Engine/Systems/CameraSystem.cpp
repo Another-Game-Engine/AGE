@@ -102,30 +102,35 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	if (_render == NULL)
 		std::cerr << "Warning: No manager set for the camerasystem" << std::endl;
 	
+	// render pass
 	_shader = _render->addShader(VERTEX_SHADER, FRAG_SHADER);
 	size_t sizeElement[2];
 	gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
 	_global_state = _render->addUniformBlock(2, sizeElement);
-	_render->addPreShaderQuad();
 	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
 	_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
-	//_pro_matrix = _render->addShaderUniform(_shader, "projection_matrix");
-	//_render->addShaderUniform(_shader, "pos_light", glm::vec4(1.0f));
 	_model_matrix = _render->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
 	_view_matrix = _render->addShaderUniform(_shader, "view_matrix", glm::mat4(1.f));
-	//_normal_matrix = _render->addShaderUniform(_shader, "normal_matrix", glm::mat3(1.f));
 	_diffuse_texture = _render->addShaderSampler(_shader, "diffuse_texture");
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color", glm::vec4(1.0f));
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio", 1.0f);
 	_render->bindMaterialToShader<gl::Color_diffuse>(_shader, _diffuse_color);
 	_render->bindMaterialToShader<gl::Ratio_diffuse>(_shader, _diffuse_ratio);
 	_render->bindTransformationToShader(_shader, _model_matrix);
-	_renderPass = _render->addRender(_shader);
-	_render->pushSetTestTaskRender(_renderPass, false, false, true);
-	_render->pushSetClearValueTaskRender(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-	_render->pushClearTaskRender(_renderPass, true, true, false);
-	_render->configRender(_renderPass, glm::ivec4(0, 0, 800, 600));
-	//_render->addColorOutputRender(_renderPass, GL_COLOR_ATTACHMENT0, GL_RGB8);
+	_renderPass = _render->addRenderPass(_shader);
+	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
+	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
+	_render->configRenderPass(_renderPass, glm::ivec4(0, 0, 800, 600));
+
+	// render final
+	_quadShader = _render->addPreShaderQuad();
+	_textureQuad = _render->addShaderUniform(_quadShader, "texture");
+	_renderQuad = _render->addRender(_quadShader);
+	_render->pushSetTestTaskRender(_renderQuad, false, false, true);
+	_render->pushSetClearValueTaskRender(_renderQuad, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+	_render->pushClearTaskRender(_renderQuad, true, true, false);
+	_render->configRender(_renderQuad, glm::ivec4(0, 0, 800, 600));
 }
 #endif
 
