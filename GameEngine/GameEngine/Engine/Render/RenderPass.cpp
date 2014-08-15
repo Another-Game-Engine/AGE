@@ -405,18 +405,15 @@ namespace gl
 
 	void RenderPostEffect::updateOutput()
 	{
-	//	// update output
-	//	if (_updateColorOutput)
-	//	{
-	//		GLenum *targeted;
-	//		targeted = new GLenum[_colorOutput.size()];
-	//		for (size_t index = 0; index < _colorOutput.size(); ++index)
-	//		{
-	//			targeted[index] = _colorOutput[index].first;
-	//			_colorOutput[index].second->attachement(_fbo, targeted[index]);
-	//		}
-	//		glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
-	//		_updateColorOutput = true;
-	//	}
+		// update output
+		if (_updateColorOutput)
+		{
+			GLenum *targeted;
+			targeted = new GLenum[_colorOutput.size()];
+			for (size_t index = 0; index < _colorOutput.size(); ++index)
+				targeted[index] = _colorOutput[index].first;
+			glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
+			_updateColorOutput = true;
+		}
 	}
 }

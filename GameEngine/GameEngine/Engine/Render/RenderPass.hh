@@ -134,23 +134,6 @@ namespace gl
 		virtual void updateOutput();
 	};
 
-	__forceinline void Render::updateOutput()
-	{
-		// update output
-		if (_updateColorOutput)
-		{
-			GLenum *targeted;
-			targeted = new GLenum[_colorOutput.size()];
-			for (size_t index = 0; index < _colorOutput.size(); ++index)
-			{
-				targeted[index] = _colorOutput[index].first;
-				_colorOutput[index].second->attachement(_fbo, targeted[index]);
-			}
-			glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
-			_updateColorOutput = true;
-		}
-	}
-
 	__forceinline void Render::updateInput()
 	{
 		// update input
