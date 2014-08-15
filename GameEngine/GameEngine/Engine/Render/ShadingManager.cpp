@@ -175,22 +175,6 @@ namespace gl
 		return (shader->addSampler(flag));
 	}
 
-	Key<InputSampler> ShadingManager::addShaderInputSampler(Key<Shader> const &keyShader, std::string const &flag)
-	{
-		Shader *shader;
-		if ((shader = getShader(keyShader, "addShaderInputSampler()")) == NULL)
-			return (Key<InputSampler>(KEY_DESTROY));
-		return (shader->addInputSampler(flag));
-	}
-
-	Key<InputSampler> ShadingManager::getShaderInputSampler(Key<Shader> const &keyShader, size_t target)
-	{
-		Shader const *shader;
-		if ((shader = getShader(keyShader, "getShaderInputSampler()")) == NULL)
-			return (Key<InputSampler>(KEY_DESTROY));
-		return (shader->getInputSampler(target));
-	}
-
 	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
 	{
 		Shader const *shader;
@@ -461,15 +445,15 @@ namespace gl
 		return (*this);
 	}
 
-	Key<RenderPass> ShadingManager::addRenderPass(Key<Shader> const &keyShader)
-	{
-		Key<RenderPass> key;
-
-		_renderPassPool.push_back(RenderPass());
-		_renderPass[key] = _renderPassPool.size() - 1;
-		bindShaderRenderPass(key, keyShader);
-		return (key);
-	}
+	//Key<RenderPass> ShadingManager::addRenderPass(Key<Shader> const &keyShader)
+	//{
+	//	Key<RenderPass> key;
+	//
+	//	_renderPassPool.push_back(RenderPass());
+	//	_renderPass[key] = _renderPassPool.size() - 1;
+	//	bindShaderRenderPass(key, keyShader);
+	//	return (key);
+	//}
 
 	Key<Render> ShadingManager::addRender(Key<Shader> const &keyShader)
 	{

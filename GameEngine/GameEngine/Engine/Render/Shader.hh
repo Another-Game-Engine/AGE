@@ -20,7 +20,6 @@ namespace gl
 	struct Uniform{};
 	struct InterfaceBlock{};
 	struct Output{};
-	struct InputSampler{};
 
 	struct MaterialBind
 	{
@@ -65,12 +64,7 @@ namespace gl
 		Key<Sampler> addSampler(std::string const &flag);
 		Key<Sampler> getSampler(size_t index) const;
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
-	
-		// add input sampler
-		Key<InputSampler> addInputSampler(std::string const &flag);
-		Key<InputSampler> getInputSampler(size_t index) const;
-		size_t getNbrInputSampler() const;
-		Shader &setInputSampler(Key<InputSampler> const &key, Texture2D const &bind);
+		bool hasSampler(Key<Sampler> const &key);
 
 		// InterfaceBlock
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock);
@@ -104,7 +98,6 @@ namespace gl
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
 		std::map<Key<InterfaceBlock>, size_t> _interfaceBlock;
-		std::map<Key<InputSampler>, size_t> _inputSampler;
 
 		/// some private function usefull for internal functionement
 		// use to create the shader
@@ -119,8 +112,6 @@ namespace gl
 		size_t getIndexUniform(Key<Uniform> const &key, std::string const &msg);
 		Task *getSampler(Key<Sampler> const &key, std::string const &msg);
 		size_t getIndexSampler(Key<Sampler> const &key, std::string const &msg);
-		Task *getInputSampler(Key<InputSampler> const &key, std::string const &msg);
-		size_t getIndexInputSampler(Key<InputSampler> const &key, std::string const &msg);
 		Task *getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
 		size_t getIndexInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
 		Task *getOutput(Key<Output> const &key, std::string const &msg);

@@ -63,8 +63,6 @@ namespace gl
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
-		Key<InputSampler> addShaderInputSampler(Key<Shader> const &shader, std::string const &flag);
-		Key<InputSampler> getShaderInputSampler(Key<Shader> const &shader, size_t index);
 
 		// Interface
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
@@ -102,7 +100,6 @@ namespace gl
 		GLenum getTypeTexture(Key<Texture> const &key);
 
 		// RenderPass
-		Key<RenderPass> addRenderPass();
 		Key<RenderPass> addRenderPass(Key<Shader> const &shader);
 		ShadingManager &rmRenderPass(Key<RenderPass> &key);
 		Key<RenderPass> getRenderPass(size_t target) const;
@@ -133,7 +130,6 @@ namespace gl
 		ShadingManager &addColorOutputRenderPass(Key<RenderPass> const &renderPass, GLenum target, GLenum internalFormat);
 
 		// Render
-		Key<Render> addRender();
 		Key<Render> addRender(Key<Shader> const &shader);
 		ShadingManager &rmRender(Key<Render> &key);
 		Key<Render> getRender(size_t target) const;

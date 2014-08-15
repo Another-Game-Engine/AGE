@@ -333,17 +333,6 @@ namespace gl
 		return (key);
 	}
 
-	Key<InputSampler> Shader::addInputSampler(std::string const &flag)
-	{
-		Key<InputSampler> key;
-
-		_tasks.push_back(Task());
-		Task *task = &_tasks.back();
-		_inputSampler[key] = _tasks.size() - 1;
-		createSamplerTask(*task, flag);
-		return (key);
-	}
-
 	Key<Sampler> Shader::getSampler(size_t target) const
 	{
 		if (target >= _samplers.size())
@@ -354,31 +343,6 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<InputSampler> Shader::getInputSampler(size_t target) const
-	{
-		if (target >= _inputSampler.size())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - getInputSampler(size_t target)", "the target is out of range", Key<InputSampler>(KEY_DESTROY));
-		auto &element = _inputSampler.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
-	}
-
-	size_t Shader::getNbrInputSampler() const
-	{
-		return (_inputSampler.size());
-	}
-
-	Shader &Shader::setInputSampler(Key<InputSampler> const &key, Texture2D const &texture)
-	{
-		Task *task;
-
-		if ((task = getInputSampler(key, "setInputSampler")) == NULL)
-			return (*this);
-		setSamplerTask(*task, texture);
-		return (*this);
-	}
-
 	Shader &Shader::setSampler(Key<Sampler> const &key, Texture const &texture)
 	{
 		Task *task;
@@ -387,6 +351,13 @@ namespace gl
 			return (*this);
 		setSamplerTask(*task, texture);
 		return (*this);
+	}
+
+	bool Shader::hasSampler(Key<Sampler> const &key)
+	{
+		if (getSampler(key, "hasSampler") != NULL)
+			return (true);
+		return (false);
 	}
 
 	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag, UniformBlock const &uniformBlock)
@@ -420,14 +391,6 @@ namespace gl
 		return (element->second);
 	}
 
-	Task *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)
-	{
-		size_t index = getIndexUniform(key, msg);
-		if (index != -1)
-			return (&_tasks[index]);
-		return (NULL);
-	}
-
 	size_t Shader::getIndexSampler(Key<Sampler> const &key, std::string const &msg)
 	{
 		if (!key)
@@ -438,27 +401,9 @@ namespace gl
 		return (element->second);
 	}
 
-	size_t Shader::getIndexInputSampler(Key<InputSampler> const &key, std::string const &msg)
-	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", -1);
-		auto &element = _inputSampler.find(key);
-		if (element == _inputSampler.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", -1);
-		return (element->second);
-	}
-
 	Task *Shader::getSampler(Key<Sampler> const &key, std::string const &msg)
 	{
 		size_t index = getIndexSampler(key, msg);
-		if (index != -1)
-			return (&_tasks[index]);
-		return (NULL);
-	}
-
-	Task *Shader::getInputSampler(Key<InputSampler> const &key, std::string const &msg)
-	{
-		size_t index = getIndexInputSampler(key, msg);
 		if (index != -1)
 			return (&_tasks[index]);
 		return (NULL);
