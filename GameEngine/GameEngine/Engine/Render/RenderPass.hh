@@ -19,6 +19,7 @@ namespace gl
 	struct Uniform;
 	struct Sampler;
 	class GeometryManager;
+	class MaterialManager;
 	class Texture2D;
 	class RenderOffScreen;
 
@@ -32,7 +33,7 @@ namespace gl
 	public:
 		~Render();
 
-		virtual Render &draw(GeometryManager &g) = 0;
+		virtual Render &draw() = 0;
 
 		// prepare draw
 		Render &pushSetScissorTask(glm::ivec4 const &area);
@@ -95,13 +96,15 @@ namespace gl
 		GLenum getAttachementOutput(size_t index);
 
 	protected:
-		RenderOffScreen(Shader &shader);
+		RenderOffScreen(Shader &shader, GeometryManager &g);
 		RenderOffScreen(RenderOffScreen const &copy) = delete;
 		RenderOffScreen &operator=(RenderOffScreen const &r) = delete;
 
 		GLenum *_colorAttachement;
 		Texture2D **_colorTexture2D;
 		GLsizei _nbrColorAttachement;
+
+		GeometryManager &_geometryManager;
 
 		Framebuffer _fbo;
 		GLint _sample;
@@ -118,17 +121,19 @@ namespace gl
 	class RenderPass : public RenderOffScreen
 	{
 	public:
-		RenderPass(Shader &shader);
+		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m);
 		virtual ~RenderPass();
 
 		RenderPass &setRenderPassObjects(AGE::Vector<AGE::Drawable> const &objects);
-		virtual Render &draw(GeometryManager &g);
+		virtual Render &draw();
 	
 	private:
 		RenderPass(RenderPass const &copy) = delete;
 		RenderPass &operator=(RenderPass const &r) = delete;
 	
 		AGE::Vector<AGE::Drawable> const *_objectsToRender;
+
+		MaterialManager &_materialManager;
 	};
 
 	//class RenderPostEffect : public Render

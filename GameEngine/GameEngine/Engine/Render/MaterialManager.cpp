@@ -1,4 +1,5 @@
 #include <Render/MaterialManager.hh>
+#include <Render/Shader.hh>
 
 # undef DEBUG_MESSAGE
 # define DEBUG_MESSAGE(type, from, reason, return_type) \
@@ -60,5 +61,14 @@ namespace gl
 		_optimizeMaterialSearch.second = &material->second;
 		return (&material->second);
 	}
-	
+
+	MaterialManager &MaterialManager::updateShaderMaterial(Key<Material> const &key, Shader &shader)
+	{
+		Material *material;
+
+		if ((material = getMaterial(key, "updateShaderMaterial")) == NULL)
+			return (*this);
+		shader.updateMaterial(*material);
+		return (*this);
+	}
 }

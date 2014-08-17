@@ -4,6 +4,7 @@
 #include <Core/Drawable.hh>
 #include <Render/OpenGLTask.hh>
 #include <Render/GeometryManager.hh>
+#include <Render/MaterialManager.hh>
 #include <Render/Storage.hh>
 
 # undef DEBUG_MESSAGE
@@ -270,13 +271,14 @@ namespace gl
 		return (*this);
 	}
 	
-	RenderOffScreen::RenderOffScreen(Shader &shader)
+	RenderOffScreen::RenderOffScreen(Shader &shader, GeometryManager &g)
 		: Render(shader),
 		_sample(1),
 		_colorAttachement(NULL),
 		_colorTexture2D(NULL),
 		_nbrColorAttachement(0),
-		_updateOutput(false)
+		_updateOutput(false),
+		_geometryManager(g)
 	{
 	}
 
@@ -348,9 +350,10 @@ namespace gl
 		return (_colorAttachement[index]);
 	}
 
-	RenderPass::RenderPass(Shader &shader)
-		: RenderOffScreen(shader),
-		_objectsToRender(NULL)
+	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
+		: RenderOffScreen(shader, g),
+		_objectsToRender(NULL),
+		_materialManager(m)
 	{
 	}
 
@@ -364,7 +367,7 @@ namespace gl
 		return (*this);
 	}
 
-	Render &RenderPass::draw(GeometryManager &g)
+	Render &RenderPass::draw()
 	{
 		_fbo.bind();
 		if (_updateOutput)
@@ -379,8 +382,9 @@ namespace gl
 		for (size_t index = 0; index < _objectsToRender->size(); ++index)
 		{
 			AGE::Drawable const &object = (*_objectsToRender)[index];
-			//_shader.preDraw(object.material)
-			g.draw(_mode, object.mesh.indices, object.mesh.vertices);
+			_materialManager.updateShaderMaterial(object.material, _shader);
+			_shader.preDraw(object.transformation);
+			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
 		}
 		return (*this);
 	}

@@ -464,23 +464,30 @@ namespace gl
 		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&mat);
 	}
 
-	void Shader::preDraw(Material const &material, glm::mat4 const &transform)
+	Shader &Shader::updateMaterial(Material const &material)
 	{
 		use();
-		setTransformationTask(transform);
 		for (size_t index = 0; index < _bindMaterial.size(); ++index)
 		if (_bindMaterial[index].isUse)
 			setTaskWithMaterial(_bindMaterial[index], material);
+		return (*this);
+	}
+
+	Shader &Shader::preDraw(glm::mat4 const &transform)
+	{
+		use();
+		setTransformationTask(transform);
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
 			if (!_tasks[index].isExec())
-				DEBUG_MESSAGE("Warning", "Shader - updateMemory", "function pointer not set",);
+				DEBUG_MESSAGE("Warning", "Shader - updateMemory", "function pointer not set", *this);
 			if (_tasks[index].update)
 			{
 				_tasks[index].func(_tasks[index].params);
 				_tasks[index].update = false;
 			}
 		}
+		return (*this);
 	}
 
 	size_t Shader::createMaterialBind(size_t offset, size_t indexTask)
