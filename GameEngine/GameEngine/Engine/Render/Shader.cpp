@@ -464,7 +464,7 @@ namespace gl
 		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&mat);
 	}
 
-	Shader &Shader::updateMaterial(Material const &material)
+	Shader &Shader::setMaterial(Material const &material)
 	{
 		use();
 		for (size_t index = 0; index < _bindMaterial.size(); ++index)
@@ -473,7 +473,7 @@ namespace gl
 		return (*this);
 	}
 
-	Shader &Shader::preDraw(glm::mat4 const &transform)
+	Shader &Shader::update(glm::mat4 const &transform)
 	{
 		use();
 		setTransformationTask(transform);

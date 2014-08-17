@@ -21,7 +21,7 @@ namespace gl
 		Key<Material> getMaterial(size_t index) const;
 		template <typename TYPE> MaterialManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
 		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
-		MaterialManager &updateShaderMaterial(Key<Material> const &key, Shader &shader);
+		MaterialManager &setShader(Key<Material> const &key, Shader &shader);
 
 	private:
 		MaterialManager(MaterialManager const &copy) = delete;

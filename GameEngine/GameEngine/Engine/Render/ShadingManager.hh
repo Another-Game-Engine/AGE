@@ -43,6 +43,7 @@ namespace gl
 		Key<Shader> addShader(std::string const &vert, std::string const &frag);
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
 		Key<Shader> getShader(size_t index) const;
+		
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat3 const &value);
@@ -53,11 +54,14 @@ namespace gl
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
 		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3);
+		
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
+		
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
 		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
+
 		Key<UniformBlock> addUniformBlock(size_t nbrElement, size_t *sizeElement);
 		ShadingManager &rmUniformBlock(Key<UniformBlock> &uniformBlock);
 		Key<UniformBlock> getUniformBlock(size_t index) const;
@@ -85,6 +89,8 @@ namespace gl
 		Key<RenderPass> getRenderPass(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPass)
 		ShadingManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
+		ShadingManager &pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
+		ShadingManager &popOutputColorRenderPass(Key<RenderPass> const &key);
 
 		// drawing
 		ShadingManager &draw(AGE::Vector<AGE::Drawable> const &objectRender);

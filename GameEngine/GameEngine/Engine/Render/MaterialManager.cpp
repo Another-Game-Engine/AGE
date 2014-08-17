@@ -62,13 +62,13 @@ namespace gl
 		return (&material->second);
 	}
 
-	MaterialManager &MaterialManager::updateShaderMaterial(Key<Material> const &key, Shader &shader)
+	MaterialManager &MaterialManager::setShader(Key<Material> const &key, Shader &shader)
 	{
 		Material *material;
 
 		if ((material = getMaterial(key, "updateShaderMaterial")) == NULL)
 			return (*this);
-		shader.updateMaterial(*material);
+		shader.setMaterial(*material);
 		return (*this);
 	}
 }

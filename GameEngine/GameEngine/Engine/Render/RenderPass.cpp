@@ -386,13 +386,15 @@ namespace gl
 			for (size_t index = 0; index < _inputSamplers.size(); ++index)
 				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
 		}
+		for (size_t index = 0; index < _tasks.size(); ++index)
+			_tasks[index].func(_tasks[index].params);
 		if (_objectsToRender == NULL)
 			return (*this);
 		for (size_t index = 0; index < _objectsToRender->size(); ++index)
 		{
 			AGE::Drawable const &object = (*_objectsToRender)[index];
-			_materialManager.updateShaderMaterial(object.material, _shader);
-			_shader.preDraw(object.transformation);
+			_materialManager.setShader(object.material, _shader);
+			_shader.update(object.transformation);
 			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
 		}
 		return (*this);

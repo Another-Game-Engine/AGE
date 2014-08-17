@@ -420,10 +420,32 @@ namespace gl
 		renderPass->configRect(rect);
 		return (*this);
 	}
+
+	ShadingManager &ShadingManager::pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "pushOutputColorRenderPass")) == NULL)
+			return (*this);
+		renderPass->pushColorOutput(attachement, internalFormat);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::popOutputColorRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "pushOutputColorRenderPass")) == NULL)
+			return (*this);
+		renderPass->popColorOutput();
+		return (*this);
+	}
 	
 	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
 	{
-
+		auto &element = _renderPass.begin();
+		element->second->setRenderPassObjects(objectRender);
+		element->second->draw();
 		return (*this);
 	}
 

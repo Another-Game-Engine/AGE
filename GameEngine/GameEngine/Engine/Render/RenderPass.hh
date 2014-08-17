@@ -115,6 +115,8 @@ namespace gl
 	__forceinline void RenderOffScreen::updateOutput()
 	{
 		glDrawBuffers(_nbrColorAttachement, _colorAttachement);
+		for (size_t index = 0; index < _nbrColorAttachement; ++index)
+			_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
 		_updateOutput = false;
 	}
 
