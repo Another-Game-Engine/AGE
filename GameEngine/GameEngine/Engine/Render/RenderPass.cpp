@@ -364,7 +364,7 @@ namespace gl
 		return (*this);
 	}
 
-	Render &RenderPass::draw()
+	Render &RenderPass::draw(GeometryManager &g)
 	{
 		_fbo.bind();
 		if (_updateOutput)
@@ -373,6 +373,14 @@ namespace gl
 		{
 			for (size_t index = 0; index < _inputSamplers.size(); ++index)
 				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
+		}
+		if (_objectsToRender == NULL)
+			return (*this);
+		for (size_t index = 0; index < _objectsToRender->size(); ++index)
+		{
+			AGE::Drawable const &object = (*_objectsToRender)[index];
+			//_shader.preDraw(object.material)
+			g.draw(_mode, object.mesh.indices, object.mesh.vertices);
 		}
 		return (*this);
 	}

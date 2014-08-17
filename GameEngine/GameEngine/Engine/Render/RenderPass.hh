@@ -32,7 +32,7 @@ namespace gl
 	public:
 		~Render();
 
-		virtual Render &draw() = 0;
+		virtual Render &draw(GeometryManager &g) = 0;
 
 		// prepare draw
 		Render &pushSetScissorTask(glm::ivec4 const &area);
@@ -122,7 +122,7 @@ namespace gl
 		virtual ~RenderPass();
 
 		RenderPass &setRenderPassObjects(AGE::Vector<AGE::Drawable> const &objects);
-		virtual Render &draw();
+		virtual Render &draw(GeometryManager &g);
 	
 	private:
 		RenderPass(RenderPass const &copy) = delete;

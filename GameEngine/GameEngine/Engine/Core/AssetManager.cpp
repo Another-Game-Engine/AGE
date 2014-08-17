@@ -30,7 +30,7 @@ namespace AGE
 		auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
 		for (auto &e : data.collection)
 		{
-			auto key = manager->addMaterial();
+			auto key = manager->materialManager.addMaterial();
 			material->datas.push_back(key);
 
 			// TODO fill material with material key

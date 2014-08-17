@@ -11,6 +11,7 @@
 #include <Render/Material.hh>
 #include <cassert>
 #include <Render/GeometryManager.hh>
+#include <Render/MaterialManager.hh>
 #include <Render/RenderPass.hh>
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
@@ -33,6 +34,7 @@ namespace gl
 	{
 	public:
 		GeometryManager geometryManager;
+		MaterialManager materialManager;
 
 	public:
 		ShadingManager();
@@ -73,15 +75,7 @@ namespace gl
 		Key<UniformBlock> getUniformBlock(size_t index) const;
 		template <typename TYPE> ShadingManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
 
-		// Material
-		Key<Material> addMaterial();
-		ShadingManager &rmMaterial(Key<Material> &key);
-		Key<Material> getMaterial(size_t index) const;
-		//ShadingManager &setRenderPassMaterial(Key<Material> const &m, Key<RenderPass> const &r);
-		template <typename TYPE> ShadingManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
-		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
-		template <typename TYPE> ShadingManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
-		ShadingManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+	
 		ShadingManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
 
 		// Texture
@@ -97,6 +91,10 @@ namespace gl
 		ShadingManager &rmTexture(Key<Texture> &key);
 		Key<Texture> getTexture(size_t target) const;
 		GLenum getTypeTexture(Key<Texture> const &key);
+
+		template <typename TYPE> ShadingManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+		ShadingManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+
 
 		// RenderPass
 		//Key<RenderPass> addRenderPass(Key<Shader> const &shader);
@@ -165,7 +163,6 @@ namespace gl
 		std::map<Key<Shader>, Shader *> _shaders;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
-		std::map<Key<Material>, Material> _materials;
 		//std::map<Key<RenderPass>, size_t> _renderPass;
 		//std::map<Key<Render>, size_t> _render;
 
@@ -175,7 +172,6 @@ namespace gl
 		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
 		std::pair<Key<RenderPass>, size_t> _optimizeRenderPassSearch;
 		std::pair<Key<Render>, size_t> _optimizeRenderSearch;
-		std::pair<Key<Material>, Material *> _optimizeMaterialSearch;
 		
 		// binding
 		AGE::Vector<BindingShader> _bindShader;
@@ -193,7 +189,6 @@ namespace gl
 		//RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
 		size_t getRenderIndex(Key<Render> const &key, std::string const &in);
 		Render *getRender(Key<Render> const &key, std::string const &in);
-		Material *getMaterial(Key<Material> const &key, std::string const &in);
 		
 		// tool use in intern for bind shader to render/renderPass
 		//void addBindShaderToRendering(Render *r, Shader *s);
@@ -222,6 +217,16 @@ namespace gl
 	};
 
 	template <typename TYPE>
+	ShadingManager &ShadingManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	{
+		Shader *shader;
+		if ((shader = getShader(shaderKey, "bindMaterialToShader")) == NULL)
+			return (*this);
+		shader->bindingMaterial<TYPE>(uniformKey);
+		return (*this);
+	}
+
+	template <typename TYPE>
 	ShadingManager &ShadingManager::setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value)
 	{
 		UniformBlock *uniformBlock;
@@ -229,36 +234,6 @@ namespace gl
 		if ((uniformBlock = getUniformBlock(key, "setUniformBlock")) == NULL)
 			return (*this);
 		uniformBlock->set<TYPE>(index, value);
-		return (*this);
-	}
-
-	template <typename TYPE> 
-	ShadingManager &ShadingManager::setMaterial(Key<Material> const &key, typename TYPE::return_type const &value)
-	{
-		Material *material;
-
-		if ((material = getMaterial(key, "setMaterial")) == NULL)
-			return (*this);
-		material->set<TYPE>(value);
-		return (*this);
-	}
-
-	template <typename TYPE> 
-	typename TYPE::return_type ShadingManager::getMaterial(Key<Material> const &key)
-	{
-		Material *material;
-
-		material = getMaterial(key, "getMaterial");
-		return (material->get<TYPE>());
-	}
-
-	template <typename TYPE>
-	ShadingManager &ShadingManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
-	{
-		Shader *shader;
-		if ((shader = getShader(shaderKey, "bindMaterialToShader")) == NULL)
-			return (*this);
-		shader->bindingMaterial<TYPE>(uniformKey);
 		return (*this);
 	}
 

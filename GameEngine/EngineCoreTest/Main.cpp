@@ -12,6 +12,7 @@
 #include <Utils/PubSub.hpp>
 
 #include <Render/GeometryManager.hh>
+#include <Render/MaterialManager.hh>
 #include <Render/ShadingManager.hh>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
@@ -184,7 +185,6 @@ int			main(int ac, char **av)
 	config->loadFile();
 
 #ifdef RENDERING_ACTIVATED
-
 	auto &geo = e->setInstance<gl::ShadingManager>()->geometryManager;
 	geo.addIndexPool();
 	geo.addVertexPool();

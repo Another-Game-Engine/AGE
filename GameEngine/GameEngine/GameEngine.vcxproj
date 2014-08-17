@@ -222,6 +222,7 @@
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManager.cpp" />
     <ClCompile Include="Engine\Render\Material.cpp" />
+    <ClCompile Include="Engine\Render\MaterialManager.cpp" />
     <ClCompile Include="Engine\Render\MemoryGPU.cpp" />
     <ClCompile Include="Engine\Render\OpenGLTask.cpp" />
     <ClCompile Include="Engine\Render\PixelBuffer.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />
     <ClInclude Include="Engine\Render\Material.hh" />
+    <ClInclude Include="Engine\Render\MaterialManager.hh" />
     <ClInclude Include="Engine\Render\MemoryGPU.hh" />
     <ClInclude Include="Engine\Render\OpenGLTask.hh" />
     <ClInclude Include="Engine\Render\PixelBuffer.hh" />
