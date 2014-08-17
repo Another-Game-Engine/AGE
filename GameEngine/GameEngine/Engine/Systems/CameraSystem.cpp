@@ -117,11 +117,10 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	_render->bindMaterialToShader<gl::Color_diffuse>(_shader, _diffuse_color);
 	_render->bindMaterialToShader<gl::Ratio_diffuse>(_shader, _diffuse_ratio);
 	_render->bindTransformationToShader(_shader, _model_matrix);
-	//_renderPass = _render->addRenderPass(_shader);
-	//_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
-	//_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-	//_render->pushClearTaskRenderPass(_renderPass, true, true, false);
-	//_render->configRenderPass(_renderPass, glm::ivec4(0, 0, 800, 600));
+	_renderPass = _render->addRenderPass(_shader, glm::ivec4(0, 0, 800, 600));
+	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
+	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
 
 	// render final
 	//_quadShader = _render->addPreShaderQuad();

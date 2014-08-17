@@ -186,6 +186,7 @@
     <ClInclude Include="Engine\Render\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\MaterialManager.hh" />
+    <ClInclude Include="Engine\Render\MacroShadingManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

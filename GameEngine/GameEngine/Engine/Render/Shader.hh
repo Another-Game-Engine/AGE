@@ -13,9 +13,6 @@
 
 namespace gl
 {
-
-	class ShaderResource;
-
 	struct Sampler{};
 	struct Uniform{};
 	struct InterfaceBlock{};

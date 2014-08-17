@@ -298,6 +298,7 @@
     <ClInclude Include="Engine\Render\GeometryManager.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />
+    <ClInclude Include="Engine\Render\MacroShadingManager.hh" />
     <ClInclude Include="Engine\Render\Material.hh" />
     <ClInclude Include="Engine\Render\MaterialManager.hh" />
     <ClInclude Include="Engine\Render\MemoryGPU.hh" />

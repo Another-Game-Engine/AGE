@@ -14,6 +14,15 @@
 
 namespace gl
 {
+	Render::Render(Shader &shader)
+		: _rect(0, 0, 512, 512),
+		_mode(GL_TRIANGLES),
+		_shader(shader),
+		_branch(NULL),
+		_updateInput(false)
+	{
+
+	}
 
 	Render::~Render()
 	{
