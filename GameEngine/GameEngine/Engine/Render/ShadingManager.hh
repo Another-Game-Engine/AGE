@@ -26,7 +26,6 @@ namespace gl
 	struct InterfaceBlock;
 	class Texture;
 	class UniformBuffer;
-	class Drawable;
 	struct BindingRenderPass;
 	struct BindingShader;
 

@@ -20,6 +20,7 @@ namespace gl
 	struct Sampler;
 	class GeometryManager;
 	class Texture2D;
+	class RenderOffScreen;
 
 	//!\file RenderPass.hh
 	//!\author Dorian Pinaud
@@ -34,7 +35,6 @@ namespace gl
 		virtual Render &draw() = 0;
 
 		// prepare draw
-		bool stencilSizeValid();
 		Render &pushSetScissorTask(glm::ivec4 const &area);
 		Render &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
 		Render &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
@@ -60,7 +60,7 @@ namespace gl
 		GLenum getMode() const;
 
 		// Render attach to this render
-		Render &branchInput(Render const &input);
+		Render &branchInput(RenderOffScreen const &input);
 		Render &unBranchInput();
 		Render &pushInputSampler(Key<Sampler> const &key);
 		Render &popInputSampler();
@@ -72,38 +72,65 @@ namespace gl
 		Render(Render const &copy) = delete;
 		Render &operator=(Render const &r) = delete;
 
-		Shader &_shader;
-		AGE::Vector<Task> _tasks;
-		GLint _stencilSize;
 		glm::ivec4 _rect;
 		GLenum _mode;
+		
+		Shader &_shader;
+		AGE::Vector<Task> _tasks;
 		AGE::Vector<Key<Sampler>> _inputSamplers;
-		Render const *_branch;
+		RenderOffScreen const *_branch;
 		bool _updateInput;
-
-		void updateInput();
 	};
 
-	//class RenderPass : public Render
-	//{
-	//public:
-	//	RenderPass();
-	//	virtual ~RenderPass();
-	//	RenderPass(RenderPass const &copy);
-	//	RenderPass &operator=(RenderPass const &r);
-	//
-	//	virtual Render &update();
-	//
-	//	RenderPass &configSample(GLint sample);
-	//
-	//private:
-	//	Framebuffer _fbo;
-	//	GLint _sample;
-	//
-	//	virtual void updateOutput();
-	//
-	//};
-	//
+	class RenderOffScreen : public Render
+	{
+	public:
+		virtual ~RenderOffScreen();
+
+		RenderOffScreen &configSample(GLint sample);
+		RenderOffScreen &pushColorOutput(GLenum attachement, GLenum internalFormat);
+		RenderOffScreen &pushColorOutput(GLenum attachement, size_t width, size_t height, GLenum internalFormat);
+		RenderOffScreen &popColorOutput();
+		Texture2D const &getColorOutput(size_t index) const;
+		GLenum getAttachementOutput(size_t index);
+
+	protected:
+		RenderOffScreen(Shader &shader);
+		RenderOffScreen(RenderOffScreen const &copy) = delete;
+		RenderOffScreen &operator=(RenderOffScreen const &r) = delete;
+
+		GLenum *_colorAttachement;
+		Texture2D **_colorTexture2D;
+		GLsizei _nbrColorAttachement;
+
+		Framebuffer _fbo;
+		GLint _sample;
+		bool _updateOutput;
+		void updateOutput();
+	};
+
+	__forceinline void RenderOffScreen::updateOutput()
+	{
+		glDrawBuffers(_nbrColorAttachement, _colorAttachement);
+		_updateOutput = false;
+	}
+
+	class RenderPass : public RenderOffScreen
+	{
+	public:
+		RenderPass(Shader &shader);
+		virtual ~RenderPass();
+
+		RenderPass &setRenderPassObjects(AGE::Vector<AGE::Drawable> const &objects);
+		virtual Render &draw();
+	
+	private:
+		RenderPass(RenderPass const &copy) = delete;
+		RenderPass &operator=(RenderPass const &r) = delete;
+	
+		AGE::Vector<AGE::Drawable> const *_objectsToRender;
+	};
+
 	//class RenderPostEffect : public Render
 	//{
 	//public:

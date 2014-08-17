@@ -14,12 +14,6 @@
 namespace gl
 {
 
-	//RenderPass::RenderPass()
-	//	: Render(),
-	//	_sample(1)
-	//{
-	//}
-
 	Render::~Render()
 	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
@@ -29,53 +23,6 @@ namespace gl
 			delete[] _tasks[index].params;
 		}
 	}
-
-	//RenderPass::~RenderPass()
-	//{
-	//	for (size_t index = 0; index < _colorOutput.size(); ++index)
-	//		delete _colorOutput[index].second;
-	//}
-
-	//Render::Render(Render const &copy)
-	//	: _stencilSize(copy._stencilSize),
-	//	_rect(copy._rect),
-	//	_input(copy._input),
-	//	_shader(copy._shader),
-	//	_mode(copy._mode),
-	//	_updateInput(true),
-	//	_updateColorOutput(false)
-	//{
-	//}
-
-	//RenderPass::RenderPass(RenderPass const &copy)
-	//	: Render(copy),
-	//	_sample(copy._sample)
-	//{
-	//}
-
-	//Render &Render::operator=(Render const &r)
-	//{
-	//	if (this != &r)
-	//	{
-	//		_stencilSize = r._stencilSize;
-	//		_rect = r._rect;
-	//		_shader = r._shader;
-	//		_mode = r._mode;
-	//	}
-	//	return (*this);
-	//}
-
-	//RenderPass &RenderPass::operator=(RenderPass const &r)
-	//{
-	//	if (this != &r)
-	//	{
-	//		operator=(r);
-	//		_sample = r._sample;
-	//		_input = r._input;
-	//		_updateInput = true;
-	//	}
-	//	return (*this);
-	//}
 
 	Render &Render::pushSetScissorTask(glm::ivec4 const &area)
 	{
@@ -277,48 +224,11 @@ namespace gl
 		return (*this);
 	}
 
-	//Render &Render::update()
-	//{
-	//	glViewport(_rect.x, _rect.y, _rect.z, _rect.w);
-	//	for (size_t index = 0; index < _tasks.size(); ++index)
-	//		_tasks[index].func(_tasks[index].params);
-	//	updateInput();
-	//	return (*this);
-	//}
-
-	//Render &RenderPass::update()
-	//{
-	//	if (_shader == NULL)
-	//		DEBUG_MESSAGE("Warning", "RenderPass - update", "shader bind to renderPass assign to NULL", *this);
-	//	_fbo.bind();
-	//	_fbo.size(_rect.z, _rect.w, _sample);
-	//	glViewport(_rect.x, _rect.y, _rect.z, _rect.w);
-	//	for (size_t index = 0; index < _tasks.size(); ++index)
-	//		_tasks[index].func(_tasks[index].params);
-	//	updateOutput();
-	//	updateInput();
-	//	return (*this);
-	//}
-
-
-	bool Render::stencilSizeValid()
-	{
-		if (_stencilSize == -1)
-			glGetIntegerv(GL_STENCIL_BITS, &_stencilSize);
-		return (_stencilSize < 8) ? false : true;
-	}
-
 	Render &Render::configRect(glm::ivec4 const &rect)
 	{
 		_rect = rect;
 		return (*this);
 	}
-
-	//RenderPass &RenderPass::configSample(GLint sample)
-	//{
-	//	_sample = sample;
-	//	return (*this);
-	//}
 
 	Render &Render::setMode(GLenum mode)
 	{
@@ -331,7 +241,7 @@ namespace gl
 		return (_mode);
 	}
 
-	Render &Render::branchInput(Render const &input)
+	Render &Render::branchInput(RenderOffScreen const &input)
 	{
 		_branch = &input;
 		_updateInput = true;
@@ -359,13 +269,128 @@ namespace gl
 		_inputSamplers.pop_back();
 		return (*this);
 	}
+	
+	RenderOffScreen::RenderOffScreen(Shader &shader)
+		: Render(shader),
+		_sample(1),
+		_colorAttachement(NULL),
+		_colorTexture2D(NULL),
+		_nbrColorAttachement(0),
+		_updateOutput(false)
+	{
+	}
 
-	//Render &Render::addColorOutput(GLenum target, GLenum internalFormat)
+	RenderOffScreen::~RenderOffScreen()
+	{
+		if (_nbrColorAttachement > 0)
+		{
+			delete[] _colorAttachement;
+			delete[] _colorTexture2D;
+		}
+	}
+
+	RenderOffScreen &RenderOffScreen::configSample(GLint sample)
+	{
+		_sample = sample;
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::pushColorOutput(GLenum attachement, GLenum internalFormat)
+	{
+		return (pushColorOutput(attachement, _rect.z, _rect.w, internalFormat));
+	}
+
+	RenderOffScreen &RenderOffScreen::pushColorOutput(GLenum attachement, size_t width, size_t height, GLenum internalFormat)
+	{
+		GLsizei tmp_nbrColorAttachement = _nbrColorAttachement + 1;
+		GLenum *tmp_colorAttachement = new GLenum[tmp_nbrColorAttachement];
+		Texture2D **tmp_colorTexture2D = new Texture2D *[tmp_nbrColorAttachement];
+		memcpy(tmp_colorAttachement, _colorAttachement, sizeof(GLenum)* _nbrColorAttachement);
+		memcpy(tmp_colorTexture2D, _colorTexture2D, sizeof(GLenum)* _nbrColorAttachement);
+		if (_nbrColorAttachement > 0)
+		{
+			delete[] _colorAttachement;
+			delete[] _colorTexture2D;
+		}
+		_colorAttachement = tmp_colorAttachement;
+		_colorTexture2D = tmp_colorTexture2D;
+		_nbrColorAttachement = tmp_nbrColorAttachement;
+		_colorTexture2D[_nbrColorAttachement - 1] = new Texture2D(width, height, internalFormat, false);
+		_colorAttachement[_nbrColorAttachement - 1] = attachement;
+		_updateOutput = true;
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::popColorOutput()
+	{
+		if (_nbrColorAttachement < 1)
+			return (*this);
+		GLsizei tmp_nbrColorAttachement = _nbrColorAttachement - 1;
+		GLenum *tmp_colorAttachement = new GLenum[tmp_nbrColorAttachement];
+		Texture2D **tmp_colorTexture2D = new Texture2D *[tmp_nbrColorAttachement];
+		memcpy(tmp_colorAttachement, _colorAttachement, sizeof(GLenum)* tmp_nbrColorAttachement);
+		memcpy(tmp_colorTexture2D, _colorTexture2D, sizeof(GLenum)* tmp_nbrColorAttachement);
+		delete[] _colorAttachement;
+		delete[] _colorTexture2D;
+		_colorAttachement = tmp_colorAttachement;
+		_colorTexture2D = tmp_colorTexture2D;
+		_updateOutput = true;
+		return (*this);
+	}
+
+	Texture2D const &RenderOffScreen::getColorOutput(size_t index) const
+	{
+		return (*_colorTexture2D[index]);
+	}
+
+	GLenum RenderOffScreen::getAttachementOutput(size_t index)
+	{
+		return (_colorAttachement[index]);
+	}
+
+	RenderPass::RenderPass(Shader &shader)
+		: RenderOffScreen(shader),
+		_objectsToRender(NULL)
+	{
+	}
+
+	RenderPass::~RenderPass()
+	{
+	}
+
+	RenderPass &RenderPass::setRenderPassObjects(AGE::Vector<AGE::Drawable> const &objects)
+	{
+		_objectsToRender = &objects;
+		return (*this);
+	}
+
+	Render &RenderPass::draw()
+	{
+		_fbo.bind();
+		if (_updateOutput)
+			updateOutput();
+		if (_inputSamplers.size() == _nbrColorAttachement && _branch != NULL)
+		{
+			for (size_t index = 0; index < _inputSamplers.size(); ++index)
+				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
+		}
+		return (*this);
+	}
+
+	//Render &RenderPass::draw()
 	//{
-	//	_colorOutput.push_back(std::make_pair(target, new Texture2D(_rect.z, _rect.w, internalFormat, true)));
-	//	_updateColorOutput = true;
+	//	if (_shader == NULL)
+	//		DEBUG_MESSAGE("Warning", "RenderPass - update", "shader bind to renderPass assign to NULL", *this);
+	//	_fbo.bind();
+	//	_fbo.size(_rect.z, _rect.w, _sample);
+	//	glViewport(_rect.x, _rect.y, _rect.z, _rect.w);
+	//	for (size_t index = 0; index < _tasks.size(); ++index)
+	//		_tasks[index].func(_tasks[index].params);
+	//	updateOutput();
+	//	updateInput();
 	//	return (*this);
 	//}
+
 
 	//Texture2D const &Render::getColorOutput(size_t index) const
 	//{
@@ -389,20 +414,6 @@ namespace gl
 	//			targeted[index] = _colorOutput[index].first;
 	//			_colorOutput[index].second->attachement(_fbo, targeted[index]);
 	//		}
-	//		glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
-	//		_updateColorOutput = true;
-	//	}
-	//}
-
-	//void RenderPostEffect::updateOutput()
-	//{
-	//	// update output
-	//	if (_updateColorOutput)
-	//	{
-	//		GLenum *targeted;
-	//		targeted = new GLenum[_colorOutput.size()];
-	//		for (size_t index = 0; index < _colorOutput.size(); ++index)
-	//			targeted[index] = _colorOutput[index].first;
 	//		glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
 	//		_updateColorOutput = true;
 	//	}
