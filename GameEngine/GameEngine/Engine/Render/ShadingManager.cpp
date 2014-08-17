@@ -68,7 +68,7 @@ namespace gl
 			return (*this);
 		delete shader;
 		_shaders.erase(key);
-		unbindShaderToRendering(shader);
+//		unbindShaderToRendering(shader);
 		key.destroy();
 		return (*this);
 	}
@@ -335,53 +335,53 @@ namespace gl
 		return (&uniformBlock->second);
 	}
 
-	size_t ShadingManager::getRenderPassIndex(Key<RenderPass> const &key, std::string const &in)
-	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", -1);
-		if (_renderPass.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", -1);
-		if (key == _optimizeRenderPassSearch.first)
-			return (_optimizeRenderPassSearch.second);
-		auto &renderPassIndex = _renderPass.find(key);
-		if (renderPassIndex == _renderPass.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", -1);
-		_optimizeRenderPassSearch.first = key;
-		_optimizeRenderPassSearch.second = renderPassIndex->second;
-		return (renderPassIndex->second);
-	}
-
-	size_t ShadingManager::getRenderIndex(Key<Render> const &key, std::string const &in)
-	{
-		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", -1);
-		if (_render.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", -1);
-		if (key == _optimizeRenderSearch.first)
-			return (_optimizeRenderSearch.second);
-		auto &renderIndex = _render.find(key);
-		if (renderIndex == _render.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", -1);
-		_optimizeRenderSearch.first = key;
-		_optimizeRenderSearch.second = renderIndex->second;
-		return (renderIndex->second);
-	}
-
-	RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key, std::string const &in)
-	{
-		size_t index;
-		if ((index = getRenderPassIndex(key, in)) == -1)
-			return (NULL);
-		return (&_renderPassPool[index]);
-	}
-
-	Render *ShadingManager::getRender(Key<Render> const &key, std::string const &in)
-	{
-		size_t index;
-		if ((index = getRenderIndex(key, in)) == -1)
-			return (NULL);
-		return (&_renderPool[index]);
-	}
+	//size_t ShadingManager::getRenderPassIndex(Key<RenderPass> const &key, std::string const &in)
+	//{
+	//	if (!key)
+	//		DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", -1);
+	//	if (_renderPass.size() == 0)
+	//		DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", -1);
+	//	if (key == _optimizeRenderPassSearch.first)
+	//		return (_optimizeRenderPassSearch.second);
+	//	auto &renderPassIndex = _renderPass.find(key);
+	//	if (renderPassIndex == _renderPass.end())
+	//		DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", -1);
+	//	_optimizeRenderPassSearch.first = key;
+	//	_optimizeRenderPassSearch.second = renderPassIndex->second;
+	//	return (renderPassIndex->second);
+	//}
+	//
+	//size_t ShadingManager::getRenderIndex(Key<Render> const &key, std::string const &in)
+	//{
+	//	if (!key)
+	//		DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", -1);
+	//	if (_render.size() == 0)
+	//		DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", -1);
+	//	if (key == _optimizeRenderSearch.first)
+	//		return (_optimizeRenderSearch.second);
+	//	auto &renderIndex = _render.find(key);
+	//	if (renderIndex == _render.end())
+	//		DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", -1);
+	//	_optimizeRenderSearch.first = key;
+	//	_optimizeRenderSearch.second = renderIndex->second;
+	//	return (renderIndex->second);
+	//}
+	//
+	//RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key, std::string const &in)
+	//{
+	//	size_t index;
+	//	if ((index = getRenderPassIndex(key, in)) == -1)
+	//		return (NULL);
+	//	return (&_renderPassPool[index]);
+	//}
+	//
+	//Render *ShadingManager::getRender(Key<Render> const &key, std::string const &in)
+	//{
+	//	size_t index;
+	//	if ((index = getRenderIndex(key, in)) == -1)
+	//		return (NULL);
+	//	return (&_renderPool[index]);
+	//}
 
 	Material *ShadingManager::getMaterial(Key<Material> const &key, std::string const &in)
 	{
@@ -455,592 +455,565 @@ namespace gl
 	//	return (key);
 	//}
 
-	Key<Render> ShadingManager::addRender(Key<Shader> const &keyShader)
-	{
-		Key<Render> key;
+	//Key<Render> ShadingManager::addRender(Key<Shader> const &keyShader)
+	//{
+	//	Key<Render> key;
+	//
+	//	_renderPool.push_back(Render());
+	//	_render[key] = _renderPool.size() - 1;
+	//	bindShaderRender(key, keyShader);
+	//	return (key);
+	//}
 
-		_renderPool.push_back(Render());
-		_render[key] = _renderPool.size() - 1;
-		bindShaderRender(key, keyShader);
-		return (key);
-	}
+	//Key<RenderPass> ShadingManager::addRenderPass()
+	//{
+	//	Key<RenderPass> key;
+	//
+	//	_renderPassPool.push_back(RenderPass());
+	//	_renderPass[key] = _renderPassPool.size() - 1;
+	//	return (key);
+	//}
 
-	Key<RenderPass> ShadingManager::addRenderPass()
-	{
-		Key<RenderPass> key;
+	//Key<Render> ShadingManager::addRender()
+	//{
+	//	Key<Render> key;
+	//
+	//	_renderPool.push_back(Render());
+	//	_render[key] = _renderPool.size() - 1;
+	//	return (key);
+	//}
 
-		_renderPassPool.push_back(RenderPass());
-		_renderPass[key] = _renderPassPool.size() - 1;
-		return (key);
-	}
+	//ShadingManager &ShadingManager::rmRenderPass(Key<RenderPass> &key)
+	//{
+	//	RenderPass *render;
+	//	if ((render = getRenderPass(key, "rmRenderPass")) == NULL)
+	//		return (*this);
+	//	unbindRenderingInput(render);
+	//	_renderPass.erase(key);
+	//	key.destroy();
+	//	return (*this);
+	//}
 
-	Key<Render> ShadingManager::addRender()
-	{
-		Key<Render> key;
+	//ShadingManager &ShadingManager::rmRender(Key<Render> &key)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "rmRenderPass")) == NULL)
+	//		return (*this);
+	//	_render.erase(key);
+	//	key.destroy();
+	//	return (*this);
+	//}
 
-		_renderPool.push_back(Render());
-		_render[key] = _renderPool.size() - 1;
-		return (key);
-	}
+	//Key<RenderPass> ShadingManager::getRenderPass(size_t target) const
+	//{
+	//	if (target >= _renderPass.size())
+	//		DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getRenderPass(size_t target)", "the target is out of range", Key<RenderPass>(KEY_DESTROY));
+	//	auto &element = _renderPass.begin();
+	//	for (size_t index = 0; index < target; ++index)
+	//		++element;
+	//	return (element->first);
+	//}
 
-	ShadingManager &ShadingManager::rmRenderPass(Key<RenderPass> &key)
-	{
-		RenderPass *render;
-		if ((render = getRenderPass(key, "rmRenderPass")) == NULL)
-			return (*this);
-		unbindRenderingInput(render);
-		_renderPass.erase(key);
-		key.destroy();
-		return (*this);
-	}
+//Key<Render> ShadingManager::getRender(size_t target) const
+//{
+//	if (target >= _render.size())
+//		DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getRenderPass(size_t target)", "the target is out of range", Key<Render>(KEY_DESTROY));
+//	auto &element = _render.begin();
+//	for (size_t index = 0; index < target; ++index)
+//		++element;
+//	return (element->first);
+//}
 
-	ShadingManager &ShadingManager::rmRender(Key<Render> &key)
-	{
-		Render *render;
-		if ((render = getRender(key, "rmRenderPass")) == NULL)
-			return (*this);
-		_render.erase(key);
-		key.destroy();
-		return (*this);
-	}
+	//void ShadingManager::unbindShaderToRendering(Shader *s)
+	//{
+	//	for (size_t index = 0; index < _bindShader.size(); ++index)
+	//		if (_bindShader[index].s == s)
+	//			_bindShader[index].r->bindShader(NULL);
+	//}
 
-	Key<RenderPass> ShadingManager::getRenderPass(size_t target) const
-	{
-		if (target >= _renderPass.size())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getRenderPass(size_t target)", "the target is out of range", Key<RenderPass>(KEY_DESTROY));
-		auto &element = _renderPass.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
-	}
+	//void ShadingManager::unbindRenderingTarget(Render *r)
+	//{
+	//	for (size_t index = 0; index < _bindRendering.size(); ++index)
+	//	{
+	//		if (_bindRendering[index].target == r)
+	//		{
+	//			r->unbindInput();
+	//			return;
+	//		}
+	//	}
+	//}
 
-	Key<Render> ShadingManager::getRender(size_t target) const
-	{
-		if (target >= _render.size())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getRenderPass(size_t target)", "the target is out of range", Key<Render>(KEY_DESTROY));
-		auto &element = _render.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
-	}
+	//void ShadingManager::unbindRenderingInput(RenderPass *r)
+	//{
+	//	for (size_t index = 0; index < _bindRendering.size(); ++index)
+	//	{
+	//		if (_bindRendering[index].input == r)
+	//			_bindRendering[index].target->unbindInput();
+	//	}
+	//}
 
-	void ShadingManager::unbindShaderToRendering(Shader *s)
-	{
-		for (size_t index = 0; index < _bindShader.size(); ++index)
-			if (_bindShader[index].s == s)
-				_bindShader[index].r->bindShader(NULL);
-	}
+	//ShadingManager &ShadingManager::bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s)
+	//{
+	//	RenderPass *render;
+	//	Shader *shader;
+	//
+	//	if ((render = getRenderPass(r, "bindShaderRenderPass")) == NULL)
+	//		return (*this);
+	//	if ((shader = getShader(s, "bindShaderRenderPass")) == NULL)
+	//		return (*this);
+	//	render->bindShader(shader);
+	//	addBindShaderToRendering(render, shader);
+	//	return (*this);
+	//}
 
-	void ShadingManager::unbindRenderingTarget(Render *r)
-	{
-		for (size_t index = 0; index < _bindRendering.size(); ++index)
-		{
-			if (_bindRendering[index].target == r)
-			{
-				r->unbindInput();
-				return;
-			}
-		}
-	}
+	//ShadingManager &ShadingManager::bindShaderRender(Key<Render> const &r, Key<Shader> const &s)
+	//{
+	//	Render *render;
+	//	Shader *shader;
+	//
+	//	if ((render = getRender(r, "bindShaderRender")) == NULL)
+	//		return (*this);
+	//	if ((shader = getShader(s, "bindShaderRender")) == NULL)
+	//		return (*this);
+	//	render->bindShader(shader);
+	//	addBindShaderToRendering(render, shader);
+	//	return (*this);
+	//}
 
-	void ShadingManager::unbindRenderingInput(RenderPass *r)
-	{
-		for (size_t index = 0; index < _bindRendering.size(); ++index)
-		{
-			if (_bindRendering[index].input == r)
-				_bindRendering[index].target->unbindInput();
-		}
-	}
+	//void ShadingManager::addBindShaderToRendering(Render *r, Shader *s)
+	//{
+	//	for (size_t index = 0; index < _bindShader.size(); ++index)
+	//	{
+	//		if (_bindShader[index].s == s)
+	//		{
+	//			_bindShader[index].r = r;
+	//			return ;
+	//		}
+	//	}
+	//	_bindShader.push_back(BindingShader(r, s));
+	//}
 
-	ShadingManager &ShadingManager::bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s)
-	{
-		RenderPass *render;
-		Shader *shader;
+	//ShadingManager &ShadingManager::bindInputRenderPass(Key<RenderPass> const &t, Key<RenderPass> const &i)
+	//{
+	//	RenderPass *target;
+	//	RenderPass *input;
+	//	if ((target = getRenderPass(t, "bindInputRenderPass")) == NULL)
+	//		return (*this);
+	//	if ((input = getRenderPass(i, "bindInputRenderPass")) == NULL)
+	//		return (*this);
+	//	target->bindInput(*input);
+	//	addBindTargetToInput(target, input);
+	//	return (*this);
+	//}
 
-		if ((render = getRenderPass(r, "bindShaderRenderPass")) == NULL)
-			return (*this);
-		if ((shader = getShader(s, "bindShaderRenderPass")) == NULL)
-			return (*this);
-		render->bindShader(shader);
-		addBindShaderToRendering(render, shader);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::bindShaderRender(Key<Render> const &r, Key<Shader> const &s)
-	{
-		Render *render;
-		Shader *shader;
-
-		if ((render = getRender(r, "bindShaderRender")) == NULL)
-			return (*this);
-		if ((shader = getShader(s, "bindShaderRender")) == NULL)
-			return (*this);
-		render->bindShader(shader);
-		addBindShaderToRendering(render, shader);
-		return (*this);
-	}
-
-	void ShadingManager::addBindShaderToRendering(Render *r, Shader *s)
-	{
-		for (size_t index = 0; index < _bindShader.size(); ++index)
-		{
-			if (_bindShader[index].s == s)
-			{
-				_bindShader[index].r = r;
-				return ;
-			}
-		}
-		_bindShader.push_back(BindingShader(r, s));
-	}
-
-	ShadingManager &ShadingManager::bindInputRenderPass(Key<RenderPass> const &t, Key<RenderPass> const &i)
-	{
-		RenderPass *target;
-		RenderPass *input;
-		if ((target = getRenderPass(t, "bindInputRenderPass")) == NULL)
-			return (*this);
-		if ((input = getRenderPass(i, "bindInputRenderPass")) == NULL)
-			return (*this);
-		target->bindInput(*input);
-		addBindTargetToInput(target, input);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::bindInputRender(Key<Render> const &t, Key<RenderPass> const &i)
-	{
-		Render *target;
-		RenderPass *input;
-		if ((target = getRender(t, "bindInputRender")) == NULL)
-			return (*this);
-		if ((input = getRenderPass(i, "bindInputRender")) == NULL)
-			return (*this);
-		target->bindInput(*input);
-		addBindTargetToInput(target, input);
-		return (*this);
-	}
-
-	void ShadingManager::addBindTargetToInput(Render *t, RenderPass *i)
-	{
-		for (size_t index = 0; index < _bindRendering.size(); ++index)
-		{
-			if (_bindRendering[index].target == t)
-			{
-				_bindRendering[index].input = i;
-				return ;
-			}
-		}
-		_bindRendering.push_back(BindingRenderPass(t, i));
-	}
-
-	ShadingManager &ShadingManager::pushClearTaskRenderPass(Key<RenderPass> const &key, bool color, bool depth, bool stencil)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setClearOptionRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushClearTask(color, depth, stencil);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetClearValueTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth, uint8_t stencil)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setClearValueRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetClearValueTask(color, depth, stencil);
-		return (*this);
-	}
+	//ShadingManager &ShadingManager::bindInputRender(Key<Render> const &t, Key<RenderPass> const &i)
+	//{
+	//	Render *target;
+	//	RenderPass *input;
+	//	if ((target = getRender(t, "bindInputRender")) == NULL)
+	//		return (*this);
+	//	if ((input = getRenderPass(i, "bindInputRender")) == NULL)
+	//		return (*this);
+	//	target->bindInput(*input);
+	//	addBindTargetToInput(target, input);
+	//	return (*this);
+	//}
+	//
+	//void ShadingManager::addBindTargetToInput(Render *t, RenderPass *i)
+	//{
+	//	for (size_t index = 0; index < _bindRendering.size(); ++index)
+	//	{
+	//		if (_bindRendering[index].target == t)
+	//		{
+	//			_bindRendering[index].input = i;
+	//			return ;
+	//		}
+	//	}
+	//	_bindRendering.push_back(BindingRenderPass(t, i));
+	//}
+	//
+	//ShadingManager &ShadingManager::pushClearTaskRenderPass(Key<RenderPass> const &key, bool color, bool depth, bool stencil)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setClearOptionRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushClearTask(color, depth, stencil);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetClearValueTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth, uint8_t stencil)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setClearValueRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetClearValueTask(color, depth, stencil);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetColorMaskTaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setColorMaskRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetColorMaskTask(index, color);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilMaskTaskRenderPass(Key<RenderPass> const &key, uint8_t front, uint8_t back)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetStencilMaskTask(front, back);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetDepthMaskTaskRenderPass(Key<RenderPass> const &key, bool depth)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetDepthMaskTask(depth);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetTestTaskRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetTestTask(scissor, stencil, depth);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetScissorTaskRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetScissorTask(area);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilFunctionFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setStencilFunctionFrontFaceRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetStencilFunctionFrontFaceTask(func, ref, mask);
+	//	return (*this);
+	//}
+	//ShadingManager &ShadingManager::pushSetStencilOperationFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setStencilOperationFrontFaceRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetStencilOperationFrontFaceTask(opStencilFail, opDepthFail, opDepthPass);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilFunctionBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setStencilFunctionBackFaceRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetStencilFunctionBackFaceTask(func, ref, mask);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilOperationBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setStencilOperationBackFaceRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetStencilOperationBackFaceTask(opStencilFail, opDepthFail, opDepthPass);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilFunctionTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setStencilFunctionRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetStencilFunctionTask(func, ref, mask);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilOperationTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setStencilOperationRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetStencilOperationTask(opStencilFail, opDepthFail, opDepthPass);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setBlendEquationRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetBlendEquationTask(colorMode, alphaMode);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum mode)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setBlendEquationRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetBlendEquationTask(mode);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setBlendFuncRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetBlendFuncTask(srcRGB, destRGB, srcAlpha, destAlpha);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setBlendFuncRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetBlendFuncTask(src, dest);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendConstantTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendColor)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "setBlendConstantRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->pushSetBlendConstantTask(blendColor);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::popTaskRenderPass(Key<RenderPass> const &key)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "popTaskRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->popTask();
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushClearTaskRender(Key<Render> const &key, bool color, bool depth, bool stencil)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setClearOptionRender")) == NULL)
+	//		return (*this);
+	//	render->pushClearTask(color, depth, stencil);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetClearValueTaskRender(Key<Render> const &key, glm::vec4 const &color, float depth, uint8_t stencil)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setClearValueRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetClearValueTask(color, depth, stencil);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetColorMaskTaskRender(Key<Render> const &key, glm::bvec4 const &color, GLuint index)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setColorMaskRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetColorMaskTask(index, color);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilMaskTaskRender(Key<Render> const &key, uint8_t front, uint8_t back)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setDepthStencilMaskRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetStencilMaskTask(front, back);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetDepthMaskTaskRender(Key<Render> const &key, bool depth)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setDepthStencilMaskRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetDepthMaskTask(depth);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetTestTaskRender(Key<Render> const &key, bool scissor, bool stencil, bool depth)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setDepthStencilMaskRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetTestTask(scissor, stencil, depth);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetScissorTaskRender(Key<Render> const &key, glm::ivec4 const &area)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setDepthStencilMaskRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetScissorTask(area);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilFunctionFrontFaceTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setStencilFunctionFrontFaceRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetStencilFunctionFrontFaceTask(func, ref, mask);
+	//	return (*this);
+	//}
+	//ShadingManager &ShadingManager::pushSetStencilOperationFrontFaceTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepth)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setStencilOperationFrontFaceRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetStencilOperationFrontFaceTask(opStencilFail, opDepthFail, opDepth);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilFunctionBackFaceTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setStencilFunctionBackFaceRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetStencilFunctionBackFaceTask(func, ref, mask);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilOperationBackFaceTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepth)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setStencilOperationBackFaceRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetStencilOperationBackFaceTask(opStencilFail, opDepthFail, opDepth);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilFunctionTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setStencilFunctionRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetStencilFunctionTask(func, ref, mask);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetStencilOperationTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepth)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setStencilOperationRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetStencilOperationTask(opStencilFail, opDepthFail, opDepth);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendEquationTaskRender(Key<Render> const &key, GLenum colorMode, GLenum alphaMode)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setBlendEquationRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetBlendEquationTask(colorMode, alphaMode);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendEquationTaskRender(Key<Render> const &key, GLenum mode)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setBlendEquationRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetBlendEquationTask(mode);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendFuncTaskRender(Key<Render> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setBlendFuncRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetBlendFuncTask(srcRGB, destRGB, srcAlpha, destAlpha);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendFuncTaskRender(Key<Render> const &key, GLenum src, GLenum dest)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setBlendFuncRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetBlendFuncTask(src, dest);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::pushSetBlendConstantTaskRender(Key<Render> const &key, glm::vec4 const &blendColor)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "setBlendConstantRender")) == NULL)
+	//		return (*this);
+	//	render->pushSetBlendConstantTask(blendColor);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::popTaskRender(Key<Render> const &key)
+	//{
+	//	Render *render;
+	//	if ((render = getRender(key, "popTaskRender")) == NULL)
+	//		return (*this);
+	//	render->popTask();
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::configRender(Key<Render> const &r, glm::ivec4 const &rect)
+	//{
+	//	Render *render;
+	//
+	//	if ((render = getRender(r, "configRender")) == NULL)
+	//		return (*this);
+	//	render->configRect(rect);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::setModeRender(Key<Render> const &r, GLenum mode)
+	//{
+	//	Render *render;
+	//
+	//	if ((render = getRender(r, "configRender")) == NULL)
+	//		return (*this);
+	//	render->setMode(mode);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::addColorOutputRenderPass(Key<RenderPass> const &key, GLenum target, GLenum internalFormat)
+	//{
+	//	RenderPass *renderPass;
+	//	if ((renderPass = getRenderPass(key, "addColorOutputRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->addColorOutput(target, internalFormat);
+	//	return (*this);
+	//}
+	//
+	//ShadingManager &ShadingManager::setModeRenderPass(Key<RenderPass> const &key, GLenum mode)
+	//{
+	//	RenderPass *renderPass;
+	//
+	//	if ((renderPass = getRenderPass(key, "setModeRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->setMode(mode);
+	//	return (*this);
+	//}
 	
-	ShadingManager &ShadingManager::pushSetColorMaskTaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setColorMaskRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetColorMaskTask(index, color);
-		return (*this);
-	}
-	
-	ShadingManager &ShadingManager::pushSetStencilMaskTaskRenderPass(Key<RenderPass> const &key, uint8_t front, uint8_t back)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetStencilMaskTask(front, back);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetDepthMaskTaskRenderPass(Key<RenderPass> const &key, bool depth)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetDepthMaskTask(depth);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetTestTaskRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetTestTask(scissor, stencil, depth);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetScissorTaskRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setDepthStencilMaskRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetScissorTask(area);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilFunctionFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setStencilFunctionFrontFaceRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetStencilFunctionFrontFaceTask(func, ref, mask);
-		return (*this);
-	}
-	ShadingManager &ShadingManager::pushSetStencilOperationFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setStencilOperationFrontFaceRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetStencilOperationFrontFaceTask(opStencilFail, opDepthFail, opDepthPass);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilFunctionBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setStencilFunctionBackFaceRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetStencilFunctionBackFaceTask(func, ref, mask);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilOperationBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setStencilOperationBackFaceRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetStencilOperationBackFaceTask(opStencilFail, opDepthFail, opDepthPass);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilFunctionTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setStencilFunctionRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetStencilFunctionTask(func, ref, mask);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilOperationTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setStencilOperationRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetStencilOperationTask(opStencilFail, opDepthFail, opDepthPass);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setBlendEquationRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetBlendEquationTask(colorMode, alphaMode);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum mode)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setBlendEquationRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetBlendEquationTask(mode);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setBlendFuncRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetBlendFuncTask(srcRGB, destRGB, srcAlpha, destAlpha);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setBlendFuncRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetBlendFuncTask(src, dest);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendConstantTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendColor)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "setBlendConstantRenderPass")) == NULL)
-			return (*this);
-		renderPass->pushSetBlendConstantTask(blendColor);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::popTaskRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "popTaskRenderPass")) == NULL)
-			return (*this);
-		renderPass->popTask();
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushClearTaskRender(Key<Render> const &key, bool color, bool depth, bool stencil)
-	{
-		Render *render;
-		if ((render = getRender(key, "setClearOptionRender")) == NULL)
-			return (*this);
-		render->pushClearTask(color, depth, stencil);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetClearValueTaskRender(Key<Render> const &key, glm::vec4 const &color, float depth, uint8_t stencil)
-	{
-		Render *render;
-		if ((render = getRender(key, "setClearValueRender")) == NULL)
-			return (*this);
-		render->pushSetClearValueTask(color, depth, stencil);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetColorMaskTaskRender(Key<Render> const &key, glm::bvec4 const &color, GLuint index)
-	{
-		Render *render;
-		if ((render = getRender(key, "setColorMaskRender")) == NULL)
-			return (*this);
-		render->pushSetColorMaskTask(index, color);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilMaskTaskRender(Key<Render> const &key, uint8_t front, uint8_t back)
-	{
-		Render *render;
-		if ((render = getRender(key, "setDepthStencilMaskRender")) == NULL)
-			return (*this);
-		render->pushSetStencilMaskTask(front, back);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetDepthMaskTaskRender(Key<Render> const &key, bool depth)
-	{
-		Render *render;
-		if ((render = getRender(key, "setDepthStencilMaskRender")) == NULL)
-			return (*this);
-		render->pushSetDepthMaskTask(depth);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetTestTaskRender(Key<Render> const &key, bool scissor, bool stencil, bool depth)
-	{
-		Render *render;
-		if ((render = getRender(key, "setDepthStencilMaskRender")) == NULL)
-			return (*this);
-		render->pushSetTestTask(scissor, stencil, depth);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetScissorTaskRender(Key<Render> const &key, glm::ivec4 const &area)
-	{
-		Render *render;
-		if ((render = getRender(key, "setDepthStencilMaskRender")) == NULL)
-			return (*this);
-		render->pushSetScissorTask(area);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilFunctionFrontFaceTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask)
-	{
-		Render *render;
-		if ((render = getRender(key, "setStencilFunctionFrontFaceRender")) == NULL)
-			return (*this);
-		render->pushSetStencilFunctionFrontFaceTask(func, ref, mask);
-		return (*this);
-	}
-	ShadingManager &ShadingManager::pushSetStencilOperationFrontFaceTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepth)
-	{
-		Render *render;
-		if ((render = getRender(key, "setStencilOperationFrontFaceRender")) == NULL)
-			return (*this);
-		render->pushSetStencilOperationFrontFaceTask(opStencilFail, opDepthFail, opDepth);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilFunctionBackFaceTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask)
-	{
-		Render *render;
-		if ((render = getRender(key, "setStencilFunctionBackFaceRender")) == NULL)
-			return (*this);
-		render->pushSetStencilFunctionBackFaceTask(func, ref, mask);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilOperationBackFaceTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepth)
-	{
-		Render *render;
-		if ((render = getRender(key, "setStencilOperationBackFaceRender")) == NULL)
-			return (*this);
-		render->pushSetStencilOperationBackFaceTask(opStencilFail, opDepthFail, opDepth);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilFunctionTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask)
-	{
-		Render *render;
-		if ((render = getRender(key, "setStencilFunctionRender")) == NULL)
-			return (*this);
-		render->pushSetStencilFunctionTask(func, ref, mask);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetStencilOperationTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepth)
-	{
-		Render *render;
-		if ((render = getRender(key, "setStencilOperationRender")) == NULL)
-			return (*this);
-		render->pushSetStencilOperationTask(opStencilFail, opDepthFail, opDepth);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendEquationTaskRender(Key<Render> const &key, GLenum colorMode, GLenum alphaMode)
-	{
-		Render *render;
-		if ((render = getRender(key, "setBlendEquationRender")) == NULL)
-			return (*this);
-		render->pushSetBlendEquationTask(colorMode, alphaMode);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendEquationTaskRender(Key<Render> const &key, GLenum mode)
-	{
-		Render *render;
-		if ((render = getRender(key, "setBlendEquationRender")) == NULL)
-			return (*this);
-		render->pushSetBlendEquationTask(mode);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendFuncTaskRender(Key<Render> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)
-	{
-		Render *render;
-		if ((render = getRender(key, "setBlendFuncRender")) == NULL)
-			return (*this);
-		render->pushSetBlendFuncTask(srcRGB, destRGB, srcAlpha, destAlpha);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendFuncTaskRender(Key<Render> const &key, GLenum src, GLenum dest)
-	{
-		Render *render;
-		if ((render = getRender(key, "setBlendFuncRender")) == NULL)
-			return (*this);
-		render->pushSetBlendFuncTask(src, dest);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::pushSetBlendConstantTaskRender(Key<Render> const &key, glm::vec4 const &blendColor)
-	{
-		Render *render;
-		if ((render = getRender(key, "setBlendConstantRender")) == NULL)
-			return (*this);
-		render->pushSetBlendConstantTask(blendColor);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::popTaskRender(Key<Render> const &key)
-	{
-		Render *render;
-		if ((render = getRender(key, "popTaskRender")) == NULL)
-			return (*this);
-		render->popTask();
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::configRender(Key<Render> const &r, glm::ivec4 const &rect)
-	{
-		Render *render;
-
-		if ((render = getRender(r, "configRender")) == NULL)
-			return (*this);
-		render->configRect(rect);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::setModeRender(Key<Render> const &r, GLenum mode)
-	{
-		Render *render;
-
-		if ((render = getRender(r, "configRender")) == NULL)
-			return (*this);
-		render->setMode(mode);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::addColorOutputRenderPass(Key<RenderPass> const &key, GLenum target, GLenum internalFormat)
-	{
-		RenderPass *renderPass;
-		if ((renderPass = getRenderPass(key, "addColorOutputRenderPass")) == NULL)
-			return (*this);
-		renderPass->addColorOutput(target, internalFormat);
-		return (*this);
-	}
-
-	ShadingManager &ShadingManager::setModeRenderPass(Key<RenderPass> const &key, GLenum mode)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key, "setModeRenderPass")) == NULL)
-			return (*this);
-		renderPass->setMode(mode);
-		return (*this);
-	}
-
 	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
 	{
-		for (size_t index = 0; index < _renderPassPool.size(); ++index)
-		{
-			_renderPassPool[index].update();
-			for (size_t index = 0; index < objectRender.size(); ++index)
-			{
-				Material *material;
-				if ((material = getMaterial(objectRender[index].material, "draw")) == NULL)
-					return (*this);
-				RenderPass *renderPass = material->get<Render_Pass>();
-				renderPass->accessShader()->preDraw(*material, objectRender[index].transformation);
-				geometryManager.draw(renderPass->getMode(), objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
-			}
-		}
-		for (size_t index = 0; index < _renderPool.size(); ++index)
-		{
-			Render &render = _renderPool[index];
-			render.update();
-			for (size_t index = 0; index < objectRender.size(); ++index)
-			{
-				Material *material;
-				if ((material = getMaterial(objectRender[index].material, "draw")) == NULL)
-					return (*this);
-			//	RenderPass *renderPass = material->get<Render_Pass>();
-			//	renderPass->accessShader()->preDraw(*material, objectRender[index].transformation);
-				render.accessShader()->preDraw(*material, objectRender[index].transformation);
-				geometryManager.draw(render.getMode(), objectRender[index].mesh.indices, objectRender[index].mesh.vertices);
-			}
-		}
+		
 		return (*this);
 	}
 
@@ -1072,18 +1045,18 @@ namespace gl
 		return (element->first);
 	}
 
-	ShadingManager &ShadingManager::setRenderPassMaterial(Key<Material> const &m, Key<RenderPass> const &r)
-	{
-		RenderPass *renderPass;
-		Material *material;
-
-		if ((renderPass = getRenderPass(r, "setRenderPassMaterial")) == NULL)
-			return (*this);
-		if ((material = getMaterial(m, "setRenderPassMaterial")) == NULL)
-			return (*this);
-		material->set<Render_Pass>(renderPass);
-		return (*this);
-	}
+	//ShadingManager &ShadingManager::setRenderPassMaterial(Key<Material> const &m, Key<RenderPass> const &r)
+	//{
+	//	RenderPass *renderPass;
+	//	Material *material;
+	//
+	//	if ((renderPass = getRenderPass(r, "setRenderPassMaterial")) == NULL)
+	//		return (*this);
+	//	if ((material = getMaterial(m, "setRenderPassMaterial")) == NULL)
+	//		return (*this);
+	//	material->set<Render_Pass>(renderPass);
+	//	return (*this);
+	//}
 
 	ShadingManager &ShadingManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
@@ -1103,16 +1076,16 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::configRenderPass(Key<RenderPass> const &key, glm::ivec4 const &rect, GLint sample)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key, "configRenderPass")) == NULL)
-			return (*this);
-		renderPass->configRect(rect);
-		renderPass->configSample(sample);
-		return (*this);
-	}
+	//ShadingManager &ShadingManager::configRenderPass(Key<RenderPass> const &key, glm::ivec4 const &rect, GLint sample)
+	//{
+	//	RenderPass *renderPass;
+	//
+	//	if ((renderPass = getRenderPass(key, "configRenderPass")) == NULL)
+	//		return (*this);
+	//	renderPass->configRect(rect);
+	//	renderPass->configSample(sample);
+	//	return (*this);
+	//}
 
 
 }

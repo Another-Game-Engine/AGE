@@ -381,6 +381,14 @@ namespace gl
 		return (element->first);
 	}
 
+	Task *Shader::getUniform(Key<Uniform> const &key, std::string const &msg)
+	{
+		size_t index = getIndexUniform(key, msg);
+		if (index != -1)
+			return (&_tasks[index]);
+		return (NULL);
+	}
+
 	size_t Shader::getIndexUniform(Key<Uniform> const &key, std::string const &msg)
 	{
 		if (!key)

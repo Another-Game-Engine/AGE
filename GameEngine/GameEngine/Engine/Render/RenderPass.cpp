@@ -357,6 +357,7 @@ namespace gl
 	Render &Render::popInputSampler()
 	{
 		_inputSamplers.pop_back();
+		return (*this);
 	}
 
 	//Render &Render::addColorOutput(GLenum target, GLenum internalFormat)

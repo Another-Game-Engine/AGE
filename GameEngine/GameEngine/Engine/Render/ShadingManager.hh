@@ -78,7 +78,7 @@ namespace gl
 		Key<Material> addMaterial();
 		ShadingManager &rmMaterial(Key<Material> &key);
 		Key<Material> getMaterial(size_t index) const;
-		ShadingManager &setRenderPassMaterial(Key<Material> const &m, Key<RenderPass> const &r);
+		//ShadingManager &setRenderPassMaterial(Key<Material> const &m, Key<RenderPass> const &r);
 		template <typename TYPE> ShadingManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
 		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
 		template <typename TYPE> ShadingManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
@@ -100,63 +100,63 @@ namespace gl
 		GLenum getTypeTexture(Key<Texture> const &key);
 
 		// RenderPass
-		Key<RenderPass> addRenderPass(Key<Shader> const &shader);
-		ShadingManager &rmRenderPass(Key<RenderPass> &key);
-		Key<RenderPass> getRenderPass(size_t target) const;
-		ShadingManager &bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s);
-		ShadingManager &bindInputRenderPass(Key<RenderPass> const &target, Key<RenderPass> const &input);
-
-		ShadingManager &pushClearTaskRenderPass(Key<RenderPass> const &key, bool color = true, bool depth = true, bool stencil = false);
-		ShadingManager &pushSetClearValueTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
-		ShadingManager &pushSetColorMaskTaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index = 0);
-		ShadingManager &pushSetDepthMaskTaskRenderPass(Key<RenderPass> const &key, bool depth);
-		ShadingManager &pushSetStencilMaskTaskRenderPass(Key<RenderPass> const &key, uint8_t front, uint8_t back);
-		ShadingManager &pushSetTestTaskRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth);
-		ShadingManager &pushSetScissorTaskRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area);
-		ShadingManager &pushSetStencilFunctionFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
-		ShadingManager &pushSetStencilOperationFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		ShadingManager &pushSetStencilFunctionBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
-		ShadingManager &pushSetStencilOperationBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		ShadingManager &pushSetStencilFunctionTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
-		ShadingManager &pushSetStencilOperationTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		ShadingManager &pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum mode);
-		ShadingManager &pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode);
-		ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
-		ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest);
-		ShadingManager &pushSetBlendConstantTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendPass);
-		ShadingManager &popTaskRenderPass(Key<RenderPass> const &key);
-		ShadingManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLint sample = 1);
-		ShadingManager &setModeRenderPass(Key<RenderPass> const &renderPass, GLenum mode);
-		ShadingManager &addColorOutputRenderPass(Key<RenderPass> const &renderPass, GLenum target, GLenum internalFormat);
+		//Key<RenderPass> addRenderPass(Key<Shader> const &shader);
+		//ShadingManager &rmRenderPass(Key<RenderPass> &key);
+		//Key<RenderPass> getRenderPass(size_t target) const;
+		//ShadingManager &bindShaderRenderPass(Key<RenderPass> const &r, Key<Shader> const &s);
+		//ShadingManager &bindInputRenderPass(Key<RenderPass> const &target, Key<RenderPass> const &input);
+		//
+		//ShadingManager &pushClearTaskRenderPass(Key<RenderPass> const &key, bool color = true, bool depth = true, bool stencil = false);
+		//ShadingManager &pushSetClearValueTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
+		//ShadingManager &pushSetColorMaskTaskRenderPass(Key<RenderPass> const &key, glm::bvec4 const &color, GLuint index = 0);
+		//ShadingManager &pushSetDepthMaskTaskRenderPass(Key<RenderPass> const &key, bool depth);
+		//ShadingManager &pushSetStencilMaskTaskRenderPass(Key<RenderPass> const &key, uint8_t front, uint8_t back);
+		//ShadingManager &pushSetTestTaskRenderPass(Key<RenderPass> const &key, bool scissor, bool stencil, bool depth);
+		//ShadingManager &pushSetScissorTaskRenderPass(Key<RenderPass> const &key, glm::ivec4 const &area);
+		//ShadingManager &pushSetStencilFunctionFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		//ShadingManager &pushSetStencilOperationFrontFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		//ShadingManager &pushSetStencilFunctionBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		//ShadingManager &pushSetStencilOperationBackFaceTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		//ShadingManager &pushSetStencilFunctionTaskRenderPass(Key<RenderPass> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		//ShadingManager &pushSetStencilOperationTaskRenderPass(Key<RenderPass> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		//ShadingManager &pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum mode);
+		//ShadingManager &pushSetBlendEquationTaskRenderPass(Key<RenderPass> const &key, GLenum colorMode, GLenum alphaMode);
+		//ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
+		//ShadingManager &pushSetBlendFuncTaskRenderPass(Key<RenderPass> const &key, GLenum src, GLenum dest);
+		//ShadingManager &pushSetBlendConstantTaskRenderPass(Key<RenderPass> const &key, glm::vec4 const &blendPass);
+		//ShadingManager &popTaskRenderPass(Key<RenderPass> const &key);
+		//ShadingManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLint sample = 1);
+		//ShadingManager &setModeRenderPass(Key<RenderPass> const &renderPass, GLenum mode);
+		//ShadingManager &addColorOutputRenderPass(Key<RenderPass> const &renderPass, GLenum target, GLenum internalFormat);
 
 		// Render
-		Key<Render> addRender(Key<Shader> const &shader);
-		ShadingManager &rmRender(Key<Render> &key);
-		Key<Render> getRender(size_t target) const;
-		ShadingManager &bindShaderRender(Key<Render> const &r, Key<Shader> const &s);
-		ShadingManager &bindInputRender(Key<Render> const &target, Key<RenderPass> const &input);
+		//Key<Render> addRender(Key<Shader> const &shader);
+		//ShadingManager &rmRender(Key<Render> &key);
+		//Key<Render> getRender(size_t target) const;
+		//ShadingManager &bindShaderRender(Key<Render> const &r, Key<Shader> const &s);
+		//ShadingManager &bindInputRender(Key<Render> const &target, Key<RenderPass> const &input);
 
-		ShadingManager &pushClearTaskRender(Key<Render> const &key, bool color = true, bool depth = true, bool stencil = false);
-		ShadingManager &pushSetClearValueTaskRender(Key<Render> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
-		ShadingManager &pushSetColorMaskTaskRender(Key<Render> const &key, glm::bvec4 const &color, GLuint index = 0);
-		ShadingManager &pushSetDepthMaskTaskRender(Key<Render> const &key, bool depth);
-		ShadingManager &pushSetStencilMaskTaskRender(Key<Render> const &key, uint8_t front, uint8_t back);
-		ShadingManager &pushSetTestTaskRender(Key<Render> const &key, bool scissor, bool stencil, bool depth);
-		ShadingManager &pushSetScissorTaskRender(Key<Render> const &key, glm::ivec4 const &area);
-		ShadingManager &pushSetStencilFunctionFrontFaceTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask = 0xff);
-		ShadingManager &pushSetStencilOperationFrontFaceTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		ShadingManager &pushSetStencilFunctionBackFaceTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask = 0xff);
-		ShadingManager &pushSetStencilOperationBackFaceTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		ShadingManager &pushSetStencilFunctionTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask = 0xff);
-		ShadingManager &pushSetStencilOperationTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		ShadingManager &pushSetBlendEquationTaskRender(Key<Render> const &key, GLenum mode);
-		ShadingManager &pushSetBlendEquationTaskRender(Key<Render> const &key, GLenum colorMode, GLenum alphaMode);
-		ShadingManager &pushSetBlendFuncTaskRender(Key<Render> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
-		ShadingManager &pushSetBlendFuncTaskRender(Key<Render> const &key, GLenum src, GLenum dest);
-		ShadingManager &pushSetBlendConstantTaskRender(Key<Render> const &key, glm::vec4 const &blendPass);
-		ShadingManager &popTaskRender(Key<Render> const &key);
-		ShadingManager &configRender(Key<Render> const &render, glm::ivec4 const &rect);
-		ShadingManager &setModeRender(Key<Render> const &render, GLenum mode);
+		//ShadingManager &pushClearTaskRender(Key<Render> const &key, bool color = true, bool depth = true, bool stencil = false);
+		//ShadingManager &pushSetClearValueTaskRender(Key<Render> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0);
+		//ShadingManager &pushSetColorMaskTaskRender(Key<Render> const &key, glm::bvec4 const &color, GLuint index = 0);
+		//ShadingManager &pushSetDepthMaskTaskRender(Key<Render> const &key, bool depth);
+		//ShadingManager &pushSetStencilMaskTaskRender(Key<Render> const &key, uint8_t front, uint8_t back);
+		//ShadingManager &pushSetTestTaskRender(Key<Render> const &key, bool scissor, bool stencil, bool depth);
+		//ShadingManager &pushSetScissorTaskRender(Key<Render> const &key, glm::ivec4 const &area);
+		//ShadingManager &pushSetStencilFunctionFrontFaceTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		//ShadingManager &pushSetStencilOperationFrontFaceTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		//ShadingManager &pushSetStencilFunctionBackFaceTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		//ShadingManager &pushSetStencilOperationBackFaceTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		//ShadingManager &pushSetStencilFunctionTaskRender(Key<Render> const &key, GLenum func, int ref, uint8_t mask = 0xff);
+		//ShadingManager &pushSetStencilOperationTaskRender(Key<Render> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		//ShadingManager &pushSetBlendEquationTaskRender(Key<Render> const &key, GLenum mode);
+		//ShadingManager &pushSetBlendEquationTaskRender(Key<Render> const &key, GLenum colorMode, GLenum alphaMode);
+		//ShadingManager &pushSetBlendFuncTaskRender(Key<Render> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
+		//ShadingManager &pushSetBlendFuncTaskRender(Key<Render> const &key, GLenum src, GLenum dest);
+		//ShadingManager &pushSetBlendConstantTaskRender(Key<Render> const &key, glm::vec4 const &blendPass);
+		//ShadingManager &popTaskRender(Key<Render> const &key);
+		//ShadingManager &configRender(Key<Render> const &render, glm::ivec4 const &rect);
+		//ShadingManager &setModeRender(Key<Render> const &render, GLenum mode);
 
 		// drawing
 		ShadingManager &draw(AGE::Vector<AGE::Drawable> const &objectRender);
@@ -167,8 +167,8 @@ namespace gl
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
 		std::map<Key<Material>, Material> _materials;
-		std::map<Key<RenderPass>, size_t> _renderPass;
-		std::map<Key<Render>, size_t> _render;
+		//std::map<Key<RenderPass>, size_t> _renderPass;
+		//std::map<Key<Render>, size_t> _render;
 
 		// optimize search in map
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
@@ -183,27 +183,27 @@ namespace gl
 		AGE::Vector<BindingRenderPass> _bindRendering;
 
 		// pool
-		AGE::Vector<RenderPass> _renderPassPool;
-		AGE::Vector<Render> _renderPool;
+		//AGE::Vector<RenderPass> _renderPassPool;
+		//AGE::Vector<Render> _renderPool;
 
 		// tool use in intern for search
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key, std::string const &in);
 		Texture *getTexture(Key<Texture> const &key, std::string const &in);
-		size_t getRenderPassIndex(Key<RenderPass> const &key, std::string const &in);
-		RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
+		//size_t getRenderPassIndex(Key<RenderPass> const &key, std::string const &in);
+		//RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
 		size_t getRenderIndex(Key<Render> const &key, std::string const &in);
 		Render *getRender(Key<Render> const &key, std::string const &in);
 		Material *getMaterial(Key<Material> const &key, std::string const &in);
 		
 		// tool use in intern for bind shader to render/renderPass
-		void addBindShaderToRendering(Render *r, Shader *s);
-		void unbindShaderToRendering(Shader *s);
+		//void addBindShaderToRendering(Render *r, Shader *s);
+		//void unbindShaderToRendering(Shader *s);
 
 		// tool use in intern for bind render and renderPass
-		void addBindTargetToInput(Render *t, RenderPass *i);
-		void unbindRenderingTarget(Render *r);
-		void unbindRenderingInput(RenderPass *r);
+		//void addBindTargetToInput(Render *t, RenderPass *i);
+		//void unbindRenderingTarget(Render *r);
+		//void unbindRenderingInput(RenderPass *r);
 	};
 
 	struct BindingShader
