@@ -48,6 +48,7 @@ protected:
 	gl::Key<gl::Uniform> _diffuse_ratio;
 	gl::Key<gl::Sampler> _diffuse_texture;
 	gl::Key<gl::RenderPass> _renderPass;
+	gl::Key<gl::RenderPostEffect> _renderPostEffect;
 	
 	gl::Key<gl::Render> _renderQuad;
 	gl::Key<gl::Uniform> _textureQuad;

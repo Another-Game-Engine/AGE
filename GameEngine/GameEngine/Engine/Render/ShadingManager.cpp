@@ -5,8 +5,6 @@
 
 namespace gl
 {
-	GEN_DEF_RENDER_PUSH_TASK(RenderPass)
-	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect)
 
 	ShadingManager::ShadingManager()
 		: _preShaderQuad(NULL)
@@ -412,6 +410,8 @@ namespace gl
 		return (element->first);
 	}
 
+	GEN_DEF_RENDER_PUSH_TASK(RenderPass);
+
 	ShadingManager &ShadingManager::configRenderPass(Key<RenderPass> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
 	{
 		RenderPass *renderPass;
@@ -494,5 +494,48 @@ namespace gl
 		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *_preShaderQuad, geometryManager);
 		element->configRect(rect);
 		return (key);
+	}
+
+	Key<RenderPostEffect> ShadingManager::getRenderPostEffect(size_t target) const
+	{
+		if (target >= _renderPass.size())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getRenderPass(size_t target)", "the target is out of range", Key<RenderPostEffect>(KEY_DESTROY));
+		auto &element = _renderPostEffect.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
+	}
+
+	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect);
+
+	ShadingManager &ShadingManager::configRenderPostEffect(Key<RenderPostEffect> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
+	{
+		RenderPostEffect *renderPostEffect;
+
+		if ((renderPostEffect = getRenderPostEffect(key, "setModeRenderPass")) == NULL)
+			return (*this);
+		renderPostEffect->setMode(mode);
+		renderPostEffect->configRect(rect);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
+	{
+		RenderPostEffect *renderPostEffect;
+
+		if ((renderPostEffect = getRenderPostEffect(key, "setModeRenderPass")) == NULL)
+			return (*this);
+		renderPostEffect->pushColorOutput(attachement, internalFormat);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key)
+	{
+		RenderPostEffect *renderPostEffect;
+
+		if ((renderPostEffect = getRenderPostEffect(key, "setModeRenderPass")) == NULL)
+			return (*this);
+		renderPostEffect->popColorOutput();
+		return (*this);
 	}
 }
