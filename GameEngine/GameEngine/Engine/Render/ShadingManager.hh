@@ -38,7 +38,7 @@ namespace gl
 		~ShadingManager();
 
 		// shader handling
-		Key<Shader> addPreShaderQuad();
+		ShadingManager &createPreShaderQuad();
 		Key<Shader> addComputeShader(std::string const &compute);
 		Key<Shader> addShader(std::string const &vert, std::string const &frag);
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
@@ -92,44 +92,41 @@ namespace gl
 		ShadingManager &pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
 		ShadingManager &popOutputColorRenderPass(Key<RenderPass> const &key);
 
+		// RenderOnScreen
+		Key<RenderPostEffect> addRenderPostEffect(glm::ivec4 const &rect);
+		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
+		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect)
+		ShadingManager &configRenderPostEffect(Key<RenderPostEffect> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
+		ShadingManager &pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
+		ShadingManager &popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key);
+
 		// drawing
 		ShadingManager &draw(AGE::Vector<AGE::Drawable> const &objectRender);
 
 	private:
 		// all map
 		std::map<Key<Shader>, Shader *> _shaders;
+		Shader * _preShaderQuad;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
 		std::map<Key<RenderPass>, RenderPass *> _renderPass;
-		//std::map<Key<Render>, size_t> _render;
+		std::map<Key<RenderPostEffect>, RenderPostEffect *> _renderPostEffect;
 
 		// optimize search in map
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
 		std::pair<Key<UniformBlock>, UniformBlock *> _optimizeUniformBlockSearch;
 		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
 		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
-	//	std::pair<Key<Render>, size_t> _optimizeRenderSearch;
+		std::pair<Key<RenderPostEffect>, RenderPostEffect *> _optimizeRenderPostEffectSearch;
 		
-		// binding
-		AGE::Vector<BindingShader> _bindShader;
-		AGE::Vector<BindingRenderPass> _bindRendering;
 
 		// tool use in intern for search
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key, std::string const &in);
 		Texture *getTexture(Key<Texture> const &key, std::string const &in);
 		RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
-		size_t getRenderIndex(Key<Render> const &key, std::string const &in);
-		Render *getRender(Key<Render> const &key, std::string const &in);
+		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key, std::string const &in);
 		
-		// tool use in intern for bind shader to render/renderPass
-		//void addBindShaderToRendering(Render *r, Shader *s);
-		//void unbindShaderToRendering(Shader *s);
-
-		// tool use in intern for bind render and renderPass
-		//void addBindTargetToInput(Render *t, RenderPass *i);
-		//void unbindRenderingTarget(Render *r);
-		//void unbindRenderingInput(RenderPass *r);
 	};
 
 	struct BindingShader

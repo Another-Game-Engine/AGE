@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <Render/SimpleFormGeometry.hh>
 
 #define DEBUG_MESSAGE(type, from, reason, return_type) \
 	{ assert(0 && std::string(std::string(type) + ":from[" + std::string(from) + "] reason[" + std::string(reason) + "]").c_str()); return return_type; }
@@ -11,12 +12,37 @@
 namespace gl
 {
 	GeometryManager::GeometryManager()
+		: _simpleForm(NULL)
 	{
 	}
 
 	GeometryManager::~GeometryManager()
 	{
 
+	}
+
+	GeometryManager &GeometryManager::createSimpleForm()
+	{
+		if (_simpleForm != NULL)
+			return (*this);
+		_simpleForm = new Key<Vertices>[nbrSimpleForm];
+		GLenum type = GL_FLOAT;
+		uint8_t sizeType = sizeof(float);
+		uint8_t nbrComponent = 2;
+		Key<VertexPool> keyPool = addVertexPool(1, &type, &sizeType, &nbrComponent);
+		size_t nbrElement = 4;
+		uint8_t nbrBuffer = 1;
+		size_t sizeBuffer = sizeType * nbrComponent * nbrElement;
+		_simpleForm[QUAD] = addVertices(4, nbrBuffer, &sizeBuffer, (void **)&quadForm);
+		attachVerticesToVertexPool(_simpleForm[QUAD], keyPool);
+		return (*this);
+	}
+
+	Key<Vertices> GeometryManager::getSimpleForm(SimpleForm form)
+	{
+		if (_simpleForm == NULL)
+			createSimpleForm();
+		return (_simpleForm[form]);
 	}
 
 	Key<VertexPool> GeometryManager::addVertexPool()

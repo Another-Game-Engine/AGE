@@ -6,28 +6,30 @@
 namespace gl
 {
 	GEN_DEF_RENDER_PUSH_TASK(RenderPass)
+	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect)
 
 	ShadingManager::ShadingManager()
+		: _preShaderQuad(NULL)
 	{
 	}
 
 	ShadingManager::~ShadingManager()
 	{
+		if (_preShaderQuad == NULL)
+			delete _preShaderQuad;
 		for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
 			delete it->second;
 		for (auto it = _textures.begin(); it != _textures.end(); ++it)
 			delete it->second;
 	}
 
-	Key<Shader> ShadingManager::addPreShaderQuad()
+	ShadingManager &ShadingManager::createPreShaderQuad()
 	{
-		Key<Shader> key;
-		Shader *shader;
-
-		if ((shader = Shader::createPreShaderQuad()) == NULL)
-			DEBUG_MESSAGE("Warning", "ShadingManager-addPreShaderQuad()", "compute invalid", Key<Shader>(KEY_DESTROY));
-		_shaders[key] = shader;
-		return (key);
+		if (_preShaderQuad != NULL)
+			return (*this);
+		if ((_preShaderQuad = Shader::createPreShaderQuad()) == NULL)
+			DEBUG_MESSAGE("Warning", "ShadingManager-addPreShaderQuad()", "compute invalid", *this);
+		return (*this);
 	}
 
 	Key<Shader> ShadingManager::addComputeShader(std::string const &compute)
@@ -465,5 +467,32 @@ namespace gl
 			return (*this);
 		shader->bindingTransformation(uniformKey);
 		return (*this);
+	}
+
+	RenderPostEffect *ShadingManager::getRenderPostEffect(Key<RenderPostEffect> const &key, std::string const &in)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_renderPostEffect.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+		if (key == _optimizeRenderPostEffectSearch.first)
+			return (_optimizeRenderPostEffectSearch.second);
+		auto &renderPostEffect = _renderPostEffect.find(key);
+		if (renderPostEffect == _renderPostEffect.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+		_optimizeRenderPostEffectSearch.first = key;
+		_optimizeRenderPostEffectSearch.second = renderPostEffect->second;
+		return (renderPostEffect->second);
+	}
+
+	Key<RenderPostEffect> ShadingManager::addRenderPostEffect(glm::ivec4 const &rect)
+	{
+		Key<RenderPostEffect> key;
+		Shader *shader;
+
+		createPreShaderQuad();
+		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *_preShaderQuad, geometryManager);
+		element->configRect(rect);
+		return (key);
 	}
 }

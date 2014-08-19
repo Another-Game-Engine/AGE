@@ -8,7 +8,7 @@
 namespace gl
 {
 	class Shader;
-	class Uniform;
+	struct Uniform;
 
 	class MaterialManager
 	{

@@ -13,11 +13,13 @@ namespace gl
 {
 	class Vertices;
 
-	//!\file GeometryManager.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class GeometryManager
-	//!\brief Handle the geometry of the render
+	const uint8_t nbrSimpleForm = 1;
+	
+	enum SimpleForm
+	{
+		QUAD = 0
+	};
+
 	class GeometryManager
 	{
 	public:
@@ -28,10 +30,14 @@ namespace gl
 			POOL *pool;
 			Key<Pool::Element<TYPE>> element;
 		};
+
 	public:
 		// constructor
 		GeometryManager();
 		~GeometryManager();
+
+		GeometryManager &createSimpleForm();
+		Key<Vertices> getSimpleForm(SimpleForm form);
 
 		// handle pools
 		Key<VertexPool> addVertexPool();
@@ -66,6 +72,9 @@ namespace gl
 		GeometryManager &draw(GLenum mode, Key<Indices> const &keyindices, Key<Vertices> const &keyVertice);
 		GeometryManager &draw(GLenum mode, Key<Vertices> const &keyvertices);
 	private:
+		// simple form
+		gl::Key<Vertices> *_simpleForm;
+
 		// data represent pools
 		std::map<Key<IndexPool>, IndexPool> _indexPool;
 		std::map<Key<VertexPool>, VertexPool> _vertexPool;

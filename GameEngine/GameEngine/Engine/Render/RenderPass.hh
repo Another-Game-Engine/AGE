@@ -22,6 +22,7 @@ namespace gl
 	class MaterialManager;
 	class Texture2D;
 	class RenderOffScreen;
+	class Vertices;
 
 	//!\file RenderPass.hh
 	//!\author Dorian Pinaud
@@ -138,34 +139,18 @@ namespace gl
 		MaterialManager &_materialManager;
 	};
 
-	//class RenderPostEffect : public Render
-	//{
-	//public:
-	//	RenderPostEffect();
-	//	virtual ~RenderPostEffect();
-	//	RenderPostEffect(RenderPostEffect const &copy);
-	//	RenderPostEffect &operator=(RenderPostEffect const &r);
-	//
-	//	virtual Render &update();
-	//
-	//private:
-	//	gl::Key<Vertices> _quad;
-	//	gl::Key<Indices> _indicesQuad;
-	//	gl::Key<VertexPool> _quadPool;
-	//	gl::Key<IndexPool> _indicesQuadPool;
-	//
-	//	virtual void updateOutput();
-	//};
-	//
-	//__forceinline void Render::updateInput()
-	//{
-	//	// update input
-	//	if (_updateInput && _input != NULL)
-	//	{
-	//		if (_input->getNbrColorOuput() != _inputSamplers.size())
-	//			DEBUG_MESSAGE("Warning", "RenderPass - update", "attach invalid", );
-	//		for (size_t index = 0; index < _input->getNbrColorOuput(); ++index)
-	//			_shader->setSampler(_inputSamplers[index], _input->getColorOutput(index));
-	//	}
-	//}
+	class RenderPostEffect : public RenderOffScreen
+	{
+	public:
+		RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g);
+		virtual ~RenderPostEffect();
+
+		virtual Render &draw();
+	private:
+		RenderPostEffect(RenderPostEffect const &copy) = delete;
+		RenderPostEffect &operator=(RenderPostEffect const &r) = delete;
+
+		Key<Vertices> _quad;
+	};
+
 }

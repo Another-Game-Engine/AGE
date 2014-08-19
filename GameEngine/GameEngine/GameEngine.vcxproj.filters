@@ -187,6 +187,7 @@
     <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\MaterialManager.hh" />
     <ClInclude Include="Engine\Render\MacroShadingManager.hh" />
+    <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

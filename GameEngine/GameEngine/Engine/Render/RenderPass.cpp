@@ -400,6 +400,34 @@ namespace gl
 		return (*this);
 	}
 
+	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g)
+		: RenderOffScreen(s, g),
+		_quad(key)
+	{
+
+	}
+
+	RenderPostEffect::~RenderPostEffect()
+	{
+
+	}
+
+	Render &RenderPostEffect::draw()
+	{
+		_fbo.bind();
+		if (_updateOutput)
+			updateOutput();
+		if (_inputSamplers.size() == _nbrColorAttachement && _branch != NULL)
+		{
+			for (size_t index = 0; index < _inputSamplers.size(); ++index)
+				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
+		}
+		for (size_t index = 0; index < _tasks.size(); ++index)
+			_tasks[index].func(_tasks[index].params);
+		_geometryManager.draw(_mode, _quad);
+		return (*this);
+	}
+
 	//Render &RenderPass::draw()
 	//{
 	//	if (_shader == NULL)
