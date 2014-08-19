@@ -397,6 +397,7 @@ namespace gl
 			_shader.update(object.transformation);
 			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
 		}
+		_fbo.unbind();
 		return (*this);
 	}
 
@@ -424,7 +425,11 @@ namespace gl
 		}
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
+		glFlush();
+		_shader.update();
 		_geometryManager.draw(_mode, _quad);
+		glFlush();
+		_fbo.unbind();
 		return (*this);
 	}
 

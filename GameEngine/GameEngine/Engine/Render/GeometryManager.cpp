@@ -33,7 +33,9 @@ namespace gl
 		size_t nbrElement = 4;
 		uint8_t nbrBuffer = 1;
 		size_t sizeBuffer = sizeType * nbrComponent * nbrElement;
-		_simpleForm[QUAD] = addVertices(4, nbrBuffer, &sizeBuffer, (void **)&quadForm);
+		void *buffer[1];
+		buffer[0] = (void *)quadForm;
+		_simpleForm[QUAD] = addVertices(nbrElement, nbrBuffer, &sizeBuffer, buffer);
 		attachVerticesToVertexPool(_simpleForm[QUAD], keyPool);
 		return (*this);
 	}

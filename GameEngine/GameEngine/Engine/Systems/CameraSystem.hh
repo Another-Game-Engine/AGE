@@ -9,7 +9,7 @@
 # define NEW_SHADER 1
 
 #if NEW_SHADER
-namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; class RenderPass; class Render; }
+namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; class RenderPass; class Render; class RenderPostEffect; }
 #endif
 
 class CameraSystem : public System

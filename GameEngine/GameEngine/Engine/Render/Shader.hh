@@ -71,6 +71,7 @@ namespace gl
 		// update memory
 		Shader &setMaterial(Material const &materia);
 		Shader &update(glm::mat4 const &transform);
+		Shader &update();
 
 		Shader &bindingTransformation(Key<Uniform> const &key);
 		template <typename TYPE> Shader &bindingMaterial(Key<Uniform> const &key);

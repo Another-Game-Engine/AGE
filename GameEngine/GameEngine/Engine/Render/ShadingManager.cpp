@@ -19,6 +19,10 @@ namespace gl
 			delete it->second;
 		for (auto it = _textures.begin(); it != _textures.end(); ++it)
 			delete it->second;
+		for (auto it = _renderPass.begin(); it != _renderPass.end(); ++it)
+			delete it->second;
+		for (auto it = _renderPostEffect.begin(); it != _renderPostEffect.end(); ++it)
+			delete it->second;
 	}
 
 	ShadingManager &ShadingManager::createPreShaderQuad()
@@ -448,6 +452,8 @@ namespace gl
 		auto &element = _renderPass.begin();
 		element->second->setRenderPassObjects(objectRender);
 		element->second->draw();
+		auto &elementPostEffect = _renderPostEffect.begin();
+		elementPostEffect->second->draw();
 		return (*this);
 	}
 
