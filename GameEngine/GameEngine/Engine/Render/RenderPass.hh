@@ -68,7 +68,7 @@ namespace gl
 		Render &popInputSampler();
 
 	protected:
-		Render(Shader &shader);
+		Render(Shader &shader, GeometryManager &g);
 		
 		Render() = delete;
 		Render(Render const &copy) = delete;
@@ -82,6 +82,8 @@ namespace gl
 		AGE::Vector<Key<Sampler>> _inputSamplers;
 		RenderOffScreen const *_branch;
 		bool _updateInput;
+
+		GeometryManager &_geometryManager;
 	};
 
 	class RenderOffScreen : public Render
@@ -95,6 +97,7 @@ namespace gl
 		RenderOffScreen &popColorOutput();
 		Texture2D const &getColorOutput(size_t index) const;
 		GLenum getAttachementOutput(size_t index);
+		size_t getNbrAttachementOutput() const;
 
 	protected:
 		RenderOffScreen(Shader &shader, GeometryManager &g);
@@ -104,8 +107,6 @@ namespace gl
 		GLenum *_colorAttachement;
 		Texture2D **_colorTexture2D;
 		GLsizei _nbrColorAttachement;
-
-		GeometryManager &_geometryManager;
 
 		Framebuffer _fbo;
 		GLint _sample;
@@ -120,6 +121,20 @@ namespace gl
 			_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
 		_updateOutput = false;
 	}
+
+	class RenderOnScreen : public Render
+	{
+	public:
+		virtual ~RenderOnScreen();
+		RenderOnScreen(Key<Vertices> const &key, Shader &shader, GeometryManager &g);
+
+		virtual Render &draw();
+	private:
+		RenderOnScreen(RenderOnScreen const &copy) = delete;
+		RenderOnScreen &operator=(RenderOnScreen const &r) = delete;
+
+		Key<Vertices> _quad;
+	};
 
 	class RenderPass : public RenderOffScreen
 	{

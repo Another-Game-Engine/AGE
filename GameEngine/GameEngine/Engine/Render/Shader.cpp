@@ -493,6 +493,7 @@ namespace gl
 				_tasks[index].update = false;
 			}
 		}
+		return (*this);
 	}
 
 	size_t Shader::createMaterialBind(size_t offset, size_t indexTask)

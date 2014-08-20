@@ -30,7 +30,7 @@ namespace gl
 		uint8_t sizeType = sizeof(float);
 		uint8_t nbrComponent = 2;
 		Key<VertexPool> keyPool = addVertexPool(1, &type, &sizeType, &nbrComponent);
-		size_t nbrElement = 4;
+		size_t nbrElement = 6;
 		uint8_t nbrBuffer = 1;
 		size_t sizeBuffer = sizeType * nbrComponent * nbrElement;
 		void *buffer[1];

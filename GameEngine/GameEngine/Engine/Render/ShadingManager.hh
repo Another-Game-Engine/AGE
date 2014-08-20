@@ -91,15 +91,31 @@ namespace gl
 		ShadingManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
 		ShadingManager &pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
 		ShadingManager &popOutputColorRenderPass(Key<RenderPass> const &key);
+		ShadingManager &pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s);
+		ShadingManager &popInputColorRenderPass(Key<RenderPass> const &key);
 
-		// RenderOnScreen
+
+		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(glm::ivec4 const &rect);
 		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect)
 		ShadingManager &configRenderPostEffect(Key<RenderPostEffect> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
 		ShadingManager &pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
 		ShadingManager &popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key);
+		ShadingManager &pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s);
+		ShadingManager &popInputColorRenderPostEffect(Key<RenderPostEffect> const &key);
 
+		// RenderOnScreen
+		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect);
+		Key<RenderOnScreen> getRenderOnScreen(size_t target) const;
+		GEN_DEC_RENDER_PUSH_TASK(RenderOnScreen);
+		ShadingManager &configRenderOnScreen(Key<RenderOnScreen> const &renderOnScreen, glm::ivec4 const &rect, GLenum mode);
+
+		ShadingManager &branch(Key<RenderPass> const &from, Key<RenderPass> const &to);
+		ShadingManager &branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to);
+		ShadingManager &branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to);
+		ShadingManager &branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to);
+	
 		// drawing
 		ShadingManager &draw(AGE::Vector<AGE::Drawable> const &objectRender);
 
@@ -111,6 +127,7 @@ namespace gl
 		std::map<Key<Texture>, Texture *> _textures;
 		std::map<Key<RenderPass>, RenderPass *> _renderPass;
 		std::map<Key<RenderPostEffect>, RenderPostEffect *> _renderPostEffect;
+		std::map<Key<RenderOnScreen>, RenderOnScreen *> _renderOnScreen;
 
 		// optimize search in map
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
@@ -118,7 +135,7 @@ namespace gl
 		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
 		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
 		std::pair<Key<RenderPostEffect>, RenderPostEffect *> _optimizeRenderPostEffectSearch;
-		
+		std::pair<Key<RenderOnScreen>, RenderOnScreen *> _optimizeRenderOnScreenSearch;
 
 		// tool use in intern for search
 		Shader *getShader(Key<Shader> const &key, std::string const &in);
@@ -126,7 +143,8 @@ namespace gl
 		Texture *getTexture(Key<Texture> const &key, std::string const &in);
 		RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
 		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key, std::string const &in);
-		
+		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key, std::string const &in);
+
 	};
 
 	struct BindingShader

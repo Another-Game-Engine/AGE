@@ -123,11 +123,12 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
 	_render->pushOutputColorRenderPass(_renderPass, GL_COLOR_ATTACHMENT0, GL_RGB8);
 
-	_renderPostEffect = _render->addRenderPostEffect(glm::ivec4(0, 0, 800, 600));
-	_render->pushClearTaskRenderPostEffect(_renderPostEffect, false, false, true);
-	_render->pushSetTestTaskRenderPostEffect(_renderPostEffect, false, true, true);
-	_render->pushSetClearValueTaskRenderPostEffect(_renderPostEffect, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-	_render->pushOutputColorRenderPostEffect(_renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGB8);
+	_renderOnScreen = _render->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
+	_render->pushClearTaskRenderOnScreen(_renderOnScreen, true, true, false);
+	_render->pushSetTestTaskRenderOnScreen(_renderOnScreen, false, false, true);
+	_render->pushSetClearValueTaskRenderOnScreen(_renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+
+	_render->branch(_renderPass, _renderOnScreen);
 
 	// render final
 	//_quadShader = _render->addPreShaderQuad();

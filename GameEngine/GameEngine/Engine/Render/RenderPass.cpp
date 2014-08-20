@@ -14,12 +14,13 @@
 
 namespace gl
 {
-	Render::Render(Shader &shader)
+	Render::Render(Shader &shader, GeometryManager &g)
 		: _rect(0, 0, 512, 512),
 		_mode(GL_TRIANGLES),
 		_shader(shader),
 		_branch(NULL),
-		_updateInput(false)
+		_updateInput(false),
+		_geometryManager(g)
 	{
 
 	}
@@ -281,13 +282,11 @@ namespace gl
 	}
 	
 	RenderOffScreen::RenderOffScreen(Shader &shader, GeometryManager &g)
-		: Render(shader),
+		: Render(shader, g),
 		_sample(1),
 		_colorAttachement(NULL),
 		_colorTexture2D(NULL),
-		_nbrColorAttachement(0),
-		_updateOutput(false),
-		_geometryManager(g)
+		_nbrColorAttachement(0)
 	{
 	}
 
@@ -359,6 +358,11 @@ namespace gl
 		return (_colorAttachement[index]);
 	}
 
+	size_t RenderOffScreen::getNbrAttachementOutput() const
+	{
+		return (_nbrColorAttachement);
+	}
+
 	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
 		: RenderOffScreen(shader, g),
 		_objectsToRender(NULL),
@@ -425,53 +429,35 @@ namespace gl
 		}
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		glFlush();
 		_shader.update();
 		_geometryManager.draw(_mode, _quad);
-		glFlush();
 		_fbo.unbind();
 		return (*this);
 	}
 
-	//Render &RenderPass::draw()
-	//{
-	//	if (_shader == NULL)
-	//		DEBUG_MESSAGE("Warning", "RenderPass - update", "shader bind to renderPass assign to NULL", *this);
-	//	_fbo.bind();
-	//	_fbo.size(_rect.z, _rect.w, _sample);
-	//	glViewport(_rect.x, _rect.y, _rect.z, _rect.w);
-	//	for (size_t index = 0; index < _tasks.size(); ++index)
-	//		_tasks[index].func(_tasks[index].params);
-	//	updateOutput();
-	//	updateInput();
-	//	return (*this);
-	//}
+	RenderOnScreen::RenderOnScreen(Key<Vertices> const &key, Shader &s, GeometryManager &g)
+		: Render(s, g),
+		_quad(key)
+	{
 
+	}
 
-	//Texture2D const &Render::getColorOutput(size_t index) const
-	//{
-	//	return (*_colorOutput[index].second);
-	//}
+	RenderOnScreen::~RenderOnScreen()
+	{
 
-	//size_t Render::getNbrColorOuput() const
-	//{
-	//	return (_colorOutput.size());
-	//}
+	}
 
-	//void RenderPass::updateOutput()
-	//{
-	//	// update output
-	//	if (_updateColorOutput)
-	//	{
-	//		GLenum *targeted;
-	//		targeted = new GLenum[_colorOutput.size()];
-	//		for (size_t index = 0; index < _colorOutput.size(); ++index)
-	//		{
-	//			targeted[index] = _colorOutput[index].first;
-	//			_colorOutput[index].second->attachement(_fbo, targeted[index]);
-	//		}
-	//		glDrawBuffers(GLsizei(_colorOutput.size()), targeted);
-	//		_updateColorOutput = true;
-	//	}
-	//}
+	Render &RenderOnScreen::draw()
+	{
+		if (_inputSamplers.size() == _branch->getNbrAttachementOutput() && _branch != NULL)
+		{
+			for (size_t index = 0; index < _inputSamplers.size(); ++index)
+				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
+		}
+		for (size_t index = 0; index < _tasks.size(); ++index)
+			_tasks[index].func(_tasks[index].params);
+		_shader.update();
+		_geometryManager.draw(_mode, _quad);
+		return (*this);
+	}
 }

@@ -31,6 +31,7 @@ namespace gl
 			return (*this);
 		if ((_preShaderQuad = Shader::createPreShaderQuad()) == NULL)
 			DEBUG_MESSAGE("Warning", "ShadingManager-addPreShaderQuad()", "compute invalid", *this);
+		_preShaderQuad->addSampler("input_sampler");
 		return (*this);
 	}
 
@@ -446,14 +447,34 @@ namespace gl
 		renderPass->popColorOutput();
 		return (*this);
 	}
+
+	ShadingManager &ShadingManager::pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "pushInputColorRenderPass")) == NULL)
+			return (*this);
+		renderPass->pushInputSampler(s);
+		return (*this);
+	}
 	
+	ShadingManager &ShadingManager::popInputColorRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "pushInputColorRenderPass")) == NULL)
+			return (*this);
+		renderPass->popInputSampler();
+		return (*this);
+	}
+
 	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		auto &element = _renderPass.begin();
 		element->second->setRenderPassObjects(objectRender);
 		element->second->draw();
-		auto &elementPostEffect = _renderPostEffect.begin();
-		elementPostEffect->second->draw();
+		auto &elementOnScreen = _renderOnScreen.begin();
+		elementOnScreen->second->draw();
 		return (*this);
 	}
 
@@ -491,13 +512,29 @@ namespace gl
 		return (renderPostEffect->second);
 	}
 
+	RenderOnScreen *ShadingManager::getRenderOnScreen(Key<RenderOnScreen> const &key, std::string const &in)
+	{
+		if (!key)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+		if (_renderOnScreen.size() == 0)
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+		if (key == _optimizeRenderOnScreenSearch.first)
+			return (_optimizeRenderOnScreenSearch.second);
+		auto &renderOnScreen = _renderOnScreen.find(key);
+		if (renderOnScreen == _renderOnScreen.end())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+		_optimizeRenderOnScreenSearch.first = key;
+		_optimizeRenderOnScreenSearch.second = renderOnScreen->second;
+		return (renderOnScreen->second);
+	}
+
 	Key<RenderPostEffect> ShadingManager::addRenderPostEffect(glm::ivec4 const &rect)
 	{
 		Key<RenderPostEffect> key;
-		Shader *shader;
 
 		createPreShaderQuad();
 		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *_preShaderQuad, geometryManager);
+		element->pushInputSampler(_preShaderQuad->getSampler(0));
 		element->configRect(rect);
 		return (key);
 	}
@@ -535,13 +572,108 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key)
+	ShadingManager & ShadingManager::popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key)
 	{
 		RenderPostEffect *renderPostEffect;
 
 		if ((renderPostEffect = getRenderPostEffect(key, "setModeRenderPass")) == NULL)
 			return (*this);
 		renderPostEffect->popColorOutput();
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s)
+	{
+		RenderPostEffect *renderPostEffect;
+
+		if ((renderPostEffect = getRenderPostEffect(key, "pushInputColorRenderPostEffect")) == NULL)
+			return (*this);
+		renderPostEffect->pushInputSampler(s);
+		return (*this);
+	}
+	
+	ShadingManager &ShadingManager::popInputColorRenderPostEffect(Key<RenderPostEffect> const &key)
+	{
+		RenderPostEffect *renderPostEffect;
+
+		if ((renderPostEffect = getRenderPostEffect(key, "pushInputColorRenderPass")) == NULL)
+			return (*this);
+		renderPostEffect->popInputSampler();
+		return (*this);
+	}
+
+	Key<RenderOnScreen> ShadingManager::addRenderOnScreen(glm::ivec4 const &rect)
+	{
+		Key<RenderOnScreen> key;
+
+		createPreShaderQuad();
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleForm(QUAD), *_preShaderQuad, geometryManager);
+		element->pushInputSampler(_preShaderQuad->getSampler(0));
+		element->configRect(rect);
+		return (key);
+	}
+
+	Key<RenderOnScreen> ShadingManager::getRenderOnScreen(size_t target) const
+	{
+		if (target >= _textures.size())
+			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getTexture(size_t target)", "the target is out of range", Key<RenderOnScreen>(KEY_DESTROY));
+		auto &element = _renderOnScreen.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
+	}
+
+	GEN_DEF_RENDER_PUSH_TASK(RenderOnScreen);
+
+	ShadingManager &ShadingManager::branch(Key<RenderPass> const &from, Key<RenderPass> const &to)
+	{
+		RenderPass *renderPassFrom;
+		RenderPass *renderPassTo;
+
+		if ((renderPassFrom = getRenderPass(from, "branch")) == NULL)
+			return (*this);
+		if ((renderPassTo = getRenderPass(to, "branch")) == NULL)
+			return (*this);
+		renderPassTo->branchInput(*renderPassFrom);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to)
+	{
+		RenderPass *renderPassFrom;
+		RenderPostEffect *renderPassTo;
+
+		if ((renderPassFrom = getRenderPass(from, "branch")) == NULL)
+			return (*this);
+		if ((renderPassTo = getRenderPostEffect(to, "branch")) == NULL)
+			return (*this);
+		renderPassTo->branchInput(*renderPassFrom);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to)
+	{
+		RenderPass *renderPassFrom;
+		RenderOnScreen *renderPassTo;
+
+		if ((renderPassFrom = getRenderPass(from, "branch")) == NULL)
+			return (*this);
+		if ((renderPassTo = getRenderOnScreen(to, "branch")) == NULL)
+			return (*this);
+		renderPassTo->branchInput(*renderPassFrom);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to)
+	{
+		RenderPostEffect *renderPassFrom;
+		RenderOnScreen *renderPassTo;
+
+		if ((renderPassFrom = getRenderPostEffect(from, "branch")) == NULL)
+			return (*this);
+		if ((renderPassTo = getRenderOnScreen(to, "branch")) == NULL)
+			return (*this);
+		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
 	}
 }

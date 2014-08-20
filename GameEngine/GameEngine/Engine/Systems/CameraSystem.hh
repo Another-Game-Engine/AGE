@@ -9,7 +9,7 @@
 # define NEW_SHADER 1
 
 #if NEW_SHADER
-namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; class RenderPass; class Render; class RenderPostEffect; }
+namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; class RenderPass; class Render; class RenderPostEffect; class RenderOnScreen; }
 #endif
 
 class CameraSystem : public System
@@ -48,8 +48,9 @@ protected:
 	gl::Key<gl::Uniform> _diffuse_ratio;
 	gl::Key<gl::Sampler> _diffuse_texture;
 	gl::Key<gl::RenderPass> _renderPass;
-	gl::Key<gl::RenderPostEffect> _renderPostEffect;
-	
+//	gl::Key<gl::RenderPostEffect> _renderPostEffect;
+	gl::Key<gl::RenderOnScreen> _renderOnScreen;
+
 	gl::Key<gl::Render> _renderQuad;
 	gl::Key<gl::Uniform> _textureQuad;
 
