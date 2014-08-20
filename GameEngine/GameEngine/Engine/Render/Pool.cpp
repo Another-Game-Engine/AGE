@@ -6,8 +6,6 @@
 #include <cassert>
 
 #define INDEXPOOL 1
-#define DEBUG_MESSAGE(type, from, key_word, reason, end) \
-	{ assert(0 && std::string(std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]").c_str()); return end; }
 
 namespace gl
 {
@@ -179,36 +177,36 @@ namespace gl
 	GLenum Pool::getTypeComponent(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getTypeComponent", "Index out of range", -1)
+			assert(0);
 		return (_typeComponent[index]);
 	}
 
 	uint8_t Pool::getSizeTypeComponent(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getSizeTypeComponent", "Index out of range", -1)
+			assert(0);
 		return (_sizeTypeComponent[index]);
 	}
 
 	uint8_t Pool::getNbrComponent(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getNbrComponent", "Index out of range", -1)
+			assert(0);
 		return (_nbrComponent[index]);
 	}
 
 	size_t Pool::getSizeAttribute(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getSizeAttribute", "Index out of range", -1)
+			assert(0);
 			return (_sizeAttribute[index]);
 	}
 
 	size_t Pool::getOffsetAttribute(uint8_t index) const
 	{
 		if (index >= _nbrAttribute)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "getOffsetAttribute", "Index out of range", -1)
-			return (_offsetAttribute[index]);
+			assert(0);
+		return (_offsetAttribute[index]);
 	}
 
 
@@ -230,7 +228,7 @@ namespace gl
 	Pool::Element<Vertices> const *VertexPool::getVerticesPoolElement(Key<Element<Vertices>> const &key, std::string const &msg) const
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", msg, "key invalid", NULL);
+			assert(0);
 		auto &element = _poolElement.find(key);
 		if (element == _poolElement.end())
 			return (NULL);
@@ -240,7 +238,7 @@ namespace gl
 	Pool::Element<Indices> const *IndexPool::getIndicesPoolElement(Key<Element<Indices>> const &key, std::string const &msg) const
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", msg, "key invalid", NULL);
+			assert(0);
 		auto &element = _poolElement.find(key);
 		if (element == _poolElement.end())
 			return (NULL);
@@ -363,7 +361,7 @@ namespace gl
 	VertexPool &VertexPool::setTypeComponent(uint8_t index, GLenum type)
 	{
 		if (index >= _nbrAttribute)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "setTypeComponent", "index out of range", *this)
+			assert(0);
 		clearPool();
 		_typeComponent[index] = type;
 		return (*this);
@@ -373,7 +371,7 @@ namespace gl
 	VertexPool &VertexPool::setSizeTypeComponent(uint8_t index, uint8_t sizeType)
 	{
 		if (index >= _nbrAttribute)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "setSizeTypeComponent", "index out of range", *this)
+			assert(0);
 		clearPool();
 		_sizeTypeComponent[index] = sizeType;
 		return (*this);
@@ -383,7 +381,7 @@ namespace gl
 	VertexPool &VertexPool::setNbrComponent(uint8_t index, uint8_t nbrComponent)
 	{
 		if (index >= _nbrAttribute)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "setNbrComponent", "index out of range", *this)
+			assert(0);
 		clearPool();
 		_nbrComponent[index] = nbrComponent;
 		return (*this);
@@ -472,7 +470,7 @@ namespace gl
 	VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const
 	{
 		if (!_indexPoolattach && _indexPoolattach->_vertexPoolattach)
-			DEBUG_MESSAGE("Warning", "Pool.cpp", "draw", "no indexpool attach", *this)
+			assert(0);
 		_vao.bind();
 		auto &element = _poolElement.find(drawOnIt);
 		if (element == _poolElement.end())

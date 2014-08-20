@@ -56,7 +56,6 @@
     <ClCompile Include="Engine\Render\Shader.cpp" />
     <ClCompile Include="Engine\Render\ShadingManager.cpp" />
     <ClCompile Include="Engine\Render\UniformBlock.cpp" />
-    <ClCompile Include="Engine\Render\UniformBuffer.cpp" />
     <ClCompile Include="Engine\Render\VertexArray.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
@@ -181,7 +180,6 @@
     <ClInclude Include="Engine\Render\Shader.hh" />
     <ClInclude Include="Engine\Render\ShadingManager.hh" />
     <ClInclude Include="Engine\Render\UniformBlock.hh" />
-    <ClInclude Include="Engine\Render\UniformBuffer.hh" />
     <ClInclude Include="Engine\Render\VertexArray.hh" />
     <ClInclude Include="Engine\Render\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />

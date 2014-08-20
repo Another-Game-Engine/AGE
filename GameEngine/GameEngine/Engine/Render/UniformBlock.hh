@@ -42,19 +42,15 @@ namespace gl
 		void GPUallocation();
 	};
 
-# undef DEBUG_MESSAGE
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
-
 	template <typename TYPE>
 	UniformBlock &UniformBlock::set(size_t index, TYPE const &value)
 	{
 		if (_update)
 			GPUallocation();
 		if (index >= _nbrElement)
-			DEBUG_MESSAGE("Warning", "UniformBlock.hh - set(TYPE)", "index is equal or superior of nbr element into uniformBlock", *this);
+			assert(0);
 		if (sizeof(TYPE) != _data[index].size)
-			DEBUG_MESSAGE("Warning", "UniformBlock.hh - set(TYPE)", "the type of value size is different of fiels target into uniformBlock", *this);
+			assert(0);
 		_buffer.bind();
 		glBufferSubData(GL_UNIFORM_BUFFER, _data[index].offset, _data[index].size, &value);
 		return (*this);

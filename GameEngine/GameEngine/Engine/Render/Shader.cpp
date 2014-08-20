@@ -4,10 +4,6 @@
 #include <cassert>
 
 #include <Render/OpenGLTask.hh>
-
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
-
 #include <Render/PreShader.cpp>
 
 
@@ -116,7 +112,7 @@ namespace gl
 			std::cerr << "Link error on program : " << std::endl;
 			std::cerr << std::endl << errorMsg << std::endl << std::endl;
 			delete[] errorMsg;
-			DEBUG_MESSAGE("Error", "Shader.cpp-linkProgram()", "File doesn't link", false);
+			assert(0);
 		}
 		return (true);
 	}
@@ -127,7 +123,7 @@ namespace gl
 
 		use();
 		if ((location = glGetUniformLocation(_progId, flag)) == -1)
-			DEBUG_MESSAGE("Error", "Shader - getUniformLocation", "the location [" + std::string(flag) + "] doesn't exist on the shader", -1);
+			assert(0);
 		return (location);
 	}
 
@@ -137,7 +133,7 @@ namespace gl
 		
 		use();
 		if ((location = glGetUniformBlockIndex(_progId, flag)) == -1)
-			DEBUG_MESSAGE("Error", "Shader - getUniformBlockLocation", "the location [" + std::string(flag) + "] doesn't exist on the shader", -1);
+			assert(0);
 		return (location);
 	}
 
@@ -160,7 +156,7 @@ namespace gl
 	Key<Uniform> Shader::getUniform(size_t target) const
 	{
 		if (target >= _uniforms.size())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - getUniform(size_t target)", "the target is out of range", Key<Uniform>(KEY_DESTROY))
+			assert(0);
 		auto &element = _uniforms.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -336,7 +332,7 @@ namespace gl
 	Key<Sampler> Shader::getSampler(size_t target) const
 	{
 		if (target >= _samplers.size())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - getSampler(size_t target)", "the target is out of range", Key<Sampler>(KEY_DESTROY));
+			assert(0);
 		auto &element = _samplers.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -374,7 +370,7 @@ namespace gl
 	Key<InterfaceBlock> Shader::getInterfaceBlock(size_t target) const
 	{
 		if (target >= _interfaceBlock.size())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - getInterfaceBlock(size_t target)", "the target is out of range", Key<InterfaceBlock>(KEY_DESTROY));
+			assert(0);
 		auto &element = _interfaceBlock.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -392,20 +388,20 @@ namespace gl
 	size_t Shader::getIndexUniform(Key<Uniform> const &key, std::string const &msg)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", -1);
+			assert(0);
 		auto &element = _uniforms.find(key);
 		if (element == _uniforms.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", -1);
+			assert(0);
 		return (element->second);
 	}
 
 	size_t Shader::getIndexSampler(Key<Sampler> const &key, std::string const &msg)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", -1);
+			assert(0);	
 		auto &element = _samplers.find(key);
 		if (element == _samplers.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", -1);
+			assert(0);	
 		return (element->second);
 	}
 
@@ -420,10 +416,10 @@ namespace gl
 	size_t Shader::getIndexInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", -1);
+			assert(0);
 		auto &element = _interfaceBlock.find(key);
 		if (element == _interfaceBlock.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", -1);
+			assert(0);
 		return (element->second);
 	}
 
@@ -438,10 +434,10 @@ namespace gl
 	size_t Shader::getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "Shader.hh - " + msg, "key destroy use", -1);
+			assert(0);
 		auto &element = _bindUniform.find(key);
 		if (element == _bindUniform.end())
-			DEBUG_MESSAGE("Warning", "Shader.cpp - " + msg, "the key correspond of any element in list", -1);
+			assert(0);
 		return (element->second);
 	}
 
@@ -486,7 +482,7 @@ namespace gl
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
 			if (!_tasks[index].isExec())
-				DEBUG_MESSAGE("Warning", "Shader - updateMemory", "function pointer not set", *this);
+				assert(0);
 			if (_tasks[index].update)
 			{
 				_tasks[index].func(_tasks[index].params);
@@ -535,8 +531,7 @@ namespace gl
 		GLint fileSize;
 
 		if (file.fail())
-			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't exist", -1);
-		file.seekg(0, file.end);
+			assert(0);		file.seekg(0, file.end);
 		fileSize = static_cast<GLint>(file.tellg()) + 1;
 		file.seekg(0, file.beg);
 		content = new GLchar[fileSize];
@@ -545,8 +540,7 @@ namespace gl
 		shaderId = glCreateShader(type);
 		glShaderSource(shaderId, 1, const_cast<const GLchar**>(&content), const_cast<const GLint*>(&fileSize));
 		if (compileShader(shaderId, path) == false)
-			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't compile", -1);
-		delete[] content;
+			assert(0);		delete[] content;
 		return (shaderId);
 	}
 
@@ -556,7 +550,7 @@ namespace gl
 		shaderId = glCreateShader(type);
 		glShaderSource(shaderId, 1, (const GLchar**)(&source), NULL);
 		if (compileShader(shaderId, "") == false)
-			DEBUG_MESSAGE("Error", "Shader.cpp-Shader(path, type)", "File doesn't compile", -1);
+			assert(0);
 		return (shaderId);
 	}
 
@@ -577,7 +571,7 @@ namespace gl
 			std::cerr << "Compile error on " << file.data() << ": " << std::endl;
 			std::cerr << std::endl << errorMsg << std::endl << std::endl;
 			delete[] errorMsg;
-			DEBUG_MESSAGE("Error", "Shader.cpp-compileShader(shaderId, file)", "File doesn't compile", false);
+			assert(0);
 		}
 		return (true);
 	}

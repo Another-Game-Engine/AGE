@@ -144,7 +144,7 @@ namespace gl
 			task.func = func;
 		}
 		if (task.sizeParams[1] != sizeof(TYPE))
-			DEBUG_MESSAGE("Warning", "Shader - setUniformTask", "size of setting different of dest", );
+			assert(0);
 		if (memcmp(task.params[1], data, sizeof(TYPE)) != 0)
 		{
 			task.update = true;
@@ -160,7 +160,7 @@ namespace gl
 			return (*this);
 		Task const &task = _tasks[indexTask];
 		if (task.sizeParams[task.indexToTarget] != TYPE::size)
-			DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "The size of material is not adapt with the uniform target", *this);
+			assert(0);
 		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
 	}
@@ -173,7 +173,7 @@ namespace gl
 			return (*this);
 		Task const &task = _tasks[indexTask];
 		if (task.sizeParams[task.indexToTarget] != TYPE::size)
-			DEBUG_MESSAGE("Warning", "Shader - bindingMaterial", "The size of material is not adapt with the uniform target", *this);
+			assert(0);
 		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
 	}

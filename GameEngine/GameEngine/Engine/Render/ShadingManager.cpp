@@ -30,7 +30,7 @@ namespace gl
 		if (_preShaderQuad != NULL)
 			return (*this);
 		if ((_preShaderQuad = Shader::createPreShaderQuad()) == NULL)
-			DEBUG_MESSAGE("Warning", "ShadingManager-addPreShaderQuad()", "compute invalid", *this);
+			assert(0);
 		_preShaderQuad->addSampler("input_sampler");
 		return (*this);
 	}
@@ -41,7 +41,7 @@ namespace gl
 		Shader *shader;
 
 		if ((shader = Shader::createComputeShader(compute)) == NULL)
-			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &compute)", "compute invalid", Key<Shader>(KEY_DESTROY));
+			assert(0);
 		_shaders[key] = shader;
 		return (key);
 	}
@@ -52,7 +52,7 @@ namespace gl
 		Shader *shader;
 
 		if ((shader = Shader::createShader(vertex, frag)) == NULL)
-			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &frag, string const &vertex)", "frag and vertex invalid", Key<Shader>(KEY_DESTROY));
+			assert(0);
 		_shaders[key] = shader;
 		return (key);
 	}
@@ -63,7 +63,7 @@ namespace gl
 		Shader *shader;
 
 		if ((shader = Shader::createShader(vertex, frag, geo)) == NULL)
-			DEBUG_MESSAGE("Warning", "ShadingManager-addShader(string const &frag, string const &vertex, string const &geo)", "frag, vertex or geo invalid", Key<Shader>(KEY_DESTROY))
+			assert(0);
 		_shaders[key] = shader;
 		return (key);
 	}
@@ -71,7 +71,7 @@ namespace gl
 	Key<Shader> ShadingManager::getShader(size_t target) const
 	{
 		if (target >= _shaders.size())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getShader(size_t target)", "the target is out of range", Key<Shader>(KEY_DESTROY));
+			assert(0);
 		auto &element = _shaders.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -210,7 +210,7 @@ namespace gl
 	Key<UniformBlock> ShadingManager::getUniformBlock(size_t target) const
 	{
 		if (target >= _uniformBlock.size())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getUniformBlock(size_t target)", "the target is out of range", Key<UniformBlock>(KEY_DESTROY));
+			assert(0);
 		auto &element = _uniformBlock.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -267,7 +267,7 @@ namespace gl
 	Key<Texture> ShadingManager::getTexture(size_t target) const
 	{
 		if (target >= _textures.size())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getTexture(size_t target)", "the target is out of range", Key<Texture>(KEY_DESTROY));
+			assert(0);
 		auto &element = _textures.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -285,14 +285,14 @@ namespace gl
 	Shader *ShadingManager::getShader(Key<Shader> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+			assert(0);
 		if (_shaders.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no shader present in pool", NULL);
+			assert(0);
 		if (key == _optimizeShaderSearch.first)
 			return (_optimizeShaderSearch.second);
 		auto &shader = _shaders.find(key);
 		if (shader == _shaders.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "shader not find", NULL);
+			assert(0);
 		_optimizeShaderSearch.first = key;
 		_optimizeShaderSearch.second = shader->second;
 		return (shader->second);
@@ -301,14 +301,14 @@ namespace gl
 	Texture *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+			assert(0);
 		if (_textures.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no texture present in pool", NULL);
+			assert(0);
 		if (key == _optimizeTextureSearch.first)
 			return (_optimizeTextureSearch.second);
 		auto &texture = _textures.find(key);
 		if (texture == _textures.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "texture not find", NULL);
+			assert(0);
 		_optimizeTextureSearch.first = key;
 		_optimizeTextureSearch.second = texture->second;
 		return (texture->second);
@@ -317,14 +317,14 @@ namespace gl
 	UniformBlock *ShadingManager::getUniformBlock(Key<UniformBlock> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+			assert(0);
 		if (_uniformBlock.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+			assert(0);
 		if (key == _optimizeUniformBlockSearch.first)
 			return (_optimizeUniformBlockSearch.second);
 		auto &uniformBlock = _uniformBlock.find(key);
 		if (uniformBlock == _uniformBlock.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+			assert(0);
 		_optimizeUniformBlockSearch.first = key;
 		_optimizeUniformBlockSearch.second = &uniformBlock->second;
 		return (&uniformBlock->second);
@@ -333,14 +333,14 @@ namespace gl
 	RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+			assert(0);
 		if (_renderPass.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+			assert(0);
 		if (key == _optimizeRenderPassSearch.first)
 			return (_optimizeRenderPassSearch.second);
 		auto &renderPassIndex = _renderPass.find(key);
 		if (renderPassIndex == _renderPass.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+			assert(0);
 		_optimizeRenderPassSearch.first = key;
 		_optimizeRenderPassSearch.second = renderPassIndex->second;
 		return (renderPassIndex->second);
@@ -408,7 +408,7 @@ namespace gl
 	Key<RenderPass> ShadingManager::getRenderPass(size_t target) const
 	{
 		if (target >= _renderPass.size())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getRenderPass(size_t target)", "the target is out of range", Key<RenderPass>(KEY_DESTROY));
+			assert(0);
 		auto &element = _renderPass.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -499,14 +499,14 @@ namespace gl
 	RenderPostEffect *ShadingManager::getRenderPostEffect(Key<RenderPostEffect> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+			assert(0);
 		if (_renderPostEffect.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+			assert(0);
 		if (key == _optimizeRenderPostEffectSearch.first)
 			return (_optimizeRenderPostEffectSearch.second);
 		auto &renderPostEffect = _renderPostEffect.find(key);
 		if (renderPostEffect == _renderPostEffect.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+			assert(0);
 		_optimizeRenderPostEffectSearch.first = key;
 		_optimizeRenderPostEffectSearch.second = renderPostEffect->second;
 		return (renderPostEffect->second);
@@ -515,14 +515,14 @@ namespace gl
 	RenderOnScreen *ShadingManager::getRenderOnScreen(Key<RenderOnScreen> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+			assert(0);
 		if (_renderOnScreen.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+			assert(0);
 		if (key == _optimizeRenderOnScreenSearch.first)
 			return (_optimizeRenderOnScreenSearch.second);
 		auto &renderOnScreen = _renderOnScreen.find(key);
 		if (renderOnScreen == _renderOnScreen.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+			assert(0);
 		_optimizeRenderOnScreenSearch.first = key;
 		_optimizeRenderOnScreenSearch.second = renderOnScreen->second;
 		return (renderOnScreen->second);
@@ -542,7 +542,7 @@ namespace gl
 	Key<RenderPostEffect> ShadingManager::getRenderPostEffect(size_t target) const
 	{
 		if (target >= _renderPass.size())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - getRenderPass(size_t target)", "the target is out of range", Key<RenderPostEffect>(KEY_DESTROY));
+			assert(0);
 		auto &element = _renderPostEffect.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -616,7 +616,7 @@ namespace gl
 	Key<RenderOnScreen> ShadingManager::getRenderOnScreen(size_t target) const
 	{
 		if (target >= _textures.size())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getTexture(size_t target)", "the target is out of range", Key<RenderOnScreen>(KEY_DESTROY));
+			assert(0);
 		auto &element = _renderOnScreen.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;

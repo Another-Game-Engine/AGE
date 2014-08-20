@@ -1,10 +1,5 @@
 #pragma once
 
-# undef DEBUG_MESSAGE
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
-
-
 #define GEN_DEC_RENDER_PUSH_TASK(name) \
 	ShadingManager &pushClearTask##name##(Key<##name##> const &key, bool color = true, bool depth = true, bool stencil = false); \
 	ShadingManager &pushSetClearValueTask##name##(Key<##name##> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0); \

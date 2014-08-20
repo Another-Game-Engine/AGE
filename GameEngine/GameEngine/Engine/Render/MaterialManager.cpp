@@ -1,11 +1,6 @@
 #include <Render/MaterialManager.hh>
 #include <Render/Shader.hh>
 
-# undef DEBUG_MESSAGE
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
-
-
 namespace gl
 {
 	MaterialManager::MaterialManager()
@@ -31,7 +26,7 @@ namespace gl
 	Key<Material> MaterialManager::getMaterial(size_t target) const
 	{
 		if (target >= _materials.size())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp-getMaterial(size_t target)", "the target is out of range", Key<Material>(KEY_DESTROY));
+			assert(0);
 		auto &element = _materials.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -49,14 +44,14 @@ namespace gl
 	Material *MaterialManager::getMaterial(Key<Material> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "key destroy", NULL);
+			assert(0);
 		if (_materials.size() == 0)
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "no uniformBlock present in pool", NULL);
+			assert(0);
 		if (key == _optimizeMaterialSearch.first)
 			return (_optimizeMaterialSearch.second);
 		auto &material = _materials.find(key);
 		if (material == _materials.end())
-			DEBUG_MESSAGE("Warning", "ShadingManager.cpp - " + in, "uniformBlock not find", NULL);
+			assert(0);
 		_optimizeMaterialSearch.first = key;
 		_optimizeMaterialSearch.second = &material->second;
 		return (&material->second);

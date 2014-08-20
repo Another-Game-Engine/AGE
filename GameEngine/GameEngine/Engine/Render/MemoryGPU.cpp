@@ -1,12 +1,7 @@
 #include <Render/MemoryGPU.hh>
 #include <iostream>
 #include <stdint.h>
-
-# define WARNING_MESSAGE_SETTING(type, index) \
-	std::cerr << "warning: tentative to set value to the index : [" << index << "] which is out of range on a object MemoryBlocksGPU for " << type << std::endl;\
-
-# define WARNING_MESSAGE_GETTING(type, index) \
-	std::cerr << "warning: tentative to get value to the index : [" << index << "] which is out of range on a object MemoryBlocksGPU for " << type << std::endl;\
+#include <assert.h>
 
 namespace gl
 {
@@ -129,7 +124,7 @@ namespace gl
 	{
 		if (index >= _nbrBlock)
 		{
-			WARNING_MESSAGE_GETTING("getOffset", index);
+			assert(0);
 			return (-1);
 		}
 		return (_baseOffset[index]);
@@ -144,7 +139,7 @@ namespace gl
 	{
 		if (index >= _nbrBlock)
 		{
-			WARNING_MESSAGE_GETTING("size", index);
+			assert(0);
 			return (-1);
 		}
 		return (_sizeBlocks[index]);
@@ -160,7 +155,7 @@ namespace gl
 	{
 		if (index >= _nbrBlock)
 		{
-			WARNING_MESSAGE_SETTING("setOffset", index);
+			assert(0);
 			return (*this);
 		}
 		_baseOffset[index] = offset;
@@ -204,7 +199,7 @@ namespace gl
 	{
 		if (index >= _nbrBlock)
 		{
-			WARNING_MESSAGE_SETTING("size", index);
+			assert(0);
 			return (*this);
 		}
 		_sizeBlocks[index] = sizeBlock;

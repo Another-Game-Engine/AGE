@@ -7,11 +7,6 @@
 #include <Render/MaterialManager.hh>
 #include <Render/Storage.hh>
 
-# undef DEBUG_MESSAGE
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
-
-
 namespace gl
 {
 	Render::Render(Shader &shader, GeometryManager &g)
@@ -226,7 +221,7 @@ namespace gl
 	Render &Render::popTask()
 	{
 		if (!(_tasks.size() > 0))
-			DEBUG_MESSAGE("Warning", "RenderPass - popTask", "No task to pop", *this);
+			assert(0);
 		auto &element = _tasks.back();
 		for (uint8_t index = 0; index < element.nbrParams; ++index)
 			delete element.params[index];
@@ -271,7 +266,7 @@ namespace gl
 		if (_shader.hasSampler(key))
 			_inputSamplers.push_back(key);
 		else
-			DEBUG_MESSAGE("Warning", "pushInputSampler", "input not present into this shader attach", *this);
+			assert(0);
 		return (*this);
 	}
 

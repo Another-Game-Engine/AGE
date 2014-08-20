@@ -6,9 +6,6 @@
 #include <cassert>
 #include <Render/SimpleFormGeometry.hh>
 
-#define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{ assert(0 && std::string(std::string(type) + ":from[" + std::string(from) + "] reason[" + std::string(reason) + "]").c_str()); return return_type; }
-
 namespace gl
 {
 	GeometryManager::GeometryManager()
@@ -266,14 +263,14 @@ namespace gl
 	VertexPool *GeometryManager::getVertexPool(Key<VertexPool> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
+			assert(0);
 		if (_vertexPool.size() == 0)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "no element into vertex pool", NULL);
+			assert(0);
 		if (_optimizerVertexPoolSearch.first == key)
 			return (_optimizerVertexPoolSearch.second);
 		auto &vertexPool = _vertexPool.find(key);
 		if (vertexPool == _vertexPool.end())
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "element not found", NULL);
+			assert(0);
 		_optimizerVertexPoolSearch.first = key;
 		_optimizerVertexPoolSearch.second = &vertexPool->second;
 		return (&vertexPool->second);
@@ -282,14 +279,14 @@ namespace gl
 	IndexPool *GeometryManager::getIndexPool(Key<IndexPool> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
+			assert(0);
 		if (_indexPool.size() == 0)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "no element into index pool", NULL);
+			assert(0);
 		if (_optimizerIndexPoolSearch.first == key)
 			return (_optimizerIndexPoolSearch.second);
 		auto &indexPool = _indexPool.find(key);
 		if (indexPool == _indexPool.end())
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "element not found", NULL);
+			assert(0);
 		_optimizerIndexPoolSearch.first = key;
 		_optimizerIndexPoolSearch.second = &indexPool->second;
 		return (&indexPool->second);
@@ -298,14 +295,14 @@ namespace gl
 	Indices *GeometryManager::getIndices(Key<Indices> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
+			assert(0);
 		if (_indices.size() == 0)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "no element into indices", NULL);
+			assert(0);
 		if (_optimizerIndicesSearch.first == key)
 			return (_optimizerIndicesSearch.second);
 		auto &indices = _indices.find(key);
 		if (indices == _indices.end())
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "element not found", NULL);
+			assert(0);
 		_optimizerIndicesSearch.first = key;
 		_optimizerIndicesSearch.second = &indices->second;
 		return (&indices->second);
@@ -314,14 +311,14 @@ namespace gl
 	Vertices *GeometryManager::getVertices(Key<Vertices> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
+			assert(0);
 		if (_vertices.size() == 0)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "no element into vertices", NULL);
+			assert(0);
 		if (_optimizerVerticesSearch.first == key)
 			return (_optimizerVerticesSearch.second);
 		auto &vertices = _vertices.find(key);
 		if (vertices == _vertices.end())
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "element not found", NULL);
+			assert(0);
 		_optimizerVerticesSearch.first = key;
 		_optimizerVerticesSearch.second = &vertices->second;
 		return (&vertices->second);
@@ -330,7 +327,7 @@ namespace gl
 	GeometryManager::Attach<Vertices, VertexPool> *GeometryManager::getVertexAttach(Key<Vertices> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
+			assert(0);
 		if (_optimizerVertexAttachSearch.first == key)
 			return (_optimizerVertexAttachSearch.second);
 		if (_vertexAttach.size() == 0)
@@ -346,7 +343,7 @@ namespace gl
 	GeometryManager::Attach<Indices, IndexPool> *GeometryManager::getIndexAttach(Key<Indices> const &key, std::string const &in)
 	{
 		if (!key)
-			DEBUG_MESSAGE("Warning", "GeometryManager.cpp - " + in, "key is destroy", NULL);
+			assert(0);
 		if (_indexAttach.size() == 0)
 			return (NULL);
 		if (_optimizerIndexAttachSearch.first == key)

@@ -3,11 +3,6 @@
 #include <iostream>
 #include <stdint.h>
 
-# undef DEBUG_MESSAGE
-# define DEBUG_MESSAGE(type, from, reason, return_type) \
-	{	assert(0 && std::string(std::string(type) + ": from[" + std::string(from) + "], reason[" + std::string(reason) + "].").c_str()); return return_type; }
-
-
 namespace gl
 {
 	void setClearValue(void **);

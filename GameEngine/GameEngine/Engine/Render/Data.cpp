@@ -3,9 +3,6 @@
 #include <string>
 #include <cassert>
 
-#define DEBUG_MESSAGE(type, from, key_word, reason, end) \
-	{ assert(0 && std::string(std::string(type) + ":from[" + std::string(from) + "].key-word[" + std::string(key_word) + "].reason[" + std::string(reason) + "]").c_str()); return end; }
-
 namespace gl
 {
 	Vertices::Vertices()
@@ -98,7 +95,7 @@ namespace gl
 	void const *Vertices::getBuffer(uint8_t index) const
 	{
 		if (index >= _nbrBuffers)
-			DEBUG_MESSAGE("Warning", "Vertices", "getBuffer", "the index is out of range", NULL)
+			assert(0);
 		return (_buffers[index]);
 	}
 
@@ -106,7 +103,7 @@ namespace gl
 	size_t Vertices::getSizeBuffer(uint8_t index) const
 	{
 		if (index >= _nbrBuffers)
-			DEBUG_MESSAGE("Warning", "Vertices", "getSizeBuffer", "the index is out of range", NULL);
+			assert(0);
 		return (_sizeBuffers[index]);
 	}
 
