@@ -477,7 +477,6 @@ namespace gl
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
 		_indexPoolattach->onDrawCall(mode, drawWithIt, memory);
-		_vao.unbind();
 		return (*this);
 	}
 
@@ -501,7 +500,6 @@ namespace gl
 		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
 		_vao.bind();
 		glDrawArrays(mode, GLint(memory.getElementStart()), GLsizei(memory.getNbrElement()));
-		_vao.unbind();
 		return (*this);
 	}
 

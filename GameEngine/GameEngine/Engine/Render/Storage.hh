@@ -18,11 +18,11 @@ namespace gl
 		virtual GLenum getType() const = 0;
 		virtual Storage const &attachement(Framebuffer const &fbo, GLenum attach) const = 0;
 	protected:
-		Storage(GLsizei width, GLsizei height, GLenum internalFormat);
+		Storage(size_t width, size_t height, GLenum internalFormat);
 
 		GLuint _id;
-		GLsizei _width;
-		GLsizei _height;
+		size_t _width;
+		size_t _height;
 		GLenum _internalFormat;
 	};
 
@@ -42,7 +42,7 @@ namespace gl
 		uint8_t getMaxLevelMipMap() const;
 
 	protected:
-		Texture(GLsizei width, GLsizei height, GLenum internalFormat, bool mipMapping);
+		Texture(size_t width, size_t height, GLenum internalFormat, bool mipMapping);
 
 		uint8_t _mipMapLevels;
 		uint8_t _levelTarget;
@@ -51,7 +51,7 @@ namespace gl
 	class Texture2D : public Texture
 	{
 	public:
-		Texture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping = true);
+		Texture2D(size_t width, size_t height, GLenum internalFormat, bool mipmapping = true);
 		virtual ~Texture2D();
 
 		virtual GLenum getType() const;
@@ -66,13 +66,13 @@ namespace gl
 		Texture2D &configUpload(glm::ivec4 const &rect);
 
 	private:
-		glm::vec4 _rect;
+		glm::ivec4 _rect;
 	};
 
 	class RenderBuffer : public Storage
 	{
 	public:
-		RenderBuffer(GLsizei width, GLsizei height, GLenum internalFormat);
+		RenderBuffer(size_t width, size_t height, GLenum internalFormat);
 		virtual ~RenderBuffer();
 
 	private:

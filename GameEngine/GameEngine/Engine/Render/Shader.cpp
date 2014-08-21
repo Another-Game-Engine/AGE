@@ -531,7 +531,8 @@ namespace gl
 		GLint fileSize;
 
 		if (file.fail())
-			assert(0);		file.seekg(0, file.end);
+			assert(0);		
+		file.seekg(0, file.end);
 		fileSize = static_cast<GLint>(file.tellg()) + 1;
 		file.seekg(0, file.beg);
 		content = new GLchar[fileSize];
@@ -540,7 +541,8 @@ namespace gl
 		shaderId = glCreateShader(type);
 		glShaderSource(shaderId, 1, const_cast<const GLchar**>(&content), const_cast<const GLint*>(&fileSize));
 		if (compileShader(shaderId, path) == false)
-			assert(0);		delete[] content;
+			assert(0);
+		delete[] content;
 		return (shaderId);
 	}
 

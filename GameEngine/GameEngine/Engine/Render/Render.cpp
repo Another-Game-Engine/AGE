@@ -1,4 +1,4 @@
-#include <Render/RenderPass.hh>
+#include <Render/Render.hh>
 #include <cassert>
 #include <string>
 #include <Core/Drawable.hh>

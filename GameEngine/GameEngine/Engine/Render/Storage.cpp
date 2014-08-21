@@ -9,7 +9,7 @@
 
 namespace gl
 {
-	Storage::Storage(GLsizei width, GLsizei height, GLenum internalFormat)
+	Storage::Storage(size_t width, size_t height, GLenum internalFormat)
 		: _id(0),
 		_width(width),
 		_height(height),
@@ -26,7 +26,7 @@ namespace gl
 		return (_id);
 	}
 
-	Texture::Texture(GLsizei width, GLsizei height, GLenum internalFormat, bool mipMapping)
+	Texture::Texture(size_t width, size_t height, GLenum internalFormat, bool mipMapping)
 		: Storage(width, height, internalFormat),
 		_mipMapLevels(mipMapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(_width), float(_height))) + 1))) : 1),
 		_levelTarget(0)
@@ -50,12 +50,12 @@ namespace gl
 		return (*this);
 	}
 
-	Texture2D::Texture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipMapping)
+	Texture2D::Texture2D(size_t width, size_t height, GLenum internalFormat, bool mipMapping)
 		: Texture(width, height, internalFormat, mipMapping),
 		_rect(glm::ivec4(0, 0, width, height))
 	{
 		glBindTexture(GL_TEXTURE_2D, _id);
-		glTexStorage2D(GL_TEXTURE_2D, _mipMapLevels, _internalFormat, _width, _height);
+		glTexStorage2D(GL_TEXTURE_2D, _mipMapLevels, _internalFormat, GLsizei(_width), GLsizei(_height));
 	}
 
 	Texture2D::~Texture2D()
@@ -115,12 +115,12 @@ namespace gl
 		return (*this);
 	}
 
-	RenderBuffer::RenderBuffer(GLsizei width, GLsizei height, GLenum internalFormat)
+	RenderBuffer::RenderBuffer(size_t width, size_t height, GLenum internalFormat)
 		: Storage(width, height, internalFormat)
 	{
 		glGenRenderbuffers(1, &_id);
 		glBindRenderbuffer(GL_RENDERBUFFER, _id);
-		glRenderbufferStorage(GL_RENDERBUFFER, internalFormat, width, height);
+		glRenderbufferStorage(GL_RENDERBUFFER, internalFormat, GLsizei(width), GLsizei(height));
 	}
 
 	RenderBuffer::~RenderBuffer()

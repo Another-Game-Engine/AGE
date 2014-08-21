@@ -12,7 +12,7 @@
 #include <cassert>
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>
-#include <Render/RenderPass.hh>
+#include <Render/Render.hh>
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
 #include <Render/MacroShadingManager.hh>
