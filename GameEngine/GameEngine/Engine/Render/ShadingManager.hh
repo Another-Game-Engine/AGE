@@ -94,6 +94,7 @@ namespace gl
 		ShadingManager &pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s);
 		ShadingManager &popInputColorRenderPass(Key<RenderPass> const &key);
 		ShadingManager &createDepthBufferRenderPass(Key<RenderPass> const &key);
+		ShadingManager &createStencilBufferRenderPass(Key<RenderPass> const &key);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(glm::ivec4 const &rect);

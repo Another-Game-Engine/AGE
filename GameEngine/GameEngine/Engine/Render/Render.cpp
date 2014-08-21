@@ -282,7 +282,8 @@ namespace gl
 		_colorAttachement(NULL),
 		_colorTexture2D(NULL),
 		_nbrColorAttachement(0),
-		_depthBuffer(NULL)
+		_depthBuffer(NULL),
+		_stencilBuffer(NULL)
 	{
 	}
 
@@ -295,6 +296,8 @@ namespace gl
 		}
 		if (_depthBuffer != NULL)
 			delete _depthBuffer;
+		if (_stencilBuffer)
+			delete _stencilBuffer;
 	}
 
 	RenderOffScreen &RenderOffScreen::configSample(GLint sample)
@@ -366,6 +369,14 @@ namespace gl
 		if (_depthBuffer != NULL)
 			return (*this);
 		_depthBuffer = new RenderBuffer(_rect.z, _rect.w, GL_DEPTH_COMPONENT);
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::createStencilBuffer()
+	{
+		if (_stencilBuffer != NULL)
+			return (*this);
+		_stencilBuffer = new RenderBuffer(_rect.z, _rect.w, GL_DEPTH_COMPONENT);
 		return (*this);
 	}
 

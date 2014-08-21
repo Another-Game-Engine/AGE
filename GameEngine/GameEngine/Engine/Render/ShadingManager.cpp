@@ -478,6 +478,16 @@ namespace gl
 		return (*this);
 	}
 
+	ShadingManager &ShadingManager::createStencilBufferRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+			return (*this);
+		renderPass->createStencilBuffer();
+		return (*this);
+	}
+
 	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		auto &element = _renderPass.begin();

@@ -111,7 +111,6 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
 	_model_matrix = _render->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
 	_view_matrix = _render->addShaderUniform(_shader, "view_matrix", glm::mat4(1.f));
-	_diffuse_texture = _render->addShaderSampler(_shader, "diffuse_texture");
 	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color", glm::vec4(1.0f));
 	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio", 1.0f);
 	_render->bindMaterialToShader<gl::Color_diffuse>(_shader, _diffuse_color);

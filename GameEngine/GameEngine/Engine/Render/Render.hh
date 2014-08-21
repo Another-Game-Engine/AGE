@@ -112,7 +112,7 @@ namespace gl
 		GLsizei _nbrColorAttachement;
 
 		RenderBuffer *_depthBuffer;
-		//RenderBuffer *_storageBuffer;
+		RenderBuffer *_stencilBuffer;
 
 		Framebuffer _fbo;
 		GLint _sample;
