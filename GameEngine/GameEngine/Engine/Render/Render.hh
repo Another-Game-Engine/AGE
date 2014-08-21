@@ -99,6 +99,9 @@ namespace gl
 		GLenum getAttachementOutput(size_t index);
 		size_t getNbrAttachementOutput() const;
 
+		RenderOffScreen &createDepthBuffer();
+		RenderOffScreen &createStencilBuffer();
+
 	protected:
 		RenderOffScreen(Shader &shader, GeometryManager &g);
 		RenderOffScreen(RenderOffScreen const &copy) = delete;
@@ -107,6 +110,9 @@ namespace gl
 		GLenum *_colorAttachement;
 		Texture2D **_colorTexture2D;
 		GLsizei _nbrColorAttachement;
+
+		RenderBuffer *_depthBuffer;
+		//RenderBuffer *_storageBuffer;
 
 		Framebuffer _fbo;
 		GLint _sample;
@@ -119,6 +125,8 @@ namespace gl
 		glDrawBuffers(_nbrColorAttachement, _colorAttachement);
 		for (size_t index = 0; index < _nbrColorAttachement; ++index)
 			_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
+		if (_depthBuffer != NULL)
+			_fbo.attachement(*_depthBuffer, GL_DEPTH_ATTACHMENT);
 		_updateOutput = false;
 	}
 

@@ -468,6 +468,16 @@ namespace gl
 		return (*this);
 	}
 
+	ShadingManager &ShadingManager::createDepthBufferRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "pushInputColorRenderPass")) == NULL)
+			return (*this);
+		renderPass->createDepthBuffer();
+		return (*this);
+	}
+
 	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		auto &element = _renderPass.begin();

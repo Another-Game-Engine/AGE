@@ -122,6 +122,7 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
 	_render->pushOutputColorRenderPass(_renderPass, GL_COLOR_ATTACHMENT0, GL_RGB8);
+	_render->createDepthBufferRenderPass(_renderPass);
 
 	_renderOnScreen = _render->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
 	_render->pushClearTaskRenderOnScreen(_renderOnScreen, true, true, false);

@@ -281,7 +281,8 @@ namespace gl
 		_sample(1),
 		_colorAttachement(NULL),
 		_colorTexture2D(NULL),
-		_nbrColorAttachement(0)
+		_nbrColorAttachement(0),
+		_depthBuffer(NULL)
 	{
 	}
 
@@ -292,6 +293,8 @@ namespace gl
 			delete[] _colorAttachement;
 			delete[] _colorTexture2D;
 		}
+		if (_depthBuffer != NULL)
+			delete _depthBuffer;
 	}
 
 	RenderOffScreen &RenderOffScreen::configSample(GLint sample)
@@ -356,6 +359,14 @@ namespace gl
 	size_t RenderOffScreen::getNbrAttachementOutput() const
 	{
 		return (_nbrColorAttachement);
+	}
+
+	RenderOffScreen &RenderOffScreen::createDepthBuffer()
+	{
+		if (_depthBuffer != NULL)
+			return (*this);
+		_depthBuffer = new RenderBuffer(_rect.z, _rect.w, GL_DEPTH_COMPONENT);
+		return (*this);
 	}
 
 	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
