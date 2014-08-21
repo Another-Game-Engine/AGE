@@ -97,7 +97,7 @@ namespace gl
 		ShadingManager &createStencilBufferRenderPass(Key<RenderPass> const &key);
 
 		// RenderPostEffect
-		Key<RenderPostEffect> addRenderPostEffect(glm::ivec4 const &rect);
+		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
 		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect)
 		ShadingManager &configRenderPostEffect(Key<RenderPostEffect> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);

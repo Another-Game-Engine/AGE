@@ -548,12 +548,14 @@ namespace gl
 		return (renderOnScreen->second);
 	}
 
-	Key<RenderPostEffect> ShadingManager::addRenderPostEffect(glm::ivec4 const &rect)
+	Key<RenderPostEffect> ShadingManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
 	{
 		Key<RenderPostEffect> key;
+		Shader *shader;
 
-		createPreShaderQuad();
-		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *_preShaderQuad, geometryManager);
+		if ((shader = getShader(s, "addRenderPostEffect")) == NULL)
+			return  (Key<RenderPostEffect>(KEY_DESTROY));
+		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *shader, geometryManager);
 		element->pushInputSampler(_preShaderQuad->getSampler(0));
 		element->configRect(rect);
 		return (key);
