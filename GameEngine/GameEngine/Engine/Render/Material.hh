@@ -13,8 +13,7 @@ namespace gl
 
 	enum TypeMaterial
 	{
-		RENDER_PASS = 0,
-		COLOR_DIFFUSE,
+		COLOR_DIFFUSE = 0,
 		RATIO_DIFFUSE,
 		TEXTURE_DIFFUSE,
 		COLOR_SPECULAR,
@@ -32,8 +31,7 @@ namespace gl
 
 	// definition of material handle by the engine
 	struct Start { enum { size = 0, offset = 0 }; };
-	DECL_MATERIAL(Render_Pass, RenderPass *, Start, RENDER_PASS);
-	DECL_MATERIAL(Color_diffuse, glm::vec4, Render_Pass, COLOR_DIFFUSE);
+	DECL_MATERIAL(Color_diffuse, glm::vec4, Start, COLOR_DIFFUSE);
 	DECL_MATERIAL(Ratio_diffuse, float, Color_diffuse, RATIO_DIFFUSE);
 	DECL_MATERIAL(Texture_diffuse, Key<Texture>, Ratio_diffuse, TEXTURE_DIFFUSE);
 	DECL_MATERIAL(Color_specular, glm::vec4, Texture_diffuse, COLOR_SPECULAR);

@@ -81,9 +81,9 @@ namespace gl
 		AGE::Vector<Task> _tasks;
 		AGE::Vector<Key<Sampler>> _inputSamplers;
 		RenderOffScreen const *_branch;
-		bool _updateInput;
 
 		GeometryManager &_geometryManager;
+		void updateInput();
 	};
 
 	class RenderOffScreen : public Render
@@ -100,7 +100,18 @@ namespace gl
 		size_t getNbrAttachementOutput() const;
 
 		RenderOffScreen &createDepthBuffer();
+		RenderOffScreen &deleteDepthBuffer();
+		RenderBuffer const *getDepthBuffer() const;
+
 		RenderOffScreen &createStencilBuffer();
+		RenderOffScreen &deleteStencilBuffer();
+		RenderBuffer const *getStencilBuffer() const;
+
+		RenderOffScreen &useInputDepth();
+		RenderOffScreen &unUseInputDepth();
+		RenderOffScreen &useInputStencil();
+		RenderOffScreen &unUseInputStencil();
+
 
 	protected:
 		RenderOffScreen(Shader &shader, GeometryManager &g);
@@ -109,26 +120,20 @@ namespace gl
 
 		GLenum *_colorAttachement;
 		Texture2D **_colorTexture2D;
-		GLsizei _nbrColorAttachement;
+		uint8_t _nbrColorAttachement;
 
 		RenderBuffer *_depthBuffer;
 		RenderBuffer *_stencilBuffer;
+		bool _useInputDepth;
+		bool _useInputStencil;
 
 		Framebuffer _fbo;
 		GLint _sample;
 		bool _updateOutput;
-		void updateOutput();
-	};
 
-	__forceinline void RenderOffScreen::updateOutput()
-	{
-		glDrawBuffers(_nbrColorAttachement, _colorAttachement);
-		for (size_t index = 0; index < _nbrColorAttachement; ++index)
-			_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
-		if (_depthBuffer != NULL)
-			_fbo.attachement(*_depthBuffer, GL_DEPTH_ATTACHMENT);
-		_updateOutput = false;
-	}
+		void updateOutput();
+		void updateInput();
+	};
 
 	class RenderOnScreen : public Render
 	{

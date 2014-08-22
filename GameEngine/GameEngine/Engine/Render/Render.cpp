@@ -14,7 +14,6 @@ namespace gl
 		_mode(GL_TRIANGLES),
 		_shader(shader),
 		_branch(NULL),
-		_updateInput(false),
 		_geometryManager(g)
 	{
 
@@ -250,13 +249,11 @@ namespace gl
 	Render &Render::branchInput(RenderOffScreen const &input)
 	{
 		_branch = &input;
-		_updateInput = true;
 		return (*this);
 	}
 
 	Render &Render::unBranchInput()
 	{
-		_updateInput = false;
 		_branch = NULL;
 		return (*this);
 	}
@@ -275,7 +272,40 @@ namespace gl
 		_inputSamplers.pop_back();
 		return (*this);
 	}
+
+	void Render::updateInput()
+	{
+		if (_branch != NULL && _inputSamplers.size() == _branch->getNbrAttachementOutput())
+		{
+			for (size_t index = 0; index < _inputSamplers.size(); ++index)
+				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
+		}
+	}
 	
+	RenderOffScreen &RenderOffScreen::useInputDepth()
+	{
+		_useInputDepth = true;
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::unUseInputDepth()
+	{
+		_useInputDepth = false;
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::useInputStencil()
+	{
+		_useInputStencil = true;
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::unUseInputStencil()
+	{
+		_useInputStencil = false;
+		return (*this);
+	}
+
 	RenderOffScreen::RenderOffScreen(Shader &shader, GeometryManager &g)
 		: Render(shader, g),
 		_sample(1),
@@ -283,7 +313,10 @@ namespace gl
 		_colorTexture2D(NULL),
 		_nbrColorAttachement(0),
 		_depthBuffer(NULL),
-		_stencilBuffer(NULL)
+		_stencilBuffer(NULL),
+		_useInputDepth(false),
+		_useInputStencil(false),
+		_updateOutput(false)
 	{
 	}
 
@@ -313,6 +346,11 @@ namespace gl
 
 	RenderOffScreen &RenderOffScreen::pushColorOutput(GLenum attachement, size_t width, size_t height, GLenum internalFormat)
 	{
+		for (uint8_t index = 0; index < _nbrColorAttachement; ++index)
+		{
+			if (attachement == _colorAttachement[index])
+				return (*this);
+		}
 		GLsizei tmp_nbrColorAttachement = _nbrColorAttachement + 1;
 		GLenum *tmp_colorAttachement = new GLenum[tmp_nbrColorAttachement];
 		Texture2D **tmp_colorTexture2D = new Texture2D *[tmp_nbrColorAttachement];
@@ -372,12 +410,61 @@ namespace gl
 		return (*this);
 	}
 
+	RenderOffScreen &RenderOffScreen::deleteDepthBuffer()
+	{
+		if (_depthBuffer == NULL)
+			return (*this);
+		delete _depthBuffer;
+		_depthBuffer = NULL;
+		return (*this);
+	}
+
+	RenderBuffer const *RenderOffScreen::getDepthBuffer() const
+	{
+		return (_depthBuffer);
+	}
+
 	RenderOffScreen &RenderOffScreen::createStencilBuffer()
 	{
 		if (_stencilBuffer != NULL)
 			return (*this);
 		_stencilBuffer = new RenderBuffer(_rect.z, _rect.w, GL_DEPTH_COMPONENT);
 		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::deleteStencilBuffer()
+	{
+		if (_stencilBuffer == NULL)
+			return (*this);
+		delete _stencilBuffer;
+		_stencilBuffer = NULL;
+		return (*this);
+	}
+
+	void RenderOffScreen::updateOutput()
+	{
+		glDrawBuffers(_nbrColorAttachement, _colorAttachement);
+		for (size_t index = 0; index < _nbrColorAttachement; ++index)
+			_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
+		if (_depthBuffer != NULL && _useInputDepth == false)
+			_fbo.attachement(*_depthBuffer, GL_DEPTH_ATTACHMENT);
+		if (_stencilBuffer != NULL && _useInputStencil == false)
+			_fbo.attachement(*_stencilBuffer, GL_STENCIL_ATTACHMENT);
+		_updateOutput = false;
+	}
+
+	void RenderOffScreen::updateInput()
+	{
+		Render::updateInput();
+		if (_useInputDepth && _branch->getDepthBuffer() != NULL)
+			_fbo.attachement(*_branch->getDepthBuffer(), GL_DEPTH_ATTACHMENT);
+		if (_useInputStencil && _branch->getStencilBuffer() != NULL)
+			_fbo.attachement(*_branch->getStencilBuffer(), GL_STENCIL_ATTACHMENT);
+	}
+
+	RenderBuffer const *RenderOffScreen::getStencilBuffer() const
+	{
+		return (_stencilBuffer);
 	}
 
 	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
@@ -402,11 +489,7 @@ namespace gl
 		_fbo.bind();
 		if (_updateOutput)
 			updateOutput();
-		if (_inputSamplers.size() == _nbrColorAttachement && _branch != NULL)
-		{
-			for (size_t index = 0; index < _inputSamplers.size(); ++index)
-				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
-		}
+		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		if (_objectsToRender == NULL)
@@ -439,11 +522,7 @@ namespace gl
 		_fbo.bind();
 		if (_updateOutput)
 			updateOutput();
-		if (_inputSamplers.size() == _nbrColorAttachement && _branch != NULL)
-		{
-			for (size_t index = 0; index < _inputSamplers.size(); ++index)
-				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
-		}
+		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		_shader.update();
@@ -466,11 +545,7 @@ namespace gl
 
 	Render &RenderOnScreen::draw()
 	{
-		if (_inputSamplers.size() == _branch->getNbrAttachementOutput() && _branch != NULL)
-		{
-			for (size_t index = 0; index < _inputSamplers.size(); ++index)
-				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
-		}
+		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		_shader.update();

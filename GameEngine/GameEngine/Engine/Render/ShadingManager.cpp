@@ -488,6 +488,46 @@ namespace gl
 		return (*this);
 	}
 
+	ShadingManager &ShadingManager::useInputDepthRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+			return (*this);
+		renderPass->useInputDepth();
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::unUseInputDepthRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+			return (*this);
+		renderPass->unUseInputDepth();
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::useInputStencilRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+			return (*this);
+		renderPass->useInputStencil();
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::unUseInputStencilRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+			return (*this);
+		renderPass->unUseInputStencil();
+		return (*this);
+	}
+
 	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		auto &element = _renderPass.begin();
