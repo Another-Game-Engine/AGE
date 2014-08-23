@@ -25,7 +25,7 @@
 	ShadingManager &ShadingManager::pushClearTask##name##(Key<##name##> const &key, bool color, bool depth, bool stencil)																			\
 	{																																																\
 		##name## *renderPass;																																											\
-		if ((renderPass = get##name##(key, "setClearOption##name##")) == NULL)																													\
+		if ((renderPass = get##name##(key)) == NULL)																													\
 			return (*this);																																											\
 		renderPass->pushClearTask(color, depth, stencil);																																			\
 		return (*this);																																												\
@@ -34,7 +34,7 @@
 ShadingManager &ShadingManager::pushSetClearValueTask##name##(Key<##name##> const &key, glm::vec4 const &color, float depth, uint8_t stencil)													\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setClearValue##name##")) == NULL)																														\
+	if ((renderPass = get##name##(key)) == NULL)																														\
 		return (*this);																																												\
 	renderPass->pushSetClearValueTask(color, depth, stencil);																																		\
 	return (*this);																																													\
@@ -43,7 +43,7 @@ ShadingManager &ShadingManager::pushSetClearValueTask##name##(Key<##name##> cons
 ShadingManager &ShadingManager::pushSetColorMaskTask##name##(Key<##name##> const &key, glm::bvec4 const &color, GLuint index)																	\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setColorMask##name##")) == NULL)																														\
+	if ((renderPass = get##name##(key)) == NULL)																														\
 		return (*this);																																												\
 	renderPass->pushSetColorMaskTask(index, color);																																					\
 	return (*this);																																													\
@@ -52,7 +52,7 @@ ShadingManager &ShadingManager::pushSetColorMaskTask##name##(Key<##name##> const
 ShadingManager &ShadingManager::pushSetStencilMaskTask##name##(Key<##name##> const &key, uint8_t front, uint8_t back)																			\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setDepthStencilMask##name##")) == NULL)																													\
+	if ((renderPass = get##name##(key)) == NULL)																													\
 		return (*this);																																												\
 	renderPass->pushSetStencilMaskTask(front, back);																																				\
 	return (*this);																																													\
@@ -61,7 +61,7 @@ ShadingManager &ShadingManager::pushSetStencilMaskTask##name##(Key<##name##> con
 ShadingManager &ShadingManager::pushSetDepthMaskTask##name##(Key<##name##> const &key, bool depth)																								\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setDepthStencilMask##name##")) == NULL)																													\
+	if ((renderPass = get##name##(key)) == NULL)																													\
 		return (*this);																																												\
 	renderPass->pushSetDepthMaskTask(depth);																																						\
 	return (*this);																																													\
@@ -70,7 +70,7 @@ ShadingManager &ShadingManager::pushSetDepthMaskTask##name##(Key<##name##> const
 ShadingManager &ShadingManager::pushSetTestTask##name##(Key<##name##> const &key, bool scissor, bool stencil, bool depth)																		\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setDepthStencilMask##name##")) == NULL)																													\
+	if ((renderPass = get##name##(key)) == NULL)																													\
 		return (*this);																																												\
 	renderPass->pushSetTestTask(scissor, stencil, depth);																																			\
 	return (*this);																																													\
@@ -79,7 +79,7 @@ ShadingManager &ShadingManager::pushSetTestTask##name##(Key<##name##> const &key
 ShadingManager &ShadingManager::pushSetScissorTask##name##(Key<##name##> const &key, glm::ivec4 const &area)																					\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setDepthStencilMask##name##")) == NULL)																													\
+	if ((renderPass = get##name##(key)) == NULL)																													\
 		return (*this);																																												\
 	renderPass->pushSetScissorTask(area);																																							\
 	return (*this);																																													\
@@ -88,7 +88,7 @@ ShadingManager &ShadingManager::pushSetScissorTask##name##(Key<##name##> const &
 ShadingManager &ShadingManager::pushSetStencilFunctionFrontFaceTask##name##(Key<##name##> const &key, GLenum func, int ref, uint8_t mask)														\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setStencilFunctionFrontFace##name##")) == NULL)																											\
+	if ((renderPass = get##name##(key)) == NULL)																											\
 		return (*this);																																												\
 	renderPass->pushSetStencilFunctionFrontFaceTask(func, ref, mask);																																\
 	return (*this);																																													\
@@ -96,7 +96,7 @@ ShadingManager &ShadingManager::pushSetStencilFunctionFrontFaceTask##name##(Key<
 ShadingManager &ShadingManager::pushSetStencilOperationFrontFaceTask##name##(Key<##name##> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass) 							\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setStencilOperationFrontFace##name##")) == NULL)																										\
+	if ((renderPass = get##name##(key)) == NULL)																										\
 		return (*this);																																												\
 	renderPass->pushSetStencilOperationFrontFaceTask(opStencilFail, opDepthFail, opDepthPass);																										\
 	return (*this);																																													\
@@ -105,7 +105,7 @@ ShadingManager &ShadingManager::pushSetStencilOperationFrontFaceTask##name##(Key
 ShadingManager &ShadingManager::pushSetStencilFunctionBackFaceTask##name##(Key<##name##> const &key, GLenum func, int ref, uint8_t mask)														\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setStencilFunctionBackFace##name##")) == NULL)																											\
+	if ((renderPass = get##name##(key)) == NULL)																											\
 		return (*this);																																												\
 	renderPass->pushSetStencilFunctionBackFaceTask(func, ref, mask);																																\
 	return (*this);																																													\
@@ -114,7 +114,7 @@ ShadingManager &ShadingManager::pushSetStencilFunctionBackFaceTask##name##(Key<#
 ShadingManager &ShadingManager::pushSetStencilOperationBackFaceTask##name##(Key<##name##> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)								\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setStencilOperationBackFace##name##")) == NULL)																											\
+	if ((renderPass = get##name##(key)) == NULL)																											\
 		return (*this);																																												\
 	renderPass->pushSetStencilOperationBackFaceTask(opStencilFail, opDepthFail, opDepthPass);																										\
 	return (*this);																																													\
@@ -123,7 +123,7 @@ ShadingManager &ShadingManager::pushSetStencilOperationBackFaceTask##name##(Key<
 ShadingManager &ShadingManager::pushSetStencilFunctionTask##name##(Key<##name##> const &key, GLenum func, int ref, uint8_t mask)																\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setStencilFunction##name##")) == NULL)																													\
+	if ((renderPass = get##name##(key)) == NULL)																													\
 		return (*this);																																												\
 	renderPass->pushSetStencilFunctionTask(func, ref, mask);																																		\
 	return (*this);																																													\
@@ -132,7 +132,7 @@ ShadingManager &ShadingManager::pushSetStencilFunctionTask##name##(Key<##name##>
 ShadingManager &ShadingManager::pushSetStencilOperationTask##name##(Key<##name##> const &key, GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass)										\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setStencilOperation##name##")) == NULL)																													\
+	if ((renderPass = get##name##(key)) == NULL)																													\
 		return (*this);																																												\
 	renderPass->pushSetStencilOperationTask(opStencilFail, opDepthFail, opDepthPass);																												\
 	return (*this);																																													\
@@ -141,7 +141,7 @@ ShadingManager &ShadingManager::pushSetStencilOperationTask##name##(Key<##name##
 ShadingManager &ShadingManager::pushSetBlendEquationTask##name##(Key<##name##> const &key, GLenum colorMode, GLenum alphaMode)																	\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setBlendEquation##name##")) == NULL)																													\
+	if ((renderPass = get##name##(key)) == NULL)																													\
 		return (*this);																																												\
 	renderPass->pushSetBlendEquationTask(colorMode, alphaMode);																																		\
 	return (*this);																																													\
@@ -150,7 +150,7 @@ ShadingManager &ShadingManager::pushSetBlendEquationTask##name##(Key<##name##> c
 ShadingManager &ShadingManager::pushSetBlendEquationTask##name##(Key<##name##> const &key, GLenum mode)																							\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setBlendEquation##name##")) == NULL)																													\
+	if ((renderPass = get##name##(key)) == NULL)																													\
 		return (*this);																																												\
 	renderPass->pushSetBlendEquationTask(mode);																																						\
 	return (*this);																																													\
@@ -159,7 +159,7 @@ ShadingManager &ShadingManager::pushSetBlendEquationTask##name##(Key<##name##> c
 ShadingManager &ShadingManager::pushSetBlendFuncTask##name##(Key<##name##> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha)										\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setBlendFunc##name##")) == NULL)																														\
+	if ((renderPass = get##name##(key)) == NULL)																														\
 		return (*this);																																												\
 	renderPass->pushSetBlendFuncTask(srcRGB, destRGB, srcAlpha, destAlpha);																															\
 	return (*this);																																													\
@@ -168,7 +168,7 @@ ShadingManager &ShadingManager::pushSetBlendFuncTask##name##(Key<##name##> const
 ShadingManager &ShadingManager::pushSetBlendFuncTask##name##(Key<##name##> const &key, GLenum src, GLenum dest)																					\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setBlendFunc##name##")) == NULL)																														\
+	if ((renderPass = get##name##(key)) == NULL)																														\
 		return (*this);																																												\
 	renderPass->pushSetBlendFuncTask(src, dest);																																					\
 	return (*this);																																													\
@@ -177,7 +177,7 @@ ShadingManager &ShadingManager::pushSetBlendFuncTask##name##(Key<##name##> const
 ShadingManager &ShadingManager::pushSetBlendConstantTask##name##(Key<##name##> const &key, glm::vec4 const &blendColor)																			\
 {																																																	\
 	name *renderPass;																																											\
-	if ((renderPass = get##name##(key, "setBlendConstant##name##")) == NULL)																													\
+	if ((renderPass = get##name##(key)) == NULL)																													\
 		return (*this);																																												\
 	renderPass->pushSetBlendConstantTask(blendColor);																																				\
 	return (*this);																																													\
@@ -186,7 +186,7 @@ ShadingManager &ShadingManager::pushSetBlendConstantTask##name##(Key<##name##> c
 ShadingManager &ShadingManager::popTask##name##(Key<##name##> const &key)																														 \
 {																																																	 \
 	name *renderPass;																																											 \
-	if ((renderPass = get##name##(key, "popTask##name##")) == NULL)																																  \
+	if ((renderPass = get##name##(key)) == NULL)																																  \
 		return (*this);																																												  \
 	renderPass->popTask();																																											  \
 	return (*this);																																													  \

@@ -81,7 +81,7 @@ namespace gl
 	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &key, size_t target)
 	{
 		Shader const *shader;
-		if ((shader = getShader(key, "getShaderUniform()")) == NULL)
+		if ((shader = getShader(key)) == NULL)
 			return (Key<Uniform>(KEY_DESTROY));
 		return (shader->getUniform(target));
 	}
@@ -89,7 +89,7 @@ namespace gl
 	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
 	{
 		Shader *shader;
-		if ((shader = getShader(key, "addShaderUniform(mat4)")) == NULL)
+		if ((shader = getShader(key)) == NULL)
 			return (Key<Uniform>(KEY_DESTROY));
 		return (shader->addUniform(flag));
 	}
@@ -97,7 +97,7 @@ namespace gl
 	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat4 const &value)
 	{
 		Shader *shader;
-		if ((shader = getShader(key, "addShaderUniform(mat4)")) == NULL)
+		if ((shader = getShader(key)) == NULL)
 			return (Key<Uniform>(KEY_DESTROY));
 		return (shader->addUniform(flag, value));
 	}
@@ -105,7 +105,7 @@ namespace gl
 	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat3 const &value)
 	{
 		Shader *shader;
-		if ((shader = getShader(key, "addShaderUniform(mat3)")) == NULL)
+		if ((shader = getShader(key)) == NULL)
 			return (Key<Uniform>(KEY_DESTROY));
 		return (shader->addUniform(flag, value));
 	}
@@ -113,7 +113,7 @@ namespace gl
 	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec4 const &value)
 	{
 		Shader *shader;
-		if ((shader = getShader(key, "addShaderUniform(vec4)")) == NULL)
+		if ((shader = getShader(key)) == NULL)
 			return (Key<Uniform>(KEY_DESTROY));
 		return (shader->addUniform(flag, value));
 	}
@@ -121,7 +121,7 @@ namespace gl
 	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, float value)
 	{
 		Shader *shader;
-		if ((shader = getShader(key, "addShaderUniform(float)")) == NULL)
+		if ((shader = getShader(key)) == NULL)
 			return (Key<Uniform>(KEY_DESTROY));
 		return (shader->addUniform(flag, value));
 	}
@@ -129,7 +129,7 @@ namespace gl
 	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat4 const &mat4)
 	{
 		Shader *shader;
-		if ((shader = getShader(keyShader, "setShaderUniform(mat4)")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (*this);
 		shader->setUniform(key, mat4);
 		return (*this);
@@ -138,7 +138,7 @@ namespace gl
 	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec4 const &vec4)
 	{
 		Shader *shader;
-		if ((shader = getShader(keyShader, "setShaderUniform(vec4)")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (*this);
 		shader->setUniform(key, vec4);
 		return (*this);
@@ -147,7 +147,7 @@ namespace gl
 	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, float v)
 	{
 		Shader *shader;
-		if ((shader = getShader(keyShader, "setShaderUniform(float)")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (*this);
 		shader->setUniform(key, v);
 		return (*this);
@@ -156,7 +156,7 @@ namespace gl
 	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat3 const &mat3)
 	{
 		Shader *shader;
-		if ((shader = getShader(keyShader, "setShaderUniform(mat3)")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (*this);
 		shader->setUniform(key, mat3);
 		return (*this);
@@ -165,7 +165,7 @@ namespace gl
 	Key<Sampler> ShadingManager::addShaderSampler(Key<Shader> const &keyShader, std::string const &flag)
 	{
 		Shader *shader;
-		if ((shader = getShader(keyShader, "addShaderSampler()")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (Key<Sampler>(KEY_DESTROY));
 		return (shader->addSampler(flag));
 	}
@@ -173,7 +173,7 @@ namespace gl
 	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
 	{
 		Shader const *shader;
-		if ((shader = getShader(keyShader, "getShaderSampler()")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (Key<Sampler>(KEY_DESTROY));
 		return (shader->getSampler(target));
 	}
@@ -181,10 +181,10 @@ namespace gl
 	ShadingManager &ShadingManager::setShaderSampler(Key<Shader> const &keyShader, Key<Sampler> const &keySampler, Key<Texture> const &keyTexture)
 	{
 		Shader *shader;
-		if ((shader = getShader(keyShader, "setShaderSampler()")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (*this);
 		Texture *texture;
-		if ((texture = getTexture(keyTexture, "setShaderSampler()")) == NULL)
+		if ((texture = getTexture(keyTexture)) == NULL)
 			return (*this);
 		shader->setSampler(keySampler, *texture);
 		return (*this);
@@ -200,7 +200,7 @@ namespace gl
 
 	ShadingManager &ShadingManager::rmUniformBlock(Key<UniformBlock> &key)
 	{
-		if (getUniformBlock(key, "rmUniformBlock") == NULL)
+		if (getUniformBlock(key) == NULL)
 			return (*this);
 		_uniformBlock.erase(key);
 		key.destroy();
@@ -220,10 +220,10 @@ namespace gl
 	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
 	{
 		Shader *shader;
-		if ((shader = getShader(keyShader, "addShaderInterfaceBlock()")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (Key<InterfaceBlock>(KEY_DESTROY));
 		UniformBlock *uniformBlock;
-		if ((uniformBlock = getUniformBlock(keyUniformBlock, "addShaderInterfaceBlock()")) == NULL)
+		if ((uniformBlock = getUniformBlock(keyUniformBlock)) == NULL)
 			return (Key<InterfaceBlock>(KEY_DESTROY));
 		return (shader->addInterfaceBlock(flag, *uniformBlock));
 	}
@@ -231,7 +231,7 @@ namespace gl
 	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
 	{
 		Shader const *shader;
-		if ((shader = getShader(keyShader, "getShaderInterfaceBlock()")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (Key<InterfaceBlock>(KEY_DESTROY));
 		return (shader->getInterfaceBlock(target));
 	}
@@ -247,7 +247,7 @@ namespace gl
 	ShadingManager &ShadingManager::parameterTexture(Key<Texture> const &key, GLenum pname, GLint param)
 	{
 		Texture *texture;
-		if ((texture = getTexture(key, "rmTexture()")) == NULL)
+		if ((texture = getTexture(key)) == NULL)
 			return (*this);
 		texture->parameter(pname, param);
 		return (*this);
@@ -256,7 +256,7 @@ namespace gl
 	ShadingManager &ShadingManager::rmTexture(Key<Texture> &key)
 	{
 		Texture *texture;
-		if ((texture = getTexture(key, "rmTexture()")) == NULL)
+		if ((texture = getTexture(key)) == NULL)
 			return (*this);
 		delete texture;
 		_textures.erase(key);
@@ -277,12 +277,12 @@ namespace gl
 	GLenum ShadingManager::getTypeTexture(Key<Texture> const &key)
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "getTypeTexture()")) == NULL)
+		if ((texture = getTexture(key)) == NULL)
 			return (GL_NONE);
 		return (texture->getType());
 	}
 
-	Shader *ShadingManager::getShader(Key<Shader> const &key, std::string const &in)
+	Shader *ShadingManager::getShader(Key<Shader> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -298,7 +298,7 @@ namespace gl
 		return (shader->second);
 	}
 
-	Texture *ShadingManager::getTexture(Key<Texture> const &key, std::string const &in)
+	Texture *ShadingManager::getTexture(Key<Texture> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -314,7 +314,7 @@ namespace gl
 		return (texture->second);
 	}
 
-	UniformBlock *ShadingManager::getUniformBlock(Key<UniformBlock> const &key, std::string const &in)
+	UniformBlock *ShadingManager::getUniformBlock(Key<UniformBlock> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -330,7 +330,7 @@ namespace gl
 		return (&uniformBlock->second);
 	}
 
-	RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key, std::string const &in)
+	RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -350,7 +350,7 @@ namespace gl
 	ShadingManager &ShadingManager::uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "uploadTexture")) == NULL)
+		if ((texture = getTexture(key)) == NULL)
 			return (*this);
 		texture->upload(format, type, img);
 		texture->generateMipMap();
@@ -360,7 +360,7 @@ namespace gl
 	ShadingManager &ShadingManager::downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "downloadTexture")) == NULL)
+		if ((texture = getTexture(key)) == NULL)
 			return (*this);
 		texture->download(format, type, img);
 		return (*this);
@@ -369,7 +369,7 @@ namespace gl
 	ShadingManager &ShadingManager::setlevelTargetTexture(Key<Texture> const &key, uint8_t levelTarget)
 	{
 		Texture *texture;
-		if ((texture = getTexture(key, "levelTargetTexture")) == NULL)
+		if ((texture = getTexture(key)) == NULL)
 			return (*this);
 		texture->setLevelTarget(levelTarget);
 		return (*this);
@@ -378,7 +378,7 @@ namespace gl
 	ShadingManager &ShadingManager::bindTexture(Key<Texture> const &key)
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "bindTexture")) == NULL)
+		if ((texture = getTexture(key)) == NULL)
 			return (*this);
 		texture->bind();
 		return (*this);
@@ -387,7 +387,7 @@ namespace gl
 	ShadingManager &ShadingManager::unbindTexture(Key<Texture> const &key) 
 	{
 		Texture const *texture;
-		if ((texture = getTexture(key, "unbindTexture")) == NULL)
+		if ((texture = getTexture(key)) == NULL)
 			return (*this);
 		texture->unbind();
 		return (*this);
@@ -398,7 +398,7 @@ namespace gl
 		Key<RenderPass> key;
 		Shader *shader;
 
-		if ((shader = getShader(keyShader, "addRenderPass")) == NULL)
+		if ((shader = getShader(keyShader)) == NULL)
 			return (Key<RenderPass>(KEY_DESTROY));
 		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, materialManager);
 		element->configRect(rect);
@@ -421,7 +421,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "setModeRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->setMode(mode);
 		renderPass->configRect(rect);
@@ -432,7 +432,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "pushOutputColorRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->pushColorOutput(attachement, internalFormat);
 		return (*this);
@@ -442,7 +442,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "pushOutputColorRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->popColorOutput();
 		return (*this);
@@ -452,7 +452,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "pushInputColorRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->pushInputSampler(s);
 		return (*this);
@@ -462,7 +462,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "pushInputColorRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->popInputSampler();
 		return (*this);
@@ -472,7 +472,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "pushInputColorRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->createDepthBuffer();
 		return (*this);
@@ -482,7 +482,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->createStencilBuffer();
 		return (*this);
@@ -492,7 +492,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->useInputDepth();
 		return (*this);
@@ -502,7 +502,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->unUseInputDepth();
 		return (*this);
@@ -512,7 +512,7 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->useInputStencil();
 		return (*this);
@@ -522,9 +522,29 @@ namespace gl
 	{
 		RenderPass *renderPass;
 
-		if ((renderPass = getRenderPass(key, "createStencilBufferRenderPass")) == NULL)
+		if ((renderPass = getRenderPass(key)) == NULL)
 			return (*this);
 		renderPass->unUseInputStencil();
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key)) == NULL)
+			return (*this);
+		renderPass->useInputColor(attachement);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key)) == NULL)
+			return (*this);
+		renderPass->unUseInputColor(attachement);
 		return (*this);
 	}
 
@@ -541,7 +561,7 @@ namespace gl
 	ShadingManager &ShadingManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
-		if ((shader = getShader(shaderKey, "unbindMaterialToShader")) == NULL)
+		if ((shader = getShader(shaderKey)) == NULL)
 			return (*this);
 		shader->unbindMaterial(uniformKey);
 		return (*this);
@@ -550,13 +570,13 @@ namespace gl
 	ShadingManager &ShadingManager::bindTransformationToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
-		if ((shader = getShader(shaderKey, "unbindMaterialToShader")) == NULL)
+		if ((shader = getShader(shaderKey)) == NULL)
 			return (*this);
 		shader->bindingTransformation(uniformKey);
 		return (*this);
 	}
 
-	RenderPostEffect *ShadingManager::getRenderPostEffect(Key<RenderPostEffect> const &key, std::string const &in)
+	RenderPostEffect *ShadingManager::getRenderPostEffect(Key<RenderPostEffect> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -572,7 +592,7 @@ namespace gl
 		return (renderPostEffect->second);
 	}
 
-	RenderOnScreen *ShadingManager::getRenderOnScreen(Key<RenderOnScreen> const &key, std::string const &in)
+	RenderOnScreen *ShadingManager::getRenderOnScreen(Key<RenderOnScreen> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -593,7 +613,7 @@ namespace gl
 		Key<RenderPostEffect> key;
 		Shader *shader;
 
-		if ((shader = getShader(s, "addRenderPostEffect")) == NULL)
+		if ((shader = getShader(s)) == NULL)
 			return  (Key<RenderPostEffect>(KEY_DESTROY));
 		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *shader, geometryManager);
 		element->pushInputSampler(_preShaderQuad->getSampler(0));
@@ -617,7 +637,7 @@ namespace gl
 	{
 		RenderPostEffect *renderPostEffect;
 
-		if ((renderPostEffect = getRenderPostEffect(key, "setModeRenderPass")) == NULL)
+		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
 			return (*this);
 		renderPostEffect->setMode(mode);
 		renderPostEffect->configRect(rect);
@@ -628,7 +648,7 @@ namespace gl
 	{
 		RenderPostEffect *renderPostEffect;
 
-		if ((renderPostEffect = getRenderPostEffect(key, "setModeRenderPass")) == NULL)
+		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
 			return (*this);
 		renderPostEffect->pushColorOutput(attachement, internalFormat);
 		return (*this);
@@ -638,7 +658,7 @@ namespace gl
 	{
 		RenderPostEffect *renderPostEffect;
 
-		if ((renderPostEffect = getRenderPostEffect(key, "setModeRenderPass")) == NULL)
+		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
 			return (*this);
 		renderPostEffect->popColorOutput();
 		return (*this);
@@ -648,7 +668,7 @@ namespace gl
 	{
 		RenderPostEffect *renderPostEffect;
 
-		if ((renderPostEffect = getRenderPostEffect(key, "pushInputColorRenderPostEffect")) == NULL)
+		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
 			return (*this);
 		renderPostEffect->pushInputSampler(s);
 		return (*this);
@@ -658,7 +678,7 @@ namespace gl
 	{
 		RenderPostEffect *renderPostEffect;
 
-		if ((renderPostEffect = getRenderPostEffect(key, "pushInputColorRenderPass")) == NULL)
+		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
 			return (*this);
 		renderPostEffect->popInputSampler();
 		return (*this);
@@ -692,9 +712,9 @@ namespace gl
 		RenderPass *renderPassFrom;
 		RenderPass *renderPassTo;
 
-		if ((renderPassFrom = getRenderPass(from, "branch")) == NULL)
+		if ((renderPassFrom = getRenderPass(from)) == NULL)
 			return (*this);
-		if ((renderPassTo = getRenderPass(to, "branch")) == NULL)
+		if ((renderPassTo = getRenderPass(to)) == NULL)
 			return (*this);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
@@ -705,9 +725,9 @@ namespace gl
 		RenderPass *renderPassFrom;
 		RenderPostEffect *renderPassTo;
 
-		if ((renderPassFrom = getRenderPass(from, "branch")) == NULL)
+		if ((renderPassFrom = getRenderPass(from)) == NULL)
 			return (*this);
-		if ((renderPassTo = getRenderPostEffect(to, "branch")) == NULL)
+		if ((renderPassTo = getRenderPostEffect(to)) == NULL)
 			return (*this);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
@@ -718,9 +738,9 @@ namespace gl
 		RenderPass *renderPassFrom;
 		RenderOnScreen *renderPassTo;
 
-		if ((renderPassFrom = getRenderPass(from, "branch")) == NULL)
+		if ((renderPassFrom = getRenderPass(from)) == NULL)
 			return (*this);
-		if ((renderPassTo = getRenderOnScreen(to, "branch")) == NULL)
+		if ((renderPassTo = getRenderOnScreen(to)) == NULL)
 			return (*this);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
@@ -731,9 +751,9 @@ namespace gl
 		RenderPostEffect *renderPassFrom;
 		RenderOnScreen *renderPassTo;
 
-		if ((renderPassFrom = getRenderPostEffect(from, "branch")) == NULL)
+		if ((renderPassFrom = getRenderPostEffect(from)) == NULL)
 			return (*this);
-		if ((renderPassTo = getRenderOnScreen(to, "branch")) == NULL)
+		if ((renderPassTo = getRenderOnScreen(to)) == NULL)
 			return (*this);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);

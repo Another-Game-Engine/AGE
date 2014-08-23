@@ -306,6 +306,18 @@ namespace gl
 		return (*this);
 	}
 
+	RenderOffScreen &RenderOffScreen::useInputColor(GLenum attachement)
+	{
+		_useInputColor[attachement] = true;
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::unUseInputColor(GLenum attachement)
+	{
+		_useInputColor[attachement] = false;
+		return (*this);
+	}
+
 	RenderOffScreen::RenderOffScreen(Shader &shader, GeometryManager &g)
 		: Render(shader, g),
 		_sample(1),
@@ -392,7 +404,7 @@ namespace gl
 		return (*_colorTexture2D[index]);
 	}
 
-	GLenum RenderOffScreen::getAttachementOutput(size_t index)
+	GLenum RenderOffScreen::getAttachementOutput(size_t index) const
 	{
 		return (_colorAttachement[index]);
 	}
@@ -445,7 +457,11 @@ namespace gl
 	{
 		glDrawBuffers(_nbrColorAttachement, _colorAttachement);
 		for (size_t index = 0; index < _nbrColorAttachement; ++index)
-			_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
+		{
+			auto &element = _useInputColor.find(_colorAttachement[index]);
+			if (element == _useInputColor.end() || element->second == false)
+				_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
+		}
 		if (_depthBuffer != NULL && _useInputDepth == false)
 			_fbo.attachement(*_depthBuffer, GL_DEPTH_ATTACHMENT);
 		if (_stencilBuffer != NULL && _useInputStencil == false)
@@ -455,11 +471,19 @@ namespace gl
 
 	void RenderOffScreen::updateInput()
 	{
+		if (_branch == NULL)
+			return;
 		Render::updateInput();
 		if (_useInputDepth && _branch->getDepthBuffer() != NULL)
 			_fbo.attachement(*_branch->getDepthBuffer(), GL_DEPTH_ATTACHMENT);
 		if (_useInputStencil && _branch->getStencilBuffer() != NULL)
 			_fbo.attachement(*_branch->getStencilBuffer(), GL_STENCIL_ATTACHMENT);
+		for (size_t index = 0; index < _branch->getNbrAttachementOutput(); ++index)
+		{
+			auto &element = _useInputColor.find(_branch->getAttachementOutput(index));
+			if (element != _useInputColor.end() && element->second == true)
+				_fbo.attachement(_branch->getColorOutput(index), _branch->getAttachementOutput(index));
+		}
 	}
 
 	RenderBuffer const *RenderOffScreen::getStencilBuffer() const

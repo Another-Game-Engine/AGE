@@ -11,6 +11,7 @@
 #include <Render/OpenGLTask.hh>
 #include <Render/Framebuffer.hh>
 #include <Render/Shader.hh>
+#include <map>
 
 namespace AGE { struct Drawable; }
 
@@ -96,7 +97,7 @@ namespace gl
 		RenderOffScreen &pushColorOutput(GLenum attachement, size_t width, size_t height, GLenum internalFormat);
 		RenderOffScreen &popColorOutput();
 		Texture2D const &getColorOutput(size_t index) const;
-		GLenum getAttachementOutput(size_t index);
+		GLenum getAttachementOutput(size_t index) const;
 		size_t getNbrAttachementOutput() const;
 
 		RenderOffScreen &createDepthBuffer();
@@ -111,7 +112,8 @@ namespace gl
 		RenderOffScreen &unUseInputDepth();
 		RenderOffScreen &useInputStencil();
 		RenderOffScreen &unUseInputStencil();
-
+		RenderOffScreen &useInputColor(GLenum attachement);
+		RenderOffScreen &unUseInputColor(GLenum attachement);
 
 	protected:
 		RenderOffScreen(Shader &shader, GeometryManager &g);
@@ -126,6 +128,7 @@ namespace gl
 		RenderBuffer *_stencilBuffer;
 		bool _useInputDepth;
 		bool _useInputStencil;
+		std::map<GLenum, bool> _useInputColor;
 
 		Framebuffer _fbo;
 		GLint _sample;

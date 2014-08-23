@@ -99,6 +99,8 @@ namespace gl
 		ShadingManager &unUseInputDepthRenderPass(Key<RenderPass> const &key);
 		ShadingManager &useInputStencilRenderPass(Key<RenderPass> const &key);
 		ShadingManager &unUseInputStencilRenderPass(Key<RenderPass> const &key);
+		ShadingManager &useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		ShadingManager &unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
@@ -143,12 +145,12 @@ namespace gl
 		std::pair<Key<RenderOnScreen>, RenderOnScreen *> _optimizeRenderOnScreenSearch;
 
 		// tool use in intern for search
-		Shader *getShader(Key<Shader> const &key, std::string const &in);
-		UniformBlock *getUniformBlock(Key<UniformBlock> const &key, std::string const &in);
-		Texture *getTexture(Key<Texture> const &key, std::string const &in);
-		RenderPass *getRenderPass(Key<RenderPass> const &key, std::string const &in);
-		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key, std::string const &in);
-		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key, std::string const &in);
+		Shader *getShader(Key<Shader> const &key);
+		UniformBlock *getUniformBlock(Key<UniformBlock> const &key);
+		Texture *getTexture(Key<Texture> const &key);
+		RenderPass *getRenderPass(Key<RenderPass> const &key);
+		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key);
+		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key);
 
 	};
 
@@ -172,7 +174,7 @@ namespace gl
 	ShadingManager &ShadingManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
-		if ((shader = getShader(shaderKey, "bindMaterialToShader")) == NULL)
+		if ((shader = getShader(shaderKey)) == NULL)
 			return (*this);
 		shader->bindingMaterial<TYPE>(uniformKey);
 		return (*this);
@@ -183,7 +185,7 @@ namespace gl
 	{
 		UniformBlock *uniformBlock;
 
-		if ((uniformBlock = getUniformBlock(key, "setUniformBlock")) == NULL)
+		if ((uniformBlock = getUniformBlock(key)) == NULL)
 			return (*this);
 		uniformBlock->set<TYPE>(index, value);
 		return (*this);
