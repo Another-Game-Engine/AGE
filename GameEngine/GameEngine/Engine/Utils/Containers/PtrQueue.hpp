@@ -25,6 +25,7 @@ namespace AGE
 			BaseUid()
 				: Base(BaseUid::getId())
 			{}
+			virtual ~BaseUid(){}
 		};
 	}
 
@@ -136,8 +137,8 @@ namespace AGE
 		{
 			std::size_t sizeOfType = sizeof(T);
 			
-			while (_size - _cursor <= sizeOfType + sizeof(std::size_t)
-				|| _size <= _cursor)
+			while (_size - _to <= sizeOfType + sizeof(std::size_t)
+				|| _size <= _to)
 			{
 				_size += _chunkSize;
 				_data = (char*)(realloc(_data, _size));

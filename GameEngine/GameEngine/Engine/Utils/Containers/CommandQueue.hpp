@@ -27,6 +27,16 @@ namespace AGE
 			int b = 0;
 			void *d = nullptr;
 		};
+
+		struct TestCommand2 : public BaseCommand
+		{
+			virtual void execute()
+			{
+				std::cout << "Exec 2 : " << a << std::endl;
+			}
+
+			char a = 'A';
+		};
 	};
 
 	template <typename Base = CommandType::BaseCommand>
