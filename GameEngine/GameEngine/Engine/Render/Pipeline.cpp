@@ -20,7 +20,13 @@ namespace gl
 			delete[] _times;
 	}
 
-	Pipeline &Pipeline::set(uint8_t time, Render *rendering)
+	Pipeline &Pipeline::setToRender(AGE::Vector<AGE::Drawable> const &toRender)
+	{
+		_toRender = &toRender;
+		return (*this);
+	}
+
+	Pipeline &Pipeline::setRendering(uint8_t time, Render *rendering)
 	{
 		_min = std::min(time, _min);
 		_max = std::max(time, _max);
@@ -48,8 +54,13 @@ namespace gl
 			for (uint8_t index = 0; index < _nbrRendering; ++index)
 			{
 				if (time == _times[index])
+				{
+					if (_rendering[index]->getType() == RENDER_PASS)
+						((RenderPass *)_rendering[index])->setRenderPassObjects(*_toRender);
 					_rendering[index]->draw();
+				}
 			}
 		}
+		return (*this);
 	}
 }

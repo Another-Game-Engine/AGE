@@ -576,4 +576,19 @@ namespace gl
 		_geometryManager.draw(_mode, _quad);
 		return (*this);
 	}
+
+	RenderType RenderOnScreen::getType() const
+	{
+		return (RenderType::RENDER_ON_SCREEN);
+	}
+
+	RenderType RenderPostEffect::getType() const
+	{
+		return (RenderType::RENDER_POST_EFFECT);
+	}
+
+	RenderType RenderPass::getType() const
+	{
+		return (RenderType::RENDER_PASS);
+	}
 }

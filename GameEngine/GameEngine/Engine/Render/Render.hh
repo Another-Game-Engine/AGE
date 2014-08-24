@@ -25,17 +25,20 @@ namespace gl
 	class RenderOffScreen;
 	class Vertices;
 
-	//!\file RenderPass.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class RenderPass
-	//!\brief Handle one of opengl render pass
+	enum RenderType
+	{
+		RENDER_POST_EFFECT = 0,
+		RENDER_PASS,
+		RENDER_ON_SCREEN
+	};
+
 	class Render
 	{
 	public:
 		~Render();
 
 		virtual Render &draw() = 0;
+		virtual RenderType getType() const = 0;
 
 		// prepare draw
 		Render &pushSetScissorTask(glm::ivec4 const &area);
@@ -145,6 +148,7 @@ namespace gl
 		RenderOnScreen(Key<Vertices> const &key, Shader &shader, GeometryManager &g);
 
 		virtual Render &draw();
+		virtual RenderType getType() const;
 	private:
 		RenderOnScreen(RenderOnScreen const &copy) = delete;
 		RenderOnScreen &operator=(RenderOnScreen const &r) = delete;
@@ -160,6 +164,7 @@ namespace gl
 
 		RenderPass &setRenderPassObjects(AGE::Vector<AGE::Drawable> const &objects);
 		virtual Render &draw();
+		virtual RenderType getType() const;
 	
 	private:
 		RenderPass(RenderPass const &copy) = delete;
@@ -177,6 +182,7 @@ namespace gl
 		virtual ~RenderPostEffect();
 
 		virtual Render &draw();
+		virtual RenderType getType() const;
 	private:
 		RenderPostEffect(RenderPostEffect const &copy) = delete;
 		RenderPostEffect &operator=(RenderPostEffect const &r) = delete;

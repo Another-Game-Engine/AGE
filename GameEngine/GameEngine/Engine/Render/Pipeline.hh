@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <stdint.h>
 
 namespace gl
@@ -12,7 +11,8 @@ namespace gl
 		Pipeline();
 		~Pipeline();
 
-		Pipeline &set(uint8_t time, Render *rendering);
+		Pipeline &setToRender(AGE::Vector<AGE::Drawable> const &geo);
+		Pipeline &setRendering(uint8_t time, Render *rendering);
 		Pipeline &draw(uint8_t time);
 
 	private:
@@ -24,5 +24,6 @@ namespace gl
 		uint8_t *_times;
 		Render **_rendering;
 		uint8_t _nbrRendering;
+		AGE::Vector<AGE::Drawable> const *_toRender;
 	};
 }
