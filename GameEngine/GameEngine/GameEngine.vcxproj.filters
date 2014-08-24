@@ -61,6 +61,7 @@
     <ClCompile Include="Engine\Render\PreShader.cpp" />
     <ClCompile Include="Engine\Render\MaterialManager.cpp" />
     <ClCompile Include="Engine\Render\Render.cpp" />
+    <ClCompile Include="Engine\Render\Pipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Engine\Render\MacroShadingManager.hh" />
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
     <ClInclude Include="Engine\Render\Render.hh" />
+    <ClInclude Include="Engine\Render\Pipeline.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -1,6 +1,9 @@
 #pragma once
 
 #include <stdint.h>
+#include <Utils/Containers/Vector.hpp>
+
+namespace AGE { class Drawable; }
 
 namespace gl
 {
