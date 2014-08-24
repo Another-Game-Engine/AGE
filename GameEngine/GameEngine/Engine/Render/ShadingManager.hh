@@ -154,22 +154,6 @@ namespace gl
 
 	};
 
-	struct BindingShader
-	{
-		Render *r;
-		Shader *s;
-		BindingShader(Render *r, Shader *s) : r(r), s(s)
-		{}
-	};
-
-	struct BindingRenderPass
-	{
-		Render *target;
-		RenderPass *input;
-		BindingRenderPass(Render *target, RenderPass *input) : target(target), input(input)
-		{}
-	};
-
 	template <typename TYPE>
 	ShadingManager &ShadingManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
