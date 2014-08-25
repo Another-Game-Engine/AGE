@@ -90,7 +90,7 @@ namespace AGE
 			memcpy(tmp, &s, sizeof(std::size_t));
 			tmp += sizeof(std::size_t);
 			T* res = new(tmp)T();
-			_to += sizeof(std::size_t) + sizeof(T);
+			_to += sizeof(std::size_t) + s;
 			return res;
 		}
 

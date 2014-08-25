@@ -361,7 +361,6 @@ namespace AGE
 					co->hasMoved = true;
 					co->projection = command->projection;
 			}
-			_octreeCommands.pop();
 		}
 
 		_octreeDrawList.clear();
