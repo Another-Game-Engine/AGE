@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <Utils/Containers/Vector.hpp>
+#include <Render/Render.hh>
 
 namespace AGE { class Drawable; }
 
@@ -16,6 +17,8 @@ namespace gl
 
 		Pipeline &setToRender(AGE::Vector<AGE::Drawable> const &geo);
 		Pipeline &setRendering(uint8_t time, Render *rendering);
+		uint8_t getMinTime() const;
+		uint8_t getMaxTime() const;
 		Pipeline &draw(uint8_t time);
 
 	private:

@@ -1,5 +1,7 @@
 #include <Render/ShadingManager.hh>
 #include <Render/Storage.hh>
+#include <Render/Pipeline.hh>
+#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -548,16 +550,6 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::draw(AGE::Vector<AGE::Drawable> const &objectRender)
-	{
-		auto &element = _renderPass.begin();
-		element->second->setRenderPassObjects(objectRender);
-		element->second->draw();
-		auto &elementOnScreen = _renderOnScreen.begin();
-		elementOnScreen->second->draw();
-		return (*this);
-	}
-
 	ShadingManager &ShadingManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
@@ -606,6 +598,22 @@ namespace gl
 		_optimizeRenderOnScreenSearch.first = key;
 		_optimizeRenderOnScreenSearch.second = renderOnScreen->second;
 		return (renderOnScreen->second);
+	}
+
+	Pipeline *ShadingManager::getPipeline(Key<Pipeline> const &key)
+	{
+		if (!key)
+			assert(0);
+		if (_pipelines.size() == 0)
+			assert(0);
+		if (key == _optimizePipelineSearch.first)
+			return (_optimizePipelineSearch.second);
+		auto &pipeline = _pipelines.find(key);
+		if (pipeline == _pipelines.end())
+			assert(0);
+		_optimizePipelineSearch.first = key;
+		_optimizePipelineSearch.second = &pipeline->second;
+		return (&pipeline->second);
 	}
 
 	Key<RenderPostEffect> ShadingManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
@@ -756,6 +764,110 @@ namespace gl
 		if ((renderPassTo = getRenderOnScreen(to)) == NULL)
 			return (*this);
 		renderPassTo->branchInput(*renderPassFrom);
+		return (*this);
+	}
+
+	Key<Pipeline> ShadingManager::addPipeline()
+	{
+		Key<Pipeline> key;
+
+		_pipelines[key];
+		return (key);
+	}
+
+	ShadingManager &ShadingManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r)
+	{
+		Pipeline *pipeline;
+		RenderPass *renderPass;
+
+		if ((pipeline = getPipeline(p)) == NULL)
+			return (*this);
+		if ((renderPass = getRenderPass(r)) == NULL)
+			return (*this);
+		pipeline->setRendering(time, renderPass);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r)
+	{
+		Pipeline *pipeline;
+		RenderPostEffect *renderPostEffect;
+
+		if ((pipeline = getPipeline(p)) == NULL)
+			return (*this);
+		if ((renderPostEffect = getRenderPostEffect(r)) == NULL)
+			return (*this);
+		pipeline->setRendering(time, renderPostEffect);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r)
+	{
+		Pipeline *pipeline;
+		RenderOnScreen *renderOnScreen;
+
+		if ((pipeline = getPipeline(p)) == NULL)
+			return (*this);
+		if ((renderOnScreen = getRenderOnScreen(r)) == NULL)
+			return (*this);
+		pipeline->setRendering(time, renderOnScreen);
+		_minTime = std::min(_minTime, pipeline->getMinTime());
+		_maxTime = std::max(_maxTime, pipeline->getMaxTime());
+		return (*this);
+	}
+
+	Key<Pipeline> ShadingManager::getPipeline(size_t target)
+	{
+		if (target >= _pipelines.size())
+			assert(0);
+		auto &element = _pipelines.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
+	}
+
+	ShadingManager &ShadingManager::updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender)
+	{
+		Pipeline *pipeline;
+
+		if ((pipeline = getPipeline(p)) == NULL)
+			return (*this);
+		pipeline->setToRender(objectRender);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::drawPipelines()
+	{
+		for (uint8_t time = _minTime; time < _maxTime; ++time)
+			for (auto &pipeline = _pipelines.begin(); pipeline != _pipelines.end(); ++pipeline)
+				pipeline->second.draw(time);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender)
+	{
+		Pipeline *pipeline;
+
+		if ((pipeline = getPipeline(key)) == NULL)
+			return (*this);
+		pipeline->setToRender(objectRender);
+		for (uint8_t time = pipeline->getMinTime(); time < pipeline->getMaxTime(); ++time)
+			pipeline->draw(time);
+		return (*this);
+	}
+
+	ShadingManager &ShadingManager::draw(Key<RenderOnScreen> const &o, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender)
+	{
+		RenderOnScreen *renderOnScreen;
+		RenderPass *renderPass;
+
+		if ((renderOnScreen = getRenderOnScreen(o)) == NULL)
+			return (*this);
+		if ((renderPass = getRenderPass(r)) == NULL)
+			return (*this);
+		renderOnScreen->branchInput(*renderPass);
+		renderPass->draw();
+		renderOnScreen->draw();
 		return (*this);
 	}
 }

@@ -1,5 +1,4 @@
 #include <Render/Pipeline.hh>
-#include <Render/Render.hh>
 #include <iostream>
 #include <algorithm>
 
@@ -47,18 +46,25 @@ namespace gl
 		return (*this);
 	}
 
+	uint8_t Pipeline::getMaxTime() const
+	{
+		return (_max);
+	}
+
+	uint8_t Pipeline::getMinTime() const
+	{
+		return (_min);
+	}
+
 	Pipeline &Pipeline::draw(uint8_t time)
 	{
-		if (time >= _min && time <= _max)
+		for (uint8_t index = 0; index < _nbrRendering; ++index)
 		{
-			for (uint8_t index = 0; index < _nbrRendering; ++index)
+			if (time == _times[index])
 			{
-				if (time == _times[index])
-				{
-					if (_rendering[index]->getType() == RENDER_PASS)
-						((RenderPass *)_rendering[index])->setRenderPassObjects(*_toRender);
-					_rendering[index]->draw();
-				}
+				if (_rendering[index]->getType() == RENDER_PASS)
+					((RenderPass *)_rendering[index])->setRenderPassObjects(*_toRender);
+				_rendering[index]->draw();
 			}
 		}
 		return (*this);

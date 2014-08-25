@@ -26,6 +26,7 @@ namespace gl
 	class UniformBuffer;
 	struct BindingRenderPass;
 	struct BindingShader;
+	class Pipeline;
 
 	class ShadingManager : public Dependency<ShadingManager>
 	{
@@ -123,8 +124,18 @@ namespace gl
 		ShadingManager &branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to);
 		ShadingManager &branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to);
 	
+		// Pipeline
+		Key<Pipeline> addPipeline();
+		ShadingManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r);
+		ShadingManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r);
+		ShadingManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r);
+		Key<Pipeline> getPipeline(size_t target);
+		ShadingManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
+
 		// drawing
-		ShadingManager &draw(AGE::Vector<AGE::Drawable> const &objectRender);
+		ShadingManager &drawPipelines();
+		ShadingManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
+		ShadingManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
 
 	private:
 		// all map
@@ -135,6 +146,9 @@ namespace gl
 		std::map<Key<RenderPass>, RenderPass *> _renderPass;
 		std::map<Key<RenderPostEffect>, RenderPostEffect *> _renderPostEffect;
 		std::map<Key<RenderOnScreen>, RenderOnScreen *> _renderOnScreen;
+		std::map<Key<Pipeline>, Pipeline> _pipelines;
+		uint8_t _minTime;
+		uint8_t _maxTime;
 
 		// optimize search in map
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
@@ -143,6 +157,7 @@ namespace gl
 		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
 		std::pair<Key<RenderPostEffect>, RenderPostEffect *> _optimizeRenderPostEffectSearch;
 		std::pair<Key<RenderOnScreen>, RenderOnScreen *> _optimizeRenderOnScreenSearch;
+		std::pair<Key<Pipeline>, Pipeline *> _optimizePipelineSearch;
 
 		// tool use in intern for search
 		Shader *getShader(Key<Shader> const &key);
@@ -151,6 +166,7 @@ namespace gl
 		RenderPass *getRenderPass(Key<RenderPass> const &key);
 		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key);
 		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key);
+		Pipeline *getPipeline(Key<Pipeline> const &key);
 
 	};
 

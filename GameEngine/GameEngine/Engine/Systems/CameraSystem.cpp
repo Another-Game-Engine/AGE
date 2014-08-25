@@ -166,7 +166,7 @@ void CameraSystem::mainUpdate(double time)
 		_render->setUniformBlock(_global_state, 0, camera.projection);
 		_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		_render->draw(camera.drawables);
+		_render->draw(_renderOnScreen, _renderPass, camera.drawables);
 		camera.drawables.clear();
 		drawList.pop_back();
 	}
