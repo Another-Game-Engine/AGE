@@ -4,7 +4,7 @@
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <Texture/Texture.hpp>
-#include <Render/ShadingManager.hh>
+#include <Render/RenderManager.hh>
 
 namespace AGE
 {
@@ -27,7 +27,7 @@ namespace AGE
 		cereal::PortableBinaryInputArchive ar(ifs);
 		ar(data);
 
-		auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
+		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		for (auto &e : data.collection)
 		{
 			auto key = manager->materialManager.addMaterial();
@@ -58,7 +58,7 @@ namespace AGE
 		ar(data);
 
 		// TODO fill texture with texture key
-		auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
+		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		auto key = manager->addTexture2D(3, data.width, data.height, true);
 		manager->uploadTexture(key, GL_RGBA32F, GL_UNSIGNED_BYTE, data.data.data());
 		manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -146,7 +146,7 @@ namespace AGE
 	void AssetsManager::loadSubmesh(SubMeshData &data, SubMeshInstance &mesh)
 	{
 		auto &pools = _pools.find(data.infos)->second;
-		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::ShadingManager>()->geometryManager;
+		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 
 		std::size_t size = data.infos.count();
 
@@ -229,7 +229,7 @@ namespace AGE
 	// Create pool for meshs
 	void AssetsManager::createPool(const std::bitset<MeshInfos::END> &infos)
 	{
-		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::ShadingManager>()->geometryManager;
+		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 		assert(geometryManager != nullptr);
 
 		std::size_t size = infos.count();

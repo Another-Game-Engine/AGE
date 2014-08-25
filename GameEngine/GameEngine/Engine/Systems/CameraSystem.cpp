@@ -5,7 +5,7 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/CameraComponent.hpp>
 #include <Core/SceneManager.hh>
-#include <Render/ShadingManager.hh>
+#include <Render/RenderManager.hh>
 #include <Render/GeometryManager.hh>
 #include <Core/Drawable.hh>
 #include <Core/AssetsManager.hpp>
@@ -95,7 +95,7 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 
 #if NEW_SHADER
 
-void CameraSystem::setManager(gl::ShadingManager &m)
+void CameraSystem::setManager(gl::RenderManager &m)
 {
 	_render = &m;
 
@@ -127,6 +127,10 @@ void CameraSystem::setManager(gl::ShadingManager &m)
 	_render->pushClearTaskRenderOnScreen(_renderOnScreen, true, true, false);
 	_render->pushSetTestTaskRenderOnScreen(_renderOnScreen, false, false, true);
 	_render->pushSetClearValueTaskRenderOnScreen(_renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+
+	_pipeline = _render->addPipeline();
+	_render->setPipeline(_pipeline, 0, _renderPass);
+	_render->setPipeline(_pipeline, 1, _renderOnScreen);
 
 	_render->branch(_renderPass, _renderOnScreen);
 
@@ -166,7 +170,8 @@ void CameraSystem::mainUpdate(double time)
 		_render->setUniformBlock(_global_state, 0, camera.projection);
 		_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		_render->draw(_renderOnScreen, _renderPass, camera.drawables);
+		_render->updatePipeline(_pipeline, camera.drawables);
+		_render->drawPipelines();
 		camera.drawables.clear();
 		drawList.pop_back();
 	}

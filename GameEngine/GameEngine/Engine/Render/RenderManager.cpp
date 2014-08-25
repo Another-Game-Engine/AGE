@@ -1,4 +1,4 @@
-#include <Render/ShadingManager.hh>
+#include <Render/RenderManager.hh>
 #include <Render/Storage.hh>
 #include <Render/Pipeline.hh>
 #include <algorithm>
@@ -8,12 +8,12 @@
 namespace gl
 {
 
-	ShadingManager::ShadingManager()
+	RenderManager::RenderManager()
 		: _preShaderQuad(NULL)
 	{
 	}
 
-	ShadingManager::~ShadingManager()
+	RenderManager::~RenderManager()
 	{
 		if (_preShaderQuad == NULL)
 			delete _preShaderQuad;
@@ -27,7 +27,7 @@ namespace gl
 			delete it->second;
 	}
 
-	ShadingManager &ShadingManager::createPreShaderQuad()
+	RenderManager &RenderManager::createPreShaderQuad()
 	{
 		if (_preShaderQuad != NULL)
 			return (*this);
@@ -37,7 +37,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Shader> ShadingManager::addComputeShader(std::string const &compute)
+	Key<Shader> RenderManager::addComputeShader(std::string const &compute)
 	{
 		Key<Shader> key;
 		Shader *shader;
@@ -48,7 +48,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<Shader> ShadingManager::addShader(std::string const &vertex, std::string const &frag)
+	Key<Shader> RenderManager::addShader(std::string const &vertex, std::string const &frag)
 	{
 		Key<Shader> key;
 		Shader *shader;
@@ -59,7 +59,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<Shader> ShadingManager::addShader(std::string const &geo, std::string const &vertex, std::string const &frag)
+	Key<Shader> RenderManager::addShader(std::string const &geo, std::string const &vertex, std::string const &frag)
 	{
 		Key<Shader> key;
 		Shader *shader;
@@ -70,7 +70,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<Shader> ShadingManager::getShader(size_t target) const
+	Key<Shader> RenderManager::getShader(size_t target) const
 	{
 		if (target >= _shaders.size())
 			assert(0);
@@ -80,7 +80,7 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<Uniform> ShadingManager::getShaderUniform(Key<Shader> const &key, size_t target)
+	Key<Uniform> RenderManager::getShaderUniform(Key<Shader> const &key, size_t target)
 	{
 		Shader const *shader;
 		if ((shader = getShader(key)) == NULL)
@@ -88,7 +88,7 @@ namespace gl
 		return (shader->getUniform(target));
 	}
 
-	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
 	{
 		Shader *shader;
 		if ((shader = getShader(key)) == NULL)
@@ -96,7 +96,7 @@ namespace gl
 		return (shader->addUniform(flag));
 	}
 
-	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat4 const &value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat4 const &value)
 	{
 		Shader *shader;
 		if ((shader = getShader(key)) == NULL)
@@ -104,7 +104,7 @@ namespace gl
 		return (shader->addUniform(flag, value));
 	}
 
-	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat3 const &value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat3 const &value)
 	{
 		Shader *shader;
 		if ((shader = getShader(key)) == NULL)
@@ -112,7 +112,7 @@ namespace gl
 		return (shader->addUniform(flag, value));
 	}
 
-	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec4 const &value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec4 const &value)
 	{
 		Shader *shader;
 		if ((shader = getShader(key)) == NULL)
@@ -120,7 +120,7 @@ namespace gl
 		return (shader->addUniform(flag, value));
 	}
 
-	Key<Uniform> ShadingManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, float value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, float value)
 	{
 		Shader *shader;
 		if ((shader = getShader(key)) == NULL)
@@ -128,7 +128,7 @@ namespace gl
 		return (shader->addUniform(flag, value));
 	}
 
-	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat4 const &mat4)
+	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat4 const &mat4)
 	{
 		Shader *shader;
 		if ((shader = getShader(keyShader)) == NULL)
@@ -137,7 +137,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec4 const &vec4)
+	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec4 const &vec4)
 	{
 		Shader *shader;
 		if ((shader = getShader(keyShader)) == NULL)
@@ -146,7 +146,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, float v)
+	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, float v)
 	{
 		Shader *shader;
 		if ((shader = getShader(keyShader)) == NULL)
@@ -155,7 +155,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat3 const &mat3)
+	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat3 const &mat3)
 	{
 		Shader *shader;
 		if ((shader = getShader(keyShader)) == NULL)
@@ -164,7 +164,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Sampler> ShadingManager::addShaderSampler(Key<Shader> const &keyShader, std::string const &flag)
+	Key<Sampler> RenderManager::addShaderSampler(Key<Shader> const &keyShader, std::string const &flag)
 	{
 		Shader *shader;
 		if ((shader = getShader(keyShader)) == NULL)
@@ -172,7 +172,7 @@ namespace gl
 		return (shader->addSampler(flag));
 	}
 
-	Key<Sampler> ShadingManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
+	Key<Sampler> RenderManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
 	{
 		Shader const *shader;
 		if ((shader = getShader(keyShader)) == NULL)
@@ -180,7 +180,7 @@ namespace gl
 		return (shader->getSampler(target));
 	}
 
-	ShadingManager &ShadingManager::setShaderSampler(Key<Shader> const &keyShader, Key<Sampler> const &keySampler, Key<Texture> const &keyTexture)
+	RenderManager &RenderManager::setShaderSampler(Key<Shader> const &keyShader, Key<Sampler> const &keySampler, Key<Texture> const &keyTexture)
 	{
 		Shader *shader;
 		if ((shader = getShader(keyShader)) == NULL)
@@ -192,7 +192,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<UniformBlock> ShadingManager::addUniformBlock(size_t nbrElement, size_t *sizeElement)
+	Key<UniformBlock> RenderManager::addUniformBlock(size_t nbrElement, size_t *sizeElement)
 	{
 		Key<UniformBlock> key;
 
@@ -200,7 +200,7 @@ namespace gl
 		return (key);
 	}
 
-	ShadingManager &ShadingManager::rmUniformBlock(Key<UniformBlock> &key)
+	RenderManager &RenderManager::rmUniformBlock(Key<UniformBlock> &key)
 	{
 		if (getUniformBlock(key) == NULL)
 			return (*this);
@@ -209,7 +209,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<UniformBlock> ShadingManager::getUniformBlock(size_t target) const
+	Key<UniformBlock> RenderManager::getUniformBlock(size_t target) const
 	{
 		if (target >= _uniformBlock.size())
 			assert(0);
@@ -219,7 +219,7 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<InterfaceBlock> ShadingManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
+	Key<InterfaceBlock> RenderManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
 	{
 		Shader *shader;
 		if ((shader = getShader(keyShader)) == NULL)
@@ -230,7 +230,7 @@ namespace gl
 		return (shader->addInterfaceBlock(flag, *uniformBlock));
 	}
 
-	Key<InterfaceBlock> ShadingManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
+	Key<InterfaceBlock> RenderManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
 	{
 		Shader const *shader;
 		if ((shader = getShader(keyShader)) == NULL)
@@ -238,7 +238,7 @@ namespace gl
 		return (shader->getInterfaceBlock(target));
 	}
 
-	Key<Texture> ShadingManager::addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping)
+	Key<Texture> RenderManager::addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping)
 	{
 		Key<Texture> key;
 
@@ -246,7 +246,7 @@ namespace gl
 		return (key);
 	}
 
-	ShadingManager &ShadingManager::parameterTexture(Key<Texture> const &key, GLenum pname, GLint param)
+	RenderManager &RenderManager::parameterTexture(Key<Texture> const &key, GLenum pname, GLint param)
 	{
 		Texture *texture;
 		if ((texture = getTexture(key)) == NULL)
@@ -255,7 +255,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::rmTexture(Key<Texture> &key)
+	RenderManager &RenderManager::rmTexture(Key<Texture> &key)
 	{
 		Texture *texture;
 		if ((texture = getTexture(key)) == NULL)
@@ -266,7 +266,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Texture> ShadingManager::getTexture(size_t target) const
+	Key<Texture> RenderManager::getTexture(size_t target) const
 	{
 		if (target >= _textures.size())
 			assert(0);
@@ -276,7 +276,7 @@ namespace gl
 		return (element->first);
 	}
 
-	GLenum ShadingManager::getTypeTexture(Key<Texture> const &key)
+	GLenum RenderManager::getTypeTexture(Key<Texture> const &key)
 	{
 		Texture const *texture;
 		if ((texture = getTexture(key)) == NULL)
@@ -284,7 +284,7 @@ namespace gl
 		return (texture->getType());
 	}
 
-	Shader *ShadingManager::getShader(Key<Shader> const &key)
+	Shader *RenderManager::getShader(Key<Shader> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -300,7 +300,7 @@ namespace gl
 		return (shader->second);
 	}
 
-	Texture *ShadingManager::getTexture(Key<Texture> const &key)
+	Texture *RenderManager::getTexture(Key<Texture> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -316,7 +316,7 @@ namespace gl
 		return (texture->second);
 	}
 
-	UniformBlock *ShadingManager::getUniformBlock(Key<UniformBlock> const &key)
+	UniformBlock *RenderManager::getUniformBlock(Key<UniformBlock> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -332,7 +332,7 @@ namespace gl
 		return (&uniformBlock->second);
 	}
 
-	RenderPass *ShadingManager::getRenderPass(Key<RenderPass> const &key)
+	RenderPass *RenderManager::getRenderPass(Key<RenderPass> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -349,7 +349,7 @@ namespace gl
 	}
 
 
-	ShadingManager &ShadingManager::uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
+	RenderManager &RenderManager::uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
 		Texture const *texture;
 		if ((texture = getTexture(key)) == NULL)
@@ -359,7 +359,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
+	RenderManager &RenderManager::downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
 		Texture const *texture;
 		if ((texture = getTexture(key)) == NULL)
@@ -368,7 +368,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setlevelTargetTexture(Key<Texture> const &key, uint8_t levelTarget)
+	RenderManager &RenderManager::setlevelTargetTexture(Key<Texture> const &key, uint8_t levelTarget)
 	{
 		Texture *texture;
 		if ((texture = getTexture(key)) == NULL)
@@ -377,7 +377,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::bindTexture(Key<Texture> const &key)
+	RenderManager &RenderManager::bindTexture(Key<Texture> const &key)
 	{
 		Texture const *texture;
 		if ((texture = getTexture(key)) == NULL)
@@ -386,7 +386,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::unbindTexture(Key<Texture> const &key) 
+	RenderManager &RenderManager::unbindTexture(Key<Texture> const &key) 
 	{
 		Texture const *texture;
 		if ((texture = getTexture(key)) == NULL)
@@ -395,7 +395,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<RenderPass> ShadingManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect)
+	Key<RenderPass> RenderManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect)
 	{
 		Key<RenderPass> key;
 		Shader *shader;
@@ -407,7 +407,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<RenderPass> ShadingManager::getRenderPass(size_t target) const
+	Key<RenderPass> RenderManager::getRenderPass(size_t target) const
 	{
 		if (target >= _renderPass.size())
 			assert(0);
@@ -419,7 +419,7 @@ namespace gl
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPass);
 
-	ShadingManager &ShadingManager::configRenderPass(Key<RenderPass> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
+	RenderManager &RenderManager::configRenderPass(Key<RenderPass> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
 	{
 		RenderPass *renderPass;
 
@@ -430,7 +430,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat)
+	RenderManager &RenderManager::pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat)
 	{
 		RenderPass *renderPass;
 
@@ -440,7 +440,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::popOutputColorRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::popOutputColorRenderPass(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass;
 
@@ -450,7 +450,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s)
+	RenderManager &RenderManager::pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s)
 	{
 		RenderPass *renderPass;
 
@@ -460,7 +460,7 @@ namespace gl
 		return (*this);
 	}
 	
-	ShadingManager &ShadingManager::popInputColorRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::popInputColorRenderPass(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass;
 
@@ -470,7 +470,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::createDepthBufferRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::createDepthBufferRenderPass(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass;
 
@@ -480,7 +480,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::createStencilBufferRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::createStencilBufferRenderPass(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass;
 
@@ -490,7 +490,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::useInputDepthRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::useInputDepthRenderPass(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass;
 
@@ -500,7 +500,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::unUseInputDepthRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::unUseInputDepthRenderPass(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass;
 
@@ -510,7 +510,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::useInputStencilRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::useInputStencilRenderPass(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass;
 
@@ -520,7 +520,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::unUseInputStencilRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::unUseInputStencilRenderPass(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass;
 
@@ -530,7 +530,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
+	RenderManager &RenderManager::useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
 	{
 		RenderPass *renderPass;
 
@@ -540,7 +540,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
+	RenderManager &RenderManager::unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
 	{
 		RenderPass *renderPass;
 
@@ -550,7 +550,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	RenderManager &RenderManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
 		if ((shader = getShader(shaderKey)) == NULL)
@@ -559,7 +559,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::bindTransformationToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	RenderManager &RenderManager::bindTransformationToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
 		if ((shader = getShader(shaderKey)) == NULL)
@@ -568,7 +568,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPostEffect *ShadingManager::getRenderPostEffect(Key<RenderPostEffect> const &key)
+	RenderPostEffect *RenderManager::getRenderPostEffect(Key<RenderPostEffect> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -584,7 +584,7 @@ namespace gl
 		return (renderPostEffect->second);
 	}
 
-	RenderOnScreen *ShadingManager::getRenderOnScreen(Key<RenderOnScreen> const &key)
+	RenderOnScreen *RenderManager::getRenderOnScreen(Key<RenderOnScreen> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -600,7 +600,7 @@ namespace gl
 		return (renderOnScreen->second);
 	}
 
-	Pipeline *ShadingManager::getPipeline(Key<Pipeline> const &key)
+	Pipeline *RenderManager::getPipeline(Key<Pipeline> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -616,7 +616,7 @@ namespace gl
 		return (&pipeline->second);
 	}
 
-	Key<RenderPostEffect> ShadingManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
+	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
 	{
 		Key<RenderPostEffect> key;
 		Shader *shader;
@@ -629,7 +629,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<RenderPostEffect> ShadingManager::getRenderPostEffect(size_t target) const
+	Key<RenderPostEffect> RenderManager::getRenderPostEffect(size_t target) const
 	{
 		if (target >= _renderPass.size())
 			assert(0);
@@ -641,7 +641,7 @@ namespace gl
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect);
 
-	ShadingManager &ShadingManager::configRenderPostEffect(Key<RenderPostEffect> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
+	RenderManager &RenderManager::configRenderPostEffect(Key<RenderPostEffect> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
 	{
 		RenderPostEffect *renderPostEffect;
 
@@ -652,7 +652,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
+	RenderManager &RenderManager::pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
 	{
 		RenderPostEffect *renderPostEffect;
 
@@ -662,7 +662,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager & ShadingManager::popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key)
+	RenderManager & RenderManager::popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key)
 	{
 		RenderPostEffect *renderPostEffect;
 
@@ -672,7 +672,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s)
+	RenderManager &RenderManager::pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s)
 	{
 		RenderPostEffect *renderPostEffect;
 
@@ -682,7 +682,7 @@ namespace gl
 		return (*this);
 	}
 	
-	ShadingManager &ShadingManager::popInputColorRenderPostEffect(Key<RenderPostEffect> const &key)
+	RenderManager &RenderManager::popInputColorRenderPostEffect(Key<RenderPostEffect> const &key)
 	{
 		RenderPostEffect *renderPostEffect;
 
@@ -692,7 +692,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<RenderOnScreen> ShadingManager::addRenderOnScreen(glm::ivec4 const &rect)
+	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect)
 	{
 		Key<RenderOnScreen> key;
 
@@ -703,7 +703,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<RenderOnScreen> ShadingManager::getRenderOnScreen(size_t target) const
+	Key<RenderOnScreen> RenderManager::getRenderOnScreen(size_t target) const
 	{
 		if (target >= _textures.size())
 			assert(0);
@@ -715,7 +715,7 @@ namespace gl
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderOnScreen);
 
-	ShadingManager &ShadingManager::branch(Key<RenderPass> const &from, Key<RenderPass> const &to)
+	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPass> const &to)
 	{
 		RenderPass *renderPassFrom;
 		RenderPass *renderPassTo;
@@ -728,7 +728,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to)
+	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to)
 	{
 		RenderPass *renderPassFrom;
 		RenderPostEffect *renderPassTo;
@@ -741,7 +741,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to)
+	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to)
 	{
 		RenderPass *renderPassFrom;
 		RenderOnScreen *renderPassTo;
@@ -754,7 +754,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to)
+	RenderManager &RenderManager::branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to)
 	{
 		RenderPostEffect *renderPassFrom;
 		RenderOnScreen *renderPassTo;
@@ -767,7 +767,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Pipeline> ShadingManager::addPipeline()
+	Key<Pipeline> RenderManager::addPipeline()
 	{
 		Key<Pipeline> key;
 
@@ -775,7 +775,7 @@ namespace gl
 		return (key);
 	}
 
-	ShadingManager &ShadingManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r)
+	RenderManager &RenderManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r)
 	{
 		Pipeline *pipeline;
 		RenderPass *renderPass;
@@ -788,7 +788,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r)
+	RenderManager &RenderManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r)
 	{
 		Pipeline *pipeline;
 		RenderPostEffect *renderPostEffect;
@@ -801,7 +801,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r)
+	RenderManager &RenderManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r)
 	{
 		Pipeline *pipeline;
 		RenderOnScreen *renderOnScreen;
@@ -816,7 +816,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Pipeline> ShadingManager::getPipeline(size_t target)
+	Key<Pipeline> RenderManager::getPipeline(size_t target)
 	{
 		if (target >= _pipelines.size())
 			assert(0);
@@ -826,7 +826,7 @@ namespace gl
 		return (element->first);
 	}
 
-	ShadingManager &ShadingManager::updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender)
+	RenderManager &RenderManager::updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		Pipeline *pipeline;
 
@@ -836,7 +836,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::drawPipelines()
+	RenderManager &RenderManager::drawPipelines()
 	{
 		for (uint8_t time = _minTime; time < _maxTime; ++time)
 			for (auto &pipeline = _pipelines.begin(); pipeline != _pipelines.end(); ++pipeline)
@@ -844,7 +844,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender)
+	RenderManager &RenderManager::drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		Pipeline *pipeline;
 
@@ -856,7 +856,7 @@ namespace gl
 		return (*this);
 	}
 
-	ShadingManager &ShadingManager::draw(Key<RenderOnScreen> const &o, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender)
+	RenderManager &RenderManager::draw(Key<RenderOnScreen> const &o, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		RenderOnScreen *renderOnScreen;
 		RenderPass *renderPass;

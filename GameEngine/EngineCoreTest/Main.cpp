@@ -13,7 +13,7 @@
 
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>
-#include <Render/ShadingManager.hh>
+#include <Render/RenderManager.hh>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
 
@@ -185,7 +185,7 @@ int			main(int ac, char **av)
 	config->loadFile();
 
 #ifdef RENDERING_ACTIVATED
-	auto &geo = e->setInstance<gl::ShadingManager>()->geometryManager;
+	auto &geo = e->setInstance<gl::RenderManager>()->geometryManager;
 	geo.addIndexPool();
 	geo.addVertexPool();
 	GLenum typeComponent[2] = { GL_FLOAT, GL_FLOAT };

@@ -9,7 +9,7 @@
 # define NEW_SHADER 1
 
 #if NEW_SHADER
-namespace gl { class Shader; class ShadingManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; class RenderPass; class Render; class RenderPostEffect; class RenderOnScreen; }
+namespace gl { class Shader; class RenderManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; class RenderPass; class Render; class RenderPostEffect; class RenderOnScreen; class Pipeline; }
 #endif
 
 class CameraSystem : public System
@@ -19,7 +19,7 @@ public:
 	virtual ~CameraSystem(){}
 
 #if NEW_SHADER
-	void setManager(gl::ShadingManager &m);
+	void setManager(gl::RenderManager &m);
 #endif
 	void setRenderDebugMode(bool t);
 	bool getRenderDebugMode() const;
@@ -36,7 +36,7 @@ protected:
 #else
 	EntityFilter _drawable;
 	EntityFilter _camera;
-	gl::ShadingManager *_render;
+	gl::RenderManager *_render;
 	gl::Key<gl::Shader> _shader;
 	gl::Key<gl::Shader> _quadShader;
 	gl::Key<gl::UniformBlock> _global_state;
@@ -50,6 +50,7 @@ protected:
 	gl::Key<gl::RenderPass> _renderPass;
 //	gl::Key<gl::RenderPostEffect> _renderPostEffect;
 	gl::Key<gl::RenderOnScreen> _renderOnScreen;
+	gl::Key<gl::Pipeline> _pipeline;
 
 	gl::Key<gl::Render> _renderQuad;
 	gl::Key<gl::Uniform> _textureQuad;

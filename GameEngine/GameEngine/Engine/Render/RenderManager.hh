@@ -15,7 +15,7 @@
 #include <Render/Render.hh>
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
-#include <Render/MacroShadingManager.hh>
+#include <Render/MacroRenderManager.hh>
 
 namespace gl
 {
@@ -28,18 +28,18 @@ namespace gl
 	struct BindingShader;
 	class Pipeline;
 
-	class ShadingManager : public Dependency<ShadingManager>
+	class RenderManager : public Dependency<RenderManager>
 	{
 	public:
 		GeometryManager geometryManager;
 		MaterialManager materialManager;
 
 	public:
-		ShadingManager();
-		~ShadingManager();
+		RenderManager();
+		~RenderManager();
 
 		// shader handling
-		ShadingManager &createPreShaderQuad();
+		RenderManager &createPreShaderQuad();
 		Key<Shader> addComputeShader(std::string const &compute);
 		Key<Shader> addShader(std::string const &vert, std::string const &frag);
 		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
@@ -51,36 +51,36 @@ namespace gl
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, float value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::vec4 const &value);
 		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
-		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
-		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
-		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
-		ShadingManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3);
+		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
+		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
+		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
+		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3);
 		
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
-		ShadingManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
+		RenderManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
 		
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
 		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
 
 		Key<UniformBlock> addUniformBlock(size_t nbrElement, size_t *sizeElement);
-		ShadingManager &rmUniformBlock(Key<UniformBlock> &uniformBlock);
+		RenderManager &rmUniformBlock(Key<UniformBlock> &uniformBlock);
 		Key<UniformBlock> getUniformBlock(size_t index) const;
-		template <typename TYPE> ShadingManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
-		ShadingManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
-		template <typename TYPE> ShadingManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
-		ShadingManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+		template <typename TYPE> RenderManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
+		RenderManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
+		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+		RenderManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
 
 		// Texture
 		Key<Texture> addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping);
-		ShadingManager &uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
-		ShadingManager &downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
-		ShadingManager &setlevelTargetTexture(Key<Texture> const &key, uint8_t level);
-		ShadingManager &bindTexture(Key<Texture> const &key);
-		ShadingManager &unbindTexture(Key<Texture> const &key);
-		ShadingManager &configUploadTexture2D(Key<Texture> const &key, glm::ivec4 const &rect);
-		ShadingManager &parameterTexture(Key<Texture> const &key, GLenum pname, GLint param);
-		ShadingManager &rmTexture(Key<Texture> &key);
+		RenderManager &uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
+		RenderManager &downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
+		RenderManager &setlevelTargetTexture(Key<Texture> const &key, uint8_t level);
+		RenderManager &bindTexture(Key<Texture> const &key);
+		RenderManager &unbindTexture(Key<Texture> const &key);
+		RenderManager &configUploadTexture2D(Key<Texture> const &key, glm::ivec4 const &rect);
+		RenderManager &parameterTexture(Key<Texture> const &key, GLenum pname, GLint param);
+		RenderManager &rmTexture(Key<Texture> &key);
 		Key<Texture> getTexture(size_t target) const;
 		GLenum getTypeTexture(Key<Texture> const &key);
 
@@ -89,53 +89,53 @@ namespace gl
 		Key<RenderPass> addRenderPass(Key<Shader> const &shader, glm::ivec4 const &rect);
 		Key<RenderPass> getRenderPass(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPass)
-		ShadingManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
-		ShadingManager &pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
-		ShadingManager &popOutputColorRenderPass(Key<RenderPass> const &key);
-		ShadingManager &pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s);
-		ShadingManager &popInputColorRenderPass(Key<RenderPass> const &key);
-		ShadingManager &createDepthBufferRenderPass(Key<RenderPass> const &key);
-		ShadingManager &createStencilBufferRenderPass(Key<RenderPass> const &key);
-		ShadingManager &useInputDepthRenderPass(Key<RenderPass> const &key);
-		ShadingManager &unUseInputDepthRenderPass(Key<RenderPass> const &key);
-		ShadingManager &useInputStencilRenderPass(Key<RenderPass> const &key);
-		ShadingManager &unUseInputStencilRenderPass(Key<RenderPass> const &key);
-		ShadingManager &useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
-		ShadingManager &unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		RenderManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
+		RenderManager &pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
+		RenderManager &popOutputColorRenderPass(Key<RenderPass> const &key);
+		RenderManager &pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s);
+		RenderManager &popInputColorRenderPass(Key<RenderPass> const &key);
+		RenderManager &createDepthBufferRenderPass(Key<RenderPass> const &key);
+		RenderManager &createStencilBufferRenderPass(Key<RenderPass> const &key);
+		RenderManager &useInputDepthRenderPass(Key<RenderPass> const &key);
+		RenderManager &unUseInputDepthRenderPass(Key<RenderPass> const &key);
+		RenderManager &useInputStencilRenderPass(Key<RenderPass> const &key);
+		RenderManager &unUseInputStencilRenderPass(Key<RenderPass> const &key);
+		RenderManager &useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		RenderManager &unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
 		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect)
-		ShadingManager &configRenderPostEffect(Key<RenderPostEffect> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
-		ShadingManager &pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
-		ShadingManager &popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key);
-		ShadingManager &pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s);
-		ShadingManager &popInputColorRenderPostEffect(Key<RenderPostEffect> const &key);
+		RenderManager &configRenderPostEffect(Key<RenderPostEffect> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
+		RenderManager &pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
+		RenderManager &popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key);
+		RenderManager &pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s);
+		RenderManager &popInputColorRenderPostEffect(Key<RenderPostEffect> const &key);
 
 		// RenderOnScreen
 		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect);
 		Key<RenderOnScreen> getRenderOnScreen(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderOnScreen);
-		ShadingManager &configRenderOnScreen(Key<RenderOnScreen> const &renderOnScreen, glm::ivec4 const &rect, GLenum mode);
+		RenderManager &configRenderOnScreen(Key<RenderOnScreen> const &renderOnScreen, glm::ivec4 const &rect, GLenum mode);
 
-		ShadingManager &branch(Key<RenderPass> const &from, Key<RenderPass> const &to);
-		ShadingManager &branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to);
-		ShadingManager &branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to);
-		ShadingManager &branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to);
+		RenderManager &branch(Key<RenderPass> const &from, Key<RenderPass> const &to);
+		RenderManager &branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to);
+		RenderManager &branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to);
+		RenderManager &branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to);
 	
 		// Pipeline
 		Key<Pipeline> addPipeline();
-		ShadingManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r);
-		ShadingManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r);
-		ShadingManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r);
+		RenderManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r);
+		RenderManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r);
+		RenderManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r);
 		Key<Pipeline> getPipeline(size_t target);
-		ShadingManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
+		RenderManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
 
 		// drawing
-		ShadingManager &drawPipelines();
-		ShadingManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
-		ShadingManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
+		RenderManager &drawPipelines();
+		RenderManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
+		RenderManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
 
 	private:
 		// all map
@@ -171,7 +171,7 @@ namespace gl
 	};
 
 	template <typename TYPE>
-	ShadingManager &ShadingManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	RenderManager &RenderManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
 		if ((shader = getShader(shaderKey)) == NULL)
@@ -181,7 +181,7 @@ namespace gl
 	}
 
 	template <typename TYPE>
-	ShadingManager &ShadingManager::setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value)
+	RenderManager &RenderManager::setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value)
 	{
 		UniformBlock *uniformBlock;
 

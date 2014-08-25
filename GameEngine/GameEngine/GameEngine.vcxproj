@@ -230,8 +230,8 @@
     <ClCompile Include="Engine\Render\Pool.cpp" />
     <ClCompile Include="Engine\Render\PreShader.cpp" />
     <ClCompile Include="Engine\Render\Render.cpp" />
+    <ClCompile Include="Engine\Render\RenderManager.cpp" />
     <ClCompile Include="Engine\Render\Shader.cpp" />
-    <ClCompile Include="Engine\Render\ShadingManager.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
     <ClCompile Include="Engine\Render\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\VertexArray.cpp" />
@@ -298,7 +298,7 @@
     <ClInclude Include="Engine\Render\GeometryManager.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />
-    <ClInclude Include="Engine\Render\MacroShadingManager.hh" />
+    <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
     <ClInclude Include="Engine\Render\Material.hh" />
     <ClInclude Include="Engine\Render\MaterialManager.hh" />
     <ClInclude Include="Engine\Render\MemoryGPU.hh" />
@@ -307,8 +307,8 @@
     <ClInclude Include="Engine\Render\PixelBuffer.hh" />
     <ClInclude Include="Engine\Render\Pool.hh" />
     <ClInclude Include="Engine\Render\Render.hh" />
+    <ClInclude Include="Engine\Render\RenderManager.hh" />
     <ClInclude Include="Engine\Render\Shader.hh" />
-    <ClInclude Include="Engine\Render\ShadingManager.hh" />
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\UniformBlock.hh" />
