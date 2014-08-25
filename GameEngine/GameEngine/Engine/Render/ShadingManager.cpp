@@ -865,6 +865,7 @@ namespace gl
 			return (*this);
 		if ((renderPass = getRenderPass(r)) == NULL)
 			return (*this);
+		renderPass->setRenderPassObjects(objectRender);
 		renderOnScreen->branchInput(*renderPass);
 		renderPass->draw();
 		renderOnScreen->draw();
