@@ -201,7 +201,7 @@ namespace gl
 
 	void Shader::createUniformBlockTask(Task &task, std::string const &flag, UniformBlock const &ubo)
 	{
-		task.func = setBlockPointerUBO;
+		task.func = setBlockBinding;
 		task.indexToTarget = 4;
 		task.nbrParams = 5;
 		task.sizeParams = new size_t[task.nbrParams];
@@ -216,12 +216,6 @@ namespace gl
 		task.params[2] = new GLuint;
 		*(GLuint *)task.params[2] = ubo.getBindingPoint();
 		task.sizeParams[2] = sizeof(GLuint);
-		task.params[3] = new GLuint;
-		*(GLuint *)task.params[3] = ubo.getBufferId();
-		task.sizeParams[3] = sizeof(GLuint);
-		task.params[4] = new UniformBlock const *;
-		*(UniformBlock const **)task.params[4] = &ubo;
-		task.sizeParams[4] = sizeof(UniformBlock *);
 	}
 
 	Key<Uniform> Shader::addUniform(std::string const &flag)

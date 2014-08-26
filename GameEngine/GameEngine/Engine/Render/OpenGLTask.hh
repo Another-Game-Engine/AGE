@@ -27,7 +27,7 @@ namespace gl
 	void setUniformMat4(void **);
 	void setUniformMat3(void **);
 	void setUniformUint(void **);
-	void setBlockPointerUBO(void **);
+	void setBlockBinding(void **);
 	void setUniformFloat(void **);
 	void setUniformVec4(void **);
 	void setUniformSampler(void **);

@@ -104,6 +104,6 @@ namespace gl
 		_update = false;
 		_buffer.bind();
 		_buffer.BufferData(_sizeBlock);
+		glBindBufferRange(_buffer.getMode(), _bindingPoint, _buffer.getId(), 0, _sizeBlock);
 	}
-
 }

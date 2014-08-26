@@ -28,6 +28,7 @@ namespace gl
 		size_t getSizeBlock(size_t index) const;
 		GLuint getBindingPoint() const;
 		GLuint getBufferId() const;
+		UniformBlock const &update() const;
 
 		template <typename TYPE> UniformBlock &set(size_t index, TYPE const &value);
 	
