@@ -9,11 +9,11 @@
 #include <stdlib.h>
 #include <Core/Engine.hh>
 #include <Core/SceneManager.hh>
-#include <Core/Renderer.hh>
 #include <Utils/PubSub.hpp>
 
-#include <OpenGL/GeometryManager.hh>
-#include <OpenGL/ShadingManager.hh>
+#include <Render/GeometryManager.hh>
+#include <Render/MaterialManager.hh>
+#include <Render/RenderManager.hh>
 // SCENES
 #include "Scenes/BenchmarkScene.hpp"
 
@@ -158,9 +158,6 @@ int			main(int ac, char **av)
 	e->setInstance<SdlContext, IRenderContext>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
-#ifdef RENDERING_ACTIVATED
-	e->setInstance<Renderer>();
-#endif
 	e->setInstance<SceneManager>();
 	e->setInstance<AGE::AssetsManager>();
 	e->setInstance<PerformanceDebugger>("Developper Name");
@@ -188,8 +185,7 @@ int			main(int ac, char **av)
 	config->loadFile();
 
 #ifdef RENDERING_ACTIVATED
-
-	auto &geo = e->setInstance<gl::ShadingManager>()->geometryManager;
+	auto &geo = e->setInstance<gl::RenderManager>()->geometryManager;
 	geo.addIndexPool();
 	geo.addVertexPool();
 	GLenum typeComponent[2] = { GL_FLOAT, GL_FLOAT };

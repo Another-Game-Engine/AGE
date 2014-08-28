@@ -1,4 +1,7 @@
 #include "FontManager.hh"
+
+#if ACTIVATE
+
 #include <Utils/PubSub.hpp>
 #include <Text/Font.hh>
 #include <cereal/archives/xml.hpp>
@@ -174,3 +177,4 @@ void FontManager::draw2DString(const std::string &text,
 {
 	_toDraw.emplace_back(text, fontName, size, position, color, shader);
 }
+#endif

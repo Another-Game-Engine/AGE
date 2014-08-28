@@ -4,16 +4,10 @@
 #include <set>
 
 #include <Components/Component.hh>
-#include <MediaFiles/TextureFile.hpp>
-#include <MediaFiles/ObjFile.hpp>
-#include <MediaFiles/MaterialFile.hpp>
-#include <MediaFiles/CubeMapFile.hpp>
-#include "OpenGL/Shader.hh"
-#include <core/Renderer.hh>
+#include <Render/Shader.hh>
 #include <cereal/types/string.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
-#include <MediaFiles/AssetsManager.hpp>
 #include "Behaviors/Cullable.hpp"
 
 namespace Resources

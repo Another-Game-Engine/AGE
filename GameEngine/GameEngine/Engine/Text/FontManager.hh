@@ -1,5 +1,9 @@
 #pragma once
 
+#define ACTIVATE 0
+
+#if ACTIVATE
+
 #include <Utils/OpenGL.hh>
 #include <Utils/Dependency.hpp>
 #include <iostream>
@@ -15,7 +19,7 @@ class PubSub;
 
 
 #if !TEST_NEW_VERTEXMANAGER
-#include <OpenGL/GeometryManager.hh>
+#include <Render/GeometryManager.hh>
 template <uint8_t NBR_ATTRIBUTE> class VertexManager;
 #endif
 
@@ -73,3 +77,5 @@ private:
 //	std::unique_ptr<VertexManager<2>> _vertexManager;
 	std::unique_ptr<PubSub> _pubSub;
 };
+
+#endif

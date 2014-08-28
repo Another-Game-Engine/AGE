@@ -21,22 +21,6 @@ namespace Component
 	CameraComponent::~CameraComponent(void)
 	{}
 
-	void CameraComponent::attachSkybox(std::shared_ptr<CubeMapFile> texture, const std::string &_cubeMapShader)
-	{
-		skybox = texture;
-		cubeMapShader = _cubeMapShader;
-	}
-
-	void CameraComponent::dettachSkybox()
-	{
-		skybox = nullptr;
-	}
-
-	std::shared_ptr<CubeMapFile> CameraComponent::getSkybox()
-	{
-		return skybox;
-	}
-
 	const std::string &CameraComponent::getSkyboxShader() const
 	{
 		return cubeMapShader;

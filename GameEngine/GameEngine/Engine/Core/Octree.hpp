@@ -11,8 +11,8 @@
 
 #include <Entities/Entity.hh>
 
-#include <OpenGL/Key.hh>
-#include <OpenGL/Data.hh>
+#include <Render/Key.hh>
+#include <Render/Data.hh>
 
 #include <stack>
 

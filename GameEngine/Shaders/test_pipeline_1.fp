@@ -6,7 +6,6 @@ in vec3 interpolated_normal;
 in vec2 interpolated_texCoord;
 in vec4 pos_light_viewspace;
 
-uniform sampler2D diffuse_texture;
 uniform vec4 diffuse_color;
 uniform float diffuse_ratio;
 
@@ -17,8 +16,6 @@ void main(void)
 	vec3 light = vec3(pos_light_viewspace) / pos_light_viewspace.w;
 	vec3 position = vec3(interpolated_position) / interpolated_position.w;
 	vec3 lightVec = normalize(light - position);
-	float lambert_intensity = clamp(dot(lightVec, interpolated_normal), 0.0f, 1.0f);
-	vec4 diffuse = interpolated_color * texture2D(diffuse_texture, interpolated_texCoord) * diffuse_color * diffuse_ratio * lambert_intensity;
+	vec4 diffuse =  diffuse_color * diffuse_ratio;
 	fragcolor = diffuse;
-	fragcolor += diffuse_color * diffuse_ratio;
 }
