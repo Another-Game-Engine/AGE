@@ -68,8 +68,7 @@ namespace gl
 		~SpotLight();
 
 		virtual Light &setShader(Key<Light> const &key, Shader &shader);
-		SpotLight &setPosition(glm::vec4 const &position);
-		SpotLight &setDirection(glm::vec4 const &dir);
+		SpotLight &setTransform(glm::vec4 const &position, glm::vec4 const &dir);
 		SpotLight &setSpotCutOff(float spotCutOff);
 		SpotLight &setFallOff(float fallOff);
 

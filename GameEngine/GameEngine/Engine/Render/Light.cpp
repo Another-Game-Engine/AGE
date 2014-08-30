@@ -95,14 +95,9 @@ namespace gl
 
 	}
 
-	SpotLight &SpotLight::setPosition(glm::vec4 const &position)
+	SpotLight &SpotLight::setTransform(glm::vec4 const &position, glm::vec4 const &dir)
 	{
 		_position = position;
-		return (*this);
-	}
-
-	SpotLight &SpotLight::setDirection(glm::vec4 const &dir)
-	{
 		_direction = dir;
 		return (*this);
 	}
