@@ -221,6 +221,8 @@
     <ClCompile Include="Engine\Render\Data.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManager.cpp" />
+    <ClCompile Include="Engine\Render\Light.cpp" />
+    <ClCompile Include="Engine\Render\LightManager.cpp" />
     <ClCompile Include="Engine\Render\Material.cpp" />
     <ClCompile Include="Engine\Render\MaterialManager.cpp" />
     <ClCompile Include="Engine\Render\MemoryGPU.cpp" />
@@ -298,6 +300,8 @@
     <ClInclude Include="Engine\Render\GeometryManager.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />
+    <ClInclude Include="Engine\Render\Light.hh" />
+    <ClInclude Include="Engine\Render\LightManager.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
     <ClInclude Include="Engine\Render\Material.hh" />
     <ClInclude Include="Engine\Render\MaterialManager.hh" />
