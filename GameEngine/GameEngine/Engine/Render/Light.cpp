@@ -26,12 +26,6 @@ namespace gl
 
 	}
 
-	DirectionalLight::DirectionalLight(glm::vec4 const &dir)
-		: DirectionalLight(dir, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
-	{
-
-	}
-
 	DirectionalLight::~DirectionalLight()
 	{
 
@@ -43,16 +37,15 @@ namespace gl
 		return (*this);
 	}
 
+	Light &DirectionalLight::setShader(Shader &s)
+	{
+		return (*this);
+	}
+
 	PointLight::PointLight(glm::vec4 const &position, float fallOff, glm::vec4 const &color)
 		: Light(color),
 		_position(position),
 		_fallOff(fallOff)
-	{
-
-	}
-
-	PointLight::PointLight(glm::vec4 const &position, float fallOff)
-		: PointLight(position, fallOff, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
 	{
 
 	}
@@ -74,18 +67,17 @@ namespace gl
 		return (*this);
 	}
 
+	Light &PointLight::setShader(Shader &s)
+	{
+		return (*this);
+	}
+
 	SpotLight::SpotLight(glm::vec4 const &position, glm::vec4 const &dir, float spotCutOff, float fallOff, glm::vec4 const &color)
 		: Light(color),
 		_position(position),
 		_direction(dir),
 		_spotCutOff(spotCutOff),
 		_fallOff(fallOff)
-	{
-
-	}
-
-	SpotLight::SpotLight(glm::vec4 const &position, glm::vec4 const &dir, float spotCutOff, float fallOff)
-		: SpotLight(position, dir, spotCutOff, fallOff, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
 	{
 
 	}
@@ -111,6 +103,11 @@ namespace gl
 	SpotLight &SpotLight::setFallOff(float fallOff)
 	{
 		_fallOff = fallOff;
+		return (*this);
+	}
+
+	Light &SpotLight::setShader(Shader &s)
+	{
 		return (*this);
 	}
 }
