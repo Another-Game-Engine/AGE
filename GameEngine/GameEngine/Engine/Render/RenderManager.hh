@@ -12,6 +12,7 @@
 #include <cassert>
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>
+#include <Render/LightManager.hh>
 #include <Render/Render.hh>
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
@@ -33,6 +34,7 @@ namespace gl
 	public:
 		GeometryManager geometryManager;
 		MaterialManager materialManager;
+		LightManager lightManager;
 
 	public:
 		RenderManager();
