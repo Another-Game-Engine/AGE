@@ -79,21 +79,21 @@ namespace gl
 		return ((SpotLight *)_light[index]);
 	}
 
-	LayoutLight *LightManager::getLayoutLight(Key<LayoutLight> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_layoutLight.size() == 0)
-			assert(0);
-		if (key == _optimizeSearchLayoutLight.first)
-			return (_optimizeSearchLayoutLight.second);
-		auto &index = _layoutLight.find(key);
-		if (index == _layoutLight.end())
-			assert(0);
-		_optimizeSearchLayoutLight.first = key;
-		_optimizeSearchLayoutLight.second = &index->second;
-		return (&index->second);
-	}
+	//LayoutLight *LightManager::getLayoutLight(Key<LayoutLight> const &key)
+	//{
+	//	if (!key)
+	//		assert(0);
+	//	if (_layoutLight.size() == 0)
+	//		assert(0);
+	//	if (key == _optimizeSearchLayoutLight.first)
+	//		return (_optimizeSearchLayoutLight.second);
+	//	auto &index = _layoutLight.find(key);
+	//	if (index == _layoutLight.end())
+	//		assert(0);
+	//	_optimizeSearchLayoutLight.first = key;
+	//	_optimizeSearchLayoutLight.second = &index->second;
+	//	return (&index->second);
+	//}
 
 	size_t LightManager::addPoolLight()
 	{
@@ -292,36 +292,32 @@ namespace gl
 		return (*this);
 	}
 
-	Key<LayoutLight> LightManager::addLayoutLight()
-	{
-		Key<LayoutLight> key;
-
-		_layoutLight[key];
-		return (key);
-	}
-
-	LightManager &LightManager::rmLayoutLight(Key<LayoutLight> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_layoutLight.size() == 0)
-			assert(0);
-		auto &element = _layoutLight.find(key);
-		if (element == _layoutLight.end())
-			assert(0);
-		_layoutLight.erase(element);
-		return (*this);
-	}
-
-	LightManager &LightManager::pushLightLayoutLight(Key<LayoutLight> const &layoutLight, Key<Light> const &light)
-	{
-		return (*this);
-	}
-
-	LightManager &LightManager::popLightLayoutLight(Key<LayoutLight> const &layoutLight, Key<Light> const &light)
-	{
-		return (*this);
-	}
+	//Key<LayoutLight> LightManager::addLayoutLight()
+	//{
+	//	Key<LayoutLight> key;
+	//
+	//	_layoutLight[key];
+	//	return (key);
+	//}
+	//
+	//LightManager &LightManager::rmLayoutLight(Key<LayoutLight> const &key)
+	//{
+	//	if (!key)
+	//		assert(0);
+	//	if (_layoutLight.size() == 0)
+	//		assert(0);
+	//	auto &element = _layoutLight.find(key);
+	//	if (element == _layoutLight.end())
+	//		assert(0);
+	//	_layoutLight.erase(element);
+	//	return (*this);
+	//}
+	//
+	//LightManager &LightManager::pushLightLayoutLight(Key<LayoutLight> const &layoutLight, Key<DirectionalLight> const &light)
+	//{
+	//
+	//	return (*this);
+	//}
 
 
 }
