@@ -65,10 +65,12 @@ namespace gl
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
 		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
 
+		// uniform block
 		Key<UniformBlock> addUniformBlock(size_t nbrElement, size_t *sizeElement);
 		RenderManager &rmUniformBlock(Key<UniformBlock> &uniformBlock);
 		Key<UniformBlock> getUniformBlock(size_t index) const;
 		template <typename TYPE> RenderManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
+		
 		RenderManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
 		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
 		RenderManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);

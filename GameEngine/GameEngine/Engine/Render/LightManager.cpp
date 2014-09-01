@@ -13,52 +13,86 @@ namespace gl
 
 	}
 
-	DirectionalLight *LightManager::getDirectionalLight(Key<DirectionalLight> const &key)
+	size_t LightManager::getLight(Key<DirectionalLight> const &key)
 	{
 		if (!key)
 			assert(0);
 		if (_directionalLight.size() == 0)
 			assert(0);
 		if (key == _optimizeSearchDirectionalLight.first)
-			return ((DirectionalLight *)_light[_optimizeSearchDirectionalLight.second]);
+			return (_optimizeSearchDirectionalLight.second);
 		auto &index = _directionalLight.find(key);
 		if (index == _directionalLight.end())
 			assert(0);
 		_optimizeSearchDirectionalLight.first = key;
 		_optimizeSearchDirectionalLight.second = index->second;
-		return ((DirectionalLight *)_light[index->second]);
+		return (index->second);
 	}
 
-	PointLight *LightManager::getPointLight(Key<PointLight> const &key)
+	DirectionalLight *LightManager::getDirectionalLight(Key<DirectionalLight> const &key)
+	{
+		size_t index = getLight(key);
+		return ((DirectionalLight *)_light[index]);
+	}
+
+	size_t LightManager::getLight(Key<PointLight> const &key)
 	{
 		if (!key)
 			assert(0);
 		if (_pointLight.size() == 0)
 			assert(0);
 		if (key == _optimizeSearchPointLight.first)
-			return ((PointLight *)_light[_optimizeSearchPointLight.second]);
+			return (_optimizeSearchPointLight.second);
 		auto &index = _pointLight.find(key);
 		if (index == _pointLight.end())
 			assert(0);
 		_optimizeSearchPointLight.first = key;
 		_optimizeSearchPointLight.second = index->second;
-		return ((PointLight *)_light[index->second]);
+		return (index->second);
 	}
 
-	SpotLight *LightManager::getSpotLight(Key<SpotLight> const &key)
+	PointLight *LightManager::getPointLight(Key<PointLight> const &key)
+	{
+		size_t index = getLight(key);
+		return ((PointLight *)_light[index]);
+	}
+
+	size_t LightManager::getLight(Key<SpotLight> const &key)
 	{
 		if (!key)
 			assert(0);
 		if (_spotLight.size() == 0)
 			assert(0);
 		if (key == _optimizeSearchSpotLight.first)
-			return ((SpotLight *)_light[_optimizeSearchSpotLight.second]);
+			return (_optimizeSearchSpotLight.second);
 		auto &index = _spotLight.find(key);
 		if (index == _spotLight.end())
 			assert(0);
 		_optimizeSearchSpotLight.first = key;
 		_optimizeSearchSpotLight.second = index->second;
-		return ((SpotLight *)_light[index->second]);
+		return (index->second);
+	}
+
+	SpotLight *LightManager::getSpotLight(Key<SpotLight> const &key)
+	{
+		size_t index = getLight(key);
+		return ((SpotLight *)_light[index]);
+	}
+
+	LayoutLight *LightManager::getLayoutLight(Key<LayoutLight> const &key)
+	{
+		if (!key)
+			assert(0);
+		if (_layoutLight.size() == 0)
+			assert(0);
+		if (key == _optimizeSearchLayoutLight.first)
+			return (_optimizeSearchLayoutLight.second);
+		auto &index = _layoutLight.find(key);
+		if (index == _layoutLight.end())
+			assert(0);
+		_optimizeSearchLayoutLight.first = key;
+		_optimizeSearchLayoutLight.second = &index->second;
+		return (&index->second);
 	}
 
 	size_t LightManager::addPoolLight()
@@ -95,6 +129,7 @@ namespace gl
 		if (index == _directionalLight.end())
 			assert(0);
 		delete _light[index->second];
+		_light[index->second] = NULL;
 		_directionalLight.erase(index);
 		return (*this);
 	}
@@ -128,6 +163,7 @@ namespace gl
 		if (index == _pointLight.end())
 			assert(0);
 		delete _light[index->second];
+		_light[index->second] = NULL;
 		_pointLight.erase(index);
 		return (*this);
 	}
@@ -161,6 +197,7 @@ namespace gl
 		if (index == _spotLight.end())
 			assert(0);
 		delete _light[index->second];
+		_light[index->second] = NULL;
 		_spotLight.erase(index);
 		return (*this);
 	}
@@ -254,4 +291,37 @@ namespace gl
 		light->setTransform(position, dir);
 		return (*this);
 	}
+
+	Key<LayoutLight> LightManager::addLayoutLight()
+	{
+		Key<LayoutLight> key;
+
+		_layoutLight[key];
+		return (key);
+	}
+
+	LightManager &LightManager::rmLayoutLight(Key<LayoutLight> const &key)
+	{
+		if (!key)
+			assert(0);
+		if (_layoutLight.size() == 0)
+			assert(0);
+		auto &element = _layoutLight.find(key);
+		if (element == _layoutLight.end())
+			assert(0);
+		_layoutLight.erase(element);
+		return (*this);
+	}
+
+	LightManager &LightManager::pushLightLayoutLight(Key<LayoutLight> const &layoutLight, Key<Light> const &light)
+	{
+		return (*this);
+	}
+
+	LightManager &LightManager::popLightLayoutLight(Key<LayoutLight> const &layoutLight, Key<Light> const &light)
+	{
+		return (*this);
+	}
+
+
 }
