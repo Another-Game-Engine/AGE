@@ -195,39 +195,4 @@ namespace gl
 		return (*this);
 	}
 
-	template <typename TYPE1>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1);
-	}
-
-	template <typename TYPE1, typename TYPE2>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2);
-	}
-
-	template <typename TYPE1, typename TYPE2, typename TYPE3>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2); tab[2] = sizeof(TYPE3);
-	}
-
-	template <typename TYPE1, typename TYPE2, typename TYPE3, typename TYPE4>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2); tab[2] = sizeof(TYPE3); tab[3] = sizeof(TYPE4);
-	}
-
-	template <typename TYPE1, typename TYPE2, typename TYPE3, typename TYPE4, typename TYPE5>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2); tab[2] = sizeof(TYPE3); tab[3] = sizeof(TYPE4); tab[4] = sizeof(TYPE5);
-	}
-
-	template <typename TYPE1, typename TYPE2, typename TYPE3, typename TYPE4, typename TYPE5, typename TYPE6>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2); tab[2] = sizeof(TYPE3); tab[3] = sizeof(TYPE4); tab[4] = sizeof(TYPE5); tab[5] = sizeof(TYPE6);
-	}
 }

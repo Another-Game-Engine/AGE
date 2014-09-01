@@ -104,8 +104,7 @@ void CameraSystem::setManager(gl::RenderManager &m)
 	
 	// render pass
 	_shader = _render->addShader(VERTEX_SHADER, FRAG_SHADER);
-	size_t sizeElement[2];
-	gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
+	size_t sizeElement[2] = {sizeof(glm::mat4), sizeof(glm::vec4)};
 	_global_state = _render->addUniformBlock(2, sizeElement);
 	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
 	_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
@@ -134,14 +133,28 @@ void CameraSystem::setManager(gl::RenderManager &m)
 
 	_render->branch(_renderPass, _renderOnScreen);
 
-	// render final
-	//_quadShader = _render->addPreShaderQuad();
-	//_textureQuad = _render->addShaderUniform(_quadShader, "texture");
-	//_renderQuad = _render->addRender(_quadShader);
-	//_render->pushSetTestTaskRender(_renderQuad, false, false, true);
-	//_render->pushSetClearValueTaskRender(_renderQuad, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-	//_render->pushClearTaskRender(_renderQuad, true, true, false);
-	//_render->configRender(_renderQuad, glm::ivec4(0, 0, 800, 600));
+	const size_t size = 8;
+	size_t sizeBlock[size] = 
+	{
+		sizeof(glm::vec4), sizeof(glm::vec4), 
+		sizeof(glm::vec4), sizeof(glm::vec4),
+		sizeof(glm::vec4), sizeof(glm::vec4),
+		sizeof(float), sizeof(float)
+	};
+	auto test_color = _render->addUniformBlock(size, sizeBlock);
+	
+
+	_render->setUniformBlock(test_color, 0, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	_render->setUniformBlock(test_color, 1, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	_render->setUniformBlock(test_color, 2, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	_render->setUniformBlock(test_color, 3, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	_render->setUniformBlock(test_color, 4, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	_render->setUniformBlock(test_color, 5, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	_render->setUniformBlock(test_color, 6, 1.0f);
+	_render->setUniformBlock(test_color, 7, 1.0f);
+
+	auto interface_test_color = _render->addShaderInterfaceBlock(_shader, "test_color", test_color);
+
 }
 #endif
 

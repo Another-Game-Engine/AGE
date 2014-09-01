@@ -1,4 +1,5 @@
 #include <Render/LightManager.hh>
+#include <Render/UniformBlock.hh>
 #include <assert.h>
 
 namespace gl
@@ -284,11 +285,15 @@ namespace gl
 
 	LightManager &LightManager::setTransformSpotLight(Key<SpotLight> const &key, glm::vec4 const &position, glm::vec4 const &dir)
 	{
-		SpotLight *light;
-
-		if ((light = getSpotLight(key)) == NULL)
-			return (*this);
+		SpotLight *light = getSpotLight(key);
 		light->setTransform(position, dir);
+		return (*this);
+	}
+
+	LightManager &LightManager::setUniformBlock(Key<PointLight> const &key, UniformBlock &ubo, size_t index)
+	{
+		PointLight *point = getPointLight(key);
+		//ubo.set<PointLight>(index, *point);
 		return (*this);
 	}
 

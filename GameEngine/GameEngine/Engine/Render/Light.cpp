@@ -37,11 +37,6 @@ namespace gl
 		return (*this);
 	}
 
-	Light &DirectionalLight::setShader(Shader &s)
-	{
-		return (*this);
-	}
-
 	PointLight::PointLight(glm::vec4 const &position, float fallOff, glm::vec4 const &color)
 		: Light(color),
 		_position(position),
@@ -64,11 +59,6 @@ namespace gl
 	PointLight &PointLight::setFallOff(float fallOff)
 	{
 		_fallOff = fallOff;
-		return (*this);
-	}
-
-	Light &PointLight::setShader(Shader &s)
-	{
 		return (*this);
 	}
 
@@ -106,8 +96,4 @@ namespace gl
 		return (*this);
 	}
 
-	Light &SpotLight::setShader(Shader &s)
-	{
-		return (*this);
-	}
 }

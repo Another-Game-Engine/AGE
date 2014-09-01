@@ -38,9 +38,9 @@ namespace gl
 		LightManager &setPositionPointLight(Key<PointLight> const &key, glm::vec4 const &position);
 		LightManager &setDirectionDirectionalLight(Key<DirectionalLight> const &key, glm::vec4 const &dir);
 		LightManager &setTransformSpotLight(Key<SpotLight> const &key, glm::vec4 const &position, glm::vec4 const &dir);
-	//	LightManager &setUniformBlock(Key<PointLight> const &key, UniformBlock &ubo);
-	//	LightManager &setUniformBlock(Key<SpotLight> const &key, UniformBlock &ubo);
-	//	LightManager &setUniformBlock(Key<DirectionalLight> const &key, UniformBlock &ubo);
+		LightManager &setUniformBlock(Key<PointLight> const &key, UniformBlock &ubo, size_t index);
+		LightManager &setUniformBlock(Key<SpotLight> const &key, UniformBlock &ubo, size_t index);
+		LightManager &setUniformBlock(Key<DirectionalLight> const &key, UniformBlock &ubo, size_t index);
 
 		// add Layout Light
 		//Key<LayoutLight> addLayoutLight();

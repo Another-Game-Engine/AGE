@@ -6,14 +6,14 @@
 namespace gl
 {
 	class Shader;
-
+	class UniformBlock;
+	
 	class Light
 	{
 	public:
 
 		~Light();
 
-		virtual Light &setShader(Shader &shader) = 0;
 		Light &setColor(glm::vec4 const &color);
 
 	protected:
@@ -30,7 +30,6 @@ namespace gl
 		DirectionalLight(glm::vec4 const &dir, glm::vec4 const &color);
 		~DirectionalLight();
 
-		virtual Light &setShader(Shader &shader);
 		DirectionalLight &setDirection(glm::vec4 const &dir);
 
 	private:
@@ -46,7 +45,6 @@ namespace gl
 		PointLight(glm::vec4 const &position, float fallOff, glm::vec4 const &color);
 		~PointLight();
 
-		virtual Light &setShader(Shader &shader);
 		PointLight &setPosition(glm::vec4 const &position);
 		PointLight &setFallOff(float fallOff);
 
@@ -64,7 +62,6 @@ namespace gl
 		SpotLight(glm::vec4 const &position, glm::vec4 const &dir, float spotCutOff, float fallOff, glm::vec4 const &color);
 		~SpotLight();
 
-		virtual Light &setShader(Shader &shader);
 		SpotLight &setTransform(glm::vec4 const &position, glm::vec4 const &dir);
 		SpotLight &setSpotCutOff(float spotCutOff);
 		SpotLight &setFallOff(float fallOff);
