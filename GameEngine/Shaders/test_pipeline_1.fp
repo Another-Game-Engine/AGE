@@ -8,9 +8,8 @@ in vec4 pos_light_viewspace;
 
 uniform test_color
 {
-	vec4 c[2];
-	vec4 y[4];
-	float t[2];
+	vec4 toto;
+	vec4 koko;
 };
 
 uniform vec4 diffuse_color;
@@ -23,6 +22,6 @@ void main(void)
 	vec3 light = vec3(pos_light_viewspace) / pos_light_viewspace.w;
 	vec3 position = vec3(interpolated_position) / interpolated_position.w;
 	vec3 lightVec = normalize(light - position);
-	vec4 diffuse =  diffuse_color * diffuse_ratio * c[0] * c[1] * y[0] * y[1] * y[2] * y[3] * t[0] * t[1];
+	vec4 diffuse =  diffuse_color * diffuse_ratio * t[0].toto * t[1].toto;
 	fragcolor = diffuse;
 }

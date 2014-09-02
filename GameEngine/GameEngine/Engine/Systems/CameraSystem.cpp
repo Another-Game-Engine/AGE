@@ -133,25 +133,13 @@ void CameraSystem::setManager(gl::RenderManager &m)
 
 	_render->branch(_renderPass, _renderOnScreen);
 
-	const size_t size = 8;
-	size_t sizeBlock[size] = 
-	{
-		sizeof(glm::vec4), sizeof(glm::vec4), 
-		sizeof(glm::vec4), sizeof(glm::vec4),
-		sizeof(glm::vec4), sizeof(glm::vec4),
-		sizeof(float), sizeof(float)
-	};
+	const size_t size = 2;
+	size_t sizeBlock[size] = { sizeof(glm::vec4), sizeof(glm::vec4) };
+
 	auto test_color = _render->addUniformBlock(size, sizeBlock);
 	
-
 	_render->setUniformBlock(test_color, 0, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	_render->setUniformBlock(test_color, 1, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	_render->setUniformBlock(test_color, 2, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	_render->setUniformBlock(test_color, 3, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	_render->setUniformBlock(test_color, 4, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	_render->setUniformBlock(test_color, 5, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	_render->setUniformBlock(test_color, 6, 1.0f);
-	_render->setUniformBlock(test_color, 7, 1.0f);
 
 	auto interface_test_color = _render->addShaderInterfaceBlock(_shader, "test_color", test_color);
 
