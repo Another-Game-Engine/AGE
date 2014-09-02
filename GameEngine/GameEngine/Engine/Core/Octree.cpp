@@ -22,7 +22,6 @@ namespace AGE
 	Octree::~Octree(void)
 	{
 		_isRunning = false;
-		_hasSomeWork.notify_one();
 		_thread->join();
 		delete _thread;
 	}
@@ -107,7 +106,7 @@ namespace AGE
 
 	void Octree::setScale(const glm::vec3 &v, const OctreeKey &id)
 	{
-		_commandQueue.emplace<OctreeCommand::Orientation>(id, v);
+		_commandQueue.emplace<OctreeCommand::Scale>(id, v);
 	}
 
 	void Octree::setCameraInfos(const OctreeKey &id
@@ -173,11 +172,9 @@ namespace AGE
 	}
 
 	AGE::Vector<DrawableCollection> &Octree::getDrawableList()
-	{
-		//_mainThreadDrawList = std::move(_octreeDrawList);
-		//std::swap(_mainThreadCommands, _octreeCommands);
-
-		//_mainThreadCommands.clear();
+	{ 
+		_commandQueue.emplace<OctreeCommand::SwapDrawLists>();
+		_commandQueue.releaseReadability();
 		return _mainThreadDrawList;
 	}
 
@@ -320,6 +317,10 @@ namespace AGE
 				default:
 					break;
 				}
+			})
+			.handle<OctreeCommand::SwapDrawLists>([&](const OctreeCommand::SwapDrawLists& msg)
+			{
+				std::swap(_mainThreadDrawList, _octreeDrawList);
 			});
 
 //////////////////////////
@@ -366,7 +367,6 @@ namespace AGE
 			//std::cout << "Camera n[" << cameraCounter << "] : " << drawed << " / " << total << std::endl;
 			++cameraCounter;
 		}
-		lock.unlock();
 		//std::unique_lock<std::mutex> lock2(_mutex);
 		//lock2.lock();
 		//std::swap(_octreeDrawList, _mainThreadDrawList);

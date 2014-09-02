@@ -125,6 +125,9 @@ namespace AGE
 			OctreeKey key;
 			glm::mat4 projection;
 		};
+
+		struct SwapDrawLists
+		{};
 	}
 
 	class Octree : public Dependency<Octree>

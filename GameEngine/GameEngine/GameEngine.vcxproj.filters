@@ -228,6 +228,7 @@
     <ClInclude Include="Engine\Utils\Containers\CommandQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\ThreadedCommandQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\PtrQueue.hpp" />
+    <ClInclude Include="Engine\Utils\DataSwapper.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
