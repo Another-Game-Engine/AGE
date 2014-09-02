@@ -52,9 +52,7 @@ namespace AGE
 			res.id = _userObjectCounter++;
 		}
 
-		auto c = _mainThreadCommands.push<OctreeCommand::CreateDrawable>();
-		c->key = res;
-
+		_commandQueue.emplace<OctreeCommand::CreateDrawable>(res);
 		return res;
 	}
 
@@ -65,16 +63,14 @@ namespace AGE
 		{
 		case(OctreeKey::Type::Camera) :
 		{
-										  _freeCameraObjects.push(key.id);
-										  auto c = _mainThreadCommands.push<OctreeCommand::DeleteCamera>();
-										  c->key = key;
+			_freeCameraObjects.push(key.id);
+			_commandQueue.emplace<OctreeCommand::DeleteCamera>(key);
 		}
 									  break;
 		case(OctreeKey::Type::Cullable) :
 		{
-											_freeUserObjects.push(key.id);
-											auto c = _mainThreadCommands.push<OctreeCommand::DeleteDrawable>();
-											c->key = key;
+			_freeUserObjects.push(key.id);
+			_commandQueue.emplace<OctreeCommand::DeleteDrawable>(key);
 		}
 										break;
 		default:
@@ -95,38 +91,29 @@ namespace AGE
 		{
 			res.id = _cameraCounter++;
 		}
-
-		_mainThreadCommands.push<OctreeCommand::CreateCamera>()->key = res;
+		_commandQueue.emplace<OctreeCommand::CreateCamera>(res);
 
 		return res;
 	}
 
 	void Octree::setPosition(const glm::vec3 &v, const OctreeKey &id)
 	{
-		auto c = _mainThreadCommands.push<OctreeCommand::Position>();
-		c->key = id;
-		c->position = v;
+		_commandQueue.emplace<OctreeCommand::Position>(id, v);
 	}
 	void Octree::setOrientation(const glm::quat &v, const OctreeKey &id)
 	{
-		auto c = _mainThreadCommands.push<OctreeCommand::Orientation>();
-		c->key = id;
-		c->orientation = v;
+		_commandQueue.emplace<OctreeCommand::Orientation>(id, v);
 	}
 
 	void Octree::setScale(const glm::vec3 &v, const OctreeKey &id)
 	{
-		auto c = _mainThreadCommands.push<OctreeCommand::Scale>();
-		c->key = id;
-		c->scale = v;
+		_commandQueue.emplace<OctreeCommand::Orientation>(id, v);
 	}
 
 	void Octree::setCameraInfos(const OctreeKey &id
 		, const glm::mat4 &projection)
 	{
-		auto c = _mainThreadCommands.push<OctreeCommand::CameraInfos>();
-		c->key = id;
-		c->projection = projection;
+		_commandQueue.emplace<OctreeCommand::CameraInfos>(id, projection);
 	}
 
 	void Octree::setPosition(const glm::vec3 &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids)
@@ -152,10 +139,7 @@ namespace AGE
 		, const AGE::Vector<AGE::MaterialInstance> &materials)
 	{
 		assert(!key.invalid() || key.type != OctreeKey::Type::Cullable);
-		auto c = _mainThreadCommands.push<OctreeCommand::Geometry>();
-		c->key = key;
-		c->submeshInstances = meshs;
-		c->materialInstances = materials;
+		_commandQueue.emplace<OctreeCommand::Geometry>(key, meshs, materials);
 	}
 
 	//-----------------------------------------------------------------
@@ -190,114 +174,99 @@ namespace AGE
 
 	AGE::Vector<DrawableCollection> &Octree::getDrawableList()
 	{
-		std::unique_lock<std::mutex> lock(_mutex);
-		_mainThreadDrawList = std::move(_octreeDrawList);
-		std::swap(_mainThreadCommands, _octreeCommands);
-//		_octreeCommands = std::move(_mainThreadCommands);
-		_mainThreadCommands.clear();
-		lock.unlock();
-		_hasSomeWork.notify_one();
+		//_mainThreadDrawList = std::move(_octreeDrawList);
+		//std::swap(_mainThreadCommands, _octreeCommands);
+
+		//_mainThreadCommands.clear();
 		return _mainThreadDrawList;
 	}
 
 
 	void Octree::_update()
 	{
-		std::unique_lock<std::mutex> lock(_mutex);
-		_hasSomeWork.wait(lock);
-		if (!_isRunning)
-			return;
+		UserObject *uo = nullptr;
+		CameraObject *co = nullptr;
 
-		while (!_octreeCommands.isEmpty())
-		{
-			//process command
-			auto commandPtr = _octreeCommands.pop();
-
-			UserObject *uo = nullptr;
-			CameraObject *co = nullptr;
-			if (commandPtr->uid == OctreeCommand::CreateDrawable::getId())
+		_commandQueue.getDispatcher()
+			.handle<OctreeCommand::CameraInfos>([&](const OctreeCommand::CameraInfos& msg)
 			{
-				auto command = (OctreeCommand::CreateDrawable*)(commandPtr);
-				if (command->key.id >= _userObjects.size())
-				{
-					_userObjects.push_back(UserObject());
-					uo = &_userObjects.back();
-				}
-				else
-				{
-					uo = &_userObjects[command->key.id];
-				}
-				uo->id = command->key.id;
-				uo->active = true;
-				break;
-			}
-			else if (commandPtr->uid == OctreeCommand::DeleteDrawable::getId())
+				co = &_cameraObjects[msg.key.id];
+				co->hasMoved = true;
+				co->projection = msg.projection;
+			})
+			.handle<OctreeCommand::CreateCamera>([&](const OctreeCommand::CreateCamera& msg)
 			{
-				auto command = (OctreeCommand::DeleteDrawable*)(commandPtr);
-				uo = &_userObjects[command->key.id];
-				for (auto &e : uo->drawableCollection)
-				{
-					removeDrawableObject(e);
-				}
-				uo->drawableCollection.clear();
-				uo->active = false;
-			}
-
-			else if (commandPtr->uid == OctreeCommand::CreateCamera::getId())
-			{
-				auto command = (OctreeCommand::CreateCamera*)(commandPtr);
-				if (command->key.id >= _cameraObjects.size())
+				if (msg.key.id >= _cameraObjects.size())
 				{
 					_cameraObjects.push_back(CameraObject());
 					co = &_cameraObjects.back();
 				}
 				else
 				{
-					co = &_cameraObjects[command->key.id];
+					co = &_cameraObjects[msg.key.id];
 				}
-				co->key.id = command->key.id;
+				co->key.id = msg.key.id;
 				co->active = true;
-			}
-			else if (commandPtr->uid == OctreeCommand::DeleteCamera::getId())
+			})
+			.handle<OctreeCommand::CreateDrawable>([&](const OctreeCommand::CreateDrawable& msg)
 			{
-				auto command = (OctreeCommand::DeleteCamera*)(commandPtr);
-				co = &_cameraObjects[command->key.id];
+				if (msg.key.id >= _userObjects.size())
+				{
+					_userObjects.push_back(UserObject());
+					uo = &_userObjects.back();
+				}
+				else
+				{
+					uo = &_userObjects[msg.key.id];
+				}
+			})
+			.handle<OctreeCommand::DeleteCamera>([&](const OctreeCommand::DeleteCamera& msg)
+			{
+				co = &_cameraObjects[msg.key.id];
 				co->active = false;
-			}
-			else if (commandPtr->uid == OctreeCommand::Geometry::getId())
+			})
+			.handle<OctreeCommand::DeleteDrawable>([&](const OctreeCommand::DeleteDrawable& msg)
 			{
-				auto command = (OctreeCommand::Geometry*)(commandPtr);
-				uo = &_userObjects[command->key.id];
+				uo = &_userObjects[msg.key.id];
+				for (auto &e : uo->drawableCollection)
+				{
+					removeDrawableObject(e);
+				}
+				uo->drawableCollection.clear();
+				uo->active = false;
+			})
+			.handle<OctreeCommand::Geometry>([&](const OctreeCommand::Geometry& msg)
+			{
+				uo = &_userObjects[msg.key.id];
 				assert(uo->active != false);
 				for (auto &e : uo->drawableCollection)
 				{
 					removeDrawableObject(e);
 				}
 				uo->drawableCollection.clear();
-				for (std::size_t i = 0; i < command->submeshInstances.size(); ++i)
+				for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
 				{
-					auto id = addDrawableObject(command->key.id);
+					auto id = addDrawableObject(msg.key.id);
 					uo->drawableCollection.push_back(id);
-					_cullableObjects[id].mesh = command->submeshInstances[i];
-					_cullableObjects[id].material = command->materialInstances[i];
+					_cullableObjects[id].mesh = msg.submeshInstances[i];
+					_cullableObjects[id].material = msg.materialInstances[i];
 					_cullableObjects[id].position = uo->position;
 					_cullableObjects[id].orientation = uo->orientation;
 					_cullableObjects[id].scale = uo->scale;
 				}
-			}
-			else if (commandPtr->uid == OctreeCommand::Position::getId())
+			})
+				.handle<OctreeCommand::Position>([&](const OctreeCommand::Position& msg)
 			{
-				auto command = (OctreeCommand::Position*)(commandPtr);
-				switch (command->key.type)
+				switch (msg.key.type)
 				{
 				case(OctreeKey::Type::Camera) :
-					co = &_cameraObjects[command->key.id];
-					co->position = command->position;
+					co = &_cameraObjects[msg.key.id];
+					co->position = msg.position;
 					co->hasMoved = true;
 					break;
 				case(OctreeKey::Type::Cullable) :
-					uo = &_userObjects[command->key.id];
-					uo->position = command->position;
+					uo = &_userObjects[msg.key.id];
+					uo->position = msg.position;
 					for (auto &e : uo->drawableCollection)
 					{
 						_cullableObjects[e].position = uo->position;
@@ -307,20 +276,19 @@ namespace AGE
 				default:
 					break;
 				}
-			}
-			else if (commandPtr->uid == OctreeCommand::Scale::getId())
+			})
+			.handle<OctreeCommand::Scale>([&](const OctreeCommand::Scale& msg)
 			{
-				auto command = (OctreeCommand::Scale*)(commandPtr);
-				switch (command->key.type)
+				switch (msg.key.type)
 				{
 				case(OctreeKey::Type::Camera) :
-					co = &_cameraObjects[command->key.id];
-					co->scale = command->scale;
+					co = &_cameraObjects[msg.key.id];
+					co->scale = msg.scale;
 					co->hasMoved = true;
 					break;
 				case(OctreeKey::Type::Cullable) :
-					uo = &_userObjects[command->key.id];
-					uo->scale = command->scale;
+					uo = &_userObjects[msg.key.id];
+					uo->scale = msg.scale;
 					for (auto &e : uo->drawableCollection)
 					{
 						_cullableObjects[e].scale = uo->scale;
@@ -330,20 +298,19 @@ namespace AGE
 				default:
 					break;
 				}
-			}
-			else if (commandPtr->uid == OctreeCommand::Orientation::getId())
+			})
+			.handle<OctreeCommand::Orientation>([&](const OctreeCommand::Orientation& msg)
 			{
-				auto command = (OctreeCommand::Orientation*)(commandPtr);
-				switch (command->key.type)
+				switch (msg.key.type)
 				{
 				case(OctreeKey::Type::Camera) :
-					co = &_cameraObjects[command->key.id];
-					co->orientation = command->orientation;
+					co = &_cameraObjects[msg.key.id];
+					co->orientation = msg.orientation;
 					co->hasMoved = true;
 					break;
 				case(OctreeKey::Type::Cullable) :
-					uo = &_userObjects[command->key.id];
-					uo->orientation = command->orientation;
+					uo = &_userObjects[msg.key.id];
+					uo->orientation = msg.orientation;
 					for (auto &e : uo->drawableCollection)
 					{
 						_cullableObjects[e].orientation = uo->orientation;
@@ -353,16 +320,10 @@ namespace AGE
 				default:
 					break;
 				}
-			}
-			else if (commandPtr->uid == OctreeCommand::CameraInfos::getId())
-			{
-				auto command = (OctreeCommand::CameraInfos*)(commandPtr);
-					co = &_cameraObjects[command->key.id];
-					co->hasMoved = true;
-					co->projection = command->projection;
-			}
-		}
+			});
 
+//////////////////////////
+	
 		_octreeDrawList.clear();
 
 		static std::size_t cameraCounter = 0; cameraCounter = 0;

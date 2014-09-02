@@ -25,10 +25,10 @@
 
 #include <Core/OctreeKey.hpp>
 
-#include <Utils/Containers/PtrQueue.hpp>
+#include <tmq/doubleBuffered/templateDispatcher.hpp>
+#include <tmq/doubleBuffered/queue.hpp>
 
 #include <thread>
-#include <mutex>
 #include <condition_variable>
 #include <atomic>
 
@@ -40,53 +40,88 @@ namespace AGE
 
 	namespace OctreeCommand
 	{
-		struct Position : public PtrQueueType::BaseUid<Position>
+		struct Position
 		{
+			Position(const OctreeKey &_key, const glm::vec3 &_position)
+				: key(_key)
+				, position(_position)
+			{}
 			OctreeKey key;
 			glm::vec3 position;
 		};
 
-		struct Scale : public PtrQueueType::BaseUid<Scale>
+		struct Scale
 		{
+			Scale(const OctreeKey &_key, const glm::vec3 &_scale)
+				: key(_key)
+				, scale(_scale)
+			{}
 			OctreeKey key;
 			glm::vec3 scale;
 		};
 
-		struct Orientation : public PtrQueueType::BaseUid<Orientation>
+		struct Orientation
 		{
+			Orientation(const OctreeKey &_key, const glm::quat &_orientation)
+				: key(_key)
+				, orientation(_orientation)
+			{}
 			OctreeKey key;
 			glm::quat orientation;
 		};
 
-		struct Geometry : public PtrQueueType::BaseUid<Geometry>
+		struct Geometry
 		{
+			Geometry(const OctreeKey &_key
+				, const AGE::Vector<SubMeshInstance> &_submeshInstances
+				, const AGE::Vector<MaterialInstance> &_materialInstances)
+				: key(_key)
+				, submeshInstances(_submeshInstances)
+				, materialInstances(_materialInstances)
+			{}
 			OctreeKey key;
 			AGE::Vector<SubMeshInstance> submeshInstances;
 			AGE::Vector<MaterialInstance> materialInstances;
 		};
 
-		struct CreateDrawable : public PtrQueueType::BaseUid<CreateDrawable>
+		struct CreateDrawable
 		{
+			CreateDrawable(const OctreeKey &_key)
+				: key(_key)
+			{}
 			OctreeKey key;
 		};
 
-		struct DeleteDrawable : public PtrQueueType::BaseUid<DeleteDrawable>
+		struct DeleteDrawable
 		{
+			DeleteDrawable(const OctreeKey &_key)
+				: key(_key)
+			{}
 			OctreeKey key;
 		};
 
-		struct CreateCamera : public PtrQueueType::BaseUid<CreateCamera>
+		struct CreateCamera
 		{
+			CreateCamera(const OctreeKey &_key)
+				: key(_key)
+			{}
 			OctreeKey key;
 		};
 
-		struct DeleteCamera : public PtrQueueType::BaseUid<DeleteCamera>
+		struct DeleteCamera
 		{
+			DeleteCamera(const OctreeKey &_key)
+				: key(_key)
+			{}
 			OctreeKey key;
 		};
 
-		struct CameraInfos : public PtrQueueType::BaseUid<CameraInfos>
+		struct CameraInfos
 		{
+			CameraInfos(const OctreeKey &_key, const glm::mat4 &_projection)
+				: key(_key)
+				, projection(_projection)
+			{}
 			OctreeKey key;
 			glm::mat4 projection;
 		};
@@ -155,9 +190,7 @@ namespace AGE
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
 
-		AGE::PtrQueue<PtrQueueType::Base> _octreeCommands;
-		AGE::PtrQueue<PtrQueueType::Base> _mainThreadCommands;
-
+		TMQ::Double::Queue _commandQueue;
 
 		AGE::Vector<DrawableCollection> _octreeDrawList;
 		AGE::Vector<DrawableCollection> _mainThreadDrawList;
@@ -194,8 +227,6 @@ namespace AGE
 		void removeDrawableObject(DRAWABLE_ID id);
 		void _run();
 
-		std::mutex _mutex;
-		std::condition_variable _hasSomeWork;
 		std::thread *_thread;
 		std::atomic_bool _isRunning;
 
