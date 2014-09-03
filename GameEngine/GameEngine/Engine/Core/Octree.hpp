@@ -205,7 +205,6 @@ namespace AGE
 		TMQ::Double::Queue _commandQueue;
 
 		AGE::Vector<DrawableCollection> _octreeDrawList;
-		AGE::Vector<DrawableCollection> _mainThreadDrawList;
 
 	public:
 		const OctreeKey &addCullableElement();

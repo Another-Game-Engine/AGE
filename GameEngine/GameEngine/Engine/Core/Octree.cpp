@@ -11,9 +11,6 @@ namespace AGE
 {
 	Octree::Octree()
 	{
-		// init in main thread
-		_mainThreadDrawList = AGE::Vector<DrawableCollection>();
-
 		// launch thread
 		_thread = new std::thread(&Octree::_run, std::ref(*this));
 
@@ -179,7 +176,6 @@ namespace AGE
 		auto f = c->promise.get_future();
 		_commandQueue.releaseReadability();
 		list = std::move(f.get());
-		//return AGE::Vector<DrawableCollection>();// _mainThreadDrawList;
 	}
 
 
@@ -335,9 +331,6 @@ namespace AGE
 			{
 				msg.promise.set_value(std::move(_octreeDrawList));
 				_octreeDrawList.clear();
-				//_mainThreadDrawList = _octreeDrawList;
-				//_octreeDrawList.clear();
-				//std::swap(_mainThreadDrawList, _octreeDrawList);
 			})
 			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
 			{
