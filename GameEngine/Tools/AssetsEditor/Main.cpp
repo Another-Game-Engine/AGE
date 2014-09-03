@@ -19,7 +19,7 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PubSub.hpp>
-#include <OpenGL/GeometryManager.hh>
+#include <Render/GeometryManager.hh>
 #include <Utils/PerformanceDebugger.hh>
 #include <Core/AssetsManager.hpp>
 

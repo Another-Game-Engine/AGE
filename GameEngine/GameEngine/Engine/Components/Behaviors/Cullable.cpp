@@ -2,8 +2,8 @@
 #include <Core/AScene.hh>
 #include <Core/Octree.hpp>
 
-#include <OpenGL/Key.hh>
-#include <OpenGL/Data.hh>
+#include <Render/Key.hh>
+#include <Render/Data.hh>
 
 namespace AGE
 {

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <OpenGL/GeometryManager.hh>
-#include <OpenGL/Data.hh>
+#include <Render/GeometryManager.hh>
+#include <Render/Data.hh>
 #include <array>
 
 class SpriteManager;

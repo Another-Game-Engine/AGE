@@ -5,7 +5,7 @@
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
-#include <OpenGL/Material.hh>
+#include <Render/Material.hh>
 
 namespace AGE
 {

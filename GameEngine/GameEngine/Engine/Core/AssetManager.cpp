@@ -4,7 +4,7 @@
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <Texture/Texture.hpp>
-#include <OpenGL/ShadingManager.hh>
+#include <Render/RenderManager.hh>
 
 namespace AGE
 {
@@ -27,10 +27,10 @@ namespace AGE
 		cereal::PortableBinaryInputArchive ar(ifs);
 		ar(data);
 
-		auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
+		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		for (auto &e : data.collection)
 		{
-			auto key = manager->addMaterial();
+			auto key = manager->materialManager.addMaterial();
 			material->datas.push_back(key);
 
 			// TODO fill material with material key
@@ -58,15 +58,13 @@ namespace AGE
 		ar(data);
 
 		// TODO fill texture with texture key
-		auto manager = _dependencyManager.lock()->getInstance<gl::ShadingManager>();
+		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		auto key = manager->addTexture2D(3, data.width, data.height, true);
-		manager->setOptionTransferTexture2D(key, 0, GL_RGBA32F, GL_UNSIGNED_BYTE);
-		manager->writeTexture(key, data.data.data());
-		manager->generateMipMapTexture2D(key);
-		manager->filterTexture2D(key, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-		manager->wrapTexture2D(key, GL_REPEAT);
-		manager->storageTexture2D(key, 1);
-
+		manager->uploadTexture(key, GL_RGBA32F, GL_UNSIGNED_BYTE, data.data.data());
+		manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		_textures.insert(std::make_pair(filePath.getFullName(), key));
 		return key;
 	}
@@ -148,7 +146,7 @@ namespace AGE
 	void AssetsManager::loadSubmesh(SubMeshData &data, SubMeshInstance &mesh)
 	{
 		auto &pools = _pools.find(data.infos)->second;
-		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::ShadingManager>()->geometryManager;
+		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 
 		std::size_t size = data.infos.count();
 
@@ -217,7 +215,7 @@ namespace AGE
 			}
 			++ctr;
 		}
-		mesh.vertices = geometryManager.addVertices(maxSize, size, nbrBuffer.data(), buffer.data());
+		mesh.vertices = geometryManager.addVertices(maxSize, uint8_t(size), nbrBuffer.data(), buffer.data());
 		mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
 		mesh.bounding = data.boundingInfos;
 //		mesh.name = data.name; // TODO
@@ -231,7 +229,7 @@ namespace AGE
 	// Create pool for meshs
 	void AssetsManager::createPool(const std::bitset<MeshInfos::END> &infos)
 	{
-		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::ShadingManager>()->geometryManager;
+		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 		assert(geometryManager != nullptr);
 
 		std::size_t size = infos.count();
@@ -294,7 +292,7 @@ namespace AGE
 			++ctr;
 		}
 
-		auto vpKey = geometryManager->addVertexPool(size, typeComponent, sizeTypeComponent, nbrComponent);
+		auto vpKey = geometryManager->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
 		auto indKey = geometryManager->addIndexPool();
 
 		geometryManager->attachIndexPoolToVertexPool(vpKey, indKey);

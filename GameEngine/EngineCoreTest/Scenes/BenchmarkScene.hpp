@@ -10,10 +10,8 @@
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/CameraSystem.hh>
-#include <Systems/DownSampleSystem.hh>
-#include <Systems/PostFxSystem.hh>
-#include <Systems/LightRenderingSystem.hh>
-#include <Systems/BlitFinalRender.hh>
+#include <Components\/MeshRenderer.hh>
+#include <Components/PointLight.hh>
 
 #include <Core/AssetsManager.hpp>
 
@@ -54,7 +52,7 @@ public:
 #ifdef RENDERING_ACTIVATED
 
 		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
-	auto &m = *getInstance<gl::ShadingManager>();
+	auto &m = *getInstance<gl::RenderManager>();
 #if NEW_SHADER
 	camerasystem->setManager(m);
 #endif
@@ -184,8 +182,8 @@ public:
 					for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
 					{
 						gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-						getInstance<gl::ShadingManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
-						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
+						getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
+						getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
 					}
 				}
 				else
@@ -195,8 +193,8 @@ public:
 					for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
 					{
 						gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-						getInstance<gl::ShadingManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
-						getInstance<gl::ShadingManager>()->setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
+						getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
+						getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
 					}
 				}
 #else
