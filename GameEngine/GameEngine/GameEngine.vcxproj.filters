@@ -78,6 +78,7 @@
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
     <ClCompile Include="Engine\Core\Drawable.cpp" />
     <ClCompile Include="Engine\OpenGL\OpenGLTask.cpp" />
+    <ClCompile Include="..\Vendors\tmq\doubleBuffered\queue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />

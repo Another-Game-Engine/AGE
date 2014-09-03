@@ -143,32 +143,6 @@ public:
 #endif //PHYSIC_SIMULATION
 #endif
 
-	auto test = new AGE::CommandQueue<AGE::CommandType::BaseCommand>();
-
-	for (auto i = 0; i < 200; ++i)
-	{
-		auto a = test->push<AGE::CommandType::TestCommand>();
-		a->a = 'A';
-		a->b = i;
-	}
-	test->executeAll();
-
-	for (auto i = 0; i < 300; ++i)
-	{
-		auto a = test->push<AGE::CommandType::TestCommand>();
-		a->a = 'B';
-		a->b = i;
-		auto b = test->push<AGE::CommandType::TestCommand2>();
-		b->a = 'b';
-	}
-	test->executeOne();
-	for (auto i = 0; i < 40; ++i)
-	{
-		auto a = test->push<AGE::CommandType::TestCommand>();
-		a->a = 'C';
-		a->b = i;
-	}
-	test->executeAll();
 	return true;
 }
 

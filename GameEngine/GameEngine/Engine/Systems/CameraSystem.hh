@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <OpenGL/Key.hh>
 #include <Components/CameraComponent.hpp>
+#include <Core/Drawable.hh>
 
 # define NEW_SHADER 1
 
@@ -49,6 +50,8 @@ protected:
 	gl::Key<gl::RenderPass> _renderPass;
 
 	gl::Key<gl::Uniform> _transformation;
+
+	AGE::Vector<AGE::DrawableCollection> _drawList;
 #endif
 	virtual void updateBegin(double time);
 	virtual void updateEnd(double time);

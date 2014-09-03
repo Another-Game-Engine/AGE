@@ -30,7 +30,7 @@
 
 #include <thread>
 #include <condition_variable>
-#include <atomic>
+#include <future>
 
 class AScene;
 
@@ -127,7 +127,16 @@ namespace AGE
 		};
 
 		struct SwapDrawLists
-		{};
+		{
+			std::promise<AGE::Vector<DrawableCollection>> promise;
+
+			SwapDrawLists() = default;
+			SwapDrawLists(const SwapDrawLists &o) = delete;
+			SwapDrawLists(SwapDrawLists &&o)
+			{
+				std::swap(std::move(promise), std::move(o.promise));
+			}
+		};
 	}
 
 	class Octree : public Dependency<Octree>
@@ -220,18 +229,18 @@ namespace AGE
 		void setCameraInfos(const OctreeKey &id
 			, const glm::mat4 &projection);
 
-		AGE::Vector<DrawableCollection> &getDrawableList();
+		void getDrawableList(AGE::Vector<DrawableCollection> &list);
 
 		//
 		// END
 	private:
-		void _update();
+		bool _update();
 		DRAWABLE_ID addDrawableObject(Octree::USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
 		void _run();
 
 		std::thread *_thread;
-		std::atomic_bool _isRunning;
+		bool _isRunning;
 
 		/*void _executeCommand(OctreeCommand::CreateDrawable *command)
 		{

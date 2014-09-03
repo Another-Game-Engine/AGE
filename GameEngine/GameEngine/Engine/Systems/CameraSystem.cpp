@@ -196,10 +196,10 @@ void CameraSystem::mainUpdate(double time)
 	}
 	_totalTime += time;
 #else
-	auto &drawList = _scene.lock()->getInstance<AGE::Octree>()->getDrawableList();
-	while (!drawList.empty())
+	_scene.lock()->getInstance<AGE::Octree>()->getDrawableList(_drawList);
+	while (!_drawList.empty())
 	{
-		auto &camera = drawList.back();
+		auto &camera = _drawList.back();
 		if (camera.drawables.empty())
 			return;
 		_render->setUniformBlock(_global_state, 0, camera.projection);
@@ -207,7 +207,7 @@ void CameraSystem::mainUpdate(double time)
 		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
 		_render->draw(GL_TRIANGLES, _shader, _renderPass, camera.drawables);
 		camera.drawables.clear();
-		drawList.pop_back();
+		_drawList.pop_back();
 	}
 #endif
 }

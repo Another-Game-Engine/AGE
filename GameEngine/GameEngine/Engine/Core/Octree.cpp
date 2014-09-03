@@ -17,11 +17,14 @@ namespace AGE
 
 		// launch thread
 		_thread = new std::thread(&Octree::_run, std::ref(*this));
+
+		_commandQueue.launch();
 	}
 
 	Octree::~Octree(void)
 	{
 		_isRunning = false;
+		_commandQueue.emplace<TMQ::CloseQueue>();
 		_thread->join();
 		delete _thread;
 	}
@@ -32,7 +35,7 @@ namespace AGE
 		_octreeDrawList = AGE::Vector<DrawableCollection>();
 		while (_isRunning)
 		{
-			_update();
+			_isRunning = _update();
 		}
 	}
 
@@ -171,28 +174,29 @@ namespace AGE
 		assert(id != (std::size_t)(-1));
 	}
 
-	AGE::Vector<DrawableCollection> &Octree::getDrawableList()
+	void Octree::getDrawableList(AGE::Vector<DrawableCollection> &list)
 	{ 
-		_commandQueue.emplace<OctreeCommand::SwapDrawLists>();
+		auto c = _commandQueue.emplace<OctreeCommand::SwapDrawLists>();
+		auto f = c->promise.get_future();
 		_commandQueue.releaseReadability();
-		return _mainThreadDrawList;
+		list = std::move(f.get());
+		//return AGE::Vector<DrawableCollection>();// _mainThreadDrawList;
 	}
 
 
-	void Octree::_update()
+	bool Octree::_update()
 	{
-		UserObject *uo = nullptr;
-		CameraObject *co = nullptr;
-
 		_commandQueue.getDispatcher()
 			.handle<OctreeCommand::CameraInfos>([&](const OctreeCommand::CameraInfos& msg)
 			{
+			CameraObject *co = nullptr;
 				co = &_cameraObjects[msg.key.id];
 				co->hasMoved = true;
 				co->projection = msg.projection;
 			})
 			.handle<OctreeCommand::CreateCamera>([&](const OctreeCommand::CreateCamera& msg)
 			{
+				CameraObject *co = nullptr;
 				if (msg.key.id >= _cameraObjects.size())
 				{
 					_cameraObjects.push_back(CameraObject());
@@ -207,6 +211,7 @@ namespace AGE
 			})
 			.handle<OctreeCommand::CreateDrawable>([&](const OctreeCommand::CreateDrawable& msg)
 			{
+				UserObject *uo = nullptr;
 				if (msg.key.id >= _userObjects.size())
 				{
 					_userObjects.push_back(UserObject());
@@ -219,12 +224,14 @@ namespace AGE
 			})
 			.handle<OctreeCommand::DeleteCamera>([&](const OctreeCommand::DeleteCamera& msg)
 			{
+				CameraObject *co = nullptr;
 				co = &_cameraObjects[msg.key.id];
 				co->active = false;
 			})
 			.handle<OctreeCommand::DeleteDrawable>([&](const OctreeCommand::DeleteDrawable& msg)
 			{
-				uo = &_userObjects[msg.key.id];
+				UserObject *uo = nullptr;
+				uo = &this->_userObjects[msg.key.id];
 				for (auto &e : uo->drawableCollection)
 				{
 					removeDrawableObject(e);
@@ -232,10 +239,11 @@ namespace AGE
 				uo->drawableCollection.clear();
 				uo->active = false;
 			})
-			.handle<OctreeCommand::Geometry>([&](const OctreeCommand::Geometry& msg)
+			.handle<OctreeCommand::Geometry>([this](const OctreeCommand::Geometry& msg)
 			{
+				UserObject *uo = nullptr;
 				uo = &_userObjects[msg.key.id];
-				assert(uo->active != false);
+				//assert(uo->active == true);
 				for (auto &e : uo->drawableCollection)
 				{
 					removeDrawableObject(e);
@@ -254,6 +262,8 @@ namespace AGE
 			})
 				.handle<OctreeCommand::Position>([&](const OctreeCommand::Position& msg)
 			{
+				UserObject *uo = nullptr;
+				CameraObject *co = nullptr;
 				switch (msg.key.type)
 				{
 				case(OctreeKey::Type::Camera) :
@@ -276,6 +286,8 @@ namespace AGE
 			})
 			.handle<OctreeCommand::Scale>([&](const OctreeCommand::Scale& msg)
 			{
+				UserObject *uo = nullptr;
+				CameraObject *co = nullptr;
 				switch (msg.key.type)
 				{
 				case(OctreeKey::Type::Camera) :
@@ -298,6 +310,8 @@ namespace AGE
 			})
 			.handle<OctreeCommand::Orientation>([&](const OctreeCommand::Orientation& msg)
 			{
+				UserObject *uo = nullptr;
+				CameraObject *co = nullptr;
 				switch (msg.key.type)
 				{
 				case(OctreeKey::Type::Camera) :
@@ -318,14 +332,20 @@ namespace AGE
 					break;
 				}
 			})
-			.handle<OctreeCommand::SwapDrawLists>([&](const OctreeCommand::SwapDrawLists& msg)
+			.handle<OctreeCommand::SwapDrawLists>([&](OctreeCommand::SwapDrawLists& msg)
 			{
-				std::swap(_mainThreadDrawList, _octreeDrawList);
+				msg.promise.set_value(std::move(_octreeDrawList));
+				_octreeDrawList.clear();
+				//_mainThreadDrawList = _octreeDrawList;
+				//_octreeDrawList.clear();
+				//std::swap(_mainThreadDrawList, _octreeDrawList);
+			})
+			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
+			{
+				return false;
 			});
 
 //////////////////////////
-	
-		_octreeDrawList.clear();
 
 		static std::size_t cameraCounter = 0; cameraCounter = 0;
 
@@ -364,12 +384,8 @@ namespace AGE
 					++drawed;
 				}
 			}
-			//std::cout << "Camera n[" << cameraCounter << "] : " << drawed << " / " << total << std::endl;
 			++cameraCounter;
 		}
-		//std::unique_lock<std::mutex> lock2(_mutex);
-		//lock2.lock();
-		//std::swap(_octreeDrawList, _mainThreadDrawList);
-		//lock2.unlock();
+		return true;
 	}
 }
