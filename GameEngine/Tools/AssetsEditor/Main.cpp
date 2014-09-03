@@ -11,7 +11,6 @@
 
 #include <Core/Engine.hh>
 #include <Core/SceneManager.hh>
-#include <Core/Renderer.hh>
 
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
@@ -49,7 +48,6 @@ int			main(int ac, char **av)
 	e->setInstance<SdlContext, IRenderContext>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
-	e->setInstance<Renderer>();
 	e->setInstance<SceneManager>();
 	e->setInstance<AGE::AssetsManager>();
 	e->setInstance<PerformanceDebugger>();

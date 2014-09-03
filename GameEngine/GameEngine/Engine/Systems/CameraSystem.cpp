@@ -132,6 +132,14 @@ void CameraSystem::setManager(gl::RenderManager &m)
 
 	_render->branch(_renderPass, _renderOnScreen);
 
+	auto u = _render->addUniformBlock();
+	auto light_test = _render->addShaderInterfaceBlock(_shader, "light", u);
+	_render->setUniformBlock(u, 0, glm::vec4(1.f), 0);
+	_render->setUniformBlock(u, 0, glm::vec4(1.f), 1);
+	_render->setUniformBlock(u, 1, glm::vec4(1.f), 0);
+	_render->setUniformBlock(u, 1, glm::vec4(1.f), 1);
+	_render->setUniformBlock(u, 2, 1.0f, 0);
+	_render->setUniformBlock(u, 2, 1.0f, 1);
 }
 #endif
 
