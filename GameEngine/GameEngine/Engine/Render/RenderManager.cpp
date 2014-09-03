@@ -192,12 +192,20 @@ namespace gl
 		return (*this);
 	}
 
-	Key<UniformBlock> RenderManager::addUniformBlock(size_t nbrElement, size_t *sizeElement)
+	Key<UniformBlock> RenderManager::addUniformBlock()
 	{
 		Key<UniformBlock> key;
 
-		_uniformBlock[key] = UniformBlock(nbrElement, sizeElement);
+		_uniformBlock[key];
 		return (key);
+	}
+
+	RenderManager &RenderManager::introspectionBlock(Key<Shader> const &s, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u)
+	{
+		Shader *shader = getShader(s);
+		UniformBlock *uniformBlock = getUniformBlock(u);
+		shader->introspection(i, *uniformBlock);
+		return (*this);
 	}
 
 	RenderManager &RenderManager::rmUniformBlock(Key<UniformBlock> &key)
@@ -219,15 +227,19 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<InterfaceBlock> RenderManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
+	Key<InterfaceBlock> RenderManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> &keyUniformBlock)
 	{
-		Shader *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<InterfaceBlock>(KEY_DESTROY));
-		UniformBlock *uniformBlock;
-		if ((uniformBlock = getUniformBlock(keyUniformBlock)) == NULL)
-			return (Key<InterfaceBlock>(KEY_DESTROY));
+		Shader *shader = getShader(keyShader);
+		UniformBlock *uniformBlock = getUniformBlock(keyUniformBlock);
 		return (shader->addInterfaceBlock(flag, *uniformBlock));
+	}
+
+	RenderManager &RenderManager::setShaderInterfaceBlock(Key<Shader> const &keyShader, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u)
+	{
+		Shader *shader = getShader(keyShader);
+		UniformBlock *uniformBlock = getUniformBlock(u);
+		shader->setInterfaceBlock(i, *uniformBlock);
+		return (*this);
 	}
 
 	Key<InterfaceBlock> RenderManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
@@ -654,20 +666,14 @@ namespace gl
 
 	RenderManager &RenderManager::pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
 	{
-		RenderPostEffect *renderPostEffect;
-
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
 		renderPostEffect->pushColorOutput(attachement, internalFormat);
 		return (*this);
 	}
 
 	RenderManager & RenderManager::popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key)
 	{
-		RenderPostEffect *renderPostEffect;
-
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
 		renderPostEffect->popColorOutput();
 		return (*this);
 	}

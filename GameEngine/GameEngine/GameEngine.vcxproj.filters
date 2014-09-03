@@ -62,7 +62,6 @@
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
-    <ClCompile Include="Engine\Render\LightManager.cpp" />
     <ClCompile Include="Engine\Render\Light.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +189,6 @@
     <ClInclude Include="Engine\Render\Pipeline.hh" />
     <ClInclude Include="Engine\Render\RenderManager.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
-    <ClInclude Include="Engine\Render\LightManager.hh" />
     <ClInclude Include="Engine\Render\Light.hh" />
   </ItemGroup>
   <ItemGroup>

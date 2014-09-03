@@ -104,8 +104,7 @@ void CameraSystem::setManager(gl::RenderManager &m)
 	
 	// render pass
 	_shader = _render->addShader(VERTEX_SHADER, FRAG_SHADER);
-	size_t sizeElement[2] = {sizeof(glm::mat4), sizeof(glm::vec4)};
-	_global_state = _render->addUniformBlock(2, sizeElement);
+	_global_state = _render->addUniformBlock();
 	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
 	_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
 	_model_matrix = _render->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
@@ -132,16 +131,6 @@ void CameraSystem::setManager(gl::RenderManager &m)
 	_render->setPipeline(_pipeline, 1, _renderOnScreen);
 
 	_render->branch(_renderPass, _renderOnScreen);
-
-	const size_t size = 2;
-	size_t sizeBlock[size] = { sizeof(glm::vec4), sizeof(glm::vec4) };
-
-	auto test_color = _render->addUniformBlock(size, sizeBlock);
-	
-	_render->setUniformBlock(test_color, 0, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	_render->setUniformBlock(test_color, 1, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-	auto interface_test_color = _render->addShaderInterfaceBlock(_shader, "test_color", test_color);
 
 }
 #endif

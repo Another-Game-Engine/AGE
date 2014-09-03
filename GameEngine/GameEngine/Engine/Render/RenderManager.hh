@@ -12,7 +12,6 @@
 #include <cassert>
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>
-#include <Render/LightManager.hh>
 #include <Render/Render.hh>
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
@@ -34,7 +33,6 @@ namespace gl
 	public:
 		GeometryManager geometryManager;
 		MaterialManager materialManager;
-		LightManager lightManager;
 
 	public:
 		RenderManager();
@@ -62,15 +60,18 @@ namespace gl
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		RenderManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
 		
-		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
+		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> &keyUniformBlock);
+		RenderManager &setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u);
 		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
 
 		// uniform block
-		Key<UniformBlock> addUniformBlock(size_t nbrElement, size_t *sizeElement);
+		Key<UniformBlock> addUniformBlock();
+		RenderManager &introspectionBlock(Key<Shader> const &s, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u);
 		RenderManager &rmUniformBlock(Key<UniformBlock> &uniformBlock);
 		Key<UniformBlock> getUniformBlock(size_t index) const;
 		template <typename TYPE> RenderManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
-		
+		template <typename TYPE> RenderManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value, size_t indexTab);
+
 		RenderManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
 		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
 		RenderManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
@@ -192,6 +193,17 @@ namespace gl
 		if ((uniformBlock = getUniformBlock(key)) == NULL)
 			return (*this);
 		uniformBlock->set<TYPE>(index, value);
+		return (*this);
+	}
+
+	template <typename TYPE>
+	RenderManager &RenderManager::setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value, size_t indexTab)
+	{
+		UniformBlock *uniformBlock;
+
+		if ((uniformBlock = getUniformBlock(key)) == NULL)
+			return (*this);
+		uniformBlock->set<TYPE>(index, value, indexTab);
 		return (*this);
 	}
 

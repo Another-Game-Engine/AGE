@@ -7,13 +7,15 @@ namespace gl
 {
 	MemoryGPU::MemoryGPU()
 		: size(0),
-		offset(0)
+		offset(0),
+		stride(0)
 	{
 	}
 
 	MemoryGPU::MemoryGPU(MemoryGPU const &copy)
 		: size(copy.size),
-		offset(copy.offset)
+		offset(copy.offset),
+		stride(copy.stride)
 	{
 	}
 
@@ -21,9 +23,10 @@ namespace gl
 	{
 	}
 
-	MemoryGPU::MemoryGPU(size_t size, size_t offset)
+	MemoryGPU::MemoryGPU(size_t size, size_t offset, size_t stride)
 		: size(size),
-		offset(offset)
+		offset(offset),
+		stride(stride)
 	{
 	}
 
@@ -33,8 +36,39 @@ namespace gl
 		{
 			size = m.size;
 			offset = m.offset;
+			stride = m.stride;
 		}
 		return (*this);
+	}
+
+	bool MemoryGPU::operator<(MemoryGPU const &m) const
+	{
+		return (offset < m.offset);
+	}
+
+	bool MemoryGPU::operator>(MemoryGPU const &m) const
+	{
+		return (offset > m.offset);
+	}
+
+	bool MemoryGPU::operator>=(MemoryGPU const &m) const
+	{
+		return (offset >= m.offset);
+	}
+
+	bool MemoryGPU::operator<=(MemoryGPU const &m) const
+	{
+		return (offset <= m.offset);
+	}
+
+	bool MemoryGPU::operator==(MemoryGPU const &m) const
+	{
+		return (offset == m.offset);
+	}
+
+	bool MemoryGPU::operator!=(MemoryGPU const &m) const
+	{
+		return (offset != m.offset);
 	}
 
 	MemoryBlocksGPU::MemoryBlocksGPU()
