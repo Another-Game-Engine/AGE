@@ -345,7 +345,6 @@
     <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
     <ClInclude Include="Engine\Utils\Containers\PtrQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
-    <ClInclude Include="Engine\Utils\Containers\ThreadedCommandQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
     <ClInclude Include="Engine\Utils\DataSwapper.hpp" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />

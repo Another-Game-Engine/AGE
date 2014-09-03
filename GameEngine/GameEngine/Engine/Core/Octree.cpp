@@ -12,7 +12,6 @@ namespace AGE
 	Octree::Octree()
 	{
 		// init in main thread
-		_isRunning = false;
 		_mainThreadDrawList = AGE::Vector<DrawableCollection>();
 
 		// launch thread
@@ -23,8 +22,8 @@ namespace AGE
 
 	Octree::~Octree(void)
 	{
-		_isRunning = false;
 		_commandQueue.emplace<TMQ::CloseQueue>();
+		_commandQueue.releaseReadability();
 		_thread->join();
 		delete _thread;
 	}
@@ -35,7 +34,7 @@ namespace AGE
 		_octreeDrawList = AGE::Vector<DrawableCollection>();
 		while (_isRunning)
 		{
-			_isRunning = _update();
+			_update();
 		}
 	}
 
@@ -342,6 +341,7 @@ namespace AGE
 			})
 			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
 			{
+				_isRunning = false;
 				return false;
 			});
 
