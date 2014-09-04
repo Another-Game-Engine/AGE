@@ -1,6 +1,6 @@
-#include <Scenes/BenchmarkScene.hpp>
+#include <Scenes/BenchmarkScene.hh>
 #include <Components/lifetimeComponent.hh>
-#include <Systems/LifetimeSystem.hpp>
+#include <Systems/LifetimeSystem.hh>
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
@@ -10,7 +10,7 @@
 #include <Core/AssetsManager.hpp>
 #include <Core/Octree.hpp>
 #include <Context/IRenderContext.hh>
-#include <CONFIGS.hpp>
+#include <CONFIGS.hh>
 #include <Render/RenderManager.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"

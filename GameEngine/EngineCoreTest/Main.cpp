@@ -15,7 +15,7 @@
 #include <Render/MaterialManager.hh>
 #include <Render/RenderManager.hh>
 // SCENES
-#include "Scenes/BenchmarkScene.hpp"
+#include "Scenes/BenchmarkScene.hh"
 
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
@@ -29,7 +29,7 @@
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
 
 //CONFIGS
-#include <CONFIGS.hpp>
+#include <CONFIGS.hh>
 
 bool loadAssets(std::shared_ptr<Engine> e)
 {

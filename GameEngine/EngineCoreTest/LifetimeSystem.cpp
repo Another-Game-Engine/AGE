@@ -1,4 +1,4 @@
-#include <Systems/LifetimeSystem.hpp>
+#include <Systems/LifetimeSystem.hh>
 #include <Components/lifetimeComponent.hh>
 
 LifetimeSystem::LifetimeSystem(std::weak_ptr<AScene> &&scene)

@@ -18,30 +18,30 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BenchmarkScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LifetimeSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\LifetimeComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\BenchmarkScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scenes\BenchmarkScene.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\LifetimeSystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CONFIGS.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Systems\LifetimeSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\lifetimeComponent.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CONFIGS.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\LifetimeSystem.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\BenchmarkScene.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
