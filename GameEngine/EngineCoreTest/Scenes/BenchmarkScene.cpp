@@ -15,6 +15,9 @@
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
+# define DEFFERED_VERTEX_SHADER "../../Shaders/Deffered_shading/deffered_shading_get_buffer.vp"
+# define DEFFERED_FRAG_SHADER "../../Shaders/Deffered_shading/deffered_shading_get_buffer.fp"
+
 
 Entity GLOBAL_CAMERA;
 
@@ -147,12 +150,11 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	auto m = getInstance<gl::RenderManager>();
 
 	// create the shader
-	key.shader = m->addShader(VERTEX_SHADER, FRAG_SHADER); 
-
+	key.shader = m->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
+	
 	// get from the shader the information key
 	key.global_state = m->addUniformBlock();
 	m->addShaderInterfaceBlock(key.shader, "global_state", key.global_state);
-	m->setUniformBlock(key.global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
 	key.view_matrix = m->addShaderUniform(key.shader, "view_matrix", glm::mat4(1.f));
 
 	// bind the key on drawable info (material-transformation)
@@ -167,7 +169,9 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->pushClearTaskRenderPass(key.renderPass, true, true, false);
 	m->pushOutputColorRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
 	m->pushOutputColorRenderPass(key.renderPass, GL_COLOR_ATTACHMENT1, GL_RGBA8);
-	m->pushOutputColorRenderPass(key.renderPass, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
+	m->createDepthOutputRenderPass(key.renderPass, GL_DEPTH_COMPONENT24);
+	m->pushSetBlendStateTask(key.renderPass, 0, false);
+	m->pushSetBlendStateTask(key.renderPass, 1, false);
 
 	// create renderOnscreen and set it
 	key.renderOnScreen = m->addRenderOnScreen(glm::ivec4(0, 0, getInstance<IRenderContext>()->getScreenSize().x, getInstance<IRenderContext>()->getScreenSize().y));

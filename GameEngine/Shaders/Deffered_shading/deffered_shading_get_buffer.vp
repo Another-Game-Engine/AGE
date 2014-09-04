@@ -6,9 +6,9 @@ uniform global_state
 };
 
 layout (location = 0) in vec4 position;
-layout (location = 1) in vec4 color;
-layout (location = 2) in vec4 normal;
-layout (location = 4) in vec2 texCoord;
+layout (location = 1) in vec4 normal;
+layout (location = 2) in vec4 color;
+layout (location = 3) in vec2 texCoord;
 
 uniform mat4 view_matrix;
 uniform mat4 model_matrix;
@@ -21,6 +21,7 @@ void main()
 {
 	mat3 normal_matrix = transpose(inverse(mat3(view_matrix * model_matrix)));
 	inter_position = view_matrix * model_matrix * position;
+	inter_normal = vec3(normal);
 	inter_texCoord = texCoord;
 	gl_Position = projection_matrix * inter_position;
 }

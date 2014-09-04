@@ -471,6 +471,26 @@ namespace gl
 		renderPass->pushInputSampler(s);
 		return (*this);
 	}
+
+	RenderManager &RenderManager::createDepthOutputRenderPass(Key<RenderPass> const &key, GLenum internalFormat)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key)) == NULL)
+			return (*this);
+		renderPass->createDepthOutput(internalFormat);
+		return (*this);
+	}
+
+	RenderManager &RenderManager::deleteDepthOutputRenderPass(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass;
+
+		if ((renderPass = getRenderPass(key)) == NULL)
+			return (*this);
+		renderPass->deleteDepthOutput();
+		return (*this);
+	}
 	
 	RenderManager &RenderManager::popInputColorRenderPass(Key<RenderPass> const &key)
 	{

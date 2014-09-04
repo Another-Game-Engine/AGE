@@ -99,6 +99,8 @@ namespace gl
 		RenderManager &popOutputColorRenderPass(Key<RenderPass> const &key);
 		RenderManager &pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s);
 		RenderManager &popInputColorRenderPass(Key<RenderPass> const &key);
+		RenderManager &createDepthOutputRenderPass(Key<RenderPass> const &key, GLenum internalFormat);
+		RenderManager &deleteDepthOutputRenderPass(Key<RenderPass> const &key);
 		RenderManager &createDepthBufferRenderPass(Key<RenderPass> const &key);
 		RenderManager &createStencilBufferRenderPass(Key<RenderPass> const &key);
 		RenderManager &useInputDepthRenderPass(Key<RenderPass> const &key);

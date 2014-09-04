@@ -35,7 +35,7 @@ namespace gl
 	class Render
 	{
 	public:
-		~Render();
+		virtual ~Render();
 
 		virtual Render &draw() = 0;
 		virtual RenderType getType() const = 0;
@@ -69,6 +69,7 @@ namespace gl
 		Render &branchInput(RenderOffScreen const &input);
 		Render &unBranchInput();
 		Render &pushInputSampler(Key<Sampler> const &key);
+		Render &pushDepthInputSampler(Key<Sampler> const &key);
 		Render &popInputSampler();
 
 	protected:
@@ -84,6 +85,7 @@ namespace gl
 		Shader &_shader;
 		AGE::Vector<Task> _tasks;
 		AGE::Vector<Key<Sampler>> _inputSamplers;
+		Key<Sampler> *_depthInputSampler;
 		RenderOffScreen const *_branch;
 
 		GeometryManager &_geometryManager;
@@ -103,6 +105,9 @@ namespace gl
 		GLenum getAttachementOutput(size_t index) const;
 		size_t getNbrAttachementOutput() const;
 
+		RenderOffScreen &createDepthOutput(GLenum internalFormat);
+		RenderOffScreen &deleteDepthOutput();
+		Texture2D  const *getDepthAttachementOutput() const;
 		RenderOffScreen &createDepthBuffer();
 		RenderOffScreen &deleteDepthBuffer();
 		RenderBuffer const *getDepthBuffer() const;
@@ -125,6 +130,7 @@ namespace gl
 
 		GLenum *_colorAttachement;
 		Texture2D **_colorTexture2D;
+		Texture2D *_depthTexture2D;
 		uint8_t _nbrColorAttachement;
 
 		RenderBuffer *_depthBuffer;

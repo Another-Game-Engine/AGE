@@ -14,6 +14,7 @@ namespace gl
 		: _rect(0, 0, 512, 512),
 		_mode(GL_TRIANGLES),
 		_shader(shader),
+		_depthInputSampler(NULL),
 		_branch(NULL),
 		_geometryManager(g)
 	{
@@ -28,6 +29,8 @@ namespace gl
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
 		}
+		if (_depthInputSampler != NULL)
+			delete _depthInputSampler;
 	}
 
 	Render &Render::pushSetScissorTask(glm::ivec4 const &area)
@@ -268,6 +271,18 @@ namespace gl
 		return (*this);
 	}
 
+	Render &Render::pushDepthInputSampler(Key<Sampler> const &key)
+	{
+		if (_shader.hasSampler(key))
+		{
+			_depthInputSampler = new Key<Sampler>();
+			*_depthInputSampler = key;
+		}
+		else
+			assert(0);
+		return (*this);
+	}
+
 	Render &Render::popInputSampler()
 	{
 		_inputSamplers.pop_back();
@@ -276,11 +291,13 @@ namespace gl
 
 	void Render::updateInput()
 	{
-		if (_branch != NULL && _inputSamplers.size() == _branch->getNbrAttachementOutput())
+		if (_branch != NULL && _inputSamplers.size() <= _branch->getNbrAttachementOutput())
 		{
 			for (size_t index = 0; index < _inputSamplers.size(); ++index)
 				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
 		}
+		if (_depthInputSampler != NULL && _branch->getDepthAttachementOutput() != NULL)
+			_shader.setSampler(*_depthInputSampler, *_branch->getDepthAttachementOutput());
 	}
 	
 	RenderOffScreen &RenderOffScreen::useInputDepth()
@@ -324,6 +341,7 @@ namespace gl
 		_sample(1),
 		_colorAttachement(NULL),
 		_colorTexture2D(NULL),
+		_depthTexture2D(NULL),
 		_nbrColorAttachement(0),
 		_depthBuffer(NULL),
 		_stencilBuffer(NULL),
@@ -342,8 +360,10 @@ namespace gl
 		}
 		if (_depthBuffer != NULL)
 			delete _depthBuffer;
-		if (_stencilBuffer)
+		if (_stencilBuffer != NULL)
 			delete _stencilBuffer;
+		if (_depthTexture2D != NULL)
+			delete _depthTexture2D;
 	}
 
 	RenderOffScreen &RenderOffScreen::configSample(GLint sample)
@@ -368,7 +388,7 @@ namespace gl
 		GLenum *tmp_colorAttachement = new GLenum[tmp_nbrColorAttachement];
 		Texture2D **tmp_colorTexture2D = new Texture2D *[tmp_nbrColorAttachement];
 		memcpy(tmp_colorAttachement, _colorAttachement, sizeof(GLenum)* _nbrColorAttachement);
-		memcpy(tmp_colorTexture2D, _colorTexture2D, sizeof(GLenum)* _nbrColorAttachement);
+		memcpy(tmp_colorTexture2D, _colorTexture2D, sizeof(Texture2D *)* _nbrColorAttachement);
 		if (_nbrColorAttachement > 0)
 		{
 			delete[] _colorAttachement;
@@ -423,6 +443,14 @@ namespace gl
 		return (*this);
 	}
 
+	RenderOffScreen &RenderOffScreen::createDepthOutput(GLenum internalFormat)
+	{
+		if (_depthTexture2D != NULL)
+			return (*this);
+		_depthTexture2D = new Texture2D(_rect.z, _rect.w, internalFormat);
+		return (*this);
+	}
+
 	RenderOffScreen &RenderOffScreen::deleteDepthBuffer()
 	{
 		if (_depthBuffer == NULL)
@@ -430,6 +458,21 @@ namespace gl
 		delete _depthBuffer;
 		_depthBuffer = NULL;
 		return (*this);
+	}
+
+
+	RenderOffScreen &RenderOffScreen::deleteDepthOutput()
+	{
+		if (_depthTexture2D == NULL)
+			return (*this);
+		delete _depthTexture2D;
+		_depthTexture2D = NULL;
+		return (*this);
+	}
+
+	Texture2D const *RenderOffScreen::getDepthAttachementOutput() const
+	{
+		return (_depthTexture2D);
 	}
 
 	RenderBuffer const *RenderOffScreen::getDepthBuffer() const
@@ -463,8 +506,13 @@ namespace gl
 			if (element == _useInputColor.end() || element->second == false)
 				_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
 		}
-		if (_depthBuffer != NULL && _useInputDepth == false)
-			_fbo.attachement(*_depthBuffer, GL_DEPTH_ATTACHMENT);
+		if (_useInputDepth == false)
+		{
+			if (_depthTexture2D != NULL)
+				_fbo.attachement(*_depthTexture2D, GL_DEPTH_ATTACHMENT);
+			else if (_depthBuffer != NULL)
+				_fbo.attachement(*_depthBuffer, GL_DEPTH_ATTACHMENT);
+		}
 		if (_stencilBuffer != NULL && _useInputStencil == false)
 			_fbo.attachement(*_stencilBuffer, GL_STENCIL_ATTACHMENT);
 		_updateOutput = false;
