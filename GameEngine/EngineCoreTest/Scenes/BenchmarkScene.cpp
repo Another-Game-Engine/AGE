@@ -165,8 +165,9 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->pushSetTestTaskRenderPass(key.renderPass, false, false, true);
 	m->pushSetClearValueTaskRenderPass(key.renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 	m->pushClearTaskRenderPass(key.renderPass, true, true, false);
-	m->pushOutputColorRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0, GL_RGB8);
-	m->createDepthBufferRenderPass(key.renderPass);
+	m->pushOutputColorRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+	m->pushOutputColorRenderPass(key.renderPass, GL_COLOR_ATTACHMENT1, GL_RGBA8);
+	m->pushOutputColorRenderPass(key.renderPass, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
 
 	// create renderOnscreen and set it
 	key.renderOnScreen = m->addRenderOnScreen(glm::ivec4(0, 0, getInstance<IRenderContext>()->getScreenSize().x, getInstance<IRenderContext>()->getScreenSize().y));
