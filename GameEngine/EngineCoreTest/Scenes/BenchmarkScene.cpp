@@ -251,12 +251,6 @@ BenchmarkScene &BenchmarkScene::initScene()
 	getLink(light)->setPosition(glm::vec3(0, 3, 0));
 	auto lightComponent = addComponent<Component::PointLight>(light);
 
-	auto plane = createEntity();
-	auto link = getLink(plane);
-	link->setPosition(glm::vec3(0, -10, 0));
-	link->setScale(glm::vec3(100, 1, 100));
-	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
-	mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
 #endif
 	return (*this);
 }
