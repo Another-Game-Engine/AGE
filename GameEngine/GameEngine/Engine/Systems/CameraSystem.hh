@@ -36,26 +36,25 @@ protected:
 #else
 	EntityFilter _drawable;
 	EntityFilter _camera;
-	gl::RenderManager *_render;
-	gl::Key<gl::Shader> _shader;
-	gl::Key<gl::Shader> _quadShader;
-	gl::Key<gl::UniformBlock> _global_state;
-	gl::Key<gl::Uniform> _pro_matrix;
-	gl::Key<gl::Uniform> _model_matrix;
-	gl::Key<gl::Uniform> _view_matrix;
-	gl::Key<gl::Uniform> _normal_matrix;
-	gl::Key<gl::Uniform> _diffuse_color;
-	gl::Key<gl::Uniform> _diffuse_ratio;
-	gl::Key<gl::Sampler> _diffuse_texture;
-	gl::Key<gl::RenderPass> _renderPass;
-//	gl::Key<gl::RenderPostEffect> _renderPostEffect;
-	gl::Key<gl::RenderOnScreen> _renderOnScreen;
-	gl::Key<gl::Pipeline> _pipeline;
+	//gl::RenderManager *_render;
+	//gl::Key<gl::Shader> _shader;
+	//gl::Key<gl::Shader> _quadShader;
+	//gl::Key<gl::UniformBlock> _global_state;
+	//gl::Key<gl::Uniform> _pro_matrix;
+	//gl::Key<gl::Uniform> _model_matrix;
+	//gl::Key<gl::Uniform> _view_matrix;
+	//gl::Key<gl::Uniform> _normal_matrix;
+	//gl::Key<gl::Uniform> _diffuse_color;
+	//gl::Key<gl::Uniform> _diffuse_ratio;
+	//gl::Key<gl::Sampler> _diffuse_texture;
+	//gl::Key<gl::RenderPass> _renderPass;
+	//gl::Key<gl::RenderOnScreen> _renderOnScreen;
+	//gl::Key<gl::Pipeline> _pipeline;
 
-	gl::Key<gl::Render> _renderQuad;
-	gl::Key<gl::Uniform> _textureQuad;
-
-	gl::Key<gl::Uniform> _transformation;
+	//gl::Key<gl::Render> _renderQuad;
+	//gl::Key<gl::Uniform> _textureQuad;
+	//
+	//gl::Key<gl::Uniform> _transformation;
 #endif
 	virtual void updateBegin(double time);
 	virtual void updateEnd(double time);

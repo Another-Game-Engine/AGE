@@ -21,6 +21,9 @@
 
 #include <CONFIGS.hpp>
 
+# define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
+# define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
+
 Entity GLOBAL_CAMERA;
 
 class BenchmarkScene : public AScene	
@@ -46,32 +49,35 @@ public:
 //		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
 
-#ifdef RENDERING_ACTIVATED
+	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 
-		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
-	auto &m = *getInstance<gl::RenderManager>();
-#if NEW_SHADER
-	camerasystem->setManager(m);
-#endif
-
-#ifdef SIMPLE_RENDERING
-		addSystem<SimpleMeshRenderer>(80);
-#else
-#if !NEW_SHADER
-	addSystem<LightRenderingSystem>(80); // Render with the lights
-	addSystem<DownSampleSystem>(100); // DOWNSAMPLE FBO
-	addSystem<PostFxSystem>(110); // POST FXs
-	addSystem<BlitFinalRender>(120); // BLIT ON FBO 0
-
-	getSystem<PostFxSystem>()->setHDRIdealIllumination(0.3f);
-	getSystem<PostFxSystem>()->setHDRAdaptationSpeed(0.1f);
-	getSystem<PostFxSystem>()->setHDRMaxLightDiminution(0.1f);
-	getSystem<PostFxSystem>()->setHDRMaxDarkImprovement(1.2f);
-	getSystem<PostFxSystem>()->useHDR(false);
-	getSystem<PostFxSystem>()->useBloom(false);
-#endif
-#endif
-#endif
+	auto m = getInstance<gl::RenderManager>();
+	_shader = m->addShader(VERTEX_SHADER, FRAG_SHADER);
+	_global_state = m->addUniformBlock();
+	m->addShaderInterfaceBlock(_shader, "global_state", _global_state);
+	m->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
+	_model_matrix = m->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
+	_view_matrix = m->addShaderUniform(_shader, "view_matrix", glm::mat4(1.f));
+	_diffuse_color = m->addShaderUniform(_shader, "diffuse_color", glm::vec4(1.0f));
+	_diffuse_ratio = m->addShaderUniform(_shader, "diffuse_ratio", 1.0f);
+	m->bindMaterialToShader<gl::Color_diffuse>(_shader, _diffuse_color);
+	m->bindMaterialToShader<gl::Ratio_diffuse>(_shader, _diffuse_ratio);
+	m->bindTransformationToShader(_shader, _model_matrix);
+	_renderPass = m->addRenderPass(_shader, glm::ivec4(0, 0, 800, 600));
+	m->pushSetTestTaskRenderPass(_renderPass, false, false, true);
+	m->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+	m->pushClearTaskRenderPass(_renderPass, true, true, false);
+	m->pushOutputColorRenderPass(_renderPass, GL_COLOR_ATTACHMENT0, GL_RGB8);
+	m->createDepthBufferRenderPass(_renderPass);
+	_renderOnScreen = m->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
+	m->pushClearTaskRenderOnScreen(_renderOnScreen, true, true, false);
+	m->pushSetTestTaskRenderOnScreen(_renderOnScreen, false, false, true);
+	m->pushSetClearValueTaskRenderOnScreen(_renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+	_pipeline = m->addPipeline();
+	m->setPipeline(_pipeline, 0, _renderPass);
+	m->setPipeline(_pipeline, 1, _renderOnScreen);
+	m->branch(_renderPass, _renderOnScreen);
+	
 
 #ifdef LIFETIME_ACTIVATED
 		addSystem<LifetimeSystem>(2);
@@ -217,8 +223,6 @@ public:
 				rigidBody->getBody().setFriction(0.5f);
 				rigidBody->getBody().setRestitution(0.5f);
 #endif
-
-
 			}
 #ifdef LOG_FRAMERATE
 
@@ -233,6 +237,20 @@ public:
 			return false;
 		}
 #endif
+		auto &drawList = getInstance<AGE::Octree>()->getDrawableList();
+		while (!drawList.empty())
+		{
+			auto &camera = drawList.back();
+			if (camera.drawables.empty())
+				return true;
+			getInstance<gl::RenderManager>()->setUniformBlock(_global_state, 0, camera.projection);
+			getInstance<gl::RenderManager>()->setShaderUniform(_shader, _view_matrix, camera.transformation);
+			getInstance<gl::RenderManager>()->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
+			getInstance<gl::RenderManager>()->updatePipeline(_pipeline, camera.drawables);
+			getInstance<gl::RenderManager>()->drawPipelines();
+			camera.drawables.clear();
+			drawList.pop_back();
+		}
 		return true;
 	}
 private:
@@ -243,4 +261,19 @@ private:
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;
 	std::ofstream _logFile;
+
+	// rendering key
+	gl::Key<gl::Shader> _shader;
+	gl::Key<gl::Shader> _quadShader;
+	gl::Key<gl::UniformBlock> _global_state;
+	gl::Key<gl::Uniform> _pro_matrix;
+	gl::Key<gl::Uniform> _model_matrix;
+	gl::Key<gl::Uniform> _view_matrix;
+	gl::Key<gl::Uniform> _normal_matrix;
+	gl::Key<gl::Uniform> _diffuse_color;
+	gl::Key<gl::Uniform> _diffuse_ratio;
+	gl::Key<gl::Sampler> _diffuse_texture;
+	gl::Key<gl::RenderPass> _renderPass;
+	gl::Key<gl::RenderOnScreen> _renderOnScreen;
+	gl::Key<gl::Pipeline> _pipeline;
 };
