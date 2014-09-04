@@ -156,7 +156,7 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->createDepthBufferRenderPass(key.renderPass);
 
 	// create renderOnscreen and set it
-	key.renderOnScreen = m->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
+	key.renderOnScreen = m->addRenderOnScreen(glm::ivec4(0, 0, getInstance<IRenderContext>()->getScreenSize().x, getInstance<IRenderContext>()->getScreenSize().y));
 	m->pushClearTaskRenderOnScreen(key.renderOnScreen, true, true, false);
 	m->pushSetTestTaskRenderOnScreen(key.renderOnScreen, false, false, true);
 	m->pushSetClearValueTaskRenderOnScreen(key.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
@@ -229,18 +229,9 @@ BenchmarkScene &BenchmarkScene::initScene()
 
 #ifdef RENDERING_ACTIVATED
 	// build the camera
-	auto camera = createEntity();
-	GLOBAL_CAMERA = camera;
-	auto cam = addComponent<Component::CameraComponent>(camera);
-
-	// set the camera
-	auto screenSize = getInstance<IRenderContext>()->getScreenSize();
-	cam->fboSize = screenSize;
-	cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
-	cam->sampleNbr = 0;
-
-	auto camLink = getLink(camera);
-	camLink->setPosition(glm::vec3(0, 0, -10));
+	GLOBAL_CAMERA = createEntity();
+	addComponent<Component::CameraComponent>(GLOBAL_CAMERA);
+	getLink(GLOBAL_CAMERA)->setPosition(glm::vec3(0, 0, -10));
 
 	// build light
 	auto light = createEntity();

@@ -23,8 +23,6 @@
 
 #include <Render/RenderManager.hh>
 
-extern Entity GLOBAL_CAMERA;
-
 struct RenderKey
 {
 	gl::Key<gl::Shader> shader;
@@ -60,5 +58,6 @@ private:
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;
 	std::ofstream _logFile;
+	Entity GLOBALE_CAMERA;
 	RenderKey key; // rendering key
 };
