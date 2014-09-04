@@ -31,102 +31,6 @@
 //CONFIGS
 #include <CONFIGS.hpp>
 
-bool loadShaders(std::shared_ptr<Engine> e)
-{
-#if !NEW_SHADER
-	std::string	perModelVars[] =
-	{
-		"model"
-	};
-
-	std::string	perFrameVars[] =
-	{
-		"projection",
-		"view",
-		"time",
-		"pointLightNbr",
-		"spotLightNbr"
-	};
-
-	std::string	materialBasic[] =
-	{
-		"ambient",
-		"diffuse",
-		"specular",
-		"transmittance",
-		"emission",
-		"shininess"
-	};
-
-	std::string	perLightVars[] =
-	{
-		"lightVP"
-	};
-
-	auto s = e->getInstance<Renderer>()->addShader("MaterialBasic",
-		"../../Shaders/MaterialBasic.vp",
-		"../../Shaders/MaterialBasic.fp");
-
-	auto shadowDepth = e->getInstance<Renderer>()->addShader("ShadowDepth", "../../Shaders/ShadowMapping.vp", "../../Shaders/ShadowMapping.fp");
-
-	e->getInstance<Renderer>()->addUniform("MaterialBasic")
-		->init(s, "MaterialBasic", materialBasic);
-	e->getInstance<Renderer>()->addUniform("PerFrame")
-		->init(s, "PerFrame", perFrameVars);
-	e->getInstance<Renderer>()->addUniform("PerModel")
-		->init(s, "PerModel", perModelVars);
-	e->getInstance<Renderer>()->addUniform("PerLight")
-		->init(shadowDepth, "PerLight", perLightVars);
-
-	//e->getInstance<Renderer>()->addShader("2DText",
-	//	"../../Shaders/2DText.vp",
-	//	"../../Shaders/2DText.fp");
-	//
-	//e->getInstance<Renderer>()->addShader("SpriteBasic",
-	//	"../../Shaders/SpriteBasic.vp",
-	//	"../../Shaders/SpriteBasic.fp");
-
-	e->getInstance<Renderer>()->addShader("basicLight", "../../Shaders/light.vp", "../../Shaders/light.fp");
-	e->getInstance<Renderer>()->addShader("depthOnly", "../../Shaders/depthOnly.vp", "../../Shaders/depthOnly.fp");
-	e->getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerModel", "PerModel");
-	e->getInstance<Renderer>()->bindShaderToUniform("ShadowDepth", "PerLight", "PerLight");
-
-	e->getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerFrame", "PerFrame");
-	e->getInstance<Renderer>()->bindShaderToUniform("depthOnly", "PerModel", "PerModel");
-
-	e->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerFrame", "PerFrame");
-	e->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "PerModel", "PerModel");
-	e->getInstance<Renderer>()->bindShaderToUniform("MaterialBasic", "MaterialBasic", "MaterialBasic");
-
-	std::string	vars[] =
-	{
-		"projection",
-		"view"
-	};
-
-	auto sky = e->getInstance<Renderer>()->addShader("cubemapShader", "../../Shaders/cubemap.vp", "../../Shaders/cubemap.fp");
-
-	e->getInstance<Renderer>()->addUniform("cameraUniform")
-		->init(sky, "cameraUniform", vars);
-
-	e->getInstance<Renderer>()->bindShaderToUniform("cubemapShader", "cameraUniform", "cameraUniform");
-#endif
-	// set uniform and sampler
-
-
-	//
-	//gl::Key<gl::Shader> test_pipeline_1 = m->addShader("../../test_pipeline_1.vp", "../../test_pipeline_1.fp");
-	//auto &pm = m->addShaderUniform(test_pipeline_1, "projection_matrix", glm::perspective<float>(60.f, 600.f / 800.f, 1.0f, 100.0f));
-	//auto &mm = m->addShaderUniform(test_pipeline_1, "modelview_matrix", glm::mat4(1.f));
-	//size_t sizeData[2] = {sizeof(glm::vec4), sizeof(glm::mat4)};
-	//auto &ub = m->addUniformBlock(2, sizeData);
-	//auto &ib = m->addShaderInterfaceBlock(test_pipeline_1, "test", ub);
-	//m->setUniformBlock(ub, 0, glm::vec4(1.0, 0.0, 1.0, 2.0));
-	//m->setUniformBlock(ub, 1, glm::mat4(1.0));
-	return true;
-}
-
-
 bool loadAssets(std::shared_ptr<Engine> e)
 {
 
@@ -193,7 +97,7 @@ int			main(int ac, char **av)
 	uint8_t nbrComponent[2] = { 2, 2 };
 	geo.addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
 
-	if (!loadShaders(e) || !loadAssets(e))
+	if (!loadAssets(e))
 		return EXIT_FAILURE;
 #endif
 

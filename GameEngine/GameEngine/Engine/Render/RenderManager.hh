@@ -188,10 +188,7 @@ namespace gl
 	template <typename TYPE>
 	RenderManager &RenderManager::setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value)
 	{
-		UniformBlock *uniformBlock;
-
-		if ((uniformBlock = getUniformBlock(key)) == NULL)
-			return (*this);
+		UniformBlock *uniformBlock = getUniformBlock(key);
 		uniformBlock->set<TYPE>(index, value);
 		return (*this);
 	}
