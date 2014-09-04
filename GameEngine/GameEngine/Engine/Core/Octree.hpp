@@ -126,17 +126,12 @@ namespace AGE
 			glm::mat4 projection;
 		};
 
-		struct SwapDrawLists
+		struct SwapDrawLists : public TMQ::FutureData<AGE::Vector<DrawableCollection>>
 		{
-			std::promise<AGE::Vector<DrawableCollection>> promise;
-
-			SwapDrawLists() = default;
-			SwapDrawLists(const SwapDrawLists &o) = delete;
-			SwapDrawLists(SwapDrawLists &&o)
-			{
-				std::swap(std::move(promise), std::move(o.promise));
-			}
 		};
+
+		struct PrepareDrawLists
+		{};
 	}
 
 	class Octree : public Dependency<Octree>
@@ -229,7 +224,7 @@ namespace AGE
 			, const glm::mat4 &projection);
 
 		void getDrawableList(AGE::Vector<DrawableCollection> &list);
-
+		void update();
 		//
 		// END
 	private:

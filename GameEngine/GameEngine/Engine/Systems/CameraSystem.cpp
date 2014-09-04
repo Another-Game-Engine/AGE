@@ -214,6 +214,7 @@ void CameraSystem::mainUpdate(double time)
 	}
 	_totalTime += time;
 #else
+	_scene.lock()->getInstance<AGE::Octree>()->update();
 	_scene.lock()->getInstance<AGE::Octree>()->getDrawableList(_drawList);
 	while (!_drawList.empty())
 	{
