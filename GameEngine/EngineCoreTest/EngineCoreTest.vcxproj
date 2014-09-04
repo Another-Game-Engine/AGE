@@ -150,10 +150,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BenchmarkScene.cpp" />
+    <ClCompile Include="Components\LifetimeComponent.cpp" />
     <ClCompile Include="LifetimeSystem.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\lifetimeComponent.hh" />
     <ClInclude Include="CONFIGS.hpp" />
     <ClInclude Include="Scenes\BenchmarkScene.hpp" />
     <ClInclude Include="Systems\LifetimeSystem.hpp" />

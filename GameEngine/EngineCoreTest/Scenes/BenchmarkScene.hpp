@@ -1,27 +1,20 @@
 #pragma once
 
 #include <Core/AScene.hh>
+#include <Render/Key.hh>
+#include <fstream>
 
-#include <Systems/LifetimeSystem.hpp>
+namespace gl 
+{ 
+	class Shader; 
+	struct Uniform; 
+	class UniformBlock; 
+	class RenderPass; 
+	class RenderOnScreen; 
+	class Pipeline; 
+}
 
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <Systems/BulletDynamicSystem.hpp>
-#include <Systems/CollisionAdderSystem.hpp>
-#include <Systems/CollisionCleanerSystem.hpp>
-#include <Systems/CameraSystem.hh>
-#include <Components\/MeshRenderer.hh>
-#include <Components/PointLight.hh>
-
-#include <Core/AssetsManager.hpp>
-
-#include <Core/Octree.hpp>
-
-#include <Context/IRenderContext.hh>
-
-#include <CONFIGS.hpp>
-
-#include <Render/RenderManager.hh>
+//#include <glm/gtc/matrix_transform.hpp>
 
 struct RenderKey
 {
@@ -30,7 +23,6 @@ struct RenderKey
 	gl::Key<gl::Uniform> pro_matrix;
 	gl::Key<gl::Uniform> view_matrix;
 	gl::Key<gl::Uniform> normal_matrix;
-	gl::Key<gl::Sampler> diffuse_texture;
 	gl::Key<gl::RenderPass> renderPass;
 	gl::Key<gl::RenderOnScreen> renderOnScreen;
 	gl::Key<gl::Pipeline> pipeline;

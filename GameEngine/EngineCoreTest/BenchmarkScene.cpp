@@ -1,4 +1,17 @@
 #include <Scenes/BenchmarkScene.hpp>
+#include <Components/lifetimeComponent.hh>
+#include <Systems/LifetimeSystem.hpp>
+#include <Systems/BulletDynamicSystem.hpp>
+#include <Systems/CollisionAdderSystem.hpp>
+#include <Systems/CollisionCleanerSystem.hpp>
+#include <Systems/CameraSystem.hh>
+#include <Components/MeshRenderer.hh>
+#include <Components/PointLight.hh>
+#include <Core/AssetsManager.hpp>
+#include <Core/Octree.hpp>
+#include <Context/IRenderContext.hh>
+#include <CONFIGS.hpp>
+#include <Render/RenderManager.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -235,12 +248,8 @@ BenchmarkScene &BenchmarkScene::initScene()
 
 	// build light
 	auto light = createEntity();
-	auto lightLink = getLink(light);
+	getLink(light)->setPosition(glm::vec3(0, 3, 0));
 	auto lightComponent = addComponent<Component::PointLight>(light);
-	lightComponent->lightData.colorRange = glm::vec4(1, 1, 1, 30);
-	lightComponent->lightData.positionPower.w = 0.5f;
-	lightComponent->lightData.hasShadow = -1;
-	lightLink->setPosition(glm::vec3(0, 3, 0));
 
 	auto plane = createEntity();
 	auto link = getLink(plane);

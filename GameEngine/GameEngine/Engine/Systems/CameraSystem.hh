@@ -6,9 +6,6 @@
 #include <Render/Key.hh>
 #include <Components/CameraComponent.hpp>
 
-
-namespace gl { class Shader; class RenderManager; struct Uniform; class UniformBlock; class GeometryManager; struct Sampler; class RenderPass; class Render; class RenderPostEffect; class RenderOnScreen; class Pipeline; }
-
 class CameraSystem : public System
 {
 public:
