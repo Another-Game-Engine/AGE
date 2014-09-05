@@ -491,6 +491,13 @@ namespace gl
 		return (*this);
 	}
 
+	RenderManager &RenderManager::useInputBufferRenderPass(Key<RenderPass> const &key, GLenum attachement)
+	{
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->useInputBuffer(attachement);
+		return (*this);
+	}
+
 	RenderManager &RenderManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
@@ -636,6 +643,13 @@ namespace gl
 	{
 		RenderPostEffect *renderPass = getRenderPostEffect(key);
 		renderPass->popTarget();
+		return (*this);
+	}
+
+	RenderManager &RenderManager::useInputBufferRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement)
+	{
+		RenderPostEffect *renderPass = getRenderPostEffect(key);
+		renderPass->useInputBuffer(attachement);
 		return (*this);
 	}
 

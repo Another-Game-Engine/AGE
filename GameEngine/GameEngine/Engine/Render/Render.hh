@@ -101,21 +101,25 @@ namespace gl
 
 		RenderOffScreen &pushTarget(GLenum attachement);
 		RenderOffScreen &popTarget();
-		RenderOffScreen &createBufferSamplable(GLenum attachement, float x, float y, GLenum internalFormat);
+		
+		RenderOffScreen &createBufferSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
 		RenderOffScreen &createBufferSamplable(GLenum attachement, GLenum internalFormat);
 		Texture2D const *getBufferSamplable(GLenum attachement) const;
-		RenderOffScreen &createBufferNotSamplable(GLenum attachement, float x, float y, GLenum internalFormat);
+		RenderOffScreen &createBufferNotSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
 		RenderOffScreen &createBufferNotSamplable(GLenum attachement, GLenum internalFormat);
-		RenderOffScreen &deleteBufferNotSamplable(GLenum attachement);
 		RenderBuffer const *getBufferNotSamplable(GLenum attachement) const;
+		
 		RenderOffScreen &deleteBuffer(GLenum attachement);
+
+		RenderOffScreen &useInputBuffer(GLenum attachement);
 
 	protected:
 		RenderOffScreen(Shader &shader, GeometryManager &g);
 		RenderOffScreen(RenderOffScreen const &copy) = delete;
 		RenderOffScreen &operator=(RenderOffScreen const &r) = delete;
 
-		std::map<GLenum, Storage const *> _buffer;
+		std::map<GLenum, std::pair<Storage const *, bool>> _buffer; // the bool is use to determinate if the storage is own by this class or the branched one.
+
 		AGE::Vector<GLenum> _target;
 		Framebuffer _fbo;
 		GLint _sample;

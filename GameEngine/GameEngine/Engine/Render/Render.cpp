@@ -298,7 +298,7 @@ namespace gl
 	RenderOffScreen::~RenderOffScreen()
 	{
 		for (auto &element = _buffer.begin(); element != _buffer.end(); ++element)
-			if (element->second != NULL) delete element->second;
+			if (element->second.first != NULL) delete element->second.first;
 	}
 
 	RenderOffScreen &RenderOffScreen::configSample(GLint sample)
@@ -321,17 +321,22 @@ namespace gl
 		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::createBufferSamplable(GLenum attachement, float x, float y, GLenum internalFormat)
+	RenderOffScreen &RenderOffScreen::createBufferSamplable(GLenum attachement, int x, int y, GLenum internalFormat)
 	{
 		_updateFrameBuffer = true;
 		auto &element = _buffer.find(attachement);
 		if (element == _buffer.end())
-			_buffer[attachement] = new Texture2D(_rect.z, _rect.w, internalFormat);
+		{
+			auto &save = _buffer[attachement];
+			save.first = new Texture2D(x, y, internalFormat);
+			save.second = true;
+		}
 		else
 		{
-			if (element->second != NULL)
-				delete element->second;
-			element->second = new Texture2D(x, y, internalFormat);
+			if (element->second.first != NULL)
+				delete element->second.first;
+			element->second.first = new Texture2D(x, y, internalFormat);
+			element->second.second = true;
 		}
 		return (*this);
 	}
@@ -348,8 +353,8 @@ namespace gl
 		auto &element = _buffer.find(attachement);
 		if (element != _buffer.end())
 		{
-			delete element->second;
-			element->second = NULL;
+			delete element->second.first;
+			element->second.first = NULL;
 		}
 		return (*this);
 	}
@@ -361,8 +366,8 @@ namespace gl
 			return (NULL);
 		else
 		{
-			if (element->second->getType() == GL_TEXTURE_2D)
-				return ((Texture2D const *)element->second);
+			if (element->second.first->getType() == GL_TEXTURE_2D)
+				return ((Texture2D const *)element->second.first);
 			else
 				return (NULL);
 		}
@@ -374,17 +379,22 @@ namespace gl
 		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::createBufferNotSamplable(GLenum attachement, float x, float y, GLenum internalFormat)
+	RenderOffScreen &RenderOffScreen::createBufferNotSamplable(GLenum attachement, int x, int y, GLenum internalFormat)
 	{
 		_updateFrameBuffer = true;
 		auto &element = _buffer.find(attachement);
 		if (element == _buffer.end())
-			return (*this);
+		{
+			auto &save = _buffer[attachement];
+			save.first = new RenderBuffer(x, y, internalFormat);
+			save.second = true;
+		}
 		else
 		{
-			if (element->second != NULL)
-				delete element->second;
-			element->second = new RenderBuffer(x, y, internalFormat);
+			if (element->second.second != NULL)
+				delete element->second.first;
+			element->second.first = new RenderBuffer(x, y, internalFormat);
+			element->second.second = true;
 		}
 		return (*this);
 	}
@@ -396,38 +406,39 @@ namespace gl
 			return (NULL);
 		else
 		{
-			if (element->second->getType() == GL_RENDERBUFFER)
-				return ((RenderBuffer const *)element->second);
+			if (element->second.first->getType() == GL_RENDERBUFFER)
+				return ((RenderBuffer const *)element->second.first);
 			else
 				return (NULL);
 		}
 	}
 
-	//RenderOffScreen &RenderOffScreen::useInputBuffer(GLenum attachement)
-	//{
-	//	auto &search = _branch->_buffer.find(attachement);
-	//	if (search == _branch->_buffer.end())
-	//		return (*this);
-	//	auto &element = _buffer.find(attachement);
-	//	if (element == _buffer.end())
-	//		return (*this);
-	//	if (element->second != NULL)
-	//		delete element->second;
-	//	element->second = search->second;
-	//	return (*this);
-	//}
+	RenderOffScreen &RenderOffScreen::useInputBuffer(GLenum attachement)
+	{
+		auto &search = _branch->_buffer.find(attachement);
+		if (search == _branch->_buffer.end())
+			return (*this);
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
+			return (*this);
+		if (element->second.first != NULL)
+			delete element->second.first;
+		element->second.first = search->second.first;
+		element->second.second = false;
+		return (*this);
+	}
 
 	void RenderOffScreen::updateBuffer()
 	{
 		_updateBuffer = false;
-		glDrawBuffers(_target.size(), _target.data());
+		glDrawBuffers(GLsizei(_target.size()), _target.data());
 	}
 
 	void RenderOffScreen::updateFrameBuffer()
 	{
 		_updateFrameBuffer = false;
 		for (auto &element = _buffer.begin(); element != _buffer.end(); ++element)
-			_fbo.attachement(*element->second, element->first);
+			_fbo.attachement(*element->second.first, element->first);
 	}
 
 	void RenderOffScreen::updateOutput()
