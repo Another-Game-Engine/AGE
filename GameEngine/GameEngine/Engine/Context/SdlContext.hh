@@ -12,15 +12,11 @@ private:
 	SDL_Window		*_window;
 	SDL_GLContext	_glContext;
 protected:
-	virtual void _setScreenSize(const glm::uvec2 &screenSize);
-	virtual bool _start(int mode);
+	virtual bool _init(int mode);
+	virtual bool _update();
 public:
   SdlContext() { }
   virtual ~SdlContext() { }
-
-  virtual void    updateEvents(Input &input) const;
-  virtual void 	  flush() const;
-  virtual void    stop() const;
 };
 
 #endif

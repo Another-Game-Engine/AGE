@@ -31,6 +31,8 @@
 //CONFIGS
 #include <CONFIGS.hpp>
 
+#include <thread>
+
 bool loadShaders(std::shared_ptr<Engine> e)
 {
 #if !NEW_SHADER
@@ -155,9 +157,20 @@ int			main(int ac, char **av)
 	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
 
 	e->setInstance<PubSub::Manager>();
-	e->setInstance<SdlContext, IRenderContext>();
-	e->setInstance<Input>();
-	e->setInstance<Timer>();
+
+	auto renderThread = std::thread([&](){
+		auto context = e->setInstance<SdlContext, IRenderContext>();
+		if (!context->init(0, 800, 600, "~AGE~ V0.0 Demo"))
+			return;
+		e->setInstance<Input>();
+		e->setInstance<Timer>();
+
+		while (true)
+		{
+			context->update();
+		}
+	});
+
 	e->setInstance<SceneManager>();
 	e->setInstance<AGE::AssetsManager>();
 	e->setInstance<PerformanceDebugger>("Developper Name");
@@ -165,10 +178,6 @@ int			main(int ac, char **av)
 #ifdef PHYSIC_SIMULATION
 	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 #endif
-
-	// init engine
-	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
-		return (EXIT_FAILURE);
 
 	// Set default window size
 	// If config file has different value, it'll be changed automaticaly
@@ -183,6 +192,8 @@ int			main(int ac, char **av)
 
 
 	config->loadFile();
+
+	std::this_thread::sleep_for(std::chrono::seconds(300));
 
 #ifdef RENDERING_ACTIVATED
 	auto &geo = e->setInstance<gl::RenderManager>()->geometryManager;
@@ -213,5 +224,7 @@ int			main(int ac, char **av)
 		;
 	config->saveToFile();
 	e->stop();
+
+	renderThread.join();
 	return (EXIT_SUCCESS);
 }

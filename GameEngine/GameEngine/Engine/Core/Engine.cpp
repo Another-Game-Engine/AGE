@@ -1,7 +1,6 @@
 
 #include "Engine.hh"
 #include "Context/IRenderContext.hh"
-#include "Utils/OpenGL.hh"
 #include "Timer.hh"
 #include "Utils/PubSub.hpp"
 #include "SceneManager.hh"
@@ -19,18 +18,6 @@ Engine::~Engine()
 
 bool        Engine::init(int mode, unsigned int swidth, unsigned int sheight, std::string &&name)
 {
-	auto context = getInstance<IRenderContext>();
-
-	if (!context->start(mode, swidth, sheight, std::move(name)))
-		return (false);
-
-	if (glewInit() != GLEW_OK)
-	{
-		std::cerr << "glewInit Failed" << std::endl;
-		return (false);
-	}
-	glEnable(GL_ALPHA_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	return true;
 }
 
@@ -44,13 +31,13 @@ bool 		Engine::update()
 	auto context = getInstance<IRenderContext>();
 
 	auto timer = getInstance<Timer>();
-	auto inputs = getInstance<Input>();
+//	auto inputs = getInstance<Input>();
 	auto sceneManager = getInstance<SceneManager>();
 	auto time = timer->getElapsed();
 
 	timer->update();
-    inputs->clearInputs();
-	context->updateEvents(*inputs);
+//    inputs->clearInputs();
+//	context->updateEvents(*inputs);
 	sceneManager->update(time);
 	context->flush();
 
