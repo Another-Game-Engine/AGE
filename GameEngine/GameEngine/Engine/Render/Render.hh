@@ -12,6 +12,7 @@
 #include <Render/Framebuffer.hh>
 #include <Render/Shader.hh>
 #include <map>
+#include <utility>
 
 namespace AGE { struct Drawable; }
 
@@ -68,8 +69,8 @@ namespace gl
 		// Render attach to this render
 		Render &branchInput(RenderOffScreen const &input);
 		Render &unBranchInput();
-		Render &pushInputSampler(Key<Sampler> const &key);
-		Render &pushDepthInputSampler(Key<Sampler> const &key);
+		
+		Render &pushInputSampler(Key<Sampler> const &key, GLenum attachement);
 		Render &popInputSampler();
 
 	protected:
@@ -84,8 +85,7 @@ namespace gl
 		
 		Shader &_shader;
 		AGE::Vector<Task> _tasks;
-		AGE::Vector<Key<Sampler>> _inputSamplers;
-		Key<Sampler> *_depthInputSampler;
+		AGE::Vector<std::pair<Key<Sampler>, GLenum>> _inputSamplers;
 		RenderOffScreen const *_branch;
 
 		GeometryManager &_geometryManager;
@@ -98,51 +98,33 @@ namespace gl
 		virtual ~RenderOffScreen();
 
 		RenderOffScreen &configSample(GLint sample);
-		RenderOffScreen &pushColorOutput(GLenum attachement, GLenum internalFormat);
-		RenderOffScreen &pushColorOutput(GLenum attachement, size_t width, size_t height, GLenum internalFormat);
-		RenderOffScreen &popColorOutput();
-		Texture2D const &getColorOutput(size_t index) const;
-		GLenum getAttachementOutput(size_t index) const;
-		size_t getNbrAttachementOutput() const;
 
-		RenderOffScreen &createDepthOutput(GLenum internalFormat);
-		RenderOffScreen &deleteDepthOutput();
-		Texture2D  const *getDepthAttachementOutput() const;
-		RenderOffScreen &createDepthBuffer();
-		RenderOffScreen &deleteDepthBuffer();
-		RenderBuffer const *getDepthBuffer() const;
-
-		RenderOffScreen &createStencilBuffer();
-		RenderOffScreen &deleteStencilBuffer();
-		RenderBuffer const *getStencilBuffer() const;
-
-		RenderOffScreen &useInputDepth();
-		RenderOffScreen &unUseInputDepth();
-		RenderOffScreen &useInputStencil();
-		RenderOffScreen &unUseInputStencil();
-		RenderOffScreen &useInputColor(GLenum attachement);
-		RenderOffScreen &unUseInputColor(GLenum attachement);
+		RenderOffScreen &addTarget(GLenum attachement);
+		RenderOffScreen &popTarget();
+		RenderOffScreen &createBufferSamplable(GLenum attachement, float x, float y, GLenum internalFormat);
+		RenderOffScreen &createBufferSamplable(GLenum attachement, GLenum internalFormat);
+		Texture2D const *getBufferSamplable(GLenum attachement) const;
+		RenderOffScreen &createBufferNotSamplable(GLenum attachement, float x, float y, GLenum internalFormat);
+		RenderOffScreen &createBufferNotSamplable(GLenum attachement, GLenum internalFormat);
+		RenderOffScreen &deleteBufferNotSamplable(GLenum attachement);
+		RenderBuffer const *getBufferNotSamplable(GLenum attachement) const;
+		RenderOffScreen &deleteBuffer(GLenum attachement);
 
 	protected:
 		RenderOffScreen(Shader &shader, GeometryManager &g);
 		RenderOffScreen(RenderOffScreen const &copy) = delete;
 		RenderOffScreen &operator=(RenderOffScreen const &r) = delete;
 
-		GLenum *_colorAttachement;
-		Texture2D **_colorTexture2D;
-		Texture2D *_depthTexture2D;
-		uint8_t _nbrColorAttachement;
-
-		RenderBuffer *_depthBuffer;
-		RenderBuffer *_stencilBuffer;
-		bool _useInputDepth;
-		bool _useInputStencil;
-		std::map<GLenum, bool> _useInputColor;
-
+		std::map<GLenum, Storage const *> _buffer;
+		AGE::Vector<GLenum> _target;
 		Framebuffer _fbo;
 		GLint _sample;
-		bool _updateOutput;
 
+		bool _updateBuffer;
+		bool _updateFrameBuffer;
+
+		void updateBuffer();
+		void updateFrameBuffer();
 		void updateOutput();
 		void updateInput();
 	};

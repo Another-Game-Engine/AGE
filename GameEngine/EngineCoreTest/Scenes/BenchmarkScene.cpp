@@ -184,6 +184,7 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->setPipeline(key.pipeline, 0, key.renderPass);
 	m->setPipeline(key.pipeline, 1, key.renderOnScreen);
 	m->branch(key.renderPass, key.renderOnScreen);
+
 	return (*this);
 }
 

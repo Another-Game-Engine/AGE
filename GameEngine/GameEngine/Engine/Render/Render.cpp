@@ -14,7 +14,6 @@ namespace gl
 		: _rect(0, 0, 512, 512),
 		_mode(GL_TRIANGLES),
 		_shader(shader),
-		_depthInputSampler(NULL),
 		_branch(NULL),
 		_geometryManager(g)
 	{
@@ -29,8 +28,6 @@ namespace gl
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
 		}
-		if (_depthInputSampler != NULL)
-			delete _depthInputSampler;
 	}
 
 	Render &Render::pushSetScissorTask(glm::ivec4 const &area)
@@ -262,22 +259,10 @@ namespace gl
 		return (*this);
 	}
 
-	Render &Render::pushInputSampler(Key<Sampler> const &key)
+	Render &Render::pushInputSampler(Key<Sampler> const &key, GLenum attachement)
 	{
 		if (_shader.hasSampler(key))
-			_inputSamplers.push_back(key);
-		else
-			assert(0);
-		return (*this);
-	}
-
-	Render &Render::pushDepthInputSampler(Key<Sampler> const &key)
-	{
-		if (_shader.hasSampler(key))
-		{
-			_depthInputSampler = new Key<Sampler>();
-			*_depthInputSampler = key;
-		}
+			_inputSamplers.push_back(std::make_pair(key, attachement));
 		else
 			assert(0);
 		return (*this);
@@ -291,79 +276,29 @@ namespace gl
 
 	void Render::updateInput()
 	{
-		if (_branch != NULL && _inputSamplers.size() <= _branch->getNbrAttachementOutput())
+		if (_branch != NULL)
 		{
 			for (size_t index = 0; index < _inputSamplers.size(); ++index)
-				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
+			{
+				Texture2D const *text = NULL;
+				if ((text = _branch->getBufferSamplable(_inputSamplers[index].second)) != NULL)
+					_shader.setSampler(_inputSamplers[index].first, *text);
+			}
 		}
-		if (_depthInputSampler != NULL && _branch->getDepthAttachementOutput() != NULL)
-			_shader.setSampler(*_depthInputSampler, *_branch->getDepthAttachementOutput());
-	}
-	
-	RenderOffScreen &RenderOffScreen::useInputDepth()
-	{
-		_useInputDepth = true;
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::unUseInputDepth()
-	{
-		_useInputDepth = false;
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::useInputStencil()
-	{
-		_useInputStencil = true;
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::unUseInputStencil()
-	{
-		_useInputStencil = false;
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::useInputColor(GLenum attachement)
-	{
-		_useInputColor[attachement] = true;
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::unUseInputColor(GLenum attachement)
-	{
-		_useInputColor[attachement] = false;
-		return (*this);
 	}
 
 	RenderOffScreen::RenderOffScreen(Shader &shader, GeometryManager &g)
 		: Render(shader, g),
-		_sample(1),
-		_colorAttachement(NULL),
-		_colorTexture2D(NULL),
-		_depthTexture2D(NULL),
-		_nbrColorAttachement(0),
-		_depthBuffer(NULL),
-		_stencilBuffer(NULL),
-		_useInputDepth(false),
-		_useInputStencil(false),
-		_updateOutput(false)
+		_sample(0),
+		_updateBuffer(true),
+		_updateFrameBuffer(true)
 	{
 	}
 
 	RenderOffScreen::~RenderOffScreen()
 	{
-		if (_nbrColorAttachement > 0)
-		{
-			delete[] _colorAttachement;
-			delete[] _colorTexture2D;
-		}
-		if (_depthBuffer != NULL)
-			delete _depthBuffer;
-		if (_stencilBuffer != NULL)
-			delete _stencilBuffer;
-		if (_depthTexture2D != NULL)
-			delete _depthTexture2D;
+		for (auto &element = _buffer.begin(); element != _buffer.end(); ++element)
+			if (element->second != NULL) delete element->second;
 	}
 
 	RenderOffScreen &RenderOffScreen::configSample(GLint sample)
@@ -372,173 +307,158 @@ namespace gl
 		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::pushColorOutput(GLenum attachement, GLenum internalFormat)
+	RenderOffScreen &RenderOffScreen::addTarget(GLenum attachement)
 	{
-		return (pushColorOutput(attachement, _rect.z, _rect.w, internalFormat));
+		_updateBuffer = true;
+		_target.push_back(attachement);
+		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::pushColorOutput(GLenum attachement, size_t width, size_t height, GLenum internalFormat)
+	RenderOffScreen &RenderOffScreen::popTarget()
 	{
-		for (uint8_t index = 0; index < _nbrColorAttachement; ++index)
+		_updateBuffer = true;
+		_target.pop_back();
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::createBufferSamplable(GLenum attachement, float x, float y, GLenum internalFormat)
+	{
+		_updateFrameBuffer = true;
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
+			_buffer[attachement] = new Texture2D(_rect.z, _rect.w, internalFormat);
+		else
 		{
-			if (attachement == _colorAttachement[index])
-				return (*this);
+			if (element->second != NULL)
+				delete element->second;
+			element->second = new Texture2D(x, y, internalFormat);
 		}
-		GLsizei tmp_nbrColorAttachement = _nbrColorAttachement + 1;
-		GLenum *tmp_colorAttachement = new GLenum[tmp_nbrColorAttachement];
-		Texture2D **tmp_colorTexture2D = new Texture2D *[tmp_nbrColorAttachement];
-		memcpy(tmp_colorAttachement, _colorAttachement, sizeof(GLenum)* _nbrColorAttachement);
-		memcpy(tmp_colorTexture2D, _colorTexture2D, sizeof(Texture2D *)* _nbrColorAttachement);
-		if (_nbrColorAttachement > 0)
+		return (*this);
+	}
+	
+	RenderOffScreen &RenderOffScreen::createBufferSamplable(GLenum attachement, GLenum internalFormat)
+	{
+		createBufferSamplable(attachement, _rect[2], _rect[3], internalFormat);
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::deleteBuffer(GLenum attachement)
+	{
+		_updateFrameBuffer = true;
+		auto &element = _buffer.find(attachement);
+		if (element != _buffer.end())
 		{
-			delete[] _colorAttachement;
-			delete[] _colorTexture2D;
+			delete element->second;
+			element->second = NULL;
 		}
-		_colorAttachement = tmp_colorAttachement;
-		_colorTexture2D = tmp_colorTexture2D;
-		_nbrColorAttachement = tmp_nbrColorAttachement;
-		_colorTexture2D[_nbrColorAttachement - 1] = new Texture2D(width, height, internalFormat, false);
-		_colorAttachement[_nbrColorAttachement - 1] = attachement;
-		_updateOutput = true;
 		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::popColorOutput()
+	Texture2D const *RenderOffScreen::getBufferSamplable(GLenum attachement) const
 	{
-		if (_nbrColorAttachement < 1)
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
+			return (NULL);
+		else
+		{
+			if (element->second->getType() == GL_TEXTURE_2D)
+				return ((Texture2D const *)element->second);
+			else
+				return (NULL);
+		}
+	}
+
+	RenderOffScreen &RenderOffScreen::createBufferNotSamplable(GLenum attachement, float x, float y, GLenum internalFormat)
+	{
+		createBufferNotSamplable(attachement, _rect[2], _rect[3], internalFormat);
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::createBufferNotSamplable(GLenum attachement, float x, float y, GLenum internalFormat)
+	{
+		_updateFrameBuffer = true;
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
 			return (*this);
-		GLsizei tmp_nbrColorAttachement = _nbrColorAttachement - 1;
-		GLenum *tmp_colorAttachement = new GLenum[tmp_nbrColorAttachement];
-		Texture2D **tmp_colorTexture2D = new Texture2D *[tmp_nbrColorAttachement];
-		memcpy(tmp_colorAttachement, _colorAttachement, sizeof(GLenum)* tmp_nbrColorAttachement);
-		memcpy(tmp_colorTexture2D, _colorTexture2D, sizeof(GLenum)* tmp_nbrColorAttachement);
-		delete[] _colorAttachement;
-		delete[] _colorTexture2D;
-		_colorAttachement = tmp_colorAttachement;
-		_colorTexture2D = tmp_colorTexture2D;
-		_updateOutput = true;
+		else
+		{
+			if (element->second != NULL)
+				delete element->second;
+			element->second = new RenderBuffer(x, y, internalFormat);
+		}
 		return (*this);
 	}
 
-	Texture2D const &RenderOffScreen::getColorOutput(size_t index) const
+	RenderBuffer const *RenderOffScreen::getBufferNotSamplable(GLenum attachement) const
 	{
-		return (*_colorTexture2D[index]);
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
+			return (NULL);
+		else
+		{
+			if (element->second->getType() == GL_RENDERBUFFER)
+				return ((RenderBuffer const *)element->second);
+			else
+				return (NULL);
+		}
 	}
 
-	GLenum RenderOffScreen::getAttachementOutput(size_t index) const
+	//RenderOffScreen &RenderOffScreen::useInputBuffer(GLenum attachement)
+	//{
+	//	auto &search = _branch->_buffer.find(attachement);
+	//	if (search == _branch->_buffer.end())
+	//		return (*this);
+	//	auto &element = _buffer.find(attachement);
+	//	if (element == _buffer.end())
+	//		return (*this);
+	//	if (element->second != NULL)
+	//		delete element->second;
+	//	element->second = search->second;
+	//	return (*this);
+	//}
+
+	void RenderOffScreen::updateBuffer()
 	{
-		return (_colorAttachement[index]);
+		_updateBuffer = false;
+		glDrawBuffers(_target.size(), _target.data());
 	}
 
-	size_t RenderOffScreen::getNbrAttachementOutput() const
+	void RenderOffScreen::updateFrameBuffer()
 	{
-		return (_nbrColorAttachement);
-	}
-
-	RenderOffScreen &RenderOffScreen::createDepthBuffer()
-	{
-		if (_depthBuffer != NULL)
-			return (*this);
-		_depthBuffer = new RenderBuffer(_rect.z, _rect.w, GL_DEPTH_COMPONENT);
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::createDepthOutput(GLenum internalFormat)
-	{
-		if (_depthTexture2D != NULL)
-			return (*this);
-		_depthTexture2D = new Texture2D(_rect.z, _rect.w, internalFormat);
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::deleteDepthBuffer()
-	{
-		if (_depthBuffer == NULL)
-			return (*this);
-		delete _depthBuffer;
-		_depthBuffer = NULL;
-		return (*this);
-	}
-
-
-	RenderOffScreen &RenderOffScreen::deleteDepthOutput()
-	{
-		if (_depthTexture2D == NULL)
-			return (*this);
-		delete _depthTexture2D;
-		_depthTexture2D = NULL;
-		return (*this);
-	}
-
-	Texture2D const *RenderOffScreen::getDepthAttachementOutput() const
-	{
-		return (_depthTexture2D);
-	}
-
-	RenderBuffer const *RenderOffScreen::getDepthBuffer() const
-	{
-		return (_depthBuffer);
-	}
-
-	RenderOffScreen &RenderOffScreen::createStencilBuffer()
-	{
-		if (_stencilBuffer != NULL)
-			return (*this);
-		_stencilBuffer = new RenderBuffer(_rect.z, _rect.w, GL_DEPTH_COMPONENT);
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::deleteStencilBuffer()
-	{
-		if (_stencilBuffer == NULL)
-			return (*this);
-		delete _stencilBuffer;
-		_stencilBuffer = NULL;
-		return (*this);
+		_updateFrameBuffer = false;
+		for (auto &element = _buffer.begin(); element != _buffer.end(); ++element)
+			_fbo.attachement(*element->second, element->first);
 	}
 
 	void RenderOffScreen::updateOutput()
 	{
-		glDrawBuffers(_nbrColorAttachement, _colorAttachement);
-		for (size_t index = 0; index < _nbrColorAttachement; ++index)
-		{
-			auto &element = _useInputColor.find(_colorAttachement[index]);
-			if (element == _useInputColor.end() || element->second == false)
-				_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
-		}
-		if (_useInputDepth == false)
-		{
-			if (_depthTexture2D != NULL)
-				_fbo.attachement(*_depthTexture2D, GL_DEPTH_ATTACHMENT);
-			else if (_depthBuffer != NULL)
-				_fbo.attachement(*_depthBuffer, GL_DEPTH_ATTACHMENT);
-		}
-		if (_stencilBuffer != NULL && _useInputStencil == false)
-			_fbo.attachement(*_stencilBuffer, GL_STENCIL_ATTACHMENT);
-		_updateOutput = false;
+		if (_updateBuffer)
+			updateBuffer();
+		if (_updateFrameBuffer)
+			updateFrameBuffer();
 	}
 
-	void RenderOffScreen::updateInput()
-	{
-		if (_branch == NULL)
-			return;
-		Render::updateInput();
-		if (_useInputDepth && _branch->getDepthBuffer() != NULL)
-			_fbo.attachement(*_branch->getDepthBuffer(), GL_DEPTH_ATTACHMENT);
-		if (_useInputStencil && _branch->getStencilBuffer() != NULL)
-			_fbo.attachement(*_branch->getStencilBuffer(), GL_STENCIL_ATTACHMENT);
-		for (size_t index = 0; index < _branch->getNbrAttachementOutput(); ++index)
-		{
-			auto &element = _useInputColor.find(_branch->getAttachementOutput(index));
-			if (element != _useInputColor.end() && element->second == true)
-				_fbo.attachement(_branch->getColorOutput(index), _branch->getAttachementOutput(index));
-		}
-	}
+	//void RenderOffScreen::updateInput()
+	//{
+	//	if (_branch == NULL)
+	//		return;
+	//	Render::updateInput();
+	//	if (_useInputDepth && _branch->getDepthBuffer() != NULL)
+	//		_fbo.attachement(*_branch->getDepthBuffer(), GL_DEPTH_ATTACHMENT);
+	//	if (_useInputStencil && _branch->getStencilBuffer() != NULL)
+	//		_fbo.attachement(*_branch->getStencilBuffer(), GL_STENCIL_ATTACHMENT);
+	//	for (size_t index = 0; index < _branch->getNbrAttachementOutput(); ++index)
+	//	{
+	//		auto &element = _useInputColor.find(_branch->getAttachementOutput(index));
+	//		if (element != _useInputColor.end() && element->second == true)
+	//			_fbo.attachement(_branch->getColorOutput(index), _branch->getAttachementOutput(index));
+	//	}
+	//}
 
-	RenderBuffer const *RenderOffScreen::getStencilBuffer() const
-	{
-		return (_stencilBuffer);
-	}
+	//RenderBuffer const *RenderOffScreen::getStencilBuffer() const
+	//{
+	//	return (_stencilBuffer);
+	//}
 
 	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
 		: RenderOffScreen(shader, g),
@@ -560,8 +480,7 @@ namespace gl
 	Render &RenderPass::draw()
 	{
 		_fbo.bind();
-		if (_updateOutput)
-			updateOutput();
+		updateOutput();
 		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
@@ -593,8 +512,7 @@ namespace gl
 	Render &RenderPostEffect::draw()
 	{
 		_fbo.bind();
-		if (_updateOutput)
-			updateOutput();
+		updateOutput();
 		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
