@@ -307,7 +307,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::addTarget(GLenum attachement)
+	RenderOffScreen &RenderOffScreen::pushTarget(GLenum attachement)
 	{
 		_updateBuffer = true;
 		_target.push_back(attachement);
@@ -368,7 +368,7 @@ namespace gl
 		}
 	}
 
-	RenderOffScreen &RenderOffScreen::createBufferNotSamplable(GLenum attachement, float x, float y, GLenum internalFormat)
+	RenderOffScreen &RenderOffScreen::createBufferNotSamplable(GLenum attachement, GLenum internalFormat)
 	{
 		createBufferNotSamplable(attachement, _rect[2], _rect[3], internalFormat);
 		return (*this);
@@ -437,28 +437,6 @@ namespace gl
 		if (_updateFrameBuffer)
 			updateFrameBuffer();
 	}
-
-	//void RenderOffScreen::updateInput()
-	//{
-	//	if (_branch == NULL)
-	//		return;
-	//	Render::updateInput();
-	//	if (_useInputDepth && _branch->getDepthBuffer() != NULL)
-	//		_fbo.attachement(*_branch->getDepthBuffer(), GL_DEPTH_ATTACHMENT);
-	//	if (_useInputStencil && _branch->getStencilBuffer() != NULL)
-	//		_fbo.attachement(*_branch->getStencilBuffer(), GL_STENCIL_ATTACHMENT);
-	//	for (size_t index = 0; index < _branch->getNbrAttachementOutput(); ++index)
-	//	{
-	//		auto &element = _useInputColor.find(_branch->getAttachementOutput(index));
-	//		if (element != _useInputColor.end() && element->second == true)
-	//			_fbo.attachement(_branch->getColorOutput(index), _branch->getAttachementOutput(index));
-	//	}
-	//}
-
-	//RenderBuffer const *RenderOffScreen::getStencilBuffer() const
-	//{
-	//	return (_stencilBuffer);
-	//}
 
 	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
 		: RenderOffScreen(shader, g),

@@ -442,143 +442,52 @@ namespace gl
 		return (*this);
 	}
 
-	RenderManager &RenderManager::pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat)
+	RenderManager &RenderManager::createBufferSamplableRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat)
 	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->pushColorOutput(attachement, internalFormat);
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->createBufferSamplable(attachement, internalFormat);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::popOutputColorRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::createBufferNotSamplableRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat)
 	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->popColorOutput();
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->createBufferNotSamplable(attachement, internalFormat);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s)
+	RenderManager &RenderManager::deleteBufferRenderPass(Key<RenderPass> const &key, GLenum attachement)
 	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->pushInputSampler(s);
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->deleteBuffer(attachement);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::createDepthOutputRenderPass(Key<RenderPass> const &key, GLenum internalFormat)
+	RenderManager &RenderManager::pushInputRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s, GLenum attachement)
 	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->createDepthOutput(internalFormat);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::deleteDepthOutputRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->deleteDepthOutput();
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->pushInputSampler(s, attachement);
 		return (*this);
 	}
 	
-	RenderManager &RenderManager::popInputColorRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::popInputRenderPass(Key<RenderPass> const &key)
 	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
+		RenderPass *renderPass = getRenderPass(key);
 		renderPass->popInputSampler();
 		return (*this);
 	}
 
-	RenderManager &RenderManager::createDepthBufferRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::pushTargetRenderPass(Key<RenderPass> const &key, GLenum attachement)
 	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->createDepthBuffer();
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->pushTarget(attachement);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::createStencilBufferRenderPass(Key<RenderPass> const &key)
+	RenderManager &RenderManager::popTargetRenderPass(Key<RenderPass> const &key)
 	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->createStencilBuffer();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::useInputDepthRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->useInputDepth();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::unUseInputDepthRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->unUseInputDepth();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::useInputStencilRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->useInputStencil();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::unUseInputStencilRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->unUseInputStencil();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->useInputColor(attachement);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->unUseInputColor(attachement);
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->popTarget();
 		return (*this);
 	}
 
@@ -656,7 +565,7 @@ namespace gl
 		if ((shader = getShader(s)) == NULL)
 			return  (Key<RenderPostEffect>(KEY_DESTROY));
 		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *shader, geometryManager);
-		element->pushInputSampler(_preShaderQuad->getSampler(0));
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
 		return (key);
 	}
@@ -675,46 +584,58 @@ namespace gl
 
 	RenderManager &RenderManager::configRenderPostEffect(Key<RenderPostEffect> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
 	{
-		RenderPostEffect *renderPostEffect;
-
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
 		renderPostEffect->setMode(mode);
 		renderPostEffect->configRect(rect);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
+	RenderManager &RenderManager::createBufferSamplableRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
 	{
 		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
-		renderPostEffect->pushColorOutput(attachement, internalFormat);
+		renderPostEffect->createBufferSamplable(attachement, internalFormat);
 		return (*this);
 	}
 
-	RenderManager & RenderManager::popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key)
+	RenderManager &RenderManager::createBufferNotSamplableRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
 	{
 		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
-		renderPostEffect->popColorOutput();
+		renderPostEffect->createBufferNotSamplable(attachement, internalFormat);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s)
+	RenderManager &RenderManager::deleteBufferRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement)
 	{
-		RenderPostEffect *renderPostEffect;
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
+		renderPostEffect->deleteBuffer(attachement);
+		return (*this);
+	}
 
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
-		renderPostEffect->pushInputSampler(s);
+	RenderManager &RenderManager::pushInputRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s, GLenum attachement)
+	{
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
+		renderPostEffect->pushInputSampler(s, attachement);
 		return (*this);
 	}
 	
-	RenderManager &RenderManager::popInputColorRenderPostEffect(Key<RenderPostEffect> const &key)
+	RenderManager &RenderManager::popInputRenderPostEffect(Key<RenderPostEffect> const &key)
 	{
-		RenderPostEffect *renderPostEffect;
-
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
 		renderPostEffect->popInputSampler();
+		return (*this);
+	}
+
+	RenderManager &RenderManager::pushTargetRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement)
+	{
+		RenderPostEffect *renderPass = getRenderPostEffect(key);
+		renderPass->pushTarget(attachement);
+		return (*this);
+	}
+
+	RenderManager &RenderManager::popTargetRenderPostEffect(Key<RenderPostEffect> const &key)
+	{
+		RenderPostEffect *renderPass = getRenderPostEffect(key);
+		renderPass->popTarget();
 		return (*this);
 	}
 
@@ -724,7 +645,7 @@ namespace gl
 
 		createPreShaderQuad();
 		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleForm(QUAD), *_preShaderQuad, geometryManager);
-		element->pushInputSampler(_preShaderQuad->getSampler(0));
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
 		return (key);
 	}

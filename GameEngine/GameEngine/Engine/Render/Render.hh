@@ -99,7 +99,7 @@ namespace gl
 
 		RenderOffScreen &configSample(GLint sample);
 
-		RenderOffScreen &addTarget(GLenum attachement);
+		RenderOffScreen &pushTarget(GLenum attachement);
 		RenderOffScreen &popTarget();
 		RenderOffScreen &createBufferSamplable(GLenum attachement, float x, float y, GLenum internalFormat);
 		RenderOffScreen &createBufferSamplable(GLenum attachement, GLenum internalFormat);
@@ -126,7 +126,6 @@ namespace gl
 		void updateBuffer();
 		void updateFrameBuffer();
 		void updateOutput();
-		void updateInput();
 	};
 
 	class RenderOnScreen : public Render

@@ -95,30 +95,26 @@ namespace gl
 		Key<RenderPass> getRenderPass(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPass)
 		RenderManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
-		RenderManager &pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
-		RenderManager &popOutputColorRenderPass(Key<RenderPass> const &key);
-		RenderManager &pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s);
-		RenderManager &popInputColorRenderPass(Key<RenderPass> const &key);
-		RenderManager &createDepthOutputRenderPass(Key<RenderPass> const &key, GLenum internalFormat);
-		RenderManager &deleteDepthOutputRenderPass(Key<RenderPass> const &key);
-		RenderManager &createDepthBufferRenderPass(Key<RenderPass> const &key);
-		RenderManager &createStencilBufferRenderPass(Key<RenderPass> const &key);
-		RenderManager &useInputDepthRenderPass(Key<RenderPass> const &key);
-		RenderManager &unUseInputDepthRenderPass(Key<RenderPass> const &key);
-		RenderManager &useInputStencilRenderPass(Key<RenderPass> const &key);
-		RenderManager &unUseInputStencilRenderPass(Key<RenderPass> const &key);
-		RenderManager &useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
-		RenderManager &unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		RenderManager &createBufferSamplableRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
+		RenderManager &createBufferNotSamplableRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
+		RenderManager &deleteBufferRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		RenderManager &pushInputRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s, GLenum attachement);
+		RenderManager &popInputRenderPass(Key<RenderPass> const &key);
+		RenderManager &pushTargetRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		RenderManager &popTargetRenderPass(Key<RenderPass> const &key);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
 		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect)
 		RenderManager &configRenderPostEffect(Key<RenderPostEffect> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
-		RenderManager &pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
-		RenderManager &popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key);
-		RenderManager &pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s);
-		RenderManager &popInputColorRenderPostEffect(Key<RenderPostEffect> const &key);
+		RenderManager &createBufferSamplableRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
+		RenderManager &createBufferNotSamplableRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
+		RenderManager &deleteBufferRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement);
+		RenderManager &pushInputRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s, GLenum attachement);
+		RenderManager &popInputRenderPostEffect(Key<RenderPostEffect> const &key);
+		RenderManager &pushTargetRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement);
+		RenderManager &popTargetRenderPostEffect(Key<RenderPostEffect> const &key);
 
 		// RenderOnScreen
 		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect);

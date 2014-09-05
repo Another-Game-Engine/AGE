@@ -167,9 +167,11 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->pushSetTestTaskRenderPass(key.renderPass, false, false, true);
 	m->pushSetClearValueTaskRenderPass(key.renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 	m->pushClearTaskRenderPass(key.renderPass, true, true, false);
-	m->pushOutputColorRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
-	m->pushOutputColorRenderPass(key.renderPass, GL_COLOR_ATTACHMENT1, GL_RGBA8);
-	m->createDepthOutputRenderPass(key.renderPass, GL_DEPTH_COMPONENT24);
+	m->pushTargetRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0);
+	m->pushTargetRenderPass(key.renderPass, GL_COLOR_ATTACHMENT1);
+	m->createBufferSamplableRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+	m->createBufferSamplableRenderPass(key.renderPass, GL_COLOR_ATTACHMENT1, GL_RGBA8);
+	m->createBufferSamplableRenderPass(key.renderPass, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
 	m->pushSetBlendStateTask(key.renderPass, 0, false);
 	m->pushSetBlendStateTask(key.renderPass, 1, false);
 
