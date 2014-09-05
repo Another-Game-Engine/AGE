@@ -45,30 +45,34 @@ bool SdlContext::_update()
 		SDL_SetWindowSize(_window, _screenSize.x, _screenSize.y);
 		SDL_SetWindowPosition(_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 	})
+		.handle<RendCtxCommand::BoolFunction>([&](RendCtxCommand::BoolFunction& msg)
+	{
+		msg.result.set_value(msg.function());
+	})
 		.handle<RendCtxCommand::Stop>([&](const RendCtxCommand::Stop& msg)
 	{
 		returnValue = false;
 	});
 
-	SDL_Event events;
-	auto input = _dependencyManager.lock()->getInstance<Input>();
-	while (SDL_PollEvent(&events))
-	{
-		if (events.type == SDL_KEYDOWN)
-			input->addKeyInput(events.key.keysym.sym);
-		else if (events.type == SDL_KEYUP)
-			input->removeKeyInput(events.key.keysym.sym);
-		else if (events.type == SDL_MOUSEBUTTONDOWN)
-			input->addKeyInput(events.button.button);
-		else if (events.type == SDL_MOUSEBUTTONUP)
-			input->removeKeyInput(events.button.button);
-		else if (events.type == SDL_MOUSEWHEEL)
-			input->setMouseWheel(glm::i8vec2(events.wheel.x, events.wheel.y));
-		else if (events.type == SDL_MOUSEMOTION)
-			input->setMousePosition(glm::i8vec2(events.motion.x, events.motion.y), glm::i8vec2(events.motion.xrel, events.motion.yrel));
-		else
-			input->addInput(events.type);
-	}
+	//SDL_Event events;
+	//auto input = _dependencyManager.lock()->getInstance<Input>();
+	//while (SDL_PollEvent(&events))
+	//{
+	//	if (events.type == SDL_KEYDOWN)
+	//		input->addKeyInput(events.key.keysym.sym);
+	//	else if (events.type == SDL_KEYUP)
+	//		input->removeKeyInput(events.key.keysym.sym);
+	//	else if (events.type == SDL_MOUSEBUTTONDOWN)
+	//		input->addKeyInput(events.button.button);
+	//	else if (events.type == SDL_MOUSEBUTTONUP)
+	//		input->removeKeyInput(events.button.button);
+	//	else if (events.type == SDL_MOUSEWHEEL)
+	//		input->setMouseWheel(glm::i8vec2(events.wheel.x, events.wheel.y));
+	//	else if (events.type == SDL_MOUSEMOTION)
+	//		input->setMousePosition(glm::i8vec2(events.motion.x, events.motion.y), glm::i8vec2(events.motion.xrel, events.motion.yrel));
+	//	else
+	//		input->addInput(events.type);
+	//}
 	return returnValue;
 }
 

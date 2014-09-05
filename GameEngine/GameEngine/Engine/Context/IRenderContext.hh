@@ -4,8 +4,7 @@
 
 #include "Core/Input.hh"
 #include <Utils/Dependency.hpp>
-#include <tmq/doubleBuffered/queue.hpp>
-#include <tmq/doubleBuffered/templateDispatcher.hpp>
+#include <Utils/CommandQueueHolder.hpp>
 
 namespace RendCtxCommand
 {
@@ -20,9 +19,18 @@ namespace RendCtxCommand
 	};
 	struct GetScreenSize : public TMQ::FutureData < glm::uvec2 >
 	{};
+
+	struct BoolFunction : public TMQ::FutureData<bool>
+	{
+		std::function<bool()> function;
+		BoolFunction(const std::function<bool()> &_function)
+			: function(_function)
+		{
+		}
+	};
 }
 
-class IRenderContext : public Dependency<IRenderContext>
+class IRenderContext : public Dependency<IRenderContext>, public AGE::CommandQueueHolder
 {
 public:
 	IRenderContext()
@@ -40,7 +48,7 @@ public:
 		return _init(mode);
 	}
 
-	bool update()
+	virtual bool updateCommandQueue()
 	{
 		return _update();
 	}
@@ -67,7 +75,6 @@ public:
 	}
 
 protected:
-	TMQ::Double::Queue _commandQueue;
 	glm::uvec2 _screenSize;
 	std::string _windowName;
 	virtual bool _init(int mode) = 0;

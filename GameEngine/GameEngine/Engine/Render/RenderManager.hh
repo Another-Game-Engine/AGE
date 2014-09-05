@@ -16,6 +16,7 @@
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
 #include <Render/MacroRenderManager.hh>
+#include <Utils/CommandQueueHolder.hpp>
 
 namespace gl
 {
@@ -28,7 +29,28 @@ namespace gl
 	struct BindingShader;
 	class Pipeline;
 
-	class RenderManager : public Dependency<RenderManager>
+	namespace RenderManagerCmd
+	{
+		struct Stop{};
+		struct BoolFunction : public TMQ::FutureData < bool >
+		{
+			std::function<bool()> function;
+			BoolFunction(const std::function<bool()> &_function)
+				: function(_function)
+			{
+			}
+		};
+		struct VoidFunction
+		{
+			std::function<void()> function;
+			VoidFunction(const std::function<void()> &_function)
+				: function(_function)
+			{
+			}
+		};
+	}
+
+	class RenderManager : public Dependency<RenderManager>, public AGE::CommandQueueHolder
 	{
 	public:
 		GeometryManager geometryManager;
@@ -137,6 +159,21 @@ namespace gl
 		RenderManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
 		RenderManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
 
+		// CommandQueue
+		virtual bool updateCommandQueue()
+		{
+			bool result = true;
+			_commandQueue.getDispatcher()
+				.handle<RenderManagerCmd::BoolFunction>([&](RenderManagerCmd::BoolFunction& msg)
+			{
+				msg.result.set_value(msg.function());
+			})
+				.handle<RenderManagerCmd::Stop>([&](RenderManagerCmd::Stop& msg)
+			{
+				result = false;
+			});
+			return result;
+		}
 	private:
 		// all map
 		std::map<Key<Shader>, Shader *> _shaders;

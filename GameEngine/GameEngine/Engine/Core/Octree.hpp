@@ -25,8 +25,7 @@
 
 #include <Core/OctreeKey.hpp>
 
-#include <tmq/doubleBuffered/templateDispatcher.hpp>
-#include <tmq/doubleBuffered/queue.hpp>
+#include <Utils/CommandQueueHolder.hpp>
 
 #include <thread>
 #include <condition_variable>
@@ -134,7 +133,7 @@ namespace AGE
 		{};
 	}
 
-	class Octree : public Dependency<Octree>
+	class Octree : public Dependency<Octree>, public CommandQueueHolder
 	{
 	public:
 		typedef std::uint64_t USER_OBJECT_ID;
@@ -197,8 +196,6 @@ namespace AGE
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
 
-		TMQ::Double::Queue _commandQueue;
-
 		AGE::Vector<DrawableCollection> _octreeDrawList;
 
 	public:
@@ -225,6 +222,11 @@ namespace AGE
 
 		void getDrawableList(AGE::Vector<DrawableCollection> &list);
 		void update();
+		virtual bool updateCommandQueue()
+		{
+			assert(false);
+			return true;
+		}
 		//
 		// END
 	private:

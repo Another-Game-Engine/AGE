@@ -1,12 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="..\Vendors\tmq\doubleBuffered\queue.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
+    <ClCompile Include="Engine\Core\Drawable.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\Octree.cpp" />
+    <ClCompile Include="Engine\Render\Buffer.cpp" />
+    <ClCompile Include="Engine\Render\Data.cpp" />
+    <ClCompile Include="Engine\Render\Framebuffer.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManager.cpp" />
+    <ClCompile Include="Engine\Render\Material.cpp" />
+    <ClCompile Include="Engine\Render\MaterialManager.cpp" />
+    <ClCompile Include="Engine\Render\MemoryGPU.cpp" />
+    <ClCompile Include="Engine\Render\OpenGLTask.cpp" />
+    <ClCompile Include="Engine\Render\Pipeline.cpp" />
+    <ClCompile Include="Engine\Render\PixelBuffer.cpp" />
+    <ClCompile Include="Engine\Render\Pool.cpp" />
+    <ClCompile Include="Engine\Render\PreShader.cpp" />
+    <ClCompile Include="Engine\Render\Render.cpp" />
+    <ClCompile Include="Engine\Render\RenderManager.cpp" />
+    <ClCompile Include="Engine\Render\Shader.cpp" />
+    <ClCompile Include="Engine\Render\Storage.cpp" />
+    <ClCompile Include="Engine\Render\UniformBlock.cpp" />
+    <ClCompile Include="Engine\Render\VertexArray.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
@@ -43,30 +63,6 @@
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
-    <ClCompile Include="Engine\Core\Drawable.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="Engine\OpenGL\OpenGLTask.cpp" />
-    <ClCompile Include="..\Vendors\tmq\doubleBuffered\queue.cpp" />
-=======
-    <ClCompile Include="Engine\Render\Buffer.cpp" />
-    <ClCompile Include="Engine\Render\Data.cpp" />
-    <ClCompile Include="Engine\Render\GeometryManager.cpp" />
-    <ClCompile Include="Engine\Render\Material.cpp" />
-    <ClCompile Include="Engine\Render\MemoryGPU.cpp" />
-    <ClCompile Include="Engine\Render\OpenGLTask.cpp" />
-    <ClCompile Include="Engine\Render\PixelBuffer.cpp" />
-    <ClCompile Include="Engine\Render\Pool.cpp" />
-    <ClCompile Include="Engine\Render\Shader.cpp" />
-    <ClCompile Include="Engine\Render\UniformBlock.cpp" />
-    <ClCompile Include="Engine\Render\VertexArray.cpp" />
-    <ClCompile Include="Engine\Render\Framebuffer.cpp" />
-    <ClCompile Include="Engine\Render\Storage.cpp" />
-    <ClCompile Include="Engine\Render\PreShader.cpp" />
-    <ClCompile Include="Engine\Render\MaterialManager.cpp" />
-    <ClCompile Include="Engine\Render\Render.cpp" />
-    <ClCompile Include="Engine\Render\Pipeline.cpp" />
-    <ClCompile Include="Engine\Render\RenderManager.cpp" />
->>>>>>> ab854dda420cab1a822fc22df59dfd34cb2a657d
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
@@ -74,10 +70,13 @@
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
+    <ClInclude Include="Engine\Core\Drawable.hh" />
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\Octree.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
+    <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
+    <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
@@ -85,6 +84,27 @@
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
+    <ClInclude Include="Engine\Render\Buffer.hh" />
+    <ClInclude Include="Engine\Render\Data.hh" />
+    <ClInclude Include="Engine\Render\Framebuffer.hh" />
+    <ClInclude Include="Engine\Render\GeometryManager.hh" />
+    <ClInclude Include="Engine\Render\Key.hh" />
+    <ClInclude Include="Engine\Render\Key.hpp" />
+    <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
+    <ClInclude Include="Engine\Render\Material.hh" />
+    <ClInclude Include="Engine\Render\MaterialManager.hh" />
+    <ClInclude Include="Engine\Render\MemoryGPU.hh" />
+    <ClInclude Include="Engine\Render\OpenGLTask.hh" />
+    <ClInclude Include="Engine\Render\Pipeline.hh" />
+    <ClInclude Include="Engine\Render\PixelBuffer.hh" />
+    <ClInclude Include="Engine\Render\Pool.hh" />
+    <ClInclude Include="Engine\Render\Render.hh" />
+    <ClInclude Include="Engine\Render\RenderManager.hh" />
+    <ClInclude Include="Engine\Render\Shader.hh" />
+    <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
+    <ClInclude Include="Engine\Render\Storage.hh" />
+    <ClInclude Include="Engine\Render\UniformBlock.hh" />
+    <ClInclude Include="Engine\Render\VertexArray.hh" />
     <ClInclude Include="Engine\Skinning\Animation.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationInstance.hpp" />
@@ -96,8 +116,15 @@
     <ClInclude Include="Engine\Components\SpotLight.hh" />
     <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
+    <ClInclude Include="Engine\Texture\Texture.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\CommandQueue.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\PtrQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
+    <ClInclude Include="Engine\Utils\DataSwapper.hpp" />
+    <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
@@ -166,39 +193,7 @@
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
-    <ClInclude Include="Engine\Core\Drawable.hh" />
-    <ClInclude Include="Engine\Geometry\Material.hpp" />
-    <ClInclude Include="Engine\Texture\Texture.hpp" />
-    <ClInclude Include="Engine\Core\OctreeKey.hpp" />
-    <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
-    <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
-<<<<<<< HEAD
-    <ClInclude Include="Engine\Utils\Containers\CommandQueue.hpp" />
-    <ClInclude Include="Engine\Utils\Containers\PtrQueue.hpp" />
-    <ClInclude Include="Engine\Utils\DataSwapper.hpp" />
-=======
-    <ClInclude Include="Engine\Render\Buffer.hh" />
-    <ClInclude Include="Engine\Render\Data.hh" />
-    <ClInclude Include="Engine\Render\GeometryManager.hh" />
-    <ClInclude Include="Engine\Render\Key.hh" />
-    <ClInclude Include="Engine\Render\Key.hpp" />
-    <ClInclude Include="Engine\Render\Material.hh" />
-    <ClInclude Include="Engine\Render\MemoryGPU.hh" />
-    <ClInclude Include="Engine\Render\OpenGLTask.hh" />
-    <ClInclude Include="Engine\Render\PixelBuffer.hh" />
-    <ClInclude Include="Engine\Render\Pool.hh" />
-    <ClInclude Include="Engine\Render\Shader.hh" />
-    <ClInclude Include="Engine\Render\UniformBlock.hh" />
-    <ClInclude Include="Engine\Render\VertexArray.hh" />
-    <ClInclude Include="Engine\Render\Framebuffer.hh" />
-    <ClInclude Include="Engine\Render\Storage.hh" />
-    <ClInclude Include="Engine\Render\MaterialManager.hh" />
-    <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
-    <ClInclude Include="Engine\Render\Render.hh" />
-    <ClInclude Include="Engine\Render\Pipeline.hh" />
-    <ClInclude Include="Engine\Render\RenderManager.hh" />
-    <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
->>>>>>> ab854dda420cab1a822fc22df59dfd34cb2a657d
+    <ClInclude Include="Engine\Utils\CommandQueueHolder.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
