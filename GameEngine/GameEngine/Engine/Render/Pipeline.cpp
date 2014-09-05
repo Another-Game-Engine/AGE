@@ -63,7 +63,7 @@ namespace gl
 			if (time == _times[index])
 			{
 				if (_rendering[index]->getType() == RENDER_PASS)
-					((RenderPass *)_rendering[index])->setRenderPassObjects(*_toRender);
+					((RenderPass *)_rendering[index])->setObjectsToRender(*_toRender);
 				_rendering[index]->draw();
 			}
 		}

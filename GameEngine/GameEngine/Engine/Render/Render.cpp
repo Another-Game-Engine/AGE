@@ -451,6 +451,7 @@ namespace gl
 
 	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
 		: RenderOffScreen(shader, g),
+		_typeRendering(RenderingObjectType::GLOBAL_RENDER),
 		_objectsToRender(NULL),
 		_materialManager(m)
 	{
@@ -460,21 +461,35 @@ namespace gl
 	{
 	}
 
-	RenderPass &RenderPass::setRenderPassObjects(AGE::Vector<AGE::Drawable> const &objects)
+	RenderPass &RenderPass::setTypeOfRenderingObjects(RenderingObjectType type)
+	{
+		_typeRendering = type;
+		return (*this);
+	}
+
+	RenderPass &RenderPass::setObjectsToRender(AGE::Vector<AGE::Drawable> const &objects)
 	{
 		_objectsToRender = &objects;
 		return (*this);
 	}
 
-	Render &RenderPass::draw()
+	void RenderPass::separateDraw()
 	{
-		_fbo.bind();
-		updateOutput();
-		updateInput();
+		for (size_t index = 0; index < _objectsToRender->size(); ++index)
+		{
+			for (size_t i = 0; i < _tasks.size(); ++i)
+				_tasks[i].func(_tasks[i].params);
+			AGE::Drawable const &object = (*_objectsToRender)[index];
+			_materialManager.setShader(object.material, _shader);
+			_shader.update(object.transformation);
+			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
+		}
+	}
+
+	void RenderPass::globalDraw()
+	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		if (_objectsToRender == NULL)
-			return (*this);
 		for (size_t index = 0; index < _objectsToRender->size(); ++index)
 		{
 			AGE::Drawable const &object = (*_objectsToRender)[index];
@@ -482,7 +497,19 @@ namespace gl
 			_shader.update(object.transformation);
 			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
 		}
-		_fbo.unbind();
+	}
+
+	Render &RenderPass::draw()
+	{
+		_fbo.bind();
+		updateOutput();
+		updateInput();
+		if (_objectsToRender == NULL)
+			return (*this);
+		if (_typeRendering == RenderingObjectType::GLOBAL_RENDER)
+			globalDraw();
+		else
+			separateDraw();
 		return (*this);
 	}
 
@@ -507,7 +534,6 @@ namespace gl
 			_tasks[index].func(_tasks[index].params);
 		_shader.update();
 		_geometryManager.draw(_mode, _quad);
-		_fbo.unbind();
 		return (*this);
 	}
 
@@ -525,6 +551,8 @@ namespace gl
 
 	Render &RenderOnScreen::draw()
 	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDrawBuffer(GL_BACK);
 		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);

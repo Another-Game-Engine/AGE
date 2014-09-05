@@ -33,6 +33,12 @@ namespace gl
 		RENDER_ON_SCREEN
 	};
 
+	enum RenderingObjectType
+	{
+		GLOBAL_RENDER = 0,
+		SEPARATE_RENDER
+	};
+
 	class Render
 	{
 	public:
@@ -41,7 +47,7 @@ namespace gl
 		virtual Render &draw() = 0;
 		virtual RenderType getType() const = 0;
 
-		// prepare draw
+		// state
 		Render &pushSetScissorTask(glm::ivec4 const &area);
 		Render &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
 		Render &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
@@ -153,14 +159,18 @@ namespace gl
 		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m);
 		virtual ~RenderPass();
 
-		RenderPass &setRenderPassObjects(AGE::Vector<AGE::Drawable> const &objects);
+		RenderPass &setTypeOfRenderingObjects(RenderingObjectType type);
+		RenderPass &setObjectsToRender(AGE::Vector<AGE::Drawable> const &objects);
 		virtual Render &draw();
 		virtual RenderType getType() const;
 	
 	private:
+		void separateDraw();
+		void globalDraw();
 		RenderPass(RenderPass const &copy) = delete;
 		RenderPass &operator=(RenderPass const &r) = delete;
 	
+		RenderingObjectType _typeRendering;
 		AGE::Vector<AGE::Drawable> const *_objectsToRender;
 
 		MaterialManager &_materialManager;

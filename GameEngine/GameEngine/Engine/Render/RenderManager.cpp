@@ -498,6 +498,13 @@ namespace gl
 		return (*this);
 	}
 
+	RenderManager &RenderManager::setRenderingObjectsType(Key<RenderPass> const &key, RenderingObjectType type)
+	{
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->setTypeOfRenderingObjects(type);
+		return (*this);
+	}
+
 	RenderManager &RenderManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
@@ -826,7 +833,7 @@ namespace gl
 			return (*this);
 		if ((renderPass = getRenderPass(r)) == NULL)
 			return (*this);
-		renderPass->setRenderPassObjects(objectRender);
+		renderPass->setObjectsToRender(objectRender);
 		renderOnScreen->branchInput(*renderPass);
 		renderPass->draw();
 		renderOnScreen->draw();
