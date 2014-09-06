@@ -402,6 +402,7 @@
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
+    <ClInclude Include="Engine\Utils\ThreadQueue.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
   </ItemGroup>
   <ItemGroup>
