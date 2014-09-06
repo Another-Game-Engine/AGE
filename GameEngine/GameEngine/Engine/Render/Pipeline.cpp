@@ -7,7 +7,8 @@ namespace gl
 	Pipeline::Pipeline()
 		: _times(NULL),
 		_rendering(NULL),
-		_nbrRendering(0)
+		_nbrRendering(0),
+		_toRender(nullptr)
 	{
 	}
 
@@ -58,6 +59,8 @@ namespace gl
 
 	Pipeline &Pipeline::draw(uint8_t time)
 	{
+		if (!_toRender)
+			return(*this);
 		for (uint8_t index = 0; index < _nbrRendering; ++index)
 		{
 			if (time == _times[index])

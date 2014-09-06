@@ -65,6 +65,10 @@ int			main(int ac, char **av)
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
 
+	// Important, we have to launch the command queue from the sender thread
+	context->launchCommandQueue();
+	renderManager->launchCommandQueue();
+
 	auto renderThread = std::thread([&]()
 	{
 		bool renderUpdate = true;
@@ -78,10 +82,6 @@ int			main(int ac, char **av)
 				break;
 		}
 	});
-
-	// Important, we have to launch the command queue from the sender thread
-	context->launchCommandQueue();
-	renderManager->launchCommandQueue();
 
 	auto contextInit = context->getCommandQueue().priorityEmplace<RendCtxCommand::BoolFunction, bool>(
 		std::function<bool()>([&](){
@@ -138,7 +138,7 @@ int			main(int ac, char **av)
 
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
 
-	std::this_thread::sleep_for(std::chrono::seconds(300));
+//	std::this_thread::sleep_for(std::chrono::seconds(300));
 
 	// launch engine
 	if (e->start() == false)

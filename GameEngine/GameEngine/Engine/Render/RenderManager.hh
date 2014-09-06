@@ -42,11 +42,13 @@ namespace gl
 		};
 		struct VoidFunction
 		{
-			std::function<void()> function;
-			VoidFunction(const std::function<void()> &_function)
+			std::function<void(void)> function;
+			VoidFunction(const std::function<void(void)> &_function)
 				: function(_function)
 			{
 			}
+			VoidFunction(const VoidFunction &) = delete;
+			VoidFunction &operator=(const VoidFunction&) = delete;
 		};
 	}
 
@@ -167,6 +169,13 @@ namespace gl
 				.handle<RenderManagerCmd::BoolFunction>([&](RenderManagerCmd::BoolFunction& msg)
 			{
 				msg.result.set_value(msg.function());
+			})
+				.handle<RenderManagerCmd::VoidFunction>([&](const RenderManagerCmd::VoidFunction& msg)
+			{
+				if (msg.function)
+					msg.function();
+				else
+					std::cout << "Prout" << std::endl;
 			})
 				.handle<RenderManagerCmd::Stop>([&](RenderManagerCmd::Stop& msg)
 			{

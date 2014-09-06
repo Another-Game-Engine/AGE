@@ -55,7 +55,8 @@ public:
 
 	void flush()
 	{
-		_commandQueue.emplace<RendCtxCommand::Flush>();
+ 		_commandQueue.emplace<RendCtxCommand::Flush>();
+		_commandQueue.releaseReadability();
 	}
 
 	void stop()
