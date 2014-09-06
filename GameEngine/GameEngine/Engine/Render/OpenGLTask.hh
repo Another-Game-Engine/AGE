@@ -5,6 +5,7 @@
 
 namespace gl
 {
+
 	void setClearValue(void **);
 	void setColorMask(void **);
 	void setDepthMask(void **);
@@ -32,6 +33,7 @@ namespace gl
 	void setUniformVec4(void **);
 	void setUniformSampler(void **);
 	void setFragDataLocation(void **);
+	void draw(void **);
 
 	struct MaterialBindTask
 	{

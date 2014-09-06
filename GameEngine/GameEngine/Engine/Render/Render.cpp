@@ -452,8 +452,7 @@ namespace gl
 	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
 		: RenderOffScreen(shader, g),
 		_typeRendering(RenderingObjectType::GLOBAL_RENDER),
-		_objectsToRender(NULL),
-		_materialManager(m)
+		_drawData(DrawData(shader, g, m, _mode))
 	{
 	}
 
@@ -461,12 +460,12 @@ namespace gl
 	{
 	}
 
-	RenderPass &RenderPass::pushDrawTask(RenderPass *itself, GeometryManager *g, MaterialManager *m)
+	RenderPass &RenderPass::pushDrawTask()
 	{
 		Task task;
 
-		setTaskAllocation(task, itself, g, m);
-		task.func = NULL;
+		setTaskAllocation(task, &_drawData);
+		task.func = draw;
 		_tasks.push_back(task);
 		return (*this);
 	}
@@ -479,37 +478,26 @@ namespace gl
 
 	RenderPass &RenderPass::setObjectsToRender(AGE::Vector<AGE::Drawable> const &objects)
 	{
-		_objectsToRender = &objects;
+		_drawData.toRender = &objects;
 		return (*this);
 	}
 
 	void RenderPass::separateDraw()
 	{
-		for (size_t _startObjectToRender = 0; _startObjectToRender < _objectsToRender->size(); ++_startObjectToRender)
+		for (_drawData.start = 0; _drawData.start < _drawData.toRender->size(); ++_drawData.start)
 		{
-			_endObjectToRender = _startObjectToRender + 1;
+			_drawData.end = _drawData.start + 1;
 			for (size_t i = 0; i < _tasks.size(); ++i)
 				_tasks[i].func(_tasks[i].params);
-			AGE::Drawable const &object = (*_objectsToRender)[_startObjectToRender];
-			_materialManager.setShader(object.material, _shader);
-			_shader.update(object.transformation);
-			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
 		}
 	}
 
 	void RenderPass::globalDraw()
 	{
-		_startObjectToRender = 0;
-		_endObjectToRender = _objectsToRender->size();
+		_drawData.start = 0;
+		_drawData.end = _drawData.toRender->size();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		for (size_t _startObjectToRender = 0; _startObjectToRender < _endObjectToRender; ++_startObjectToRender)
-		{
-			AGE::Drawable const &object = (*_objectsToRender)[_startObjectToRender];
-			_materialManager.setShader(object.material, _shader);
-			_shader.update(object.transformation);
-			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
-		}
 	}
 
 	Render &RenderPass::render()
@@ -517,7 +505,7 @@ namespace gl
 		_fbo.bind();
 		updateOutput();
 		updateInput();
-		if (_objectsToRender == NULL)
+		if (_drawData.toRender == NULL)
 			return (*this);
 		if (_typeRendering == RenderingObjectType::GLOBAL_RENDER)
 			globalDraw();
@@ -587,5 +575,17 @@ namespace gl
 	RenderType RenderPass::getType() const
 	{
 		return (RenderType::RENDER_PASS);
+	}
+
+	DrawData::DrawData(Shader &s, GeometryManager &g, MaterialManager &m, GLenum mode)
+		: shader(s),
+		geometryManager(g),
+		materialManager(m),
+		mode(mode),
+		start(0),
+		end(0),
+		toRender(NULL)
+	{
+
 	}
 }

@@ -39,6 +39,18 @@ namespace gl
 		SEPARATE_RENDER
 	};
 
+	struct DrawData
+	{
+		GLenum mode;
+		size_t start;
+		size_t end;
+		AGE::Vector<AGE::Drawable> const *toRender;
+		Shader &shader;
+		GeometryManager &geometryManager;
+		MaterialManager &materialManager;
+		DrawData(Shader &s, GeometryManager &g, MaterialManager &m, GLenum mode);
+	};
+
 	class Render
 	{
 	public:
@@ -159,7 +171,7 @@ namespace gl
 		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m);
 		virtual ~RenderPass();
 
-		RenderPass &pushDrawTask(RenderPass *itself, GeometryManager *g, MaterialManager *m);
+		RenderPass &pushDrawTask();
 
 		RenderPass &setTypeOfRenderingObjects(RenderingObjectType type);
 		RenderPass &setObjectsToRender(AGE::Vector<AGE::Drawable> const &objects);
@@ -173,11 +185,7 @@ namespace gl
 		RenderPass &operator=(RenderPass const &r) = delete;
 	
 		RenderingObjectType _typeRendering;
-		size_t _startObjectToRender;
-		size_t _endObjectToRender;
-		AGE::Vector<AGE::Drawable> const *_objectsToRender;
-
-		MaterialManager &_materialManager;
+		DrawData _drawData;
 	};
 
 	class RenderPostEffect : public RenderOffScreen

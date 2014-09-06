@@ -4,6 +4,10 @@
 #include <assert.h>
 #include <memory>
 #include <string>
+#include <Core/Drawable.hh>
+#include <Render/Render.hh>
+#include <Render/GeometryManager.hh>
+#include <Render/MaterialManager.hh>
 
 #define CONVERT(type, index) (*((type *)data[index]))
 
@@ -153,6 +157,19 @@ namespace gl
 	{
 		glActiveTexture(GL_TEXTURE0 + CONVERT(GLuint, 0));
 		glBindTexture(CONVERT(GLenum, 1), CONVERT(GLint, 2));
+	}
+
+	void draw(void **data)
+	{
+		DrawData *task = CONVERT(DrawData *, 0);
+
+		for (size_t index = task->start; index < task->end; ++index)
+		{
+			AGE::Drawable const &object = (*task->toRender)[index];
+			task->materialManager.setShader(object.material, task->shader);
+			task->shader.update(object.transformation);
+			task->geometryManager.draw(task->mode, object.mesh.indices, object.mesh.vertices);
+		}
 	}
 
 	Task::Task()
