@@ -44,7 +44,7 @@ namespace gl
 	public:
 		virtual ~Render();
 
-		virtual Render &draw() = 0;
+		virtual Render &render() = 0;
 		virtual RenderType getType() const = 0;
 
 		// state
@@ -144,7 +144,7 @@ namespace gl
 		virtual ~RenderOnScreen();
 		RenderOnScreen(Key<Vertices> const &key, Shader &shader, GeometryManager &g);
 
-		virtual Render &draw();
+		virtual Render &render();
 		virtual RenderType getType() const;
 	private:
 		RenderOnScreen(RenderOnScreen const &copy) = delete;
@@ -159,9 +159,11 @@ namespace gl
 		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m);
 		virtual ~RenderPass();
 
+		RenderPass &pushDrawTask(RenderPass *itself, GeometryManager *g, MaterialManager *m);
+
 		RenderPass &setTypeOfRenderingObjects(RenderingObjectType type);
 		RenderPass &setObjectsToRender(AGE::Vector<AGE::Drawable> const &objects);
-		virtual Render &draw();
+		virtual Render &render();
 		virtual RenderType getType() const;
 	
 	private:
@@ -171,6 +173,8 @@ namespace gl
 		RenderPass &operator=(RenderPass const &r) = delete;
 	
 		RenderingObjectType _typeRendering;
+		size_t _startObjectToRender;
+		size_t _endObjectToRender;
 		AGE::Vector<AGE::Drawable> const *_objectsToRender;
 
 		MaterialManager &_materialManager;
@@ -182,7 +186,7 @@ namespace gl
 		RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g);
 		virtual ~RenderPostEffect();
 
-		virtual Render &draw();
+		virtual Render &render();
 		virtual RenderType getType() const;
 	private:
 		RenderPostEffect(RenderPostEffect const &copy) = delete;

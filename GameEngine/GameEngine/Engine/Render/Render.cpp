@@ -461,6 +461,16 @@ namespace gl
 	{
 	}
 
+	RenderPass &RenderPass::pushDrawTask(RenderPass *itself, GeometryManager *g, MaterialManager *m)
+	{
+		Task task;
+
+		setTaskAllocation(task, itself, g, m);
+		task.func = NULL;
+		_tasks.push_back(task);
+		return (*this);
+	}
+
 	RenderPass &RenderPass::setTypeOfRenderingObjects(RenderingObjectType type)
 	{
 		_typeRendering = type;
@@ -475,11 +485,12 @@ namespace gl
 
 	void RenderPass::separateDraw()
 	{
-		for (size_t index = 0; index < _objectsToRender->size(); ++index)
+		for (size_t _startObjectToRender = 0; _startObjectToRender < _objectsToRender->size(); ++_startObjectToRender)
 		{
+			_endObjectToRender = _startObjectToRender + 1;
 			for (size_t i = 0; i < _tasks.size(); ++i)
 				_tasks[i].func(_tasks[i].params);
-			AGE::Drawable const &object = (*_objectsToRender)[index];
+			AGE::Drawable const &object = (*_objectsToRender)[_startObjectToRender];
 			_materialManager.setShader(object.material, _shader);
 			_shader.update(object.transformation);
 			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
@@ -488,18 +499,20 @@ namespace gl
 
 	void RenderPass::globalDraw()
 	{
+		_startObjectToRender = 0;
+		_endObjectToRender = _objectsToRender->size();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		for (size_t index = 0; index < _objectsToRender->size(); ++index)
+		for (size_t _startObjectToRender = 0; _startObjectToRender < _endObjectToRender; ++_startObjectToRender)
 		{
-			AGE::Drawable const &object = (*_objectsToRender)[index];
+			AGE::Drawable const &object = (*_objectsToRender)[_startObjectToRender];
 			_materialManager.setShader(object.material, _shader);
 			_shader.update(object.transformation);
 			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
 		}
 	}
 
-	Render &RenderPass::draw()
+	Render &RenderPass::render()
 	{
 		_fbo.bind();
 		updateOutput();
@@ -525,7 +538,7 @@ namespace gl
 
 	}
 
-	Render &RenderPostEffect::draw()
+	Render &RenderPostEffect::render()
 	{
 		_fbo.bind();
 		updateOutput();
@@ -549,7 +562,7 @@ namespace gl
 
 	}
 
-	Render &RenderOnScreen::draw()
+	Render &RenderOnScreen::render()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glDrawBuffer(GL_BACK);

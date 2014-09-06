@@ -64,7 +64,7 @@ namespace gl
 			{
 				if (_rendering[index]->getType() == RENDER_PASS)
 					((RenderPass *)_rendering[index])->setObjectsToRender(*_toRender);
-				_rendering[index]->draw();
+				_rendering[index]->render();
 			}
 		}
 		return (*this);

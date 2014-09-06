@@ -835,8 +835,8 @@ namespace gl
 			return (*this);
 		renderPass->setObjectsToRender(objectRender);
 		renderOnScreen->branchInput(*renderPass);
-		renderPass->draw();
-		renderOnScreen->draw();
+		renderPass->render();
+		renderOnScreen->render();
 		return (*this);
 	}
 }

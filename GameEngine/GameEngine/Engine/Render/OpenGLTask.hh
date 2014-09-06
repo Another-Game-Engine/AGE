@@ -33,6 +33,13 @@ namespace gl
 	void setUniformSampler(void **);
 	void setFragDataLocation(void **);
 
+	struct MaterialBindTask
+	{
+		size_t indexTask;
+		size_t offsetMaterial;
+		bool isUse;
+	};
+
 	struct Task
 	{
 		int nbrParams;

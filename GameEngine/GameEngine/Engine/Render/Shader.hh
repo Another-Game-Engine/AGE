@@ -18,13 +18,6 @@ namespace gl
 	struct InterfaceBlock{};
 	struct Output{};
 
-	struct MaterialBind
-	{
-		size_t indexTask;
-		size_t offsetMaterial;
-		bool isUse;
-	};
-
 	//!\file Shader.hh
 	//!\author Dorian Pinaud
 	//!\version v1.0
@@ -88,7 +81,7 @@ namespace gl
 
 		// binding for object in shader
 		Key<Uniform> _bindTransformation;
-		std::vector<MaterialBind> _bindMaterial;
+		std::vector<MaterialBindTask> _bindMaterial;
 		
 		// pool stack
 		AGE::Vector<Task> _tasks;
@@ -126,11 +119,11 @@ namespace gl
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
 		void createUniformBlockTask(Task &task, std::string const &flag, UniformBlock &ubo);
-		void setMaterialBinding(MaterialBind &bind, size_t index, size_t offset);
+		void setMaterialBinding(MaterialBindTask &bind, size_t index, size_t offset);
 		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **), void *data);
 		void setSamplerTask(Task &task, Texture const &texture);
 		void setUniformBlockTask(Task &task, UniformBlock &ubo);
-		void setTaskWithMaterial(MaterialBind const &bind, Material const &material);
+		void setTaskWithMaterial(MaterialBindTask const &bind, Material const &material);
 		void setTransformationTask(glm::mat4 const &mat);
 	};
 
@@ -216,14 +209,14 @@ namespace gl
 		ubo.introspection(*this, *((GLuint *)task.params[1]));
 	}
 
-	inline void Shader::setMaterialBinding(MaterialBind &bind, size_t index, size_t offset)
+	inline void Shader::setMaterialBinding(MaterialBindTask &bind, size_t index, size_t offset)
 	{
 		bind.indexTask = index;
 		bind.isUse = true;
 		bind.offsetMaterial = offset;
 	}
 
-	inline void Shader::setTaskWithMaterial(MaterialBind const &bind, Material const &material)
+	inline void Shader::setTaskWithMaterial(MaterialBindTask const &bind, Material const &material)
 	{
 		Task &task = _tasks[bind.indexTask];
 		size_t sizeParam = task.sizeParams[task.indexToTarget];

@@ -448,8 +448,8 @@ namespace gl
 	{
 		use();
 		for (size_t index = 0; index < _bindMaterial.size(); ++index)
-		if (_bindMaterial[index].isUse)
-			setTaskWithMaterial(_bindMaterial[index], material);
+			if (_bindMaterial[index].isUse)
+				setTaskWithMaterial(_bindMaterial[index], material);
 		return (*this);
 	}
 
@@ -486,7 +486,7 @@ namespace gl
 				return (index);
 			}
 		}
-		MaterialBind mb;
+		MaterialBindTask mb;
 		setMaterialBinding(mb, indexTask, offset);
 		_bindMaterial.push_back(mb);
 		return (_bindMaterial.size() - 1);
