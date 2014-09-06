@@ -27,7 +27,11 @@ namespace RendCtxCommand
 			: function(_function)
 		{
 		}
+		virtual ~BoolFunction()
+		{}
 	};
+	struct RefreshInputs
+	{};
 }
 
 class IRenderContext : public Dependency<IRenderContext>, public AGE::CommandQueueHolder
@@ -56,7 +60,11 @@ public:
 	void flush()
 	{
  		_commandQueue.emplace<RendCtxCommand::Flush>();
-		_commandQueue.releaseReadability();
+	}
+
+	void refreshInputs()
+	{
+ 		_commandQueue.emplace<RendCtxCommand::RefreshInputs>();
 	}
 
 	void stop()

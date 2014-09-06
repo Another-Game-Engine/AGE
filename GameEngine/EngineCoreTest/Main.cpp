@@ -74,10 +74,10 @@ int			main(int ac, char **av)
 		bool renderUpdate = true;
 		while (renderUpdate)
 		{
-			renderUpdate = context->updateCommandQueue();
+			renderUpdate = renderManager->updateCommandQueue();
 			if (!renderUpdate)
 				break;
-			renderUpdate = renderManager->updateCommandQueue();
+			renderUpdate = context->updateCommandQueue();
 			if (!renderUpdate)
 				break;
 		}

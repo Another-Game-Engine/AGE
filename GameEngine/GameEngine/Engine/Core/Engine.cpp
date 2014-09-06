@@ -31,15 +31,14 @@ bool 		Engine::update()
 	auto context = getInstance<IRenderContext>();
 
 	auto timer = getInstance<Timer>();
-//	auto inputs = getInstance<Input>();
 	auto sceneManager = getInstance<SceneManager>();
 	auto time = timer->getElapsed();
 
 	timer->update();
-//    inputs->clearInputs();
-//	context->updateEvents(*inputs);
+	context->refreshInputs();
 	sceneManager->update(time);
 	context->flush();
+	context->getCommandQueue().releaseReadability();
 
 	return (sceneManager->userUpdate(time));
 }

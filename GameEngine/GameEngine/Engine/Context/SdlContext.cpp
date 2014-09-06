@@ -49,30 +49,36 @@ bool SdlContext::_update()
 	{
 		msg.result.set_value(msg.function());
 	})
+		.handle<RendCtxCommand::RefreshInputs>([&](const RendCtxCommand::RefreshInputs& msg)
+	{
+		SDL_Event events;
+		auto input = _dependencyManager.lock()->getInstance<Input>();
+		std::lock_guard<std::mutex>(input->getMutex());
+//		input->clearInputs();
+		while (SDL_PollEvent(&events))
+		{
+			std::cout << "lol" << std::endl;
+			//if (events.type == SDL_KEYDOWN)
+			//	input->addKeyInput(events.key.keysym.sym);
+			//else if (events.type == SDL_KEYUP)
+			//	input->removeKeyInput(events.key.keysym.sym);
+			//else if (events.type == SDL_MOUSEBUTTONDOWN)
+			//	input->addKeyInput(events.button.button);
+			//else if (events.type == SDL_MOUSEBUTTONUP)
+			//	input->removeKeyInput(events.button.button);
+			//else if (events.type == SDL_MOUSEWHEEL)
+			//	input->setMouseWheel(glm::i8vec2(events.wheel.x, events.wheel.y));
+			//else if (events.type == SDL_MOUSEMOTION)
+			//	input->setMousePosition(glm::i8vec2(events.motion.x, events.motion.y), glm::i8vec2(events.motion.xrel, events.motion.yrel));
+			//else
+			//	input->addInput(events.type);
+		}
+	})
 		.handle<RendCtxCommand::Stop>([&](const RendCtxCommand::Stop& msg)
 	{
 		returnValue = false;
 	});
 
-	SDL_Event events;
-	auto input = _dependencyManager.lock()->getInstance<Input>();
-	while (SDL_PollEvent(&events))
-	{
-		if (events.type == SDL_KEYDOWN)
-			input->addKeyInput(events.key.keysym.sym);
-		else if (events.type == SDL_KEYUP)
-			input->removeKeyInput(events.key.keysym.sym);
-		else if (events.type == SDL_MOUSEBUTTONDOWN)
-			input->addKeyInput(events.button.button);
-		else if (events.type == SDL_MOUSEBUTTONUP)
-			input->removeKeyInput(events.button.button);
-		else if (events.type == SDL_MOUSEWHEEL)
-			input->setMouseWheel(glm::i8vec2(events.wheel.x, events.wheel.y));
-		else if (events.type == SDL_MOUSEMOTION)
-			input->setMousePosition(glm::i8vec2(events.motion.x, events.motion.y), glm::i8vec2(events.motion.xrel, events.motion.yrel));
-		else
-			input->addInput(events.type);
-	}
 	return returnValue;
 }
 

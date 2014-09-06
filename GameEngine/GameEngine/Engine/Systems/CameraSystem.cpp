@@ -163,10 +163,10 @@ void CameraSystem::mainUpdate(double time)
 		if (camera.drawables.empty())
 			break;
 		_render->getCommandQueue().emplace<gl::RenderManagerCmd::VoidFunction>(std::function<void()>([=](){
-			_render->setUniformBlock(_global_state, 0, glm::mat4(camera.projection));
-			_render->setShaderUniform(_shader, _view_matrix, glm::mat4(camera.transformation));
-			_render->setShaderUniform(_shader, gl::Key<gl::Uniform>(_diffuse_ratio), 1.0f);
-			_render->updatePipeline(_pipeline, std::move(camera.drawables));
+			_render->setUniformBlock(_global_state, 0, camera.projection);
+			_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
+			_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
+			_render->updatePipeline(_pipeline, camera.drawables);
 			_render->drawPipelines();
 		}));
 

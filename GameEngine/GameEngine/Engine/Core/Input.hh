@@ -3,16 +3,23 @@
 #include <list>
 #include <Utils/Dependency.hpp>
 #include "glm/gtc/type_precision.hpp"
+#include <mutex>
+#include <atomic>
 
 class Input : public Dependency<Input>
 {
 private:
 	std::list<int>	_inputs;
 	std::list<int>	_keyInputs;
-	glm::i8vec2		_mousePosition;
-	glm::i8vec2		_mouseDelta;
-	glm::i8vec2		_mouseWheelDelta;
 
+	std::atomic_int32_t _mousePosX;
+	std::atomic_int32_t _mousePosY;
+	std::atomic_int32_t _mouseDelX;
+	std::atomic_int32_t _mouseDelY;
+	std::atomic_int32_t _mouseWheelX;
+	std::atomic_int32_t _mouseWheelY;
+
+	std::mutex      _mutex;
 public:
 	Input();
 	virtual ~Input() { }
@@ -28,4 +35,5 @@ public:
 	glm::i8vec2 const  	&getMouseWheel();
   	bool 				getInput(int input, bool handled = false);
   	bool 				getKey(int input, bool handled = false);
+	inline std::mutex   &getMutex(){ return _mutex; }
 };

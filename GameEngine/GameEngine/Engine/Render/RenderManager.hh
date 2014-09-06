@@ -49,6 +49,9 @@ namespace gl
 			}
 			VoidFunction(const VoidFunction &) = delete;
 			VoidFunction &operator=(const VoidFunction&) = delete;
+			~VoidFunction()
+			{
+			}
 		};
 	}
 
