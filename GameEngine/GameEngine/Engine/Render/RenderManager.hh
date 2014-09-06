@@ -101,6 +101,7 @@ namespace gl
 		RenderManager &pushInputRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s, GLenum attachement);
 		RenderManager &popInputRenderPass(Key<RenderPass> const &key);
 		RenderManager &pushTargetRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
 		RenderManager &popTargetRenderPass(Key<RenderPass> const &key);
 		RenderManager &useInputBufferRenderPass(Key<RenderPass> const &key, GLenum attachement);
 		RenderManager &setRenderingObjectsType(Key<RenderPass> const &key, RenderingObjectType type);

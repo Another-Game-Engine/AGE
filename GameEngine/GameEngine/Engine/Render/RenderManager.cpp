@@ -484,6 +484,14 @@ namespace gl
 		return (*this);
 	}
 
+	RenderManager &RenderManager::pushDrawTaskRenderBuffer(Key<RenderPass> const &key)
+	{
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->pushDrawTask();
+		return (*this);
+	}
+
+
 	RenderManager &RenderManager::popTargetRenderPass(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass = getRenderPass(key);

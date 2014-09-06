@@ -174,12 +174,14 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->createBufferSamplableRenderPass(key.renderPass, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
 	m->pushSetBlendStateTask(key.renderPass, 0, false);
 	m->pushSetBlendStateTask(key.renderPass, 1, false);
+	m->pushDrawTaskRenderBuffer(key.renderPass);
 
 	// create renderOnscreen and set it
 	key.renderOnScreen = m->addRenderOnScreen(glm::ivec4(0, 0, getInstance<IRenderContext>()->getScreenSize().x, getInstance<IRenderContext>()->getScreenSize().y));
 	m->pushClearTaskRenderOnScreen(key.renderOnScreen, true, true, false);
 	m->pushSetTestTaskRenderOnScreen(key.renderOnScreen, false, false, true);
 	m->pushSetClearValueTaskRenderOnScreen(key.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+
 
 	// create the pipeline and set it with both render element add before
 	key.pipeline = m->addPipeline();
