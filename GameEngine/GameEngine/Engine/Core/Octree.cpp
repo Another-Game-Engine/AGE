@@ -26,6 +26,20 @@ namespace AGE
 		return true;
 	}
 
+	bool Octree::_initInNewThread()
+	{
+		return true;
+	}
+
+	bool Octree::_release()
+	{
+		return true;
+	}
+
+	bool Octree::_releaseInNewThread()
+	{
+		return true;
+	}
 
 	const OctreeKey &Octree::addCullableElement()
 	{

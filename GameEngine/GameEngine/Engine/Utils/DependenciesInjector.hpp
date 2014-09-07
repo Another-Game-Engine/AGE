@@ -56,6 +56,24 @@ public:
 		return static_cast<T*>(_instances[id]);
 	}
 
+	template <typename T>
+	void deleteInstance()
+	{
+		std::uint16_t id = T::getTypeId();
+		if (!hasInstance<T>())
+		{
+			auto p = _parent.lock();
+			if (p)
+			{
+				return p->deleteInstance<T>();
+			}
+			else
+				assert(false && "Instance is not set !");
+		}
+		delete static_cast<T*>(_instances[id]);
+		_instances[id] = nullptr;
+	}
+
 	template <typename T, typename TypeSelector = T, typename ...Args>
 	T *setInstance(Args ...args)
 	{

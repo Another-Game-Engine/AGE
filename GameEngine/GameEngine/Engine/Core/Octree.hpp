@@ -223,6 +223,9 @@ namespace AGE
 	private:
 		bool virtual _init();
 		bool virtual _update();
+		bool virtual _initInNewThread();
+		bool virtual _release();
+		bool virtual _releaseInNewThread();
 		DRAWABLE_ID addDrawableObject(Octree::USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
 		void _run();

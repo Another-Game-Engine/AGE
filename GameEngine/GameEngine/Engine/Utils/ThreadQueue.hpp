@@ -14,16 +14,21 @@ namespace AGE
 		TMQ::Double::Queue _commandQueue;
 		virtual bool _update() = 0;
 		virtual bool _init() = 0;
+		virtual bool _initInNewThread() = 0;
+		virtual bool _release() = 0;
+		virtual bool _releaseInNewThread() = 0;
 		Engine *_engine;
+		std::atomic_bool _run;
 
 		bool update()
 		{
 			bool run = true;
-			while (run)
+			run = _initInNewThread();
+			while (_run && run)
 			{
 				run = _update();
 			}
-			return true;
+			return _releaseInNewThread();
 		}
 
 	public:
@@ -38,17 +43,27 @@ namespace AGE
 
 		virtual ~ThreadQueue()
 		{
-			_thread.join();
+			if (_thread.joinable())
+				quit();
 		}
 
 		bool launch(Engine *engine)
 		{
+			_run = true;
 			_engine = engine;
 			assert(_engine != nullptr);
 			auto res = _init();
 			_commandQueue.launch();
 			_thread = std::thread(&ThreadQueue::update, std::ref(*this));
 			return res;
+		}
+
+		void quit()
+		{
+			_run = false;
+			_commandQueue.releaseReadability();
+			_thread.join();
+			_release();
 		}
 
 		TMQ::Double::Queue &getCommandQueue()

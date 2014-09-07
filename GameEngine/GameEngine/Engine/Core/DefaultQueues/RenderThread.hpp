@@ -23,6 +23,23 @@ namespace AGE
 				return true;
 			}
 
+			virtual bool _initInNewThread()
+			{
+				return true;
+			}
+
+			virtual bool _release()
+			{
+				return true;
+			}
+
+			virtual bool _releaseInNewThread()
+			{
+				_engine->deleteInstance<IRenderContext>();
+				_engine->deleteInstance<gl::RenderManager>();
+				return true;
+			}
+
 			virtual bool _update()
 			{
 				bool returnValue = true;

@@ -132,8 +132,6 @@ int			main(int ac, char **av)
 
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
 
-//	std::this_thread::sleep_for(std::chrono::seconds(300));
-
 	// launch engine
 	if (e->start() == false)
 		return (EXIT_FAILURE);
@@ -142,6 +140,7 @@ int			main(int ac, char **av)
 	config->saveToFile();
 	e->stop();
 
-	//renderThread.join();
+	renderThread->quit();
+	octree->quit();
 	return (EXIT_SUCCESS);
 }
