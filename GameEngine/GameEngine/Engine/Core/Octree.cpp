@@ -4,35 +4,24 @@
 #include <Core/EntityFilter.hpp>
 #include <Components/CameraComponent.hpp>
 #include <Utils/Frustum.hpp>
-#include <thread>
 #include <chrono>
 
 namespace AGE
 {
 	Octree::Octree()
 	{
-		// launch thread
-		_thread = new std::thread(&Octree::_run, std::ref(*this));
-
-		_commandQueue.launch();
 	}
 
 	Octree::~Octree(void)
 	{
 		_commandQueue.emplace<TMQ::CloseQueue>();
 		_commandQueue.releaseReadability();
-		_thread->join();
-		delete _thread;
 	}
 
-	void Octree::_run()
+	bool Octree::_init()
 	{
-		_isRunning = true;
 		_octreeDrawList = AGE::Vector<DrawableCollection>();
-		while (_isRunning)
-		{
-			_update();
-		}
+		return true;
 	}
 
 

@@ -27,9 +27,7 @@
 
 #include <Utils/CommandQueueHolder.hpp>
 
-#include <thread>
-#include <condition_variable>
-#include <future>
+#include <Utils/ThreadQueue.hpp>
 
 class AScene;
 
@@ -133,7 +131,7 @@ namespace AGE
 		{};
 	}
 
-	class Octree : public Dependency<Octree>, public CommandQueueHolder
+	class Octree : public ThreadQueue, public Dependency<Octree>
 	{
 	public:
 		typedef std::uint64_t USER_OBJECT_ID;
@@ -230,12 +228,12 @@ namespace AGE
 		//
 		// END
 	private:
-		bool _update();
+		bool virtual _init();
+		bool virtual _update();
 		DRAWABLE_ID addDrawableObject(Octree::USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
 		void _run();
 
-		std::thread *_thread;
 		bool _isRunning;
 	};
 }

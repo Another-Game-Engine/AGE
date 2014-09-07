@@ -5,11 +5,11 @@
 #include "Core/Input.hh"
 #include <Utils/Dependency.hpp>
 #include <Utils/CommandQueueHolder.hpp>
+#include <tmq/common/message.hpp>
 
 namespace RendCtxCommand
 {
 	struct Flush{};
-	struct Stop{};
 	struct SetScreenSize
 	{
 		SetScreenSize(const glm::uvec2& v)
@@ -20,21 +20,11 @@ namespace RendCtxCommand
 	struct GetScreenSize : public TMQ::FutureData < glm::uvec2 >
 	{};
 
-	struct BoolFunction : public TMQ::FutureData<bool>
-	{
-		std::function<bool()> function;
-		BoolFunction(const std::function<bool()> &_function)
-			: function(_function)
-		{
-		}
-		virtual ~BoolFunction()
-		{}
-	};
 	struct RefreshInputs
 	{};
 }
 
-class IRenderContext : public Dependency<IRenderContext>, public AGE::CommandQueueHolder
+class IRenderContext : public Dependency<IRenderContext>
 {
 public:
 	IRenderContext()
@@ -52,42 +42,10 @@ public:
 		return _init(mode);
 	}
 
-	virtual bool updateCommandQueue()
-	{
-		return _update();
-	}
-
-	void flush()
-	{
- 		_commandQueue.emplace<RendCtxCommand::Flush>();
-	}
-
-	void refreshInputs()
-	{
- 		_commandQueue.emplace<RendCtxCommand::RefreshInputs>();
-	}
-
-	void stop()
-	{
-		_commandQueue.emplace<RendCtxCommand::Stop>();
-	}
-	
-	const glm::uvec2 &getScreenSize()
-	{
-		auto res = _commandQueue.priorityEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>();
-		return res.get();
-	}
-
-	void setScreenSize(const glm::uvec2 &screenSize)
-	{
-		_commandQueue.emplace<RendCtxCommand::SetScreenSize>(screenSize);
-	}
-
 protected:
 	glm::uvec2 _screenSize;
 	std::string _windowName;
 	virtual bool _init(int mode) = 0;
-	virtual bool _update() = 0;
 };
 
 #endif

@@ -195,6 +195,7 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Utils\CommandQueueHolder.hpp" />
     <ClInclude Include="Engine\Utils\ThreadQueue.hpp" />
+    <ClInclude Include="Engine\Core\DefaultQueues\RenderThread.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

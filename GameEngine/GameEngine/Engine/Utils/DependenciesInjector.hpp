@@ -4,10 +4,12 @@
 #include <Utils/Dependency.hpp>
 #include <memory>
 #include <Utils/Containers/Vector.hpp>
+#include <mutex>
 
 class DependenciesInjector : public std::enable_shared_from_this<DependenciesInjector>
 {
 private:
+	std::mutex _mutex;
 	DependenciesInjector(DependenciesInjector const &);
 	DependenciesInjector &operator=(DependenciesInjector const &);
 
@@ -37,14 +39,19 @@ public:
 	template <typename T>
 	T *getInstance()
 	{
+		//std::unique_lock<std::mutex> lock(_mutex);
+		//lock.lock();
 		std::uint16_t id = T::getTypeId();
 		if (!hasInstance<T>())
 		{
 			auto p = _parent.lock();
 			if (p)
+			{
+				//lock.unlock();
 				return p->getInstance<T>();
+			}
 			else
-				assert(false && "Engine Instance is not set !");
+				assert(false && "Instance is not set !");
 		}
 		return static_cast<T*>(_instances[id]);
 	}
@@ -52,6 +59,7 @@ public:
 	template <typename T, typename TypeSelector = T, typename ...Args>
 	T *setInstance(Args ...args)
 	{
+		//std::lock_guard<std::mutex> lock(_mutex);
 		std::uint16_t id = TypeSelector::getTypeId();
 		if (_instances.size() <= id || _instances[id] == nullptr)
 		{

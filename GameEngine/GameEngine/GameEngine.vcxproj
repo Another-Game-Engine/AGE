@@ -279,6 +279,7 @@
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
+    <ClInclude Include="Engine\Core\DefaultQueues\RenderThread.hpp" />
     <ClInclude Include="Engine\Core\Drawable.hh" />
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\Octree.hpp" />

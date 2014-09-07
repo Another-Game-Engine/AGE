@@ -28,6 +28,8 @@
 
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
 
+#include <Core/DefaultQueues/RenderThread.hpp>
+
 //CONFIGS
 #include <CONFIGS.hpp>
 
@@ -56,34 +58,26 @@ int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
+	auto renderThread = e->setInstance < AGE::DefaultQueue::RenderThread >();
+	renderThread->launch(e.get());
+
+	auto octree = e->setInstance<AGE::Octree>();
+	octree->launch(e.get());
+
 	// Set Configurations
 	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
 
 	e->setInstance<PubSub::Manager>();
-	auto context = e->setInstance<SdlContext, IRenderContext>();
-	auto renderManager = e->setInstance<gl::RenderManager>();
+	auto context = e->getInstance<IRenderContext>();
+	auto renderManager = e->getInstance<gl::RenderManager>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
 
 	// Important, we have to launch the command queue from the sender thread
-	context->launchCommandQueue();
-	renderManager->launchCommandQueue();
+	//context->launchCommandQueue();
+	//renderManager->launchCommandQueue();
 
-	auto renderThread = std::thread([&]()
-	{
-		bool renderUpdate = true;
-		while (renderUpdate)
-		{
-			renderUpdate = renderManager->updateCommandQueue();
-			if (!renderUpdate)
-				break;
-			renderUpdate = context->updateCommandQueue();
-			if (!renderUpdate)
-				break;
-		}
-	});
-
-	auto contextInit = context->getCommandQueue().priorityEmplace<RendCtxCommand::BoolFunction, bool>(
+	auto contextInit = renderThread->getCommandQueue().priorityEmplace<AGE::DefaultQueue::RenderThread::BoolFunction, bool>(
 		std::function<bool()>([&](){
 		if (!context->init(0, 800, 600, "~AGE~ V0.0 Demo"))
 			return false;
@@ -112,9 +106,9 @@ int			main(int ac, char **av)
 
 	// Set default window size
 	// If config file has different value, it'll be changed automaticaly
-	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&e](const glm::uvec2 &v)
+	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&](const glm::uvec2 &v)
 	{
-		e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
+		renderThread->getCommandQueue().emplace<RendCtxCommand::SetScreenSize>(v);
 	});
 	config->setConfiguration<std::string>("debuggerDevelopperName", "Modify MyConfigurationFile.conf with your name", [&e](const std::string &name)
 	{
@@ -148,6 +142,6 @@ int			main(int ac, char **av)
 	config->saveToFile();
 	e->stop();
 
-	renderThread.join();
+	//renderThread.join();
 	return (EXIT_SUCCESS);
 }

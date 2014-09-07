@@ -2,6 +2,7 @@
 #include "Utils/OpenGL.hh"
 #include <iostream>
 #include <Utils/DependenciesInjector.hpp>
+#include <Render/RenderManager.hh>
 
 bool SdlContext::_init(int mode)
 {
@@ -24,61 +25,5 @@ bool SdlContext::_init(int mode)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	return (true);
-}
-
-bool SdlContext::_update()
-{
-	bool returnValue = true;
-
-	_commandQueue.getDispatcher()
-		.handle<RendCtxCommand::Flush>([&](const RendCtxCommand::Flush& msg)
-	{
-		SDL_GL_SwapWindow(_window);
-	})
-		.handle<RendCtxCommand::GetScreenSize>([&](RendCtxCommand::GetScreenSize& msg)
-	{
-		msg.result.set_value(_screenSize);
-	})
-		.handle<RendCtxCommand::SetScreenSize>([&](const RendCtxCommand::SetScreenSize& msg)
-	{
-		_screenSize = msg.screenSize;
-		SDL_SetWindowSize(_window, _screenSize.x, _screenSize.y);
-		SDL_SetWindowPosition(_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-	})
-		.handle<RendCtxCommand::BoolFunction>([&](RendCtxCommand::BoolFunction& msg)
-	{
-		msg.result.set_value(msg.function());
-	})
-		.handle<RendCtxCommand::RefreshInputs>([&](const RendCtxCommand::RefreshInputs& msg)
-	{
-		SDL_Event events;
-		auto input = _dependencyManager.lock()->getInstance<Input>();
-		std::lock_guard<std::mutex>(input->getMutex());
-//		input->clearInputs();
-		while (SDL_PollEvent(&events))
-		{
-			std::cout << "lol" << std::endl;
-			//if (events.type == SDL_KEYDOWN)
-			//	input->addKeyInput(events.key.keysym.sym);
-			//else if (events.type == SDL_KEYUP)
-			//	input->removeKeyInput(events.key.keysym.sym);
-			//else if (events.type == SDL_MOUSEBUTTONDOWN)
-			//	input->addKeyInput(events.button.button);
-			//else if (events.type == SDL_MOUSEBUTTONUP)
-			//	input->removeKeyInput(events.button.button);
-			//else if (events.type == SDL_MOUSEWHEEL)
-			//	input->setMouseWheel(glm::i8vec2(events.wheel.x, events.wheel.y));
-			//else if (events.type == SDL_MOUSEMOTION)
-			//	input->setMousePosition(glm::i8vec2(events.motion.x, events.motion.y), glm::i8vec2(events.motion.xrel, events.motion.yrel));
-			//else
-			//	input->addInput(events.type);
-		}
-	})
-		.handle<RendCtxCommand::Stop>([&](const RendCtxCommand::Stop& msg)
-	{
-		returnValue = false;
-	});
-
-	return returnValue;
 }
 

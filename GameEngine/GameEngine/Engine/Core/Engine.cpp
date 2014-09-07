@@ -4,6 +4,7 @@
 #include "Timer.hh"
 #include "Utils/PubSub.hpp"
 #include "SceneManager.hh"
+#include <Core/DefaultQueues/RenderThread.hpp>
 
 #include <iostream>
 
@@ -28,25 +29,20 @@ bool 		Engine::start()
 
 bool 		Engine::update()
 {
-	auto context = getInstance<IRenderContext>();
-
 	auto timer = getInstance<Timer>();
 	auto sceneManager = getInstance<SceneManager>();
 	auto time = timer->getElapsed();
+	auto renderThread = getInstance < AGE::DefaultQueue::RenderThread >();
 
 	timer->update();
-	context->refreshInputs();
+	renderThread->getCommandQueue().emplace<RendCtxCommand::RefreshInputs>();
 	sceneManager->update(time);
-	context->flush();
-	context->getCommandQueue().releaseReadability();
+	renderThread->getCommandQueue().emplace<RendCtxCommand::Flush>();
+	renderThread->getCommandQueue().releaseReadability();
 
 	return (sceneManager->userUpdate(time));
 }
 
 void 		Engine::stop()
 {
-	auto context = hasInstance<IRenderContext>() ? getInstance<IRenderContext>() : nullptr;
-
-	if (context)
-		context->stop();
 }

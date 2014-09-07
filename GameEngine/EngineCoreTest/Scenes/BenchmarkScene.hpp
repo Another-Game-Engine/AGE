@@ -18,6 +18,7 @@
 #include <Core/Octree.hpp>
 
 #include <Context/IRenderContext.hh>
+#include <Core/DefaultQueues/RenderThread.hpp>
 
 #include <CONFIGS.hpp>
 
@@ -38,8 +39,6 @@ public:
 
 	virtual bool 			userStart()
 	{
-
-		setInstance<AGE::Octree>();
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 		getInstance<AGE::Octree>()->setScene(weakOnThis);
 
@@ -54,7 +53,7 @@ public:
 		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::RenderManager>();
 #if NEW_SHADER
-	camerasystem->setManager(m);
+	camerasystem->setManager(getInstance<AGE::DefaultQueue::RenderThread>());
 #endif
 
 #ifdef SIMPLE_RENDERING
@@ -112,7 +111,7 @@ public:
 		GLOBAL_CAMERA = camera;
 		auto cam = addComponent<Component::CameraComponent>(camera);
 
-		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
+		auto screenSize = getInstance<AGE::DefaultQueue::RenderThread>()->getCommandQueue().priorityEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 		cam->fboSize = screenSize;
 		cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
 		cam->sampleNbr = 0;
