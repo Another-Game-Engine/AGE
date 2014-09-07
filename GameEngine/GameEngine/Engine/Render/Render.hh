@@ -92,6 +92,17 @@ namespace gl
 		Render &popInputSampler();
 
 	protected:
+		struct DrawCommand
+		{
+		public:
+			GeometryManager &geometryManager;
+			Shader &shader;
+			GLenum mode;
+		public:
+			DrawCommand(GeometryManager &g, Shader &s, GLenum mode);
+		};
+
+	protected:
 		Render(Shader &shader, GeometryManager &g);
 		
 		Render() = delete;
@@ -105,8 +116,8 @@ namespace gl
 		AGE::Vector<Task> _tasks;
 		AGE::Vector<std::pair<Key<Sampler>, GLenum>> _inputSamplers;
 		RenderOffScreen const *_branch;
-
 		GeometryManager &_geometryManager;
+		
 		void updateInput();
 	};
 
@@ -159,6 +170,16 @@ namespace gl
 		virtual Render &render();
 		virtual RenderType getType() const;
 	private:
+		struct DrawCommand : public Render::DrawCommand
+		{
+		public:
+			Key<Vertices> quad;
+		
+		public:
+			DrawCommand(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad);
+		};
+
+	private:
 		RenderOnScreen(RenderOnScreen const &copy) = delete;
 		RenderOnScreen &operator=(RenderOnScreen const &r) = delete;
 
@@ -178,6 +199,16 @@ namespace gl
 		virtual Render &render();
 		virtual RenderType getType() const;
 	
+	private:
+		struct DrawCommand
+		{
+		public:
+			MaterialManager &materialManager;
+
+		public:
+			DrawCommand(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode);
+		};
+
 	private:
 		void separateDraw();
 		void globalDraw();

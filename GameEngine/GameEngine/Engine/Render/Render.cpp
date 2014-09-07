@@ -287,6 +287,13 @@ namespace gl
 		}
 	}
 
+	Render::DrawCommand::DrawCommand(GeometryManager &g, Shader &s, GLenum mode)
+		: geometryManager(g),
+		shader(s),
+		mode(mode)
+	{
+	}
+
 	RenderOffScreen::RenderOffScreen(Shader &shader, GeometryManager &g)
 		: Render(shader, g),
 		_sample(0),
@@ -560,6 +567,12 @@ namespace gl
 		_shader.update();
 		_geometryManager.draw(_mode, _quad);
 		return (*this);
+	}
+
+	RenderOnScreen::DrawCommand::DrawCommand(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad)
+		: Render::DrawCommand(g, s, mode),
+		quad(quad)
+	{
 	}
 
 	RenderType RenderOnScreen::getType() const
