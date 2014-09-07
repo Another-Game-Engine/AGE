@@ -5,6 +5,8 @@
 #include <Components/CameraComponent.hpp>
 #include <Utils/Frustum.hpp>
 #include <chrono>
+#include <Utils/DependenciesInjector.hpp>
+#include <Core/DefaultQueues/RenderThread.hpp>
 
 namespace AGE
 {
@@ -159,13 +161,6 @@ namespace AGE
 		assert(id != (std::size_t)(-1));
 	}
 
-	void Octree::getDrawableList(AGE::Vector<DrawableCollection> &list)
-	{
-		auto futur = _commandQueue.priorityEmplace<OctreeCommand::SwapDrawLists, AGE::Vector<DrawableCollection>>();
-		_commandQueue.releaseReadability();
-		list = std::move(futur.get());
-	}
-
 
 	bool Octree::_update()
 	{
@@ -315,16 +310,11 @@ namespace AGE
 				break;
 			}
 		})
-			.handle<OctreeCommand::SwapDrawLists>([&](OctreeCommand::SwapDrawLists& msg)
-		{
-			msg.result.set_value(std::move(_octreeDrawList));
-			_octreeDrawList.clear();
-		})
 			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
 		{
 			_isRunning = false;
 			return false;
-		}).handle<OctreeCommand::PrepareDrawLists>([&](const OctreeCommand::PrepareDrawLists& msg)
+		}).handle<OctreeCommand::PrepareDrawLists>([&](OctreeCommand::PrepareDrawLists& msg)
 		{
 			static std::size_t cameraCounter = 0; cameraCounter = 0;
 
@@ -365,13 +355,23 @@ namespace AGE
 				}
 				++cameraCounter;
 			}
+
+			auto renderThread = getDependencyManager().lock()->getInstance<AGE::DefaultQueue::RenderThread>();
+			for (auto &e : this->_octreeDrawList)
+			{
+				renderThread->getCommandQueue().safeEmplace<AGE::DefaultQueue::RenderThread::VoidFunction>([=](){
+					msg.function(e);
+				});
+			}
+			_octreeDrawList.clear();
+			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
+			renderThread->getCommandQueue().releaseReadability();
+
+			//msg.result.set_value(std::move(_octreeDrawList));
+			//_octreeDrawList.clear();
 		});
 
 		return true;
 	}
 
-	void Octree::update()
-	{
-		_commandQueue.emplace<OctreeCommand::PrepareDrawLists>();
-	}
 }

@@ -160,24 +160,17 @@ void CameraSystem::updateEnd(double time)
 
 void CameraSystem::mainUpdate(double time)
 {
-	_scene.lock()->getInstance<AGE::Octree>()->update();
-	_scene.lock()->getInstance<AGE::Octree>()->getDrawableList(_drawList);
-	while (!_drawList.empty())
-	{
-		auto &camera = _drawList.back();
-		if (camera.drawables.empty())
-			break;
-		_renderThread->getCommandQueue().emplace<AGE::DefaultQueue::RenderThread::VoidFunction>(std::function<void()>([=](){
-			_renderManager->setUniformBlock(_global_state, 0, camera.projection);
-			_renderManager->setShaderUniform(_shader, _view_matrix, camera.transformation);
-			_renderManager->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-			_renderManager->updatePipeline(_pipeline, camera.drawables);
-			_renderManager->drawPipelines();
-		}));
+		auto renderManager = _scene.lock()->getInstance<gl::RenderManager>();
 
-		camera.drawables.clear();
-		_drawList.pop_back();
-	}
+		auto octree = _scene.lock()->getInstance<AGE::Octree>();
+		octree->getCommandQueue().emplace<AGE::OctreeCommand::PrepareDrawLists>([=](AGE::DrawableCollection collection)
+		{		
+			renderManager->setUniformBlock(_global_state, 0, collection.projection);
+			renderManager->setShaderUniform(_shader, _view_matrix, collection.transformation);
+			renderManager->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
+			renderManager->updatePipeline(_pipeline, collection.drawables);
+			renderManager->drawPipelines();
+		});
 }
 
 bool CameraSystem::initialize()

@@ -123,12 +123,13 @@ namespace AGE
 			glm::mat4 projection;
 		};
 
-		struct SwapDrawLists : public TMQ::FutureData<AGE::Vector<DrawableCollection>>
-		{
-		};
-
 		struct PrepareDrawLists
-		{};
+		{
+			std::function<void(DrawableCollection)> function;
+			PrepareDrawLists(std::function<void(DrawableCollection)> _function)
+				: function(_function)
+			{}
+		};
 	}
 
 	class Octree : public ThreadQueue, public Dependency<Octree>
@@ -217,14 +218,6 @@ namespace AGE
 
 		void setCameraInfos(const OctreeKey &id
 			, const glm::mat4 &projection);
-
-		void getDrawableList(AGE::Vector<DrawableCollection> &list);
-		void update();
-		virtual bool updateCommandQueue()
-		{
-			assert(false);
-			return true;
-		}
 		//
 		// END
 	private:

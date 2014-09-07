@@ -234,6 +234,12 @@ public:
 			return false;
 		}
 #endif
+
+		auto renderThread = getInstance<AGE::DefaultQueue::RenderThread>();
+		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::RefreshInputs>();
+
+		auto octree = getInstance<AGE::Octree>();
+		octree->getCommandQueue().releaseReadability();
 		return true;
 	}
 private:
