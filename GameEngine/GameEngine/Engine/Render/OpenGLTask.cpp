@@ -161,14 +161,14 @@ namespace gl
 
 	void draw(void **data)
 	{
-		DrawData *task = CONVERT(DrawData *, 0);
+		RenderPass::Draw &draw = *CONVERT(RenderPass::Draw *, 0);
 
-		for (size_t index = task->start; index < task->end; ++index)
+		for (size_t index = draw.start; index < draw.end; ++index)
 		{
-			AGE::Drawable const &object = (*task->toRender)[index];
-			task->materialManager.setShader(object.material, task->shader);
-			task->shader.update(object.transformation);
-			task->geometryManager.draw(task->mode, object.mesh.indices, object.mesh.vertices);
+			AGE::Drawable const &object = (*draw.toRender)[index];
+			draw.materialManager.setShader(object.material, draw.shader);
+			draw.shader.update(object.transformation);
+			draw.geometryManager.draw(draw.mode, object.mesh.indices, object.mesh.vertices);
 		}
 	}
 

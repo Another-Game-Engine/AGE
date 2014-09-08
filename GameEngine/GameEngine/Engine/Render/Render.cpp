@@ -10,12 +10,10 @@
 
 namespace gl
 {
-	Render::Render(Shader &shader, GeometryManager &g)
+	Render::Render(Draw *draw)
 		: _rect(0, 0, 512, 512),
-		_mode(GL_TRIANGLES),
-		_shader(shader),
 		_branch(NULL),
-		_geometryManager(g)
+		_draw(*draw)
 	{
 
 	}
@@ -28,6 +26,7 @@ namespace gl
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
 		}
+		delete &_draw;
 	}
 
 	Render &Render::pushSetScissorTask(glm::ivec4 const &area)
@@ -238,13 +237,14 @@ namespace gl
 
 	Render &Render::setMode(GLenum mode)
 	{
-		_mode = mode;
+		_draw.mode = mode;
 		return (*this);
 	}
 
+
 	GLenum Render::getMode() const
 	{
-		return (_mode);
+		return (_draw.mode);
 	}
 
 	Render &Render::branchInput(RenderOffScreen const &input)
@@ -261,7 +261,7 @@ namespace gl
 
 	Render &Render::pushInputSampler(Key<Sampler> const &key, GLenum attachement)
 	{
-		if (_shader.hasSampler(key))
+		if (_draw.shader.hasSampler(key))
 			_inputSamplers.push_back(std::make_pair(key, attachement));
 		else
 			assert(0);
@@ -282,20 +282,30 @@ namespace gl
 			{
 				Texture2D const *text = NULL;
 				if ((text = _branch->getBufferSamplable(_inputSamplers[index].second)) != NULL)
-					_shader.setSampler(_inputSamplers[index].first, *text);
+					_draw.shader.setSampler(_inputSamplers[index].first, *text);
 			}
 		}
 	}
 
-	Render::DrawCommand::DrawCommand(GeometryManager &g, Shader &s, GLenum mode)
+	Render::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode)
 		: geometryManager(g),
 		shader(s),
 		mode(mode)
 	{
 	}
 
-	RenderOffScreen::RenderOffScreen(Shader &shader, GeometryManager &g)
-		: Render(shader, g),
+	RenderPass::Draw::Draw(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode)
+		: Render::Draw(g, s, mode),
+		materialManager(m),
+		toRender(NULL),
+		start(0),
+		end(0)
+	{
+
+	}
+
+	RenderOffScreen::RenderOffScreen(Render::Draw *draw)
+		: Render(draw),
 		_sample(0),
 		_updateBuffer(true),
 		_updateFrameBuffer(true)
@@ -456,10 +466,10 @@ namespace gl
 			updateFrameBuffer();
 	}
 
-	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
-		: RenderOffScreen(shader, g),
+	RenderPass::RenderPass(Shader &s, GeometryManager &g, MaterialManager &m)
+		: RenderOffScreen(new Draw(g, s, m, GL_TRIANGLES)),
 		_typeRendering(RenderingObjectType::GLOBAL_RENDER),
-		_drawData(DrawData(shader, g, m, _mode))
+		_draw((Draw &)Render::_draw)
 	{
 	}
 
@@ -471,7 +481,7 @@ namespace gl
 	{
 		Task task;
 
-		setTaskAllocation(task, &_drawData);
+		setTaskAllocation(task, (RenderPass::Draw *)&_draw);
 		task.func = draw;
 		_tasks.push_back(task);
 		return (*this);
@@ -485,15 +495,15 @@ namespace gl
 
 	RenderPass &RenderPass::setObjectsToRender(AGE::Vector<AGE::Drawable> const &objects)
 	{
-		_drawData.toRender = &objects;
+		_draw.toRender = &objects;
 		return (*this);
 	}
 
 	void RenderPass::separateDraw()
 	{
-		for (_drawData.start = 0; _drawData.start < _drawData.toRender->size(); ++_drawData.start)
+		for (_draw.start = 0; _draw.start < _draw.toRender->size(); ++_draw.start)
 		{
-			_drawData.end = _drawData.start + 1;
+			_draw.end = _draw.start + 1;
 			for (size_t i = 0; i < _tasks.size(); ++i)
 				_tasks[i].func(_tasks[i].params);
 		}
@@ -501,8 +511,8 @@ namespace gl
 
 	void RenderPass::globalDraw()
 	{
-		_drawData.start = 0;
-		_drawData.end = _drawData.toRender->size();
+		_draw.start = 0;
+		_draw.end = _draw.toRender->size();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 	}
@@ -512,7 +522,7 @@ namespace gl
 		_fbo.bind();
 		updateOutput();
 		updateInput();
-		if (_drawData.toRender == NULL)
+		if (_draw.toRender == NULL)
 			return (*this);
 		if (_typeRendering == RenderingObjectType::GLOBAL_RENDER)
 			globalDraw();
@@ -521,9 +531,17 @@ namespace gl
 		return (*this);
 	}
 
+	RenderPostEffect::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &key)
+		: Render::Draw(g, s, mode),
+		quad(key)
+	{
+
+	}
+
+
 	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g)
-		: RenderOffScreen(s, g),
-		_quad(key)
+		: RenderOffScreen(new Draw(g, s, GL_TRIANGLES, key)),
+		_draw((Draw &)Render::_draw)
 	{
 
 	}
@@ -540,14 +558,14 @@ namespace gl
 		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		_shader.update();
-		_geometryManager.draw(_mode, _quad);
+		_draw.shader.update();
+		_draw.geometryManager.draw(_draw.mode, _draw.quad);
 		return (*this);
 	}
 
 	RenderOnScreen::RenderOnScreen(Key<Vertices> const &key, Shader &s, GeometryManager &g)
-		: Render(s, g),
-		_quad(key)
+		: Render(new Draw(g, s, GL_TRIANGLES, key)),
+		_draw((Draw &)Render::_draw)
 	{
 
 	}
@@ -564,13 +582,13 @@ namespace gl
 		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		_shader.update();
-		_geometryManager.draw(_mode, _quad);
+		_draw.shader.update();
+		_draw.geometryManager.draw(_draw.mode, _draw.quad);
 		return (*this);
 	}
 
-	RenderOnScreen::DrawCommand::DrawCommand(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad)
-		: Render::DrawCommand(g, s, mode),
+	RenderOnScreen::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad)
+		: Render::Draw(g, s, mode),
 		quad(quad)
 	{
 	}
@@ -588,17 +606,5 @@ namespace gl
 	RenderType RenderPass::getType() const
 	{
 		return (RenderType::RENDER_PASS);
-	}
-
-	DrawData::DrawData(Shader &s, GeometryManager &g, MaterialManager &m, GLenum mode)
-		: shader(s),
-		geometryManager(g),
-		materialManager(m),
-		mode(mode),
-		start(0),
-		end(0),
-		toRender(NULL)
-	{
-
 	}
 }

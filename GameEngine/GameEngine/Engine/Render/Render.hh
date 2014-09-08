@@ -39,20 +39,19 @@ namespace gl
 		SEPARATE_RENDER
 	};
 
-	struct DrawData
-	{
-		GLenum mode;
-		size_t start;
-		size_t end;
-		AGE::Vector<AGE::Drawable> const *toRender;
-		Shader &shader;
-		GeometryManager &geometryManager;
-		MaterialManager &materialManager;
-		DrawData(Shader &s, GeometryManager &g, MaterialManager &m, GLenum mode);
-	};
-
 	class Render
 	{
+	public:
+		struct Draw
+		{
+		public:
+			GeometryManager &geometryManager;
+			Shader &shader;
+			GLenum mode;
+		public:
+			Draw(GeometryManager &g, Shader &s, GLenum mode);
+		};
+
 	public:
 		virtual ~Render();
 
@@ -92,33 +91,17 @@ namespace gl
 		Render &popInputSampler();
 
 	protected:
-		struct DrawCommand
-		{
-		public:
-			GeometryManager &geometryManager;
-			Shader &shader;
-			GLenum mode;
-		public:
-			DrawCommand(GeometryManager &g, Shader &s, GLenum mode);
-		};
-
-	protected:
-		Render(Shader &shader, GeometryManager &g);
-		
+		Render(Draw *draw);
 		Render() = delete;
 		Render(Render const &copy) = delete;
 		Render &operator=(Render const &r) = delete;
+		void updateInput();
 
 		glm::ivec4 _rect;
-		GLenum _mode;
-		
-		Shader &_shader;
 		AGE::Vector<Task> _tasks;
 		AGE::Vector<std::pair<Key<Sampler>, GLenum>> _inputSamplers;
 		RenderOffScreen const *_branch;
-		GeometryManager &_geometryManager;
-		
-		void updateInput();
+		Draw &_draw;
 	};
 
 	class RenderOffScreen : public Render
@@ -143,7 +126,7 @@ namespace gl
 		RenderOffScreen &useInputBuffer(GLenum attachement);
 
 	protected:
-		RenderOffScreen(Shader &shader, GeometryManager &g);
+		RenderOffScreen(Render::Draw *draw);
 		RenderOffScreen(RenderOffScreen const &copy) = delete;
 		RenderOffScreen &operator=(RenderOffScreen const &r) = delete;
 
@@ -164,30 +147,44 @@ namespace gl
 	class RenderOnScreen : public Render
 	{
 	public:
+		struct Draw : public Render::Draw
+		{
+		public:
+			Key<Vertices> quad;
+
+		public:
+			Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad);
+		};
+
+	public:
 		virtual ~RenderOnScreen();
 		RenderOnScreen(Key<Vertices> const &key, Shader &shader, GeometryManager &g);
 
 		virtual Render &render();
 		virtual RenderType getType() const;
-	private:
-		struct DrawCommand : public Render::DrawCommand
-		{
-		public:
-			Key<Vertices> quad;
-		
-		public:
-			DrawCommand(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad);
-		};
 
 	private:
 		RenderOnScreen(RenderOnScreen const &copy) = delete;
 		RenderOnScreen &operator=(RenderOnScreen const &r) = delete;
 
-		Key<Vertices> _quad;
+		Draw &_draw;
 	};
 
 	class RenderPass : public RenderOffScreen
 	{
+	public:
+		struct Draw : public Render::Draw
+		{
+		public:
+			MaterialManager &materialManager;
+			AGE::Vector<AGE::Drawable> const *toRender;
+			size_t start;
+			size_t end;
+
+		public:
+			Draw(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode);
+		};
+
 	public:
 		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m);
 		virtual ~RenderPass();
@@ -198,16 +195,6 @@ namespace gl
 		RenderPass &setObjectsToRender(AGE::Vector<AGE::Drawable> const &objects);
 		virtual Render &render();
 		virtual RenderType getType() const;
-	
-	private:
-		struct DrawCommand
-		{
-		public:
-			MaterialManager &materialManager;
-
-		public:
-			DrawCommand(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode);
-		};
 
 	private:
 		void separateDraw();
@@ -216,22 +203,32 @@ namespace gl
 		RenderPass &operator=(RenderPass const &r) = delete;
 	
 		RenderingObjectType _typeRendering;
-		DrawData _drawData;
+		Draw &_draw;
 	};
 
 	class RenderPostEffect : public RenderOffScreen
 	{
+	public:
+		struct Draw : public Render::Draw
+		{
+		public:
+			Key<Vertices> quad;
+
+		public:
+			Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad);
+		};
 	public:
 		RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g);
 		virtual ~RenderPostEffect();
 
 		virtual Render &render();
 		virtual RenderType getType() const;
+
 	private:
 		RenderPostEffect(RenderPostEffect const &copy) = delete;
 		RenderPostEffect &operator=(RenderPostEffect const &r) = delete;
 
-		Key<Vertices> _quad;
+		Draw &_draw;
 	};
 
 }
