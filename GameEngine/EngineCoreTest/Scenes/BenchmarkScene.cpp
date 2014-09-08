@@ -12,6 +12,7 @@
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>
 #include <Render/RenderManager.hh>
+#include <Render/pipeline.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -137,7 +138,7 @@ bool BenchmarkScene::userUpdate(double time)
 			return true;
 		getInstance<gl::RenderManager>()->setUniformBlock(key.global_state, 0, camera.projection);
 		getInstance<gl::RenderManager>()->setShaderUniform(key.shader, key.view_matrix, camera.transformation);
-		getInstance<gl::RenderManager>()->updatePipeline(key.pipeline, camera.drawables);
+		getInstance<gl::RenderManager>()->updatePipeline(key.pipeline, camera.drawables, gl::DrawType::GLOBAL);
 		getInstance<gl::RenderManager>()->drawPipelines();
 		camera.drawables.clear();
 		drawList.pop_back();

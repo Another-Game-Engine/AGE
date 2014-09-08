@@ -1,6 +1,7 @@
 #include <Render/Pipeline.hh>
 #include <iostream>
 #include <algorithm>
+#include <Core/Drawable.hh>
 
 namespace gl
 {
@@ -12,10 +13,9 @@ namespace gl
 	{
 	}
 
-	Pipeline &Pipeline::setDraw(AGE::Vector<AGE::Drawable> const &toRender, DrawType type)
+	Pipeline &Pipeline::setDraw(AGE::Vector<AGE::Drawable> const &toRender)
 	{
 		_toRender = &toRender;
-		drawType = type;
 		return (*this);
 	}
 
@@ -51,7 +51,7 @@ namespace gl
 	{
 		auto &element = _rendering.find(time);
 		if (element == _rendering.end())
-			assert(0);
+			return (*this);
 		if (element->second->getType() == RenderType::RENDER_PASS)
 			((RenderPass *)element->second)->setDraw(*_toRender, start, end);
 		element->second->render();

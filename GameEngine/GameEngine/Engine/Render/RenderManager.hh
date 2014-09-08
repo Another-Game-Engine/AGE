@@ -27,6 +27,7 @@ namespace gl
 	struct BindingRenderPass;
 	struct BindingShader;
 	class Pipeline;
+	enum DrawType;
 
 	class RenderManager : public Dependency<RenderManager>
 	{

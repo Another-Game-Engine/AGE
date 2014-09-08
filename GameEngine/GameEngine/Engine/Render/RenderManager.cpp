@@ -801,7 +801,8 @@ namespace gl
 
 		if ((pipeline = getPipeline(p)) == NULL)
 			return (*this);
-		pipeline->setDraw(objectRender, type);
+		pipeline->setDraw(objectRender);
+		pipeline->drawType = type;
 		return (*this);
 	}
 
