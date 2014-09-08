@@ -28,7 +28,7 @@
 
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
 
-#include <Core/DefaultQueues/RenderThread.hpp>
+#include <Core/RenderThread.hpp>
 
 //CONFIGS
 #include <CONFIGS.hpp>
@@ -58,7 +58,7 @@ int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
-	auto renderThread = e->setInstance < AGE::DefaultQueue::RenderThread >();
+	auto renderThread = e->setInstance < AGE::RenderThread >();
 	renderThread->launch(e.get());
 
 	auto octree = e->setInstance<AGE::Octree>();
@@ -77,7 +77,7 @@ int			main(int ac, char **av)
 	//context->launchCommandQueue();
 	//renderManager->launchCommandQueue();
 
-	auto contextInit = renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::DefaultQueue::RenderThread::BoolFunction, bool>(
+	auto contextInit = renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::RenderThread::BoolFunction, bool>(
 		std::function<bool()>([&](){
 		if (!context->init(0, 800, 600, "~AGE~ V0.0 Demo"))
 			return false;

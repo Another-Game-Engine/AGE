@@ -18,7 +18,7 @@
 #include <Core/Octree.hpp>
 
 #include <Context/IRenderContext.hh>
-#include <Core/DefaultQueues/RenderThread.hpp>
+#include <Core/RenderThread.hpp>
 
 #include <CONFIGS.hpp>
 
@@ -53,7 +53,7 @@ public:
 		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::RenderManager>();
 #if NEW_SHADER
-	camerasystem->setManager(getInstance<AGE::DefaultQueue::RenderThread>());
+	camerasystem->setManager(getInstance<AGE::RenderThread>());
 #endif
 
 #ifdef SIMPLE_RENDERING
@@ -111,7 +111,7 @@ public:
 		GLOBAL_CAMERA = camera;
 		auto cam = addComponent<Component::CameraComponent>(camera);
 
-		auto screenSize = getInstance<AGE::DefaultQueue::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+		auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 		cam->fboSize = screenSize;
 		cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
 		cam->sampleNbr = 0;
@@ -235,7 +235,7 @@ public:
 		}
 #endif
 
-		auto renderThread = getInstance<AGE::DefaultQueue::RenderThread>();
+		auto renderThread = getInstance<AGE::RenderThread>();
 		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::RefreshInputs>();
 
 		auto octree = getInstance<AGE::Octree>();
@@ -245,7 +245,7 @@ public:
 private:
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 15000.0f;
+	double _maxTime = 15.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;

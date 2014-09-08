@@ -6,7 +6,7 @@
 #include <Render/Key.hh>
 #include <Components/CameraComponent.hpp>
 #include <Core/Drawable.hh>
-#include <Core/DefaultQueues/RenderThread.hpp>
+#include <Core/RenderThread.hpp>
 
 # define NEW_SHADER 1
 
@@ -21,7 +21,7 @@ public:
 	virtual ~CameraSystem(){}
 
 #if NEW_SHADER
-	void setManager(AGE::DefaultQueue::RenderThread *m);
+	void setManager(AGE::RenderThread *m);
 #endif
 	void setRenderDebugMode(bool t);
 	bool getRenderDebugMode() const;
@@ -38,7 +38,7 @@ protected:
 #else
 	EntityFilter _drawable;
 	EntityFilter _camera;
-	AGE::DefaultQueue::RenderThread *_renderThread;
+	AGE::RenderThread *_renderThread;
 	gl::RenderManager *_renderManager;
 	gl::Key<gl::Shader> _shader;
 	gl::Key<gl::Shader> _quadShader;

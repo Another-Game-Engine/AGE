@@ -6,7 +6,7 @@
 #include <Utils/Frustum.hpp>
 #include <chrono>
 #include <Utils/DependenciesInjector.hpp>
-#include <Core/DefaultQueues/RenderThread.hpp>
+#include <Core/RenderThread.hpp>
 
 namespace AGE
 {

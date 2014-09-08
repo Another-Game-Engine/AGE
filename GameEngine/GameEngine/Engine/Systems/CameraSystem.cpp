@@ -9,7 +9,7 @@
 #include <Render/GeometryManager.hh>
 #include <Core/Drawable.hh>
 #include <Core/AssetsManager.hpp>
-#include <Core/DefaultQueues/RenderThread.hpp>
+#include <Core/RenderThread.hpp>
 #include <Utils/DependenciesInjector.hpp>
 
 //tmp
@@ -161,11 +161,11 @@ void CameraSystem::updateEnd(double time)
 void CameraSystem::mainUpdate(double time)
 {
 		auto renderManager = _scene.lock()->getInstance<gl::RenderManager>();
-		auto renderThread = _scene.lock()->getInstance<RenderThread>();
+		auto renderThread = _scene.lock()->getInstance<AGE::RenderThread>();
 
 		auto octree = _scene.lock()->getInstance<AGE::Octree>();
 		octree->getCommandQueue().emplace<AGE::OctreeCommand::PrepareDrawLists>([=](AGE::DrawableCollection collection)
-		{		
+		{
 			renderManager->setUniformBlock(_global_state, 0, collection.projection);
 			renderManager->setShaderUniform(_shader, _view_matrix, collection.transformation);
 			renderManager->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
