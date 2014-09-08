@@ -57,7 +57,7 @@ void CameraSystem::getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
 #endif
 	auto scene = _scene.lock();
 	auto mousePos = scene->getInstance<Input>()->getMousePosition();
-	auto screenSize = scene->getInstance<AGE::DefaultQueue::RenderThread>()->getCommandQueue().priorityEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screenSize = scene->getInstance<AGE::DefaultQueue::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 #if NEW_SHADER
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
 #else
@@ -77,7 +77,7 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 		return;
 #endif
 	auto scene = _scene.lock();
-	auto screenSize = scene->getInstance<AGE::DefaultQueue::RenderThread>()->getCommandQueue().priorityEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screenSize = scene->getInstance<AGE::DefaultQueue::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 	auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
 #if NEW_SHADER
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
@@ -106,7 +106,7 @@ void CameraSystem::setManager(AGE::DefaultQueue::RenderThread *m)
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 	
-	auto res = _renderThread->getCommandQueue().priorityEmplace<AGE:: DefaultQueue::RenderThread::BoolFunction, bool>([&](){
+	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE:: DefaultQueue::RenderThread::BoolFunction, bool>([&](){
 		// render pass
 		_shader = _renderManager->addShader(VERTEX_SHADER, FRAG_SHADER);
 		size_t sizeElement[2];

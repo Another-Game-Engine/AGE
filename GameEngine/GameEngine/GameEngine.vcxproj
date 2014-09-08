@@ -210,7 +210,9 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Vendors\tmq\doubleBuffered\queue.cpp" />
+    <ClCompile Include="..\Vendors\tmq\dispatcher.cpp" />
+    <ClCompile Include="..\Vendors\tmq\message.cpp" />
+    <ClCompile Include="..\Vendors\tmq\queue.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
@@ -274,6 +276,10 @@
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Vendors\tmq\dispatcher.hpp" />
+    <ClInclude Include="..\Vendors\tmq\message.hpp" />
+    <ClInclude Include="..\Vendors\tmq\queue.hpp" />
+    <ClInclude Include="..\Vendors\tmq\templateDispatcher.hpp" />
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
     <ClInclude Include="Engine\Components\Behaviors\Cullable.hpp" />
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />

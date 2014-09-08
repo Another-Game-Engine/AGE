@@ -5,7 +5,7 @@
 #include "Core/Input.hh"
 #include <Utils/Dependency.hpp>
 #include <Utils/CommandQueueHolder.hpp>
-#include <tmq/common/message.hpp>
+#include <tmq/message.hpp>
 
 namespace RendCtxCommand
 {

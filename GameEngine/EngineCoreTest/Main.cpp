@@ -77,7 +77,7 @@ int			main(int ac, char **av)
 	//context->launchCommandQueue();
 	//renderManager->launchCommandQueue();
 
-	auto contextInit = renderThread->getCommandQueue().priorityEmplace<AGE::DefaultQueue::RenderThread::BoolFunction, bool>(
+	auto contextInit = renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::DefaultQueue::RenderThread::BoolFunction, bool>(
 		std::function<bool()>([&](){
 		if (!context->init(0, 800, 600, "~AGE~ V0.0 Demo"))
 			return false;
@@ -108,7 +108,7 @@ int			main(int ac, char **av)
 	// If config file has different value, it'll be changed automaticaly
 	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&](const glm::uvec2 &v)
 	{
-		renderThread->getCommandQueue().emplace<RendCtxCommand::SetScreenSize>(v);
+		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::SetScreenSize>(v);
 	});
 	config->setConfiguration<std::string>("debuggerDevelopperName", "Modify MyConfigurationFile.conf with your name", [&e](const std::string &name)
 	{

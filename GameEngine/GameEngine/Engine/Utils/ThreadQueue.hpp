@@ -1,8 +1,8 @@
 #pragma once
 
 #include <thread>
-#include <tmq/doubleBuffered/templateDispatcher.hpp>
-#include <tmq/doubleBuffered/queue.hpp>
+#include <tmq/templateDispatcher.hpp>
+#include <tmq/queue.hpp>
 #include <Core/Engine.hh>
 namespace AGE
 {
@@ -11,7 +11,7 @@ namespace AGE
 	private:
 		std::thread _thread;
 	protected:
-		TMQ::Double::Queue _commandQueue;
+		TMQ::Queue _commandQueue;
 		virtual bool _update() = 0;
 		virtual bool _init() = 0;
 		virtual bool _initInNewThread() = 0;
@@ -66,7 +66,7 @@ namespace AGE
 			_release();
 		}
 
-		TMQ::Double::Queue &getCommandQueue()
+		TMQ::Queue &getCommandQueue()
 		{
 			return _commandQueue;
 		}

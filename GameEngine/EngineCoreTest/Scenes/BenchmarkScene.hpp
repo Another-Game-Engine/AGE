@@ -111,7 +111,7 @@ public:
 		GLOBAL_CAMERA = camera;
 		auto cam = addComponent<Component::CameraComponent>(camera);
 
-		auto screenSize = getInstance<AGE::DefaultQueue::RenderThread>()->getCommandQueue().priorityEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+		auto screenSize = getInstance<AGE::DefaultQueue::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 		cam->fboSize = screenSize;
 		cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
 		cam->sampleNbr = 0;

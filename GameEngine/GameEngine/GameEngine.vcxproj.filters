@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\Vendors\tmq\doubleBuffered\queue.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
     <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
@@ -63,6 +62,9 @@
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
+    <ClCompile Include="..\Vendors\tmq\dispatcher.cpp" />
+    <ClCompile Include="..\Vendors\tmq\message.cpp" />
+    <ClCompile Include="..\Vendors\tmq\queue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
@@ -196,6 +198,10 @@
     <ClInclude Include="Engine\Utils\CommandQueueHolder.hpp" />
     <ClInclude Include="Engine\Utils\ThreadQueue.hpp" />
     <ClInclude Include="Engine\Core\DefaultQueues\RenderThread.hpp" />
+    <ClInclude Include="..\Vendors\tmq\dispatcher.hpp" />
+    <ClInclude Include="..\Vendors\tmq\message.hpp" />
+    <ClInclude Include="..\Vendors\tmq\queue.hpp" />
+    <ClInclude Include="..\Vendors\tmq\templateDispatcher.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

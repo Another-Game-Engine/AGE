@@ -16,7 +16,7 @@
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
 #include <Render/MacroRenderManager.hh>
-#include <tmq/common/message.hpp>
+#include <tmq/message.hpp>
 
 namespace gl
 {

@@ -1,18 +1,18 @@
 #pragma once
 
-//#include <tmq/doubleBuffered/queue.hpp>
-//#include <tmq/doubleBuffered/templateDispatcher.hpp>
+//#include <tmq/queue.hpp>
+//#include <tmq/templateDispatcher.hpp>
 //
 //namespace AGE
 //{
 //	class CommandQueueHolder
 //	{
 //	protected:
-//		TMQ::Double::Queue _commandQueue;
+//		TMQ::Queue _commandQueue;
 //	public:
 //		virtual ~CommandQueueHolder(){}
 //		virtual bool updateCommandQueue() = 0;
-//		inline TMQ::Double::Queue &getCommandQueue()
+//		inline TMQ::Queue &getCommandQueue()
 //		{
 //			return _commandQueue;
 //		}
