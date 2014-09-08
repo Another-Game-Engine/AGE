@@ -104,7 +104,6 @@ namespace gl
 		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
 		RenderManager &popTargetRenderPass(Key<RenderPass> const &key);
 		RenderManager &useInputBufferRenderPass(Key<RenderPass> const &key, GLenum attachement);
-		RenderManager &setRenderingObjectsType(Key<RenderPass> const &key, RenderingObjectType type);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
@@ -136,7 +135,7 @@ namespace gl
 		RenderManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r);
 		RenderManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r);
 		Key<Pipeline> getPipeline(size_t target);
-		RenderManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
+		RenderManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender, DrawType type);
 
 		// drawing
 		RenderManager &drawPipelines();

@@ -12,12 +12,12 @@
 namespace gl
 {
 	class Vertices;
-
-	const uint8_t nbrSimpleForm = 1;
 	
 	enum SimpleForm
 	{
-		QUAD = 0
+		QUAD = 0,
+		SPHERE,
+		NBR_SIMPLE_FORM
 	};
 
 	class GeometryManager
