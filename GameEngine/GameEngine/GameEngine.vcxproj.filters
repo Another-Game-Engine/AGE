@@ -63,6 +63,7 @@
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
     <ClCompile Include="Engine\Render\Light.cpp" />
+    <ClCompile Include="Engine\Render\ShaderResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Engine\Render\RenderManager.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
     <ClInclude Include="Engine\Render\Light.hh" />
+    <ClInclude Include="Engine\Render\ShaderResourceManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
