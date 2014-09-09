@@ -71,6 +71,10 @@ namespace gl
 		// draw
 		GeometryManager &draw(GLenum mode, Key<Indices> const &keyindices, Key<Vertices> const &keyVertice);
 		GeometryManager &draw(GLenum mode, Key<Vertices> const &keyvertices);
+
+		// generate ico sphere
+		static void generateIcoSphere(size_t recursion, glm::vec3 **vertex, glm::u32vec3 **indices);
+
 	private:
 		// simple form
 		gl::Key<Vertices> *_simpleForm;
