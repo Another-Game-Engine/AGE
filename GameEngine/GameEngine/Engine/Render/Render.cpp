@@ -428,6 +428,16 @@ namespace gl
 		return (*this);
 	}
 
+	RenderOffScreen &RenderOffScreen::pushSetUniformMat4Task(Key<Uniform> const &key, size_t location)
+	{
+		Task task;
+
+		setTaskAllocation(task, (RenderOffScreen *)&_draw, Key<Uniform>(key), location);
+		task.func = setUniformMat4byLocation;
+		_tasks.push_back(task);
+		return (*this);
+	}
+
 	void RenderOffScreen::updateBuffer()
 	{
 		_updateBuffer = false;

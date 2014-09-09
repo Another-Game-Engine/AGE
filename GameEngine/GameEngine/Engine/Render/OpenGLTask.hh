@@ -26,6 +26,7 @@ namespace gl
 	void setBlendConstant(void **);
 	void setTest(void **);
 	void setUniformMat4(void **);
+	void setUniformMat4byLocation(void **);
 	void setUniformMat3(void **);
 	void setUniformUint(void **);
 	void setBlockBinding(void **);
