@@ -556,7 +556,7 @@ namespace gl
 		return (renderOnScreen->second);
 	}
 
-	Pipeline *RenderManager::getPipeline(Key<Pipeline> const &key)
+	size_t RenderManager::getIndexPipeline(Key<Pipeline> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -568,8 +568,13 @@ namespace gl
 		if (pipeline == _pipelines.end())
 			assert(0);
 		_optimizePipelineSearch.first = key;
-		_optimizePipelineSearch.second = &pipeline->second;
-		return (&pipeline->second);
+		_optimizePipelineSearch.second = pipeline->second;
+		return (pipeline->second);
+	}
+
+	Pipeline *RenderManager::getPipeline(Key<Pipeline> const &key)
+	{
+		return (&_pipelineOrdered[getIndexPipeline(key)]);
 	}
 
 	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
@@ -716,12 +721,12 @@ namespace gl
 		return (*this);
 	}
 
-	Key<Pipeline> RenderManager::addPipeline(uint8_t priority)
+	Key<Pipeline> RenderManager::addPipeline()
 	{
 		Key<Pipeline> key;
 	
-		Pipeline &element = _pipelines[key];
-		_pipelineOrder[priority] = &element;
+		_pipelineOrdered.push_back(Pipeline());
+		_pipelines[key] = _pipelineOrdered.size() - 1;
 		return (key);
 	}
 
@@ -775,8 +780,8 @@ namespace gl
 
 	RenderManager &RenderManager::drawPipelines()
 	{
-		for (auto &index = _pipelineOrder.begin(); index != _pipelineOrder.end(); ++index)
-			index->second->draw();
+		for (size_t index = 0; index < _pipelineOrdered.size(); ++index)
+			_pipelineOrdered[index].draw();
 		return (*this);
 	}
 

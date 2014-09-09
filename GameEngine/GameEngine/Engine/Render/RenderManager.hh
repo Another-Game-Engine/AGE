@@ -132,7 +132,7 @@ namespace gl
 		RenderManager &branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to);
 
 		// Pipeline
-		Key<Pipeline> addPipeline(uint8_t priority);
+		Key<Pipeline> addPipeline();
 		RenderManager &pushRenderPassPipeline(Key<Pipeline> const &p, Key<RenderPass> const &r);
 		RenderManager &pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r);
 		RenderManager &pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r);
@@ -154,8 +154,8 @@ namespace gl
 		std::map<Key<RenderPass>, RenderPass *> _renderPass;
 		std::map<Key<RenderPostEffect>, RenderPostEffect *> _renderPostEffect;
 		std::map<Key<RenderOnScreen>, RenderOnScreen *> _renderOnScreen;
-		std::map<Key<Pipeline>, Pipeline> _pipelines;
-		std::map<uint8_t, Pipeline *> _pipelineOrder;
+		std::map<Key<Pipeline>, size_t> _pipelines;
+		AGE::Vector<Pipeline> _pipelineOrdered;
 
 		// optimize search in map
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
@@ -164,7 +164,7 @@ namespace gl
 		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
 		std::pair<Key<RenderPostEffect>, RenderPostEffect *> _optimizeRenderPostEffectSearch;
 		std::pair<Key<RenderOnScreen>, RenderOnScreen *> _optimizeRenderOnScreenSearch;
-		std::pair<Key<Pipeline>, Pipeline *> _optimizePipelineSearch;
+		std::pair<Key<Pipeline>, size_t> _optimizePipelineSearch;
 
 		// tool use in intern for search
 		Shader *getShader(Key<Shader> const &key);
@@ -173,6 +173,7 @@ namespace gl
 		RenderPass *getRenderPass(Key<RenderPass> const &key);
 		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key);
 		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key);
+		size_t getIndexPipeline(Key<Pipeline> const &key);
 		Pipeline *getPipeline(Key<Pipeline> const &key);
 	};
 
