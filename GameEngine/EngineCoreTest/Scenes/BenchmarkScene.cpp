@@ -138,7 +138,7 @@ bool BenchmarkScene::userUpdate(double time)
 			return true;
 		getInstance<gl::RenderManager>()->setUniformBlock(key.global_state, 0, camera.projection);
 		getInstance<gl::RenderManager>()->setShaderUniform(key.shader, key.view_matrix, camera.transformation);
-		getInstance<gl::RenderManager>()->updatePipeline(key.pipeline, camera.drawables, gl::DrawType::GLOBAL);
+		getInstance<gl::RenderManager>()->updatePipeline(key.pipeline, camera.drawables);
 		getInstance<gl::RenderManager>()->drawPipelines();
 		camera.drawables.clear();
 		drawList.pop_back();
@@ -185,9 +185,9 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 
 
 	// create the pipeline and set it with both render element add before
-	key.pipeline = m->addPipeline();
-	m->setPipeline(key.pipeline, 0, key.renderPass);
-	m->setPipeline(key.pipeline, 1, key.renderOnScreen);
+	key.pipeline = m->addPipeline(0);
+	m->pushRenderPassPipeline(key.pipeline, key.renderPass);
+	m->pushRenderOnScreenPipeline(key.pipeline, key.renderOnScreen);
 	m->branch(key.renderPass, key.renderOnScreen);
 
 	return (*this);

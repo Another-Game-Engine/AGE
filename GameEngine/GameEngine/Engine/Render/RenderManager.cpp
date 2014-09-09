@@ -568,7 +568,7 @@ namespace gl
 		if (pipeline == _pipelines.end())
 			assert(0);
 		_optimizePipelineSearch.first = key;
-		_optimizePipelineSearch.second = &pipelines->second;
+		_optimizePipelineSearch.second = &pipeline->second;
 		return (&pipeline->second);
 	}
 
@@ -725,7 +725,7 @@ namespace gl
 		return (key);
 	}
 
-	RenderManager &RenderManager::pushRenderPassPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r)
+	RenderManager &RenderManager::pushRenderPassPipeline(Key<Pipeline> const &p, Key<RenderPass> const &r)
 	{
 		Pipeline *pipeline = getPipeline(p);
 		RenderPass *renderPass = getRenderPass(r);
@@ -733,7 +733,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderManager &RenderManager::pushRenderPostEffectPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r)
+	RenderManager &RenderManager::pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r)
 	{
 		Pipeline *pipeline = getPipeline(p);
 		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
@@ -741,7 +741,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderManager &RenderManager::pushRenderOnScreenPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r)
+	RenderManager &RenderManager::pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r)
 	{
 		Pipeline *pipeline = getPipeline(p);
 		RenderOnScreen *renderOnScreen = getRenderOnScreen(r);
@@ -766,7 +766,7 @@ namespace gl
 		return (*this);
 	}
 
-	RenderManager &RenderManager::udpatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender)
+	RenderManager &RenderManager::updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		Pipeline *pipeline = getPipeline(p);
 		pipeline->update(objectRender);
@@ -777,6 +777,7 @@ namespace gl
 	{
 		for (auto &index = _pipelineOrder.begin(); index != _pipelineOrder.end(); ++index)
 			index->second->draw();
+		return (*this);
 	}
 
 	RenderManager &RenderManager::drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender)

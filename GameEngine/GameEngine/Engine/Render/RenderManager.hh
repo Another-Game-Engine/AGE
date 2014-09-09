@@ -133,12 +133,12 @@ namespace gl
 
 		// Pipeline
 		Key<Pipeline> addPipeline(uint8_t priority);
-		RenderManager &pushRenderPassPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r);
-		RenderManager &pushRenderPostEffectPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r);
-		RenderManager &pushRenderOnScreenPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r);
+		RenderManager &pushRenderPassPipeline(Key<Pipeline> const &p, Key<RenderPass> const &r);
+		RenderManager &pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r);
+		RenderManager &pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r);
 		Key<Pipeline> getPipeline(size_t target);
 		RenderManager &configPipeline(Key<Pipeline> const &key, DrawType type);
-		RenderManager &udpatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
+		RenderManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
 
 		// drawing
 		RenderManager &drawPipelines();
