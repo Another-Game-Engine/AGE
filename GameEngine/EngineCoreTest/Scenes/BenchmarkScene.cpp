@@ -185,7 +185,7 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 
 
 	// create the pipeline and set it with both render element add before
-	key.pipeline = m->addPipeline(0);
+	key.pipeline = m->addPipeline();
 	m->pushRenderPassPipeline(key.pipeline, key.renderPass);
 	m->pushRenderOnScreenPipeline(key.pipeline, key.renderOnScreen);
 	m->branch(key.renderPass, key.renderOnScreen);

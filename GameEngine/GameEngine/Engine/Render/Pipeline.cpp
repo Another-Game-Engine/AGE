@@ -14,6 +14,15 @@ namespace gl
 		_drawFunc[DrawType::EACH_FOLLOWING_OBJECT] = &Pipeline::drawEachFollowObject;
 	}
 
+	Pipeline::Pipeline(Pipeline const &copy)
+		: _type(copy._type),
+		_toRender(copy._toRender)
+	{
+		_drawFunc[DrawType::NONE_OBJECT] = &Pipeline::drawNoneObject;
+		_drawFunc[DrawType::ALL_OBJECT] = &Pipeline::drawAllObject;
+		_drawFunc[DrawType::EACH_FOLLOWING_OBJECT] = &Pipeline::drawEachFollowObject;
+	}
+
 	Pipeline::~Pipeline()
 	{
 	}

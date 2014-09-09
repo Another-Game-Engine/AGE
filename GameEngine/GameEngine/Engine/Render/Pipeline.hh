@@ -24,6 +24,7 @@ namespace gl
 	public:
 		Pipeline();
 		~Pipeline();
+		Pipeline(Pipeline const &copy);
 
 		Pipeline &update(AGE::Vector<AGE::Drawable> const &geo);
 		Pipeline &config(DrawType drawType);
@@ -35,7 +36,6 @@ namespace gl
 		void drawEachFollowObject();
 		void drawNoneObject();
 
-		Pipeline(Pipeline const &copy) = delete;
 		Pipeline &operator=(Pipeline const &p) = delete;
 
 		uint8_t _priority;
