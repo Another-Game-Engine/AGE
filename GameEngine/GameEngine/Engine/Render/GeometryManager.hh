@@ -8,6 +8,7 @@
 #include <Utils/Dependency.hpp>
 #include <map>
 #include <Utils/Containers/Vector.hpp>
+#include <glm/glm.hpp>
 
 namespace gl
 {
