@@ -490,7 +490,7 @@ namespace gl
 	{
 		_draw.toRender = &objects;
 		_draw.start = start;
-		_draw.end = start;
+		_draw.end = end;
 		return (*this);
 	}
 
