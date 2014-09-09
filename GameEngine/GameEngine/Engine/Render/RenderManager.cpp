@@ -407,7 +407,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<RenderPass> RenderManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect)
+	Key<RenderPass> RenderManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect, uint8_t time)
 	{
 		Key<RenderPass> key;
 		Shader *shader;
@@ -416,6 +416,7 @@ namespace gl
 			return (Key<RenderPass>(KEY_DESTROY));
 		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, materialManager);
 		element->configRect(rect);
+		_render[time] = element;
 		return (key);
 	}
 
@@ -556,23 +557,23 @@ namespace gl
 		return (renderOnScreen->second);
 	}
 
-	Pipeline *RenderManager::getPipeline(Key<Pipeline> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_pipelines.size() == 0)
-			assert(0);
-		if (key == _optimizePipelineSearch.first)
-			return (_optimizePipelineSearch.second);
-		auto &pipeline = _pipelines.find(key);
-		if (pipeline == _pipelines.end())
-			assert(0);
-		_optimizePipelineSearch.first = key;
-		_optimizePipelineSearch.second = &pipeline->second;
-		return (&pipeline->second);
-	}
+	//Pipeline *RenderManager::getPipeline(Key<Pipeline> const &key)
+	//{
+	//	if (!key)
+	//		assert(0);
+	//	if (_pipelines.size() == 0)
+	//		assert(0);
+	//	if (key == _optimizePipelineSearch.first)
+	//		return (_optimizePipelineSearch.second);
+	//	auto &pipeline = _pipelines.find(key);
+	//	if (pipeline == _pipelines.end())
+	//		assert(0);
+	//	_optimizePipelineSearch.first = key;
+	//	_optimizePipelineSearch.second = &pipeline->second;
+	//	return (&pipeline->second);
+	//}
 
-	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
+	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect, uint8_t time)
 	{
 		Key<RenderPostEffect> key;
 		Shader *shader;
@@ -582,6 +583,7 @@ namespace gl
 		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *shader, geometryManager);
 		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
+		_render[time] = element;
 		return (key);
 	}
 
@@ -661,7 +663,7 @@ namespace gl
 		return (*this);
 	}
 
-	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect)
+	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, uint8_t time)
 	{
 		Key<RenderOnScreen> key;
 
@@ -669,6 +671,7 @@ namespace gl
 		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleForm(QUAD), *_preShaderQuad, geometryManager);
 		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
+		_render[time] = element;
 		return (key);
 	}
 
@@ -686,155 +689,139 @@ namespace gl
 
 	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPass> const &to)
 	{
-		RenderPass *renderPassFrom;
-		RenderPass *renderPassTo;
-
-		if ((renderPassFrom = getRenderPass(from)) == NULL)
-			return (*this);
-		if ((renderPassTo = getRenderPass(to)) == NULL)
-			return (*this);
+		RenderPass *renderPassFrom = getRenderPass(from);
+		RenderPass *renderPassTo = getRenderPass(to);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to)
 	{
-		RenderPass *renderPassFrom;
-		RenderPostEffect *renderPassTo;
-
-		if ((renderPassFrom = getRenderPass(from)) == NULL)
-			return (*this);
-		if ((renderPassTo = getRenderPostEffect(to)) == NULL)
-			return (*this);
+		RenderPass *renderPassFrom = getRenderPass(from);
+		RenderPostEffect *renderPassTo = getRenderPostEffect(to);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to)
 	{
-		RenderPass *renderPassFrom;
-		RenderOnScreen *renderPassTo;
-
-		if ((renderPassFrom = getRenderPass(from)) == NULL)
-			return (*this);
-		if ((renderPassTo = getRenderOnScreen(to)) == NULL)
-			return (*this);
+		RenderPass *renderPassFrom = getRenderPass(from);
+		RenderOnScreen *renderPassTo = getRenderOnScreen(to);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to)
 	{
-		RenderPostEffect *renderPassFrom;
-		RenderOnScreen *renderPassTo;
-
-		if ((renderPassFrom = getRenderPostEffect(from)) == NULL)
-			return (*this);
-		if ((renderPassTo = getRenderOnScreen(to)) == NULL)
-			return (*this);
+		RenderPostEffect *renderPassFrom = getRenderPostEffect(from);
+		RenderOnScreen *renderPassTo = getRenderOnScreen(to);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
 	}
 
-	Key<Pipeline> RenderManager::addPipeline()
-	{
-		Key<Pipeline> key;
+	//Key<Pipeline> RenderManager::addPipeline()
+	//{
+	//	Key<Pipeline> key;
+	//
+	//	_pipelines[key];
+	//	return (key);
+	//}
 
-		_pipelines[key];
-		return (key);
-	}
+	//RenderManager &RenderManager::addRenderPassPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r)
+	//{
+	//	Pipeline *pipeline = getPipeline(p);
+	//	RenderPass *renderPass = getRenderPass(r);
+	//	pipeline->addRendering(time, renderPass);
+	//	_minTime = std::min(_minTime, pipeline->getMinTime());
+	//	_maxTime = std::max(_maxTime, pipeline->getMaxTime());
+	//	return (*this);
+	//}
 
-	RenderManager &RenderManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r)
-	{
-		Pipeline *pipeline;
-		RenderPass *renderPass;
+	//RenderManager &RenderManager::addRenderPostEffectPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r)
+	//{
+	//	Pipeline *pipeline = getPipeline(p);
+	//	RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
+	//	pipeline->addRendering(time, renderPostEffect);
+	//	_minTime = std::min(_minTime, pipeline->getMinTime());
+	//	_maxTime = std::max(_maxTime, pipeline->getMaxTime());
+	//	return (*this);
+	//}
 
-		if ((pipeline = getPipeline(p)) == NULL)
-			return (*this);
-		if ((renderPass = getRenderPass(r)) == NULL)
-			return (*this);
-		pipeline->setRendering(time, renderPass);
-		return (*this);
-	}
+	//RenderManager &RenderManager::addRenderOnScreenPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r)
+	//{
+	//	Pipeline *pipeline = getPipeline(p);
+	//	RenderOnScreen *renderOnScreen = getRenderOnScreen(r);
+	//	pipeline->addRendering(time, renderOnScreen);
+	//	_minTime = std::min(_minTime, pipeline->getMinTime());
+	//	_maxTime = std::max(_maxTime, pipeline->getMaxTime());
+	//	return (*this);
+	//}
 
-	RenderManager &RenderManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r)
-	{
-		Pipeline *pipeline;
-		RenderPostEffect *renderPostEffect;
+	//Key<Pipeline> RenderManager::getPipeline(size_t target)
+	//{
+	//	if (target >= _pipelines.size())
+	//		assert(0);
+	//	auto &element = _pipelines.begin();
+	//	for (size_t index = 0; index < target; ++index)
+	//		++element;
+	//	return (element->first);
+	//}
 
-		if ((pipeline = getPipeline(p)) == NULL)
-			return (*this);
-		if ((renderPostEffect = getRenderPostEffect(r)) == NULL)
-			return (*this);
-		pipeline->setRendering(time, renderPostEffect);
-		return (*this);
-	}
+	//RenderManager &RenderManager::setDrawPipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender, DrawType type)
+	//{
+	//	Pipeline *pipeline = getPipeline(p);
+	//	pipeline->setDraw(objectRender);
+	//	pipeline->type = type;
+	//	return (*this);
+	//}
 
-	RenderManager &RenderManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r)
-	{
-		Pipeline *pipeline;
-		RenderOnScreen *renderOnScreen;
+	//RenderManager &RenderManager::setDrawPipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender)
+	//{
+	//	Pipeline *pipeline = getPipeline(p);
+	//	pipeline->setDraw(objectRender);
+	//	return (*this);
+	//}
 
-		if ((pipeline = getPipeline(p)) == NULL)
-			return (*this);
-		if ((renderOnScreen = getRenderOnScreen(r)) == NULL)
-			return (*this);
-		pipeline->setRendering(time, renderOnScreen);
-		_minTime = std::min(_minTime, pipeline->getMinTime());
-		_maxTime = std::max(_maxTime, pipeline->getMaxTime());
-		return (*this);
-	}
+	//RenderManager &RenderManager::setDrawPipeline(Key<Pipeline> const &p, DrawType type)
+	//{
+	//	Pipeline *pipeline = getPipeline(p);
+	//	pipeline->type = type;
+	//	return (*this);
+	//}
 
-	Key<Pipeline> RenderManager::getPipeline(size_t target)
-	{
-		if (target >= _pipelines.size())
-			assert(0);
-		auto &element = _pipelines.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
-	}
+	//RenderManager &RenderManager::drawPipelines()
+	//{
+	//	for (auto &pipeline = _pipelines.begin(); pipeline != _pipelines.end(); ++pipeline)
+	//	{
+	//		
+	//	}
+	//	return (*this);
+	//}
 
-	RenderManager &RenderManager::updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender, DrawType type)
-	{
-		Pipeline *pipeline;
-
-		if ((pipeline = getPipeline(p)) == NULL)
-			return (*this);
-		pipeline->setDraw(objectRender);
-		pipeline->drawType = type;
-		return (*this);
-	}
-
-	RenderManager &RenderManager::drawPipelines()
-	{
-		for (uint8_t time = _minTime; time < _maxTime; ++time)
-			for (auto &pipeline = _pipelines.begin(); pipeline != _pipelines.end(); ++pipeline)
-				pipeline->second.draw(time);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender)
-	{
-		Pipeline *pipeline;
-
-		if ((pipeline = getPipeline(key)) == NULL)
-			return (*this);
-		pipeline->setDraw(objectRender);
-		for (uint8_t time = pipeline->getMinTime(); time < pipeline->getMaxTime(); ++time)
-			pipeline->draw(time);
-		return (*this);
-	}
+	//RenderManager &RenderManager::drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender)
+	//{
+	//	Pipeline *pipeline = getPipeline(key);
+	//	pipeline->setDraw(objectRender);
+	//	if (pipeline->type == DrawType::GLOBAL)
+	//	{
+	//		for (uint8_t time = pipeline->getMinTime(); time < pipeline->getMaxTime(); ++time)
+	//			pipeline->draw(time);
+	//	}
+	//	else
+	//	{
+	//		for (size_t index = 0; index < pipeline->toRender->size(); ++index)
+	//		{
+	//			for (uint8_t time = pipeline->getMinTime(); time < pipeline->getMaxTime(); ++time)
+	//				pipeline->draw(time, index);
+	//		}
+	//	}
+	//	return (*this);
+	//}
 
 	RenderManager &RenderManager::draw(Key<RenderOnScreen> const &o, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
-		RenderOnScreen *renderOnScreen;
-		RenderPass *renderPass;
-
-		if ((renderOnScreen = getRenderOnScreen(o)) == NULL)
-			return (*this);
-		if ((renderPass = getRenderPass(r)) == NULL)
-			return (*this);
+		RenderOnScreen *renderOnScreen = getRenderOnScreen(o);
+		RenderPass *renderPass = getRenderPass(r);
 		renderPass->setDraw(objectRender, 0, objectRender.size());
 		renderOnScreen->branchInput(*renderPass);
 		renderPass->render();

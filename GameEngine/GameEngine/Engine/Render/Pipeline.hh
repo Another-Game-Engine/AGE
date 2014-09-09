@@ -20,16 +20,19 @@ namespace gl
 	class Pipeline
 	{
 	public:
-		DrawType drawType;
+		DrawType type;
+		AGE::Vector<AGE::Drawable> const *toRender;
 
 	public:
 		Pipeline();
 		~Pipeline();
 
 		Pipeline &setDraw(AGE::Vector<AGE::Drawable> const &geo);
-		Pipeline &setRendering(uint8_t time, Render *rendering);
+		Pipeline &setDraw(DrawType drawType);
+		Pipeline &addRendering(uint8_t time, Render *rendering);
 		uint8_t getMinTime() const;
 		uint8_t getMaxTime() const;
+		Pipeline &draw();
 		Pipeline &draw(uint8_t time);
 		Pipeline &draw(uint8_t time, size_t index);
 	private:
@@ -41,7 +44,5 @@ namespace gl
 		uint8_t _max;
 
 		std::map<size_t, Render *> _rendering;
-		AGE::Vector<AGE::Drawable> const *_toRender;
-
 	};
 }

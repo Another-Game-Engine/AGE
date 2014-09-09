@@ -13,13 +13,13 @@ namespace gl
 	{
 	}
 
-	Pipeline &Pipeline::setDraw(AGE::Vector<AGE::Drawable> const &toRender)
+	Pipeline &Pipeline::setDraw(AGE::Vector<AGE::Drawable> const &r)
 	{
-		_toRender = &toRender;
+		toRender = &r;
 		return (*this);
 	}
 
-	Pipeline &Pipeline::setRendering(uint8_t time, Render *rendering)
+	Pipeline &Pipeline::addRendering(uint8_t time, Render *rendering)
 	{
 		_rendering[time] = rendering;
 		return (*this);
@@ -43,7 +43,7 @@ namespace gl
 
 	Pipeline &Pipeline::draw(uint8_t time)
 	{
-		draw(time, 0, _toRender->size());
+		draw(time, 0, toRender->size());
 		return (*this);
 	}
 
@@ -53,8 +53,13 @@ namespace gl
 		if (element == _rendering.end())
 			return (*this);
 		if (element->second->getType() == RenderType::RENDER_PASS)
-			((RenderPass *)element->second)->setDraw(*_toRender, start, end);
+			((RenderPass *)element->second)->setDraw(*toRender, start, end);
 		element->second->render();
 		return (*this);
+	}
+
+	Pipeline &Pipeline::draw()
+	{
+
 	}
 }
