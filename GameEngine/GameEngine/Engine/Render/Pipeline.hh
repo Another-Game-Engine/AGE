@@ -8,28 +8,39 @@ namespace AGE { class Drawable; }
 
 namespace gl
 {
+
+	enum DrawType
+	{
+		GLOBAL = 0,
+		SEPARATE
+	};
+
 	class Render;
 	class Pipeline
 	{
 	public:
+		DrawType drawType;
+
+	public:
 		Pipeline();
 		~Pipeline();
 
-		Pipeline &setToRender(AGE::Vector<AGE::Drawable> const &geo);
+		Pipeline &setDraw(AGE::Vector<AGE::Drawable> const &geo, DrawType type);
 		Pipeline &setRendering(uint8_t time, Render *rendering);
 		uint8_t getMinTime() const;
 		uint8_t getMaxTime() const;
 		Pipeline &draw(uint8_t time);
-
+		Pipeline &draw(uint8_t time, size_t index);
 	private:
 		Pipeline(Pipeline const &copy) = delete;
 		Pipeline &operator=(Pipeline const &p) = delete;
+		Pipeline &draw(uint8_t time, size_t start, size_t end);
 
 		uint8_t _min;
 		uint8_t _max;
-		uint8_t *_times;
-		Render **_rendering;
-		uint8_t _nbrRendering;
+
+		std::map<size_t, Render *> _rendering;
 		AGE::Vector<AGE::Drawable> const *_toRender;
+
 	};
 }

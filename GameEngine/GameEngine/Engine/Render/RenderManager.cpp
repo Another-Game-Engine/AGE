@@ -506,13 +506,6 @@ namespace gl
 		return (*this);
 	}
 
-	RenderManager &RenderManager::setRenderingObjectsType(Key<RenderPass> const &key, RenderingObjectType type)
-	{
-		RenderPass *renderPass = getRenderPass(key);
-		renderPass->setTypeOfRenderingObjects(type);
-		return (*this);
-	}
-
 	RenderManager &RenderManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
 		Shader *shader;
@@ -802,13 +795,13 @@ namespace gl
 		return (element->first);
 	}
 
-	RenderManager &RenderManager::updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender)
+	RenderManager &RenderManager::updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender, DrawType type)
 	{
 		Pipeline *pipeline;
 
 		if ((pipeline = getPipeline(p)) == NULL)
 			return (*this);
-		pipeline->setToRender(objectRender);
+		pipeline->setDraw(objectRender, type);
 		return (*this);
 	}
 
@@ -826,7 +819,7 @@ namespace gl
 
 		if ((pipeline = getPipeline(key)) == NULL)
 			return (*this);
-		pipeline->setToRender(objectRender);
+		pipeline->setDraw(objectRender);
 		for (uint8_t time = pipeline->getMinTime(); time < pipeline->getMaxTime(); ++time)
 			pipeline->draw(time);
 		return (*this);
@@ -841,7 +834,7 @@ namespace gl
 			return (*this);
 		if ((renderPass = getRenderPass(r)) == NULL)
 			return (*this);
-		renderPass->setObjectsToRender(objectRender);
+		renderPass->setDraw(objectRender, 0, objectRender.size());
 		renderOnScreen->branchInput(*renderPass);
 		renderPass->render();
 		renderOnScreen->render();
