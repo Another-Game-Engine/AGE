@@ -108,6 +108,7 @@ namespace gl
 		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
 		RenderManager &popTargetRenderPass(Key<RenderPass> const &key);
 		RenderManager &useInputBufferRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
@@ -122,6 +123,7 @@ namespace gl
 		RenderManager &pushTargetRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement);
 		RenderManager &popTargetRenderPostEffect(Key<RenderPostEffect> const &key);
 		RenderManager &useInputBufferRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement);
+
 		// RenderOnScreen
 		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect);
 		Key<RenderOnScreen> getRenderOnScreen(size_t target) const;

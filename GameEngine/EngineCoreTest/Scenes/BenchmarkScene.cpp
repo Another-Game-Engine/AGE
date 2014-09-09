@@ -157,6 +157,7 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	key.global_state = m->addUniformBlock();
 	m->addShaderInterfaceBlock(key.shader, "global_state", key.global_state);
 	key.view_matrix = m->addShaderUniform(key.shader, "view_matrix", glm::mat4(1.f));
+	auto test = m->addShaderUniform(key.shader, "test", glm::mat4(1));
 
 	// bind the key on drawable info (material-transformation)
 	m->bindMaterialToShader<gl::Color_diffuse>(key.shader, m->addShaderUniform(key.shader, "diffuse_color", glm::vec4(1.0f)));
@@ -176,6 +177,7 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->pushSetBlendStateTask(key.renderPass, 0, false);
 	m->pushSetBlendStateTask(key.renderPass, 1, false);
 	m->pushDrawTaskRenderBuffer(key.renderPass);
+	m->pushSetUniformTaskRenderPass(key.renderPass, test, 0);
 
 	// create renderOnscreen and set it
 	key.renderOnScreen = m->addRenderOnScreen(glm::ivec4(0, 0, getInstance<IRenderContext>()->getScreenSize().x, getInstance<IRenderContext>()->getScreenSize().y));
@@ -190,14 +192,9 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->pushRenderOnScreenPipeline(key.pipeline, key.renderOnScreen);
 	m->branch(key.renderPass, key.renderOnScreen);
 
-	m->locationStorage.generateLocation(3);
-	m->locationStorage.setLocation(0, 0);
-	m->locationStorage.setLocation(0, 1.0f);
-	m->locationStorage.setLocation(1, 2.0);
-	m->locationStorage.setLocation(2, long(30));
-	std::cout << m->locationStorage.getLocation<float>(0) << std::endl;
-	std::cout << m->locationStorage.getLocation<double>(1) << std::endl;
-	std::cout << m->locationStorage.getLocation<long>(2) << std::endl;
+	// data storage
+	m->locationStorage.generateLocation(1);
+	m->locationStorage.setLocation(0, glm::mat4(0));
 	return (*this);
 }
 

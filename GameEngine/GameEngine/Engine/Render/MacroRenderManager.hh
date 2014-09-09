@@ -22,6 +22,9 @@
 	RenderManager &RenderManager::pushSetBlendStateTask(Key<##name##> const &key, int drawBuffer, bool state); \
 	RenderManager &popTask##name##(Key<##name##> const &key);
 
+#define GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(name) \
+	RenderManager &pushSetUniformTask##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location);
+
 #define GEN_DEF_RENDER_PUSH_TASK(name) 																																								\
 	RenderManager &RenderManager::pushClearTask##name##(Key<##name##> const &key, bool color, bool depth, bool stencil)																			\
 	{																																																\
@@ -201,3 +204,11 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 	renderPass->popTask();																																											  \
 	return (*this);																																													  \
 }
+
+#define GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(name) \
+	RenderManager &RenderManager::pushSetUniformTask##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location) \
+	{\
+		name *render = get##name##(key); \
+		render->pushSetUniformMat4Task(u, location); \
+		return (*this);\
+	}

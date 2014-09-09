@@ -427,6 +427,7 @@ namespace gl
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPass);
+	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
 
 	RenderManager &RenderManager::configRenderPass(Key<RenderPass> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
 	{

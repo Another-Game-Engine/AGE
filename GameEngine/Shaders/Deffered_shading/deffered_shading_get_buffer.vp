@@ -5,6 +5,8 @@ uniform global_state
 	mat4 projection_matrix;
 };
 
+uniform mat4 test;
+
 layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 normal;
 layout (location = 2) in vec4 color;
@@ -23,5 +25,5 @@ void main()
 	inter_position = view_matrix * model_matrix * position;
 	inter_normal = vec3(normal);
 	inter_texCoord = texCoord;
-	gl_Position = projection_matrix * inter_position;
+	gl_Position = projection_matrix * test * inter_position;
 }
