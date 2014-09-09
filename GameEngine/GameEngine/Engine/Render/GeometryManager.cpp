@@ -139,7 +139,7 @@ namespace gl
 	{
 		if (_simpleForm != NULL)
 			return (*this);
-		_simpleForm = new Key<Vertices>[nbrSimpleForm];
+		_simpleForm = new Key<Vertices>[SimpleForm::NBR_SIMPLE_FORM];
 		GLenum type = GL_FLOAT;
 		uint8_t sizeType = sizeof(float);
 		uint8_t nbrComponent = 2;
@@ -149,7 +149,7 @@ namespace gl
 		size_t sizeBuffer = sizeType * nbrComponent * nbrElement;
 		void *buffer[1];
 		buffer[0] = (void *)quadForm;
-		_simpleForm[QUAD] = addVertices(nbrElement, nbrBuffer, &sizeBuffer, buffer);
+		_simpleForm[SimpleForm::QUAD] = addVertices(nbrElement, nbrBuffer, &sizeBuffer, buffer);
 		attachVerticesToVertexPool(_simpleForm[QUAD], keyPool);
 		return (*this);
 	}

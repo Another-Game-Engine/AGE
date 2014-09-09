@@ -33,12 +33,6 @@ namespace gl
 		RENDER_ON_SCREEN
 	};
 
-	enum RenderingObjectType
-	{
-		GLOBAL_RENDER = 0,
-		SEPARATE_RENDER
-	};
-
 	class Render
 	{
 	public:
@@ -170,42 +164,6 @@ namespace gl
 		Draw &_draw;
 	};
 
-	class RenderPass : public RenderOffScreen
-	{
-	public:
-		struct Draw : public Render::Draw
-		{
-		public:
-			MaterialManager &materialManager;
-			AGE::Vector<AGE::Drawable> const *toRender;
-			size_t start;
-			size_t end;
-
-		public:
-			Draw(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode);
-		};
-
-	public:
-		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m);
-		virtual ~RenderPass();
-
-		RenderPass &pushDrawTask();
-
-		RenderPass &setTypeOfRenderingObjects(RenderingObjectType type);
-		RenderPass &setObjectsToRender(AGE::Vector<AGE::Drawable> const &objects);
-		virtual Render &render();
-		virtual RenderType getType() const;
-
-	private:
-		void separateDraw();
-		void globalDraw();
-		RenderPass(RenderPass const &copy) = delete;
-		RenderPass &operator=(RenderPass const &r) = delete;
-	
-		RenderingObjectType _typeRendering;
-		Draw &_draw;
-	};
-
 	class RenderPostEffect : public RenderOffScreen
 	{
 	public:
@@ -227,6 +185,40 @@ namespace gl
 	private:
 		RenderPostEffect(RenderPostEffect const &copy) = delete;
 		RenderPostEffect &operator=(RenderPostEffect const &r) = delete;
+
+		Draw &_draw;
+	};
+
+	class RenderPass : public RenderOffScreen
+	{
+	public:
+		struct Draw : public Render::Draw
+		{
+		public:
+			MaterialManager &materialManager;
+			AGE::Vector<AGE::Drawable> const *toRender;
+			size_t start;
+			size_t end;
+
+		public:
+			Draw(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode);
+		};
+
+	public:
+		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m);
+		virtual ~RenderPass();
+
+		RenderPass &pushDrawTask();
+
+		RenderPass &setDraw(AGE::Vector<AGE::Drawable> const &objects, size_t start, size_t end);
+		virtual Render &render();
+		virtual RenderType getType() const;
+
+	private:
+		void separateDraw();
+		void globalDraw();
+		RenderPass(RenderPass const &copy) = delete;
+		RenderPass &operator=(RenderPass const &r) = delete;
 
 		Draw &_draw;
 	};

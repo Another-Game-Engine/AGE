@@ -468,7 +468,6 @@ namespace gl
 
 	RenderPass::RenderPass(Shader &s, GeometryManager &g, MaterialManager &m)
 		: RenderOffScreen(new Draw(g, s, m, GL_TRIANGLES)),
-		_typeRendering(RenderingObjectType::GLOBAL_RENDER),
 		_draw((Draw &)Render::_draw)
 	{
 	}
@@ -487,34 +486,12 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPass &RenderPass::setTypeOfRenderingObjects(RenderingObjectType type)
-	{
-		_typeRendering = type;
-		return (*this);
-	}
-
-	RenderPass &RenderPass::setObjectsToRender(AGE::Vector<AGE::Drawable> const &objects)
+	RenderPass &RenderPass::setDraw(AGE::Vector<AGE::Drawable> const &objects, size_t start, size_t end)
 	{
 		_draw.toRender = &objects;
+		_draw.start = start;
+		_draw.end = start;
 		return (*this);
-	}
-
-	void RenderPass::separateDraw()
-	{
-		for (_draw.start = 0; _draw.start < _draw.toRender->size(); ++_draw.start)
-		{
-			_draw.end = _draw.start + 1;
-			for (size_t i = 0; i < _tasks.size(); ++i)
-				_tasks[i].func(_tasks[i].params);
-		}
-	}
-
-	void RenderPass::globalDraw()
-	{
-		_draw.start = 0;
-		_draw.end = _draw.toRender->size();
-		for (size_t index = 0; index < _tasks.size(); ++index)
-			_tasks[index].func(_tasks[index].params);
 	}
 
 	Render &RenderPass::render()
@@ -522,12 +499,8 @@ namespace gl
 		_fbo.bind();
 		updateOutput();
 		updateInput();
-		if (_draw.toRender == NULL)
-			return (*this);
-		if (_typeRendering == RenderingObjectType::GLOBAL_RENDER)
-			globalDraw();
-		else
-			separateDraw();
+		for (size_t i = 0; i < _tasks.size(); ++i)
+			_tasks[i].func(_tasks[i].params);
 		return (*this);
 	}
 
