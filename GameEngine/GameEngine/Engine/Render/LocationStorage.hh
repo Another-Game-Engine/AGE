@@ -41,14 +41,26 @@ namespace gl
 	template <typename TYPE>
 	LocationStorage &LocationStorage::setLocation(size_t index, TYPE const &value)
 	{
-		_locations[index] = Location(&value, sizeof(TYPE), 1);
+		if (_locations[index].size != sizeof(TYPE))
+			_locations[index] = Location(&value, sizeof(TYPE), 1);
+		else
+		{
+			memcpy(_locations[index].ptr, (TYPE *)&value, sizeof(TYPE));
+			_locations[index].nbrElement = 1;
+		}
 		return (*this);
 	}
 
 	template <typename TYPE>
 	LocationStorage &LocationStorage::setLocation(size_t index, TYPE const &value, size_t nbrElement)
 	{
-		_locations[index] = Location(&value, sizeof(TYPE), nbrElement);
+		if (_locations[index].size != sizeof(TYPE))
+			_locations[index] = Location(&value, sizeof(TYPE), nbrElement);
+		else
+		{
+			memcpy(_locations[index].ptr, (TYPE *)&value, sizeof(TYPE));
+			_locations[index].nbrElement = nbrElement;
+		}
 		return (*this);
 	}
 
