@@ -107,17 +107,21 @@ namespace gl
 
 		RenderOffScreen &pushTarget(GLenum attachement);
 		RenderOffScreen &popTarget();
-		
 		RenderOffScreen &createBufferSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
 		RenderOffScreen &createBufferSamplable(GLenum attachement, GLenum internalFormat);
 		Texture2D const *getBufferSamplable(GLenum attachement) const;
 		RenderOffScreen &createBufferNotSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
 		RenderOffScreen &createBufferNotSamplable(GLenum attachement, GLenum internalFormat);
 		RenderBuffer const *getBufferNotSamplable(GLenum attachement) const;
-		
 		RenderOffScreen &deleteBuffer(GLenum attachement);
-
 		RenderOffScreen &useInputBuffer(GLenum attachement);
+
+		RenderOffScreen &pushSetUniformMat4Task(Key<Uniform> const &key, size_t location);
+		RenderOffScreen &pushSetUniformMat3Task(Key<Uniform> const &key, size_t location);
+		RenderOffScreen &pushSetUniformfTask(Key<Uniform> const &key, size_t location);
+		RenderOffScreen &pushSetUniformVec4Task(Key<Uniform> const &key, size_t location);
+		RenderOffScreen &pushSetSamplerTask(Key<Sampler> const &key, size_t location);
+		RenderOffScreen &pushSetInterfaceBlockUBOTask(Key<InterfaceBlock> const &key, size_t location);
 
 	protected:
 		RenderOffScreen(Render::Draw *draw);

@@ -1,5 +1,6 @@
 #include <Render/UniformBlock.hh>
 #include <Render/Shader.hh>
+#include <Render/ShaderResource.hh>
 
 namespace gl
 {
@@ -55,46 +56,6 @@ namespace gl
 		return (_buffer.getId());
 	}
 
-	static size_t convertEnumToSize(GLint typeEnum)
-	{
-		switch (typeEnum)
-		{
-		case GL_FLOAT_MAT3:
-			return (sizeof(glm::mat3));
-		case GL_FLOAT_MAT4:
-			return (sizeof(glm::mat4));
-		case GL_FLOAT:
-			return (sizeof(float));
-		case GL_FLOAT_VEC3:
-			return (sizeof(glm::vec3));
-		case GL_FLOAT_VEC4:
-			return (sizeof(glm::vec4));
-		case GL_INT:
-			return (sizeof(int));
-		case  GL_FLOAT_VEC2:
-			return (sizeof(glm::vec2));
-		case GL_INT_VEC2:
-			return (sizeof(glm::ivec2));
-		case GL_INT_VEC3:
-			return (sizeof(glm::ivec3));
-		case GL_INT_VEC4:
-			return (sizeof(glm::ivec4));
-		case GL_BOOL:
-			return (sizeof(bool));
-		case GL_BOOL_VEC2:
-			return (sizeof(glm::bvec2));
-		case GL_BOOL_VEC3:
-			return (sizeof(glm::bvec3));
-		case GL_BOOL_VEC4:
-			return (sizeof(glm::bvec4));
-		case GL_FLOAT_MAT2:
-			return (sizeof(glm::mat2));
-		default:
-			assert(0);
-		}
-		return (0);
-	}
-
 	UniformBlock const &UniformBlock::introspection(Shader const &s, GLuint indexInterfaceBlock)
 	{
 		glGetActiveUniformBlockiv(s.getId(), indexInterfaceBlock, GL_UNIFORM_BLOCK_DATA_SIZE, &_sizeBlock);
@@ -117,7 +78,7 @@ namespace gl
 		glGetActiveUniformsiv(s.getId(), nbrElement, (const GLuint *)elements, GL_UNIFORM_ARRAY_STRIDE, strides);
 		for (GLint index = 0; index < nbrElement; ++index)
 		{
-			MemoryGPU m(sizes[index] * convertEnumToSize(types[index]), offsets[index], strides[index]);
+			MemoryGPU m(sizes[index] * convertGLidToSize(types[index]), offsets[index], strides[index]);
 			_data.insert(m);
 		}
 		delete[] offsets;

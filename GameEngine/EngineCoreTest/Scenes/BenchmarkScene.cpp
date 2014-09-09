@@ -190,6 +190,14 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->pushRenderOnScreenPipeline(key.pipeline, key.renderOnScreen);
 	m->branch(key.renderPass, key.renderOnScreen);
 
+	m->shaderResourceManager.generateLocation(3);
+	m->shaderResourceManager.setLocation(0, 0);
+	m->shaderResourceManager.setLocation(0, 1.0f);
+	m->shaderResourceManager.setLocation(1, 2.0);
+	m->shaderResourceManager.setLocation(2, long(30));
+	std::cout << m->shaderResourceManager.getLocation<float>(0) << std::endl;
+	std::cout << m->shaderResourceManager.getLocation<double>(1) << std::endl;
+	std::cout << m->shaderResourceManager.getLocation<long>(2) << std::endl;
 	return (*this);
 }
 

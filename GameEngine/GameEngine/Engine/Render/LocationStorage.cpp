@@ -1,5 +1,6 @@
-#include <Render/ShaderResourceManager.hh>
+#include <Render/LocationStorage.hh>
 #include <stdint.h>
+#include <glm/glm.hpp>
 
 namespace gl
 {
@@ -11,7 +12,7 @@ namespace gl
 
 	}
 
-	Location::Location(void *location, size_t size, size_t nbrElement)
+	Location::Location(void const *location, size_t size, size_t nbrElement)
 		: ptr(NULL),
 		size(size),
 		nbrElement(nbrElement)
@@ -46,15 +47,15 @@ namespace gl
 		return (*this);
 	}
 
-	ShaderResourceManager::ShaderResourceManager()
+	LocationStorage::LocationStorage()
 	{
 	}
 
-	ShaderResourceManager::~ShaderResourceManager()
+	LocationStorage::~LocationStorage()
 	{
 	}
 
-	ShaderResourceManager &ShaderResourceManager::generateLocation(size_t nbrIndex)
+	LocationStorage &LocationStorage::generateLocation(size_t nbrIndex)
 	{
 		_locations.resize(nbrIndex);
 		return (*this);

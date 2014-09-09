@@ -16,6 +16,7 @@
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
 #include <Render/MacroRenderManager.hh>
+#include <Render/LocationStorage.hh>
 
 namespace gl
 {
@@ -35,6 +36,7 @@ namespace gl
 	public:
 		GeometryManager geometryManager;
 		MaterialManager materialManager;
+		LocationStorage shaderResourceManager;
 
 	public:
 		RenderManager();

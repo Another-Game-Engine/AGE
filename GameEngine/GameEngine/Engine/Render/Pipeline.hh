@@ -4,7 +4,7 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Render/Render.hh>
 
-namespace AGE { class Drawable; }
+namespace AGE { struct Drawable; }
 
 namespace gl
 {
