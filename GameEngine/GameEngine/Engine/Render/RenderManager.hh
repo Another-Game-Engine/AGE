@@ -93,7 +93,7 @@ namespace gl
 
 
 		// RenderPass
-		Key<RenderPass> addRenderPass(Key<Shader> const &shader, glm::ivec4 const &rect, uint8_t time);
+		Key<RenderPass> addRenderPass(Key<Shader> const &shader, glm::ivec4 const &rect);
 		Key<RenderPass> getRenderPass(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPass)
 		RenderManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
@@ -106,10 +106,9 @@ namespace gl
 		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
 		RenderManager &popTargetRenderPass(Key<RenderPass> const &key);
 		RenderManager &useInputBufferRenderPass(Key<RenderPass> const &key, GLenum attachement);
-		RenderManager &setObjectToRender(Key<RenderPass> const &key, AGE::Vector<AGE::Drawable> const &toRender);
 
 		// RenderPostEffect
-		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect, uint8_t time);
+		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
 		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect)
 		RenderManager &configRenderPostEffect(Key<RenderPostEffect> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
@@ -122,7 +121,7 @@ namespace gl
 		RenderManager &popTargetRenderPostEffect(Key<RenderPostEffect> const &key);
 		RenderManager &useInputBufferRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement);
 		// RenderOnScreen
-		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, uint8_t time);
+		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect);
 		Key<RenderOnScreen> getRenderOnScreen(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderOnScreen);
 		RenderManager &configRenderOnScreen(Key<RenderOnScreen> const &renderOnScreen, glm::ivec4 const &rect, GLenum mode);
@@ -133,14 +132,13 @@ namespace gl
 		RenderManager &branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to);
 
 		// Pipeline
-		//Key<Pipeline> addPipeline();
-		//RenderManager &addRenderPassPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r);
-		//RenderManager &addRenderPostEffectPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r);
-		//RenderManager &addRenderOnScreenPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r);
-		//Key<Pipeline> getPipeline(size_t target);
-		//RenderManager &setDrawPipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender, DrawType type);
-		//RenderManager &setDrawPipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
-		//RenderManager &setDrawPipeline(Key<Pipeline> const &p, DrawType type);
+		Key<Pipeline> addPipeline(uint8_t priority);
+		RenderManager &pushRenderPassPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r);
+		RenderManager &pushRenderPostEffectPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r);
+		RenderManager &pushRenderOnScreenPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r);
+		Key<Pipeline> getPipeline(size_t target);
+		RenderManager &configPipeline(Key<Pipeline> const &key, DrawType type);
+		RenderManager &udpatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
 
 		// drawing
 		//RenderManager &drawPipelines();
@@ -156,10 +154,7 @@ namespace gl
 		std::map<Key<RenderPass>, RenderPass *> _renderPass;
 		std::map<Key<RenderPostEffect>, RenderPostEffect *> _renderPostEffect;
 		std::map<Key<RenderOnScreen>, RenderOnScreen *> _renderOnScreen;
-		std::map<uint8_t, Render *> _render;
-
-		//uint8_t _minTime;
-		//uint8_t _maxTime;
+		std::map<Key<Pipeline>, Pipeline> _pipelines;
 
 		// optimize search in map
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
@@ -177,9 +172,7 @@ namespace gl
 		RenderPass *getRenderPass(Key<RenderPass> const &key);
 		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key);
 		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key);
-		//Pipeline *getPipeline(Key<Pipeline> const &key);
-		//void drawGlobal(Pipeline &current);
-		//void drawSeparate();
+		Pipeline *getPipeline(Key<Pipeline> const &key);
 	};
 
 	template <typename TYPE>

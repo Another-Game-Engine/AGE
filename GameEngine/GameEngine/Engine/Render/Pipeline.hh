@@ -11,7 +11,8 @@ namespace gl
 
 	enum DrawType
 	{
-		GLOBAL = 0,
+		NON = 0,
+		GLOBAL,
 		SEPARATE
 	};
 
@@ -20,29 +21,27 @@ namespace gl
 	class Pipeline
 	{
 	public:
-		DrawType type;
-		AGE::Vector<AGE::Drawable> const *toRender;
-
-	public:
-		Pipeline();
+		Pipeline(uint8_t priority);
 		~Pipeline();
 
-		Pipeline &setDraw(AGE::Vector<AGE::Drawable> const &geo);
-		Pipeline &setDraw(DrawType drawType);
-		Pipeline &addRendering(uint8_t time, Render *rendering);
-		uint8_t getMinTime() const;
-		uint8_t getMaxTime() const;
-		Pipeline &draw();
-		Pipeline &draw(uint8_t time);
-		Pipeline &draw(uint8_t time, size_t index);
+		Pipeline &update(AGE::Vector<AGE::Drawable> const &geo);
+		Pipeline &config(DrawType drawType);
+		Pipeline &pushRender(Render *render);
+		Pipeline &pushRenderPass(RenderPass *renderPass);
+		bool operator<(Pipeline const &p);
+		bool operator>(Pipeline const &p);
+		bool operator<=(Pipeline const &p);
+		bool operator>=(Pipeline const &p);
+		bool operator==(Pipeline const &p);
+		bool operator!=(Pipeline const &p);
 	private:
 		Pipeline(Pipeline const &copy) = delete;
 		Pipeline &operator=(Pipeline const &p) = delete;
-		Pipeline &draw(uint8_t time, size_t start, size_t end);
 
-		uint8_t _min;
-		uint8_t _max;
-
-		std::map<size_t, Render *> _rendering;
+		uint8_t _priority;
+		DrawType _type;
+		AGE::Vector<AGE::Drawable> const *_toRender;
+		AGE::Vector<Render *> _render;
+		AGE::Vector<RenderPass *> _renderPass;
 	};
 }

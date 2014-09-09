@@ -5,7 +5,10 @@
 
 namespace gl
 {
-	Pipeline::Pipeline()
+	Pipeline::Pipeline(uint8_t priority)
+		: _priority(priority),
+		_type(DrawType::GLOBAL),
+		_toRender(NULL)
 	{
 	}
 
@@ -13,53 +16,60 @@ namespace gl
 	{
 	}
 
-	Pipeline &Pipeline::setDraw(AGE::Vector<AGE::Drawable> const &r)
+	Pipeline &Pipeline::update(AGE::Vector<AGE::Drawable> const &toRender)
 	{
-		toRender = &r;
+		_toRender = &toRender;
+		for (size_t index = 0; index < _renderPass.size(); ++index)
+			_renderPass[index]->setDraw(*_toRender);
 		return (*this);
 	}
 
-	Pipeline &Pipeline::addRendering(uint8_t time, Render *rendering)
+	Pipeline &Pipeline::config(DrawType type)
 	{
-		_rendering[time] = rendering;
+		_type = type;
 		return (*this);
 	}
 
-	uint8_t Pipeline::getMaxTime() const
+	Pipeline &Pipeline::pushRender(Render *render)
 	{
-		return (_max);
+		_render.push_back(render);
+		return (*this);
 	}
-
-	uint8_t Pipeline::getMinTime() const
+	
+	Pipeline &Pipeline::pushRenderPass(RenderPass *renderPass)
 	{
-		return (_min);
-	}
-
-	Pipeline &Pipeline::draw(uint8_t time, size_t index)
-	{
-		draw(time, index, index + 1);
+		_render.push_back(renderPass);
+		_renderPass.push_back(renderPass);
 		return (*this);
 	}
 
-	Pipeline &Pipeline::draw(uint8_t time)
+	bool Pipeline::operator<(Pipeline const &p)
 	{
-		draw(time, 0, toRender->size());
-		return (*this);
+		return (_priority < p._priority);
 	}
 
-	Pipeline &Pipeline::draw(uint8_t time, size_t start, size_t end)
+	bool Pipeline::operator>(Pipeline const &p)
 	{
-		auto &element = _rendering.find(time);
-		if (element == _rendering.end())
-			return (*this);
-		if (element->second->getType() == RenderType::RENDER_PASS)
-			((RenderPass *)element->second)->setDraw(*toRender, start, end);
-		element->second->render();
-		return (*this);
+		return (_priority > p._priority);
 	}
 
-	Pipeline &Pipeline::draw()
+	bool Pipeline::operator<=(Pipeline const &p)
 	{
-
+		return (_priority <= p._priority);
 	}
+
+	bool Pipeline::operator>=(Pipeline const &p)
+	{
+		return (_priority >= p._priority);
+	}
+	bool Pipeline::operator==(Pipeline const &p)
+	{
+		return (_priority == p._priority);
+	}
+
+	bool Pipeline::operator!=(Pipeline const &p)
+	{
+		return (_priority != p._priority);
+	}
+
 }
