@@ -141,8 +141,8 @@ namespace gl
 		RenderManager &udpatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
 
 		// drawing
-		//RenderManager &drawPipelines();
-		//RenderManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
+		RenderManager &drawPipelines();
+		RenderManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
 		RenderManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
 
 	private:
@@ -155,6 +155,7 @@ namespace gl
 		std::map<Key<RenderPostEffect>, RenderPostEffect *> _renderPostEffect;
 		std::map<Key<RenderOnScreen>, RenderOnScreen *> _renderOnScreen;
 		std::map<Key<Pipeline>, Pipeline> _pipelines;
+		std::map<uint8_t, Pipeline *> _pipelineOrder;
 
 		// optimize search in map
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;

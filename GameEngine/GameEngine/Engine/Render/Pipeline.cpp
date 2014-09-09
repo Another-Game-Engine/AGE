@@ -5,14 +5,13 @@
 
 namespace gl
 {
-	Pipeline::Pipeline(uint8_t priority)
-		: _priority(priority),
-		_type(DrawType::GLOBAL),
+	Pipeline::Pipeline()
+		: _type(DrawType::ALL_OBJECT),
 		_toRender(NULL)
 	{
-		_drawFunc[DrawType::NONE] = &Pipeline::drawNone;
-		_drawFunc[DrawType::GLOBAL] = &Pipeline::drawGlobal;
-		_drawFunc[DrawType::SEPARATE] = &Pipeline::drawSeparate;
+		_drawFunc[DrawType::NONE_OBJECT] = &Pipeline::drawNoneObject;
+		_drawFunc[DrawType::ALL_OBJECT] = &Pipeline::drawAllObject;
+		_drawFunc[DrawType::EACH_FOLLOWING_OBJECT] = &Pipeline::drawEachFollowObject;
 	}
 
 	Pipeline::~Pipeline()
@@ -42,35 +41,6 @@ namespace gl
 		_render.push_back(renderPass);
 		_renderPass.push_back(renderPass);
 		return (*this);
-	}
-
-	bool Pipeline::operator<(Pipeline const &p)
-	{
-		return (_priority < p._priority);
-	}
-
-	bool Pipeline::operator>(Pipeline const &p)
-	{
-		return (_priority > p._priority);
-	}
-
-	bool Pipeline::operator<=(Pipeline const &p)
-	{
-		return (_priority <= p._priority);
-	}
-
-	bool Pipeline::operator>=(Pipeline const &p)
-	{
-		return (_priority >= p._priority);
-	}
-	bool Pipeline::operator==(Pipeline const &p)
-	{
-		return (_priority == p._priority);
-	}
-
-	bool Pipeline::operator!=(Pipeline const &p)
-	{
-		return (_priority != p._priority);
 	}
 
 	Pipeline &Pipeline::draw()

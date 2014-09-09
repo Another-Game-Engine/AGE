@@ -720,7 +720,8 @@ namespace gl
 	{
 		Key<Pipeline> key;
 	
-		_pipelines[key] = Pipeline(priority);
+		Pipeline &element = _pipelines[key];
+		_pipelineOrder[priority] = &element;
 		return (key);
 	}
 
@@ -772,32 +773,25 @@ namespace gl
 		return (*this);
 	}
 
+	RenderManager &RenderManager::drawPipelines()
+	{
+		for (auto &index = _pipelineOrder.begin(); index != _pipelineOrder.end(); ++index)
+			index->second->draw();
+	}
 
-	//RenderManager &RenderManager::drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender)
-	//{
-	//	Pipeline *pipeline = getPipeline(key);
-	//	pipeline->setDraw(objectRender);
-	//	if (pipeline->type == DrawType::GLOBAL)
-	//	{
-	//		for (uint8_t time = pipeline->getMinTime(); time < pipeline->getMaxTime(); ++time)
-	//			pipeline->draw(time);
-	//	}
-	//	else
-	//	{
-	//		for (size_t index = 0; index < pipeline->toRender->size(); ++index)
-	//		{
-	//			for (uint8_t time = pipeline->getMinTime(); time < pipeline->getMaxTime(); ++time)
-	//				pipeline->draw(time, index);
-	//		}
-	//	}
-	//	return (*this);
-	//}
+	RenderManager &RenderManager::drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender)
+	{
+		Pipeline *pipeline = getPipeline(key);
+		pipeline->update(objectRender);
+		pipeline->draw();
+		return (*this);
+	}
 
 	RenderManager &RenderManager::draw(Key<RenderOnScreen> const &o, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
 		RenderOnScreen *renderOnScreen = getRenderOnScreen(o);
 		RenderPass *renderPass = getRenderPass(r);
-		renderPass->setDraw(objectRender);
+		renderPass->setDraw(objectRender, 0, objectRender.size());
 		renderOnScreen->branchInput(*renderPass);
 		renderPass->render();
 		renderOnScreen->render();

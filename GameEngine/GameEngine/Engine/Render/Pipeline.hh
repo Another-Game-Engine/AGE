@@ -22,19 +22,13 @@ namespace gl
 	class Pipeline
 	{
 	public:
-		Pipeline(uint8_t priority);
+		Pipeline();
 		~Pipeline();
 
 		Pipeline &update(AGE::Vector<AGE::Drawable> const &geo);
 		Pipeline &config(DrawType drawType);
 		Pipeline &pushRender(Render *render);
 		Pipeline &pushRenderPass(RenderPass *renderPass);
-		bool operator<(Pipeline const &p);
-		bool operator>(Pipeline const &p);
-		bool operator<=(Pipeline const &p);
-		bool operator>=(Pipeline const &p);
-		bool operator==(Pipeline const &p);
-		bool operator!=(Pipeline const &p);
 		Pipeline &draw();
 	private:
 		void drawAllObject();
