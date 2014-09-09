@@ -287,23 +287,6 @@ namespace gl
 		}
 	}
 
-	Render::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode)
-		: geometryManager(g),
-		shader(s),
-		mode(mode)
-	{
-	}
-
-	RenderPass::Draw::Draw(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode)
-		: Render::Draw(g, s, mode),
-		materialManager(m),
-		toRender(NULL),
-		start(0),
-		end(0)
-	{
-
-	}
-
 	RenderOffScreen::RenderOffScreen(Render::Draw *draw)
 		: Render(draw),
 		_sample(0),
@@ -466,8 +449,8 @@ namespace gl
 			updateFrameBuffer();
 	}
 
-	RenderPass::RenderPass(Shader &s, GeometryManager &g, MaterialManager &m)
-		: RenderOffScreen(new Draw(g, s, m, GL_TRIANGLES)),
+	RenderPass::RenderPass(Shader &s, GeometryManager &g, MaterialManager &m, LocationStorage &l)
+		: RenderOffScreen(new Draw(g, l, s, m, GL_TRIANGLES)),
 		_draw((Draw &)Render::_draw)
 	{
 	}
@@ -512,16 +495,9 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPostEffect::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &key)
-		: Render::Draw(g, s, mode),
-		quad(key)
-	{
 
-	}
-
-
-	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g)
-		: RenderOffScreen(new Draw(g, s, GL_TRIANGLES, key)),
+	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g, LocationStorage &l)
+		: RenderOffScreen(new Draw(g, l, s, GL_TRIANGLES, key)),
 		_draw((Draw &)Render::_draw)
 	{
 
@@ -587,5 +563,33 @@ namespace gl
 	RenderType RenderPass::getType() const
 	{
 		return (RenderType::RENDER_PASS);
+	}
+
+	Render::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode)
+		: geometryManager(g),
+		shader(s),
+		mode(mode)
+	{
+	}
+
+	RenderPass::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, MaterialManager &m, GLenum mode)
+		: RenderOffScreen::Draw(g, l, s, mode),
+		materialManager(m),
+		toRender(NULL),
+		start(0),
+		end(0)
+	{
+	}
+
+	RenderPostEffect::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad)
+		: RenderOffScreen::Draw(g, l, s, mode),
+		quad(quad)
+	{
+	}
+
+	RenderOffScreen::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode)
+		: Render::Draw(g, s, mode),
+		locationStorage(l)
+	{
 	}
 }

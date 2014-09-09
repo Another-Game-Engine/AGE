@@ -36,7 +36,7 @@ namespace gl
 	public:
 		GeometryManager geometryManager;
 		MaterialManager materialManager;
-		LocationStorage shaderResourceManager;
+		LocationStorage locationStorage;
 
 	public:
 		RenderManager();

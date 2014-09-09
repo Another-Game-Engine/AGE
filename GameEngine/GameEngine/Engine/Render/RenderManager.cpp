@@ -410,11 +410,8 @@ namespace gl
 	Key<RenderPass> RenderManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect)
 	{
 		Key<RenderPass> key;
-		Shader *shader;
-
-		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<RenderPass>(KEY_DESTROY));
-		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, materialManager);
+		Shader *shader = getShader(keyShader);
+		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, materialManager, locationStorage);
 		element->configRect(rect);
 		return (key);
 	}
@@ -580,11 +577,9 @@ namespace gl
 	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
 	{
 		Key<RenderPostEffect> key;
-		Shader *shader;
 
-		if ((shader = getShader(s)) == NULL)
-			return  (Key<RenderPostEffect>(KEY_DESTROY));
-		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *shader, geometryManager);
+		Shader *shader = getShader(s);
+		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *shader, geometryManager, locationStorage);
 		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
 		return (key);

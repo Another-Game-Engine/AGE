@@ -11,6 +11,7 @@
 #include <Render/OpenGLTask.hh>
 #include <Render/Framebuffer.hh>
 #include <Render/Shader.hh>
+#include <Render/LocationStorage.hh>
 #include <map>
 #include <utility>
 
@@ -98,13 +99,48 @@ namespace gl
 		Draw &_draw;
 	};
 
+	class RenderOnScreen : public Render
+	{
+	public:
+		struct Draw : public Render::Draw
+		{
+		public:
+			Key<Vertices> quad;
+
+		public:
+			Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad);
+		};
+
+	public:
+		virtual ~RenderOnScreen();
+		RenderOnScreen(Key<Vertices> const &key, Shader &shader, GeometryManager &g);
+
+		virtual Render &render();
+		virtual RenderType getType() const;
+
+	private:
+		RenderOnScreen(RenderOnScreen const &copy) = delete;
+		RenderOnScreen &operator=(RenderOnScreen const &r) = delete;
+
+		Draw &_draw;
+	};
+
 	class RenderOffScreen : public Render
 	{
+	public:
+		struct Draw : public Render::Draw
+		{
+		public:
+			LocationStorage &locationStorage;
+
+		public:
+			Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode);
+		};
+
 	public:
 		virtual ~RenderOffScreen();
 
 		RenderOffScreen &configSample(GLint sample);
-
 		RenderOffScreen &pushTarget(GLenum attachement);
 		RenderOffScreen &popTarget();
 		RenderOffScreen &createBufferSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
@@ -142,45 +178,19 @@ namespace gl
 		void updateOutput();
 	};
 
-	class RenderOnScreen : public Render
-	{
-	public:
-		struct Draw : public Render::Draw
-		{
-		public:
-			Key<Vertices> quad;
-
-		public:
-			Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad);
-		};
-
-	public:
-		virtual ~RenderOnScreen();
-		RenderOnScreen(Key<Vertices> const &key, Shader &shader, GeometryManager &g);
-
-		virtual Render &render();
-		virtual RenderType getType() const;
-
-	private:
-		RenderOnScreen(RenderOnScreen const &copy) = delete;
-		RenderOnScreen &operator=(RenderOnScreen const &r) = delete;
-
-		Draw &_draw;
-	};
-
 	class RenderPostEffect : public RenderOffScreen
 	{
 	public:
-		struct Draw : public Render::Draw
+		struct Draw : public RenderOffScreen::Draw
 		{
 		public:
 			Key<Vertices> quad;
 
 		public:
-			Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad);
+			Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad);
 		};
 	public:
-		RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g);
+		RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g, LocationStorage &l);
 		virtual ~RenderPostEffect();
 
 		virtual Render &render();
@@ -196,7 +206,7 @@ namespace gl
 	class RenderPass : public RenderOffScreen
 	{
 	public:
-		struct Draw : public Render::Draw
+		struct Draw : public RenderOffScreen::Draw
 		{
 		public:
 			MaterialManager &materialManager;
@@ -205,11 +215,11 @@ namespace gl
 			size_t end;
 
 		public:
-			Draw(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode);
+			Draw(GeometryManager &g, LocationStorage &l, Shader &s, MaterialManager &m, GLenum mode);
 		};
 
 	public:
-		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m);
+		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m, LocationStorage &l);
 		virtual ~RenderPass();
 
 		RenderPass &pushDrawTask();
