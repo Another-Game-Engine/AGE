@@ -21,7 +21,7 @@ namespace gl
 	}
 
 	typedef std::pair<uint32_t, uint32_t>				idxPair_t;
-	typedef std::unordered_map<idxPair_t, uint32_t>		idxHash_t;
+	typedef std::map<idxPair_t, uint32_t>				idxHash_t;
 
 	static uint32_t getMiddlePoint(std::vector<glm::vec3> vertexTab, idxHash_t &middlePoints, uint32_t p1, uint32_t p2)
 	{
