@@ -156,8 +156,6 @@ namespace gl
 		RenderOffScreen &pushSetUniformMat3Task(Key<Uniform> const &key, size_t location);
 		RenderOffScreen &pushSetUniformFloatTask(Key<Uniform> const &key, size_t location);
 		RenderOffScreen &pushSetUniformVec4Task(Key<Uniform> const &key, size_t location);
-		RenderOffScreen &pushSetSamplerTask(Key<Sampler> const &key, size_t location);
-		RenderOffScreen &pushSetInterfaceBlockUBOTask(Key<InterfaceBlock> const &key, size_t location);
 
 	protected:
 		RenderOffScreen(Render::Draw *draw);

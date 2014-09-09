@@ -97,32 +97,15 @@ namespace gl
 		// RenderPass
 		Key<RenderPass> addRenderPass(Key<Shader> const &shader, glm::ivec4 const &rect);
 		Key<RenderPass> getRenderPass(size_t target) const;
-		GEN_DEC_RENDER_PUSH_TASK(RenderPass)
-		RenderManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
-		RenderManager &createBufferSamplableRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
-		RenderManager &createBufferNotSamplableRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
-		RenderManager &deleteBufferRenderPass(Key<RenderPass> const &key, GLenum attachement);
-		RenderManager &pushInputRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s, GLenum attachement);
-		RenderManager &popInputRenderPass(Key<RenderPass> const &key);
-		RenderManager &pushTargetRenderPass(Key<RenderPass> const &key, GLenum attachement);
 		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
-		RenderManager &popTargetRenderPass(Key<RenderPass> const &key);
-		RenderManager &useInputBufferRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		GEN_DEC_RENDER_PUSH_TASK(RenderPass);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
 		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
-		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect)
-		RenderManager &configRenderPostEffect(Key<RenderPostEffect> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
-		RenderManager &createBufferSamplableRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
-		RenderManager &createBufferNotSamplableRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
-		RenderManager &deleteBufferRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement);
-		RenderManager &pushInputRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s, GLenum attachement);
-		RenderManager &popInputRenderPostEffect(Key<RenderPostEffect> const &key);
-		RenderManager &pushTargetRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement);
-		RenderManager &popTargetRenderPostEffect(Key<RenderPostEffect> const &key);
-		RenderManager &useInputBufferRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement);
+		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect);
+		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
 
 		// RenderOnScreen
 		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect);

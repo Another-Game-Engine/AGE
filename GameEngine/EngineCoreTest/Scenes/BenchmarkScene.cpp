@@ -157,7 +157,6 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	key.global_state = m->addUniformBlock();
 	m->addShaderInterfaceBlock(key.shader, "global_state", key.global_state);
 	key.view_matrix = m->addShaderUniform(key.shader, "view_matrix", glm::mat4(1.f));
-	auto test = m->addShaderUniform(key.shader, "test", glm::mat4(1));
 
 	// bind the key on drawable info (material-transformation)
 	m->bindMaterialToShader<gl::Color_diffuse>(key.shader, m->addShaderUniform(key.shader, "diffuse_color", glm::vec4(1.0f)));
@@ -177,7 +176,6 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->pushSetBlendStateTask(key.renderPass, 0, false);
 	m->pushSetBlendStateTask(key.renderPass, 1, false);
 	m->pushDrawTaskRenderBuffer(key.renderPass);
-	m->pushSetUniformTaskRenderPass(key.renderPass, test, 0);
 
 	// create renderOnscreen and set it
 	key.renderOnScreen = m->addRenderOnScreen(glm::ivec4(0, 0, getInstance<IRenderContext>()->getScreenSize().x, getInstance<IRenderContext>()->getScreenSize().y));
@@ -185,16 +183,12 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->pushSetTestTaskRenderOnScreen(key.renderOnScreen, false, false, true);
 	m->pushSetClearValueTaskRenderOnScreen(key.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 
-
 	// create the pipeline and set it with both render element add before
 	key.pipeline = m->addPipeline();
 	m->pushRenderPassPipeline(key.pipeline, key.renderPass);
 	m->pushRenderOnScreenPipeline(key.pipeline, key.renderOnScreen);
 	m->branch(key.renderPass, key.renderOnScreen);
 
-	// data storage
-	m->locationStorage.generateLocation(1);
-	m->locationStorage.setLocation(0, glm::mat4(0));
 	return (*this);
 }
 

@@ -167,6 +167,30 @@ namespace gl
 		draw.shader.setUniform(key, draw.locationStorage.getLocation<glm::mat4>(location));
 	}
 
+	void setUniformMat3byLocation(void **data)
+	{
+		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
+		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
+		size_t location = CONVERT(size_t, 2);
+		draw.shader.setUniform(key, draw.locationStorage.getLocation<glm::mat3>(location));
+	}
+
+	void setUniformFloatbyLocation(void **data)
+	{
+		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
+		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
+		size_t location = CONVERT(size_t, 2);
+		draw.shader.setUniform(key, draw.locationStorage.getLocation<float>(location));
+	}
+
+	void setUniformVec4byLocation(void **data)
+	{
+		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
+		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
+		size_t location = CONVERT(size_t, 2);
+		draw.shader.setUniform(key, draw.locationStorage.getLocation<glm::vec4>(location));
+	}
+
 	void draw(void **data)
 	{
 		RenderPass::Draw &draw = *CONVERT(RenderPass::Draw *, 0);

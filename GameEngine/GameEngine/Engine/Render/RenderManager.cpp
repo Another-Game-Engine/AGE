@@ -429,78 +429,10 @@ namespace gl
 	GEN_DEF_RENDER_PUSH_TASK(RenderPass);
 	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
 
-	RenderManager &RenderManager::configRenderPass(Key<RenderPass> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->setMode(mode);
-		renderPass->configRect(rect);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::createBufferSamplableRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat)
-	{
-		RenderPass *renderPass = getRenderPass(key);
-		renderPass->createBufferSamplable(attachement, internalFormat);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::createBufferNotSamplableRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat)
-	{
-		RenderPass *renderPass = getRenderPass(key);
-		renderPass->createBufferNotSamplable(attachement, internalFormat);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::deleteBufferRenderPass(Key<RenderPass> const &key, GLenum attachement)
-	{
-		RenderPass *renderPass = getRenderPass(key);
-		renderPass->deleteBuffer(attachement);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::pushInputRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s, GLenum attachement)
-	{
-		RenderPass *renderPass = getRenderPass(key);
-		renderPass->pushInputSampler(s, attachement);
-		return (*this);
-	}
-	
-	RenderManager &RenderManager::popInputRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass = getRenderPass(key);
-		renderPass->popInputSampler();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::pushTargetRenderPass(Key<RenderPass> const &key, GLenum attachement)
-	{
-		RenderPass *renderPass = getRenderPass(key);
-		renderPass->pushTarget(attachement);
-		return (*this);
-	}
-
 	RenderManager &RenderManager::pushDrawTaskRenderBuffer(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass = getRenderPass(key);
 		renderPass->pushDrawTask();
-		return (*this);
-	}
-
-
-	RenderManager &RenderManager::popTargetRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass = getRenderPass(key);
-		renderPass->popTarget();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::useInputBufferRenderPass(Key<RenderPass> const &key, GLenum attachement)
-	{
-		RenderPass *renderPass = getRenderPass(key);
-		renderPass->useInputBuffer(attachement);
 		return (*this);
 	}
 
@@ -597,70 +529,6 @@ namespace gl
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect);
-
-	RenderManager &RenderManager::configRenderPostEffect(Key<RenderPostEffect> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
-	{
-		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
-		renderPostEffect->setMode(mode);
-		renderPostEffect->configRect(rect);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::createBufferSamplableRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
-	{
-		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
-		renderPostEffect->createBufferSamplable(attachement, internalFormat);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::createBufferNotSamplableRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
-	{
-		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
-		renderPostEffect->createBufferNotSamplable(attachement, internalFormat);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::deleteBufferRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement)
-	{
-		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
-		renderPostEffect->deleteBuffer(attachement);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::pushInputRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s, GLenum attachement)
-	{
-		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
-		renderPostEffect->pushInputSampler(s, attachement);
-		return (*this);
-	}
-	
-	RenderManager &RenderManager::popInputRenderPostEffect(Key<RenderPostEffect> const &key)
-	{
-		RenderPostEffect *renderPostEffect = getRenderPostEffect(key);
-		renderPostEffect->popInputSampler();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::pushTargetRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement)
-	{
-		RenderPostEffect *renderPass = getRenderPostEffect(key);
-		renderPass->pushTarget(attachement);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::popTargetRenderPostEffect(Key<RenderPostEffect> const &key)
-	{
-		RenderPostEffect *renderPass = getRenderPostEffect(key);
-		renderPass->popTarget();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::useInputBufferRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement)
-	{
-		RenderPostEffect *renderPass = getRenderPostEffect(key);
-		renderPass->useInputBuffer(attachement);
-		return (*this);
-	}
 
 	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect)
 	{

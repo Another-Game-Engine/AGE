@@ -438,6 +438,37 @@ namespace gl
 		return (*this);
 	}
 
+	RenderOffScreen &RenderOffScreen::pushSetUniformMat3Task(Key<Uniform> const &key, size_t location)
+	{
+		Task task;
+
+		setTaskAllocation(task, (RenderOffScreen *)&_draw, Key<Uniform>(key), location);
+		task.func = setUniformMat3byLocation;
+		_tasks.push_back(task);
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::pushSetUniformFloatTask(Key<Uniform> const &key, size_t location)
+	{
+		Task task;
+
+		setTaskAllocation(task, (RenderOffScreen *)&_draw, Key<Uniform>(key), location);
+		task.func = setUniformFloatbyLocation;
+		_tasks.push_back(task);
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::pushSetUniformVec4Task(Key<Uniform> const &key, size_t location)
+	{
+		Task task;
+
+		setTaskAllocation(task, (RenderOffScreen *)&_draw, Key<Uniform>(key), location);
+		task.func = setUniformVec4byLocation;
+		_tasks.push_back(task);
+		return (*this);
+	}
+
+
 	void RenderOffScreen::updateBuffer()
 	{
 		_updateBuffer = false;

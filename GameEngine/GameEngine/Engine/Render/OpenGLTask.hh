@@ -28,10 +28,13 @@ namespace gl
 	void setUniformMat4(void **);
 	void setUniformMat4byLocation(void **);
 	void setUniformMat3(void **);
+	void setUniformMat3byLocation(void **);
 	void setUniformUint(void **);
 	void setBlockBinding(void **);
 	void setUniformFloat(void **);
+	void setUniformFloatbyLocation(void **);
 	void setUniformVec4(void **);
+	void setUniformVec4byLocation(void **);
 	void setUniformSampler(void **);
 	void setFragDataLocation(void **);
 	void draw(void **);
