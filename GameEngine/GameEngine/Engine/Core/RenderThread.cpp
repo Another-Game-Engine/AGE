@@ -1,4 +1,5 @@
 #include "RenderThread.hpp"
+#include <Utils/ThreadQueueCommands.hpp>
 
 using namespace AGE;
 
@@ -43,7 +44,7 @@ bool RenderThread::_update()
 	{
 		_context->setScreenSize(msg.screenSize);
 	})
-		.handle<BoolFunction>([&](BoolFunction& msg)
+		.handle<AGE::TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
 	{
 		msg.result.set_value(msg.function());
 	})
@@ -51,7 +52,7 @@ bool RenderThread::_update()
 	{
 		_context->refreshInputs();
 	})
-		.handle<VoidFunction>([&](const VoidFunction& msg)
+		.handle<TQC::VoidFunction>([&](const TQC::VoidFunction& msg)
 	{
 		if (msg.function)
 			msg.function();

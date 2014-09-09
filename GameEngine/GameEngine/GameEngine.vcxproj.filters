@@ -203,6 +203,7 @@
     <ClInclude Include="..\Vendors\tmq\queue.hpp" />
     <ClInclude Include="..\Vendors\tmq\templateDispatcher.hpp" />
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
+    <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

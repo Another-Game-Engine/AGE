@@ -30,6 +30,8 @@
 
 #include <Core/RenderThread.hpp>
 
+#include <Utils/ThreadQueueCommands.hpp>
+
 //CONFIGS
 #include <CONFIGS.hpp>
 
@@ -77,7 +79,7 @@ int			main(int ac, char **av)
 	//context->launchCommandQueue();
 	//renderManager->launchCommandQueue();
 
-	auto contextInit = renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::RenderThread::BoolFunction, bool>(
+	auto contextInit = renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
 		std::function<bool()>([&](){
 		if (!context->init(0, 800, 600, "~AGE~ V0.0 Demo"))
 			return false;

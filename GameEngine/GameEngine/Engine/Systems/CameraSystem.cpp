@@ -11,6 +11,7 @@
 #include <Core/AssetsManager.hpp>
 #include <Core/RenderThread.hpp>
 #include <Utils/DependenciesInjector.hpp>
+#include <Utils/ThreadQueueCommands.hpp>
 
 //tmp
 #include <Core/Octree.hpp>
@@ -106,7 +107,7 @@ void CameraSystem::setManager(AGE::RenderThread *m)
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 	
-	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE:: RenderThread::BoolFunction, bool>([&](){
+	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&](){
 		// render pass
 		_shader = _renderManager->addShader(VERTEX_SHADER, FRAG_SHADER);
 		size_t sizeElement[2];

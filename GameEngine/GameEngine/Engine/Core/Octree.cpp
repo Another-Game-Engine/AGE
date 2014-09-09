@@ -7,6 +7,7 @@
 #include <chrono>
 #include <Utils/DependenciesInjector.hpp>
 #include <Core/RenderThread.hpp>
+#include <Utils/ThreadQueueCommands.hpp>
 
 namespace AGE
 {
@@ -373,7 +374,7 @@ namespace AGE
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::RenderThread>();
 			for (auto &e : this->_octreeDrawList)
 			{
-				renderThread->getCommandQueue().safeEmplace<AGE::RenderThread::VoidFunction>([=](){
+				renderThread->getCommandQueue().safeEmplace<TQC::VoidFunction>([=](){
 					msg.function(e);
 				});
 			}
