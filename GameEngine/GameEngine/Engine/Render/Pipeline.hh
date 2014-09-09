@@ -11,9 +11,10 @@ namespace gl
 
 	enum DrawType
 	{
-		NON = 0,
-		GLOBAL,
-		SEPARATE
+		ALL_OBJECT = 0,
+		EACH_FOLLOWING_OBJECT,
+		NONE_OBJECT,
+		SIZE
 	};
 
 	class Render;
@@ -34,7 +35,12 @@ namespace gl
 		bool operator>=(Pipeline const &p);
 		bool operator==(Pipeline const &p);
 		bool operator!=(Pipeline const &p);
+		Pipeline &draw();
 	private:
+		void drawAllObject();
+		void drawEachFollowObject();
+		void drawNoneObject();
+
 		Pipeline(Pipeline const &copy) = delete;
 		Pipeline &operator=(Pipeline const &p) = delete;
 
@@ -43,5 +49,6 @@ namespace gl
 		AGE::Vector<AGE::Drawable> const *_toRender;
 		AGE::Vector<Render *> _render;
 		AGE::Vector<RenderPass *> _renderPass;
+		void (Pipeline::*_drawFunc[DrawType::SIZE])();
 	};
 }

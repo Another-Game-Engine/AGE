@@ -209,8 +209,9 @@ namespace gl
 		virtual ~RenderPass();
 
 		RenderPass &pushDrawTask();
-
-		RenderPass &setDraw(AGE::Vector<AGE::Drawable> const &objects);
+		RenderPass &setDraw(AGE::Vector<AGE::Drawable> const &objects, size_t start, size_t end);
+		RenderPass &setDraw();
+		
 		virtual Render &render();
 		virtual RenderType getType() const;
 

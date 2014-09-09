@@ -494,6 +494,14 @@ namespace gl
 		return (*this);
 	}
 
+	RenderPass &RenderPass::setDraw()
+	{
+		_draw.toRender = NULL;
+		_draw.start = 0;
+		_draw.end = 0;
+		return (*this);
+	}
+
 	Render &RenderPass::render()
 	{
 		_fbo.bind();
