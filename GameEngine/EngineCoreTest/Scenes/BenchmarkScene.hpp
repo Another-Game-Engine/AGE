@@ -40,7 +40,7 @@ public:
 	virtual bool 			userStart()
 	{
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		getInstance<AGE::PrepareRenderThread>()->setScene(weakOnThis);
+		getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis);
 
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
@@ -238,7 +238,7 @@ public:
 		auto renderThread = getInstance<AGE::RenderThread>();
 		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::RefreshInputs>();
 
-		auto octree = getInstance<AGE::PrepareRenderThread>();
+		auto octree = getInstance<AGE::Threads::Prepare>();
 		octree->getCommandQueue().releaseReadability();
 		return true;
 	}

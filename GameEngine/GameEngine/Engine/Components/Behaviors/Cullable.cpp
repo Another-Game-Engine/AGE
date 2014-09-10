@@ -13,7 +13,7 @@ namespace AGE
 		{
 			_scene = scene;
 			assert(_cullableOTKey.invalid());
-			_cullableOTKey = scene->getInstance<AGE::PrepareRenderThread>()->addCullableElement();
+			_cullableOTKey = scene->getInstance<AGE::Threads::Prepare>()->addCullableElement();
 			scene->getLink(entityId)->registerOctreeObject(_cullableOTKey);
 			assert(!_cullableOTKey.invalid());
 		}
@@ -24,7 +24,7 @@ namespace AGE
 			mesh = nullptr;
 			material = nullptr;
 			scene->getLink(entityId)->unregisterOctreeObject(_cullableOTKey);
-			scene->getInstance<AGE::PrepareRenderThread>()->removeElement(_cullableOTKey);
+			scene->getInstance<AGE::Threads::Prepare>()->removeElement(_cullableOTKey);
 			_cullableOTKey = PrepareKey();
 		}
 
@@ -74,7 +74,7 @@ namespace AGE
 				else
 					materials.push_back(material->datas[e.defaultMaterialIndex]);
 			}
-			_scene->getInstance<AGE::PrepareRenderThread>()->updateGeometry(_cullableOTKey, mesh->subMeshs, materials);
+			_scene->getInstance<AGE::Threads::Prepare>()->updateGeometry(_cullableOTKey, mesh->subMeshs, materials);
 		}
 
 

@@ -165,7 +165,7 @@ void CameraSystem::mainUpdate(double time)
 		auto renderManager = _scene.lock()->getInstance<gl::RenderManager>();
 		auto renderThread = _scene.lock()->getInstance<AGE::Threads::Render>();
 
-		auto octree = _scene.lock()->getInstance<AGE::PrepareRenderThread>();
+		auto octree = _scene.lock()->getInstance<AGE::Threads::Prepare>();
 		octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
 		{
 			renderManager->setUniformBlock(_global_state, 0, collection.projection);
