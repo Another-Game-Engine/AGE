@@ -291,6 +291,8 @@
     <ClInclude Include="Engine\Core\Octree.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThreadInterface.hpp" />
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />

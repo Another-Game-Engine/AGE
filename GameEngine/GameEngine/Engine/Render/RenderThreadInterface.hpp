@@ -8,4 +8,9 @@ namespace AGE
 	class RenderThreadInterface : public ThreadQueue, public Dependency < RenderThreadInterface >
 	{
 	};
+
+	namespace Threads
+	{
+		typedef RenderThreadInterface Render;
+	}
 }

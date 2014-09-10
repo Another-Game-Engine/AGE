@@ -371,7 +371,7 @@ namespace AGE
 				++cameraCounter;
 			}
 
-			auto renderThread = getDependencyManager().lock()->getInstance<AGE::RenderThreadInterface>();
+			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
 			for (auto &e : this->_octreeDrawList)
 			{
 				renderThread->getCommandQueue().safeEmplace<TQC::VoidFunction>([=](){

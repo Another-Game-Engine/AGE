@@ -205,6 +205,8 @@
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
     <ClInclude Include="Engine\Render\RenderThreadInterface.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThreadInterface.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
