@@ -12,9 +12,10 @@
 #include <Core/RenderThread.hpp>
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
+#include <Core/PrepareRenderThreadCommand.hpp>
 
 //tmp
-#include <Core/Octree.hpp>
+#include <Core/PrepareRenderThread.hpp>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -164,8 +165,8 @@ void CameraSystem::mainUpdate(double time)
 		auto renderManager = _scene.lock()->getInstance<gl::RenderManager>();
 		auto renderThread = _scene.lock()->getInstance<AGE::Threads::Render>();
 
-		auto octree = _scene.lock()->getInstance<AGE::Octree>();
-		octree->getCommandQueue().emplace<AGE::OctreeCommand::PrepareDrawLists>([=](AGE::DrawableCollection collection)
+		auto octree = _scene.lock()->getInstance<AGE::PrepareRenderThread>();
+		octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
 		{
 			renderManager->setUniformBlock(_global_state, 0, collection.projection);
 			renderManager->setShaderUniform(_shader, _view_matrix, collection.transformation);

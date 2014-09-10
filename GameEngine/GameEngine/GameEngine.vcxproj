@@ -219,7 +219,7 @@
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Drawable.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
-    <ClCompile Include="Engine\Core\Octree.cpp" />
+    <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />
@@ -288,11 +288,10 @@
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
     <ClInclude Include="Engine\Core\Drawable.hh" />
     <ClInclude Include="Engine\Core\Link.hpp" />
-    <ClInclude Include="Engine\Core\Octree.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
-    <ClInclude Include="Engine\Core\OctreeKey.hpp" />
+    <ClInclude Include="Engine\Core\PrepareKey.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
-    <ClInclude Include="Engine\Core\PrepareRenderThreadInterface.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />

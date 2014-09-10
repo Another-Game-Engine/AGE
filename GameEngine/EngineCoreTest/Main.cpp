@@ -63,8 +63,8 @@ int			main(int ac, char **av)
 	auto renderThread = e->setInstance<AGE::RenderThread, AGE::Threads::Render>();
 	renderThread->launch(e.get());
 
-	auto octree = e->setInstance<AGE::Octree>();
-	octree->launch(e.get());
+	auto preparationThread = e->setInstance<AGE::Threads::Prepare>();
+	preparationThread->launch(e.get());
 
 	// Set Configurations
 	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
@@ -143,6 +143,6 @@ int			main(int ac, char **av)
 	e->stop();
 
 	renderThread->quit();
-	octree->quit();
+	preparationThread->quit();
 	return (EXIT_SUCCESS);
 }

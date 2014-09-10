@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 #include <Utils/GlmSerialization.hpp>
 #include <Audio/Audio.hh>
 #include <cereal/types/base_class.hpp>
