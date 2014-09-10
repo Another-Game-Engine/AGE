@@ -8,7 +8,7 @@
 #include <functional>
 #include <Render/Material.hh>
 #include <Render/UniformBlock.hh>
-#include <Render/OpenGLTask.hh>
+#include <Render/Task.hh>
 #include <Render/Framebuffer.hh>
 #include <Render/Shader.hh>
 #include <Render/LocationStorage.hh>
@@ -156,6 +156,7 @@ namespace gl
 		RenderOffScreen &pushSetUniformMat3Task(Key<Uniform> const &key, size_t location);
 		RenderOffScreen &pushSetUniformFloatTask(Key<Uniform> const &key, size_t location);
 		RenderOffScreen &pushSetUniformVec4Task(Key<Uniform> const &key, size_t location);
+		RenderOffScreen &pushOwnTask(std::function<void(LocationStorage &)> const &func);
 
 	protected:
 		RenderOffScreen(Render::Draw *draw);

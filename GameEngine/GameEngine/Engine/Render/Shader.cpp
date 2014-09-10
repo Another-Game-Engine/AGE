@@ -3,7 +3,7 @@
 # include <fstream>
 #include <cassert>
 
-#include <Render/OpenGLTask.hh>
+#include <Render/Task.hh>
 #include <Render/PreShader.cpp>
 
 

@@ -6,7 +6,7 @@
 # include <map>
 # include <Render/Key.hh>
 # include <glm/glm.hpp>
-# include <Render/OpenGLTask.hh>
+# include <Render/Task.hh>
 # include <Render/Material.hh>
 # include <Render/Storage.hh>
 # include <Render/UniformBlock.hh>

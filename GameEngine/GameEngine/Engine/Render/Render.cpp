@@ -2,7 +2,7 @@
 #include <cassert>
 #include <string>
 #include <Core/Drawable.hh>
-#include <Render/OpenGLTask.hh>
+#include <Render/Task.hh>
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>
 #include <Render/Storage.hh>
@@ -468,6 +468,15 @@ namespace gl
 		return (*this);
 	}
 
+	RenderOffScreen &RenderOffScreen::pushOwnTask(std::function<void (LocationStorage &)> const &f)
+	{
+		Task task;
+
+		setTaskAllocation(task, &(std::function<void(LocationStorage &)> const &)f, &((RenderOffScreen::Draw *)&_draw)->locationStorage);
+		task.func = setUniformVec4byLocation;
+		_tasks.push_back(task);
+		return (*this);
+	}
 
 	void RenderOffScreen::updateBuffer()
 	{
@@ -633,4 +642,5 @@ namespace gl
 		locationStorage(l)
 	{
 	}
+
 }

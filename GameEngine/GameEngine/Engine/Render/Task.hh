@@ -38,6 +38,7 @@ namespace gl
 	void setUniformSampler(void **);
 	void setFragDataLocation(void **);
 	void draw(void **);
+	void ownTask(void **);
 
 	struct MaterialBindTask
 	{

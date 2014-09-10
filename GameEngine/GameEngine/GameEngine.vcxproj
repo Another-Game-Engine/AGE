@@ -226,7 +226,6 @@
     <ClCompile Include="Engine\Render\Material.cpp" />
     <ClCompile Include="Engine\Render\MaterialManager.cpp" />
     <ClCompile Include="Engine\Render\MemoryGPU.cpp" />
-    <ClCompile Include="Engine\Render\OpenGLTask.cpp" />
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
     <ClCompile Include="Engine\Render\PixelBuffer.cpp" />
     <ClCompile Include="Engine\Render\Pool.cpp" />
@@ -236,6 +235,7 @@
     <ClCompile Include="Engine\Render\Shader.cpp" />
     <ClCompile Include="Engine\Render\ShaderResource.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
+    <ClCompile Include="Engine\Render\Task.cpp" />
     <ClCompile Include="Engine\Render\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\VertexArray.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
@@ -307,7 +307,6 @@
     <ClInclude Include="Engine\Render\Material.hh" />
     <ClInclude Include="Engine\Render\MaterialManager.hh" />
     <ClInclude Include="Engine\Render\MemoryGPU.hh" />
-    <ClInclude Include="Engine\Render\OpenGLTask.hh" />
     <ClInclude Include="Engine\Render\Pipeline.hh" />
     <ClInclude Include="Engine\Render\PixelBuffer.hh" />
     <ClInclude Include="Engine\Render\Pool.hh" />
@@ -317,6 +316,7 @@
     <ClInclude Include="Engine\Render\ShaderResource.hh" />
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
+    <ClInclude Include="Engine\Render\Task.hh" />
     <ClInclude Include="Engine\Render\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\VertexArray.hh" />
     <ClInclude Include="Engine\Skinning\Animation.hpp" />

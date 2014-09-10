@@ -1,4 +1,4 @@
-#include <Render/OpenGLTask.hh>
+#include <Render/Task.hh>
 #include <Utils/OpenGL.hh>
 #include <glm/glm.hpp>
 #include <assert.h>
@@ -202,6 +202,13 @@ namespace gl
 			draw.shader.update(object.transformation);
 			draw.geometryManager.draw(draw.mode, object.mesh.indices, object.mesh.vertices);
 		}
+	}
+
+	void ownTask(void **data)
+	{
+		std::function<void(LocationStorage &)> const &f = *CONVERT(std::function<void(LocationStorage &)> *, 0);
+		LocationStorage &l = *CONVERT(LocationStorage *, 1);
+		f(l);
 	}
 
 	Task::Task()
