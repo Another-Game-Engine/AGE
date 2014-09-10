@@ -53,7 +53,7 @@ public:
 		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::RenderManager>();
 #if NEW_SHADER
-	camerasystem->setManager(getInstance<AGE::RenderThread>());
+	camerasystem->setManager();
 #endif
 
 #ifdef SIMPLE_RENDERING

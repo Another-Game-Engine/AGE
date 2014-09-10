@@ -5,13 +5,14 @@
 #include <Render/RenderManager.hh>
 #include <Utils/Dependency.hpp>
 #include <Context/IRenderContext.hh>
+#include <Render/RenderThreadInterface.hpp>
 
 ////
 // Default render thread, you can also build yours
 
 namespace AGE
 {
-	class RenderThread : public ThreadQueue, public Dependency < RenderThread >
+	class RenderThread : public RenderThreadInterface
 	{
 		SdlContext *_context;
 		gl::RenderManager *_renderManager;

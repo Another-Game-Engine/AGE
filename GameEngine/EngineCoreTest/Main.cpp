@@ -60,7 +60,7 @@ int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
-	auto renderThread = e->setInstance < AGE::RenderThread >();
+	auto renderThread = e->setInstance<AGE::RenderThread, AGE::RenderThreadInterface>();
 	renderThread->launch(e.get());
 
 	auto octree = e->setInstance<AGE::Octree>();

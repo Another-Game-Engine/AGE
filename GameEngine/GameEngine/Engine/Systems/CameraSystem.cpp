@@ -58,7 +58,7 @@ void CameraSystem::getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
 #endif
 	auto scene = _scene.lock();
 	auto mousePos = scene->getInstance<Input>()->getMousePosition();
-	auto screenSize = scene->getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screenSize = scene->getInstance<AGE::RenderThreadInterface>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 #if NEW_SHADER
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
 #else
@@ -78,7 +78,7 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 		return;
 #endif
 	auto scene = _scene.lock();
-	auto screenSize = scene->getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screenSize = scene->getInstance<AGE::RenderThreadInterface>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 	auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
 #if NEW_SHADER
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
@@ -99,11 +99,11 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 
 #if NEW_SHADER
 
-void CameraSystem::setManager(AGE::RenderThread *m)
+void CameraSystem::setManager()
 {
 	// A NETTOYER !!!!
 	_renderManager = _scene.lock()->getInstance<gl::RenderManager>();
-	_renderThread = m;
+	_renderThread = (AGE::RenderThread*)(_scene.lock()->getInstance<AGE::RenderThreadInterface>());
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 	
@@ -162,7 +162,7 @@ void CameraSystem::updateEnd(double time)
 void CameraSystem::mainUpdate(double time)
 {
 		auto renderManager = _scene.lock()->getInstance<gl::RenderManager>();
-		auto renderThread = _scene.lock()->getInstance<AGE::RenderThread>();
+		auto renderThread = _scene.lock()->getInstance<AGE::RenderThreadInterface>();
 
 		auto octree = _scene.lock()->getInstance<AGE::Octree>();
 		octree->getCommandQueue().emplace<AGE::OctreeCommand::PrepareDrawLists>([=](AGE::DrawableCollection collection)

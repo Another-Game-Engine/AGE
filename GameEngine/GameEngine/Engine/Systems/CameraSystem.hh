@@ -21,7 +21,7 @@ public:
 	virtual ~CameraSystem(){}
 
 #if NEW_SHADER
-	void setManager(AGE::RenderThread *m);
+	void setManager();
 #endif
 	void setRenderDebugMode(bool t);
 	bool getRenderDebugMode() const;
