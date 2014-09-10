@@ -511,8 +511,10 @@ namespace gl
 	{
 		Key<RenderPostEffect> key;
 
+
+		geometryManager.createQuadSimpleForm();
 		Shader *shader = getShader(s);
-		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *shader, geometryManager, locationStorage);
+		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleFormGeo(QUAD), *shader, geometryManager, locationStorage);
 		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
 		return (key);
@@ -535,7 +537,8 @@ namespace gl
 		Key<RenderOnScreen> key;
 
 		createPreShaderQuad();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleForm(QUAD), *_preShaderQuad, geometryManager);
+		geometryManager.createQuadSimpleForm();
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(QUAD), *_preShaderQuad, geometryManager);
 		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
 		return (key);

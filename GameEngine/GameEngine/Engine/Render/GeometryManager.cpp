@@ -8,60 +8,64 @@
 #include <Render/SimpleFormGeometry.hh>
 #include <glm/glm.hpp>
 
+typedef std::pair<uint32_t, uint32_t>				idxPair_t;
+typedef std::map<idxPair_t, uint32_t>				idxHash_t;
+
+static uint32_t getMiddlePoint(std::vector<glm::vec3> vertexTab, idxHash_t &middlePoints, uint32_t p1, uint32_t p2)
+{
+	// first check if we have it already
+	bool firstIsSmaller = p1 < p2;
+	uint32_t smallerIndex = firstIsSmaller ? p1 : p2;
+	uint32_t greaterIndex = firstIsSmaller ? p2 : p1;
+	idxPair_t key;
+
+	key.first = smallerIndex;
+	key.second = greaterIndex;
+
+	uint32_t ret;
+
+	idxHash_t::iterator it = middlePoints.find(key);
+	if (it != middlePoints.end())
+	{
+		return it->second;
+	}
+
+	// not in cache, calculate it
+	glm::vec3 point1 = vertexTab[p1];
+	glm::vec3 point2 = vertexTab[p2];
+	glm::vec3 middle = (point1 + point2) / 2.0f;
+
+	// add vertex makes sure point is on unit sphere
+	vertexTab.push_back(glm::normalize(glm::vec3(middle)));
+
+	ret = vertexTab.size() - 1;
+
+	// store it, return index
+	middlePoints[key] = ret;
+	return ret;
+}
+
 namespace gl
 {
 	GeometryManager::GeometryManager()
-		: _simpleForm(NULL)
+		: _simpleFormPoolGeo(NULL),
+		_simpleFormPoolId(NULL)
 	{
 	}
 
 	GeometryManager::~GeometryManager()
 	{
-
-	}
-
-	typedef std::pair<uint32_t, uint32_t>				idxPair_t;
-	typedef std::map<idxPair_t, uint32_t>				idxHash_t;
-
-	static uint32_t getMiddlePoint(std::vector<glm::vec3> vertexTab, idxHash_t &middlePoints, uint32_t p1, uint32_t p2)
-	{
-		// first check if we have it already
-		bool firstIsSmaller = p1 < p2;
-		uint32_t smallerIndex = firstIsSmaller ? p1 : p2;
-		uint32_t greaterIndex = firstIsSmaller ? p2 : p1;
-		idxPair_t key;
-
-		key.first = smallerIndex;
-		key.second = greaterIndex;
-
-		uint32_t ret;
-
-		idxHash_t::iterator it = middlePoints.find(key);
-		if (it != middlePoints.end())
-		{
-			return it->second;
-		}
-
-		// not in cache, calculate it
-		glm::vec3 point1 = vertexTab[p1];
-		glm::vec3 point2 = vertexTab[p2];
-		glm::vec3 middle = (point1 + point2) / 2.0f;
-
-		// add vertex makes sure point is on unit sphere
-		vertexTab.push_back(glm::normalize(glm::vec3(middle)));
-
-		ret = vertexTab.size() - 1;
-
-		// store it, return index
-		middlePoints[key] = ret;
-		return ret;
+		if (_simpleFormPoolGeo != NULL)
+			delete _simpleFormPoolGeo;
+		if (_simpleFormPoolId != NULL)
+			delete _simpleFormPoolId;
 	}
 
 	void GeometryManager::generateIcoSphere(size_t recursion, glm::vec3 **vertex, glm::u32vec3 **indices)
 	{
 		idxHash_t					middlePoints;
-		std::vector<glm::vec3>		vertexTab;
-		std::vector<glm::u32vec3>	idTab;
+		AGE::Vector<glm::vec3>		vertexTab;
+		AGE::Vector<glm::u32vec3>	idTab;
 		uint32_t					currentIdx = 0;
 
 		// create 12 vertices of a icosahedron
@@ -135,30 +139,52 @@ namespace gl
 		memcpy(*indices, idTab.data(), idTab.size() * sizeof(glm::u32vec3));
 	}
 
-	GeometryManager &GeometryManager::createSimpleForm()
+	void GeometryManager::initSimpleForm()
 	{
-		if (_simpleForm != NULL)
+		if (_simpleFormPoolGeo == NULL)
+		{
+			GLenum type = GL_FLOAT;
+			uint8_t sizeType = sizeof(float);
+			uint8_t nbrComponent = 2;
+			_simpleFormPoolGeo = new Key<VertexPool>(addVertexPool(1, &type, &sizeType, &nbrComponent));
+		}
+		if (_simpleFormPoolId == NULL)
+			_simpleFormPoolId = new Key<IndexPool>(addIndexPool());
+	}
+
+	GeometryManager &GeometryManager::createQuadSimpleForm()
+	{
+		auto &element = _simpleFormGeo.find(SimpleForm::QUAD);
+		if (element != _simpleFormGeo.end())
 			return (*this);
-		_simpleForm = new Key<Vertices>[SimpleForm::NBR_SIMPLE_FORM];
-		GLenum type = GL_FLOAT;
-		uint8_t sizeType = sizeof(float);
-		uint8_t nbrComponent = 2;
-		Key<VertexPool> keyPool = addVertexPool(1, &type, &sizeType, &nbrComponent);
+		initSimpleForm();
 		size_t nbrElement = 6;
-		uint8_t nbrBuffer = 1;
-		size_t sizeBuffer = sizeType * nbrComponent * nbrElement;
-		void *buffer[1];
+		uint8_t const nbrBuffer = 1;
+		size_t sizeBuffer = 4 * 3 * nbrElement;
+		void *buffer[nbrBuffer];
 		buffer[0] = (void *)quadForm;
-		_simpleForm[SimpleForm::QUAD] = addVertices(nbrElement, nbrBuffer, &sizeBuffer, buffer);
-		attachVerticesToVertexPool(_simpleForm[QUAD], keyPool);
+		_simpleFormGeo[SimpleForm::QUAD] = addVertices(nbrElement, nbrBuffer, &sizeBuffer, buffer);
+		_simpleFormId[SimpleForm::QUAD] = addIndices(nbrElement, quadFormId);
+		attachVerticesToVertexPool(_simpleFormGeo[QUAD], *_simpleFormPoolGeo);
+		attachIndicesToIndexPool(_simpleFormId[QUAD], *_simpleFormPoolId);
 		return (*this);
 	}
 
-	Key<Vertices> GeometryManager::getSimpleForm(SimpleForm form)
+
+	Key<Vertices> GeometryManager::getSimpleFormGeo(SimpleForm form)
 	{
-		if (_simpleForm == NULL)
-			createSimpleForm();
-		return (_simpleForm[form]);
+		auto key = _simpleFormGeo.find(form);
+		if (key == _simpleFormGeo.end())
+			assert(0);
+		return (key->second);
+	}
+
+	Key<Indices> GeometryManager::getSimpleFormId(SimpleForm form)
+	{
+		auto key = _simpleFormId.find(form);
+		if (key == _simpleFormId.end())
+			assert(0);
+		return (key->second);
 	}
 
 	Key<VertexPool> GeometryManager::addVertexPool()
@@ -216,7 +242,7 @@ namespace gl
 	// the key will be set to empty
 	GeometryManager &GeometryManager::rmVertexPool(Key<VertexPool> &key)
 	{
-		if (getVertexPool(key, "rmVertexPool") == NULL)
+		if (getVertexPool(key) == NULL)
 			return (*this);
 		_vertexPool.erase(key);
 		key.destroy();
@@ -225,7 +251,7 @@ namespace gl
 
 	GeometryManager &GeometryManager::rmIndexPool(Key<IndexPool> &key)
 	{
-		if (getIndexPool(key, "rmIndexPool") == NULL)
+		if (getIndexPool(key) == NULL)
 			return (*this);
 		_indexPool.erase(key);
 		key.destroy();
@@ -265,7 +291,7 @@ namespace gl
 
 	GeometryManager &GeometryManager::rmVertices(Key<Vertices> &key)
 	{
-		if (getVertices(key, "rmVertices") == NULL)
+		if (getVertices(key) == NULL)
 			return (*this);
 		dettachVerticesToVertexPool(key);
 		key.destroy();
@@ -274,7 +300,7 @@ namespace gl
 
 	GeometryManager &GeometryManager::rmIndices(Key<Indices> &key)
 	{
-		if (getIndices(key, "rmIndices") == NULL)
+		if (getIndices(key) == NULL)
 			return (*this);
 		dettachIndicesToIndexPool(key);
 		key.destroy();
@@ -284,7 +310,7 @@ namespace gl
 	GeometryManager &GeometryManager::attachVerticesToVertexPool(Key<Vertices> const &keyVertices, Key<VertexPool> const &keyPool)
 	{
 		Attach<Vertices, VertexPool> newAttach;
-		if ((newAttach.pool = getVertexPool(keyPool, "attachVerticesToVertexPool")) == NULL || (newAttach.data = getVertices(keyVertices, "attachVerticesToVertexPool")) == NULL)
+		if ((newAttach.pool = getVertexPool(keyPool)) == NULL || (newAttach.data = getVertices(keyVertices)) == NULL)
 			return (*this);
 		dettachVerticesToVertexPool(keyVertices);
 		newAttach.element = newAttach.pool->addVertices(*newAttach.data);
@@ -295,7 +321,7 @@ namespace gl
 	GeometryManager &GeometryManager::dettachVerticesToVertexPool(Key<Vertices> const &key)
 	{
 		Attach<Vertices, VertexPool> *attach;
-		if ((attach = getVertexAttach(key, "dettachVerticesToVertexPool")) == NULL)
+		if ((attach = getVertexAttach(key)) == NULL)
 			return (*this);
 		attach->pool->rmVertices(attach->element);
 		_vertexAttach.erase(key);
@@ -305,9 +331,9 @@ namespace gl
 	GeometryManager &GeometryManager::attachIndicesToIndexPool(Key<Indices> const &keyIndices, Key<IndexPool> const &keyPool)
 	{
 		Attach<Indices, IndexPool> newAttach;
-		if ((newAttach.pool = getIndexPool(keyPool, "attachIndicesToIndexPool")) == NULL)
+		if ((newAttach.pool = getIndexPool(keyPool)) == NULL)
 			return (*this);
-		if ((newAttach.data = getIndices(keyIndices, "attachIndicesToIndexPool")) == NULL)
+		if ((newAttach.data = getIndices(keyIndices)) == NULL)
 			return (*this);
 		dettachIndicesToIndexPool(keyIndices);
 		newAttach.element = newAttach.pool->addIndices(*newAttach.data);
@@ -318,7 +344,7 @@ namespace gl
 	GeometryManager &GeometryManager::dettachIndicesToIndexPool(Key<Indices> const &key)
 	{
 		Attach<Indices, IndexPool> *attach;
-		if ((attach = getIndexAttach(key, "dettachIndicesToIndexPool")) == NULL)
+		if ((attach = getIndexAttach(key)) == NULL)
 			return (*this);
 		attach->pool->rmIndices(attach->element);
 		_indexAttach.erase(key);
@@ -328,10 +354,10 @@ namespace gl
 	GeometryManager &GeometryManager::attachIndexPoolToVertexPool(Key<VertexPool> const &keyVertex, Key<IndexPool> const &keyIndex)
 	{
 		VertexPool *vertexPool;
-		if ((vertexPool = getVertexPool(keyVertex, "attachIndexPoolToVertexPool")) == NULL)
+		if ((vertexPool = getVertexPool(keyVertex)) == NULL)
 			return (*this);
 		IndexPool *indexPool;
-		if ((indexPool = getIndexPool(keyIndex, "attachIndexPoolToVertexPool")) == NULL)
+		if ((indexPool = getIndexPool(keyIndex)) == NULL)
 			return (*this);
 		vertexPool->attachIndexPoolToVertexPool(*indexPool);
 		indexPool->attachVertexPoolToIndexPool(*vertexPool);
@@ -341,10 +367,10 @@ namespace gl
 	GeometryManager &GeometryManager::dettachIndexPoolToVertexPool(Key<VertexPool> const &keyVertex, Key<IndexPool> const &keyIndex)
 	{
 		VertexPool *vertexPool;
-		if ((vertexPool = getVertexPool(keyVertex, "dettachIndexPoolToVertexPool")) == NULL)
+		if ((vertexPool = getVertexPool(keyVertex)) == NULL)
 			return (*this);
 		IndexPool *indexPool;
-		if ((indexPool = getIndexPool(keyIndex, "dettachIndexPoolToVertexPool")) == NULL)
+		if ((indexPool = getIndexPool(keyIndex)) == NULL)
 			return (*this);
 		vertexPool->dettachIndexPoolToVertexPool();
 		indexPool->dettachVertexPoolToIndexPool();
@@ -356,9 +382,9 @@ namespace gl
 		Attach<Indices, IndexPool> *indexAttach;
 		Attach<Vertices, VertexPool> *vertexAttach;
 
-		if ((indexAttach = getIndexAttach(keyIndices, "draw")) == NULL)
+		if ((indexAttach = getIndexAttach(keyIndices)) == NULL)
 			return (*this);
-		if ((vertexAttach = getVertexAttach(keyVertices, "draw")) == NULL)
+		if ((vertexAttach = getVertexAttach(keyVertices)) == NULL)
 			return (*this);
 		indexAttach->pool->syncronisation();
 		vertexAttach->pool->syncronisation();
@@ -370,14 +396,14 @@ namespace gl
 	{
 		Attach<Vertices, VertexPool> *vertexAttach;
 
-		if ((vertexAttach = getVertexAttach(keyVertices, "draw")) == NULL)
+		if ((vertexAttach = getVertexAttach(keyVertices)) == NULL)
 			return (*this);
 		vertexAttach->pool->syncronisation();
 		vertexAttach->pool->draw(mode, vertexAttach->element);
 		return (*this);
 	}
 
-	VertexPool *GeometryManager::getVertexPool(Key<VertexPool> const &key, std::string const &in)
+	VertexPool *GeometryManager::getVertexPool(Key<VertexPool> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -393,7 +419,7 @@ namespace gl
 		return (&vertexPool->second);
 	}
 
-	IndexPool *GeometryManager::getIndexPool(Key<IndexPool> const &key, std::string const &in)
+	IndexPool *GeometryManager::getIndexPool(Key<IndexPool> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -409,7 +435,7 @@ namespace gl
 		return (&indexPool->second);
 	}
 
-	Indices *GeometryManager::getIndices(Key<Indices> const &key, std::string const &in)
+	Indices *GeometryManager::getIndices(Key<Indices> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -425,7 +451,7 @@ namespace gl
 		return (&indices->second);
 	}
 
-	Vertices *GeometryManager::getVertices(Key<Vertices> const &key, std::string const &in)
+	Vertices *GeometryManager::getVertices(Key<Vertices> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -441,7 +467,7 @@ namespace gl
 		return (&vertices->second);
 	}
 
-	GeometryManager::Attach<Vertices, VertexPool> *GeometryManager::getVertexAttach(Key<Vertices> const &key, std::string const &in)
+	GeometryManager::Attach<Vertices, VertexPool> *GeometryManager::getVertexAttach(Key<Vertices> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -457,7 +483,7 @@ namespace gl
 		return (&verticesAttach->second);
 	}
 
-	GeometryManager::Attach<Indices, IndexPool> *GeometryManager::getIndexAttach(Key<Indices> const &key, std::string const &in)
+	GeometryManager::Attach<Indices, IndexPool> *GeometryManager::getIndexAttach(Key<Indices> const &key)
 	{
 		if (!key)
 			assert(0);
