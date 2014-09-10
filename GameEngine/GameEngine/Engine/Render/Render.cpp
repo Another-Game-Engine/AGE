@@ -299,6 +299,8 @@ namespace gl
 	{
 		for (auto &element = _buffer.begin(); element != _buffer.end(); ++element)
 			if (element->second.first != NULL) delete element->second.first;
+		for (size_t index = 0; index < _ownFunction.size(); ++index)
+			delete _ownFunction[index];
 	}
 
 	RenderOffScreen &RenderOffScreen::configSample(GLint sample)
@@ -472,8 +474,9 @@ namespace gl
 	{
 		Task task;
 
-		setTaskAllocation(task, &(std::function<void(LocationStorage &)> const &)f, &((RenderOffScreen::Draw *)&_draw)->locationStorage);
-		task.func = setUniformVec4byLocation;
+		_ownFunction.push_back(new std::function<void(LocationStorage &)>(f));
+		setTaskAllocation(task, _ownFunction.back(), &((RenderOffScreen::Draw *)&_draw)->locationStorage);
+		task.func = ownTask;
 		_tasks.push_back(task);
 		return (*this);
 	}

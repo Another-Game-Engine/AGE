@@ -206,9 +206,9 @@ namespace gl
 
 	void ownTask(void **data)
 	{
-		std::function<void(LocationStorage &)> const &f = *CONVERT(std::function<void(LocationStorage &)> *, 0);
+		std::function<void(LocationStorage &)> *f = CONVERT(std::function<void(LocationStorage &)> *, 0);
 		LocationStorage &l = *CONVERT(LocationStorage *, 1);
-		f(l);
+		(*f)(l);
 	}
 
 	Task::Task()

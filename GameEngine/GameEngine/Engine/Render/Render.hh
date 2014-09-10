@@ -165,6 +165,7 @@ namespace gl
 
 		std::map<GLenum, std::pair<Storage const *, bool>> _buffer; // the bool is use to determinate if the storage is own by this class or the branched one.
 
+		AGE::Vector<std::function<void(LocationStorage &)> *> _ownFunction;
 		AGE::Vector<GLenum> _target;
 		Framebuffer _fbo;
 		GLint _sample;

@@ -176,7 +176,6 @@ BenchmarkScene &BenchmarkScene::initRenderManager()
 	m->pushSetBlendStateTask(key.renderPass, 0, false);
 	m->pushSetBlendStateTask(key.renderPass, 1, false);
 	m->pushDrawTaskRenderBuffer(key.renderPass);
-
 	// create renderOnscreen and set it
 	key.renderOnScreen = m->addRenderOnScreen(glm::ivec4(0, 0, getInstance<IRenderContext>()->getScreenSize().x, getInstance<IRenderContext>()->getScreenSize().y));
 	m->pushClearTaskRenderOnScreen(key.renderOnScreen, true, true, false);
