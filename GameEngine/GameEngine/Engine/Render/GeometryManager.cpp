@@ -61,7 +61,7 @@ namespace gl
 			delete _simpleFormPoolId;
 	}
 
-	void GeometryManager::generateIcoSphere(size_t recursion, glm::vec3 **vertex, glm::u32vec3 **indices)
+	void GeometryManager::generateIcoSphere(size_t recursion, glm::vec3 **vertex, glm::u32vec3 **indices, size_t &nbrElement)
 	{
 		idxHash_t					middlePoints;
 		AGE::Vector<glm::vec3>		vertexTab;
@@ -133,10 +133,13 @@ namespace gl
 			idTab = idTab2;
 		}
 
+		if (vertexTab.size() != idTab.size())
+			assert(0);
 		*vertex = new glm::vec3[vertexTab.size()];
 		*indices = new glm::u32vec3[idTab.size()];
 		memcpy(*vertex, vertexTab.data(), vertexTab.size() * sizeof(glm::vec3));
 		memcpy(*indices, idTab.data(), idTab.size() * sizeof(glm::u32vec3));
+		nbrElement = vertexTab.size();
 	}
 
 	void GeometryManager::initSimpleForm()
@@ -165,8 +168,28 @@ namespace gl
 		buffer[0] = (void *)quadForm;
 		_simpleFormGeo[SimpleForm::QUAD] = addVertices(nbrElement, nbrBuffer, &sizeBuffer, buffer);
 		_simpleFormId[SimpleForm::QUAD] = addIndices(nbrElement, quadFormId);
-		attachVerticesToVertexPool(_simpleFormGeo[QUAD], *_simpleFormPoolGeo);
-		attachIndicesToIndexPool(_simpleFormId[QUAD], *_simpleFormPoolId);
+		attachVerticesToVertexPool(_simpleFormGeo[SimpleForm::QUAD], *_simpleFormPoolGeo);
+		attachIndicesToIndexPool(_simpleFormId[SimpleForm::QUAD], *_simpleFormPoolId);
+		return (*this);
+	}
+
+	GeometryManager &GeometryManager::createSphereSimpleForm()
+	{
+		auto &element = _simpleFormGeo.find(SimpleForm::SPHERE);
+		if (element != _simpleFormGeo.end())
+			return (*this);
+		size_t const nbrBuffer = 1;
+		void *buffer[nbrBuffer];
+		uint32_t *id;
+		size_t nbrElement;
+		generateIcoSphere(6, (glm::vec3 **)&buffer[0], (glm::u32vec3 **)&id, nbrElement);
+		size_t sizeBuffer = 4 * 3 * nbrElement;
+		_simpleFormGeo[SimpleForm::SPHERE] = addVertices(nbrElement, nbrBuffer, &sizeBuffer, buffer);
+		_simpleFormId[SimpleForm::SPHERE] = addIndices(nbrElement, id);
+		attachVerticesToVertexPool(_simpleFormGeo[SimpleForm::SPHERE], *_simpleFormPoolGeo);
+		attachIndicesToIndexPool(_simpleFormId[SimpleForm::SPHERE], *_simpleFormPoolId);
+		delete[] buffer[0];
+		delete[] id;
 		return (*this);
 	}
 
