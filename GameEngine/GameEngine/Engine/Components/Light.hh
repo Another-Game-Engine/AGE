@@ -1,15 +1,16 @@
 #pragma once
 
-#include <Components\Component.hh>
-#include <glm\glm.hpp>
+#include <Components/Component.hh>
+#include <glm/glm.hpp>
 #include <Render/Key.hh>
+#include <Core/OctreeElement.hh>
 
 namespace gl { class GeometryManager; class Vertices; class Indices; }
 
 namespace Component
 {
 
-	struct PointLight : public ComponentBase<PointLight>
+	struct PointLight : public ComponentBase<PointLight>, public AGE::OctreeElement
 	{
 	public:
 		float power;
@@ -25,6 +26,9 @@ namespace Component
 		
 		virtual void reset(AScene *);
 		void	init(AScene *);
+
+		virtual OctreeElement &initOctree(AScene *scene, ENTITY_ID entityId);
+		virtual OctreeElement &resetOctree(AScene *scene, ENTITY_ID entityId);
 
 		template <typename Archive>void serialize(Archive &ar);
 	};

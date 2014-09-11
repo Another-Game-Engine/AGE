@@ -94,6 +94,23 @@ namespace AGE
 		return res;
 	}
 
+	const OctreeKey Octree::addPointLightElement()
+	{
+		OctreeKey res;
+
+		res.type = OctreeKey::Type::PointLight;
+		if (!_freePointLightObjects.empty())
+		{
+			res.id = _freePointLightObjects.front();
+			_freePointLightObjects.pop();
+		}
+		else
+			res.id = _pointLightCounter++;
+
+		_mainThreadCommands.emplace(res, CommandType::CreatePointLight);
+		return (res);
+	}
+
 	void Octree::setPosition(const glm::vec3 &v, const OctreeKey &id)
 	{
 		_mainThreadCommands.emplace(id, v, CommandType::Position);

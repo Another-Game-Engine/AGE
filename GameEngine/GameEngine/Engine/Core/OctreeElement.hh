@@ -16,9 +16,8 @@ namespace AGE
 		OctreeElement(OctreeElement &&o);
 		OctreeElement &operator=(OctreeElement &&o);
 
-		virtual OctreeElement &initOctree(::AScene *scene, ENTITY_ID entityId) = 0;
-		virtual OctreeElement &resetOctree(::AScene *scene, ENTITY_ID entityId) = 0;
-		virtual OctreeElement &updateOctree() = 0;
+		virtual OctreeElement &initOctree(AScene *scene, ENTITY_ID entityId) = 0;
+		virtual OctreeElement &resetOctree(AScene *scene, ENTITY_ID entityId) = 0;
 
 	protected:
 		OctreeKey _OTKey;

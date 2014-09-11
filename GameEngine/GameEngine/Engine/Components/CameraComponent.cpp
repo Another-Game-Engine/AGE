@@ -1,8 +1,6 @@
-//# define GLM_FORCE_RADIANS
-
 #include <Components/CameraComponent.hpp>
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
@@ -11,6 +9,7 @@ namespace Component
 {
 	CameraComponent::CameraComponent()
 		: ComponentBase<CameraComponent>(),
+		AGE::OctreeElement(),
 		viewport(0),
 		fboSize(800, 600),
 		sampleNbr(1),
@@ -72,11 +71,6 @@ namespace Component
 	void CameraComponent::reset(AScene *scene)
 	{
 		resetOctree(scene, this->entityId);
-	}
-
-	AGE::OctreeElement &CameraComponent::updateOctree()
-	{
-		return (*this);
 	}
 
 	AGE::OctreeElement &CameraComponent::initOctree(::AScene *scene, ENTITY_ID entityId)

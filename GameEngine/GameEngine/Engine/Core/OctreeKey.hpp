@@ -11,6 +11,7 @@ namespace AGE
 			no_type = 0
 			, Camera
 			, Cullable
+			, PointLight
 		};
 		
 		static const std::uint8_t NO_TYPE = Type::no_type;

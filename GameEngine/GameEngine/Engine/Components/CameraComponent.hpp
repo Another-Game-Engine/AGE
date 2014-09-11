@@ -4,7 +4,6 @@
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
-#include "Behaviors/Camera.hpp"
 #include <Core/OctreeElement.hh>
 
 namespace Component
@@ -24,7 +23,6 @@ namespace Component
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
 
-		virtual OctreeElement &updateOctree();
 		virtual OctreeElement &initOctree(::AScene *scene, ENTITY_ID entityId);
 		virtual OctreeElement &resetOctree(::AScene *scene, ENTITY_ID entityId);
 

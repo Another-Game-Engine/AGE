@@ -72,7 +72,7 @@ namespace Component
 		return material;
 	}
 
-	AGE::OctreeElement &MeshRenderer::updateOctree()
+	MeshRenderer &MeshRenderer::updateOctree()
 	{
 		assert(_scene != nullptr);
 
@@ -94,7 +94,6 @@ namespace Component
 	AGE::OctreeElement &MeshRenderer::initOctree(::AScene *scene, ENTITY_ID entityId)
 	{
 		_scene = scene;
-		assert(_OTKey.invalid());
 		_OTKey = scene->getInstance<AGE::Octree>()->addCullableElement();
 		scene->getLink(entityId)->registerOctreeObject(_OTKey);
 		assert(!_OTKey.invalid());

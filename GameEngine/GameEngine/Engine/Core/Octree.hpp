@@ -53,6 +53,8 @@ namespace AGE
 			, DeleteDrawable
 			, CreateCamera
 			, DeleteCamera
+			, CreatePointLight
+			, DeletePointLight
 			, CameraInfos
 			, END // <- should always be the last
 		};
@@ -84,6 +86,14 @@ namespace AGE
 			bool active;
 			bool hasMoved;
 			glm::mat4 projection;
+		};
+
+		struct PointLightObject
+		{
+			float power;
+			float range;
+			glm::vec3 color;
+			glm::vec4 position;
 		};
 
 		struct OctreeCommand
@@ -185,8 +195,11 @@ namespace AGE
 		AGE::Queue<OctreeKey::OctreeObjectId> _freeCullableObjects;
 		AGE::Vector<CameraObject> _cameraObjects;
 		AGE::Queue<OctreeKey::OctreeObjectId> _freeCameraObjects;
+		AGE::Vector<PointLightObject> _pointLightObjects;
+		AGE::Queue<OctreeKey::OctreeObjectId> _freePointLightObjects;
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
+		std::size_t _pointLightCounter = 0;
 
 		AGE::Queue<OctreeCommand> _octreeCommands;
 		AGE::Queue<OctreeCommand> _mainThreadCommands;
@@ -198,6 +211,7 @@ namespace AGE
 	public:
 		const OctreeKey &addCullableElement();
 		const OctreeKey &addCameraElement();
+		const OctreeKey addPointLightElement();
 
 		void removeElement(const OctreeKey &key);
 

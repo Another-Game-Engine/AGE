@@ -35,7 +35,7 @@ namespace Component
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
 
-		virtual OctreeElement &updateOctree();
+		MeshRenderer &updateOctree();
 		virtual OctreeElement &initOctree(::AScene *scene, ENTITY_ID entityId);
 		virtual OctreeElement &resetOctree(::AScene *scene, ENTITY_ID entityId);
 
