@@ -1,4 +1,4 @@
-#version 440
+#version 330
 
 in vec4 inter_position;
 in vec3 inter_normal;
