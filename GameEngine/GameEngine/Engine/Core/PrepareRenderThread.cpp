@@ -59,7 +59,7 @@ namespace AGE
 		}
 		else
 		{
-			res.id = uint32_t(_userObjectCounter++);
+			res.id = PrepareKey::OctreeObjectId(_userObjectCounter++);
 		}
 
 		_commandQueue.emplace<PRTC::CreateDrawable>(res);
@@ -99,7 +99,7 @@ namespace AGE
 		}
 		else
 		{
-			res.id = uint32_t(_cameraCounter++);
+			res.id = PrepareKey::OctreeObjectId(_cameraCounter++);
 		}
 		_commandQueue.emplace<PRTC::CreateCamera>(res);
 
@@ -177,7 +177,7 @@ namespace AGE
 
 	void PrepareRenderThread::removeDrawableObject(DRAWABLE_ID id)
 	{
-		_freeCullableObjects.push(uint32_t(id));
+		_freeCullableObjects.push(PrepareKey::OctreeObjectId(id));
 		_cullableObjects[id].active = false;
 		assert(id != (std::size_t)(-1));
 	}

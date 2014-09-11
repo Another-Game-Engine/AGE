@@ -13,11 +13,11 @@ namespace AGE
 			, Cullable
 		};
 		
-		static const std::uint8_t NO_TYPE = Type::no_type;
-		static const std::uint32_t NO_ID = (std::uint32_t)(-1);
-
 		typedef std::uint8_t OctreeObjectType;
 		typedef std::uint32_t OctreeObjectId;
+
+		static const OctreeObjectType NO_TYPE = Type::no_type;
+		static const OctreeObjectId NO_ID = (OctreeObjectId)(-1);
 
 		OctreeObjectType type = NO_TYPE;
 		OctreeObjectId id = NO_ID;
