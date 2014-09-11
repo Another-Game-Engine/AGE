@@ -536,8 +536,8 @@ namespace gl
 		Key<RenderOnScreen> key;
 
 		createPreShaderQuad();
-		geometryManager.createSphereSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::SPHERE), *_preShaderQuad, geometryManager);
+		geometryManager.createQuadSimpleForm();
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), *_preShaderQuad, geometryManager);
 		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
 		return (key);
