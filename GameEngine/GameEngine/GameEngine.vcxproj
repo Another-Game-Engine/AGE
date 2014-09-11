@@ -211,17 +211,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
-    <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
+    <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Drawable.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\Octree.cpp" />
+    <ClCompile Include="Engine\Core\OctreeElement.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManager.cpp" />
-    <ClCompile Include="Engine\Render\Light.cpp" />
     <ClCompile Include="Engine\Render\LocationStorage.cpp" />
     <ClCompile Include="Engine\Render\Material.cpp" />
     <ClCompile Include="Engine\Render\MaterialManager.cpp" />
@@ -277,7 +277,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
-    <ClInclude Include="Engine\Components\Behaviors\Cullable.hpp" />
+    <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
@@ -285,6 +285,7 @@
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\Octree.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
+    <ClInclude Include="Engine\Core\OctreeElement.hh" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />
@@ -301,7 +302,6 @@
     <ClInclude Include="Engine\Render\GeometryManager.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />
-    <ClInclude Include="Engine\Render\Light.hh" />
     <ClInclude Include="Engine\Render\LocationStorage.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
     <ClInclude Include="Engine\Render\Material.hh" />
@@ -400,7 +400,6 @@
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
-    <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
   </ItemGroup>

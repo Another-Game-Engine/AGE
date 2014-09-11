@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Engine\Components\Behaviors\Camera.cpp" />
-    <ClCompile Include="Engine\Components\Behaviors\Cullable.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
@@ -61,14 +60,14 @@
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
-    <ClCompile Include="Engine\Render\Light.cpp" />
     <ClCompile Include="Engine\Render\ShaderResource.cpp" />
     <ClCompile Include="Engine\Render\LocationStorage.cpp" />
     <ClCompile Include="Engine\Render\Task.cpp" />
+    <ClCompile Include="Engine\Components\Light.cpp" />
+    <ClCompile Include="Engine\Core\OctreeElement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
-    <ClInclude Include="Engine\Components\Behaviors\Cullable.hpp" />
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
@@ -161,7 +160,6 @@
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
-    <ClInclude Include="Engine\Components\PointLight.hh" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\Drawable.hh" />
@@ -190,10 +188,11 @@
     <ClInclude Include="Engine\Render\Pipeline.hh" />
     <ClInclude Include="Engine\Render\RenderManager.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
-    <ClInclude Include="Engine\Render\Light.hh" />
     <ClInclude Include="Engine\Render\ShaderResource.hh" />
     <ClInclude Include="Engine\Render\LocationStorage.hh" />
     <ClInclude Include="Engine\Render\Task.hh" />
+    <ClInclude Include="Engine\Components\Light.hh" />
+    <ClInclude Include="Engine\Core\OctreeElement.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

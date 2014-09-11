@@ -6,7 +6,7 @@
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/CameraSystem.hh>
 #include <Components/MeshRenderer.hh>
-#include <Components/PointLight.hh>
+#include <Components/Light.hh>
 #include <Core/AssetsManager.hpp>
 #include <Core/Octree.hpp>
 #include <Context/IRenderContext.hh>
@@ -61,14 +61,6 @@ bool BenchmarkScene::userUpdate(double time)
 			addComponent<Component::Lifetime>(e, 5.0f);
 #endif
 #ifdef RENDERING_ACTIVATED
-
-			if (i == 0)
-			{
-				auto lightComponent = addComponent<Component::PointLight>(e);
-				lightComponent->lightData.colorRange = glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 13);
-				lightComponent->lightData.positionPower.w = 1;
-				lightComponent->lightData.hasShadow = 1;
-			}
 
 #ifndef COMPLEX_MESH
 			Component::MeshRenderer *mesh;
@@ -258,8 +250,8 @@ BenchmarkScene &BenchmarkScene::initScene()
 	// build light
 	auto light = createEntity();
 	getLink(light)->setPosition(glm::vec3(0, 3, 0));
-	auto lightComponent = addComponent<Component::PointLight>(light);
-
+	addComponent<Component::PointLight>(light);
+	
 #endif
 	return (*this);
 }

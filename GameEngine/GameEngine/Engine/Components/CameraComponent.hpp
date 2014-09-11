@@ -5,43 +5,31 @@
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
 #include "Behaviors/Camera.hpp"
+#include <Core/OctreeElement.hh>
 
 namespace Component
 {
-	struct CameraComponent : public ComponentBase<CameraComponent>, public AGE::ComponentBehavior::Camera
+	struct CameraComponent : public ComponentBase<CameraComponent>, public AGE::OctreeElement
 	{
 		CameraComponent();
-		virtual ~CameraComponent(void);
-		void init(AScene *scene)
-		{
-			::AGE::ComponentBehavior::Camera::init(scene, this->entityId);
-		}
+		virtual ~CameraComponent();
+		CameraComponent(CameraComponent const &o);
+		CameraComponent	&operator=(CameraComponent const &o);
+		void init(AScene *scene);
+		virtual void reset(AScene *scene);
 
-		virtual void reset(AScene *scene)
-		{
-			::AGE::ComponentBehavior::Camera::reset(scene, this->entityId);
-		}
-
-		void                 dettachSkybox();
+		void dettachSkybox();
 		const std::string &getSkyboxShader() const;
 
-		//////
-		////
-		// Serialization
+		template <typename Archive> void save(Archive &ar) const;
+		template <typename Archive> void load(Archive &ar);
 
-		template <typename Archive>
-		void save(Archive &ar) const
-		{
-		}
+		virtual OctreeElement &updateOctree();
+		virtual OctreeElement &initOctree(::AScene *scene, ENTITY_ID entityId);
+		virtual OctreeElement &resetOctree(::AScene *scene, ENTITY_ID entityId);
 
-		template <typename Archive>
-		void load(Archive &ar)
-		{
-		}
-
-		// !Serialization
-		////
-		//////
+		void setProjection(const glm::mat4 &);
+		const glm::mat4 &getProjection() const;
 
 		glm::uvec4	viewport;
 		std::string cubeMapShader;
@@ -50,31 +38,19 @@ namespace Component
 		// Camera fbo infos
 		glm::uvec2	fboSize;
 		uint32_t	sampleNbr;
-
-		CameraComponent(CameraComponent const &o)
-			: AGE::ComponentBehavior::Camera(o)
-		{
-			viewport = o.viewport;
-			cubeMapShader = o.cubeMapShader;
-			//@CESAR TODO TODO COPY FRAMEBUFFER
-			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
-			blitOnScreen = o.blitOnScreen;
-			fboSize = o.fboSize;
-			sampleNbr = o.sampleNbr;
-		}
-
-		CameraComponent	&operator=(CameraComponent const &o)
-		{
-			viewport = o.viewport;
-			cubeMapShader = o.cubeMapShader;
-			//@CESAR TODO TODO COPY FRAMEBUFFER
-			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
-			blitOnScreen = o.blitOnScreen;
-			fboSize = o.fboSize;
-			sampleNbr = o.sampleNbr;
-			AGE::ComponentBehavior::Camera::operator=(o);
-			return *this;
-		}
 	private:
+		glm::mat4 _projection;
+		AScene *_scene = nullptr;
+
 	};
+
+	template <typename Archive>
+	void CameraComponent::save(Archive &ar) const
+	{
+	}
+
+	template <typename Archive>
+	void CameraComponent::load(Archive &ar)
+	{
+	}
 }

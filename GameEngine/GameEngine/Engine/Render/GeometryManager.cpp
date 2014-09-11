@@ -169,6 +169,7 @@ namespace gl
 		_simpleFormId[SimpleForm::QUAD] = addIndices(nbrElement, quadFormId);
 		attachVerticesToVertexPool(_simpleFormGeo[SimpleForm::QUAD], *_simpleFormPoolGeo);
 		attachIndicesToIndexPool(_simpleFormId[SimpleForm::QUAD], *_simpleFormPoolId);
+		attachIndexPoolToVertexPool(*_simpleFormPoolGeo, *_simpleFormPoolId);
 		return (*this);
 	}
 
@@ -189,6 +190,7 @@ namespace gl
 		_simpleFormId[SimpleForm::SPHERE] = addIndices(nbrElementId, id);
 		attachVerticesToVertexPool(_simpleFormGeo[SimpleForm::SPHERE], *_simpleFormPoolGeo);
 		attachIndicesToIndexPool(_simpleFormId[SimpleForm::SPHERE], *_simpleFormPoolId);
+		attachIndexPoolToVertexPool(*_simpleFormPoolGeo, *_simpleFormPoolId);
 		delete[] buffer[0];
 		delete[] id;
 		return (*this);

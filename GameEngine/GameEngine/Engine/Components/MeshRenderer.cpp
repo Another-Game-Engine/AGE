@@ -1,13 +1,17 @@
-#include "MeshRenderer.hh"
+#include <Components/MeshRenderer.hh>
 #include "Core/Engine.hh"
 #include <Core/AScene.hh>
 #include <Geometry/Mesh.hpp>
+#include <Geometry/Material.hpp>
+#include <assert.h>
 
 namespace Component
 {
 	MeshRenderer::MeshRenderer() :
 		Component::ComponentBase<MeshRenderer>(),
-		Cullable()
+		OctreeElement(),
+		mesh(nullptr),
+		material(nullptr)
 	{
 	}
 
@@ -17,24 +21,92 @@ namespace Component
 
 	MeshRenderer::MeshRenderer(MeshRenderer &&o)
 		: ComponentBase<MeshRenderer>(std::move(o))
-		, Cullable(std::move(o))
+		, OctreeElement(std::move(o)),
+		mesh(std::move(o.mesh)),
+		material(std::move(o.material))
 	{
 	}
 
 	MeshRenderer &MeshRenderer::operator=(MeshRenderer &&o)
 	{
-		Cullable::operator=(std::move(o));
+		OctreeElement::operator=(std::move(o));
+		mesh = std::move(o.mesh);
+		material = std::move(o.material);
 		return *this;
 	}
 
 	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r)
 	{
-		AGE::ComponentBehavior::Cullable::init(scene, entityId);
+		initOctree(scene, entityId);
 		setMesh(r);
 	}
 
 	void MeshRenderer::reset(AScene *scene)
 	{
-		AGE::ComponentBehavior::Cullable::reset(scene, entityId);
+		resetOctree(scene, entityId);
+		mesh = nullptr;
+		material = nullptr;
+	}
+
+	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh)
+	{
+		mesh = _mesh;
+		updateOctree();
+		return (*this);
+	}
+
+	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
+	{
+		return mesh;
+	}
+
+	MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_material)
+	{
+		material = _material;
+		updateOctree();
+		return (*this);
+	}
+
+	std::shared_ptr<AGE::MaterialSetInstance> MeshRenderer::getMaterial()
+	{
+		return material;
+	}
+
+	AGE::OctreeElement &MeshRenderer::updateOctree()
+	{
+		assert(_scene != nullptr);
+
+		if (this->mesh == nullptr || this->material == nullptr)
+			return (*this);
+		assert(material->datas.size() > 0);
+		AGE::Vector<AGE::MaterialInstance> materials;
+		for (auto &e : mesh->subMeshs)
+		{
+			if (e.defaultMaterialIndex >= material->datas.size())
+				materials.push_back(material->datas[0]);
+			else
+				materials.push_back(material->datas[e.defaultMaterialIndex]);
+		}
+		_scene->getInstance<AGE::Octree>()->updateGeometry(_OTKey, mesh->subMeshs, materials);
+		return (*this);
+	}
+
+	AGE::OctreeElement &MeshRenderer::initOctree(::AScene *scene, ENTITY_ID entityId)
+	{
+		_scene = scene;
+		assert(_OTKey.invalid());
+		_OTKey = scene->getInstance<AGE::Octree>()->addCullableElement();
+		scene->getLink(entityId)->registerOctreeObject(_OTKey);
+		assert(!_OTKey.invalid());
+		return (*this);
+	}
+
+	AGE::OctreeElement &MeshRenderer::resetOctree(::AScene *scene, ENTITY_ID entityId)
+	{
+		assert(!_OTKey.invalid());
+		scene->getLink(entityId)->unregisterOctreeObject(_OTKey);
+		scene->getInstance<AGE::Octree>()->removeElement(_OTKey);
+		_OTKey = AGE::OctreeKey();
+		return (*this);
 	}
 }
