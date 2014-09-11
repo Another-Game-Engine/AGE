@@ -99,7 +99,7 @@ namespace AGE
 		}
 		else
 		{
-			res.id = _cameraCounter++;
+			res.id = uint32_t(_cameraCounter++);
 		}
 		_commandQueue.emplace<PRTC::CreateCamera>(res);
 
