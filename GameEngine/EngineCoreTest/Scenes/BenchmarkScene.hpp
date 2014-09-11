@@ -15,7 +15,7 @@
 
 #include <Core/AssetsManager.hpp>
 
-#include <Core/Octree.hpp>
+#include <Core/PrepareRenderThread.hpp>
 
 #include <Context/IRenderContext.hh>
 #include <Core/RenderThread.hpp>
@@ -40,7 +40,7 @@ public:
 	virtual bool 			userStart()
 	{
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		getInstance<AGE::Octree>()->setScene(weakOnThis);
+		getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis);
 
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
@@ -53,7 +53,7 @@ public:
 		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::RenderManager>();
 #if NEW_SHADER
-	camerasystem->setManager(getInstance<AGE::RenderThread>());
+	camerasystem->setManager();
 #endif
 
 #ifdef SIMPLE_RENDERING
@@ -238,7 +238,7 @@ public:
 		auto renderThread = getInstance<AGE::RenderThread>();
 		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::RefreshInputs>();
 
-		auto octree = getInstance<AGE::Octree>();
+		auto octree = getInstance<AGE::Threads::Prepare>();
 		octree->getCommandQueue().releaseReadability();
 		return true;
 	}

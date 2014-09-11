@@ -1,4 +1,6 @@
 #include <Utils/MatrixConversion.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 glm::vec3 posFromMat4(const glm::mat4 &mat)
 {

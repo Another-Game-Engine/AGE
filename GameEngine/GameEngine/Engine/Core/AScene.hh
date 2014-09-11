@@ -9,7 +9,7 @@
 #include <map>
 #include <array>
 
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 
 #include <cereal/cereal.hpp>
 #include <cereal/archives/binary.hpp>

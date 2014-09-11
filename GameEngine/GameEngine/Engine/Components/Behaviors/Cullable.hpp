@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
-#include <Core/Octree.hpp>
+#include <Core/PrepareRenderThread.hpp>
 
 class AScene;
 
@@ -15,7 +15,7 @@ namespace AGE
 		struct Cullable
 		{
 		private:
-			OctreeKey _cullableOTKey;
+			PrepareKey _cullableOTKey;
 		public:
 			void init(::AScene *scene, ENTITY_ID entityId);
 			void reset(::AScene *scene, ENTITY_ID entityId);

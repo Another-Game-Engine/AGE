@@ -6,7 +6,7 @@
 #include <Systems/System.h>
 #include <Core/EntityFilter.hpp>
 #include <Entities/EntityFlags.hh>
-#include <Core/Octree.hpp>
+#include <Core/PrepareRenderThread.hpp>
 
 AScene::AScene(std::weak_ptr<Engine> &&engine) :
 DependenciesInjector(std::move(engine))
@@ -80,7 +80,7 @@ Entity &AScene::createEntity()
 		{
 			auto &e = _pool[_entityNumber];
 			e.entity.id = _entityNumber;
-			e.link._octree = getInstance<AGE::Octree>();
+			e.link._octree = getInstance<AGE::PrepareRenderThread>();
 			assert(++_entityNumber != UINT16_MAX);
 			return e.entity;
 		}

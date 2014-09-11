@@ -1,4 +1,4 @@
-#include "Octree.hpp"
+#include "PrepareRenderThread.hpp"
 #include <Core/AScene.hh>
 #include <Components/MeshRenderer.hh>
 #include <Core/EntityFilter.hpp>
@@ -8,44 +8,50 @@
 #include <Utils/DependenciesInjector.hpp>
 #include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include "PrepareRenderThreadCommand.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 
 namespace AGE
 {
-	Octree::Octree()
+	PrepareRenderThread::PrepareRenderThread()
 	{
 	}
 
-	Octree::~Octree(void)
+	PrepareRenderThread::~PrepareRenderThread(void)
 	{
 		_commandQueue.emplace<TMQ::CloseQueue>();
 		_commandQueue.releaseReadability();
 	}
 
-	bool Octree::_init()
+	bool PrepareRenderThread::_init()
 	{
 		_octreeDrawList = AGE::Vector<DrawableCollection>();
 		return true;
 	}
 
-	bool Octree::_initInNewThread()
+	bool PrepareRenderThread::_initInNewThread()
 	{
 		return true;
 	}
 
-	bool Octree::_release()
+	bool PrepareRenderThread::_release()
 	{
 		return true;
 	}
 
-	bool Octree::_releaseInNewThread()
+	bool PrepareRenderThread::_releaseInNewThread()
 	{
 		return true;
 	}
 
-	const OctreeKey &Octree::addCullableElement()
+	const PrepareKey &PrepareRenderThread::addCullableElement()
 	{
-		OctreeKey res;
-		res.type = OctreeKey::Type::Cullable;
+		PrepareKey res;
+		res.type = PrepareKey::Type::Cullable;
 		if (!_freeUserObjects.empty())
 		{
 			res.id = _freeUserObjects.front();
@@ -56,25 +62,25 @@ namespace AGE
 			res.id = uint32_t(_userObjectCounter++);
 		}
 
-		_commandQueue.emplace<OctreeCommand::CreateDrawable>(res);
+		_commandQueue.emplace<PRTC::CreateDrawable>(res);
 		return res;
 	}
 
-	void Octree::removeElement(const OctreeKey &key)
+	void PrepareRenderThread::removeElement(const PrepareKey &key)
 	{
 		assert(!key.invalid());
 		switch (key.type)
 		{
-		case(OctreeKey::Type::Camera) :
+		case(PrepareKey::Type::Camera) :
 		{
 			_freeCameraObjects.push(key.id);
-			_commandQueue.emplace<OctreeCommand::DeleteCamera>(key);
+			_commandQueue.emplace<PRTC::DeleteCamera>(key);
 		}
 									  break;
-		case(OctreeKey::Type::Cullable) :
+		case(PrepareKey::Type::Cullable) :
 		{
 			_freeUserObjects.push(key.id);
-			_commandQueue.emplace<OctreeCommand::DeleteDrawable>(key);
+			_commandQueue.emplace<PRTC::DeleteDrawable>(key);
 		}
 										break;
 		default:
@@ -82,10 +88,10 @@ namespace AGE
 		}
 	}
 
-	const OctreeKey &Octree::addCameraElement()
+	const PrepareKey &PrepareRenderThread::addCameraElement()
 	{
-		OctreeKey res;
-		res.type = OctreeKey::Type::Camera;
+		PrepareKey res;
+		res.type = PrepareKey::Type::Camera;
 		if (!_freeCameraObjects.empty())
 		{
 			res.id = _freeCameraObjects.front();
@@ -95,60 +101,60 @@ namespace AGE
 		{
 			res.id = _cameraCounter++;
 		}
-		_commandQueue.emplace<OctreeCommand::CreateCamera>(res);
+		_commandQueue.emplace<PRTC::CreateCamera>(res);
 
 		return res;
 	}
 
-	void Octree::setPosition(const glm::vec3 &v, const OctreeKey &id)
+	void PrepareRenderThread::setPosition(const glm::vec3 &v, const PrepareKey &id)
 	{
-		_commandQueue.emplace<OctreeCommand::Position>(id, v);
+		_commandQueue.emplace<PRTC::Position>(id, v);
 	}
-	void Octree::setOrientation(const glm::quat &v, const OctreeKey &id)
+	void PrepareRenderThread::setOrientation(const glm::quat &v, const PrepareKey &id)
 	{
-		_commandQueue.emplace<OctreeCommand::Orientation>(id, v);
-	}
-
-	void Octree::setScale(const glm::vec3 &v, const OctreeKey &id)
-	{
-		_commandQueue.emplace<OctreeCommand::Scale>(id, v);
+		_commandQueue.emplace<PRTC::Orientation>(id, v);
 	}
 
-	void Octree::setCameraInfos(const OctreeKey &id
+	void PrepareRenderThread::setScale(const glm::vec3 &v, const PrepareKey &id)
+	{
+		_commandQueue.emplace<PRTC::Scale>(id, v);
+	}
+
+	void PrepareRenderThread::setCameraInfos(const PrepareKey &id
 		, const glm::mat4 &projection)
 	{
-		_commandQueue.emplace<OctreeCommand::CameraInfos>(id, projection);
+		_commandQueue.emplace<PRTC::CameraInfos>(id, projection);
 	}
 
-	void Octree::setPosition(const glm::vec3 &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids)
+	void PrepareRenderThread::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setPosition(v, e);
 	}
 
-	void Octree::setOrientation(const glm::quat &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids)
+	void PrepareRenderThread::setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setOrientation(v, e);
 	}
 
-	void Octree::setScale(const glm::vec3 &v, const std::array<OctreeKey, MAX_CPT_NUMBER> &ids)
+	void PrepareRenderThread::setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setScale(v, e);
 	}
 
-	void Octree::updateGeometry(const OctreeKey &key
+	void PrepareRenderThread::updateGeometry(const PrepareKey &key
 		, const AGE::Vector<AGE::SubMeshInstance> &meshs
 		, const AGE::Vector<AGE::MaterialInstance> &materials)
 	{
-		assert(!key.invalid() || key.type != OctreeKey::Type::Cullable);
-		_commandQueue.emplace<OctreeCommand::Geometry>(key, meshs, materials);
+		assert(!key.invalid() || key.type != PrepareKey::Type::Cullable);
+		_commandQueue.emplace<PRTC::Geometry>(key, meshs, materials);
 	}
 
 	//-----------------------------------------------------------------
 
-	Octree::DRAWABLE_ID Octree::addDrawableObject(Octree::USER_OBJECT_ID uid)
+	PrepareRenderThread::DRAWABLE_ID PrepareRenderThread::addDrawableObject(PrepareRenderThread::USER_OBJECT_ID uid)
 	{
 		DRAWABLE_ID res = DRAWABLE_ID(-1);
 		CullableObject *co = nullptr;
@@ -169,7 +175,7 @@ namespace AGE
 		return res;
 	}
 
-	void Octree::removeDrawableObject(DRAWABLE_ID id)
+	void PrepareRenderThread::removeDrawableObject(DRAWABLE_ID id)
 	{
 		_freeCullableObjects.push(uint32_t(id));
 		_cullableObjects[id].active = false;
@@ -177,17 +183,17 @@ namespace AGE
 	}
 
 
-	bool Octree::_update()
+	bool PrepareRenderThread::_update()
 	{
 		_commandQueue.getDispatcher()
-			.handle<OctreeCommand::CameraInfos>([&](const OctreeCommand::CameraInfos& msg)
+			.handle<PRTC::CameraInfos>([&](const PRTC::CameraInfos& msg)
 		{
 			CameraObject *co = nullptr;
 			co = &_cameraObjects[msg.key.id];
 			co->hasMoved = true;
 			co->projection = msg.projection;
 		})
-			.handle<OctreeCommand::CreateCamera>([&](const OctreeCommand::CreateCamera& msg)
+			.handle<PRTC::CreateCamera>([&](const PRTC::CreateCamera& msg)
 		{
 			CameraObject *co = nullptr;
 			if (msg.key.id >= _cameraObjects.size())
@@ -202,7 +208,7 @@ namespace AGE
 			co->key.id = msg.key.id;
 			co->active = true;
 		})
-			.handle<OctreeCommand::CreateDrawable>([&](const OctreeCommand::CreateDrawable& msg)
+			.handle<PRTC::CreateDrawable>([&](const PRTC::CreateDrawable& msg)
 		{
 			UserObject *uo = nullptr;
 			if (msg.key.id >= _userObjects.size())
@@ -215,13 +221,13 @@ namespace AGE
 				uo = &_userObjects[msg.key.id];
 			}
 		})
-			.handle<OctreeCommand::DeleteCamera>([&](const OctreeCommand::DeleteCamera& msg)
+			.handle<PRTC::DeleteCamera>([&](const PRTC::DeleteCamera& msg)
 		{
 			CameraObject *co = nullptr;
 			co = &_cameraObjects[msg.key.id];
 			co->active = false;
 		})
-			.handle<OctreeCommand::DeleteDrawable>([&](const OctreeCommand::DeleteDrawable& msg)
+			.handle<PRTC::DeleteDrawable>([&](const PRTC::DeleteDrawable& msg)
 		{
 			UserObject *uo = nullptr;
 			uo = &this->_userObjects[msg.key.id];
@@ -232,7 +238,7 @@ namespace AGE
 			uo->drawableCollection.clear();
 			uo->active = false;
 		})
-			.handle<OctreeCommand::Geometry>([this](const OctreeCommand::Geometry& msg)
+			.handle<PRTC::Geometry>([this](const PRTC::Geometry& msg)
 		{
 			UserObject *uo = nullptr;
 			uo = &_userObjects[msg.key.id];
@@ -253,18 +259,18 @@ namespace AGE
 				_cullableObjects[id].scale = uo->scale;
 			}
 		})
-			.handle<OctreeCommand::Position>([&](const OctreeCommand::Position& msg)
+			.handle<PRTC::Position>([&](const PRTC::Position& msg)
 		{
 			UserObject *uo = nullptr;
 			CameraObject *co = nullptr;
 			switch (msg.key.type)
 			{
-			case(OctreeKey::Type::Camera) :
+			case(PrepareKey::Type::Camera) :
 				co = &_cameraObjects[msg.key.id];
 				co->position = msg.position;
 				co->hasMoved = true;
 				break;
-			case(OctreeKey::Type::Cullable) :
+			case(PrepareKey::Type::Cullable) :
 				uo = &_userObjects[msg.key.id];
 				uo->position = msg.position;
 				for (auto &e : uo->drawableCollection)
@@ -277,18 +283,18 @@ namespace AGE
 				break;
 			}
 		})
-			.handle<OctreeCommand::Scale>([&](const OctreeCommand::Scale& msg)
+			.handle<PRTC::Scale>([&](const PRTC::Scale& msg)
 		{
 			UserObject *uo = nullptr;
 			CameraObject *co = nullptr;
 			switch (msg.key.type)
 			{
-			case(OctreeKey::Type::Camera) :
+			case(PrepareKey::Type::Camera) :
 				co = &_cameraObjects[msg.key.id];
 				co->scale = msg.scale;
 				co->hasMoved = true;
 				break;
-			case(OctreeKey::Type::Cullable) :
+			case(PrepareKey::Type::Cullable) :
 				uo = &_userObjects[msg.key.id];
 				uo->scale = msg.scale;
 				for (auto &e : uo->drawableCollection)
@@ -301,18 +307,18 @@ namespace AGE
 				break;
 			}
 		})
-			.handle<OctreeCommand::Orientation>([&](const OctreeCommand::Orientation& msg)
+			.handle<PRTC::Orientation>([&](const PRTC::Orientation& msg)
 		{
 			UserObject *uo = nullptr;
 			CameraObject *co = nullptr;
 			switch (msg.key.type)
 			{
-			case(OctreeKey::Type::Camera) :
+			case(PrepareKey::Type::Camera) :
 				co = &_cameraObjects[msg.key.id];
 				co->orientation = msg.orientation;
 				co->hasMoved = true;
 				break;
-			case(OctreeKey::Type::Cullable) :
+			case(PrepareKey::Type::Cullable) :
 				uo = &_userObjects[msg.key.id];
 				uo->orientation = msg.orientation;
 				for (auto &e : uo->drawableCollection)
@@ -329,7 +335,7 @@ namespace AGE
 		{
 			_isRunning = false;
 			return false;
-		}).handle<OctreeCommand::PrepareDrawLists>([&](OctreeCommand::PrepareDrawLists& msg)
+		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
 			static std::size_t cameraCounter = 0; cameraCounter = 0;
 
@@ -371,7 +377,7 @@ namespace AGE
 				++cameraCounter;
 			}
 
-			auto renderThread = getDependencyManager().lock()->getInstance<AGE::RenderThread>();
+			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
 			for (auto &e : this->_octreeDrawList)
 			{
 				renderThread->getCommandQueue().safeEmplace<TQC::VoidFunction>([=](){

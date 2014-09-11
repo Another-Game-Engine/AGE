@@ -7,7 +7,6 @@
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Drawable.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
-    <ClCompile Include="Engine\Core\Octree.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
@@ -66,6 +65,7 @@
     <ClCompile Include="..\Vendors\tmq\message.cpp" />
     <ClCompile Include="..\Vendors\tmq\queue.cpp" />
     <ClCompile Include="Engine\Core\RenderThread.cpp" />
+    <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\Behaviors\Camera.hpp" />
@@ -75,9 +75,7 @@
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
     <ClInclude Include="Engine\Core\Drawable.hh" />
     <ClInclude Include="Engine\Core\Link.hpp" />
-    <ClInclude Include="Engine\Core\Octree.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
-    <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
@@ -204,6 +202,10 @@
     <ClInclude Include="..\Vendors\tmq\templateDispatcher.hpp" />
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
+    <ClInclude Include="Engine\Render\RenderThreadInterface.hpp" />
+    <ClInclude Include="Engine\Core\PrepareKey.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

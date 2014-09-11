@@ -4,7 +4,7 @@
 
 namespace AGE
 {
-	struct OctreeKey
+	struct PrepareKey
 	{
 		enum Type
 		{
@@ -27,7 +27,7 @@ namespace AGE
 			return (type == NO_TYPE || id == NO_ID);
 		}
 
-		bool operator==(const OctreeKey &o)
+		bool operator==(const PrepareKey &o)
 		{
 			return o.id == id && o.type == type;
 		}
