@@ -46,17 +46,17 @@ void				Input::setMouseWheel(glm::i8vec2 const &delta)
 	_mouseWheelY = delta.y;
 }
 
-glm::i8vec2 const  	&Input::getMouseWheel()
+glm::i8vec2   	    Input::getMouseWheel()
 {
 	return glm::i8vec2(_mouseWheelX, _mouseWheelY);
 }
 
-glm::i8vec2 const  	&Input::getMousePosition()
+glm::i8vec2      	Input::getMousePosition()
 {
 	return glm::i8vec2(_mousePosX, _mousePosY);
 }
 
-glm::i8vec2 const  	&Input::getMouseDelta()
+glm::i8vec2       	Input::getMouseDelta()
 {
 	return glm::i8vec2(_mouseDelX, _mouseDelY);
 }

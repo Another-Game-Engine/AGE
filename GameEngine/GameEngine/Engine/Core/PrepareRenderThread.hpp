@@ -99,10 +99,8 @@ namespace AGE
 		AGE::Vector<DrawableCollection> _octreeDrawList;
 
 	public:
-		const PrepareKey &addCullableElement();
-		const PrepareKey &addCameraElement();
-
-//----------------------------------------- MOVED
+		PrepareKey addCullableElement();
+		PrepareKey addCameraElement();
 
 		void removeElement(const PrepareKey &key);
 
@@ -120,8 +118,6 @@ namespace AGE
 
 		void setCameraInfos(const PrepareKey &id
 			, const glm::mat4 &projection);
-
-//---------------------------------------------------------------------------------
 
 		//
 		// END

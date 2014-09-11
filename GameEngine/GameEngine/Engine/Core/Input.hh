@@ -30,9 +30,9 @@ public:
 	void 				removeKeyInput(int input);
 	void 				setMousePosition(glm::i8vec2 const &pos, glm::i8vec2 const &rel);
 	void				setMouseWheel(glm::i8vec2 const &delta);
-	glm::i8vec2 const  	&getMousePosition();
-	glm::i8vec2 const  	&getMouseDelta();
-	glm::i8vec2 const  	&getMouseWheel();
+	glm::i8vec2  	    getMousePosition();
+	glm::i8vec2      	getMouseDelta();
+	glm::i8vec2      	getMouseWheel();
   	bool 				getInput(int input, bool handled = false);
   	bool 				getKey(int input, bool handled = false);
 	inline std::mutex   &getMutex(){ return _mutex; }

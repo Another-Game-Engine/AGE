@@ -48,7 +48,7 @@ namespace AGE
 		return true;
 	}
 
-	const PrepareKey &PrepareRenderThread::addCullableElement()
+	PrepareKey PrepareRenderThread::addCullableElement()
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::Cullable;
@@ -88,7 +88,7 @@ namespace AGE
 		}
 	}
 
-	const PrepareKey &PrepareRenderThread::addCameraElement()
+	PrepareKey PrepareRenderThread::addCameraElement()
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::Camera;

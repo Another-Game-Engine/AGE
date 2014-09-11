@@ -142,7 +142,7 @@ void CameraSystem::setManager()
 		_renderManager->branch(_renderPass, _renderOnScreen);
 		return true;
 	});
-	//assert(res.get());
+	assert(res.get());
 }
 #endif
 
