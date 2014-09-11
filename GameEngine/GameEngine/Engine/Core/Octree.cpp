@@ -53,7 +53,7 @@ namespace AGE
 		}
 		else
 		{
-			res.id = _userObjectCounter++;
+			res.id = uint32_t(_userObjectCounter++);
 		}
 
 		_commandQueue.emplace<OctreeCommand::CreateDrawable>(res);
@@ -171,7 +171,7 @@ namespace AGE
 
 	void Octree::removeDrawableObject(DRAWABLE_ID id)
 	{
-		_freeCullableObjects.push(id);
+		_freeCullableObjects.push(uint32_t(id));
 		_cullableObjects[id].active = false;
 		assert(id != (std::size_t)(-1));
 	}
