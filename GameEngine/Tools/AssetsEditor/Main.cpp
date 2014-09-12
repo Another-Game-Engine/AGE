@@ -61,7 +61,7 @@ int			main(int ac, char **av)
 	// If config file has different value, it'll be changed automaticaly
 	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&e](const glm::uvec2 &v)
 	{
-		e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
+		//e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
 	});
 
 	config->loadFile();
