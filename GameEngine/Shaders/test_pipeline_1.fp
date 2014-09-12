@@ -1,4 +1,4 @@
-#version 440
+#version 430
 
 in vec4 interpolated_position;
 in vec4 interpolated_color;
