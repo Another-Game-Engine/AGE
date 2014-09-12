@@ -16,6 +16,7 @@
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
 #include <Render/MacroRenderManager.hh>
+#include <tmq/message.hpp>
 
 namespace gl
 {
@@ -27,6 +28,11 @@ namespace gl
 	struct BindingRenderPass;
 	struct BindingShader;
 	class Pipeline;
+
+	namespace RenderManagerCmd
+	{
+		struct Stop{};
+	}
 
 	class RenderManager : public Dependency<RenderManager>
 	{
@@ -136,7 +142,6 @@ namespace gl
 		RenderManager &drawPipelines();
 		RenderManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
 		RenderManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
-
 	private:
 		// all map
 		std::map<Key<Shader>, Shader *> _shaders;

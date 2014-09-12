@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <Utils/Containers/Vector.hpp>

@@ -1,6 +1,6 @@
 #include "Cullable.hpp"
 #include <Core/AScene.hh>
-#include <Core/Octree.hpp>
+#include <Core/PrepareRenderThread.hpp>
 
 #include <Render/Key.hh>
 #include <Render/Data.hh>
@@ -13,7 +13,7 @@ namespace AGE
 		{
 			_scene = scene;
 			assert(_cullableOTKey.invalid());
-			_cullableOTKey = scene->getInstance<AGE::Octree>()->addCullableElement();
+			_cullableOTKey = scene->getInstance<AGE::Threads::Prepare>()->addCullableElement();
 			scene->getLink(entityId)->registerOctreeObject(_cullableOTKey);
 			assert(!_cullableOTKey.invalid());
 		}
@@ -24,8 +24,8 @@ namespace AGE
 			mesh = nullptr;
 			material = nullptr;
 			scene->getLink(entityId)->unregisterOctreeObject(_cullableOTKey);
-			scene->getInstance<AGE::Octree>()->removeElement(_cullableOTKey);
-			_cullableOTKey = OctreeKey();
+			scene->getInstance<AGE::Threads::Prepare>()->removeElement(_cullableOTKey);
+			_cullableOTKey = PrepareKey();
 		}
 
 		//temporary
@@ -74,7 +74,7 @@ namespace AGE
 				else
 					materials.push_back(material->datas[e.defaultMaterialIndex]);
 			}
-			_scene->getInstance<AGE::Octree>()->updateGeometry(_cullableOTKey, mesh->subMeshs, materials);
+			_scene->getInstance<AGE::Threads::Prepare>()->updateGeometry(_cullableOTKey, mesh->subMeshs, materials);
 		}
 
 

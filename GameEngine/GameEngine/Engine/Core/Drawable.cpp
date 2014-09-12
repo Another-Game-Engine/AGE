@@ -18,9 +18,9 @@ namespace AGE
 	}
 
 	Drawable::Drawable(SubMeshInstance &&_m, MaterialInstance &&_mat, glm::mat4 &&_t)
-		: mesh(_m)
-		, material(_mat)
-		, transformation(_t)
+		: mesh(std::move(_m))
+		, material(std::move(_mat))
+		, transformation(std::move(_t))
 	{
 	}
 

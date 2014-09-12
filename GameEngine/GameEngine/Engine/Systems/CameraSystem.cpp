@@ -9,9 +9,13 @@
 #include <Render/GeometryManager.hh>
 #include <Core/Drawable.hh>
 #include <Core/AssetsManager.hpp>
+#include <Core/RenderThread.hpp>
+#include <Utils/DependenciesInjector.hpp>
+#include <Utils/ThreadQueueCommands.hpp>
+#include <Core/PrepareRenderThreadCommand.hpp>
 
 //tmp
-#include <Core/Octree.hpp>
+#include <Core/PrepareRenderThread.hpp>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -19,7 +23,8 @@
 CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene)
 	: System(std::move(scene)),
 #if NEW_SHADER
-	_render(NULL),
+	_renderThread(nullptr),
+	_renderManager(nullptr),
 #endif
 	_renderDebugMethod(false),
 	_totalTime(0),
@@ -54,7 +59,7 @@ void CameraSystem::getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
 #endif
 	auto scene = _scene.lock();
 	auto mousePos = scene->getInstance<Input>()->getMousePosition();
-	auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
+	auto screenSize = scene->getInstance<AGE::Threads::Render>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 #if NEW_SHADER
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
 #else
@@ -74,7 +79,7 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 		return;
 #endif
 	auto scene = _scene.lock();
-	auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
+	auto screenSize = scene->getInstance<AGE::Threads::Render>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 	auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
 #if NEW_SHADER
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
@@ -95,53 +100,49 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 
 #if NEW_SHADER
 
-void CameraSystem::setManager(gl::RenderManager &m)
+void CameraSystem::setManager()
 {
-	_render = &m;
+	// A NETTOYER !!!!
+	_renderManager = _scene.lock()->getInstance<gl::RenderManager>();
+	_renderThread = (AGE::RenderThread*)(_scene.lock()->getInstance<AGE::Threads::Render>());
 
-	if (_render == NULL)
-		std::cerr << "Warning: No manager set for the camerasystem" << std::endl;
+	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 	
-	// render pass
-	_shader = _render->addShader(VERTEX_SHADER, FRAG_SHADER);
-	size_t sizeElement[2];
-	gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
-	_global_state = _render->addUniformBlock(2, sizeElement);
-	_render->addShaderInterfaceBlock(_shader, "global_state", _global_state);
-	_render->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
-	_model_matrix = _render->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
-	_view_matrix = _render->addShaderUniform(_shader, "view_matrix", glm::mat4(1.f));
-	_diffuse_color = _render->addShaderUniform(_shader, "diffuse_color", glm::vec4(1.0f));
-	_diffuse_ratio = _render->addShaderUniform(_shader, "diffuse_ratio", 1.0f);
-	_render->bindMaterialToShader<gl::Color_diffuse>(_shader, _diffuse_color);
-	_render->bindMaterialToShader<gl::Ratio_diffuse>(_shader, _diffuse_ratio);
-	_render->bindTransformationToShader(_shader, _model_matrix);
-	_renderPass = _render->addRenderPass(_shader, glm::ivec4(0, 0, 800, 600));
-	_render->pushSetTestTaskRenderPass(_renderPass, false, false, true);
-	_render->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-	_render->pushClearTaskRenderPass(_renderPass, true, true, false);
-	_render->pushOutputColorRenderPass(_renderPass, GL_COLOR_ATTACHMENT0, GL_RGB8);
-	_render->createDepthBufferRenderPass(_renderPass);
+	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&](){
+		// render pass
+		_shader = _renderManager->addShader(VERTEX_SHADER, FRAG_SHADER);
+		size_t sizeElement[2];
+		gl::set_tab_sizetype<glm::mat4, glm::vec4>(sizeElement);
+		_global_state = _renderManager->addUniformBlock(2, sizeElement);
+		_renderManager->addShaderInterfaceBlock(_shader, "global_state", _global_state);
+		_renderManager->setUniformBlock(_global_state, 1, glm::vec4(0.0f, 8.0f, 0.0f, 1.0f));
+		_model_matrix = _renderManager->addShaderUniform(_shader, "model_matrix", glm::mat4(1.f));
+		_view_matrix = _renderManager->addShaderUniform(_shader, "view_matrix", glm::mat4(1.f));
+		_diffuse_color = _renderManager->addShaderUniform(_shader, "diffuse_color", glm::vec4(1.0f));
+		_diffuse_ratio = _renderManager->addShaderUniform(_shader, "diffuse_ratio", 1.0f);
+		_renderManager->bindMaterialToShader<gl::Color_diffuse>(_shader, _diffuse_color);
+		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(_shader, _diffuse_ratio);
+		_renderManager->bindTransformationToShader(_shader, _model_matrix);
+		_renderPass = _renderManager->addRenderPass(_shader, glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushSetTestTaskRenderPass(_renderPass, false, false, true);
+		_renderManager->pushSetClearValueTaskRenderPass(_renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+		_renderManager->pushClearTaskRenderPass(_renderPass, true, true, false);
+		_renderManager->pushOutputColorRenderPass(_renderPass, GL_COLOR_ATTACHMENT0, GL_RGB8);
+		_renderManager->createDepthBufferRenderPass(_renderPass);
 
-	_renderOnScreen = _render->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
-	_render->pushClearTaskRenderOnScreen(_renderOnScreen, true, true, false);
-	_render->pushSetTestTaskRenderOnScreen(_renderOnScreen, false, false, true);
-	_render->pushSetClearValueTaskRenderOnScreen(_renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+		_renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushClearTaskRenderOnScreen(_renderOnScreen, true, true, false);
+		_renderManager->pushSetTestTaskRenderOnScreen(_renderOnScreen, false, false, true);
+		_renderManager->pushSetClearValueTaskRenderOnScreen(_renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 
-	_pipeline = _render->addPipeline();
-	_render->setPipeline(_pipeline, 0, _renderPass);
-	_render->setPipeline(_pipeline, 1, _renderOnScreen);
+		_pipeline = _renderManager->addPipeline();
+		_renderManager->setPipeline(_pipeline, 0, _renderPass);
+		_renderManager->setPipeline(_pipeline, 1, _renderOnScreen);
 
-	_render->branch(_renderPass, _renderOnScreen);
-
-	// render final
-	//_quadShader = _render->addPreShaderQuad();
-	//_textureQuad = _render->addShaderUniform(_quadShader, "texture");
-	//_renderQuad = _render->addRender(_quadShader);
-	//_render->pushSetTestTaskRender(_renderQuad, false, false, true);
-	//_render->pushSetClearValueTaskRender(_renderQuad, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-	//_render->pushClearTaskRender(_renderQuad, true, true, false);
-	//_render->configRender(_renderQuad, glm::ivec4(0, 0, 800, 600));
+		_renderManager->branch(_renderPass, _renderOnScreen);
+		return true;
+	});
+	assert(res.get());
 }
 #endif
 
@@ -161,20 +162,18 @@ void CameraSystem::updateEnd(double time)
 
 void CameraSystem::mainUpdate(double time)
 {
-	auto &drawList = _scene.lock()->getInstance<AGE::Octree>()->getDrawableList();
-	while (!drawList.empty())
-	{
-		auto &camera = drawList.back();
-		if (camera.drawables.empty())
-			return;
-		_render->setUniformBlock(_global_state, 0, camera.projection);
-		_render->setShaderUniform(_shader, _view_matrix, camera.transformation);
-		_render->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
-		_render->updatePipeline(_pipeline, camera.drawables);
-		_render->drawPipelines();
-		camera.drawables.clear();
-		drawList.pop_back();
-	}
+		auto renderManager = _scene.lock()->getInstance<gl::RenderManager>();
+		auto renderThread = _scene.lock()->getInstance<AGE::Threads::Render>();
+
+		auto octree = _scene.lock()->getInstance<AGE::Threads::Prepare>();
+		octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
+		{
+			renderManager->setUniformBlock(_global_state, 0, collection.projection);
+			renderManager->setShaderUniform(_shader, _view_matrix, collection.transformation);
+			renderManager->setShaderUniform(_shader, _diffuse_ratio, 1.0f);
+			renderManager->updatePipeline(_pipeline, collection.drawables);
+			renderManager->drawPipelines();
+		});
 }
 
 bool CameraSystem::initialize()

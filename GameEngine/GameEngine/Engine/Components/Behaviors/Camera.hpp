@@ -4,8 +4,8 @@
 #include <cstddef>
 
 #include <Utils/Frustum.hpp>
-#include <glm/glm.hpp>
-#include <Core/Octree.hpp>
+#include <glm/fwd.hpp>
+#include <Core/PrepareRenderThread.hpp>
 
 class AScene;
 
@@ -16,7 +16,7 @@ namespace AGE
 		struct Camera
 		{
 		private:
-			OctreeKey _cameraOTKey;
+			PrepareKey _cameraOTKey;
 		public:
 			void init(::AScene *scene, ENTITY_ID entityId);
 			void reset(::AScene *scene, ENTITY_ID entityId);

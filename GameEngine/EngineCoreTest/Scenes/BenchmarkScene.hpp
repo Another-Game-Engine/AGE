@@ -15,11 +15,15 @@
 
 #include <Core/AssetsManager.hpp>
 
-#include <Core/Octree.hpp>
+#include <Core/PrepareRenderThread.hpp>
 
 #include <Context/IRenderContext.hh>
+#include <Core/RenderThread.hpp>
 
 #include <CONFIGS.hpp>
+
+//for test
+#include <Utils/Containers/CommandQueue.hpp>
 
 Entity GLOBAL_CAMERA;
 
@@ -35,10 +39,8 @@ public:
 
 	virtual bool 			userStart()
 	{
-
-		setInstance<AGE::Octree>();
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		getInstance<AGE::Octree>()->setScene(weakOnThis);
+		getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis);
 
 #ifdef PHYSIC_SIMULATION
 		addSystem<BulletDynamicSystem>(0);
@@ -51,7 +53,7 @@ public:
 		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::RenderManager>();
 #if NEW_SHADER
-	camerasystem->setManager(m);
+	camerasystem->setManager();
 #endif
 
 #ifdef SIMPLE_RENDERING
@@ -109,7 +111,7 @@ public:
 		GLOBAL_CAMERA = camera;
 		auto cam = addComponent<Component::CameraComponent>(camera);
 
-		auto screenSize = getInstance<IRenderContext>()->getScreenSize();
+		auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 		cam->fboSize = screenSize;
 		cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
 		cam->sampleNbr = 0;
@@ -138,9 +140,8 @@ public:
 #endif //PHYSIC_SIMULATION
 #endif
 
-
-		return true;
-	}
+	return true;
+}
 
 	virtual bool 			userUpdate(double time)
 	{
@@ -233,6 +234,12 @@ public:
 			return false;
 		}
 #endif
+
+		auto renderThread = getInstance<AGE::RenderThread>();
+		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::RefreshInputs>();
+
+		auto octree = getInstance<AGE::Threads::Prepare>();
+		octree->getCommandQueue().releaseReadability();
 		return true;
 	}
 private:
