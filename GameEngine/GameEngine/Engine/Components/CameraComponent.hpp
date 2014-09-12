@@ -4,7 +4,7 @@
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/string.hpp>
-#include <Core/OctreeElement.hh>
+#include <Core/PrepareElement.hh>
 
 namespace Component
 {

@@ -3,7 +3,7 @@
 #include <Components/Component.hh>
 #include <glm/glm.hpp>
 #include <Render/Key.hh>
-#include <Core/OctreeElement.hh>
+#include <Core/PrepareElement.hh>
 
 namespace gl { class GeometryManager; class Vertices; class Indices; }
 

@@ -220,7 +220,7 @@
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Drawable.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
-    <ClCompile Include="Engine\Core\OctreeElement.cpp" />
+    <ClCompile Include="Engine\Core\PrepareElement.cpp" />
     <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
@@ -294,8 +294,8 @@
     <ClInclude Include="Engine\Core\Drawable.hh" />
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
-    <ClInclude Include="Engine\Core\OctreeElement.hh" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
+    <ClInclude Include="Engine\Core\PrepareElement.hh" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />

@@ -8,7 +8,7 @@
 #include <cereal/types/string.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
-#include <Core/OctreeElement.hh>
+#include <Core/PrepareElement.hh>
 
 namespace Resources
 {

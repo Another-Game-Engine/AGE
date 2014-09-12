@@ -1,4 +1,4 @@
-#include <Core/OctreeElement.hh>
+#include <Core/PrepareElement.hh>
 #include <Core/AScene.hh>
 
 namespace AGE
