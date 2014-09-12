@@ -38,7 +38,7 @@ static uint32_t getMiddlePoint(std::vector<glm::vec3> &vertexTab, idxHash_t &mid
 	// add vertex makes sure point is on unit sphere
 	vertexTab.push_back(glm::normalize(glm::vec3(middle)));
 
-	ret = vertexTab.size() - 1;
+	ret = uint32_t(vertexTab.size() - 1);
 
 	// store it, return index
 	middlePoints[key] = ret;
@@ -69,7 +69,7 @@ namespace gl
 		uint32_t					currentIdx = 0;
 
 		// create 12 vertices of a icosahedron
-		float t = (1.0 + std::sqrt(5.0)) / 2.0;
+		float t = (1.0f + std::sqrt(5.0f)) / 2.0f;
 
 		vertexTab.push_back(glm::normalize(glm::vec3(-1, t, 0)));
 		vertexTab.push_back(glm::normalize(glm::vec3(1, t, 0)));
