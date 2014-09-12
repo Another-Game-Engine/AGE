@@ -27,6 +27,7 @@ namespace gl
 			if (shadersResources[index].type == type)
 				return (shadersResources[index].size);
 		assert(0);
+		return (0);
 	}
 
 }
