@@ -9,7 +9,7 @@ namespace Component
 {
 	MeshRenderer::MeshRenderer() :
 		Component::ComponentBase<MeshRenderer>(),
-		OctreeElement(),
+		PrepareElement(),
 		mesh(nullptr),
 		material(nullptr)
 	{
@@ -21,7 +21,7 @@ namespace Component
 
 	MeshRenderer::MeshRenderer(MeshRenderer &&o)
 		: ComponentBase<MeshRenderer>(std::move(o))
-		, OctreeElement(std::move(o)),
+		, PrepareElement(std::move(o)),
 		mesh(std::move(o.mesh)),
 		material(std::move(o.material))
 	{
@@ -29,7 +29,7 @@ namespace Component
 
 	MeshRenderer &MeshRenderer::operator=(MeshRenderer &&o)
 	{
-		OctreeElement::operator=(std::move(o));
+		PrepareElement::operator=(std::move(o));
 		mesh = std::move(o.mesh);
 		material = std::move(o.material);
 		return *this;
@@ -87,25 +87,25 @@ namespace Component
 			else
 				materials.push_back(material->datas[e.defaultMaterialIndex]);
 		}
-		_scene->getInstance<AGE::Octree>()->updateGeometry(_OTKey, mesh->subMeshs, materials);
+		_scene->getInstance<AGE::Threads::Prepare>()->updateGeometry(_OTKey, mesh->subMeshs, materials);
 		return (*this);
 	}
 
-	AGE::OctreeElement &MeshRenderer::initOctree(::AScene *scene, ENTITY_ID entityId)
+	AGE::PrepareElement &MeshRenderer::initOctree(::AScene *scene, ENTITY_ID entityId)
 	{
 		_scene = scene;
-		_OTKey = scene->getInstance<AGE::Octree>()->addCullableElement();
+		_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addCullableElement();
 		scene->getLink(entityId)->registerOctreeObject(_OTKey);
 		assert(!_OTKey.invalid());
 		return (*this);
 	}
 
-	AGE::OctreeElement &MeshRenderer::resetOctree(::AScene *scene, ENTITY_ID entityId)
+	AGE::PrepareElement &MeshRenderer::resetOctree(::AScene *scene, ENTITY_ID entityId)
 	{
 		assert(!_OTKey.invalid());
 		scene->getLink(entityId)->unregisterOctreeObject(_OTKey);
-		scene->getInstance<AGE::Octree>()->removeElement(_OTKey);
-		_OTKey = AGE::OctreeKey();
+		scene->getInstance<AGE::Threads::Prepare>()->removeElement(_OTKey);
+		_OTKey = AGE::PrepareKey();
 		return (*this);
 	}
 }

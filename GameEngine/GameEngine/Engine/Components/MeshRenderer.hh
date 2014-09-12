@@ -23,7 +23,7 @@ class Renderer;
 namespace Component
 {
 
-	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>, public AGE::OctreeElement
+	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>, public AGE::PrepareElement
 	{
 		MeshRenderer();
 		virtual ~MeshRenderer();
@@ -36,8 +36,8 @@ namespace Component
 		template <typename Archive> void load(Archive &ar);
 
 		MeshRenderer &updateOctree();
-		virtual OctreeElement &initOctree(::AScene *scene, ENTITY_ID entityId);
-		virtual OctreeElement &resetOctree(::AScene *scene, ENTITY_ID entityId);
+		virtual PrepareElement &initOctree(::AScene *scene, ENTITY_ID entityId);
+		virtual PrepareElement &resetOctree(::AScene *scene, ENTITY_ID entityId);
 
 		MeshRenderer &setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh);
 		std::shared_ptr<AGE::MeshInstance> getMesh();

@@ -1,16 +1,17 @@
 #include "Link.hpp"
-#include <Core/Octree.hpp>
+#include <Core/PrepareRenderThread.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 using namespace AGE;
 
-void Link::registerOctreeObject(const OctreeKey &key)
+void Link::registerOctreeObject(const PrepareKey &key)
 {
 	for (auto &b : _octreeObjects)
 	{
 		if (b.invalid())
 		{
 			b = key;
-			auto ot = static_cast<Octree*>(_octree);
+			auto ot = static_cast<PrepareRenderThread*>(_octree);
 			ot->setPosition(_position, key);
 			ot->setScale(_scale, key);
 			ot->setOrientation(_orientation, key);
@@ -24,7 +25,7 @@ void Link::setPosition(const glm::vec3 &v)
 {
 	_computeTrans = true;
 	_position = v;
-	auto ot = static_cast<Octree*>(_octree);
+	auto ot = static_cast<PrepareRenderThread*>(_octree);
 	for(auto &e : _octreeObjects)
 	{
 		if (e.invalid())
@@ -36,7 +37,7 @@ void Link::setPosition(const glm::vec3 &v)
 void Link::setScale(const glm::vec3 &v) {
 	_computeTrans = true;
 	_scale = v;
-	auto ot = static_cast<Octree*>(_octree);
+	auto ot = static_cast<PrepareRenderThread*>(_octree);
 	for (auto &e : _octreeObjects)
 	{
 		if (e.invalid())
@@ -47,7 +48,7 @@ void Link::setScale(const glm::vec3 &v) {
 void Link::setOrientation(const glm::quat &v) {
 	_computeTrans = true;
 	_orientation = v;
-	auto ot = static_cast<Octree*>(_octree);
+	auto ot = static_cast<PrepareRenderThread*>(_octree);
 	for (auto &e : _octreeObjects)
 	{
 		if (e.invalid())
@@ -56,13 +57,13 @@ void Link::setOrientation(const glm::quat &v) {
 	}
 }
 
-void Link::unregisterOctreeObject(const OctreeKey &key)
+void Link::unregisterOctreeObject(const PrepareKey &key)
 {
 	for (auto &b : _octreeObjects)
 	{
 		if (b == key)
 		{
-			b = OctreeKey();
+			b = PrepareKey();
 			return;
 		}
 	}
@@ -93,5 +94,5 @@ const glm::mat4 &Link::getTransform()
 			_orientation = glm::quat(glm::mat4(1));
 			_trans = glm::mat4(1);
 			_computeTrans = true;
-			_octreeObjects.fill(OctreeKey());
+			_octreeObjects.fill(PrepareKey());
 		}

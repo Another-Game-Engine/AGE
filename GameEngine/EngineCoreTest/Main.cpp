@@ -15,7 +15,7 @@
 #include <Render/MaterialManager.hh>
 #include <Render/RenderManager.hh>
 // SCENES
-#include "Scenes/BenchmarkScene.hh"
+#include <Scenes/BenchmarkScene.hpp>
 
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
@@ -25,15 +25,17 @@
 #include <Utils/PubSub.hpp>
 #include <Utils/PerformanceDebugger.hh>
 #include <Core/AssetsManager.hpp>
-
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
+#include <Core/RenderThread.hpp>
+#include <Utils/ThreadQueueCommands.hpp>
 
 //CONFIGS
 #include <CONFIGS.hh>
 
+#include <thread>
+
 bool loadAssets(std::shared_ptr<Engine> e)
 {
-
 	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"));
@@ -55,13 +57,44 @@ int			main(int ac, char **av)
 {
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
+	auto renderThread = e->setInstance<AGE::RenderThread, AGE::Threads::Render>();
+	renderThread->launch(e.get());
+
+	auto preparationThread = e->setInstance<AGE::Threads::Prepare>();
+	preparationThread->launch(e.get());
+
 	// Set Configurations
 	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
 
 	e->setInstance<PubSub::Manager>();
-	e->setInstance<SdlContext, IRenderContext>();
+	auto context = e->getInstance<IRenderContext>();
+	auto renderManager = e->getInstance<gl::RenderManager>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
+
+	// Important, we have to launch the command queue from the sender thread
+	//context->launchCommandQueue();
+	//renderManager->launchCommandQueue();
+
+	auto contextInit = renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
+		std::function<bool()>([&](){
+		if (!context->init(0, 800, 600, "~AGE~ V0.0 Demo"))
+			return false;
+#ifdef RENDERING_ACTIVATED
+		auto &geo = e->getInstance<gl::RenderManager>()->geometryManager;
+		geo.addIndexPool();
+		geo.addVertexPool();
+		GLenum typeComponent[2] = { GL_FLOAT, GL_FLOAT };
+		uint8_t sizeTypeComponent[2] = { sizeof(float), sizeof(float) };
+		uint8_t nbrComponent[2] = { 2, 2 };
+		geo.addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
+
+		if (!loadAssets(e))
+			return false;
+#endif
+		return true;
+	}));
+
 	e->setInstance<SceneManager>();
 	e->setInstance<AGE::AssetsManager>();
 	e->setInstance<PerformanceDebugger>("Developper Name");
@@ -70,15 +103,11 @@ int			main(int ac, char **av)
 	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 #endif
 
-	// init engine
-	if (e->init(0, 800, 600, "~AGE~ V0.0 Demo") == false)
-		return (EXIT_FAILURE);
-
 	// Set default window size
 	// If config file has different value, it'll be changed automaticaly
-	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&e](const glm::uvec2 &v)
+	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&](const glm::uvec2 &v)
 	{
-		e->getInstance<IRenderContext>()->setScreenSize(std::move(v));
+		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::SetScreenSize>(v);
 	});
 	config->setConfiguration<std::string>("debuggerDevelopperName", "Modify MyConfigurationFile.conf with your name", [&e](const std::string &name)
 	{
@@ -88,18 +117,10 @@ int			main(int ac, char **av)
 
 	config->loadFile();
 
-#ifdef RENDERING_ACTIVATED
-	auto &geo = e->setInstance<gl::RenderManager>()->geometryManager;
-	geo.addIndexPool();
-	geo.addVertexPool();
-	GLenum typeComponent[2] = { GL_FLOAT, GL_FLOAT };
-	uint8_t sizeTypeComponent[2] = { sizeof(float), sizeof(float) };
-	uint8_t nbrComponent[2] = { 2, 2 };
-	geo.addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
-
-	if (!loadAssets(e))
+	// We wait here for context initialization return
+	bool contextInitReturnValue = contextInit.get();
+	if (contextInitReturnValue == false)
 		return EXIT_FAILURE;
-#endif
 
 	// add main scene
 	e->getInstance<SceneManager>()->addScene(std::make_shared<BenchmarkScene>(e), "BenchmarkScene");
@@ -117,5 +138,8 @@ int			main(int ac, char **av)
 		;
 	config->saveToFile();
 	e->stop();
+
+	renderThread->quit();
+	preparationThread->quit();
 	return (EXIT_SUCCESS);
 }

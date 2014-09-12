@@ -23,7 +23,9 @@ namespace gl
 		Key();
 		~Key();
 		Key(Key<TYPE> const &copy);
+		Key(Key<TYPE> &&copy);
 		Key<TYPE> &operator=(Key<TYPE> const &t);
+		Key<TYPE> &operator=(Key<TYPE> &&t);
 		std::size_t getId() const;
 		bool empty() const;
 		bool operator!() const;

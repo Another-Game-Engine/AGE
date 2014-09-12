@@ -3,23 +3,23 @@
 
 namespace AGE
 {
-	OctreeElement::OctreeElement()
+	PrepareElement::PrepareElement()
 	{
 
 	}
 
-	OctreeElement::~OctreeElement()
+	PrepareElement::~PrepareElement()
 	{
 
 	}
 
-	OctreeElement::OctreeElement(OctreeElement &&o)
+	PrepareElement::PrepareElement(PrepareElement &&o)
 		: _OTKey(o._OTKey),
 		_scene(o._scene)
 	{
 	}
 
-	OctreeElement &OctreeElement::operator=(OctreeElement &&o)
+	PrepareElement &PrepareElement::operator=(PrepareElement &&o)
 	{
 		_OTKey = o._OTKey;
 		_scene = o._scene;

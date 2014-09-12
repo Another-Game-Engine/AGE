@@ -2,25 +2,25 @@
 
 #include <Entities/EntityTypedef.hpp>
 #include <cstddef>
-#include <Core/Octree.hpp>
+#include <Core/PrepareRenderThread.hpp>
 
 class AScene;
 
 namespace AGE
 {
-	struct OctreeElement
+	struct PrepareElement
 	{
 	public:
-		OctreeElement();
-		virtual ~OctreeElement();
-		OctreeElement(OctreeElement &&o);
-		OctreeElement &operator=(OctreeElement &&o);
+		PrepareElement();
+		virtual ~PrepareElement();
+		PrepareElement(PrepareElement &&o);
+		PrepareElement &operator=(PrepareElement &&o);
 
-		virtual OctreeElement &initOctree(AScene *scene, ENTITY_ID entityId) = 0;
-		virtual OctreeElement &resetOctree(AScene *scene, ENTITY_ID entityId) = 0;
+		virtual PrepareElement &initOctree(AScene *scene, ENTITY_ID entityId) = 0;
+		virtual PrepareElement &resetOctree(AScene *scene, ENTITY_ID entityId) = 0;
 
 	protected:
-		OctreeKey _OTKey;
+		PrepareKey _OTKey;
 		AScene *_scene = nullptr;
 	};
 }

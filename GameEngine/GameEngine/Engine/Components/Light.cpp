@@ -44,12 +44,12 @@ namespace Component
 
 	}
 
-	AGE::OctreeElement &PointLight::initOctree(AScene *scene, ENTITY_ID entityId)
+	AGE::PrepareElement &PointLight::initOctree(AScene *scene, ENTITY_ID entityId)
 	{
 		return (*this);
 	}
 
-	AGE::OctreeElement &PointLight::resetOctree(AScene *scene, ENTITY_ID entityId)
+	AGE::PrepareElement &PointLight::resetOctree(AScene *scene, ENTITY_ID entityId)
 	{
 		return (*this);
 	}

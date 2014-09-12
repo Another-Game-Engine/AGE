@@ -28,9 +28,22 @@ namespace gl
 	}
 
 	template <typename TYPE>
+	Key<TYPE>::Key(Key<TYPE> &&copy) 
+		: _id(std::move(copy._id))
+	{
+	}
+
+	template <typename TYPE>
 	Key<TYPE> &Key<TYPE>::operator=(Key<TYPE> const &k)
 	{
 		_id = k._id;
+		return (*this);
+	}
+
+	template <typename TYPE>
+	Key<TYPE> &Key<TYPE>::operator=(Key<TYPE> &&k)
+	{
+		_id = std::move(k._id);
 		return (*this);
 	}
 

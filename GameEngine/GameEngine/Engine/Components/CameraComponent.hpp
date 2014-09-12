@@ -8,7 +8,7 @@
 
 namespace Component
 {
-	struct CameraComponent : public ComponentBase<CameraComponent>, public AGE::OctreeElement
+	struct CameraComponent : public ComponentBase<CameraComponent>, public AGE::PrepareElement
 	{
 		CameraComponent();
 		virtual ~CameraComponent();
@@ -23,8 +23,8 @@ namespace Component
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
 
-		virtual OctreeElement &initOctree(::AScene *scene, ENTITY_ID entityId);
-		virtual OctreeElement &resetOctree(::AScene *scene, ENTITY_ID entityId);
+		virtual PrepareElement &initOctree(::AScene *scene, ENTITY_ID entityId);
+		virtual PrepareElement &resetOctree(::AScene *scene, ENTITY_ID entityId);
 
 		void setProjection(const glm::mat4 &);
 		const glm::mat4 &getProjection() const;

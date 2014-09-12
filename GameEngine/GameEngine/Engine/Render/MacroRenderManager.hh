@@ -19,7 +19,7 @@
 	RenderManager &pushSetBlendFuncTask##name##(Key<##name##> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha); \
 	RenderManager &pushSetBlendFuncTask##name##(Key<##name##> const &key, GLenum src, GLenum dest); \
 	RenderManager &pushSetBlendConstantTask##name##(Key<##name##> const &key, glm::vec4 const &blendPass); \
-	RenderManager &RenderManager::pushSetBlendStateTask(Key<##name##> const &key, int drawBuffer, bool state); \
+	RenderManager &RenderManager::pushSetBlendStateTask##name##(Key<##name##> const &key, int drawBuffer, bool state); \
 	RenderManager &popTask##name##(Key<##name##> const &key);
 
 #define GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(name) \
@@ -201,7 +201,7 @@ RenderManager &RenderManager::pushSetBlendConstantTask##name##(Key<##name##> con
 	return (*this);																																													\
 } \
 \
-RenderManager &RenderManager::pushSetBlendStateTask(Key<##name##> const &key, int drawBuffer, bool state) \
+	RenderManager &RenderManager::pushSetBlendStateTask##name##(Key<##name##> const &key, int drawBuffer, bool state) \
 { \
 	name *render;																																											\
 	if ((render = get##name##(key)) == NULL)																													\
