@@ -6,9 +6,6 @@ uniform global_state
 	 vec4 pos_light;
 };
 
-//uniform mat4 projection_matrix;
-//uniform vec4 pos_light;
-
 layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 color;
 layout (location = 2) in vec4 normal;
@@ -18,7 +15,6 @@ uniform mat4 view_matrix;
 uniform mat4 model_matrix;
 
 out vec4 interpolated_position;
-out vec4 interpolated_color;
 out vec3 interpolated_normal;
 out vec2 interpolated_texCoord;
 out vec4 pos_light_viewspace;
@@ -27,7 +23,6 @@ void main(void)
 {
 	mat3 normal_matrix = transpose(inverse(mat3(view_matrix * model_matrix))); 
 	interpolated_position = view_matrix * model_matrix * position;
-	interpolated_color = color;
 	interpolated_normal = normal_matrix * vec3(normal);
 	interpolated_texCoord = texCoord;
 	pos_light_viewspace = view_matrix * pos_light;

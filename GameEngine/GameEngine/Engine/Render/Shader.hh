@@ -6,7 +6,7 @@
 # include <map>
 # include <Render/Key.hh>
 # include <glm/glm.hpp>
-# include <Render/OpenGLTask.hh>
+# include <Render/Task.hh>
 # include <Render/Material.hh>
 # include <Render/Storage.hh>
 # include <Render/UniformBlock.hh>
@@ -17,13 +17,6 @@ namespace gl
 	struct Uniform{};
 	struct InterfaceBlock{};
 	struct Output{};
-
-	struct MaterialBind
-	{
-		size_t indexTask;
-		size_t offsetMaterial;
-		bool isUse;
-	};
 
 	//!\file Shader.hh
 	//!\author Dorian Pinaud
@@ -64,9 +57,10 @@ namespace gl
 		bool hasSampler(Key<Sampler> const &key);
 
 		// InterfaceBlock
-		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock const &uniformblock);
+		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock &uniformblock);
 		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
-		Shader &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock const &uniformblock);
+		Shader &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock);
+		Shader &introspection(Key<InterfaceBlock> const &key, UniformBlock &u);
 
 		// update memory
 		Shader &setMaterial(Material const &materia);
@@ -87,7 +81,7 @@ namespace gl
 
 		// binding for object in shader
 		Key<Uniform> _bindTransformation;
-		std::vector<MaterialBind> _bindMaterial;
+		std::vector<MaterialBindTask> _bindMaterial;
 		
 		// pool stack
 		AGE::Vector<Task> _tasks;
@@ -107,15 +101,14 @@ namespace gl
 		bool linkProgram() const;
 
 		// search function
-		Task *getUniform(Key<Uniform> const &key, std::string const &msg);
-		size_t getIndexUniform(Key<Uniform> const &key, std::string const &msg);
-		Task *getSampler(Key<Sampler> const &key, std::string const &msg);
-		size_t getIndexSampler(Key<Sampler> const &key, std::string const &msg);
-		Task *getInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
-		size_t getIndexInterfaceBlock(Key<InterfaceBlock> const &key, std::string const &msg);
-		Task *getOutput(Key<Output> const &key, std::string const &msg);
-		size_t getIndexOutput(Key<Output> const &key, std::string const &msg);
-
+		Task *getUniform(Key<Uniform> const &key);
+		size_t getIndexUniform(Key<Uniform> const &key);
+		Task *getSampler(Key<Sampler> const &key);
+		size_t getIndexSampler(Key<Sampler> const &key);
+		Task *getInterfaceBlock(Key<InterfaceBlock> const &key);
+		size_t getIndexInterfaceBlock(Key<InterfaceBlock> const &key);
+		Task *getOutput(Key<Output> const &key);
+		size_t getIndexOutput(Key<Output> const &key);
 
 		GLuint getUniformLocation(char const *flag);
 		GLuint getUniformBlockLocation(char const *flag);
@@ -125,12 +118,12 @@ namespace gl
 		size_t createMaterialBind(size_t offset, size_t indexTask);
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
-		void createUniformBlockTask(Task &task, std::string const &flag, UniformBlock const &ubo);
-		void setMaterialBinding(MaterialBind &bind, size_t index, size_t offset);
+		void createUniformBlockTask(Task &task, std::string const &flag, UniformBlock &ubo);
+		void setMaterialBinding(MaterialBindTask &bind, size_t index, size_t offset);
 		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **), void *data);
 		void setSamplerTask(Task &task, Texture const &texture);
-		void setUniformBlockTask(Task &task, UniformBlock const &ubo);
-		void setTaskWithMaterial(MaterialBind const &bind, Material const &material);
+		void setUniformBlockTask(Task &task, UniformBlock &ubo);
+		void setTaskWithMaterial(MaterialBindTask const &bind, Material const &material);
 		void setTransformationTask(glm::mat4 const &mat);
 	};
 
@@ -156,7 +149,7 @@ namespace gl
 	Shader &Shader::bindingMaterial(Key<Uniform> const &key)
 	{
 		size_t indexTask;
-		if ((indexTask = getIndexUniform(key, "bindingMaterial")) == -1)
+		if ((indexTask = getIndexUniform(key)) == -1)
 			return (*this);
 		Task const &task = _tasks[indexTask];
 		if (task.sizeParams[task.indexToTarget] != TYPE::size)
@@ -169,7 +162,7 @@ namespace gl
 	Shader &Shader::bindingMaterial(Key<Sampler> const &key)
 	{
 		size_t indexTask;
-		if ((indexTask = getIndexSampler(key, "bindingMaterial")) == -1)
+		if ((indexTask = getIndexSampler(key)) == -1)
 			return (*this);
 		Task const &task = _tasks[indexTask];
 		if (task.sizeParams[task.indexToTarget] != TYPE::size)
@@ -194,7 +187,7 @@ namespace gl
 		}
 	}
 
-	inline void Shader::setUniformBlockTask(Task &task, UniformBlock const &ubo)
+	inline void Shader::setUniformBlockTask(Task &task, UniformBlock &ubo)
 	{
 		GLuint bindingPoint = ubo.getBindingPoint();
 		GLuint id = ubo.getBufferId();
@@ -213,16 +206,17 @@ namespace gl
 			*((UniformBlock const **)task.params[4]) = &ubo;
 			task.update = true;
 		}
+		ubo.introspection(*this, *((GLuint *)task.params[1]));
 	}
 
-	inline void Shader::setMaterialBinding(MaterialBind &bind, size_t index, size_t offset)
+	inline void Shader::setMaterialBinding(MaterialBindTask &bind, size_t index, size_t offset)
 	{
 		bind.indexTask = index;
 		bind.isUse = true;
 		bind.offsetMaterial = offset;
 	}
 
-	inline void Shader::setTaskWithMaterial(MaterialBind const &bind, Material const &material)
+	inline void Shader::setTaskWithMaterial(MaterialBindTask const &bind, Material const &material)
 	{
 		Task &task = _tasks[bind.indexTask];
 		size_t sizeParam = task.sizeParams[task.indexToTarget];

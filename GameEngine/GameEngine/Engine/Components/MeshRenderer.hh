@@ -8,7 +8,7 @@
 #include <cereal/types/string.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
-#include "Behaviors/Cullable.hpp"
+#include <Core/OctreeElement.hh>
 
 namespace Resources
 {
@@ -19,47 +19,48 @@ enum Shadow;
 class Material;
 class Renderer;
 
+
 namespace Component
 {
 
-	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>, public AGE::ComponentBehavior::Cullable
+	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>, public AGE::PrepareElement
 	{
 		MeshRenderer();
-		virtual ~MeshRenderer(void);
+		virtual ~MeshRenderer();
 		MeshRenderer(MeshRenderer &&o);
 		MeshRenderer &operator=(MeshRenderer &&o);
 		void init(AScene *, std::shared_ptr<AGE::MeshInstance> file);
 		virtual void reset(AScene *);
 
-		//////
-		////
-		// Serialization
+		template <typename Archive> void save(Archive &ar) const;
+		template <typename Archive> void load(Archive &ar);
 
-		template <typename Archive>
-		void save(Archive &ar) const
-		{
-			//ar(CEREAL_NVP(shader));
-			//std::string meshName = mesh->path.getFullName();
-			//ar(cereal::make_nvp("meshName", meshName));
-		}
+		MeshRenderer &updateOctree();
+		virtual PrepareElement &initOctree(::AScene *scene, ENTITY_ID entityId);
+		virtual PrepareElement &resetOctree(::AScene *scene, ENTITY_ID entityId);
 
-		template <typename Archive>
-		void load(Archive &ar)
-		{
-			//ar(shader);
-			//std::string meshName;
-			//ar(meshName);
-			// TODO @CESAR
-			//mesh = std::static_pointer_cast<ObjFile>(_entity->getScene().lock()->getInstance<AssetsManager>()->loadFromFile(File(meshName)));
-		}
-
-		// !Serialization
-		////
-		//////
+		MeshRenderer &setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh);
+		std::shared_ptr<AGE::MeshInstance> getMesh();
+		MeshRenderer &setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_mesh);
+		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
 
 	private:
-		MeshRenderer(MeshRenderer const &);
-		MeshRenderer	&operator=(MeshRenderer const &);
+		std::shared_ptr<AGE::MeshInstance> mesh;
+		std::shared_ptr<AGE::MaterialSetInstance> material;
+	
+		MeshRenderer(MeshRenderer const &) = delete;
+		MeshRenderer	&operator=(MeshRenderer const &) = delete;
 	};
 
+	template <typename Archive>
+	void MeshRenderer::save(Archive &ar) const
+	{
+
+	}
+
+	template <typename Archive>
+	void MeshRenderer::load(Archive &ar)
+	{
+
+	}
 }

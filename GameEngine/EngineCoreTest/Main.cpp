@@ -15,7 +15,7 @@
 #include <Render/MaterialManager.hh>
 #include <Render/RenderManager.hh>
 // SCENES
-#include "Scenes/BenchmarkScene.hpp"
+#include <Scenes/BenchmarkScene.hpp>
 
 // DEPENDENCIES
 #include <Context/SdlContext.hh>
@@ -25,15 +25,12 @@
 #include <Utils/PubSub.hpp>
 #include <Utils/PerformanceDebugger.hh>
 #include <Core/AssetsManager.hpp>
-
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
-
 #include <Core/RenderThread.hpp>
-
 #include <Utils/ThreadQueueCommands.hpp>
 
 //CONFIGS
-#include <CONFIGS.hpp>
+#include <CONFIGS.hh>
 
 #include <thread>
 

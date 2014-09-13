@@ -16,10 +16,12 @@
 #include <Render/Shader.hh>
 #include <Core/Drawable.hh>
 #include <Render/MacroRenderManager.hh>
+#include <Render/LocationStorage.hh>
 #include <tmq/message.hpp>
 
 namespace gl
 {
+
 	struct Uniform;
 	struct Sampler;
 	struct InterfaceBlock;
@@ -28,6 +30,7 @@ namespace gl
 	struct BindingRenderPass;
 	struct BindingShader;
 	class Pipeline;
+	enum DrawType;
 
 	namespace RenderManagerCmd
 	{
@@ -39,6 +42,7 @@ namespace gl
 	public:
 		GeometryManager geometryManager;
 		MaterialManager materialManager;
+		LocationStorage locationStorage;
 
 	public:
 		RenderManager();
@@ -66,13 +70,18 @@ namespace gl
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		RenderManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
 		
-		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock);
+		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> &keyUniformBlock);
+		RenderManager &setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u);
 		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
 
-		Key<UniformBlock> addUniformBlock(size_t nbrElement, size_t *sizeElement);
+		// uniform block
+		Key<UniformBlock> addUniformBlock();
+		RenderManager &introspectionBlock(Key<Shader> const &s, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u);
 		RenderManager &rmUniformBlock(Key<UniformBlock> &uniformBlock);
 		Key<UniformBlock> getUniformBlock(size_t index) const;
 		template <typename TYPE> RenderManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
+		template <typename TYPE> RenderManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value, size_t indexTab);
+
 		RenderManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
 		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
 		RenderManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
@@ -94,30 +103,15 @@ namespace gl
 		// RenderPass
 		Key<RenderPass> addRenderPass(Key<Shader> const &shader, glm::ivec4 const &rect);
 		Key<RenderPass> getRenderPass(size_t target) const;
-		GEN_DEC_RENDER_PUSH_TASK(RenderPass)
-		RenderManager &configRenderPass(Key<RenderPass> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
-		RenderManager &pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat);
-		RenderManager &popOutputColorRenderPass(Key<RenderPass> const &key);
-		RenderManager &pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s);
-		RenderManager &popInputColorRenderPass(Key<RenderPass> const &key);
-		RenderManager &createDepthBufferRenderPass(Key<RenderPass> const &key);
-		RenderManager &createStencilBufferRenderPass(Key<RenderPass> const &key);
-		RenderManager &useInputDepthRenderPass(Key<RenderPass> const &key);
-		RenderManager &unUseInputDepthRenderPass(Key<RenderPass> const &key);
-		RenderManager &useInputStencilRenderPass(Key<RenderPass> const &key);
-		RenderManager &unUseInputStencilRenderPass(Key<RenderPass> const &key);
-		RenderManager &useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
-		RenderManager &unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement);
+		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
+		GEN_DEC_RENDER_PUSH_TASK(RenderPass);
+		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
 		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
-		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect)
-		RenderManager &configRenderPostEffect(Key<RenderPostEffect> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1);
-		RenderManager &pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat);
-		RenderManager &popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key);
-		RenderManager &pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s);
-		RenderManager &popInputColorRenderPostEffect(Key<RenderPostEffect> const &key);
+		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect);
+		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
 
 		// RenderOnScreen
 		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect);
@@ -129,13 +123,14 @@ namespace gl
 		RenderManager &branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to);
 		RenderManager &branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to);
 		RenderManager &branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to);
-	
+
 		// Pipeline
 		Key<Pipeline> addPipeline();
-		RenderManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r);
-		RenderManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r);
-		RenderManager &setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r);
+		RenderManager &pushRenderPassPipeline(Key<Pipeline> const &p, Key<RenderPass> const &r);
+		RenderManager &pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r);
+		RenderManager &pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r);
 		Key<Pipeline> getPipeline(size_t target);
+		RenderManager &configPipeline(Key<Pipeline> const &key, DrawType type);
 		RenderManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
 
 		// drawing
@@ -151,9 +146,8 @@ namespace gl
 		std::map<Key<RenderPass>, RenderPass *> _renderPass;
 		std::map<Key<RenderPostEffect>, RenderPostEffect *> _renderPostEffect;
 		std::map<Key<RenderOnScreen>, RenderOnScreen *> _renderOnScreen;
-		std::map<Key<Pipeline>, Pipeline> _pipelines;
-		uint8_t _minTime;
-		uint8_t _maxTime;
+		std::map<Key<Pipeline>, size_t> _pipelines;
+		AGE::Vector<Pipeline> _pipelineOrdered;
 
 		// optimize search in map
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
@@ -162,7 +156,7 @@ namespace gl
 		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
 		std::pair<Key<RenderPostEffect>, RenderPostEffect *> _optimizeRenderPostEffectSearch;
 		std::pair<Key<RenderOnScreen>, RenderOnScreen *> _optimizeRenderOnScreenSearch;
-		std::pair<Key<Pipeline>, Pipeline *> _optimizePipelineSearch;
+		std::pair<Key<Pipeline>, size_t> _optimizePipelineSearch;
 
 		// tool use in intern for search
 		Shader *getShader(Key<Shader> const &key);
@@ -171,8 +165,8 @@ namespace gl
 		RenderPass *getRenderPass(Key<RenderPass> const &key);
 		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key);
 		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key);
+		size_t getIndexPipeline(Key<Pipeline> const &key);
 		Pipeline *getPipeline(Key<Pipeline> const &key);
-
 	};
 
 	template <typename TYPE>
@@ -188,47 +182,20 @@ namespace gl
 	template <typename TYPE>
 	RenderManager &RenderManager::setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value)
 	{
-		UniformBlock *uniformBlock;
-
-		if ((uniformBlock = getUniformBlock(key)) == NULL)
-			return (*this);
+		UniformBlock *uniformBlock = getUniformBlock(key);
 		uniformBlock->set<TYPE>(index, value);
 		return (*this);
 	}
 
-	template <typename TYPE1>
-	inline void set_tab_sizetype(size_t *tab)
+	template <typename TYPE>
+	RenderManager &RenderManager::setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value, size_t indexTab)
 	{
-		tab[0] = sizeof(TYPE1);
+		UniformBlock *uniformBlock;
+
+		if ((uniformBlock = getUniformBlock(key)) == NULL)
+			return (*this);
+		uniformBlock->set<TYPE>(index, value, indexTab);
+		return (*this);
 	}
 
-	template <typename TYPE1, typename TYPE2>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2);
-	}
-
-	template <typename TYPE1, typename TYPE2, typename TYPE3>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2); tab[2] = sizeof(TYPE3);
-	}
-
-	template <typename TYPE1, typename TYPE2, typename TYPE3, typename TYPE4>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2); tab[2] = sizeof(TYPE3); tab[3] = sizeof(TYPE4);
-	}
-
-	template <typename TYPE1, typename TYPE2, typename TYPE3, typename TYPE4, typename TYPE5>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2); tab[2] = sizeof(TYPE3); tab[3] = sizeof(TYPE4); tab[4] = sizeof(TYPE5);
-	}
-
-	template <typename TYPE1, typename TYPE2, typename TYPE3, typename TYPE4, typename TYPE5, typename TYPE6>
-	inline void set_tab_sizetype(size_t *tab)
-	{
-		tab[0] = sizeof(TYPE1); tab[1] = sizeof(TYPE2); tab[2] = sizeof(TYPE3); tab[3] = sizeof(TYPE4); tab[4] = sizeof(TYPE5); tab[5] = sizeof(TYPE6);
-	}
 }

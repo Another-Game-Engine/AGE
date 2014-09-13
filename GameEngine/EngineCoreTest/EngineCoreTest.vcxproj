@@ -150,16 +150,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CONFIGS.hpp" />
-    <ClInclude Include="Scenes\BenchmarkScene.hpp" />
-    <ClInclude Include="Systems\LifetimeSystem.hpp" />
+    <ClCompile Include="Scenes\BenchmarkScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Components\lifetimeComponent.hh" />
+    <ClInclude Include="CONFIGS.hh" />
+    <ClInclude Include="Scenes\BenchmarkScene.hpp" />
+    <ClInclude Include="Systems\LifetimeSystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

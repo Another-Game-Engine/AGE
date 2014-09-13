@@ -2,7 +2,7 @@
 #include <cassert>
 #include <string>
 #include <Core/Drawable.hh>
-#include <Render/OpenGLTask.hh>
+#include <Render/Task.hh>
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>
 #include <Render/Storage.hh>
@@ -10,12 +10,10 @@
 
 namespace gl
 {
-	Render::Render(Shader &shader, GeometryManager &g)
+	Render::Render(Draw *draw)
 		: _rect(0, 0, 512, 512),
-		_mode(GL_TRIANGLES),
-		_shader(shader),
 		_branch(NULL),
-		_geometryManager(g)
+		_draw(*draw)
 	{
 
 	}
@@ -28,6 +26,7 @@ namespace gl
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
 		}
+		delete &_draw;
 	}
 
 	Render &Render::pushSetScissorTask(glm::ivec4 const &area)
@@ -238,13 +237,14 @@ namespace gl
 
 	Render &Render::setMode(GLenum mode)
 	{
-		_mode = mode;
+		_draw.mode = mode;
 		return (*this);
 	}
 
+
 	GLenum Render::getMode() const
 	{
-		return (_mode);
+		return (_draw.mode);
 	}
 
 	Render &Render::branchInput(RenderOffScreen const &input)
@@ -259,10 +259,10 @@ namespace gl
 		return (*this);
 	}
 
-	Render &Render::pushInputSampler(Key<Sampler> const &key)
+	Render &Render::pushInputSampler(Key<Sampler> const &key, GLenum attachement)
 	{
-		if (_shader.hasSampler(key))
-			_inputSamplers.push_back(key);
+		if (_draw.shader.hasSampler(key))
+			_inputSamplers.push_back(std::make_pair(key, attachement));
 		else
 			assert(0);
 		return (*this);
@@ -276,74 +276,31 @@ namespace gl
 
 	void Render::updateInput()
 	{
-		if (_branch != NULL && _inputSamplers.size() == _branch->getNbrAttachementOutput())
+		if (_branch != NULL)
 		{
 			for (size_t index = 0; index < _inputSamplers.size(); ++index)
-				_shader.setSampler(_inputSamplers[index], _branch->getColorOutput(index));
+			{
+				Texture2D const *text = NULL;
+				if ((text = _branch->getBufferSamplable(_inputSamplers[index].second)) != NULL)
+					_draw.shader.setSampler(_inputSamplers[index].first, *text);
+			}
 		}
 	}
-	
-	RenderOffScreen &RenderOffScreen::useInputDepth()
-	{
-		_useInputDepth = true;
-		return (*this);
-	}
 
-	RenderOffScreen &RenderOffScreen::unUseInputDepth()
-	{
-		_useInputDepth = false;
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::useInputStencil()
-	{
-		_useInputStencil = true;
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::unUseInputStencil()
-	{
-		_useInputStencil = false;
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::useInputColor(GLenum attachement)
-	{
-		_useInputColor[attachement] = true;
-		return (*this);
-	}
-
-	RenderOffScreen &RenderOffScreen::unUseInputColor(GLenum attachement)
-	{
-		_useInputColor[attachement] = false;
-		return (*this);
-	}
-
-	RenderOffScreen::RenderOffScreen(Shader &shader, GeometryManager &g)
-		: Render(shader, g),
-		_sample(1),
-		_colorAttachement(NULL),
-		_colorTexture2D(NULL),
-		_nbrColorAttachement(0),
-		_depthBuffer(NULL),
-		_stencilBuffer(NULL),
-		_useInputDepth(false),
-		_useInputStencil(false),
-		_updateOutput(false)
+	RenderOffScreen::RenderOffScreen(Render::Draw *draw)
+		: Render(draw),
+		_sample(0),
+		_updateBuffer(true),
+		_updateFrameBuffer(true)
 	{
 	}
 
 	RenderOffScreen::~RenderOffScreen()
 	{
-		if (_nbrColorAttachement > 0)
-		{
-			delete[] _colorAttachement;
-			delete[] _colorTexture2D;
-		}
-		if (_depthBuffer != NULL)
-			delete _depthBuffer;
-		if (_stencilBuffer)
-			delete _stencilBuffer;
+		for (auto &element = _buffer.begin(); element != _buffer.end(); ++element)
+			if (element->second.first != NULL) delete element->second.first;
+		for (size_t index = 0; index < _ownFunction.size(); ++index)
+			delete _ownFunction[index];
 	}
 
 	RenderOffScreen &RenderOffScreen::configSample(GLint sample)
@@ -352,150 +309,202 @@ namespace gl
 		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::pushColorOutput(GLenum attachement, GLenum internalFormat)
+	RenderOffScreen &RenderOffScreen::pushTarget(GLenum attachement)
 	{
-		return (pushColorOutput(attachement, _rect.z, _rect.w, internalFormat));
+		_updateBuffer = true;
+		_target.push_back(attachement);
+		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::pushColorOutput(GLenum attachement, size_t width, size_t height, GLenum internalFormat)
+	RenderOffScreen &RenderOffScreen::popTarget()
 	{
-		for (uint8_t index = 0; index < _nbrColorAttachement; ++index)
+		_updateBuffer = true;
+		_target.pop_back();
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::createBufferSamplable(GLenum attachement, int x, int y, GLenum internalFormat)
+	{
+		_updateFrameBuffer = true;
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
 		{
-			if (attachement == _colorAttachement[index])
-				return (*this);
+			auto &save = _buffer[attachement];
+			save.first = new Texture2D(x, y, internalFormat);
+			save.second = true;
 		}
-		GLsizei tmp_nbrColorAttachement = _nbrColorAttachement + 1;
-		GLenum *tmp_colorAttachement = new GLenum[tmp_nbrColorAttachement];
-		Texture2D **tmp_colorTexture2D = new Texture2D *[tmp_nbrColorAttachement];
-		memcpy(tmp_colorAttachement, _colorAttachement, sizeof(GLenum)* _nbrColorAttachement);
-		memcpy(tmp_colorTexture2D, _colorTexture2D, sizeof(GLenum)* _nbrColorAttachement);
-		if (_nbrColorAttachement > 0)
+		else
 		{
-			delete[] _colorAttachement;
-			delete[] _colorTexture2D;
+			if (element->second.first != NULL)
+				delete element->second.first;
+			element->second.first = new Texture2D(x, y, internalFormat);
+			element->second.second = true;
 		}
-		_colorAttachement = tmp_colorAttachement;
-		_colorTexture2D = tmp_colorTexture2D;
-		_nbrColorAttachement = tmp_nbrColorAttachement;
-		_colorTexture2D[_nbrColorAttachement - 1] = new Texture2D(width, height, internalFormat, false);
-		_colorAttachement[_nbrColorAttachement - 1] = attachement;
-		_updateOutput = true;
+		return (*this);
+	}
+	
+	RenderOffScreen &RenderOffScreen::createBufferSamplable(GLenum attachement, GLenum internalFormat)
+	{
+		createBufferSamplable(attachement, _rect[2], _rect[3], internalFormat);
 		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::popColorOutput()
+	RenderOffScreen &RenderOffScreen::deleteBuffer(GLenum attachement)
 	{
-		if (_nbrColorAttachement < 1)
+		_updateFrameBuffer = true;
+		auto &element = _buffer.find(attachement);
+		if (element != _buffer.end())
+		{
+			delete element->second.first;
+			element->second.first = NULL;
+		}
+		return (*this);
+	}
+
+	Texture2D const *RenderOffScreen::getBufferSamplable(GLenum attachement) const
+	{
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
+			return (NULL);
+		else
+		{
+			if (element->second.first->getType() == GL_TEXTURE_2D)
+				return ((Texture2D const *)element->second.first);
+			else
+				return (NULL);
+		}
+	}
+
+	RenderOffScreen &RenderOffScreen::createBufferNotSamplable(GLenum attachement, GLenum internalFormat)
+	{
+		createBufferNotSamplable(attachement, _rect[2], _rect[3], internalFormat);
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::createBufferNotSamplable(GLenum attachement, int x, int y, GLenum internalFormat)
+	{
+		_updateFrameBuffer = true;
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
+		{
+			auto &save = _buffer[attachement];
+			save.first = new RenderBuffer(x, y, internalFormat);
+			save.second = true;
+		}
+		else
+		{
+			if (element->second.second != NULL)
+				delete element->second.first;
+			element->second.first = new RenderBuffer(x, y, internalFormat);
+			element->second.second = true;
+		}
+		return (*this);
+	}
+
+	RenderBuffer const *RenderOffScreen::getBufferNotSamplable(GLenum attachement) const
+	{
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
+			return (NULL);
+		else
+		{
+			if (element->second.first->getType() == GL_RENDERBUFFER)
+				return ((RenderBuffer const *)element->second.first);
+			else
+				return (NULL);
+		}
+	}
+
+	RenderOffScreen &RenderOffScreen::useInputBuffer(GLenum attachement)
+	{
+		auto &search = _branch->_buffer.find(attachement);
+		if (search == _branch->_buffer.end())
 			return (*this);
-		GLsizei tmp_nbrColorAttachement = _nbrColorAttachement - 1;
-		GLenum *tmp_colorAttachement = new GLenum[tmp_nbrColorAttachement];
-		Texture2D **tmp_colorTexture2D = new Texture2D *[tmp_nbrColorAttachement];
-		memcpy(tmp_colorAttachement, _colorAttachement, sizeof(GLenum)* tmp_nbrColorAttachement);
-		memcpy(tmp_colorTexture2D, _colorTexture2D, sizeof(GLenum)* tmp_nbrColorAttachement);
-		delete[] _colorAttachement;
-		delete[] _colorTexture2D;
-		_colorAttachement = tmp_colorAttachement;
-		_colorTexture2D = tmp_colorTexture2D;
-		_updateOutput = true;
-		return (*this);
-	}
-
-	Texture2D const &RenderOffScreen::getColorOutput(size_t index) const
-	{
-		return (*_colorTexture2D[index]);
-	}
-
-	GLenum RenderOffScreen::getAttachementOutput(size_t index) const
-	{
-		return (_colorAttachement[index]);
-	}
-
-	size_t RenderOffScreen::getNbrAttachementOutput() const
-	{
-		return (_nbrColorAttachement);
-	}
-
-	RenderOffScreen &RenderOffScreen::createDepthBuffer()
-	{
-		if (_depthBuffer != NULL)
+		auto &element = _buffer.find(attachement);
+		if (element == _buffer.end())
 			return (*this);
-		_depthBuffer = new RenderBuffer(_rect.z, _rect.w, GL_DEPTH_COMPONENT);
+		if (element->second.first != NULL)
+			delete element->second.first;
+		element->second.first = search->second.first;
+		element->second.second = false;
 		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::deleteDepthBuffer()
+	RenderOffScreen &RenderOffScreen::pushSetUniformMat4Task(Key<Uniform> const &key, size_t location)
 	{
-		if (_depthBuffer == NULL)
-			return (*this);
-		delete _depthBuffer;
-		_depthBuffer = NULL;
+		Task task;
+
+		setTaskAllocation(task, (RenderOffScreen *)&_draw, Key<Uniform>(key), location);
+		task.func = setUniformMat4byLocation;
+		_tasks.push_back(task);
 		return (*this);
 	}
 
-	RenderBuffer const *RenderOffScreen::getDepthBuffer() const
+	RenderOffScreen &RenderOffScreen::pushSetUniformMat3Task(Key<Uniform> const &key, size_t location)
 	{
-		return (_depthBuffer);
-	}
+		Task task;
 
-	RenderOffScreen &RenderOffScreen::createStencilBuffer()
-	{
-		if (_stencilBuffer != NULL)
-			return (*this);
-		_stencilBuffer = new RenderBuffer(_rect.z, _rect.w, GL_DEPTH_COMPONENT);
+		setTaskAllocation(task, (RenderOffScreen *)&_draw, Key<Uniform>(key), location);
+		task.func = setUniformMat3byLocation;
+		_tasks.push_back(task);
 		return (*this);
 	}
 
-	RenderOffScreen &RenderOffScreen::deleteStencilBuffer()
+	RenderOffScreen &RenderOffScreen::pushSetUniformFloatTask(Key<Uniform> const &key, size_t location)
 	{
-		if (_stencilBuffer == NULL)
-			return (*this);
-		delete _stencilBuffer;
-		_stencilBuffer = NULL;
+		Task task;
+
+		setTaskAllocation(task, (RenderOffScreen *)&_draw, Key<Uniform>(key), location);
+		task.func = setUniformFloatbyLocation;
+		_tasks.push_back(task);
 		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::pushSetUniformVec4Task(Key<Uniform> const &key, size_t location)
+	{
+		Task task;
+
+		setTaskAllocation(task, (RenderOffScreen *)&_draw, Key<Uniform>(key), location);
+		task.func = setUniformVec4byLocation;
+		_tasks.push_back(task);
+		return (*this);
+	}
+
+	RenderOffScreen &RenderOffScreen::pushOwnTask(std::function<void (LocationStorage &)> const &f)
+	{
+		Task task;
+
+		_ownFunction.push_back(new std::function<void(LocationStorage &)>(f));
+		setTaskAllocation(task, _ownFunction.back(), &((RenderOffScreen::Draw *)&_draw)->locationStorage);
+		task.func = ownTask;
+		_tasks.push_back(task);
+		return (*this);
+	}
+
+	void RenderOffScreen::updateBuffer()
+	{
+		_updateBuffer = false;
+		glDrawBuffers(GLsizei(_target.size()), _target.data());
+	}
+
+	void RenderOffScreen::updateFrameBuffer()
+	{
+		_updateFrameBuffer = false;
+		for (auto &element = _buffer.begin(); element != _buffer.end(); ++element)
+			_fbo.attachement(*element->second.first, element->first);
 	}
 
 	void RenderOffScreen::updateOutput()
 	{
-		glDrawBuffers(_nbrColorAttachement, _colorAttachement);
-		for (size_t index = 0; index < _nbrColorAttachement; ++index)
-		{
-			auto &element = _useInputColor.find(_colorAttachement[index]);
-			if (element == _useInputColor.end() || element->second == false)
-				_fbo.attachement(*_colorTexture2D[index], _colorAttachement[index]);
-		}
-		if (_depthBuffer != NULL && _useInputDepth == false)
-			_fbo.attachement(*_depthBuffer, GL_DEPTH_ATTACHMENT);
-		if (_stencilBuffer != NULL && _useInputStencil == false)
-			_fbo.attachement(*_stencilBuffer, GL_STENCIL_ATTACHMENT);
-		_updateOutput = false;
+		if (_updateBuffer)
+			updateBuffer();
+		if (_updateFrameBuffer)
+			updateFrameBuffer();
 	}
 
-	void RenderOffScreen::updateInput()
-	{
-		if (_branch == NULL)
-			return;
-		Render::updateInput();
-		if (_useInputDepth && _branch->getDepthBuffer() != NULL)
-			_fbo.attachement(*_branch->getDepthBuffer(), GL_DEPTH_ATTACHMENT);
-		if (_useInputStencil && _branch->getStencilBuffer() != NULL)
-			_fbo.attachement(*_branch->getStencilBuffer(), GL_STENCIL_ATTACHMENT);
-		for (size_t index = 0; index < _branch->getNbrAttachementOutput(); ++index)
-		{
-			auto &element = _useInputColor.find(_branch->getAttachementOutput(index));
-			if (element != _useInputColor.end() && element->second == true)
-				_fbo.attachement(_branch->getColorOutput(index), _branch->getAttachementOutput(index));
-		}
-	}
-
-	RenderBuffer const *RenderOffScreen::getStencilBuffer() const
-	{
-		return (_stencilBuffer);
-	}
-
-	RenderPass::RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m)
-		: RenderOffScreen(shader, g),
-		_objectsToRender(NULL),
-		_materialManager(m)
+	RenderPass::RenderPass(Shader &s, GeometryManager &g, MaterialManager &m, LocationStorage &l)
+		: RenderOffScreen(new Draw(g, l, s, m, GL_TRIANGLES)),
+		_draw((Draw &)Render::_draw)
 	{
 	}
 
@@ -503,36 +512,46 @@ namespace gl
 	{
 	}
 
-	RenderPass &RenderPass::setRenderPassObjects(AGE::Vector<AGE::Drawable> const &objects)
+	RenderPass &RenderPass::pushDrawTask()
 	{
-		_objectsToRender = &objects;
+		Task task;
+
+		setTaskAllocation(task, (RenderPass::Draw *)&_draw);
+		task.func = draw;
+		_tasks.push_back(task);
 		return (*this);
 	}
 
-	Render &RenderPass::draw()
+	RenderPass &RenderPass::setDraw(AGE::Vector<AGE::Drawable> const &objects, size_t start, size_t end)
+	{
+		_draw.toRender = &objects;
+		_draw.start = start;
+		_draw.end = end;
+		return (*this);
+	}
+
+	RenderPass &RenderPass::setDraw()
+	{
+		_draw.toRender = NULL;
+		_draw.start = 0;
+		_draw.end = 0;
+		return (*this);
+	}
+
+	Render &RenderPass::render()
 	{
 		_fbo.bind();
-		if (_updateOutput)
-			updateOutput();
+		updateOutput();
 		updateInput();
-		for (size_t index = 0; index < _tasks.size(); ++index)
-			_tasks[index].func(_tasks[index].params);
-		if (_objectsToRender == NULL)
-			return (*this);
-		for (size_t index = 0; index < _objectsToRender->size(); ++index)
-		{
-			AGE::Drawable const &object = (*_objectsToRender)[index];
-			_materialManager.setShader(object.material, _shader);
-			_shader.update(object.transformation);
-			_geometryManager.draw(_mode, object.mesh.indices, object.mesh.vertices);
-		}
-		_fbo.unbind();
+		for (size_t i = 0; i < _tasks.size(); ++i)
+			_tasks[i].func(_tasks[i].params);
 		return (*this);
 	}
 
-	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g)
-		: RenderOffScreen(s, g),
-		_quad(key)
+
+	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g, LocationStorage &l)
+		: RenderOffScreen(new Draw(g, l, s, GL_TRIANGLES, key)),
+		_draw((Draw &)Render::_draw)
 	{
 
 	}
@@ -542,23 +561,21 @@ namespace gl
 
 	}
 
-	Render &RenderPostEffect::draw()
+	Render &RenderPostEffect::render()
 	{
 		_fbo.bind();
-		if (_updateOutput)
-			updateOutput();
+		updateOutput();
 		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		_shader.update();
-		_geometryManager.draw(_mode, _quad);
-		_fbo.unbind();
+		_draw.shader.update();
+		_draw.geometryManager.draw(_draw.mode, _draw.quad);
 		return (*this);
 	}
 
 	RenderOnScreen::RenderOnScreen(Key<Vertices> const &key, Shader &s, GeometryManager &g)
-		: Render(s, g),
-		_quad(key)
+		: Render(new Draw(g, s, GL_TRIANGLES, key)),
+		_draw((Draw &)Render::_draw)
 	{
 
 	}
@@ -568,14 +585,22 @@ namespace gl
 
 	}
 
-	Render &RenderOnScreen::draw()
+	Render &RenderOnScreen::render()
 	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDrawBuffer(GL_BACK);
 		updateInput();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
-		_shader.update();
-		_geometryManager.draw(_mode, _quad);
+		_draw.shader.update();
+		_draw.geometryManager.draw(_draw.mode, _draw.quad);
 		return (*this);
+	}
+
+	RenderOnScreen::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad)
+		: Render::Draw(g, s, mode),
+		quad(quad)
+	{
 	}
 
 	RenderType RenderOnScreen::getType() const
@@ -592,4 +617,33 @@ namespace gl
 	{
 		return (RenderType::RENDER_PASS);
 	}
+
+	Render::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode)
+		: geometryManager(g),
+		shader(s),
+		mode(mode)
+	{
+	}
+
+	RenderPass::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, MaterialManager &m, GLenum mode)
+		: RenderOffScreen::Draw(g, l, s, mode),
+		materialManager(m),
+		toRender(NULL),
+		start(0),
+		end(0)
+	{
+	}
+
+	RenderPostEffect::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad)
+		: RenderOffScreen::Draw(g, l, s, mode),
+		quad(quad)
+	{
+	}
+
+	RenderOffScreen::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode)
+		: Render::Draw(g, s, mode),
+		locationStorage(l)
+	{
+	}
+
 }

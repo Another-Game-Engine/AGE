@@ -1,75 +1,91 @@
 #include <Render/Pipeline.hh>
 #include <iostream>
 #include <algorithm>
+#include <Core/Drawable.hh>
 
 namespace gl
 {
 	Pipeline::Pipeline()
-		: _times(NULL),
-		_rendering(NULL),
-		_nbrRendering(0),
-		_toRender(nullptr)
+		: _type(DrawType::ALL_OBJECT),
+		_toRender(NULL)
 	{
+		_drawFunc[DrawType::NONE_OBJECT] = &Pipeline::drawNoneObject;
+		_drawFunc[DrawType::ALL_OBJECT] = &Pipeline::drawAllObject;
+		_drawFunc[DrawType::EACH_FOLLOWING_OBJECT] = &Pipeline::drawEachFollowObject;
+	}
+
+	Pipeline::Pipeline(Pipeline const &copy)
+		: _type(copy._type),
+		_toRender(copy._toRender)
+	{
+		_drawFunc[DrawType::NONE_OBJECT] = &Pipeline::drawNoneObject;
+		_drawFunc[DrawType::ALL_OBJECT] = &Pipeline::drawAllObject;
+		_drawFunc[DrawType::EACH_FOLLOWING_OBJECT] = &Pipeline::drawEachFollowObject;
 	}
 
 	Pipeline::~Pipeline()
 	{
-		if (_rendering != NULL)
-			delete[] _rendering;
-		if (_times != NULL)
-			delete[] _times;
 	}
 
-	Pipeline &Pipeline::setToRender(AGE::Vector<AGE::Drawable> const &toRender)
+	Pipeline &Pipeline::update(AGE::Vector<AGE::Drawable> const &toRender)
 	{
 		_toRender = &toRender;
 		return (*this);
 	}
 
-	Pipeline &Pipeline::setRendering(uint8_t time, Render *rendering)
+	Pipeline &Pipeline::config(DrawType type)
 	{
-		_min = std::min(time, _min);
-		_max = std::max(time, _max);
-		uint8_t tmp_nbrRendering = _nbrRendering + 1;
-		Render **tmp_rendering = new Render*[tmp_nbrRendering];
-		memcpy(tmp_rendering, _rendering, sizeof(Render *)* _nbrRendering);
-		tmp_rendering[tmp_nbrRendering - 1] = rendering;
-		uint8_t *tmp_times = new uint8_t[tmp_nbrRendering];
-		memcpy(tmp_times, _times, sizeof(uint8_t)* _nbrRendering);
-		tmp_times[tmp_nbrRendering - 1] = time;
-		if (_rendering != NULL)
-			delete[] _rendering;
-		if (_times != NULL)
-			delete[] _times;
-		_rendering = tmp_rendering;
-		_times = tmp_times;
-		_nbrRendering = tmp_nbrRendering;
+		_type = type;
 		return (*this);
 	}
 
-	uint8_t Pipeline::getMaxTime() const
+	Pipeline &Pipeline::pushRender(Render *render)
 	{
-		return (_max);
+		_render.push_back(render);
+		return (*this);
+	}
+	
+	Pipeline &Pipeline::pushRenderPass(RenderPass *renderPass)
+	{
+		_render.push_back(renderPass);
+		_renderPass.push_back(renderPass);
+		return (*this);
 	}
 
-	uint8_t Pipeline::getMinTime() const
+	Pipeline &Pipeline::draw()
 	{
-		return (_min);
+		(this->*_drawFunc[_type])();
+		return (*this);
 	}
 
-	Pipeline &Pipeline::draw(uint8_t time)
+	void Pipeline::drawAllObject()
 	{
-		if (!_toRender)
-			return(*this);
-		for (uint8_t index = 0; index < _nbrRendering; ++index)
+		if (_toRender == NULL)
+			return;
+		for (size_t index = 0; index < _renderPass.size(); ++index)
+			_renderPass[index]->setDraw(*_toRender, 0, _toRender->size());
+		for (size_t index = 0; index < _render.size(); ++index)
+			_render[index]->render();
+	}
+
+	void Pipeline::drawNoneObject()
+	{
+		for (size_t index = 0; index < _renderPass.size(); ++index)
+			_renderPass[index]->setDraw();
+		for (size_t index = 0; index < _render.size(); ++index)
+			_render[index]->render();
+	}
+
+	void Pipeline::drawEachFollowObject()
+	{
+		if (_toRender == NULL)
+			return ;
+		for (size_t r = 0; r < _toRender->size(); ++r)
 		{
-			if (time == _times[index])
-			{
-				if (_rendering[index]->getType() == RENDER_PASS)
-					((RenderPass *)_rendering[index])->setRenderPassObjects(*_toRender);
-				_rendering[index]->draw();
-			}
+			for (size_t index = 0; index < _renderPass.size(); ++index)
+				_renderPass[index]->setDraw(*_toRender, r, r + 1);
+			for (size_t index = 0; index < _render.size(); ++index)
+				_render[index]->render();
 		}
-		return (*this);
 	}
 }
