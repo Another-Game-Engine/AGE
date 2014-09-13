@@ -25,10 +25,19 @@ namespace AGE
 		Drawable(SubMeshInstance &&_m, MaterialInstance &&_mat, glm::mat4 &&_t);
 	};
 
+	struct PointLight
+	{
+		float power;
+		float range;
+		glm::vec3 color;
+		glm::vec4 position;
+	};
+
 	struct DrawableCollection
 	{
 		glm::mat4 transformation;
 		glm::mat4 projection;
 		AGE::Vector<Drawable> drawables;
+		AGE::Vector<PointLight> lights;
 	};
 }

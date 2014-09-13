@@ -78,10 +78,26 @@ namespace AGE
 			PrepareKey key;
 		};
 
+		struct CreatePointLight
+		{
+			CreatePointLight(PrepareKey const &key)
+			: key(key)
+			{}
+			PrepareKey key;
+		};
+
 		struct DeleteCamera
 		{
 			DeleteCamera(const PrepareKey &_key)
 				: key(_key)
+			{}
+			PrepareKey key;
+		};
+
+		struct DeletePointLight
+		{
+			DeletePointLight(const PrepareKey &key)
+			: key(key)
 			{}
 			PrepareKey key;
 		};

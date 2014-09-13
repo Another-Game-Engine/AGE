@@ -77,6 +77,14 @@ namespace AGE
 			bool active;
 		};
 
+		struct PointLightObject
+		{
+			float power;
+			float range;
+			glm::vec3 color;
+			glm::vec4 position;
+		};
+
 
 	private:
 		//TMP
@@ -93,14 +101,18 @@ namespace AGE
 		AGE::Queue<PrepareKey::OctreeObjectId> _freeCullableObjects;
 		AGE::Vector<CameraObject> _cameraObjects;
 		AGE::Queue<PrepareKey::OctreeObjectId> _freeCameraObjects;
+		AGE::Vector<PointLight> _pointLightObject;
+		AGE::Queue<PrepareKey::OctreeObjectId> _freePointLightObjects;
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
+		std::size_t _pointLightCounter = 0;
 
 		AGE::Vector<DrawableCollection> _octreeDrawList;
 
 	public:
 		PrepareKey addCullableElement();
 		PrepareKey addCameraElement();
+		PrepareKey addPointLightElement();
 
 		void removeElement(const PrepareKey &key);
 

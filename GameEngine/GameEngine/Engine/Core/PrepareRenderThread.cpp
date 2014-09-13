@@ -66,28 +66,6 @@ namespace AGE
 		return res;
 	}
 
-	void PrepareRenderThread::removeElement(const PrepareKey &key)
-	{
-		assert(!key.invalid());
-		switch (key.type)
-		{
-		case(PrepareKey::Type::Camera) :
-		{
-			_freeCameraObjects.push(key.id);
-			_commandQueue.emplace<PRTC::DeleteCamera>(key);
-		}
-									  break;
-		case(PrepareKey::Type::Cullable) :
-		{
-			_freeUserObjects.push(key.id);
-			_commandQueue.emplace<PRTC::DeleteDrawable>(key);
-		}
-										break;
-		default:
-			break;
-		}
-	}
-
 	PrepareKey PrepareRenderThread::addCameraElement()
 	{
 		PrepareKey res;
@@ -104,6 +82,45 @@ namespace AGE
 		_commandQueue.emplace<PRTC::CreateCamera>(res);
 
 		return res;
+	}
+
+	PrepareKey PrepareRenderThread::addPointLightElement()
+	{
+		PrepareKey res;
+		res.type = PrepareKey::Type::PointLight;
+		if (!_freePointLightObjects.empty())
+		{
+			res.id = _freePointLightObjects.front();
+			_freePointLightObjects.pop();
+		}
+		else
+		{
+			res.id = PrepareKey::OctreeObjectId(_pointLightCounter++);
+		}
+		_commandQueue.emplace<PRTC::CreatePointLight>(res);
+		return res;
+	}
+
+	void PrepareRenderThread::removeElement(const PrepareKey &key)
+	{
+		assert(!key.invalid());
+		switch (key.type)
+		{
+		case PrepareKey::Type::Camera:
+			_freeCameraObjects.push(key.id);
+			_commandQueue.emplace<PRTC::DeleteCamera>(key);
+			break;
+		case PrepareKey::Type::Cullable:
+			_freeUserObjects.push(key.id);
+			_commandQueue.emplace<PRTC::DeleteDrawable>(key);
+			break;
+		case PrepareKey::Type::PointLight:
+			_freePointLightObjects.push(key.id);
+			_commandQueue.emplace<PRTC::DeletePointLight>(key);
+			break;
+		default:
+			break;
+		}
 	}
 
 	void PrepareRenderThread::setPosition(const glm::vec3 &v, const PrepareKey &id)
@@ -348,6 +365,7 @@ namespace AGE
 				frustum.setMatrix(camera.projection * transformation, true);
 
 				_octreeDrawList.emplace_back();
+				_octreeDrawList.back().lights = _pointLightObject;
 				auto &drawList = _octreeDrawList.back();
 
 				drawList.drawables.clear();
