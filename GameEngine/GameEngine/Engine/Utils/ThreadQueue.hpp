@@ -61,6 +61,7 @@ namespace AGE
 		void quit()
 		{
 			_run = false;
+			_commandQueue.safeEmplace<TMQ::CloseQueue>();
 			_commandQueue.releaseReadability();
 			_thread.join();
 			_release();

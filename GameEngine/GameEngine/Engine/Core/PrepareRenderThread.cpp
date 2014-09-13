@@ -333,7 +333,6 @@ namespace AGE
 		})
 			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
 		{
-			_isRunning = false;
 			return false;
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
@@ -363,7 +362,7 @@ namespace AGE
 						++total;
 					else
 						continue;
-					if (frustum.pointIn(e.position) == true)
+					if (frustum.sphereIn(e.boundingInfo) /*frustum.pointIn(e.position)*/ == true)
 					{
 						if (e.hasMoved)
 						{

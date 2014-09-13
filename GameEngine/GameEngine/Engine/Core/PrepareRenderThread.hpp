@@ -130,8 +130,6 @@ namespace AGE
 		DRAWABLE_ID addDrawableObject(PrepareRenderThread::USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
 		void _run();
-
-		bool _isRunning;
 	};
 
 	namespace Threads

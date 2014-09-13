@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Plane.hpp"
+#include <Utils/BoundingInfos.hpp>
 
 namespace AGE
 {
@@ -84,6 +85,16 @@ namespace AGE
 				if (v <= 0.0f)
 					return false;
 			}
+			return true;
+		}
+
+		bool sphereIn(const AGE::BoundingInfos &b)
+		{
+			return true;
+		}
+
+		bool aabbIn(const AGE::BoundingInfos &b)
+		{
 			return true;
 		}
 	};
