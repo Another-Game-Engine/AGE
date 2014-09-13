@@ -79,6 +79,7 @@ namespace AGE
 
 		struct PointLightObject
 		{
+			PrepareKey key;
 			float power;
 			float range;
 			glm::vec3 color;
@@ -101,7 +102,7 @@ namespace AGE
 		AGE::Queue<PrepareKey::OctreeObjectId> _freeCullableObjects;
 		AGE::Vector<CameraObject> _cameraObjects;
 		AGE::Queue<PrepareKey::OctreeObjectId> _freeCameraObjects;
-		AGE::Vector<PointLight> _pointLightObject;
+		AGE::Vector<PointLightObject> _pointLightObjects;
 		AGE::Queue<PrepareKey::OctreeObjectId> _freePointLightObjects;
 		std::size_t _userObjectCounter = 0;
 		std::size_t _cameraCounter = 0;
@@ -114,12 +115,11 @@ namespace AGE
 		PrepareKey addCameraElement();
 		PrepareKey addPointLightElement();
 
+		void setPointLight(float, float, glm::vec3 const &, glm::vec4 const &, const PrepareKey &id);
 		void removeElement(const PrepareKey &key);
-
 		void setPosition(const glm::vec3 &v, const PrepareKey &key);
 		void setOrientation(const glm::quat &v, const PrepareKey &key);
 		void setScale(const glm::vec3 &v, const PrepareKey &key);
-
 		void setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		void setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		void setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);

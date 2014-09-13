@@ -10,14 +10,8 @@ namespace gl { class GeometryManager; class Vertices; class Indices; }
 namespace Component
 {
 
-	struct PointLight : public ComponentBase<PointLight>, public AGE::PrepareElement
+	class PointLight : public ComponentBase<PointLight>, public AGE::PrepareElement
 	{
-	public:
-		float power;
-		float range;
-		glm::vec3 color;
-		glm::vec4 position;
-	
 	public:
 		PointLight();
 		virtual ~PointLight();
@@ -29,8 +23,16 @@ namespace Component
 
 		virtual PrepareElement &initOctree(AScene *scene, ENTITY_ID entityId);
 		virtual PrepareElement &resetOctree(AScene *scene, ENTITY_ID entityId);
+		PointLight &setPosition(glm::vec4 const &position);
+		PointLight &set(float power, float range, glm::vec3 const &color, glm::vec4 const &position);
 
 		template <typename Archive>void serialize(Archive &ar);
+
+	private:
+		float _power;
+		float _range;
+		glm::vec3 _color;
+		glm::vec4 _position;
 	};
 
 	template <typename Archive>

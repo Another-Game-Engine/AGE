@@ -123,6 +123,11 @@ namespace AGE
 		}
 	}
 
+	void PrepareRenderThread::setPointLight(float power, float range, glm::vec3 const &color, glm::vec4 const &position, const PrepareKey &id)
+	{
+		_commandQueue.emplace<PRTC::SetPointLight>(power, range, color, position, id);
+	}
+
 	void PrepareRenderThread::setPosition(const glm::vec3 &v, const PrepareKey &id)
 	{
 		_commandQueue.emplace<PRTC::Position>(id, v);
@@ -225,6 +230,20 @@ namespace AGE
 			co->key.id = msg.key.id;
 			co->active = true;
 		})
+			.handle<PRTC::CreatePointLight>([&](const PRTC::CreatePointLight &msg)
+		{
+			PointLightObject *co = nullptr;
+			if (msg.key.id >= _pointLightObjects.size())
+			{
+				_pointLightObjects.push_back(PointLightObject());
+				co = &_pointLightObjects.back();
+			}
+			else
+			{
+				co = &_pointLightObjects.back();
+			}
+			co->key.id = msg.key.id;
+		})
 			.handle<PRTC::CreateDrawable>([&](const PRTC::CreateDrawable& msg)
 		{
 			UserObject *uo = nullptr;
@@ -238,11 +257,25 @@ namespace AGE
 				uo = &_userObjects[msg.key.id];
 			}
 		})
+			.handle<PRTC::SetPointLight>([&](const PRTC::SetPointLight &msg)
+		{
+			PointLightObject *l = nullptr;
+			l = &_pointLightObjects[msg.key.id];
+			l->color = msg.color;
+			l->position = msg.position;
+			l->power = msg.power;
+			l->range = msg.range;
+		})
 			.handle<PRTC::DeleteCamera>([&](const PRTC::DeleteCamera& msg)
 		{
 			CameraObject *co = nullptr;
 			co = &_cameraObjects[msg.key.id];
 			co->active = false;
+		})
+			.handle<PRTC::DeletePointLight>([&](const PRTC::DeletePointLight &msg)
+		{
+			PointLightObject *co = nullptr;
+			co = &_pointLightObjects[msg.key.id];
 		})
 			.handle<PRTC::DeleteDrawable>([&](const PRTC::DeleteDrawable& msg)
 		{
@@ -278,10 +311,13 @@ namespace AGE
 		})
 			.handle<PRTC::Position>([&](const PRTC::Position& msg)
 		{
-			UserObject *uo = nullptr;
 			CameraObject *co = nullptr;
+			UserObject *uo = nullptr;
+			PointLightObject *l = nullptr;
+
 			switch (msg.key.type)
 			{
+
 			case(PrepareKey::Type::Camera) :
 				co = &_cameraObjects[msg.key.id];
 				co->position = msg.position;
@@ -295,6 +331,10 @@ namespace AGE
 					_cullableObjects[e].position = uo->position;
 					_cullableObjects[e].hasMoved = true;
 				}
+				break;
+			case(PrepareKey::Type::PointLight) :
+				l = &_pointLightObjects[msg.key.id];
+				l->position = glm::vec4(msg.position.x, msg.position.y, msg.position.z, 1.0f);
 				break;
 			default:
 				break;
@@ -365,7 +405,11 @@ namespace AGE
 				frustum.setMatrix(camera.projection * transformation, true);
 
 				_octreeDrawList.emplace_back();
-				_octreeDrawList.back().lights = _pointLightObject;
+				for (size_t index = 0; index < _pointLightObjects.size(); ++index)
+				{
+					auto &p = _pointLightObjects[index];
+					_octreeDrawList.back().lights.push_back(PointLight(p.power, p.range, p.color, p.position));
+				}
 				auto &drawList = _octreeDrawList.back();
 
 				drawList.drawables.clear();

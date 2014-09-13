@@ -13,6 +13,7 @@ namespace gl
 
 namespace AGE
 {
+
 	struct Drawable
 	{
 		SubMeshInstance mesh;
@@ -31,6 +32,14 @@ namespace AGE
 		float range;
 		glm::vec3 color;
 		glm::vec4 position;
+		PointLight(float power, float range, glm::vec3 const &color, glm::vec4 const &position)
+			: power(power),
+			range(range),
+			color(color),
+			position(position)
+		{
+
+		}
 	};
 
 	struct DrawableCollection
