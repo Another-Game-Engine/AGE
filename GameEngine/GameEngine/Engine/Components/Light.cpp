@@ -1,4 +1,5 @@
 #include <Components/Light.hh>
+#include <Core/AScene.hh>
 #include <Render/GeometryManager.hh>
 
 namespace Component
@@ -46,11 +47,19 @@ namespace Component
 
 	AGE::PrepareElement &PointLight::initOctree(AScene *scene, ENTITY_ID entityId)
 	{
+		_scene = scene;
+	//	_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addLightElement();
+		scene->getLink(entityId)->registerOctreeObject(_OTKey);
+		assert(!_OTKey.invalid());
 		return (*this);
 	}
 
 	AGE::PrepareElement &PointLight::resetOctree(AScene *scene, ENTITY_ID entityId)
 	{
+		assert(!_OTKey.invalid());
+		scene->getLink(entityId)->unregisterOctreeObject(_OTKey);
+		//scene->getInstance<AGE::Threads::Prepare>()->removeElement(_OTKey);
+		_OTKey = AGE::PrepareKey();
 		return (*this);
 	}
 }

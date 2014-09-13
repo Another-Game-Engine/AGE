@@ -3,6 +3,7 @@
 
 namespace AGE
 {
+
 	PrepareElement::PrepareElement()
 	{
 
@@ -25,4 +26,5 @@ namespace AGE
 		_scene = o._scene;
 		return *this;
 	}
+
 }
