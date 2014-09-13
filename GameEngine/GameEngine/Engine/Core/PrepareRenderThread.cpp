@@ -185,6 +185,7 @@ namespace AGE
 
 	bool PrepareRenderThread::_update()
 	{
+		auto returnValue = true;
 		_commandQueue.getDispatcher()
 			.handle<PRTC::CameraInfos>([&](const PRTC::CameraInfos& msg)
 		{
@@ -333,7 +334,7 @@ namespace AGE
 		})
 			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
 		{
-			return false;
+			returnValue = false;
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
 			static std::size_t cameraCounter = 0; cameraCounter = 0;
@@ -391,7 +392,7 @@ namespace AGE
 			//_octreeDrawList.clear();
 		});
 
-		return true;
+		return returnValue;
 	}
 
 }

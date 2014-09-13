@@ -26,7 +26,5 @@ namespace AGE
 	public:
 		RenderThread();
 		virtual ~RenderThread();
-		struct Stop{};
-
 	};
 }
