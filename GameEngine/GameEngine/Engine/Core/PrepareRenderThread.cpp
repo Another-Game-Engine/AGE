@@ -1,19 +1,14 @@
-#include "PrepareRenderThread.hpp"
+#include <Core/PrepareRenderThread.hpp>
+#include <Core/PrepareRenderThreadCommand.hpp>
 #include <Core/AScene.hh>
-#include <Components/MeshRenderer.hh>
-#include <Core/EntityFilter.hpp>
-#include <Components/CameraComponent.hpp>
 #include <Utils/Frustum.hpp>
-#include <chrono>
-#include <Utils/DependenciesInjector.hpp>
 #include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include "PrepareRenderThreadCommand.hpp"
 #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <Core/Drawable.hh>
 
 namespace AGE
 {
@@ -176,8 +171,6 @@ namespace AGE
 		_commandQueue.emplace<PRTC::Geometry>(key, meshs, materials);
 		return (*this);
 	}
-
-	//-----------------------------------------------------------------
 
 	DRAWABLE_ID PrepareRenderThread::addDrawable(USER_OBJECT_ID uid)
 	{

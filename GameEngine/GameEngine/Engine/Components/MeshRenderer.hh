@@ -15,6 +15,12 @@ namespace Resources
 	class Texture;
 };
 
+namespace AGE
+{
+	struct MeshInstance;
+	struct MaterialSetInstance;
+}
+
 enum Shadow;
 class Material;
 class Renderer;

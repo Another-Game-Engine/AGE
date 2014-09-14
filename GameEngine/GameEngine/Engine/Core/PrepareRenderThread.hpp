@@ -1,18 +1,10 @@
 #pragma once
 
-#include <glm/fwd.hpp>
 #include <Entities/EntityTypedef.hpp>
 #include <Utils/Dependency.hpp>
-#include <Utils/BoundingInfos.hpp>
-#include <Entities/Entity.hh>
-#include <Render/Key.hh>
-#include <Render/Data.hh>
-#include <stack>
 #include <Utils/Containers/Queue.hpp>
 #include <Utils/Containers/Vector.hpp>
-#include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
-#include <Core/Drawable.hh>
 #include <Core/PrepareKey.hpp>
 #include <Utils/CommandQueueHolder.hpp>
 #include <Utils/ThreadQueue.hpp>
@@ -21,6 +13,16 @@ class AScene;
 
 namespace AGE
 {
+	typedef std::uint64_t DRAWABLE_ID;
+	typedef std::uint64_t USER_OBJECT_ID;
+
+	struct Drawable;
+	struct Mesh;
+	struct PointLight;
+	struct Camera;
+	struct DrawableCollection;
+	struct SubMeshInstance;
+
 	class PrepareRenderThread : public ThreadQueue, public Dependency<PrepareRenderThread>
 	{
 	public:
@@ -40,20 +42,20 @@ namespace AGE
 		PrepareRenderThread &setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		PrepareRenderThread &setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		PrepareRenderThread &setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
-		PrepareRenderThread &updateGeometry(const PrepareKey &id, const AGE::Vector<AGE::SubMeshInstance> &meshs, const AGE::Vector<AGE::MaterialInstance> &materials);
+		PrepareRenderThread &updateGeometry(const PrepareKey &id, const Vector<SubMeshInstance> &meshs, const Vector<MaterialInstance> &materials);
 		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
 
 	private:
 		std::weak_ptr<AScene> scene;
 
-		AGE::Vector<Mesh> _meshs;
-		AGE::Queue<PrepareKey::OctreeObjectId> _freeMeshs;
-		AGE::Vector<Drawable> _drawables;
-		AGE::Queue<PrepareKey::OctreeObjectId> _freeDrawables;
-		AGE::Vector<Camera> _cameras;
-		AGE::Queue<PrepareKey::OctreeObjectId> _freeCameras;
-		AGE::Vector<PointLight> _pointLights;
-		AGE::Queue<PrepareKey::OctreeObjectId> _freePointLights;
+		Vector<Mesh> _meshs;
+		Vector<Drawable> _drawables;
+		Vector<Camera> _cameras;
+		Vector<PointLight> _pointLights;
+		Queue<PrepareKey::OctreeObjectId> _freeDrawables;
+		Queue<PrepareKey::OctreeObjectId> _freeCameras;
+		Queue<PrepareKey::OctreeObjectId> _freeMeshs;
+		Queue<PrepareKey::OctreeObjectId> _freePointLights;
 		std::size_t _MeshCounter = 0;
 		std::size_t _cameraCounter = 0;
 		std::size_t _pointLightCounter = 0;

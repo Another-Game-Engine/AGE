@@ -1,6 +1,5 @@
 #include <Components/CameraComponent.hpp>
-#include <glm/fwd.hpp>
-
+#include <glm/gtc/matrix_transform.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 
@@ -24,8 +23,6 @@ namespace Component
 	{
 			viewport = o.viewport;
 			cubeMapShader = o.cubeMapShader;
-			//@CESAR TODO TODO COPY FRAMEBUFFER
-			// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
 			blitOnScreen = o.blitOnScreen;
 			fboSize = o.fboSize;
 			sampleNbr = o.sampleNbr;
@@ -35,8 +32,6 @@ namespace Component
 	{
 		viewport = o.viewport;
 		cubeMapShader = o.cubeMapShader;
-		//@CESAR TODO TODO COPY FRAMEBUFFER
-		// @CESAR IMPORTANT FBO ARE COPYED ! THIS HAVE TO BE TEMPORARY !!!!
 		blitOnScreen = o.blitOnScreen;
 		fboSize = o.fboSize;
 		sampleNbr = o.sampleNbr;
