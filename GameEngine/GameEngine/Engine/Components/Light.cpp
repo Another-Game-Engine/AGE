@@ -40,15 +40,15 @@ namespace Component
 
 	}
 
-	void PointLight::init(AScene *)
+	void PointLight::init(AScene *scene)
 	{
-
+		initOctree(scene, entityId);
 	}
 
 	AGE::PrepareElement &PointLight::initOctree(AScene *scene, ENTITY_ID entityId)
 	{
 		_scene = scene;
-		_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addPointLightElement();
+		_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addPointLight();
 		scene->getLink(entityId)->registerOctreeObject(_OTKey);
 		assert(!_OTKey.invalid());
 		return (*this);

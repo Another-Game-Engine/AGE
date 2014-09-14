@@ -135,6 +135,9 @@ bool BenchmarkScene::userStart()
 	rigidBody->getBody().setFriction(0.8f);
 #endif //PHYSIC_SIMULATION
 #endif
+	auto light = createEntity();
+	auto lightData = addComponent<Component::PointLight>(light);
+	lightData->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec4(1.0f));
 	return true;
 }
 

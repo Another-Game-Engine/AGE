@@ -19,7 +19,7 @@ namespace Component
 		PointLight &operator=(PointLight const &o);
 		
 		virtual void reset(AScene *);
-		void	init(AScene *);
+		void init(AScene *);
 
 		virtual PrepareElement &initOctree(AScene *scene, ENTITY_ID entityId);
 		virtual PrepareElement &resetOctree(AScene *scene, ENTITY_ID entityId);

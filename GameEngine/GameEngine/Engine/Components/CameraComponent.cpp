@@ -74,7 +74,7 @@ namespace Component
 
 	AGE::PrepareElement &CameraComponent::initOctree(::AScene *scene, ENTITY_ID entityId)
 	{
-		_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addCameraElement();
+		_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addCamera();
 		scene->getLink(entityId)->registerOctreeObject(_OTKey);
 		scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_OTKey, _projection);
 		return (*this);

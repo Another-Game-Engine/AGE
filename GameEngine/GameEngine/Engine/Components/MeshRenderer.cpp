@@ -94,7 +94,7 @@ namespace Component
 	AGE::PrepareElement &MeshRenderer::initOctree(::AScene *scene, ENTITY_ID entityId)
 	{
 		_scene = scene;
-		_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addCullableElement();
+		_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addMesh();
 		scene->getLink(entityId)->registerOctreeObject(_OTKey);
 		assert(!_OTKey.invalid());
 		return (*this);

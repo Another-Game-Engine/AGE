@@ -24,18 +24,19 @@ namespace AGE
 	{
 	}
 
-	/*Drawable &Drawable::operator=(Drawable const &d)
+	PointLight::PointLight()
+		: power(1.0f),
+		range(1.0f),
+		color(1.0f),
+		position(0.f)
 	{
-		mesh = d.mesh;
-		material = d.material;
-		transformation = d.transformation;
-		return (*this);
 	}
 
-	Drawable::Drawable(Drawable const &d)
+	PointLight::PointLight(float power, float range, glm::vec3 const &color, glm::vec4 const &position)
+		: power(power),
+		range(range),
+		color(color),
+		position(position)
 	{
-		mesh = d.mesh;
-		material = d.material;
-		transformation = d.transformation;
-	}*/
+	}
 }
