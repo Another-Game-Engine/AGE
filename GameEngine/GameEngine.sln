@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deffered_shading", "Deffere
 	ProjectSection(SolutionItems) = preProject
 		Shaders\Deffered_shading\deffered_shading_get_buffer.fp = Shaders\Deffered_shading\deffered_shading_get_buffer.fp
 		Shaders\Deffered_shading\deffered_shading_get_buffer.vp = Shaders\Deffered_shading\deffered_shading_get_buffer.vp
+		deffered_shading_lighting.fp = deffered_shading_lighting.fp
+		deffered_shading_lighting.vp = deffered_shading_lighting.vp
 	EndProjectSection
 EndProject
 Global
@@ -122,7 +124,7 @@ Global
 		{F584710B-8089-4D6B-801A-8A2354FCF28A} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8} = {9D3EF6A3-621D-4807-90CB-705CCD3A8FB8}
 		{EB423B39-F564-498E-B291-0D9676AF09B5} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
-		{1133660B-897C-4237-9E3B-15C10A3A2942} = {4F71FD1A-92D4-4EE1-A02A-3C30682405B3}
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
+		{1133660B-897C-4237-9E3B-15C10A3A2942} = {4F71FD1A-92D4-4EE1-A02A-3C30682405B3}
 	EndGlobalSection
 EndGlobal

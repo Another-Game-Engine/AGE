@@ -20,10 +20,14 @@ void BenchmarkScene::initRendering()
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&](){
 		// create the shader
 		key.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
+		key.shader_post = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
 		// get from the shader the information key
 		key.global_state = _renderManager->addUniformBlock();
 		_renderManager->addShaderInterfaceBlock(key.shader, "global_state", key.global_state);
+		_renderManager->addShaderInterfaceBlock(key.shader_post, "global_state", key.global_state);
+		
 		key.view_matrix = _renderManager->addShaderUniform(key.shader, "view_matrix", glm::mat4(1.f));
+		
 		// bind the key on drawable info (material-transformation)
 		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.shader, _renderManager->addShaderUniform(key.shader, "diffuse_color", glm::vec4(1.0f)));
 		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.shader, _renderManager->addShaderUniform(key.shader, "diffuse_ratio", 1.0f));
@@ -46,11 +50,16 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushClearTaskRenderOnScreen(key.renderOnScreen, true, true, false);
 		_renderManager->pushSetTestTaskRenderOnScreen(key.renderOnScreen, false, false, true);
 		_renderManager->pushSetClearValueTaskRenderOnScreen(key.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+		// create renderPostEffect for accumulation light
+		key.renderAccLight = _renderManager->addRenderPostEffect(key.shader_post, glm::ivec4(0, 0, 800, 600));
 		// create the pipeline and set it with both render element add before
-		key.pipeline = _renderManager->addPipeline();
-		_renderManager->pushRenderPassPipeline(key.pipeline, key.renderPass);
-		_renderManager->pushRenderOnScreenPipeline(key.pipeline, key.renderOnScreen);
+		key.pipeline_1 = _renderManager->addPipeline();
+		_renderManager->pushRenderPassPipeline(key.pipeline_1, key.renderPass);
+		_renderManager->pushRenderOnScreenPipeline(key.pipeline_1, key.renderOnScreen);
 		_renderManager->branch(key.renderPass, key.renderOnScreen);
+		key.pipeline_2 = _renderManager->addPipeline();
+		_renderManager->pushRenderPostEffectPipeline();
+		_renderManager->branch();
 		return true;
 	});
 	assert(res.get());
