@@ -19,7 +19,7 @@ void BenchmarkScene::initRendering()
 
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&](){
 		// create the shader
-		key.shader = _renderManager->addShader(VERTEX_SHADER, FRAG_SHADER);
+		key.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
 		// get from the shader the information key
 		key.global_state = _renderManager->addUniformBlock();
 		_renderManager->addShaderInterfaceBlock(key.shader, "global_state", key.global_state);

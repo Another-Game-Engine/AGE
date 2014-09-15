@@ -216,18 +216,18 @@ namespace AGE
 			++ctr;
 		}
 		
-		//geometryManager.createSphereSimpleForm();
-		//mesh.vertices = geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
-		//mesh.indices = geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
-		mesh.vertices = geometryManager.addVertices(maxSize, uint8_t(size), nbrBuffer.data(), buffer.data());
-		mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
+		geometryManager.createSphereSimpleForm();
+		mesh.vertices = geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
+		mesh.indices = geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
+		//		mesh.vertices = geometryManager.addVertices(maxSize, uint8_t(size), nbrBuffer.data(), buffer.data());
+		//		mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
 		mesh.bounding = data.boundingInfos;
-		//mesh.name = data.name; // TODO
+		//		mesh.name = data.name; // TODO
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
 		mesh.vertexPool = _pools.find(data.infos)->second.first;
 		mesh.indexPool = _pools.find(data.infos)->second.second;
-		geometryManager.attachVerticesToVertexPool(mesh.vertices, pools.first);
-		geometryManager.attachIndicesToIndexPool(mesh.indices, pools.second);
+		//		geometryManager.attachVerticesToVertexPool(mesh.vertices, pools.first);
+		//		geometryManager.attachIndicesToIndexPool(mesh.indices, pools.second);
 	}
 
 	// Create pool for meshs

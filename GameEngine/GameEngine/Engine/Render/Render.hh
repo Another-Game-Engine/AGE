@@ -15,7 +15,7 @@
 #include <map>
 #include <utility>
 
-namespace AGE { struct Drawable; }
+namespace AGE { struct Drawable;  }
 
 namespace gl
 {
@@ -26,6 +26,7 @@ namespace gl
 	class Texture2D;
 	class RenderOffScreen;
 	class Vertices;
+	class Indices;
 
 	enum RenderType
 	{
@@ -106,14 +107,15 @@ namespace gl
 		{
 		public:
 			Key<Vertices> quad;
+			Key<Indices> quadId;
 
 		public:
-			Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad);
+			Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad, Key<Indices> const &id);
 		};
 
 	public:
 		virtual ~RenderOnScreen();
-		RenderOnScreen(Key<Vertices> const &key, Shader &shader, GeometryManager &g);
+		RenderOnScreen(Key<Vertices> const &key, Key<Indices> const &id, Shader &shader, GeometryManager &g);
 
 		virtual Render &render();
 		virtual RenderType getType() const;

@@ -6,7 +6,6 @@
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>
 #include <Render/Storage.hh>
-#
 
 namespace gl
 {
@@ -573,8 +572,8 @@ namespace gl
 		return (*this);
 	}
 
-	RenderOnScreen::RenderOnScreen(Key<Vertices> const &key, Shader &s, GeometryManager &g)
-		: Render(new Draw(g, s, GL_TRIANGLES, key)),
+	RenderOnScreen::RenderOnScreen(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g)
+		: Render(new Draw(g, s, GL_TRIANGLES, key, id)),
 		_draw((Draw &)Render::_draw)
 	{
 
@@ -593,13 +592,14 @@ namespace gl
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		_draw.shader.update();
-		_draw.geometryManager.draw(_draw.mode, _draw.quad);
+		_draw.geometryManager.draw(_draw.mode, _draw.quadId, _draw.quad);
 		return (*this);
 	}
 
-	RenderOnScreen::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad)
+	RenderOnScreen::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad, Key<Indices> const &id)
 		: Render::Draw(g, s, mode),
-		quad(quad)
+		quad(quad),
+		quadId(id)
 	{
 	}
 
