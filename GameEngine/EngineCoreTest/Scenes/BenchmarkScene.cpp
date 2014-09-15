@@ -19,47 +19,40 @@ void BenchmarkScene::initRendering()
 
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&](){
 		// create the shader
-		key.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
-		key.shader_post = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
+		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
 		// get from the shader the information key
 		key.global_state = _renderManager->addUniformBlock();
-		_renderManager->addShaderInterfaceBlock(key.shader, "global_state", key.global_state);
-		_renderManager->addShaderInterfaceBlock(key.shader_post, "global_state", key.global_state);
+		_renderManager->addShaderInterfaceBlock(key.getBuff.shader, "global_state", key.global_state);
 		
-		key.view_matrix = _renderManager->addShaderUniform(key.shader, "view_matrix", glm::mat4(1.f));
+		key.getBuff.view_matrix = _renderManager->addShaderUniform(key.getBuff.shader, "view_matrix", glm::mat4(1.f));
 		
 		// bind the key on drawable info (material-transformation)
-		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.shader, _renderManager->addShaderUniform(key.shader, "diffuse_color", glm::vec4(1.0f)));
-		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.shader, _renderManager->addShaderUniform(key.shader, "diffuse_ratio", 1.0f));
-		_renderManager->bindTransformationToShader(key.shader, _renderManager->addShaderUniform(key.shader, "model_matrix", glm::mat4(1.f)));
+		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_color", glm::vec4(1.0f)));
+		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_ratio", 1.0f));
+		_renderManager->bindTransformationToShader(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "model_matrix", glm::mat4(1.f)));
 		// create renderpass and set it
-		key.renderPass = _renderManager->addRenderPass(key.shader, glm::ivec4(0, 0, 800, 600));
-		_renderManager->pushSetTestTaskRenderPass(key.renderPass, false, false, true);
-		_renderManager->pushSetClearValueTaskRenderPass(key.renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-		_renderManager->pushClearTaskRenderPass(key.renderPass, true, true, false);
-		_renderManager->pushTargetRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0);
-		_renderManager->pushTargetRenderPass(key.renderPass, GL_COLOR_ATTACHMENT1);
-		_renderManager->createBufferSamplableRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
-		_renderManager->createBufferSamplableRenderPass(key.renderPass, GL_COLOR_ATTACHMENT1, GL_RGBA8);
-		_renderManager->createBufferSamplableRenderPass(key.renderPass, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
-		_renderManager->pushSetBlendStateTaskRenderPass(key.renderPass, 0, false);
-		_renderManager->pushSetBlendStateTaskRenderPass(key.renderPass, 1, false);
-		_renderManager->pushDrawTaskRenderBuffer(key.renderPass);
+		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushSetTestTaskRenderPass(key.getBuff.renderPass, false, false, true);
+		_renderManager->pushSetClearValueTaskRenderPass(key.getBuff.renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+		_renderManager->pushClearTaskRenderPass(key.getBuff.renderPass, true, true, false);
+		_renderManager->pushTargetRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT0);
+		_renderManager->pushTargetRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT1);
+		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT1, GL_RGBA8);
+		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
+		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 0, false);
+		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 1, false);
+		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
 		// create renderOnscreen and set it
-		key.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
-		_renderManager->pushClearTaskRenderOnScreen(key.renderOnScreen, true, true, false);
-		_renderManager->pushSetTestTaskRenderOnScreen(key.renderOnScreen, false, false, true);
-		_renderManager->pushSetClearValueTaskRenderOnScreen(key.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-		// create renderPostEffect for accumulation light
-		key.renderAccLight = _renderManager->addRenderPostEffect(key.shader_post, glm::ivec4(0, 0, 800, 600));
+		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushClearTaskRenderOnScreen(key.getBuff.renderOnScreen, true, true, false);
+		_renderManager->pushSetTestTaskRenderOnScreen(key.getBuff.renderOnScreen, false, false, true);
+		_renderManager->pushSetClearValueTaskRenderOnScreen(key.getBuff.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 		// create the pipeline and set it with both render element add before
-		key.pipeline_1 = _renderManager->addPipeline();
-		_renderManager->pushRenderPassPipeline(key.pipeline_1, key.renderPass);
-		_renderManager->pushRenderOnScreenPipeline(key.pipeline_1, key.renderOnScreen);
-		_renderManager->branch(key.renderPass, key.renderOnScreen);
-		key.pipeline_2 = _renderManager->addPipeline();
-		_renderManager->pushRenderPostEffectPipeline();
-		_renderManager->branch();
+		key.getBuff.pipeline = _renderManager->addPipeline();
+		_renderManager->pushRenderPassPipeline(key.getBuff.pipeline, key.getBuff.renderPass);
+		_renderManager->pushRenderOnScreenPipeline(key.getBuff.pipeline, key.getBuff.renderOnScreen);
+		_renderManager->branch(key.getBuff.renderPass, key.getBuff.renderOnScreen);
 		return true;
 	});
 	assert(res.get());
@@ -141,9 +134,9 @@ bool BenchmarkScene::userStart()
 	rigidBody->getBody().setFriction(0.8f);
 #endif //PHYSIC_SIMULATION
 #endif
-	//auto light = createEntity();
-	//auto lightData = addComponent<Component::PointLight>(light);
-	//lightData->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec4(1.0f));
+	auto light = createEntity();
+	auto lightData = addComponent<Component::PointLight>(light);
+	lightData->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
 	return true;
 }
 
@@ -240,8 +233,8 @@ bool BenchmarkScene::userUpdate(double time)
 	octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
 	{
 		renderManager->setUniformBlock(key.global_state, 0, collection.projection);
-		renderManager->setShaderUniform(key.shader, key.view_matrix, collection.transformation);
-		renderManager->updatePipeline(key.pipeline, collection.drawables);
+		renderManager->setShaderUniform(key.getBuff.shader, key.getBuff.view_matrix, collection.transformation);
+		renderManager->updatePipeline(key.getBuff.pipeline, collection.drawables);
 		renderManager->drawPipelines();
 	});
 

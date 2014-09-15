@@ -57,7 +57,6 @@
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
-    <ClCompile Include="Engine\Core\Drawable.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />
     <ClCompile Include="Engine\Render\GeometryManager.cpp" />
@@ -79,12 +78,12 @@
     <ClCompile Include="Engine\Render\LocationStorage.cpp" />
     <ClCompile Include="Engine\Render\Task.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
-    <ClCompile Include="..\Vendors\tmq\dispatcher.cpp" />
-    <ClCompile Include="..\Vendors\tmq\message.cpp" />
-    <ClCompile Include="..\Vendors\tmq\queue.cpp" />
     <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
+    <ClCompile Include="Engine\TMQ\dispatcher.cpp" />
+    <ClCompile Include="Engine\TMQ\message.cpp" />
+    <ClCompile Include="Engine\TMQ\queue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -208,7 +207,6 @@
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
-    <ClInclude Include="Engine\Core\Drawable.hh" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Texture\Texture.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
@@ -240,10 +238,6 @@
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Utils\CommandQueueHolder.hpp" />
     <ClInclude Include="Engine\Utils\ThreadQueue.hpp" />
-    <ClInclude Include="..\Vendors\tmq\dispatcher.hpp" />
-    <ClInclude Include="..\Vendors\tmq\message.hpp" />
-    <ClInclude Include="..\Vendors\tmq\queue.hpp" />
-    <ClInclude Include="..\Vendors\tmq\templateDispatcher.hpp" />
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
     <ClInclude Include="Engine\Render\RenderThreadInterface.hpp" />
@@ -251,6 +245,10 @@
     <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
     <ClInclude Include="Engine\Core\PreparableObject.hh" />
+    <ClInclude Include="Engine\TMQ\dispatcher.hpp" />
+    <ClInclude Include="Engine\TMQ\message.hpp" />
+    <ClInclude Include="Engine\TMQ\queue.hpp" />
+    <ClInclude Include="Engine\TMQ\templateDispatcher.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

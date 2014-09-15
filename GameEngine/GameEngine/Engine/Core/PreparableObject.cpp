@@ -2,6 +2,20 @@
 
 namespace AGE
 {
+	PreparableObject::PreparableObject()
+		: active(true),
+		hasMoved(true),
+		position(0.f),
+		scale(1.0f)
+	{
+
+	}
+
+	PreparableObject::~PreparableObject()
+	{
+
+	}
+
 	Drawable::Drawable()
 	{
 	}
@@ -25,18 +39,18 @@ namespace AGE
 	}
 
 	PointLight::PointLight()
-		: power(1.0f),
+		: PreparableObject(),
+		power(1.0f),
 		range(1.0f),
-		color(1.0f),
-		position(0.f)
+		color(1.0f)
 	{
 	}
 
-	PointLight::PointLight(float power, float range, glm::vec3 const &color, glm::vec4 const &position)
+	PointLight::PointLight(float power, float range, glm::vec3 const &color, glm::vec3 const &position)
 		: power(power),
 		range(range),
-		color(color),
-		position(position)
+		color(color)
 	{
+		PreparableObject::position = position;
 	}
 }

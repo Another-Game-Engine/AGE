@@ -36,8 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deffered_shading", "Deffere
 	ProjectSection(SolutionItems) = preProject
 		Shaders\Deffered_shading\deffered_shading_get_buffer.fp = Shaders\Deffered_shading\deffered_shading_get_buffer.fp
 		Shaders\Deffered_shading\deffered_shading_get_buffer.vp = Shaders\Deffered_shading\deffered_shading_get_buffer.vp
-		deffered_shading_lighting.fp = deffered_shading_lighting.fp
-		deffered_shading_lighting.vp = deffered_shading_lighting.vp
+		Shaders\Deffered_shading\deffered_shading_lighting.fp = Shaders\Deffered_shading\deffered_shading_lighting.fp
+		Shaders\Deffered_shading\deffered_shading_lighting.vp = Shaders\Deffered_shading\deffered_shading_lighting.vp
 	EndProjectSection
 EndProject
 Global

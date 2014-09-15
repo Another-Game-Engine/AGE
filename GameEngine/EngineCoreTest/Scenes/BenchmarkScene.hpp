@@ -30,6 +30,9 @@
 
 struct Deferred_get_buffer_Key
 {
+	gl::Key<gl::RenderPass> renderPass;
+	gl::Key<gl::RenderOnScreen> renderOnScreen;
+	gl::Key<gl::Pipeline> pipeline;
 	gl::Key<gl::Shader> shader;
 	gl::Key<gl::Uniform> position_light;
 	gl::Key<gl::Uniform> color_light;
