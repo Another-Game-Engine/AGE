@@ -151,7 +151,7 @@ namespace gl
 		{
 			GLenum type = GL_FLOAT;
 			uint8_t sizeType = sizeof(float);
-			uint8_t nbrComponent = 2;
+			uint8_t nbrComponent = 3;
 			_simpleFormPoolGeo = new Key<VertexPool>(addVertexPool(1, &type, &sizeType, &nbrComponent));
 		}
 		if (_simpleFormPoolId == NULL)
@@ -164,12 +164,13 @@ namespace gl
 		if (element != _simpleFormGeo.end())
 			return (*this);
 		initSimpleForm();
+		size_t nbrVertices = 4;
 		size_t nbrElement = 6;
 		uint8_t const nbrBuffer = 1;
-		size_t sizeBuffer = 4 * 3 * nbrElement;
+		size_t sizeBuffer = 4 * 3 * nbrVertices;
 		void *buffer[nbrBuffer];
 		buffer[0] = (void *)quadForm;
-		_simpleFormGeo[SimpleForm::QUAD] = addVertices(nbrElement, nbrBuffer, &sizeBuffer, buffer);
+		_simpleFormGeo[SimpleForm::QUAD] = addVertices(nbrVertices, nbrBuffer, &sizeBuffer, buffer);
 		_simpleFormId[SimpleForm::QUAD] = addIndices(nbrElement, quadFormId);
 		attachVerticesToVertexPool(_simpleFormGeo[SimpleForm::QUAD], *_simpleFormPoolGeo);
 		attachIndicesToIndexPool(_simpleFormId[SimpleForm::QUAD], *_simpleFormPoolId);
@@ -188,7 +189,7 @@ namespace gl
 		uint32_t *id;
 		size_t nbrElementGeo;
 		size_t nbrElementId;
-		generateIcoSphere(0, (glm::vec3 **)&buffer[0], (glm::u32vec3 **)&id, nbrElementId, nbrElementGeo);
+		generateIcoSphere(3, (glm::vec3 **)&buffer[0], (glm::u32vec3 **)&id, nbrElementId, nbrElementGeo);
 		size_t sizeBuffer = 4 * 3 * nbrElementGeo;
 		_simpleFormGeo[SimpleForm::SPHERE] = addVertices(nbrElementGeo, nbrBuffer, &sizeBuffer, buffer);
 		_simpleFormId[SimpleForm::SPHERE] = addIndices(nbrElementId, id);
