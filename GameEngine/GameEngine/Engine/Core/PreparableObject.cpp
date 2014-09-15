@@ -1,4 +1,4 @@
-#include <Core/Drawable.hh>
+#include <Core/PreparableObject.hh>
 
 namespace AGE
 {

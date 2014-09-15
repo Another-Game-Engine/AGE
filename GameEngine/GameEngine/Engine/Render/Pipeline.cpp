@@ -1,7 +1,7 @@
 #include <Render/Pipeline.hh>
 #include <iostream>
 #include <algorithm>
-#include <Core/Drawable.hh>
+#include <Core/PreparableObject.hh>
 
 namespace gl
 {

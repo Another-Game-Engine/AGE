@@ -2,84 +2,58 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
+#include <Core/PrepareRenderThread.hpp>
 
 namespace Component
 {
 	CameraComponent::CameraComponent()
-		: ComponentBase<CameraComponent>(),
-		AGE::PrepareElement(),
-		viewport(0),
-		fboSize(800, 600),
-		sampleNbr(1),
-		blitOnScreen(true)
+		: ComponentBase<CameraComponent>()
 	{
 	}
 
 	CameraComponent::~CameraComponent(void)
-	{}
+	{
+	}
 
 	CameraComponent::CameraComponent(CameraComponent const &o)
-		: AGE::PrepareElement(o)
+		: _scene(o._scene),
+		_key(o._key)
 	{
-			viewport = o.viewport;
-			cubeMapShader = o.cubeMapShader;
-			blitOnScreen = o.blitOnScreen;
-			fboSize = o.fboSize;
-			sampleNbr = o.sampleNbr;
-		}
+	}
 
 	CameraComponent	&CameraComponent::operator=(CameraComponent const &o)
 	{
-		viewport = o.viewport;
-		cubeMapShader = o.cubeMapShader;
-		blitOnScreen = o.blitOnScreen;
-		fboSize = o.fboSize;
-		sampleNbr = o.sampleNbr;
-		AGE::PrepareElement::operator=(o);
+		_scene = o._scene;
+		_key = o._key;
 		return *this;
 	}
 
 	void CameraComponent::setProjection(const glm::mat4 &projection)
 	{
-		_projection = projection;
-		_scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_OTKey, _projection);
+		_scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, projection);
 	}
 
 	const glm::mat4 &CameraComponent::getProjection() const
 	{
-		return _projection;
-	}
-
-	const std::string &CameraComponent::getSkyboxShader() const
-	{
-		return cubeMapShader;
+		if (_scene == nullptr)
+			assert(0);
+		return (_scene->getInstance<AGE::Threads::Prepare>()->getProjection(_key));
 	}
 
 	void CameraComponent::init(AScene *scene)
 	{
 		_scene = scene;
-		_projection = glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f);
-		initOctree(scene, this->entityId);
+		_key = scene->getInstance<AGE::Threads::Prepare>()->addCamera();
+		scene->getLink(entityId)->registerOctreeObject(_key);
+		scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, glm::perspective(55.0f, 16.0f / 9.0f, 0.1f, 2000.0f));
 	}
 
 	void CameraComponent::reset(AScene *scene)
 	{
-		resetOctree(scene, this->entityId);
-	}
-
-	AGE::PrepareElement &CameraComponent::initOctree(::AScene *scene, ENTITY_ID entityId)
-	{
-		_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addCamera();
-		scene->getLink(entityId)->registerOctreeObject(_OTKey);
-		scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_OTKey, _projection);
-		return (*this);
-	}
-
-	AGE::PrepareElement &CameraComponent::resetOctree(::AScene *scene, ENTITY_ID entityId)
-	{
-		scene->getLink(entityId)->unregisterOctreeObject(_OTKey);
-		scene->getInstance<AGE::Threads::Prepare>()->removeElement(_OTKey);
-		return (*this);
+		if (!_key.invalid())
+			assert(0);
+		scene->getLink(entityId)->unregisterOctreeObject(_key);
+		scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
 	}
 
 };

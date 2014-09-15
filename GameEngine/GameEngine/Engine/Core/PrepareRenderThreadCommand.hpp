@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <Geometry/Material.hpp>
 #include <Geometry/Mesh.hpp>
-#include "Drawable.hh"
+#include <Core/PreparableObject.hh>
 
 namespace AGE
 {

@@ -8,7 +8,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Core/Drawable.hh>
+#include <Core/PreparableObject.hh>
 
 namespace AGE
 {
@@ -140,6 +140,13 @@ namespace AGE
 	{
 		_commandQueue.emplace<PRTC::CameraInfos>(id, projection);
 		return (*this);
+	}
+
+	glm::mat4 const &PrepareRenderThread::getProjection(const PrepareKey &key)
+	{
+		if (key.id >= _cameras.size())
+			assert(0);
+		return (_cameras[key.id].projection);
 	}
 
 	PrepareRenderThread &PrepareRenderThread::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)

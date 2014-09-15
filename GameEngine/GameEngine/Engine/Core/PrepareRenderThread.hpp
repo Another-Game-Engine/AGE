@@ -44,6 +44,7 @@ namespace AGE
 		PrepareRenderThread &setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		PrepareRenderThread &updateGeometry(const PrepareKey &id, const Vector<SubMeshInstance> &meshs, const Vector<MaterialInstance> &materials);
 		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
+		glm::mat4 const &getProjection(const PrepareKey &id);
 
 	private:
 		std::weak_ptr<AScene> scene;
