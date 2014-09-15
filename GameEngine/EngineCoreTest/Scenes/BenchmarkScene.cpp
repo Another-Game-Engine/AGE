@@ -20,16 +20,16 @@ void BenchmarkScene::initRendering()
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&](){
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
+		
 		// get from the shader the information key
 		key.global_state = _renderManager->addUniformBlock();
 		_renderManager->addShaderInterfaceBlock(key.getBuff.shader, "global_state", key.global_state);
-		
-		key.getBuff.view_matrix = _renderManager->addShaderUniform(key.getBuff.shader, "view_matrix", glm::mat4(1.f));
 		
 		// bind the key on drawable info (material-transformation)
 		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_color", glm::vec4(1.0f)));
 		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_ratio", 1.0f));
 		_renderManager->bindTransformationToShader(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "model_matrix", glm::mat4(1.f)));
+		
 		// create renderpass and set it
 		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 800, 600));
 		_renderManager->pushSetTestTaskRenderPass(key.getBuff.renderPass, false, false, true);
@@ -43,11 +43,13 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 0, false);
 		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 1, false);
 		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
+		
 		// create renderOnscreen and set it
 		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
 		_renderManager->pushClearTaskRenderOnScreen(key.getBuff.renderOnScreen, true, true, false);
 		_renderManager->pushSetTestTaskRenderOnScreen(key.getBuff.renderOnScreen, false, false, true);
 		_renderManager->pushSetClearValueTaskRenderOnScreen(key.getBuff.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+		
 		// create the pipeline and set it with both render element add before
 		key.getBuff.pipeline = _renderManager->addPipeline();
 		_renderManager->pushRenderPassPipeline(key.getBuff.pipeline, key.getBuff.renderPass);
@@ -233,7 +235,7 @@ bool BenchmarkScene::userUpdate(double time)
 	octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
 	{
 		renderManager->setUniformBlock(key.global_state, 0, collection.projection);
-		renderManager->setShaderUniform(key.getBuff.shader, key.getBuff.view_matrix, collection.transformation);
+		renderManager->setUniformBlock(key.global_state, 1, collection.transformation);
 		renderManager->updatePipeline(key.getBuff.pipeline, collection.drawables);
 		renderManager->drawPipelines();
 	});
