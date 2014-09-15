@@ -22,7 +22,7 @@ namespace Component
 		void init(AScene *);
 
 		PointLight &setPosition(glm::vec4 const &position);
-		PointLight &set(float power, float range, glm::vec3 const &color, glm::vec4 const &position);
+		PointLight &set(float power, float range, glm::vec3 const &color, glm::vec3 const &position);
 
 		template <typename Archive>void serialize(Archive &ar);
 
