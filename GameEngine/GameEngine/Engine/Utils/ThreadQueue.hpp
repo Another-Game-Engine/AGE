@@ -8,9 +8,8 @@ namespace AGE
 {
 	class ThreadQueue
 	{
-	private:
-		std::thread _thread;
 	protected:
+		std::thread _thread;
 		TMQ::Queue _commandQueue;
 		virtual bool _update() = 0;
 		virtual bool _init() = 0;
@@ -43,8 +42,7 @@ namespace AGE
 
 		virtual ~ThreadQueue()
 		{
-			if (_thread.joinable())
-				quit();
+		//	quit();
 		}
 
 		bool launch(Engine *engine)
@@ -60,8 +58,10 @@ namespace AGE
 
 		void quit()
 		{
+			if (!_thread.joinable())
+				return;
+			_commandQueue.autoPriorityEmplace<TMQ::CloseQueue>();
 			_run = false;
-			_commandQueue.releaseReadability();
 			_thread.join();
 			_release();
 		}
