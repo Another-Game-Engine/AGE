@@ -21,6 +21,11 @@ namespace AGE
 		glm::quat orientation;
 	};
 
+	struct CullableObject : public PreparableObject
+	{
+
+	};
+
 	struct Mesh : public PreparableObject
 	{
 		AGE::Vector<DRAWABLE_ID> drawableCollection;
@@ -32,7 +37,11 @@ namespace AGE
 		SubMeshInstance mesh;
 		MaterialInstance material;
 		glm::mat4 transformation;
-		BoundingInfos boundingInfo;
+		// Cesar Bounding infos
+//		BoundingInfos boundingInfo;
+		// Paul Bounding infos
+		glm::vec3		minBB, maxBB;
+		glm::vec3		minAABB, maxAABB;
 
 		Drawable();
 		~Drawable();

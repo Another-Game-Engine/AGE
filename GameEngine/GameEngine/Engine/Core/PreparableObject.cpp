@@ -2,7 +2,8 @@
 
 namespace AGE
 {
-	Drawable::Drawable()
+	// temporary bounding box (waiting for the asset manager to handle that properly...)
+	Drawable::Drawable() : minBB(-1), maxBB(1)
 	{
 	}
 

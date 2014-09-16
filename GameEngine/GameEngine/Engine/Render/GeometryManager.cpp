@@ -189,7 +189,7 @@ namespace gl
 		uint32_t *id;
 		size_t nbrElementGeo;
 		size_t nbrElementId;
-		generateIcoSphere(1, (glm::vec3 **)&buffer[0], (glm::u32vec3 **)&id, nbrElementId, nbrElementGeo);
+		generateIcoSphere(3, (glm::vec3 **)&buffer[0], (glm::u32vec3 **)&id, nbrElementId, nbrElementGeo);
 		size_t sizeBuffer = 4 * 3 * nbrElementGeo;
 		_simpleFormGeo[SimpleForm::SPHERE] = addVertices(nbrElementGeo, nbrBuffer, &sizeBuffer, buffer);
 		_simpleFormId[SimpleForm::SPHERE] = addIndices(nbrElementId, id);
