@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <memory>
 #include <string>
-#include <Core/Drawable.hh>
+#include <Core/PreparableObject.hh>
 #include <Render/Render.hh>
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>

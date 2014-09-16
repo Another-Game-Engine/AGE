@@ -116,9 +116,6 @@ bool BenchmarkScene::userStart()
 	auto cam = addComponent<Component::CameraComponent>(camera);
 
 	auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
-	cam->fboSize = screenSize;
-	cam->viewport = glm::uvec4(0, 0, cam->fboSize.x, cam->fboSize.y);
-	cam->sampleNbr = 0;
 
 	auto camLink = getLink(camera);
 	camLink->setPosition(glm::vec3(0, 0, -10));
@@ -135,6 +132,9 @@ bool BenchmarkScene::userStart()
 	rigidBody->getBody().setFriction(0.8f);
 #endif //PHYSIC_SIMULATION
 #endif
+	auto light = createEntity();
+	auto lightData = addComponent<Component::PointLight>(light);
+	lightData->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
 	return true;
 }
 

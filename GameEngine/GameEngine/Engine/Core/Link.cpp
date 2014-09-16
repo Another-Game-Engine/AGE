@@ -1,6 +1,7 @@
 #include "Link.hpp"
 #include <Core/PrepareRenderThread.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace AGE;
 

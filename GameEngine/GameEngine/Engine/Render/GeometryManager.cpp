@@ -135,10 +135,14 @@ namespace gl
 
 		*vertex = new glm::vec3[vertexTab.size()];
 		*indices = new glm::u32vec3[idTab.size()];
+		//*vertex = (glm::vec3 *)quadForm;
+		//*indices = (glm::u32vec3 *)quadFormId;
 		memcpy(*vertex, vertexTab.data(), vertexTab.size() * sizeof(glm::vec3));
 		memcpy(*indices, idTab.data(), idTab.size() * sizeof(glm::u32vec3));
 		nbrElementGeo = vertexTab.size();
-		nbrElementId = idTab.size();
+		nbrElementId = idTab.size() * 3;
+		//nbrElementGeo = 12;
+		//nbrElementId = 6;
 	}
 
 	void GeometryManager::initSimpleForm()
@@ -184,7 +188,7 @@ namespace gl
 		uint32_t *id;
 		size_t nbrElementGeo;
 		size_t nbrElementId;
-		generateIcoSphere(6, (glm::vec3 **)&buffer[0], (glm::u32vec3 **)&id, nbrElementId, nbrElementGeo);
+		generateIcoSphere(0, (glm::vec3 **)&buffer[0], (glm::u32vec3 **)&id, nbrElementId, nbrElementGeo);
 		size_t sizeBuffer = 4 * 3 * nbrElementGeo;
 		_simpleFormGeo[SimpleForm::SPHERE] = addVertices(nbrElementGeo, nbrBuffer, &sizeBuffer, buffer);
 		_simpleFormId[SimpleForm::SPHERE] = addIndices(nbrElementId, id);
