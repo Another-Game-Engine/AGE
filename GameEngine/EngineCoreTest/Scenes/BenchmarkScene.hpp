@@ -1,27 +1,20 @@
 #pragma once
 
 #include <Core/AScene.hh>
-
 #include <Systems/LifetimeSystem.hpp>
-
 #include <glm/gtc/matrix_transform.hpp>
-
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Systems/CollisionAdderSystem.hpp>
 #include <Systems/CollisionCleanerSystem.hpp>
 #include <Systems/CameraSystem.hh>
 #include <Components/MeshRenderer.hh>
 #include <Components/Light.hh>
-
 #include <Core/AssetsManager.hpp>
-
 #include <Core/PrepareRenderThread.hpp>
 #include <Core/PrepareRenderThreadCommand.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
-
 #include <Context/IRenderContext.hh>
 #include <Core/RenderThread.hpp>
-
 #include <CONFIGS.hh>
 
 //for test
@@ -31,18 +24,38 @@
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
 # define DEFFERED_VERTEX_SHADER "../../Shaders/Deffered_shading/deffered_shading_get_buffer.vp"
 # define DEFFERED_FRAG_SHADER "../../Shaders/Deffered_shading/deffered_shading_get_buffer.fp"
+# define DEFFERED_VERTEX_SHADER_ACCUM "../../Shaders/Deffered_shading/deffered_shading_lighting.vp"
+# define DEFFERED_FRAG_SHADER_ACCUM "../../Shaders/Deffered_shading/deffered_shading_lighting.fp"
 
-
-struct RenderKey
+struct Deferred_accum_light
 {
 	gl::Key<gl::Shader> shader;
-	gl::Key<gl::UniformBlock> global_state;
-	gl::Key<gl::Uniform> pro_matrix;
-	gl::Key<gl::Uniform> view_matrix;
-	gl::Key<gl::Uniform> normal_matrix;
+	gl::Key<gl::Pipeline> pipeline;
+	gl::Key<gl::RenderPass> renderPass;
+	gl::Key<gl::RenderPostEffect> renderPostEffect;
+	gl::Key<gl::Uniform> position_light;
+	gl::Key<gl::Uniform> color_light;
+	gl::Key<gl::Uniform> power_light;
+	gl::Key<gl::Uniform> range_light;
+	gl::Key<gl::Sampler> depth_buffer;
+	gl::Key<gl::Sampler> normal_buffer;
+};
+
+struct Deferred_get_buffer_Key
+{
+	gl::Key<gl::Shader> shader;
+	gl::Key<gl::Uniform> model_matrix;
 	gl::Key<gl::RenderPass> renderPass;
 	gl::Key<gl::RenderOnScreen> renderOnScreen;
 	gl::Key<gl::Pipeline> pipeline;
+};
+
+struct RenderKey
+{
+	Deferred_accum_light Accum;
+	Deferred_get_buffer_Key getBuff;
+	gl::Key<gl::UniformBlock> global_state;
+
 };
 
 class BenchmarkScene : public AScene	
