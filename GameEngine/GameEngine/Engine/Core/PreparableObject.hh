@@ -14,11 +14,12 @@ namespace AGE
 	{
 		bool active;
 		bool hasMoved;
-		DRAWABLE_ID id;
 		PrepareKey key;
 		glm::vec3 position;
 		glm::vec3 scale;
 		glm::quat orientation;
+		PreparableObject();
+		~PreparableObject();
 	};
 
 	struct CullableObject : public PreparableObject
@@ -34,6 +35,7 @@ namespace AGE
 
 	struct Drawable : public PreparableObject
 	{
+		DRAWABLE_ID id;
 		SubMeshInstance mesh;
 		MaterialInstance material;
 		glm::mat4 transformation;
@@ -59,12 +61,11 @@ namespace AGE
 		float power;
 		float range;
 		glm::vec3 color;
-		glm::vec4 position;
 		PointLight();
-		PointLight(float power, float range, glm::vec3 const &color, glm::vec4 const &position);
+		PointLight(float power, float range, glm::vec3 const &color, glm::vec3 const &position);
 	};
 
-	struct DrawableCollection : public PreparableObject
+	struct DrawableCollection
 	{
 		glm::mat4 transformation;
 		glm::mat4 projection;

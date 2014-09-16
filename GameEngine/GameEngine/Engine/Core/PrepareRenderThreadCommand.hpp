@@ -89,7 +89,7 @@ namespace AGE
 
 		struct SetPointLight
 		{
-			SetPointLight(float power, float range, glm::vec3 const &color, glm::vec4 const &position, const PrepareKey &key)
+			SetPointLight(float power, float range, glm::vec3 const &color, glm::vec3 const &position, const PrepareKey &key)
 			: key(key),
 			power(power),
 			range(range),
@@ -100,7 +100,7 @@ namespace AGE
 			float power;
 			float range;
 			glm::vec3 color;
-			glm::vec4 position;
+			glm::vec3 position;
 		};
 
 		struct DeleteCamera
