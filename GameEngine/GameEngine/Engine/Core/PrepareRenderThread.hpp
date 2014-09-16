@@ -71,8 +71,6 @@ namespace AGE
 		DRAWABLE_ID addDrawable(USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
 		void _run();
-
-		bool _isRunning;
 	};
 
 	namespace Threads

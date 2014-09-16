@@ -139,7 +139,7 @@ int			main(int ac, char **av)
 	config->saveToFile();
 	e->stop();
 
-	renderThread->quit();
 	preparationThread->quit();
+	renderThread->quit();
 	return (EXIT_SUCCESS);
 }

@@ -172,6 +172,40 @@ namespace TMQ
 			_queue.emplace<T>(args...);
 		}
 
+		//Lock mutex or not
+		//Depend of the usage you made before
+		template <typename T>
+		void autoPush(const T& e)
+		{
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_queue.push(e);
+			}
+			else
+			{
+				_queue.push(e);
+			}
+		}
+
+		//Lock mutex or not
+		//Depend of the usage you made before
+		template <typename T, typename ...Args>
+		void autoEmplace(Args ...args)
+		{
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_queue.emplace<T>(args...);
+			}
+			else
+			{
+				_queue.emplace<T>(args...);
+			}
+		}
+
 		//Push in queue and return future
 		//Message data have to heritate from FutureData
 		template <typename T, typename F>
@@ -218,6 +252,40 @@ namespace TMQ
 			assert(_publisherThreadId == 0);
 			std::lock_guard<std::mutex> lock(_mutex);
 			return _queue.emplace<T>(args...)->getFuture();
+		}
+
+		//Lock mutex or not
+		//Depend of the usage you made before
+		template <typename T, typename F>
+		std::future<F> autoPushFuture(const T &e)
+		{
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				return _queue.push(e)->getFuture();
+			}
+			else
+			{
+				return _queue.push(e)->getFuture();
+			}
+		}
+
+		//Lock mutex or not
+		//Depend of the usage you made before
+		template <typename T, typename F, typename ...Args>
+		std::future<F> autoEmplaceFuture(Args ...args)
+		{
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				return _queue.emplace<T>(args...)->getFuture();
+			}
+			else
+			{
+				return _queue.emplace<T>(args...)->getFuture();
+			}
 		}
 
 		//////
@@ -323,6 +391,70 @@ namespace TMQ
 				std::lock_guard<std::mutex> lock(_mutex);
 				futur = (_priority.emplace<T>(args...))->getFuture();
 			}
+			releaseReadability();
+			return futur;
+		}
+
+		template <typename T>
+		void autoPriorityPush(const T& e)
+		{
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_queue.push(e);
+			}
+			else
+			{
+				_queue.push(e);
+			}
+			releaseReadability();
+		}
+
+		template <typename T, typename ...Args>
+		void autoPriorityEmplace(Args ...args)
+		{
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_queue.emplace<T>(args...);
+			}
+			else
+			{
+				_queue.emplace<T>(args...);
+			}
+			releaseReadability();
+		}
+
+		template <typename T, typename F>
+		std::future<F> autoPriorityFuturePush(const T &e)
+		{
+			std::future<F> futur;
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				futur = _priority.push(e)->getFuture();
+			}
+			else
+				futur = _priority.push(e)->getFuture();
+			releaseReadability();
+			return futur;
+		}
+
+		template <typename T, typename F, typename ...Args>
+		std::future<F> autoPriorityFutureEmplace(Args ...args)
+		{
+			std::future<F> futur;
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				futur = (_priority.emplace<T>(args...))->getFuture();
+			}
+			else
+				futur = (_priority.emplace<T>(args...))->getFuture();
 			releaseReadability();
 			return futur;
 		}
