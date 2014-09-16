@@ -1,7 +1,7 @@
 #include <Render/Render.hh>
 #include <cassert>
 #include <string>
-#include <Core/Drawable.hh>
+#include <Core/PreparableObject.hh>
 #include <Render/Task.hh>
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>

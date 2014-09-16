@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <Geometry/Material.hpp>
 #include <Geometry/Mesh.hpp>
-#include "Drawable.hh"
+#include <Core/PreparableObject.hh>
 
 namespace AGE
 {
@@ -76,12 +76,45 @@ namespace AGE
 				: key(_key)
 			{}
 			PrepareKey key;
+
+		};
+
+		struct CreatePointLight
+		{
+			CreatePointLight(PrepareKey const &key)
+			: key(key)
+			{}
+			PrepareKey key;
+		};
+
+		struct SetPointLight
+		{
+			SetPointLight(float power, float range, glm::vec3 const &color, glm::vec3 const &position, const PrepareKey &key)
+			: key(key),
+			power(power),
+			range(range),
+			color(color),
+			position(position)
+			{}
+			PrepareKey key;
+			float power;
+			float range;
+			glm::vec3 color;
+			glm::vec3 position;
 		};
 
 		struct DeleteCamera
 		{
 			DeleteCamera(const PrepareKey &_key)
 				: key(_key)
+			{}
+			PrepareKey key;
+		};
+
+		struct DeletePointLight
+		{
+			DeletePointLight(const PrepareKey &key)
+			: key(key)
 			{}
 			PrepareKey key;
 		};

@@ -8,36 +8,31 @@
 #include <cereal/types/string.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
-#include <Core/OctreeElement.hh>
+#include <Core/PrepareKey.hpp>
 
-namespace Resources
+
+namespace AGE
 {
-	class Texture;
-};
-
-enum Shadow;
-class Material;
-class Renderer;
-
+	struct MeshInstance;
+	struct MaterialSetInstance;
+}
 
 namespace Component
 {
 
-	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>, public AGE::PrepareElement
+	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>
 	{
 		MeshRenderer();
 		virtual ~MeshRenderer();
 		MeshRenderer(MeshRenderer &&o);
 		MeshRenderer &operator=(MeshRenderer &&o);
+		
 		void init(AScene *, std::shared_ptr<AGE::MeshInstance> file);
 		virtual void reset(AScene *);
 
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
 
-		MeshRenderer &updateOctree();
-		virtual PrepareElement &initOctree(::AScene *scene, ENTITY_ID entityId);
-		virtual PrepareElement &resetOctree(::AScene *scene, ENTITY_ID entityId);
 
 		MeshRenderer &setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh);
 		std::shared_ptr<AGE::MeshInstance> getMesh();
@@ -45,11 +40,14 @@ namespace Component
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
 
 	private:
-		std::shared_ptr<AGE::MeshInstance> mesh;
-		std::shared_ptr<AGE::MaterialSetInstance> material;
-	
+		AGE::PrepareKey _key;
+		AScene *_scene;
+		std::shared_ptr<AGE::MeshInstance> _mesh;
+		std::shared_ptr<AGE::MaterialSetInstance> _material;
+
+		void updateGeometry();
 		MeshRenderer(MeshRenderer const &) = delete;
-		MeshRenderer	&operator=(MeshRenderer const &) = delete;
+		MeshRenderer &operator=(MeshRenderer const &) = delete;
 	};
 
 	template <typename Archive>

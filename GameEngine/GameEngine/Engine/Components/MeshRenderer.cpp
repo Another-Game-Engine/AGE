@@ -4,14 +4,13 @@
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <assert.h>
+#include <Core/PrepareRenderThread.hpp>
 
 namespace Component
 {
 	MeshRenderer::MeshRenderer() :
 		Component::ComponentBase<MeshRenderer>(),
-		PrepareElement(),
-		mesh(nullptr),
-		material(nullptr)
+		_scene(nullptr)
 	{
 	}
 
@@ -20,92 +19,75 @@ namespace Component
 	}
 
 	MeshRenderer::MeshRenderer(MeshRenderer &&o)
-		: ComponentBase<MeshRenderer>(std::move(o))
-		, PrepareElement(std::move(o)),
-		mesh(std::move(o.mesh)),
-		material(std::move(o.material))
+		: ComponentBase<MeshRenderer>(std::move(o)),
+		_scene(o._scene),
+		_key(o._key)
 	{
 	}
 
 	MeshRenderer &MeshRenderer::operator=(MeshRenderer &&o)
 	{
-		PrepareElement::operator=(std::move(o));
-		mesh = std::move(o.mesh);
-		material = std::move(o.material);
+		_scene = o._scene;
+		_key = o._key;
 		return *this;
 	}
 
 	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r)
 	{
-		initOctree(scene, entityId);
+		_scene = scene;
+		_key = scene->getInstance<AGE::Threads::Prepare>()->addMesh();
+		scene->getLink(entityId)->registerOctreeObject(_key);
+		assert(!_key.invalid());
 		setMesh(r);
 	}
 
 	void MeshRenderer::reset(AScene *scene)
 	{
-		resetOctree(scene, entityId);
-		mesh = nullptr;
-		material = nullptr;
+		assert(!_key.invalid());
+		scene->getLink(entityId)->unregisterOctreeObject(_key);
+		scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
+		_key = AGE::PrepareKey();
 	}
 
-	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh)
+	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<AGE::MeshInstance> &mesh)
 	{
-		mesh = _mesh;
-		updateOctree();
+		_mesh = mesh;
+		updateGeometry();
 		return (*this);
 	}
 
 	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
 	{
-		return mesh;
+		return _mesh;
 	}
 
-	MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_material)
+	MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &material)
 	{
-		material = _material;
-		updateOctree();
+		_material = material;
+		updateGeometry();
 		return (*this);
 	}
 
 	std::shared_ptr<AGE::MaterialSetInstance> MeshRenderer::getMaterial()
 	{
-		return material;
+		return _material;
 	}
 
-	MeshRenderer &MeshRenderer::updateOctree()
+	void MeshRenderer::updateGeometry()
 	{
 		assert(_scene != nullptr);
 
-		if (this->mesh == nullptr || this->material == nullptr)
-			return (*this);
-		assert(material->datas.size() > 0);
+		if (this->_mesh == nullptr || this->_material == nullptr)
+			return;
+		assert(_material->datas.size() > 0);
 		AGE::Vector<AGE::MaterialInstance> materials;
-		for (auto &e : mesh->subMeshs)
+		for (auto &e : _mesh->subMeshs)
 		{
-			if (e.defaultMaterialIndex >= material->datas.size())
-				materials.push_back(material->datas[0]);
+			if (e.defaultMaterialIndex >= _material->datas.size())
+				materials.push_back(_material->datas[0]);
 			else
-				materials.push_back(material->datas[e.defaultMaterialIndex]);
+				materials.push_back(_material->datas[e.defaultMaterialIndex]);
 		}
-		_scene->getInstance<AGE::Threads::Prepare>()->updateGeometry(_OTKey, mesh->subMeshs, materials);
-		return (*this);
-	}
-
-	AGE::PrepareElement &MeshRenderer::initOctree(::AScene *scene, ENTITY_ID entityId)
-	{
-		_scene = scene;
-		_OTKey = scene->getInstance<AGE::Threads::Prepare>()->addCullableElement();
-		scene->getLink(entityId)->registerOctreeObject(_OTKey);
-		assert(!_OTKey.invalid());
-		return (*this);
-	}
-
-	AGE::PrepareElement &MeshRenderer::resetOctree(::AScene *scene, ENTITY_ID entityId)
-	{
-		assert(!_OTKey.invalid());
-		scene->getLink(entityId)->unregisterOctreeObject(_OTKey);
-		scene->getInstance<AGE::Threads::Prepare>()->removeElement(_OTKey);
-		_OTKey = AGE::PrepareKey();
-		return (*this);
+		_scene->getInstance<AGE::Threads::Prepare>()->updateGeometry(_key, _mesh->subMeshs, materials);
 	}
 }
