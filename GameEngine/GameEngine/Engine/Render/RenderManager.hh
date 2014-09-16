@@ -114,15 +114,11 @@ namespace gl
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
 
 		// RenderOnScreen
-		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect);
+		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPass> const &renderPass);
+		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPostEffect> const &renderPostEffect); 
 		Key<RenderOnScreen> getRenderOnScreen(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderOnScreen);
 		RenderManager &configRenderOnScreen(Key<RenderOnScreen> const &renderOnScreen, glm::ivec4 const &rect, GLenum mode);
-
-		RenderManager &branch(Key<RenderPass> const &from, Key<RenderPass> const &to);
-		RenderManager &branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to);
-		RenderManager &branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to);
-		RenderManager &branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to);
 
 		// Pipeline
 		Key<Pipeline> addPipeline();

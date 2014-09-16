@@ -19,7 +19,7 @@
 	RenderManager &pushSetBlendFuncTask##name##(Key<##name##> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha); \
 	RenderManager &pushSetBlendFuncTask##name##(Key<##name##> const &key, GLenum src, GLenum dest); \
 	RenderManager &pushSetBlendConstantTask##name##(Key<##name##> const &key, glm::vec4 const &blendPass); \
-	RenderManager &RenderManager::pushSetBlendStateTask##name##(Key<##name##> const &key, int drawBuffer, bool state); \
+	RenderManager &pushSetBlendStateTask##name##(Key<##name##> const &key, int drawBuffer, bool state); \
 	RenderManager &popTask##name##(Key<##name##> const &key);
 
 #define GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(name) \
@@ -31,11 +31,12 @@
 	RenderManager &createBufferSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat); \
 	RenderManager &createBufferNotSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat); \
 	RenderManager &deleteBuffer##name##(Key<##name##> const &key, GLenum attachement); \
-	RenderManager &pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement); \
+	RenderManager &pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPostEffect> const &r); \
+	RenderManager &pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPass> const &r); \
 	RenderManager &popInput##name##(Key<##name##> const &key); \
 	RenderManager &pushTarget##name##(Key<##name##> const &key, GLenum attachement); \
 	RenderManager &popTarget##name##(Key<##name##> const &key); \
-	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement); \
+	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, RenderOffScreen const &render); \
 	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f);
 
 
@@ -276,13 +277,22 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 		return (*this);																																	\
 	}																																					\
 																																						\
-	RenderManager &RenderManager::pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement)								\
+	RenderManager &RenderManager::pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPass> const &r)								\
 	{																																					\
 		name *render = get##name##(key);																									\
-		render->pushInputSampler(s, attachement);																								\
+		RenderPass *renderPass = getRenderPass(r); \
+		render->pushInputSampler(s, attachement, *renderPass);																								\
 		return (*this);																																	\
 	}																																					\
-																																						\
+\
+	RenderManager &RenderManager::pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPostEffect> const &r) \
+	{\
+		name *render = get##name##(key); \
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);\
+		render->pushInputSampler(s, attachement, *renderPostEffect); \
+		return (*this);\
+	}\
+	\
 	RenderManager &RenderManager::popInput##name##(Key<##name##> const &key)																			\
 	{																																					\
 		name *render = get##name##(key);																									\
@@ -304,10 +314,10 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 		return (*this);																																	\
 	}																																					\
 																																						\
-	RenderManager &RenderManager::useInputBuffer##name##(Key<##name##> const &key, GLenum attachement)													\
+	RenderManager &RenderManager::useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, RenderOffScreen const &renderOffScreen)													\
 	{																																					\
 		name *render = get##name##(key);																										\
-		render->useInputBuffer(attachement); \
+		render->useInputBuffer(attachement, renderOffScreen); \
 		return (*this); \
 	} \
 	\

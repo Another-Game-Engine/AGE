@@ -48,6 +48,15 @@ namespace gl
 			Draw(GeometryManager &g, Shader &s, GLenum mode);
 		};
 
+		struct Input
+		{
+			Key<Sampler> sampler;
+			GLenum attachement;
+			RenderOffScreen const &render;
+			Input(Key<Sampler> const &sampler, GLenum attachement, RenderOffScreen const &render);
+			~Input();
+		};
+
 	public:
 		virtual ~Render();
 
@@ -79,11 +88,7 @@ namespace gl
 		Render &setMode(GLenum mode);
 		GLenum getMode() const;
 
-		// Render attach to this render
-		Render &branchInput(RenderOffScreen const &input);
-		Render &unBranchInput();
-		
-		Render &pushInputSampler(Key<Sampler> const &key, GLenum attachement);
+		Render &pushInputSampler(Key<Sampler> const &key, GLenum attachement, RenderOffScreen const &render);
 		Render &popInputSampler();
 
 	protected:
@@ -95,8 +100,7 @@ namespace gl
 
 		glm::ivec4 _rect;
 		AGE::Vector<Task> _tasks;
-		AGE::Vector<std::pair<Key<Sampler>, GLenum>> _inputSamplers;
-		RenderOffScreen const *_branch;
+		AGE::Vector<Input> _inputSamplers;
 		Draw &_draw;
 	};
 
@@ -152,7 +156,7 @@ namespace gl
 		RenderOffScreen &createBufferNotSamplable(GLenum attachement, GLenum internalFormat);
 		RenderBuffer const *getBufferNotSamplable(GLenum attachement) const;
 		RenderOffScreen &deleteBuffer(GLenum attachement);
-		RenderOffScreen &useInputBuffer(GLenum attachement);
+		RenderOffScreen &useInputBuffer(GLenum attachement, RenderOffScreen const &render);
 
 		RenderOffScreen &pushSetUniformMat4Task(Key<Uniform> const &key, size_t location);
 		RenderOffScreen &pushSetUniformMat3Task(Key<Uniform> const &key, size_t location);

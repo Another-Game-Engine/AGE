@@ -515,7 +515,6 @@ namespace gl
 		geometryManager.createQuadSimpleForm();
 		Shader *shader = getShader(s);
 		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleFormGeo(QUAD), *shader, geometryManager, locationStorage);
-		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
 		return (key);
 	}
@@ -533,14 +532,26 @@ namespace gl
 	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect);
 	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
 
-	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect)
+	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPass> const &r)
 	{
 		Key<RenderOnScreen> key;
-
+		RenderPass *renderPass = getRenderPass(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
 		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager);
-		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPass);
+		element->configRect(rect);
+		return (key);
+	}
+
+	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPostEffect> const &r)
+	{
+		Key<RenderOnScreen> key;
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
+		createPreShaderQuad();
+		geometryManager.createQuadSimpleForm();
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager);
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
 		element->configRect(rect);
 		return (key);
 	}
@@ -556,38 +567,6 @@ namespace gl
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderOnScreen);
-
-	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPass> const &to)
-	{
-		RenderPass *renderPassFrom = getRenderPass(from);
-		RenderPass *renderPassTo = getRenderPass(to);
-		renderPassTo->branchInput(*renderPassFrom);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to)
-	{
-		RenderPass *renderPassFrom = getRenderPass(from);
-		RenderPostEffect *renderPassTo = getRenderPostEffect(to);
-		renderPassTo->branchInput(*renderPassFrom);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to)
-	{
-		RenderPass *renderPassFrom = getRenderPass(from);
-		RenderOnScreen *renderPassTo = getRenderOnScreen(to);
-		renderPassTo->branchInput(*renderPassFrom);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to)
-	{
-		RenderPostEffect *renderPassFrom = getRenderPostEffect(from);
-		RenderOnScreen *renderPassTo = getRenderOnScreen(to);
-		renderPassTo->branchInput(*renderPassFrom);
-		return (*this);
-	}
 
 	Key<Pipeline> RenderManager::addPipeline()
 	{
@@ -666,7 +645,6 @@ namespace gl
 		RenderOnScreen *renderOnScreen = getRenderOnScreen(o);
 		RenderPass *renderPass = getRenderPass(r);
 		renderPass->setDraw(objectRender, 0, objectRender.size());
-		renderOnScreen->branchInput(*renderPass);
 		renderPass->render();
 		renderOnScreen->render();
 		return (*this);

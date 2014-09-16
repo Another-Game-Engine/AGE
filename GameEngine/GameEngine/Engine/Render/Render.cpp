@@ -11,7 +11,6 @@ namespace gl
 {
 	Render::Render(Draw *draw)
 		: _rect(0, 0, 512, 512),
-		_branch(NULL),
 		_draw(*draw)
 	{
 
@@ -246,22 +245,10 @@ namespace gl
 		return (_draw.mode);
 	}
 
-	Render &Render::branchInput(RenderOffScreen const &input)
-	{
-		_branch = &input;
-		return (*this);
-	}
-
-	Render &Render::unBranchInput()
-	{
-		_branch = NULL;
-		return (*this);
-	}
-
-	Render &Render::pushInputSampler(Key<Sampler> const &key, GLenum attachement)
+	Render &Render::pushInputSampler(Key<Sampler> const &key, GLenum attachement, RenderOffScreen const &render)
 	{
 		if (_draw.shader.hasSampler(key))
-			_inputSamplers.push_back(std::make_pair(key, attachement));
+			_inputSamplers.push_back(Input(key, attachement, render));
 		else
 			assert(0);
 		return (*this);
@@ -275,14 +262,11 @@ namespace gl
 
 	void Render::updateInput()
 	{
-		if (_branch != NULL)
+		for (size_t index = 0; index < _inputSamplers.size(); ++index)
 		{
-			for (size_t index = 0; index < _inputSamplers.size(); ++index)
-			{
-				Texture2D const *text = NULL;
-				if ((text = _branch->getBufferSamplable(_inputSamplers[index].second)) != NULL)
-					_draw.shader.setSampler(_inputSamplers[index].first, *text);
-			}
+			Texture2D const *text = NULL;
+			if ((text = _inputSamplers[index].render.getBufferSamplable(_inputSamplers[index].attachement)) != NULL)
+				_draw.shader.setSampler(_inputSamplers[index].sampler, *text);
 		}
 	}
 
@@ -414,10 +398,10 @@ namespace gl
 		}
 	}
 
-	RenderOffScreen &RenderOffScreen::useInputBuffer(GLenum attachement)
+	RenderOffScreen &RenderOffScreen::useInputBuffer(GLenum attachement, RenderOffScreen const &render)
 	{
-		auto &search = _branch->_buffer.find(attachement);
-		if (search == _branch->_buffer.end())
+		auto &search = render._buffer.find(attachement);
+		if (search == render._buffer.end())
 			return (*this);
 		auto &element = _buffer.find(attachement);
 		if (element == _buffer.end())
@@ -623,6 +607,19 @@ namespace gl
 		shader(s),
 		mode(mode)
 	{
+	}
+
+	Render::Input::Input(Key<Sampler> const &sampler, GLenum attachement, RenderOffScreen const &render)
+		: sampler(sampler),
+		attachement(attachement),
+		render(render)
+	{
+
+	}
+	
+	Render::Input::~Input()
+	{
+
 	}
 
 	RenderPass::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, MaterialManager &m, GLenum mode)
