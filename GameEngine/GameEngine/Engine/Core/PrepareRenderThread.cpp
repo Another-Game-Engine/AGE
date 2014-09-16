@@ -363,7 +363,7 @@ namespace AGE
 						++total;
 					else
 						continue;
-					if (frustum.sphereIn(e.boundingInfo, e.position) /*frustum.pointIn(e.position)*/ == true)
+					if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ frustum.pointIn(e.position) == true)
 					{
 						if (e.hasMoved)
 						{
