@@ -1,4 +1,4 @@
-#include 330
+#version 330
 
 layout (location = 0) out vec4 color;
 
@@ -14,12 +14,12 @@ uniform float range_light;
 
 uniform mat4 view_matrix;
 
-uniform sampler2D depth_scene;
-uniform sampler2D normal_scene;
+uniform sampler2D depth_buffer;
+uniform sampler2D normal_buffer;
 
 in vec2 interpolated_texCoord;
 
-vec3 getWoldPosition(float depth, vec2 screenPos, mat4 viewProj)
+vec3 getWorldPosition(float depth, vec2 screenPos, mat4 viewProj)
 {
 	vec4 worldPos = vec4(screenPos, depth, 1.0f);
 	worldPos = inverse(viewProj) * worldPos;
@@ -30,9 +30,9 @@ vec3 getWoldPosition(float depth, vec2 screenPos, mat4 viewProj)
 void main()
 {
 	mat4 modelView = projection_matrix * view_matrix;
-	float depth = texture(depth_scene, interpolated_texCoord).x;
+	float depth = texture(depth_buffer, interpolated_texCoord).x;
 	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, modelView);
 	vec3 lightDir = worldPos - position_light;
-	float lambert = max(0.0f, dot(normalize(texture(normal_scene, interpolated_texCoord).xyz * 2 - 1)), normalize(lightDir)));
-	color = lambert;	
+	float lambert = max(0.0f, dot(normalize((texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f)), normalize(lightDir)));
+	color = vec4(lambert);	
 }

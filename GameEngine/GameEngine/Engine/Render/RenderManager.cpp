@@ -120,6 +120,7 @@ namespace gl
 		return (shader->addUniform(flag, value));
 	}
 
+
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, float value)
 	{
 		Shader *shader;
@@ -530,6 +531,7 @@ namespace gl
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect);
+	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
 
 	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect)
 	{
