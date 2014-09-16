@@ -21,12 +21,12 @@ void BenchmarkScene::initRendering()
 	{
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
-		//key.Accum.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
+		key.Accum.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
 
 		// get from the shader the information key
 		key.global_state = _renderManager->addUniformBlock();
 		_renderManager->addShaderInterfaceBlock(key.getBuff.shader, "global_state", key.global_state);
-		//_renderManager->addShaderInterfaceBlock(key.Accum.shader, "global_state", key.global_state);
+		_renderManager->addShaderInterfaceBlock(key.Accum.shader, "global_state", key.global_state);
 
 		// bind the key on drawable info (material-transformation)
 		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_color", glm::vec4(1.0f)));
@@ -34,12 +34,10 @@ void BenchmarkScene::initRendering()
 		_renderManager->bindTransformationToShader(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "model_matrix", glm::mat4(1.f)));
 		
 		// found uniform
-		//key.Accum.position_light = _renderManager->addShaderUniform(key.Accum.shader, "position_light", glm::vec3(0.0f));
-		//key.Accum.color_light = _renderManager->addShaderUniform(key.Accum.shader, "color_light", glm::vec3(0.f));
-		//key.Accum.power_light = _renderManager->addShaderUniform(key.Accum.shader, "power_light", float(1.0f));
-		//key.Accum.range_light = _renderManager->addShaderUniform(key.Accum.shader, "range_light", float(1.0f));
-		//key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
-		//key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
+		key.Accum.position_light = _renderManager->addShaderUniform(key.Accum.shader, "position_light", glm::vec3(0.0f));
+		key.Accum.range_light = _renderManager->addShaderUniform(key.Accum.shader, "range_light", float(1.0f));
+		key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
+		key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
 
 
 		// create renderpass and set it
@@ -57,17 +55,17 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
 		
 		// create renderPostEffect
-		//key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
-		//_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, true);
-		//_renderManager->pushSetClearValueTaskRenderPostEffect(key.Accum.renderPostEffect, glm::vec4(1.f, 0.25f, 0.25f, 1.0f));
-		//_renderManager->pushClearTaskRenderPostEffect(key.Accum.renderPostEffect, true, true, false);
-		//_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
-		//_renderManager->createBufferSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGBA8);
-		//_renderManager->pushSetBlendEquationTaskRenderPostEffect(key.Accum.renderPostEffect, GL_FUNC_ADD);
-		//_renderManager->pushSetBlendFuncTaskRenderPostEffect(key.Accum.renderPostEffect, GL_ONE, GL_ONE);
-		//_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, true);
-		//_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_DEPTH_ATTACHMENT, key.getBuff.renderPass);
-		//_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.normal_buffer, GL_COLOR_ATTACHMENT1, key.getBuff.renderPass);
+		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, true);
+		_renderManager->pushSetClearValueTaskRenderPostEffect(key.Accum.renderPostEffect, glm::vec4(1.f, 0.25f, 0.25f, 1.0f));
+		_renderManager->pushClearTaskRenderPostEffect(key.Accum.renderPostEffect, true, true, false);
+		_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
+		_renderManager->createBufferSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+		_renderManager->pushSetBlendEquationTaskRenderPostEffect(key.Accum.renderPostEffect, GL_FUNC_ADD);
+		_renderManager->pushSetBlendFuncTaskRenderPostEffect(key.Accum.renderPostEffect, GL_ONE, GL_ONE);
+		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, true);
+		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_DEPTH_ATTACHMENT, key.getBuff.renderPass);
+		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.normal_buffer, GL_COLOR_ATTACHMENT1, key.getBuff.renderPass);
 
 		// create renderOnscreen and set it
 		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.getBuff.renderPass);

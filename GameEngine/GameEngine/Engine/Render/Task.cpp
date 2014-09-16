@@ -153,6 +153,11 @@ namespace gl
 		glUniform4f(CONVERT(unsigned int, 0), CONVERT(glm::vec4, 1).x, CONVERT(glm::vec4, 1).y, CONVERT(glm::vec4, 1).z, CONVERT(glm::vec4, 1).w);
 	}
 
+	void setUniformVec3(void **data)
+	{
+		glUniform3f(CONVERT(unsigned int, 0), CONVERT(glm::vec4, 1).x, CONVERT(glm::vec4, 1).y, CONVERT(glm::vec4, 1).z);
+	}
+
 	void setUniformSampler(void **data)
 	{
 		glActiveTexture(GL_TEXTURE0 + CONVERT(GLuint, 0));

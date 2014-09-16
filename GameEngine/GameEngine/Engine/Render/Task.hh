@@ -34,6 +34,7 @@ namespace gl
 	void setUniformFloat(void **);
 	void setUniformFloatbyLocation(void **);
 	void setUniformVec4(void **);
+	void setUniformVec3(void **data);
 	void setUniformVec4byLocation(void **);
 	void setUniformSampler(void **);
 	void setFragDataLocation(void **);

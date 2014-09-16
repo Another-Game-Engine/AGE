@@ -60,12 +60,14 @@ namespace gl
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat3 const &value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, float value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::vec4 const &value);
+		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::vec3 const &value);
 		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
-		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
+		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec3 const &vec3);
 		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
 		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
 		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3);
-		
+		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
+
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		RenderManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);

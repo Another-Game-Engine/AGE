@@ -35,7 +35,6 @@ struct Deferred_accum_light
 	gl::Key<gl::RenderPostEffect> renderPostEffect;
 	gl::Key<gl::Uniform> position_light;
 	gl::Key<gl::Uniform> color_light;
-	gl::Key<gl::Uniform> power_light;
 	gl::Key<gl::Uniform> range_light;
 	gl::Key<gl::Sampler> depth_buffer;
 	gl::Key<gl::Sampler> normal_buffer;

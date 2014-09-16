@@ -82,50 +82,45 @@ namespace gl
 
 	Key<Uniform> RenderManager::getShaderUniform(Key<Shader> const &key, size_t target)
 	{
-		Shader const *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader const *shader = getShader(key);
 		return (shader->getUniform(target));
 	}
 
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag));
 	}
 
+
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat4 const &value)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat3 const &value)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
+		return (shader->addUniform(flag, value));
+	}
+
+	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec3 const &value)
+	{
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec4 const &value)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
 
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, float value)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
@@ -144,6 +139,15 @@ namespace gl
 		if ((shader = getShader(keyShader)) == NULL)
 			return (*this);
 		shader->setUniform(key, vec4);
+		return (*this);
+	}
+
+	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec3 const &vec3)
+	{
+		Shader *shader;
+		if ((shader = getShader(keyShader)) == NULL)
+			return (*this);
+		shader->setUniform(key, vec3);
 		return (*this);
 	}
 

@@ -250,6 +250,17 @@ namespace gl
 		setUniformTask<glm::mat3>(*task, setUniformMat3, (void *)&value);
 		return (key);
 	}
+
+	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec3 const &value)
+	{
+		Key<Uniform> key;
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		_uniforms[key] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
+		return (key);
+	}
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec4 const &value)
 	{
@@ -291,6 +302,13 @@ namespace gl
 	{
 		Task *task = getUniform(key);
 		setUniformTask<glm::vec4>(*task, setUniformVec4, (void *)&value);
+		return (*this);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec3 const &value)
+	{
+		Task *task = getUniform(key);
+		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
 		return (*this);
 	}
 
