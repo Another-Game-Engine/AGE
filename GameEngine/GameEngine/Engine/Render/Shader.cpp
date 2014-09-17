@@ -124,6 +124,7 @@ namespace gl
 		use();
 		if ((location = glGetUniformLocation(_progId, flag)) == -1)
 			assert(0);
+		glUniform1i(location, location);
 		return (location);
 	}
 

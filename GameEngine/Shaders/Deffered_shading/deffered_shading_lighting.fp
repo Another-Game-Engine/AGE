@@ -32,12 +32,12 @@ void main()
 	float dist = distance(worldPos, position_light);
 	float attenuation = 1.0f;
 	float lambert = 0.f;
+	vec3 normal = (texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f);
 	if (dist < range_light)
 	{
 		attenuation = 1.0f / (1.0f + 0.1f * dist + 0.01f * dist * dist);
 		vec3 lightDir = worldPos - position_light;
-		lambert = max(0.0f, dot(normalize((texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f)), normalize(lightDir)));
+		lambert = max(0.0f, dot(normalize(normal), normalize(lightDir)));
 	}
-	color = vec4(lambert * attenuation);
-	color += vec4(texture(normal_buffer, interpolated_texCoord).xyz, 1.0f);
+	color = vec4(lambert);
 }
