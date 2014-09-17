@@ -23,6 +23,8 @@ namespace AGE
 	struct DrawableCollection;
 	struct SubMeshInstance;
 
+	class OctreeNode;
+
 	class PrepareRenderThread : public ThreadQueue, public Dependency<PrepareRenderThread>
 	{
 	public:
@@ -47,6 +49,8 @@ namespace AGE
 		glm::mat4 const &getProjection(const PrepareKey &id);
 
 	private:
+		OctreeNode *_octree;
+
 		std::weak_ptr<AScene> scene;
 
 		Vector<Mesh> _meshs;

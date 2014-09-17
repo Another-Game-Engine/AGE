@@ -1,18 +1,20 @@
 #include <Core/PrepareRenderThread.hpp>
 #include <Core/PrepareRenderThreadCommand.hpp>
 #include <Core/AScene.hh>
-#include <Utils/Frustum.hpp>
+#include <Utils/Frustum.hh>
 #include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Core/PreparableObject.hh>
+#include <Core/CullableObjects.hh>
+#include <Core/OctreeNode.hh>
 
 namespace AGE
 {
-	PrepareRenderThread::PrepareRenderThread()
+	PrepareRenderThread::PrepareRenderThread() :
+		_octree(new OctreeNode)
 	{
 	}
 
@@ -423,29 +425,8 @@ namespace AGE
 						{
 							e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 
-							glm::vec4		boundingBox[8];
-
-							boundingBox[0] = glm::vec4(e.minBB.x, e.minBB.y, e.minBB.z, 1.0f);
-							boundingBox[1] = glm::vec4(e.maxBB.x, e.minBB.y, e.minBB.z, 1.0f);
-							boundingBox[2] = glm::vec4(e.maxBB.x, e.maxBB.y, e.minBB.z, 1.0f);
-							boundingBox[3] = glm::vec4(e.maxBB.x, e.maxBB.y, e.maxBB.z, 1.0f);
-							boundingBox[4] = glm::vec4(e.maxBB.x, e.minBB.y, e.maxBB.z, 1.0f);
-							boundingBox[5] = glm::vec4(e.minBB.x, e.maxBB.y, e.minBB.z, 1.0f);
-							boundingBox[6] = glm::vec4(e.minBB.x, e.maxBB.y, e.maxBB.z, 1.0f);
-							boundingBox[7] = glm::vec4(e.minBB.x, e.minBB.y, e.maxBB.z, 1.0f);
-
-							// Transform the bounding box
-							for (size_t i = 0; i < 8; ++i)
-								boundingBox[i] = e.transformation * boundingBox[i];
-							// Find the AA bounding box
-							e.minAABB = glm::vec3(boundingBox[0]);
-							e.maxAABB = glm::vec3(boundingBox[0]);
-
-							for (size_t i = 1; i < 8; ++i)
-							{
-								e.minAABB = glm::min(e.minAABB, glm::vec3(boundingBox[i]));
-								e.maxAABB = glm::max(e.maxAABB, glm::vec3(boundingBox[i]));
-							}
+							// compute the new bounding box
+							e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
 
 							e.hasMoved = false;
 						}

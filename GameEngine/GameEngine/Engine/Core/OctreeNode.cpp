@@ -1,5 +1,6 @@
 
 #include <Core/OctreeNode.hh>
+#include <Core/CullableInterfaces.hh>
 
 namespace AGE
 {
@@ -17,17 +18,17 @@ namespace AGE
 
 	}
 
-	OctreeNode	*OctreeNode::AddElement(Drawable *toAdd)
+	OctreeNode	*OctreeNode::AddElement(CullableObject *toAdd)
 	{
 		return (NULL);
 	}
 
-	OctreeNode	*OctreeNode::MoveElement(Drawable *toAdd)
+	OctreeNode	*OctreeNode::MoveElement(CullableObject *toAdd)
 	{
 		return (NULL);
 	}
 
-	OctreeNode	*OctreeNode::removeElement(Drawable *toRm)
+	OctreeNode	*OctreeNode::removeElement(CullableObject *toRm)
 	{
 		return (NULL);
 	}

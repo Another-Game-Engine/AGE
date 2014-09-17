@@ -1,5 +1,5 @@
 
-#include <glm/glm.hpp>
+#include <Utils/AABoundingBox.hh>
 
 #define		MAX_ELEMENT_PER_NODE	4
 
@@ -18,7 +18,7 @@ namespace AGE
 		NBR_OCTREE_NODES
 	};
 
-	class	Drawable;
+	class	CullableObject;
 
 	class	OctreeNode
 	{
@@ -26,17 +26,16 @@ namespace AGE
 		OctreeNode();
 		~OctreeNode();
 
-		OctreeNode	*AddElement(Drawable *toAdd);
-		OctreeNode	*MoveElement(Drawable *toAdd);
-		OctreeNode	*removeElement(Drawable *toRm);
+		OctreeNode	*AddElement(CullableObject *toAdd);
+		OctreeNode	*MoveElement(CullableObject *toAdd);
+		OctreeNode	*removeElement(CullableObject *toRm);
 
 	private:
 		OctreeNode		*_father;
 		OctreeNode		*_sons[NBR_OCTREE_NODES];
 
-		glm::vec3	_minPoint;
-		glm::vec3	_maxPoint;
+		AABoundingBox	_node;
 
-		Drawable	*_elements[MAX_ELEMENT_PER_NODE];
+		CullableObject	*_elements[MAX_ELEMENT_PER_NODE];
 	};
 }
