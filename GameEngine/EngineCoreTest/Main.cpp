@@ -28,9 +28,12 @@
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
 #include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
+#include <Utils/Imgui.hpp>
 
 //CONFIGS
 #include <CONFIGS.hh>
+
+
 
 #include <thread>
 
@@ -71,6 +74,7 @@ int			main(int ac, char **av)
 	auto renderManager = e->getInstance<gl::RenderManager>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
+	e->setInstance<AGE::Imgui>();
 
 	// Important, we have to launch the command queue from the sender thread
 	//context->launchCommandQueue();

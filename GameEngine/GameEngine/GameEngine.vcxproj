@@ -280,6 +280,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
+    <ClInclude Include="Engine\Configuration.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
     <ClInclude Include="Engine\Core\Link.hpp" />
@@ -404,6 +405,7 @@
     <ClInclude Include="Engine\Utils\Frustum.hpp" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\Imgui.hpp" />
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />

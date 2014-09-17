@@ -1,4 +1,6 @@
 #include <Scenes/BenchmarkScene.hpp>
+#include <Configuration.hpp>
+#include <Utils/Imgui.hpp>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -144,6 +146,12 @@ bool BenchmarkScene::userUpdate(double time)
 	++_chunkFrame;
 	_timeCounter += time;
 	_chunkCounter += time;
+
+#ifdef USE_IMGUI
+			getInstance<AGE::Imgui>()->push([](){
+				std::cout << "coucou from main thread !" << std::endl;
+			});
+#endif
 
 	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 100.0f * (float)time, glm::vec3(0, 1, 0)));
 

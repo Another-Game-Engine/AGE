@@ -1,6 +1,14 @@
 #include "RenderThread.hpp"
 #include <Utils/ThreadQueueCommands.hpp>
 
+#include <Configuration.hpp>
+
+#ifdef USE_IMGUI
+
+#include <Utils/Imgui.hpp>
+
+#endif
+
 using namespace AGE;
 
 bool RenderThread::_init()
@@ -34,6 +42,12 @@ bool RenderThread::_update()
 	_commandQueue.getDispatcher()
 		.handle<RendCtxCommand::Flush>([&](const RendCtxCommand::Flush& msg)
 	{
+#ifdef USE_IMGUI
+			getDependencyManager().lock()->getInstance<AGE::Imgui>()->push([](){
+				std::cout << "coucou from render thread !" << std::endl;
+			});
+		getDependencyManager().lock()->getInstance<AGE::Imgui>()->update();
+#endif
 		_context->swapContext();
 	})
 		.handle<RendCtxCommand::GetScreenSize>([&](RendCtxCommand::GetScreenSize& msg)

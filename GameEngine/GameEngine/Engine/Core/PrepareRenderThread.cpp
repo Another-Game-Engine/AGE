@@ -9,6 +9,14 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Core/PreparableObject.hh>
+#include <Configuration.hpp>
+
+#ifdef USE_IMGUI
+
+#include <Utils/Imgui.hpp>
+
+#endif
+
 
 namespace AGE
 {
@@ -439,6 +447,12 @@ namespace AGE
 				});
 			}
 			_octreeDrawList.clear();
+#ifdef USE_IMGUI
+			getDependencyManager().lock()->getInstance<AGE::Imgui>()->push([]()
+			{
+				std::cout << "coucou from prepare thread !" << std::endl;
+			});
+#endif
 			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
 			renderThread->getCommandQueue().releaseReadability();
 

@@ -249,6 +249,8 @@
     <ClInclude Include="Engine\TMQ\message.hpp" />
     <ClInclude Include="Engine\TMQ\queue.hpp" />
     <ClInclude Include="Engine\TMQ\templateDispatcher.hpp" />
+    <ClInclude Include="Engine\Configuration.hpp" />
+    <ClInclude Include="Engine\Utils\Imgui.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
