@@ -27,8 +27,7 @@ namespace AGE
 	{
 	}
 
-	PointLight::PointLight()
-		: PreparableObject(),
+	PointLight::PointLight() :
 		power(1.0f),
 		range(1.0f),
 		color(1.0f)

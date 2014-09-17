@@ -14,7 +14,7 @@
 #include <Render/MaterialManager.hh>
 #include <Render/Render.hh>
 #include <Render/Shader.hh>
-#include <Core/PreparableObject.hh>
+#include <Core/CullableObjects.hh>
 #include <Render/MacroRenderManager.hh>
 #include <Render/LocationStorage.hh>
 #include <tmq/message.hpp>
