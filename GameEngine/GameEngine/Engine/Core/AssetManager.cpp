@@ -224,8 +224,6 @@ namespace AGE
 		mesh.bounding = data.boundingInfos;
 		//		mesh.name = data.name; // TODO
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
-		mesh.vertexPool = _pools.find(data.infos)->second.first;
-		mesh.indexPool = _pools.find(data.infos)->second.second;
 		geometryManager.attachVerticesToVertexPool(mesh.vertices, pools.first);
 		geometryManager.attachIndicesToIndexPool(mesh.indices, pools.second);
 	}

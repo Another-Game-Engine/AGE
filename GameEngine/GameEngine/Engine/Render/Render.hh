@@ -54,6 +54,7 @@ namespace gl
 			GLenum attachement;
 			RenderOffScreen const &render;
 			Input(Key<Sampler> const &sampler, GLenum attachement, RenderOffScreen const &render);
+			Input(Input const &copy);
 			~Input();
 		};
 
@@ -191,12 +192,13 @@ namespace gl
 		{
 		public:
 			Key<Vertices> quad;
+			Key<Indices> idQuad;
 
 		public:
-			Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad);
+			Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad, Key<Indices> const &id);
 		};
 	public:
-		RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g, LocationStorage &l);
+		RenderPostEffect(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l);
 		virtual ~RenderPostEffect();
 
 		virtual Render &render();

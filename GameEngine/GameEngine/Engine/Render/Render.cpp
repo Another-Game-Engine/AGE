@@ -19,7 +19,7 @@ namespace gl
 	Render::~Render()
 	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
-		{	
+		{
 			for (uint8_t param = 0; param < _tasks[index].nbrParams; ++param)
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
@@ -532,8 +532,8 @@ namespace gl
 	}
 
 
-	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g, LocationStorage &l)
-		: RenderOffScreen(new Draw(g, l, s, GL_TRIANGLES, key)),
+	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l)
+		: RenderOffScreen(new Draw(g, l, s, GL_TRIANGLES, key, id)),
 		_draw((Draw &)Render::_draw)
 	{
 
@@ -552,7 +552,8 @@ namespace gl
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		_draw.shader.update();
-		_draw.geometryManager.draw(_draw.mode, _draw.quad);
+		_draw.geometryManager.draw(_draw.mode, _draw.idQuad, _draw.quad);
+		glFlush();
 		return (*this);
 	}
 
@@ -577,6 +578,7 @@ namespace gl
 			_tasks[index].func(_tasks[index].params);
 		_draw.shader.update();
 		_draw.geometryManager.draw(_draw.mode, _draw.quadId, _draw.quad);
+		glFlush();
 		return (*this);
 	}
 
@@ -616,6 +618,14 @@ namespace gl
 	{
 
 	}
+
+	Render::Input::Input(Input const &copy)
+		: sampler(copy.sampler),
+		attachement(copy.attachement),
+		render(copy.render)
+	{
+
+	}
 	
 	Render::Input::~Input()
 	{
@@ -631,9 +641,10 @@ namespace gl
 	{
 	}
 
-	RenderPostEffect::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad)
+	RenderPostEffect::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad, Key<Indices> const &id) 
 		: RenderOffScreen::Draw(g, l, s, mode),
-		quad(quad)
+		quad(quad),
+		idQuad(id)
 	{
 	}
 

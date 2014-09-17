@@ -27,7 +27,7 @@ vec3 getWorldPosition(float depth, vec2 screenPos, mat4 viewProj)
 void main()
 {
 	mat4 modelView = projection_matrix * view_matrix;
-	float depth = texture(depth_buffer, interpolated_texCoord).x;
+	float depth = texture(depth_buffer, interpolated_texCoord).z;
 	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, modelView);
 	float dist = distance(worldPos, position_light);
 	float attenuation = 1.0f;
@@ -39,4 +39,5 @@ void main()
 		lambert = max(0.0f, dot(normalize((texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f)), normalize(lightDir)));
 	}
 	color = vec4(lambert * attenuation);
+	color += vec4(texture(normal_buffer, interpolated_texCoord).xyz, 1.0f);
 }

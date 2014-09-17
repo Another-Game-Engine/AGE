@@ -177,16 +177,9 @@ namespace gl
 	{
 		GLint id = texture.getId();
 		GLenum type = texture.getType();
-		if (memcmp(task.params[1], &type, sizeof(GLenum)) != 0)
-		{
-			*(GLenum *)task.params[1] = texture.getType();
-			task.update = true;
-		}
-		if (memcmp(task.params[2], &id, sizeof(GLint)) != 0)
-		{
-			*(GLint *)task.params[2] = texture.getId();
-			task.update = true;
-		}
+		*(GLenum *)task.params[1] = texture.getType();
+		*(GLint *)task.params[2] = texture.getId();
+		task.update = true;
 	}
 
 	inline void Shader::setUniformBlockTask(Task &task, UniformBlock &ubo)

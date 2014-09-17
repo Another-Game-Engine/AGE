@@ -38,7 +38,6 @@ namespace gl
 
 		Pipeline &operator=(Pipeline const &p) = delete;
 
-		uint8_t _priority;
 		DrawType _type;
 		AGE::Vector<AGE::Drawable> const *_toRender;
 		AGE::Vector<Render *> _render;

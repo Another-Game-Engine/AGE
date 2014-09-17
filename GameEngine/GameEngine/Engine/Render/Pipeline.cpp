@@ -16,7 +16,9 @@ namespace gl
 
 	Pipeline::Pipeline(Pipeline const &copy)
 		: _type(copy._type),
-		_toRender(copy._toRender)
+		_toRender(copy._toRender),
+		_render(copy._render),
+		_renderPass(copy._renderPass)
 	{
 		_drawFunc[DrawType::NONE_OBJECT] = &Pipeline::drawNoneObject;
 		_drawFunc[DrawType::ALL_OBJECT] = &Pipeline::drawAllObject;

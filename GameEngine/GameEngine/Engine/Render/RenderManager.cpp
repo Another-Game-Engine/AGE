@@ -518,7 +518,7 @@ namespace gl
 
 		geometryManager.createQuadSimpleForm();
 		Shader *shader = getShader(s);
-		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleFormGeo(QUAD), *shader, geometryManager, locationStorage);
+		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleFormGeo(QUAD), geometryManager.getSimpleFormId(QUAD), *shader, geometryManager, locationStorage);
 		element->configRect(rect);
 		return (key);
 	}

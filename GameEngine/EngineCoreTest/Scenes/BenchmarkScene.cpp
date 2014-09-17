@@ -1,4 +1,5 @@
 #include <Scenes/BenchmarkScene.hpp>
+#include <Render/Pipeline.hh>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -19,6 +20,7 @@ void BenchmarkScene::initRendering()
 
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
 	{
+		glEnable(GL_TEXTURE_2D);
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
 		key.Accum.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
@@ -61,22 +63,31 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushClearTaskRenderPostEffect(key.Accum.renderPostEffect, true, true, false);
 		_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
 		_renderManager->createBufferSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGBA8);
-		_renderManager->pushSetBlendEquationTaskRenderPostEffect(key.Accum.renderPostEffect, GL_FUNC_ADD);
-		_renderManager->pushSetBlendFuncTaskRenderPostEffect(key.Accum.renderPostEffect, GL_ONE, GL_ONE);
-		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, true);
-		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_DEPTH_ATTACHMENT, key.getBuff.renderPass);
+		_renderManager->createBufferNotSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
+		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, false);
+	//	_renderManager->pushSetBlendEquationTaskRenderPostEffect(key.Accum.renderPostEffect, GL_FUNC_ADD);
+	//	_renderManager->pushSetBlendFuncTaskRenderPostEffect(key.Accum.renderPostEffect, GL_ONE, GL_ONE);
 		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.normal_buffer, GL_COLOR_ATTACHMENT1, key.getBuff.renderPass);
+		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_COLOR_ATTACHMENT0, key.getBuff.renderPass);
 
 		// create renderOnscreen and set it
-		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.getBuff.renderPass);
+		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.Accum.renderPostEffect);
 		_renderManager->pushClearTaskRenderOnScreen(key.getBuff.renderOnScreen, true, true, false);
 		_renderManager->pushSetTestTaskRenderOnScreen(key.getBuff.renderOnScreen, false, false, true);
-		_renderManager->pushSetClearValueTaskRenderOnScreen(key.getBuff.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+		_renderManager->pushSetClearValueTaskRenderOnScreen(key.getBuff.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));	
+
 		
 		// create the pipeline and set it with both render element add before
 		key.getBuff.pipeline = _renderManager->addPipeline();
 		_renderManager->pushRenderPassPipeline(key.getBuff.pipeline, key.getBuff.renderPass);
-		_renderManager->pushRenderOnScreenPipeline(key.getBuff.pipeline, key.getBuff.renderOnScreen);
+		
+	
+		// create the pipeline for accum
+		key.Accum.pipeline = _renderManager->addPipeline();
+		_renderManager->pushRenderPostEffectPipeline(key.Accum.pipeline, key.Accum.renderPostEffect);
+		_renderManager->configPipeline(key.Accum.pipeline, gl::DrawType::EACH_FOLLOWING_OBJECT);
+		_renderManager->pushRenderOnScreenPipeline(key.Accum.pipeline, key.getBuff.renderOnScreen);
+		_renderManager->geometryManager.createSphereSimpleForm();
 		return true;
 	});
 	assert(res.get());
@@ -256,9 +267,20 @@ bool BenchmarkScene::userUpdate(double time)
 
 	octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
 	{
+		AGE::Vector<AGE::Drawable> lights;
+		for (size_t index = 0; index < collection.lights.size(); ++index)
+		{
+			AGE::Drawable drawable;
+
+			drawable.material = renderManager->materialManager.getDefaultMaterial();
+			drawable.mesh.vertices = renderManager->geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
+			drawable.mesh.indices = renderManager->geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
+			lights.push_back(drawable);
+		}
 		renderManager->setUniformBlock(key.global_state, 0, collection.projection);
 		renderManager->setUniformBlock(key.global_state, 1, collection.transformation);
 		renderManager->updatePipeline(key.getBuff.pipeline, collection.drawables);
+		renderManager->updatePipeline(key.Accum.pipeline, lights);
 		renderManager->drawPipelines();
 	});
 
