@@ -10,6 +10,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\Ga
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shader", "Shader", "{6823E483-DFC6-4750-920C-35DA2E87B060}"
 	ProjectSection(SolutionItems) = preProject
+		Shaders\Deffered_shading\deffered_shading_lighting.vp = Shaders\Deffered_shading\deffered_shading_lighting.vp
 		Shaders\test_pipeline_1.fp = Shaders\test_pipeline_1.fp
 		Shaders\test_pipeline_1.vp = Shaders\test_pipeline_1.vp
 	EndProjectSection

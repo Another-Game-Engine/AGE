@@ -32,8 +32,8 @@ void main()
 	vec3 lightDir = worldPos - position_light;
 	float dist = length(lightDir);
 	vec3 normal = (texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f);
-	//float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
+	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
 	float lambert = max(0.0f, dot(normalize(normal), normalize(lightDir)));
-	//color = vec4(lambert) / attenuation;
-	color = vec4(depth) * step(lambert, lambert);
+	color = vec4(lambert) / attenuation * (1.f - step(1.0f, depth));
+	//color += vec4(normal, 1.f);
 }
