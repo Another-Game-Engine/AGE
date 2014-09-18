@@ -9,7 +9,7 @@ uniform global_state
 };
 
 uniform vec3 position_light;
-uniform float range_light;
+uniform vec3 attenuation_light;
 
 uniform sampler2D depth_buffer;
 uniform sampler2D normal_buffer;
@@ -27,17 +27,13 @@ vec3 getWorldPosition(float depth, vec2 screenPos, mat4 viewProj)
 void main()
 {
 	mat4 modelView = projection_matrix * view_matrix;
-	float depth = texture(depth_buffer, interpolated_texCoord).z;
+	float depth = texture(depth_buffer, interpolated_texCoord).x;
 	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, modelView);
-	float dist = distance(worldPos, position_light);
-	float attenuation = 1.0f;
-	float lambert = 0.f;
+	vec3 lightDir = worldPos - position_light;
+	float dist = length(lightDir);
 	vec3 normal = (texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f);
-	if (dist < range_light)
-	{
-		attenuation = 1.0f / (1.0f + 0.1f * dist + 0.01f * dist * dist);
-		vec3 lightDir = worldPos - position_light;
-		lambert = max(0.0f, dot(normalize(normal), normalize(lightDir)));
-	}
-	color = vec4(lambert);
+	//float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
+	float lambert = max(0.0f, dot(normalize(normal), normalize(lightDir)));
+	//color = vec4(lambert) / attenuation;
+	color = vec4(depth) * step(lambert, lambert);
 }
