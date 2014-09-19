@@ -26,14 +26,13 @@ vec3 getWorldPosition(float depth, vec2 screenPos, mat4 viewProj)
 
 void main()
 {
-	mat4 modelView = projection_matrix * view_matrix;
+	mat4 viewProj = projection_matrix * view_matrix;
 	float depth = texture(depth_buffer, interpolated_texCoord).x;
-	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, modelView);
-	vec3 lightDir = worldPos - position_light;
+	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, viewProj);
+	vec3 lightDir = position_light - worldPos;
 	float dist = length(lightDir);
 	vec3 normal = (texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f);
 	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
 	float lambert = max(0.0f, dot(normalize(normal), normalize(lightDir)));
 	color = vec4(lambert) / attenuation * (1.f - step(1.0f, depth));
-	//color += vec4(normal, 1.f);
 }
