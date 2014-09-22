@@ -13,7 +13,7 @@
 
 #ifdef USE_IMGUI
 
-#include <Utils/Imgui.hpp>
+#include <Utils/Age_Imgui.hpp>
 
 #endif
 
@@ -447,19 +447,17 @@ namespace AGE
 				});
 			}
 			_octreeDrawList.clear();
-#ifdef USE_IMGUI
-			getDependencyManager().lock()->getInstance<AGE::Imgui>()->push([]()
-			{
-				std::cout << "coucou from prepare thread !" << std::endl;
-			});
-#endif
+
 			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
 			renderThread->getCommandQueue().releaseReadability();
+
+		IMGUI_BEGIN
+			std::cout << "coucou from prepare thread !" << std::endl;
+		IMGUI_END
 
 			//msg.result.set_value(std::move(_octreeDrawList));
 			//_octreeDrawList.clear();
 		});
-
 		return returnValue;
 	}
 

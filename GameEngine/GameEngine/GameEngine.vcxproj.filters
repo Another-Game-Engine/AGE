@@ -84,6 +84,8 @@
     <ClCompile Include="Engine\TMQ\dispatcher.cpp" />
     <ClCompile Include="Engine\TMQ\message.cpp" />
     <ClCompile Include="Engine\TMQ\queue.cpp" />
+    <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Utils\Age_Imgui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -250,7 +252,10 @@
     <ClInclude Include="Engine\TMQ\queue.hpp" />
     <ClInclude Include="Engine\TMQ\templateDispatcher.hpp" />
     <ClInclude Include="Engine\Configuration.hpp" />
-    <ClInclude Include="Engine\Utils\Imgui.hpp" />
+    <ClInclude Include="..\Vendors\imgui\imconfig.h" />
+    <ClInclude Include="..\Vendors\imgui\imgui.h" />
+    <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Utils\Age_Imgui.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
