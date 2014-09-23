@@ -36,7 +36,8 @@
 	RenderManager &popInput##name##(Key<##name##> const &key); \
 	RenderManager &pushTarget##name##(Key<##name##> const &key, GLenum attachement); \
 	RenderManager &popTarget##name##(Key<##name##> const &key); \
-	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, RenderOffScreen const &render); \
+	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPass> const &r); \
+	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPostEffect> const &r); \
 	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f);
 
 
@@ -314,10 +315,19 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 		return (*this);																																	\
 	}																																					\
 																																						\
-	RenderManager &RenderManager::useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, RenderOffScreen const &renderOffScreen)													\
+	RenderManager &RenderManager::useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPass> const &r)													\
+	{																																					\
+		name *render = get##name##(key);\
+		RenderPass *renderPass = getRenderPass(r); \
+		render->useInputBuffer(attachement, *renderPass); \
+		return (*this); \
+	} \
+	\
+	RenderManager &RenderManager::useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPostEffect> const &r)													\
 	{																																					\
 		name *render = get##name##(key);																										\
-		render->useInputBuffer(attachement, renderOffScreen); \
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(r); \
+		render->useInputBuffer(attachement, *renderPostEffect); \
 		return (*this); \
 	} \
 	\

@@ -40,7 +40,6 @@ void BenchmarkScene::initRendering()
 		key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
 		key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
 
-
 		// create renderpass and set it
 		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 800, 600));
 		_renderManager->pushSetTestTaskRenderPass(key.getBuff.renderPass, false, false, true);
@@ -55,32 +54,38 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 1, false);
 		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
 		
+		// create  clear renderPass
+		key.clean.renderPass = _renderManager->addRenderPass(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
+		_renderManager->createBufferSamplableRenderPass(key.clean.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+		_renderManager->pushSetClearValueTaskRenderPass(key.clean.renderPass, glm::vec4(1.f, 0.f, 0.f, 1.0f));
+		_renderManager->pushClearTaskRenderPass(key.clean.renderPass, true, false, false);
+		
 		// create renderPostEffect
 		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
-		_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, true);
-		_renderManager->pushSetClearValueTaskRenderPostEffect(key.Accum.renderPostEffect, glm::vec4(0.f, 0.f, 0.f, 1.0f));
-		_renderManager->pushClearTaskRenderPostEffect(key.Accum.renderPostEffect, true, true, false);
+		_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, false);
 		_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
-		_renderManager->createBufferSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGBA8);
-		_renderManager->createBufferNotSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
 		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, true);
 		_renderManager->pushSetBlendEquationTaskRenderPostEffect(key.Accum.renderPostEffect, GL_FUNC_ADD);
 		_renderManager->pushSetBlendFuncTaskRenderPostEffect(key.Accum.renderPostEffect, GL_ONE, GL_ONE);
 		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.normal_buffer, GL_COLOR_ATTACHMENT1, key.getBuff.renderPass);
 		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_DEPTH_ATTACHMENT, key.getBuff.renderPass);
-
+		_renderManager->useInputBufferRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, key.clean.renderPass);
+		
 		// create renderOnscreen and set it
 		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.Accum.renderPostEffect);
 		_renderManager->pushClearTaskRenderOnScreen(key.getBuff.renderOnScreen, true, true, false);
 		_renderManager->pushSetTestTaskRenderOnScreen(key.getBuff.renderOnScreen, false, false, true);
 		_renderManager->pushSetClearValueTaskRenderOnScreen(key.getBuff.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));	
 
-		
 		// create the pipeline and set it with both render element add before
 		key.getBuff.pipeline = _renderManager->addPipeline();
 		_renderManager->pushRenderPassPipeline(key.getBuff.pipeline, key.getBuff.renderPass);
-		
-	
+
+		// create the pipeline for cleaning
+		key.clean.pipeline = _renderManager->addPipeline();
+		_renderManager->configPipeline(key.clean.pipeline, gl::DrawType::NONE_OBJECT);
+		_renderManager->pushRenderPassPipeline(key.clean.pipeline, key.clean.renderPass);
+
 		// create the pipeline for accum
 		key.Accum.pipeline = _renderManager->addPipeline();
 		_renderManager->pushRenderPostEffectPipeline(key.Accum.pipeline, key.Accum.renderPostEffect);
@@ -168,9 +173,15 @@ bool BenchmarkScene::userStart()
 	rigidBody->getBody().setFriction(0.8f);
 #endif //PHYSIC_SIMULATION
 #endif
-	auto light = createEntity();
-	auto lightData = addComponent<Component::PointLight>(light);
-	lightData->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	// lights creation
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
 	return true;
 }
 

@@ -117,7 +117,7 @@ namespace gl
 		return (true);
 	}
 
-	GLuint Shader::getUniformLocation(char const *flag)
+	GLuint Shader::getSamplerLocation(char const *flag)
 	{
 		GLuint location;
 
@@ -125,6 +125,16 @@ namespace gl
 		if ((location = glGetUniformLocation(_progId, flag)) == -1)
 			assert(0);
 		glUniform1i(location, location);
+		return (location);
+	}
+
+	GLuint Shader::getUniformLocation(char const *flag)
+	{
+		GLuint location;
+
+		use();
+		if ((location = glGetUniformLocation(_progId, flag)) == -1)
+			assert(0);
 		return (location);
 	}
 
@@ -190,7 +200,7 @@ namespace gl
 		task.params = new void *[task.nbrParams];
 		task.params[0] = new GLuint;
 		task.sizeParams[0] = sizeof(GLuint);
-		GLuint location = getUniformLocation(flag.c_str());
+		GLuint location = getSamplerLocation(flag.c_str());
 		*(GLuint *)task.params[0] = location;
 		task.params[1] = new GLint;
 		*(GLenum *)task.params[1] = GL_TEXTURE_2D;

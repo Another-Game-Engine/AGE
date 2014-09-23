@@ -49,12 +49,18 @@ struct Deferred_get_buffer_Key
 	gl::Key<gl::Pipeline> pipeline;
 };
 
+struct Deffered_clean_buffer
+{
+	gl::Key<gl::RenderPass> renderPass;
+	gl::Key<gl::Pipeline> pipeline;
+};
+
 struct RenderKey
 {
+	Deffered_clean_buffer clean;
 	Deferred_accum_light Accum;
 	Deferred_get_buffer_Key getBuff;
 	gl::Key<gl::UniformBlock> global_state;
-
 };
 
 class BenchmarkScene : public AScene	
