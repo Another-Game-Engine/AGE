@@ -39,10 +39,13 @@ bool RenderThread::_update()
 	_commandQueue.getDispatcher()
 		.handle<RendCtxCommand::Flush>([&](const RendCtxCommand::Flush& msg)
 	{
+#ifdef USE_IMGUI
 		IMGUI_BEGIN
 		std::cout << "coucou from render thread !" << std::endl;
 		IMGUI_END
-		AGE::Imgui::getInstance()->update();
+		AGE::Imgui::getInstance()->endUpdate();
+		ImGui::Render();
+#endif
 
 		_context->swapContext();
 	})

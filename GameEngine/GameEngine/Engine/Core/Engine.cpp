@@ -4,6 +4,13 @@
 #include "Timer.hh"
 #include "Utils/PubSub.hpp"
 #include "SceneManager.hh"
+#include <Configuration.hpp>
+
+#ifdef USE_IMGUI
+
+#include <Utils/Age_Imgui.hpp>
+
+#endif
 
 #include <iostream>
 
@@ -31,6 +38,12 @@ bool 		Engine::update()
 	auto timer = getInstance<Timer>();
 	auto sceneManager = getInstance<SceneManager>();
 	auto time = timer->getElapsed();
+
+#ifdef USE_IMGUI
+
+	AGE::Imgui::getInstance()->startUpdate();
+
+#endif
 
 	timer->update();
 	sceneManager->update(time);

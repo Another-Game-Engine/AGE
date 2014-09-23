@@ -149,6 +149,10 @@ bool BenchmarkScene::userUpdate(double time)
 
 	IMGUI_BEGIN
 		std::cout << "coucou from main thread !" << std::endl;
+	static bool show_gui_window = true;
+	ImGui::Begin("Another Window", &show_gui_window, ImVec2(200, 100));
+	ImGui::Text("Hello");
+	ImGui::End();
 	IMGUI_END
 
 	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 100.0f * (float)time, glm::vec3(0, 1, 0)));
