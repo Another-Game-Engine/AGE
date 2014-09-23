@@ -3,11 +3,7 @@
 
 #include <Configuration.hpp>
 
-#ifdef USE_IMGUI
-
 #include <Utils/Age_Imgui.hpp>
-
-#endif
 
 using namespace AGE;
 
@@ -20,6 +16,7 @@ bool RenderThread::_init()
 
 bool RenderThread::_initInNewThread()
 {
+	AGE::Imgui::getInstance()->registerThread(100);
 	return true;
 }
 

@@ -10,12 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Core/PreparableObject.hh>
 #include <Configuration.hpp>
-
-#ifdef USE_IMGUI
-
 #include <Utils/Age_Imgui.hpp>
-
-#endif
 
 
 namespace AGE
@@ -38,6 +33,7 @@ namespace AGE
 
 	bool PrepareRenderThread::_initInNewThread()
 	{
+		AGE::Imgui::getInstance()->registerThread(50);
 		return true;
 	}
 

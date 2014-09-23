@@ -76,6 +76,7 @@ int			main(int ac, char **av)
 	e->setInstance<Timer>();
 
 	AGE::Imgui::getInstance()->init(e.get());
+	AGE::Imgui::getInstance()->registerThread(0);
 
 	// Important, we have to launch the command queue from the sender thread
 	//context->launchCommandQueue();

@@ -51,8 +51,6 @@ namespace AGE
 		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex_x, tex_y, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
 		//stbi_image_free(tex_data);
 
-		_commandQueue.launch();
-
 #endif //USE_IMGUI
 		return true;
 	}
@@ -60,4 +58,70 @@ namespace AGE
 	Imgui::Imgui()
 	{
 	}
+
+	void Imgui::update()
+	{
+#ifdef USE_IMGUI
+		for (auto &q : _commandQueue)
+		{
+			q.second->releaseReadability();
+			q.second->getDispatcher()
+				.handle<TQC::VoidFunction>([&](const TQC::VoidFunction& msg)
+			{
+				msg.function();
+			});
+		}
+#endif
+	}
+
+	void Imgui::push(const std::function<void()> &fn)
+	{
+#ifdef USE_IMGUI
+		std::lock_guard<std::mutex> lock(_mutex);
+		std::shared_ptr<TMQ::Queue> queue = nullptr;
+		{
+			auto it = _threadIds.find(std::this_thread::get_id().hash());
+			assert(it != std::end(_threadIds) && "Thread is not registered.");
+			queue = _commandQueue[it->second];
+		}
+
+		queue->emplace<TQC::VoidFunction>(std::move(fn));
+#endif
+	}
+
+	void Imgui::push(std::function<void()> &&fn)
+	{
+#ifdef USE_IMGUI
+		std::lock_guard<std::mutex> lock(_mutex);
+		std::shared_ptr<TMQ::Queue> queue = nullptr;
+		{
+			auto it = _threadIds.find(std::this_thread::get_id().hash());
+			assert(it != std::end(_threadIds) && "Thread is not registered.");
+			queue = _commandQueue[it->second];
+		}
+
+		queue->emplace<TQC::VoidFunction>(std::move(fn));
+#endif
+	}
+
+	void Imgui::registerThread(std::size_t priority)
+	{
+#ifdef USE_IMGUI
+		std::lock_guard<std::mutex> lock(_mutex);
+		auto threadId = std::this_thread::get_id().hash();
+		assert(_threadIds.find(threadId) == std::end(_threadIds) && "Thread already registered.");
+		assert(_commandQueue.find(priority) == std::end(_commandQueue) && "Priority already reserved.");
+		_threadIds.insert(std::make_pair(threadId, priority));
+		auto queue = std::make_shared<TMQ::Queue>();
+		_commandQueue.insert(std::make_pair(priority, queue));
+		queue->launch();
+#endif
+	}
+
+	Imgui* Imgui::getInstance()
+	{
+		static Imgui* ImguiInstance = new Imgui();
+		return ImguiInstance;
+	}
+
 }

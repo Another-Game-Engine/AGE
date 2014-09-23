@@ -8,54 +8,36 @@
 #include <Utils/ThreadQueueCommands.hpp>
 #include <TMQ/dispatcher.hpp>
 #include <TMQ/templateDispatcher.hpp>
+#include <map>
+#include <memory>
 
 namespace AGE
 {
 	class Imgui
 	{
 	private:
-		TMQ::Queue _commandQueue;
+		std::map<std::size_t , std::size_t> _threadIds;
+		std::map<std::size_t, std::shared_ptr<TMQ::Queue>> _commandQueue;
+		std::mutex _mutex;
 	public:
 		Imgui();
-
 		bool init(DependenciesInjector *di);
-
-		void update()
-		{
-#ifdef USE_IMGUI
-			_commandQueue.releaseReadability();
-			_commandQueue.getDispatcher()
-				.handle<TQC::VoidFunction>([&](const TQC::VoidFunction& msg)
-			{
-				msg.function();
-			});
-#endif
-		}
-
-		void push(const std::function<void()> &fn)
-		{
-#ifdef USE_IMGUI
-			_commandQueue.autoEmplace<TQC::VoidFunction>(fn);
-#endif
-		}
-
-//		void push(std::function<void()> &&fn)
-//		{
-//#ifdef USE_IMGUI
-//			_commandQueue.autoEmplace<TQC::VoidFunction>(fn);
-//#endif
-//		}
-
-		static Imgui* getInstance()
-		{
-			static Imgui* ImguiInstance = new Imgui();
-			return ImguiInstance;
-		}
-
+		void update();
+		void push(const std::function<void()> &fn);
+		void push(std::function<void()> &&fn);
+		// Call this at the begining of a thread to register it to the Imgui command queue
+		void registerThread(std::size_t priority);
+		static Imgui* getInstance();
 	};
 
-#define IMGUI_BEGIN AGE::Imgui::getInstance()->push([=](){
+#ifdef USE_IMGUI
+#define IMGUI_BEGIN ::AGE::Imgui::getInstance()->push([=](){
 
 #define IMGUI_END });
+#else
+#define IMGUI_BEGIN (void)([=](){
+
+#define IMGUI_END });
+#endif
 
 }
