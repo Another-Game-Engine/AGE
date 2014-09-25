@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AFormatconvertor.hh"
+#include "AFormatConvertor.hh"
 
 namespace AGE
 {
@@ -13,5 +13,7 @@ namespace AGE
 		explicit Texture();
 		// DTOR
 		virtual ~Texture();
+
+		bool load(const std::string &fileName);
 	}; // class Texture
 } // namespace AGE

@@ -4,9 +4,10 @@
 
 namespace AGE
 {
-	AFormatConvertor::AFormatConvertor(const std::vector<std::string> &formatName)
+	AFormatConvertor::AFormatConvertor(std::initializer_list<std::string> formatName)
 		: _formatHandle(formatName)
 	{
+
 	}
 
 	AFormatConvertor::~AFormatConvertor()
@@ -17,4 +18,5 @@ namespace AGE
 	{
 		return _formatHandle;
 	}
+
 } // namespace AGE
