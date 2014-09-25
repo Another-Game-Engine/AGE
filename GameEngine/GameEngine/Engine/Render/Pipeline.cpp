@@ -57,7 +57,6 @@ namespace gl
 	Pipeline &Pipeline::draw()
 	{
 		(this->*_drawFunc[_type])();
-		glFlush();
 		return (*this);
 	}
 

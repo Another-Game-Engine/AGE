@@ -281,7 +281,7 @@ namespace gl
 	RenderOffScreen::~RenderOffScreen()
 	{
 		for (auto &element = _buffer.begin(); element != _buffer.end(); ++element)
-			if (element->second.first != NULL) delete element->second.first;
+			if (element->second.first != NULL && !element->first) delete element->second.first;
 		for (size_t index = 0; index < _ownFunction.size(); ++index)
 			delete _ownFunction[index];
 	}
@@ -403,13 +403,11 @@ namespace gl
 		auto &search = render._buffer.find(attachement);
 		if (search == render._buffer.end())
 			return (*this);
-		auto &element = _buffer.find(attachement);
-		if (element == _buffer.end())
-			return (*this);
-		if (element->second.first != NULL)
-			delete element->second.first;
-		element->second.first = search->second.first;
-		element->second.second = false;
+		auto &element = _buffer[attachement];
+		if (element.first != NULL)
+			delete element.first;
+		element.first = search->second.first;
+		element.second = false;
 		return (*this);
 	}
 
@@ -528,6 +526,7 @@ namespace gl
 		updateInput();
 		for (size_t i = 0; i < _tasks.size(); ++i)
 			_tasks[i].func(_tasks[i].params);
+		glFlush();
 		return (*this);
 	}
 

@@ -206,6 +206,7 @@ namespace gl
 			draw.materialManager.setShader(object.material, draw.shader);
 			draw.shader.update(object.transformation);
 			draw.geometryManager.draw(draw.mode, object.mesh.indices, object.mesh.vertices);
+			glFlush();
 		}
 	}
 
