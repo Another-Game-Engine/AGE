@@ -1,9 +1,13 @@
-#include <Render/OpenGLTask.hh>
+#include <Render/Task.hh>
 #include <Utils/OpenGL.hh>
 #include <glm/glm.hpp>
 #include <assert.h>
 #include <memory>
 #include <string>
+#include <Core/PreparableObject.hh>
+#include <Render/Render.hh>
+#include <Render/GeometryManager.hh>
+#include <Render/MaterialManager.hh>
 
 #define CONVERT(type, index) (*((type *)data[index]))
 
@@ -134,10 +138,9 @@ namespace gl
 		glUniform1i(CONVERT(unsigned int, 0), CONVERT(int, 1));
 	}
 
-	void setBlockPointerUBO(void **data)
+	void setBlockBinding(void **data)
 	{
 		glUniformBlockBinding(CONVERT(GLuint, 0), CONVERT(GLuint, 1), CONVERT(GLuint, 2));
-		glBindBufferBase(GL_UNIFORM_BUFFER, CONVERT(GLuint, 2), CONVERT(GLuint, 3));
 	}
 
 	void setUniformFloat(void **data)
@@ -154,6 +157,58 @@ namespace gl
 	{
 		glActiveTexture(GL_TEXTURE0 + CONVERT(GLuint, 0));
 		glBindTexture(CONVERT(GLenum, 1), CONVERT(GLint, 2));
+	}
+
+	void setUniformMat4byLocation(void **data)
+	{
+		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
+		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
+		size_t location = CONVERT(size_t, 2);
+		draw.shader.setUniform(key, draw.locationStorage.getLocation<glm::mat4>(location));
+	}
+
+	void setUniformMat3byLocation(void **data)
+	{
+		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
+		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
+		size_t location = CONVERT(size_t, 2);
+		draw.shader.setUniform(key, draw.locationStorage.getLocation<glm::mat3>(location));
+	}
+
+	void setUniformFloatbyLocation(void **data)
+	{
+		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
+		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
+		size_t location = CONVERT(size_t, 2);
+		draw.shader.setUniform(key, draw.locationStorage.getLocation<float>(location));
+	}
+
+	void setUniformVec4byLocation(void **data)
+	{
+		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
+		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
+		size_t location = CONVERT(size_t, 2);
+		draw.shader.setUniform(key, draw.locationStorage.getLocation<glm::vec4>(location));
+	}
+
+	void draw(void **data)
+	{
+		RenderPass::Draw &draw = *CONVERT(RenderPass::Draw *, 0);
+
+		for (size_t index = draw.start; index < draw.end; ++index)
+		{
+			AGE::Drawable const &object = (*draw.toRender)[index];
+			draw.materialManager.setShader(object.material, draw.shader);
+			draw.shader.update(object.transformation);
+			draw.geometryManager.draw(draw.mode, object.mesh.indices, object.mesh.vertices);
+		}
+	}
+
+	void ownTask(void **data)
+	{
+		std::function<void(LocationStorage &)> *f = CONVERT(std::function<void(LocationStorage &)> *, 0);
+		LocationStorage &l = *CONVERT(LocationStorage *, 1);
+		(*f)(l);
 	}
 
 	Task::Task()

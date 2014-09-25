@@ -10,7 +10,8 @@ namespace AGE
 		{
 			no_type = 0
 			, Camera
-			, Cullable
+			, Drawable
+			, PointLight
 		};
 		
 		typedef std::uint8_t OctreeObjectType;

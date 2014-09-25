@@ -13,12 +13,19 @@ namespace gl
 	{
 	public:
 		MemoryGPU();
-		MemoryGPU(size_t size, size_t offset);
+		MemoryGPU(size_t size, size_t offset, size_t stride);
 		~MemoryGPU();
 		MemoryGPU(MemoryGPU const &copy);
 		MemoryGPU &operator=(MemoryGPU const &m);
+		bool operator<(MemoryGPU const &m) const;
+		bool operator>(MemoryGPU const &m) const;
+		bool operator<=(MemoryGPU const &m) const;
+		bool operator>=(MemoryGPU const &m) const;
+		bool operator==(MemoryGPU const &m) const;
+		bool operator!=(MemoryGPU const &m) const;
 		size_t size;
 		size_t offset;
+		size_t stride;
 	};
 
 	//!\file MemoryGPU.hh

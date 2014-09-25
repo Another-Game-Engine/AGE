@@ -5,6 +5,7 @@
 
 namespace gl
 {
+
 	void setClearValue(void **);
 	void setColorMask(void **);
 	void setDepthMask(void **);
@@ -25,13 +26,26 @@ namespace gl
 	void setBlendConstant(void **);
 	void setTest(void **);
 	void setUniformMat4(void **);
+	void setUniformMat4byLocation(void **);
 	void setUniformMat3(void **);
+	void setUniformMat3byLocation(void **);
 	void setUniformUint(void **);
-	void setBlockPointerUBO(void **);
+	void setBlockBinding(void **);
 	void setUniformFloat(void **);
+	void setUniformFloatbyLocation(void **);
 	void setUniformVec4(void **);
+	void setUniformVec4byLocation(void **);
 	void setUniformSampler(void **);
 	void setFragDataLocation(void **);
+	void draw(void **);
+	void ownTask(void **);
+
+	struct MaterialBindTask
+	{
+		size_t indexTask;
+		size_t offsetMaterial;
+		bool isUse;
+	};
 
 	struct Task
 	{

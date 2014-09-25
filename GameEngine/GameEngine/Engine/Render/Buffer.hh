@@ -92,6 +92,5 @@ namespace gl
 		virtual GLenum getMode() const;
 		virtual Buffer const &BufferData(size_t size) const;
 		virtual Buffer const &BufferSubData(size_t offset, size_t size, void *buffer) const;
-
 	};
 }

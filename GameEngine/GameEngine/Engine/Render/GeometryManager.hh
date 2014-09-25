@@ -8,16 +8,17 @@
 #include <Utils/Dependency.hpp>
 #include <map>
 #include <Utils/Containers/Vector.hpp>
+#include <glm/glm.hpp>
 
 namespace gl
 {
 	class Vertices;
-
-	const uint8_t nbrSimpleForm = 1;
 	
 	enum SimpleForm
 	{
-		QUAD = 0
+		QUAD = 0,
+		SPHERE,
+		NBR_SIMPLE_FORM
 	};
 
 	class GeometryManager
@@ -36,8 +37,10 @@ namespace gl
 		GeometryManager();
 		~GeometryManager();
 
-		GeometryManager &createSimpleForm();
-		Key<Vertices> getSimpleForm(SimpleForm form);
+		GeometryManager &createQuadSimpleForm();
+		GeometryManager &createSphereSimpleForm();
+		Key<Vertices> getSimpleFormGeo(SimpleForm form);
+		Key<Indices> getSimpleFormId(SimpleForm form);
 
 		// handle pools
 		Key<VertexPool> addVertexPool();
@@ -71,9 +74,17 @@ namespace gl
 		// draw
 		GeometryManager &draw(GLenum mode, Key<Indices> const &keyindices, Key<Vertices> const &keyVertice);
 		GeometryManager &draw(GLenum mode, Key<Vertices> const &keyvertices);
+
+		// generate ico sphere
+		static void generateIcoSphere(size_t recursion, glm::vec3 **vertex, glm::u32vec3 **indices, size_t &nbrElementId, size_t &nbrElementGeo);
+
 	private:
 		// simple form
-		gl::Key<Vertices> *_simpleForm;
+		std::map<SimpleForm, Key<Vertices>> _simpleFormGeo;
+		std::map<SimpleForm, Key<Indices>> _simpleFormId;
+		Key<VertexPool> *_simpleFormPoolGeo;
+		Key<IndexPool> *_simpleFormPoolId;
+		void initSimpleForm();
 
 		// data represent pools
 		std::map<Key<IndexPool>, IndexPool> _indexPool;
@@ -91,11 +102,11 @@ namespace gl
 		std::pair<Key<Indices>, Attach<Indices, IndexPool> *> _optimizerIndexAttachSearch;
 
 		// tool use in intern
-		VertexPool *getVertexPool(Key<VertexPool> const &key, std::string const &in);
-		IndexPool *getIndexPool(Key<IndexPool> const &key, std::string const &in);
-		Indices *getIndices(Key<Indices> const &key, std::string const &in);
-		Vertices *getVertices(Key<Vertices> const &key, std::string const &in);
-		Attach<Vertices, VertexPool> *getVertexAttach(Key<Vertices> const &key, std::string const &in);
-		Attach<Indices, IndexPool> *getIndexAttach(Key<Indices> const &key, std::string const &in);
+		VertexPool *getVertexPool(Key<VertexPool> const &key);
+		IndexPool *getIndexPool(Key<IndexPool> const &key);
+		Indices *getIndices(Key<Indices> const &key);
+		Vertices *getVertices(Key<Vertices> const &key);
+		Attach<Vertices, VertexPool> *getVertexAttach(Key<Vertices> const &key);
+		Attach<Indices, IndexPool> *getIndexAttach(Key<Indices> const &key);
 	};
 }

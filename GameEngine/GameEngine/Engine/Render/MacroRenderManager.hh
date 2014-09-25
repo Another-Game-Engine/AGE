@@ -19,7 +19,25 @@
 	RenderManager &pushSetBlendFuncTask##name##(Key<##name##> const &key, GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha); \
 	RenderManager &pushSetBlendFuncTask##name##(Key<##name##> const &key, GLenum src, GLenum dest); \
 	RenderManager &pushSetBlendConstantTask##name##(Key<##name##> const &key, glm::vec4 const &blendPass); \
+	RenderManager &RenderManager::pushSetBlendStateTask##name##(Key<##name##> const &key, int drawBuffer, bool state); \
 	RenderManager &popTask##name##(Key<##name##> const &key);
+
+#define GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(name) \
+	RenderManager &pushSetUniformMat4Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location); \
+	RenderManager &pushSetUniformMat3Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location); \
+	RenderManager &pushSetUniformFloatTask##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location); \
+	RenderManager &pushSetUniformVec4Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location); \
+	RenderManager &config##name##(Key<##name##> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1); \
+	RenderManager &createBufferSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat); \
+	RenderManager &createBufferNotSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat); \
+	RenderManager &deleteBuffer##name##(Key<##name##> const &key, GLenum attachement); \
+	RenderManager &pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement); \
+	RenderManager &popInput##name##(Key<##name##> const &key); \
+	RenderManager &pushTarget##name##(Key<##name##> const &key, GLenum attachement); \
+	RenderManager &popTarget##name##(Key<##name##> const &key); \
+	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement); \
+	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f);
+
 
 #define GEN_DEF_RENDER_PUSH_TASK(name) 																																								\
 	RenderManager &RenderManager::pushClearTask##name##(Key<##name##> const &key, bool color, bool depth, bool stencil)																			\
@@ -181,13 +199,121 @@ RenderManager &RenderManager::pushSetBlendConstantTask##name##(Key<##name##> con
 		return (*this);																																												\
 	renderPass->pushSetBlendConstantTask(blendColor);																																				\
 	return (*this);																																													\
-}																																																	 \
+} \
+\
+	RenderManager &RenderManager::pushSetBlendStateTask##name##(Key<##name##> const &key, int drawBuffer, bool state) \
+{ \
+	name *render;																																											\
+	if ((render = get##name##(key)) == NULL)																													\
+		return (*this);																																												\
+	render->pushSetBlendTask(drawBuffer, state); 																																				\
+	return (*this); \
+}\
 																																																	 \
 RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)																														 \
 {																																																	 \
-	name *renderPass;																																											 \
-	if ((renderPass = get##name##(key)) == NULL)																																  \
+	name *render;																																											 \
+	if ((render = get##name##(key)) == NULL)																																  \
 		return (*this);																																												  \
-	renderPass->popTask();																																											  \
+	render->popTask();																																											  \
 	return (*this);																																													  \
 }
+
+#define GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(name) \
+	RenderManager &RenderManager::pushSetUniformMat4Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location) \
+	{\
+		name *render = get##name##(key); \
+		render->pushSetUniformMat4Task(u, location); \
+		return (*this);\
+	} \
+	\
+	RenderManager &RenderManager::pushSetUniformMat3Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location) \
+	{\
+		name *render = get##name##(key); \
+		render->pushSetUniformMat3Task(u, location); \
+		return (*this); \
+	} \
+	\
+	RenderManager &RenderManager::pushSetUniformFloatTask##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location) \
+	{\
+		name *render = get##name##(key); \
+		render->pushSetUniformMat3Task(u, location); \
+		return (*this); \
+	} \
+	RenderManager &RenderManager::pushSetUniformVec4Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location) \
+	{\
+		name *render = get##name##(key); \
+		render->pushSetUniformVec4Task(u, location); \
+		return (*this); \
+	} \
+																																						\
+	RenderManager &RenderManager::config##name##(Key<##name##> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)							\
+	{																																					\
+		name *render = get##name##(key);																									\
+		render->setMode(mode);																												\
+		render->configRect(rect);																												\
+		return (*this);																																	\
+	}																																					\
+																																						\
+	RenderManager &RenderManager::createBufferSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat)					\
+	{																																					\
+		name *render = get##name##(key);																									\
+		render->createBufferSamplable(attachement, internalFormat);																			\
+		return (*this);																																	\
+	}																																					\
+																																						\
+	RenderManager &RenderManager::createBufferNotSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat)					\
+	{																																					\
+		name *render = get##name##(key);																									\
+		render->createBufferNotSamplable(attachement, internalFormat);																		\
+		return (*this);																																	\
+	}																																					\
+																																						\
+	RenderManager &RenderManager::deleteBuffer##name##(Key<##name##> const &key, GLenum attachement)													\
+	{																																					\
+		name *render = get##name##(key);																									\
+		render->deleteBuffer(attachement);																									\
+		return (*this);																																	\
+	}																																					\
+																																						\
+	RenderManager &RenderManager::pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement)								\
+	{																																					\
+		name *render = get##name##(key);																									\
+		render->pushInputSampler(s, attachement);																								\
+		return (*this);																																	\
+	}																																					\
+																																						\
+	RenderManager &RenderManager::popInput##name##(Key<##name##> const &key)																			\
+	{																																					\
+		name *render = get##name##(key);																									\
+		render->popInputSampler();																											\
+		return (*this);																																	\
+	}																																					\
+																																						\
+	RenderManager &RenderManager::pushTarget##name##(Key<##name##> const &key, GLenum attachement)														\
+	{																																					\
+		name *render = get##name##(key);																										\
+		render->pushTarget(attachement);																											\
+		return (*this);																																	\
+	}																																					\
+																																						\
+	RenderManager &RenderManager::popTarget##name##(Key<##name##> const &key)																			\
+	{																																					\
+		name *render = get##name##(key);																										\
+		render->popTarget();																														\
+		return (*this);																																	\
+	}																																					\
+																																						\
+	RenderManager &RenderManager::useInputBuffer##name##(Key<##name##> const &key, GLenum attachement)													\
+	{																																					\
+		name *render = get##name##(key);																										\
+		render->useInputBuffer(attachement); \
+		return (*this); \
+	} \
+	\
+	RenderManager &RenderManager::pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f) \
+	{\
+		name *render = get##name##(key); \
+		render->pushOwnTask(f); \
+		return (*this); \
+	}

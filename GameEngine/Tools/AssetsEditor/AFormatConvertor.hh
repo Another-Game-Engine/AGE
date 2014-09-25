@@ -3,6 +3,7 @@
 namespace std
 {
 	template <class T, class Alloc = allocator<T>> class vector;
+	template<class T> class initializer_list;
 }
 
 namespace AGE
@@ -21,6 +22,7 @@ namespace AGE
 		const std::vector<std::string> &getFormatHandle();
 	    // Pure Virtual
 		virtual bool load(const std::string &fileName) = 0;
+		virtual bool save() = 0;
 
 	}; // class AFormatConvertor
 } // namespace AGE

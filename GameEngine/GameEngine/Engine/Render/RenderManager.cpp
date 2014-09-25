@@ -192,12 +192,20 @@ namespace gl
 		return (*this);
 	}
 
-	Key<UniformBlock> RenderManager::addUniformBlock(size_t nbrElement, size_t *sizeElement)
+	Key<UniformBlock> RenderManager::addUniformBlock()
 	{
 		Key<UniformBlock> key;
 
-		_uniformBlock[key] = UniformBlock(nbrElement, sizeElement);
+		_uniformBlock[key];
 		return (key);
+	}
+
+	RenderManager &RenderManager::introspectionBlock(Key<Shader> const &s, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u)
+	{
+		Shader *shader = getShader(s);
+		UniformBlock *uniformBlock = getUniformBlock(u);
+		shader->introspection(i, *uniformBlock);
+		return (*this);
 	}
 
 	RenderManager &RenderManager::rmUniformBlock(Key<UniformBlock> &key)
@@ -219,15 +227,19 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<InterfaceBlock> RenderManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> const &keyUniformBlock)
+	Key<InterfaceBlock> RenderManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> &keyUniformBlock)
 	{
-		Shader *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<InterfaceBlock>(KEY_DESTROY));
-		UniformBlock *uniformBlock;
-		if ((uniformBlock = getUniformBlock(keyUniformBlock)) == NULL)
-			return (Key<InterfaceBlock>(KEY_DESTROY));
+		Shader *shader = getShader(keyShader);
+		UniformBlock *uniformBlock = getUniformBlock(keyUniformBlock);
 		return (shader->addInterfaceBlock(flag, *uniformBlock));
+	}
+
+	RenderManager &RenderManager::setShaderInterfaceBlock(Key<Shader> const &keyShader, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u)
+	{
+		Shader *shader = getShader(keyShader);
+		UniformBlock *uniformBlock = getUniformBlock(u);
+		shader->setInterfaceBlock(i, *uniformBlock);
+		return (*this);
 	}
 
 	Key<InterfaceBlock> RenderManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
@@ -398,11 +410,8 @@ namespace gl
 	Key<RenderPass> RenderManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect)
 	{
 		Key<RenderPass> key;
-		Shader *shader;
-
-		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<RenderPass>(KEY_DESTROY));
-		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, materialManager);
+		Shader *shader = getShader(keyShader);
+		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, materialManager, locationStorage);
 		element->configRect(rect);
 		return (key);
 	}
@@ -418,135 +427,12 @@ namespace gl
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPass);
+	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
 
-	RenderManager &RenderManager::configRenderPass(Key<RenderPass> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
+	RenderManager &RenderManager::pushDrawTaskRenderBuffer(Key<RenderPass> const &key)
 	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->setMode(mode);
-		renderPass->configRect(rect);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::pushOutputColorRenderPass(Key<RenderPass> const &key, GLenum attachement, GLenum internalFormat)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->pushColorOutput(attachement, internalFormat);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::popOutputColorRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->popColorOutput();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::pushInputColorRenderPass(Key<RenderPass> const &key, Key<Sampler> const &s)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->pushInputSampler(s);
-		return (*this);
-	}
-	
-	RenderManager &RenderManager::popInputColorRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->popInputSampler();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::createDepthBufferRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->createDepthBuffer();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::createStencilBufferRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->createStencilBuffer();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::useInputDepthRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->useInputDepth();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::unUseInputDepthRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->unUseInputDepth();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::useInputStencilRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->useInputStencil();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::unUseInputStencilRenderPass(Key<RenderPass> const &key)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->unUseInputStencil();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::useInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->useInputColor(attachement);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::unUseInputColorRenderPass(Key<RenderPass> const &key, GLenum attachement)
-	{
-		RenderPass *renderPass;
-
-		if ((renderPass = getRenderPass(key)) == NULL)
-			return (*this);
-		renderPass->unUseInputColor(attachement);
+		RenderPass *renderPass = getRenderPass(key);
+		renderPass->pushDrawTask();
 		return (*this);
 	}
 
@@ -600,7 +486,7 @@ namespace gl
 		return (renderOnScreen->second);
 	}
 
-	Pipeline *RenderManager::getPipeline(Key<Pipeline> const &key)
+	size_t RenderManager::getIndexPipeline(Key<Pipeline> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -612,19 +498,23 @@ namespace gl
 		if (pipeline == _pipelines.end())
 			assert(0);
 		_optimizePipelineSearch.first = key;
-		_optimizePipelineSearch.second = &pipeline->second;
-		return (&pipeline->second);
+		_optimizePipelineSearch.second = pipeline->second;
+		return (pipeline->second);
+	}
+
+	Pipeline *RenderManager::getPipeline(Key<Pipeline> const &key)
+	{
+		return (&_pipelineOrdered[getIndexPipeline(key)]);
 	}
 
 	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
 	{
 		Key<RenderPostEffect> key;
-		Shader *shader;
 
-		if ((shader = getShader(s)) == NULL)
-			return  (Key<RenderPostEffect>(KEY_DESTROY));
-		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleForm(QUAD), *shader, geometryManager);
-		element->pushInputSampler(_preShaderQuad->getSampler(0));
+		geometryManager.createQuadSimpleForm();
+		Shader *shader = getShader(s);
+		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleFormGeo(QUAD), *shader, geometryManager, locationStorage);
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
 		return (key);
 	}
@@ -641,64 +531,14 @@ namespace gl
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect);
 
-	RenderManager &RenderManager::configRenderPostEffect(Key<RenderPostEffect> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)
-	{
-		RenderPostEffect *renderPostEffect;
-
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
-		renderPostEffect->setMode(mode);
-		renderPostEffect->configRect(rect);
-		return (*this);
-	}
-
-	RenderManager &RenderManager::pushOutputColorRenderPostEffect(Key<RenderPostEffect> const &key, GLenum attachement, GLenum internalFormat)
-	{
-		RenderPostEffect *renderPostEffect;
-
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
-		renderPostEffect->pushColorOutput(attachement, internalFormat);
-		return (*this);
-	}
-
-	RenderManager & RenderManager::popOutputColorRenderPostEffect(Key<RenderPostEffect> const &key)
-	{
-		RenderPostEffect *renderPostEffect;
-
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
-		renderPostEffect->popColorOutput();
-		return (*this);
-	}
-
-	RenderManager &RenderManager::pushInputColorRenderPostEffect(Key<RenderPostEffect> const &key, Key<Sampler> const &s)
-	{
-		RenderPostEffect *renderPostEffect;
-
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
-		renderPostEffect->pushInputSampler(s);
-		return (*this);
-	}
-	
-	RenderManager &RenderManager::popInputColorRenderPostEffect(Key<RenderPostEffect> const &key)
-	{
-		RenderPostEffect *renderPostEffect;
-
-		if ((renderPostEffect = getRenderPostEffect(key)) == NULL)
-			return (*this);
-		renderPostEffect->popInputSampler();
-		return (*this);
-	}
-
 	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect)
 	{
 		Key<RenderOnScreen> key;
 
 		createPreShaderQuad();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleForm(QUAD), *_preShaderQuad, geometryManager);
-		element->pushInputSampler(_preShaderQuad->getSampler(0));
+		geometryManager.createQuadSimpleForm();
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), *_preShaderQuad, geometryManager);
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
 		element->configRect(rect);
 		return (key);
 	}
@@ -717,52 +557,32 @@ namespace gl
 
 	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPass> const &to)
 	{
-		RenderPass *renderPassFrom;
-		RenderPass *renderPassTo;
-
-		if ((renderPassFrom = getRenderPass(from)) == NULL)
-			return (*this);
-		if ((renderPassTo = getRenderPass(to)) == NULL)
-			return (*this);
+		RenderPass *renderPassFrom = getRenderPass(from);
+		RenderPass *renderPassTo = getRenderPass(to);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to)
 	{
-		RenderPass *renderPassFrom;
-		RenderPostEffect *renderPassTo;
-
-		if ((renderPassFrom = getRenderPass(from)) == NULL)
-			return (*this);
-		if ((renderPassTo = getRenderPostEffect(to)) == NULL)
-			return (*this);
+		RenderPass *renderPassFrom = getRenderPass(from);
+		RenderPostEffect *renderPassTo = getRenderPostEffect(to);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to)
 	{
-		RenderPass *renderPassFrom;
-		RenderOnScreen *renderPassTo;
-
-		if ((renderPassFrom = getRenderPass(from)) == NULL)
-			return (*this);
-		if ((renderPassTo = getRenderOnScreen(to)) == NULL)
-			return (*this);
+		RenderPass *renderPassFrom = getRenderPass(from);
+		RenderOnScreen *renderPassTo = getRenderOnScreen(to);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to)
 	{
-		RenderPostEffect *renderPassFrom;
-		RenderOnScreen *renderPassTo;
-
-		if ((renderPassFrom = getRenderPostEffect(from)) == NULL)
-			return (*this);
-		if ((renderPassTo = getRenderOnScreen(to)) == NULL)
-			return (*this);
+		RenderPostEffect *renderPassFrom = getRenderPostEffect(from);
+		RenderOnScreen *renderPassTo = getRenderOnScreen(to);
 		renderPassTo->branchInput(*renderPassFrom);
 		return (*this);
 	}
@@ -770,49 +590,33 @@ namespace gl
 	Key<Pipeline> RenderManager::addPipeline()
 	{
 		Key<Pipeline> key;
-
-		_pipelines[key];
+	
+		_pipelineOrdered.push_back(Pipeline());
+		_pipelines[key] = _pipelineOrdered.size() - 1;
 		return (key);
 	}
 
-	RenderManager &RenderManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPass> const &r)
+	RenderManager &RenderManager::pushRenderPassPipeline(Key<Pipeline> const &p, Key<RenderPass> const &r)
 	{
-		Pipeline *pipeline;
-		RenderPass *renderPass;
-
-		if ((pipeline = getPipeline(p)) == NULL)
-			return (*this);
-		if ((renderPass = getRenderPass(r)) == NULL)
-			return (*this);
-		pipeline->setRendering(time, renderPass);
+		Pipeline *pipeline = getPipeline(p);
+		RenderPass *renderPass = getRenderPass(r);
+		pipeline->pushRenderPass(renderPass);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderPostEffect> const &r)
+	RenderManager &RenderManager::pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r)
 	{
-		Pipeline *pipeline;
-		RenderPostEffect *renderPostEffect;
-
-		if ((pipeline = getPipeline(p)) == NULL)
-			return (*this);
-		if ((renderPostEffect = getRenderPostEffect(r)) == NULL)
-			return (*this);
-		pipeline->setRendering(time, renderPostEffect);
+		Pipeline *pipeline = getPipeline(p);
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
+		pipeline->pushRender(renderPostEffect);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::setPipeline(Key<Pipeline> const &p, uint8_t time, Key<RenderOnScreen> const &r)
+	RenderManager &RenderManager::pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r)
 	{
-		Pipeline *pipeline;
-		RenderOnScreen *renderOnScreen;
-
-		if ((pipeline = getPipeline(p)) == NULL)
-			return (*this);
-		if ((renderOnScreen = getRenderOnScreen(r)) == NULL)
-			return (*this);
-		pipeline->setRendering(time, renderOnScreen);
-		_minTime = std::min(_minTime, pipeline->getMinTime());
-		_maxTime = std::max(_maxTime, pipeline->getMaxTime());
+		Pipeline *pipeline = getPipeline(p);
+		RenderOnScreen *renderOnScreen = getRenderOnScreen(r);
+		pipeline->pushRender(renderOnScreen);
 		return (*this);
 	}
 
@@ -826,49 +630,43 @@ namespace gl
 		return (element->first);
 	}
 
+	RenderManager &RenderManager::configPipeline(Key<Pipeline> const &p, DrawType type)
+	{
+		Pipeline *pipeline = getPipeline(p);
+		pipeline->config(type);
+		return (*this);
+	}
+
 	RenderManager &RenderManager::updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
-		Pipeline *pipeline;
-
-		if ((pipeline = getPipeline(p)) == NULL)
-			return (*this);
-		pipeline->setToRender(objectRender);
+		Pipeline *pipeline = getPipeline(p);
+		pipeline->update(objectRender);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::drawPipelines()
 	{
-		for (uint8_t time = _minTime; time < _maxTime; ++time)
-			for (auto &pipeline = _pipelines.begin(); pipeline != _pipelines.end(); ++pipeline)
-				pipeline->second.draw(time);
+		for (size_t index = 0; index < _pipelineOrdered.size(); ++index)
+			_pipelineOrdered[index].draw();
 		return (*this);
 	}
 
 	RenderManager &RenderManager::drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
-		Pipeline *pipeline;
-
-		if ((pipeline = getPipeline(key)) == NULL)
-			return (*this);
-		pipeline->setToRender(objectRender);
-		for (uint8_t time = pipeline->getMinTime(); time < pipeline->getMaxTime(); ++time)
-			pipeline->draw(time);
+		Pipeline *pipeline = getPipeline(key);
+		pipeline->update(objectRender);
+		pipeline->draw();
 		return (*this);
 	}
 
 	RenderManager &RenderManager::draw(Key<RenderOnScreen> const &o, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender)
 	{
-		RenderOnScreen *renderOnScreen;
-		RenderPass *renderPass;
-
-		if ((renderOnScreen = getRenderOnScreen(o)) == NULL)
-			return (*this);
-		if ((renderPass = getRenderPass(r)) == NULL)
-			return (*this);
-		renderPass->setRenderPassObjects(objectRender);
+		RenderOnScreen *renderOnScreen = getRenderOnScreen(o);
+		RenderPass *renderPass = getRenderPass(r);
+		renderPass->setDraw(objectRender, 0, objectRender.size());
 		renderOnScreen->branchInput(*renderPass);
-		renderPass->draw();
-		renderOnScreen->draw();
+		renderPass->render();
+		renderOnScreen->render();
 		return (*this);
 	}
 }

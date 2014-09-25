@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Plane.hpp"
+#include <Utils/BoundingInfos.hpp>
 
 namespace AGE
 {
@@ -84,6 +85,22 @@ namespace AGE
 				if (v <= 0.0f)
 					return false;
 			}
+			return true;
+		}
+
+		bool sphereIn(const AGE::BoundingInfos &b, const glm::vec3 position)
+		{
+			for (int i = 0; i < _END; ++i)
+			{
+				auto v = _planes[i].dot(b.getCenter() + position);
+				if (v < /* TODO add radius in bounding infos ! */ - 1.0f)
+					return false;
+			}
+			return true;
+		}
+
+		bool aabbIn(const AGE::BoundingInfos &b)
+		{
 			return true;
 		}
 	};

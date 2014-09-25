@@ -8,10 +8,12 @@
 #include <functional>
 #include <Render/Material.hh>
 #include <Render/UniformBlock.hh>
-#include <Render/OpenGLTask.hh>
+#include <Render/Task.hh>
 #include <Render/Framebuffer.hh>
 #include <Render/Shader.hh>
+#include <Render/LocationStorage.hh>
 #include <map>
+#include <utility>
 
 namespace AGE { struct Drawable; }
 
@@ -35,12 +37,23 @@ namespace gl
 	class Render
 	{
 	public:
-		~Render();
+		struct Draw
+		{
+		public:
+			GeometryManager &geometryManager;
+			Shader &shader;
+			GLenum mode;
+		public:
+			Draw(GeometryManager &g, Shader &s, GLenum mode);
+		};
 
-		virtual Render &draw() = 0;
+	public:
+		virtual ~Render();
+
+		virtual Render &render() = 0;
 		virtual RenderType getType() const = 0;
 
-		// prepare draw
+		// state
 		Render &pushSetScissorTask(glm::ivec4 const &area);
 		Render &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
 		Render &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
@@ -68,126 +81,161 @@ namespace gl
 		// Render attach to this render
 		Render &branchInput(RenderOffScreen const &input);
 		Render &unBranchInput();
-		Render &pushInputSampler(Key<Sampler> const &key);
+		
+		Render &pushInputSampler(Key<Sampler> const &key, GLenum attachement);
 		Render &popInputSampler();
 
 	protected:
-		Render(Shader &shader, GeometryManager &g);
-		
+		Render(Draw *draw);
 		Render() = delete;
 		Render(Render const &copy) = delete;
 		Render &operator=(Render const &r) = delete;
+		void updateInput();
 
 		glm::ivec4 _rect;
-		GLenum _mode;
-		
-		Shader &_shader;
 		AGE::Vector<Task> _tasks;
-		AGE::Vector<Key<Sampler>> _inputSamplers;
+		AGE::Vector<std::pair<Key<Sampler>, GLenum>> _inputSamplers;
 		RenderOffScreen const *_branch;
-
-		GeometryManager &_geometryManager;
-		void updateInput();
-	};
-
-	class RenderOffScreen : public Render
-	{
-	public:
-		virtual ~RenderOffScreen();
-
-		RenderOffScreen &configSample(GLint sample);
-		RenderOffScreen &pushColorOutput(GLenum attachement, GLenum internalFormat);
-		RenderOffScreen &pushColorOutput(GLenum attachement, size_t width, size_t height, GLenum internalFormat);
-		RenderOffScreen &popColorOutput();
-		Texture2D const &getColorOutput(size_t index) const;
-		GLenum getAttachementOutput(size_t index) const;
-		size_t getNbrAttachementOutput() const;
-
-		RenderOffScreen &createDepthBuffer();
-		RenderOffScreen &deleteDepthBuffer();
-		RenderBuffer const *getDepthBuffer() const;
-
-		RenderOffScreen &createStencilBuffer();
-		RenderOffScreen &deleteStencilBuffer();
-		RenderBuffer const *getStencilBuffer() const;
-
-		RenderOffScreen &useInputDepth();
-		RenderOffScreen &unUseInputDepth();
-		RenderOffScreen &useInputStencil();
-		RenderOffScreen &unUseInputStencil();
-		RenderOffScreen &useInputColor(GLenum attachement);
-		RenderOffScreen &unUseInputColor(GLenum attachement);
-
-	protected:
-		RenderOffScreen(Shader &shader, GeometryManager &g);
-		RenderOffScreen(RenderOffScreen const &copy) = delete;
-		RenderOffScreen &operator=(RenderOffScreen const &r) = delete;
-
-		GLenum *_colorAttachement;
-		Texture2D **_colorTexture2D;
-		uint8_t _nbrColorAttachement;
-
-		RenderBuffer *_depthBuffer;
-		RenderBuffer *_stencilBuffer;
-		bool _useInputDepth;
-		bool _useInputStencil;
-		std::map<GLenum, bool> _useInputColor;
-
-		Framebuffer _fbo;
-		GLint _sample;
-		bool _updateOutput;
-
-		void updateOutput();
-		void updateInput();
+		Draw &_draw;
 	};
 
 	class RenderOnScreen : public Render
 	{
 	public:
+		struct Draw : public Render::Draw
+		{
+		public:
+			Key<Vertices> quad;
+
+		public:
+			Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad);
+		};
+
+	public:
 		virtual ~RenderOnScreen();
 		RenderOnScreen(Key<Vertices> const &key, Shader &shader, GeometryManager &g);
 
-		virtual Render &draw();
+		virtual Render &render();
 		virtual RenderType getType() const;
+
 	private:
 		RenderOnScreen(RenderOnScreen const &copy) = delete;
 		RenderOnScreen &operator=(RenderOnScreen const &r) = delete;
 
-		Key<Vertices> _quad;
+		Draw &_draw;
 	};
 
-	class RenderPass : public RenderOffScreen
+	class RenderOffScreen : public Render
 	{
 	public:
-		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m);
-		virtual ~RenderPass();
+		struct Draw : public Render::Draw
+		{
+		public:
+			LocationStorage &locationStorage;
 
-		RenderPass &setRenderPassObjects(AGE::Vector<AGE::Drawable> const &objects);
-		virtual Render &draw();
-		virtual RenderType getType() const;
-	
-	private:
-		RenderPass(RenderPass const &copy) = delete;
-		RenderPass &operator=(RenderPass const &r) = delete;
-	
-		AGE::Vector<AGE::Drawable> const *_objectsToRender;
+		public:
+			Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode);
+		};
 
-		MaterialManager &_materialManager;
+	public:
+		virtual ~RenderOffScreen();
+
+		RenderOffScreen &configSample(GLint sample);
+		RenderOffScreen &pushTarget(GLenum attachement);
+		RenderOffScreen &popTarget();
+		RenderOffScreen &createBufferSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
+		RenderOffScreen &createBufferSamplable(GLenum attachement, GLenum internalFormat);
+		Texture2D const *getBufferSamplable(GLenum attachement) const;
+		RenderOffScreen &createBufferNotSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
+		RenderOffScreen &createBufferNotSamplable(GLenum attachement, GLenum internalFormat);
+		RenderBuffer const *getBufferNotSamplable(GLenum attachement) const;
+		RenderOffScreen &deleteBuffer(GLenum attachement);
+		RenderOffScreen &useInputBuffer(GLenum attachement);
+
+		RenderOffScreen &pushSetUniformMat4Task(Key<Uniform> const &key, size_t location);
+		RenderOffScreen &pushSetUniformMat3Task(Key<Uniform> const &key, size_t location);
+		RenderOffScreen &pushSetUniformFloatTask(Key<Uniform> const &key, size_t location);
+		RenderOffScreen &pushSetUniformVec4Task(Key<Uniform> const &key, size_t location);
+		RenderOffScreen &pushOwnTask(std::function<void(LocationStorage &)> const &func);
+
+	protected:
+		RenderOffScreen(Render::Draw *draw);
+		RenderOffScreen(RenderOffScreen const &copy) = delete;
+		RenderOffScreen &operator=(RenderOffScreen const &r) = delete;
+
+		std::map<GLenum, std::pair<Storage const *, bool>> _buffer; // the bool is use to determinate if the storage is own by this class or the branched one.
+
+		AGE::Vector<std::function<void(LocationStorage &)> *> _ownFunction;
+		AGE::Vector<GLenum> _target;
+		Framebuffer _fbo;
+		GLint _sample;
+
+		bool _updateBuffer;
+		bool _updateFrameBuffer;
+
+		void updateBuffer();
+		void updateFrameBuffer();
+		void updateOutput();
 	};
 
 	class RenderPostEffect : public RenderOffScreen
 	{
 	public:
-		RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g);
+		struct Draw : public RenderOffScreen::Draw
+		{
+		public:
+			Key<Vertices> quad;
+
+		public:
+			Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad);
+		};
+	public:
+		RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g, LocationStorage &l);
 		virtual ~RenderPostEffect();
 
-		virtual Render &draw();
+		virtual Render &render();
 		virtual RenderType getType() const;
+
 	private:
 		RenderPostEffect(RenderPostEffect const &copy) = delete;
 		RenderPostEffect &operator=(RenderPostEffect const &r) = delete;
 
-		Key<Vertices> _quad;
+		Draw &_draw;
+	};
+
+	class RenderPass : public RenderOffScreen
+	{
+	public:
+		struct Draw : public RenderOffScreen::Draw
+		{
+		public:
+			MaterialManager &materialManager;
+			AGE::Vector<AGE::Drawable> const *toRender;
+			size_t start;
+			size_t end;
+
+		public:
+			Draw(GeometryManager &g, LocationStorage &l, Shader &s, MaterialManager &m, GLenum mode);
+		};
+
+	public:
+		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m, LocationStorage &l);
+		virtual ~RenderPass();
+
+		RenderPass &pushDrawTask();
+		RenderPass &setDraw(AGE::Vector<AGE::Drawable> const &objects, size_t start, size_t end);
+		RenderPass &setDraw();
+		
+		virtual Render &render();
+		virtual RenderType getType() const;
+
+	private:
+		void separateDraw();
+		void globalDraw();
+		RenderPass(RenderPass const &copy) = delete;
+		RenderPass &operator=(RenderPass const &r) = delete;
+
+		Draw &_draw;
 	};
 
 }

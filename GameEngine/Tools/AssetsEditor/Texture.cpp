@@ -1,6 +1,6 @@
 #include <vector>
 #include <string>
-#include <il/devil_cpp_wrapper.hpp>
+//#include <il/devil_cpp_wrapper.hpp>
 #include "Texture.hh"
 
 namespace AGE

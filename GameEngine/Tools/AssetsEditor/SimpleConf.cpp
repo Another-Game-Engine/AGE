@@ -1,6 +1,6 @@
 #include <string>
 #include <iostream>
-#include "Simple.hh"
+#include "SimpleConf.hh"
 
 namespace AGE
 {

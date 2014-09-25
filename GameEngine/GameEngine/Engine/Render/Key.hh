@@ -19,7 +19,7 @@ namespace gl
 	class Key
 	{
 	public:
-		Key(int);
+		explicit Key(int);
 		Key();
 		~Key();
 		Key(Key<TYPE> const &copy);

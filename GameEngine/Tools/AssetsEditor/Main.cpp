@@ -1,27 +1,11 @@
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/matrix_interpolation.hpp>
-
 #include <Utils/Containers/Vector.hpp>
 #include <map>
-#include <chrono>
 
-#include <Core/Engine.hh>
-#include <Core/SceneManager.hh>
+//EDITOR
+#include "AssetConvertor.hh"
+#include "SimpleConf.hh"
 
-// DEPENDENCIES
-#include <Context/SdlContext.hh>
-#include <Core/ConfigurationManager.hpp>
-#include <Physic/BulletDynamicManager.hpp>
-#include <Core/Timer.hh>
-#include <Utils/PubSub.hpp>
-#include <Render/GeometryManager.hh>
-#include <Utils/PerformanceDebugger.hh>
-#include <Core/AssetsManager.hpp>
-
+//CONVERTOR
 #include <Convertor/SkeletonLoader.hpp>
 #include <Convertor/AnimationsLoader.hpp>
 #include <Convertor/MeshLoader.hpp>
@@ -39,6 +23,12 @@
 
 int			main(int ac, char **av)
 {
+	{
+		AGE::SimpleConf confFile("convertor.conf");
+		AGE::AssetConvertor convertor(&confFile);
+		convertor.loads();
+		convertor.saves();
+	}
 	{
 		AGE::AssetDataSet dataSet;
 		dataSet.filePath = File("ball/ball.obj");
