@@ -25,11 +25,8 @@ namespace gl
 		~LocationStorage();
 
 		LocationStorage &generateLocation(size_t nbrIndex);
-		template <typename TYPE> LocationStorage &setLocation(size_t index, TYPE const &value);
-		template <typename TYPE> LocationStorage &setLocation(size_t index, TYPE const &value, size_t nbrElement);
-		template <typename TYPE> TYPE getLocation(size_t index);
-		template <typename TYPE> TYPE getLocation(size_t index, size_t &nbrElement);
-		
+		template <typename TYPE> LocationStorage &setLocation(size_t index, TYPE value);
+		template <typename TYPE> TYPE getLocation(size_t index);	
 
 	private:
 		LocationStorage(LocationStorage const &copy) = delete;
@@ -39,7 +36,7 @@ namespace gl
 	};
 
 	template <typename TYPE>
-	LocationStorage &LocationStorage::setLocation(size_t index, TYPE const &value)
+	LocationStorage &LocationStorage::setLocation(size_t index, TYPE value)
 	{
 		if (_locations[index].size != sizeof(TYPE))
 			_locations[index] = Location(&value, sizeof(TYPE), 1);
@@ -47,19 +44,6 @@ namespace gl
 		{
 			memcpy(_locations[index].ptr, (TYPE *)&value, sizeof(TYPE));
 			_locations[index].nbrElement = 1;
-		}
-		return (*this);
-	}
-
-	template <typename TYPE>
-	LocationStorage &LocationStorage::setLocation(size_t index, TYPE const &value, size_t nbrElement)
-	{
-		if (_locations[index].size != sizeof(TYPE))
-			_locations[index] = Location(&value, sizeof(TYPE), nbrElement);
-		else
-		{
-			memcpy(_locations[index].ptr, (TYPE *)&value, sizeof(TYPE));
-			_locations[index].nbrElement = nbrElement;
 		}
 		return (*this);
 	}
@@ -73,12 +57,5 @@ namespace gl
 		TYPE value;
 		memcpy(&value, location.ptr, sizeof(TYPE));
 		return (value);
-	}
-
-	template <typename TYPE>
-	TYPE LocationStorage::getLocation(size_t index, size_t &nbrElement)
-	{
-		nbrElement = _locations[index].nbrElement;
-		return (getLocation(index));
 	}
 }

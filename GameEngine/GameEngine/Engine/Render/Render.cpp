@@ -524,8 +524,10 @@ namespace gl
 		_fbo.bind();
 		updateOutput();
 		updateInput();
+		_draw.shader.use();
 		for (size_t i = 0; i < _tasks.size(); ++i)
 			_tasks[i].func(_tasks[i].params);
+		glFlush();
 		return (*this);
 	}
 
@@ -547,10 +549,12 @@ namespace gl
 		_fbo.bind();
 		updateOutput();
 		updateInput();
+		_draw.shader.use();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		_draw.shader.update();
 		_draw.geometryManager.draw(_draw.mode, _draw.idQuad, _draw.quad);
+		glFlush();
 		return (*this);
 	}
 
@@ -571,10 +575,12 @@ namespace gl
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glDrawBuffer(GL_BACK);
 		updateInput();
+		_draw.shader.use();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 			_tasks[index].func(_tasks[index].params);
 		_draw.shader.update();
 		_draw.geometryManager.draw(_draw.mode, _draw.quadId, _draw.quad);
+		glFlush();
 		return (*this);
 	}
 

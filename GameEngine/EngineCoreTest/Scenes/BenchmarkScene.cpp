@@ -35,8 +35,8 @@ void BenchmarkScene::initRendering()
 		_renderManager->bindTransformationToShader(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "model_matrix", glm::mat4(1.f)));
 		
 		// found uniform
-		key.Accum.position_light = _renderManager->addShaderUniform(key.Accum.shader, "position_light", glm::vec3(0.f, 0.f, 10.f));
-		key.Accum.range_light = _renderManager->addShaderUniform(key.Accum.shader, "attenuation_light", glm::vec3(1.f, 0.1f, 0.f));
+		key.Accum.position_light = _renderManager->addShaderUniform(key.Accum.shader, "position_light", glm::vec3(1.f));
+		key.Accum.range_light = _renderManager->addShaderUniform(key.Accum.shader, "attenuation_light", glm::vec3(1.f));
 		key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
 		key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
 
@@ -65,6 +65,7 @@ void BenchmarkScene::initRendering()
 
 		// create renderPostEffect
 		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushOwnTaskRenderPostEffect(key.Accum.renderPostEffect, [](gl::LocationStorage &l){ std::cout << l.getLocation<size_t>(0) << std::endl; });
 		_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, false);
 		_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
 		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, true);
@@ -74,7 +75,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_DEPTH_ATTACHMENT, key.getBuff.renderPass);
 		_renderManager->useInputBufferRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, key.clean.renderPass);
 		_renderManager->createBufferNotSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
-		
+
 		// create renderOnscreen and set it
 		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.clean.renderPass);
 		_renderManager->pushClearTaskRenderOnScreen(key.getBuff.renderOnScreen, true, true, false);
@@ -181,12 +182,6 @@ bool BenchmarkScene::userStart()
 	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
 	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
 	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
-	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
-	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
-	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
-	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
-	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
-	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
 	return true;
 }
 
@@ -282,6 +277,8 @@ bool BenchmarkScene::userUpdate(double time)
 
 	octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
 	{
+		renderManager->locationStorage.generateLocation(collection.lights.size() + 1);
+		renderManager->locationStorage.setLocation(0, collection.lights.size());
 		AGE::Vector<AGE::Drawable> lights;
 		for (size_t index = 0; index < collection.lights.size(); ++index)
 		{
@@ -290,6 +287,7 @@ bool BenchmarkScene::userUpdate(double time)
 			drawable.material = renderManager->materialManager.getDefaultMaterial();
 			drawable.mesh.vertices = renderManager->geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
 			drawable.mesh.indices = renderManager->geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
+			renderManager->locationStorage.setLocation(index + 1, collection.lights[index]);
 			lights.push_back(drawable);
 		}
 		renderManager->setUniformBlock(key.global_state, 0, collection.projection);
