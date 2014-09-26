@@ -526,7 +526,6 @@ namespace gl
 		updateInput();
 		for (size_t i = 0; i < _tasks.size(); ++i)
 			_tasks[i].func(_tasks[i].params);
-		glFlush();
 		return (*this);
 	}
 
@@ -552,7 +551,6 @@ namespace gl
 			_tasks[index].func(_tasks[index].params);
 		_draw.shader.update();
 		_draw.geometryManager.draw(_draw.mode, _draw.idQuad, _draw.quad);
-		glFlush();
 		return (*this);
 	}
 
@@ -577,7 +575,6 @@ namespace gl
 			_tasks[index].func(_tasks[index].params);
 		_draw.shader.update();
 		_draw.geometryManager.draw(_draw.mode, _draw.quadId, _draw.quad);
-		glFlush();
 		return (*this);
 	}
 

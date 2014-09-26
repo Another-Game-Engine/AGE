@@ -79,7 +79,7 @@ void BenchmarkScene::initRendering()
 		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.clean.renderPass);
 		_renderManager->pushClearTaskRenderOnScreen(key.getBuff.renderOnScreen, true, true, false);
 		_renderManager->pushSetTestTaskRenderOnScreen(key.getBuff.renderOnScreen, false, false, true);
-		_renderManager->pushSetClearValueTaskRenderOnScreen(key.getBuff.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+		_renderManager->pushSetClearValueTaskRenderOnScreen(key.getBuff.renderOnScreen, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
 		// create the pipeline and set it with both render element add before
 		key.getBuff.pipeline = _renderManager->addPipeline();
@@ -178,6 +178,12 @@ bool BenchmarkScene::userStart()
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
 	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
 	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
 	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
