@@ -40,15 +40,16 @@ bool 		Engine::update()
 	auto time = timer->getElapsed();
 
 #ifdef USE_IMGUI
-
+IMGUI_BEGIN
 	AGE::Imgui::getInstance()->startUpdate();
-
+IMGUI_END
 #endif
 
 	timer->update();
 	sceneManager->update(time);
 
-	return (sceneManager->userUpdate(time));
+	auto res =sceneManager->userUpdate(time);
+	return res;
 }
 
 void 		Engine::stop()

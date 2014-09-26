@@ -4,8 +4,8 @@
 #include <Utils/DependenciesInjector.hpp>
 #include <SDL/SDL_keycode.h>
 #include <SDL/SDL.h>
-#include <Utils/OpenGL.hh>
 #include <imgui/imconfig.h>
+#include <Utils/Utils.hh>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <imgui\stb_image.h>
@@ -17,14 +17,29 @@ namespace AGE
 {
 
 	unsigned int Imgui::_fontTex = 0;
+	int Imgui::_shader_handle = 0;
+	int Imgui::_vert_handle = 0;
+	int Imgui::_frag_handle = 0;
+	int Imgui::_texture_location = 0;
+	int Imgui::_ortho_location = 0;
+	int Imgui::_position_location = 0;
+	int Imgui::_uv_location = 0;
+	int Imgui::_colour_location = 0;
+	unsigned int Imgui::_vbohandle = 0;
+	unsigned int Imgui::_cursor = 0;
+	unsigned int Imgui::_size = 0;
 
 	bool Imgui::init(DependenciesInjector *di)
 	{
 #ifdef USE_IMGUI
-		auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+		std::lock_guard<std::mutex> lock(_mutex);
+		//HARDCODED WINDOW TO FIX
+		//auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
 		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2((float)window.x, (float)window.y);        // Display size, in pixels. For clamping windows positions.
+		//HARDCODED WINDOW TO FIX
+		//io.DisplaySize = ImVec2((float)window.x, (float)window.y);        // Display size, in pixels. For clamping windows positions.
+		io.DisplaySize = ImVec2(800, 600);        // Display size, in pixels. For clamping windows positions.
 		io.DeltaTime = 1.0f / 60.0f;                          // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
 		io.PixelCenterOffset = 0.0f;                        // Align OpenGL texels
 		io.KeyMap[ImGuiKey_Tab] = SDLK_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
@@ -62,6 +77,53 @@ namespace AGE
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex_x, tex_y, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
 		stbi_image_free(tex_data);
 
+		static const char vertex_shader[] = \
+			"#version 330\n"
+			"uniform mat4 ortho;\n"
+
+			"in vec2 Position;\n"
+			"in vec2 UV;\n"
+			"in vec4 Colour;\n"
+
+			"out vec2 Frag_UV;\n"
+			"out vec4 Frag_Colour;\n"
+
+			"void main()\n"
+			"{\n"
+			"	Frag_UV = UV;\n"
+			"	Frag_Colour = Colour;\n"
+			"\n"
+			"	gl_Position = ortho*vec4(Position.xy,0,1);\n"
+			"}\n";
+
+		static const char fragment_shader[] = \
+			"#version 330\n"
+			"uniform sampler2D Texture;\n"
+
+			"in vec2 Frag_UV;\n"
+			"in vec4 Frag_Colour;\n"
+
+			"out vec4 FragColor;\n"
+
+			"void main()\n"
+			"{\n"
+			"	FragColor = Frag_Colour * texture( Texture, Frag_UV.st);\n"
+			"}\n";
+
+		initShader(&_shader_handle, &_vert_handle, &_frag_handle, vertex_shader, fragment_shader);
+
+		_texture_location = glGetUniformLocation(_shader_handle, "Texture");
+		_ortho_location = glGetUniformLocation(_shader_handle, "ortho");
+		_position_location = glGetAttribLocation(_shader_handle, "Position");
+		_uv_location = glGetAttribLocation(_shader_handle, "UV");
+		_colour_location = glGetAttribLocation(_shader_handle, "Colour");
+
+		_size = static_cast<int>(pow(2.0, 20.0)); //1Mb streaming buffer
+		glGenBuffers(1, &_vbohandle);
+		glBindBuffer(GL_ARRAY_BUFFER, _vbohandle);
+		glBufferData(GL_ARRAY_BUFFER, _size, NULL, GL_DYNAMIC_DRAW);
+#else
+		UNUSED(di);
 #endif //USE_IMGUI
 		return true;
 	}
@@ -99,30 +161,32 @@ namespace AGE
 	void Imgui::endUpdate()
 	{
 #ifdef USE_IMGUI
+
+		std::lock_guard<std::mutex> lock(_mutex);
+		if (_releaseWork == false)
+			return;
+		static auto counter = 0;
+		++counter;
+		auto i = 0;
 		for (auto &q : _commandQueue)
 		{
-			q.second->releaseReadability();
-			q.second->getDispatcher()
-				.handle<TQC::VoidFunction>([&](const TQC::VoidFunction& msg)
+			if (q.second.empty())
+				return;
+			while (true && !q.second.empty())
 			{
-				msg.function();
-			});
+				if (q.second.front().end == false)
+				{
+					q.second.front().function();
+					q.second.pop();
+				}
+				else
+				{
+					q.second.pop();
+					break;
+				}
+			}
 		}
-#endif
-	}
-
-	void Imgui::push(const std::function<void()> &fn)
-	{
-#ifdef USE_IMGUI
-		std::lock_guard<std::mutex> lock(_mutex);
-		std::shared_ptr<TMQ::Queue> queue = nullptr;
-		{
-			auto it = _threadIds.find(std::this_thread::get_id().hash());
-			assert(it != std::end(_threadIds) && "Thread is not registered.");
-			queue = _commandQueue[it->second];
-		}
-
-		queue->emplace<TQC::VoidFunction>(std::move(fn));
+		_releaseWork = false;
 #endif
 	}
 
@@ -130,14 +194,16 @@ namespace AGE
 	{
 #ifdef USE_IMGUI
 		std::lock_guard<std::mutex> lock(_mutex);
-		std::shared_ptr<TMQ::Queue> queue = nullptr;
+		std::queue<ImguiCommand> *queue = nullptr;
 		{
 			auto it = _threadIds.find(std::this_thread::get_id().hash());
 			assert(it != std::end(_threadIds) && "Thread is not registered.");
-			queue = _commandQueue[it->second];
+			queue = &_commandQueue[it->second];
 		}
 
-		queue->emplace<TQC::VoidFunction>(std::move(fn));
+		queue->emplace<ImguiCommand>(std::move(fn));
+#else
+		UNUSED(fn);
 #endif
 	}
 
@@ -149,11 +215,27 @@ namespace AGE
 		assert(_threadIds.find(threadId) == std::end(_threadIds) && "Thread already registered.");
 		assert(_commandQueue.find(priority) == std::end(_commandQueue) && "Priority already reserved.");
 		_threadIds.insert(std::make_pair(threadId, priority));
-		auto queue = std::make_shared<TMQ::Queue>();
-		_commandQueue.insert(std::make_pair(priority, queue));
-		queue->launch();
+		_commandQueue.insert(std::make_pair(priority, std::queue<ImguiCommand>()));
+#else
+		UNUSED(priority);
 #endif
 	}
+
+	void Imgui::threadLoopEnd()
+	{
+#ifdef USE_IMGUI
+		std::lock_guard<std::mutex> lock(_mutex);
+		auto threadId = std::this_thread::get_id().hash();
+		assert(_threadIds.find(threadId) != std::end(_threadIds) && "Thread not registered.");
+		auto priority = _threadIds.find(threadId)->second;
+		_commandQueue[priority].emplace<ImguiCommand>(true);
+		if (_launched && _threadIds.find(threadId) == --std::end(_threadIds))
+		{
+			_releaseWork = true;
+		}
+#endif
+	}
+
 
 	Imgui* Imgui::getInstance()
 	{
@@ -161,44 +243,68 @@ namespace AGE
 		return ImguiInstance;
 	}
 
+	static void make_ortho(float *result, float const & left, float const & right, float const & bottom, float const & top, float const & zNear, float const & zFar)
+	{
+#ifdef USE_IMGUI
+		result[0] = static_cast<float>(2) / (right - left);
+		result[5] = static_cast<float>(2) / (top - bottom);
+		result[10] = -float(2) / (zFar - zNear);
+		result[12] = -(right + left) / (right - left);
+		result[13] = -(top + bottom) / (top - bottom);
+		result[14] = -(zFar + zNear) / (zFar - zNear);
+#else
+		UNUSED(result);
+		UNUSED(left);
+		UNUSED(right);
+		UNUSED(bottom);
+		UNUSED(top);
+		UNUSED(zNear);
+		UNUSED(zFar);
+#endif
+	}
+
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
+#ifdef USE_IMGUI
 		if (cmd_lists_count == 0)
 			return;
 
-		// We are using the OpenGL fixed pipeline to make the example code simpler to read!
-		// A probable faster way to render would be to collate all vertices from all cmd_lists into a single vertex buffer.
-		// Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers.
+		// Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glDisable(GL_CULL_FACE);
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_SCISSOR_TEST);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glEnableClientState(GL_COLOR_ARRAY);
 
 		// Setup texture
-		glBindTexture(GL_TEXTURE_2D, Imgui::_fontTex);
-		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _fontTex);
 
 		// Setup orthographic projection matrix
 		const float width = ImGui::GetIO().DisplaySize.x;
 		const float height = ImGui::GetIO().DisplaySize.y;
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0.0f, width, height, 0.0f, -1.0f, +1.0f);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		float ortho[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }; //identity matrix
+		make_ortho(ortho, 0.0f, width, height, 0.0f, -1.0f, +1.0f);
 
-		// Render command lists
+		glUseProgram(_shader_handle);
+		glUniform1i(_texture_location, 0);
+		glUniformMatrix4fv(_ortho_location, 1, GL_FALSE, ortho);
+
+		glEnableVertexAttribArray(_position_location);
+		glEnableVertexAttribArray(_uv_location);
+		glEnableVertexAttribArray(_colour_location);
+
 		for (int n = 0; n < cmd_lists_count; n++)
 		{
 			const ImDrawList* cmd_list = cmd_lists[n];
-			const unsigned char* vtx_buffer = (const unsigned char*)cmd_list->vtx_buffer.begin();
-			glVertexPointer(2, GL_FLOAT, sizeof(ImDrawVert), (void*)(vtx_buffer));
-			glTexCoordPointer(2, GL_FLOAT, sizeof(ImDrawVert), (void*)(vtx_buffer + 8));
-			glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(ImDrawVert), (void*)(vtx_buffer + 16));
+			const const ImDrawVert* vtx_buffer = reinterpret_cast<const ImDrawVert*>(cmd_list->vtx_buffer.begin());
+			int vtx_size = static_cast<int>(cmd_list->vtx_buffer.size());
+
+			unsigned offset = stream(GL_ARRAY_BUFFER, _vbohandle, &_cursor, &_size, vtx_buffer, vtx_size);
+
+			glVertexAttribPointer(_position_location, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (void*)(offset));
+			glVertexAttribPointer(_uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (void*)(offset + 8));
+			glVertexAttribPointer(_colour_location, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (void*)(offset + 16));
 
 			int vtx_offset = 0;
 			const ImDrawCmd* pcmd_end = cmd_list->commands.end();
@@ -209,13 +315,39 @@ namespace AGE
 				vtx_offset += pcmd->vtx_count;
 			}
 		}
-		glDisable(GL_SCISSOR_TEST);
-		glDisableClientState(GL_COLOR_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
+
+		glDisableVertexAttribArray(_position_location);
+		glDisableVertexAttribArray(_uv_location);
+		glDisableVertexAttribArray(_colour_location);
+		glUseProgram(0);
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
+		glDisable(GL_SCISSOR_TEST);
 		glDisable(GL_BLEND);
+#else
+		UNUSED(cmd_lists);
+		UNUSED(cmd_lists_count);
+#endif
 	}
 
+	void Imgui::initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs)
+	{
+#ifdef USE_IMGUI
+		*pid = glCreateProgram();
+		*vert = glCreateShader(GL_VERTEX_SHADER);
+		*frag = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(*vert, 1, &vs, 0);
+		glShaderSource(*frag, 1, &fs, 0);
+		glCompileShader(*vert);
+		glCompileShader(*frag);
+		glAttachShader(*pid, *vert);
+		glAttachShader(*pid, *frag);
+		glLinkProgram(*pid);
+#else
+		UNUSED(pid);
+		UNUSED(vert);
+		UNUSED(frag);
+		UNUSED(vs);
+		UNUSED(fs);
+#endif
+	}
 }

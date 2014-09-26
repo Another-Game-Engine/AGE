@@ -444,13 +444,13 @@ namespace AGE
 			}
 			_octreeDrawList.clear();
 
+			IMGUI_BEGIN
+				ImGui::Text("Coucou from prepare render thread");
+			IMGUI_END
+				Imgui::getInstance()->threadLoopEnd();
+
 			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
 			renderThread->getCommandQueue().releaseReadability();
-
-		IMGUI_BEGIN
-			std::cout << "coucou from prepare thread !" << std::endl;
-		IMGUI_END
-
 			//msg.result.set_value(std::move(_octreeDrawList));
 			//_octreeDrawList.clear();
 		});

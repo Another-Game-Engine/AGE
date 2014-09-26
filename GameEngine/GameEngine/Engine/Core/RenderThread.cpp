@@ -41,12 +41,12 @@ bool RenderThread::_update()
 	{
 #ifdef USE_IMGUI
 		IMGUI_BEGIN
-		std::cout << "coucou from render thread !" << std::endl;
-		IMGUI_END
-		AGE::Imgui::getInstance()->endUpdate();
+		ImGui::Text("Coucou from render thread");
 		ImGui::Render();
+		IMGUI_END
+		Imgui::getInstance()->threadLoopEnd();
+		AGE::Imgui::getInstance()->endUpdate();
 #endif
-
 		_context->swapContext();
 	})
 		.handle<RendCtxCommand::GetScreenSize>([&](RendCtxCommand::GetScreenSize& msg)
