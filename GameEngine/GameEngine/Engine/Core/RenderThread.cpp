@@ -4,6 +4,7 @@
 #include <Configuration.hpp>
 
 #include <Utils/Age_Imgui.hpp>
+#include <chrono>
 
 using namespace AGE;
 
@@ -35,6 +36,7 @@ bool RenderThread::_releaseInNewThread()
 bool RenderThread::_update()
 {
 	bool returnValue = true;
+	static auto frameStart = std::chrono::high_resolution_clock::now();
 
 	_commandQueue.getDispatcher()
 		.handle<RendCtxCommand::Flush>([&](const RendCtxCommand::Flush& msg)
@@ -70,6 +72,16 @@ bool RenderThread::_update()
 		if (msg.function)
 			msg.function();
 	})
+		.handle<TQC::StartOfFrame>([&](const TQC::StartOfFrame& msg)
+		{
+			frameStart = std::chrono::system_clock::now();
+		}).handle<TQC::EndOfFrame>([&](const TQC::EndOfFrame& msg)
+		{
+			auto t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - frameStart);
+			IMGUI_BEGIN
+				ImGui::Text("Prepare Render Thread : %i ms", t.count());
+			IMGUI_END
+		})
 		.handle<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
 	{
 		return false;

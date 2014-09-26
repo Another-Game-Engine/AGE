@@ -17,6 +17,23 @@ namespace AGE
 			{}
 		};
 
+		//Call that in first for each thread
+		struct StartOfFrame
+		{
+			//std::chrono::system_clock::time_point ms;
+			//StartOfFrame()
+			//{
+			//	ms = std::chrono::system_clock::now();
+			//}
+		};
+
+		struct EndOfFrame
+		{
+			//EndOfFrame()
+			//{
+			//}
+		};
+
 		struct VoidFunction
 		{
 			std::function<void(void)> function;

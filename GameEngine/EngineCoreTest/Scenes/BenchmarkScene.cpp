@@ -1,6 +1,7 @@
 #include <Scenes/BenchmarkScene.hpp>
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
+#include <Utils/ThreadQueueCommands.hpp>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -242,9 +243,8 @@ bool BenchmarkScene::userUpdate(double time)
 		renderManager->drawPipelines();
 	});
 
-#ifdef USE_IMGUI
-	AGE::Imgui::getInstance()->threadLoopEnd();
-#endif
+	octree->getCommandQueue().autoEmplace<AGE::TQC::EndOfFrame>();
 	octree->getCommandQueue().releaseReadability();
+	octree->getCommandQueue().autoEmplace<AGE::TQC::StartOfFrame>();
 	return true;
 }
