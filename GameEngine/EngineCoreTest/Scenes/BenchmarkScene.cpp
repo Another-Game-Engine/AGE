@@ -62,11 +62,6 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushClearTaskRenderPass(key.clean.renderPass, true, false, false);
 		_renderManager->pushSetBlendStateTaskRenderPass(key.clean.renderPass, 0, false);
 		_renderManager->pushTargetRenderPass(key.clean.renderPass, GL_COLOR_ATTACHMENT0);
-		_renderManager->pushOwnTaskRenderPass(key.clean.renderPass, [](gl::RenderOffScreen::Draw &d)
-		{
-			size_t indexElement = d.locationStorage.getLocation<size_t>(0) + 1;
-			d.locationStorage.setLocation(indexElement, size_t(0));
-		});
 
 		// create renderPostEffect
 		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));

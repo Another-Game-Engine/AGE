@@ -17,7 +17,7 @@
 
 namespace AGE { struct Drawable;  }
 
-#define DECL_INPUT struct Input{ Key<Sampler> sampler; GLenum attachement; OffScreenRender const &render; Input(Key<Sampler> const &sampler, GLenum attachement, RenderOffScreen const &render); Input(Input const &copy); ~Input(); };
+#define DECL_INPUT struct Input{ Key<Sampler> sampler; GLenum attachement; OffScreenRender const &render; Input(Key<Sampler> const &sampler, GLenum attachement, OffScreenRender const &render); Input(Input const &copy); ~Input(); };
 
 namespace gl
 {
@@ -96,15 +96,14 @@ namespace gl
 	public:
 		BaseRender &configRect(glm::ivec4 const &rect);
 
+		virtual BaseRender &render() = 0;
+		virtual RenderType getType() const = 0;
+
 	protected:
 		BaseRender();
 		~BaseRender();
 
-		virtual BaseRender &render() = 0;
-		virtual RenderType getType() const = 0;
-
 		glm::ivec4 _rect;
-
 		void update();
 	};
 
@@ -158,7 +157,7 @@ namespace gl
 		DECL_INPUT
 		DrawableRender &setMode(GLenum mode);
 		GLenum getMode() const;
-		DrawableRender &pushInputSampler(Key<Sampler> const &key, GLenum attachement, RenderOffScreen const &render);
+		DrawableRender &pushInputSampler(Key<Sampler> const &key, GLenum attachement, OffScreenRender const &render);
 		DrawableRender &popInputSampler();
 
 	protected:
@@ -187,20 +186,6 @@ namespace gl
 		RenderOnScreen &operator=(RenderOnScreen const &r) = delete;
 	};
 
-	class RenderPostEffect : public DrawableRender, public OffScreenRender, public QuadRender
-	{
-	public:
-		RenderPostEffect(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l);
-		virtual ~RenderPostEffect();
-
-		virtual BaseRender &render();
-		virtual RenderType getType() const;
-
-	private:
-		RenderPostEffect(RenderPostEffect const &copy) = delete;
-		RenderPostEffect &operator=(RenderPostEffect const &r) = delete;
-	};
-
 	class RenderPass : public DrawableRender, public OffScreenRender
 	{
 	public:
@@ -224,7 +209,21 @@ namespace gl
 		size_t _end;
 	};
 
-	class EmptyPass : public OffScreenRender
+	class RenderPostEffect : public DrawableRender, public OffScreenRender, public QuadRender
+	{
+	public:
+		RenderPostEffect(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l);
+		virtual ~RenderPostEffect();
+
+		virtual BaseRender &render();
+		virtual RenderType getType() const;
+
+	private:
+		RenderPostEffect(RenderPostEffect const &copy) = delete;
+		RenderPostEffect &operator=(RenderPostEffect const &r) = delete;
+	};
+
+	class EmptyPass : public OperationBuffer, public BaseRender
 	{
 	public:
 		EmptyPass(LocationStorage &locationStorage);

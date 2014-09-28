@@ -435,6 +435,11 @@ namespace gl
 
 	}
 
+	DrawableRender::~DrawableRender()
+	{
+
+	}
+
 	DrawableRender &DrawableRender::setMode(GLenum mode)
 	{
 		_mode = mode;
@@ -447,7 +452,7 @@ namespace gl
 		return (_mode);
 	}
 
-	DrawableRender &DrawableRender::pushInputSampler(Key<Sampler> const &key, GLenum attachement, RenderOffScreen const &render)
+	DrawableRender &DrawableRender::pushInputSampler(Key<Sampler> const &key, GLenum attachement, OffScreenRender const &render)
 	{
 		if (_shader.hasSampler(key))
 			_inputSamplers.push_back(Input(key, attachement, render));
@@ -471,6 +476,27 @@ namespace gl
 			if ((text = _inputSamplers[index].render.getBufferSamplable(_inputSamplers[index].attachement)) != NULL)
 				_shader.setSampler(_inputSamplers[index].sampler, *text);
 		}
+	}
+
+	DrawableRender::Input::Input(Key<Sampler> const &sampler, GLenum attachement, OffScreenRender const &render)
+		: sampler(sampler),
+		attachement(attachement),
+		render(render)
+	{
+
+	}
+
+	DrawableRender::Input::~Input()
+	{
+
+	}
+
+	DrawableRender::Input::Input(DrawableRender::Input const &copy)
+		: sampler(copy.sampler),
+		attachement(copy.attachement),
+		render(copy.render)
+	{
+
 	}
 
 	RenderOnScreen::RenderOnScreen(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l)
@@ -558,8 +584,9 @@ namespace gl
 	}
 
 	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l)
-		: DrawableRender(new Draw(g, l, s, GL_TRIANGLES, key, id)),
-		_draw((Draw &)Render::_draw)
+		: DrawableRender(s, g),
+		OffScreenRender(l),
+		QuadRender(key, id)
 	{
 
 	}
@@ -569,17 +596,14 @@ namespace gl
 
 	}
 
-	Render &RenderPostEffect::render()
+	BaseRender &RenderPostEffect::render()
 	{
 		_fbo.bind();
-		updateOutput();
-		updateInput();
-		_draw.shader.use();
-		for (size_t index = 0; index < _tasks.size(); ++index)
-			_tasks[index].func(_tasks[index].params);
-		_draw.shader.update();
-		_draw.geometryManager.draw(_draw.mode, _draw.idQuad, _draw.quad);
-		glFlush();
+		_shader.use();
+		DrawableRender::update();
+		OffScreenRender::update();
+		_shader.update();
+		_geometryManager.draw(_mode, _id, _vertices);
 		return (*this);
 	}
 
@@ -588,54 +612,37 @@ namespace gl
 		return (RenderType::RENDER_POST_EFFECT);
 	}
 
-	Render::Draw::Draw(GeometryManager &g, Shader &s, GLenum mode)
-		: geometryManager(g),
-		shader(s),
-		mode(mode)
-	{
-	}
-
-	Render::Input::Input(Key<Sampler> const &sampler, GLenum attachement, RenderOffScreen const &render)
-		: sampler(sampler),
-		attachement(attachement),
-		render(render)
+	EmptyPass::EmptyPass(LocationStorage &locationStorage)
+		: OperationBuffer(locationStorage)
 	{
 
 	}
 
-	Render::Input::Input(Input const &copy)
-		: sampler(copy.sampler),
-		attachement(copy.attachement),
-		render(copy.render)
-	{
-
-	}
-	
-	Render::Input::~Input()
+	EmptyPass::~EmptyPass()
 	{
 
 	}
 
-	RenderPass::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, MaterialManager &m, GLenum mode)
-		: RenderOffScreen::Draw(g, l, s, mode),
-		materialManager(m),
-		toRender(NULL),
-		start(0),
-		end(0)
+	BaseRender &EmptyPass::render()
 	{
+		OperationBuffer::update();
+		return (*this);
 	}
 
-	RenderPostEffect::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad, Key<Indices> const &id) 
-		: RenderOffScreen::Draw(g, l, s, mode),
-		quad(quad),
-		idQuad(id)
+	RenderType EmptyPass::getType() const
 	{
+		return (RenderType::RENDER_EMPTY);
 	}
 
-	RenderOffScreen::Draw::Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode)
-		: Render::Draw(g, s, mode),
-		locationStorage(l)
+	QuadRender::QuadRender(Key<Vertices> const &key, Key<Indices> const &id)
+		: _vertices(key),
+		_id(id)
 	{
+
 	}
 
+	QuadRender::~QuadRender()
+	{
+
+	}
 }

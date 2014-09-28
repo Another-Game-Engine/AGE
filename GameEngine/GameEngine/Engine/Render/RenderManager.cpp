@@ -437,7 +437,7 @@ namespace gl
 	RenderManager &RenderManager::pushDrawTaskRenderBuffer(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass = getRenderPass(key);
-		renderPass->pushDrawTask();
+		renderPass->pushPassTask();
 		return (*this);
 	}
 
@@ -542,7 +542,7 @@ namespace gl
 		RenderPass *renderPass = getRenderPass(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager);
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager, locationStorage);
 		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPass);
 		element->configRect(rect);
 		return (key);
@@ -554,7 +554,7 @@ namespace gl
 		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager);
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager, locationStorage);
 		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
 		element->configRect(rect);
 		return (key);
@@ -648,7 +648,7 @@ namespace gl
 	{
 		RenderOnScreen *renderOnScreen = getRenderOnScreen(o);
 		RenderPass *renderPass = getRenderPass(r);
-		renderPass->setDraw(objectRender, 0, objectRender.size());
+		renderPass->setPass(objectRender, 0, objectRender.size());
 		renderPass->render();
 		renderOnScreen->render();
 		return (*this);

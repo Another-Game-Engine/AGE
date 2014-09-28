@@ -23,10 +23,6 @@
 	RenderManager &popTask##name##(Key<##name##> const &key);
 
 #define GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(name) \
-	RenderManager &pushSetUniformMat4Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location); \
-	RenderManager &pushSetUniformMat3Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location); \
-	RenderManager &pushSetUniformFloatTask##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location); \
-	RenderManager &pushSetUniformVec4Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location); \
 	RenderManager &config##name##(Key<##name##> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1); \
 	RenderManager &createBufferSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat); \
 	RenderManager &createBufferNotSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat); \
@@ -38,7 +34,7 @@
 	RenderManager &popTarget##name##(Key<##name##> const &key); \
 	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPass> const &r); \
 	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPostEffect> const &r); \
-	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(RenderOffScreen::Draw &)> const &f);
+	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f);
 
 
 #define GEN_DEF_RENDER_PUSH_TASK(name) 																																								\
@@ -222,33 +218,6 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 }
 
 #define GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(name) \
-	RenderManager &RenderManager::pushSetUniformMat4Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location) \
-	{\
-		name *render = get##name##(key); \
-		render->pushSetUniformMat4Task(u, location); \
-		return (*this);\
-	} \
-	\
-	RenderManager &RenderManager::pushSetUniformMat3Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location) \
-	{\
-		name *render = get##name##(key); \
-		render->pushSetUniformMat3Task(u, location); \
-		return (*this); \
-	} \
-	\
-	RenderManager &RenderManager::pushSetUniformFloatTask##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location) \
-	{\
-		name *render = get##name##(key); \
-		render->pushSetUniformMat3Task(u, location); \
-		return (*this); \
-	} \
-	RenderManager &RenderManager::pushSetUniformVec4Task##name##(Key<##name##> const &key, Key<Uniform> const &u, size_t location) \
-	{\
-		name *render = get##name##(key); \
-		render->pushSetUniformVec4Task(u, location); \
-		return (*this); \
-	} \
-																																						\
 	RenderManager &RenderManager::config##name##(Key<##name##> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)							\
 	{																																					\
 		name *render = get##name##(key);																									\
@@ -331,7 +300,7 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 		return (*this); \
 	} \
 	\
-	RenderManager &RenderManager::pushOwnTask##name##(Key<##name##> const &key, std::function<void(RenderOffScreen::Draw &)> const &f) \
+	RenderManager &RenderManager::pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f) \
 	{\
 		name *render = get##name##(key); \
 		render->pushOwnTask(f); \
