@@ -164,48 +164,22 @@ namespace gl
 		glBindTexture(CONVERT(GLenum, 1), CONVERT(GLint, 2));
 	}
 
-	void setUniformMat4byLocation(void **data)
-	{
-		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
-		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
-		size_t location = CONVERT(size_t, 2);
-		draw.shader.setUniform(key, draw.locationStorage.getLocation<glm::mat4>(location));
-	}
-
-	void setUniformMat3byLocation(void **data)
-	{
-		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
-		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
-		size_t location = CONVERT(size_t, 2);
-		draw.shader.setUniform(key, draw.locationStorage.getLocation<glm::mat3>(location));
-	}
-
-	void setUniformFloatbyLocation(void **data)
-	{
-		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
-		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
-		size_t location = CONVERT(size_t, 2);
-		draw.shader.setUniform(key, draw.locationStorage.getLocation<float>(location));
-	}
-
-	void setUniformVec4byLocation(void **data)
-	{
-		RenderOffScreen::Draw &draw = *CONVERT(RenderOffScreen::Draw *, 0);
-		Key<Uniform> const &key = CONVERT(Key<Uniform>, 1);
-		size_t location = CONVERT(size_t, 2);
-		draw.shader.setUniform(key, draw.locationStorage.getLocation<glm::vec4>(location));
-	}
-
 	void draw(void **data)
 	{
-		RenderPass::Draw &draw = *CONVERT(RenderPass::Draw *, 0);
+		GeometryManager &geometryManager = *CONVERT(GeometryManager *, 0);
+		MaterialManager &materialManager = *CONVERT(MaterialManager *, 1);
+		Shader &shader = *CONVERT(Shader *, 2);
+		AGE::Vector<AGE::Drawable> **toRender = CONVERT(AGE::Vector<AGE::Drawable> **, 3);
+		GLenum mode = *CONVERT(GLenum *, 4);
+		size_t start = *CONVERT(size_t *, 5);
+		size_t end = *CONVERT(size_t *, 6);
 
-		for (size_t index = draw.start; index < draw.end; ++index)
+		for (size_t index = start; index < end; ++index)
 		{
-			AGE::Drawable const &object = (*draw.toRender)[index];
-			draw.materialManager.setShader(object.material, draw.shader);
-			draw.shader.update(object.transformation);
-			draw.geometryManager.draw(draw.mode, object.mesh.indices, object.mesh.vertices);
+			AGE::Drawable const &object = (**toRender)[index];
+			materialManager.setShader(object.material, shader);
+			shader.update(object.transformation);
+			geometryManager.draw(mode, object.mesh.indices, object.mesh.vertices);
 		}
 	}
 

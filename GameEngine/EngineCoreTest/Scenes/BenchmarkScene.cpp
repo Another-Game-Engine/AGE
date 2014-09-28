@@ -62,10 +62,14 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushClearTaskRenderPass(key.clean.renderPass, true, false, false);
 		_renderManager->pushSetBlendStateTaskRenderPass(key.clean.renderPass, 0, false);
 		_renderManager->pushTargetRenderPass(key.clean.renderPass, GL_COLOR_ATTACHMENT0);
+		_renderManager->pushOwnTaskRenderPass(key.clean.renderPass, [](gl::RenderOffScreen::Draw &d)
+		{
+			size_t indexElement = d.locationStorage.getLocation<size_t>(0) + 1;
+			d.locationStorage.setLocation(indexElement, size_t(0));
+		});
 
 		// create renderPostEffect
 		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
-		_renderManager->pushOwnTaskRenderPostEffect(key.Accum.renderPostEffect, [](gl::LocationStorage &l){ std::cout << l.getLocation<size_t>(0) << std::endl; });
 		_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, false);
 		_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
 		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, true);
@@ -277,7 +281,7 @@ bool BenchmarkScene::userUpdate(double time)
 
 	octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
 	{
-		renderManager->locationStorage.generateLocation(collection.lights.size() + 1);
+		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
 		renderManager->locationStorage.setLocation(0, collection.lights.size());
 		AGE::Vector<AGE::Drawable> lights;
 		for (size_t index = 0; index < collection.lights.size(); ++index)

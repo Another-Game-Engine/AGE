@@ -38,7 +38,7 @@
 	RenderManager &popTarget##name##(Key<##name##> const &key); \
 	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPass> const &r); \
 	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPostEffect> const &r); \
-	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f);
+	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(RenderOffScreen::Draw &)> const &f);
 
 
 #define GEN_DEF_RENDER_PUSH_TASK(name) 																																								\
@@ -331,7 +331,7 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 		return (*this); \
 	} \
 	\
-	RenderManager &RenderManager::pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f) \
+	RenderManager &RenderManager::pushOwnTask##name##(Key<##name##> const &key, std::function<void(RenderOffScreen::Draw &)> const &f) \
 	{\
 		name *render = get##name##(key); \
 		render->pushOwnTask(f); \
