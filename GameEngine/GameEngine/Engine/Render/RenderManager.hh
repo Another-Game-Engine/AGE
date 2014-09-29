@@ -103,16 +103,19 @@ namespace gl
 		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
 		GEN_DEC_RENDER_PUSH_TASK(RenderPass);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
+		GEN_DEC_DRAWABLERENDER_PUSH_TASK(RenderPass);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
 		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
+		GEN_DEC_DRAWABLERENDER_PUSH_TASK(RenderPostEffect);
 
 		// RenderOnScreen
 		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPass> const &renderPass);
-		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPostEffect> const &renderPostEffect); 
+		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPostEffect> const &renderPostEffect);
+		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<EmptyRenderPass> const &renderPostEffect);
 		Key<RenderOnScreen> getRenderOnScreen(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderOnScreen);
 		RenderManager &configRenderOnScreen(Key<RenderOnScreen> const &renderOnScreen, glm::ivec4 const &rect, GLenum mode);
@@ -129,6 +132,7 @@ namespace gl
 		RenderManager &pushRenderPassPipeline(Key<Pipeline> const &p, Key<RenderPass> const &r);
 		RenderManager &pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r);
 		RenderManager &pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r);
+		RenderManager &pushEmptyRenderPassPipeline(Key<Pipeline> const &p, Key<EmptyRenderPass> const &r);
 		Key<Pipeline> getPipeline(size_t target);
 		RenderManager &configPipeline(Key<Pipeline> const &key, DrawType type);
 		RenderManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);

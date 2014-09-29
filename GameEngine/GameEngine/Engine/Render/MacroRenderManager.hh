@@ -45,22 +45,25 @@
 	RenderManager &pushSetBlendFuncTask##name##(Key<##name##> const &key, GLenum src, GLenum dest); \
 	RenderManager &pushSetBlendConstantTask##name##(Key<##name##> const &key, glm::vec4 const &blendPass); \
 	RenderManager &pushSetBlendStateTask##name##(Key<##name##> const &key, int drawBuffer, bool state); \
-	RenderManager &popTask##name##(Key<##name##> const &key);
+	RenderManager &popTask##name##(Key<##name##> const &key); \
+	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f);
 
 #define GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(name) \
-	RenderManager &config##name##(Key<##name##> const &renderPass, glm::ivec4 const &rect, GLenum mode = GL_TRIANGLES, GLint sample = 1); \
+	RenderManager &config##name##(Key<##name##> const &renderPass, glm::ivec4 const &rect, GLint sample = 1); \
 	RenderManager &createBufferSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat); \
 	RenderManager &createBufferNotSamplable##name##(Key<##name##> const &key, GLenum attachement, GLenum internalFormat); \
 	RenderManager &deleteBuffer##name##(Key<##name##> const &key, GLenum attachement); \
-	RenderManager &pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPostEffect> const &r); \
-	RenderManager &pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPass> const &r); \
-	RenderManager &popInput##name##(Key<##name##> const &key); \
-	RenderManager &pushTarget##name##(Key<##name##> const &key, GLenum attachement); \
-	RenderManager &popTarget##name##(Key<##name##> const &key); \
 	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPass> const &r); \
 	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<RenderPostEffect> const &r); \
-	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f);
+	RenderManager &useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<EmptyRenderPass> const &r); \
+	RenderManager &pushTarget##name##(Key<##name##> const &key, GLenum attachement); \
+	RenderManager &popTarget##name##(Key<##name##> const &key); \
 
+#define GEN_DEC_DRAWABLERENDER_PUSH_TASK(name) \
+	RenderManager &pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPostEffect> const &r); \
+	RenderManager &pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPass> const &r); \
+	RenderManager &pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<EmptyRenderPass> const &r); \
+	RenderManager &popInput##name##(Key<##name##> const &key);
 
 #define GEN_DEF_RENDER_PUSH_TASK(name) 																																								\
 	RenderManager &RenderManager::pushClearTask##name##(Key<##name##> const &key, bool color, bool depth, bool stencil)																			\
@@ -240,13 +243,19 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 		return (*this);																																												  \
 	render->popTask();																																											  \
 	return (*this);																																													  \
+} \
+\
+RenderManager &RenderManager::pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f) \
+{\
+	name *render = get##name##(key); \
+	render->pushOwnTask(f); \
+	return (*this); \
 }
 
 #define GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(name) \
-	RenderManager &RenderManager::config##name##(Key<##name##> const &key, glm::ivec4 const &rect, GLenum mode, GLint sample)							\
+	RenderManager &RenderManager::config##name##(Key<##name##> const &key, glm::ivec4 const &rect, GLint sample)							\
 	{																																					\
 		name *render = get##name##(key);																									\
-		render->setMode(mode);																												\
 		render->configRect(rect);																												\
 		return (*this);																																	\
 	}																																					\
@@ -270,30 +279,7 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 		name *render = get##name##(key);																									\
 		render->deleteBuffer(attachement);																									\
 		return (*this);																																	\
-	}																																					\
-																																						\
-	RenderManager &RenderManager::pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPass> const &r)								\
-	{																																					\
-		name *render = get##name##(key);																									\
-		RenderPass *renderPass = getRenderPass(r); \
-		render->pushInputSampler(s, attachement, *renderPass);																								\
-		return (*this);																																	\
-	}																																					\
-\
-	RenderManager &RenderManager::pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPostEffect> const &r) \
-	{\
-		name *render = get##name##(key); \
-		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);\
-		render->pushInputSampler(s, attachement, *renderPostEffect); \
-		return (*this);\
-	}\
-	\
-	RenderManager &RenderManager::popInput##name##(Key<##name##> const &key)																			\
-	{																																					\
-		name *render = get##name##(key);																									\
-		render->popInputSampler();																											\
-		return (*this);																																	\
-	}																																					\
+	}																																																										\
 																																						\
 	RenderManager &RenderManager::pushTarget##name##(Key<##name##> const &key, GLenum attachement)														\
 	{																																					\
@@ -325,9 +311,42 @@ RenderManager &RenderManager::popTask##name##(Key<##name##> const &key)									
 		return (*this); \
 	} \
 	\
-	RenderManager &RenderManager::pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f) \
+	RenderManager &RenderManager::useInputBuffer##name##(Key<##name##> const &key, GLenum attachement, Key<EmptyRenderPass> const &r)													\
+	{																																					\
+	name *render = get##name##(key);																										\
+	EmptyRenderPass *emptyRenderPass = getEmptyRenderPass(r); \
+	render->useInputBuffer(attachement, *emptyRenderPass); \
+	return (*this); \
+	}
+
+#define GEN_DEF_DRAWABLERENDER_PUSH_TASK(name)																																	\
+	RenderManager &RenderManager::pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPass> const &r)								\
+	{																																					\
+	name *render = get##name##(key);																									\
+	RenderPass *renderPass = getRenderPass(r); \
+	render->pushInputSampler(s, attachement, *renderPass);																								\
+	return (*this);																																	\
+	}																																					\
+	\
+	RenderManager &RenderManager::pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<RenderPostEffect> const &r) \
 	{\
-		name *render = get##name##(key); \
-		render->pushOwnTask(f); \
-		return (*this); \
+	name *render = get##name##(key); \
+	RenderPostEffect *renderPostEffect = getRenderPostEffect(r); \
+	render->pushInputSampler(s, attachement, *renderPostEffect); \
+	return (*this); \
+	}\
+	\
+	RenderManager &RenderManager::pushInput##name##(Key<##name##> const &key, Key<Sampler> const &s, GLenum attachement, Key<EmptyRenderPass> const &r) \
+	{\
+	name *render = get##name##(key); \
+	EmptyRenderPass *emptyRenderPass = getEmptyRenderPass(r); \
+	render->pushInputSampler(s, attachement, *emptyRenderPass); \
+	return (*this); \
+	}\
+	\
+	RenderManager &RenderManager::popInput##name##(Key<##name##> const &key)																			\
+	{																																					\
+	name *render = get##name##(key);																									\
+	render->popInputSampler();																											\
+	return (*this);																																	\
 	}

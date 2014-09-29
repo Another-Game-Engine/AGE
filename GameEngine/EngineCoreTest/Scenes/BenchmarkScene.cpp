@@ -55,13 +55,13 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
 
 		// create  clear renderPass
-		key.clean.renderPass = _renderManager->addRenderPass(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
-		_renderManager->createBufferSamplableRenderPass(key.clean.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
-		_renderManager->pushSetClearValueTaskRenderPass(key.clean.renderPass, glm::vec4(0.f, 0.f, 0.f, 1.0f));
-		_renderManager->pushSetTestTaskRenderPass(key.clean.renderPass, false, false, false);
-		_renderManager->pushClearTaskRenderPass(key.clean.renderPass, true, false, false);
-		_renderManager->pushSetBlendStateTaskRenderPass(key.clean.renderPass, 0, false);
-		_renderManager->pushTargetRenderPass(key.clean.renderPass, GL_COLOR_ATTACHMENT0);
+		key.clean.emptyRenderPass = _renderManager->addEmptyRenderPass(glm::ivec4(0, 0, 800, 600));
+		_renderManager->createBufferSamplableEmptyRenderPass(key.clean.emptyRenderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+		_renderManager->pushSetClearValueTaskEmptyRenderPass(key.clean.emptyRenderPass, glm::vec4(0.f, 0.f, 0.f, 1.0f));
+		_renderManager->pushSetTestTaskEmptyRenderPass(key.clean.emptyRenderPass, false, false, false);
+		_renderManager->pushClearTaskEmptyRenderPass(key.clean.emptyRenderPass, true, false, false);
+		_renderManager->pushSetBlendStateTaskEmptyRenderPass(key.clean.emptyRenderPass, 0, false);
+		_renderManager->pushTargetEmptyRenderPass(key.clean.emptyRenderPass, GL_COLOR_ATTACHMENT0);
 
 		// create renderPostEffect
 		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
@@ -72,11 +72,11 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushSetBlendFuncTaskRenderPostEffect(key.Accum.renderPostEffect, GL_ONE, GL_ONE);
 		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.normal_buffer, GL_COLOR_ATTACHMENT1, key.getBuff.renderPass);
 		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_DEPTH_ATTACHMENT, key.getBuff.renderPass);
-		_renderManager->useInputBufferRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, key.clean.renderPass);
+		_renderManager->useInputBufferRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, key.clean.emptyRenderPass);
 		_renderManager->createBufferNotSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
 
 		// create renderOnscreen and set it
-		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.clean.renderPass);
+		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.clean.emptyRenderPass);
 		_renderManager->pushClearTaskRenderOnScreen(key.getBuff.renderOnScreen, true, true, false);
 		_renderManager->pushSetTestTaskRenderOnScreen(key.getBuff.renderOnScreen, false, false, true);
 		_renderManager->pushSetClearValueTaskRenderOnScreen(key.getBuff.renderOnScreen, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -88,7 +88,7 @@ void BenchmarkScene::initRendering()
 		// create the pipeline for cleaning
 		key.clean.pipeline = _renderManager->addPipeline();
 		_renderManager->configPipeline(key.clean.pipeline, gl::DrawType::NONE_OBJECT);
-		_renderManager->pushRenderPassPipeline(key.clean.pipeline, key.clean.renderPass);
+		_renderManager->pushEmptyRenderPassPipeline(key.clean.pipeline, key.clean.emptyRenderPass);
 
 		// create the pipeline for accum
 		key.Accum.pipeline = _renderManager->addPipeline();

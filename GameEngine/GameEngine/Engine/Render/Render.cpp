@@ -625,7 +625,8 @@ namespace gl
 
 	BaseRender &EmptyRenderPass::render()
 	{
-		OperationBuffer::update();
+		_fbo.bind();
+		OffScreenRender::update();
 		return (*this);
 	}
 

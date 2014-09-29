@@ -51,7 +51,7 @@ struct Deferred_get_buffer_Key
 
 struct Deffered_clean_buffer
 {
-	gl::Key<gl::RenderPass> renderPass;
+	gl::Key<gl::EmptyRenderPass> emptyRenderPass;
 	gl::Key<gl::Pipeline> pipeline;
 };
 

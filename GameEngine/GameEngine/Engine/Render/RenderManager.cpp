@@ -416,6 +416,7 @@ namespace gl
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPass);
 	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
+	GEN_DEF_DRAWABLERENDER_PUSH_TASK(RenderPass);
 
 	RenderManager &RenderManager::pushDrawTaskRenderBuffer(Key<RenderPass> const &key)
 	{
@@ -491,6 +492,7 @@ namespace gl
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect);
 	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
+	GEN_DEF_DRAWABLERENDER_PUSH_TASK(RenderPostEffect);
 
 	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPass> const &r)
 	{
@@ -516,6 +518,18 @@ namespace gl
 		return (key);
 	}
 
+	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<EmptyRenderPass> const &r)
+	{
+		Key<RenderOnScreen> key;
+		EmptyRenderPass *renderPostEffect = getEmptyRenderPass(r);
+		createPreShaderQuad();
+		geometryManager.createQuadSimpleForm();
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager, locationStorage);
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
+		element->configRect(rect);
+		return (key);
+	}
+	
 	Key<RenderOnScreen> RenderManager::getRenderOnScreen(size_t target) const
 	{
 		if (target >= _textures.size())
@@ -548,6 +562,7 @@ namespace gl
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(EmptyRenderPass);
+	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(EmptyRenderPass);
 
 
 	Key<Pipeline> RenderManager::addPipeline()
@@ -570,19 +585,27 @@ namespace gl
 	RenderManager &RenderManager::pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r)
 	{
 		Pipeline *pipeline = getPipeline(p);
-		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
-		pipeline->pushRender(renderPostEffect);
+		RenderPostEffect *render = getRenderPostEffect(r);
+		pipeline->pushRender(render);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r)
 	{
 		Pipeline *pipeline = getPipeline(p);
-		RenderOnScreen *renderOnScreen = getRenderOnScreen(r);
-		pipeline->pushRender(renderOnScreen);
+		RenderOnScreen *render = getRenderOnScreen(r);
+		pipeline->pushRender(render);
 		return (*this);
 	}
 
+	RenderManager &RenderManager::pushEmptyRenderPassPipeline(Key<Pipeline> const &p, Key<EmptyRenderPass> const &r)
+	{
+		Pipeline *pipeline = getPipeline(p);
+		EmptyRenderPass *render = getEmptyRenderPass(r);
+		pipeline->pushRender(render);
+		return (*this);
+	}
+	
 	Key<Pipeline> RenderManager::getPipeline(size_t target)
 	{
 		if (target >= _pipelines.size())
