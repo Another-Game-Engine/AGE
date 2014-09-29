@@ -26,6 +26,8 @@
 # define DEFFERED_FRAG_SHADER "../../Shaders/Deffered_shading/deffered_shading_get_buffer.fp"
 # define DEFFERED_VERTEX_SHADER_ACCUM "../../Shaders/Deffered_shading/deffered_shading_lighting.vp"
 # define DEFFERED_FRAG_SHADER_ACCUM "../../Shaders/Deffered_shading/deffered_shading_lighting.fp"
+# define DEFERRED_FRAG_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.fp"
+# define DEFERRED_VERTEX_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.vp"
 
 struct Deferred_accum_light
 {
@@ -45,7 +47,6 @@ struct Deferred_get_buffer_Key
 	gl::Key<gl::Shader> shader;
 	gl::Key<gl::Uniform> model_matrix;
 	gl::Key<gl::RenderPass> renderPass;
-	gl::Key<gl::RenderOnScreen> renderOnScreen;
 	gl::Key<gl::Pipeline> pipeline;
 };
 
@@ -55,8 +56,19 @@ struct Deffered_clean_buffer
 	gl::Key<gl::Pipeline> pipeline;
 };
 
+struct Deffered_merge
+{
+	gl::Key<gl::Shader> shader;
+	gl::Key<gl::Sampler> diffuse_buffer;
+	gl::Key<gl::Sampler> light_buffer;
+	gl::Key<gl::RenderPostEffect> renderPostEffect;
+	gl::Key<gl::Pipeline> pipeline;
+	gl::Key<gl::RenderOnScreen> renderOnScreen;
+};
+
 struct RenderKey
 {
+	Deffered_merge merge;
 	Deffered_clean_buffer clean;
 	Deferred_accum_light Accum;
 	Deferred_get_buffer_Key getBuff;

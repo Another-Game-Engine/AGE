@@ -35,6 +35,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetsEditor", "Tools\Asset
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deffered_shading", "Deffered_shading", "{F584710B-8089-4D6B-801A-8A2354FCF28A}"
 	ProjectSection(SolutionItems) = preProject
+		Shaders\Deffered_shading\deferred_shading_merge.fp = Shaders\Deffered_shading\deferred_shading_merge.fp
+		Shaders\Deffered_shading\deferred_shading_merge.vp = Shaders\Deffered_shading\deferred_shading_merge.vp
 		Shaders\Deffered_shading\deffered_shading_get_buffer.fp = Shaders\Deffered_shading\deffered_shading_get_buffer.fp
 		Shaders\Deffered_shading\deffered_shading_get_buffer.vp = Shaders\Deffered_shading\deffered_shading_get_buffer.vp
 		Shaders\Deffered_shading\deffered_shading_lighting.fp = Shaders\Deffered_shading\deffered_shading_lighting.fp

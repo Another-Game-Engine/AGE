@@ -23,6 +23,7 @@ void BenchmarkScene::initRendering()
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
 		key.Accum.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
+		key.merge.shader = _renderManager->addShader(DEFERRED_VERTEX_SHADER_MERGE, DEFERRED_FRAG_SHADER_MERGE);
 
 		// get from the shader the information key
 		key.global_state = _renderManager->addUniformBlock();
@@ -40,6 +41,8 @@ void BenchmarkScene::initRendering()
 		key.Accum.color_light = _renderManager->addShaderUniform(key.Accum.shader, "color_light", glm::vec3(1.0f));
 		key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
 		key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
+		key.merge.diffuse_buffer = _renderManager->addShaderSampler(key.merge.shader, "diffuse_buffer");
+		key.merge.light_buffer = _renderManager->addShaderSampler(key.merge.shader, "light_buffer");
 
 		// create renderpass and set it
 		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 800, 600));
@@ -91,11 +94,22 @@ void BenchmarkScene::initRendering()
 			l.setLocation(nbrElement + 1, index + 1);
 		});
 
-		// create renderOnscreen and set it
-		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.clean.emptyRenderPass);
-		_renderManager->pushClearTaskRenderOnScreen(key.getBuff.renderOnScreen, true, true, false);
-		_renderManager->pushSetTestTaskRenderOnScreen(key.getBuff.renderOnScreen, false, false, true);
-		_renderManager->pushSetClearValueTaskRenderOnScreen(key.getBuff.renderOnScreen, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+
+		// create merge
+		key.merge.renderPostEffect = _renderManager->addRenderPostEffect(key.merge.shader, glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.light_buffer, GL_COLOR_ATTACHMENT0, key.Accum.renderPostEffect);
+		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.diffuse_buffer, GL_COLOR_ATTACHMENT0, key.getBuff.renderPass);
+		_renderManager->createBufferSamplableRenderPostEffect(key.merge.renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+		_renderManager->createBufferNotSamplableRenderPostEffect(key.merge.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
+		_renderManager->pushTargetRenderPostEffect(key.merge.renderPostEffect, GL_COLOR_ATTACHMENT0);
+		_renderManager->pushClearTaskRenderPostEffect(key.merge.renderPostEffect, true, false, false);
+		_renderManager->pushSetTestTaskRenderPostEffect(key.merge.renderPostEffect, true, false, false);
+		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.merge.renderPostEffect, 0, false);
+
+		key.merge.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.merge.renderPostEffect);
+		_renderManager->pushClearTaskRenderOnScreen(key.merge.renderOnScreen, true, true, false);
+		_renderManager->pushSetTestTaskRenderOnScreen(key.merge.renderOnScreen, false, false, true);
+		_renderManager->pushSetClearValueTaskRenderOnScreen(key.merge.renderOnScreen, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
 		// create the pipeline and set it with both render element add before
 		key.getBuff.pipeline = _renderManager->addPipeline();
@@ -110,8 +124,13 @@ void BenchmarkScene::initRendering()
 		key.Accum.pipeline = _renderManager->addPipeline();
 		_renderManager->pushRenderPostEffectPipeline(key.Accum.pipeline, key.Accum.renderPostEffect);
 		_renderManager->configPipeline(key.Accum.pipeline, gl::DrawType::EACH_FOLLOWING_OBJECT);
-		_renderManager->pushRenderOnScreenPipeline(key.Accum.pipeline, key.getBuff.renderOnScreen);
 		_renderManager->geometryManager.createSphereSimpleForm();
+
+		// create pipleine for merge
+		key.merge.pipeline = _renderManager->addPipeline();
+		_renderManager->configPipeline(key.merge.pipeline, gl::DrawType::NONE_OBJECT);
+		_renderManager->pushRenderPostEffectPipeline(key.merge.pipeline, key.merge.renderPostEffect);
+		_renderManager->pushRenderOnScreenPipeline(key.merge.pipeline, key.merge.renderOnScreen);
 		return true;
 	});
 	assert(res.get());
@@ -196,6 +215,9 @@ bool BenchmarkScene::userStart()
 	// lights creation
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(-5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, 10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
 	return true;
 }
 
