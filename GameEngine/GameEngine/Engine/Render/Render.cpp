@@ -612,24 +612,24 @@ namespace gl
 		return (RenderType::RENDER_POST_EFFECT);
 	}
 
-	EmptyPass::EmptyPass(LocationStorage &locationStorage)
-		: OperationBuffer(locationStorage)
+	EmptyRenderPass::EmptyRenderPass(LocationStorage &locationStorage)
+		: OffScreenRender(locationStorage)
 	{
 
 	}
 
-	EmptyPass::~EmptyPass()
+	EmptyRenderPass::~EmptyRenderPass()
 	{
 
 	}
 
-	BaseRender &EmptyPass::render()
+	BaseRender &EmptyRenderPass::render()
 	{
 		OperationBuffer::update();
 		return (*this);
 	}
 
-	RenderType EmptyPass::getType() const
+	RenderType EmptyRenderPass::getType() const
 	{
 		return (RenderType::RENDER_EMPTY);
 	}

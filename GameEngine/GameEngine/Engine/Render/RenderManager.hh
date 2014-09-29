@@ -117,6 +117,13 @@ namespace gl
 		GEN_DEC_RENDER_PUSH_TASK(RenderOnScreen);
 		RenderManager &configRenderOnScreen(Key<RenderOnScreen> const &renderOnScreen, glm::ivec4 const &rect, GLenum mode);
 
+		// EmptyRender
+		Key<EmptyRenderPass> addEmptyRenderPass(glm::ivec4 const &rect);
+		Key<EmptyRenderPass> getEmptyRenderPass(size_t target) const;
+		GEN_DEC_RENDER_PUSH_TASK(EmptyRenderPass);
+		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(EmptyRenderPass);
+
+
 		// Pipeline
 		Key<Pipeline> addPipeline();
 		RenderManager &pushRenderPassPipeline(Key<Pipeline> const &p, Key<RenderPass> const &r);
@@ -131,14 +138,11 @@ namespace gl
 		RenderManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
 		RenderManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
 	private:
-		// all map
+		// container
 		std::map<Key<Shader>, Shader *> _shaders;
 		Shader * _preShaderQuad;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
-		std::map<Key<RenderPass>, RenderPass *> _renderPass;
-		std::map<Key<RenderPostEffect>, RenderPostEffect *> _renderPostEffect;
-		std::map<Key<RenderOnScreen>, RenderOnScreen *> _renderOnScreen;
 		std::map<Key<Pipeline>, size_t> _pipelines;
 		AGE::Vector<Pipeline> _pipelineOrdered;
 
@@ -146,18 +150,22 @@ namespace gl
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
 		std::pair<Key<UniformBlock>, UniformBlock *> _optimizeUniformBlockSearch;
 		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
-		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
-		std::pair<Key<RenderPostEffect>, RenderPostEffect *> _optimizeRenderPostEffectSearch;
-		std::pair<Key<RenderOnScreen>, RenderOnScreen *> _optimizeRenderOnScreenSearch;
 		std::pair<Key<Pipeline>, size_t> _optimizePipelineSearch;
+
+		GEN_CONTAINER(RenderPass, _renderPass);
+		GEN_CONTAINER(RenderPostEffect, _renderPostEffect);
+		GEN_CONTAINER(RenderOnScreen, _renderOnScreen);
+		GEN_CONTAINER(EmptyRenderPass, _emptyRenderPass);
 
 		// tool use in intern for search
 		Shader *getShader(Key<Shader> const &key);
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key);
 		Texture *getTexture(Key<Texture> const &key);
-		RenderPass *getRenderPass(Key<RenderPass> const &key);
-		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key);
-		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key);
+		GEN_DEC_SEARCH_FUNCTION(EmptyRenderPass);
+		GEN_DEC_SEARCH_FUNCTION(RenderPass);
+		GEN_DEC_SEARCH_FUNCTION(RenderOnScreen);
+		GEN_DEC_SEARCH_FUNCTION(RenderPostEffect);
+
 		size_t getIndexPipeline(Key<Pipeline> const &key);
 		Pipeline *getPipeline(Key<Pipeline> const &key);
 	};

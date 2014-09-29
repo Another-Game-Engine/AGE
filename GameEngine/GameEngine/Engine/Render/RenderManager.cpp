@@ -349,23 +349,6 @@ namespace gl
 		return (&uniformBlock->second);
 	}
 
-	RenderPass *RenderManager::getRenderPass(Key<RenderPass> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_renderPass.size() == 0)
-			assert(0);
-		if (key == _optimizeRenderPassSearch.first)
-			return (_optimizeRenderPassSearch.second);
-		auto &renderPassIndex = _renderPass.find(key);
-		if (renderPassIndex == _renderPass.end())
-			assert(0);
-		_optimizeRenderPassSearch.first = key;
-		_optimizeRenderPassSearch.second = renderPassIndex->second;
-		return (renderPassIndex->second);
-	}
-
-
 	RenderManager &RenderManager::uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
 		Texture const *texture;
@@ -459,37 +442,10 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPostEffect *RenderManager::getRenderPostEffect(Key<RenderPostEffect> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_renderPostEffect.size() == 0)
-			assert(0);
-		if (key == _optimizeRenderPostEffectSearch.first)
-			return (_optimizeRenderPostEffectSearch.second);
-		auto &renderPostEffect = _renderPostEffect.find(key);
-		if (renderPostEffect == _renderPostEffect.end())
-			assert(0);
-		_optimizeRenderPostEffectSearch.first = key;
-		_optimizeRenderPostEffectSearch.second = renderPostEffect->second;
-		return (renderPostEffect->second);
-	}
-
-	RenderOnScreen *RenderManager::getRenderOnScreen(Key<RenderOnScreen> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_renderOnScreen.size() == 0)
-			assert(0);
-		if (key == _optimizeRenderOnScreenSearch.first)
-			return (_optimizeRenderOnScreenSearch.second);
-		auto &renderOnScreen = _renderOnScreen.find(key);
-		if (renderOnScreen == _renderOnScreen.end())
-			assert(0);
-		_optimizeRenderOnScreenSearch.first = key;
-		_optimizeRenderOnScreenSearch.second = renderOnScreen->second;
-		return (renderOnScreen->second);
-	}
+	GEN_DEF_SEARCH_FUNCTION(EmptyRenderPass, _emptyRenderPass);
+	GEN_DEF_SEARCH_FUNCTION(RenderPass, _renderPass);
+	GEN_DEF_SEARCH_FUNCTION(RenderOnScreen, _renderOnScreen);
+	GEN_DEF_SEARCH_FUNCTION(RenderPostEffect, _renderPostEffect);
 
 	size_t RenderManager::getIndexPipeline(Key<Pipeline> const &key)
 	{
@@ -571,6 +527,28 @@ namespace gl
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderOnScreen);
+
+	Key<EmptyRenderPass> RenderManager::addEmptyRenderPass(glm::ivec4 const &rect)
+	{
+		Key<EmptyRenderPass> key;
+		
+		auto &element = _emptyRenderPass[key] = new EmptyRenderPass(locationStorage);
+		element->configRect(rect);
+		return (key);
+	}
+
+	Key<EmptyRenderPass> RenderManager::getEmptyRenderPass(size_t target) const
+	{
+		if (target >= _emptyRenderPass.size())
+			assert(0);
+		auto &element = _emptyRenderPass.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
+	}
+
+	GEN_DEF_RENDER_PUSH_TASK(EmptyRenderPass);
+
 
 	Key<Pipeline> RenderManager::addPipeline()
 	{

@@ -223,18 +223,18 @@ namespace gl
 		RenderPostEffect &operator=(RenderPostEffect const &r) = delete;
 	};
 
-	class EmptyPass : public OperationBuffer, public BaseRender
+	class EmptyRenderPass : public OffScreenRender
 	{
 	public:
-		EmptyPass(LocationStorage &locationStorage);
-		virtual ~EmptyPass();
+		EmptyRenderPass(LocationStorage &locationStorage);
+		virtual ~EmptyRenderPass();
 
 		virtual BaseRender &render();
 		virtual RenderType getType() const;
 
 	private:
-		EmptyPass(RenderPass const &copy) = delete;
-		EmptyPass &operator=(RenderPass const &r) = delete;
+		EmptyRenderPass(EmptyRenderPass const &copy) = delete;
+		EmptyRenderPass &operator=(EmptyRenderPass const &r) = delete;
 	};
 
 }
