@@ -38,20 +38,17 @@ namespace gl
 	template <typename TYPE>
 	LocationStorage &LocationStorage::setLocation(size_t index, TYPE value)
 	{
-		if (_locations[index].size != sizeof(TYPE))
+		if (_locations[index].size < sizeof(TYPE))
 			_locations[index] = Location(&value, sizeof(TYPE), 1);
 		else
-		{
 			memcpy(_locations[index].ptr, (TYPE *)&value, sizeof(TYPE));
-			_locations[index].nbrElement = 1;
-		}
 		return (*this);
 	}
 
 	template <typename TYPE>
 	TYPE LocationStorage::getLocation(size_t index)
 	{
-		if (sizeof(TYPE) != _locations[index].size)
+		if (sizeof(TYPE) > _locations[index].size)
 			assert(0);
 		Location &location = _locations[index];
 		TYPE value;

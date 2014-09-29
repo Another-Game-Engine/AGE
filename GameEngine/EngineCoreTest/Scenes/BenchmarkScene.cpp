@@ -36,7 +36,8 @@ void BenchmarkScene::initRendering()
 		
 		// found uniform
 		key.Accum.position_light = _renderManager->addShaderUniform(key.Accum.shader, "position_light", glm::vec3(1.f));
-		key.Accum.range_light = _renderManager->addShaderUniform(key.Accum.shader, "attenuation_light", glm::vec3(1.f));
+		key.Accum.range_light = _renderManager->addShaderUniform(key.Accum.shader, "attenuation_light", glm::vec3(1.f, 0.1f, 0.01f));
+		key.Accum.color_light = _renderManager->addShaderUniform(key.Accum.shader, "color_light", glm::vec3(1.0f));
 		key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
 		key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
 
@@ -62,8 +63,13 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushClearTaskEmptyRenderPass(key.clean.emptyRenderPass, true, false, false);
 		_renderManager->pushSetBlendStateTaskEmptyRenderPass(key.clean.emptyRenderPass, 0, false);
 		_renderManager->pushTargetEmptyRenderPass(key.clean.emptyRenderPass, GL_COLOR_ATTACHMENT0);
-
+		_renderManager->pushOwnTaskEmptyRenderPass(key.clean.emptyRenderPass, [](gl::LocationStorage &l){
+			size_t nbrElement = l.getLocation<size_t>(0);
+			l.setLocation(nbrElement + 1, size_t(0));
+		});
 		// create renderPostEffect
+		gl::RenderManager *r = _renderManager;
+		RenderKey *k = &key;
 		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
 		_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, false);
 		_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
@@ -74,6 +80,16 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_DEPTH_ATTACHMENT, key.getBuff.renderPass);
 		_renderManager->useInputBufferRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, key.clean.emptyRenderPass);
 		_renderManager->createBufferNotSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
+		_renderManager->pushOwnTaskRenderPostEffect(key.Accum.renderPostEffect, [=](gl::LocationStorage &l)
+		{
+			size_t nbrElement = l.getLocation<size_t>(0);
+			size_t index = l.getLocation<size_t>(nbrElement + 1);
+			AGE::PointLight pointLight = l.getLocation<AGE::PointLight>(index + 1);
+			r->setShaderUniform(k->Accum.shader, k->Accum.position_light, pointLight.position);
+			r->setShaderUniform(k->Accum.shader, k->Accum.range_light, pointLight.range);
+			r->setShaderUniform(k->Accum.shader, k->Accum.color_light, pointLight.color);
+			l.setLocation(nbrElement + 1, index + 1);
+		});
 
 		// create renderOnscreen and set it
 		key.getBuff.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.clean.emptyRenderPass);
@@ -178,9 +194,8 @@ bool BenchmarkScene::userStart()
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
-	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
-	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
-	addComponent<Component::PointLight>(createEntity())->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
 	return true;
 }
 
@@ -278,6 +293,7 @@ bool BenchmarkScene::userUpdate(double time)
 	{
 		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
 		renderManager->locationStorage.setLocation(0, collection.lights.size());
+		renderManager->locationStorage.setLocation(collection.lights.size() + 1, size_t(0));
 		AGE::Vector<AGE::Drawable> lights;
 		for (size_t index = 0; index < collection.lights.size(); ++index)
 		{

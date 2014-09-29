@@ -40,15 +40,13 @@ namespace AGE
 
 	PointLight::PointLight()
 		: PreparableObject(),
-		power(1.0f),
-		range(1.0f),
-		color(1.0f)
+		range(glm::vec3(1.0f, 0.1f, 0.01f)),
+		color(glm::vec3(1.f))
 	{
 	}
 
-	PointLight::PointLight(float power, float range, glm::vec3 const &color, glm::vec3 const &position)
-		: power(power),
-		range(range),
+	PointLight::PointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range)
+		: range(range),
 		color(color)
 	{
 		PreparableObject::position = position;

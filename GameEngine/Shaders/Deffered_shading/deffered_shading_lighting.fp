@@ -10,6 +10,7 @@ uniform global_state
 
 uniform vec3 position_light;
 uniform vec3 attenuation_light;
+uniform vec3 color_light;
 
 uniform sampler2D depth_buffer;
 uniform sampler2D normal_buffer;
@@ -34,5 +35,5 @@ void main()
 	vec3 normal = (texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f);
 	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
 	float lambert = max(0.0f, dot(normalize(normal), normalize(lightDir)));
-	color = vec4(lambert) / attenuation * (1.f - step(1.0f, depth));
+	color = vec4(vec3(lambert) * color_light, 1.0f) / attenuation * (1.f - step(1.0f, depth));
 }
