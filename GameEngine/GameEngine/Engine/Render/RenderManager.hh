@@ -81,6 +81,7 @@ namespace gl
 
 		RenderManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
 		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Sampler> const &u);
 		RenderManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
 
 		// Texture
@@ -176,6 +177,16 @@ namespace gl
 
 	template <typename TYPE>
 	RenderManager &RenderManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	{
+		Shader *shader;
+		if ((shader = getShader(shaderKey)) == NULL)
+			return (*this);
+		shader->bindingMaterial<TYPE>(uniformKey);
+		return (*this);
+	}
+
+	template <typename TYPE>
+	RenderManager &RenderManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Sampler> const &samplerKey)
 	{
 		Shader *shader;
 		if ((shader = getShader(shaderKey)) == NULL)

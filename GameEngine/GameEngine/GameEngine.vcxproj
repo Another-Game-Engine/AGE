@@ -273,6 +273,7 @@
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
+    <ClCompile Include="Engine\Utils\MathematicTools.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
@@ -405,6 +406,7 @@
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\MathematicTools.hh" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\Plane.hpp" />
