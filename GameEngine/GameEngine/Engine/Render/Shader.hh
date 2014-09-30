@@ -169,8 +169,6 @@ namespace gl
 		if ((indexTask = getIndexSampler(key)) == -1)
 			return (*this);
 		Task const &task = _tasks[indexTask];
-		if (task.sizeParams[task.indexToTarget] != TYPE::size)
-			assert(0);
 		_bindSampler[key] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
 	}
