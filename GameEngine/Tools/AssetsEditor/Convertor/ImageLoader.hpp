@@ -2,7 +2,7 @@
 
 #include "AssimpLoader.hpp"
 #include <Texture/Texture.hpp>
-#include <SOIL.h>
+#include <FreeImagePlus.h>
 
 namespace AGE
 {
@@ -62,18 +62,26 @@ namespace AGE
 				if (found)
 					continue;
 				auto path = dataSet.rawDirectory.path().string() + "\\" + e;
-				int width, height, channels;
-				auto imgData = SOIL_load_image(path.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
-				if (imgData)
+
+				fipImage image;
+
+				if (!image.load(path.c_str()))
 				{
+					std::cout << "coucou";
+				}
+
 					auto t = new TextureData();
 					dataSet.textures.push_back(t);
-					t->width = width;
-					t->height = height;
+					t->width = image.getWidth();
+					t->height = image.getHeight();
+					auto colorType = image.getColorType();
+					auto colNumber = colorType == FIC_RGBALPHA ? 4 : 3;
 					t->rawPath = e;
-					t->data.assign(imgData, imgData + (sizeof(unsigned char) * width * height * channels));
-					SOIL_free_image_data(imgData);
-				}
+					auto imgData = FreeImage_GetBits(image);
+					t->data.assign(imgData, imgData + (sizeof(unsigned char) * t->width * t->height * colNumber));
+
+				//	t->data.assign(imgData, imgData + (sizeof(unsigned char) * width * height * channels));
+				//	SOIL_free_image_data(imgData);
 			}
 			dataSet.texturesPath.clear();
 			if (dataSet.textures.size() == 0)
