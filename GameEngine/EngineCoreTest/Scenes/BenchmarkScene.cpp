@@ -1,4 +1,5 @@
 #include <Scenes/BenchmarkScene.hpp>
+#include <Render/Pipeline.hh>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -13,44 +14,127 @@ void BenchmarkScene::initRendering()
 {
 	// A NETTOYER !!!!
 	_renderManager = getInstance<gl::RenderManager>();
+	auto assetsManager = getInstance<AGE::AssetsManager>();
 	_renderThread = (AGE::RenderThread*)(getInstance<AGE::Threads::Render>());
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 
-	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&](){
+	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
+	{
 		// create the shader
-		key.shader = _renderManager->addShader(VERTEX_SHADER, FRAG_SHADER);
+		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
+		key.Accum.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
+		key.merge.shader = _renderManager->addShader(DEFERRED_VERTEX_SHADER_MERGE, DEFERRED_FRAG_SHADER_MERGE);
+
 		// get from the shader the information key
 		key.global_state = _renderManager->addUniformBlock();
-		_renderManager->addShaderInterfaceBlock(key.shader, "global_state", key.global_state);
-		key.view_matrix = _renderManager->addShaderUniform(key.shader, "view_matrix", glm::mat4(1.f));
+		_renderManager->addShaderInterfaceBlock(key.getBuff.shader, "global_state", key.global_state);
+		_renderManager->addShaderInterfaceBlock(key.Accum.shader, "global_state", key.global_state);
+
 		// bind the key on drawable info (material-transformation)
-		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.shader, _renderManager->addShaderUniform(key.shader, "diffuse_color", glm::vec4(1.0f)));
-		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.shader, _renderManager->addShaderUniform(key.shader, "diffuse_ratio", 1.0f));
-		_renderManager->bindTransformationToShader(key.shader, _renderManager->addShaderUniform(key.shader, "model_matrix", glm::mat4(1.f)));
+		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_color", glm::vec4(1.0f)));
+		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_ratio", 1.0f));
+		_renderManager->bindTransformationToShader(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "model_matrix", glm::mat4(1.f)));
+		auto keyDiffuse = _renderManager->addShaderSampler(key.getBuff.shader, "diffuse_texture");
+//		_renderManager->bindMaterialToShader<gl::Texture_diffuse>(key.getBuff.shader, keyDiffuse);
+
+
+		// found uniform
+		key.Accum.position_light = _renderManager->addShaderUniform(key.Accum.shader, "position_light", glm::vec3(1.f));
+		key.Accum.range_light = _renderManager->addShaderUniform(key.Accum.shader, "attenuation_light", glm::vec3(1.f, 0.1f, 0.01f));
+		key.Accum.color_light = _renderManager->addShaderUniform(key.Accum.shader, "color_light", glm::vec3(1.0f));
+		key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
+		key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
+		key.merge.diffuse_buffer = _renderManager->addShaderSampler(key.merge.shader, "diffuse_buffer");
+		key.merge.light_buffer = _renderManager->addShaderSampler(key.merge.shader, "light_buffer");
+
 		// create renderpass and set it
-		key.renderPass = _renderManager->addRenderPass(key.shader, glm::ivec4(0, 0, 800, 600));
-		_renderManager->pushSetTestTaskRenderPass(key.renderPass, false, false, true);
-		_renderManager->pushSetClearValueTaskRenderPass(key.renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-		_renderManager->pushClearTaskRenderPass(key.renderPass, true, true, false);
-		_renderManager->pushTargetRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0);
-		_renderManager->pushTargetRenderPass(key.renderPass, GL_COLOR_ATTACHMENT1);
-		_renderManager->createBufferSamplableRenderPass(key.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
-		_renderManager->createBufferSamplableRenderPass(key.renderPass, GL_COLOR_ATTACHMENT1, GL_RGBA8);
-		_renderManager->createBufferSamplableRenderPass(key.renderPass, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
-		_renderManager->pushSetBlendStateTaskRenderPass(key.renderPass, 0, false);
-		_renderManager->pushSetBlendStateTaskRenderPass(key.renderPass, 1, false);
-		_renderManager->pushDrawTaskRenderBuffer(key.renderPass);
-		// create renderOnscreen and set it
-		key.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600));
-		_renderManager->pushClearTaskRenderOnScreen(key.renderOnScreen, true, true, false);
-		_renderManager->pushSetTestTaskRenderOnScreen(key.renderOnScreen, false, false, true);
-		_renderManager->pushSetClearValueTaskRenderOnScreen(key.renderOnScreen, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushSetTestTaskRenderPass(key.getBuff.renderPass, false, false, true);
+		_renderManager->pushSetClearValueTaskRenderPass(key.getBuff.renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+		_renderManager->pushClearTaskRenderPass(key.getBuff.renderPass, true, true, false);
+		_renderManager->pushTargetRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT0);
+		_renderManager->pushTargetRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT1);
+		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT1, GL_RGBA8);
+		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
+		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 0, false);
+		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 1, false);
+		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
+
+		// create  clear renderPass
+		key.clean.emptyRenderPass = _renderManager->addEmptyRenderPass(glm::ivec4(0, 0, 800, 600));
+		_renderManager->createBufferSamplableEmptyRenderPass(key.clean.emptyRenderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+		_renderManager->pushSetClearValueTaskEmptyRenderPass(key.clean.emptyRenderPass, glm::vec4(0.f, 0.f, 0.f, 1.0f));
+		_renderManager->pushSetTestTaskEmptyRenderPass(key.clean.emptyRenderPass, false, false, false);
+		_renderManager->pushClearTaskEmptyRenderPass(key.clean.emptyRenderPass, true, false, false);
+		_renderManager->pushSetBlendStateTaskEmptyRenderPass(key.clean.emptyRenderPass, 0, false);
+		_renderManager->pushTargetEmptyRenderPass(key.clean.emptyRenderPass, GL_COLOR_ATTACHMENT0);
+		_renderManager->pushOwnTaskEmptyRenderPass(key.clean.emptyRenderPass, [](gl::LocationStorage &l){
+			size_t nbrElement = l.getLocation<size_t>(0);
+			l.setLocation(nbrElement + 1, size_t(0));
+		});
+		// create renderPostEffect
+		gl::RenderManager *r = _renderManager;
+		RenderKey *k = &key;
+		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, false);
+		_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
+		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, true);
+		_renderManager->pushSetBlendEquationTaskRenderPostEffect(key.Accum.renderPostEffect, GL_FUNC_ADD);
+		_renderManager->pushSetBlendFuncTaskRenderPostEffect(key.Accum.renderPostEffect, GL_ONE, GL_ONE);
+		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.normal_buffer, GL_COLOR_ATTACHMENT1, key.getBuff.renderPass);
+		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_DEPTH_ATTACHMENT, key.getBuff.renderPass);
+		_renderManager->useInputBufferRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, key.clean.emptyRenderPass);
+		_renderManager->createBufferNotSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
+		_renderManager->pushOwnTaskRenderPostEffect(key.Accum.renderPostEffect, [=](gl::LocationStorage &l)
+		{
+			size_t nbrElement = l.getLocation<size_t>(0);
+			size_t index = l.getLocation<size_t>(nbrElement + 1);
+			AGE::PointLight pointLight = l.getLocation<AGE::PointLight>(index + 1);
+			r->setShaderUniform(k->Accum.shader, k->Accum.position_light, pointLight.position);
+			r->setShaderUniform(k->Accum.shader, k->Accum.range_light, pointLight.range);
+			r->setShaderUniform(k->Accum.shader, k->Accum.color_light, pointLight.color);
+			l.setLocation(nbrElement + 1, index + 1);
+		});
+
+
+		// create merge
+		key.merge.renderPostEffect = _renderManager->addRenderPostEffect(key.merge.shader, glm::ivec4(0, 0, 800, 600));
+		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.light_buffer, GL_COLOR_ATTACHMENT0, key.Accum.renderPostEffect);
+		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.diffuse_buffer, GL_COLOR_ATTACHMENT0, key.getBuff.renderPass);
+		_renderManager->createBufferSamplableRenderPostEffect(key.merge.renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGBA8);
+		_renderManager->createBufferNotSamplableRenderPostEffect(key.merge.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
+		_renderManager->pushTargetRenderPostEffect(key.merge.renderPostEffect, GL_COLOR_ATTACHMENT0);
+		_renderManager->pushClearTaskRenderPostEffect(key.merge.renderPostEffect, true, false, false);
+		_renderManager->pushSetTestTaskRenderPostEffect(key.merge.renderPostEffect, true, false, false);
+		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.merge.renderPostEffect, 0, false);
+
+		key.merge.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.merge.renderPostEffect);
+		_renderManager->pushClearTaskRenderOnScreen(key.merge.renderOnScreen, true, true, false);
+		_renderManager->pushSetTestTaskRenderOnScreen(key.merge.renderOnScreen, false, false, true);
+		_renderManager->pushSetClearValueTaskRenderOnScreen(key.merge.renderOnScreen, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+
 		// create the pipeline and set it with both render element add before
-		key.pipeline = _renderManager->addPipeline();
-		_renderManager->pushRenderPassPipeline(key.pipeline, key.renderPass);
-		_renderManager->pushRenderOnScreenPipeline(key.pipeline, key.renderOnScreen);
-		_renderManager->branch(key.renderPass, key.renderOnScreen);
+		key.getBuff.pipeline = _renderManager->addPipeline();
+		_renderManager->pushRenderPassPipeline(key.getBuff.pipeline, key.getBuff.renderPass);
+
+		// create the pipeline for cleaning
+		key.clean.pipeline = _renderManager->addPipeline();
+		_renderManager->configPipeline(key.clean.pipeline, gl::DrawType::NONE_OBJECT);
+		_renderManager->pushEmptyRenderPassPipeline(key.clean.pipeline, key.clean.emptyRenderPass);
+
+		// create the pipeline for accum
+		key.Accum.pipeline = _renderManager->addPipeline();
+		_renderManager->pushRenderPostEffectPipeline(key.Accum.pipeline, key.Accum.renderPostEffect);
+		_renderManager->configPipeline(key.Accum.pipeline, gl::DrawType::EACH_FOLLOWING_OBJECT);
+		_renderManager->geometryManager.createSphereSimpleForm();
+
+		// create pipleine for merge
+		key.merge.pipeline = _renderManager->addPipeline();
+		_renderManager->configPipeline(key.merge.pipeline, gl::DrawType::NONE_OBJECT);
+		_renderManager->pushRenderPostEffectPipeline(key.merge.pipeline, key.merge.renderPostEffect);
+		_renderManager->pushRenderOnScreenPipeline(key.merge.pipeline, key.merge.renderOnScreen);
 		return true;
 	});
 	assert(res.get());
@@ -132,9 +216,12 @@ bool BenchmarkScene::userStart()
 	rigidBody->getBody().setFriction(0.8f);
 #endif //PHYSIC_SIMULATION
 #endif
-	auto light = createEntity();
-	auto lightData = addComponent<Component::PointLight>(light);
-	lightData->set(1.0f, 1.0f, glm::vec3(1.0f), glm::vec3(1.0f));
+	// lights creation
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(-5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, 10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
 	return true;
 }
 
@@ -230,9 +317,24 @@ bool BenchmarkScene::userUpdate(double time)
 
 	octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
 	{
+		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
+		renderManager->locationStorage.setLocation(0, collection.lights.size());
+		renderManager->locationStorage.setLocation(collection.lights.size() + 1, size_t(0));
+		AGE::Vector<AGE::Drawable> lights;
+		for (size_t index = 0; index < collection.lights.size(); ++index)
+		{
+			AGE::Drawable drawable;
+
+			drawable.material = renderManager->materialManager.getDefaultMaterial();
+			drawable.mesh.vertices = renderManager->geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
+			drawable.mesh.indices = renderManager->geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
+			renderManager->locationStorage.setLocation(index + 1, collection.lights[index]);
+			lights.push_back(drawable);
+		}
 		renderManager->setUniformBlock(key.global_state, 0, collection.projection);
-		renderManager->setShaderUniform(key.shader, key.view_matrix, collection.transformation);
-		renderManager->updatePipeline(key.pipeline, collection.drawables);
+		renderManager->setUniformBlock(key.global_state, 1, collection.transformation);
+		renderManager->updatePipeline(key.getBuff.pipeline, collection.drawables);
+		renderManager->updatePipeline(key.Accum.pipeline, lights);
 		renderManager->drawPipelines();
 	});
 

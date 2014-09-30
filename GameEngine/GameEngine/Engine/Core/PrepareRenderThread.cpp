@@ -112,9 +112,9 @@ namespace AGE
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPointLight(float power, float range, glm::vec3 const &color, glm::vec3 const &position, const PrepareKey &id)
+	PrepareRenderThread &PrepareRenderThread::setPointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::SetPointLight>(power, range, color, position, id);
+		_commandQueue.emplace<PRTC::SetPointLight>(position, color, range, id);
 		return (*this);
 	}
 
@@ -259,9 +259,8 @@ namespace AGE
 		{
 			PointLight *l = nullptr;
 			l = &_pointLights[msg.key.id];
-			l->color = msg.color;
 			l->position = msg.position;
-			l->power = msg.power;
+			l->color = msg.color;
 			l->range = msg.range;
 		})
 			.handle<PRTC::DeleteCamera>([&](const PRTC::DeleteCamera& msg)
@@ -400,7 +399,7 @@ namespace AGE
 				for (size_t index = 0; index < _pointLights.size(); ++index)
 				{
 					auto &p = _pointLights[index];
-					_octreeDrawList.back().lights.push_back(PointLight(p.power, p.range, p.color, p.position));
+					_octreeDrawList.back().lights.push_back(PointLight(p.position, p.color, p.range));
 				}
 				auto &drawList = _octreeDrawList.back();
 
