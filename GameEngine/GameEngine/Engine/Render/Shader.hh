@@ -89,6 +89,7 @@ namespace gl
 		AGE::Vector<Task> _tasks;
 
 		// map of task
+		std::map<Key<Sampler>, size_t> _bindSampler;
 		std::map<Key<Uniform>, size_t> _bindUniform;
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
@@ -170,7 +171,7 @@ namespace gl
 		Task const &task = _tasks[indexTask];
 		if (task.sizeParams[task.indexToTarget] != TYPE::size)
 			assert(0);
-		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
+		_bindSampler[key] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
 	}
 
