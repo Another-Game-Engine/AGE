@@ -37,7 +37,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_ratio", 1.0f));
 		_renderManager->bindTransformationToShader(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "model_matrix", glm::mat4(1.f)));
 		auto keyDiffuse = _renderManager->addShaderSampler(key.getBuff.shader, "diffuse_texture");
-//		_renderManager->bindMaterialToShader<gl::Texture_diffuse>(key.getBuff.shader, keyDiffuse);
+		_renderManager->bindMaterialToShader<gl::Texture_diffuse>(key.getBuff.shader, keyDiffuse);
 
 
 		// found uniform

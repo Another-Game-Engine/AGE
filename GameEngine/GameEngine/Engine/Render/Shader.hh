@@ -170,7 +170,7 @@ namespace gl
 		Task const &task = _tasks[indexTask];
 		if (task.sizeParams[task.indexToTarget] != TYPE::size)
 			assert(0);
-		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
+		_samplers[key] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
 	}
 
