@@ -11,19 +11,19 @@ namespace std
 
 namespace AGE
 {
-	class Simple: public AConfigurationFile
+	class SimpleConf: public AConfigurationFile
 	{
 	private:
 		const std::string _fileName;
 	public:
 		// CTOR
-		explicit Simple(const std::string &fileName);
+		explicit SimpleConf(const std::string &fileName);
 		// DTOR
-		virtual ~Simple();
+		virtual ~SimpleConf();
 
 	private:
 		// Private members functions
 		bool _readFile();
 
-	}; // class Simple
+	}; // class SimpleConf
 } // namespace AGE

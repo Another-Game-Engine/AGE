@@ -4,8 +4,9 @@
 
 namespace AGE
 {
-	Simple::Simple(const std::string &fileName)
-		: _fileName(fileName)
+	SimpleConf::SimpleConf(const std::string &fileName)
+		: AConfigurationFile(fileName)
+		, _fileName(fileName)
 	{
 		if (!_readFile())
 		{
@@ -13,11 +14,11 @@ namespace AGE
 		}
 	}
 
-	Simple::~Simple()
+	SimpleConf::~SimpleConf()
 	{
 	}
 
-	bool Simple::_readFile()
+	bool SimpleConf::_readFile()
 	{
 		return true;
 	}

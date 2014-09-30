@@ -27,13 +27,13 @@
     <ClCompile Include="AFormatConvertor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Simple.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dataSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AConfigurationFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleConf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,13 +68,13 @@
     <ClInclude Include="AFormatConvertor.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Simple.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dataSet.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AConfigurationFile.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleConf.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
