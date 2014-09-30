@@ -177,8 +177,6 @@ namespace gl
 
 	inline void Shader::setSamplerTask(Task &task, Texture const &texture)
 	{
-		GLint id = texture.getId();
-		GLenum type = texture.getType();
 		*(GLenum *)task.params[1] = texture.getType();
 		*(GLint *)task.params[2] = texture.getId();
 		task.update = true;
