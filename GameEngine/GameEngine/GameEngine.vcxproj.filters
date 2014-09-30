@@ -84,6 +84,7 @@
     <ClCompile Include="Engine\TMQ\dispatcher.cpp" />
     <ClCompile Include="Engine\TMQ\message.cpp" />
     <ClCompile Include="Engine\TMQ\queue.cpp" />
+    <ClCompile Include="Engine\Utils\MathematicTools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="Engine\TMQ\message.hpp" />
     <ClInclude Include="Engine\TMQ\queue.hpp" />
     <ClInclude Include="Engine\TMQ\templateDispatcher.hpp" />
+    <ClInclude Include="Engine\Utils\MathematicTools.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -1,5 +1,6 @@
 #include <Scenes/BenchmarkScene.hpp>
 #include <Render/Pipeline.hh>
+#include <Utils/MathematicTools.hh>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -137,6 +138,16 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushRenderOnScreenPipeline(key.merge.pipeline, key.merge.renderOnScreen);
 		return true;
 	});
+	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);
+	//float disc = Mathematic::secondDegreeDiscriminant(equation);
+	//std::cout << disc << std::endl;
+	//if (disc > 0)
+	//{
+	//	glm::vec2 result = Mathematic::resolveSecondDegree(equation, disc);
+	//	std::cout << result.x << ", " << result.y << std::endl;
+	//}
+	//else
+	//	std::cout << Mathematic::resolveSecondDegree(equation) << std::endl;
 	assert(res.get());
 }
 
@@ -221,7 +232,7 @@ bool BenchmarkScene::userStart()
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(-5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, 10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+
 	return true;
 }
 
