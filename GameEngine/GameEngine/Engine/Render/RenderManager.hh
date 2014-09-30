@@ -191,7 +191,7 @@ namespace gl
 		Shader *shader;
 		if ((shader = getShader(shaderKey)) == NULL)
 			return (*this);
-		shader->bindingMaterial<TYPE>(uniformKey);
+		shader->bindingMaterial<TYPE>(samplerKey);
 		return (*this);
 	}
 
