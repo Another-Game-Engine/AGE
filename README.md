@@ -14,7 +14,7 @@ Demo .exe : https://www.dropbox.com/s/dot6ecqo59i1prz/AGE-V0.0-demo.7z
 
 - C++11, OpenGL 4.1
 - Entity component system based architecture
-- Flexible communication throught events
+- Multi-threaded execution pipeline (Gameplay, culling, pre-render, rendering)
 - Bullet Physics Library integration
 - Flexible scene organization and possibility to run multiple scenes at the same time
 - Tile based forward rendering (no implemented yet)
