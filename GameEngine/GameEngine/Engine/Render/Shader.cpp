@@ -194,7 +194,7 @@ namespace gl
 	void Shader::createSamplerTask(Task &task, std::string const &flag)
 	{
 		task.func = setUniformSampler;
-		task.indexToTarget = 1;
+		task.indexToTarget = 2;
 		task.nbrParams = 3;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
