@@ -165,23 +165,23 @@ bool BenchmarkScene::userUpdate(double time)
 			{
 				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("ball/ball.sage"));
 				mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
-				for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
-				{
-					gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-					getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
-					getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
-				}
+				//for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
+				//{
+				//	gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
+				//	getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
+				//	getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
+				//}
 			}
 			else
 			{
 				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 				mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
-				for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
-				{
-					gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-					getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
-					getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
-				}
+				//for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
+				//{
+				//	gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
+				//	getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
+				//	getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
+				//}
 			}
 #else
 			auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
