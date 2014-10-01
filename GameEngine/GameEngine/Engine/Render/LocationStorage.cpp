@@ -57,6 +57,8 @@ namespace gl
 
 	LocationStorage &LocationStorage::generateLocation(size_t nbrIndex)
 	{
+		if (nbrIndex == _locations.size())
+			return (*this);
 		_locations.resize(nbrIndex);
 		return (*this);
 	}

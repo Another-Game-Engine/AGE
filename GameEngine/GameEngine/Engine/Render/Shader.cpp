@@ -117,6 +117,17 @@ namespace gl
 		return (true);
 	}
 
+	GLuint Shader::getSamplerLocation(char const *flag)
+	{
+		GLuint location;
+
+		use();
+		if ((location = glGetUniformLocation(_progId, flag)) == -1)
+			assert(0);
+		glUniform1i(location, location);
+		return (location);
+	}
+
 	GLuint Shader::getUniformLocation(char const *flag)
 	{
 		GLuint location;
@@ -189,7 +200,7 @@ namespace gl
 		task.params = new void *[task.nbrParams];
 		task.params[0] = new GLuint;
 		task.sizeParams[0] = sizeof(GLuint);
-		GLuint location = getUniformLocation(flag.c_str());
+		GLuint location = getSamplerLocation(flag.c_str());
 		*(GLuint *)task.params[0] = location;
 		task.params[1] = new GLint;
 		*(GLenum *)task.params[1] = GL_TEXTURE_2D;
@@ -250,6 +261,17 @@ namespace gl
 		setUniformTask<glm::mat3>(*task, setUniformMat3, (void *)&value);
 		return (key);
 	}
+
+	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec3 const &value)
+	{
+		Key<Uniform> key;
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		_uniforms[key] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
+		return (key);
+	}
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec4 const &value)
 	{
@@ -291,6 +313,13 @@ namespace gl
 	{
 		Task *task = getUniform(key);
 		setUniformTask<glm::vec4>(*task, setUniformVec4, (void *)&value);
+		return (*this);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec3 const &value)
+	{
+		Task *task = getUniform(key);
+		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
 		return (*this);
 	}
 
