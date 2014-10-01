@@ -71,21 +71,22 @@ namespace AGE
 					return false;
 				}
 
-				if (!image.convertTo32Bits())
-				{
-					std::cout << "coucou";
-					return false;
-				}
+				//if (!image.convertTo32Bits())
+				//{
+				//	std::cout << "coucou";
+				//	return false;
+				//}
 
 					auto t = new TextureData();
 					dataSet.textures.push_back(t);
 					t->width = image.getWidth();
 					t->height = image.getHeight();
 					auto colorType = image.getColorType();
-					auto colNumber = colorType == FIC_RGBALPHA ? 4 : 3;
 					t->rawPath = e;
+					t->bpp = image.getBitsPerPixel();
+					auto colNumber = t->bpp == 24 ? 3 : 4;
 					auto imgData = FreeImage_GetBits(image);
-					t->data.assign(imgData, imgData + (sizeof(unsigned char) * t->width * t->height * colNumber));
+					t->data.assign(imgData, imgData + sizeof(unsigned char) * t->width * t->height * colNumber);
 
 				//	t->data.assign(imgData, imgData + (sizeof(unsigned char) * width * height * channels));
 				//	SOIL_free_image_data(imgData);

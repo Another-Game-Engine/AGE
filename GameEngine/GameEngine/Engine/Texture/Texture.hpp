@@ -11,12 +11,13 @@ namespace AGE
 		std::string rawPath;
 		std::uint32_t width;
 		std::uint32_t height;
+		std::uint8_t bpp;
 		AGE::Vector<unsigned char> data;
 
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(rawPath, width, height, data);
+			ar(rawPath, width, height, bpp, data);
 		}
 	};
 }
