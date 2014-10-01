@@ -36,7 +36,6 @@ namespace gl
 	{
 	public:
 		GeometryManager geometryManager;
-		MaterialManager materialManager;
 		LocationStorage locationStorage;
 
 	public:
@@ -83,6 +82,16 @@ namespace gl
 		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
 		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Sampler> const &u);
 		RenderManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+
+		// Material
+		Key<Material> getDefaultMaterial();
+		Key<Material> addMaterial();
+		RenderManager &rmMaterial(Key<Material> &key);
+		Key<Material> getMaterial(size_t index);
+		template <typename TYPE> RenderManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
+		template <typename TYPE> RenderManager &setMaterial(Key<Material> const &key, Key<Texture> const &key_tex);
+		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
+
 
 		// Texture
 		Key<Texture> addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping);
@@ -143,6 +152,9 @@ namespace gl
 		RenderManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
 		RenderManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
 	private:
+		// internal manager
+		MaterialManager _materialManager;
+
 		// container
 		std::map<Key<Shader>, Shader *> _shaders;
 		Shader * _preShaderQuad;
@@ -214,4 +226,24 @@ namespace gl
 		return (*this);
 	}
 
+	template <typename TYPE>
+	RenderManager &RenderManager::setMaterial(Key<Material> const &key, typename TYPE::return_type const &value)
+	{
+		_materialManager.setMaterial<TYPE>(key, value);
+		return (*this);
+	}
+
+	template <typename TYPE>
+	RenderManager &RenderManager::setMaterial(Key<Material> const &key, Key<Texture> const &key_tex)
+	{
+		Texture *texture = getTexture(key_tex);
+		_materialManager.setMaterial<TYPE>(key, texture->getId());
+		return (*this);
+	}
+
+	template <typename TYPE>
+	typename TYPE::return_type RenderManager::getMaterial(Key<Material> const &key)
+	{
+		return (_materialManager.getMaterial<TYPE>(key);)
+	}
 }

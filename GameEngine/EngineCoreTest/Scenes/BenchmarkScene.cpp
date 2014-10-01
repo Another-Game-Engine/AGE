@@ -222,6 +222,16 @@ bool BenchmarkScene::userStart()
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+
+	//{
+	//	auto _e = createEntity();
+	//	auto _l = getLink(_e);
+	//	_l->setPosition(glm::vec3(1, 1, 1));
+	//	_l->setScale(glm::vec3(3.0f));
+	//	auto _m = addComponent<Component::MeshRenderer>(_e, getInstance<AGE::AssetsManager>()->getMesh("head/head.sage"));
+	//	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("head/head.mage")));
+	//}
+
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
@@ -262,25 +272,16 @@ bool BenchmarkScene::userUpdate(double time)
 			Component::MeshRenderer *mesh;
 			if (i % 4 == 0)
 			{
+				//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+				//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
 				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
-				//for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
-				//{
-				//	gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-				//	getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
-				//	getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
-				//}
+
 			}
 			else
 			{
 				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
 				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
-				//for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
-				//{
-				//	gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-				//	getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
-				//	getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
-				//}
 			}
 #else
 			auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
@@ -337,7 +338,7 @@ bool BenchmarkScene::userUpdate(double time)
 		{
 			AGE::Drawable drawable;
 
-			drawable.material = renderManager->materialManager.getDefaultMaterial();
+			drawable.material = renderManager->getDefaultMaterial();
 			drawable.mesh.vertices = renderManager->geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
 			drawable.mesh.indices = renderManager->geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
 			renderManager->locationStorage.setLocation(index + 1, collection.lights[index]);

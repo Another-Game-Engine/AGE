@@ -47,27 +47,27 @@ namespace AGE
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		for (auto &e : data.collection)
 		{
-			auto key = manager->materialManager.addMaterial();
+			auto key = manager->addMaterial();
 			material->datas.push_back(key);
 
 			// TODO fill material with material key
 			for (size_t index = 0; index < material->datas.size(); ++index)
 				{
 					gl::Key<gl::Material> &mat = material->datas[index];
-					manager->materialManager.setMaterial<gl::Color_diffuse>(mat, e.diffuse);
-					manager->materialManager.setMaterial<gl::Color_ambiant>(mat, e.ambient);
-					manager->materialManager.setMaterial<gl::Color_emissive>(mat, e.emissive);
-					manager->materialManager.setMaterial<gl::Color_specular>(mat, e.specular);
+					manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
+					manager->setMaterial<gl::Color_ambiant>(mat, e.ambient);
+					manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
+					manager->setMaterial<gl::Color_specular>(mat, e.specular);
 
-					manager->materialManager.setMaterial<gl::Texture_ambiant>(mat, loadTexture(e.ambientTexPath));
-					manager->materialManager.setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
-					manager->materialManager.setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
-					manager->materialManager.setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
+					manager->setMaterial<gl::Texture_ambiant>(mat, loadTexture(e.ambientTexPath));
+					manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
+					manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
+					manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
 
-					manager->materialManager.setMaterial<gl::Ratio_ambiant>(mat, 1.0f); // todo
-					manager->materialManager.setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
-					manager->materialManager.setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
-					manager->materialManager.setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
+					manager->setMaterial<gl::Ratio_ambiant>(mat, 1.0f); // todo
+					manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
+					manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
+					manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
 				}
 
 		}
