@@ -168,7 +168,7 @@ namespace AGE
 		auto &pools = _pools.find(data.infos)->second;
 		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 
-		std::size_t size = data.infos.count();
+		std::size_t size = 4;// data.infos.count();
 
 		AGE::Vector<void*> buffer;
 		buffer.resize(size);
@@ -178,63 +178,104 @@ namespace AGE
 		std::size_t ctr = 0;
 		auto sizeofFloat = sizeof(float);
 		auto maxSize = data.positions.size();
-		for (std::size_t i = 0; i < data.infos.size(); ++i)
+
+		// we send positions
+
+		std::vector < glm::vec4 > tempColor;
+
+		buffer[ctr] = &data.positions[0].x;
+		nbrBuffer[ctr] = data.positions.size() * 4 * sizeofFloat;
+		++ctr;
+		if (data.infos.test(Normals))
 		{
-			if (!data.infos.test(i))
-				continue;
-			switch (MeshInfos(i))
-			{
-			case Positions:
-				buffer[ctr] = &data.positions[0].x;
-				nbrBuffer[ctr] = data.positions.size() * 4 * sizeofFloat;
-				if (data.positions.size() > maxSize)
-					maxSize = data.positions.size();
-				break;
-			case Normals:
-				buffer[ctr] = &data.normals[0].x;
-				nbrBuffer[ctr] = data.normals.size() * 4 * sizeofFloat;
-				if (data.normals.size() > maxSize)
-					maxSize = data.normals.size();
-				break;
-			case Tangents:
-				buffer[ctr] = &data.tangents[0].x;
-				nbrBuffer[ctr] = data.tangents.size() * 4 * sizeofFloat;
-				if (data.tangents.size() > maxSize)
-					maxSize = data.tangents.size();
-				break;
-			case BiTangents:
-				buffer[ctr] = &data.biTangents[0].x;
-				nbrBuffer[ctr] = data.biTangents.size() * 4 * sizeofFloat;
-				if (data.biTangents.size() > maxSize)
-					maxSize = data.biTangents.size();
-				break;
-			case Uvs:
-				buffer[ctr] = &data.uvs[0][0].x;
-				nbrBuffer[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
-				break;
-			case Weights:
-				buffer[ctr] = &data.weights[0].x;
-				nbrBuffer[ctr] = data.weights.size() * 4 * sizeofFloat;
-				if (data.weights.size() > maxSize)
-					maxSize = data.weights.size();
-				break;
-			case BoneIndices:
-				buffer[ctr] = &data.boneIndices[0].x;
-				nbrBuffer[ctr] = data.boneIndices.size() * 4 * sizeofFloat;
-				if (data.boneIndices.size() > maxSize)
-					maxSize = data.boneIndices.size();
-				break;
-			case Colors:
-				buffer[ctr] = &data.colors[0].x;
-				nbrBuffer[ctr] = data.colors.size() * 4 * sizeofFloat;
-				if (data.colors.size() > maxSize)
-					maxSize = data.colors.size();
-				break;
-			default:
-				break;
-			}
+			buffer[ctr] = &data.normals[0].x;
+			nbrBuffer[ctr] = data.normals.size() * 4 * sizeofFloat;
+			if (data.normals.size() > maxSize)
+				maxSize = data.normals.size();
 			++ctr;
 		}
+		if (data.infos.test(Uvs))
+		{
+			buffer[ctr] = &data.uvs[0][0].x;
+			nbrBuffer[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
+			++ctr;
+		}
+		if (data.infos.test(Colors))
+		{
+			buffer[ctr] = &data.colors[0].x;
+			nbrBuffer[ctr] = data.colors.size() * 4 * sizeofFloat;
+			if (data.colors.size() > maxSize)
+				maxSize = data.colors.size();
+			++ctr;
+		}
+		else
+		{
+			tempColor.resize(maxSize, glm::vec4(1, 1, 1, 1));
+			buffer[ctr] = &tempColor[0].x;
+			nbrBuffer[ctr] = tempColor.size() * 4 * sizeofFloat;
+			++ctr;
+		}
+
+
+		//for (std::size_t i = 0; i < data.infos.size(); ++i)
+		//{
+		//	if (!data.infos.test(i))
+		//		continue;
+		//	switch (MeshInfos(i))
+		//	{
+		//	case Positions:
+		//		buffer[ctr] = &data.positions[0].x;
+		//		nbrBuffer[ctr] = data.positions.size() * 4 * sizeofFloat;
+		//		if (data.positions.size() > maxSize)
+		//			maxSize = data.positions.size();
+		//		break;
+		//	case Normals:
+		//		buffer[ctr] = &data.normals[0].x;
+		//		nbrBuffer[ctr] = data.normals.size() * 4 * sizeofFloat;
+		//		if (data.normals.size() > maxSize)
+		//			maxSize = data.normals.size();
+		//		break;
+		//	//case Tangents:
+		//	//	buffer[ctr] = &data.tangents[0].x;
+		//	//	nbrBuffer[ctr] = data.tangents.size() * 4 * sizeofFloat;
+		//	//	if (data.tangents.size() > maxSize)
+		//	//		maxSize = data.tangents.size();
+		//	//	break;
+		//	//case BiTangents:
+		//	//	buffer[ctr] = &data.biTangents[0].x;
+		//	//	nbrBuffer[ctr] = data.biTangents.size() * 4 * sizeofFloat;
+		//	//	if (data.biTangents.size() > maxSize)
+		//	//		maxSize = data.biTangents.size();
+		//	//	break;
+		//	case Uvs:
+		//		buffer[ctr] = &data.uvs[0][0].x;
+		//		nbrBuffer[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
+		//		//if (data.uvs[0].size() > maxSize)
+		//		//	maxSize = data.uvs[0].size();
+		//		break;
+		//	case Weights:
+		//		buffer[ctr] = &data.weights[0].x;
+		//		nbrBuffer[ctr] = data.weights.size() * 4 * sizeofFloat;
+		//		if (data.weights.size() > maxSize)
+		//			maxSize = data.weights.size();
+		//		break;
+		//	case BoneIndices:
+		//		buffer[ctr] = &data.boneIndices[0].x;
+		//		nbrBuffer[ctr] = data.boneIndices.size() * 4 * sizeofFloat;
+		//		if (data.boneIndices.size() > maxSize)
+		//			maxSize = data.boneIndices.size();
+		//		break;
+		//	case Colors:
+		//		buffer[ctr] = &data.colors[0].x;
+		//		nbrBuffer[ctr] = data.colors.size() * 4 * sizeofFloat;
+		//		if (data.colors.size() > maxSize)
+		//			maxSize = data.colors.size();
+		//		break;
+		//	default:
+		//		break;
+		//	}
+		//	++ctr;
+		//}
 
 		//geometryManager.createSphereSimpleForm();
 		//mesh.vertices = geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
@@ -254,14 +295,39 @@ namespace AGE
 		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 		assert(geometryManager != nullptr);
 
-		std::size_t size = infos.count();
+		std::size_t size = 4;// infos.count();
 
 		GLenum *typeComponent = new GLenum[size]; // {GL_FLOAT, GL_FLOAT, GL_FLOAT};			
 		uint8_t *sizeTypeComponent = new uint8_t[size]; // { sizeof(float), sizeof(float), sizeof(float) };
 		uint8_t *nbrComponent = new uint8_t[size];// {4, 4, 4};
 
 		std::size_t ctr = 0;
-		for (std::size_t i = 0; i < infos.size(); ++i)
+
+		//positions
+		typeComponent[ctr] = GL_FLOAT;
+		sizeTypeComponent[ctr] = sizeof(float);
+		nbrComponent[ctr] = 4;
+		++ctr;
+
+		//normals
+		typeComponent[ctr] = GL_FLOAT;
+		sizeTypeComponent[ctr] = sizeof(float);
+		nbrComponent[ctr] = 4;
+		++ctr;
+
+		//uvs
+		typeComponent[ctr] = GL_FLOAT;
+		sizeTypeComponent[ctr] = sizeof(float);
+		nbrComponent[ctr] = 2;
+		++ctr;
+
+		//colors
+		typeComponent[ctr] = GL_FLOAT;
+		sizeTypeComponent[ctr] = sizeof(float);
+		nbrComponent[ctr] = 4;
+		++ctr;
+
+		/*for (std::size_t i = 0; i < infos.size(); ++i)
 		{
 			if (!infos.test(i))
 				continue;
@@ -312,7 +378,7 @@ namespace AGE
 				break;
 			}
 			++ctr;
-		}
+		}*/
 
 		auto vpKey = geometryManager->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
 		auto indKey = geometryManager->addIndexPool();

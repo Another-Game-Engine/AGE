@@ -98,10 +98,12 @@ namespace gl
 	bool Shader::linkProgram() const
 	{
 		GLint         linkRet = 0;
+		GLint         params = 0;
 		GLsizei       msgLenght;
 		GLchar        *errorMsg;
 
 		glLinkProgram(_progId);
+
 		glGetProgramiv(_progId, GL_LINK_STATUS, &linkRet);
 		if (linkRet == GL_FALSE)
 		{

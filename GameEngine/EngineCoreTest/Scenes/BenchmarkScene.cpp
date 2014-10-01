@@ -136,6 +136,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->configPipeline(key.merge.pipeline, gl::DrawType::NONE_OBJECT);
 		_renderManager->pushRenderPostEffectPipeline(key.merge.pipeline, key.merge.renderPostEffect);
 		_renderManager->pushRenderOnScreenPipeline(key.merge.pipeline, key.merge.renderOnScreen);
+
 		return true;
 	});
 	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);

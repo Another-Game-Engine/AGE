@@ -41,7 +41,7 @@ bool loadAssets(std::shared_ptr<Engine> e)
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"));
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"));
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"));
-	auto t = e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
+	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
 #endif
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
