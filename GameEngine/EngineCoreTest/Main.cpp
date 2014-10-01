@@ -39,6 +39,7 @@ bool loadAssets(std::shared_ptr<Engine> e)
 	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"));
+	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"));
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"));
 	auto t = e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
 #endif

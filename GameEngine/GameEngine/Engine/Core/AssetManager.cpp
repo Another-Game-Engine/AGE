@@ -81,10 +81,10 @@ namespace AGE
 		auto key = manager->addTexture2D(data.width, data.height, GL_RGB32F, false);
 		auto color = data.bpp == 24 ? GL_RGB : GL_RGBA;
 		manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data.data.data());
-		//manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		//manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		//manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		_textures.insert(std::make_pair(filePath.getFullName(), key));
 		return key;
 	}
