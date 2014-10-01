@@ -26,7 +26,9 @@ namespace AGE
 		};
 	public:
 		std::shared_ptr<Animation> loadAnimation(const File &filePath);
+		std::shared_ptr<Animation> getAnimation(const File &filePath);
 		std::shared_ptr<Skeleton> loadSkeleton(const File &filePath);
+		std::shared_ptr<Skeleton> getSkeleton(const File &filePath);
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder = std::vector<MeshInfos>());
 		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
 		std::shared_ptr<MaterialSetInstance> loadMaterial(const File &filePath);

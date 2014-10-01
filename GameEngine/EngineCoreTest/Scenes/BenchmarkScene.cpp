@@ -223,14 +223,15 @@ bool BenchmarkScene::userStart()
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
 
-	//{
-	//	auto _e = createEntity();
-	//	auto _l = getLink(_e);
-	//	_l->setPosition(glm::vec3(1, 1, 1));
-	//	_l->setScale(glm::vec3(3.0f));
-	//	auto _m = addComponent<Component::MeshRenderer>(_e, getInstance<AGE::AssetsManager>()->getMesh("head/head.sage"));
-	//	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("head/head.mage")));
-	//}
+	{
+		auto _e = createEntity();
+		auto _l = getLink(_e);
+		_l->setOrientation(glm::quat(glm::vec3(-90, 0, 0)));
+		_l->setPosition(glm::vec3(5, 1, 5));
+		_l->setScale(glm::vec3(0.01f));
+		auto _m = addComponent<Component::MeshRenderer>(_e, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
+		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
+	}
 
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
@@ -239,6 +240,18 @@ bool BenchmarkScene::userStart()
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(-5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(-5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(-5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(-5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
@@ -269,20 +282,20 @@ bool BenchmarkScene::userUpdate(double time)
 #ifdef RENDERING_ACTIVATED
 
 #ifndef COMPLEX_MESH
-			Component::MeshRenderer *mesh;
-			if (i % 4 == 0)
-			{
-				//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-				//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
-				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+			//Component::MeshRenderer *mesh;
+			//if (i % 4 == 0)
+			//{
+			//	//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+			//	//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+			//	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
 
-			}
-			else
-			{
-				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
-				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
-			}
+			//}
+			//else
+			//{
+			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+			//	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+			//}
 #else
 			auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 			mesh->setShader("MaterialBasic");

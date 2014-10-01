@@ -126,6 +126,22 @@ namespace AGE
 		return animation;
 	}
 
+	std::shared_ptr<Animation> AssetsManager::getAnimation(const File &_filePath)
+	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		if (_animations.find(filePath.getFullName()) != std::end(_animations))
+			return _animations[filePath.getFullName()];
+		return nullptr;
+	}
+
+	std::shared_ptr<Skeleton> AssetsManager::getSkeleton(const File &_filePath)
+	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
+			return _skeletons[filePath.getFullName()];
+		return nullptr;
+	}
+
 	std::shared_ptr<Skeleton> AssetsManager::loadSkeleton(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
