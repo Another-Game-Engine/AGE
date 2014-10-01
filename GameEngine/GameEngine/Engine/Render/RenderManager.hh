@@ -236,7 +236,7 @@ namespace gl
 	template <typename TYPE>
 	RenderManager &RenderManager::setMaterial(Key<Material> const &key, Key<Texture> const &key_tex)
 	{
-		Texture *texture = getTexture(tex);
+		Texture *texture = getTexture(key_tex);
 		_materialManager.setMaterial<TYPE>(key, texture->getId());
 		return (*this);
 	}

@@ -8,6 +8,23 @@
 
 namespace AGE
 {
+	std::shared_ptr<MeshInstance> AssetsManager::getMesh(const File &_filePath)
+	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
+			return _meshs[filePath.getFullName()];
+		return nullptr;
+	}
+
+	std::shared_ptr<MaterialSetInstance> AssetsManager::getMaterial(const File &_filePath)
+	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		if (_materials.find(filePath.getFullName()) != std::end(_materials))
+			return _materials[filePath.getFullName()];
+		return nullptr;
+	}
+
+
 	std::shared_ptr<MaterialSetInstance> AssetsManager::loadMaterial(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
@@ -34,6 +51,25 @@ namespace AGE
 			material->datas.push_back(key);
 
 			// TODO fill material with material key
+			for (size_t index = 0; index < material->datas.size(); ++index)
+				{
+					gl::Key<gl::Material> &mat = material->datas[index];
+					manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
+					manager->setMaterial<gl::Color_ambiant>(mat, e.ambient);
+					manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
+					manager->setMaterial<gl::Color_specular>(mat, e.specular);
+
+					manager->setMaterial<gl::Texture_ambiant>(mat, loadTexture(e.ambientTexPath));
+					manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
+					manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
+					manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
+
+					manager->setMaterial<gl::Ratio_ambiant>(mat, 1.0f); // todo
+					manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
+					manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
+					manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
+				}
+
 		}
 
 		_materials.insert(std::make_pair(filePath.getFullName(), material));
@@ -59,8 +95,9 @@ namespace AGE
 
 		// TODO fill texture with texture key
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
-		auto key = manager->addTexture2D(3, data.width, data.height, true);
-		manager->uploadTexture(key, GL_RGBA32F, GL_UNSIGNED_BYTE, data.data.data());
+		auto key = manager->addTexture2D(data.width, data.height, GL_RGB32F, false);
+		auto color = data.bpp == 24 ? GL_RGB : GL_RGBA;
+		manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data.data.data());
 		manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -89,6 +126,22 @@ namespace AGE
 		return animation;
 	}
 
+	std::shared_ptr<Animation> AssetsManager::getAnimation(const File &_filePath)
+	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		if (_animations.find(filePath.getFullName()) != std::end(_animations))
+			return _animations[filePath.getFullName()];
+		return nullptr;
+	}
+
+	std::shared_ptr<Skeleton> AssetsManager::getSkeleton(const File &_filePath)
+	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
+			return _skeletons[filePath.getFullName()];
+		return nullptr;
+	}
+
 	std::shared_ptr<Skeleton> AssetsManager::loadSkeleton(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
@@ -109,7 +162,7 @@ namespace AGE
 		return skeleton;
 	}
 
-	std::shared_ptr<MeshInstance> AssetsManager::loadMesh(const File &_filePath)
+	std::shared_ptr<MeshInstance> AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
@@ -133,19 +186,44 @@ namespace AGE
 		for (std::size_t i = 0; i < data.subMeshs.size(); ++i)
 		{
 			// If no vertex pool correspond to submesh
-			if (_pools.find(data.subMeshs[i].infos) == std::end(_pools))
+			std::vector<MeshInfos> order;
+			std::bitset<MeshInfos::END> infos;
+			if (loadOrder.empty())
 			{
-				createPool(data.subMeshs[i].infos);
+				for (std::size_t j = 0; i < data.subMeshs[i].infos.size(); ++j)
+				{
+					if (!data.subMeshs[i].infos.test(j))
+						continue;
+					order.push_back(MeshInfos(j));
+					infos.set(j);
+				}
 			}
-			loadSubmesh(data.subMeshs[i], meshInstance->subMeshs[i]);
+			else
+			{
+				for (auto &e : loadOrder)
+				{
+					if (!data.subMeshs[i].infos.test(e))
+						continue;
+					order.push_back(e);
+					infos.set(e);
+				}
+			}
+			if (_pools.find(infos) == std::end(_pools))
+			{
+				createPool(order, infos);
+			}
+			loadSubmesh(data.subMeshs[i], meshInstance->subMeshs[i], order, infos);
 		}
 		_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
 		return meshInstance;
 	}
 
-	void AssetsManager::loadSubmesh(SubMeshData &data, SubMeshInstance &mesh)
+	void AssetsManager::loadSubmesh(SubMeshData &data
+		, SubMeshInstance &mesh
+		, const std::vector<MeshInfos> &order
+		, const std::bitset<MeshInfos::END> &infos)
 	{
-		auto &pools = _pools.find(data.infos)->second;
+		auto &pools = _pools.find(infos)->second;
 		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 
 		std::size_t size = data.infos.count();
@@ -158,11 +236,10 @@ namespace AGE
 		std::size_t ctr = 0;
 		auto sizeofFloat = sizeof(float);
 		auto maxSize = data.positions.size();
-		for (std::size_t i = 0; i < data.infos.size(); ++i)
+
+		for (auto &e : order)
 		{
-			if (!data.infos.test(i))
-				continue;
-			switch (MeshInfos(i))
+			switch (MeshInfos(e))
 			{
 			case Positions:
 				buffer[ctr] = &data.positions[0].x;
@@ -191,6 +268,8 @@ namespace AGE
 			case Uvs:
 				buffer[ctr] = &data.uvs[0][0].x;
 				nbrBuffer[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
+				if (data.uvs[0].size() > maxSize)
+					maxSize = data.uvs[0].size();
 				break;
 			case Weights:
 				buffer[ctr] = &data.weights[0].x;
@@ -229,7 +308,7 @@ namespace AGE
 	}
 
 	// Create pool for meshs
-	void AssetsManager::createPool(const std::bitset<MeshInfos::END> &infos)
+	void AssetsManager::createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos)
 	{
 		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 		assert(geometryManager != nullptr);
@@ -241,11 +320,10 @@ namespace AGE
 		uint8_t *nbrComponent = new uint8_t[size];// {4, 4, 4};
 
 		std::size_t ctr = 0;
-		for (std::size_t i = 0; i < infos.size(); ++i)
+
+		for (auto &e : order)
 		{
-			if (!infos.test(i))
-				continue;
-			switch (MeshInfos(i))
+			switch (e)
 			{
 			case Positions:
 				typeComponent[ctr] = GL_FLOAT;

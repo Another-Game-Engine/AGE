@@ -68,6 +68,7 @@ namespace AGE
 				aiString reflexionTexPath;
 				aiString specularTexPath;
 				aiString normalTexPath;
+				aiString bumpTexPath;
 
 				aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &diffuseTexPath);
 				aiMat->GetTexture(aiTextureType_AMBIENT, 0, &ambientTexPath);
@@ -75,6 +76,7 @@ namespace AGE
 				aiMat->GetTexture(aiTextureType_REFLECTION, 0, &reflexionTexPath);
 				aiMat->GetTexture(aiTextureType_SPECULAR, 0, &specularTexPath);
 				aiMat->GetTexture(aiTextureType_NORMALS, 0, &normalTexPath);
+				aiMat->Get(AI_MATKEY_TEXTURE_HEIGHT(0), bumpTexPath);
 
 				auto material = new MaterialData();
 
@@ -90,6 +92,7 @@ namespace AGE
 				material->reflectiveTexPath = reflexionTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath) : "default.jpg";
 				material->specularTexPath = specularTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath) : "default.jpg";
 				material->normalTexPath = normalTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath) : "default.jpg";
+				material->bumpTexPath = bumpTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(bumpTexPath) : "default.jpg";
 
 				dataSet.texturesPath.insert(material->diffuseTexPath);
 				dataSet.texturesPath.insert(material->ambientTexPath);
@@ -97,6 +100,7 @@ namespace AGE
 				dataSet.texturesPath.insert(material->reflectiveTexPath);
 				dataSet.texturesPath.insert(material->specularTexPath);
 				dataSet.texturesPath.insert(material->normalTexPath);
+				dataSet.texturesPath.insert(material->bumpTexPath);
 
 				AssimpLoader::replaceExtension(material->diffuseTexPath, ".tage");
 				AssimpLoader::replaceExtension(material->ambientTexPath, ".tage");
@@ -104,6 +108,7 @@ namespace AGE
 				AssimpLoader::replaceExtension(material->reflectiveTexPath, ".tage");
 				AssimpLoader::replaceExtension(material->specularTexPath, ".tage");
 				AssimpLoader::replaceExtension(material->normalTexPath, ".tage");
+				AssimpLoader::replaceExtension(material->bumpTexPath, ".tage");
 
 				dataSet.materials.push_back(material);
             }

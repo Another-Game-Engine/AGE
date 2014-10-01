@@ -15,6 +15,7 @@ void BenchmarkScene::initRendering()
 {
 	// A NETTOYER !!!!
 	_renderManager = getInstance<gl::RenderManager>();
+	auto assetsManager = getInstance<AGE::AssetsManager>();
 	_renderThread = (AGE::RenderThread*)(getInstance<AGE::Threads::Render>());
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
@@ -35,7 +36,10 @@ void BenchmarkScene::initRendering()
 		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_color", glm::vec4(1.0f)));
 		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_ratio", 1.0f));
 		_renderManager->bindTransformationToShader(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "model_matrix", glm::mat4(1.f)));
-		
+		auto keyDiffuse = _renderManager->addShaderSampler(key.getBuff.shader, "diffuse_texture");
+		_renderManager->bindMaterialToShader<gl::Texture_diffuse>(key.getBuff.shader, keyDiffuse);
+
+
 		// found uniform
 		key.Accum.position_light = _renderManager->addShaderUniform(key.Accum.shader, "position_light", glm::vec3(1.f));
 		key.Accum.range_light = _renderManager->addShaderUniform(key.Accum.shader, "attenuation_light", glm::vec3(1.f, 0.1f, 0.01f));
@@ -132,6 +136,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->configPipeline(key.merge.pipeline, gl::DrawType::NONE_OBJECT);
 		_renderManager->pushRenderPostEffectPipeline(key.merge.pipeline, key.merge.renderPostEffect);
 		_renderManager->pushRenderOnScreenPipeline(key.merge.pipeline, key.merge.renderOnScreen);
+
 		return true;
 	});
 	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);
@@ -217,6 +222,17 @@ bool BenchmarkScene::userStart()
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+
+	{
+		auto _e = createEntity();
+		auto _l = getLink(_e);
+		_l->setOrientation(glm::quat(glm::vec3(-90, 0, 0)));
+		_l->setPosition(glm::vec3(5, 1, 5));
+		_l->setScale(glm::vec3(0.01f));
+		auto _m = addComponent<Component::MeshRenderer>(_e, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
+		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
+	}
+
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
@@ -224,10 +240,7 @@ bool BenchmarkScene::userStart()
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(-5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.1f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(5.0f, -10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.1f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.01f, 0.f));
 
 	return true;
 }
@@ -239,7 +252,7 @@ bool BenchmarkScene::userUpdate(double time)
 	_timeCounter += time;
 	_chunkCounter += time;
 
-	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 100.0f * (float)time, glm::vec3(0, 1, 0)));
+	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
 
 	if (_chunkCounter >= _maxChunk)
 	{
@@ -254,29 +267,20 @@ bool BenchmarkScene::userUpdate(double time)
 #ifdef RENDERING_ACTIVATED
 
 #ifndef COMPLEX_MESH
-			Component::MeshRenderer *mesh;
-			if (i % 4 == 0)
-			{
-				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("ball/ball.sage"));
-				mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
-				for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
-				{
-					gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-					getInstance<gl::RenderManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
-					getInstance<gl::RenderManager>()->setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
-				}
-			}
-			else
-			{
-				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
-				mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
-				for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
-				{
-					gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-					getInstance<gl::RenderManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
-					getInstance<gl::RenderManager>()->setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
-				}
-			}
+			//Component::MeshRenderer *mesh;
+			//if (i % 4 == 0)
+			//{
+			//	//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+			//	//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+			//	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+
+			//}
+			//else
+			//{
+			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+			//	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+			//}
 #else
 			auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 			mesh->setShader("MaterialBasic");
