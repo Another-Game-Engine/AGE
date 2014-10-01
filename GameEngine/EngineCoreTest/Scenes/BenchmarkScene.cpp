@@ -262,8 +262,8 @@ bool BenchmarkScene::userUpdate(double time)
 				for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
 				{
 					gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-					getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
-					getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
+					getInstance<gl::RenderManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4((float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, (float)(rand() % 100) / 100.0f, 1));
+					getInstance<gl::RenderManager>()->setMaterial<gl::Ratio_diffuse>(mat, 1.0f);
 				}
 			}
 			else
@@ -273,8 +273,8 @@ bool BenchmarkScene::userUpdate(double time)
 				for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
 				{
 					gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
-					getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
-					getInstance<gl::RenderManager>()->materialManager.setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
+					getInstance<gl::RenderManager>()->setMaterial<gl::Color_diffuse>(mat, glm::vec4(0, 0.0f, 1.f, 0.f));
+					getInstance<gl::RenderManager>()->setMaterial<gl::Ratio_diffuse>(mat, (float)(rand() % 100) / 100.0f);
 				}
 			}
 #else
@@ -332,7 +332,7 @@ bool BenchmarkScene::userUpdate(double time)
 		{
 			AGE::Drawable drawable;
 
-			drawable.material = renderManager->materialManager.getDefaultMaterial();
+			drawable.material = renderManager->getDefaultMaterial();
 			drawable.mesh.vertices = renderManager->geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
 			drawable.mesh.indices = renderManager->geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
 			renderManager->locationStorage.setLocation(index + 1, collection.lights[index]);

@@ -77,4 +77,5 @@ namespace gl
 		shader.setMaterial(*material);
 		return (*this);
 	}
+
 }
