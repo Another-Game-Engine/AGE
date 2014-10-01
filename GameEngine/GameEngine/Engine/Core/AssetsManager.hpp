@@ -27,8 +27,10 @@ namespace AGE
 	public:
 		std::shared_ptr<Animation> loadAnimation(const File &filePath);
 		std::shared_ptr<Skeleton> loadSkeleton(const File &filePath);
-		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
+		std::shared_ptr<MeshInstance> loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder = std::vector<MeshInfos>());
+		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
 		std::shared_ptr<MaterialSetInstance> loadMaterial(const File &filePath);
+		std::shared_ptr<MaterialSetInstance> getMaterial(const File &filePath);
 		gl::Key<gl::Texture> loadTexture(const File &filepath);
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 	private:
@@ -46,8 +48,8 @@ namespace AGE
 		//Texture collection
 		std::map<std::string, gl::Key<gl::Texture>> _textures;
 
-		void loadSubmesh(SubMeshData &data, SubMeshInstance &mesh);
+		void loadSubmesh(SubMeshData &data, SubMeshInstance &mesh, const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos);
 		// Create pool for meshs
-		void createPool(const std::bitset<MeshInfos::END> &infos);
+		void createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos);
 	};
 }

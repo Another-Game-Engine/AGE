@@ -48,6 +48,23 @@ int			main(int ac, char **av)
 	}
 	{
 		AGE::AssetDataSet dataSet;
+		dataSet.filePath = File("head/head.obj");
+		dataSet.skinName = "head";
+		dataSet.materialName = "head";
+
+		dataSet.serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+		dataSet.rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+
+		AGE::MaterialLoader::load(dataSet);
+		AGE::ImageLoader::load(dataSet);
+		AGE::MeshLoader::load(dataSet);
+
+		AGE::MaterialLoader::save(dataSet);
+		AGE::ImageLoader::save(dataSet);
+		AGE::MeshLoader::save(dataSet);
+	}
+	{
+		AGE::AssetDataSet dataSet;
 		dataSet.filePath = File("cube/cube.obj");
 		dataSet.skinName = "cube";
 		dataSet.materialName = "cube";

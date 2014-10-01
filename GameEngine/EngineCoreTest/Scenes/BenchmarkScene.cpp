@@ -244,7 +244,7 @@ bool BenchmarkScene::userUpdate(double time)
 	_timeCounter += time;
 	_chunkCounter += time;
 
-	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 100.0f * (float)time, glm::vec3(0, 1, 0)));
+	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
 
 	if (_chunkCounter >= _maxChunk)
 	{
@@ -262,8 +262,8 @@ bool BenchmarkScene::userUpdate(double time)
 			Component::MeshRenderer *mesh;
 			if (i % 4 == 0)
 			{
-				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("ball/ball.sage"));
-				mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
 				//for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
 				//{
 				//	gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];
@@ -273,8 +273,8 @@ bool BenchmarkScene::userUpdate(double time)
 			}
 			else
 			{
-				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
-				mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
 				//for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
 				//{
 				//	gl::Key<gl::Material> mat = mesh->getMaterial()->datas[index];

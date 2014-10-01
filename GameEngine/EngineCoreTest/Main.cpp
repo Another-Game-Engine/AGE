@@ -38,10 +38,12 @@ bool loadAssets(std::shared_ptr<Engine> e)
 {
 	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
+	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("head/head.mage"));
 #endif
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));

@@ -8,6 +8,23 @@
 
 namespace AGE
 {
+	std::shared_ptr<MeshInstance> AssetsManager::getMesh(const File &_filePath)
+	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
+			return _meshs[filePath.getFullName()];
+		return nullptr;
+	}
+
+	std::shared_ptr<MaterialSetInstance> AssetsManager::getMaterial(const File &_filePath)
+	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		if (_materials.find(filePath.getFullName()) != std::end(_materials))
+			return _materials[filePath.getFullName()];
+		return nullptr;
+	}
+
+
 	std::shared_ptr<MaterialSetInstance> AssetsManager::loadMaterial(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
@@ -129,7 +146,7 @@ namespace AGE
 		return skeleton;
 	}
 
-	std::shared_ptr<MeshInstance> AssetsManager::loadMesh(const File &_filePath)
+	std::shared_ptr<MeshInstance> AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
@@ -153,22 +170,47 @@ namespace AGE
 		for (std::size_t i = 0; i < data.subMeshs.size(); ++i)
 		{
 			// If no vertex pool correspond to submesh
-			if (_pools.find(data.subMeshs[i].infos) == std::end(_pools))
+			std::vector<MeshInfos> order;
+			std::bitset<MeshInfos::END> infos;
+			if (loadOrder.empty())
 			{
-				createPool(data.subMeshs[i].infos);
+				for (std::size_t j = 0; i < data.subMeshs[i].infos.size(); ++j)
+				{
+					if (!data.subMeshs[i].infos.test(j))
+						continue;
+					order.push_back(MeshInfos(j));
+					infos.set(j);
+				}
 			}
-			loadSubmesh(data.subMeshs[i], meshInstance->subMeshs[i]);
+			else
+			{
+				for (auto &e : loadOrder)
+				{
+					if (!data.subMeshs[i].infos.test(e))
+						continue;
+					order.push_back(e);
+					infos.set(e);
+				}
+			}
+			if (_pools.find(infos) == std::end(_pools))
+			{
+				createPool(order, infos);
+			}
+			loadSubmesh(data.subMeshs[i], meshInstance->subMeshs[i], order, infos);
 		}
 		_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
 		return meshInstance;
 	}
 
-	void AssetsManager::loadSubmesh(SubMeshData &data, SubMeshInstance &mesh)
+	void AssetsManager::loadSubmesh(SubMeshData &data
+		, SubMeshInstance &mesh
+		, const std::vector<MeshInfos> &order
+		, const std::bitset<MeshInfos::END> &infos)
 	{
-		auto &pools = _pools.find(data.infos)->second;
+		auto &pools = _pools.find(infos)->second;
 		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 
-		std::size_t size = 4;// data.infos.count();
+		std::size_t size = data.infos.count();
 
 		AGE::Vector<void*> buffer;
 		buffer.resize(size);
@@ -179,103 +221,63 @@ namespace AGE
 		auto sizeofFloat = sizeof(float);
 		auto maxSize = data.positions.size();
 
-		// we send positions
-
-		std::vector < glm::vec4 > tempColor;
-
-		buffer[ctr] = &data.positions[0].x;
-		nbrBuffer[ctr] = data.positions.size() * 4 * sizeofFloat;
-		++ctr;
-		if (data.infos.test(Normals))
+		for (auto &e : order)
 		{
-			buffer[ctr] = &data.normals[0].x;
-			nbrBuffer[ctr] = data.normals.size() * 4 * sizeofFloat;
-			if (data.normals.size() > maxSize)
-				maxSize = data.normals.size();
+			switch (MeshInfos(e))
+			{
+			case Positions:
+				buffer[ctr] = &data.positions[0].x;
+				nbrBuffer[ctr] = data.positions.size() * 4 * sizeofFloat;
+				if (data.positions.size() > maxSize)
+					maxSize = data.positions.size();
+				break;
+			case Normals:
+				buffer[ctr] = &data.normals[0].x;
+				nbrBuffer[ctr] = data.normals.size() * 4 * sizeofFloat;
+				if (data.normals.size() > maxSize)
+					maxSize = data.normals.size();
+				break;
+			case Tangents:
+				buffer[ctr] = &data.tangents[0].x;
+				nbrBuffer[ctr] = data.tangents.size() * 4 * sizeofFloat;
+				if (data.tangents.size() > maxSize)
+					maxSize = data.tangents.size();
+				break;
+			case BiTangents:
+				buffer[ctr] = &data.biTangents[0].x;
+				nbrBuffer[ctr] = data.biTangents.size() * 4 * sizeofFloat;
+				if (data.biTangents.size() > maxSize)
+					maxSize = data.biTangents.size();
+				break;
+			case Uvs:
+				buffer[ctr] = &data.uvs[0][0].x;
+				nbrBuffer[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
+				if (data.uvs[0].size() > maxSize)
+					maxSize = data.uvs[0].size();
+				break;
+			case Weights:
+				buffer[ctr] = &data.weights[0].x;
+				nbrBuffer[ctr] = data.weights.size() * 4 * sizeofFloat;
+				if (data.weights.size() > maxSize)
+					maxSize = data.weights.size();
+				break;
+			case BoneIndices:
+				buffer[ctr] = &data.boneIndices[0].x;
+				nbrBuffer[ctr] = data.boneIndices.size() * 4 * sizeofFloat;
+				if (data.boneIndices.size() > maxSize)
+					maxSize = data.boneIndices.size();
+				break;
+			case Colors:
+				buffer[ctr] = &data.colors[0].x;
+				nbrBuffer[ctr] = data.colors.size() * 4 * sizeofFloat;
+				if (data.colors.size() > maxSize)
+					maxSize = data.colors.size();
+				break;
+			default:
+				break;
+			}
 			++ctr;
 		}
-		if (data.infos.test(Uvs))
-		{
-			buffer[ctr] = &data.uvs[0][0].x;
-			nbrBuffer[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
-			++ctr;
-		}
-		if (data.infos.test(Colors))
-		{
-			buffer[ctr] = &data.colors[0].x;
-			nbrBuffer[ctr] = data.colors.size() * 4 * sizeofFloat;
-			if (data.colors.size() > maxSize)
-				maxSize = data.colors.size();
-			++ctr;
-		}
-		else
-		{
-			tempColor.resize(maxSize, glm::vec4(1, 1, 1, 1));
-			buffer[ctr] = &tempColor[0].x;
-			nbrBuffer[ctr] = tempColor.size() * 4 * sizeofFloat;
-			++ctr;
-		}
-
-
-		//for (std::size_t i = 0; i < data.infos.size(); ++i)
-		//{
-		//	if (!data.infos.test(i))
-		//		continue;
-		//	switch (MeshInfos(i))
-		//	{
-		//	case Positions:
-		//		buffer[ctr] = &data.positions[0].x;
-		//		nbrBuffer[ctr] = data.positions.size() * 4 * sizeofFloat;
-		//		if (data.positions.size() > maxSize)
-		//			maxSize = data.positions.size();
-		//		break;
-		//	case Normals:
-		//		buffer[ctr] = &data.normals[0].x;
-		//		nbrBuffer[ctr] = data.normals.size() * 4 * sizeofFloat;
-		//		if (data.normals.size() > maxSize)
-		//			maxSize = data.normals.size();
-		//		break;
-		//	//case Tangents:
-		//	//	buffer[ctr] = &data.tangents[0].x;
-		//	//	nbrBuffer[ctr] = data.tangents.size() * 4 * sizeofFloat;
-		//	//	if (data.tangents.size() > maxSize)
-		//	//		maxSize = data.tangents.size();
-		//	//	break;
-		//	//case BiTangents:
-		//	//	buffer[ctr] = &data.biTangents[0].x;
-		//	//	nbrBuffer[ctr] = data.biTangents.size() * 4 * sizeofFloat;
-		//	//	if (data.biTangents.size() > maxSize)
-		//	//		maxSize = data.biTangents.size();
-		//	//	break;
-		//	case Uvs:
-		//		buffer[ctr] = &data.uvs[0][0].x;
-		//		nbrBuffer[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
-		//		//if (data.uvs[0].size() > maxSize)
-		//		//	maxSize = data.uvs[0].size();
-		//		break;
-		//	case Weights:
-		//		buffer[ctr] = &data.weights[0].x;
-		//		nbrBuffer[ctr] = data.weights.size() * 4 * sizeofFloat;
-		//		if (data.weights.size() > maxSize)
-		//			maxSize = data.weights.size();
-		//		break;
-		//	case BoneIndices:
-		//		buffer[ctr] = &data.boneIndices[0].x;
-		//		nbrBuffer[ctr] = data.boneIndices.size() * 4 * sizeofFloat;
-		//		if (data.boneIndices.size() > maxSize)
-		//			maxSize = data.boneIndices.size();
-		//		break;
-		//	case Colors:
-		//		buffer[ctr] = &data.colors[0].x;
-		//		nbrBuffer[ctr] = data.colors.size() * 4 * sizeofFloat;
-		//		if (data.colors.size() > maxSize)
-		//			maxSize = data.colors.size();
-		//		break;
-		//	default:
-		//		break;
-		//	}
-		//	++ctr;
-		//}
 
 		//geometryManager.createSphereSimpleForm();
 		//mesh.vertices = geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
@@ -290,12 +292,12 @@ namespace AGE
 	}
 
 	// Create pool for meshs
-	void AssetsManager::createPool(const std::bitset<MeshInfos::END> &infos)
+	void AssetsManager::createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos)
 	{
 		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
 		assert(geometryManager != nullptr);
 
-		std::size_t size = 4;// infos.count();
+		std::size_t size = infos.count();
 
 		GLenum *typeComponent = new GLenum[size]; // {GL_FLOAT, GL_FLOAT, GL_FLOAT};			
 		uint8_t *sizeTypeComponent = new uint8_t[size]; // { sizeof(float), sizeof(float), sizeof(float) };
@@ -303,35 +305,9 @@ namespace AGE
 
 		std::size_t ctr = 0;
 
-		//positions
-		typeComponent[ctr] = GL_FLOAT;
-		sizeTypeComponent[ctr] = sizeof(float);
-		nbrComponent[ctr] = 4;
-		++ctr;
-
-		//normals
-		typeComponent[ctr] = GL_FLOAT;
-		sizeTypeComponent[ctr] = sizeof(float);
-		nbrComponent[ctr] = 4;
-		++ctr;
-
-		//uvs
-		typeComponent[ctr] = GL_FLOAT;
-		sizeTypeComponent[ctr] = sizeof(float);
-		nbrComponent[ctr] = 2;
-		++ctr;
-
-		//colors
-		typeComponent[ctr] = GL_FLOAT;
-		sizeTypeComponent[ctr] = sizeof(float);
-		nbrComponent[ctr] = 4;
-		++ctr;
-
-		/*for (std::size_t i = 0; i < infos.size(); ++i)
+		for (auto &e : order)
 		{
-			if (!infos.test(i))
-				continue;
-			switch (MeshInfos(i))
+			switch (e)
 			{
 			case Positions:
 				typeComponent[ctr] = GL_FLOAT;
@@ -378,7 +354,7 @@ namespace AGE
 				break;
 			}
 			++ctr;
-		}*/
+		}
 
 		auto vpKey = geometryManager->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
 		auto indKey = geometryManager->addIndexPool();
