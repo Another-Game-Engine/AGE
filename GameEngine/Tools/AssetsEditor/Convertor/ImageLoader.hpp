@@ -68,6 +68,13 @@ namespace AGE
 				if (!image.load(path.c_str()))
 				{
 					std::cout << "coucou";
+					return false;
+				}
+
+				if (!image.convertTo32Bits())
+				{
+					std::cout << "coucou";
+					return false;
 				}
 
 					auto t = new TextureData();
