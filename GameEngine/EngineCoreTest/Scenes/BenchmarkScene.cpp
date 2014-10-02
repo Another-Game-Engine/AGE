@@ -214,11 +214,11 @@ bool BenchmarkScene::userStart()
 	auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
 	auto camLink = getLink(camera);
-	camLink->setPosition(glm::vec3(0, 0, -10));
+	camLink->setPosition(glm::vec3(0, 5, -10));
 
 	auto plane = createEntity();
 	auto link = getLink(plane);
-	link->setPosition(glm::vec3(0, -10, 0));
+	link->setPosition(glm::vec3(0, 0, 0));
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
@@ -226,9 +226,9 @@ bool BenchmarkScene::userStart()
 	{
 		auto _e = createEntity();
 		auto _l = getLink(_e);
-		_l->setOrientation(glm::quat(glm::vec3(-90, 0, 0)));
-		_l->setPosition(glm::vec3(5, 1, 5));
-		_l->setScale(glm::vec3(0.01f));
+		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), 0, 0)));
+		_l->setPosition(glm::vec3(0, 0, 0));
+		_l->setScale(glm::vec3(0.05f));
 		auto _m = addComponent<Component::MeshRenderer>(_e, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
 	}
@@ -240,7 +240,7 @@ bool BenchmarkScene::userStart()
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.01f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.001f, 0.f));
 
 	return true;
 }
@@ -253,6 +253,11 @@ bool BenchmarkScene::userUpdate(double time)
 	_chunkCounter += time;
 
 	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
+
+	if (getInstance<Input>()->getInput(SDLK_UP))
+		getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, 25.f * time, 0));
+	if (getInstance<Input>()->getInput(SDLK_DOWN))
+		getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, -25.f * time, 0));
 
 	if (_chunkCounter >= _maxChunk)
 	{

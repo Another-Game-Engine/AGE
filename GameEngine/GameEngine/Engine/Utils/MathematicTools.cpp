@@ -28,4 +28,15 @@ namespace Mathematic
 	{
 		return (-equation.y / (2.0f * equation.z));
 	}
+
+	// conversion degree
+	float degreeToRadian(float value)
+	{
+		return (3.14159f * (value) / 180.0f);
+	}
+
+	float radianToDegree(float value)
+	{
+		return (180.f * (value) / 3.14159f);
+	}
 }
