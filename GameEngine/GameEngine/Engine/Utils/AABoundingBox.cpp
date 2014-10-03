@@ -43,4 +43,43 @@ namespace AGE
 			maxPoint = glm::max(maxPoint, glm::vec3(boundingBox[i]));
 		}
 	}
+
+	ECollision		AABoundingBox::checkCollision(AABoundingBox const &oth, glm::u8vec3 &direction) const
+	{
+		direction = glm::u8vec3(0);
+		if (minPoint.x > oth.maxPoint.x)
+			direction.x = -1;
+		if (oth.minPoint.x > maxPoint.x)
+			direction.x = 1;
+		if (minPoint.y > oth.maxPoint.y)
+			direction.y = -1;
+		if (oth.minPoint.y > maxPoint.y)
+			direction.y = 1;
+		if (minPoint.z > oth.maxPoint.z)
+			direction.z = -1;
+		if (oth.minPoint.z > maxPoint.z)
+			direction.z = 1;
+		if (direction == glm::u8vec3(0))
+		{
+			if (oth.minPoint.x < minPoint.x)
+				direction.x = -1;
+			if (oth.maxPoint.x > maxPoint.x)
+				direction.x = 1;
+			if (oth.minPoint.y < minPoint.y)
+				direction.y = -1;
+			if (oth.maxPoint.y > maxPoint.y)
+				direction.y = 1;
+			if (oth.minPoint.z < minPoint.z)
+				direction.z = -1;
+			if (oth.maxPoint.z > maxPoint.z)
+				direction.z = 1;
+			if (direction == glm::u8vec3(0))
+				return INSIDE;
+			else
+				return INTERSECT;
+		}
+		else
+			return OUTSIDE;
+	}
+
 }
