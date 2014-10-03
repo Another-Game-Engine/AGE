@@ -221,14 +221,14 @@ bool BenchmarkScene::userStart()
 	link->setPosition(glm::vec3(0, 0, 0));
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
-	mesh->setMaterial(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
 
 	{
 		auto _e = createEntity();
 		auto _l = getLink(_e);
-		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), 0, 0)));
+		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(180), 0)));
 		_l->setPosition(glm::vec3(0, 0, 0));
-		_l->setScale(glm::vec3(0.05f));
+		_l->setScale(glm::vec3(0.01f));
 		auto _m = addComponent<Component::MeshRenderer>(_e, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
 	}

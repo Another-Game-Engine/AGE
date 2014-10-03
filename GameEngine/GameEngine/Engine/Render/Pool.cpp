@@ -477,6 +477,7 @@ namespace gl
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
 		_indexPoolattach->onDrawCall(mode, drawWithIt, memory);
+		_vao.unbind();
 		return (*this);
 	}
 

@@ -140,9 +140,7 @@ namespace gl
 		memcpy(*vertex, vertexTab.data(), vertexTab.size() * sizeof(glm::vec3));
 		memcpy(*indices, idTab.data(), idTab.size() * sizeof(glm::u32vec3));
 		nbrElementGeo = vertexTab.size();
-		nbrElementId = idTab.size() * 3;
-		//nbrElementGeo = 12;
-		//nbrElementId = 6;
+		nbrElementId = idTab.size();
 	}
 
 	void GeometryManager::initSimpleForm()
