@@ -4,7 +4,8 @@
 
 namespace AGE
 {
-	OctreeNode::OctreeNode()
+	OctreeNode::OctreeNode() :
+		_node(glm::vec3(-1), glm::vec3(1))
 	{
 		_father = NULL;
 		for (uint32_t i = 0; i < 8; ++i)
@@ -24,6 +25,7 @@ namespace AGE
 		glm::u8vec3	direction;
 		ECollision collisionState;
 
+		// check the collision state depending on the geometry shape
 		switch (toAdd->type)
 		{
 		case CULLABLE_BOUNDING_BOX:
@@ -56,10 +58,7 @@ namespace AGE
 			else // if the node is not a leaf, we add the object to all it's sons
 			{
 				for (uint32_t i = 0; i < 8; ++i)
-				{
-					if (_sons[i & 4][i & 2][i & 1] != NULL)
-						_sons[i & 4][i & 2][i & 1]->AddElement(toAdd);
-				}
+					_sons[i & 4][i & 2][i & 1]->AddElement(toAdd);
 			}
 			return (newRoot);
 		}
@@ -87,7 +86,43 @@ namespace AGE
 
 	OctreeNode	*OctreeNode::extendNode(CullableObject *toAdd, glm::u8vec3 const &direction)
 	{
-		return (this);
+		OctreeNode	*newRoot = new OctreeNode;
+		glm::vec3	nodeSize = _node.maxPoint - _node.minPoint;
+
+		_father = newRoot;
+		newRoot->_sons[direction.x == -1 ? 0 : 1][direction.y == -1 ? 0 : 1][direction.z == -1 ? 0 : 1] = this;
+		if (direction.x == -1)
+		{
+			newRoot->_node.minPoint.x = _node.minPoint.x - nodeSize.x;
+			newRoot->_node.maxPoint.x = _node.maxPoint.x;
+		}
+		else
+		{
+			newRoot->_node.minPoint.x = _node.minPoint.x;
+			newRoot->_node.maxPoint.x = _node.maxPoint.x + nodeSize.x;
+		}
+		if (direction.y == -1)
+		{
+			newRoot->_node.minPoint.y = _node.minPoint.y - nodeSize.y;
+			newRoot->_node.maxPoint.y = _node.maxPoint.y;
+		}
+		else
+		{
+			newRoot->_node.minPoint.y = _node.minPoint.y;
+			newRoot->_node.maxPoint.y = _node.maxPoint.y + nodeSize.y;
+		}
+		if (direction.z == -1)
+		{
+			newRoot->_node.minPoint.z = _node.minPoint.z - nodeSize.z;
+			newRoot->_node.maxPoint.z = _node.maxPoint.z;
+		}
+		else
+		{
+			newRoot->_node.minPoint.z = _node.minPoint.z;
+			newRoot->_node.maxPoint.z = _node.maxPoint.z + nodeSize.z;
+		}
+		newRoot->generateAllSons();
+		return (newRoot->AddElement(toAdd));
 	}
 
 	bool		OctreeNode::isLeaf() const
@@ -100,6 +135,27 @@ namespace AGE
 				_sons[1][0][1] == NULL &&
 				_sons[1][1][0] == NULL &&
 				_sons[1][1][1] == NULL);
+	}
+
+	void		OctreeNode::generateAllSons()
+	{
+		for (uint32_t i = 0; i < 8; ++i)
+		{
+			glm::u8vec3	currentSon(i & 4, i & 2, i & 1);
+			if (_sons[currentSon.x][currentSon.y][currentSon.z] == NULL)
+			{
+				OctreeNode	*newSon = new OctreeNode;
+				glm::vec3	nodeHalfSize = (_node.maxPoint - _node.minPoint) / 2.0f;
+
+				newSon->_father = this;
+				newSon->_node.minPoint = _node.minPoint + glm::vec3(currentSon) * nodeHalfSize;
+				newSon->_node.maxPoint = _node.maxPoint - glm::vec3(currentSon.x == 0 ? 1 : 0,
+																	currentSon.y == 0 ? 1 : 0,
+																	currentSon.z == 0 ? 1 : 0) * nodeHalfSize;
+
+				_sons[currentSon.x][currentSon.y][currentSon.z] = newSon;
+			}
+		}
 	}
 
 }

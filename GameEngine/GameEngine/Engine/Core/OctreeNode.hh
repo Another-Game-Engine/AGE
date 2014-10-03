@@ -22,6 +22,8 @@ namespace AGE
 		OctreeNode	*extendNode(CullableObject *toAdd, glm::u8vec3 const &direction);
 		bool		isLeaf() const;
 
+		void		generateAllSons();
+
 		OctreeNode		*_father;
 		OctreeNode		*_sons[2][2][2];
 
