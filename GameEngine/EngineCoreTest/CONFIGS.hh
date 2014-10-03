@@ -1,6 +1,6 @@
 #pragma once
 
-//#define PHYSIC_SIMULATION
+#define PHYSIC_SIMULATION
 
 #define LOG_FRAMERATE
 

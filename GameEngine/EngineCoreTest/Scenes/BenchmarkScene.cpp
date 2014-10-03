@@ -218,7 +218,7 @@ bool BenchmarkScene::userStart()
 
 	auto plane = createEntity();
 	auto link = getLink(plane);
-	link->setPosition(glm::vec3(0, 0, 0));
+	link->setPosition(glm::vec3(0, -30, 0));
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
@@ -287,20 +287,20 @@ bool BenchmarkScene::userUpdate(double time)
 #ifdef RENDERING_ACTIVATED
 
 #ifndef COMPLEX_MESH
-			//Component::MeshRenderer *mesh;
-			//if (i % 4 == 0)
-			//{
-			//	//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-			//	//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
-			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-			//	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+			Component::MeshRenderer *mesh;
+			if (i % 4 == 0)
+			{
+				//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+				//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
 
-			//}
-			//else
-			//{
-			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
-			//	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
-			//}
+			}
+			else
+			{
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+			}
 #else
 			auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 			mesh->setShader("MaterialBasic");
