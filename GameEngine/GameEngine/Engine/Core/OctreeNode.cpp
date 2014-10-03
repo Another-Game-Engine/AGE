@@ -81,7 +81,12 @@ namespace AGE
 
 	void		OctreeNode::splitNode()
 	{
-
+		generateAllSons();
+		for (int i = 0; i < MAX_ELEMENT_PER_NODE; ++i)
+		{
+			AddElement(_elements[i]);
+			_elements[i] = NULL;
+		}
 	}
 
 	OctreeNode	*OctreeNode::extendNode(CullableObject *toAdd, glm::u8vec3 const &direction)
