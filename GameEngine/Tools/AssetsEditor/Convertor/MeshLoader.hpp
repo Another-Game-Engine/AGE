@@ -29,6 +29,8 @@ namespace AGE
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
 			ar(*dataSet.mesh);
+			delete dataSet.mesh;
+			dataSet.mesh = nullptr;
 			return true;
 		}
 
