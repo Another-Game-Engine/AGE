@@ -406,8 +406,8 @@ namespace AGE
 
 				for (auto &e : _drawables)
 				{
-					//if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ /*frustum.pointIn(e.position) ==*/ true)
-					if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ frustum.pointIn(e.position) == true)
+					if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ /*frustum.pointIn(e.position) ==*/ true)
+					//if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ frustum.pointIn(e.position) == true)
 					{
 						if (e.hasMoved)
 						{
