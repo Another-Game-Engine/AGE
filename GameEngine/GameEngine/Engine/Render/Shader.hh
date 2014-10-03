@@ -213,8 +213,11 @@ namespace gl
 	{
 		Task &task = _tasks[bind.indexTask];
 		size_t sizeParam = task.sizeParams[task.indexToTarget];
-		if (memcmp(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam) == 0)
-			return;
+		if (task.type == TypeTask::UniformTask)
+		{
+			if (memcmp(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam) == 0)
+				return;
+		}
 		memcpy(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam);
 		task.update = true;
 	}

@@ -178,23 +178,23 @@ namespace gl
 
 	void Shader::createUniformTask(Task &task, std::string const &flag)
 	{
+		task.type = TypeTask::UniformTask;
 		task.func = NULL;
 		task.nbrParams = 2;
 		task.indexToTarget = 1;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
-		
 		task.params[0] = new GLuint;
 		task.sizeParams[0] = sizeof(GLuint);
 		GLuint location = getUniformLocation(flag.c_str());
 		*(GLuint *)task.params[0] = location;
-		
 		task.params[1] = NULL;
 		task.sizeParams[1] = 0;
 	}
 
 	void Shader::createSamplerTask(Task &task, std::string const &flag)
 	{
+		task.type = TypeTask::SamplerTask;
 		task.func = setUniformSampler;
 		task.indexToTarget = 2;
 		task.nbrParams = 3;
@@ -214,9 +214,10 @@ namespace gl
 
 	void Shader::createUniformBlockTask(Task &task, std::string const &flag, UniformBlock &ubo)
 	{
+		task.type = TypeTask::InterfaceBlockTask;
 		task.func = setBlockBinding;
-		task.indexToTarget = 4;
-		task.nbrParams = 5;
+		task.indexToTarget = 0;
+		task.nbrParams = 3;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
 		task.params[0] = new GLuint;
