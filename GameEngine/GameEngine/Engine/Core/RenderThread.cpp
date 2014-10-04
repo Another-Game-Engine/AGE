@@ -79,7 +79,7 @@ bool RenderThread::_update()
 		{
 			auto t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - frameStart);
 			IMGUI_BEGIN
-				ImGui::Text("Prepare Render Thread : %i ms", t.count());
+				ImGui::Text("Render Thread : %i ms", t.count());
 			IMGUI_END
 		})
 		.handle<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
