@@ -13,7 +13,8 @@ namespace gl
 	Shader::Shader()
 		: _unitProgId(NULL),
 		_progId(-1),
-		_nbrUnitProgId(0)
+		_nbrUnitProgId(0),
+		_bindTransformation(Key<Uniform>::createKey())
 	{
 
 	}
@@ -235,7 +236,7 @@ namespace gl
 
 	Key<Uniform> Shader::addUniform(std::string const &flag)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		_uniforms[key] = _tasks.size() - 1;
@@ -245,7 +246,7 @@ namespace gl
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat4 const &value)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks[_tasks.size() - 1];
 		_uniforms[key] = _tasks.size() - 1;
@@ -256,7 +257,7 @@ namespace gl
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat3 const &value)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		_uniforms[key] = _tasks.size() - 1;
@@ -267,7 +268,7 @@ namespace gl
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec3 const &value)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		_uniforms[key] = _tasks.size() - 1;
@@ -278,7 +279,7 @@ namespace gl
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec4 const &value)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		_uniforms[key] = _tasks.size() - 1;
@@ -289,7 +290,7 @@ namespace gl
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, float value)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		_uniforms[key] = _tasks.size() - 1;
@@ -335,7 +336,7 @@ namespace gl
 
 	Key<Sampler> Shader::addSampler(std::string const &flag)
 	{
-		Key<Sampler> key;
+		Key<Sampler> key = Key<Sampler>::createKey();
 
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
@@ -370,7 +371,7 @@ namespace gl
 
 	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag, UniformBlock &uniformBlock)
 	{
-		Key<InterfaceBlock> key;
+		Key<InterfaceBlock> key = Key<InterfaceBlock>::createKey();
 
 		_tasks.push_back(Task());
 		_interfaceBlock[key] = _tasks.size() - 1;

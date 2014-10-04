@@ -19,13 +19,16 @@ namespace gl
 	class Key
 	{
 	public:
-		explicit Key(int);
+		static Key<TYPE> createKey()
+		{
+			static size_t id = 0;
+			return (Key<TYPE>(++id));
+		}
+
 		Key();
 		~Key();
 		Key(Key<TYPE> const &copy);
-		Key(Key<TYPE> &&copy);
 		Key<TYPE> &operator=(Key<TYPE> const &t);
-		Key<TYPE> &operator=(Key<TYPE> &&t);
 		std::size_t getId() const;
 		bool empty() const;
 		bool operator!() const;
@@ -35,15 +38,10 @@ namespace gl
 		bool operator>(Key<TYPE> const &compare) const;
 		void destroy();
 
-		////Hash function
-		//struct hash_fn {
-		//	size_t operator()(const Key<TYPE> &v) const
-		//	{
-		//		return v._id;
-		//	}
-		//};
 	private:
 		std::size_t _id;
+		explicit Key(size_t id);
+
 	};
 }
 

@@ -17,6 +17,7 @@ namespace AGE
 	}
 
 	Drawable::Drawable()
+		: material(MaterialInstance::createKey())
 	{
 	}
 
