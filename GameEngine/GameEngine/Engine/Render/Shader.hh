@@ -89,6 +89,7 @@ namespace gl
 		AGE::Vector<Task> _tasks;
 
 		// map of task
+		std::map<Key<Sampler>, size_t> _bindSampler;
 		std::map<Key<Uniform>, size_t> _bindUniform;
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
@@ -168,16 +169,12 @@ namespace gl
 		if ((indexTask = getIndexSampler(key)) == -1)
 			return (*this);
 		Task const &task = _tasks[indexTask];
-		if (task.sizeParams[task.indexToTarget] != TYPE::size)
-			assert(0);
-		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
+		_bindSampler[key] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
 	}
 
 	inline void Shader::setSamplerTask(Task &task, Texture const &texture)
 	{
-		GLint id = texture.getId();
-		GLenum type = texture.getType();
 		*(GLenum *)task.params[1] = texture.getType();
 		*(GLint *)task.params[2] = texture.getId();
 		task.update = true;
@@ -216,8 +213,11 @@ namespace gl
 	{
 		Task &task = _tasks[bind.indexTask];
 		size_t sizeParam = task.sizeParams[task.indexToTarget];
-		if (memcmp(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam) == 0)
-			return;
+		if (task.type == TypeTask::UniformTask)
+		{
+			if (memcmp(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam) == 0)
+				return;
+		}
 		memcpy(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam);
 		task.update = true;
 	}

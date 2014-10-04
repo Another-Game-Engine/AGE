@@ -29,8 +29,17 @@
 #include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
 
+#include <Utils/Age_Imgui.hpp>
+
+#include <Utils/ThreadQueueCommands.hpp>
+
+#include <Skinning/AnimationManager.hpp>
+
+
 //CONFIGS
 #include <CONFIGS.hh>
+
+
 
 #include <thread>
 
@@ -38,9 +47,16 @@ bool loadAssets(std::shared_ptr<Engine> e)
 {
 	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"));
-	auto t = e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"));
+	e->getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"));
+	e->getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"));
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("head/head.mage"));
 #endif
 #ifdef COMPLEX_MESH
 	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
@@ -71,6 +87,9 @@ int			main(int ac, char **av)
 	auto renderManager = e->getInstance<gl::RenderManager>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
+	e->setInstance<AGE::AnimationManager>();
+
+	AGE::Imgui::getInstance()->registerThread(0);
 
 	// Important, we have to launch the command queue from the sender thread
 	//context->launchCommandQueue();
@@ -130,6 +149,14 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
+
+#ifdef USE_IMGUI
+	renderThread->getCommandQueue().autoPriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([=](){
+		AGE::Imgui::getInstance()->init(e.get());
+		return true;
+	}).get();
+	AGE::Imgui::getInstance()->launch();
+#endif
 
 	// launch engine
 	if (e->start() == false)

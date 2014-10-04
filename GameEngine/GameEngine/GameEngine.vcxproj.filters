@@ -84,6 +84,12 @@
     <ClCompile Include="Engine\TMQ\dispatcher.cpp" />
     <ClCompile Include="Engine\TMQ\message.cpp" />
     <ClCompile Include="Engine\TMQ\queue.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Utils\Age_Imgui.cpp" />
+=======
+    <ClCompile Include="Engine\Utils\MathematicTools.cpp" />
+>>>>>>> a3b976593235aea9b4696f6f176fd081ff019d00
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -249,6 +255,15 @@
     <ClInclude Include="Engine\TMQ\message.hpp" />
     <ClInclude Include="Engine\TMQ\queue.hpp" />
     <ClInclude Include="Engine\TMQ\templateDispatcher.hpp" />
+<<<<<<< HEAD
+    <ClInclude Include="Engine\Configuration.hpp" />
+    <ClInclude Include="..\Vendors\imgui\imconfig.h" />
+    <ClInclude Include="..\Vendors\imgui\imgui.h" />
+    <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Utils\Age_Imgui.hpp" />
+=======
+    <ClInclude Include="Engine\Utils\MathematicTools.hh" />
+>>>>>>> a3b976593235aea9b4696f6f176fd081ff019d00
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

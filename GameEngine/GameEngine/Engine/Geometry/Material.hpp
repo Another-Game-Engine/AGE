@@ -23,6 +23,7 @@ namespace AGE
 		std::string reflectiveTexPath;
 		std::string specularTexPath;
 		std::string normalTexPath;
+		std::string bumpTexPath;
 
 		template <class Archive>
 		void serialize(Archive &ar)

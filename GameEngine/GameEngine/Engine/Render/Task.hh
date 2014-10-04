@@ -44,8 +44,16 @@ namespace gl
 		bool isUse;
 	};
 
+	enum TypeTask
+	{
+		UniformTask = 0,
+		SamplerTask,
+		InterfaceBlockTask
+	};
+
 	struct Task
 	{
+		TypeTask type;
 		int nbrParams;
 		void **params;
 		size_t *sizeParams;

@@ -399,7 +399,7 @@ namespace gl
 	{
 		Key<RenderPass> key;
 		Shader *shader = getShader(keyShader);
-		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, materialManager, locationStorage);
+		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, _materialManager, locationStorage);
 		element->configRect(rect);
 		return (key);
 	}
@@ -652,6 +652,27 @@ namespace gl
 		renderPass->setPass(objectRender, 0, objectRender.size());
 		renderPass->render();
 		renderOnScreen->render();
+		return (*this);
+	}
+
+	Key<Material> RenderManager::getDefaultMaterial()
+	{
+		return (_materialManager.getDefaultMaterial());
+	}
+
+	Key<Material> RenderManager::addMaterial()
+	{
+		return (_materialManager.addMaterial());
+	}
+
+	Key<Material> RenderManager::getMaterial(size_t index)
+	{
+		return (_materialManager.getMaterial(index));
+	}
+
+	RenderManager &RenderManager::rmMaterial(Key<Material> &key)
+	{
+		_materialManager.rmMaterial(key);
 		return (*this);
 	}
 }
