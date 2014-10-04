@@ -316,7 +316,6 @@ namespace AGE
 			}
 		}
 
-		glScissor(0, 0, 800, 600);
 		glDisableVertexAttribArray(_position_location);
 		glDisableVertexAttribArray(_uv_location);
 		glDisableVertexAttribArray(_colour_location);
