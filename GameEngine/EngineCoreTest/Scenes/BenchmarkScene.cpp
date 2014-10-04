@@ -1,6 +1,12 @@
 #include <Scenes/BenchmarkScene.hpp>
+
+#include <Configuration.hpp>
+#include <Utils/Age_Imgui.hpp>
+#include <Utils/ThreadQueueCommands.hpp>
+
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
+
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -268,12 +274,20 @@ bool BenchmarkScene::userUpdate(double time)
 	_timeCounter += time;
 	_chunkCounter += time;
 
+
+	IMGUI_BEGIN
+	ImGui::Text("Coucou from main thread !");
+	IMGUI_END
+
+
+
 	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
 
 	if (getInstance<Input>()->getInput(SDLK_UP))
 		getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, 25.f * time, 0));
 	if (getInstance<Input>()->getInput(SDLK_DOWN))
 		getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, -25.f * time, 0));
+
 
 	if (_chunkCounter >= _maxChunk)
 	{
@@ -288,20 +302,20 @@ bool BenchmarkScene::userUpdate(double time)
 #ifdef RENDERING_ACTIVATED
 
 #ifndef COMPLEX_MESH
-			//Component::MeshRenderer *mesh;
-			//if (i % 4 == 0)
-			//{
-			//	//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-			//	//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
-			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-			//	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+			Component::MeshRenderer *mesh;
+			if (i % 4 == 0)
+			{
+				//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+				//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
 
-			//}
-			//else
-			//{
-			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
-			//	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
-			//}
+			}
+			else
+			{
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+			}
 #else
 			auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
 			mesh->setShader("MaterialBasic");
@@ -370,6 +384,8 @@ bool BenchmarkScene::userUpdate(double time)
 		renderManager->drawPipelines();
 	});
 
+	octree->getCommandQueue().autoEmplace<AGE::TQC::EndOfFrame>();
 	octree->getCommandQueue().releaseReadability();
+	octree->getCommandQueue().autoEmplace<AGE::TQC::StartOfFrame>();
 	return true;
 }

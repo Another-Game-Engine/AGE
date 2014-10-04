@@ -28,10 +28,18 @@
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
 #include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
+
+#include <Utils/Age_Imgui.hpp>
+
+#include <Utils/ThreadQueueCommands.hpp>
+
 #include <Skinning/AnimationManager.hpp>
+
 
 //CONFIGS
 #include <CONFIGS.hh>
+
+
 
 #include <thread>
 
@@ -85,6 +93,8 @@ int			main(int ac, char **av)
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
 	e->setInstance<AGE::AnimationManager>();
+
+	AGE::Imgui::getInstance()->registerThread(0);
 
 	// Important, we have to launch the command queue from the sender thread
 	//context->launchCommandQueue();
@@ -144,6 +154,14 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
+
+#ifdef USE_IMGUI
+	renderThread->getCommandQueue().autoPriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([=](){
+		AGE::Imgui::getInstance()->init(e.get());
+		return true;
+	}).get();
+	AGE::Imgui::getInstance()->launch();
+#endif
 
 	// launch engine
 	if (e->start() == false)

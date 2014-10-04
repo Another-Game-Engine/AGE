@@ -9,6 +9,10 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Core/PreparableObject.hh>
+#include <Configuration.hpp>
+#include <Utils/Age_Imgui.hpp>
+#include <chrono>
+
 
 namespace AGE
 {
@@ -30,6 +34,7 @@ namespace AGE
 
 	bool PrepareRenderThread::_initInNewThread()
 	{
+		AGE::Imgui::getInstance()->registerThread(50);
 		return true;
 	}
 
@@ -211,6 +216,8 @@ namespace AGE
 	bool PrepareRenderThread::_update()
 	{
 		auto returnValue = true;
+		static auto frameStart = std::chrono::high_resolution_clock::now();
+
 		_commandQueue.getDispatcher()
 			.handle<PRTC::CameraInfos>([&](const PRTC::CameraInfos& msg)
 		{
@@ -383,6 +390,16 @@ namespace AGE
 			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
 		{
 			returnValue = false;
+		})
+		.handle<TQC::StartOfFrame>([&](const TQC::StartOfFrame& msg)
+		{
+			frameStart = std::chrono::system_clock::now();
+		}).handle<TQC::EndOfFrame>([&](const TQC::EndOfFrame& msg)
+		{
+			auto t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - frameStart);
+			IMGUI_BEGIN
+				ImGui::Text("Prepare Render Thread : %i ms", t.count());
+			IMGUI_END
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
 			for (auto &camera : _cameras)
@@ -426,9 +443,13 @@ namespace AGE
 				});
 			}
 			_octreeDrawList.clear();
-			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
-			renderThread->getCommandQueue().releaseReadability();
 
+			Imgui::getInstance()->threadLoopEnd();
+
+			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
+			renderThread->getCommandQueue().autoEmplace<AGE::TQC::EndOfFrame>();
+			renderThread->getCommandQueue().releaseReadability();
+			renderThread->getCommandQueue().autoEmplace<AGE::TQC::StartOfFrame>();
 			//msg.result.set_value(std::move(_octreeDrawList));
 			//_octreeDrawList.clear();
 		});
