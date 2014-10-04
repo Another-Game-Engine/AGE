@@ -299,13 +299,13 @@ namespace AGE
 			const ImDrawList* cmd_list = cmd_lists[n];
 			const const ImDrawVert* vtx_buffer = reinterpret_cast<const ImDrawVert*>(cmd_list->vtx_buffer.begin());
 			int vtx_size = static_cast<int>(cmd_list->vtx_buffer.size());
-
+		
 			unsigned offset = stream(GL_ARRAY_BUFFER, _vbohandle, &_cursor, &_size, vtx_buffer, vtx_size);
-
+		
 			glVertexAttribPointer(_position_location, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (void*)(offset));
 			glVertexAttribPointer(_uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (void*)(offset + 8));
 			glVertexAttribPointer(_colour_location, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (void*)(offset + 16));
-
+		
 			int vtx_offset = 0;
 			const ImDrawCmd* pcmd_end = cmd_list->commands.end();
 			for (const ImDrawCmd* pcmd = cmd_list->commands.begin(); pcmd != pcmd_end; pcmd++)
@@ -316,6 +316,7 @@ namespace AGE
 			}
 		}
 
+		glScissor(0, 0, 800, 600);
 		glDisableVertexAttribArray(_position_location);
 		glDisableVertexAttribArray(_uv_location);
 		glDisableVertexAttribArray(_colour_location);
