@@ -177,7 +177,7 @@ namespace gl
 				_internalSyncronized = false;
 				memory.setSync(false);
 				memory.setIsUsed(true);
-				Key<Pool::Element<TYPE>> keyElement;
+				Key<Pool::Element<TYPE>> keyElement = Key<Pool::Element<TYPE>>::createKey();
 				Pool::Element<TYPE> newElement;
 				newElement.memoryIndex = index;
 				newElement.data = &vertices;
@@ -203,7 +203,7 @@ namespace gl
 		}
 		_poolMemory.push_back(memory);
 		Element<TYPE> element;
-		Key<Element<TYPE>> keyElement;
+		Key<Element<TYPE>> keyElement = Key<Element<TYPE>>::createKey();
 		element.data = &vertices;
 		element.memoryIndex = _poolMemory.size() - 1;
 		poolElement[keyElement] = element;

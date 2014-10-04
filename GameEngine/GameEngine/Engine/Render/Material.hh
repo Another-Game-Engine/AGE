@@ -25,6 +25,7 @@ namespace gl
 		COLOR_EMISSIVE,
 		RATIO_EMISSIVE,
 		TEXTURE_EMISSIVE,
+		TEXTURE_BUMP,
 		OPACITY,
 		SHININESS
 	};
@@ -43,7 +44,8 @@ namespace gl
 	DECL_MATERIAL(Color_emissive, glm::vec4, Texture_ambiant, COLOR_EMISSIVE);
 	DECL_MATERIAL(Ratio_emissive, float, Color_emissive, RATIO_EMISSIVE);
 	DECL_MATERIAL(Texture_emissive, unsigned int, Ratio_emissive, TEXTURE_EMISSIVE);
-	DECL_MATERIAL(Opacity, float, Texture_emissive, OPACITY);
+	DECL_MATERIAL(Texture_bump, unsigned int, Texture_emissive, TEXTURE_EMISSIVE);
+	DECL_MATERIAL(Opacity, float, Texture_bump, OPACITY);
 	DECL_MATERIAL(Shininess, float, Opacity, SHININESS);
 	struct Last { enum { size = Shininess::offset + Shininess::size }; };
 
