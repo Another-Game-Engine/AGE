@@ -14,7 +14,7 @@ layout (location = 1) out vec4 normal_frag;
 void main(void)
 {
 	//vec3(texture(diffuse_texture, inter_texCoord) +
-	diffuse_frag = (diffuse_color * diffuse_ratio) * 0.5f + (texture(diffuse_texture, inter_texCoord) * 0.5f);
+	diffuse_frag = (diffuse_color * diffuse_ratio) * texture(diffuse_texture, inter_texCoord);
 	vec3 normal = inter_normal * 0.5f + 0.5f;
 	normal_frag = vec4(normal, 1.0f);
 }
