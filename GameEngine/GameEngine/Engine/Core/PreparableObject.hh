@@ -49,11 +49,10 @@ namespace AGE
 
 	struct PointLight : public PreparableObject
 	{
-		float power;
-		float range;
+		glm::vec3 range;
 		glm::vec3 color;
 		PointLight();
-		PointLight(float power, float range, glm::vec3 const &color, glm::vec3 const &position);
+		PointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range);
 	};
 
 	struct DrawableCollection

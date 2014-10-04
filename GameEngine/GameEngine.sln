@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -10,11 +10,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\Ga
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shader", "Shader", "{6823E483-DFC6-4750-920C-35DA2E87B060}"
 	ProjectSection(SolutionItems) = preProject
+		Shaders\Deffered_shading\deffered_shading_lighting.vp = Shaders\Deffered_shading\deffered_shading_lighting.vp
 		Shaders\test_pipeline_1.fp = Shaders\test_pipeline_1.fp
 		Shaders\test_pipeline_1.vp = Shaders\test_pipeline_1.vp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vendors", "Vendors", "{9D3EF6A3-621D-4807-90CB-705CCD3A8FB8}"
+	ProjectSection(SolutionItems) = preProject
+		Vendors\ResIL\include\il\devil_cpp_wrapper.hpp = Vendors\ResIL\include\il\devil_cpp_wrapper.hpp
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinyObjLoader", "Vendors\TinyObjLoader\TinyObjLoader.vcxproj", "{99FC20C2-9AD1-4049-BB11-B369C42FD6A8}"
 EndProject
@@ -34,8 +38,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetsEditor", "Tools\Asset
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deffered_shading", "Deffered_shading", "{F584710B-8089-4D6B-801A-8A2354FCF28A}"
 	ProjectSection(SolutionItems) = preProject
+		Shaders\Deffered_shading\deferred_shading_merge.fp = Shaders\Deffered_shading\deferred_shading_merge.fp
+		Shaders\Deffered_shading\deferred_shading_merge.vp = Shaders\Deffered_shading\deferred_shading_merge.vp
 		Shaders\Deffered_shading\deffered_shading_get_buffer.fp = Shaders\Deffered_shading\deffered_shading_get_buffer.fp
 		Shaders\Deffered_shading\deffered_shading_get_buffer.vp = Shaders\Deffered_shading\deffered_shading_get_buffer.vp
+		Shaders\Deffered_shading\deffered_shading_lighting.fp = Shaders\Deffered_shading\deffered_shading_lighting.fp
+		Shaders\Deffered_shading\deffered_shading_lighting.vp = Shaders\Deffered_shading\deffered_shading_lighting.vp
 	EndProjectSection
 EndProject
 Global
@@ -90,7 +98,8 @@ Global
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.Release|Win32.Build.0 = Release|Win32
 		{EB423B39-F564-498E-B291-0D9676AF09B5}.Release|x64.ActiveCfg = Release|x64
 		{1133660B-897C-4237-9E3B-15C10A3A2942}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{1133660B-897C-4237-9E3B-15C10A3A2942}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{1133660B-897C-4237-9E3B-15C10A3A2942}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{1133660B-897C-4237-9E3B-15C10A3A2942}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{1133660B-897C-4237-9E3B-15C10A3A2942}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1133660B-897C-4237-9E3B-15C10A3A2942}.Debug|Win32.Build.0 = Debug|Win32
 		{1133660B-897C-4237-9E3B-15C10A3A2942}.Debug|x64.ActiveCfg = Debug|x64
@@ -103,26 +112,31 @@ Global
 		{1133660B-897C-4237-9E3B-15C10A3A2942}.Release|x64.ActiveCfg = Release|x64
 		{1133660B-897C-4237-9E3B-15C10A3A2942}.Release|x64.Build.0 = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Win32.ActiveCfg = Debug|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Win32.Build.0 = Debug|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|x64.ActiveCfg = Debug|x64
+		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|x64.Build.0 = Debug|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|Any CPU.ActiveCfg = Release|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|Win32.ActiveCfg = Release|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|Win32.Build.0 = Release|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|x64.ActiveCfg = Release|x64
+		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F584710B-8089-4D6B-801A-8A2354FCF28A} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8} = {9D3EF6A3-621D-4807-90CB-705CCD3A8FB8}
 		{EB423B39-F564-498E-B291-0D9676AF09B5} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
-		{1133660B-897C-4237-9E3B-15C10A3A2942} = {4F71FD1A-92D4-4EE1-A02A-3C30682405B3}
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
+<<<<<<< HEAD
+		{F584710B-8089-4D6B-801A-8A2354FCF28A} = {6823E483-DFC6-4750-920C-35DA2E87B060}
+=======
+		{1133660B-897C-4237-9E3B-15C10A3A2942} = {4F71FD1A-92D4-4EE1-A02A-3C30682405B3}
+>>>>>>> 32ff032ca68bd196eed6c8b8bf82e1bfd94bddc6
 	EndGlobalSection
 EndGlobal

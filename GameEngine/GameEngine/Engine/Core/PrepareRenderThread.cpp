@@ -117,9 +117,9 @@ namespace AGE
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPointLight(float power, float range, glm::vec3 const &color, glm::vec3 const &position, const PrepareKey &id)
+	PrepareRenderThread &PrepareRenderThread::setPointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::SetPointLight>(power, range, color, position, id);
+		_commandQueue.emplace<PRTC::SetPointLight>(position, color, range, id);
 		return (*this);
 	}
 
@@ -266,9 +266,8 @@ namespace AGE
 		{
 			PointLight *l = nullptr;
 			l = &_pointLights[msg.key.id];
-			l->color = msg.color;
 			l->position = msg.position;
-			l->power = msg.power;
+			l->color = msg.color;
 			l->range = msg.range;
 		})
 			.handle<PRTC::DeleteCamera>([&](const PRTC::DeleteCamera& msg)
@@ -403,38 +402,29 @@ namespace AGE
 			IMGUI_END
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
-			static std::size_t cameraCounter = 0; cameraCounter = 0;
-
 			for (auto &camera : _cameras)
 			{
 				if (!camera.active)
 					continue;
+				
 				Frustum frustum;
-				auto transformation = glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale);
-				frustum.setMatrix(camera.projection * transformation, true);
+				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
+				frustum.setMatrix(camera.projection * view, true);
 
 				_octreeDrawList.emplace_back();
+				auto &drawList = _octreeDrawList.back();
+				drawList.transformation = view;
+				drawList.projection = camera.projection;
 				for (size_t index = 0; index < _pointLights.size(); ++index)
 				{
 					auto &p = _pointLights[index];
-					_octreeDrawList.back().lights.push_back(PointLight(p.power, p.range, p.color, p.position));
+					drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
-				auto &drawList = _octreeDrawList.back();
-
-				drawList.drawables.clear();
-
-				drawList.transformation = transformation;
-				drawList.projection = camera.projection;
-
-				std::size_t drawed = 0; std::size_t total = 0;
 
 				for (auto &e : _drawables)
 				{
-					if (e.active)
-						++total;
-					else
-						continue;
-					if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ frustum.pointIn(e.position) == true)
+					if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ /*frustum.pointIn(e.position) ==*/ true)
+					//if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ frustum.pointIn(e.position) == true)
 					{
 						if (e.hasMoved)
 						{
@@ -442,10 +432,8 @@ namespace AGE
 							e.hasMoved = false;
 						}
 						drawList.drawables.emplace_back(e.mesh, e.material, e.transformation);
-						++drawed;
 					}
 				}
-				++cameraCounter;
 			}
 
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();

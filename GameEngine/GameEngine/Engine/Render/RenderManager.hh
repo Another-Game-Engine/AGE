@@ -36,7 +36,6 @@ namespace gl
 	{
 	public:
 		GeometryManager geometryManager;
-		MaterialManager materialManager;
 		LocationStorage locationStorage;
 
 	public:
@@ -55,12 +54,14 @@ namespace gl
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat3 const &value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, float value);
 		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::vec4 const &value);
+		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::vec3 const &value);
 		Key<Uniform> getShaderUniform(Key<Shader> const &shader, size_t index);
-		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
+		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec3 const &vec3);
 		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
 		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
 		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3);
-		
+		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
+
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		RenderManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
@@ -79,7 +80,18 @@ namespace gl
 
 		RenderManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
 		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Sampler> const &u);
 		RenderManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+
+		// Material
+		Key<Material> getDefaultMaterial();
+		Key<Material> addMaterial();
+		RenderManager &rmMaterial(Key<Material> &key);
+		Key<Material> getMaterial(size_t index);
+		template <typename TYPE> RenderManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
+		template <typename TYPE> RenderManager &setMaterial(Key<Material> const &key, Key<Texture> const &key_tex);
+		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
+
 
 		// Texture
 		Key<Texture> addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping);
@@ -101,29 +113,36 @@ namespace gl
 		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
 		GEN_DEC_RENDER_PUSH_TASK(RenderPass);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
+		GEN_DEC_DRAWABLERENDER_PUSH_TASK(RenderPass);
 
 		// RenderPostEffect
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
 		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
+		GEN_DEC_DRAWABLERENDER_PUSH_TASK(RenderPostEffect);
 
 		// RenderOnScreen
-		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect);
+		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPass> const &renderPass);
+		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPostEffect> const &renderPostEffect);
+		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<EmptyRenderPass> const &renderPostEffect);
 		Key<RenderOnScreen> getRenderOnScreen(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderOnScreen);
 		RenderManager &configRenderOnScreen(Key<RenderOnScreen> const &renderOnScreen, glm::ivec4 const &rect, GLenum mode);
 
-		RenderManager &branch(Key<RenderPass> const &from, Key<RenderPass> const &to);
-		RenderManager &branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to);
-		RenderManager &branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to);
-		RenderManager &branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to);
+		// EmptyRender
+		Key<EmptyRenderPass> addEmptyRenderPass(glm::ivec4 const &rect);
+		Key<EmptyRenderPass> getEmptyRenderPass(size_t target) const;
+		GEN_DEC_RENDER_PUSH_TASK(EmptyRenderPass);
+		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(EmptyRenderPass);
+
 
 		// Pipeline
 		Key<Pipeline> addPipeline();
 		RenderManager &pushRenderPassPipeline(Key<Pipeline> const &p, Key<RenderPass> const &r);
 		RenderManager &pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r);
 		RenderManager &pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r);
+		RenderManager &pushEmptyRenderPassPipeline(Key<Pipeline> const &p, Key<EmptyRenderPass> const &r);
 		Key<Pipeline> getPipeline(size_t target);
 		RenderManager &configPipeline(Key<Pipeline> const &key, DrawType type);
 		RenderManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
@@ -133,14 +152,14 @@ namespace gl
 		RenderManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
 		RenderManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
 	private:
-		// all map
+		// internal manager
+		MaterialManager _materialManager;
+
+		// container
 		std::map<Key<Shader>, Shader *> _shaders;
 		Shader * _preShaderQuad;
 		std::map<Key<UniformBlock>, UniformBlock> _uniformBlock;
 		std::map<Key<Texture>, Texture *> _textures;
-		std::map<Key<RenderPass>, RenderPass *> _renderPass;
-		std::map<Key<RenderPostEffect>, RenderPostEffect *> _renderPostEffect;
-		std::map<Key<RenderOnScreen>, RenderOnScreen *> _renderOnScreen;
 		std::map<Key<Pipeline>, size_t> _pipelines;
 		AGE::Vector<Pipeline> _pipelineOrdered;
 
@@ -148,18 +167,22 @@ namespace gl
 		std::pair<Key<Shader>, Shader *> _optimizeShaderSearch;
 		std::pair<Key<UniformBlock>, UniformBlock *> _optimizeUniformBlockSearch;
 		std::pair<Key<Texture>, Texture *> _optimizeTextureSearch;
-		std::pair<Key<RenderPass>, RenderPass *> _optimizeRenderPassSearch;
-		std::pair<Key<RenderPostEffect>, RenderPostEffect *> _optimizeRenderPostEffectSearch;
-		std::pair<Key<RenderOnScreen>, RenderOnScreen *> _optimizeRenderOnScreenSearch;
 		std::pair<Key<Pipeline>, size_t> _optimizePipelineSearch;
+
+		GEN_CONTAINER(RenderPass, _renderPass);
+		GEN_CONTAINER(RenderPostEffect, _renderPostEffect);
+		GEN_CONTAINER(RenderOnScreen, _renderOnScreen);
+		GEN_CONTAINER(EmptyRenderPass, _emptyRenderPass);
 
 		// tool use in intern for search
 		Shader *getShader(Key<Shader> const &key);
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key);
 		Texture *getTexture(Key<Texture> const &key);
-		RenderPass *getRenderPass(Key<RenderPass> const &key);
-		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key);
-		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key);
+		GEN_DEC_SEARCH_FUNCTION(EmptyRenderPass);
+		GEN_DEC_SEARCH_FUNCTION(RenderPass);
+		GEN_DEC_SEARCH_FUNCTION(RenderOnScreen);
+		GEN_DEC_SEARCH_FUNCTION(RenderPostEffect);
+
 		size_t getIndexPipeline(Key<Pipeline> const &key);
 		Pipeline *getPipeline(Key<Pipeline> const &key);
 	};
@@ -171,6 +194,16 @@ namespace gl
 		if ((shader = getShader(shaderKey)) == NULL)
 			return (*this);
 		shader->bindingMaterial<TYPE>(uniformKey);
+		return (*this);
+	}
+
+	template <typename TYPE>
+	RenderManager &RenderManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Sampler> const &samplerKey)
+	{
+		Shader *shader;
+		if ((shader = getShader(shaderKey)) == NULL)
+			return (*this);
+		shader->bindingMaterial<TYPE>(samplerKey);
 		return (*this);
 	}
 
@@ -193,4 +226,24 @@ namespace gl
 		return (*this);
 	}
 
+	template <typename TYPE>
+	RenderManager &RenderManager::setMaterial(Key<Material> const &key, typename TYPE::return_type const &value)
+	{
+		_materialManager.setMaterial<TYPE>(key, value);
+		return (*this);
+	}
+
+	template <typename TYPE>
+	RenderManager &RenderManager::setMaterial(Key<Material> const &key, Key<Texture> const &key_tex)
+	{
+		Texture *texture = getTexture(key_tex);
+		_materialManager.setMaterial<TYPE>(key, texture->getId());
+		return (*this);
+	}
+
+	template <typename TYPE>
+	typename TYPE::return_type RenderManager::getMaterial(Key<Material> const &key)
+	{
+		return (_materialManager.getMaterial<TYPE>(key);)
+	}
 }
