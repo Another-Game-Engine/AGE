@@ -227,7 +227,7 @@ bool BenchmarkScene::userStart()
 		auto _e = createEntity();
 		auto _l = getLink(_e);
 //		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(180), 0)));
-		_l->setPosition(glm::vec3(0, 0, 0));
+		_l->setPosition(glm::vec3(5, 0, 0));
 		_l->setScale(glm::vec3(0.01f));
 		auto _m = addComponent<Component::MeshRenderer>(_e, getInstance<AGE::AssetsManager>()->getMesh("sponza/sponza.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("sponza/sponza.mage")));

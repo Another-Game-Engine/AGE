@@ -99,7 +99,6 @@ namespace AGE
 		manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		_textures.insert(std::make_pair(filePath.getFullName(), key));
-		std::cout << key.getId() << std::endl;
 		return key;
 	}
 
