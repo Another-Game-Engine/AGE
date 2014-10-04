@@ -36,10 +36,7 @@ namespace gl
 	template <typename TYPE>
 	bool Key<TYPE>::empty() const
 	{
-		if (_id == -1)
-			return (true);
-		else
-			return (false);
+		return (_id == -1);
 	}
 
 	template <typename TYPE>
@@ -51,9 +48,7 @@ namespace gl
 	template <typename TYPE>
 	bool Key<TYPE>::operator==(Key<TYPE> const &compare) const
 	{
-		if (_id == compare._id)
-			return (true);
-		return (false);
+		return (_id == compare._id);
 	}
 
 	template <typename TYPE>
@@ -72,17 +67,13 @@ namespace gl
 	template <typename TYPE>
 	bool Key<TYPE>::operator<(Key<TYPE> const &compare) const
 	{
-		if (_id < compare._id)
-			return (true);
-		return (false);
+		return (_id < compare._id);
 	}
 
 	template <typename TYPE>
 	bool Key<TYPE>::operator>(Key<TYPE> const &compare) const
 	{
-		if (_id > compare._id)
-			return (true);
-		return (false);
+		return (_id > compare._id);
 	}
 
 	template <typename TYPE>

@@ -249,9 +249,7 @@ namespace gl
 
 	Key<InterfaceBlock> RenderManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
 	{
-		Shader const *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<InterfaceBlock>());
+		Shader const *shader = getShader(keyShader);
 		return (shader->getInterfaceBlock(target));
 	}
 
