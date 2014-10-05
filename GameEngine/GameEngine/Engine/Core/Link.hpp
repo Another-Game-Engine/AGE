@@ -18,6 +18,7 @@ namespace AGE
 		const glm::quat &getOrientation() const { return _orientation; }
 
 		void setPosition(const glm::vec3 &v);
+		void setForward(const glm::vec3 &v);
 		void setScale(const glm::vec3 &v);
 		void setOrientation(const glm::quat &v);
 
