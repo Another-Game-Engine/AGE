@@ -66,7 +66,7 @@ namespace AGE
 		{
 			return (extendNode(toAdd, direction));
 		}
-		return (_father->AddElement(toAdd));
+		return (NULL);
 	}
 
 	OctreeNode	*OctreeNode::MoveElement(CullableObject *toAdd)
