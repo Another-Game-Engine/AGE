@@ -32,11 +32,6 @@ namespace gl
 	class Pipeline;
 	enum DrawType;
 
-	namespace RenderManagerCmd
-	{
-		struct Stop{};
-	}
-
 	class RenderManager : public Dependency<RenderManager>
 	{
 	public:

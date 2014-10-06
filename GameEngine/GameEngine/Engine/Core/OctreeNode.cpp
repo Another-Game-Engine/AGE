@@ -64,8 +64,10 @@ namespace AGE
 		}
 		else if (_father == NULL)
 		{
+			// if it's outside and there is no father, we extend the tree
 			return (extendNode(toAdd, direction));
 		}
+		// just returns null if the the object is outside and the node is not the root (only extend by the root)
 		return (NULL);
 	}
 
@@ -76,6 +78,19 @@ namespace AGE
 
 	OctreeNode	*OctreeNode::removeElement(CullableObject *toRm)
 	{
+		glm::u8vec3	direction;
+		ECollision collisionState;
+
+		// check the collision state depending on the geometry shape
+		switch (toRm->type)
+		{
+		case CULLABLE_BOUNDING_BOX:
+			collisionState = _node.checkCollision(((CullableBoundingBox*)toAdd)->currentAABB, direction);
+			break;
+		default:
+			assert(!"This cullable type is not handled yet.");
+			break;
+		}
 		return (NULL);
 	}
 

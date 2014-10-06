@@ -57,9 +57,9 @@ bool RenderThread::_update()
 		if (msg.function)
 			msg.function();
 	})
-		.handle<Stop>([&](Stop& msg)
+		.handle<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
 	{
-		returnValue = false;
+		return false;
 	});
 
 	return returnValue;
