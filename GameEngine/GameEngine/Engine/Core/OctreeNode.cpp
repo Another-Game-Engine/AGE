@@ -85,7 +85,7 @@ namespace AGE
 		switch (toRm->type)
 		{
 		case CULLABLE_BOUNDING_BOX:
-			collisionState = _node.checkCollision(((CullableBoundingBox*)toAdd)->currentAABB, direction);
+			collisionState = _node.checkCollision(((CullableBoundingBox*)toRm)->currentAABB, direction);
 			break;
 		default:
 			assert(!"This cullable type is not handled yet.");
