@@ -6,6 +6,10 @@
 #include <Utils/Age_Imgui.hpp>
 #include <chrono>
 
+#ifdef USE_IMGUI
+#include <imgui/imgui.h>
+#endif
+
 using namespace AGE;
 
 bool RenderThread::_init()
@@ -62,6 +66,12 @@ bool RenderThread::_update()
 		if (msg.function)
 			msg.function();
 	})
+#ifdef USE_IMGUI
+		.handle<RendCtxCommand::RenderImgui>([&](const RendCtxCommand::RenderImgui &msg)
+	{
+		AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists, msg.cmd_lists_count);
+	})
+#endif
 		.handle<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
 	{
 		return false;

@@ -31,6 +31,7 @@ namespace AGE
 	bool Imgui::init(DependenciesInjector *di)
 	{
 #ifdef USE_IMGUI
+		_dependencyInjector = di;
 		//HARDCODED WINDOW TO FIX
 		//auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
@@ -58,9 +59,7 @@ namespace AGE
 		io.KeyMap[ImGuiKey_Y] = SDLK_y;
 		io.KeyMap[ImGuiKey_Z] = SDLK_z;
 
-		io.RenderDrawListsFn = [](ImDrawList** const draw_lists, int count){
-
-		};
+		io.RenderDrawListsFn = renderDrawLists;
 //		renderDrawLists;
 
 		//io.SetClipboardTextFn = ImImpl_SetClipboardTextFn;
@@ -189,6 +188,16 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef USE_IMGUI
+		_dependencyInjector->getInstance<AGE::Threads::Render>()->getCommandQueue().autoEmplace<RendCtxCommand::RenderImgui>(cmd_lists, cmd_lists_count);
+#else
+		UNUSED(cmd_lists);
+		UNUSED(cmd_lists_count);
+#endif
+	}
+
+	void Imgui::renderThreadRenderFn(ImDrawList** const cmd_lists, int cmd_lists_count)
+	{
+
 		if (cmd_lists_count == 0)
 			return;
 
@@ -246,10 +255,6 @@ namespace AGE
 		glEnable(GL_DEPTH_TEST);
 		glDisable(GL_SCISSOR_TEST);
 		glDisable(GL_BLEND);
-#else
-		UNUSED(cmd_lists);
-		UNUSED(cmd_lists_count);
-#endif
 	}
 
 	void Imgui::initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs)

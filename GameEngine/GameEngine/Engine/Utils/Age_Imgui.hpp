@@ -14,6 +14,7 @@ namespace AGE
 		static int _texture_location, _ortho_location;
 		static int _position_location, _uv_location, _colour_location;
 		static unsigned int _vbohandle, _cursor, _size;
+		static DependenciesInjector *_dependencyInjector;
 		bool _releaseWork = false;
 		bool _launched = false;
 	public:
@@ -23,6 +24,7 @@ namespace AGE
 		static Imgui* getInstance();
 		static void renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count);
 		static void initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs);
+		void renderThreadRenderFn(ImDrawList **const cmd_lists, int cmd_lists_count);
 
 		template<typename T>
 		static unsigned int stream(GLenum target, unsigned int vbo, unsigned int *vbo_cursor, unsigned int *vbo_size, T *start, int elementCount)
