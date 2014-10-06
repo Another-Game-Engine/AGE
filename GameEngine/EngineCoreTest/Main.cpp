@@ -94,8 +94,6 @@ int			main(int ac, char **av)
 	e->setInstance<Timer>();
 	e->setInstance<AGE::AnimationManager>();
 
-	AGE::Imgui::getInstance()->registerThread(0);
-
 	// Important, we have to launch the command queue from the sender thread
 	//context->launchCommandQueue();
 	//renderManager->launchCommandQueue();
@@ -160,7 +158,6 @@ int			main(int ac, char **av)
 		AGE::Imgui::getInstance()->init(e.get());
 		return true;
 	}).get();
-	AGE::Imgui::getInstance()->launch();
 #endif
 
 	// launch engine

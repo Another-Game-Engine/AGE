@@ -274,13 +274,6 @@ bool BenchmarkScene::userUpdate(double time)
 	_timeCounter += time;
 	_chunkCounter += time;
 
-
-	IMGUI_BEGIN
-	ImGui::Text("Coucou from main thread !");
-	IMGUI_END
-
-
-
 	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
 
 	if (getInstance<Input>()->getInput(SDLK_UP))
@@ -362,7 +355,6 @@ bool BenchmarkScene::userUpdate(double time)
 	auto renderManager = getInstance<gl::RenderManager>();
 
 	{
-		IMGUI_BEGIN
 		auto link = getLink(GLOBAL_FLOOR);
 		auto pos = link->getPosition();
 		float p[3] = {pos.x, pos.y, pos.z};
@@ -370,7 +362,6 @@ bool BenchmarkScene::userUpdate(double time)
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
-		IMGUI_END
 	}
 
 
@@ -397,8 +388,6 @@ bool BenchmarkScene::userUpdate(double time)
 		renderManager->drawPipelines();
 	});
 
-	octree->getCommandQueue().autoEmplace<AGE::TQC::EndOfFrame>();
 	octree->getCommandQueue().releaseReadability();
-	octree->getCommandQueue().autoEmplace<AGE::TQC::StartOfFrame>();
 	return true;
 }

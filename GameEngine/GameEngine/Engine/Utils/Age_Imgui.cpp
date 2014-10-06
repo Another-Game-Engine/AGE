@@ -1,7 +1,6 @@
 #include "Age_Imgui.hpp"
 #include <Context/IRenderContext.hh>
 #include <Render/RenderThreadInterface.hpp>
-#include <Utils/DependenciesInjector.hpp>
 #include <SDL/SDL_keycode.h>
 #include <SDL/SDL.h>
 #include <imgui/imconfig.h>
@@ -32,7 +31,6 @@ namespace AGE
 	bool Imgui::init(DependenciesInjector *di)
 	{
 #ifdef USE_IMGUI
-		std::lock_guard<std::mutex> lock(_mutex);
 		//HARDCODED WINDOW TO FIX
 		//auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
@@ -60,7 +58,11 @@ namespace AGE
 		io.KeyMap[ImGuiKey_Y] = SDLK_y;
 		io.KeyMap[ImGuiKey_Z] = SDLK_z;
 
-		io.RenderDrawListsFn = renderDrawLists;
+		io.RenderDrawListsFn = [](ImDrawList** const draw_lists, int count){
+
+		};
+//		renderDrawLists;
+
 		//io.SetClipboardTextFn = ImImpl_SetClipboardTextFn;
 		//io.GetClipboardTextFn = ImImpl_GetClipboardTextFn;
 
@@ -157,85 +159,6 @@ namespace AGE
 		ImGui::NewFrame();
 #endif
 	}
-
-	void Imgui::endUpdate()
-	{
-#ifdef USE_IMGUI
-
-		std::lock_guard<std::mutex> lock(_mutex);
-		if (_releaseWork == false)
-			return;
-		static auto counter = 0;
-		++counter;
-		auto i = 0;
-		for (auto &q : _commandQueue)
-		{
-			if (q.second.empty())
-				return;
-			while (true && !q.second.empty())
-			{
-				if (q.second.front().end == false)
-				{
-					q.second.front().function();
-					q.second.pop();
-				}
-				else
-				{
-					q.second.pop();
-					break;
-				}
-			}
-		}
-		_releaseWork = false;
-#endif
-	}
-
-	void Imgui::push(std::function<void()> &&fn)
-	{
-#ifdef USE_IMGUI
-		std::lock_guard<std::mutex> lock(_mutex);
-		std::queue<ImguiCommand> *queue = nullptr;
-		{
-			auto it = _threadIds.find(std::this_thread::get_id().hash());
-			assert(it != std::end(_threadIds) && "Thread is not registered.");
-			queue = &_commandQueue[it->second];
-		}
-
-		queue->emplace<ImguiCommand>(std::move(fn));
-#else
-		UNUSED(fn);
-#endif
-	}
-
-	void Imgui::registerThread(std::size_t priority)
-	{
-#ifdef USE_IMGUI
-		std::lock_guard<std::mutex> lock(_mutex);
-		auto threadId = std::this_thread::get_id().hash();
-		assert(_threadIds.find(threadId) == std::end(_threadIds) && "Thread already registered.");
-		assert(_commandQueue.find(priority) == std::end(_commandQueue) && "Priority already reserved.");
-		_threadIds.insert(std::make_pair(threadId, priority));
-		_commandQueue.insert(std::make_pair(priority, std::queue<ImguiCommand>()));
-#else
-		UNUSED(priority);
-#endif
-	}
-
-	void Imgui::threadLoopEnd()
-	{
-#ifdef USE_IMGUI
-		std::lock_guard<std::mutex> lock(_mutex);
-		auto threadId = std::this_thread::get_id().hash();
-		assert(_threadIds.find(threadId) != std::end(_threadIds) && "Thread not registered.");
-		auto priority = _threadIds.find(threadId)->second;
-		_commandQueue[priority].emplace<ImguiCommand>(true);
-		if (_launched && _threadIds.find(threadId) == --std::end(_threadIds))
-		{
-			_releaseWork = true;
-		}
-#endif
-	}
-
 
 	Imgui* Imgui::getInstance()
 	{
