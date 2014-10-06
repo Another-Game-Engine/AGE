@@ -8,13 +8,15 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Core/CullableObjects.hh>
-#include <Core/OctreeNode.hh>
+#include <Core/PreparableObject.hh>
+#include <Configuration.hpp>
+#include <Utils/Age_Imgui.hpp>
+#include <chrono>
+
 
 namespace AGE
 {
-	PrepareRenderThread::PrepareRenderThread() :
-		_octree(new OctreeNode)
+	PrepareRenderThread::PrepareRenderThread()
 	{
 	}
 
@@ -32,6 +34,7 @@ namespace AGE
 
 	bool PrepareRenderThread::_initInNewThread()
 	{
+		AGE::Imgui::getInstance()->registerThread(50);
 		return true;
 	}
 
@@ -114,9 +117,9 @@ namespace AGE
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPointLight(float power, float range, glm::vec3 const &color, glm::vec3 const &position, const PrepareKey &id)
+	PrepareRenderThread &PrepareRenderThread::setPointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::SetPointLight>(power, range, color, position, id);
+		_commandQueue.emplace<PRTC::SetPointLight>(position, color, range, id);
 		return (*this);
 	}
 
@@ -213,6 +216,8 @@ namespace AGE
 	bool PrepareRenderThread::_update()
 	{
 		auto returnValue = true;
+		static auto frameStart = std::chrono::high_resolution_clock::now();
+
 		_commandQueue.getDispatcher()
 			.handle<PRTC::CameraInfos>([&](const PRTC::CameraInfos& msg)
 		{
@@ -261,9 +266,8 @@ namespace AGE
 		{
 			PointLight *l = nullptr;
 			l = &_pointLights[msg.key.id];
-			l->color = msg.color;
 			l->position = msg.position;
-			l->power = msg.power;
+			l->color = msg.color;
 			l->range = msg.range;
 		})
 			.handle<PRTC::DeleteCamera>([&](const PRTC::DeleteCamera& msg)
@@ -386,55 +390,49 @@ namespace AGE
 			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
 		{
 			returnValue = false;
+		})
+		.handle<TQC::StartOfFrame>([&](const TQC::StartOfFrame& msg)
+		{
+			frameStart = std::chrono::system_clock::now();
+		}).handle<TQC::EndOfFrame>([&](const TQC::EndOfFrame& msg)
+		{
+			auto t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - frameStart);
+			IMGUI_BEGIN
+				ImGui::Text("Prepare Render Thread : %i ms", t.count());
+			IMGUI_END
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
-			static std::size_t cameraCounter = 0;
-
 			for (auto &camera : _cameras)
 			{
 				if (!camera.active)
 					continue;
+				
 				Frustum frustum;
-				auto transformation = glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale);
-				frustum.setMatrix(camera.projection * transformation, true);
+				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
+				frustum.setMatrix(camera.projection * view, true);
 
 				_octreeDrawList.emplace_back();
+				auto &drawList = _octreeDrawList.back();
+				drawList.transformation = view;
+				drawList.projection = camera.projection;
 				for (size_t index = 0; index < _pointLights.size(); ++index)
 				{
 					auto &p = _pointLights[index];
-					_octreeDrawList.back().lights.push_back(PointLight(p.power, p.range, p.color, p.position));
+					drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
-				auto &drawList = _octreeDrawList.back();
-
-				drawList.drawables.clear();
-
-				drawList.transformation = transformation;
-				drawList.projection = camera.projection;
-
-				std::size_t drawed = 0; std::size_t total = 0;
 
 				for (auto &e : _drawables)
 				{
-					if (e.active)
-						++total;
-					else
-						continue;
-					if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ frustum.pointIn(e.position) == true)
+					if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ /*frustum.pointIn(e.position) ==*/ true)
 					{
 						if (e.hasMoved)
 						{
 							e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
-
-							// compute the new bounding box
-							e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
-
 							e.hasMoved = false;
 						}
 						drawList.drawables.emplace_back(e.mesh, e.material, e.transformation);
-						++drawed;
 					}
 				}
-				++cameraCounter;
 			}
 
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
@@ -445,9 +443,13 @@ namespace AGE
 				});
 			}
 			_octreeDrawList.clear();
-			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
-			renderThread->getCommandQueue().releaseReadability();
 
+			Imgui::getInstance()->threadLoopEnd();
+
+			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
+			renderThread->getCommandQueue().autoEmplace<AGE::TQC::EndOfFrame>();
+			renderThread->getCommandQueue().releaseReadability();
+			renderThread->getCommandQueue().autoEmplace<AGE::TQC::StartOfFrame>();
 			//msg.result.set_value(std::move(_octreeDrawList));
 			//_octreeDrawList.clear();
 		});

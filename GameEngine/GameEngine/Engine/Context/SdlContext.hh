@@ -4,6 +4,11 @@
 #include "context/IRenderContext.hh"
 #include <Core/Input.hh>
 #include <Utils/DependenciesInjector.hpp>
+#include <Configuration.hpp>
+
+#ifdef USE_IMGUI
+#include <Utils/Age_Imgui.hpp>
+#endif
 
 class SdlContext : public IRenderContext
 {
@@ -29,9 +34,25 @@ public:
 		while (SDL_PollEvent(&events))
 		{
 			if (events.type == SDL_KEYDOWN)
+			{
 				input->addKeyInput(events.key.keysym.sym);
+#ifdef USE_IMGUI
+				ImGuiIO& io = ImGui::GetIO();
+					io.KeysDown[events.key.keysym.scancode] = true;
+				//io.KeyCtrl = (mods & GLFW_MOD_CONTROL) != 0;
+				//io.KeyShift = (mods & GLFW_MOD_SHIFT) != 0;
+#endif
+			}
 			else if (events.type == SDL_KEYUP)
+			{
+#ifdef USE_IMGUI
+				ImGuiIO& io = ImGui::GetIO();
+					io.KeysDown[events.key.keysym.scancode] = false;
+				//io.KeyCtrl = (mods & GLFW_MOD_CONTROL) != 0;
+				//io.KeyShift = (mods & GLFW_MOD_SHIFT) != 0;
+#endif
 				input->removeKeyInput(events.key.keysym.sym);
+			}
 			else if (events.type == SDL_MOUSEBUTTONDOWN)
 				input->addKeyInput(events.button.button);
 			else if (events.type == SDL_MOUSEBUTTONUP)

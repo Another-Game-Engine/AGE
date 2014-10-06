@@ -16,7 +16,9 @@ namespace gl
 
 	Pipeline::Pipeline(Pipeline const &copy)
 		: _type(copy._type),
-		_toRender(copy._toRender)
+		_toRender(copy._toRender),
+		_render(copy._render),
+		_renderPass(copy._renderPass)
 	{
 		_drawFunc[DrawType::NONE_OBJECT] = &Pipeline::drawNoneObject;
 		_drawFunc[DrawType::ALL_OBJECT] = &Pipeline::drawAllObject;
@@ -39,7 +41,7 @@ namespace gl
 		return (*this);
 	}
 
-	Pipeline &Pipeline::pushRender(Render *render)
+	Pipeline &Pipeline::pushRender(BaseRender *render)
 	{
 		_render.push_back(render);
 		return (*this);
@@ -63,7 +65,7 @@ namespace gl
 		if (_toRender == NULL)
 			return;
 		for (size_t index = 0; index < _renderPass.size(); ++index)
-			_renderPass[index]->setDraw(*_toRender, 0, _toRender->size());
+			_renderPass[index]->setPass(*_toRender, 0, _toRender->size());
 		for (size_t index = 0; index < _render.size(); ++index)
 			_render[index]->render();
 	}
@@ -71,7 +73,7 @@ namespace gl
 	void Pipeline::drawNoneObject()
 	{
 		for (size_t index = 0; index < _renderPass.size(); ++index)
-			_renderPass[index]->setDraw();
+			_renderPass[index]->setPass();
 		for (size_t index = 0; index < _render.size(); ++index)
 			_render[index]->render();
 	}
@@ -83,7 +85,7 @@ namespace gl
 		for (size_t r = 0; r < _toRender->size(); ++r)
 		{
 			for (size_t index = 0; index < _renderPass.size(); ++index)
-				_renderPass[index]->setDraw(*_toRender, r, r + 1);
+				_renderPass[index]->setPass(*_toRender, r, r + 1);
 			for (size_t index = 0; index < _render.size(); ++index)
 				_render[index]->render();
 		}

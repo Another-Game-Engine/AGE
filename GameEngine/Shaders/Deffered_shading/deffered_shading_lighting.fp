@@ -5,14 +5,12 @@ layout (location = 0) out vec4 color;
 uniform global_state
 {
 	mat4 projection_matrix;
+	mat4 view_matrix;
 };
 
 uniform vec3 position_light;
+uniform vec3 attenuation_light;
 uniform vec3 color_light;
-uniform float power_light;
-uniform float range_light;
-
-uniform mat4 view_matrix;
 
 uniform sampler2D depth_buffer;
 uniform sampler2D normal_buffer;
@@ -29,10 +27,13 @@ vec3 getWorldPosition(float depth, vec2 screenPos, mat4 viewProj)
 
 void main()
 {
-	mat4 modelView = projection_matrix * view_matrix;
+	mat4 viewProj = projection_matrix * view_matrix;
 	float depth = texture(depth_buffer, interpolated_texCoord).x;
-	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, modelView);
-	vec3 lightDir = worldPos - position_light;
-	float lambert = max(0.0f, dot(normalize((texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f)), normalize(lightDir)));
-	color = vec4(lambert);	
+	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, viewProj);
+	vec3 lightDir = position_light - worldPos;
+	float dist = length(lightDir);
+	vec3 normal = (texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f);
+	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
+	float lambert = max(0.0f, dot(normalize(normal), normalize(lightDir)));
+	color = vec4(vec3(lambert) * color_light, 1.0f) / attenuation * (1.f - step(1.0f, depth));
 }

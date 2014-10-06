@@ -39,7 +39,7 @@ namespace gl
 
 	Key<Shader> RenderManager::addComputeShader(std::string const &compute)
 	{
-		Key<Shader> key;
+		Key<Shader> key = Key<Shader>::createKey();
 		Shader *shader;
 
 		if ((shader = Shader::createComputeShader(compute)) == NULL)
@@ -50,7 +50,7 @@ namespace gl
 
 	Key<Shader> RenderManager::addShader(std::string const &vertex, std::string const &frag)
 	{
-		Key<Shader> key;
+		Key<Shader> key = Key<Shader>::createKey();
 		Shader *shader;
 
 		if ((shader = Shader::createShader(vertex, frag)) == NULL)
@@ -61,7 +61,7 @@ namespace gl
 
 	Key<Shader> RenderManager::addShader(std::string const &geo, std::string const &vertex, std::string const &frag)
 	{
-		Key<Shader> key;
+		Key<Shader> key = Key<Shader>::createKey();
 		Shader *shader;
 
 		if ((shader = Shader::createShader(vertex, frag, geo)) == NULL)
@@ -82,50 +82,45 @@ namespace gl
 
 	Key<Uniform> RenderManager::getShaderUniform(Key<Shader> const &key, size_t target)
 	{
-		Shader const *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader const *shader = getShader(key);
 		return (shader->getUniform(target));
 	}
 
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag));
 	}
 
+
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat4 const &value)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat3 const &value)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
+		return (shader->addUniform(flag, value));
+	}
+
+	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec3 const &value)
+	{
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec4 const &value)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
 
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, float value)
 	{
-		Shader *shader;
-		if ((shader = getShader(key)) == NULL)
-			return (Key<Uniform>(KEY_DESTROY));
+		Shader *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
@@ -144,6 +139,15 @@ namespace gl
 		if ((shader = getShader(keyShader)) == NULL)
 			return (*this);
 		shader->setUniform(key, vec4);
+		return (*this);
+	}
+
+	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec3 const &vec3)
+	{
+		Shader *shader;
+		if ((shader = getShader(keyShader)) == NULL)
+			return (*this);
+		shader->setUniform(key, vec3);
 		return (*this);
 	}
 
@@ -169,7 +173,7 @@ namespace gl
 	{
 		Shader *shader;
 		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<Sampler>(KEY_DESTROY));
+			return (Key<Sampler>());
 		return (shader->addSampler(flag));
 	}
 
@@ -177,7 +181,7 @@ namespace gl
 	{
 		Shader const *shader;
 		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<Sampler>(KEY_DESTROY));
+			return (Key<Sampler>());
 		return (shader->getSampler(target));
 	}
 
@@ -195,7 +199,7 @@ namespace gl
 
 	Key<UniformBlock> RenderManager::addUniformBlock()
 	{
-		Key<UniformBlock> key;
+		Key<UniformBlock> key = Key<UniformBlock>::createKey();
 
 		_uniformBlock[key];
 		return (key);
@@ -245,15 +249,13 @@ namespace gl
 
 	Key<InterfaceBlock> RenderManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
 	{
-		Shader const *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<InterfaceBlock>(KEY_DESTROY));
+		Shader const *shader = getShader(keyShader);
 		return (shader->getInterfaceBlock(target));
 	}
 
 	Key<Texture> RenderManager::addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping)
 	{
-		Key<Texture> key;
+		Key<Texture> key = Key<Texture>::createKey();
 
 		_textures[key] = new Texture2D(width, height, internalFormat, mipmapping);
 		return (key);
@@ -345,23 +347,6 @@ namespace gl
 		return (&uniformBlock->second);
 	}
 
-	RenderPass *RenderManager::getRenderPass(Key<RenderPass> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_renderPass.size() == 0)
-			assert(0);
-		if (key == _optimizeRenderPassSearch.first)
-			return (_optimizeRenderPassSearch.second);
-		auto &renderPassIndex = _renderPass.find(key);
-		if (renderPassIndex == _renderPass.end())
-			assert(0);
-		_optimizeRenderPassSearch.first = key;
-		_optimizeRenderPassSearch.second = renderPassIndex->second;
-		return (renderPassIndex->second);
-	}
-
-
 	RenderManager &RenderManager::uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
 		Texture const *texture;
@@ -410,9 +395,9 @@ namespace gl
 
 	Key<RenderPass> RenderManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect)
 	{
-		Key<RenderPass> key;
+		Key<RenderPass> key = Key<RenderPass>::createKey();
 		Shader *shader = getShader(keyShader);
-		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, materialManager, locationStorage);
+		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, _materialManager, locationStorage);
 		element->configRect(rect);
 		return (key);
 	}
@@ -429,11 +414,12 @@ namespace gl
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPass);
 	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
+	GEN_DEF_DRAWABLERENDER_PUSH_TASK(RenderPass);
 
 	RenderManager &RenderManager::pushDrawTaskRenderBuffer(Key<RenderPass> const &key)
 	{
 		RenderPass *renderPass = getRenderPass(key);
-		renderPass->pushDrawTask();
+		renderPass->pushPassTask();
 		return (*this);
 	}
 
@@ -455,37 +441,10 @@ namespace gl
 		return (*this);
 	}
 
-	RenderPostEffect *RenderManager::getRenderPostEffect(Key<RenderPostEffect> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_renderPostEffect.size() == 0)
-			assert(0);
-		if (key == _optimizeRenderPostEffectSearch.first)
-			return (_optimizeRenderPostEffectSearch.second);
-		auto &renderPostEffect = _renderPostEffect.find(key);
-		if (renderPostEffect == _renderPostEffect.end())
-			assert(0);
-		_optimizeRenderPostEffectSearch.first = key;
-		_optimizeRenderPostEffectSearch.second = renderPostEffect->second;
-		return (renderPostEffect->second);
-	}
-
-	RenderOnScreen *RenderManager::getRenderOnScreen(Key<RenderOnScreen> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_renderOnScreen.size() == 0)
-			assert(0);
-		if (key == _optimizeRenderOnScreenSearch.first)
-			return (_optimizeRenderOnScreenSearch.second);
-		auto &renderOnScreen = _renderOnScreen.find(key);
-		if (renderOnScreen == _renderOnScreen.end())
-			assert(0);
-		_optimizeRenderOnScreenSearch.first = key;
-		_optimizeRenderOnScreenSearch.second = renderOnScreen->second;
-		return (renderOnScreen->second);
-	}
+	GEN_DEF_SEARCH_FUNCTION(EmptyRenderPass, _emptyRenderPass);
+	GEN_DEF_SEARCH_FUNCTION(RenderPass, _renderPass);
+	GEN_DEF_SEARCH_FUNCTION(RenderOnScreen, _renderOnScreen);
+	GEN_DEF_SEARCH_FUNCTION(RenderPostEffect, _renderPostEffect);
 
 	size_t RenderManager::getIndexPipeline(Key<Pipeline> const &key)
 	{
@@ -510,12 +469,11 @@ namespace gl
 
 	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
 	{
-		Key<RenderPostEffect> key;
+		Key<RenderPostEffect> key = Key<RenderPostEffect>::createKey();
 
 		geometryManager.createQuadSimpleForm();
 		Shader *shader = getShader(s);
-		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleFormGeo(QUAD), *shader, geometryManager, locationStorage);
-		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
+		auto &element = _renderPostEffect[key] = new RenderPostEffect(geometryManager.getSimpleFormGeo(QUAD), geometryManager.getSimpleFormId(QUAD), *shader, geometryManager, locationStorage);
 		element->configRect(rect);
 		return (key);
 	}
@@ -532,19 +490,44 @@ namespace gl
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect);
 	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
+	GEN_DEF_DRAWABLERENDER_PUSH_TASK(RenderPostEffect);
 
-	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect)
+	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPass> const &r)
 	{
-		Key<RenderOnScreen> key;
-
+		Key<RenderOnScreen> key = Key<RenderOnScreen>::createKey();
+		RenderPass *renderPass = getRenderPass(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager);
-		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0);
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager, locationStorage);
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPass);
 		element->configRect(rect);
 		return (key);
 	}
 
+	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPostEffect> const &r)
+	{
+		Key<RenderOnScreen> key = Key<RenderOnScreen>::createKey();
+		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
+		createPreShaderQuad();
+		geometryManager.createQuadSimpleForm();
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager, locationStorage);
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
+		element->configRect(rect);
+		return (key);
+	}
+
+	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<EmptyRenderPass> const &r)
+	{
+		Key<RenderOnScreen> key = Key<RenderOnScreen>::createKey();
+		EmptyRenderPass *renderPostEffect = getEmptyRenderPass(r);
+		createPreShaderQuad();
+		geometryManager.createQuadSimpleForm();
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(geometryManager.getSimpleFormGeo(SimpleForm::QUAD), geometryManager.getSimpleFormId(SimpleForm::QUAD), *_preShaderQuad, geometryManager, locationStorage);
+		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
+		element->configRect(rect);
+		return (key);
+	}
+	
 	Key<RenderOnScreen> RenderManager::getRenderOnScreen(size_t target) const
 	{
 		if (target >= _textures.size())
@@ -557,41 +540,32 @@ namespace gl
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderOnScreen);
 
-	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPass> const &to)
+	Key<EmptyRenderPass> RenderManager::addEmptyRenderPass(glm::ivec4 const &rect)
 	{
-		RenderPass *renderPassFrom = getRenderPass(from);
-		RenderPass *renderPassTo = getRenderPass(to);
-		renderPassTo->branchInput(*renderPassFrom);
-		return (*this);
+		Key<EmptyRenderPass> key = Key<EmptyRenderPass>::createKey();
+		
+		auto &element = _emptyRenderPass[key] = new EmptyRenderPass(locationStorage);
+		element->configRect(rect);
+		return (key);
 	}
 
-	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderPostEffect> const &to)
+	Key<EmptyRenderPass> RenderManager::getEmptyRenderPass(size_t target) const
 	{
-		RenderPass *renderPassFrom = getRenderPass(from);
-		RenderPostEffect *renderPassTo = getRenderPostEffect(to);
-		renderPassTo->branchInput(*renderPassFrom);
-		return (*this);
+		if (target >= _emptyRenderPass.size())
+			assert(0);
+		auto &element = _emptyRenderPass.begin();
+		for (size_t index = 0; index < target; ++index)
+			++element;
+		return (element->first);
 	}
 
-	RenderManager &RenderManager::branch(Key<RenderPass> const &from, Key<RenderOnScreen> const &to)
-	{
-		RenderPass *renderPassFrom = getRenderPass(from);
-		RenderOnScreen *renderPassTo = getRenderOnScreen(to);
-		renderPassTo->branchInput(*renderPassFrom);
-		return (*this);
-	}
+	GEN_DEF_RENDER_PUSH_TASK(EmptyRenderPass);
+	GEN_DEF_RENDEROFFSCREEN_PUSH_TASK(EmptyRenderPass);
 
-	RenderManager &RenderManager::branch(Key<RenderPostEffect> const &from, Key<RenderOnScreen> const &to)
-	{
-		RenderPostEffect *renderPassFrom = getRenderPostEffect(from);
-		RenderOnScreen *renderPassTo = getRenderOnScreen(to);
-		renderPassTo->branchInput(*renderPassFrom);
-		return (*this);
-	}
 
 	Key<Pipeline> RenderManager::addPipeline()
 	{
-		Key<Pipeline> key;
+		Key<Pipeline> key = Key<Pipeline>::createKey();
 	
 		_pipelineOrdered.push_back(Pipeline());
 		_pipelines[key] = _pipelineOrdered.size() - 1;
@@ -609,19 +583,27 @@ namespace gl
 	RenderManager &RenderManager::pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r)
 	{
 		Pipeline *pipeline = getPipeline(p);
-		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
-		pipeline->pushRender(renderPostEffect);
+		RenderPostEffect *render = getRenderPostEffect(r);
+		pipeline->pushRender(render);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r)
 	{
 		Pipeline *pipeline = getPipeline(p);
-		RenderOnScreen *renderOnScreen = getRenderOnScreen(r);
-		pipeline->pushRender(renderOnScreen);
+		RenderOnScreen *render = getRenderOnScreen(r);
+		pipeline->pushRender(render);
 		return (*this);
 	}
 
+	RenderManager &RenderManager::pushEmptyRenderPassPipeline(Key<Pipeline> const &p, Key<EmptyRenderPass> const &r)
+	{
+		Pipeline *pipeline = getPipeline(p);
+		EmptyRenderPass *render = getEmptyRenderPass(r);
+		pipeline->pushRender(render);
+		return (*this);
+	}
+	
 	Key<Pipeline> RenderManager::getPipeline(size_t target)
 	{
 		if (target >= _pipelines.size())
@@ -665,10 +647,30 @@ namespace gl
 	{
 		RenderOnScreen *renderOnScreen = getRenderOnScreen(o);
 		RenderPass *renderPass = getRenderPass(r);
-		renderPass->setDraw(objectRender, 0, objectRender.size());
-		renderOnScreen->branchInput(*renderPass);
+		renderPass->setPass(objectRender, 0, objectRender.size());
 		renderPass->render();
 		renderOnScreen->render();
+		return (*this);
+	}
+
+	Key<Material> RenderManager::getDefaultMaterial()
+	{
+		return (_materialManager.getDefaultMaterial());
+	}
+
+	Key<Material> RenderManager::addMaterial()
+	{
+		return (_materialManager.addMaterial());
+	}
+
+	Key<Material> RenderManager::getMaterial(size_t index)
+	{
+		return (_materialManager.getMaterial(index));
+	}
+
+	RenderManager &RenderManager::rmMaterial(Key<Material> &key)
+	{
+		_materialManager.rmMaterial(key);
 		return (*this);
 	}
 }

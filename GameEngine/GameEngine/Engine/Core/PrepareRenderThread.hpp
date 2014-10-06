@@ -36,7 +36,7 @@ namespace AGE
 		PrepareKey addCamera();
 		PrepareKey addPointLight();
 
-		PrepareRenderThread &setPointLight(float, float, glm::vec3 const &, glm::vec3 const &, const PrepareKey &id);
+		PrepareRenderThread &setPointLight(glm::vec3 const &, glm::vec3 const &, glm::vec3 const &, const PrepareKey &id);
 		PrepareRenderThread &removeElement(const PrepareKey &key);
 		PrepareRenderThread &setPosition(const glm::vec3 &v, const PrepareKey &key);
 		PrepareRenderThread &setOrientation(const glm::quat &v, const PrepareKey &key);

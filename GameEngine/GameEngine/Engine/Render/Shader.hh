@@ -43,11 +43,13 @@ namespace gl
 		Key<Uniform> addUniform(std::string const &flag, glm::mat4 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::mat3 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::vec4 const &value);
+		Key<Uniform> addUniform(std::string const &flag, glm::vec3 const &value);
 		Key<Uniform> addUniform(std::string const &flag, float value);
 		Key<Uniform> getUniform(size_t index) const;
 		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &mat4);
 		Shader &setUniform(Key<Uniform> const &key, glm::mat3 const &mat3);
 		Shader &setUniform(Key<Uniform> const &key, glm::vec4 const &vec4);
+		Shader &setUniform(Key<Uniform> const &key, glm::vec3 const &vec4);
 		Shader &setUniform(Key<Uniform> const &key, float v);
 
 		// sampler 
@@ -87,6 +89,7 @@ namespace gl
 		AGE::Vector<Task> _tasks;
 
 		// map of task
+		std::map<Key<Sampler>, size_t> _bindSampler;
 		std::map<Key<Uniform>, size_t> _bindUniform;
 		std::map<Key<Uniform>, size_t> _uniforms;
 		std::map<Key<Sampler>, size_t> _samplers;
@@ -112,6 +115,7 @@ namespace gl
 
 		GLuint getUniformLocation(char const *flag);
 		GLuint getUniformBlockLocation(char const *flag);
+		GLuint getSamplerLocation(char const *flag);
 		size_t getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg);
 
 		// use to create/set task and binding
@@ -165,26 +169,15 @@ namespace gl
 		if ((indexTask = getIndexSampler(key)) == -1)
 			return (*this);
 		Task const &task = _tasks[indexTask];
-		if (task.sizeParams[task.indexToTarget] != TYPE::size)
-			assert(0);
-		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
+		_bindSampler[key] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
 	}
 
 	inline void Shader::setSamplerTask(Task &task, Texture const &texture)
 	{
-		GLint id = texture.getId();
-		GLenum type = texture.getType();
-		if (memcmp(task.params[1], &type, sizeof(GLenum)) != 0)
-		{
-			*(GLenum *)task.params[1] = texture.getType();
-			task.update = true;
-		}
-		if (memcmp(task.params[2], &id, sizeof(GLint)) != 0)
-		{
-			*(GLint *)task.params[2] = texture.getId();
-			task.update = true;
-		}
+		*(GLenum *)task.params[1] = texture.getType();
+		*(GLint *)task.params[2] = texture.getId();
+		task.update = true;
 	}
 
 	inline void Shader::setUniformBlockTask(Task &task, UniformBlock &ubo)
@@ -220,8 +213,11 @@ namespace gl
 	{
 		Task &task = _tasks[bind.indexTask];
 		size_t sizeParam = task.sizeParams[task.indexToTarget];
-		if (memcmp(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam) == 0)
-			return;
+		if (task.type == TypeTask::UniformTask)
+		{
+			if (memcmp(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam) == 0)
+				return;
+		}
 		memcpy(task.params[task.indexToTarget], material.getData(bind.offsetMaterial), sizeParam);
 		task.update = true;
 	}

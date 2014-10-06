@@ -17,6 +17,8 @@
 
 namespace AGE { struct Drawable;  }
 
+#define DECL_INPUT struct Input{ Key<Sampler> sampler; GLenum attachement; OffScreenRender const &render; Input(Key<Sampler> const &sampler, GLenum attachement, OffScreenRender const &render); Input(Input const &copy); ~Input(); };
+
 namespace gl
 {
 	struct Uniform;
@@ -32,212 +34,207 @@ namespace gl
 	{
 		RENDER_POST_EFFECT = 0,
 		RENDER_PASS,
-		RENDER_ON_SCREEN
+		RENDER_ON_SCREEN,
+		RENDER_EMPTY
 	};
 
-	class Render
+	struct Draw
+	{
+		GLenum mode;
+		GeometryManager &geometryManager;
+		Shader &shader;
+		MaterialManager &materialManager;
+		AGE::Vector<AGE::Drawable> const *toRender;
+		size_t start;
+		size_t end;
+		Draw(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode);
+		Draw(Draw const &copy);
+		~Draw();
+	};
+
+	class OperationBuffer
 	{
 	public:
-		struct Draw
-		{
-		public:
-			GeometryManager &geometryManager;
-			Shader &shader;
-			GLenum mode;
-		public:
-			Draw(GeometryManager &g, Shader &s, GLenum mode);
-		};
+		virtual ~OperationBuffer();
 
-	public:
-		virtual ~Render();
-
-		virtual Render &render() = 0;
-		virtual RenderType getType() const = 0;
-
-		// state
-		Render &pushSetScissorTask(glm::ivec4 const &area);
-		Render &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
-		Render &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
-		Render &pushSetDepthMaskTask(bool depth);
-		Render &pushSetStencilMaskTask(uint8_t front, uint8_t back);
-		Render &pushClearTask(bool color, bool depth, bool stencil);
-		Render &pushSetStencilFunctionFrontFaceTask(GLenum func, int ref, uint8_t mask);
-		Render &pushSetStencilOperationFrontFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		Render &pushSetStencilFunctionBackFaceTask(GLenum func, int ref, uint8_t mask);
-		Render &pushSetStencilOperationBackFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		Render &pushSetStencilFunctionTask(GLenum func, int ref, uint8_t mask);
-		Render &pushSetStencilOperationTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
-		Render &pushSetBlendTask(int drawBuffer, bool state);
-		Render &pushSetBlendEquationTask(GLenum colorMode, GLenum alphaMode);
-		Render &pushSetBlendEquationTask(GLenum mode);
-		Render &pushSetBlendFuncTask(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
-		Render &pushSetBlendFuncTask(GLenum src, GLenum dest);
-		Render &pushSetBlendConstantTask(glm::vec4 const &blendColor);
-		Render &pushSetTestTask(bool scissor, bool stencil, bool depth);
-		Render &popTask();
-		Render &configRect(glm::ivec4 const &rect);
-		Render &setMode(GLenum mode);
-		GLenum getMode() const;
-
-		// Render attach to this render
-		Render &branchInput(RenderOffScreen const &input);
-		Render &unBranchInput();
-		
-		Render &pushInputSampler(Key<Sampler> const &key, GLenum attachement);
-		Render &popInputSampler();
+		OperationBuffer &pushSetScissorTask(glm::ivec4 const &area);
+		OperationBuffer &pushSetClearValueTask(glm::vec4 const &color, float depth, uint8_t stencil);
+		OperationBuffer &pushSetColorMaskTask(GLuint index, glm::bvec4 const &color);
+		OperationBuffer &pushSetDepthMaskTask(bool depth);
+		OperationBuffer &pushSetStencilMaskTask(uint8_t front, uint8_t back);
+		OperationBuffer &pushClearTask(bool color, bool depth, bool stencil);
+		OperationBuffer &pushSetStencilFunctionFrontFaceTask(GLenum func, int ref, uint8_t mask);
+		OperationBuffer &pushSetStencilOperationFrontFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		OperationBuffer &pushSetStencilFunctionBackFaceTask(GLenum func, int ref, uint8_t mask);
+		OperationBuffer &pushSetStencilOperationBackFaceTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		OperationBuffer &pushSetStencilFunctionTask(GLenum func, int ref, uint8_t mask);
+		OperationBuffer &pushSetStencilOperationTask(GLenum opStencilFail, GLenum opDepthFail, GLenum opDepthPass);
+		OperationBuffer &pushSetBlendTask(int drawBuffer, bool state);
+		OperationBuffer &pushSetBlendEquationTask(GLenum colorMode, GLenum alphaMode);
+		OperationBuffer &pushSetBlendEquationTask(GLenum mode);
+		OperationBuffer &pushSetBlendFuncTask(GLenum srcRGB, GLenum destRGB, GLenum srcAlpha, GLenum destAlpha);
+		OperationBuffer &pushSetBlendFuncTask(GLenum src, GLenum dest);
+		OperationBuffer &pushSetBlendConstantTask(glm::vec4 const &blendColor);
+		OperationBuffer &pushSetTestTask(bool scissor, bool stencil, bool depth);
+		OperationBuffer &pushOwnTask(std::function<void(LocationStorage &)> const &func);
+		OperationBuffer &popTask();
 
 	protected:
-		Render(Draw *draw);
-		Render() = delete;
-		Render(Render const &copy) = delete;
-		Render &operator=(Render const &r) = delete;
-		void updateInput();
+		OperationBuffer(LocationStorage &locationStorage);
+		OperationBuffer(OperationBuffer const &copy) = delete;
+		OperationBuffer &operator=(OperationBuffer const &o) = delete;
 
-		glm::ivec4 _rect;
+		LocationStorage &_locationStorage;
+		AGE::Vector<std::function<void(LocationStorage &)> *> _ownFunction;
 		AGE::Vector<Task> _tasks;
-		AGE::Vector<std::pair<Key<Sampler>, GLenum>> _inputSamplers;
-		RenderOffScreen const *_branch;
-		Draw &_draw;
+
+		void update();
 	};
 
-	class RenderOnScreen : public Render
+	class BaseRender
 	{
 	public:
-		struct Draw : public Render::Draw
-		{
-		public:
-			Key<Vertices> quad;
-			Key<Indices> quadId;
+		BaseRender &configRect(glm::ivec4 const &rect);
 
-		public:
-			Draw(GeometryManager &g, Shader &s, GLenum mode, Key<Vertices> const &quad, Key<Indices> const &id);
-		};
+		virtual BaseRender &render() = 0;
+		virtual RenderType getType() const = 0;
 
+	protected:
+		BaseRender();
+		~BaseRender();
+
+		glm::ivec4 _rect;
+		void update();
+	};
+
+	class QuadRender
+	{
+	public:
+		virtual ~QuadRender();
+	protected:
+		QuadRender(Key<Vertices> const &key, Key<Indices> const &id);
+		QuadRender(QuadRender const &copy) = delete;
+		QuadRender &operator=(QuadRender const &q) = delete;
+
+		Key<Vertices> _vertices;
+		Key<Indices> _id;
+	};
+
+	class OffScreenRender : public OperationBuffer, public BaseRender
+	{
+	public:
+		~OffScreenRender();
+		OffScreenRender &configSample(GLint sample);
+		OffScreenRender &pushTarget(GLenum attachement);
+		OffScreenRender &popTarget();
+		OffScreenRender &createBufferSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
+		OffScreenRender &createBufferSamplable(GLenum attachement, GLenum internalFormat);
+		Texture2D const *getBufferSamplable(GLenum attachement) const;
+		OffScreenRender &createBufferNotSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
+		OffScreenRender &createBufferNotSamplable(GLenum attachement, GLenum internalFormat);
+		RenderBuffer const *getBufferNotSamplable(GLenum attachement) const;
+		OffScreenRender &deleteBuffer(GLenum attachement);
+		OffScreenRender &useInputBuffer(GLenum attachement, OffScreenRender const &render);
+
+	protected:
+		OffScreenRender(LocationStorage &locationStorage);
+
+		std::map<GLenum, std::pair<Storage const *, bool>> _buffer; // the bool is use to determinate if the storage is own by this class or the branched one.
+		AGE::Vector<GLenum> _target;
+		Framebuffer _fbo;
+		GLint _sample;
+		bool _updateTarget;
+		bool _updateFrameBuffer;
+
+		void update();
+	};
+
+	class DrawableRender
+	{
+	public:
+		virtual ~DrawableRender();
+
+		DECL_INPUT
+		DrawableRender &setMode(GLenum mode);
+		GLenum getMode() const;
+		DrawableRender &pushInputSampler(Key<Sampler> const &key, GLenum attachement, OffScreenRender const &render);
+		DrawableRender &popInputSampler();
+
+	protected:
+		DrawableRender(Shader &shader, GeometryManager &geo);
+		DrawableRender(DrawableRender const &copy) = delete;
+		DrawableRender &operator=(DrawableRender const &d) = delete;
+		void update();
+
+		AGE::Vector<Input> _inputSamplers;
+		GeometryManager &_geometryManager;
+		Shader &_shader;
+		GLenum _mode;
+	};
+
+	class RenderOnScreen : public DrawableRender, public OperationBuffer, public QuadRender, public BaseRender
+	{
 	public:
 		virtual ~RenderOnScreen();
-		RenderOnScreen(Key<Vertices> const &key, Key<Indices> const &id, Shader &shader, GeometryManager &g);
+		RenderOnScreen(Key<Vertices> const &key, Key<Indices> const &id, Shader &shader, GeometryManager &g, LocationStorage &l);
 
-		virtual Render &render();
+		virtual BaseRender &render();
 		virtual RenderType getType() const;
 
 	private:
 		RenderOnScreen(RenderOnScreen const &copy) = delete;
 		RenderOnScreen &operator=(RenderOnScreen const &r) = delete;
-
-		Draw &_draw;
 	};
 
-	class RenderOffScreen : public Render
+	class RenderPass : public DrawableRender, public OffScreenRender
 	{
 	public:
-		struct Draw : public Render::Draw
-		{
-		public:
-			LocationStorage &locationStorage;
+		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m, LocationStorage &l);
+		virtual ~RenderPass();
 
-		public:
-			Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode);
-		};
+		RenderPass &pushPassTask();
+		RenderPass &setPass(AGE::Vector<AGE::Drawable> const &objects, size_t start, size_t end);
+		RenderPass &setPass();
+		
+		virtual BaseRender &render();
+		virtual RenderType getType() const;
 
-	public:
-		virtual ~RenderOffScreen();
+	private:
+		RenderPass(RenderPass const &copy) = delete;
+		RenderPass &operator=(RenderPass const &r) = delete;
 
-		RenderOffScreen &configSample(GLint sample);
-		RenderOffScreen &pushTarget(GLenum attachement);
-		RenderOffScreen &popTarget();
-		RenderOffScreen &createBufferSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
-		RenderOffScreen &createBufferSamplable(GLenum attachement, GLenum internalFormat);
-		Texture2D const *getBufferSamplable(GLenum attachement) const;
-		RenderOffScreen &createBufferNotSamplable(GLenum attachement, int x, int y, GLenum internalFormat);
-		RenderOffScreen &createBufferNotSamplable(GLenum attachement, GLenum internalFormat);
-		RenderBuffer const *getBufferNotSamplable(GLenum attachement) const;
-		RenderOffScreen &deleteBuffer(GLenum attachement);
-		RenderOffScreen &useInputBuffer(GLenum attachement);
-
-		RenderOffScreen &pushSetUniformMat4Task(Key<Uniform> const &key, size_t location);
-		RenderOffScreen &pushSetUniformMat3Task(Key<Uniform> const &key, size_t location);
-		RenderOffScreen &pushSetUniformFloatTask(Key<Uniform> const &key, size_t location);
-		RenderOffScreen &pushSetUniformVec4Task(Key<Uniform> const &key, size_t location);
-		RenderOffScreen &pushOwnTask(std::function<void(LocationStorage &)> const &func);
-
-	protected:
-		RenderOffScreen(Render::Draw *draw);
-		RenderOffScreen(RenderOffScreen const &copy) = delete;
-		RenderOffScreen &operator=(RenderOffScreen const &r) = delete;
-
-		std::map<GLenum, std::pair<Storage const *, bool>> _buffer; // the bool is use to determinate if the storage is own by this class or the branched one.
-
-		AGE::Vector<std::function<void(LocationStorage &)> *> _ownFunction;
-		AGE::Vector<GLenum> _target;
-		Framebuffer _fbo;
-		GLint _sample;
-
-		bool _updateBuffer;
-		bool _updateFrameBuffer;
-
-		void updateBuffer();
-		void updateFrameBuffer();
-		void updateOutput();
+		MaterialManager &_materialManager;
+		AGE::Vector<AGE::Drawable> const *_toRender;
+		size_t _start;
+		size_t _end;
 	};
 
-	class RenderPostEffect : public RenderOffScreen
+	class RenderPostEffect : public DrawableRender, public OffScreenRender, public QuadRender
 	{
 	public:
-		struct Draw : public RenderOffScreen::Draw
-		{
-		public:
-			Key<Vertices> quad;
-
-		public:
-			Draw(GeometryManager &g, LocationStorage &l, Shader &s, GLenum mode, Key<Vertices> const &quad);
-		};
-	public:
-		RenderPostEffect(Key<Vertices> const &key, Shader &s, GeometryManager &g, LocationStorage &l);
+		RenderPostEffect(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l);
 		virtual ~RenderPostEffect();
 
-		virtual Render &render();
+		virtual BaseRender &render();
 		virtual RenderType getType() const;
 
 	private:
 		RenderPostEffect(RenderPostEffect const &copy) = delete;
 		RenderPostEffect &operator=(RenderPostEffect const &r) = delete;
-
-		Draw &_draw;
 	};
 
-	class RenderPass : public RenderOffScreen
+	class EmptyRenderPass : public OffScreenRender
 	{
 	public:
-		struct Draw : public RenderOffScreen::Draw
-		{
-		public:
-			MaterialManager &materialManager;
-			AGE::Vector<AGE::Drawable> const *toRender;
-			size_t start;
-			size_t end;
+		EmptyRenderPass(LocationStorage &locationStorage);
+		virtual ~EmptyRenderPass();
 
-		public:
-			Draw(GeometryManager &g, LocationStorage &l, Shader &s, MaterialManager &m, GLenum mode);
-		};
-
-	public:
-		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m, LocationStorage &l);
-		virtual ~RenderPass();
-
-		RenderPass &pushDrawTask();
-		RenderPass &setDraw(AGE::Vector<AGE::Drawable> const &objects, size_t start, size_t end);
-		RenderPass &setDraw();
-		
-		virtual Render &render();
+		virtual BaseRender &render();
 		virtual RenderType getType() const;
 
 	private:
-		void separateDraw();
-		void globalDraw();
-		RenderPass(RenderPass const &copy) = delete;
-		RenderPass &operator=(RenderPass const &r) = delete;
-
-		Draw &_draw;
+		EmptyRenderPass(EmptyRenderPass const &copy) = delete;
+		EmptyRenderPass &operator=(EmptyRenderPass const &r) = delete;
 	};
 
 }

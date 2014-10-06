@@ -50,9 +50,9 @@ namespace Component
 		return (*this);
 	}
 
-	PointLight &PointLight::set(float power, float range, glm::vec3 const &color, glm::vec3 const &position)
+	PointLight &PointLight::set(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range)
 	{
-		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(power, range, color, position, _key);
+		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(position, color, range, _key);
 		return (*this);
 	}
 }

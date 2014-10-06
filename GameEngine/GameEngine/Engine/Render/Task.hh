@@ -26,15 +26,12 @@ namespace gl
 	void setBlendConstant(void **);
 	void setTest(void **);
 	void setUniformMat4(void **);
-	void setUniformMat4byLocation(void **);
 	void setUniformMat3(void **);
-	void setUniformMat3byLocation(void **);
 	void setUniformUint(void **);
 	void setBlockBinding(void **);
 	void setUniformFloat(void **);
-	void setUniformFloatbyLocation(void **);
 	void setUniformVec4(void **);
-	void setUniformVec4byLocation(void **);
+	void setUniformVec3(void **data);
 	void setUniformSampler(void **);
 	void setFragDataLocation(void **);
 	void draw(void **);
@@ -47,8 +44,16 @@ namespace gl
 		bool isUse;
 	};
 
+	enum TypeTask
+	{
+		UniformTask = 0,
+		SamplerTask,
+		InterfaceBlockTask
+	};
+
 	struct Task
 	{
+		TypeTask type;
 		int nbrParams;
 		void **params;
 		size_t *sizeParams;

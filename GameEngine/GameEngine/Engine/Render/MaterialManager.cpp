@@ -4,6 +4,8 @@
 namespace gl
 {
 	MaterialManager::MaterialManager()
+		: _defaultMaterialCreated(false),
+		_defaultMaterial(Key<Material>::createKey())
 	{
 
 	}
@@ -11,6 +13,16 @@ namespace gl
 	MaterialManager::~MaterialManager()
 	{
 
+	}
+
+	Key<Material> MaterialManager::getDefaultMaterial()
+	{
+		if (_defaultMaterialCreated == false)
+		{
+			_defaultMaterial = addMaterial();
+			_defaultMaterialCreated = true;
+		}
+		return (_defaultMaterial);
 	}
 
 	MaterialManager &MaterialManager::rmMaterial(Key<Material> &key)
@@ -35,7 +47,7 @@ namespace gl
 
 	Key<Material> MaterialManager::addMaterial()
 	{
-		Key<Material> key;
+		Key<Material> key = Key<Material>::createKey();
 
 		_materials[key];
 		return (key);
@@ -66,4 +78,5 @@ namespace gl
 		shader.setMaterial(*material);
 		return (*this);
 	}
+
 }

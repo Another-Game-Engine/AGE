@@ -2,7 +2,7 @@
 
 #include "AssimpLoader.hpp"
 #include <Texture/Texture.hpp>
-#include <SOIL.h>
+#include <FreeImagePlus.h>
 
 namespace AGE
 {
@@ -13,19 +13,55 @@ namespace AGE
 		{
 			if (dataSet.texturesLoaded == false)
 				return false;
-			for (auto &m : dataSet.textures)
+			while (!dataSet.textures.empty())
 			{
-				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + File(m->rawPath).getFolder());
+				auto &t = dataSet.textures.back();
+
+				auto path = dataSet.rawDirectory.path().string() + "\\" + t->rawPath;
+
+				fipImage image;
+
+				if (!image.load(path.c_str()))
+				{
+					std::cout << "coucou";
+					return false;
+				}
+
+				if (!image.convertTo32Bits())
+				{
+					std::cout << "coucou";
+					return false;
+				}
+
+
+				t->width = image.getWidth();
+				t->height = image.getHeight();
+				auto colorType = image.getColorType();
+				t->bpp = image.getBitsPerPixel();
+
+					auto colNumber = 8;
+					if (t->bpp == 8)
+						colNumber = 3;
+					else if (t->bpp == 16)
+						colNumber = 3;
+					else
+						colNumber = 4;
+					auto imgData = FreeImage_GetBits(image);
+					t->data.assign(imgData, imgData + sizeof(unsigned char) * t->width * t->height * colNumber);
+
+
+				dataSet.textures.pop_back();
+				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder());
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 				{
 					std::cerr << "Material convertor error : creating directory" << std::endl;
 					return false;
 				}
-				auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + File(m->rawPath).getFolder() + "\\" + File(m->rawPath).getShortFileName() + ".tage";
+				auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder() + "\\" + File(t->rawPath).getShortFileName() + ".tage";
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 				cereal::PortableBinaryOutputArchive ar(ofs);
-				ar(*m);
+				ar(*t);
 			}
 			return true;
 		}
@@ -61,19 +97,10 @@ namespace AGE
 				}
 				if (found)
 					continue;
-				auto path = dataSet.rawDirectory.path().string() + "\\" + e;
-				int width, height, channels;
-				auto imgData = SOIL_load_image(path.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
-				if (imgData)
-				{
-					auto t = new TextureData();
-					dataSet.textures.push_back(t);
-					t->width = width;
-					t->height = height;
-					t->rawPath = e;
-					t->data.assign(imgData, imgData + (sizeof(unsigned char) * width * height * channels));
-					SOIL_free_image_data(imgData);
-				}
+
+				auto t = new TextureData();
+				dataSet.textures.push_back(t);
+				t->rawPath = e;
 			}
 			dataSet.texturesPath.clear();
 			if (dataSet.textures.size() == 0)

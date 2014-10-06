@@ -30,6 +30,11 @@ namespace gl
 			TYPE const *data;
 			POOL *pool;
 			Key<Pool::Element<TYPE>> element;
+			Attach()
+				: element(Key<Pool::Element<TYPE>>::createKey())
+			{
+
+			}
 		};
 
 	public:

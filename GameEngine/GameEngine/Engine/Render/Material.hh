@@ -25,6 +25,7 @@ namespace gl
 		COLOR_EMISSIVE,
 		RATIO_EMISSIVE,
 		TEXTURE_EMISSIVE,
+		TEXTURE_BUMP,
 		OPACITY,
 		SHININESS
 	};
@@ -33,17 +34,18 @@ namespace gl
 	struct Start { enum { size = 0, offset = 0 }; };
 	DECL_MATERIAL(Color_diffuse, glm::vec4, Start, COLOR_DIFFUSE);
 	DECL_MATERIAL(Ratio_diffuse, float, Color_diffuse, RATIO_DIFFUSE);
-	DECL_MATERIAL(Texture_diffuse, Key<Texture>, Ratio_diffuse, TEXTURE_DIFFUSE);
+	DECL_MATERIAL(Texture_diffuse, unsigned int, Ratio_diffuse, TEXTURE_DIFFUSE);
 	DECL_MATERIAL(Color_specular, glm::vec4, Texture_diffuse, COLOR_SPECULAR);
 	DECL_MATERIAL(Ratio_specular, float, Color_specular, RATIO_SPECULAR);
-	DECL_MATERIAL(Texture_specular, Key<Texture>, Ratio_specular, TEXTURE_SPECULAR);
+	DECL_MATERIAL(Texture_specular, unsigned int, Ratio_specular, TEXTURE_SPECULAR);
 	DECL_MATERIAL(Color_ambiant, glm::vec4, Texture_specular, COLOR_AMBIANT);
 	DECL_MATERIAL(Ratio_ambiant, float, Color_ambiant, RATIO_AMBIANT);
-	DECL_MATERIAL(Texture_ambiant, Key<Texture>, Ratio_ambiant, TEXTURE_AMBIENT);
+	DECL_MATERIAL(Texture_ambiant, unsigned int, Ratio_ambiant, TEXTURE_AMBIENT);
 	DECL_MATERIAL(Color_emissive, glm::vec4, Texture_ambiant, COLOR_EMISSIVE);
 	DECL_MATERIAL(Ratio_emissive, float, Color_emissive, RATIO_EMISSIVE);
-	DECL_MATERIAL(Texture_emissive, Key<Texture>, Ratio_emissive, TEXTURE_EMISSIVE);
-	DECL_MATERIAL(Opacity, float, Texture_emissive, OPACITY);
+	DECL_MATERIAL(Texture_emissive, unsigned int, Ratio_emissive, TEXTURE_EMISSIVE);
+	DECL_MATERIAL(Texture_bump, unsigned int, Texture_emissive, TEXTURE_EMISSIVE);
+	DECL_MATERIAL(Opacity, float, Texture_bump, OPACITY);
 	DECL_MATERIAL(Shininess, float, Opacity, SHININESS);
 	struct Last { enum { size = Shininess::offset + Shininess::size }; };
 

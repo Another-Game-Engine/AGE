@@ -13,7 +13,8 @@ namespace gl
 	Shader::Shader()
 		: _unitProgId(NULL),
 		_progId(-1),
-		_nbrUnitProgId(0)
+		_nbrUnitProgId(0),
+		_bindTransformation(Key<Uniform>::createKey())
 	{
 
 	}
@@ -98,10 +99,12 @@ namespace gl
 	bool Shader::linkProgram() const
 	{
 		GLint         linkRet = 0;
+		GLint         params = 0;
 		GLsizei       msgLenght;
 		GLchar        *errorMsg;
 
 		glLinkProgram(_progId);
+
 		glGetProgramiv(_progId, GL_LINK_STATUS, &linkRet);
 		if (linkRet == GL_FALSE)
 		{
@@ -115,6 +118,17 @@ namespace gl
 			assert(0);
 		}
 		return (true);
+	}
+
+	GLuint Shader::getSamplerLocation(char const *flag)
+	{
+		GLuint location;
+
+		use();
+		if ((location = glGetUniformLocation(_progId, flag)) == -1)
+			assert(0);
+		glUniform1i(location, location);
+		return (location);
 	}
 
 	GLuint Shader::getUniformLocation(char const *flag)
@@ -165,31 +179,31 @@ namespace gl
 
 	void Shader::createUniformTask(Task &task, std::string const &flag)
 	{
+		task.type = TypeTask::UniformTask;
 		task.func = NULL;
 		task.nbrParams = 2;
 		task.indexToTarget = 1;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
-		
 		task.params[0] = new GLuint;
 		task.sizeParams[0] = sizeof(GLuint);
 		GLuint location = getUniformLocation(flag.c_str());
 		*(GLuint *)task.params[0] = location;
-		
 		task.params[1] = NULL;
 		task.sizeParams[1] = 0;
 	}
 
 	void Shader::createSamplerTask(Task &task, std::string const &flag)
 	{
+		task.type = TypeTask::SamplerTask;
 		task.func = setUniformSampler;
-		task.indexToTarget = 1;
+		task.indexToTarget = 2;
 		task.nbrParams = 3;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
 		task.params[0] = new GLuint;
 		task.sizeParams[0] = sizeof(GLuint);
-		GLuint location = getUniformLocation(flag.c_str());
+		GLuint location = getSamplerLocation(flag.c_str());
 		*(GLuint *)task.params[0] = location;
 		task.params[1] = new GLint;
 		*(GLenum *)task.params[1] = GL_TEXTURE_2D;
@@ -201,9 +215,10 @@ namespace gl
 
 	void Shader::createUniformBlockTask(Task &task, std::string const &flag, UniformBlock &ubo)
 	{
+		task.type = TypeTask::InterfaceBlockTask;
 		task.func = setBlockBinding;
-		task.indexToTarget = 4;
-		task.nbrParams = 5;
+		task.indexToTarget = 0;
+		task.nbrParams = 3;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
 		task.params[0] = new GLuint;
@@ -221,7 +236,7 @@ namespace gl
 
 	Key<Uniform> Shader::addUniform(std::string const &flag)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		_uniforms[key] = _tasks.size() - 1;
@@ -231,7 +246,7 @@ namespace gl
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat4 const &value)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks[_tasks.size() - 1];
 		_uniforms[key] = _tasks.size() - 1;
@@ -242,7 +257,7 @@ namespace gl
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat3 const &value)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		_uniforms[key] = _tasks.size() - 1;
@@ -250,10 +265,21 @@ namespace gl
 		setUniformTask<glm::mat3>(*task, setUniformMat3, (void *)&value);
 		return (key);
 	}
+
+	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec3 const &value)
+	{
+		Key<Uniform> key = Key<Uniform>::createKey();
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		_uniforms[key] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
+		return (key);
+	}
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec4 const &value)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		_uniforms[key] = _tasks.size() - 1;
@@ -264,7 +290,7 @@ namespace gl
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, float value)
 	{
-		Key<Uniform> key;
+		Key<Uniform> key = Key<Uniform>::createKey();
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		_uniforms[key] = _tasks.size() - 1;
@@ -294,6 +320,13 @@ namespace gl
 		return (*this);
 	}
 
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec3 const &value)
+	{
+		Task *task = getUniform(key);
+		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
+		return (*this);
+	}
+
 	Shader &Shader::setUniform(Key<Uniform> const &key, float value)
 	{
 		Task *task = getUniform(key);
@@ -303,7 +336,7 @@ namespace gl
 
 	Key<Sampler> Shader::addSampler(std::string const &flag)
 	{
-		Key<Sampler> key;
+		Key<Sampler> key = Key<Sampler>::createKey();
 
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
@@ -338,7 +371,7 @@ namespace gl
 
 	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag, UniformBlock &uniformBlock)
 	{
-		Key<InterfaceBlock> key;
+		Key<InterfaceBlock> key = Key<InterfaceBlock>::createKey();
 
 		_tasks.push_back(Task());
 		_interfaceBlock[key] = _tasks.size() - 1;

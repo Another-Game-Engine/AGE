@@ -152,7 +152,9 @@ void Queue::releaseReadability()
 		lock.unlock();
 	}
 	else
+	{
 		lock.unlock();
+	}
 	_readCondition.notify_one();
 }
 

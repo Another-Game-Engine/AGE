@@ -16,6 +16,7 @@ namespace gl
 		MaterialManager();
 		~MaterialManager();
 
+		Key<Material> getDefaultMaterial();
 		Key<Material> addMaterial();
 		MaterialManager &rmMaterial(Key<Material> &key);
 		Key<Material> getMaterial(size_t index) const;
@@ -30,7 +31,8 @@ namespace gl
 		std::map<Key<Material>, Material> _materials;
 		std::pair<Key<Material>, Material *> _optimizeMaterialSearch;
 		Material *getMaterial(Key<Material> const &key, std::string const &in);
-
+		bool _defaultMaterialCreated;
+		Key<Material> _defaultMaterial;
 	};
 
 	template <typename TYPE>
