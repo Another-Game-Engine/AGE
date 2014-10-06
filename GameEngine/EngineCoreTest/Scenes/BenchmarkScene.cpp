@@ -220,33 +220,49 @@ bool BenchmarkScene::userStart()
 	auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
 	auto camLink = getLink(camera);
-	camLink->setPosition(glm::vec3(0, 5, -10));
+	camLink->setPosition(glm::vec3(0, 1.5, 0));
 
-	auto plane = createEntity();
-	auto link = getLink(plane);
-	link->setPosition(glm::vec3(0, 0, 0));
+	GLOBAL_FLOOR = createEntity();
+	auto link = getLink(GLOBAL_FLOOR);
+	link->setPosition(glm::vec3(0, -1, 0));
 	link->setScale(glm::vec3(100, 1, 100));
-	auto mesh = addComponent<Component::MeshRenderer>(plane, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
+	auto mesh = addComponent<Component::MeshRenderer>(GLOBAL_FLOOR, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
 
 	{
-		auto _e = createEntity();
-		auto _l = getLink(_e);
-		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(180), 0)));
-		_l->setPosition(glm::vec3(0, 0, 0));
+		GLOBAL_SPONZA = createEntity();
+		auto _l = getLink(GLOBAL_SPONZA);
+//		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(180), 0)));
+		_l->setPosition(glm::vec3(5, 0, 0));
 		_l->setScale(glm::vec3(0.01f));
-		auto _m = addComponent<Component::MeshRenderer>(_e, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
+		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("sponza/sponza.sage"));
+		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("sponza/sponza.mage")));
+	}
+
+	{
+		GLOBAL_CATWOMAN = createEntity();
+		auto _l = getLink(GLOBAL_CATWOMAN);
+		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(180), 0)));
+		_l->setPosition(glm::vec3(2, 1, 2));
+		_l->setScale(glm::vec3(0.007f));
+		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
 	}
 
+
 #ifdef PHYSIC_SIMULATION
-	auto rigidBody = addComponent<Component::RigidBody>(plane, 0.0f);
-	rigidBody->setCollisionShape(weakOnThis, plane, Component::RigidBody::BOX);
+	auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_FLOOR, 0.0f);
+	rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, Component::RigidBody::BOX);
 	rigidBody->getBody().setFriction(0.8f);
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.001f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -50.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 
 	return true;
 }
@@ -310,7 +326,7 @@ bool BenchmarkScene::userUpdate(double time)
 			auto link = getLink(e);
 			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
 			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-			link->setScale(glm::vec3(3.0f));
+			link->setScale(glm::vec3(1.0f));
 
 #ifdef PHYSIC_SIMULATION
 			auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
@@ -344,6 +360,19 @@ bool BenchmarkScene::userUpdate(double time)
 
 	auto octree = getInstance<AGE::Threads::Prepare>();
 	auto renderManager = getInstance<gl::RenderManager>();
+
+	{
+		IMGUI_BEGIN
+		auto link = getLink(GLOBAL_FLOOR);
+		auto pos = link->getPosition();
+		float p[3] = {pos.x, pos.y, pos.z};
+		if (ImGui::InputFloat3("Floor position", p))
+		{
+			link->setPosition(glm::vec3(p[0], p[1], p[2]));
+		}
+		IMGUI_END
+	}
+
 
 	octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
 	{

@@ -218,21 +218,21 @@ namespace gl
 
 	Key<VertexPool> GeometryManager::addVertexPool()
 	{
-		Key<VertexPool> key;
+		Key<VertexPool> key = Key<VertexPool>::createKey();
 		_vertexPool[key] = VertexPool();
 		return (key);
 	}
 
 	Key<IndexPool> GeometryManager::addIndexPool()
 	{
-		Key<IndexPool> key;
+		Key<IndexPool> key = Key<IndexPool>::createKey();
 		_indexPool[key];
 		return (key);
 	}
 
 	Key<VertexPool> GeometryManager::addVertexPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
 	{
-		Key<VertexPool> key;
+		Key<VertexPool> key = Key<VertexPool>::createKey();
 
 		_vertexPool[key] = VertexPool(nbrAttributes, typeComponent, sizeTypeComponent, nbrComponent);
 		return (key);
@@ -241,7 +241,7 @@ namespace gl
 	Key<VertexPool> GeometryManager::getVertexPool(size_t target) const
 	{
 		if (target >= _vertexPool.size())
-			return (Key<VertexPool>(KEY_DESTROY));
+			return (Key<VertexPool>());
 		auto &element = _vertexPool.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -251,7 +251,7 @@ namespace gl
 	Key<IndexPool> GeometryManager::getIndexPool(size_t target) const
 	{
 		if (target >= _vertexPool.size())
-			return (Key<IndexPool>(KEY_DESTROY));
+			return (Key<IndexPool>());
 		auto &element = _indexPool.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -290,7 +290,7 @@ namespace gl
 	Key<Vertices> GeometryManager::getVertices(size_t target) const
 	{
 		if (target >= _vertices.size())
-			return (Key<Vertices>(KEY_DESTROY));
+			return (Key<Vertices>());
 		auto &element = _vertices.begin();
 		for (size_t index = 0; index < target; ++index)
 			++element;
@@ -304,7 +304,7 @@ namespace gl
 
 	Key<Vertices> GeometryManager::addVertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers)
 	{
-		Key<Vertices> key;
+		Key<Vertices> key = Key<Vertices>::createKey();
 
 		_vertices[key] = Vertices(nbrVertices, nbrBuffers, sizeBuffers, buffers);
 		return (key);
@@ -312,7 +312,7 @@ namespace gl
 
 	Key<Indices> GeometryManager::addIndices(size_t nbrIndices, uint32_t *buffer)
 	{
-		Key<Indices> key;
+		Key<Indices> key = Key<Indices>::createKey();
 
 		_indices[key] = Indices(nbrIndices, buffer);
 		return (key);

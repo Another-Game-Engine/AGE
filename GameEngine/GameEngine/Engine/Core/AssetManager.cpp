@@ -51,25 +51,21 @@ namespace AGE
 			material->datas.push_back(key);
 
 			// TODO fill material with material key
-			for (size_t index = 0; index < material->datas.size(); ++index)
-				{
-					gl::Key<gl::Material> &mat = material->datas[index];
-					manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
-					manager->setMaterial<gl::Color_ambiant>(mat, e.ambient);
-					manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
-					manager->setMaterial<gl::Color_specular>(mat, e.specular);
+			gl::Key<gl::Material> &mat = material->datas.back();
+			manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
+			manager->setMaterial<gl::Color_ambiant>(mat, e.ambient);
+			manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
+			manager->setMaterial<gl::Color_specular>(mat, e.specular);
 
-					manager->setMaterial<gl::Texture_ambiant>(mat, loadTexture(e.ambientTexPath));
-					manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
-					manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
-					manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
+			manager->setMaterial<gl::Texture_ambiant>(mat, loadTexture(e.ambientTexPath));
+			manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
+			manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
+			manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
 
-					manager->setMaterial<gl::Ratio_ambiant>(mat, 1.0f); // todo
-					manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
-					manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
-					manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
-				}
-
+			manager->setMaterial<gl::Ratio_ambiant>(mat, 1.0f); // todo
+			manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
+			manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
+			manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
 		}
 
 		_materials.insert(std::make_pair(filePath.getFullName(), material));
@@ -95,7 +91,7 @@ namespace AGE
 
 		// TODO fill texture with texture key
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
-		auto key = manager->addTexture2D(data.width, data.height, GL_RGB32F, false);
+		auto key = manager->addTexture2D(data.width, data.height, GL_RGB32F, true);
 		auto color = data.bpp == 24 ? GL_RGB : GL_RGBA;
 		manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data.data.data());
 		manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

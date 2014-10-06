@@ -39,7 +39,7 @@ namespace gl
 
 	Key<Shader> RenderManager::addComputeShader(std::string const &compute)
 	{
-		Key<Shader> key;
+		Key<Shader> key = Key<Shader>::createKey();
 		Shader *shader;
 
 		if ((shader = Shader::createComputeShader(compute)) == NULL)
@@ -50,7 +50,7 @@ namespace gl
 
 	Key<Shader> RenderManager::addShader(std::string const &vertex, std::string const &frag)
 	{
-		Key<Shader> key;
+		Key<Shader> key = Key<Shader>::createKey();
 		Shader *shader;
 
 		if ((shader = Shader::createShader(vertex, frag)) == NULL)
@@ -61,7 +61,7 @@ namespace gl
 
 	Key<Shader> RenderManager::addShader(std::string const &geo, std::string const &vertex, std::string const &frag)
 	{
-		Key<Shader> key;
+		Key<Shader> key = Key<Shader>::createKey();
 		Shader *shader;
 
 		if ((shader = Shader::createShader(vertex, frag, geo)) == NULL)
@@ -173,7 +173,7 @@ namespace gl
 	{
 		Shader *shader;
 		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<Sampler>(KEY_DESTROY));
+			return (Key<Sampler>());
 		return (shader->addSampler(flag));
 	}
 
@@ -181,7 +181,7 @@ namespace gl
 	{
 		Shader const *shader;
 		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<Sampler>(KEY_DESTROY));
+			return (Key<Sampler>());
 		return (shader->getSampler(target));
 	}
 
@@ -199,7 +199,7 @@ namespace gl
 
 	Key<UniformBlock> RenderManager::addUniformBlock()
 	{
-		Key<UniformBlock> key;
+		Key<UniformBlock> key = Key<UniformBlock>::createKey();
 
 		_uniformBlock[key];
 		return (key);
@@ -249,15 +249,13 @@ namespace gl
 
 	Key<InterfaceBlock> RenderManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
 	{
-		Shader const *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<InterfaceBlock>(KEY_DESTROY));
+		Shader const *shader = getShader(keyShader);
 		return (shader->getInterfaceBlock(target));
 	}
 
 	Key<Texture> RenderManager::addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping)
 	{
-		Key<Texture> key;
+		Key<Texture> key = Key<Texture>::createKey();
 
 		_textures[key] = new Texture2D(width, height, internalFormat, mipmapping);
 		return (key);
@@ -397,7 +395,7 @@ namespace gl
 
 	Key<RenderPass> RenderManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect)
 	{
-		Key<RenderPass> key;
+		Key<RenderPass> key = Key<RenderPass>::createKey();
 		Shader *shader = getShader(keyShader);
 		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, _materialManager, locationStorage);
 		element->configRect(rect);
@@ -471,7 +469,7 @@ namespace gl
 
 	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
 	{
-		Key<RenderPostEffect> key;
+		Key<RenderPostEffect> key = Key<RenderPostEffect>::createKey();
 
 		geometryManager.createQuadSimpleForm();
 		Shader *shader = getShader(s);
@@ -496,7 +494,7 @@ namespace gl
 
 	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPass> const &r)
 	{
-		Key<RenderOnScreen> key;
+		Key<RenderOnScreen> key = Key<RenderOnScreen>::createKey();
 		RenderPass *renderPass = getRenderPass(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
@@ -508,7 +506,7 @@ namespace gl
 
 	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPostEffect> const &r)
 	{
-		Key<RenderOnScreen> key;
+		Key<RenderOnScreen> key = Key<RenderOnScreen>::createKey();
 		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
@@ -520,7 +518,7 @@ namespace gl
 
 	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<EmptyRenderPass> const &r)
 	{
-		Key<RenderOnScreen> key;
+		Key<RenderOnScreen> key = Key<RenderOnScreen>::createKey();
 		EmptyRenderPass *renderPostEffect = getEmptyRenderPass(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
@@ -544,7 +542,7 @@ namespace gl
 
 	Key<EmptyRenderPass> RenderManager::addEmptyRenderPass(glm::ivec4 const &rect)
 	{
-		Key<EmptyRenderPass> key;
+		Key<EmptyRenderPass> key = Key<EmptyRenderPass>::createKey();
 		
 		auto &element = _emptyRenderPass[key] = new EmptyRenderPass(locationStorage);
 		element->configRect(rect);
@@ -567,7 +565,7 @@ namespace gl
 
 	Key<Pipeline> RenderManager::addPipeline()
 	{
-		Key<Pipeline> key;
+		Key<Pipeline> key = Key<Pipeline>::createKey();
 	
 		_pipelineOrdered.push_back(Pipeline());
 		_pipelines[key] = _pipelineOrdered.size() - 1;

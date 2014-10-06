@@ -4,7 +4,8 @@
 namespace gl
 {
 	MaterialManager::MaterialManager()
-		: _defaultMaterialCreated(false)
+		: _defaultMaterialCreated(false),
+		_defaultMaterial(Key<Material>::createKey())
 	{
 
 	}
@@ -46,7 +47,7 @@ namespace gl
 
 	Key<Material> MaterialManager::addMaterial()
 	{
-		Key<Material> key;
+		Key<Material> key = Key<Material>::createKey();
 
 		_materials[key];
 		return (key);

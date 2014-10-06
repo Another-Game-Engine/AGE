@@ -92,10 +92,13 @@ private:
 
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 15.0f;
+	double _maxTime = 10005.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;
 	std::ofstream _logFile;
 	Entity GLOBAL_CAMERA;
+	Entity GLOBAL_CATWOMAN;
+	Entity GLOBAL_SPONZA;
+	Entity GLOBAL_FLOOR;
 };
