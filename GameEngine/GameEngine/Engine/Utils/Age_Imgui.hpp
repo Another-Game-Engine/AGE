@@ -4,9 +4,60 @@
 #include <imgui/imgui.h>
 #include <Utils/OpenGL.hh>
 #include <Utils/DependenciesInjector.hpp>
+#include <vector>
 
 namespace AGE
 {
+	struct Age_ImDrawList
+	{
+		std::vector<ImDrawCmd>     commands;
+		std::vector<ImDrawVert>    vtx_buffer;
+		Age_ImDrawList(const ImDrawList& o)
+		{
+			const ImDrawCmd* pcmd_end = o.commands.end();
+			for (const ImDrawCmd* pcmd = o.commands.begin(); pcmd != pcmd_end; pcmd++)
+			{
+				commands.push_back(*pcmd);
+			}
+			auto ve = o.vtx_buffer.end();
+			for (auto v = o.vtx_buffer.begin(); v != ve; v++)
+			{
+				vtx_buffer.push_back(*v);
+			}
+		}
+	};
+
+	struct RenderImgui
+	{
+		std::vector<Age_ImDrawList> cmd_lists;
+		RenderImgui(ImDrawList** const _cmd_lists, int _cmd_lists_count)
+		{
+			for (auto i = 0; i < _cmd_lists_count; ++i)
+				cmd_lists.push_back(*_cmd_lists[i]);
+		}
+
+		//RenderImgui(const RenderImgui &o)
+		//{
+		//	cmd_lists = o.cmd_lists;
+		//}
+
+		//RenderImgui &operator=(const RenderImgui &o)
+		//{
+		//	cmd_lists = o.cmd_lists;
+		//}
+
+		//RenderImgui(RenderImgui &&o)
+		//{
+		//	cmd_lists = std::move(o.cmd_lists);
+		//}
+
+		//	RenderImgui &operator=(RenderImgui &&o)
+		//{
+		//	cmd_lists = std::move(o.cmd_lists);
+		//}
+	};
+
+
 	class Imgui
 	{
 		static unsigned int _fontTex;
@@ -14,7 +65,7 @@ namespace AGE
 		static int _texture_location, _ortho_location;
 		static int _position_location, _uv_location, _colour_location;
 		static unsigned int _vbohandle, _cursor, _size;
-		static DependenciesInjector *_dependencyInjector;
+		DependenciesInjector *_dependencyInjector = nullptr;
 		bool _releaseWork = false;
 		bool _launched = false;
 	public:
@@ -24,7 +75,7 @@ namespace AGE
 		static Imgui* getInstance();
 		static void renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count);
 		static void initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs);
-		void renderThreadRenderFn(ImDrawList **const cmd_lists, int cmd_lists_count);
+		void renderThreadRenderFn(const std::vector<Age_ImDrawList> &cmd_lists);
 
 		template<typename T>
 		static unsigned int stream(GLenum target, unsigned int vbo, unsigned int *vbo_cursor, unsigned int *vbo_size, T *start, int elementCount)

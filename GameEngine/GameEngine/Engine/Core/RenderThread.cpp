@@ -67,14 +67,14 @@ bool RenderThread::_update()
 			msg.function();
 	})
 #ifdef USE_IMGUI
-		.handle<RendCtxCommand::RenderImgui>([&](const RendCtxCommand::RenderImgui &msg)
+		.handle<AGE::RenderImgui>([&](const AGE::RenderImgui &msg)
 	{
-		AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists, msg.cmd_lists_count);
+		AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 	})
 #endif
 		.handle<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
 	{
-		return false;
+		returnValue = false;
 	});
 
 	return returnValue;

@@ -8,6 +8,10 @@
 #include <tmq/message.hpp>
 #include <Configuration.hpp>
 
+#ifdef USE_IMGUI
+#include <Utils/Age_Imgui.hpp>
+#endif
+
 namespace RendCtxCommand
 {
 	struct Flush{};
@@ -23,18 +27,6 @@ namespace RendCtxCommand
 
 	struct RefreshInputs
 	{};
-
-#ifdef USE_IMGUI
-	struct ::ImDrawList;
-	struct RenderImgui
-	{
-		::ImDrawList** const cmd_lists; int cmd_lists_count;
-		RenderImgui(::ImDrawList** const _cmd_lists, int _cmd_lists_count)
-			: cmd_lists(_cmd_lists)
-			, cmd_lists_count(_cmd_lists_count)
-		{}
-	};
-#endif
 }
 
 class IRenderContext : public Dependency<IRenderContext>

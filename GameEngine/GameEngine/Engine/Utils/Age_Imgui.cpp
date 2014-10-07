@@ -5,6 +5,7 @@
 #include <SDL/SDL.h>
 #include <imgui/imconfig.h>
 #include <Utils/Utils.hh>
+#include <Core/PrepareRenderThread.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <imgui\stb_image.h>
@@ -60,7 +61,6 @@ namespace AGE
 		io.KeyMap[ImGuiKey_Z] = SDLK_z;
 
 		io.RenderDrawListsFn = renderDrawLists;
-//		renderDrawLists;
 
 		//io.SetClipboardTextFn = ImImpl_SetClipboardTextFn;
 		//io.GetClipboardTextFn = ImImpl_GetClipboardTextFn;
@@ -188,17 +188,17 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef USE_IMGUI
-		_dependencyInjector->getInstance<AGE::Threads::Render>()->getCommandQueue().autoEmplace<RendCtxCommand::RenderImgui>(cmd_lists, cmd_lists_count);
+		getInstance()->_dependencyInjector->getInstance<AGE::Threads::Prepare>()->getCommandQueue().autoEmplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
 #else
 		UNUSED(cmd_lists);
 		UNUSED(cmd_lists_count);
 #endif
 	}
 
-	void Imgui::renderThreadRenderFn(ImDrawList** const cmd_lists, int cmd_lists_count)
+	void Imgui::renderThreadRenderFn(std::vector<Age_ImDrawList> const &cmd_lists)
 	{
 
-		if (cmd_lists_count == 0)
+		if (cmd_lists.empty())
 			return;
 
 		// Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled
@@ -226,11 +226,11 @@ namespace AGE
 		glEnableVertexAttribArray(_uv_location);
 		glEnableVertexAttribArray(_colour_location);
 
-		for (int n = 0; n < cmd_lists_count; n++)
+		for (int n = 0; n < cmd_lists.size(); n++)
 		{
-			const ImDrawList* cmd_list = cmd_lists[n];
-			const const ImDrawVert* vtx_buffer = reinterpret_cast<const ImDrawVert*>(cmd_list->vtx_buffer.begin());
-			int vtx_size = static_cast<int>(cmd_list->vtx_buffer.size());
+			auto& cmd_list = cmd_lists[n];
+			const const ImDrawVert* vtx_buffer = reinterpret_cast<const ImDrawVert*>(&cmd_list.vtx_buffer.front());
+			int vtx_size = static_cast<int>(cmd_list.vtx_buffer.size());
 		
 			unsigned offset = stream(GL_ARRAY_BUFFER, _vbohandle, &_cursor, &_size, vtx_buffer, vtx_size);
 		
@@ -239,8 +239,8 @@ namespace AGE
 			glVertexAttribPointer(_colour_location, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (void*)(offset + 16));
 		
 			int vtx_offset = 0;
-			const ImDrawCmd* pcmd_end = cmd_list->commands.end();
-			for (const ImDrawCmd* pcmd = cmd_list->commands.begin(); pcmd != pcmd_end; pcmd++)
+			auto pcmd_end = cmd_list.commands.end();
+			for (auto pcmd = cmd_list.commands.begin(); pcmd != pcmd_end; pcmd++)
 			{
 				glScissor((int)pcmd->clip_rect.x, (int)(height - pcmd->clip_rect.w), (int)(pcmd->clip_rect.z - pcmd->clip_rect.x), (int)(pcmd->clip_rect.w - pcmd->clip_rect.y));
 				glDrawArrays(GL_TRIANGLES, vtx_offset, pcmd->vtx_count);

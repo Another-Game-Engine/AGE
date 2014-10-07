@@ -349,7 +349,7 @@ bool BenchmarkScene::userUpdate(double time)
 #endif
 
 	auto renderThread = getInstance<AGE::RenderThread>();
-	renderThread->getCommandQueue().safeEmplace<RendCtxCommand::RefreshInputs>();
+	renderThread->getCommandQueue().autoEmplace<RendCtxCommand::RefreshInputs>();
 
 	auto octree = getInstance<AGE::Threads::Prepare>();
 	auto renderManager = getInstance<gl::RenderManager>();
@@ -365,7 +365,9 @@ bool BenchmarkScene::userUpdate(double time)
 	}
 
 
-	octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
+	octree->getCommandQueue().autoEmplace<AGE::PRTC::PrepareDrawLists>();
+
+	octree->getCommandQueue().autoEmplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
 	{
 		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
 		renderManager->locationStorage.setLocation(0, collection.lights.size());
@@ -387,6 +389,13 @@ bool BenchmarkScene::userUpdate(double time)
 		renderManager->updatePipeline(key.Accum.pipeline, lights);
 		renderManager->drawPipelines();
 	});
+
+#ifdef USE_IMGUI
+	ImGui::Text("Main Thread : coucou");
+	ImGui::Render();
+#endif
+
+	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
 
 	octree->getCommandQueue().releaseReadability();
 	return true;

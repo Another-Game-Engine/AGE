@@ -391,6 +391,7 @@ namespace AGE
 			returnValue = false;
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
+			_octreeDrawList.clear();
 			for (auto &camera : _cameras)
 			{
 				if (!camera.active)
@@ -423,21 +424,33 @@ namespace AGE
 					}
 				}
 			}
-
+		}).handle<PRTC::RenderDrawLists>([&](PRTC::RenderDrawLists& msg)
+		{
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
 			for (auto &e : this->_octreeDrawList)
 			{
-				renderThread->getCommandQueue().safeEmplace<TQC::VoidFunction>([=](){
+				renderThread->getCommandQueue().autoEmplace<TQC::VoidFunction>([=](){
 					msg.function(e);
 				});
-			}
-			_octreeDrawList.clear();
-
-			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
+			}	
+		}).handle<PRTC::Flush>([&](const PRTC::Flush& msg)
+		{
+			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
+			renderThread->getCommandQueue().autoEmplace<RendCtxCommand::Flush>();
 			renderThread->getCommandQueue().releaseReadability();
-			//msg.result.set_value(std::move(_octreeDrawList));
-			//_octreeDrawList.clear();
+		}).handle<AGE::RenderImgui>([&](const AGE::RenderImgui& msg)
+		{
+			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
+			renderThread->getCommandQueue().autoPush(msg);
 		});
+
+
+
+			//renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
+			//renderThread->getCommandQueue().releaseReadability();
+			////msg.result.set_value(std::move(_octreeDrawList));
+			////_octreeDrawList.clear();
+
 
 		return returnValue;
 	}

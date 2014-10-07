@@ -37,7 +37,7 @@ bool 		Engine::update()
 {
 #ifdef USE_IMGUI
 	auto frameStart = std::chrono::high_resolution_clock::now();
-	ImGui::NewFrame();
+	AGE::Imgui::getInstance()->startUpdate();
 #endif
 	auto timer = getInstance<Timer>();
 	auto sceneManager = getInstance<SceneManager>();
@@ -46,13 +46,9 @@ bool 		Engine::update()
 	timer->update();
 	sceneManager->update(time);
 
-	auto res =sceneManager->userUpdate(time);
+	auto res = sceneManager->userUpdate(time);
 
-#ifdef USE_IMGUI
-	auto t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - frameStart);
-	ImGui::Text("Main Thread : %i ms", t.count());
-	ImGui::Render();
-#endif
+
 
 	return res;
 }
