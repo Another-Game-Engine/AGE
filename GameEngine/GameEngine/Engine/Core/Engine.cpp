@@ -36,7 +36,6 @@ bool 		Engine::start()
 bool 		Engine::update()
 {
 #ifdef USE_IMGUI
-	auto frameStart = std::chrono::high_resolution_clock::now();
 	AGE::Imgui::getInstance()->startUpdate();
 #endif
 	auto timer = getInstance<Timer>();

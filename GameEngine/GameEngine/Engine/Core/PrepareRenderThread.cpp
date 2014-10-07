@@ -440,8 +440,10 @@ namespace AGE
 			renderThread->getCommandQueue().releaseReadability();
 		}).handle<AGE::RenderImgui>([&](const AGE::RenderImgui& msg)
 		{
+#ifdef USE_IMGUI
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
 			renderThread->getCommandQueue().autoPush(msg);
+#endif
 		});
 
 
