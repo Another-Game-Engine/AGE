@@ -208,6 +208,12 @@
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <PreBuildEvent>
+      <Command>"$(SolutionDir)Vendors\Doxygen\doxygen.exe" "$(SolutionDir)Documentation\configuration\Doxyfile"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Doxygen documentation generation</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
