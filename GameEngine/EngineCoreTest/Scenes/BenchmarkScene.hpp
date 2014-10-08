@@ -98,4 +98,7 @@ private:
 	std::size_t _chunkFrame = 0;
 	std::ofstream _logFile;
 	Entity GLOBAL_CAMERA;
+	Entity GLOBAL_CATWOMAN;
+	Entity GLOBAL_SPONZA;
+	Entity GLOBAL_FLOOR;
 };

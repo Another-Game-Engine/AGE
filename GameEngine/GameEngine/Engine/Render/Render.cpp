@@ -29,6 +29,7 @@ namespace gl
 
 	void BaseRender::update()
 	{
+		glScissor(_rect.x, _rect.y, _rect.z, _rect.w);
 		glViewport(_rect.x, _rect.y, _rect.z, _rect.w);
 	}
 
@@ -517,6 +518,7 @@ namespace gl
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glDrawBuffer(GL_BACK);
+		BaseRender::update();
 		DrawableRender::update();
 		OperationBuffer::update();
 		_shader.update();
