@@ -91,8 +91,27 @@ namespace AGE
 
 		// TODO fill texture with texture key
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
-		auto key = manager->addTexture2D(data.width, data.height, GL_RGB32F, true);
-		auto color = data.bpp == 24 ? GL_RGB : GL_RGBA;
+		GLenum ct = GL_RGB32F;
+		GLenum color = GL_RGB;
+		if (data.colorNumber == 3)
+		{
+			ct = GL_RGB32F;
+			color = GL_BGR;
+		}
+		else if (data.colorNumber == 4)
+		{
+			ct = GL_RGBA32F;
+			color = GL_BGRA;
+		}
+		else if (data.colorNumber == 1)
+		{
+			ct = GL_R8;
+			color = GL_LUMINANCE;
+		}
+		else
+			assert(false);
+		auto key = manager->addTexture2D(data.width, data.height, ct, true);
+
 		manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data.data.data());
 		manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
