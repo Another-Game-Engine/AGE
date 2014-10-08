@@ -52,8 +52,10 @@ void BenchmarkScene::initRendering()
 		key.Accum.color_light = _renderManager->addShaderUniform(key.Accum.shader, "color_light", glm::vec3(1.0f));
 		key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
 		key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
+		key.Accum.glossiness = _renderManager->addShaderUniform(key.Accum.shader, "shininess", 50.f);
 		key.merge.diffuse_buffer = _renderManager->addShaderSampler(key.merge.shader, "diffuse_buffer");
 		key.merge.light_buffer = _renderManager->addShaderSampler(key.merge.shader, "light_buffer");
+		_renderManager->bindMaterialToShader<gl::Shininess>(key.Accum.shader, key.Accum.glossiness);
 
 		// create renderpass and set it
 		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 800, 600));
@@ -248,6 +250,14 @@ bool BenchmarkScene::userStart()
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
 	}
 
+	{
+		auto e = createEntity();
+		auto _l = getLink(e);
+		_l->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+		_l->setScale(glm::vec3(0.05f));
+		auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+	}
 
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_FLOOR, 0.0f);
@@ -256,9 +266,9 @@ bool BenchmarkScene::userStart()
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, -50.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+//	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.05f, 0.001f));
+//	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
@@ -305,6 +315,8 @@ bool BenchmarkScene::userUpdate(double time)
 	if (getInstance<Input>()->getInput(SDLK_e))
 		lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 
+	if (getInstance<Input>()->getInput(SDLK_ESCAPE))
+		return (false);
 
 	if (_chunkCounter >= _maxChunk)
 	{
@@ -322,11 +334,8 @@ bool BenchmarkScene::userUpdate(double time)
 			Component::MeshRenderer *mesh;
 			if (i % 4 == 0)
 			{
-				//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-				//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
 				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
-
 			}
 			else
 			{
@@ -340,10 +349,10 @@ bool BenchmarkScene::userUpdate(double time)
 
 #endif
 
-			auto link = getLink(e);
-			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
-			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-			link->setScale(glm::vec3(1.0f));
+			//auto link = getLink(e);
+			//link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+			//link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+			//link->setScale(glm::vec3(1.0f));
 
 #ifdef PHYSIC_SIMULATION
 			auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
