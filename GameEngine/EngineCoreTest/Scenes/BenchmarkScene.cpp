@@ -274,12 +274,37 @@ bool BenchmarkScene::userUpdate(double time)
 	_timeCounter += time;
 	_chunkCounter += time;
 
-	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
+//	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
 
+	//if (getInstance<Input>()->getInput(SDLK_UP))
+	//	getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, 25.f * time, 0));
+	//if (getInstance<Input>()->getInput(SDLK_DOWN))
+	//	getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, -25.f * time, 0));
+
+	auto lc = getLink(GLOBAL_CAMERA);
+	float c = 5.f;
+	if (getInstance<Input>()->getInput(SDLK_SPACE))
+		c = c * 3.0f;
+	if (getInstance<Input>()->getInput(SDLK_z))
+		lc->setForward(glm::vec3(0.f, 0.f, -c * time));
+	if (getInstance<Input>()->getInput(SDLK_s))
+		lc->setForward(glm::vec3(0.f, 0.f, c * time));
+	if (getInstance<Input>()->getInput(SDLK_q))
+		lc->setForward(glm::vec3(-c * time, 0.f, 0.f));
+	if (getInstance<Input>()->getInput(SDLK_d))
+		lc->setForward(glm::vec3(c * time, 0.f, 0.f));
+	if (getInstance<Input>()->getInput(SDLK_RIGHT))
+		lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
+	if (getInstance<Input>()->getInput(SDLK_LEFT))
+		lc->setOrientation(glm::rotate(lc->getOrientation(), 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
 	if (getInstance<Input>()->getInput(SDLK_UP))
-		getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, 25.f * time, 0));
+		lc->setOrientation(glm::rotate(lc->getOrientation(), 50.f * (float)time, glm::vec3(1.f, 0.f, 0.f)));
 	if (getInstance<Input>()->getInput(SDLK_DOWN))
-		getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, -25.f * time, 0));
+		lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
+	if (getInstance<Input>()->getInput(SDLK_a))
+		lc->setOrientation(glm::rotate(lc->getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
+	if (getInstance<Input>()->getInput(SDLK_e))
+		lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 
 
 	if (_chunkCounter >= _maxChunk)
