@@ -232,12 +232,12 @@ bool BenchmarkScene::userStart()
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
 
 	{
-		//GLOBAL_SPONZA = createEntity();
-		//auto _l = getLink(GLOBAL_SPONZA);
-		//_l->setPosition(glm::vec3(5, 0, 0));
-		//_l->setScale(glm::vec3(0.01f));
-		//auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("sponza/sponza.sage"));
-		//_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("sponza/sponza.mage")));
+		GLOBAL_SPONZA = createEntity();
+		auto _l = getLink(GLOBAL_SPONZA);
+		_l->setPosition(glm::vec3(5, 0, 0));
+		_l->setScale(glm::vec3(0.01f));
+		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("sponza/sponza.sage"));
+		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("sponza/sponza.mage")));
 	}
 
 	{
@@ -266,12 +266,12 @@ bool BenchmarkScene::userStart()
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
-//	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.05f, 0.001f));
-//	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 
 	return true;
 }
@@ -349,10 +349,10 @@ bool BenchmarkScene::userUpdate(double time)
 
 #endif
 
-			//auto link = getLink(e);
-			//link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
-			//link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-			//link->setScale(glm::vec3(1.0f));
+			auto link = getLink(e);
+			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+			link->setScale(glm::vec3(1.0f));
 
 #ifdef PHYSIC_SIMULATION
 			auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
