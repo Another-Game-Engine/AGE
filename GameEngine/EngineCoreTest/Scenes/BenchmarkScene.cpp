@@ -357,11 +357,29 @@ bool BenchmarkScene::userUpdate(double time)
 	{
 		auto link = getLink(GLOBAL_FLOOR);
 		auto pos = link->getPosition();
-		float p[3] = {pos.x, pos.y, pos.z};
-		if (ImGui::InputFloat3("Floor position", p))
+		static float p[3] = {pos.x, pos.y, pos.z};
+		if (ImGui::SliderFloat("Floor x", &p[0], -10, 10))
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
+		if (ImGui::SliderFloat("Floor y", &p[1], -10, 10))
+		{
+			link->setPosition(glm::vec3(p[0], p[1], p[2]));
+		}
+		if (ImGui::SliderFloat("Floor z", &p[2], -10, 10))
+		{
+			link->setPosition(glm::vec3(p[0], p[1], p[2]));
+		}
+		//if (ImGui::InputFloat3("Floor position", p))
+		//{
+		//	link->setPosition(glm::vec3(p[0], p[1], p[2]));
+		//}
+
+		//static char t[1000];
+		//if (ImGui::InputText("test", t, 1000))
+		//{
+
+		//}
 	}
 
 

@@ -12,6 +12,17 @@ namespace AGE
 	{
 		std::vector<ImDrawCmd>     commands;
 		std::vector<ImDrawVert>    vtx_buffer;
+		Age_ImDrawList(const Age_ImDrawList& o)
+		{
+			commands = o.commands;
+			vtx_buffer = o.vtx_buffer;
+		}
+		Age_ImDrawList& operator=(const Age_ImDrawList& o)
+		{
+			commands = o.commands;
+			vtx_buffer = o.vtx_buffer;
+			return *this;
+		}
 		Age_ImDrawList(const ImDrawList& o)
 		{
 			const ImDrawCmd* pcmd_end = o.commands.end();
@@ -36,15 +47,16 @@ namespace AGE
 				cmd_lists.push_back(*_cmd_lists[i]);
 		}
 
-		//RenderImgui(const RenderImgui &o)
-		//{
-		//	cmd_lists = o.cmd_lists;
-		//}
+		RenderImgui(const RenderImgui &o)
+		{
+			cmd_lists = o.cmd_lists;
+		}
 
-		//RenderImgui &operator=(const RenderImgui &o)
-		//{
-		//	cmd_lists = o.cmd_lists;
-		//}
+		RenderImgui &operator=(const RenderImgui &o)
+		{
+			cmd_lists = o.cmd_lists;
+			return *this;
+		}
 
 		//RenderImgui(RenderImgui &&o)
 		//{

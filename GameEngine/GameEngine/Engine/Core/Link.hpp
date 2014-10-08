@@ -17,6 +17,18 @@ namespace AGE
 		const glm::vec3 &getScale() const { return _scale; }
 		const glm::quat &getOrientation() const { return _orientation; }
 
+		// Used by modules like physic, do not use it to set object position, use setPosition instead
+		void internalSetPosition(const glm::vec3 &v);
+		// Used by modules like physic, do not use it to set object scale, use setScale instead
+		void internalSetScale(const glm::vec3 &v);
+		// Used by modules like physic, do not use it to set object orientation, use setOrientation instead
+		void internalSetOrientation(const glm::quat &v);
+
+		inline bool userModified()
+		{
+			auto ret = _userModification; _userModification = false; return ret;
+		}
+
 		void setPosition(const glm::vec3 &v);
 		void setScale(const glm::vec3 &v);
 		void setOrientation(const glm::quat &v);
@@ -26,6 +38,7 @@ namespace AGE
 	public:
 		const glm::mat4 &getTransform();
 	private:
+		bool _userModification = false;
 		glm::vec3 _position;
 		glm::vec3 _scale;
 		glm::quat _orientation;
