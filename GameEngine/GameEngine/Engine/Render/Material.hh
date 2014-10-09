@@ -37,10 +37,7 @@ namespace gl
 	DECL_MATERIAL(Color_specular, glm::vec4, Texture_diffuse, COLOR_SPECULAR);
 	DECL_MATERIAL(Ratio_specular, float, Color_specular, RATIO_SPECULAR);
 	DECL_MATERIAL(Texture_specular, unsigned int, Ratio_specular, TEXTURE_SPECULAR);
-	DECL_MATERIAL(Color_ambiant, glm::vec4, Texture_specular, COLOR_AMBIANT);
-	DECL_MATERIAL(Ratio_ambiant, float, Color_ambiant, RATIO_AMBIANT);
-	DECL_MATERIAL(Texture_ambiant, unsigned int, Ratio_ambiant, TEXTURE_AMBIENT);
-	DECL_MATERIAL(Color_emissive, glm::vec4, Texture_ambiant, COLOR_EMISSIVE);
+	DECL_MATERIAL(Color_emissive, glm::vec4, Texture_specular, COLOR_EMISSIVE);
 	DECL_MATERIAL(Ratio_emissive, float, Color_emissive, RATIO_EMISSIVE);
 	DECL_MATERIAL(Texture_emissive, unsigned int, Ratio_emissive, TEXTURE_EMISSIVE);
 	DECL_MATERIAL(Texture_bump, unsigned int, Texture_emissive, TEXTURE_EMISSIVE);

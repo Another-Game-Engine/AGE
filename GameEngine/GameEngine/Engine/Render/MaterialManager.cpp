@@ -54,7 +54,6 @@ namespace gl
 
 		auto element = _materials[key];
 		element.set<gl::Texture_diffuse>(getDefaultTexture2D().getId());
-		element.set<gl::Texture_ambiant>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_bump>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_emissive>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_specular>(getDefaultTexture2D().getId());

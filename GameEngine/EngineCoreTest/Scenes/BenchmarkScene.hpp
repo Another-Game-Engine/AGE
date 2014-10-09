@@ -41,6 +41,7 @@ struct Deferred_accum_light
 	gl::Key<gl::Sampler> depth_buffer;
 	gl::Key<gl::Sampler> normal_buffer;
 	gl::Key<gl::Sampler> specular_buffer;
+	gl::Key<gl::Uniform> ambiant_color;
 };
 
 struct Deferred_get_buffer_Key

@@ -53,16 +53,13 @@ namespace AGE
 			// TODO fill material with material key
 			gl::Key<gl::Material> &mat = material->datas.back();
 			manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
-			manager->setMaterial<gl::Color_ambiant>(mat, e.ambient);
 			manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
 			manager->setMaterial<gl::Color_specular>(mat, e.specular);
 
-			manager->setMaterial<gl::Texture_ambiant>(mat, loadTexture(e.ambientTexPath));
 			manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
 			manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
 			manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
 
-			manager->setMaterial<gl::Ratio_ambiant>(mat, 1.0f); // todo
 			manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
 			manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
 			manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
