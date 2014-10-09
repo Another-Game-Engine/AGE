@@ -16,6 +16,7 @@
 #include <Context/IRenderContext.hh>
 #include <Core/RenderThread.hpp>
 #include <CONFIGS.hh>
+#include <Skinning/AnimationInstance.hpp>
 
 //for test
 #include <Utils/Containers/CommandQueue.hpp>
@@ -102,4 +103,5 @@ private:
 	Entity GLOBAL_CATWOMAN;
 	Entity GLOBAL_SPONZA;
 	Entity GLOBAL_FLOOR;
+	std::shared_ptr<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
 };

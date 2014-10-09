@@ -6,6 +6,7 @@
 
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
+#include <Skinning/AnimationManager.hpp>
 
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
@@ -243,11 +244,15 @@ bool BenchmarkScene::userStart()
 	{
 		GLOBAL_CATWOMAN = createEntity();
 		auto _l = getLink(GLOBAL_CATWOMAN);
-		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(180), 0)));
-		_l->setPosition(glm::vec3(2, 1, 2));
-		_l->setScale(glm::vec3(0.007f));
+		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(270), 0)));
+		_l->setPosition(glm::vec3(2.761, 0, 0.075));
+		_l->setScale(glm::vec3(0.004f));
 		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
+		GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
+			getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
+			getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
+		);		
 	}
 
 	{
@@ -388,7 +393,7 @@ bool BenchmarkScene::userUpdate(double time)
 	auto renderManager = getInstance<gl::RenderManager>();
 
 	{
-		auto link = getLink(GLOBAL_FLOOR);
+		auto link = getLink(GLOBAL_CATWOMAN);
 		auto pos = link->getPosition();
 		static float p[3] = {pos.x, pos.y, pos.z};
 		if (ImGui::SliderFloat("Floor x", &p[0], -10, 10))
