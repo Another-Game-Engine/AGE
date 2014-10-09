@@ -40,6 +40,7 @@ struct Deferred_accum_light
 	gl::Key<gl::Uniform> range_light;
 	gl::Key<gl::Sampler> depth_buffer;
 	gl::Key<gl::Sampler> normal_buffer;
+	gl::Key<gl::Sampler> specular_buffer;
 };
 
 struct Deferred_get_buffer_Key
@@ -48,7 +49,9 @@ struct Deferred_get_buffer_Key
 	gl::Key<gl::Uniform> model_matrix;
 	gl::Key<gl::RenderPass> renderPass;
 	gl::Key<gl::Pipeline> pipeline;
-	gl::Key<gl::Uniform> glossiness;
+	gl::Key<gl::Uniform> specular_color;
+	gl::Key<gl::Uniform> specular_ratio;
+	gl::Key<gl::Uniform> shininess;
 };
 
 struct Deffered_clean_buffer

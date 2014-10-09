@@ -12,12 +12,14 @@ uniform vec3 position_light;
 uniform vec3 attenuation_light;
 uniform vec3 color_light;
 
-uniform float shininess;
-
 uniform sampler2D depth_buffer;
 uniform sampler2D normal_buffer;
+uniform sampler2D specular_buffer;
+
+uniform float shininess;
 
 in vec2 interpolated_texCoord;
+flat in vec3 interpolated_eyes_pos;
 
 vec3 getWorldPosition(float depth, vec2 screenPos, mat4 viewProj)
 {
@@ -37,8 +39,9 @@ void main()
 	vec3 normal = normalize(vec3(texture(normal_buffer, interpolated_texCoord).xyz) * 2.0f - 1.0f);
 	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
 	float lambert = max(0.0f, dot(normal, normalize(lightDir)));
-	vec3 eyes = -transpose(mat3(view_matrix)) * view_matrix[3].xyz - worldPos;
+	vec3 worldPosToEyes = normalize(interpolated_eyes_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
-	float specular = clamp(pow(max(dot(reflection, normalize(eyes)), 0.0f), shininess), 0.0f, 1.0f);
-	color = vec4(vec3(lambert + specular) * color_light, 1.0f) / (attenuation) * (1.f - step(1.0f, depth));
+	vec4 specular = texture(specular_buffer, interpolated_texCoord);
+	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), specular.w), 0.0f, 1.0f);
+	color = vec4(vec3(lambert * color_light + vec3(specular) * specularRatio), 1.0f) / (attenuation) * (1.f - step(1.0f, depth));
 }
