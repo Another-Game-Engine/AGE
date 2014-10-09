@@ -34,7 +34,7 @@ void main()
 	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, viewProj);
 	vec3 lightDir = position_light - worldPos;
 	float dist = length(lightDir);
-	vec3 normal = normalize(texture(normal_buffer, interpolated_texCoord).xyz * 2.0f - 1.0f);
+	vec3 normal = normalize(vec3(texture(normal_buffer, interpolated_texCoord).xyz) * 2.0f - 1.0f);
 	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
 	float lambert = max(0.0f, dot(normal, normalize(lightDir)));
 	vec3 eyes = -transpose(mat3(view_matrix)) * view_matrix[3].xyz - worldPos;

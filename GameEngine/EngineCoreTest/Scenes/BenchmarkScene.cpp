@@ -52,10 +52,9 @@ void BenchmarkScene::initRendering()
 		key.Accum.color_light = _renderManager->addShaderUniform(key.Accum.shader, "color_light", glm::vec3(1.0f));
 		key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
 		key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
-		key.Accum.glossiness = _renderManager->addShaderUniform(key.Accum.shader, "shininess", 50.f);
+		key.getBuff.glossiness = _renderManager->addShaderUniform(key.Accum.shader, "shininess", 50.f);
 		key.merge.diffuse_buffer = _renderManager->addShaderSampler(key.merge.shader, "diffuse_buffer");
 		key.merge.light_buffer = _renderManager->addShaderSampler(key.merge.shader, "light_buffer");
-		_renderManager->bindMaterialToShader<gl::Shininess>(key.Accum.shader, key.Accum.glossiness);
 
 		// create renderpass and set it
 		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 800, 600));
@@ -106,7 +105,6 @@ void BenchmarkScene::initRendering()
 			r->setShaderUniform(k->Accum.shader, k->Accum.color_light, pointLight.color);
 			l.setLocation(nbrElement + 1, index + 1);
 		});
-
 
 		// create merge
 		key.merge.renderPostEffect = _renderManager->addRenderPostEffect(key.merge.shader, glm::ivec4(0, 0, 800, 600));
