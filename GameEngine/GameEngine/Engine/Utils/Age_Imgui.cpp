@@ -1,11 +1,11 @@
 #include "Age_Imgui.hpp"
 #include <Context/IRenderContext.hh>
 #include <Render/RenderThreadInterface.hpp>
-#include <Utils/DependenciesInjector.hpp>
 #include <SDL/SDL_keycode.h>
 #include <SDL/SDL.h>
 #include <imgui/imconfig.h>
 #include <Utils/Utils.hh>
+#include <Core/PrepareRenderThread.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <imgui\stb_image.h>
@@ -32,7 +32,7 @@ namespace AGE
 	bool Imgui::init(DependenciesInjector *di)
 	{
 #ifdef USE_IMGUI
-		std::lock_guard<std::mutex> lock(_mutex);
+		_dependencyInjector = di;
 		//HARDCODED WINDOW TO FIX
 		//auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
@@ -42,25 +42,26 @@ namespace AGE
 		io.DisplaySize = ImVec2(800, 600);        // Display size, in pixels. For clamping windows positions.
 		io.DeltaTime = 1.0f / 60.0f;                          // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
 		io.PixelCenterOffset = 0.0f;                        // Align OpenGL texels
-		io.KeyMap[ImGuiKey_Tab] = SDLK_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
+		io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
 		io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
 		io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
 		io.KeyMap[ImGuiKey_UpArrow] = SDL_SCANCODE_UP;
 		io.KeyMap[ImGuiKey_DownArrow] = SDL_SCANCODE_DOWN;
 		io.KeyMap[ImGuiKey_Home] = SDL_SCANCODE_HOME;
 		io.KeyMap[ImGuiKey_End] = SDL_SCANCODE_END;
-		io.KeyMap[ImGuiKey_Delete] = SDLK_DELETE;
-		io.KeyMap[ImGuiKey_Backspace] = SDLK_BACKSPACE;
-		io.KeyMap[ImGuiKey_Enter] = SDLK_RETURN;
-		io.KeyMap[ImGuiKey_Escape] = SDLK_ESCAPE;
-		io.KeyMap[ImGuiKey_A] = SDLK_a;
-		io.KeyMap[ImGuiKey_C] = SDLK_c;
-		io.KeyMap[ImGuiKey_V] = SDLK_v;
-		io.KeyMap[ImGuiKey_X] = SDLK_x;
-		io.KeyMap[ImGuiKey_Y] = SDLK_y;
-		io.KeyMap[ImGuiKey_Z] = SDLK_z;
+		io.KeyMap[ImGuiKey_Delete] = SDL_SCANCODE_DELETE;
+		io.KeyMap[ImGuiKey_Backspace] = SDL_SCANCODE_BACKSPACE;
+		io.KeyMap[ImGuiKey_Enter] = SDL_SCANCODE_RETURN;
+		io.KeyMap[ImGuiKey_Escape] = SDL_SCANCODE_ESCAPE;
+		io.KeyMap[ImGuiKey_A] = SDL_SCANCODE_A;
+		io.KeyMap[ImGuiKey_C] = SDL_SCANCODE_C;
+		io.KeyMap[ImGuiKey_V] = SDL_SCANCODE_V;
+		io.KeyMap[ImGuiKey_X] = SDL_SCANCODE_X;
+		io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
+		io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 
 		io.RenderDrawListsFn = renderDrawLists;
+
 		//io.SetClipboardTextFn = ImImpl_SetClipboardTextFn;
 		//io.GetClipboardTextFn = ImImpl_GetClipboardTextFn;
 
@@ -158,85 +159,6 @@ namespace AGE
 #endif
 	}
 
-	void Imgui::endUpdate()
-	{
-#ifdef USE_IMGUI
-
-		std::lock_guard<std::mutex> lock(_mutex);
-		if (_releaseWork == false)
-			return;
-		static auto counter = 0;
-		++counter;
-		auto i = 0;
-		for (auto &q : _commandQueue)
-		{
-			if (q.second.empty())
-				return;
-			while (true && !q.second.empty())
-			{
-				if (q.second.front().end == false)
-				{
-					q.second.front().function();
-					q.second.pop();
-				}
-				else
-				{
-					q.second.pop();
-					break;
-				}
-			}
-		}
-		_releaseWork = false;
-#endif
-	}
-
-	void Imgui::push(std::function<void()> &&fn)
-	{
-#ifdef USE_IMGUI
-		std::lock_guard<std::mutex> lock(_mutex);
-		std::queue<ImguiCommand> *queue = nullptr;
-		{
-			auto it = _threadIds.find(std::this_thread::get_id().hash());
-			assert(it != std::end(_threadIds) && "Thread is not registered.");
-			queue = &_commandQueue[it->second];
-		}
-
-		queue->emplace<ImguiCommand>(std::move(fn));
-#else
-		UNUSED(fn);
-#endif
-	}
-
-	void Imgui::registerThread(std::size_t priority)
-	{
-#ifdef USE_IMGUI
-		std::lock_guard<std::mutex> lock(_mutex);
-		auto threadId = std::this_thread::get_id().hash();
-		assert(_threadIds.find(threadId) == std::end(_threadIds) && "Thread already registered.");
-		assert(_commandQueue.find(priority) == std::end(_commandQueue) && "Priority already reserved.");
-		_threadIds.insert(std::make_pair(threadId, priority));
-		_commandQueue.insert(std::make_pair(priority, std::queue<ImguiCommand>()));
-#else
-		UNUSED(priority);
-#endif
-	}
-
-	void Imgui::threadLoopEnd()
-	{
-#ifdef USE_IMGUI
-		std::lock_guard<std::mutex> lock(_mutex);
-		auto threadId = std::this_thread::get_id().hash();
-		assert(_threadIds.find(threadId) != std::end(_threadIds) && "Thread not registered.");
-		auto priority = _threadIds.find(threadId)->second;
-		_commandQueue[priority].emplace<ImguiCommand>(true);
-		if (_launched && _threadIds.find(threadId) == --std::end(_threadIds))
-		{
-			_releaseWork = true;
-		}
-#endif
-	}
-
-
 	Imgui* Imgui::getInstance()
 	{
 		static Imgui* ImguiInstance = new Imgui();
@@ -266,7 +188,17 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef USE_IMGUI
-		if (cmd_lists_count == 0)
+		getInstance()->_dependencyInjector->getInstance<AGE::Threads::Prepare>()->getCommandQueue().autoEmplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
+#else
+		UNUSED(cmd_lists);
+		UNUSED(cmd_lists_count);
+#endif
+	}
+
+	void Imgui::renderThreadRenderFn(std::vector<Age_ImDrawList> const &cmd_lists)
+	{
+
+		if (cmd_lists.empty())
 			return;
 
 		// Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled
@@ -294,11 +226,11 @@ namespace AGE
 		glEnableVertexAttribArray(_uv_location);
 		glEnableVertexAttribArray(_colour_location);
 
-		for (int n = 0; n < cmd_lists_count; n++)
+		for (int n = 0; n < cmd_lists.size(); n++)
 		{
-			const ImDrawList* cmd_list = cmd_lists[n];
-			const const ImDrawVert* vtx_buffer = reinterpret_cast<const ImDrawVert*>(cmd_list->vtx_buffer.begin());
-			int vtx_size = static_cast<int>(cmd_list->vtx_buffer.size());
+			auto& cmd_list = cmd_lists[n];
+			const const ImDrawVert* vtx_buffer = reinterpret_cast<const ImDrawVert*>(&cmd_list.vtx_buffer.front());
+			int vtx_size = static_cast<int>(cmd_list.vtx_buffer.size());
 		
 			unsigned offset = stream(GL_ARRAY_BUFFER, _vbohandle, &_cursor, &_size, vtx_buffer, vtx_size);
 		
@@ -307,8 +239,8 @@ namespace AGE
 			glVertexAttribPointer(_colour_location, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (void*)(offset + 16));
 		
 			int vtx_offset = 0;
-			const ImDrawCmd* pcmd_end = cmd_list->commands.end();
-			for (const ImDrawCmd* pcmd = cmd_list->commands.begin(); pcmd != pcmd_end; pcmd++)
+			auto pcmd_end = cmd_list.commands.end();
+			for (auto pcmd = cmd_list.commands.begin(); pcmd != pcmd_end; pcmd++)
 			{
 				glScissor((int)pcmd->clip_rect.x, (int)(height - pcmd->clip_rect.w), (int)(pcmd->clip_rect.z - pcmd->clip_rect.x), (int)(pcmd->clip_rect.w - pcmd->clip_rect.y));
 				glDrawArrays(GL_TRIANGLES, vtx_offset, pcmd->vtx_count);
@@ -323,10 +255,6 @@ namespace AGE
 		glEnable(GL_DEPTH_TEST);
 		glDisable(GL_SCISSOR_TEST);
 		glDisable(GL_BLEND);
-#else
-		UNUSED(cmd_lists);
-		UNUSED(cmd_lists_count);
-#endif
 	}
 
 	void Imgui::initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs)

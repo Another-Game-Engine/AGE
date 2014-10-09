@@ -6,6 +6,11 @@
 #include <Utils/Dependency.hpp>
 #include <Utils/CommandQueueHolder.hpp>
 #include <tmq/message.hpp>
+#include <Configuration.hpp>
+
+#ifdef USE_IMGUI
+#include <Utils/Age_Imgui.hpp>
+#endif
 
 namespace RendCtxCommand
 {

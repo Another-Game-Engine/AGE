@@ -238,7 +238,6 @@ bool BenchmarkScene::userStart()
 	{
 		GLOBAL_SPONZA = createEntity();
 		auto _l = getLink(GLOBAL_SPONZA);
-//		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(180), 0)));
 		_l->setPosition(glm::vec3(5, 0, 0));
 		_l->setScale(glm::vec3(0.01f));
 		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("sponza/sponza.sage"));
@@ -271,12 +270,12 @@ bool BenchmarkScene::userStart()
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
-//	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
 	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.05f, 0.001f));
-//	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 
 	return true;
 }
@@ -287,6 +286,13 @@ bool BenchmarkScene::userUpdate(double time)
 	++_chunkFrame;
 	_timeCounter += time;
 	_chunkCounter += time;
+
+//	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
+
+	//if (getInstance<Input>()->getInput(SDLK_UP))
+	//	getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, 25.f * time, 0));
+	//if (getInstance<Input>()->getInput(SDLK_DOWN))
+	//	getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, -25.f * time, 0));
 
 	auto lc = getLink(GLOBAL_CAMERA);
 	float c = 5.f;
@@ -312,40 +318,33 @@ bool BenchmarkScene::userUpdate(double time)
 		lc->setOrientation(glm::rotate(lc->getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 	if (getInstance<Input>()->getInput(SDLK_e))
 		lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
+
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 		return (false);
-
-	IMGUI_BEGIN
-	ImGui::Text("Coucou from main thread !");
-	IMGUI_END
-
 
 	if (_chunkCounter >= _maxChunk)
 	{
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 		for (auto i = 0; i < 30; ++i)
 		{
-	//		auto e = createEntity();
+			auto e = createEntity();
 
 #ifdef LIFETIME_ACTIVATED
-		//	addComponent<Component::Lifetime>(e, 5.0f);
+			addComponent<Component::Lifetime>(e, 5.0f);
 #endif
 #ifdef RENDERING_ACTIVATED
 
 #ifndef COMPLEX_MESH
-			//Component::MeshRenderer *mesh;
+			Component::MeshRenderer *mesh;
 			if (i % 4 == 0)
 			{
-				//mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-				//mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
-			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-			//	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
-
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
 			}
 			else
 			{
-			//	mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
-		//		mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
 			}
 #else
 			auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
@@ -354,10 +353,10 @@ bool BenchmarkScene::userUpdate(double time)
 
 #endif
 
-			//auto link = getLink(e);
-			//link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
-			//link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-			//link->setScale(glm::vec3(1.0f));
+			auto link = getLink(e);
+			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+			link->setScale(glm::vec3(1.0f));
 
 #ifdef PHYSIC_SIMULATION
 			auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
@@ -387,25 +386,43 @@ bool BenchmarkScene::userUpdate(double time)
 #endif
 
 	auto renderThread = getInstance<AGE::RenderThread>();
-	renderThread->getCommandQueue().safeEmplace<RendCtxCommand::RefreshInputs>();
+	renderThread->getCommandQueue().autoEmplace<RendCtxCommand::RefreshInputs>();
 
 	auto octree = getInstance<AGE::Threads::Prepare>();
 	auto renderManager = getInstance<gl::RenderManager>();
 
 	{
-		IMGUI_BEGIN
 		auto link = getLink(GLOBAL_FLOOR);
 		auto pos = link->getPosition();
-		float p[3] = {pos.x, pos.y, pos.z};
-		if (ImGui::InputFloat3("Floor position", p))
+		static float p[3] = {pos.x, pos.y, pos.z};
+		if (ImGui::SliderFloat("Floor x", &p[0], -10, 10))
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
-		IMGUI_END
+		if (ImGui::SliderFloat("Floor y", &p[1], -10, 10))
+		{
+			link->setPosition(glm::vec3(p[0], p[1], p[2]));
+		}
+		if (ImGui::SliderFloat("Floor z", &p[2], -10, 10))
+		{
+			link->setPosition(glm::vec3(p[0], p[1], p[2]));
+		}
+		//if (ImGui::InputFloat3("Floor position", p))
+		//{
+		//	link->setPosition(glm::vec3(p[0], p[1], p[2]));
+		//}
+
+		//static char t[1000];
+		//if (ImGui::InputText("test", t, 1000))
+		//{
+
+		//}
 	}
 
 
-	octree->getCommandQueue().emplace<AGE::PRTC::PrepareDrawLists>([=](AGE::DrawableCollection collection)
+	octree->getCommandQueue().autoEmplace<AGE::PRTC::PrepareDrawLists>();
+
+	octree->getCommandQueue().autoEmplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
 	{
 		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
 		renderManager->locationStorage.setLocation(0, collection.lights.size());
@@ -428,8 +445,13 @@ bool BenchmarkScene::userUpdate(double time)
 		renderManager->drawPipelines();
 	});
 
-	octree->getCommandQueue().autoEmplace<AGE::TQC::EndOfFrame>();
+#ifdef USE_IMGUI
+	ImGui::Text("Main Thread : coucou");
+	ImGui::Render();
+#endif
+
+	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
+
 	octree->getCommandQueue().releaseReadability();
-	octree->getCommandQueue().autoEmplace<AGE::TQC::StartOfFrame>();
 	return true;
 }

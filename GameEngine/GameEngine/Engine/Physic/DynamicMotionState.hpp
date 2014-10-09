@@ -32,8 +32,13 @@ public:
 
     virtual void setWorldTransform(const btTransform &worldTrans)
     {
-		_link->setPosition(convertBulletVectorToGLM(worldTrans.getOrigin()));
-		_link->setOrientation(convertBulletQuatToGLM(worldTrans.getRotation()));
+		if (_link->userModified())
+		{
+			mInitialPosition.setFromOpenGLMatrix(glm::value_ptr(_link->getTransform()));
+			return;
+		}
+		_link->internalSetPosition(convertBulletVectorToGLM(worldTrans.getOrigin()));
+		_link->internalSetOrientation(convertBulletQuatToGLM(worldTrans.getRotation()));
 		//auto scale = scaleFromMat4(_ageTransform);
 		//worldTrans.getOpenGLMatrix(glm::value_ptr(_ageTransform));
 		//_ageTransform = glm::scale(_ageTransform, scale);
