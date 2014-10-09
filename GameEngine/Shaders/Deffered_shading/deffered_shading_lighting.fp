@@ -42,6 +42,6 @@ void main()
 	vec3 worldPosToEyes = normalize(interpolated_eyes_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
 	vec4 specular = texture(specular_buffer, interpolated_texCoord);
-	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), specular.w), 0.0f, 1.0f);
+	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f * specular.w), 0.0f, 1.0f);
 	color = vec4(vec3(lambert * color_light + vec3(specular) * specularRatio), 1.0f) / (attenuation) * (1.f - step(1.0f, depth));
 }

@@ -481,8 +481,12 @@ namespace gl
 	{
 		use();
 		for (size_t index = 0; index < _bindMaterial.size(); ++index)
+		{
 			if (_bindMaterial[index].isUse)
+			{
 				setTaskWithMaterial(_bindMaterial[index], material);
+			}
+		}
 		return (*this);
 	}
 

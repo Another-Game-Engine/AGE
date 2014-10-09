@@ -141,7 +141,7 @@ namespace AGE
 		// Setup timestep
 		static double time = 0.0f;
 		const double current_time = SDL_GetTicks();
-		float dif = current_time - time;
+		float dif = (float)(current_time - time);
 		io.DeltaTime = dif == 0.0f ? 0.000000001f : dif / 1000.0f;
 		time = current_time;
 
@@ -150,9 +150,9 @@ namespace AGE
 		int mx, my;
 		auto mouseState = SDL_GetMouseState(&mx, &my);
 		io.MousePos = ImVec2((float)mx, (float)my);
-		io.MouseDown[0] = mouseState & SDL_BUTTON(SDL_BUTTON_LEFT);
-		io.MouseDown[1] = mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT);
-		io.MouseDown[2] = mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+		io.MouseDown[0] = (bool)(mouseState & SDL_BUTTON(SDL_BUTTON_LEFT));
+		io.MouseDown[1] = (bool)(mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT));
+		io.MouseDown[2] = (bool)(mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE));
 
 		// Start the frame
 		ImGui::NewFrame();
