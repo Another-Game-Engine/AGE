@@ -8,7 +8,6 @@
 
 namespace gl
 {
-	class Texture;
 	class RenderPass;
 
 	enum TypeMaterial

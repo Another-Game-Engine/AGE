@@ -1,59 +1,93 @@
 #pragma once
 
 #include <Configuration.hpp>
-#include <Utils/Dependency.hpp>
 #include <imgui/imgui.h>
-#include <Utils/ThreadQueueCommands.hpp>
 #include <Utils/OpenGL.hh>
-#include <queue>
-#include <map>
-#include <array>
+#include <Utils/DependenciesInjector.hpp>
+#include <vector>
 
 namespace AGE
 {
+	struct Age_ImDrawList
+	{
+		std::vector<ImDrawCmd>     commands;
+		std::vector<ImDrawVert>    vtx_buffer;
+		Age_ImDrawList(const Age_ImDrawList& o)
+		{
+			commands = o.commands;
+			vtx_buffer = o.vtx_buffer;
+		}
+		Age_ImDrawList& operator=(const Age_ImDrawList& o)
+		{
+			commands = o.commands;
+			vtx_buffer = o.vtx_buffer;
+			return *this;
+		}
+		Age_ImDrawList(const ImDrawList& o)
+		{
+			const ImDrawCmd* pcmd_end = o.commands.end();
+			for (const ImDrawCmd* pcmd = o.commands.begin(); pcmd != pcmd_end; pcmd++)
+			{
+				commands.push_back(*pcmd);
+			}
+			auto ve = o.vtx_buffer.end();
+			for (auto v = o.vtx_buffer.begin(); v != ve; v++)
+			{
+				vtx_buffer.push_back(*v);
+			}
+		}
+	};
+
+	struct RenderImgui
+	{
+		std::vector<Age_ImDrawList> cmd_lists;
+		RenderImgui(ImDrawList** const _cmd_lists, int _cmd_lists_count)
+		{
+			for (auto i = 0; i < _cmd_lists_count; ++i)
+				cmd_lists.push_back(*_cmd_lists[i]);
+		}
+
+		RenderImgui(const RenderImgui &o)
+		{
+			cmd_lists = o.cmd_lists;
+		}
+
+		RenderImgui &operator=(const RenderImgui &o)
+		{
+			cmd_lists = o.cmd_lists;
+			return *this;
+		}
+
+		//RenderImgui(RenderImgui &&o)
+		//{
+		//	cmd_lists = std::move(o.cmd_lists);
+		//}
+
+		//	RenderImgui &operator=(RenderImgui &&o)
+		//{
+		//	cmd_lists = std::move(o.cmd_lists);
+		//}
+	};
+
+
 	class Imgui
 	{
-	private:
-
-		struct ImguiCommand
-		{
-			std::function<void()> function;
-			bool end = false;
-
-			ImguiCommand(std::function<void()> &&f)
-				: function(std::move(f))
-				, end(false)
-			{}
-
-			ImguiCommand(bool _end)
-				: end(_end)
-			{}
-		};
-
-		std::map<std::size_t, std::size_t> _threadIds;
-		std::map<std::size_t, std::queue<ImguiCommand>> _commandQueue;
-		std::mutex _mutex;
 		static unsigned int _fontTex;
 		static int _shader_handle, _vert_handle, _frag_handle;
 		static int _texture_location, _ortho_location;
 		static int _position_location, _uv_location, _colour_location;
 		static unsigned int _vbohandle, _cursor, _size;
+		DependenciesInjector *_dependencyInjector = nullptr;
 		bool _releaseWork = false;
 		bool _launched = false;
 	public:
 		Imgui();
-		void launch() { _launched = true; }
 		bool init(DependenciesInjector *di);
 		void startUpdate();
-		void endUpdate();
-		void push(std::function<void()> &&fn);
-		// Call this at the begining of a thread to register it to the Imgui command queue
-		void registerThread(std::size_t priority);
 		static Imgui* getInstance();
 		static void renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count);
 		static void initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs);
-		void threadLoopEnd();
-
+		void renderThreadRenderFn(const std::vector<Age_ImDrawList> &cmd_lists);
 
 		template<typename T>
 		static unsigned int stream(GLenum target, unsigned int vbo, unsigned int *vbo_cursor, unsigned int *vbo_size, T *start, int elementCount)
@@ -80,15 +114,4 @@ namespace AGE
 		}
 
 	};
-
-#ifdef USE_IMGUI
-#define IMGUI_BEGIN ::AGE::Imgui::getInstance()->push([=](){
-
-#define IMGUI_END });
-#else
-#define IMGUI_BEGIN (void)([=](){
-
-#define IMGUI_END });
-#endif
-
 }

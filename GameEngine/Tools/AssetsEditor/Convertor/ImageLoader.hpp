@@ -27,27 +27,32 @@ namespace AGE
 					return false;
 				}
 
-				if (!image.convertTo32Bits())
-				{
-					std::cout << "coucou";
-					return false;
-				}
-
-
 				t->width = image.getWidth();
 				t->height = image.getHeight();
 				auto colorType = image.getColorType();
 				t->bpp = image.getBitsPerPixel();
 
-					auto colNumber = 8;
-					if (t->bpp == 8)
-						colNumber = 3;
-					else if (t->bpp == 16)
-						colNumber = 3;
-					else
-						colNumber = 4;
-					auto imgData = FreeImage_GetBits(image);
-					t->data.assign(imgData, imgData + sizeof(unsigned char) * t->width * t->height * colNumber);
+				t->colorNumber = 0;
+				if (colorType == FIC_RGB)
+				{
+					t->colorNumber = 3;
+					if (t->bpp > 24)
+						t->colorNumber = 4;
+				}
+				else if (colorType == FIC_RGBALPHA)
+				{
+					t->colorNumber = 4;
+					if (t->bpp < 32)
+						t->colorNumber = 3;
+				}
+				else if (colorType == FIC_MINISBLACK || colorType == FIC_MINISWHITE)
+				{
+					t->colorNumber = 1;
+				}
+				else
+					assert(false);
+				auto imgData = FreeImage_GetBits(image);
+				t->data.assign(imgData, imgData + sizeof(unsigned char) * t->width * t->height * t->colorNumber);
 
 
 				dataSet.textures.pop_back();

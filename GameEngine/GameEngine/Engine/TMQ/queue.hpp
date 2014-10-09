@@ -31,6 +31,27 @@ namespace TMQ
 		bool empty();
 	private:
 		template <typename T>
+		T* push(const T& e)
+		{
+			std::size_t s = sizeof(Message<T>);
+			std::size_t sizeOfInt = sizeof(std::size_t);
+
+			if (_data == nullptr
+				|| _size - _to < s + sizeOfInt)
+			{
+				allocate<T>();
+			}
+
+			char *tmp = _data;
+			tmp += _to;
+			memcpy(tmp, &s, sizeOfInt);
+			tmp += sizeOfInt;
+			Message<T>* res = new(tmp)Message<T>(e);
+			_to += sizeOfInt + s;
+			return &res->_data;
+		}
+
+		template <typename T>
 		T* push(T&& e)
 		{
 			std::size_t s = sizeof(Message<T>);
@@ -134,7 +155,7 @@ namespace TMQ
 			});
 			// Assure you that you will not call unprotected functions from different thread	
 			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			return _queue.push(e);
+			return _queue.push<T>(e);
 		}
 
 		//Do not lock mutex
@@ -158,7 +179,7 @@ namespace TMQ
 			// Assure you that you didn't call unprotected function before
 			assert(_publisherThreadId == 0);
 			std::lock_guard<std::mutex> lock(_mutex);
-			_queue.push(e);
+			_queue.push<T>(e);
 		}
 
 		//Lock mutex

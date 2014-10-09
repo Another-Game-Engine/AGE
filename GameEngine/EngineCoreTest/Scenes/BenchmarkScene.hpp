@@ -40,6 +40,7 @@ struct Deferred_accum_light
 	gl::Key<gl::Uniform> range_light;
 	gl::Key<gl::Sampler> depth_buffer;
 	gl::Key<gl::Sampler> normal_buffer;
+	gl::Key<gl::Uniform> glossiness;
 };
 
 struct Deferred_get_buffer_Key
@@ -92,7 +93,7 @@ private:
 
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
-	double _maxTime = 10005.0f;
+	double _maxTime = 10000000005.0f;
 	double _chunkCounter = 0.0;
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;

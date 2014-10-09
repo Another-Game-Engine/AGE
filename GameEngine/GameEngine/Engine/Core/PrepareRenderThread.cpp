@@ -34,7 +34,6 @@ namespace AGE
 
 	bool PrepareRenderThread::_initInNewThread()
 	{
-		AGE::Imgui::getInstance()->registerThread(50);
 		return true;
 	}
 
@@ -128,6 +127,7 @@ namespace AGE
 		_commandQueue.emplace<PRTC::Position>(id, v);
 		return (*this);
 	}
+
 	PrepareRenderThread &PrepareRenderThread::setOrientation(const glm::quat &v, const PrepareKey &id)
 	{
 		_commandQueue.emplace<PRTC::Orientation>(id, v);
@@ -390,18 +390,9 @@ namespace AGE
 			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
 		{
 			returnValue = false;
-		})
-		.handle<TQC::StartOfFrame>([&](const TQC::StartOfFrame& msg)
-		{
-			frameStart = std::chrono::system_clock::now();
-		}).handle<TQC::EndOfFrame>([&](const TQC::EndOfFrame& msg)
-		{
-			auto t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - frameStart);
-			IMGUI_BEGIN
-				ImGui::Text("Prepare Render Thread : %i ms", t.count());
-			IMGUI_END
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
+			_octreeDrawList.clear();
 			for (auto &camera : _cameras)
 			{
 				if (!camera.active)
@@ -410,7 +401,6 @@ namespace AGE
 				Frustum frustum;
 				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
 				frustum.setMatrix(camera.projection * view, true);
-
 				_octreeDrawList.emplace_back();
 				auto &drawList = _octreeDrawList.back();
 				drawList.transformation = view;
@@ -434,25 +424,35 @@ namespace AGE
 					}
 				}
 			}
-
+		}).handle<PRTC::RenderDrawLists>([&](PRTC::RenderDrawLists& msg)
+		{
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
 			for (auto &e : this->_octreeDrawList)
 			{
-				renderThread->getCommandQueue().safeEmplace<TQC::VoidFunction>([=](){
+				renderThread->getCommandQueue().autoEmplace<TQC::VoidFunction>([=](){
 					msg.function(e);
 				});
-			}
-			_octreeDrawList.clear();
-
-			Imgui::getInstance()->threadLoopEnd();
-
-			renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
-			renderThread->getCommandQueue().autoEmplace<AGE::TQC::EndOfFrame>();
+			}	
+		}).handle<PRTC::Flush>([&](const PRTC::Flush& msg)
+		{
+			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
+			renderThread->getCommandQueue().autoEmplace<RendCtxCommand::Flush>();
 			renderThread->getCommandQueue().releaseReadability();
-			renderThread->getCommandQueue().autoEmplace<AGE::TQC::StartOfFrame>();
-			//msg.result.set_value(std::move(_octreeDrawList));
-			//_octreeDrawList.clear();
+		}).handle<AGE::RenderImgui>([&](const AGE::RenderImgui& msg)
+		{
+#ifdef USE_IMGUI
+			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
+			renderThread->getCommandQueue().autoPush(msg);
+#endif
 		});
+
+
+
+			//renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
+			//renderThread->getCommandQueue().releaseReadability();
+			////msg.result.set_value(std::move(_octreeDrawList));
+			////_octreeDrawList.clear();
+
 
 		return returnValue;
 	}

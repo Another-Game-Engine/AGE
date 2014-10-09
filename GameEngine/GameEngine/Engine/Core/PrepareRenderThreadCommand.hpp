@@ -129,10 +129,19 @@ namespace AGE
 
 		struct PrepareDrawLists
 		{
+		};
+
+		struct RenderDrawLists
+		{
 			std::function<void(DrawableCollection)> function;
-			PrepareDrawLists(std::function<void(DrawableCollection)> _function)
+			RenderDrawLists(std::function<void(DrawableCollection)> _function)
 				: function(_function)
 			{}
+		};
+
+		struct Flush
+		{
+			int i = 12;
 		};
 	}
 }

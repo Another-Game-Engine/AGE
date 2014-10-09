@@ -55,8 +55,8 @@ bool loadAssets(std::shared_ptr<Engine> e)
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"));
 	e->getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"));
 	e->getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("sibenik/sibenik.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
-	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sibenik/sibenik.mage"));
+	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("sibenik/sibenik.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sibenik/sibenik.mage"));
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sponza/sponza.mage"));
 	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
@@ -93,8 +93,6 @@ int			main(int ac, char **av)
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
 	e->setInstance<AGE::AnimationManager>();
-
-	AGE::Imgui::getInstance()->registerThread(0);
 
 	// Important, we have to launch the command queue from the sender thread
 	//context->launchCommandQueue();
@@ -160,7 +158,6 @@ int			main(int ac, char **av)
 		AGE::Imgui::getInstance()->init(e.get());
 		return true;
 	}).get();
-	AGE::Imgui::getInstance()->launch();
 #endif
 
 	// launch engine
