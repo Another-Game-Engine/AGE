@@ -19,10 +19,16 @@ static void	unitTestOctree()
 	box->currentAABB.fromTransformedBox(aabb, transform);
 
 	// The unit tests
-	std::cout << "- Basic extend test:" << std::endl;
-	root = root->AddElement(box);
+	std::cout << "- Basic AABB extend test:" << std::endl;
+	root = root->addElement(box);
 	if (root->getNodeBoundingBox().minPoint == glm::vec3(-3) &&
 		root->getNodeBoundingBox().maxPoint == glm::vec3(1))
+		std::cout << "\tSUCCEED" << std::endl;
+	else
+		std::cout << "\tFAILED" << std::endl;
+	std::cout << "- Basic AABB remove test:" << std::endl;
+	root = root->removeElement(box);
+	if (root->isLeaf())
 		std::cout << "\tSUCCEED" << std::endl;
 	else
 		std::cout << "\tFAILED" << std::endl;

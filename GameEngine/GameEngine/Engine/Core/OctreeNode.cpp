@@ -9,7 +9,7 @@ namespace AGE
 	{
 		_father = NULL;
 		for (uint32_t i = 0; i < 8; ++i)
-			_sons[i & 4][i & 2][i & 1] = NULL;
+			_sons[(i & 4) == 4][(i & 2) == 2][i & 1] = NULL;
 		_elementsNbr = 0;
 		for (size_t i = 0; i < MAX_ELEMENT_PER_NODE; ++i)
 			_elements[i] = NULL;
@@ -20,7 +20,7 @@ namespace AGE
 
 	}
 
-	OctreeNode	*OctreeNode::AddElement(CullableObject *toAdd)
+	OctreeNode	*OctreeNode::addElement(CullableObject *toAdd)
 	{
 		glm::i8vec3	direction;
 		ECollision collisionState;
@@ -46,8 +46,7 @@ namespace AGE
 			{
 				newRoot = extendNode(toAdd, direction);
 			}
-			// if the node is a leaf, then we add the object to the node
-			if (isLeaf())
+			else if (isLeaf()) // if the node is a leaf, then we add the object to the node
 			{
 				_elements[_elementsNbr] = toAdd;
 				++_elementsNbr;
@@ -58,7 +57,7 @@ namespace AGE
 			else // if the node is not a leaf, we add the object to all it's sons
 			{
 				for (uint32_t i = 0; i < 8; ++i)
-					_sons[i & 4][i & 2][i & 1]->AddElement(toAdd);
+					_sons[(i & 4) == 4][(i & 2) == 2][i & 1]->addElement(toAdd);
 			}
 			return (newRoot);
 		}
@@ -71,7 +70,7 @@ namespace AGE
 		return (NULL);
 	}
 
-	OctreeNode	*OctreeNode::MoveElement(CullableObject *toAdd)
+	OctreeNode	*OctreeNode::moveElement(CullableObject *toAdd)
 	{
 		return (NULL);
 	}
@@ -91,7 +90,43 @@ namespace AGE
 			assert(!"This cullable type is not handled yet.");
 			break;
 		}
-		return (NULL);
+		if (collisionState != OUTSIDE)
+		{
+			if (isLeaf())
+			{
+				for (uint32_t i = 0; i < _elementsNbr; ++i)
+				{
+					if (_elements[i] == toRm)
+					{
+						_elements[i] = _elements[_elementsNbr - 1];
+						_elements[_elementsNbr - 1] = NULL;
+						--_elementsNbr;
+						break;
+					}
+				}
+			}
+			else
+			{
+				bool	removeSons = true;
+
+				for (uint32_t i = 0; i < 8; ++i)
+				{
+					_sons[(i & 4) == 4][(i & 2) == 2][i & 1]->removeElement(toRm);
+					if (_sons[(i & 4) == 4][(i & 2) == 2][i & 1]->_elementsNbr != 0 ||
+						_sons[(i & 4) == 4][(i & 2) == 2][i & 1]->isLeaf() == false)
+						removeSons = false;
+				}
+				if (removeSons)
+				{
+					for (uint32_t i = 0; i < 8; ++i)
+					{
+						delete _sons[(i & 4) == 4][(i & 2) == 2][i & 1];
+						_sons[(i & 4) == 4][(i & 2) == 2][i & 1] = NULL;
+					}
+				}
+			}
+		}
+		return (this);
 	}
 
 	AABoundingBox const &OctreeNode::getNodeBoundingBox() const
@@ -104,9 +139,10 @@ namespace AGE
 		generateAllSons();
 		for (int i = 0; i < MAX_ELEMENT_PER_NODE; ++i)
 		{
-			AddElement(_elements[i]);
+			addElement(_elements[i]);
 			_elements[i] = NULL;
 		}
+		_elementsNbr = 0;
 	}
 
 	OctreeNode * OctreeNode::extendNode(CullableObject *toAdd, glm::i8vec3 const &direction)
@@ -115,7 +151,7 @@ namespace AGE
 		glm::vec3	nodeSize = _node.maxPoint - _node.minPoint;
 
 		_father = newRoot;
-		newRoot->_sons[direction.x == -1 ? 0 : 1][direction.y == -1 ? 0 : 1][direction.z == -1 ? 0 : 1] = this;
+		newRoot->_sons[direction.x == -1 ? 1 : 0][direction.y == -1 ? 1 : 0][direction.z == -1 ? 1 : 0] = this;
 		if (direction.x == -1)
 		{
 			newRoot->_node.minPoint.x = _node.minPoint.x - nodeSize.x;
@@ -147,26 +183,20 @@ namespace AGE
 			newRoot->_node.maxPoint.z = _node.maxPoint.z + nodeSize.z;
 		}
 		newRoot->generateAllSons();
-		return (newRoot->AddElement(toAdd));
+		return (newRoot->addElement(toAdd));
 	}
 
 	bool		OctreeNode::isLeaf() const
 	{
-		return (_sons[0][0][0] == NULL &&
-				_sons[0][0][1] == NULL &&
-				_sons[0][1][0] == NULL &&
-				_sons[0][1][1] == NULL &&
-				_sons[1][0][0] == NULL &&
-				_sons[1][0][1] == NULL &&
-				_sons[1][1][0] == NULL &&
-				_sons[1][1][1] == NULL);
+		// If a node is not a leaf, all his sons are created
+		return (_sons[0][0][0] == NULL);
 	}
 
 	void		OctreeNode::generateAllSons()
 	{
 		for (uint32_t i = 0; i < 8; ++i)
 		{
-			glm::u8vec3	currentSon(i & 4, i & 2, i & 1);
+			glm::u8vec3	currentSon((i & 4) == 4, (i & 2) == 2, i & 1);
 			if (_sons[currentSon.x][currentSon.y][currentSon.z] == NULL)
 			{
 				OctreeNode	*newSon = new OctreeNode;
