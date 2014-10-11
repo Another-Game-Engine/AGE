@@ -12,7 +12,7 @@
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
 #include <chrono>
-
+#include <Skinning/AnimationManager.hpp>
 
 namespace AGE
 {
@@ -424,6 +424,7 @@ namespace AGE
 					}
 				}
 			}
+			getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
 		}).handle<PRTC::RenderDrawLists>([&](PRTC::RenderDrawLists& msg)
 		{
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();

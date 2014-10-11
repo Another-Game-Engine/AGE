@@ -57,7 +57,7 @@ bool loadAssets(std::shared_ptr<Engine> e)
 	e->getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"));
 	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("sibenik/sibenik.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
 	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sibenik/sibenik.mage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors, AGE::MeshInfos::Tangents, AGE::MeshInfos::BiTangents});
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sponza/sponza.mage"));
 	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
 	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("head/head.mage"));
