@@ -11,6 +11,7 @@ namespace gl
 	class Shader;
 	struct Uniform;
 	class Texture2D;
+	class Texture;
 
 	class MaterialManager
 	{
@@ -20,9 +21,8 @@ namespace gl
 
 		Key<Material> getDefaultMaterial();
 		Key<Material> addMaterial();
-		MaterialManager &createDefaultTexture2D(glm::u8vec4 const &color);
-		MaterialManager &createDefaultTexture2D(std::array<glm::u8vec4, 4> const &damColor);
 		Texture2D &getDefaultTexture2D();
+		Key<Texture> getKeyDefaultTexture2D();
 		MaterialManager &rmMaterial(Key<Material> &key);
 		Key<Material> getMaterial(size_t index) const;
 		template <typename TYPE> MaterialManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
@@ -32,12 +32,15 @@ namespace gl
 	private:
 		MaterialManager(MaterialManager const &copy) = delete;
 		MaterialManager &operator=(MaterialManager const &m) = delete;
+		MaterialManager &createDefaultTexture2D(glm::u8vec4 const &color);
+		MaterialManager &createDefaultTexture2D(std::array<glm::u8vec4, 4> const &damColor);
 
 		std::map<Key<Material>, Material> _materials;
 		std::pair<Key<Material>, Material *> _optimizeMaterialSearch;
 		Material *getMaterial(Key<Material> const &key, std::string const &in);
 		bool _defaultMaterialCreated;
 		Key<Material> _defaultMaterial;
+		Key<Texture> _keyDefaultTexture;
 		Texture2D *_defaultTexture;
 
 	};

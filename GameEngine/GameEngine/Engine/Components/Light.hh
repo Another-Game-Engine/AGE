@@ -29,6 +29,8 @@ namespace Component
 	private:
 		AGE::PrepareKey _key;
 		AScene *_scene;
+
+		static float computePointLightRange(float minValue, glm::vec3 const &attenuation);
 	};
 
 	template <typename Archive>

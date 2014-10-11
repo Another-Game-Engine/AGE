@@ -294,7 +294,7 @@ bool BenchmarkScene::userStart()
 #endif
 	// lights creation
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.05f, 0.01f));
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));

@@ -3,6 +3,8 @@
 #include <Render/GeometryManager.hh>
 #include <Core/PrepareRenderThread.hpp>
 
+#include <Utils/MathematicTools.hh>
+
 namespace Component
 {
 	PointLight::PointLight()
@@ -52,7 +54,30 @@ namespace Component
 
 	PointLight &PointLight::set(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range)
 	{
+		float	maxRange = computePointLightRange(256, range);
+
+		std::cout << "max range = " << maxRange << std::endl;
+		std::cout << "recomputed value = " << range.x + range.y * maxRange + range.z * maxRange * maxRange << std::endl;
 		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(position, color, range, _key);
 		return (*this);
 	}
+
+	float		PointLight::computePointLightRange(float minValue, glm::vec3 const &attenuation)
+	{
+		glm::vec3 equation(attenuation.z, attenuation.y, attenuation.x - minValue);
+		float discriminant = Mathematic::secondDegreeDiscriminant(equation);
+		if (discriminant == 0)
+			return (Mathematic::resolveSecondDegree(equation));
+		else if (discriminant > 0)
+		{
+			glm::vec2	results = Mathematic::resolveSecondDegree(equation, discriminant);
+			return (glm::max(results.x, results.y));
+		}
+		else
+		{
+			assert(!"The impossible has happenned :/");
+			return (0);
+		}
+	}
+
 }

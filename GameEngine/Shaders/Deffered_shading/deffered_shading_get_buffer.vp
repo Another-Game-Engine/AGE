@@ -10,6 +10,8 @@ layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 normal;
 layout (location = 2) in vec2 texCoord;
 layout (location = 3) in vec4 color;
+layout (location = 4) in vec4 bitTangent;
+layout (location = 5) in vec4 tangents;
 
 uniform mat4 model_matrix;
 

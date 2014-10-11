@@ -59,6 +59,7 @@ namespace AGE
 			manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
 			manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
 			manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
+			manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath));
 
 			manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
 			manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
@@ -71,13 +72,13 @@ namespace AGE
 
 	gl::Key<gl::Texture> AssetsManager::loadTexture(const File &_filePath)
 	{
+		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_textures.find(filePath.getFullName()) != std::end(_textures))
 			return _textures[filePath.getFullName()];
 		if (!filePath.exists())
 		{
-			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
-			assert(false);
+			return (manager->getDefaultTexture2D());
 		}
 
 		TextureData data;
@@ -87,7 +88,7 @@ namespace AGE
 		ar(data);
 
 		// TODO fill texture with texture key
-		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+		
 		GLenum ct = GL_RGB32F;
 		GLenum color = GL_RGB;
 		if (data.colorNumber == 3)

@@ -89,7 +89,10 @@ namespace gl
 	MaterialManager &MaterialManager::createDefaultTexture2D(glm::u8vec4 const &color)
 	{
 		if (_defaultTexture == NULL)
+		{
+			_keyDefaultTexture = Key<Texture>::createKey();
 			_defaultTexture = new Texture2D(4, 4, GL_RGBA, false);
+		}
 		glm::u8vec4 c[4];
 		for (size_t index = 0; index < 4; ++index)
 			c[index] = color;
@@ -100,7 +103,10 @@ namespace gl
 	MaterialManager &MaterialManager::createDefaultTexture2D(std::array<glm::u8vec4, 4> const &damColor)
 	{
 		if (_defaultTexture == NULL)
+		{
+			_keyDefaultTexture = Key<Texture>::createKey();	
 			_defaultTexture = new Texture2D(4, 4, GL_RGBA, false);
+		}
 		glm::u8vec4 c[4];
 		for (size_t index = 0; index < 4; ++index)
 			c[index] = damColor[index];
@@ -111,7 +117,14 @@ namespace gl
 	Texture2D &MaterialManager::getDefaultTexture2D()
 	{
 		if (_defaultTexture == NULL)
-			createDefaultTexture2D(glm::u8vec4(0xFF));
+			createDefaultTexture2D(glm::u8vec4(0x00));
 		return (*_defaultTexture);
+	}
+
+	Key<Texture> MaterialManager::getKeyDefaultTexture2D()
+	{
+		if (_defaultTexture == NULL)
+			createDefaultTexture2D(glm::u8vec4(0x00));
+		return (_keyDefaultTexture);
 	}
 }
