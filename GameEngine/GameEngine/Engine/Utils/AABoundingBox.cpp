@@ -44,9 +44,9 @@ namespace AGE
 		}
 	}
 
-	ECollision		AABoundingBox::checkCollision(AABoundingBox const &oth, glm::u8vec3 &direction) const
-	{
-		direction = glm::u8vec3(0);
+	AGE::ECollision AABoundingBox::checkCollision(AABoundingBox const &oth, glm::i8vec3 &direction) const
+{
+		direction = glm::i8vec3(0);
 		if (minPoint.x > oth.maxPoint.x)
 			direction.x = -1;
 		if (oth.minPoint.x > maxPoint.x)
@@ -59,7 +59,7 @@ namespace AGE
 			direction.z = -1;
 		if (oth.minPoint.z > maxPoint.z)
 			direction.z = 1;
-		if (direction == glm::u8vec3(0))
+		if (direction == glm::i8vec3(0))
 		{
 			if (oth.minPoint.x < minPoint.x)
 				direction.x = -1;
@@ -73,7 +73,7 @@ namespace AGE
 				direction.z = -1;
 			if (oth.maxPoint.z > maxPoint.z)
 				direction.z = 1;
-			if (direction == glm::u8vec3(0))
+			if (direction == glm::i8vec3(0))
 				return INSIDE;
 			else
 				return INTERSECT;

@@ -22,7 +22,7 @@ namespace AGE
 
 	OctreeNode	*OctreeNode::AddElement(CullableObject *toAdd)
 	{
-		glm::u8vec3	direction;
+		glm::i8vec3	direction;
 		ECollision collisionState;
 
 		// check the collision state depending on the geometry shape
@@ -78,7 +78,7 @@ namespace AGE
 
 	OctreeNode	*OctreeNode::removeElement(CullableObject *toRm)
 	{
-		glm::u8vec3	direction;
+		glm::i8vec3	direction;
 		ECollision collisionState;
 
 		// check the collision state depending on the geometry shape
@@ -94,6 +94,11 @@ namespace AGE
 		return (NULL);
 	}
 
+	AABoundingBox const &OctreeNode::getNodeBoundingBox() const
+	{
+		return (_node);
+	}
+
 	void		OctreeNode::splitNode()
 	{
 		generateAllSons();
@@ -104,8 +109,8 @@ namespace AGE
 		}
 	}
 
-	OctreeNode	*OctreeNode::extendNode(CullableObject *toAdd, glm::u8vec3 const &direction)
-	{
+	OctreeNode * OctreeNode::extendNode(CullableObject *toAdd, glm::i8vec3 const &direction)
+{
 		OctreeNode	*newRoot = new OctreeNode;
 		glm::vec3	nodeSize = _node.maxPoint - _node.minPoint;
 

@@ -25,6 +25,6 @@ namespace AGE
 		void		fromTransformedBox(AABoundingBox const &oth, glm::mat4 const &transform);
 
 		// check the state of collision between two AABB
-		ECollision	checkCollision(AABoundingBox const &oth, glm::u8vec3 &direction) const;
+		ECollision checkCollision(AABoundingBox const &oth, glm::i8vec3 &direction) const;
 	};
 }

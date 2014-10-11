@@ -17,9 +17,11 @@ namespace AGE
 		OctreeNode	*MoveElement(CullableObject *toAdd);
 		OctreeNode	*removeElement(CullableObject *toRm);
 
+		AABoundingBox const &getNodeBoundingBox() const;
+
 	private:
 		void		splitNode();
-		OctreeNode	*extendNode(CullableObject *toAdd, glm::u8vec3 const &direction);
+		OctreeNode *extendNode(CullableObject *toAdd, glm::i8vec3 const &direction);
 		bool		isLeaf() const;
 
 		void		generateAllSons();
