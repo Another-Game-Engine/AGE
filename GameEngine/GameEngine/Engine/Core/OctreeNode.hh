@@ -1,5 +1,6 @@
 
 #include <Utils/AABoundingBox.hh>
+#include <Utils/Containers/Vector.hpp>
 
 #define		MAX_ELEMENT_PER_NODE	4
 
@@ -13,17 +14,20 @@ namespace AGE
 		OctreeNode();
 		~OctreeNode();
 
-		OctreeNode	*addElement(CullableObject *toAdd);
-		OctreeNode	*moveElement(CullableObject *toAdd);
-		OctreeNode	*removeElement(CullableObject *toRm);
+		OctreeNode	*addElement(CullableObject *toAdd, bool useOldPos = false);
+		OctreeNode	*removeElement(CullableObject *toRm, bool useOldPos = false);
+		OctreeNode	*moveElement(CullableObject *toMove);
+
+		void		getElementsIntersect(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill);
+		void		getElementsInside(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill);
 
 		AABoundingBox const &getNodeBoundingBox() const;
 		bool				isLeaf() const;
 
 	private:
+		// Utils methods
 		void		splitNode();
 		OctreeNode *extendNode(CullableObject *toAdd, glm::i8vec3 const &direction);
-
 		void		generateAllSons();
 
 		OctreeNode		*_father;

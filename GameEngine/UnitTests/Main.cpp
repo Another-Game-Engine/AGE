@@ -48,10 +48,21 @@ static void	unitTestOctree()
 		std::cout << "\tSUCCEED" << std::endl;
 	else
 		std::cout << "\tFAILED" << std::endl;
+	std::cout << "- Harcore AABB remove test:" << std::endl;
+	for (uint32_t i = 0; i < 100; ++i)
+	{
+		root->removeElement(boxes[i]);
+		delete boxes[i];
+	}
+	if (root->isLeaf())
+		std::cout << "\tSUCCEED" << std::endl;
+	else
+		std::cout << "\tFAILED" << std::endl;
 }
 
 int		main(int argc, char*argv[])
 {
 	unitTestOctree();
+	system("PAUSE");
 	return (EXIT_SUCCESS);
 }

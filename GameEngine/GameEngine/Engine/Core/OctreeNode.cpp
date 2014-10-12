@@ -20,7 +20,7 @@ namespace AGE
 
 	}
 
-	OctreeNode	*OctreeNode::addElement(CullableObject *toAdd)
+	OctreeNode	*OctreeNode::addElement(CullableObject *toAdd, bool useOldPos)
 	{
 		glm::i8vec3	direction;
 		ECollision collisionState;
@@ -29,7 +29,10 @@ namespace AGE
 		switch (toAdd->type)
 		{
 		case CULLABLE_BOUNDING_BOX:
-			collisionState = _node.checkCollision(((CullableBoundingBox*)toAdd)->currentAABB, direction);
+			if (useOldPos)
+				collisionState = _node.checkCollision(((CullableBoundingBox*)toAdd)->previousAABB, direction);
+			else
+				collisionState = _node.checkCollision(((CullableBoundingBox*)toAdd)->currentAABB, direction);
 			break;
 		default:
 			assert(!"This cullable type is not handled yet.");
@@ -70,12 +73,7 @@ namespace AGE
 		return (NULL);
 	}
 
-	OctreeNode	*OctreeNode::moveElement(CullableObject *toAdd)
-	{
-		return (NULL);
-	}
-
-	OctreeNode	*OctreeNode::removeElement(CullableObject *toRm)
+	OctreeNode	*OctreeNode::removeElement(CullableObject *toRm, bool useOldPos)
 	{
 		glm::i8vec3	direction;
 		ECollision collisionState;
@@ -84,7 +82,10 @@ namespace AGE
 		switch (toRm->type)
 		{
 		case CULLABLE_BOUNDING_BOX:
-			collisionState = _node.checkCollision(((CullableBoundingBox*)toRm)->currentAABB, direction);
+			if (useOldPos)
+				collisionState = _node.checkCollision(((CullableBoundingBox*)toRm)->previousAABB, direction);
+			else
+				collisionState = _node.checkCollision(((CullableBoundingBox*)toRm)->currentAABB, direction);
 			break;
 		default:
 			assert(!"This cullable type is not handled yet.");
@@ -129,9 +130,31 @@ namespace AGE
 		return (this);
 	}
 
+	OctreeNode	*OctreeNode::moveElement(CullableObject *toMove)
+	{
+		removeElement(toMove, true);
+		return (addElement(toMove));
+	}
+
+	void		getElementsIntersect(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill)
+	{
+
+	}
+
+	void		getElementsInside(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill)
+	{
+
+	}
+
 	AABoundingBox const &OctreeNode::getNodeBoundingBox() const
 	{
 		return (_node);
+	}
+
+	bool		OctreeNode::isLeaf() const
+	{
+		// If a node is not a leaf, all his sons are created
+		return (_sons[0][0][0] == NULL);
 	}
 
 	void		OctreeNode::splitNode()
@@ -184,12 +207,6 @@ namespace AGE
 		}
 		newRoot->generateAllSons();
 		return (newRoot->addElement(toAdd));
-	}
-
-	bool		OctreeNode::isLeaf() const
-	{
-		// If a node is not a leaf, all his sons are created
-		return (_sons[0][0][0] == NULL);
 	}
 
 	void		OctreeNode::generateAllSons()
