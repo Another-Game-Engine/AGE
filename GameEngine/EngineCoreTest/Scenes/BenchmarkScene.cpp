@@ -6,6 +6,7 @@
 
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
+#include <Skinning/AnimationManager.hpp>
 
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
@@ -45,6 +46,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_color", glm::vec4(1.0f)));
 		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_ratio", 0.0f));
 		_renderManager->bindMaterialToShader<gl::Texture_diffuse>(key.getBuff.shader, _renderManager->addShaderSampler(key.getBuff.shader, "diffuse_texture"));
+		_renderManager->bindMaterialToShader<gl::Texture_bump>(key.getBuff.shader, _renderManager->addShaderSampler(key.getBuff.shader, "bump_texture"));
 		_renderManager->bindTransformationToShader(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "model_matrix", glm::mat4(1.f)));
 
 
@@ -115,7 +117,7 @@ void BenchmarkScene::initRendering()
 		// create merge
 		key.merge.renderPostEffect = _renderManager->addRenderPostEffect(key.merge.shader, glm::ivec4(0, 0, 800, 600));
 		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.light_buffer, GL_COLOR_ATTACHMENT0, key.Accum.renderPostEffect);
-		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.diffuse_buffer, GL_COLOR_ATTACHMENT0, key.getBuff.renderPass);
+		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.diffuse_buffer, GL_COLOR_ATTACHMENT1, key.getBuff.renderPass);
 		_renderManager->createBufferSamplableRenderPostEffect(key.merge.renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGBA8);
 		_renderManager->createBufferNotSamplableRenderPostEffect(key.merge.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
 		_renderManager->pushTargetRenderPostEffect(key.merge.renderPostEffect, GL_COLOR_ATTACHMENT0);
@@ -258,6 +260,7 @@ bool BenchmarkScene::userStart()
 	{
 		GLOBAL_CATWOMAN = createEntity();
 		auto _l = getLink(GLOBAL_CATWOMAN);
+
 		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l->setPosition(glm::vec3(-4, 0, 0));
 		_l->setScale(glm::vec3(0.007f));
@@ -269,6 +272,9 @@ bool BenchmarkScene::userStart()
 			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
 			_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
 		}
+		//	GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
+		//getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
+		//getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
 	}
 
 	{
@@ -415,7 +421,7 @@ bool BenchmarkScene::userUpdate(double time)
 	auto renderManager = getInstance<gl::RenderManager>();
 
 	{
-		auto link = getLink(GLOBAL_FLOOR);
+		auto link = getLink(GLOBAL_CATWOMAN);
 		auto pos = link->getPosition();
 		static float p[3] = {pos.x, pos.y, pos.z};
 		if (ImGui::SliderFloat("Floor x", &p[0], -10, 10))

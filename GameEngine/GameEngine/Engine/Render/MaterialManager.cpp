@@ -14,8 +14,6 @@ namespace gl
 
 	MaterialManager::~MaterialManager()
 	{
-		if (_defaultTexture != NULL)
-			delete _defaultTexture;
 	}
 
 	Key<Material> MaterialManager::getDefaultMaterial()
@@ -91,7 +89,7 @@ namespace gl
 		if (_defaultTexture == NULL)
 		{
 			_keyDefaultTexture = Key<Texture>::createKey();
-			_defaultTexture = new Texture2D(4, 4, GL_RGBA, false);
+			_defaultTexture = new Texture2D(2, 2, GL_RGBA8, false);
 		}
 		glm::u8vec4 c[4];
 		for (size_t index = 0; index < 4; ++index)
@@ -105,7 +103,7 @@ namespace gl
 		if (_defaultTexture == NULL)
 		{
 			_keyDefaultTexture = Key<Texture>::createKey();	
-			_defaultTexture = new Texture2D(4, 4, GL_RGBA, false);
+			_defaultTexture = new Texture2D(2, 2, GL_RGBA8, false);
 		}
 		glm::u8vec4 c[4];
 		for (size_t index = 0; index < 4; ++index)
