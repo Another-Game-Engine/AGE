@@ -11,5 +11,5 @@ void main()
 {
 	vec3 diffuse = texture(diffuse_buffer, interpolated_texCoord).xyz;
 	vec3 light = texture(light_buffer, interpolated_texCoord).xyz;
-	color = vec4((light + 1.0f) * diffuse, 1.0f);
+	color = vec4(light * diffuse, 1.0f);
 }
