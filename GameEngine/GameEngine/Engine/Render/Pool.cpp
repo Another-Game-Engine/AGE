@@ -469,8 +469,7 @@ namespace gl
 
 	VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const
 	{
-		if (!_indexPoolattach && _indexPoolattach->_vertexPoolattach)
-			assert(0);
+		if (!_indexPoolattach) assert(0);
 		_vao.bind();
 		auto &element = _poolElement.find(drawOnIt);
 		if (element == _poolElement.end())
@@ -480,6 +479,20 @@ namespace gl
 		_vao.unbind();
 		return (*this);
 	}
+
+	VertexPool const &VertexPool::drawInstanced(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt, size_t nbrIntanced) const
+	{
+		if (!_indexPoolattach) assert(0);
+		_vao.bind();
+		auto &element = _poolElement.find(drawOnIt);
+		if (element == _poolElement.end())
+			return (*this);
+		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
+		_indexPoolattach->onDrawIntancedCall(mode, drawWithIt, memory, nbrIntanced);
+		_vao.unbind();
+		return (*this);
+	}
+
 
 	VertexPool &VertexPool::operator=(VertexPool const &v)
 	{
@@ -595,6 +608,16 @@ namespace gl
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
 		glDrawElementsBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), GLint(target.getElementStart()));
+		return (*this);
+	}
+
+	IndexPool const &IndexPool::onDrawIntancedCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target, size_t nbrIntanced) const
+	{
+		Pool::Element<Indices> const *element;
+		if ((element = getIndicesPoolElement(key, "rmIndices")) == NULL)
+			return (*this);
+		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
+		glDrawElementsInstancedBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), nbrIntanced, GLint(target.getElementStart()));
 		return (*this);
 	}
 

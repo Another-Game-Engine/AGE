@@ -114,6 +114,7 @@ namespace gl
 		virtual Buffer const &getBuffer() const;
 		VertexPool const &draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const;
 		VertexPool const &draw(GLenum mode, Key<Element<Vertices>> const &drawIt) const;
+		VertexPool const &drawInstanced(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt, size_t nbrIntanced) const;
 
 	private:
 		VertexBuffer _vbo;
@@ -124,6 +125,8 @@ namespace gl
 		std::map<Key<Element<Vertices>>, Element<Vertices>> _poolElement;
 		// tool use in intern
 		Element<Vertices> const *getVerticesPoolElement(Key<Element<Vertices>> const &key, std::string const &msg) const;
+		
+		friend IndexPool;
 	};
 
 	//!\file Pool.hh
@@ -150,20 +153,17 @@ namespace gl
 		// tool for link index pool and  vertex pool (usefull for draw with indices ;p)
 		IndexPool &attachVertexPoolToIndexPool(VertexPool const &pool);
 		IndexPool &dettachVertexPoolToIndexPool();
+		IndexPool const &onDrawCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target) const;
+		IndexPool const &onDrawIntancedCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target, size_t nbrInstanced) const;
 
 	private:
 		gl::IndexBuffer _ibo;
 		VertexPool const *_vertexPoolattach;
-
 		// reprsent data in ibo
 		std::map<Key<Element<Indices>>, Element<Indices>> _poolElement;
-
-		// Warning must be call only by VertexPool
-		IndexPool const &onDrawCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target) const;
-		friend VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const;
-	
 		// tool use in intern
 		Element<Indices> const *getIndicesPoolElement(Key<Element<Indices>> const &key, std::string const &msg) const;
+		
 	};
 
 	template <typename TYPE>
