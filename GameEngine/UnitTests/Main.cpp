@@ -32,6 +32,22 @@ static void	unitTestOctree()
 		std::cout << "\tSUCCEED" << std::endl;
 	else
 		std::cout << "\tFAILED" << std::endl;
+	// change the size of the aabb
+	aabb.minPoint = glm::vec3(0);
+	aabb.maxPoint = glm::vec3(0.01);
+	// generate 100 boxes
+	AGE::CullableBoundingBox	*boxes[100];
+	std::cout << "- Basic node split test:" << std::endl;
+	for (uint32_t i = 0; i < 100; ++i)
+	{
+		boxes[i] = new AGE::CullableBoundingBox;
+		boxes[i]->currentAABB.fromTransformedBox(aabb, glm::translate(glm::mat4(1), glm::vec3(i * 0.01)));
+		root = root->addElement(boxes[i]);
+	}
+	if (root->isLeaf() == false)
+		std::cout << "\tSUCCEED" << std::endl;
+	else
+		std::cout << "\tFAILED" << std::endl;
 }
 
 int		main(int argc, char*argv[])
