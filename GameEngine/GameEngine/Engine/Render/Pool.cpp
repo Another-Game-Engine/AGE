@@ -1,300 +1,46 @@
 #include <Render/Pool.hh>
-#include <Render/MemoryGPU.hh>
-#include <Render/Data.hh>
-#include <iostream>
-#include <string>
-#include <cassert>
 
 #define INDEXPOOL 1
 
 namespace gl
 {
-
-	Pool::Pool()
-		: _nbrAttribute(4),
-		_typeComponent(NULL),
-		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL),
-		_sizeAttribute(NULL),
-		_offsetAttribute(NULL),
-		_nbrBytePool(0),
-		_nbrElementPool(0),
-		_syncronized(true),
-		_internalSyncronized(true)
+	AttributeData::AttributeData()
+		: typeComponent(GL_FLOAT),
+		sizeTypeComponent(sizeof(float)),
+		nbrComponent(4),
+		sizeAttribute(0),
+		offsetAttribute(0)
 	{
-		_typeComponent = new GLenum[_nbrAttribute];
-		_sizeTypeComponent = new uint8_t[_nbrAttribute];
-		_nbrComponent = new uint8_t[_nbrAttribute];
-		_sizeAttribute = new size_t[_nbrAttribute];
-		_offsetAttribute = new size_t[_nbrAttribute];
-		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		for (uint8_t index = 0; index < _nbrAttribute - 1; ++index)
-		{
-			_typeComponent[index] = GL_FLOAT;
-			_sizeTypeComponent[index] = sizeof(float);
-			_nbrComponent[index] = 4;
-		}
-		_typeComponent[_nbrAttribute - 1] = GL_FLOAT;
-		_sizeTypeComponent[_nbrAttribute - 1] = sizeof(float);
-		_nbrComponent[_nbrAttribute - 1] = 2;
+
 	}
 
-	Pool::Pool(int)
-		: _nbrAttribute(1),
-		_typeComponent(NULL),
-		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL),
-		_sizeAttribute(NULL),
-		_offsetAttribute(NULL),
-		_nbrBytePool(0),
-		_nbrElementPool(0),
-		_syncronized(true),
-		_internalSyncronized(true)
+	AttributeData::AttributeData(GLenum tc, uint8_t stc, uint8_t nbrC)
+		: typeComponent(tc),
+		sizeTypeComponent(stc),
+		nbrComponent(nbrC),
+		sizeAttribute(0),
+		offsetAttribute(0)
 	{
-		_typeComponent = new GLenum;
-		_sizeTypeComponent = new uint8_t;
-		_nbrComponent = new uint8_t;
-		_sizeAttribute = new size_t;
-		_offsetAttribute = new size_t;
-		*_typeComponent = GL_UNSIGNED_INT;
-		*_sizeTypeComponent = sizeof(unsigned int);
-		*_nbrComponent = 1;
-		*_sizeAttribute = 0;
-		*_offsetAttribute = 0;
+
 	}
 
-	Pool::Pool(uint8_t nbrAttribute, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
-		: _nbrAttribute(nbrAttribute),
-		_typeComponent(NULL),
-		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL),
-		_sizeAttribute(NULL),
-		_offsetAttribute(NULL),
-		_nbrBytePool(0),
-		_nbrElementPool(0),
-		_syncronized(true),
-		_internalSyncronized(true)
+	AttributeData::AttributeData(AttributeData const &copy)
+		: typeComponent(copy.typeComponent),
+		sizeTypeComponent(copy.sizeTypeComponent),
+		nbrComponent(copy.nbrComponent),
+		sizeAttribute(copy.sizeAttribute),
+		offsetAttribute(copy.offsetAttribute)
 	{
-		if (_nbrAttribute)
-		{
-			_typeComponent = new GLenum[_nbrAttribute];
-			memcpy(_typeComponent, typeComponent, sizeof(GLenum)* _nbrAttribute);
-			_sizeTypeComponent = new uint8_t[_nbrAttribute];
-			memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			_nbrComponent = new uint8_t[_nbrAttribute];
-			memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* _nbrAttribute);
-			_sizeAttribute = new size_t[_nbrAttribute];
-			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			_offsetAttribute = new size_t[_nbrAttribute];
-			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		}
+
 	}
 
-	Pool::Pool(Pool const &copy)
-		: _nbrAttribute(copy._nbrAttribute),
-		_typeComponent(NULL),
-		_sizeTypeComponent(NULL),
-		_nbrComponent(NULL),
-		_sizeAttribute(NULL),
-		_offsetAttribute(NULL),
-		_nbrBytePool(0),
-		_nbrElementPool(0),
-		_syncronized(true)
+	AttributeData &AttributeData::operator=(AttributeData const &a)
 	{
-		if (_nbrAttribute)
-		{
-			_typeComponent = new GLenum[_nbrAttribute];
-			memcpy(_typeComponent, copy._typeComponent, sizeof(GLenum)* _nbrAttribute);
-			_sizeTypeComponent = new uint8_t[_nbrAttribute];
-			memcpy(_sizeTypeComponent, copy._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			_nbrComponent = new uint8_t[_nbrAttribute];
-			memcpy(_nbrComponent, copy._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
-			_sizeAttribute = new size_t[_nbrAttribute];
-			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			_offsetAttribute = new size_t[_nbrAttribute];
-			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		}
-	}
-
-	Pool::~Pool()
-	{
-		clear();
-	}
-
-	void Pool::clear()
-	{
-		if (_nbrAttribute)
-		{
-			delete[] _typeComponent;
-			delete[] _sizeTypeComponent;
-			delete[] _nbrComponent;
-			delete[] _sizeAttribute;
-			delete[] _offsetAttribute;
-		}
-	}
-
-	// set all data with "p" data
-	Pool &Pool::operator=(Pool const &p)
-	{
-		if (this != &p)
-		{
-			if (_nbrAttribute != p._nbrAttribute)
-			{
-				clear();
-				_nbrAttribute = p._nbrAttribute;
-				if (_nbrAttribute)
-				{
-					_typeComponent = new GLenum[p._nbrAttribute];
-					_sizeTypeComponent = new uint8_t[p._nbrAttribute];
-					_nbrComponent = new uint8_t[p._nbrAttribute];
-					_sizeAttribute = new size_t[p._nbrAttribute];
-					_offsetAttribute = new size_t[p._nbrAttribute];
-				}
-				else
-				{
-					_typeComponent = NULL;
-					_sizeTypeComponent = NULL;
-					_nbrComponent = NULL;
-					_sizeAttribute = NULL;
-					_offsetAttribute = NULL;
-				}
-			}
-			memcpy(_typeComponent, p._typeComponent, sizeof(GLenum)* _nbrAttribute);
-			memcpy(_sizeTypeComponent, p._sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-			memcpy(_nbrComponent, p._nbrComponent, sizeof(uint8_t)* _nbrAttribute);
-			memset(_sizeAttribute, 0, sizeof(size_t) * _nbrAttribute);
-			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		}
-		return (*this);
-	}
-
-	uint8_t Pool::getNbrAttribute() const
-	{
-		return (_nbrAttribute);
-	}
-
-	GLenum Pool::getTypeComponent(uint8_t index) const
-	{
-		if (index >= _nbrAttribute)
-			assert(0);
-		return (_typeComponent[index]);
-	}
-
-	uint8_t Pool::getSizeTypeComponent(uint8_t index) const
-	{
-		if (index >= _nbrAttribute)
-			assert(0);
-		return (_sizeTypeComponent[index]);
-	}
-
-	uint8_t Pool::getNbrComponent(uint8_t index) const
-	{
-		if (index >= _nbrAttribute)
-			assert(0);
-		return (_nbrComponent[index]);
-	}
-
-	size_t Pool::getSizeAttribute(uint8_t index) const
-	{
-		if (index >= _nbrAttribute)
-			assert(0);
-			return (_sizeAttribute[index]);
-	}
-
-	size_t Pool::getOffsetAttribute(uint8_t index) const
-	{
-		if (index >= _nbrAttribute)
-			assert(0);
-		return (_offsetAttribute[index]);
-	}
-
-
-	size_t Pool::getNbrBytePool() const
-	{
-		return (_nbrBytePool);
-	}
-
-	Key<Pool::Element<Vertices>> VertexPool::addVertices(Vertices const &vertices)
-	{
-		return (addElementPool<Vertices>(_poolElement, vertices));
-	}
-
-	Key<Pool::Element<Indices>> IndexPool::addIndices(Indices const &indices)
-	{
-		return (addElementPool<Indices>(_poolElement, indices));
-	}
-
-	Pool::Element<Vertices> const *VertexPool::getVerticesPoolElement(Key<Element<Vertices>> const &key, std::string const &msg) const
-	{
-		if (!key)
-			assert(0);
-		auto &element = _poolElement.find(key);
-		if (element == _poolElement.end())
-			return (NULL);
-		return (&element->second);
-	}
-
-	Pool::Element<Indices> const *IndexPool::getIndicesPoolElement(Key<Element<Indices>> const &key, std::string const &msg) const
-	{
-		if (!key)
-			assert(0);
-		auto &element = _poolElement.find(key);
-		if (element == _poolElement.end())
-			return (NULL);
-		return (&element->second);
-	}
-
-	VertexPool &VertexPool::rmVertices(Key<Pool::Element<Vertices>> &key)
-	{
-		Pool::Element<Vertices> const *element;
-		if ((element = getVerticesPoolElement(key, "rmVertices")) == NULL)
-			return (*this);
-		MemoryBlocksGPU &memory = _poolMemory[element->memoryIndex];
-		memory.setSync(true);
-		memory.setIsUsed(false);
-		_poolElement.erase(key);
-		key.destroy();
-		return (*this);
-	}
-
-	IndexPool &IndexPool::rmIndices(Key<Pool::Element<Indices>> &key)
-	{
-		Pool::Element<Indices> const *element;
-		if ((element = getIndicesPoolElement(key, "rmIndices")) == NULL)
-			return (*this);
-		MemoryBlocksGPU &memory = _poolMemory[element->memoryIndex];
-		memory.setSync(true);
-		memory.setIsUsed(false);
-		_poolElement.erase(key);
-		key.destroy();
-		return (*this);
-	}
-
-	void Pool::clearPool()
-	{
-		_syncronized = true;
-		_internalSyncronized = true;
-		_nbrBytePool = 0;
-		_nbrElementPool = 0;
-		_poolMemory.clear();
-	}
-
-	VertexPool &VertexPool::clearPool()
-	{
-		Pool::clearPool();
-		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		_poolElement.clear();
-		return (*this);
-	}
-
-	IndexPool &IndexPool::clearPool()
-	{
-		Pool::clearPool();
-		*_sizeAttribute = 0;
-		*_offsetAttribute = 0;
-		_poolElement.clear();
+		typeComponent = a.typeComponent;
+		sizeTypeComponent = a.sizeTypeComponent;
+		nbrComponent = a.nbrComponent;
+		sizeAttribute = a.sizeAttribute;
+		offsetAttribute = a.offsetAttribute;
 		return (*this);
 	}
 
@@ -304,14 +50,8 @@ namespace gl
 	{
 	}
 
-	VertexPool::VertexPool(VertexPool const &copy)
-		: Pool(copy),
-		_indexPoolattach(copy._indexPoolattach)
-	{
-	}
-
-	VertexPool::VertexPool(uint8_t nbrAttribute, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
-		: Pool(nbrAttribute, typeComponent, sizeTypeComponent, nbrComponent),
+	VertexPool::VertexPool(uint8_t nbrAttribute, AGE::Vector<GLenum> const &typeComponent, AGE::Vector<uint8_t> const &sizeTypeComponent, AGE::Vector<uint8_t> const &nbrComponent)
+		: Pool<VertexPool, Vertices>(nbrAttribute, typeComponent, sizeTypeComponent, nbrComponent),
 		_indexPoolattach(NULL)
 	{
 	}
@@ -320,107 +60,7 @@ namespace gl
 	{
 	}
 
-	// permit too set the nbr of attribute, set by default all data into it
-	// execpt if the nbrAttribute is equal of the value initial
-	VertexPool &VertexPool::setNbrAttribute(uint8_t nbrAttribute)
-	{
-		clearPool();
-		if (_nbrAttribute != nbrAttribute)
-		{
-			clear();
-			_nbrAttribute = nbrAttribute;
-			if (_nbrAttribute)
-			{
-				_typeComponent = new GLenum[_nbrAttribute];
-				_sizeTypeComponent = new uint8_t[_nbrAttribute];
-				_nbrComponent = new uint8_t[_nbrAttribute];
-				_sizeAttribute = new size_t[_nbrAttribute];
-				_offsetAttribute = new size_t[_nbrAttribute];
-				for (uint8_t index = 0; index < _nbrAttribute; ++index)
-				{
-					_typeComponent[index] = GL_FLOAT;
-					_sizeTypeComponent[index] = sizeof(float);
-					_nbrComponent[index] = (index == 2) ? 2 : 4;
-				}
-			}
-			else
-			{
-				_typeComponent = NULL;
-				_sizeTypeComponent = NULL;
-				_typeComponent = NULL;
-				_sizeTypeComponent = NULL;
-				_nbrComponent = NULL;
-			}
-			memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		}
-		return (*this);
-	}
-
-	// set type at the attribute index, check the validity of data
-	VertexPool &VertexPool::setTypeComponent(uint8_t index, GLenum type)
-	{
-		if (index >= _nbrAttribute)
-			assert(0);
-		clearPool();
-		_typeComponent[index] = type;
-		return (*this);
-	}
-
-	// set size type in byte at the attribute index, check the validity of data
-	VertexPool &VertexPool::setSizeTypeComponent(uint8_t index, uint8_t sizeType)
-	{
-		if (index >= _nbrAttribute)
-			assert(0);
-		clearPool();
-		_sizeTypeComponent[index] = sizeType;
-		return (*this);
-	}
-
-	// set nbr Component at the attribute index, check the validity of data
-	VertexPool &VertexPool::setNbrComponent(uint8_t index, uint8_t nbrComponent)
-	{
-		if (index >= _nbrAttribute)
-			assert(0);
-		clearPool();
-		_nbrComponent[index] = nbrComponent;
-		return (*this);
-	}
-
-	// warning suppress all data in pool for the new
-	VertexPool &VertexPool::setData(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
-	{
-		clearPool();
-		if (_nbrAttribute != nbrAttributes)
-		{
-			clear();
-			_nbrAttribute = nbrAttributes;
-			if (_nbrAttribute)
-			{
-				_sizeTypeComponent = new uint8_t[_nbrAttribute];
-				_typeComponent = new GLenum[_nbrAttribute];
-				_nbrComponent = new uint8_t[_nbrAttribute];
-				_sizeAttribute = new size_t[_nbrAttribute];
-				_offsetAttribute = new size_t[_nbrAttribute];
-			}
-			else
-			{
-				_sizeAttribute = NULL;
-				_offsetAttribute = NULL;
-				_sizeTypeComponent = NULL;
-				_typeComponent = NULL;
-				_nbrComponent = NULL;
-			}
-		}
-		memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		memset(_offsetAttribute, 0, sizeof(size_t)* _nbrAttribute);
-		memcpy(_sizeTypeComponent, sizeTypeComponent, sizeof(uint8_t)* _nbrAttribute);
-		memcpy(_typeComponent, typeComponent, sizeof(GLenum)* nbrAttributes);
-		memcpy(_nbrComponent, nbrComponent, sizeof(uint8_t)* nbrAttributes);
-		return (*this);
-	}
-
-	Pool &VertexPool::syncronisation()
+	Pool<VertexPool, Vertices> &VertexPool::syncronisation()
 	{
 		if (!_syncronized || !_internalSyncronized)
 			_vbo.bind();
