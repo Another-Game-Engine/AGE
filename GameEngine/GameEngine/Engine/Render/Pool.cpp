@@ -166,13 +166,10 @@ namespace gl
 	{
 		auto element = getElementPool(i);
 		auto const &memory = _poolMemory[element->memoryIndex];
-		glDrawElements(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)start);
+		glDrawElementsBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), (GLint)start);
 		return (*this);
 	}
 
-	//glDrawElementsBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), GLint(target.getElementStart()));
-	//glDrawElementsInstancedBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), nbrIntanced, GLint(target.getElementStart()));
-	
 	IndexPool const &IndexPool::bind() const
 	{
 		_buffer.bind();

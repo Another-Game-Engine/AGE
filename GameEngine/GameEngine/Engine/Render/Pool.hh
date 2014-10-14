@@ -198,17 +198,13 @@ namespace gl
 		memory.setNbrBlock(_attributes.size());
 		for (uint8_t index = 0; index < memory.getNbrBlock(); ++index)
 		{
-			size_t sizeMemory = _attributes[index].sizeTypeComponent;
-			sizeMemory *= _attributes[index].nbrComponent;
-			sizeMemory *= element.getNbrElement();
-			memory.setOffset(index, _attributes[index].offsetAttribute + _attributes[index].sizeAttribute);
-			_nbrBytePool += sizeMemory;
-			_attributes[index].sizeAttribute += sizeMemory;
-			memory.setSizeBlock(index, sizeMemory);
+			memory.setSizeBlock(index, _attributes[index].sizeTypeComponent * _attributes[index].nbrComponent * element.getNbrElement());
+			memory.setOffset(index, _attributes[index].sizeAttribute);
+			_nbrBytePool += memory.getSizeBlock(index);
+			_attributes[index].sizeAttribute += memory.getSizeBlock(index);
 			if (index > 0)
 			{
-				_attributes[index].offsetAttribute = _attributes[index - 1].offsetAttribute;
-				_attributes[index].offsetAttribute += _attributes[index - 1].sizeAttribute;
+				_attributes[index].offsetAttribute = _attributes[index - 1].offsetAttribute + _attributes[index - 1].sizeAttribute;
 			}
 		}
 		if (_poolMemory.size() > 0)
@@ -274,7 +270,7 @@ namespace gl
 				memory.setSync(true);
 				for (size_t index = 0; index < memory.getNbrBlock(); ++index)
 				{
-					_buffer.BufferSubData(memory.getOffset(uint8_t(index)), memory.getSizeBlock(uint8_t(index)), (void *)element.second.data->getBuffer(uint8_t(index)));
+					_buffer.BufferSubData(_attributes[index].offsetAttribute + memory.getOffset(uint8_t(index)), memory.getSizeBlock(uint8_t(index)), (void *)element.second.data->getBuffer(uint8_t(index)));
 				}
 			}
 		}
