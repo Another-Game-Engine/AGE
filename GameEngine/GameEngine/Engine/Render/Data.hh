@@ -8,7 +8,7 @@ namespace gl
 {
 	class MemoryBlocksGPU;
 	class Vertices;
-	template<typename TYPE> class Key;
+	template<typename TYPE, std::uint32_t POOL> class Key;
 
 	//!\file Data.hh
 	//!\author Dorian Pinaud
