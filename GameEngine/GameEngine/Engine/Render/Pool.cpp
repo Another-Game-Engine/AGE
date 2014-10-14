@@ -2,7 +2,6 @@
 #include <Render/MemoryGPU.hh>
 #include <Render/Data.hh>
 #include <iostream>
-#include <string>
 #include <cassert>
 
 #define INDEXPOOL 1
@@ -225,7 +224,7 @@ namespace gl
 		return (addElementPool<Indices>(_poolElement, indices));
 	}
 
-	Pool::Element<Vertices> const *VertexPool::getVerticesPoolElement(Key<Element<Vertices>> const &key, std::string const &msg) const
+	Pool::Element<Vertices> const *VertexPool::getVerticesPoolElement(Key<Element<Vertices>> const &key) const
 	{
 		if (!key)
 			assert(0);
@@ -235,7 +234,7 @@ namespace gl
 		return (&element->second);
 	}
 
-	Pool::Element<Indices> const *IndexPool::getIndicesPoolElement(Key<Element<Indices>> const &key, std::string const &msg) const
+	Pool::Element<Indices> const *IndexPool::getIndicesPoolElement(Key<Element<Indices>> const &key) const
 	{
 		if (!key)
 			assert(0);
@@ -248,7 +247,7 @@ namespace gl
 	VertexPool &VertexPool::rmVertices(Key<Pool::Element<Vertices>> &key)
 	{
 		Pool::Element<Vertices> const *element;
-		if ((element = getVerticesPoolElement(key, "rmVertices")) == NULL)
+		if ((element = getVerticesPoolElement(key/*, "rmVertices"*/)) == NULL)
 			return (*this);
 		MemoryBlocksGPU &memory = _poolMemory[element->memoryIndex];
 		memory.setSync(true);
@@ -261,7 +260,7 @@ namespace gl
 	IndexPool &IndexPool::rmIndices(Key<Pool::Element<Indices>> &key)
 	{
 		Pool::Element<Indices> const *element;
-		if ((element = getIndicesPoolElement(key, "rmIndices")) == NULL)
+		if ((element = getIndicesPoolElement(key/*, "rmIndices"*/)) == NULL)
 			return (*this);
 		MemoryBlocksGPU &memory = _poolMemory[element->memoryIndex];
 		memory.setSync(true);
@@ -509,7 +508,7 @@ namespace gl
 	VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Vertices>> const &drawIt) const
 	{
 		Pool::Element<Vertices> const *element;
-		if ((element = getVerticesPoolElement(drawIt, "draw")) == NULL)
+		if ((element = getVerticesPoolElement(drawIt/*, "draw"*/)) == NULL)
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
 		_vao.bind();
@@ -604,7 +603,7 @@ namespace gl
 	IndexPool const &IndexPool::onDrawCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target) const
 	{
 		Pool::Element<Indices> const *element;
-		if ((element = getIndicesPoolElement(key, "rmIndices")) == NULL)
+		if ((element = getIndicesPoolElement(key/*, "rmIndices"*/)) == NULL)
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
 		glDrawElementsBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), GLint(target.getElementStart()));
@@ -614,7 +613,7 @@ namespace gl
 	IndexPool const &IndexPool::onDrawIntancedCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target, size_t nbrIntanced) const
 	{
 		Pool::Element<Indices> const *element;
-		if ((element = getIndicesPoolElement(key, "rmIndices")) == NULL)
+		if ((element = getIndicesPoolElement(key/*, "rmIndices"*/)) == NULL)
 			return (*this);
 		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
 		glDrawElementsInstancedBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), nbrIntanced, GLint(target.getElementStart()));

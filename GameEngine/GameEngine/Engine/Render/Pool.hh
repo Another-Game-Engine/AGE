@@ -124,7 +124,7 @@ namespace gl
 		// reprensent data in vbo
 		std::map<Key<Element<Vertices>>, Element<Vertices>> _poolElement;
 		// tool use in intern
-		Element<Vertices> const *getVerticesPoolElement(Key<Element<Vertices>> const &key, std::string const &msg) const;
+		Element<Vertices> const *getVerticesPoolElement(Key<Element<Vertices>> const &key) const;
 		
 		friend IndexPool;
 	};
@@ -162,7 +162,7 @@ namespace gl
 		// reprsent data in ibo
 		std::map<Key<Element<Indices>>, Element<Indices>> _poolElement;
 		// tool use in intern
-		Element<Indices> const *getIndicesPoolElement(Key<Element<Indices>> const &key, std::string const &msg) const;
+		Element<Indices> const *getIndicesPoolElement(Key<Element<Indices>> const &key) const;
 		
 	};
 

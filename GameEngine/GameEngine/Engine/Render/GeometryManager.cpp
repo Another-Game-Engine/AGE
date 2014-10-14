@@ -2,7 +2,6 @@
 #include <Render/Data.hh>
 #include <Render/Pool.hh>
 #include <iostream>
-#include <string>
 #include <cassert>
 #include <unordered_map>
 #include <Render/SimpleFormGeometry.hh>
@@ -434,15 +433,12 @@ namespace gl
 
 	VertexPool *GeometryManager::getVertexPool(Key<VertexPool> const &key)
 	{
-		if (!key)
-			assert(0);
-		if (_vertexPool.size() == 0)
-			assert(0);
+		assert(key);
+		assert(_vertexPool.size());
 		if (_optimizerVertexPoolSearch.first == key)
 			return (_optimizerVertexPoolSearch.second);
 		auto &vertexPool = _vertexPool.find(key);
-		if (vertexPool == _vertexPool.end())
-			assert(0);
+		assert(vertexPool != _vertexPool.end());
 		_optimizerVertexPoolSearch.first = key;
 		_optimizerVertexPoolSearch.second = &vertexPool->second;
 		return (&vertexPool->second);
@@ -450,15 +446,12 @@ namespace gl
 
 	IndexPool *GeometryManager::getIndexPool(Key<IndexPool> const &key)
 	{
-		if (!key)
-			assert(0);
-		if (_indexPool.size() == 0)
-			assert(0);
+		assert(key);
+		assert(_indexPool.size());
 		if (_optimizerIndexPoolSearch.first == key)
 			return (_optimizerIndexPoolSearch.second);
 		auto &indexPool = _indexPool.find(key);
-		if (indexPool == _indexPool.end())
-			assert(0);
+		assert(indexPool != _indexPool.end());
 		_optimizerIndexPoolSearch.first = key;
 		_optimizerIndexPoolSearch.second = &indexPool->second;
 		return (&indexPool->second);
@@ -466,15 +459,12 @@ namespace gl
 
 	Indices *GeometryManager::getIndices(Key<Indices> const &key)
 	{
-		if (!key)
-			assert(0);
-		if (_indices.size() == 0)
-			assert(0);
+		assert(key);
+		assert(_indices.size());
 		if (_optimizerIndicesSearch.first == key)
 			return (_optimizerIndicesSearch.second);
 		auto &indices = _indices.find(key);
-		if (indices == _indices.end())
-			assert(0);
+		assert(indices != _indices.end());
 		_optimizerIndicesSearch.first = key;
 		_optimizerIndicesSearch.second = &indices->second;
 		return (&indices->second);
@@ -482,15 +472,12 @@ namespace gl
 
 	Vertices *GeometryManager::getVertices(Key<Vertices> const &key)
 	{
-		if (!key)
-			assert(0);
-		if (_vertices.size() == 0)
-			assert(0);
+		assert(key);
+		assert(_vertices.size());
 		if (_optimizerVerticesSearch.first == key)
 			return (_optimizerVerticesSearch.second);
 		auto &vertices = _vertices.find(key);
-		if (vertices == _vertices.end())
-			assert(0);
+		assert(vertices != _vertices.end());
 		_optimizerVerticesSearch.first = key;
 		_optimizerVerticesSearch.second = &vertices->second;
 		return (&vertices->second);
@@ -498,8 +485,7 @@ namespace gl
 
 	GeometryManager::Attach<Vertices, VertexPool> *GeometryManager::getVertexAttach(Key<Vertices> const &key)
 	{
-		if (!key)
-			assert(0);
+		assert(key);
 		if (_optimizerVertexAttachSearch.first == key)
 			return (_optimizerVertexAttachSearch.second);
 		if (_vertexAttach.size() == 0)
@@ -514,8 +500,7 @@ namespace gl
 
 	GeometryManager::Attach<Indices, IndexPool> *GeometryManager::getIndexAttach(Key<Indices> const &key)
 	{
-		if (!key)
-			assert(0);
+		assert(key);
 		if (_indexAttach.size() == 0)
 			return (NULL);
 		if (_optimizerIndexAttachSearch.first == key)

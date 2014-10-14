@@ -500,14 +500,14 @@ namespace gl
 	Shader &Shader::update()
 	{
 		use();
-		for (size_t index = 0; index < _tasks.size(); ++index)
+		for (auto &task : _tasks)
 		{
-			if (!_tasks[index].isExec())
+			if (!task.isExec())
 				assert(0);
-			if (_tasks[index].update)
+			if (task.update)
 			{
-				_tasks[index].func(_tasks[index].params);
-				_tasks[index].update = false;
+				task.func(task.params);
+				task.update = false;
 			}
 		}
 		return (*this);
