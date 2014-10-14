@@ -24,6 +24,11 @@ namespace gl
 
 	}
 
+	AttributeData::~AttributeData()
+	{
+
+	}
+
 	AttributeData::AttributeData(AttributeData const &copy)
 		: typeComponent(copy.typeComponent),
 		sizeTypeComponent(copy.sizeTypeComponent),
@@ -45,138 +50,99 @@ namespace gl
 	}
 
 	VertexPool::VertexPool()
-		: Pool(),
-		_indexPoolattach(NULL)
+		: Pool<VertexPool, Vertices, VertexBuffer>(),
+		_indexPool(NULL),
+		_contextSet(false)
 	{
 	}
 
 	VertexPool::VertexPool(uint8_t nbrAttribute, AGE::Vector<GLenum> const &typeComponent, AGE::Vector<uint8_t> const &sizeTypeComponent, AGE::Vector<uint8_t> const &nbrComponent)
-		: Pool<VertexPool, Vertices>(nbrAttribute, typeComponent, sizeTypeComponent, nbrComponent),
-		_indexPoolattach(NULL)
+		: Pool<VertexPool, Vertices, VertexBuffer>(nbrAttribute, typeComponent, sizeTypeComponent, nbrComponent),
+		_indexPool(NULL),
+		_contextSet(false)
 	{
+	}
+
+	VertexPool::VertexPool(VertexPool const &copy)
+		: Pool<VertexPool, Vertices, VertexBuffer>(copy),
+		_indexPool(copy._indexPool),
+		_contextSet(copy._contextSet)
+	{
+	}
+
+	VertexPool &VertexPool::operator=(VertexPool const &v)
+	{
+		Pool<VertexPool, Vertices, VertexBuffer>::operator=(v);
+		_indexPool = v._indexPool;
+		_contextSet = v._contextSet;
+		return (*this);
 	}
 
 	VertexPool::~VertexPool()
 	{
 	}
 
-	Pool<VertexPool, Vertices> &VertexPool::syncronisation()
+	VertexPool const &VertexPool::bind() const
 	{
-		if (!_syncronized || !_internalSyncronized)
-			_vbo.bind();
-		if (!_syncronized)
-			_vbo.BufferData(_nbrBytePool);
-		if (!_internalSyncronized)
+		_buffer.bind();
+		for (size_t index = 0; index < _attributes.size(); ++index)
 		{
-			if (_nbrAttribute)
-				memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			_nbrElementPool = 0;
-			for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
-			{
-				Vertices const *vertices = index->second.data;
-				MemoryBlocksGPU &memory = _poolMemory[index->second.memoryIndex];
-				if (vertices && memory.getSync() == false)
-				{
-					memory.setStartElement(_nbrElementPool);
-					for (uint8_t index = 0; index < _nbrAttribute; ++index)
-					{
-						memory.setSync(true);
-						memory.setOffset(index, _offsetAttribute[index] + _sizeAttribute[index]);
-						_vbo.BufferSubData(memory.getOffset(index), memory.getSizeBlock(index), (void *)vertices->getBuffer(index));
-						_sizeAttribute[index] += memory.getSizeBlock(index);
-					}
-					_nbrElementPool += memory.getNbrElement();
-				}
-			}
-		}
-		if (!_syncronized)
-		{
-			_vao.bind();
-			_vbo.bind();
-			if (_indexPoolattach)
-				_indexPoolattach->getBuffer().bind();
-			for (size_t index = 0; index < _nbrAttribute; ++index)
-			{
-				_vao.activateAttribute(index);
-				_vao.attribute(index, _nbrComponent[index], _typeComponent[index], _offsetAttribute[index]);
-			}
-			_vao.unbind();
-		}
-		_internalSyncronized = true;
-		_syncronized = true;
-		return (*this);
-	}
-
-	VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const
-	{
-		if (!_indexPoolattach) assert(0);
-		_vao.bind();
-		auto &element = _poolElement.find(drawOnIt);
-		if (element == _poolElement.end())
-			return (*this);
-		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
-		_indexPoolattach->onDrawCall(mode, drawWithIt, memory);
-		_vao.unbind();
-		return (*this);
-	}
-
-	VertexPool const &VertexPool::drawInstanced(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt, size_t nbrIntanced) const
-	{
-		if (!_indexPoolattach) assert(0);
-		_vao.bind();
-		auto &element = _poolElement.find(drawOnIt);
-		if (element == _poolElement.end())
-			return (*this);
-		MemoryBlocksGPU const &memory = _poolMemory[element->second.memoryIndex];
-		_indexPoolattach->onDrawIntancedCall(mode, drawWithIt, memory, nbrIntanced);
-		_vao.unbind();
-		return (*this);
-	}
-
-
-	VertexPool &VertexPool::operator=(VertexPool const &v)
-	{
-		if (this != &v)
-		{
-			clearPool();
-			Pool::operator=(v);
-			_indexPoolattach = v._indexPoolattach;
-			return (*this);
+			auto const &attribute = _attributes[index];
+			_buffer.attribute(index, attribute.nbrComponent, attribute.typeComponent, attribute.offsetAttribute);
 		}
 		return (*this);
 	}
 
-	VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Vertices>> const &drawIt) const
+	VertexPool &VertexPool::startContext(IndexPool &i)
 	{
-		Pool::Element<Vertices> const *element;
-		if ((element = getVerticesPoolElement(drawIt, "draw")) == NULL)
-			return (*this);
-		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
-		_vao.bind();
-		glDrawArrays(mode, GLint(memory.getElementStart()), GLsizei(memory.getNbrElement()));
+		_context.bind();
+		if (_indexPool != &i)
+			_setContext = false;
+		_indexPool = &i;
+		if (!_setContext)
+		{
+			bind();
+			i.bind();
+			_contextSet = true;
+		}
 		return (*this);
 	}
 
-	VertexPool &VertexPool::attachIndexPoolToVertexPool(IndexPool const &pool)
+	VertexPool &VertexPool::startContext()
 	{
-		_indexPoolattach = &pool;
+		_context.bind();
+		if (!_setContext)
+		{
+			bind();
+			_contextSet = true;
+		}
 		return (*this);
 	}
 
-	VertexPool &VertexPool::dettachIndexPoolToVertexPool()
+	VertexPool const &VertexPool::endContext() const
 	{
-		_indexPoolattach = NULL;
+		_context.unbind();
 		return (*this);
 	}
 
-	Buffer const & VertexPool::getBuffer() const
+	VertexPool &VertexPool::draw(GLenum mode, Key<Element<Vertices>> const &key)
 	{
-		return (_vbo);
+		auto element = getElementPool(key);
+		auto const &memory = _poolMemory[element->memoryIndex];
+		glDrawArrays(mode, GLsizei(memory.getElementStart()), GLint(memory.getNbrElement()));
+		return (*this);
+	}
+
+	VertexPool &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &i, Key<Element<Vertices>> const &v)
+	{
+		auto element = getElementPool(v);
+		auto const &memory = _poolMemory[element->memoryIndex];
+		_indexPool->draw(mode, i, memory.getElementStart());
+		return (*this);
 	}
 
 	IndexPool::IndexPool()
-		: Pool(INDEXPOOL),
-		_vertexPoolattach(NULL)
+		: Pool<IndexPool, Indices, IndexBuffer>(1, {GL_UNSIGNED_INT}, {sizeof(unsigned int)}, {1})
 	{
 	}
 
@@ -185,91 +151,31 @@ namespace gl
 	}
 
 	IndexPool::IndexPool(IndexPool const &copy)
-		: Pool(copy),
-		_vertexPoolattach(copy._vertexPoolattach)
+		: Pool<IndexPool, Indices, IndexBuffer>(copy)
 	{
 
 	}
 
 	IndexPool &IndexPool::operator=(IndexPool const &i)
 	{
-		if (this != &i)
-		{
-			clearPool();
-			Pool::operator=(i);
-			_vertexPoolattach = i._vertexPoolattach;
-		}
+		Pool<IndexPool, Indices, IndexBuffer>::operator=(i);
 		return (*this);
 	}
 
-	Pool &IndexPool::syncronisation()
+	IndexPool &IndexPool::draw(GLenum mode, Key<Element<Indices>> const &i, size_t start)
 	{
-		if (!_syncronized || !_internalSyncronized)
-			_ibo.bind();
-		if (!_syncronized)
-			_ibo.BufferData(_nbrBytePool);
-		if (!_internalSyncronized)
-		{
-			if (_nbrAttribute)
-				memset(_sizeAttribute, 0, sizeof(size_t)* _nbrAttribute);
-			_nbrElementPool = 0;
-			for (auto &index = _poolElement.begin(); index != _poolElement.end(); ++index)
-			{
-				Indices const *indices = index->second.data;
-				MemoryBlocksGPU &memory = _poolMemory[index->second.memoryIndex];
-				if (indices && memory.getSync() == false)
-				{
-					memory.setStartElement(_nbrElementPool);
-					for (uint8_t index = 0; index < _nbrAttribute; ++index)
-					{
-						memory.setSync(true);
-						memory.setOffset(index, _offsetAttribute[index] + _sizeAttribute[index]);
-						_ibo.BufferSubData(memory.getOffset(index), memory.getSizeBlock(index), (void *)indices->getBuffer());
-						_sizeAttribute[index] += memory.getSizeBlock(index);
-					}
-					_nbrElementPool += memory.getNbrElement();
-				}
-			}
-		}
-		_internalSyncronized = true;
-		_syncronized = true;
+		auto element = getElementPool(i);
+		auto const &memory = _poolMemory[element->memoryIndex];
+		glDrawElements(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)start);
 		return (*this);
 	}
 
-	Buffer const &IndexPool::getBuffer() const
+	//glDrawElementsBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), GLint(target.getElementStart()));
+	//glDrawElementsInstancedBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), nbrIntanced, GLint(target.getElementStart()));
+	
+	IndexPool const &IndexPool::bind() const
 	{
-		return (_ibo);
-	}
-
-	IndexPool const &IndexPool::onDrawCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target) const
-	{
-		Pool::Element<Indices> const *element;
-		if ((element = getIndicesPoolElement(key, "rmIndices")) == NULL)
-			return (*this);
-		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
-		glDrawElementsBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), GLint(target.getElementStart()));
-		return (*this);
-	}
-
-	IndexPool const &IndexPool::onDrawIntancedCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target, size_t nbrIntanced) const
-	{
-		Pool::Element<Indices> const *element;
-		if ((element = getIndicesPoolElement(key, "rmIndices")) == NULL)
-			return (*this);
-		MemoryBlocksGPU const &memory = _poolMemory[element->memoryIndex];
-		glDrawElementsInstancedBaseVertex(mode, GLsizei(memory.getNbrElement()), GL_UNSIGNED_INT, (const GLvoid *)(memory.getElementStart() * sizeof(unsigned int)), nbrIntanced, GLint(target.getElementStart()));
-		return (*this);
-	}
-
-	IndexPool &IndexPool::attachVertexPoolToIndexPool(VertexPool const &pool)
-	{
-		_vertexPoolattach = &pool;
-		return (*this);
-	}
-
-	IndexPool &IndexPool::dettachVertexPoolToIndexPool()
-	{
-		_vertexPoolattach = NULL;
+		_buffer.bind();
 		return (*this);
 	}
 }

@@ -328,9 +328,9 @@ namespace AGE
 
 		std::size_t size = infos.count();
 
-		GLenum *typeComponent = new GLenum[size]; // {GL_FLOAT, GL_FLOAT, GL_FLOAT};			
-		uint8_t *sizeTypeComponent = new uint8_t[size]; // { sizeof(float), sizeof(float), sizeof(float) };
-		uint8_t *nbrComponent = new uint8_t[size];// {4, 4, 4};
+		AGE::Vector<GLenum> typeComponent(size); // {GL_FLOAT, GL_FLOAT, GL_FLOAT};			
+		AGE::Vector<uint8_t> sizeTypeComponent(size); // { sizeof(float), sizeof(float), sizeof(float) };
+		AGE::Vector<uint8_t> nbrComponent(size);// {4, 4, 4};
 
 		std::size_t ctr = 0;
 
@@ -388,12 +388,7 @@ namespace AGE
 		auto vpKey = geometryManager->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
 		auto indKey = geometryManager->addIndexPool();
 
-		geometryManager->attachIndexPoolToVertexPool(vpKey, indKey);
 
 		_pools.insert(std::make_pair(infos, std::make_pair(vpKey, indKey)));
-
-		delete[] typeComponent;
-		delete[] sizeTypeComponent;
-		delete[] nbrComponent;
 	}
 }

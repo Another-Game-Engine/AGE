@@ -10,11 +10,6 @@
 
 namespace gl
 {
-	//!\file Key.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class Key<TYPE>
-	//!\brief Key use to represent opengl instance outside the render context
 	template <typename TYPE>
 	class Key
 	{

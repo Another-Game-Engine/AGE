@@ -50,7 +50,7 @@ namespace gl
 		MemoryBlocksGPU &setSizeBlock(uint8_t index, size_t sizeBlock);
 		MemoryBlocksGPU &setOffset(uint8_t index, size_t offset);
 		MemoryBlocksGPU &setIsUsed(bool isused);
-		
+
 		// getter
 		bool getSync() const;
 		size_t getElementStart() const;
