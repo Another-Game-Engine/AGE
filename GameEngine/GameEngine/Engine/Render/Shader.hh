@@ -116,7 +116,7 @@ namespace gl
 		GLuint getUniformLocation(char const *flag);
 		GLuint getUniformBlockLocation(char const *flag);
 		GLuint getSamplerLocation(char const *flag);
-		size_t getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg);
+		size_t getUniformBindMaterial(Key<Uniform> const &key/*, std::string const &msg*/);
 
 		// use to create/set task and binding
 		size_t createMaterialBind(size_t offset, size_t indexTask);

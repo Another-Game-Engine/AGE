@@ -37,7 +37,7 @@ namespace gl
 
 		std::map<Key<Material>, Material> _materials;
 		std::pair<Key<Material>, Material *> _optimizeMaterialSearch;
-		Material *getMaterial(Key<Material> const &key, std::string const &in);
+		Material *getMaterial(Key<Material> const &key/*, std::string const &in*/);
 		bool _defaultMaterialCreated;
 		Key<Material> _defaultMaterial;
 		Key<Texture> _keyDefaultTexture;
@@ -50,7 +50,7 @@ namespace gl
 	{
 		Material *material;
 
-		if ((material = getMaterial(key, "setMaterial")) == NULL)
+		if ((material = getMaterial(key/*, "setMaterial"*/)) == NULL)
 			return (*this);
 		material->set<TYPE>(value);
 		return (*this);

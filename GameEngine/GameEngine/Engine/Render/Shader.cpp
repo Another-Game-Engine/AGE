@@ -444,13 +444,11 @@ namespace gl
 		return (NULL);
 	}
 
-	size_t Shader::getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg)
+	size_t Shader::getUniformBindMaterial(Key<Uniform> const &key/*, std::string const &msg*/)
 	{
-		if (!key)
-			assert(0);
+		assert(key);
 		auto &element = _bindUniform.find(key);
-		if (element == _bindUniform.end())
-			assert(0);
+		assert(element != _bindUniform.end());
 		return (element->second);
 	}
 
@@ -500,14 +498,13 @@ namespace gl
 	Shader &Shader::update()
 	{
 		use();
-		for (size_t index = 0; index < _tasks.size(); ++index)
+		for (auto &task : _tasks)
 		{
-			if (!_tasks[index].isExec())
-				assert(0);
-			if (_tasks[index].update)
+			assert(task.isExec());
+			if (task.update)
 			{
-				_tasks[index].func(_tasks[index].params);
-				_tasks[index].update = false;
+				task.func(task.params);
+				task.update = false;
 			}
 		}
 		return (*this);
@@ -517,9 +514,10 @@ namespace gl
 	{
 		for (size_t index = 0; index < _bindMaterial.size(); ++index)
 		{
-			if (_bindMaterial[index].isUse == false)
+			auto &material = _bindMaterial[index];
+			if (material.isUse == false)
 			{
-				setMaterialBinding(_bindMaterial[index], indexTask, offset);
+				setMaterialBinding(material, indexTask, offset);
 				return (index);
 			}
 		}
@@ -532,7 +530,7 @@ namespace gl
 	Shader &Shader::unbindMaterial(Key<Uniform> const &key)
 	{
 		size_t binding;
-		if ((binding = getUniformBindMaterial(key, "unbindMaterial")) == -1)
+		if ((binding = getUniformBindMaterial(key/*, "unbindMaterial"*/)) == -1)
 			return (*this);
 		_bindMaterial[binding].isUse = false;
 		return (*this);
