@@ -29,7 +29,7 @@ namespace gl
 	MaterialManager &MaterialManager::rmMaterial(Key<Material> &key)
 	{
 		Material *material;
-		if ((material = getMaterial(key, "rmMaterial()")) == NULL)
+		if ((material = getMaterial(key)) == NULL)
 			return (*this);
 		_materials[key.getId()] = Material();
 		key.destroy();
@@ -57,7 +57,7 @@ namespace gl
 		return (key);
 	}
 
-	Material *MaterialManager::getMaterial(Key<Material> const &key, std::string const &in)
+	Material *MaterialManager::getMaterial(Key<Material> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -71,7 +71,7 @@ namespace gl
 	{
 		Material *material;
 
-		if ((material = getMaterial(key, "updateShaderMaterial")) == NULL)
+		if ((material = getMaterial(key)) == NULL)
 			return (*this);
 		shader.setMaterial(*material);
 		return (*this);
