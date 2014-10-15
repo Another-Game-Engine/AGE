@@ -55,6 +55,7 @@ namespace gl
 		element.set<gl::Texture_bump>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_emissive>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_specular>(getDefaultTexture2D().getId());
+		element.set<gl::Texture_normal>(getDefaultTexture2D().getId());
 		return (key);
 	}
 
