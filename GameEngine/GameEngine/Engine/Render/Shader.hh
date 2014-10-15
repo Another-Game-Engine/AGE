@@ -89,11 +89,11 @@ namespace gl
 		AGE::Vector<Task> _tasks;
 
 		// map of task
-		std::map<Key<Sampler>, size_t> _bindSampler;
-		std::map<Key<Uniform>, size_t> _bindUniform;
-		std::map<Key<Uniform>, size_t> _uniforms;
-		std::map<Key<Sampler>, size_t> _samplers;
-		std::map<Key<InterfaceBlock>, size_t> _interfaceBlock;
+		AGE::Vector<size_t> _bindSampler;
+		AGE::Vector<size_t> _bindUniform;
+		AGE::Vector<size_t> _uniforms;
+		AGE::Vector<size_t> _samplers;
+		AGE::Vector<size_t> _interfaceBlock;
 
 		/// some private function usefull for internal functionement
 		// use to create the shader
@@ -158,7 +158,9 @@ namespace gl
 		Task const &task = _tasks[indexTask];
 		if (task.sizeParams[task.indexToTarget] != TYPE::size)
 			assert(0);
-		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
+		if (_bindUniform.size() <= key.getId())
+			_bindUniform.resize(key.getId() + 1);
+		_bindUniform[key.getId()] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
 	}
 
@@ -169,7 +171,9 @@ namespace gl
 		if ((indexTask = getIndexSampler(key)) == -1)
 			return (*this);
 		Task const &task = _tasks[indexTask];
-		_bindSampler[key] = createMaterialBind(TYPE::offset, indexTask);
+		if (_bindSampler.size() <= key.getId())
+			_bindSampler.resize(key.getId() + 1);
+		_bindSampler[key.getId()] = createMaterialBind(TYPE::offset, indexTask);
 		return (*this);
 	}
 
