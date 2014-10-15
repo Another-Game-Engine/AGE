@@ -9,7 +9,7 @@ namespace AGE
 	{
 		_father = NULL;
 		for (uint32_t i = 0; i < 8; ++i)
-			_sons[(i & 4) == 4][(i & 2) == 2][i & 1] = NULL;
+			_sons[i] = NULL;
 		_elementsNbr = 0;
 		for (size_t i = 0; i < MAX_ELEMENT_PER_NODE; ++i)
 			_elements[i] = NULL;
@@ -20,7 +20,7 @@ namespace AGE
 
 	}
 
-	OctreeNode	*OctreeNode::addElement(CullableObject *toAdd, bool useOldPos)
+	OctreeNode	*OctreeNode::addElement(CullableObject *toAdd)
 	{
 		glm::i8vec3	direction;
 		ECollision collisionState;
@@ -29,10 +29,7 @@ namespace AGE
 		switch (toAdd->type)
 		{
 		case CULLABLE_BOUNDING_BOX:
-			if (useOldPos)
-				collisionState = _node.checkCollision(((CullableBoundingBox*)toAdd)->previousAABB, direction);
-			else
-				collisionState = _node.checkCollision(((CullableBoundingBox*)toAdd)->currentAABB, direction);
+			collisionState = _node.checkCollision(((CullableBoundingBox*)toAdd)->currentAABB, direction);
 			break;
 		default:
 			assert(!"This cullable type is not handled yet.");
@@ -60,7 +57,7 @@ namespace AGE
 			else // if the node is not a leaf, we add the object to all it's sons
 			{
 				for (uint32_t i = 0; i < 8; ++i)
-					_sons[(i & 4) == 4][(i & 2) == 2][i & 1]->addElement(toAdd);
+					_sons[i]->addElement(toAdd);
 			}
 			return (newRoot);
 		}
@@ -73,25 +70,24 @@ namespace AGE
 		return (NULL);
 	}
 
-	OctreeNode	*OctreeNode::removeElement(CullableObject *toRm, bool useOldPos)
+	OctreeNode	*OctreeNode::removeElement(CullableObject *toRm, bool useCurrentPos)
 	{
-		glm::i8vec3	direction;
-		ECollision collisionState;
+		bool collisionState;
 
 		// check the collision state depending on the geometry shape
+		// TODO: remove the direction which is useless in this case
 		switch (toRm->type)
 		{
 		case CULLABLE_BOUNDING_BOX:
-			if (useOldPos)
-				collisionState = _node.checkCollision(((CullableBoundingBox*)toRm)->previousAABB, direction);
-			else
-				collisionState = _node.checkCollision(((CullableBoundingBox*)toRm)->currentAABB, direction);
+			collisionState = _node.checkCollision(useCurrentPos ?
+												((CullableBoundingBox*)toRm)->currentAABB :
+												((CullableBoundingBox*)toRm)->previousAABB);
 			break;
 		default:
 			assert(!"This cullable type is not handled yet.");
 			break;
 		}
-		if (collisionState != OUTSIDE)
+		if (collisionState)
 		{
 			if (isLeaf())
 			{
@@ -112,17 +108,17 @@ namespace AGE
 
 				for (uint32_t i = 0; i < 8; ++i)
 				{
-					_sons[(i & 4) == 4][(i & 2) == 2][i & 1]->removeElement(toRm);
-					if (_sons[(i & 4) == 4][(i & 2) == 2][i & 1]->_elementsNbr != 0 ||
-						_sons[(i & 4) == 4][(i & 2) == 2][i & 1]->isLeaf() == false)
+					_sons[i]->removeElement(toRm);
+					if (_sons[i]->_elementsNbr != 0 ||
+						_sons[i]->isLeaf() == false)
 						removeSons = false;
 				}
 				if (removeSons)
 				{
 					for (uint32_t i = 0; i < 8; ++i)
 					{
-						delete _sons[(i & 4) == 4][(i & 2) == 2][i & 1];
-						_sons[(i & 4) == 4][(i & 2) == 2][i & 1] = NULL;
+						delete _sons[i];
+						_sons[i] = NULL;
 					}
 				}
 			}
@@ -132,18 +128,38 @@ namespace AGE
 
 	OctreeNode	*OctreeNode::moveElement(CullableObject *toMove)
 	{
-		removeElement(toMove, true);
+		removeElement(toMove, false);
 		return (addElement(toMove));
 	}
 
-	void		getElementsIntersect(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill)
+	void		OctreeNode::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill)
 	{
+		bool collisionState;
 
-	}
-
-	void		getElementsInside(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill)
-	{
-
+		switch (toTest->type)
+		{
+		case CULLABLE_FRUSTUM:
+			collisionState = ((CullableFrustum*)toTest)->currentFrustum.checkCollision(_node);
+			break;
+		default:
+			assert(!"This cullable type is not handled yet.");
+			break;
+		}
+		if (collisionState != OUTSIDE)
+		{
+			if (isLeaf())
+			{
+				for (uint32_t i = 0; i < _elementsNbr; ++i)
+				{
+					if (_elements[i]->hasBeenFound == false &&
+						toTest->checkCollision(_elements[i]))
+					{
+						toFill.push_back(_elements[i]);
+						_elements[i]->hasBeenFound = true;
+					}
+				}
+			}
+		}
 	}
 
 	AABoundingBox const &OctreeNode::getNodeBoundingBox() const
@@ -154,7 +170,7 @@ namespace AGE
 	bool		OctreeNode::isLeaf() const
 	{
 		// If a node is not a leaf, all his sons are created
-		return (_sons[0][0][0] == NULL);
+		return (_sons[0] == NULL);
 	}
 
 	void		OctreeNode::splitNode()
@@ -174,7 +190,9 @@ namespace AGE
 		glm::vec3	nodeSize = _node.maxPoint - _node.minPoint;
 
 		_father = newRoot;
-		newRoot->_sons[direction.x == -1 ? 1 : 0][direction.y == -1 ? 1 : 0][direction.z == -1 ? 1 : 0] = this;
+		newRoot->_sons[ (direction.x == -1 ? 4 : 0) +
+						(direction.y == -1 ? 2 : 0) +
+						(direction.z == -1 ? 1 : 0)] = this;
 		if (direction.x == -1)
 		{
 			newRoot->_node.minPoint.x = _node.minPoint.x - nodeSize.x;
@@ -213,8 +231,8 @@ namespace AGE
 	{
 		for (uint32_t i = 0; i < 8; ++i)
 		{
-			glm::u8vec3	currentSon((i & 4) == 4, (i & 2) == 2, i & 1);
-			if (_sons[currentSon.x][currentSon.y][currentSon.z] == NULL)
+			glm::u8vec3	currentSon((i & 4) ? 1 : 0, (i & 2) ? 1 : 0, i & 1);
+			if (_sons[i] == NULL)
 			{
 				OctreeNode	*newSon = new OctreeNode;
 				glm::vec3	nodeHalfSize = (_node.maxPoint - _node.minPoint) / 2.0f;
@@ -225,7 +243,7 @@ namespace AGE
 																	currentSon.y == 0 ? 1 : 0,
 																	currentSon.z == 0 ? 1 : 0) * nodeHalfSize;
 
-				_sons[currentSon.x][currentSon.y][currentSon.z] = newSon;
+				_sons[i] = newSon;
 			}
 		}
 	}

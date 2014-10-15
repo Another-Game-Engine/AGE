@@ -14,12 +14,11 @@ namespace AGE
 		OctreeNode();
 		~OctreeNode();
 
-		OctreeNode	*addElement(CullableObject *toAdd, bool useOldPos = false);
-		OctreeNode	*removeElement(CullableObject *toRm, bool useOldPos = false);
+		OctreeNode	*addElement(CullableObject *toAdd);
+		OctreeNode	*removeElement(CullableObject *toRm, bool useCurrentPos = true);
 		OctreeNode	*moveElement(CullableObject *toMove);
 
-		void		getElementsIntersect(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill);
-		void		getElementsInside(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill);
+		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill);
 
 		AABoundingBox const &getNodeBoundingBox() const;
 		bool				isLeaf() const;
@@ -31,7 +30,7 @@ namespace AGE
 		void		generateAllSons();
 
 		OctreeNode		*_father;
-		OctreeNode		*_sons[2][2][2];
+		OctreeNode		*_sons[8];
 
 		AABoundingBox	_node;
 

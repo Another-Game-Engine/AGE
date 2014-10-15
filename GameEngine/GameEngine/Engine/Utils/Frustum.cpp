@@ -7,67 +7,55 @@ namespace AGE
 
 	void	Frustum::buildPlanes()
 	{
-		Plane *p = nullptr;
-
-		p = &(_planes[_NEAR]);
-		p->set(_matrix[0][3] + _matrix[0][2],
-			_matrix[1][3] + _matrix[1][2],
-			_matrix[2][3] + _matrix[2][2],
-			_matrix[3][3] + _matrix[3][2]);
-		p->normalize();
-
-		p = &(_planes[_FAR]);
-		p->set(_matrix[0][3] - _matrix[0][2],
-			_matrix[1][3] - _matrix[1][2],
-			_matrix[2][3] - _matrix[2][2],
-			_matrix[3][3] - _matrix[3][2]);
-		p->normalize();
-
-		p = &_planes[_LEFT];
-		p->set(_matrix[0][3] + _matrix[0][0],
-			_matrix[1][3] + _matrix[1][0],
-			_matrix[2][3] + _matrix[2][0],
-			_matrix[3][3] + _matrix[3][0]);
-		p->normalize();
-
-		p = &_planes[_RIGHT];
-		p->set(_matrix[0][3] - _matrix[0][0],
-			_matrix[1][3] - _matrix[1][0],
-			_matrix[2][3] - _matrix[2][0],
-			_matrix[3][3] - _matrix[3][0]);
-		p->normalize();
-
-		p = &_planes[_BOTTOM];
-		p->set(_matrix[0][3] + _matrix[0][1],
-			_matrix[1][3] + _matrix[1][1],
-			_matrix[2][3] + _matrix[2][1],
-			_matrix[3][3] + _matrix[3][1]);
-		p->normalize();
-
-		p = &_planes[_TOP];
-		p->set(_matrix[0][3] - _matrix[0][1],
-			_matrix[1][3] - _matrix[1][1],
-			_matrix[2][3] - _matrix[2][1],
-			_matrix[3][3] - _matrix[3][1]);
-		p->normalize();
+		_planes[PLANE_NEAR].setCoefficients(
+			_viewProj[0][2] + _viewProj[0][3],
+			_viewProj[1][2] + _viewProj[1][3],
+			_viewProj[2][2] + _viewProj[2][3],
+			_viewProj[3][2] + _viewProj[3][3]);
+		_planes[PLANE_FAR].setCoefficients(
+			-_viewProj[0][2] + _viewProj[0][3],
+			-_viewProj[1][2] + _viewProj[1][3],
+			-_viewProj[2][2] + _viewProj[2][3],
+			-_viewProj[3][2] + _viewProj[3][3]);
+		_planes[PLANE_BOTTOM].setCoefficients(
+			_viewProj[0][1] + _viewProj[0][3],
+			_viewProj[1][1] + _viewProj[1][3],
+			_viewProj[2][1] + _viewProj[2][3],
+			_viewProj[3][1] + _viewProj[3][3]);
+		_planes[PLANE_TOP].setCoefficients(
+			-_viewProj[0][1] + _viewProj[0][3],
+			-_viewProj[1][1] + _viewProj[1][3],
+			-_viewProj[2][1] + _viewProj[2][3],
+			-_viewProj[3][1] + _viewProj[3][3]);
+		_planes[PLANE_LEFT].setCoefficients(
+			_viewProj[0][0] + _viewProj[0][3],
+			_viewProj[1][0] + _viewProj[1][3],
+			_viewProj[2][0] + _viewProj[2][3],
+			_viewProj[3][0] + _viewProj[3][3]);
+		_planes[PLANE_RIGHT].setCoefficients(
+			-_viewProj[0][0] + _viewProj[0][3],
+			-_viewProj[1][0] + _viewProj[1][3],
+			-_viewProj[2][0] + _viewProj[2][3],
+			-_viewProj[3][0] + _viewProj[3][3]);
 	}
 
-	void Frustum::setMatrix(const glm::mat4 &matrix, bool rebuildPlanes)
+	void Frustum::setMatrix(const glm::mat4 &viewProj)
 	{
-		_matrix = matrix;
-		if (rebuildPlanes)
-			buildPlanes();
-	}
-
-	bool Frustum::pointIn(const glm::vec3 &point) const
-	{
-		for (int i = 0; i < _END; ++i)
+		if (_viewProj != viewProj)
 		{
-			auto v = _planes[i].dot(point);
-			if (v <= 0.0f)
-				return false;
+			_viewProj = viewProj;
+			buildPlanes();
 		}
-		return true;
+	}
+
+	bool Frustum::checkCollision(AABoundingBox const &aabb) const
+	{
+		for (int i = 0; i < PLANE_END; i++)
+		{
+			if (_planes[i].getPointDistance(aabb.getPositivePoint(_planes[i].getNormal())) < 0)
+				return (false);
+		}
+		return (true);
 	}
 
 }

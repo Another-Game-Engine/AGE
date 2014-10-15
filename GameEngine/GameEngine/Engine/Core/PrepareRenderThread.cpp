@@ -409,7 +409,7 @@ namespace AGE
 				
 				Frustum frustum;
 				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
-				frustum.setMatrix(camera.projection * view, true);
+				frustum.setMatrix(camera.projection * view);
 
 				_octreeDrawList.emplace_back();
 				auto &drawList = _octreeDrawList.back();

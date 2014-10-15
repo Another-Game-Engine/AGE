@@ -17,6 +17,32 @@ namespace AGE
 		maxPoint = max;
 	}
 
+	glm::vec3	AABoundingBox::getPositivePoint(glm::vec3 const &normal) const
+	{
+		glm::vec3 ret = minPoint;
+
+		if (normal.x >= 0)
+			ret.x = maxPoint.x;
+		if (normal.y >= 0)
+			ret.y = maxPoint.y;
+		if (normal.z >= 0)
+			ret.z = maxPoint.z;
+		return (ret);
+	}
+
+	glm::vec3	AABoundingBox::getNegativePoint(glm::vec3 const &normal) const
+	{
+		glm::vec3 ret = maxPoint;
+
+		if (normal.x >= 0)
+			ret.x = minPoint.x;
+		if (normal.y >= 0)
+			ret.y = minPoint.y;
+		if (normal.z >= 0)
+			ret.z = minPoint.z;
+		return (ret);
+	}
+
 	void		AABoundingBox::fromTransformedBox(AABoundingBox const &aabb, glm::mat4 const &transform)
 	{
 		glm::vec4		boundingBox[8];
@@ -44,20 +70,20 @@ namespace AGE
 		}
 	}
 
-	AGE::ECollision AABoundingBox::checkCollision(AABoundingBox const &oth, glm::i8vec3 &direction) const
-{
+	ECollision AABoundingBox::checkCollision(AABoundingBox const &oth, glm::i8vec3 &direction) const
+	{
 		direction = glm::i8vec3(0);
-		if (minPoint.x > oth.maxPoint.x)
+		if (minPoint.x >= oth.maxPoint.x)
 			direction.x = -1;
-		if (oth.minPoint.x > maxPoint.x)
+		if (oth.minPoint.x >= maxPoint.x)
 			direction.x = 1;
-		if (minPoint.y > oth.maxPoint.y)
+		if (minPoint.y >= oth.maxPoint.y)
 			direction.y = -1;
-		if (oth.minPoint.y > maxPoint.y)
+		if (oth.minPoint.y >= maxPoint.y)
 			direction.y = 1;
-		if (minPoint.z > oth.maxPoint.z)
+		if (minPoint.z >= oth.maxPoint.z)
 			direction.z = -1;
-		if (oth.minPoint.z > maxPoint.z)
+		if (oth.minPoint.z >= maxPoint.z)
 			direction.z = 1;
 		if (direction == glm::i8vec3(0))
 		{
@@ -80,6 +106,16 @@ namespace AGE
 		}
 		else
 			return OUTSIDE;
+	}
+
+	bool	AABoundingBox::checkCollision(AABoundingBox const &oth) const
+	{
+		return (maxPoint.x > oth.minPoint.x &&
+			minPoint.x < oth.maxPoint.x &&
+			maxPoint.y > oth.minPoint.y &&
+			minPoint.y < oth.maxPoint.y &&
+			maxPoint.z > oth.minPoint.z &&
+			minPoint.z < oth.maxPoint.z);
 	}
 
 }

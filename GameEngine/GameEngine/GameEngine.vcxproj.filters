@@ -92,9 +92,8 @@
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="Engine\Utils\Age_Imgui.cpp" />
-
     <ClCompile Include="Engine\Utils\MathematicTools.cpp" />
-
+    <ClCompile Include="Engine\Utils\Plane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
@@ -209,7 +208,6 @@
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
-    <ClInclude Include="Engine\Utils\Plane.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
@@ -271,6 +269,7 @@
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
     <ClInclude Include="Engine\Utils\Age_Imgui.hpp" />
     <ClInclude Include="Engine\Utils\MathematicTools.hh" />
+    <ClInclude Include="Engine\Utils\Plane.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

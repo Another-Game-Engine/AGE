@@ -19,9 +19,12 @@ namespace AGE
 	{
 		CullableType	type;
 		OctreeNode		*currentNode;
+		bool			hasBeenFound;
 
 		CullableObject();
 		~CullableObject();
+
+		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const = 0;
 	};
 
 	struct CullableBoundingBox : public CullableObject
@@ -31,6 +34,8 @@ namespace AGE
 
 		CullableBoundingBox();
 		~CullableBoundingBox();
+
+		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const;
 	};
 
 	struct CullableSphere : public CullableObject
@@ -40,6 +45,8 @@ namespace AGE
 
 		CullableSphere();
 		~CullableSphere();
+
+		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const;
 	};
 
 	struct CullableFrustum : public CullableObject
@@ -49,6 +56,8 @@ namespace AGE
 
 		CullableFrustum();
 		~CullableFrustum();
+
+		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const;
 	};
 
 }
