@@ -21,7 +21,8 @@ vec3 perturb_normal()
 {
 	vec3 normal_bump = texture(bump_texture, inter_texCoord).xyz;
 	mat3 TBN = mat3(inter_tangent, inter_bitTangent, inter_normal);
-	return mix(normalize(transpose(TBN) * (normal_bump * 2.f - 1.f)), inter_normal, all(equal(normal_bump, vec3(0.f))));
+	vec3 normal_bump_adjust = normalize(normal_bump * 2.f - vec3(1.f));
+	return mix(normalize(transpose(TBN) * normal_bump_adjust), inter_normal, all(equal(normal_bump, vec3(0.f))));
 }
 
 void main(void)
