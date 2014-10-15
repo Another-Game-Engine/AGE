@@ -159,6 +159,11 @@ namespace AGE
 					}
 				}
 			}
+			else
+			{
+				for (uint32_t i = 0; i < 8; ++i)
+					_sons[i]->getElementsCollide(toTest, toFill);
+			}
 		}
 	}
 

@@ -5,6 +5,7 @@
 
 static void	unitTestOctree()
 {
+	AGE::CullableFrustum		*frustum = new AGE::CullableFrustum;
 	// Octree node
 	AGE::OctreeNode				*root = new AGE::OctreeNode;
 	// Cullable objects
