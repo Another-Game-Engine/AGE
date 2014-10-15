@@ -103,7 +103,7 @@ namespace AGE
 		}
 		else if (data.colorNumber == 1)
 		{
-			ct = GL_R8;
+			ct = GL_RGB32F;
 			color = GL_LUMINANCE;
 		}
 		else
