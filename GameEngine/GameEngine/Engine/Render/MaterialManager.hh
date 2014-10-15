@@ -36,7 +36,7 @@ namespace gl
 		MaterialManager &createDefaultTexture2D(std::array<glm::u8vec4, 4> const &damColor);
 
 		AGE::Vector<Material> _materials;
-		Material *getMaterial(Key<Material> const &key, std::string const &in);
+		Material *getMaterial(Key<Material> const &key);
 		bool _defaultMaterialCreated;
 		Key<Material> _defaultMaterial;
 		Key<Texture> _keyDefaultTexture;
@@ -49,7 +49,7 @@ namespace gl
 	{
 		Material *material;
 
-		if ((material = getMaterial(key, "setMaterial")) == NULL)
+		if ((material = getMaterial(key)) == NULL)
 			return (*this);
 		material->set<TYPE>(value);
 		return (*this);
