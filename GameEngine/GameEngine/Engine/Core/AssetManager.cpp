@@ -60,6 +60,7 @@ namespace AGE
 			manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
 			manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
 			manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath));
+			manager->setMaterial<gl::Texture_normal>(mat, loadTexture(e.normalTexPath));
 
 			manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
 			manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
@@ -103,7 +104,7 @@ namespace AGE
 		}
 		else if (data.colorNumber == 1)
 		{
-			ct = GL_R8;
+			ct = GL_RGB32F;
 			color = GL_LUMINANCE;
 		}
 		else
