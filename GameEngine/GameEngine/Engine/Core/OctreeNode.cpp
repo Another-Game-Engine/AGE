@@ -132,7 +132,7 @@ namespace AGE
 		return (addElement(toMove));
 	}
 
-	void		OctreeNode::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill)
+	void		OctreeNode::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill) const
 	{
 		bool collisionState;
 
@@ -190,7 +190,7 @@ namespace AGE
 	}
 
 	OctreeNode * OctreeNode::extendNode(CullableObject *toAdd, glm::i8vec3 const &direction)
-{
+	{
 		OctreeNode	*newRoot = new OctreeNode;
 		glm::vec3	nodeSize = _node.maxPoint - _node.minPoint;
 

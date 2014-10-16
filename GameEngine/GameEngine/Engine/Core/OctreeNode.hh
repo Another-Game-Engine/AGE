@@ -18,7 +18,7 @@ namespace AGE
 		OctreeNode	*removeElement(CullableObject *toRm, bool useCurrentPos = true);
 		OctreeNode	*moveElement(CullableObject *toMove);
 
-		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill);
+		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill) const;
 
 		AABoundingBox const &getNodeBoundingBox() const;
 		bool				isLeaf() const;

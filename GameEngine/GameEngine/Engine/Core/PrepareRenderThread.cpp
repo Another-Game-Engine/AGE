@@ -11,6 +11,7 @@
 #include <Core/PreparableObject.hh>
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
+#include <Core/OctreeNode.hh>
 #include <chrono>
 
 
@@ -18,6 +19,8 @@ namespace AGE
 {
 	PrepareRenderThread::PrepareRenderThread()
 	{
+		_drawables.reserve(65536);
+		_octree = new OctreeNode;
 	}
 
 	PrepareRenderThread::~PrepareRenderThread(void)
@@ -209,6 +212,8 @@ namespace AGE
 	{
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
 		_drawables[id].active = false;
+		// remove drawable from octree
+		_octree = _octree->removeElement(&_drawables[id]);
 		assert(id != (std::size_t)(-1));
 	}
 
@@ -306,6 +311,13 @@ namespace AGE
 				_drawables[id].position = uo->position;
 				_drawables[id].orientation = uo->orientation;
 				_drawables[id].scale = uo->scale;
+
+				// add drawable in octree
+				_drawables[id].transformation = glm::scale(glm::translate(glm::mat4(1), _drawables[id].position) *
+					glm::toMat4(_drawables[id].orientation), _drawables[id].scale);
+				_drawables[id].currentAABB.fromTransformedBox(_drawables[id].meshAABB, _drawables[id].transformation);
+				_drawables[id].previousAABB = _drawables[id].currentAABB;
+				_octree = _octree->addElement(&_drawables[id]);
 			}
 		})
 			.handle<PRTC::Position>([&](const PRTC::Position& msg)
@@ -402,36 +414,53 @@ namespace AGE
 			IMGUI_END
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
+			AGE::Vector<CullableObject*> toDraw;
+
+			// Update drawable positions in octree
+			for (auto &e : _drawables)
+			{
+				if (e.hasMoved)
+				{
+					e.previousAABB = e.currentAABB;
+					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
+					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
+					_octree = _octree->moveElement(&e);
+					e.hasMoved = false;
+				}
+			}
+			// Do culling for each camera
 			for (auto &camera : _cameras)
 			{
 				if (!camera.active)
 					continue;
 				
-				Frustum frustum;
 				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
-				frustum.setMatrix(camera.projection * view);
+				// update frustum infos for culling
+				camera.currentFrustum.setMatrix(camera.projection * view);
 
 				_octreeDrawList.emplace_back();
 				auto &drawList = _octreeDrawList.back();
 				drawList.transformation = view;
 				drawList.projection = camera.projection;
+
+				// no culling for the lights for the moment (TODO)
 				for (size_t index = 0; index < _pointLights.size(); ++index)
 				{
 					auto &p = _pointLights[index];
 					drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
 
-				for (auto &e : _drawables)
+				// Do the culling
+				_octree->getElementsCollide((CullableObject*)&camera, toDraw);
+
+				// iter on element to draw
+				for (CullableObject *e : toDraw)
 				{
-					if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ /*frustum.pointIn(e.position) ==*/ true)
-					{
-						if (e.hasMoved)
-						{
-							e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
-							e.hasMoved = false;
-						}
-						drawList.drawables.emplace_back(e.mesh, e.material, e.transformation);
-					}
+					// mandatory if you want the object to be found again
+					e->hasBeenFound = false;
+					// all the elements are drawable for the moment (TODO)
+					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
+					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
 				}
 			}
 
