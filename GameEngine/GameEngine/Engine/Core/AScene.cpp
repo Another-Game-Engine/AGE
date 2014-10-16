@@ -7,6 +7,7 @@
 #include <Core/EntityFilter.hpp>
 #include <Entities/EntityFlags.hh>
 #include <Core/PrepareRenderThread.hpp>
+#include <fstream>
 
 AScene::AScene(std::weak_ptr<Engine> &&engine) :
 DependenciesInjector(std::move(engine))
@@ -82,6 +83,7 @@ Entity &AScene::createEntity()
 			e.entity.id = _entityNumber;
 			e.link._octree = getInstance<AGE::PrepareRenderThread>();
 			assert(++_entityNumber != UINT16_MAX);
+			e.entity.setActive(true);
 			return e.entity;
 		}
 		else
@@ -101,6 +103,7 @@ Entity &AScene::createEntity()
 			return;
 		++data.entity.version;
 		data.entity.flags = 0;
+		data.entity.setActive(false);
 		cachedCode = data.barcode;
 		data.barcode.reset();
 		getLink(e)->reset();
@@ -118,3 +121,10 @@ Entity &AScene::createEntity()
 		}
 		_free.push(e.id);
 	}
+
+void AScene::saveToJson(const std::string &fileName) const
+{
+	std::ofstream file(fileName, std::ios::binary);
+	assert(file.is_open());
+	save<cereal::JSONOutputArchive>(file, true);
+}

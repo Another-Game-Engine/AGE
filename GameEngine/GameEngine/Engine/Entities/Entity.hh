@@ -97,10 +97,21 @@ public:
 		return flags;
 	}
 
+	inline bool isActive() const
+	{
+		return active;
+	}
+
+	inline void setActive(bool v)
+	{
+		active = v;
+	}
+
 private:
 	ENTITY_ID id;
 	ENTITY_VERSION version;
 	ENTITY_FLAGS flags;
+	bool active : 1;
 
 	friend AScene;
 	friend AComponentManager;

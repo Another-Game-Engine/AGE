@@ -38,7 +38,7 @@ private:
 public:
 	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
-	inline std::uint16_t    getNumberOfEntities() { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
+	inline std::uint16_t    getNumberOfEntities() const { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
@@ -126,20 +126,30 @@ public:
 		return false;
 	}
 
+	void saveToJson(const std::string &fileName) const;
+
 	template <typename Archive>
-	void save(std::ofstream &s)
+	void save(std::ofstream &s, bool verbose = false) const
 	{
 		Archive ar(s);
-		unsigned int size = 0;
+
+		auto entityNbr = getNumberOfEntities();
+		if (verbose)
+			ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
+		else
+			ar(entityNbr);
+		
 		for (auto &e : _pool)
 		{
-			// TODO
-			//if (e.getFlags() & EntityData::ACTIVE)
-			//{
-			//	++size;
-			//}
+			if (e.entity.isActive())
+			{
+				if (verbose)
+					ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), e));
+				else
+					ar(e);
+			}
 		}
-		ar(cereal::make_nvp("Number_of_serialized_entities", size));
+		
 		for (auto &e : _pool)
 		{
 			// TODO
