@@ -140,7 +140,7 @@ int			main(int ac, char **av)
 	//	AGE::ImageLoader::save(dataSet);
 	//	AGE::MeshLoader::save(dataSet);
 	//}
-	/*{
+	{
 		AGE::AssetDataSet dataSet;
 		dataSet.filePath = File("cube/cube.obj");
 		dataSet.skinName = "cube";
@@ -156,6 +156,6 @@ int			main(int ac, char **av)
 		AGE::MaterialLoader::save(dataSet);
 		AGE::ImageLoader::save(dataSet);
 		AGE::MeshLoader::save(dataSet);
-	}*/
+	}
 	return (0);
 }
