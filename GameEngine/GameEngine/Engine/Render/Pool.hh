@@ -19,16 +19,20 @@ namespace gl
 	class Indices;
 	class MemoryBlocksGPU;
 
+#define KEY_ELEMENT_POOL 0;
+
 	template <typename TYPE>
 	struct Element
 	{
 		size_t memoryIndex;
 		TYPE const *data;
-		Element() : memoryIndex(0), data(NULL) {}
+		Element() : memoryIndex(0), data(nullptr) {}
 		Element(size_t memoryIndex, TYPE const *data) : memoryIndex(memoryIndex), data(data) {}
 		Element(Element const &copy) : memoryIndex(copy.memoryIndex), data(copy.data){}
 		Element &operator=(Element const &e) { memoryIndex = e.memoryIndex; data = e.data; return (*this); }
 		~Element(){}
+		void reset() { data = nullptr; memoryIndex = 0; }
+		bool operator!() { return data != nullptr; }
 	};
 
 	template <typename TYPE> 
@@ -96,7 +100,7 @@ namespace gl
 		BUFFER _buffer;
 		AGE::Vector<AttributeData> _attributes;
 		size_t _nbrBytePool;
-		std::unordered_map<Key<Element<DATA>>, Element<DATA>, HashKey<Key<Element<DATA>>>> _poolElement;
+		AGE::Vector<Element<DATA>> _poolElement;
 		AGE::Vector<MemoryBlocksGPU> _poolMemory;
 		bool _setContext;
 		bool _reloadBuffer;
@@ -183,7 +187,7 @@ namespace gl
 			{
 				_internalSyncronized = false;
 				memory.setSync(false); memory.setIsUsed(true);
-				_poolElement[key] = Element<DATA>(index, &element);
+				_poolElement[key.getId()] = Element<DATA>(index, &element);
 				return (true);
 			}
 		}
@@ -226,7 +230,9 @@ namespace gl
 			return (key);
 		resetSyncronisation();
 		buildNewMemoryStorage(element);
-		_poolElement[key] = Element<DATA>(_poolMemory.size() - 1, &element);
+		if (_poolElement.size() < key.getId())
+			_poolElement.resize(key.getId() + 1);
+		_poolElement[key.getId()] = Element<DATA>(_poolMemory.size() - 1, &element);
 		return (key);
 	}
 
@@ -235,26 +241,24 @@ namespace gl
 	{
 		if (!key)
 			assert(0);
-		if (_poolElement.size() == 0)
+		if (_poolElement.size() == 0 || key.getId() >= _poolElement.size())
 			assert(0);
 		if (_optimizerElementSearch.first == key)
 			return (_optimizerElementSearch.second);
-		auto &it = _poolElement.find(key);
-		if (it == _poolElement.end())
-			assert(0);
+		auto &res = _poolElement[key.getId()];
+		_optimizerElementSearch.second = &res;
 		_optimizerElementSearch.first = key;
-		_optimizerElementSearch.second = &it->second;
-		return (&it->second);
+		return (&res);
 	}
 
 	template <typename POOL, typename DATA, typename BUFFER>
 	Pool<POOL, DATA, BUFFER> &Pool<POOL, DATA, BUFFER>::rmElement(Key<Element<DATA>> &key)
 	{
-		Element<DATA> const *element = getElementPool(key);
+		Element<DATA> *element = getElementPool(key);
 		MemoryBlocksGPU &memory = _poolMemory[element->memoryIndex];
 		memory.setSync(true);
 		memory.setIsUsed(false);
-		_poolElement.erase(key);
+		element->reset();
 		key.destroy();
 		return (*this);
 	}
@@ -264,13 +268,15 @@ namespace gl
 	{
 		for (auto &element : _poolElement)
 		{
-			MemoryBlocksGPU &memory = _poolMemory[element.second.memoryIndex];
+			if (element.data == nullptr)
+				continue;
+			MemoryBlocksGPU &memory = _poolMemory[element.memoryIndex];
 			if (!memory.getSync())
 			{
 				memory.setSync(true);
 				for (size_t index = 0; index < memory.getNbrBlock(); ++index)
 				{
-					_buffer.BufferSubData(_attributes[index].offsetAttribute + memory.getOffset(uint8_t(index)), memory.getSizeBlock(uint8_t(index)), (void *)element.second.data->getBuffer(uint8_t(index)));
+					_buffer.BufferSubData(_attributes[index].offsetAttribute + memory.getOffset(uint8_t(index)), memory.getSizeBlock(uint8_t(index)), (void *)element.data->getBuffer(uint8_t(index)));
 				}
 			}
 		}

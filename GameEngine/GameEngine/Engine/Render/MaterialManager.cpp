@@ -29,9 +29,9 @@ namespace gl
 	MaterialManager &MaterialManager::rmMaterial(Key<Material> &key)
 	{
 		Material *material;
-		if ((material = getMaterial(key, "rmMaterial()")) == NULL)
+		if ((material = getMaterial(key)) == NULL)
 			return (*this);
-		_materials.erase(key);
+		_materials[key.getId()] = Material();
 		key.destroy();
 		return (*this);
 	}
@@ -40,17 +40,16 @@ namespace gl
 	{
 		if (target >= _materials.size())
 			assert(0);
-		auto &element = _materials.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
+		return Key<Material>::createKeyWithId(target);
 	}
 
 	Key<Material> MaterialManager::addMaterial()
 	{
 		Key<Material> key = Key<Material>::createKey();
 
-		auto element = _materials[key];
+		if (_materials.size() <= key.getId())
+			_materials.resize(key.getId() + 1);
+		auto &element = _materials[key.getId()];
 		element.set<gl::Texture_diffuse>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_bump>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_emissive>(getDefaultTexture2D().getId());
@@ -59,27 +58,21 @@ namespace gl
 		return (key);
 	}
 
-	Material *MaterialManager::getMaterial(Key<Material> const &key, std::string const &in)
+	Material *MaterialManager::getMaterial(Key<Material> const &key)
 	{
 		if (!key)
 			assert(0);
 		if (_materials.size() == 0)
 			assert(0);
-		if (key == _optimizeMaterialSearch.first)
-			return (_optimizeMaterialSearch.second);
-		auto &material = _materials.find(key);
-		if (material == _materials.end())
-			assert(0);
-		_optimizeMaterialSearch.first = key;
-		_optimizeMaterialSearch.second = &material->second;
-		return (&material->second);
+		auto &material = _materials[key.getId()];
+		return (&material);
 	}
 
 	MaterialManager &MaterialManager::setShader(Key<Material> const &key, Shader &shader)
 	{
 		Material *material;
 
-		if ((material = getMaterial(key, "updateShaderMaterial")) == NULL)
+		if ((material = getMaterial(key)) == NULL)
 			return (*this);
 		shader.setMaterial(*material);
 		return (*this);
