@@ -56,8 +56,6 @@ namespace Component
 	{
 		float	maxRange = computePointLightRange(256, range);
 
-		std::cout << "max range = " << maxRange << std::endl;
-		std::cout << "recomputed value = " << range.x + range.y * maxRange + range.z * maxRange * maxRange << std::endl;
 		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(position, color, range, _key);
 		return (*this);
 	}

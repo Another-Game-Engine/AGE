@@ -9,11 +9,11 @@ uniform global_state
 layout (location = 0) in vec2 position;
 
 out vec2 interpolated_texCoord;
-flat out vec3 interpolated_eyes_pos;
+flat out vec3 eyes_pos;
 
 void main()
 {
 	interpolated_texCoord = position * 0.5f + 0.5f; 
-	interpolated_eyes_pos = -transpose(mat3(view_matrix)) * view_matrix[3].xyz;
+	eyes_pos = -transpose(mat3(view_matrix)) * view_matrix[3].xyz;
 	gl_Position = vec4(position, 0.f, 1.0f);
 }

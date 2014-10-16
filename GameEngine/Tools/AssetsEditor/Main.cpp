@@ -29,7 +29,7 @@ int			main(int ac, char **av)
 		convertor.loads();
 		convertor.saves();
 	}
-	/*{
+	{
 		AGE::AssetDataSet dataSet;
 		dataSet.filePath = File("ball/ball.obj");
 		dataSet.skinName = "ball";
@@ -63,7 +63,7 @@ int			main(int ac, char **av)
 
 		AGE::MeshLoader::load(dataSet);
 		AGE::MeshLoader::save(dataSet);
-	}*/
+	}
 	//{
 	//	AGE::AssetDataSet dataSet;
 	//	dataSet.filePath = File("sibenik/sibenik.obj");

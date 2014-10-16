@@ -10,22 +10,20 @@ layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 normal;
 layout (location = 2) in vec2 texCoord;
 layout (location = 3) in vec4 color;
-layout (location = 4) in vec4 bitTangent;
-layout (location = 5) in vec4 tangent;
 
 uniform mat4 model_matrix;
 
 out vec3 inter_normal;
 out vec2 inter_texCoord;
-out vec3 inter_bitTangent;
-out vec3 inter_tangent;
+out vec4 inter_position;
+flat out vec3 eyes_pos;
 
 void main()
 {
 	mat3 normal_matrix = transpose(inverse(mat3(model_matrix)));
 	inter_normal = normalize(normal_matrix * vec3(normal));
-	inter_bitTangent = normalize(normal_matrix * vec3(bitTangent));
-	inter_tangent = normalize(normal_matrix * vec3(tangent));
+	eyes_pos = -transpose(mat3(view_matrix)) * view_matrix[3].xyz;
 	inter_texCoord = texCoord;
-	gl_Position = projection_matrix * view_matrix * model_matrix * position;
+	inter_position = model_matrix * position;
+	gl_Position = projection_matrix * view_matrix * inter_position;
 }

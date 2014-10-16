@@ -78,10 +78,7 @@ namespace AGE
 		if (_textures.find(filePath.getFullName()) != std::end(_textures))
 			return _textures[filePath.getFullName()];
 		if (!filePath.exists())
-		{
 			return (manager->getDefaultTexture2D());
-		}
-
 		TextureData data;
 
 		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
