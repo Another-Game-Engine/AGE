@@ -59,14 +59,13 @@ namespace AGE
 
 			dataSet.assimpScene = const_cast<aiScene*>(dataSet.assimpImporter.ReadFile(
 				path
-				, aiProcessPreset_TargetRealtime_Quality
-/*aiProcess_Triangulate |
+				, aiProcess_Triangulate |
 				aiProcess_GenNormals |
 				aiProcess_CalcTangentSpace |
 				aiProcess_JoinIdenticalVertices |
 				aiProcess_SortByPType |
 				aiProcess_ImproveCacheLocality |
-				aiProcess_OptimizeMeshes*/));
+				aiProcess_OptimizeMeshes));
 
 			if (dataSet.assimpScene == nullptr)
 			{
