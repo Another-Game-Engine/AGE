@@ -485,5 +485,7 @@ bool BenchmarkScene::userUpdate(double time)
 	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
 
 	octree->getCommandQueue().releaseReadability();
+
+	saveToJson("SAVE_TEST.json");
 	return true;
 }

@@ -6,6 +6,7 @@
 #include <Core/PrepareKey.hpp>
 #include <cstring>
 #include <array>
+#include <Utils/GlmSerialization.hpp>
 
 class AScene;
 
@@ -53,6 +54,16 @@ namespace AGE
 	public:
 		Link();
 		void reset();
+
+		template < typename Archive >
+		void serialize(Archive &ar)
+		{
+			ar(
+				cereal::make_nvp("Position", _position)
+				, cereal::make_nvp("Scale", _scale)
+				, cereal::make_nvp("Orientation", _orientation)
+				);
+		}
 
 		friend class AScene;
 	};

@@ -3,6 +3,7 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Components/Component.hh>
 #include <utility>
+#include <cereal/cereal.hpp>
 
 class AScene;
 

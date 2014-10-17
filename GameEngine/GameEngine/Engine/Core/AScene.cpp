@@ -140,5 +140,6 @@ void AScene::saveToJson(const std::string &fileName)
 {
 	std::ofstream file(fileName, std::ios::binary);
 	assert(file.is_open());
-	save<cereal::JSONOutputArchive>(file, true);
+	save<cereal::JSONOutputArchive>(file);
+	file.close();
 }

@@ -21,6 +21,7 @@
 
 #include <Core/ComponentManager.hpp>
 #include <Utils/Containers/Queue.hpp>
+#include <Entities/EntitySerializationInfos.hpp>
 
 class System;
 class Engine;
@@ -128,39 +129,46 @@ public:
 	void saveToJson(const std::string &fileName);
 
 	template <typename Archive>
-	void save(std::ofstream &s, bool verbose = false)
+	void save(std::ofstream &s)
 	{
 		Archive ar(s);
 
 		buildTypeDatabase();
 
 		// we save type database
-		ar(_typeDatabase);
+		ar(cereal::make_nvp("Types_database", _typeDatabase));
 
 		auto entityNbr = getNumberOfEntities();
-		if (verbose)
-			ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
-		else
-			ar(entityNbr);
+
+		ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
 		
+		std::vector<EntityData> entities;
+
+		// we list entities
+		auto ctr = 0;
 		for (auto &e : _pool)
 		{
 			if (e.entity.isActive())
 			{
-				//if (verbose)
-				//	ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), e));
-				//else
-				//	ar(e);
+				entities.push_back(e);
+				++ctr;
+				if (ctr >= entityNbr)
+					break;
 			}
 		}
-		
-		for (auto &e : _pool)
+
+		for (auto &e : entities)
 		{
-			// TODO
-			//if (e.getFlags() & EntityData::ACTIVE)
-			//{
-			//	ar(cereal::make_nvp("Entity_" + std::to_string(e.getHandle().getId()), e));
-			//}
+			auto es = EntitySerializationInfos(e);
+			for (COMPONENT_ID i = 0; i < MAX_CPT_NUMBER; ++i)
+			{
+				if (e.barcode.hasComponent(i))
+				{
+					es.components.push_back(getComponent(e.getEntity(), i));
+				}
+			}
+
+			ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), es));
 		}
 	}
 
