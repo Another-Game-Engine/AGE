@@ -16,6 +16,8 @@
 #include <chrono>
 #include <Skinning/AnimationManager.hpp>
 
+#define ACTIVATE_OCTREE_CULLING
+
 namespace AGE
 {
 	PrepareRenderThread::PrepareRenderThread()
@@ -443,6 +445,8 @@ namespace AGE
 					drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
 
+#ifdef ACTIVATE_OCTREE_CULLING
+
 				// Do the culling
 				_octree->getElementsCollide(&camera, toDraw);
 
@@ -455,6 +459,15 @@ namespace AGE
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
 					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
 				}
+#else
+				for (auto &e : _drawables)
+				{
+					if (e.active)
+					{
+						drawList.drawables.emplace_back(e.mesh, e.material, e.transformation);
+					}
+				}
+#endif
 			}
 			getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
 		}).handle<PRTC::RenderDrawLists>([&](PRTC::RenderDrawLists& msg)
