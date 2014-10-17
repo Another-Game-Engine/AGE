@@ -4,9 +4,12 @@
 #include <Render/Key.hh>
 #include <Render/VertexArray.hh>
 #include <Render/Buffer.hh>
-#include <map>
-#include <Utils/Containers/Vector.hpp>
+#include <unordered_map>
+#include <Render/MemoryGPU.hh>
 #include <stdint.h>
+#include <Render/Data.hh>
+#include <Utils/Containers/Vector.hpp>
+#include <cassert>
 
 namespace gl
 {
@@ -16,197 +19,319 @@ namespace gl
 	class Indices;
 	class MemoryBlocksGPU;
 
-	//!\file Pool.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class Pool
-	//!\brief Handle one kind of element for the GeometryManager
+	template <typename TYPE>
+	struct Element
+	{
+		size_t memoryIndex;
+		TYPE const *data;
+		Element() : memoryIndex(0), data(NULL) {}
+		Element(size_t memoryIndex, TYPE const *data) : memoryIndex(memoryIndex), data(data) {}
+		Element(Element const &copy) : memoryIndex(copy.memoryIndex), data(copy.data){}
+		Element &operator=(Element const &e) { memoryIndex = e.memoryIndex; data = e.data; return (*this); }
+		~Element(){}
+	};
+
+	template <typename TYPE> 
+	struct HashKey {};
+
+	template <>
+	struct HashKey<Key<Element<Indices>>>
+	{
+		std::size_t operator()(Key<Element<Indices>> const &k) const
+		{
+			return (std::hash<std::size_t>()(k.getId()));
+		}
+	};
+
+	template <>
+	struct HashKey<Key<Element<Vertices>>>
+	{
+		std::size_t operator()(Key<Element<Vertices>> const &k) const
+		{
+			return (std::hash<std::size_t>()(k.getId()));
+		}
+	};
+
+	struct AttributeData
+	{
+		GLenum typeComponent;
+		uint8_t sizeTypeComponent;
+		uint8_t nbrComponent;
+		size_t sizeAttribute;
+		size_t offsetAttribute;
+		AttributeData();
+		AttributeData(GLenum tc, uint8_t stc, uint8_t nbrC);
+		~AttributeData();
+		AttributeData(AttributeData const &copy);
+		AttributeData &operator=(AttributeData const &a);
+	};
+
+	template <typename POOL, typename DATA, typename BUFFER>
 	class Pool
 	{
 	public:
-		template <typename TYPE>
-		struct Element
-		{
-			size_t memoryIndex;
-			TYPE const *data;
-		};
-	public:
-		// constructor
 		Pool();
-		~Pool();
-		Pool(int);
-		Pool(uint8_t nbrAttribute, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
+		Pool(uint8_t nbrAttribute, AGE::Vector<GLenum> const &type, AGE::Vector<uint8_t> const &sizetype, AGE::Vector<uint8_t> const &nbrComponent);
 		Pool(Pool const &copy);
-		virtual Pool &operator=(Pool const &p);
+		Pool<POOL, DATA, BUFFER> &operator=(Pool const &p); 
+		virtual ~Pool();
 
-		// getter
-		bool getIsIndicesPool() const;
-		uint8_t getNbrAttribute() const;
-		GLenum getTypeComponent(uint8_t index) const;
-		uint8_t getSizeTypeComponent(uint8_t index) const;
-		uint8_t getNbrComponent(uint8_t index) const;
-		size_t getSizeAttribute(uint8_t index) const;
-		size_t getOffsetAttribute(uint8_t index) const;
-
-		size_t getNbrBytePool() const;
-
-		//draw and synchronisation
-		virtual Pool &syncronisation() = 0;
-		virtual Buffer const &getBuffer() const = 0;
+	public:
+		uint8_t getNbrAttribute() const { return (_data.size()); }
+		GLenum getTypeComponent(uint8_t index) { return (_data[index].typeComponent); }
+		uint8_t getSizeTypeComponent(uint8_t index) { return (_data[index].sizeTypeComponent); }
+		uint8_t getNbrComponent(uint8_t index) const { return (_data[index].nbrComponent); }
+		size_t getSizeAttribute(uint8_t index) const { return (_data[index].sizeAttribute); }
+		size_t getOffsetAttribute(uint8_t index) const { return (_data[index].offsetAttribute); }
+		size_t getNbrBytePool() const { return (_nbrBytePool); }
+	
+	public:
+		Key<Element<DATA>> addElementPool(DATA const &vertices);
+		Element<DATA> *getElementPool(Key<Element<DATA>> const &key);
+		Pool<POOL, DATA, BUFFER> &rmElement(Key<Element<DATA>> &key);
+		Pool<POOL, DATA, BUFFER> &syncronisation();
+		Pool<POOL, DATA, BUFFER> &bind();
 
 	protected:
-
-		// data represent attributes
-		uint8_t _nbrAttribute;
-		GLenum *_typeComponent;
-		uint8_t *_sizeTypeComponent;
-		uint8_t *_nbrComponent;
-		size_t *_sizeAttribute;
-		size_t *_offsetAttribute;
-
-		// represent all data
-		AGE::Vector<MemoryBlocksGPU> _poolMemory;
+		BUFFER _buffer;
+		AGE::Vector<AttributeData> _attributes;
 		size_t _nbrBytePool;
-		size_t _nbrElementPool;
-		bool _syncronized;
+		std::unordered_map<Key<Element<DATA>>, Element<DATA>, HashKey<Key<Element<DATA>>>> _poolElement;
+		AGE::Vector<MemoryBlocksGPU> _poolMemory;
+		bool _setContext;
+		bool _reloadBuffer;
 		bool _internalSyncronized;
-
-		//function associate to syncronisation
-		void clearPool();
-
-		// tool use in intern
-		void clear();
-		template <typename TYPE> Key<Element<TYPE>> addElementPool(std::map<Key<Pool::Element<TYPE>>, Element<TYPE>> &poolElement, TYPE const &vertices);
-	};
-
-	//!\file Pool.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class VertexPool
-	//!\brief Handle Vertices for the GeometryManager
-	class VertexPool : public Pool
-	{
-	public:
-		VertexPool();
-		VertexPool(uint8_t nbrAttribute, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
-		VertexPool(VertexPool const &copy);
-		virtual ~VertexPool();
-		VertexPool &operator=(VertexPool const &pool);
-
-		// attribute setter
-		VertexPool &setData(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
-		VertexPool &setNbrAttribute(uint8_t nbrAttribute);
-		VertexPool &setTypeComponent(uint8_t index, GLenum type);
-		VertexPool &setSizeTypeComponent(uint8_t index, uint8_t sizeType);
-		VertexPool &setNbrComponent(uint8_t index, uint8_t nbrComponent);
-
-		// Vertices handler
-		Key<Element<Vertices>> addVertices(Vertices const &vertices);
-		VertexPool &rmVertices(Key<Element<Vertices>> &key);
-		VertexPool &clearPool();
-
-		// tool for link index pool and  vertex pool (usefull for draw with indices ;p)
-		VertexPool &attachIndexPoolToVertexPool(IndexPool const &pool);
-		VertexPool &dettachIndexPoolToVertexPool();
-
-		//draw and synchronisation
-		virtual Pool &syncronisation();
-		virtual Buffer const &getBuffer() const;
-		VertexPool const &draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const;
-		VertexPool const &draw(GLenum mode, Key<Element<Vertices>> const &drawIt) const;
+		std::pair<Key<Element<DATA>>, Element<DATA> *> _optimizerElementSearch;
 
 	private:
-		VertexBuffer _vbo;
-		VertexArray _vao;
-		IndexPool const *_indexPoolattach;
-
-		// reprensent data in vbo
-		std::map<Key<Element<Vertices>>, Element<Vertices>> _poolElement;
-		// tool use in intern
-		Element<Vertices> const *getVerticesPoolElement(Key<Element<Vertices>> const &key, std::string const &msg) const;
+		bool checkMemoryStorage(Key<Element<DATA>> const &key, DATA const &element);
+		void resetSyncronisation();
+		void buildNewMemoryStorage(DATA const &element);
+		void internalSycronisation();
 	};
 
-	//!\file Pool.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class IndexPool
-	//!\brief Handle Indices for the GeometryManager
-	class IndexPool : public Pool
+	template <typename POOL, typename DATA, typename BUFFER>
+	Pool<POOL, DATA, BUFFER>::Pool()
+		: _nbrBytePool(0),
+		_setContext(true),
+		_reloadBuffer(false),
+		_internalSyncronized(false)
 	{
-	public:
-		IndexPool();
-		IndexPool(IndexPool const &copy);
-		virtual ~IndexPool();
-		virtual IndexPool &operator=(IndexPool const &p);
-		
-		virtual Pool &syncronisation();
-		virtual Buffer const &getBuffer() const;
+	}
 
-		// Vertices handler
-		Key<Element<Indices>> addIndices(Indices const &indices);
-		IndexPool &rmIndices(Key<Element<Indices>> &key);
-		IndexPool &clearPool();
+	template <typename POOL, typename DATA, typename BUFFER>
+	Pool<POOL, DATA, BUFFER>::Pool(uint8_t nbrAttribute, AGE::Vector<GLenum> const &type, AGE::Vector<uint8_t> const &sizetype, AGE::Vector<uint8_t> const &nbrComponent)
+		: _nbrBytePool(0),
+		_setContext(true),
+		_reloadBuffer(false),
+		_internalSyncronized(false)
+	{
+		_attributes.resize(nbrAttribute);
+		for (size_t index = 0; index < _attributes.size(); ++index)
+		{
+			auto &attribute = _attributes[index];
+			attribute.typeComponent = type[index];
+			attribute.sizeTypeComponent = sizetype[index];
+			attribute.nbrComponent = nbrComponent[index];
+		}
+	}
 
-		// tool for link index pool and  vertex pool (usefull for draw with indices ;p)
-		IndexPool &attachVertexPoolToIndexPool(VertexPool const &pool);
-		IndexPool &dettachVertexPoolToIndexPool();
+	template <typename POOL, typename DATA, typename BUFFER>
+	Pool<POOL, DATA, BUFFER>::Pool(Pool<POOL, DATA, BUFFER> const &copy)
+		: _attributes(copy._attributes),
+		_nbrBytePool(copy._nbrBytePool),
+		_setContext(copy._setContext),
+		_reloadBuffer(copy._reloadBuffer),
+		_internalSyncronized(copy._internalSyncronized)
+	{
 
-	private:
-		gl::IndexBuffer _ibo;
-		VertexPool const *_vertexPoolattach;
+	}
 
-		// reprsent data in ibo
-		std::map<Key<Element<Indices>>, Element<Indices>> _poolElement;
+	template <typename POOL, typename DATA, typename BUFFER>
+	Pool<POOL, DATA, BUFFER> &Pool<POOL, DATA, BUFFER>::operator=(Pool<POOL, DATA, BUFFER> const &p)
+	{
+		_attributes = p._attributes;
+		_nbrBytePool = p._nbrBytePool;
+		_setContext = p._setContext;
+		_reloadBuffer = p._reloadBuffer;
+		_internalSyncronized = p._internalSyncronized;
+		return (*this);
+	}
 
-		// Warning must be call only by VertexPool
-		IndexPool const &onDrawCall(GLenum mode, Key<Element<Indices>> const &key, MemoryBlocksGPU const &target) const;
-		friend VertexPool const &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &drawWithIt, Key<Element<Vertices>> const &drawOnIt) const;
+	template <typename POOL, typename DATA, typename BUFFER>
+	Pool<POOL, DATA, BUFFER>::~Pool()
+	{
+	}
+
+	template <typename POOL, typename DATA, typename BUFFER>
+	void Pool<POOL, DATA, BUFFER>::resetSyncronisation()
+	{
+		_setContext = false;
+		_reloadBuffer = false;
+		_internalSyncronized = false;
+		for (int index = 0; index < _poolMemory.size(); ++index)
+			_poolMemory[index].setSync(false);
+	}
 	
-		// tool use in intern
-		Element<Indices> const *getIndicesPoolElement(Key<Element<Indices>> const &key, std::string const &msg) const;
-	};
-
-	template <typename TYPE>
-	Key<Pool::Element<TYPE>> Pool::addElementPool(std::map<Key<Pool::Element<TYPE>>, Element<TYPE>> &poolElement, TYPE const &vertices)
+	template <typename POOL, typename DATA, typename BUFFER>
+	bool Pool<POOL, DATA, BUFFER>::checkMemoryStorage(Key<Element<DATA>> const &key, DATA const &element)
 	{
 		for (size_t index = 0; index < _poolMemory.size(); ++index)
 		{
 			MemoryBlocksGPU &memory = _poolMemory[index];
-			if (_poolMemory[index].getIsUsed() == false && memory.getNbrElement() == vertices.getNbrElement())
+			if (!memory.getIsUsed() && memory.getNbrElement() == element.getNbrElement())
 			{
 				_internalSyncronized = false;
-				memory.setSync(false);
-				memory.setIsUsed(true);
-				Key<Pool::Element<TYPE>> keyElement = Key<Pool::Element<TYPE>>::createKey();
-				Pool::Element<TYPE> newElement;
-				newElement.memoryIndex = index;
-				newElement.data = &vertices;
-				poolElement[keyElement] = newElement;
-				return (keyElement);
+				memory.setSync(false); memory.setIsUsed(true);
+				_poolElement[key] = Element<DATA>(index, &element);
+				return (true);
 			}
 		}
-		_syncronized = false; // cause reset of buffer on gpu
-		_internalSyncronized = false;
-		for (int index = 0; index < _poolMemory.size(); ++index)
-			_poolMemory[index].setSync(false);
+		return (false);
+	}
+
+	template <typename POOL, typename DATA, typename BUFFER>
+	void Pool<POOL, DATA, BUFFER>::buildNewMemoryStorage(DATA const &element)
+	{
 		MemoryBlocksGPU memory;
-		memory.setNbrElement(vertices.getNbrElement());
-		memory.setNbrBlock(_nbrAttribute);
-		for (uint8_t index = 0; index < _nbrAttribute; ++index)
+		memory.setNbrElement(element.getNbrElement()); 
+		memory.setNbrBlock(_attributes.size());
+		for (uint8_t index = 0; index < memory.getNbrBlock(); ++index)
 		{
-			size_t sizeAttribute = _sizeTypeComponent[index] * _nbrComponent[index] * vertices.getNbrElement();
-			_nbrBytePool += sizeAttribute;
-			_sizeAttribute[index] += sizeAttribute;
-			memory.setSizeBlock(index, sizeAttribute);
+			memory.setSizeBlock(index, _attributes[index].sizeTypeComponent * _attributes[index].nbrComponent * element.getNbrElement());
+			memory.setOffset(index, _attributes[index].sizeAttribute);
+			_nbrBytePool += memory.getSizeBlock(index);
+			_attributes[index].sizeAttribute += memory.getSizeBlock(index);
 			if (index > 0)
-				_offsetAttribute[index] = _offsetAttribute[index - 1] + _sizeAttribute[index - 1];
+			{
+				_attributes[index].offsetAttribute = _attributes[index - 1].offsetAttribute + _attributes[index - 1].sizeAttribute;
+			}
+		}
+		if (_poolMemory.size() > 0)
+		{
+			memory.setStartElement(_poolMemory.back().getElementStart() + _poolMemory.back().getNbrElement());
+		}
+		else
+		{
+			memory.setStartElement(0);
 		}
 		_poolMemory.push_back(memory);
-		Element<TYPE> element;
-		Key<Element<TYPE>> keyElement = Key<Element<TYPE>>::createKey();
-		element.data = &vertices;
-		element.memoryIndex = _poolMemory.size() - 1;
-		poolElement[keyElement] = element;
-		return (keyElement);
 	}
+
+	template <typename POOL, typename DATA, typename BUFFER>
+	Key<Element<DATA>> Pool<POOL, DATA, BUFFER>::addElementPool(DATA const &element)
+	{
+		Key<Element<DATA>> key = Key<Element<DATA>>::createKey();
+		if (checkMemoryStorage(key, element))
+			return (key);
+		resetSyncronisation();
+		buildNewMemoryStorage(element);
+		_poolElement[key] = Element<DATA>(_poolMemory.size() - 1, &element);
+		return (key);
+	}
+
+	template <typename POOL, typename DATA, typename BUFFER>
+	Element<DATA> *Pool<POOL, DATA, BUFFER>::getElementPool(Key<Element<DATA>> const &key)
+	{
+		if (!key)
+			assert(0);
+		if (_poolElement.size() == 0)
+			assert(0);
+		if (_optimizerElementSearch.first == key)
+			return (_optimizerElementSearch.second);
+		auto &it = _poolElement.find(key);
+		if (it == _poolElement.end())
+			assert(0);
+		_optimizerElementSearch.first = key;
+		_optimizerElementSearch.second = &it->second;
+		return (&it->second);
+	}
+
+	template <typename POOL, typename DATA, typename BUFFER>
+	Pool<POOL, DATA, BUFFER> &Pool<POOL, DATA, BUFFER>::rmElement(Key<Element<DATA>> &key)
+	{
+		Element<DATA> const *element = getElementPool(key);
+		MemoryBlocksGPU &memory = _poolMemory[element->memoryIndex];
+		memory.setSync(true);
+		memory.setIsUsed(false);
+		_poolElement.erase(key);
+		key.destroy();
+		return (*this);
+	}
+
+	template <typename POOL, typename DATA, typename BUFFER>
+	void Pool<POOL, DATA, BUFFER>::internalSycronisation()
+	{
+		for (auto &element : _poolElement)
+		{
+			MemoryBlocksGPU &memory = _poolMemory[element.second.memoryIndex];
+			if (!memory.getSync())
+			{
+				memory.setSync(true);
+				for (size_t index = 0; index < memory.getNbrBlock(); ++index)
+				{
+					_buffer.BufferSubData(_attributes[index].offsetAttribute + memory.getOffset(uint8_t(index)), memory.getSizeBlock(uint8_t(index)), (void *)element.second.data->getBuffer(uint8_t(index)));
+				}
+			}
+		}
+	}
+
+	template <typename POOL, typename DATA, typename BUFFER>
+	Pool<POOL, DATA, BUFFER> &Pool<POOL, DATA, BUFFER>::bind()
+	{
+		_buffer.bind();
+	}
+
+	template <typename POOL, typename DATA, typename BUFFER>
+	Pool<POOL, DATA, BUFFER> &Pool<POOL, DATA, BUFFER>::syncronisation()
+	{
+		if (_reloadBuffer && _internalSyncronized)
+		{
+			return (*this);
+		}
+		_buffer.bind();
+		if (!_reloadBuffer)
+		{
+			_buffer.BufferData(_nbrBytePool);
+			_reloadBuffer = true;
+		}
+		if (!_internalSyncronized)
+		{
+			internalSycronisation();
+			_internalSyncronized = true;
+		}
+		return (*this);
+	}
+
+	class VertexPool : public Pool<VertexPool, Vertices, VertexBuffer>
+	{
+	public:
+		VertexPool();
+		VertexPool(uint8_t nbrAttribute, AGE::Vector<GLenum> const &typeComponent, AGE::Vector<uint8_t> const &sizeTypeComponent, AGE::Vector<uint8_t> const &nbrComponent);
+		virtual ~VertexPool();
+		VertexPool(VertexPool const &copy);
+		VertexPool &operator=(VertexPool const &pool); 
+		VertexPool const &bind() const;
+		VertexPool &startContext();
+		VertexPool &startContext(IndexPool &i);
+		VertexPool const &endContext() const;
+		VertexPool &draw(GLenum mode, Key<Element<Vertices>> const &key);
+		VertexPool &draw(GLenum mode, Key<Element<Indices>> const &i, Key<Element<Vertices>> const &v);
+
+	private:
+		VertexArray _context;
+		IndexPool *_indexPool;
+		bool _contextSet;
+	};
+
+	class IndexPool : public Pool<IndexPool, Indices, IndexBuffer>
+	{
+	public:
+		IndexPool();
+		virtual ~IndexPool();
+		IndexPool const &bind() const;
+		IndexPool(IndexPool const &copy);
+		IndexPool &operator=(IndexPool const &p);
+		IndexPool &draw(GLenum mode, Key<Element<Indices>> const &i, size_t start);
+	};
 }

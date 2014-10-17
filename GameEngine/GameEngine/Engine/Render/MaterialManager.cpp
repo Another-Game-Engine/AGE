@@ -14,8 +14,6 @@ namespace gl
 
 	MaterialManager::~MaterialManager()
 	{
-		if (_defaultTexture != NULL)
-			delete _defaultTexture;
 	}
 
 	Key<Material> MaterialManager::getDefaultMaterial()
@@ -54,10 +52,10 @@ namespace gl
 
 		auto element = _materials[key];
 		element.set<gl::Texture_diffuse>(getDefaultTexture2D().getId());
-		element.set<gl::Texture_ambiant>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_bump>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_emissive>(getDefaultTexture2D().getId());
 		element.set<gl::Texture_specular>(getDefaultTexture2D().getId());
+		element.set<gl::Texture_normal>(getDefaultTexture2D().getId());
 		return (key);
 	}
 
@@ -90,7 +88,10 @@ namespace gl
 	MaterialManager &MaterialManager::createDefaultTexture2D(glm::u8vec4 const &color)
 	{
 		if (_defaultTexture == NULL)
-			_defaultTexture = new Texture2D(4, 4, GL_RGBA, false);
+		{
+			_keyDefaultTexture = Key<Texture>::createKey();
+			_defaultTexture = new Texture2D(2, 2, GL_RGBA8, false);
+		}
 		glm::u8vec4 c[4];
 		for (size_t index = 0; index < 4; ++index)
 			c[index] = color;
@@ -101,7 +102,10 @@ namespace gl
 	MaterialManager &MaterialManager::createDefaultTexture2D(std::array<glm::u8vec4, 4> const &damColor)
 	{
 		if (_defaultTexture == NULL)
-			_defaultTexture = new Texture2D(4, 4, GL_RGBA, false);
+		{
+			_keyDefaultTexture = Key<Texture>::createKey();	
+			_defaultTexture = new Texture2D(2, 2, GL_RGBA8, false);
+		}
 		glm::u8vec4 c[4];
 		for (size_t index = 0; index < 4; ++index)
 			c[index] = damColor[index];
@@ -112,7 +116,14 @@ namespace gl
 	Texture2D &MaterialManager::getDefaultTexture2D()
 	{
 		if (_defaultTexture == NULL)
-			createDefaultTexture2D(glm::u8vec4(0xFF));
+			createDefaultTexture2D(glm::u8vec4(0x00));
 		return (*_defaultTexture);
+	}
+
+	Key<Texture> MaterialManager::getKeyDefaultTexture2D()
+	{
+		if (_defaultTexture == NULL)
+			createDefaultTexture2D(glm::u8vec4(0x00));
+		return (_keyDefaultTexture);
 	}
 }

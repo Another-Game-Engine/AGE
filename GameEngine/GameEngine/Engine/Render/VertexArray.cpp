@@ -29,15 +29,4 @@ namespace gl
 		return (_id);
 	}
 
-	VertexArray const &VertexArray::activateAttribute(size_t index) const
-	{
-		glEnableVertexAttribArray(GLuint(index));
-		return (*this);
-	}
-
-	VertexArray const &VertexArray::attribute(size_t index, int nbrComponent, GLenum type, size_t offset) const
-	{
-		glVertexAttribPointer(GLuint(index), GLint(nbrComponent), type, GL_FALSE, 0, (const GLvoid *)offset);
-		return (*this);
-	}
 }

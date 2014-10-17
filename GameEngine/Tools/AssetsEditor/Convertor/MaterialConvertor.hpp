@@ -86,13 +86,13 @@ namespace AGE
 				material->reflective = AssimpLoader::aiColorToGlm(reflective);
 				material->specular = AssimpLoader::aiColorToGlm(specular);
 
-				material->diffuseTexPath = diffuseTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(diffuseTexPath) : "default.jpg";
-				material->ambientTexPath = ambientTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(ambientTexPath) : "default.jpg";
-				material->emissiveTexPath = emissiveTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(emissiveTexPath) : "default.jpg";
-				material->reflectiveTexPath = reflexionTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath) : "default.jpg";
-				material->specularTexPath = specularTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath) : "default.jpg";
-				material->normalTexPath = normalTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath) : "default.jpg";
-				material->bumpTexPath = bumpTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(bumpTexPath) : "default.jpg";
+				material->diffuseTexPath = diffuseTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(diffuseTexPath) : "";
+				material->ambientTexPath = ambientTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(ambientTexPath) : "";
+				material->emissiveTexPath = emissiveTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(emissiveTexPath) : "";
+				material->reflectiveTexPath = reflexionTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath) : "";
+				material->specularTexPath = specularTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath) : "";
+				material->normalTexPath = normalTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath) : "";
+				material->bumpTexPath = bumpTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(bumpTexPath) : "";
 
 				dataSet.texturesPath.insert(material->diffuseTexPath);
 				dataSet.texturesPath.insert(material->ambientTexPath);

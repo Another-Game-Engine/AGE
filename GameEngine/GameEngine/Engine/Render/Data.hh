@@ -51,7 +51,7 @@ namespace gl
 		Indices &operator=(Indices const &i);
 
 		size_t getNbrElement() const;
-		uint32_t const *getBuffer() const;
+		uint32_t const *getBuffer(size_t) const;
 
 	private:
 		size_t _nbrIndices;

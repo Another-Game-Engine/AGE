@@ -6,6 +6,7 @@
 
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
+#include <Skinning/AnimationManager.hpp>
 
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
@@ -39,11 +40,14 @@ void BenchmarkScene::initRendering()
 		_renderManager->addShaderInterfaceBlock(key.Accum.shader, "global_state", key.global_state);
 
 		// bind the key on drawable info (material-transformation)
+		_renderManager->bindMaterialToShader<gl::Color_specular>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "specular_color", glm::vec4(1.0f)));
+		_renderManager->bindMaterialToShader<gl::Ratio_specular>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "specular_ratio", 1.0f));
+		_renderManager->bindMaterialToShader<gl::Shininess>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "shininess", 0.01f));
 		_renderManager->bindMaterialToShader<gl::Color_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_color", glm::vec4(1.0f)));
-		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_ratio", 1.0f));
+		_renderManager->bindMaterialToShader<gl::Ratio_diffuse>(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "diffuse_ratio", 0.0f));
+		_renderManager->bindMaterialToShader<gl::Texture_diffuse>(key.getBuff.shader, _renderManager->addShaderSampler(key.getBuff.shader, "diffuse_texture"));
+		_renderManager->bindMaterialToShader<gl::Texture_normal>(key.getBuff.shader, _renderManager->addShaderSampler(key.getBuff.shader, "bump_texture"));
 		_renderManager->bindTransformationToShader(key.getBuff.shader, _renderManager->addShaderUniform(key.getBuff.shader, "model_matrix", glm::mat4(1.f)));
-		auto keyDiffuse = _renderManager->addShaderSampler(key.getBuff.shader, "diffuse_texture");
-		_renderManager->bindMaterialToShader<gl::Texture_diffuse>(key.getBuff.shader, keyDiffuse);
 
 
 		// found uniform
@@ -52,11 +56,11 @@ void BenchmarkScene::initRendering()
 		key.Accum.color_light = _renderManager->addShaderUniform(key.Accum.shader, "color_light", glm::vec3(1.0f));
 		key.Accum.depth_buffer = _renderManager->addShaderSampler(key.Accum.shader, "depth_buffer");
 		key.Accum.normal_buffer = _renderManager->addShaderSampler(key.Accum.shader, "normal_buffer");
-		key.Accum.glossiness = _renderManager->addShaderUniform(key.Accum.shader, "shininess", 50.f);
+		key.Accum.specular_buffer = _renderManager->addShaderSampler(key.Accum.shader, "specular_buffer");
+		key.Accum.ambiant_color = _renderManager->addShaderUniform(key.Accum.shader, "ambiant_color", glm::vec3(0.01f, 0.01f, 0.01f));
 		key.merge.diffuse_buffer = _renderManager->addShaderSampler(key.merge.shader, "diffuse_buffer");
 		key.merge.light_buffer = _renderManager->addShaderSampler(key.merge.shader, "light_buffer");
-		_renderManager->bindMaterialToShader<gl::Shininess>(key.Accum.shader, key.Accum.glossiness);
-
+		
 		// create renderpass and set it
 		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 800, 600));
 		_renderManager->pushSetTestTaskRenderPass(key.getBuff.renderPass, false, false, true);
@@ -64,11 +68,14 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushClearTaskRenderPass(key.getBuff.renderPass, true, true, false);
 		_renderManager->pushTargetRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT0);
 		_renderManager->pushTargetRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT1);
+		_renderManager->pushTargetRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT2);
 		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
 		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT1, GL_RGBA8);
+		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_COLOR_ATTACHMENT2, GL_RGBA8);
 		_renderManager->createBufferSamplableRenderPass(key.getBuff.renderPass, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
 		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 0, false);
 		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 1, false);
+		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 2, false);
 		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
 
 		// create  clear renderPass
@@ -94,6 +101,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushSetBlendFuncTaskRenderPostEffect(key.Accum.renderPostEffect, GL_ONE, GL_ONE);
 		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.normal_buffer, GL_COLOR_ATTACHMENT1, key.getBuff.renderPass);
 		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.depth_buffer, GL_DEPTH_ATTACHMENT, key.getBuff.renderPass);
+		_renderManager->pushInputRenderPostEffect(key.Accum.renderPostEffect, key.Accum.specular_buffer, GL_COLOR_ATTACHMENT2, key.getBuff.renderPass);
 		_renderManager->useInputBufferRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0, key.clean.emptyRenderPass);
 		_renderManager->createBufferNotSamplableRenderPostEffect(key.Accum.renderPostEffect, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
 		_renderManager->pushOwnTaskRenderPostEffect(key.Accum.renderPostEffect, [=](gl::LocationStorage &l)
@@ -106,7 +114,6 @@ void BenchmarkScene::initRendering()
 			r->setShaderUniform(k->Accum.shader, k->Accum.color_light, pointLight.color);
 			l.setLocation(nbrElement + 1, index + 1);
 		});
-
 
 		// create merge
 		key.merge.renderPostEffect = _renderManager->addRenderPostEffect(key.merge.shader, glm::ivec4(0, 0, 800, 600));
@@ -230,7 +237,12 @@ bool BenchmarkScene::userStart()
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(GLOBAL_FLOOR, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
-
+	for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
+	{
+		_renderManager->setMaterial<gl::Color_specular>(mesh->getMaterial()->datas[index], glm::vec4(1.0f));
+		_renderManager->setMaterial<gl::Shininess>(mesh->getMaterial()->datas[index], 1.f);
+		_renderManager->setMaterial<gl::Ratio_specular>(mesh->getMaterial()->datas[index], 1.0f);
+	}
 	{
 		GLOBAL_SPONZA = createEntity();
 		auto _l = getLink(GLOBAL_SPONZA);
@@ -238,16 +250,34 @@ bool BenchmarkScene::userStart()
 		_l->setScale(glm::vec3(0.01f));
 		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("sponza/sponza.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("sponza/sponza.mage")));
+		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+		{
+			_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+			_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
+			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+		}
 	}
 
 	{
 		GLOBAL_CATWOMAN = createEntity();
 		auto _l = getLink(GLOBAL_CATWOMAN);
-		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(180), 0)));
-		_l->setPosition(glm::vec3(2, 1, 2));
+
+		static bool useOnce = false;
+		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+		_l->setPosition(glm::vec3(-4, 0, 0));
 		_l->setScale(glm::vec3(0.007f));
 		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
+		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+		{
+			_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 0.1f);
+			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+			_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+			//_renderManager->setMaterial<gl::Texture_normal>(getComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN)->getMaterial()->datas[index], _renderManager->getDefaultTexture2D());
+		}
+		//	GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
+		//getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
+		//getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
 	}
 
 	{
@@ -257,6 +287,12 @@ bool BenchmarkScene::userStart()
 		_l->setScale(glm::vec3(0.05f));
 		auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+		{
+			_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
+			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+			_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+		}
 	}
 
 #ifdef PHYSIC_SIMULATION
@@ -266,12 +302,13 @@ bool BenchmarkScene::userStart()
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.05f, 0.001f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
-addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+	
+	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));
+	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
+	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 
 	return true;
 }
@@ -314,7 +351,6 @@ bool BenchmarkScene::userUpdate(double time)
 		lc->setOrientation(glm::rotate(lc->getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 	if (getInstance<Input>()->getInput(SDLK_e))
 		lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
-
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 		return (false);
 
@@ -388,7 +424,7 @@ bool BenchmarkScene::userUpdate(double time)
 	auto renderManager = getInstance<gl::RenderManager>();
 
 	{
-		auto link = getLink(GLOBAL_FLOOR);
+		auto link = getLink(GLOBAL_CATWOMAN);
 		auto pos = link->getPosition();
 		static float p[3] = {pos.x, pos.y, pos.z};
 		if (ImGui::SliderFloat("Floor x", &p[0], -10, 10))

@@ -85,6 +85,7 @@ namespace gl
 
 		// Material
 		Key<Material> getDefaultMaterial();
+		Key<Texture> getDefaultTexture2D();
 		Key<Material> addMaterial();
 		RenderManager &rmMaterial(Key<Material> &key);
 		Key<Material> getMaterial(size_t index);

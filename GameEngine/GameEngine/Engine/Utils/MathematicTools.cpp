@@ -8,7 +8,7 @@ namespace Mathematic
 	// equation = ax² + by + z
 	float secondDegreeDiscriminant(glm::vec3 const &equation)
 	{
-		return (pow(equation.y, 2.f) - 4.f * equation.z * equation.x);
+		return (equation.y * equation.y - 4.f * equation.x * equation.z);
 	}
 
 	// equation = ax² + by + z
@@ -18,15 +18,15 @@ namespace Mathematic
 
 		if (discriminant <= 0)
 			assert(0);
-		result.x = (-equation.y + sqrt(discriminant)) / (2.f * equation.z);
-		result.y = (-equation.y - sqrt(discriminant)) / (2.f * equation.z);
+		result.x = (-equation.y + sqrt(discriminant)) / (2.f * equation.x);
+		result.y = (-equation.y - sqrt(discriminant)) / (2.f * equation.x);
 		return (result);
 	}
 
 	// equation = az² + by + x
 	float resolveSecondDegree(glm::vec3 const &equation)
 	{
-		return (-equation.y / (2.0f * equation.z));
+		return (-equation.y / (2.0f * equation.x));
 	}
 
 	// conversion degree

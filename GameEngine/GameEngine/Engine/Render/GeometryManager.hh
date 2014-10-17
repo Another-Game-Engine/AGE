@@ -13,7 +13,11 @@
 namespace gl
 {
 	class Vertices;
-	
+	class Indices;
+	template <typename TYPE> struct Element;
+	class VertexPool;
+	class IndexPool;
+
 	enum SimpleForm
 	{
 		QUAD = 0,
@@ -21,22 +25,19 @@ namespace gl
 		NBR_SIMPLE_FORM
 	};
 
+	template <typename TYPE, typename POOL>
+	struct Attach
+	{
+		POOL *pool;
+		Key<Element<TYPE>> element;
+		Attach(POOL *p) : pool(p), element(Key<Element<TYPE>>::createKey()) {}
+		Attach() : pool(NULL){}
+		Attach(Attach<TYPE, POOL> const &copy) : pool(copy.pool), element(copy.element){}
+		Attach &operator=(Attach<TYPE, POOL> const &a) { pool = a.pool; element = a.element; return (*this); }
+	};
+
 	class GeometryManager
 	{
-	public:
-		template <typename TYPE, typename POOL>
-		struct Attach
-		{
-			TYPE const *data;
-			POOL *pool;
-			Key<Pool::Element<TYPE>> element;
-			Attach()
-				: element(Key<Pool::Element<TYPE>>::createKey())
-			{
-
-			}
-		};
-
 	public:
 		// constructor
 		GeometryManager();
@@ -49,7 +50,7 @@ namespace gl
 
 		// handle pools
 		Key<VertexPool> addVertexPool();
-		Key<VertexPool> addVertexPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent);
+		Key<VertexPool> addVertexPool(uint8_t nbrAttributes, AGE::Vector<GLenum> const &typeComponent, AGE::Vector<uint8_t>const &sizeTypeComponent, AGE::Vector<uint8_t> const &nbrComponent);
 		Key<VertexPool> getVertexPool(size_t index) const;
 		size_t nbrVertexPool() const;
 		GeometryManager &rmVertexPool(Key<VertexPool> &key);
@@ -73,15 +74,12 @@ namespace gl
 		GeometryManager &dettachVerticesToVertexPool(Key<Vertices> const &vertices);
 		GeometryManager &attachIndicesToIndexPool(Key<Indices> const &vertices, Key<IndexPool> const &pool);
 		GeometryManager &dettachIndicesToIndexPool(Key<Indices> const &vertices);
-		GeometryManager &attachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indicespool);
-		GeometryManager &dettachIndexPoolToVertexPool(Key<VertexPool> const &vertexpool, Key<IndexPool> const &indexpool);
-
-		// draw
-		GeometryManager &draw(GLenum mode, Key<Indices> const &keyindices, Key<Vertices> const &keyVertice);
-		GeometryManager &draw(GLenum mode, Key<Vertices> const &keyvertices);
-
+		
 		// generate ico sphere
 		static void generateIcoSphere(size_t recursion, glm::vec3 **vertex, glm::u32vec3 **indices, size_t &nbrElementId, size_t &nbrElementGeo);
+
+		GeometryManager &draw(GLenum mode, Key<Vertices> const &vertices);
+		GeometryManager &draw(GLenum mode, Key<Indices> const &indices, Key<Vertices> const &vertices);
 
 	private:
 		// simple form
@@ -98,13 +96,14 @@ namespace gl
 		std::map<Key<Vertices>, Vertices> _vertices;
 		std::map<Key<Vertices>, Attach<Vertices, VertexPool>> _vertexAttach;
 		std::map<Key<Indices>, Attach<Indices, IndexPool>> _indexAttach;
-	
+
 		std::pair<Key<IndexPool>, IndexPool *> _optimizerIndexPoolSearch;
 		std::pair<Key<VertexPool>, VertexPool *> _optimizerVertexPoolSearch;
 		std::pair<Key<Vertices>, Vertices *> _optimizerVerticesSearch;
 		std::pair<Key<Indices>, Indices *> _optimizerIndicesSearch;
 		std::pair<Key<Vertices>, Attach<Vertices, VertexPool> *> _optimizerVertexAttachSearch;
 		std::pair<Key<Indices>, Attach<Indices, IndexPool> *> _optimizerIndexAttachSearch;
+		std::pair<VertexPool *, VertexArray *> _optimizerDrawingContextSearch;
 
 		// tool use in intern
 		VertexPool *getVertexPool(Key<VertexPool> const &key);
@@ -114,4 +113,5 @@ namespace gl
 		Attach<Vertices, VertexPool> *getVertexAttach(Key<Vertices> const &key);
 		Attach<Indices, IndexPool> *getIndexAttach(Key<Indices> const &key);
 	};
+
 }

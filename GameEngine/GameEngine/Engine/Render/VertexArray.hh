@@ -14,8 +14,6 @@ namespace gl
 		 void bind() const;
 		 void unbind() const;
 		 GLuint getId() const;
-		 VertexArray const &activateAttribute(size_t index) const;
-		 VertexArray const &attribute(size_t index, int nbrComponent, GLenum type, size_t offset) const;
 	private:
 		GLuint _id;
 

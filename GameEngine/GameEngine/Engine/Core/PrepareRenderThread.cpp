@@ -14,7 +14,7 @@
 #include <Core/OctreeNode.hh>
 #include <Core/CullableInterfaces.hh>
 #include <chrono>
-
+#include <Skinning/AnimationManager.hpp>
 
 namespace AGE
 {
@@ -456,6 +456,7 @@ namespace AGE
 					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
 				}
 			}
+			getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
 		}).handle<PRTC::RenderDrawLists>([&](PRTC::RenderDrawLists& msg)
 		{
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
