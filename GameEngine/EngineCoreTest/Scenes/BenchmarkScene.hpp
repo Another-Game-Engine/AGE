@@ -16,6 +16,7 @@
 #include <Context/IRenderContext.hh>
 #include <Core/RenderThread.hpp>
 #include <CONFIGS.hh>
+#include <Skinning/AnimationInstance.hpp>
 
 //for test
 #include <Utils/Containers/CommandQueue.hpp>
@@ -40,7 +41,8 @@ struct Deferred_accum_light
 	gl::Key<gl::Uniform> range_light;
 	gl::Key<gl::Sampler> depth_buffer;
 	gl::Key<gl::Sampler> normal_buffer;
-	gl::Key<gl::Uniform> glossiness;
+	gl::Key<gl::Sampler> specular_buffer;
+	gl::Key<gl::Uniform> ambiant_color;
 };
 
 struct Deferred_get_buffer_Key
@@ -49,6 +51,9 @@ struct Deferred_get_buffer_Key
 	gl::Key<gl::Uniform> model_matrix;
 	gl::Key<gl::RenderPass> renderPass;
 	gl::Key<gl::Pipeline> pipeline;
+	gl::Key<gl::Uniform> specular_color;
+	gl::Key<gl::Uniform> specular_ratio;
+	gl::Key<gl::Uniform> shininess;
 };
 
 struct Deffered_clean_buffer
@@ -102,4 +107,5 @@ private:
 	Entity GLOBAL_CATWOMAN;
 	Entity GLOBAL_SPONZA;
 	Entity GLOBAL_FLOOR;
+	std::shared_ptr<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
 };

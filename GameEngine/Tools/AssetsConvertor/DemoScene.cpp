@@ -173,7 +173,7 @@ bool 			DemoScene::userStart()
 
 		//convertor->load("../../Assets/fboasteroid.tga");
 		//convertor->load("../../Assets/fbosolar.tga");
-		//convertor->load("../../Assets/fbosponza.tga");
+		//convertor->load("../../Assets/fbosponza	");
 
 		//convertor->serializeData("fbotexture");
 		//convertor->clear();

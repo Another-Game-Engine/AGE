@@ -74,9 +74,6 @@ namespace gl
 	MemoryBlocksGPU::MemoryBlocksGPU()
 		: _nbrElement(0),
 		_startElement(0),
-		_nbrBlock(0),
-		_sizeBlocks(NULL),
-		_baseOffset(NULL),
 		_sync(false),
 		_isUsed(true)
 	{
@@ -85,67 +82,26 @@ namespace gl
 
 	MemoryBlocksGPU::~MemoryBlocksGPU()
 	{
-		if (_nbrBlock)
-		{
-			delete[] _sizeBlocks;
-			delete[] _baseOffset;
-		}
 	}
 
 	MemoryBlocksGPU::MemoryBlocksGPU(MemoryBlocksGPU const &copy)
 		: _nbrElement(copy._nbrElement),
 		_startElement(copy._startElement),
-		_nbrBlock(copy._nbrBlock),
-		_sizeBlocks(NULL),
-		_baseOffset(NULL),
+		_sizeBlocks(copy._sizeBlocks),
+		_baseOffset(copy._baseOffset),
 		_sync(false),
 		_isUsed(copy._isUsed)
 	{
-		if (_nbrBlock)
-		{
-			_sizeBlocks = new size_t[_nbrBlock];
-			_baseOffset = new size_t[_nbrBlock];
-		}
-		for (size_t index = 0; index < copy._nbrBlock; ++index)
-		{
-			_sizeBlocks[index] = copy._sizeBlocks[index];
-			_baseOffset[index] = copy._baseOffset[index];
-		}
 	}
 
 	MemoryBlocksGPU &MemoryBlocksGPU::operator=(MemoryBlocksGPU const &b)
 	{
-		if (&b != this)
-		{
-			_isUsed = b._isUsed;
-			_sync = false;
-			_startElement = b._startElement;
-			_nbrElement = b._nbrElement;
-			if (b._nbrBlock != _nbrBlock)
-			{
-				if (_nbrBlock)
-				{
-					delete[] _sizeBlocks;
-					delete[] _baseOffset;
-				}
-				_nbrBlock = b._nbrBlock;
-				if (_nbrBlock)
-				{
-					_sizeBlocks = new size_t[_nbrBlock];
-					_baseOffset = new size_t[_nbrBlock];
-				}
-				else
-				{
-					_baseOffset = NULL;
-					_sizeBlocks = NULL;
-				}
-			}
-			for (size_t index = 0; index < b._nbrBlock; ++index)
-			{
-				_sizeBlocks[index] = b._sizeBlocks[index];
-				_baseOffset[index] = b._baseOffset[index];
-			}
-		}
+		_isUsed = b._isUsed;
+		_sync = false;
+		_startElement = b._startElement;
+		_nbrElement = b._nbrElement;
+		_sizeBlocks = b._sizeBlocks;
+		_baseOffset = b._baseOffset;
 		return (*this);
 	}
 
@@ -156,26 +112,16 @@ namespace gl
 
 	size_t MemoryBlocksGPU::getOffset(uint8_t index) const
 	{
-		if (index >= _nbrBlock)
-		{
-			assert(0);
-			return (-1);
-		}
 		return (_baseOffset[index]);
 	}
 
 	size_t MemoryBlocksGPU::getNbrBlock() const
 	{
-		return (_nbrBlock);
+		return (_sizeBlocks.size());
 	}
 
 	size_t MemoryBlocksGPU::getSizeBlock(uint8_t index) const
 	{
-		if (index >= _nbrBlock)
-		{
-			assert(0);
-			return (-1);
-		}
 		return (_sizeBlocks[index]);
 	}
 
@@ -187,11 +133,6 @@ namespace gl
 
 	MemoryBlocksGPU &MemoryBlocksGPU::setOffset(uint8_t index, size_t offset)
 	{
-		if (index >= _nbrBlock)
-		{
-			assert(0);
-			return (*this);
-		}
 		_baseOffset[index] = offset;
 		return (*this);
 	}
@@ -205,37 +146,13 @@ namespace gl
 	// the values into the new storage are set to 0.
 	MemoryBlocksGPU &MemoryBlocksGPU::setNbrBlock(size_t nbrBlock)
 	{
-		if (nbrBlock != _nbrBlock)
-		{
-			if (_nbrBlock)
-			{
-				delete[] _baseOffset;
-				delete[] _sizeBlocks;
-			}
-			_nbrBlock = nbrBlock;
-			if (nbrBlock)
-			{
-				_baseOffset = new size_t[_nbrBlock];
-				_sizeBlocks = new size_t[_nbrBlock];
-				memset(_sizeBlocks, 0, sizeof(size_t) * _nbrBlock);
-				memset(_baseOffset, 0, sizeof(size_t)* _nbrBlock);
-			}
-			else
-			{
-				_baseOffset = NULL;
-				_sizeBlocks = NULL;
-			}
-		}
+		_sizeBlocks.resize(nbrBlock);
+		_baseOffset.resize(nbrBlock);
 		return (*this);
 	}
 
 	MemoryBlocksGPU &MemoryBlocksGPU::setSizeBlock(uint8_t index, size_t sizeBlock)
 	{
-		if (index >= _nbrBlock)
-		{
-			assert(0);
-			return (*this);
-		}
 		_sizeBlocks[index] = sizeBlock;
 		return (*this);
 	}

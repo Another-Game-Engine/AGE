@@ -658,6 +658,12 @@ namespace gl
 		return (_materialManager.getDefaultMaterial());
 	}
 
+	Key<Texture> RenderManager::getDefaultTexture2D()
+	{
+		_textures[_materialManager.getKeyDefaultTexture2D()] = &_materialManager.getDefaultTexture2D();
+		return (_materialManager.getKeyDefaultTexture2D());
+	}
+
 	Key<Material> RenderManager::addMaterial()
 	{
 		return (_materialManager.addMaterial());

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <Utils/Containers/Vector.hpp>
 
 namespace gl
 {
@@ -49,7 +50,7 @@ namespace gl
 		MemoryBlocksGPU &setSizeBlock(uint8_t index, size_t sizeBlock);
 		MemoryBlocksGPU &setOffset(uint8_t index, size_t offset);
 		MemoryBlocksGPU &setIsUsed(bool isused);
-		
+
 		// getter
 		bool getSync() const;
 		size_t getElementStart() const;
@@ -63,9 +64,8 @@ namespace gl
 	private:
 		size_t _nbrElement;
 		size_t _startElement;
-		size_t _nbrBlock;
-		size_t *_sizeBlocks;
-		size_t *_baseOffset;
+		AGE::Vector<size_t> _sizeBlocks;
+		AGE::Vector<size_t> _baseOffset;
 		bool _sync;
 		bool _isUsed;
 

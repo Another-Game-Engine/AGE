@@ -13,8 +13,6 @@ namespace gl
 	{
 	}
 
-	// nbrVertices is the number will be draw during a render, nbrBuffers is each buffer use for each attribute,
-	// sizeBuffer indicate for each buffer is size in byte, buffers contain all data use for the draw for the attribute.
 	Vertices::Vertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers)
 		: _buffers(NULL),
 		_sizeBuffers(NULL),
@@ -165,7 +163,7 @@ namespace gl
 		return (_nbrIndices);
 	}
 
-	uint32_t const *Indices::getBuffer() const
+	uint32_t const *Indices::getBuffer(size_t) const
 	{
 		return (_buffer);
 	}

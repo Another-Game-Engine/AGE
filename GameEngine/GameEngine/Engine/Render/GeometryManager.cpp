@@ -147,10 +147,7 @@ namespace gl
 	{
 		if (_simpleFormPoolGeo == NULL)
 		{
-			GLenum type = GL_FLOAT;
-			uint8_t sizeType = sizeof(float);
-			uint8_t nbrComponent = 3;
-			_simpleFormPoolGeo = new Key<VertexPool>(addVertexPool(1, &type, &sizeType, &nbrComponent));
+			_simpleFormPoolGeo = new Key<VertexPool>(addVertexPool(1, { GL_FLOAT }, { sizeof(float) }, {3}));
 		}
 		if (_simpleFormPoolId == NULL)
 			_simpleFormPoolId = new Key<IndexPool>(addIndexPool());
@@ -172,7 +169,6 @@ namespace gl
 		_simpleFormId[SimpleForm::QUAD] = addIndices(nbrElement, quadFormId);
 		attachVerticesToVertexPool(_simpleFormGeo[SimpleForm::QUAD], *_simpleFormPoolGeo);
 		attachIndicesToIndexPool(_simpleFormId[SimpleForm::QUAD], *_simpleFormPoolId);
-		attachIndexPoolToVertexPool(*_simpleFormPoolGeo, *_simpleFormPoolId);
 		return (*this);
 	}
 
@@ -193,7 +189,6 @@ namespace gl
 		_simpleFormId[SimpleForm::SPHERE] = addIndices(nbrElementId, id);
 		attachVerticesToVertexPool(_simpleFormGeo[SimpleForm::SPHERE], *_simpleFormPoolGeo);
 		attachIndicesToIndexPool(_simpleFormId[SimpleForm::SPHERE], *_simpleFormPoolId);
-		attachIndexPoolToVertexPool(*_simpleFormPoolGeo, *_simpleFormPoolId);
 		delete[] buffer[0];
 		delete[] id;
 		return (*this);
@@ -230,7 +225,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<VertexPool> GeometryManager::addVertexPool(uint8_t nbrAttributes, GLenum *typeComponent, uint8_t *sizeTypeComponent, uint8_t *nbrComponent)
+	Key<VertexPool> GeometryManager::addVertexPool(uint8_t nbrAttributes, AGE::Vector<GLenum> const &typeComponent, AGE::Vector<uint8_t> const &sizeTypeComponent, AGE::Vector<uint8_t> const &nbrComponent)
 	{
 		Key<VertexPool> key = Key<VertexPool>::createKey();
 
@@ -338,35 +333,30 @@ namespace gl
 
 	GeometryManager &GeometryManager::attachVerticesToVertexPool(Key<Vertices> const &keyVertices, Key<VertexPool> const &keyPool)
 	{
-		Attach<Vertices, VertexPool> newAttach;
-		if ((newAttach.pool = getVertexPool(keyPool)) == NULL || (newAttach.data = getVertices(keyVertices)) == NULL)
-			return (*this);
+		Attach<Vertices, VertexPool> newAttach(getVertexPool(keyPool));
+		
 		dettachVerticesToVertexPool(keyVertices);
-		newAttach.element = newAttach.pool->addVertices(*newAttach.data);
-		_vertexAttach.insert(std::make_pair(keyVertices, newAttach));
+		newAttach.element = newAttach.pool->addElementPool(*getVertices(keyVertices));
+		_vertexAttach[keyVertices] = newAttach;
 		return (*this);
 	}
 
 	GeometryManager &GeometryManager::dettachVerticesToVertexPool(Key<Vertices> const &key)
 	{
-		Attach<Vertices, VertexPool> *attach;
-		if ((attach = getVertexAttach(key)) == NULL)
+		Attach<Vertices, VertexPool> *attach = getVertexAttach(key);
+		if (attach == NULL)
 			return (*this);
-		attach->pool->rmVertices(attach->element);
+		attach->pool->rmElement(attach->element);
 		_vertexAttach.erase(key);
 		return (*this);
 	}
 
 	GeometryManager &GeometryManager::attachIndicesToIndexPool(Key<Indices> const &keyIndices, Key<IndexPool> const &keyPool)
 	{
-		Attach<Indices, IndexPool> newAttach;
-		if ((newAttach.pool = getIndexPool(keyPool)) == NULL)
-			return (*this);
-		if ((newAttach.data = getIndices(keyIndices)) == NULL)
-			return (*this);
+		Attach<Indices, IndexPool> newAttach(getIndexPool(keyPool));
 		dettachIndicesToIndexPool(keyIndices);
-		newAttach.element = newAttach.pool->addIndices(*newAttach.data);
-		_indexAttach.insert(std::make_pair(keyIndices, newAttach));
+		newAttach.element = newAttach.pool->addElementPool(*getIndices(keyIndices));
+		_indexAttach[keyIndices] =  newAttach;
 		return (*this);
 	}
 
@@ -375,60 +365,8 @@ namespace gl
 		Attach<Indices, IndexPool> *attach;
 		if ((attach = getIndexAttach(key)) == NULL)
 			return (*this);
-		attach->pool->rmIndices(attach->element);
+		attach->pool->rmElement(attach->element);
 		_indexAttach.erase(key);
-		return (*this);
-	}
-
-	GeometryManager &GeometryManager::attachIndexPoolToVertexPool(Key<VertexPool> const &keyVertex, Key<IndexPool> const &keyIndex)
-	{
-		VertexPool *vertexPool;
-		if ((vertexPool = getVertexPool(keyVertex)) == NULL)
-			return (*this);
-		IndexPool *indexPool;
-		if ((indexPool = getIndexPool(keyIndex)) == NULL)
-			return (*this);
-		vertexPool->attachIndexPoolToVertexPool(*indexPool);
-		indexPool->attachVertexPoolToIndexPool(*vertexPool);
-		return (*this);
-	}
-
-	GeometryManager &GeometryManager::dettachIndexPoolToVertexPool(Key<VertexPool> const &keyVertex, Key<IndexPool> const &keyIndex)
-	{
-		VertexPool *vertexPool;
-		if ((vertexPool = getVertexPool(keyVertex)) == NULL)
-			return (*this);
-		IndexPool *indexPool;
-		if ((indexPool = getIndexPool(keyIndex)) == NULL)
-			return (*this);
-		vertexPool->dettachIndexPoolToVertexPool();
-		indexPool->dettachVertexPoolToIndexPool();
-		return (*this);
-	}
-
-	GeometryManager &GeometryManager::draw(GLenum mode, Key<Indices> const &keyIndices, Key<Vertices> const &keyVertices)
-	{
-		Attach<Indices, IndexPool> *indexAttach;
-		Attach<Vertices, VertexPool> *vertexAttach;
-
-		if ((indexAttach = getIndexAttach(keyIndices)) == NULL)
-			return (*this);
-		if ((vertexAttach = getVertexAttach(keyVertices)) == NULL)
-			return (*this);
-		indexAttach->pool->syncronisation();
-		vertexAttach->pool->syncronisation();
-		vertexAttach->pool->draw(mode, indexAttach->element, vertexAttach->element);
-		return (*this);
-	}
-
-	GeometryManager &GeometryManager::draw(GLenum mode, Key<Vertices> const &keyVertices)
-	{
-		Attach<Vertices, VertexPool> *vertexAttach;
-
-		if ((vertexAttach = getVertexAttach(keyVertices)) == NULL)
-			return (*this);
-		vertexAttach->pool->syncronisation();
-		vertexAttach->pool->draw(mode, vertexAttach->element);
 		return (*this);
 	}
 
@@ -496,7 +434,7 @@ namespace gl
 		return (&vertices->second);
 	}
 
-	GeometryManager::Attach<Vertices, VertexPool> *GeometryManager::getVertexAttach(Key<Vertices> const &key)
+	Attach<Vertices, VertexPool> *GeometryManager::getVertexAttach(Key<Vertices> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -512,7 +450,7 @@ namespace gl
 		return (&verticesAttach->second);
 	}
 
-	GeometryManager::Attach<Indices, IndexPool> *GeometryManager::getIndexAttach(Key<Indices> const &key)
+	Attach<Indices, IndexPool> *GeometryManager::getIndexAttach(Key<Indices> const &key)
 	{
 		if (!key)
 			assert(0);
@@ -526,5 +464,28 @@ namespace gl
 		_optimizerIndexAttachSearch.first = key;
 		_optimizerIndexAttachSearch.second = &indexAttach->second;
 		return (&indexAttach->second);
+	}
+
+	GeometryManager &GeometryManager::draw(GLenum mode, Key<Vertices> const &vertices)
+	{
+		auto attachment = getVertexAttach(vertices);
+		attachment->pool->startContext();
+		attachment->pool->bind();
+		attachment->pool->syncronisation();
+		attachment->pool->draw(mode, attachment->element);
+		attachment->pool->endContext();
+		return (*this);
+	}
+
+	GeometryManager &GeometryManager::draw(GLenum mode, Key<Indices> const &indices, Key<Vertices> const &vertices)
+	{
+		auto attachmentVertices = getVertexAttach(vertices);
+		auto attachmentIndices = getIndexAttach(indices);
+		attachmentVertices->pool->startContext(*attachmentIndices->pool);
+		attachmentVertices->pool->syncronisation();
+		attachmentIndices->pool->syncronisation();
+		attachmentVertices->pool->draw(mode, attachmentIndices->element, attachmentVertices->element);
+		attachmentVertices->pool->endContext();
+		return (*this);
 	}
 }
