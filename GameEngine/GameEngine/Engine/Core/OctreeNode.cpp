@@ -138,20 +138,21 @@ namespace AGE
 		switch (toTest->type)
 		{
 		case CULLABLE_FRUSTUM:
-			collisionState = ((CullableFrustum*)toTest)->currentFrustum.checkCollision(_node);
+//			collisionState = ((CullableFrustum*)toTest)->currentFrustum.checkCollision(_node);
+			collisionState = true;
 			break;
 		default:
 			assert(!"This cullable type is not handled yet.");
 			break;
 		}
-		if (collisionState != OUTSIDE)
+		if (collisionState)
 		{
 			if (isLeaf())
 			{
 				for (uint32_t i = 0; i < _elementsNbr; ++i)
 				{
-					if (_elements[i]->hasBeenFound == false &&
-						toTest->checkCollision(_elements[i]))
+					if (_elements[i]->hasBeenFound == false && true
+						/*toTest->checkCollision(_elements[i])*/)
 					{
 						toFill.push_back(_elements[i]);
 						_elements[i]->hasBeenFound = true;
