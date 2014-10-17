@@ -38,16 +38,16 @@ public:
 				input->addKeyInput(events.key.keysym.sym);
 #ifdef USE_IMGUI
 				ImGuiIO& io = ImGui::GetIO();
-					io.KeysDown[events.key.keysym.scancode] = true;
-				//io.KeyCtrl = (mods & GLFW_MOD_CONTROL) != 0;
-				//io.KeyShift = (mods & GLFW_MOD_SHIFT) != 0;
+				io.KeysDown[events.key.keysym.scancode] = true;			  
+				io.KeyCtrl = false;// (mods & GLFW_MOD_CONTROL) != 0;
+				io.KeyShift = false;// (mods & GLFW_MOD_SHIFT) != 0;
 #endif
 			}
 			else if (events.type == SDL_KEYUP)
 			{
 #ifdef USE_IMGUI
 				ImGuiIO& io = ImGui::GetIO();
-					io.KeysDown[events.key.keysym.scancode] = false;
+				io.KeysDown[events.key.keysym.scancode] = false;
 				//io.KeyCtrl = (mods & GLFW_MOD_CONTROL) != 0;
 				//io.KeyShift = (mods & GLFW_MOD_SHIFT) != 0;
 #endif

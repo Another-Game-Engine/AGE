@@ -24,6 +24,28 @@ void Link::registerOctreeObject(const PrepareKey &key)
 
 void Link::setPosition(const glm::vec3 &v)
 {
+	_userModification = true;
+	internalSetPosition(v);
+}
+
+void Link::setScale(const glm::vec3 &v) {
+	_userModification = true;
+	internalSetScale(v);
+}
+
+void Link::setOrientation(const glm::quat &v) {
+	_userModification = true;
+	internalSetOrientation(v);
+}
+
+void Link::setForward(const glm::vec3 &v)
+{
+	_userModification = true;
+	internalSetForward(v);
+}
+
+void Link::internalSetPosition(const glm::vec3 &v)
+{
 	_computeTrans = true;
 	_position = v;
 	auto ot = static_cast<PrepareRenderThread*>(_octree);
@@ -35,7 +57,23 @@ void Link::setPosition(const glm::vec3 &v)
 	}
 }
 
-void Link::setScale(const glm::vec3 &v) {
+void Link::internalSetForward(const glm::vec3 &v)
+{
+	_computeTrans = true;
+	glm::vec4 get = glm::mat4(glm::toMat4(_orientation) * glm::translate(glm::mat4(1), v))[3];
+	_position.x = _position.x + get.x;
+	_position.y = _position.y + get.y;
+	_position.z = _position.z + get.z;
+	auto ot = static_cast<PrepareRenderThread*>(_octree);
+	for (auto &e : _octreeObjects)
+	{
+		if (e.invalid())
+			return;
+		ot->setPosition(_position, e);
+	}
+}
+
+void Link::internalSetScale(const glm::vec3 &v) {
 	_computeTrans = true;
 	_scale = v;
 	auto ot = static_cast<PrepareRenderThread*>(_octree);
@@ -46,7 +84,8 @@ void Link::setScale(const glm::vec3 &v) {
 		ot->setScale(_scale, e);
 	}
 }
-void Link::setOrientation(const glm::quat &v) {
+
+void Link::internalSetOrientation(const glm::quat &v) {
 	_computeTrans = true;
 	_orientation = v;
 	auto ot = static_cast<PrepareRenderThread*>(_octree);

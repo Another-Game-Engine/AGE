@@ -1,0 +1,50 @@
+/*!
+
+\file		Engine.hh
+
+\class		Engine
+\brief		This is the engine class.
+
+			Here is an example :
+
+\code
+			int			main(int ac, char **av)
+			{
+				Engine	engine = Engine();
+				if (engine->start() == false)
+					return (EXIT_FAILURE);
+				while (engine->update())
+					;
+				engine->stop();
+
+				return (EXIT_SUCCESS);
+			}
+\endcode
+
+\fn			Engine::Engine()
+\brief		Constructor.
+
+\fn			virtual Engine::~Engine()
+\brief		Destructor.
+
+\fn			bool Engine::init(int mode, unsigned int swidth, unsigned int sheight, std::string &&name)
+\brief		The initialisation function.
+\param		mode this integer is not used by the function yet.
+\param		swidth is not used by the function yet.
+\param		sheight is not used by the function yet.
+\param		name is not used by the function yet.
+\return		a booleean that is always true.
+
+\fn			bool Engine::start()
+\brief		This function launchs the engine.
+\return		a booleean that is always true.
+
+\fn			bool Engine::update()
+\brief		This function updates the engine.
+\return		a booleean.
+
+\fn			void Engine::stop()
+\brief		This function stops the engine.
+\return		void
+
+*/

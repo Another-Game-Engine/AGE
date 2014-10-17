@@ -6,6 +6,10 @@
 #include <Utils/Age_Imgui.hpp>
 #include <chrono>
 
+#ifdef USE_IMGUI
+#include <imgui/imgui.h>
+#endif
+
 using namespace AGE;
 
 bool RenderThread::_init()
@@ -17,7 +21,6 @@ bool RenderThread::_init()
 
 bool RenderThread::_initInNewThread()
 {
-	AGE::Imgui::getInstance()->registerThread(100);
 	return true;
 }
 
@@ -36,19 +39,10 @@ bool RenderThread::_releaseInNewThread()
 bool RenderThread::_update()
 {
 	bool returnValue = true;
-	static auto frameStart = std::chrono::high_resolution_clock::now();
 
 	_commandQueue.getDispatcher()
 		.handle<RendCtxCommand::Flush>([&](const RendCtxCommand::Flush& msg)
 	{
-#ifdef USE_IMGUI
-		IMGUI_BEGIN
-		ImGui::Text("Coucou from render thread");
-		ImGui::Render();
-		IMGUI_END
-		Imgui::getInstance()->threadLoopEnd();
-		AGE::Imgui::getInstance()->endUpdate();
-#endif
 		_context->swapContext();
 	})
 		.handle<RendCtxCommand::GetScreenSize>([&](RendCtxCommand::GetScreenSize& msg)
@@ -72,19 +66,15 @@ bool RenderThread::_update()
 		if (msg.function)
 			msg.function();
 	})
-		.handle<TQC::StartOfFrame>([&](const TQC::StartOfFrame& msg)
-		{
-			frameStart = std::chrono::system_clock::now();
-		}).handle<TQC::EndOfFrame>([&](const TQC::EndOfFrame& msg)
-		{
-			auto t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - frameStart);
-			IMGUI_BEGIN
-				ImGui::Text("Render Thread : %i ms", t.count());
-			IMGUI_END
-		})
+#ifdef USE_IMGUI
+		.handle<AGE::RenderImgui>([&](const AGE::RenderImgui &msg)
+	{
+		AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
+	})
+#endif
 		.handle<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
 	{
-		return false;
+		returnValue = false;
 	});
 
 	return returnValue;

@@ -15,6 +15,7 @@ namespace AGE
 		bool hasMoved;
 		PrepareKey key;
 		glm::vec3 position;
+		glm::vec3 forward;
 		glm::vec3 scale;
 		glm::quat orientation;
 		PreparableObject();
