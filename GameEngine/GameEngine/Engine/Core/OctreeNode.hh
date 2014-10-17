@@ -5,7 +5,7 @@
 #include <Core/CullableInterfaces.hh>
 
 // tmp value waiting for bounding box computation
-#define		MAX_ELEMENT_PER_NODE	4096
+#define		MAX_ELEMENT_PER_NODE	512
 
 namespace AGE
 {
@@ -35,7 +35,10 @@ namespace AGE
 
 		AABoundingBox	_node;
 
+		// nbr of elements in the node
 		uint32_t		_elementsNbr;
+		// nbr of elements in all the subnodes
+		uint32_t		_uniqueSubElements;
 		CullableObject	*_elements[MAX_ELEMENT_PER_NODE];
 	};
 }

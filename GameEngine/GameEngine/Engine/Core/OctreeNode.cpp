@@ -9,6 +9,7 @@ namespace AGE
 		_father = NULL;
 		for (uint32_t i = 0; i < 8; ++i)
 			_sons[i] = NULL;
+		_uniqueSubElements = 0;
 		_elementsNbr = 0;
 		for (size_t i = 0; i < MAX_ELEMENT_PER_NODE; ++i)
 			_elements[i] = NULL;
@@ -55,6 +56,7 @@ namespace AGE
 			}
 			else // if the node is not a leaf, we add the object to all it's sons
 			{
+				++_uniqueSubElements;
 				for (uint32_t i = 0; i < 8; ++i)
 					_sons[i]->addElement(toAdd);
 			}
@@ -74,7 +76,6 @@ namespace AGE
 		bool collisionState;
 
 		// check the collision state depending on the geometry shape
-		// TODO: remove the direction which is useless in this case
 		switch (toRm->type)
 		{
 		case CULLABLE_BOUNDING_BOX:
@@ -86,8 +87,10 @@ namespace AGE
 			assert(!"This cullable type is not handled yet.");
 			break;
 		}
+		// if the cullable collide with the current node
 		if (collisionState)
 		{
+			//if the node is a leaf, we just remove the element from the array
 			if (isLeaf())
 			{
 				for (uint32_t i = 0; i < _elementsNbr; ++i)
@@ -101,24 +104,44 @@ namespace AGE
 					}
 				}
 			}
-			else
+			else // if the node is not a leaf
 			{
-				bool	removeSons = true;
+				// we decrement the number of elements in the subnodes
+				--_uniqueSubElements;
+				// if removeSons is true, we merge the sons with this node
+				bool	removeSons = _uniqueSubElements < MAX_ELEMENT_PER_NODE;
 
+				// to merge the sons, all the sons must be leafs
 				for (uint32_t i = 0; i < 8; ++i)
 				{
 					_sons[i]->removeElement(toRm);
-					if (_sons[i]->_elementsNbr != 0 ||
-						_sons[i]->isLeaf() == false)
+					if (_sons[i]->isLeaf() == false)
 						removeSons = false;
 				}
+				// if we can remove the sons
 				if (removeSons)
 				{
+					// for each son
 					for (uint32_t i = 0; i < 8; ++i)
 					{
+						//  for each element in this son
+						for (uint32_t e = 0; e < _sons[i]->_elementsNbr; ++e)
+						{
+							// if the element was not already added to the current node
+							if (_sons[i]->_elements[e]->hasBeenFound == false)
+							{
+								// we add it
+								_elements[_elementsNbr++] = _sons[i]->_elements[e];
+								_sons[i]->_elements[e]->hasBeenFound = true;
+							}
+						}
+						// then we remove the son
 						delete _sons[i];
 						_sons[i] = NULL;
 					}
+					// we reset all the elements in the node for the next search operation
+					for (uint32_t i = 0; i < _elementsNbr; ++i)
+						_elements[i]->hasBeenFound = false;
 				}
 			}
 		}
@@ -138,8 +161,7 @@ namespace AGE
 		switch (toTest->type)
 		{
 		case CULLABLE_FRUSTUM:
-//			collisionState = ((CullableFrustum*)toTest)->currentFrustum.checkCollision(_node);
-			collisionState = true;
+			collisionState = ((CullableFrustum*)toTest)->currentFrustum.checkCollision(_node);
 			break;
 		default:
 			assert(!"This cullable type is not handled yet.");
@@ -151,8 +173,8 @@ namespace AGE
 			{
 				for (uint32_t i = 0; i < _elementsNbr; ++i)
 				{
-					if (_elements[i]->hasBeenFound == false && true
-						/*toTest->checkCollision(_elements[i])*/)
+					if (_elements[i]->hasBeenFound == false &&
+						toTest->checkCollision(_elements[i]))
 					{
 						toFill.push_back(_elements[i]);
 						_elements[i]->hasBeenFound = true;
