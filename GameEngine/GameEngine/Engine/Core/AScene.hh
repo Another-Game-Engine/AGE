@@ -16,6 +16,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
+#include <cereal/types/map.hpp>
 #include <Components/ComponentRegistrar.hpp>
 
 #include <Core/ComponentManager.hpp>
@@ -35,6 +36,7 @@ private:
 	AGE::Queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
 	int test = 0;
+	std::map<std::size_t, unsigned short>                                   _typeDatabase;
 public:
 	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
@@ -60,13 +62,10 @@ public:
 	void                    informFiltersTagDeletion(TAG_ID id, EntityData &&entity);
 	void                    informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity);
 	void                    informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity);
+	void                    buildTypeDatabase();
 
 	Entity &createEntity();
 	void destroy(const Entity &e);
-
-	//const glm::mat4 &getTransform(const Entity &e) const;
-	//glm::mat4 &getTransformRef(const Entity &e);
-	//void setTransform(Entity &e, const glm::mat4 &trans);
 
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
@@ -126,12 +125,17 @@ public:
 		return false;
 	}
 
-	void saveToJson(const std::string &fileName) const;
+	void saveToJson(const std::string &fileName);
 
 	template <typename Archive>
-	void save(std::ofstream &s, bool verbose = false) const
+	void save(std::ofstream &s, bool verbose = false)
 	{
 		Archive ar(s);
+
+		buildTypeDatabase();
+
+		// we save type database
+		ar(_typeDatabase);
 
 		auto entityNbr = getNumberOfEntities();
 		if (verbose)
@@ -143,10 +147,10 @@ public:
 		{
 			if (e.entity.isActive())
 			{
-				if (verbose)
-					ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), e));
-				else
-					ar(e);
+				//if (verbose)
+				//	ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), e));
+				//else
+				//	ar(e);
 			}
 		}
 		
@@ -241,6 +245,8 @@ public:
 		if (_componentsManagers[id] == nullptr)
 		{
 			_componentsManagers[id] = new ComponentManager<T>(this);
+			if (_typeDatabase.find(T::getTypeId()) != std::end(_typeDatabase))
+				buildTypeDatabase();
 		}
 		if (e.barcode.hasComponent(id))
 		{

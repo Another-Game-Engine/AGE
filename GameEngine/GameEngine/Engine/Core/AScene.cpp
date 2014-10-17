@@ -75,6 +75,20 @@ void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, 
 	}
 }
 
+void                    AScene::buildTypeDatabase()
+{
+	_typeDatabase.clear();
+	for (auto &e : _componentsManagers)
+	{
+		if (!e)
+			continue;
+		std::size_t hash;
+		unsigned short id;
+		e->getDatabaseRegister(hash, id);
+		_typeDatabase.insert(std::make_pair(hash, id));
+	}
+}
+
 Entity &AScene::createEntity()
 	{
 		if (_free.empty())
@@ -122,7 +136,7 @@ Entity &AScene::createEntity()
 		_free.push(e.id);
 	}
 
-void AScene::saveToJson(const std::string &fileName) const
+void AScene::saveToJson(const std::string &fileName)
 {
 	std::ofstream file(fileName, std::ios::binary);
 	assert(file.is_open());
