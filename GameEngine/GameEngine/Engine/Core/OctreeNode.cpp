@@ -1,6 +1,5 @@
 
 #include <Core/OctreeNode.hh>
-#include <Core/CullableInterfaces.hh>
 
 namespace AGE
 {

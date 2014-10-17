@@ -1,13 +1,14 @@
+#pragma once
 
 #include <Utils/AABoundingBox.hh>
 #include <Utils/Containers/Vector.hpp>
+#include <Core/CullableInterfaces.hh>
 
-#define		MAX_ELEMENT_PER_NODE	4
+// tmp value waiting for bounding box computation
+#define		MAX_ELEMENT_PER_NODE	4096
 
 namespace AGE
 {
-	class	CullableObject;
-
 	class	OctreeNode
 	{
 	public:

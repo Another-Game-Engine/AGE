@@ -12,6 +12,7 @@
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
 #include <Core/OctreeNode.hh>
+#include <Core/CullableInterfaces.hh>
 #include <chrono>
 
 
@@ -451,7 +452,7 @@ namespace AGE
 				}
 
 				// Do the culling
-				_octree->getElementsCollide((CullableObject*)&camera, toDraw);
+				_octree->getElementsCollide((AGE::CullableObject*)&camera, toDraw);
 
 				// iter on element to draw
 				for (CullableObject *e : toDraw)
