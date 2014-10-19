@@ -30,6 +30,8 @@ namespace AGE
 	{
 		_commandQueue.emplace<TMQ::CloseQueue>();
 		_commandQueue.releaseReadability();
+		if (_octree)
+			delete _octree;
 	}
 
 	bool PrepareRenderThread::_init()
