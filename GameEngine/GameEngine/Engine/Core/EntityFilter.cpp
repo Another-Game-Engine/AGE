@@ -92,11 +92,11 @@ void EntityFilter::unlock()
 	if (!_locked)
 		return;
 	_locked = false;
-	for (auto &&e : _toAdd)
+	for (auto &e : _toAdd)
 	{
 		_collection.insert(e);
 	}
-	for (auto &&e : _trash)
+	for (auto &e : _trash)
 	{
 		_collection.erase(e);
 	}
