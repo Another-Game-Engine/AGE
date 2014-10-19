@@ -230,7 +230,6 @@ namespace gl
 
 	Key<IndexPool> GeometryManager::addIndexPool()
 	{
-		Key<Indices>::addInternalData();
 		Key<IndexPool> key = Key<IndexPool>::createKey();
 		if (key.getId() >= _indexPool.size())
 			_indexPool.push_back(NULL);
@@ -240,30 +239,11 @@ namespace gl
 
 	Key<VertexPool> GeometryManager::addVertexPool(uint8_t nbrAttributes, AGE::Vector<GLenum> const &typeComponent, AGE::Vector<uint8_t> const &sizeTypeComponent, AGE::Vector<uint8_t> const &nbrComponent)
 	{
-		Key<Vertices>::addInternalData();
 		Key<VertexPool> key = Key<VertexPool>::createKey();
 		if (key.getId() >= _vertexPool.size())
 			_vertexPool.push_back(NULL);
 		_vertexPool[key.getId()] = new VertexPool(nbrAttributes, typeComponent, sizeTypeComponent, nbrComponent);
 		return (key);
-	}
-
-	GeometryManager &GeometryManager::rmVertexPool(Key<VertexPool> &key)
-	{
-		auto pool = getVertexPool(key);
-		delete pool;
-		pool = NULL;
-		key.destroy();
-		return (*this);
-	}
-
-	GeometryManager &GeometryManager::rmIndexPool(Key<IndexPool> &key)
-	{
-		auto pool = getIndexPool(key);
-		delete pool;
-		pool = NULL;
-		key.destroy();
-		return (*this);
 	}
 
 	Key<Vertices> GeometryManager::addVertices(size_t nbrVertices, AGE::Vector<size_t> const &sizeBuffers, AGE::Vector<void *> const &buffers, Key<VertexPool> const &pool)
