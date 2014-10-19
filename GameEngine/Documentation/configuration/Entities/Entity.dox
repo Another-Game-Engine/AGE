@@ -1,0 +1,56 @@
+/*!
+\class		Entity Entity.hh "Engine/Entity.hh"
+\brief		An entity
+
+\code
+			int			main(int ac, char **av)
+			{
+			}
+\endcode
+
+\fn			Entity::Entity()
+\brief		Default constructor.
+
+\fn			Entity::Entity(const Entity &o)
+\brief		Copy constructor.
+
+\fn			Entity::Entity(const Entity &&o)
+\brief		Move constructor.
+
+\fn			Entity::~Entity()
+\brief		Default destructor.
+
+\fn			Entity::Entity & operator= (const Entity &o)
+\brief		Copy assigment operator
+\return		An entity.
+ 
+\fn			bool Entity::operator== (const Entity &o) const
+\brief		Returns true if both entities have same version and id.
+\return		A boolean.
+ 
+\fn			bool Entity::operator!= (const Entity &o) const
+\brief		Returns true if both entities have different version and id.
+\return		A boolean.
+ 
+\fn			bool Entity::operator< (const Entity &o) const
+\brief		Returns true if the entity has an id lesser than the one given in parameter.
+\return		A boolean.
+ 
+\fn			bool Entity::operator<= (const Entity &o) const
+\brief		Returns true if the entity has an id lesser than or equal to the one given in parameter. 
+\return		A boolean.
+ 
+\fn			bool Entity::operator> (const Entity &o) const
+\brief		Returns true if the entity has an id greater than the one given in parameter.
+\return		A boolean.
+ 
+\fn			bool Entity::operator>= (const Entity &o) const
+\brief		Returns true if the entity has an id greater than or equal to one given in parameter.
+\return		A boolean.
+
+\fn			void Entity::removeComponent(ComponentType id)
+\brief		Remove a component from the entity.
+\param		id is the component identifier.
+\return		void
+
+*/
