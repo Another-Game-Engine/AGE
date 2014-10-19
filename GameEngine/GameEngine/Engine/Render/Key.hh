@@ -1,64 +1,65 @@
-#ifndef KEY_HH_
-# define KEY_HH_
+#pragma once
 
 #include <iostream>
 #include <queue>
 #include <cstdint>
-
-#define KEY_DESTROY -1
-
-# define CLASS_ACCESS \
-	friend VerticesManager;\
+#include <Utils/Containers/Vector.hpp>
 
 namespace gl
 {
-	//!\file Key.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class Key<TYPE>
-	//!\brief Key use to represent opengl instance outside the render context
-	template <typename TYPE, std::uint32_t POOL = 0>
+	struct InternalData
+	{
+		std::size_t id;
+		std::queue<std::size_t> trash;
+		InternalData() : id(0){}
+	};
+
+	template <typename TYPE>
 	class Key
 	{
 	public:
-		static Key<TYPE, POOL> createKey()
+		static Key<TYPE> createKey(size_t index = 0)
 		{
-			static size_t id = 0;
-			if (!_trash.empty())
+			if (_data.size() == 0)
+				_data.push_back(InternalData());
+			auto &data = _data[index];
+			if (!data.trash.empty())
 			{
-				auto res = Key<TYPE, POOL>(_trash.front());
-				_trash.pop();
+				auto res = Key<TYPE>(data.trash.front());
+				data.trash.pop();
 				return res;
 			}
-			return (Key<TYPE, POOL>(++id));
+			return (Key<TYPE>(data.id++));
 		}
 
-		// Use it with precautions
-		static Key<TYPE, POOL> createKeyWithId(std::size_t _id)
+		static void addInternalData()
 		{
-			return (Key<TYPE, POOL>(_id));
+			_data.push_back(InternalData());
+		}
+
+		static Key<TYPE> createKeyWithId(std::size_t _id)
+		{
+			return (Key<TYPE>(_id));
 		}
 
 		Key();
 		~Key();
-		Key(Key<TYPE, POOL> const &copy);
-		Key<TYPE, POOL> &operator=(Key<TYPE, POOL> const &t);
-		std::size_t getId() const;
+		Key(Key<TYPE> const &copy);
+		Key<TYPE> &operator=(Key<TYPE> const &t);
+		size_t getId() const;
 		bool empty() const;
 		bool operator!() const;
-		bool operator==(Key<TYPE, POOL> const &compare) const;
-		bool operator!=(Key<TYPE, POOL> const &compare) const;
-		bool operator<(Key<TYPE, POOL> const &compare) const;
-		bool operator>(Key<TYPE, POOL> const &compare) const;
+		bool operator==(Key<TYPE> const &compare) const;
+		bool operator!=(Key<TYPE> const &compare) const;
+		bool operator<(Key<TYPE> const &compare) const;
+		bool operator>(Key<TYPE> const &compare) const;
 		void destroy();
 
 	private:
-		std::size_t _id;
+		size_t _id;
 		explicit Key(size_t id);
-		static std::queue<std::size_t> _trash;
+		static AGE::Vector<InternalData> _data;
 	};
 }
 
 #include <Render/Key.hpp>
-
-#endif /*KEY_HK_*/
