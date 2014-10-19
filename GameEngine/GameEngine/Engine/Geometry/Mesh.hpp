@@ -6,7 +6,7 @@
 
 #include <Render/GeometryManager.hh>
 
-#include <Utils/BoundingInfos.hpp>
+#include <Utils/AABoundingBox.hh>
 
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
@@ -42,13 +42,13 @@ namespace AGE
 		AGE::Vector<glm::vec4> weights;
 		AGE::Vector<glm::vec4> boneIndices;
 		AGE::Vector<glm::vec4> colors;
-		BoundingInfos boundingInfos;
+		AGE::AABoundingBox boundingBox;
 		MaterialIndex defaultMaterialIndex;
 
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors, boundingInfos, defaultMaterialIndex);
+			ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors, boundingBox, defaultMaterialIndex);
 		}
 	};
 
@@ -56,12 +56,11 @@ namespace AGE
 	{
 		std::string name;
 		AGE::Vector<SubMeshData> subMeshs;
-		AGE::BoundingInfos boundingInfos;
 
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(name, subMeshs, boundingInfos);
+			ar(name, subMeshs);
 		}
 	};
 
@@ -69,7 +68,7 @@ namespace AGE
 	{
 		gl::Key<gl::Indices> indices;
 		gl::Key<gl::Vertices> vertices;
-		AGE::BoundingInfos bounding;
+		AGE::AABoundingBox boundingBox;
 //		std::string name;
 		MaterialIndex defaultMaterialIndex;
 	};

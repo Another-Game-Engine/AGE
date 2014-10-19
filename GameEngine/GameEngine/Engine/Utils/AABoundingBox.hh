@@ -31,5 +31,11 @@ namespace AGE
 		ECollision checkCollision(AABoundingBox const &oth, glm::i8vec3 &direction) const;
 
 		bool		checkCollision(AABoundingBox const &oth) const;
+
+		template <class Archive>
+		void serialize(Archive &ar)
+		{
+			ar(minPoint, maxPoint);
+		}
 	};
 }

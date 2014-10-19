@@ -215,8 +215,10 @@ namespace AGE
 	{
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
 		_drawables[id].active = false;
+#ifdef ACTIVATE_OCTREE_CULLING
 		// remove drawable from octree
 		_octree = _octree->removeElement(&_drawables[id]);
+#endif
 		assert(id != (std::size_t)(-1));
 	}
 
@@ -314,13 +316,16 @@ namespace AGE
 				_drawables[id].position = uo->position;
 				_drawables[id].orientation = uo->orientation;
 				_drawables[id].scale = uo->scale;
+				_drawables[id].meshAABB = msg.submeshInstances[i].boundingBox;
 
+#ifdef ACTIVATE_OCTREE_CULLING
 				// add drawable in octree
 				_drawables[id].transformation = glm::scale(glm::translate(glm::mat4(1), _drawables[id].position) *
 					glm::toMat4(_drawables[id].orientation), _drawables[id].scale);
 				_drawables[id].currentAABB.fromTransformedBox(_drawables[id].meshAABB, _drawables[id].transformation);
 				_drawables[id].previousAABB = _drawables[id].currentAABB;
 				_octree = _octree->addElement(&_drawables[id]);
+#endif
 			}
 		})
 			.handle<PRTC::Position>([&](const PRTC::Position& msg)
@@ -417,7 +422,9 @@ namespace AGE
 					e.previousAABB = e.currentAABB;
 					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
+#ifdef  ACTIVATE_OCTREE_CULLING
 					_octree = _octree->moveElement(&e);
+#endif
 					e.hasMoved = false;
 				}
 			}
