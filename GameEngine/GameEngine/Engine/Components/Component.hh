@@ -30,7 +30,6 @@ namespace	Component
 		template <typename Archive>
 		void serializeBase(Archive &ar)
 		{
-			ar(cereal::make_nvp("Component_Type_ID", serializedID));
 			_serialize(ar);
 		}
 

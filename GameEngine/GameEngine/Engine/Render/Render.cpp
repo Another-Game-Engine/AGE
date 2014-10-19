@@ -10,7 +10,7 @@
 namespace gl
 {
 	BaseRender::BaseRender()
-		: _rect(0, 0, 800, 600)
+		: _rect(0, 0, 1600, 900)
 	{
 
 	}

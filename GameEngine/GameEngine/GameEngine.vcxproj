@@ -209,10 +209,12 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)Vendors\Doxygen\doxygen.exe" "$(SolutionDir)Documentation\configuration\Doxyfile"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>Doxygen documentation generation</Message>
+      <Message>
+      </Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

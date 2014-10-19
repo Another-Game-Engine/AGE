@@ -25,6 +25,8 @@ struct EntitySerializationInfos
 			, cereal::make_nvp("flags", flags)
 			, cereal::make_nvp("components_number", components.size())
 			);
+		for (auto &e : components)
+			e->serializeBase(ar);
 	}
 
 	template < typename Archive >

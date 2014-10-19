@@ -127,6 +127,8 @@ public:
 	}
 
 	void saveToJson(const std::string &fileName);
+	void saveToBinary(const std::string &fileName);
+
 
 	template <typename Archive>
 	void save(std::ofstream &s)
