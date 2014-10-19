@@ -87,7 +87,7 @@ int			main(int ac, char **av)
 	preparationThread->launch(e.get());
 
 	// Set Configurations
-	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
+	auto config = e->setInstance<ConfigurationManager>(File("NewMyConfigurationFile.conf"));
 
 	e->setInstance<PubSub::Manager>();
 	auto context = e->getInstance<IRenderContext>();

@@ -281,23 +281,6 @@ bool BenchmarkScene::userStart()
 	}
 
 	{
-		GLOBAL_HEAD = createEntity();
-		auto _l = getLink(GLOBAL_HEAD);
-
-		static bool useOnce = false;
-		_l->setPosition(glm::vec3(-4, 0, 0));
-		_l->setScale(glm::vec3(10.0));
-		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_HEAD, getInstance<AGE::AssetsManager>()->getMesh("head/head.sage"));
-		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("head/head.mage")));
-		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-		{
-			_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 0.1f);
-			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
-			_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
-		}
-	}
-
-	{
 		auto e = createEntity();
 		auto _l = getLink(e);
 		_l->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -458,24 +441,6 @@ bool BenchmarkScene::userUpdate(double time)
 		}
 	}
 
-	{
-		auto link = getLink(GLOBAL_HEAD);
-		auto pos = link->getPosition();
-		static float p[3] = {pos.x, pos.y, pos.z};
-		if (ImGui::SliderFloat("Head x", &p[0], -10, 10))
-		{
-			link->setPosition(glm::vec3(p[0], p[1], p[2]));
-		}
-		if (ImGui::SliderFloat("Head y", &p[1], -10, 10))
-		{
-			link->setPosition(glm::vec3(p[0], p[1], p[2]));
-		}
-		if (ImGui::SliderFloat("Head z", &p[2], -10, 10))
-		{
-			link->setPosition(glm::vec3(p[0], p[1], p[2]));
-		}
-	}
-
 	octree->getCommandQueue().autoEmplace<AGE::PRTC::PrepareDrawLists>();
 
 	octree->getCommandQueue().autoEmplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
@@ -510,6 +475,6 @@ bool BenchmarkScene::userUpdate(double time)
 
 	octree->getCommandQueue().releaseReadability();
 
-	//saveToJson("SAVE_TEST.json");
+//	saveToJson("SAVE_TEST.json");
 	return true;
 }
