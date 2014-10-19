@@ -3,6 +3,7 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Components/Component.hh>
 #include <utility>
+#include <cereal/cereal.hpp>
 
 class AScene;
 
@@ -21,6 +22,9 @@ public:
 	virtual bool removeComponent(Entity &e) = 0;
 	virtual Component::Base *getComponentPtr(const Entity &e) = 0;
 	virtual Component::Base *getComponentPtr(ENTITY_ID e) = 0;
+
+	virtual void getDatabaseRegister(std::size_t &hash, unsigned short &id) const = 0;
+
 protected:
 	bool _reorder;
 };
@@ -121,6 +125,12 @@ public:
 	virtual Component::Base *getComponentPtr(ENTITY_ID e)
 	{
 		return static_cast<Component::Base*>(getComponent(e));
+	}
+
+	virtual void getDatabaseRegister(std::size_t &hash, unsigned short &id) const
+	{
+		hash = typeid(T).hash_code();
+		id = T::getTypeId();
 	}
 
 private:

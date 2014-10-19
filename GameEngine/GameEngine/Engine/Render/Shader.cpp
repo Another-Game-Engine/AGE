@@ -479,8 +479,7 @@ namespace gl
 		use();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
-			if (!_tasks[index].isExec())
-				assert(0);
+			assert(_tasks[index].isExec());
 			if (_tasks[index].update)
 			{
 				_tasks[index].func(_tasks[index].params);

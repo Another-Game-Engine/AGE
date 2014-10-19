@@ -43,7 +43,7 @@ namespace AGE
 		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 		cereal::PortableBinaryInputArchive ar(ifs);
 		ar(data);
-
+		material->name = data.name;
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		for (auto &e : data.collection)
 		{

@@ -53,7 +53,7 @@ namespace Component
 	template <typename Archive>
 	void MeshRenderer::save(Archive &ar) const
 	{
-
+		ar(_mesh != nullptr ? _mesh->name : "", _material != nullptr ? _material->name : "");
 	}
 
 	template <typename Archive>

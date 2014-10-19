@@ -7,6 +7,7 @@
 #include <Core/EntityFilter.hpp>
 #include <Entities/EntityFlags.hh>
 #include <Core/PrepareRenderThread.hpp>
+#include <fstream>
 
 AScene::AScene(std::weak_ptr<Engine> &&engine) :
 DependenciesInjector(std::move(engine))
@@ -74,6 +75,20 @@ void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, 
 	}
 }
 
+void                    AScene::buildTypeDatabase()
+{
+	_typeDatabase.clear();
+	for (auto &e : _componentsManagers)
+	{
+		if (!e)
+			continue;
+		std::size_t hash;
+		unsigned short id;
+		e->getDatabaseRegister(hash, id);
+		_typeDatabase.insert(std::make_pair(hash, id));
+	}
+}
+
 Entity &AScene::createEntity()
 	{
 		if (_free.empty())
@@ -82,6 +97,7 @@ Entity &AScene::createEntity()
 			e.entity.id = _entityNumber;
 			e.link._octree = getInstance<AGE::PrepareRenderThread>();
 			assert(++_entityNumber != UINT16_MAX);
+			e.entity.setActive(true);
 			return e.entity;
 		}
 		else
@@ -101,6 +117,7 @@ Entity &AScene::createEntity()
 			return;
 		++data.entity.version;
 		data.entity.flags = 0;
+		data.entity.setActive(false);
 		cachedCode = data.barcode;
 		data.barcode.reset();
 		getLink(e)->reset();
@@ -118,3 +135,19 @@ Entity &AScene::createEntity()
 		}
 		_free.push(e.id);
 	}
+
+void AScene::saveToJson(const std::string &fileName)
+{
+	std::ofstream file(fileName, std::ios::binary);
+	assert(file.is_open());
+	save<cereal::JSONOutputArchive>(file);
+	file.close();
+}
+
+void AScene::saveToBinary(const std::string &fileName)
+{
+	std::ofstream file(fileName, std::ios::binary);
+	assert(file.is_open());
+	save<cereal::PortableBinaryOutputArchive>(file);
+	file.close();
+}
