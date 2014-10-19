@@ -62,7 +62,7 @@ void BenchmarkScene::initRendering()
 		key.merge.light_buffer = _renderManager->addShaderSampler(key.merge.shader, "light_buffer");
 		
 		// create renderpass and set it
-		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 800, 600));
+		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 1600, 900));
 		_renderManager->pushSetTestTaskRenderPass(key.getBuff.renderPass, false, false, true);
 		_renderManager->pushSetClearValueTaskRenderPass(key.getBuff.renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 		_renderManager->pushClearTaskRenderPass(key.getBuff.renderPass, true, true, false);
@@ -79,7 +79,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
 
 		// create  clear renderPass
-		key.clean.emptyRenderPass = _renderManager->addEmptyRenderPass(glm::ivec4(0, 0, 800, 600));
+		key.clean.emptyRenderPass = _renderManager->addEmptyRenderPass(glm::ivec4(0, 0, 1600, 900));
 		_renderManager->createBufferSamplableEmptyRenderPass(key.clean.emptyRenderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
 		_renderManager->pushSetClearValueTaskEmptyRenderPass(key.clean.emptyRenderPass, glm::vec4(0.f, 0.f, 0.f, 1.0f));
 		_renderManager->pushSetTestTaskEmptyRenderPass(key.clean.emptyRenderPass, false, false, false);
@@ -93,7 +93,7 @@ void BenchmarkScene::initRendering()
 		// create renderPostEffect
 		gl::RenderManager *r = _renderManager;
 		RenderKey *k = &key;
-		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 800, 600));
+		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 1600, 900));
 		_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, false);
 		_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
 		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, true);
@@ -116,7 +116,7 @@ void BenchmarkScene::initRendering()
 		});
 
 		// create merge
-		key.merge.renderPostEffect = _renderManager->addRenderPostEffect(key.merge.shader, glm::ivec4(0, 0, 800, 600));
+		key.merge.renderPostEffect = _renderManager->addRenderPostEffect(key.merge.shader, glm::ivec4(0, 0, 1600, 900));
 		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.light_buffer, GL_COLOR_ATTACHMENT0, key.Accum.renderPostEffect);
 		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.diffuse_buffer, GL_COLOR_ATTACHMENT0, key.getBuff.renderPass);
 		_renderManager->createBufferSamplableRenderPostEffect(key.merge.renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGBA8);
@@ -126,7 +126,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushSetTestTaskRenderPostEffect(key.merge.renderPostEffect, true, false, false);
 		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.merge.renderPostEffect, 0, false);
 
-		key.merge.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 800, 600), key.merge.renderPostEffect);
+		key.merge.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 1600, 900), key.merge.renderPostEffect);
 		_renderManager->pushClearTaskRenderOnScreen(key.merge.renderOnScreen, true, true, false);
 		_renderManager->pushSetTestTaskRenderOnScreen(key.merge.renderOnScreen, false, false, true);
 		_renderManager->pushSetClearValueTaskRenderOnScreen(key.merge.renderOnScreen, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -427,30 +427,19 @@ bool BenchmarkScene::userUpdate(double time)
 		auto link = getLink(GLOBAL_CATWOMAN);
 		auto pos = link->getPosition();
 		static float p[3] = {pos.x, pos.y, pos.z};
-		if (ImGui::SliderFloat("Floor x", &p[0], -10, 10))
+		if (ImGui::SliderFloat("Cat x", &p[0], -10, 10))
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
-		if (ImGui::SliderFloat("Floor y", &p[1], -10, 10))
+		if (ImGui::SliderFloat("Cat y", &p[1], -10, 10))
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
-		if (ImGui::SliderFloat("Floor z", &p[2], -10, 10))
+		if (ImGui::SliderFloat("Cat z", &p[2], -10, 10))
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
-		//if (ImGui::InputFloat3("Floor position", p))
-		//{
-		//	link->setPosition(glm::vec3(p[0], p[1], p[2]));
-		//}
-
-		//static char t[1000];
-		//if (ImGui::InputText("test", t, 1000))
-		//{
-
-		//}
 	}
-
 
 	octree->getCommandQueue().autoEmplace<AGE::PRTC::PrepareDrawLists>();
 
@@ -485,5 +474,7 @@ bool BenchmarkScene::userUpdate(double time)
 	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
 
 	octree->getCommandQueue().releaseReadability();
+
+//	saveToJson("SAVE_TEST.json");
 	return true;
 }

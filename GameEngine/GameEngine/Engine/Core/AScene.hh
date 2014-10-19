@@ -16,10 +16,12 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
+#include <cereal/types/map.hpp>
 #include <Components/ComponentRegistrar.hpp>
 
 #include <Core/ComponentManager.hpp>
 #include <Utils/Containers/Queue.hpp>
+#include <Entities/EntitySerializationInfos.hpp>
 
 class System;
 class Engine;
@@ -35,10 +37,11 @@ private:
 	AGE::Queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
 	int test = 0;
+	std::map<std::size_t, unsigned short>                                   _typeDatabase;
 public:
 	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
-	inline std::uint16_t    getNumberOfEntities() { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
+	inline std::uint16_t    getNumberOfEntities() const { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
@@ -60,13 +63,10 @@ public:
 	void                    informFiltersTagDeletion(TAG_ID id, EntityData &&entity);
 	void                    informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity);
 	void                    informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity);
+	void                    buildTypeDatabase();
 
 	Entity &createEntity();
 	void destroy(const Entity &e);
-
-	//const glm::mat4 &getTransform(const Entity &e) const;
-	//glm::mat4 &getTransformRef(const Entity &e);
-	//void setTransform(Entity &e, const glm::mat4 &trans);
 
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
@@ -126,27 +126,51 @@ public:
 		return false;
 	}
 
+	void saveToJson(const std::string &fileName);
+	void saveToBinary(const std::string &fileName);
+
+
 	template <typename Archive>
 	void save(std::ofstream &s)
 	{
 		Archive ar(s);
-		unsigned int size = 0;
+
+		buildTypeDatabase();
+
+		// we save type database
+		ar(cereal::make_nvp("Types_database", _typeDatabase));
+
+		auto entityNbr = getNumberOfEntities();
+
+		ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
+		
+		std::vector<EntityData> entities;
+
+		// we list entities
+		auto ctr = 0;
 		for (auto &e : _pool)
 		{
-			// TODO
-			//if (e.getFlags() & EntityData::ACTIVE)
-			//{
-			//	++size;
-			//}
+			if (e.entity.isActive())
+			{
+				entities.push_back(e);
+				++ctr;
+				if (ctr >= entityNbr)
+					break;
+			}
 		}
-		ar(cereal::make_nvp("Number_of_serialized_entities", size));
-		for (auto &e : _pool)
+
+		for (auto &e : entities)
 		{
-			// TODO
-			//if (e.getFlags() & EntityData::ACTIVE)
-			//{
-			//	ar(cereal::make_nvp("Entity_" + std::to_string(e.getHandle().getId()), e));
-			//}
+			auto es = EntitySerializationInfos(e);
+			for (COMPONENT_ID i = 0; i < MAX_CPT_NUMBER; ++i)
+			{
+				if (e.barcode.hasComponent(i))
+				{
+					es.components.push_back(getComponent(e.getEntity(), i));
+				}
+			}
+
+			ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), es));
 		}
 	}
 
@@ -231,6 +255,8 @@ public:
 		if (_componentsManagers[id] == nullptr)
 		{
 			_componentsManagers[id] = new ComponentManager<T>(this);
+			if (_typeDatabase.find(T::getTypeId()) != std::end(_typeDatabase))
+				buildTypeDatabase();
 		}
 		if (e.barcode.hasComponent(id))
 		{
