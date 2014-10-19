@@ -219,7 +219,8 @@ namespace AGE
 		_drawables[id].active = false;
 #ifdef ACTIVATE_OCTREE_CULLING
 		// remove drawable from octree
-		_octree = _octree->removeElement(&_drawables[id]);
+		if (_drawables[id].toAddInOctree == false)
+			_octree = _octree->removeElement(&_drawables[id]);
 #endif
 		assert(id != (std::size_t)(-1));
 	}
