@@ -29,11 +29,6 @@ namespace gl
 		size_t stride;
 	};
 
-	//!\file MemoryGPU.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class MemoryBlocksGPU
-	//!\brief Representing data on GPU in blocks
 	class MemoryBlocksGPU
 	{
 	public:

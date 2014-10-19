@@ -1,61 +1,36 @@
 #pragma once
 
 #include <stdint.h>
-#include <Render/GeometryManager.hh>
-#include <Render/Pool.hh>
+#include <Utils/Containers/Vector.hpp>
 
 namespace gl
 {
-	class MemoryBlocksGPU;
-	class Vertices;
-	template<typename TYPE, std::uint32_t POOL> class Key;
+	template<typename TYPE> class Key;
 
-	//!\file Data.hh
-	//!\author Dorian Pinaud
-	//!\version v2.0
-	//!\class Vertices
-	//!\brief contain vertices information
-	class Vertices
+	class Data
 	{
 	public:
-		Vertices();
-		Vertices(size_t nbrVertices, uint8_t nbrBuffers, size_t *sizeBuffers, void **buffers);
-		~Vertices();
-		Vertices(Vertices const &copy);
-		Vertices &operator=(Vertices const &v);
+		Data();
+		Data(size_t nbrElement, AGE::Vector<size_t> const &sizeBuffers, AGE::Vector<void *> const &buffers);
+		Data(size_t nbrElement, AGE::Vector<uint32_t> const &buffer);
+		~Data();
+		Data(Data const &copy);
+		Data &operator=(Data const &v);
 
+	public:
 		void const *getBuffer(uint8_t index) const;
 		size_t getSizeBuffer(uint8_t index) const;
-		uint8_t getNbrBuffers() const;
+		size_t getNbrBuffers() const;
 		size_t getNbrElement() const;
 
 	private:
-
-		void **_buffers;
-		size_t *_sizeBuffers;
-		size_t _nbrVertices;
-		uint8_t _nbrBuffers;
-	};
-
-	//!\file Data.hh
-	//!\author Dorian Pinaud
-	//!\version v2.0
-	//!\class Indices
-	//!\brief Indices data
-	class Indices
-	{
-	public:
-		Indices();
-		Indices(Indices const &copy);
-		Indices(size_t nbrIndices, uint32_t *buffer);
-		Indices &operator=(Indices const &i);
-
-		size_t getNbrElement() const;
-		uint32_t const *getBuffer(size_t) const;
-
+		AGE::Vector<void *> _buffers;
+		AGE::Vector<size_t> _sizeBuffers;
+		size_t _nbrElement;
+	
 	private:
-		size_t _nbrIndices;
-		uint32_t *_buffer;
+		void copyData(AGE::Vector<void *> const &data, AGE::Vector<size_t> const &sizeData);
+		void cleanData();
 	};
 
 }

@@ -69,8 +69,9 @@ namespace AGE
 	{
 		gl::Key<gl::Indices> indices;
 		gl::Key<gl::Vertices> vertices;
+		gl::Key<gl::IndexPool> indexPool;
+		gl::Key<gl::VertexPool> vertexPool;
 		AGE::BoundingInfos bounding;
-//		std::string name;
 		MaterialIndex defaultMaterialIndex;
 	};
 

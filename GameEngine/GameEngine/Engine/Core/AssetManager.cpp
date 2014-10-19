@@ -309,13 +309,13 @@ namespace AGE
 		//geometryManager.createSphereSimpleForm();
 		//mesh.vertices = geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
 		//mesh.indices = geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
-		mesh.vertices = geometryManager.addVertices(maxSize, uint8_t(size), nbrBuffer.data(), buffer.data());
-		mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
+		mesh.vertices = geometryManager.addVertices(maxSize, nbrBuffer, buffer, pools.first);
+		mesh.indices = geometryManager.addIndices(data.indices.size(), data.indices, pools.second);
 		mesh.bounding = data.boundingInfos;
 		//		mesh.name = data.name; // TODO
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
-		geometryManager.attachVerticesToVertexPool(mesh.vertices, pools.first);
-		geometryManager.attachIndicesToIndexPool(mesh.indices, pools.second);
+//		geometryManager.attachVerticesToVertexPool(mesh.vertices, pools.first);
+//		geometryManager.attachIndicesToIndexPool(mesh.indices, pools.second);
 	}
 
 	// Create pool for meshs

@@ -1,6 +1,5 @@
 #include <Render/Pool.hh>
 
-#define INDEXPOOL 1
 
 namespace gl
 {
@@ -125,7 +124,7 @@ namespace gl
 		return (*this);
 	}
 
-	VertexPool &VertexPool::draw(GLenum mode, Key<Element<Vertices>> const &key)
+	VertexPool &VertexPool::draw(GLenum mode, Key<Vertices> const &key)
 	{
 		auto element = getElementPool(key);
 		auto const &memory = _poolMemory[element->memoryIndex];
@@ -133,7 +132,7 @@ namespace gl
 		return (*this);
 	}
 
-	VertexPool &VertexPool::draw(GLenum mode, Key<Element<Indices>> const &i, Key<Element<Vertices>> const &v)
+	VertexPool &VertexPool::draw(GLenum mode, Key<Indices> const &i, Key<Vertices> const &v)
 	{
 		auto element = getElementPool(v);
 		auto const &memory = _poolMemory[element->memoryIndex];
@@ -162,7 +161,7 @@ namespace gl
 		return (*this);
 	}
 
-	IndexPool &IndexPool::draw(GLenum mode, Key<Element<Indices>> const &i, size_t start)
+	IndexPool &IndexPool::draw(GLenum mode, Key<Indices> const &i, size_t start)
 	{
 		auto element = getElementPool(i);
 		auto const &memory = _poolMemory[element->memoryIndex];

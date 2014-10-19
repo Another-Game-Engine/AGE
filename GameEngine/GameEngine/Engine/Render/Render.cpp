@@ -6,6 +6,7 @@
 #include <Render/GeometryManager.hh>
 #include <Render/MaterialManager.hh>
 #include <Render/Storage.hh>
+#include <Render/Pool.hh>
 
 namespace gl
 {
@@ -500,10 +501,10 @@ namespace gl
 
 	}
 
-	RenderOnScreen::RenderOnScreen(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l)
+	RenderOnScreen::RenderOnScreen(Shader &s, GeometryManager &g, LocationStorage &l)
 		: DrawableRender(s, g),
 		OperationBuffer(l),
-		QuadRender(key, id),
+		QuadRender(g.getSimpleFormGeo(SimpleForm::QUAD), g.getSimpleFormId(SimpleForm::QUAD), g.getSimpleFormGeoPool(), g.getSimpleFormIdPool()),
 		BaseRender()
 	{
 
@@ -522,7 +523,7 @@ namespace gl
 		DrawableRender::update();
 		OperationBuffer::update();
 		_shader.update();
-		_geometryManager.draw(_mode, _id, _vertices);
+		_geometryManager.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
 		return (*this);
 	}
 
@@ -585,10 +586,10 @@ namespace gl
 		return (RenderType::RENDER_PASS);
 	}
 
-	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l)
+	RenderPostEffect::RenderPostEffect(Shader &s, GeometryManager &g, LocationStorage &l)
 		: DrawableRender(s, g),
 		OffScreenRender(l),
-		QuadRender(key, id)
+		QuadRender(g.getSimpleFormGeo(SimpleForm::QUAD), g.getSimpleFormId(SimpleForm::QUAD), g.getSimpleFormGeoPool(), g.getSimpleFormIdPool())
 	{
 
 	}
@@ -605,7 +606,7 @@ namespace gl
 		DrawableRender::update();
 		OffScreenRender::update();
 		_shader.update();
-		_geometryManager.draw(_mode, _id, _vertices);
+		_geometryManager.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
 		return (*this);
 	}
 
@@ -637,9 +638,11 @@ namespace gl
 		return (RenderType::RENDER_EMPTY);
 	}
 
-	QuadRender::QuadRender(Key<Vertices> const &key, Key<Indices> const &id)
+	QuadRender::QuadRender(Key<Vertices> const &key, Key<Indices> const &id, Key<VertexPool> const &vertexPool, Key<IndexPool> const &indexPool)
 		: _vertices(key),
-		_id(id)
+		_id(id),
+		_vertexPool(vertexPool),
+		_indexPool(indexPool)
 	{
 
 	}

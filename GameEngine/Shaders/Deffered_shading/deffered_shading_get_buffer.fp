@@ -3,7 +3,6 @@
 in vec3 inter_normal;
 in vec2 inter_texCoord;
 in vec3 inter_tangent;
-in vec3 inter_bitangent;
 
 uniform vec4 diffuse_color;
 uniform float diffuse_ratio;
@@ -11,7 +10,7 @@ uniform vec4 specular_color;
 uniform float specular_ratio;
 uniform float shininess;
 uniform sampler2D diffuse_texture;
-uniform sampler2D bump_texture;
+uniform sampler2D normal_texture;
 
 layout (location = 0) out vec4 diffuse_frag;
 layout (location = 1) out vec4 normal_frag;
@@ -19,10 +18,11 @@ layout (location = 2) out vec4 specular_frag;
 
 vec3 perturb_normal()
 {
-	vec3 normal_texture_ts = texture(bump_texture, inter_texCoord).xyz;
-	vec3 normal_texture = normal_texture_ts * 2.f - vec3(1.f);
-	mat3 TBN = mat3(inter_tangent, inter_bitangent, inter_normal);
-	return mix(normalize(TBN * normal_texture), inter_normal, all(equal(normal_texture_ts, vec3(0.f))));
+	vec3 perturbated_normal_ts = texture(normal_texture, inter_texCoord).xyz;
+	vec3 perturbated_normal = perturbated_normal_ts * 2.f - vec3(1.f);
+	vec3 bitangent = cross(inter_tangent, inter_normal);
+	mat3 TBN = mat3(inter_tangent, bitangent, inter_normal);
+	return mix(normalize(TBN * perturbated_normal), inter_normal, all(equal(perturbated_normal_ts, vec3(0.f))));
 }
 
 void main(void)
