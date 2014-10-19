@@ -61,8 +61,8 @@ bool loadAssets(std::shared_ptr<Engine> e)
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents});
 
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sponza/sponza.mage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, AGE::MeshInfos::BiTangents});
-	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("head/head.mage"));
+	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, AGE::MeshInfos::BiTangents});
+	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("head/head.mage"));
 
 #endif
 #ifdef COMPLEX_MESH
