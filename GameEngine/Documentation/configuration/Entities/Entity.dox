@@ -9,7 +9,7 @@
 			auto engine = createEntity()
 \endcode
 
-			We have now an entity, we can add some components:
+\brief			We have now an entity, we can add some components:
 \code
 			camera.getLink().setFoward(glm::vec3(0.f, 0.f, -c * time));
 \endcode
