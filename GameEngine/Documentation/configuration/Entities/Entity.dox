@@ -1,11 +1,17 @@
 /*!
 \class		Entity Entity.hh "Engine/Entity.hh"
-\brief		An entity
+\brief		An entity is only an empty contener which takes sense thanks to its added components.
+			Its an group of data, forming a logical creation like a character, a weapon...
+			The entity is updated by an associated system each game loop run.
 
+			To instantiate an entity, use a AScene inherited classe and use its inherited method:
 \code
-			int			main(int ac, char **av)
-			{
-			}
+			auto engine = createEntity()
+\endcode
+
+			We have now an entity, we can add some components:
+\code
+			camera.getLink().setFoward(glm::vec3(0.f, 0.f, -c * time));
 \endcode
 
 \fn			Entity::Entity()
