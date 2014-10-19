@@ -5,7 +5,7 @@
 #include <Core/CullableInterfaces.hh>
 
 // tmp value waiting for bounding box computation
-#define		MAX_ELEMENT_PER_NODE	512
+#define		MAX_ELEMENT_PER_NODE	16
 
 namespace AGE
 {
