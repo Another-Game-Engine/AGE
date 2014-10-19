@@ -366,11 +366,6 @@ bool BenchmarkScene::userUpdate(double time)
 #endif
 #ifdef RENDERING_ACTIVATED
 
-			auto link = getLink(e);
-			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
-			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-			link->setScale(glm::vec3(1.0f));
-
 #ifndef COMPLEX_MESH
 			Component::MeshRenderer *mesh;
 			if (i % 4 == 0)
@@ -389,6 +384,11 @@ bool BenchmarkScene::userUpdate(double time)
 #endif
 
 #endif
+
+			auto link = getLink(e);
+			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+			link->setScale(glm::vec3(1.0f));
 
 #ifdef PHYSIC_SIMULATION
 			auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
