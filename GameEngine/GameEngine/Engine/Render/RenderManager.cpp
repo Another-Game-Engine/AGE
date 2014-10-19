@@ -80,12 +80,6 @@ namespace gl
 		return (element->first);
 	}
 
-	Key<Uniform> RenderManager::getShaderUniform(Key<Shader> const &key, size_t target)
-	{
-		Shader const *shader = getShader(key);
-		return (shader->getUniform(target));
-	}
-
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
 	{
 		Shader *shader = getShader(key);
@@ -511,7 +505,7 @@ namespace gl
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
 		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, geometryManager, locationStorage);
-		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
+		element->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
 		element->configRect(rect);
 		return (key);
 	}
