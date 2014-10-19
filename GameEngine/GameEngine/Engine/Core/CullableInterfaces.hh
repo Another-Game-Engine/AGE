@@ -21,6 +21,7 @@ namespace AGE
 		CullableType	type;
 		OctreeNode		*currentNode;
 		bool			hasBeenFound;
+		bool			toAddInOctree;
 
 		CullableObject();
 		~CullableObject();

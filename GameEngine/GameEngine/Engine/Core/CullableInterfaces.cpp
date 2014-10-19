@@ -6,7 +6,8 @@ namespace AGE
 	CullableObject::CullableObject() :
 		type(UNKNOWN_CULLABLE),
 		currentNode(NULL),
-		hasBeenFound(false)
+		hasBeenFound(false),
+		toAddInOctree(false)
 	{
 	}
 
