@@ -409,22 +409,26 @@ namespace AGE
 			// Update drawable positions in octree
 			for (auto &e : _drawables)
 			{
-				if (e.hasMoved)
+				if (e.hasMoved && e.toAddInOctree == false)
 				{
 					e.hasMoved = false;
 					e.previousAABB = e.currentAABB;
 					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
 #ifdef  ACTIVATE_OCTREE_CULLING
-					if (e.toAddInOctree == false)
-						_octree = _octree->moveElement(&e);
+					_octree = _octree->moveElement(&e);
 #endif
 				}
+#ifdef  ACTIVATE_OCTREE_CULLING
 				if (e.toAddInOctree)
 				{
+					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
+					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
+					e.previousAABB = e.currentAABB;
 					e.toAddInOctree = false;
-					_octree->addElement(&e);
+					_octree = _octree->addElement(&e);
 				}
+#endif
 			}
 			// Do culling for each camera
 			_octreeDrawList.clear();

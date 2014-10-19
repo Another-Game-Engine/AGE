@@ -150,8 +150,8 @@ namespace AGE
 
 	OctreeNode	*OctreeNode::moveElement(CullableObject *toMove)
 	{
-		removeElement(toMove, false);
-		return (addElement(toMove));
+		OctreeNode *newRoot = removeElement(toMove, false);
+		return (newRoot->addElement(toMove));
 	}
 
 	void		OctreeNode::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill) const
