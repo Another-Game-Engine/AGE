@@ -20,12 +20,12 @@ namespace gl
 
 	Data::Data(size_t nbrElement, AGE::Vector<uint32_t> const &buffer)
 		: _buffers({ new uint32_t[nbrElement] }),
-		_sizeBuffers(sizeof(uint32_t) * nbrElement),
 		_nbrElement(nbrElement)
 	{
-		for (size_t index = 0; index < buffer.size(); ++index)
+		_sizeBuffers.push_back(sizeof(uint32_t)* nbrElement);
+		for (size_t index = 0; index < _sizeBuffers.back(); ++index)
 		{
-			((uint32_t *)_buffers[0])[index] = buffer[index];
+			((uint8_t *)_buffers.back())[index] = ((uint8_t *)buffer.data())[index];
 		}
 	}
 
@@ -88,12 +88,12 @@ namespace gl
 
 	void Data::cleanData()
 	{
-		for (auto &buffer : _buffers)
+		for (size_t index = 0; index < _buffers.size(); ++index)
 		{
-			if (buffer != NULL)
+			if (_buffers[index] != NULL)
 			{
-				delete[] buffer;
-				buffer = NULL;
+				delete[] _buffers[index];
+				_buffers[index] = NULL;
 			}
 		}
 	}
