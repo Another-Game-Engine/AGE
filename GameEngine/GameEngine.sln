@@ -33,8 +33,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4F71FD1A-92D4-4EE1-A02A-3C30682405B3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineCoreTest", "EngineCoreTest\EngineCoreTest.vcxproj", "{1133660B-897C-4237-9E3B-15C10A3A2942}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetsEditor", "Tools\AssetsEditor\AssetsEditor.vcxproj", "{CB955D69-5F17-4705-BE34-81FBE92E26EB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deffered_shading", "Deffered_shading", "{F584710B-8089-4D6B-801A-8A2354FCF28A}"
 	ProjectSection(SolutionItems) = preProject
