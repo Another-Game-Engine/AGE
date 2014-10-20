@@ -192,11 +192,9 @@ namespace gl
 		std::vector<unsigned int> id;
 		size_t nbrElementGeo;
 		size_t nbrElementId;
-//<<<<<<< HEAD
-//		generateIcoSphere(3, (glm::vec3 **)&buffer[0], (glm::u32vec3 **)&id, nbrElementId, nbrElementGeo);
-//=======
+
 		generateIcoSphere(1, buffer, id, nbrElementId, nbrElementGeo);
-//>>>>>>> 6a474651760b3a141c2d6ae2b76f4559f089f055
+
 		size_t sizeBuffer = 4 * 3 * nbrElementGeo;
 		_simpleFormGeo[SimpleForm::SPHERE] = addVertices(nbrElementGeo, { 4 * 3 * nbrElementGeo }, buffer, *_simpleFormPoolGeo);
 		_simpleFormId[SimpleForm::SPHERE] = addIndices(nbrElementId, id, *_simpleFormPoolId);
