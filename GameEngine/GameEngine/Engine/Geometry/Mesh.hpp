@@ -68,8 +68,13 @@ namespace AGE
 	{
 		gl::Key<gl::Indices> indices;
 		gl::Key<gl::Vertices> vertices;
+		
 		AGE::AABoundingBox boundingBox;
 //		std::string name;
+
+		gl::Key<gl::IndexPool> indexPool;
+		gl::Key<gl::VertexPool> vertexPool;
+
 		MaterialIndex defaultMaterialIndex;
 	};
 

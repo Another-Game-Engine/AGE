@@ -30,7 +30,6 @@ namespace	Component
 		template <typename Archive>
 		void serializeBase(Archive &ar)
 		{
-			ar(cereal::make_nvp("Component_Type_ID", serializedID));
 			_serialize(ar);
 		}
 
@@ -112,16 +111,22 @@ namespace	Component
 		}
 
 		ENTITY_ID entityId;
-
 	private:
 		ComponentBase(ComponentBase &other);
 		ComponentBase &operator=(ComponentBase const &o);
-
 
 		static std::string &name()
 		{
 			static std::string _name = typeid(T).name();
 			return _name;
 		}
+	protected:
+		struct PostSerializationInterface
+		{};
+
+		// used if their is post serialization work to do (example, load mesh)
+		static std::function<void(AScene *scene
+			, Component::Base *component
+			, const PostSerializationInterface *postDatas) > _postSerialization;
 	};
 }

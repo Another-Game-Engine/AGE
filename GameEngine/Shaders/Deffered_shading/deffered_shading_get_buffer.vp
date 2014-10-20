@@ -10,14 +10,12 @@ layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 normal;
 layout (location = 2) in vec2 texCoord;
 layout (location = 3) in vec4 tangent;
-layout (location = 4) in vec4 bitangent;
 
 uniform mat4 model_matrix;
 
 out vec3 inter_normal;
 out vec2 inter_texCoord;
 out vec3 inter_tangent;
-out vec3 inter_bitangent;
 
 void main()
 {
@@ -25,6 +23,5 @@ void main()
 	inter_normal = normalize(normal_matrix * vec3(normal));
 	inter_texCoord = texCoord;
 	inter_tangent = normalize(normal_matrix * vec3(tangent));
-	inter_bitangent = normalize(normal_matrix * vec3(bitangent));
 	gl_Position = projection_matrix * view_matrix * model_matrix * position;
 }

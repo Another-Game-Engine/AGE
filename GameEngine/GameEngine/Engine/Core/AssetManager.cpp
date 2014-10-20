@@ -43,7 +43,7 @@ namespace AGE
 		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 		cereal::PortableBinaryInputArchive ar(ifs);
 		ar(data);
-
+		material->name = data.name;
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		for (auto &e : data.collection)
 		{
@@ -307,15 +307,14 @@ namespace AGE
 		}
 
 		//geometryManager.createSphereSimpleForm();
-		//mesh.vertices = geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
-		//mesh.indices = geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
-		mesh.vertices = geometryManager.addVertices(maxSize, uint8_t(size), nbrBuffer.data(), buffer.data());
-		mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
+
+		mesh.vertices = geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
+		mesh.indices = geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
+		//mesh.vertices = geometryManager.addVertices(maxSize, uint8_t(size), nbrBuffer.data(), buffer.data());
+		//mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
 		mesh.boundingBox = data.boundingBox;
 		//		mesh.name = data.name; // TODO
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
-		geometryManager.attachVerticesToVertexPool(mesh.vertices, pools.first);
-		geometryManager.attachIndicesToIndexPool(mesh.indices, pools.second);
 	}
 
 	// Create pool for meshs

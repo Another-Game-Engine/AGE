@@ -29,46 +29,33 @@ namespace gl
 		Shader(Shader const &) = delete;
 		Shader &operator=(Shader const &) = delete;
 		~Shader(void);
-		
 		static Shader *createComputeShader(std::string const &name);
 		static Shader *createShader(std::string const &v, std::string const &f);
 		static Shader *createShader(std::string const &v, std::string const &f, std::string const &g);
 		static Shader *createPreShaderQuad();
-
 		void use() const;
 		GLuint getId() const;
-
-		// handling uniform management
 		Key<Uniform> addUniform(std::string const &flag);
 		Key<Uniform> addUniform(std::string const &flag, glm::mat4 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::mat3 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::vec4 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::vec3 const &value);
 		Key<Uniform> addUniform(std::string const &flag, float value);
-		Key<Uniform> getUniform(size_t index) const;
 		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &mat4);
 		Shader &setUniform(Key<Uniform> const &key, glm::mat3 const &mat3);
 		Shader &setUniform(Key<Uniform> const &key, glm::vec4 const &vec4);
 		Shader &setUniform(Key<Uniform> const &key, glm::vec3 const &vec4);
 		Shader &setUniform(Key<Uniform> const &key, float v);
-
-		// sampler 
 		Key<Sampler> addSampler(std::string const &flag);
-		Key<Sampler> getSampler(size_t index) const;
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 		bool hasSampler(Key<Sampler> const &key);
-
-		// InterfaceBlock
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock &uniformblock);
 		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
 		Shader &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock);
 		Shader &introspection(Key<InterfaceBlock> const &key, UniformBlock &u);
-
-		// update memory
 		Shader &setMaterial(Material const &materia);
 		Shader &update(glm::mat4 const &transform);
 		Shader &update();
-
 		Shader &bindingTransformation(Key<Uniform> const &key);
 		template <typename TYPE> Shader &bindingMaterial(Key<Uniform> const &key);
 		template <typename TYPE> Shader &bindingMaterial(Key<Sampler> const &key);
@@ -76,49 +63,16 @@ namespace gl
 
 	private:
 		Shader();
-
-		GLuint *_unitProgId;
-		GLuint	_progId;
-		uint8_t _nbrUnitProgId;
-
-		// binding for object in shader
-		Key<Uniform> _bindTransformation;
-		std::vector<MaterialBindTask> _bindMaterial;
-		
-		// pool stack
-		AGE::Vector<Task> _tasks;
-
-		// map of task
-		std::map<Key<Sampler>, size_t> _bindSampler;
-		std::map<Key<Uniform>, size_t> _bindUniform;
-		std::map<Key<Uniform>, size_t> _uniforms;
-		std::map<Key<Sampler>, size_t> _samplers;
-		std::map<Key<InterfaceBlock>, size_t> _interfaceBlock;
-
-		/// some private function usefull for internal functionement
-		// use to create the shader
 		static bool compileShader(GLuint shaderId, std::string const &file);
 		static GLuint addUnitProgByFile(std::string const &path, GLenum type);
 		static GLuint addUnitProg(char const *source, GLenum type);
 		bool createProgram();
 		bool linkProgram() const;
-
-		// search function
 		Task *getUniform(Key<Uniform> const &key);
-		size_t getIndexUniform(Key<Uniform> const &key);
 		Task *getSampler(Key<Sampler> const &key);
-		size_t getIndexSampler(Key<Sampler> const &key);
 		Task *getInterfaceBlock(Key<InterfaceBlock> const &key);
-		size_t getIndexInterfaceBlock(Key<InterfaceBlock> const &key);
 		Task *getOutput(Key<Output> const &key);
 		size_t getIndexOutput(Key<Output> const &key);
-
-		GLuint getUniformLocation(char const *flag);
-		GLuint getUniformBlockLocation(char const *flag);
-		GLuint getSamplerLocation(char const *flag);
-		size_t getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg);
-
-		// use to create/set task and binding
 		size_t createMaterialBind(size_t offset, size_t indexTask);
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
@@ -129,6 +83,24 @@ namespace gl
 		void setUniformBlockTask(Task &task, UniformBlock &ubo);
 		void setTaskWithMaterial(MaterialBindTask const &bind, Material const &material);
 		void setTransformationTask(glm::mat4 const &mat);
+		GLuint getUniformLocation(char const *flag);
+		GLuint getUniformBlockLocation(char const *flag);
+		GLuint getSamplerLocation(char const *flag);
+		size_t getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg);
+	
+	private:
+		size_t _shaderNumber;
+		GLuint *_unitProgId;
+		GLuint	_progId;
+		uint8_t _nbrUnitProgId;
+		Key<Uniform> _bindTransformation;
+		AGE::Vector<MaterialBindTask> _bindMaterial;
+		AGE::Vector<Task> _tasks;
+		AGE::Vector<size_t> _bindSampler;
+		AGE::Vector<size_t> _bindUniform;
+		AGE::Vector<size_t> _uniforms;
+		AGE::Vector<size_t> _samplers;
+		AGE::Vector<size_t> _interfaceBlock;
 	};
 
 	template <typename TYPE>
@@ -152,24 +124,21 @@ namespace gl
 	template <typename TYPE>
 	Shader &Shader::bindingMaterial(Key<Uniform> const &key)
 	{
-		size_t indexTask;
-		if ((indexTask = getIndexUniform(key)) == -1)
-			return (*this);
-		Task const &task = _tasks[indexTask];
-		if (task.sizeParams[task.indexToTarget] != TYPE::size)
-			assert(0);
-		_bindUniform[key] = createMaterialBind(TYPE::offset, indexTask);
+		Task const &task = *getUniform(key);
+		assert(task.sizeParams[task.indexToTarget] == TYPE::size);
+		if (_bindUniform.size() <= key.getId())
+			_bindUniform.resize(key.getId() + 1, -1);
+		_bindUniform[key.getId()] = createMaterialBind(TYPE::offset, _uniforms[key.getId()]);
 		return (*this);
 	}
 
 	template <typename TYPE>
 	Shader &Shader::bindingMaterial(Key<Sampler> const &key)
 	{
-		size_t indexTask;
-		if ((indexTask = getIndexSampler(key)) == -1)
-			return (*this);
-		Task const &task = _tasks[indexTask];
-		_bindSampler[key] = createMaterialBind(TYPE::offset, indexTask);
+		Task const &task = *getSampler(key);
+		if (_bindSampler.size() <= key.getId())
+			_bindSampler.resize(key.getId() + 1, -1);
+		_bindSampler[key.getId()] = createMaterialBind(TYPE::offset, _samplers[key.getId()]);
 		return (*this);
 	}
 

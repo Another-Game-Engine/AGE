@@ -29,6 +29,8 @@ namespace gl
 	class RenderOffScreen;
 	class Vertices;
 	class Indices;
+	class IndexPool;
+	class VertexPool;
 
 	enum RenderType
 	{
@@ -112,12 +114,14 @@ namespace gl
 	public:
 		virtual ~QuadRender();
 	protected:
-		QuadRender(Key<Vertices> const &key, Key<Indices> const &id);
+		QuadRender(Key<Vertices> const &key, Key<Indices> const &id, Key<VertexPool> const &vertexPool, Key<IndexPool> const &indexPool);
 		QuadRender(QuadRender const &copy) = delete;
 		QuadRender &operator=(QuadRender const &q) = delete;
 
 		Key<Vertices> _vertices;
 		Key<Indices> _id;
+		Key<VertexPool> _vertexPool;
+		Key<IndexPool> _indexPool;
 	};
 
 	class OffScreenRender : public OperationBuffer, public BaseRender
@@ -176,7 +180,7 @@ namespace gl
 	{
 	public:
 		virtual ~RenderOnScreen();
-		RenderOnScreen(Key<Vertices> const &key, Key<Indices> const &id, Shader &shader, GeometryManager &g, LocationStorage &l);
+		RenderOnScreen(Shader &s, GeometryManager &g, LocationStorage &l);
 
 		virtual BaseRender &render();
 		virtual RenderType getType() const;
@@ -212,7 +216,7 @@ namespace gl
 	class RenderPostEffect : public DrawableRender, public OffScreenRender, public QuadRender
 	{
 	public:
-		RenderPostEffect(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l);
+		RenderPostEffect(Shader &s, GeometryManager &g, LocationStorage &l);
 		virtual ~RenderPostEffect();
 
 		virtual BaseRender &render();

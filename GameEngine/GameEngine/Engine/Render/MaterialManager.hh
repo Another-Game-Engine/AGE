@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <Utils/Containers/Vector.hpp>
 #include <utility>
 #include <Render/Material.hh>
 #include <Render/Key.hh>
@@ -35,9 +35,8 @@ namespace gl
 		MaterialManager &createDefaultTexture2D(glm::u8vec4 const &color);
 		MaterialManager &createDefaultTexture2D(std::array<glm::u8vec4, 4> const &damColor);
 
-		std::map<Key<Material>, Material> _materials;
-		std::pair<Key<Material>, Material *> _optimizeMaterialSearch;
-		Material *getMaterial(Key<Material> const &key, std::string const &in);
+		AGE::Vector<Material> _materials;
+		Material *getMaterial(Key<Material> const &key);
 		bool _defaultMaterialCreated;
 		Key<Material> _defaultMaterial;
 		Key<Texture> _keyDefaultTexture;
@@ -50,7 +49,7 @@ namespace gl
 	{
 		Material *material;
 
-		if ((material = getMaterial(key, "setMaterial")) == NULL)
+		if ((material = getMaterial(key)) == NULL)
 			return (*this);
 		material->set<TYPE>(value);
 		return (*this);

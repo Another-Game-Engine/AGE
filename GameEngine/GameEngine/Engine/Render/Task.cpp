@@ -179,7 +179,7 @@ namespace gl
 			AGE::Drawable const &object = (**toRender)[index];
 			materialManager.setShader(object.material, shader);
 			shader.update(object.transformation);
-			geometryManager.draw(mode, object.mesh.indices, object.mesh.vertices);
+			geometryManager.draw(mode, object.mesh.indices, object.mesh.vertices, object.mesh.indexPool, object.mesh.vertexPool);
 		}
 	}
 

@@ -166,7 +166,7 @@ namespace Component
 			}
 			else if (c == SPHERE)
 			{
-				_collisionShape = new btSphereShape(0.5);
+				_collisionShape = new btSphereShape(1);
 			}
 			else if (c == MESH)
 			{
