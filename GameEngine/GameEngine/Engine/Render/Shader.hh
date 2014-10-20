@@ -47,7 +47,6 @@ namespace gl
 		Shader &setUniform(Key<Uniform> const &key, glm::vec3 const &vec4);
 		Shader &setUniform(Key<Uniform> const &key, float v);
 		Key<Sampler> addSampler(std::string const &flag);
-		Key<Sampler> getSampler(size_t index) const;
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 		bool hasSampler(Key<Sampler> const &key);
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock &uniformblock);
@@ -71,9 +70,7 @@ namespace gl
 		bool linkProgram() const;
 		Task *getUniform(Key<Uniform> const &key);
 		Task *getSampler(Key<Sampler> const &key);
-		size_t getIndexSampler(Key<Sampler> const &key);
 		Task *getInterfaceBlock(Key<InterfaceBlock> const &key);
-		size_t getIndexInterfaceBlock(Key<InterfaceBlock> const &key);
 		Task *getOutput(Key<Output> const &key);
 		size_t getIndexOutput(Key<Output> const &key);
 		size_t createMaterialBind(size_t offset, size_t indexTask);
@@ -130,7 +127,7 @@ namespace gl
 		Task const &task = *getUniform(key);
 		assert(task.sizeParams[task.indexToTarget] == TYPE::size);
 		if (_bindUniform.size() <= key.getId())
-			_bindUniform.resize(key.getId() + 1);
+			_bindUniform.resize(key.getId() + 1, -1);
 		_bindUniform[key.getId()] = createMaterialBind(TYPE::offset, _uniforms[key.getId()]);
 		return (*this);
 	}
@@ -138,13 +135,10 @@ namespace gl
 	template <typename TYPE>
 	Shader &Shader::bindingMaterial(Key<Sampler> const &key)
 	{
-		size_t indexTask;
-		if ((indexTask = getIndexSampler(key)) == -1)
-			return (*this);
-		Task const &task = _tasks[indexTask];
+		Task const &task = *getSampler(key);
 		if (_bindSampler.size() <= key.getId())
-			_bindSampler.resize(key.getId() + 1);
-		_bindSampler[key.getId()] = createMaterialBind(TYPE::offset, indexTask);
+			_bindSampler.resize(key.getId() + 1, -1);
+		_bindSampler[key.getId()] = createMaterialBind(TYPE::offset, _samplers[key.getId()]);
 		return (*this);
 	}
 

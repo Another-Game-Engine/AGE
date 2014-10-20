@@ -62,7 +62,6 @@ namespace gl
 		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
 
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
-		Key<Sampler> getShaderSampler(Key<Shader> const &shader, size_t index);
 		RenderManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
 		
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> &keyUniformBlock);

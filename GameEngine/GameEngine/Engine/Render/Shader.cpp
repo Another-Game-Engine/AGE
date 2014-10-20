@@ -339,21 +339,15 @@ namespace gl
 
 	Key<Sampler> Shader::addSampler(std::string const &flag)
 	{
-		Key<Sampler> key = Key<Sampler>::createKey();
+		Key<Sampler> key = Key<Sampler>::createKey(_shaderNumber);
 
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
 		if (_samplers.size() <= key.getId())
-			_samplers.resize(key.getId() + 1);
+			_samplers.push_back(-1);
 		_samplers[key.getId()] = _tasks.size() - 1;
 		createSamplerTask(*task, flag);
 		return (key);
-	}
-
-	Key<Sampler> Shader::getSampler(size_t target) const
-	{
-		assert(target < _samplers.size());
-		return Key<Sampler>::createKeyWithId(target);
 	}
 
 	Shader &Shader::setSampler(Key<Sampler> const &key, Texture const &texture)
@@ -397,32 +391,20 @@ namespace gl
 		return (&_tasks[index]);
 	}
 
-	size_t Shader::getIndexSampler(Key<Sampler> const &key)
-	{
-		assert(key);	
-		return _samplers[key.getId()];
-	}
-
 	Task *Shader::getSampler(Key<Sampler> const &key)
 	{
-		size_t index = getIndexSampler(key);
-		if (index != -1)
-			return (&_tasks[index]);
-		return (NULL);
-	}
-
-	size_t Shader::getIndexInterfaceBlock(Key<InterfaceBlock> const &key)
-	{
 		assert(key);
-		return _interfaceBlock[key.getId()];
+		size_t index = _samplers[key.getId()];
+		assert(index != -1);
+		return (&_tasks[index]);
 	}
 
 	Task *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key)
 	{
-		size_t index = getIndexInterfaceBlock(key);
-		if (index != -1)
-			return (&_tasks[index]);
-		return (NULL);
+		assert(key);
+		size_t index = _interfaceBlock[key.getId()];
+		assert(index != -1);
+		return (&_tasks[index]);
 	}
 
 	size_t Shader::getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg)
@@ -433,10 +415,7 @@ namespace gl
 
 	Shader &Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock)
 	{
-		Task *task;
-
-		if ((task = getInterfaceBlock(key)) == NULL)
-			return (*this);
+		Task *task = getInterfaceBlock(key);
 		setUniformBlockTask(*task, uniformBlock);
 		return (*this);
 	}
