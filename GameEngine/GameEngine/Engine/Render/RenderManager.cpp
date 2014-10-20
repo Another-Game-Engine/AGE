@@ -171,14 +171,6 @@ namespace gl
 		return (shader->addSampler(flag));
 	}
 
-	Key<Sampler> RenderManager::getShaderSampler(Key<Shader> const &keyShader, size_t target)
-	{
-		Shader const *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<Sampler>());
-		return (shader->getSampler(target));
-	}
-
 	RenderManager &RenderManager::setShaderSampler(Key<Shader> const &keyShader, Key<Sampler> const &keySampler, Key<Texture> const &keyTexture)
 	{
 		Shader *shader;
@@ -493,7 +485,7 @@ namespace gl
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
 		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, geometryManager, locationStorage);
-		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPass);
+		element->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPass);
 		element->configRect(rect);
 		return (key);
 	}
@@ -517,7 +509,7 @@ namespace gl
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
 		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, geometryManager, locationStorage);
-		element->pushInputSampler(_preShaderQuad->getSampler(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
+		element->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
 		element->configRect(rect);
 		return (key);
 	}
