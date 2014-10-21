@@ -9,5 +9,5 @@ This documentation is also accessible **on our official website** : http://doc.a
 #### Create your own documentation with Doxygen
 Open a command prompt, then use cd to go into the *\Documentation\configuration* directory:  
 <code>cd "path-to-your-folder\GameEngine\Documentation\configuration"</code>.  
-Then type <code>doxygen Doxyfile</code> in order to generate all html files.  
+Then type <code>doxygen</code> in order to generate all html files.  
 The documents will be created in the *Documentation\html* directory. You should start opening the index.html file with your browser.
