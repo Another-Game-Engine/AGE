@@ -7,13 +7,15 @@
 message("You are running qmake on a generated .pro file. This may not work!")
 
 
-HEADERS += ./qtassetseditor.h \
-    ./applicationsettings.h \
-    ./projectcreationform.h
-SOURCES += ./main.cpp \
+HEADERS += ./applicationsettings.h \
+    ./qtassetseditor.h \
+    ./projectcreationform.h \
+    ./assetseditorproject.h
+SOURCES += ./applicationsettings.cpp \
+    ./main.cpp \
+    ./projectcreationform.cpp \
     ./qtassetseditor.cpp \
-    ./applicationsettings.cpp \
-    ./projectcreationform.cpp
+    ./assetseditorproject.cpp
 FORMS += ./qtassetseditor.ui \
     ./projectcreationform.ui
 RESOURCES += qtassetseditor.qrc
