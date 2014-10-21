@@ -17,6 +17,7 @@ public:
 	inline ApplicationSettings &getSettings() { return _settings; }
 
 	void createProject(const QString &projectPath, const QString &rawPath, const QString &cookedPath);
+	void openProject(const QString &projectPath);
 private slots:
     void on_actionOpen_project_triggered();
 

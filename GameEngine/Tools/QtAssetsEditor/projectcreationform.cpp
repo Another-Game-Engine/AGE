@@ -20,7 +20,7 @@ void ProjectCreationForm::on_createProjectFileBtn_clicked()
 {
     projectPath = QFileDialog::getSaveFileName(this, "Create File",
                                 "",
-                                ".AssetsEditorProject");
+                                "*.AssetsEditorProject");
 	ui.projectFilePathText->setText(projectPath + ".AssetsEditorProject");
 	QFile(projectPath).open(QIODevice::ReadWrite);
 }

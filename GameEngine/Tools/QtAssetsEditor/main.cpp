@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	if (!settings.init())
 		return 0;
 
-	if (settings.getLastOpenend().size() == 0)
+	if (settings.getLastOpened().size() == 0)
 	{
 		ProjectCreationForm pcf;
 		pcf.show();

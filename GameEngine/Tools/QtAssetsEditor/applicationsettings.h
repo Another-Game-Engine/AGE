@@ -9,7 +9,7 @@ public:
     ApplicationSettings();
 	bool init();
 	void save() const;
-	inline const QList<QString> &getLastOpenend() const { return _lastOpened; }
+	inline const QList<QString> &getLastOpened() const { return _lastOpened; }
 	void addProject(const QString &path);
 private:
 	QString _settingsFilePath;
