@@ -9,18 +9,25 @@ namespace gl
 {
 
 	RenderManager::RenderManager()
-		: _preShaderQuad(NULL)
+		: _preShaderQuad(NULL),
+		_defaultMaterialCreated(false),
+		_defaultTexture2DCreated(false),
+		_renderManagerNumber(0)
 	{
+		static size_t id = 0;
+		_renderManagerNumber = id++;
 	}
 
 	RenderManager::~RenderManager()
 	{
 		if (_preShaderQuad == NULL)
 			delete _preShaderQuad;
-		for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
-			delete it->second;
-		for (auto it = _textures.begin(); it != _textures.end(); ++it)
-			delete it->second;
+		for (auto &shader : _shaders)
+			delete shader;
+		for (auto &uniformBlock : _uniformBlock)
+			delete uniformBlock;
+		for (auto texture : _textures)
+			delete texture;
 		for (auto it = _renderPass.begin(); it != _renderPass.end(); ++it)
 			delete it->second;
 		for (auto it = _renderPostEffect.begin(); it != _renderPostEffect.end(); ++it)
@@ -31,7 +38,7 @@ namespace gl
 	{
 		if (_preShaderQuad != NULL)
 			return (*this);
-		if ((_preShaderQuad = Shader::createPreShaderQuad()) == NULL)
+		if ((_preShaderQuad = Shader::createPreShaderQuad(_materials)) == NULL)
 			assert(0);
 		_preShaderQuad->addSampler("input_sampler");
 		return (*this);
@@ -39,45 +46,32 @@ namespace gl
 
 	Key<Shader> RenderManager::addComputeShader(std::string const &compute)
 	{
-		Key<Shader> key = Key<Shader>::createKey();
-		Shader *shader;
-
-		if ((shader = Shader::createComputeShader(compute)) == NULL)
-			assert(0);
-		_shaders[key] = shader;
+		Key<Shader> key = Key<Shader>::createKey(_renderManagerNumber);
+		Shader *shader = Shader::createComputeShader(compute, _materials);
+		if (_shaders.size() <= key.getId())
+			_shaders.push_back(NULL);
+		_shaders[key.getId()] = shader;
 		return (key);
 	}
 
 	Key<Shader> RenderManager::addShader(std::string const &vertex, std::string const &frag)
 	{
-		Key<Shader> key = Key<Shader>::createKey();
-		Shader *shader;
-
-		if ((shader = Shader::createShader(vertex, frag)) == NULL)
-			assert(0);
-		_shaders[key] = shader;
+		Key<Shader> key = Key<Shader>::createKey(_renderManagerNumber);
+		Shader *shader = Shader::createShader(vertex, frag, _materials);
+		if (_shaders.size() <= key.getId())
+			_shaders.push_back(NULL);
+		_shaders[key.getId()] = shader;
 		return (key);
 	}
 
 	Key<Shader> RenderManager::addShader(std::string const &geo, std::string const &vertex, std::string const &frag)
 	{
-		Key<Shader> key = Key<Shader>::createKey();
-		Shader *shader;
-
-		if ((shader = Shader::createShader(vertex, frag, geo)) == NULL)
-			assert(0);
-		_shaders[key] = shader;
+		Key<Shader> key = Key<Shader>::createKey(_renderManagerNumber);
+		Shader *shader = Shader::createShader(vertex, frag, geo, _materials);
+		if (_shaders.size() <= key.getId())
+			_shaders.push_back(NULL);
+		_shaders[key.getId()] = shader;
 		return (key);
-	}
-
-	Key<Shader> RenderManager::getShader(size_t target) const
-	{
-		if (target >= _shaders.size())
-			assert(0);
-		auto &element = _shaders.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
 	}
 
 	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
@@ -120,27 +114,21 @@ namespace gl
 
 	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat4 const &mat4)
 	{
-		Shader *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (*this);
+		Shader *shader = getShader(keyShader);
 		shader->setUniform(key, mat4);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec4 const &vec4)
 	{
-		Shader *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (*this);
+		Shader *shader = getShader(keyShader);
 		shader->setUniform(key, vec4);
 		return (*this);
 	}
 
 	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec3 const &vec3)
 	{
-		Shader *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (*this);
+		Shader *shader = getShader(keyShader);
 		shader->setUniform(key, vec3);
 		return (*this);
 	}
@@ -165,29 +153,24 @@ namespace gl
 
 	Key<Sampler> RenderManager::addShaderSampler(Key<Shader> const &keyShader, std::string const &flag)
 	{
-		Shader *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (Key<Sampler>());
+		Shader *shader = getShader(keyShader);
 		return (shader->addSampler(flag));
 	}
 
 	RenderManager &RenderManager::setShaderSampler(Key<Shader> const &keyShader, Key<Sampler> const &keySampler, Key<Texture> const &keyTexture)
 	{
-		Shader *shader;
-		if ((shader = getShader(keyShader)) == NULL)
-			return (*this);
-		Texture *texture;
-		if ((texture = getTexture(keyTexture)) == NULL)
-			return (*this);
+		Shader *shader = getShader(keyShader);
+		Texture *texture = getTexture(keyTexture);
 		shader->setSampler(keySampler, *texture);
 		return (*this);
 	}
 
 	Key<UniformBlock> RenderManager::addUniformBlock()
 	{
-		Key<UniformBlock> key = Key<UniformBlock>::createKey();
-
-		_uniformBlock[key];
+		Key<UniformBlock> key = Key<UniformBlock>::createKey(_renderManagerNumber);
+		if (_uniformBlock.size() <= key.getId())
+			_uniformBlock.push_back(NULL);
+		_uniformBlock[key.getId()] = new UniformBlock();
 		return (key);
 	}
 
@@ -197,25 +180,6 @@ namespace gl
 		UniformBlock *uniformBlock = getUniformBlock(u);
 		shader->introspection(i, *uniformBlock);
 		return (*this);
-	}
-
-	RenderManager &RenderManager::rmUniformBlock(Key<UniformBlock> &key)
-	{
-		if (getUniformBlock(key) == NULL)
-			return (*this);
-		_uniformBlock.erase(key);
-		key.destroy();
-		return (*this);
-	}
-
-	Key<UniformBlock> RenderManager::getUniformBlock(size_t target) const
-	{
-		if (target >= _uniformBlock.size())
-			assert(0);
-		auto &element = _uniformBlock.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
 	}
 
 	Key<InterfaceBlock> RenderManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> &keyUniformBlock)
@@ -241,9 +205,10 @@ namespace gl
 
 	Key<Texture> RenderManager::addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping)
 	{
-		Key<Texture> key = Key<Texture>::createKey();
-
-		_textures[key] = new Texture2D(width, height, internalFormat, mipmapping);
+		Key<Texture> key = Key<Texture>::createKey(_renderManagerNumber);
+		if (_textures.size() <= key.getId())
+			_textures.push_back(NULL);
+		_textures[key.getId()] = new Texture2D(width, height, internalFormat, mipmapping);
 		return (key);
 	}
 
@@ -256,27 +221,6 @@ namespace gl
 		return (*this);
 	}
 
-	RenderManager &RenderManager::rmTexture(Key<Texture> &key)
-	{
-		Texture *texture;
-		if ((texture = getTexture(key)) == NULL)
-			return (*this);
-		delete texture;
-		_textures.erase(key);
-		key.destroy();
-		return (*this);
-	}
-
-	Key<Texture> RenderManager::getTexture(size_t target) const
-	{
-		if (target >= _textures.size())
-			assert(0);
-		auto &element = _textures.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
-	}
-
 	GLenum RenderManager::getTypeTexture(Key<Texture> const &key)
 	{
 		Texture const *texture;
@@ -287,57 +231,25 @@ namespace gl
 
 	Shader *RenderManager::getShader(Key<Shader> const &key)
 	{
-		if (!key)
-			assert(0);
-		if (_shaders.size() == 0)
-			assert(0);
-		if (key == _optimizeShaderSearch.first)
-			return (_optimizeShaderSearch.second);
-		auto &shader = _shaders.find(key);
-		if (shader == _shaders.end())
-			assert(0);
-		_optimizeShaderSearch.first = key;
-		_optimizeShaderSearch.second = shader->second;
-		return (shader->second);
+		assert(key);
+		return (_shaders[key.getId()]);
 	}
 
 	Texture *RenderManager::getTexture(Key<Texture> const &key)
 	{
-		if (!key)
-			assert(0);
-		if (_textures.size() == 0)
-			assert(0);
-		if (key == _optimizeTextureSearch.first)
-			return (_optimizeTextureSearch.second);
-		auto &texture = _textures.find(key);
-		if (texture == _textures.end())
-			assert(0);
-		_optimizeTextureSearch.first = key;
-		_optimizeTextureSearch.second = texture->second;
-		return (texture->second);
+		assert(key);
+		return (_textures[key.getId()]);
 	}
 
 	UniformBlock *RenderManager::getUniformBlock(Key<UniformBlock> const &key)
 	{
-		if (!key)
-			assert(0);
-		if (_uniformBlock.size() == 0)
-			assert(0);
-		if (key == _optimizeUniformBlockSearch.first)
-			return (_optimizeUniformBlockSearch.second);
-		auto &uniformBlock = _uniformBlock.find(key);
-		if (uniformBlock == _uniformBlock.end())
-			assert(0);
-		_optimizeUniformBlockSearch.first = key;
-		_optimizeUniformBlockSearch.second = &uniformBlock->second;
-		return (&uniformBlock->second);
+		assert(key);
+		return (_uniformBlock[key.getId()]);
 	}
 
 	RenderManager &RenderManager::uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
-		Texture const *texture;
-		if ((texture = getTexture(key)) == NULL)
-			return (*this);
+		Texture const *texture = getTexture(key);
 		texture->upload(format, type, img);
 		texture->generateMipMap();
 		return (*this);
@@ -383,7 +295,7 @@ namespace gl
 	{
 		Key<RenderPass> key = Key<RenderPass>::createKey();
 		Shader *shader = getShader(keyShader);
-		auto &element = _renderPass[key] = new RenderPass(*shader, geometryManager, _materialManager, locationStorage);
+		auto &element = _renderPass[key] = new RenderPass(*shader, *this);
 		element->configRect(rect);
 		return (key);
 	}
@@ -459,7 +371,7 @@ namespace gl
 
 		geometryManager.createQuadSimpleForm();
 		Shader *shader = getShader(s);
-		auto &element = _renderPostEffect[key] = new RenderPostEffect(*shader, geometryManager, locationStorage);
+		auto &element = _renderPostEffect[key] = new RenderPostEffect(*shader, *this);
 		element->configRect(rect);
 		return (key);
 	}
@@ -484,7 +396,7 @@ namespace gl
 		RenderPass *renderPass = getRenderPass(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, geometryManager, locationStorage);
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, *this);
 		element->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPass);
 		element->configRect(rect);
 		return (key);
@@ -496,7 +408,7 @@ namespace gl
 		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, geometryManager, locationStorage);
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, *this);
 		element->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
 		element->configRect(rect);
 		return (key);
@@ -508,7 +420,7 @@ namespace gl
 		EmptyRenderPass *renderPostEffect = getEmptyRenderPass(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, geometryManager, locationStorage);
+		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, *this);
 		element->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
 		element->configRect(rect);
 		return (key);
@@ -530,7 +442,7 @@ namespace gl
 	{
 		Key<EmptyRenderPass> key = Key<EmptyRenderPass>::createKey();
 		
-		auto &element = _emptyRenderPass[key] = new EmptyRenderPass(locationStorage);
+		auto &element = _emptyRenderPass[key] = new EmptyRenderPass(*this);
 		element->configRect(rect);
 		return (key);
 	}
@@ -641,28 +553,42 @@ namespace gl
 
 	Key<Material> RenderManager::getDefaultMaterial()
 	{
-		return (_materialManager.getDefaultMaterial());
+		if (_defaultMaterialCreated == false)
+		{
+			_defaultMaterial = addMaterial();
+			_defaultMaterialCreated = true;
+		}
+		return (_defaultMaterial);
 	}
 
 	Key<Texture> RenderManager::getDefaultTexture2D()
 	{
-		_textures[_materialManager.getKeyDefaultTexture2D()] = &_materialManager.getDefaultTexture2D();
-		return (_materialManager.getKeyDefaultTexture2D());
+		if (_defaultTexture2DCreated == false)
+		{
+			_defaultTexture2D = addTexture2D(2, 2, GL_RGBA, false);
+			_defaultTexture2DCreated = true;
+		}
+		return (_defaultTexture2D);
 	}
 
 	Key<Material> RenderManager::addMaterial()
 	{
-		return (_materialManager.addMaterial());
+		Key<Material> key = Key<Material>::createKey(_renderManagerNumber);
+		if (_materials.size() <= key.getId())
+			_materials.push_back(Material());
+		return (key);
 	}
 
-	Key<Material> RenderManager::getMaterial(size_t index)
+	Material *RenderManager::getMaterial(Key<Material> const &key)
 	{
-		return (_materialManager.getMaterial(index));
+		assert(!!key);
+		return (&_materials[key.getId()]);
 	}
 
-	RenderManager &RenderManager::rmMaterial(Key<Material> &key)
+	RenderManager &RenderManager::setShaderByMaterial(Key<Shader> &keyShader, Key<Material> const &key)
 	{
-		_materialManager.rmMaterial(key);
+		Shader &shader = *getShader(keyShader);
 		return (*this);
 	}
+
 }

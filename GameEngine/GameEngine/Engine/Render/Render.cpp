@@ -7,6 +7,7 @@
 #include <Render/MaterialManager.hh>
 #include <Render/Storage.hh>
 #include <Render/Pool.hh>
+#include <Render/RenderManager.hh>
 
 namespace gl
 {
@@ -501,10 +502,10 @@ namespace gl
 
 	}
 
-	RenderOnScreen::RenderOnScreen(Shader &s, GeometryManager &g, LocationStorage &l)
-		: DrawableRender(s, g),
-		OperationBuffer(l),
-		QuadRender(g.getSimpleFormGeo(SimpleForm::QUAD), g.getSimpleFormId(SimpleForm::QUAD), g.getSimpleFormGeoPool(), g.getSimpleFormIdPool()),
+	RenderOnScreen::RenderOnScreen(Shader &s, RenderManager &r)
+		: DrawableRender(s, r.geometryManager),
+		OperationBuffer(r.locationStorage),
+		QuadRender(r.geometryManager.getSimpleFormGeo(SimpleForm::QUAD), r.geometryManager.getSimpleFormId(SimpleForm::QUAD), r.geometryManager.getSimpleFormGeoPool(), r.geometryManager.getSimpleFormIdPool()),
 		BaseRender()
 	{
 
@@ -532,10 +533,9 @@ namespace gl
 		return (RenderType::RENDER_ON_SCREEN);
 	}
 
-	RenderPass::RenderPass(Shader &s, GeometryManager &g, MaterialManager &m, LocationStorage &l)
-		: DrawableRender(s, g),
-		OffScreenRender(l),
-		_materialManager(m),
+	RenderPass::RenderPass(Shader &s, RenderManager &r)
+		: DrawableRender(s, r.geometryManager),
+		OffScreenRender(r.locationStorage),
 		_toRender(NULL),
 		_start(0),
 		_end(0)
@@ -550,7 +550,7 @@ namespace gl
 	{
 		Task task;
 
-		setTaskAllocation(task, &_geometryManager, &_materialManager, &_shader, &_toRender, &_mode, &_start, &_end);
+		setTaskAllocation(task, &_geometryManager, &_shader, &_toRender, &_mode, &_start, &_end);
 		task.func = draw;
 		_tasks.push_back(task);
 		return (*this);
@@ -586,10 +586,10 @@ namespace gl
 		return (RenderType::RENDER_PASS);
 	}
 
-	RenderPostEffect::RenderPostEffect(Shader &s, GeometryManager &g, LocationStorage &l)
-		: DrawableRender(s, g),
-		OffScreenRender(l),
-		QuadRender(g.getSimpleFormGeo(SimpleForm::QUAD), g.getSimpleFormId(SimpleForm::QUAD), g.getSimpleFormGeoPool(), g.getSimpleFormIdPool())
+	RenderPostEffect::RenderPostEffect(Shader &s, RenderManager &r)
+		: DrawableRender(s, r.geometryManager),
+		OffScreenRender(r.locationStorage),
+		QuadRender(r.geometryManager.getSimpleFormGeo(SimpleForm::QUAD), r.geometryManager.getSimpleFormId(SimpleForm::QUAD), r.geometryManager.getSimpleFormGeoPool(), r.geometryManager.getSimpleFormIdPool())
 	{
 
 	}
@@ -615,8 +615,8 @@ namespace gl
 		return (RenderType::RENDER_POST_EFFECT);
 	}
 
-	EmptyRenderPass::EmptyRenderPass(LocationStorage &locationStorage)
-		: OffScreenRender(locationStorage)
+	EmptyRenderPass::EmptyRenderPass(RenderManager &r)
+		: OffScreenRender(r.locationStorage)
 	{
 
 	}

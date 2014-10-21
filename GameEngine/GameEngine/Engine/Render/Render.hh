@@ -31,6 +31,7 @@ namespace gl
 	class Indices;
 	class IndexPool;
 	class VertexPool;
+	class RenderManager;
 
 	enum RenderType
 	{
@@ -180,7 +181,7 @@ namespace gl
 	{
 	public:
 		virtual ~RenderOnScreen();
-		RenderOnScreen(Shader &s, GeometryManager &g, LocationStorage &l);
+		RenderOnScreen(Shader &s, RenderManager &r);
 
 		virtual BaseRender &render();
 		virtual RenderType getType() const;
@@ -193,7 +194,7 @@ namespace gl
 	class RenderPass : public DrawableRender, public OffScreenRender
 	{
 	public:
-		RenderPass(Shader &shader, GeometryManager &g, MaterialManager &m, LocationStorage &l);
+		RenderPass(Shader &shader, RenderManager &r);
 		virtual ~RenderPass();
 
 		RenderPass &pushPassTask();
@@ -207,7 +208,6 @@ namespace gl
 		RenderPass(RenderPass const &copy) = delete;
 		RenderPass &operator=(RenderPass const &r) = delete;
 
-		MaterialManager &_materialManager;
 		AGE::Vector<AGE::Drawable> const *_toRender;
 		size_t _start;
 		size_t _end;
@@ -216,7 +216,7 @@ namespace gl
 	class RenderPostEffect : public DrawableRender, public OffScreenRender, public QuadRender
 	{
 	public:
-		RenderPostEffect(Shader &s, GeometryManager &g, LocationStorage &l);
+		RenderPostEffect(Shader &s, RenderManager &r);
 		virtual ~RenderPostEffect();
 
 		virtual BaseRender &render();
@@ -230,7 +230,7 @@ namespace gl
 	class EmptyRenderPass : public OffScreenRender
 	{
 	public:
-		EmptyRenderPass(LocationStorage &locationStorage);
+		EmptyRenderPass(RenderManager &r);
 		virtual ~EmptyRenderPass();
 
 		virtual BaseRender &render();
