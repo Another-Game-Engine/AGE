@@ -1595,7 +1595,7 @@ GENERATE_LATEX         = NO
 # The default directory is: latex.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_OUTPUT           = 
+LATEX_OUTPUT           = ../latex
 
 # The LATEX_CMD_NAME tag can be used to specify the LaTeX command name to be
 # invoked.
@@ -1870,7 +1870,7 @@ GENERATE_DOCBOOK       = NO
 # The default directory is: docbook.
 # This tag requires that the tag GENERATE_DOCBOOK is set to YES.
 
-DOCBOOK_OUTPUT         = 
+DOCBOOK_OUTPUT         = ../docbook
 
 # If the DOCBOOK_PROGRAMLISTING tag is set to YES doxygen will include the
 # program listings (including syntax highlighting and cross-referencing
