@@ -28,10 +28,14 @@ namespace gl
 			delete uniformBlock;
 		for (auto texture : _textures)
 			delete texture;
-		for (auto it = _renderPass.begin(); it != _renderPass.end(); ++it)
-			delete it->second;
-		for (auto it = _renderPostEffect.begin(); it != _renderPostEffect.end(); ++it)
-			delete it->second;
+		for (auto &renderPass : _renderPass)
+			delete renderPass;
+		for (auto &renderPostEffect : _renderPostEffect)
+			delete renderPostEffect;
+		for (auto &emptyRenderPass : _emptyRenderPass)
+			delete emptyRenderPass;
+		for (auto &renderOnScreen : _renderOnScreen)
+			delete renderOnScreen;
 	}
 
 	RenderManager &RenderManager::createPreShaderQuad()
@@ -266,9 +270,7 @@ namespace gl
 
 	RenderManager &RenderManager::setlevelTargetTexture(Key<Texture> const &key, uint8_t levelTarget)
 	{
-		Texture *texture;
-		if ((texture = getTexture(key)) == NULL)
-			return (*this);
+		Texture *texture= getTexture(key);
 		texture->setLevelTarget(levelTarget);
 		return (*this);
 	}
@@ -293,21 +295,12 @@ namespace gl
 
 	Key<RenderPass> RenderManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect)
 	{
-		Key<RenderPass> key = Key<RenderPass>::createKey();
+		Key<RenderPass> key = Key<RenderPass>::createKey(_renderManagerNumber);
 		Shader *shader = getShader(keyShader);
-		auto &element = _renderPass[key] = new RenderPass(*shader, *this);
-		element->configRect(rect);
+		if (_renderPass.size() <= key.getId())
+			_renderPass.push_back(new RenderPass(*shader, *this));
+		_renderPass[key.getId()]->configRect(rect);
 		return (key);
-	}
-
-	Key<RenderPass> RenderManager::getRenderPass(size_t target) const
-	{
-		if (target >= _renderPass.size())
-			assert(0);
-		auto &element = _renderPass.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPass);
@@ -339,51 +332,22 @@ namespace gl
 		return (*this);
 	}
 
-	GEN_DEF_SEARCH_FUNCTION(EmptyRenderPass, _emptyRenderPass);
-	GEN_DEF_SEARCH_FUNCTION(RenderPass, _renderPass);
-	GEN_DEF_SEARCH_FUNCTION(RenderOnScreen, _renderOnScreen);
-	GEN_DEF_SEARCH_FUNCTION(RenderPostEffect, _renderPostEffect);
-
-	size_t RenderManager::getIndexPipeline(Key<Pipeline> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_pipelines.size() == 0)
-			assert(0);
-		if (key == _optimizePipelineSearch.first)
-			return (_optimizePipelineSearch.second);
-		auto &pipeline = _pipelines.find(key);
-		if (pipeline == _pipelines.end())
-			assert(0);
-		_optimizePipelineSearch.first = key;
-		_optimizePipelineSearch.second = pipeline->second;
-		return (pipeline->second);
-	}
-
 	Pipeline *RenderManager::getPipeline(Key<Pipeline> const &key)
 	{
-		return (&_pipelineOrdered[getIndexPipeline(key)]);
+		assert(!!key);
+		return (&_pipelines[key.getId()]);
 	}
 
 	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
 	{
-		Key<RenderPostEffect> key = Key<RenderPostEffect>::createKey();
+		Key<RenderPostEffect> key = Key<RenderPostEffect>::createKey(_renderManagerNumber);
 
 		geometryManager.createQuadSimpleForm();
 		Shader *shader = getShader(s);
-		auto &element = _renderPostEffect[key] = new RenderPostEffect(*shader, *this);
-		element->configRect(rect);
+		if (_renderPostEffect.size() <= key.getId())
+			_renderPostEffect.push_back(new RenderPostEffect(*shader, *this));
+		_renderPostEffect[key.getId()]->configRect(rect);
 		return (key);
-	}
-
-	Key<RenderPostEffect> RenderManager::getRenderPostEffect(size_t target) const
-	{
-		if (target >= _renderPass.size())
-			assert(0);
-		auto &element = _renderPostEffect.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderPostEffect);
@@ -392,13 +356,14 @@ namespace gl
 
 	Key<RenderOnScreen> RenderManager::addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPass> const &r)
 	{
-		Key<RenderOnScreen> key = Key<RenderOnScreen>::createKey();
+		Key<RenderOnScreen> key = Key<RenderOnScreen>::createKey(_renderManagerNumber);
 		RenderPass *renderPass = getRenderPass(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, *this);
-		element->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPass);
-		element->configRect(rect);
+		if (_renderOnScreen.size() <= key.getId())
+			_renderOnScreen.push_back(new RenderOnScreen(*_preShaderQuad, *this));
+		_renderOnScreen[key.getId()]->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPass);
+		_renderOnScreen[key.getId()]->configRect(rect);
 		return (key);
 	}
 
@@ -408,9 +373,10 @@ namespace gl
 		RenderPostEffect *renderPostEffect = getRenderPostEffect(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, *this);
-		element->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
-		element->configRect(rect);
+		if (_renderOnScreen.size() <= key.getId())
+			_renderOnScreen.push_back(new RenderOnScreen(*_preShaderQuad, *this));
+		_renderOnScreen[key.getId()]->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
+		_renderOnScreen[key.getId()]->configRect(rect);
 		return (key);
 	}
 
@@ -420,41 +386,23 @@ namespace gl
 		EmptyRenderPass *renderPostEffect = getEmptyRenderPass(r);
 		createPreShaderQuad();
 		geometryManager.createQuadSimpleForm();
-		auto &element = _renderOnScreen[key] = new RenderOnScreen(*_preShaderQuad, *this);
-		element->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
-		element->configRect(rect);
+		if (_renderOnScreen.size() <= key.getId())
+			_renderOnScreen.push_back(new RenderOnScreen(*_preShaderQuad, *this));
+		_renderOnScreen[key.getId()]->pushInputSampler(Key<Sampler>::createKeyWithId(0), GL_COLOR_ATTACHMENT0, *renderPostEffect);
+		_renderOnScreen[key.getId()]->configRect(rect);
 		return (key);
-	}
-	
-	Key<RenderOnScreen> RenderManager::getRenderOnScreen(size_t target) const
-	{
-		if (target >= _textures.size())
-			assert(0);
-		auto &element = _renderOnScreen.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(RenderOnScreen);
 
 	Key<EmptyRenderPass> RenderManager::addEmptyRenderPass(glm::ivec4 const &rect)
 	{
-		Key<EmptyRenderPass> key = Key<EmptyRenderPass>::createKey();
+		Key<EmptyRenderPass> key = Key<EmptyRenderPass>::createKey(_renderManagerNumber);
 		
-		auto &element = _emptyRenderPass[key] = new EmptyRenderPass(*this);
-		element->configRect(rect);
+		if (_emptyRenderPass.size() <= key.getId())
+			_emptyRenderPass.push_back(new EmptyRenderPass(*this));
+		_emptyRenderPass[key.getId()]->configRect(rect);
 		return (key);
-	}
-
-	Key<EmptyRenderPass> RenderManager::getEmptyRenderPass(size_t target) const
-	{
-		if (target >= _emptyRenderPass.size())
-			assert(0);
-		auto &element = _emptyRenderPass.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
 	}
 
 	GEN_DEF_RENDER_PUSH_TASK(EmptyRenderPass);
@@ -463,10 +411,10 @@ namespace gl
 
 	Key<Pipeline> RenderManager::addPipeline()
 	{
-		Key<Pipeline> key = Key<Pipeline>::createKey();
+		Key<Pipeline> key = Key<Pipeline>::createKey(_renderManagerNumber);
 	
-		_pipelineOrdered.push_back(Pipeline());
-		_pipelines[key] = _pipelineOrdered.size() - 1;
+		if (_pipelines.size() <= key.getId())
+			_pipelines.push_back(Pipeline());
 		return (key);
 	}
 
@@ -501,16 +449,6 @@ namespace gl
 		pipeline->pushRender(render);
 		return (*this);
 	}
-	
-	Key<Pipeline> RenderManager::getPipeline(size_t target)
-	{
-		if (target >= _pipelines.size())
-			assert(0);
-		auto &element = _pipelines.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
-	}
 
 	RenderManager &RenderManager::configPipeline(Key<Pipeline> const &p, DrawType type)
 	{
@@ -528,8 +466,8 @@ namespace gl
 
 	RenderManager &RenderManager::drawPipelines()
 	{
-		for (size_t index = 0; index < _pipelineOrdered.size(); ++index)
-			_pipelineOrdered[index].draw();
+		for (size_t index = 0; index < _pipelines.size(); ++index)
+			_pipelines[index].draw();
 		return (*this);
 	}
 

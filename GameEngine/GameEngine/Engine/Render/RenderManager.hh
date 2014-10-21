@@ -87,24 +87,20 @@ namespace gl
 		RenderManager &parameterTexture(Key<Texture> const &key, GLenum pname, GLint param);
 		GLenum getTypeTexture(Key<Texture> const &key);
 		Key<RenderPass> addRenderPass(Key<Shader> const &shader, glm::ivec4 const &rect);
-		Key<RenderPass> getRenderPass(size_t target) const;
 		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
 		GEN_DEC_RENDER_PUSH_TASK(RenderPass);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
 		GEN_DEC_DRAWABLERENDER_PUSH_TASK(RenderPass);
 		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
-		Key<RenderPostEffect> getRenderPostEffect(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
 		GEN_DEC_DRAWABLERENDER_PUSH_TASK(RenderPostEffect);
 		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPass> const &renderPass);
 		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<RenderPostEffect> const &renderPostEffect);
 		Key<RenderOnScreen> addRenderOnScreen(glm::ivec4 const &rect, Key<EmptyRenderPass> const &renderPostEffect);
-		Key<RenderOnScreen> getRenderOnScreen(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(RenderOnScreen);
 		RenderManager &configRenderOnScreen(Key<RenderOnScreen> const &renderOnScreen, glm::ivec4 const &rect, GLenum mode);
 		Key<EmptyRenderPass> addEmptyRenderPass(glm::ivec4 const &rect);
-		Key<EmptyRenderPass> getEmptyRenderPass(size_t target) const;
 		GEN_DEC_RENDER_PUSH_TASK(EmptyRenderPass);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(EmptyRenderPass);
 		Key<Pipeline> addPipeline();
@@ -112,7 +108,6 @@ namespace gl
 		RenderManager &pushRenderPostEffectPipeline(Key<Pipeline> const &p, Key<RenderPostEffect> const &r);
 		RenderManager &pushRenderOnScreenPipeline(Key<Pipeline> const &p, Key<RenderOnScreen> const &r);
 		RenderManager &pushEmptyRenderPassPipeline(Key<Pipeline> const &p, Key<EmptyRenderPass> const &r);
-		Key<Pipeline> getPipeline(size_t target);
 		RenderManager &configPipeline(Key<Pipeline> const &key, DrawType type);
 		RenderManager &updatePipeline(Key<Pipeline> const &p, AGE::Vector<AGE::Drawable> const &objectRender);
 		RenderManager &drawPipelines();
@@ -125,13 +120,11 @@ namespace gl
 		AGE::Vector<UniformBlock *> _uniformBlock;
 		AGE::Vector<Texture *> _textures;
 		AGE::Vector<Material> _materials;
-		std::map<Key<Pipeline>, size_t> _pipelines;
-		AGE::Vector<Pipeline> _pipelineOrdered;
-		std::pair<Key<Pipeline>, size_t> _optimizePipelineSearch;
-		GEN_CONTAINER(RenderPass, _renderPass);
-		GEN_CONTAINER(RenderPostEffect, _renderPostEffect);
-		GEN_CONTAINER(RenderOnScreen, _renderOnScreen);
-		GEN_CONTAINER(EmptyRenderPass, _emptyRenderPass);
+		AGE::Vector<Pipeline> _pipelines;
+		AGE::Vector<RenderPass *> _renderPass;
+		AGE::Vector<RenderPostEffect *> _renderPostEffect;
+		AGE::Vector<RenderOnScreen *> _renderOnScreen;
+		AGE::Vector<EmptyRenderPass *> _emptyRenderPass;
 		bool _defaultMaterialCreated;
 		Key<Material> _defaultMaterial;
 		bool _defaultTexture2DCreated;
@@ -143,12 +136,11 @@ namespace gl
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key);
 		Texture *getTexture(Key<Texture> const &key);
 		Material *getMaterial(Key<Material> const &key);
-		GEN_DEC_SEARCH_FUNCTION(EmptyRenderPass);
-		GEN_DEC_SEARCH_FUNCTION(RenderPass);
-		GEN_DEC_SEARCH_FUNCTION(RenderOnScreen);
-		GEN_DEC_SEARCH_FUNCTION(RenderPostEffect);
-		size_t getIndexPipeline(Key<Pipeline> const &key);
 		Pipeline *getPipeline(Key<Pipeline> const &key);
+		EmptyRenderPass *getEmptyRenderPass(Key<EmptyRenderPass> const &key) { assert(!!key); return (_emptyRenderPass[key.getId()]); }
+		RenderPass *getRenderPass(Key<RenderPass> const &key) { assert(!!key); return (_renderPass[key.getId()]); }
+		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key) { assert(!!key); return (_renderOnScreen[key.getId()]); }
+		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key) { assert(!!key); return (_renderPostEffect[key.getId()]); }
 	
 	private:
 		friend class RenderPass;
