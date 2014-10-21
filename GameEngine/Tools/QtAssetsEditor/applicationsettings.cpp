@@ -21,7 +21,7 @@ bool ApplicationSettings::init()
 		settingsFile.close();
 	}
 
-	QSettings settings(_settingsFilePath, QSettings::NativeFormat);
+	QSettings settings(_settingsFilePath, QSettings::IniFormat);
 
 	auto size = settings.beginReadArray("LastOpened");
 	if (size != -1)
@@ -39,7 +39,7 @@ bool ApplicationSettings::init()
 
 void ApplicationSettings::save() const
 {
-	QSettings settings(_settingsFilePath, QSettings::NativeFormat);
+	QSettings settings(_settingsFilePath, QSettings::IniFormat);
 
 	settings.beginWriteArray("LastOpened");
 	for (auto i = 0; i < _lastOpened.size(); ++i)
@@ -48,6 +48,7 @@ void ApplicationSettings::save() const
 		settings.setValue("path", _lastOpened.at(i));
 	}
 	settings.endArray();
+	settings.sync();
 }
 
 void ApplicationSettings::addProject(const QString &path)

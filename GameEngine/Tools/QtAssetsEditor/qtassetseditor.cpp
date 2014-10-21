@@ -11,3 +11,8 @@ QtAssetsEditor::~QtAssetsEditor()
 {
 
 }
+
+void QtAssetsEditor::createProject(const QString &projectPath, const QString &rawPath, const QString &cookedPath)
+{
+
+}

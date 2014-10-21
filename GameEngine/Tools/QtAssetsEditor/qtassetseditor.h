@@ -14,6 +14,7 @@ public:
 	~QtAssetsEditor();
 	inline ApplicationSettings &getSettings() { return _settings; }
 
+	void createProject(const QString &projectPath, const QString &rawPath, const QString &cookedPath);
 private:
 	Ui::QtAssetsEditorClass ui;
 	ApplicationSettings _settings;
