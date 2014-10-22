@@ -1,9 +1,10 @@
 #pragma once
 
 #include <Utils/Dependency.hpp>
-#include <list>
+#include <Utils/Containers/Vector.hpp>
 #include <memory>
 #include <Skinning/AnimationInstance.hpp>
+#include <mutex>
 
 namespace AGE
 {
@@ -16,22 +17,30 @@ namespace AGE
 		virtual ~AnimationManager()
 		{}
 
-		std::shared_ptr<AGE::AnimationInstance> createAnimationInstance(std::shared_ptr<AGE::Skeleton> skeleton, std::shared_ptr<AGE::Animation> animation)
+		gl::Key<AnimationInstance> createAnimationInstance(std::shared_ptr<AGE::Skeleton> skeleton, std::shared_ptr<AGE::Animation> animation)
 		{
-			auto instance = std::make_shared<AGE::AnimationInstance>(skeleton, animation);
-			_list.push_back(instance);
-			return instance;
+			std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
+
+			auto instance = AGE::AnimationInstance(skeleton, animation);
+			instance.key = gl::Key<AGE::AnimationInstance>::createKey();
+			if (instance.key.getId() >= _list.size())
+				_list.resize(instance.key.getId() + 1);
+			_list[instance.key.getId()] = instance;
+			return instance.key;
 		}
 
 		void update(float time)
 		{
+			std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
+
 			for (auto &e : _list)
 			{
-				e->update(time);
+				e.update(time);
 			}
 		}
 
 	private:
-		std::list<std::shared_ptr<AGE::AnimationInstance>> _list;
+		std::vector<AGE::AnimationInstance> _list;
+		std::mutex _mutex;
 	};
 }

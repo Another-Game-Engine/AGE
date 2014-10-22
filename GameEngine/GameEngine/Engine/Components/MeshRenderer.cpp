@@ -73,6 +73,13 @@ namespace Component
 		return _material;
 	}
 
+	MeshRenderer &MeshRenderer::setAnimation(const gl::Key<AGE::AnimationInstance> &key)
+	{
+		_animation = key;
+		updateGeometry();
+		return (*this);
+	}
+
 	void MeshRenderer::updateGeometry()
 	{
 		assert(_scene != nullptr);
@@ -88,6 +95,6 @@ namespace Component
 			else
 				materials.push_back(_material->datas[e.defaultMaterialIndex]);
 		}
-		_scene->getInstance<AGE::Threads::Prepare>()->updateGeometry(_key, _mesh->subMeshs, materials);
+		_scene->getInstance<AGE::Threads::Prepare>()->updateGeometry(_key, _mesh->subMeshs, materials, _animation);
 	}
 }

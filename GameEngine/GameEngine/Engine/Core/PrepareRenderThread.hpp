@@ -8,6 +8,7 @@
 #include <Core/PrepareKey.hpp>
 #include <Utils/CommandQueueHolder.hpp>
 #include <Utils/ThreadQueue.hpp>
+#include <Skinning/AnimationInstance.hpp>
 
 class AScene;
 
@@ -44,7 +45,11 @@ namespace AGE
 		PrepareRenderThread &setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		PrepareRenderThread &setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		PrepareRenderThread &setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
-		PrepareRenderThread &updateGeometry(const PrepareKey &id, const Vector<SubMeshInstance> &meshs, const Vector<MaterialInstance> &materials);
+		PrepareRenderThread &updateGeometry(
+			const PrepareKey &id
+			, const Vector<SubMeshInstance> &meshs
+			, const Vector<MaterialInstance> &materials
+			, const gl::Key<AGE::AnimationInstance> &animation);
 		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
 		glm::mat4 const &getProjection(const PrepareKey &id);
 

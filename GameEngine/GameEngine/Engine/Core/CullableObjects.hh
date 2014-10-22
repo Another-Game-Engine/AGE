@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/CullableInterfaces.hh>
+#include <Skinning/AnimationInstance.hpp>
 
 namespace AGE
 {
@@ -19,15 +20,14 @@ namespace AGE
 		SubMeshInstance mesh;
 		MaterialInstance material;
 		glm::mat4 transformation;
-		// Cesar Bounding infos
-		//		BoundingInfos boundingInfo;
-		// This info must be filled by the asset manager
 		AABoundingBox		meshAABB;
+		gl::Key<AGE::AnimationInstance> animation;
+		std::vector<glm::mat4> bones; // we'll have to find a optimized solution than copy vector of mat4 oO
 
 		Drawable();
 		~Drawable();
 		Drawable(const SubMeshInstance &_m, const MaterialInstance &_mat, const glm::mat4 &_t);
-		Drawable(SubMeshInstance &&_m, MaterialInstance &&_mat, glm::mat4 &&_t);
+		Drawable(const SubMeshInstance &_m, const MaterialInstance &_mat, const glm::mat4 &_t, const std::vector<glm::mat4> &_bones);
 	};
 
 	struct Camera : public CullableFrustum

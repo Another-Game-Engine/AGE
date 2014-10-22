@@ -44,14 +44,17 @@ namespace AGE
 		{
 			Geometry(const PrepareKey &_key
 				, const AGE::Vector<SubMeshInstance> &_submeshInstances
-				, const AGE::Vector<MaterialInstance> &_materialInstances)
+				, const AGE::Vector<MaterialInstance> &_materialInstances
+				, const gl::Key<AnimationInstance> &_animation)
 				: key(_key)
 				, submeshInstances(_submeshInstances)
 				, materialInstances(_materialInstances)
+				, animation(_animation)
 			{}
 			PrepareKey key;
 			AGE::Vector<SubMeshInstance> submeshInstances;
 			AGE::Vector<MaterialInstance> materialInstances;
+			gl::Key<AnimationInstance> animation;
 		};
 
 		struct CreateDrawable

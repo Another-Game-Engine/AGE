@@ -275,9 +275,11 @@ bool BenchmarkScene::userStart()
 			_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
 			//_renderManager->setMaterial<gl::Texture_normal>(getComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN)->getMaterial()->datas[index], _renderManager->getDefaultTexture2D());
 		}
-		//	GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
-		//getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
-		//getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
+		GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
+			getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
+			getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
+			);
+		_m->setAnimation(GLOBAL_CAT_ANIMATION);
 	}
 
 	{

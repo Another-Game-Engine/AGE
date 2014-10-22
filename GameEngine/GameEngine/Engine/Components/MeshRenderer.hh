@@ -9,7 +9,7 @@
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 #include <Core/PrepareKey.hpp>
-
+#include <Skinning/AnimationInstance.hpp>
 
 namespace AGE
 {
@@ -38,12 +38,14 @@ namespace Component
 		std::shared_ptr<AGE::MeshInstance> getMesh();
 		MeshRenderer &setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_mesh);
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
+		MeshRenderer &setAnimation(const gl::Key<AGE::AnimationInstance> &key);
 
 	private:
 		AGE::PrepareKey _key;
 		AScene *_scene;
 		std::shared_ptr<AGE::MeshInstance> _mesh;
 		std::shared_ptr<AGE::MaterialSetInstance> _material;
+		gl::Key<AGE::AnimationInstance> _animation;
 
 		void updateGeometry();
 		MeshRenderer(MeshRenderer const &) = delete;

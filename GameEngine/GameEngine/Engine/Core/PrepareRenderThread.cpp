@@ -183,12 +183,14 @@ namespace AGE
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::updateGeometry(const PrepareKey &key
+	PrepareRenderThread &PrepareRenderThread::updateGeometry(
+		const PrepareKey &key
 		, const AGE::Vector<AGE::SubMeshInstance> &meshs
-		, const AGE::Vector<AGE::MaterialInstance> &materials)
+		, const AGE::Vector<AGE::MaterialInstance> &materials
+		, const gl::Key<AGE::AnimationInstance> &animation)
 	{
 		assert(!key.invalid() || key.type != PrepareKey::Type::Drawable);
-		_commandQueue.emplace<PRTC::Geometry>(key, meshs, materials);
+		_commandQueue.emplace<PRTC::Geometry>(key, meshs, materials, animation);
 		return (*this);
 	}
 
@@ -321,6 +323,7 @@ namespace AGE
 				_drawables[id].scale = uo->scale;
 				_drawables[id].meshAABB = msg.submeshInstances[i].boundingBox;
 				_drawables[id].toAddInOctree = true;
+				_drawables[id].animation = msg.animation;
 			}
 		})
 			.handle<PRTC::Position>([&](const PRTC::Position& msg)
@@ -408,6 +411,11 @@ namespace AGE
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
 			AGE::Vector<CullableObject*> toDraw;
+
+
+			// we update animation instances
+			getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
+
 
 			// Update drawable positions in Octree
 			for (auto &e : _drawables)

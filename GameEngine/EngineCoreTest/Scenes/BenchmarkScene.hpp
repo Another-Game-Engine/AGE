@@ -108,5 +108,5 @@ private:
 	Entity GLOBAL_SPONZA;
 	Entity GLOBAL_FLOOR;
 	Entity GLOBAL_HEAD;
-	std::shared_ptr<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
+	gl::Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
 };
