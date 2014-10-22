@@ -140,13 +140,13 @@ void BenchmarkScene::initRendering()
 		_renderManager->configPipeline(key.clean.pipeline, gl::DrawType::NONE_OBJECT);
 		_renderManager->pushEmptyRenderPassPipeline(key.clean.pipeline, key.clean.emptyRenderPass);
 
-		// create the pipeline for accum
+		// create the pipeline for accumulation
 		key.Accum.pipeline = _renderManager->addPipeline();
 		_renderManager->pushRenderPostEffectPipeline(key.Accum.pipeline, key.Accum.renderPostEffect);
 		_renderManager->configPipeline(key.Accum.pipeline, gl::DrawType::EACH_FOLLOWING_OBJECT);
-		_renderManager->geometryManager.createSphereSimpleForm();
+		_renderManager->createSphereSimpleForm();
 
-		// create pipleine for merge
+		// create pipeline for merge
 		key.merge.pipeline = _renderManager->addPipeline();
 		_renderManager->configPipeline(key.merge.pipeline, gl::DrawType::NONE_OBJECT);
 		_renderManager->pushRenderPostEffectPipeline(key.merge.pipeline, key.merge.renderPostEffect);
@@ -454,8 +454,8 @@ bool BenchmarkScene::userUpdate(double time)
 			AGE::Drawable drawable;
 
 			drawable.material = renderManager->getDefaultMaterial();
-			drawable.mesh.vertices = renderManager->geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
-			drawable.mesh.indices = renderManager->geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
+			drawable.mesh.vertices = renderManager->getSimpleFormGeo(gl::SimpleForm::SPHERE);
+			drawable.mesh.indices = renderManager->getSimpleFormId(gl::SimpleForm::SPHERE);
 			renderManager->locationStorage.setLocation(index + 1, collection.lights[index]);
 			lights.push_back(drawable);
 		}

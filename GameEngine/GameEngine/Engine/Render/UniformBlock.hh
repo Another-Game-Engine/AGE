@@ -15,15 +15,11 @@ namespace gl
 	public:
 		UniformBlock();
 		~UniformBlock();
-		UniformBlock(UniformBlock const &copy);
-		UniformBlock &operator=(UniformBlock const &u);
-
 		size_t getNbrElement() const;
 		size_t getSizeBlock() const;
 		GLuint getBindingPoint() const;
 		GLuint getBufferId() const;
 		UniformBlock const &introspection(Shader const &s, GLuint indexInterfaceBlock);
-
 		template <typename TYPE> UniformBlock &set(size_t index, TYPE const &value);
 		template <typename TYPE> UniformBlock &set(size_t index, TYPE const &value, size_t indexTab);
 
@@ -33,6 +29,9 @@ namespace gl
 		GLint _sizeBlock;
 		UniformBuffer _buffer;
 
+	private:
+		UniformBlock(UniformBlock const &copy) = delete;
+		UniformBlock &operator=(UniformBlock const &u) = delete;
 		void GPUallocation();
 	};
 

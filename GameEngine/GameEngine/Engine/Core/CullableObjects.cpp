@@ -37,7 +37,7 @@ namespace AGE
 		range(pRange),
 		color(pColor)
 	{
-		PreparableObject::position = position;
+		PreparableObject::position = pPosition;
 	}
 
 

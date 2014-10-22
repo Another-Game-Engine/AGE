@@ -6,6 +6,7 @@
 #include <map>
 #include <Skinning/Skeleton.hpp>
 #include <Geometry/Mesh.hpp>
+#include <glm/glm.hpp>
 
 namespace AGE
 {
@@ -20,7 +21,7 @@ namespace AGE
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
-					std::cerr << "Mesh convertor error : creating directory" << std::endl;
+					std::cerr << "Mesh convector error : creating directory" << std::endl;
 					return false;
 			}
 			auto fileName = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() + ".sage" : dataSet.skinName + ".sage";

@@ -1,17 +1,16 @@
 #include <Render/Shader.hh>
 #include <string>
-# include <fstream>
+#include <fstream>
 #include <cassert>
-
 #include <Render/Task.hh>
 #include <Render/PreShader.cpp>
-
 
 namespace gl
 {
 
-	Shader::Shader()
-		: _shaderNumber(0),
+	Shader::Shader(AGE::Vector<Material> const &materials)
+		: _materials(materials),
+		_shaderNumber(0),
 		_unitProgId(NULL),
 		_progId(-1),
 		_nbrUnitProgId(0)
@@ -20,9 +19,9 @@ namespace gl
 		_shaderNumber = id++;
 	}
 
-	Shader *Shader::createShader(std::string const &v, std::string const &f, std::string const &g)
+	Shader *Shader::createShader(std::string const &v, std::string const &f, std::string const &g, AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader;
+		Shader *s = new Shader(materials);
 
 		s->_nbrUnitProgId = 3;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -37,9 +36,9 @@ namespace gl
 		return (s);
 	}
 
-	Shader *Shader::createShader(std::string const &v, std::string const &f)
+	Shader *Shader::createShader(std::string const &v, std::string const &f, AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader;
+		Shader *s = new Shader(materials);
 
 		s->_nbrUnitProgId = 2;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -52,9 +51,9 @@ namespace gl
 		return (s);
 	}
 
-	Shader *Shader::createComputeShader(std::string const &c)
+	Shader *Shader::createComputeShader(std::string const &c, AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader;
+		Shader *s = new Shader(materials);
 
 		s->_nbrUnitProgId = 1;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -65,9 +64,9 @@ namespace gl
 		return (s);
 	}
 
-	Shader *Shader::createPreShaderQuad()
+	Shader *Shader::createPreShaderQuad(AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader;
+		Shader *s = new Shader(materials);
 
 		s->_nbrUnitProgId = 2;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -377,42 +376,6 @@ namespace gl
 		return (key);
 	}
 
-	Key<InterfaceBlock> Shader::getInterfaceBlock(size_t target) const
-	{
-		assert(target < _interfaceBlock.size());
-		return Key<InterfaceBlock>::createKeyWithId(target);
-	}
-
-	Task *Shader::getUniform(Key<Uniform> const &key)
-	{
-		assert(key);
-		size_t index = _uniforms[key.getId()];
-		assert(index != -1);
-		return (&_tasks[index]);
-	}
-
-	Task *Shader::getSampler(Key<Sampler> const &key)
-	{
-		assert(key);
-		size_t index = _samplers[key.getId()];
-		assert(index != -1);
-		return (&_tasks[index]);
-	}
-
-	Task *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key)
-	{
-		assert(key);
-		size_t index = _interfaceBlock[key.getId()];
-		assert(index != -1);
-		return (&_tasks[index]);
-	}
-
-	size_t Shader::getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg)
-	{
-		assert(key);
-		return _bindUniform[key.getId()];
-	}
-
 	Shader &Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock)
 	{
 		Task *task = getInterfaceBlock(key);
@@ -427,35 +390,8 @@ namespace gl
 		return (*this);
 	}
 
-	void Shader::setTransformationTask(glm::mat4 const &mat)
-	{
-		Task *task = getUniform(_bindTransformation);
-		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&mat);
-	}
-
-	Shader &Shader::setMaterial(Material const &material)
-	{
-		use();
-		for (size_t index = 0; index < _bindMaterial.size(); ++index)
-		{
-			if (_bindMaterial[index].isUse)
-			{
-				setTaskWithMaterial(_bindMaterial[index], material);
-			}
-		}
-		return (*this);
-	}
-
-	Shader &Shader::update(glm::mat4 const &transform)
-	{
-		setTransformationTask(transform);
-		update();
-		return (*this);
-	}
-
 	Shader &Shader::update()
 	{
-		use();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
 			assert(_tasks[index].isExec());
@@ -468,27 +404,40 @@ namespace gl
 		return (*this);
 	}
 
+	Shader &Shader::update(glm::mat4 const &transform, Material const &material)
+	{
+		for (size_t index = 0; index < _bindMaterial.size(); ++index)
+			if (_bindMaterial[index].isUse)
+				setTaskWithMaterial(_bindMaterial[index], material);
+		Task *task = getUniform(_bindTransformation);
+		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&transform);
+		update();
+		return (*this);
+	}
+
 	size_t Shader::createMaterialBind(size_t offset, size_t indexTask)
 	{
 		for (size_t index = 0; index < _bindMaterial.size(); ++index)
 		{
 			if (_bindMaterial[index].isUse == false)
 			{
-				setMaterialBinding(_bindMaterial[index], indexTask, offset);
+				_bindMaterial[index].indexTask = index;
+				_bindMaterial[index].isUse = true;
+				_bindMaterial[index].offsetMaterial = offset;
 				return (index);
 			}
 		}
 		MaterialBindTask mb;
-		setMaterialBinding(mb, indexTask, offset);
+		mb.indexTask = indexTask;
+		mb.isUse = true;
+		mb.offsetMaterial = offset;
 		_bindMaterial.push_back(mb);
 		return (_bindMaterial.size() - 1);
 	}
 
 	Shader &Shader::unbindMaterial(Key<Uniform> const &key)
 	{
-		size_t binding;
-		if ((binding = getUniformBindMaterial(key, "unbindMaterial")) == -1)
-			return (*this);
+		size_t binding = getUniformBindMaterial(key);
 		_bindMaterial[binding].isUse = false;
 		return (*this);
 	}

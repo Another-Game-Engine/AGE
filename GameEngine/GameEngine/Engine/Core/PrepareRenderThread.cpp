@@ -409,7 +409,7 @@ namespace AGE
 		{
 			AGE::Vector<CullableObject*> toDraw;
 
-			// Update drawable positions in octree
+			// Update drawable positions in Octree
 			for (auto &e : _drawables)
 			{
 				if (e.hasMoved && e.toAddInOctree == false)

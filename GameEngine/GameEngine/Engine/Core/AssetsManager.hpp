@@ -4,10 +4,12 @@
 #include <Utils/Dependency.hpp>
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/File.hpp>
-#include <Render/GeometryManager.hh>
 #include <bitset>
 #include <Geometry/Mesh.hpp>
 #include <Render/Storage.hh>
+#include <Render/Pool.hh>
+#include <Render/Key.hh>
+#include <map>
 
 namespace AGE
 {

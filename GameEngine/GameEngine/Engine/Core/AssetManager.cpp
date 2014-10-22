@@ -235,7 +235,7 @@ namespace AGE
 		, const std::bitset<MeshInfos::END> &infos)
 	{
 		auto &pools = _pools.find(infos)->second;
-		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
+		auto m = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 
 		std::size_t size = data.infos.count();
 
@@ -306,9 +306,8 @@ namespace AGE
 			++ctr;
 		}
 
-
-		mesh.vertices = geometryManager.addVertices(maxSize, nbrBuffer, buffer, pools.first);
-		mesh.indices = geometryManager.addIndices(data.indices.size(), data.indices, pools.second);
+		mesh.vertices = m->addVertices(maxSize, nbrBuffer, buffer, pools.first);
+		mesh.indices = m->addIndices(data.indices.size(), data.indices, pools.second);
 		mesh.vertexPool = pools.first;
 		mesh.indexPool = pools.second;
 		mesh.boundingBox = data.boundingBox;
@@ -316,11 +315,11 @@ namespace AGE
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
 	}
 
-	// Create pool for meshs
+	// Create pool for mesh
 	void AssetsManager::createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos)
 	{
-		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
-		assert(geometryManager != nullptr);
+		auto m = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+		assert(m != nullptr);
 
 		std::size_t size = infos.count();
 
@@ -381,8 +380,8 @@ namespace AGE
 			++ctr;
 		}
 
-		auto vpKey = geometryManager->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
-		auto indKey = geometryManager->addIndexPool();
+		auto vpKey = m->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
+		auto indKey = m->addIndexPool();
 
 
 		_pools.insert(std::make_pair(infos, std::make_pair(vpKey, indKey)));
