@@ -1,7 +1,7 @@
 #include <Core/PrepareRenderThread.hpp>
 #include <Core/PrepareRenderThreadCommand.hpp>
 #include <Core/AScene.hh>
-#include <Utils/Frustum.hpp>
+#include <Utils/Frustum.hh>
 #include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
 #include <glm/glm.hpp>
@@ -11,19 +11,27 @@
 #include <Core/PreparableObject.hh>
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
+#include <Core/OctreeNode.hh>
+#include <Core/CullableInterfaces.hh>
 #include <chrono>
 #include <Skinning/AnimationManager.hpp>
+
+#define ACTIVATE_OCTREE_CULLING
 
 namespace AGE
 {
 	PrepareRenderThread::PrepareRenderThread()
 	{
+		_drawables.reserve(65536);
+		_octree = new OctreeNode;
 	}
 
 	PrepareRenderThread::~PrepareRenderThread(void)
 	{
 		_commandQueue.emplace<TMQ::CloseQueue>();
 		_commandQueue.releaseReadability();
+		if (_octree)
+			delete _octree;
 	}
 
 	bool PrepareRenderThread::_init()
@@ -209,6 +217,11 @@ namespace AGE
 	{
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
 		_drawables[id].active = false;
+#ifdef ACTIVATE_OCTREE_CULLING
+		// remove drawable from octree
+		if (_drawables[id].toAddInOctree == false)
+			_octree = _octree->removeElement(&_drawables[id]);
+#endif
 		assert(id != (std::size_t)(-1));
 	}
 
@@ -306,6 +319,8 @@ namespace AGE
 				_drawables[id].position = uo->position;
 				_drawables[id].orientation = uo->orientation;
 				_drawables[id].scale = uo->scale;
+				_drawables[id].meshAABB = msg.submeshInstances[i].boundingBox;
+				_drawables[id].toAddInOctree = true;
 			}
 		})
 			.handle<PRTC::Position>([&](const PRTC::Position& msg)
@@ -392,37 +407,79 @@ namespace AGE
 			returnValue = false;
 		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
+			AGE::Vector<CullableObject*> toDraw;
+
+			// Update drawable positions in octree
+			for (auto &e : _drawables)
+			{
+				if (e.hasMoved && e.toAddInOctree == false)
+				{
+					e.hasMoved = false;
+					e.previousAABB = e.currentAABB;
+					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
+					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
+#ifdef  ACTIVATE_OCTREE_CULLING
+					_octree = _octree->moveElement(&e);
+#endif
+				}
+#ifdef  ACTIVATE_OCTREE_CULLING
+				if (e.toAddInOctree)
+				{
+					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
+					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
+					e.previousAABB = e.currentAABB;
+					e.toAddInOctree = false;
+					_octree = _octree->addElement(&e);
+				}
+#endif
+			}
+			// Do culling for each camera
 			_octreeDrawList.clear();
 			for (auto &camera : _cameras)
 			{
 				if (!camera.active)
 					continue;
 				
-				Frustum frustum;
 				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
-				frustum.setMatrix(camera.projection * view, true);
+
+				// update frustum infos for culling
+				camera.currentFrustum.setMatrix(camera.projection * view);
+
 				_octreeDrawList.emplace_back();
 				auto &drawList = _octreeDrawList.back();
 				drawList.transformation = view;
 				drawList.projection = camera.projection;
+
+				// no culling for the lights for the moment (TODO)
 				for (size_t index = 0; index < _pointLights.size(); ++index)
 				{
 					auto &p = _pointLights[index];
 					drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
 
+#ifdef ACTIVATE_OCTREE_CULLING
+
+				// Do the culling
+				_octree->getElementsCollide(&camera, toDraw);
+
+				// iter on element to draw
+				for (CullableObject *e : toDraw)
+				{
+					// mandatory if you want the object to be found again
+					e->hasBeenFound = false;
+					// all the elements are drawable for the moment (TODO)
+					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
+					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
+				}
+#else
 				for (auto &e : _drawables)
 				{
-					if (/*frustum.sphereIn(e.boundingInfo, e.position)*/ /*frustum.pointIn(e.position) ==*/ true)
+					if (e.active)
 					{
-						if (e.hasMoved)
-						{
-							e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
-							e.hasMoved = false;
-						}
 						drawList.drawables.emplace_back(e.mesh, e.material, e.transformation);
 					}
 				}
+#endif
 			}
 			getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
 		}).handle<PRTC::RenderDrawLists>([&](PRTC::RenderDrawLists& msg)

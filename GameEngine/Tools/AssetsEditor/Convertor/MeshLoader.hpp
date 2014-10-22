@@ -6,6 +6,7 @@
 #include <map>
 #include <Skinning/Skeleton.hpp>
 #include <Geometry/Mesh.hpp>
+#include <glm/glm.hpp>
 
 namespace AGE
 {
@@ -20,7 +21,7 @@ namespace AGE
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
-					std::cerr << "Mesh convertor error : creating directory" << std::endl;
+					std::cerr << "Mesh convector error : creating directory" << std::endl;
 					return false;
 			}
 			auto fileName = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() + ".sage" : dataSet.skinName + ".sage";
@@ -57,7 +58,8 @@ namespace AGE
 
 			auto &meshs = dataSet.mesh->subMeshs;
 
-			AGE::Vector<BoundingInfos> subMeshBoundings;
+			// The meshes dont have bounding box (only the subMeshes)
+//			AGE::Vector<AGE::AABoundingBox> subMeshBoundings;
 
 			for (unsigned int meshIndex = 0; meshIndex < dataSet.assimpScene->mNumMeshes; ++meshIndex)
 			{
@@ -65,12 +67,21 @@ namespace AGE
 
 				std::uint32_t indice = 0;
 
+				// init the bounding box to the first vertex
+				meshs[meshIndex].boundingBox.maxPoint = glm::vec3(mesh->mVertices[0].x, mesh->mVertices[0].y, mesh->mVertices[0].z);
+				meshs[meshIndex].boundingBox.minPoint = glm::vec3(mesh->mVertices[0].x, mesh->mVertices[0].y, mesh->mVertices[0].z);
+
 				for (size_t i = 0; i < mesh->mNumVertices; i++)
 				{
 					if (mesh->HasPositions())
 					{
 						auto &aiPositions = mesh->mVertices[i];
-						meshs[meshIndex].boundingInfos.addPosition(glm::vec3(aiPositions.x, aiPositions.y, aiPositions.z));
+						// set the bounding box
+						meshs[meshIndex].boundingBox.maxPoint = glm::max(meshs[meshIndex].boundingBox.maxPoint,
+							glm::vec3(aiPositions.x, aiPositions.y, aiPositions.z));
+						meshs[meshIndex].boundingBox.minPoint = glm::min(meshs[meshIndex].boundingBox.minPoint,
+							glm::vec3(aiPositions.x, aiPositions.y, aiPositions.z));
+
 						meshs[meshIndex].positions.push_back(glm::vec4(aiPositions.x, aiPositions.y, aiPositions.z, 1));
 						meshs[meshIndex].infos.set(MeshInfos::Positions);
 					}
@@ -100,8 +111,8 @@ namespace AGE
 						meshs[meshIndex].infos.set(MeshInfos::BiTangents);
 					}
 				}
-
-				subMeshBoundings.push_back(meshs[meshIndex].boundingInfos);
+				// The meshes dont have bounding box (only the subMeshes)
+//				subMeshBoundings.push_back(meshs[meshIndex].boundingBox);
 
 				unsigned int meshFacesNbr = mesh->mNumFaces;
 				for (unsigned int faceIndex = 0; faceIndex < meshFacesNbr; ++faceIndex)
@@ -154,7 +165,6 @@ namespace AGE
 					}
 				}
 			}
-			dataSet.mesh->boundingInfos.initFromList(subMeshBoundings);
 			dataSet.meshLoaded = true;
 			return true;
 		}

@@ -306,12 +306,12 @@ namespace AGE
 			++ctr;
 		}
 
-		//createSphereSimpleForm();
 		mesh.vertices = m->addVertices(maxSize, nbrBuffer, buffer, pools.first);
 		mesh.indices = m->addIndices(data.indices.size(), data.indices, pools.second);
 		mesh.vertexPool = pools.first;
 		mesh.indexPool = pools.second;
-		mesh.bounding = data.boundingInfos;
+		mesh.boundingBox = data.boundingBox;
+
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
 	}
 

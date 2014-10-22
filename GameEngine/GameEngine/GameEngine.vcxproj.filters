@@ -68,6 +68,46 @@
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="Engine\Render\Buffer.cpp" />
+    <ClCompile Include="Engine\Render\Data.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManager.cpp" />
+    <ClCompile Include="Engine\Render\Material.cpp" />
+    <ClCompile Include="Engine\Render\MemoryGPU.cpp" />
+    <ClCompile Include="Engine\Render\PixelBuffer.cpp" />
+    <ClCompile Include="Engine\Render\Pool.cpp" />
+    <ClCompile Include="Engine\Render\Shader.cpp" />
+    <ClCompile Include="Engine\Render\UniformBlock.cpp" />
+    <ClCompile Include="Engine\Render\VertexArray.cpp" />
+    <ClCompile Include="Engine\Render\Framebuffer.cpp" />
+    <ClCompile Include="Engine\Render\Storage.cpp" />
+    <ClCompile Include="Engine\Render\PreShader.cpp" />
+    <ClCompile Include="Engine\Render\MaterialManager.cpp" />
+    <ClCompile Include="Engine\Render\Render.cpp" />
+    <ClCompile Include="Engine\Render\Pipeline.cpp" />
+    <ClCompile Include="Engine\Render\RenderManager.cpp" />
+    <ClCompile Include="Engine\Render\ShaderResource.cpp" />
+    <ClCompile Include="Engine\Render\LocationStorage.cpp" />
+    <ClCompile Include="Engine\Render\Task.cpp" />
+    <ClCompile Include="Engine\Components\Light.cpp" />
+    <ClCompile Include="Engine\Core\RenderThread.cpp" />
+    <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
+    <ClCompile Include="Engine\Core\PreparableObject.cpp" />
+    <ClCompile Include="Engine\Core\OctreeNode.cpp" />
+    <ClCompile Include="Engine\TMQ\dispatcher.cpp" />
+    <ClCompile Include="Engine\TMQ\message.cpp" />
+    <ClCompile Include="Engine\TMQ\queue.cpp" />
+    <ClCompile Include="Engine\Utils\AABoundingBox.cpp" />
+    <ClCompile Include="Engine\Utils\Sphere.cpp" />
+    <ClCompile Include="Engine\Utils\Frustum.cpp" />
+    <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />
+    <ClCompile Include="Engine\Core\CullableObjects.cpp" />
+    <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Utils\Age_Imgui.cpp" />
+    <ClCompile Include="Engine\Utils\MathematicTools.cpp" />
+    <ClCompile Include="Engine\Utils\Plane.cpp" />
+=======
+>>>>>>> 6a474651760b3a141c2d6ae2b76f4559f089f055
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -195,7 +235,6 @@
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Utils\Dependency.hpp" />
     <ClInclude Include="Engine\Utils\File.hpp" />
-    <ClInclude Include="Engine\Utils\Frustum.hpp" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
     <ClInclude Include="Engine\Utils\Age_Imgui.hpp" />
@@ -203,7 +242,6 @@
     <ClInclude Include="Engine\Utils\MathematicTools.hh" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
-    <ClInclude Include="Engine\Utils\Plane.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
@@ -212,8 +250,33 @@
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\ThreadQueue.hpp" />
     <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
+<<<<<<< HEAD
+    <ClInclude Include="Engine\Render\RenderThreadInterface.hpp" />
+    <ClInclude Include="Engine\Core\PrepareKey.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
+    <ClInclude Include="Engine\Core\PreparableObject.hh" />
+    <ClInclude Include="Engine\Core\OctreeNode.hh" />
+    <ClInclude Include="Engine\TMQ\dispatcher.hpp" />
+    <ClInclude Include="Engine\TMQ\message.hpp" />
+    <ClInclude Include="Engine\TMQ\queue.hpp" />
+    <ClInclude Include="Engine\TMQ\templateDispatcher.hpp" />
+    <ClInclude Include="Engine\Utils\AABoundingBox.hh" />
+    <ClInclude Include="Engine\Configuration.hpp" />
+    <ClInclude Include="..\Vendors\imgui\imconfig.h" />
+    <ClInclude Include="..\Vendors\imgui\imgui.h" />
+    <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Utils\Sphere.hh" />
+    <ClInclude Include="Engine\Utils\Frustum.hh" />
+    <ClInclude Include="Engine\Core\CullableInterfaces.hh" />
+    <ClInclude Include="Engine\Core\CullableObjects.hh" />
+    <ClInclude Include="Engine\Utils\Age_Imgui.hpp" />
+    <ClInclude Include="Engine\Utils\MathematicTools.hh" />
+    <ClInclude Include="Engine\Utils\Plane.hh" />
+=======
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
+>>>>>>> 6a474651760b3a141c2d6ae2b76f4559f089f055
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -3,7 +3,9 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <Render/Pool.hh>
 #include <Render/SimpleFormGeometry.hh>
+#include <Render/Data.hh>
 
 
 namespace gl
