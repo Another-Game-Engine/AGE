@@ -4,13 +4,12 @@
 #include <bitset>
 #include <glm/glm.hpp>
 
-#include <Render/GeometryManager.hh>
-
 #include <Utils/BoundingInfos.hpp>
 
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/bitset.hpp>
+#include <Render/Pool.hh>
 
 namespace AGE
 {

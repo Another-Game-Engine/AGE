@@ -1,6 +1,5 @@
 #include <Components/Light.hh>
 #include <Core/AScene.hh>
-#include <Render/GeometryManager.hh>
 #include <Core/PrepareRenderThread.hpp>
 
 #include <Utils/MathematicTools.hh>

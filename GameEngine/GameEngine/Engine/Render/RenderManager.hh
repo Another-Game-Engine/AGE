@@ -10,7 +10,6 @@
 #include <Render/UniformBlock.hh>
 #include <Render/Material.hh>
 #include <cassert>
-#include <Render/GeometryManager.hh>
 #include <Render/Render.hh>
 #include <Render/Shader.hh>
 #include <Core/PreparableObject.hh>
@@ -32,10 +31,17 @@ namespace gl
 	class Pipeline;
 	enum DrawType;
 
+	enum SimpleForm
+	{
+		QUAD = 0,
+		SPHERE = 1
+	};
+
 	class RenderManager : public Dependency<RenderManager>
 	{
 	public:
-		GeometryManager geometryManager;
+		Key<VertexPool> simpleFormPoolGeo;
+		Key<IndexPool> simpleFormPoolId;
 		LocationStorage locationStorage;
 
 	public:
@@ -115,7 +121,23 @@ namespace gl
 		RenderManager &drawPipeline(Key<Pipeline> const &key, AGE::Vector<AGE::Drawable> const &objectRender);
 		RenderManager &draw(Key<RenderOnScreen> const &key, Key<RenderPass> const &r, AGE::Vector<AGE::Drawable> const &objectRender);
 	
+		RenderManager &createQuadSimpleForm();
+		RenderManager &createSphereSimpleForm();
+		Key<Vertices> getSimpleFormGeo(SimpleForm form);
+		Key<Indices> getSimpleFormId(SimpleForm form);
+		Key<VertexPool> addVertexPool(uint8_t nbrAttributes, AGE::Vector<GLenum> const &typeComponent, AGE::Vector<uint8_t>const &sizeTypeComponent, AGE::Vector<uint8_t> const &nbrComponent);
+		Key<IndexPool> addIndexPool();
+		Key<Vertices> addVertices(size_t nbrVertices, AGE::Vector<size_t> const &sizeBuffers, AGE::Vector<void *> const &buffers, Key<VertexPool> const &pool);
+		Key<Indices> addIndices(size_t nbrIndices, AGE::Vector<uint32_t> const &buffers, Key<IndexPool> const &pool);
+		RenderManager &rmVertices(Key<VertexPool> const &vertexPool, Key<Vertices> &vertices);
+		RenderManager &rmIndices(Key<IndexPool> const &indexPool, Key<Indices> &indices);
+		static void generateIcoSphere(size_t recursion, AGE::Vector<void *> &vertex, AGE::Vector<unsigned int> &index, size_t &nbrElementId, size_t &nbrElementGeo);
+		RenderManager &draw(GLenum mode, Key<Vertices> const &vertices, Key<VertexPool> const &pool);
+		RenderManager &draw(GLenum mode, Key<Indices> const &indices, Key<Vertices> const &vertices, Key<IndexPool> const &indexPool, Key<VertexPool> const &vertexPool);
+
 	private:
+		std::map<SimpleForm, Key<Vertices>> _simpleFormGeo;
+		std::map<SimpleForm, Key<Indices>> _simpleFormId;
 		Shader * _preShaderQuad;
 		AGE::Vector<Shader *> _shaders;
 		AGE::Vector<UniformBlock *> _uniformBlock;
@@ -126,6 +148,9 @@ namespace gl
 		AGE::Vector<RenderPostEffect *> _renderPostEffect;
 		AGE::Vector<RenderOnScreen *> _renderOnScreen;
 		AGE::Vector<EmptyRenderPass *> _emptyRenderPass;
+		AGE::Vector<IndexPool *> _indexPool;
+		AGE::Vector<VertexPool *> _vertexPool;
+	
 		bool _defaultMaterialCreated;
 		Key<Material> _defaultMaterial;
 		bool _defaultTexture2DCreated;
@@ -133,7 +158,8 @@ namespace gl
 		size_t _renderManagerNumber;
 
 	private:
-		Shader *getShader(Key<Shader> const &key){ assert(!!key); return (_shaders[key.getId()]);}
+		void initSimpleForm();
+		Shader *getShader(Key<Shader> const &key){ assert(!!key); return (_shaders[key.getId()]); }
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key)	{ assert(!!key); return (_uniformBlock[key.getId()]); }
 		Texture *getTexture(Key<Texture> const &key) { assert(!!key); return (_textures[key.getId()]);}
 		Material *getMaterial(Key<Material> const &key){ assert(!!key); return (&_materials[key.getId()]); }
@@ -142,6 +168,8 @@ namespace gl
 		RenderPass *getRenderPass(Key<RenderPass> const &key) { assert(!!key); return (_renderPass[key.getId()]); }
 		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key) { assert(!!key); return (_renderOnScreen[key.getId()]); }
 		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key) { assert(!!key); return (_renderPostEffect[key.getId()]); }
+		VertexPool *getVertexPool(Key<VertexPool> const &key) { assert(!!key); return (_vertexPool[key.getId()]); }
+		IndexPool *getIndexPool(Key<IndexPool> const &key){ assert(!!key); return (_indexPool[key.getId()]); };
 	};
 
 	template <typename TYPE>

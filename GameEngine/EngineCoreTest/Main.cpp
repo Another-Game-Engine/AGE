@@ -11,8 +11,6 @@
 #include <Core/SceneManager.hh>
 #include <Utils/PubSub.hpp>
 
-#include <Render/GeometryManager.hh>
-#include <Render/MaterialManager.hh>
 #include <Render/RenderManager.hh>
 // SCENES
 #include <Scenes/BenchmarkScene.hpp>
@@ -105,7 +103,6 @@ int			main(int ac, char **av)
 		if (!context->init(0, 1600, 900, "~AGE~ V0.0 Demo"))
 			return false;
 #ifdef RENDERING_ACTIVATED
-		auto &geo = e->getInstance<gl::RenderManager>()->geometryManager;
 		if (!loadAssets(e))
 			return false;
 #endif
@@ -114,14 +111,14 @@ int			main(int ac, char **av)
 
 	e->setInstance<SceneManager>();
 	e->setInstance<AGE::AssetsManager>();
-	e->setInstance<PerformanceDebugger>("Developper Name");
+	e->setInstance<PerformanceDebugger>("Developer Name");
 
 #ifdef PHYSIC_SIMULATION
 	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 #endif
 
 	// Set default window size
-	// If config file has different value, it'll be changed automaticaly
+	// If config file has different value, it'll be changed automatically
 	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(1600, 900), [&](const glm::uvec2 &v)
 	{
 		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::SetScreenSize>(v);

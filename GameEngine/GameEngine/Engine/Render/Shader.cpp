@@ -376,42 +376,6 @@ namespace gl
 		return (key);
 	}
 
-	Key<InterfaceBlock> Shader::getInterfaceBlock(size_t target) const
-	{
-		assert(target < _interfaceBlock.size());
-		return Key<InterfaceBlock>::createKeyWithId(target);
-	}
-
-	Task *Shader::getUniform(Key<Uniform> const &key)
-	{
-		assert(key);
-		size_t index = _uniforms[key.getId()];
-		assert(index != -1);
-		return (&_tasks[index]);
-	}
-
-	Task *Shader::getSampler(Key<Sampler> const &key)
-	{
-		assert(key);
-		size_t index = _samplers[key.getId()];
-		assert(index != -1);
-		return (&_tasks[index]);
-	}
-
-	Task *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key)
-	{
-		assert(key);
-		size_t index = _interfaceBlock[key.getId()];
-		assert(index != -1);
-		return (&_tasks[index]);
-	}
-
-	size_t Shader::getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg)
-	{
-		assert(key);
-		return _bindUniform[key.getId()];
-	}
-
 	Shader &Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock)
 	{
 		Task *task = getInterfaceBlock(key);
@@ -473,9 +437,7 @@ namespace gl
 
 	Shader &Shader::unbindMaterial(Key<Uniform> const &key)
 	{
-		size_t binding;
-		if ((binding = getUniformBindMaterial(key, "unbindMaterial")) == -1)
-			return (*this);
+		size_t binding = getUniformBindMaterial(key);
 		_bindMaterial[binding].isUse = false;
 		return (*this);
 	}

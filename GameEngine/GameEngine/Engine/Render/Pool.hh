@@ -69,7 +69,7 @@ namespace gl
 	
 	public:
 		Key<DATA> addElementPool(Data const &vertices);
-		ElementPool *getElementPool(Key<DATA> const &key);
+		ElementPool *getElementPool(Key<DATA> const &key){ assert(!!key); return (&_poolElement[key.getId()]); }
 		Pool<POOL, DATA, BUFFER> &rmElement(Key<DATA> &key);
 		Pool<POOL, DATA, BUFFER> &syncronisation();
 		Pool<POOL, DATA, BUFFER> &bind();
@@ -214,17 +214,6 @@ namespace gl
 			_poolElement.push_back(ElementPool());
 		_poolElement[key.getId()] = ElementPool(_poolMemory.size() - 1, element);
 		return (key);
-	}
-
-	template <typename POOL, typename DATA, typename BUFFER>
-	ElementPool *Pool<POOL, DATA, BUFFER>::getElementPool(Key<DATA> const &key)
-	{
-		if (!key)
-			assert(0);
-		if (_poolElement.size() == 0 || key.getId() >= _poolElement.size())
-			assert(0);
-		auto &res = _poolElement[key.getId()];
-		return (&res);
 	}
 
 	template <typename POOL, typename DATA, typename BUFFER>

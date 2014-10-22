@@ -45,7 +45,6 @@ namespace gl
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 		bool hasSampler(Key<Sampler> const &key);
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock &uniformblock);
-		Key<InterfaceBlock> getInterfaceBlock(size_t index) const;
 		Shader &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock);
 		Shader &introspection(Key<InterfaceBlock> const &key, UniformBlock &u);
 		Shader &update();
@@ -62,11 +61,9 @@ namespace gl
 		static GLuint addUnitProg(char const *source, GLenum type);
 		bool createProgram();
 		bool linkProgram() const;
-		Task *getUniform(Key<Uniform> const &key);
-		Task *getSampler(Key<Sampler> const &key);
-		Task *getInterfaceBlock(Key<InterfaceBlock> const &key);
-		Task *getOutput(Key<Output> const &key);
-		size_t getIndexOutput(Key<Output> const &key);
+		Task *getUniform(Key<Uniform> const &key) { assert(key); size_t index = _uniforms[key.getId()]; assert(index != -1); return (&_tasks[index]);}
+		Task *getSampler(Key<Sampler> const &key) { assert(key); size_t index = _samplers[key.getId()]; assert(index != -1); return (&_tasks[index]);}
+		Task *getInterfaceBlock(Key<InterfaceBlock> const &key)	{ assert(key); size_t index = _interfaceBlock[key.getId()]; assert(index != -1); return (&_tasks[index]);}
 		size_t createMaterialBind(size_t offset, size_t indexTask);
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
@@ -78,7 +75,7 @@ namespace gl
 		GLuint getUniformLocation(char const *flag);
 		GLuint getUniformBlockLocation(char const *flag);
 		GLuint getSamplerLocation(char const *flag);
-		size_t getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg);
+		size_t getUniformBindMaterial(Key<Uniform> const &key) { assert(!!key); return (_bindUniform[key.getId()]); }
 	
 	private:
 		AGE::Vector<Material> const &_materials;

@@ -3,8 +3,6 @@
 #include <string>
 #include <Core/PreparableObject.hh>
 #include <Render/Task.hh>
-#include <Render/GeometryManager.hh>
-#include <Render/MaterialManager.hh>
 #include <Render/Storage.hh>
 #include <Render/Pool.hh>
 #include <Render/RenderManager.hh>
@@ -523,7 +521,7 @@ namespace gl
 		OperationBuffer::update();
 		_shader.use();
 		_shader.update();
-		BaseRender::_source.geometryManager.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
+		BaseRender::_source.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
 		return (*this);
 	}
 
@@ -607,7 +605,7 @@ namespace gl
 		OffScreenRender::update();
 		_shader.use();
 		_shader.update();
-		BaseRender::_source.geometryManager.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
+		BaseRender::_source.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
 		return (*this);
 	}
 
@@ -640,10 +638,10 @@ namespace gl
 	}
 
 	QuadRender::QuadRender(RenderManager &r)
-		: _vertices(r.geometryManager.getSimpleFormGeo(SimpleForm::QUAD)),
-		_id(r.geometryManager.getSimpleFormId(SimpleForm::QUAD)),
-		_vertexPool(r.geometryManager.simpleFormPoolGeo),
-		_indexPool(r.geometryManager.simpleFormPoolId)
+		: _vertices(r.getSimpleFormGeo(SimpleForm::QUAD)),
+		_id(r.getSimpleFormId(SimpleForm::QUAD)),
+		_vertexPool(r.simpleFormPoolGeo),
+		_indexPool(r.simpleFormPoolId)
 	{
 
 	}

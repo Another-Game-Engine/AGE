@@ -6,7 +6,6 @@
 #include <string>
 #include <Core/PreparableObject.hh>
 #include <Render/Render.hh>
-#include <Render/GeometryManager.hh>
 #include <Render/RenderManager.hh>
 
 #define CONVERT(type, index) (*((type *)data[index]))
@@ -177,7 +176,7 @@ namespace gl
 		{
 			AGE::Drawable const &object = (**toRender)[index];
 			source.updateShader(key, object.transformation, object.material);
-			source.geometryManager.draw(mode, object.mesh.indices, object.mesh.vertices, object.mesh.indexPool, object.mesh.vertexPool);
+			source.draw(mode, object.mesh.indices, object.mesh.vertices, object.mesh.indexPool, object.mesh.vertexPool);
 		}
 	}
 
