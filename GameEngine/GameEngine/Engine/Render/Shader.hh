@@ -49,7 +49,7 @@ namespace gl
 		Shader &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock);
 		Shader &introspection(Key<InterfaceBlock> const &key, UniformBlock &u);
 		Shader &update();
-		Shader &update(glm::mat4 const &transform, Key<Material> const &key);
+		Shader &update(glm::mat4 const &transform, Material const &key);
 		Shader &bindingTransformation(Key<Uniform> const &key);
 		template <typename TYPE> Shader &bindingMaterial(Key<Uniform> const &key);
 		template <typename TYPE> Shader &bindingMaterial(Key<Sampler> const &key);

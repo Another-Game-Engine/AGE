@@ -11,8 +11,9 @@
 
 namespace gl
 {
-	BaseRender::BaseRender()
-		: _rect(0, 0, 1600, 900)
+	BaseRender::BaseRender(RenderManager &source)
+		: _rect(0, 0, 1600, 900),
+		_source(source)
 	{
 
 	}
@@ -270,9 +271,9 @@ namespace gl
 			_tasks[index].func(_tasks[index].params);
 	}
 
-	OffScreenRender::OffScreenRender(LocationStorage &locationStorage)
-		: OperationBuffer(locationStorage),
-		BaseRender(),
+	OffScreenRender::OffScreenRender(RenderManager &source)
+		: OperationBuffer(source.locationStorage),
+		BaseRender(source),
 		_sample(0),
 		_updateTarget(true),
 		_updateFrameBuffer(true)
@@ -430,8 +431,8 @@ namespace gl
 		OperationBuffer::update();
 	}
 
-	DrawableRender::DrawableRender(Shader &shader, GeometryManager &geo)
-		: _geometryManager(geo),
+	DrawableRender::DrawableRender(Shader &shader, RenderManager &source)
+		: _source(source),
 		_shader(shader),
 		_mode(GL_TRIANGLES)
 	{
@@ -457,10 +458,8 @@ namespace gl
 
 	DrawableRender &DrawableRender::pushInputSampler(Key<Sampler> const &key, GLenum attachement, OffScreenRender const &render)
 	{
-		if (_shader.hasSampler(key))
-			_inputSamplers.push_back(Input(key, attachement, render));
-		else
-			assert(0);
+		assert(_shader.hasSampler(key));
+		_inputSamplers.push_back(Input(key, attachement, render));
 		return (*this);
 	}
 
@@ -472,7 +471,6 @@ namespace gl
 
 	void DrawableRender::update()
 	{
-		_shader.use();
 		for (size_t index = 0; index < _inputSamplers.size(); ++index)
 		{
 			Texture2D const *text = NULL;
@@ -503,10 +501,10 @@ namespace gl
 	}
 
 	RenderOnScreen::RenderOnScreen(Shader &s, RenderManager &r)
-		: DrawableRender(s, r.geometryManager),
+		: DrawableRender(s, r),
 		OperationBuffer(r.locationStorage),
-		QuadRender(r.geometryManager.getSimpleFormGeo(SimpleForm::QUAD), r.geometryManager.getSimpleFormId(SimpleForm::QUAD), r.geometryManager.getSimpleFormGeoPool(), r.geometryManager.getSimpleFormIdPool()),
-		BaseRender()
+		QuadRender(r),
+		BaseRender(r)
 	{
 
 	}
@@ -523,8 +521,9 @@ namespace gl
 		BaseRender::update();
 		DrawableRender::update();
 		OperationBuffer::update();
+		_shader.use();
 		_shader.update();
-		_geometryManager.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
+		BaseRender::_source.geometryManager.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
 		return (*this);
 	}
 
@@ -533,12 +532,13 @@ namespace gl
 		return (RenderType::RENDER_ON_SCREEN);
 	}
 
-	RenderPass::RenderPass(Shader &s, RenderManager &r)
-		: DrawableRender(s, r.geometryManager),
-		OffScreenRender(r.locationStorage),
+	RenderPass::RenderPass(Shader &s, Key<Shader> const &keyShader, RenderManager &r)
+		: DrawableRender(s, r),
+		OffScreenRender(r),
 		_toRender(NULL),
 		_start(0),
-		_end(0)
+		_end(0),
+		_keyShader(keyShader)
 	{
 	}
 
@@ -550,7 +550,7 @@ namespace gl
 	{
 		Task task;
 
-		setTaskAllocation(task, &_geometryManager, &_shader, &_toRender, &_mode, &_start, &_end);
+		setTaskAllocation(task, &(BaseRender::_source), &_keyShader, &_toRender, &_mode, &_start, &_end);
 		task.func = draw;
 		_tasks.push_back(task);
 		return (*this);
@@ -587,9 +587,9 @@ namespace gl
 	}
 
 	RenderPostEffect::RenderPostEffect(Shader &s, RenderManager &r)
-		: DrawableRender(s, r.geometryManager),
-		OffScreenRender(r.locationStorage),
-		QuadRender(r.geometryManager.getSimpleFormGeo(SimpleForm::QUAD), r.geometryManager.getSimpleFormId(SimpleForm::QUAD), r.geometryManager.getSimpleFormGeoPool(), r.geometryManager.getSimpleFormIdPool())
+		: DrawableRender(s, r),
+		OffScreenRender(r),
+		QuadRender(r)
 	{
 
 	}
@@ -605,8 +605,9 @@ namespace gl
 		_shader.use();
 		DrawableRender::update();
 		OffScreenRender::update();
+		_shader.use();
 		_shader.update();
-		_geometryManager.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
+		BaseRender::_source.geometryManager.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
 		return (*this);
 	}
 
@@ -616,7 +617,7 @@ namespace gl
 	}
 
 	EmptyRenderPass::EmptyRenderPass(RenderManager &r)
-		: OffScreenRender(r.locationStorage)
+		: OffScreenRender(r)
 	{
 
 	}
@@ -638,11 +639,11 @@ namespace gl
 		return (RenderType::RENDER_EMPTY);
 	}
 
-	QuadRender::QuadRender(Key<Vertices> const &key, Key<Indices> const &id, Key<VertexPool> const &vertexPool, Key<IndexPool> const &indexPool)
-		: _vertices(key),
-		_id(id),
-		_vertexPool(vertexPool),
-		_indexPool(indexPool)
+	QuadRender::QuadRender(RenderManager &r)
+		: _vertices(r.geometryManager.getSimpleFormGeo(SimpleForm::QUAD)),
+		_id(r.geometryManager.getSimpleFormId(SimpleForm::QUAD)),
+		_vertexPool(r.geometryManager.simpleFormPoolGeo),
+		_indexPool(r.geometryManager.simpleFormPoolId)
 	{
 
 	}

@@ -27,14 +27,16 @@ namespace gl
 	class GeometryManager
 	{
 	public:
+		Key<VertexPool> simpleFormPoolGeo;
+		Key<IndexPool> simpleFormPoolId;
+
+	public:
 		GeometryManager();
 		~GeometryManager();
 		GeometryManager &createQuadSimpleForm();
 		GeometryManager &createSphereSimpleForm();
 		Key<Vertices> getSimpleFormGeo(SimpleForm form);
 		Key<Indices> getSimpleFormId(SimpleForm form);
-		Key<VertexPool> getSimpleFormGeoPool();
-		Key<IndexPool> getSimpleFormIdPool();
 		Key<VertexPool> addVertexPool(uint8_t nbrAttributes, AGE::Vector<GLenum> const &typeComponent, AGE::Vector<uint8_t>const &sizeTypeComponent, AGE::Vector<uint8_t> const &nbrComponent);
 		Key<IndexPool> addIndexPool();
 		Key<Vertices> addVertices(size_t nbrVertices, AGE::Vector<size_t> const &sizeBuffers, AGE::Vector<void *> const &buffers, Key<VertexPool> const &pool);
@@ -48,8 +50,6 @@ namespace gl
 	private:
 		std::map<SimpleForm, Key<Vertices>> _simpleFormGeo;
 		std::map<SimpleForm, Key<Indices>> _simpleFormId;
-		Key<VertexPool> *_simpleFormPoolGeo;
-		Key<IndexPool> *_simpleFormPoolId;
 		void initSimpleForm();
 		AGE::Vector<IndexPool *> _indexPool;
 		AGE::Vector<VertexPool *> _vertexPool;

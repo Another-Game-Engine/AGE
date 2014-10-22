@@ -103,10 +103,11 @@ namespace gl
 		virtual RenderType getType() const = 0;
 
 	protected:
-		BaseRender();
+		BaseRender(RenderManager &source);
 		~BaseRender();
 
 		glm::ivec4 _rect;
+		RenderManager &_source;
 		void update();
 	};
 
@@ -115,7 +116,7 @@ namespace gl
 	public:
 		virtual ~QuadRender();
 	protected:
-		QuadRender(Key<Vertices> const &key, Key<Indices> const &id, Key<VertexPool> const &vertexPool, Key<IndexPool> const &indexPool);
+		QuadRender(RenderManager &r);
 		QuadRender(QuadRender const &copy) = delete;
 		QuadRender &operator=(QuadRender const &q) = delete;
 
@@ -142,7 +143,7 @@ namespace gl
 		OffScreenRender &useInputBuffer(GLenum attachement, OffScreenRender const &render);
 
 	protected:
-		OffScreenRender(LocationStorage &locationStorage);
+		OffScreenRender(RenderManager &source);
 
 		std::map<GLenum, std::pair<Storage const *, bool>> _buffer; // the bool is use to determinate if the storage is own by this class or the branched one.
 		AGE::Vector<GLenum> _target;
@@ -166,13 +167,13 @@ namespace gl
 		DrawableRender &popInputSampler();
 
 	protected:
-		DrawableRender(Shader &shader, GeometryManager &geo);
+		DrawableRender(Shader &shader, RenderManager &geo);
 		DrawableRender(DrawableRender const &copy) = delete;
 		DrawableRender &operator=(DrawableRender const &d) = delete;
 		void update();
 
 		AGE::Vector<Input> _inputSamplers;
-		GeometryManager &_geometryManager;
+		RenderManager &_source;
 		Shader &_shader;
 		GLenum _mode;
 	};
@@ -194,7 +195,7 @@ namespace gl
 	class RenderPass : public DrawableRender, public OffScreenRender
 	{
 	public:
-		RenderPass(Shader &shader, RenderManager &r);
+		RenderPass(Shader &shader, Key<Shader> const &keyShader, RenderManager &r);
 		virtual ~RenderPass();
 
 		RenderPass &pushPassTask();
@@ -211,6 +212,7 @@ namespace gl
 		AGE::Vector<AGE::Drawable> const *_toRender;
 		size_t _start;
 		size_t _end;
+		Key<Shader> _keyShader;
 	};
 
 	class RenderPostEffect : public DrawableRender, public OffScreenRender, public QuadRender

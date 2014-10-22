@@ -7,7 +7,7 @@
 #include <Core/PreparableObject.hh>
 #include <Render/Render.hh>
 #include <Render/GeometryManager.hh>
-#include <Render/MaterialManager.hh>
+#include <Render/RenderManager.hh>
 
 #define CONVERT(type, index) (*((type *)data[index]))
 
@@ -166,8 +166,8 @@ namespace gl
 
 	void draw(void **data)
 	{
-		GeometryManager &geometryManager = *CONVERT(GeometryManager *, 0);
-		Shader &shader = *CONVERT(Shader *, 1);
+		RenderManager &source = *CONVERT(RenderManager *, 0);
+		Key<Shader> const &key = *CONVERT(Key<Shader> *, 1);
 		AGE::Vector<AGE::Drawable> **toRender = CONVERT(AGE::Vector<AGE::Drawable> **, 2);
 		GLenum mode = *CONVERT(GLenum *, 3);
 		size_t start = *CONVERT(size_t *, 4);
@@ -176,8 +176,8 @@ namespace gl
 		for (size_t index = start; index < end; ++index)
 		{
 			AGE::Drawable const &object = (**toRender)[index];
-			shader.update(object.transformation, object.material);
-			geometryManager.draw(mode, object.mesh.indices, object.mesh.vertices, object.mesh.indexPool, object.mesh.vertexPool);
+			source.updateShader(key, object.transformation, object.material);
+			source.geometryManager.draw(mode, object.mesh.indices, object.mesh.vertices, object.mesh.indexPool, object.mesh.vertexPool);
 		}
 	}
 

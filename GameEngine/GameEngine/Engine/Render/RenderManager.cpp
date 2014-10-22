@@ -1,6 +1,5 @@
 #include <Render/RenderManager.hh>
 #include <Render/Storage.hh>
-#include <Render/Pipeline.hh>
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -42,8 +41,7 @@ namespace gl
 	{
 		if (_preShaderQuad != NULL)
 			return (*this);
-		if ((_preShaderQuad = Shader::createPreShaderQuad(_materials)) == NULL)
-			assert(0);
+		_preShaderQuad = Shader::createPreShaderQuad(_materials);
 		_preShaderQuad->addSampler("input_sampler");
 		return (*this);
 	}
@@ -233,24 +231,6 @@ namespace gl
 		return (texture->getType());
 	}
 
-	Shader *RenderManager::getShader(Key<Shader> const &key)
-	{
-		assert(key);
-		return (_shaders[key.getId()]);
-	}
-
-	Texture *RenderManager::getTexture(Key<Texture> const &key)
-	{
-		assert(key);
-		return (_textures[key.getId()]);
-	}
-
-	UniformBlock *RenderManager::getUniformBlock(Key<UniformBlock> const &key)
-	{
-		assert(key);
-		return (_uniformBlock[key.getId()]);
-	}
-
 	RenderManager &RenderManager::uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
 	{
 		Texture const *texture = getTexture(key);
@@ -298,7 +278,7 @@ namespace gl
 		Key<RenderPass> key = Key<RenderPass>::createKey(_renderManagerNumber);
 		Shader *shader = getShader(keyShader);
 		if (_renderPass.size() <= key.getId())
-			_renderPass.push_back(new RenderPass(*shader, *this));
+			_renderPass.push_back(new RenderPass(*shader, keyShader, *this));
 		_renderPass[key.getId()]->configRect(rect);
 		return (key);
 	}
@@ -330,12 +310,6 @@ namespace gl
 			return (*this);
 		shader->bindingTransformation(uniformKey);
 		return (*this);
-	}
-
-	Pipeline *RenderManager::getPipeline(Key<Pipeline> const &key)
-	{
-		assert(!!key);
-		return (&_pipelines[key.getId()]);
 	}
 
 	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
@@ -489,6 +463,23 @@ namespace gl
 		return (*this);
 	}
 
+	RenderManager &RenderManager::updateShader(Key<Shader> const &shader)
+	{
+		Shader &s = *getShader(shader);
+		s.use();
+		s.update();
+		return (*this);
+	}
+
+	RenderManager &RenderManager::updateShader(Key<Shader> const &shader, glm::mat4 const &transform, Key<Material> const &material)
+	{
+		Shader &s = *getShader(shader);
+		Material &m = *getMaterial(material);
+		s.use();
+		s.update(transform, m);
+		return (*this);
+	}
+
 	Key<Material> RenderManager::getDefaultMaterial()
 	{
 		if (_defaultMaterialCreated == false)
@@ -515,12 +506,6 @@ namespace gl
 		if (_materials.size() <= key.getId())
 			_materials.push_back(Material());
 		return (key);
-	}
-
-	Material *RenderManager::getMaterial(Key<Material> const &key)
-	{
-		assert(!!key);
-		return (&_materials[key.getId()]);
 	}
 
 	RenderManager &RenderManager::setShaderByMaterial(Key<Shader> &keyShader, Key<Material> const &key)

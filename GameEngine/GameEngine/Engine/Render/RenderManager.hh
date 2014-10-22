@@ -17,6 +17,7 @@
 #include <Render/MacroRenderManager.hh>
 #include <Render/LocationStorage.hh>
 #include <tmq/message.hpp>
+#include <Render/Pipeline.hh>
 
 namespace gl
 {
@@ -57,6 +58,8 @@ namespace gl
 		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
 		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
 		RenderManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
+		RenderManager &updateShader(Key<Shader> const &shader, glm::mat4 const &transform, Key<Material> const &mat);
+		RenderManager &updateShader(Key<Shader> const &shader);
 		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> &keyUniformBlock);
 		RenderManager &setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u);
 		Key<InterfaceBlock> getShaderInterfaceBlock(Key<Shader> const &shader, size_t index);
@@ -68,7 +71,6 @@ namespace gl
 		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
 		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Sampler> const &u);
 		RenderManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
-		
 		Key<Material> getDefaultMaterial();
 		Key<Texture> getDefaultTexture2D();
 		Key<Material> addMaterial();
@@ -76,7 +78,6 @@ namespace gl
 		template <typename TYPE> RenderManager &setMaterial(Key<Material> const &key, Key<Texture> const &key_tex);
 		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
 		RenderManager &setShaderByMaterial(Key<Shader> &shader, Key<Material> const &key);
-
 		Key<Texture> addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping);
 		RenderManager &uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
 		RenderManager &downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
@@ -132,21 +133,15 @@ namespace gl
 		size_t _renderManagerNumber;
 
 	private:
-		Shader *getShader(Key<Shader> const &key);
-		UniformBlock *getUniformBlock(Key<UniformBlock> const &key);
-		Texture *getTexture(Key<Texture> const &key);
-		Material *getMaterial(Key<Material> const &key);
-		Pipeline *getPipeline(Key<Pipeline> const &key);
+		Shader *getShader(Key<Shader> const &key){ assert(!!key); return (_shaders[key.getId()]);}
+		UniformBlock *getUniformBlock(Key<UniformBlock> const &key)	{ assert(!!key); return (_uniformBlock[key.getId()]); }
+		Texture *getTexture(Key<Texture> const &key) { assert(!!key); return (_textures[key.getId()]);}
+		Material *getMaterial(Key<Material> const &key){ assert(!!key); return (&_materials[key.getId()]); }
+		Pipeline *getPipeline(Key<Pipeline> const &key) { assert(!!key); return (&_pipelines[key.getId()]); }
 		EmptyRenderPass *getEmptyRenderPass(Key<EmptyRenderPass> const &key) { assert(!!key); return (_emptyRenderPass[key.getId()]); }
 		RenderPass *getRenderPass(Key<RenderPass> const &key) { assert(!!key); return (_renderPass[key.getId()]); }
 		RenderOnScreen *getRenderOnScreen(Key<RenderOnScreen> const &key) { assert(!!key); return (_renderOnScreen[key.getId()]); }
 		RenderPostEffect *getRenderPostEffect(Key<RenderPostEffect> const &key) { assert(!!key); return (_renderPostEffect[key.getId()]); }
-	
-	private:
-		friend class RenderPass;
-		friend class RenderPostEffect;
-		friend class RenderOnScreen;
-		friend class EmptyRenderPass;
 	};
 
 	template <typename TYPE>

@@ -440,16 +440,11 @@ namespace gl
 		return (*this);
 	}
 
-	Shader &Shader::update(glm::mat4 const &transform, Key<Material> const &key)
+	Shader &Shader::update(glm::mat4 const &transform, Material const &material)
 	{
-		use();
-		if (!!key)
-		{
-			Material const &material = _materials[key.getId()];
-			for (size_t index = 0; index < _bindMaterial.size(); ++index)
-				if (_bindMaterial[index].isUse)
-					setTaskWithMaterial(_bindMaterial[index], material);
-		}
+		for (size_t index = 0; index < _bindMaterial.size(); ++index)
+			if (_bindMaterial[index].isUse)
+				setTaskWithMaterial(_bindMaterial[index], material);
 		Task *task = getUniform(_bindTransformation);
 		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&transform);
 		update();

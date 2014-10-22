@@ -48,17 +48,11 @@ static uint32_t getMiddlePoint(std::vector<glm::vec3> &vertexTab, idxHash_t &mid
 namespace gl
 {
 	GeometryManager::GeometryManager()
-		: _simpleFormPoolGeo(NULL),
-		_simpleFormPoolId(NULL)
 	{
 	}
 
 	GeometryManager::~GeometryManager()
 	{
-		if (_simpleFormPoolGeo != NULL)
-			delete _simpleFormPoolGeo;
-		if (_simpleFormPoolId != NULL)
-			delete _simpleFormPoolId;
 		for (auto &pool : _indexPool)
 		{
 			if (pool != NULL)
@@ -162,12 +156,12 @@ namespace gl
 
 	void GeometryManager::initSimpleForm()
 	{
-		if (_simpleFormPoolGeo == NULL)
+		if (simpleFormPoolGeo.getId() == -1)
 		{
-			_simpleFormPoolGeo = new Key<VertexPool>(addVertexPool(1, { GL_FLOAT }, { sizeof(float) }, {3}));
+			simpleFormPoolGeo = addVertexPool(1, { GL_FLOAT }, { sizeof(float) }, {3});
 		}
-		if (_simpleFormPoolId == NULL)
-			_simpleFormPoolId = new Key<IndexPool>(addIndexPool());
+		if (simpleFormPoolId.getId() == -1)
+			simpleFormPoolId = addIndexPool();
 	}
 
 	GeometryManager &GeometryManager::createQuadSimpleForm()
@@ -176,8 +170,8 @@ namespace gl
 		if (element != _simpleFormGeo.end())
 			return (*this);
 		initSimpleForm();
-		_simpleFormGeo[SimpleForm::QUAD] = addVertices(4, { 4 * 3 * 4 }, {&quadForm[0]}, *_simpleFormPoolGeo);
-		_simpleFormId[SimpleForm::QUAD] = addIndices(6, quadFormId, *_simpleFormPoolId);
+		_simpleFormGeo[SimpleForm::QUAD] = addVertices(4, { 4 * 3 * 4 }, {&quadForm[0]}, simpleFormPoolGeo);
+		_simpleFormId[SimpleForm::QUAD] = addIndices(6, quadFormId, simpleFormPoolId);
 		return (*this);
 	}
 
@@ -194,8 +188,8 @@ namespace gl
 		size_t nbrElementId;
 		generateIcoSphere(1, buffer, id, nbrElementId, nbrElementGeo);
 		size_t sizeBuffer = 4 * 3 * nbrElementGeo;
-		_simpleFormGeo[SimpleForm::SPHERE] = addVertices(nbrElementGeo, { 4 * 3 * nbrElementGeo }, buffer, *_simpleFormPoolGeo);
-		_simpleFormId[SimpleForm::SPHERE] = addIndices(nbrElementId, id, *_simpleFormPoolId);
+		_simpleFormGeo[SimpleForm::SPHERE] = addVertices(nbrElementGeo, { 4 * 3 * nbrElementGeo }, buffer, simpleFormPoolGeo);
+		_simpleFormId[SimpleForm::SPHERE] = addIndices(nbrElementId, id, simpleFormPoolId);
 		if (buffer[0] != NULL)
 			delete buffer[0];
 		return (*this);
@@ -216,16 +210,6 @@ namespace gl
 		if (key == _simpleFormId.end())
 			assert(0);
 		return (key->second);
-	}
-	
-	Key<VertexPool> GeometryManager::getSimpleFormGeoPool()
-	{
-		return (*_simpleFormPoolGeo);
-	}
-
-	Key<IndexPool> GeometryManager::getSimpleFormIdPool()
-	{
-		return (*_simpleFormPoolId);
 	}
 
 	Key<IndexPool> GeometryManager::addIndexPool()
