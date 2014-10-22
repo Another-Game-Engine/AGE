@@ -35,6 +35,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineCoreTest", "EngineCoreTest\EngineCoreTest.vcxproj", "{1133660B-897C-4237-9E3B-15C10A3A2942}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetsEditor", "Tools\AssetsEditor\AssetsEditor.vcxproj", "{CB955D69-5F17-4705-BE34-81FBE92E26EB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deffered_shading", "Deffered_shading", "{F584710B-8089-4D6B-801A-8A2354FCF28A}"
 	ProjectSection(SolutionItems) = preProject
@@ -45,6 +48,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deffered_shading", "Deffere
 		Shaders\Deffered_shading\deffered_shading_lighting.fp = Shaders\Deffered_shading\deffered_shading_lighting.fp
 		Shaders\Deffered_shading\deffered_shading_lighting.vp = Shaders\Deffered_shading\deffered_shading_lighting.vp
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTests", "UnitTests\UnitTests.vcxproj", "{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +130,18 @@ Global
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|Win32.Build.0 = Release|Win32
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|x64.ActiveCfg = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|x64.Build.0 = Release|x64
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Debug|Win32.Build.0 = Debug|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Debug|x64.ActiveCfg = Debug|x64
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Release|Any CPU.ActiveCfg = Release|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Release|Win32.ActiveCfg = Release|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Release|Win32.Build.0 = Release|Win32
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,6 +151,6 @@ Global
 		{99FC20C2-9AD1-4049-BB11-B369C42FD6A8} = {9D3EF6A3-621D-4807-90CB-705CCD3A8FB8}
 		{EB423B39-F564-498E-B291-0D9676AF09B5} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
-		{1133660B-897C-4237-9E3B-15C10A3A2942} = {4F71FD1A-92D4-4EE1-A02A-3C30682405B3}
+		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB} = {4F71FD1A-92D4-4EE1-A02A-3C30682405B3}
 	EndGlobalSection
 EndGlobal

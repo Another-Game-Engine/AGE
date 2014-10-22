@@ -237,12 +237,6 @@ namespace gl
 		return (*this);
 	}
 
-	Key<InterfaceBlock> RenderManager::getShaderInterfaceBlock(Key<Shader> const &keyShader, size_t target)
-	{
-		Shader const *shader = getShader(keyShader);
-		return (shader->getInterfaceBlock(target));
-	}
-
 	Key<Texture> RenderManager::addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping)
 	{
 		Key<Texture> key = Key<Texture>::createKey(_renderManagerNumber);
