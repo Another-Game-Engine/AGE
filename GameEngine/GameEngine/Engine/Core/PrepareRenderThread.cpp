@@ -414,7 +414,8 @@ namespace AGE
 
 
 			// we update animation instances
-			getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
+			auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
+			animationManager->update(0.1f);
 
 
 			// Update drawable positions in Octree
@@ -477,7 +478,15 @@ namespace AGE
 					e->hasBeenFound = false;
 					// all the elements are drawable for the moment (TODO)
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
-					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
+					if (!currentDrawable->animation.empty())
+					{
+						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation, animationManager->getBones(currentDrawable->animation));
+						drawList.drawables.back().animation = currentDrawable->animation;
+					}
+					else
+					{
+						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
+					}
 				}
 #else
 				for (auto &e : _drawables)

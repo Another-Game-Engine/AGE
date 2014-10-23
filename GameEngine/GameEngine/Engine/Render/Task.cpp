@@ -175,9 +175,20 @@ namespace gl
 		for (size_t index = start; index < end; ++index)
 		{
 			AGE::Drawable const &object = (**toRender)[index];
-			if (object.bones.size() > 0)
-				std::cout << object.bones.size() << std::endl;
+
 			source.updateShader(key, object.transformation, object.material);
+
+			//if (!object.animation.empty())
+			//{
+				//// CESAR ICI ENVOYER LES MATRICES DES BONES
+				//auto shader = source.getShader(key);
+				//auto id = shader->getId();
+				//glUniformMatrix4fv(glGetUniformLocation(id, "bones")
+				//	, object.bones.size()
+				//	, GL_FALSE
+				//	, glm::value_ptr(object.bones[0]));
+				//glUniform1i(glGetUniformLocation(id, "is_skinned"), 1);
+			//}
 			source.draw(mode, object.mesh.indices, object.mesh.vertices, object.mesh.indexPool, object.mesh.vertexPool);
 		}
 	}

@@ -39,6 +39,11 @@ namespace AGE
 			}
 		}
 
+		std::vector<glm::mat4> &getBones(const gl::Key<AnimationInstance> &key)
+		{
+			return _list[key.getId()].bindPoses;
+		}
+
 	private:
 		std::vector<AGE::AnimationInstance> _list;
 		std::mutex _mutex;
