@@ -12,7 +12,10 @@ public:
 	AssetsEditorProject(QObject *parent, const QString &projectPath, const QString &rawPath, const QString &cookedPath); // used at creation
 	AssetsEditorProject(QObject *parent, const QString &projectPath); // used at load
 	~AssetsEditorProject();
-	void save();
+	bool save();
+	bool load();
+	inline const QString &getRawPath() const { return _rawPath; }
+	inline const QString &getCookedPath() const { return _cookedPath; }
 private:
 	QString _path;
 	QString _rawPath;

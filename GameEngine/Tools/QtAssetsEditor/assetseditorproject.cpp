@@ -1,10 +1,6 @@
 #include "assetseditorproject.h"
-
-//AssetsEditorProject::AssetsEditorProject(QObject *parent)
-//	: QObject(parent)
-//{
-//
-//}
+#include <qfile.h>
+#include <qsettings.h>
 
 AssetsEditorProject::AssetsEditorProject(
 	QObject *parent
@@ -16,7 +12,6 @@ AssetsEditorProject::AssetsEditorProject(
 	, _rawPath(rawPath)
 	, _cookedPath(cookedPath)
 {
-
 }
 
 AssetsEditorProject::AssetsEditorProject(
@@ -33,8 +28,41 @@ AssetsEditorProject::AssetsEditorProject(
 
 AssetsEditorProject::~AssetsEditorProject()
 {
-
+	save();
 }
 
-void AssetsEditorProject::save()
-{}
+bool AssetsEditorProject::save()
+{
+	QFile settingsFile(_path);
+
+	if (!settingsFile.exists())
+	{
+		if (!settingsFile.open(QIODevice::ReadWrite | QIODevice::Text))
+			return false;
+		settingsFile.close();
+	}
+
+	QSettings settings(_path, QSettings::IniFormat);
+	settings.setValue("path", _path);
+	settings.setValue("rawPath", _rawPath);
+	settings.setValue("cookedPath", _cookedPath);
+	return true;
+}
+
+bool AssetsEditorProject::load()
+{
+	QFile settingsFile(_path);
+
+	if (!settingsFile.exists())
+	{
+		if (!settingsFile.open(QIODevice::ReadWrite | QIODevice::Text))
+			return false;
+		settingsFile.close();
+	}
+
+	QSettings settings(_path, QSettings::IniFormat);
+	_path = settings.value("path").toString();
+	_rawPath = settings.value("rawPath").toString();
+	_cookedPath = settings.value("cookedPath").toString();
+	return true;
+}

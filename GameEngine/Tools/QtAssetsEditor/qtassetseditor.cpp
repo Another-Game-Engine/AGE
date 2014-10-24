@@ -15,52 +15,90 @@ QtAssetsEditor::QtAssetsEditor(QWidget *parent)
 	ui.setupUi(this);
 	this->setWindowTitle("AGE : Assets Editor");
 
-	_fileSystemModel = nullptr;
+	_rawFileSystemModel = nullptr;
+	_cookedFileSystemModel = nullptr;
 
-	_dock = new QDockWidget(tr("dock widget title"), this);
-	_dock->setAllowedAreas(Qt::LeftDockWidgetArea
-		| Qt::RightDockWidgetArea);
+	_dock = new QDockWidget(tr("Assets explorer"), this);
+	_dock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	addDockWidget(Qt::LeftDockWidgetArea, _dock);
+
+	_assetPropertyDock = new QDockWidget(tr("Asset Property"), this);
+	_assetPropertyDock->setAllowedAreas(Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, _assetPropertyDock);
 
 	_splitter = new QSplitter(_dock);
 
 	_rawTreeView = new QTreeView(_splitter);
+
+	_cookedTreeView = new QTreeView(_splitter);
+
 	_dock->setWidget(_splitter);
 
 	QSettings settings;
 	restoreGeometry(settings.value("geometry").toByteArray());
 	restoreState(settings.value("windowState").toByteArray());
 
+	_rawMeshFilters << "*.fbx";
+	_rawMeshFilters << "*.obj";
+	_rawMaterialFilters << "*.mtl";
+	_rawTextureFilters << "*.png";
+	_rawTextureFilters << "*.jpg";
+	_rawTextureFilters << "*.jpeg";
+	_rawTextureFilters << "*.tga";
 }
 
 QtAssetsEditor::~QtAssetsEditor()
 {
 }
 
-void QtAssetsEditor::createProject(const QString &projectPath, const QString &rawPath, const QString &cookedPath)
+bool QtAssetsEditor::createProject(const QString &projectPath, const QString &rawPath, const QString &cookedPath)
 {
 	if (_project)
 		_project->save();
 	_project = std::make_unique<AssetsEditorProject>(this, projectPath, rawPath, cookedPath);
-	createRawView(projectPath);
+	auto returnValue = _project->save();
+	createRawView(_project->getRawPath());
+	createCookedView(_project->getCookedPath());
+	setWindowTitle("AGE Assets Editor : " + projectPath);
+	return returnValue;
 }
 
-void QtAssetsEditor::openProject(const QString &projectPath)
+bool QtAssetsEditor::openProject(const QString &projectPath)
 {
 	if (_project)
 		_project->save();
 	_project = std::make_unique<AssetsEditorProject>(this, projectPath);
-	createRawView(projectPath);
+	auto returnValue = _project->load();
+	createRawView(_project->getRawPath());
+	createCookedView(_project->getCookedPath());
+	setWindowTitle("AGE Assets Editor : " + projectPath);
+	return returnValue;
 }
 
 void QtAssetsEditor::createRawView(const QString &rawPath)
 {
-	if (_fileSystemModel)
-		delete _fileSystemModel;
-	_fileSystemModel = new QFileSystemModel();
-	_fileSystemModel->setRootPath(rawPath);
-	_rawTreeView->setModel(_fileSystemModel);
-	_rawTreeView->setRootIndex(_fileSystemModel->index(rawPath));
+	if (_rawFileSystemModel)
+		delete _rawFileSystemModel;
+	_rawFileSystemModel = new QFileSystemModel();
+	_rawFileSystemModel->setRootPath(rawPath);
+	_rawFileSystemModel->setNameFilters(_rawMaterialFilters + _rawMeshFilters + _rawTextureFilters);
+	_rawFileSystemModel->setNameFilterDisables(false);
+
+	_rawTreeView->setModel(_rawFileSystemModel);
+	_rawTreeView->setRootIndex(_rawFileSystemModel->index(rawPath));
+	_rawTreeView->show();
+}
+
+void QtAssetsEditor::createCookedView(const QString &path)
+{
+	if (_cookedFileSystemModel)
+		delete _cookedFileSystemModel;
+	_cookedFileSystemModel = new QFileSystemModel();
+	_cookedFileSystemModel->setRootPath(path);
+
+	_cookedTreeView->setModel(_cookedFileSystemModel);
+	_cookedTreeView->setRootIndex(_cookedFileSystemModel->index(path));
+	_cookedTreeView->show();
 }
 
 void QtAssetsEditor::on_actionOpen_project_triggered()
