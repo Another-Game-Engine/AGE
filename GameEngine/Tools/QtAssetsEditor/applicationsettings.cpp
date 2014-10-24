@@ -4,24 +4,12 @@
 #include <qdebug.h>
 
 ApplicationSettings::ApplicationSettings()
-	: _settingsFilePath("")
 {
 }
 
 bool ApplicationSettings::init()
 {
-	_settingsFilePath = QApplication::applicationDirPath() + "/assetsEditorSettings.ini";
-
-	QFile settingsFile(_settingsFilePath);
-
-	if (!settingsFile.exists())
-	{
-		if (!settingsFile.open(QIODevice::ReadWrite | QIODevice::Text))
-			return false;
-		settingsFile.close();
-	}
-
-	QSettings settings(_settingsFilePath, QSettings::IniFormat);
+	QSettings settings;
 
 	auto size = settings.beginReadArray("LastOpened");
 	if (size != -1)
@@ -39,7 +27,7 @@ bool ApplicationSettings::init()
 
 void ApplicationSettings::save() const
 {
-	QSettings settings(_settingsFilePath, QSettings::IniFormat);
+	QSettings settings;
 
 	settings.beginWriteArray("LastOpened");
 	for (auto i = 0; i < _lastOpened.size(); ++i)

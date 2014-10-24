@@ -12,7 +12,6 @@ public:
 	inline const QList<QString> &getLastOpened() const { return _lastOpened; }
 	void addProject(const QString &path);
 private:
-	QString _settingsFilePath;
 	QList < QString > _lastOpened;
 };
 

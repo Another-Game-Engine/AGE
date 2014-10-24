@@ -24,12 +24,16 @@ private slots:
     void on_actionOpen_project_triggered();
 
     void on_actionCreate_project_triggered();
+
+	virtual void closeEvent(QCloseEvent *event);
 private:
 	void createRawView(const QString &rawPath);
 private:
 	Ui::QtAssetsEditorClass ui;
 	ApplicationSettings _settings;
 	std::unique_ptr<AssetsEditorProject> _project;
+
+	QDockWidget *_dock;
 
 	QSplitter *_splitter;
 	QFileSystemModel *_fileSystemModel;

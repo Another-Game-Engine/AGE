@@ -2,16 +2,34 @@
 #include "projectcreationform.h"
 #include "openproject.h"
 #include <qtreeview.h>
+#include <qdockwidget.h>
+#include <qsettings.h>
 
 QtAssetsEditor::QtAssetsEditor(QWidget *parent)
 	: QMainWindow(parent)
 {
+	QCoreApplication::setOrganizationName("AGE");
+    QCoreApplication::setOrganizationDomain("another game engine");
+    QCoreApplication::setApplicationName("Assets Editor");
+
 	ui.setupUi(this);
 	this->setWindowTitle("AGE : Assets Editor");
 
-	_splitter = new QSplitter();
 	_fileSystemModel = nullptr;
+
+	_dock = new QDockWidget(tr("dock widget title"), this);
+	_dock->setAllowedAreas(Qt::LeftDockWidgetArea
+		| Qt::RightDockWidgetArea);
+	addDockWidget(Qt::LeftDockWidgetArea, _dock);
+
+	_splitter = new QSplitter(_dock);
+
 	_rawTreeView = new QTreeView(_splitter);
+	_dock->setWidget(_splitter);
+
+	QSettings settings;
+	restoreGeometry(settings.value("geometry").toByteArray());
+	restoreState(settings.value("windowState").toByteArray());
 
 }
 
@@ -69,4 +87,12 @@ void QtAssetsEditor::on_actionCreate_project_triggered()
         _settings.addProject(pcf.projectPath);
         createProject(pcf.projectPath, pcf.rawDir, pcf.cookedDir);
     }
+}
+
+void QtAssetsEditor::closeEvent(QCloseEvent *event)
+{
+	QSettings settings;
+	settings.setValue("geometry", saveGeometry());
+	settings.setValue("windowState", saveState());
+	QMainWindow::closeEvent(event);
 }
