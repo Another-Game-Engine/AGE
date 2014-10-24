@@ -282,7 +282,8 @@ bool BenchmarkScene::userStart()
 	}
 
 	{
-		auto e = createEntity();
+		GLOBAL_LIGHT = createEntity();
+		auto e = GLOBAL_LIGHT;
 		auto _l = getLink(e);
 		_l->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
 		_l->setScale(glm::vec3(0.05f));
@@ -294,6 +295,8 @@ bool BenchmarkScene::userStart()
 			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
 			_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
 		}
+		getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+		addComponent<Component::PointLight>(GLOBAL_LIGHT)->set(glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));
 	}
 
 #ifdef PHYSIC_SIMULATION
@@ -304,8 +307,9 @@ bool BenchmarkScene::userStart()
 #endif
 	// lights creation
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
-	
-	addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));
+
+
+//	getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
@@ -425,18 +429,18 @@ bool BenchmarkScene::userUpdate(double time)
 	auto renderManager = getInstance<gl::RenderManager>();
 
 	{
-		auto link = getLink(GLOBAL_CATWOMAN);
+		auto link = getLink(GLOBAL_LIGHT);
 		auto pos = link->getPosition();
 		static float p[3] = {pos.x, pos.y, pos.z};
-		if (ImGui::SliderFloat("Cat x", &p[0], -10, 10))
+		if (ImGui::SliderFloat("x", &p[0], -50, 50))
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
-		if (ImGui::SliderFloat("Cat y", &p[1], -10, 10))
+		if (ImGui::SliderFloat("y", &p[1], -50, 50))
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
-		if (ImGui::SliderFloat("Cat z", &p[2], -10, 10))
+		if (ImGui::SliderFloat("z", &p[2], -50, 50))
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}

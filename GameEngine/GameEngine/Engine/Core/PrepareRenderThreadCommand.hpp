@@ -92,14 +92,12 @@ namespace AGE
 
 		struct SetPointLight
 		{
-			SetPointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range, PrepareKey &key)
+			SetPointLight(glm::vec3 const &color, glm::vec3 const &range, PrepareKey &key)
 			: key(key),
-			position(position),
 			color(color),
 			range(range)
 			{}
 			PrepareKey key;
-			glm::vec3 position;
 			glm::vec3 color;
 			glm::vec3 range;
 		};

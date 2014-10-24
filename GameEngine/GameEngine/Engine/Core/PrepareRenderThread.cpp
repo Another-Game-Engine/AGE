@@ -124,9 +124,9 @@ namespace AGE
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
+	PrepareRenderThread &PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::SetPointLight>(position, color, range, id);
+		_commandQueue.emplace<PRTC::SetPointLight>(color, range, id);
 		return (*this);
 	}
 
@@ -281,7 +281,6 @@ namespace AGE
 		{
 			PointLight *l = nullptr;
 			l = &_pointLights[msg.key.id];
-			l->position = msg.position;
 			l->color = msg.color;
 			l->range = msg.range;
 		})

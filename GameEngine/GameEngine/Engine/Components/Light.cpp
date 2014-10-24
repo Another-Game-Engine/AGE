@@ -45,17 +45,11 @@ namespace Component
 		assert(!_key.invalid());
 	}
 
-	PointLight &PointLight::setPosition(glm::vec4 const &position)
-	{
-		_scene->getInstance<AGE::Threads::Prepare>()->setPosition(glm::vec3(position.x, position.y, position.z), _key);
-		return (*this);
-	}
-
-	PointLight &PointLight::set(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range)
+	PointLight &PointLight::set(glm::vec3 const &color, glm::vec3 const &range)
 	{
 		float	maxRange = computePointLightRange(256, range);
 
-		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(position, color, range, _key);
+		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(color, range, _key);
 		return (*this);
 	}
 
