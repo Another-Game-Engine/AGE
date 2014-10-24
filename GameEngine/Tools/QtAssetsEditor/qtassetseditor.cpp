@@ -1,12 +1,18 @@
 #include "qtassetseditor.h"
 #include "projectcreationform.h"
 #include "openproject.h"
+#include <qtreeview.h>
 
 QtAssetsEditor::QtAssetsEditor(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 	this->setWindowTitle("AGE : Assets Editor");
+
+	_splitter = new QSplitter();
+	_fileSystemModel = nullptr;
+	_rawTreeView = new QTreeView(_splitter);
+
 }
 
 QtAssetsEditor::~QtAssetsEditor()
@@ -18,6 +24,7 @@ void QtAssetsEditor::createProject(const QString &projectPath, const QString &ra
 	if (_project)
 		_project->save();
 	_project = std::make_unique<AssetsEditorProject>(this, projectPath, rawPath, cookedPath);
+	createRawView(projectPath);
 }
 
 void QtAssetsEditor::openProject(const QString &projectPath)
@@ -25,6 +32,17 @@ void QtAssetsEditor::openProject(const QString &projectPath)
 	if (_project)
 		_project->save();
 	_project = std::make_unique<AssetsEditorProject>(this, projectPath);
+	createRawView(projectPath);
+}
+
+void QtAssetsEditor::createRawView(const QString &rawPath)
+{
+	if (_fileSystemModel)
+		delete _fileSystemModel;
+	_fileSystemModel = new QFileSystemModel();
+	_fileSystemModel->setRootPath(rawPath);
+	_rawTreeView->setModel(_fileSystemModel);
+	_rawTreeView->setRootIndex(_fileSystemModel->index(rawPath));
 }
 
 void QtAssetsEditor::on_actionOpen_project_triggered()

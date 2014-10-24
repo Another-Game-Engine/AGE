@@ -6,6 +6,8 @@
 #include "applicationsettings.h"
 #include "assetseditorproject.h"
 #include <memory>
+#include <qsplitter.h>
+#include <qfilesystemmodel.h>
 
 class QtAssetsEditor : public QMainWindow
 {
@@ -22,11 +24,16 @@ private slots:
     void on_actionOpen_project_triggered();
 
     void on_actionCreate_project_triggered();
-
+private:
+	void createRawView(const QString &rawPath);
 private:
 	Ui::QtAssetsEditorClass ui;
 	ApplicationSettings _settings;
 	std::unique_ptr<AssetsEditorProject> _project;
+
+	QSplitter *_splitter;
+	QFileSystemModel *_fileSystemModel;
+	QTreeView *_rawTreeView;
 };
 
 #endif // QTASSETSEDITOR_H
