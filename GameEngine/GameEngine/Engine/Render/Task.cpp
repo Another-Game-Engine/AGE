@@ -142,6 +142,11 @@ namespace gl
 		glUniform1i(CONVERT(unsigned int, 0), CONVERT(int, 1));
 	}
 
+	void setUniformTabMat(void **data)
+	{
+		glUniformMatrix4fv(CONVERT(unsigned int, 0), CONVERT(size_t, 3), GL_FALSE, (const float *)&(CONVERT(glm::mat4, 1)));
+	}
+
 	void setBlockBinding(void **data)
 	{
 		glUniformBlockBinding(CONVERT(GLuint, 0), CONVERT(GLuint, 1), CONVERT(GLuint, 2));

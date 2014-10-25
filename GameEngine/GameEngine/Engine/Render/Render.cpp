@@ -47,6 +47,7 @@ namespace gl
 			for (uint8_t param = 0; param < _tasks[index].nbrParams; ++param)
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
+			delete[] _tasks[index].sizeParams;
 		}
 		for (size_t index = 0; index < _ownFunction.size(); ++index)
 			delete _ownFunction[index];

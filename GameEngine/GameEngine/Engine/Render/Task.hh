@@ -25,6 +25,7 @@ namespace gl
 	void setBlendFunc(void **);
 	void setBlendConstant(void **);
 	void setTest(void **);
+	void setUniformTabMat(void **);
 	void setUniformMat4(void **);
 	void setUniformMat3(void **);
 	void setUniformUint(void **);
@@ -48,6 +49,7 @@ namespace gl
 	enum TypeTask
 	{
 		UniformTask = 0,
+		UniformTabTask,
 		SamplerTask,
 		InterfaceBlockTask
 	};
