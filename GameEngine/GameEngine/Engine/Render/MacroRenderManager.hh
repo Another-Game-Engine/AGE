@@ -21,7 +21,8 @@
 	RenderManager &pushSetBlendConstantTask##name##(Key<##name##> const &key, glm::vec4 const &blendPass); \
 	RenderManager &pushSetBlendStateTask##name##(Key<##name##> const &key, int drawBuffer, bool state); \
 	RenderManager &popTask##name##(Key<##name##> const &key); \
-	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f);
+	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f); \
+	RenderManager &pushSetCullFace##name##(Key<##name##> const &key, GLenum mode);
 
 #define GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(name) \
 	RenderManager &config##name##(Key<##name##> const &renderPass, glm::ivec4 const &rect, GLint sample = 1); \
@@ -224,6 +225,12 @@ RenderManager &RenderManager::pushOwnTask##name##(Key<##name##> const &key, std:
 {\
 	name *render = get##name##(key); \
 	render->pushOwnTask(f); \
+	return (*this); \
+} \
+RenderManager &RenderManager::pushSetCullFace##name##(Key<##name##> const &key, GLenum mode) \
+{ \
+	name *render = get##name##(key); \
+	render->pushSetCullFace(mode); \
 	return (*this); \
 }
 

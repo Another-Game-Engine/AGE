@@ -81,6 +81,13 @@ namespace gl
 
 	Shader::~Shader()
 	{
+		for (size_t index = 0; index < _tasks.size(); ++index)
+		{
+			for (uint8_t param = 0; param < _tasks[index].nbrParams; ++param)
+				delete _tasks[index].params[param];
+			delete[] _tasks[index].params;
+			delete[] _tasks[index].sizeParams;
+		}
 		if (_nbrUnitProgId > 0)
 			delete[] _unitProgId;
 		for (uint8_t index = 0; index < _nbrUnitProgId; ++index)
@@ -183,6 +190,29 @@ namespace gl
 		task.sizeParams[1] = 0;
 	}
 
+	void Shader::createUniformTabTask(Task &task, std::string const &flag, size_t sizeType, size_t size)
+	{
+		task.type = TypeTask::UniformTabTask;
+		task.func = NULL;
+		task.indexToTarget = 0xFF;
+		task.nbrParams = 4;
+		task.sizeParams = new size_t[task.nbrParams];
+		task.params = new void *[task.nbrParams];
+		task.params[0] = new GLuint;
+		GLuint location = getUniformLocation(flag.c_str());
+		*(GLuint *)task.params[0] = location;
+		task.params[1] = new uint8_t[sizeType * size];
+		memset(task.params[1], 0, sizeType * size);
+		task.sizeParams[1] = size * sizeType;
+		task.params[2] = new size_t;
+		*((size_t *)task.params[2]) = sizeType;
+		task.sizeParams[2] = sizeof(size_t);
+		task.params[3] = new size_t;
+		*((size_t *)task.params[3]) = size;
+		task.sizeParams[3] = sizeof(size_t);
+		task.update = false;
+	}
+
 	void Shader::createSamplerTask(Task &task, std::string const &flag)
 	{
 		task.type = TypeTask::SamplerTask;
@@ -207,7 +237,7 @@ namespace gl
 	{
 		task.type = TypeTask::InterfaceBlockTask;
 		task.func = setBlockBinding;
-		task.indexToTarget = 0;
+		task.indexToTarget = 0xFF;
 		task.nbrParams = 3;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
@@ -245,7 +275,7 @@ namespace gl
 			_uniforms.push_back(-1);
 		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&value);
+		setUniformTask(*task, setUniformMat4, value);
 		return (key);
 	}
 	
@@ -258,7 +288,7 @@ namespace gl
 			_uniforms.push_back(-1);
 		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<glm::mat3>(*task, setUniformMat3, (void *)&value);
+		setUniformTask(*task, setUniformMat3, value);
 		return (key);
 	}
 
@@ -271,7 +301,7 @@ namespace gl
 			_uniforms.push_back(-1);
 		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
+		setUniformTask(*task, setUniformVec3, value);
 		return (key);
 	}
 	
@@ -284,7 +314,7 @@ namespace gl
 			_uniforms.push_back(size_t(-1));
 		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<glm::vec4>(*task, setUniformVec4, (void *)&value);
+		setUniformTask(*task, setUniformVec4, value);
 		return (key);
 	}
 
@@ -297,42 +327,81 @@ namespace gl
 			_uniforms.push_back(-1);
 		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<float>(*task, setUniformFloat, (void *)&value);
+		setUniformTask(*task, setUniformFloat, value);
+		return (key);
+	}
+
+	Key<Uniform> Shader::addUniform(std::string const &flag, bool value)
+	{
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask(*task, setUniformUint, value);
+		return (key);
+	}
+	
+	Key<Uniform> Shader::addUniform(std::string const &flag, size_t sizeType, size_t size)
+	{
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
+		createUniformTabTask(*task, flag, sizeType, size);
 		return (key);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&value);
+		setUniformTask(*task, setUniformMat4, value);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat3 const &value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<glm::mat3>(*task, setUniformMat3, (void *)&value);
+		setUniformTask(*task, setUniformMat3, value);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec4 const &value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<glm::vec4>(*task, setUniformVec4, (void *)&value);
+		setUniformTask(*task, setUniformVec4, value);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec3 const &value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
+		setUniformTask(*task, setUniformVec3, value);
+		return (*this);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, bool b)
+	{
+		Task *task = getUniform(key);
+		setUniformTask(*task, setUniformUint, b);
+		return (*this);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &data, size_t index)
+	{
+		Task *task = getUniform(key);
+		setUniformTabTask(*task, setUniformTabMat, data, index);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, float value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<float>(*task, setUniformFloat, (void *)&value);
+		setUniformTask(*task, setUniformFloat, value);
 		return (*this);
 	}
 
@@ -394,9 +463,9 @@ namespace gl
 	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
-			assert(_tasks[index].isExec());
 			if (_tasks[index].update)
 			{
+				assert(_tasks[index].isExec());
 				_tasks[index].func(_tasks[index].params);
 				_tasks[index].update = false;
 			}
@@ -410,7 +479,7 @@ namespace gl
 			if (_bindMaterial[index].isUse)
 				setTaskWithMaterial(_bindMaterial[index], material);
 		Task *task = getUniform(_bindTransformation);
-		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&transform);
+		setUniformTask(*task, setUniformMat4, transform);
 		update();
 		return (*this);
 	}

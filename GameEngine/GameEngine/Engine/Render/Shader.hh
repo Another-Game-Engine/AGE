@@ -36,11 +36,15 @@ namespace gl
 		Key<Uniform> addUniform(std::string const &flag, glm::vec4 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::vec3 const &value);
 		Key<Uniform> addUniform(std::string const &flag, float value);
+		Key<Uniform> addUniform(std::string const &flag, bool b);
+		Key<Uniform> addUniform(std::string const &falg, size_t sizeType, size_t size);
 		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &mat4);
 		Shader &setUniform(Key<Uniform> const &key, glm::mat3 const &mat3);
 		Shader &setUniform(Key<Uniform> const &key, glm::vec4 const &vec4);
 		Shader &setUniform(Key<Uniform> const &key, glm::vec3 const &vec4);
 		Shader &setUniform(Key<Uniform> const &key, float v);
+		Shader &setUniform(Key<Uniform> const &key, bool b);
+		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &data, size_t index);
 		Key<Sampler> addSampler(std::string const &flag);
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 		bool hasSampler(Key<Sampler> const &key);
@@ -68,7 +72,9 @@ namespace gl
 		void createUniformTask(Task &task, std::string const &flag);
 		void createSamplerTask(Task &task, std::string const &flag);
 		void createUniformBlockTask(Task &task, std::string const &flag, UniformBlock &ubo);
-		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **), void *data);
+		void createUniformTabTask(Task &task, std::string const &flag, size_t sizeType, size_t size);
+		template <typename TYPE> void setUniformTask(Task &task, void(*func)(void **),TYPE const &data);
+		template <typename TYPE> void setUniformTabTask(Task &task, void(*func)(void **), TYPE const &data, size_t index);
 		void setSamplerTask(Task &task, Texture const &texture);
 		void setUniformBlockTask(Task &task, UniformBlock &ubo);
 		void setTaskWithMaterial(MaterialBindTask const &bind, Material const &material);
@@ -94,7 +100,7 @@ namespace gl
 	};
 
 	template <typename TYPE>
-	void Shader::setUniformTask(Task &task, void(*func)(void **), void *data)
+	void Shader::setUniformTask(Task &task, void(*func)(void **), TYPE const &data)
 	{
 		if (task.params[1] == NULL)
 		{
@@ -102,12 +108,29 @@ namespace gl
 			task.sizeParams[1] = sizeof(TYPE);
 			task.func = func;
 		}
-		if (task.sizeParams[1] != sizeof(TYPE))
-			assert(0);
-		if (memcmp(task.params[1], data, sizeof(TYPE)) != 0)
+		assert(task.sizeParams[1] == sizeof(TYPE));
+		if (memcmp(task.params[1], &data, sizeof(TYPE)) != 0)
 		{
 			task.update = true;
-			memcpy(task.params[1], data, sizeof(TYPE));
+			memcpy(task.params[1], &data, sizeof(TYPE));
+		}
+	}
+
+	template <typename TYPE>
+	void Shader::setUniformTabTask(Task &task, void(*func)(void **), TYPE const &data, size_t index)
+	{
+		if (task.func == NULL)
+		{
+			task.func = func;
+			task.update = true;
+		}
+		assert((*(size_t *)task.params[2]) == sizeof(TYPE));
+		assert((*(size_t *)task.params[3]) > index);
+		if (memcmp(&(((uint8_t *)task.params[1])[(*(size_t *)task.params[2]) * index]), &data, sizeof(TYPE)) != 0)
+		{
+			memcpy(&(((uint8_t *)task.params[1])[(*(size_t *)task.params[2]) * index]), &data, sizeof(TYPE));
+			glm::mat4 const &mat = *((glm::mat4 *)task.params[1]);
+			task.update = true;
 		}
 	}
 
@@ -164,6 +187,8 @@ namespace gl
 	inline void Shader::setTaskWithMaterial(MaterialBindTask const &bind, Material const &material)
 	{
 		Task &task = _tasks[bind.indexTask];
+		assert(task.type != TypeTask::UniformTabTask);
+		assert(task.type != TypeTask::InterfaceBlockTask);
 		size_t sizeParam = task.sizeParams[task.indexToTarget];
 		if (task.type == TypeTask::UniformTask)
 		{

@@ -97,6 +97,11 @@ namespace gl
 			glDisablei(GL_BLEND, CONVERT(int, 0));
 	}
 
+	void setCullFace(void **data)
+	{
+		glCullFace(CONVERT(GLenum, 0));
+	}
+
 	void setBlendEquationSeparate(void **data)
 	{
 		glBlendEquationSeparate(CONVERT(GLenum, 0), CONVERT(GLenum, 1));
@@ -135,6 +140,11 @@ namespace gl
 	void setUniformUint(void **data)
 	{
 		glUniform1i(CONVERT(unsigned int, 0), CONVERT(int, 1));
+	}
+
+	void setUniformTabMat(void **data)
+	{
+		glUniformMatrix4fv(CONVERT(unsigned int, 0), CONVERT(size_t, 3), GL_FALSE, (const float *)&(CONVERT(glm::mat4, 1)));
 	}
 
 	void setBlockBinding(void **data)

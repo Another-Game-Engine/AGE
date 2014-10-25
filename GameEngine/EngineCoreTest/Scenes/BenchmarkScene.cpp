@@ -75,6 +75,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 0, false);
 		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 1, false);
 		_renderManager->pushSetBlendStateTaskRenderPass(key.getBuff.renderPass, 2, false);
+		_renderManager->pushSetCullFaceRenderPass(key.getBuff.renderPass, GL_BACK);
 		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
 
 		// create  clear renderPass
