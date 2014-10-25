@@ -97,6 +97,11 @@ namespace gl
 			glDisablei(GL_BLEND, CONVERT(int, 0));
 	}
 
+	void setCullFace(void **data)
+	{
+		glCullFace(CONVERT(GLenum, 0));
+	}
+
 	void setBlendEquationSeparate(void **data)
 	{
 		glBlendEquationSeparate(CONVERT(GLenum, 0), CONVERT(GLenum, 1));

@@ -34,6 +34,7 @@ namespace gl
 	void setUniformVec3(void **data);
 	void setUniformSampler(void **);
 	void setFragDataLocation(void **);
+	void setCullFace(void **);
 	void draw(void **);
 	void ownTask(void **);
 

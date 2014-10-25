@@ -36,11 +36,15 @@ namespace gl
 		Key<Uniform> addUniform(std::string const &flag, glm::vec4 const &value);
 		Key<Uniform> addUniform(std::string const &flag, glm::vec3 const &value);
 		Key<Uniform> addUniform(std::string const &flag, float value);
+		Key<Uniform> addUniform(std::string const &flag, bool b);
+		Key<Uniform> addUniform(std::string const &falg, size_t sizeType, size_t size);
 		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &mat4);
 		Shader &setUniform(Key<Uniform> const &key, glm::mat3 const &mat3);
 		Shader &setUniform(Key<Uniform> const &key, glm::vec4 const &vec4);
 		Shader &setUniform(Key<Uniform> const &key, glm::vec3 const &vec4);
 		Shader &setUniform(Key<Uniform> const &key, float v);
+		Shader &setUniform(Key<Uniform> const &key, bool b);
+		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &data, size_t index);
 		Key<Sampler> addSampler(std::string const &flag);
 		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
 		bool hasSampler(Key<Sampler> const &key);

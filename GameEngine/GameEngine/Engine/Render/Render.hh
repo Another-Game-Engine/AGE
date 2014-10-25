@@ -80,6 +80,7 @@ namespace gl
 		OperationBuffer &pushSetBlendConstantTask(glm::vec4 const &blendColor);
 		OperationBuffer &pushSetTestTask(bool scissor, bool stencil, bool depth);
 		OperationBuffer &pushOwnTask(std::function<void(LocationStorage &)> const &func);
+		OperationBuffer &pushSetCullFace(GLenum mode);
 		OperationBuffer &popTask();
 
 	protected:

@@ -301,6 +301,31 @@ namespace gl
 		return (key);
 	}
 
+	Key<Uniform> Shader::addUniform(std::string const &flag, bool value)
+	{
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask<float>(*task, setUniformBool, (void *)&value);
+		return (key);
+	}
+	
+	Key<Uniform> Shader::addUniform(std::string const &falg, size_t sizeType, size_t size)
+	{
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
+		createUniformTabTask(*task, flag, sizeType, size);
+		return (key);
+	}
+
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &value)
 	{
 		Task *task = getUniform(key);
@@ -326,6 +351,20 @@ namespace gl
 	{
 		Task *task = getUniform(key);
 		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
+		return (*this);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, bool b)
+	{
+		Task *task = getUniform(key);
+		setUniformTask<glm::vec3>(*task, setUniformBool, (void *)&b);
+		return (*this);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &data, size_t index)
+	{
+		Task *task = getUniform(key);
+		setUniformTabTask(*task, setUniformTabMat, (void *)&data, index);
 		return (*this);
 	}
 

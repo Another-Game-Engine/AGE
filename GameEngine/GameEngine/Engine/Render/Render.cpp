@@ -240,6 +240,16 @@ namespace gl
 		return (*this);
 	}
 
+	OperationBuffer &OperationBuffer::pushSetCullFace(GLenum mode)
+	{
+		Task task;
+
+		setTaskAllocation(task, mode);
+		task.func = setCullFace;
+		_tasks.push_back(task);
+		return (*this);
+	}
+
 	OperationBuffer &OperationBuffer::pushOwnTask(std::function<void(LocationStorage &)> const &f)
 	{
 		Task task;
