@@ -28,6 +28,10 @@ int main(int argc, char *argv[])
 		else
 			return 0;
 	}
+	else
+	{
+		w.openProject(settings.getLastOpened().first());
+	}
 
 	w.show();
 	auto returnValue = a.exec();
