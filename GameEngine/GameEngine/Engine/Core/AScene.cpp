@@ -44,14 +44,14 @@ bool                           AScene::start()
 }
 
 
-void                    AScene::informFiltersTagAddition(TAG_ID id, EntityData &&entity)
+void                    AScene::informFiltersTagAddition(TAG_ID id, const EntityData &entity)
 {
 	for (auto &&f : _filters[id])
 	{
 		f->tagAdded(std::move(entity), id);
 	}
 }
-void                    AScene::informFiltersTagDeletion(TAG_ID id, EntityData &&entity)
+void                    AScene::informFiltersTagDeletion(TAG_ID id, const EntityData &entity)
 {
 	for (auto &&f : _filters[id])
 	{
@@ -59,7 +59,7 @@ void                    AScene::informFiltersTagDeletion(TAG_ID id, EntityData &
 	}
 }
 
-void                    AScene::informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity)
+void                    AScene::informFiltersComponentAddition(COMPONENT_ID id, const EntityData &entity)
 {
 	for (auto &&f : _filters[id])
 	{
@@ -67,7 +67,7 @@ void                    AScene::informFiltersComponentAddition(COMPONENT_ID id, 
 	}
 }
 
-void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity)
+void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, const EntityData &entity)
 {
 	for (auto &&f : _filters[id])
 	{
@@ -140,26 +140,26 @@ Entity &AScene::createEntity()
 		}
 	}
 
-void AScene::saveToJson(const std::string &fileName)
+void AScene::saveToJson(const std::string &fileName, DependenciesInjector *dependencyManager)
 {
 	std::ofstream file(fileName, std::ios::binary);
 	assert(file.is_open());
-	save<cereal::JSONOutputArchive>(file);
+	save<cereal::JSONOutputArchive>(file, dependencyManager);
 	file.close();
 }
 
-void AScene::loadFromJson(const std::string &fileName)
+void AScene::loadFromJson(const std::string &fileName, DependenciesInjector *dependencyManager)
 {
 	std::ifstream file(fileName, std::ios::binary);
 	assert(file.is_open());
-	load<cereal::JSONInputArchive>(file);
+	load<cereal::JSONInputArchive>(file, dependencyManager);
 	file.close();
 }
 
-void AScene::saveToBinary(const std::string &fileName)
+void AScene::saveToBinary(const std::string &fileName, DependenciesInjector *dependencyManager)
 {
 	std::ofstream file(fileName, std::ios::binary);
 	assert(file.is_open());
-	save<cereal::PortableBinaryOutputArchive>(file);
+	save<cereal::PortableBinaryOutputArchive>(file, dependencyManager);
 	file.close();
 }

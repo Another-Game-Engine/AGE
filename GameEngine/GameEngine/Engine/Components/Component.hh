@@ -10,6 +10,8 @@
 #include <cereal/archives/xml.hpp>
 #include <regex>
 
+class DependenciesInjector;
+
 namespace	Component
 {
 	struct Base
@@ -18,19 +20,19 @@ namespace	Component
 		virtual ~Base();
 		virtual void reset(){};
 
-		virtual void unserialize(cereal::JSONInputArchive &ar) = 0;
-		virtual void unserialize(cereal::BinaryInputArchive &ar) = 0;
-		virtual void unserialize(cereal::XMLInputArchive &ar) = 0;
-		virtual void unserialize(cereal::PortableBinaryInputArchive &ar) = 0;
-		virtual void _serialize(cereal::JSONOutputArchive &ar) = 0;
-		virtual void _serialize(cereal::BinaryOutputArchive &ar) = 0;
-		virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;
-		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar) = 0;
+		virtual void _unserialize(cereal::JSONInputArchive &ar, DependenciesInjector *dpm) = 0;
+		virtual void _unserialize(cereal::BinaryInputArchive &ar, DependenciesInjector *dpm) = 0;
+		virtual void _unserialize(cereal::XMLInputArchive &ar, DependenciesInjector *dpm) = 0;
+		virtual void _unserialize(cereal::PortableBinaryInputArchive &ar, DependenciesInjector *dpm) = 0;
+		virtual void _serialize(cereal::JSONOutputArchive &ar, DependenciesInjector *dpm) = 0;
+		virtual void _serialize(cereal::BinaryOutputArchive &ar, DependenciesInjector *dpm) = 0;
+		virtual void _serialize(cereal::XMLOutputArchive &ar, DependenciesInjector *dpm) = 0;
+		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar, DependenciesInjector *dpm) = 0;
 
 		template <typename Archive>
-		void serializeBase(Archive &ar)
+		void serializeBase(Archive &ar, DependenciesInjector *dependecyInjector)
 		{
-			_serialize(ar);
+			_serialize(ar, dependecyInjector);
 		}
 
 	protected:
@@ -70,42 +72,42 @@ namespace	Component
 			return id;
 		}
 
-		virtual void unserialize(cereal::JSONInputArchive &ar)
+		virtual void _unserialize(cereal::JSONInputArchive &ar, DependenciesInjector *dpm)
 		{
 			ar(*(dynamic_cast<T*>(this)));
 		}
 
-		virtual void unserialize(cereal::BinaryInputArchive &ar)
+		virtual void _unserialize(cereal::BinaryInputArchive &ar, DependenciesInjector *dpm)
 		{
 			ar(*(dynamic_cast<T*>(this)));
 		}
 
-		virtual void unserialize(cereal::XMLInputArchive &ar)
+		virtual void _unserialize(cereal::XMLInputArchive &ar, DependenciesInjector *dpm)
 		{
 			ar(*(dynamic_cast<T*>(this)));
 		}
 
-		virtual void unserialize(cereal::PortableBinaryInputArchive &ar)
+		virtual void _unserialize(cereal::PortableBinaryInputArchive &ar, DependenciesInjector *dpm)
 		{
 			ar(*(dynamic_cast<T*>(this)));
 		}
 
-		virtual void _serialize(cereal::JSONOutputArchive &ar)
+		virtual void _serialize(cereal::JSONOutputArchive &ar, DependenciesInjector *dpm)
 		{
 			ar(cereal::make_nvp(name(), *dynamic_cast<T*>(this)));
 		}
 
-		virtual void _serialize(cereal::BinaryOutputArchive &ar)
+		virtual void _serialize(cereal::BinaryOutputArchive &ar, DependenciesInjector *dpm)
 		{
 			ar(*dynamic_cast<T*>(this));
 		}
 
-		virtual void _serialize(cereal::XMLOutputArchive &ar)
+		virtual void _serialize(cereal::XMLOutputArchive &ar, DependenciesInjector *dpm)
 		{
 			ar(cereal::make_nvp(name(), *dynamic_cast<T*>(this)));
 		}
 
-		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar)
+		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar, DependenciesInjector *dpm)
 		{
 			ar(*dynamic_cast<T*>(this));
 		}

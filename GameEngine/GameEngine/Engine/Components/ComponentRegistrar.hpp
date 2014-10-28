@@ -3,7 +3,8 @@
 #include <map>
 #include <functional>
 #include <cereal/cereal.hpp>
-//#include <Components/Component.hh>
+
+class DependenciesInjector;
 
 namespace Component
 {
@@ -36,13 +37,13 @@ public:
 	}
 
 	template <class Archive>
-	Component::Base *createComponentFromType(std::size_t type, Archive &ar, std::size_t &typeId)
+	Component::Base *createComponentFromType(std::size_t type, Archive &ar, std::size_t &typeId, DependenciesInjector *dpm)
 	{
 		auto &it = _collection.find(type);
 		auto &typeIt = _typeId.find(type);
 		assert((it != std::end(_collection) || typeIt != std::end(_typeId)) && "Component has not been registered");
 		auto res = (it->second)();
-		res->unserialize(ar);
+		res->_unserialize(ar, dpm);
 		typeId = typeIt->second;
 		return res;
 	}

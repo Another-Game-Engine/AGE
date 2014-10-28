@@ -57,10 +57,10 @@ public:
 		_filters[id].remove(filter);
 	}
 
-	void                    informFiltersTagAddition(TAG_ID id, EntityData &&entity);
-	void                    informFiltersTagDeletion(TAG_ID id, EntityData &&entity);
-	void                    informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity);
-	void                    informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity);
+	void                    informFiltersTagAddition(TAG_ID id, const EntityData &entity);
+	void                    informFiltersTagDeletion(TAG_ID id, const EntityData &entity);
+	void                    informFiltersComponentAddition(COMPONENT_ID id, const EntityData &entity);
+	void                    informFiltersComponentDeletion(COMPONENT_ID id, const EntityData &entity);
 
 	Entity &createEntity();
 	void destroy(const Entity &e);
@@ -124,13 +124,13 @@ public:
 		return false;
 	}
 
-	void saveToJson(const std::string &fileName);
-	void loadFromJson(const std::string &fileName);
-	void saveToBinary(const std::string &fileName);
+	void saveToJson(const std::string &fileName, DependenciesInjector *dependencyManager);
+	void loadFromJson(const std::string &fileName, DependenciesInjector *dependencyManager);
+	void saveToBinary(const std::string &fileName, DependenciesInjector *dependencyManager);
 
 
 	template <typename Archive>
-	void save(std::ofstream &s)
+	void save(std::ofstream &s, DependenciesInjector *dependencyManager)
 	{
 		Archive ar(s);
 
@@ -170,12 +170,12 @@ public:
 				}
 			}
 			ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), es));
-			es.serializeComponents(ar);
+			es.serializeComponents(ar, dependencyManager);
 		}
 	}
 
 	template <typename Archive>
-	void load(std::ifstream &s)
+	void load(std::ifstream &s, DependenciesInjector *dpm)
 	{
 		Archive ar(s);
 
@@ -195,7 +195,7 @@ public:
 			for (auto &hash : infos.componentsHash)
 			{
 				std::size_t componentTypeId;
-				auto ptr = ComponentRegistrar::getInstance().createComponentFromType(hash, ar, componentTypeId);
+				auto ptr = ComponentRegistrar::getInstance().createComponentFromType(hash, ar, componentTypeId, dpm);
 			}
 		//	ar(*e.get());
 		}
@@ -295,12 +295,28 @@ public:
 		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->getComponent(entity);
 	}
 
+	template <typename T>
+	bool *hasComponent(const Entity &entity)
+	{
+		COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
+		auto &e = _pool[entity.id];
+		assert(e.entity == entity);
+		return (e.barcode.hasComponent(id));
+	}
+
 	Component::Base *getComponent(const Entity &entity, COMPONENT_ID componentId)
 	{
 		auto &e = _pool[entity.id];
 		assert(e.entity == entity);
 		assert(e.barcode.hasComponent(componentId));
 		return this->_componentsManagers[componentId]->getComponentPtr(entity);
+	}
+
+	bool hasComponent(const Entity &entity, COMPONENT_ID componentId)
+	{
+		auto &e = _pool[entity.id];
+		assert(e.entity == entity);
+		return (e.barcode.hasComponent(componentId));
 	}
 
 	std::size_t getComponentHash(COMPONENT_ID componentId)

@@ -229,6 +229,8 @@ bool BenchmarkScene::userStart()
 
 #ifdef RENDERING_ACTIVATED
 
+
+
 	auto camera = createEntity();
 	GLOBAL_CAMERA = camera;
 	auto cam = addComponent<Component::CameraComponent>(camera);
@@ -239,6 +241,7 @@ bool BenchmarkScene::userStart()
 	camLink->setPosition(glm::vec3(0, 1.5, 0));
 
 	GLOBAL_FLOOR = createEntity();
+	tmp.push_back(GLOBAL_FLOOR);
 	auto link = getLink(GLOBAL_FLOOR);
 	link->setPosition(glm::vec3(0, -1, 0));
 	link->setScale(glm::vec3(100, 1, 100));
@@ -373,7 +376,7 @@ bool BenchmarkScene::userUpdate(double time)
 		for (auto i = 0; i < 30; ++i)
 		{
 			auto e = createEntity();
-
+			tmp.push_back(e);
 #ifdef LIFETIME_ACTIVATED
 			addComponent<Component::Lifetime>(e, 5.0f);
 #endif
@@ -484,68 +487,30 @@ bool BenchmarkScene::userUpdate(double time)
 	ImGui::Render();
 #endif
 
-	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
-
-	octree->getCommandQueue().releaseReadability();
 	static int ooo = 0;
 	++ooo;
 	if (ooo == 100)
 	{
-		saveToJson("SAVE_TEST.json");
-		clearAllEntities();
-		loadFromJson("SAVE_TEST.json");
-	//{
-	//	GLOBAL_CATWOMAN = createEntity();
-	//	auto _l = getLink(GLOBAL_CATWOMAN);
-
-	//	static bool useOnce = false;
-	//	_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-	//	_l->setPosition(glm::vec3(-4, 0, 0));
-	//	_l->setScale(glm::vec3(0.007f));
-	//	auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
-	//	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
-	//	for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-	//	{
-	//		_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 0.1f);
-	//		_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
-	//		_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
-	//		//_renderManager->setMaterial<gl::Texture_normal>(getComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN)->getMaterial()->datas[index], _renderManager->getDefaultTexture2D());
-	//	}
-	//	GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
-	//		getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
-	//		getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
-	//		);
-	//	_m->setAnimation(GLOBAL_CAT_ANIMATION);
-	//}
-
-	//{
-	//	GLOBAL_LIGHT = createEntity();
-	//	auto e = GLOBAL_LIGHT;
-	//	auto _l = getLink(e);
-	//	_l->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-	//	_l->setScale(glm::vec3(0.05f));
-	//	auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-	//	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-	//	for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-	//	{
-	//		_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
-	//		_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
-	//		_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
-	//	}
-	//	getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
-	//	addComponent<Component::PointLight>(GLOBAL_LIGHT)->set(glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));
-	//}
-{
-auto camera = createEntity();
-	GLOBAL_CAMERA = camera;
-	auto cam = addComponent<Component::CameraComponent>(camera);
-
-	auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
-
-	auto camLink = getLink(camera);
-	camLink->setPosition(glm::vec3(0, 1.5, 0));
-}
+//		saveToJson("SAVE_TEST.json", this);
+		//clearAllEntities();
+		for (auto &e : tmp)
+			destroy(e);
+		tmp.clear();
+	//	loadFromJson("SAVE_TEST.json", this);
+//{
+//auto camera = createEntity();
+//	GLOBAL_CAMERA = camera;
+//	auto cam = addComponent<Component::CameraComponent>(camera);
+//
+//	auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+//
+//	auto camLink = getLink(camera);
+//	camLink->setPosition(glm::vec3(0, 1.5, 0));
+//}
 //		exit(0);
-	}
+	}	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
+
+	octree->getCommandQueue().releaseReadability();
+
 	return true;
 }

@@ -28,7 +28,7 @@ void EntityFilter::unRequireTag(TAG_ID id)
 	_scene.lock()->filterUnsubscribe(id, this);
 }
 
-void EntityFilter::componentAdded(EntityData &&e, COMPONENT_ID typeId)
+void EntityFilter::componentAdded(const EntityData &e, COMPONENT_ID typeId)
 {
 	if (e.barcode.match(_barcode))
 	{
@@ -41,7 +41,7 @@ void EntityFilter::componentAdded(EntityData &&e, COMPONENT_ID typeId)
 	}
 }
 
-void EntityFilter::componentRemoved(EntityData &&e, COMPONENT_ID typeId)
+void EntityFilter::componentRemoved(const EntityData &e, COMPONENT_ID typeId)
 {
 	if (!e.barcode.match(_barcode))
 	{
@@ -54,7 +54,7 @@ void EntityFilter::componentRemoved(EntityData &&e, COMPONENT_ID typeId)
 	}
 }
 
-void EntityFilter::tagAdded(EntityData &&e, TAG_ID typeId)
+void EntityFilter::tagAdded(const EntityData &e, TAG_ID typeId)
 {
 	if (e.barcode.match(_barcode))
 	{
@@ -67,7 +67,7 @@ void EntityFilter::tagAdded(EntityData &&e, TAG_ID typeId)
 	}
 }
 
-void EntityFilter::tagRemoved(EntityData &&e, TAG_ID typeId)
+void EntityFilter::tagRemoved(const EntityData &e, TAG_ID typeId)
 {
 	if (!e.barcode.match(_barcode))
 	{

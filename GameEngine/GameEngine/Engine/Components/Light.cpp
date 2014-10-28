@@ -29,11 +29,11 @@ namespace Component
 		return (*this);
 	}
 
-	void PointLight::reset(AScene *)
+	void PointLight::reset(AScene *scene)
 	{
 		assert(!_key.invalid());
-		_scene->getLink(entityId)->unregisterOctreeObject(_key);
-		_scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
+		scene->getLink(entityId)->unregisterOctreeObject(_key);
+		scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
 		_key = AGE::PrepareKey();
 	}
 

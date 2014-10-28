@@ -110,4 +110,5 @@ private:
 	Entity GLOBAL_FLOOR;
 	Entity GLOBAL_HEAD;
 	gl::Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
+	std::vector<Entity> tmp;
 };
