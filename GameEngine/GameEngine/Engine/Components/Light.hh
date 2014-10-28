@@ -10,7 +10,7 @@ namespace gl { class GeometryManager; class Vertices; class Indices; }
 namespace Component
 {
 
-	class PointLight : public ComponentBase<PointLight>
+	struct PointLight : public ComponentBase<PointLight>
 	{
 	public:
 		PointLight();

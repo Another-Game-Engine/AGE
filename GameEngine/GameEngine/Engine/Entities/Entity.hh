@@ -8,9 +8,9 @@
 #include "EntityTypedef.hpp"
 
 #include <cereal/cereal.hpp>
-#include <cereal/types/bitset.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/json.hpp>
+#include <cereal/types/bitset.hpp>
 
 #include <Core/Link.hpp>
 

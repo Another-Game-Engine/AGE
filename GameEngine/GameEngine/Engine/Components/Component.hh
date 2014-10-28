@@ -110,16 +110,22 @@ namespace	Component
 			ar(*dynamic_cast<T*>(this));
 		}
 
-		ENTITY_ID entityId;
-	private:
-		ComponentBase(ComponentBase &other);
-		ComponentBase &operator=(ComponentBase const &o);
-
 		static std::string &name()
 		{
 			static std::string _name = typeid(T).name();
 			return _name;
 		}
+
+		static std::size_t &hash_code()
+		{
+			static std::size_t _name = typeid(T).hash_code();
+			return _name;
+		}
+
+		ENTITY_ID entityId;
+	private:
+		ComponentBase(ComponentBase &other);
+		ComponentBase &operator=(ComponentBase const &o);
 	protected:
 		struct PostSerializationInterface
 		{};

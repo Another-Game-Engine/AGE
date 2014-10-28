@@ -12,6 +12,7 @@ class AComponentManager
 public:
 	AComponentManager()
 		: _reorder(false)
+		, _componentHash(-1)
 	{}
 	virtual ~AComponentManager()
 	{}
@@ -25,8 +26,10 @@ public:
 
 	virtual void getDatabaseRegister(std::size_t &hash, unsigned short &id) const = 0;
 
+	inline std::size_t getHashCode() const { return _componentHash; }
 protected:
 	bool _reorder;
+	std::size_t _componentHash;
 };
 
 template <typename T>
@@ -37,6 +40,7 @@ public:
 		: _scene(scene)
 		, _size(0)
 	{
+		_componentHash = T::hash_code();
 	}
 
 	virtual ~ComponentManager()

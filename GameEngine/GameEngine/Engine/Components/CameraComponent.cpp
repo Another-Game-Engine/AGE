@@ -50,8 +50,7 @@ namespace Component
 
 	void CameraComponent::reset(AScene *scene)
 	{
-		if (!_key.invalid())
-			assert(0);
+		assert(!_key.invalid());
 		scene->getLink(entityId)->unregisterOctreeObject(_key);
 		scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
 	}

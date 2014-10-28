@@ -169,6 +169,13 @@ void BenchmarkScene::initRendering()
 
 bool BenchmarkScene::userStart()
 {
+	REGISTER_COMPONENT_TYPE(Component::CameraComponent);
+	REGISTER_COMPONENT_TYPE(Component::MeshRenderer);
+	REGISTER_COMPONENT_TYPE(Component::Lifetime);
+	REGISTER_COMPONENT_TYPE(Component::RigidBody);
+	REGISTER_COMPONENT_TYPE(Component::PointLight);
+
+
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis);
 
@@ -480,7 +487,65 @@ bool BenchmarkScene::userUpdate(double time)
 	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
 
 	octree->getCommandQueue().releaseReadability();
+	static int ooo = 0;
+	++ooo;
+	if (ooo == 100)
+	{
+		saveToJson("SAVE_TEST.json");
+		clearAllEntities();
+		loadFromJson("SAVE_TEST.json");
+	//{
+	//	GLOBAL_CATWOMAN = createEntity();
+	//	auto _l = getLink(GLOBAL_CATWOMAN);
 
-//	saveToJson("SAVE_TEST.json");
+	//	static bool useOnce = false;
+	//	_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+	//	_l->setPosition(glm::vec3(-4, 0, 0));
+	//	_l->setScale(glm::vec3(0.007f));
+	//	auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
+	//	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
+	//	for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+	//	{
+	//		_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 0.1f);
+	//		_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+	//		_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+	//		//_renderManager->setMaterial<gl::Texture_normal>(getComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN)->getMaterial()->datas[index], _renderManager->getDefaultTexture2D());
+	//	}
+	//	GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
+	//		getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
+	//		getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
+	//		);
+	//	_m->setAnimation(GLOBAL_CAT_ANIMATION);
+	//}
+
+	//{
+	//	GLOBAL_LIGHT = createEntity();
+	//	auto e = GLOBAL_LIGHT;
+	//	auto _l = getLink(e);
+	//	_l->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	//	_l->setScale(glm::vec3(0.05f));
+	//	auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+	//	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+	//	for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+	//	{
+	//		_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
+	//		_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+	//		_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+	//	}
+	//	getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+	//	addComponent<Component::PointLight>(GLOBAL_LIGHT)->set(glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));
+	//}
+{
+auto camera = createEntity();
+	GLOBAL_CAMERA = camera;
+	auto cam = addComponent<Component::CameraComponent>(camera);
+
+	auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+
+	auto camLink = getLink(camera);
+	camLink->setPosition(glm::vec3(0, 1.5, 0));
+}
+//		exit(0);
+	}
 	return true;
 }

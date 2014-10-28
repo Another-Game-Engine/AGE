@@ -27,7 +27,7 @@ class System;
 class Engine;
 class EntityFilter;
 
-class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
+class AScene : public DependenciesInjector, public EntityIdRegistrar
 {
 private:
 	std::multimap<std::size_t, std::shared_ptr<System> >                    _systems;
@@ -36,8 +36,6 @@ private:
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
 	AGE::Queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
-	int test = 0;
-	std::map<std::size_t, unsigned short>                                   _typeDatabase;
 public:
 	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
@@ -63,10 +61,10 @@ public:
 	void                    informFiltersTagDeletion(TAG_ID id, EntityData &&entity);
 	void                    informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity);
 	void                    informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity);
-	void                    buildTypeDatabase();
 
 	Entity &createEntity();
 	void destroy(const Entity &e);
+	void clearAllEntities();
 
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
@@ -127,6 +125,7 @@ public:
 	}
 
 	void saveToJson(const std::string &fileName);
+	void loadFromJson(const std::string &fileName);
 	void saveToBinary(const std::string &fileName);
 
 
@@ -135,10 +134,8 @@ public:
 	{
 		Archive ar(s);
 
-		buildTypeDatabase();
-
-		// we save type database
-		ar(cereal::make_nvp("Types_database", _typeDatabase));
+		//// we save type database
+		//ar(cereal::make_nvp("Types_database", _typeDatabase));
 
 		auto entityNbr = getNumberOfEntities();
 
@@ -166,11 +163,14 @@ public:
 			{
 				if (e.barcode.hasComponent(i))
 				{
+					auto cpt = getComponent(e.getEntity(), i);
+					auto hash_code = getComponentHash(i);
+					es.componentsHash.push_back(hash_code);
 					es.components.push_back(getComponent(e.getEntity(), i));
 				}
 			}
-
 			ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), es));
+			es.serializeComponents(ar);
 		}
 	}
 
@@ -178,14 +178,28 @@ public:
 	void load(std::ifstream &s)
 	{
 		Archive ar(s);
+
 		unsigned int size = 0;
 		ar(size);
 		for (unsigned int i = 0; i < size; ++i)
 		{
-			auto e = createEntity();
-			ar(*e.get());
+			auto &e = createEntity();
+			auto &ed = _pool[e.getId()];
+
+			EntitySerializationInfos infos(ed);
+			ar(infos);
+			e.flags = infos.flags;
+			ed.barcode = infos.barcode;
+			ed.link = infos.link;
+
+			for (auto &hash : infos.componentsHash)
+			{
+				std::size_t componentTypeId;
+				auto ptr = ComponentRegistrar::getInstance().createComponentFromType(hash, ar, componentTypeId);
+			}
+		//	ar(*e.get());
 		}
-		updateEntityHandles();
+		//updateEntityHandles();
 	}
 
 
@@ -255,8 +269,6 @@ public:
 		if (_componentsManagers[id] == nullptr)
 		{
 			_componentsManagers[id] = new ComponentManager<T>(this);
-			if (_typeDatabase.find(T::getTypeId()) != std::end(_typeDatabase))
-				buildTypeDatabase();
 		}
 		if (e.barcode.hasComponent(id))
 		{
@@ -289,6 +301,12 @@ public:
 		assert(e.entity == entity);
 		assert(e.barcode.hasComponent(componentId));
 		return this->_componentsManagers[componentId]->getComponentPtr(entity);
+	}
+
+	std::size_t getComponentHash(COMPONENT_ID componentId)
+	{
+		assert(this->_componentsManagers[componentId] != nullptr);
+		return this->_componentsManagers[componentId]->getHashCode();
 	}
 
 	template <typename T>
