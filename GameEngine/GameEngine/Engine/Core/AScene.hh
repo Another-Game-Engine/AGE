@@ -23,6 +23,9 @@
 #include <Utils/Containers/Queue.hpp>
 #include <Entities/EntitySerializationInfos.hpp>
 
+//je remplace l'age queue par une std::queue pour le test
+#include <queue>
+
 class System;
 class Engine;
 class EntityFilter;
@@ -34,7 +37,7 @@ private:
 	std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 	std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
-	AGE::Queue<std::uint16_t>                                               _free;
+	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
 public:
 	AScene(std::weak_ptr<Engine> &&engine);

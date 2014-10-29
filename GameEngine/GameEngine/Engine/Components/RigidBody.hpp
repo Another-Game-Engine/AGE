@@ -64,10 +64,9 @@ namespace Component
 
 		virtual void reset(AScene *scene)
 		{
-			auto manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
 			if (_rigidBody != nullptr)
 			{
-				manager->getWorld()->removeRigidBody(_rigidBody);
+				_manager->getWorld()->removeRigidBody(_rigidBody);
 				delete _rigidBody;
 				_rigidBody = nullptr;
 			}

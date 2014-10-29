@@ -65,7 +65,7 @@ namespace AGE
 
 		std::size_t size() const
 		{
-			return _end;
+			return _end - _start;
 		}
 
 		bool empty() const
