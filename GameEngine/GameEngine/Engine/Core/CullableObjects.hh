@@ -23,6 +23,7 @@ namespace AGE
 		AABoundingBox		meshAABB;
 		gl::Key<AGE::AnimationInstance> animation;
 		std::vector<glm::mat4> bones; // we'll have to find a optimized solution than copy vector of mat4 oO
+		void reset();
 
 		Drawable();
 		virtual ~Drawable();

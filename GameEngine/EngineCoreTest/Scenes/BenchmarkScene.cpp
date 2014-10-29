@@ -335,7 +335,7 @@ bool BenchmarkScene::userUpdate(double time)
 	_timeCounter += time;
 	_chunkCounter += time;
 
-	if (rand() % 25 || ImGui::Button("Clear All"))
+	if (_frameCounter % 45 == 0 || ImGui::Button("Clear All"))
 	{
 		clearAllEntities();
 

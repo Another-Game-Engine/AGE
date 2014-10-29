@@ -218,7 +218,7 @@ namespace AGE
 	void PrepareRenderThread::removeDrawableObject(DRAWABLE_ID id)
 	{
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
-		_drawables[id].active = false;
+		_drawables[id].reset();
 #ifdef ACTIVATE_OCTREE_CULLING
 		// remove drawable from octree
 		if (_drawables[id].toAddInOctree == false)
@@ -300,7 +300,9 @@ namespace AGE
 			Mesh *uo = nullptr;
 			uo = &this->_meshs[msg.key.id];
 			for (auto &e : uo->drawableCollection)
+			{
 				removeDrawableObject(e);
+			}
 			uo->drawableCollection.clear();
 			uo->active = false;
 		})
