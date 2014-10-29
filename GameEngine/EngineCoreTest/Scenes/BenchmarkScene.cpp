@@ -241,7 +241,6 @@ bool BenchmarkScene::userStart()
 	camLink->setPosition(glm::vec3(0, 1.5, 0));
 
 	GLOBAL_FLOOR = createEntity();
-	tmp.push_back(GLOBAL_FLOOR);
 	auto link = getLink(GLOBAL_FLOOR);
 	link->setPosition(glm::vec3(0, -1, 0));
 	link->setScale(glm::vec3(100, 1, 100));
@@ -285,11 +284,11 @@ bool BenchmarkScene::userStart()
 			_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
 			//_renderManager->setMaterial<gl::Texture_normal>(getComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN)->getMaterial()->datas[index], _renderManager->getDefaultTexture2D());
 		}
-		GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
-			getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
-			getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
-			);
-		_m->setAnimation(GLOBAL_CAT_ANIMATION);
+		//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
+		//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
+		//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
+		//	);
+		//_m->setAnimation(GLOBAL_CAT_ANIMATION);
 	}
 
 	{
@@ -376,7 +375,6 @@ bool BenchmarkScene::userUpdate(double time)
 		for (auto i = 0; i < 30; ++i)
 		{
 			auto e = createEntity();
-			tmp.push_back(e);
 #ifdef LIFETIME_ACTIVATED
 			addComponent<Component::Lifetime>(e, 5.0f);
 #endif
@@ -491,24 +489,46 @@ bool BenchmarkScene::userUpdate(double time)
 	++ooo;
 	if (ooo == 100)
 	{
-//		saveToJson("SAVE_TEST.json", this);
-		//clearAllEntities();
-		for (auto &e : tmp)
-			destroy(e);
-		tmp.clear();
+		saveToJson("SAVE_TEST.json", this);
+		clearAllEntities();
 	//	loadFromJson("SAVE_TEST.json", this);
-//{
-//auto camera = createEntity();
-//	GLOBAL_CAMERA = camera;
-//	auto cam = addComponent<Component::CameraComponent>(camera);
-//
-//	auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
-//
-//	auto camLink = getLink(camera);
-//	camLink->setPosition(glm::vec3(0, 1.5, 0));
-//}
-//		exit(0);
-	}	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
+		{
+			auto camera = createEntity();
+			GLOBAL_CAMERA = camera;
+			auto cam = addComponent<Component::CameraComponent>(camera);
+
+			auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+
+			auto camLink = getLink(camera);
+			camLink->setPosition(glm::vec3(0, 1.5, 0));
+		}
+	}
+	else if (ooo == 103)
+	{
+		std::this_thread::sleep_for(std::chrono::seconds(5));
+	}
+	if (ooo == 600)
+	{
+		saveToJson("SAVE_TEST.json", this);
+		clearAllEntities();
+	//	loadFromJson("SAVE_TEST.json", this);
+		{
+			auto camera = createEntity();
+			GLOBAL_CAMERA = camera;
+			auto cam = addComponent<Component::CameraComponent>(camera);
+
+			auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+
+			auto camLink = getLink(camera);
+			camLink->setPosition(glm::vec3(0, 1.5, 0));
+		}
+	}
+	else if (ooo == 603)
+	{
+		std::this_thread::sleep_for(std::chrono::seconds(5));
+	}
+
+	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
 
 	octree->getCommandQueue().releaseReadability();
 

@@ -19,7 +19,7 @@ namespace AGE
 		glm::vec3 scale;
 		glm::quat orientation;
 		PreparableObject();
-		~PreparableObject();
+		virtual ~PreparableObject();
 	};
 
 }

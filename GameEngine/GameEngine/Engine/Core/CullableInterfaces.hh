@@ -24,7 +24,7 @@ namespace AGE
 		bool			toAddInOctree;
 
 		CullableObject();
-		~CullableObject();
+		virtual ~CullableObject();
 
 		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const = 0;
 	};
@@ -35,7 +35,7 @@ namespace AGE
 		AABoundingBox		currentAABB;
 
 		CullableBoundingBox();
-		~CullableBoundingBox();
+		virtual ~CullableBoundingBox();
 
 		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const;
 	};

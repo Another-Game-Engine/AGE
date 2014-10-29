@@ -48,14 +48,14 @@ void                    AScene::informFiltersTagAddition(TAG_ID id, const Entity
 {
 	for (auto &&f : _filters[id])
 	{
-		f->tagAdded(std::move(entity), id);
+		f->tagAdded(entity, id);
 	}
 }
 void                    AScene::informFiltersTagDeletion(TAG_ID id, const EntityData &entity)
 {
 	for (auto &&f : _filters[id])
 	{
-		f->tagRemoved(std::move(entity), id);
+		f->tagRemoved(entity, id);
 	}
 }
 
@@ -63,7 +63,7 @@ void                    AScene::informFiltersComponentAddition(COMPONENT_ID id, 
 {
 	for (auto &&f : _filters[id])
 	{
-		f->componentAdded(std::move(entity), id);
+		f->componentAdded(entity, id);
 	}
 }
 
@@ -71,7 +71,7 @@ void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, 
 {
 	for (auto &&f : _filters[id])
 	{
-		f->componentRemoved(std::move(entity), id);
+		f->componentRemoved(entity, id);
 	}
 }
 
@@ -91,6 +91,7 @@ Entity &AScene::createEntity()
 			auto id = _free.front();
 			_free.pop();
 			_pool[id].link.reset();
+			_pool[id].entity.setActive(true);
 			return _pool[id].entity;
 		}
 	}
@@ -99,24 +100,22 @@ Entity &AScene::createEntity()
 	{
 		Barcode cachedCode;
 		auto &data = _pool[e.id];
-		if (data.entity != e)
-			return;
+		assert(data.entity == e);
 		++data.entity.version;
 		data.entity.flags = 0;
 		data.entity.setActive(false);
 		cachedCode = data.barcode;
 		data.barcode.reset();
-		getLink(e)->reset();
 		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
 		{
 			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))
 			{
-				informFiltersComponentDeletion(COMPONENT_ID(i), std::move(data));
+				informFiltersComponentDeletion(COMPONENT_ID(i), data);
 				_componentsManagers[i]->removeComponent(data.entity);
 			}
 			if (i >= MAX_CPT_NUMBER && cachedCode.code.test(i))
 			{
-				informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), std::move(data));
+				informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), data);
 			}
 		}
 		_free.push(e.id);
@@ -133,9 +132,9 @@ Entity &AScene::createEntity()
 			if (e.entity.isActive())
 			{
 				destroy(e.entity);
-				++ctr;
-				if (ctr >= entityNbr)
-					break;
+				//++ctr;
+				//if (ctr >= entityNbr)
+				//	break;
 			}
 		}
 	}

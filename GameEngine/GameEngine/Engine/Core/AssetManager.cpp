@@ -91,17 +91,17 @@ namespace AGE
 		GLenum color = GL_RGB;
 		if (data.colorNumber == 3)
 		{
-			ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//GL_RGB32F;
+			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
 			color = GL_BGR;
 		}
 		else if (data.colorNumber == 4)
 		{
-			ct = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;// GL_RGBA32F;
+			ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
 			color = GL_BGRA;
 		}
 		else if (data.colorNumber == 1)
 		{
-			ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;// GL_RGB32F;
+			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
 			color = GL_LUMINANCE;
 		}
 		else

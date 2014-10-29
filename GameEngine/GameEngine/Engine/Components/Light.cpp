@@ -33,7 +33,6 @@ namespace Component
 	{
 		assert(!_key.invalid());
 		scene->getLink(entityId)->unregisterOctreeObject(_key);
-		scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
 		_key = AGE::PrepareKey();
 	}
 

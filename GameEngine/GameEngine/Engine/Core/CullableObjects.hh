@@ -25,7 +25,7 @@ namespace AGE
 		std::vector<glm::mat4> bones; // we'll have to find a optimized solution than copy vector of mat4 oO
 
 		Drawable();
-		~Drawable();
+		virtual ~Drawable();
 		Drawable(const SubMeshInstance &_m, const MaterialInstance &_mat, const glm::mat4 &_t);
 		Drawable(const SubMeshInstance &_m, const MaterialInstance &_mat, const glm::mat4 &_t, const std::vector<glm::mat4> &_bones);
 	};
