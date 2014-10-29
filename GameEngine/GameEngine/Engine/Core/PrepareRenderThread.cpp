@@ -294,6 +294,7 @@ namespace AGE
 		{
 			PointLight *co = nullptr;
 			co = &_pointLights[msg.key.id];
+			co->active = false;
 		})
 			.handle<PRTC::DeleteDrawable>([&](const PRTC::DeleteDrawable& msg)
 		{
@@ -464,7 +465,8 @@ namespace AGE
 				for (size_t index = 0; index < _pointLights.size(); ++index)
 				{
 					auto &p = _pointLights[index];
-					drawList.lights.emplace_back(p.position, p.color, p.range);
+					if (p.active)
+						drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
 
 #ifdef ACTIVATE_OCTREE_CULLING
