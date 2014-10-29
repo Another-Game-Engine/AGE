@@ -59,7 +59,7 @@ void BenchmarkScene::initRendering()
 		key.Accum.ambiant_color = _renderManager->addShaderUniform(key.Accum.shader, "ambiant_color", glm::vec3(0.01f, 0.01f, 0.01f));
 		key.merge.diffuse_buffer = _renderManager->addShaderSampler(key.merge.shader, "diffuse_buffer");
 		key.merge.light_buffer = _renderManager->addShaderSampler(key.merge.shader, "light_buffer");
-		
+
 		// create renderpass and set it
 		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 1600, 900));
 		_renderManager->pushSetTestTaskRenderPass(key.getBuff.renderPass, false, false, true);
@@ -319,7 +319,7 @@ bool BenchmarkScene::userStart()
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
 
 
-//	getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+	//	getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
@@ -335,21 +335,43 @@ bool BenchmarkScene::userUpdate(double time)
 	_timeCounter += time;
 	_chunkCounter += time;
 
-	if (_frameCounter % 45 == 0 || ImGui::Button("Clear All"))
+	if (/*_frameCounter % 45 == 0 || */ImGui::Button("Clear All"))
 	{
 		clearAllEntities();
 
-		auto camera = createEntity();
-		GLOBAL_CAMERA = camera;
-		auto cam = addComponent<Component::CameraComponent>(camera);
 
-		auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
-		
-		auto camLink = getLink(camera);
-		camLink->setPosition(glm::vec3(0, 1.5, 0));
+		// camera creation
+		{
+			auto camera = createEntity();
+			GLOBAL_CAMERA = camera;
+			auto cam = addComponent<Component::CameraComponent>(camera);
+
+			auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+
+			auto camLink = getLink(camera);
+			camLink->setPosition(glm::vec3(0, 1.5, 0));
+		}
+		// light creation
+		{
+			GLOBAL_LIGHT = createEntity();
+			auto e = GLOBAL_LIGHT;
+			auto _l = getLink(e);
+			_l->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+			_l->setScale(glm::vec3(0.05f));
+			auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+			_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+			for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+			{
+				_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
+				_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+				_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+			}
+			getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+			addComponent<Component::PointLight>(GLOBAL_LIGHT)->set(glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));			
+		}
 	}
 
-//	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
+	//	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
 
 	//if (getInstance<Input>()->getInput(SDLK_UP))
 	//	getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, 25.f * time, 0));
@@ -457,7 +479,7 @@ bool BenchmarkScene::userUpdate(double time)
 	{
 		auto link = getLink(GLOBAL_LIGHT);
 		auto pos = link->getPosition();
-		static float p[3] = {pos.x, pos.y, pos.z};
+		static float p[3] = { pos.x, pos.y, pos.z };
 		if (ImGui::SliderFloat("x", &p[0], -50, 50))
 		{
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));

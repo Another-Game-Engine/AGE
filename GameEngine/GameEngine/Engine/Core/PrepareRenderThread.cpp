@@ -265,6 +265,7 @@ namespace AGE
 			else
 				co = &_pointLights.back();
 			co->key.id = msg.key.id;
+			co->active = true;
 		})
 			.handle<PRTC::CreateDrawable>([&](const PRTC::CreateDrawable& msg)
 		{

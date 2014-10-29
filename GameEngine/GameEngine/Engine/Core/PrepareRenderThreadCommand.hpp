@@ -112,8 +112,8 @@ namespace AGE
 
 		struct DeletePointLight
 		{
-			DeletePointLight(const PrepareKey &key)
-			: key(key)
+			DeletePointLight(const PrepareKey &_key)
+			: key(_key)
 			{}
 			PrepareKey key;
 		};
