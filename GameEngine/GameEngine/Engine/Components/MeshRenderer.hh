@@ -40,11 +40,7 @@ namespace Component
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
 		MeshRenderer &setAnimation(const gl::Key<AGE::AnimationInstance> &key);
 
-		virtual void postUnserialization(AScene *scene)
-		{
-			_scene = scene;
-			std::cout << "ARRRRRRRRRRRRRRRRRRRRRRRRRRRRRG" << std::endl;
-		}
+		virtual void postUnserialization(AScene *scene);
 
 	private:
 		AGE::PrepareKey _key;
@@ -75,7 +71,17 @@ namespace Component
 	template <typename Archive>
 	void MeshRenderer::save(Archive &ar) const
 	{
-		ar(_serializationInfos);
+		auto serializationInfos = std::make_unique<SerializationInfos>();
+		if (_material)
+		{
+			serializationInfos->material = _material->path;
+		}
+		if (_mesh)
+		{
+			serializationInfos->mesh = _mesh->path;
+		}
+		//todo with animations
+		ar(serializationInfos);
 	}
 
 	template <typename Archive>

@@ -44,6 +44,7 @@ namespace AGE
 		cereal::PortableBinaryInputArchive ar(ifs);
 		ar(data);
 		material->name = data.name;
+		material->path = _filePath.getFullName();
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		for (auto &e : data.collection)
 		{
@@ -193,6 +194,7 @@ namespace AGE
 
 		meshInstance->subMeshs.resize(data.subMeshs.size());
 		meshInstance->name = data.name;
+		meshInstance->path = _filePath.getFullName();
 
 		for (std::size_t i = 0; i < data.subMeshs.size(); ++i)
 		{

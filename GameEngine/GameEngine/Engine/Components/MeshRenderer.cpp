@@ -5,6 +5,7 @@
 #include <Geometry/Material.hpp>
 #include <assert.h>
 #include <Core/PrepareRenderThread.hpp>
+#include <Core/AssetsManager.hpp>
 
 namespace Component
 {
@@ -42,9 +43,6 @@ namespace Component
 	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r)
 	{
 		_scene = scene;
-		_key = scene->getInstance<AGE::Threads::Prepare>()->addMesh();
-		scene->getLink(entityId)->registerOctreeObject(_key);
-		assert(!_key.invalid());
 		setMesh(r);
 	}
 
@@ -59,6 +57,9 @@ namespace Component
 	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<AGE::MeshInstance> &mesh)
 	{
 		_mesh = mesh;
+		_key = _scene->getInstance<AGE::Threads::Prepare>()->addMesh();
+		_scene->getLink(entityId)->registerOctreeObject(_key);
+		assert(!_key.invalid());
 		updateGeometry();
 		return (*this);
 	}
@@ -104,4 +105,31 @@ namespace Component
 		}
 		_scene->getInstance<AGE::Threads::Prepare>()->updateGeometry(_key, _mesh->subMeshs, materials, _animation);
 	}
+
+	void MeshRenderer::postUnserialization(AScene *scene)
+	{
+		_scene = scene;
+		if (_serializationInfos)
+		{
+			if (!_serializationInfos->mesh.empty())
+			{
+				auto mesh = _scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
+				if (mesh)
+				{
+					setMesh(mesh);
+				}
+			}
+			if (!_serializationInfos->material.empty())
+			{
+				auto material = _scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
+				if (material)
+				{
+					setMaterial(material);
+				}
+			}
+			// todo with animations
+		}
+	}
+
+
 }

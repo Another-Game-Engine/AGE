@@ -80,6 +80,7 @@ namespace AGE
 	struct MeshInstance
 	{
 		std::string name;
+		std::string path;
 		AGE::Vector<SubMeshInstance> subMeshs;
 	};
 
