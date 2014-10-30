@@ -26,16 +26,19 @@ namespace Component
 
 	private:
 		AScene *_scene = nullptr;
+		glm::mat4 _projection;
 		AGE::PrepareKey _key;
 	};
 
 	template <typename Archive>
 	void CameraComponent::save(Archive &ar) const
 	{
+		ar(cereal::make_nvp("projection", _projection));
 	}
 
 	template <typename Archive>
 	void CameraComponent::load(Archive &ar)
 	{
+		ar(_projection);
 	}
 }

@@ -28,6 +28,8 @@ namespace Component
 	private:
 		AGE::PrepareKey _key;
 		AScene *_scene;
+		glm::vec3 _color;
+		glm::vec3 _range;
 
 		static float computePointLightRange(float minValue, glm::vec3 const &attenuation);
 	};
@@ -35,6 +37,7 @@ namespace Component
 	template <typename Archive>
 	void PointLight::serialize(Archive &ar)
 	{
+		ar(cereal::make_nvp("color", _color), cereal::make_nvp("range", _range));
 	}
 
 }

@@ -16,8 +16,9 @@ namespace Component
 	}
 
 	CameraComponent::CameraComponent(CameraComponent const &o)
-		: _scene(o._scene),
-		_key(o._key)
+		: _scene(o._scene)
+		, _projection(1)
+		, _key(o._key)
 	{
 	}
 
@@ -25,19 +26,19 @@ namespace Component
 	{
 		_scene = o._scene;
 		_key = o._key;
+		_projection = o._projection;
 		return *this;
 	}
 
 	void CameraComponent::setProjection(const glm::mat4 &projection)
 	{
+		_projection = projection;
 		_scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, projection);
 	}
 
 	const glm::mat4 &CameraComponent::getProjection() const
 	{
-		if (_scene == nullptr)
-			assert(0);
-		return (_scene->getInstance<AGE::Threads::Prepare>()->getProjection(_key));
+		return _projection;
 	}
 
 	void CameraComponent::init(AScene *scene)
@@ -52,6 +53,7 @@ namespace Component
 	{
 		assert(!_key.invalid());
 		scene->getLink(entityId)->unregisterOctreeObject(_key);
+		_projection = glm::mat4(1);
 	}
 
 };

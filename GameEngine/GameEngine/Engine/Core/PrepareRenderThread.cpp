@@ -155,13 +155,6 @@ namespace AGE
 		return (*this);
 	}
 
-	glm::mat4 const &PrepareRenderThread::getProjection(const PrepareKey &key)
-	{
-		if (key.id >= _cameras.size())
-			assert(0);
-		return (_cameras[key.id].projection);
-	}
-
 	PrepareRenderThread &PrepareRenderThread::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)

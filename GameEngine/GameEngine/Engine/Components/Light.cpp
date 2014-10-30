@@ -7,6 +7,9 @@
 namespace Component
 {
 	PointLight::PointLight()
+		: _scene(nullptr)
+		, _range(1)
+		, _color(1)
 	{
 	}
 
@@ -18,6 +21,8 @@ namespace Component
 	PointLight::PointLight(PointLight const &o)
 		: _scene(o._scene),
 		_key(o._key)
+		, _range(o._range)
+		, _color(o._color)
 	{
 
 	}
@@ -26,6 +31,8 @@ namespace Component
 	{
 		_scene = p._scene;
 		_key = p._key;
+		_range = p._range;
+		_color = p._color;
 		return (*this);
 	}
 
@@ -34,10 +41,14 @@ namespace Component
 		assert(!_key.invalid());
 		scene->getLink(entityId)->unregisterOctreeObject(_key);
 		_key = AGE::PrepareKey();
+		_color = glm::vec3(1);
+		_range = glm::vec3(1);
 	}
 
 	void PointLight::init(AScene *scene)
 	{
+		_color = glm::vec3(1);
+		_range = glm::vec3(1);
 		_scene = scene;
 		_key = scene->getInstance<AGE::Threads::Prepare>()->addPointLight();
 		scene->getLink(entityId)->registerOctreeObject(_key);
@@ -47,7 +58,8 @@ namespace Component
 	PointLight &PointLight::set(glm::vec3 const &color, glm::vec3 const &range)
 	{
 		float	maxRange = computePointLightRange(256, range);
-
+		_color = color;
+		_range = range;
 		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(color, range, _key);
 		return (*this);
 	}

@@ -51,7 +51,6 @@ namespace AGE
 			, const Vector<MaterialInstance> &materials
 			, const gl::Key<AGE::AnimationInstance> &animation);
 		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
-		glm::mat4 const &getProjection(const PrepareKey &id);
 
 	private:
 		OctreeNode *_octree;
