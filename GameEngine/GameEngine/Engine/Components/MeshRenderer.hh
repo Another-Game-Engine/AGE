@@ -10,6 +10,7 @@
 #include <Core/AScene.hh>
 #include <Core/PrepareKey.hpp>
 #include <Skinning/AnimationInstance.hpp>
+#include <cereal/types/memory.hpp>
 
 namespace AGE
 {
@@ -19,7 +20,6 @@ namespace AGE
 
 namespace Component
 {
-
 	struct MeshRenderer : public Component::ComponentBase<MeshRenderer>
 	{
 		MeshRenderer();
@@ -40,12 +40,32 @@ namespace Component
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
 		MeshRenderer &setAnimation(const gl::Key<AGE::AnimationInstance> &key);
 
+		virtual void postUnserialization(AScene *scene)
+		{
+			_scene = scene;
+			std::cout << "ARRRRRRRRRRRRRRRRRRRRRRRRRRRRRG" << std::endl;
+		}
+
 	private:
 		AGE::PrepareKey _key;
 		AScene *_scene;
 		std::shared_ptr<AGE::MeshInstance> _mesh;
 		std::shared_ptr<AGE::MaterialSetInstance> _material;
 		gl::Key<AGE::AnimationInstance> _animation;
+
+		struct SerializationInfos
+		{
+			std::string mesh;
+			std::string material;
+			std::string animation;
+			template < typename Archive >
+			void serialize(Archive &ar)
+			{
+				ar(mesh, material, animation);
+			}
+		};
+
+		std::unique_ptr<SerializationInfos> _serializationInfos;
 
 		void updateGeometry();
 		MeshRenderer(MeshRenderer const &) = delete;
@@ -55,12 +75,12 @@ namespace Component
 	template <typename Archive>
 	void MeshRenderer::save(Archive &ar) const
 	{
-		ar(_mesh != nullptr ? _mesh->name : "", _material != nullptr ? _material->name : "");
+		ar(_serializationInfos);
 	}
 
 	template <typename Archive>
 	void MeshRenderer::load(Archive &ar)
 	{
-
+		ar(_serializationInfos);
 	}
 }

@@ -127,13 +127,13 @@ public:
 		return false;
 	}
 
-	void saveToJson(const std::string &fileName, DependenciesInjector *dependencyManager);
-	void loadFromJson(const std::string &fileName, DependenciesInjector *dependencyManager);
-	void saveToBinary(const std::string &fileName, DependenciesInjector *dependencyManager);
+	void saveToJson(const std::string &fileName);
+	void loadFromJson(const std::string &fileName);
+	void saveToBinary(const std::string &fileName);
 
 
 	template <typename Archive>
-	void save(std::ofstream &s, DependenciesInjector *dependencyManager)
+	void save(std::ofstream &s)
 	{
 		Archive ar(s);
 
@@ -173,12 +173,12 @@ public:
 				}
 			}
 			ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), es));
-			es.serializeComponents(ar, dependencyManager);
+			es.serializeComponents(ar, this);
 		}
 	}
 
 	template <typename Archive>
-	void load(std::ifstream &s, DependenciesInjector *dpm)
+	void load(std::ifstream &s)
 	{
 		Archive ar(s);
 
@@ -192,13 +192,16 @@ public:
 			EntitySerializationInfos infos(ed);
 			ar(infos);
 			e.flags = infos.flags;
-			ed.barcode = infos.barcode;
 			ed.link = infos.link;
 
 			for (auto &hash : infos.componentsHash)
 			{
 				std::size_t componentTypeId;
-				auto ptr = ComponentRegistrar::getInstance().createComponentFromType(hash, ar, componentTypeId, dpm);
+				auto ptr = ComponentRegistrar::getInstance().createComponentFromType(hash, ar, componentTypeId, this);
+				ed.barcode.setComponent(componentTypeId);
+				assert(_componentsManagers[componentTypeId] != nullptr);
+				_componentsManagers[componentTypeId]->addComponentPtr(e, ptr);
+				informFiltersComponentAddition(componentTypeId, ed);
 			}
 		//	ar(*e.get());
 		}
@@ -209,6 +212,17 @@ public:
 	////////////////////////
 	///////
 	// Component Manager Get / Set
+
+	template <typename T>
+	void registerComponentType()
+	{
+		COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
+		if (_componentsManagers[id] == nullptr)
+		{
+			_componentsManagers[id] = new ComponentManager<T>(this);
+		}
+		REGISTER_COMPONENT_TYPE(T);
+	}
 
 	template <typename T>
 	void clearComponentsType()
@@ -237,7 +251,7 @@ public:
 		if (data.entity != e)
 			return;
 		data.barcode.setTag(tag);
-		informFiltersTagAddition(tag, std::move(data));
+		informFiltersTagAddition(tag, data);
 	}
 
 	void removeTag(Entity &e, TAG_ID tag)
@@ -246,7 +260,7 @@ public:
 		if (data.entity != e)
 			return;
 		data.barcode.unsetTag(tag);
-		informFiltersTagDeletion(tag, std::move(data));
+		informFiltersTagDeletion(tag, data);
 	}
 
 	bool isTagged(Entity &e, TAG_ID tag)
@@ -282,7 +296,7 @@ public:
 
 		e.barcode.setComponent(id);
 
-		informFiltersComponentAddition(COMPONENT_ID(T::getTypeId()), std::move(e));
+		informFiltersComponentAddition(COMPONENT_ID(T::getTypeId()), e);
 		return res;
 	}
 
@@ -341,7 +355,7 @@ public:
 		}
 		static_cast<ComponentManager<T>*>(_componentsManagers[id])->removeComponent(entity);
 		e.barcode.unsetComponent(id);
-		informFiltersComponentDeletion(id, std::move(e));
+		informFiltersComponentDeletion(id, e);
 		return true;
 	}
 

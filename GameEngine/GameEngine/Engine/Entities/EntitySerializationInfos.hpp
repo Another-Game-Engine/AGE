@@ -30,10 +30,10 @@ struct EntitySerializationInfos
 	}
 
 	template < typename Archive >
-	void serializeComponents(Archive &ar, DependenciesInjector *dependencyManager) const
+	void serializeComponents(Archive &ar, AScene *scene) const
 	{
 		for (auto &e : components)
-			e->serializeBase(ar, dependencyManager);
+			e->serializeBase(ar, scene);
 	}
 
 	template < typename Archive >

@@ -169,11 +169,14 @@ void BenchmarkScene::initRendering()
 
 bool BenchmarkScene::userStart()
 {
-	REGISTER_COMPONENT_TYPE(Component::CameraComponent);
-	REGISTER_COMPONENT_TYPE(Component::MeshRenderer);
-	REGISTER_COMPONENT_TYPE(Component::Lifetime);
-	REGISTER_COMPONENT_TYPE(Component::RigidBody);
-	REGISTER_COMPONENT_TYPE(Component::PointLight);
+	// We register component types so that we can load components from file
+	// It'll create the component manager for the scene and
+	// register the type in the global component register manager
+	registerComponentType<Component::CameraComponent>();
+	registerComponentType<Component::MeshRenderer>();
+	registerComponentType<Component::Lifetime>();
+	registerComponentType<Component::RigidBody>();
+	registerComponentType<Component::PointLight>();
 
 
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
@@ -337,9 +340,9 @@ bool BenchmarkScene::userUpdate(double time)
 
 	if (ImGui::Button("Save -> Clear -> Reload"))
 	{
-		saveToJson("SAVE_TEST.json", this);
+		saveToJson("SAVE_TEST.json");
 		clearAllEntities();
-		loadFromJson("SAVE_TEST.json", this);
+		loadFromJson("SAVE_TEST.json");
 
 		//// camera creation
 		//{

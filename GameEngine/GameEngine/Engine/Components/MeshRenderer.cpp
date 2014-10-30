@@ -11,6 +11,7 @@ namespace Component
 	MeshRenderer::MeshRenderer() :
 		Component::ComponentBase<MeshRenderer>(),
 		_scene(nullptr)
+		, _serializationInfos(nullptr)
 	{
 	}
 
@@ -21,7 +22,10 @@ namespace Component
 	MeshRenderer::MeshRenderer(MeshRenderer &&o)
 		: ComponentBase<MeshRenderer>(std::move(o)),
 		_scene(o._scene),
-		_key(o._key)
+		_key(o._key),
+		_serializationInfos(std::move(o._serializationInfos)),
+		_material(o._material),
+		_mesh(o._mesh)
 	{
 	}
 
@@ -29,6 +33,9 @@ namespace Component
 	{
 		_scene = o._scene;
 		_key = o._key;
+		_serializationInfos = std::move(o._serializationInfos);
+		_material = o._material;
+		_mesh = o._mesh;
 		return *this;
 	}
 

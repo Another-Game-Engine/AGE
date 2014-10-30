@@ -139,26 +139,26 @@ Entity &AScene::createEntity()
 		}
 	}
 
-void AScene::saveToJson(const std::string &fileName, DependenciesInjector *dependencyManager)
+void AScene::saveToJson(const std::string &fileName)
 {
 	std::ofstream file(fileName, std::ios::binary);
 	assert(file.is_open());
-	save<cereal::JSONOutputArchive>(file, dependencyManager);
+	save<cereal::JSONOutputArchive>(file);
 	file.close();
 }
 
-void AScene::loadFromJson(const std::string &fileName, DependenciesInjector *dependencyManager)
+void AScene::loadFromJson(const std::string &fileName)
 {
 	std::ifstream file(fileName, std::ios::binary);
 	assert(file.is_open());
-	load<cereal::JSONInputArchive>(file, dependencyManager);
+	load<cereal::JSONInputArchive>(file);
 	file.close();
 }
 
-void AScene::saveToBinary(const std::string &fileName, DependenciesInjector *dependencyManager)
+void AScene::saveToBinary(const std::string &fileName)
 {
 	std::ofstream file(fileName, std::ios::binary);
 	assert(file.is_open());
-	save<cereal::PortableBinaryOutputArchive>(file, dependencyManager);
+	save<cereal::PortableBinaryOutputArchive>(file);
 	file.close();
 }

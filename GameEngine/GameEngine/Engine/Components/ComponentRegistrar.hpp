@@ -4,7 +4,7 @@
 #include <functional>
 #include <cereal/cereal.hpp>
 
-class DependenciesInjector;
+class AScene;
 
 namespace Component
 {
@@ -37,13 +37,13 @@ public:
 	}
 
 	template <class Archive>
-	Component::Base *createComponentFromType(std::size_t type, Archive &ar, std::size_t &typeId, DependenciesInjector *dpm)
+	Component::Base *createComponentFromType(std::size_t type, Archive &ar, std::size_t &typeId, AScene *scene)
 	{
 		auto &it = _collection.find(type);
 		auto &typeIt = _typeId.find(type);
 		assert((it != std::end(_collection) || typeIt != std::end(_typeId)) && "Component has not been registered");
 		auto res = (it->second)();
-		res->_unserialize(ar, dpm);
+		res->_unserialize(ar, scene);
 		typeId = typeIt->second;
 		return res;
 	}
