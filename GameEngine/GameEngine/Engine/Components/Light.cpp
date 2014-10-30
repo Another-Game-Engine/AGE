@@ -82,4 +82,10 @@ namespace Component
 		}
 	}
 
+
+	void PointLight::postUnserialization(AScene *scene)
+	{
+		init(scene);
+		set(_color, _range);
+	}
 }

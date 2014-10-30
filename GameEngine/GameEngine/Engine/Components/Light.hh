@@ -25,6 +25,7 @@ namespace Component
 
 		template <typename Archive>void serialize(Archive &ar);
 
+		virtual void postUnserialization(AScene *scene);
 	private:
 		AGE::PrepareKey _key;
 		AScene *_scene;

@@ -23,7 +23,7 @@ namespace Component
 
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
-
+		virtual void postUnserialization(AScene *scene);
 	private:
 		AScene *_scene = nullptr;
 		glm::mat4 _projection;

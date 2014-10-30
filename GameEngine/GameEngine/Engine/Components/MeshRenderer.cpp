@@ -116,7 +116,7 @@ namespace Component
 				auto mesh = _scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 				if (mesh)
 				{
-					setMesh(mesh);
+					init(_scene, mesh);
 				}
 			}
 			if (!_serializationInfos->material.empty())

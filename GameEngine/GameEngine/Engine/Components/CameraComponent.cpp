@@ -56,5 +56,11 @@ namespace Component
 		_projection = glm::mat4(1);
 	}
 
+	void CameraComponent::postUnserialization(AScene *scene)
+	{
+		init(scene);
+		setProjection(_projection);
+	}
+
 };
 

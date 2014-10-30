@@ -356,7 +356,7 @@ bool BenchmarkScene::userUpdate(double time)
 			camLink->setPosition(glm::vec3(0, 1.5, 0));
 		}
 		// light creation
-		{
+		/*{
 			GLOBAL_LIGHT = createEntity();
 			auto e = GLOBAL_LIGHT;
 			auto _l = getLink(e);
@@ -372,7 +372,7 @@ bool BenchmarkScene::userUpdate(double time)
 			}
 			getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
 			addComponent<Component::PointLight>(GLOBAL_LIGHT)->set(glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));			
-		}
+		}*/
 	}
 
 	//	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
