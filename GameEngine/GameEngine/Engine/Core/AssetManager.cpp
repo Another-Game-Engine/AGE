@@ -306,6 +306,11 @@ namespace AGE
 			++ctr;
 		}
 
+		m->createSphereSimpleForm();
+		//mesh.vertices = m->getSimpleFormGeo(gl::SimpleForm::SPHERE);
+		//mesh.indices = m->getSimpleFormId(gl::SimpleForm::SPHERE);
+		//mesh.indexPool = m->simpleFormPoolId;
+		//mesh.vertexPool = m->simpleFormPoolGeo;
 		mesh.vertices = m->addVertices(maxSize, nbrBuffer, buffer, pools.first);
 		mesh.indices = m->addIndices(data.indices.size(), data.indices, pools.second);
 		mesh.vertexPool = pools.first;

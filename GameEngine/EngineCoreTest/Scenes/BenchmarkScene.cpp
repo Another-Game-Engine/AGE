@@ -456,6 +456,8 @@ bool BenchmarkScene::userUpdate(double time)
 			drawable.material = renderManager->getDefaultMaterial();
 			drawable.mesh.vertices = renderManager->getSimpleFormGeo(gl::SimpleForm::SPHERE);
 			drawable.mesh.indices = renderManager->getSimpleFormId(gl::SimpleForm::SPHERE);
+			drawable.mesh.vertexPool = renderManager->simpleFormPoolGeo;
+			drawable.mesh.indexPool = renderManager->simpleFormPoolId;
 			renderManager->locationStorage.setLocation(index + 1, collection.lights[index]);
 			lights.push_back(drawable);
 		}

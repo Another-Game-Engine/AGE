@@ -23,9 +23,8 @@ namespace gl
 		{
 			if (_data.size() <= index)
 			{
-				_data.push_back(InternalData());
+				_data.resize(index + 1);
 			}
-			assert(_data.size() > index);
 			auto &data = _data[index];
 			if (!data.trash.empty())
 			{

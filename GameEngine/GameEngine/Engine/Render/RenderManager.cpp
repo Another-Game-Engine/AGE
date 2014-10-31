@@ -704,16 +704,14 @@ namespace gl
 	Key<Vertices> RenderManager::getSimpleFormGeo(SimpleForm form)
 	{
 		auto key = _simpleFormGeo.find(form);
-		if (key == _simpleFormGeo.end())
-			assert(0);
+		assert(key != _simpleFormGeo.end());
 		return (key->second);
 	}
 
 	Key<Indices> RenderManager::getSimpleFormId(SimpleForm form)
 	{
 		auto key = _simpleFormId.find(form);
-		if (key == _simpleFormId.end())
-			assert(0);
+		assert(key != _simpleFormId.end());
 		return (key->second);
 	}
 
