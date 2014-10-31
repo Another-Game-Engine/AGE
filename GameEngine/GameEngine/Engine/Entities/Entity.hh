@@ -11,6 +11,7 @@
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/bitset.hpp>
+#include <cereal/types/vector.hpp>
 
 #include <Core/Link.hpp>
 
@@ -120,7 +121,7 @@ private:
 	ENTITY_ID id;
 	ENTITY_VERSION version;
 	ENTITY_FLAGS flags;
-	bool active : 1;
+	bool active;
 
 	friend AScene;
 	friend AComponentManager;

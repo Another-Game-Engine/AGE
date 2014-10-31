@@ -162,3 +162,11 @@ void AScene::saveToBinary(const std::string &fileName)
 	save<cereal::PortableBinaryOutputArchive>(file);
 	file.close();
 }
+
+void AScene::loadFromBinary(const std::string &fileName)
+{
+	std::ifstream file(fileName, std::ios::binary);
+	assert(file.is_open());
+	load<cereal::PortableBinaryInputArchive>(file);
+	file.close();
+}

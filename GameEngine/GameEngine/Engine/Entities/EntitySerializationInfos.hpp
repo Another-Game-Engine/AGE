@@ -1,7 +1,7 @@
 #include "Entity.hh"
 #include <Components/Component.hh>
-#include <cereal/types/vector.hpp>
 #include <vector>
+#include <cereal/types/vector.hpp>
 
 struct EntitySerializationInfos
 {

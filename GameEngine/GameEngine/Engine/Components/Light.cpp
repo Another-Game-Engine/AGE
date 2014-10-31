@@ -19,8 +19,8 @@ namespace Component
 	}
 
 	PointLight::PointLight(PointLight const &o)
-		: _scene(o._scene),
-		_key(o._key)
+		: _scene(o._scene)
+		, _key(o._key)
 		, _range(o._range)
 		, _color(o._color)
 	{
@@ -47,8 +47,6 @@ namespace Component
 
 	void PointLight::init(AScene *scene)
 	{
-		_color = glm::vec3(1);
-		_range = glm::vec3(1);
 		_scene = scene;
 		_key = scene->getInstance<AGE::Threads::Prepare>()->addPointLight();
 		scene->getLink(entityId)->registerOctreeObject(_key);

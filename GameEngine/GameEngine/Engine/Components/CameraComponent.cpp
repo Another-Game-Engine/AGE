@@ -33,7 +33,7 @@ namespace Component
 	void CameraComponent::setProjection(const glm::mat4 &projection)
 	{
 		_projection = projection;
-		_scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, projection);
+		_scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, _projection);
 	}
 
 	const glm::mat4 &CameraComponent::getProjection() const
@@ -46,7 +46,7 @@ namespace Component
 		_scene = scene;
 		_key = scene->getInstance<AGE::Threads::Prepare>()->addCamera();
 		scene->getLink(entityId)->registerOctreeObject(_key);
-		scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, glm::perspective(60.0f, 1600.0f / 900.0f, 0.1f, 2000.0f));
+		setProjection(glm::perspective(60.0f, 1600.0f / 900.0f, 0.1f, 2000.0f));
 	}
 
 	void CameraComponent::reset(AScene *scene)

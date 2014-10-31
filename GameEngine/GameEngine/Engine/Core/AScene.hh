@@ -130,6 +130,7 @@ public:
 	void saveToJson(const std::string &fileName);
 	void loadFromJson(const std::string &fileName);
 	void saveToBinary(const std::string &fileName);
+	void loadFromBinary(const std::string &fileName);
 
 
 	template <typename Archive>
@@ -192,7 +193,9 @@ public:
 			EntitySerializationInfos infos(ed);
 			ar(infos);
 			e.flags = infos.flags;
-			ed.link = infos.link;
+			ed.link.setPosition(infos.link.getPosition());
+			ed.link.setOrientation(infos.link.getOrientation());
+			ed.link.setScale(infos.link.getScale());
 
 			for (auto &hash : infos.componentsHash)
 			{
