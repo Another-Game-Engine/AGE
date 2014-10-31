@@ -7,6 +7,9 @@
 namespace Component
 {
 	PointLight::PointLight()
+		: _scene(nullptr)
+		, _range(1)
+		, _color(1)
 	{
 	}
 
@@ -16,8 +19,10 @@ namespace Component
 	}
 
 	PointLight::PointLight(PointLight const &o)
-		: _scene(o._scene),
-		_key(o._key)
+		: _scene(o._scene)
+		, _key(o._key)
+		, _range(o._range)
+		, _color(o._color)
 	{
 
 	}
@@ -26,15 +31,18 @@ namespace Component
 	{
 		_scene = p._scene;
 		_key = p._key;
+		_range = p._range;
+		_color = p._color;
 		return (*this);
 	}
 
-	void PointLight::reset(AScene *)
+	void PointLight::reset(AScene *scene)
 	{
 		assert(!_key.invalid());
-		_scene->getLink(entityId)->unregisterOctreeObject(_key);
-		_scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
+		scene->getLink(entityId)->unregisterOctreeObject(_key);
 		_key = AGE::PrepareKey();
+		_color = glm::vec3(1);
+		_range = glm::vec3(1);
 	}
 
 	void PointLight::init(AScene *scene)
@@ -45,17 +53,12 @@ namespace Component
 		assert(!_key.invalid());
 	}
 
-	PointLight &PointLight::setPosition(glm::vec4 const &position)
-	{
-		_scene->getInstance<AGE::Threads::Prepare>()->setPosition(glm::vec3(position.x, position.y, position.z), _key);
-		return (*this);
-	}
-
-	PointLight &PointLight::set(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range)
+	PointLight &PointLight::set(glm::vec3 const &color, glm::vec3 const &range)
 	{
 		float	maxRange = computePointLightRange(256, range);
-
-		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(position, color, range, _key);
+		_color = color;
+		_range = range;
+		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(color, range, _key);
 		return (*this);
 	}
 
@@ -77,4 +80,10 @@ namespace Component
 		}
 	}
 
+
+	void PointLight::postUnserialization(AScene *scene)
+	{
+		init(scene);
+		set(_color, _range);
+	}
 }

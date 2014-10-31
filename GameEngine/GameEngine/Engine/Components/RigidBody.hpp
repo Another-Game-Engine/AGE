@@ -62,7 +62,7 @@ namespace Component
 			_mass = mass;
 		}
 
-		virtual void reset(AScene *)
+		virtual void reset(AScene *scene)
 		{
 			if (_rigidBody != nullptr)
 			{
@@ -288,6 +288,9 @@ namespace Component
 
 
 	private:
+		btCollisionShape *_collisionShape;
+		btMotionState *_motionState;
+		btRigidBody *_rigidBody;
 		BulletDynamicManager *_manager;
 		CollisionShape _shapeType;
 		btScalar _mass;
@@ -295,9 +298,6 @@ namespace Component
 		glm::vec3 _rotationConstraint;
 		glm::vec3 _transformConstraint;
 		std::string _shapeName;
-		btCollisionShape *_collisionShape;
-		btMotionState *_motionState;
-		btRigidBody *_rigidBody;
 
 	private:
 		RigidBody &operator=(RigidBody const &o);

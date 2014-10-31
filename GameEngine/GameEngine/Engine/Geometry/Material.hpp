@@ -50,5 +50,6 @@ namespace AGE
 	{
 		AGE::Vector<MaterialInstance> datas;
 		std::string name;
+		std::string path;
 	};
 }

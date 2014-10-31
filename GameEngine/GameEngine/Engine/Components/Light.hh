@@ -10,7 +10,7 @@ namespace gl { class GeometryManager; class Vertices; class Indices; }
 namespace Component
 {
 
-	class PointLight : public ComponentBase<PointLight>
+	struct PointLight : public ComponentBase<PointLight>
 	{
 	public:
 		PointLight();
@@ -21,14 +21,16 @@ namespace Component
 		virtual void reset(AScene *);
 		void init(AScene *);
 
-		PointLight &setPosition(glm::vec4 const &position);
-		PointLight &set(glm::vec3 const &position, glm::vec3 const &color = glm::vec3(1.0f), glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f));
+		PointLight &set(glm::vec3 const &color = glm::vec3(1.0f), glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f));
 
 		template <typename Archive>void serialize(Archive &ar);
 
+		virtual void postUnserialization(AScene *scene);
 	private:
 		AGE::PrepareKey _key;
 		AScene *_scene;
+		glm::vec3 _color;
+		glm::vec3 _range;
 
 		static float computePointLightRange(float minValue, glm::vec3 const &attenuation);
 	};
@@ -36,6 +38,7 @@ namespace Component
 	template <typename Archive>
 	void PointLight::serialize(Archive &ar)
 	{
+		ar(cereal::make_nvp("color", _color), cereal::make_nvp("range", _range));
 	}
 
 }

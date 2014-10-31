@@ -187,3 +187,39 @@ $RECYCLE.BIN/
 /GameEngine/Tools/AssetsEditor/*.sage
 /GameEngine/Tools/AssetsEditor/catwoman.skage
 /GameEngine/Tools/AssetsEditor/roulade.aage
+
+
+# Qt
+
+# C++ objects and libs
+
+*.slo
+*.lo
+*.o
+*.a
+*.la
+*.lai
+*.so
+*.dll
+*.dylib
+
+# Qt-es
+
+/.qmake.cache
+/.qmake.stash
+*.pro.user
+*.pro.user.*
+*.moc
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+Makefile*
+*-build-*
+
+# QtCreator
+
+*.autosave
+
+#QtCtreator Qml
+*.qmlproject.user
+*.qmlproject.user.*

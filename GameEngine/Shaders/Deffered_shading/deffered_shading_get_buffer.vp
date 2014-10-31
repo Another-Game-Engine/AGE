@@ -10,8 +10,13 @@ layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 normal;
 layout (location = 2) in vec2 texCoord;
 layout (location = 3) in vec4 tangent;
+//layout (location = 4) in vec4 blendWeight;
+//layout (location = 5) in vec4 blendIndice;
 
 uniform mat4 model_matrix;
+
+//uniform bool is_skinned = false;
+//uniform mat4 bones[200];
 
 out vec3 inter_normal;
 out vec2 inter_texCoord;
@@ -23,5 +28,17 @@ void main()
 	inter_normal = normalize(normal_matrix * vec3(normal));
 	inter_texCoord = texCoord;
 	inter_tangent = normalize(normal_matrix * vec3(tangent));
-	gl_Position = projection_matrix * view_matrix * model_matrix * position;
+
+//	if (!is_skinned)
+	{
+		gl_Position = projection_matrix * view_matrix * model_matrix * position;
+	}
+//	else
+//	{
+//		vec4 newPosition = (bones[int(blendIndice.x)] * position) * blendWeight.x;
+//		newPosition += (bones[int(blendIndice.y)] * position) * blendWeight.y;
+//		newPosition += (bones[int(blendIndice.z)] * position) * blendWeight.z;
+//		newPosition += (bones[int(blendIndice.w)] * position) * blendWeight.w;
+//		gl_Position = projection_matrix * view_matrix * model_matrix * vec4(newPosition.xyz,1);
+//	}
 }

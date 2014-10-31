@@ -124,9 +124,9 @@ namespace AGE
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
+	PrepareRenderThread &PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::SetPointLight>(position, color, range, id);
+		_commandQueue.emplace<PRTC::SetPointLight>(color, range, id);
 		return (*this);
 	}
 
@@ -155,13 +155,6 @@ namespace AGE
 		return (*this);
 	}
 
-	glm::mat4 const &PrepareRenderThread::getProjection(const PrepareKey &key)
-	{
-		if (key.id >= _cameras.size())
-			assert(0);
-		return (_cameras[key.id].projection);
-	}
-
 	PrepareRenderThread &PrepareRenderThread::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
@@ -183,12 +176,14 @@ namespace AGE
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::updateGeometry(const PrepareKey &key
+	PrepareRenderThread &PrepareRenderThread::updateGeometry(
+		const PrepareKey &key
 		, const AGE::Vector<AGE::SubMeshInstance> &meshs
-		, const AGE::Vector<AGE::MaterialInstance> &materials)
+		, const AGE::Vector<AGE::MaterialInstance> &materials
+		, const gl::Key<AGE::AnimationInstance> &animation)
 	{
 		assert(!key.invalid() || key.type != PrepareKey::Type::Drawable);
-		_commandQueue.emplace<PRTC::Geometry>(key, meshs, materials);
+		_commandQueue.emplace<PRTC::Geometry>(key, meshs, materials, animation);
 		return (*this);
 	}
 
@@ -216,7 +211,7 @@ namespace AGE
 	void PrepareRenderThread::removeDrawableObject(DRAWABLE_ID id)
 	{
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
-		_drawables[id].active = false;
+		_drawables[id].reset();
 #ifdef ACTIVATE_OCTREE_CULLING
 		// remove drawable from octree
 		if (_drawables[id].toAddInOctree == false)
@@ -263,6 +258,7 @@ namespace AGE
 			else
 				co = &_pointLights.back();
 			co->key.id = msg.key.id;
+			co->active = true;
 		})
 			.handle<PRTC::CreateDrawable>([&](const PRTC::CreateDrawable& msg)
 		{
@@ -279,7 +275,6 @@ namespace AGE
 		{
 			PointLight *l = nullptr;
 			l = &_pointLights[msg.key.id];
-			l->position = msg.position;
 			l->color = msg.color;
 			l->range = msg.range;
 		})
@@ -293,13 +288,16 @@ namespace AGE
 		{
 			PointLight *co = nullptr;
 			co = &_pointLights[msg.key.id];
+			co->active = false;
 		})
 			.handle<PRTC::DeleteDrawable>([&](const PRTC::DeleteDrawable& msg)
 		{
 			Mesh *uo = nullptr;
 			uo = &this->_meshs[msg.key.id];
 			for (auto &e : uo->drawableCollection)
+			{
 				removeDrawableObject(e);
+			}
 			uo->drawableCollection.clear();
 			uo->active = false;
 		})
@@ -321,6 +319,7 @@ namespace AGE
 				_drawables[id].scale = uo->scale;
 				_drawables[id].meshAABB = msg.submeshInstances[i].boundingBox;
 				_drawables[id].toAddInOctree = true;
+				_drawables[id].animation = msg.animation;
 			}
 		})
 			.handle<PRTC::Position>([&](const PRTC::Position& msg)
@@ -409,6 +408,12 @@ namespace AGE
 		{
 			AGE::Vector<CullableObject*> toDraw;
 
+
+			// we update animation instances
+			auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
+			animationManager->update(0.1f);
+
+
 			// Update drawable positions in Octree
 			for (auto &e : _drawables)
 			{
@@ -454,7 +459,8 @@ namespace AGE
 				for (size_t index = 0; index < _pointLights.size(); ++index)
 				{
 					auto &p = _pointLights[index];
-					drawList.lights.emplace_back(p.position, p.color, p.range);
+					if (p.active)
+						drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
 
 #ifdef ACTIVATE_OCTREE_CULLING
@@ -469,7 +475,15 @@ namespace AGE
 					e->hasBeenFound = false;
 					// all the elements are drawable for the moment (TODO)
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
-					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
+					if (!currentDrawable->animation.empty())
+					{
+						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation, animationManager->getBones(currentDrawable->animation));
+						drawList.drawables.back().animation = currentDrawable->animation;
+					}
+					else
+					{
+						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
+					}
 				}
 #else
 				for (auto &e : _drawables)

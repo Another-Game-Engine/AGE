@@ -12,6 +12,7 @@ class AComponentManager
 public:
 	AComponentManager()
 		: _reorder(false)
+		, _componentHash(-1)
 	{}
 	virtual ~AComponentManager()
 	{}
@@ -24,9 +25,12 @@ public:
 	virtual Component::Base *getComponentPtr(ENTITY_ID e) = 0;
 
 	virtual void getDatabaseRegister(std::size_t &hash, unsigned short &id) const = 0;
+	virtual void addComponentPtr(const Entity &e, Component::Base *ptr) = 0;
 
+	inline std::size_t getHashCode() const { return _componentHash; }
 protected:
 	bool _reorder;
+	std::size_t _componentHash;
 };
 
 template <typename T>
@@ -37,6 +41,7 @@ public:
 		: _scene(scene)
 		, _size(0)
 	{
+		_componentHash = T::hash_code();
 	}
 
 	virtual ~ComponentManager()
@@ -79,6 +84,20 @@ public:
 		component->init(_scene, std::forward<Args>(args)...);
 		_reorder = true;
 		return component;
+	}
+
+	// used for unserialization
+	virtual void addComponentPtr(const Entity &entity, Component::Base *component)
+	{
+		if (_components.size() <= _size)
+			_components.resize(_size + 16);
+		_componentsRefs[entity.getId()] = ENTITY_ID(_size);
+		_components[_size] = std::move(T(std::move(*(static_cast<T*>(component)))));
+		_components[_size].entityId = entity.getId();
+		_components[_size].postUnserialization(this->_scene);
+		++_size;
+		delete component;
+		_reorder = true;
 	}
 
 	T *getComponent(const Entity &e)

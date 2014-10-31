@@ -44,6 +44,7 @@ namespace AGE
 		cereal::PortableBinaryInputArchive ar(ifs);
 		ar(data);
 		material->name = data.name;
+		material->path = _filePath.getFullName();
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		for (auto &e : data.collection)
 		{
@@ -91,17 +92,17 @@ namespace AGE
 		GLenum color = GL_RGB;
 		if (data.colorNumber == 3)
 		{
-			ct = GL_RGB32F;
+			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
 			color = GL_BGR;
 		}
 		else if (data.colorNumber == 4)
 		{
-			ct = GL_RGBA32F;
+			ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
 			color = GL_BGRA;
 		}
 		else if (data.colorNumber == 1)
 		{
-			ct = GL_RGB32F;
+			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
 			color = GL_LUMINANCE;
 		}
 		else
@@ -193,6 +194,7 @@ namespace AGE
 
 		meshInstance->subMeshs.resize(data.subMeshs.size());
 		meshInstance->name = data.name;
+		meshInstance->path = _filePath.getFullName();
 
 		for (std::size_t i = 0; i < data.subMeshs.size(); ++i)
 		{

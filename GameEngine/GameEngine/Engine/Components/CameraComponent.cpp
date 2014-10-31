@@ -16,8 +16,9 @@ namespace Component
 	}
 
 	CameraComponent::CameraComponent(CameraComponent const &o)
-		: _scene(o._scene),
-		_key(o._key)
+		: _scene(o._scene)
+		, _projection(1)
+		, _key(o._key)
 	{
 	}
 
@@ -25,19 +26,19 @@ namespace Component
 	{
 		_scene = o._scene;
 		_key = o._key;
+		_projection = o._projection;
 		return *this;
 	}
 
 	void CameraComponent::setProjection(const glm::mat4 &projection)
 	{
-		_scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, projection);
+		_projection = projection;
+		_scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, _projection);
 	}
 
 	const glm::mat4 &CameraComponent::getProjection() const
 	{
-		if (_scene == nullptr)
-			assert(0);
-		return (_scene->getInstance<AGE::Threads::Prepare>()->getProjection(_key));
+		return _projection;
 	}
 
 	void CameraComponent::init(AScene *scene)
@@ -45,15 +46,20 @@ namespace Component
 		_scene = scene;
 		_key = scene->getInstance<AGE::Threads::Prepare>()->addCamera();
 		scene->getLink(entityId)->registerOctreeObject(_key);
-		scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, glm::perspective(60.0f, 1600.0f / 900.0f, 0.1f, 2000.0f));
+		setProjection(glm::perspective(60.0f, 1600.0f / 900.0f, 0.1f, 2000.0f));
 	}
 
 	void CameraComponent::reset(AScene *scene)
 	{
-		if (!_key.invalid())
-			assert(0);
+		assert(!_key.invalid());
 		scene->getLink(entityId)->unregisterOctreeObject(_key);
-		scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
+		_projection = glm::mat4(1);
+	}
+
+	void CameraComponent::postUnserialization(AScene *scene)
+	{
+		init(scene);
+		setProjection(_projection);
 	}
 
 };

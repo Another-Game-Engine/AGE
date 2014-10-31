@@ -105,8 +105,9 @@ private:
 	std::ofstream _logFile;
 	Entity GLOBAL_CAMERA;
 	Entity GLOBAL_CATWOMAN;
+	Entity GLOBAL_LIGHT;
 	Entity GLOBAL_SPONZA;
 	Entity GLOBAL_FLOOR;
 	Entity GLOBAL_HEAD;
-	std::shared_ptr<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
+	gl::Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
 };

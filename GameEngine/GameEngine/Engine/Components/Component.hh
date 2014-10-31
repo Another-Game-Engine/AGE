@@ -10,6 +10,8 @@
 #include <cereal/archives/xml.hpp>
 #include <regex>
 
+class AScene;
+
 namespace	Component
 {
 	struct Base
@@ -18,19 +20,19 @@ namespace	Component
 		virtual ~Base();
 		virtual void reset(){};
 
-		virtual void unserialize(cereal::JSONInputArchive &ar) = 0;
-		virtual void unserialize(cereal::BinaryInputArchive &ar) = 0;
-		virtual void unserialize(cereal::XMLInputArchive &ar) = 0;
-		virtual void unserialize(cereal::PortableBinaryInputArchive &ar) = 0;
-		virtual void _serialize(cereal::JSONOutputArchive &ar) = 0;
-		virtual void _serialize(cereal::BinaryOutputArchive &ar) = 0;
-		virtual void _serialize(cereal::XMLOutputArchive &ar) = 0;
-		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar) = 0;
+		virtual void _unserialize(cereal::JSONInputArchive &ar, AScene *scene) = 0;
+		virtual void _unserialize(cereal::BinaryInputArchive &ar, AScene *scene) = 0;
+		virtual void _unserialize(cereal::XMLInputArchive &ar, AScene *scene) = 0;
+		virtual void _unserialize(cereal::PortableBinaryInputArchive &ar, AScene *scene) = 0;
+		virtual void _serialize(cereal::JSONOutputArchive &ar, AScene *scene) = 0;
+		virtual void _serialize(cereal::BinaryOutputArchive &ar, AScene *scene) = 0;
+		virtual void _serialize(cereal::XMLOutputArchive &ar, AScene *scene) = 0;
+		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar, AScene *scene) = 0;
 
 		template <typename Archive>
-		void serializeBase(Archive &ar)
+		void serializeBase(Archive &ar, AScene *dependecyInjector)
 		{
-			_serialize(ar);
+			_serialize(ar, dependecyInjector);
 		}
 
 	protected:
@@ -70,63 +72,66 @@ namespace	Component
 			return id;
 		}
 
-		virtual void unserialize(cereal::JSONInputArchive &ar)
+		virtual void _unserialize(cereal::JSONInputArchive &ar, AScene *scene)
 		{
 			ar(*(dynamic_cast<T*>(this)));
 		}
 
-		virtual void unserialize(cereal::BinaryInputArchive &ar)
+		virtual void _unserialize(cereal::BinaryInputArchive &ar, AScene *scene)
 		{
 			ar(*(dynamic_cast<T*>(this)));
 		}
 
-		virtual void unserialize(cereal::XMLInputArchive &ar)
+		virtual void _unserialize(cereal::XMLInputArchive &ar, AScene *scene)
 		{
 			ar(*(dynamic_cast<T*>(this)));
 		}
 
-		virtual void unserialize(cereal::PortableBinaryInputArchive &ar)
+		virtual void _unserialize(cereal::PortableBinaryInputArchive &ar, AScene *scene)
 		{
 			ar(*(dynamic_cast<T*>(this)));
 		}
 
-		virtual void _serialize(cereal::JSONOutputArchive &ar)
+		virtual void _serialize(cereal::JSONOutputArchive &ar, AScene *scene)
 		{
 			ar(cereal::make_nvp(name(), *dynamic_cast<T*>(this)));
 		}
 
-		virtual void _serialize(cereal::BinaryOutputArchive &ar)
+		virtual void _serialize(cereal::BinaryOutputArchive &ar, AScene *scene)
 		{
 			ar(*dynamic_cast<T*>(this));
 		}
 
-		virtual void _serialize(cereal::XMLOutputArchive &ar)
+		virtual void _serialize(cereal::XMLOutputArchive &ar, AScene *scene)
 		{
 			ar(cereal::make_nvp(name(), *dynamic_cast<T*>(this)));
 		}
 
-		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar)
+		virtual void _serialize(cereal::PortableBinaryOutputArchive &ar, AScene *scene)
 		{
 			ar(*dynamic_cast<T*>(this));
 		}
-
-		ENTITY_ID entityId;
-	private:
-		ComponentBase(ComponentBase &other);
-		ComponentBase &operator=(ComponentBase const &o);
 
 		static std::string &name()
 		{
 			static std::string _name = typeid(T).name();
 			return _name;
 		}
-	protected:
-		struct PostSerializationInterface
-		{};
 
+		static std::size_t &hash_code()
+		{
+			static std::size_t _name = typeid(T).hash_code();
+			return _name;
+		}
+
+		ENTITY_ID entityId;
+	private:
+		ComponentBase(ComponentBase &other);
+		ComponentBase &operator=(ComponentBase const &o);
+		friend T;
+	public:
 		// used if their is post serialization work to do (example, load mesh)
-		static std::function<void(AScene *scene
-			, Component::Base *component
-			, const PostSerializationInterface *postDatas) > _postSerialization;
+		virtual void postUnserialization(AScene *scene)
+		{}
 	};
 }

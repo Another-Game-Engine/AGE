@@ -72,9 +72,9 @@ glm::i8vec2       	Input::getMouseDelta()
 
 bool 	Input::getInput(int input, bool handled)
 {
-	std::list<int>::iterator		it = _inputs.begin();
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
+		std::list<int>::iterator		it = _inputs.begin();
 		while (it != _inputs.end())
 		{
 			if (*it == input)
