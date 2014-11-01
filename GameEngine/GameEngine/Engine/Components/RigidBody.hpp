@@ -23,7 +23,6 @@
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/set.hpp>
-#include <cereal/types/base_class.hpp>
 #include <cereal/types/string.hpp>
 
 #include <Physic/DynamicMotionState.hpp>
@@ -275,11 +274,15 @@ namespace Component
 		template <typename Archive>
 		void save(Archive &ar) const
 		{
+			std::string TODO = "todo";
+			ar(TODO);
 		}
 
 		template <typename Archive>
 		void load(Archive &ar)
 		{
+			std::string TODO;
+			ar(TODO);
 		}
 
 		// !Serialization

@@ -3,6 +3,7 @@
 #include <vector>
 #include <cereal/types/vector.hpp>
 
+
 struct EntitySerializationInfos
 {
 	AGE::Link link;
@@ -20,11 +21,11 @@ struct EntitySerializationInfos
 	template < typename Archive >
 	void save(Archive &ar) const
 	{
+		auto componentSize = components.size();
 		ar(
 			cereal::make_nvp("link", link)
 			, cereal::make_nvp("barcode", barcode)
 			, cereal::make_nvp("flags", flags)
-			, cereal::make_nvp("components_number", components.size())
 			, cereal::make_nvp("components_hash", componentsHash)
 			);
 	}
@@ -44,7 +45,6 @@ struct EntitySerializationInfos
 			link
 			, barcode
 			, flags
-			, cptNbr
 			, componentsHash
 			);
 	}

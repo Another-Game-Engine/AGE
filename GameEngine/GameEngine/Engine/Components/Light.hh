@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <Render/Key.hh>
 #include <Core/PreparableObject.hh>
+#include <Utils/GlmSerialization.hpp>
 
 namespace gl { class GeometryManager; class Vertices; class Indices; }
 
