@@ -141,7 +141,7 @@ public:
 		//// we save type database
 		//ar(cereal::make_nvp("Types_database", _typeDatabase));
 
-		auto entityNbr = getNumberOfEntities();
+		std::uint16_t entityNbr = getNumberOfEntities();
 
 		ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
 		
@@ -183,7 +183,7 @@ public:
 	{
 		Archive ar(s);
 
-		unsigned int size = 0;
+		std::uint16_t size = 0;
 		ar(size);
 		for (unsigned int i = 0; i < size; ++i)
 		{
