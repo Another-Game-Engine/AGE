@@ -18,16 +18,16 @@ namespace gl
 	struct InterfaceBlock{};
 	struct Output{};
 
-	class Shader
+	class Program
 	{
 	public:
-		Shader(Shader const &) = delete;
-		Shader &operator=(Shader const &) = delete;
-		~Shader(void);
-		static Shader *createComputeShader(std::string const &name, AGE::Vector<Material> const &material);
-		static Shader *createShader(std::string const &v, std::string const &f, AGE::Vector<Material> const &material);
-		static Shader *createShader(std::string const &v, std::string const &f, std::string const &g, AGE::Vector<Material> const &material);
-		static Shader *createPreShaderQuad(AGE::Vector<Material> const &material);
+		Program(Program const &) = delete;
+		Program &operator=(Program const &) = delete;
+		~Program(void);
+		static Program *createComputeShader(std::string const &name, AGE::Vector<Material> const &material);
+		static Program *createShader(std::string const &v, std::string const &f, AGE::Vector<Material> const &material);
+		static Program *createShader(std::string const &v, std::string const &f, std::string const &g, AGE::Vector<Material> const &material);
+		static Program *createPreShaderQuad(AGE::Vector<Material> const &material);
 		void use() const;
 		GLuint getId() const;
 		Key<Uniform> addUniform(std::string const &flag);
@@ -38,28 +38,28 @@ namespace gl
 		Key<Uniform> addUniform(std::string const &flag, float value);
 		Key<Uniform> addUniform(std::string const &flag, bool b);
 		Key<Uniform> addUniform(std::string const &falg, size_t sizeType, size_t size);
-		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &mat4);
-		Shader &setUniform(Key<Uniform> const &key, glm::mat3 const &mat3);
-		Shader &setUniform(Key<Uniform> const &key, glm::vec4 const &vec4);
-		Shader &setUniform(Key<Uniform> const &key, glm::vec3 const &vec4);
-		Shader &setUniform(Key<Uniform> const &key, float v);
-		Shader &setUniform(Key<Uniform> const &key, bool b);
-		Shader &setUniform(Key<Uniform> const &key, glm::mat4 const &data, size_t index);
+		Program &setUniform(Key<Uniform> const &key, glm::mat4 const &mat4);
+		Program &setUniform(Key<Uniform> const &key, glm::mat3 const &mat3);
+		Program &setUniform(Key<Uniform> const &key, glm::vec4 const &vec4);
+		Program &setUniform(Key<Uniform> const &key, glm::vec3 const &vec4);
+		Program &setUniform(Key<Uniform> const &key, float v);
+		Program &setUniform(Key<Uniform> const &key, bool b);
+		Program &setUniform(Key<Uniform> const &key, glm::mat4 const &data, size_t index);
 		Key<Sampler> addSampler(std::string const &flag);
-		Shader &setSampler(Key<Sampler> const &key, Texture const &bind);
+		Program &setSampler(Key<Sampler> const &key, Texture const &bind);
 		bool hasSampler(Key<Sampler> const &key);
 		Key<InterfaceBlock> addInterfaceBlock(std::string const &flag, UniformBlock &uniformblock);
-		Shader &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock);
-		Shader &introspection(Key<InterfaceBlock> const &key, UniformBlock &u);
-		Shader &update();
-		Shader &update(glm::mat4 const &transform, Material const &key);
-		Shader &bindingTransformation(Key<Uniform> const &key);
-		template <typename TYPE> Shader &bindingMaterial(Key<Uniform> const &key);
-		template <typename TYPE> Shader &bindingMaterial(Key<Sampler> const &key);
-		Shader &unbindMaterial(Key<Uniform> const &key);
+		Program &setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock);
+		Program &introspection(Key<InterfaceBlock> const &key, UniformBlock &u);
+		Program &update();
+		Program &update(glm::mat4 const &transform, Material const &key);
+		Program &bindingTransformation(Key<Uniform> const &key);
+		template <typename TYPE> Program &bindingMaterial(Key<Uniform> const &key);
+		template <typename TYPE> Program &bindingMaterial(Key<Sampler> const &key);
+		Program &unbindMaterial(Key<Uniform> const &key);
 
 	private:
-		Shader(AGE::Vector<Material> const &materials);
+		Program(AGE::Vector<Material> const &materials);
 		static bool compileShader(GLuint shaderId, std::string const &file);
 		static GLuint addUnitProgByFile(std::string const &path, GLenum type);
 		static GLuint addUnitProg(char const *source, GLenum type);
@@ -100,7 +100,7 @@ namespace gl
 	};
 
 	template <typename TYPE>
-	void Shader::setUniformTask(Task &task, void(*func)(void **), TYPE const &data)
+	void Program::setUniformTask(Task &task, void(*func)(void **), TYPE const &data)
 	{
 		if (task.params[1] == NULL)
 		{
@@ -117,7 +117,7 @@ namespace gl
 	}
 
 	template <typename TYPE>
-	void Shader::setUniformTabTask(Task &task, void(*func)(void **), TYPE const &data, size_t index)
+	void Program::setUniformTabTask(Task &task, void(*func)(void **), TYPE const &data, size_t index)
 	{
 		if (task.func == NULL)
 		{
@@ -135,7 +135,7 @@ namespace gl
 	}
 
 	template <typename TYPE>
-	Shader &Shader::bindingMaterial(Key<Uniform> const &key)
+	Program &Program::bindingMaterial(Key<Uniform> const &key)
 	{
 		Task const &task = *getUniform(key);
 		assert(task.sizeParams[task.indexToTarget] == TYPE::size);
@@ -146,7 +146,7 @@ namespace gl
 	}
 
 	template <typename TYPE>
-	Shader &Shader::bindingMaterial(Key<Sampler> const &key)
+	Program &Program::bindingMaterial(Key<Sampler> const &key)
 	{
 		Task const &task = *getSampler(key);
 		if (_bindSampler.size() <= key.getId())
@@ -155,14 +155,14 @@ namespace gl
 		return (*this);
 	}
 
-	inline void Shader::setSamplerTask(Task &task, Texture const &texture)
+	inline void Program::setSamplerTask(Task &task, Texture const &texture)
 	{
 		*(GLenum *)task.params[1] = texture.getType();
 		*(GLint *)task.params[2] = texture.getId();
 		task.update = true;
 	}
 
-	inline void Shader::setUniformBlockTask(Task &task, UniformBlock &ubo)
+	inline void Program::setUniformBlockTask(Task &task, UniformBlock &ubo)
 	{
 		GLuint bindingPoint = ubo.getBindingPoint();
 		GLuint id = ubo.getBufferId();
@@ -184,7 +184,7 @@ namespace gl
 		ubo.introspection(*this, *((GLuint *)task.params[1]));
 	}
 
-	inline void Shader::setTaskWithMaterial(MaterialBindTask const &bind, Material const &material)
+	inline void Program::setTaskWithMaterial(MaterialBindTask const &bind, Material const &material)
 	{
 		Task &task = _tasks[bind.indexTask];
 		assert(task.type != TypeTask::UniformTabTask);

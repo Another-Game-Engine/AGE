@@ -1,5 +1,5 @@
 #include <Render/UniformBlock.hh>
-#include <Render/Shader.hh>
+#include <Render/Program.hh>
 #include <Render/ShaderResource.hh>
 
 namespace gl
@@ -37,7 +37,7 @@ namespace gl
 		return (_buffer.getId());
 	}
 
-	UniformBlock const &UniformBlock::introspection(Shader const &s, GLuint indexInterfaceBlock)
+	UniformBlock const &UniformBlock::introspection(Program const &s, GLuint indexInterfaceBlock)
 	{
 		glGetActiveUniformBlockiv(s.getId(), indexInterfaceBlock, GL_UNIFORM_BLOCK_DATA_SIZE, &_sizeBlock);
 		GLint nbrElement;

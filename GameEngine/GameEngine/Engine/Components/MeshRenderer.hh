@@ -4,7 +4,7 @@
 #include <set>
 
 #include <Components/Component.hh>
-#include <Render/Shader.hh>
+#include <Render/Program.hh>
 #include <cereal/types/string.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>

@@ -81,149 +81,149 @@ namespace gl
 	{
 		if (_preShaderQuad != NULL)
 			return (*this);
-		_preShaderQuad = Shader::createPreShaderQuad(_materials);
+		_preShaderQuad = Program::createPreShaderQuad(_materials);
 		_preShaderQuad->addSampler("input_sampler");
 		return (*this);
 	}
 
-	Key<Shader> RenderManager::addComputeShader(std::string const &compute)
+	Key<Program> RenderManager::addComputeShader(std::string const &compute)
 	{
-		Key<Shader> key = Key<Shader>::createKey(_renderManagerNumber);
-		Shader *shader = Shader::createComputeShader(compute, _materials);
+		Key<Program> key = Key<Program>::createKey(_renderManagerNumber);
+		Program *shader = Program::createComputeShader(compute, _materials);
 		if (_shaders.size() <= key.getId())
 			_shaders.push_back(NULL);
 		_shaders[key.getId()] = shader;
 		return (key);
 	}
 
-	Key<Shader> RenderManager::addShader(std::string const &vertex, std::string const &frag)
+	Key<Program> RenderManager::addShader(std::string const &vertex, std::string const &frag)
 	{
-		Key<Shader> key = Key<Shader>::createKey(_renderManagerNumber);
-		Shader *shader = Shader::createShader(vertex, frag, _materials);
+		Key<Program> key = Key<Program>::createKey(_renderManagerNumber);
+		Program *shader = Program::createShader(vertex, frag, _materials);
 		if (_shaders.size() <= key.getId())
 			_shaders.push_back(NULL);
 		_shaders[key.getId()] = shader;
 		return (key);
 	}
 
-	Key<Shader> RenderManager::addShader(std::string const &geo, std::string const &vertex, std::string const &frag)
+	Key<Program> RenderManager::addShader(std::string const &geo, std::string const &vertex, std::string const &frag)
 	{
-		Key<Shader> key = Key<Shader>::createKey(_renderManagerNumber);
-		Shader *shader = Shader::createShader(vertex, frag, geo, _materials);
+		Key<Program> key = Key<Program>::createKey(_renderManagerNumber);
+		Program *shader = Program::createShader(vertex, frag, geo, _materials);
 		if (_shaders.size() <= key.getId())
 			_shaders.push_back(NULL);
 		_shaders[key.getId()] = shader;
 		return (key);
 	}
 
-	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Program> const &key, std::string const &flag)
 	{
-		Shader *shader = getShader(key);
+		Program *shader = getShader(key);
 		return (shader->addUniform(flag));
 	}
 
 
-	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat4 const &value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Program> const &key, std::string const &flag, glm::mat4 const &value)
 	{
-		Shader *shader = getShader(key);
+		Program *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
-	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::mat3 const &value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Program> const &key, std::string const &flag, glm::mat3 const &value)
 	{
-		Shader *shader = getShader(key);
+		Program *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
-	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec3 const &value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Program> const &key, std::string const &flag, glm::vec3 const &value)
 	{
-		Shader *shader = getShader(key);
+		Program *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
-	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, bool value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Program> const &key, std::string const &flag, bool value)
 	{
-		Shader *shader = getShader(key);
+		Program *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
-	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, size_t sizeType, size_t size)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Program> const &key, std::string const &flag, size_t sizeType, size_t size)
 	{
-		Shader *shader = getShader(key);
+		Program *shader = getShader(key);
 		return (shader->addUniform(flag, sizeType, size));
 	}
 
-	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, glm::vec4 const &value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Program> const &key, std::string const &flag, glm::vec4 const &value)
 	{
-		Shader *shader = getShader(key);
+		Program *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
 
-	Key<Uniform> RenderManager::addShaderUniform(Key<Shader> const &key, std::string const &flag, float value)
+	Key<Uniform> RenderManager::addShaderUniform(Key<Program> const &key, std::string const &flag, float value)
 	{
-		Shader *shader = getShader(key);
+		Program *shader = getShader(key);
 		return (shader->addUniform(flag, value));
 	}
 
-	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat4 const &mat4)
+	RenderManager &RenderManager::setShaderUniform(Key<Program> const &keyShader, Key<Uniform> const &key, glm::mat4 const &mat4)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		shader->setUniform(key, mat4);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, bool b)
+	RenderManager &RenderManager::setShaderUniform(Key<Program> const &keyShader, Key<Uniform> const &key, bool b)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		shader->setUniform(key, b);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec4 const &vec4)
+	RenderManager &RenderManager::setShaderUniform(Key<Program> const &keyShader, Key<Uniform> const &key, glm::vec4 const &vec4)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		shader->setUniform(key, vec4);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::vec3 const &vec3)
+	RenderManager &RenderManager::setShaderUniform(Key<Program> const &keyShader, Key<Uniform> const &key, glm::vec3 const &vec3)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		shader->setUniform(key, vec3);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, float v)
+	RenderManager &RenderManager::setShaderUniform(Key<Program> const &keyShader, Key<Uniform> const &key, float v)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		shader->setUniform(key, v);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat3 const &mat3)
+	RenderManager &RenderManager::setShaderUniform(Key<Program> const &keyShader, Key<Uniform> const &key, glm::mat3 const &mat3)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		shader->setUniform(key, mat3);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::setShaderUniform(Key<Shader> const &keyShader, Key<Uniform> const &key, glm::mat4 const &mat, size_t index)
+	RenderManager &RenderManager::setShaderUniform(Key<Program> const &keyShader, Key<Uniform> const &key, glm::mat4 const &mat, size_t index)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		shader->setUniform(key, mat, index);
 		return (*this);
 	}
 
-	Key<Sampler> RenderManager::addShaderSampler(Key<Shader> const &keyShader, std::string const &flag)
+	Key<Sampler> RenderManager::addShaderSampler(Key<Program> const &keyShader, std::string const &flag)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		return (shader->addSampler(flag));
 	}
 
-	RenderManager &RenderManager::setShaderSampler(Key<Shader> const &keyShader, Key<Sampler> const &keySampler, Key<Texture> const &keyTexture)
+	RenderManager &RenderManager::setShaderSampler(Key<Program> const &keyShader, Key<Sampler> const &keySampler, Key<Texture> const &keyTexture)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		Texture *texture = getTexture(keyTexture);
 		shader->setSampler(keySampler, *texture);
 		return (*this);
@@ -238,24 +238,24 @@ namespace gl
 		return (key);
 	}
 
-	RenderManager &RenderManager::introspectionBlock(Key<Shader> const &s, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u)
+	RenderManager &RenderManager::introspectionBlock(Key<Program> const &s, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u)
 	{
-		Shader *shader = getShader(s);
+		Program *shader = getShader(s);
 		UniformBlock *uniformBlock = getUniformBlock(u);
 		shader->introspection(i, *uniformBlock);
 		return (*this);
 	}
 
-	Key<InterfaceBlock> RenderManager::addShaderInterfaceBlock(Key<Shader> const &keyShader, std::string const &flag, Key<UniformBlock> &keyUniformBlock)
+	Key<InterfaceBlock> RenderManager::addShaderInterfaceBlock(Key<Program> const &keyShader, std::string const &flag, Key<UniformBlock> &keyUniformBlock)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		UniformBlock *uniformBlock = getUniformBlock(keyUniformBlock);
 		return (shader->addInterfaceBlock(flag, *uniformBlock));
 	}
 
-	RenderManager &RenderManager::setShaderInterfaceBlock(Key<Shader> const &keyShader, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u)
+	RenderManager &RenderManager::setShaderInterfaceBlock(Key<Program> const &keyShader, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u)
 	{
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		UniformBlock *uniformBlock = getUniformBlock(u);
 		shader->setInterfaceBlock(i, *uniformBlock);
 		return (*this);
@@ -329,10 +329,10 @@ namespace gl
 		return (*this);
 	}
 
-	Key<RenderPass> RenderManager::addRenderPass(Key<Shader> const &keyShader, glm::ivec4 const &rect)
+	Key<RenderPass> RenderManager::addRenderPass(Key<Program> const &keyShader, glm::ivec4 const &rect)
 	{
 		Key<RenderPass> key = Key<RenderPass>::createKey(_renderManagerNumber);
-		Shader *shader = getShader(keyShader);
+		Program *shader = getShader(keyShader);
 		if (_renderPass.size() <= key.getId())
 			_renderPass.push_back(new RenderPass(*shader, keyShader, *this));
 		_renderPass[key.getId()]->configRect(rect);
@@ -350,30 +350,30 @@ namespace gl
 		return (*this);
 	}
 
-	RenderManager &RenderManager::unbindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	RenderManager &RenderManager::unbindMaterialToShader(Key<Program> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
-		Shader *shader;
+		Program *shader;
 		if ((shader = getShader(shaderKey)) == NULL)
 			return (*this);
 		shader->unbindMaterial(uniformKey);
 		return (*this);
 	}
 
-	RenderManager &RenderManager::bindTransformationToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	RenderManager &RenderManager::bindTransformationToShader(Key<Program> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
-		Shader *shader;
+		Program *shader;
 		if ((shader = getShader(shaderKey)) == NULL)
 			return (*this);
 		shader->bindingTransformation(uniformKey);
 		return (*this);
 	}
 
-	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect)
+	Key<RenderPostEffect> RenderManager::addRenderPostEffect(Key<Program> const &s, glm::ivec4 const &rect)
 	{
 		Key<RenderPostEffect> key = Key<RenderPostEffect>::createKey(_renderManagerNumber);
 
 		createQuadSimpleForm();
-		Shader *shader = getShader(s);
+		Program *shader = getShader(s);
 		if (_renderPostEffect.size() <= key.getId())
 			_renderPostEffect.push_back(new RenderPostEffect(*shader, *this));
 		_renderPostEffect[key.getId()]->configRect(rect);
@@ -519,17 +519,17 @@ namespace gl
 		return (*this);
 	}
 
-	RenderManager &RenderManager::updateShader(Key<Shader> const &shader)
+	RenderManager &RenderManager::updateShader(Key<Program> const &shader)
 	{
-		Shader &s = *getShader(shader);
+		Program &s = *getShader(shader);
 		s.use();
 		s.update();
 		return (*this);
 	}
 
-	RenderManager &RenderManager::updateShader(Key<Shader> const &shader, glm::mat4 const &transform, Key<Material> const &material)
+	RenderManager &RenderManager::updateShader(Key<Program> const &shader, glm::mat4 const &transform, Key<Material> const &material)
 	{
-		Shader &s = *getShader(shader);
+		Program &s = *getShader(shader);
 		Material &m = *getMaterial(material);
 		s.use();
 		s.update(transform, m);
@@ -564,9 +564,9 @@ namespace gl
 		return (key);
 	}
 
-	RenderManager &RenderManager::setShaderByMaterial(Key<Shader> &keyShader, Key<Material> const &key)
+	RenderManager &RenderManager::setShaderByMaterial(Key<Program> &keyShader, Key<Material> const &key)
 	{
-		Shader &shader = *getShader(keyShader);
+		Program &shader = *getShader(keyShader);
 		return (*this);
 	}
 

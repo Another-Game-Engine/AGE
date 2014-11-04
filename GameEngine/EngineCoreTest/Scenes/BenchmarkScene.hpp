@@ -32,7 +32,7 @@
 
 struct Deferred_accum_light
 {
-	gl::Key<gl::Shader> shader;
+	gl::Key<gl::Program> shader;
 	gl::Key<gl::Pipeline> pipeline;
 	gl::Key<gl::RenderPass> renderPass;
 	gl::Key<gl::RenderPostEffect> renderPostEffect;
@@ -47,7 +47,7 @@ struct Deferred_accum_light
 
 struct Deferred_get_buffer_Key
 {
-	gl::Key<gl::Shader> shader;
+	gl::Key<gl::Program> shader;
 	gl::Key<gl::Uniform> model_matrix;
 	gl::Key<gl::RenderPass> renderPass;
 	gl::Key<gl::Pipeline> pipeline;
@@ -64,7 +64,7 @@ struct Deffered_clean_buffer
 
 struct Deffered_merge
 {
-	gl::Key<gl::Shader> shader;
+	gl::Key<gl::Program> shader;
 	gl::Key<gl::Sampler> diffuse_buffer;
 	gl::Key<gl::Sampler> light_buffer;
 	gl::Key<gl::RenderPostEffect> renderPostEffect;

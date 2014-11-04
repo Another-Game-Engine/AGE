@@ -8,7 +8,7 @@
 
 namespace gl
 {
-	class Shader;
+	class Program;
 
 	class UniformBlock
 	{
@@ -19,7 +19,7 @@ namespace gl
 		size_t getSizeBlock() const;
 		GLuint getBindingPoint() const;
 		GLuint getBufferId() const;
-		UniformBlock const &introspection(Shader const &s, GLuint indexInterfaceBlock);
+		UniformBlock const &introspection(Program const &s, GLuint indexInterfaceBlock);
 		template <typename TYPE> UniformBlock &set(size_t index, TYPE const &value);
 		template <typename TYPE> UniformBlock &set(size_t index, TYPE const &value, size_t indexTab);
 

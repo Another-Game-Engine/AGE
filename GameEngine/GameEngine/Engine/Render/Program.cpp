@@ -1,4 +1,4 @@
-#include <Render/Shader.hh>
+#include <Render/Program.hh>
 #include <string>
 #include <fstream>
 #include <cassert>
@@ -7,8 +7,7 @@
 
 namespace gl
 {
-
-	Shader::Shader(AGE::Vector<Material> const &materials)
+	Program::Program(AGE::Vector<Material> const &materials)
 		: _materials(materials),
 		_shaderNumber(0),
 		_unitProgId(NULL),
@@ -19,9 +18,9 @@ namespace gl
 		_shaderNumber = id++;
 	}
 
-	Shader *Shader::createShader(std::string const &v, std::string const &f, std::string const &g, AGE::Vector<Material> const &materials)
+	Program *Program::createShader(std::string const &v, std::string const &f, std::string const &g, AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader(materials);
+		Program *s = new Program(materials);
 
 		s->_nbrUnitProgId = 3;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -36,9 +35,9 @@ namespace gl
 		return (s);
 	}
 
-	Shader *Shader::createShader(std::string const &v, std::string const &f, AGE::Vector<Material> const &materials)
+	Program *Program::createShader(std::string const &v, std::string const &f, AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader(materials);
+		Program *s = new Program(materials);
 
 		s->_nbrUnitProgId = 2;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -51,9 +50,9 @@ namespace gl
 		return (s);
 	}
 
-	Shader *Shader::createComputeShader(std::string const &c, AGE::Vector<Material> const &materials)
+	Program *Program::createComputeShader(std::string const &c, AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader(materials);
+		Program *s = new Program(materials);
 
 		s->_nbrUnitProgId = 1;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -64,9 +63,9 @@ namespace gl
 		return (s);
 	}
 
-	Shader *Shader::createPreShaderQuad(AGE::Vector<Material> const &materials)
+	Program *Program::createPreShaderQuad(AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader(materials);
+		Program *s = new Program(materials);
 
 		s->_nbrUnitProgId = 2;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -79,7 +78,7 @@ namespace gl
 		return (s);
 	}
 
-	Shader::~Shader()
+	Program::~Program()
 	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
@@ -95,7 +94,7 @@ namespace gl
 		glDeleteProgram(_progId);
 	}
 
-	bool Shader::createProgram()
+	bool Program::createProgram()
 	{
 		_progId = glCreateProgram();
 		for (uint8_t index = 0; index < _nbrUnitProgId; ++index)
@@ -103,7 +102,7 @@ namespace gl
 		return (linkProgram());
 	}
 
-	bool Shader::linkProgram() const
+	bool Program::linkProgram() const
 	{
 		GLint         linkRet = 0;
 		GLint         params = 0;
@@ -127,7 +126,7 @@ namespace gl
 		return (true);
 	}
 
-	GLuint Shader::getSamplerLocation(char const *flag)
+	GLuint Program::getSamplerLocation(char const *flag)
 	{
 		GLuint location;
 
@@ -138,7 +137,7 @@ namespace gl
 		return (location);
 	}
 
-	GLuint Shader::getUniformLocation(char const *flag)
+	GLuint Program::getUniformLocation(char const *flag)
 	{
 		GLuint location;
 
@@ -148,7 +147,7 @@ namespace gl
 		return (location);
 	}
 
-	GLuint Shader::getUniformBlockLocation(char const *flag)
+	GLuint Program::getUniformBlockLocation(char const *flag)
 	{
 		GLuint location;
 		
@@ -158,7 +157,7 @@ namespace gl
 		return (location);
 	}
 
-	void Shader::use() const
+	void Program::use() const
 	{
 		static GLint idbind = 0;
 		
@@ -169,12 +168,12 @@ namespace gl
 		}
 	}
 
-	GLuint Shader::getId() const
+	GLuint Program::getId() const
 	{
 		return (_progId);
 	}
 
-	void Shader::createUniformTask(Task &task, std::string const &flag)
+	void Program::createUniformTask(Task &task, std::string const &flag)
 	{
 		task.type = TypeTask::UniformTask;
 		task.func = NULL;
@@ -190,7 +189,7 @@ namespace gl
 		task.sizeParams[1] = 0;
 	}
 
-	void Shader::createUniformTabTask(Task &task, std::string const &flag, size_t sizeType, size_t size)
+	void Program::createUniformTabTask(Task &task, std::string const &flag, size_t sizeType, size_t size)
 	{
 		task.type = TypeTask::UniformTabTask;
 		task.func = NULL;
@@ -213,7 +212,7 @@ namespace gl
 		task.update = false;
 	}
 
-	void Shader::createSamplerTask(Task &task, std::string const &flag)
+	void Program::createSamplerTask(Task &task, std::string const &flag)
 	{
 		task.type = TypeTask::SamplerTask;
 		task.func = setUniformSampler;
@@ -233,7 +232,7 @@ namespace gl
 		task.sizeParams[2] = sizeof(GLint);
 	}
 
-	void Shader::createUniformBlockTask(Task &task, std::string const &flag, UniformBlock &ubo)
+	void Program::createUniformBlockTask(Task &task, std::string const &flag, UniformBlock &ubo)
 	{
 		task.type = TypeTask::InterfaceBlockTask;
 		task.func = setBlockBinding;
@@ -254,7 +253,7 @@ namespace gl
 		ubo.introspection(*this, location);
 	}
 
-	Key<Uniform> Shader::addUniform(std::string const &flag)
+	Key<Uniform> Program::addUniform(std::string const &flag)
 	{
 		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
@@ -266,7 +265,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat4 const &value)
+	Key<Uniform> Program::addUniform(std::string const &flag, glm::mat4 const &value)
 	{
 		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
@@ -279,7 +278,7 @@ namespace gl
 		return (key);
 	}
 	
-	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat3 const &value)
+	Key<Uniform> Program::addUniform(std::string const &flag, glm::mat3 const &value)
 	{
 		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
@@ -292,7 +291,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec3 const &value)
+	Key<Uniform> Program::addUniform(std::string const &flag, glm::vec3 const &value)
 	{
 		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
@@ -305,7 +304,7 @@ namespace gl
 		return (key);
 	}
 	
-	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec4 const &value)
+	Key<Uniform> Program::addUniform(std::string const &flag, glm::vec4 const &value)
 	{
 		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
@@ -318,7 +317,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<Uniform> Shader::addUniform(std::string const &flag, float value)
+	Key<Uniform> Program::addUniform(std::string const &flag, float value)
 	{
 		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
@@ -331,7 +330,7 @@ namespace gl
 		return (key);
 	}
 
-	Key<Uniform> Shader::addUniform(std::string const &flag, bool value)
+	Key<Uniform> Program::addUniform(std::string const &flag, bool value)
 	{
 		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
@@ -344,7 +343,7 @@ namespace gl
 		return (key);
 	}
 	
-	Key<Uniform> Shader::addUniform(std::string const &flag, size_t sizeType, size_t size)
+	Key<Uniform> Program::addUniform(std::string const &flag, size_t sizeType, size_t size)
 	{
 		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
@@ -356,56 +355,56 @@ namespace gl
 		return (key);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &value)
+	Program &Program::setUniform(Key<Uniform> const &key, glm::mat4 const &value)
 	{
 		Task *task = getUniform(key);
 		setUniformTask(*task, setUniformMat4, value);
 		return (*this);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat3 const &value)
+	Program &Program::setUniform(Key<Uniform> const &key, glm::mat3 const &value)
 	{
 		Task *task = getUniform(key);
 		setUniformTask(*task, setUniformMat3, value);
 		return (*this);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec4 const &value)
+	Program &Program::setUniform(Key<Uniform> const &key, glm::vec4 const &value)
 	{
 		Task *task = getUniform(key);
 		setUniformTask(*task, setUniformVec4, value);
 		return (*this);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec3 const &value)
+	Program &Program::setUniform(Key<Uniform> const &key, glm::vec3 const &value)
 	{
 		Task *task = getUniform(key);
 		setUniformTask(*task, setUniformVec3, value);
 		return (*this);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, bool b)
+	Program &Program::setUniform(Key<Uniform> const &key, bool b)
 	{
 		Task *task = getUniform(key);
 		setUniformTask(*task, setUniformUint, b);
 		return (*this);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &data, size_t index)
+	Program &Program::setUniform(Key<Uniform> const &key, glm::mat4 const &data, size_t index)
 	{
 		Task *task = getUniform(key);
 		setUniformTabTask(*task, setUniformTabMat, data, index);
 		return (*this);
 	}
 
-	Shader &Shader::setUniform(Key<Uniform> const &key, float value)
+	Program &Program::setUniform(Key<Uniform> const &key, float value)
 	{
 		Task *task = getUniform(key);
 		setUniformTask(*task, setUniformFloat, value);
 		return (*this);
 	}
 
-	Key<Sampler> Shader::addSampler(std::string const &flag)
+	Key<Sampler> Program::addSampler(std::string const &flag)
 	{
 		Key<Sampler> key = Key<Sampler>::createKey(_shaderNumber);
 
@@ -418,21 +417,21 @@ namespace gl
 		return (key);
 	}
 
-	Shader &Shader::setSampler(Key<Sampler> const &key, Texture const &texture)
+	Program &Program::setSampler(Key<Sampler> const &key, Texture const &texture)
 	{
 		Task *task = getSampler(key);
 		setSamplerTask(*task, texture);
 		return (*this);
 	}
 
-	bool Shader::hasSampler(Key<Sampler> const &key)
+	bool Program::hasSampler(Key<Sampler> const &key)
 	{
 		if (getSampler(key) != NULL)
 			return (true);
 		return (false);
 	}
 
-	Key<InterfaceBlock> Shader::addInterfaceBlock(std::string const &flag, UniformBlock &uniformBlock)
+	Key<InterfaceBlock> Program::addInterfaceBlock(std::string const &flag, UniformBlock &uniformBlock)
 	{
 		Key<InterfaceBlock> key = Key<InterfaceBlock>::createKey();
 
@@ -445,21 +444,21 @@ namespace gl
 		return (key);
 	}
 
-	Shader &Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock)
+	Program &Program::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock)
 	{
 		Task *task = getInterfaceBlock(key);
 		setUniformBlockTask(*task, uniformBlock);
 		return (*this);
 	}
 
-	Shader &Shader::introspection(Key<InterfaceBlock> const &key, UniformBlock &u)
+	Program &Program::introspection(Key<InterfaceBlock> const &key, UniformBlock &u)
 	{
 		Task *task = getInterfaceBlock(key);
 		u.introspection(*this, *((GLuint *)task->params[1]));
 		return (*this);
 	}
 
-	Shader &Shader::update()
+	Program &Program::update()
 	{
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
@@ -473,7 +472,7 @@ namespace gl
 		return (*this);
 	}
 
-	Shader &Shader::update(glm::mat4 const &transform, Material const &material)
+	Program &Program::update(glm::mat4 const &transform, Material const &material)
 	{
 		for (size_t index = 0; index < _bindMaterial.size(); ++index)
 			if (_bindMaterial[index].isUse)
@@ -484,7 +483,7 @@ namespace gl
 		return (*this);
 	}
 
-	size_t Shader::createMaterialBind(size_t offset, size_t indexTask)
+	size_t Program::createMaterialBind(size_t offset, size_t indexTask)
 	{
 		for (size_t index = 0; index < _bindMaterial.size(); ++index)
 		{
@@ -504,20 +503,20 @@ namespace gl
 		return (_bindMaterial.size() - 1);
 	}
 
-	Shader &Shader::unbindMaterial(Key<Uniform> const &key)
+	Program &Program::unbindMaterial(Key<Uniform> const &key)
 	{
 		size_t binding = getUniformBindMaterial(key);
 		_bindMaterial[binding].isUse = false;
 		return (*this);
 	}
 
-	Shader &Shader::bindingTransformation(Key<Uniform> const &key)
+	Program &Program::bindingTransformation(Key<Uniform> const &key)
 	{
 		_bindTransformation = key;
 		return (*this);
 	}
 
-	GLuint Shader::addUnitProgByFile(std::string const &path, GLenum type)
+	GLuint Program::addUnitProgByFile(std::string const &path, GLenum type)
 	{
 		GLuint shaderId;
 		std::ifstream file(path.c_str(), std::ios_base::binary);
@@ -540,7 +539,7 @@ namespace gl
 		return (shaderId);
 	}
 
-	GLuint Shader::addUnitProg(char const *source, GLenum type)
+	GLuint Program::addUnitProg(char const *source, GLenum type)
 	{
 		GLuint shaderId;
 		shaderId = glCreateShader(type);
@@ -550,7 +549,7 @@ namespace gl
 		return (shaderId);
 	}
 
-	bool Shader::compileShader(GLuint shaderId, std::string const &file)
+	bool Program::compileShader(GLuint shaderId, std::string const &file)
 	{
 		GLint         compileRet = 0;
 		GLsizei       msgLenght;

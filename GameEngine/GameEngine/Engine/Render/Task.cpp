@@ -176,7 +176,7 @@ namespace gl
 	void draw(void **data)
 	{
 		RenderManager &source = *CONVERT(RenderManager *, 0);
-		Key<Shader> const &key = *CONVERT(Key<Shader> *, 1);
+		Key<Program> const &key = *CONVERT(Key<Program> *, 1);
 		AGE::Vector<AGE::Drawable> **toRender = CONVERT(AGE::Vector<AGE::Drawable> **, 2);
 		GLenum mode = *CONVERT(GLenum *, 3);
 		size_t start = *CONVERT(size_t *, 4);

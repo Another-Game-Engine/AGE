@@ -11,7 +11,7 @@
 #include <Render/Material.hh>
 #include <cassert>
 #include <Render/Render.hh>
-#include <Render/Shader.hh>
+#include <Render/Program.hh>
 #include <Render/MacroRenderManager.hh>
 #include <Core/CullableObjects.hh>
 #include <Render/LocationStorage.hh>
@@ -48,45 +48,45 @@ namespace gl
 		RenderManager();
 		~RenderManager();
 		RenderManager &createPreShaderQuad();
-		Key<Shader> addComputeShader(std::string const &compute);
-		Key<Shader> addShader(std::string const &vert, std::string const &frag);
-		Key<Shader> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
-		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag);
-		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat4 const &value);
-		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::mat3 const &value);
-		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, float value);
-		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::vec4 const &value);
-		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, glm::vec3 const &value);
-		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, bool value);
-		Key<Uniform> addShaderUniform(Key<Shader> const &shader, std::string const &flag, size_t sizeType, size_t size);
-		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec3 const &vec3);
-		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
-		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, float v);
-		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3);
-		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
-		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, bool b);
-		RenderManager &setShaderUniform(Key<Shader> const &shader, Key<Uniform> const &key, glm::mat4 const &data, size_t index);
-		Key<Sampler> addShaderSampler(Key<Shader> const &shader, std::string const &flag);
-		RenderManager &setShaderSampler(Key<Shader> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
-		RenderManager &updateShader(Key<Shader> const &shader, glm::mat4 const &transform, Key<Material> const &mat);
-		RenderManager &updateShader(Key<Shader> const &shader);
-		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Shader> const &shader, std::string const &flag, Key<UniformBlock> &keyUniformBlock);
-		RenderManager &setShaderInterfaceBlock(Key<Shader> const &shader, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u);
+		Key<Program> addComputeShader(std::string const &compute);
+		Key<Program> addShader(std::string const &vert, std::string const &frag);
+		Key<Program> addShader(std::string const &geometry, std::string const &vert, std::string const &frag);
+		Key<Uniform> addShaderUniform(Key<Program> const &shader, std::string const &flag);
+		Key<Uniform> addShaderUniform(Key<Program> const &shader, std::string const &flag, glm::mat4 const &value);
+		Key<Uniform> addShaderUniform(Key<Program> const &shader, std::string const &flag, glm::mat3 const &value);
+		Key<Uniform> addShaderUniform(Key<Program> const &shader, std::string const &flag, float value);
+		Key<Uniform> addShaderUniform(Key<Program> const &shader, std::string const &flag, glm::vec4 const &value);
+		Key<Uniform> addShaderUniform(Key<Program> const &shader, std::string const &flag, glm::vec3 const &value);
+		Key<Uniform> addShaderUniform(Key<Program> const &shader, std::string const &flag, bool value);
+		Key<Uniform> addShaderUniform(Key<Program> const &shader, std::string const &flag, size_t sizeType, size_t size);
+		RenderManager &setShaderUniform(Key<Program> const &shader, Key<Uniform> const &key, glm::vec3 const &vec3);
+		RenderManager &setShaderUniform(Key<Program> const &shader, Key<Uniform> const &key, glm::vec4 const &vec4);
+		RenderManager &setShaderUniform(Key<Program> const &shader, Key<Uniform> const &key, float v);
+		RenderManager &setShaderUniform(Key<Program> const &shader, Key<Uniform> const &key, glm::mat3 const &mat3);
+		RenderManager &setShaderUniform(Key<Program> const &shader, Key<Uniform> const &key, glm::mat4 const &mat4);
+		RenderManager &setShaderUniform(Key<Program> const &shader, Key<Uniform> const &key, bool b);
+		RenderManager &setShaderUniform(Key<Program> const &shader, Key<Uniform> const &key, glm::mat4 const &data, size_t index);
+		Key<Sampler> addShaderSampler(Key<Program> const &shader, std::string const &flag);
+		RenderManager &setShaderSampler(Key<Program> const &shader, Key<Sampler> const &key, Key<Texture> const &keytexture);
+		RenderManager &updateShader(Key<Program> const &shader, glm::mat4 const &transform, Key<Material> const &mat);
+		RenderManager &updateShader(Key<Program> const &shader);
+		Key<InterfaceBlock> addShaderInterfaceBlock(Key<Program> const &shader, std::string const &flag, Key<UniformBlock> &keyUniformBlock);
+		RenderManager &setShaderInterfaceBlock(Key<Program> const &shader, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u);
 		Key<UniformBlock> addUniformBlock();
-		RenderManager &introspectionBlock(Key<Shader> const &s, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u);
+		RenderManager &introspectionBlock(Key<Program> const &s, Key<InterfaceBlock> const &i, Key<UniformBlock> const &u);
 		template <typename TYPE> RenderManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value);
 		template <typename TYPE> RenderManager &setUniformBlock(Key<UniformBlock> const &key, size_t index, TYPE const &value, size_t indexTab);
-		RenderManager &bindTransformationToShader(Key<Shader> const &keyShader, Key<Uniform> const &keyUniform);
-		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
-		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Shader> const &s, Key<Sampler> const &u);
-		RenderManager &unbindMaterialToShader(Key<Shader> const &s, Key<Uniform> const &u);
+		RenderManager &bindTransformationToShader(Key<Program> const &keyShader, Key<Uniform> const &keyUniform);
+		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Program> const &s, Key<Uniform> const &u);
+		template <typename TYPE> RenderManager &bindMaterialToShader(Key<Program> const &s, Key<Sampler> const &u);
+		RenderManager &unbindMaterialToShader(Key<Program> const &s, Key<Uniform> const &u);
 		Key<Material> getDefaultMaterial();
 		Key<Texture> getDefaultTexture2D();
 		Key<Material> addMaterial();
 		template <typename TYPE> RenderManager &setMaterial(Key<Material> const &key, typename TYPE::return_type const &value);
 		template <typename TYPE> RenderManager &setMaterial(Key<Material> const &key, Key<Texture> const &key_tex);
 		template <typename TYPE> typename TYPE::return_type getMaterial(Key<Material> const &key);
-		RenderManager &setShaderByMaterial(Key<Shader> &shader, Key<Material> const &key);
+		RenderManager &setShaderByMaterial(Key<Program> &shader, Key<Material> const &key);
 		Key<Texture> addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping);
 		RenderManager &uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
 		RenderManager &downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
@@ -96,12 +96,12 @@ namespace gl
 		RenderManager &configUploadTexture2D(Key<Texture> const &key, glm::ivec4 const &rect);
 		RenderManager &parameterTexture(Key<Texture> const &key, GLenum pname, GLint param);
 		GLenum getTypeTexture(Key<Texture> const &key);
-		Key<RenderPass> addRenderPass(Key<Shader> const &shader, glm::ivec4 const &rect);
+		Key<RenderPass> addRenderPass(Key<Program> const &shader, glm::ivec4 const &rect);
 		RenderManager &pushDrawTaskRenderBuffer(Key<RenderPass> const &key);
 		GEN_DEC_RENDER_PUSH_TASK(RenderPass);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPass);
 		GEN_DEC_DRAWABLERENDER_PUSH_TASK(RenderPass);
-		Key<RenderPostEffect> addRenderPostEffect(Key<Shader> const &s, glm::ivec4 const &rect);
+		Key<RenderPostEffect> addRenderPostEffect(Key<Program> const &s, glm::ivec4 const &rect);
 		GEN_DEC_RENDER_PUSH_TASK(RenderPostEffect);
 		GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(RenderPostEffect);
 		GEN_DEC_DRAWABLERENDER_PUSH_TASK(RenderPostEffect);
@@ -141,8 +141,8 @@ namespace gl
 	private:
 		std::map<SimpleForm, Key<Vertices>> _simpleFormGeo;
 		std::map<SimpleForm, Key<Indices>> _simpleFormId;
-		Shader * _preShaderQuad;
-		AGE::Vector<Shader *> _shaders;
+		Program * _preShaderQuad;
+		AGE::Vector<Program *> _shaders;
 		AGE::Vector<UniformBlock *> _uniformBlock;
 		AGE::Vector<Texture *> _textures;
 		AGE::Vector<Material> _materials;
@@ -162,7 +162,7 @@ namespace gl
 
 	private:
 		void initSimpleForm();
-		Shader *getShader(Key<Shader> const &key){ assert(!!key); return (_shaders[key.getId()]); }
+		Program *getShader(Key<Program> const &key){ assert(!!key); return (_shaders[key.getId()]); }
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key)	{ assert(!!key); return (_uniformBlock[key.getId()]); }
 		Texture *getTexture(Key<Texture> const &key) { assert(!!key); return (_textures[key.getId()]);}
 		Material *getMaterial(Key<Material> const &key){ assert(!!key); return (&_materials[key.getId()]); }
@@ -176,9 +176,9 @@ namespace gl
 	};
 
 	template <typename TYPE>
-	RenderManager &RenderManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Uniform> const &uniformKey)
+	RenderManager &RenderManager::bindMaterialToShader(Key<Program> const &shaderKey, Key<Uniform> const &uniformKey)
 	{
-		Shader *shader;
+		Program *shader;
 		if ((shader = getShader(shaderKey)) == NULL)
 			return (*this);
 		shader->bindingMaterial<TYPE>(uniformKey);
@@ -186,9 +186,9 @@ namespace gl
 	}
 
 	template <typename TYPE>
-	RenderManager &RenderManager::bindMaterialToShader(Key<Shader> const &shaderKey, Key<Sampler> const &samplerKey)
+	RenderManager &RenderManager::bindMaterialToShader(Key<Program> const &shaderKey, Key<Sampler> const &samplerKey)
 	{
-		Shader *shader;
+		Program *shader;
 		if ((shader = getShader(shaderKey)) == NULL)
 			return (*this);
 		shader->bindingMaterial<TYPE>(samplerKey);

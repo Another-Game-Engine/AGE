@@ -440,7 +440,7 @@ namespace gl
 		OperationBuffer::update();
 	}
 
-	DrawableRender::DrawableRender(Shader &shader, RenderManager &source)
+	DrawableRender::DrawableRender(Program &shader, RenderManager &source)
 		: _source(source),
 		_shader(shader),
 		_mode(GL_TRIANGLES)
@@ -509,7 +509,7 @@ namespace gl
 
 	}
 
-	RenderOnScreen::RenderOnScreen(Shader &s, RenderManager &r)
+	RenderOnScreen::RenderOnScreen(Program &s, RenderManager &r)
 		: DrawableRender(s, r),
 		OperationBuffer(r.locationStorage),
 		QuadRender(r),
@@ -541,7 +541,7 @@ namespace gl
 		return (RenderType::RENDER_ON_SCREEN);
 	}
 
-	RenderPass::RenderPass(Shader &s, Key<Shader> const &keyShader, RenderManager &r)
+	RenderPass::RenderPass(Program &s, Key<Program> const &keyShader, RenderManager &r)
 		: DrawableRender(s, r),
 		OffScreenRender(r),
 		_toRender(NULL),
@@ -595,7 +595,7 @@ namespace gl
 		return (RenderType::RENDER_PASS);
 	}
 
-	RenderPostEffect::RenderPostEffect(Shader &s, RenderManager &r)
+	RenderPostEffect::RenderPostEffect(Program &s, RenderManager &r)
 		: DrawableRender(s, r),
 		OffScreenRender(r),
 		QuadRender(r)

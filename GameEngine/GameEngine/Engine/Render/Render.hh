@@ -10,7 +10,7 @@
 #include <Render/UniformBlock.hh>
 #include <Render/Task.hh>
 #include <Render/Framebuffer.hh>
-#include <Render/Shader.hh>
+#include <Render/Program.hh>
 #include <Render/LocationStorage.hh>
 #include <map>
 #include <utility>
@@ -45,12 +45,12 @@ namespace gl
 	{
 		GLenum mode;
 		GeometryManager &geometryManager;
-		Shader &shader;
+		Program &shader;
 		MaterialManager &materialManager;
 		AGE::Vector<AGE::Drawable> const *toRender;
 		size_t start;
 		size_t end;
-		Draw(GeometryManager &g, Shader &s, MaterialManager &m, GLenum mode);
+		Draw(GeometryManager &g, Program &s, MaterialManager &m, GLenum mode);
 		Draw(Draw const &copy);
 		~Draw();
 	};
@@ -168,14 +168,14 @@ namespace gl
 		DrawableRender &popInputSampler();
 
 	protected:
-		DrawableRender(Shader &shader, RenderManager &geo);
+		DrawableRender(Program &shader, RenderManager &geo);
 		DrawableRender(DrawableRender const &copy) = delete;
 		DrawableRender &operator=(DrawableRender const &d) = delete;
 		void update();
 
 		AGE::Vector<Input> _inputSamplers;
 		RenderManager &_source;
-		Shader &_shader;
+		Program &_shader;
 		GLenum _mode;
 	};
 
@@ -183,7 +183,7 @@ namespace gl
 	{
 	public:
 		virtual ~RenderOnScreen();
-		RenderOnScreen(Shader &s, RenderManager &r);
+		RenderOnScreen(Program &s, RenderManager &r);
 
 		virtual BaseRender &render();
 		virtual RenderType getType() const;
@@ -196,7 +196,7 @@ namespace gl
 	class RenderPass : public DrawableRender, public OffScreenRender
 	{
 	public:
-		RenderPass(Shader &shader, Key<Shader> const &keyShader, RenderManager &r);
+		RenderPass(Program &shader, Key<Program> const &keyShader, RenderManager &r);
 		virtual ~RenderPass();
 
 		RenderPass &pushPassTask();
@@ -213,13 +213,13 @@ namespace gl
 		AGE::Vector<AGE::Drawable> const *_toRender;
 		size_t _start;
 		size_t _end;
-		Key<Shader> _keyShader;
+		Key<Program> _keyShader;
 	};
 
 	class RenderPostEffect : public DrawableRender, public OffScreenRender, public QuadRender
 	{
 	public:
-		RenderPostEffect(Shader &s, RenderManager &r);
+		RenderPostEffect(Program &s, RenderManager &r);
 		virtual ~RenderPostEffect();
 
 		virtual BaseRender &render();
