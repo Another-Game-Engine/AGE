@@ -1,35 +1,51 @@
-#ifndef KEY_HH_
-# define KEY_HH_
+#pragma once
 
 #include <iostream>
-
-#define KEY_DESTROY -1
-
-# define CLASS_ACCESS \
-	friend VerticesManager;\
+#include <queue>
+#include <cstdint>
+#include <Utils/Containers/Vector.hpp>
+#include <assert.h>
 
 namespace gl
 {
-	//!\file Key.hh
-	//!\author Dorian Pinaud
-	//!\version v1.0
-	//!\class Key<TYPE>
-	//!\brief Key use to represent opengl instance outside the render context
+	struct InternalData
+	{
+		std::size_t id;
+		std::queue<std::size_t> trash;
+		InternalData() : id(0){}
+	};
+
 	template <typename TYPE>
 	class Key
 	{
 	public:
-		static Key<TYPE> createKey()
+		static Key<TYPE> createKey(size_t index = 0)
 		{
-			static size_t id = 0;
-			return (Key<TYPE>(++id));
+			if (_data.size() <= index)
+			{
+				_data.push_back(InternalData());
+			}
+			assert(_data.size() > index);
+			auto &data = _data[index];
+			if (!data.trash.empty())
+			{
+				auto res = Key<TYPE>(data.trash.front());
+				data.trash.pop();
+				return res;
+			}
+			return (Key<TYPE>(data.id++));
+		}
+
+		static Key<TYPE> createKeyWithId(std::size_t _id)
+		{
+			return (Key<TYPE>(_id));
 		}
 
 		Key();
 		~Key();
 		Key(Key<TYPE> const &copy);
 		Key<TYPE> &operator=(Key<TYPE> const &t);
-		std::size_t getId() const;
+		size_t getId() const;
 		bool empty() const;
 		bool operator!() const;
 		bool operator==(Key<TYPE> const &compare) const;
@@ -39,12 +55,10 @@ namespace gl
 		void destroy();
 
 	private:
-		std::size_t _id;
+		size_t _id;
 		explicit Key(size_t id);
-
+		static AGE::Vector<InternalData> _data;
 	};
 }
 
 #include <Render/Key.hpp>
-
-#endif /*KEY_HK_*/

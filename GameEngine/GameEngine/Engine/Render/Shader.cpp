@@ -1,27 +1,27 @@
 #include <Render/Shader.hh>
 #include <string>
-# include <fstream>
+#include <fstream>
 #include <cassert>
-
 #include <Render/Task.hh>
 #include <Render/PreShader.cpp>
-
 
 namespace gl
 {
 
-	Shader::Shader()
-		: _unitProgId(NULL),
+	Shader::Shader(AGE::Vector<Material> const &materials)
+		: _materials(materials),
+		_shaderNumber(0),
+		_unitProgId(NULL),
 		_progId(-1),
-		_nbrUnitProgId(0),
-		_bindTransformation(Key<Uniform>::createKey())
+		_nbrUnitProgId(0)
 	{
-
+		static size_t id = 0;
+		_shaderNumber = id++;
 	}
 
-	Shader *Shader::createShader(std::string const &v, std::string const &f, std::string const &g)
+	Shader *Shader::createShader(std::string const &v, std::string const &f, std::string const &g, AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader;
+		Shader *s = new Shader(materials);
 
 		s->_nbrUnitProgId = 3;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -36,9 +36,9 @@ namespace gl
 		return (s);
 	}
 
-	Shader *Shader::createShader(std::string const &v, std::string const &f)
+	Shader *Shader::createShader(std::string const &v, std::string const &f, AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader;
+		Shader *s = new Shader(materials);
 
 		s->_nbrUnitProgId = 2;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -51,9 +51,9 @@ namespace gl
 		return (s);
 	}
 
-	Shader *Shader::createComputeShader(std::string const &c)
+	Shader *Shader::createComputeShader(std::string const &c, AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader;
+		Shader *s = new Shader(materials);
 
 		s->_nbrUnitProgId = 1;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -64,9 +64,9 @@ namespace gl
 		return (s);
 	}
 
-	Shader *Shader::createPreShaderQuad()
+	Shader *Shader::createPreShaderQuad(AGE::Vector<Material> const &materials)
 	{
-		Shader *s = new Shader;
+		Shader *s = new Shader(materials);
 
 		s->_nbrUnitProgId = 2;
 		s->_unitProgId = new GLuint[s->_nbrUnitProgId];
@@ -81,6 +81,13 @@ namespace gl
 
 	Shader::~Shader()
 	{
+		for (size_t index = 0; index < _tasks.size(); ++index)
+		{
+			for (uint8_t param = 0; param < _tasks[index].nbrParams; ++param)
+				delete _tasks[index].params[param];
+			delete[] _tasks[index].params;
+			delete[] _tasks[index].sizeParams;
+		}
 		if (_nbrUnitProgId > 0)
 			delete[] _unitProgId;
 		for (uint8_t index = 0; index < _nbrUnitProgId; ++index)
@@ -167,16 +174,6 @@ namespace gl
 		return (_progId);
 	}
 
-	Key<Uniform> Shader::getUniform(size_t target) const
-	{
-		if (target >= _uniforms.size())
-			assert(0);
-		auto &element = _uniforms.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
-	}
-
 	void Shader::createUniformTask(Task &task, std::string const &flag)
 	{
 		task.type = TypeTask::UniformTask;
@@ -191,6 +188,29 @@ namespace gl
 		*(GLuint *)task.params[0] = location;
 		task.params[1] = NULL;
 		task.sizeParams[1] = 0;
+	}
+
+	void Shader::createUniformTabTask(Task &task, std::string const &flag, size_t sizeType, size_t size)
+	{
+		task.type = TypeTask::UniformTabTask;
+		task.func = NULL;
+		task.indexToTarget = 0xFF;
+		task.nbrParams = 4;
+		task.sizeParams = new size_t[task.nbrParams];
+		task.params = new void *[task.nbrParams];
+		task.params[0] = new GLuint;
+		GLuint location = getUniformLocation(flag.c_str());
+		*(GLuint *)task.params[0] = location;
+		task.params[1] = new uint8_t[sizeType * size];
+		memset(task.params[1], 0, sizeType * size);
+		task.sizeParams[1] = size * sizeType;
+		task.params[2] = new size_t;
+		*((size_t *)task.params[2]) = sizeType;
+		task.sizeParams[2] = sizeof(size_t);
+		task.params[3] = new size_t;
+		*((size_t *)task.params[3]) = size;
+		task.sizeParams[3] = sizeof(size_t);
+		task.update = false;
 	}
 
 	void Shader::createSamplerTask(Task &task, std::string const &flag)
@@ -217,7 +237,7 @@ namespace gl
 	{
 		task.type = TypeTask::InterfaceBlockTask;
 		task.func = setBlockBinding;
-		task.indexToTarget = 0;
+		task.indexToTarget = 0xFF;
 		task.nbrParams = 3;
 		task.sizeParams = new size_t[task.nbrParams];
 		task.params = new void *[task.nbrParams];
@@ -236,123 +256,166 @@ namespace gl
 
 	Key<Uniform> Shader::addUniform(std::string const &flag)
 	{
-		Key<Uniform> key = Key<Uniform>::createKey();
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
-		_uniforms[key] = _tasks.size() - 1;
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
 		return (key);
 	}
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat4 const &value)
 	{
-		Key<Uniform> key = Key<Uniform>::createKey();
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
 		Task *task = &_tasks[_tasks.size() - 1];
-		_uniforms[key] = _tasks.size() - 1;
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&value);
+		setUniformTask(*task, setUniformMat4, value);
 		return (key);
 	}
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::mat3 const &value)
 	{
-		Key<Uniform> key = Key<Uniform>::createKey();
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
-		_uniforms[key] = _tasks.size() - 1;
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<glm::mat3>(*task, setUniformMat3, (void *)&value);
+		setUniformTask(*task, setUniformMat3, value);
 		return (key);
 	}
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec3 const &value)
 	{
-		Key<Uniform> key = Key<Uniform>::createKey();
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
-		_uniforms[key] = _tasks.size() - 1;
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
+		setUniformTask(*task, setUniformVec3, value);
 		return (key);
 	}
 	
 	Key<Uniform> Shader::addUniform(std::string const &flag, glm::vec4 const &value)
 	{
-		Key<Uniform> key = Key<Uniform>::createKey();
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
-		_uniforms[key] = _tasks.size() - 1;
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(size_t(-1));
+		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<glm::vec4>(*task, setUniformVec4, (void *)&value);		return (key);
+		setUniformTask(*task, setUniformVec4, value);
 		return (key);
 	}
 
 	Key<Uniform> Shader::addUniform(std::string const &flag, float value)
 	{
-		Key<Uniform> key = Key<Uniform>::createKey();
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
-		_uniforms[key] = _tasks.size() - 1;
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
 		createUniformTask(*task, flag);
-		setUniformTask<float>(*task, setUniformFloat, (void *)&value);
+		setUniformTask(*task, setUniformFloat, value);
+		return (key);
+	}
+
+	Key<Uniform> Shader::addUniform(std::string const &flag, bool value)
+	{
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
+		createUniformTask(*task, flag);
+		setUniformTask(*task, setUniformUint, value);
+		return (key);
+	}
+	
+	Key<Uniform> Shader::addUniform(std::string const &flag, size_t sizeType, size_t size)
+	{
+		Key<Uniform> key = Key<Uniform>::createKey(_shaderNumber);
+		_tasks.push_back(Task());
+		Task *task = &_tasks.back();
+		if (_uniforms.size() <= key.getId())
+			_uniforms.push_back(-1);
+		_uniforms[key.getId()] = _tasks.size() - 1;
+		createUniformTabTask(*task, flag, sizeType, size);
 		return (key);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&value);
+		setUniformTask(*task, setUniformMat4, value);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat3 const &value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<glm::mat3>(*task, setUniformMat3, (void *)&value);
+		setUniformTask(*task, setUniformMat3, value);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec4 const &value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<glm::vec4>(*task, setUniformVec4, (void *)&value);
+		setUniformTask(*task, setUniformVec4, value);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, glm::vec3 const &value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<glm::vec3>(*task, setUniformVec3, (void *)&value);
+		setUniformTask(*task, setUniformVec3, value);
+		return (*this);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, bool b)
+	{
+		Task *task = getUniform(key);
+		setUniformTask(*task, setUniformUint, b);
+		return (*this);
+	}
+
+	Shader &Shader::setUniform(Key<Uniform> const &key, glm::mat4 const &data, size_t index)
+	{
+		Task *task = getUniform(key);
+		setUniformTabTask(*task, setUniformTabMat, data, index);
 		return (*this);
 	}
 
 	Shader &Shader::setUniform(Key<Uniform> const &key, float value)
 	{
 		Task *task = getUniform(key);
-		setUniformTask<float>(*task, setUniformFloat, (void *)&value);
+		setUniformTask(*task, setUniformFloat, value);
 		return (*this);
 	}
 
 	Key<Sampler> Shader::addSampler(std::string const &flag)
 	{
-		Key<Sampler> key = Key<Sampler>::createKey();
+		Key<Sampler> key = Key<Sampler>::createKey(_shaderNumber);
 
 		_tasks.push_back(Task());
 		Task *task = &_tasks.back();
-		_samplers[key] = _tasks.size() - 1;
+		if (_samplers.size() <= key.getId())
+			_samplers.push_back(-1);
+		_samplers[key.getId()] = _tasks.size() - 1;
 		createSamplerTask(*task, flag);
 		return (key);
-	}
-
-	Key<Sampler> Shader::getSampler(size_t target) const
-	{
-		if (target >= _samplers.size())
-			assert(0);
-		auto &element = _samplers.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
 	}
 
 	Shader &Shader::setSampler(Key<Sampler> const &key, Texture const &texture)
@@ -374,92 +437,17 @@ namespace gl
 		Key<InterfaceBlock> key = Key<InterfaceBlock>::createKey();
 
 		_tasks.push_back(Task());
-		_interfaceBlock[key] = _tasks.size() - 1;
+		if (_interfaceBlock.size() <= key.getId())
+			_interfaceBlock.resize(key.getId() + 1);
+		_interfaceBlock[key.getId()] = _tasks.size() - 1;
 		Task *task = &_tasks.back();
 		createUniformBlockTask(*task, flag, uniformBlock);
 		return (key);
 	}
 
-	Key<InterfaceBlock> Shader::getInterfaceBlock(size_t target) const
-	{
-		if (target >= _interfaceBlock.size())
-			assert(0);
-		auto &element = _interfaceBlock.begin();
-		for (size_t index = 0; index < target; ++index)
-			++element;
-		return (element->first);
-	}
-
-	Task *Shader::getUniform(Key<Uniform> const &key)
-	{
-		size_t index = getIndexUniform(key);
-		if (index != -1)
-			return (&_tasks[index]);
-		return (NULL);
-	}
-
-	size_t Shader::getIndexUniform(Key<Uniform> const &key)
-	{
-		if (!key)
-			assert(0);
-		auto &element = _uniforms.find(key);
-		if (element == _uniforms.end())
-			assert(0);
-		return (element->second);
-	}
-
-	size_t Shader::getIndexSampler(Key<Sampler> const &key)
-	{
-		if (!key)
-			assert(0);	
-		auto &element = _samplers.find(key);
-		if (element == _samplers.end())
-			assert(0);	
-		return (element->second);
-	}
-
-	Task *Shader::getSampler(Key<Sampler> const &key)
-	{
-		size_t index = getIndexSampler(key);
-		if (index != -1)
-			return (&_tasks[index]);
-		return (NULL);
-	}
-
-	size_t Shader::getIndexInterfaceBlock(Key<InterfaceBlock> const &key)
-	{
-		if (!key)
-			assert(0);
-		auto &element = _interfaceBlock.find(key);
-		if (element == _interfaceBlock.end())
-			assert(0);
-		return (element->second);
-	}
-
-	Task *Shader::getInterfaceBlock(Key<InterfaceBlock> const &key)
-	{
-		size_t index = getIndexInterfaceBlock(key);
-		if (index != -1)
-			return (&_tasks[index]);
-		return (NULL);
-	}
-
-	size_t Shader::getUniformBindMaterial(Key<Uniform> const &key, std::string const &msg)
-	{
-		if (!key)
-			assert(0);
-		auto &element = _bindUniform.find(key);
-		if (element == _bindUniform.end())
-			assert(0);
-		return (element->second);
-	}
-
 	Shader &Shader::setInterfaceBlock(Key<InterfaceBlock> const &key, UniformBlock &uniformBlock)
 	{
-		Task *task;
-
-		if ((task = getInterfaceBlock(key)) == NULL)
-			return (*this);
+		Task *task = getInterfaceBlock(key);
 		setUniformBlockTask(*task, uniformBlock);
 		return (*this);
 	}
@@ -471,41 +459,28 @@ namespace gl
 		return (*this);
 	}
 
-	void Shader::setTransformationTask(glm::mat4 const &mat)
-	{
-		Task *task = getUniform(_bindTransformation);
-		setUniformTask<glm::mat4>(*task, setUniformMat4, (void *)&mat);
-	}
-
-	Shader &Shader::setMaterial(Material const &material)
-	{
-		use();
-		for (size_t index = 0; index < _bindMaterial.size(); ++index)
-			if (_bindMaterial[index].isUse)
-				setTaskWithMaterial(_bindMaterial[index], material);
-		return (*this);
-	}
-
-	Shader &Shader::update(glm::mat4 const &transform)
-	{
-		setTransformationTask(transform);
-		update();
-		return (*this);
-	}
-
 	Shader &Shader::update()
 	{
-		use();
 		for (size_t index = 0; index < _tasks.size(); ++index)
 		{
-			if (!_tasks[index].isExec())
-				assert(0);
 			if (_tasks[index].update)
 			{
+				assert(_tasks[index].isExec());
 				_tasks[index].func(_tasks[index].params);
 				_tasks[index].update = false;
 			}
 		}
+		return (*this);
+	}
+
+	Shader &Shader::update(glm::mat4 const &transform, Material const &material)
+	{
+		for (size_t index = 0; index < _bindMaterial.size(); ++index)
+			if (_bindMaterial[index].isUse)
+				setTaskWithMaterial(_bindMaterial[index], material);
+		Task *task = getUniform(_bindTransformation);
+		setUniformTask(*task, setUniformMat4, transform);
+		update();
 		return (*this);
 	}
 
@@ -515,21 +490,23 @@ namespace gl
 		{
 			if (_bindMaterial[index].isUse == false)
 			{
-				setMaterialBinding(_bindMaterial[index], indexTask, offset);
+				_bindMaterial[index].indexTask = index;
+				_bindMaterial[index].isUse = true;
+				_bindMaterial[index].offsetMaterial = offset;
 				return (index);
 			}
 		}
 		MaterialBindTask mb;
-		setMaterialBinding(mb, indexTask, offset);
+		mb.indexTask = indexTask;
+		mb.isUse = true;
+		mb.offsetMaterial = offset;
 		_bindMaterial.push_back(mb);
 		return (_bindMaterial.size() - 1);
 	}
 
 	Shader &Shader::unbindMaterial(Key<Uniform> const &key)
 	{
-		size_t binding;
-		if ((binding = getUniformBindMaterial(key, "unbindMaterial")) == -1)
-			return (*this);
+		size_t binding = getUniformBindMaterial(key);
 		_bindMaterial[binding].isUse = false;
 		return (*this);
 	}

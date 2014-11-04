@@ -1,7 +1,11 @@
-#ifdef KEY_HH_
+
 
 namespace gl
 {
+
+	template <typename TYPE>
+	AGE::Vector<InternalData> Key<TYPE>::_data;
+
 	template <typename TYPE>
 	Key<TYPE>::Key()
 	{
@@ -83,5 +87,3 @@ namespace gl
 	}
 
 }
-
-#endif

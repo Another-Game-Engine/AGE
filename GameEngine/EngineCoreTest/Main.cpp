@@ -11,8 +11,6 @@
 #include <Core/SceneManager.hh>
 #include <Utils/PubSub.hpp>
 
-#include <Render/GeometryManager.hh>
-#include <Render/MaterialManager.hh>
 #include <Render/RenderManager.hh>
 // SCENES
 #include <Scenes/BenchmarkScene.hpp>
@@ -47,19 +45,21 @@ bool loadAssets(std::shared_ptr<Engine> e)
 {
 	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents });
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents });
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents });
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"));
 	e->getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"));
 	e->getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"));
 	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("sibenik/sibenik.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
 	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sibenik/sibenik.mage"));
-	e->getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+
+	e->getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents});
+
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sponza/sponza.mage"));
-	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
+	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, AGE::MeshInfos::BiTangents});
 	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("head/head.mage"));
 
 #endif
@@ -85,7 +85,7 @@ int			main(int ac, char **av)
 	preparationThread->launch(e.get());
 
 	// Set Configurations
-	auto config = e->setInstance<ConfigurationManager>(File("MyConfigurationFile.conf"));
+	auto config = e->setInstance<ConfigurationManager>(File("NewMyConfigurationFile.conf"));
 
 	e->setInstance<PubSub::Manager>();
 	auto context = e->getInstance<IRenderContext>();
@@ -100,17 +100,9 @@ int			main(int ac, char **av)
 
 	auto contextInit = renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
 		std::function<bool()>([&](){
-		if (!context->init(0, 800, 600, "~AGE~ V0.0 Demo"))
+		if (!context->init(0, 1600, 900, "~AGE~ V0.0 Demo"))
 			return false;
 #ifdef RENDERING_ACTIVATED
-		auto &geo = e->getInstance<gl::RenderManager>()->geometryManager;
-		geo.addIndexPool();
-		geo.addVertexPool();
-		GLenum typeComponent[2] = { GL_FLOAT, GL_FLOAT };
-		uint8_t sizeTypeComponent[2] = { sizeof(float), sizeof(float) };
-		uint8_t nbrComponent[2] = { 2, 2 };
-		geo.addVertexPool(2, typeComponent, sizeTypeComponent, nbrComponent);
-
 		if (!loadAssets(e))
 			return false;
 #endif
@@ -119,15 +111,15 @@ int			main(int ac, char **av)
 
 	e->setInstance<SceneManager>();
 	e->setInstance<AGE::AssetsManager>();
-	e->setInstance<PerformanceDebugger>("Developper Name");
+	e->setInstance<PerformanceDebugger>("Developer Name");
 
 #ifdef PHYSIC_SIMULATION
 	e->setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 #endif
 
 	// Set default window size
-	// If config file has different value, it'll be changed automaticaly
-	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(800, 600), [&](const glm::uvec2 &v)
+	// If config file has different value, it'll be changed automatically
+	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(1600, 900), [&](const glm::uvec2 &v)
 	{
 		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::SetScreenSize>(v);
 	});

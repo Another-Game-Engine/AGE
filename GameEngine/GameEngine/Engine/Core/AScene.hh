@@ -16,29 +16,33 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
+#include <cereal/types/map.hpp>
 #include <Components/ComponentRegistrar.hpp>
 
 #include <Core/ComponentManager.hpp>
 #include <Utils/Containers/Queue.hpp>
+#include <Entities/EntitySerializationInfos.hpp>
+
+//je remplace l'age queue par une std::queue pour le test
+#include <queue>
 
 class System;
 class Engine;
 class EntityFilter;
 
-class AScene : public DependenciesInjector, public ComponentRegistrar, public EntityIdRegistrar
+class AScene : public DependenciesInjector, public EntityIdRegistrar
 {
 private:
 	std::multimap<std::size_t, std::shared_ptr<System> >                    _systems;
 	std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 	std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
-	AGE::Queue<std::uint16_t>                                               _free;
+	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
-	int test = 0;
 public:
 	AScene(std::weak_ptr<Engine> &&engine);
 	virtual ~AScene();
-	inline std::uint16_t    getNumberOfEntities() { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
+	inline std::uint16_t    getNumberOfEntities() const { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
@@ -56,17 +60,14 @@ public:
 		_filters[id].remove(filter);
 	}
 
-	void                    informFiltersTagAddition(TAG_ID id, EntityData &&entity);
-	void                    informFiltersTagDeletion(TAG_ID id, EntityData &&entity);
-	void                    informFiltersComponentAddition(COMPONENT_ID id, EntityData &&entity);
-	void                    informFiltersComponentDeletion(COMPONENT_ID id, EntityData &&entity);
+	void                    informFiltersTagAddition(TAG_ID id, const EntityData &entity);
+	void                    informFiltersTagDeletion(TAG_ID id, const EntityData &entity);
+	void                    informFiltersComponentAddition(COMPONENT_ID id, const EntityData &entity);
+	void                    informFiltersComponentDeletion(COMPONENT_ID id, const EntityData &entity);
 
 	Entity &createEntity();
 	void destroy(const Entity &e);
-
-	//const glm::mat4 &getTransform(const Entity &e) const;
-	//glm::mat4 &getTransformRef(const Entity &e);
-	//void setTransform(Entity &e, const glm::mat4 &trans);
+	void clearAllEntities();
 
 	template <typename T>
 	std::shared_ptr<T> addSystem(std::size_t priority)
@@ -126,27 +127,54 @@ public:
 		return false;
 	}
 
+	void saveToJson(const std::string &fileName);
+	void loadFromJson(const std::string &fileName);
+	void saveToBinary(const std::string &fileName);
+	void loadFromBinary(const std::string &fileName);
+
+
 	template <typename Archive>
 	void save(std::ofstream &s)
 	{
 		Archive ar(s);
-		unsigned int size = 0;
+
+		//// we save type database
+		//ar(cereal::make_nvp("Types_database", _typeDatabase));
+
+		std::uint16_t entityNbr = getNumberOfEntities();
+
+		ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
+		
+		std::vector<EntityData> entities;
+
+		// we list entities
+		auto ctr = 0;
 		for (auto &e : _pool)
 		{
-			// TODO
-			//if (e.getFlags() & EntityData::ACTIVE)
-			//{
-			//	++size;
-			//}
+			if (e.entity.isActive())
+			{
+				entities.push_back(e);
+				++ctr;
+				if (ctr >= entityNbr)
+					break;
+			}
 		}
-		ar(cereal::make_nvp("Number_of_serialized_entities", size));
-		for (auto &e : _pool)
+
+		for (auto &e : entities)
 		{
-			// TODO
-			//if (e.getFlags() & EntityData::ACTIVE)
-			//{
-			//	ar(cereal::make_nvp("Entity_" + std::to_string(e.getHandle().getId()), e));
-			//}
+			auto es = EntitySerializationInfos(e);
+			for (COMPONENT_ID i = 0; i < MAX_CPT_NUMBER; ++i)
+			{
+				if (e.barcode.hasComponent(i))
+				{
+					auto cpt = getComponent(e.getEntity(), i);
+					auto hash_code = getComponentHash(i);
+					es.componentsHash.push_back(hash_code);
+					es.components.push_back(getComponent(e.getEntity(), i));
+				}
+			}
+			ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), es));
+			es.serializeComponents(ar, this);
 		}
 	}
 
@@ -154,20 +182,50 @@ public:
 	void load(std::ifstream &s)
 	{
 		Archive ar(s);
-		unsigned int size = 0;
+
+		std::uint16_t size = 0;
 		ar(size);
 		for (unsigned int i = 0; i < size; ++i)
 		{
-			auto e = createEntity();
-			ar(*e.get());
+			auto &e = createEntity();
+			auto &ed = _pool[e.getId()];
+
+			EntitySerializationInfos infos(ed);
+			ar(infos);
+			e.flags = infos.flags;
+			ed.link.setPosition(infos.link.getPosition());
+			ed.link.setOrientation(infos.link.getOrientation());
+			ed.link.setScale(infos.link.getScale());
+
+			for (auto &hash : infos.componentsHash)
+			{
+				std::size_t componentTypeId;
+				auto ptr = ComponentRegistrar::getInstance().createComponentFromType(hash, ar, componentTypeId, this);
+				ed.barcode.setComponent(componentTypeId);
+				assert(_componentsManagers[componentTypeId] != nullptr);
+				_componentsManagers[componentTypeId]->addComponentPtr(e, ptr);
+				informFiltersComponentAddition(componentTypeId, ed);
+			}
+		//	ar(*e.get());
 		}
-		updateEntityHandles();
+		//updateEntityHandles();
 	}
 
 
 	////////////////////////
 	///////
 	// Component Manager Get / Set
+
+	template <typename T>
+	void registerComponentType()
+	{
+		COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
+		if (_componentsManagers[id] == nullptr)
+		{
+			_componentsManagers[id] = new ComponentManager<T>(this);
+		}
+		REGISTER_COMPONENT_TYPE(T);
+	}
 
 	template <typename T>
 	void clearComponentsType()
@@ -196,7 +254,7 @@ public:
 		if (data.entity != e)
 			return;
 		data.barcode.setTag(tag);
-		informFiltersTagAddition(tag, std::move(data));
+		informFiltersTagAddition(tag, data);
 	}
 
 	void removeTag(Entity &e, TAG_ID tag)
@@ -205,7 +263,7 @@ public:
 		if (data.entity != e)
 			return;
 		data.barcode.unsetTag(tag);
-		informFiltersTagDeletion(tag, std::move(data));
+		informFiltersTagDeletion(tag, data);
 	}
 
 	bool isTagged(Entity &e, TAG_ID tag)
@@ -241,7 +299,7 @@ public:
 
 		e.barcode.setComponent(id);
 
-		informFiltersComponentAddition(COMPONENT_ID(T::getTypeId()), std::move(e));
+		informFiltersComponentAddition(COMPONENT_ID(T::getTypeId()), e);
 		return res;
 	}
 
@@ -257,12 +315,34 @@ public:
 		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->getComponent(entity);
 	}
 
+	template <typename T>
+	bool *hasComponent(const Entity &entity)
+	{
+		COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
+		auto &e = _pool[entity.id];
+		assert(e.entity == entity);
+		return (e.barcode.hasComponent(id));
+	}
+
 	Component::Base *getComponent(const Entity &entity, COMPONENT_ID componentId)
 	{
 		auto &e = _pool[entity.id];
 		assert(e.entity == entity);
 		assert(e.barcode.hasComponent(componentId));
 		return this->_componentsManagers[componentId]->getComponentPtr(entity);
+	}
+
+	bool hasComponent(const Entity &entity, COMPONENT_ID componentId)
+	{
+		auto &e = _pool[entity.id];
+		assert(e.entity == entity);
+		return (e.barcode.hasComponent(componentId));
+	}
+
+	std::size_t getComponentHash(COMPONENT_ID componentId)
+	{
+		assert(this->_componentsManagers[componentId] != nullptr);
+		return this->_componentsManagers[componentId]->getHashCode();
 	}
 
 	template <typename T>
@@ -278,7 +358,7 @@ public:
 		}
 		static_cast<ComponentManager<T>*>(_componentsManagers[id])->removeComponent(entity);
 		e.barcode.unsetComponent(id);
-		informFiltersComponentDeletion(id, std::move(e));
+		informFiltersComponentDeletion(id, e);
 		return true;
 	}
 

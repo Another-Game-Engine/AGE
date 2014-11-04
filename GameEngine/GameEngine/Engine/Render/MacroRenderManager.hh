@@ -1,30 +1,5 @@
 #pragma once
 
-#define GEN_CONTAINER(type, name) \
-	std::map<Key<##type##>, type *> name;\
-	std::pair<Key<##type##>, type *> _optimize##type##Search;
-
-# define GEN_DEC_SEARCH_FUNCTION(type) \
-	type *get##type##(Key<type> const &key);
-
-
-#define GEN_DEF_SEARCH_FUNCTION(type, name) \
-	type *RenderManager::get##type##(Key<##type##> const &key) \
-	{ \
-		if (!key) \
-			assert(0); \
-		if (##name##.size() == 0) \
-			assert(0); \
-		if (key == _optimize##type##Search.first) \
-			return (_optimize##type##Search.second); \
-		auto &value = name##.find(key); \
-		if (value == name##.end()) \
-			assert(0); \
-		_optimize##type##Search.first = key; \
-		_optimize##type##Search.second = value->second; \
-		return (value->second); \
-	}
-
 #define GEN_DEC_RENDER_PUSH_TASK(name) \
 	RenderManager &pushClearTask##name##(Key<##name##> const &key, bool color = true, bool depth = true, bool stencil = false); \
 	RenderManager &pushSetClearValueTask##name##(Key<##name##> const &key, glm::vec4 const &color, float depth = 1.0f, uint8_t stencil = 0); \
@@ -46,7 +21,8 @@
 	RenderManager &pushSetBlendConstantTask##name##(Key<##name##> const &key, glm::vec4 const &blendPass); \
 	RenderManager &pushSetBlendStateTask##name##(Key<##name##> const &key, int drawBuffer, bool state); \
 	RenderManager &popTask##name##(Key<##name##> const &key); \
-	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f);
+	RenderManager &pushOwnTask##name##(Key<##name##> const &key, std::function<void(LocationStorage &)> const &f); \
+	RenderManager &pushSetCullFace##name##(Key<##name##> const &key, GLenum mode);
 
 #define GEN_DEC_RENDEROFFSCREEN_PUSH_TASK(name) \
 	RenderManager &config##name##(Key<##name##> const &renderPass, glm::ivec4 const &rect, GLint sample = 1); \
@@ -249,6 +225,12 @@ RenderManager &RenderManager::pushOwnTask##name##(Key<##name##> const &key, std:
 {\
 	name *render = get##name##(key); \
 	render->pushOwnTask(f); \
+	return (*this); \
+} \
+RenderManager &RenderManager::pushSetCullFace##name##(Key<##name##> const &key, GLenum mode) \
+{ \
+	name *render = get##name##(key); \
+	render->pushSetCullFace(mode); \
 	return (*this); \
 }
 

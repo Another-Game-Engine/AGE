@@ -23,7 +23,6 @@
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/set.hpp>
-#include <cereal/types/base_class.hpp>
 #include <cereal/types/string.hpp>
 
 #include <Physic/DynamicMotionState.hpp>
@@ -62,7 +61,7 @@ namespace Component
 			_mass = mass;
 		}
 
-		virtual void reset(AScene *)
+		virtual void reset(AScene *scene)
 		{
 			if (_rigidBody != nullptr)
 			{
@@ -166,7 +165,7 @@ namespace Component
 			}
 			else if (c == SPHERE)
 			{
-				_collisionShape = new btSphereShape(0.5);
+				_collisionShape = new btSphereShape(1);
 			}
 			else if (c == MESH)
 			{
@@ -275,11 +274,15 @@ namespace Component
 		template <typename Archive>
 		void save(Archive &ar) const
 		{
+			std::string TODO = "todo";
+			ar(TODO);
 		}
 
 		template <typename Archive>
 		void load(Archive &ar)
 		{
+			std::string TODO;
+			ar(TODO);
 		}
 
 		// !Serialization
@@ -288,6 +291,9 @@ namespace Component
 
 
 	private:
+		btCollisionShape *_collisionShape;
+		btMotionState *_motionState;
+		btRigidBody *_rigidBody;
 		BulletDynamicManager *_manager;
 		CollisionShape _shapeType;
 		btScalar _mass;
@@ -295,9 +301,6 @@ namespace Component
 		glm::vec3 _rotationConstraint;
 		glm::vec3 _transformConstraint;
 		std::string _shapeName;
-		btCollisionShape *_collisionShape;
-		btMotionState *_motionState;
-		btRigidBody *_rigidBody;
 
 	private:
 		RigidBody &operator=(RigidBody const &o);

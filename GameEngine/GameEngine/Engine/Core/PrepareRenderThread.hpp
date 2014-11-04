@@ -8,6 +8,7 @@
 #include <Core/PrepareKey.hpp>
 #include <Utils/CommandQueueHolder.hpp>
 #include <Utils/ThreadQueue.hpp>
+#include <Skinning/AnimationInstance.hpp>
 
 class AScene;
 
@@ -23,6 +24,8 @@ namespace AGE
 	struct DrawableCollection;
 	struct SubMeshInstance;
 
+	class OctreeNode;
+
 	class PrepareRenderThread : public ThreadQueue, public Dependency<PrepareRenderThread>
 	{
 	public:
@@ -34,7 +37,7 @@ namespace AGE
 		PrepareKey addCamera();
 		PrepareKey addPointLight();
 
-		PrepareRenderThread &setPointLight(glm::vec3 const &, glm::vec3 const &, glm::vec3 const &, const PrepareKey &id);
+		PrepareRenderThread &setPointLight(glm::vec3 const &, glm::vec3 const &, const PrepareKey &id);
 		PrepareRenderThread &removeElement(const PrepareKey &key);
 		PrepareRenderThread &setPosition(const glm::vec3 &v, const PrepareKey &key);
 		PrepareRenderThread &setOrientation(const glm::quat &v, const PrepareKey &key);
@@ -42,11 +45,16 @@ namespace AGE
 		PrepareRenderThread &setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		PrepareRenderThread &setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		PrepareRenderThread &setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
-		PrepareRenderThread &updateGeometry(const PrepareKey &id, const Vector<SubMeshInstance> &meshs, const Vector<MaterialInstance> &materials);
+		PrepareRenderThread &updateGeometry(
+			const PrepareKey &id
+			, const Vector<SubMeshInstance> &meshs
+			, const Vector<MaterialInstance> &materials
+			, const gl::Key<AGE::AnimationInstance> &animation);
 		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
-		glm::mat4 const &getProjection(const PrepareKey &id);
 
 	private:
+		OctreeNode *_octree;
+
 		std::weak_ptr<AScene> scene;
 
 		Vector<Mesh> _meshs;

@@ -17,25 +17,6 @@ namespace gl
 	{
 	}
 
-
-	UniformBlock::UniformBlock(UniformBlock const &copy)
-		: _bindingPoint(copy._bindingPoint),
-		_sizeBlock(copy._sizeBlock),
-		_data(copy._data)
-	{
-	}
-
-	UniformBlock &UniformBlock::operator=(UniformBlock const &u)
-	{
-		if (this != &u)
-		{
-			_sizeBlock = u._sizeBlock;
-			_bindingPoint = u._bindingPoint;
-			_data = u._data;
-		}
-		return (*this);
-	}
-
 	size_t UniformBlock::getNbrElement() const
 	{
 		return (_data.size());

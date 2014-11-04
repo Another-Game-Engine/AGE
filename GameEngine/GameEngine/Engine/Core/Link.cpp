@@ -103,6 +103,8 @@ void Link::unregisterOctreeObject(const PrepareKey &key)
 	{
 		if (b == key)
 		{
+			auto ot = static_cast<PrepareRenderThread*>(_octree);
+			ot->removeElement(b);
 			b = PrepareKey();
 			return;
 		}

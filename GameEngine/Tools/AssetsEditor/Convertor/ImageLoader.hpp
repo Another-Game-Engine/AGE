@@ -16,15 +16,14 @@ namespace AGE
 			while (!dataSet.textures.empty())
 			{
 				auto &t = dataSet.textures.back();
-
+				dataSet.textures.pop_back();
 				auto path = dataSet.rawDirectory.path().string() + "\\" + t->rawPath;
 
 				fipImage image;
 
 				if (!image.load(path.c_str()))
 				{
-					std::cout << "coucou";
-					return false;
+					continue;
 				}
 
 				t->width = image.getWidth();
@@ -55,7 +54,6 @@ namespace AGE
 				t->data.assign(imgData, imgData + sizeof(unsigned char) * t->width * t->height * t->colorNumber);
 
 
-				dataSet.textures.pop_back();
 				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder());
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))

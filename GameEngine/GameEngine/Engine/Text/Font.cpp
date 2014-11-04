@@ -1,5 +1,5 @@
 #include "Font.hh"
-#include <Render/GeometryManager.hh>
+#include <Render/RenderManager.hh>
 #include <Render/Data.hh>
 
 Font::Font()

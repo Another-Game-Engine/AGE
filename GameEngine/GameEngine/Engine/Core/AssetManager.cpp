@@ -43,7 +43,8 @@ namespace AGE
 		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 		cereal::PortableBinaryInputArchive ar(ifs);
 		ar(data);
-
+		material->name = data.name;
+		material->path = _filePath.getFullName();
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		for (auto &e : data.collection)
 		{
@@ -53,16 +54,15 @@ namespace AGE
 			// TODO fill material with material key
 			gl::Key<gl::Material> &mat = material->datas.back();
 			manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
-			manager->setMaterial<gl::Color_ambiant>(mat, e.ambient);
 			manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
 			manager->setMaterial<gl::Color_specular>(mat, e.specular);
 
-			manager->setMaterial<gl::Texture_ambiant>(mat, loadTexture(e.ambientTexPath));
 			manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
 			manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
 			manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
+			manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath));
+			manager->setMaterial<gl::Texture_normal>(mat, loadTexture(e.normalTexPath));
 
-			manager->setMaterial<gl::Ratio_ambiant>(mat, 1.0f); // todo
 			manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
 			manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
 			manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
@@ -74,15 +74,12 @@ namespace AGE
 
 	gl::Key<gl::Texture> AssetsManager::loadTexture(const File &_filePath)
 	{
+		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_textures.find(filePath.getFullName()) != std::end(_textures))
 			return _textures[filePath.getFullName()];
 		if (!filePath.exists())
-		{
-			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
-			assert(false);
-		}
-
+			return (manager->getDefaultTexture2D());
 		TextureData data;
 
 		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
@@ -90,22 +87,22 @@ namespace AGE
 		ar(data);
 
 		// TODO fill texture with texture key
-		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+		
 		GLenum ct = GL_RGB32F;
 		GLenum color = GL_RGB;
 		if (data.colorNumber == 3)
 		{
-			ct = GL_RGB32F;
+			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
 			color = GL_BGR;
 		}
 		else if (data.colorNumber == 4)
 		{
-			ct = GL_RGBA32F;
+			ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
 			color = GL_BGRA;
 		}
 		else if (data.colorNumber == 1)
 		{
-			ct = GL_R8;
+			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
 			color = GL_LUMINANCE;
 		}
 		else
@@ -197,6 +194,7 @@ namespace AGE
 
 		meshInstance->subMeshs.resize(data.subMeshs.size());
 		meshInstance->name = data.name;
+		meshInstance->path = _filePath.getFullName();
 
 		for (std::size_t i = 0; i < data.subMeshs.size(); ++i)
 		{
@@ -239,7 +237,7 @@ namespace AGE
 		, const std::bitset<MeshInfos::END> &infos)
 	{
 		auto &pools = _pools.find(infos)->second;
-		auto &geometryManager = _dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
+		auto m = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 
 		std::size_t size = data.infos.count();
 
@@ -310,29 +308,26 @@ namespace AGE
 			++ctr;
 		}
 
-		//geometryManager.createSphereSimpleForm();
-		//mesh.vertices = geometryManager.getSimpleFormGeo(gl::SimpleForm::SPHERE);
-		//mesh.indices = geometryManager.getSimpleFormId(gl::SimpleForm::SPHERE);
-		mesh.vertices = geometryManager.addVertices(maxSize, uint8_t(size), nbrBuffer.data(), buffer.data());
-		mesh.indices = geometryManager.addIndices(data.indices.size(), &data.indices[0]);
-		mesh.bounding = data.boundingInfos;
-		//		mesh.name = data.name; // TODO
+		mesh.vertices = m->addVertices(maxSize, nbrBuffer, buffer, pools.first);
+		mesh.indices = m->addIndices(data.indices.size(), data.indices, pools.second);
+		mesh.vertexPool = pools.first;
+		mesh.indexPool = pools.second;
+		mesh.boundingBox = data.boundingBox;
+
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
-		geometryManager.attachVerticesToVertexPool(mesh.vertices, pools.first);
-		geometryManager.attachIndicesToIndexPool(mesh.indices, pools.second);
 	}
 
-	// Create pool for meshs
+	// Create pool for mesh
 	void AssetsManager::createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos)
 	{
-		auto geometryManager = &_dependencyManager.lock()->getInstance<gl::RenderManager>()->geometryManager;
-		assert(geometryManager != nullptr);
+		auto m = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+		assert(m != nullptr);
 
 		std::size_t size = infos.count();
 
-		GLenum *typeComponent = new GLenum[size]; // {GL_FLOAT, GL_FLOAT, GL_FLOAT};			
-		uint8_t *sizeTypeComponent = new uint8_t[size]; // { sizeof(float), sizeof(float), sizeof(float) };
-		uint8_t *nbrComponent = new uint8_t[size];// {4, 4, 4};
+		AGE::Vector<GLenum> typeComponent(size); // {GL_FLOAT, GL_FLOAT, GL_FLOAT};			
+		AGE::Vector<uint8_t> sizeTypeComponent(size); // { sizeof(float), sizeof(float), sizeof(float) };
+		AGE::Vector<uint8_t> nbrComponent(size);// {4, 4, 4};
 
 		std::size_t ctr = 0;
 
@@ -387,15 +382,10 @@ namespace AGE
 			++ctr;
 		}
 
-		auto vpKey = geometryManager->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
-		auto indKey = geometryManager->addIndexPool();
+		auto vpKey = m->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
+		auto indKey = m->addIndexPool();
 
-		geometryManager->attachIndexPoolToVertexPool(vpKey, indKey);
 
 		_pools.insert(std::make_pair(infos, std::make_pair(vpKey, indKey)));
-
-		delete[] typeComponent;
-		delete[] sizeTypeComponent;
-		delete[] nbrComponent;
 	}
 }

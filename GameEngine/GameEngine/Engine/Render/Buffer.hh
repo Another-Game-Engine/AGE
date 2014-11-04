@@ -47,6 +47,7 @@ namespace gl
 		virtual Buffer const &bind() const;
 		virtual Buffer const &unbind() const;
 		virtual GLenum getMode() const;
+		VertexBuffer const &attribute(size_t index, int nbrComponent, GLenum type, size_t offset) const;
 		virtual Buffer const &BufferData(size_t size) const;
 		virtual Buffer const &BufferSubData(size_t offset, size_t size, void *buffer) const;
 	

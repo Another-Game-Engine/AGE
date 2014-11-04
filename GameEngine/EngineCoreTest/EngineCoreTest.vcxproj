@@ -99,6 +99,7 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -113,6 +114,7 @@
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex64_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <SubSystem>Console</SubSystem>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

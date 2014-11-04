@@ -6,7 +6,6 @@
 #include <Components/CameraComponent.hpp>
 #include <Core/SceneManager.hh>
 #include <Render/RenderManager.hh>
-#include <Render/GeometryManager.hh>
 #include <Core/PreparableObject.hh>
 #include <Core/AssetsManager.hpp>
 #include <Core/RenderThread.hpp>

@@ -45,6 +45,13 @@ namespace gl
 		return (*this);
 	}
 
+	VertexBuffer const &VertexBuffer::attribute(size_t index, int nbrComponent, GLenum type, size_t offset) const
+	{
+		glEnableVertexAttribArray(index);
+		glVertexAttribPointer(GLuint(index), GLint(nbrComponent), type, GL_FALSE, 0, (const GLvoid *)offset);
+		return (*this);
+	}
+	
 	Buffer const &VertexBuffer::BufferSubData(size_t offset, size_t size, void *buffer) const
 	{
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, buffer);

@@ -39,7 +39,7 @@ namespace AGE
 		ImGuiIO& io = ImGui::GetIO();
 		//HARDCODED WINDOW TO FIX
 		//io.DisplaySize = ImVec2((float)window.x, (float)window.y);        // Display size, in pixels. For clamping windows positions.
-		io.DisplaySize = ImVec2(800, 600);        // Display size, in pixels. For clamping windows positions.
+		io.DisplaySize = ImVec2(1600, 900);        // Display size, in pixels. For clamping windows positions.
 		io.DeltaTime = 1.0f / 60.0f;                          // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
 		io.PixelCenterOffset = 0.0f;                        // Align OpenGL texels
 		io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
@@ -141,7 +141,7 @@ namespace AGE
 		// Setup timestep
 		static double time = 0.0f;
 		const double current_time = SDL_GetTicks();
-		float dif = current_time - time;
+		float dif = (float)(current_time - time);
 		io.DeltaTime = dif == 0.0f ? 0.000000001f : dif / 1000.0f;
 		time = current_time;
 
@@ -150,9 +150,9 @@ namespace AGE
 		int mx, my;
 		auto mouseState = SDL_GetMouseState(&mx, &my);
 		io.MousePos = ImVec2((float)mx, (float)my);
-		io.MouseDown[0] = mouseState & SDL_BUTTON(SDL_BUTTON_LEFT);
-		io.MouseDown[1] = mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT);
-		io.MouseDown[2] = mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+		io.MouseDown[0] = (bool)(mouseState & SDL_BUTTON(SDL_BUTTON_LEFT));
+		io.MouseDown[1] = (bool)(mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT));
+		io.MouseDown[2] = (bool)(mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE));
 
 		// Start the frame
 		ImGui::NewFrame();

@@ -7,6 +7,13 @@
 
 #include "EntityTypedef.hpp"
 
+#include <cereal/cereal.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/types/bitset.hpp>
+#include <cereal/types/vector.hpp>
+
 #include <Core/Link.hpp>
 
 class AScene;
@@ -20,6 +27,7 @@ public:
 		: id(0)
 		, version(0)
 		, flags(0)
+		, active(false)
 	{}
 
 	~Entity()
@@ -30,6 +38,7 @@ public:
 		id = o.id;
 		version = o.version;
 		flags = o.flags;
+		active = o.active;
 	}
 
 	Entity(Entity &&o)
@@ -37,6 +46,7 @@ public:
 		id = std::move(o.id);
 		version = std::move(o.version);
 		flags = std::move(o.flags);
+		active = o.active;
 	}
 
 	Entity &operator=(const Entity &o)
@@ -44,6 +54,7 @@ public:
 		id = o.id;
 		version = o.version;
 		flags = o.flags;
+		active = o.active;
 		return *this;
 	}
 
@@ -87,7 +98,7 @@ public:
 		return version;
 	}
 
-	inline const ENTITY_FLAGS &getFlags()
+	inline const ENTITY_FLAGS &getFlags() const
 	{
 		return flags;
 	}
@@ -97,10 +108,21 @@ public:
 		return flags;
 	}
 
+	inline bool isActive() const
+	{
+		return active;
+	}
+
+	inline void setActive(bool v)
+	{
+		active = v;
+	}
+
 private:
 	ENTITY_ID id;
 	ENTITY_VERSION version;
 	ENTITY_FLAGS flags;
+	bool active;
 
 	friend AScene;
 	friend AComponentManager;
@@ -177,6 +199,14 @@ public:
 	{
 		code.reset();
 	}
+
+	template < typename Archive >
+	void serialize(Archive &ar)
+	{
+		ar(
+			cereal::make_nvp("bitset", code)
+			);
+	}
 private:
 	std::bitset<MAX_CPT_NUMBER + MAX_TAG_NUMBER> code;
 
@@ -189,6 +219,7 @@ class EntityData
 public:
 	const Entity &getEntity() const { return entity; }
 	const Barcode &getBarcode() const { return barcode; }
+	const AGE::Link &getLink() const { return link; }
 private:
 	Entity entity;
 	AGE::Link link;

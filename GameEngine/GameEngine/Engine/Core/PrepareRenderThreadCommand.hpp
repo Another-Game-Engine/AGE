@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <Geometry/Material.hpp>
 #include <Geometry/Mesh.hpp>
-#include <Core/PreparableObject.hh>
+#include <Core/CullableObjects.hh>
 
 namespace AGE
 {
@@ -44,14 +44,17 @@ namespace AGE
 		{
 			Geometry(const PrepareKey &_key
 				, const AGE::Vector<SubMeshInstance> &_submeshInstances
-				, const AGE::Vector<MaterialInstance> &_materialInstances)
+				, const AGE::Vector<MaterialInstance> &_materialInstances
+				, const gl::Key<AnimationInstance> &_animation)
 				: key(_key)
 				, submeshInstances(_submeshInstances)
 				, materialInstances(_materialInstances)
+				, animation(_animation)
 			{}
 			PrepareKey key;
 			AGE::Vector<SubMeshInstance> submeshInstances;
 			AGE::Vector<MaterialInstance> materialInstances;
+			gl::Key<AnimationInstance> animation;
 		};
 
 		struct CreateDrawable
@@ -89,14 +92,12 @@ namespace AGE
 
 		struct SetPointLight
 		{
-			SetPointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range, PrepareKey &key)
+			SetPointLight(glm::vec3 const &color, glm::vec3 const &range, PrepareKey &key)
 			: key(key),
-			position(position),
 			color(color),
 			range(range)
 			{}
 			PrepareKey key;
-			glm::vec3 position;
 			glm::vec3 color;
 			glm::vec3 range;
 		};
@@ -111,8 +112,8 @@ namespace AGE
 
 		struct DeletePointLight
 		{
-			DeletePointLight(const PrepareKey &key)
-			: key(key)
+			DeletePointLight(const PrepareKey &_key)
+			: key(_key)
 			{}
 			PrepareKey key;
 		};

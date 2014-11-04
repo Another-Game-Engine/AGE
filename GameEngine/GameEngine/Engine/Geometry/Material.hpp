@@ -28,18 +28,19 @@ namespace AGE
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath);
+			ar(diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath, bumpTexPath);
 		}
 	};
 
 	struct MaterialDataSet
 	{
 		AGE::Vector<MaterialData> collection;
+		std::string name;
 
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(collection);
+			ar(collection, name);
 		}
 	};
 
@@ -48,5 +49,7 @@ namespace AGE
 	struct MaterialSetInstance
 	{
 		AGE::Vector<MaterialInstance> datas;
+		std::string name;
+		std::string path;
 	};
 }

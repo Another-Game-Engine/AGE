@@ -60,6 +60,7 @@ namespace AGE
 			dataSet.assimpScene = const_cast<aiScene*>(dataSet.assimpImporter.ReadFile(
 				path
 				, aiProcess_Triangulate |
+				aiProcess_GenNormals |
 				aiProcess_CalcTangentSpace |
 				aiProcess_JoinIdenticalVertices |
 				aiProcess_SortByPType |

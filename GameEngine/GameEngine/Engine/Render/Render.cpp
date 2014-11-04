@@ -3,14 +3,15 @@
 #include <string>
 #include <Core/PreparableObject.hh>
 #include <Render/Task.hh>
-#include <Render/GeometryManager.hh>
-#include <Render/MaterialManager.hh>
 #include <Render/Storage.hh>
+#include <Render/Pool.hh>
+#include <Render/RenderManager.hh>
 
 namespace gl
 {
-	BaseRender::BaseRender()
-		: _rect(0, 0, 800, 600)
+	BaseRender::BaseRender(RenderManager &source)
+		: _rect(0, 0, 1600, 900),
+		_source(source)
 	{
 
 	}
@@ -46,6 +47,7 @@ namespace gl
 			for (uint8_t param = 0; param < _tasks[index].nbrParams; ++param)
 				delete _tasks[index].params[param];
 			delete[] _tasks[index].params;
+			delete[] _tasks[index].sizeParams;
 		}
 		for (size_t index = 0; index < _ownFunction.size(); ++index)
 			delete _ownFunction[index];
@@ -239,6 +241,16 @@ namespace gl
 		return (*this);
 	}
 
+	OperationBuffer &OperationBuffer::pushSetCullFace(GLenum mode)
+	{
+		Task task;
+
+		setTaskAllocation(task, mode);
+		task.func = setCullFace;
+		_tasks.push_back(task);
+		return (*this);
+	}
+
 	OperationBuffer &OperationBuffer::pushOwnTask(std::function<void(LocationStorage &)> const &f)
 	{
 		Task task;
@@ -268,9 +280,9 @@ namespace gl
 			_tasks[index].func(_tasks[index].params);
 	}
 
-	OffScreenRender::OffScreenRender(LocationStorage &locationStorage)
-		: OperationBuffer(locationStorage),
-		BaseRender(),
+	OffScreenRender::OffScreenRender(RenderManager &source)
+		: OperationBuffer(source.locationStorage),
+		BaseRender(source),
 		_sample(0),
 		_updateTarget(true),
 		_updateFrameBuffer(true)
@@ -428,8 +440,8 @@ namespace gl
 		OperationBuffer::update();
 	}
 
-	DrawableRender::DrawableRender(Shader &shader, GeometryManager &geo)
-		: _geometryManager(geo),
+	DrawableRender::DrawableRender(Shader &shader, RenderManager &source)
+		: _source(source),
 		_shader(shader),
 		_mode(GL_TRIANGLES)
 	{
@@ -455,10 +467,8 @@ namespace gl
 
 	DrawableRender &DrawableRender::pushInputSampler(Key<Sampler> const &key, GLenum attachement, OffScreenRender const &render)
 	{
-		if (_shader.hasSampler(key))
-			_inputSamplers.push_back(Input(key, attachement, render));
-		else
-			assert(0);
+		assert(_shader.hasSampler(key));
+		_inputSamplers.push_back(Input(key, attachement, render));
 		return (*this);
 	}
 
@@ -470,7 +480,6 @@ namespace gl
 
 	void DrawableRender::update()
 	{
-		_shader.use();
 		for (size_t index = 0; index < _inputSamplers.size(); ++index)
 		{
 			Texture2D const *text = NULL;
@@ -500,11 +509,11 @@ namespace gl
 
 	}
 
-	RenderOnScreen::RenderOnScreen(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l)
-		: DrawableRender(s, g),
-		OperationBuffer(l),
-		QuadRender(key, id),
-		BaseRender()
+	RenderOnScreen::RenderOnScreen(Shader &s, RenderManager &r)
+		: DrawableRender(s, r),
+		OperationBuffer(r.locationStorage),
+		QuadRender(r),
+		BaseRender(r)
 	{
 
 	}
@@ -521,8 +530,9 @@ namespace gl
 		BaseRender::update();
 		DrawableRender::update();
 		OperationBuffer::update();
+		_shader.use();
 		_shader.update();
-		_geometryManager.draw(_mode, _id, _vertices);
+		BaseRender::_source.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
 		return (*this);
 	}
 
@@ -531,13 +541,13 @@ namespace gl
 		return (RenderType::RENDER_ON_SCREEN);
 	}
 
-	RenderPass::RenderPass(Shader &s, GeometryManager &g, MaterialManager &m, LocationStorage &l)
-		: DrawableRender(s, g),
-		OffScreenRender(l),
-		_materialManager(m),
+	RenderPass::RenderPass(Shader &s, Key<Shader> const &keyShader, RenderManager &r)
+		: DrawableRender(s, r),
+		OffScreenRender(r),
 		_toRender(NULL),
 		_start(0),
-		_end(0)
+		_end(0),
+		_keyShader(keyShader)
 	{
 	}
 
@@ -549,7 +559,7 @@ namespace gl
 	{
 		Task task;
 
-		setTaskAllocation(task, &_geometryManager, &_materialManager, &_shader, &_toRender, &_mode, &_start, &_end);
+		setTaskAllocation(task, &(BaseRender::_source), &_keyShader, &_toRender, &_mode, &_start, &_end);
 		task.func = draw;
 		_tasks.push_back(task);
 		return (*this);
@@ -585,10 +595,10 @@ namespace gl
 		return (RenderType::RENDER_PASS);
 	}
 
-	RenderPostEffect::RenderPostEffect(Key<Vertices> const &key, Key<Indices> const &id, Shader &s, GeometryManager &g, LocationStorage &l)
-		: DrawableRender(s, g),
-		OffScreenRender(l),
-		QuadRender(key, id)
+	RenderPostEffect::RenderPostEffect(Shader &s, RenderManager &r)
+		: DrawableRender(s, r),
+		OffScreenRender(r),
+		QuadRender(r)
 	{
 
 	}
@@ -604,8 +614,9 @@ namespace gl
 		_shader.use();
 		DrawableRender::update();
 		OffScreenRender::update();
+		_shader.use();
 		_shader.update();
-		_geometryManager.draw(_mode, _id, _vertices);
+		BaseRender::_source.draw(_mode, _id, _vertices, _indexPool, _vertexPool);
 		return (*this);
 	}
 
@@ -614,8 +625,8 @@ namespace gl
 		return (RenderType::RENDER_POST_EFFECT);
 	}
 
-	EmptyRenderPass::EmptyRenderPass(LocationStorage &locationStorage)
-		: OffScreenRender(locationStorage)
+	EmptyRenderPass::EmptyRenderPass(RenderManager &r)
+		: OffScreenRender(r)
 	{
 
 	}
@@ -637,9 +648,11 @@ namespace gl
 		return (RenderType::RENDER_EMPTY);
 	}
 
-	QuadRender::QuadRender(Key<Vertices> const &key, Key<Indices> const &id)
-		: _vertices(key),
-		_id(id)
+	QuadRender::QuadRender(RenderManager &r)
+		: _vertices(r.getSimpleFormGeo(SimpleForm::QUAD)),
+		_id(r.getSimpleFormId(SimpleForm::QUAD)),
+		_vertexPool(r.simpleFormPoolGeo),
+		_indexPool(r.simpleFormPoolId)
 	{
 
 	}
