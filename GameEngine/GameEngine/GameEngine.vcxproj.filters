@@ -76,6 +76,8 @@
     <ClCompile Include="Engine\Utils\Sphere.cpp" />
     <ClCompile Include="Engine\Render\Program.cpp" />
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
+    <ClCompile Include="Engine\Render\ResourceProgram.cpp" />
+    <ClCompile Include="Engine\Render\Attribute.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -228,6 +230,8 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Render\Program.hh" />
     <ClInclude Include="Engine\Render\UnitProg.hh" />
+    <ClInclude Include="Engine\Render\ResourceProgram.hh" />
+    <ClInclude Include="Engine\Render\Attribute.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

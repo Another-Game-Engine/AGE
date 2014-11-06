@@ -65,14 +65,14 @@ namespace AGE
 
 	struct SubMeshInstance
 	{
-		gl::Key<gl::Indices> indices;
-		gl::Key<gl::Vertices> vertices;
+		Key<Vertices> vertices;
+		Key<Indices> indices;
 		
 		AGE::AABoundingBox boundingBox;
 //		std::string name;
 
-		gl::Key<gl::IndexPool> indexPool;
-		gl::Key<gl::VertexPool> vertexPool;
+		Key<IndexPool> indexPool;
+		Key<VertexPool> vertexPool;
 
 		MaterialIndex defaultMaterialIndex;
 	};

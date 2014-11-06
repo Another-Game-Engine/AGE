@@ -38,7 +38,7 @@ namespace Component
 		std::shared_ptr<AGE::MeshInstance> getMesh();
 		MeshRenderer &setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_mesh);
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
-		MeshRenderer &setAnimation(const gl::Key<AGE::AnimationInstance> &key);
+		MeshRenderer &setAnimation(const Key<AGE::AnimationInstance> &key);
 
 		virtual void postUnserialization(AScene *scene);
 
@@ -47,7 +47,7 @@ namespace Component
 		AScene *_scene;
 		std::shared_ptr<AGE::MeshInstance> _mesh;
 		std::shared_ptr<AGE::MaterialSetInstance> _material;
-		gl::Key<AGE::AnimationInstance> _animation;
+		Key<AGE::AnimationInstance> _animation;
 
 		struct SerializationInfos
 		{

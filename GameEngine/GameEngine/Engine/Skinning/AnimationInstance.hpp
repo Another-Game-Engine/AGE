@@ -23,7 +23,7 @@ namespace AGE
 		AGE::Vector<glm::mat4> transformations;
 		AGE::Vector<glm::mat4> bindPoses;
 		void update(float t);
-		gl::Key<AnimationInstance> key;
+		Key<AnimationInstance> key;
 	};
 
 }

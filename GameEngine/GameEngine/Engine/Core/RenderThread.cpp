@@ -15,7 +15,7 @@ using namespace AGE;
 bool RenderThread::_init()
 {
 	_context = _engine->setInstance<SdlContext, IRenderContext>();
-	_renderManager = _engine->setInstance<gl::RenderManager>();
+	_renderManager = _engine->setInstance<RenderManager>();
 	return true;
 }
 
@@ -32,7 +32,7 @@ bool RenderThread::_release()
 bool RenderThread::_releaseInNewThread()
 {
 	_engine->deleteInstance<IRenderContext>();
-	_engine->deleteInstance<gl::RenderManager>();
+	_engine->deleteInstance<RenderManager>();
 	return true;
 }
 

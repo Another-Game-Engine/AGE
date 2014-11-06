@@ -32,44 +32,44 @@
 
 struct Deferred_accum_light
 {
-	gl::Key<gl::Program> shader;
-	gl::Key<gl::Pipeline> pipeline;
-	gl::Key<gl::RenderPass> renderPass;
-	gl::Key<gl::RenderPostEffect> renderPostEffect;
-	gl::Key<gl::Uniform> position_light;
-	gl::Key<gl::Uniform> color_light;
-	gl::Key<gl::Uniform> range_light;
-	gl::Key<gl::Sampler> depth_buffer;
-	gl::Key<gl::Sampler> normal_buffer;
-	gl::Key<gl::Sampler> specular_buffer;
-	gl::Key<gl::Uniform> ambiant_color;
+	Key<Program> shader;
+	Key<Pipeline> pipeline;
+	Key<RenderPass> renderPass;
+	Key<RenderPostEffect> renderPostEffect;
+	Key<Uniform> position_light;
+	Key<Uniform> color_light;
+	Key<Uniform> range_light;
+	Key<Sampler> depth_buffer;
+	Key<Sampler> normal_buffer;
+	Key<Sampler> specular_buffer;
+	Key<Uniform> ambiant_color;
 };
 
 struct Deferred_get_buffer_Key
 {
-	gl::Key<gl::Program> shader;
-	gl::Key<gl::Uniform> model_matrix;
-	gl::Key<gl::RenderPass> renderPass;
-	gl::Key<gl::Pipeline> pipeline;
-	gl::Key<gl::Uniform> specular_color;
-	gl::Key<gl::Uniform> specular_ratio;
-	gl::Key<gl::Uniform> shininess;
+	Key<Program> shader;
+	Key<Uniform> model_matrix;
+	Key<RenderPass> renderPass;
+	Key<Pipeline> pipeline;
+	Key<Uniform> specular_color;
+	Key<Uniform> specular_ratio;
+	Key<Uniform> shininess;
 };
 
 struct Deffered_clean_buffer
 {
-	gl::Key<gl::EmptyRenderPass> emptyRenderPass;
-	gl::Key<gl::Pipeline> pipeline;
+	Key<EmptyRenderPass> emptyRenderPass;
+	Key<Pipeline> pipeline;
 };
 
 struct Deffered_merge
 {
-	gl::Key<gl::Program> shader;
-	gl::Key<gl::Sampler> diffuse_buffer;
-	gl::Key<gl::Sampler> light_buffer;
-	gl::Key<gl::RenderPostEffect> renderPostEffect;
-	gl::Key<gl::Pipeline> pipeline;
-	gl::Key<gl::RenderOnScreen> renderOnScreen;
+	Key<Program> shader;
+	Key<Sampler> diffuse_buffer;
+	Key<Sampler> light_buffer;
+	Key<RenderPostEffect> renderPostEffect;
+	Key<Pipeline> pipeline;
+	Key<RenderOnScreen> renderOnScreen;
 };
 
 struct RenderKey
@@ -78,7 +78,7 @@ struct RenderKey
 	Deffered_clean_buffer clean;
 	Deferred_accum_light Accum;
 	Deferred_get_buffer_Key getBuff;
-	gl::Key<gl::UniformBlock> global_state;
+	Key<UniformBlock> global_state;
 };
 
 class BenchmarkScene : public AScene	
@@ -93,7 +93,7 @@ public:
 
 private:
 	AGE::RenderThread *_renderThread;
-	gl::RenderManager *_renderManager;
+	RenderManager *_renderManager;
 	RenderKey key;
 
 	std::size_t _frameCounter = 0;
@@ -109,5 +109,5 @@ private:
 	Entity GLOBAL_SPONZA;
 	Entity GLOBAL_FLOOR;
 	Entity GLOBAL_HEAD;
-	gl::Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
+	Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
 };

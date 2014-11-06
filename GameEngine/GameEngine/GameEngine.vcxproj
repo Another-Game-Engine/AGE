@@ -229,6 +229,7 @@
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Core\RenderThread.cpp" />
+    <ClCompile Include="Engine\Render\Attribute.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
@@ -242,6 +243,7 @@
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
     <ClCompile Include="Engine\Render\Program.cpp" />
+    <ClCompile Include="Engine\Render\ResourceProgram.cpp" />
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
     <ClCompile Include="Engine\Render\ShaderResource.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
@@ -324,6 +326,7 @@
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
+    <ClInclude Include="Engine\Render\Attribute.hh" />
     <ClInclude Include="Engine\Render\Buffer.hh" />
     <ClInclude Include="Engine\Render\Data.hh" />
     <ClInclude Include="Engine\Render\Framebuffer.hh" />
@@ -340,6 +343,7 @@
     <ClInclude Include="Engine\Render\RenderManager.hh" />
     <ClInclude Include="Engine\Render\RenderThreadInterface.hpp" />
     <ClInclude Include="Engine\Render\Program.hh" />
+    <ClInclude Include="Engine\Render\ResourceProgram.hh" />
     <ClInclude Include="Engine\Render\UnitProg.hh" />
     <ClInclude Include="Engine\Render\ShaderResource.hh" />
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />

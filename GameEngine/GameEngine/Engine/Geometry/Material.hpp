@@ -44,7 +44,7 @@ namespace AGE
 		}
 	};
 
-	typedef gl::Key<gl::Material> MaterialInstance;
+	typedef Key<Material> MaterialInstance;
 
 	struct MaterialSetInstance
 	{

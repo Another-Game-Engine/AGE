@@ -3,23 +3,19 @@
 
 # include "Utils/OpenGL.hh"
 
-namespace gl
+class VertexArray
 {
-	/// Class representing vertexArray
-	class VertexArray
-	{
-	public:
-		 VertexArray();
-		~VertexArray();
-		 void bind() const;
-		 void unbind() const;
-		 GLuint getId() const;
-	private:
-		GLuint _id;
+public:
+	VertexArray();
+	~VertexArray();
+	void bind() const;
+	void unbind() const;
+	GLuint getId() const;
+private:
+	GLuint _id;
 
-		VertexArray(VertexArray const &vertexarray);
-		VertexArray &operator=(VertexArray const &vertexarray);
-	};
-}
+	VertexArray(VertexArray const &vertexarray);
+	VertexArray &operator=(VertexArray const &vertexarray);
+};
 
 #endif /*!VERTEXARRAY_HH_*/

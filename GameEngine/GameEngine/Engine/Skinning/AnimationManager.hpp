@@ -17,12 +17,12 @@ namespace AGE
 		virtual ~AnimationManager()
 		{}
 
-		gl::Key<AnimationInstance> createAnimationInstance(std::shared_ptr<AGE::Skeleton> skeleton, std::shared_ptr<AGE::Animation> animation)
+		Key<AnimationInstance> createAnimationInstance(std::shared_ptr<AGE::Skeleton> skeleton, std::shared_ptr<AGE::Animation> animation)
 		{
 			std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
 
 			auto instance = AGE::AnimationInstance(skeleton, animation);
-			instance.key = gl::Key<AGE::AnimationInstance>::createKey();
+			instance.key = Key<AGE::AnimationInstance>::createKey();
 			if (instance.key.getId() >= _list.size())
 				_list.resize(instance.key.getId() + 1);
 			_list[instance.key.getId()] = instance;
@@ -39,7 +39,7 @@ namespace AGE
 			}
 		}
 
-		std::vector<glm::mat4> &getBones(const gl::Key<AnimationInstance> &key)
+		std::vector<glm::mat4> &getBones(const Key<AnimationInstance> &key)
 		{
 			return _list[key.getId()].bindPoses;
 		}

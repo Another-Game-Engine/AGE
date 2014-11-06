@@ -51,7 +51,7 @@ UnitProg::~UnitProg()
 	destroy();
 }
 
-bool UnitProg::compileUnitProg(GLuint id, char const *file)
+bool UnitProg::compileUnitProg(GLuint id, char const *file) const
 {
 	GLint compileRet = 0;
 	glCompileShader(_id);
@@ -88,7 +88,7 @@ void UnitProg::create()
 	assert(compileUnitProg(_id, source));
 }
 
-void UnitProg::destroy()
+void UnitProg::destroy() const
 {
 	if (_id != 0)
 		glDeleteShader(_id);

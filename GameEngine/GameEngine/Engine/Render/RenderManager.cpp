@@ -7,9 +7,6 @@
 #include <Render/SimpleFormGeometry.hh>
 #include <Render/Data.hh>
 
-
-namespace gl
-{
 	typedef std::pair<uint32_t, uint32_t>				idxPair_t;
 	typedef std::map<idxPair_t, uint32_t>				idxHash_t;
 
@@ -766,20 +763,18 @@ namespace gl
 		p->bind();
 		p->syncronisation();
 		p->draw(mode, vertices);
-		p->endContext();
-		return (*this);
-	}
+	p->endContext();
+	return (*this);
+}
 
-	RenderManager &RenderManager::draw(GLenum mode, Key<Indices> const &indices, Key<Vertices> const &vertices, Key<IndexPool> const &indexPool, Key<VertexPool> const &vertexPool)
-	{
-		auto pv = getVertexPool(vertexPool);
-		auto pi = getIndexPool(indexPool);
-		pv->startContext(*pi);
-		pv->syncronisation();
-		pi->syncronisation();
-		pv->draw(mode, indices, vertices);
-		pv->endContext();
-		return (*this);
-	}
-
+RenderManager &RenderManager::draw(GLenum mode, Key<Indices> const &indices, Key<Vertices> const &vertices, Key<IndexPool> const &indexPool, Key<VertexPool> const &vertexPool)
+{
+	auto pv = getVertexPool(vertexPool);
+	auto pi = getIndexPool(indexPool);
+	pv->startContext(*pi);
+	pv->syncronisation();
+	pi->syncronisation();
+	pv->draw(mode, indices, vertices);
+	pv->endContext();
+	return (*this);
 }

@@ -49,7 +49,7 @@ namespace AGE
 			const PrepareKey &id
 			, const Vector<SubMeshInstance> &meshs
 			, const Vector<MaterialInstance> &materials
-			, const gl::Key<AGE::AnimationInstance> &animation);
+			, const Key<AGE::AnimationInstance> &animation);
 		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
 
 	private:

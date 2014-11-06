@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Utils/OpenGL.hh>
-#include <iostream>
+# include <Utils/OpenGL.hh>
+# include <iostream>
 
 
 class UnitProg
@@ -17,9 +17,9 @@ public:
 	GLuint getId() const;
 
 private:
-	bool compileUnitProg(GLuint id, char const *file);
+	bool compileUnitProg(GLuint id, char const *file) const;
 	void create();
-	void destroy();
+	void destroy() const;
 
 private:
 	std::string _filename;

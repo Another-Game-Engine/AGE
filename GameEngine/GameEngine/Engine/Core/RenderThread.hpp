@@ -15,7 +15,7 @@ namespace AGE
 	class RenderThread : public RenderThreadInterface
 	{
 		SdlContext *_context;
-		gl::RenderManager *_renderManager;
+		RenderManager *_renderManager;
 
 
 		virtual bool _init();

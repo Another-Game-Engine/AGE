@@ -81,7 +81,7 @@ namespace Component
 		return _material;
 	}
 
-	MeshRenderer &MeshRenderer::setAnimation(const gl::Key<AGE::AnimationInstance> &key)
+	MeshRenderer &MeshRenderer::setAnimation(const Key<AGE::AnimationInstance> &key)
 	{
 		_animation = key;
 		updateGeometry();

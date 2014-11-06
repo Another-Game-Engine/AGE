@@ -45,36 +45,36 @@ namespace AGE
 		ar(data);
 		material->name = data.name;
 		material->path = _filePath.getFullName();
-		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+		auto manager = _dependencyManager.lock()->getInstance<RenderManager>();
 		for (auto &e : data.collection)
 		{
 			auto key = manager->addMaterial();
 			material->datas.push_back(key);
 
 			// TODO fill material with material key
-			gl::Key<gl::Material> &mat = material->datas.back();
-			manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
-			manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
-			manager->setMaterial<gl::Color_specular>(mat, e.specular);
+			Key<Material> &mat = material->datas.back();
+			manager->setMaterial<Color_diffuse>(mat, e.diffuse);
+			manager->setMaterial<Color_emissive>(mat, e.emissive);
+			manager->setMaterial<Color_specular>(mat, e.specular);
 
-			manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
-			manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
-			manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
-			manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath));
-			manager->setMaterial<gl::Texture_normal>(mat, loadTexture(e.normalTexPath));
+			manager->setMaterial<Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
+			manager->setMaterial<Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
+			manager->setMaterial<Texture_specular>(mat, loadTexture(e.specularTexPath));
+			manager->setMaterial<Texture_bump>(mat, loadTexture(e.bumpTexPath));
+			manager->setMaterial<Texture_normal>(mat, loadTexture(e.normalTexPath));
 
-			manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
-			manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
-			manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
+			manager->setMaterial<Ratio_diffuse>(mat, 1.0f); // todo
+			manager->setMaterial<Ratio_emissive>(mat, 1.0f); // todo
+			manager->setMaterial<Ratio_specular>(mat, 1.0f); // todo
 		}
 
 		_materials.insert(std::make_pair(filePath.getFullName(), material));
 		return material;
 	}
 
-	gl::Key<gl::Texture> AssetsManager::loadTexture(const File &_filePath)
+	Key<Texture> AssetsManager::loadTexture(const File &_filePath)
 	{
-		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+		auto manager = _dependencyManager.lock()->getInstance<RenderManager>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_textures.find(filePath.getFullName()) != std::end(_textures))
 			return _textures[filePath.getFullName()];
@@ -237,7 +237,7 @@ namespace AGE
 		, const std::bitset<MeshInfos::END> &infos)
 	{
 		auto &pools = _pools.find(infos)->second;
-		auto m = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+		auto m = _dependencyManager.lock()->getInstance<RenderManager>();
 
 		std::size_t size = data.infos.count();
 
@@ -325,7 +325,7 @@ namespace AGE
 	// Create pool for mesh
 	void AssetsManager::createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos)
 	{
-		auto m = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+		auto m = _dependencyManager.lock()->getInstance<RenderManager>();
 		assert(m != nullptr);
 
 		std::size_t size = infos.count();
