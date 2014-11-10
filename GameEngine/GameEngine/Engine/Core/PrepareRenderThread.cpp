@@ -11,7 +11,7 @@
 #include <Core/PreparableObject.hh>
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Core/OctreeNode.hh>
+#include <Core/LooseOctreeNode.hh>
 #include <Core/CullableInterfaces.hh>
 #include <chrono>
 #include <Skinning/AnimationManager.hpp>
@@ -23,7 +23,7 @@ namespace AGE
 	PrepareRenderThread::PrepareRenderThread()
 	{
 		_drawables.reserve(65536);
-		_octree = new OctreeNode;
+		_octree = new LooseOctreeNode;
 	}
 
 	PrepareRenderThread::~PrepareRenderThread(void)

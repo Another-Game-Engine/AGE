@@ -24,7 +24,7 @@ namespace AGE
 	struct DrawableCollection;
 	struct SubMeshInstance;
 
-	class OctreeNode;
+	class LooseOctreeNode;
 
 	class PrepareRenderThread : public ThreadQueue, public Dependency<PrepareRenderThread>
 	{
@@ -53,7 +53,7 @@ namespace AGE
 		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
 
 	private:
-		OctreeNode *_octree;
+		LooseOctreeNode *_octree;
 
 		std::weak_ptr<AScene> scene;
 

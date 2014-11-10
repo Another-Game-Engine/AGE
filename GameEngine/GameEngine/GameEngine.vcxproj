@@ -225,6 +225,7 @@
     <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
+    <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="Engine\Core\CullableInterfaces.hh" />
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
     <ClInclude Include="Engine\Core\Link.hpp" />
+    <ClInclude Include="Engine\Core\LooseOctreeNode.hh" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Core\OctreeNode.hh" />
