@@ -34,7 +34,7 @@ namespace AGE
 		material = MaterialInstance();
 		transformation = glm::mat4(1);
 		meshAABB = AABoundingBox();
-		animation = gl::Key<AGE::AnimationInstance>();
+		animation = Key<AGE::AnimationInstance>();
 		this->toAddInOctree = false;
 		this->hasMoved = false;
 		bones.clear();

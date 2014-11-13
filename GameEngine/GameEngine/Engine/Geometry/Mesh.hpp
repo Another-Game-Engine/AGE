@@ -10,6 +10,10 @@
 #include <cereal/types/string.hpp>
 #include <cereal/types/bitset.hpp>
 #include <Render/Pool.hh>
+#include <Render/Key.hh>
+
+class Vertices;
+class Indices;
 
 namespace AGE
 {
@@ -67,13 +71,7 @@ namespace AGE
 	{
 		Key<Vertices> vertices;
 		Key<Indices> indices;
-		
 		AGE::AABoundingBox boundingBox;
-//		std::string name;
-
-		Key<IndexPool> indexPool;
-		Key<VertexPool> vertexPool;
-
 		MaterialIndex defaultMaterialIndex;
 	};
 

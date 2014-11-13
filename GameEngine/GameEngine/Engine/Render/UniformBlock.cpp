@@ -1,6 +1,36 @@
 #include <Render/UniformBlock.hh>
 #include <Render/Program.hh>
-#include <Render/ShaderResource.hh>
+#include <glm/glm.hpp>
+
+static const unsigned int nbr_type = 15;
+static std::pair<size_t, GLenum> types[nbr_type] =
+{
+	{ sizeof(glm::mat3), GL_FLOAT_MAT3 },
+	{ sizeof(glm::mat4), GL_FLOAT_MAT4 },
+	{ sizeof(glm::mat2), GL_FLOAT_MAT2 },
+	{ sizeof(float), GL_FLOAT },
+	{ sizeof(glm::vec2), GL_FLOAT_VEC2 },
+	{ sizeof(glm::vec3), GL_FLOAT_VEC3 },
+	{ sizeof(glm::vec4), GL_FLOAT_VEC4 },
+	{ sizeof(int), GL_INT },
+	{ sizeof(glm::ivec2), GL_INT_VEC2 },
+	{ sizeof(glm::ivec3), GL_INT_VEC3 },
+	{ sizeof(glm::ivec4), GL_INT_VEC4 },
+	{ sizeof(bool), GL_BOOL },
+	{ sizeof(glm::bvec2), GL_BOOL_VEC2 },
+	{ sizeof(glm::bvec3), GL_BOOL_VEC3 },
+	{ sizeof(glm::bvec4), GL_BOOL_VEC4 }
+};
+
+size_t convertGLidToSize(GLint type)
+{
+	for (size_t index = 0; index < nbr_type; ++index)
+	if (types[index].second == type)
+		return (types[index].first);
+	assert(0);
+	return (0);
+}
+
 
 UniformBlock::UniformBlock()
 	: _sizeBlock(0)
@@ -35,35 +65,31 @@ GLuint UniformBlock::getBufferId() const
 	return (_buffer.getId());
 }
 
-UniformBlock const &UniformBlock::introspection(Program const &s, GLuint indexInterfaceBlock)
+UniformBlock const &UniformBlock::introspection(Program const &program, GLuint indexInterfaceBlock)
 {
-	glGetActiveUniformBlockiv(s.getId(), indexInterfaceBlock, GL_UNIFORM_BLOCK_DATA_SIZE, &_sizeBlock);
+	glGetActiveUniformBlockiv(program.getId(), indexInterfaceBlock, GL_UNIFORM_BLOCK_DATA_SIZE, &_sizeBlock);
 	GLint nbrElement;
-	glGetActiveUniformBlockiv(s.getId(), indexInterfaceBlock, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &nbrElement);
-	GLint *elements = new GLint[nbrElement];
-	glGetActiveUniformBlockiv(s.getId(), indexInterfaceBlock, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, elements);
-	for (GLint index = 0; index < nbrElement; ++index)
+	glGetActiveUniformBlockiv(program.getId(), indexInterfaceBlock, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &nbrElement);
+	std::vector<GLint> elements(nbrElement);
+	glGetActiveUniformBlockiv(program.getId(), indexInterfaceBlock, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, elements.data());
+	for (GLint index = 0; index < nbrElement; ++index) 
 	{
 		if (elements[index] == -1)
 			assert(0);
 	}
-	GLint *offsets = new GLint[nbrElement];
-	GLint *sizes = new GLint[nbrElement];
-	GLint *types = new GLint[nbrElement];
-	GLint *strides = new GLint[nbrElement];
-	glGetActiveUniformsiv(s.getId(), nbrElement, (const GLuint *)elements, GL_UNIFORM_OFFSET, offsets);
-	glGetActiveUniformsiv(s.getId(), nbrElement, (const GLuint *)elements, GL_UNIFORM_SIZE, sizes);
-	glGetActiveUniformsiv(s.getId(), nbrElement, (const GLuint *)elements, GL_UNIFORM_TYPE, types);
-	glGetActiveUniformsiv(s.getId(), nbrElement, (const GLuint *)elements, GL_UNIFORM_ARRAY_STRIDE, strides);
+	std::vector<GLint> offsets(nbrElement);
+	std::vector<GLint> sizes(nbrElement);
+	std::vector<GLint> types(nbrElement);
+	std::vector<GLint> strides(nbrElement);
+	glGetActiveUniformsiv(program.getId(), nbrElement, (const GLuint *)elements.data(), GL_UNIFORM_OFFSET, offsets.data());
+	glGetActiveUniformsiv(program.getId(), nbrElement, (const GLuint *)elements.data(), GL_UNIFORM_SIZE, sizes.data());
+	glGetActiveUniformsiv(program.getId(), nbrElement, (const GLuint *)elements.data(), GL_UNIFORM_TYPE, types.data());
+	glGetActiveUniformsiv(program.getId(), nbrElement, (const GLuint *)elements.data(), GL_UNIFORM_ARRAY_STRIDE, strides.data());
 	for (GLint index = 0; index < nbrElement; ++index)
 	{
 		MemoryGPU m(sizes[index] * convertGLidToSize(types[index]), offsets[index], strides[index]);
 		_data.insert(m);
 	}
-	delete[] offsets;
-	delete[] sizes;
-	delete[] types;
-	delete[] strides;
 	GPUallocation();
 	return (*this);
 }

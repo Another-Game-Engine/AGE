@@ -119,14 +119,6 @@ namespace Component
 					init(_scene, mesh);
 				}
 			}
-			if (!_serializationInfos->material.empty())
-			{
-				auto material = _scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
-				if (material)
-				{
-					setMaterial(material);
-				}
-			}
 			// todo with animations
 		}
 	}

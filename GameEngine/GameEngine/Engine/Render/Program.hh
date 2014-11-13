@@ -6,6 +6,7 @@
 # include <vector>
 # include <array>
 # include <memory>
+# include <Render/Attribute.hh>
 
 class VertexPool;
 class IndexPool;
@@ -25,11 +26,9 @@ public:
 	Program &operator=(Program &&u);
 
 public:
-	Program setAttribute(std::vector<std::string> const &attibutes);
+	Program &setAttribute(std::vector<Attribute> const &attibutes);
+	Program &setAttribute(std::vector<Attribute> &&attibutes);
 	GLuint getId() const;
-	bool hasGeometryShader() const;
-	bool hasFragmentShader() const;
-	bool hasVertexShader() const;
 	template <typename resource_t> Key<ResourceProgram> add(std::string const &name, resource_t const &value);
 	template <typename resource_t> Key<ResourceProgram> add(std::string &&name, resource_t &&value);
 	template <typename resource_t> Program &set(Key<ResourceProgram> const &key, resource_t const &value);
@@ -38,9 +37,7 @@ public:
 	Program &update();
 
 private:
-	bool create(GLuint compute);
-	bool create(GLuint vertex, GLuint fragment);
-	bool create(GLuint vertex, GLuint fragment, GLuint geometry);
+	void create();
 	void destroy();
 
 private:
@@ -48,8 +45,6 @@ private:
 	std::vector<IResourceProgram *> _resourceProgram;
 	std::vector<UnitProg> _unitProg;
 	GLuint _id;
-	std::unique_ptr<VertexPool> _vertPool;
-	std::unique_ptr<IndexPool> _idPool;
 };
 
 template <typename resource_t> 

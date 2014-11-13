@@ -16,108 +16,6 @@ namespace AGE
 		return nullptr;
 	}
 
-	std::shared_ptr<MaterialSetInstance> AssetsManager::getMaterial(const File &_filePath)
-	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
-		if (_materials.find(filePath.getFullName()) != std::end(_materials))
-			return _materials[filePath.getFullName()];
-		return nullptr;
-	}
-
-
-	std::shared_ptr<MaterialSetInstance> AssetsManager::loadMaterial(const File &_filePath)
-	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
-
-		if (_materials.find(filePath.getFullName()) != std::end(_materials))
-			return _materials[filePath.getFullName()];
-		if (!filePath.exists())
-		{
-			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
-			assert(false);
-		}
-
-		MaterialDataSet data;
-		auto material = std::make_shared<MaterialSetInstance>();
-
-		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-		cereal::PortableBinaryInputArchive ar(ifs);
-		ar(data);
-		material->name = data.name;
-		material->path = _filePath.getFullName();
-		auto manager = _dependencyManager.lock()->getInstance<RenderManager>();
-		for (auto &e : data.collection)
-		{
-			auto key = manager->addMaterial();
-			material->datas.push_back(key);
-
-			// TODO fill material with material key
-			Key<Material> &mat = material->datas.back();
-			manager->setMaterial<Color_diffuse>(mat, e.diffuse);
-			manager->setMaterial<Color_emissive>(mat, e.emissive);
-			manager->setMaterial<Color_specular>(mat, e.specular);
-
-			manager->setMaterial<Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
-			manager->setMaterial<Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
-			manager->setMaterial<Texture_specular>(mat, loadTexture(e.specularTexPath));
-			manager->setMaterial<Texture_bump>(mat, loadTexture(e.bumpTexPath));
-			manager->setMaterial<Texture_normal>(mat, loadTexture(e.normalTexPath));
-
-			manager->setMaterial<Ratio_diffuse>(mat, 1.0f); // todo
-			manager->setMaterial<Ratio_emissive>(mat, 1.0f); // todo
-			manager->setMaterial<Ratio_specular>(mat, 1.0f); // todo
-		}
-
-		_materials.insert(std::make_pair(filePath.getFullName(), material));
-		return material;
-	}
-
-	Key<Texture> AssetsManager::loadTexture(const File &_filePath)
-	{
-		auto manager = _dependencyManager.lock()->getInstance<RenderManager>();
-		File filePath(_assetsDirectory + _filePath.getFullName());
-		if (_textures.find(filePath.getFullName()) != std::end(_textures))
-			return _textures[filePath.getFullName()];
-		if (!filePath.exists())
-			return (manager->getDefaultTexture2D());
-		TextureData data;
-
-		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-		cereal::PortableBinaryInputArchive ar(ifs);
-		ar(data);
-
-		// TODO fill texture with texture key
-		
-		GLenum ct = GL_RGB32F;
-		GLenum color = GL_RGB;
-		if (data.colorNumber == 3)
-		{
-			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
-			color = GL_BGR;
-		}
-		else if (data.colorNumber == 4)
-		{
-			ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
-			color = GL_BGRA;
-		}
-		else if (data.colorNumber == 1)
-		{
-			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
-			color = GL_LUMINANCE;
-		}
-		else
-			assert(false);
-		auto key = manager->addTexture2D(data.width, data.height, ct, true);
-
-		manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data.data.data());
-		manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		_textures.insert(std::make_pair(filePath.getFullName(), key));
-		return key;
-	}
-
 	std::shared_ptr<Animation> AssetsManager::loadAnimation(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
@@ -221,10 +119,6 @@ namespace AGE
 					infos.set(e);
 				}
 			}
-			if (_pools.find(infos) == std::end(_pools))
-			{
-				createPool(order, infos);
-			}
 			loadSubmesh(data.subMeshs[i], meshInstance->subMeshs[i], order, infos);
 		}
 		_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
@@ -236,7 +130,6 @@ namespace AGE
 		, const std::vector<MeshInfos> &order
 		, const std::bitset<MeshInfos::END> &infos)
 	{
-		auto &pools = _pools.find(infos)->second;
 		auto m = _dependencyManager.lock()->getInstance<RenderManager>();
 
 		std::size_t size = data.infos.count();
@@ -307,18 +200,6 @@ namespace AGE
 			}
 			++ctr;
 		}
-
-		m->createSphereSimpleForm();
-		//mesh.vertices = m->getSimpleFormGeo(gl::SimpleForm::SPHERE);
-		//mesh.indices = m->getSimpleFormId(gl::SimpleForm::SPHERE);
-		//mesh.indexPool = m->simpleFormPoolId;
-		//mesh.vertexPool = m->simpleFormPoolGeo;
-		mesh.vertices = m->addVertices(maxSize, nbrBuffer, buffer, pools.first);
-		mesh.indices = m->addIndices(data.indices.size(), data.indices, pools.second);
-		mesh.vertexPool = pools.first;
-		mesh.indexPool = pools.second;
-		mesh.boundingBox = data.boundingBox;
-
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
 	}
 
@@ -387,10 +268,5 @@ namespace AGE
 			++ctr;
 		}
 
-		auto vpKey = m->addVertexPool(uint8_t(size), typeComponent, sizeTypeComponent, nbrComponent);
-		auto indKey = m->addIndexPool();
-
-
-		_pools.insert(std::make_pair(infos, std::make_pair(vpKey, indKey)));
 	}
 }

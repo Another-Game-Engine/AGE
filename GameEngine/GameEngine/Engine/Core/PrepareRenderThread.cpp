@@ -180,7 +180,7 @@ namespace AGE
 		const PrepareKey &key
 		, const AGE::Vector<AGE::SubMeshInstance> &meshs
 		, const AGE::Vector<AGE::MaterialInstance> &materials
-		, const gl::Key<AGE::AnimationInstance> &animation)
+		, const Key<AGE::AnimationInstance> &animation)
 	{
 		assert(!key.invalid() || key.type != PrepareKey::Type::Drawable);
 		_commandQueue.emplace<PRTC::Geometry>(key, meshs, materials, animation);

@@ -30,57 +30,6 @@
 # define DEFERRED_FRAG_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.fp"
 # define DEFERRED_VERTEX_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.vp"
 
-struct Deferred_accum_light
-{
-	Key<Program> shader;
-	Key<Pipeline> pipeline;
-	Key<RenderPass> renderPass;
-	Key<RenderPostEffect> renderPostEffect;
-	Key<Uniform> position_light;
-	Key<Uniform> color_light;
-	Key<Uniform> range_light;
-	Key<Sampler> depth_buffer;
-	Key<Sampler> normal_buffer;
-	Key<Sampler> specular_buffer;
-	Key<Uniform> ambiant_color;
-};
-
-struct Deferred_get_buffer_Key
-{
-	Key<Program> shader;
-	Key<Uniform> model_matrix;
-	Key<RenderPass> renderPass;
-	Key<Pipeline> pipeline;
-	Key<Uniform> specular_color;
-	Key<Uniform> specular_ratio;
-	Key<Uniform> shininess;
-};
-
-struct Deffered_clean_buffer
-{
-	Key<EmptyRenderPass> emptyRenderPass;
-	Key<Pipeline> pipeline;
-};
-
-struct Deffered_merge
-{
-	Key<Program> shader;
-	Key<Sampler> diffuse_buffer;
-	Key<Sampler> light_buffer;
-	Key<RenderPostEffect> renderPostEffect;
-	Key<Pipeline> pipeline;
-	Key<RenderOnScreen> renderOnScreen;
-};
-
-struct RenderKey
-{
-	Deffered_merge merge;
-	Deffered_clean_buffer clean;
-	Deferred_accum_light Accum;
-	Deferred_get_buffer_Key getBuff;
-	Key<UniformBlock> global_state;
-};
-
 class BenchmarkScene : public AScene	
 {
 public:
@@ -94,7 +43,6 @@ public:
 private:
 	AGE::RenderThread *_renderThread;
 	RenderManager *_renderManager;
-	RenderKey key;
 
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
