@@ -1,12 +1,12 @@
 #pragma once
 
+# include <vector>
 # include <Render/UnitProg.hh>
 # include <Render/ResourceProgram.hh>
 # include <Render/Key.hh>
-# include <vector>
-# include <array>
-# include <memory>
 # include <Render/Attribute.hh>
+
+
 
 class VertexPool;
 class IndexPool;
@@ -41,28 +41,23 @@ private:
 	void destroy();
 
 private:
-	size_t _layer;
-	std::vector<IResourceProgram *> _resourceProgram;
-	std::vector<UnitProg> _unitProg;
+	std::vector<IResourceProgram *> _resourcesProgram;
+	std::vector<UnitProg> _unitsProg;
 	GLuint _id;
 };
 
 template <typename resource_t> 
 Key<ResourceProgram> Program::add(std::string const &name, resource_t const &value)
-{
-	auto key = Key<ResourceProgram>::createKey(_layer);
+{	
 	_resourceProgram.emplace_back(value);
-	assert(_resourceProgram.size() > key.getId())
-	return (key);
+	return (Key<ResourceProgram>::createKeyWithId(_resourcesProgram.size() - 1));
 }
 
 template <typename resource_t> 
 Key<ResourceProgram> Program::add(std::string &&name, resource_t &&value)
 {
-	auto key = Key<ResourceProgram>::createKey(_layer);
 	_resourceProgram.emplace_back(std::move(value));
-	assert(_resourceProgram.size() > key.getId())
-	return (key);
+	return (Key<ResourceProgram>::createKeyWithId(_resourcesProgram.size() - 1));
 }
 
 
@@ -70,22 +65,18 @@ template <typename resource_t>
 Program & Program::set(Key<ResourceProgram> const &key, resource_t const &value)
 {
 	_resourceProgram[key.getId()] = value;
-	assert(_resourceProgram.size() > key.getId())
-	return (key);
+	return (*this);
 }
 
 template <typename resource_t>
 Program & Program::set(Key<ResourceProgram> const &key, resource_t &&value)
 {
 	_resourceProgram[key.getId()] = std::move(value);
-	assert(_resourceProgram.size() > key.getId())
-	return (key);
+	return (*this);
 }
 
 template <typename resource_t>
 Program & Program::has(Key<ResourceProgram> const &key)
 {
-	if (_resourceProgram.size() > key.getId())
-		return (true);
-	return (false);
+	return (_resourceProgram.size() > key.getId());
 }

@@ -29,6 +29,11 @@ void BenchmarkScene::initRendering()
 
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
 	{
+		//auto &m = _renderManager;
+		//auto &program = m->addProgram(m->addUnitProgram(DEFFERED_VERTEX_SHADER, GL_VERTEX_SHADER), m->addUnitProgram(DEFFERED_FRAG_SHADER, GL_FRAGMENT_SHADER));
+		//auto &model_matrix = m->addResourceProgram<glm::mat4>(program, "model_matrix");
+		//m->setResourceProgram(program, model_matrix, glm::mat4(1.0f));
+		return (true);
 	});
 	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);
 	//float disc = Mathematic::secondDegreeDiscriminant(equation);
@@ -124,18 +129,12 @@ bool BenchmarkScene::userStart()
 	link->setPosition(glm::vec3(0, -1, 0));
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(GLOBAL_FLOOR, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
-	for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
-	{
-	}
 	{
 		GLOBAL_SPONZA = createEntity();
 		auto _l = getLink(GLOBAL_SPONZA);
 		_l->setPosition(glm::vec3(5, 0, 0));
 		_l->setScale(glm::vec3(0.01f));
 		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("sponza/sponza.sage"));
-		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-		{
-		}
 	}
 
 	{
@@ -147,10 +146,6 @@ bool BenchmarkScene::userStart()
 		_l->setPosition(glm::vec3(-4, 0, 0));
 		_l->setScale(glm::vec3(0.007f));
 		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
-		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-		{
-			//_renderManager->setMaterial<gl::Texture_normal>(getComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN)->getMaterial()->datas[index], _renderManager->getDefaultTexture2D());
-		}
 		//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
 		//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
 		//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
@@ -165,9 +160,6 @@ bool BenchmarkScene::userStart()
 		_l->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
 		_l->setScale(glm::vec3(0.05f));
 		auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-		{
-		}
 		getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
 		addComponent<Component::PointLight>(GLOBAL_LIGHT)->set(glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));
 	}

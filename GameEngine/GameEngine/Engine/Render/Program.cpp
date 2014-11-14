@@ -3,48 +3,51 @@
 #include <Utils/OpenGL.hh>
 
 Program::Program(UnitProg const &u):
-_unitProg({u})
+_unitsProg({u})
 {
 	create();
 }
 
 Program::Program(UnitProg const &u1, UnitProg const &u2):
-_unitProg({u1, u2})
+_unitsProg({u1, u2})
 {
 	create();
 }
 
 Program::Program(UnitProg const &u1, UnitProg const &u2, UnitProg const &u3):
-_unitProg({u1, u2, u3})
+_unitsProg({u1, u2, u3})
 {
 	create();
 }
 
 Program::Program(UnitProg &&u):
-_unitProg({std::move(u)})
+_unitsProg({std::move(u)})
 {
 	create();
 }
 
 Program::Program(UnitProg &&u1, UnitProg &&u2):
-_unitProg({std::move(u1), std::move(u2)})
+_unitsProg({std::move(u1), std::move(u2)})
 {
 	create();
 }
 
 Program::Program(UnitProg &&u1, UnitProg &&u2, UnitProg &&u3):
-_unitProg({std::move(u1), std::move(u2), std::move(u3)})
+_unitsProg({std::move(u1), std::move(u2), std::move(u3)})
 {
 	create();
 }
 
-Program::Program(Program const &copy)
+Program::Program(Program const &copy):
+_resourcesProgram(copy._resourcesProgram),
+_unitsProg(copy._unitsProg)
 {
 	create();
 }
 
 Program::Program(Program &&move):
-_layer(std::move(move._layer)),
+_resourcesProgram(std::move(move._resourcesProgram)),
+_unitsProg(std::move(move._unitsProg)),
 _id(std::move(move._id))
 {
 	move._id = 0;
@@ -63,9 +66,9 @@ Program & Program::operator=(Program const &u)
 {
 	if (this != &u)
 	{
-		_layer = u._layer;
+		_resourcesProgram = u._resourcesProgram;
+		_unitsProg = u._unitsProg;
 		_id = u._id;
-
 	}
 	return (*this);
 }
@@ -81,9 +84,8 @@ Program & Program::operator=(Program const &u)
 */
 Program & Program::operator=(Program &&u)
 {
-	_layer = std::move(u)._layer;
-	_resourceProgram = std::move(u._resourceProgram);
-	_unitProg = std::move(u._unitProg);
+	_resourcesProgram = std::move(u._resourcesProgram);
+	_unitsProg = std::move(u._unitsProg);
 	_id = std::move(u)._id;
 	u._id = 0;
 	return (*this);
@@ -145,10 +147,8 @@ Program & Program::update()
 */
 void Program::create()
 {
-	static size_t layer = 0;
-	_layer = layer++;
 	_id = glCreateProgram();
-	for (auto &unit : _unitProg)
+	for (auto &unit : _unitsProg)
 	{
 		glAttachShader(_id, unit.getId());
 	}

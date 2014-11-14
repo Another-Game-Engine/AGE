@@ -46,11 +46,8 @@ bool loadAssets(std::shared_ptr<Engine> e)
 	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents });
-	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"));
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents });
-	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents });
-	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"));
 	e->getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"));
 	e->getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"));
 	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("sibenik/sibenik.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
@@ -58,7 +55,6 @@ bool loadAssets(std::shared_ptr<Engine> e)
 
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents});
 
-	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sponza/sponza.mage"));
 	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, AGE::MeshInfos::BiTangents});
 	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("head/head.mage"));
 
