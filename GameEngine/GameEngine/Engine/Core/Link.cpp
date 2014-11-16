@@ -33,6 +33,7 @@ void Link::unregisterOctreeObject(const PrepareKey &key)
 			{
 				std::swap(b, _octreeObjects[_lastOctreeObjectIndex - 1]);
 			}
+			--_lastOctreeObjectIndex;
 			return;
 		}
 	}
@@ -139,8 +140,41 @@ void Link::reset()
 	_trans = glm::mat4(1);
 	_computeTrans = true;
 	_octreeObjects.fill(PrepareKey());
-	_parent = MAX_ENTITY_NUMBER;
-	_children.fill(MAX_ENTITY_NUMBER);
+	_parent = nullptr;
+	_children.fill(nullptr);
 	_lastOctreeObjectIndex = 0;
 	_lastChildrenIndex = 0;
+}
+
+void Link::_setChild(Link *ptr)
+{
+	_children[_lastChildrenIndex++] = ptr;
+}
+
+void Link::_setParent(Link *ptr)
+{
+	_parent = ptr;
+}
+
+void Link::_removeChild(Link *ptr)
+{
+	assert(_lastChildrenIndex != 0);
+	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
+	{
+		auto &b = _children[i];
+		if (b == ptr)
+		{
+			if (_lastOctreeObjectIndex - 1 != i)
+			{
+				std::swap(b, _children[_lastChildrenIndex - 1]);
+			}
+			--_lastChildrenIndex;
+			return;
+		}
+	}
+}
+
+void Link::_removeParent()
+{
+	_parent = nullptr;
 }

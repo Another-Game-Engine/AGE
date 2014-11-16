@@ -39,6 +39,8 @@ namespace AGE
 
 		void registerOctreeObject(const PrepareKey &key);
 		void unregisterOctreeObject(const PrepareKey &key);
+
+		inline bool hasChildren() const { return _lastChildrenIndex != 0; };
 	public:
 		const glm::mat4 &getTransform();
 	private:
@@ -49,10 +51,15 @@ namespace AGE
 		glm::mat4 _trans;
 		bool _computeTrans;
 		std::array<PrepareKey, MAX_CPT_NUMBER> _octreeObjects;
-		ENTITY_ID _parent;
-		std::array<ENTITY_ID, MAX_CHILDREN> _children;
+		Link *_parent;
+		std::array<Link*, MAX_CHILDREN> _children;
 		std::size_t _lastOctreeObjectIndex;
 		std::size_t _lastChildrenIndex;
+
+		void _setChild(Link *ptr);
+		void _setParent(Link *ptr);
+		void _removeChild(Link *ptr);
+		void _removeParent();
 	public:
 		void *_octree;
 	public:
