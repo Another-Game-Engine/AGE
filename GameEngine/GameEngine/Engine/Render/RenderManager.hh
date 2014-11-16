@@ -1,5 +1,7 @@
 #pragma once
 
+# include <memory>
+# include <vector>
 #include <Utils/OpenGL.hh>
 #include <Utils/Dependency.hpp>
 #include <Render/Key.hh>
@@ -10,49 +12,45 @@ class UnitProg;
 class RenderManager : public Dependency<RenderManager>
 {
 public:
-	RenderManager();
-	~RenderManager();
-
-public:
 	Key<UnitProg> addUnitProgram(std::string const &name, GLenum mode);
 	Key<UnitProg> addUnitProgram(std::string &&name, GLenum mode);
-	Key<Program> addProgram(Key<UnitProg> const &u1);
-	Key<Program> addProgram(Key<UnitProg> const &u1, Key<UnitProg> const &u2);
-	Key<Program> addProgram(Key<UnitProg> const &u1, Key<UnitProg> const &u2, Key<UnitProg> const &u3);
-	Key<Program> addProgram(Key<UnitProg> &&u1);
-	Key<Program> addProgram(Key<UnitProg> &&u1, Key<UnitProg> &&u2);
-	Key<Program> addProgram(Key<UnitProg> &&u1, Key<UnitProg> &&u2, Key<UnitProg> &&u3);
+	Key<Program> addProgram(std::vector<Key<UnitProg>> const &u1);
 	template <typename resource_t> Key<ResourceProgram> addResourceProgram(Key<Program> const &program, std::string const &flag);
 	template <typename resource_t> Key<ResourceProgram> addResourceProgram(Key<Program> const &program, std::string &&flag);
-	template <typename resource_t> RenderManager &setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, resource_t const &value);
+	template <typename resource_t> RenderManager &setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, typename resource_t::type const &value);
+	template <typename resource_t> RenderManager &setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, typename resource_t::type &&value);
 
 private:
 	std::vector<Program> _programs;
-	std::vector<UnitProg> _unitProgs;
-
-private:
-	Program *getProgram(Key<Program> const &key){ assert(!!key); return (&_programs[key.getId()]); }
-	UnitProg *getUnitProg(Key<UnitProg> const &key) { assert(!!key); return (&_unitProgs[key.getId()]); }
+	std::vector<std::shared_ptr<UnitProg>> _unitProgs;
 };
 
 template <typename resource_t>
 inline Key<ResourceProgram> RenderManager::addResourceProgram(Key<Program> const &program, std::string const &name)
 {
-	auto tmp_program = getProgram(program);
-	return (tmp_program->add(name, resource_t()));
+	auto &tmp_program = _programs[program.getId()];
+	return (tmp_program.add<resource_t>(resource_t(resource_t::type(), tmp_program, std::move(name))));
 }
 
 template <typename resource_t>
 inline Key<ResourceProgram> RenderManager::addResourceProgram(Key<Program> const &program, std::string &&name)
 {
-	auto tmp_program = getProgram(program);
-	return (tmp_program->add(std::move(name), resource_t()));
+	auto &tmp_program = _programs[program.getId()];
+	return (tmp_program.add<resource_t>(resource_t(resource_t::type(), tmp_program, std::move(name))));
 }
 
 template <typename resource_t>
-inline RenderManager &RenderManager::setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, resource_t const &value)
+inline RenderManager &RenderManager::setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, typename resource_t::type const &value)
 {
-	auto tmp_program = getProgram(program);
-	tmp_program->set(resource, value);
+	auto &tmp_program = _programs[program.getId()];
+	tmp_program.set<resource_t>(resource, value);
+	return (*this);
+}
+
+template <typename resource_t>
+inline RenderManager &RenderManager::setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, typename resource_t::type &&value)
+{
+	auto &tmp_program = _programs[program.getId()];
+	tmp_program.set<resource_t>(resource, std::move(value));
 	return (*this);
 }

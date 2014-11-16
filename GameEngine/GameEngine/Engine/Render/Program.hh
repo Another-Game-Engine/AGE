@@ -1,77 +1,68 @@
 #pragma once
 
-# include <vector>
+# include <memory>
 # include <Render/UnitProg.hh>
 # include <Render/ResourceProgram.hh>
 # include <Render/Key.hh>
 # include <Render/Attribute.hh>
 
-
-
-class VertexPool;
-class IndexPool;
-
 class Program
 {
 public:
-	Program(UnitProg const &u);
-	Program(UnitProg const &u1, UnitProg const &u2);
-	Program(UnitProg const &u1, UnitProg const &u2, UnitProg const &u3);
-	Program(UnitProg &&u);
-	Program(UnitProg &&u1, UnitProg &&u2);
-	Program(UnitProg &&u1, UnitProg &&u2, UnitProg &&u3);
-	Program(Program const &copy);
+	Program(std::vector<std::shared_ptr<UnitProg>> const &units);
+	Program(Program const &copy) = delete;
 	Program(Program &&move);
-	Program &operator=(Program const &u);
+	Program &operator=(Program const &u) = delete;
 	Program &operator=(Program &&u);
 
 public:
 	Program &setAttribute(std::vector<Attribute> const &attibutes);
 	Program &setAttribute(std::vector<Attribute> &&attibutes);
 	GLuint getId() const;
-	template <typename resource_t> Key<ResourceProgram> add(std::string const &name, resource_t const &value);
-	template <typename resource_t> Key<ResourceProgram> add(std::string &&name, resource_t &&value);
-	template <typename resource_t> Program &set(Key<ResourceProgram> const &key, resource_t const &value);
-	template <typename resource_t> Program &set(Key<ResourceProgram> const &key, resource_t &&value);
+	template <typename resource_t> Key<ResourceProgram> add(resource_t const &value);
+	template <typename resource_t> Key<ResourceProgram> add(resource_t &&value);
+	template <typename resource_t> Program &set(Key<ResourceProgram> const &key, typename resource_t::type const &value);
+	template <typename resource_t> Program &set(Key<ResourceProgram> const &key, typename resource_t::type &&value);
 	template <typename resource_t> Program &has(Key<ResourceProgram> const &key);
 	Program &update();
+	Program const &use() const;
 
 private:
 	void create();
 	void destroy();
 
 private:
-	std::vector<IResourceProgram *> _resourcesProgram;
-	std::vector<UnitProg> _unitsProg;
+	std::vector<std::unique_ptr<IResourceProgram>> _resourcesProgram;
+	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 	GLuint _id;
 };
 
 template <typename resource_t> 
-Key<ResourceProgram> Program::add(std::string const &name, resource_t const &value)
-{	
-	_resourceProgram.emplace_back(value);
+Key<ResourceProgram> Program::add(resource_t const &resource)
+{
+	_resourcesProgram.emplace_back(std::make_unique<resource_t>(resource));
 	return (Key<ResourceProgram>::createKeyWithId(_resourcesProgram.size() - 1));
 }
 
 template <typename resource_t> 
-Key<ResourceProgram> Program::add(std::string &&name, resource_t &&value)
+Key<ResourceProgram> Program::add(resource_t &&resource)
 {
-	_resourceProgram.emplace_back(std::move(value));
+	_resourcesProgram.emplace_back(std::make_unique<resource_t>(std::move(resource)));
 	return (Key<ResourceProgram>::createKeyWithId(_resourcesProgram.size() - 1));
 }
 
 
 template <typename resource_t>
-Program & Program::set(Key<ResourceProgram> const &key, resource_t const &value)
+Program & Program::set(Key<ResourceProgram> const &key, typename resource_t::type const &value)
 {
-	_resourceProgram[key.getId()] = value;
+	*static_cast<resource_t *>(_resourcesProgram[key.getId()].get()) = value;
 	return (*this);
 }
 
 template <typename resource_t>
-Program & Program::set(Key<ResourceProgram> const &key, resource_t &&value)
+Program & Program::set(Key<ResourceProgram> const &key, typename resource_t::type &&value)
 {
-	_resourceProgram[key.getId()] = std::move(value);
+	*static_cast<resource_t *>(_resourcesProgram[key.getId()].get()) = std::move(value);
 	return (*this);
 }
 

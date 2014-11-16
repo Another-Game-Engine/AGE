@@ -2,45 +2,8 @@
 #include <assert.h>
 #include <Utils/OpenGL.hh>
 
-Program::Program(UnitProg const &u):
-_unitsProg({u})
-{
-	create();
-}
-
-Program::Program(UnitProg const &u1, UnitProg const &u2):
-_unitsProg({u1, u2})
-{
-	create();
-}
-
-Program::Program(UnitProg const &u1, UnitProg const &u2, UnitProg const &u3):
-_unitsProg({u1, u2, u3})
-{
-	create();
-}
-
-Program::Program(UnitProg &&u):
-_unitsProg({std::move(u)})
-{
-	create();
-}
-
-Program::Program(UnitProg &&u1, UnitProg &&u2):
-_unitsProg({std::move(u1), std::move(u2)})
-{
-	create();
-}
-
-Program::Program(UnitProg &&u1, UnitProg &&u2, UnitProg &&u3):
-_unitsProg({std::move(u1), std::move(u2), std::move(u3)})
-{
-	create();
-}
-
-Program::Program(Program const &copy):
-_resourcesProgram(copy._resourcesProgram),
-_unitsProg(copy._unitsProg)
+Program::Program(std::vector<std::shared_ptr<UnitProg>> const &u) :
+_unitsProg(u)
 {
 	create();
 }
@@ -51,26 +14,6 @@ _unitsProg(std::move(move._unitsProg)),
 _id(std::move(move._id))
 {
 	move._id = 0;
-}
-
-/**
-* Method:    operator=
-* FullName:  Program::operator=
-* Access:    public 
-* Returns:   Program &
-* Qualifier:
-* Parameter: Program const & u
-* Goal:		 Assignment operation
-*/
-Program & Program::operator=(Program const &u)
-{
-	if (this != &u)
-	{
-		_resourcesProgram = u._resourcesProgram;
-		_unitsProg = u._unitsProg;
-		_id = u._id;
-	}
-	return (*this);
 }
 
 /**
@@ -137,6 +80,16 @@ Program & Program::update()
 	return (*this);
 }
 
+Program const & Program::use() const
+{
+	static GLint currentProgram = 0;
+	if (currentProgram == _id)
+		return (*this);
+	currentProgram = _id;
+	glUseProgram(_id);
+	return (*this);
+}
+
 /**
 * Method:    create
 * FullName:  Program::create
@@ -148,9 +101,9 @@ Program & Program::update()
 void Program::create()
 {
 	_id = glCreateProgram();
-	for (auto &unit : _unitsProg)
+	for (auto &element : _unitsProg)
 	{
-		glAttachShader(_id, unit.getId());
+		glAttachShader(_id, element->getId());
 	}
 	glLinkProgram(_id);
 }

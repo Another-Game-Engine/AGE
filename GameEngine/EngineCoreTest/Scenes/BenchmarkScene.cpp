@@ -7,7 +7,7 @@
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
-
+#include <Render/ResourceProgram.hh>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -29,10 +29,10 @@ void BenchmarkScene::initRendering()
 
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
 	{
-		//auto &m = _renderManager;
-		//auto &program = m->addProgram(m->addUnitProgram(DEFFERED_VERTEX_SHADER, GL_VERTEX_SHADER), m->addUnitProgram(DEFFERED_FRAG_SHADER, GL_FRAGMENT_SHADER));
-		//auto &model_matrix = m->addResourceProgram<glm::mat4>(program, "model_matrix");
-		//m->setResourceProgram(program, model_matrix, glm::mat4(1.0f));
+		auto &m = _renderManager;
+		auto &program = m->addProgram({ m->addUnitProgram(DEFFERED_VERTEX_SHADER, GL_VERTEX_SHADER), m->addUnitProgram(DEFFERED_FRAG_SHADER, GL_FRAGMENT_SHADER) });
+		auto &model_matrix = m->addResourceProgram<Mat4>(program, "model_matrix");
+		m->setResourceProgram<Mat4>(program, model_matrix, glm::mat4(1.0f));
 		return (true);
 	});
 	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);

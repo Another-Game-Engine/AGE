@@ -30,10 +30,9 @@ public:
 	void setUpdate(bool isUpdate);
 
 private:
-	bool create();
+	bool create(Program const &program);
 
 protected:
-	Program const &_parent;
 	std::string const _name;
 	GLint _id;
 	bool _isUpdate;
@@ -45,6 +44,8 @@ public:
 	Vec4(glm::vec4 const &value, Program const &parent, std::string const &name);
 	Vec4(glm::vec4 const &value, Program const &parent, std::string &&name);
 	Vec4 &operator=(glm::vec4 const &value);
+public:
+	typedef glm::vec4 type;
 
 public:
 	virtual IResourceProgram &operator()() override final;
@@ -62,6 +63,9 @@ public:
 
 public:
 	virtual IResourceProgram &operator()() override final;
+
+public:
+	typedef glm::mat4 type;
 
 private:
 	glm::mat4 _value;

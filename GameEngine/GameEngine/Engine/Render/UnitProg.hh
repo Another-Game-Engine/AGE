@@ -3,7 +3,6 @@
 # include <Utils/OpenGL.hh>
 # include <iostream>
 
-
 class UnitProg
 {
 public:
@@ -17,7 +16,7 @@ public:
 	GLuint getId() const;
 
 private:
-	bool compileUnitProg(GLuint id, char const *file) const;
+	bool compileUnitProg(char const *fileName);
 	void create();
 	void destroy() const;
 
