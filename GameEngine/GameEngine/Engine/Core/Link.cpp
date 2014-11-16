@@ -7,19 +7,35 @@ using namespace AGE;
 
 void Link::registerOctreeObject(const PrepareKey &key)
 {
-	for (auto &b : _octreeObjects)
+	assert(_lastOctreeObjectIndex < MAX_CPT_NUMBER);
+	auto &b = _octreeObjects[_lastOctreeObjectIndex];
+	assert(b.invalid());
+
+	b = key;
+	auto ot = static_cast<PrepareRenderThread*>(_octree);
+	ot->setPosition(_position, key);
+	ot->setScale(_scale, key);
+	ot->setOrientation(_orientation, key);
+	++_lastOctreeObjectIndex;
+}
+
+void Link::unregisterOctreeObject(const PrepareKey &key)
+{
+	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
 	{
-		if (b.invalid())
+		auto &b = _octreeObjects[i];
+		if (b == key)
 		{
-			b = key;
 			auto ot = static_cast<PrepareRenderThread*>(_octree);
-			ot->setPosition(_position, key);
-			ot->setScale(_scale, key);
-			ot->setOrientation(_orientation, key);
+			ot->removeElement(b);
+			b = PrepareKey();
+			if (_lastOctreeObjectIndex - 1 != i)
+			{
+				std::swap(b, _octreeObjects[_lastOctreeObjectIndex - 1]);
+			}
 			return;
 		}
 	}
-	assert(false);
 }
 
 void Link::setPosition(const glm::vec3 &v)
@@ -49,10 +65,10 @@ void Link::internalSetPosition(const glm::vec3 &v)
 	_computeTrans = true;
 	_position = v;
 	auto ot = static_cast<PrepareRenderThread*>(_octree);
-	for(auto &e : _octreeObjects)
+	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
 	{
-		if (e.invalid())
-			return;
+		auto &e = _octreeObjects[i];
+		assert(!e.invalid());
 		ot->setPosition(_position, e);
 	}
 }
@@ -65,10 +81,10 @@ void Link::internalSetForward(const glm::vec3 &v)
 	_position.y = _position.y + get.y;
 	_position.z = _position.z + get.z;
 	auto ot = static_cast<PrepareRenderThread*>(_octree);
-	for (auto &e : _octreeObjects)
+	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
 	{
-		if (e.invalid())
-			return;
+		auto &e = _octreeObjects[i];
+		assert(!e.invalid());
 		ot->setPosition(_position, e);
 	}
 }
@@ -77,10 +93,10 @@ void Link::internalSetScale(const glm::vec3 &v) {
 	_computeTrans = true;
 	_scale = v;
 	auto ot = static_cast<PrepareRenderThread*>(_octree);
-	for (auto &e : _octreeObjects)
+	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
 	{
-		if (e.invalid())
-			return;
+		auto &e = _octreeObjects[i];
+		assert(!e.invalid());
 		ot->setScale(_scale, e);
 	}
 }
@@ -89,25 +105,11 @@ void Link::internalSetOrientation(const glm::quat &v) {
 	_computeTrans = true;
 	_orientation = v;
 	auto ot = static_cast<PrepareRenderThread*>(_octree);
-	for (auto &e : _octreeObjects)
+	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
 	{
-		if (e.invalid())
-			return;
+		auto &e = _octreeObjects[i];
+		assert(!e.invalid());
 		ot->setOrientation(_orientation, e);
-	}
-}
-
-void Link::unregisterOctreeObject(const PrepareKey &key)
-{
-	for (auto &b : _octreeObjects)
-	{
-		if (b == key)
-		{
-			auto ot = static_cast<PrepareRenderThread*>(_octree);
-			ot->removeElement(b);
-			b = PrepareKey();
-			return;
-		}
 	}
 }
 
@@ -124,17 +126,21 @@ const glm::mat4 &Link::getTransform()
 	return _trans;
 }
 
-		Link::Link()
-		{
-			reset();
-		}
+Link::Link()
+{
+	reset();
+}
 
-		void Link::reset()
-		{
-			_position = glm::vec3(0);
-			_scale = glm::vec3(1);
-			_orientation = glm::quat(glm::mat4(1));
-			_trans = glm::mat4(1);
-			_computeTrans = true;
-			_octreeObjects.fill(PrepareKey());
-		}
+void Link::reset()
+{
+	_position = glm::vec3(0);
+	_scale = glm::vec3(1);
+	_orientation = glm::quat(glm::mat4(1));
+	_trans = glm::mat4(1);
+	_computeTrans = true;
+	_octreeObjects.fill(PrepareKey());
+	_parent = MAX_ENTITY_NUMBER;
+	_children.fill(MAX_ENTITY_NUMBER);
+	_lastOctreeObjectIndex = 0;
+	_lastChildrenIndex = 0;
+}

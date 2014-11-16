@@ -49,6 +49,10 @@ namespace AGE
 		glm::mat4 _trans;
 		bool _computeTrans;
 		std::array<PrepareKey, MAX_CPT_NUMBER> _octreeObjects;
+		ENTITY_ID _parent;
+		std::array<ENTITY_ID, MAX_CHILDREN> _children;
+		std::size_t _lastOctreeObjectIndex;
+		std::size_t _lastChildrenIndex;
 	public:
 		void *_octree;
 	public:
