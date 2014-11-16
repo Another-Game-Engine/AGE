@@ -17,6 +17,6 @@ public:
 	GraphicalMemory &setMemory(Key<GraphicalMemory> const &memory);
 
 private:
-	std::vector<std::pair<Vertices>> _elements;
+	std::vector<Vertices> _elements;
 	std::vector<AttributeBlockMemory> _blocksMemory;
 };

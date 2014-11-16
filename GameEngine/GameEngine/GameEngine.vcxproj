@@ -252,6 +252,7 @@
     <ClCompile Include="Engine\Render\Task.cpp" />
     <ClCompile Include="Engine\Render\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\VertexArray.cpp" />
+    <ClCompile Include="Engine\Render\Vertices.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
@@ -355,6 +356,7 @@
     <ClInclude Include="Engine\Render\Task.hh" />
     <ClInclude Include="Engine\Render\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\VertexArray.hh" />
+    <ClInclude Include="Engine\Render\Vertices.hh" />
     <ClInclude Include="Engine\Skinning\Animation.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationInstance.hpp" />

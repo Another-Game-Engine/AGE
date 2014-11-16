@@ -1,7 +1,10 @@
 #pragma once
 
 # include <vector>
+# include <memory>
 # include <Render/Data.hh>
+
+class Data;
 
 class Vertices
 {
@@ -10,5 +13,5 @@ public:
 	Vertices(std::vector<Data> &&data);
 
 private:
-	std::vector<Data> _data;
+	std::vector<std::shared_ptr<Data>> _data;
 };

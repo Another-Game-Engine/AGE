@@ -78,6 +78,9 @@
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
     <ClCompile Include="Engine\Render\ResourceProgram.cpp" />
     <ClCompile Include="Engine\Render\Attribute.cpp" />
+    <ClCompile Include="Engine\Render\AttributeBlockMemory.cpp" />
+    <ClCompile Include="Engine\Render\GraphicalMemory.cpp" />
+    <ClCompile Include="Engine\Render\Vertices.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -232,6 +235,9 @@
     <ClInclude Include="Engine\Render\UnitProg.hh" />
     <ClInclude Include="Engine\Render\ResourceProgram.hh" />
     <ClInclude Include="Engine\Render\Attribute.hh" />
+    <ClInclude Include="Engine\Render\AttributeBlockMemory.hh" />
+    <ClInclude Include="Engine\Render\GraphicalMemory.hh" />
+    <ClInclude Include="Engine\Render\Vertices.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
