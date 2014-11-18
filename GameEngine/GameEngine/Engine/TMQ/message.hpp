@@ -13,7 +13,7 @@ namespace TMQ
 		MessageBase(const MessageBase&) = delete;
 		MessageBase &operator=(const MessageBase&) = delete;
 	protected:
-		static std::size_t __shaderIdCounter;
+		static std::size_t __sharedIdCounter;
 	};
 
 	template <typename T>
@@ -26,7 +26,7 @@ namespace TMQ
 
 		static std::size_t getId()
 		{
-			static std::size_t id = MessageBase::__shaderIdCounter++;
+			static std::size_t id = MessageBase::__sharedIdCounter++;
 			return id;
 		}
 
@@ -53,30 +53,43 @@ namespace TMQ
 	template <typename T>
 	struct FutureData
 	{
+	private:
+		std::promise<T> *result;
+		bool _used;
+	public:
 		virtual ~FutureData()
-		{}
+		{
+			if (_used)
+				delete result;
+		}
 
-		std::promise<T> result;
 		std::future<T> getFuture()
 		{
-			return result.get_future();
+			return result->get_future();
 		}
 		FutureData& operator=(const FutureData&) = delete;
 		explicit FutureData(const FutureData&) = delete;
-		explicit FutureData() = default;
+		explicit FutureData()
+			: result(nullptr)
+			, _used(false)
+		{
+			result = new std::promise<T>();
+		}
 		FutureData& operator=(FutureData&& o)
 		{
-			result = std::move(o.result);
+			result = o.result;
 			return *this;
 		}
 		explicit FutureData(FutureData&& o)
 		{
-			result = std::move(o.result);
+			result = o.result;
 		}
-	};
 
-	//TODO REMOVE
-	class CloseQueue
-	{
+		void setValue(const T &v)
+		{
+			assert(!_used);
+			result->set_value(v);
+			_used = true;
+		}
 	};
 }

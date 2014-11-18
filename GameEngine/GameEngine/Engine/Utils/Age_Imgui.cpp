@@ -34,7 +34,7 @@ namespace AGE
 #ifdef USE_IMGUI
 		_dependencyInjector = di;
 		//HARDCODED WINDOW TO FIX
-		//auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+		//auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue()->safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
 		ImGuiIO& io = ImGui::GetIO();
 		//HARDCODED WINDOW TO FIX
@@ -188,7 +188,7 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef USE_IMGUI
-		getInstance()->_dependencyInjector->getInstance<AGE::Threads::Prepare>()->getCommandQueue().autoEmplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
+		getInstance()->_dependencyInjector->getInstance<AGE::Threads::Prepare>()->getCommandQueue()->autoEmplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
 #else
 		UNUSED(cmd_lists);
 		UNUSED(cmd_lists_count);

@@ -24,7 +24,7 @@ bool RenderThread::_init()
 
 	registerMessageCallback<RendCtxCommand::GetScreenSize>([&](RendCtxCommand::GetScreenSize& msg)
 	{
-		msg.result.set_value(_context->getScreenSize());
+		msg.setValue(_context->getScreenSize());
 	});
 
 	registerMessageCallback<RendCtxCommand::SetScreenSize>([&](RendCtxCommand::SetScreenSize& msg)
@@ -34,7 +34,7 @@ bool RenderThread::_init()
 
 	registerMessageCallback<AGE::TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
 	{
-		msg.result.set_value(msg.function());
+		msg.setValue(msg.function());
 	});
 
 	registerMessageCallback<RendCtxCommand::RefreshInputs>([&](RendCtxCommand::RefreshInputs& msg)
@@ -54,12 +54,6 @@ bool RenderThread::_init()
 		AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 	});
 #endif
-
-	registerMessageCallback<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
-	{
-		std::cout << "close";
-	});
-
 	return true;
 }
 

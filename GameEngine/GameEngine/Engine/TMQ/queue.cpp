@@ -70,6 +70,20 @@ MessageBase *PtrQueue::front()
 	return ((MessageBase*)(tmp));
 }
 
+std::size_t PtrQueue::getFrontSize()
+{
+	if (empty())
+		return 0;
+
+	char *tmp = _data;
+	std::size_t soi = sizeof(std::size_t);
+
+	tmp += _cursor;
+	std::size_t s = *reinterpret_cast<std::size_t*>(tmp);
+	return s;
+}
+
+
 void PtrQueue::clear()
 {
 	_cursor = _to = 0;

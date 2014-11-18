@@ -222,11 +222,6 @@ namespace AGE
 				break;
 			}
 		});
-
-		registerMessageCallback<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
-		{
-			std::cout << "quit";
-		});
 		
 		registerMessageCallback<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
 		{
@@ -327,7 +322,7 @@ namespace AGE
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
 			for (auto &e : this->_octreeDrawList)
 			{
-				renderThread->getCommandQueue().autoEmplace<TQC::VoidFunction>([=](){
+				renderThread->getCommandQueue()->autoEmplace<TQC::VoidFunction>([=](){
 					msg.function(e);
 				});
 			}	
@@ -336,15 +331,15 @@ namespace AGE
 		registerMessageCallback<PRTC::Flush>([&](PRTC::Flush& msg)
 		{
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
-			renderThread->getCommandQueue().autoEmplace<RendCtxCommand::Flush>();
-			renderThread->getCommandQueue().releaseReadability();
+			renderThread->getCommandQueue()->autoEmplace<RendCtxCommand::Flush>();
+			renderThread->getCommandQueue()->releaseReadability();
 		});
 
 		registerMessageCallback<AGE::RenderImgui>([&](AGE::RenderImgui& msg)
 		{
 #ifdef USE_IMGUI
 			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
-			renderThread->getCommandQueue().autoPush(msg);
+			renderThread->getCommandQueue()->autoPush(msg);
 #endif
 		});
 
@@ -541,8 +536,8 @@ namespace AGE
 
 
 
-			//renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
-			//renderThread->getCommandQueue().releaseReadability();
+			//renderThread->getCommandQueue()->safeEmplace<RendCtxCommand::Flush>();
+			//renderThread->getCommandQueue()->releaseReadability();
 			////msg.result.set_value(std::move(_octreeDrawList));
 			////_octreeDrawList.clear();
 

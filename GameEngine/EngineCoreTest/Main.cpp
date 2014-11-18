@@ -21,23 +21,15 @@
 #include <Core/Timer.hh>
 #include <Utils/PerformanceDebugger.hh>
 #include <Core/AssetsManager.hpp>
+#include <Core/MainThread.hpp>
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
 #include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
-
 #include <Utils/Age_Imgui.hpp>
-
 #include <Utils/ThreadQueueCommands.hpp>
-
 #include <Skinning/AnimationManager.hpp>
-
-
 //CONFIGS
 #include <CONFIGS.hh>
-
-
-
-#include <thread>
 
 bool loadAssets(std::shared_ptr<Engine> e)
 {
@@ -51,22 +43,10 @@ bool loadAssets(std::shared_ptr<Engine> e)
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"));
 	e->getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"));
 	e->getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"));
-	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("sibenik/sibenik.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Colors});
-	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sibenik/sibenik.mage"));
 
 	e->getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents});
 
 	e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sponza/sponza.mage"));
-	//e->getInstance<AGE::AssetsManager>()->loadMesh(File("head/head.sage"), {AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, AGE::MeshInfos::BiTangents});
-	//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("head/head.mage"));
-
-#endif
-#ifdef COMPLEX_MESH
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__Space.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__cube.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__ball.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__galileo.cpd"));
-	e->getInstance<AssetsManager>()->loadFromList(File("../../Assets/Serialized/export__dragon.cpd"));
 #endif
 
 	return true;
@@ -77,9 +57,15 @@ int			main(int ac, char **av)
 	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
 
 	auto renderThread = e->setInstance<AGE::RenderThread, AGE::Threads::Render>();
-	renderThread->launch(e.get());
-
 	auto preparationThread = e->setInstance<AGE::Threads::Prepare>();
+	auto mainThread = e->setInstance<AGE::MainThread>();
+
+
+	preparationThread->setNextCommandQueue(renderThread->getCurrentThreadCommandQueue());
+	renderThread->setNextCommandQueue(mainThread->getCurrentThreadCommandQueue());
+	mainThread->setNextCommandQueue(preparationThread->getCurrentThreadCommandQueue());
+
+	renderThread->launch(e.get());
 	preparationThread->launch(e.get());
 
 	// Set Configurations
@@ -95,7 +81,7 @@ int			main(int ac, char **av)
 	//context->launchCommandQueue();
 	//renderManager->launchCommandQueue();
 
-	auto contextInit = renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
+	auto contextInit = mainThread->getCommandQueue()->safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
 		std::function<bool()>([&](){
 		if (!context->init(0, 1600, 900, "~AGE~ V0.0 Demo"))
 			return false;
@@ -118,7 +104,7 @@ int			main(int ac, char **av)
 	// If config file has different value, it'll be changed automatically
 	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(1600, 900), [&](const glm::uvec2 &v)
 	{
-		renderThread->getCommandQueue().safeEmplace<RendCtxCommand::SetScreenSize>(v);
+		mainThread->getCommandQueue()->safeEmplace<RendCtxCommand::SetScreenSize>(v);
 	});
 	config->setConfiguration<std::string>("debuggerDevelopperName", "Modify MyConfigurationFile.conf with your name", [&e](const std::string &name)
 	{
@@ -143,7 +129,7 @@ int			main(int ac, char **av)
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
 
 #ifdef USE_IMGUI
-	renderThread->getCommandQueue().autoPriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([=](){
+	mainThread->getCommandQueue()->autoPriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([=](){
 		AGE::Imgui::getInstance()->init(e.get());
 		return true;
 	}).get();

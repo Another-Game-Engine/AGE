@@ -26,6 +26,7 @@ namespace TMQ
 		~PtrQueue();
 		void pop();
 		MessageBase *front();
+		std::size_t getFrontSize();
 		void clear();
 		void release();
 		bool empty();
@@ -67,9 +68,28 @@ namespace TMQ
 			tmp += _to;
 			memcpy(tmp, &s, sizeOfInt);
 			tmp += sizeOfInt;
-			Message<T>* res = new(tmp)Message<T>(e);
+			Message<T>* res = new(tmp)Message<T>(std::move(e));
 			_to += sizeOfInt + s;
 			return &res->_data;
+		}
+
+		void move(MessageBase *e, std::size_t size)
+		{
+			std::size_t s = size;
+			std::size_t sizeOfInt = sizeof(std::size_t);
+
+			if (_data == nullptr
+				|| _size - _to < s + sizeOfInt)
+			{
+				allocate(size);
+			}
+
+			char *tmp = _data;
+			tmp += _to;
+			memcpy(tmp, &s, sizeOfInt);
+			tmp += sizeOfInt;
+			memmove(tmp, e, size);
+			_to += sizeOfInt + s;
 		}
 
 		template <typename T, typename ...Args>
@@ -98,6 +118,16 @@ namespace TMQ
 		{
 			std::size_t sizeOfType = sizeof(Message<T>);
 
+			while (_size - _to <= sizeOfType + sizeof(std::size_t)
+				|| _size <= _to)
+			{
+				_size += _chunkSize;
+				_data = (char*)(realloc(_data, _size));
+			}
+		}
+
+		void allocate(std::size_t sizeOfType)
+		{
 			while (_size - _to <= sizeOfType + sizeof(std::size_t)
 				|| _size <= _to)
 			{
@@ -191,6 +221,22 @@ namespace TMQ
 			assert(_publisherThreadId == 0);
 			std::lock_guard<std::mutex> lock(_mutex);
 			_queue.emplace<T>(args...);
+		}
+
+		//Lock mutex or not
+		//Depend of the usage you made before
+		void autoMove(MessageBase *e, std::size_t size)
+		{
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_queue.move(e, size);
+			}
+			else
+			{
+				_queue.move(e, size);
+			}
 		}
 
 		//Lock mutex or not

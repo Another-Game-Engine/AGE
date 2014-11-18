@@ -11,6 +11,7 @@ namespace AGE
 	protected:
 		std::thread _thread;
 		TMQ::Queue _commandQueue;
+		TMQ::Queue *_next;
 		virtual bool _update() = 0;
 		virtual bool _init() = 0;
 		virtual bool _initInNewThread() = 0;
@@ -18,12 +19,13 @@ namespace AGE
 		virtual bool _releaseInNewThread() = 0;
 		Engine *_engine;
 		std::atomic_bool _run;
+		std::size_t _thisThreadId;
 
 		bool update()
 		{
 			bool run = true;
 			run = _initInNewThread();
-			auto thisThreadId = std::this_thread::get_id().hash();
+			_thisThreadId = std::this_thread::get_id().hash();
 			while (_run && run)
 			{
 				TMQ::PtrQueue q;
@@ -33,12 +35,17 @@ namespace AGE
 					auto message = q.front();
 					auto id = message->uid;
 					auto tid = message->tid;
-					assert(tid != thisThreadId); // mean that it's this thread who publish the message
+					assert(tid != _thisThreadId); // mean that it's this thread who publish the message
 					if (_callbackCollection.size() <= id || !_callbackCollection[id])
 					{
 						// Todo -> push the message for the next thread
-						q.pop();
-						continue;
+						if (_next)
+						{
+							_next->autoMove(message, q.getFrontSize());
+							q.pop();
+							continue;							
+						}
+						assert(false);
 					}
 					(*_callbackCollection[id].get())(message);
 					q.pop();
@@ -93,6 +100,7 @@ namespace AGE
 
 		ThreadQueue()
 			: _engine(nullptr)
+			, _next(nullptr)
 		{}
 
 		virtual ~ThreadQueue()
@@ -115,15 +123,28 @@ namespace AGE
 		{
 			if (!_thread.joinable())
 				return;
-			_commandQueue.autoPriorityEmplace<TMQ::CloseQueue>();
 			_run = false;
 			_thread.join();
 			_release();
 		}
 
-		TMQ::Queue &getCommandQueue()
+		// USE ONLY THAT FUNCTION TO GET THE COMMAND QUEUE
+		TMQ::Queue *getCommandQueue()
 		{
-			return _commandQueue;
+			assert(std::this_thread::get_id().hash() == _thisThreadId);
+			return _next;
+		}
+
+		void setNextCommandQueue(TMQ::Queue *next)
+		{
+			_next = next;
+		}
+
+		// USE THAT FUNCTION ONLY TO PASS THE RESULT to setNextCommandQueue
+		// Do NOT use it to pass messages
+		TMQ::Queue *getCurrentThreadCommandQueue()
+		{
+			return &_commandQueue;
 		}
 
 		template <typename T>
