@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <Core/Engine.hh>
 #include <Core/SceneManager.hh>
-#include <Utils/PubSub.hpp>
 
 #include <Render/RenderManager.hh>
 // SCENES
@@ -20,7 +19,6 @@
 #include <Core/ConfigurationManager.hpp>
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
-#include <Utils/PubSub.hpp>
 #include <Utils/PerformanceDebugger.hh>
 #include <Core/AssetsManager.hpp>
 #include <Systems/CameraSystem.hh> // just for the define... to rm for the future
@@ -87,7 +85,6 @@ int			main(int ac, char **av)
 	// Set Configurations
 	auto config = e->setInstance<ConfigurationManager>(File("NewMyConfigurationFile.conf"));
 
-	e->setInstance<PubSub::Manager>();
 	auto context = e->getInstance<IRenderContext>();
 	auto renderManager = e->getInstance<gl::RenderManager>();
 	e->setInstance<Input>();

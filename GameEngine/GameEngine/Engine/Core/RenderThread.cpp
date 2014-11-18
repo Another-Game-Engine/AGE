@@ -16,6 +16,50 @@ bool RenderThread::_init()
 {
 	_context = _engine->setInstance<SdlContext, IRenderContext>();
 	_renderManager = _engine->setInstance<gl::RenderManager>();
+
+	registerMessageCallback<RendCtxCommand::Flush>([&](RendCtxCommand::Flush& msg)
+	{
+		_context->swapContext();
+	});
+
+	registerMessageCallback<RendCtxCommand::GetScreenSize>([&](RendCtxCommand::GetScreenSize& msg)
+	{
+		msg.result.set_value(_context->getScreenSize());
+	});
+
+	registerMessageCallback<RendCtxCommand::SetScreenSize>([&](RendCtxCommand::SetScreenSize& msg)
+	{
+		_context->setScreenSize(msg.screenSize);
+	});
+
+	registerMessageCallback<AGE::TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
+	{
+		msg.result.set_value(msg.function());
+	});
+
+	registerMessageCallback<RendCtxCommand::RefreshInputs>([&](RendCtxCommand::RefreshInputs& msg)
+	{
+		_context->refreshInputs();
+	});
+
+	registerMessageCallback<TQC::VoidFunction>([&](TQC::VoidFunction& msg)
+	{
+		if (msg.function)
+			msg.function();
+	});
+
+#ifdef USE_IMGUI
+	registerMessageCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
+	{
+		AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
+	});
+#endif
+
+	registerMessageCallback<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
+	{
+		std::cout << "close";
+	});
+
 	return true;
 }
 
@@ -40,42 +84,7 @@ bool RenderThread::_update()
 {
 	bool returnValue = true;
 
-	_commandQueue.getDispatcher()
-		.handle<RendCtxCommand::Flush>([&](const RendCtxCommand::Flush& msg)
-	{
-		_context->swapContext();
-	})
-		.handle<RendCtxCommand::GetScreenSize>([&](RendCtxCommand::GetScreenSize& msg)
-	{
-		msg.result.set_value(_context->getScreenSize());
-	})
-		.handle<RendCtxCommand::SetScreenSize>([&](const RendCtxCommand::SetScreenSize& msg)
-	{
-		_context->setScreenSize(msg.screenSize);
-	})
-		.handle<AGE::TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
-	{
-		msg.result.set_value(msg.function());
-	})
-		.handle<RendCtxCommand::RefreshInputs>([&](const RendCtxCommand::RefreshInputs& msg)
-	{
-		_context->refreshInputs();
-	})
-		.handle<TQC::VoidFunction>([&](const TQC::VoidFunction& msg)
-	{
-		if (msg.function)
-			msg.function();
-	})
-#ifdef USE_IMGUI
-		.handle<AGE::RenderImgui>([&](const AGE::RenderImgui &msg)
-	{
-		AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
-	})
-#endif
-		.handle<TMQ::CloseQueue>([&](TMQ::CloseQueue& msg)
-	{
-		returnValue = false;
-	});
+	
 
 	return returnValue;
 }

@@ -7,10 +7,13 @@ namespace TMQ
 	struct MessageBase
 	{
 		virtual ~MessageBase();
-		MessageBase(std::size_t _uid);
+		MessageBase(std::size_t _uid, std::size_t _tid);
 		std::size_t uid;
+		std::size_t tid; // thread id
 		MessageBase(const MessageBase&) = delete;
 		MessageBase &operator=(const MessageBase&) = delete;
+	protected:
+		static std::size_t __shaderIdCounter;
 	};
 
 	template <typename T>
@@ -23,21 +26,21 @@ namespace TMQ
 
 		static std::size_t getId()
 		{
-			static std::size_t id = typeid(T).hash_code();
+			static std::size_t id = MessageBase::__shaderIdCounter++;
 			return id;
 		}
 
 		explicit Message(const T &data)
-			: MessageBase(getId()), _data(data)
+			: MessageBase(getId(), std::this_thread::get_id().hash()), _data(data)
 		{}
 
 		explicit Message(T &&data)
-			: MessageBase(getId()), _data(std::move(data))
+			: MessageBase(getId(), std::this_thread::get_id().hash()), _data(std::move(data))
 		{}
 
 		template <typename ...Args>
 		explicit Message(Args ...args)
-			: MessageBase(getId()), _data(args...)
+			: MessageBase(getId(), std::this_thread::get_id().hash()), _data(args...)
 		{
 		}
 
