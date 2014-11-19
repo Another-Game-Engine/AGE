@@ -3,11 +3,15 @@
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
+#include <Utils/Singleton.hh>
 
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
 #include <Render/ResourceProgram.hh>
+#include <Render/GraphicalMemory.hh>
+#include <Render/Data.hh>
+#include <Render/Vertices.hh>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -29,10 +33,13 @@ void BenchmarkScene::initRendering()
 
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
 	{
+		GraphicalMemory graphic;
+
 		auto &m = _renderManager;
 		auto &program = m->addProgram({ m->addUnitProgram(DEFFERED_VERTEX_SHADER, GL_VERTEX_SHADER), m->addUnitProgram(DEFFERED_FRAG_SHADER, GL_FRAGMENT_SHADER) });
 		auto &model_matrix = m->addResourceProgram<Mat4>(program, "model_matrix");
 		m->setResourceProgram<Mat4>(program, model_matrix, glm::mat4(1.0f));
+		auto key = graphic.addVertices(Vertices({ Data(std::vector<int>({1, 2, 3}), Attribute::Indices) }));
 		return (true);
 	});
 	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);
@@ -443,9 +450,9 @@ bool BenchmarkScene::userUpdate(double time)
 
 	octree->getCommandQueue().autoEmplace<AGE::PRTC::PrepareDrawLists>();
 
-	octree->getCommandQueue().autoEmplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
-	{
-	});
+	//octree->getCommandQueue().autoEmplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
+	//{
+	//});
 
 #ifdef USE_IMGUI
 	ImGui::Text("Main Thread : coucou");

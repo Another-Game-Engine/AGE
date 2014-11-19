@@ -1,22 +1,30 @@
 #pragma once
 
+# include <array>
 # include <vector>
 # include <utility>
-# include <Utils/Singleton.hh>
+# include <memory>
+# include <Render/Attribute.hh>
+# include <Render/AttributeBlockMemory.hh>
 
 template <typename type_t> class Key;
-enum class Attribute;
 class Vertices;
-class AttributeBlockMemory;
 
-class GraphicalMemory : public Singleton<GraphicalMemory>
+class GraphicalMemory
 {
 public:
-	Key<GraphicalMemory> addMemory(Attribute attribute);
-	GraphicalMemory &deleteMemory(Key<GraphicalMemory> const &memory);
-	GraphicalMemory &setMemory(Key<GraphicalMemory> const &memory);
+	GraphicalMemory();
+
+public:
+	Key<Vertices> addVertices(Vertices const &vertices);
+	Key<Vertices> addVertices(Vertices &&vertices);
+	GraphicalMemory &deleteVertices(Key<GraphicalMemory> const &memory);
+	GraphicalMemory &setVertices(Key<GraphicalMemory> const &memory, Vertices const &vertices);
+	GraphicalMemory &setVertices(Key<GraphicalMemory> const &memory, Vertices &&vertices);
 
 private:
+	void addVerticesToBlocksMemory(Vertices const &vertices);
+private:
 	std::vector<Vertices> _elements;
-	std::vector<AttributeBlockMemory> _blocksMemory;
+	std::array<AttributeBlockMemory, Attribute::END> _blocksMemory;
 };

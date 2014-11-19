@@ -2,15 +2,24 @@
 
 # include <vector>
 # include <memory>
-# include <Render/Data.hh>
 
 class Data;
 
 class Vertices
 {
 public:
+	typedef std::vector<std::shared_ptr<Data>>::iterator iterator;
+	typedef std::vector<std::shared_ptr<Data>>::const_iterator const_iterator;
+
+public:
 	Vertices(std::vector<Data> const &data);
 	Vertices(std::vector<Data> &&data);
+	iterator begin();
+	const_iterator begin() const;
+	iterator end();
+	const_iterator end() const;
+	std::weak_ptr<Data> const &getData(size_t index) const;
+	size_t nbrData() const;
 
 private:
 	std::vector<std::shared_ptr<Data>> _data;

@@ -70,7 +70,6 @@ namespace AGE
 	struct SubMeshInstance
 	{
 		Key<Vertices> vertices;
-		Key<Indices> indices;
 		AGE::AABoundingBox boundingBox;
 		MaterialIndex defaultMaterialIndex;
 	};

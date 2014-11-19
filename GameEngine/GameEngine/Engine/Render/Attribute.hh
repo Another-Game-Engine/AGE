@@ -4,8 +4,9 @@
 # include <stdint.h>
 # include <string>
 # include <tuple>
+# include <functional>
 
-enum class Attribute
+enum Attribute
 {
 	Position = 0,
 	Normal,
@@ -16,9 +17,10 @@ enum class Attribute
 	END
 };
 
+
 typedef std::tuple<std::string, size_t, size_t, GLenum> AttributeData;
 
-static const AttributeData AttributeProperty[(size_t)Attribute::END] =
+static const AttributeData attProperty[(size_t)Attribute::END] =
 {
 	std::make_tuple("position", 4, sizeof(float), GL_FLOAT),
 	std::make_tuple("normal", 4, sizeof(float), GL_FLOAT),

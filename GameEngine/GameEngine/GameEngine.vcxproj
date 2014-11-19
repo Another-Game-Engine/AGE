@@ -237,10 +237,8 @@
     <ClCompile Include="Engine\Render\GraphicalMemory.cpp" />
     <ClCompile Include="Engine\Render\LocationStorage.cpp" />
     <ClCompile Include="Engine\Render\Material.cpp" />
-    <ClCompile Include="Engine\Render\MemoryGPU.cpp" />
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
     <ClCompile Include="Engine\Render\PixelBuffer.cpp" />
-    <ClCompile Include="Engine\Render\Pool.cpp" />
     <ClCompile Include="Engine\Render\PreShader.cpp" />
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
@@ -340,10 +338,8 @@
     <ClInclude Include="Engine\Render\LocationStorage.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
     <ClInclude Include="Engine\Render\Material.hh" />
-    <ClInclude Include="Engine\Render\MemoryGPU.hh" />
     <ClInclude Include="Engine\Render\Pipeline.hh" />
     <ClInclude Include="Engine\Render\PixelBuffer.hh" />
-    <ClInclude Include="Engine\Render\Pool.hh" />
     <ClInclude Include="Engine\Render\Render.hh" />
     <ClInclude Include="Engine\Render\RenderManager.hh" />
     <ClInclude Include="Engine\Render\RenderThreadInterface.hpp" />

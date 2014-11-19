@@ -502,7 +502,7 @@ namespace AGE
 			for (auto &e : this->_octreeDrawList)
 			{
 				renderThread->getCommandQueue().autoEmplace<TQC::VoidFunction>([=](){
-//					msg.function(e);
+					msg.function(e);
 				});
 			}	
 		}).handle<PRTC::Flush>([&](const PRTC::Flush& msg)
