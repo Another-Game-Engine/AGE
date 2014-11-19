@@ -26,9 +26,9 @@ namespace AGE
 			bool run = true;
 			run = _initInNewThread();
 			_thisThreadId = std::this_thread::get_id().hash();
+			TMQ::PtrQueue q;
 			while (_run && run)
 			{
-				TMQ::PtrQueue q = TMQ::PtrQueue();
 				bool isPriorityQueue = this->_commandQueue.getReadableQueue(q);
 				while (!q.empty())
 				{
