@@ -18,11 +18,11 @@ namespace TMQ
 	class PtrQueue
 	{
 	public:
-		PtrQueue(const PtrQueue &o) = delete;
-		PtrQueue& operator=(const PtrQueue &o) = delete;
+		PtrQueue(const TMQ::PtrQueue &o);
+		PtrQueue& operator=(const TMQ::PtrQueue &o);
 		PtrQueue(std::size_t chunkSize = 1024);
-		PtrQueue& operator=(PtrQueue &&o);
-		PtrQueue(PtrQueue &&o);
+		PtrQueue& operator=(TMQ::PtrQueue &&o);
+		PtrQueue(TMQ::PtrQueue &&o);
 		~PtrQueue();
 		void pop();
 		MessageBase *front();
@@ -30,6 +30,15 @@ namespace TMQ
 		void clear();
 		void release();
 		bool empty();
+	private:
+		std::size_t _chunkSize;
+		char *_data;
+		std::size_t _cursor;
+		std::size_t _size;
+		std::size_t _to;
+
+		friend class Queue;
+
 	private:
 		template <typename T>
 		T* push(const T& e)
@@ -88,7 +97,9 @@ namespace TMQ
 			tmp += _to;
 			memcpy(tmp, &s, sizeOfInt);
 			tmp += sizeOfInt;
-			memmove(tmp, e, size);
+			e->clone(tmp);
+			//memcpy(tmp, e, size);
+			auto test = (MessageBase*)(tmp);
 			_to += sizeOfInt + s;
 		}
 
@@ -135,14 +146,6 @@ namespace TMQ
 				_data = (char*)(realloc(_data, _size));
 			}
 		}
-
-		std::size_t _chunkSize;
-		char *_data;
-		std::size_t _cursor;
-		std::size_t _size;
-		std::size_t _to;
-
-		friend class Queue;
 	};
 
 	class Queue
@@ -166,7 +169,7 @@ namespace TMQ
 		Queue(Queue &&) = delete;
 		Queue operator=(Queue &&) = delete;
 
-		bool getReadableQueue(PtrQueue& q);
+		bool getReadableQueue(TMQ::PtrQueue &q);
 		Dispatcher getDispatcher();
 		void releaseReadability();
 		void setWaitingTime(std::size_t milliseconds);
@@ -225,34 +228,26 @@ namespace TMQ
 
 		//Lock mutex or not
 		//Depend of the usage you made before
-		void autoMove(MessageBase *e, std::size_t size)
+		void move(MessageBase *e, std::size_t size)
 		{
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.move(e, size);
-			}
-			else
-			{
-				_queue.move(e, size);
-			}
+			std::call_once(_onceFlag, [&](){
+				_publisherThreadId = std::this_thread::get_id().hash();
+			});
+			// Assure you that you will not call unprotected functions from different thread	
+			assert(std::this_thread::get_id().hash() == _publisherThreadId);
+			_queue.move(e, size);
 		}
 
 		//Lock mutex or not
 		//Depend of the usage you made before
-		void autoPriorityMove(MessageBase *e, std::size_t size)
+		void priorityMove(MessageBase *e, std::size_t size)
 		{
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_priority.move(e, size);
-			}
-			else
-			{
-				_priority.move(e, size);
-			}
+			std::call_once(_onceFlag, [&](){
+				_publisherThreadId = std::this_thread::get_id().hash();
+			});
+			// Assure you that you will not call unprotected functions from different thread	
+			assert(std::this_thread::get_id().hash() == _publisherThreadId);
+			_priority.move(e, size);
 			releaseReadability();
 		}
 

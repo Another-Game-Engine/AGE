@@ -16,22 +16,22 @@ PtrQueue::PtrQueue(std::size_t chunkSize)
 PtrQueue& PtrQueue::operator=(PtrQueue &&o)
 {
 	std::swap(_data, o._data);
-	_chunkSize = std::move(o._chunkSize);
-	_cursor = std::move(o._cursor);
-	_to = std::move(o._to);
+	std::swap(_chunkSize, o._chunkSize);
+	std::swap(_cursor, o._cursor);
+	std::swap(_to, o._to);
 	std::swap(_size, o._size);
-	o.clear();
+//	o.clear();
 	return *this;
 }
 
 PtrQueue::PtrQueue(PtrQueue &&o)
 {
 	std::swap(_data, o._data);
-	_chunkSize = std::move(o._chunkSize);
-	_cursor = std::move(o._cursor);
-	_to = std::move(o._to);
+	std::swap(_chunkSize, o._chunkSize);
+	std::swap(_cursor, o._cursor);
+	std::swap(_to, o._to);
 	std::swap(_size, o._size);
-	o.clear();
+//	o.clear();
 }
 
 PtrQueue::~PtrQueue()
@@ -53,8 +53,7 @@ void PtrQueue::pop()
 	_cursor += s + soi;
 	tmp += soi;
 	auto r = reinterpret_cast<MessageBase*>(tmp);
-	if (r->_used)
-		r->~MessageBase();
+	r->~MessageBase();
 }
 
 MessageBase *PtrQueue::front()
@@ -129,7 +128,7 @@ void Queue::launch()
 }
 
 //return true if ti's a priority queue
-bool Queue::getReadableQueue(PtrQueue& q)
+bool Queue::getReadableQueue(TMQ::PtrQueue &q)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
 	bool isPriorityQueue;

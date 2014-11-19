@@ -139,10 +139,5 @@ namespace AGE
 				: function(_function)
 			{}
 		};
-
-		struct Flush
-		{
-			int i = 12;
-		};
 	}
 }

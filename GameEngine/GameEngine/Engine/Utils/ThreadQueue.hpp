@@ -28,7 +28,7 @@ namespace AGE
 			_thisThreadId = std::this_thread::get_id().hash();
 			while (_run && run)
 			{
-				TMQ::PtrQueue q;
+				TMQ::PtrQueue q = TMQ::PtrQueue();
 				bool isPriorityQueue = this->_commandQueue.getReadableQueue(q);
 				while (!q.empty())
 				{
@@ -42,9 +42,9 @@ namespace AGE
 						if (_next)
 						{
 							if (isPriorityQueue)
-								_next->autoPriorityMove(message, q.getFrontSize());
+								_next->priorityMove(message, q.getFrontSize());
 							else
-								_next->autoMove(message, q.getFrontSize());
+								_next->move(message, q.getFrontSize());
 							q.pop();
 							continue;							
 						}
@@ -55,6 +55,8 @@ namespace AGE
 					q.pop();
 				}
 				run = _update();
+				if (_next)
+					_next->releaseReadability();
 			}
 			return _releaseInNewThread();
 		}

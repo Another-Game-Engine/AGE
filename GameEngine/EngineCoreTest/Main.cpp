@@ -62,7 +62,7 @@ int			main(int ac, char **av)
 
 
 	preparationThread->setNextCommandQueue(renderThread->getCurrentThreadCommandQueue());
-	renderThread->setNextCommandQueue(mainThread->getCurrentThreadCommandQueue());
+//	renderThread->setNextCommandQueue(mainThread->getCurrentThreadCommandQueue());
 	mainThread->setNextCommandQueue(preparationThread->getCurrentThreadCommandQueue());
 
 	renderThread->launch(e.get());
@@ -81,7 +81,7 @@ int			main(int ac, char **av)
 	//context->launchCommandQueue();
 	//renderManager->launchCommandQueue();
 
-	auto contextInit = mainThread->getCommandQueue()->safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
+	auto contextInit = mainThread->getCommandQueue()->priorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
 		std::function<bool()>([&](){
 		if (!context->init(0, 1600, 900, "~AGE~ V0.0 Demo"))
 			return false;
@@ -104,7 +104,7 @@ int			main(int ac, char **av)
 	// If config file has different value, it'll be changed automatically
 	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(1600, 900), [&](const glm::uvec2 &v)
 	{
-		mainThread->getCommandQueue()->safeEmplace<RendCtxCommand::SetScreenSize>(v);
+		mainThread->getCommandQueue()->emplace<RendCtxCommand::SetScreenSize>(v);
 	});
 	config->setConfiguration<std::string>("debuggerDevelopperName", "Modify MyConfigurationFile.conf with your name", [&e](const std::string &name)
 	{

@@ -246,5 +246,6 @@
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

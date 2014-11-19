@@ -11,4 +11,5 @@ MessageBase::MessageBase(std::size_t _uid, std::size_t _tid)
 }
 
 MessageBase::~MessageBase()
-{}
+{
+}

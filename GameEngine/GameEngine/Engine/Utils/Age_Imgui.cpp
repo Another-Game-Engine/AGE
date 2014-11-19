@@ -6,7 +6,7 @@
 #include <imgui/imconfig.h>
 #include <Utils/Utils.hh>
 #include <Core/PrepareRenderThread.hpp>
-
+#include <Core/MainThread.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include <imgui\stb_image.h>
 #ifdef _MSC_VER
@@ -188,7 +188,7 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef USE_IMGUI
-		getInstance()->_dependencyInjector->getInstance<AGE::Threads::Prepare>()->getCommandQueue()->autoEmplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
+		getInstance()->_dependencyInjector->getInstance<AGE::MainThread>()->getCommandQueue()->autoEmplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
 #else
 		UNUSED(cmd_lists);
 		UNUSED(cmd_lists_count);

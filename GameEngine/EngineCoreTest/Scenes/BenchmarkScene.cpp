@@ -28,7 +28,7 @@ void BenchmarkScene::initRendering()
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 
-	auto res = mainThread->getCommandQueue()->safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
+	auto res = mainThread->getCommandQueue()->priorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
 		std::function<bool()>([&](){
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
@@ -235,7 +235,7 @@ bool BenchmarkScene::userStart()
 	GLOBAL_CAMERA = camera;
 	auto cam = addComponent<Component::CameraComponent>(camera);
 
-	auto screenSize = getInstance<AGE::MainThread>()->getCommandQueue()->safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screenSize = getInstance<AGE::MainThread>()->getCommandQueue()->priorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
 	auto camLink = getLink(camera);
 	camLink->setPosition(glm::vec3(0, 1.5, 0));
@@ -335,12 +335,14 @@ bool BenchmarkScene::userUpdate(double time)
 	_timeCounter += time;
 	_chunkCounter += time;
 
+#ifdef USE_IMGUI
 	if (ImGui::Button("Save -> Clear -> Reload"))
 	{
 		saveToBinary("SAVE_TEST.json");
 		clearAllEntities();
 		loadFromBinary("SAVE_TEST.json");
 	}
+#endif
 
 	//	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
 
@@ -386,6 +388,24 @@ bool BenchmarkScene::userUpdate(double time)
 			addComponent<Component::Lifetime>(e, 5.0f);
 #endif
 
+			auto link = getLink(e);
+			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+			link->setScale(glm::vec3(1.0f));
+
+
+			Component::MeshRenderer *mesh;
+			if (i % 4 == 0)
+			{
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+			}
+			else
+			{
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+			}
+
 #ifdef PHYSIC_SIMULATION
 			auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
 			//				rigidBody->setTransformation(link->getTransform());
@@ -419,6 +439,7 @@ bool BenchmarkScene::userUpdate(double time)
 	auto octree = getInstance<AGE::Threads::Prepare>();
 	auto renderManager = getInstance<gl::RenderManager>();
 
+#ifdef USE_IMGUI
 	{
 		auto link = getLink(GLOBAL_LIGHT);
 		auto pos = link->getPosition();
@@ -436,10 +457,11 @@ bool BenchmarkScene::userUpdate(double time)
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
 	}
+#endif
 
-	octree->getCommandQueue()->autoEmplace<AGE::PRTC::PrepareDrawLists>();
+	mainThread->getCommandQueue()->autoEmplace<AGE::PRTC::PrepareDrawLists>();
 
-	octree->getCommandQueue()->autoEmplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
+	mainThread->getCommandQueue()->autoEmplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
 	{
 		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
 		renderManager->locationStorage.setLocation(0, collection.lights.size());
@@ -467,9 +489,9 @@ bool BenchmarkScene::userUpdate(double time)
 	ImGui::Render();
 #endif
 
-	octree->getCommandQueue()->autoEmplace<AGE::PRTC::Flush>();
+	mainThread->getCommandQueue()->autoEmplace<RendCtxCommand::Flush>();
 
-	octree->getCommandQueue()->releaseReadability();
+	mainThread->getCommandQueue()->releaseReadability();
 
 	return true;
 }

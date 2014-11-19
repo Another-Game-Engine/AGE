@@ -22,13 +22,14 @@ namespace TMQ
 
 			void waitAndDispatch()
 			{
-				TMQ::PtrQueue q;
+				TMQ::PtrQueue *q;
 				_queue->getReadableQueue(q);
-				while (!q.empty())
+				assert(q != nullptr);
+				while (!q->empty())
 				{
-					auto message = q.front();
+					auto message = q->front();
 					auto ret = dispatch(message);
-					q.pop();
+					q->pop();
 					if (!ret)
 						assert(false);
 				}

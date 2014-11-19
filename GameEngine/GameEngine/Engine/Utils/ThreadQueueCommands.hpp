@@ -10,7 +10,8 @@ namespace AGE
 		{
 			std::function<bool()> function;
 			BoolFunction(const std::function<bool()> &_function)
-				: function(_function)
+				: TMQ::FutureData<bool>()
+				, function(_function)
 			{
 			}
 			virtual ~BoolFunction()
@@ -25,8 +26,6 @@ namespace AGE
 				: function(_function)
 			{
 			}
-			VoidFunction(const VoidFunction &) = delete;
-			VoidFunction &operator=(const VoidFunction&) = delete;
 			~VoidFunction()
 			{
 			}
