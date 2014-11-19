@@ -53,7 +53,8 @@ void PtrQueue::pop()
 	_cursor += s + soi;
 	tmp += soi;
 	auto r = reinterpret_cast<MessageBase*>(tmp);
-	r->~MessageBase();
+	if (r->_used)
+		r->~MessageBase();
 }
 
 MessageBase *PtrQueue::front()
@@ -127,23 +128,28 @@ void Queue::launch()
 	_writeCondition.notify_one();
 }
 
-void Queue::getReadableQueue(PtrQueue& q)
+//return true if ti's a priority queue
+bool Queue::getReadableQueue(PtrQueue& q)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
+	bool isPriorityQueue;
 	if (!_readCondition.wait_for(lock, std::chrono::milliseconds(1), [this](){ return !_copy.empty() || !_priorityCopy.empty(); }))
-		return;
+		return false;
 	if (!_priorityCopy.empty())
 	{
 		q = std::move(_priorityCopy);
 		_priorityCopy.clear();
+		isPriorityQueue = true;
 	}
 	else
 	{
 		q = std::move(_copy);
 		_copy.clear();
+		isPriorityQueue = false;
 	}
 	lock.unlock();
 	_writeCondition.notify_one();
+	return isPriorityQueue;
 }
 
 void Queue::releaseReadability()

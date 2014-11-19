@@ -14,7 +14,8 @@ namespace AGE
 			{
 			}
 			virtual ~BoolFunction()
-			{}
+			{
+			}
 		};
 
 		struct VoidFunction

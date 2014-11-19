@@ -12,6 +12,7 @@ namespace TMQ
 		std::size_t tid; // thread id
 		MessageBase(const MessageBase&) = delete;
 		MessageBase &operator=(const MessageBase&) = delete;
+		bool _used = false;
 	protected:
 		static std::size_t __sharedIdCounter;
 	};
@@ -55,12 +56,10 @@ namespace TMQ
 	{
 	private:
 		std::promise<T> *result;
-		bool _used;
 	public:
 		virtual ~FutureData()
 		{
-			if (_used)
-				delete result;
+			delete result;
 		}
 
 		std::future<T> getFuture()
@@ -71,7 +70,6 @@ namespace TMQ
 		explicit FutureData(const FutureData&) = delete;
 		explicit FutureData()
 			: result(nullptr)
-			, _used(false)
 		{
 			result = new std::promise<T>();
 		}
@@ -87,9 +85,7 @@ namespace TMQ
 
 		void setValue(const T &v)
 		{
-			assert(!_used);
 			result->set_value(v);
-			_used = true;
 		}
 	};
 }

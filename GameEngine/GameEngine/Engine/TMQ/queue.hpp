@@ -166,7 +166,7 @@ namespace TMQ
 		Queue(Queue &&) = delete;
 		Queue operator=(Queue &&) = delete;
 
-		void getReadableQueue(PtrQueue& q);
+		bool getReadableQueue(PtrQueue& q);
 		Dispatcher getDispatcher();
 		void releaseReadability();
 		void setWaitingTime(std::size_t milliseconds);
@@ -237,6 +237,23 @@ namespace TMQ
 			{
 				_queue.move(e, size);
 			}
+		}
+
+		//Lock mutex or not
+		//Depend of the usage you made before
+		void autoPriorityMove(MessageBase *e, std::size_t size)
+		{
+			// Assure you that you didn't call unprotected function before
+			if (_publisherThreadId == 0)
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_priority.move(e, size);
+			}
+			else
+			{
+				_priority.move(e, size);
+			}
+			releaseReadability();
 		}
 
 		//Lock mutex or not
@@ -366,7 +383,7 @@ namespace TMQ
 			});
 			// Assure you that you will not call unprotected functions from different thread	
 			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			_queue.push(e);
+			_priority.push(e);
 			releaseReadability();
 		}
 
@@ -378,7 +395,7 @@ namespace TMQ
 			});
 			// Assure you that you will not call unprotected functions from different thread	
 			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			_queue.emplace<T>(args...);
+			_priority.emplace<T>(args...);
 			releaseReadability();
 		}
 
@@ -429,7 +446,7 @@ namespace TMQ
 			assert(_publisherThreadId == 0);
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.emplace<T>(args...);
+				_priority.emplace<T>(args...);
 			}
 			releaseReadability();
 		}
@@ -469,11 +486,11 @@ namespace TMQ
 			if (_publisherThreadId == 0)
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.push(e);
+				_priority.push(e);
 			}
 			else
 			{
-				_queue.push(e);
+				_priority.push(e);
 			}
 			releaseReadability();
 		}
@@ -485,11 +502,11 @@ namespace TMQ
 			if (_publisherThreadId == 0)
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.emplace<T>(args...);
+				_priority.emplace<T>(args...);
 			}
 			else
 			{
-				_queue.emplace<T>(args...);
+				_priority.emplace<T>(args...);
 			}
 			releaseReadability();
 		}

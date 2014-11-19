@@ -7,6 +7,7 @@
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
+#include <Core/MainThread.hpp>
 
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
@@ -23,12 +24,12 @@ void BenchmarkScene::initRendering()
 	// A NETTOYER !!!!
 	_renderManager = getInstance<gl::RenderManager>();
 	auto assetsManager = getInstance<AGE::AssetsManager>();
-	_renderThread = (AGE::RenderThread*)(getInstance<AGE::Threads::Render>());
+	auto mainThread = getInstance<AGE::MainThread>();
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 
-	auto res = _renderThread->getCommandQueue()->safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
-	{
+	auto res = mainThread->getCommandQueue()->safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
+		std::function<bool()>([&](){
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
 		key.Accum.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
@@ -153,7 +154,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushRenderOnScreenPipeline(key.merge.pipeline, key.merge.renderOnScreen);
 
 		return true;
-	});
+	}));
 	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);
 	//float disc = Mathematic::secondDegreeDiscriminant(equation);
 	//std::cout << disc << std::endl;
@@ -180,7 +181,7 @@ bool BenchmarkScene::userStart()
 
 
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis);
+	getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis); // @CESAR << remove that !!!
 
 #ifdef PHYSIC_SIMULATION
 	addSystem<BulletDynamicSystem>(0);
@@ -234,7 +235,7 @@ bool BenchmarkScene::userStart()
 	GLOBAL_CAMERA = camera;
 	auto cam = addComponent<Component::CameraComponent>(camera);
 
-	auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue()->safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screenSize = getInstance<AGE::MainThread>()->getCommandQueue()->safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
 	auto camLink = getLink(camera);
 	camLink->setPosition(glm::vec3(0, 1.5, 0));
@@ -412,8 +413,8 @@ bool BenchmarkScene::userUpdate(double time)
 	}
 #endif
 
-	auto renderThread = getInstance<AGE::RenderThread>();
-	renderThread->getCommandQueue()->autoEmplace<RendCtxCommand::RefreshInputs>();
+	auto mainThread = getInstance<AGE::MainThread>();
+	mainThread->getCommandQueue()->autoEmplace<RendCtxCommand::RefreshInputs>();
 
 	auto octree = getInstance<AGE::Threads::Prepare>();
 	auto renderManager = getInstance<gl::RenderManager>();
@@ -435,99 +436,6 @@ bool BenchmarkScene::userUpdate(double time)
 			link->setPosition(glm::vec3(p[0], p[1], p[2]));
 		}
 	}
-
-	//static int ooo = 0;
-	//++ooo;
-	//if (ooo == 100)
-	//{
-	//	saveToJson("SAVE_TEST.json", this);
-	//	clearAllEntities();
-	////	loadFromJson("SAVE_TEST.json", this);
-	//	{
-	//		auto camera = createEntity();
-	//		GLOBAL_CAMERA = camera;
-	//		auto cam = addComponent<Component::CameraComponent>(camera);
-
-	//		auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue()->safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
-
-	//		auto camLink = getLink(camera);
-	//		camLink->setPosition(glm::vec3(0, 1.5, 0));
-	//	}
-	//}
-	//else if (ooo == 101)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 102)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 103)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 104)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 105)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 106)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 107)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-
-	//if (ooo == 600)
-	//{
-	//	saveToJson("SAVE_TEST.json", this);
-	//	clearAllEntities();
-	////	loadFromJson("SAVE_TEST.json", this);
-	//	{
-	//		auto camera = createEntity();
-	//		GLOBAL_CAMERA = camera;
-	//		auto cam = addComponent<Component::CameraComponent>(camera);
-
-	//		auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue()->safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
-
-	//		auto camLink = getLink(camera);
-	//		camLink->setPosition(glm::vec3(0, 1.5, 0));
-	//	}
-	//}
-	//else if (ooo == 601)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 602)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 603)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 604)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 605)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 606)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 607)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-
 
 	octree->getCommandQueue()->autoEmplace<AGE::PRTC::PrepareDrawLists>();
 

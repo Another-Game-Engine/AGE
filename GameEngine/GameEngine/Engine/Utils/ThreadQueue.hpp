@@ -29,7 +29,7 @@ namespace AGE
 			while (_run && run)
 			{
 				TMQ::PtrQueue q;
-				this->_commandQueue.getReadableQueue(q);
+				bool isPriorityQueue = this->_commandQueue.getReadableQueue(q);
 				while (!q.empty())
 				{
 					auto message = q.front();
@@ -41,13 +41,17 @@ namespace AGE
 						// Todo -> push the message for the next thread
 						if (_next)
 						{
-							_next->autoMove(message, q.getFrontSize());
+							if (isPriorityQueue)
+								_next->autoPriorityMove(message, q.getFrontSize());
+							else
+								_next->autoMove(message, q.getFrontSize());
 							q.pop();
 							continue;							
 						}
 						assert(false);
 					}
 					(*_callbackCollection[id].get())(message);
+					message->_used = true;
 					q.pop();
 				}
 				run = _update();
@@ -83,6 +87,7 @@ namespace AGE
 			virtual void operator()(TMQ::MessageBase *m)
 			{
 				assert(isValid());
+				auto prout = dynamic_cast<TMQ::Message<T>*>(m);
 				function(static_cast<TMQ::Message<T>*>(m)->_data);
 			}
 			virtual ~CallbackContainer(){}

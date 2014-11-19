@@ -34,6 +34,8 @@ bool RenderThread::_init()
 
 	registerMessageCallback<AGE::TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
 	{
+		if (!msg.function)
+			std::cout << "kill me please";
 		msg.setValue(msg.function());
 	});
 
