@@ -11,19 +11,25 @@
 #include <Core/PreparableObject.hh>
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
+#if defined OCTREE_CULLING
+#include <Core/OctreeNode.hh>
+#elif defined LOOSE_OCTREE_CULLING
 #include <Core/LooseOctreeNode.hh>
+#endif
 #include <Core/CullableInterfaces.hh>
 #include <chrono>
 #include <Skinning/AnimationManager.hpp>
-
-#define ACTIVATE_OCTREE_CULLING
 
 namespace AGE
 {
 	PrepareRenderThread::PrepareRenderThread()
 	{
 		_drawables.reserve(65536);
+#if defined LOOSE_OCTREE_CULLING
 		_octree = new LooseOctreeNode;
+#elif defined OCTREE_CULLING
+		_octree = new OctreeNode;
+#endif
 	}
 
 	PrepareRenderThread::~PrepareRenderThread(void)
@@ -471,8 +477,10 @@ namespace AGE
 				// iter on element to draw
 				for (CullableObject *e : toDraw)
 				{
+#ifdef OCTREE_CULLING
 					// mandatory if you want the object to be found again
 					e->hasBeenFound = false;
+#endif
 					// all the elements are drawable for the moment (TODO)
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
 					if (!currentDrawable->animation.empty())

@@ -4,6 +4,8 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Core/CullableInterfaces.hh>
 
+#define VEC3_BIGGER(a, b) (a.x > b.x && a.y > b.y && a.z > b.z)
+
 namespace AGE
 {
 	// Think about replacing octree elements pointer with that
@@ -28,7 +30,7 @@ namespace AGE
 		~LooseOctreeNode();
 
 		LooseOctreeNode	*addElement(CullableObject *toAdd);
-		LooseOctreeNode	*removeElement(CullableObject *toRm, bool useCurrentPos = true);
+		LooseOctreeNode	*removeElement(CullableObject *toRm);
 		LooseOctreeNode	*moveElement(CullableObject *toMove);
 
 		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill) const;
@@ -41,6 +43,7 @@ namespace AGE
 		LooseOctreeNode *extendNode(CullableObject *toAdd, glm::i8vec3 const &direction);
 		void		generateAllSons();
 		void		computeLooseNode();
+		LooseOctreeNode	*removeElementIfChangeNode(CullableObject *toRm, bool &hasBeenRemoved);
 
 		LooseOctreeNode *_father;
 		LooseOctreeNode *_sons[8];

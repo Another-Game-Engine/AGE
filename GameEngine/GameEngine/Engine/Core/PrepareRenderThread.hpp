@@ -10,6 +10,13 @@
 #include <Utils/ThreadQueue.hpp>
 #include <Skinning/AnimationInstance.hpp>
 
+#define LOOSE_OCTREE_CULLING
+//#define OCTREE_CULLING
+
+#if defined LOOSE_OCTREE_CULLING || defined OCTREE_CULLING
+#define ACTIVATE_OCTREE_CULLING
+#endif
+
 class AScene;
 
 namespace AGE
@@ -25,6 +32,7 @@ namespace AGE
 	struct SubMeshInstance;
 
 	class LooseOctreeNode;
+	class OctreeNode;
 
 	class PrepareRenderThread : public ThreadQueue, public Dependency<PrepareRenderThread>
 	{
@@ -53,7 +61,11 @@ namespace AGE
 		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
 
 	private:
+#if defined LOOSE_OCTREE_CULLING
 		LooseOctreeNode *_octree;
+#elif defined OCTREE_CULLING
+		OctreeNode *_octree;
+#endif
 
 		std::weak_ptr<AScene> scene;
 
