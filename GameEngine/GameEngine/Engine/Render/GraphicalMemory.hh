@@ -23,8 +23,6 @@ public:
 	GraphicalMemory &setVertices(Key<GraphicalMemory> const &memory, Vertices &&vertices);
 
 private:
-	void addVerticesToBlocksMemory(Vertices const &vertices);
-private:
 	std::vector<Vertices> _elements;
 	std::array<AttributeBlockMemory, Attribute::END> _blocksMemory;
 };

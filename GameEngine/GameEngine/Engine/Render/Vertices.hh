@@ -18,8 +18,6 @@ public:
 	const_iterator begin() const;
 	iterator end();
 	const_iterator end() const;
-	std::weak_ptr<Data> const &getData(size_t index) const;
-	size_t nbrData() const;
 
 private:
 	std::vector<std::shared_ptr<Data>> _data;

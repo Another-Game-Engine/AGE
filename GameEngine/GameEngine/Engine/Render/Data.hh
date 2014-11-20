@@ -9,9 +9,10 @@ public:
 	template <typename type_t> Data(std::vector<type_t> const &data, Attribute type);
 
 public:
-	operator size_t();
+	operator size_t() const;
 	size_t getSize() const;
 	void const *getData() const;
+	void *getData();
 
 private:
 	Attribute _type;

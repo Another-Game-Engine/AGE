@@ -1,10 +1,12 @@
 #pragma once
 
+# include <queue>
 # include <vector>
 # include <memory>
+# include <utility>
 # include <Render/Attribute.hh>
 # include <Render/Buffer.hh>
-# include <type_traits>
+# include <glm/glm.hpp>
 
 template <typename type_t> class Key;
 
@@ -13,6 +15,14 @@ class Buffer;
 
 class AttributeBlockMemory
 {
+public:
+	struct AttributeElement 
+	{
+		AttributeElement(std::weak_ptr<Data> const &element, glm::vec3 const &range);
+		std::weak_ptr<Data> element; 
+		glm::vec3 range; 
+	};
+
 public:
 	AttributeBlockMemory();
 	AttributeBlockMemory(Attribute type);
@@ -23,14 +33,17 @@ public:
 
 
 public:
-	AttributeBlockMemory &addElement(std::weak_ptr<Data> const &data);
+	AttributeBlockMemory &addElement(std::shared_ptr<Data> const &data);
+	AttributeBlockMemory &updateMemory();
+
+private:
+	AttributeBlockMemory(Attribute type, size_t size, std::unique_ptr<Buffer> &&buffer);
 
 private:
 	Attribute _type;
 	size_t _size;
-	std::vector<std::weak_ptr<Data>> _elements;
+	std::vector<AttributeElement> _elements;
 	std::unique_ptr<Buffer> _buffer;
-
-private:
-	std::unique_ptr<Buffer> generatePtr();
+	bool _updateMajor;
+	bool _updateMinor;
 };
