@@ -18,9 +18,6 @@
 #include <CONFIGS.hh>
 #include <Skinning/AnimationInstance.hpp>
 
-//for test
-#include <Utils/Containers/CommandQueue.hpp>
-
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
 # define DEFFERED_VERTEX_SHADER "../../Shaders/Deffered_shading/deffered_shading_get_buffer.vp"
@@ -84,7 +81,7 @@ struct RenderKey
 class BenchmarkScene : public AScene	
 {
 public:
-	BenchmarkScene(std::weak_ptr<Engine> &&engine);
+	BenchmarkScene(std::weak_ptr<AGE::Engine> &&engine);
 
 	virtual ~BenchmarkScene(void);
 	void initRendering();

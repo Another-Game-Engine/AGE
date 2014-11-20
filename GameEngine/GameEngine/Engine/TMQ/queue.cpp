@@ -132,8 +132,20 @@ bool Queue::getReadableQueue(TMQ::PtrQueue &q)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
 	bool isPriorityQueue;
-	if (!_readCondition.wait_for(lock, std::chrono::milliseconds(1), [this](){ return !_copy.empty() || !_priorityCopy.empty(); }))
-		return false;
+	if (_millisecondToWait == 0)
+	{
+		//lock.lock();
+		if (_copy.empty() && _priorityCopy.empty())
+		{
+			lock.unlock();
+			return false;
+		}
+	}
+	else
+	{
+		if (!_readCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this](){ return !_copy.empty() || !_priorityCopy.empty(); }))
+			return false;
+	}
 	if (!_priorityCopy.empty())
 	{
 		q = std::move(_priorityCopy);

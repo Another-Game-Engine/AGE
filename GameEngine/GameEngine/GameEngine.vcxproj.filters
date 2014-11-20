@@ -147,7 +147,6 @@
     <ClInclude Include="Engine\Utils\AABoundingBox.hh" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
     <ClInclude Include="Engine\Utils\CommandQueueHolder.hpp" />
-    <ClInclude Include="Engine\Utils\Containers\CommandQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
     <ClInclude Include="Engine\Utils\Containers\PtrQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
@@ -227,6 +226,7 @@
     <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\MainThread.hpp" />
+    <ClInclude Include="Engine\Utils\CommandQueue.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

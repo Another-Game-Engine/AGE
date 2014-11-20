@@ -10,7 +10,7 @@
 #include <Core/MainThread.hpp>
 
 
-BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
+BenchmarkScene::BenchmarkScene(std::weak_ptr<AGE::Engine> &&engine)
 	: AScene(std::move(engine))
 {
 }
@@ -491,7 +491,7 @@ bool BenchmarkScene::userUpdate(double time)
 
 	mainThread->getCommandQueue()->autoEmplace<RendCtxCommand::Flush>();
 
-	mainThread->getCommandQueue()->releaseReadability();
+
 
 	return true;
 }

@@ -9,7 +9,7 @@
 #include <Core/PrepareRenderThread.hpp>
 #include <fstream>
 
-AScene::AScene(std::weak_ptr<Engine> &&engine) :
+AScene::AScene(std::weak_ptr<AGE::Engine> &&engine) :
 DependenciesInjector(std::move(engine))
 , _entityNumber(0)
 {

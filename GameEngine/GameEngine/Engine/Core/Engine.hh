@@ -1,20 +1,52 @@
 #pragma once
 
+#include <Configuration.hpp>
 #include "Utils/DependenciesInjector.hpp"
-#include <string>
 
-class Engine : public DependenciesInjector
+namespace AGE
 {
-private:
-	Engine(Engine const &);
-	Engine &operator=(Engine const &);
+	class PrepareRenderThread;
+	class RenderThread;
+	class MainThread;
+	class SceneManager;
+	class Timer;
 
-public:
-	Engine();
-	virtual ~Engine();
+	class Engine : public DependenciesInjector
+	{
+	protected:
+		Engine(Engine const &);
+		Engine &operator=(Engine const &);
 
-	bool        init(int mode, unsigned int swidth, unsigned int sheight, std::string &&name);
-	bool 		start();
-	bool 		update();
-	void 		stop();
-};
+		PrepareRenderThread *_prepareThread;
+		RenderThread *_renderThread;
+		MainThread *_mainThread;
+		Timer *_timer;
+#ifdef USE_DEFAULT_ENGINE_CONFIGURATION
+		SceneManager *_sceneManager;
+#endif
+
+	public:
+		// All functions are virtual so if you want to customize your Engine class
+		// without hacking the core, you can heritate from :)
+		Engine();
+		virtual ~Engine();
+
+		virtual bool        init();
+		virtual bool 		start();
+		virtual bool 		update();
+		virtual void 		stop();
+
+		inline PrepareRenderThread *getPrepareThread()
+		{
+			return _prepareThread;
+		}
+		inline RenderThread *getRenderThread()
+		{
+			return _renderThread;
+		}
+		inline MainThread *getMainThread()
+		{
+			return _mainThread;
+		}
+	};
+}

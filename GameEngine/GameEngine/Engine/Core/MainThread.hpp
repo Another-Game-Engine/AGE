@@ -1,19 +1,25 @@
 #pragma once
 
 #include <Utils/Dependency.hpp>
-#include <tmq/templateDispatcher.hpp>
-#include <tmq/queue.hpp>
+#include <Utils/CommandQueue.hpp>
 
 namespace AGE
 {
-	class MainThread : public Dependency < MainThread >
+	class MainThread : public Dependency < MainThread >, public CommandQueue
 	{
 	public:
-
 		MainThread()
 			: _next(nullptr)
 			, _thisThreadId(std::this_thread::get_id().hash())
+			, _engine(nullptr)
 		{
+		}
+
+		bool launch(Engine *engine)
+		{
+			_engine = engine;
+			if (!engine)
+				return false;
 			_commandQueue.launch();
 		}
 
@@ -35,9 +41,11 @@ namespace AGE
 		{
 			return &_commandQueue;
 		}
+
 	private:
 		TMQ::Queue _commandQueue;
 		TMQ::Queue *_next;
 		std::size_t _thisThreadId;
+		Engine *_engine;
 	};
 }

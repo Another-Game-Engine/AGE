@@ -31,7 +31,9 @@
 //CONFIGS
 #include <CONFIGS.hh>
 
-bool loadAssets(std::shared_ptr<Engine> e)
+using namespace AGE;
+
+bool loadAssets(std::shared_ptr<AGE::Engine> e)
 {
 	e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
@@ -54,35 +56,18 @@ bool loadAssets(std::shared_ptr<Engine> e)
 
 int			main(int ac, char **av)
 {
-	std::shared_ptr<Engine>	e = std::make_shared<Engine>();
-
-	auto renderThread = e->setInstance<AGE::RenderThread, AGE::Threads::Render>();
-	auto preparationThread = e->setInstance<AGE::Threads::Prepare>();
-	auto mainThread = e->setInstance<AGE::MainThread>();
-
-
-	preparationThread->setNextCommandQueue(renderThread->getCurrentThreadCommandQueue());
-//	renderThread->setNextCommandQueue(mainThread->getCurrentThreadCommandQueue());
-	mainThread->setNextCommandQueue(preparationThread->getCurrentThreadCommandQueue());
-
-	renderThread->launch(e.get());
-	preparationThread->launch(e.get());
+	std::shared_ptr<AGE::Engine>	e = std::make_shared<AGE::Engine>();
+	e->init();
 
 	// Set Configurations
 	auto config = e->setInstance<ConfigurationManager>(File("NewMyConfigurationFile.conf"));
 
 	auto context = e->getInstance<IRenderContext>();
 	auto renderManager = e->getInstance<gl::RenderManager>();
-	e->setInstance<Input>();
-	e->setInstance<Timer>();
-	e->setInstance<AGE::AnimationManager>();
 
-	// Important, we have to launch the command queue from the sender thread
-	//context->launchCommandQueue();
-	//renderManager->launchCommandQueue();
-
-	auto contextInit = mainThread->getCommandQueue()->priorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
-		std::function<bool()>([&](){
+	auto contextInit = e->getMainThread()->getCommandQueue()->priorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
+		std::function<bool()>([&]()
+	{
 		if (!context->init(0, 1600, 900, "~AGE~ V0.0 Demo"))
 			return false;
 #ifdef RENDERING_ACTIVATED
@@ -92,8 +77,6 @@ int			main(int ac, char **av)
 		return true;
 	}));
 
-	e->setInstance<SceneManager>();
-	e->setInstance<AGE::AssetsManager>();
 	e->setInstance<PerformanceDebugger>("Developer Name");
 
 #ifdef PHYSIC_SIMULATION
@@ -104,7 +87,7 @@ int			main(int ac, char **av)
 	// If config file has different value, it'll be changed automatically
 	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(1600, 900), [&](const glm::uvec2 &v)
 	{
-		mainThread->getCommandQueue()->emplace<RendCtxCommand::SetScreenSize>(v);
+		e->getMainThread()->getCommandQueue()->emplace<RendCtxCommand::SetScreenSize>(v);
 	});
 	config->setConfiguration<std::string>("debuggerDevelopperName", "Modify MyConfigurationFile.conf with your name", [&e](const std::string &name)
 	{
@@ -143,7 +126,5 @@ int			main(int ac, char **av)
 	config->saveToFile();
 	e->stop();
 
-	preparationThread->quit();
-	renderThread->quit();
 	return (EXIT_SUCCESS);
 }

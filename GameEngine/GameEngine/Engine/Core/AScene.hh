@@ -27,7 +27,10 @@
 #include <queue>
 
 class System;
-class Engine;
+namespace AGE
+{
+	class Engine;
+}
 class EntityFilter;
 
 class AScene : public DependenciesInjector, public EntityIdRegistrar
@@ -40,7 +43,7 @@ private:
 	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
 public:
-	AScene(std::weak_ptr<Engine> &&engine);
+	AScene(std::weak_ptr<AGE::Engine> &&engine);
 	virtual ~AScene();
 	inline std::uint16_t    getNumberOfEntities() const { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
 	virtual bool 			userStart() = 0;

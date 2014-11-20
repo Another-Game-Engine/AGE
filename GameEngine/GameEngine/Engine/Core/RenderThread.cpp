@@ -10,6 +10,8 @@
 #include <imgui/imgui.h>
 #endif
 
+#include <Core/Engine.hh>
+
 using namespace AGE;
 
 bool RenderThread::_init()
@@ -34,8 +36,6 @@ bool RenderThread::_init()
 
 	registerMessageCallback<AGE::TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
 	{
-		if (!msg.function)
-			std::cout << "kill me please";
 		msg.setValue(msg.function());
 	});
 
@@ -79,7 +79,6 @@ bool RenderThread::_releaseInNewThread()
 bool RenderThread::_update()
 {
 	bool returnValue = true;
-
 	
 
 	return returnValue;

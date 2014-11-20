@@ -1,103 +1,35 @@
 #pragma once
 
 #include <thread>
-#include <tmq/templateDispatcher.hpp>
-#include <tmq/queue.hpp>
-#include <Core/Engine.hh>
+#include <Utils/CommandQueue.hpp>
+
 namespace AGE
 {
-	class ThreadQueue
+	class ThreadQueue : public CommandQueue
 	{
 	protected:
 		std::thread _thread;
-		TMQ::Queue _commandQueue;
-		TMQ::Queue *_next;
+
 		virtual bool _update() = 0;
 		virtual bool _init() = 0;
 		virtual bool _initInNewThread() = 0;
 		virtual bool _release() = 0;
 		virtual bool _releaseInNewThread() = 0;
-		Engine *_engine;
 		std::atomic_bool _run;
-		std::size_t _thisThreadId;
 
-		bool update()
+		bool update(Engine *engine)
 		{
 			bool run = true;
+			init(engine);
 			run = _initInNewThread();
-			_thisThreadId = std::this_thread::get_id().hash();
-			TMQ::PtrQueue q;
 			while (_run && run)
 			{
-				bool isPriorityQueue = this->_commandQueue.getReadableQueue(q);
-				while (!q.empty())
-				{
-					auto message = q.front();
-					auto id = message->uid;
-					auto tid = message->tid;
-					assert(tid != _thisThreadId); // mean that it's this thread who publish the message
-					if (_callbackCollection.size() <= id || !_callbackCollection[id])
-					{
-						// Todo -> push the message for the next thread
-						if (_next)
-						{
-							if (isPriorityQueue)
-								_next->priorityMove(message, q.getFrontSize());
-							else
-								_next->move(message, q.getFrontSize());
-							q.pop();
-							continue;							
-						}
-						assert(false);
-					}
-					(*_callbackCollection[id].get())(message);
-					message->_used = true;
-					q.pop();
-				}
-				run = _update();
+				run = commandQueueUpdate();
 				if (_next)
 					_next->releaseReadability();
 			}
 			return _releaseInNewThread();
 		}
-
-		struct ICallbackContainer
-		{
-			virtual void operator()(TMQ::MessageBase *m) = 0;
-			virtual ~ICallbackContainer(){}
-			ICallbackContainer()
-				: _isValid(false)
-			{}
-			inline bool isValid() { return _isValid; }
-		protected:
-			bool _isValid;
-		};
-
-		template <typename T>
-		struct CallbackContainer : public ICallbackContainer
-		{
-			CallbackContainer()
-			{
-			}
-
-			CallbackContainer(const std::function<void(T &)> &fn)
-				: function(fn)
-			{
-				_isValid = true;
-			}
-
-			virtual void operator()(TMQ::MessageBase *m)
-			{
-				assert(isValid());
-				auto prout = dynamic_cast<TMQ::Message<T>*>(m);
-				function(static_cast<TMQ::Message<T>*>(m)->_data);
-			}
-			virtual ~CallbackContainer(){}
-
-			std::function<void(T &)> function;
-		};
-
-		std::vector<std::unique_ptr<ICallbackContainer>> _callbackCollection;
 
 	public:
 		ThreadQueue(const ThreadQueue &) = delete;
@@ -106,8 +38,6 @@ namespace AGE
 		ThreadQueue& operator=(ThreadQueue &&) = delete;
 
 		ThreadQueue()
-			: _engine(nullptr)
-			, _next(nullptr)
 		{}
 
 		virtual ~ThreadQueue()
@@ -117,12 +47,10 @@ namespace AGE
 
 		bool launch(Engine *engine)
 		{
-			_run = true;
 			_engine = engine;
-			assert(_engine != nullptr);
+			_run = true;
 			auto res = _init();
-			_commandQueue.launch();
-			_thread = std::thread(&ThreadQueue::update, std::ref(*this));
+			_thread = std::thread(&ThreadQueue::update, std::ref(*this), engine);
 			return res;
 		}
 
@@ -133,34 +61,6 @@ namespace AGE
 			_run = false;
 			_thread.join();
 			_release();
-		}
-
-		// USE ONLY THAT FUNCTION TO GET THE COMMAND QUEUE
-		TMQ::Queue *getCommandQueue()
-		{
-			assert(std::this_thread::get_id().hash() == _thisThreadId);
-			return _next;
-		}
-
-		void setNextCommandQueue(TMQ::Queue *next)
-		{
-			_next = next;
-		}
-
-		// USE THAT FUNCTION ONLY TO PASS THE RESULT to setNextCommandQueue
-		// Do NOT use it to pass messages
-		TMQ::Queue *getCurrentThreadCommandQueue()
-		{
-			return &_commandQueue;
-		}
-
-		template <typename T>
-		void registerMessageCallback(const std::function<void(T &)> &fn)
-		{
-			auto id = TMQ::Message<T>::getId();
-			if (id >= _callbackCollection.size())
-				_callbackCollection.resize(id + 1);
-			_callbackCollection[id] = std::make_unique<CallbackContainer<T>>(fn);
 		}
 	};
 }
