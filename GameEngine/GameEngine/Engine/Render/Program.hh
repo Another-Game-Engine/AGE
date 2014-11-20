@@ -5,6 +5,7 @@
 # include <Render/ResourceProgram.hh>
 # include <Render/Key.hh>
 # include <Render/Attribute.hh>
+# include <Render/GraphicalMemory.hh>
 
 class Program
 {
@@ -34,6 +35,7 @@ private:
 private:
 	std::vector<std::unique_ptr<IResourceProgram>> _resourcesProgram;
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
+	GraphicalMemory _graphicalMemory;
 	GLuint _id;
 };
 

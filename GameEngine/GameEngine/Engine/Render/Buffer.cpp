@@ -50,7 +50,7 @@ VertexBuffer const &VertexBuffer::attribute(size_t index, int nbrComponent, GLen
 	return (*this);
 }
 
-Buffer const &VertexBuffer::BufferSubData(size_t offset, size_t size, void *buffer) const
+Buffer const &VertexBuffer::BufferSubData(size_t offset, size_t size, void const *buffer) const
 {
 	glBufferSubData(GL_ARRAY_BUFFER, offset, size, buffer);
 	return (*this);
@@ -93,7 +93,7 @@ Buffer const &IndexBuffer::BufferData(size_t size) const
 	return (*this);
 }
 
-Buffer const &IndexBuffer::BufferSubData(size_t offset, size_t size, void *buffer) const
+Buffer const &IndexBuffer::BufferSubData(size_t offset, size_t size, void const *buffer) const
 {
 	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, buffer);
 	return (*this);
@@ -131,7 +131,7 @@ Buffer const &UniformBuffer::BufferData(size_t size) const
 	return (*this);
 }
 
-Buffer const &UniformBuffer::BufferSubData(size_t offset, size_t size, void *buffer) const
+Buffer const &UniformBuffer::BufferSubData(size_t offset, size_t size, void const *buffer) const
 {
 	glBufferSubData(GL_UNIFORM_BUFFER, offset, size, buffer);
 	return (*this);

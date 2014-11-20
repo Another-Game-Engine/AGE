@@ -18,7 +18,11 @@ public:
 	const_iterator begin() const;
 	iterator end();
 	const_iterator end() const;
+	size_t offset() const;
+	size_t size() const;
 
 private:
 	std::vector<std::shared_ptr<Data>> _data;
+	size_t _offset;
+	size_t _size;
 };

@@ -1,6 +1,5 @@
 #pragma once
 
-# include <array>
 # include <vector>
 # include <utility>
 # include <memory>
@@ -10,19 +9,22 @@
 template <typename type_t> class Key;
 class Vertices;
 
+typedef uint8_t GraphicQuery;
+
 class GraphicalMemory
 {
 public:
 	GraphicalMemory();
 
 public:
-	Key<Vertices> addVertices(Vertices const &vertices);
-	Key<Vertices> addVertices(Vertices &&vertices);
-	GraphicalMemory &deleteVertices(Key<GraphicalMemory> const &memory);
-	GraphicalMemory &setVertices(Key<GraphicalMemory> const &memory, Vertices const &vertices);
-	GraphicalMemory &setVertices(Key<GraphicalMemory> const &memory, Vertices &&vertices);
+	GraphicalMemory &load(std::vector<Attribute> const &attributes);
+	GraphicalMemory &load(std::vector<Attribute> &&attribtues);
+	Key<Vertices> handle(Vertices const &vertices);
+	Key<Vertices> handle(Vertices &&vertices);
+	GraphicalMemory &quit(Key<Vertices> const &memory);
+	GraphicalMemory &query(Key<Vertices> const &memory, GraphicQuery query);
 
 private:
 	std::vector<Vertices> _elements;
-	std::array<AttributeBlockMemory, Attribute::END> _blocksMemory;
+	std::vector<AttributeBlockMemory> _blocksMemory;
 };

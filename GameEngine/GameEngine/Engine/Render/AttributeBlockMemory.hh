@@ -6,7 +6,6 @@
 # include <utility>
 # include <Render/Attribute.hh>
 # include <Render/Buffer.hh>
-# include <glm/glm.hpp>
 
 template <typename type_t> class Key;
 
@@ -15,14 +14,6 @@ class Buffer;
 
 class AttributeBlockMemory
 {
-public:
-	struct AttributeElement 
-	{
-		AttributeElement(std::weak_ptr<Data> const &element, glm::vec3 const &range);
-		std::weak_ptr<Data> element; 
-		glm::vec3 range; 
-	};
-
 public:
 	AttributeBlockMemory();
 	AttributeBlockMemory(Attribute type);
@@ -41,9 +32,7 @@ private:
 
 private:
 	Attribute _type;
-	size_t _size;
-	std::vector<AttributeElement> _elements;
+	std::vector<std::weak_ptr<Data>> _elements;
 	std::unique_ptr<Buffer> _buffer;
-	bool _updateMajor;
-	bool _updateMinor;
+	bool _update;
 };

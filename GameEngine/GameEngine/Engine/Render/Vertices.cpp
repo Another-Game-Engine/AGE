@@ -39,3 +39,11 @@ Vertices::const_iterator Vertices::end() const
 {
 	return  (_data.end());
 }
+
+size_t Vertices::offset() const
+{
+	if (_data.empty())
+		return (0);
+	auto &dataGeneral = _data.front();
+	return (dataGeneral->);
+}
