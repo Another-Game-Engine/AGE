@@ -24,6 +24,8 @@ public:
 
 
 public:
+	bool operator!=(Data const &data) const;
+	bool operator==(Data const &data) const;
 	AttributeBlockMemory &addElement(std::shared_ptr<Data> const &data);
 	AttributeBlockMemory &updateMemory();
 

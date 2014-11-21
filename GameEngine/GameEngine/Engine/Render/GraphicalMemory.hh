@@ -18,11 +18,13 @@ public:
 
 public:
 	GraphicalMemory &load(std::vector<Attribute> const &attributes);
-	GraphicalMemory &load(std::vector<Attribute> &&attribtues);
 	Key<Vertices> handle(Vertices const &vertices);
 	Key<Vertices> handle(Vertices &&vertices);
 	GraphicalMemory &quit(Key<Vertices> const &memory);
 	GraphicalMemory &query(Key<Vertices> const &memory, GraphicQuery query);
+
+private:
+	bool isMatch(Vertices const &vertices) const;
 
 private:
 	std::vector<Vertices> _elements;
