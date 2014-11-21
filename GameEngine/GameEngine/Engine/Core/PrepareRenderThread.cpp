@@ -518,7 +518,14 @@ namespace AGE
 	}
 
 
-	bool PrepareRenderThread::_update()
+	bool PrepareRenderThread::_updateBegin()
+	{
+		auto returnValue = true;
+
+		return returnValue;
+	}
+
+	bool PrepareRenderThread::_updateEnd()
 	{
 		auto returnValue = true;
 

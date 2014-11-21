@@ -72,10 +72,11 @@ namespace AGE
 		AGE::Vector<DrawableCollection> _octreeDrawList;
 
 		virtual bool _init();
-		virtual bool _update();
 		virtual bool _initInNewThread();
 		virtual bool _release();
 		virtual bool _releaseInNewThread();
+		virtual bool _updateBegin();
+		virtual bool _updateEnd();
 		DRAWABLE_ID addDrawable(USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
 		void _run();

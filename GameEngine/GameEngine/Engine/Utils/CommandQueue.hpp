@@ -112,6 +112,8 @@ namespace AGE
 		bool commandQueueUpdate()
 		{
 			bool isPriorityQueue = this->_commandQueue.getReadableQueue(q);
+			if (q.empty())
+				return false;
 			while (!q.empty())
 			{
 				auto message = q.front();

@@ -61,8 +61,10 @@ namespace AGE
 		_renderThread->getCurrentThreadCommandQueue()->setWaitingTime(100);
 		_prepareThread->getCurrentThreadCommandQueue()->setWaitingTime(100);
 
-		_renderThread->launch(this);
-		_prepareThread->launch(this);
+		_renderThread->setLastOfLoop(true);
+
+		_renderThread->launch(this, "Render thread");
+		_prepareThread->launch(this, "Prepare thread");
 		_mainThread->init(this);
 
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
@@ -85,6 +87,7 @@ namespace AGE
 #ifdef USE_IMGUI
 		AGE::Imgui::getInstance()->startUpdate();
 #endif
+		_mainThread->getCurrentThreadCommandQueue()->releaseReadability();
 		_mainThread->commandQueueUpdate();
 		_sceneManager->update(time);
 		 res = _sceneManager->userUpdate(time);

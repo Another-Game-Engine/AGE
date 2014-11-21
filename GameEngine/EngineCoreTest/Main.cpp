@@ -22,7 +22,6 @@
 #include <Utils/PerformanceDebugger.hh>
 #include <Core/AssetsManager.hpp>
 #include <Core/MainThread.hpp>
-#include <Systems/CameraSystem.hh> // just for the define... to rm for the future
 #include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
 #include <Utils/Age_Imgui.hpp>
@@ -112,7 +111,7 @@ int			main(int ac, char **av)
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
 
 #ifdef USE_IMGUI
-	mainThread->getCommandQueue()->autoPriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([=](){
+	e->getMainThread()->getCommandQueue()->autoPriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([=](){
 		AGE::Imgui::getInstance()->init(e.get());
 		return true;
 	}).get();

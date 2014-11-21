@@ -75,6 +75,7 @@
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
     <ClCompile Include="Engine\Utils\Sphere.cpp" />
+    <ClCompile Include="Engine\Utils\ThreadName.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -227,6 +228,8 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\MainThread.hpp" />
     <ClInclude Include="Engine\Utils\CommandQueue.hpp" />
+    <ClInclude Include="Engine\Utils\ThreadName.hpp" />
+    <ClInclude Include="Engine\Core\MainThreadCommand.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

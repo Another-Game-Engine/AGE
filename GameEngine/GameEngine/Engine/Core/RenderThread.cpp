@@ -19,6 +19,7 @@ bool RenderThread::_init()
 	_context = _engine->setInstance<SdlContext, IRenderContext>();
 	_renderManager = _engine->setInstance<gl::RenderManager>();
 
+
 	registerMessageCallback<RendCtxCommand::Flush>([&](RendCtxCommand::Flush& msg)
 	{
 		_context->swapContext();
@@ -76,13 +77,18 @@ bool RenderThread::_releaseInNewThread()
 	return true;
 }
 
-bool RenderThread::_update()
+bool RenderThread::_updateBegin()
 {
 	bool returnValue = true;
-	
-
 	return returnValue;
 }
+
+bool RenderThread::_updateEnd()
+{
+	bool returnValue = true;
+	return returnValue;
+}
+
 
 RenderThread::RenderThread()
 {}

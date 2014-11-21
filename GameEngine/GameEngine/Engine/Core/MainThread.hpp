@@ -2,6 +2,7 @@
 
 #include <Utils/Dependency.hpp>
 #include <Utils/CommandQueue.hpp>
+#include <Core/MainThreadCommand.hpp>
 
 namespace AGE
 {
@@ -13,6 +14,11 @@ namespace AGE
 			, _thisThreadId(std::this_thread::get_id().hash())
 			, _engine(nullptr)
 		{
+			registerMessageCallback<MTC::FrameTime>([&](MTC::FrameTime& msg)
+			{
+				ImGui::Text((std::string(msg.name) + " " + std::to_string(msg.time)).c_str());
+			});
+
 		}
 
 		bool launch(Engine *engine)

@@ -22,7 +22,8 @@ namespace AGE
 		virtual bool _initInNewThread();
 		virtual bool _release();
 		virtual bool _releaseInNewThread();
-		virtual bool _update();
+		virtual bool _updateBegin();
+		virtual bool _updateEnd();
 	public:
 		RenderThread();
 		virtual ~RenderThread();
