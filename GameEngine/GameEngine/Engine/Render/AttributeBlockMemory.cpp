@@ -35,7 +35,7 @@ AttributeBlockMemory &AttributeBlockMemory::operator=(AttributeBlockMemory &&a)
 	return (*this);
 }
 
-AttributeBlockMemory &AttributeBlockMemory::addElement(std::shared_ptr<Data> const &data)
+AttributeBlockMemory &AttributeBlockMemory::handle(std::shared_ptr<Data> const &data)
 {
 	_update = true;
 	for (auto &element : _elements) {
@@ -49,7 +49,7 @@ AttributeBlockMemory &AttributeBlockMemory::addElement(std::shared_ptr<Data> con
 	return (*this);
 }
 
-AttributeBlockMemory &AttributeBlockMemory::updateMemory()
+AttributeBlockMemory &AttributeBlockMemory::update()
 {
 	if (!_update){
 		return (*this);
@@ -72,4 +72,14 @@ AttributeBlockMemory &AttributeBlockMemory::updateMemory()
 	}
 	_buffer->unbind();
 	return (*this);
+}
+
+bool AttributeBlockMemory::operator!=(Data const &data) const
+{
+	return (data != _type);
+}
+
+bool AttributeBlockMemory::operator==(Data const &data) const
+{
+	return (data == _type);
 }

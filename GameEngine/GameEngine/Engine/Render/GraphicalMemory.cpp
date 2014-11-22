@@ -22,8 +22,9 @@ Key<Vertices> GraphicalMemory::handle(Vertices const &vertices)
 	_elements.emplace_back(vertices);
 	size_t index = 0;
 	for (auto &ptrData : vertices) {
-		_blocksMemory[index].addElement(ptrData);
+		_blocksMemory[index].handle(ptrData);
 	}
+	return ()
 }
 
 Key<Vertices> GraphicalMemory::handle(Vertices &&vertices)
@@ -33,7 +34,7 @@ Key<Vertices> GraphicalMemory::handle(Vertices &&vertices)
 		for (auto &block : _blocksMemory) {
 			auto &data = *ptrData;
 			if (block == data) {
-				block.addElement(ptrData);
+				block.handle(ptrData);
 				break;
 			}
 		}

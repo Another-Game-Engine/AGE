@@ -5,9 +5,10 @@
 # include <memory>
 # include <Render/Attribute.hh>
 # include <Render/AttributeBlockMemory.hh>
+# include <Render/Vertices.hh>
 
 template <typename type_t> class Key;
-class Vertices;
+//class Vertices;
 
 typedef uint8_t GraphicQuery;
 

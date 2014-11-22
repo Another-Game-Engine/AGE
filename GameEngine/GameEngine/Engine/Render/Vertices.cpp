@@ -2,7 +2,9 @@
 #include <Render/Data.hh>
 #include <algorithm>
 
-Vertices::Vertices(std::vector<Data> const &data)
+Vertices::Vertices(size_t size, std::vector<Data> const &data) :
+_offset(0),
+_size(size)
 {
 	_data.resize(data.size());
 	size_t index = 0;
@@ -11,7 +13,9 @@ Vertices::Vertices(std::vector<Data> const &data)
 	});
 }
 
-Vertices::Vertices(std::vector<Data> &&data)
+Vertices::Vertices(size_t size, std::vector<Data> &&data) :
+_offset(0),
+_size(size)
 {
 	_data.resize(std::move(data).size());
 	size_t index = 0;
@@ -42,8 +46,10 @@ Vertices::const_iterator Vertices::end() const
 
 size_t Vertices::offset() const
 {
-	if (_data.empty())
-		return (0);
-	auto &dataGeneral = _data.front();
-	return (dataGeneral->);
+	return (_offset);
+}
+
+size_t Vertices::size() const
+{
+	return (_size);
 }

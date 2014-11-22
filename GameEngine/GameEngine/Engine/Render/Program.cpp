@@ -43,8 +43,9 @@ Program & Program::operator=(Program &&u)
 * Parameter: std::vector<Attribute> const & attibutes
 * Goal:		 Alloc a new vertexPool in function attributes
 */
-Program & Program::setAttribute(std::vector<Attribute> const &attibutes)
+Program & Program::setAttribute(std::vector<Attribute> const &attributes)
 {
+	_graphicalMemory.load(attributes);
 	return (*this);
 }
 
