@@ -30,7 +30,7 @@ namespace AGE
 		~LooseOctreeNode();
 
 		LooseOctreeNode	*addElement(CullableObject *toAdd);
-		LooseOctreeNode	*removeElement(CullableObject *toRm);
+		void removeElement(CullableObject *toRm);
 		LooseOctreeNode	*moveElement(CullableObject *toMove);
 
 		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill) const;
@@ -38,12 +38,21 @@ namespace AGE
 		AABoundingBox const &getNodeBoundingBox() const;
 		bool				isLeaf() const;
 
+		// clean octree functions
+		LooseOctreeNode *tryChangeRoot();
+		void removeEmptyLeafs();
+
 	private:
 		// Utils methods
 		LooseOctreeNode *extendNode(CullableObject *toAdd, glm::i8vec3 const &direction);
 		void		generateAllSons();
 		void		computeLooseNode();
-		LooseOctreeNode	*removeElementIfChangeNode(CullableObject *toRm, bool &hasBeenRemoved);
+		// remove an element from a node
+		void removeElementFromNode(CullableObject *toRm);
+		// move an element from in node
+		LooseOctreeNode *moveElementFromNode(CullableObject *toMv);
+		// add an element in the node if the element is entierly contained in the current node
+		bool addElementFromNode(CullableObject *toAdd);
 
 		LooseOctreeNode *_father;
 		LooseOctreeNode *_sons[8];

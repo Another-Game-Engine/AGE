@@ -76,6 +76,7 @@
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
     <ClCompile Include="Engine\Utils\Sphere.cpp" />
     <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
+    <ClCompile Include="Engine\Core\LooseOctree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\LooseOctreeNode.hh" />
+    <ClInclude Include="Engine\Core\LooseOctree.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

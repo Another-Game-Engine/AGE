@@ -6,7 +6,7 @@
 
 namespace AGE
 {
-	class OctreeNode;
+	class LooseOctreeNode;
 
 	enum CullableType
 	{
@@ -19,7 +19,7 @@ namespace AGE
 	struct CullableObject : public PreparableObject
 	{
 		CullableType	type;
-		OctreeNode		*currentNode;
+		LooseOctreeNode	*currentNode;
 		bool			hasBeenFound;
 		bool			toAddInOctree;
 

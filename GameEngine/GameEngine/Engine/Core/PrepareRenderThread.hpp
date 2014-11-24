@@ -9,6 +9,7 @@
 #include <Utils/CommandQueueHolder.hpp>
 #include <Utils/ThreadQueue.hpp>
 #include <Skinning/AnimationInstance.hpp>
+#include <Core/LooseOctree.hh>
 
 #define LOOSE_OCTREE_CULLING
 //#define OCTREE_CULLING
@@ -31,7 +32,6 @@ namespace AGE
 	struct DrawableCollection;
 	struct SubMeshInstance;
 
-	class LooseOctreeNode;
 	class OctreeNode;
 
 	class PrepareRenderThread : public ThreadQueue, public Dependency<PrepareRenderThread>
@@ -62,7 +62,7 @@ namespace AGE
 
 	private:
 #if defined LOOSE_OCTREE_CULLING
-		LooseOctreeNode *_octree;
+		LooseOctree _octree;
 #elif defined OCTREE_CULLING
 		OctreeNode *_octree;
 #endif

@@ -13,8 +13,6 @@
 #include <Utils/Age_Imgui.hpp>
 #if defined OCTREE_CULLING
 #include <Core/OctreeNode.hh>
-#elif defined LOOSE_OCTREE_CULLING
-#include <Core/LooseOctreeNode.hh>
 #endif
 #include <Core/CullableInterfaces.hh>
 #include <chrono>
@@ -25,9 +23,7 @@ namespace AGE
 	PrepareRenderThread::PrepareRenderThread()
 	{
 		_drawables.reserve(65536);
-#if defined LOOSE_OCTREE_CULLING
-		_octree = new LooseOctreeNode;
-#elif defined OCTREE_CULLING
+#if defined OCTREE_CULLING
 		_octree = new OctreeNode;
 #endif
 	}
@@ -36,8 +32,6 @@ namespace AGE
 	{
 		_commandQueue.emplace<TMQ::CloseQueue>();
 		_commandQueue.releaseReadability();
-		if (_octree)
-			delete _octree;
 	}
 
 	bool PrepareRenderThread::_init()
@@ -221,7 +215,7 @@ namespace AGE
 #ifdef ACTIVATE_OCTREE_CULLING
 		// remove drawable from octree
 		if (_drawables[id].toAddInOctree == false)
-			_octree = _octree->removeElement(&_drawables[id]);
+			_octree.removeElement(&_drawables[id]);
 #endif
 		assert(id != (std::size_t)(-1));
 	}
@@ -430,7 +424,7 @@ namespace AGE
 					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
 #ifdef  ACTIVATE_OCTREE_CULLING
-					_octree = _octree->moveElement(&e);
+					_octree.moveElement(&e);
 #endif
 				}
 #ifdef  ACTIVATE_OCTREE_CULLING
@@ -440,7 +434,7 @@ namespace AGE
 					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
 					e.previousAABB = e.currentAABB;
 					e.toAddInOctree = false;
-					_octree = _octree->addElement(&e);
+					_octree.addElement(&e);
 				}
 #endif
 			}
@@ -472,7 +466,7 @@ namespace AGE
 #ifdef ACTIVATE_OCTREE_CULLING
 
 				// Do the culling
-				_octree->getElementsCollide(&camera, toDraw);
+				_octree.getElementsCollide(&camera, toDraw);
 
 				// iter on element to draw
 				for (CullableObject *e : toDraw)

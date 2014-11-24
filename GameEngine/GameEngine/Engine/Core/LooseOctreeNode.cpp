@@ -53,8 +53,8 @@ namespace AGE
 
 			if (VEC3_BIGGER(looseNodeSize, objectDimensions))
 			{
-				++_uniqueSubElements;
 				// if the object is entirely in the loose node
+				++_uniqueSubElements;
 				if (VEC3_BIGGER(halfLooseNodeSize, objectDimensions))
 				{
 					// if the object can fit in the lower level of the tree
@@ -70,6 +70,7 @@ namespace AGE
 				{
 					// else we put the object in this node
 					_elements.push_back(toAdd);
+					toAdd->currentNode = this;
 				}
 				return (this);
 			}
@@ -92,106 +93,16 @@ namespace AGE
 			return (NULL);
 	}
 
-	LooseOctreeNode	*LooseOctreeNode::removeElement(CullableObject *toRm)
+	void LooseOctreeNode::removeElement(CullableObject *toRm)
 	{
-		bool collisionState;
-		glm::vec3 objectDimensions;
-
-		// check the collision state depending on the geometry shape
-		switch (toRm->type)
-		{
-		case CULLABLE_BOUNDING_BOX:
-			collisionState = _node.checkPointIn(((CullableBoundingBox*)toRm)->currentAABB.center);
-			objectDimensions = ((CullableBoundingBox*)toRm)->currentAABB.maxPoint -
-								((CullableBoundingBox*)toRm)->currentAABB.minPoint;
-			break;
-		default:
-			assert(!"This cullable type is not handled yet.");
-			break;
-		}
-		// if the cullable is in the current node
-		if (collisionState)
-		{
-			glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
-			glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
-
-			if (VEC3_BIGGER(looseNodeSize, objectDimensions))
-			{
-				--_uniqueSubElements;
-				// if the object is entirely in the loose node
-				if (VEC3_BIGGER(halfLooseNodeSize, objectDimensions))
-				{
-					// the object is in a sub element
-					for (uint32_t i = 0; i < 8; ++i)
-					{
-						if (_sons[i]->removeElement(toRm) != NULL)
-							break;
-					}
-					// remove the last level of the octree
-					if (_uniqueSubElements == 0 && !isLeaf())
-					{
-						for (uint32_t i = 0; i < 8; ++i)
-						{
-							delete _sons[i];
-							_sons[i] = NULL;
-						}
-					}
-				}
-				else
-				{
-					// remove the element from the node
-					for (uint32_t i = 0; i < _elements.size(); ++i)
-					{
-						if (_elements[i] == toRm)
-						{
-							_elements[i] = _elements[_elements.size() - 1];
-							_elements.pop_back();
-							break;
-						}
-					}
-					if (_father == NULL)
-					{
-						// if the node is the root, try to remove it
-						uint32_t nbrSonUsed = 0;
-						uint32_t sonUsedIdx;
-
-						// if only one of its sons is used
-						for (uint32_t i = 0; i < 8; ++i)
-						{
-							if (_sons[i]->_uniqueSubElements != 0)
-							{
-								++nbrSonUsed;
-								sonUsedIdx = i;
-								if (nbrSonUsed > 1)
-									break;
-							}
-						}
-						if (nbrSonUsed == 1)
-						{
-							// replace the root by this son
-							LooseOctreeNode *newRoot = _sons[sonUsedIdx];
-
-							_sons[sonUsedIdx] = NULL;
-							delete this;
-							return (newRoot);
-						}
-					}
-				}
-			}
-			return (this);
-		}
-		return (NULL);
+		toRm->currentNode->removeElementFromNode(toRm);
 	}
 
 	LooseOctreeNode	*LooseOctreeNode::moveElement(CullableObject *toMove)
 	{
-		bool hasBeenRemoved;
+		LooseOctreeNode *newRoot = toMove->currentNode->moveElementFromNode(toMove);
 
-		LooseOctreeNode *newRoot = removeElementIfChangeNode(toMove, hasBeenRemoved);
-		if (hasBeenRemoved == true)
-			return (newRoot->addElement(toMove));
-		else
-			return (newRoot);
+		return ((newRoot == NULL) ? this : newRoot);
 	}
 
 	void		LooseOctreeNode::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill) const
@@ -231,6 +142,59 @@ namespace AGE
 	{
 		// If a node is not a leaf, all his sons are created
 		return (_sons[0] == NULL);
+	}
+
+	LooseOctreeNode *LooseOctreeNode::tryChangeRoot()
+	{
+		// if the node is the root, has no elements and has sons, we try to change it
+		if (_father == NULL && !isLeaf())
+		{
+			// if the node is the root, try to remove it
+			uint32_t nbrSonUsed = 0;
+			uint32_t sonUsedIdx;
+
+			// if only one of its sons is used
+			for (uint32_t i = 0; i < 8; ++i)
+			{
+				if (_sons[i]->_uniqueSubElements != 0)
+				{
+					++nbrSonUsed;
+					sonUsedIdx = i;
+					if (nbrSonUsed > 1)
+						break;
+				}
+			}
+			if (nbrSonUsed == 1)
+			{
+				// replace the root by this son
+				LooseOctreeNode *newRoot = _sons[sonUsedIdx];
+
+				_sons[sonUsedIdx] = NULL;
+				delete this;
+				return (newRoot);
+			}
+		}
+		return (NULL);
+	}
+
+	void LooseOctreeNode::removeEmptyLeafs()
+	{
+		if (!isLeaf())
+		{
+			if (_uniqueSubElements == 0)
+			{
+				for (int i = 0; i < 8; ++i)
+				{
+					delete _sons[i];
+					_sons[i] = NULL;
+				}
+			}
+			else
+			{
+				for (int i = 0; i < 8; ++i)
+					_sons[i]->removeEmptyLeafs();
+			}
+		}
 	}
 
 	LooseOctreeNode *LooseOctreeNode::extendNode(CullableObject *toAdd, glm::i8vec3 const &direction)
@@ -308,109 +272,136 @@ namespace AGE
 		_looseNode.recomputeCenter();
 	}
 
-	LooseOctreeNode* LooseOctreeNode::removeElementIfChangeNode(CullableObject *toRm, bool &hasBeenRemoved)
+	void LooseOctreeNode::removeElementFromNode(CullableObject *toRm)
 	{
-		bool prevCollisionState;
+		LooseOctreeNode *curNode = this;
+
+		// remove the element from the node
+		for (uint32_t i = 0; i < _elements.size(); ++i)
+		{
+			if (_elements[i] == toRm)
+			{
+				_elements[i] = _elements[_elements.size() - 1];
+				_elements.pop_back();
+				for (LooseOctreeNode *curNode = this; curNode != NULL; curNode = curNode->_father)
+				{
+					--curNode->_uniqueSubElements;
+				}
+				toRm->currentNode = NULL;
+				break;
+			}
+		}
+
+	}
+
+	LooseOctreeNode *LooseOctreeNode::moveElementFromNode(CullableObject *toMv)
+	{
+		glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
+		glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
+
 		bool currentCollisionState;
-		glm::vec3 prevObjectDimensions;
 		glm::vec3 currentObjectDimensions;
 
 		// check the collision state depending on the geometry shape
-		switch (toRm->type)
+		switch (toMv->type)
 		{
 		case CULLABLE_BOUNDING_BOX:
-			prevCollisionState = _node.checkPointIn(((CullableBoundingBox*)toRm)->previousAABB.center);
-			currentCollisionState = _node.checkPointIn(((CullableBoundingBox*)toRm)->currentAABB.center);
-			prevObjectDimensions = ((CullableBoundingBox*)toRm)->previousAABB.maxPoint -
-				((CullableBoundingBox*)toRm)->previousAABB.minPoint;
-			currentObjectDimensions = ((CullableBoundingBox*)toRm)->currentAABB.maxPoint -
-				((CullableBoundingBox*)toRm)->currentAABB.minPoint;
+			currentCollisionState = _node.checkPointIn(((CullableBoundingBox*)toMv)->currentAABB.center);
+			currentObjectDimensions = ((CullableBoundingBox*)toMv)->currentAABB.maxPoint -
+				((CullableBoundingBox*)toMv)->currentAABB.minPoint;
 			break;
 		default:
 			assert(!"This cullable type is not handled yet.");
 			break;
 		}
-		// if the cullable is in the current node
-		if (prevCollisionState)
+		if (currentCollisionState &&
+			VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
 		{
-			glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
-			glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
-
-			if (VEC3_BIGGER(looseNodeSize, prevObjectDimensions))
+			if (!VEC3_BIGGER(halfLooseNodeSize, currentObjectDimensions))
 			{
-				// if the object is entirely in the loose node
-				--_uniqueSubElements;
-				if (VEC3_BIGGER(halfLooseNodeSize, prevObjectDimensions))
-				{
-					// the object is in a sub element
-					for (uint32_t i = 0; i < 8; ++i)
-					{
-						if (_sons[i]->removeElementIfChangeNode(toRm, hasBeenRemoved) != NULL)
-							break;
-					}
-				}
-				else if (currentCollisionState &&
-					VEC3_BIGGER(looseNodeSize, currentObjectDimensions) &&
-					!VEC3_BIGGER(halfLooseNodeSize, currentObjectDimensions))
-				{
-					hasBeenRemoved = false;
-				}
-				else
-				{
-					hasBeenRemoved = true;
-					// remove the element from the node
-					for (uint32_t i = 0; i < _elements.size(); ++i)
-					{
-						if (_elements[i] == toRm)
-						{
-							_elements[i] = _elements[_elements.size() - 1];
-							_elements.pop_back();
-							break;
-						}
-					}
-					if (_father == NULL)
-					{
-						// if the node is the root, try to remove it
-						uint32_t nbrSonUsed = 0;
-						uint32_t sonUsedIdx;
-
-						// if only one of its sons is used
-						for (uint32_t i = 0; i < 8; ++i)
-						{
-							if (_sons[i]->_uniqueSubElements != 0)
-							{
-								++nbrSonUsed;
-								sonUsedIdx = i;
-								if (nbrSonUsed > 1)
-									break;
-							}
-						}
-						if (nbrSonUsed == 1)
-						{
-							// replace the root by this son
-							LooseOctreeNode *newRoot = _sons[sonUsedIdx];
-
-							_sons[sonUsedIdx] = NULL;
-							delete this;
-							return (newRoot);
-						}
-					}
-				}
-				// remove the last level of the octree
-				if (hasBeenRemoved == false)
-					++_uniqueSubElements;
-				else if (_uniqueSubElements == 0 && !isLeaf())
-				{
-					for (uint32_t i = 0; i < 8; ++i)
-					{
-						delete _sons[i];
-						_sons[i] = NULL;
-					}
-				}
+				// The object is still in the same node
+				return (NULL);
 			}
-			return (this);
+			else
+			{
+				removeElementFromNode(toMv);
+				addElementFromNode(toMv);
+				return (NULL);
+			}
 		}
-		return (NULL);
+		else
+		{
+			// The object has changed node
+			LooseOctreeNode *prevNode = this;
+			LooseOctreeNode *currentNode = this->_father;
+			LooseOctreeNode *newRoot;
+
+			removeElementFromNode(toMv);
+			while (currentNode)
+			{
+				looseNodeSize = currentNode->_looseNode.maxPoint - currentNode->_looseNode.minPoint;
+				halfLooseNodeSize = looseNodeSize / 2.0f;
+				switch (toMv->type)
+				{
+				case CULLABLE_BOUNDING_BOX:
+					currentCollisionState = _node.checkPointIn(((CullableBoundingBox*)toMv)->currentAABB.center);
+					currentObjectDimensions = ((CullableBoundingBox*)toMv)->currentAABB.maxPoint -
+						((CullableBoundingBox*)toMv)->currentAABB.minPoint;
+					break;
+				default:
+					assert(!"This cullable type is not handled yet.");
+					break;
+				}
+				if (currentCollisionState &&
+					VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
+				{
+					currentNode->addElementFromNode(toMv);
+					return (NULL);
+				}
+				prevNode = currentNode;
+				currentNode = currentNode->_father;
+			}
+			return (prevNode->addElement(toMv));
+		}
 	}
 
+	bool LooseOctreeNode::addElementFromNode(CullableObject *toAdd)
+	{
+		glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
+		glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
+
+		bool currentCollisionState;
+		glm::vec3 currentObjectDimensions;
+
+		switch (toAdd->type)
+		{
+		case CULLABLE_BOUNDING_BOX:
+			currentCollisionState = _node.checkPointIn(((CullableBoundingBox*)toAdd)->currentAABB.center);
+			currentObjectDimensions = ((CullableBoundingBox*)toAdd)->currentAABB.maxPoint -
+				((CullableBoundingBox*)toAdd)->currentAABB.minPoint;
+			break;
+		default:
+			assert(!"This cullable type is not handled yet.");
+			break;
+		}
+		if (currentCollisionState &&
+			VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
+		{
+			++_uniqueSubElements;
+			if (!VEC3_BIGGER(halfLooseNodeSize, currentObjectDimensions))
+			{
+				_elements.push_back(toAdd);
+				return (true);
+			}
+			else
+			{
+				for (int i = 0; i < 8; ++i)
+				{
+					if (_sons[i]->addElementFromNode(toAdd) == true)
+						return (true);
+				}
+			}
+		}
+		return (false);
+	}
 }
