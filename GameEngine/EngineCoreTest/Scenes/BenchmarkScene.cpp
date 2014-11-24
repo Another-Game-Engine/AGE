@@ -35,6 +35,7 @@ void BenchmarkScene::initRendering()
 	{
 		GraphicalMemory graphic;
 
+		graphic.load({Attribute::Indices});
 		auto &m = _renderManager;
 		auto &program = m->addProgram({ m->addUnitProgram(DEFFERED_VERTEX_SHADER, GL_VERTEX_SHADER), m->addUnitProgram(DEFFERED_FRAG_SHADER, GL_FRAGMENT_SHADER) });
 		auto &model_matrix = m->addResourceProgram<Mat4>(program, "model_matrix");

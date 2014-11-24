@@ -19,6 +19,7 @@ public:
 	iterator end();
 	const_iterator end() const;
 	size_t offset() const;
+	Vertices &offset(size_t o);
 	size_t size() const;
 
 private:

@@ -49,6 +49,12 @@ size_t Vertices::offset() const
 	return (_offset);
 }
 
+Vertices & Vertices::offset(size_t o)
+{
+	_offset = o;
+	return (*this);
+}
+
 size_t Vertices::size() const
 {
 	return (_size);

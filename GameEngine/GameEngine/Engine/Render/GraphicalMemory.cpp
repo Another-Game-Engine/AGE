@@ -19,7 +19,12 @@ GraphicalMemory &GraphicalMemory::load(std::vector<Attribute> const &attributes)
 Key<Vertices> GraphicalMemory::handle(Vertices const &vertices)
 {
 	assert(isMatch(vertices));
+	size_t offsetVertices = 0;
+	if (!_elements.empty()) {
+		offsetVertices = _elements.back().offset() + _elements.back().size();
+	}
 	_elements.emplace_back(vertices);
+	_elements.back().offset(offsetVertices);
 	size_t index = 0;
 	for (auto &ptrData : vertices) {
 		_blocksMemory[index].handle(ptrData);
@@ -30,16 +35,16 @@ Key<Vertices> GraphicalMemory::handle(Vertices const &vertices)
 Key<Vertices> GraphicalMemory::handle(Vertices &&vertices)
 {
 	assert(isMatch(vertices));
-	for (auto &ptrData : vertices) {
-		for (auto &block : _blocksMemory) {
-			auto &data = *ptrData;
-			if (block == data) {
-				block.handle(ptrData);
-				break;
-			}
-		}
+	size_t offsetVertices = 0;
+	if (!_elements.empty()) {
+		offsetVertices = _elements.back().offset() + _elements.back().size();
 	}
 	_elements.emplace_back(std::move(vertices));
+	_elements.back().offset(offsetVertices);
+	size_t index = 0;
+	for (auto &ptrData : vertices) {
+		_blocksMemory[index].handle(ptrData);
+	}
 	return (Key<Vertices>::createKey(_elements.size() - 1));
 }
 
