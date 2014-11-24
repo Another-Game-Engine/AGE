@@ -475,7 +475,7 @@ namespace AGE
 					e->hasBeenFound = false;
 					// all the elements are drawable for the moment (TODO)
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
-					if (!currentDrawable->animation.empty())
+					if (!currentDrawable->animation)
 					{
 						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation, animationManager->getBones(currentDrawable->animation));
 						drawList.drawables.back().animation = currentDrawable->animation;

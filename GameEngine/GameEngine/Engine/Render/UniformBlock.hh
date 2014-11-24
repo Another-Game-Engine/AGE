@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Render/Buffer.hh>
-#include <Render/MemoryGPU.hh>
 #include <array>
 #include <cassert>
 #include <set>
@@ -23,7 +22,7 @@ public:
 
 private:
 	int _bindingPoint;
-	std::set<MemoryGPU> _data;
+//	std::set<MemoryGPU> _data;
 	GLint _sizeBlock;
 	UniformBuffer _buffer;
 

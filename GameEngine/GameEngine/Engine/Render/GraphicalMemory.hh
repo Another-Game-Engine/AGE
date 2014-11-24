@@ -8,7 +8,6 @@
 # include <Render/Vertices.hh>
 
 template <typename type_t> class Key;
-//class Vertices;
 
 typedef uint8_t GraphicQuery;
 

@@ -24,7 +24,7 @@ Key<Vertices> GraphicalMemory::handle(Vertices const &vertices)
 	for (auto &ptrData : vertices) {
 		_blocksMemory[index].handle(ptrData);
 	}
-	return ()
+	return (Key<Vertices>::createKey(_elements.size() - 1));
 }
 
 Key<Vertices> GraphicalMemory::handle(Vertices &&vertices)
@@ -40,7 +40,7 @@ Key<Vertices> GraphicalMemory::handle(Vertices &&vertices)
 		}
 	}
 	_elements.emplace_back(std::move(vertices));
-	return (Key<Vertices>::createKeyWithId(_elements.size() - 1));
+	return (Key<Vertices>::createKey(_elements.size() - 1));
 }
 
 GraphicalMemory & GraphicalMemory::quit(Key<Vertices> const &memory)

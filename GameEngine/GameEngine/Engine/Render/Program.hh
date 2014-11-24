@@ -43,14 +43,14 @@ template <typename resource_t>
 Key<ResourceProgram> Program::add(resource_t const &resource)
 {
 	_resourcesProgram.emplace_back(std::make_unique<resource_t>(resource));
-	return (Key<ResourceProgram>::createKeyWithId(_resourcesProgram.size() - 1));
+	return (Key<ResourceProgram>::createKey(_resourcesProgram.size() - 1));
 }
 
 template <typename resource_t> 
 Key<ResourceProgram> Program::add(resource_t &&resource)
 {
 	_resourcesProgram.emplace_back(std::make_unique<resource_t>(std::move(resource)));
-	return (Key<ResourceProgram>::createKeyWithId(_resourcesProgram.size() - 1));
+	return (Key<ResourceProgram>::createKey(_resourcesProgram.size() - 1));
 }
 
 
@@ -71,5 +71,5 @@ Program & Program::set(Key<ResourceProgram> const &key, typename resource_t::typ
 template <typename resource_t>
 Program & Program::has(Key<ResourceProgram> const &key)
 {
-	return (_resourceProgram.size() > key.getId());
+	return (_resourceProgram.size() > key.g	etId());
 }

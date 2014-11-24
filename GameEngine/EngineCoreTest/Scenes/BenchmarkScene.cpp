@@ -39,7 +39,7 @@ void BenchmarkScene::initRendering()
 		auto &program = m->addProgram({ m->addUnitProgram(DEFFERED_VERTEX_SHADER, GL_VERTEX_SHADER), m->addUnitProgram(DEFFERED_FRAG_SHADER, GL_FRAGMENT_SHADER) });
 		auto &model_matrix = m->addResourceProgram<Mat4>(program, "model_matrix");
 		m->setResourceProgram<Mat4>(program, model_matrix, glm::mat4(1.0f));
-		auto key = graphic.addVertices(Vertices({ Data(std::vector<int>({1, 2, 3}), Attribute::Indices) }));
+		auto key = graphic.handle(Vertices(3, { Data(std::vector<int>({1, 2, 3}), Attribute::Indices) }));
 		return (true);
 	});
 	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);

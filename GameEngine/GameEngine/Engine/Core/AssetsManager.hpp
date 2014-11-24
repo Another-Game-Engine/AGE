@@ -7,7 +7,6 @@
 #include <bitset>
 #include <Geometry/Mesh.hpp>
 #include <Render/Storage.hh>
-#include <Render/Pool.hh>
 #include <Render/Key.hh>
 #include <map>
 

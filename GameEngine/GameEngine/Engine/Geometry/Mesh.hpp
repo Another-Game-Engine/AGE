@@ -9,7 +9,6 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/bitset.hpp>
-#include <Render/Pool.hh>
 #include <Render/Key.hh>
 
 class Vertices;

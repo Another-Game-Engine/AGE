@@ -47,7 +47,8 @@ UniformBlock::~UniformBlock()
 
 size_t UniformBlock::getNbrElement() const
 {
-	return (_data.size());
+	return (0);
+	//return (_data.size());
 }
 
 size_t UniformBlock::getSizeBlock() const
@@ -87,8 +88,8 @@ UniformBlock const &UniformBlock::introspection(Program const &program, GLuint i
 	glGetActiveUniformsiv(program.getId(), nbrElement, (const GLuint *)elements.data(), GL_UNIFORM_ARRAY_STRIDE, strides.data());
 	for (GLint index = 0; index < nbrElement; ++index)
 	{
-		MemoryGPU m(sizes[index] * convertGLidToSize(types[index]), offsets[index], strides[index]);
-		_data.insert(m);
+		//MemoryGPU m(sizes[index] * convertGLidToSize(types[index]), offsets[index], strides[index]);
+		//_data.insert(m);
 	}
 	GPUallocation();
 	return (*this);

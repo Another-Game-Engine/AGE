@@ -334,7 +334,6 @@
     <ClInclude Include="Engine\Render\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\GraphicalMemory.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
-    <ClInclude Include="Engine\Render\Key.hpp" />
     <ClInclude Include="Engine\Render\LocationStorage.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
     <ClInclude Include="Engine\Render\Material.hh" />
