@@ -116,9 +116,10 @@ Dispatcher Queue::getDispatcher()
 }
 
 
-Queue::Queue()
+Queue::Queue(bool shared)
 	: _publisherThreadId(0)
 	, _millisecondToWait(1)
+	, _shared(shared)
 {
 }
 

@@ -14,6 +14,7 @@ namespace AGE
 	protected:
 		TMQ::Queue _commandQueue;
 		TMQ::Queue *_next;
+		TMQ::Queue _taskQueue;
 		Engine *_engine;
 		std::size_t _threadId;
 
@@ -64,6 +65,8 @@ namespace AGE
 		CommandQueue()
 			: _engine(nullptr)
 			, _next(nullptr)
+			, _commandQueue(false)
+			, _taskQueue(true)
 		{}
 
 		virtual ~CommandQueue()
@@ -86,6 +89,11 @@ namespace AGE
 		{
 			assert(std::this_thread::get_id().hash() == _threadId);
 			return _next;
+		}
+
+		TMQ::Queue *getTaskQueue()
+		{
+			return &_taskQueue;
 		}
 
 		void setNextCommandQueue(TMQ::Queue *next)
