@@ -47,7 +47,7 @@ void CameraSystem::getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to)
 		return;
 	auto scene = _scene.lock();
 	auto mousePos = scene->getInstance<Input>()->getMousePosition();
-	auto screenSize = scene->getInstance<AGE::Threads::Render>()->getCommandQueue()->emplaceFuture<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	//auto screenSize = scene->getInstance<AGE::Threads::Render>()->getCommandQueue()->emplaceFuture<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
 	// TODO
 	//screenPosToWorldRay(mousePos.x, mousePos.y, screenSize.x, screenSize.y, cameraCpt->lookAtTransform, cameraCpt->projection, from, to);
@@ -58,9 +58,9 @@ void CameraSystem::getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to)
 	if (_camera.getCollection().size() == 0)
 		return;
 	auto scene = _scene.lock();
-	auto screenSize = scene->getInstance<AGE::Threads::Render>()->getCommandQueue()->emplaceFuture<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
-	auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
-	auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
+	//auto screenSize = scene->getInstance<AGE::Threads::Render>()->getCommandQueue()->emplaceFuture<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	//auto centerPos = glm::vec2(screenSize) * glm::vec2(0.5f);
+	//auto cameraCpt = scene->getComponent<Component::CameraComponent>(*(_camera.getCollection().begin()));
 	//TODO
 	//screenPosToWorldRay(
 	//	static_cast<int>(centerPos.x),

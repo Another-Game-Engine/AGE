@@ -12,12 +12,14 @@ namespace AGE
 	class Engine;
 	class CommandQueue
 	{
+	public:
+		CommandQueue *_next;
 	private:
 		TMQ::PtrQueue q;
 	protected:
 		TMQ::ReleasableQueue _commandQueue;
 		TMQ::ImmediateQueue _taskQueue;
-		CommandQueue *_next;
+
 		CommandQueue *_prev;
 		Engine *_engine;
 		std::size_t _threadId;
@@ -86,6 +88,7 @@ namespace AGE
 
 	public:
 		bool _hasFrameBefore;
+		bool first;
 		CommandQueue(const CommandQueue &) = delete;
 		CommandQueue(CommandQueue &&) = delete;
 		CommandQueue& operator=(const CommandQueue &) = delete;
@@ -98,6 +101,7 @@ namespace AGE
 		{
 			_commandQueue.setWaitingTime(1);
 			_hasFrameBefore = false;
+			first = false;
 		}
 
 		virtual ~CommandQueue()
@@ -152,7 +156,7 @@ namespace AGE
 		bool commandQueueUpdate()
 		{
 			// We pop task queue
-			if (_taskQueue.getReadableQueue(q))
+			if (!first && _taskQueue.getReadableQueue(q))
 			{
 				while (!q.empty())
 				{
@@ -175,7 +179,22 @@ namespace AGE
 			if (!_hasFrameBefore)
 				return true;
 			updateBegin();
-			if (_commandQueue.getReadableQueue(q))
+			if (first && _taskQueue.getReadableQueue(q))
+			{
+				while (!q.empty())
+				{
+					auto message = q.front();
+					auto id = message->uid;
+					if (_callbackCollection.size() <= id || !_callbackCollection[id])
+					{
+						assert(false); // || return false
+					}
+					(*_callbackCollection[id].get())(message);
+					message->_used = true;
+					q.pop();
+				}
+			}
+			if (first == false && _commandQueue.getReadableQueue(q))
 			{
 				while (!q.empty())
 				{
@@ -198,8 +217,10 @@ namespace AGE
 			updateEnd();
 			_next->_hasFrameBefore = true;
 //			auto t = std::chrono::system_clock::now();
-			while (_next->getCurrentThreadCommandQueue()->releaseReadability() == false)
-				;
+			if (_next->first != true)
+			{
+				/*while (*/_next->getCurrentThreadCommandQueue()->releaseReadability();/* == false)*/
+			}
 //			auto tt = std::chrono::system_clock::now() - t;
 //			std::cout << _name + " : " + std::to_string(tt.count()) << std::endl;
 			return true;

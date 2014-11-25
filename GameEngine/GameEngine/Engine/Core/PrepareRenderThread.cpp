@@ -327,12 +327,12 @@ namespace AGE
 			}	
 		});
 
-		registerMessageCallback<AGE::RenderImgui>([&](AGE::RenderImgui& msg)
-		{
-#ifdef USE_IMGUI
-			getCommandQueue()->push(msg);
-#endif
-		});
+//		registerMessageCallback<AGE::RenderImgui>([&](AGE::RenderImgui& msg)
+//		{
+//#ifdef USE_IMGUI
+//			getCommandQueue()->push(msg);
+//#endif
+//		});
 
 		return true;
 	}
@@ -528,7 +528,7 @@ namespace AGE
 	bool PrepareRenderThread::_updateEnd()
 	{
 		auto returnValue = true;
-		//_next->getCurrentThreadCommandQueue()->emplace<AGE::MTC::FrameTime>(_name, _elapsed.count());
+		_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_name, _elapsed.count());
 		return returnValue;
 	}
 

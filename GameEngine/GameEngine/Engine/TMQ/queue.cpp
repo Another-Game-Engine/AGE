@@ -122,7 +122,7 @@ ReleasableQueue::ReleasableQueue()
 
 void ReleasableQueue::launch()
 {
-//	_writeCondition.notify_one();
+	_writeCondition.notify_one();
 }
 
 //return true if ti's a priority queue
@@ -154,13 +154,11 @@ bool ReleasableQueue::isWritable()
 bool ReleasableQueue::releaseReadability()
 {
 	std::unique_lock<std::mutex> lock(_mutex);
-	if (!_writeCondition.wait_for(lock, std::chrono::milliseconds(1), [this]()
+//	if (!_writeCondition.wait_for(lock, std::chrono::milliseconds(1), [this]()
+	_writeCondition.wait(lock, [this]()
 	{
 		return (_copy.empty());
-	}))
-	{
-		return false;
-	}
+	});
 	if (!_queue.empty() && _copy.empty())
 	{
 		_copy = std::move(_queue);

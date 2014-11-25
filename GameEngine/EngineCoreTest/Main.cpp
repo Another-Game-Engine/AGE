@@ -121,6 +121,7 @@ int			main(int ac, char **av)
 	e->getCurrentThreadCommandQueue()->releaseReadability();
 	e->_hasFrameBefore = true;
 	e->getCommandQueue()->releaseReadability();
+	e->first = true;
 	while (e->commandQueueUpdate())
 		;
 	config->saveToFile();

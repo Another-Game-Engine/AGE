@@ -182,32 +182,41 @@ namespace TMQ
 
 		void move(MessageBase *e, std::size_t size)
 		{
-			std::lock_guard<std::mutex> lock(_mutex);
-			_queue.move(e, size);
+			{
+				std::unique_lock<std::mutex> lock(_mutex);
+				_queue.move(e, size);
+			}
 			_releaseReadability();
 		}
 
 		template <typename T>
 		void push(const T& e)
 		{
-			std::lock_guard<std::mutex> lock(_mutex);
-			_queue.push(e);
+			{
+				std::unique_lock<std::mutex> lock(_mutex);
+				_queue.push(e);
+			}
 			_releaseReadability();
 		}
 
 		template <typename T, typename ...Args>
 		void emplace(Args ...args)
 		{
-			std::lock_guard<std::mutex> lock(_mutex);
-			_queue.emplace<T>(args...);
+			{
+				std::unique_lock<std::mutex> lock(_mutex);
+				_queue.emplace<T>(args...);
+			}
 			_releaseReadability();
 		}
 
 		template <typename T, typename F>
 		std::future<F> pushFuture(const T &e)
 		{
-			std::lock_guard<std::mutex> lock(_mutex);
-			auto f = _queue.push(e)->getFuture();
+			std::future < F > f;
+			{
+				std::unique_lock<std::mutex> lock(_mutex);
+				f = _queue.push(e)->getFuture();
+			}
 			_releaseReadability();
 			return f;
 		}
@@ -215,8 +224,11 @@ namespace TMQ
 		template <typename T, typename F, typename ...Args>
 		std::future<F> emplaceFuture(Args ...args)
 		{
-			std::lock_guard<std::mutex> lock(_mutex);
-			auto f = _queue.emplace<T>(args...)->getFuture();
+			std::future< F > f;
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				f = _queue.emplace<T>(args...)->getFuture();
+			}
 			_releaseReadability();
 			return f;
 		}
