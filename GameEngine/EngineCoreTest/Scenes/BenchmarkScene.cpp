@@ -9,9 +9,9 @@
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
 #include <Render/ResourceProgram.hh>
-#include <Render/GraphicalMemory.hh>
-#include <Render/Data.hh>
-#include <Render/Vertices.hh>
+#include <Render/GeometryManagement/GraphicalMemory.hh>
+#include <Render/GeometryManagement/Data.hh>
+#include <Render/GeometryManagement/Vertices.hh>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))

@@ -4,8 +4,8 @@
 # include <Render/UnitProg.hh>
 # include <Render/ResourceProgram.hh>
 # include <Render/Key.hh>
-# include <Render/Attribute.hh>
-# include <Render/GraphicalMemory.hh>
+# include <Render/GeometryManagement/Attribute.hh>
+# include <Render/GeometryManagement/GraphicalMemory.hh>
 
 class Program
 {

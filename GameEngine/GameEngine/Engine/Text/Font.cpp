@@ -1,6 +1,5 @@
 #include "Font.hh"
 #include <Render/RenderManager.hh>
-#include <Render/Data.hh>
 
 Font::Font()
 : _name("")

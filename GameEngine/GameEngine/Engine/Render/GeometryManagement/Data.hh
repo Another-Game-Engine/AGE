@@ -1,7 +1,7 @@
 #pragma once
 
 # include <vector>
-# include <Render/Attribute.hh>
+# include <Render/GeometryManagement/Attribute.hh>
 # include <glm/glm.hpp>
 
 class Data

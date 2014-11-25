@@ -4,7 +4,7 @@
 # include <vector>
 # include <memory>
 # include <utility>
-# include <Render/Attribute.hh>
+# include <Render/GeometryManagement/Attribute.hh>
 # include <Render/Buffer.hh>
 
 template <typename type_t> class Key;
@@ -21,7 +21,6 @@ public:
 	AttributeBlockMemory(AttributeBlockMemory &&move);
 	AttributeBlockMemory &operator=(AttributeBlockMemory const &a) = delete;
 	AttributeBlockMemory &operator=(AttributeBlockMemory &&a);
-
 
 public:
 	operator size_t() const;

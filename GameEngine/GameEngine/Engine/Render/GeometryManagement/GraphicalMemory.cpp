@@ -1,7 +1,7 @@
-#include <Render/GraphicalMemory.hh>
+#include <Render/GeometryManagement/GraphicalMemory.hh>
 #include <Render/Key.hh>
-#include <Render/Vertices.hh>
-#include <Render/Data.hh>
+#include <Render/GeometryManagement/Vertices.hh>
+#include <Render/GeometryManagement/Data.hh>
 #include <tuple>
 
 GraphicalMemory::GraphicalMemory()

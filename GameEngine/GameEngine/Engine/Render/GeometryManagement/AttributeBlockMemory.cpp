@@ -1,6 +1,6 @@
-#include <Render/AttributeBlockMemory.hh>
+#include <Render/GeometryManagement/AttributeBlockMemory.hh>
 #include <Render/Key.hh>
-#include <Render/Data.hh>
+#include <Render/GeometryManagement/Data.hh>
 #include <utility>
 
 AttributeBlockMemory::AttributeBlockMemory():

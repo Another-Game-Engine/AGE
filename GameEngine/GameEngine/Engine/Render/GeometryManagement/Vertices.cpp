@@ -1,5 +1,5 @@
-#include <Render/Vertices.hh>
-#include <Render/Data.hh>
+#include <Render/GeometryManagement/Vertices.hh>
+#include <Render/GeometryManagement/Data.hh>
 #include <algorithm>
 
 Vertices::Vertices(size_t size, std::vector<Data> const &data) :

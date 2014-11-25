@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -229,12 +229,13 @@
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Core\RenderThread.cpp" />
-    <ClCompile Include="Engine\Render\Attribute.cpp" />
-    <ClCompile Include="Engine\Render\AttributeBlockMemory.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
-    <ClCompile Include="Engine\Render\Data.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
-    <ClCompile Include="Engine\Render\GraphicalMemory.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Attribute.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\AttributeBlockMemory.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Data.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\GraphicalMemory.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Vertices.cpp" />
     <ClCompile Include="Engine\Render\LocationStorage.cpp" />
     <ClCompile Include="Engine\Render\Material.cpp" />
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
@@ -250,7 +251,6 @@
     <ClCompile Include="Engine\Render\Task.cpp" />
     <ClCompile Include="Engine\Render\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\VertexArray.cpp" />
-    <ClCompile Include="Engine\Render\Vertices.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
@@ -327,12 +327,14 @@
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
-    <ClInclude Include="Engine\Render\Attribute.hh" />
-    <ClInclude Include="Engine\Render\AttributeBlockMemory.hh" />
     <ClInclude Include="Engine\Render\Buffer.hh" />
     <ClInclude Include="Engine\Render\Data.hh" />
     <ClInclude Include="Engine\Render\Framebuffer.hh" />
-    <ClInclude Include="Engine\Render\GraphicalMemory.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Attribute.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\AttributeBlockMemory.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Data.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\GraphicalMemory.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Vertices.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\LocationStorage.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
@@ -351,7 +353,6 @@
     <ClInclude Include="Engine\Render\Task.hh" />
     <ClInclude Include="Engine\Render\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\VertexArray.hh" />
-    <ClInclude Include="Engine\Render\Vertices.hh" />
     <ClInclude Include="Engine\Skinning\Animation.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationInstance.hpp" />

@@ -3,12 +3,11 @@
 # include <vector>
 # include <utility>
 # include <memory>
-# include <Render/Attribute.hh>
-# include <Render/AttributeBlockMemory.hh>
-# include <Render/Vertices.hh>
+# include <Render/GeometryManagement/Attribute.hh>
+# include <Render/GeometryManagement/AttributeBlockMemory.hh>
+# include <Render/GeometryManagement/Vertices.hh>
 
 template <typename type_t> class Key;
-
 
 class GraphicalMemory
 {
