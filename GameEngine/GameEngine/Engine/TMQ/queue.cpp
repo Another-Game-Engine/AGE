@@ -133,35 +133,26 @@ bool Queue::getReadableQueue(TMQ::PtrQueue &q)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
 	bool isPriorityQueue;
-	if (_millisecondToWait == 0)
-	{
-		//lock.lock();
-		if (_copy.empty() && _priorityCopy.empty())
-		{
-			lock.unlock();
-			return false;
-		}
-	}
-	else
-	{
-		if (!_readCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this](){ return !_copy.empty() || !_priorityCopy.empty(); }))
-			return false;
-	}
-	if (!_priorityCopy.empty())
-	{
-		q = std::move(_priorityCopy);
-		_priorityCopy.clear();
-		isPriorityQueue = true;
-	}
-	else
-	{
-		q = std::move(_copy);
-		_copy.clear();
-		isPriorityQueue = false;
-	}
+	if (!_readCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this](){ return !_copy.empty(); }))
+		return false;
+	q = std::move(_copy);
+	_copy.clear();
+	isPriorityQueue = false;
+
 	lock.unlock();
 	_writeCondition.notify_one();
 	return isPriorityQueue;
+}
+
+bool Queue::isWritable()
+{
+	std::unique_lock<std::mutex> lock(_mutex);
+	if (_writeCondition.wait_for(lock, std::chrono::milliseconds(1), [this]()
+	{
+		return _copy.empty();
+	}))
+		return true;
+	return false;
 }
 
 void Queue::releaseReadability()
@@ -169,15 +160,9 @@ void Queue::releaseReadability()
 	std::unique_lock<std::mutex> lock(_mutex);
 	_writeCondition.wait(lock, [this]()
 	{
-		return (_copy.empty() && _priorityCopy.empty());
+		return (_copy.empty());
 	});
-	if (!_priority.empty() && _priorityCopy.empty())
-	{
-		_priorityCopy = std::move(_priority);
-		_priority.clear();
-		lock.unlock();
-	}
-	else if (!_queue.empty() && _copy.empty())
+	if (!_queue.empty() && _copy.empty())
 	{
 		_copy = std::move(_queue);
 		_queue.clear();

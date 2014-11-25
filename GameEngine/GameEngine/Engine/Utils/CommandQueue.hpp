@@ -3,6 +3,7 @@
 #include <thread>
 #include <tmq/templateDispatcher.hpp>
 #include <tmq/queue.hpp>
+#include <atomic>
 
 namespace AGE
 {
@@ -14,8 +15,10 @@ namespace AGE
 	protected:
 		TMQ::Queue _commandQueue;
 		TMQ::Queue *_next;
+		CommandQueue *_prev;
 		TMQ::Queue _taskQueue;
 		Engine *_engine;
+		std::atomic_uint64_t _frameNumber;
 		std::size_t _threadId;
 
 		struct ICallbackContainer
@@ -65,9 +68,14 @@ namespace AGE
 		CommandQueue()
 			: _engine(nullptr)
 			, _next(nullptr)
+			, _prev(nullptr)
 			, _commandQueue(false)
 			, _taskQueue(true)
-		{}
+			, _frameNumber(0)
+		{
+			_taskQueue.setWaitingTime(1);
+			_commandQueue.setWaitingTime(1);
+		}
 
 		virtual ~CommandQueue()
 		{
@@ -96,9 +104,10 @@ namespace AGE
 			return &_taskQueue;
 		}
 
-		void setNextCommandQueue(TMQ::Queue *next)
+		void setNextCommandQueue(CommandQueue *next)
 		{
-			_next = next;
+			_next = &(next->_commandQueue);
+			next->_prev = this;
 		}
 
 		// USE THAT FUNCTION ONLY TO PASS THE RESULT to setNextCommandQueue
@@ -119,6 +128,65 @@ namespace AGE
 
 		bool commandQueueUpdate()
 		{
+			// We pop task queue
+			if (_taskQueue.getReadableQueue(q))
+			{
+				while (!q.empty())
+				{
+					auto message = q.front();
+					auto id = message->uid;
+					if (_callbackCollection.size() <= id || !_callbackCollection[id])
+					{
+						assert(false);
+					}
+					(*_callbackCollection[id].get())(message);
+					message->_used = true;
+					q.pop();
+				}
+			}
+			if (_next->isWritable())
+			{
+				if (_prev && _prev->_frameNumber != 0)
+				{
+					if (_commandQueue.getReadableQueue(q))
+					{
+						while (!q.empty())
+						{
+							auto message = q.front();
+							auto id = message->uid;
+							auto tid = message->tid;
+							assert(tid != _threadId); // mean that it's this thread who publish the message
+							if (_callbackCollection.size() <= id || !_callbackCollection[id])
+							{
+								if (_next)
+								{
+									_next->move(message, q.getFrontSize());
+									q.pop();
+									continue;
+								}
+								assert(false);
+							}
+							(*_callbackCollection[id].get())(message);
+							message->_used = true;
+							q.pop();
+						}
+						// TODO update
+						++_frameNumber;
+						if (_frameNumber == 0)
+							_frameNumber == 1;
+						if (_next)
+							_next->releaseReadability();
+					}
+				}
+			}
+			else
+			{
+				// TODO update
+				++_frameNumber;
+				if (_frameNumber == 0)
+					_frameNumber == 1;
+			}
+
 			bool isPriorityQueue = this->_commandQueue.getReadableQueue(q);
 			if (q.empty())
 				return false;
@@ -133,7 +201,7 @@ namespace AGE
 					if (_next)
 					{
 						if (isPriorityQueue)
-							_next->priorityMove(message, q.getFrontSize());
+							_next->move(message, q.getFrontSize());
 						else
 							_next->move(message, q.getFrontSize());
 						q.pop();

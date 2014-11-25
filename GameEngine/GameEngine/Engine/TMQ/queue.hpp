@@ -170,6 +170,7 @@ namespace TMQ
 		bool getReadableQueue(TMQ::PtrQueue &q);
 		Dispatcher getDispatcher();
 		void releaseReadability();
+		bool isWritable();
 		void setWaitingTime(std::size_t milliseconds);
 		std::size_t getWaitingTime();
 
