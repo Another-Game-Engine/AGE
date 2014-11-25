@@ -10,6 +10,7 @@ public:
 	template <typename type_t> Data(std::vector<type_t> const &data, Attribute type);
 
 public:
+	operator Attribute() const;
 	operator size_t() const;
 	size_t size() const;
 	glm::vec2 const &range() const;

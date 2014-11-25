@@ -17,6 +17,13 @@ enum Attribute
 	END
 };
 
+enum Property
+{
+	Name = 0,
+	NbrComponent,
+	Size,
+	GLType
+};
 
 typedef std::tuple<std::string, size_t, size_t, GLenum> AttributeData;
 

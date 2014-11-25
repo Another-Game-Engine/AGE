@@ -9,7 +9,6 @@
 
 template <typename type_t> class Key;
 
-typedef uint8_t GraphicQuery;
 
 class GraphicalMemory
 {
@@ -20,13 +19,17 @@ public:
 	GraphicalMemory &load(std::vector<Attribute> const &attributes);
 	Key<Vertices> handle(Vertices const &vertices);
 	Key<Vertices> handle(Vertices &&vertices);
-	GraphicalMemory &quit(Key<Vertices> const &memory);
-	GraphicalMemory &query(Key<Vertices> const &memory, GraphicQuery query);
+	GraphicalMemory &unhandle(Key<Vertices> &memory);
+	GraphicalMemory &draw(GLenum mode, Key<Vertices> &memory);
+	GraphicalMemory &bind();
+	GraphicalMemory &update();
 
 private:
-	bool isMatch(Vertices const &vertices) const;
+	bool _is_match(Vertices const &vertices) const;
+	bool _is_has_indices() const;
 
 private:
 	std::vector<Vertices> _elements;
 	std::vector<AttributeBlockMemory> _blocksMemory;
+
 };

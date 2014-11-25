@@ -1,5 +1,10 @@
 #include <Render/Data.hh>
 
+Data::operator Attribute() const
+{
+	return (_type);
+}
+
 Data::operator size_t() const
 {
 	return (size_t(_type));

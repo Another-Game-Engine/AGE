@@ -24,9 +24,11 @@ public:
 
 
 public:
-	bool operator!=(Data const &data) const;
-	bool operator==(Data const &data) const;
+	operator size_t() const;
+	bool operator!=(Attribute attribute) const;
+	bool operator==(Attribute attribute) const;
 	AttributeBlockMemory &handle(std::shared_ptr<Data> const &data);
+	AttributeBlockMemory &bind();
 	AttributeBlockMemory &update();
 
 private:

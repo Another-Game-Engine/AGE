@@ -35,6 +35,15 @@ AttributeBlockMemory &AttributeBlockMemory::operator=(AttributeBlockMemory &&a)
 	return (*this);
 }
 
+/**
+* Method:    handle
+* FullName:  AttributeBlockMemory::handle
+* Access:    public 
+* Returns:   AttributeBlockMemory &
+* Qualifier:
+* Parameter: std::shared_ptr<Data> const & data
+* Goal:		handle the Data in argument but do not handle the ownership of the ptr
+*/
 AttributeBlockMemory &AttributeBlockMemory::handle(std::shared_ptr<Data> const &data)
 {
 	_update = true;
@@ -49,6 +58,14 @@ AttributeBlockMemory &AttributeBlockMemory::handle(std::shared_ptr<Data> const &
 	return (*this);
 }
 
+/**
+* Method:    update
+* FullName:  AttributeBlockMemory::update
+* Access:    public 
+* Returns:   AttributeBlockMemory &
+* Qualifier:
+* Goal:		 update the memory on GPU if there are modifications
+*/
 AttributeBlockMemory &AttributeBlockMemory::update()
 {
 	if (!_update){
@@ -74,12 +91,57 @@ AttributeBlockMemory &AttributeBlockMemory::update()
 	return (*this);
 }
 
-bool AttributeBlockMemory::operator!=(Data const &data) const
+/**
+* Method:    operator!=
+* FullName:  AttributeBlockMemory::operator!=
+* Access:    public 
+* Returns:   bool
+* Qualifier: const
+* Parameter: Attribute attribute
+* Goal:		 compare the argument and the attribute type of the instance
+*/
+bool AttributeBlockMemory::operator!=(Attribute attribute) const
 {
-	return (data != _type);
+	return (attribute != _type);
 }
 
-bool AttributeBlockMemory::operator==(Data const &data) const
+/**
+* Method:    operator==
+* FullName:  AttributeBlockMemory::operator==
+* Access:    public 
+* Returns:   bool
+* Qualifier: const
+* Parameter: Attribute attribute
+* Goal:		 compare the argument and the attribute type of the instance
+*/
+bool AttributeBlockMemory::operator==(Attribute attribute) const
 {
-	return (data == _type);
+	return (attribute == _type);
+}
+
+/**
+* Method:    bind
+* FullName:  AttributeBlockMemory::bind
+* Access:    public 
+* Returns:   AttributeBlockMemory &
+* Qualifier:
+* Goal:		 bind the buffer object
+*/
+AttributeBlockMemory & AttributeBlockMemory::bind()
+{
+	_buffer->bind();
+	return (*this);
+}
+
+/**
+* Method:    operator size_t
+* FullName:  AttributeBlockMemory::operator size_t
+* Access:    public 
+* Returns:   
+* Qualifier: const
+* Goal:		 cast the AttributeBlockMemory in size_t with the attribute type of the instance
+*/
+AttributeBlockMemory::operator size_t() const
+{
+	return (size_t(_type));
 }
