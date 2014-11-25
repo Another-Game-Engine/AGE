@@ -110,58 +110,57 @@ bool PtrQueue::empty()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-Dispatcher Queue::getDispatcher()
+Dispatcher ReleasableQueue::getDispatcher()
 {
 	return Dispatcher(this);
 }
 
-
-Queue::Queue(bool shared)
-	: _publisherThreadId(0)
-	, _millisecondToWait(1)
-	, _shared(shared)
+ReleasableQueue::ReleasableQueue()
+	: _millisecondToWait(1)
 {
 }
 
-void Queue::launch()
+void ReleasableQueue::launch()
 {
-	_writeCondition.notify_one();
+//	_writeCondition.notify_one();
 }
 
 //return true if ti's a priority queue
-bool Queue::getReadableQueue(TMQ::PtrQueue &q)
+bool ReleasableQueue::getReadableQueue(TMQ::PtrQueue &q)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
-	bool isPriorityQueue;
-	if (!_readCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this](){ return !_copy.empty(); }))
+	if (!_readCondition.wait_for(lock, std::chrono::milliseconds(1), [this](){ return !_copy.empty(); }))
+	{
 		return false;
+	}
 	q = std::move(_copy);
 	_copy.clear();
-	isPriorityQueue = false;
-
 	lock.unlock();
 	_writeCondition.notify_one();
-	return isPriorityQueue;
+	return true;
 }
 
-bool Queue::isWritable()
+bool ReleasableQueue::isWritable()
 {
 	std::unique_lock<std::mutex> lock(_mutex);
 	if (_writeCondition.wait_for(lock, std::chrono::milliseconds(1), [this]()
 	{
-		return _copy.empty();
+		return _queue.empty();
 	}))
 		return true;
 	return false;
 }
 
-void Queue::releaseReadability()
+bool ReleasableQueue::releaseReadability()
 {
 	std::unique_lock<std::mutex> lock(_mutex);
-	_writeCondition.wait(lock, [this]()
+	if (!_writeCondition.wait_for(lock, std::chrono::milliseconds(1), [this]()
 	{
 		return (_copy.empty());
-	});
+	}))
+	{
+		return false;
+	}
 	if (!_queue.empty() && _copy.empty())
 	{
 		_copy = std::move(_queue);
@@ -173,15 +172,16 @@ void Queue::releaseReadability()
 		lock.unlock();
 	}
 	_readCondition.notify_one();
+	return true;
 }
 
-void Queue::setWaitingTime(std::size_t milliseconds)
+void ReleasableQueue::setWaitingTime(std::size_t milliseconds)
 {
 	std::lock_guard<std::mutex> lock(_mutex);
 	_millisecondToWait = milliseconds;
 }
 
-std::size_t Queue::getWaitingTime()
+std::size_t ReleasableQueue::getWaitingTime()
 {
 	std::lock_guard<std::mutex> lock(_mutex);
 	return _millisecondToWait;

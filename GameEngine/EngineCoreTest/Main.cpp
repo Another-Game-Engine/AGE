@@ -56,7 +56,7 @@ bool loadAssets(std::shared_ptr<AGE::Engine> e)
 int			main(int ac, char **av)
 {
 	std::shared_ptr<AGE::Engine>	e = std::make_shared<AGE::Engine>();
-	e->init();
+	e->init(e.get());
 
 	// Set Configurations
 	auto config = e->setInstance<ConfigurationManager>(File("NewMyConfigurationFile.conf"));
@@ -64,7 +64,7 @@ int			main(int ac, char **av)
 	auto context = e->getInstance<IRenderContext>();
 	auto renderManager = e->getInstance<gl::RenderManager>();
 
-	auto contextInit = e->getMainThread()->getCommandQueue()->priorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
+	auto contextInit = e->getRenderThread()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>(
 		std::function<bool()>([&]()
 	{
 		if (!context->init(0, 1600, 900, "~AGE~ V0.0 Demo"))
@@ -111,19 +111,20 @@ int			main(int ac, char **av)
 	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
 
 #ifdef USE_IMGUI
-	e->getMainThread()->getCommandQueue()->autoPriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([=](){
+	e->getRenderThread()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>([=](){
 		AGE::Imgui::getInstance()->init(e.get());
 		return true;
 	}).get();
 #endif
 
 	// launch engine
-	if (e->start() == false)
-		return (EXIT_FAILURE);
-	while (e->update())
+	e->getCurrentThreadCommandQueue()->releaseReadability();
+	e->_hasFrameBefore = true;
+	e->getCommandQueue()->releaseReadability();
+	while (e->commandQueueUpdate())
 		;
 	config->saveToFile();
-	e->stop();
+	//e->stop();
 
 	return (EXIT_SUCCESS);
 }

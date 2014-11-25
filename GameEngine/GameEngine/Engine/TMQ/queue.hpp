@@ -11,9 +11,10 @@
 
 namespace TMQ
 {
-	class Queue;
+	class ReleasableQueue;
 	class Dispatcher;
 	class Messsage;
+	class ImmediateQueue;
 
 	class PtrQueue
 	{
@@ -37,7 +38,8 @@ namespace TMQ
 		std::size_t _size;
 		std::size_t _to;
 
-		friend class Queue;
+		friend class ReleasableQueue;
+		friend class ImmediateQueue;
 
 	private:
 		template <typename T>
@@ -147,29 +149,99 @@ namespace TMQ
 		}
 	};
 
-	class Queue
+	class ImmediateQueue
+	{
+	private:
+		PtrQueue _queue;
+		std::mutex _mutex;
+		std::condition_variable _condition;
+		bool _releaseReadability()
+		{
+			_condition.notify_one();
+			return true;
+		}
+	public:
+		ImmediateQueue()
+		{}
+
+		ImmediateQueue(const ImmediateQueue&) = delete;
+		ImmediateQueue &operator=(const ImmediateQueue&) = delete;
+		ImmediateQueue(ImmediateQueue &&) = delete;
+		ImmediateQueue operator=(ImmediateQueue &&) = delete;
+
+		bool getReadableQueue(TMQ::PtrQueue &q)
+		{
+			std::unique_lock<std::mutex> lock(_mutex);
+			if (!_condition.wait_for(lock, std::chrono::milliseconds(1), [this](){ return !_queue.empty(); }))
+				return false;
+			q = std::move(_queue);
+			_queue.clear();
+			lock.unlock();
+			return true;
+		}
+
+		void move(MessageBase *e, std::size_t size)
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			_queue.move(e, size);
+			_releaseReadability();
+		}
+
+		template <typename T>
+		void push(const T& e)
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			_queue.push(e);
+			_releaseReadability();
+		}
+
+		template <typename T, typename ...Args>
+		void emplace(Args ...args)
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			_queue.emplace<T>(args...);
+			_releaseReadability();
+		}
+
+		template <typename T, typename F>
+		std::future<F> pushFuture(const T &e)
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			auto f = _queue.push(e)->getFuture();
+			_releaseReadability();
+			return f;
+		}
+
+		template <typename T, typename F, typename ...Args>
+		std::future<F> emplaceFuture(Args ...args)
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			auto f = _queue.emplace<T>(args...)->getFuture();
+			_releaseReadability();
+			return f;
+		}
+	};
+
+	class ReleasableQueue
 	{
 		PtrQueue _queue;
 		PtrQueue _copy;
 		std::mutex _mutex;
 		std::condition_variable _readCondition;
 		std::condition_variable _writeCondition;
-		std::size_t _publisherThreadId;
-		std::once_flag _onceFlag;
 		std::size_t _millisecondToWait;
-		const bool _shared; // true if shared, false if only one thread push in it
 	public:
-		Queue(bool shared);
+		ReleasableQueue();
 		void launch();
 
-		Queue(const Queue&) = delete;
-		Queue &operator=(const Queue&) = delete;
-		Queue(Queue &&) = delete;
-		Queue operator=(Queue &&) = delete;
+		ReleasableQueue(const ReleasableQueue&) = delete;
+		ReleasableQueue &operator=(const ReleasableQueue&) = delete;
+		ReleasableQueue(ReleasableQueue &&) = delete;
+		ReleasableQueue operator=(ReleasableQueue &&) = delete;
 
 		bool getReadableQueue(TMQ::PtrQueue &q);
 		Dispatcher getDispatcher();
-		void releaseReadability();
+		bool releaseReadability();
 		bool isWritable();
 		void setWaitingTime(std::size_t milliseconds);
 		std::size_t getWaitingTime();
@@ -181,92 +253,30 @@ namespace TMQ
 		//Depend of the usage you made before
 		void move(MessageBase *e, std::size_t size)
 		{
-			if (_shared)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.move(e, size);
-				return;
-			}
-			else
-			{
-				std::call_once(_onceFlag, [&](){
-					_publisherThreadId = std::this_thread::get_id().hash();
-				});
-				// Assure you that you will not call unprotected functions from different thread	
-				assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			}
 			_queue.move(e, size);
 		}
-
 
 		template <typename T>
 		void push(const T& e)
 		{
-			// Assure you that you didn't call unprotected function before
-			if (_shared)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.push(e);
-				return;
-			}
 			_queue.push(e);
 		}
 
 		template <typename T, typename ...Args>
 		void emplace(Args ...args)
 		{
-			if (_shared)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.emplace<T>(args...);
-				return;
-			}
-			else
-			{
-				std::call_once(_onceFlag, [&](){
-					_publisherThreadId = std::this_thread::get_id().hash();
-				});
-				// Assure you that you will not call unprotected functions from different thread
-				assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			}
 			_queue.emplace<T>(args...);
 		}
 
 		template <typename T, typename F>
 		std::future<F> pushFuture(const T &e)
 		{
-			if (_shared)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				return _queue.push(e)->getFuture();
-			}
-			else
-			{
-				std::call_once(_onceFlag, [&](){
-					_publisherThreadId = std::this_thread::get_id().hash();
-				});
-				// Assure you that you will not call unprotected functions from different thread
-				assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			}
 			return _queue.push(e)->getFuture();
 		}
 
 		template <typename T, typename F, typename ...Args>
 		std::future<F> emplaceFuture(Args ...args)
 		{
-			if (_shared)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				return _queue.emplace<T>(args...)->getFuture();
-			}
-			else
-			{
-				std::call_once(_onceFlag, [&](){
-					_publisherThreadId = std::this_thread::get_id().hash();
-				});
-				// Assure you that you will not call unprotected functions from different thread	
-				assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			}
 			return _queue.emplace<T>(args...)->getFuture();
 		}
 	};

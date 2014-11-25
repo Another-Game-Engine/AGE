@@ -28,7 +28,7 @@ _queue(o._queue)
 	o._chained = false;
 }
 
-Dispatcher::Dispatcher(TMQ::Queue *queue)
+Dispatcher::Dispatcher(TMQ::ReleasableQueue *queue)
 	: _queue(queue)
 	, _chained(false)
 {}

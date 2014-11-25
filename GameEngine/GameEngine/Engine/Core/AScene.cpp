@@ -12,6 +12,7 @@
 AScene::AScene(std::weak_ptr<AGE::Engine> &&engine) :
 DependenciesInjector(std::move(engine))
 , _entityNumber(0)
+, _engine(engine)
 {
 	_componentsManagers.assign(nullptr);
 }

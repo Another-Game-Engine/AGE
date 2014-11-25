@@ -2,16 +2,16 @@
 
 #include <Configuration.hpp>
 #include "Utils/DependenciesInjector.hpp"
+#include <Utils/ThreadQueue.hpp>
 
 namespace AGE
 {
 	class PrepareRenderThread;
 	class RenderThread;
-	class MainThread;
 	class SceneManager;
 	class Timer;
 
-	class Engine : public DependenciesInjector
+	class Engine : public DependenciesInjector, public CommandQueue
 	{
 	protected:
 		Engine(Engine const &);
@@ -19,7 +19,6 @@ namespace AGE
 
 		PrepareRenderThread *_prepareThread;
 		RenderThread *_renderThread;
-		MainThread *_mainThread;
 		Timer *_timer;
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 		SceneManager *_sceneManager;
@@ -31,10 +30,12 @@ namespace AGE
 		Engine();
 		virtual ~Engine();
 
-		virtual bool        init();
-		virtual bool 		start();
-		virtual bool 		update();
-		virtual void 		stop();
+		virtual bool _init();
+		virtual bool _initInNewThread();
+		virtual bool _release();
+		virtual bool _releaseInNewThread();
+		virtual bool _updateBegin();
+		virtual bool _updateEnd();
 
 		inline PrepareRenderThread *getPrepareThread()
 		{
@@ -44,9 +45,9 @@ namespace AGE
 		{
 			return _renderThread;
 		}
-		inline MainThread *getMainThread()
+		inline Engine *getMainThread()
 		{
-			return _mainThread;
+			return this;
 		}
 	};
 }

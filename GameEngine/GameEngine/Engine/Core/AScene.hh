@@ -42,6 +42,8 @@ private:
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
 	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
+protected:
+	std::weak_ptr<AGE::Engine> _engine;
 public:
 	AScene(std::weak_ptr<AGE::Engine> &&engine);
 	virtual ~AScene();
@@ -50,6 +52,7 @@ public:
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
 	bool                    start();
+	inline std::weak_ptr<AGE::Engine> getEngine() { return _engine; }
 
 	void                    filterSubscribe(COMPONENT_ID id, EntityFilter* filter)
 	{

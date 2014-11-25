@@ -6,7 +6,7 @@
 #include <imgui/imconfig.h>
 #include <Utils/Utils.hh>
 #include <Core/PrepareRenderThread.hpp>
-#include <Core/MainThread.hpp>
+#include <Core/Engine.hh>
 #define STB_IMAGE_IMPLEMENTATION
 #include <imgui\stb_image.h>
 #ifdef _MSC_VER
@@ -29,10 +29,10 @@ namespace AGE
 	unsigned int Imgui::_cursor = 0;
 	unsigned int Imgui::_size = 0;
 
-	bool Imgui::init(DependenciesInjector *di)
+	bool Imgui::init(Engine *en)
 	{
 #ifdef USE_IMGUI
-		_dependencyInjector = di;
+		_engine = en;
 		//HARDCODED WINDOW TO FIX
 		//auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue()->safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
@@ -188,7 +188,7 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef USE_IMGUI
-		getInstance()->_dependencyInjector->getInstance<AGE::MainThread>()->getCommandQueue()->autoEmplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
+		getInstance()->_engine->getCommandQueue()->emplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
 #else
 		UNUSED(cmd_lists);
 		UNUSED(cmd_lists_count);

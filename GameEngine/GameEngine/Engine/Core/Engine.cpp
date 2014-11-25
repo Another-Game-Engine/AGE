@@ -28,7 +28,6 @@ namespace AGE
 	Engine::Engine()
 		: _prepareThread(nullptr)
 		, _renderThread(nullptr)
-		, _mainThread(nullptr)
 		, _timer(nullptr)
 	{
 
@@ -38,11 +37,10 @@ namespace AGE
 	{
 	}
 
-	bool        Engine::init()
+	bool Engine::_init()
 	{
 		_renderThread = setInstance<AGE::RenderThread, AGE::Threads::Render>();
 		_prepareThread = setInstance<AGE::Threads::Prepare>();
-		_mainThread = setInstance<AGE::MainThread>();
 
 		_timer = setInstance<Timer>();
 
@@ -53,52 +51,68 @@ namespace AGE
 		setInstance<Input>();
 		setInstance<AGE::AnimationManager>();
 
-		_prepareThread->setNextCommandQueue(_renderThread->getCurrentThreadCommandQueue());
-		_renderThread->setNextCommandQueue(_mainThread->getCurrentThreadCommandQueue());
-		_mainThread->setNextCommandQueue(_prepareThread->getCurrentThreadCommandQueue());
+		_prepareThread->setNextCommandQueue(_renderThread);
+		_renderThread->setNextCommandQueue(this);
+		setNextCommandQueue(_prepareThread);
 
-		_mainThread->getCurrentThreadCommandQueue()->setWaitingTime(100);
-		_renderThread->getCurrentThreadCommandQueue()->setWaitingTime(100);
-		_prepareThread->getCurrentThreadCommandQueue()->setWaitingTime(100);
+		getCurrentThreadCommandQueue()->setWaitingTime(1);
+		_renderThread->getCurrentThreadCommandQueue()->setWaitingTime(1);
+		_prepareThread->getCurrentThreadCommandQueue()->setWaitingTime(1);
 
 		_renderThread->setLastOfLoop(true);
 
+#ifdef USE_IMGUI
+		registerMessageCallback<MTC::FrameTime>([&](MTC::FrameTime& msg)
+		{
+			ImGui::Text((std::string(msg.name) + " " + std::to_string(msg.time)).c_str());
+		});
+#endif
+
 		_renderThread->launch(this, "Render thread");
 		_prepareThread->launch(this, "Prepare thread");
-		_mainThread->init(this);
 
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
 		return true;
 	}
 
-	bool 		Engine::start()
+	bool Engine::_initInNewThread()
 	{
-		return (true);
+		return true;
 	}
 
-	bool 		Engine::update()
+	bool Engine::_release()
 	{
+		_prepareThread->quit();
+		_renderThread->quit();
+		return true;
+	}
 
+	bool Engine::_releaseInNewThread()
+	{
+		return true;
+	}
+
+	bool Engine::_updateBegin()
+	{
+#ifdef USE_IMGUI
+		AGE::Imgui::getInstance()->startUpdate();
+#endif
+		return true;
+	}
+
+	bool Engine::_updateEnd()
+	{
 		auto time = _timer->getElapsed();
 		_timer->update();
 		bool res = true;
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
-#ifdef USE_IMGUI
-		AGE::Imgui::getInstance()->startUpdate();
-#endif
-		_mainThread->getCurrentThreadCommandQueue()->releaseReadability();
-		_mainThread->commandQueueUpdate();
+		//getCurrentThreadCommandQueue()->releaseReadability();
+		//commandQueueUpdate();
 		_sceneManager->update(time);
-		 res = _sceneManager->userUpdate(time);
-		 _mainThread->getCommandQueue()->releaseReadability();
+		res = _sceneManager->userUpdate(time);
+		//getCommandQueue()->releaseReadability();
 #endif
 		return res;
-	}
-
-	void 		Engine::stop()
-	{
-		_prepareThread->quit();
-		_renderThread->quit();
 	}
 }

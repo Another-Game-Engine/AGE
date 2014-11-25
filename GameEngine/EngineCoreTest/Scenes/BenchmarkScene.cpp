@@ -24,11 +24,11 @@ void BenchmarkScene::initRendering()
 	// A NETTOYER !!!!
 	_renderManager = getInstance<gl::RenderManager>();
 	auto assetsManager = getInstance<AGE::AssetsManager>();
-	auto mainThread = getInstance<AGE::MainThread>();
+	auto mainThread = getEngine().lock();
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 
-	auto res = mainThread->getCommandQueue()->priorityFutureEmplace<AGE::TQC::BoolFunction, bool>(
+	auto res = getInstance<AGE::RenderThread>()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>(
 		std::function<bool()>([&](){
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
@@ -235,7 +235,7 @@ bool BenchmarkScene::userStart()
 	GLOBAL_CAMERA = camera;
 	auto cam = addComponent<Component::CameraComponent>(camera);
 
-	auto screenSize = getInstance<AGE::MainThread>()->getCommandQueue()->priorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screenSize = getInstance<AGE::RenderThread>()->getTaskQueue()->emplaceFuture<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
 	auto camLink = getLink(camera);
 	camLink->setPosition(glm::vec3(0, 1.5, 0));
@@ -433,8 +433,8 @@ bool BenchmarkScene::userUpdate(double time)
 	}
 #endif
 
-	auto mainThread = getInstance<AGE::MainThread>();
-	mainThread->getCommandQueue()->autoEmplace<RendCtxCommand::RefreshInputs>();
+	auto mainThread = getEngine().lock();
+	mainThread->getCommandQueue()->emplace<RendCtxCommand::RefreshInputs>();
 
 	auto octree = getInstance<AGE::Threads::Prepare>();
 	auto renderManager = getInstance<gl::RenderManager>();
@@ -459,9 +459,9 @@ bool BenchmarkScene::userUpdate(double time)
 	}
 #endif
 
-	mainThread->getCommandQueue()->autoEmplace<AGE::PRTC::PrepareDrawLists>();
+	mainThread->getCommandQueue()->emplace<AGE::PRTC::PrepareDrawLists>();
 
-	mainThread->getCommandQueue()->autoEmplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
+	mainThread->getCommandQueue()->emplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
 	{
 		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
 		renderManager->locationStorage.setLocation(0, collection.lights.size());
@@ -489,7 +489,7 @@ bool BenchmarkScene::userUpdate(double time)
 	ImGui::Render();
 #endif
 
-	mainThread->getCommandQueue()->autoEmplace<RendCtxCommand::Flush>();
+	mainThread->getCommandQueue()->emplace<RendCtxCommand::Flush>();
 
 
 

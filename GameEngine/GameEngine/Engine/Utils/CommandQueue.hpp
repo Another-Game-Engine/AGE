@@ -4,6 +4,8 @@
 #include <tmq/templateDispatcher.hpp>
 #include <tmq/queue.hpp>
 #include <atomic>
+#include <Core/MainThreadCommand.hpp>
+#include <iostream>
 
 namespace AGE
 {
@@ -13,13 +15,22 @@ namespace AGE
 	private:
 		TMQ::PtrQueue q;
 	protected:
-		TMQ::Queue _commandQueue;
-		TMQ::Queue *_next;
+		TMQ::ReleasableQueue _commandQueue;
+		TMQ::ImmediateQueue _taskQueue;
+		CommandQueue *_next;
 		CommandQueue *_prev;
-		TMQ::Queue _taskQueue;
 		Engine *_engine;
-		std::atomic_uint64_t _frameNumber;
 		std::size_t _threadId;
+		std::string _name;
+		std::chrono::system_clock::time_point _time;
+		std::chrono::system_clock::duration _elapsed;
+
+		virtual bool _init() = 0;
+		virtual bool _initInNewThread() = 0;
+		virtual bool _release() = 0;
+		virtual bool _releaseInNewThread() = 0;
+		virtual bool _updateBegin() = 0;
+		virtual bool _updateEnd() = 0;
 
 		struct ICallbackContainer
 		{
@@ -49,7 +60,6 @@ namespace AGE
 			virtual void operator()(TMQ::MessageBase *m)
 			{
 				assert(isValid());
-				auto prout = dynamic_cast<TMQ::Message<T>*>(m);
 				function(static_cast<TMQ::Message<T>*>(m)->_data);
 			}
 			virtual ~CallbackContainer(){}
@@ -59,7 +69,23 @@ namespace AGE
 
 		std::vector<std::unique_ptr<ICallbackContainer>> _callbackCollection;
 
+		bool updateBegin()
+		{
+			//_time = std::chrono::system_clock::now();
+			return _updateBegin();
+		}
+
+		bool updateEnd()
+		{
+			bool res =_updateEnd();
+			if (!res)
+				return res;
+			//_elapsed = std::chrono::system_clock::now() - _time;
+			return res;
+		}
+
 	public:
+		bool _hasFrameBefore;
 		CommandQueue(const CommandQueue &) = delete;
 		CommandQueue(CommandQueue &&) = delete;
 		CommandQueue& operator=(const CommandQueue &) = delete;
@@ -69,12 +95,9 @@ namespace AGE
 			: _engine(nullptr)
 			, _next(nullptr)
 			, _prev(nullptr)
-			, _commandQueue(false)
-			, _taskQueue(true)
-			, _frameNumber(0)
 		{
-			_taskQueue.setWaitingTime(1);
 			_commandQueue.setWaitingTime(1);
+			_hasFrameBefore = false;
 		}
 
 		virtual ~CommandQueue()
@@ -89,30 +112,30 @@ namespace AGE
 			_threadId = std::this_thread::get_id().hash();
 			assert(_engine != nullptr);
 			_commandQueue.launch();
-			return true;
+			return _init();
 		}
 
 		// USE ONLY THAT FUNCTION TO GET THE COMMAND QUEUE
-		TMQ::Queue *getCommandQueue()
+		TMQ::ReleasableQueue *getCommandQueue()
 		{
 			assert(std::this_thread::get_id().hash() == _threadId);
-			return _next;
+			return _next->getCurrentThreadCommandQueue();
 		}
 
-		TMQ::Queue *getTaskQueue()
+		TMQ::ImmediateQueue *getTaskQueue()
 		{
 			return &_taskQueue;
 		}
 
 		void setNextCommandQueue(CommandQueue *next)
 		{
-			_next = &(next->_commandQueue);
+			_next = next;
 			next->_prev = this;
 		}
 
 		// USE THAT FUNCTION ONLY TO PASS THE RESULT to setNextCommandQueue
 		// Do NOT use it to pass messages
-		TMQ::Queue *getCurrentThreadCommandQueue()
+		TMQ::ReleasableQueue *getCurrentThreadCommandQueue()
 		{
 			return &_commandQueue;
 		}
@@ -137,6 +160,34 @@ namespace AGE
 					auto id = message->uid;
 					if (_callbackCollection.size() <= id || !_callbackCollection[id])
 					{
+						assert(false); // || return false
+					}
+					(*_callbackCollection[id].get())(message);
+					message->_used = true;
+					q.pop();
+				}
+			}
+
+
+			// If commands are released
+			// 1 : This is the first frame of the main thread
+			// 2 : There were a frame before who release it
+			if (!_hasFrameBefore)
+				return true;
+			updateBegin();
+			if (_commandQueue.getReadableQueue(q))
+			{
+				while (!q.empty())
+				{
+					auto message = q.front();
+					auto id = message->uid;
+					auto tid = message->tid;
+					assert(tid != _threadId);
+					if (_callbackCollection.size() <= id || !_callbackCollection[id])
+					{
+						_next->getCurrentThreadCommandQueue()->move(message, q.getFrontSize());
+						q.pop();
+						continue;
 						assert(false);
 					}
 					(*_callbackCollection[id].get())(message);
@@ -144,75 +195,13 @@ namespace AGE
 					q.pop();
 				}
 			}
-			if (_next->isWritable())
-			{
-				if (_prev && _prev->_frameNumber != 0)
-				{
-					if (_commandQueue.getReadableQueue(q))
-					{
-						while (!q.empty())
-						{
-							auto message = q.front();
-							auto id = message->uid;
-							auto tid = message->tid;
-							assert(tid != _threadId); // mean that it's this thread who publish the message
-							if (_callbackCollection.size() <= id || !_callbackCollection[id])
-							{
-								if (_next)
-								{
-									_next->move(message, q.getFrontSize());
-									q.pop();
-									continue;
-								}
-								assert(false);
-							}
-							(*_callbackCollection[id].get())(message);
-							message->_used = true;
-							q.pop();
-						}
-						// TODO update
-						++_frameNumber;
-						if (_frameNumber == 0)
-							_frameNumber == 1;
-						if (_next)
-							_next->releaseReadability();
-					}
-				}
-			}
-			else
-			{
-				// TODO update
-				++_frameNumber;
-				if (_frameNumber == 0)
-					_frameNumber == 1;
-			}
-
-			bool isPriorityQueue = this->_commandQueue.getReadableQueue(q);
-			if (q.empty())
-				return false;
-			while (!q.empty())
-			{
-				auto message = q.front();
-				auto id = message->uid;
-				auto tid = message->tid;
-				assert(tid != _threadId); // mean that it's this thread who publish the message
-				if (_callbackCollection.size() <= id || !_callbackCollection[id])
-				{
-					if (_next)
-					{
-						if (isPriorityQueue)
-							_next->move(message, q.getFrontSize());
-						else
-							_next->move(message, q.getFrontSize());
-						q.pop();
-						continue;
-					}
-					assert(false);
-				}
-				(*_callbackCollection[id].get())(message);
-				message->_used = true;
-				q.pop();
-			}
+			updateEnd();
+			_next->_hasFrameBefore = true;
+//			auto t = std::chrono::system_clock::now();
+			while (_next->getCurrentThreadCommandQueue()->releaseReadability() == false)
+				;
+//			auto tt = std::chrono::system_clock::now() - t;
+//			std::cout << _name + " : " + std::to_string(tt.count()) << std::endl;
 			return true;
 		}
 	};

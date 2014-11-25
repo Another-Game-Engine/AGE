@@ -86,6 +86,7 @@ bool RenderThread::_updateBegin()
 bool RenderThread::_updateEnd()
 {
 	bool returnValue = true;
+	//_next->getCurrentThreadCommandQueue()->emplace<AGE::MTC::FrameTime>(_name, _elapsed.count());
 	return returnValue;
 }
 

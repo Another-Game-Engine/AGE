@@ -330,7 +330,7 @@ namespace AGE
 		registerMessageCallback<AGE::RenderImgui>([&](AGE::RenderImgui& msg)
 		{
 #ifdef USE_IMGUI
-			getCommandQueue()->autoPush(msg);
+			getCommandQueue()->push(msg);
 #endif
 		});
 
@@ -528,7 +528,7 @@ namespace AGE
 	bool PrepareRenderThread::_updateEnd()
 	{
 		auto returnValue = true;
-
+		//_next->getCurrentThreadCommandQueue()->emplace<AGE::MTC::FrameTime>(_name, _elapsed.count());
 		return returnValue;
 	}
 
