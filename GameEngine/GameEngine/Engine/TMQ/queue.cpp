@@ -89,6 +89,15 @@ void PtrQueue::clear()
 	_cursor = _to = 0;
 }
 
+void PtrQueue::eraseAll()
+{
+	while (!empty())
+	{
+		pop();
+	}
+	clear();
+}
+
 void PtrQueue::release()
 {
 	clear();
@@ -151,14 +160,32 @@ bool ReleasableQueue::isWritable()
 	return false;
 }
 
-bool ReleasableQueue::releaseReadability()
+void ReleasableQueue::clear()
 {
 	std::unique_lock<std::mutex> lock(_mutex);
-//	if (!_writeCondition.wait_for(lock, std::chrono::milliseconds(1), [this]()
-	_writeCondition.wait(lock, [this]()
+	_queue.eraseAll();
+}
+
+bool ReleasableQueue::releaseReadability(bool wait)
+{
+	std::unique_lock<std::mutex> lock(_mutex);
+	if (wait)
 	{
-		return (_copy.empty());
-	});
+		_writeCondition.wait(lock, [this]()
+		{
+			return (_copy.empty());
+		});
+	}
+	else
+	{
+		if (!_writeCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
+		{
+			return (_copy.empty());
+		}))
+		{
+			return false;
+		}
+	}
 	if (!_queue.empty() && _copy.empty())
 	{
 		_copy = std::move(_queue);

@@ -29,6 +29,7 @@ namespace TMQ
 		MessageBase *front();
 		std::size_t getFrontSize();
 		void clear();
+		void eraseAll();
 		void release();
 		bool empty();
 	private:
@@ -253,10 +254,11 @@ namespace TMQ
 
 		bool getReadableQueue(TMQ::PtrQueue &q);
 		Dispatcher getDispatcher();
-		bool releaseReadability();
+		bool releaseReadability(bool wait = true);
 		bool isWritable();
 		void setWaitingTime(std::size_t milliseconds);
 		std::size_t getWaitingTime();
+		void clear();
 
 		//////
 		////// Internal standard queue access

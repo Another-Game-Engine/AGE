@@ -89,6 +89,7 @@ namespace AGE
 	public:
 		bool _hasFrameBefore;
 		bool first;
+		bool last;
 		CommandQueue(const CommandQueue &) = delete;
 		CommandQueue(CommandQueue &&) = delete;
 		CommandQueue& operator=(const CommandQueue &) = delete;
@@ -102,6 +103,7 @@ namespace AGE
 			_commandQueue.setWaitingTime(1);
 			_hasFrameBefore = false;
 			first = false;
+			last = false;
 		}
 
 		virtual ~CommandQueue()
@@ -156,8 +158,9 @@ namespace AGE
 		bool commandQueueUpdate()
 		{
 			// We pop task queue
-			if (!first && _taskQueue.getReadableQueue(q))
+			if (!first && !_hasFrameBefore)
 			{
+				_taskQueue.getReadableQueue(q);
 				while (!q.empty())
 				{
 					auto message = q.front();
@@ -170,16 +173,12 @@ namespace AGE
 					message->_used = true;
 					q.pop();
 				}
-			}
-
-
-			// If commands are released
-			// 1 : This is the first frame of the main thread
-			// 2 : There were a frame before who release it
-			if (!_hasFrameBefore)
 				return true;
+			}
+
+
 			updateBegin();
-			if (first && _taskQueue.getReadableQueue(q))
+			if (_taskQueue.getReadableQueue(q))
 			{
 				while (!q.empty())
 				{
@@ -194,7 +193,8 @@ namespace AGE
 					q.pop();
 				}
 			}
-			if (first == false && _commandQueue.getReadableQueue(q))
+			bool getQueue = false;
+			if (first == false && (getQueue = _commandQueue.getReadableQueue(q)))
 			{
 				while (!q.empty())
 				{
@@ -214,15 +214,42 @@ namespace AGE
 					q.pop();
 				}
 			}
-			updateEnd();
-			_next->_hasFrameBefore = true;
-//			auto t = std::chrono::system_clock::now();
-			if (_next->first != true)
+			if (getQueue || first)
 			{
-				/*while (*/_next->getCurrentThreadCommandQueue()->releaseReadability();/* == false)*/
+				_next->_hasFrameBefore = true;
+				if (_next->first != true)
+				{
+					if (_next->last)
+					{
+						if (!_next->getCurrentThreadCommandQueue()->releaseReadability(false))
+						{
+							_next->getCurrentThreadCommandQueue()->clear();
+						}
+					}
+					else
+					{
+						while (!_next->getCurrentThreadCommandQueue()->releaseReadability(false))
+						{
+							if (_taskQueue.getReadableQueue(q))
+							{
+								while (!q.empty())
+								{
+									auto message = q.front();
+									auto id = message->uid;
+									if (_callbackCollection.size() <= id || !_callbackCollection[id])
+									{
+										assert(false); // || return false
+									}
+									(*_callbackCollection[id].get())(message);
+									message->_used = true;
+									q.pop();
+								}
+							}
+						}
+					}
+				}
 			}
-//			auto tt = std::chrono::system_clock::now() - t;
-//			std::cout << _name + " : " + std::to_string(tt.count()) << std::endl;
+			updateEnd();
 			return true;
 		}
 	};
