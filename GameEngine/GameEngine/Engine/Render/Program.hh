@@ -33,7 +33,7 @@ private:
 	void destroy();
 
 private:
-	std::vector<std::unique_ptr<IResourceProgram>> _resourcesProgram;
+	std::vector<std::unique_ptr<IProgramResource>> _resourcesProgram;
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 	GraphicalMemory _graphicalMemory;
 	GLuint _id;
