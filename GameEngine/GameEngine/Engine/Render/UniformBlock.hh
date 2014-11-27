@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/Buffer.hh>
+#include <Render/Buffer/UniformBuffer.hh>
 #include <array>
 #include <cassert>
 #include <set>

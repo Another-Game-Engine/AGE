@@ -2,6 +2,8 @@
 #include <Render/Key.hh>
 #include <Render/GeometryManagement/Data.hh>
 #include <utility>
+#include <Render/Buffer/VertexBuffer.hh>
+#include <Render/Buffer/IndexBuffer.hh>
 
 AttributeBlockMemory::AttributeBlockMemory():
 _type(Attribute::Position),
@@ -13,7 +15,7 @@ _update(true)
 
 AttributeBlockMemory::AttributeBlockMemory(Attribute type):
 _type(type),
-_buffer((_type == Attribute::Indices) ? std::unique_ptr<Buffer>(std::make_unique<IndexBuffer>()) : std::unique_ptr<Buffer>(std::make_unique<VertexBuffer>())),
+_buffer((_type == Attribute::Indices) ? std::unique_ptr<IBuffer>(std::make_unique<IndexBuffer>()) : std::unique_ptr<IBuffer>(std::make_unique<VertexBuffer>())),
 _update(true)
 {
 }
@@ -80,11 +82,11 @@ AttributeBlockMemory &AttributeBlockMemory::update()
 		}
 	}
 	_buffer->bind();
-	_buffer->BufferData(sizeBuffer);
+	_buffer->alloc(sizeBuffer);
 	for (auto &element : _elements) { // set the data in the vertex buffer object
 		auto &data = element.lock();
 		if (data) {
-			_buffer->BufferSubData(data->range().x, data->size(), data->data());
+			_buffer->sub(data->range().x, data->size(), data->data());
 		}
 	}
 	_buffer->unbind();

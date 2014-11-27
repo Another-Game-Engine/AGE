@@ -1,11 +1,10 @@
 #pragma once
 
-# include <queue>
 # include <vector>
 # include <memory>
 # include <utility>
 # include <Render/GeometryManagement/Attribute.hh>
-# include <Render/Buffer.hh>
+# include <Render/Buffer/IBuffer.hh>
 
 template <typename type_t> class Key;
 
@@ -36,6 +35,6 @@ private:
 private:
 	Attribute _type;
 	std::vector<std::weak_ptr<Data>> _elements;
-	std::unique_ptr<Buffer> _buffer;
+	std::unique_ptr<IBuffer> _buffer;
 	bool _update;
 };

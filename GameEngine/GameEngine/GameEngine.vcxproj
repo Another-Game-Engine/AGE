@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -229,7 +229,10 @@
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Core\RenderThread.cpp" />
-    <ClCompile Include="Engine\Render\Buffer.cpp" />
+    <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
+    <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
+    <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
+    <ClCompile Include="Engine\Render\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Attribute.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\AttributeBlockMemory.cpp" />
@@ -327,7 +330,11 @@
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
-    <ClInclude Include="Engine\Render\Buffer.hh" />
+    <ClInclude Include="Engine\Render\Buffer\ABuffer.hh" />
+    <ClInclude Include="Engine\Render\Buffer\IBuffer.hh" />
+    <ClInclude Include="Engine\Render\Buffer\IndexBuffer.hh" />
+    <ClInclude Include="Engine\Render\Buffer\UniformBuffer.hh" />
+    <ClInclude Include="Engine\Render\Buffer\VertexBuffer.hh" />
     <ClInclude Include="Engine\Render\Data.hh" />
     <ClInclude Include="Engine\Render\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Attribute.hh" />

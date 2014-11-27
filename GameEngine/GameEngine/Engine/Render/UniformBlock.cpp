@@ -63,7 +63,7 @@ GLuint UniformBlock::getBindingPoint() const
 
 GLuint UniformBlock::getBufferId() const
 {
-	return (_buffer.getId());
+	return (_buffer.id());
 }
 
 UniformBlock const &UniformBlock::introspection(Program const &program, GLuint indexInterfaceBlock)
@@ -98,6 +98,6 @@ UniformBlock const &UniformBlock::introspection(Program const &program, GLuint i
 void UniformBlock::GPUallocation()
 {
 	_buffer.bind();
-	_buffer.BufferData(_sizeBlock);
-	glBindBufferRange(_buffer.getMode(), _bindingPoint, _buffer.getId(), 0, _sizeBlock);
+	_buffer.alloc(_sizeBlock);
+	glBindBufferRange(_buffer.mode(), _bindingPoint, _buffer.id(), 0, _sizeBlock);
 }
