@@ -3,6 +3,8 @@
 #include <Configuration.hpp>
 #include "Utils/DependenciesInjector.hpp"
 #include <Utils/ThreadQueue.hpp>
+#include <array>
+#include <map>
 
 namespace AGE
 {
@@ -20,6 +22,24 @@ namespace AGE
 		PrepareRenderThread *_prepareThread;
 		RenderThread *_renderThread;
 		Timer *_timer;
+
+		struct ThreadStatistics
+		{
+			std::string name;
+			float averageTime;
+			unsigned char frameCounter;
+			std::array < float, 32 > frames;
+			ThreadStatistics()
+				: name("")
+				, averageTime(0.0f)
+				, frameCounter(0)
+			{
+				frames.fill(0);
+			}
+		};
+
+		std::map<std::size_t, ThreadStatistics> _threadsStatics;
+		void updateThreadStatistics(std::size_t id, float time);
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 		SceneManager *_sceneManager;
 #endif

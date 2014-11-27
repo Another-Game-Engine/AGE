@@ -491,7 +491,5 @@ bool BenchmarkScene::userUpdate(double time)
 
 	mainThread->getCommandQueue()->emplace<RendCtxCommand::Flush>();
 
-
-
 	return true;
 }

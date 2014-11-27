@@ -59,12 +59,19 @@ namespace AGE
 		_renderThread->getCurrentThreadCommandQueue()->setWaitingTime(1);
 		_prepareThread->getCurrentThreadCommandQueue()->setWaitingTime(1);
 
-		_renderThread->setLastOfLoop(true);
+		_threadsStatics.insert(std::make_pair(std::this_thread::get_id().hash(), Engine::ThreadStatistics()));
+		_threadsStatics[std::this_thread::get_id().hash()].name = "Main Thread";
 
 #ifdef USE_IMGUI
-		registerMessageCallback<MTC::FrameTime>([&](MTC::FrameTime& msg)
+		registerMessageCallback<MTC::FrameTime>([this](MTC::FrameTime& msg)
 		{
-			ImGui::Text((std::string(msg.name) + " " + std::to_string(msg.time)).c_str());
+			updateThreadStatistics(msg.id, msg.time);
+		});
+
+		registerMessageCallback<MTC::ThreadRegistration>([this](MTC::ThreadRegistration& msg)
+		{
+			_threadsStatics.insert(std::make_pair(msg.id, Engine::ThreadStatistics()));
+			_threadsStatics[msg.id].name = msg.name;
 		});
 #endif
 
@@ -74,6 +81,22 @@ namespace AGE
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
 		return true;
+	}
+
+	void Engine::updateThreadStatistics(std::size_t id, float time)
+	{
+		auto &s = _threadsStatics[id];
+		if (s.frameCounter >= s.frames.size())
+		{
+			s.frameCounter = 0;
+		}
+		s.frames[s.frameCounter++] = time;
+		s.averageTime = 0.0f;
+		for (auto i = 0; i < s.frames.size(); ++i)
+		{
+			s.averageTime += s.frames[i];
+		}
+		s.averageTime /= (float)(s.frames.size());
 	}
 
 	bool Engine::_initInNewThread()
@@ -95,6 +118,7 @@ namespace AGE
 
 	bool Engine::_updateBegin()
 	{
+		updateThreadStatistics(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
 #ifdef USE_IMGUI
 		AGE::Imgui::getInstance()->startUpdate();
 #endif
@@ -107,11 +131,12 @@ namespace AGE
 		_timer->update();
 		bool res = true;
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
-		//getCurrentThreadCommandQueue()->releaseReadability();
-		//commandQueueUpdate();
 		_sceneManager->update(time);
+		for (auto &e : _threadsStatics)
+		{
+			ImGui::Text((std::string(e.second.name) + " " + std::to_string(e.second.averageTime)).c_str());
+		}
 		res = _sceneManager->userUpdate(time);
-		//getCommandQueue()->releaseReadability();
 #endif
 		return res;
 	}

@@ -86,7 +86,7 @@ bool RenderThread::_updateBegin()
 bool RenderThread::_updateEnd()
 {
 	bool returnValue = true;
-	_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_name, _elapsed.count());
+	_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(this->_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
 	return returnValue;
 }
 

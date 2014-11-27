@@ -229,8 +229,8 @@ namespace AGE
 
 
 			// we update animation instances
-			auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
-			animationManager->update(0.1f);
+			//auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
+			//animationManager->update(0.1f);
 
 
 			// Update drawable positions in Octree
@@ -294,15 +294,15 @@ namespace AGE
 					e->hasBeenFound = false;
 					// all the elements are drawable for the moment (TODO)
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
-					if (!currentDrawable->animation.empty())
-					{
-						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation, animationManager->getBones(currentDrawable->animation));
-						drawList.drawables.back().animation = currentDrawable->animation;
-					}
-					else
-					{
+					//if (!currentDrawable->animation.empty())
+					//{
+					//	drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation, animationManager->getBones(currentDrawable->animation));
+					//	drawList.drawables.back().animation = currentDrawable->animation;
+					//}
+					//else
+					//{
 						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
-					}
+					//}
 				}
 #else
 				for (auto &e : _drawables)
@@ -528,7 +528,7 @@ namespace AGE
 	bool PrepareRenderThread::_updateEnd()
 	{
 		auto returnValue = true;
-		_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_name, _elapsed.count());
+		_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
 		return returnValue;
 	}
 

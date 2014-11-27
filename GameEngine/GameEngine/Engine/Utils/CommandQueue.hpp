@@ -73,7 +73,7 @@ namespace AGE
 
 		bool updateBegin()
 		{
-			//_time = std::chrono::system_clock::now();
+			_time = std::chrono::system_clock::now();
 			return _updateBegin();
 		}
 
@@ -82,7 +82,7 @@ namespace AGE
 			bool res =_updateEnd();
 			if (!res)
 				return res;
-			//_elapsed = std::chrono::system_clock::now() - _time;
+			_elapsed = std::chrono::system_clock::now() - _time;
 			return res;
 		}
 
