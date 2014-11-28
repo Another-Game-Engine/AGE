@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -250,9 +250,7 @@
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
     <ClCompile Include="Engine\Render\Program.cpp" />
-    <ClCompile Include="Engine\Render\ResourceProgram.cpp" />
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
-    <ClCompile Include="Engine\Render\ShaderResource.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
     <ClCompile Include="Engine\Render\Task.cpp" />
     <ClCompile Include="Engine\Render\UniformBlock.cpp" />
@@ -359,9 +357,7 @@
     <ClInclude Include="Engine\Render\RenderManager.hh" />
     <ClInclude Include="Engine\Render\RenderThreadInterface.hpp" />
     <ClInclude Include="Engine\Render\Program.hh" />
-    <ClInclude Include="Engine\Render\ResourceProgram.hh" />
     <ClInclude Include="Engine\Render\UnitProg.hh" />
-    <ClInclude Include="Engine\Render\ShaderResource.hh" />
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\Task.hh" />

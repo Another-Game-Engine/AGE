@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
@@ -20,7 +20,6 @@
     <ClCompile Include="Engine\Render\PreShader.cpp" />
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
-    <ClCompile Include="Engine\Render\ShaderResource.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
     <ClCompile Include="Engine\Render\Task.cpp" />
     <ClCompile Include="Engine\Render\UniformBlock.cpp" />
@@ -72,7 +71,6 @@
     <ClCompile Include="Engine\Utils\Sphere.cpp" />
     <ClCompile Include="Engine\Render\Program.cpp" />
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
-    <ClCompile Include="Engine\Render\ResourceProgram.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Attribute.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\AttributeBlockMemory.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Data.cpp" />
@@ -127,7 +125,6 @@
     <ClInclude Include="Engine\Render\Render.hh" />
     <ClInclude Include="Engine\Render\RenderManager.hh" />
     <ClInclude Include="Engine\Render\RenderThreadInterface.hpp" />
-    <ClInclude Include="Engine\Render\ShaderResource.hh" />
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\Task.hh" />
@@ -233,7 +230,6 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Render\Program.hh" />
     <ClInclude Include="Engine\Render\UnitProg.hh" />
-    <ClInclude Include="Engine\Render\ResourceProgram.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Attribute.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\AttributeBlockMemory.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Data.hh" />
