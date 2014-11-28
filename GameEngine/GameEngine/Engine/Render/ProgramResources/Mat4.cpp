@@ -2,13 +2,13 @@
 #include <Render/Program.hh>
 
 Mat4::Mat4(glm::mat4 const &value, Program const &parent, std::string const &name) :
-AProgramResources(parent, name)
+AProgramResources(parent, name, GL_UNIFORM)
 {
 
 }
 
 Mat4::Mat4(glm::mat4 const &value, Program const &parent, std::string &&name):
-AProgramResources(parent, name),
+AProgramResources(parent, name, GL_UNIFORM),
 _value(value)
 {
 
@@ -43,4 +43,18 @@ IProgramResource & Mat4::operator()()
 		_isUpdate = true;
 	}
 	return (*this);
+}
+
+/**
+* Method:    safe
+* FullName:  Mat4::safe
+* Access:    virtual public 
+* Returns:   bool
+* Qualifier: const
+* Parameter: size_t size
+* Goal:		 Valid if the memory size in input is the same than in intern
+*/
+bool Mat4::safe(size_t size) const
+{
+	return ((sizeof(type) == size) ? true : false);
 }

@@ -4,13 +4,13 @@
 #include <Render/Program.hh>
 
 Vec4::Vec4(glm::vec4 const &value, Program const &parent, std::string const &name) :
-AProgramResources(parent, name)
+AProgramResources(parent, name, GL_UNIFORM)
 {
 
 }
 
 Vec4::Vec4(glm::vec4 const &value, Program const &parent, std::string &&name) :
-AProgramResources(parent, name),
+AProgramResources(parent, name, GL_UNIFORM),
 _value(value)
 {
 
@@ -38,5 +38,19 @@ IProgramResource & Vec4::operator()()
 		_isUpdate = true;
 	}
 	return (*this);
+}
+
+/**
+* Method:    safe
+* FullName:  Vec4::safe
+* Access:    virtual public 
+* Returns:   bool
+* Qualifier: const
+* Parameter: size_t size
+* Goal:		 Valid if the memory size in input is the same than in intern
+*/
+bool Vec4::safe(size_t size) const
+{
+	return ((sizeof(type) == size) ? true : false);
 }
 

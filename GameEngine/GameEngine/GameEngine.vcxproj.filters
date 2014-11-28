@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
@@ -83,6 +83,8 @@
     <ClCompile Include="Engine\Render\ProgramResources\AProgramResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Vec4.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Mat4.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\UniformBlock.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\BlockResourcesFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -244,6 +246,9 @@
     <ClInclude Include="Engine\Render\ProgramResources\AProgramResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Mat4.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Vec4.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\UniformBlock.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\IBlockResources.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\BlockResourcesFactory.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
