@@ -21,6 +21,13 @@ _value(move._value)
 
 }
 
+Mat4 & Mat4::operator=(glm::mat4 const &value)
+{
+	_value = value;
+	return (*this);
+}
+
+
 /**
 * Method:    operator()
 * FullName:  Mat4::operator()
@@ -37,4 +44,3 @@ IProgramResource & Mat4::operator()()
 	}
 	return (*this);
 }
-

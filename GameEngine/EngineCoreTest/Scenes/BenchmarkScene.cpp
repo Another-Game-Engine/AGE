@@ -8,7 +8,7 @@
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
-#include <Render/ResourceProgram.hh>
+#include <Render/ProgramResources/Mat4.hh>
 #include <Render/GeometryManagement/GraphicalMemory.hh>
 #include <Render/GeometryManagement/Data.hh>
 #include <Render/GeometryManagement/Vertices.hh>

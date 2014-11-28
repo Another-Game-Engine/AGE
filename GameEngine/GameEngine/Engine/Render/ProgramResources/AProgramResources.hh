@@ -22,7 +22,7 @@ public:
 	AProgramResources &update(bool u);
 
 private:
-	bool create(Program const &program);
+	bool create(Program const &parent);
 
 protected:
 	std::string _name;

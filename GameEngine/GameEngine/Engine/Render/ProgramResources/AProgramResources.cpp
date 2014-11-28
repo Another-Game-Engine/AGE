@@ -79,3 +79,9 @@ AProgramResources &AProgramResources::update(bool u)
 	return (*this);
 }
 
+bool AProgramResources::create(Program const &parent)
+{
+	_id = glGetUniformLocation(parent.getId(), _name.c_str());
+	return ((_id > -1) ? true : false);
+}
+
