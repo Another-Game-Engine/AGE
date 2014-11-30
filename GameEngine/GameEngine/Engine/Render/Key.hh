@@ -12,20 +12,20 @@ public:
 	Key();
 
 public:
-	static Key<TYPE> createKey(size_t index);
+	static Key<TYPE> createKey(int index);
 
 public:
-	size_t getId() const;
+	int getId() const;
 	operator bool() const;
 	void destroy();
 
 private:
 	int _id;
-	explicit Key(size_t id);
+	explicit Key(int id);
 };
 
 template <typename type_t>
-std::size_t Key<type_t>::getId() const
+int Key<type_t>::getId() const
 {
 	return (_id);
 }
@@ -46,13 +46,13 @@ void Key<type_t>::destroy()
 }
 
 template <typename type_t>
-Key<type_t>::Key(size_t id)
+Key<type_t>::Key(int id)
 {
 	_id = id;
 }
 
 template <typename type_t>
-Key<type_t> Key<type_t>::createKey(size_t index)
+Key<type_t> Key<type_t>::createKey(int index)
 {
 	return (Key<type_t>(index));
 }

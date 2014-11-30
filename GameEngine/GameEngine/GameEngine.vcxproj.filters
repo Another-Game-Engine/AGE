@@ -22,7 +22,6 @@
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
     <ClCompile Include="Engine\Render\Task.cpp" />
-    <ClCompile Include="Engine\Render\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\VertexArray.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
@@ -85,6 +84,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Mat4.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\BlockResourcesFactory.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\ABlockResources.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -130,7 +130,6 @@
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\Task.hh" />
-    <ClInclude Include="Engine\Render\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\VertexArray.hh" />
     <ClInclude Include="Engine\Skinning\Animation.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />
@@ -249,6 +248,7 @@
     <ClInclude Include="Engine\Render\ProgramResources\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\IBlockResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\BlockResourcesFactory.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\ABlockResources.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

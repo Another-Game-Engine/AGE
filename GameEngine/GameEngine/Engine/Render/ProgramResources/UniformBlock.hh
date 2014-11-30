@@ -18,13 +18,15 @@ public:
 	template <typename type_t> type_t &operator[](size_t index);
 
 public:
-	IProgramResource &operator()();
+	IProgramResources &operator()();
 
 private:
-	void introspection();
+	UniformBlock &introspection(Program const &program);
 
 private:
-	std::vector<std::unique_ptr<IBlockResources>> _data;
+	GLint _size_block;
+	std::vector<std::unique_ptr<IBlockResources>> _blockResources;
+	std::vector<uint8_t> _buffer;
 };
 
 template <typename type_t>

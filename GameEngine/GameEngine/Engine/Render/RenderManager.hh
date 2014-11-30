@@ -15,10 +15,10 @@ public:
 	Key<UnitProg> addUnitProgram(std::string const &name, GLenum mode);
 	Key<UnitProg> addUnitProgram(std::string &&name, GLenum mode);
 	Key<Program> addProgram(std::vector<Key<UnitProg>> const &u1);
-	template <typename resource_t> Key<ResourceProgram> addResourceProgram(Key<Program> const &program, std::string const &flag);
-	template <typename resource_t> Key<ResourceProgram> addResourceProgram(Key<Program> const &program, std::string &&flag);
-	template <typename resource_t> RenderManager &setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, typename resource_t::type const &value);
-	template <typename resource_t> RenderManager &setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, typename resource_t::type &&value);
+	template <typename resource_t> Key<ProgramResource> addProgramResource(Key<Program> const &program, std::string const &flag);
+	template <typename resource_t> Key<ProgramResource> addProgramResource(Key<Program> const &program, std::string &&flag);
+	template <typename resource_t> RenderManager &setProgramResource(Key<Program> const &program, Key<ProgramResource> const &resource, typename resource_t::type const &value);
+	template <typename resource_t> RenderManager &setProgramResource(Key<Program> const &program, Key<ProgramResource> const &resource, typename resource_t::type &&value);
 
 private:
 	std::vector<Program> _programs;
@@ -26,21 +26,21 @@ private:
 };
 
 template <typename resource_t>
-inline Key<ResourceProgram> RenderManager::addResourceProgram(Key<Program> const &program, std::string const &name)
+inline Key<ProgramResource> RenderManager::addProgramResource(Key<Program> const &program, std::string const &name)
 {
 	auto &tmp_program = _programs[program.getId()];
 	return (tmp_program.add<resource_t>(resource_t(resource_t::type(), tmp_program, std::move(name))));
 }
 
 template <typename resource_t>
-inline Key<ResourceProgram> RenderManager::addResourceProgram(Key<Program> const &program, std::string &&name)
+inline Key<ProgramResource> RenderManager::addProgramResource(Key<Program> const &program, std::string &&name)
 {
 	auto &tmp_program = _programs[program.getId()];
 	return (tmp_program.add<resource_t>(resource_t(resource_t::type(), tmp_program, std::move(name))));
 }
 
 template <typename resource_t>
-inline RenderManager &RenderManager::setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, typename resource_t::type const &value)
+inline RenderManager &RenderManager::setProgramResource(Key<Program> const &program, Key<ProgramResource> const &resource, typename resource_t::type const &value)
 {
 	auto &tmp_program = _programs[program.getId()];
 	tmp_program.set<resource_t>(resource, value);
@@ -48,7 +48,7 @@ inline RenderManager &RenderManager::setResourceProgram(Key<Program> const &prog
 }
 
 template <typename resource_t>
-inline RenderManager &RenderManager::setResourceProgram(Key<Program> const &program, Key<ResourceProgram> const &resource, typename resource_t::type &&value)
+inline RenderManager &RenderManager::setProgramResource(Key<Program> const &program, Key<ProgramResource> const &resource, typename resource_t::type &&value)
 {
 	auto &tmp_program = _programs[program.getId()];
 	tmp_program.set<resource_t>(resource, std::move(value));

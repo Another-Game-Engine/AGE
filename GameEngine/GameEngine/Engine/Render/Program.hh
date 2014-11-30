@@ -20,11 +20,11 @@ public:
 	Program &setAttribute(std::vector<Attribute> const &attibutes);
 	Program &setAttribute(std::vector<Attribute> &&attibutes);
 	GLuint getId() const;
-	template <typename resource_t> Key<ResourceProgram> add(resource_t const &value);
-	template <typename resource_t> Key<ResourceProgram> add(resource_t &&value);
-	template <typename resource_t> Program &set(Key<ResourceProgram> const &key, typename resource_t::type const &value);
-	template <typename resource_t> Program &set(Key<ResourceProgram> const &key, typename resource_t::type &&value);
-	template <typename resource_t> Program &has(Key<ResourceProgram> const &key);
+	template <typename resource_t> Key<ProgramResource> add(resource_t const &value);
+	template <typename resource_t> Key<ProgramResource> add(resource_t &&value);
+	template <typename resource_t> Program &set(Key<ProgramResource> const &key, typename resource_t::type const &value);
+	template <typename resource_t> Program &set(Key<ProgramResource> const &key, typename resource_t::type &&value);
+	template <typename resource_t> Program &has(Key<ProgramResource> const &key);
 	Program &update();
 	Program const &use() const;
 
@@ -33,43 +33,43 @@ private:
 	void destroy();
 
 private:
-	std::vector<std::unique_ptr<IProgramResource>> _resourcesProgram;
+	std::vector<std::unique_ptr<IProgramResources>> _resourcesProgram;
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 	GraphicalMemory _graphicalMemory;
 	GLuint _id;
 };
 
 template <typename resource_t> 
-Key<ResourceProgram> Program::add(resource_t const &resource)
+Key<ProgramResource> Program::add(resource_t const &resource)
 {
 	_resourcesProgram.emplace_back(std::make_unique<resource_t>(resource));
 	return (Key<ResourceProgram>::createKey(_resourcesProgram.size() - 1));
 }
 
 template <typename resource_t> 
-Key<ResourceProgram> Program::add(resource_t &&resource)
+Key<ProgramResource> Program::add(resource_t &&resource)
 {
 	_resourcesProgram.emplace_back(std::make_unique<resource_t>(std::move(resource)));
-	return (Key<ResourceProgram>::createKey(_resourcesProgram.size() - 1));
+	return (Key<ProgramResource>::createKey(_resourcesProgram.size() - 1));
 }
 
 
 template <typename resource_t>
-Program & Program::set(Key<ResourceProgram> const &key, typename resource_t::type const &value)
+Program & Program::set(Key<ProgramResource> const &key, typename resource_t::type const &value)
 {
 	*static_cast<resource_t *>(_resourcesProgram[key.getId()].get()) = value;
 	return (*this);
 }
 
 template <typename resource_t>
-Program & Program::set(Key<ResourceProgram> const &key, typename resource_t::type &&value)
+Program & Program::set(Key<ProgramResource> const &key, typename resource_t::type &&value)
 {
 	*static_cast<resource_t *>(_resourcesProgram[key.getId()].get()) = std::move(value);
 	return (*this);
 }
 
 template <typename resource_t>
-Program & Program::has(Key<ResourceProgram> const &key)
+Program & Program::has(Key<ProgramResource> const &key)
 {
 	return (_resourceProgram.size() > key.g	etId());
 }

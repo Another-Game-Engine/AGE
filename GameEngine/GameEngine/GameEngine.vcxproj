@@ -244,6 +244,7 @@
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
     <ClCompile Include="Engine\Render\PixelBuffer.cpp" />
     <ClCompile Include="Engine\Render\PreShader.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\ABlockResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AProgramResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\BlockResourcesFactory.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Mat4.cpp" />
@@ -255,7 +256,6 @@
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
     <ClCompile Include="Engine\Render\Task.cpp" />
-    <ClCompile Include="Engine\Render\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\VertexArray.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
@@ -351,6 +351,7 @@
     <ClInclude Include="Engine\Render\Material.hh" />
     <ClInclude Include="Engine\Render\Pipeline.hh" />
     <ClInclude Include="Engine\Render\PixelBuffer.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\ABlockResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\AProgramResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\BlockResourcesFactory.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\IBlockResources.hh" />
@@ -366,7 +367,6 @@
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\Task.hh" />
-    <ClInclude Include="Engine\Render\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\VertexArray.hh" />
     <ClInclude Include="Engine\Skinning\Animation.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />

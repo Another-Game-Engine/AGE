@@ -6,11 +6,12 @@
 
 class Program;
 
-class AProgramResources : public IProgramResource
+class AProgramResources : public IProgramResources
 {
 protected:
 	AProgramResources(Program const &parent, std::string const &name, GLenum type);
 	AProgramResources(Program const &parent, std::string &&name, GLenum type);
+	AProgramResources(GLint id, std::string &&name, GLenum type);
 	AProgramResources(AProgramResources &&move);
 	AProgramResources(AProgramResources const &copy) = delete;
 	AProgramResources &operator=(AProgramResources const &a) = delete;

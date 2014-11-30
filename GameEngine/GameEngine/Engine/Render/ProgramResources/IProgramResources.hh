@@ -1,9 +1,9 @@
 #pragma once
 
-class IProgramResource
+class IProgramResources
 {
 public:
-	virtual IProgramResource &operator()() = 0;
+	virtual IProgramResources &operator()() = 0;
 };
 
-typedef IProgramResource ResourceProgram;
+typedef IProgramResources ProgramResource;

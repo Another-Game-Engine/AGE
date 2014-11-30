@@ -18,6 +18,14 @@ _isUpdate(false)
 	assert(create(parent));
 }
 
+AProgramResources::AProgramResources(GLint id, std::string &&name, GLenum type) :
+_name(std::move(name)),
+_id(id),
+_type(type),
+_isUpdate(false)
+{
+}
+
 AProgramResources::AProgramResources(AProgramResources &&move) :
 _name(std::move(move._name)),
 _id(move._id),

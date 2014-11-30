@@ -38,8 +38,8 @@ void BenchmarkScene::initRendering()
 		graphic.load({Attribute::Indices});
 		auto &m = _renderManager;
 		auto &program = m->addProgram({ m->addUnitProgram(DEFFERED_VERTEX_SHADER, GL_VERTEX_SHADER), m->addUnitProgram(DEFFERED_FRAG_SHADER, GL_FRAGMENT_SHADER) });
-		auto &model_matrix = m->addResourceProgram<Mat4>(program, "model_matrix");
-		m->setResourceProgram<Mat4>(program, model_matrix, glm::mat4(1.0f));
+		auto &model_matrix = m->addProgramResource<Mat4>(program, "model_matrix");
+		m->setProgramResource<Mat4>(program, model_matrix, glm::mat4(1.0f));
 		auto key1 = graphic.handle(Vertices(3, { Data(std::vector<int>({1, 2, 3}), Attribute::Indices) }));
 		auto key2 = graphic.handle(Vertices(4, { Data(std::vector<int>({ 1, 2, 3, 4 }), Attribute::Indices) }));
 		graphic.unhandle(key1);

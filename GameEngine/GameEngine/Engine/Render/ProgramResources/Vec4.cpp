@@ -4,13 +4,15 @@
 #include <Render/Program.hh>
 
 Vec4::Vec4(glm::vec4 const &value, Program const &parent, std::string const &name) :
-AProgramResources(parent, name, GL_UNIFORM)
+AProgramResources(parent, name, GL_UNIFORM),
+ABlockResources()
 {
 
 }
 
 Vec4::Vec4(glm::vec4 const &value, Program const &parent, std::string &&name) :
 AProgramResources(parent, name, GL_UNIFORM),
+ABlockResources(),
 _value(value)
 {
 
@@ -18,7 +20,16 @@ _value(value)
 
 Vec4::Vec4(Vec4 &&move):
 AProgramResources(std::move(move)),
+ABlockResources(move),
 _value(move._value)
+{
+
+}
+
+Vec4::Vec4(glm::vec4 const &value, GLint id, std::string &&name) :
+AProgramResources(id, std::move(name), GL_UNIFORM),
+ABlockResources(),
+_value(value)
 {
 
 }
@@ -31,7 +42,7 @@ _value(move._value)
 * Qualifier:
 * Goal:		 send data to GPU
 */
-IProgramResource & Vec4::operator()()
+IProgramResources & Vec4::operator()()
 {
 	if (!_isUpdate) {
 		glUniform4f(_id, _value.x, _value.y, _value.z, _value.w);
@@ -54,3 +65,15 @@ bool Vec4::safe(size_t size) const
 	return ((sizeof(type) == size) ? true : false);
 }
 
+/**
+* Method:    size
+* FullName:  Vec4::size
+* Access:    virtual public 
+* Returns:   size_t
+* Qualifier: const
+* Goal:		 data size of the resource
+*/
+size_t Vec4::size() const
+{
+	return (sizeof(glm::vec4));
+}
