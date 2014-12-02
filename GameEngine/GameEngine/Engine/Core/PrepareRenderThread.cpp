@@ -229,8 +229,8 @@ namespace AGE
 
 
 			// we update animation instances
-			//auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
-			//animationManager->update(0.1f);
+			auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
+			animationManager->update(0.1f);
 
 
 			// Update drawable positions in Octree

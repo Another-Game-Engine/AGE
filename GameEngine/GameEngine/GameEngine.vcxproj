@@ -451,7 +451,6 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="Engine\Components\Component.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SdlContext.hh" />

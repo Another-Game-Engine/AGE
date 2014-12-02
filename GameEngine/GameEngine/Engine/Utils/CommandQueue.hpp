@@ -249,8 +249,7 @@ namespace AGE
 					}
 				}
 			}
-			updateEnd();
-			return true;
+			return updateEnd();
 		}
 	};
 }

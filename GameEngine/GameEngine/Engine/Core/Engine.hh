@@ -57,6 +57,11 @@ namespace AGE
 		virtual bool _updateBegin();
 		virtual bool _updateEnd();
 
+		void quit()
+		{
+			_release();
+		}
+
 		inline PrepareRenderThread *getPrepareThread()
 		{
 			return _prepareThread;

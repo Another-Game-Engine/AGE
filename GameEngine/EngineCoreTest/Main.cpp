@@ -126,7 +126,7 @@ int			main(int ac, char **av)
 	while (e->commandQueueUpdate())
 		;
 	config->saveToFile();
-	//e->stop();
+	e->_release();
 
 	return (EXIT_SUCCESS);
 }
