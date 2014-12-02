@@ -45,6 +45,19 @@ bool RenderThread::_init()
 		_context->refreshInputs();
 	});
 
+	registerMessageCallback<RendCtxCommand::CopyDrawLists>([&](RendCtxCommand::CopyDrawLists& msg)
+	{
+		this->_toDrawList = std::move(msg.list);
+	});
+
+	registerMessageCallback<RendCtxCommand::RenderDrawLists>([&](RendCtxCommand::RenderDrawLists& msg)
+	{
+		for (auto &e : this->_toDrawList)
+		{
+			msg.function(e);
+		}
+	});
+
 	registerMessageCallback<TQC::VoidFunction>([&](TQC::VoidFunction& msg)
 	{
 		if (msg.function)

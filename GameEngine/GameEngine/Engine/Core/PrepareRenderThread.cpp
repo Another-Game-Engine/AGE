@@ -315,17 +315,18 @@ namespace AGE
 #endif
 			}
 			getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
+			getCommandQueue()->emplace<RendCtxCommand::CopyDrawLists>(std::move(this->_octreeDrawList));
 		});
 
-		registerMessageCallback<PRTC::RenderDrawLists>([&](PRTC::RenderDrawLists& msg)
-		{
-			for (auto &e : this->_octreeDrawList)
-			{
-				getCommandQueue()->emplace<TQC::VoidFunction>([=](){
-					msg.function(e);
-				});
-			}	
-		});
+		//registerMessageCallback<PRTC::RenderDrawLists>([&](PRTC::RenderDrawLists& msg)
+		//{
+		//	for (auto &e : this->_octreeDrawList)
+		//	{
+		//		getCommandQueue()->emplace<TQC::VoidFunction>([=](){
+		//			msg.function(e);
+		//		});
+		//	}	
+		//});
 
 //		registerMessageCallback<AGE::RenderImgui>([&](AGE::RenderImgui& msg)
 //		{

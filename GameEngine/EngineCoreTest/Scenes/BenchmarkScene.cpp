@@ -461,7 +461,7 @@ bool BenchmarkScene::userUpdate(double time)
 
 	mainThread->getCommandQueue()->emplace<AGE::PRTC::PrepareDrawLists>();
 
-	mainThread->getCommandQueue()->emplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
+	mainThread->getCommandQueue()->emplace<RendCtxCommand::RenderDrawLists>([=](AGE::DrawableCollection collection)
 	{
 		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
 		renderManager->locationStorage.setLocation(0, collection.lights.size());

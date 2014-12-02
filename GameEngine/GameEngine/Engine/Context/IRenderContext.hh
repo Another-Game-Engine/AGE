@@ -12,6 +12,8 @@
 #include <Utils/Age_Imgui.hpp>
 #endif
 
+#include <Core/CullableObjects.hh>
+
 namespace RendCtxCommand
 {
 	struct Flush{};
@@ -27,6 +29,23 @@ namespace RendCtxCommand
 
 	struct RefreshInputs
 	{};
+
+	struct CopyDrawLists
+	{
+		AGE::Vector<AGE::DrawableCollection> list;
+
+		CopyDrawLists(AGE::Vector<AGE::DrawableCollection> &c)
+			: list(std::move(c))
+		{}
+	};
+
+	struct RenderDrawLists
+	{
+		std::function<void(AGE::DrawableCollection)> function;
+		RenderDrawLists(std::function<void(AGE::DrawableCollection)> _function)
+			: function(_function)
+		{}
+	};
 }
 
 class IRenderContext : public Dependency<IRenderContext>

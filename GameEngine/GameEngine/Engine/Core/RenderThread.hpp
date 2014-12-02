@@ -17,6 +17,7 @@ namespace AGE
 		SdlContext *_context;
 		gl::RenderManager *_renderManager;
 
+		AGE::Vector<DrawableCollection> _toDrawList;
 
 		virtual bool _init();
 		virtual bool _initInNewThread();

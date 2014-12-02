@@ -131,13 +131,5 @@ namespace AGE
 		struct PrepareDrawLists
 		{
 		};
-
-		struct RenderDrawLists
-		{
-			std::function<void(DrawableCollection)> function;
-			RenderDrawLists(std::function<void(DrawableCollection)> _function)
-				: function(_function)
-			{}
-		};
 	}
 }
