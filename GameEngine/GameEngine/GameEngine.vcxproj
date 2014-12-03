@@ -228,7 +228,7 @@
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
-    <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
+    <ClCompile Include="Engine\Core\OldPrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />
