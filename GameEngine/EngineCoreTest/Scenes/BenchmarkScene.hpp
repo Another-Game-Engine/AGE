@@ -89,7 +89,7 @@ public:
 	virtual bool userUpdate(double time);
 
 private:
-	AGE::RenderThread *_renderThread;
+	AGE::OldRenderThread *_renderThread;
 	gl::RenderManager *_renderManager;
 	RenderKey key;
 

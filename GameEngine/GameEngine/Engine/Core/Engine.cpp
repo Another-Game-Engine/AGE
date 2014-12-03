@@ -39,7 +39,7 @@ namespace AGE
 
 	bool Engine::_init()
 	{
-		_renderThread = setInstance<AGE::RenderThread, AGE::Threads::Render>();
+		_renderThread = setInstance<AGE::OldRenderThread, AGE::Threads::Render>();
 		_prepareThread = setInstance<AGE::Threads::Prepare>();
 
 		_timer = setInstance<Timer>();

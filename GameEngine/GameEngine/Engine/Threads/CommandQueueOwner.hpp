@@ -9,8 +9,8 @@ namespace AGE
 	class CommandQueueOwner
 	{
 	public:
-		inline TMQ::ReleasableQueue *getQueue() { return &_queue; }
-	private:
+		inline TMQ::ReleasableQueue *getCommandQueue() { return &_queue; }
+	protected:
 		TMQ::ReleasableQueue _queue;
 
 		friend class CommandQueuePusher;

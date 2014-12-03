@@ -18,7 +18,7 @@ namespace AGE
 		CommandQueuePusher();
 		virtual ~CommandQueuePusher();
 		void LinkToNext(CommandQueueOwner *next);
-	private:
+	protected:
 		CommandQueueOwner *_next;
 
 		friend class CommandQueueOwner;

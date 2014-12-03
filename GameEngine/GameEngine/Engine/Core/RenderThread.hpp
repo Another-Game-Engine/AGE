@@ -12,7 +12,7 @@
 
 namespace AGE
 {
-	class RenderThread : public RenderThreadInterface
+	class OldRenderThread : public RenderThreadInterface
 	{
 		SdlContext *_context;
 		gl::RenderManager *_renderManager;
@@ -26,7 +26,7 @@ namespace AGE
 		virtual bool _updateBegin();
 		virtual bool _updateEnd();
 	public:
-		RenderThread();
-		virtual ~RenderThread();
+		OldRenderThread();
+		virtual ~OldRenderThread();
 	};
 }

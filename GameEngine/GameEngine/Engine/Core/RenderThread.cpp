@@ -14,7 +14,7 @@
 
 using namespace AGE;
 
-bool RenderThread::_init()
+bool OldRenderThread::_init()
 {
 	_context = _engine->setInstance<SdlContext, IRenderContext>();
 	_renderManager = _engine->setInstance<gl::RenderManager>();
@@ -73,30 +73,30 @@ bool RenderThread::_init()
 	return true;
 }
 
-bool RenderThread::_initInNewThread()
+bool OldRenderThread::_initInNewThread()
 {
 	return true;
 }
 
-bool RenderThread::_release()
+bool OldRenderThread::_release()
 {
 	return true;
 }
 
-bool RenderThread::_releaseInNewThread()
+bool OldRenderThread::_releaseInNewThread()
 {
 	_engine->deleteInstance<IRenderContext>();
 	_engine->deleteInstance<gl::RenderManager>();
 	return true;
 }
 
-bool RenderThread::_updateBegin()
+bool OldRenderThread::_updateBegin()
 {
 	bool returnValue = true;
 	return returnValue;
 }
 
-bool RenderThread::_updateEnd()
+bool OldRenderThread::_updateEnd()
 {
 	bool returnValue = true;
 	_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(this->_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
@@ -104,8 +104,8 @@ bool RenderThread::_updateEnd()
 }
 
 
-RenderThread::RenderThread()
+OldRenderThread::OldRenderThread()
 {}
 
-RenderThread::~RenderThread()
+OldRenderThread::~OldRenderThread()
 {}

@@ -20,19 +20,19 @@
 
 namespace AGE
 {
-	PrepareRenderThread::PrepareRenderThread()
+	OldPrepareRenderThread::OldPrepareRenderThread()
 	{
 		_drawables.reserve(65536);
 		_octree = new OctreeNode;
 	}
 
-	PrepareRenderThread::~PrepareRenderThread(void)
+	OldPrepareRenderThread::~OldPrepareRenderThread(void)
 	{
 		if (_octree)
 			delete _octree;
 	}
 
-	bool PrepareRenderThread::_init()
+	bool OldPrepareRenderThread::_init()
 	{
 		_octreeDrawList = AGE::Vector<DrawableCollection>();
 
@@ -338,22 +338,22 @@ namespace AGE
 		return true;
 	}
 
-	bool PrepareRenderThread::_initInNewThread()
+	bool OldPrepareRenderThread::_initInNewThread()
 	{
 		return true;
 	}
 
-	bool PrepareRenderThread::_release()
+	bool OldPrepareRenderThread::_release()
 	{
 		return true;
 	}
 
-	bool PrepareRenderThread::_releaseInNewThread()
+	bool OldPrepareRenderThread::_releaseInNewThread()
 	{
 		return true;
 	}
 
-	PrepareKey PrepareRenderThread::addMesh()
+	PrepareKey OldPrepareRenderThread::addMesh()
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::Drawable;
@@ -368,7 +368,7 @@ namespace AGE
 		return res;
 	}
 
-	PrepareKey PrepareRenderThread::addCamera()
+	PrepareKey OldPrepareRenderThread::addCamera()
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::Camera;
@@ -384,7 +384,7 @@ namespace AGE
 		return res;
 	}
 
-	PrepareKey PrepareRenderThread::addPointLight()
+	PrepareKey OldPrepareRenderThread::addPointLight()
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::PointLight;
@@ -399,7 +399,7 @@ namespace AGE
 		return res;
 	}
 
-	PrepareRenderThread &PrepareRenderThread::removeElement(const PrepareKey &key)
+	OldPrepareRenderThread &OldPrepareRenderThread::removeElement(const PrepareKey &key)
 	{
 		assert(!key.invalid());
 		switch (key.type)
@@ -422,59 +422,59 @@ namespace AGE
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
+	OldPrepareRenderThread &OldPrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
 	{
 		_commandQueue.emplace<PRTC::SetPointLight>(color, range, id);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPosition(const glm::vec3 &v, const PrepareKey &id)
+	OldPrepareRenderThread &OldPrepareRenderThread::setPosition(const glm::vec3 &v, const PrepareKey &id)
 	{
 		_commandQueue.emplace<PRTC::Position>(id, v);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setOrientation(const glm::quat &v, const PrepareKey &id)
+	OldPrepareRenderThread &OldPrepareRenderThread::setOrientation(const glm::quat &v, const PrepareKey &id)
 	{
 		_commandQueue.emplace<PRTC::Orientation>(id, v);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setScale(const glm::vec3 &v, const PrepareKey &id)
+	OldPrepareRenderThread &OldPrepareRenderThread::setScale(const glm::vec3 &v, const PrepareKey &id)
 	{
 		_commandQueue.emplace<PRTC::Scale>(id, v);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setCameraInfos(const PrepareKey &id
+	OldPrepareRenderThread &OldPrepareRenderThread::setCameraInfos(const PrepareKey &id
 		, const glm::mat4 &projection)
 	{
 		_commandQueue.emplace<PRTC::CameraInfos>(id, projection);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	OldPrepareRenderThread &OldPrepareRenderThread::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setPosition(v, e);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	OldPrepareRenderThread &OldPrepareRenderThread::setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setOrientation(v, e);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	OldPrepareRenderThread &OldPrepareRenderThread::setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setScale(v, e);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::updateGeometry(
+	OldPrepareRenderThread &OldPrepareRenderThread::updateGeometry(
 		const PrepareKey &key
 		, const AGE::Vector<AGE::SubMeshInstance> &meshs
 		, const AGE::Vector<AGE::MaterialInstance> &materials
@@ -485,7 +485,7 @@ namespace AGE
 		return (*this);
 	}
 
-	DRAWABLE_ID PrepareRenderThread::addDrawable(USER_OBJECT_ID uid)
+	DRAWABLE_ID OldPrepareRenderThread::addDrawable(USER_OBJECT_ID uid)
 	{
 		DRAWABLE_ID res = DRAWABLE_ID(-1);
 		Drawable *co = nullptr;
@@ -506,7 +506,7 @@ namespace AGE
 		return res;
 	}
 
-	void PrepareRenderThread::removeDrawableObject(DRAWABLE_ID id)
+	void OldPrepareRenderThread::removeDrawableObject(DRAWABLE_ID id)
 	{
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
 		_drawables[id].reset();
@@ -519,14 +519,14 @@ namespace AGE
 	}
 
 
-	bool PrepareRenderThread::_updateBegin()
+	bool OldPrepareRenderThread::_updateBegin()
 	{
 		auto returnValue = true;
 
 		return returnValue;
 	}
 
-	bool PrepareRenderThread::_updateEnd()
+	bool OldPrepareRenderThread::_updateEnd()
 	{
 		auto returnValue = true;
 		_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());

@@ -26,31 +26,31 @@ namespace AGE
 
 	class OctreeNode;
 
-	class PrepareRenderThread : public ThreadQueue, public Dependency<PrepareRenderThread>
+	class OldPrepareRenderThread : public ThreadQueue, public Dependency<OldPrepareRenderThread>
 	{
 	public:
-		PrepareRenderThread();
-		virtual ~PrepareRenderThread(void);
+		OldPrepareRenderThread();
+		virtual ~OldPrepareRenderThread(void);
 		void setScene(std::weak_ptr<AScene> _scene) { scene = _scene; }
 
 		PrepareKey addMesh();
 		PrepareKey addCamera();
 		PrepareKey addPointLight();
 
-		PrepareRenderThread &setPointLight(glm::vec3 const &, glm::vec3 const &, const PrepareKey &id);
-		PrepareRenderThread &removeElement(const PrepareKey &key);
-		PrepareRenderThread &setPosition(const glm::vec3 &v, const PrepareKey &key);
-		PrepareRenderThread &setOrientation(const glm::quat &v, const PrepareKey &key);
-		PrepareRenderThread &setScale(const glm::vec3 &v, const PrepareKey &key);
-		PrepareRenderThread &setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
-		PrepareRenderThread &setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
-		PrepareRenderThread &setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
-		PrepareRenderThread &updateGeometry(
+		OldPrepareRenderThread &setPointLight(glm::vec3 const &, glm::vec3 const &, const PrepareKey &id);
+		OldPrepareRenderThread &removeElement(const PrepareKey &key);
+		OldPrepareRenderThread &setPosition(const glm::vec3 &v, const PrepareKey &key);
+		OldPrepareRenderThread &setOrientation(const glm::quat &v, const PrepareKey &key);
+		OldPrepareRenderThread &setScale(const glm::vec3 &v, const PrepareKey &key);
+		OldPrepareRenderThread &setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
+		OldPrepareRenderThread &setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
+		OldPrepareRenderThread &setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
+		OldPrepareRenderThread &updateGeometry(
 			const PrepareKey &id
 			, const Vector<SubMeshInstance> &meshs
 			, const Vector<MaterialInstance> &materials
 			, const gl::Key<AGE::AnimationInstance> &animation);
-		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
+		OldPrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
 
 	private:
 		OctreeNode *_octree;
@@ -84,6 +84,6 @@ namespace AGE
 
 	namespace Threads
 	{
-		typedef PrepareRenderThread Prepare;
+		typedef OldPrepareRenderThread Prepare;
 	}
 }

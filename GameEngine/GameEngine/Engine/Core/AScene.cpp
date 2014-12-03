@@ -82,7 +82,7 @@ Entity &AScene::createEntity()
 		{
 			auto &e = _pool[_entityNumber];
 			e.entity.id = _entityNumber;
-			e.link._octree = getInstance<AGE::PrepareRenderThread>();
+			e.link._octree = getInstance<AGE::OldPrepareRenderThread>();
 			assert(++_entityNumber != UINT16_MAX);
 			e.entity.setActive(true);
 			return e.entity;

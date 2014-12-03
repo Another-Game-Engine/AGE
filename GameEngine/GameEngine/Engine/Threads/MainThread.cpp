@@ -1,5 +1,6 @@
 #include "MainThread.hpp"
 #include <Core/Engine.hh>
+#include "CommandQueueOwner.hpp"
 
 namespace AGE
 {
@@ -15,6 +16,31 @@ namespace AGE
 	
 	bool MainThread::update()
 	{
+		for (auto &e : _engines)
+		{
+			//e->update();
+		}
+
+		TMQ::PtrQueue queue;
+
+		bool released = false;
+
+		while (!released || !queue.empty())
+		{
+			if (!queue.empty())
+			{
+				// pop one task and execute it
+			}
+			else
+			{
+				getTaskQueue()->getReadableQueue(queue);
+			}
+			if (!released)
+			{
+				released = _next->getCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait);
+			}
+		}
+
 		return true;
 	}
 

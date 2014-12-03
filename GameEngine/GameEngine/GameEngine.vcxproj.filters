@@ -81,6 +81,8 @@
     <ClCompile Include="Engine\Threads\Thread.cpp" />
     <ClCompile Include="Engine\Threads\MainThread.cpp" />
     <ClCompile Include="Engine\Threads\CommandQueuePusher.cpp" />
+    <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
+    <ClCompile Include="Engine\Threads\RenderThead.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -240,6 +242,9 @@
     <ClInclude Include="Engine\Threads\MainThread.hpp" />
     <ClInclude Include="Engine\Threads\CommandQueueOwner.hpp" />
     <ClInclude Include="Engine\Threads\CommandQueuePusher.hpp" />
+    <ClInclude Include="Engine\Threads\TaskQueueOwner.hpp" />
+    <ClInclude Include="Engine\Threads\PrepareRenderThread.hpp" />
+    <ClInclude Include="Engine\Threads\RenderThread.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

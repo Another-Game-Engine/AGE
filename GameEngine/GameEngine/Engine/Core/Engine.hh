@@ -9,8 +9,8 @@
 
 namespace AGE
 {
-	class PrepareRenderThread;
-	class RenderThread;
+	class OldPrepareRenderThread;
+	class OldRenderThread;
 	class Timer;
 
 	class Engine : public DependenciesInjector
@@ -23,8 +23,8 @@ namespace AGE
 		Engine(Engine const &);
 		Engine &operator=(Engine const &);
 
-		PrepareRenderThread *_prepareThread;
-		RenderThread *_renderThread;
+		OldPrepareRenderThread *_prepareThread;
+		OldRenderThread *_renderThread;
 		Timer *_timer;
 
 		struct ThreadStatistics
@@ -62,11 +62,11 @@ namespace AGE
 			_release();
 		}
 
-		inline PrepareRenderThread *getPrepareThread()
+		inline OldPrepareRenderThread *getPrepareThread()
 		{
 			return _prepareThread;
 		}
-		inline RenderThread *getRenderThread()
+		inline OldRenderThread *getRenderThread()
 		{
 			return _renderThread;
 		}

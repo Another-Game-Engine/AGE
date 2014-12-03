@@ -1,14 +1,18 @@
 #pragma once
 
 #include "Thread.hpp"
+#include "CommandQueuePusher.hpp"
+#include "TaskQueueOwner.hpp"
+
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
+
 
 namespace AGE
 {
 	class Engine;
 
-	class MainThread : public Thread
+	class MainThread : public Thread, public CommandQueuePusher, public TaskQueueOwner
 	{
 	public:
 		virtual bool init();

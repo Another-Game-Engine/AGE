@@ -28,7 +28,7 @@ void BenchmarkScene::initRendering()
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 
-	auto res = getInstance<AGE::RenderThread>()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>(
+	auto res = getInstance<AGE::OldRenderThread>()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>(
 		std::function<bool()>([&](){
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
@@ -235,7 +235,7 @@ bool BenchmarkScene::userStart()
 	GLOBAL_CAMERA = camera;
 	auto cam = addComponent<Component::CameraComponent>(camera);
 
-	auto screenSize = getInstance<AGE::RenderThread>()->getTaskQueue()->emplaceFuture<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screenSize = getInstance<AGE::OldRenderThread>()->getTaskQueue()->emplaceFuture<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
 	auto camLink = getLink(camera);
 	camLink->setPosition(glm::vec3(0, 1.5, 0));
