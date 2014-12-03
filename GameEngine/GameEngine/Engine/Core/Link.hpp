@@ -14,9 +14,13 @@ namespace AGE
 {
 	struct Link
 	{
-		const glm::vec3 &getPosition() const { return _position; }
-		const glm::vec3 &getScale() const { return _scale; }
-		const glm::quat &getOrientation() const { return _orientation; }
+		inline const glm::vec3 &getPosition() const { return _position; }
+		inline const glm::vec3 &getScale() const { return _scale; }
+		inline const glm::quat &getOrientation() const { return _orientation; }
+		inline float *getPositionPtr() { return glm::value_ptr(_position); }
+		inline float *getScalePtr() { return glm::value_ptr(_scale); }
+		inline float *getOrientationPtr() { return glm::value_ptr(_orientation); }
+
 
 		// Used by modules like physic, do not use it to set object position, use setPosition instead
 		void internalSetPosition(const glm::vec3 &v);

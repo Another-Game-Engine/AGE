@@ -102,7 +102,7 @@ private:
 	std::ofstream _logFile;
 	Entity GLOBAL_CAMERA;
 	Entity GLOBAL_CATWOMAN;
-	Entity GLOBAL_LIGHT;
+	std::array<Entity, 5> GLOBAL_LIGHTS;
 	Entity GLOBAL_SPONZA;
 	Entity GLOBAL_FLOOR;
 	Entity GLOBAL_HEAD;

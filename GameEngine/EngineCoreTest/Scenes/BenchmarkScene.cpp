@@ -291,11 +291,12 @@ bool BenchmarkScene::userStart()
 		//_m->setAnimation(GLOBAL_CAT_ANIMATION);
 	}
 
+	for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 	{
-		GLOBAL_LIGHT = createEntity();
-		auto e = GLOBAL_LIGHT;
+		GLOBAL_LIGHTS[i] = createEntity();
+		auto e = GLOBAL_LIGHTS[i];
 		auto _l = getLink(e);
-		_l->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+		_l->setPosition(glm::vec3(i, 1.0f, i));
 		_l->setScale(glm::vec3(0.05f));
 		auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
@@ -305,9 +306,10 @@ bool BenchmarkScene::userStart()
 			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
 			_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
 		}
-		getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
-		addComponent<Component::PointLight>(GLOBAL_LIGHT)->set(glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));
+		getLink(e)->setPosition(glm::vec3(i, 5.0f, 0));
+		addComponent<Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f,  (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 	}
+
 
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_FLOOR, 0.0f);
@@ -336,12 +338,12 @@ bool BenchmarkScene::userUpdate(double time)
 	_chunkCounter += time;
 
 #ifdef USE_IMGUI
-	if (ImGui::Button("Save -> Clear -> Reload"))
-	{
-		saveToBinary("SAVE_TEST.json");
-		clearAllEntities();
-		loadFromBinary("SAVE_TEST.json");
-	}
+	//if (ImGui::Button("Save -> Clear -> Reload"))
+	//{
+	//	saveToBinary("SAVE_TEST.json");
+	//	clearAllEntities();
+	//	loadFromBinary("SAVE_TEST.json");
+	//}
 #endif
 
 	//	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
@@ -441,20 +443,21 @@ bool BenchmarkScene::userUpdate(double time)
 
 #ifdef USE_IMGUI
 	{
-		auto link = getLink(GLOBAL_LIGHT);
-		auto pos = link->getPosition();
-		static float p[3] = { pos.x, pos.y, pos.z };
-		if (ImGui::SliderFloat("x", &p[0], -50, 50))
+		for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 		{
-			link->setPosition(glm::vec3(p[0], p[1], p[2]));
-		}
-		if (ImGui::SliderFloat("y", &p[1], -50, 50))
-		{
-			link->setPosition(glm::vec3(p[0], p[1], p[2]));
-		}
-		if (ImGui::SliderFloat("z", &p[2], -50, 50))
-		{
-			link->setPosition(glm::vec3(p[0], p[1], p[2]));
+			auto e = GLOBAL_LIGHTS[i];
+			auto link = getLink(e);
+
+			if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link->getPositionPtr(), -50, 50))
+			{
+				auto l = getLink(e);
+				l->setPosition(l->getPosition());
+			}
+			auto lightComponent = getComponent<Component::PointLight>(e);
+			if (ImGui::ColorEdit3(std::string("Light " + std::to_string(i) + " color").c_str(), lightComponent->getColorPtr()))
+			{
+				lightComponent->set(lightComponent->getColor(), lightComponent->getRange());
+			}
 		}
 	}
 #endif
