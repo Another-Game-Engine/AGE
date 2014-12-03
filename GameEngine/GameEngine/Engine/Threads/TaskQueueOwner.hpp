@@ -28,6 +28,8 @@ namespace AGE
 				_sharedCommandCallbacks.resize(id + 1);
 			_sharedCommandCallbacks[id] = std::make_unique<CallbackContainer<T>>(fn);
 		}
+
+		bool executeTask(TMQ::MessageBase *task);
 	private:
 		TMQ::ImmediateQueue _queue;
 
