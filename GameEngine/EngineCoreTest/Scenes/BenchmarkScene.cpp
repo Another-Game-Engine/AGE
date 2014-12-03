@@ -242,7 +242,7 @@ bool BenchmarkScene::userStart()
 
 	GLOBAL_FLOOR = createEntity();
 	auto link = getLink(GLOBAL_FLOOR);
-	link->setPosition(glm::vec3(0, -1, 0));
+	link->setPosition(glm::vec3(0, -0.532, 0));
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(GLOBAL_FLOOR, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
@@ -314,7 +314,7 @@ bool BenchmarkScene::userStart()
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_FLOOR, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, Component::RigidBody::BOX);
-	rigidBody->getBody().setFriction(0.8f);
+	rigidBody->getBody().setFriction(0.3f);
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
@@ -401,6 +401,7 @@ bool BenchmarkScene::userUpdate(double time)
 			{
 				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+				link->setScale(glm::vec3(0.5f));
 			}
 			else
 			{
@@ -417,6 +418,7 @@ bool BenchmarkScene::userUpdate(double time)
 				rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);
 			rigidBody->getBody().setRestitution(0.5f);
+			rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
 #endif
 
 
@@ -488,7 +490,6 @@ bool BenchmarkScene::userUpdate(double time)
 	});
 
 #ifdef USE_IMGUI
-	ImGui::Text("Main Thread : coucou");
 	ImGui::Render();
 #endif
 
