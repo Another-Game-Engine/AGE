@@ -117,9 +117,9 @@ int			main(int ac, char **av)
 #endif
 
 	// launch engine
-	e->getCurrentThreadCommandQueue()->releaseReadability();
+	e->getCurrentThreadCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait);
 	e->_hasFrameBefore = true;
-	e->getCommandQueue()->releaseReadability();
+	e->getCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait);
 	e->first = true;
 	e->getRenderThread()->last = true;
 	while (e->commandQueueUpdate())

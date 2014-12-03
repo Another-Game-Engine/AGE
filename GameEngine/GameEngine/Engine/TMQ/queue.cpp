@@ -119,14 +119,11 @@ bool PtrQueue::empty()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-Dispatcher ReleasableQueue::getDispatcher()
-{
-	return Dispatcher(this);
-}
 
 ReleasableQueue::ReleasableQueue()
 	: _millisecondToWait(1)
 {
+	_releasable = true;
 }
 
 void ReleasableQueue::launch()
@@ -146,19 +143,10 @@ bool ReleasableQueue::getReadableQueue(TMQ::PtrQueue &q)
 	_copy.clear();
 	lock.unlock();
 	_writeCondition.notify_one();
+	_releasable = true;
 	return true;
 }
 
-bool ReleasableQueue::isWritable()
-{
-	std::unique_lock<std::mutex> lock(_mutex);
-	if (_writeCondition.wait_for(lock, std::chrono::milliseconds(1), [this]()
-	{
-		return _queue.empty();
-	}))
-		return true;
-	return false;
-}
 
 void ReleasableQueue::clear()
 {
@@ -166,18 +154,40 @@ void ReleasableQueue::clear()
 	_queue.eraseAll();
 }
 
-bool ReleasableQueue::releaseReadability(bool wait)
+bool ReleasableQueue::releaseReadability(ReleasableQueue::WaitType waitType)
 {
-	std::unique_lock<std::mutex> lock(_mutex);
-	if (wait)
+	if (waitType == WaitType::NoWait)
 	{
+		if (!_releasable)
+			return false;
+		std::unique_lock<std::mutex> lock(_mutex);
+		_copy = std::move(_queue);
+		_queue.clear();
+		_releasable = false;
+		lock.unlock();
+		_readCondition.notify_one();
+		return true;
+	}
+	else if (waitType == WaitType::Block)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+
 		_writeCondition.wait(lock, [this]()
 		{
 			return (_copy.empty());
 		});
+		if (!_copy.empty())
+			return false;
+		_copy = std::move(_queue);
+		_queue.clear();
+		_releasable = false;
+		lock.unlock();
+		_readCondition.notify_one();
+		return true;
 	}
-	else
+	else if (waitType == WaitType::Wait)
 	{
+		std::unique_lock<std::mutex> lock(_mutex);
 		if (!_writeCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
 		{
 			return (_copy.empty());
@@ -185,18 +195,13 @@ bool ReleasableQueue::releaseReadability(bool wait)
 		{
 			return false;
 		}
-	}
-	if (!_queue.empty() && _copy.empty())
-	{
 		_copy = std::move(_queue);
 		_queue.clear();
+		_releasable = false;
 		lock.unlock();
+		_readCondition.notify_one();
+		return true;
 	}
-	else
-	{
-		lock.unlock();
-	}
-	_readCondition.notify_one();
 	return true;
 }
 

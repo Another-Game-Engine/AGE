@@ -32,7 +32,7 @@ namespace AGE
 			std::string name;
 			float averageTime;
 			unsigned char frameCounter;
-			std::array < float, 32 > frames;
+			std::array < float, 64 > frames;
 			ThreadStatistics()
 				: name("")
 				, averageTime(0.0f)

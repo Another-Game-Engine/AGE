@@ -221,14 +221,14 @@ namespace AGE
 				{
 					if (_next->last)
 					{
-						if (!_next->getCurrentThreadCommandQueue()->releaseReadability(false))
+						if (!_next->getCurrentThreadCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait))
 						{
 							_next->getCurrentThreadCommandQueue()->clear();
 						}
 					}
 					else
 					{
-						while (!_next->getCurrentThreadCommandQueue()->releaseReadability(false))
+						while (!_next->getCurrentThreadCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::Wait))
 						{
 							if (_taskQueue.getReadableQueue(q))
 							{

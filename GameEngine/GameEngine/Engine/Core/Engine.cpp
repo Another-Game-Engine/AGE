@@ -131,9 +131,14 @@ namespace AGE
 		bool res = true;
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 		updateScenes(time);
-		for (auto &e : _threadsStatics)
+		if (ImGui::CollapsingHeader("Threads statistics"))
 		{
-			ImGui::Text((std::string(e.second.name) + " " + std::to_string(e.second.averageTime)).c_str());
+			for (auto &e : _threadsStatics)
+			{
+				ImGui::Text("Thread : %s", e.second.name.c_str());
+				ImGui::Text(std::string(std::to_string(e.second.averageTime) + " | " + std::to_string(int(1000.0f / e.second.averageTime)) + " fps").c_str());
+				ImGui::PlotLines("Frame Times", e.second.frames.data() , (int)e.second.frames.size(), (int)e.second.frameCounter, e.second.name.c_str(), 0.0f, 20.0f, ImVec2(0, 70));
+			}
 		}
 		res = userUpdateScenes(time);
 #endif

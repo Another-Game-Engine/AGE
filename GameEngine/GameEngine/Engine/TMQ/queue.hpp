@@ -243,7 +243,15 @@ namespace TMQ
 		std::condition_variable _readCondition;
 		std::condition_variable _writeCondition;
 		std::size_t _millisecondToWait;
+		std::atomic_bool _releasable;
 	public:
+		enum WaitType
+		{
+			Block = 0
+			, Wait = 1
+			, NoWait = 2
+		};
+
 		ReleasableQueue();
 		void launch();
 
@@ -253,9 +261,7 @@ namespace TMQ
 		ReleasableQueue operator=(ReleasableQueue &&) = delete;
 
 		bool getReadableQueue(TMQ::PtrQueue &q);
-		Dispatcher getDispatcher();
-		bool releaseReadability(bool wait = true);
-		bool isWritable();
+		bool releaseReadability(WaitType waitType);
 		void setWaitingTime(std::size_t milliseconds);
 		std::size_t getWaitingTime();
 		void clear();
