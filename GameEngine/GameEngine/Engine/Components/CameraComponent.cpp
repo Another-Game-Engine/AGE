@@ -46,7 +46,7 @@ namespace Component
 		_scene = scene;
 		_key = scene->getInstance<AGE::Threads::Prepare>()->addCamera();
 		scene->getLink(entityId)->registerOctreeObject(_key);
-		setProjection(glm::perspective(60.0f, 1600.0f / 900.0f, 0.1f, 2000.0f));
+		setProjection(glm::perspective(60.0f, 1920.0f / 1040.0f, 0.1f, 2000.0f));
 	}
 
 	void CameraComponent::reset(AScene *scene)

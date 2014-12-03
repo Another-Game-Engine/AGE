@@ -25,5 +25,6 @@ namespace AGE
 		MainThread &operator=(MainThread &&) = delete;
 
 		AGE::Vector < std::unique_ptr<AGE::Engine> > _engines;
+		AGE::Engine *_activeEngine;
 	};
 }

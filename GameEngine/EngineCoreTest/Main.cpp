@@ -66,7 +66,7 @@ int			main(int ac, char **av)
 	auto contextInit = e->getRenderThread()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>(
 		std::function<bool()>([&]()
 	{
-		if (!context->init(0, 1600, 900, "~AGE~ V0.0 Demo"))
+		if (!context->init(0, 1920, 1040, "~AGE~ V0.0 Demo"))
 			return false;
 #ifdef RENDERING_ACTIVATED
 		if (!loadAssets(e))
@@ -83,7 +83,7 @@ int			main(int ac, char **av)
 
 	// Set default window size
 	// If config file has different value, it'll be changed automatically
-	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(1600, 900), [&](const glm::uvec2 &v)
+	config->setConfiguration<glm::uvec2>("windowSize", glm::uvec2(1920, 1040), [&](const glm::uvec2 &v)
 	{
 		e->getMainThread()->getCommandQueue()->emplace<RendCtxCommand::SetScreenSize>(v);
 	});

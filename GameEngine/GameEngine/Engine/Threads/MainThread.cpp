@@ -20,6 +20,7 @@ namespace AGE
 
 	MainThread::MainThread()
 		: Thread(Thread::ThreadType::Main)
+		, _activeEngine(nullptr)
 	{
 		// We register the main thread id
 		_registerId();
