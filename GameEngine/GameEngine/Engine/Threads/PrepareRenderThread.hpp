@@ -11,7 +11,7 @@
 
 namespace AGE
 {
-	class RenderScene;
+	class RenderScene{};
 
 	class PrepareRenderThread : public Thread, public CommandQueuePusher, public CommandQueueOwner, public TaskQueueOwner
 	{

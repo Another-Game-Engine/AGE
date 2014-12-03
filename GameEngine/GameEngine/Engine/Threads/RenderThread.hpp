@@ -10,7 +10,7 @@
 
 namespace AGE
 {
-	class RenderContext;
+	class RenderContext{};
 
 	class RenderThread : public Thread, public CommandQueuePusher, public CommandQueueOwner, public TaskQueueOwner
 	{
