@@ -291,8 +291,6 @@ bool BenchmarkScene::userStart()
 		//_m->setAnimation(GLOBAL_CAT_ANIMATION);
 	}
 
-	if (ImGui::CollapsingHeader("Light settings"))
-	{
 		for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 		{
 			GLOBAL_LIGHTS[i] = createEntity();
@@ -311,7 +309,7 @@ bool BenchmarkScene::userStart()
 			getLink(e)->setPosition(glm::vec3(i, 5.0f, 0));
 			addComponent<Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 		}
-	}
+	
 
 
 #ifdef PHYSIC_SIMULATION
@@ -447,6 +445,7 @@ bool BenchmarkScene::userUpdate(double time)
 	auto renderManager = getInstance<gl::RenderManager>();
 
 #ifdef USE_IMGUI
+	if (ImGui::CollapsingHeader("Light settings"))
 	{
 		for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 		{
