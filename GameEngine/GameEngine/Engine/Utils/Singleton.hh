@@ -9,10 +9,11 @@ class Singleton
 {
 private:
   static T    *_instance;
-  Singleton();
-  ~Singleton();
   static std::once_flag _flag;
-	static void 		freeMemory();
+protected:
+  Singleton();
+  virtual ~Singleton();
+  static void 		freeMemory();
 public:
   	static T           *getInstance();
 

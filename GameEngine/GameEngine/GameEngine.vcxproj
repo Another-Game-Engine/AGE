@@ -253,6 +253,9 @@
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
+    <ClCompile Include="Engine\Threads\MainThread.cpp" />
+    <ClCompile Include="Engine\Threads\Thread.cpp" />
+    <ClCompile Include="Engine\Threads\ThreadManager.cpp" />
     <ClCompile Include="Engine\TMQ\dispatcher.cpp" />
     <ClCompile Include="Engine\TMQ\message.cpp" />
     <ClCompile Include="Engine\TMQ\queue.cpp" />
@@ -362,6 +365,9 @@
     <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
     <ClInclude Include="Engine\Texture\Texture.hpp" />
+    <ClInclude Include="Engine\Threads\MainThread.hpp" />
+    <ClInclude Include="Engine\Threads\Thread.hpp" />
+    <ClInclude Include="Engine\Threads\ThreadManager.hpp" />
     <ClInclude Include="Engine\TMQ\dispatcher.hpp" />
     <ClInclude Include="Engine\TMQ\message.hpp" />
     <ClInclude Include="Engine\TMQ\queue.hpp" />

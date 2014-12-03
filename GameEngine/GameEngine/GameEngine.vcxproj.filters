@@ -77,6 +77,9 @@
     <ClCompile Include="Engine\Utils\Sphere.cpp" />
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Utils\ThreadQueue.cpp" />
+    <ClCompile Include="Engine\Threads\ThreadManager.cpp" />
+    <ClCompile Include="Engine\Threads\Thread.cpp" />
+    <ClCompile Include="Engine\Threads\MainThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -231,6 +234,9 @@
     <ClInclude Include="Engine\Utils\CommandQueue.hpp" />
     <ClInclude Include="Engine\Utils\ThreadName.hpp" />
     <ClInclude Include="Engine\Core\MainThreadCommand.hpp" />
+    <ClInclude Include="Engine\Threads\Thread.hpp" />
+    <ClInclude Include="Engine\Threads\ThreadManager.hpp" />
+    <ClInclude Include="Engine\Threads\MainThread.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
