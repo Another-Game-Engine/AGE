@@ -9,7 +9,7 @@ class AScene;
 
 namespace AGE
 {
-	class SceneManager : public Dependency < SceneManager >
+	class SceneManager
 	{
 	private:
 		std::map<std::string, std::shared_ptr<AScene>>	_scenes;
@@ -40,7 +40,7 @@ namespace AGE
 		void        resetScene(std::string const &name);
 		bool        initScene(std::string const &name);
 
-		bool        userUpdate(double time) const;
-		void        update(double time);
+		bool        userUpdateScenes(double time) const;
+		void        updateScenes(double time);
 	};
 }

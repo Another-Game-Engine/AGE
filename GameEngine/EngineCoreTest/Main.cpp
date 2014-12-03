@@ -8,7 +8,6 @@
 
 #include <stdlib.h>
 #include <Core/Engine.hh>
-#include <Core/SceneManager.hh>
 
 #include <Render/RenderManager.hh>
 // SCENES
@@ -102,13 +101,13 @@ int			main(int ac, char **av)
 		return EXIT_FAILURE;
 
 	// add main scene
-	e->getInstance<SceneManager>()->addScene(std::make_shared<BenchmarkScene>(e), "BenchmarkScene");
+	e->addScene(std::make_shared<BenchmarkScene>(e), "BenchmarkScene");
 
 	// bind scene
-	if (!e->getInstance<SceneManager>()->initScene("BenchmarkScene"))
+	if (!e->initScene("BenchmarkScene"))
 		return (EXIT_FAILURE);
 
-	e->getInstance<SceneManager>()->enableScene("BenchmarkScene", 100);
+	e->enableScene("BenchmarkScene", 100);
 
 #ifdef USE_IMGUI
 	e->getRenderThread()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>([=](){

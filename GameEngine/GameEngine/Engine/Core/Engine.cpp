@@ -46,7 +46,6 @@ namespace AGE
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
-		_sceneManager = setInstance<SceneManager>();
 		setInstance<AGE::AssetsManager>();
 		setInstance<Input>();
 		setInstance<AGE::AnimationManager>();
@@ -131,12 +130,12 @@ namespace AGE
 		_timer->update();
 		bool res = true;
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
-		_sceneManager->update(time);
+		updateScenes(time);
 		for (auto &e : _threadsStatics)
 		{
 			ImGui::Text((std::string(e.second.name) + " " + std::to_string(e.second.averageTime)).c_str());
 		}
-		res = _sceneManager->userUpdate(time);
+		res = userUpdateScenes(time);
 #endif
 		return res;
 	}

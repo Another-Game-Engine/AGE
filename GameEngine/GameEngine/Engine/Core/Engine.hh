@@ -5,15 +5,19 @@
 #include <Utils/ThreadQueue.hpp>
 #include <array>
 #include <map>
+#include <Core/SceneManager.hh>
 
 namespace AGE
 {
 	class PrepareRenderThread;
 	class RenderThread;
-	class SceneManager;
 	class Timer;
 
-	class Engine : public DependenciesInjector, public CommandQueue
+	class Engine : public DependenciesInjector
+		, public CommandQueue
+#ifdef USE_DEFAULT_ENGINE_CONFIGURATION
+		, public SceneManager
+#endif
 	{
 	protected:
 		Engine(Engine const &);
@@ -40,10 +44,6 @@ namespace AGE
 
 		std::map<std::size_t, ThreadStatistics> _threadsStatics;
 		void updateThreadStatistics(std::size_t id, float time);
-#ifdef USE_DEFAULT_ENGINE_CONFIGURATION
-		SceneManager *_sceneManager;
-#endif
-
 	public:
 		// All functions are virtual so if you want to customize your Engine class
 		// without hacking the core, you can heritate from :)

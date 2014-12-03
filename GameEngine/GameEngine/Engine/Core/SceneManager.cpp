@@ -76,7 +76,7 @@ namespace AGE
 		return t->second->start();
 	}
 
-	bool            SceneManager::userUpdate(double time) const
+	bool            SceneManager::userUpdateScenes(double time) const
 	{
 		for (auto &e : _actives)
 		{
@@ -86,7 +86,7 @@ namespace AGE
 		return true;
 	}
 
-	void            SceneManager::update(double time)
+	void            SceneManager::updateScenes(double time)
 	{
 		for (auto &e : _actives)
 		{
