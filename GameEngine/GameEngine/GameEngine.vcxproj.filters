@@ -249,6 +249,7 @@
     <ClInclude Include="Engine\Threads\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Threads\RenderThread.hpp" />
     <ClInclude Include="Engine\Threads\CallbackContainer.hpp" />
+    <ClInclude Include="Engine\Core\RenderScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

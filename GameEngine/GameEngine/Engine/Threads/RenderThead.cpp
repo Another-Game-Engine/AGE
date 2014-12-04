@@ -42,6 +42,9 @@ namespace AGE
 			if (!tasks.empty())
 			{
 				// pop one task and execute
+				auto task = tasks.front();
+				assert(executeTask(task)); // we receive a task that we cannot treat
+				tasks.pop();
 			}
 			else
 			{
@@ -54,6 +57,16 @@ namespace AGE
 			else
 			{
 				// pop all commands
+				while (!commands.empty())
+				{
+					auto command = commands.front();
+					if (!executeCommand(command))
+					{
+						assert(!_activeContext);
+						/*_activeContext->executeCommand(command);*/ // TO UNCOMMENT
+					}
+					commands.pop();
+				}
 				commandsCleared = true;
 			}
 		}
@@ -61,6 +74,9 @@ namespace AGE
 		while (!tasks.empty())
 		{
 			//pop all tasks
+			auto task = tasks.front();
+			assert(executeTask(task)); // we receive a task that we cannot treat
+			tasks.pop();
 		}
 
 		return true;

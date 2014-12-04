@@ -8,6 +8,8 @@
 #include <Entities/EntityFlags.hh>
 #include <Core/PrepareRenderThread.hpp>
 #include <fstream>
+#include <Threads/ThreadManager.hpp>
+#include <Threads/MainThread.hpp>
 
 AScene::AScene(std::weak_ptr<AGE::Engine> &&engine) :
 DependenciesInjector(std::move(engine))

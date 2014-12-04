@@ -32,5 +32,7 @@ namespace AGE
 
 		AGE::Vector < std::unique_ptr<AGE::RenderScene> > _scenes;
 		AGE::RenderScene *_activeScene;
+
+		friend class ThreadManager;
 	};
 }

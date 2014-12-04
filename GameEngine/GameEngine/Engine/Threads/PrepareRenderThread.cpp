@@ -43,7 +43,9 @@ namespace AGE
 		{
 			if (!tasks.empty())
 			{
-				// pop one task and execute
+				auto task = tasks.front();
+				assert(executeTask(task)); // we receive a task that we cannot treat
+				tasks.pop();
 			}
 			else
 			{
@@ -56,7 +58,25 @@ namespace AGE
 			else
 			{
 				// pop all commands
+				while (!commands.empty())
+				{
+					auto command = commands.front();
+					if (!executeCommand(command))
+					{
+						if (!_activeScene /*|| !_activeScene->executeCommand(command)*/) // TO UNCOMMENT
+						{
+							_next->getCommandQueue()->move(command, commands.getFrontSize());
+							commands.pop();
+							continue;
+						}
+						commands.pop();
+						continue;
+					}
+					commands.pop();
+				}
+
 				commandsCleared = true;
+
 				if (!_next->getCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait))
 				{
 					_next->getCommandQueue()->clear();
@@ -66,7 +86,9 @@ namespace AGE
 
 		while (!tasks.empty())
 		{
-			//pop all tasks
+			auto task = tasks.front();
+			assert(executeTask(task)); // we receive a task that we cannot treat
+			tasks.pop();
 		}
 
 		return true;

@@ -12,7 +12,7 @@ namespace AGE
 {
 	class RenderContext{};
 
-	class RenderThread : public Thread, public CommandQueuePusher, public CommandQueueOwner, public TaskQueueOwner
+	class RenderThread : public Thread, public CommandQueueOwner, public TaskQueueOwner
 	{
 	public:
 		virtual bool init();
@@ -31,5 +31,7 @@ namespace AGE
 
 		AGE::Vector < std::unique_ptr<AGE::RenderContext> > _contexts;
 		AGE::RenderContext *_activeContext;
+
+		friend class ThreadManager;
 	};
 }

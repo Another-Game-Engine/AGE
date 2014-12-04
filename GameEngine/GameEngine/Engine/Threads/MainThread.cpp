@@ -29,7 +29,9 @@ namespace AGE
 		{
 			if (!queue.empty())
 			{
-				// pop one task and execute it
+				auto task = queue.front();
+				assert(executeTask(task)); // we receive a task that we cannot handle
+				queue.pop();
 			}
 			else
 			{

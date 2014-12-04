@@ -28,6 +28,8 @@ namespace AGE
 		MainThread &operator=(const MainThread &) = delete;
 		MainThread &operator=(MainThread &&) = delete;
 
+		friend class ThreadManager;
+
 		AGE::Vector < std::unique_ptr<AGE::Engine> > _engines;
 		AGE::Engine *_activeEngine;
 	};

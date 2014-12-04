@@ -326,6 +326,7 @@
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
+    <ClInclude Include="Engine\Core\RenderScene.hpp" />
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />

@@ -8,10 +8,17 @@
 
 namespace AGE
 {
+	class MainThread;
+	class PrepareRenderThread;
+	class RenderThread;
+
 	class ThreadManager
 	{
 	public:
 		Thread *getCurrentThread() const;
+		MainThread *getMainThread() const;
+		RenderThread *getRenderThread() const;
+		PrepareRenderThread *getPrepareThread() const;
 	private:
 		ThreadManager();
 		virtual ~ThreadManager();
@@ -24,8 +31,8 @@ namespace AGE
 		friend class Thread;
 	};
 
-	static Thread *currentThread()
-	{
-		return Singleton<ThreadManager>::getInstance()->getCurrentThread();
-	}
+	static Thread *currentThread();
+	static MainThread *getMainThread();
+	static RenderThread *getRenderThread();
+	static PrepareRenderThread *getPrepareThread();
 }
