@@ -29,6 +29,12 @@
 //CONFIGS
 #include <CONFIGS.hh>
 
+////////////////////////////////////////
+/////// NEW IMPLEMENTATION
+#include <Threads/ThreadManager.hpp>
+#include <Threads/MainThread.hpp>
+////////////////////////////////////////
+
 using namespace AGE;
 
 bool loadAssets(std::shared_ptr<AGE::Engine> e)
@@ -54,6 +60,21 @@ bool loadAssets(std::shared_ptr<AGE::Engine> e)
 
 int			main(int ac, char **av)
 {
+///////////////////////////////////////////////////////////////////////////////////
+/////////// NEW IMPLEMENTATION
+///////////
+	auto a = Singleton<AGE::ThreadManager>::getInstance();
+	auto b = Singleton<AGE::ThreadManager>::getInstance();
+	auto c = Singleton<AGE::ThreadManager>::getInstance();
+	auto d = Singleton<AGE::ThreadManager>::getInstance();
+	AGE::InitAGE();
+	auto engine = AGE::CreateEngine();
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 	std::shared_ptr<AGE::Engine>	e = std::make_shared<AGE::Engine>();
 	e->init(e.get());
 

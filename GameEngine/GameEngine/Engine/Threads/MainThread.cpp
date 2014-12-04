@@ -1,11 +1,16 @@
 #include "MainThread.hpp"
 #include <Core/Engine.hh>
 #include "CommandQueueOwner.hpp"
+#include "ThreadManager.hpp"
+#include "RenderThread.hpp"
 
 namespace AGE
 {
 	bool MainThread::init()
 	{
+		// We register the main thread id
+		_registerId();
+
 		return true;
 	}
 	
@@ -50,8 +55,6 @@ namespace AGE
 		: Thread(Thread::ThreadType::Main)
 		, _activeEngine(nullptr)
 	{
-		// We register the main thread id
-		_registerId();
 	}
 	
 	MainThread::~MainThread()
@@ -60,7 +63,10 @@ namespace AGE
 	AGE::Engine *MainThread::createEngine()
 	{
 		_engines.push_back(std::make_unique<AGE::Engine>());
-		return _engines.back().get();
+		auto engine = _engines.back().get();
+		auto futur = GetRenderThread()->getTaskQueue()->emplaceFuture<MainThreadToRenderThread::CreateRenderContext, bool>(engine);
+		assert(futur.get());
+		return engine;
 	}
 
 	void MainThread::destroyEngine(AGE::Engine *engine)
@@ -78,6 +84,20 @@ namespace AGE
 			std::swap(_engines[i], _engines.back());
 		}
 		_engines.pop_back();
+	}
+
+	bool MainThread::launch()
+	{
+		if (!init())
+			return false;
+		return true;
+	}
+
+	bool MainThread::stop()
+	{
+		if (!release())
+			return false;
+		return true;
 	}
 
 }

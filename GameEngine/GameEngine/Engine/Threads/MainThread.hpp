@@ -17,6 +17,8 @@ namespace AGE
 	public:
 		virtual bool init();
 		virtual bool release();
+		virtual bool launch();
+		virtual bool stop();
 		bool update();
 		AGE::Engine *createEngine();
 		void destroyEngine(AGE::Engine *engine);

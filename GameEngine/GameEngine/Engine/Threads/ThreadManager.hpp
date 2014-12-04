@@ -11,6 +11,7 @@ namespace AGE
 	class MainThread;
 	class PrepareRenderThread;
 	class RenderThread;
+	class Engine;
 
 	class ThreadManager
 	{
@@ -19,6 +20,8 @@ namespace AGE
 		MainThread *getMainThread() const;
 		RenderThread *getRenderThread() const;
 		PrepareRenderThread *getPrepareThread() const;
+		Engine *createEngine();
+		bool initAndLaunch();
 	private:
 		ThreadManager();
 		virtual ~ThreadManager();
@@ -31,8 +34,10 @@ namespace AGE
 		friend class Thread;
 	};
 
-	static Thread *currentThread();
-	static MainThread *getMainThread();
-	static RenderThread *getRenderThread();
-	static PrepareRenderThread *getPrepareThread();
+	Thread *CurrentThread();
+	MainThread *GetMainThread();
+	RenderThread *GetRenderThread();
+	PrepareRenderThread *GetPrepareThread();
+	Engine *CreateEngine();
+	bool InitAGE();
 }

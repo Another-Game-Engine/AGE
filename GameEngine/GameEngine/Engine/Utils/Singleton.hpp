@@ -17,15 +17,12 @@ void 		Singleton<T>::freeMemory()
 template<class T>
 T           *Singleton<T>::getInstance()
 {
-  if (_instance == NULL)
-  {
-    _instance = new T();
 	std::call_once(_flag, []()
 	{
+		Singleton<T>::_instance = new T();
 		std::atexit(&Singleton<T>::freeMemory);
 	});
-  }
-  return (_instance);
+	return (_instance);
 }
 
 #endif

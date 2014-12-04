@@ -5,12 +5,14 @@
 #include "CommandQueueOwner.hpp"
 #include "TaskQueueOwner.hpp"
 
+#include <Core/RenderContext.hpp>
+
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
 
 namespace AGE
 {
-	class RenderContext{};
+	class Engine;
 
 	class RenderThread : public Thread, public CommandQueueOwner, public TaskQueueOwner
 	{
@@ -18,6 +20,8 @@ namespace AGE
 		virtual bool init();
 		virtual bool release();
 		bool update();
+		virtual bool launch();
+		virtual bool stop();
 	private:
 		RenderThread();
 		virtual ~RenderThread();
@@ -32,6 +36,25 @@ namespace AGE
 		AGE::Vector < std::unique_ptr<AGE::RenderContext> > _contexts;
 		AGE::RenderContext *_activeContext;
 
+		std::thread _threadHandle;
+		std::atomic_bool _run;
+
 		friend class ThreadManager;
 	};
+
+	/***********************MAIN THREAD -> RENDER THREAD MESSAGES ********************/
+	struct MainThreadToRenderThread
+	{
+	private:
+		struct CreateRenderContext : TMQ::FutureData<bool>
+		{
+			CreateRenderContext(Engine *_engine) : engine(_engine){}
+			Engine *engine;
+		};
+		friend class RenderThread;
+		friend class MainThread;
+	};
+
+	/*********************************************************************************/
+
 }

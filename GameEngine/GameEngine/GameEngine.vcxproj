@@ -260,6 +260,7 @@
     <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\RenderThead.cpp" />
     <ClCompile Include="Engine\Threads\TaskQueueOwner.cpp" />
+    <ClCompile Include="Engine\Threads\TaskThread.cpp" />
     <ClCompile Include="Engine\Threads\Thread.cpp" />
     <ClCompile Include="Engine\Threads\ThreadManager.cpp" />
     <ClCompile Include="Engine\TMQ\dispatcher.cpp" />
@@ -326,6 +327,7 @@
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
+    <ClInclude Include="Engine\Core\RenderContext.hpp" />
     <ClInclude Include="Engine\Core\RenderScene.hpp" />
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
@@ -379,6 +381,7 @@
     <ClInclude Include="Engine\Threads\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Threads\RenderThread.hpp" />
     <ClInclude Include="Engine\Threads\TaskQueueOwner.hpp" />
+    <ClInclude Include="Engine\Threads\TaskThread.hpp" />
     <ClInclude Include="Engine\Threads\Thread.hpp" />
     <ClInclude Include="Engine\Threads\ThreadManager.hpp" />
     <ClInclude Include="Engine\TMQ\dispatcher.hpp" />

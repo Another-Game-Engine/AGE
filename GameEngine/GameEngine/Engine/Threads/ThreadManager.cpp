@@ -2,13 +2,14 @@
 #include "MainThread.hpp"
 #include "PrepareRenderThread.hpp"
 #include "RenderThread.hpp"
+#include "TaskThread.hpp"
 
 namespace AGE
 {
 	ThreadManager::ThreadManager()
 	{
 		auto hardwareConcurency = std::thread::hardware_concurrency();
-		// To old computer, we need at least 3 threads hahahahaha
+		// For old computer, we need at least 3 threads hahahahaha
 		// Yeah, we're like this :D
 		assert(hardwareConcurency >= 3);
 		_threads.resize(hardwareConcurency, nullptr);
@@ -19,15 +20,27 @@ namespace AGE
 		for (std::size_t i = Thread::Worker1; i < hardwareConcurency; ++i)
 		{
 			// Todo
-			//_threads[i] = new TaskThread();
+			_threads[i] = new TaskThread(Thread::ThreadType(i));
 		}
+	}
+	
+	bool ThreadManager::initAndLaunch()
+	{
+		bool res = true;
+		for (auto &t : _threads)
+		{
+			res = t->launch();
+			if (!res)
+				return false;
+		}
+		return true;
 	}
 
 	ThreadManager::~ThreadManager()
 	{
 		for (auto &e : _threads)
 		{
-			e->release();
+			e->stop();
 			delete e;
 		}
 	}
@@ -55,6 +68,11 @@ namespace AGE
 		}
 	}
 
+	Engine *ThreadManager::createEngine()
+	{
+		return getMainThread()->createEngine();
+	}
+
 	MainThread *ThreadManager::getMainThread() const
 	{
 		return static_cast<MainThread*>(_threads[Thread::Main]);
@@ -69,24 +87,41 @@ namespace AGE
 		return static_cast<PrepareRenderThread*>(_threads[Thread::PrepareRender]);
 	}
 
-	static Thread *currentThread()
+	Thread *CurrentThread()
 	{
 		return Singleton<ThreadManager>::getInstance()->getCurrentThread();
 	}
 
-	static MainThread *getMainThread()
+	MainThread *GetMainThread()
 	{
 		return Singleton<ThreadManager>::getInstance()->getMainThread();
 	}
 
-	static RenderThread *getRenderThread()
+	RenderThread *GetRenderThread()
 	{
 		return Singleton<ThreadManager>::getInstance()->getRenderThread();
 	}
 
-	static PrepareRenderThread *getPrepareThread()
+	PrepareRenderThread *GetPrepareThread()
 	{
 		return Singleton<ThreadManager>::getInstance()->getPrepareThread();
 	}
 
+	Engine *CreateEngine()
+	{
+		return Singleton<ThreadManager>::getInstance()->createEngine();
+	}
+
+	bool InitAGE()
+	{
+		static std::once_flag onceFlag;
+		bool res = true;
+		std::call_once(onceFlag, [&](){
+			auto threadManager = Singleton<ThreadManager>::getInstance();
+			res = threadManager->initAndLaunch();
+			if (!res)
+				return;
+		});
+		return res;
+	}
 }

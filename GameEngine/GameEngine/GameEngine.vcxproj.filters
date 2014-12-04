@@ -86,6 +86,7 @@
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
     <ClCompile Include="Engine\Threads\CommandQueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\TaskQueueOwner.cpp" />
+    <ClCompile Include="Engine\Threads\TaskThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -250,6 +251,8 @@
     <ClInclude Include="Engine\Threads\RenderThread.hpp" />
     <ClInclude Include="Engine\Threads\CallbackContainer.hpp" />
     <ClInclude Include="Engine\Core\RenderScene.hpp" />
+    <ClInclude Include="Engine\Core\RenderContext.hpp" />
+    <ClInclude Include="Engine\Threads\TaskThread.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

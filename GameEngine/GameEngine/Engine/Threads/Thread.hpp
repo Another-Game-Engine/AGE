@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include <string>
 
 namespace AGE
 {
@@ -19,6 +20,9 @@ namespace AGE
 			, Worker5
 			, END
 		};
+
+		static std::string threadTypeToString(ThreadType t);
+
 		virtual bool init() = 0;
 		virtual bool release() = 0;
 		Thread(ThreadType type);
@@ -29,6 +33,8 @@ namespace AGE
 		Thread &operator=(Thread &) = delete;
 		Thread &operator=(Thread &&) = delete;
 		inline std::size_t getId() const { return _id; }
+		virtual bool launch() = 0;
+		virtual bool stop() = 0;
 	protected:
 		// This function will generate the unique id of the thread
 		// It have to be called only in the thread context

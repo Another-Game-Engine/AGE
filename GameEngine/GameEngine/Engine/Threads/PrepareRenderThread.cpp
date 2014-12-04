@@ -20,6 +20,27 @@ namespace AGE
 		return true;
 	}
 
+	bool PrepareRenderThread::launch()
+	{
+		if (!init())
+			return false;
+		_threadHandle = std::thread([&](){
+			this->_run = true;
+			while (this->_run)
+			{
+				update();
+			}
+		});
+		return true;
+	}
+
+	bool PrepareRenderThread::stop()
+	{
+		_run = false;
+		_threadHandle.join();
+		return true;
+	}
+
 	bool PrepareRenderThread::update()
 	{
 		/*
@@ -38,57 +59,41 @@ namespace AGE
 		TMQ::PtrQueue commands;
 		TMQ::PtrQueue tasks;
 
-		bool commandsCleared = false;
-		while (!commandsCleared)
+		_registerId();
+
+		if (!getCommandQueue()->getReadableQueue(commands))
 		{
-			if (!tasks.empty())
+			getTaskQueue()->getReadableQueue(tasks);
+			while (!tasks.empty())
 			{
 				auto task = tasks.front();
 				assert(executeTask(task)); // we receive a task that we cannot treat
 				tasks.pop();
 			}
-			else
+		}
+		else
+		{
+			// pop all commands
+			while (!commands.empty())
 			{
-				getTaskQueue()->getReadableQueue(tasks);
-			}
-			if (commands.empty())
-			{
-				getCommandQueue()->getReadableQueue(commands);
-			}
-			else
-			{
-				// pop all commands
-				while (!commands.empty())
+				auto command = commands.front();
+				if (!executeCommand(command))
 				{
-					auto command = commands.front();
-					if (!executeCommand(command))
+					if (!_activeScene /*|| !_activeScene->executeCommand(command)*/) // TO UNCOMMENT
 					{
-						if (!_activeScene /*|| !_activeScene->executeCommand(command)*/) // TO UNCOMMENT
-						{
-							_next->getCommandQueue()->move(command, commands.getFrontSize());
-							commands.pop();
-							continue;
-						}
+						_next->getCommandQueue()->move(command, commands.getFrontSize());
 						commands.pop();
 						continue;
 					}
 					commands.pop();
+					continue;
 				}
-
-				commandsCleared = true;
-
-				if (!_next->getCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait))
-				{
-					_next->getCommandQueue()->clear();
-				}
+				commands.pop();
 			}
-		}
-
-		while (!tasks.empty())
-		{
-			auto task = tasks.front();
-			assert(executeTask(task)); // we receive a task that we cannot treat
-			tasks.pop();
+			if (!_next->getCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait))
+			{
+				_next->getCommandQueue()->clear();
+			}
 		}
 
 		return true;

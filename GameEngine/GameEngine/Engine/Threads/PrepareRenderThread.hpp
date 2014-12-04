@@ -7,6 +7,7 @@
 
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
+#include <thread>
 
 
 namespace AGE
@@ -19,6 +20,8 @@ namespace AGE
 		virtual bool init();
 		virtual bool release();
 		bool update();
+		virtual bool launch();
+		virtual bool stop();
 	private:
 		PrepareRenderThread();
 		virtual ~PrepareRenderThread();
@@ -32,6 +35,9 @@ namespace AGE
 
 		AGE::Vector < std::unique_ptr<AGE::RenderScene> > _scenes;
 		AGE::RenderScene *_activeScene;
+
+		std::thread _threadHandle;
+		std::atomic_bool _run;
 
 		friend class ThreadManager;
 	};
