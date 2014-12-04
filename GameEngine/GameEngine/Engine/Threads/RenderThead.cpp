@@ -1,10 +1,12 @@
 #include "RenderThread.hpp"
+#include <Core/Engine.hh>
+#include <Render/RenderManager.hh>
+#include <Context/SdlContext.hh>
 
 namespace AGE
 {
 	RenderThread::RenderThread()
 		: Thread(AGE::Thread::ThreadType::Render)
-		, _activeContext(nullptr)
 	{}
 
 	RenderThread::~RenderThread()
@@ -14,7 +16,12 @@ namespace AGE
 	{
 		this->registerTaskCallback<MainThreadToRenderThread::CreateRenderContext>([&](MainThreadToRenderThread::CreateRenderContext &msg)
 		{
-			this->_contexts.push_back(std::make_unique<RenderContext>(msg.engine));
+			if (!msg.engine.lock()->setInstance<SdlContext, IRenderContext>()->init(0, 1920, 1040, "~AGE~ V0.00001 Demo"))
+			{
+				msg.setValue(false);
+				return;
+			}
+			msg.engine.lock()->setInstance<gl::RenderManager>();
 			msg.setValue(true);
 		});
 		return true;
@@ -29,13 +36,7 @@ namespace AGE
 	{
 		if (!init())
 			return false;
-		_threadHandle = std::thread([&](){
-			this->_run = true;
-			while (this->_run)
-			{
-				update();
-			}
-		});
+		_threadHandle = std::thread(&RenderThread::update, std::ref(*this));
 		return true;
 	}
 
@@ -61,34 +62,40 @@ namespace AGE
 
 		_registerId();
 
+		this->_run = true;
+		DWORD threadId = GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
+		SetThreadName(threadId, this->_name.c_str());
+
 		TMQ::PtrQueue commands;
 		TMQ::PtrQueue tasks;
 
-		bool commandsCleared = false;
+		while (this->_run)
+		{
+			bool commandsCleared = false;
 
-		if (!getCommandQueue()->getReadableQueue(commands))
-		{
-			getTaskQueue()->getReadableQueue(tasks);
-			while (!tasks.empty())
+			if (!getCommandQueue()->getReadableQueue(commands))
 			{
-				//pop all tasks
-				auto task = tasks.front();
-				assert(executeTask(task)); // we receive a task that we cannot treat
-				tasks.pop();
-			}
-		}
-		else
-		{
-			// pop all commands
-			while (!commands.empty())
-			{
-				auto command = commands.front();
-				if (!executeCommand(command))
+				getTaskQueue()->getReadableQueue(tasks);
+				while (!tasks.empty())
 				{
-					assert(!_activeContext);
-					/*_activeContext->executeCommand(command);*/ // TO UNCOMMENT
+					//pop all tasks
+					auto task = tasks.front();
+					assert(executeTask(task)); // we receive a task that we cannot treat
+					tasks.pop();
 				}
-				commands.pop();
+			}
+			else
+			{
+				// pop all commands
+				while (!commands.empty())
+				{
+					auto command = commands.front();
+					if (!executeCommand(command))
+					{
+						/*_activeContext->executeCommand(command);*/ // TO UNCOMMENT
+					}
+					commands.pop();
+				}
 			}
 		}
 		return true;

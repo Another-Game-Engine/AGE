@@ -7,6 +7,7 @@ namespace AGE
 {
 	Thread::Thread(Thread::ThreadType type)
 		: _id(type)
+		, _name(threadTypeToString(type))
 	{
 
 	}

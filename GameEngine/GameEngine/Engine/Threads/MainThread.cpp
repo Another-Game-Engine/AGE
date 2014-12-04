@@ -10,7 +10,6 @@ namespace AGE
 	{
 		// We register the main thread id
 		_registerId();
-
 		return true;
 	}
 	
@@ -21,10 +20,7 @@ namespace AGE
 	
 	bool MainThread::update()
 	{
-		for (auto &e : _engines)
-		{
-			//e->update();
-		}
+		_engine->update();
 
 		TMQ::PtrQueue queue;
 
@@ -51,39 +47,38 @@ namespace AGE
 		return true;
 	}
 
+	bool MainThread::run()
+	{
+		_run = true;
+		while (_run)
+		{
+			if (!update())
+				return false;
+		}
+	}
+
 	MainThread::MainThread()
 		: Thread(Thread::ThreadType::Main)
-		, _activeEngine(nullptr)
+		, _engine(nullptr)
 	{
 	}
 	
 	MainThread::~MainThread()
 	{}
 
-	AGE::Engine *MainThread::createEngine()
+	std::weak_ptr<AGE::Engine> MainThread::createEngine()
 	{
-		_engines.push_back(std::make_unique<AGE::Engine>());
-		auto engine = _engines.back().get();
-		auto futur = GetRenderThread()->getTaskQueue()->emplaceFuture<MainThreadToRenderThread::CreateRenderContext, bool>(engine);
-		assert(futur.get());
-		return engine;
-	}
-
-	void MainThread::destroyEngine(AGE::Engine *engine)
-	{
-		std::size_t i = 0;
-		for (std::size_t i = 0; i < _engines.size(); ++i)
+		bool unique = true;
+		if (unique)
 		{
-			if (_engines[i].get() == engine)
-				break;
+			_engine = std::make_shared<AGE::Engine>();
+			auto engine = std::weak_ptr<AGE::Engine>(_engine);
+			auto futur = GetRenderThread()->getTaskQueue()->emplaceFuture<MainThreadToRenderThread::CreateRenderContext, bool>(engine);
+			auto success = futur.get();
+			assert(success);
 		}
-		assert(i < _engines.size());
-		//_engines[i]->quit();
-		if (i != _engines.size() - 1)
-		{
-			std::swap(_engines[i], _engines.back());
-		}
-		_engines.pop_back();
+		unique = false;
+		return _engine;
 	}
 
 	bool MainThread::launch()

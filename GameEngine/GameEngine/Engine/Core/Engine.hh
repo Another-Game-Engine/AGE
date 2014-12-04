@@ -50,6 +50,9 @@ namespace AGE
 		Engine();
 		virtual ~Engine();
 
+		bool launch(std::function<bool()> fn);
+		bool update();
+
 		virtual bool _init();
 		virtual bool _initInNewThread();
 		virtual bool _release();
@@ -69,10 +72,6 @@ namespace AGE
 		inline OldRenderThread *getRenderThread()
 		{
 			return _renderThread;
-		}
-		inline Engine *getMainThread()
-		{
-			return this;
 		}
 	};
 }

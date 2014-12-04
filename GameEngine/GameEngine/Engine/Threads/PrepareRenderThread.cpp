@@ -1,4 +1,5 @@
 #include "PrepareRenderThread.hpp"
+#include <Utils/ThreadName.hpp>
 
 namespace AGE
 {
@@ -24,13 +25,7 @@ namespace AGE
 	{
 		if (!init())
 			return false;
-		_threadHandle = std::thread([&](){
-			this->_run = true;
-			while (this->_run)
-			{
-				update();
-			}
-		});
+		_threadHandle = std::thread(&PrepareRenderThread::update, std::ref(*this));
 		return true;
 	}
 
@@ -61,41 +56,47 @@ namespace AGE
 
 		_registerId();
 
-		if (!getCommandQueue()->getReadableQueue(commands))
+		this->_run = true;
+		DWORD threadId = GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
+		SetThreadName(threadId, this->_name.c_str());
+
+		while (this->_run)
 		{
-			getTaskQueue()->getReadableQueue(tasks);
-			while (!tasks.empty())
+			if (!getCommandQueue()->getReadableQueue(commands))
 			{
-				auto task = tasks.front();
-				assert(executeTask(task)); // we receive a task that we cannot treat
-				tasks.pop();
-			}
-		}
-		else
-		{
-			// pop all commands
-			while (!commands.empty())
-			{
-				auto command = commands.front();
-				if (!executeCommand(command))
+				getTaskQueue()->getReadableQueue(tasks);
+				while (!tasks.empty())
 				{
-					if (!_activeScene /*|| !_activeScene->executeCommand(command)*/) // TO UNCOMMENT
+					auto task = tasks.front();
+					assert(executeTask(task)); // we receive a task that we cannot treat
+					tasks.pop();
+				}
+			}
+			else
+			{
+				// pop all commands
+				while (!commands.empty())
+				{
+					auto command = commands.front();
+					if (!executeCommand(command))
 					{
-						_next->getCommandQueue()->move(command, commands.getFrontSize());
+						if (!_activeScene /*|| !_activeScene->executeCommand(command)*/) // TO UNCOMMENT
+						{
+							_next->getCommandQueue()->move(command, commands.getFrontSize());
+							commands.pop();
+							continue;
+						}
 						commands.pop();
 						continue;
 					}
 					commands.pop();
-					continue;
 				}
-				commands.pop();
-			}
-			if (!_next->getCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait))
-			{
-				_next->getCommandQueue()->clear();
+				if (!_next->getCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait))
+				{
+					_next->getCommandQueue()->clear();
+				}
 			}
 		}
-
 		return true;
 	}
 }

@@ -10,8 +10,8 @@
 #include <Core/MainThread.hpp>
 
 
-BenchmarkScene::BenchmarkScene(std::weak_ptr<AGE::Engine> &&engine)
-	: AScene(std::move(engine))
+BenchmarkScene::BenchmarkScene(std::weak_ptr<AGE::Engine> engine)
+	: AScene(engine)
 {
 }
 
@@ -178,6 +178,10 @@ bool BenchmarkScene::userStart()
 	registerComponentType<Component::Lifetime>();
 	registerComponentType<Component::RigidBody>();
 	registerComponentType<Component::PointLight>();
+
+#ifdef PHYSIC_SIMULATION
+	setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
+#endif
 
 
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());

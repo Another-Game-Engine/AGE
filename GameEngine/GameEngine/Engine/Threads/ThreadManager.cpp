@@ -68,7 +68,7 @@ namespace AGE
 		}
 	}
 
-	Engine *ThreadManager::createEngine()
+	std::weak_ptr<AGE::Engine> ThreadManager::createEngine()
 	{
 		return getMainThread()->createEngine();
 	}
@@ -107,7 +107,7 @@ namespace AGE
 		return Singleton<ThreadManager>::getInstance()->getPrepareThread();
 	}
 
-	Engine *CreateEngine()
+	std::weak_ptr<Engine> CreateEngine()
 	{
 		return Singleton<ThreadManager>::getInstance()->createEngine();
 	}

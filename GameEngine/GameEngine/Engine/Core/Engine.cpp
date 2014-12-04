@@ -3,8 +3,10 @@
 #include <Core/PrepareRenderThread.hpp>
 #include <Core/RenderThread.hpp>
 #include <Core/MainThread.hpp>
-
 #include <Core/Timer.hh>
+
+#include <Threads/ThreadManager.hpp>
+#include <Threads/MainThread.hpp>
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
@@ -143,5 +145,26 @@ namespace AGE
 		res = userUpdateScenes(time);
 #endif
 		return res;
+	}
+
+	bool Engine::launch(std::function<bool()> fn)
+	{
+		if (!fn())
+			return false;
+		return GetMainThread()->run();
+	}
+
+	bool Engine::update()
+	{
+		if (!_updateBegin())
+		{
+			return false;
+		}
+		// update
+		if (!_updateEnd())
+		{
+			return false;
+		}
+		return true;
 	}
 }

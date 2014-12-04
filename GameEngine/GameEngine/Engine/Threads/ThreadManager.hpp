@@ -3,8 +3,7 @@
 #include "Thread.hpp"
 #include <Utils/Singleton.hh>
 #include <Utils/Containers/Vector.hpp>
-//to remove
-#include <thread>
+#include <memory>
 
 namespace AGE
 {
@@ -20,7 +19,7 @@ namespace AGE
 		MainThread *getMainThread() const;
 		RenderThread *getRenderThread() const;
 		PrepareRenderThread *getPrepareThread() const;
-		Engine *createEngine();
+		std::weak_ptr<AGE::Engine> createEngine();
 		bool initAndLaunch();
 	private:
 		ThreadManager();
@@ -38,6 +37,6 @@ namespace AGE
 	MainThread *GetMainThread();
 	RenderThread *GetRenderThread();
 	PrepareRenderThread *GetPrepareThread();
-	Engine *CreateEngine();
+	std::weak_ptr<Engine> CreateEngine();
 	bool InitAGE();
 }

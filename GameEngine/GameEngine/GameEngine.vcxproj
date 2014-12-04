@@ -225,6 +225,7 @@
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
+    <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
@@ -317,6 +318,7 @@
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
     <ClInclude Include="Engine\Core\CullableInterfaces.hh" />
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
+    <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\MainThread.hpp" />
     <ClInclude Include="Engine\Core\MainThreadCommand.hpp" />
@@ -327,7 +329,6 @@
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
-    <ClInclude Include="Engine\Core\RenderContext.hpp" />
     <ClInclude Include="Engine\Core\RenderScene.hpp" />
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />

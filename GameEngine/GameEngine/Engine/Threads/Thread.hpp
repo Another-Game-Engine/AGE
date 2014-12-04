@@ -41,5 +41,6 @@ namespace AGE
 		std::size_t _registerId();
 
 		const ThreadType _id;
+		const std::string _name;
 	};
 }

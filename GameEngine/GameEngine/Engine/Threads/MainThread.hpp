@@ -19,9 +19,10 @@ namespace AGE
 		virtual bool release();
 		virtual bool launch();
 		virtual bool stop();
+		bool run();
 		bool update();
-		AGE::Engine *createEngine();
-		void destroyEngine(AGE::Engine *engine);
+		std::weak_ptr<AGE::Engine> createEngine();
+		std::weak_ptr<AGE::Engine> getEngine();
 	private:
 		MainThread();
 		virtual ~MainThread();
@@ -29,10 +30,10 @@ namespace AGE
 		MainThread(MainThread &&) = delete;
 		MainThread &operator=(const MainThread &) = delete;
 		MainThread &operator=(MainThread &&) = delete;
+		std::atomic_bool _run;
 
 		friend class ThreadManager;
 
-		AGE::Vector < std::unique_ptr<AGE::Engine> > _engines;
-		AGE::Engine *_activeEngine;
+		std::shared_ptr<AGE::Engine> _engine;
 	};
 }

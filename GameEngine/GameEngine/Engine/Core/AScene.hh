@@ -45,7 +45,7 @@ private:
 protected:
 	std::weak_ptr<AGE::Engine> _engine;
 public:
-	AScene(std::weak_ptr<AGE::Engine> &&engine);
+	AScene(std::weak_ptr<AGE::Engine> engine);
 	virtual ~AScene();
 	inline std::uint16_t    getNumberOfEntities() const { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
 	virtual bool 			userStart() = 0;

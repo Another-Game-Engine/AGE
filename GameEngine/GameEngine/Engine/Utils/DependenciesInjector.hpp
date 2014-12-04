@@ -10,8 +10,8 @@ class DependenciesInjector : public std::enable_shared_from_this<DependenciesInj
 {
 private:
 	std::mutex _mutex;
-	DependenciesInjector(DependenciesInjector const &);
-	DependenciesInjector &operator=(DependenciesInjector const &);
+	DependenciesInjector(DependenciesInjector const &) = delete;
+	DependenciesInjector &operator=(DependenciesInjector const &) = delete;
 
 	AGE::Vector<IDependency*>             _instances;
 	std::weak_ptr<DependenciesInjector>                   _parent;

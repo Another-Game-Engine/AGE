@@ -81,7 +81,7 @@ struct RenderKey
 class BenchmarkScene : public AScene	
 {
 public:
-	BenchmarkScene(std::weak_ptr<AGE::Engine> &&engine);
+	BenchmarkScene(std::weak_ptr<AGE::Engine> engine);
 
 	virtual ~BenchmarkScene(void);
 	void initRendering();

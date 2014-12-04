@@ -5,8 +5,6 @@
 #include "CommandQueueOwner.hpp"
 #include "TaskQueueOwner.hpp"
 
-#include <Core/RenderContext.hpp>
-
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
 
@@ -30,12 +28,6 @@ namespace AGE
 		RenderThread &operator=(const RenderThread &) = delete;
 		RenderThread &operator=(RenderThread &&) = delete;
 
-		void _createRenderContext(){} // todo -> create a render context when an engine is created in Main thread
-		void _destroyRenderContext(AGE::RenderContext *context){}; // todo -> delete a render context when an engine deleted in Main thread
-
-		AGE::Vector < std::unique_ptr<AGE::RenderContext> > _contexts;
-		AGE::RenderContext *_activeContext;
-
 		std::thread _threadHandle;
 		std::atomic_bool _run;
 
@@ -48,8 +40,8 @@ namespace AGE
 	private:
 		struct CreateRenderContext : TMQ::FutureData<bool>
 		{
-			CreateRenderContext(Engine *_engine) : engine(_engine){}
-			Engine *engine;
+			CreateRenderContext(std::weak_ptr<Engine> _engine) : engine(_engine){}
+			std::weak_ptr<Engine> engine;
 		};
 		friend class RenderThread;
 		friend class MainThread;
