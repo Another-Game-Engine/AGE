@@ -44,9 +44,9 @@ _value(value)
 */
 IProgramResources & Vec4::operator()()
 {
-	if (!_isUpdate) {
+	if (!_update) {
 		glUniform4f(_id, _value.x, _value.y, _value.z, _value.w);
-		_isUpdate = true;
+		_update = true;
 	}
 	return (*this);
 }
@@ -76,4 +76,17 @@ bool Vec4::safe(size_t size) const
 size_t Vec4::size() const
 {
 	return (sizeof(glm::vec4));
+}
+
+/**
+* Method:    data
+* FullName:  Vec4::data
+* Access:    virtual public 
+* Returns:   void const *
+* Qualifier: const
+* Goal:		 data of the vec4
+*/
+void const *Vec4::data() const
+{
+	return (&_value);
 }

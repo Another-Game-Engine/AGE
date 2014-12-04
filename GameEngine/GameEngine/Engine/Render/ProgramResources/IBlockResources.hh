@@ -10,4 +10,6 @@ public:
 	virtual IBlockResources &size_array(size_t sa) = 0;
 	virtual size_t stride() const = 0;
 	virtual IBlockResources &stride(size_t s) = 0;
+	virtual size_t size() const = 0;
+	virtual void const *data() const = 0;
 };

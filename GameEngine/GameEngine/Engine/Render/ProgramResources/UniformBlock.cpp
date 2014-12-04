@@ -4,21 +4,40 @@
 
 UniformBlock::UniformBlock(Program const &parent, std::string const &name) :
 AProgramResources(parent, name, GL_UNIFORM_BLOCK),
-_size_block(0)
+_buffer(std::make_shared<UniformBuffer>()),
+_block_binding(0)
 {
 	introspection(parent);
 }
 
 UniformBlock::UniformBlock(Program const &parent, std::string &&name) :
 AProgramResources(parent, std::move(name), GL_UNIFORM_BLOCK),
-_size_block(0)
+_buffer(std::make_shared<UniformBuffer>()),
+_block_binding(0)
 {
 	introspection(parent);
 }
 
+UniformBlock::UniformBlock(Program const &parent, std::string const &name, UniformBlock const &shared) :
+AProgramResources(parent, name, GL_UNIFORM_BLOCK),
+_buffer(shared._buffer),
+_block_binding(shared._block_binding)
+{
+
+}
+
+UniformBlock::UniformBlock(Program const &parent, std::string &&name, UniformBlock const &shared) :
+AProgramResources(parent, std::move(name), GL_UNIFORM_BLOCK),
+_buffer(shared._buffer),
+_block_binding(shared._block_binding)
+{
+
+}
+
 UniformBlock::UniformBlock(UniformBlock &&move) :
 AProgramResources(std::move(move)),
-_size_block(move._size_block)
+_buffer(std::move(move._buffer)),
+_block_binding(move._block_binding)
 {
 
 }
@@ -33,6 +52,12 @@ _size_block(move._size_block)
 */
 IProgramResources & UniformBlock::operator()()
 {
+	if (!_update) {
+		for (auto &blockResource : _blockResources) {
+			_buffer.sub(blockResource->offset, blockResource->size(), nullptr);
+		}
+		_update = true;
+	}
 	return (*this);
 }
 
@@ -47,8 +72,11 @@ IProgramResources & UniformBlock::operator()()
 */
 UniformBlock &UniformBlock::introspection(Program const &program)
 {
-	glGetActiveUniformBlockiv(program.getId(), _id, GL_UNIFORM_BLOCK_DATA_SIZE, &_size_block);
-	_buffer.resize(_size_block);
+	static GLint static_binding = 0;
+	_block_binding = static_binding++;
+	GLint size_block;
+	glGetActiveUniformBlockiv(program.getId(), _id, GL_UNIFORM_BLOCK_DATA_SIZE, &size_block);
+	_buffer->alloc(size_block);
 	GLint nbrUniforms;
 	glGetActiveUniformBlockiv(program.getId(), _id, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &nbrUniforms);
 	_blockResources.resize(nbrUniforms);

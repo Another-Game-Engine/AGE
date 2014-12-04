@@ -6,12 +6,15 @@
 # include <assert.h>
 # include <Render/ProgramResources/AProgramResources.hh>
 # include <Render/ProgramResources/IBlockResources.hh>
+# include <Render/Buffer/UniformBuffer.hh>
 
 class UniformBlock : public AProgramResources
 {
 public:
 	UniformBlock(Program const &parent, std::string const &name);
 	UniformBlock(Program const &parent, std::string &&name);
+	UniformBlock(Program const &parent, std::string const &name, UniformBlock const &shared);
+	UniformBlock(Program const &parent, std::string &&name, UniformBlock const &shaded);
 	UniformBlock(UniformBlock &&move);
 	UniformBlock(UniformBlock const &copy) = delete;
 	UniformBlock &operator=(UniformBlock const &u) = delete;
@@ -24,9 +27,9 @@ private:
 	UniformBlock &introspection(Program const &program);
 
 private:
-	GLint _size_block;
 	std::vector<std::unique_ptr<IBlockResources>> _blockResources;
-	std::vector<uint8_t> _buffer;
+	std::shared_ptr<UniformBuffer> _buffer;
+	GLint _block_binding;
 };
 
 template <typename type_t>

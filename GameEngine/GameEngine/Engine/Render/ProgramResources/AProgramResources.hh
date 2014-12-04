@@ -30,5 +30,5 @@ protected:
 	std::string _name;
 	GLint _id;
 	GLenum _type;
-	bool _isUpdate;
+	bool _update;
 };

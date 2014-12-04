@@ -5,7 +5,7 @@
 AProgramResources::AProgramResources(Program const &parent, std::string const &name, GLenum type) :
 _name(name),
 _type(type),
-_isUpdate(false)
+_update(false)
 {
 	assert(create(parent));
 }
@@ -13,7 +13,7 @@ _isUpdate(false)
 AProgramResources::AProgramResources(Program const &parent, std::string &&name, GLenum type) :
 _name(std::move(name)),
 _type(type),
-_isUpdate(false)
+_update(false)
 {
 	assert(create(parent));
 }
@@ -22,7 +22,7 @@ AProgramResources::AProgramResources(GLint id, std::string &&name, GLenum type) 
 _name(std::move(name)),
 _id(id),
 _type(type),
-_isUpdate(false)
+_update(false)
 {
 }
 
@@ -30,7 +30,7 @@ AProgramResources::AProgramResources(AProgramResources &&move) :
 _name(std::move(move._name)),
 _id(move._id),
 _type(move._type),
-_isUpdate(move._isUpdate)
+_update(move._update)
 {
 	move._id = 0;
 }
@@ -72,7 +72,7 @@ GLuint AProgramResources::id() const
 */
 bool AProgramResources::update() const
 {
-	return (_isUpdate);
+	return (_update);
 }
 
 /**
@@ -86,7 +86,7 @@ bool AProgramResources::update() const
 */
 AProgramResources &AProgramResources::update(bool u)
 {
-	_isUpdate = u;
+	_update = u;
 	return (*this);
 }
 

@@ -16,9 +16,6 @@ public:
 	virtual size_t stride() const override final;
 	virtual IBlockResources &stride(size_t s) override final;
 
-public:
-	virtual size_t size() const = 0;
-
 private:
 	size_t _offset;
 	size_t _size_array;

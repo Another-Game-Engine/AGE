@@ -49,9 +49,9 @@ Mat4 &Mat4::operator=(glm::mat4 const &m)
 */
 IProgramResources & Mat4::operator()()
 {
-	if (!_isUpdate) {
+	if (!_update) {
 		glUniformMatrix4fv(_id, 1, GL_FALSE, (GLfloat *)(&_value[0]));
-		_isUpdate = true;
+		_update = true;
 	}
 	return (*this);
 }
@@ -81,4 +81,17 @@ bool Mat4::safe(size_t size) const
 size_t Mat4::size() const
 {
 	return (sizeof(glm::mat4));
+}
+
+/**
+* Method:    data
+* FullName:  Mat4::data
+* Access:    virtual public 
+* Returns:   void const *
+* Qualifier: const
+* Goal:		 data the mat4
+*/
+void const *Mat4::data() const
+{
+	return (&_value);
 }

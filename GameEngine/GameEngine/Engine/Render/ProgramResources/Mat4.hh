@@ -21,6 +21,7 @@ public:
 	virtual IProgramResources &operator()() override final;
 	virtual bool safe(size_t size) const override final;
 	virtual size_t size() const override final;
+	virtual void const *data() const override final;
 
 public:
 	typedef glm::mat4 type;
