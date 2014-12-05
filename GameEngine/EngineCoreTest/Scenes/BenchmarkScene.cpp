@@ -12,6 +12,7 @@
 #include <Render/GeometryManagement/GraphicalMemory.hh>
 #include <Render/GeometryManagement/Data.hh>
 #include <Render/GeometryManagement/Vertices.hh>
+#include <Render/ProgramResources/UniformBlock.hh>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -39,6 +40,7 @@ void BenchmarkScene::initRendering()
 		auto &m = _renderManager;
 		auto &program = m->addProgram({ m->addUnitProgram(DEFFERED_VERTEX_SHADER, GL_VERTEX_SHADER), m->addUnitProgram(DEFFERED_FRAG_SHADER, GL_FRAGMENT_SHADER) });
 		auto &model_matrix = m->addProgramResource<Mat4>(program, "model_matrix");
+		auto &model_matrix_ub = m->addProgramResource<UniformBlock>(program, "model_matrix");
 		m->setProgramResource<Mat4>(program, model_matrix, glm::mat4(1.0f));
 		auto key1 = graphic.handle(Vertices(3, { Data(std::vector<int>({1, 2, 3}), Attribute::Indices) }));
 		auto key2 = graphic.handle(Vertices(4, { Data(std::vector<int>({ 1, 2, 3, 4 }), Attribute::Indices) }));

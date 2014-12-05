@@ -52,11 +52,8 @@ _block_binding(move._block_binding)
 */
 IProgramResources & UniformBlock::operator()()
 {
-	if (!_update) {
-		for (auto &blockResource : _blockResources) {
-			_buffer.sub(blockResource->offset, blockResource->size(), nullptr);
-		}
-		_update = true;
+	for (auto &blockResource : _blockResources) {
+		_buffer->sub(blockResource->offset, blockResource->size(), blockResource->data());
 	}
 	return (*this);
 }
