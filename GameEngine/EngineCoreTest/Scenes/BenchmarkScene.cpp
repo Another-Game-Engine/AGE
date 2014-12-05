@@ -185,7 +185,7 @@ bool BenchmarkScene::userStart()
 
 
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis); // @CESAR << remove that !!!
+//	getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis); // @CESAR << remove that !!!
 
 #ifdef PHYSIC_SIMULATION
 	addSystem<BulletDynamicSystem>(0);

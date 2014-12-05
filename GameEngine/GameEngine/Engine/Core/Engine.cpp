@@ -128,6 +128,7 @@ namespace AGE
 
 	bool Engine::_updateEnd()
 	{
+		_timer = getInstance<Timer>();
 		auto time = _timer->getElapsed();
 		_timer->update();
 		bool res = true;
@@ -147,7 +148,7 @@ namespace AGE
 		return res;
 	}
 
-	bool Engine::launch(std::function<bool()> fn)
+	bool Engine::launch(std::function<bool()> &fn)
 	{
 		if (!fn())
 			return false;

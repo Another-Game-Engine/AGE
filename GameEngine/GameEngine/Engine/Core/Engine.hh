@@ -50,7 +50,7 @@ namespace AGE
 		Engine();
 		virtual ~Engine();
 
-		bool launch(std::function<bool()> fn);
+		bool launch(std::function<bool()> &fn);
 		bool update();
 
 		virtual bool _init();

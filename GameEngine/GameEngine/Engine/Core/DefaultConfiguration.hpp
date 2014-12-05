@@ -5,5 +5,5 @@
 namespace AGE
 {
 	class Engine;
-	std::function<bool()> DefaultEngineConfiguration(Engine *e, std::function<bool()> userConfigs);
+	std::function<bool()> DefaultEngineConfiguration(Engine *e, std::function<bool()> &userConfigs);
 }

@@ -16,22 +16,22 @@
 namespace AGE
 {
 	Timer::Timer() :
-		_oldTime(0),
-		_curTime(0)
+		_elapsed(0.0l)
 	{
+		_oldTime = std::chrono::system_clock::now();
+		_curTime = std::chrono::system_clock::now();
 	}
 
 	void 		Timer::update()
 	{
 		_oldTime = _curTime;
-		_curTime = SDL_GetTicks();
-		if (_oldTime == 0)
-			_oldTime = _curTime;
+		_curTime = std::chrono::system_clock::now();
+		_elapsed = std::chrono::duration_cast<std::chrono::seconds>(_curTime - _oldTime).count();
 	}
 
 	double 		Timer::getElapsed() const
 	{
-		return glm::clamp(static_cast<double>(_curTime - _oldTime) / 1000.0, 0.0, 0.1);
+		return _elapsed;
 	}
 
 	double 		Timer::getNow() const

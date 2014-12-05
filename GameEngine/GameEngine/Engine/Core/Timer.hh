@@ -1,14 +1,16 @@
 #pragma once
 
 #include <Utils/Dependency.hpp>
+#include <chrono>
 
 namespace AGE
 {
 	class Timer : public Dependency < Timer >
 	{
 	private:
-		unsigned int 		_oldTime;
-		unsigned int		_curTime;
+		std::chrono::system_clock::time_point 		_oldTime;
+		std::chrono::system_clock::time_point		_curTime;
+		double _elapsed;
 
 	public:
 		Timer();
