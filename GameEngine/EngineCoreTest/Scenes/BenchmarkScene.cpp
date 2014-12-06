@@ -13,6 +13,8 @@
 #include <Render/GeometryManagement/Data.hh>
 #include <Render/GeometryManagement/Vertices.hh>
 #include <Render/ProgramResources/UniformBlock.hh>
+#include <Render/ProgramResources/Vec4.hh>
+#include <Render/ProgramResources/Mat4.hh>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -34,17 +36,11 @@ void BenchmarkScene::initRendering()
 
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
 	{
-		GraphicalMemory graphic;
-
-		graphic.load({Attribute::Indices});
-		auto &m = _renderManager;
-		auto &program = m->addProgram({ m->addUnitProgram(DEFFERED_VERTEX_SHADER, GL_VERTEX_SHADER), m->addUnitProgram(DEFFERED_FRAG_SHADER, GL_FRAGMENT_SHADER) });
-		auto &model_matrix = m->addProgramResource<Mat4>(program, "model_matrix");
-		auto &model_matrix_ub = m->addProgramResource<UniformBlock>(program, "model_matrix");
-		m->setProgramResource<Mat4>(program, model_matrix, glm::mat4(1.0f));
-		auto key1 = graphic.handle(Vertices(3, { Data(std::vector<int>({1, 2, 3}), Attribute::Indices) }));
-		auto key2 = graphic.handle(Vertices(4, { Data(std::vector<int>({ 1, 2, 3, 4 }), Attribute::Indices) }));
-		graphic.unhandle(key1);
+		UnitProg u1("", GL_VERTEX_SHADER);
+		UnitProg u2("", GL_FRAGMENT_SHADER);
+		Program shader({ u1, u2 }, { Indices });
+		shader.addResource(std::make_unique<Vec4>((glm::vec4(0), shader, "")));
+		UniformBlock ubo(shader, "");
 		return (true);
 	});
 	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);

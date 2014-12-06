@@ -17,7 +17,7 @@ GraphicalMemory::GraphicalMemory()
 * Parameter: std::vector<Attribute> const & attributes
 * Goal:		 load element the good attribute adapted for the shader targeted
 */
-GraphicalMemory &GraphicalMemory::load(std::vector<Attribute> const &attributes)
+GraphicalMemory &GraphicalMemory::init(std::vector<Attribute> const &attributes)
 {
 	_blocksMemory.resize(attributes.size());
 	for (auto index = 0; index < attributes.size(); ++index) {
@@ -35,7 +35,7 @@ GraphicalMemory &GraphicalMemory::load(std::vector<Attribute> const &attributes)
 * Parameter: Vertices const & vertices
 * Goal:		 Handle a new vertices inside the graphical memory
 */
-Key<Vertices> GraphicalMemory::handle(Vertices const &vertices)
+Key<Vertices> GraphicalMemory::add(Vertices const &vertices)
 {
 	assert(_is_match(vertices));
 	size_t offsetVertices = 0;
@@ -46,7 +46,7 @@ Key<Vertices> GraphicalMemory::handle(Vertices const &vertices)
 	_elements.back().offset(offsetVertices);
 	size_t index = 0;
 	for (auto &ptrData : vertices) {
-		_blocksMemory[index].handle(ptrData);
+		_blocksMemory[index].add(ptrData);
 	}
 	return (Key<Vertices>::createKey(_elements.size() - 1));
 }
@@ -60,7 +60,7 @@ Key<Vertices> GraphicalMemory::handle(Vertices const &vertices)
 * Parameter: Vertices & & vertices
 * Goal:		 Handle a new vertices inside the graphical memory
 */
-Key<Vertices> GraphicalMemory::handle(Vertices &&vertices)
+Key<Vertices> GraphicalMemory::add(Vertices &&vertices)
 {
 	std::vector<int> toto;
 	assert(_is_match(vertices));
@@ -72,21 +72,21 @@ Key<Vertices> GraphicalMemory::handle(Vertices &&vertices)
 	_elements.back().offset(offsetVertices);
 	size_t index = 0;
 	for (auto &ptrData : vertices) {
-		_blocksMemory[index].handle(ptrData);
+		_blocksMemory[index].add(ptrData);
 	}
 	return (Key<Vertices>::createKey(_elements.size() - 1));
 }
 
 /**
-* Method:    unhandle
+* Method:    remove
 * FullName:  GraphicalMemory::unhandle
 * Access:    public 
 * Returns:   GraphicalMemory &
 * Qualifier:
 * Parameter: Key<Vertices> & memory
-* Goal:		 unhandle an vertices from the graphic memory
+* Goal:		 remove an vertices from the graphic memory
 */
-GraphicalMemory & GraphicalMemory::unhandle(Key<Vertices> &memory)
+GraphicalMemory & GraphicalMemory::remove(Key<Vertices> &memory)
 {
 	_elements.erase(_elements.begin() + memory.getId());
 	memory.destroy();
@@ -173,9 +173,7 @@ GraphicalMemory & GraphicalMemory::bind()
 {
 	size_t index = 0;
 	for (auto &block : _blocksMemory) {
-		block.bind();
-		glVertexAttribPointer(index++, std::get<Property::NbrComponent>(attProperty[block]), 
-			std::get<Property::GLType>(attProperty[block]), GL_FALSE, 0, 0);
+		_array_buffer.attribute(index++, block, block.buffer());
 	}
 	return (*this);
 }

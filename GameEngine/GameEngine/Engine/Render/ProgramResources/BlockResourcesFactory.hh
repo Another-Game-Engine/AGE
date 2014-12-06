@@ -10,11 +10,12 @@
 class BlockResourcesFactory
 {
 public:
-	BlockResourcesFactory();
+	BlockResourcesFactory(UniformBlock const &parent);
 
 public:
-	std::unique_ptr<IBlockResources> operator()(GLenum mode, GLint id, std::string &&name);
+	std::unique_ptr<IBlockResources> operator()(GLenum mode, GLint id);
 
 private:
-	std::vector<std::pair<GLenum, std::function<std::unique_ptr<IBlockResources> (GLint, std::string &&)>>> _blue_prints;
+	UniformBlock const &_parent;
+	std::vector<std::pair<GLenum, std::function<std::unique_ptr<IBlockResources> (GLint)>>> _blue_prints;
 };

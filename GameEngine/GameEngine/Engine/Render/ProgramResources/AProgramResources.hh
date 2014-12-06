@@ -11,7 +11,7 @@ class AProgramResources : public IProgramResources
 protected:
 	AProgramResources(Program const &parent, std::string const &name, GLenum type);
 	AProgramResources(Program const &parent, std::string &&name, GLenum type);
-	AProgramResources(GLint id, std::string &&name, GLenum type);
+	AProgramResources(Program const &parent, GLint id, GLenum type);
 	AProgramResources(AProgramResources &&move);
 	AProgramResources(AProgramResources const &copy) = delete;
 	AProgramResources &operator=(AProgramResources const &a) = delete;
@@ -22,13 +22,16 @@ public:
 	bool update() const;
 	AProgramResources &update(bool u);
 	GLenum type() const;
+	Program const &program() const;
 
 private:
-	bool create(Program const &parent);
+	bool found_id();
+	bool found_name();
 
 protected:
 	std::string _name;
-	GLint _id;
+	Program const &_parent;
+	GLuint _id;
 	GLenum _type;
 	bool _update;
 };

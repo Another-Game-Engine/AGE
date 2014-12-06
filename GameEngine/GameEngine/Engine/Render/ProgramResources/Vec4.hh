@@ -9,7 +9,7 @@ class Program;
 class Vec4 : public AProgramResources, public ABlockResources
 {
 public:
-	Vec4(glm::vec4 const &value, GLint id, std::string &&name);
+	Vec4(glm::vec4 const &value, Program const &parent, GLint id);
 	Vec4(glm::vec4 const &value, Program const &parent, std::string const &name);
 	Vec4(glm::vec4 const &value, Program const &parent, std::string &&name);
 	Vec4(Vec4 &&move);

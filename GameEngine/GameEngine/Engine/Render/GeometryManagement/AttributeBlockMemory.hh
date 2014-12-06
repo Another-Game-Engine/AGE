@@ -22,12 +22,12 @@ public:
 	AttributeBlockMemory &operator=(AttributeBlockMemory &&a);
 
 public:
-	operator size_t() const;
+	operator Attribute() const;
 	bool operator!=(Attribute attribute) const;
 	bool operator==(Attribute attribute) const;
-	AttributeBlockMemory &handle(std::shared_ptr<Data> const &data);
-	AttributeBlockMemory &bind();
+	AttributeBlockMemory &add(std::shared_ptr<Data> const &data);
 	AttributeBlockMemory &update();
+	IBuffer const &buffer() const;
 
 private:
 	AttributeBlockMemory(Attribute type, size_t size, std::unique_ptr<Buffer> &&buffer);

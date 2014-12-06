@@ -46,7 +46,7 @@ AttributeBlockMemory &AttributeBlockMemory::operator=(AttributeBlockMemory &&a)
 * Parameter: std::shared_ptr<Data> const & data
 * Goal:		handle the Data in argument but do not handle the ownership of the ptr
 */
-AttributeBlockMemory &AttributeBlockMemory::handle(std::shared_ptr<Data> const &data)
+AttributeBlockMemory &AttributeBlockMemory::add(std::shared_ptr<Data> const &data)
 {
 	_update = true;
 	for (auto &element : _elements) {
@@ -94,6 +94,19 @@ AttributeBlockMemory &AttributeBlockMemory::update()
 }
 
 /**
+* Method:    buffer
+* FullName:  AttributeBlockMemory::buffer
+* Access:    public 
+* Returns:   IBuffer const &
+* Qualifier: const
+* Goal:		 get the buffer
+*/
+IBuffer const & AttributeBlockMemory::buffer() const
+{
+	return (*_buffer.get());
+}
+
+/**
 * Method:    operator!=
 * FullName:  AttributeBlockMemory::operator!=
 * Access:    public 
@@ -122,20 +135,6 @@ bool AttributeBlockMemory::operator==(Attribute attribute) const
 }
 
 /**
-* Method:    bind
-* FullName:  AttributeBlockMemory::bind
-* Access:    public 
-* Returns:   AttributeBlockMemory &
-* Qualifier:
-* Goal:		 bind the buffer object
-*/
-AttributeBlockMemory & AttributeBlockMemory::bind()
-{
-	_buffer->bind();
-	return (*this);
-}
-
-/**
 * Method:    operator size_t
 * FullName:  AttributeBlockMemory::operator size_t
 * Access:    public 
@@ -143,7 +142,7 @@ AttributeBlockMemory & AttributeBlockMemory::bind()
 * Qualifier: const
 * Goal:		 cast the AttributeBlockMemory in size_t with the attribute type of the instance
 */
-AttributeBlockMemory::operator size_t() const
+AttributeBlockMemory::operator Attribute() const
 {
-	return (size_t(_type));
+	return (_type);
 }

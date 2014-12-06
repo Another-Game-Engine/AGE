@@ -92,12 +92,9 @@ UniformBlock &UniformBlock::introspection(Program const &program)
 	glGetActiveUniformsiv(program.getId(), nbrUniforms, (const GLuint *)indices.data(), GL_UNIFORM_TYPE, types.data());
 	glGetActiveUniformsiv(program.getId(), nbrUniforms, (const GLuint *)indices.data(), GL_UNIFORM_ARRAY_STRIDE, strides.data());
 	glGetActiveUniformsiv(program.getId(), nbrUniforms, (const GLuint *)indices.data(), GL_UNIFORM_NAME_LENGTH, nameLenght.data());
-	BlockResourcesFactory factory;
+	BlockResourcesFactory factory(*this);
 	for (GLint index = 0; index < nbrUniforms; ++index) {
-		std::string name(nameLenght[index], 0);
-		GLsizei nbrCharacters;
-		glGetActiveUniformName(program.getId(), indices[index], nameLenght[index],	&nbrCharacters, (GLchar *)name.data());
-		_blockResources[index] = factory(types[index], indices[index], std::move(name));
+		_blockResources[index] = factory(types[index], indices[index]);
 		_blockResources[index]->offset(offsets[index]);
 		_blockResources[index]->size_array(sizes[index]);
 		_blockResources[index]->stride(strides[index]);

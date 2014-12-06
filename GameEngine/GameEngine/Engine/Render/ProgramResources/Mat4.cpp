@@ -9,8 +9,8 @@ _value(value)
 
 }
 
-Mat4::Mat4(glm::mat4 const &value, GLint id, std::string &&name) :
-AProgramResources(id, std::move(name), GL_UNIFORM),
+Mat4::Mat4(glm::mat4 const &value, Program const &parent, GLint id) :
+AProgramResources(parent, id, GL_UNIFORM),
 ABlockResources(),
 _value(value)
 {

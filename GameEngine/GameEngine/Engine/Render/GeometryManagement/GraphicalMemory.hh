@@ -6,6 +6,7 @@
 # include <Render/GeometryManagement/Attribute.hh>
 # include <Render/GeometryManagement/AttributeBlockMemory.hh>
 # include <Render/GeometryManagement/Vertices.hh>
+# include <Render/Buffer/VertexArray.hh>
 
 template <typename type_t> class Key;
 
@@ -15,10 +16,11 @@ public:
 	GraphicalMemory();
 
 public:
-	GraphicalMemory &load(std::vector<Attribute> const &attributes);
-	Key<Vertices> handle(Vertices const &vertices);
-	Key<Vertices> handle(Vertices &&vertices);
-	GraphicalMemory &unhandle(Key<Vertices> &memory);
+	GraphicalMemory &init(std::vector<Attribute> const &attributes);
+	Key<Vertices> add(Vertices const &vertices);
+	Key<Vertices> add(Vertices &&vertices);
+	Vertices &get(Key<Vertices> const &memory);
+	GraphicalMemory &remove(Key<Vertices> &memory);
 	GraphicalMemory &draw(GLenum mode, Key<Vertices> &memory);
 	GraphicalMemory &bind();
 	GraphicalMemory &update();
@@ -28,6 +30,7 @@ private:
 	bool _is_has_indices() const;
 
 private:
+	VertexArray _array_buffer;
 	std::vector<Vertices> _elements;
 	std::vector<AttributeBlockMemory> _blocksMemory;
 

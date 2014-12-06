@@ -232,6 +232,7 @@
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
+    <ClCompile Include="Engine\Render\Buffer\VertexArray.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Attribute.cpp" />
@@ -256,7 +257,6 @@
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
     <ClCompile Include="Engine\Render\Task.cpp" />
-    <ClCompile Include="Engine\Render\VertexArray.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
@@ -337,6 +337,7 @@
     <ClInclude Include="Engine\Render\Buffer\IBuffer.hh" />
     <ClInclude Include="Engine\Render\Buffer\IndexBuffer.hh" />
     <ClInclude Include="Engine\Render\Buffer\UniformBuffer.hh" />
+    <ClInclude Include="Engine\Render\Buffer\VertexArray.hh" />
     <ClInclude Include="Engine\Render\Buffer\VertexBuffer.hh" />
     <ClInclude Include="Engine\Render\Data.hh" />
     <ClInclude Include="Engine\Render\Framebuffer.hh" />
@@ -367,7 +368,6 @@
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\Task.hh" />
-    <ClInclude Include="Engine\Render\VertexArray.hh" />
     <ClInclude Include="Engine\Skinning\Animation.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationInstance.hpp" />
