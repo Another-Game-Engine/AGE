@@ -1,11 +1,11 @@
 #include "Age_Imgui.hpp"
 #include <Context/IRenderContext.hh>
-#include <Render/RenderThreadInterface.hpp>
 #include <SDL/SDL_keycode.h>
 #include <SDL/SDL.h>
 #include <imgui/imconfig.h>
 #include <Utils/Utils.hh>
-#include <Core/PrepareRenderThread.hpp>
+#include <Threads/PrepareRenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
 #define STB_IMAGE_IMPLEMENTATION
 #include <imgui\stb_image.h>
@@ -188,7 +188,7 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef USE_IMGUI
-		getInstance()->_engine->getCommandQueue()->emplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
+		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
 #else
 		UNUSED(cmd_lists);
 		UNUSED(cmd_lists_count);

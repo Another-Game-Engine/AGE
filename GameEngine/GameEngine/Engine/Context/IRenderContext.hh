@@ -4,7 +4,6 @@
 
 #include "Core/Input.hh"
 #include <Utils/Dependency.hpp>
-#include <Utils/CommandQueueHolder.hpp>
 #include <tmq/message.hpp>
 #include <Configuration.hpp>
 

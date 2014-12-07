@@ -6,8 +6,6 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Geometry/Material.hpp>
 #include <Core/PrepareKey.hpp>
-#include <Utils/CommandQueueHolder.hpp>
-#include <Utils/ThreadQueue.hpp>
 #include <Skinning/AnimationInstance.hpp>
 
 class AScene;

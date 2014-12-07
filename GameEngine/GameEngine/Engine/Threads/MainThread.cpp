@@ -10,6 +10,20 @@ namespace AGE
 	{
 		// We register the main thread id
 		_registerId();
+
+#ifdef USE_IMGUI
+		//registerCallback<MTC::FrameTime>([this](MTC::FrameTime& msg)
+		//{
+		//	//updateThreadStatistics(msg.id, msg.time);
+		//});
+
+		//registerCallback<MTC::ThreadRegistration>([this](MTC::ThreadRegistration& msg)
+		//{
+		//	//_threadsStatics.insert(std::make_pair(msg.id, Engine::ThreadStatistics()));
+		//	//_threadsStatics[msg.id].name = msg.name;
+		//});
+#endif
+
 		return true;
 	}
 	

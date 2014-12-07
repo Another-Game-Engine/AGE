@@ -3,6 +3,7 @@
 #include <Render/RenderManager.hh>
 #include <Context/SdlContext.hh>
 #include <Utils/ThreadQueueCommands.hpp>
+#include <Utils/ThreadName.hpp>
 
 namespace AGE
 {
@@ -151,3 +152,16 @@ namespace AGE
 		return true;
 	}
 }
+
+//bool OldRenderThread::_updateBegin()
+//{
+//	bool returnValue = true;
+//	return returnValue;
+//}
+//
+//bool OldRenderThread::_updateEnd()
+//{
+//	bool returnValue = true;
+//	_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(this->_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
+//	return returnValue;
+//}

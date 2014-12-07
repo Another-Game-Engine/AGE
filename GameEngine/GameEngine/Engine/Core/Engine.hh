@@ -2,19 +2,15 @@
 
 #include <Configuration.hpp>
 #include "Utils/DependenciesInjector.hpp"
-#include <Utils/ThreadQueue.hpp>
 #include <array>
 #include <map>
 #include <Core/SceneManager.hh>
 
 namespace AGE
 {
-	class OldPrepareRenderThread;
-	class OldRenderThread;
 	class Timer;
 
 	class Engine : public DependenciesInjector
-		, public CommandQueue
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 		, public SceneManager
 #endif
@@ -23,8 +19,6 @@ namespace AGE
 		Engine(Engine const &);
 		Engine &operator=(Engine const &);
 
-		OldPrepareRenderThread *_prepareThread;
-		OldRenderThread *_renderThread;
 		Timer *_timer;
 
 		struct ThreadStatistics
@@ -45,33 +39,10 @@ namespace AGE
 		std::map<std::size_t, ThreadStatistics> _threadsStatics;
 		void updateThreadStatistics(std::size_t id, float time);
 	public:
-		// All functions are virtual so if you want to customize your Engine class
-		// without hacking the core, you can heritate from :)
 		Engine();
 		virtual ~Engine();
 
 		bool launch(std::function<bool()> &fn);
 		bool update();
-
-		virtual bool _init();
-		virtual bool _initInNewThread();
-		virtual bool _release();
-		virtual bool _releaseInNewThread();
-		virtual bool _updateBegin();
-		virtual bool _updateEnd();
-
-		void quit()
-		{
-			_release();
-		}
-
-		inline OldPrepareRenderThread *getPrepareThread()
-		{
-			return _prepareThread;
-		}
-		inline OldRenderThread *getRenderThread()
-		{
-			return _renderThread;
-		}
 	};
 }
