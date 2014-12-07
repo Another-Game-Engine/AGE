@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Thread.hpp"
-#include "CommandQueuePusher.hpp"
-#include "CommandQueueOwner.hpp"
+#include "QueuePusher.hpp"
+#include "QueueOwner.hpp"
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
 

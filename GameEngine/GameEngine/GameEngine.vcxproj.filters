@@ -79,15 +79,15 @@
     <ClCompile Include="Engine\Threads\ThreadManager.cpp" />
     <ClCompile Include="Engine\Threads\Thread.cpp" />
     <ClCompile Include="Engine\Threads\MainThread.cpp" />
-    <ClCompile Include="Engine\Threads\CommandQueuePusher.cpp" />
     <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\RenderThead.cpp" />
     <ClCompile Include="Engine\Core\OldPrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
-    <ClCompile Include="Engine\Threads\CommandQueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\TaskThread.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
+    <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
+    <ClCompile Include="Engine\Threads\QueuePusher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -245,8 +245,6 @@
     <ClInclude Include="Engine\Threads\Thread.hpp" />
     <ClInclude Include="Engine\Threads\ThreadManager.hpp" />
     <ClInclude Include="Engine\Threads\MainThread.hpp" />
-    <ClInclude Include="Engine\Threads\CommandQueueOwner.hpp" />
-    <ClInclude Include="Engine\Threads\CommandQueuePusher.hpp" />
     <ClInclude Include="Engine\Threads\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Threads\RenderThread.hpp" />
     <ClInclude Include="Engine\Threads\CallbackContainer.hpp" />
@@ -254,6 +252,8 @@
     <ClInclude Include="Engine\Threads\TaskThread.hpp" />
     <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Threads\QueueOwner.hpp" />
+    <ClInclude Include="Engine\Threads\QueuePusher.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

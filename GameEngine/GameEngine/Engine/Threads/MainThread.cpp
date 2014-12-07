@@ -1,6 +1,6 @@
 #include "MainThread.hpp"
 #include <Core/Engine.hh>
-#include "CommandQueueOwner.hpp"
+#include "QueueOwner.hpp"
 #include "ThreadManager.hpp"
 #include "RenderThread.hpp"
 

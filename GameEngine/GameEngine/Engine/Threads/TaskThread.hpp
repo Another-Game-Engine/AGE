@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Thread.hpp"
-#include "CommandQueueOwner.hpp"
+#include "QueueOwner.hpp"
 
 namespace AGE
 {

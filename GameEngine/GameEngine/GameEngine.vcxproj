@@ -256,10 +256,10 @@
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
-    <ClCompile Include="Engine\Threads\CommandQueueOwner.cpp" />
-    <ClCompile Include="Engine\Threads\CommandQueuePusher.cpp" />
     <ClCompile Include="Engine\Threads\MainThread.cpp" />
     <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
+    <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
+    <ClCompile Include="Engine\Threads\QueuePusher.cpp" />
     <ClCompile Include="Engine\Threads\RenderThead.cpp" />
     <ClCompile Include="Engine\Threads\TaskThread.cpp" />
     <ClCompile Include="Engine\Threads\Thread.cpp" />
@@ -377,10 +377,10 @@
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
     <ClInclude Include="Engine\Texture\Texture.hpp" />
     <ClInclude Include="Engine\Threads\CallbackContainer.hpp" />
-    <ClInclude Include="Engine\Threads\CommandQueueOwner.hpp" />
-    <ClInclude Include="Engine\Threads\CommandQueuePusher.hpp" />
     <ClInclude Include="Engine\Threads\MainThread.hpp" />
     <ClInclude Include="Engine\Threads\PrepareRenderThread.hpp" />
+    <ClInclude Include="Engine\Threads\QueueOwner.hpp" />
+    <ClInclude Include="Engine\Threads\QueuePusher.hpp" />
     <ClInclude Include="Engine\Threads\RenderThread.hpp" />
     <ClInclude Include="Engine\Threads\TaskThread.hpp" />
     <ClInclude Include="Engine\Threads\Thread.hpp" />
