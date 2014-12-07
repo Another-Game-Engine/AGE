@@ -216,3 +216,185 @@ std::size_t ReleasableQueue::getWaitingTime()
 	std::lock_guard<std::mutex> lock(_mutex);
 	return _millisecondToWait;
 }
+
+
+////////////////////
+/// HYBRID
+
+
+bool HybridQueue::getTaskQueue(TMQ::PtrQueue &q, WaitType waitType)
+{
+   	if (waitType == WaitType::NoWait)
+	{
+		if (!_releasable)
+			return false;
+		std::unique_lock<std::mutex> lock(_mutex);
+		q = std::move(_taskQueue);
+		_taskQueue.clear();
+		_releasable = false;
+		lock.unlock();
+		return true;
+	}
+	else if (waitType == WaitType::Block)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+
+		_readCondition.wait(lock, [this]()
+		{
+			return (_releasable || !_taskQueue.empty());
+		});
+		if (_taskQueue.empty() && !_releasable)
+			return false;
+		q = std::move(_taskQueue);
+		_taskQueue.clear();
+		_releasable = false;
+		lock.unlock();
+		return true;
+	}
+	else if (waitType == WaitType::Wait)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+		if (_readCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
+		{
+			return (!(_releasable || _taskQueue.empty()));
+		}))
+		{
+			return false;
+		}
+		q = std::move(_taskQueue);
+		_taskQueue.clear();
+		_releasable = false;
+		lock.unlock();
+		return true;
+	}
+	return true;
+}
+
+void HybridQueue::getTaskAndCommandQueue(
+	TMQ::PtrQueue &taskQueue,
+	bool &taskQueueSuccess,
+	TMQ::PtrQueue &commandQueue,
+	bool &commandQueueSuccess,
+	WaitType waitType)
+{
+   	if (waitType == WaitType::NoWait)
+	{
+		if (!_releasable)
+		{
+			taskQueueSuccess = commandQueueSuccess = false;
+			return;
+		}
+		std::unique_lock<std::mutex> lock(_mutex);
+		taskQueue = std::move(_taskQueue);
+		_taskQueue.clear();
+		commandQueue = std::move(_commandQueueCopy);
+		_commandQueueCopy.clear();
+		_releasable = false;
+		lock.unlock();
+		taskQueueSuccess = !taskQueue.empty();
+		commandQueueSuccess = !commandQueue.empty();
+		if (commandQueueSuccess)
+			_writeCondition.notify_one();
+		return;
+	}
+	else if (waitType == WaitType::Block)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+
+		_readCondition.wait(lock, [this]()
+		{
+			return (_releasable || !_taskQueue.empty() || !_commandQueueCopy.empty());
+		});
+		taskQueue = std::move(_taskQueue);
+		_taskQueue.clear();
+		commandQueue = std::move(_commandQueueCopy);
+		_commandQueueCopy.clear();
+		_releasable = false;
+		lock.unlock();
+		taskQueueSuccess = !taskQueue.empty();
+		commandQueueSuccess = !commandQueue.empty();
+		if (commandQueueSuccess)
+			_writeCondition.notify_one();
+		return;
+	}
+	else if (waitType == WaitType::Wait)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+		if (_readCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
+		{
+			return (!(_releasable || !_taskQueue.empty() || !_commandQueueCopy.empty()));
+		}))
+		{
+			commandQueueSuccess = taskQueueSuccess = false;
+			return;
+		}
+		taskQueue = std::move(_taskQueue);
+		commandQueue = std::move(_commandQueueCopy);
+		_taskQueue.clear();
+		_commandQueueCopy.clear();
+		_releasable = false;
+		lock.unlock();
+		taskQueueSuccess = !taskQueue.empty();
+		commandQueueSuccess = !commandQueue.empty();
+		if (commandQueueSuccess)
+			_writeCondition.notify_one();
+	}
+}
+
+bool HybridQueue::releaseTaskReadability()
+{
+	_releasable = true;
+	_readCondition.notify_one();
+	return true;
+}
+
+bool HybridQueue::releaseCommandReadability(WaitType waitType)
+{
+   	if (waitType == WaitType::NoWait)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+		_commandQueueCopy = std::move(_commandQueue);
+		_commandQueue.clear();
+		_releasable = true;
+		lock.unlock();
+		_readCondition.notify_one();
+		return true;
+	}
+	else if (waitType == WaitType::Block)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+		_writeCondition.wait(lock, [this]()
+		{
+			return (_commandQueueCopy.empty());
+		});
+		if (!_commandQueueCopy.empty())
+			return false;
+		_commandQueueCopy = std::move(_commandQueue);
+		_commandQueue.clear();
+		_releasable = true;
+		lock.unlock();
+		_readCondition.notify_one();
+		return true;
+	}
+	else if (waitType == WaitType::Wait)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+		if (!_writeCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
+		{
+			return (_commandQueueCopy.empty());
+		}))
+		{
+			return false;
+		}
+		_commandQueueCopy = std::move(_commandQueue);
+		_commandQueue.clear();
+		_releasable = true;
+		lock.unlock();
+		_readCondition.notify_one();
+		return true;
+	}
+	return true;
+}
+		void setWaitingTime(std::size_t milliseconds);
+		std::size_t getWaitingTime();
+		void clear();

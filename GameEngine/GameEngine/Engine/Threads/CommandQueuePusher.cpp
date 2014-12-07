@@ -3,14 +3,14 @@
 
 namespace AGE
 {
-	CommandQueuePusher::CommandQueuePusher()
+	QueuePusher::QueuePusher()
 		: _next(nullptr)
 	{}
 
-	CommandQueuePusher::~CommandQueuePusher()
+	QueuePusher::~QueuePusher()
 	{}
 
-	void CommandQueuePusher::LinkToNext(CommandQueueOwner *next)
+	void QueuePusher::LinkToNext(QueueOwner *next)
 	{
 		assert(next == false);
 		_next = next;

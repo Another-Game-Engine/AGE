@@ -12,7 +12,7 @@ namespace AGE
 {
 	class Engine;
 
-	class RenderThread : public Thread, public CommandQueueOwner, public TaskQueueOwner
+	class RenderThread : public Thread, public QueueOwner
 	{
 	public:
 		virtual bool init();

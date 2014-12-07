@@ -15,6 +15,7 @@ namespace TMQ
 	class Dispatcher;
 	class Messsage;
 	class ImmediateQueue;
+	class HybridQueue;
 
 	class PtrQueue
 	{
@@ -41,6 +42,7 @@ namespace TMQ
 
 		friend class ReleasableQueue;
 		friend class ImmediateQueue;
+		friend class HybridQueue;
 
 	private:
 		template <typename T>
@@ -300,4 +302,135 @@ namespace TMQ
 			return _queue.emplace<T>(args...)->getFuture();
 		}
 	};
+
+class HybridQueue
+	{
+		PtrQueue _commandQueue;
+		PtrQueue _commandQueueCopy;
+		PtrQueue _taskQueue;
+		std::mutex _mutex;
+		std::condition_variable _readCondition;
+		std::condition_variable _writeCondition;
+		std::size_t _millisecondToWait;
+		std::atomic_bool _releasable;
+	public:
+		enum WaitType
+		{
+			Block = 0
+			, Wait = 1
+			, NoWait = 2
+		};
+
+		HybridQueue();
+		void launch();
+
+		HybridQueue(const HybridQueue&) = delete;
+		HybridQueue &operator=(const HybridQueue&) = delete;
+		HybridQueue(HybridQueue &&) = delete;
+		HybridQueue &operator=(HybridQueue &&) = delete;
+
+		bool getTaskQueue(TMQ::PtrQueue &q, WaitType waitType);
+		void getTaskAndCommandQueue(
+			TMQ::PtrQueue &taskQueue,
+			bool &taskQueueSuccess,
+			TMQ::PtrQueue &commandQueue,
+			bool &commandQueueSuccess,
+			WaitType waitType);
+		bool releaseTaskReadability();
+		bool releaseCommandReadability(WaitType waitType);
+		void setWaitingTime(std::size_t milliseconds);
+		std::size_t getWaitingTime();
+		void clear();
+
+		//////
+		////// Internal standard queue access
+
+		/////////
+		/// COMMANDS
+		void moveCommand(MessageBase *e, std::size_t size)
+		{
+			_commandQueue.move(e, size);
+		}
+
+		template <typename T>
+		void pushCommand(const T& e)
+		{
+			_commandQueue.push(e);
+		}
+
+		template <typename T, typename ...Args>
+		void emplaceCommand(Args ...args)
+		{
+			_commandQueue.emplace<T>(args...);
+		}
+
+		template <typename T, typename F>
+		std::future<F> pushFutureCommand(const T &e)
+		{
+			return _commandQueue.push(e)->getFuture();
+		}
+
+		template <typename T, typename F, typename ...Args>
+		std::future<F> emplaceFutureCommand(Args ...args)
+		{
+			return _commandQueue.emplace<T>(args...)->getFuture();
+		}
+
+		//////////////
+		//// TASKS
+
+		void moveTask(MessageBase *e, std::size_t size)
+		{
+			{
+				std::unique_lock<std::mutex> lock(_mutex);
+				_taskQueue.move(e, size);
+			}
+			releaseTaskReadability();
+		}
+
+		template <typename T>
+		void pushTask(const T& e)
+		{
+			{
+				std::unique_lock<std::mutex> lock(_mutex);
+				_taskQueue.push(e);
+			}
+			releaseTaskReadability(WaitType::NoWait);
+		}
+
+		template <typename T, typename ...Args>
+		void emplaceTask(Args ...args)
+		{
+			{
+				std::unique_lock<std::mutex> lock(_mutex);
+				_taskQueue.emplace<T>(args...);
+			}
+			releaseTaskReadability(WaitType::NoWait);
+		}
+
+		template <typename T, typename F>
+		std::future<F> pushFutureTask(const T &e)
+		{
+			std::future < F > f;
+			{
+				std::unique_lock<std::mutex> lock(_mutex);
+				f = _taskQueue.push(e)->getFuture();
+			}
+			releaseTaskReadability(WaitType::NoWait);
+			return f;
+		}
+
+		template <typename T, typename F, typename ...Args>
+		std::future<F> emplaceFutureTask(Args ...args)
+		{
+			std::future< F > f;
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				f = _taskQueue.emplace<T>(args...)->getFuture();
+			}
+			releaseTaskReadability(WaitType::NoWait);
+			return f;
+		}
+	};
+
 }

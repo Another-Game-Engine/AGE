@@ -14,7 +14,7 @@ namespace AGE
 {
 	class RenderScene{};
 
-	class PrepareRenderThread : public Thread, public CommandQueuePusher, public CommandQueueOwner, public TaskQueueOwner
+	class PrepareRenderThread : public Thread, public QueuePusher, public QueueOwner
 	{
 	public:
 		virtual bool init();

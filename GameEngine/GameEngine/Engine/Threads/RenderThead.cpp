@@ -15,7 +15,7 @@ namespace AGE
 
 	bool RenderThread::init()
 	{
-		this->registerTaskCallback<MainThreadToRenderThread::CreateRenderContext>([&](MainThreadToRenderThread::CreateRenderContext &msg)
+		this->registerCallback<MainThreadToRenderThread::CreateRenderContext>([&](MainThreadToRenderThread::CreateRenderContext &msg)
 		{
 			if (!msg.engine.lock()->setInstance<SdlContext, IRenderContext>()->init(0, 1920, 1040, "~AGE~ V0.00001 Demo"))
 			{
@@ -41,7 +41,7 @@ namespace AGE
 		//	_context->setScreenSize(msg.screenSize);
 		//});
 
-		registerTaskCallback<TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
+		registerCallback<TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
 		{
 			msg.setValue(msg.function());
 		});
@@ -64,14 +64,14 @@ namespace AGE
 		//	}
 		//});
 
-		registerTaskCallback<TQC::VoidFunction>([&](AGE::TQC::VoidFunction& msg)
+		registerCallback<TQC::VoidFunction>([&](AGE::TQC::VoidFunction& msg)
 		{
 			if (msg.function)
 				msg.function();
 		});
 
 #ifdef USE_IMGUI
-		registerTaskCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
+		registerCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
 		{
 			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 		});
@@ -121,32 +121,29 @@ namespace AGE
 
 		TMQ::PtrQueue commands;
 		TMQ::PtrQueue tasks;
+		bool commandSuccess;
+		bool taskSuccess;
 
 		while (this->_run)
 		{
-			bool commandsCleared = false;
-
-			if (!getCommandQueue()->getReadableQueue(commands))
+			getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
+			if (taskSuccess)
 			{
-				getTaskQueue()->getReadableQueue(tasks);
 				while (!tasks.empty())
 				{
 					//pop all tasks
 					auto task = tasks.front();
-					assert(executeTask(task)); // we receive a task that we cannot treat
+					assert(execute(task)); // we receive a task that we cannot treat
 					tasks.pop();
 				}
 			}
-			else
+			if (commandSuccess)
 			{
 				// pop all commands
 				while (!commands.empty())
 				{
 					auto command = commands.front();
-					if (!executeCommand(command))
-					{
-						/*_activeContext->executeCommand(command);*/ // TO UNCOMMENT
-					}
+					assert(execute(command));
 					commands.pop();
 				}
 			}

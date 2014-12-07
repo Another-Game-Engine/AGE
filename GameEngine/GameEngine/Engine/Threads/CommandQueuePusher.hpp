@@ -2,7 +2,7 @@
 
 namespace AGE
 {
-	class CommandQueueOwner;
+	class QueueOwner;
 
 	// Command queue pusher are class who have a
 	// pointer on the command queue of the next
@@ -12,15 +12,15 @@ namespace AGE
 	// push command to Render thread, so it's a
 	// pusher, but main thread push command to it
 	// so it's also an owner.
-	class CommandQueuePusher
+	class QueuePusher
 	{
 	public:
-		CommandQueuePusher();
-		virtual ~CommandQueuePusher();
-		void LinkToNext(CommandQueueOwner *next);
+		QueuePusher();
+		virtual ~QueuePusher();
+		void LinkToNext(QueueOwner *next);
 	protected:
-		CommandQueueOwner *_next;
+		QueueOwner *_next;
 
-		friend class CommandQueueOwner;
+		friend class QueueOwner;
 	};
 }

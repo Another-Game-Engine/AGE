@@ -31,7 +31,7 @@ namespace AGE
 
 		bool executeTask(TMQ::MessageBase *task);
 	private:
-		TMQ::ImmediateQueue _queue;
+		TMQ::HybridQueue _queue;
 
 		AGE::Vector<std::unique_ptr<ICallbackContainer>> _individualTaskCallbacks;
 		static AGE::Vector<std::unique_ptr<ICallbackContainer>> _sharedTaskCallbacks;

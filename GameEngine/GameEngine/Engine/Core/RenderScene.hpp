@@ -18,7 +18,7 @@ namespace AGE
 	struct SubMeshInstance;
 	class OctreeNode;
 
-	class RenderScene : public CommandQueuePusher
+	class RenderScene : public QueuePusher
 	{
 	public:
 	private:

@@ -2,9 +2,9 @@
 
 namespace AGE
 {
-	AGE::Vector<std::unique_ptr<ICallbackContainer>> CommandQueueOwner::_sharedCommandCallbacks = AGE::Vector<std::unique_ptr<ICallbackContainer>>();
+	AGE::Vector<std::unique_ptr<ICallbackContainer>> QueueOwner::_sharedCommandCallbacks = AGE::Vector<std::unique_ptr<ICallbackContainer>>();
 
-	bool CommandQueueOwner::executeCommand(TMQ::MessageBase *task)
+	bool QueueOwner::execute(TMQ::MessageBase *task)
 	{
 		std::size_t id = task->uid;
 		if (_individualCommandCallbacks.size() > id && _individualCommandCallbacks[id] != nullptr)

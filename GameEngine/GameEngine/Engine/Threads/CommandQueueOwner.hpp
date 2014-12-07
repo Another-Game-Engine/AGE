@@ -6,15 +6,15 @@
 
 namespace AGE
 {
-	class CommandQueuePusher;
+	class QueuePusher;
 
-	class CommandQueueOwner
+	class QueueOwner
 	{
 	public:
-		inline TMQ::ReleasableQueue *getCommandQueue() { return &_queue; }
+		inline TMQ::HybridQueue *getQueue() { return &_queue; }
 
 		template <typename T>
-		void registerCommandCallback(const std::function<void(T &)> &fn)
+		void registerCallback(const std::function<void(T &)> &fn)
 		{
 			auto id = TMQ::Message<T>::getId();
 			if (id >= _individualCommandCallbacks.size())
@@ -23,7 +23,7 @@ namespace AGE
 		}
 
 		template <typename T>
-		static void registerSharedCommandCallback(const std::function<void(T &)> &fn)
+		static void registerSharedCallback(const std::function<void(T &)> &fn)
 		{
 			auto id = TMQ::Message<T>::getId();
 			if (id >= _sharedCommandCallbacks.size())
@@ -31,13 +31,13 @@ namespace AGE
 			_sharedCommandCallbacks[id] = std::make_unique<CallbackContainer<T>>(fn);
 		}
 
-		bool executeCommand(TMQ::MessageBase *task);
+		bool execute(TMQ::MessageBase *task);
 	protected:
-		TMQ::ReleasableQueue _queue;
+		TMQ::HybridQueue _queue;
 
 		AGE::Vector<std::unique_ptr<ICallbackContainer>> _individualCommandCallbacks;
 		static AGE::Vector<std::unique_ptr<ICallbackContainer>> _sharedCommandCallbacks;
 
-		friend class CommandQueuePusher;
+		friend class QueuePusher;
 	};
 }

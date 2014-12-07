@@ -2,6 +2,7 @@
 
 #include "Thread.hpp"
 #include "CommandQueuePusher.hpp"
+#include "CommandQueueOwner.hpp"
 #include "TaskQueueOwner.hpp"
 
 #include <Utils/Containers/Vector.hpp>
@@ -12,7 +13,7 @@ namespace AGE
 {
 	class Engine;
 
-	class MainThread : public Thread, public CommandQueuePusher, public TaskQueueOwner
+	class MainThread : public Thread, public QueuePusher, public QueueOwner
 	{
 	public:
 		virtual bool init();

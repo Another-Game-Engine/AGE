@@ -53,6 +53,8 @@ namespace AGE
 
 		TMQ::PtrQueue commands;
 		TMQ::PtrQueue tasks;
+		bool commandSucces;
+		bool taskSuccess;
 
 		_registerId();
 
@@ -62,27 +64,26 @@ namespace AGE
 
 		while (this->_run)
 		{
-			if (!getCommandQueue()->getReadableQueue(commands))
+			getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSucces, TMQ::HybridQueue::WaitType::Block);
+			if (taskSuccess)
 			{
-				getTaskQueue()->getReadableQueue(tasks);
 				while (!tasks.empty())
 				{
 					auto task = tasks.front();
-					assert(executeTask(task)); // we receive a task that we cannot treat
+					assert(execute(task)); // we receive a task that we cannot treat
 					tasks.pop();
 				}
 			}
-			else
+			if (commandSucces)
 			{
-				// pop all commands
 				while (!commands.empty())
 				{
 					auto command = commands.front();
-					if (!executeCommand(command))
+					if (!execute(command))
 					{
 						if (!_activeScene /*|| !_activeScene->executeCommand(command)*/) // TO UNCOMMENT
 						{
-							_next->getCommandQueue()->move(command, commands.getFrontSize());
+							_next->getQueue()->moveCommand(command, commands.getFrontSize());
 							commands.pop();
 							continue;
 						}
@@ -91,10 +92,11 @@ namespace AGE
 					}
 					commands.pop();
 				}
-				if (!_next->getCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait))
+				if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
 				{
-					_next->getCommandQueue()->clear();
+					_next->getQueue()->clear();
 				}
+
 			}
 		}
 		return true;

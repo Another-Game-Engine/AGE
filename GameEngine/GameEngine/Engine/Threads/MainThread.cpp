@@ -20,27 +20,31 @@ namespace AGE
 	
 	bool MainThread::update()
 	{
-		_engine->update();
+		TMQ::PtrQueue taskQueue;
 
-		TMQ::PtrQueue queue;
-
-		bool released = false;
-
-		while (!released || !queue.empty())
+		if (!getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
 		{
-			if (!queue.empty())
+			_engine->update();
+			while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
 			{
-				auto task = queue.front();
-				assert(executeTask(task)); // we receive a task that we cannot handle
-				queue.pop();
+				if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
+				{
+					while (!taskQueue.empty())
+					{
+						auto task = taskQueue.front();
+						assert(execute(task)); // we receive a task that we cannot handle
+						taskQueue.pop();
+					}
+				}
 			}
-			else
+		}
+		else
+		{
+			while (!taskQueue.empty())
 			{
-				getTaskQueue()->getReadableQueue(queue);
-			}
-			if (!released)
-			{
-				released = _next->getCommandQueue()->releaseReadability(TMQ::ReleasableQueue::WaitType::NoWait);
+				auto task = taskQueue.front();
+				assert(execute(task)); // we receive a task that we cannot handle
+				taskQueue.pop();
 			}
 		}
 
@@ -73,7 +77,7 @@ namespace AGE
 		{
 			_engine = std::make_shared<AGE::Engine>();
 			auto engine = std::weak_ptr<AGE::Engine>(_engine);
-			auto futur = GetRenderThread()->getTaskQueue()->emplaceFuture<MainThreadToRenderThread::CreateRenderContext, bool>(engine);
+			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<MainThreadToRenderThread::CreateRenderContext, bool>(engine);
 			auto success = futur.get();
 			assert(success);
 		}
