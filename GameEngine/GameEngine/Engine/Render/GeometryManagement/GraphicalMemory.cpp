@@ -8,15 +8,14 @@ GraphicalMemory::GraphicalMemory()
 {
 }
 
-/**
-* Method:    load
-* FullName:  GraphicalMemory::load
-* Access:    public 
-* Returns:   GraphicalMemory &
-* Qualifier:
-* Parameter: std::vector<Attribute> const & attributes
-* Goal:		 load element the good attribute adapted for the shader targeted
-*/
+GraphicalMemory::GraphicalMemory(GraphicalMemory &&move) :
+_array_buffer(std::move(move._array_buffer)),
+_elements(std::move(move._elements)),
+_blocksMemory(std::move(move._blocksMemory))
+{
+
+}
+
 GraphicalMemory &GraphicalMemory::init(std::vector<Attribute> const &attributes)
 {
 	_blocksMemory.resize(attributes.size());
@@ -26,15 +25,6 @@ GraphicalMemory &GraphicalMemory::init(std::vector<Attribute> const &attributes)
 	return (*this);
 }
 
-/**
-* Method:    handle
-* FullName:  GraphicalMemory::handle
-* Access:    public 
-* Returns:   Key<Vertices>
-* Qualifier:
-* Parameter: Vertices const & vertices
-* Goal:		 Handle a new vertices inside the graphical memory
-*/
 Key<Vertices> GraphicalMemory::add(Vertices const &vertices)
 {
 	assert(_is_match(vertices));
@@ -51,15 +41,6 @@ Key<Vertices> GraphicalMemory::add(Vertices const &vertices)
 	return (Key<Vertices>::createKey(_elements.size() - 1));
 }
 
-/**
-* Method:    handle
-* FullName:  GraphicalMemory::handle
-* Access:    public 
-* Returns:   Key<Vertices>
-* Qualifier:
-* Parameter: Vertices & & vertices
-* Goal:		 Handle a new vertices inside the graphical memory
-*/
 Key<Vertices> GraphicalMemory::add(Vertices &&vertices)
 {
 	std::vector<int> toto;
@@ -77,15 +58,6 @@ Key<Vertices> GraphicalMemory::add(Vertices &&vertices)
 	return (Key<Vertices>::createKey(_elements.size() - 1));
 }
 
-/**
-* Method:    remove
-* FullName:  GraphicalMemory::unhandle
-* Access:    public 
-* Returns:   GraphicalMemory &
-* Qualifier:
-* Parameter: Key<Vertices> & memory
-* Goal:		 remove an vertices from the graphic memory
-*/
 GraphicalMemory & GraphicalMemory::remove(Key<Vertices> &memory)
 {
 	_elements.erase(_elements.begin() + memory.getId());
@@ -93,16 +65,6 @@ GraphicalMemory & GraphicalMemory::remove(Key<Vertices> &memory)
 	return (*this);
 }
 
-/**
-* Method:    _is_match
-* FullName:  GraphicalMemory::_is_match
-* Access:    private 
-* Returns:   bool
-* Qualifier: const
-* Parameter: Vertices const & vertices
-* Goal:		 check if the data inside the vertices match 
-*			 with the attribute block inside the graphic memory
-*/
 bool GraphicalMemory::_is_match(Vertices const &vertices) const
 {
 	size_t nbrData = 0;
@@ -121,16 +83,6 @@ bool GraphicalMemory::_is_match(Vertices const &vertices) const
 	return (true);
 }
 
-/**
-* Method:    draw
-* FullName:  GraphicalMemory::draw
-* Access:    public 
-* Returns:   GraphicalMemory &
-* Qualifier:
-* Parameter: GLenum mode
-* Parameter: Key<Vertices> & memory
-* Goal:		 draw the vertices targeted
-*/
 GraphicalMemory & GraphicalMemory::draw(GLenum mode, Key<Vertices> &memory)
 {
 	assert(memory);
@@ -143,14 +95,6 @@ GraphicalMemory & GraphicalMemory::draw(GLenum mode, Key<Vertices> &memory)
 	return (*this);
 }
 
-/**
-* Method:    _is_has_indices
-* FullName:  GraphicalMemory::_is_has_indices
-* Access:    private 
-* Returns:   bool
-* Qualifier: const
-* Goal:		 check if the graphical memory has a block for the indices
-*/
 bool GraphicalMemory::_is_has_indices() const
 {
 	for (auto &block : _blocksMemory) {
@@ -161,14 +105,6 @@ bool GraphicalMemory::_is_has_indices() const
 	return (false);
 }
 
-/**
-* Method:    bind
-* FullName:  GraphicalMemory::bind
-* Access:    public 
-* Returns:   GraphicalMemory &
-* Qualifier:
-* Goal:		 bind all attribute blocks
-*/
 GraphicalMemory & GraphicalMemory::bind()
 {
 	size_t index = 0;
@@ -178,14 +114,6 @@ GraphicalMemory & GraphicalMemory::bind()
 	return (*this);
 }
 
-/**
-* Method:    update
-* FullName:  GraphicalMemory::update
-* Access:    public 
-* Returns:   GraphicalMemory &
-* Qualifier:
-* Goal:		 update all attribute blocks
-*/
 GraphicalMemory & GraphicalMemory::update()
 {
 	for (auto &block : _blocksMemory) {

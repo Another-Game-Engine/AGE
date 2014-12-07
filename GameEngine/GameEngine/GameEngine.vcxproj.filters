@@ -85,6 +85,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\BlockResourcesFactory.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\ABlockResources.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexArray.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\ProgramResourcesFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -249,6 +250,7 @@
     <ClInclude Include="Engine\Render\ProgramResources\BlockResourcesFactory.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\ABlockResources.hh" />
     <ClInclude Include="Engine\Render\Buffer\VertexArray.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\ProgramResourcesFactory.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

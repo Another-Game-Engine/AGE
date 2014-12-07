@@ -85,7 +85,6 @@ int			main(int ac, char **av)
 
 	e->setInstance<PubSub::Manager>();
 	auto context = e->getInstance<IRenderContext>();
-	auto renderManager = e->getInstance<RenderManager>();
 	e->setInstance<Input>();
 	e->setInstance<Timer>();
 	e->setInstance<AGE::AnimationManager>();

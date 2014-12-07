@@ -130,7 +130,6 @@ namespace AGE
 		, const std::vector<MeshInfos> &order
 		, const std::bitset<MeshInfos::END> &infos)
 	{
-		auto m = _dependencyManager.lock()->getInstance<RenderManager>();
 
 		std::size_t size = data.infos.count();
 
@@ -206,8 +205,6 @@ namespace AGE
 	// Create pool for mesh
 	void AssetsManager::createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos)
 	{
-		auto m = _dependencyManager.lock()->getInstance<RenderManager>();
-		assert(m != nullptr);
 
 		std::size_t size = infos.count();
 

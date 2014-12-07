@@ -7,11 +7,13 @@ class UnitProg
 {
 public:
 	UnitProg(std::string const &filename, GLenum type);
-	UnitProg(UnitProg const &copy);
+	UnitProg(UnitProg const &copy) = delete;
 	UnitProg(UnitProg &&move);
-	UnitProg &operator=(UnitProg const &u);
-	UnitProg &operator=(UnitProg &&u);
+	UnitProg &operator=(UnitProg const &u) = delete;
+	UnitProg &operator=(UnitProg &&u) = delete;
 	~UnitProg();
+
+public:
 	GLenum getType() const;
 	GLuint getId() const;
 

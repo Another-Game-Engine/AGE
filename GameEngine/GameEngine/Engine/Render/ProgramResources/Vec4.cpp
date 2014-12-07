@@ -34,14 +34,6 @@ _value(value)
 
 }
 
-/**
-* Method:    operator()
-* FullName:  Vec4::operator()
-* Access:    virtual public 
-* Returns:   IProgramResource &
-* Qualifier:
-* Goal:		 send data to GPU
-*/
 IProgramResources & Vec4::operator()()
 {
 	if (!_update) {
@@ -51,41 +43,16 @@ IProgramResources & Vec4::operator()()
 	return (*this);
 }
 
-/**
-* Method:    safe
-* FullName:  Vec4::safe
-* Access:    virtual public 
-* Returns:   bool
-* Qualifier: const
-* Parameter: size_t size
-* Goal:		 Valid if the memory size in input is the same than in intern
-*/
 bool Vec4::safe(size_t size) const
 {
 	return ((sizeof(type) == size) ? true : false);
 }
 
-/**
-* Method:    size
-* FullName:  Vec4::size
-* Access:    virtual public 
-* Returns:   size_t
-* Qualifier: const
-* Goal:		 data size of the resource
-*/
 size_t Vec4::size() const
 {
 	return (sizeof(glm::vec4));
 }
 
-/**
-* Method:    data
-* FullName:  Vec4::data
-* Access:    virtual public 
-* Returns:   void const *
-* Qualifier: const
-* Goal:		 data of the vec4
-*/
 void const *Vec4::data() const
 {
 	return (&_value);

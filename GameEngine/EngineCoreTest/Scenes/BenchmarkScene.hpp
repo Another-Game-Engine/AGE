@@ -42,7 +42,6 @@ public:
 
 private:
 	AGE::RenderThread *_renderThread;
-	RenderManager *_renderManager;
 
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;

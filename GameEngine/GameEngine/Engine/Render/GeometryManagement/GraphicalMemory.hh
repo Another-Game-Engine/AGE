@@ -14,6 +14,10 @@ class GraphicalMemory
 {
 public:
 	GraphicalMemory();
+	GraphicalMemory(GraphicalMemory const &copy) = delete;
+	GraphicalMemory(GraphicalMemory &&move);
+	GraphicalMemory &operator=(GraphicalMemory const &g) = delete;
+	GraphicalMemory &operator=(GraphicalMemory &&g) = delete;
 
 public:
 	GraphicalMemory &init(std::vector<Attribute> const &attributes);

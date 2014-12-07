@@ -249,6 +249,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\AProgramResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\BlockResourcesFactory.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Mat4.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\ProgramResourcesFactory.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Vec4.cpp" />
     <ClCompile Include="Engine\Render\Render.cpp" />
@@ -358,6 +359,7 @@
     <ClInclude Include="Engine\Render\ProgramResources\IBlockResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\IProgramResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Mat4.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\ProgramResourcesFactory.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Vec4.hh" />
     <ClInclude Include="Engine\Render\Render.hh" />

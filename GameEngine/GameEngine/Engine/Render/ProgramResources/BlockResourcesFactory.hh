@@ -7,13 +7,15 @@
 # include <functional>
 # include <Render/ProgramResources/IBlockResources.hh>
 
+class UniformBlock;
+
 class BlockResourcesFactory
 {
 public:
 	BlockResourcesFactory(UniformBlock const &parent);
 
 public:
-	std::unique_ptr<IBlockResources> operator()(GLenum mode, GLint id);
+	std::unique_ptr<IBlockResources> build(GLenum mode, GLint id);
 
 private:
 	UniformBlock const &_parent;

@@ -15,6 +15,7 @@
 #include <Render/ProgramResources/UniformBlock.hh>
 #include <Render/ProgramResources/Vec4.hh>
 #include <Render/ProgramResources/Mat4.hh>
+#include <memory>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
 	: AScene(std::move(engine))
@@ -28,18 +29,16 @@ BenchmarkScene::~BenchmarkScene(void)
 void BenchmarkScene::initRendering()
 {
 	// A NETTOYER !!!!
-	_renderManager = getInstance<RenderManager>();
 	auto assetsManager = getInstance<AGE::AssetsManager>();
 	_renderThread = (AGE::RenderThread*)(getInstance<AGE::Threads::Render>());
 
-	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
-
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
 	{
-		UnitProg u1("", GL_VERTEX_SHADER);
-		UnitProg u2("", GL_FRAGMENT_SHADER);
+		glGenBuffers(0, 0);
+		std::shared_ptr<UnitProg> u1 = std::make_shared<UnitProg>("", GL_VERTEX_SHADER);
+		std::shared_ptr<UnitProg> u2 = std::make_shared<UnitProg>("", GL_FRAGMENT_SHADER);
 		Program shader({ u1, u2 }, { Indices });
-		shader.addResource(std::make_unique<Vec4>((glm::vec4(0), shader, "")));
+		shader.addResource(std::make_unique<Vec4>(glm::vec4(0), shader, ""));
 		UniformBlock ubo(shader, "");
 		return (true);
 	});
@@ -80,7 +79,6 @@ bool BenchmarkScene::userStart()
 #ifdef RENDERING_ACTIVATED
 
 	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
-	auto &m = *getInstance<RenderManager>();
 	initRendering();
 
 #ifdef SIMPLE_RENDERING
@@ -336,7 +334,6 @@ bool BenchmarkScene::userUpdate(double time)
 	renderThread->getCommandQueue().autoEmplace<RendCtxCommand::RefreshInputs>();
 
 	auto octree = getInstance<AGE::Threads::Prepare>();
-	auto renderManager = getInstance<RenderManager>();
 
 	{
 		auto link = getLink(GLOBAL_LIGHT);

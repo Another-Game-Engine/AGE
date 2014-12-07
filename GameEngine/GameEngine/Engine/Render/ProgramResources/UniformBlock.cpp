@@ -42,31 +42,14 @@ _block_binding(move._block_binding)
 
 }
 
-/**
-* Method:    operator()
-* FullName:  UniformBlock::operator()
-* Access:    public 
-* Returns:   IProgramResources &
-* Qualifier:
-* Goal:		 synchronized the uniform with GPU
-*/
 IProgramResources & UniformBlock::operator()()
 {
 	for (auto &blockResource : _blockResources) {
-		_buffer->sub(blockResource->offset, blockResource->size(), blockResource->data());
+		_buffer->sub(blockResource->offset(), blockResource->size(), blockResource->data());
 	}
 	return (*this);
 }
 
-/**
-* Method:    introspection
-* FullName:  UniformBlock::introspection
-* Access:    private 
-* Returns:   UniformBlock &
-* Qualifier:
-* Parameter: Program const & program
-* Goal:		 introspect the uniform for allocate the good data
-*/
 UniformBlock &UniformBlock::introspection(Program const &program)
 {
 	static GLint static_binding = 0;
@@ -94,7 +77,7 @@ UniformBlock &UniformBlock::introspection(Program const &program)
 	glGetActiveUniformsiv(program.getId(), nbrUniforms, (const GLuint *)indices.data(), GL_UNIFORM_NAME_LENGTH, nameLenght.data());
 	BlockResourcesFactory factory(*this);
 	for (GLint index = 0; index < nbrUniforms; ++index) {
-		_blockResources[index] = factory(types[index], indices[index]);
+		_blockResources[index] = factory.build(types[index], indices[index]);
 		_blockResources[index]->offset(offsets[index]);
 		_blockResources[index]->size_array(sizes[index]);
 		_blockResources[index]->stride(strides[index]);

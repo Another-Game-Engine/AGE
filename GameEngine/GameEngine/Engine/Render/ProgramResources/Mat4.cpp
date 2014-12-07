@@ -39,14 +39,6 @@ Mat4 &Mat4::operator=(glm::mat4 const &m)
 	return (*this);
 }
 
-/**
-* Method:    operator()
-* FullName:  Mat4::operator()
-* Access:    virtual public 
-* Returns:   IProgramResource &
-* Qualifier:
-* Goal:		 send the data to GPU
-*/
 IProgramResources & Mat4::operator()()
 {
 	if (!_update) {
@@ -56,41 +48,16 @@ IProgramResources & Mat4::operator()()
 	return (*this);
 }
 
-/**
-* Method:    safe
-* FullName:  Mat4::safe
-* Access:    virtual public 
-* Returns:   bool
-* Qualifier: const
-* Parameter: size_t size
-* Goal:		 Valid if the memory size in input is the same than in intern
-*/
 bool Mat4::safe(size_t size) const
 {
 	return ((sizeof(type) == size) ? true : false);
 }
 
-/**
-* Method:    size
-* FullName:  Mat4::size
-* Access:    virtual public 
-* Returns:   size_t
-* Qualifier: const
-* Goal:		 size of element
-*/
 size_t Mat4::size() const
 {
 	return (sizeof(glm::mat4));
 }
 
-/**
-* Method:    data
-* FullName:  Mat4::data
-* Access:    virtual public 
-* Returns:   void const *
-* Qualifier: const
-* Goal:		 data the mat4
-*/
 void const *Mat4::data() const
 {
 	return (&_value);

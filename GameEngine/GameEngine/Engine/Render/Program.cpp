@@ -3,15 +3,18 @@
 #include <Utils/OpenGL.hh>
 
 Program::Program(std::vector<std::shared_ptr<UnitProg>> const &u, std::vector<Attribute> const &attibutes) :
-_unitsProg(u)
+_unitsProg(u),
+_resources_factory(*this)
 {
 	_graphicalMemory.init(attibutes);
 	create();
 }
 
-Program::Program(Program &&move):
+Program::Program(Program &&move) :
 _resourcesProgram(std::move(move._resourcesProgram)),
 _unitsProg(std::move(move._unitsProg)),
+_graphicalMemory(std::move(move._graphicalMemory)),
+_resources_factory(*this),
 _id(std::move(move._id))
 {
 	move._id = 0;
@@ -54,15 +57,23 @@ void Program::destroy()
 	}
 }
 
-Key<ProgramResource> & Program::addResource(std::unique_ptr<IProgramResources> const &value)
+Key<ProgramResource> & Program::addResource(GLenum mode, std::string &&name)
 {
-	_resourcesProgram.emplace_back(value);
-	return (Key<ProgramResource>::createKey(_resourcesProgram.size() - 1));
+	std::unique_ptr<IProgramResources> tmp = _resources_factory.build(mode, std::move(name));
+	assert(tmp.get() != nullptr);
+	_resourcesProgram.emplace_back(std::move(tmp));
+	return (Key<ProgramResource>::createKey(int(_resourcesProgram.size() - 1)));
 }
 
-std::unique_ptr<IProgramResources> const & Program::getResource(Key<ProgramResource> const &key)
+Key<ProgramResource> & Program::addResource(std::unique_ptr<IProgramResources> value)
 {
-	return (_resourcesProgram[key.getId()]);
+	_resourcesProgram.emplace_back(std::move(value));
+	return (Key<ProgramResource>::createKey(int(_resourcesProgram.size() - 1)));
+}
+
+IProgramResources &Program::getResource(Key<ProgramResource> const &key)
+{
+	return (*_resourcesProgram[key.getId()].get());
 }
 
 bool Program::has(Key<ProgramResource> const &key)
