@@ -395,7 +395,7 @@ class HybridQueue
 				std::unique_lock<std::mutex> lock(_mutex);
 				_taskQueue.push(e);
 			}
-			releaseTaskReadability(WaitType::NoWait);
+			releaseTaskReadability();
 		}
 
 		template <typename T, typename ...Args>
@@ -405,7 +405,7 @@ class HybridQueue
 				std::unique_lock<std::mutex> lock(_mutex);
 				_taskQueue.emplace<T>(args...);
 			}
-			releaseTaskReadability(WaitType::NoWait);
+			releaseTaskReadability();
 		}
 
 		template <typename T, typename F>
@@ -416,7 +416,7 @@ class HybridQueue
 				std::unique_lock<std::mutex> lock(_mutex);
 				f = _taskQueue.push(e)->getFuture();
 			}
-			releaseTaskReadability(WaitType::NoWait);
+			releaseTaskReadability();
 			return f;
 		}
 
@@ -428,7 +428,7 @@ class HybridQueue
 				std::lock_guard<std::mutex> lock(_mutex);
 				f = _taskQueue.emplace<T>(args...)->getFuture();
 			}
-			releaseTaskReadability(WaitType::NoWait);
+			releaseTaskReadability();
 			return f;
 		}
 	};

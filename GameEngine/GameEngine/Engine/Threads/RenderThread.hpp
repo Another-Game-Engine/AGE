@@ -3,8 +3,6 @@
 #include "Thread.hpp"
 #include "CommandQueuePusher.hpp"
 #include "CommandQueueOwner.hpp"
-#include "TaskQueueOwner.hpp"
-
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
 

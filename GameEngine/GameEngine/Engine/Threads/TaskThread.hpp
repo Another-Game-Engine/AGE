@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Thread.hpp"
-#include "TaskQueueOwner.hpp"
+#include "CommandQueueOwner.hpp"
 
 namespace AGE
 {
 	class ThreadManager;
 
-	class TaskThread : public Thread, public TaskQueueOwner
+	class TaskThread : public Thread, public QueueOwner
 	{
 	public:
 		virtual bool init();

@@ -41,7 +41,7 @@ using namespace AGE;
 
 bool loadAssets(AGE::Engine *e)
 {
-	return AGE::GetRenderThread()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>([=](){
+	return AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::TQC::BoolFunction, bool>([=](){
 
 		e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
@@ -77,7 +77,7 @@ int			main(int ac, char **av)
 
 
 #ifdef USE_IMGUI
-		AGE::GetRenderThread()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>([=](){
+		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::TQC::BoolFunction, bool>([=](){
 			AGE::Imgui::getInstance()->init(engine.lock().get());
 			return true;
 		}).get();

@@ -14,7 +14,7 @@ namespace AGE
 	{
 		return std::function<bool()>([&](){
 			#ifdef USE_IMGUI
-				GetRenderThread()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>([=](){
+				GetRenderThread()->getQueue()->emplaceFutureTask<AGE::TQC::BoolFunction, bool>([=](){
 					AGE::Imgui::getInstance()->init(engine);
 					return true;
 				}).get();

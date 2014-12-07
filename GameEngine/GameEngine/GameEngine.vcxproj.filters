@@ -85,7 +85,6 @@
     <ClCompile Include="Engine\Core\OldPrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
     <ClCompile Include="Engine\Threads\CommandQueueOwner.cpp" />
-    <ClCompile Include="Engine\Threads\TaskQueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\TaskThread.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
@@ -248,7 +247,6 @@
     <ClInclude Include="Engine\Threads\MainThread.hpp" />
     <ClInclude Include="Engine\Threads\CommandQueueOwner.hpp" />
     <ClInclude Include="Engine\Threads\CommandQueuePusher.hpp" />
-    <ClInclude Include="Engine\Threads\TaskQueueOwner.hpp" />
     <ClInclude Include="Engine\Threads\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Threads\RenderThread.hpp" />
     <ClInclude Include="Engine\Threads\CallbackContainer.hpp" />

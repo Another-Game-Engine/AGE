@@ -221,6 +221,16 @@ std::size_t ReleasableQueue::getWaitingTime()
 ////////////////////
 /// HYBRID
 
+HybridQueue::HybridQueue()
+	: _millisecondToWait(1)
+{
+	_releasable = true;
+}
+
+void HybridQueue::launch()
+{
+	_writeCondition.notify_one();
+}
 
 bool HybridQueue::getTaskQueue(TMQ::PtrQueue &q, WaitType waitType)
 {
@@ -395,6 +405,21 @@ bool HybridQueue::releaseCommandReadability(WaitType waitType)
 	}
 	return true;
 }
-		void setWaitingTime(std::size_t milliseconds);
-		std::size_t getWaitingTime();
-		void clear();
+
+void HybridQueue::setWaitingTime(std::size_t milliseconds)
+{
+	std::lock_guard<std::mutex> lock(_mutex);
+	_millisecondToWait = milliseconds;
+}
+
+std::size_t HybridQueue::getWaitingTime()
+{
+	std::lock_guard<std::mutex> lock(_mutex);
+	return _millisecondToWait;
+}
+
+void HybridQueue::clear()
+{
+	std::unique_lock<std::mutex> lock(_mutex);
+	_commandQueue.eraseAll();
+}
