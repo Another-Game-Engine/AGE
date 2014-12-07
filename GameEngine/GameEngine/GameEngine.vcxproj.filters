@@ -88,6 +88,7 @@
     <ClCompile Include="Engine\Threads\TaskQueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\TaskThread.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
+    <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -254,6 +255,7 @@
     <ClInclude Include="Engine\Core\RenderScene.hpp" />
     <ClInclude Include="Engine\Threads\TaskThread.hpp" />
     <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />
+    <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

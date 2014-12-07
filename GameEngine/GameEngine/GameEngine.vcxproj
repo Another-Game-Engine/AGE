@@ -223,6 +223,7 @@
     <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
+    <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
     <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
@@ -315,6 +316,7 @@
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Configuration.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
+    <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
     <ClInclude Include="Engine\Core\CullableInterfaces.hh" />
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
