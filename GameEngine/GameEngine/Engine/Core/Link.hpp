@@ -65,7 +65,7 @@ namespace AGE
 		void _removeChild(Link *ptr);
 		void _removeParent();
 	public:
-		void *_octree;
+		RenderScene *_octree;
 	public:
 		Link();
 		void reset();

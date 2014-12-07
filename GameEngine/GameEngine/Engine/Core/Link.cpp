@@ -1,7 +1,7 @@
 #include "Link.hpp"
-#include <Core/PrepareRenderThread.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <Core/RenderScene.hpp>
 
 using namespace AGE;
 
@@ -12,7 +12,7 @@ void Link::registerOctreeObject(const PrepareKey &key)
 	assert(b.invalid());
 
 	b = key;
-	auto ot = static_cast<OldPrepareRenderThread*>(_octree);
+	auto ot = static_cast<RenderScene*>(_octree);
 	ot->setPosition(_position, key);
 	ot->setScale(_scale, key);
 	ot->setOrientation(_orientation, key);
@@ -26,7 +26,7 @@ void Link::unregisterOctreeObject(const PrepareKey &key)
 		auto &b = _octreeObjects[i];
 		if (b == key)
 		{
-			auto ot = static_cast<OldPrepareRenderThread*>(_octree);
+			auto ot = static_cast<RenderScene*>(_octree);
 			ot->removeElement(b);
 			b = PrepareKey();
 			if (_lastOctreeObjectIndex - 1 != i)
@@ -65,7 +65,7 @@ void Link::internalSetPosition(const glm::vec3 &v)
 {
 	_computeTrans = true;
 	_position = v;
-	auto ot = static_cast<OldPrepareRenderThread*>(_octree);
+	auto ot = static_cast<RenderScene*>(_octree);
 	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
 	{
 		auto &e = _octreeObjects[i];
@@ -81,7 +81,7 @@ void Link::internalSetForward(const glm::vec3 &v)
 	_position.x = _position.x + get.x;
 	_position.y = _position.y + get.y;
 	_position.z = _position.z + get.z;
-	auto ot = static_cast<OldPrepareRenderThread*>(_octree);
+	auto ot = static_cast<RenderScene*>(_octree);
 	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
 	{
 		auto &e = _octreeObjects[i];
@@ -93,7 +93,7 @@ void Link::internalSetForward(const glm::vec3 &v)
 void Link::internalSetScale(const glm::vec3 &v) {
 	_computeTrans = true;
 	_scale = v;
-	auto ot = static_cast<OldPrepareRenderThread*>(_octree);
+	auto ot = static_cast<RenderScene*>(_octree);
 	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
 	{
 		auto &e = _octreeObjects[i];
@@ -105,7 +105,7 @@ void Link::internalSetScale(const glm::vec3 &v) {
 void Link::internalSetOrientation(const glm::quat &v) {
 	_computeTrans = true;
 	_orientation = v;
-	auto ot = static_cast<OldPrepareRenderThread*>(_octree);
+	auto ot = static_cast<RenderScene*>(_octree);
 	for (std::size_t i = 0; i < _lastOctreeObjectIndex; ++i)
 	{
 		auto &e = _octreeObjects[i];

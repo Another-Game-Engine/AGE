@@ -231,7 +231,6 @@
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Core\OldPrepareRenderThread.cpp" />
-    <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
@@ -330,7 +329,6 @@
     <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
     <ClInclude Include="Engine\Core\RenderScene.hpp" />
-    <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />

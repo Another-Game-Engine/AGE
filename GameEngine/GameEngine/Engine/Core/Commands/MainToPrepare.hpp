@@ -10,10 +10,13 @@
 
 namespace AGE
 {
+	class RenderScene;
 	namespace Commands
 	{
 		class MainToPrepare
 		{
+			friend class RenderScene;
+
 			struct SetPosition
 			{
 				SetPosition(const PrepareKey &_key, const glm::vec3 &_position);
