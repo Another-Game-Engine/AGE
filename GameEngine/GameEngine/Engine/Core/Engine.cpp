@@ -1,7 +1,6 @@
 #include "Engine.hh"
 
 #include <Core/PrepareRenderThread.hpp>
-#include <Core/RenderThread.hpp>
 #include <Core/MainThread.hpp>
 #include <Core/Timer.hh>
 

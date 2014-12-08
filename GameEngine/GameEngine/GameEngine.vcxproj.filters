@@ -86,6 +86,7 @@
     <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
     <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\QueuePusher.cpp" />
+    <ClCompile Include="Engine\Core\RenderScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />

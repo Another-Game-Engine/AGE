@@ -12,6 +12,7 @@ class AScene;
 
 namespace AGE
 {
+	class RenderScene;
 	struct Link
 	{
 		inline const glm::vec3 &getPosition() const { return _position; }

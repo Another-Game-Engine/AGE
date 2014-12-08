@@ -3,6 +3,7 @@
 #include "Thread.hpp"
 #include "QueuePusher.hpp"
 #include "QueueOwner.hpp"
+#include <Core/RenderScene.hpp>
 
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
@@ -11,8 +12,6 @@
 
 namespace AGE
 {
-	class RenderScene{};
-
 	class PrepareRenderThread : public Thread, public QueuePusher, public QueueOwner
 	{
 	public:

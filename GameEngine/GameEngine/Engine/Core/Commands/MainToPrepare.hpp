@@ -15,7 +15,7 @@ namespace AGE
 	{
 		class MainToPrepare
 		{
-			friend class RenderScene;
+			friend class AGE::RenderScene;
 
 			struct SetPosition
 			{
