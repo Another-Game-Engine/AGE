@@ -30,6 +30,7 @@ class System;
 namespace AGE
 {
 	class Engine;
+	class RenderScene;
 }
 class EntityFilter;
 
@@ -42,6 +43,9 @@ private:
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
 	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
+	AGE::RenderScene *_renderScene;
+
+	inline void _setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }
 protected:
 	std::weak_ptr<AGE::Engine> _engine;
 public:
@@ -150,7 +154,7 @@ public:
 		std::uint16_t entityNbr = getNumberOfEntities();
 
 		ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
-		
+
 		std::vector<EntityData> entities;
 
 		// we list entities
@@ -212,7 +216,7 @@ public:
 				_componentsManagers[componentTypeId]->addComponentPtr(e, ptr);
 				informFiltersComponentAddition(componentTypeId, ed);
 			}
-		//	ar(*e.get());
+			//	ar(*e.get());
 		}
 		//updateEntityHandles();
 	}
@@ -315,9 +319,9 @@ public:
 		COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
 		auto &e = _pool[entity.id];
 		assert(e.entity == entity);
-			//return nullptr;
+		//return nullptr;
 		assert(e.barcode.hasComponent(id));
-			//return nullptr;
+		//return nullptr;
 		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->getComponent(entity);
 	}
 
@@ -407,4 +411,5 @@ public:
 
 private:
 	friend EntityFilter;
+	friend class AGE::RenderScene;
 };

@@ -1,5 +1,7 @@
 #include "SceneManager.hh"
 #include "AScene.hh"
+#include <Threads/MainThread.hpp>
+#include <Threads/ThreadManager.hpp>
 
 namespace AGE
 {
@@ -90,6 +92,7 @@ namespace AGE
 	{
 		for (auto &e : _actives)
 		{
+			GetMainThread()->setSceneAsActive(e.second.get());
 			e.second->update(time);
 		}
 	}

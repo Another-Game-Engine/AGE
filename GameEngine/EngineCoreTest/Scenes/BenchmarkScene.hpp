@@ -14,9 +14,9 @@
 #include <Core/PrepareRenderThreadCommand.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
 #include <Context/IRenderContext.hh>
-#include <Core/RenderThread.hpp>
 #include <CONFIGS.hh>
 #include <Skinning/AnimationInstance.hpp>
+#include <Render/Pipeline.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -89,7 +89,6 @@ public:
 	virtual bool userUpdate(double time);
 
 private:
-	AGE::OldRenderThread *_renderThread;
 	gl::RenderManager *_renderManager;
 	RenderKey key;
 

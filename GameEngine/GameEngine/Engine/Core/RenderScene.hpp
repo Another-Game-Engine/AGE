@@ -18,13 +18,15 @@ namespace AGE
 	struct SubMeshInstance;
 	class OctreeNode;
 	class PrepareRenderThread;
+	class Engine;
 
 	class RenderScene
 	{
 	public:
-		RenderScene(PrepareRenderThread *prepareThread);
+		RenderScene(PrepareRenderThread *prepareThread, Engine *engine, AScene *scene);
 		~RenderScene(void);
-		bool RenderScene::init();
+		bool init();
+		inline const AScene *getScene() const { return _scene; }
 	private:
 		void _setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg);
 		void _createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg);
@@ -63,17 +65,20 @@ namespace AGE
 		void removeDrawableObject(DRAWABLE_ID id);
 
 
-		bool _updateEnd()
-		{
-			//auto returnValue = true;
-			//_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
-			//return returnValue;
-			return true;
-		}
+//		bool _updateBegin();
+		//bool _updateEnd()
+		//{
+		//	//auto returnValue = true;
+		//	//_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
+		//	//return returnValue;
+		//	return true;
+		//}
 	private:
 		AScene *_scene;
-		OctreeNode *_octree;
 		PrepareRenderThread *_prepareThread;
+		Engine *_engine;
+
+		OctreeNode *_octree;
 
 		AGE::Vector<Mesh> _meshs;
 		AGE::Vector<Drawable> _drawables;

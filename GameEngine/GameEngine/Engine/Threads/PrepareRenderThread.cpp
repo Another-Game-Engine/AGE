@@ -1,5 +1,8 @@
 #include "PrepareRenderThread.hpp"
 #include <Utils/ThreadName.hpp>
+#include <Threads/MainThread.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Core/AScene.hh>
 
 namespace AGE
 {
@@ -100,5 +103,63 @@ namespace AGE
 			}
 		}
 		return true;
+	}
+
+	RenderScene *PrepareRenderThread::_getRenderScene(const AScene *scene)
+	{
+		for (auto &e : _scenes)
+		{
+			if (e->getScene() == scene)
+			{
+				return e.get();
+			}
+		}
+		return nullptr;
+	}
+
+	void PrepareRenderThread::setCameraProjection(const glm::mat4& projection, const PrepareKey &key)
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		scene->setCameraInfos(key, projection);
+	}
+
+	PrepareKey PrepareRenderThread::addCamera()
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		return scene->addCamera();
+	}
+
+	void PrepareRenderThread::updateGeometry(
+		const PrepareKey &key
+		, const AGE::Vector<AGE::SubMeshInstance> &meshs
+		, const AGE::Vector<AGE::MaterialInstance> &materials
+		, const gl::Key<AGE::AnimationInstance> &animation)
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		scene->updateGeometry(key, meshs, materials, animation);
+	}
+
+	PrepareKey PrepareRenderThread::addMesh()
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		return scene->addMesh();
+	}
+
+	PrepareKey PrepareRenderThread::addPointLight()
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		return scene->addPointLight();
+	}
+
+	void PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		scene->setPointLight(color, range, id);
 	}
 }

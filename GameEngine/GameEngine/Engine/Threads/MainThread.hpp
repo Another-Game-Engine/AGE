@@ -6,6 +6,7 @@
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
 
+class AScene;
 
 namespace AGE
 {
@@ -22,6 +23,8 @@ namespace AGE
 		bool update();
 		std::weak_ptr<AGE::Engine> createEngine();
 		std::weak_ptr<AGE::Engine> getEngine();
+		void setSceneAsActive(AScene *scene);
+		inline const AScene *getActiveScene() const { return _activeScene; }
 	private:
 		MainThread();
 		virtual ~MainThread();
@@ -34,5 +37,6 @@ namespace AGE
 		friend class ThreadManager;
 
 		std::shared_ptr<AGE::Engine> _engine;
+		AScene *_activeScene;
 	};
 }

@@ -8,7 +8,6 @@
 #include <Render/RenderManager.hh>
 #include <Core/PreparableObject.hh>
 #include <Core/AssetsManager.hpp>
-#include <Core/RenderThread.hpp>
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
 #include <Core/PrepareRenderThreadCommand.hpp>

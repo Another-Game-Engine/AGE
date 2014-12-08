@@ -20,6 +20,17 @@ namespace AGE
 		bool update();
 		virtual bool launch();
 		virtual bool stop();
+
+		void setCameraProjection(const glm::mat4& projection, const PrepareKey &key);
+		PrepareKey addCamera();
+		void updateGeometry(
+			const PrepareKey &key
+			, const AGE::Vector<AGE::SubMeshInstance> &meshs
+			, const AGE::Vector<AGE::MaterialInstance> &materials
+			, const gl::Key<AGE::AnimationInstance> &animation);
+		PrepareKey addMesh();
+		PrepareKey addPointLight();
+		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id);
 	private:
 		PrepareRenderThread();
 		virtual ~PrepareRenderThread();
@@ -30,6 +41,7 @@ namespace AGE
 
 		void _createRenderScene(){} // todo -> create a scene when scene created in Main thread
 		void _destroyRenderScene(AGE::RenderScene *scene){}; // todo -> delete a scene when scene deleted in Main thread
+		RenderScene *_getRenderScene(const AScene *scene);
 
 		AGE::Vector < std::unique_ptr<AGE::RenderScene> > _scenes;
 		AGE::RenderScene *_activeScene;

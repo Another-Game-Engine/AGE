@@ -1,5 +1,7 @@
 #include "RenderScene.hpp"
 #include <Threads/PrepareRenderThread.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
 #include <Core/OctreeNode.hh>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -9,11 +11,14 @@
 
 namespace AGE
 {
-	RenderScene::RenderScene(PrepareRenderThread *prepareThread)
+	RenderScene::RenderScene(PrepareRenderThread *prepareThread, Engine *engine, AScene *scene)
+		: _prepareThread(prepareThread)
+		, _engine(engine)
+		, _scene(scene)
 	{
 		_drawables.reserve(65536);
 		_octree = new OctreeNode();
-		_prepareThread = prepareThread;
+		assert(prepareThread && engine && scene);
 	}
 
 	RenderScene::~RenderScene(void)
@@ -53,8 +58,7 @@ namespace AGE
 		}
 		else
 			res.id = PrepareKey::OctreeObjectId(_cameraCounter++);
-		_commandQueue.emplace<PRTC::CreateCamera>(res);
-
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreateCamera>(res);
 		return res;
 	}
 
@@ -69,7 +73,7 @@ namespace AGE
 		}
 		else
 			res.id = PrepareKey::OctreeObjectId(_pointLightCounter++);
-		_commandQueue.emplace<PRTC::CreatePointLight>(res);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreatePointLight>(res);
 		return res;
 	}
 
@@ -80,15 +84,15 @@ namespace AGE
 		{
 		case PrepareKey::Type::Camera:
 			_freeCameras.push(key.id);
-			_commandQueue.emplace<PRTC::DeleteCamera>(key);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteCamera>(key);
 			break;
 		case PrepareKey::Type::Drawable:
 			_freeMeshs.push(key.id);
-			_commandQueue.emplace<PRTC::DeleteDrawable>(key);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteDrawable>(key);
 			break;
 		case PrepareKey::Type::PointLight:
 			_freePointLights.push(key.id);
-			_commandQueue.emplace<PRTC::DeletePointLight>(key);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeletePointLight>(key);
 			break;
 		default:
 			break;
@@ -98,32 +102,32 @@ namespace AGE
 
 	RenderScene &RenderScene::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::SetPointLight>(color, range, id);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, id);
 		return (*this);
 	}
 
 	RenderScene &RenderScene::setPosition(const glm::vec3 &v, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::Position>(id, v);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetPosition>(id, v);
 		return (*this);
 	}
 
 	RenderScene &RenderScene::setOrientation(const glm::quat &v, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::Orientation>(id, v);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetOrientation>(id, v);
 		return (*this);
 	}
 
 	RenderScene &RenderScene::setScale(const glm::vec3 &v, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::Scale>(id, v);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetScale>(id, v);
 		return (*this);
 	}
 
 	RenderScene &RenderScene::setCameraInfos(const PrepareKey &id
 		, const glm::mat4 &projection)
 	{
-		_commandQueue.emplace<PRTC::CameraInfos>(id, projection);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(id, projection);
 		return (*this);
 	}
 
@@ -155,7 +159,7 @@ namespace AGE
 		, const gl::Key<AGE::AnimationInstance> &animation)
 	{
 		assert(!key.invalid() || key.type != PrepareKey::Type::Drawable);
-		_commandQueue.emplace<PRTC::Geometry>(key, meshs, materials, animation);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs, materials, animation);
 		return (*this);
 	}
 
@@ -193,19 +197,19 @@ namespace AGE
 	}
 
 
-	bool RenderScene::_updateBegin()
-	{
-		auto returnValue = true;
+	//bool RenderScene::_updateBegin()
+	//{
+	//	auto returnValue = true;
 
-		return returnValue;
-	}
+	//	return returnValue;
+	//}
 
-	bool RenderScene::_updateEnd()
-	{
-		auto returnValue = true;
-		_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
-		return returnValue;
-	}
+	//bool RenderScene::_updateEnd()
+	//{
+	//	auto returnValue = true;
+	//	//_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
+	//	return returnValue;
+	//}
 
 		void RenderScene::_setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg)
 		{
@@ -399,8 +403,8 @@ namespace AGE
 
 
 			// we update animation instances
-			auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
-			animationManager->update(0.1f);
+			//auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
+			//animationManager->update(0.1f);
 
 
 			// Update drawable positions in Octree
@@ -484,8 +488,8 @@ namespace AGE
 				}
 #endif
 			}
-			getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
-			getCommandQueue()->emplace<RendCtxCommand::CopyDrawLists>(std::move(this->_octreeDrawList));
+			//getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
+			//GetRenderThread()->getQueue()->emplaceCommand<RendCtxCommand::CopyDrawLists>(this->_octreeDrawList);
 		}
 
 }

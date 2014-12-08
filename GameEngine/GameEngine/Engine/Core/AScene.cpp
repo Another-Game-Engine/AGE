@@ -10,11 +10,13 @@
 #include <fstream>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
+#include <Threads/PrepareRenderThread.hpp>
 
 AScene::AScene(std::weak_ptr<AGE::Engine> engine) :
 DependenciesInjector(std::move(engine))
 , _entityNumber(0)
 , _engine(engine)
+, _renderScene(nullptr)
 {
 	_componentsManagers.assign(nullptr);
 }
@@ -84,7 +86,7 @@ Entity &AScene::createEntity()
 		{
 			auto &e = _pool[_entityNumber];
 			e.entity.id = _entityNumber;
-			e.link._octree = getInstance<AGE::OldPrepareRenderThread>();
+			e.link._octree = _renderScene;
 			assert(++_entityNumber != UINT16_MAX);
 			e.entity.setActive(true);
 			return e.entity;

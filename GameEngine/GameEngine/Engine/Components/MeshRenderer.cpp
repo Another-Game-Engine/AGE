@@ -6,6 +6,8 @@
 #include <assert.h>
 #include <Core/PrepareRenderThread.hpp>
 #include <Core/AssetsManager.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Threads/PrepareRenderThread.hpp>
 
 namespace Component
 {
@@ -57,7 +59,7 @@ namespace Component
 	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<AGE::MeshInstance> &mesh)
 	{
 		_mesh = mesh;
-		_key = _scene->getInstance<AGE::Threads::Prepare>()->addMesh();
+		AGE::GetPrepareThread()->addMesh();
 		_scene->getLink(entityId)->registerOctreeObject(_key);
 		assert(!_key.invalid());
 		updateGeometry();
@@ -103,7 +105,7 @@ namespace Component
 			else
 				materials.push_back(_material->datas[e.defaultMaterialIndex]);
 		}
-		_scene->getInstance<AGE::Threads::Prepare>()->updateGeometry(_key, _mesh->subMeshs, materials, _animation);
+		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, materials, _animation);
 	}
 
 	void MeshRenderer::postUnserialization(AScene *scene)

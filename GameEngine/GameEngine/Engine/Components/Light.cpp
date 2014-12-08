@@ -4,6 +4,9 @@
 
 #include <Utils/MathematicTools.hh>
 
+#include <Threads/PrepareRenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
+
 namespace Component
 {
 	PointLight::PointLight()
@@ -48,7 +51,7 @@ namespace Component
 	void PointLight::init(AScene *scene)
 	{
 		_scene = scene;
-		_key = scene->getInstance<AGE::Threads::Prepare>()->addPointLight();
+		_key = AGE::GetPrepareThread()->addPointLight();
 		scene->getLink(entityId)->registerOctreeObject(_key);
 		assert(!_key.invalid());
 	}
@@ -58,7 +61,7 @@ namespace Component
 		float	maxRange = computePointLightRange(256, range);
 		_color = color;
 		_range = range;
-		_scene->getInstance<AGE::Threads::Prepare>()->setPointLight(color, range, _key);
+		AGE::GetPrepareThread()->setPointLight(color, range, _key);
 		return (*this);
 	}
 

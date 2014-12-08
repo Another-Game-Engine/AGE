@@ -78,6 +78,7 @@ namespace AGE
 	MainThread::MainThread()
 		: Thread(Thread::ThreadType::Main)
 		, _engine(nullptr)
+		, _activeScene(nullptr)
 	{
 	}
 	
@@ -111,6 +112,11 @@ namespace AGE
 		if (!release())
 			return false;
 		return true;
+	}
+
+	void MainThread::setSceneAsActive(AScene *scene)
+	{
+		_activeScene = scene;
 	}
 
 }
