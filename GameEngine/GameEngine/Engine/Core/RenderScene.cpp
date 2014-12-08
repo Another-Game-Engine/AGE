@@ -3,6 +3,7 @@
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/OctreeNode.hh>
+#include <Core/Commands/Render.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -15,6 +16,9 @@ namespace AGE
 		: _prepareThread(prepareThread)
 		, _engine(engine)
 		, _scene(scene)
+		, _MeshCounter(0)
+		, _pointLightCounter(0)
+		, _cameraCounter(0)
 	{
 		_drawables.reserve(65536);
 		_octree = new OctreeNode()			;
@@ -489,7 +493,7 @@ namespace AGE
 #endif
 			}
 			//getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
-			//GetRenderThread()->getQueue()->emplaceCommand<RendCtxCommand::CopyDrawLists>(this->_octreeDrawList);
+			GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::CopyDrawLists>(this->_octreeDrawList);
 		}
 
 }

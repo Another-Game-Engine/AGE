@@ -9,6 +9,7 @@
 #include <Context/SdlContext.hh>
 #include <Utils/Containers/Vector.hpp>
 #include <Core/CullableObjects.hh>
+#include <Core/Tasks/Basics.hpp>
 
 namespace AGE
 {
@@ -36,6 +37,7 @@ namespace AGE
  		registerCallback<Commands::Render::Flush>([&](Commands::Render::Flush& msg)
 		{
 			_context->swapContext();
+
 		});
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
@@ -50,7 +52,8 @@ namespace AGE
 
 		registerCallback<Commands::Render::CopyDrawLists>([&](Commands::Render::CopyDrawLists& msg)
 		{
-			this->_drawlist.insert(this->_drawlist.end(), msg.list.begin(), msg.list.end());
+			//this->_drawlist.insert(this->_drawlist.end(), msg.list.begin(), msg.list.end());
+			this->_drawlist = msg.list;
 		});
 
 		registerCallback<Commands::Render::RenderDrawLists>([&](Commands::Render::RenderDrawLists& msg)
@@ -61,12 +64,12 @@ namespace AGE
 			}
 		});
 
-		registerCallback<TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
+		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
 		{
 			msg.setValue(msg.function());
 		});
 
-		registerCallback<TQC::VoidFunction>([&](AGE::TQC::VoidFunction& msg)
+		registerCallback<AGE::Tasks::Basic::VoidFunction>([&](AGE::Tasks::Basic::VoidFunction& msg)
 		{
 			if (msg.function)
 				msg.function();
@@ -150,6 +153,7 @@ namespace AGE
 					assert(execute(command));
 					commands.pop();
 				}
+				_drawlist.clear();
 			}
 		}
 		return true;

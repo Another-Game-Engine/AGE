@@ -26,7 +26,7 @@ namespace AGE
 	{
 		_oldTime = _curTime;
 		_curTime = std::chrono::system_clock::now();
-		_elapsed = std::chrono::duration_cast<std::chrono::seconds>(_curTime - _oldTime).count();
+		_elapsed = (double)(std::chrono::duration_cast<std::chrono::milliseconds>(_curTime - _oldTime).count()) / 1000.0l;
 	}
 
 	double 		Timer::getElapsed() const

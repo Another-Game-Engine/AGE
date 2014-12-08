@@ -4,6 +4,8 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/AScene.hh>
 #include <Core/Tasks/MainToPrepare.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Core/Commands/Render.hpp>
 
 namespace AGE
 {

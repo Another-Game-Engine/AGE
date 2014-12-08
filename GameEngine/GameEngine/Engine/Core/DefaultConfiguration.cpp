@@ -7,6 +7,7 @@
 #include <Utils/ThreadQueueCommands.hpp>
 #include <Utils/Age_Imgui.hpp>
 #include <Core/Timer.hh>
+#include <Core/Tasks/Basics.hpp>
 
 namespace AGE
 {
@@ -14,7 +15,7 @@ namespace AGE
 	{
 		return std::function<bool()>([&](){
 			#ifdef USE_IMGUI
-				GetRenderThread()->getQueue()->emplaceFutureTask<AGE::TQC::BoolFunction, bool>([=](){
+				GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 					AGE::Imgui::getInstance()->init(engine);
 					return true;
 				}).get();
