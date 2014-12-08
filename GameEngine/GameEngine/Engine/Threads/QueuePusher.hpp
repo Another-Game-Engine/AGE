@@ -17,7 +17,7 @@ namespace AGE
 	public:
 		QueuePusher();
 		virtual ~QueuePusher();
-		void LinkToNext(QueueOwner *next);
+		void linkToNext(QueueOwner *next);
 	protected:
 		QueueOwner *_next;
 

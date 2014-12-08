@@ -74,6 +74,7 @@ namespace AGE
 		//	return true;
 		//}
 	private:
+		friend class PrepareRenderThread;
 		AScene *_scene;
 		PrepareRenderThread *_prepareThread;
 		Engine *_engine;

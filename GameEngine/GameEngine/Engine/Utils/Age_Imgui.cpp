@@ -38,7 +38,6 @@ namespace AGE
 
 		ImGuiIO& io = ImGui::GetIO();
 		//HARDCODED WINDOW TO FIX
-		//io.DisplaySize = ImVec2((float)window.x, (float)window.y);        // Display size, in pixels. For clamping windows positions.
 		io.DisplaySize = ImVec2(1920, 1040);        // Display size, in pixels. For clamping windows positions.
 		io.DeltaTime = 1.0f / 60.0f;                          // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
 		io.PixelCenterOffset = 0.0f;                        // Align OpenGL texels

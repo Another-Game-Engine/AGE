@@ -83,6 +83,7 @@ namespace AGE
 			return false;
 		}
 		GetMainThread()->setSceneAsActive(t->second.get());
+		GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(t->second.get());
 		return t->second->start();
 	}
 
@@ -91,6 +92,7 @@ namespace AGE
 		for (auto &e : _actives)
 		{
 			GetMainThread()->setSceneAsActive(e.second.get());
+			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(e.second.get());
 			if (!e.second->userUpdate(time))
 				return false;
 		}
@@ -102,6 +104,7 @@ namespace AGE
 		for (auto &e : _actives)
 		{
 			GetMainThread()->setSceneAsActive(e.second.get());
+			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(e.second.get());
 			e.second->update(time);
 		}
 	}

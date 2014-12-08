@@ -21,6 +21,77 @@ namespace AGE
 			this->_createRenderScene(msg.scene);
 			msg.setValue(true);
 		});
+
+		registerCallback<Commands::MainToPrepare::SceneUpdateBegin>([this](Commands::MainToPrepare::SceneUpdateBegin &msg){
+			this->_activeScene = _getRenderScene(msg.scene);
+			assert(this->_activeScene != nullptr);
+		});
+
+		registerCallback<Commands::MainToPrepare::CameraInfos>([this](Commands::MainToPrepare::CameraInfos &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setCameraInfos(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::CreateCamera>([this](Commands::MainToPrepare::CreateCamera &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_createCamera(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::CreateDrawable>([this](Commands::MainToPrepare::CreateDrawable &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_createDrawable(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::CreatePointLight>([this](Commands::MainToPrepare::CreatePointLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_createPointLight(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::DeleteCamera>([this](Commands::MainToPrepare::DeleteCamera &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_deleteCamera(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::DeleteDrawable>([this](Commands::MainToPrepare::DeleteDrawable &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_deleteDrawable(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::DeletePointLight>([this](Commands::MainToPrepare::DeletePointLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_deletePointLight(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::PrepareDrawLists>([this](Commands::MainToPrepare::PrepareDrawLists &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_prepareDrawList(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::SetGeometry>([this](Commands::MainToPrepare::SetGeometry &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setGeometry(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::SetOrientation>([this](Commands::MainToPrepare::SetOrientation &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setOrientation(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::SetPointLight>([this](Commands::MainToPrepare::SetPointLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setPointLight(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::SetPosition>([this](Commands::MainToPrepare::SetPosition &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setPosition(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::SetScale>([this](Commands::MainToPrepare::SetScale &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setScale(msg);
+		});
+
 		return true;
 	}
 
@@ -89,12 +160,7 @@ namespace AGE
 					auto command = commands.front();
 					if (!execute(command))
 					{
-						if (!_activeScene /*|| !_activeScene->executeCommand(command)*/) // TO UNCOMMENT
-						{
-							_next->getQueue()->moveCommand(command, commands.getFrontSize());
-							commands.pop();
-							continue;
-						}
+						_next->getQueue()->moveCommand(command, commands.getFrontSize());
 						commands.pop();
 						continue;
 					}

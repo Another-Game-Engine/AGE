@@ -6,9 +6,16 @@
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
 
+class SdlContext;
+class Input;
+namespace gl
+{
+	class RenderManager;
+}
 namespace AGE
 {
 	class Engine;
+	struct DrawableCollection;
 
 	class RenderThread : public Thread, public QueueOwner
 	{
@@ -29,22 +36,10 @@ namespace AGE
 		std::thread _threadHandle;
 		std::atomic_bool _run;
 
+		SdlContext *_context;
+		gl::RenderManager *_render;
+		AGE::Vector < AGE::DrawableCollection > _drawlist;
+
 		friend class ThreadManager;
 	};
-
-	/***********************MAIN THREAD -> RENDER THREAD MESSAGES ********************/
-	struct MainThreadToRenderThread
-	{
-	private:
-		struct CreateRenderContext : TMQ::FutureData<bool>
-		{
-			CreateRenderContext(std::weak_ptr<Engine> _engine) : engine(_engine){}
-			std::weak_ptr<Engine> engine;
-		};
-		friend class RenderThread;
-		friend class MainThread;
-	};
-
-	/*********************************************************************************/
-
 }

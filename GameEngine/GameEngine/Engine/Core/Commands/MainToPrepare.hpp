@@ -109,8 +109,8 @@ namespace AGE
 
 			struct SceneUpdateBegin
 			{
-				SceneUpdateBegin(std::size_t _sceneId);
-				std::size_t sceneId;
+				SceneUpdateBegin(AScene *_scene);
+				AScene *scene;
 			};
 		};
 	}

@@ -4,6 +4,11 @@
 #include <Context/SdlContext.hh>
 #include <Utils/ThreadQueueCommands.hpp>
 #include <Utils/ThreadName.hpp>
+#include <Core/Tasks/Render.hpp>
+#include <Core/Commands/Render.hpp>
+#include <Context/SdlContext.hh>
+#include <Utils/Containers/Vector.hpp>
+#include <Core/CullableObjects.hh>
 
 namespace AGE
 {
@@ -16,54 +21,50 @@ namespace AGE
 
 	bool RenderThread::init()
 	{
-		this->registerCallback<MainThreadToRenderThread::CreateRenderContext>([&](MainThreadToRenderThread::CreateRenderContext &msg)
+		this->registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
-			if (!msg.engine.lock()->setInstance<SdlContext, IRenderContext>()->init(0, 1920, 1040, "~AGE~ V0.00001 Demo"))
+			_context = msg.engine.lock()->setInstance<SdlContext, IRenderContext>();
+			if (!_context->init(0, 1920, 1040, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
 				return;
 			}
-			msg.engine.lock()->setInstance<gl::RenderManager>();
+			_render = msg.engine.lock()->setInstance<gl::RenderManager>();
 			msg.setValue(true);
 		});
 
-		//registerTaskCallback<RendCtxCommand::Flush>([&](RendCtxCommand::Flush& msg)
-		//{
-		//	_context->swapContext();
-		//});
+ 		registerCallback<Commands::Render::Flush>([&](Commands::Render::Flush& msg)
+		{
+			_context->swapContext();
+		});
 
-		//registerTaskCallback<RendCtxCommand::GetScreenSize>([&](RendCtxCommand::GetScreenSize& msg)
-		//{
-		//	msg.setValue(_context->getScreenSize());
-		//});
+		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
+		{
+			msg.setValue(_context->getScreenSize());
+		});
 
-		//registerTaskCallback<RendCtxCommand::SetScreenSize>([&](RendCtxCommand::SetScreenSize& msg)
-		//{
-		//	_context->setScreenSize(msg.screenSize);
-		//});
+		registerCallback<Tasks::Render::SetWindowSize>([&](Tasks::Render::SetWindowSize& msg)
+		{
+			_context->setScreenSize(msg.size);
+		});
+
+		registerCallback<Commands::Render::CopyDrawLists>([&](Commands::Render::CopyDrawLists& msg)
+		{
+			this->_drawlist.insert(this->_drawlist.end(), msg.list.begin(), msg.list.end());
+		});
+
+		registerCallback<Commands::Render::RenderDrawLists>([&](Commands::Render::RenderDrawLists& msg)
+		{
+			for (auto &e : this->_drawlist)
+			{
+				msg.function(e);
+			}
+		});
 
 		registerCallback<TQC::BoolFunction>([&](AGE::TQC::BoolFunction& msg)
 		{
 			msg.setValue(msg.function());
 		});
-
-		//registerTaskCallback<RendCtxCommand::RefreshInputs>([&](RendCtxCommand::RefreshInputs& msg)
-		//{
-		//	_context->refreshInputs();
-		//});
-
-		//registerTaskCallback<RendCtxCommand::CopyDrawLists>([&](RendCtxCommand::CopyDrawLists& msg)
-		//{
-		//	this->_toDrawList = std::move(msg.list);
-		//});
-
-		//registerTaskCallback<RendCtxCommand::RenderDrawLists>([&](RendCtxCommand::RenderDrawLists& msg)
-		//{
-		//	for (auto &e : this->_toDrawList)
-		//	{
-		//		msg.function(e);
-		//	}
-		//});
 
 		registerCallback<TQC::VoidFunction>([&](AGE::TQC::VoidFunction& msg)
 		{
@@ -127,6 +128,8 @@ namespace AGE
 
 		while (this->_run)
 		{
+			if (_context)
+				_context->refreshInputs();
 			getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
 			if (taskSuccess)
 			{

@@ -492,9 +492,6 @@ bool BenchmarkScene::userUpdate(double time)
 	//	renderManager->drawPipelines();
 	//});
 
-#ifdef USE_IMGUI
-	ImGui::Render();
-#endif
 	//TODO.
 	//mainThread->getCommandQueue()->emplace<RendCtxCommand::Flush>();
 

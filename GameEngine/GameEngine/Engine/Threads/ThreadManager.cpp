@@ -3,6 +3,8 @@
 #include "PrepareRenderThread.hpp"
 #include "RenderThread.hpp"
 #include "TaskThread.hpp"
+#include "QueueOwner.hpp"
+#include "QueuePusher.hpp"
 
 namespace AGE
 {
@@ -14,12 +16,16 @@ namespace AGE
 		assert(hardwareConcurency >= 3);
 		_threads.resize(hardwareConcurency, nullptr);
 		_threadIdReference.resize(hardwareConcurency, -1);
-		_threads[Thread::Main] = new MainThread();
-		_threads[Thread::PrepareRender] = new PrepareRenderThread();
-		_threads[Thread::Render] = new RenderThread();
+		auto mt = new MainThread();
+		auto pt = new PrepareRenderThread();
+		auto rt = new RenderThread();;
+		_threads[Thread::Main] = mt;
+		_threads[Thread::PrepareRender] = pt;
+		_threads[Thread::Render] = rt;
+		mt->linkToNext(pt);
+		pt->linkToNext(rt);
 		for (std::size_t i = Thread::Worker1; i < hardwareConcurency; ++i)
 		{
-			// Todo
 			_threads[i] = new TaskThread(Thread::ThreadType(i));
 		}
 	}

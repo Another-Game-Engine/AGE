@@ -6,6 +6,10 @@
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
+#include <Threads/PrepareRenderThread.hpp>
+#include <Threads/RenderThread.hpp>
+
+#include <Core/Commands/Render.hpp>
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
@@ -56,32 +60,13 @@ namespace AGE
 
 //	bool Engine::_updateBegin()
 //	{
-//		updateThreadStatistics(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
-//#ifdef USE_IMGUI
-//		AGE::Imgui::getInstance()->startUpdate();
-//#endif
+
 //		return true;
 //	}
 //
 //	bool Engine::_updateEnd()
 //	{
-//		_timer = getInstance<Timer>();
-//		auto time = _timer->getElapsed();
-//		_timer->update();
-//		bool res = true;
-//#ifdef USE_DEFAULT_ENGINE_CONFIGURATION
-//		updateScenes(time);
-//		if (ImGui::CollapsingHeader("Threads statistics"))
-//		{
-//			for (auto &e : _threadsStatics)
-//			{
-//				ImGui::Text("Thread : %s", e.second.name.c_str());
-//				ImGui::Text(std::string(std::to_string(e.second.averageTime) + " | " + std::to_string(int(1000.0f / e.second.averageTime)) + " fps").c_str());
-//				ImGui::PlotLines("Frame Times", e.second.frames.data() , (int)e.second.frames.size(), (int)e.second.frameCounter, e.second.name.c_str(), 0.0f, 20.0f, ImVec2(0, 70));
-//			}
-//		}
-//		res = userUpdateScenes(time);
-//#endif
+
 //		return res;
 //	}
 
@@ -95,7 +80,6 @@ namespace AGE
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
 		setInstance<AGE::AssetsManager>();
-		setInstance<Input>();
 		setInstance<AGE::AnimationManager>();
 
 		//_threadsStatics.insert(std::make_pair(std::this_thread::get_id().hash(), Engine::ThreadStatistics()));
@@ -108,8 +92,31 @@ namespace AGE
 
 	bool Engine::update()
 	{
+		bool res = false;
+
+		// TODO
+		//updateThreadStatistics(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
+#ifdef USE_IMGUI
+		AGE::Imgui::getInstance()->startUpdate();
+#endif
 		_timer->update();
 		updateScenes(_timer->getElapsed());
-		return userUpdateScenes(_timer->getElapsed());
+		res = userUpdateScenes(_timer->getElapsed());
+		if (!res)
+			return false;
+		if (ImGui::CollapsingHeader("Threads statistics"))
+		{
+			for (auto &e : _threadsStatics)
+			{
+				ImGui::Text("Thread : %s", e.second.name.c_str());
+				ImGui::Text(std::string(std::to_string(e.second.averageTime) + " | " + std::to_string(int(1000.0f / e.second.averageTime)) + " fps").c_str());
+				ImGui::PlotLines("Frame Times", e.second.frames.data() , (int)e.second.frames.size(), (int)e.second.frameCounter, e.second.name.c_str(), 0.0f, 20.0f, ImVec2(0, 70));
+			}
+		}
+		res = userUpdateScenes(_timer->getElapsed());
+#ifdef USE_IMGUI
+	ImGui::Render();
+#endif
+	GetPrepareThread()->getQueue()->emplaceCommand<Commands::Render::Flush>();
 	}
 }

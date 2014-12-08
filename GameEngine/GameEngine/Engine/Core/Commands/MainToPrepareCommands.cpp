@@ -68,8 +68,8 @@ namespace AGE
 				, projection(_projection)
 			{}
 
-			SceneUpdateBegin::SceneUpdateBegin(std::size_t _sceneId)
-				: sceneId(_sceneId)
+			SceneUpdateBegin::SceneUpdateBegin(AScene *_scene)
+				: scene(_scene)
 			{
 			}
 		}

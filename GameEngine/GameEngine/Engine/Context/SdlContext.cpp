@@ -2,10 +2,13 @@
 #include "Utils/OpenGL.hh"
 #include <iostream>
 #include <Utils/DependenciesInjector.hpp>
+#include <Core/Input.hh>
 #include <Render/RenderManager.hh>
 
 bool SdlContext::_init(int mode)
 {
+	_dependencyManager.lock()->setInstance<Input>();
+
 	if (SDL_Init(SDL_INIT_VIDEO) != 0 ||
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0 ||
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) != 0 ||

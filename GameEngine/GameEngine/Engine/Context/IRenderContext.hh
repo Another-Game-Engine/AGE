@@ -13,40 +13,6 @@
 
 #include <Core/CullableObjects.hh>
 
-namespace RendCtxCommand
-{
-	struct Flush{};
-	struct SetScreenSize
-	{
-		SetScreenSize(const glm::uvec2& v)
-			: screenSize(v)
-		{}
-		glm::uvec2 screenSize;
-	};
-	struct GetScreenSize : public TMQ::FutureData < glm::uvec2 >
-	{};
-
-	struct RefreshInputs
-	{};
-
-	struct CopyDrawLists
-	{
-		AGE::Vector<AGE::DrawableCollection> list;
-
-		CopyDrawLists(AGE::Vector<AGE::DrawableCollection> &c)
-			: list(std::move(c))
-		{}
-	};
-
-	struct RenderDrawLists
-	{
-		std::function<void(AGE::DrawableCollection)> function;
-		RenderDrawLists(std::function<void(AGE::DrawableCollection)> _function)
-			: function(_function)
-		{}
-	};
-}
-
 class IRenderContext : public Dependency<IRenderContext>
 {
 public:

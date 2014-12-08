@@ -10,9 +10,9 @@ namespace AGE
 	QueuePusher::~QueuePusher()
 	{}
 
-	void QueuePusher::LinkToNext(QueueOwner *next)
+	void QueuePusher::linkToNext(QueueOwner *next)
 	{
-		assert(next == false);
+		assert(next != nullptr);
 		_next = next;
 	}
 }

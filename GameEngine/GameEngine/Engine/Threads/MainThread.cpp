@@ -3,6 +3,7 @@
 #include "QueueOwner.hpp"
 #include "ThreadManager.hpp"
 #include "RenderThread.hpp"
+#include <Core/Tasks/Render.hpp>
 
 namespace AGE
 {
@@ -92,7 +93,7 @@ namespace AGE
 		{
 			_engine = std::make_shared<AGE::Engine>();
 			auto engine = std::weak_ptr<AGE::Engine>(_engine);
-			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<MainThreadToRenderThread::CreateRenderContext, bool>(engine);
+			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(engine);
 			auto success = futur.get();
 			assert(success);
 		}

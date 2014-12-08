@@ -59,7 +59,7 @@ namespace Component
 	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<AGE::MeshInstance> &mesh)
 	{
 		_mesh = mesh;
-		AGE::GetPrepareThread()->addMesh();
+		_key = AGE::GetPrepareThread()->addMesh();
 		_scene->getLink(entityId)->registerOctreeObject(_key);
 		assert(!_key.invalid());
 		updateGeometry();
