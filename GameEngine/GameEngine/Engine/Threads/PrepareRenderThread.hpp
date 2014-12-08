@@ -39,8 +39,8 @@ namespace AGE
 		PrepareRenderThread &operator=(const PrepareRenderThread &) = delete;
 		PrepareRenderThread &operator=(PrepareRenderThread &&) = delete;
 
-		void _createRenderScene(){} // todo -> create a scene when scene created in Main thread
-		void _destroyRenderScene(AGE::RenderScene *scene){}; // todo -> delete a scene when scene deleted in Main thread
+		void _createRenderScene(AScene *scene);
+		void _destroyRenderScene(AGE::RenderScene *scene);
 		RenderScene *_getRenderScene(const AScene *scene);
 
 		AGE::Vector < std::unique_ptr<AGE::RenderScene> > _scenes;

@@ -12,10 +12,9 @@ void Link::registerOctreeObject(const PrepareKey &key)
 	assert(b.invalid());
 
 	b = key;
-	auto ot = static_cast<RenderScene*>(_octree);
-	ot->setPosition(_position, key);
-	ot->setScale(_scale, key);
-	ot->setOrientation(_orientation, key);
+	_octree->setPosition(_position, key);
+	_octree->setScale(_scale, key);
+	_octree->setOrientation(_orientation, key);
 	++_lastOctreeObjectIndex;
 }
 
@@ -26,8 +25,7 @@ void Link::unregisterOctreeObject(const PrepareKey &key)
 		auto &b = _octreeObjects[i];
 		if (b == key)
 		{
-			auto ot = static_cast<RenderScene*>(_octree);
-			ot->removeElement(b);
+			_octree->removeElement(b);
 			b = PrepareKey();
 			if (_lastOctreeObjectIndex - 1 != i)
 			{

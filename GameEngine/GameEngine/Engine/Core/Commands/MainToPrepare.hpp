@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __COMMANDS_MAIN_TO_PREPARE__
+#define __COMMANDS_MAIN_TO_PREPARE__
 
 #include <glm/glm.hpp>
 #include <Utils/Containers/Vector.hpp>
@@ -8,15 +9,15 @@
 #include <Geometry/Mesh.hpp>
 #include <Core/CullableObjects.hh>
 
+class AScene;
+
 namespace AGE
 {
 	class RenderScene;
 	namespace Commands
 	{
-		class MainToPrepare
+		namespace MainToPrepare
 		{
-			friend class AGE::RenderScene;
-
 			struct SetPosition
 			{
 				SetPosition(const PrepareKey &_key, const glm::vec3 &_position);
@@ -114,3 +115,4 @@ namespace AGE
 		};
 	}
 }
+#endif

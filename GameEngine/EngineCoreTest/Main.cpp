@@ -21,7 +21,6 @@
 #include <Utils/PerformanceDebugger.hh>
 #include <Core/AssetsManager.hpp>
 #include <Core/MainThread.hpp>
-#include <Core/RenderThread.hpp>
 #include <Utils/ThreadQueueCommands.hpp>
 #include <Utils/Age_Imgui.hpp>
 #include <Utils/ThreadQueueCommands.hpp>

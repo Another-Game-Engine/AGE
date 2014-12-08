@@ -1,7 +1,9 @@
 #include "SceneManager.hh"
 #include "AScene.hh"
 #include <Threads/MainThread.hpp>
+#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Core/Tasks/MainToPrepare.hpp>
 
 namespace AGE
 {
@@ -16,7 +18,10 @@ namespace AGE
 
 	void		SceneManager::addScene(std::shared_ptr<AScene> scene, std::string const &name)
 	{
+
+		GetPrepareThread()->getQueue()->emplaceFutureTask<AGE::Tasks::MainToPrepare::CreateScene, bool>(scene.get()).get();
 		_scenes[name] = scene;
+
 	}
 
 	void		SceneManager::removeScene(std::string const &name)
@@ -74,7 +79,10 @@ namespace AGE
 	{
 		auto t = _scenes.find(name);
 		if (t == std::end(_scenes))
+		{
 			return false;
+		}
+		GetMainThread()->setSceneAsActive(t->second.get());
 		return t->second->start();
 	}
 
@@ -82,6 +90,7 @@ namespace AGE
 	{
 		for (auto &e : _actives)
 		{
+			GetMainThread()->setSceneAsActive(e.second.get());
 			if (!e.second->userUpdate(time))
 				return false;
 		}

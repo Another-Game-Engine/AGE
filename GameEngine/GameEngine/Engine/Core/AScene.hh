@@ -45,7 +45,6 @@ private:
 	ENTITY_ID                                                               _entityNumber;
 	AGE::RenderScene *_renderScene;
 
-	inline void _setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }
 protected:
 	std::weak_ptr<AGE::Engine> _engine;
 public:
@@ -57,7 +56,7 @@ public:
 	void 					update(double time);
 	bool                    start();
 	inline std::weak_ptr<AGE::Engine> getEngine() { return _engine; }
-
+	inline void setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }
 	void                    filterSubscribe(COMPONENT_ID id, EntityFilter* filter)
 	{
 		auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);

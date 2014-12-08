@@ -9,7 +9,11 @@
 #include <Skinning/AnimationManager.hpp>
 #include <Core/MainThread.hpp>
 #include <Render/RenderManager.hh>
-
+#include <Threads/RenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Core/Tasks/Render.hpp>
+#include <glm/glm.hpp>
+#include <SDL/SDL.h>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<AGE::Engine> engine)
 	: AScene(engine)
@@ -29,6 +33,7 @@ void BenchmarkScene::initRendering()
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 
+	//TODO
 	//auto res = getInstance<AGE::OldRenderThread>()->getTaskQueue()->emplaceFuture<AGE::TQC::BoolFunction, bool>(
 	//	std::function<bool()>([&](){
 	//	// create the shader
@@ -230,7 +235,7 @@ bool BenchmarkScene::userStart()
 	GLOBAL_CAMERA = camera;
 	auto cam = addComponent<Component::CameraComponent>(camera);
 
-	auto screenSize = getInstance<AGE::OldRenderThread>()->getTaskQueue()->emplaceFuture<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();
 
 	auto camLink = getLink(camera);
 	camLink->setPosition(glm::vec3(0, 1.5, 0));
@@ -434,7 +439,8 @@ bool BenchmarkScene::userUpdate(double time)
 #endif
 
 	auto mainThread = getEngine().lock();
-	mainThread->getCommandQueue()->emplace<RendCtxCommand::RefreshInputs>();
+	// TODO place it in engin update
+	//mainThread->getCommandQueue()->emplace<RendCtxCommand::RefreshInputs>();
 
 	auto renderManager = getInstance<gl::RenderManager>();
 
@@ -460,36 +466,37 @@ bool BenchmarkScene::userUpdate(double time)
 	}
 #endif
 
-	mainThread->getCommandQueue()->emplace<AGE::PRTC::PrepareDrawLists>();
+	// TODO
+	//mainThread->getCommandQueue()->emplace<AGE::PRTC::PrepareDrawLists>();
+	// TODO
+	//mainThread->getCommandQueue()->emplace<RendCtxCommand::RenderDrawLists>([=](AGE::DrawableCollection collection)
+	//{
+	//	renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
+	//	renderManager->locationStorage.setLocation(0, collection.lights.size());
+	//	renderManager->locationStorage.setLocation(collection.lights.size() + 1, size_t(0));
+	//	AGE::Vector<AGE::Drawable> lights;
+	//	for (size_t index = 0; index < collection.lights.size(); ++index)
+	//	{
+	//		AGE::Drawable drawable;
 
-	mainThread->getCommandQueue()->emplace<RendCtxCommand::RenderDrawLists>([=](AGE::DrawableCollection collection)
-	{
-		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
-		renderManager->locationStorage.setLocation(0, collection.lights.size());
-		renderManager->locationStorage.setLocation(collection.lights.size() + 1, size_t(0));
-		AGE::Vector<AGE::Drawable> lights;
-		for (size_t index = 0; index < collection.lights.size(); ++index)
-		{
-			AGE::Drawable drawable;
-
-			drawable.material = renderManager->getDefaultMaterial();
-			drawable.mesh.vertices = renderManager->getSimpleFormGeo(gl::SimpleForm::SPHERE);
-			drawable.mesh.indices = renderManager->getSimpleFormId(gl::SimpleForm::SPHERE);
-			renderManager->locationStorage.setLocation(index + 1, collection.lights[index]);
-			lights.push_back(drawable);
-		}
-		renderManager->setUniformBlock(key.global_state, 0, collection.projection);
-		renderManager->setUniformBlock(key.global_state, 1, collection.transformation);
-		renderManager->updatePipeline(key.getBuff.pipeline, collection.drawables);
-		renderManager->updatePipeline(key.Accum.pipeline, lights);
-		renderManager->drawPipelines();
-	});
+	//		drawable.material = renderManager->getDefaultMaterial();
+	//		drawable.mesh.vertices = renderManager->getSimpleFormGeo(gl::SimpleForm::SPHERE);
+	//		drawable.mesh.indices = renderManager->getSimpleFormId(gl::SimpleForm::SPHERE);
+	//		renderManager->locationStorage.setLocation(index + 1, collection.lights[index]);
+	//		lights.push_back(drawable);
+	//	}
+	//	renderManager->setUniformBlock(key.global_state, 0, collection.projection);
+	//	renderManager->setUniformBlock(key.global_state, 1, collection.transformation);
+	//	renderManager->updatePipeline(key.getBuff.pipeline, collection.drawables);
+	//	renderManager->updatePipeline(key.Accum.pipeline, lights);
+	//	renderManager->drawPipelines();
+	//});
 
 #ifdef USE_IMGUI
 	ImGui::Render();
 #endif
-
-	mainThread->getCommandQueue()->emplace<RendCtxCommand::Flush>();
+	//TODO.
+	//mainThread->getCommandQueue()->emplace<RendCtxCommand::Flush>();
 
 	return true;
 }

@@ -17,7 +17,7 @@ namespace AGE
 		, _scene(scene)
 	{
 		_drawables.reserve(65536);
-		_octree = new OctreeNode();
+		_octree = new OctreeNode()			;
 		assert(prepareThread && engine && scene);
 	}
 

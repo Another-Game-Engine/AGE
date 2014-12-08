@@ -83,10 +83,11 @@
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
     <ClCompile Include="Engine\Threads\TaskThread.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
-    <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
     <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\QueuePusher.cpp" />
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
+    <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
+    <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -249,6 +250,9 @@
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Threads\QueueOwner.hpp" />
     <ClInclude Include="Engine\Threads\QueuePusher.hpp" />
+    <ClInclude Include="Engine\Core\Tasks\Render.hpp" />
+    <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
+    <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

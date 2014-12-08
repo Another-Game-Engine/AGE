@@ -3,6 +3,7 @@
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/AScene.hh>
+#include <Core/Tasks/MainToPrepare.hpp>
 
 namespace AGE
 {
@@ -16,6 +17,10 @@ namespace AGE
 
 	bool PrepareRenderThread::init()
 	{
+		registerCallback<Tasks::MainToPrepare::CreateScene>([this](Tasks::MainToPrepare::CreateScene &msg){
+			this->_createRenderScene(msg.scene);
+			msg.setValue(true);
+		});
 		return true;
 	}
 
@@ -162,4 +167,16 @@ namespace AGE
 		assert(scene != nullptr);
 		scene->setPointLight(color, range, id);
 	}
+
+	void PrepareRenderThread::_createRenderScene(AScene *scene)
+	{
+		_scenes.emplace_back(std::make_unique<RenderScene>(this, scene->getEngine().lock().get(), scene));
+		scene->setRenderScene(_scenes.back().get());
+	}
+
+	void PrepareRenderThread::_destroyRenderScene(AGE::RenderScene *scene)
+	{
+		assert(false);
+	}
+
 }
