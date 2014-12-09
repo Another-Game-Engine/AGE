@@ -113,7 +113,6 @@ namespace AGE
 				ImGui::PlotLines("Frame Times", e.second.frames.data() , (int)e.second.frames.size(), (int)e.second.frameCounter, e.second.name.c_str(), 0.0f, 20.0f, ImVec2(0, 70));
 			}
 		}
-		res = userUpdateScenes(_timer->getElapsed());
 #ifdef USE_IMGUI
 	ImGui::Render();
 #endif
