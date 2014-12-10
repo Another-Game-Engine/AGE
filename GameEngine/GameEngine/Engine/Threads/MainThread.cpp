@@ -69,6 +69,8 @@ namespace AGE
 	bool MainThread::run()
 	{
 		_run = true;
+		_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block);
+
 		while (_run)
 		{
 			if (!update())

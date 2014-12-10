@@ -72,9 +72,6 @@ namespace AGE
 
 	bool Engine::launch(std::function<bool()> &fn)
 	{
-		if (!fn())
-			return false;
-
 		_timer = setInstance<Timer>();
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
@@ -87,6 +84,8 @@ namespace AGE
 
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
+		if (!fn())
+			return false;
 		return GetMainThread()->run();
 	}
 
