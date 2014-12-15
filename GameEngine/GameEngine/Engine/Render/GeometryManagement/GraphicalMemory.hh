@@ -13,14 +13,13 @@ template <typename type_t> class Key;
 class GraphicalMemory
 {
 public:
-	GraphicalMemory();
+	GraphicalMemory(std::vector<Attribute> const &attributes);
 	GraphicalMemory(GraphicalMemory const &copy) = delete;
 	GraphicalMemory(GraphicalMemory &&move);
 	GraphicalMemory &operator=(GraphicalMemory const &g) = delete;
 	GraphicalMemory &operator=(GraphicalMemory &&g) = delete;
 
 public:
-	GraphicalMemory &init(std::vector<Attribute> const &attributes);
 	Key<Vertices> add(Vertices const &vertices);
 	Key<Vertices> add(Vertices &&vertices);
 	Vertices &get(Key<Vertices> const &memory);

@@ -3,15 +3,9 @@
 #include <Render/ProgramResources/Vec4.hh>
 #include <Render/Program.hh>
 
-Vec4::Vec4(glm::vec4 const &value, Program const &parent, std::string const &name) :
-AProgramResources(parent, name, GL_UNIFORM),
-ABlockResources()
-{
-
-}
 
 Vec4::Vec4(glm::vec4 const &value, Program const &parent, std::string &&name) :
-AProgramResources(parent, name, GL_UNIFORM),
+AProgramResources(parent, std::move(name), GL_UNIFORM),
 ABlockResources(),
 _value(value)
 {
@@ -31,7 +25,6 @@ AProgramResources(parent, id,  GL_UNIFORM),
 ABlockResources(),
 _value(value)
 {
-
 }
 
 IProgramResources & Vec4::operator()()

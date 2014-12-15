@@ -1,14 +1,6 @@
 #include <Render/ProgramResources/Mat4.hh>
 #include <Render/Program.hh>
 
-Mat4::Mat4(glm::mat4 const &value, Program const &parent, std::string const &name) :
-AProgramResources(parent, name, GL_UNIFORM),
-ABlockResources(),
-_value(value)
-{
-
-}
-
 Mat4::Mat4(glm::mat4 const &value, Program const &parent, GLint id) :
 AProgramResources(parent, id, GL_UNIFORM),
 ABlockResources(),

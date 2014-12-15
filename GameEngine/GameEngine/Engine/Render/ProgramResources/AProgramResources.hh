@@ -1,7 +1,5 @@
 #pragma once
 
-# include <Utils/OpenGL.hh>
-# include <string>
 # include <Render/ProgramResources/IProgramResources.hh>
 
 class Program;
@@ -9,7 +7,6 @@ class Program;
 class AProgramResources : public IProgramResources
 {
 protected:
-	AProgramResources(Program const &parent, std::string const &name, GLenum type);
 	AProgramResources(Program const &parent, std::string &&name, GLenum type);
 	AProgramResources(Program const &parent, GLint id, GLenum type);
 	AProgramResources(AProgramResources &&move);
@@ -17,16 +14,14 @@ protected:
 	AProgramResources &operator=(AProgramResources const &a) = delete;
 
 public:
-	std::string const &name() const;
-	GLuint id() const;
-	bool update() const;
-	AProgramResources &update(bool u);
-	GLenum type() const;
-	Program const &program() const;
+	virtual std::string const &name() const override final;
+	virtual GLuint id() const override final;
+	virtual GLenum type() const override final;
+	virtual Program const &program() const override final;
 
 private:
-	bool found_id();
-	bool found_name();
+	bool _found_id();
+	bool _found_name();
 
 protected:
 	std::string _name;

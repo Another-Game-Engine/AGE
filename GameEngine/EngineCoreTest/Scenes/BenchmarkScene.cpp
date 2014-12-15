@@ -34,12 +34,9 @@ void BenchmarkScene::initRendering()
 
 	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
 	{
-		glGenBuffers(0, 0);
-		std::shared_ptr<UnitProg> u1 = std::make_shared<UnitProg>("", GL_VERTEX_SHADER);
-		std::shared_ptr<UnitProg> u2 = std::make_shared<UnitProg>("", GL_FRAGMENT_SHADER);
-		Program shader({ u1, u2 }, { Indices });
-		shader.addResource(std::make_unique<Vec4>(glm::vec4(0), shader, ""));
-		UniformBlock ubo(shader, "");
+		std::shared_ptr<UnitProg> u1 = std::make_shared<UnitProg>(VERTEX_SHADER, GL_VERTEX_SHADER);
+		std::shared_ptr<UnitProg> u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
+		Program shader({ u1, u2 });
 		return (true);
 	});
 	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);

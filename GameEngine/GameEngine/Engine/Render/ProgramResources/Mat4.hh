@@ -10,7 +10,6 @@ class Program;
 class Mat4 : public AProgramResources, public ABlockResources
 {
 public:
-	Mat4(glm::mat4 const &value, Program const &parent, std::string const &name);
 	Mat4(glm::mat4 const &value, Program const &parent, GLint id);
 	Mat4(glm::mat4 const &value, Program const &parent, std::string &&name);
 	Mat4(Mat4 &&move);

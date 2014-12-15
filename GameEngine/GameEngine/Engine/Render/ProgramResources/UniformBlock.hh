@@ -11,9 +11,7 @@
 class UniformBlock : public AProgramResources
 {
 public:
-	UniformBlock(Program const &parent, std::string const &name);
 	UniformBlock(Program const &parent, std::string &&name);
-	UniformBlock(Program const &parent, std::string const &name, UniformBlock const &shared);
 	UniformBlock(Program const &parent, std::string &&name, UniformBlock const &shaded);
 	UniformBlock(UniformBlock &&move);
 	UniformBlock(UniformBlock const &copy) = delete;
@@ -24,7 +22,7 @@ public:
 	IProgramResources &operator()();
 
 private:
-	UniformBlock &introspection(Program const &program);
+	UniformBlock &_create(Program const &program);
 
 private:
 	std::vector<std::unique_ptr<IBlockResources>> _blockResources;

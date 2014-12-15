@@ -1,15 +1,7 @@
 #include <Render/ProgramResources/AProgramResources.hh>
 #include <Render/Program.hh>
 #include <assert.h>
-
-AProgramResources::AProgramResources(Program const &parent, std::string const &name, GLenum type) :
-_name(name),
-_parent(parent),
-_type(type),
-_update(false)
-{
-	assert(found_id());
-}
+#include <array>
 
 AProgramResources::AProgramResources(Program const &parent, std::string &&name, GLenum type) :
 _name(std::move(name)),
@@ -17,7 +9,7 @@ _parent(parent),
 _type(type),
 _update(false)
 {
-	assert(found_id());
+	assert(_found_id());
 }
 
 AProgramResources::AProgramResources(Program const &parent, GLint id, GLenum type) :
@@ -26,7 +18,7 @@ _parent(parent),
 _type(type),
 _update(false)
 {
-	assert(found_name());
+	assert(_found_name());
 }
 
 AProgramResources::AProgramResources(AProgramResources &&move) :
@@ -49,33 +41,24 @@ GLuint AProgramResources::id() const
 	return (_id);
 }
 
-bool AProgramResources::update() const
-{
-	return (_update);
-}
-
-AProgramResources &AProgramResources::update(bool u)
-{
-	_update = u;
-	return (*this);
-}
-
-bool AProgramResources::found_id()
+bool AProgramResources::_found_id()
 {
 	_id = glGetProgramResourceIndex(_parent.getId(), _type, _name.c_str());
 	return ((_id != GL_INVALID_INDEX) ? true : false);
 }
 
-bool AProgramResources::found_name()
+bool AProgramResources::_found_name()
 {
-	GLint lenght = 0;
-	glGetActiveUniformsiv(_parent.getId(), 1, &_id, GL_UNIFORM_NAME_LENGTH, &lenght);
-	if (lenght == 0) {
-		return (false);
+	size_t const nbr_properties = 1;
+	std::array<GLenum, nbr_properties> type_properties = {GL_NAME_LENGTH};
+	std::array<GLint, nbr_properties> properties = {0};
+	glGetProgramResourceiv(_parent.getId(), _type, _id, nbr_properties, type_properties.data(), nbr_properties, NULL, properties.data());
+	if (properties[0] == 0) {
+		 (false);
 	}
-	std::string name(lenght, 0);
+	std::string name(properties[0], 0);
 	GLsizei useless;
-	glGetActiveUniformName(_parent.getId(), _id, lenght, &useless, (GLchar *)name.data());
+	glGetProgramResourceName(_parent.getId(), _type, _id, properties[0], &useless, (GLchar *)name.data());
 	_name = std::move(name);
 	return (true);
 }

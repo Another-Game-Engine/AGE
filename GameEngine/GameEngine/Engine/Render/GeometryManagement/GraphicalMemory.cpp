@@ -4,8 +4,12 @@
 #include <Render/GeometryManagement/Data.hh>
 #include <tuple>
 
-GraphicalMemory::GraphicalMemory()
+GraphicalMemory::GraphicalMemory(std::vector<Attribute> const &attributes) :
+_blocksMemory(attributes.size())
 {
+	for (auto index = 0; index < attributes.size(); ++index) {
+		_blocksMemory[index] = AttributeBlockMemory(attributes[index]);
+	}
 }
 
 GraphicalMemory::GraphicalMemory(GraphicalMemory &&move) :
@@ -14,15 +18,6 @@ _elements(std::move(move._elements)),
 _blocksMemory(std::move(move._blocksMemory))
 {
 
-}
-
-GraphicalMemory &GraphicalMemory::init(std::vector<Attribute> const &attributes)
-{
-	_blocksMemory.resize(attributes.size());
-	for (auto index = 0; index < attributes.size(); ++index) {
-		_blocksMemory[index] = AttributeBlockMemory(attributes[index]);
-	}
-	return (*this);
 }
 
 Key<Vertices> GraphicalMemory::add(Vertices const &vertices)

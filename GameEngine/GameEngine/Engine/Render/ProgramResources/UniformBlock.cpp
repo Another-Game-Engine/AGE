@@ -2,28 +2,12 @@
 #include <Render/ProgramResources/BlockResourcesFactory.hh>
 #include <Render/Program.hh>
 
-UniformBlock::UniformBlock(Program const &parent, std::string const &name) :
-AProgramResources(parent, name, GL_UNIFORM_BLOCK),
-_buffer(std::make_shared<UniformBuffer>()),
-_block_binding(0)
-{
-	introspection(parent);
-}
-
 UniformBlock::UniformBlock(Program const &parent, std::string &&name) :
 AProgramResources(parent, std::move(name), GL_UNIFORM_BLOCK),
 _buffer(std::make_shared<UniformBuffer>()),
 _block_binding(0)
 {
-	introspection(parent);
-}
-
-UniformBlock::UniformBlock(Program const &parent, std::string const &name, UniformBlock const &shared) :
-AProgramResources(parent, name, GL_UNIFORM_BLOCK),
-_buffer(shared._buffer),
-_block_binding(shared._block_binding)
-{
-
+	_create(parent);
 }
 
 UniformBlock::UniformBlock(Program const &parent, std::string &&name, UniformBlock const &shared) :
@@ -50,7 +34,7 @@ IProgramResources & UniformBlock::operator()()
 	return (*this);
 }
 
-UniformBlock &UniformBlock::introspection(Program const &program)
+UniformBlock &UniformBlock::_create(Program const &program)
 {
 	static GLint static_binding = 0;
 	_block_binding = static_binding++;
