@@ -9,6 +9,7 @@
 #include <memory>
 #include <thread>
 
+#define ACTIVATE_OCTREE_CULLING
 
 namespace AGE
 {
