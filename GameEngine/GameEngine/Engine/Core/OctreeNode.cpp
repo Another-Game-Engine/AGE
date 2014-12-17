@@ -1,6 +1,7 @@
 
 #include <Core/OctreeNode.hh>
-
+//TODO DEMOVE
+#include <Core/CullableObjects.hh>
 namespace AGE
 {
 	OctreeNode::OctreeNode() :
@@ -24,6 +25,28 @@ namespace AGE
 	{
 		glm::i8vec3	direction;
 		ECollision collisionState;
+
+		if (!toAdd)
+		{
+			std::cout << "lolol" << std::endl;
+			assert(false);
+		}
+
+
+		Drawable *currentDrawable = dynamic_cast<Drawable*>(toAdd);
+
+		if (!currentDrawable)
+		{
+			std::cout << "lolprout" << std::endl;
+			assert(false);
+		}
+
+		if (!currentDrawable->material)
+		{
+			std::cout << "lol" << std::endl;
+			assert(false);
+		}
+
 
 		// check the collision state depending on the geometry shape
 		switch (toAdd->type)
@@ -58,7 +81,10 @@ namespace AGE
 			{
 				++_uniqueSubElements;
 				for (uint32_t i = 0; i < 8; ++i)
-					_sons[i]->addElement(toAdd);
+				{
+					if (_sons[i])
+						_sons[i]->addElement(toAdd);
+				}
 			}
 			return (newRoot);
 		}
@@ -74,6 +100,13 @@ namespace AGE
 	OctreeNode	*OctreeNode::removeElement(CullableObject *toRm, bool useCurrentPos)
 	{
 		bool collisionState;
+
+		Drawable *currentDrawable = dynamic_cast<Drawable*>(toRm);
+		if (!currentDrawable->material)
+		{
+			std::cout << "lol" << std::endl;
+			assert(false);
+		}
 
 		// check the collision state depending on the geometry shape
 		switch (toRm->type)
@@ -150,6 +183,17 @@ namespace AGE
 
 	OctreeNode	*OctreeNode::moveElement(CullableObject *toMove)
 	{
+		Drawable *currentDrawable = dynamic_cast<Drawable*>(toMove);
+		if (!currentDrawable)
+		{
+			std::cout << "lolprout";
+			assert(false);
+		}
+		if (!currentDrawable->material)
+		{
+			std::cout << "lol" << std::endl;
+			assert(false);
+		}
 		OctreeNode *newRoot = removeElement(toMove, false);
 		return (newRoot->addElement(toMove));
 	}
@@ -176,6 +220,18 @@ namespace AGE
 					if (_elements[i]->hasBeenFound == false &&
 						toTest->checkCollision(_elements[i]))
 					{
+						Drawable *currentDrawable = dynamic_cast<Drawable*>(_elements[i]);
+						if (!currentDrawable)
+						{
+							std::cout << "lolprout";
+							assert(false);
+						}
+						if (!currentDrawable->material)
+						{
+							std::cout << "lol " << i << " " << _elementsNbr << std::endl;
+							continue;
+							//assert(false);
+						}
 						toFill.push_back(_elements[i]);
 						_elements[i]->hasBeenFound = true;
 					}
@@ -184,7 +240,10 @@ namespace AGE
 			else
 			{
 				for (uint32_t i = 0; i < 8; ++i)
-					_sons[i]->getElementsCollide(toTest, toFill);
+				{
+					if (_sons[i])
+						_sons[i]->getElementsCollide(toTest, toFill);
+				}
 			}
 		}
 	}
@@ -213,6 +272,19 @@ namespace AGE
 
 	OctreeNode * OctreeNode::extendNode(CullableObject *toAdd, glm::i8vec3 const &direction)
 	{
+
+		Drawable *currentDrawable = dynamic_cast<Drawable*>(toAdd);
+		if (!currentDrawable)
+		{
+			std::cout << "lolprout";
+			assert(false);
+		}
+		if (!currentDrawable->material)
+		{
+			std::cout << "lol" << std::endl;
+			assert(false);
+		}
+
 		OctreeNode	*newRoot = new OctreeNode;
 		glm::vec3	nodeSize = _node.maxPoint - _node.minPoint;
 

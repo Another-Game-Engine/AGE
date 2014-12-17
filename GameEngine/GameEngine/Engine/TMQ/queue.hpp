@@ -9,6 +9,9 @@
 #include <condition_variable>
 #include <mutex>
 
+//TO REMOVE
+#include <iostream>
+
 namespace TMQ
 {
 	class ReleasableQueue;
@@ -48,6 +51,8 @@ namespace TMQ
 		template <typename T>
 		T* push(const T& e)
 		{
+			if (sizeof(T) % 4)
+				std::cout << sizeof(T) << std::endl;
 			std::size_t s = sizeof(Message<T>);
 			std::size_t sizeOfInt = sizeof(std::size_t);
 
@@ -69,6 +74,8 @@ namespace TMQ
 		template <typename T>
 		T* push(T&& e)
 		{
+			if (sizeof(T) % 4)
+				std::cout << sizeof(T) << std::endl;
 			std::size_t s = sizeof(Message<T>);
 			std::size_t sizeOfInt = sizeof(std::size_t);
 
@@ -110,6 +117,10 @@ namespace TMQ
 		template <typename T, typename ...Args>
 		T* emplace(Args ...args)
 		{
+			if (sizeof(T) % 4)
+			{
+				std::cout << sizeof(T) << std::endl;
+			}
 			std::size_t s = sizeof(Message<T>);
 			std::size_t sizeOfInt = sizeof(std::size_t);
 
@@ -131,6 +142,10 @@ namespace TMQ
 		template <typename T>
 		void allocate()
 		{
+			if (sizeof(T) % 4)
+			{
+				std::cout << sizeof(T) << std::endl;
+			}
 			std::size_t sizeOfType = sizeof(Message<T>);
 
 			while (_size - _to <= sizeOfType + sizeof(std::size_t)

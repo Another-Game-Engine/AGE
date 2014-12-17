@@ -191,12 +191,12 @@ namespace AGE
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
-		_drawables[id].reset();
 #ifdef ACTIVATE_OCTREE_CULLING
 		// remove drawable from octree
 		if (_drawables[id].toAddInOctree == false)
 			_octree = _octree->removeElement(&_drawables[id]);
 #endif
+		_drawables[id].reset();
 		assert(id != (std::size_t)(-1));
 	}
 
@@ -310,6 +310,11 @@ namespace AGE
 				uo->drawableCollection.push_back(id);
 				_drawables[id].mesh = msg.submeshInstances[i];
 				_drawables[id].material = msg.materialInstances[i];
+				if (!msg.materialInstances[i])
+				{
+					std::cout << "lolkillme";
+					assert(false);
+				}
 				_drawables[id].position = uo->position;
 				_drawables[id].orientation = uo->orientation;
 				_drawables[id].scale = uo->scale;
@@ -420,11 +425,8 @@ namespace AGE
 					e.previousAABB = e.currentAABB;
 					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
-#ifdef  ACTIVATE_OCTREE_CULLING
 					_octree = _octree->moveElement(&e);
-#endif
 				}
-#ifdef  ACTIVATE_OCTREE_CULLING
 				if (e.toAddInOctree)
 				{
 					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
@@ -433,7 +435,6 @@ namespace AGE
 					e.toAddInOctree = false;
 					_octree = _octree->addElement(&e);
 				}
-#endif
 			}
 			// Do culling for each camera
 			_octreeDrawList.clear();
@@ -481,6 +482,11 @@ namespace AGE
 					//{
 						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
 					//}
+						if (!currentDrawable->material)
+						{
+							std::cout << "lol" << std::endl;
+							assert(false);
+						}
 				}
 #else
 				for (auto &e : _drawables)
@@ -493,6 +499,17 @@ namespace AGE
 #endif
 			}
 			//getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
+				for (auto &i : this->_octreeDrawList)
+				{
+					for (auto &e : i.drawables)
+					{
+						if (!e.material)
+						{
+							std::cout << "lol";
+							assert(false);
+						}
+					}
+				}
 			GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::CopyDrawLists>(this->_octreeDrawList);
 		}
 

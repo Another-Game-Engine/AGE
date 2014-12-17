@@ -287,6 +287,7 @@ void HybridQueue::getTaskAndCommandQueue(
 	bool &commandQueueSuccess,
 	WaitType waitType)
 {
+	taskQueueSuccess = commandQueueSuccess = false;
    	if (waitType == WaitType::NoWait)
 	{
 		if (!_releasable)
@@ -294,7 +295,9 @@ void HybridQueue::getTaskAndCommandQueue(
 			taskQueueSuccess = commandQueueSuccess = false;
 			return;
 		}
-		std::unique_lock<std::mutex> lock(_mutex);
+		std::unique_lock<std::mutex> lock(_mutex, std::try_to_lock);
+		if (!lock.owns_lock())
+			return;
 		taskQueue = std::move(_taskQueue);
 		_taskQueue.clear();
 		commandQueue = std::move(_commandQueueCopy);
@@ -363,7 +366,9 @@ bool HybridQueue::releaseCommandReadability(WaitType waitType)
 	try{
 		if (waitType == WaitType::NoWait)
 		{
-			std::unique_lock<std::mutex> lock(_mutex);
+			std::unique_lock<std::mutex> lock(_mutex, std::try_to_lock);
+			if (!lock.owns_lock())
+				return false;
 			if (!_commandQueueCopy.empty())
 				return false;
 			_commandQueueCopy = std::move(_commandQueue);
@@ -376,6 +381,8 @@ bool HybridQueue::releaseCommandReadability(WaitType waitType)
 		else if (waitType == WaitType::Block)
 		{
 			std::unique_lock<std::mutex> lock(_mutex);
+			while (!lock.owns_lock())
+				lock.try_lock();
 			_writeCondition.wait(lock, [this]()
 			{
 				return (_commandQueueCopy.empty());
@@ -399,6 +406,8 @@ bool HybridQueue::releaseCommandReadability(WaitType waitType)
 			{
 				return false;
 			}
+			if (!lock.owns_lock())
+				assert(false);
 			_commandQueueCopy = std::move(_commandQueue);
 			_commandQueue.clear();
 			_releasable = true;
@@ -430,5 +439,10 @@ std::size_t HybridQueue::getWaitingTime()
 void HybridQueue::clear()
 {
 	std::unique_lock<std::mutex> lock(_mutex);
+	while (!lock.owns_lock())
+	{
+		lock.lock();
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
 	_commandQueue.eraseAll();
 }

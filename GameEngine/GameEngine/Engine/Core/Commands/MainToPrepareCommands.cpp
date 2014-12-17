@@ -31,7 +31,8 @@ namespace AGE
 				, submeshInstances(_submeshInstances)
 				, materialInstances(_materialInstances)
 				, animation(_animation)
-			{}
+			{
+			}
 
 			CreateDrawable::CreateDrawable(const PrepareKey &_key)
 				: key(_key)

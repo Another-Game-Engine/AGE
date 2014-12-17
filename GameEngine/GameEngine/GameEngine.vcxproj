@@ -193,6 +193,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -15,6 +15,8 @@ namespace AGE
 {
 	RenderThread::RenderThread()
 		: Thread(AGE::Thread::ThreadType::Render)
+		, _context(nullptr)
+		, _render(nullptr)
 	{}
 
 	RenderThread::~RenderThread()

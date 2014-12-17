@@ -105,6 +105,7 @@ namespace AGE
 
 			struct PrepareDrawLists
 			{
+				std::size_t alignement;
 			};
 
 			struct SceneUpdateBegin

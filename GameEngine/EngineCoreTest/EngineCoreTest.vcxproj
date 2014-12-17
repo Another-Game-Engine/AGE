@@ -142,6 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -469,7 +469,7 @@ bool BenchmarkScene::userUpdate(double time)
 	// TODO
 	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
 	// TODO
-	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::Render::RenderDrawLists>([=](AGE::DrawableCollection collection)
+	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::Render::RenderDrawLists>([this, renderManager](AGE::DrawableCollection &collection)
 	{
 		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
 		renderManager->locationStorage.setLocation(0, collection.lights.size());

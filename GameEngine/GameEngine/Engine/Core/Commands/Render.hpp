@@ -13,7 +13,9 @@ namespace AGE
 	{
 		namespace Render
 		{
-			struct Flush{};
+			struct Flush{
+				std::size_t aligned;
+			};
 
 			//TODO implement in render thread directly
 			//struct RefreshInputs
