@@ -165,15 +165,7 @@ namespace gl
 		Shader *getShader(Key<Shader> const &key){ assert(!!key); return (_shaders[key.getId()]); }
 		UniformBlock *getUniformBlock(Key<UniformBlock> const &key)	{ assert(!!key); return (_uniformBlock[key.getId()]); }
 		Texture *getTexture(Key<Texture> const &key) { assert(!!key); return (_textures[key.getId()]);}
-		Material *getMaterial(Key<Material> const &key)
-		{
-			if (!key)
-			{
-				std::cout << "lol" << key.getId() << std::endl;
-				assert(false);
-			}
-			assert(!!key); return (&_materials[key.getId()]);
-		}
+		Material *getMaterial(Key<Material> const &key) { assert(!!key); return (&_materials[key.getId()]);}
 		Pipeline *getPipeline(Key<Pipeline> const &key) { assert(!!key); return (&_pipelines[key.getId()]); }
 		EmptyRenderPass *getEmptyRenderPass(Key<EmptyRenderPass> const &key) { assert(!!key); return (_emptyRenderPass[key.getId()]); }
 		RenderPass *getRenderPass(Key<RenderPass> const &key) { assert(!!key); return (_renderPass[key.getId()]); }
