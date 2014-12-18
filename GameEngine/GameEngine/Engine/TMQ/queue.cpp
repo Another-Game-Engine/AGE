@@ -223,6 +223,7 @@ std::size_t ReleasableQueue::getWaitingTime()
 
 HybridQueue::HybridQueue()
 	: _millisecondToWait(1)
+	, _autorizedPublisher(-1)
 {
 	_releasable = true;
 }

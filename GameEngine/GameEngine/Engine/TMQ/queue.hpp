@@ -317,6 +317,7 @@ class HybridQueue
 		std::condition_variable _writeCondition;
 		std::size_t _millisecondToWait;
 		std::atomic_bool _releasable;
+		std::size_t _autorizedPublisher;
 	public:
 		enum WaitType
 		{
@@ -345,6 +346,7 @@ class HybridQueue
 		void setWaitingTime(std::size_t milliseconds);
 		std::size_t getWaitingTime();
 		void clear();
+		inline void publicationReservedTo(std::size_t publisherThreadId) { _autorizedPublisher = publisherThreadId; }
 
 		//////
 		////// Internal standard queue access
@@ -353,30 +355,35 @@ class HybridQueue
 		/// COMMANDS
 		void moveCommand(MessageBase *e, std::size_t size)
 		{
+			assert(_autorizedPublisher != -1 && std::this_thread::get_id().hash() == _autorizedPublisher);
 			_commandQueue.move(e, size);
 		}
 
 		template <typename T>
 		void pushCommand(const T& e)
 		{
+			assert(_autorizedPublisher != -1 && std::this_thread::get_id().hash() == _autorizedPublisher);
 			_commandQueue.push(e);
 		}
 
 		template <typename T, typename ...Args>
 		void emplaceCommand(Args ...args)
 		{
+			assert(_autorizedPublisher != -1 && std::this_thread::get_id().hash() == _autorizedPublisher);
 			_commandQueue.emplace<T>(args...);
 		}
 
 		template <typename T, typename F>
 		std::future<F> pushFutureCommand(const T &e)
 		{
+			assert(_autorizedPublisher != -1 && std::this_thread::get_id().hash() == _autorizedPublisher);
 			return _commandQueue.push(e)->getFuture();
 		}
 
 		template <typename T, typename F, typename ...Args>
 		std::future<F> emplaceFutureCommand(Args ...args)
 		{
+			assert(_autorizedPublisher != -1 && std::this_thread::get_id().hash() == _autorizedPublisher);
 			return _commandQueue.emplace<T>(args...)->getFuture();
 		}
 

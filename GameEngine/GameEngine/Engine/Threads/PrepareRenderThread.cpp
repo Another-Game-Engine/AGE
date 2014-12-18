@@ -142,6 +142,7 @@ namespace AGE
 		this->_run = true;
 		DWORD threadId = GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, this->_name.c_str());
+		_next->getQueue()->publicationReservedTo(std::this_thread::get_id().hash());
 
 		while (this->_run)
 		{
