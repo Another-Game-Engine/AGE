@@ -34,7 +34,8 @@ namespace AGE
 		RenderThread &operator=(RenderThread &&) = delete;
 
 		std::thread _threadHandle;
-		std::atomic_bool _run;
+		std::atomic_bool _insideRun;
+		bool _run;
 
 		SdlContext *_context;
 		gl::RenderManager *_render;

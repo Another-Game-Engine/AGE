@@ -32,7 +32,8 @@ namespace AGE
 		MainThread(MainThread &&) = delete;
 		MainThread &operator=(const MainThread &) = delete;
 		MainThread &operator=(MainThread &&) = delete;
-		std::atomic_bool _run;
+		std::atomic_bool _insideRun;
+		bool _run;
 
 		friend class ThreadManager;
 

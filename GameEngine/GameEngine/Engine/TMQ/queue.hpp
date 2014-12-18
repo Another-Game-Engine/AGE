@@ -156,156 +156,156 @@ namespace TMQ
 		}
 	};
 
-	class ImmediateQueue
-	{
-	private:
-		PtrQueue _queue;
-		std::mutex _mutex;
-		std::condition_variable _condition;
-		bool _releaseReadability()
-		{
-			_condition.notify_one();
-			return true;
-		}
-	public:
-		ImmediateQueue()
-		{}
+	//class ImmediateQueue
+	//{
+	//private:
+	//	PtrQueue _queue;
+	//	std::mutex _mutex;
+	//	std::condition_variable _condition;
+	//	bool _releaseReadability()
+	//	{
+	//		_condition.notify_one();
+	//		return true;
+	//	}
+	//public:
+	//	ImmediateQueue()
+	//	{}
 
-		ImmediateQueue(const ImmediateQueue&) = delete;
-		ImmediateQueue &operator=(const ImmediateQueue&) = delete;
-		ImmediateQueue(ImmediateQueue &&) = delete;
-		ImmediateQueue operator=(ImmediateQueue &&) = delete;
+	//	ImmediateQueue(const ImmediateQueue&) = delete;
+	//	ImmediateQueue &operator=(const ImmediateQueue&) = delete;
+	//	ImmediateQueue(ImmediateQueue &&) = delete;
+	//	ImmediateQueue operator=(ImmediateQueue &&) = delete;
 
-		bool getReadableQueue(TMQ::PtrQueue &q)
-		{
-			std::unique_lock<std::mutex> lock(_mutex);
-			if (!_condition.wait_for(lock, std::chrono::milliseconds(1), [this](){ return !_queue.empty(); }))
-				return false;
-			q = std::move(_queue);
-			_queue.clear();
-			lock.unlock();
-			return true;
-		}
+	//	bool getReadableQueue(TMQ::PtrQueue &q)
+	//	{
+	//		std::unique_lock<std::mutex> lock(_mutex);
+	//		if (!_condition.wait_for(lock, std::chrono::milliseconds(1), [this](){ return !_queue.empty(); }))
+	//			return false;
+	//		q = std::move(_queue);
+	//		_queue.clear();
+	//		lock.unlock();
+	//		return true;
+	//	}
 
-		void move(MessageBase *e, std::size_t size)
-		{
-			{
-				std::unique_lock<std::mutex> lock(_mutex);
-				_queue.move(e, size);
-			}
-			_releaseReadability();
-		}
+	//	void move(MessageBase *e, std::size_t size)
+	//	{
+	//		{
+	//			std::unique_lock<std::mutex> lock(_mutex);
+	//			_queue.move(e, size);
+	//		}
+	//		_releaseReadability();
+	//	}
 
-		template <typename T>
-		void push(const T& e)
-		{
-			{
-				std::unique_lock<std::mutex> lock(_mutex);
-				_queue.push(e);
-			}
-			_releaseReadability();
-		}
+	//	template <typename T>
+	//	void push(const T& e)
+	//	{
+	//		{
+	//			std::unique_lock<std::mutex> lock(_mutex);
+	//			_queue.push(e);
+	//		}
+	//		_releaseReadability();
+	//	}
 
-		template <typename T, typename ...Args>
-		void emplace(Args ...args)
-		{
-			{
-				std::unique_lock<std::mutex> lock(_mutex);
-				_queue.emplace<T>(args...);
-			}
-			_releaseReadability();
-		}
+	//	template <typename T, typename ...Args>
+	//	void emplace(Args ...args)
+	//	{
+	//		{
+	//			std::unique_lock<std::mutex> lock(_mutex);
+	//			_queue.emplace<T>(args...);
+	//		}
+	//		_releaseReadability();
+	//	}
 
-		template <typename T, typename F>
-		std::future<F> pushFuture(const T &e)
-		{
-			std::future < F > f;
-			{
-				std::unique_lock<std::mutex> lock(_mutex);
-				f = _queue.push(e)->getFuture();
-			}
-			_releaseReadability();
-			return f;
-		}
+	//	template <typename T, typename F>
+	//	std::future<F> pushFuture(const T &e)
+	//	{
+	//		std::future < F > f;
+	//		{
+	//			std::unique_lock<std::mutex> lock(_mutex);
+	//			f = _queue.push(e)->getFuture();
+	//		}
+	//		_releaseReadability();
+	//		return f;
+	//	}
 
-		template <typename T, typename F, typename ...Args>
-		std::future<F> emplaceFuture(Args ...args)
-		{
-			std::future< F > f;
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				f = _queue.emplace<T>(args...)->getFuture();
-			}
-			_releaseReadability();
-			return f;
-		}
-	};
+	//	template <typename T, typename F, typename ...Args>
+	//	std::future<F> emplaceFuture(Args ...args)
+	//	{
+	//		std::future< F > f;
+	//		{
+	//			std::lock_guard<std::mutex> lock(_mutex);
+	//			f = _queue.emplace<T>(args...)->getFuture();
+	//		}
+	//		_releaseReadability();
+	//		return f;
+	//	}
+	//};
 
-	class ReleasableQueue
-	{
-		PtrQueue _queue;
-		PtrQueue _copy;
-		std::mutex _mutex;
-		std::condition_variable _readCondition;
-		std::condition_variable _writeCondition;
-		std::size_t _millisecondToWait;
-		std::atomic_bool _releasable;
-	public:
-		enum WaitType
-		{
-			Block = 0
-			, Wait = 1
-			, NoWait = 2
-		};
+	//class ReleasableQueue
+	//{
+	//	PtrQueue _queue;
+	//	PtrQueue _copy;
+	//	std::mutex _mutex;
+	//	std::condition_variable _readCondition;
+	//	std::condition_variable _writeCondition;
+	//	std::size_t _millisecondToWait;
+	//	std::atomic_bool _releasable;
+	//public:
+	//	enum WaitType
+	//	{
+	//		Block = 0
+	//		, Wait = 1
+	//		, NoWait = 2
+	//	};
 
-		ReleasableQueue();
-		void launch();
+	//	ReleasableQueue();
+	//	void launch();
 
-		ReleasableQueue(const ReleasableQueue&) = delete;
-		ReleasableQueue &operator=(const ReleasableQueue&) = delete;
-		ReleasableQueue(ReleasableQueue &&) = delete;
-		ReleasableQueue operator=(ReleasableQueue &&) = delete;
+	//	ReleasableQueue(const ReleasableQueue&) = delete;
+	//	ReleasableQueue &operator=(const ReleasableQueue&) = delete;
+	//	ReleasableQueue(ReleasableQueue &&) = delete;
+	//	ReleasableQueue operator=(ReleasableQueue &&) = delete;
 
-		bool getReadableQueue(TMQ::PtrQueue &q);
-		bool releaseReadability(WaitType waitType);
-		void setWaitingTime(std::size_t milliseconds);
-		std::size_t getWaitingTime();
-		void clear();
+	//	bool getReadableQueue(TMQ::PtrQueue &q);
+	//	bool releaseReadability(WaitType waitType);
+	//	void setWaitingTime(std::size_t milliseconds);
+	//	std::size_t getWaitingTime();
+	//	void clear();
 
-		//////
-		////// Internal standard queue access
+	//	//////
+	//	////// Internal standard queue access
 
-		//Lock mutex or not
-		//Depend of the usage you made before
-		void move(MessageBase *e, std::size_t size)
-		{
-			_queue.move(e, size);
-		}
+	//	//Lock mutex or not
+	//	//Depend of the usage you made before
+	//	void move(MessageBase *e, std::size_t size)
+	//	{
+	//		_queue.move(e, size);
+	//	}
 
-		template <typename T>
-		void push(const T& e)
-		{
-			_queue.push(e);
-		}
+	//	template <typename T>
+	//	void push(const T& e)
+	//	{
+	//		_queue.push(e);
+	//	}
 
-		template <typename T, typename ...Args>
-		void emplace(Args ...args)
-		{
-			_queue.emplace<T>(args...);
-		}
+	//	template <typename T, typename ...Args>
+	//	void emplace(Args ...args)
+	//	{
+	//		_queue.emplace<T>(args...);
+	//	}
 
-		template <typename T, typename F>
-		std::future<F> pushFuture(const T &e)
-		{
-			return _queue.push(e)->getFuture();
-		}
+	//	template <typename T, typename F>
+	//	std::future<F> pushFuture(const T &e)
+	//	{
+	//		return _queue.push(e)->getFuture();
+	//	}
 
-		template <typename T, typename F, typename ...Args>
-		std::future<F> emplaceFuture(Args ...args)
-		{
-			return _queue.emplace<T>(args...)->getFuture();
-		}
-	};
+	//	template <typename T, typename F, typename ...Args>
+	//	std::future<F> emplaceFuture(Args ...args)
+	//	{
+	//		return _queue.emplace<T>(args...)->getFuture();
+	//	}
+	//};
 
 class HybridQueue
 	{
@@ -317,6 +317,7 @@ class HybridQueue
 		std::condition_variable _writeCondition;
 		std::size_t _millisecondToWait;
 		std::atomic_bool _releasable;
+		std::size_t _reservedPublisher;
 	public:
 		enum WaitType
 		{
@@ -345,6 +346,7 @@ class HybridQueue
 		void setWaitingTime(std::size_t milliseconds);
 		std::size_t getWaitingTime();
 		void clear();
+		inline void reserveTo(std::size_t publisherThreadId) { _reservedPublisher = publisherThreadId; }
 
 		//////
 		////// Internal standard queue access
@@ -353,30 +355,35 @@ class HybridQueue
 		/// COMMANDS
 		void moveCommand(MessageBase *e, std::size_t size)
 		{
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			_commandQueue.move(e, size);
 		}
 
 		template <typename T>
 		void pushCommand(const T& e)
 		{
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			_commandQueue.push(e);
 		}
 
 		template <typename T, typename ...Args>
 		void emplaceCommand(Args ...args)
 		{
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			_commandQueue.emplace<T>(args...);
 		}
 
 		template <typename T, typename F>
 		std::future<F> pushFutureCommand(const T &e)
 		{
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			return _commandQueue.push(e)->getFuture();
 		}
 
 		template <typename T, typename F, typename ...Args>
 		std::future<F> emplaceFutureCommand(Args ...args)
 		{
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			return _commandQueue.emplace<T>(args...)->getFuture();
 		}
 
@@ -386,7 +393,7 @@ class HybridQueue
 		void moveTask(MessageBase *e, std::size_t size)
 		{
 			{
-				std::unique_lock<std::mutex> lock(_mutex);
+				std::lock_guard<std::mutex> lock(_mutex);
 				_taskQueue.move(e, size);
 			}
 			releaseTaskReadability();
@@ -396,7 +403,7 @@ class HybridQueue
 		void pushTask(const T& e)
 		{
 			{
-				std::unique_lock<std::mutex> lock(_mutex);
+				std::lock_guard<std::mutex> lock(_mutex);
 				_taskQueue.push(e);
 			}
 			releaseTaskReadability();
@@ -406,7 +413,7 @@ class HybridQueue
 		void emplaceTask(Args ...args)
 		{
 			{
-				std::unique_lock<std::mutex> lock(_mutex);
+				std::lock_guard<std::mutex> lock(_mutex);
 				_taskQueue.emplace<T>(args...);
 			}
 			releaseTaskReadability();
@@ -417,7 +424,7 @@ class HybridQueue
 		{
 			std::future < F > f;
 			{
-				std::unique_lock<std::mutex> lock(_mutex);
+				std::lock_guard<std::mutex> lock(_mutex);
 				f = _taskQueue.push(e)->getFuture();
 			}
 			releaseTaskReadability();

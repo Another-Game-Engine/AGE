@@ -42,6 +42,15 @@ namespace AGE
 		return true;
 	}
 
+	void ThreadManager::exit()
+	{
+		//bool res = true;
+		//for (auto &t : _threads)
+		//{
+		//	res = t->stop();
+		//}
+	}
+
 	ThreadManager::~ThreadManager()
 	{
 		for (auto &e : _threads)
@@ -129,5 +138,14 @@ namespace AGE
 				return;
 		});
 		return res;
+	}
+
+	void ExitAGE()
+	{
+		static std::once_flag onceFlag;
+		std::call_once(onceFlag, [&](){
+			auto threadManager = Singleton<ThreadManager>::getInstance();
+			threadManager->exit();
+	});
 	}
 }

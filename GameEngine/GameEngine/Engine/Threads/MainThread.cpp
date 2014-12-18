@@ -30,6 +30,7 @@ namespace AGE
 	
 	bool MainThread::release()
 	{
+		_insideRun = false;
 		return true;
 	}
 	
@@ -39,7 +40,8 @@ namespace AGE
 
 		if (!getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
 		{
-			_engine->update();
+			if (!_engine->update())
+				return false;
 			while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
 			{
 				if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
@@ -69,13 +71,15 @@ namespace AGE
 	bool MainThread::run()
 	{
 		_run = true;
+		_insideRun.store(true);
 		_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block);
 
-		while (_run)
+		while (_run && _insideRun)
 		{
-			if (!update())
-				return false;
+			_run = update();
 		}
+		//ExitAGE();
+		return true;
 	}
 
 	MainThread::MainThread()
@@ -105,6 +109,7 @@ namespace AGE
 
 	bool MainThread::launch()
 	{
+		_next->getQueue()->reserveTo(std::this_thread::get_id().hash());
 		if (!init())
 			return false;
 		return true;

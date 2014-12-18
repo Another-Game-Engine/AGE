@@ -4,6 +4,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/AScene.hh>
 #include <Core/Tasks/MainToPrepare.hpp>
+#include <Core/Tasks/Basics.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Core/Commands/Render.hpp>
 
@@ -94,6 +95,15 @@ namespace AGE
 			_activeScene->_setScale(msg);
 		});
 
+		registerCallback<Tasks::Basic::VoidFunction>([this](Tasks::Basic::VoidFunction &msg){
+			if (msg.function)
+				msg.function();
+		});
+
+		registerCallback<Tasks::Basic::Exit>([&](Tasks::Basic::Exit& msg)
+		{
+		});
+
 		return true;
 	}
 
@@ -112,7 +122,8 @@ namespace AGE
 
 	bool PrepareRenderThread::stop()
 	{
-		_run = false;
+		_insideRun = false;
+		getQueue()->emplaceTask<Tasks::Basic::Exit>();
 		_threadHandle.join();
 		return true;
 	}
@@ -139,11 +150,14 @@ namespace AGE
 
 		_registerId();
 
-		this->_run = true;
+		_run = true;
+		_insideRun = true;
 		DWORD threadId = GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, this->_name.c_str());
 
-		while (this->_run)
+		_next->getQueue()->reserveTo(std::this_thread::get_id().hash());
+
+		while (this->_run && _insideRun)
 		{
 			getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSucces, TMQ::HybridQueue::WaitType::Block);
 			if (taskSuccess)
