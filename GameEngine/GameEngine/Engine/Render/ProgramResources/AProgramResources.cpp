@@ -2,6 +2,7 @@
 #include <Render/Program.hh>
 #include <assert.h>
 #include <array>
+#include <string>
 
 AProgramResources::AProgramResources(Program const &parent, std::string &&name, GLenum type) :
 _name(std::move(name)),
@@ -43,7 +44,7 @@ GLuint AProgramResources::id() const
 
 bool AProgramResources::_found_id()
 {
-	_id = glGetProgramResourceIndex(_parent.getId(), _type, _name.c_str());
+	_id = glGetProgramResourceIndex(_parent.getId(), _type, _name.c_str() + '\0');
 	return ((_id != GL_INVALID_INDEX) ? true : false);
 }
 

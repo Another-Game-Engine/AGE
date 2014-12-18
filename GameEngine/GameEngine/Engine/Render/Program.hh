@@ -23,6 +23,7 @@ public:
 	IProgramResources &getResource(Key<ProgramResource> const &key);
 	bool has(Key<ProgramResource> const &key);
 	Program const &use() const;
+	Program const &print_resources() const;
 
 private:
 	void _create();

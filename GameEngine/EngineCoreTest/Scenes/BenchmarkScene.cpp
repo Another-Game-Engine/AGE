@@ -36,19 +36,10 @@ void BenchmarkScene::initRendering()
 	{
 		std::shared_ptr<UnitProg> u1 = std::make_shared<UnitProg>(VERTEX_SHADER, GL_VERTEX_SHADER);
 		std::shared_ptr<UnitProg> u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
-		Program shader({ u1, u2 });
+		Program program({ u1, u2 });
+		program.print_resources();
 		return (true);
 	});
-	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);
-	//float disc = Mathematic::secondDegreeDiscriminant(equation);
-	//std::cout << disc << std::endl;
-	//if (disc > 0)
-	//{
-	//	glm::vec2 result = Mathematic::resolveSecondDegree(equation, disc);
-	//	std::cout << result.x << ", " << result.y << std::endl;
-	//}
-	//else
-	//	std::cout << Mathematic::resolveSecondDegree(equation) << std::endl;
 	assert(res.get());
 }
 
