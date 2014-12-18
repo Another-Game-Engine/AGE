@@ -4,8 +4,8 @@
 #include <Render/Program.hh>
 
 
-Vec4::Vec4(glm::vec4 const &value, Program const &parent, std::string &&name) :
-AProgramResources(parent, std::move(name), GL_UNIFORM),
+Vec4::Vec4(glm::vec4 const &value, GLint id, std::string &&name) :
+AProgramResources(id, std::move(name), GL_UNIFORM),
 ABlockResources(),
 _value(value)
 {
@@ -18,13 +18,6 @@ ABlockResources(move),
 _value(move._value)
 {
 
-}
-
-Vec4::Vec4(glm::vec4 const &value, Program const &parent, GLint id) :
-AProgramResources(parent, id,  GL_UNIFORM),
-ABlockResources(),
-_value(value)
-{
 }
 
 IProgramResources & Vec4::operator()()

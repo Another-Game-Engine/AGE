@@ -18,16 +18,18 @@ public:
 	Program &operator=(Program const &u) = delete;
 
 public:
-	GLuint getId() const;
-	Key<ProgramResource> &addResource(std::string const &name);
-	IProgramResources &getResource(Key<ProgramResource> const &key);
-	bool has(Key<ProgramResource> const &key);
+	GLuint id() const;
+	Key<ProgramResource> &get_key(std::string const &name);
+	IProgramResources &get_resource(Key<ProgramResource> const &key);
+	IProgramResources &get_resource(std::string const &name);
+	bool has_resource(Key<ProgramResource> const &key);
 	Program const &use() const;
 	Program const &print_resources() const;
 
 private:
 	void _create();
-	void _getProgramResources();
+	void _get_resources();
+	void _get_resource(size_t index, GLenum resource, std::string const & buffer);
 	void _destroy();
 
 private:
