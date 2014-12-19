@@ -83,7 +83,6 @@ namespace AGE
 		{
 			AGE::CreateEngine().lock()->deleteInstance<gl::RenderManager>();
 			AGE::CreateEngine().lock()->deleteInstance<IRenderContext>();
-		//_context = msg.engine.lock()->setInstance<SdlContext, IRenderContext>();
 			this->_insideRun = false;
 		});
 
@@ -113,7 +112,6 @@ namespace AGE
 	bool RenderThread::stop()
 	{
 		getQueue()->emplaceTask<Tasks::Basic::Exit>();
-		_threadHandle.join();
 		return true;
 	}
 

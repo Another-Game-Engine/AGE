@@ -44,16 +44,29 @@ namespace AGE
 
 	void ThreadManager::exit()
 	{
-		bool res = true;
+		auto hardwareConcurency = std::thread::hardware_concurrency();
+		for (std::size_t i = Thread::Worker1; i < hardwareConcurency; ++i)
+		{
+			_threads[i]->stop();
+			delete _threads[i];
+			_threads[i] = nullptr;
+		}
+		_threads[Thread::Main]->stop();
+		_threads[Thread::Render]->stop();
+
+		/*bool res = true;
 		for (auto &t : _threads)
 		{
 			res = t->stop();
 		}
 		for (auto &t : _threads)
 		{
-			t = nullptr;
-			delete t;
-		}
+			if (t)
+			{
+				delete t;
+				t = nullptr;
+			}
+		}*/
 		_threads.clear();
 	}
 

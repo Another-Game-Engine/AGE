@@ -103,6 +103,7 @@ namespace AGE
 		registerCallback<Tasks::Basic::Exit>([&](Tasks::Basic::Exit& msg)
 		{
 			_insideRun = false;
+			GetRenderThread()->stop();
 		});
 
 		return true;

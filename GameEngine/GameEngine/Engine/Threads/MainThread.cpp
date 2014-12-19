@@ -4,6 +4,8 @@
 #include "ThreadManager.hpp"
 #include "RenderThread.hpp"
 #include <Core/Tasks/Render.hpp>
+#include <Threads/PrepareRenderThread.hpp>
+
 
 namespace AGE
 {
@@ -119,6 +121,7 @@ namespace AGE
 	{
 		if (!release())
 			return false;
+		GetPrepareThread()->stop();
 		return true;
 	}
 
