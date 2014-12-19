@@ -18,7 +18,7 @@ namespace AGE
 		_threadIdReference.resize(hardwareConcurency, -1);
 		auto mt = new MainThread();
 		auto pt = new PrepareRenderThread();
-		auto rt = new RenderThread();;
+		auto rt = new RenderThread();
 		_threads[Thread::Main] = mt;
 		_threads[Thread::PrepareRender] = pt;
 		_threads[Thread::Render] = rt;
@@ -40,6 +40,21 @@ namespace AGE
 				return false;
 		}
 		return true;
+	}
+
+	void ThreadManager::exit()
+	{
+		bool res = true;
+		for (auto &t : _threads)
+		{
+			res = t->stop();
+		}
+		for (auto &t : _threads)
+		{
+			t = nullptr;
+			delete t;
+		}
+		_threads.clear();
 	}
 
 	ThreadManager::~ThreadManager()
@@ -123,11 +138,21 @@ namespace AGE
 		static std::once_flag onceFlag;
 		bool res = true;
 		std::call_once(onceFlag, [&](){
+			Singleton<ThreadManager>::setInstance();
 			auto threadManager = Singleton<ThreadManager>::getInstance();
 			res = threadManager->initAndLaunch();
 			if (!res)
 				return;
 		});
 		return res;
+	}
+
+	void ExitAGE()
+	{
+		static std::once_flag onceFlag;
+		std::call_once(onceFlag, [&](){
+			auto threadManager = Singleton<ThreadManager>::getInstance();
+			threadManager->exit();
+	});
 	}
 }

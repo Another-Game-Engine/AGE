@@ -30,6 +30,7 @@ namespace AGE
 	
 	bool MainThread::release()
 	{
+		_insideRun = false;
 		return true;
 	}
 	
@@ -70,13 +71,15 @@ namespace AGE
 	bool MainThread::run()
 	{
 		_run = true;
+		_insideRun.store(true);
 		_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block);
 
-		while (_run)
+		while (_run && _insideRun)
 		{
-			if (!update())
-				return false;
+			_run = update();
 		}
+		ExitAGE();
+		return true;
 	}
 
 	MainThread::MainThread()
@@ -91,7 +94,7 @@ namespace AGE
 
 	std::weak_ptr<AGE::Engine> MainThread::createEngine()
 	{
-		bool unique = true;
+		static bool unique = true;
 		if (unique)
 		{
 			_engine = std::make_shared<AGE::Engine>();
@@ -106,9 +109,9 @@ namespace AGE
 
 	bool MainThread::launch()
 	{
+		_next->getQueue()->reserveTo(std::this_thread::get_id().hash());
 		if (!init())
 			return false;
-		_next->getQueue()->publicationReservedTo(std::this_thread::get_id().hash());
 		return true;
 	}
 

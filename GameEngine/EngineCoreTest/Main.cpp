@@ -37,6 +37,8 @@
 #include <Core/Tasks/Basics.hpp>
 ////////////////////////////////////////
 
+#include <chrono>
+
 using namespace AGE;
 
 bool loadAssets(AGE::Engine *e)
@@ -69,13 +71,14 @@ int			main(int ac, char **av)
 	///////////
 	AGE::InitAGE();
 	auto engine = AGE::CreateEngine();
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	engine.lock()->launch(std::function<bool()>([&]()
 	{
 		engine.lock().get()->setInstance<Timer>();
 		engine.lock().get()->setInstance<AGE::AssetsManager>();
 
-
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 #ifdef USE_IMGUI
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 			AGE::Imgui::getInstance()->init(engine.lock().get());
@@ -86,17 +89,18 @@ int			main(int ac, char **av)
 		if (!loadAssets(engine.lock().get()))
 			return false;
 #endif
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 		// add main scene
 		engine.lock()->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene");
-
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 		// bind scene
 		if (!engine.lock()->initScene("BenchmarkScene"))
 			return false;
-
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 		engine.lock()->enableScene("BenchmarkScene", 100);
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 		return true;
 	}));
-
 
 	//return std::function<bool()>([&](){
 	//		if (userConfigs)

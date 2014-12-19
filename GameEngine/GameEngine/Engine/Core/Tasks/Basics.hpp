@@ -30,6 +30,11 @@ namespace AGE
 				{
 				}
 			};
+
+			struct Exit
+			{
+				std::size_t alignement;
+			};
 		};
 	}
 }

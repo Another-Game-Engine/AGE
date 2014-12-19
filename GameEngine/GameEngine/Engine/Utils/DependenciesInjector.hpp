@@ -39,15 +39,15 @@ public:
 	template <typename T>
 	T *getInstance()
 	{
-		//std::unique_lock<std::mutex> lock(_mutex);
-		//lock.lock();
+		std::unique_lock<std::mutex> lock(_mutex);
+
 		std::uint16_t id = T::getTypeId();
 		if (!hasInstance<T>())
 		{
 			auto p = _parent.lock();
 			if (p)
 			{
-				//lock.unlock();
+				lock.unlock();
 				return p->getInstance<T>();
 			}
 			else
@@ -59,12 +59,15 @@ public:
 	template <typename T>
 	void deleteInstance()
 	{
+		std::unique_lock<std::mutex> lock(_mutex);
+
 		std::uint16_t id = T::getTypeId();
 		if (!hasInstance<T>())
 		{
 			auto p = _parent.lock();
 			if (p)
 			{
+				lock.unlock();
 				return p->deleteInstance<T>();
 			}
 			else
@@ -77,7 +80,7 @@ public:
 	template <typename T, typename TypeSelector = T, typename ...Args>
 	T *setInstance(Args ...args)
 	{
-		//std::lock_guard<std::mutex> lock(_mutex);
+		std::lock_guard<std::mutex> lock(_mutex);
 		std::uint16_t id = TypeSelector::getTypeId();
 		if (_instances.size() <= id || _instances[id] == nullptr)
 		{

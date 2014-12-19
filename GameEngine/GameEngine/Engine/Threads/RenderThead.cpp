@@ -10,6 +10,8 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Core/CullableObjects.hh>
 #include <Core/Tasks/Basics.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Core/Engine.hh>
 
 namespace AGE
 {
@@ -77,6 +79,14 @@ namespace AGE
 				msg.function();
 		});
 
+		registerCallback<AGE::Tasks::Basic::Exit>([&](AGE::Tasks::Basic::Exit& msg)
+		{
+			AGE::CreateEngine().lock()->deleteInstance<gl::RenderManager>();
+			AGE::CreateEngine().lock()->deleteInstance<IRenderContext>();
+		//_context = msg.engine.lock()->setInstance<SdlContext, IRenderContext>();
+			this->_insideRun = false;
+		});
+
 #ifdef USE_IMGUI
 		registerCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
 		{
@@ -102,7 +112,7 @@ namespace AGE
 
 	bool RenderThread::stop()
 	{
-		_run = false;
+		getQueue()->emplaceTask<Tasks::Basic::Exit>();
 		_threadHandle.join();
 		return true;
 	}
@@ -122,7 +132,8 @@ namespace AGE
 
 		_registerId();
 
-		this->_run = true;
+		_run = true;
+		_insideRun = true;
 		DWORD threadId = GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, this->_name.c_str());
 
@@ -131,7 +142,7 @@ namespace AGE
 		bool commandSuccess;
 		bool taskSuccess;
 
-		while (this->_run)
+		while (_run && _insideRun)
 		{
 			if (_context)
 				_context->refreshInputs();

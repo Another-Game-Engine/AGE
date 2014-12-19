@@ -48,7 +48,8 @@ namespace AGE
 		AGE::RenderScene *_activeScene;
 
 		std::thread _threadHandle;
-		std::atomic_bool _run;
+		std::atomic_bool _insideRun;
+		bool _run;
 
 		friend class ThreadManager;
 	};

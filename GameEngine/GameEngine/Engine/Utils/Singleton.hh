@@ -16,6 +16,7 @@ protected:
   static void 		freeMemory();
 public:
   	static T           *getInstance();
+  	static void        setInstance();
 
 };
 

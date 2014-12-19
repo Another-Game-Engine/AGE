@@ -21,6 +21,7 @@ namespace AGE
 		PrepareRenderThread *getPrepareThread() const;
 		std::weak_ptr<AGE::Engine> createEngine();
 		bool initAndLaunch();
+		void exit();
 	private:
 		ThreadManager();
 		virtual ~ThreadManager();
@@ -39,4 +40,5 @@ namespace AGE
 	PrepareRenderThread *GetPrepareThread();
 	std::weak_ptr<Engine> CreateEngine();
 	bool InitAGE();
+	void ExitAGE();
 }

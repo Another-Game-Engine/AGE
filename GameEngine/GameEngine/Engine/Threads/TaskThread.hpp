@@ -26,6 +26,7 @@ namespace AGE
 		friend class ThreadManager;
 
 		std::thread _threadHandle;
-		std::atomic_bool _run;
+		std::atomic_bool _insideRun;
+		bool _run;
 	};
 }

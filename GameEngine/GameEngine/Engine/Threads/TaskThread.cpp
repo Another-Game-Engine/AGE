@@ -1,5 +1,6 @@
 #include "TaskThread.hpp"
 #include <Utils/ThreadName.hpp>
+#include <Core/Tasks/Basics.hpp>
 
 namespace AGE
 {
@@ -14,6 +15,10 @@ namespace AGE
 
 	bool TaskThread::init()
 	{
+		registerCallback<Tasks::Basic::VoidFunction>([this](Tasks::Basic::VoidFunction &msg){
+			if (msg.function)
+				msg.function();
+		});
 		return true;
 	}
 
@@ -32,6 +37,9 @@ namespace AGE
 
 	bool TaskThread::stop()
 	{
+		_insideRun = false;
+		getQueue()->emplaceTask<Tasks::Basic::VoidFunction>([](){});
+		_threadHandle.join();
 		return true;
 	}
 
@@ -39,9 +47,10 @@ namespace AGE
 	{
 		_registerId();
 		_run = true;
+		_insideRun = true;
 		DWORD threadId = ::GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, _name.c_str());
-		while (this->_run)
+		while (_run && _insideRun)
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
