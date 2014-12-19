@@ -19,6 +19,11 @@ namespace AGE
 			if (msg.function)
 				msg.function();
 		});
+
+		registerCallback<AGE::Tasks::Basic::Exit>([&](AGE::Tasks::Basic::Exit& msg)
+		{
+			this->_insideRun = false;
+		});
 		return true;
 	}
 
@@ -37,8 +42,7 @@ namespace AGE
 
 	bool TaskThread::stop()
 	{
-		_insideRun = false;
-		getQueue()->emplaceTask<Tasks::Basic::VoidFunction>([](){});
+		getQueue()->emplaceTask<Tasks::Basic::Exit>();
 		_threadHandle.join();
 		return true;
 	}
@@ -50,9 +54,20 @@ namespace AGE
 		_insideRun = true;
 		DWORD threadId = ::GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, _name.c_str());
+
+		TMQ::PtrQueue tasks;
 		while (_run && _insideRun)
 		{
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			if (getQueue()->getTaskQueue(tasks, TMQ::HybridQueue::Block))
+			{
+				while (!tasks.empty())
+				{
+					//pop all tasks
+					auto task = tasks.front();
+					assert(execute(task)); // we receive a task that we cannot treat
+					tasks.pop();
+				}
+			}
 		}
 		return true;
 	}

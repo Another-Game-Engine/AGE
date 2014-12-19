@@ -117,106 +117,6 @@ bool PtrQueue::empty()
 	return false;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
-//
-//ReleasableQueue::ReleasableQueue()
-//	: _millisecondToWait(1)
-//{
-//	_releasable = true;
-//}
-//
-//void ReleasableQueue::launch()
-//{
-//	_writeCondition.notify_one();
-//}
-//
-////return true if ti's a priority queue
-//bool ReleasableQueue::getReadableQueue(TMQ::PtrQueue &q)
-//{
-//	std::unique_lock<std::mutex> lock(_mutex);
-//	if (!_readCondition.wait_for(lock, std::chrono::milliseconds(1), [this](){ return !_copy.empty(); }))
-//	{
-//		return false;
-//	}
-//	q = std::move(_copy);
-//	_copy.clear();
-//	lock.unlock();
-//	_writeCondition.notify_one();
-//	_releasable = true;
-//	return true;
-//}
-//
-//
-//void ReleasableQueue::clear()
-//{
-//	std::unique_lock<std::mutex> lock(_mutex);
-//	_queue.eraseAll();
-//}
-//
-//bool ReleasableQueue::releaseReadability(ReleasableQueue::WaitType waitType)
-//{
-//	if (waitType == WaitType::NoWait)
-//	{
-//		if (!_releasable)
-//			return false;
-//		std::unique_lock<std::mutex> lock(_mutex);
-//		_copy = std::move(_queue);
-//		_queue.clear();
-//		_releasable = false;
-//		lock.unlock();
-//		_readCondition.notify_one();
-//		return true;
-//	}
-//	else if (waitType == WaitType::Block)
-//	{
-//		std::unique_lock<std::mutex> lock(_mutex);
-//
-//		_writeCondition.wait(lock, [this]()
-//		{
-//			return (_copy.empty());
-//		});
-//		if (!_copy.empty())
-//			return false;
-//		_copy = std::move(_queue);
-//		_queue.clear();
-//		_releasable = false;
-//		lock.unlock();
-//		_readCondition.notify_one();
-//		return true;
-//	}
-//	else if (waitType == WaitType::Wait)
-//	{
-//		std::unique_lock<std::mutex> lock(_mutex);
-//		if (!_writeCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
-//		{
-//			return (_copy.empty());
-//		}))
-//		{
-//			return false;
-//		}
-//		_copy = std::move(_queue);
-//		_queue.clear();
-//		_releasable = false;
-//		lock.unlock();
-//		_readCondition.notify_one();
-//		return true;
-//	}
-//	return true;
-//}
-//
-//void ReleasableQueue::setWaitingTime(std::size_t milliseconds)
-//{
-//	std::lock_guard<std::mutex> lock(_mutex);
-//	_millisecondToWait = milliseconds;
-//}
-//
-//std::size_t ReleasableQueue::getWaitingTime()
-//{
-//	std::lock_guard<std::mutex> lock(_mutex);
-//	return _millisecondToWait;
-//}
-
 
 ////////////////////
 /// HYBRID
@@ -437,10 +337,10 @@ std::size_t HybridQueue::getWaitingTime()
 void HybridQueue::clear()
 {
 	std::unique_lock<std::mutex> lock(_mutex);
-	while (!lock.owns_lock())
-	{
-		lock.lock();
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}
+	//while (!lock.owns_lock())
+	//{
+	//	lock.lock();
+	//	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	//}
 	_commandQueue.eraseAll();
 }

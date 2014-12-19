@@ -54,19 +54,6 @@ namespace AGE
 		_threads[Thread::Main]->stop();
 		_threads[Thread::Render]->stop();
 
-		/*bool res = true;
-		for (auto &t : _threads)
-		{
-			res = t->stop();
-		}
-		for (auto &t : _threads)
-		{
-			if (t)
-			{
-				delete t;
-				t = nullptr;
-			}
-		}*/
 		_threads.clear();
 	}
 
