@@ -39,7 +39,8 @@ namespace AGE
 
 		if (!getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
 		{
-			_engine->update();
+			if (!_engine->update())
+				return false;
 			while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
 			{
 				if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))

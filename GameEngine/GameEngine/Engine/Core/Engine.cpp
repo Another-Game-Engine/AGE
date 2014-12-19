@@ -116,5 +116,6 @@ namespace AGE
 	ImGui::Render();
 #endif
 	GetPrepareThread()->getQueue()->emplaceCommand<Commands::Render::Flush>();
+	return true;
 	}
 }
