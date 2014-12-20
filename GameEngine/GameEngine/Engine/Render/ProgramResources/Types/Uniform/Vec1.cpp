@@ -40,9 +40,9 @@ IProgramResources & Vec1::operator()()
 	return (*this);
 }
 
-bool Vec1::safe(size_t size) const
+bool Vec1::safe(size_t s) const
 {
-	return ((sizeof(type_t) == size) ? true : false);
+	return ((size() == s) ? true : false);
 }
 
 size_t Vec1::size() const

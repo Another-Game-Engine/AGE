@@ -28,6 +28,16 @@ IProgramResources & UniformBlock::operator()()
 	return (*this);
 }
 
+size_t UniformBlock::size() const
+{
+	return (sizeof(type_t));
+}
+
+bool UniformBlock::safe(size_t s) const
+{
+	return ((size() == s) ? true : false);
+}
+
 void UniformBlock::print() const
 {
 	std::cout << "uniform block " << _name << ";";

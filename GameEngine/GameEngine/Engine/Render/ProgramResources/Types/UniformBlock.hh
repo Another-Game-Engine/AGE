@@ -19,6 +19,11 @@ public:
 public:
 	virtual IProgramResources &operator()() override final;
 	virtual void print() const override final;
+	virtual size_t size() const override final;
+	virtual bool safe(size_t size) const final;
+
+public:
+	typedef UniformBlock * type_t;
 
 private:
 	std::vector<std::shared_ptr<IBlockResources>> _blockResources;

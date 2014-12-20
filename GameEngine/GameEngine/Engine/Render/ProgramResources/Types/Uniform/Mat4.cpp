@@ -40,9 +40,9 @@ IProgramResources & Mat4::operator()()
 	return (*this);
 }
 
-bool Mat4::safe(size_t size) const
+bool Mat4::safe(size_t s) const
 {
-	return ((sizeof(type_t) == size) ? true : false);
+	return ((size() == s) ? true : false);
 }
 
 size_t Mat4::size() const

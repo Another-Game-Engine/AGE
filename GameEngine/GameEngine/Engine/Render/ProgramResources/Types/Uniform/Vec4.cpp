@@ -35,14 +35,14 @@ IProgramResources & Vec4::operator()()
 	return (*this);
 }
 
-bool Vec4::safe(size_t size) const
+bool Vec4::safe(size_t s) const
 {
-	return ((sizeof(type_t) == size) ? true : false);
+	return ((size() == s) ? true : false);
 }
 
 size_t Vec4::size() const
 {
-	return (sizeof(glm::vec4));
+	return (sizeof(type_t));
 }
 
 void const *Vec4::data() const
