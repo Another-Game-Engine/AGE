@@ -21,7 +21,7 @@ IProgramResources & UniformBlock::operator()()
 {
 	if (!_update) {
 		for (auto &blockResource : _blockResources) {
-			_buffer->sub(blockResource->offset(), blockResource->size(), blockResource->data());
+			//_buffer->sub(blockResource->offset(), blockResource->size(), blockResource->data());
 		}
 		_update = true;
 	}

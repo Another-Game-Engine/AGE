@@ -23,7 +23,7 @@ Program::~Program()
 }
 
 Program::Program(Program &&move) :
-_programResources(std::move(move._programResources)),
+_program_resources(std::move(move._program_resources)),
 _unitsProg(std::move(move._unitsProg)),
 _resources_factory(*this),
 _id(move._id)
@@ -49,35 +49,17 @@ Program const & Program::use() const
 
 Key<ProgramResource> & Program::get_key(std::string const &name)
 {
-	for (auto index = 0; index < _programResources.size(); ++index) {
-		if (name == _programResources[index]->name()) {
+	for (auto index = 0; index < _program_resources.size(); ++index) {
+		if (name == _program_resources[index]->name()) {
 			return (Key<ProgramResource>::createKey(index));
 		}
 	}
 	return (Key<ProgramResource>::createKey(-1));
 }
 
-IProgramResources * Program::get_resource(std::string const &name)
-{
-	for (size_t index = 0; index < _programResources.size(); ++index) {
-		if (name == _programResources[index]->name()) {
-			return (_programResources[index].get());
-		}
-	}
-	return (nullptr);
-}
-
-IProgramResources * Program::get_resource(Key<ProgramResource> const &key)
-{
-	if (key) {
-		return (nullptr);
-	}
-	return (_programResources[key.getId()].get());
-}
-
 bool Program::has_resource(Key<ProgramResource> const &key)
 {
-	return (_programResources.size() > key.getId());
+	return (_program_resources.size() > key.getId());
 }
 
 void Program::_get_resource(size_t index, GLenum resource, std::string const & buffer)
@@ -85,9 +67,10 @@ void Program::_get_resource(size_t index, GLenum resource, std::string const & b
 	auto size = 0;
 	glGetProgramResourceName(_id, resource, index, buffer.size(), &size, (GLchar *)buffer.data());
 	std::string name(buffer, 0, size);
-	auto element = _resources_factory.build(resource, index, std::move(name));
+	auto is_block = false;
+	auto element = _resources_factory.build(resource, index, std::move(name), is_block);
 	if (element) {
-		_programResources.emplace_back(std::move(element));
+		is_block ? _program_resources.emplace_back(std::move(element)) : _program_resources.emplace_back(std::move(element));
 	}
 }
 
@@ -108,7 +91,7 @@ void Program::_get_resources()
 
 Program const & Program::print_resources() const
 {
-	for (auto &resource : _programResources) {
+	for (auto &resource : _program_resources) {
 		resource->print();
 	}
 	return (*this);
