@@ -251,6 +251,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Factory\UniformsFactory.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec1.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec4.cpp" />
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
@@ -362,6 +363,7 @@
     <ClInclude Include="Engine\Render\ProgramResources\Types\ProgramResourcesType.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec1.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec4.hh" />
     <ClInclude Include="Engine\Render\Render.hh" />
     <ClInclude Include="Engine\Render\RenderManager.hh" />

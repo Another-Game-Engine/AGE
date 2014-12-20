@@ -1,5 +1,5 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
-#include <Render/Program.hh>
+#include <iostream>
 
 Mat4::Mat4(glm::mat4 const &value, GLint id, std::string &&name) :
 AProgramResources(id, std::move(name), GL_UNIFORM),
@@ -47,7 +47,7 @@ bool Mat4::safe(size_t size) const
 
 size_t Mat4::size() const
 {
-	return (sizeof(glm::mat4));
+	return (sizeof(type));
 }
 
 void const *Mat4::data() const

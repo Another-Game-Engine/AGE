@@ -1,5 +1,5 @@
 #include <Render/ProgramResources/Types/UniformBlock.hh>
-#include <Render/Program.hh>
+#include <iostream>
 
 UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<IBlockResources>> const &blockResources) :
 AProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),

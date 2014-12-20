@@ -1,7 +1,5 @@
-#pragma once
-
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
-#include <Render/Program.hh>
+#include <iostream>
 
 
 Vec4::Vec4(glm::vec4 const &value, GLint id, std::string &&name) :

@@ -86,6 +86,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec4.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -252,6 +253,7 @@
     <ClInclude Include="Engine\Render\ProgramResources\Types\ProgramResourcesType.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec4.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec1.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
