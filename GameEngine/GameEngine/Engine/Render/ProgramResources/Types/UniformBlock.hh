@@ -11,7 +11,7 @@
 class UniformBlock : public AProgramResources
 {
 public:
-	UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<IBlockResources>> const &blockResources);
+	UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<IBlockResources>> &&blockResources);
 	UniformBlock(UniformBlock &&move);
 	UniformBlock(UniformBlock const &copy) = delete;
 	UniformBlock &operator=(UniformBlock const &u) = delete;

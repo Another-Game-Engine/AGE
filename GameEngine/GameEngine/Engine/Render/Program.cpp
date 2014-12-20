@@ -7,12 +7,19 @@ Program::Program(std::vector<std::shared_ptr<UnitProg>> const &u) :
 _unitsProg(u),
 _resources_factory(*this)
 {
-	_create();
+	_id = glCreateProgram();
+	for (auto &element : _unitsProg) {
+		glAttachShader(_id, element->getId());
+	}
+	glLinkProgram(_id);
+	_get_resources();
 }
 
 Program::~Program()
 {
-	_destroy();
+	if (_id > 0) {
+		glDeleteProgram(_id);
+	}
 }
 
 Program::Program(Program &&move) :
@@ -38,23 +45,6 @@ Program const & Program::use() const
 	currentProgram = _id;
 	glUseProgram(_id);
 	return (*this);
-}
-
-void Program::_create()
-{
-	_id = glCreateProgram();
-	for (auto &element : _unitsProg) {
-		glAttachShader(_id, element->getId());
-	}
-	glLinkProgram(_id);
-	_get_resources();
-}
-
-void Program::_destroy()
-{
-	if (_id > 0) {
-		glDeleteProgram(_id);
-	}
 }
 
 Key<ProgramResource> & Program::get_key(std::string const &name)

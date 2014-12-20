@@ -1,6 +1,7 @@
 #include <Render/ProgramResources/Factory/UniformsFactory.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 
 #define LAMBDA_PROTO [this](GLint id, std::string &&name)
 
@@ -12,6 +13,10 @@ std::make_pair(GL_FLOAT_VEC4, LAMBDA_PROTO\
 std::make_pair(GL_FLOAT_MAT4, LAMBDA_PROTO\
 { \
 	return (std::make_unique<Mat4>(glm::mat4(1.0f), id, std::move(name))); \
+}), \
+std::make_pair(GL_FLOAT, LAMBDA_PROTO\
+{ \
+	return (std::make_unique<Vec1>(0.0f, id, std::move(name))); \
 })
 
 UniformsFactory::UniformsFactory() :

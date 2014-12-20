@@ -1,9 +1,9 @@
 #include <Render/ProgramResources/Types/UniformBlock.hh>
 #include <iostream>
 
-UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<IBlockResources>> const &blockResources) :
+UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<IBlockResources>> &&blockResources) :
 AProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),
-_blockResources(blockResources),
+_blockResources(std::move(blockResources)),
 _buffer(std::make_shared<UniformBuffer>()),
 _block_binding(0)
 {

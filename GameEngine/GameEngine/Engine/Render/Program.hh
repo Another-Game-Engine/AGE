@@ -27,10 +27,8 @@ public:
 	Program const &print_resources() const;
 
 private:
-	void _create();
 	void _get_resources();
 	void _get_resource(size_t index, GLenum resource, std::string const & buffer);
-	void _destroy();
 
 private:
 	std::vector<std::unique_ptr<IProgramResources>> _programResources;
