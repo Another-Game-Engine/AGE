@@ -22,6 +22,9 @@ BenchmarkScene::~BenchmarkScene(void)
 {
 }
 
+#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
+#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+
 void BenchmarkScene::initRendering()
 {
 	// A NETTOYER !!!!

@@ -23,7 +23,7 @@ public:
 	virtual void print() const override final;
 
 public:
-	typedef glm::mat4 type;
+	typedef glm::mat4 type_t;
 
 private:
 	glm::mat4 _value;

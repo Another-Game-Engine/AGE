@@ -20,7 +20,7 @@ public:
 	virtual void print() const override final;
 
 public:
-	typedef float type;
+	typedef float type_t;
 
 private:
 	float _value;

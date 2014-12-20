@@ -42,12 +42,12 @@ IProgramResources & Mat4::operator()()
 
 bool Mat4::safe(size_t size) const
 {
-	return ((sizeof(type) == size) ? true : false);
+	return ((sizeof(type_t) == size) ? true : false);
 }
 
 size_t Mat4::size() const
 {
-	return (sizeof(type));
+	return (sizeof(type_t));
 }
 
 void const *Mat4::data() const

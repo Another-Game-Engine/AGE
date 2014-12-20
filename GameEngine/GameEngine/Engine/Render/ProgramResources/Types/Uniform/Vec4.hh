@@ -23,7 +23,7 @@ public:
 	virtual void print() const override final;
 
 public:
-	typedef glm::vec4 type;
+	typedef glm::vec4 type_t;
 
 private:
 	glm::vec4 _value;

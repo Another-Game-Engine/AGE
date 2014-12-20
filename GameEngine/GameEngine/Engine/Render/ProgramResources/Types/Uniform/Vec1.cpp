@@ -42,12 +42,12 @@ IProgramResources & Vec1::operator()()
 
 bool Vec1::safe(size_t size) const
 {
-	return ((sizeof(type) == size) ? true : false);
+	return ((sizeof(type_t) == size) ? true : false);
 }
 
 size_t Vec1::size() const
 {
-	return (sizeof(type));
+	return (sizeof(type_t));
 }
 
 void const * Vec1::data() const

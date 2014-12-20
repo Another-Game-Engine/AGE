@@ -37,7 +37,7 @@ IProgramResources & Vec4::operator()()
 
 bool Vec4::safe(size_t size) const
 {
-	return ((sizeof(type) == size) ? true : false);
+	return ((sizeof(type_t) == size) ? true : false);
 }
 
 size_t Vec4::size() const
