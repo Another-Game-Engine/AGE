@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/ProgramResources/Vec4.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec4.hh>
 #include <Render/Program.hh>
 
 
@@ -19,6 +19,14 @@ _value(move._value)
 {
 
 }
+
+Vec4::Vec4(Vec4 const &copy) :
+AProgramResources(copy),
+ABlockResources(copy),
+_value(copy._value)
+{
+}
+
 
 IProgramResources & Vec4::operator()()
 {
@@ -42,4 +50,10 @@ size_t Vec4::size() const
 void const *Vec4::data() const
 {
 	return (&_value);
+}
+
+void Vec4::print() const
+{
+	std::cout << "uniform vec4 " << _name << ";";
+	std::cout << std::endl;
 }

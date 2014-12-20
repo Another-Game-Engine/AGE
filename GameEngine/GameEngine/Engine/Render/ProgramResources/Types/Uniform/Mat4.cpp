@@ -1,16 +1,8 @@
-#include <Render/ProgramResources/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/Program.hh>
 
-Mat4::Mat4(glm::mat4 const &value, Program const &parent, GLint id) :
-AProgramResources(parent, id, GL_UNIFORM),
-ABlockResources(),
-_value(value)
-{
-
-}
-
-Mat4::Mat4(glm::mat4 const &value, Program const &parent, std::string &&name):
-AProgramResources(parent, std::move(name), GL_UNIFORM),
+Mat4::Mat4(glm::mat4 const &value, GLint id, std::string &&name) :
+AProgramResources(id, std::move(name), GL_UNIFORM),
 ABlockResources(),
 _value(value)
 {
@@ -21,6 +13,14 @@ Mat4::Mat4(Mat4 &&move):
 AProgramResources(std::move(move)),
 ABlockResources(move),
 _value(move._value)
+{
+
+}
+
+Mat4::Mat4(Mat4 const &copy) :
+AProgramResources(copy),
+ABlockResources(copy),
+_value(copy._value)
 {
 
 }
@@ -53,4 +53,10 @@ size_t Mat4::size() const
 void const *Mat4::data() const
 {
 	return (&_value);
+}
+
+void Mat4::print() const
+{
+	std::cout << "uniform mat4 " << _name << ";";
+	std::cout << std::endl;
 }

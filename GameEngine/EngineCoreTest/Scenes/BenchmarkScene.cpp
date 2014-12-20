@@ -8,13 +8,9 @@
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
-#include <Render/ProgramResources/Mat4.hh>
 #include <Render/GeometryManagement/GraphicalMemory.hh>
 #include <Render/GeometryManagement/Data.hh>
 #include <Render/GeometryManagement/Vertices.hh>
-#include <Render/ProgramResources/UniformBlock.hh>
-#include <Render/ProgramResources/Vec4.hh>
-#include <Render/ProgramResources/Mat4.hh>
 #include <memory>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)

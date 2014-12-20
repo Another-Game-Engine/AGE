@@ -6,20 +6,22 @@
 # include <functional>
 # include <memory>
 # include <Render/ProgramResources/IProgramResources.hh>
+# include <Render/ProgramResources/Factory/UniformsFactory.hh>
 
 class Program;
 
 class ProgramResourcesFactory
 {
 public:
-	ProgramResourcesFactory(Program const &parent);
+	ProgramResourcesFactory(Program const &program);
 	ProgramResourcesFactory(ProgramResourcesFactory const &copy) = delete;
 	ProgramResourcesFactory &operator=(ProgramResourcesFactory const &p) = delete;
 
 public:
-	std::unique_ptr<IProgramResources> build(GLenum mode, std::string &&name);
+	std::unique_ptr<IProgramResources> build(GLenum mode, GLint id, std::string &&name);
 
 private:
-	Program const &_parent;
-	std::vector<std::pair<GLenum, std::function<std::unique_ptr<IProgramResources>(std::string &&name)>>> _blue_prints;
+	Program const &_program;
+	std::vector<std::pair<GLenum, std::function<std::unique_ptr<IProgramResources> (GLint, std::string &&)>>> _blue_prints;
+	UniformsFactory _uniformsFactory;
 };

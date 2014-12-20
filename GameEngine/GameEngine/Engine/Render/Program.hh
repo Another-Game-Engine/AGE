@@ -6,7 +6,7 @@
 # include <Render/Key.hh>
 # include <Render/GeometryManagement/Attribute.hh>
 # include <Render/GeometryManagement/GraphicalMemory.hh>
-# include <Render/ProgramResources/ProgramResourcesFactory.hh>
+# include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
 
 class Program
 {
@@ -20,8 +20,8 @@ public:
 public:
 	GLuint id() const;
 	Key<ProgramResource> &get_key(std::string const &name);
-	IProgramResources &get_resource(Key<ProgramResource> const &key);
-	IProgramResources &get_resource(std::string const &name);
+	IProgramResources *get_resource(Key<ProgramResource> const &key);
+	IProgramResources *get_resource(std::string const &name);
 	bool has_resource(Key<ProgramResource> const &key);
 	Program const &use() const;
 	Program const &print_resources() const;
@@ -35,7 +35,6 @@ private:
 private:
 	std::vector<std::unique_ptr<IProgramResources>> _programResources;
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
-	std::unique_ptr<GraphicalMemory> _graphicalMemory;
 	ProgramResourcesFactory _resources_factory;
 	GLuint _id;
 };
