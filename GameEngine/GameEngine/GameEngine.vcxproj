@@ -231,7 +231,6 @@
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
-    <ClCompile Include="Engine\Core\OldPrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
@@ -326,15 +325,11 @@
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
     <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />
     <ClInclude Include="Engine\Core\Link.hpp" />
-    <ClInclude Include="Engine\Core\MainThread.hpp" />
-    <ClInclude Include="Engine\Core\MainThreadCommand.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Core\OctreeNode.hh" />
     <ClInclude Include="Engine\Core\PreparableObject.hh" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
-    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
-    <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
     <ClInclude Include="Engine\Core\RenderScene.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
@@ -471,7 +466,6 @@
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\CommandQueue.hpp" />
     <ClInclude Include="Engine\Utils\ThreadName.hpp" />
-    <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
   </ItemGroup>
   <ItemGroup>

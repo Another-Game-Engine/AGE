@@ -6,7 +6,6 @@
 #include <Systems/System.h>
 #include <Core/EntityFilter.hpp>
 #include <Entities/EntityFlags.hh>
-#include <Core/PrepareRenderThread.hpp>
 #include <fstream>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>

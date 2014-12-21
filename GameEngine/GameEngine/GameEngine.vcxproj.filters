@@ -79,7 +79,6 @@
     <ClCompile Include="Engine\Threads\MainThread.cpp" />
     <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\RenderThead.cpp" />
-    <ClCompile Include="Engine\Core\OldPrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
     <ClCompile Include="Engine\Threads\TaskThread.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
@@ -106,8 +105,6 @@
     <ClInclude Include="Engine\Core\OctreeNode.hh" />
     <ClInclude Include="Engine\Core\PreparableObject.hh" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
-    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
-    <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />
@@ -232,12 +229,9 @@
     <ClInclude Include="Engine\Utils\Sphere.hh" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
-    <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
-    <ClInclude Include="Engine\Core\MainThread.hpp" />
     <ClInclude Include="Engine\Utils\CommandQueue.hpp" />
     <ClInclude Include="Engine\Utils\ThreadName.hpp" />
-    <ClInclude Include="Engine\Core\MainThreadCommand.hpp" />
     <ClInclude Include="Engine\Threads\Thread.hpp" />
     <ClInclude Include="Engine\Threads\ThreadManager.hpp" />
     <ClInclude Include="Engine\Threads\MainThread.hpp" />

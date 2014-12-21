@@ -4,7 +4,6 @@
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <assert.h>
-#include <Core/PrepareRenderThread.hpp>
 #include <Core/AssetsManager.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/PrepareRenderThread.hpp>

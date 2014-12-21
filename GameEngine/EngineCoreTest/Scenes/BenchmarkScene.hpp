@@ -10,9 +10,6 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/Light.hh>
 #include <Core/AssetsManager.hpp>
-#include <Core/PrepareRenderThread.hpp>
-#include <Core/PrepareRenderThreadCommand.hpp>
-#include <Utils/ThreadQueueCommands.hpp>
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>
 #include <Skinning/AnimationInstance.hpp>

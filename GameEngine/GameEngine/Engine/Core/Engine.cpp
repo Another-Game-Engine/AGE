@@ -1,7 +1,5 @@
 #include "Engine.hh"
 
-#include <Core/PrepareRenderThread.hpp>
-#include <Core/MainThread.hpp>
 #include <Core/Timer.hh>
 
 #include <Threads/ThreadManager.hpp>
@@ -135,7 +133,7 @@ namespace AGE
 					e.averageWaitTimeCopy = e.averageWaitTime;
 					e.averageWorkTimeCopy = e.averageWorkTime;
 				}
-				ImGui::Columns(Thread::hardwareConcurency() - 3, "Workers", true);
+				ImGui::Columns((int)(Thread::hardwareConcurency() - 3), "Workers", true);
 				for (auto i = (std::size_t)Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
 				{
 					auto &e = stats[i];

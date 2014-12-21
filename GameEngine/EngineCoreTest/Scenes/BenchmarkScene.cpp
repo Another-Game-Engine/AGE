@@ -2,12 +2,10 @@
 
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Utils/ThreadQueueCommands.hpp>
 
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
-#include <Core/MainThread.hpp>
 #include <Render/RenderManager.hh>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>

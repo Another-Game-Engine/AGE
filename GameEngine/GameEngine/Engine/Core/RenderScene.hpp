@@ -63,16 +63,6 @@ namespace AGE
 			, const gl::Key<AGE::AnimationInstance> &animation);
 		DRAWABLE_ID addDrawable(USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
-
-
-//		bool _updateBegin();
-		//bool _updateEnd()
-		//{
-		//	//auto returnValue = true;
-		//	//_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
-		//	//return returnValue;
-		//	return true;
-		//}
 	private:
 		friend class PrepareRenderThread;
 		AScene *_scene;

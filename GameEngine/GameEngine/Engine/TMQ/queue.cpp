@@ -4,11 +4,11 @@
 using namespace TMQ;
 
 PtrQueue::PtrQueue(std::size_t chunkSize)
-: _chunkSize(chunkSize)
-, _data(nullptr)
-, _cursor(0)
-, _size(0)
-, _to(0)
+	: _chunkSize(chunkSize)
+	, _data(nullptr)
+	, _cursor(0)
+	, _size(0)
+	, _to(0)
 {
 }
 
@@ -20,7 +20,7 @@ PtrQueue& PtrQueue::operator=(PtrQueue &&o)
 	std::swap(_cursor, o._cursor);
 	std::swap(_to, o._to);
 	std::swap(_size, o._size);
-//	o.clear();
+	//	o.clear();
 	return *this;
 }
 
@@ -31,7 +31,7 @@ PtrQueue::PtrQueue(PtrQueue &&o)
 	std::swap(_cursor, o._cursor);
 	std::swap(_to, o._to);
 	std::swap(_size, o._size);
-//	o.clear();
+	//	o.clear();
 }
 
 PtrQueue::~PtrQueue()
@@ -135,7 +135,7 @@ void HybridQueue::launch()
 
 bool HybridQueue::getTaskQueue(TMQ::PtrQueue &q, WaitType waitType)
 {
-   	if (waitType == WaitType::NoWait)
+	if (waitType == WaitType::NoWait)
 	{
 		if (!_releasable)
 			return false;
@@ -189,7 +189,7 @@ void HybridQueue::getTaskAndCommandQueue(
 	WaitType waitType)
 {
 	taskQueueSuccess = commandQueueSuccess = false;
-   	if (waitType == WaitType::NoWait)
+	if (waitType == WaitType::NoWait)
 	{
 		if (!_releasable)
 		{
@@ -263,61 +263,54 @@ bool HybridQueue::releaseTaskReadability()
 
 bool HybridQueue::releaseCommandReadability(WaitType waitType)
 {
-	try{
-		if (waitType == WaitType::NoWait)
-		{
-			std::unique_lock<std::mutex> lock(_mutex, std::try_to_lock);
-			if (!lock.owns_lock())
-				return false;
-			if (!_commandQueueCopy.empty())
-				return false;
-			_commandQueueCopy = std::move(_commandQueue);
-			_commandQueue.clear();
-			_releasable = true;
-			lock.unlock();
-			_readCondition.notify_one();
-			return true;
-		}
-		else if (waitType == WaitType::Block)
-		{
-			std::unique_lock<std::mutex> lock(_mutex);
-			_writeCondition.wait(lock, [this]()
-			{
-				return (_commandQueueCopy.empty());
-			});
-			if (!_commandQueueCopy.empty())
-				return false;
-			_commandQueueCopy = std::move(_commandQueue);
-			_commandQueue.clear();
-			_releasable = true;
-			lock.unlock();
-			_readCondition.notify_one();
-			return true;
-		}
-		else if (waitType == WaitType::Wait)
-		{
-			std::unique_lock<std::mutex> lock(_mutex);
-			if (!_writeCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
-			{
-				return (_commandQueueCopy.empty());
-			}))
-			{
-				return false;
-			}
-			if (!lock.owns_lock())
-				assert(false);
-			_commandQueueCopy = std::move(_commandQueue);
-			_commandQueue.clear();
-			_releasable = true;
-			lock.unlock();
-			_readCondition.notify_one();
-			return true;
-		}
-	}
-	catch (std::exception e)
+	if (waitType == WaitType::NoWait)
 	{
-		auto t = e.what();
-		auto tt = t;
+		std::unique_lock<std::mutex> lock(_mutex, std::try_to_lock);
+		if (!lock.owns_lock())
+			return false;
+		if (!_commandQueueCopy.empty())
+			return false;
+		_commandQueueCopy = std::move(_commandQueue);
+		_commandQueue.clear();
+		_releasable = true;
+		lock.unlock();
+		_readCondition.notify_one();
+		return true;
+	}
+	else if (waitType == WaitType::Block)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+		_writeCondition.wait(lock, [this]()
+		{
+			return (_commandQueueCopy.empty());
+		});
+		if (!_commandQueueCopy.empty())
+			return false;
+		_commandQueueCopy = std::move(_commandQueue);
+		_commandQueue.clear();
+		_releasable = true;
+		lock.unlock();
+		_readCondition.notify_one();
+		return true;
+	}
+	else if (waitType == WaitType::Wait)
+	{
+		std::unique_lock<std::mutex> lock(_mutex);
+		if (!_writeCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
+		{
+			return (_commandQueueCopy.empty());
+		}))
+		{
+			return false;
+		}
+		if (!lock.owns_lock())
+			assert(false);
+		_commandQueueCopy = std::move(_commandQueue);
+		_commandQueue.clear();
+		_releasable = true;
+		lock.unlock();
+		_readCondition.notify_one();
+		return true;
 	}
 	return true;
 }

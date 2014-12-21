@@ -47,7 +47,7 @@ namespace gl
 
 	VertexBuffer const &VertexBuffer::attribute(size_t index, int nbrComponent, GLenum type, size_t offset) const
 	{
-		glEnableVertexAttribArray(index);
+		glEnableVertexAttribArray((GLuint)(index));
 		glVertexAttribPointer(GLuint(index), GLint(nbrComponent), type, GL_FALSE, 0, (const GLvoid *)offset);
 		return (*this);
 	}

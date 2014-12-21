@@ -21,9 +21,7 @@
 #include <Utils/PerformanceDebugger.hh>
 #include <Core/AssetsManager.hpp>
 
-#include <Utils/ThreadQueueCommands.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Utils/ThreadQueueCommands.hpp>
 #include <Skinning/AnimationManager.hpp>
 //CONFIGS
 #include <CONFIGS.hh>

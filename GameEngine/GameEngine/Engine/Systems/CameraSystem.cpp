@@ -9,11 +9,6 @@
 #include <Core/PreparableObject.hh>
 #include <Core/AssetsManager.hpp>
 #include <Utils/DependenciesInjector.hpp>
-#include <Utils/ThreadQueueCommands.hpp>
-#include <Core/PrepareRenderThreadCommand.hpp>
-
-//tmp
-#include <Core/PrepareRenderThread.hpp>
 
 
 CameraSystem::CameraSystem(std::weak_ptr<AScene> &&scene)

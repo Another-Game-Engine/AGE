@@ -200,21 +200,6 @@ namespace AGE
 		assert(id != (std::size_t)(-1));
 	}
 
-
-	//bool RenderScene::_updateBegin()
-	//{
-	//	auto returnValue = true;
-
-	//	return returnValue;
-	//}
-
-	//bool RenderScene::_updateEnd()
-	//{
-	//	auto returnValue = true;
-	//	//_next->_next->getTaskQueue()->emplace<AGE::MTC::FrameTime>(_threadId, std::chrono::duration_cast<std::chrono::milliseconds>(_elapsed).count());
-	//	return returnValue;
-	//}
-
 		void RenderScene::_setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg)
 		{
 			Camera *co = nullptr;
