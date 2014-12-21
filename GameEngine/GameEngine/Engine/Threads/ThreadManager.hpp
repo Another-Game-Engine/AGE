@@ -34,11 +34,11 @@ namespace AGE
 			float averageWaitTimeCopy;
 			std::atomic_size_t frameCounter;
 			std::mutex mutex;
-			std::array < std::size_t, 64 > work;
-			std::array < std::size_t, 64 > wait;
-			std::array < float, 64 > workCopy;
-			std::array < float , 64 > waitCopy;
-			std::array < float , 64 > totalCopy;
+			std::array < std::size_t, 512 > work;
+			std::array < std::size_t, 512 > wait;
+			std::array < float, 512 > workCopy;
+			std::array < float , 512 > waitCopy;
+			std::array < float , 512 > totalCopy;
 			ThreadStatistics()
 				: name("")
 				, frameCounter(0)
