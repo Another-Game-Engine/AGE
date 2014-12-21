@@ -40,8 +40,16 @@ namespace AGE
 	{
 		TMQ::PtrQueue taskQueue;
 
+		std::chrono::system_clock::time_point waitStart;
+		std::chrono::system_clock::time_point waitEnd;
+		std::chrono::system_clock::time_point workStart;
+		std::chrono::system_clock::time_point workEnd;
+
+		waitStart = std::chrono::high_resolution_clock::now();
 		if (!getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
 		{
+			waitEnd = std::chrono::high_resolution_clock::now();
+			workStart = std::chrono::high_resolution_clock::now();
 			if (!_engine->update())
 				return false;
 			while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
@@ -56,15 +64,25 @@ namespace AGE
 					}
 				}
 			}
+			workEnd = std::chrono::high_resolution_clock::now();
+			GetThreadManager()->updateThreadStatistics(this->_id
+				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
+				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
 		else
 		{
+			waitEnd = std::chrono::high_resolution_clock::now();
+			workStart = std::chrono::high_resolution_clock::now();
 			while (!taskQueue.empty())
 			{
 				auto task = taskQueue.front();
 				assert(execute(task)); // we receive a task that we cannot handle
 				taskQueue.pop();
 			}
+			workEnd = std::chrono::high_resolution_clock::now();
+			GetThreadManager()->updateThreadStatistics(this->_id
+				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
+				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
 
 		return true;

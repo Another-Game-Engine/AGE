@@ -140,11 +140,20 @@ namespace AGE
 		bool commandSuccess;
 		bool taskSuccess;
 
+		std::chrono::system_clock::time_point waitStart;
+		std::chrono::system_clock::time_point waitEnd;
+		std::chrono::system_clock::time_point workStart;
+		std::chrono::system_clock::time_point workEnd;
+
 		while (_run && _insideRun)
 		{
+			waitStart = std::chrono::high_resolution_clock::now();
+
 			if (_context)
 				_context->refreshInputs();
 			getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
+			waitEnd = std::chrono::high_resolution_clock::now();
+			workStart = std::chrono::high_resolution_clock::now();
 			if (taskSuccess)
 			{
 				while (!tasks.empty())
@@ -166,6 +175,10 @@ namespace AGE
 				}
 				_drawlist.clear();
 			}
+			workEnd = std::chrono::high_resolution_clock::now();
+			GetThreadManager()->updateThreadStatistics(this->_id
+				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
+				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
 		return true;
 	}

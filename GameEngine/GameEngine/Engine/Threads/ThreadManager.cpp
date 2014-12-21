@@ -10,12 +10,11 @@ namespace AGE
 {
 	ThreadManager::ThreadManager()
 	{
-		auto hardwareConcurency = std::thread::hardware_concurrency();
 		// For old computer, we need at least 3 threads hahahahaha
 		// Yeah, we're like this :D
-		assert(hardwareConcurency >= 3);
-		_threads.resize(hardwareConcurency, nullptr);
-		_threadIdReference.resize(hardwareConcurency, -1);
+		assert(Thread::hardwareConcurency() >= 3);
+		_threads.resize(Thread::hardwareConcurency(), nullptr);
+		_threadIdReference.resize(Thread::hardwareConcurency(), -1);
 		auto mt = new MainThread();
 		auto pt = new PrepareRenderThread();
 		auto rt = new RenderThread();
@@ -24,9 +23,14 @@ namespace AGE
 		_threads[Thread::Render] = rt;
 		mt->linkToNext(pt);
 		pt->linkToNext(rt);
-		for (std::size_t i = Thread::Worker1; i < hardwareConcurency; ++i)
+		for (std::size_t i = Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
 		{
 			_threads[i] = new TaskThread(Thread::ThreadType(i));
+		}
+
+		for (std::size_t i = Thread::Main; i < Thread::hardwareConcurency(); ++i)
+		{
+			_threadsStatistics[i].name = Thread::threadTypeToString(Thread::ThreadType(i));
 		}
 	}
 	
@@ -108,6 +112,32 @@ namespace AGE
 		return static_cast<PrepareRenderThread*>(_threads[Thread::PrepareRender]);
 	}
 
+	void ThreadManager::updateThreadStatistics(Thread::ThreadType id, std::size_t workTime, std::size_t sleepTime)
+	{
+		auto &s = _threadsStatistics[id];
+		if (s.frameCounter >= s.work.size())
+		{
+			s.frameCounter = 0;
+		}
+		std::lock_guard<std::mutex>(s.mutex);
+		s.work[s.frameCounter] = workTime;
+		s.wait[s.frameCounter++] = sleepTime;
+		float newWaitTime = 0;
+		float newWorkTime = 0;
+		for (auto i = 0; i < s.work.size(); ++i)
+		{
+			newWorkTime += s.work[i];
+			newWaitTime += s.wait[i];
+		}
+		s.averageWaitTime = newWaitTime / (float)s.work.size() / 1000.0f;
+		s.averageWorkTime = newWorkTime / (float)s.work.size() / 1000.0f;
+	}
+
+	ThreadManager *GetThreadManager()
+	{
+		return Singleton<ThreadManager>::getInstance();
+	}
+
 	Thread *CurrentThread()
 	{
 		return Singleton<ThreadManager>::getInstance()->getCurrentThread();
@@ -153,6 +183,6 @@ namespace AGE
 		std::call_once(onceFlag, [&](){
 			auto threadManager = Singleton<ThreadManager>::getInstance();
 			threadManager->exit();
-	});
+		});
 	}
 }

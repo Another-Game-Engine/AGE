@@ -22,6 +22,7 @@ namespace AGE
 		};
 
 		static std::string threadTypeToString(ThreadType t);
+		static std::size_t hardwareConcurency();
 
 		virtual bool init() = 0;
 		virtual bool release() = 0;

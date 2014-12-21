@@ -62,4 +62,10 @@ namespace AGE
 		}
 		return res;
 	}
+
+	std::size_t Thread::hardwareConcurency()
+	{
+		static std::size_t res = std::thread::hardware_concurrency();
+		return res;
+	}
 }

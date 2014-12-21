@@ -40,24 +40,6 @@ namespace AGE
 	{
 	}
 
-	void Engine::updateThreadStatistics(std::size_t id, float time)
-	{
-		auto &s = _threadsStatics[id];
-		if (s.frameCounter >= s.frames.size())
-		{
-			s.frameCounter = 0;
-		}
-		s.frames[s.frameCounter++] = time;
-		s.averageTime = 0.0f;
-		for (auto i = 0; i < s.frames.size(); ++i)
-		{
-			s.averageTime += s.frames[i];
-		}
-		s.averageTime /= (float)(s.frames.size());
-	}
-
-
-
 //	bool Engine::_updateBegin()
 //	{
 
@@ -103,15 +85,109 @@ namespace AGE
 		res = userUpdateScenes(_timer->getElapsed());
 		if (!res)
 			return false;
-		if (ImGui::CollapsingHeader("Threads statistics"))
+#ifdef USE_IMGUI
+		if (ImGui::CollapsingHeader("Threads statistics", (const char*)0, true, true))
 		{
-			for (auto &e : _threadsStatics)
+			auto &stats = GetThreadManager()->getStatistics();
+			for (auto i = (std::size_t)Thread::Main; i <= Thread::Render; ++i)
 			{
-				ImGui::Text("Thread : %s", e.second.name.c_str());
-				ImGui::Text(std::string(std::to_string(e.second.averageTime) + " | " + std::to_string(int(1000.0f / e.second.averageTime)) + " fps").c_str());
-				ImGui::PlotLines("Frame Times", e.second.frames.data() , (int)e.second.frames.size(), (int)e.second.frameCounter, e.second.name.c_str(), 0.0f, 20.0f, ImVec2(0, 70));
+				auto &e = stats[i];
+				if (ImGui::CollapsingHeader(e.name.c_str(), (const char*)0, true, true))
+				{
+					std::lock_guard<std::mutex>(e.mutex);
+					for (auto i = 0; i < e.wait.size(); ++i)
+					{
+						e.waitCopy[i] = (float)e.wait[i] / 1000.0f;
+						e.workCopy[i] = (float)e.work[i] / 1000.0f;
+						e.totalCopy[i] = e.waitCopy[i] + e.workCopy[i];
+					}
+					e.averageWaitTimeCopy = e.averageWaitTime;
+					e.averageWorkTimeCopy = e.averageWorkTime;
+
+					if (e.averageWaitTime + e.averageWorkTime != 0)
+						ImGui::Text(std::string("Total : " + std::to_string(e.averageWaitTimeCopy + e.averageWorkTimeCopy) + " ms.").c_str());
+						ImGui::Text(std::string("Work : " + std::to_string((float)e.averageWorkTimeCopy) + " ms.").c_str());
+						ImGui::Text(std::string("Wait : " + std::to_string((float)e.averageWaitTimeCopy) + " ms.").c_str());
+						if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
+							ImGui::Text(std::string("FPS : " + std::to_string((int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy))) + ".").c_str());
+						ImGui::PlotLines("Frame Times", e.totalCopy.data(), (int)e.totalCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
+					if (ImGui::TreeNode((void*)(&e),"Details"))
+					{
+						ImGui::PlotLines("Frame Times", e.totalCopy.data(), (int)e.totalCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
+						ImGui::PlotLines("Wait Times", e.waitCopy.data(), (int)e.waitCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
+						ImGui::PlotLines("Work Times", e.workCopy.data(), (int)e.workCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
+						ImGui::TreePop();
+					}
+				}
+			}
+			if (ImGui::CollapsingHeader("Workers"))
+			{
+				for (auto i = (std::size_t)Thread::Worker1; i < Thread::END; ++i)
+				{
+					auto &e = stats[i];
+					std::lock_guard<std::mutex>(e.mutex);
+					for (auto i = 0; i < e.wait.size(); ++i)
+					{
+						e.waitCopy[i] = (float)e.wait[i] / 1000.0f;
+						e.workCopy[i] = (float)e.work[i] / 1000.0f;
+						e.totalCopy[i] = e.waitCopy[i] + e.workCopy[i];
+					}
+					e.averageWaitTimeCopy = e.averageWaitTime;
+					e.averageWorkTimeCopy = e.averageWorkTime;
+				}
+				ImGui::Columns(Thread::hardwareConcurency() - 3, "Workers", true);
+				for (auto i = (std::size_t)Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
+				{
+					auto &e = stats[i];
+					ImGui::Text(e.name.c_str());
+					ImGui::NextColumn();
+				}
+				ImGui::Separator();
+				for (auto i = (std::size_t)Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
+				{
+					auto &e = stats[i];
+					ImGui::Text("Total : %f", e.averageWaitTimeCopy + e.averageWorkTimeCopy);
+					ImGui::NextColumn();
+				}
+				for (auto i = (std::size_t)Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
+				{
+					auto &e = stats[i];
+					// total
+					ImGui::PlotLines("", e.totalCopy.data(), (int)e.totalCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
+					ImGui::NextColumn();
+				}
+				ImGui::Separator();
+				for (auto i = (std::size_t)Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
+				{
+					auto &e = stats[i];
+					ImGui::Text("Work : %f", e.averageWorkTimeCopy);
+					ImGui::NextColumn();
+				}
+				for (auto i = (std::size_t)Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
+				{
+					auto &e = stats[i];
+					// work
+					ImGui::PlotLines("", e.waitCopy.data(), (int)e.waitCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
+					ImGui::NextColumn();
+				}
+				ImGui::Separator();
+				for (auto i = (std::size_t)Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
+				{
+					auto &e = stats[i];
+					ImGui::Text("Wait : %f", e.averageWaitTimeCopy);
+					ImGui::NextColumn();
+				}
+				for (auto i = (std::size_t)Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
+				{
+					auto &e = stats[i];
+					// wait
+					ImGui::PlotLines("", e.workCopy.data(), (int)e.workCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
+					ImGui::NextColumn();
+				}
+				ImGui::Separator();
 			}
 		}
+#endif
 #ifdef USE_IMGUI
 	ImGui::Render();
 #endif
