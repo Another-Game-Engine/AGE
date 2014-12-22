@@ -155,7 +155,6 @@
     <ClInclude Include="Engine\Utils\AABoundingBox.hh" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
-    <ClInclude Include="Engine\Utils\Containers\PtrQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
     <ClInclude Include="Engine\Utils\DataSwapper.hpp" />
@@ -230,7 +229,6 @@
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
-    <ClInclude Include="Engine\Utils\CommandQueue.hpp" />
     <ClInclude Include="Engine\Utils\ThreadName.hpp" />
     <ClInclude Include="Engine\Threads\Thread.hpp" />
     <ClInclude Include="Engine\Threads\ThreadManager.hpp" />

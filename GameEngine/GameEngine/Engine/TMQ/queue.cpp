@@ -218,7 +218,7 @@ void HybridQueue::getTaskAndCommandQueue(
 	}
 	else if (waitType == WaitType::Block)
 	{
-		std::unique_lock<std::mutex> lock(_mutex); //ici fuck !!!
+		std::unique_lock<std::mutex> lock(_mutex);
 		_readCondition.wait(lock, [this]()
 		{
 			return (_releasable || !_taskQueue.empty() || !_commandQueueCopy.empty());
