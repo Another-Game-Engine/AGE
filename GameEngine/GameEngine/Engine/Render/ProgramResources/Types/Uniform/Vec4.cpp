@@ -4,7 +4,6 @@
 
 Vec4::Vec4(glm::vec4 const &value, GLint id, std::string &&name) :
 AProgramResources(id, std::move(name), GL_UNIFORM),
-ABlockResources(),
 _value(value)
 {
 
@@ -12,7 +11,6 @@ _value(value)
 
 Vec4::Vec4(Vec4 &&move):
 AProgramResources(std::move(move)),
-ABlockResources(move),
 _value(move._value)
 {
 
@@ -20,7 +18,6 @@ _value(move._value)
 
 Vec4::Vec4(Vec4 const &copy) :
 AProgramResources(copy),
-ABlockResources(copy),
 _value(copy._value)
 {
 }
@@ -43,11 +40,6 @@ bool Vec4::safe(size_t s) const
 size_t Vec4::size() const
 {
 	return (sizeof(type_t));
-}
-
-void const *Vec4::data() const
-{
-	return (&_value);
 }
 
 void Vec4::print() const

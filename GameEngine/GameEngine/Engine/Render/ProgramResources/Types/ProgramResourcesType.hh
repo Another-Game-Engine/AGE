@@ -1,6 +1,8 @@
 #pragma once
 
 #include <array>
+#include <unordered_map>
+#include <glm/glm.hpp>
 
 static size_t const nbr_resources = 22;
 
@@ -27,4 +29,12 @@ static std::array<GLenum, nbr_resources> const available_resources =
 	GL_TESS_CONTROL_SUBROUTINE_UNIFORM,
 	GL_TESS_EVALUATION_SUBROUTINE_UNIFORM,
 	GL_COMPUTE_SUBROUTINE_UNIFORM,
+};
+
+static const size_t nbr_type = 3;
+static std::unordered_map<GLenum, std::pair<size_t, std::string>> types =
+{
+	std::make_pair(GL_FLOAT, std::make_pair(sizeof(float), "float")),
+	std::make_pair(GL_FLOAT_VEC4, std::make_pair(sizeof(glm::vec4), "vec4")),
+	std::make_pair(GL_FLOAT_MAT4, std::make_pair(sizeof(glm::mat4), "mat4")),
 };

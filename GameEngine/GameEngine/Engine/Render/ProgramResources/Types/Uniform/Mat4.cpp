@@ -3,7 +3,6 @@
 
 Mat4::Mat4(glm::mat4 const &value, GLint id, std::string &&name) :
 AProgramResources(id, std::move(name), GL_UNIFORM),
-ABlockResources(),
 _value(value)
 {
 
@@ -11,7 +10,6 @@ _value(value)
 
 Mat4::Mat4(Mat4 &&move):
 AProgramResources(std::move(move)),
-ABlockResources(move),
 _value(move._value)
 {
 
@@ -19,7 +17,6 @@ _value(move._value)
 
 Mat4::Mat4(Mat4 const &copy) :
 AProgramResources(copy),
-ABlockResources(copy),
 _value(copy._value)
 {
 
@@ -48,11 +45,6 @@ bool Mat4::safe(size_t s) const
 size_t Mat4::size() const
 {
 	return (sizeof(type_t));
-}
-
-void const *Mat4::data() const
-{
-	return (&_value);
 }
 
 void Mat4::print() const

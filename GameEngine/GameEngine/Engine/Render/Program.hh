@@ -3,7 +3,6 @@
 # include <memory>
 # include <Render/UnitProg.hh>
 # include <Render/ProgramResources/IProgramResources.hh>
-# include <Render/ProgramResources/IBlockResources.hh>
 # include <Render/Key.hh>
 # include <Render/GeometryManagement/Attribute.hh>
 # include <Render/GeometryManagement/GraphicalMemory.hh>
@@ -33,7 +32,6 @@ private:
 
 private:
 	std::vector<std::unique_ptr<IProgramResources>> _program_resources;
-	std::vector<std::shared_ptr<IBlockResources>> _block_resources;
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 	ProgramResourcesFactory _resources_factory;
 	GLuint _id;

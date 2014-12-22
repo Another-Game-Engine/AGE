@@ -1,9 +1,8 @@
 #pragma once
 
 #include <Render/ProgramResources/AProgramResources.hh>
-#include <Render/ProgramResources/ABlockResources.hh>
 
-class Vec1 : public AProgramResources, public ABlockResources
+class Vec1 : public AProgramResources
 {
 public:
 	Vec1(float v, GLint id, std::string &&name);
@@ -16,7 +15,6 @@ public:
 	virtual IProgramResources &operator()() override final;
 	virtual bool safe(size_t size) const override final;
 	virtual size_t size() const override final;
-	virtual void const *data() const override final;
 	virtual void print() const override final;
 
 public:

@@ -245,10 +245,10 @@
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
     <ClCompile Include="Engine\Render\PixelBuffer.cpp" />
     <ClCompile Include="Engine\Render\PreShader.cpp" />
-    <ClCompile Include="Engine\Render\ProgramResources\ABlockResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AProgramResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Factory\ProgramResourcesFactory.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Factory\UniformsFactory.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\BlockResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec1.cpp" />
@@ -354,12 +354,11 @@
     <ClInclude Include="Engine\Render\Material.hh" />
     <ClInclude Include="Engine\Render\Pipeline.hh" />
     <ClInclude Include="Engine\Render\PixelBuffer.hh" />
-    <ClInclude Include="Engine\Render\ProgramResources\ABlockResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\AProgramResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Factory\ProgramResourcesFactory.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Factory\UniformsFactory.hh" />
-    <ClInclude Include="Engine\Render\ProgramResources\IBlockResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\IProgramResources.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\BlockResources.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\ProgramResourcesType.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\UniformBlock.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4.hh" />
