@@ -10,6 +10,9 @@ PtrQueue::PtrQueue(std::size_t chunkSize)
 	, _size(0)
 	, _to(0)
 {
+	_size += 1024 * 1024 * 64;
+	_data = (char*)(realloc(_data, _size));
+
 }
 
 
