@@ -165,13 +165,15 @@ bool HybridQueue::getTaskQueue(TMQ::PtrQueue &q, WaitType waitType)
 	else if (waitType == WaitType::Wait)
 	{
 		std::unique_lock<std::mutex> lock(_mutex);
-		if (_readCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
+		if (!_readCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this]()
 		{
-			return (!(_releasable || _taskQueue.empty()));
+			return (_releasable || !_taskQueue.empty());
 		}))
 		{
 			return false;
 		}
+		if (_taskQueue.empty() && !_releasable)
+			return false;
 		q = std::move(_taskQueue);
 		_taskQueue.clear();
 		_releasable = false;
@@ -233,7 +235,7 @@ void HybridQueue::getTaskAndCommandQueue(
 	else if (waitType == WaitType::Wait)
 	{
 		std::unique_lock<std::mutex> lock(_mutex);
-		if (_readCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
+		if (_readCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this]()
 		{
 			return (!(_releasable || !_taskQueue.empty() || !_commandQueueCopy.empty()));
 		}))
@@ -296,7 +298,7 @@ bool HybridQueue::releaseCommandReadability(WaitType waitType)
 	else if (waitType == WaitType::Wait)
 	{
 		std::unique_lock<std::mutex> lock(_mutex);
-		if (!_writeCondition.wait_for(lock, std::chrono::microseconds(1), [this]()
+		if (!_writeCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this]()
 		{
 			return (_commandQueueCopy.empty());
 		}))

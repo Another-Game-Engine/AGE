@@ -1,6 +1,7 @@
 #include "TaskThread.hpp"
 #include <Utils/ThreadName.hpp>
 #include <Core/Tasks/Basics.hpp>
+#include <Threads/ThreadManager.hpp>
 
 namespace AGE
 {
@@ -15,7 +16,7 @@ namespace AGE
 
 	bool TaskThread::init()
 	{
-		registerCallback<Tasks::Basic::VoidFunction>([this](Tasks::Basic::VoidFunction &msg){
+		registerCallback<Tasks::Basic::VoidFunction>([&](Tasks::Basic::VoidFunction &msg){
 			if (msg.function)
 				msg.function();
 		});
@@ -55,19 +56,30 @@ namespace AGE
 		DWORD threadId = ::GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, _name.c_str());
 
-		TMQ::PtrQueue tasks;
+		std::chrono::system_clock::time_point waitStart;
+		std::chrono::system_clock::time_point waitEnd;
+		std::chrono::system_clock::time_point workStart;
+		std::chrono::system_clock::time_point workEnd;
+
+		getQueue()->setWaitingTime(100);
 		while (_run && _insideRun)
 		{
-			if (getQueue()->getTaskQueue(tasks, TMQ::HybridQueue::Block))
+			TMQ::PtrQueue tasks;
+			waitStart = std::chrono::high_resolution_clock::now();
+			getQueue()->getTaskQueue(tasks, TMQ::HybridQueue::Wait);
+			waitEnd = std::chrono::high_resolution_clock::now();
+			workStart = std::chrono::high_resolution_clock::now();
+			while (!tasks.empty())
 			{
-				while (!tasks.empty())
-				{
-					//pop all tasks
-					auto task = tasks.front();
-					assert(execute(task)); // we receive a task that we cannot treat
-					tasks.pop();
-				}
+				//pop all tasks
+				auto task = tasks.front();
+				assert(execute(task)); // we receive a task that we cannot treat
+				tasks.pop();
 			}
+			workEnd = std::chrono::high_resolution_clock::now();
+			GetThreadManager()->updateThreadStatistics(this->_id
+				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
+				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
 		return true;
 	}

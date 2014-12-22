@@ -317,6 +317,7 @@
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Render.hpp" />

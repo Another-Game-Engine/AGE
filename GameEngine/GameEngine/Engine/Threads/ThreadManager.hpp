@@ -7,6 +7,11 @@
 #include <atomic>
 #include <array>
 
+namespace TMQ
+{
+	class HybridQueue;
+}
+
 namespace AGE
 {
 	class MainThread;
@@ -37,8 +42,8 @@ namespace AGE
 			std::array < std::size_t, 512 > work;
 			std::array < std::size_t, 512 > wait;
 			std::array < float, 512 > workCopy;
-			std::array < float , 512 > waitCopy;
-			std::array < float , 512 > totalCopy;
+			std::array < float, 512 > waitCopy;
+			std::array < float, 512 > totalCopy;
 			ThreadStatistics()
 				: name("")
 				, frameCounter(0)
@@ -53,6 +58,8 @@ namespace AGE
 		{
 			return _threadsStatistics;
 		}
+
+		TMQ::HybridQueue *getAvailableTaskQueue(bool futur = false, Thread::ThreadType type = Thread::END);
 	private:
 		std::array<ThreadStatistics, Thread::END> _threadsStatistics;
 
@@ -67,7 +74,7 @@ namespace AGE
 		AGE::Vector<AGE::Thread*> _threads;
 		AGE::Vector<std::size_t>  _threadIdReference;
 
-		friend class Singleton < ThreadManager >;
+		friend class Singleton < ThreadManager > ;
 		friend class Thread;
 	};
 

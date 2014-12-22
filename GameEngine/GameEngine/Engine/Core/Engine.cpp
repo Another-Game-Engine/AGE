@@ -164,7 +164,7 @@ namespace AGE
 				{
 					auto &e = stats[i];
 					// work
-					ImGui::PlotLines("", e.waitCopy.data(), (int)e.waitCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
+					ImGui::PlotLines("", e.workCopy.data(), (int)e.workCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
 					ImGui::NextColumn();
 				}
 				ImGui::Separator();
@@ -178,7 +178,7 @@ namespace AGE
 				{
 					auto &e = stats[i];
 					// wait
-					ImGui::PlotLines("", e.workCopy.data(), (int)e.workCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
+					ImGui::PlotLines("", e.waitCopy.data(), (int)e.waitCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
 					ImGui::NextColumn();
 				}
 				ImGui::Separator();

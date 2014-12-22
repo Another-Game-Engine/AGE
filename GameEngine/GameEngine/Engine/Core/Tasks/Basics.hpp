@@ -29,6 +29,15 @@ namespace AGE
 					: function(_function)
 				{
 				}
+				virtual ~VoidFunction()
+				{
+
+				}
+				VoidFunction(std::function<void(void)> &&_function)
+					: function(std::move(_function))
+				{
+
+				}
 			};
 
 			struct Exit

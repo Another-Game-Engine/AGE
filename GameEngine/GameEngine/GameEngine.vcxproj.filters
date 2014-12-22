@@ -248,6 +248,7 @@
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
+    <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

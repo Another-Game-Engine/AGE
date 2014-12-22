@@ -34,6 +34,7 @@ namespace AGE
 		Thread &operator=(Thread &) = delete;
 		Thread &operator=(Thread &&) = delete;
 		inline std::size_t getId() const { return _id; }
+		inline std::size_t getSystemId() const { return _systemId; }
 		virtual bool launch() = 0;
 		virtual bool stop() = 0;
 	protected:
@@ -43,5 +44,6 @@ namespace AGE
 
 		const ThreadType _id;
 		const std::string _name;
+		std::size_t _systemId;
 	};
 }

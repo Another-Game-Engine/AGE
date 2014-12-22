@@ -16,6 +16,7 @@
 #include <Core/Tasks/Render.hpp>
 #include <glm/glm.hpp>
 #include <SDL/SDL.h>
+#include <Threads/TaskScheduler.hpp>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<AGE::Engine> engine)
 	: AScene(engine)
@@ -490,5 +491,16 @@ bool BenchmarkScene::userUpdate(double time)
 		renderManager->drawPipelines();
 	});
 
+	// Push fibonacci task to test task pool
+	AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([](){
+		int n = rand();
+		int fnow = 0, fnext = 1, tempf;
+		while (--n > 0){
+			tempf = fnow + fnext;
+			fnow = fnext;
+			fnext = tempf;
+		}
+		std::cout << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId()) << " : " << fnext << std::endl;
+	});
 	return true;
 }

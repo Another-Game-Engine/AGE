@@ -5,6 +5,8 @@
 #include "TaskThread.hpp"
 #include "QueueOwner.hpp"
 #include "QueuePusher.hpp"
+#include <TMQ/queue.hpp>
+#include <limits>
 
 namespace AGE
 {
@@ -88,9 +90,9 @@ namespace AGE
 				assert(_threads[i] != nullptr);
 				return _threads[i];
 			}
-			assert(false);
-			return nullptr;
 		}
+		assert(false);
+		return nullptr;
 	}
 
 	std::weak_ptr<AGE::Engine> ThreadManager::createEngine()
@@ -131,6 +133,35 @@ namespace AGE
 		}
 		s.averageWaitTime = newWaitTime / (float)s.work.size() / 1000.0f;
 		s.averageWorkTime = newWorkTime / (float)s.work.size() / 1000.0f;
+	}
+
+	TMQ::HybridQueue *ThreadManager::getAvailableTaskQueue(bool futur, Thread::ThreadType type)
+	{
+		std::size_t res = -1;
+		long perf = std::numeric_limits<long>::max();
+		auto threadId = std::this_thread::get_id().hash();
+		for (std::size_t i = 0; i < Thread::hardwareConcurency(); ++i)
+		{
+			long stat = (long)_threadsStatistics[i].averageWorkTime - (long)_threadsStatistics[i].averageWaitTime;
+			if (stat < perf)
+			{
+				if (futur && _threads[i]->getSystemId() == threadId)
+					continue;
+				perf = stat;
+				res = i;
+			}
+		}
+		assert(res != std::size_t(-1));
+
+		// Disgusting !!!!! Heheh ! Shame on me :D
+		if (res > Thread::Render)
+			return static_cast<TaskThread*>(_threads[res])->getQueue();
+		else if (res == 0)
+			return static_cast<MainThread*>(_threads[res])->getQueue();
+		else if (res == 1)
+			return static_cast<PrepareRenderThread*>(_threads[res])->getQueue();
+		else
+			return static_cast<RenderThread*>(_threads[res])->getQueue();
 	}
 
 	ThreadManager *GetThreadManager()

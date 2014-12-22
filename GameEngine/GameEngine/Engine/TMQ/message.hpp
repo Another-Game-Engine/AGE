@@ -66,7 +66,7 @@ namespace TMQ
 		{}
 
 		template <typename ...Args>
-		explicit Message(Args &...args)
+		explicit Message(Args ...args)
 			: MessageBase(getId(), std::this_thread::get_id().hash()), _data(args...)
 		{
 		}

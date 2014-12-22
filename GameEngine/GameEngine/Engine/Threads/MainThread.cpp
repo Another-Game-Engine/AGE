@@ -5,6 +5,7 @@
 #include "RenderThread.hpp"
 #include <Core/Tasks/Render.hpp>
 #include <Threads/PrepareRenderThread.hpp>
+#include <Core/Tasks/Basics.hpp>
 
 
 namespace AGE
@@ -13,6 +14,10 @@ namespace AGE
 	{
 		// We register the main thread id
 		_registerId();
+		registerCallback<Tasks::Basic::VoidFunction>([this](Tasks::Basic::VoidFunction &msg){
+			if (msg.function)
+				msg.function();
+		});
 
 		return true;
 	}

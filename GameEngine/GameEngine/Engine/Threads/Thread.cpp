@@ -8,6 +8,7 @@ namespace AGE
 	Thread::Thread(Thread::ThreadType type)
 		: _id(type)
 		, _name(threadTypeToString(type))
+		, _systemId(0)
 	{
 
 	}
@@ -19,8 +20,8 @@ namespace AGE
 
 	std::size_t Thread::_registerId()
 	{
-		const size_t hash = std::this_thread::get_id().hash();
-		Singleton<ThreadManager>::getInstance()->registerThreadId(hash, _id);
+		_systemId = std::this_thread::get_id().hash();
+		Singleton<ThreadManager>::getInstance()->registerThreadId(_systemId, _id);
 		return _id;
 	}
 
