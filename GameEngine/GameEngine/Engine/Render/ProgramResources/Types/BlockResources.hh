@@ -7,18 +7,10 @@
 
 class UniformBlock;
 
-enum InfoBlockResources
-{
-	UBO = 0,
-	OFFSET,
-	SIZE_ARRAY,
-	STRIDE
-};
-
 class BlockResources : public AProgramResources
 {
 public:
-	BlockResources(GLint id, std::string &&name, GLenum type, std::tuple<std::weak_ptr<UniformBlock> const &, size_t, size_t, size_t> const &info);
+	BlockResources(GLint id, std::string &&name, GLenum type);
 	BlockResources(BlockResources &&move);
 	template <typename type_t> BlockResources &operator=(type_t value);
 	BlockResources &operator=(BlockResources const &b) = delete;
@@ -28,6 +20,7 @@ public:
 	size_t size_array() const;
 	size_t stride() const;
 	std::vector<uint8_t> const &data() const;
+	BlockResources &assign(std::shared_ptr<UniformBlock> const &parent, size_t offset, size_t sizeArray, size_t stride);
 
 public:
 	virtual IProgramResources &operator()() override final;

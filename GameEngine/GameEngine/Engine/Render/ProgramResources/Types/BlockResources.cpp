@@ -3,14 +3,13 @@
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <iostream>
 
-BlockResources::BlockResources(GLint id, std::string &&name, GLenum type, std::tuple<std::weak_ptr<UniformBlock> const &, size_t, size_t, size_t> const &info) :
+BlockResources::BlockResources(GLint id, std::string &&name, GLenum type) :
 AProgramResources(id, std::move(name), type),
-_parent(std::get<UBO>(info)),
-_offset(std::get<OFFSET>(info)),
-_size_array(std::get<SIZE_ARRAY>(info)),
-_stride(std::get<STRIDE>(info)),
-_size((_size_array == 0) ? types[_type].first : _size_array * _stride),
-_data(_size, 0)
+_parent(std::shared_ptr<UniformBlock>(nullptr)),
+_offset(0),
+_size_array(0),
+_stride(0),
+_size(0)
 {
 }
 
@@ -44,7 +43,10 @@ size_t BlockResources::stride() const
 IProgramResources & BlockResources::operator()()
 {
 	if (!_update) {
-		
+		auto &parent = _parent.lock();
+		if (parent) {
+			parent->buffer().sub(_offset, _size, _data.data());
+		}
 		_update = true;
 	}
 	return (*this);
@@ -70,6 +72,17 @@ std::vector<uint8_t> const & BlockResources::data() const
 {
 	return (_data);
 }
+
+BlockResources & BlockResources::assign(std::shared_ptr<UniformBlock> const &parent, size_t offset, size_t sizeArray, size_t stride)
+{
+	_parent = parent;
+	_offset = offset;
+	_size_array = sizeArray;
+	_stride = stride;
+	_size = (sizeArray == 0) ? types[_type].first : _size_array * _stride;
+	return (*this);
+}
+
 
 
 

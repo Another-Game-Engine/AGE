@@ -11,13 +11,15 @@
 class UniformBlock : public AProgramResources
 {
 public:
-	UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<BlockResources>> &&blockResources);
+	UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<BlockResources>> &&blockResources, size_t sizeBuffer);
+	UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<BlockResources>> &&blockResources, UniformBlock const &shared);
 	UniformBlock(UniformBlock &&move);
 	UniformBlock(UniformBlock const &copy) = delete;
 	UniformBlock &operator=(UniformBlock const &u) = delete;
 
 public:
 	UniformBlock &update();
+	UniformBuffer const &buffer() const;
 
 public:
 	virtual IProgramResources &operator()() override final;
@@ -31,5 +33,5 @@ public:
 private:
 	std::vector<std::shared_ptr<BlockResources>> _blockResources;
 	std::shared_ptr<UniformBuffer> _buffer;
-	GLint _block_binding;
+	size_t _binding_point;
 };
