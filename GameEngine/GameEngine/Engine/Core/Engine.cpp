@@ -111,7 +111,6 @@ namespace AGE
 						ImGui::PlotLines("Frame Times", e.totalCopy.data(), (int)e.totalCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
 					if (ImGui::TreeNode((void*)(&e),"Details"))
 					{
-						ImGui::PlotLines("Frame Times", e.totalCopy.data(), (int)e.totalCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
 						ImGui::PlotLines("Wait Times", e.waitCopy.data(), (int)e.waitCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
 						ImGui::PlotLines("Work Times", e.workCopy.data(), (int)e.workCopy.size(), (int)e.frameCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(0, 70));
 						ImGui::TreePop();
