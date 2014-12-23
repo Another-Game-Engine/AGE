@@ -31,7 +31,7 @@ public:
 	typedef UniformBlock * type_t;
 
 private:
-	std::vector<std::shared_ptr<BlockResources>> _blockResources;
+	std::vector<std::shared_ptr<BlockResources>> _block_resources;
 	std::shared_ptr<UniformBuffer> _buffer;
 	size_t _binding_point;
 };

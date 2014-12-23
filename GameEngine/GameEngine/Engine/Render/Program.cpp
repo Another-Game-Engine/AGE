@@ -67,10 +67,9 @@ void Program::_get_resource(size_t index, GLenum resource, std::string const & b
 	auto size = 0;
 	glGetProgramResourceName(_id, resource, index, buffer.size(), &size, (GLchar *)buffer.data());
 	std::string name(buffer, 0, size);
-	auto is_block = false;
-	auto element = _resources_factory.build(resource, index, std::move(name), is_block);
+	auto element = _resources_factory.build(resource, index, std::move(name));
 	if (element) {
-		is_block ? _program_resources.emplace_back(std::move(element)) : _program_resources.emplace_back(std::move(element));
+		_program_resources.emplace_back(std::move(element));
 	}
 }
 

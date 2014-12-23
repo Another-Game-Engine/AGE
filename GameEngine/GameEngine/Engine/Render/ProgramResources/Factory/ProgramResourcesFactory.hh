@@ -9,6 +9,7 @@
 # include <Render/ProgramResources/Factory/UniformsFactory.hh>
 
 class Program;
+class BlockResources;
 
 class ProgramResourcesFactory
 {
@@ -18,10 +19,11 @@ public:
 	ProgramResourcesFactory &operator=(ProgramResourcesFactory const &p) = delete;
 
 public:
-	std::unique_ptr<IProgramResources> build(GLenum mode, GLint id, std::string &&name, bool &isBlock);
+	std::unique_ptr<IProgramResources> build(GLenum mode, GLint id, std::string &&name);
 
 private:
 	Program const &_program;
-	std::vector<std::pair<GLenum, std::function<std::unique_ptr<IProgramResources> (GLint, std::string &&, bool &)>>> _blue_prints;
+	std::vector<std::pair<GLenum, std::function<std::unique_ptr<IProgramResources> (GLint, std::string &&)>>> _blue_prints;
 	UniformsFactory _uniformsFactory;
+	std::vector<std::shared_ptr<BlockResources>> _block_resources;
 };
