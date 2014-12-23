@@ -44,7 +44,8 @@ namespace AGE
 	bool TaskThread::stop()
 	{
 		getQueue()->emplaceTask<Tasks::Basic::Exit>();
-		_threadHandle.join();
+		if (_threadHandle.joinable())
+			_threadHandle.join();
 		return true;
 	}
 
@@ -62,9 +63,9 @@ namespace AGE
 		std::chrono::system_clock::time_point workEnd;
 
 		getQueue()->setWaitingTime(100);
+		TMQ::PtrQueue tasks;
 		while (_run && _insideRun)
 		{
-			TMQ::PtrQueue tasks;
 			waitStart = std::chrono::high_resolution_clock::now();
 			getQueue()->getTaskQueue(tasks, TMQ::HybridQueue::Wait);
 			waitEnd = std::chrono::high_resolution_clock::now();

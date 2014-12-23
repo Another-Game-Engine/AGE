@@ -39,5 +39,6 @@ namespace AGE
 
 		std::shared_ptr<AGE::Engine> _engine;
 		AScene *_activeScene;
+		TMQ::PtrQueue taskQueue;
 	};
 }

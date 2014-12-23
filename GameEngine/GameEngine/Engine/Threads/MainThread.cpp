@@ -30,8 +30,6 @@ namespace AGE
 	
 	bool MainThread::update()
 	{
-		TMQ::PtrQueue taskQueue;
-
 		std::chrono::system_clock::time_point waitStart;
 		std::chrono::system_clock::time_point waitEnd;
 		std::chrono::system_clock::time_point workStart;

@@ -111,6 +111,8 @@ namespace AGE
 	bool RenderThread::stop()
 	{
 		getQueue()->emplaceTask<Tasks::Basic::Exit>();
+		if (_threadHandle.joinable())
+			_threadHandle.join();
 		return true;
 	}
 
@@ -146,16 +148,15 @@ namespace AGE
 
 		while (_run && _insideRun)
 		{
-			waitStart = std::chrono::high_resolution_clock::now();
-
 			if (_context)
 				_context->refreshInputs();
+			waitStart = std::chrono::high_resolution_clock::now();
 			getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
 			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
 			if (taskSuccess)
 			{
-				while (!tasks.empty())
+				while (!tasks.empty() && _insideRun)
 				{
 					//pop all tasks
 					auto task = tasks.front();
@@ -166,7 +167,7 @@ namespace AGE
 			if (commandSuccess)
 			{
 				// pop all commands
-				while (!commands.empty())
+				while (!commands.empty() && _insideRun)
 				{
 					auto command = commands.front();
 					assert(execute(command));

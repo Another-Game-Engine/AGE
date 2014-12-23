@@ -125,7 +125,8 @@ namespace AGE
 	bool PrepareRenderThread::stop()
 	{
 		getQueue()->emplaceTask<Tasks::Basic::Exit>();
-		_threadHandle.join();
+		if (_threadHandle.joinable())
+			_threadHandle.join();
 		return true;
 	}
 

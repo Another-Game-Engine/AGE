@@ -491,20 +491,20 @@ bool BenchmarkScene::userUpdate(double time)
 		renderManager->drawPipelines();
 
 		// Push fibonacci task to test task pool
-		for (auto i = 0; i < 20; ++i)
-		{
-			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([](){
-				int n = rand();
-				int fnow = 0, fnext = 1, tempf;
-				while (--n > 0){
-					tempf = fnow + fnext;
-					fnow = fnext;
-					fnext = tempf;
-				}
-//				std::cout << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId()) << " : " << fnext << std::endl;
-				std::this_thread::sleep_for(std::chrono::milliseconds(1));
-			});
-		}
+//		for (auto i = 0; i < 20; ++i)
+//		{
+//			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([](){
+//				int n = rand();
+//				int fnow = 0, fnext = 1, tempf;
+//				while (--n > 0){
+//					tempf = fnow + fnext;
+//					fnow = fnext;
+//					fnext = tempf;
+//				}
+////				std::cout << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId()) << " : " << fnext << std::endl;
+////				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+//			});
+//		}
 	});
 	return true;
 }
