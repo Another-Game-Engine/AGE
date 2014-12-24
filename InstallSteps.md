@@ -2,7 +2,7 @@
 Cloner le repos https://github.com/Another-Game-Engine/AGE
 
 ###Etape 2) Les Vendors
-Telecharger les vendors ici : https://drive.google.com/folderview?id=0B6r28mwzes4tdHNHZjU3LW1wVmM&usp=sharing
+Telecharger les vendors ici : https://drive.google.com/folderview?id=0B6r28mwzes4teVBMMVhOTS1iQ2M&usp=sharing
 Les mettres à la racine du projet
 
 ###Etape 3) Les Assets
