@@ -40,9 +40,12 @@ private:
 template <typename type_t>
 BlockResources & BlockResources::operator=(type_t value)
 {
-	// !!!!!
+	if (!safe(sizeof(type_t))) {
+		return (*this);
+	}
+	std::memcpy(_data.data(), (void *)&value, sizeof(type_t));
 	_update = false;
-	auto &parent = _parent->lock();
+	auto parent = _parent.lock();
 	if (parent) {
 		parent->update();
 	}

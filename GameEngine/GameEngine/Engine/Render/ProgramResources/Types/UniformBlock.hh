@@ -7,6 +7,7 @@
 # include <Render/ProgramResources/AProgramResources.hh>
 # include <Render/ProgramResources/Types/BlockResources.hh>
 # include <Render/Buffer/UniformBuffer.hh>
+# include <Render/Key.hh>
 
 class UniformBlock : public AProgramResources
 {
@@ -20,6 +21,9 @@ public:
 public:
 	UniformBlock &update();
 	UniformBuffer const &buffer() const;
+	BlockResources *get_resource(std::string const &name);
+	Key<ProgramResource> get_key(std::string const &name);
+	BlockResources *get_resource(Key<ProgramResource> const &key);
 
 public:
 	virtual IProgramResources &operator()() override final;

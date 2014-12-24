@@ -25,6 +25,7 @@ BenchmarkScene::~BenchmarkScene(void)
 //#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 //#include <Render/ProgramResources/Types/Uniform/Vec4.hh>
 //#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+# include <Render/ProgramResources/Types/UniformBlock.hh>
 
 void BenchmarkScene::initRendering()
 {
@@ -37,6 +38,8 @@ void BenchmarkScene::initRendering()
 		std::shared_ptr<UnitProg> u1 = std::make_shared<UnitProg>(VERTEX_SHADER, GL_VERTEX_SHADER);
 		std::shared_ptr<UnitProg> u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
 		Program program({ u1, u2 });
+		auto block = program.get_resource<UniformBlock>("global_state")->get_resource("pos_light");
+		*block = glm::vec3(1.0f);
 		program.print_resources();
 		return (true);
 	});

@@ -57,6 +57,3 @@ std::unique_ptr<IProgramResources> ProgramResourcesFactory::build(GLenum mode, G
 	}
 	return (std::unique_ptr<IProgramResources>(nullptr));
 }
-
-
-

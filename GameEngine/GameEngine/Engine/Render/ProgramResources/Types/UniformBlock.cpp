@@ -32,7 +32,7 @@ IProgramResources & UniformBlock::operator()()
 {
 	if (!_update) {
 		_buffer->bind();
-		glBindBufferBase(_buffer->mode(), _binding_point, _buffer->id());
+		glBindBufferBase(_buffer->mode(), _binding_point, (GLuint)_buffer->id());
 		for (auto &blockResource : _block_resources) {
 			(*blockResource)();
 		}
@@ -69,4 +69,34 @@ UniformBlock & UniformBlock::update()
 UniformBuffer const & UniformBlock::buffer() const
 {
 	return (*_buffer);
+}
+
+Key<ProgramResource> UniformBlock::get_key(std::string const &name)
+{
+	auto index = 0;
+	for (auto &resource : _block_resources) {
+		if (resource->name() == name) {
+			return (Key<ProgramResource>::createKey(index));
+		}
+		++index;
+	}
+	return (Key<ProgramResource>::createKey(-1));
+}
+
+BlockResources *UniformBlock::get_resource(Key<ProgramResource> const &key)
+{
+	if (key) {
+		return (nullptr);
+	}
+	return (_block_resources[key.getId()].get());
+}
+
+BlockResources * UniformBlock::get_resource(std::string const &name)
+{
+	for (auto &resource : _block_resources) {
+		if (resource->name() == name) {
+			return (resource.get());
+		}
+	}
+	return (nullptr);
 }
