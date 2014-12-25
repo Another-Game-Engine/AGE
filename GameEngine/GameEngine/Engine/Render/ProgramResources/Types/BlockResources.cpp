@@ -1,15 +1,18 @@
 #include <Render/ProgramResources/Types/BlockResources.hh>
 #include <Render/ProgramResources/Types/UniformBlock.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
+#include <Render/ProgramResources/IInterfaceBlock.hh>
 #include <iostream>
 
-BlockResources::BlockResources(GLint id, std::string &&name, GLenum type) :
+
+BlockResources::BlockResources(GLint id, std::string &&name, GLenum type, glm::vec3 const &info) :
 AProgramResources(id, std::move(name), type),
 _parent(std::shared_ptr<UniformBlock>(nullptr)),
-_offset(0),
-_size_array(0),
-_stride(0),
-_size(0)
+_offset(info.x),
+_size_array(info.y),
+_stride(info.z),
+_size(types[type].first),
+_data(_size)
 {
 }
 
@@ -73,13 +76,9 @@ std::vector<uint8_t> const & BlockResources::data() const
 	return (_data);
 }
 
-BlockResources & BlockResources::assign(std::shared_ptr<UniformBlock> const &parent, size_t offset, size_t sizeArray, size_t stride)
+BlockResources & BlockResources::assignation(std::shared_ptr<IInterfaceBlock> const &interfaceBlock)
 {
-	_parent = parent;
-	_offset = offset;
-	_size_array = sizeArray;
-	_stride = stride;
-	_size = (sizeArray == 0) ? types[_type].first : _size_array * _stride;
+	_parent = interfaceBlock;
 	return (*this);
 }
 

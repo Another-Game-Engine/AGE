@@ -39,7 +39,7 @@ void BenchmarkScene::initRendering()
 		std::shared_ptr<UnitProg> u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
 		Program program({ u1, u2 });
 		auto block = program.get_resource<UniformBlock>("global_state")->get_resource("pos_light");
-		*block = glm::vec3(1.0f);
+		block->operator=(glm::vec3(1.0f));
 		program.print_resources();
 		return (true);
 	});
