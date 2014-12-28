@@ -80,6 +80,9 @@ void Program::_get_resources()
 		auto nbr_active_resources = 0;
 		auto max_name_lenght = 0;
 		glGetProgramInterfaceiv(_id, resource, GL_ACTIVE_RESOURCES, &nbr_active_resources);
+		if (nbr_active_resources == 0) {
+			continue;
+		}
 		glGetProgramInterfaceiv(_id, resource, GL_MAX_NAME_LENGTH, &max_name_lenght);
 		auto buffer = std::string(max_name_lenght, 0);
 		for (size_t index = 0; index < nbr_active_resources; ++index) {
@@ -96,6 +99,15 @@ Program const & Program::print_resources() const
 	return (*this);
 }
 
+
+Program & Program::update()
+{
+	use();
+	for (auto &resource : _program_resources) {
+		(*resource)();
+	}
+	return (*this);
+}
 
 
 

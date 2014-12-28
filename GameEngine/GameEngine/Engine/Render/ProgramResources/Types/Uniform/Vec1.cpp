@@ -24,6 +24,7 @@ _value(copy._value)
 
 Vec1 & Vec1::operator=(float v)
 {
+	_update = false;
 	_value = v;
 	return (*this);
 }

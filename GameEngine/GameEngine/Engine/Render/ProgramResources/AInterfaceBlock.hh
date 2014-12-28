@@ -11,8 +11,8 @@ class BlockResources;
 class AInterfaceBlock : public IInterfaceBlock
 {
 public:
-	AInterfaceBlock(std::vector<std::shared_ptr<BlockResources>> &&resources, size_t size);
-	AInterfaceBlock(std::vector<std::shared_ptr<BlockResources>> &&resources, AInterfaceBlock const &shared);
+	AInterfaceBlock(std::vector<std::unique_ptr<BlockResources>> &&resources, size_t size);
+	AInterfaceBlock(std::vector<std::unique_ptr<BlockResources>> &&resources, AInterfaceBlock const &shared);
 	AInterfaceBlock(AInterfaceBlock &&move);
 
 public:
@@ -27,7 +27,7 @@ protected:
 	virtual ~AInterfaceBlock(){};
 
 protected:
-	std::vector<std::shared_ptr<BlockResources>> _block_resources;
+	std::vector<std::unique_ptr<BlockResources>> _block_resources;
 	std::shared_ptr<UniformBuffer> _buffer;
 	size_t _binding_point;
 	bool _update_resource;

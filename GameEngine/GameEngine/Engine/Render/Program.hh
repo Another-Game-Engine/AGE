@@ -24,6 +24,7 @@ public:
 	template <typename type_t> type_t *get_resource(std::string const &name);
 	bool has_resource(Key<ProgramResource> const &key);
 	Program const &use() const;
+	Program &update();
 	Program const &print_resources() const;
 
 private:

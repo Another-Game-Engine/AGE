@@ -25,7 +25,7 @@ std::make_pair(GL_UNIFORM_BLOCK, LAMBDA_PROTO																										\
 	std::array<GLenum, nbr_prop> const prop = { GL_BUFFER_DATA_SIZE, GL_NUM_ACTIVE_VARIABLES };														\
 	std::array<GLint, nbr_prop> params;																												\
 	glGetProgramResourceiv(_program.id(), GL_UNIFORM_BLOCK, id, nbr_prop, prop.data(), nbr_prop, nullptr, params.data());							\
-	std::vector<std::shared_ptr<BlockResources>> block_resources;																					\
+	std::vector<std::unique_ptr<BlockResources>> block_resources;																					\
 	block_resources.reserve(params[1]);																												\
 	GLenum const active_variable_prop = GL_ACTIVE_VARIABLES;																						\
 	std::vector<GLint> active_variables(params[1]);																									\

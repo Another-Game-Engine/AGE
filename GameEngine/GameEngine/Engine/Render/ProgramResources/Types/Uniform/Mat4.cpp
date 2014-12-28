@@ -24,6 +24,7 @@ _value(copy._value)
 
 Mat4 &Mat4::operator=(glm::mat4 const &m)
 {
+	_update = false;
 	_value = m;
 	return (*this);
 }

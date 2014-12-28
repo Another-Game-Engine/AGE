@@ -41,7 +41,6 @@ GLuint AProgramResources::id() const
 	return (_id);
 }
 
-
 GLenum AProgramResources::type() const
 {
 	return (_type);

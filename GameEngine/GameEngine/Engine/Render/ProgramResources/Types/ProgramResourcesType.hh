@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 
-static size_t const nbr_resources = 22;
+static size_t const nbr_resources = 21;
 
 static std::array<GLenum, nbr_resources> const available_resources =
 {

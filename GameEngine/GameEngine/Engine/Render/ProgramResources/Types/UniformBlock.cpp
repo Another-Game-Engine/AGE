@@ -1,7 +1,7 @@
 #include <Render/ProgramResources/Types/UniformBlock.hh>
 #include <iostream>
 
-UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<BlockResources>> &&blockResources, size_t sizeBuffer) :
+UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::unique_ptr<BlockResources>> &&blockResources, size_t sizeBuffer) :
 AProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),
 AInterfaceBlock(std::move(blockResources), sizeBuffer)
 {
@@ -10,7 +10,7 @@ AInterfaceBlock(std::move(blockResources), sizeBuffer)
 	}
 }
 
-UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<BlockResources>> &&blockResources, AInterfaceBlock const &shared) :
+UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::unique_ptr<BlockResources>> &&blockResources, AInterfaceBlock const &shared) :
 AProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),
 AInterfaceBlock(std::move(blockResources), shared)
 {

@@ -2,17 +2,18 @@
 #include <Render/Buffer/UniformBuffer.hh>
 #include <Render/ProgramResources/Types/BlockResources.hh>
 
-AInterfaceBlock::AInterfaceBlock(std::vector<std::shared_ptr<BlockResources>> &&resources, size_t size) :
+AInterfaceBlock::AInterfaceBlock(std::vector<std::unique_ptr<BlockResources>> &&resources, size_t size) :
 _block_resources(std::move(resources)),
 _buffer(std::make_shared<UniformBuffer>()),
 _update_resource(false)
 {
 	static auto binding_point = 0ull;
 	_binding_point = binding_point++;
+	_buffer->bind();
 	_buffer->alloc(size);
 }
 
-AInterfaceBlock::AInterfaceBlock(std::vector<std::shared_ptr<BlockResources>> &&resources, AInterfaceBlock const &shared) :
+AInterfaceBlock::AInterfaceBlock(std::vector<std::unique_ptr<BlockResources>> &&resources, AInterfaceBlock const &shared) :
 _block_resources(std::move(resources)),
 _buffer(shared._buffer),
 _binding_point(shared._binding_point),

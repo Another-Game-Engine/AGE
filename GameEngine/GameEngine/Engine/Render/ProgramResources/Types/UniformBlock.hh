@@ -13,8 +13,8 @@
 class UniformBlock : public AProgramResources, public AInterfaceBlock
 {
 public:
-	UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<BlockResources>> &&blockResources, size_t sizeBuffer);
-	UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<BlockResources>> &&blockResources, AInterfaceBlock const &shared);
+	UniformBlock(GLint id, std::string &&name, std::vector<std::unique_ptr<BlockResources>> &&blockResources, size_t sizeBuffer);
+	UniformBlock(GLint id, std::string &&name, std::vector<std::unique_ptr<BlockResources>> &&blockResources, AInterfaceBlock const &shared);
 	UniformBlock(UniformBlock &&move);
 	UniformBlock(UniformBlock const &copy) = delete;
 	UniformBlock &operator=(UniformBlock const &u) = delete;

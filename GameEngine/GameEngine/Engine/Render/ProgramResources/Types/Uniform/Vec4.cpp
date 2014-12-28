@@ -22,6 +22,12 @@ _value(copy._value)
 {
 }
 
+Vec4 &Vec4::operator=(glm::vec4 const &p)
+{
+	_update = false;
+	_value = p;
+	return (*this);
+}
 
 IProgramResources & Vec4::operator()()
 {
