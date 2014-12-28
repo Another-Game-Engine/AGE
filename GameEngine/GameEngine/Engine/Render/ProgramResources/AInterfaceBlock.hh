@@ -30,5 +30,5 @@ protected:
 	std::vector<std::shared_ptr<BlockResources>> _block_resources;
 	std::shared_ptr<UniformBuffer> _buffer;
 	size_t _binding_point;
-	bool _update_by_resource;
+	bool _update_resource;
 };

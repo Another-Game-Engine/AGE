@@ -5,21 +5,18 @@
 AInterfaceBlock::AInterfaceBlock(std::vector<std::shared_ptr<BlockResources>> &&resources, size_t size) :
 _block_resources(std::move(resources)),
 _buffer(std::make_shared<UniformBuffer>()),
-_update_by_resource(false)
+_update_resource(false)
 {
 	static auto binding_point = 0ull;
 	_binding_point = binding_point++;
 	_buffer->alloc(size);
-	for (auto &resource : _block_resources) {
-		resource->assignation(this);
-	}
 }
 
 AInterfaceBlock::AInterfaceBlock(std::vector<std::shared_ptr<BlockResources>> &&resources, AInterfaceBlock const &shared) :
 _block_resources(std::move(resources)),
 _buffer(shared._buffer),
 _binding_point(shared._binding_point),
-_update_by_resource(false)
+_update_resource(false)
 {
 }
 
@@ -28,14 +25,14 @@ AInterfaceBlock::AInterfaceBlock(AInterfaceBlock &&move) :
 _block_resources(std::move(move._block_resources)),
 _buffer(std::move(move._buffer)),
 _binding_point(std::move(move._binding_point)),
-_update_by_resource(move._update_by_resource)
+_update_resource(move._update_resource)
 {
 
 }
 
 IInterfaceBlock & AInterfaceBlock::update()
 {
-	_update_by_resource = true;
+	_update_resource = true;
 	return (*this);
 }
 

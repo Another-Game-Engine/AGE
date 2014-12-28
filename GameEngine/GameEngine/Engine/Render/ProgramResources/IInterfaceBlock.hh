@@ -14,8 +14,8 @@ public:
 	virtual BlockResources *get_resource(std::string const &name) = 0;
 	virtual Key<ProgramResource> get_key(std::string const &name) = 0;
 	virtual BlockResources *get_resource(Key<ProgramResource> const &key) = 0;
+	virtual ~IInterfaceBlock(){};
 
 protected:
 	IInterfaceBlock(){};
-	virtual ~IInterfaceBlock(){};
 };

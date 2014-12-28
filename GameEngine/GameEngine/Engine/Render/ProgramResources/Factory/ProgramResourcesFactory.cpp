@@ -1,5 +1,4 @@
 #include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
-#include <Render/ProgramResources/Types/BlockResources.hh>
 #include <Render/ProgramResources/Types/UniformBlock.hh>
 #include <Render/Program.hh>
 #include <array>
@@ -10,13 +9,13 @@
 std::make_pair(GL_UNIFORM, LAMBDA_PROTO																												\
 {																																					\
 	auto const nbr_prop = 5;																														\
-	std::array<GLenum, nbr_prop> const prop = {GL_TYPE, GL_BLOCK_INDEX, GL_OFFSET,  GL_ARRAY_SIZE, GL_ARRAY_STRIDE};								\
+	std::array<GLenum, nbr_prop> const prop = { GL_TYPE, GL_BLOCK_INDEX, GL_OFFSET, GL_ARRAY_SIZE, GL_ARRAY_STRIDE };								\
 	std::array<GLint, nbr_prop> params;																												\
 	glGetProgramResourceiv(_program.id(), GL_UNIFORM, id, nbr_prop, prop.data(), nbr_prop, nullptr, params.data());									\
 	if (params[1] == -1) {																															\
 		return (_uniformsFactory.build(params[0], id, std::move(name)));																			\
 	}																																				\
-	_block_resources.emplace_back(std::make_shared<BlockResources>(id, std::move(name), params[0], glm::vec3(params[2], params[3], params[4])));	\
+	_block_resources.emplace_back(std::make_unique<BlockResources>(id, std::move(name), params[0], glm::vec3(params[2], params[3], params[4])));	\
 	return (std::unique_ptr<IProgramResources>(nullptr));																							\
 }),																																					\
 																																					\
@@ -33,13 +32,13 @@ std::make_pair(GL_UNIFORM_BLOCK, LAMBDA_PROTO																										\
 	glGetProgramResourceiv(_program.id(), GL_UNIFORM_BLOCK, id, 1, &active_variable_prop, params[1], nullptr, active_variables.data());				\
 	for (auto index = 0ull; index < params[1]; ++index) {																							\
 		for (auto &resource : _block_resources) {																									\
-			if (resource->id() == active_variables[index]) {																						\
-				block_resources.push_back(resource);																								\
+			if (resource != nullptr && resource->id() == active_variables[index]) {																	\
+				block_resources.push_back(std::move(resource));																						\
 			}																																		\
 		}																																			\
 	}																																				\
 	return (std::make_unique<UniformBlock>(id, std::move(name), std::move(block_resources), params[0]));											\
-})
+})																																					
 
 ProgramResourcesFactory::ProgramResourcesFactory(Program const &program) :
 _program(program),

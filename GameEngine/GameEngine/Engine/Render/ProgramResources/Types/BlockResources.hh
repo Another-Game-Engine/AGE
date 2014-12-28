@@ -21,7 +21,7 @@ public:
 	size_t size_array() const;
 	size_t stride() const;
 	std::vector<uint8_t> const &data() const;
-	BlockResources &assignation(std::shared_ptr<IInterfaceBlock> const &interfaceBlock);
+	BlockResources &assignation(IInterfaceBlock * interfaceBlock);
 
 public:
 	virtual IProgramResources &operator()() override final;
@@ -30,7 +30,7 @@ public:
 	virtual void print() const override final;
 
 private:
-	std::weak_ptr<IInterfaceBlock> _parent;
+	IInterfaceBlock * _parent;
 	size_t _offset;
 	size_t _size_array;
 	size_t _stride;
@@ -46,9 +46,8 @@ BlockResources & BlockResources::operator=(type_t value)
 	}
 	std::memcpy(_data.data(), (void *)&value, sizeof(type_t));
 	_update = false;
-	auto parent = _parent.lock();
-	if (parent) {
-		parent->update();
+	if (_parent) {
+		_parent->update();
 	}
 	return (*this);
 }

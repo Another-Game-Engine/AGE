@@ -31,7 +31,7 @@ private:
 	void _get_resource(size_t index, GLenum resource, std::string const & buffer);
 
 private:
-	std::vector<std::unique_ptr<IProgramResources>> _program_resources;
+	std::vector<std::shared_ptr<IProgramResources>> _program_resources;
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 	ProgramResourcesFactory _resources_factory;
 	GLuint _id;

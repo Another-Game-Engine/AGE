@@ -7,7 +7,7 @@
 
 BlockResources::BlockResources(GLint id, std::string &&name, GLenum type, glm::vec3 const &info) :
 AProgramResources(id, std::move(name), type),
-_parent(std::shared_ptr<UniformBlock>(nullptr)),
+_parent(nullptr),
 _offset(info.x),
 _size_array(info.y),
 _stride(info.z),
@@ -46,9 +46,8 @@ size_t BlockResources::stride() const
 IProgramResources & BlockResources::operator()()
 {
 	if (!_update) {
-		auto &parent = _parent.lock();
-		if (parent) {
-			parent->buffer().sub(_offset, _size, _data.data());
+		if (_parent) {
+			_parent->buffer().sub(_offset, _size, _data.data());
 		}
 		_update = true;
 	}
@@ -76,7 +75,7 @@ std::vector<uint8_t> const & BlockResources::data() const
 	return (_data);
 }
 
-BlockResources & BlockResources::assignation(std::shared_ptr<IInterfaceBlock> const &interfaceBlock)
+BlockResources & BlockResources::assignation(IInterfaceBlock * interfaceBlock)
 {
 	_parent = interfaceBlock;
 	return (*this);

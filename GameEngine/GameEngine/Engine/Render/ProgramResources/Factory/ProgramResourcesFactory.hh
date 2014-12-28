@@ -7,9 +7,9 @@
 # include <memory>
 # include <Render/ProgramResources/IProgramResources.hh>
 # include <Render/ProgramResources/Factory/UniformsFactory.hh>
+#include <Render/ProgramResources/Types/BlockResources.hh>
 
 class Program;
-class BlockResources;
 
 class ProgramResourcesFactory
 {
@@ -23,7 +23,7 @@ public:
 
 private:
 	Program const &_program;
-	std::vector<std::pair<GLenum, std::function<std::unique_ptr<IProgramResources> (GLint, std::string &&)>>> _blue_prints;
+	std::vector<std::pair<GLenum, std::function<std::unique_ptr<IProgramResources>(GLint, std::string &&)>>> _blue_prints;
 	UniformsFactory _uniformsFactory;
-	std::vector<std::shared_ptr<BlockResources>> _block_resources;
+	std::vector<std::unique_ptr<BlockResources>> _block_resources;
 };

@@ -5,13 +5,18 @@ UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::shared
 AProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),
 AInterfaceBlock(std::move(blockResources), sizeBuffer)
 {
+	for (auto &resource : _block_resources) {
+		resource->assignation(this);
+	}
 }
 
 UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::shared_ptr<BlockResources>> &&blockResources, AInterfaceBlock const &shared) :
 AProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),
 AInterfaceBlock(std::move(blockResources), shared)
 {
-
+	for (auto &resource : _block_resources) {
+		resource->assignation(this);
+	}
 }
 
 UniformBlock::UniformBlock(UniformBlock &&move) :
@@ -23,13 +28,13 @@ AInterfaceBlock(std::move(move))
 
 IProgramResources & UniformBlock::operator()()
 {
-	if (_update_by_resource) {
+	if (_update_resource) {
 		_buffer->bind();
 		glBindBufferBase(_buffer->mode(), _binding_point, (GLuint)_buffer->id());
 		for (auto &blockResource : _block_resources) {
 			(*blockResource)();
 		}
-		_update_by_resource = true;
+		_update_resource = true;
 	}
 	return (*this);
 }
