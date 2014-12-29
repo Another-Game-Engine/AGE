@@ -1,5 +1,7 @@
 #include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
 #include <Render/ProgramResources/Types/UniformBlock.hh>
+#include <Render/ProgramResources/Types/Attribute.hh>
+#include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <Render/Program.hh>
 #include <array>
 
@@ -38,9 +40,21 @@ std::make_pair(GL_UNIFORM_BLOCK, LAMBDA_PROTO																										\
 		}																																			\
 	}																																				\
 	return (std::make_unique<UniformBlock>(id, std::move(name), std::move(block_resources), params[0]));											\
+}),																																					\
+std::make_pair(GL_PROGRAM_INPUT, LAMBDA_PROTO																										\
+{																																					\
+	auto const nbr_prop = 1;																														\
+	std::array<GLenum, nbr_prop> const prop = { GL_TYPE };																							\
+	std::array<GLint, nbr_prop> params;																												\
+	glGetProgramResourceiv(_program.id(), GL_PROGRAM_INPUT, id, nbr_prop, prop.data(), nbr_prop, nullptr, params.data());							\
+	auto &available_type = available_types.find(params[0]);																							\
+	if (available_type == available_types.end()) {																									\
+		return (std::unique_ptr<IProgramResources>(nullptr));																						\
+		}																																			\
+	return (std::unique_ptr<IProgramResources>(std::make_unique<Attribute>(id, std::move(name), available_type->second)));							\
 })																																					
-
-ProgramResourcesFactory::ProgramResourcesFactory(Program const &program) :
+																																					
+ProgramResourcesFactory::ProgramResourcesFactory(Program const &program) :																			
 _program(program),
 _blue_prints({ DECLAR_BUILDERS })
 {

@@ -11,7 +11,7 @@ _parent(nullptr),
 _offset(info.x),
 _size_array(info.y),
 _stride(info.z),
-_size(types[type].first),
+_size(available_types[type].size),
 _data(_size)
 {
 }
@@ -66,7 +66,7 @@ size_t BlockResources::size() const
 
 void BlockResources::print() const
 {
-	std::cout << "block resources " << types[_type].second;
+	std::cout << "block resources " << available_types[_type].name;
 	std::cout << " " << _name << ";" <<  std::endl;
 }
 

@@ -4,7 +4,6 @@
 # include <Render/UnitProg.hh>
 # include <Render/ProgramResources/IProgramResources.hh>
 # include <Render/Key.hh>
-# include <Render/GeometryManagement/Attribute.hh>
 # include <Render/GeometryManagement/GraphicalMemory.hh>
 # include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
 
