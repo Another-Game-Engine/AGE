@@ -3,46 +3,40 @@
 
 using namespace TMQ;
 
-PtrQueue::PtrQueue(std::size_t chunkSize)
-	: _chunkSize(chunkSize)
-	, _data(nullptr)
+PtrQueue::Chunk::Chunk(std::size_t chunkSize)
+	: _data(nullptr)
 	, _cursor(0)
-	, _size(0)
+	, _size(chunkSize)
 	, _to(0)
 {
-	//_size += 1024 * 1024 * 64;
-	//_data = (char*)(realloc(_data, _size));
+	assert(chunkSize != 0);
+	_data = (char*)malloc(chunkSize);
 }
 
-
-PtrQueue& PtrQueue::operator=(PtrQueue &&o)
+PtrQueue::Chunk& PtrQueue::Chunk::operator=(Chunk &&o)
 {
 	std::swap(_data, o._data);
-	std::swap(_chunkSize, o._chunkSize);
 	std::swap(_cursor, o._cursor);
 	std::swap(_to, o._to);
 	std::swap(_size, o._size);
-	//	o.clear();
 	return *this;
 }
 
-PtrQueue::PtrQueue(PtrQueue &&o)
+PtrQueue::Chunk::Chunk(Chunk &&o)
 {
 	std::swap(_data, o._data);
-	std::swap(_chunkSize, o._chunkSize);
 	std::swap(_cursor, o._cursor);
 	std::swap(_to, o._to);
 	std::swap(_size, o._size);
-	//	o.clear();
 }
 
-PtrQueue::~PtrQueue()
+PtrQueue::Chunk::~Chunk()
 {
-	if (_data != nullptr)
-		free(_data);
+	if (_data)
+		delete _data;
 }
 
-void PtrQueue::pop()
+void PtrQueue::Chunk::pop()
 {
 	if (empty())
 		return;
@@ -58,7 +52,8 @@ void PtrQueue::pop()
 	r->~MessageBase();
 }
 
-MessageBase *PtrQueue::front()
+
+MessageBase *PtrQueue::Chunk::front()
 {
 	if (empty())
 		return nullptr;
@@ -72,7 +67,7 @@ MessageBase *PtrQueue::front()
 	return ((MessageBase*)(tmp));
 }
 
-std::size_t PtrQueue::getFrontSize()
+std::size_t PtrQueue::Chunk::getFrontSize()
 {
 	if (empty())
 		return 0;
@@ -85,13 +80,12 @@ std::size_t PtrQueue::getFrontSize()
 	return s;
 }
 
-
-void PtrQueue::clear()
+void PtrQueue::Chunk::clear()
 {
 	_cursor = _to = 0;
 }
 
-void PtrQueue::eraseAll()
+void PtrQueue::Chunk::eraseAll()
 {
 	while (!empty())
 	{
@@ -100,15 +94,7 @@ void PtrQueue::eraseAll()
 	clear();
 }
 
-void PtrQueue::release()
-{
-	clear();
-	if (_data != nullptr)
-		free(_data);
-	_data = nullptr;
-}
-
-bool PtrQueue::empty()
+bool PtrQueue::Chunk::empty()
 {
 	if (_cursor >= _to)
 	{
@@ -117,6 +103,98 @@ bool PtrQueue::empty()
 		return true;
 	}
 	return false;
+}
+
+
+PtrQueue::PtrQueue(std::size_t chunkSize)
+	: _chunkSize(chunkSize)
+{
+	_list.push_back(new Chunk(chunkSize));
+	_listWriter = std::begin(_list);
+	_listReader = std::begin(_list);
+}
+
+
+PtrQueue& PtrQueue::operator=(PtrQueue &&o)
+{
+	std::swap(_chunkSize, o._chunkSize);
+	std::swap(_list, o._list);
+	std::swap(_listReader, o._listReader);
+	std::swap(_listWriter, o._listWriter);
+	_listWriter = std::begin(_list);
+	_listReader = std::begin(_list);
+	return *this;
+}
+
+PtrQueue::PtrQueue(PtrQueue &&o)
+{
+	std::swap(_chunkSize, o._chunkSize);
+	std::swap(_list, o._list);
+	std::swap(_listReader, o._listReader);
+	std::swap(_listWriter, o._listWriter);
+	_listWriter = std::begin(_list);
+	_listReader = std::begin(_list);
+}
+
+PtrQueue::~PtrQueue()
+{
+	for (auto &e : _list)
+		delete e;
+	_list.clear();
+}
+
+void PtrQueue::pop()
+{
+	if (empty())
+		return;
+	(*_listReader)->pop();
+	if ((*_listReader)->empty())
+		++_listReader;
+	_listWriter = std::begin(_list);
+}
+
+MessageBase *PtrQueue::front()
+{
+	if (empty())
+		return nullptr;
+	_listWriter = std::begin(_list);
+	return  (*_listReader)->front();
+}
+
+std::size_t PtrQueue::getFrontSize()
+{
+	if (empty())
+		return 0;
+
+	return  (*_listReader)->getFrontSize();
+}
+
+
+void PtrQueue::clear()
+{
+	_listWriter = std::begin(_list);
+	for (auto &e : _list)
+		e->clear();
+}
+
+void PtrQueue::eraseAll()
+{
+	_listWriter = std::begin(_list);
+	for (auto &e : _list)
+		e->eraseAll();
+}
+
+bool PtrQueue::empty()
+{
+	if (_listReader == std::end(_list))
+	{
+		return true;
+	}
+	if (!(*_listReader)->empty())
+		return false;
+	if (++_listReader != std::end(_list))
+		return (*_listReader)->empty();
+	return true;
 }
 
 

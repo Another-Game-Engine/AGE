@@ -501,6 +501,12 @@ bool BenchmarkScene::userUpdate(double time)
 //					fnow = fnext;
 //					fnext = tempf;
 //				}
+//				//std::ofstream myfile;
+//				//myfile.open(std::string(std::string("C:/Users/cesar/Desktop/trash/lol-") + std::to_string(fnext)).c_str());
+//				//myfile << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId());
+//				//myfile << " : " << std::to_string(fnext);
+//				//myfile << "\n";
+//				//myfile.close();
 ////				std::cout << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId()) << " : " << fnext << std::endl;
 ////				std::this_thread::sleep_for(std::chrono::milliseconds(1));
 //			});

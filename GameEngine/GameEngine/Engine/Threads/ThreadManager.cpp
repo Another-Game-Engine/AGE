@@ -138,11 +138,11 @@ namespace AGE
 	TMQ::HybridQueue *ThreadManager::getAvailableTaskQueue(bool futur, Thread::ThreadType type)
 	{
 		std::size_t res = -1;
-		long perf = std::numeric_limits<long>::max();
+		float perf = std::numeric_limits<float>::max();
 		auto threadId = std::this_thread::get_id().hash();
 		for (std::size_t i = 0; i < Thread::hardwareConcurency(); ++i)
 		{
-			long stat = (long)_threadsStatistics[i].averageWorkTime - (long)_threadsStatistics[i].averageWaitTime;
+			float stat = _threadsStatistics[i].averageWorkTime - _threadsStatistics[i].averageWaitTime;
 			if (stat < perf)
 			{
 				if (futur && _threads[i]->getSystemId() == threadId)

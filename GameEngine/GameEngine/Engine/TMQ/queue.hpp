@@ -8,6 +8,7 @@
 #include <cinttypes>
 #include <condition_variable>
 #include <mutex>
+#include <list>
 
 namespace TMQ
 {
@@ -31,40 +32,138 @@ namespace TMQ
 		std::size_t getFrontSize();
 		void clear();
 		void eraseAll();
-		void release();
 		bool empty();
 	private:
 		std::size_t _chunkSize;
-		char *_data;
-		std::size_t _cursor;
-		std::size_t _size;
-		std::size_t _to;
+		struct Chunk
+		{
+			char *_data;
+			std::size_t _cursor;
+			std::size_t _size;
+			std::size_t _to;
 
-		friend class ReleasableQueue;
-		friend class ImmediateQueue;
-		friend class HybridQueue;
+			Chunk() = delete;
+			Chunk(const Chunk &o) = delete;
+			Chunk& operator=(const Chunk &o) = delete;
+			Chunk(std::size_t chunkSize);
+			Chunk& operator=(Chunk &&o);
+			Chunk(Chunk &&o);
+			~Chunk();
+			void pop();
+			MessageBase *front();
+			std::size_t getFrontSize();
+			void clear();
+			void eraseAll();
+			void release();
+			bool empty();
 
-	private:
+			template <typename T>
+			T* push(const T& e)
+			{
+				std::size_t sizeOfInt = sizeof(std::size_t);
+				std::size_t s = sizeof(Message<T>);
+				assert(s < _chunkSize + sizeOfInt);
+				
+				if (_size - _to < s + sizeOfInt)
+				{
+					return nullptr;
+				}
+
+				char *tmp = _data;
+				tmp += _to;
+				memcpy(tmp, &s, sizeOfInt);
+				tmp += sizeOfInt;
+				Message<T>* res = new(tmp)Message<T>(e);
+				_to += sizeOfInt + s;
+				return &res->_data;
+			}
+
+			template <typename T>
+			T* push(T&& e)
+			{
+				assert(sizeof(T) % 4 == 0);
+				std::size_t s = sizeof(Message<T>);
+				std::size_t sizeOfInt = sizeof(std::size_t);
+
+				if (_size - _to < s + sizeOfInt)
+				{
+					return nullptr;
+				}
+
+				char *tmp = _data;
+				tmp += _to;
+				memcpy(tmp, &s, sizeOfInt);
+				tmp += sizeOfInt;
+				Message<T>* res = new(tmp)Message<T>(std::move(e));
+				_to += sizeOfInt + s;
+				return &res->_data;
+			}
+
+			bool move(MessageBase *e, std::size_t size)
+			{
+				std::size_t s = size;
+				std::size_t sizeOfInt = sizeof(std::size_t);
+
+				if (_size - _to < s + sizeOfInt)
+				{
+					return false;
+				}
+
+				char *tmp = _data;
+				tmp += _to;
+				memcpy(tmp, &s, sizeOfInt);
+				tmp += sizeOfInt;
+				e->clone(tmp);
+				auto test = (MessageBase*)(tmp);
+				_to += sizeOfInt + s;
+				return true;
+			}
+
+			template <typename T, typename ...Args>
+			T* emplace(Args ...args)
+			{
+				assert(sizeof(T) % 4 == 0);
+				std::size_t s = sizeof(Message<T>);
+				std::size_t sizeOfInt = sizeof(std::size_t);
+
+				if (_size - _to < s + sizeOfInt)
+				{
+					return nullptr;
+				}
+
+				char *tmp = _data;
+				tmp += _to;
+				memcpy(tmp, &s, sizeOfInt);
+				tmp += sizeOfInt;
+				Message<T>* res = new(tmp)Message<T>(args...);
+				_to += sizeOfInt + s;
+				return &res->_data;
+			}
+		};
+		std::list<Chunk*> _list;
+		std::list<Chunk*>::iterator _listReader;
+		std::list<Chunk*>::iterator _listWriter;
+
 		template <typename T>
 		T* push(const T& e)
 		{
 			assert(sizeof(T) % 4 == 0);
 			std::size_t s = sizeof(Message<T>);
 			std::size_t sizeOfInt = sizeof(std::size_t);
+			assert(s + sizeOfInt < _chunkSize);
 
-			if (_data == nullptr
-				|| _size - _to < s + sizeOfInt)
+			auto res = (*_listWriter)->push(e);
+			if (!res)
 			{
-				allocate<T>();
+				if (_listWriter == --std::end(_list))
+				{
+					_list.push_back(new Chunk(_chunkSize));
+					_listWriter = --std::end(_list);
+				}
+				else
+					++_listWriter;
+				return push(e);
 			}
-
-			char *tmp = _data;
-			tmp += _to;
-			memcpy(tmp, &s, sizeOfInt);
-			tmp += sizeOfInt;
-			Message<T>* res = new(tmp)Message<T>(e);
-			_to += sizeOfInt + s;
-			return &res->_data;
 		}
 
 		template <typename T>
@@ -73,40 +172,38 @@ namespace TMQ
 			assert(sizeof(T) % 4 == 0);
 			std::size_t s = sizeof(Message<T>);
 			std::size_t sizeOfInt = sizeof(std::size_t);
+			assert(s + sizeOfInt < _chunkSize);
 
-			if (_data == nullptr
-				|| _size - _to < s + sizeOfInt)
+			auto res = (*_listWriter)->push(std::move(e));
+			if (!res)
 			{
-				allocate<T>();
+				if (_listWriter == --std::end(_list))
+				{
+					_list.push_back(new Chunk(_chunkSize));
+					_listWriter = --std::end(_list);
+				}
+				else
+					++_listWriter;
+				return push(e);
 			}
-
-			char *tmp = _data;
-			tmp += _to;
-			memcpy(tmp, &s, sizeOfInt);
-			tmp += sizeOfInt;
-			Message<T>* res = new(tmp)Message<T>(std::move(e));
-			_to += sizeOfInt + s;
-			return &res->_data;
 		}
-
-		void move(MessageBase *e, std::size_t size)
+		
+		bool move(MessageBase *e, std::size_t size)
 		{
 			std::size_t s = size;
 			std::size_t sizeOfInt = sizeof(std::size_t);
+			assert(s + sizeOfInt < _chunkSize);
 
-			if (_data == nullptr
-				|| _size - _to < s + sizeOfInt)
+			if ((*_listWriter)->move(std::move(e), size))
+				return true;
+			if (_listWriter == --std::end(_list))
 			{
-				allocate(size);
+				_list.push_back(new Chunk(_chunkSize));
+				_listWriter = --std::end(_list);
 			}
-
-			char *tmp = _data;
-			tmp += _to;
-			memcpy(tmp, &s, sizeOfInt);
-			tmp += sizeOfInt;
-			e->clone(tmp);
-			auto test = (MessageBase*)(tmp);
-			_to += sizeOfInt + s;
+			else
+				++_listWriter;
+			return (*_listWriter)->move(std::move(e), size);
 		}
 
 		template <typename T, typename ...Args>
@@ -115,48 +212,28 @@ namespace TMQ
 			assert(sizeof(T) % 4 == 0);
 			std::size_t s = sizeof(Message<T>);
 			std::size_t sizeOfInt = sizeof(std::size_t);
+			assert(s + sizeOfInt < _chunkSize);
 
-			if (_data == nullptr
-				|| _size - _to < s + sizeOfInt)
+			auto res = (*_listWriter)->emplace<T>(args...);
+			if (!res)
 			{
-				allocate<T>();
+				if (_listWriter == --std::end(_list))
+				{
+					_list.push_back(new Chunk(_chunkSize));
+					_listWriter = --std::end(_list);
+				}
+				else
+					++_listWriter;
+				return emplace<T>(args...);
 			}
-
-			char *tmp = _data;
-			tmp += _to;
-			memcpy(tmp, &s, sizeOfInt);
-			tmp += sizeOfInt;
-			Message<T>* res = new(tmp)Message<T>(args...);
-			_to += sizeOfInt + s;
-			return &res->_data;
+			return res;
 		}
-
-		template <typename T>
-		void allocate()
-		{
-			assert(sizeof(T) % 4 == 0);
-			std::size_t sizeOfType = sizeof(Message<T>);
-
-			while (_size - _to <= sizeOfType + sizeof(std::size_t)
-				|| _size <= _to)
-			{
-				_size += _chunkSize;
-				_data = (char*)(realloc(_data, _size));
-			}
-		}
-
-		void allocate(std::size_t sizeOfType)
-		{
-			while (_size - _to <= sizeOfType + sizeof(std::size_t)
-				|| _size <= _to)
-			{
-				_size += _chunkSize;
-				_data = (char*)(realloc(_data, _size));
-			}
-		}
+		friend class ReleasableQueue;
+		friend class ImmediateQueue;
+		friend class HybridQueue;
 	};
 
-class HybridQueue
+	class HybridQueue
 	{
 		PtrQueue _commandQueue;
 		PtrQueue _commandQueueCopy;
