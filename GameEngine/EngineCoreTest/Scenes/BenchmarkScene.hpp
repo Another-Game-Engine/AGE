@@ -10,16 +10,10 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/Light.hh>
 #include <Core/AssetsManager.hpp>
-#include <Core/PrepareRenderThread.hpp>
-#include <Core/PrepareRenderThreadCommand.hpp>
-#include <Utils/ThreadQueueCommands.hpp>
 #include <Context/IRenderContext.hh>
-#include <Core/RenderThread.hpp>
 #include <CONFIGS.hh>
 #include <Skinning/AnimationInstance.hpp>
-
-//for test
-#include <Utils/Containers/CommandQueue.hpp>
+#include <Render/Pipeline.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -84,7 +78,7 @@ struct RenderKey
 class BenchmarkScene : public AScene	
 {
 public:
-	BenchmarkScene(std::weak_ptr<Engine> &&engine);
+	BenchmarkScene(std::weak_ptr<AGE::Engine> engine);
 
 	virtual ~BenchmarkScene(void);
 	void initRendering();
@@ -92,7 +86,6 @@ public:
 	virtual bool userUpdate(double time);
 
 private:
-	AGE::RenderThread *_renderThread;
 	gl::RenderManager *_renderManager;
 	RenderKey key;
 
@@ -105,7 +98,7 @@ private:
 	std::ofstream _logFile;
 	Entity GLOBAL_CAMERA;
 	Entity GLOBAL_CATWOMAN;
-	Entity GLOBAL_LIGHT;
+	std::array<Entity, 5> GLOBAL_LIGHTS;
 	Entity GLOBAL_SPONZA;
 	Entity GLOBAL_FLOOR;
 	Entity GLOBAL_HEAD;

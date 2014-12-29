@@ -6,14 +6,14 @@ using namespace TMQ;
 
 void Dispatcher::waitAndDispatch()
 {
-	TMQ::PtrQueue q;
-	_queue->getReadableQueue(q);
-	while (!q.empty())
-	{
-		auto message = q.front();
-		dispatch(message);
-		q.pop();
-	}
+	//TMQ::PtrQueue q;
+	//_queue->getReadableQueue(q);
+	//while (!q.empty())
+	//{
+	//	auto message = q.front();
+	//	dispatch(message);
+	//	q.pop();
+	//}
 }
 
 bool Dispatcher::dispatch(MessageBase* &msg)
@@ -28,7 +28,7 @@ _queue(o._queue)
 	o._chained = false;
 }
 
-Dispatcher::Dispatcher(TMQ::Queue *queue)
+Dispatcher::Dispatcher(TMQ::ReleasableQueue *queue)
 	: _queue(queue)
 	, _chained(false)
 {}

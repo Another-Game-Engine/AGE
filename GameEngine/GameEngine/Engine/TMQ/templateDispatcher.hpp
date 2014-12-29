@@ -9,7 +9,7 @@ namespace TMQ
 			typename _Function>
 		class TemplateDispatcher
 		{
-			TMQ::Queue* _queue;
+			TMQ::ReleasableQueue* _queue;
 			_PreviousDispatcher* _previous;
 			_Function _function;
 			bool _chained;
@@ -22,13 +22,14 @@ namespace TMQ
 
 			void waitAndDispatch()
 			{
-				TMQ::PtrQueue q;
+				TMQ::PtrQueue *q;
 				_queue->getReadableQueue(q);
-				while (!q.empty())
+				assert(q != nullptr);
+				while (!q->empty())
 				{
-					auto message = q.front();
+					auto message = q->front();
 					auto ret = dispatch(message);
-					q.pop();
+					q->pop();
 					if (!ret)
 						assert(false);
 				}
@@ -51,7 +52,7 @@ namespace TMQ
 				o._chained = true;
 			}
 
-			TemplateDispatcher(TMQ::Queue* queue, _PreviousDispatcher* previous, _Function&& f)
+			TemplateDispatcher(TMQ::ReleasableQueue* queue, _PreviousDispatcher* previous, _Function&& f)
 				: _queue(queue)
 				, _previous(previous)
 				, _function(std::forward<_Function>(f))

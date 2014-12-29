@@ -1,6 +1,5 @@
 
 #include <Core/OctreeNode.hh>
-
 namespace AGE
 {
 	OctreeNode::OctreeNode() :
@@ -58,7 +57,10 @@ namespace AGE
 			{
 				++_uniqueSubElements;
 				for (uint32_t i = 0; i < 8; ++i)
-					_sons[i]->addElement(toAdd);
+				{
+					if (_sons[i])
+						_sons[i]->addElement(toAdd);
+				}
 			}
 			return (newRoot);
 		}
@@ -184,7 +186,10 @@ namespace AGE
 			else
 			{
 				for (uint32_t i = 0; i < 8; ++i)
-					_sons[i]->getElementsCollide(toTest, toFill);
+				{
+					if (_sons[i])
+						_sons[i]->getElementsCollide(toTest, toFill);
+				}
 			}
 		}
 	}

@@ -4,7 +4,6 @@
 
 #include "Core/Input.hh"
 #include <Utils/Dependency.hpp>
-#include <Utils/CommandQueueHolder.hpp>
 #include <tmq/message.hpp>
 #include <Configuration.hpp>
 
@@ -12,22 +11,7 @@
 #include <Utils/Age_Imgui.hpp>
 #endif
 
-namespace RendCtxCommand
-{
-	struct Flush{};
-	struct SetScreenSize
-	{
-		SetScreenSize(const glm::uvec2& v)
-			: screenSize(v)
-		{}
-		glm::uvec2 screenSize;
-	};
-	struct GetScreenSize : public TMQ::FutureData < glm::uvec2 >
-	{};
-
-	struct RefreshInputs
-	{};
-}
+#include <Core/CullableObjects.hh>
 
 class IRenderContext : public Dependency<IRenderContext>
 {

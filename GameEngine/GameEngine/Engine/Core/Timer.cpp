@@ -13,27 +13,29 @@
 
 #include <SDL/SDL.h>
 
-Timer::Timer() :
-	_oldTime(0),
-	_curTime(0)
+namespace AGE
 {
-}
+	Timer::Timer() :
+		_elapsed(0.0l)
+	{
+		_oldTime = std::chrono::system_clock::now();
+		_curTime = std::chrono::system_clock::now();
+	}
 
-void 		Timer::update()
-{
-	_oldTime = _curTime;
-	_curTime = SDL_GetTicks();
-	if (_oldTime == 0)
+	void 		Timer::update()
+	{
 		_oldTime = _curTime;
-}
+		_curTime = std::chrono::system_clock::now();
+		_elapsed = (double)(std::chrono::duration_cast<std::chrono::milliseconds>(_curTime - _oldTime).count()) / 1000.0l;
+	}
 
-double 		Timer::getElapsed() const
-{
-	return glm::clamp(static_cast<double>(_curTime - _oldTime) / 1000.0, 0.0, 0.1);
-}
+	double 		Timer::getElapsed() const
+	{
+		return _elapsed;
+	}
 
-double 		Timer::getNow() const
-{
-	return static_cast<double>(SDL_GetTicks()) / 1000.0f;
+	double 		Timer::getNow() const
+	{
+		return static_cast<double>(SDL_GetTicks()) / 1000.0f;
+	}
 }
-

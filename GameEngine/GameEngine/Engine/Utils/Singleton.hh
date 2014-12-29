@@ -2,17 +2,21 @@
 #ifndef SINGLETON_HH_
 #define SINGLETON_HH_
 
+#include <mutex>
+
 template<class T>
 class Singleton
 {
 private:
   static T    *_instance;
+  static std::once_flag _flag;
+protected:
   Singleton();
-  ~Singleton();
-
+  virtual ~Singleton();
+  static void 		freeMemory();
 public:
-	static void 		freeMemory();
-  	static T           *instance();
+  	static T           *getInstance();
+  	static void        setInstance();
 
 };
 
