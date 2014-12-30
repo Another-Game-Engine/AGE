@@ -19,7 +19,7 @@ namespace AGE
 	struct CullableObject : public PreparableObject
 	{
 		CullableType	type;
-		LooseOctreeNode	*currentNode;
+		uint32_t		currentNode;
 		bool			hasBeenFound;
 		bool			toAddInOctree;
 

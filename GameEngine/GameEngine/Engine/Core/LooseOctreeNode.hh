@@ -1,10 +1,13 @@
 #pragma once
 
+#include <Utils/MemoryPool.hpp>
 #include <Utils/AABoundingBox.hh>
 #include <Utils/Containers/Vector.hpp>
 #include <Core/CullableInterfaces.hh>
 
 #define VEC3_BIGGER(a, b) (a.x > b.x && a.y > b.y && a.z > b.z)
+
+#define UNDEFINED_IDX 0xFFFFFFFF
 
 namespace AGE
 {
@@ -29,33 +32,38 @@ namespace AGE
 		LooseOctreeNode();
 		~LooseOctreeNode();
 
-		LooseOctreeNode	*addElement(CullableObject *toAdd);
-		void removeElement(CullableObject *toRm);
-		LooseOctreeNode	*moveElement(CullableObject *toMove);
+		uint32_t addElement(CullableObject *toAdd, MemoryPool<LooseOctreeNode> &pool);
+		void removeElement(CullableObject *toRm, MemoryPool<LooseOctreeNode> &pool);
+		uint32_t moveElement(CullableObject *toMove, MemoryPool<LooseOctreeNode> &pool);
 
-		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill) const;
+		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill, MemoryPool<LooseOctreeNode> &pool) const;
 
 		AABoundingBox const &getNodeBoundingBox() const;
 		bool				isLeaf() const;
 
 		// clean octree functions
-		LooseOctreeNode *tryChangeRoot();
-		void removeEmptyLeafs();
+		uint32_t tryChangeRoot(MemoryPool<LooseOctreeNode> &pool);
+		void removeEmptyLeafs(MemoryPool<LooseOctreeNode> &pool);
+
+		void setIdx(uint32_t idx);
+		void removeAllSons(MemoryPool<LooseOctreeNode> &pool);
 
 	private:
 		// Utils methods
-		LooseOctreeNode *extendNode(CullableObject *toAdd, glm::i8vec3 const &direction);
-		void		generateAllSons();
+		uint32_t extendNode(CullableObject *toAdd, glm::i8vec3 const &direction, MemoryPool<LooseOctreeNode> &pool);
+		void		generateAllSons(MemoryPool<LooseOctreeNode> &pool);
 		void		computeLooseNode();
 		// remove an element from a node
-		void removeElementFromNode(CullableObject *toRm);
+		void removeElementFromNode(CullableObject *toRm, MemoryPool<LooseOctreeNode> &pool);
 		// move an element from in node
-		LooseOctreeNode *moveElementFromNode(CullableObject *toMv);
+		uint32_t moveElementFromNode(CullableObject *toMv, MemoryPool<LooseOctreeNode> &pool);
 		// add an element in the node if the element is entierly contained in the current node
-		bool addElementFromNode(CullableObject *toAdd);
+		bool addElementFromNode(CullableObject *toAdd, MemoryPool<LooseOctreeNode> &pool);
 
-		LooseOctreeNode *_father;
-		LooseOctreeNode *_sons[8];
+		uint32_t	_thisIdx;
+
+		uint32_t	_father;
+		uint32_t	_sons[8];
 
 		AABoundingBox _node;
 		AABoundingBox _looseNode;

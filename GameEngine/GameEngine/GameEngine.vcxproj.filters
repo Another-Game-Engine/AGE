@@ -230,6 +230,7 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\LooseOctreeNode.hh" />
     <ClInclude Include="Engine\Core\LooseOctree.hh" />
+    <ClInclude Include="Engine\Utils\MemoryPool.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

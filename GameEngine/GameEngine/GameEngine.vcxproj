@@ -435,6 +435,7 @@
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
     <ClInclude Include="Engine\Utils\MathematicTools.hh" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
+    <ClInclude Include="Engine\Utils\MemoryPool.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\Plane.hh" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />

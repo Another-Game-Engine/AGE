@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/LooseOctreeNode.hh>
+#include <Utils/MemoryPool.hpp>
 
 namespace AGE
 {
@@ -13,10 +14,11 @@ namespace AGE
 		void addElement(CullableObject *toAdd);
 		void removeElement(CullableObject *toRm);
 		void moveElement(CullableObject *toMv);
-		void getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill) const;
+		void getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill);
 		void cleanOctree();
 
 	private:
-		LooseOctreeNode *_root;
+		uint32_t	_root;
+		MemoryPool<LooseOctreeNode> _pool;
 	};
 }

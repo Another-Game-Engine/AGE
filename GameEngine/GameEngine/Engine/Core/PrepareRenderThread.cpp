@@ -438,6 +438,8 @@ namespace AGE
 				}
 #endif
 			}
+
+			_octree.cleanOctree();
 			// Do culling for each camera
 			_octreeDrawList.clear();
 			for (auto &camera : _cameras)
