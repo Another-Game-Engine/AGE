@@ -14,6 +14,7 @@ namespace AGE
 	{
 		std::vector<ImDrawCmd>     commands;
 		std::vector<ImDrawVert>    vtx_buffer;
+		Age_ImDrawList() = default;
 		Age_ImDrawList(const Age_ImDrawList& o)
 		{
 			commands = o.commands;
@@ -28,14 +29,20 @@ namespace AGE
 		Age_ImDrawList(const ImDrawList& o)
 		{
 			const ImDrawCmd* pcmd_end = o.commands.end();
+			commands.resize(o.commands.size());
+			int i = 0;
 			for (const ImDrawCmd* pcmd = o.commands.begin(); pcmd != pcmd_end; pcmd++)
 			{
-				commands.push_back(*pcmd);
+				commands[i] = (*pcmd);
+				++i;
 			}
 			auto ve = o.vtx_buffer.end();
+			vtx_buffer.resize(o.vtx_buffer.size());
+			i = 0;
 			for (auto v = o.vtx_buffer.begin(); v != ve; v++)
 			{
-				vtx_buffer.push_back(*v);
+				vtx_buffer[i] = *v;
+				++i;
 			}
 		}
 	};
@@ -45,8 +52,9 @@ namespace AGE
 		std::vector<Age_ImDrawList> cmd_lists;
 		RenderImgui(ImDrawList** const _cmd_lists, int _cmd_lists_count)
 		{
+			cmd_lists.resize(_cmd_lists_count);
 			for (auto i = 0; i < _cmd_lists_count; ++i)
-				cmd_lists.push_back(*_cmd_lists[i]);
+				cmd_lists[i] = Age_ImDrawList(*_cmd_lists[i]);
 		}
 
 		RenderImgui(const RenderImgui &o)
@@ -74,11 +82,13 @@ namespace AGE
 
 	class Imgui
 	{
-		static unsigned int _fontTex;
-		static int _shader_handle, _vert_handle, _frag_handle;
-		static int _texture_location, _ortho_location;
-		static int _position_location, _uv_location, _colour_location;
-		static unsigned int _vbohandle, _cursor, _size;
+		static int shader_handle, vert_handle, frag_handle;
+		static int texture_location, ortho_location;
+		static int position_location, uv_location, colour_location;
+		static size_t vbo_max_size;
+		static unsigned int vbo_handle, vao_handle;
+		static GLuint fontTex;
+
 		Engine *_engine = nullptr;
 		bool _releaseWork = false;
 		bool _launched = false;

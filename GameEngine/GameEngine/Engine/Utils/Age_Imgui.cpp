@@ -12,22 +12,16 @@
 #ifdef _MSC_VER
 #pragma warning (disable: 4996)         // 'This function or variable may be unsafe': strcpy, strdup, sprintf, vsnprintf, sscanf, fopen
 #endif
+#define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
 
 namespace AGE
 {
-
-	unsigned int Imgui::_fontTex = 0;
-	int Imgui::_shader_handle = 0;
-	int Imgui::_vert_handle = 0;
-	int Imgui::_frag_handle = 0;
-	int Imgui::_texture_location = 0;
-	int Imgui::_ortho_location = 0;
-	int Imgui::_position_location = 0;
-	int Imgui::_uv_location = 0;
-	int Imgui::_colour_location = 0;
-	unsigned int Imgui::_vbohandle = 0;
-	unsigned int Imgui::_cursor = 0;
-	unsigned int Imgui::_size = 0;
+	size_t Imgui::vbo_max_size = 20000;
+	int Imgui::shader_handle, Imgui::vert_handle, Imgui::frag_handle;
+	int Imgui::texture_location, Imgui::ortho_location;
+	int Imgui::position_location, Imgui::uv_location, Imgui::colour_location;
+	unsigned int Imgui::vbo_handle, Imgui::vao_handle;
+	GLuint Imgui::fontTex;
 
 	bool Imgui::init(Engine *en)
 	{
@@ -64,9 +58,69 @@ namespace AGE
 		//io.SetClipboardTextFn = ImImpl_SetClipboardTextFn;
 		//io.GetClipboardTextFn = ImImpl_GetClipboardTextFn;
 
-		//// Load font texture
-		glGenTextures(1, &_fontTex);
-		glBindTexture(GL_TEXTURE_2D, _fontTex);
+		const GLchar *vertex_shader =
+			"#version 330\n"
+			"uniform mat4 ortho;\n"
+			"in vec2 Position;\n"
+			"in vec2 UV;\n"
+			"in vec4 Colour;\n"
+			"out vec2 Frag_UV;\n"
+			"out vec4 Frag_Colour;\n"
+			"void main()\n"
+			"{\n"
+			"	Frag_UV = UV;\n"
+			"	Frag_Colour = Colour;\n"
+			"	gl_Position = ortho*vec4(Position.xy,0,1);\n"
+			"}\n";
+
+		const GLchar* fragment_shader =
+			"#version 330\n"
+			"uniform sampler2D Texture;\n"
+			"in vec2 Frag_UV;\n"
+			"in vec4 Frag_Colour;\n"
+			"out vec4 FragColor;\n"
+			"void main()\n"
+			"{\n"
+			"	FragColor = Frag_Colour * texture( Texture, Frag_UV.st);\n"
+			"}\n";
+
+		shader_handle = glCreateProgram();
+		vert_handle = glCreateShader(GL_VERTEX_SHADER);
+		frag_handle = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(vert_handle, 1, &vertex_shader, 0);
+		glShaderSource(frag_handle, 1, &fragment_shader, 0);
+		glCompileShader(vert_handle);
+		glCompileShader(frag_handle);
+		glAttachShader(shader_handle, vert_handle);
+		glAttachShader(shader_handle, frag_handle);
+		glLinkProgram(shader_handle);
+
+		texture_location = glGetUniformLocation(shader_handle, "Texture");
+		ortho_location = glGetUniformLocation(shader_handle, "ortho");
+		position_location = glGetAttribLocation(shader_handle, "Position");
+		uv_location = glGetAttribLocation(shader_handle, "UV");
+		colour_location = glGetAttribLocation(shader_handle, "Colour");
+
+		glGenBuffers(1, &vbo_handle);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_handle);
+		glBufferData(GL_ARRAY_BUFFER, vbo_max_size, NULL, GL_DYNAMIC_DRAW);
+
+		glGenVertexArrays(1, &vao_handle);
+		glBindVertexArray(vao_handle);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_handle);
+		glEnableVertexAttribArray(position_location);
+		glEnableVertexAttribArray(uv_location);
+		glEnableVertexAttribArray(colour_location);
+
+		glVertexAttribPointer(position_location, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)OFFSETOF(ImDrawVert, pos));
+		glVertexAttribPointer(uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)OFFSETOF(ImDrawVert, uv));
+		glVertexAttribPointer(colour_location, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (GLvoid*)OFFSETOF(ImDrawVert, col));
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		// Load font texture
+		glGenTextures(1, &fontTex);
+		glBindTexture(GL_TEXTURE_2D, fontTex);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		const void* png_data;
@@ -76,52 +130,6 @@ namespace AGE
 		void* tex_data = stbi_load_from_memory((const unsigned char*)png_data, (int)png_size, &tex_x, &tex_y, &tex_comp, 0);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex_x, tex_y, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
 		stbi_image_free(tex_data);
-
-		static const char vertex_shader[] = \
-			"#version 330\n"
-			"uniform mat4 ortho;\n"
-
-			"in vec2 Position;\n"
-			"in vec2 UV;\n"
-			"in vec4 Colour;\n"
-
-			"out vec2 Frag_UV;\n"
-			"out vec4 Frag_Colour;\n"
-
-			"void main()\n"
-			"{\n"
-			"	Frag_UV = UV;\n"
-			"	Frag_Colour = Colour;\n"
-			"\n"
-			"	gl_Position = ortho*vec4(Position.xy,0,1);\n"
-			"}\n";
-
-		static const char fragment_shader[] = \
-			"#version 330\n"
-			"uniform sampler2D Texture;\n"
-
-			"in vec2 Frag_UV;\n"
-			"in vec4 Frag_Colour;\n"
-
-			"out vec4 FragColor;\n"
-
-			"void main()\n"
-			"{\n"
-			"	FragColor = Frag_Colour * texture( Texture, Frag_UV.st);\n"
-			"}\n";
-
-		initShader(&_shader_handle, &_vert_handle, &_frag_handle, vertex_shader, fragment_shader);
-
-		_texture_location = glGetUniformLocation(_shader_handle, "Texture");
-		_ortho_location = glGetUniformLocation(_shader_handle, "ortho");
-		_position_location = glGetAttribLocation(_shader_handle, "Position");
-		_uv_location = glGetAttribLocation(_shader_handle, "UV");
-		_colour_location = glGetAttribLocation(_shader_handle, "Colour");
-
-		_size = static_cast<int>(pow(2.0, 20.0)); //1Mb streaming buffer
-		glGenBuffers(1, &_vbohandle);
-		glBindBuffer(GL_ARRAY_BUFFER, _vbohandle);
-		glBufferData(GL_ARRAY_BUFFER, _size, NULL, GL_DYNAMIC_DRAW);
 #else
 		UNUSED(di);
 #endif //USE_IMGUI
@@ -199,9 +207,8 @@ namespace AGE
 
 		if (cmd_lists.empty())
 			return;
-
-		// Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled
 		glEnable(GL_BLEND);
+		glBlendEquation(GL_FUNC_ADD);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glDisable(GL_CULL_FACE);
 		glDisable(GL_DEPTH_TEST);
@@ -209,51 +216,68 @@ namespace AGE
 
 		// Setup texture
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _fontTex);
+		glBindTexture(GL_TEXTURE_2D, fontTex);
 
 		// Setup orthographic projection matrix
 		const float width = ImGui::GetIO().DisplaySize.x;
 		const float height = ImGui::GetIO().DisplaySize.y;
-		float ortho[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }; //identity matrix
-		make_ortho(ortho, 0.0f, width, height, 0.0f, -1.0f, +1.0f);
+		const float ortho_projection[4][4] =
+		{
+			{ 2.0f / width, 0.0f, 0.0f, 0.0f },
+			{ 0.0f, 2.0f / -height, 0.0f, 0.0f },
+			{ 0.0f, 0.0f, -1.0f, 0.0f },
+			{ -1.0f, 1.0f, 0.0f, 1.0f },
+		};
+		glUseProgram(shader_handle);
+		glUniform1i(texture_location, 0);
+		glUniformMatrix4fv(ortho_location, 1, GL_FALSE, &ortho_projection[0][0]);
 
-		glUseProgram(_shader_handle);
-		glUniform1i(_texture_location, 0);
-		glUniformMatrix4fv(_ortho_location, 1, GL_FALSE, ortho);
+		// Grow our buffer according to what we need
+		size_t total_vtx_count = 0;
+		for (int n = 0; n < cmd_lists.size(); n++)
+			total_vtx_count += cmd_lists[n].vtx_buffer.size();
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_handle);
+		size_t neededBufferSize = total_vtx_count * sizeof(ImDrawVert);
+		if (neededBufferSize > vbo_max_size)
+		{
+			vbo_max_size = neededBufferSize + 5000;  // Grow buffer
+			glBufferData(GL_ARRAY_BUFFER, vbo_max_size, NULL, GL_STREAM_DRAW);
+		}
 
-		glEnableVertexAttribArray(_position_location);
-		glEnableVertexAttribArray(_uv_location);
-		glEnableVertexAttribArray(_colour_location);
-
+		// Copy and convert all vertices into a single contiguous buffer
+		unsigned char* buffer_data = (unsigned char*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+		if (!buffer_data)
+			return;
 		for (int n = 0; n < cmd_lists.size(); n++)
 		{
-			auto& cmd_list = cmd_lists[n];
-			const const ImDrawVert* vtx_buffer = reinterpret_cast<const ImDrawVert*>(&cmd_list.vtx_buffer.front());
-			int vtx_size = static_cast<int>(cmd_list.vtx_buffer.size());
-		
-			unsigned offset = stream(GL_ARRAY_BUFFER, _vbohandle, &_cursor, &_size, vtx_buffer, vtx_size);
-		
-			glVertexAttribPointer(_position_location, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (void*)(offset));
-			glVertexAttribPointer(_uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (void*)(offset + 8));
-			glVertexAttribPointer(_colour_location, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (void*)(offset + 16));
-		
-			int vtx_offset = 0;
-			auto pcmd_end = cmd_list.commands.end();
-			for (auto pcmd = cmd_list.commands.begin(); pcmd != pcmd_end; pcmd++)
+			auto &cmd_list = cmd_lists[n];
+			memcpy(buffer_data, &cmd_list.vtx_buffer[0], cmd_list.vtx_buffer.size() * sizeof(ImDrawVert));
+			buffer_data += cmd_list.vtx_buffer.size() * sizeof(ImDrawVert);
+		}
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(vao_handle);
+
+		int cmd_offset = 0;
+		for (int n = 0; n < cmd_lists.size(); n++)
+		{
+			auto &cmd_list = cmd_lists[n];
+			int vtx_offset = cmd_offset;
+			auto &pcmd_end = std::end(cmd_list.commands);
+			for (auto &pcmd = std::begin(cmd_list.commands); pcmd != pcmd_end; pcmd++)
 			{
 				glScissor((int)pcmd->clip_rect.x, (int)(height - pcmd->clip_rect.w), (int)(pcmd->clip_rect.z - pcmd->clip_rect.x), (int)(pcmd->clip_rect.w - pcmd->clip_rect.y));
 				glDrawArrays(GL_TRIANGLES, vtx_offset, pcmd->vtx_count);
 				vtx_offset += pcmd->vtx_count;
 			}
+			cmd_offset = vtx_offset;
 		}
 
-		glDisableVertexAttribArray(_position_location);
-		glDisableVertexAttribArray(_uv_location);
-		glDisableVertexAttribArray(_colour_location);
+		// Restore modified state
+		glBindVertexArray(0);
 		glUseProgram(0);
-		glEnable(GL_DEPTH_TEST);
 		glDisable(GL_SCISSOR_TEST);
-		glDisable(GL_BLEND);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void Imgui::initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs)

@@ -20,9 +20,46 @@
 #include <Skinning/Bone.hpp>
 #include <Skinning/Skeleton.hpp>
 
+//CORE
+#include <Threads/ThreadManager.hpp>
+#include <Core/Engine.hh>
+#include <Core/Timer.hh>
+#include <Core/AssetsManager.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Utils/Age_Imgui.hpp>
+#include <Core/Tasks/Basics.hpp>
 
 int			main(int ac, char **av)
 {
+	///////////////////////////////////////////////////////////////////////////////////
+	/////////// NEW IMPLEMENTATION
+	///////////
+	AGE::InitAGE();
+	auto engine = AGE::CreateEngine();
+
+	engine.lock()->launch(std::function<bool()>([&]()
+	{
+		engine.lock().get()->setInstance<AGE::Timer>();
+		engine.lock().get()->setInstance<AGE::AssetsManager>();
+
+		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
+			AGE::Imgui::getInstance()->init(engine.lock().get());
+			return true;
+		}).get();
+
+#ifdef RENDERING_ACTIVATED
+		if (!loadAssets(engine.lock().get()))
+			return false;
+#endif
+		// add main scene
+		//engine.lock()->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene");
+		// bind scene
+		//if (!engine.lock()->initScene("BenchmarkScene"))
+		//	return false;
+		//engine.lock()->enableScene("BenchmarkScene", 100);
+		return true;
+	}));
+
 	{
 		AGE::SimpleConf confFile("convertor.conf");
 		AGE::AssetConvertor convertor(&confFile);
