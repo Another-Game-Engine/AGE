@@ -2,15 +2,24 @@
 
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Utils/ThreadQueueCommands.hpp>
 
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
+#include <Render/RenderManager.hh>
+#include <Threads/RenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Threads/PrepareRenderThread.hpp>
+#include <Core/Commands/MainToPrepare.hpp>
+#include <Core/Commands/Render.hpp>
+#include <Core/Tasks/Basics.hpp>
+#include <Core/Tasks/Render.hpp>
+#include <glm/glm.hpp>
+#include <SDL/SDL.h>
+#include <Threads/TaskScheduler.hpp>
 
-
-BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
-	: AScene(std::move(engine))
+BenchmarkScene::BenchmarkScene(std::weak_ptr<AGE::Engine> engine)
+	: AScene(engine)
 {
 }
 
@@ -23,12 +32,13 @@ void BenchmarkScene::initRendering()
 	// A NETTOYER !!!!
 	_renderManager = getInstance<gl::RenderManager>();
 	auto assetsManager = getInstance<AGE::AssetsManager>();
-	_renderThread = (AGE::RenderThread*)(getInstance<AGE::Threads::Render>());
+	auto mainThread = getEngine().lock();
 
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 
-	auto res = _renderThread->getCommandQueue().safePriorityFutureEmplace<AGE::TQC::BoolFunction, bool>([&]()
-	{
+	//TODO
+	auto res = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>(
+		std::function<bool()>([&](){
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
 		key.Accum.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
@@ -61,7 +71,7 @@ void BenchmarkScene::initRendering()
 		key.merge.light_buffer = _renderManager->addShaderSampler(key.merge.shader, "light_buffer");
 
 		// create renderpass and set it
-		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 1600, 900));
+		key.getBuff.renderPass = _renderManager->addRenderPass(key.getBuff.shader, glm::ivec4(0, 0, 1920, 1040));
 		_renderManager->pushSetTestTaskRenderPass(key.getBuff.renderPass, false, false, true);
 		_renderManager->pushSetClearValueTaskRenderPass(key.getBuff.renderPass, glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
 		_renderManager->pushClearTaskRenderPass(key.getBuff.renderPass, true, true, false);
@@ -79,7 +89,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushDrawTaskRenderBuffer(key.getBuff.renderPass);
 
 		// create  clear renderPass
-		key.clean.emptyRenderPass = _renderManager->addEmptyRenderPass(glm::ivec4(0, 0, 1600, 900));
+		key.clean.emptyRenderPass = _renderManager->addEmptyRenderPass(glm::ivec4(0, 0, 1920, 1040));
 		_renderManager->createBufferSamplableEmptyRenderPass(key.clean.emptyRenderPass, GL_COLOR_ATTACHMENT0, GL_RGBA8);
 		_renderManager->pushSetClearValueTaskEmptyRenderPass(key.clean.emptyRenderPass, glm::vec4(0.f, 0.f, 0.f, 1.0f));
 		_renderManager->pushSetTestTaskEmptyRenderPass(key.clean.emptyRenderPass, false, false, false);
@@ -93,7 +103,7 @@ void BenchmarkScene::initRendering()
 		// create renderPostEffect
 		gl::RenderManager *r = _renderManager;
 		RenderKey *k = &key;
-		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 1600, 900));
+		key.Accum.renderPostEffect = _renderManager->addRenderPostEffect(key.Accum.shader, glm::ivec4(0, 0, 1920, 1040));
 		_renderManager->pushSetTestTaskRenderPostEffect(key.Accum.renderPostEffect, false, false, false);
 		_renderManager->pushTargetRenderPostEffect(key.Accum.renderPostEffect, GL_COLOR_ATTACHMENT0);
 		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.Accum.renderPostEffect, 0, true);
@@ -116,7 +126,7 @@ void BenchmarkScene::initRendering()
 		});
 
 		// create merge
-		key.merge.renderPostEffect = _renderManager->addRenderPostEffect(key.merge.shader, glm::ivec4(0, 0, 1600, 900));
+		key.merge.renderPostEffect = _renderManager->addRenderPostEffect(key.merge.shader, glm::ivec4(0, 0, 1920, 1040));
 		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.light_buffer, GL_COLOR_ATTACHMENT0, key.Accum.renderPostEffect);
 		_renderManager->pushInputRenderPostEffect(key.merge.renderPostEffect, key.merge.diffuse_buffer, GL_COLOR_ATTACHMENT0, key.getBuff.renderPass);
 		_renderManager->createBufferSamplableRenderPostEffect(key.merge.renderPostEffect, GL_COLOR_ATTACHMENT0, GL_RGBA8);
@@ -126,7 +136,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushSetTestTaskRenderPostEffect(key.merge.renderPostEffect, true, false, false);
 		_renderManager->pushSetBlendStateTaskRenderPostEffect(key.merge.renderPostEffect, 0, false);
 
-		key.merge.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 1600, 900), key.merge.renderPostEffect);
+		key.merge.renderOnScreen = _renderManager->addRenderOnScreen(glm::ivec4(0, 0, 1920, 1040), key.merge.renderPostEffect);
 		_renderManager->pushClearTaskRenderOnScreen(key.merge.renderOnScreen, true, true, false);
 		_renderManager->pushSetTestTaskRenderOnScreen(key.merge.renderOnScreen, false, false, true);
 		_renderManager->pushSetClearValueTaskRenderOnScreen(key.merge.renderOnScreen, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -153,17 +163,7 @@ void BenchmarkScene::initRendering()
 		_renderManager->pushRenderOnScreenPipeline(key.merge.pipeline, key.merge.renderOnScreen);
 
 		return true;
-	});
-	//glm::vec3 equation = glm::vec3(1-100.f, 0.1f, 0.0000001f);
-	//float disc = Mathematic::secondDegreeDiscriminant(equation);
-	//std::cout << disc << std::endl;
-	//if (disc > 0)
-	//{
-	//	glm::vec2 result = Mathematic::resolveSecondDegree(equation, disc);
-	//	std::cout << result.x << ", " << result.y << std::endl;
-	//}
-	//else
-	//	std::cout << Mathematic::resolveSecondDegree(equation) << std::endl;
+	}));
 	assert(res.get());
 }
 
@@ -178,9 +178,13 @@ bool BenchmarkScene::userStart()
 	registerComponentType<Component::RigidBody>();
 	registerComponentType<Component::PointLight>();
 
+#ifdef PHYSIC_SIMULATION
+	setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
+#endif
+
 
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis);
+//	getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis); // @CESAR << remove that !!!
 
 #ifdef PHYSIC_SIMULATION
 	addSystem<BulletDynamicSystem>(0);
@@ -217,11 +221,7 @@ bool BenchmarkScene::userStart()
 #ifdef LIFETIME_ACTIVATED
 	_logFile << " Lifetime, ";
 #endif
-#ifdef COMPLEX_MESH
-	_logFile << " Complex mesh, ";
-#elif defined RENDERING_ACTIVATED
 	_logFile << " Rendering, ";
-#endif
 #ifdef PHYSIC_SIMULATION
 	_logFile << " Physics, ";
 #endif
@@ -238,14 +238,14 @@ bool BenchmarkScene::userStart()
 	GLOBAL_CAMERA = camera;
 	auto cam = addComponent<Component::CameraComponent>(camera);
 
-	auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+	auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();
 
 	auto camLink = getLink(camera);
 	camLink->setPosition(glm::vec3(0, 1.5, 0));
 
 	GLOBAL_FLOOR = createEntity();
 	auto link = getLink(GLOBAL_FLOOR);
-	link->setPosition(glm::vec3(0, -1, 0));
+	link->setPosition(glm::vec3(0, -0.532, 0));
 	link->setScale(glm::vec3(100, 1, 100));
 	auto mesh = addComponent<Component::MeshRenderer>(GLOBAL_FLOOR, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
 	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
@@ -294,28 +294,31 @@ bool BenchmarkScene::userStart()
 		//_m->setAnimation(GLOBAL_CAT_ANIMATION);
 	}
 
-	{
-		GLOBAL_LIGHT = createEntity();
-		auto e = GLOBAL_LIGHT;
-		auto _l = getLink(e);
-		_l->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-		_l->setScale(glm::vec3(0.05f));
-		auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+		for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 		{
-			_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
-			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
-			_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+			GLOBAL_LIGHTS[i] = createEntity();
+			auto e = GLOBAL_LIGHTS[i];
+			auto _l = getLink(e);
+			_l->setPosition(glm::vec3(i, 1.0f, i));
+			_l->setScale(glm::vec3(0.05f));
+			auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+			_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+			for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+			{
+				_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
+				_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+				_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+			}
+			getLink(e)->setPosition(glm::vec3(i, 5.0f, 0));
+			addComponent<Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 		}
-		getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
-		addComponent<Component::PointLight>(GLOBAL_LIGHT)->set(glm::vec3(1.f), glm::vec3(1.f, 0.1f, 0.0f));
-	}
+	
+
 
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_FLOOR, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, Component::RigidBody::BOX);
-	rigidBody->getBody().setFriction(0.8f);
+	rigidBody->getBody().setFriction(0.3f);
 #endif //PHYSIC_SIMULATION
 #endif
 	// lights creation
@@ -338,12 +341,14 @@ bool BenchmarkScene::userUpdate(double time)
 	_timeCounter += time;
 	_chunkCounter += time;
 
-	if (ImGui::Button("Save -> Clear -> Reload"))
-	{
-		saveToBinary("SAVE_TEST.json");
-		clearAllEntities();
-		loadFromBinary("SAVE_TEST.json");
-	}
+#ifdef USE_IMGUI
+	//if (ImGui::Button("Save -> Clear -> Reload"))
+	//{
+	//	saveToBinary("SAVE_TEST.json");
+	//	clearAllEntities();
+	//	loadFromBinary("SAVE_TEST.json");
+	//}
+#endif
 
 	//	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
 
@@ -388,9 +393,6 @@ bool BenchmarkScene::userUpdate(double time)
 #ifdef LIFETIME_ACTIVATED
 			addComponent<Component::Lifetime>(e, 5.0f);
 #endif
-#ifdef RENDERING_ACTIVATED
-
-#ifndef COMPLEX_MESH
 
 			auto link = getLink(e);
 			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
@@ -403,19 +405,13 @@ bool BenchmarkScene::userUpdate(double time)
 			{
 				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+				link->setScale(glm::vec3(0.5f));
 			}
 			else
 			{
 				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
 				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
 			}
-#else
-			auto mesh = addComponent<Component::MeshRenderer>(e, getInstance<AssetsManager>()->get<ObjFile>("obj__galileo"));
-			mesh->setShader("MaterialBasic");
-#endif
-
-#endif
-
 
 #ifdef PHYSIC_SIMULATION
 			auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
@@ -426,6 +422,7 @@ bool BenchmarkScene::userUpdate(double time)
 				rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);
 			rigidBody->getBody().setRestitution(0.5f);
+			rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
 #endif
 
 
@@ -444,126 +441,34 @@ bool BenchmarkScene::userUpdate(double time)
 	}
 #endif
 
-	auto renderThread = getInstance<AGE::RenderThread>();
-	renderThread->getCommandQueue().autoEmplace<RendCtxCommand::RefreshInputs>();
-
-	auto octree = getInstance<AGE::Threads::Prepare>();
 	auto renderManager = getInstance<gl::RenderManager>();
 
+#ifdef USE_IMGUI
+	if (ImGui::CollapsingHeader("Light settings"))
 	{
-		auto link = getLink(GLOBAL_LIGHT);
-		auto pos = link->getPosition();
-		static float p[3] = { pos.x, pos.y, pos.z };
-		if (ImGui::SliderFloat("x", &p[0], -50, 50))
+		for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 		{
-			link->setPosition(glm::vec3(p[0], p[1], p[2]));
-		}
-		if (ImGui::SliderFloat("y", &p[1], -50, 50))
-		{
-			link->setPosition(glm::vec3(p[0], p[1], p[2]));
-		}
-		if (ImGui::SliderFloat("z", &p[2], -50, 50))
-		{
-			link->setPosition(glm::vec3(p[0], p[1], p[2]));
+			auto e = GLOBAL_LIGHTS[i];
+			auto link = getLink(e);
+
+			if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link->getPositionPtr(), -50, 50))
+			{
+				auto l = getLink(e);
+				l->setPosition(l->getPosition());
+			}
+			auto lightComponent = getComponent<Component::PointLight>(e);
+			if (ImGui::ColorEdit3(std::string("Light " + std::to_string(i) + " color").c_str(), lightComponent->getColorPtr()))
+			{
+				lightComponent->set(lightComponent->getColor(), lightComponent->getRange());
+			}
 		}
 	}
+#endif
 
-	//static int ooo = 0;
-	//++ooo;
-	//if (ooo == 100)
-	//{
-	//	saveToJson("SAVE_TEST.json", this);
-	//	clearAllEntities();
-	////	loadFromJson("SAVE_TEST.json", this);
-	//	{
-	//		auto camera = createEntity();
-	//		GLOBAL_CAMERA = camera;
-	//		auto cam = addComponent<Component::CameraComponent>(camera);
-
-	//		auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
-
-	//		auto camLink = getLink(camera);
-	//		camLink->setPosition(glm::vec3(0, 1.5, 0));
-	//	}
-	//}
-	//else if (ooo == 101)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 102)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 103)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 104)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 105)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 106)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 107)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-
-	//if (ooo == 600)
-	//{
-	//	saveToJson("SAVE_TEST.json", this);
-	//	clearAllEntities();
-	////	loadFromJson("SAVE_TEST.json", this);
-	//	{
-	//		auto camera = createEntity();
-	//		GLOBAL_CAMERA = camera;
-	//		auto cam = addComponent<Component::CameraComponent>(camera);
-
-	//		auto screenSize = getInstance<AGE::RenderThread>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
-
-	//		auto camLink = getLink(camera);
-	//		camLink->setPosition(glm::vec3(0, 1.5, 0));
-	//	}
-	//}
-	//else if (ooo == 601)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 602)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 603)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 604)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 605)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 606)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-	//else if (ooo == 607)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(2));
-	//}
-
-
-	octree->getCommandQueue().autoEmplace<AGE::PRTC::PrepareDrawLists>();
-
-	octree->getCommandQueue().autoEmplace<AGE::PRTC::RenderDrawLists>([=](AGE::DrawableCollection collection)
+	// TODO
+	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
+	// TODO
+	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::Render::RenderDrawLists>([this, renderManager](AGE::DrawableCollection &collection)
 	{
 		renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
 		renderManager->locationStorage.setLocation(0, collection.lights.size());
@@ -584,16 +489,28 @@ bool BenchmarkScene::userUpdate(double time)
 		renderManager->updatePipeline(key.getBuff.pipeline, collection.drawables);
 		renderManager->updatePipeline(key.Accum.pipeline, lights);
 		renderManager->drawPipelines();
+
+		// Push fibonacci task to test task pool
+//		for (auto i = 0; i < 20; ++i)
+//		{
+//			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([](){
+//				int n = rand();
+//				int fnow = 0, fnext = 1, tempf;
+//				while (--n > 0){
+//					tempf = fnow + fnext;
+//					fnow = fnext;
+//					fnext = tempf;
+//				}
+//				//std::ofstream myfile;
+//				//myfile.open(std::string(std::string("C:/Users/cesar/Desktop/trash/lol-") + std::to_string(fnext)).c_str());
+//				//myfile << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId());
+//				//myfile << " : " << std::to_string(fnext);
+//				//myfile << "\n";
+//				//myfile.close();
+////				std::cout << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId()) << " : " << fnext << std::endl;
+////				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+//			});
+//		}
 	});
-
-#ifdef USE_IMGUI
-	ImGui::Text("Main Thread : coucou");
-	ImGui::Render();
-#endif
-
-	octree->getCommandQueue().autoEmplace<AGE::PRTC::Flush>();
-
-	octree->getCommandQueue().releaseReadability();
-
 	return true;
 }

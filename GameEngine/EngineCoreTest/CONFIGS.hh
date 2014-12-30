@@ -10,5 +10,3 @@
 
 //#define SIMPLE_RENDERING
 
-//#define COMPLEX_MESH
-

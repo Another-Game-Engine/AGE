@@ -27,7 +27,11 @@
 #include <queue>
 
 class System;
-class Engine;
+namespace AGE
+{
+	class Engine;
+	class RenderScene;
+}
 class EntityFilter;
 
 class AScene : public DependenciesInjector, public EntityIdRegistrar
@@ -39,15 +43,20 @@ private:
 	std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
 	std::queue<std::uint16_t>                                               _free;
 	ENTITY_ID                                                               _entityNumber;
+	AGE::RenderScene *_renderScene;
+
+protected:
+	std::weak_ptr<AGE::Engine> _engine;
 public:
-	AScene(std::weak_ptr<Engine> &&engine);
+	AScene(std::weak_ptr<AGE::Engine> engine);
 	virtual ~AScene();
 	inline std::uint16_t    getNumberOfEntities() const { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
 	virtual bool 			userStart() = 0;
 	virtual bool 			userUpdate(double time) = 0;
 	void 					update(double time);
 	bool                    start();
-
+	inline std::weak_ptr<AGE::Engine> getEngine() { return _engine; }
+	inline void setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }
 	void                    filterSubscribe(COMPONENT_ID id, EntityFilter* filter)
 	{
 		auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
@@ -144,7 +153,7 @@ public:
 		std::uint16_t entityNbr = getNumberOfEntities();
 
 		ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
-		
+
 		std::vector<EntityData> entities;
 
 		// we list entities
@@ -206,7 +215,7 @@ public:
 				_componentsManagers[componentTypeId]->addComponentPtr(e, ptr);
 				informFiltersComponentAddition(componentTypeId, ed);
 			}
-		//	ar(*e.get());
+			//	ar(*e.get());
 		}
 		//updateEntityHandles();
 	}
@@ -309,9 +318,9 @@ public:
 		COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
 		auto &e = _pool[entity.id];
 		assert(e.entity == entity);
-			//return nullptr;
+		//return nullptr;
 		assert(e.barcode.hasComponent(id));
-			//return nullptr;
+		//return nullptr;
 		return static_cast<ComponentManager<T>*>(_componentsManagers[id])->getComponent(entity);
 	}
 
@@ -401,4 +410,5 @@ public:
 
 private:
 	friend EntityFilter;
+	friend class AGE::RenderScene;
 };

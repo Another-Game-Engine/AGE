@@ -8,477 +8,366 @@
 #include <cinttypes>
 #include <condition_variable>
 #include <mutex>
+#include <list>
 
 namespace TMQ
 {
-	class Queue;
+	class ReleasableQueue;
 	class Dispatcher;
 	class Messsage;
+	class ImmediateQueue;
+	class HybridQueue;
 
 	class PtrQueue
 	{
 	public:
-		PtrQueue(const PtrQueue &o) = delete;
-		PtrQueue& operator=(const PtrQueue &o) = delete;
+		PtrQueue(const TMQ::PtrQueue &o);
+		PtrQueue& operator=(const TMQ::PtrQueue &o);
 		PtrQueue(std::size_t chunkSize = 1024);
-		PtrQueue& operator=(PtrQueue &&o);
-		PtrQueue(PtrQueue &&o);
+		PtrQueue& operator=(TMQ::PtrQueue &&o);
+		PtrQueue(TMQ::PtrQueue &&o);
 		~PtrQueue();
 		void pop();
 		MessageBase *front();
+		std::size_t getFrontSize();
 		void clear();
-		void release();
+		void eraseAll();
 		bool empty();
 	private:
+		std::size_t _chunkSize;
+		struct Chunk
+		{
+			char *_data;
+			std::size_t _cursor;
+			std::size_t _size;
+			std::size_t _to;
+
+			Chunk() = delete;
+			Chunk(const Chunk &o) = delete;
+			Chunk& operator=(const Chunk &o) = delete;
+			Chunk(std::size_t chunkSize);
+			Chunk& operator=(Chunk &&o);
+			Chunk(Chunk &&o);
+			~Chunk();
+			void pop();
+			MessageBase *front();
+			std::size_t getFrontSize();
+			void clear();
+			void eraseAll();
+			void release();
+			bool empty();
+
+			template <typename T>
+			T* push(const T& e)
+			{
+				std::size_t sizeOfInt = sizeof(std::size_t);
+				std::size_t s = sizeof(Message<T>);
+				assert(s < _chunkSize + sizeOfInt);
+				
+				if (_size - _to < s + sizeOfInt)
+				{
+					return nullptr;
+				}
+
+				char *tmp = _data;
+				tmp += _to;
+				memcpy(tmp, &s, sizeOfInt);
+				tmp += sizeOfInt;
+				Message<T>* res = new(tmp)Message<T>(e);
+				_to += sizeOfInt + s;
+				return &res->_data;
+			}
+
+			template <typename T>
+			T* push(T&& e)
+			{
+				assert(sizeof(T) % 4 == 0);
+				std::size_t s = sizeof(Message<T>);
+				std::size_t sizeOfInt = sizeof(std::size_t);
+
+				if (_size - _to < s + sizeOfInt)
+				{
+					return nullptr;
+				}
+
+				char *tmp = _data;
+				tmp += _to;
+				memcpy(tmp, &s, sizeOfInt);
+				tmp += sizeOfInt;
+				Message<T>* res = new(tmp)Message<T>(std::move(e));
+				_to += sizeOfInt + s;
+				return &res->_data;
+			}
+
+			bool move(MessageBase *e, std::size_t size)
+			{
+				std::size_t s = size;
+				std::size_t sizeOfInt = sizeof(std::size_t);
+
+				if (_size - _to < s + sizeOfInt)
+				{
+					return false;
+				}
+
+				char *tmp = _data;
+				tmp += _to;
+				memcpy(tmp, &s, sizeOfInt);
+				tmp += sizeOfInt;
+				e->clone(tmp);
+				auto test = (MessageBase*)(tmp);
+				_to += sizeOfInt + s;
+				return true;
+			}
+
+			template <typename T, typename ...Args>
+			T* emplace(Args ...args)
+			{
+				assert(sizeof(T) % 4 == 0);
+				std::size_t s = sizeof(Message<T>);
+				std::size_t sizeOfInt = sizeof(std::size_t);
+
+				if (_size - _to < s + sizeOfInt)
+				{
+					return nullptr;
+				}
+
+				char *tmp = _data;
+				tmp += _to;
+				memcpy(tmp, &s, sizeOfInt);
+				tmp += sizeOfInt;
+				Message<T>* res = new(tmp)Message<T>(args...);
+				_to += sizeOfInt + s;
+				return &res->_data;
+			}
+		};
+		std::list<Chunk*> _list;
+		std::list<Chunk*>::iterator _listReader;
+		std::list<Chunk*>::iterator _listWriter;
+
 		template <typename T>
 		T* push(const T& e)
 		{
+			assert(sizeof(T) % 4 == 0);
 			std::size_t s = sizeof(Message<T>);
 			std::size_t sizeOfInt = sizeof(std::size_t);
+			assert(s + sizeOfInt < _chunkSize);
 
-			if (_data == nullptr
-				|| _size - _to < s + sizeOfInt)
+			auto res = (*_listWriter)->push(e);
+			if (!res)
 			{
-				allocate<T>();
+				if (_listWriter == --std::end(_list))
+				{
+					_list.push_back(new Chunk(_chunkSize));
+					_listWriter = --std::end(_list);
+				}
+				else
+					++_listWriter;
+				return push(e);
 			}
-
-			char *tmp = _data;
-			tmp += _to;
-			memcpy(tmp, &s, sizeOfInt);
-			tmp += sizeOfInt;
-			Message<T>* res = new(tmp)Message<T>(e);
-			_to += sizeOfInt + s;
-			return &res->_data;
 		}
 
 		template <typename T>
 		T* push(T&& e)
 		{
+			assert(sizeof(T) % 4 == 0);
 			std::size_t s = sizeof(Message<T>);
 			std::size_t sizeOfInt = sizeof(std::size_t);
+			assert(s + sizeOfInt < _chunkSize);
 
-			if (_data == nullptr
-				|| _size - _to < s + sizeOfInt)
+			auto res = (*_listWriter)->push(std::move(e));
+			if (!res)
 			{
-				allocate<T>();
+				if (_listWriter == --std::end(_list))
+				{
+					_list.push_back(new Chunk(_chunkSize));
+					_listWriter = --std::end(_list);
+				}
+				else
+					++_listWriter;
+				return push(e);
 			}
+		}
+		
+		bool move(MessageBase *e, std::size_t size)
+		{
+			std::size_t s = size;
+			std::size_t sizeOfInt = sizeof(std::size_t);
+			assert(s + sizeOfInt < _chunkSize);
 
-			char *tmp = _data;
-			tmp += _to;
-			memcpy(tmp, &s, sizeOfInt);
-			tmp += sizeOfInt;
-			Message<T>* res = new(tmp)Message<T>(e);
-			_to += sizeOfInt + s;
-			return &res->_data;
+			if ((*_listWriter)->move(std::move(e), size))
+				return true;
+			if (_listWriter == --std::end(_list))
+			{
+				_list.push_back(new Chunk(_chunkSize));
+				_listWriter = --std::end(_list);
+			}
+			else
+				++_listWriter;
+			return (*_listWriter)->move(std::move(e), size);
 		}
 
 		template <typename T, typename ...Args>
 		T* emplace(Args ...args)
 		{
+			assert(sizeof(T) % 4 == 0);
 			std::size_t s = sizeof(Message<T>);
 			std::size_t sizeOfInt = sizeof(std::size_t);
+			assert(s + sizeOfInt < _chunkSize);
 
-			if (_data == nullptr
-				|| _size - _to < s + sizeOfInt)
+			auto res = (*_listWriter)->emplace<T>(args...);
+			if (!res)
 			{
-				allocate<T>();
+				if (_listWriter == --std::end(_list))
+				{
+					_list.push_back(new Chunk(_chunkSize));
+					_listWriter = --std::end(_list);
+				}
+				else
+					++_listWriter;
+				return emplace<T>(args...);
 			}
-
-			char *tmp = _data;
-			tmp += _to;
-			memcpy(tmp, &s, sizeOfInt);
-			tmp += sizeOfInt;
-			Message<T>* res = new(tmp)Message<T>(args...);
-			_to += sizeOfInt + s;
-			return &res->_data;
+			return res;
 		}
-
-		template <typename T>
-		void allocate()
-		{
-			std::size_t sizeOfType = sizeof(Message<T>);
-
-			while (_size - _to <= sizeOfType + sizeof(std::size_t)
-				|| _size <= _to)
-			{
-				_size += _chunkSize;
-				_data = (char*)(realloc(_data, _size));
-			}
-		}
-
-		std::size_t _chunkSize;
-		char *_data;
-		std::size_t _cursor;
-		std::size_t _size;
-		std::size_t _to;
-
-		friend class Queue;
+		friend class ReleasableQueue;
+		friend class ImmediateQueue;
+		friend class HybridQueue;
 	};
 
-	class Queue
+	class HybridQueue
 	{
-		PtrQueue _queue;
-		PtrQueue _copy;
-		PtrQueue _priority;
-		PtrQueue _priorityCopy;
+		PtrQueue _commandQueue;
+		PtrQueue _commandQueueCopy;
+		PtrQueue _taskQueue;
 		std::mutex _mutex;
 		std::condition_variable _readCondition;
 		std::condition_variable _writeCondition;
-		std::size_t _publisherThreadId;
-		std::once_flag _onceFlag;
 		std::size_t _millisecondToWait;
+		std::atomic_bool _releasable;
+		std::size_t _reservedPublisher;
 	public:
-		Queue();
+		enum WaitType
+		{
+			Block = 0
+			, Wait = 1
+			, NoWait = 2
+		};
+
+		HybridQueue();
 		void launch();
 
-		Queue(const Queue&) = delete;
-		Queue &operator=(const Queue&) = delete;
-		Queue(Queue &&) = delete;
-		Queue operator=(Queue &&) = delete;
+		HybridQueue(const HybridQueue&) = delete;
+		HybridQueue &operator=(const HybridQueue&) = delete;
+		HybridQueue(HybridQueue &&) = delete;
+		HybridQueue &operator=(HybridQueue &&) = delete;
 
-		void getReadableQueue(PtrQueue& q);
-		Dispatcher getDispatcher();
-		void releaseReadability();
+		bool getTaskQueue(TMQ::PtrQueue &q, WaitType waitType);
+		void getTaskAndCommandQueue(
+			TMQ::PtrQueue &taskQueue,
+			bool &taskQueueSuccess,
+			TMQ::PtrQueue &commandQueue,
+			bool &commandQueueSuccess,
+			WaitType waitType);
+		bool releaseTaskReadability();
+		bool releaseCommandReadability(WaitType waitType);
 		void setWaitingTime(std::size_t milliseconds);
 		std::size_t getWaitingTime();
+		void clear();
+		inline void reserveTo(std::size_t publisherThreadId) { _reservedPublisher = publisherThreadId; }
 
 		//////
 		////// Internal standard queue access
 
-		//Do not lock mutex
-		//Use it only if used in the same thread, or use safePush
-		template <typename T>
-		T* push(const T& e)
+		/////////
+		/// COMMANDS
+		void moveCommand(MessageBase *e, std::size_t size)
 		{
-			std::call_once(_onceFlag, [&](){
-				_publisherThreadId = std::this_thread::get_id().hash();
-			});
-			// Assure you that you will not call unprotected functions from different thread	
-			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			return _queue.push<T>(e);
-		}
-
-		//Do not lock mutex
-		//Use it only if used in the same thread, or use safeEmplace
-		template <typename T, typename ...Args>
-		T* emplace(Args ...args)
-		{
-			std::call_once(_onceFlag, [&](){
-				_publisherThreadId = std::this_thread::get_id().hash();
-			});
-			// Assure you that you will not call unprotected functions from different thread	
-			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			return _queue.emplace<T>(args...);
-		}
-
-		//Lock mutex
-		//Can be called simutanously in different threads
-		template <typename T>
-		void safePush(const T& e)
-		{
-			// Assure you that you didn't call unprotected function before
-			assert(_publisherThreadId == 0);
-			std::lock_guard<std::mutex> lock(_mutex);
-			_queue.push<T>(e);
-		}
-
-		//Lock mutex
-		//Can be called simutanously in different threads
-		template <typename T, typename ...Args>
-		void safeEmplace(Args ...args)
-		{
-			// Assure you that you didn't call unprotected function before
-			assert(_publisherThreadId == 0);
-			std::lock_guard<std::mutex> lock(_mutex);
-			_queue.emplace<T>(args...);
-		}
-
-		//Lock mutex or not
-		//Depend of the usage you made before
-		template <typename T>
-		void autoPush(const T& e)
-		{
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.push(e);
-			}
-			else
-			{
-				_queue.push(e);
-			}
-		}
-
-		//Lock mutex or not
-		//Depend of the usage you made before
-		template <typename T, typename ...Args>
-		void autoEmplace(Args ...args)
-		{
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.emplace<T>(args...);
-			}
-			else
-			{
-				_queue.emplace<T>(args...);
-			}
-		}
-
-		//Push in queue and return future
-		//Message data have to heritate from FutureData
-		template <typename T, typename F>
-		std::future<F> pushFuture(const T &e)
-		{
-			std::call_once(_onceFlag, [&](){
-				_publisherThreadId = std::this_thread::get_id().hash();
-			});
-			// Assure you that you will not call unprotected functions from different thread	
-			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			return _queue.push(e)->getFuture();
-		}
-
-		//Emplace in queue and return future
-		//Message data have to heritate from FutureData
-		template <typename T, typename F, typename ...Args>
-		std::future<F> emplaceFuture(Args ...args)
-		{
-			std::call_once(_onceFlag, [&](){
-				_publisherThreadId = std::this_thread::get_id().hash();
-			});
-			// Assure you that you will not call unprotected functions from different thread	
-			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			return _queue.emplace<T>(args...)->getFuture();
-		}
-
-		//Push in queue and return future
-		//Message data have to heritate from FutureData
-		template <typename T, typename F>
-		std::future<F> safePushFuture(const T &e)
-		{
-			// Assure you that you didn't call unprotected function before
-			assert(_publisherThreadId == 0);
-			std::lock_guard<std::mutex> lock(_mutex);			
-			return _queue.push(e)->getFuture();
-		}
-
-		//Emplace in queue and return future
-		//Message data have to heritate from FutureData
-		template <typename T, typename F, typename ...Args>
-		std::future<F> safeEmplaceFuture(Args ...args)
-		{
-			// Assure you that you didn't call unprotected function before
-			assert(_publisherThreadId == 0);
-			std::lock_guard<std::mutex> lock(_mutex);
-			return _queue.emplace<T>(args...)->getFuture();
-		}
-
-		//Lock mutex or not
-		//Depend of the usage you made before
-		template <typename T, typename F>
-		std::future<F> autoPushFuture(const T &e)
-		{
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				return _queue.push(e)->getFuture();
-			}
-			else
-			{
-				return _queue.push(e)->getFuture();
-			}
-		}
-
-		//Lock mutex or not
-		//Depend of the usage you made before
-		template <typename T, typename F, typename ...Args>
-		std::future<F> autoEmplaceFuture(Args ...args)
-		{
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				return _queue.emplace<T>(args...)->getFuture();
-			}
-			else
-			{
-				return _queue.emplace<T>(args...)->getFuture();
-			}
-		}
-
-		//////
-		////// Internal priority queue access
-
-		template <typename T>
-		void priorityPush(const T& e)
-		{
-			std::call_once(_onceFlag, [&](){
-				_publisherThreadId = std::this_thread::get_id().hash();
-			});
-			// Assure you that you will not call unprotected functions from different thread	
-			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			_queue.push(e);
-			releaseReadability();
-		}
-
-		template <typename T, typename ...Args>
-		void priorityEmplace(Args ...args)
-		{
-			std::call_once(_onceFlag, [&](){
-				_publisherThreadId = std::this_thread::get_id().hash();
-			});
-			// Assure you that you will not call unprotected functions from different thread	
-			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			_queue.emplace<T>(args...);
-			releaseReadability();
-		}
-
-		template <typename T, typename F>
-		std::future<F> priorityFuturePush(const T &e)
-		{
-			std::call_once(_onceFlag, [&](){
-				_publisherThreadId = std::this_thread::get_id().hash();
-			});
-			// Assure you that you will not call unprotected functions from different thread	
-			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			std::future<F> futur;
-			futur = _priority.push(e)->getFuture();
-			releaseReadability();
-			return futur;
-		}
-
-		template <typename T, typename F, typename ...Args>
-		std::future<F> priorityFutureEmplace(Args ...args)
-		{
-			std::call_once(_onceFlag, [&](){
-				_publisherThreadId = std::this_thread::get_id().hash();
-			});
-			// Assure you that you will not call unprotected functions from different thread	
-			assert(std::this_thread::get_id().hash() == _publisherThreadId);
-			std::future<F> futur;
-			futur = (_priority.emplace<T>(args...))->getFuture();
-			releaseReadability();
-			return futur;
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
+			_commandQueue.move(e, size);
 		}
 
 		template <typename T>
-		void safePriorityPush(const T& e)
+		void pushCommand(const T& e)
 		{
-			// Assure you that you didn't call unprotected function before
-			assert(_publisherThreadId == 0);
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.push(e);
-			}
-			releaseReadability();
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
+			_commandQueue.push(e);
 		}
 
 		template <typename T, typename ...Args>
-		void safePriorityEmplace(Args ...args)
+		void emplaceCommand(Args ...args)
 		{
-			// Assure you that you didn't call unprotected function before
-			assert(_publisherThreadId == 0);
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.emplace<T>(args...);
-			}
-			releaseReadability();
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
+			_commandQueue.emplace<T>(args...);
 		}
 
 		template <typename T, typename F>
-		std::future<F> safePriorityFuturePush(const T &e)
+		std::future<F> pushFutureCommand(const T &e)
 		{
-			// Assure you that you didn't call unprotected function before
-			assert(_publisherThreadId == 0);
-			std::future<F> futur;
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				futur = _priority.push(e)->getFuture();
-			}
-			releaseReadability();
-			return futur;
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
+			return _commandQueue.push(e)->getFuture();
 		}
 
 		template <typename T, typename F, typename ...Args>
-		std::future<F> safePriorityFutureEmplace(Args ...args)
+		std::future<F> emplaceFutureCommand(Args ...args)
 		{
-			// Assure you that you didn't call unprotected function before
-			assert(_publisherThreadId == 0);
-			std::future<F> futur;
+			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
+			return _commandQueue.emplace<T>(args...)->getFuture();
+		}
+
+		//////////////
+		//// TASKS
+
+		void moveTask(MessageBase *e, std::size_t size)
+		{
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				futur = (_priority.emplace<T>(args...))->getFuture();
+				_taskQueue.move(e, size);
 			}
-			releaseReadability();
-			return futur;
+			releaseTaskReadability();
 		}
 
 		template <typename T>
-		void autoPriorityPush(const T& e)
+		void pushTask(const T& e)
 		{
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.push(e);
+				_taskQueue.push(e);
 			}
-			else
-			{
-				_queue.push(e);
-			}
-			releaseReadability();
+			releaseTaskReadability();
 		}
 
 		template <typename T, typename ...Args>
-		void autoPriorityEmplace(Args ...args)
+		void emplaceTask(Args ...args)
 		{
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				_queue.emplace<T>(args...);
+				_taskQueue.emplace<T>(args...);
 			}
-			else
-			{
-				_queue.emplace<T>(args...);
-			}
-			releaseReadability();
+			releaseTaskReadability();
 		}
 
 		template <typename T, typename F>
-		std::future<F> autoPriorityFuturePush(const T &e)
+		std::future<F> pushFutureTask(const T &e)
 		{
-			std::future<F> futur;
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
+			std::future < F > f;
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				futur = _priority.push(e)->getFuture();
+				f = _taskQueue.push(e)->getFuture();
 			}
-			else
-				futur = _priority.push(e)->getFuture();
-			releaseReadability();
-			return futur;
+			releaseTaskReadability();
+			return f;
 		}
 
 		template <typename T, typename F, typename ...Args>
-		std::future<F> autoPriorityFutureEmplace(Args ...args)
+		std::future<F> emplaceFutureTask(Args ...args)
 		{
-			std::future<F> futur;
-			// Assure you that you didn't call unprotected function before
-			if (_publisherThreadId == 0)
+			std::future< F > f;
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				futur = (_priority.emplace<T>(args...))->getFuture();
+				f = _taskQueue.emplace<T>(args...)->getFuture();
 			}
-			else
-				futur = (_priority.emplace<T>(args...))->getFuture();
-			releaseReadability();
-			return futur;
+			releaseTaskReadability();
+			return f;
 		}
-
 	};
+
 }

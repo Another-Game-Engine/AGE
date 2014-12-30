@@ -188,7 +188,7 @@ namespace gl
 
 			source.updateShader(key, object.transformation, object.material);
 
-			//if (!obj`ect.animation.empty())
+			//if (!object.animation.empty())
 			//{
 				//// CESAR ICI ENVOYER LES MATRICES DES BONES
 				//auto shader = source.getShader(key);
