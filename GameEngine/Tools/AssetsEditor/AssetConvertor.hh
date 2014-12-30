@@ -21,7 +21,6 @@ namespace AGE
 	private:
 		AConfigurationFile *_confFile;
 		std::vector<AFormatConvertor*> _formatFiles;
-		std::vector<dataSet> _data;
 	public:
 		// CTOR
 		AssetConvertor(AConfigurationFile *file);

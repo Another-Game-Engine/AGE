@@ -152,9 +152,7 @@
     <ClCompile Include="AConfigurationFile.cpp" />
     <ClCompile Include="AFormatConvertor.cpp" />
     <ClCompile Include="AssetConvertor.cpp" />
-    <ClCompile Include="dataSet.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="SimpleConf.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -166,10 +164,8 @@
     <ClInclude Include="Convertor\MaterialConvertor.hpp" />
     <ClInclude Include="Convertor\MeshLoader.hpp" />
     <ClInclude Include="Convertor\SkeletonLoader.hpp" />
-    <ClInclude Include="dataSet.hh" />
     <ClInclude Include="AConfigurationFile.hh" />
     <ClInclude Include="AFormatConvertor.hh" />
-    <ClInclude Include="SimpleConf.hh" />
     <ClInclude Include="Texture.hh" />
   </ItemGroup>
   <ItemGroup>

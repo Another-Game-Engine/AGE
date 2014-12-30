@@ -4,7 +4,6 @@
 #include "AssetConvertor.hh"
 #include "AConfigurationFile.hh"
 #include "AFormatConvertor.hh"
-#include "dataSet.hh"
 
 namespace AGE
 {

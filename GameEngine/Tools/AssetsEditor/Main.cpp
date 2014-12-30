@@ -3,7 +3,6 @@
 
 //EDITOR
 #include "AssetConvertor.hh"
-#include "SimpleConf.hh"
 
 //CONVERTOR
 #include <Convertor/SkeletonLoader.hpp>
@@ -31,9 +30,6 @@
 
 int			main(int ac, char **av)
 {
-	///////////////////////////////////////////////////////////////////////////////////
-	/////////// NEW IMPLEMENTATION
-	///////////
 	AGE::InitAGE();
 	auto engine = AGE::CreateEngine();
 
@@ -60,12 +56,6 @@ int			main(int ac, char **av)
 		return true;
 	}));
 
-	{
-		AGE::SimpleConf confFile("convertor.conf");
-		AGE::AssetConvertor convertor(&confFile);
-		convertor.loads();
-		convertor.saves();
-	}
 	{
 		AGE::AssetDataSet dataSet;
 		dataSet.filePath = File("ball/ball.obj");
@@ -101,42 +91,6 @@ int			main(int ac, char **av)
 		AGE::MeshLoader::load(dataSet);
 		AGE::MeshLoader::save(dataSet);
 	}
-	//{
-	//	AGE::AssetDataSet dataSet;
-	//	dataSet.filePath = File("sibenik/sibenik.obj");
-	//	dataSet.skinName = "sibenik";
-	//	dataSet.materialName = "sibenik";
-
-	//	dataSet.serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-	//	dataSet.rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-	//	AGE::MaterialLoader::load(dataSet);
-	//	AGE::MaterialLoader::save(dataSet);
-
-	//	AGE::ImageLoader::load(dataSet);
-	//	AGE::ImageLoader::save(dataSet);
-
-	//	AGE::MeshLoader::load(dataSet);
-	//	AGE::MeshLoader::save(dataSet);
-	//}
-	//{
-	//	AGE::AssetDataSet dataSet;
-	//	dataSet.filePath = File("san-miguel/san-miguel.obj");
-	//	dataSet.skinName = "san-miguel";
-	//	dataSet.materialName = "san-miguel";
-
-	//	dataSet.serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-	//	dataSet.rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-	//	AGE::MaterialLoader::load(dataSet);
-	//	AGE::MaterialLoader::save(dataSet);
-
-	//	AGE::ImageLoader::load(dataSet);
-	//	AGE::ImageLoader::save(dataSet);
-
-	//	AGE::MeshLoader::load(dataSet);
-	//	AGE::MeshLoader::save(dataSet);
-	//}
 	{
 		AGE::AssetDataSet dataSet;
 		dataSet.filePath = File("catwoman/catwoman.fbx");
