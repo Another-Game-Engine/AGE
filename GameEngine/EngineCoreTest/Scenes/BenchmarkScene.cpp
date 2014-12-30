@@ -8,9 +8,6 @@
 #include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
-#include <Render/GeometryManagement/GraphicalMemory.hh>
-#include <Render/GeometryManagement/Data.hh>
-#include <Render/GeometryManagement/Vertices.hh>
 #include <memory>
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<Engine> &&engine)
@@ -26,6 +23,7 @@ BenchmarkScene::~BenchmarkScene(void)
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
 //#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 # include <Render/ProgramResources/Types/UniformBlock.hh>
+# include <Render/ProgramResources/Types/Attribute.hh>
 
 void BenchmarkScene::initRendering()
 {
@@ -38,12 +36,11 @@ void BenchmarkScene::initRendering()
 		std::shared_ptr<UnitProg> u1 = std::make_shared<UnitProg>(VERTEX_SHADER, GL_VERTEX_SHADER);
 		std::shared_ptr<UnitProg> u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
 		Program program({ u1, u2 });
-		auto block = program.get_resource<UniformBlock>("global_state")->get_resource("pos_light");
-		*block = glm::vec4(2.0f);
-		auto color = program.get_resource<Vec4>("diffuse_color");
-		*color = glm::vec4(666.f);
+		auto attribute = program.get_resource<Attribute>("position");
+		attribute->push_back<glm::vec4>({ glm::vec4(1.0f), glm::vec4(0.0f), glm::vec4(2.0f) });
 		program.update();
 		program.print_resources();
+		glFlush();
 		return (true);
 	});
 	assert(res.get());

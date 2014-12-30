@@ -5,7 +5,8 @@
 
 Program::Program(std::vector<std::shared_ptr<UnitProg>> const &u) :
 _unitsProg(u),
-_resources_factory(*this)
+_resources_factory(*this),
+_vertex_array(std::make_shared<VertexArray>())
 {
 	_id = glCreateProgram();
 	for (auto &element : _unitsProg) {
@@ -26,6 +27,7 @@ Program::Program(Program &&move) :
 _program_resources(std::move(move._program_resources)),
 _unitsProg(std::move(move._unitsProg)),
 _resources_factory(*this),
+_vertex_array(std::move(move._vertex_array)),
 _id(move._id)
 {
 	move._id = 0;
@@ -65,7 +67,7 @@ bool Program::has_resource(Key<ProgramResource> const &key)
 void Program::_get_resource(size_t index, GLenum resource, std::string const & buffer)
 {
 	auto size = 0;
-	glGetProgramResourceName(_id, resource, index, buffer.size(), &size, (GLchar *)buffer.data());
+	glGetProgramResourceName(_id, resource, GLuint(index), GLsizei(buffer.size()), (GLsizei *)&size, (GLchar *)buffer.data());
 	std::string name(buffer, 0, size);
 	auto element = _resources_factory.build(resource, index, std::move(name));
 	if (element) {
@@ -109,5 +111,8 @@ Program & Program::update()
 	return (*this);
 }
 
-
+std::shared_ptr<VertexArray> const & Program::array_buffer() const
+{
+	return (_vertex_array);
+}
 

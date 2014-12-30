@@ -4,8 +4,8 @@
 # include <Render/UnitProg.hh>
 # include <Render/ProgramResources/IProgramResources.hh>
 # include <Render/Key.hh>
-# include <Render/GeometryManagement/GraphicalMemory.hh>
 # include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
+# include <Render/Buffer/VertexArray.hh>
 
 class Program
 {
@@ -18,6 +18,7 @@ public:
 
 public:
 	GLuint id() const;
+	std::shared_ptr<VertexArray> const &array_buffer() const;
 	Key<ProgramResource> &get_key(std::string const &name);
 	template <typename type_t> type_t *get_resource(Key<ProgramResource> const &key);
 	template <typename type_t> type_t *get_resource(std::string const &name);
@@ -31,9 +32,10 @@ private:
 	void _get_resource(size_t index, GLenum resource, std::string const & buffer);
 
 private:
-	std::vector<std::shared_ptr<IProgramResources>> _program_resources;
+	std::vector<std::unique_ptr<IProgramResources>> _program_resources;
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 	ProgramResourcesFactory _resources_factory;
+	std::shared_ptr<VertexArray> _vertex_array;
 	GLuint _id;
 };
 

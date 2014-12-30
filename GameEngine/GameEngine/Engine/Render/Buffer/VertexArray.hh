@@ -18,5 +18,6 @@ public:
 
 private:
 	GLuint _id;
+	static GLuint _current_id;
 };
 

@@ -39,7 +39,7 @@ struct GlType
 	size_t size;
 	std::string name;
 	GlType(){}
-	GlType(GLenum type, GLenum typeComponent, size_t size, size_t nbrComponent, std::string &&name) :
+	GlType(GLenum type, GLenum typeComponent, size_t size, uint8_t nbrComponent, std::string &&name) :
 		nbr_component(nbrComponent),
 		type(type),
 		type_component(typeComponent),
