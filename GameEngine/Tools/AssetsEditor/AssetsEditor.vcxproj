@@ -103,7 +103,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,11 +149,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AssetFileCreator.cpp" />
+    <ClCompile Include="AssetFiles\RawMaterialFile.cpp" />
+    <ClCompile Include="AssetFiles\RawMeshFile.cpp" />
+    <ClCompile Include="AssetFiles\RawTextureFile.cpp" />
+    <ClCompile Include="File.cpp" />
     <ClCompile Include="Folder.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssetFileCreator.hpp" />
+    <ClInclude Include="AssetFiles\RawMaterialFile.hpp" />
+    <ClInclude Include="AssetFiles\RawMeshFile.hpp" />
+    <ClInclude Include="AssetFiles\RawTextureFile.hpp" />
+    <ClInclude Include="AssetFiles\UnknownFile.hpp" />
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
     <ClInclude Include="Convertor\AssimpLoader.hpp" />

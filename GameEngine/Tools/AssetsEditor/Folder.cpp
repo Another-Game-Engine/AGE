@@ -3,7 +3,8 @@
 #include <imgui\imgui.h>
 #include <regex>
 
-//tmp
+#include "AssetFileCreator.hpp"
+
 #include <iostream>
 
 namespace AGE
@@ -21,7 +22,7 @@ namespace AGE
 			auto strPath = path;
 			if (strPath.back() == '/')
 				strPath.pop_back();
-			_path = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(path);
+			_path = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(strPath);
 		}
 
 		Folder::Folder(const std::tr2::sys::basic_directory_entry<std::tr2::sys::path> &path, Folder *parent)
@@ -40,25 +41,24 @@ namespace AGE
 		void Folder::list()
 		{
 			_folders.clear();
-			for (auto it = std::tr2::sys::directory_iterator(_path);
-				it != std::tr2::sys::directory_iterator(); ++it)
+			_files.clear();
+			for (auto it = std::tr2::sys::directory_iterator(_path)
+				;  it != std::tr2::sys::directory_iterator()
+				; ++it)
 			{
-				// file object contains absolute path in the case of recursive iterators
 				const auto& file = it->path();
 
-				if (!std::tr2::sys::is_directory(file)/* && matches_mask(file)*/)
+				if (!std::tr2::sys::is_directory(file))
 				{
-					//auto last_wrinte = last_write_time(file);
-					std::cout << "file : " << file.relative_path().filename() << " - "
-						<< /*put_time(localtime(&last_write), "%Y/%m/%d %H:%M:%S") << */ std::endl;
+					auto n = AssetFileCreator::CreateFile(file.relative_path(), this);
+					_files.push_back(n);
+					std::cout << file.relative_path() << std::endl;
 				}
 				else if (std::tr2::sys::is_directory(file))
 				{
-					_folders.emplace_back(std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(_path.path().string() + "/" + file.filename() + "/"), this);
-					_folders.back().list();
-					//auto last_wrinte = last_write_time(file);
-					std::cout << "folder : " << file.filename() << " - "
-						<< /*put_time(localtime(&last_write), "%Y/%m/%d %H:%M:%S") << */ std::endl;
+					auto n = std::make_shared<AE::Folder>(std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(_path.path().string() + "/" + file.filename() + "/"), this);
+					_folders.push_back(n);
+					n->list();
 				}
 			}
 		}
@@ -74,8 +74,8 @@ namespace AGE
 			clearFolderFilter();
 			for (auto &e : _folders)
 			{
-				if (!filter(e._path))
-					e._active = false;
+				if (!filter(e->_path))
+					e->_active = false;
 			}
 		}
 
@@ -89,20 +89,26 @@ namespace AGE
 			_active = true;
 			for (auto &e : _folders)
 			{
-				e._active = true;
-				e.clearFolderFilter();
+				e->_active = true;
+				e->clearFolderFilter();
 			}
 		}
 
 
-		void Folder::printImgUi(File::PrintInfos infos)
+		void Folder::printImgUi(AssetFile::PrintInfos infos)
 		{
 			if (ImGui::TreeNode((void*)(this), _path.path().filename().c_str()))
 			{
 				for (auto &e : _folders)
 				{
-					if (e._active)
-						e.printImgUi();
+					if (e->_active)
+					{
+						e->printImgUi(infos);
+					}
+				}
+				for (auto &e : _files)
+				{
+					e->printImgUi(infos);
 				}
 				ImGui::TreePop();
 			}

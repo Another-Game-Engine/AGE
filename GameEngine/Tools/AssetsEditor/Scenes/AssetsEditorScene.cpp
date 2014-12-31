@@ -43,7 +43,8 @@ namespace AGE
 
 	bool AssetsEditorScene::userUpdate(double time)
 	{
-		folder.printImgUi();
+		folder.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 			return (false);
 		if (getInstance<Input>()->getInput(SDLK_e))
