@@ -13,7 +13,8 @@ namespace AGE
 			{}
 			UnknownFile(const std::tr2::sys::path &path, Folder *parent = nullptr)
 				: AssetFile(path, "Unknown", parent)
-			{}
+			{
+			}
 		};
 	}
 }
