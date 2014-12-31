@@ -1,61 +1,42 @@
-#include <Core/PrepareRenderThread.hpp>
-#include <Core/PrepareRenderThreadCommand.hpp>
-#include <Core/AScene.hh>
-#include <Utils/Frustum.hh>
-#include <Core/RenderThread.hpp>
-#include <Utils/ThreadQueueCommands.hpp>
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <Core/PreparableObject.hh>
-#include <Configuration.hpp>
-#include <Utils/Age_Imgui.hpp>
+#include "RenderScene.hpp"
+#include <Threads/PrepareRenderThread.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
 #include <Core/OctreeNode.hh>
-#include <Core/CullableInterfaces.hh>
+#include <Core/Commands/Render.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
-#include <Skinning/AnimationManager.hpp>
-
-#define ACTIVATE_OCTREE_CULLING
 
 namespace AGE
 {
-	PrepareRenderThread::PrepareRenderThread()
+	RenderScene::RenderScene(PrepareRenderThread *prepareThread, Engine *engine, AScene *scene)
+		: _prepareThread(prepareThread)
+		, _engine(engine)
+		, _scene(scene)
+		, _MeshCounter(0)
+		, _pointLightCounter(0)
+		, _cameraCounter(0)
 	{
 		_drawables.reserve(65536);
-		_octree = new OctreeNode;
+		_octree = new OctreeNode()			;
+		assert(prepareThread && engine && scene);
 	}
 
-	PrepareRenderThread::~PrepareRenderThread(void)
+	RenderScene::~RenderScene(void)
 	{
-		_commandQueue.emplace<TMQ::CloseQueue>();
-		_commandQueue.releaseReadability();
 		if (_octree)
 			delete _octree;
 	}
 
-	bool PrepareRenderThread::_init()
-	{
-		_octreeDrawList = AGE::Vector<DrawableCollection>();
-		return true;
-	}
-
-	bool PrepareRenderThread::_initInNewThread()
+	bool RenderScene::init()
 	{
 		return true;
 	}
 
-	bool PrepareRenderThread::_release()
-	{
-		return true;
-	}
-
-	bool PrepareRenderThread::_releaseInNewThread()
-	{
-		return true;
-	}
-
-	PrepareKey PrepareRenderThread::addMesh()
+	PrepareKey RenderScene::addMesh()
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::Drawable;
@@ -66,11 +47,11 @@ namespace AGE
 		}
 		else
 			res.id = PrepareKey::OctreeObjectId(_MeshCounter++);
-		_commandQueue.emplace<PRTC::CreateDrawable>(res);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreateDrawable>(res);
 		return res;
 	}
 
-	PrepareKey PrepareRenderThread::addCamera()
+	PrepareKey RenderScene::addCamera()
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::Camera;
@@ -81,12 +62,11 @@ namespace AGE
 		}
 		else
 			res.id = PrepareKey::OctreeObjectId(_cameraCounter++);
-		_commandQueue.emplace<PRTC::CreateCamera>(res);
-
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreateCamera>(res);
 		return res;
 	}
 
-	PrepareKey PrepareRenderThread::addPointLight()
+	PrepareKey RenderScene::addPointLight()
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::PointLight;
@@ -97,26 +77,26 @@ namespace AGE
 		}
 		else
 			res.id = PrepareKey::OctreeObjectId(_pointLightCounter++);
-		_commandQueue.emplace<PRTC::CreatePointLight>(res);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreatePointLight>(res);
 		return res;
 	}
 
-	PrepareRenderThread &PrepareRenderThread::removeElement(const PrepareKey &key)
+	RenderScene &RenderScene::removeElement(const PrepareKey &key)
 	{
 		assert(!key.invalid());
 		switch (key.type)
 		{
 		case PrepareKey::Type::Camera:
 			_freeCameras.push(key.id);
-			_commandQueue.emplace<PRTC::DeleteCamera>(key);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteCamera>(key);
 			break;
 		case PrepareKey::Type::Drawable:
 			_freeMeshs.push(key.id);
-			_commandQueue.emplace<PRTC::DeleteDrawable>(key);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteDrawable>(key);
 			break;
 		case PrepareKey::Type::PointLight:
 			_freePointLights.push(key.id);
-			_commandQueue.emplace<PRTC::DeletePointLight>(key);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeletePointLight>(key);
 			break;
 		default:
 			break;
@@ -124,70 +104,68 @@ namespace AGE
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
+	RenderScene &RenderScene::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::SetPointLight>(color, range, id);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, id);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPosition(const glm::vec3 &v, const PrepareKey &id)
+	RenderScene &RenderScene::setPosition(const glm::vec3 &v, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::Position>(id, v);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetPosition>(id, v);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setOrientation(const glm::quat &v, const PrepareKey &id)
+	RenderScene &RenderScene::setOrientation(const glm::quat &v, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::Orientation>(id, v);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetOrientation>(id, v);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setScale(const glm::vec3 &v, const PrepareKey &id)
+	RenderScene &RenderScene::setScale(const glm::vec3 &v, const PrepareKey &id)
 	{
-		_commandQueue.emplace<PRTC::Scale>(id, v);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetScale>(id, v);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setCameraInfos(const PrepareKey &id
+	RenderScene &RenderScene::setCameraInfos(const PrepareKey &id
 		, const glm::mat4 &projection)
 	{
-		_commandQueue.emplace<PRTC::CameraInfos>(id, projection);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(id, projection);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	RenderScene &RenderScene::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setPosition(v, e);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	RenderScene &RenderScene::setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setOrientation(v, e);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	RenderScene &RenderScene::setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
 			setScale(v, e);
 		return (*this);
 	}
 
-	PrepareRenderThread &PrepareRenderThread::updateGeometry(
+	RenderScene &RenderScene::updateGeometry(
 		const PrepareKey &key
-		, const AGE::Vector<AGE::SubMeshInstance> &meshs
-		, const AGE::Vector<AGE::MaterialInstance> &materials
-		, const Key<AGE::AnimationInstance> &animation)
+		, const AGE::Vector<AGE::SubMeshInstance> &meshs)
 	{
 		assert(!key.invalid() || key.type != PrepareKey::Type::Drawable);
-		_commandQueue.emplace<PRTC::Geometry>(key, meshs, materials, animation);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs);
 		return (*this);
 	}
 
-	DRAWABLE_ID PrepareRenderThread::addDrawable(USER_OBJECT_ID uid)
+	DRAWABLE_ID RenderScene::addDrawable(USER_OBJECT_ID uid)
 	{
 		DRAWABLE_ID res = DRAWABLE_ID(-1);
 		Drawable *co = nullptr;
@@ -208,33 +186,27 @@ namespace AGE
 		return res;
 	}
 
-	void PrepareRenderThread::removeDrawableObject(DRAWABLE_ID id)
+	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
-		_drawables[id].reset();
 #ifdef ACTIVATE_OCTREE_CULLING
 		// remove drawable from octree
 		if (_drawables[id].toAddInOctree == false)
 			_octree = _octree->removeElement(&_drawables[id]);
 #endif
+		_drawables[id].reset();
 		assert(id != (std::size_t)(-1));
 	}
 
-
-	bool PrepareRenderThread::_update()
-	{
-		auto returnValue = true;
-		static auto frameStart = std::chrono::high_resolution_clock::now();
-
-		_commandQueue.getDispatcher()
-			.handle<PRTC::CameraInfos>([&](const PRTC::CameraInfos& msg)
+		void RenderScene::_setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg)
 		{
 			Camera *co = nullptr;
 			co = &_cameras[msg.key.id];
 			co->hasMoved = true;
 			co->projection = msg.projection;
-		})
-			.handle<PRTC::CreateCamera>([&](const PRTC::CreateCamera& msg)
+		}
+
+		void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
 		{
 			Camera *co = nullptr;
 			if (msg.key.id >= _cameras.size())
@@ -246,8 +218,9 @@ namespace AGE
 				co = &_cameras[msg.key.id];
 			co->key.id = msg.key.id;
 			co->active = true;
-		})
-			.handle<PRTC::CreatePointLight>([&](const PRTC::CreatePointLight &msg)
+		}
+
+		void RenderScene::_createPointLight(AGE::Commands::MainToPrepare::CreatePointLight &msg)
 		{
 			PointLight *co = nullptr;
 			if (msg.key.id >= _pointLights.size())
@@ -259,8 +232,9 @@ namespace AGE
 				co = &_pointLights.back();
 			co->key.id = msg.key.id;
 			co->active = true;
-		})
-			.handle<PRTC::CreateDrawable>([&](const PRTC::CreateDrawable& msg)
+		}
+
+		void RenderScene::_createDrawable(AGE::Commands::MainToPrepare::CreateDrawable &msg)
 		{
 			Mesh *uo = nullptr;
 			if (msg.key.id >= _meshs.size())
@@ -270,27 +244,31 @@ namespace AGE
 			}
 			else
 				uo = &_meshs[msg.key.id];
-		})
-			.handle<PRTC::SetPointLight>([&](const PRTC::SetPointLight &msg)
+		}
+
+		void RenderScene::_setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg)
 		{
 			PointLight *l = nullptr;
 			l = &_pointLights[msg.key.id];
 			l->color = msg.color;
 			l->range = msg.range;
-		})
-			.handle<PRTC::DeleteCamera>([&](const PRTC::DeleteCamera& msg)
+		}
+
+		void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)
 		{
 			Camera *co = nullptr;
 			co = &_cameras[msg.key.id];
 			co->active = false;
-		})
-			.handle<PRTC::DeletePointLight>([&](const PRTC::DeletePointLight &msg)
+		}
+
+		void RenderScene::_deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg)
 		{
 			PointLight *co = nullptr;
 			co = &_pointLights[msg.key.id];
 			co->active = false;
-		})
-			.handle<PRTC::DeleteDrawable>([&](const PRTC::DeleteDrawable& msg)
+		}
+		
+		void RenderScene::_deleteDrawable(AGE::Commands::MainToPrepare::DeleteDrawable &msg)
 		{
 			Mesh *uo = nullptr;
 			uo = &this->_meshs[msg.key.id];
@@ -300,8 +278,9 @@ namespace AGE
 			}
 			uo->drawableCollection.clear();
 			uo->active = false;
-		})
-			.handle<PRTC::Geometry>([this](const PRTC::Geometry& msg)
+		}
+
+		void RenderScene::_setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg)
 		{
 			Mesh *uo = nullptr;
 			uo = &_meshs[msg.key.id];
@@ -313,16 +292,15 @@ namespace AGE
 				auto id = addDrawable(msg.key.id);
 				uo->drawableCollection.push_back(id);
 				_drawables[id].mesh = msg.submeshInstances[i];
-				_drawables[id].material = msg.materialInstances[i];
 				_drawables[id].position = uo->position;
 				_drawables[id].orientation = uo->orientation;
 				_drawables[id].scale = uo->scale;
 				_drawables[id].meshAABB = msg.submeshInstances[i].boundingBox;
 				_drawables[id].toAddInOctree = true;
-				_drawables[id].animation = msg.animation;
 			}
-		})
-			.handle<PRTC::Position>([&](const PRTC::Position& msg)
+		}
+
+		void RenderScene::_setPosition(AGE::Commands::MainToPrepare::SetPosition &msg)
 		{
 			Camera *co = nullptr;
 			Mesh *uo = nullptr;
@@ -352,8 +330,9 @@ namespace AGE
 			default:
 				break;
 			}
-		})
-			.handle<PRTC::Scale>([&](const PRTC::Scale& msg)
+		}
+
+		void RenderScene::_setScale(AGE::Commands::MainToPrepare::SetScale &msg)
 		{
 			Mesh *uo = nullptr;
 			Camera *co = nullptr;
@@ -376,8 +355,9 @@ namespace AGE
 			default:
 				break;
 			}
-		})
-			.handle<PRTC::Orientation>([&](const PRTC::Orientation& msg)
+		}
+
+		void RenderScene::_setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg)
 		{
 			Mesh *uo = nullptr;
 			Camera *co = nullptr;
@@ -400,18 +380,16 @@ namespace AGE
 			default:
 				break;
 			}
-		})
-			.handle<TMQ::CloseQueue>([&](const TMQ::CloseQueue& msg)
-		{
-			returnValue = false;
-		}).handle<PRTC::PrepareDrawLists>([&](PRTC::PrepareDrawLists& msg)
+		}
+		
+		void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
 		{
 			AGE::Vector<CullableObject*> toDraw;
 
 
 			// we update animation instances
-			auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
-			animationManager->update(0.1f);
+			//auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
+			//animationManager->update(0.1f);
 
 
 			// Update drawable positions in Octree
@@ -423,11 +401,8 @@ namespace AGE
 					e.previousAABB = e.currentAABB;
 					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
-#ifdef  ACTIVATE_OCTREE_CULLING
 					_octree = _octree->moveElement(&e);
-#endif
 				}
-#ifdef  ACTIVATE_OCTREE_CULLING
 				if (e.toAddInOctree)
 				{
 					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
@@ -436,7 +411,6 @@ namespace AGE
 					e.toAddInOctree = false;
 					_octree = _octree->addElement(&e);
 				}
-#endif
 			}
 			// Do culling for each camera
 			_octreeDrawList.clear();
@@ -475,15 +449,13 @@ namespace AGE
 					e->hasBeenFound = false;
 					// all the elements are drawable for the moment (TODO)
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
-					if (!currentDrawable->animation)
-					{
-						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation, animationManager->getBones(currentDrawable->animation));
-						drawList.drawables.back().animation = currentDrawable->animation;
-					}
-					else
-					{
-						drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
-					}
+					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
+					//}
+						if (!currentDrawable->material)
+						{
+							std::cout << "lol" << std::endl;
+							assert(false);
+						}
 				}
 #else
 				for (auto &e : _drawables)
@@ -495,38 +467,19 @@ namespace AGE
 				}
 #endif
 			}
-			getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
-		}).handle<PRTC::RenderDrawLists>([&](PRTC::RenderDrawLists& msg)
-		{
-			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
-			for (auto &e : this->_octreeDrawList)
-			{
-				renderThread->getCommandQueue().autoEmplace<TQC::VoidFunction>([=](){
-					msg.function(e);
-				});
-			}	
-		}).handle<PRTC::Flush>([&](const PRTC::Flush& msg)
-		{
-			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
-			renderThread->getCommandQueue().autoEmplace<RendCtxCommand::Flush>();
-			renderThread->getCommandQueue().releaseReadability();
-		}).handle<AGE::RenderImgui>([&](const AGE::RenderImgui& msg)
-		{
-#ifdef USE_IMGUI
-			auto renderThread = getDependencyManager().lock()->getInstance<AGE::Threads::Render>();
-			renderThread->getCommandQueue().autoPush(msg);
-#endif
-		});
-
-
-
-			//renderThread->getCommandQueue().safeEmplace<RendCtxCommand::Flush>();
-			//renderThread->getCommandQueue().releaseReadability();
-			////msg.result.set_value(std::move(_octreeDrawList));
-			////_octreeDrawList.clear();
-
-
-		return returnValue;
-	}
+			//getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
+				for (auto &i : this->_octreeDrawList)
+				{
+					for (auto &e : i.drawables)
+					{
+						if (!e.material)
+						{
+							std::cout << "lol";
+							assert(false);
+						}
+					}
+				}
+			GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::CopyDrawLists>(this->_octreeDrawList);
+		}
 
 }

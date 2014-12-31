@@ -1,96 +1,111 @@
 #include "SceneManager.hh"
 #include "AScene.hh"
+#include <Threads/MainThread.hpp>
+#include <Threads/PrepareRenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Core/Tasks/MainToPrepare.hpp>
 
-SceneManager::SceneManager()
-{}
-
-SceneManager::~SceneManager()
+namespace AGE
 {
-	_scenes.clear();
-	_actives.clear();
-}
+	SceneManager::SceneManager()
+	{}
 
-void		SceneManager::addScene(std::shared_ptr<AScene> scene, std::string const &name)
-{
-	_scenes[name] = scene;
-}
-
-void		SceneManager::removeScene(std::string const &name)
-{
-	auto t = _scenes.find(name);
-	if (t == std::end(_scenes))
-		return;
-	for (auto &e = std::begin(_actives); e != std::end(_actives);)
+	SceneManager::~SceneManager()
 	{
-		auto a = e;
-		++e;
-		if (a->second == t->second)
+		_scenes.clear();
+		_actives.clear();
+	}
+
+	void		SceneManager::addScene(std::shared_ptr<AScene> scene, std::string const &name)
+	{
+
+		GetPrepareThread()->getQueue()->emplaceFutureTask<AGE::Tasks::MainToPrepare::CreateScene, bool>(scene.get()).get();
+		_scenes[name] = scene;
+
+	}
+
+	void		SceneManager::removeScene(std::string const &name)
+	{
+		auto t = _scenes.find(name);
+		if (t == std::end(_scenes))
+			return;
+		for (auto &e = std::begin(_actives); e != std::end(_actives);)
 		{
-			_actives.erase(a);
-			break;
+			auto a = e;
+			++e;
+			if (a->second == t->second)
+			{
+				_actives.erase(a);
+				break;
+			}
+		}
+		_scenes.erase(name);
+	}
+
+	void		SceneManager::enableScene(std::string const &name, unsigned int priority)
+	{
+		auto t = _scenes.find(name);
+		if (t == std::end(_scenes))
+			return;
+		_actives[priority] = t->second;
+	}
+
+	void        SceneManager::disableScene(std::string const &name)
+	{
+		auto t = _scenes.find(name);
+		if (t == std::end(_scenes))
+			return;
+		for (auto &e = std::begin(_actives); e != std::end(_actives);)
+		{
+			auto a = e;
+			++e;
+			if (a->second == t->second)
+			{
+				_actives.erase(a);
+				break;
+			}
 		}
 	}
-	_scenes.erase(name);
-}
 
-void		SceneManager::enableScene(std::string const &name, unsigned int priority)
-{
-	auto t = _scenes.find(name);
-	if (t == std::end(_scenes))
-		return;
-	_actives[priority] = t->second;
-}
-
-void        SceneManager::disableScene(std::string const &name)
-{
-	auto t = _scenes.find(name);
-	if (t == std::end(_scenes))
-		return;
-	for (auto &e = std::begin(_actives); e != std::end(_actives);)
+	void        SceneManager::resetScene(std::string const &name)
 	{
-		auto a = e;
-		++e;
-		if (a->second == t->second)
-		{
-			_actives.erase(a);
-			break;
-		}
+		auto t = _scenes.find(name);
+		if (t == std::end(_scenes))
+			return;
+		t->second->clearAllEntities();
 	}
-}
 
-void        SceneManager::resetScene(std::string const &name)
-{
-	auto t = _scenes.find(name);
-	if (t == std::end(_scenes))
-		return;
-	// TODO
-	// TO IMPLEMENT : CLEAR ENTITY POOL
-	//	t->second->reset();
-}
-
-bool        SceneManager::initScene(std::string const &name)
-{
-	auto t = _scenes.find(name);
-	if (t == std::end(_scenes))
-		return false;
-	return t->second->start();
-}
-
-bool            SceneManager::userUpdate(double time) const
-{
-	for (auto &e : _actives)
+	bool        SceneManager::initScene(std::string const &name)
 	{
-		if (!e.second->userUpdate(time))
+		auto t = _scenes.find(name);
+		if (t == std::end(_scenes))
+		{
 			return false;
+		}
+		GetMainThread()->setSceneAsActive(t->second.get());
+		GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(t->second.get());
+		return t->second->start();
 	}
-	return true;
-}
 
-void            SceneManager::update(double time)
-{
-	for (auto &e : _actives)
+	bool            SceneManager::userUpdateScenes(double time) const
 	{
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		e.second->update(time);
+		for (auto &e : _actives)
+		{
+			GetMainThread()->setSceneAsActive(e.second.get());
+			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(e.second.get());
+			if (!e.second->userUpdate(time))
+				return false;
+		}
+		return true;
+	}
+
+	void            SceneManager::updateScenes(double time)
+	{
+		for (auto &e : _actives)
+		{
+			GetMainThread()->setSceneAsActive(e.second.get());
+			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(e.second.get());
+			e.second->update(time);
+		}
 	}
 }

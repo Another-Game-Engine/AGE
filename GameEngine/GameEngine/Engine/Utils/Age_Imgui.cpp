@@ -1,12 +1,12 @@
 #include "Age_Imgui.hpp"
 #include <Context/IRenderContext.hh>
-#include <Render/RenderThreadInterface.hpp>
 #include <SDL/SDL_keycode.h>
 #include <SDL/SDL.h>
 #include <imgui/imconfig.h>
 #include <Utils/Utils.hh>
-#include <Core/PrepareRenderThread.hpp>
-
+#include <Threads/PrepareRenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Core/Engine.hh>
 #define STB_IMAGE_IMPLEMENTATION
 #include <imgui\stb_image.h>
 #ifdef _MSC_VER
@@ -29,17 +29,16 @@ namespace AGE
 	unsigned int Imgui::_cursor = 0;
 	unsigned int Imgui::_size = 0;
 
-	bool Imgui::init(DependenciesInjector *di)
+	bool Imgui::init(Engine *en)
 	{
 #ifdef USE_IMGUI
-		_dependencyInjector = di;
+		_engine = en;
 		//HARDCODED WINDOW TO FIX
-		//auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue().safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
+		//auto window = di->getInstance<AGE::Threads::Render>()->getCommandQueue()->safePriorityFutureEmplace<RendCtxCommand::GetScreenSize, glm::uvec2>().get();
 
 		ImGuiIO& io = ImGui::GetIO();
 		//HARDCODED WINDOW TO FIX
-		//io.DisplaySize = ImVec2((float)window.x, (float)window.y);        // Display size, in pixels. For clamping windows positions.
-		io.DisplaySize = ImVec2(1600, 900);        // Display size, in pixels. For clamping windows positions.
+		io.DisplaySize = ImVec2(1920, 1040);        // Display size, in pixels. For clamping windows positions.
 		io.DeltaTime = 1.0f / 60.0f;                          // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
 		io.PixelCenterOffset = 0.0f;                        // Align OpenGL texels
 		io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
@@ -150,9 +149,9 @@ namespace AGE
 		int mx, my;
 		auto mouseState = SDL_GetMouseState(&mx, &my);
 		io.MousePos = ImVec2((float)mx, (float)my);
-		io.MouseDown[0] = (bool)(mouseState & SDL_BUTTON(SDL_BUTTON_LEFT));
-		io.MouseDown[1] = (bool)(mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT));
-		io.MouseDown[2] = (bool)(mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE));
+		io.MouseDown[0] = (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
+		io.MouseDown[1] = (mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0;
+		io.MouseDown[2] = (mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
 
 		// Start the frame
 		ImGui::NewFrame();
@@ -188,7 +187,7 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef USE_IMGUI
-		getInstance()->_dependencyInjector->getInstance<AGE::Threads::Prepare>()->getCommandQueue().autoEmplace<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
+		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
 #else
 		UNUSED(cmd_lists);
 		UNUSED(cmd_lists_count);

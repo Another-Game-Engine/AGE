@@ -1,20 +1,30 @@
 #pragma once
 
+#include <Configuration.hpp>
 #include "Utils/DependenciesInjector.hpp"
-#include <string>
+#include <array>
+#include <map>
+#include <Core/SceneManager.hh>
 
-class Engine : public DependenciesInjector
+namespace AGE
 {
-private:
-	Engine(Engine const &);
-	Engine &operator=(Engine const &);
+	class Timer;
 
-public:
-	Engine();
-	virtual ~Engine();
+	class Engine : public DependenciesInjector
+#ifdef USE_DEFAULT_ENGINE_CONFIGURATION
+		, public SceneManager
+#endif
+	{
+	protected:
+		Engine(Engine const &);
+		Engine &operator=(Engine const &);
 
-	bool        init(int mode, unsigned int swidth, unsigned int sheight, std::string &&name);
-	bool 		start();
-	bool 		update();
-	void 		stop();
-};
+		Timer *_timer;
+	public:
+		Engine();
+		virtual ~Engine();
+
+		bool launch(std::function<bool()> &fn);
+		bool update();
+	};
+}

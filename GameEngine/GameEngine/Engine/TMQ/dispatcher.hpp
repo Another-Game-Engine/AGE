@@ -9,7 +9,7 @@ namespace TMQ
 	class Dispatcher
 	{
 	private:
-		TMQ::Queue *_queue;
+		TMQ::ReleasableQueue *_queue;
 		bool _chained;
 
 		Dispatcher(const Dispatcher &) = delete;
@@ -24,7 +24,7 @@ namespace TMQ
 		bool dispatch(MessageBase* &msg);
 	public:
 		Dispatcher(Dispatcher &&o);
-		explicit Dispatcher(TMQ::Queue *queue);
+		explicit Dispatcher(TMQ::ReleasableQueue *queue);
 
 		template < typename _Message
 			, typename _Func>

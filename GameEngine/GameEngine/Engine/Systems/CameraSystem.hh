@@ -6,7 +6,6 @@
 #include <Render/Key.hh>
 #include <Components/CameraComponent.hpp>
 #include <Core/PreparableObject.hh>
-#include <Core/RenderThread.hpp>
 
 //namespace gl
 //{

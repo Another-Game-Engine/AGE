@@ -8,6 +8,8 @@
 
 namespace AGE
 {
+	class Engine;
+
 	struct Age_ImDrawList
 	{
 		std::vector<ImDrawCmd>     commands;
@@ -77,12 +79,12 @@ namespace AGE
 		static int _texture_location, _ortho_location;
 		static int _position_location, _uv_location, _colour_location;
 		static unsigned int _vbohandle, _cursor, _size;
-		DependenciesInjector *_dependencyInjector = nullptr;
+		Engine *_engine = nullptr;
 		bool _releaseWork = false;
 		bool _launched = false;
 	public:
 		Imgui();
-		bool init(DependenciesInjector *di);
+		bool init(Engine *en);
 		void startUpdate();
 		static Imgui* getInstance();
 		static void renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count);

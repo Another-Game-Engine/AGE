@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <Render/Key.hh>
 #include <Core/PreparableObject.hh>
+#include <Utils/GlmSerialization.hpp>
 
 namespace gl { class GeometryManager; class Vertices; class Indices; }
 
@@ -24,7 +25,10 @@ namespace Component
 		PointLight &set(glm::vec3 const &color = glm::vec3(1.0f), glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f));
 
 		template <typename Archive>void serialize(Archive &ar);
-
+		inline const glm::vec3 &getColor() const { return _color; }
+		inline const glm::vec3 &getRange() const { return _range; }
+		inline float *getColorPtr() { return glm::value_ptr(_color); }
+		inline float *getRangePtr() { return glm::value_ptr(_range); }
 		virtual void postUnserialization(AScene *scene);
 	private:
 		AGE::PrepareKey _key;

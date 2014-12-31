@@ -25,6 +25,10 @@ namespace AGE
 		bool				isLeaf() const;
 
 	private:
+		OctreeNode(const OctreeNode&) = delete;
+		OctreeNode(OctreeNode&&) = delete;
+		OctreeNode& operator=(const OctreeNode&) = delete;
+		OctreeNode& operator=(OctreeNode&&) = delete;
 		// Utils methods
 		void		splitNode();
 		OctreeNode *extendNode(CullableObject *toAdd, glm::i8vec3 const &direction);

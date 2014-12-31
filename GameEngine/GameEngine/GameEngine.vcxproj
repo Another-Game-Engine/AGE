@@ -192,6 +192,8 @@
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -222,18 +224,21 @@
     <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
+    <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
+    <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
-    <ClCompile Include="Engine\Core\PrepareRenderThread.cpp" />
-    <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexArray.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexBuffer.cpp" />
+    <ClCompile Include="Engine\Core\RenderScene.cpp" />
+    <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
+    <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\BlockMemory.cpp" />
     <ClCompile Include="Engine\Render\LocationStorage.cpp" />
@@ -262,6 +267,15 @@
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
     <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
+    <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
+    <ClCompile Include="Engine\Threads\MainThread.cpp" />
+    <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
+    <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
+    <ClCompile Include="Engine\Threads\QueuePusher.cpp" />
+    <ClCompile Include="Engine\Threads\RenderThead.cpp" />
+    <ClCompile Include="Engine\Threads\TaskThread.cpp" />
+    <ClCompile Include="Engine\Threads\Thread.cpp" />
+    <ClCompile Include="Engine\Threads\ThreadManager.cpp" />
     <ClCompile Include="Engine\TMQ\dispatcher.cpp" />
     <ClCompile Include="Engine\TMQ\message.cpp" />
     <ClCompile Include="Engine\TMQ\queue.cpp" />
@@ -302,6 +316,7 @@
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
     <ClCompile Include="Engine\Utils\Sphere.cpp" />
+    <ClCompile Include="Engine\Utils\ThreadName.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -311,18 +326,23 @@
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Configuration.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
+    <ClInclude Include="Engine\Core\Commands\Render.hpp" />
+    <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
+    <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
+    <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Core\Tasks\Render.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
     <ClInclude Include="Engine\Core\CullableInterfaces.hh" />
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
+    <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Core\OctreeNode.hh" />
     <ClInclude Include="Engine\Core\PreparableObject.hh" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
-    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
-    <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
-    <ClInclude Include="Engine\Core\RenderThread.hpp" />
+    <ClInclude Include="Engine\Core\RenderScene.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\Material.hpp" />
@@ -363,7 +383,6 @@
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec4.hh" />
     <ClInclude Include="Engine\Render\Render.hh" />
     <ClInclude Include="Engine\Render\RenderManager.hh" />
-    <ClInclude Include="Engine\Render\RenderThreadInterface.hpp" />
     <ClInclude Include="Engine\Render\Program.hh" />
     <ClInclude Include="Engine\Render\UnitProg.hh" />
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
@@ -381,16 +400,22 @@
     <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
     <ClInclude Include="Engine\Texture\Texture.hpp" />
+    <ClInclude Include="Engine\Threads\CallbackContainer.hpp" />
+    <ClInclude Include="Engine\Threads\MainThread.hpp" />
+    <ClInclude Include="Engine\Threads\PrepareRenderThread.hpp" />
+    <ClInclude Include="Engine\Threads\QueueOwner.hpp" />
+    <ClInclude Include="Engine\Threads\QueuePusher.hpp" />
+    <ClInclude Include="Engine\Threads\RenderThread.hpp" />
+    <ClInclude Include="Engine\Threads\TaskThread.hpp" />
+    <ClInclude Include="Engine\Threads\Thread.hpp" />
+    <ClInclude Include="Engine\Threads\ThreadManager.hpp" />
     <ClInclude Include="Engine\TMQ\dispatcher.hpp" />
     <ClInclude Include="Engine\TMQ\message.hpp" />
     <ClInclude Include="Engine\TMQ\queue.hpp" />
     <ClInclude Include="Engine\TMQ\templateDispatcher.hpp" />
     <ClInclude Include="Engine\Utils\AABoundingBox.hh" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
-    <ClInclude Include="Engine\Utils\CommandQueueHolder.hpp" />
-    <ClInclude Include="Engine\Utils\Containers\CommandQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
-    <ClInclude Include="Engine\Utils\Containers\PtrQueue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
     <ClInclude Include="Engine\Utils\DataSwapper.hpp" />
@@ -464,8 +489,7 @@
     <ClInclude Include="Engine\Utils\Sphere.hh" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
-    <ClInclude Include="Engine\Utils\ThreadQueue.hpp" />
-    <ClInclude Include="Engine\Utils\ThreadQueueCommands.hpp" />
+    <ClInclude Include="Engine\Utils\ThreadName.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
   </ItemGroup>
   <ItemGroup>

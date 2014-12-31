@@ -2,7 +2,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
-#include <Core/PrepareRenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Threads/MainThread.hpp>
+#include <Threads/PrepareRenderThread.hpp>
 
 namespace Component
 {
@@ -33,7 +35,8 @@ namespace Component
 	void CameraComponent::setProjection(const glm::mat4 &projection)
 	{
 		_projection = projection;
-		_scene->getInstance<AGE::Threads::Prepare>()->setCameraInfos(_key, _projection);
+
+		AGE::GetPrepareThread()->setCameraProjection(_projection, _key);
 	}
 
 	const glm::mat4 &CameraComponent::getProjection() const
@@ -44,9 +47,9 @@ namespace Component
 	void CameraComponent::init(AScene *scene)
 	{
 		_scene = scene;
-		_key = scene->getInstance<AGE::Threads::Prepare>()->addCamera();
+		_key = AGE::GetPrepareThread()->addCamera();
 		scene->getLink(entityId)->registerOctreeObject(_key);
-		setProjection(glm::perspective(60.0f, 1600.0f / 900.0f, 0.1f, 2000.0f));
+		setProjection(glm::perspective(60.0f, 1920.0f / 1040.0f, 0.1f, 2000.0f));
 	}
 
 	void CameraComponent::reset(AScene *scene)
