@@ -149,9 +149,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Folder.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
-    <ClCompile Include="Folder.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
@@ -161,6 +161,8 @@
     <ClInclude Include="Convertor\MaterialConvertor.hpp" />
     <ClInclude Include="Convertor\MeshLoader.hpp" />
     <ClInclude Include="Convertor\SkeletonLoader.hpp" />
+    <ClInclude Include="File.hpp" />
+    <ClInclude Include="Folder.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
   </ItemGroup>
   <ItemGroup>

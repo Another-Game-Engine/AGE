@@ -20,12 +20,16 @@
 #include <Convertor/MaterialConvertor.hpp>
 #include <Convertor/ImageLoader.hpp>
 
+#include <Folder.hpp>
+
+
 namespace AGE
 {
+	static AE::Folder folder(std::string("../../Assets/AGE-Assets-For-Test/Raw"));
 	AssetsEditorScene::AssetsEditorScene(std::weak_ptr<AGE::Engine> engine)
 		: AScene(engine)
 	{
-
+		folder.list();
 	}
 
 	AssetsEditorScene::~AssetsEditorScene(void)
@@ -39,6 +43,7 @@ namespace AGE
 
 	bool AssetsEditorScene::userUpdate(double time)
 	{
+		folder.printImgUi();
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 			return (false);
 		if (getInstance<Input>()->getInput(SDLK_e))
