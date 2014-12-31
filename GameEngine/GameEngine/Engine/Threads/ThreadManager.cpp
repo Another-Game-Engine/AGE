@@ -139,21 +139,25 @@ namespace AGE
 	{
 		std::size_t res = -1;
 		float perf = std::numeric_limits<float>::max();
+		std::size_t taskNumber = std::numeric_limits<std::size_t>::max();
 		auto threadId = std::this_thread::get_id().hash();
-		for (std::size_t i = 0; i < Thread::hardwareConcurency(); ++i)
+		for (std::size_t i = Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
 		{
 			float stat = _threadsStatistics[i].averageWorkTime - _threadsStatistics[i].averageWaitTime;
-			if (stat < perf)
+			std::size_t tn = _threads[i]->taskCounter;
+			if (stat < perf && tn <= taskNumber)
 			{
 				if (futur && _threads[i]->getSystemId() == threadId)
 					continue;
 				perf = stat;
+				taskNumber = tn;
 				res = i;
 			}
 		}
 		assert(res != std::size_t(-1));
 
 		// Disgusting !!!!! Heheh ! Shame on me :D
+		_threads[res]->taskCounter++;
 		if (res > Thread::Render)
 			return static_cast<TaskThread*>(_threads[res])->getQueue();
 		else if (res == 0)

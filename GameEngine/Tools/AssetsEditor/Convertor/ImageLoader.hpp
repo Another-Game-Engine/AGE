@@ -74,8 +74,7 @@ namespace AGE
 			dataSet.texturesLoaded = false;
 			if (!dataSet.assimpScene)
 			{
-				if (!AssimpLoader::Load(dataSet))
-					return false;
+				return false;
 			}
 
 			if (dataSet.assimpScene->HasTextures())

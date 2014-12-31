@@ -10,7 +10,7 @@ namespace AGE
 		, _name(threadTypeToString(type))
 		, _systemId(0)
 	{
-
+		taskCounter = 0;
 	}
 
 	Thread::~Thread()

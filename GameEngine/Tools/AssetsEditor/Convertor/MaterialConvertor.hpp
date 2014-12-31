@@ -39,8 +39,7 @@ namespace AGE
 			dataSet.materialsLoaded = false;
 			if (!dataSet.assimpScene)
 			{
-				if (!AssimpLoader::Load(dataSet))
-					return false;
+				return false;
 			}
 
 			if (!dataSet.assimpScene->HasMaterials())

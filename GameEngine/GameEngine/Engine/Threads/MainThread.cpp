@@ -51,6 +51,7 @@ namespace AGE
 						auto task = taskQueue.front();
 						assert(execute(task)); // we receive a task that we cannot handle
 						taskQueue.pop();
+						taskCounter--;
 					}
 				}
 			}
@@ -68,6 +69,7 @@ namespace AGE
 				auto task = taskQueue.front();
 				assert(execute(task)); // we receive a task that we cannot handle
 				taskQueue.pop();
+				taskCounter--;
 			}
 			workEnd = std::chrono::high_resolution_clock::now();
 			GetThreadManager()->updateThreadStatistics(this->_id

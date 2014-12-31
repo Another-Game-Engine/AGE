@@ -18,16 +18,10 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetConvertor.cpp">
+    <ClCompile Include="Scenes\AssetsEditorScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AFormatConvertor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AConfigurationFile.cpp">
+    <ClCompile Include="Folder.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,16 +47,7 @@
     <ClInclude Include="Convertor\ImageLoader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetConvertor.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AFormatConvertor.hh">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AConfigurationFile.hh">
+    <ClInclude Include="Scenes\AssetsEditorScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

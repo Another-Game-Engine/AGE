@@ -48,7 +48,7 @@ namespace AGE
 			return std::string(m.C_Str());
 		}
 
-		bool Load(AssetDataSet &dataSet)
+		static bool Load(AssetDataSet &dataSet)
 		{
 			auto path = dataSet.rawDirectory.path().string() + "\\" + dataSet.filePath.getFullName();
 			if (!File(path).exists())
@@ -56,7 +56,7 @@ namespace AGE
 				std::cerr << "File [" << path << "] does not exists." << std::endl;
 				return false;
 			}
-
+			
 			dataSet.assimpScene = const_cast<aiScene*>(dataSet.assimpImporter.ReadFile(
 				path
 				, aiProcess_Triangulate |

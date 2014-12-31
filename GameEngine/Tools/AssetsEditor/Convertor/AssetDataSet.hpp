@@ -9,6 +9,8 @@
 
 #include <filesystem>
 
+#include <atomic>
+
 namespace AGE
 {
 	struct Skeleton;
@@ -19,6 +21,14 @@ namespace AGE
 
 	struct AssetDataSet
 	{
+		~AssetDataSet()
+		{
+			std::cout << "asdas";
+		}
+
+		AssetDataSet()
+		{
+		}
 		//Configurations
 		bool loadSkeleton = false;
 		bool loadAnimations = false;
