@@ -64,7 +64,7 @@ namespace AGE
 
 		void Folder::printImgUi()
 		{
-			if (ImGui::TreeNode(_path.path().filename().c_str()))
+			if (ImGui::TreeNode((void*)(this), _path.path().filename().c_str()))
 			{
 				for (auto &e : _folders)
 				{

@@ -11,6 +11,7 @@
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
+#include <Utils/OpenGL.hh>
 
 namespace AGE
 {
@@ -40,6 +41,7 @@ namespace AGE
  		registerCallback<Commands::Render::Flush>([&](Commands::Render::Flush& msg)
 		{
 			_context->swapContext();
+			glClear(GL_COLOR_BUFFER_BIT);
 
 		});
 

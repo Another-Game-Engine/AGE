@@ -10,7 +10,7 @@ namespace AGE
 	namespace AE
 	{
 //		class File;
-		class Folder : public std::enable_shared_from_this < Folder >
+		class Folder
 		{
 		public:
 			Folder();
