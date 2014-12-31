@@ -23,7 +23,18 @@ namespace AGE
 	{
 		~AssetDataSet()
 		{
-			std::cout << "asdas";
+			assimpImporter.FreeScene();
+			for (auto &e : animations)
+				delete e;
+			animations.clear();
+			if (mesh)
+				delete mesh;
+			for (auto &e : materials)
+				delete e;
+			materials.clear();
+			for (auto &e : textures)
+				delete e;
+			textures.clear();
 		}
 
 		AssetDataSet()
