@@ -37,7 +37,7 @@ void BenchmarkScene::initRendering()
 		std::shared_ptr<UnitProg> u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
 		Program program({ u1, u2 });
 		auto attribute = program.get_resource<Attribute>("position");
-		attribute->push_back<glm::vec4>({ glm::vec4(1.0f), glm::vec4(0.0f), glm::vec4(2.0f) });
+		(*attribute)[1] = std::vector<float>( {0.f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f});
 		program.update();
 		program.print_resources();
 		glFlush();

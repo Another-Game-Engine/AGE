@@ -115,4 +115,3 @@ std::shared_ptr<VertexArray> const & Program::array_buffer() const
 {
 	return (_vertex_array);
 }
-

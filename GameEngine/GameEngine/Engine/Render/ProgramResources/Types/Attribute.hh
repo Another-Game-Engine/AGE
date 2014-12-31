@@ -22,13 +22,13 @@ public:
 	virtual size_t size() const override final;
 	virtual void print() const override final;
 
-private:
+public:
 	typedef Attribute * type_t;
 
 public:
 	VertexBuffer const &buffer() const;
 	Attribute &update();
-	template <typename type_t> Attribute &push_back(std::vector<type_t> const &data);
+	template <typename scalar_t> Attribute &push_back(std::vector<scalar_t> const &data);
 	Attribute &pop_back();
 	BlockMemory &operator[](size_t index);
 
@@ -42,11 +42,11 @@ private:
 	std::shared_ptr<VertexArray> _vertex_array;
 };
 
-template <typename type_t>
-Attribute & Attribute::push_back(std::vector<type_t> const &data)
+template <typename scalar_t>
+Attribute & Attribute::push_back(std::vector<scalar_t> const &data)
 {
 	auto offset = _size_alloc;
-	_block_memories.emplace_back(BlockMemory<type_t>(*this, offset, data));
+	_block_memories.emplace_back(BlockMemory(*this, offset, data));
 	_size_alloc += _block_memories.back().size();
 	_update_alloc = false;
 	_update_memory = false;
