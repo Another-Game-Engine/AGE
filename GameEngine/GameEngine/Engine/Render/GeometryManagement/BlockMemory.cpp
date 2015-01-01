@@ -1,5 +1,5 @@
 #include <Render/GeometryManagement/BlockMemory.hh>
-#include <Render/ProgramResources/Types/Attribute.hh>
+#include <Render/GeometryManagement/DrawableBuffer.hh>
 
 BlockMemory::BlockMemory(BlockMemory const &copy) :
 _update(copy._update),
@@ -17,7 +17,7 @@ _parent(std::move(move._parent))
 {
 }
 
-BlockMemory & BlockMemory::operator()()
+BlockMemory & BlockMemory::update()
 {
 	if (!_update) {
 		_parent.buffer().sub(_offset, _data.size(), _data.data());

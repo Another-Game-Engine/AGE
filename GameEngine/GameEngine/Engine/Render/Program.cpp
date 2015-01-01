@@ -2,7 +2,6 @@
 #include <assert.h>
 #include <Utils/OpenGL.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
-#include <Render/ProgramResources/Types/Attribute.hh>
 
 Program::Program(std::vector<std::shared_ptr<UnitProg>> const &u) :
 _unitsProg(u),

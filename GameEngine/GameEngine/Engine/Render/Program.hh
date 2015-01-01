@@ -5,7 +5,6 @@
 # include <Render/ProgramResources/IProgramResources.hh>
 # include <Render/Key.hh>
 # include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
-# include <Render/Buffer/VertexArray.hh>
 
 class Program
 {

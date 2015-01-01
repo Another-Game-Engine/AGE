@@ -4,7 +4,7 @@
 # include <stdint.h>
 # include <memory>
 
-class Attribute;
+class DrawableBuffer;
 
 class BlockMemory
 {
@@ -15,14 +15,14 @@ public:
 	template <typename type_t> BlockMemory &operator=(std::vector<type_t> const &data);
 
 public:
-	BlockMemory &operator()();
+	BlockMemory &update();
 	size_t size() const;
 
 private:
 	bool _update;
 	size_t _offset;
 	std::vector<uint8_t> _data;
-	Attribute const &_parent;
+	std::weak_ptr<DrawableBuffer> _parent;
 };
 
 template <typename type_t>

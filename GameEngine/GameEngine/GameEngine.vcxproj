@@ -241,6 +241,8 @@
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\BlockMemory.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\DrawableBuffer.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Painting\Painter.cpp" />
     <ClCompile Include="Engine\Render\LocationStorage.cpp" />
     <ClCompile Include="Engine\Render\Material.cpp" />
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
@@ -328,6 +330,8 @@
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Render\GeometryManagement\DrawableBuffer.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Painting\Painter.hh" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
