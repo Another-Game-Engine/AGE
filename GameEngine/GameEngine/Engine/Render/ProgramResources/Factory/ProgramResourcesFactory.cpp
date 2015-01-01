@@ -52,7 +52,7 @@ std::make_pair(GL_PROGRAM_INPUT, LAMBDA_PROTO																											\
 	if (available_type == available_types.end()) {																										\
 		return (std::unique_ptr<IProgramResources>(nullptr));																							\
 	}																																					\
-	return (std::unique_ptr<IProgramResources>(std::make_unique<Attribute>(id, std::move(name), available_type->second, _program.array_buffer())));		\
+	return (std::unique_ptr<IProgramResources>(std::make_unique<Attribute>(id, std::move(name), available_type->second)));								\
 })																																						\
 
 ProgramResourcesFactory::ProgramResourcesFactory(Program const &program) :																			

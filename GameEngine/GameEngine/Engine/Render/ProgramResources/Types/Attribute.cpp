@@ -1,13 +1,12 @@
 #include <Render/ProgramResources/Types/Attribute.hh>
 #include <iostream>
 
-Attribute::Attribute(GLint index, std::string &&name, GlType const &type, std::shared_ptr<VertexArray> const &vertexArray) :
+Attribute::Attribute(GLint index, std::string &&name, GlType const &type) :
 AProgramResources(index, std::move(name), GL_PROGRAM_INPUT),
 _update_memory(true),
 _update_alloc(true),
 _size_alloc(0),
-_available_type(type),
-_vertex_array(vertexArray)
+_available_type(type)
 {
 	
 }
@@ -17,8 +16,7 @@ AProgramResources(std::move(move)),
 _update_memory(move._update_memory),
 _update_alloc(move._update_alloc),
 _size_alloc(move._size_alloc),
-_available_type(std::move(move._available_type)),
-_vertex_array(std::move(move._vertex_array))
+_available_type(std::move(move._available_type))
 {
 
 }
@@ -28,21 +26,13 @@ AProgramResources(copy),
 _update_memory(copy._update_memory),
 _update_alloc(copy._update_alloc),
 _size_alloc(copy._size_alloc),
-_available_type(copy._available_type),
-_vertex_array(copy._vertex_array)
+_available_type(copy._available_type)
 {
 
 }
 
 IProgramResources & Attribute::operator()()
 {
-	if (!_update) {
-		_vertex_array->bind();
-		_buffer.bind();
-		glVertexAttribPointer(_id, _available_type.nbr_component, _available_type.type_component, GL_FALSE, 0, 0);
-		_vertex_array->unbind();
-		_update = true;
-	}
 	if (!_update_alloc) {
 		_buffer.bind();
 		_buffer.alloc(_size_alloc);
@@ -96,4 +86,17 @@ Attribute & Attribute::pop_back()
 BlockMemory & Attribute::operator[](size_t index)
 {
 	return (_block_memories[index]);
+}
+
+Attribute & Attribute::bind()
+{
+	_buffer.bind();
+	glVertexAttribPointer(_id, _available_type.nbr_component, _available_type.type_component, GL_FALSE, 0, 0);
+	return (*this);
+}
+
+Attribute & Attribute::unbind()
+{
+	_buffer.unbind();
+	return (*this);
 }

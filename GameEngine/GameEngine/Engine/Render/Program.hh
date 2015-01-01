@@ -18,7 +18,6 @@ public:
 
 public:
 	GLuint id() const;
-	std::shared_ptr<VertexArray> const &array_buffer() const;
 	Key<ProgramResource> &get_key(std::string const &name);
 	template <typename type_t> type_t *get_resource(Key<ProgramResource> const &key);
 	template <typename type_t> type_t *get_resource(std::string const &name);
@@ -35,7 +34,6 @@ private:
 	std::vector<std::unique_ptr<IProgramResources>> _program_resources;
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 	ProgramResourcesFactory _resources_factory;
-	std::shared_ptr<VertexArray> _vertex_array;
 	GLuint _id;
 };
 

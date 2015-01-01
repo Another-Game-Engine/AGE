@@ -2,11 +2,11 @@
 #include <assert.h>
 #include <Utils/OpenGL.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
+#include <Render/ProgramResources/Types/Attribute.hh>
 
 Program::Program(std::vector<std::shared_ptr<UnitProg>> const &u) :
 _unitsProg(u),
-_resources_factory(*this),
-_vertex_array(std::make_shared<VertexArray>())
+_resources_factory(*this)
 {
 	_id = glCreateProgram();
 	for (auto &element : _unitsProg) {
@@ -27,7 +27,6 @@ Program::Program(Program &&move) :
 _program_resources(std::move(move._program_resources)),
 _unitsProg(std::move(move._unitsProg)),
 _resources_factory(*this),
-_vertex_array(std::move(move._vertex_array)),
 _id(move._id)
 {
 	move._id = 0;
@@ -109,9 +108,4 @@ Program & Program::update()
 		(*resource)();
 	}
 	return (*this);
-}
-
-std::shared_ptr<VertexArray> const & Program::array_buffer() const
-{
-	return (_vertex_array);
 }

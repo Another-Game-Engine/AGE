@@ -10,7 +10,7 @@
 class Attribute : public AProgramResources
 {
 public:
-	Attribute(GLint index, std::string &&name, GlType const &type, std::shared_ptr<VertexArray> const &vertexArray);
+	Attribute(GLint index, std::string &&name, GlType const &type);
 	Attribute(Attribute &&move);
 	Attribute(Attribute const &copy);
 	Attribute &operator=(Attribute const &a) = delete;
@@ -30,6 +30,8 @@ public:
 	Attribute &update();
 	template <typename scalar_t> Attribute &push_back(std::vector<scalar_t> const &data);
 	Attribute &pop_back();
+	Attribute &bind();
+	Attribute &unbind();
 	BlockMemory &operator[](size_t index);
 
 private:
@@ -39,7 +41,6 @@ private:
 	std::vector<BlockMemory> _block_memories;
 	GlType _available_type;
 	VertexBuffer _buffer;
-	std::shared_ptr<VertexArray> _vertex_array;
 };
 
 template <typename scalar_t>
