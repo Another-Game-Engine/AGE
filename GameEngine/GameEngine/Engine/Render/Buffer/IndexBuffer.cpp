@@ -18,9 +18,10 @@ GLenum IndexBuffer::mode() const
 	return (GL_ELEMENT_ARRAY_BUFFER);
 }
 
-IBuffer const & IndexBuffer::alloc(size_t size) const
+IBuffer const & IndexBuffer::alloc(size_t size)
 {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
+	_size = size;
 	return (*this);
 }
 

@@ -17,9 +17,10 @@ GLenum UniformBuffer::mode() const
 	return (GL_UNIFORM_BUFFER);
 }
 
-IBuffer const & UniformBuffer::alloc(size_t size) const
+IBuffer const & UniformBuffer::alloc(size_t size)
 {
 	glBufferData(GL_UNIFORM_BUFFER, size, NULL, GL_STATIC_DRAW);
+	_size = size;
 	return (*this);
 }
 

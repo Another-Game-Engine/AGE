@@ -1,12 +1,14 @@
 #include <Render/Buffer/ABuffer.hh>
 
-ABuffer::ABuffer()
+ABuffer::ABuffer() :
+_size(0)
 {
 	glGenBuffers(1, &_id);
 }
 
 ABuffer::ABuffer(ABuffer &&move) :
-_id(move._id)
+_id(move._id),
+_size(move._size)
 {
 	move._id = 0;
 }
@@ -18,23 +20,12 @@ ABuffer::~ABuffer()
 	}
 }
 
-ABuffer & ABuffer::operator=(ABuffer &&i)
-{
-	_id = i._id;
-	i._id = 0;
-	return (*this);
-}
-
-/**
-* Method:    id
-* FullName:  ABuffer::id
-* Access:    public 
-* Returns:   GLuint
-* Qualifier: const
-* Goal:		 get the openGL id of the buffer
-*/
 GLuint ABuffer::id() const
 {
 	return (_id);
 }
 
+size_t ABuffer::size() const
+{
+	return (_size);
+}

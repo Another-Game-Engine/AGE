@@ -1,8 +1,7 @@
 #include <Render/GeometryManagement/BlockMemory.hh>
-#include <Render/GeometryManagement/DrawableBuffer.hh>
+#include <Render/GeometryManagement/Buffer.hh>
 
 BlockMemory::BlockMemory(BlockMemory const &copy) :
-_update(copy._update),
 _offset(copy._offset),
 _data(copy._data),
 _parent(copy._parent)
@@ -10,19 +9,15 @@ _parent(copy._parent)
 }
 
 BlockMemory::BlockMemory(BlockMemory &&move) :
-_update(move._update),
 _offset(move._offset),
 _data(std::move(move._data)),
 _parent(std::move(move._parent))
 {
 }
 
-BlockMemory & BlockMemory::update()
+BlockMemory & BlockMemory::update_buffer(IBuffer const &buffer)
 {
-	if (!_update) {
-		_parent.buffer().sub(_offset, _data.size(), _data.data());
-		_update = true;
-	}
+	buffer.sub(_offset, _data.size(), _data.data());
 	return (*this);
 }
 

@@ -1,5 +1,11 @@
 #include <Render/Buffer/VertexBuffer.hh>
 
+VertexBuffer::VertexBuffer() :
+ABuffer()
+{
+
+}
+
 IBuffer const & VertexBuffer::bind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, _id);
@@ -17,9 +23,10 @@ GLenum VertexBuffer::mode() const
 	return (GL_ARRAY_BUFFER);
 }
 
-IBuffer const & VertexBuffer::alloc(size_t size) const
+IBuffer const & VertexBuffer::alloc(size_t size)
 {
 	glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
+	_size = size;
 	return (*this);
 }
 
