@@ -87,10 +87,14 @@ int			main(int ac, char **av)
 #endif
 		// add main scene
 		engine.lock()->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene");
+//		engine.lock()->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene2");
 		// bind scene
 		if (!engine.lock()->initScene("BenchmarkScene"))
 			return false;
+		//if (!engine.lock()->initScene("BenchmarkScene2"))
+		//	return false;
 		engine.lock()->enableScene("BenchmarkScene", 100);
+//		engine.lock()->enableScene("BenchmarkScene2", 101);
 		return true;
 	}));
 

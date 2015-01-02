@@ -29,16 +29,16 @@ namespace gl
 			auto &data = _data[index];
 			if (!data.trash.empty())
 			{
-				auto res = Key<TYPE>(data.trash.front());
+				auto res = Key<TYPE>(data.trash.front(), index);
 				data.trash.pop();
 				return res;
 			}
-			return (Key<TYPE>(data.id++));
+			return (Key<TYPE>(data.id++, index));
 		}
 
-		static Key<TYPE> createKeyWithId(std::size_t _id)
+		static Key<TYPE> createKeyWithId(std::size_t _id, std::size_t index = 0)
 		{
-			return (Key<TYPE>(_id));
+			return (Key<TYPE>(_id, index));
 		}
 
 		Key();
@@ -56,7 +56,8 @@ namespace gl
 
 	private:
 		size_t _id;
-		explicit Key(size_t id);
+		size_t _index;
+		explicit Key(size_t id, size_t index);
 		static AGE::Vector<InternalData> _data;
 	};
 }

@@ -86,8 +86,8 @@ public:
 	virtual bool userUpdate(double time);
 
 private:
-	gl::RenderManager *_renderManager;
-	RenderKey key;
+	static gl::RenderManager *_renderManager;
+	static RenderKey key;
 
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
@@ -103,4 +103,5 @@ private:
 	Entity GLOBAL_FLOOR;
 	Entity GLOBAL_HEAD;
 	gl::Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
+	static bool initRenderingJustOneTime;
 };
