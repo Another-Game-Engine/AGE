@@ -99,6 +99,7 @@ namespace AGE
 		{
 			if (ImGui::TreeNode((void*)(this), _path.path().filename().c_str()))
 			{
+				ImGui::Separator();
 				for (auto &e : _folders)
 				{
 					if (e->_active)
@@ -110,6 +111,7 @@ namespace AGE
 				{
 					e->printImgUi(infos);
 				}
+				ImGui::Separator();
 				ImGui::TreePop();
 			}
 		}

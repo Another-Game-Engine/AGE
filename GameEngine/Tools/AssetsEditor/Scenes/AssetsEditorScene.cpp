@@ -25,11 +25,13 @@
 
 namespace AGE
 {
-	static AE::Folder folder(std::string("../../Assets/AGE-Assets-For-Test/Raw"));
+	static AE::Folder raw(std::string("../../Assets/AGE-Assets-For-Test/Raw"));
+	static AE::Folder cook(std::string("../../Assets/AGE-Assets-For-Test/Serialized"));
 	AssetsEditorScene::AssetsEditorScene(std::weak_ptr<AGE::Engine> engine)
 		: AScene(engine)
 	{
-		folder.list();
+		raw.list();
+		cook.list();
 	}
 
 	AssetsEditorScene::~AssetsEditorScene(void)
@@ -43,7 +45,12 @@ namespace AGE
 
 	bool AssetsEditorScene::userUpdate(double time)
 	{
-		folder.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+		ImGui::Begin("Raw");
+		raw.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+		ImGui::End();
+		ImGui::Begin("Cooked");
+		cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+		ImGui::End();
 
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 			return (false);
