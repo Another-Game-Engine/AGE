@@ -136,24 +136,29 @@ namespace AGE
 
 	TMQ::HybridQueue *ThreadManager::getAvailableTaskQueue(bool futur, Thread::ThreadType type)
 	{
+		static std::atomic_size_t iterator = Thread::Worker1;
+		if (iterator >= Thread::hardwareConcurency())
+			iterator = Thread::Worker1;
 		std::size_t res = -1;
-		float perf = std::numeric_limits<float>::max();
-		std::size_t taskNumber = std::numeric_limits<std::size_t>::max();
-		auto threadId = std::this_thread::get_id().hash();
-		for (std::size_t i = Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
-		{
-			float stat = _threadsStatistics[i].averageWorkTime - _threadsStatistics[i].averageWaitTime;
-			std::size_t tn = _threads[i]->taskCounter;
-			if (stat < perf && tn <= taskNumber)
-			{
-				if (futur && _threads[i]->getSystemId() == threadId)
-					continue;
-				perf = stat;
-				taskNumber = tn;
-				res = i;
-			}
-		}
-		assert(res != std::size_t(-1));
+		//float perf = std::numeric_limits<float>::max();
+		//std::size_t taskNumber = std::numeric_limits<std::size_t>::max();
+		//auto threadId = std::this_thread::get_id().hash();
+		//for (std::size_t i = Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
+		//{
+		//	float stat = _threadsStatistics[i].averageWorkTime - _threadsStatistics[i].averageWaitTime;
+		//	std::size_t tn = _threads[i]->taskCounter;
+		//	if (stat < perf && tn <= taskNumber)
+		//	{
+		//		if (futur && _threads[i]->getSystemId() == threadId)
+		//			continue;
+		//		perf = stat;
+		//		taskNumber = tn;
+		//		res = i;
+		//	}
+		//}
+		//assert(res != std::size_t(-1));
+		res = iterator;
+		++iterator;
 
 		_threads[res]->taskCounter++;
 		// Disgusting !!!!! Heheh ! Shame on me :D
