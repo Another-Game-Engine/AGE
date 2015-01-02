@@ -54,66 +54,106 @@ namespace AGE
 
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 			return (false);
-		if (getInstance<Input>()->getInput(SDLK_e))
-		{
-			std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-			dataSet->filePath = File("catwoman/catwoman.fbx");
-			dataSet->skeletonName = "catwoman";
-			dataSet->animationName = "catwoman-roulade";
-			dataSet->skinName = "catwoman";
-			dataSet->materialName = "catwoman";
 
-			dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-			dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-			AGE::AssimpLoader::Load(*dataSet.get());
-			AGE::MaterialLoader::load(*dataSet.get());
-			AGE::ImageLoader::load(*dataSet.get());
-			AGE::SkeletonLoader::load(*dataSet.get());
-			AGE::AnimationsLoader::load(*dataSet.get());
-			AGE::MeshLoader::load(*dataSet.get());
-			AGE::MaterialLoader::save(*dataSet.get());
-			AGE::ImageLoader::save(*dataSet.get());
-			AGE::MeshLoader::save(*dataSet.get());
-			AGE::SkeletonLoader::save(*dataSet.get());
-			AGE::AnimationsLoader::save(*dataSet.get());
-		}
 		static bool slowTouch = false;
-		if (getInstance<Input>()->getInput(SDLK_a))
+		if (getInstance<Input>()->getInput(SDLK_e))
 		{
 			if (!slowTouch)
 			{
 				slowTouch = true;
-				std::cout << "foo" << std::endl;
-				std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-				dataSet->filePath = File("catwoman/catwoman.fbx");
-				dataSet->skeletonName = "catwoman";
-				dataSet->animationName = "catwoman-roulade";
-				dataSet->skinName = "catwoman";
-				dataSet->materialName = "catwoman";
-
-				dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-				dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
+				// CATWOMAN
 				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
+					dataSet->filePath = File("catwoman/catwoman.fbx");
+					dataSet->skeletonName = "catwoman";
+					dataSet->animationName = "catwoman-roulade";
+					dataSet->skinName = "catwoman";
+					dataSet->materialName = "catwoman";
+
+					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+
 					AGE::AssimpLoader::Load(*dataSet.get());
+
 					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+						AGE::MaterialLoader::load(*dataSet.get());
+						AGE::ImageLoader::load(*dataSet.get());
 						AGE::SkeletonLoader::load(*dataSet.get());
+						AGE::AnimationsLoader::load(*dataSet.get());
 						AGE::MeshLoader::load(*dataSet.get());
-						AGE::SkeletonLoader::save(*dataSet.get());
+						AGE::MaterialLoader::save(*dataSet.get());
+						AGE::ImageLoader::save(*dataSet.get());
 						AGE::MeshLoader::save(*dataSet.get());
+						AGE::SkeletonLoader::save(*dataSet.get());
+						AGE::AnimationsLoader::save(*dataSet.get());
 					});
+				});
+				//SPONZA
+				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
+					dataSet->filePath = File("sponza/sponza.obj");
+					dataSet->skinName = "sponza";
+					dataSet->materialName = "sponza";
+
+					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+
+					AGE::AssimpLoader::Load(*dataSet.get());
 					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 						AGE::MaterialLoader::load(*dataSet.get());
 						AGE::MaterialLoader::save(*dataSet.get());
-					});
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+
 						AGE::ImageLoader::load(*dataSet.get());
 						AGE::ImageLoader::save(*dataSet.get());
+
+						AGE::MeshLoader::load(*dataSet.get());
+						AGE::MeshLoader::save(*dataSet.get());
 					});
+				});
+				//CUBE
+				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
+					dataSet->filePath = File("cube/cube.obj");
+					dataSet->skinName = "cube";
+					dataSet->materialName = "cube";
+
+					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+
+					AGE::AssimpLoader::Load(*dataSet.get());
+
 					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::AnimationsLoader::load(*dataSet.get());
-						AGE::AnimationsLoader::save(*dataSet.get());
+						AGE::MaterialLoader::load(*dataSet.get());
+						AGE::MaterialLoader::save(*dataSet.get());
+
+						AGE::ImageLoader::load(*dataSet.get());
+						AGE::ImageLoader::save(*dataSet.get());
+
+						AGE::MeshLoader::load(*dataSet.get());
+						AGE::MeshLoader::save(*dataSet.get());
+					});
+				});
+				//BALL
+				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
+					dataSet->filePath = File("ball/ball.obj");
+					dataSet->skinName = "ball";
+					dataSet->materialName = "ball";
+
+					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+
+					AGE::AssimpLoader::Load(*dataSet.get());
+
+					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+						AGE::MaterialLoader::load(*dataSet.get());
+						AGE::MaterialLoader::save(*dataSet.get());
+
+						AGE::ImageLoader::load(*dataSet.get());
+						AGE::ImageLoader::save(*dataSet.get());
+
+						AGE::MeshLoader::load(*dataSet.get());
+						AGE::MeshLoader::save(*dataSet.get());
 					});
 				});
 			}

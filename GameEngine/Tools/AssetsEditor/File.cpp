@@ -26,7 +26,9 @@ namespace AGE
 			{
 				auto last_write = std::tr2::sys::last_write_time(_path);
 				std::stringstream res;
-				res << std::put_time(std::localtime(&last_write), "%Y/%m/%d %H:%M:%S");
+				struct tm timeinfo;
+				localtime_s(&timeinfo, &last_write);
+				res << std::put_time(&timeinfo, "%Y/%m/%d %H:%M:%S");
 				return res.str();
 			}
 

@@ -29,7 +29,7 @@ namespace AGE
 		this->registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
 			_context = msg.engine.lock()->setInstance<SdlContext, IRenderContext>();
-			if (!_context->init(0, 800, 600, "~AGE~ V0.00001 Demo"))
+			if (!_context->init(0, 1920, 1000, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
 				return;
@@ -43,7 +43,6 @@ namespace AGE
 		{
 			_context->swapContext();
 			glClear(GL_COLOR_BUFFER_BIT);
-
 		});
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)

@@ -33,20 +33,21 @@ namespace AGE
 		struct ThreadStatistics
 		{
 			std::string name;
-			float averageWorkTime;
-			float averageWaitTime;
+			std::atomic<float> averageWorkTime;
+			std::atomic<float> averageWaitTime;
 			float averageWorkTimeCopy;
 			float averageWaitTimeCopy;
 			std::atomic_size_t frameCounter;
-			std::mutex mutex;
-			std::array < std::size_t, 512 > work;
-			std::array < std::size_t, 512 > wait;
-			std::array < float, 512 > workCopy;
-			std::array < float, 512 > waitCopy;
-			std::array < float, 512 > totalCopy;
+			std::atomic_size_t secondCounter;
+			std::array < std::size_t, 128 > work;
+			std::array < std::size_t, 128 > wait;
+			std::array < float, 128 > workCopy;
+			std::array < float, 128 > waitCopy;
+			std::array < float, 128 > totalCopy;
 			ThreadStatistics()
 				: name("")
 				, frameCounter(0)
+				, secondCounter(0)
 			{
 				work.fill(0);
 				wait.fill(0);

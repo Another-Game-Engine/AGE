@@ -71,7 +71,7 @@ namespace AGE
 		//Ptrs
 		Skeleton *skeleton = nullptr;
 		AGE::Vector<Animation*> animations;
-		MeshData *mesh;
+		MeshData *mesh = nullptr;
 		AGE::Vector<MaterialData*> materials;
 		AGE::Vector<TextureData*> textures;
 

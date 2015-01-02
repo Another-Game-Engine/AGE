@@ -121,7 +121,6 @@ namespace AGE
 		{
 			s.frameCounter = 0;
 		}
-		std::lock_guard<std::mutex>(s.mutex);
 		s.work[s.frameCounter] = workTime;
 		s.wait[s.frameCounter++] = sleepTime;
 		float newWaitTime = 0;
