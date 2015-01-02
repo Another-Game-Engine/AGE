@@ -18,6 +18,10 @@
 #include <SDL/SDL.h>
 #include <Threads/TaskScheduler.hpp>
 
+bool BenchmarkScene::initRenderingJustOneTime = true;
+RenderKey BenchmarkScene::key = RenderKey();
+gl::RenderManager *BenchmarkScene::_renderManager = nullptr;
+
 BenchmarkScene::BenchmarkScene(std::weak_ptr<AGE::Engine> engine)
 	: AScene(engine)
 {
@@ -196,7 +200,11 @@ bool BenchmarkScene::userStart()
 
 	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::RenderManager>();
-	initRendering();
+	if (initRenderingJustOneTime)
+	{
+		initRendering();
+		initRenderingJustOneTime = false;
+	}
 
 #ifdef SIMPLE_RENDERING
 	addSystem<SimpleMeshRenderer>(80);

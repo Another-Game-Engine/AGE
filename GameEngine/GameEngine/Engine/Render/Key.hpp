@@ -9,6 +9,7 @@ namespace gl
 	template <typename TYPE>
 	Key<TYPE>::Key()
 	{
+		_index = 0;
 		_id = -1;
 	}
 
@@ -65,6 +66,9 @@ namespace gl
 	template <typename TYPE>
 	void Key<TYPE>::destroy()
 	{
+		assert(_data.size() > _index);
+		auto &data = _data[_index];
+		data.trash.push(_id);
 		_id = -1;
 	}
 
@@ -81,9 +85,10 @@ namespace gl
 	}
 
 	template <typename TYPE>
-	Key<TYPE>::Key(size_t id)
+	Key<TYPE>::Key(size_t id, size_t index)
 	{
 		_id = id;
+		_index = index;
 	}
 
 }
