@@ -32,7 +32,8 @@ namespace AGE
 
 		ImGuiIO& io = ImGui::GetIO();
 		//HARDCODED WINDOW TO FIX
-		io.DisplaySize = ImVec2(1920, 1040);        // Display size, in pixels. For clamping windows positions.
+		auto screenSize = en->getInstance<IRenderContext>()->getScreenSize();
+		io.DisplaySize = ImVec2(screenSize.x, screenSize.y);        // Display size, in pixels. For clamping windows positions.
 		io.DeltaTime = 1.0f / 60.0f;                          // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
 		io.PixelCenterOffset = 0.0f;                        // Align OpenGL texels
 		io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
