@@ -108,6 +108,9 @@ namespace AGE
 				// The meshes dont have bounding box (only the subMeshes)
 //				subMeshBoundings.push_back(meshs[meshIndex].boundingBox);
 
+				glm::vec3 dist = meshs[meshIndex].boundingBox.maxPoint - meshs[meshIndex].boundingBox.minPoint;
+				meshs[meshIndex].boundingBox.center = meshs[meshIndex].boundingBox.minPoint + (dist / 2.0f);
+
 				unsigned int meshFacesNbr = mesh->mNumFaces;
 				for (unsigned int faceIndex = 0; faceIndex < meshFacesNbr; ++faceIndex)
 				{

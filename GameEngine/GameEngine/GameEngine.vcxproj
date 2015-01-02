@@ -229,6 +229,8 @@
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
+    <ClCompile Include="Engine\Core\LooseOctree.cpp" />
+    <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
@@ -326,6 +328,8 @@
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
     <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />
     <ClInclude Include="Engine\Core\Link.hpp" />
+    <ClInclude Include="Engine\Core\LooseOctree.hh" />
+    <ClInclude Include="Engine\Core\LooseOctreeNode.hh" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Core\OctreeNode.hh" />
@@ -456,6 +460,7 @@
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
     <ClInclude Include="Engine\Utils\MathematicTools.hh" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
+    <ClInclude Include="Engine\Utils\MemoryPool.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\Plane.hh" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />

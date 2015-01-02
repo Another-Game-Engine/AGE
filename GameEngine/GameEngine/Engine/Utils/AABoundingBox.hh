@@ -16,10 +16,13 @@ namespace AGE
 	{
 		glm::vec3		minPoint;
 		glm::vec3		maxPoint;
+		glm::vec3		center;
 
 		AABoundingBox();
 		~AABoundingBox();
 		AABoundingBox(glm::vec3 const &min, glm::vec3 const &max);
+
+		void recomputeCenter();
 
 		glm::vec3	getPositivePoint(glm::vec3 const &normal) const;
 		glm::vec3	getNegativePoint(glm::vec3 const &normal) const;
@@ -29,13 +32,15 @@ namespace AGE
 
 		// check the state of collision between two AABB
 		ECollision checkCollision(AABoundingBox const &oth, glm::i8vec3 &direction) const;
-
 		bool		checkCollision(AABoundingBox const &oth) const;
+		// check if a point is in the aabb
+		bool checkPointIn(glm::vec3 point, glm::i8vec3 &direction) const;
+		bool checkPointIn(glm::vec3 point) const;
 
 		template <class Archive>
 		void serialize(Archive &ar)
 		{
-			ar(minPoint, maxPoint);
+			ar(minPoint, maxPoint, center);
 		}
 	};
 }

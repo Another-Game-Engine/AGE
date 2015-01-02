@@ -21,14 +21,11 @@ namespace AGE
 		, _cameraCounter(0)
 	{
 		_drawables.reserve(65536);
-		_octree = new OctreeNode()			;
 		assert(prepareThread && engine && scene);
 	}
 
 	RenderScene::~RenderScene(void)
 	{
-		if (_octree)
-			delete _octree;
 	}
 
 	bool RenderScene::init()
@@ -194,7 +191,7 @@ namespace AGE
 #ifdef ACTIVATE_OCTREE_CULLING
 		// remove drawable from octree
 		if (_drawables[id].toAddInOctree == false)
-			_octree = _octree->removeElement(&_drawables[id]);
+			_octree.removeElement(&_drawables[id]);
 #endif
 		_drawables[id].reset();
 		assert(id != (std::size_t)(-1));
@@ -410,7 +407,7 @@ namespace AGE
 					e.previousAABB = e.currentAABB;
 					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
-					_octree = _octree->moveElement(&e);
+					_octree.moveElement(&e);
 				}
 				if (e.toAddInOctree)
 				{
@@ -418,7 +415,7 @@ namespace AGE
 					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
 					e.previousAABB = e.currentAABB;
 					e.toAddInOctree = false;
-					_octree = _octree->addElement(&e);
+					_octree.addElement(&e);
 				}
 			}
 			// Do culling for each camera
@@ -447,9 +444,11 @@ namespace AGE
 				}
 
 #ifdef ACTIVATE_OCTREE_CULLING
+				// clean empty nodes
+				_octree.cleanOctree();
 
 				// Do the culling
-				_octree->getElementsCollide(&camera, toDraw);
+				_octree.getElementsCollide(&camera, toDraw);
 
 				// iter on element to draw
 				for (CullableObject *e : toDraw)
