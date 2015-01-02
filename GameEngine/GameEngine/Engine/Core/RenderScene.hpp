@@ -5,6 +5,7 @@
 #include <Core/Commands/MainToPrepare.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Entities/EntityTypedef.hpp>
+#include <Core/LooseOctree.hh>
 
 class AScene;
 
@@ -16,7 +17,6 @@ namespace AGE
 	struct Camera;
 	struct DrawableCollection;
 	struct SubMeshInstance;
-	class OctreeNode;
 	class PrepareRenderThread;
 	class Engine;
 
@@ -69,7 +69,7 @@ namespace AGE
 		PrepareRenderThread *_prepareThread;
 		Engine *_engine;
 
-		OctreeNode *_octree;
+		LooseOctree _octree;
 
 		AGE::Vector<Mesh> _meshs;
 		AGE::Vector<Drawable> _drawables;
