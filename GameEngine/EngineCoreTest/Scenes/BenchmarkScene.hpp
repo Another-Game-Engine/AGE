@@ -104,4 +104,5 @@ private:
 	Entity GLOBAL_HEAD;
 	gl::Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
 	static bool initRenderingJustOneTime;
+	std::list<std::future<bool>> assetLoadingList;
 };

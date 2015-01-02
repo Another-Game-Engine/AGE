@@ -5,6 +5,10 @@
 #include <Geometry/Material.hpp>
 #include <Texture/Texture.hpp>
 #include <Render/RenderManager.hh>
+#include <Threads/ThreadManager.hpp>
+#include <Core/Tasks/Basics.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Threads/TaskScheduler.hpp>
 
 namespace AGE
 {
@@ -25,51 +29,60 @@ namespace AGE
 	}
 
 
-	std::shared_ptr<MaterialSetInstance> AssetsManager::loadMaterial(const File &_filePath)
+	std::future<bool> AssetsManager::loadMaterial(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 
 		if (_materials.find(filePath.getFullName()) != std::end(_materials))
-			return _materials[filePath.getFullName()];
+		{
+			std::promise<bool> promise;
+			auto future = promise.get_future();
+			promise.set_value(true);
+			return future;
+		}
 		if (!filePath.exists())
 		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
 			assert(false);
 		}
 
-		MaterialDataSet data;
 		auto material = std::make_shared<MaterialSetInstance>();
-
-		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-		cereal::PortableBinaryInputArchive ar(ifs);
-		ar(data);
-		material->name = data.name;
-		material->path = _filePath.getFullName();
-		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
-		for (auto &e : data.collection)
-		{
-			auto key = manager->addMaterial();
-			material->datas.push_back(key);
-
-			// TODO fill material with material key
-			gl::Key<gl::Material> &mat = material->datas.back();
-			manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
-			manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
-			manager->setMaterial<gl::Color_specular>(mat, e.specular);
-
-			manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
-			manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
-			manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
-			manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath));
-			manager->setMaterial<gl::Texture_normal>(mat, loadTexture(e.normalTexPath));
-
-			manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
-			manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
-			manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
-		}
-
 		_materials.insert(std::make_pair(filePath.getFullName(), material));
-		return material;
+
+		return AGE::EmplaceFutureTask<Tasks::Basic::BoolFunction, bool>([=](){
+			MaterialDataSet data;
+			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			cereal::PortableBinaryInputArchive ar(ifs);
+			ar(data);
+			material->name = data.name;
+			material->path = _filePath.getFullName();
+			auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
+				auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+				for (auto &e : data.collection)
+				{
+					auto key = manager->addMaterial();
+					material->datas.push_back(key);
+
+					// TODO fill material with material key
+					gl::Key<gl::Material> &mat = material->datas.back();
+					manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
+					manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
+					manager->setMaterial<gl::Color_specular>(mat, e.specular);
+
+					manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
+					manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
+					manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
+					manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath));
+					manager->setMaterial<gl::Texture_normal>(mat, loadTexture(e.normalTexPath));
+
+					manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
+					manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
+					manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
+				}
+				return true;
+			});
+			return future.get();
+		});
 	}
 
 	gl::Key<gl::Texture> AssetsManager::loadTexture(const File &_filePath)
@@ -87,7 +100,7 @@ namespace AGE
 		ar(data);
 
 		// TODO fill texture with texture key
-		
+
 		GLenum ct = GL_RGB32F;
 		GLenum color = GL_RGB;
 		if (data.colorNumber == 3)
@@ -118,11 +131,16 @@ namespace AGE
 		return key;
 	}
 
-	std::shared_ptr<Animation> AssetsManager::loadAnimation(const File &_filePath)
+	std::future<bool> AssetsManager::loadAnimation(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_animations.find(filePath.getFullName()) != std::end(_animations))
-			return _animations[filePath.getFullName()];
+		{
+			std::promise<bool> promise;
+			auto future = promise.get_future();
+			promise.set_value(true);
+			return future;
+		}
 		if (!filePath.exists())
 		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
@@ -130,12 +148,14 @@ namespace AGE
 		}
 
 		auto animation = std::make_shared<Animation>();
-
-		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-		cereal::PortableBinaryInputArchive ar(ifs);
-		ar(*animation.get());
 		_animations.insert(std::make_pair(filePath.getFullName(), animation));
-		return animation;
+
+		return AGE::EmplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
+			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			cereal::PortableBinaryInputArchive ar(ifs);
+			ar(*animation.get());
+			return true;
+		});
 	}
 
 	std::shared_ptr<Animation> AssetsManager::getAnimation(const File &_filePath)
@@ -154,81 +174,97 @@ namespace AGE
 		return nullptr;
 	}
 
-	std::shared_ptr<Skeleton> AssetsManager::loadSkeleton(const File &_filePath)
+	std::future<bool> AssetsManager::loadSkeleton(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
-			return _skeletons[filePath.getFullName()];
+		{
+			std::promise<bool> promise;
+			auto future = promise.get_future();
+			promise.set_value(true);
+			return future;
+		}
 		if (!filePath.exists())
 		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
 			assert(false);
 		}
-
 		auto skeleton = std::make_shared<Skeleton>();
-
-		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-		cereal::PortableBinaryInputArchive ar(ifs);
-		ar(*skeleton.get());
 		_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
-		return skeleton;
+
+		return AGE::EmplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
+			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			cereal::PortableBinaryInputArchive ar(ifs);
+			ar(*skeleton.get());
+			return true;
+		});
 	}
 
-	std::shared_ptr<MeshInstance> AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder)
+	std::future<bool> AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
-			return _meshs[filePath.getFullName()];
+		{
+			std::promise<bool> promise;
+			auto future = promise.get_future();
+			promise.set_value(true);
+			return future;
+		}
 		if (!filePath.exists())
 		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
 			assert(false);
 		}
 
-		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-		cereal::PortableBinaryInputArchive ar(ifs);
-		MeshData data;
-		ar(data);
-
 		auto meshInstance = std::make_shared<MeshInstance>();
-
-		meshInstance->subMeshs.resize(data.subMeshs.size());
-		meshInstance->name = data.name;
-		meshInstance->path = _filePath.getFullName();
-
-		for (std::size_t i = 0; i < data.subMeshs.size(); ++i)
-		{
-			// If no vertex pool correspond to submesh
-			std::vector<MeshInfos> order;
-			std::bitset<MeshInfos::END> infos;
-			if (loadOrder.empty())
-			{
-				for (std::size_t j = 0; i < data.subMeshs[i].infos.size(); ++j)
-				{
-					if (!data.subMeshs[i].infos.test(j))
-						continue;
-					order.push_back(MeshInfos(j));
-					infos.set(j);
-				}
-			}
-			else
-			{
-				for (auto &e : loadOrder)
-				{
-					if (!data.subMeshs[i].infos.test(e))
-						continue;
-					order.push_back(e);
-					infos.set(e);
-				}
-			}
-			if (_pools.find(infos) == std::end(_pools))
-			{
-				createPool(order, infos);
-			}
-			loadSubmesh(data.subMeshs[i], meshInstance->subMeshs[i], order, infos);
-		}
 		_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
-		return meshInstance;
+
+		return AGE::EmplaceFutureTask<Tasks::Basic::BoolFunction, bool>([=](){
+			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			cereal::PortableBinaryInputArchive ar(ifs);
+			std::shared_ptr<MeshData> data = std::make_shared<MeshData>();
+			ar(*data.get());
+
+			meshInstance->subMeshs.resize(data->subMeshs.size());
+			meshInstance->name = data->name;
+			meshInstance->path = _filePath.getFullName();
+
+			auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
+				for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
+				{
+					// If no vertex pool correspond to submesh
+					std::vector<MeshInfos> order;
+					std::bitset<MeshInfos::END> infos;
+					if (loadOrder.empty())
+					{
+						for (std::size_t j = 0; i < data->subMeshs[i].infos.size(); ++j)
+						{
+							if (!data->subMeshs[i].infos.test(j))
+								continue;
+							order.push_back(MeshInfos(j));
+							infos.set(j);
+						}
+					}
+					else
+					{
+						for (auto &e : loadOrder)
+						{
+							if (!data->subMeshs[i].infos.test(e))
+								continue;
+							order.push_back(e);
+							infos.set(e);
+						}
+					}
+					if (_pools.find(infos) == std::end(_pools))
+					{
+						createPool(order, infos);
+					}
+					loadSubmesh(data->subMeshs[i], meshInstance->subMeshs[i], order, infos);
+				}
+				return true;
+			});
+			return future.get();
+		});
 	}
 
 	void AssetsManager::loadSubmesh(SubMeshData &data

@@ -187,17 +187,13 @@ bool BenchmarkScene::userStart()
 	setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
 #endif
 
-
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-//	getInstance<AGE::Threads::Prepare>()->setScene(weakOnThis); // @CESAR << remove that !!!
 
 #ifdef PHYSIC_SIMULATION
 	addSystem<BulletDynamicSystem>(0);
 	//		addSystem<CollisionAdder>(1);
 	//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
-
-#ifdef RENDERING_ACTIVATED
 
 	auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 	auto &m = *getInstance<gl::RenderManager>();
@@ -207,63 +203,72 @@ bool BenchmarkScene::userStart()
 		initRenderingJustOneTime = false;
 	}
 
-#ifdef SIMPLE_RENDERING
-	addSystem<SimpleMeshRenderer>(80);
-#else
-#endif
-#endif
+	getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage")));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("sponza/sponza.mage")));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage")));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage")));
 
 #ifdef LIFETIME_ACTIVATED
 	addSystem<LifetimeSystem>(2);
 #endif //!LIFETIME_ACTIVATED
 
 	srand(42);
+	return true;
+}
 
-#ifdef LOG_FRAMERATE
-	_logFile.open("LogFile.log", std::ios::app);
-	_logFile << "\n\nNew test in ";
-#ifdef _DEBUG
-	_logFile << "DEBUG . With :";
-#else
-	_logFile << "RELEASE . With :";
-#endif
-#ifdef LIFETIME_ACTIVATED
-	_logFile << " Lifetime, ";
-#endif
-	_logFile << " Rendering, ";
-#ifdef PHYSIC_SIMULATION
-	_logFile << " Physics, ";
-#endif
-	_logFile << "\n";
+bool BenchmarkScene::userUpdate(double time)
+{
+	++_frameCounter;
+	++_chunkFrame;
+	_timeCounter += time;
+	_chunkCounter += time;
 
-
-#endif
-
-#ifdef RENDERING_ACTIVATED
-
-
-
-	auto camera = createEntity();
-	GLOBAL_CAMERA = camera;
-	auto cam = addComponent<Component::CameraComponent>(camera);
-
-	auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();
-
-	auto camLink = getLink(camera);
-	camLink->setPosition(glm::vec3(0, 1.5, 0));
-
-	GLOBAL_FLOOR = createEntity();
-	auto link = getLink(GLOBAL_FLOOR);
-	link->setPosition(glm::vec3(0, -0.532, 0));
-	link->setScale(glm::vec3(100, 1, 100));
-	auto mesh = addComponent<Component::MeshRenderer>(GLOBAL_FLOOR, getInstance<AGE::AssetsManager>()->loadMesh("cube/cube.sage"));
-	mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
-	for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
+	if (!assetLoadingList.empty())
 	{
-		_renderManager->setMaterial<gl::Color_specular>(mesh->getMaterial()->datas[index], glm::vec4(1.0f));
-		_renderManager->setMaterial<gl::Shininess>(mesh->getMaterial()->datas[index], 1.f);
-		_renderManager->setMaterial<gl::Ratio_specular>(mesh->getMaterial()->datas[index], 1.0f);
-	}
+		if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
+		{
+			ImGui::End();
+		}
+		else
+		{
+			ImGui::SetWindowPos(ImVec2(getInstance<IRenderContext>()->getScreenSize().x / 2, getInstance<IRenderContext>()->getScreenSize().y / 2));
+			ImGui::Text("Assets loading : %s", std::to_string(assetLoadingList.size()).c_str());
+			ImGui::End();
+		}
+
+		assetLoadingList.remove_if([&](std::future<bool> &e){
+			return e.wait_for(std::chrono::microseconds(1)) == std::future_status::ready && e.get();
+		});
+		if (assetLoadingList.empty())
+		{
+			auto camera = createEntity();
+			GLOBAL_CAMERA = camera;
+			auto cam = addComponent<Component::CameraComponent>(camera);
+
+			auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();
+
+			auto camLink = getLink(camera);
+			camLink->setPosition(glm::vec3(0, 1.5, 0));
+
+			GLOBAL_FLOOR = createEntity();
+			auto link = getLink(GLOBAL_FLOOR);
+			link->setPosition(glm::vec3(0, -0.532, 0));
+			link->setScale(glm::vec3(100, 1, 100));
+			auto mesh = addComponent<Component::MeshRenderer>(GLOBAL_FLOOR, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+			mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
+			for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
+			{
+				_renderManager->setMaterial<gl::Color_specular>(mesh->getMaterial()->datas[index], glm::vec4(1.0f));
+				_renderManager->setMaterial<gl::Shininess>(mesh->getMaterial()->datas[index], 1.f);
+				_renderManager->setMaterial<gl::Ratio_specular>(mesh->getMaterial()->datas[index], 1.0f);
+			}
 	{
 		GLOBAL_SPONZA = createEntity();
 		auto _l = getLink(GLOBAL_SPONZA);
@@ -303,52 +308,37 @@ bool BenchmarkScene::userStart()
 		//_m->setAnimation(GLOBAL_CAT_ANIMATION);
 	}
 
-		for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
+	for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
+	{
+		GLOBAL_LIGHTS[i] = createEntity();
+		auto e = GLOBAL_LIGHTS[i];
+		auto _l = getLink(e);
+		_l->setPosition(glm::vec3(i, 1.0f, i));
+		_l->setScale(glm::vec3(0.05f));
+		auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
 		{
-			GLOBAL_LIGHTS[i] = createEntity();
-			auto e = GLOBAL_LIGHTS[i];
-			auto _l = getLink(e);
-			_l->setPosition(glm::vec3(i, 1.0f, i));
-			_l->setScale(glm::vec3(0.05f));
-			auto _m = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-			_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-			for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-			{
-				_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
-				_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
-				_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
-			}
-			getLink(e)->setPosition(glm::vec3(i, 5.0f, 0));
-			addComponent<Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
+			_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
+			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+			_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
 		}
-	
+		getLink(e)->setPosition(glm::vec3(i, 5.0f, 0));
+		addComponent<Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
+	}
+
 
 
 #ifdef PHYSIC_SIMULATION
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_FLOOR, 0.0f);
 	rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, Component::RigidBody::BOX);
 	rigidBody->getBody().setFriction(0.3f);
 #endif //PHYSIC_SIMULATION
-#endif
-	// lights creation
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
+		}
+		return true;
+	}
 
-
-	//	getLink(GLOBAL_LIGHT)->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(25.0f, -25.0f, 0.0f), glm::vec3(1.f), glm::vec3(0.999f, 0.01f, 0.f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-
-	return true;
-}
-
-bool BenchmarkScene::userUpdate(double time)
-{
-	++_frameCounter;
-	++_chunkFrame;
-	_timeCounter += time;
-	_chunkCounter += time;
 
 #ifdef USE_IMGUI
 	//if (ImGui::Button("Save -> Clear -> Reload"))
@@ -500,26 +490,26 @@ bool BenchmarkScene::userUpdate(double time)
 		renderManager->drawPipelines();
 
 		// Push fibonacci task to test task pool
-//		for (auto i = 0; i < 20; ++i)
-//		{
-//			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([](){
-//				int n = rand();
-//				int fnow = 0, fnext = 1, tempf;
-//				while (--n > 0){
-//					tempf = fnow + fnext;
-//					fnow = fnext;
-//					fnext = tempf;
-//				}
-//				//std::ofstream myfile;
-//				//myfile.open(std::string(std::string("C:/Users/cesar/Desktop/trash/lol-") + std::to_string(fnext)).c_str());
-//				//myfile << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId());
-//				//myfile << " : " << std::to_string(fnext);
-//				//myfile << "\n";
-//				//myfile.close();
-////				std::cout << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId()) << " : " << fnext << std::endl;
-////				std::this_thread::sleep_for(std::chrono::milliseconds(1));
-//			});
-//		}
+		//		for (auto i = 0; i < 20; ++i)
+		//		{
+		//			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([](){
+		//				int n = rand();
+		//				int fnow = 0, fnext = 1, tempf;
+		//				while (--n > 0){
+		//					tempf = fnow + fnext;
+		//					fnow = fnext;
+		//					fnext = tempf;
+		//				}
+		//				//std::ofstream myfile;
+		//				//myfile.open(std::string(std::string("C:/Users/cesar/Desktop/trash/lol-") + std::to_string(fnext)).c_str());
+		//				//myfile << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId());
+		//				//myfile << " : " << std::to_string(fnext);
+		//				//myfile << "\n";
+		//				//myfile.close();
+		////				std::cout << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId()) << " : " << fnext << std::endl;
+		////				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		//			});
+		//		}
 	});
 	return true;
 }

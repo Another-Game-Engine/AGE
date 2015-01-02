@@ -155,8 +155,8 @@ namespace AGE
 		}
 		assert(res != std::size_t(-1));
 
-		// Disgusting !!!!! Heheh ! Shame on me :D
 		_threads[res]->taskCounter++;
+		// Disgusting !!!!! Heheh ! Shame on me :D
 		if (res > Thread::Render)
 			return static_cast<TaskThread*>(_threads[res])->getQueue();
 		else if (res == 0)

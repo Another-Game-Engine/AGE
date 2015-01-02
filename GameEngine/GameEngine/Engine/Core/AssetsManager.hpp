@@ -10,6 +10,7 @@
 #include <Render/Pool.hh>
 #include <Render/Key.hh>
 #include <map>
+#include <future>
 
 namespace AGE
 {
@@ -27,13 +28,13 @@ namespace AGE
 			}
 		};
 	public:
-		std::shared_ptr<Animation> loadAnimation(const File &filePath);
+		std::future<bool> loadAnimation(const File &filePath);
 		std::shared_ptr<Animation> getAnimation(const File &filePath);
-		std::shared_ptr<Skeleton> loadSkeleton(const File &filePath);
+		std::future<bool> loadSkeleton(const File &filePath);
 		std::shared_ptr<Skeleton> getSkeleton(const File &filePath);
-		std::shared_ptr<MeshInstance> loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder = std::vector<MeshInfos>());
+		std::future<bool> loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder = std::vector<MeshInfos>());
 		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
-		std::shared_ptr<MaterialSetInstance> loadMaterial(const File &filePath);
+		std::future<bool> loadMaterial(const File &filePath);
 		std::shared_ptr<MaterialSetInstance> getMaterial(const File &filePath);
 		gl::Key<gl::Texture> loadTexture(const File &filepath);
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
