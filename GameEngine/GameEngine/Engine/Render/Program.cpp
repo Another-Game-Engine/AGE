@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <Utils/OpenGL.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
+#include <Render/ProgramResources/Types/Attribute.hh>
 
 Program::Program(std::vector<std::shared_ptr<UnitProg>> const &u) :
 _unitsProg(u),
@@ -108,3 +109,21 @@ Program & Program::update()
 	}
 	return (*this);
 }
+
+size_t Program::nbr_resources() const
+{
+	return (_program_resources.size());
+}
+
+bool Program::coherent_attribute(std::vector<GLenum> const &p) const
+{
+	for (auto &resource : _program_resources) {
+		auto index = resource->id();
+		if (resource->type() == GL_PROGRAM_INPUT && *static_cast<Attribute *>(resource.get()) == p[index]) {
+			return (false);
+		}
+	}
+	return (true);
+}
+
+

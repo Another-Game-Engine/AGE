@@ -34,7 +34,7 @@ template <typename scalar_t>
 Buffer & Buffer::push_back(std::vector<scalar_t> const &data)
 {
 	auto offset = _size_alloc;
-	_block_memories.emplace_back(BlockMemory(*this, offset, data));
+	_block_memories.emplace_back(*this, offset, data);
 	_size_alloc += _block_memories.back().size();
 	return (*this);
 }

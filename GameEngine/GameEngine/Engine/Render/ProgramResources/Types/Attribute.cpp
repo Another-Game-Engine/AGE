@@ -43,3 +43,12 @@ void Attribute::print() const
 	std::cout << std::endl;
 }
 
+bool Attribute::operator==(GLenum p) const
+{
+	return (_available_type == p);
+}
+
+bool Attribute::operator!=(GLenum p) const
+{
+	return (!(_available_type == p));
+}

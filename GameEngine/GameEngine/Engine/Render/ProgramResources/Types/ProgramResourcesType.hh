@@ -53,6 +53,19 @@ struct GlType
 		size(copy.size),
 		name(copy.name)
 	{}
+
+	bool operator==(GLenum t) const
+	{
+		if (type == t) {
+			return (true);
+		}
+		return (false);
+	}
+
+	bool operator!=(GLenum t) const
+	{
+		return (!(*this == t));
+	}
 };
 
 static const size_t nbr_type = 4;

@@ -6,6 +6,8 @@
 # include <Render/Key.hh>
 # include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
 
+class Attribute;
+
 class Program
 {
 public:
@@ -24,6 +26,8 @@ public:
 	Program const &use() const;
 	Program &update();
 	Program const &print_resources() const;
+	size_t nbr_resources() const;
+	bool coherent_attribute(std::vector<GLenum> const &p) const;
 
 private:
 	void _get_resources();

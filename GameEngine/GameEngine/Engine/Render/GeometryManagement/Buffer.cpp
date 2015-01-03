@@ -33,7 +33,7 @@ Buffer & Buffer::pop_back()
 	return (*this);
 }
 
-Buffer & Buffer::operator[](size_t index)
+BlockMemory & Buffer::operator[](size_t index)
 {
 	return (_block_memories[index]);
 }

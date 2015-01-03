@@ -13,6 +13,8 @@ public:
 	Attribute(Attribute const &copy);
 	Attribute &operator=(Attribute const &a) = delete;
 	template <typename type_t> Attribute &operator+=(std::vector<type_t> const &data);
+	bool operator==(GLenum p) const;
+	bool operator!=(GLenum p) const;
 
 public:
 	virtual IProgramResources &operator()() override final;
@@ -25,5 +27,4 @@ public:
 
 private:
 	GlType _available_type;
-
 };
