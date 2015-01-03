@@ -58,11 +58,21 @@ namespace AGE
 			material->path = _filePath.getFullName();
 			auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 				auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+				int i = 0;
 				for (auto &e : data.collection)
 				{
+					++i;
 					auto key = manager->addMaterial();
 					material->datas.push_back(key);
-
+					//if (i == 20 || i == 25 || i == 26 || i == 27)
+					//{
+					//	std::cout << "fuck : " << e.diffuseTexPath << std::endl;
+					//	continue;
+					//}
+					//else
+					//{
+					//	std::cout << i << " : " << e.diffuseTexPath << std::endl;
+					//}
 					// TODO fill material with material key
 					gl::Key<gl::Material> &mat = material->datas.back();
 					manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
@@ -105,17 +115,17 @@ namespace AGE
 		GLenum color = GL_RGB;
 		if (data.colorNumber == 3)
 		{
-			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
+			ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
 			color = GL_BGR;
 		}
 		else if (data.colorNumber == 4)
 		{
-			ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
+			ct = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
 			color = GL_BGRA;
 		}
 		else if (data.colorNumber == 1)
 		{
-			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
+			ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
 			color = GL_LUMINANCE;
 		}
 		else

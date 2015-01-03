@@ -37,10 +37,10 @@ namespace AGE
 
 		static bool load(AssetDataSet &dataSet)
 		{
-			if (!dataSet.skeletonLoaded)
-			{
-				return false;
-			}
+			//if (!dataSet.skeletonLoaded)
+			//{
+			//	return false;
+			//}
 			if (!dataSet.assimpScene->HasMeshes())
 				return true;
 			dataSet.meshLoaded = false;
