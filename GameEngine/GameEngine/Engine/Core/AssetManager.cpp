@@ -229,9 +229,10 @@ namespace AGE
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();
 
-			auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
-				for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
-				{
+			std::list<std::future<bool>> futureList;
+			for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
+			{
+				futureList.push_back(AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 					// If no vertex pool correspond to submesh
 					std::vector<MeshInfos> order;
 					std::bitset<MeshInfos::END> infos;
@@ -260,10 +261,16 @@ namespace AGE
 						createPool(order, infos);
 					}
 					loadSubmesh(data->subMeshs[i], meshInstance->subMeshs[i], order, infos);
-				}
-				return true;
-			});
-			return future.get();
+					return true;
+				}));
+			}
+			while (!futureList.empty())
+			{
+				futureList.remove_if([&](std::future<bool> &e){
+					return e.valid() && e.wait_for(std::chrono::microseconds(1)) == std::future_status::ready && e.get();
+				});
+			}
+			return true;
 		});
 	}
 

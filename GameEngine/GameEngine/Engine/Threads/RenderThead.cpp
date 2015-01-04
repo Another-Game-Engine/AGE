@@ -165,6 +165,16 @@ namespace AGE
 					assert(execute(task)); // we receive a task that we cannot treat
 					tasks.pop();
 					taskCounter--;
+					workEnd = std::chrono::high_resolution_clock::now();
+					if (std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count() >= 33)
+					{
+						while (!tasks.empty() && _insideRun)
+						{
+							auto task = tasks.front();
+							getQueue()->moveTask(task, tasks.getFrontSize());
+							tasks.pop();
+						}
+					}
 				}
 			}
 			if (commandSuccess)
