@@ -26,14 +26,14 @@ size_t Buffer::size() const
 
 Buffer & Buffer::pop_back()
 {
-	auto less = _block_memories.back().size();
+	auto less = _block_memories.back()->size();
 	_size_alloc -= less;
 	_block_memories.pop_back();
 	require_resize();
 	return (*this);
 }
 
-BlockMemory & Buffer::operator[](size_t index)
+std::shared_ptr<BlockMemory> const & Buffer::operator[](size_t index)
 {
 	return (_block_memories[index]);
 }
@@ -60,7 +60,7 @@ Buffer & Buffer::update()
 	if (_request_transfer) {
 		_buffer->bind();
 		for (auto &memory : _block_memories) {
-			memory.update_buffer(*_buffer.get());
+			memory->update_buffer(*_buffer.get());
 		}
 		_request_transfer = false;
 	}
@@ -77,4 +77,12 @@ Buffer & Buffer::require_transfer()
 {
 	_request_transfer = true;
 	return (*this);
+}
+
+std::shared_ptr<BlockMemory> const &Buffer::push_back(std::vector<uint8_t> &&data)
+{
+	auto offset = _size_alloc;
+	_block_memories.emplace_back(std::make_shared<BlockMemory>(*this, offset, data));
+	_size_alloc += _block_memories.back()->size();
+	return (_block_memories.back());
 }

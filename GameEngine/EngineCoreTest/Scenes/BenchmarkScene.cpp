@@ -25,6 +25,8 @@ BenchmarkScene::~BenchmarkScene(void)
 {
 }
 
+#include <Render/Program.hh>
+#include <Render/GeometryManagement/BufferPrograms.hh>
 //#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
 //#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
@@ -41,12 +43,12 @@ void BenchmarkScene::initRendering()
 
 	auto res = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([&]()
 	{
-		std::shared_ptr<UnitProg> u1 = std::make_shared<UnitProg>(VERTEX_SHADER, GL_VERTEX_SHADER);
-		std::shared_ptr<UnitProg> u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
-		Program program({ u1, u2 });
-		auto attribute = program.get_resource<Attribute>("position");
-		program.update();
-		program.print_resources();
+		auto u1 = std::make_shared<UnitProg>(VERTEX_SHADER, GL_VERTEX_SHADER);
+		auto u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
+		auto program = std::make_shared<Program>(Program({ u1, u2 }));
+		BufferPrograms buffer({GL_FLOAT_VEC4}, {program});
+		program->update();
+		program->print_resources();
 		glFlush();
 		return (true);
 	});

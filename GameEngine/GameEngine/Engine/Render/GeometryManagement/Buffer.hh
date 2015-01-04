@@ -3,6 +3,7 @@
 # include <Render/GeometryManagement/BlockMemory.hh>
 # include <Render/Buffer/IBuffer.hh>
 # include <Render/ProgramResources/Types/ProgramResourcesType.hh>
+# include <memory>
 
 class Buffer
 {
@@ -13,28 +14,20 @@ public:
 
 public:
 	size_t size() const;
-	template <typename scalar_t> Buffer &push_back(std::vector<scalar_t> const &data);
+	std::shared_ptr<BlockMemory> const &push_back(std::vector<uint8_t> &&data);
+	Buffer &clear();
 	Buffer &pop_back();
 	Buffer &bind();
 	Buffer &unbind();
 	Buffer &update();
 	Buffer &require_resize();
 	Buffer &require_transfer();
-	BlockMemory &operator[](size_t index);
+	std::shared_ptr<BlockMemory> const &operator[](size_t index);
 
 private:
 	bool _request_resize;
 	bool _request_transfer;
 	size_t _size_alloc;
-	std::vector<BlockMemory> _block_memories;
+	std::vector<std::shared_ptr<BlockMemory>> _block_memories;
 	std::unique_ptr<IBuffer> _buffer;
 };
-
-template <typename scalar_t>
-Buffer & Buffer::push_back(std::vector<scalar_t> const &data)
-{
-	auto offset = _size_alloc;
-	_block_memories.emplace_back(*this, offset, data);
-	_size_alloc += _block_memories.back().size();
-	return (*this);
-}
