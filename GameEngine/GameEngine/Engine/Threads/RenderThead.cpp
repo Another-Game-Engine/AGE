@@ -166,7 +166,12 @@ namespace AGE
 					tasks.pop();
 					taskCounter--;
 					workEnd = std::chrono::high_resolution_clock::now();
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count() >= 33)
+#ifdef _DEBUG
+					const std::size_t toWait = 33;
+#else
+					const std::size_t toWait = 3;
+#endif
+					if (std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count() >= toWait)
 					{
 						while (!tasks.empty() && _insideRun)
 						{

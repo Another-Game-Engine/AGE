@@ -204,18 +204,23 @@ bool BenchmarkScene::userStart()
 	}
 
 	getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
+	getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+
+	/*
+assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
+
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
+	
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage")));
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage")));
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
+	
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage")));
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage")));
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage")));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage")));*/
 
 #ifdef LIFETIME_ACTIVATED
 	addSystem<LifetimeSystem>(2);
@@ -231,6 +236,8 @@ bool BenchmarkScene::userUpdate(double time)
 	++_chunkFrame;
 	_timeCounter += time;
 	_chunkCounter += time;
+
+	return true;
 
 	if (!assetLoadingList.empty())
 	{

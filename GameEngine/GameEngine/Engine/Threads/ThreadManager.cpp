@@ -172,6 +172,14 @@ namespace AGE
 			return static_cast<RenderThread*>(_threads[res])->getQueue();
 	}
 
+	void ThreadManager::forEachThreads(std::function<void(AGE::Thread *)> &&fn)
+	{
+		for (auto &e : _threads)
+		{
+			fn(e);
+		}
+	}
+
 	ThreadManager *GetThreadManager()
 	{
 		return Singleton<ThreadManager>::getInstance();

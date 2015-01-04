@@ -9,9 +9,21 @@
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/TaskScheduler.hpp>
+#include <Threads/QueueOwner.hpp>
+#include <Threads/Thread.hpp>
 
 namespace AGE
 {
+	AssetsManager::AssetsManager()
+	{
+//		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+		GetThreadManager()->forEachThreads([](AGE::Thread *t){
+			dynamic_cast <QueueOwner*>(t)->registerCallback<LoadAssetMessage>([t](LoadAssetMessage &msg){
+				msg.setValue(msg.function());
+			});
+		});
+	}
+
 	std::shared_ptr<MeshInstance> AssetsManager::getMesh(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
@@ -29,16 +41,13 @@ namespace AGE
 	}
 
 
-	std::future<bool> AssetsManager::loadMaterial(const File &_filePath)
+	void AssetsManager::loadMaterial(const File &_filePath, const std::string &loadingChannel)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 
 		if (_materials.find(filePath.getFullName()) != std::end(_materials))
 		{
-			std::promise<bool> promise;
-			auto future = promise.get_future();
-			promise.set_value(true);
-			return future;
+			return;
 		}
 		if (!filePath.exists())
 		{
@@ -49,7 +58,7 @@ namespace AGE
 		auto material = std::make_shared<MaterialSetInstance>();
 		_materials.insert(std::make_pair(filePath.getFullName(), material));
 
-		return AGE::EmplaceFutureTask<Tasks::Basic::BoolFunction, bool>([=](){
+		AGE::EmplaceFutureTask<Tasks::Basic::BoolFunction, bool>([=](){
 			MaterialDataSet data;
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
@@ -70,11 +79,11 @@ namespace AGE
 					manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
 					manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
 					manager->setMaterial<gl::Color_specular>(mat, e.specular);
-					manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
-					manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
-					manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
-					manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath));
-					manager->setMaterial<gl::Texture_normal>(mat, loadTexture(e.normalTexPath));
+					//manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath)); <<<<<<<TODO
+					//manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath)); <<<<<<<TODO
+					//manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath)); <<<<<<<<<<TODO
+					//manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath)); <<<<<<<<<<TODO
+					//manager->setMaterial<gl::Texture_normal>(mat, loadTexture(e.normalTexPath)); <<<<<<<<<<TODO
 					manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
 					manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
 					manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
@@ -85,14 +94,14 @@ namespace AGE
 		});
 	}
 
-	gl::Key<gl::Texture> AssetsManager::loadTexture(const File &_filePath)
+	void AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel)
 	{
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_textures.find(filePath.getFullName()) != std::end(_textures))
-			return _textures[filePath.getFullName()];
+			return;// _textures[filePath.getFullName()]; <<< TODO
 		if (!filePath.exists())
-			return (manager->getDefaultTexture2D());
+			return;//(manager->getDefaultTexture2D()); <<< TODO
 		TextureData data;
 
 		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
@@ -128,18 +137,19 @@ namespace AGE
 		manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		_textures.insert(std::make_pair(filePath.getFullName(), key));
-		return key;
+		return; // key <<<<< TODO
 	}
 
-	std::future<bool> AssetsManager::loadAnimation(const File &_filePath)
+	void AssetsManager::loadAnimation(const File &_filePath, const std::string &loadingChannel)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_animations.find(filePath.getFullName()) != std::end(_animations))
 		{
-			std::promise<bool> promise;
-			auto future = promise.get_future();
-			promise.set_value(true);
-			return future;
+			//std::promise<bool> promise;
+			//auto future = promise.get_future();
+			//promise.set_value(true);
+			//return future;
+			return; //TODO
 		}
 		if (!filePath.exists())
 		{
@@ -150,7 +160,7 @@ namespace AGE
 		auto animation = std::make_shared<Animation>();
 		_animations.insert(std::make_pair(filePath.getFullName(), animation));
 
-		return AGE::EmplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
+		/*return*/ AGE::EmplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){//<<<<<<<<<<TODO
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*animation.get());
@@ -174,15 +184,17 @@ namespace AGE
 		return nullptr;
 	}
 
-	std::future<bool> AssetsManager::loadSkeleton(const File &_filePath)
+	void AssetsManager::loadSkeleton(const File &_filePath, const std::string &loadingChannel)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
 		{
-			std::promise<bool> promise;
-			auto future = promise.get_future();
-			promise.set_value(true);
-			return future;
+//TODO
+			return;
+			//std::promise<bool> promise;
+			//auto future = promise.get_future();
+			//promise.set_value(true);
+			//return future;
 		}
 		if (!filePath.exists())
 		{
@@ -192,7 +204,7 @@ namespace AGE
 		auto skeleton = std::make_shared<Skeleton>();
 		_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
 
-		return AGE::EmplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
+		/*return */AGE::EmplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){ // <<<<<<<<<TODO
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*skeleton.get());
@@ -200,26 +212,24 @@ namespace AGE
 		});
 	}
 
-	std::future<bool> AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder)
+	void AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
 	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
-		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
-		{
-			std::promise<bool> promise;
-			auto future = promise.get_future();
-			promise.set_value(true);
-			return future;
-		}
-		if (!filePath.exists())
-		{
-			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
-			assert(false);
-		}
-
 		auto meshInstance = std::make_shared<MeshInstance>();
-		_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
+			{
+				return;
+			}
+			_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
+		}
 
-		return AGE::EmplaceFutureTask<Tasks::Basic::BoolFunction, bool>([=](){
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+			if (!filePath.exists())
+			{
+				return AssetsLoadingResult(true, std::string("AssetsManager : File [" + filePath.getFullName() + "] does not exists.\n"));
+			}
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			std::shared_ptr<MeshData> data = std::make_shared<MeshData>();
@@ -229,10 +239,9 @@ namespace AGE
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();
 
-			std::list<std::future<bool>> futureList;
 			for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
 			{
-				futureList.push_back(AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
+				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 					// If no vertex pool correspond to submesh
 					std::vector<MeshInfos> order;
 					std::bitset<MeshInfos::END> infos;
@@ -256,38 +265,33 @@ namespace AGE
 							infos.set(e);
 						}
 					}
-					if (_pools.find(infos) == std::end(_pools))
-					{
-						createPool(order, infos);
-					}
-					loadSubmesh(data->subMeshs[i], meshInstance->subMeshs[i], order, infos);
-					return true;
-				}));
-			}
-			while (!futureList.empty())
-			{
-				futureList.remove_if([&](std::future<bool> &e){
-					return e.valid() && e.wait_for(std::chrono::microseconds(1)) == std::future_status::ready && e.get();
+					loadSubmesh(data, i, &meshInstance->subMeshs[i], order, infos, loadingChannel);
+					return AssetsLoadingResult(false);
 				});
+				pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
 			}
-			return true;
+			return AssetsLoadingResult(false);
 		});
+		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 	}
 
-	void AssetsManager::loadSubmesh(SubMeshData &data
-		, SubMeshInstance &mesh
+	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData
+		, std::size_t index
+		, SubMeshInstance *mesh
 		, const std::vector<MeshInfos> &order
-		, const std::bitset<MeshInfos::END> &infos)
+		, const std::bitset<MeshInfos::END> &infos
+		, const std::string &loadingChannel)
 	{
-		auto &pools = _pools.find(infos)->second;
 		auto m = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+
+		auto &data = fileData->subMeshs[index];
 
 		std::size_t size = data.infos.count();
 
-		AGE::Vector<void*> buffer;
-		buffer.resize(size);
-		AGE::Vector<std::size_t> nbrBuffer;
-		nbrBuffer.resize(size);
+		std::shared_ptr<AGE::Vector<void*>> buffer = std::make_shared<AGE::Vector<void*>>();
+		buffer->resize(size);
+		std::shared_ptr<AGE::Vector<std::size_t>> nbrBuffer = std::make_shared<AGE::Vector<std::size_t>>();
+		nbrBuffer->resize(size);
 
 		std::size_t ctr = 0;
 		auto sizeofFloat = sizeof(float);
@@ -298,50 +302,50 @@ namespace AGE
 			switch (MeshInfos(e))
 			{
 			case Positions:
-				buffer[ctr] = &data.positions[0].x;
-				nbrBuffer[ctr] = data.positions.size() * 4 * sizeofFloat;
+				(*buffer)[ctr] = &data.positions[0].x;
+				(*nbrBuffer)[ctr] = data.positions.size() * 4 * sizeofFloat;
 				if (data.positions.size() > maxSize)
 					maxSize = data.positions.size();
 				break;
 			case Normals:
-				buffer[ctr] = &data.normals[0].x;
-				nbrBuffer[ctr] = data.normals.size() * 4 * sizeofFloat;
+				(*buffer)[ctr] = &data.normals[0].x;
+				(*nbrBuffer)[ctr] = data.normals.size() * 4 * sizeofFloat;
 				if (data.normals.size() > maxSize)
 					maxSize = data.normals.size();
 				break;
 			case Tangents:
-				buffer[ctr] = &data.tangents[0].x;
-				nbrBuffer[ctr] = data.tangents.size() * 4 * sizeofFloat;
+				(*buffer)[ctr] = &data.tangents[0].x;
+				(*nbrBuffer)[ctr] = data.tangents.size() * 4 * sizeofFloat;
 				if (data.tangents.size() > maxSize)
 					maxSize = data.tangents.size();
 				break;
 			case BiTangents:
-				buffer[ctr] = &data.biTangents[0].x;
-				nbrBuffer[ctr] = data.biTangents.size() * 4 * sizeofFloat;
+				(*buffer)[ctr] = &data.biTangents[0].x;
+				(*nbrBuffer)[ctr] = data.biTangents.size() * 4 * sizeofFloat;
 				if (data.biTangents.size() > maxSize)
 					maxSize = data.biTangents.size();
 				break;
 			case Uvs:
-				buffer[ctr] = &data.uvs[0][0].x;
-				nbrBuffer[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
+				(*buffer)[ctr] = &data.uvs[0][0].x;
+				(*nbrBuffer)[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
 				if (data.uvs[0].size() > maxSize)
 					maxSize = data.uvs[0].size();
 				break;
 			case Weights:
-				buffer[ctr] = &data.weights[0].x;
-				nbrBuffer[ctr] = data.weights.size() * 4 * sizeofFloat;
+				(*buffer)[ctr] = &data.weights[0].x;
+				(*nbrBuffer)[ctr] = data.weights.size() * 4 * sizeofFloat;
 				if (data.weights.size() > maxSize)
 					maxSize = data.weights.size();
 				break;
 			case BoneIndices:
-				buffer[ctr] = &data.boneIndices[0].x;
-				nbrBuffer[ctr] = data.boneIndices.size() * 4 * sizeofFloat;
+				(*buffer)[ctr] = &data.boneIndices[0].x;
+				(*nbrBuffer)[ctr] = data.boneIndices.size() * 4 * sizeofFloat;
 				if (data.boneIndices.size() > maxSize)
 					maxSize = data.boneIndices.size();
 				break;
 			case Colors:
-				buffer[ctr] = &data.colors[0].x;
-				nbrBuffer[ctr] = data.colors.size() * 4 * sizeofFloat;
+				(*buffer)[ctr] = &data.colors[0].x;
+				(*nbrBuffer)[ctr] = data.colors.size() * 4 * sizeofFloat;
 				if (data.colors.size() > maxSize)
 					maxSize = data.colors.size();
 				break;
@@ -351,13 +355,25 @@ namespace AGE
 			++ctr;
 		}
 
-		mesh.vertices = m->addVertices(maxSize, nbrBuffer, buffer, pools.first);
-		mesh.indices = m->addIndices(data.indices.size(), data.indices, pools.second);
-		mesh.vertexPool = pools.first;
-		mesh.indexPool = pools.second;
-		mesh.boundingBox = data.boundingBox;
-
-		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
+		mesh->boundingBox = data.boundingBox;
+		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		{
+			// We need to keep an instance of FileData shared_ptr
+			auto fileDataCopy = fileData;
+			(void)(fileDataCopy);
+			if (_pools.find(infos) == std::end(_pools))
+			{
+				createPool(order, infos);
+			}
+			auto &pools = _pools.find(infos)->second;
+			mesh->vertices = m->addVertices(maxSize, *nbrBuffer, *buffer, pools.first);
+			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
+			mesh->vertexPool = pools.first;
+			mesh->indexPool = pools.second;
+			return AssetsLoadingResult(false);
+		});
+		pushNewAsset(loadingChannel, data.name, future);
 	}
 
 	// Create pool for mesh
@@ -430,5 +446,31 @@ namespace AGE
 
 
 		_pools.insert(std::make_pair(infos, std::make_pair(vpKey, indKey)));
+	}
+
+	void AssetsManager::pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsManager::AssetsLoadingResult> &future)
+	{
+		std::shared_ptr<AssetsManager::AssetsLoadingChannel> channel = nullptr;
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			if (_loadingChannels.find(loadingChannel) == std::end(_loadingChannels))
+			{
+				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
+			}
+			channel = _loadingChannels[loadingChannel];
+		}
+		channel->pushNewAsset(filename, future);
+	}
+
+	bool AssetsManager::AssetsLoadingChannel::updateList()
+	{
+		// TODO
+		return true;
+	}
+
+	void AssetsManager::AssetsLoadingChannel::pushNewAsset(const std::string &filename, std::future<AssetsLoadingResult> &future)
+	{
+		std::lock_guard<std::mutex> lock(_mutex);
+		_list.push_back(AssetsManager::AssetsLoadingStatus(filename, future));
 	}
 }
