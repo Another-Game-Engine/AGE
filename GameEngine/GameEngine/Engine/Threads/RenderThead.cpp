@@ -166,13 +166,11 @@ namespace AGE
 					tasks.pop();
 					taskCounter--;
 					workEnd = std::chrono::high_resolution_clock::now();
-#ifdef _DEBUG
 					const std::size_t toWait = 33;
-#else
-					const std::size_t toWait = 3;
-#endif
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count() >= toWait)
+					const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
+					if (elapsed >= toWait)
 					{
+						std::cout << elapsed << ", ";
 						while (!tasks.empty() && _insideRun)
 						{
 							auto task = tasks.front();

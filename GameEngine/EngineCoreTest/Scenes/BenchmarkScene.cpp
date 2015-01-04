@@ -207,7 +207,7 @@ bool BenchmarkScene::userStart()
 	getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+//	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 
 	/*
@@ -236,6 +236,26 @@ bool BenchmarkScene::userUpdate(double time)
 	++_chunkFrame;
 	_timeCounter += time;
 	_chunkCounter += time;
+
+	std::size_t totalToLoad = 0;
+	std::size_t	toLoad = 0;
+	std::string loadingError;
+	getInstance<AGE::AssetsManager>()->updateLoadingChannel("DEMO_SCENE_ASSETS", totalToLoad, toLoad, loadingError);
+	if (loadingError.size() != 0)
+		std::cout << loadingError << std::endl;
+	if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
+	{
+		ImGui::End();
+	}
+	else
+	{
+		ImGui::SetWindowPos(ImVec2(getInstance<IRenderContext>()->getScreenSize().x / 2, getInstance<IRenderContext>()->getScreenSize().y / 2));
+		ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(totalToLoad).c_str());
+		ImGui::End();
+	}
+
+	/*if (toLoad == 0)
+		return false;*/
 
 	return true;
 

@@ -67,12 +67,13 @@ namespace AGE
 			std::size_t _maxAssets = 0;
 		public:
 			// return false if error
-			bool updateList();
+			bool updateList(std::size_t &noLoaded, std::size_t &total);
 			inline const std::string &getErrorMessages() const { return _errorMessages; }
 		private:
 			std::mutex _mutex;
 			void pushNewAsset(const std::string &filename, std::future<AssetsLoadingResult> &future);
 			friend class AssetsManager;
+			std::chrono::system_clock::time_point _lastUpdate;
 		};
 
 		struct LoadAssetMessage : public TMQ::FutureData < AssetsLoadingResult >
@@ -93,6 +94,7 @@ namespace AGE
 		std::shared_ptr<MaterialSetInstance> getMaterial(const File &filePath);
 		void loadTexture(const File &filepath, const std::string &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
+		void updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error);
 	private:
 		std::string _assetsDirectory;
 		// Vertices pools used by meshs

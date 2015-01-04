@@ -357,23 +357,40 @@ namespace AGE
 
 		mesh->boundingBox = data.boundingBox;
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
-		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		auto future1 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
-			// We need to keep an instance of FileData shared_ptr
-			auto fileDataCopy = fileData;
-			(void)(fileDataCopy);
 			if (_pools.find(infos) == std::end(_pools))
 			{
 				createPool(order, infos);
 			}
+			return AssetsLoadingResult(false);
+		});
+		auto future2 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		{
+			// We need to keep an instance of FileData shared_ptr
+			auto fileDataCopy = fileData;
+			(void)(fileDataCopy);
 			auto &pools = _pools.find(infos)->second;
-			mesh->vertices = m->addVertices(maxSize, *nbrBuffer, *buffer, pools.first);
+			mesh->vertices = m->addVertices(maxSize, std::cref(*(nbrBuffer.get())), std::cref(*(buffer.get())), pools.first);
 			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
 			mesh->vertexPool = pools.first;
 			mesh->indexPool = pools.second;
 			return AssetsLoadingResult(false);
 		});
-		pushNewAsset(loadingChannel, data.name, future);
+		auto future3 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		{
+			// We need to keep an instance of FileData shared_ptr
+			auto fileDataCopy = fileData;
+			(void)(fileDataCopy);
+			auto &pools = _pools.find(infos)->second;
+			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
+			mesh->vertexPool = pools.first;
+			mesh->indexPool = pools.second;
+			return AssetsLoadingResult(false);
+		});
+		pushNewAsset(loadingChannel, data.name, future1);
+		pushNewAsset(loadingChannel, data.name, future2);
+		pushNewAsset(loadingChannel, data.name, future3);
 	}
 
 	// Create pool for mesh
@@ -456,21 +473,63 @@ namespace AGE
 			if (_loadingChannels.find(loadingChannel) == std::end(_loadingChannels))
 			{
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
+				_loadingChannels[loadingChannel]->_lastUpdate = std::chrono::high_resolution_clock::now();
 			}
 			channel = _loadingChannels[loadingChannel];
 		}
 		channel->pushNewAsset(filename, future);
 	}
 
-	bool AssetsManager::AssetsLoadingChannel::updateList()
+	bool AssetsManager::AssetsLoadingChannel::updateList(std::size_t &noLoaded, std::size_t &total)
 	{
-		// TODO
-		return true;
+		std::lock_guard<std::mutex> lock(_mutex);
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - _lastUpdate).count() > 33)
+		{
+			_lastUpdate = std::chrono::high_resolution_clock::now();
+			_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
+				if (!e.future.valid())
+				{
+					_errorMessages += "ERROR : Future is invalid !\n";
+					return true;
+				}
+				auto status = e.future.wait_for(std::chrono::nanoseconds(1));
+				if (status == std::future_status::ready)
+				{
+					e.result = e.future.get();
+					if (e.result.error)
+					{
+						_errorMessages += e.result.errorMessage;
+					}
+					return true;
+				}
+				return false;
+			});
+		}
+		noLoaded = _list.size();
+		total = _maxAssets;
+		return _errorMessages.empty();
 	}
 
 	void AssetsManager::AssetsLoadingChannel::pushNewAsset(const std::string &filename, std::future<AssetsLoadingResult> &future)
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
 		_list.push_back(AssetsManager::AssetsLoadingStatus(filename, future));
+		if (_list.size() > _maxAssets)
+			_maxAssets = _list.size();
+	}
+
+	void AssetsManager::updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error)
+	{
+		std::shared_ptr<AssetsManager::AssetsLoadingChannel> channel = nullptr;
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			if (_loadingChannels.find(channelName) == std::end(_loadingChannels))
+			{
+				return;
+			}
+			channel = _loadingChannels[channelName];
+		}
+		if (!channel->updateList(to_load, total))
+			error = channel->getErrorMessages();
 	}
 }
