@@ -16,7 +16,7 @@ namespace AGE
 {
 	AssetsManager::AssetsManager()
 	{
-//		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+		//		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 		GetThreadManager()->forEachThreads([](AGE::Thread *t){
 			dynamic_cast <QueueOwner*>(t)->registerCallback<LoadAssetMessage>([t](LoadAssetMessage &msg){
 				msg.setValue(msg.function());
@@ -40,37 +40,39 @@ namespace AGE
 		return nullptr;
 	}
 
-
 	void AssetsManager::loadMaterial(const File &_filePath, const std::string &loadingChannel)
 	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
-
-		if (_materials.find(filePath.getFullName()) != std::end(_materials))
-		{
-			return;
-		}
-		if (!filePath.exists())
-		{
-			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
-			assert(false);
-		}
-
 		auto material = std::make_shared<MaterialSetInstance>();
-		_materials.insert(std::make_pair(filePath.getFullName(), material));
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			if (_materials.find(filePath.getFullName()) != std::end(_materials))
+			{
+				return;
+			}
+			_materials.insert(std::make_pair(filePath.getFullName(), material));
+		}
 
-		AGE::EmplaceFutureTask<Tasks::Basic::BoolFunction, bool>([=](){
-			MaterialDataSet data;
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		{
+			if (!filePath.exists())
+			{
+				return AssetsLoadingResult(true, std::string("AssetsManager : Mesh File [" + filePath.getFullName() + "] does not exists.\n"));
+			}
+
+			std::shared_ptr<MaterialDataSet> data = std::make_shared<MaterialDataSet>();
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
-			ar(data);
-			material->name = data.name;
+			ar(*data.get());
+			material->name = data->name;
 			material->path = _filePath.getFullName();
-			auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
-				auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
-				int i = 0;
-				for (auto &e : data.collection)
+			auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+			int i = 0;
+			for (auto &e : data->collection)
+			{
+				++i;
+				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 				{
-					++i;
 					auto key = manager->addMaterial();
 					material->datas.push_back(key);
 
@@ -87,10 +89,10 @@ namespace AGE
 					manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
 					manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
 					manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
-				}
-				return true;
-			});
-			return future.get();
+					return AssetsLoadingResult(false);
+				});
+			}
+			return AssetsLoadingResult(false);
 		});
 	}
 
@@ -189,7 +191,7 @@ namespace AGE
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
 		{
-//TODO
+			//TODO
 			return;
 			//std::promise<bool> promise;
 			//auto future = promise.get_future();
@@ -228,7 +230,7 @@ namespace AGE
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 			if (!filePath.exists())
 			{
-				return AssetsLoadingResult(true, std::string("AssetsManager : File [" + filePath.getFullName() + "] does not exists.\n"));
+				return AssetsLoadingResult(true, std::string("AssetsManager : Mesh File [" + filePath.getFullName() + "] does not exists.\n"));
 			}
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
@@ -486,13 +488,17 @@ namespace AGE
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - _lastUpdate).count() > 33)
 		{
 			_lastUpdate = std::chrono::high_resolution_clock::now();
+			std::size_t i = 0;
 			_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
+				if (i > 30)
+					return false;
+				++i;
 				if (!e.future.valid())
 				{
 					_errorMessages += "ERROR : Future is invalid !\n";
 					return true;
 				}
-				auto status = e.future.wait_for(std::chrono::nanoseconds(1));
+				auto status = e.future.wait_for(std::chrono::microseconds(10));
 				if (status == std::future_status::ready)
 				{
 					e.result = e.future.get();

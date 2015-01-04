@@ -41,8 +41,8 @@ void BenchmarkScene::initRendering()
 	assert(_renderManager != NULL && "Warning: No manager set for the camerasystem");
 
 	//TODO
-	auto res = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>(
-		std::function<bool()>([&](){
+	/*auto res = */AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Basic::VoidFunction>(
+		std::function<void()>([&](){
 		// create the shader
 		key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
 		key.Accum.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
@@ -166,10 +166,8 @@ void BenchmarkScene::initRendering()
 		_renderManager->configPipeline(key.merge.pipeline, gl::DrawType::NONE_OBJECT);
 		_renderManager->pushRenderPostEffectPipeline(key.merge.pipeline, key.merge.renderPostEffect);
 		_renderManager->pushRenderOnScreenPipeline(key.merge.pipeline, key.merge.renderOnScreen);
-
-		return true;
 	}));
-	assert(res.get());
+	//assert(res.get());
 }
 
 bool BenchmarkScene::userStart()
@@ -209,16 +207,12 @@ bool BenchmarkScene::userStart()
 	getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 //	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-
+	getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"));
+	getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
+	getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"));
+	getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage"));
+	getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"));
 	/*
-assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage")));
-
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
-	
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage")));
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage")));
-	
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage")));
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage")));
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage")));*/
 
