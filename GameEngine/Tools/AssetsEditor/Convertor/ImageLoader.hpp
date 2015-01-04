@@ -3,6 +3,7 @@
 #include "AssimpLoader.hpp"
 #include <Texture/Texture.hpp>
 #include <FreeImagePlus.h>
+#include <Utils/BitOperations.hpp>
 
 namespace AGE
 {
@@ -30,6 +31,27 @@ namespace AGE
 				t->height = image.getHeight();
 				auto colorType = image.getColorType();
 				t->bpp = image.getBitsPerPixel();
+
+				bool toResize = false;
+				if (!isPowerOfTwo(t->width))
+				{
+					t->width = roundToHighestPowerOfTwo(t->width);
+					toResize = true;
+				}
+				if (!isPowerOfTwo(t->height))
+				{
+					t->height = roundToHighestPowerOfTwo(t->height);
+					toResize = true;
+				}
+				if (toResize)
+				{
+					if (!image.rescale(t->width, t->height, FILTER_BICUBIC));
+					{
+						char a[2];
+						a[30000] = '1';
+					}
+					std::cout << "Texture : " << path << " resized !" << std::endl;
+				}
 
 				t->colorNumber = 0;
 				if (colorType == FIC_RGB)

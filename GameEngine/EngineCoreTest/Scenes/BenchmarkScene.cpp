@@ -210,8 +210,10 @@ bool BenchmarkScene::userStart()
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage")));
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage")));
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("Broken Tower/tower.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
-	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("Broken Tower/tower.mage")));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage")));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }));
+	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage")));
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage")));
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage")));
 
@@ -272,12 +274,12 @@ bool BenchmarkScene::userUpdate(double time)
 	{
 		GLOBAL_SPONZA = createEntity();
 		auto _l = getLink(GLOBAL_SPONZA);
-		_l->setPosition(glm::vec3(5, 2, 0));
-		_l->setScale(glm::vec3(0.001f));
-		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+		_l->setPosition(glm::vec3(-90, 2, 0));
+		_l->setScale(glm::vec3(0.1f));
+//		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
-		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Broken Tower/tower.sage"));
-		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Broken Tower/tower.mage")));
+		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Venice/venice.sage"));
+		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Venice/venice.mage")));
 		//for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
 		//{
 		//	_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));

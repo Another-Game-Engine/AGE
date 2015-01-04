@@ -89,6 +89,7 @@
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
+    <ClCompile Include="Engine\Utils\BitOperations.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />

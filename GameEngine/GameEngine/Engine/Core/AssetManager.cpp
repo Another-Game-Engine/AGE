@@ -64,27 +64,17 @@ namespace AGE
 					++i;
 					auto key = manager->addMaterial();
 					material->datas.push_back(key);
-					//if (i == 20 || i == 25 || i == 26 || i == 27)
-					//{
-					//	std::cout << "fuck : " << e.diffuseTexPath << std::endl;
-					//	continue;
-					//}
-					//else
-					//{
-					//	std::cout << i << " : " << e.diffuseTexPath << std::endl;
-					//}
+
 					// TODO fill material with material key
 					gl::Key<gl::Material> &mat = material->datas.back();
 					manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
 					manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
 					manager->setMaterial<gl::Color_specular>(mat, e.specular);
-
 					manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath));
 					manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath));
 					manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath));
 					manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath));
 					manager->setMaterial<gl::Texture_normal>(mat, loadTexture(e.normalTexPath));
-
 					manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
 					manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
 					manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
@@ -115,17 +105,17 @@ namespace AGE
 		GLenum color = GL_RGB;
 		if (data.colorNumber == 3)
 		{
-			ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
+			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
 			color = GL_BGR;
 		}
 		else if (data.colorNumber == 4)
 		{
-			ct = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
+			ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
 			color = GL_BGRA;
 		}
 		else if (data.colorNumber == 1)
 		{
-			ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
+			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
 			color = GL_LUMINANCE;
 		}
 		else

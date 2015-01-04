@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace AGE
 {
 	template < typename T >
@@ -19,4 +21,7 @@ namespace AGE
 	{
 		return (sizeof(T) - countOne<T>());
 	}
+
+	bool isPowerOfTwo(unsigned int x);
+	int32_t roundToHighestPowerOfTwo(int32_t v);
 }

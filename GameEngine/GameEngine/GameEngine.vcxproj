@@ -271,6 +271,7 @@
     <ClCompile Include="Engine\TMQ\message.cpp" />
     <ClCompile Include="Engine\TMQ\queue.cpp" />
     <ClCompile Include="Engine\Utils\AABoundingBox.cpp" />
+    <ClCompile Include="Engine\Utils\BitOperations.cpp" />
     <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
