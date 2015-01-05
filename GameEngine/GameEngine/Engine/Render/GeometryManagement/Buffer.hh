@@ -16,7 +16,7 @@ public:
 	size_t size() const;
 	std::shared_ptr<BlockMemory> const &push_back(std::vector<uint8_t> &&data);
 	Buffer &clear();
-	Buffer &pop_back();
+	Buffer &erase(size_t index);
 	Buffer &bind();
 	Buffer &unbind();
 	Buffer &update();

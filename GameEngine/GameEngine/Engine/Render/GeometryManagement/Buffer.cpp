@@ -24,11 +24,10 @@ size_t Buffer::size() const
 	return (_buffer->size());
 }
 
-Buffer & Buffer::pop_back()
+Buffer & Buffer::clear()
 {
-	auto less = _block_memories.back()->size();
-	_size_alloc -= less;
-	_block_memories.pop_back();
+	_size_alloc = 0;
+	_block_memories.clear();
 	require_resize();
 	return (*this);
 }
@@ -60,7 +59,9 @@ Buffer & Buffer::update()
 	if (_request_transfer) {
 		_buffer->bind();
 		for (auto &memory : _block_memories) {
-			memory->update_buffer(*_buffer.get());
+			if (!memory->is_update()) {
+				memory->update_buffer(*_buffer.get());
+			}
 		}
 		_request_transfer = false;
 	}
@@ -82,7 +83,18 @@ Buffer & Buffer::require_transfer()
 std::shared_ptr<BlockMemory> const &Buffer::push_back(std::vector<uint8_t> &&data)
 {
 	auto offset = _size_alloc;
-	_block_memories.emplace_back(std::make_shared<BlockMemory>(*this, offset, data));
+	_block_memories.emplace_back(std::make_shared<BlockMemory>(*this, _block_memories.size(), offset, data));
 	_size_alloc += _block_memories.back()->size();
 	return (_block_memories.back());
+}
+
+Buffer & Buffer::erase(size_t index)
+{
+	_block_memories.erase(_block_memories.begin() + index);
+	auto offset = 0ull;
+	for (auto index = 0; index < _block_memories.size(); ++index) {
+		_block_memories[index]->reset(index, offset);
+		offset += _block_memories[index]->size();
+	}
+	return (*this);
 }

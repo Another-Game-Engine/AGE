@@ -1,7 +1,6 @@
 #pragma once
 
 # include <Utils/OpenGL.hh>
-# include <Render/Program.hh>
 # include <Render/GeometryManagement/Buffer.hh>
 # include <Render/GeometryManagement/Vertices.hh>
 # include <Render/ProgramResources/AProgramResources.hh>
@@ -12,22 +11,21 @@
 class BufferPrograms
 {
 public:
-	BufferPrograms(std::vector<GLenum> &&types, std::vector<std::shared_ptr<Program>> const &programs);
+	BufferPrograms(std::vector<GLenum> &&types);
 	BufferPrograms(BufferPrograms &&move);
 
 public:
-	Key<Vertices> push_back(Vertices &vertices);
-	BufferPrograms &pop_back();
+	bool push_back(Vertices &vertices);
+	BufferPrograms &clear();
 	size_t size() const;
 	BufferPrograms &bind();
 	BufferPrograms &unbind();
 	BufferPrograms &update();
-	Buffer &operator[](Key<Vertices> const &key);
+	Vertices *get_vertices(Key<Vertices> const &key);
 
 private:
 	std::vector<GLenum> _types;
 	std::vector<Buffer> _buffers;
-	std::vector<std::shared_ptr<Program>> _programs;
-	std::vector<Vertices> _vertices;
+	Buffer _indices_buffer;
 	VertexArray _vertex_array;
 };

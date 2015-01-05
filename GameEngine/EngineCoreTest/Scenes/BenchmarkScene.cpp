@@ -46,7 +46,7 @@ void BenchmarkScene::initRendering()
 		auto u1 = std::make_shared<UnitProg>(VERTEX_SHADER, GL_VERTEX_SHADER);
 		auto u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
 		auto program = std::make_shared<Program>(Program({ u1, u2 }));
-		BufferPrograms buffer({GL_FLOAT_VEC4}, {program});
+		BufferPrograms buffer({GL_FLOAT_VEC4});
 		program->update();
 		program->print_resources();
 		glFlush();

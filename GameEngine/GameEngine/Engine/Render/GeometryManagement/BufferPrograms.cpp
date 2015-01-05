@@ -1,17 +1,13 @@
 #include <Render/GeometryManagement/BufferPrograms.hh>
 #include <Render/Buffer/VertexBuffer.hh>
+#include <Render/Buffer/IndexBuffer.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <memory>
 
-BufferPrograms::BufferPrograms(std::vector<GLenum> &&types, std::vector<std::shared_ptr<Program>> const &programs) :
+BufferPrograms::BufferPrograms(std::vector<GLenum> &&types) :
 _types(std::move(types)),
-_programs(std::move(programs))
+_indices_buffer(std::make_unique<IndexBuffer>())
 {
-	for (auto &program : programs) {
-		if (program->coherent_attribute(_types)) {
-			_programs.emplace_back(program);
-		}
-	}
 	_buffers.reserve(_types.size());
 	_vertex_array.bind();
 	auto index = 0ull;
@@ -30,26 +26,26 @@ _programs(std::move(programs))
 BufferPrograms::BufferPrograms(BufferPrograms &&move) :
 _types(std::move(move._types)),
 _buffers(std::move(move._buffers)),
-_programs(std::move(move._programs)),
-_vertices(std::move(move._vertices))
+_indices_buffer(std::move(move._indices_buffer)),
+_vertex_array(std::move(move._vertex_array))
 {
 }
 
-Key<Vertices> BufferPrograms::push_back(Vertices &vertices)
+bool BufferPrograms::push_back(Vertices &vertices)
 {
 	if (vertices.nbr_buffer() != _types.size()) {
-		return (Key<Vertices>::createKey(-1));
+		return (false);
 	}
 	for (auto index = 0ull; index < vertices.nbr_buffer(); ++index) {
 		if (_types[index] != vertices.get_type(index)) {
-			return (Key<Vertices>::createKey(-1));
+			return (false);
 		}
 	}
 	for (auto index = 0ull; index < vertices.nbr_buffer(); ++index) {
 		vertices.set_block_memory(_buffers[index].push_back(vertices.transfer_data(index)), index);
 	}
-	_vertices.emplace_back(vertices);
-	return (Key<Vertices>::createKey(_vertices.size() - 1));
+	vertices.set_indices_block_memory(_indices_buffer.push_back(vertices.transfer_indices_data()));
+	return (true);
 }
 
 size_t BufferPrograms::size() const
@@ -77,8 +73,11 @@ BufferPrograms & BufferPrograms::update()
 	return (*this);
 }
 
-Buffer & BufferPrograms::operator[](Key<Vertices> const &key)
+BufferPrograms & BufferPrograms::clear()
 {
-	return (_buffers[key.getId()]);
+	for (auto &buffer : _buffers) {
+		buffer.clear();
+	}
+	_indices_buffer.clear();
+	return (*this);
 }
-
