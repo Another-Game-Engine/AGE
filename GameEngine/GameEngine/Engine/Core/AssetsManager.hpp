@@ -92,7 +92,7 @@ namespace AGE
 		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
 		void loadMaterial(const File &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<MaterialSetInstance> getMaterial(const File &filePath);
-		void loadTexture(const File &filepath, const std::string &loadingChannel = "");
+		void loadTexture(const File &filepath, const std::string &loadingChannel = "", std::function<void(gl::Key<gl::Texture> &key_tex)> &callback = std::function<void(gl::Key<gl::Texture> &)>([](){}));
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		void updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error);
 	private:
@@ -108,7 +108,7 @@ namespace AGE
 		//Material collection
 		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
 		//Texture collection
-		std::map<std::string, gl::Key<gl::Texture>> _textures;
+		std::map<std::string, std::shared_ptr<gl::Key<gl::Texture>>> _textures;
 		std::mutex _mutex;
 		std::map < std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
 

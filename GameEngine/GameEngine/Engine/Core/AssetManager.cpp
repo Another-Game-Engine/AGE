@@ -68,78 +68,111 @@ namespace AGE
 			material->path = _filePath.getFullName();
 			auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 			int i = 0;
+			material->datas.resize(data->collection.size());
 			for (auto &e : data->collection)
 			{
-				++i;
 				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 				{
 					auto key = manager->addMaterial();
-					material->datas.push_back(key);
+					material->datas[i] = key;
 
 					// TODO fill material with material key
-					gl::Key<gl::Material> &mat = material->datas.back();
+					gl::Key<gl::Material> &mat = material->datas[i];
 					manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
 					manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
 					manager->setMaterial<gl::Color_specular>(mat, e.specular);
-					//manager->setMaterial<gl::Texture_diffuse>(mat, loadTexture(e.diffuseTexPath)); <<<<<<<TODO
-					//manager->setMaterial<gl::Texture_emissive>(mat, loadTexture(e.emissiveTexPath)); <<<<<<<TODO
-					//manager->setMaterial<gl::Texture_specular>(mat, loadTexture(e.specularTexPath)); <<<<<<<<<<TODO
-					//manager->setMaterial<gl::Texture_bump>(mat, loadTexture(e.bumpTexPath)); <<<<<<<<<<TODO
-					//manager->setMaterial<gl::Texture_normal>(mat, loadTexture(e.normalTexPath)); <<<<<<<<<<TODO
 					manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
 					manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
 					manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
+					loadTexture(e.diffuseTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
+						manager->setMaterial<gl::Texture_diffuse>(mat, t);
+					}));
+					loadTexture(e.emissiveTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
+						manager->setMaterial<gl::Texture_emissive>(mat, t);
+					}));
+					loadTexture(e.specularTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
+						manager->setMaterial<gl::Texture_specular>(mat, t);
+					}));
+					loadTexture(e.bumpTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
+						manager->setMaterial<gl::Texture_bump>(mat, t);
+					}));
+					loadTexture(e.normalTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
+						manager->setMaterial<gl::Texture_normal>(mat, t);
+					}));
 					return AssetsLoadingResult(false);
 				});
+				pushNewAsset(loadingChannel, _filePath.getFullName() + std::to_string(i), futureSubMaterial);
+				++i;
 			}
 			return AssetsLoadingResult(false);
 		});
+		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 	}
 
-	void AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel)
+	void AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel, std::function<void(gl::Key<gl::Texture> &key_tex)> &callback)
 	{
 		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
+		std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
-		if (_textures.find(filePath.getFullName()) != std::end(_textures))
-			return;// _textures[filePath.getFullName()]; <<< TODO
-		if (!filePath.exists())
-			return;//(manager->getDefaultTexture2D()); <<< TODO
-		TextureData data;
 
-		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-		cereal::PortableBinaryInputArchive ar(ifs);
-		ar(data);
-
-		// TODO fill texture with texture key
-
-		GLenum ct = GL_RGB32F;
-		GLenum color = GL_RGB;
-		if (data.colorNumber == 3)
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
-			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
-			color = GL_BGR;
-		}
-		else if (data.colorNumber == 4)
-		{
-			ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
-			color = GL_BGRA;
-		}
-		else if (data.colorNumber == 1)
-		{
-			ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
-			color = GL_LUMINANCE;
-		}
-		else
-			assert(false);
-		auto key = manager->addTexture2D(data.width, data.height, ct, true);
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				if (_textures.find(filePath.getFullName()) != std::end(_textures))
+				{
+					auto key = _textures[filePath.getFullName()];
+					callback(*key.get());
+					return AssetsLoadingResult(key->empty());
+				}
+			}
 
-		manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data.data.data());
-		manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		_textures.insert(std::make_pair(filePath.getFullName(), key));
-		return; // key <<<<< TODO
+			if (!filePath.exists())
+			{
+				auto key = manager->getDefaultTexture2D();
+				callback(key);
+				_textures.insert(std::make_pair(filePath.getFullName(), std::make_shared<gl::Key<gl::Texture>>(key)));
+				return AssetsLoadingResult(key.empty());
+			}
+
+			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			cereal::PortableBinaryInputArchive ar(ifs);
+			ar(*data.get());
+
+			// TODO fill texture with texture key
+
+			GLenum ct = GL_RGB32F;
+			GLenum color = GL_RGB;
+			if (data->colorNumber == 3)
+			{
+				ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
+				color = GL_BGR;
+			}
+			else if (data->colorNumber == 4)
+			{
+				ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
+				color = GL_BGRA;
+			}
+			else if (data->colorNumber == 1)
+			{
+				ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
+				color = GL_LUMINANCE;
+			}
+			else
+				return AssetsLoadingResult(true, "Image format not found.\n");
+			auto key = manager->addTexture2D(data->width, data->height, ct, true);
+			
+			manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data->data.data());
+			manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			
+			callback(key);
+				_textures.insert(std::make_pair(filePath.getFullName(), std::make_shared<gl::Key<gl::Texture>>(key)));
+			return AssetsLoadingResult(key.empty());
+		});
+		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 	}
 
 	void AssetsManager::loadAnimation(const File &_filePath, const std::string &loadingChannel)

@@ -205,12 +205,14 @@ bool BenchmarkScene::userStart()
 	getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMesh(File("Broken Tower/tower.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 //	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"));
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"));
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage"));
+	getInstance<AGE::AssetsManager>()->loadMaterial(File("Broken Tower/tower.mage"));
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"));
 	/*
 	assetLoadingList.push_back(getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage")));
@@ -237,23 +239,7 @@ bool BenchmarkScene::userUpdate(double time)
 	getInstance<AGE::AssetsManager>()->updateLoadingChannel("DEMO_SCENE_ASSETS", totalToLoad, toLoad, loadingError);
 	if (loadingError.size() != 0)
 		std::cout << loadingError << std::endl;
-	if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
-	{
-		ImGui::End();
-	}
-	else
-	{
-		ImGui::SetWindowPos(ImVec2(getInstance<IRenderContext>()->getScreenSize().x / 2, getInstance<IRenderContext>()->getScreenSize().y / 2));
-		ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(totalToLoad).c_str());
-		ImGui::End();
-	}
-
-	/*if (toLoad == 0)
-		return false;*/
-
-	return true;
-
-	if (!assetLoadingList.empty())
+	if (toLoad != 0)
 	{
 		if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 		{
@@ -262,15 +248,17 @@ bool BenchmarkScene::userUpdate(double time)
 		else
 		{
 			ImGui::SetWindowPos(ImVec2(getInstance<IRenderContext>()->getScreenSize().x / 2, getInstance<IRenderContext>()->getScreenSize().y / 2));
-			ImGui::Text("Assets loading : %s", std::to_string(assetLoadingList.size()).c_str());
+			ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(totalToLoad).c_str());
 			ImGui::End();
 		}
-
-		assetLoadingList.remove_if([&](std::future<bool> &e){
-			return e.valid() && e.wait_for(std::chrono::microseconds(1)) == std::future_status::ready && e.get();
-		});
-		if (assetLoadingList.empty())
+		return true;
+	}
+	else
+	{
+		static bool init = true;
+		if (init)
 		{
+			init = false;
 			auto camera = createEntity();
 			GLOBAL_CAMERA = camera;
 			auto cam = addComponent<Component::CameraComponent>(camera);
@@ -292,22 +280,30 @@ bool BenchmarkScene::userUpdate(double time)
 				_renderManager->setMaterial<gl::Shininess>(mesh->getMaterial()->datas[index], 1.f);
 				_renderManager->setMaterial<gl::Ratio_specular>(mesh->getMaterial()->datas[index], 1.0f);
 			}
-	{
-		GLOBAL_SPONZA = createEntity();
+{
+	GLOBAL_SPONZA = createEntity();
 		auto _l = getLink(GLOBAL_SPONZA);
-		_l->setPosition(glm::vec3(-90, 2, 0));
-		_l->setScale(glm::vec3(0.1f));
-//		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+		_l->setPosition(glm::vec3(-5, 0, 0));
+		_l->setScale(glm::vec3(0.01f));
+		//		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
-		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Venice/venice.sage"));
-		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Venice/venice.mage")));
-		//for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-		//{
-		//	_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
-		//	_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
-		//	_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
-		//}
-	}
+		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
+		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
+}
+{
+	auto brokenTower = createEntity();
+	auto _l = getLink(brokenTower);
+	_l->setPosition(glm::vec3(0, 40, 0));
+	_l->setScale(glm::vec3(0.0008f));
+	_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+
+	auto _m = addComponent<Component::MeshRenderer>(brokenTower, getInstance<AGE::AssetsManager>()->getMesh("Broken Tower/tower.sage"));
+	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Broken Tower/tower.mage")));
+	auto brokenLight = createEntity();
+	_l = getLink(brokenLight);
+	_l->setPosition(glm::vec3(0, 55.0f, 0));
+	addComponent<Component::PointLight>(brokenLight)->set(glm::vec3(1.0f), glm::vec3(1.f, 0.1f, 0.0f));
+}
 
 	{
 		GLOBAL_CATWOMAN = createEntity();
@@ -351,7 +347,7 @@ bool BenchmarkScene::userUpdate(double time)
 		getLink(e)->setPosition(glm::vec3(i, 5.0f, 0));
 		addComponent<Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 	}
-
+	
 
 
 #ifdef PHYSIC_SIMULATION
@@ -360,26 +356,9 @@ bool BenchmarkScene::userUpdate(double time)
 	rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, Component::RigidBody::BOX);
 	rigidBody->getBody().setFriction(0.3f);
 #endif //PHYSIC_SIMULATION
+	return true;
 		}
-		return true;
 	}
-
-
-#ifdef USE_IMGUI
-	//if (ImGui::Button("Save -> Clear -> Reload"))
-	//{
-	//	saveToBinary("SAVE_TEST.json");
-	//	clearAllEntities();
-	//	loadFromBinary("SAVE_TEST.json");
-	//}
-#endif
-
-	//	getLink(GLOBAL_CAMERA)->setOrientation(glm::rotate(getLink(GLOBAL_CAMERA)->getOrientation(), 50.0f * (float)time, glm::vec3(0, 1, 0)));
-
-	//if (getInstance<Input>()->getInput(SDLK_UP))
-	//	getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, 25.f * time, 0));
-	//if (getInstance<Input>()->getInput(SDLK_DOWN))
-	//	getLink(GLOBAL_CAMERA)->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, -25.f * time, 0));
 
 	auto lc = getLink(GLOBAL_CAMERA);
 	float c = 5.f;
