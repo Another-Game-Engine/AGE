@@ -15,7 +15,7 @@ public:
 	BufferPrograms(BufferPrograms &&move);
 
 public:
-	bool push_back(Vertices &vertices);
+	bool insert(Vertices &vertices);
 	BufferPrograms &clear();
 	size_t size() const;
 	BufferPrograms &bind();

@@ -20,6 +20,7 @@ _indices_buffer(std::make_unique<IndexBuffer>())
 			glVertexAttribPointer(index, a.nbr_component, a.type_component, GL_FALSE, 0, 0);
 		}
 	}
+	_indices_buffer.bind();
 	_vertex_array.unbind();
 }
 
@@ -31,7 +32,7 @@ _vertex_array(std::move(move._vertex_array))
 {
 }
 
-bool BufferPrograms::push_back(Vertices &vertices)
+bool BufferPrograms::insert(Vertices &vertices)
 {
 	if (vertices.nbr_buffer() != _types.size()) {
 		return (false);
@@ -44,6 +45,8 @@ bool BufferPrograms::push_back(Vertices &vertices)
 	for (auto index = 0ull; index < vertices.nbr_buffer(); ++index) {
 		vertices.set_block_memory(_buffers[index].push_back(vertices.transfer_data(index)), index);
 	}
+	size_t size;
+	std::cout << "1 -> " << vertices.get_indices(size)[1] << std::endl;
 	vertices.set_indices_block_memory(_indices_buffer.push_back(vertices.transfer_indices_data()));
 	return (true);
 }
@@ -70,6 +73,7 @@ BufferPrograms & BufferPrograms::update()
 	for (auto &buffer : _buffers) {
 		buffer.update();
 	}
+	_indices_buffer.update();
 	return (*this);
 }
 

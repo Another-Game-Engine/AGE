@@ -26,8 +26,9 @@ BenchmarkScene::~BenchmarkScene(void)
 }
 
 #include <Render/Program.hh>
+#include <Render/GeometryManagement/Vertices.hh>
 #include <Render/GeometryManagement/BufferPrograms.hh>
-//#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
 //#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 # include <Render/ProgramResources/Types/UniformBlock.hh>
@@ -45,10 +46,27 @@ void BenchmarkScene::initRendering()
 	{
 		auto u1 = std::make_shared<UnitProg>(VERTEX_SHADER, GL_VERTEX_SHADER);
 		auto u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
-		auto program = std::make_shared<Program>(Program({ u1, u2 }));
+		Program program({ u1, u2 });
 		BufferPrograms buffer({GL_FLOAT_VEC4});
-		program->update();
-		program->print_resources();
+		Vertices triangle({GL_FLOAT_VEC4}, 3, 6, 0, 0);
+		
+		triangle.set_indices({0, 1, 2, 2, 3, 0});
+		triangle.set_data<glm::vec4>({glm::vec4(1.0f, 0.0f, 0.0f, -1.0f), glm::vec4(1.0f, 1.0f, 0.0f, -1.0f), glm::vec4(0.0f, 1.0f, 0.0f, -1.0f)}, 0);
+
+		(*program.get_resource<UniformBlock>("global_state")->get_resource("projection_matrix")) = glm::mat4(1.0f);//glm::perspective(40.f, 1.0f, 0.0f, 1000.0f);
+		*program.get_resource<Vec4>("diffuse_color") = glm::vec4(1.0f);
+		*program.get_resource<Vec1>("diffuse_ratio") = 1.0f;
+		buffer.insert(triangle);
+		
+		program.update();
+		buffer.update();
+		triangle.remove();
+		buffer.update();
+		
+		buffer.bind();
+		triangle.draw(GL_TRIANGLES);
+		buffer.unbind();
+		program.print_resources();
 		glFlush();
 		return (true);
 	});

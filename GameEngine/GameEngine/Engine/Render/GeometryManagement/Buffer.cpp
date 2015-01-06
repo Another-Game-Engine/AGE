@@ -90,7 +90,9 @@ std::shared_ptr<BlockMemory> const &Buffer::push_back(std::vector<uint8_t> &&dat
 
 Buffer & Buffer::erase(size_t index)
 {
-	_block_memories.erase(_block_memories.begin() + index);
+	auto &iterator = _block_memories.begin() + index;
+	_size_alloc -= iterator->get()->size();
+	_block_memories.erase(iterator);
 	auto offset = 0ull;
 	for (auto index = 0; index < _block_memories.size(); ++index) {
 		_block_memories[index]->reset(index, offset);

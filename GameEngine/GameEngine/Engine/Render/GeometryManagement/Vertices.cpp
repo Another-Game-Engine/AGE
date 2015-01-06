@@ -2,13 +2,14 @@
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <Render/GeometryManagement/BlockMemory.hh>
 
-Vertices::Vertices(std::vector<GLenum> &&types, size_t nbrVertex, size_t offset, size_t index) :
+Vertices::Vertices(std::vector<GLenum> &&types, size_t nbrVertex, size_t nbrIndices, size_t offset, size_t index) :
 _index(index),
 _offset(offset),
+_nbr_indices(nbrIndices),
 _nbr_vertex(nbrVertex),
 _types(std::move(types)),
 _data(_types.size()),
-_indices_data(nbrVertex, 0),
+_indices_data(nbrIndices * sizeof(unsigned int), 0),
 _block_memories(_types.size())
 {
 	for (auto index = 0ull; index < _types.size(); ++index) {
@@ -23,6 +24,7 @@ _block_memories(_types.size())
 Vertices::Vertices(Vertices const &copy) :
 _index(copy._index),
 _offset(copy._offset),
+_nbr_indices(copy._nbr_indices),
 _nbr_vertex(copy._nbr_vertex),
 _types(copy._types),
 _data(copy._data),
@@ -35,6 +37,7 @@ _indices_block_memory(copy._indices_block_memory)
 Vertices::Vertices(Vertices &&move) :
 _index(move._index),
 _offset(move._offset),
+_nbr_indices(move._nbr_indices),
 _nbr_vertex(move._nbr_vertex),
 _types(std::move(move._types)),
 _data(std::move(move._data)),
@@ -43,6 +46,11 @@ _block_memories(std::move(move._block_memories)),
 _indices_block_memory(std::move(move._indices_block_memory))
 {
 
+}
+
+size_t Vertices::nbr_indices() const
+{
+	return (_nbr_indices);
 }
 
 size_t Vertices::nbr_vertex() const
@@ -54,7 +62,6 @@ size_t Vertices::nbr_buffer() const
 {
 	return (_data.size());
 }
-
 
 std::vector<uint8_t> &&Vertices::transfer_data(size_t index)
 {
@@ -95,6 +102,14 @@ Vertices & Vertices::remove()
 		}
 		++index;
 	}
+	if (_indices_block_memory.lock()) {
+		_indices_block_memory.lock()->remove();
+	}
+	else {
+		_indices_data.clear();
+	}
+	_nbr_vertex = 0;
+	_nbr_indices = 0;
 	return (*this);
 }
 
@@ -106,7 +121,7 @@ Vertices & Vertices::set_indices(std::vector<unsigned int> const &data)
 		*_indices_block_memory.lock() = tmp;
 		return (*this);
 	}
-	if (tmp.size() == _indices_data.size()) {
+	if (tmp.size() != _indices_data.size()) {
 		return (*this);
 	}
 	_indices_data = tmp;
@@ -117,7 +132,7 @@ Vertices & Vertices::draw(GLenum mode)
 {
 	if (_indices_block_memory.lock()) {
 		auto offset = _indices_block_memory.lock()->offset();
-		glDrawElements(mode, _nbr_vertex, GL_UNSIGNED_INT, (GLvoid *)offset);
+		glDrawElementsBaseVertex(mode, GLsizei(_nbr_indices), GL_UNSIGNED_INT, (GLvoid *)offset, GLint(_offset));
 	}
 	else {
 		glDrawArrays(mode, _offset, _nbr_vertex);

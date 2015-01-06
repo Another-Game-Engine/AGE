@@ -18,4 +18,5 @@ void main(void)
 	vec3 lightVec = normalize(light - position);
 	vec4 diffuse =  diffuse_color * diffuse_ratio;
 	fragcolor = diffuse;
+	fragcolor += vec4(1.0f, 1.0f, 1.0f, 1.0f);
 }

@@ -11,11 +11,12 @@ class BlockMemory;
 class Vertices
 {
 public:
-	Vertices(std::vector<GLenum> &&types, size_t nbrVertex, size_t offset, size_t index);
+	Vertices(std::vector<GLenum> &&types, size_t nbrVertex, size_t nbrIndices, size_t offset, size_t index);
 	Vertices(Vertices const &copy);
 	Vertices(Vertices &&move);
 
 public:
+	size_t nbr_indices() const;
 	size_t nbr_vertex() const;
 	size_t nbr_buffer() const;
 	GLenum get_type(size_t index) const;
@@ -33,6 +34,7 @@ public:
 private:
 	size_t _index;
 	size_t _offset;
+	size_t _nbr_indices;
 	size_t _nbr_vertex;
 	std::vector<GLenum> _types;
 	std::vector<std::vector<uint8_t>> _data;
@@ -64,7 +66,7 @@ Vertices &Vertices::set_data(std::vector<type_t> const &data, size_t index)
 		*_block_memories[index].lock() = tmp;
 		return (*this);
 	}
-	if (tmp.size() == _data[index].size()) {
+	if (tmp.size() != _data[index].size()) {
 		return (*this);
 	}
 	_data[index] = tmp;
