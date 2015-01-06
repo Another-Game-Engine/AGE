@@ -11,13 +11,16 @@ class Attribute;
 class Program
 {
 public:
-	Program(std::vector<std::shared_ptr<UnitProg>> const &units);
+	Program(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &units);
 	Program(Program const &copy) = delete;
 	Program(Program &&move);
 	~Program();
 	Program &operator=(Program const &u) = delete;
+	bool operator==(Program const &p) const;
+	bool operator!=(Program const &p) const;
 
 public:
+	std::string const &name() const;
 	GLuint id() const;
 	Key<ProgramResource> &get_key(std::string const &name);
 	template <typename type_t> type_t *get_resource(Key<ProgramResource> const &key);
@@ -38,6 +41,7 @@ private:
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 	ProgramResourcesFactory _resources_factory;
 	GLuint _id;
+	std::string const _name;
 };
 
 template <typename type_t>

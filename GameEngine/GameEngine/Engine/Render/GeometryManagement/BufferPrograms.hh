@@ -8,6 +8,8 @@
 # include <Render/Key.hh>
 # include <vector>
 
+class Program;
+
 class BufferPrograms
 {
 public:
@@ -21,7 +23,8 @@ public:
 	BufferPrograms &bind();
 	BufferPrograms &unbind();
 	BufferPrograms &update();
-	Vertices *get_vertices(Key<Vertices> const &key);
+	bool coherent_program(std::shared_ptr<Program> const &p);
+	std::vector<GLenum> const &get_types() const;
 
 private:
 	std::vector<GLenum> _types;

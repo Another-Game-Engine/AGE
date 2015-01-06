@@ -2,6 +2,7 @@
 #include <Render/Buffer/VertexBuffer.hh>
 #include <Render/Buffer/IndexBuffer.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
+#include <Render/Program.hh>
 #include <memory>
 
 BufferPrograms::BufferPrograms(std::vector<GLenum> &&types) :
@@ -84,4 +85,14 @@ BufferPrograms & BufferPrograms::clear()
 	}
 	_indices_buffer.clear();
 	return (*this);
+}
+
+bool BufferPrograms::coherent_program(std::shared_ptr<Program> const &p)
+{
+	return (p->coherent_attribute(_types));
+}
+
+std::vector<GLenum> const & BufferPrograms::get_types() const
+{
+	return (_types);
 }

@@ -4,9 +4,10 @@
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <Render/ProgramResources/Types/Attribute.hh>
 
-Program::Program(std::vector<std::shared_ptr<UnitProg>> const &u) :
+Program::Program(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &u) :
 _unitsProg(u),
-_resources_factory(*this)
+_resources_factory(*this),
+_name(std::move(name))
 {
 	_id = glCreateProgram();
 	for (auto &element : _unitsProg) {
@@ -27,7 +28,8 @@ Program::Program(Program &&move) :
 _program_resources(std::move(move._program_resources)),
 _unitsProg(std::move(move._unitsProg)),
 _resources_factory(*this),
-_id(move._id)
+_id(move._id),
+_name(std::move(move._name))
 {
 	move._id = 0;
 }
@@ -125,5 +127,24 @@ bool Program::coherent_attribute(std::vector<GLenum> const &p) const
 	}
 	return (true);
 }
+
+std::string const & Program::name() const
+{
+	return (_name);
+}
+
+bool Program::operator==(Program const &p) const
+{
+	if (_id == p._id) {
+		return (true);
+	}
+	return (false);
+}
+
+bool Program::operator!=(Program const &p) const
+{
+	return (!(*this == p));
+}
+
 
 

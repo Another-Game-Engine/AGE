@@ -2,12 +2,11 @@
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <Render/GeometryManagement/BlockMemory.hh>
 
-Vertices::Vertices(std::vector<GLenum> &&types, size_t nbrVertex, size_t nbrIndices, size_t offset, size_t index) :
-_index(index),
+Vertices::Vertices(std::vector<GLenum> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset) :
 _offset(offset),
 _nbr_indices(nbrIndices),
 _nbr_vertex(nbrVertex),
-_types(std::move(types)),
+_types(types),
 _data(_types.size()),
 _indices_data(nbrIndices * sizeof(unsigned int), 0),
 _block_memories(_types.size())
@@ -22,7 +21,6 @@ _block_memories(_types.size())
 }
 
 Vertices::Vertices(Vertices const &copy) :
-_index(copy._index),
 _offset(copy._offset),
 _nbr_indices(copy._nbr_indices),
 _nbr_vertex(copy._nbr_vertex),
@@ -35,7 +33,6 @@ _indices_block_memory(copy._indices_block_memory)
 }
 
 Vertices::Vertices(Vertices &&move) :
-_index(move._index),
 _offset(move._offset),
 _nbr_indices(move._nbr_indices),
 _nbr_vertex(move._nbr_vertex),
@@ -151,4 +148,10 @@ unsigned int const * Vertices::get_indices(size_t &size) const
 		size = _indices_data.size() / sizeof(unsigned int);
 		return ((unsigned int const *)_indices_data.data());
 	}
+}
+
+Vertices & Vertices::reset(size_t o)
+{
+	_offset = o;
+	return (*this);
 }

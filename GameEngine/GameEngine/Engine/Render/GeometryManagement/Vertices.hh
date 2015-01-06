@@ -11,7 +11,7 @@ class BlockMemory;
 class Vertices
 {
 public:
-	Vertices(std::vector<GLenum> &&types, size_t nbrVertex, size_t nbrIndices, size_t offset, size_t index);
+	Vertices(std::vector<GLenum> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset);
 	Vertices(Vertices const &copy);
 	Vertices(Vertices &&move);
 
@@ -29,6 +29,7 @@ public:
 	Vertices &set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, size_t index);
 	Vertices &set_indices_block_memory(std::shared_ptr<BlockMemory> const &blockMemory);
 	Vertices &remove();
+	Vertices &reset(size_t o);
 	Vertices &draw(GLenum mode);
 
 private:
