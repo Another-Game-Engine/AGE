@@ -22,7 +22,7 @@ vec3 perturb_normal()
 	vec3 perturbated_normal = perturbated_normal_ts * 2.f - vec3(1.f);
 	vec3 bitangent = cross(inter_tangent, inter_normal);
 	mat3 TBN = mat3(inter_tangent, bitangent, inter_normal);
-	return mix(normalize(TBN * perturbated_normal), inter_normal, all(equal(perturbated_normal_ts, vec3(0.f))));
+	return mix(normalize(TBN * perturbated_normal), inter_normal, float(all(equal(perturbated_normal_ts, vec3(0.f)))));
 }
 
 void main(void)
