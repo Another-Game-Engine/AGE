@@ -4,8 +4,8 @@
 # include <vector>
 # include <Render/Key.hh>
 # include <Render/Program.hh>
-# include <Render/GeometryManagement/Vertices.hh>
-# include <Render/GeometryManagement/BufferPrograms.hh>
+# include <Render/GeometryManagement/Data/Vertices.hh>
+# include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 
 class Painter
 {

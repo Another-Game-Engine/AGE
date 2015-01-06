@@ -1,4 +1,4 @@
-#include <Render/GeometryManagement/BufferPrograms.hh>
+#include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Render/Buffer/VertexBuffer.hh>
 #include <Render/Buffer/IndexBuffer.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>

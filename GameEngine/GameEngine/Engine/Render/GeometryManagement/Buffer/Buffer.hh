@@ -1,6 +1,6 @@
 #pragma once
 
-# include <Render/GeometryManagement/BlockMemory.hh>
+# include <Render/GeometryManagement/Data/BlockMemory.hh>
 # include <Render/Buffer/IBuffer.hh>
 # include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 # include <memory>

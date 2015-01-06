@@ -23,8 +23,8 @@ public:
 	std::string const &name() const;
 	GLuint id() const;
 	Key<ProgramResource> &get_key(std::string const &name);
-	template <typename type_t> type_t *get_resource(Key<ProgramResource> const &key);
-	template <typename type_t> type_t *get_resource(std::string const &name);
+	template <typename type_t> std::shared_ptr<type_t> const &get_resource(Key<ProgramResource> const &key);
+	template <typename type_t> std::shared_ptr<type_t> const &get_resource(std::string const &name);
 	bool has_resource(Key<ProgramResource> const &key);
 	Program const &use() const;
 	Program &update();
@@ -37,7 +37,7 @@ private:
 	void _get_resource(size_t index, GLenum resource, std::string const & buffer);
 
 private:
-	std::vector<std::unique_ptr<IProgramResources>> _program_resources;
+	std::vector<std::shared_ptr<IProgramResources>> _program_resources;
 	std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 	ProgramResourcesFactory _resources_factory;
 	GLuint _id;
@@ -45,7 +45,7 @@ private:
 };
 
 template <typename type_t>
-type_t * Program::get_resource(std::string const &name)
+std::shared_ptr<type_t> const &Program::get_resource(std::string const &name)
 {
 	for (size_t index = 0; index < _program_resources.size(); ++index) {
 		if (name == _program_resources[index]->name()) {
@@ -57,7 +57,7 @@ type_t * Program::get_resource(std::string const &name)
 }
 
 template <typename type_t>
-type_t * Program::get_resource(Key<ProgramResource> const &key)
+std::shared_ptr<type_t> const & Program::get_resource(Key<ProgramResource> const &key)
 {
 	if (key) {
 		return (nullptr);

@@ -1,8 +1,8 @@
 #pragma once
 
 # include <Utils/OpenGL.hh>
-# include <Render/GeometryManagement/Buffer.hh>
-# include <Render/GeometryManagement/Vertices.hh>
+# include <Render/GeometryManagement/Buffer/Buffer.hh>
+# include <Render/GeometryManagement/Data/Vertices.hh>
 # include <Render/ProgramResources/AProgramResources.hh>
 # include <Render/Buffer/VertexArray.hh>
 # include <Render/Key.hh>

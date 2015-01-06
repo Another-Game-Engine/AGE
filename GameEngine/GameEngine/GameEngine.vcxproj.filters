@@ -82,7 +82,6 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\BlockResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AInterfaceBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Attribute.cpp" />
-    <ClCompile Include="Engine\Render\GeometryManagement\BlockMemory.cpp" />
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Threads\ThreadManager.cpp" />
     <ClCompile Include="Engine\Threads\Thread.cpp" />
@@ -99,9 +98,12 @@
     <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Painting\Painter.cpp" />
-    <ClCompile Include="Engine\Render\GeometryManagement\Buffer.cpp" />
-    <ClCompile Include="Engine\Render\GeometryManagement\Vertices.cpp" />
-    <ClCompile Include="Engine\Render\GeometryManagement\BufferPrograms.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Data\BlockMemory.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Data\Vertices.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Buffer\Buffer.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.cpp" />
+    <ClCompile Include="Engine\Render\Properties\VerticesProperties.cpp" />
+    <ClCompile Include="Engine\Render\Properties\AProperty.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -256,7 +258,6 @@
     <ClInclude Include="Engine\Render\ProgramResources\IInterfaceBlock.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\AInterfaceBlock.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Attribute.hh" />
-    <ClInclude Include="Engine\Render\GeometryManagement\BlockMemory.hh" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Utils\ThreadName.hpp" />
     <ClInclude Include="Engine\Threads\Thread.hpp" />
@@ -277,9 +278,13 @@
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Render\GeometryManagement\Painting\Painter.hh" />
-    <ClInclude Include="Engine\Render\GeometryManagement\Buffer.hh" />
-    <ClInclude Include="Engine\Render\GeometryManagement\Vertices.hh" />
-    <ClInclude Include="Engine\Render\GeometryManagement\BufferPrograms.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Data\BlockMemory.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Data\Vertices.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.hh" />
+    <ClInclude Include="Engine\Render\Properties\VerticesProperties.hh" />
+    <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
+    <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

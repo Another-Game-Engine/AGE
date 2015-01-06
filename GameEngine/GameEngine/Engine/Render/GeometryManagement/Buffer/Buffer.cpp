@@ -1,4 +1,4 @@
-#include <Render/GeometryManagement/Buffer.hh>
+#include <Render/GeometryManagement/Buffer/Buffer.hh>
 
 Buffer::Buffer(std::unique_ptr<IBuffer> &&buffer) :
 _request_resize(false),

@@ -5,6 +5,7 @@
 # include <stdint.h>
 # include <vector>
 # include <memory>
+# include <Render/Properties/VerticesProperties.hh>
 
 class BlockMemory;
 
@@ -31,6 +32,7 @@ public:
 	Vertices &remove();
 	Vertices &reset(size_t o);
 	Vertices &draw(GLenum mode);
+	VerticesProperties *properties();
 
 private:
 	size_t _index;
@@ -42,6 +44,7 @@ private:
 	std::vector<uint8_t> _indices_data;
 	std::vector<std::weak_ptr<BlockMemory>> _block_memories;
 	std::weak_ptr<BlockMemory> _indices_block_memory;
+	VerticesProperties _properties;
 };
 
 template <typename type_t> 

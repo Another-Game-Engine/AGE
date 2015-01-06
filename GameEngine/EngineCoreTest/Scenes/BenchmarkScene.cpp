@@ -26,11 +26,11 @@ BenchmarkScene::~BenchmarkScene(void)
 }
 
 #include <Render/Program.hh>
-#include <Render/GeometryManagement/Vertices.hh>
-#include <Render/GeometryManagement/BufferPrograms.hh>
+#include <Render/GeometryManagement/Data/Vertices.hh>
+#include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
-//#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 # include <Render/ProgramResources/Types/UniformBlock.hh>
 # include <Render/ProgramResources/Types/Attribute.hh>
 # include <Render/GeometryManagement/Painting/Painter.hh>

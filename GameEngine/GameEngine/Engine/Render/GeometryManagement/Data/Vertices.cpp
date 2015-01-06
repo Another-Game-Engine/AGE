@@ -1,6 +1,6 @@
-#include <Render/GeometryManagement/Vertices.hh>
+#include <Render/GeometryManagement/Data/Vertices.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
-#include <Render/GeometryManagement/BlockMemory.hh>
+#include <Render/GeometryManagement/Data/BlockMemory.hh>
 
 Vertices::Vertices(std::vector<GLenum> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset) :
 _offset(offset),
@@ -154,4 +154,9 @@ Vertices & Vertices::reset(size_t o)
 {
 	_offset = o;
 	return (*this);
+}
+
+VerticesProperties * Vertices::properties()
+{
+	return (&_properties);
 }
