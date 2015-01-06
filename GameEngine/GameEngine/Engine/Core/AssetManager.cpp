@@ -178,29 +178,29 @@ namespace AGE
 	void AssetsManager::loadAnimation(const File &_filePath, const std::string &loadingChannel)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
-		if (_animations.find(filePath.getFullName()) != std::end(_animations))
-		{
-			//std::promise<bool> promise;
-			//auto future = promise.get_future();
-			//promise.set_value(true);
-			//return future;
-			return; //TODO
-		}
+		auto animation = std::make_shared<Animation>();
 		if (!filePath.exists())
 		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
 			assert(false);
 		}
 
-		auto animation = std::make_shared<Animation>();
-		_animations.insert(std::make_pair(filePath.getFullName(), animation));
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			if (_animations.find(filePath.getFullName()) != std::end(_animations))
+			{
+				return;
+			}
+			_animations.insert(std::make_pair(filePath.getFullName(), animation));
+		}
 
-		/*return*/ AGE::EmplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){//<<<<<<<<<<TODO
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*animation.get());
-			return true;
+			return AssetsLoadingResult(false);
 		});
+		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 	}
 
 	std::shared_ptr<Animation> AssetsManager::getAnimation(const File &_filePath)
@@ -222,29 +222,28 @@ namespace AGE
 	void AssetsManager::loadSkeleton(const File &_filePath, const std::string &loadingChannel)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
-		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
-		{
-			//TODO
-			return;
-			//std::promise<bool> promise;
-			//auto future = promise.get_future();
-			//promise.set_value(true);
-			//return future;
-		}
+		auto skeleton = std::make_shared<Skeleton>();
 		if (!filePath.exists())
 		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
 			assert(false);
 		}
-		auto skeleton = std::make_shared<Skeleton>();
-		_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
 
-		/*return */AGE::EmplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){ // <<<<<<<<<TODO
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
+			{
+				return;
+			}
+			_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
+		}
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*skeleton.get());
 			return true;
 		});
+		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 	}
 
 	void AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
@@ -564,6 +563,8 @@ namespace AGE
 			std::lock_guard<std::mutex> lock(_mutex);
 			if (_loadingChannels.find(channelName) == std::end(_loadingChannels))
 			{
+				total = -1;
+				to_load = -1;
 				return;
 			}
 			channel = _loadingChannels[channelName];

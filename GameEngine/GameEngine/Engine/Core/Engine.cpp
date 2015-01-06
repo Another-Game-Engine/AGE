@@ -121,10 +121,10 @@ namespace AGE
 					ImGui::Text(std::string("Wait : " + std::to_string((float)e.averageWaitTimeCopy) + " ms.").c_str());
 					if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
 						ImGui::Text(std::string("FPS : " + std::to_string((int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy))) + ".").c_str());
-					ImGui::PlotLines("Frame Times", e.totalCopy.data(), (int)e.totalCopy.size(), (int)e.secondCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(200, 70));
+					ImGui::PlotLines("Frame Times", e.totalCopy.data(), (int)e.totalCopy.size(), (int)e.secondCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(200, 30));
 					if (ImGui::TreeNode((void*)(&e), "Details"))
 					{
-						ImGui::PlotLines("Wait Times", e.waitCopy.data(), (int)e.waitCopy.size(), (int)e.secondCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(200, 70));
+						ImGui::PlotLines("Wait Times", e.waitCopy.data(), (int)e.waitCopy.size(), (int)e.secondCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(200, 30));
 						ImGui::TreePop();
 					}
 				}
@@ -135,7 +135,7 @@ namespace AGE
 				{
 					auto &e = stats[i];
 					ImGui::Text("%s", e.name.c_str());
-					ImGui::PlotLines("", e.workCopy.data(), (int)e.workCopy.size(), (int)e.secondCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(200, 70));
+					ImGui::PlotLines("", e.workCopy.data(), (int)e.workCopy.size(), (int)e.secondCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(200, 30));
 					ImGui::Separator();
 				}
 			}

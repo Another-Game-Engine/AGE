@@ -18,6 +18,17 @@ namespace AGE
 			, Worker3
 			, Worker4
 			, Worker5
+			, Worker6
+			, Worker7
+			, Worker8
+			, Worker9
+			, Worker10
+			, Worker11
+			, Worker12
+			, Worker13
+			, Worker14
+			, Worker15
+			, Worker16
 			, END
 		};
 
