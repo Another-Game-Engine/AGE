@@ -180,28 +180,28 @@ namespace AGE
 					});
 				});
 				//VENICE
-				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-					dataSet->filePath = File("Venice/venice.obj");
-					dataSet->skinName = "venice";
-					dataSet->materialName = "venice";
+				//AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+				//	std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
+				//	dataSet->filePath = File("Venice/venice.obj");
+				//	dataSet->skinName = "venice";
+				//	dataSet->materialName = "venice";
 
-					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+				//	dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+				//	dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
 
-					AGE::AssimpLoader::Load(*dataSet.get());
+				//	AGE::AssimpLoader::Load(*dataSet.get());
 
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::MaterialLoader::load(*dataSet.get());
-						AGE::MaterialLoader::save(*dataSet.get());
+				//	AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+				//		AGE::MaterialLoader::load(*dataSet.get());
+				//		AGE::MaterialLoader::save(*dataSet.get());
 
-						AGE::ImageLoader::load(*dataSet.get());
-						AGE::ImageLoader::save(*dataSet.get());
+				//		AGE::ImageLoader::load(*dataSet.get());
+				//		AGE::ImageLoader::save(*dataSet.get());
 
-						AGE::MeshLoader::load(*dataSet.get());
-						AGE::MeshLoader::save(*dataSet.get());
-					});
-				});
+				//		AGE::MeshLoader::load(*dataSet.get());
+				//		AGE::MeshLoader::save(*dataSet.get());
+				//	});
+				//});
 			}
 			slowTouch = true;
 		}
