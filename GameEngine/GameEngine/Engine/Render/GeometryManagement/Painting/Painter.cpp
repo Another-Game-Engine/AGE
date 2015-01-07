@@ -99,8 +99,7 @@ Painter & Painter::draw(GLenum mode, Key<Program> const &program, std::vector<Ke
 	}
 	for (auto &draw_element : drawList) {
 		if (draw_element) {
-			_vertices[draw_element.getId()].properties()->apply(*_programs[program.getId()]);
-			_programs[program.getId()]->update();
+			_vertices[draw_element.getId()].update(_programs[program.getId()]);
 			_vertices[draw_element.getId()].draw(mode);
 		}
 	}

@@ -1,8 +1,8 @@
 #pragma once
 
 # include <Render/Properties/IProperty.hh>
-# include <Render/ProgramResources/IProgramResources.hh>
 # include <Render/Program.hh>
+# include <utility>
 
 class AProperty : public IProperty
 {
@@ -11,9 +11,10 @@ public:
 	AProperty(AProperty &&move);
 
 public:
-	virtual std::string const &name();
+	virtual std::string const &name() const override final;
+	virtual IProgramResources *get_resource(std::shared_ptr<Program> const &p) override final;
 
 private:
 	std::string _name;
-	std::vector<IProgramResources> _resources;
+	std::vector<std::pair<std::shared_ptr<Program>, std::shared_ptr<IProgramResources>>> _resources;
 };
