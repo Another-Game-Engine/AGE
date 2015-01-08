@@ -34,6 +34,7 @@ BenchmarkScene::~BenchmarkScene(void)
 # include <Render/ProgramResources/Types/UniformBlock.hh>
 # include <Render/ProgramResources/Types/Attribute.hh>
 # include <Render/GeometryManagement/Painting/Painter.hh>
+# include <Render/Properties/Transformation.hh>
 
 void BenchmarkScene::initRendering()
 {
@@ -51,6 +52,8 @@ void BenchmarkScene::initRendering()
 
 		Painter p({ program }, { GL_FLOAT_VEC4 });
 		auto key = p.add_vertices(3, 6);
+		auto k = p.get_vertices(key)->add_property(std::make_shared<Transformation>(Transformation({program})));
+		p.get_vertices(key)->get_property<Transformation>(k)->set(glm::mat4(1.0f));
 		p.update();
 		p.draw(GL_TRIANGLES, program, {key});
 		glFlush();

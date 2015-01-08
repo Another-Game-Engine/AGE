@@ -173,14 +173,6 @@ Vertices &Vertices::remove_property(Key<Property> &key)
 	return (*this);
 }
 
-std::shared_ptr<IProperty> Vertices::get_property(Key<Property> const &p) const
-{
-	if (!p) {
-		return (nullptr);
-	}
-	return (_properties[p.getId()]);
-}
-
 Vertices & Vertices::update(std::shared_ptr<Program> const &program)
 {
 	for (auto &prop : _properties) {

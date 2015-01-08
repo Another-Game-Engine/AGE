@@ -34,7 +34,7 @@ public:
 	Vertices &draw(GLenum mode);
 	Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
 	Vertices &remove_property(Key<Property> &key);
-	std::shared_ptr<IProperty> get_property(Key<Property> const &p) const;
+	template <typename type_t> std::shared_ptr<type_t> get_property(Key<Property> const &p) const;
 	Vertices &update(std::shared_ptr<Program> const &program);
 
 private:
@@ -78,4 +78,13 @@ Vertices &Vertices::set_data(std::vector<type_t> const &data, size_t index)
 	}
 	_data[index] = tmp;
 	return (*this);
+}
+
+template <typename type_t>
+std::shared_ptr<type_t> Vertices::get_property(Key<Property> const &p) const
+{
+	if (!p) {
+		return (std::shared_ptr<type_t>(nullptr));
+	}
+	return (std::static_pointer_cast<type_t>(_properties[p.getId()]));
 }

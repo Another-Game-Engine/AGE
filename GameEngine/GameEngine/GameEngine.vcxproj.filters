@@ -103,6 +103,7 @@
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\Buffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.cpp" />
     <ClCompile Include="Engine\Render\Properties\AProperty.cpp" />
+    <ClCompile Include="Engine\Render\Properties\Transformation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -283,6 +284,7 @@
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.hh" />
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
+    <ClInclude Include="Engine\Render\Properties\Transformation.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
