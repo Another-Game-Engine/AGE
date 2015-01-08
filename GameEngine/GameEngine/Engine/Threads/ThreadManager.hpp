@@ -63,6 +63,7 @@ namespace AGE
 		TMQ::HybridQueue *getAvailableTaskQueue(bool futur = false, Thread::ThreadType type = Thread::END);
 
 		void forEachThreads(std::function<void(AGE::Thread *)> &&fn);
+		void setAsWorker(bool mainThread, bool prepareThread, bool renderThread);
 	private:
 		std::array<ThreadStatistics, Thread::END> _threadsStatistics;
 

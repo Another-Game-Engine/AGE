@@ -49,6 +49,9 @@ namespace AGE
 		virtual bool launch() = 0;
 		virtual bool stop() = 0;
 		std::atomic_size_t taskCounter;
+		inline bool isWorker() const { return _worker; }
+		void setAsWorker(bool ToF);
+
 	protected:
 		// This function will generate the unique id of the thread
 		// It have to be called only in the thread context
@@ -57,5 +60,7 @@ namespace AGE
 		const ThreadType _id;
 		const std::string _name;
 		std::size_t _systemId;
+	private:
+		std::atomic_bool _worker;
 	};
 }

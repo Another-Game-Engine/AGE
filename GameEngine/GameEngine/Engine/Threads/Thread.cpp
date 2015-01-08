@@ -10,6 +10,7 @@ namespace AGE
 		, _name(threadTypeToString(type))
 		, _systemId(0)
 	{
+		_worker = true;
 		taskCounter = 0;
 	}
 
@@ -73,5 +74,11 @@ namespace AGE
 			res = 4;
 		}
 		return res;
+	}
+
+	void Thread::setAsWorker(bool ToF)
+	{
+		assert(_id < ThreadType::Worker1);
+		_worker = ToF;
 	}
 }

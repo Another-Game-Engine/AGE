@@ -136,9 +136,7 @@ namespace AGE
 
 	TMQ::HybridQueue *ThreadManager::getAvailableTaskQueue(bool futur, Thread::ThreadType type)
 	{
-		static std::atomic_size_t iterator = Thread::Worker1;
-		if (iterator >= Thread::hardwareConcurency())
-			iterator = Thread::Worker1;
+		static std::atomic_size_t iterator = Thread::Main;
 		std::size_t res = -1;
 		//float perf = std::numeric_limits<float>::max();
 		//std::size_t taskNumber = std::numeric_limits<std::size_t>::max();
@@ -157,6 +155,14 @@ namespace AGE
 		//	}
 		//}
 		//assert(res != std::size_t(-1));
+		if (iterator >= Thread::hardwareConcurency())
+			iterator = Thread::Main;
+		while (!_threads[iterator]->isWorker())
+		{
+			++iterator;
+			if (iterator >= Thread::hardwareConcurency())
+				iterator = Thread::Main;
+		}
 		res = iterator;
 		++iterator;
 
@@ -178,6 +184,13 @@ namespace AGE
 		{
 			fn(e);
 		}
+	}
+
+	void ThreadManager::setAsWorker(bool mainThread, bool prepareThread, bool renderThread)
+	{
+		_threads[Thread::Main]->setAsWorker(mainThread);
+		_threads[Thread::PrepareRender]->setAsWorker(prepareThread);
+		_threads[Thread::Render]->setAsWorker(renderThread);
 	}
 
 	ThreadManager *GetThreadManager()

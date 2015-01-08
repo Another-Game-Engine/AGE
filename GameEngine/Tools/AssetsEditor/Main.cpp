@@ -36,6 +36,7 @@ int			main(int ac, char **av)
 
 	engine.lock()->launch(std::function<bool()>([&]()
 	{
+		AGE::GetThreadManager()->setAsWorker(false, false, false);
 		engine.lock().get()->setInstance<AGE::Timer>();
 		engine.lock().get()->setInstance<AGE::AssetsManager>();
 
