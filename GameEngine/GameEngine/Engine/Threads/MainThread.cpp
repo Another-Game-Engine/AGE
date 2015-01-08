@@ -34,29 +34,36 @@ namespace AGE
 		std::chrono::system_clock::time_point waitEnd;
 		std::chrono::system_clock::time_point workStart;
 		std::chrono::system_clock::time_point workEnd;
+		std::size_t workCount = 0;
 
-		waitStart = std::chrono::high_resolution_clock::now();
+
 		if (!getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
 		{
-			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
 			if (!_engine->update())
 				return false;
-			while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
+			workEnd = std::chrono::high_resolution_clock::now();
+			workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
+			waitStart = std::chrono::high_resolution_clock::now();
+			while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Wait))
 			{
 				if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
 				{
+					workStart = std::chrono::high_resolution_clock::now();
 					while (!taskQueue.empty())
 					{
 						auto task = taskQueue.front();
 						assert(execute(task)); // we receive a task that we cannot handle
 						taskQueue.pop();
+						taskCounter--;
 					}
+					workEnd = std::chrono::high_resolution_clock::now();
+					workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 				}
 			}
-			workEnd = std::chrono::high_resolution_clock::now();
+			waitEnd = std::chrono::high_resolution_clock::now();
 			GetThreadManager()->updateThreadStatistics(this->_id
-				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
+				, workCount
 				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
 		else
@@ -68,6 +75,7 @@ namespace AGE
 				auto task = taskQueue.front();
 				assert(execute(task)); // we receive a task that we cannot handle
 				taskQueue.pop();
+				taskCounter--;
 			}
 			workEnd = std::chrono::high_resolution_clock::now();
 			GetThreadManager()->updateThreadStatistics(this->_id

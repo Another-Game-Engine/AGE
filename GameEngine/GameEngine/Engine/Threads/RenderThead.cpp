@@ -11,6 +11,7 @@
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
+#include <Utils/OpenGL.hh>
 
 namespace AGE
 {
@@ -28,19 +29,20 @@ namespace AGE
 		this->registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
 			_context = msg.engine.lock()->setInstance<SdlContext, IRenderContext>();
-			if (!_context->init(0, 1920, 1040, "~AGE~ V0.00001 Demo"))
+			if (!_context->init(0, 1920, 1000, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
 				return;
 			}
 			_render = msg.engine.lock()->setInstance<gl::RenderManager>();
+//			SDL_GL_SetSwapInterval(1);
 			msg.setValue(true);
 		});
 
  		registerCallback<Commands::Render::Flush>([&](Commands::Render::Flush& msg)
 		{
 			_context->swapContext();
-
+			glClear(GL_COLOR_BUFFER_BIT);
 		});
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
@@ -162,6 +164,20 @@ namespace AGE
 					auto task = tasks.front();
 					assert(execute(task)); // we receive a task that we cannot treat
 					tasks.pop();
+					taskCounter--;
+					workEnd = std::chrono::high_resolution_clock::now();
+					const std::size_t toWait = 33;
+					const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
+					if (elapsed >= toWait)
+					{
+						std::cout << elapsed << ", ";
+						while (!tasks.empty() && _insideRun)
+						{
+							auto task = tasks.front();
+							getQueue()->moveTask(task, tasks.getFrontSize());
+							tasks.pop();
+						}
+					}
 				}
 			}
 			if (commandSuccess)

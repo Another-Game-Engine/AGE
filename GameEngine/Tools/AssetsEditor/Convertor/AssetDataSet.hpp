@@ -9,6 +9,8 @@
 
 #include <filesystem>
 
+#include <atomic>
+
 namespace AGE
 {
 	struct Skeleton;
@@ -19,6 +21,25 @@ namespace AGE
 
 	struct AssetDataSet
 	{
+		~AssetDataSet()
+		{
+			assimpImporter.FreeScene();
+			for (auto &e : animations)
+				delete e;
+			animations.clear();
+			if (mesh)
+				delete mesh;
+			for (auto &e : materials)
+				delete e;
+			materials.clear();
+			for (auto &e : textures)
+				delete e;
+			textures.clear();
+		}
+
+		AssetDataSet()
+		{
+		}
 		//Configurations
 		bool loadSkeleton = false;
 		bool loadAnimations = false;
@@ -50,7 +71,7 @@ namespace AGE
 		//Ptrs
 		Skeleton *skeleton = nullptr;
 		AGE::Vector<Animation*> animations;
-		MeshData *mesh;
+		MeshData *mesh = nullptr;
 		AGE::Vector<MaterialData*> materials;
 		AGE::Vector<TextureData*> textures;
 

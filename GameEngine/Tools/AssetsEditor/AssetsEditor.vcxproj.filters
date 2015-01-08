@@ -18,22 +18,25 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetConvertor.cpp">
+    <ClCompile Include="Scenes\AssetsEditorScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="Folder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AFormatConvertor.cpp">
+    <ClCompile Include="File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dataSet.cpp">
+    <ClCompile Include="AssetFileCreator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AConfigurationFile.cpp">
+    <ClCompile Include="AssetFiles\RawMeshFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleConf.cpp">
+    <ClCompile Include="AssetFiles\RawTextureFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\RawMaterialFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,22 +62,28 @@
     <ClInclude Include="Convertor\ImageLoader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetConvertor.hh">
+    <ClInclude Include="Scenes\AssetsEditorScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.hh">
+    <ClInclude Include="Folder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AFormatConvertor.hh">
+    <ClInclude Include="File.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dataSet.hh">
+    <ClInclude Include="AssetFileCreator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AConfigurationFile.hh">
+    <ClInclude Include="AssetFiles\UnknownFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleConf.hh">
+    <ClInclude Include="AssetFiles\RawMeshFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\RawTextureFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\RawMaterialFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

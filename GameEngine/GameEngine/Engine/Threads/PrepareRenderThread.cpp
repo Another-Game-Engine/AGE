@@ -176,6 +176,7 @@ namespace AGE
 					auto task = tasks.front();
 					assert(execute(task)); // we receive a task that we cannot treat
 					tasks.pop();
+					taskCounter--;
 				}
 			}
 			if (commandSucces)

@@ -36,8 +36,7 @@ namespace AGE
 			dataSet.animationLoaded = false;
 			if (!dataSet.assimpScene)
 			{
-				if (!AssimpLoader::Load(dataSet))
-					return false;
+				return false;
 			}
 			if (!dataSet.assimpScene->HasAnimations())
 				return false;

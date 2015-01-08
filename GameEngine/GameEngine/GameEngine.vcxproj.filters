@@ -89,6 +89,7 @@
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
+    <ClCompile Include="Engine\Utils\BitOperations.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -253,6 +254,7 @@
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
+    <ClInclude Include="Engine\Utils\BitOperations.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

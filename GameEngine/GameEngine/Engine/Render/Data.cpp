@@ -23,10 +23,11 @@ namespace gl
 		_nbrElement(nbrElement)
 	{
 		_sizeBuffers.push_back(sizeof(uint32_t)* nbrElement);
-		for (size_t index = 0; index < _sizeBuffers.back(); ++index)
-		{
-			((uint8_t *)_buffers.back())[index] = ((uint8_t *)buffer.data())[index];
-		}
+		std::memcpy(_buffers.back(), buffer.data(), sizeof(uint8_t) * _sizeBuffers.back());
+		//for (size_t index = 0; index < _sizeBuffers.back(); ++index)
+		//{
+		//	((uint8_t *)_buffers.back())[index] = ((uint8_t *)buffer.data())[index];
+		//}
 	}
 
 	Data::Data(Data const &copy)
@@ -79,10 +80,11 @@ namespace gl
 		for (size_t b = 0; b < _buffers.size(); ++b)
 		{
 			_buffers[b] = new uint8_t[sizeData[b]];
-			for (size_t index = 0; index < sizeData[b]; ++index)
-			{
-				((uint8_t *)_buffers[b])[index] = ((uint8_t *)data[b])[index];
-			}
+			std::memcpy(_buffers[b], data[b], sizeof(uint8_t) * sizeData[b]);
+			//for (size_t index = 0; index < sizeData[b]; ++index)
+			//{
+			//	((uint8_t *)_buffers[b])[index] = ((uint8_t *)data[b])[index];
+			//}
 		}
 	}
 

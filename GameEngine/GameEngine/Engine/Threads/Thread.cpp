@@ -10,7 +10,8 @@ namespace AGE
 		, _name(threadTypeToString(type))
 		, _systemId(0)
 	{
-
+		_worker = true;
+		taskCounter = 0;
 	}
 
 	Thread::~Thread()
@@ -67,6 +68,17 @@ namespace AGE
 	std::size_t Thread::hardwareConcurency()
 	{
 		static std::size_t res = std::thread::hardware_concurrency();
+		if (res <= 3)
+		{
+			printf("Warning : your computer can only support %i threads ! AGE is designed to use at least 4 threads.", res);
+			res = 4;
+		}
 		return res;
+	}
+
+	void Thread::setAsWorker(bool ToF)
+	{
+		assert(_id < ThreadType::Worker1);
+		_worker = ToF;
 	}
 }

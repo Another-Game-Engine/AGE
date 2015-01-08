@@ -13,7 +13,6 @@ namespace gl
 		: _rect(0, 0, 1920, 1040),
 		_source(source)
 	{
-
 	}
 
 	BaseRender::~BaseRender()
