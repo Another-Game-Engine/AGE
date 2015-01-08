@@ -25,6 +25,7 @@ public:
 	Key<ProgramResource> &get_key(std::string const &name);
 	template <typename type_t> std::shared_ptr<type_t> get_resource(Key<ProgramResource> const &key);
 	template <typename type_t> std::shared_ptr<type_t> get_resource(std::string const &name);
+	std::shared_ptr<IProgramResources> get_resource_interface(std::string const &name);
 	bool has_resource(Key<ProgramResource> const &key);
 	Program const &use() const;
 	Program &update();
@@ -51,17 +52,6 @@ std::shared_ptr<type_t> Program::get_resource(std::string const &name)
 		if (name == _program_resources[index]->name()) {
 			auto &resource = _program_resources[index];
 			return (resource->safe(sizeof(type_t::type_t)) ? std::static_pointer_cast<type_t>(resource) : nullptr);
-		}
-	}
-	return (nullptr);
-}
-
-template <>
-std::shared_ptr<IProgramResources> Program::get_resource<IProgramResources>(std::string const &name)
-{
-	for (size_t index = 0; index < _program_resources.size(); ++index) {
-		if (name == _program_resources[index]->name()) {
-			return (_program_resources[index]);
 		}
 	}
 	return (nullptr);

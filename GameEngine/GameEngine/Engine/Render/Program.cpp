@@ -146,5 +146,12 @@ bool Program::operator!=(Program const &p) const
 	return (!(*this == p));
 }
 
-
-
+std::shared_ptr<IProgramResources> Program::get_resource_interface(std::string const &name)
+{
+	for (size_t index = 0; index < _program_resources.size(); ++index) {
+		if (name == _program_resources[index]->name()) {
+			return (_program_resources[index]);
+		}
+	}
+	return (nullptr);
+}

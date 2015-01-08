@@ -1,10 +1,11 @@
 #include <Render/Properties/AProperty.hh>
+#include <Render/Program.hh>
 
 AProperty::AProperty(std::string &&name, std::vector<std::shared_ptr<Program>> const &programs) :
 _name(std::move(name))
 {
 	for (auto &program : programs) {
-		_resources.emplace_back(std::make_pair(program, nullptr/*program->get_resource<IProgramResources>(_name)*/));
+		_resources.emplace_back(std::make_pair(program, program->get_resource_interface(_name)));
 	}
 }
 
