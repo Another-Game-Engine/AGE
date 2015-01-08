@@ -261,7 +261,6 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec1.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec4.cpp" />
     <ClCompile Include="Engine\Render\Properties\AProperty.cpp" />
-    <ClCompile Include="Engine\Render\Properties\VerticesProperties.cpp" />
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
     <ClCompile Include="Engine\Render\Program.cpp" />
@@ -341,7 +340,6 @@
     <ClInclude Include="Engine\Render\GeometryManagement\Painting\Painter.hh" />
     <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
-    <ClInclude Include="Engine\Render\Properties\VerticesProperties.hh" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />

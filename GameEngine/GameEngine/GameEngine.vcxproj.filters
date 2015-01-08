@@ -102,7 +102,6 @@
     <ClCompile Include="Engine\Render\GeometryManagement\Data\Vertices.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\Buffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.cpp" />
-    <ClCompile Include="Engine\Render\Properties\VerticesProperties.cpp" />
     <ClCompile Include="Engine\Render\Properties\AProperty.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -282,7 +281,6 @@
     <ClInclude Include="Engine\Render\GeometryManagement\Data\Vertices.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.hh" />
-    <ClInclude Include="Engine\Render\Properties\VerticesProperties.hh" />
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
   </ItemGroup>

@@ -94,6 +94,7 @@ Program * Painter::get_program(Key<Program> const &program)
 
 Painter & Painter::draw(GLenum mode, Key<Program> const &program, std::vector<Key<Vertices>> const &drawList)
 {
+	_buffer.bind();
 	if (!program) {
 		return (*this);
 	}
@@ -103,6 +104,7 @@ Painter & Painter::draw(GLenum mode, Key<Program> const &program, std::vector<Ke
 			_vertices[draw_element.getId()].draw(mode);
 		}
 	}
+	_buffer.unbind();
 	return (*this);
 }
 

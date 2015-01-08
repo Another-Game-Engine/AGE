@@ -46,8 +46,6 @@ bool BufferPrograms::insert(Vertices &vertices)
 	for (auto index = 0ull; index < vertices.nbr_buffer(); ++index) {
 		vertices.set_block_memory(_buffers[index].push_back(vertices.transfer_data(index)), index);
 	}
-	size_t size;
-	std::cout << "1 -> " << vertices.get_indices(size)[1] << std::endl;
 	vertices.set_indices_block_memory(_indices_buffer.push_back(vertices.transfer_indices_data()));
 	return (true);
 }
