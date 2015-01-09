@@ -232,14 +232,13 @@
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
+    <ClCompile Include="Engine\Render\Buffer\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexArray.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
-    <ClCompile Include="Engine\Render\Buffer.cpp" />
-    <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\Buffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Data\BlockMemory.cpp" />
@@ -268,6 +267,7 @@
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
     <ClCompile Include="Engine\Render\Program.cpp" />
+    <ClCompile Include="Engine\Render\Storage\AStorage.cpp" />
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
     <ClCompile Include="Engine\Render\Task.cpp" />
@@ -337,6 +337,7 @@
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Render\Buffer\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Data\BlockMemory.hh" />
@@ -348,6 +349,8 @@
     <ClInclude Include="Engine\Render\Properties\Materials\Diffuse.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Ratio.hh" />
     <ClInclude Include="Engine\Render\Properties\Transformation.hh" />
+    <ClInclude Include="Engine\Render\Storage\AStorage.hh" />
+    <ClInclude Include="Engine\Render\Storage\IStorage.hh" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
@@ -380,7 +383,6 @@
     <ClInclude Include="Engine\Render\Buffer\VertexArray.hh" />
     <ClInclude Include="Engine\Render\Buffer\VertexBuffer.hh" />
     <ClInclude Include="Engine\Render\Data.hh" />
-    <ClInclude Include="Engine\Render\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\LocationStorage.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />

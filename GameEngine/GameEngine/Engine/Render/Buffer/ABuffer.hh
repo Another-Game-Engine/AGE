@@ -5,11 +5,13 @@
 class ABuffer : public IBuffer
 {
 public:
-	ABuffer();
 	virtual ~ABuffer();
-	ABuffer(ABuffer &&move);
 	ABuffer(ABuffer const &copy) = delete;
 	ABuffer &operator=(ABuffer const &i) = delete;
+
+protected:
+	ABuffer();
+	ABuffer(ABuffer &&move);
 
 public:
 	GLuint id() const;

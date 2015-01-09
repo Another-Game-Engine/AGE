@@ -1,5 +1,5 @@
-#include <Render/Framebuffer.hh>
-#include <Render/Storage.hh>
+#include <Render/Buffer/Framebuffer.hh>
+#include <Render/Storage/IStorage.hh>
 
 Framebuffer::Framebuffer(GLenum mode)
 	: _id(0),
@@ -34,18 +34,18 @@ Framebuffer const &Framebuffer::size(GLint width, GLint height, GLint sample) co
 	return (*this);
 }
 
-GLuint Framebuffer::getId() const
+GLuint Framebuffer::id() const
 {
 	return (_id);
 }
 
-GLenum Framebuffer::getType() const
+GLenum Framebuffer::type() const
 {
 	return (_mode);
 }
 
-Framebuffer const &Framebuffer::attachement(Storage const &storage, GLenum attach) const
+Framebuffer const &Framebuffer::attachment(IStorages const &storage, GLenum attach) const
 {
-	storage.attachement(*this, attach);
+	storage.attachment(*this, attach);
 	return (*this);
 }

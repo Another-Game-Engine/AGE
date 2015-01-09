@@ -1,5 +1,5 @@
 #include <Render/Storage.hh>
-#include <Render/Framebuffer.hh>
+#include <Render/Buffer/Framebuffer.hh>
 #include <utility>
 #include <cstdint>
 #include <iostream>
@@ -109,7 +109,7 @@ Texture const &Texture2D::parameter(GLenum pname, GLint param) const
 
 Storage const &Texture2D::attachement(Framebuffer const &fbo, GLenum attach) const
 {
-	glFramebufferTexture2D(fbo.getType(), attach, GL_TEXTURE_2D, _id, _levelTarget);
+	glFramebufferTexture2D(fbo.type(), attach, GL_TEXTURE_2D, _id, _levelTarget);
 	return (*this);
 }
 
@@ -133,6 +133,6 @@ GLenum RenderBuffer::getType() const
 
 Storage const &RenderBuffer::attachement(Framebuffer const &fbo, GLenum attach) const
 {
-	glFramebufferRenderbuffer(fbo.getType(), attach, GL_RENDERBUFFER, _id);
+	glFramebufferRenderbuffer(fbo.type(), attach, GL_RENDERBUFFER, _id);
 	return (*this);
 }

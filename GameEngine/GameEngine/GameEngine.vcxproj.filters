@@ -10,7 +10,6 @@
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
-    <ClCompile Include="Engine\Render\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\LocationStorage.cpp" />
     <ClCompile Include="Engine\Render\Material.cpp" />
     <ClCompile Include="Engine\Render\Pipeline.cpp" />
@@ -96,7 +95,6 @@
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
-    <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Painting\Painter.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Data\BlockMemory.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Data\Vertices.cpp" />
@@ -107,6 +105,8 @@
     <ClCompile Include="Engine\Render\Properties\Materials\Diffuse.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Ratio.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Color.cpp" />
+    <ClCompile Include="Engine\Render\Buffer\Framebuffer.cpp" />
+    <ClCompile Include="Engine\Render\Storage\AStorage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -136,7 +136,6 @@
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Render\Data.hh" />
-    <ClInclude Include="Engine\Render\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\LocationStorage.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
@@ -291,6 +290,9 @@
     <ClInclude Include="Engine\Render\Properties\Materials\Diffuse.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Ratio.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Color.hh" />
+    <ClInclude Include="Engine\Render\Buffer\Framebuffer.hh" />
+    <ClInclude Include="Engine\Render\Storage\IStorage.hh" />
+    <ClInclude Include="Engine\Render\Storage\AStorage.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

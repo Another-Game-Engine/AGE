@@ -6,7 +6,7 @@
 
 class AProperty : public IProperty
 {
-public:
+protected:
 	AProperty(std::string &&name);
 	AProperty(std::string &&name, std::vector<std::shared_ptr<Program>> const &programs);
 	AProperty(AProperty &&move);
