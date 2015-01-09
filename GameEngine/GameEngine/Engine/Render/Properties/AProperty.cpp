@@ -11,7 +11,7 @@ _name(std::move(name))
 
 AProperty::AProperty(AProperty &&move) :
 _name(std::move(move._name)),
-_resources(std::move(_resources))
+_resources(std::move(move._resources))
 {
 
 }

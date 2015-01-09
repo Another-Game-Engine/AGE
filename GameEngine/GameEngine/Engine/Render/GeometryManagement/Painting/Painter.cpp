@@ -3,7 +3,7 @@
 Painter::Painter(std::vector<std::shared_ptr<Program>> const &programs, std::vector<GLenum> &&types) :
 _buffer(std::move(types))
 {
-	for (auto &program : _programs) {
+	for (auto &program : programs) {
 		if (_buffer.coherent_program(program)) {
 			_programs.emplace_back(program);
 		}
@@ -94,10 +94,10 @@ Program * Painter::get_program(Key<Program> const &program)
 
 Painter & Painter::draw(GLenum mode, Key<Program> const &program, std::vector<Key<Vertices>> const &drawList)
 {
-	_buffer.bind();
 	if (!program) {
 		return (*this);
 	}
+	_buffer.bind();
 	for (auto &draw_element : drawList) {
 		if (draw_element) {
 			_vertices[draw_element.getId()].update(_programs[program.getId()]);

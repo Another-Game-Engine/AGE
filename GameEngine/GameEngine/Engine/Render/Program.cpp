@@ -121,7 +121,7 @@ bool Program::coherent_attribute(std::vector<GLenum> const &p) const
 {
 	for (auto &resource : _program_resources) {
 		auto index = resource->id();
-		if (resource->type() == GL_PROGRAM_INPUT && *static_cast<Attribute *>(resource.get()) == p[index]) {
+		if (resource->type() == GL_PROGRAM_INPUT && *static_cast<Attribute *>(resource.get()) != p[index]) {
 			return (false);
 		}
 	}

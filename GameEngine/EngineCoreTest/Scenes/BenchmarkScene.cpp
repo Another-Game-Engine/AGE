@@ -51,12 +51,17 @@ void BenchmarkScene::initRendering()
 		auto program = std::make_shared<Program>(Program(std::string("basic"), { u1, u2 }));
 
 		Painter p({ program }, { GL_FLOAT_VEC4 });
-		auto key = p.add_vertices(3, 6);
-		auto k = p.get_vertices(key)->add_property(std::make_shared<Transformation>(Transformation({program})));
+		auto key = p.add_vertices(3, 3);
+		auto k = p.get_vertices(key)->add_property(std::make_shared<Transformation>(Transformation({ program })));
+		auto uniformBlock = program->get_resource<UniformBlock>("global_state");
+		*uniformBlock->get_resource("projection_matrix") = glm::mat4(1.0f);
+		p.get_vertices(key)->set_data<glm::vec4>({ glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f) }, 0);
+		p.get_vertices(key)->set_indices({0, 1, 2});
 		p.get_vertices(key)->get_property<Transformation>(k)->set(glm::mat4(1.0f));
 		p.update();
 		p.draw(GL_TRIANGLES, program, {key});
 		glFlush();
+		program->print_resources();
 		return (true);
 	});
 	assert(res.get());

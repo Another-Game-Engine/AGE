@@ -44,7 +44,8 @@ std::make_pair(GL_UNIFORM_BLOCK, LAMBDA_PROTO																																			
 			}																																												  \
 		}																																													  \
 	}																																														  \
-	return (std::static_pointer_cast<IProgramResources>(std::make_shared<UniformBlock>(UniformBlock(id, std::move(name), std::move(block_resources), params[0]))));							  \
+	auto tmp = std::make_shared<UniformBlock>(id, std::move(name), std::move(block_resources), params[0]);																	  \
+	return (std::static_pointer_cast<IProgramResources>(tmp));																																  \
 }),																																															  \
 																																															  \
 std::make_pair(GL_PROGRAM_INPUT, LAMBDA_PROTO																																				  \
@@ -58,7 +59,8 @@ std::make_pair(GL_PROGRAM_INPUT, LAMBDA_PROTO																																			
 																																															  \
 		return (std::shared_ptr<IProgramResources>(nullptr));																																  \
 	}																																														  \
-	return (std::static_pointer_cast<IProgramResources>(std::make_shared<Attribute>(id, std::move(name), available_type->second)));															  \
+	auto tmp = std::make_shared<Attribute>(id, std::move(name), available_type->second);													\
+	return (std::static_pointer_cast<IProgramResources>(tmp));															  \
 })																																															 
 
 ProgramResourcesFactory::ProgramResourcesFactory(Program const &program) :																			
