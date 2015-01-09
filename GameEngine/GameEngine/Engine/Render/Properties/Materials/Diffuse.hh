@@ -2,8 +2,7 @@
 
 # include <Render/Properties/AProperty.hh>
 # include <Render/Properties/Materials/Ratio.hh>
-
-class Program;
+# include <Render/Properties/Materials/Color.hh>
 
 class Diffuse : public AProperty
 {
@@ -17,7 +16,10 @@ public:
 public:
 	float get_ratio() const;
 	Diffuse &set_ratio(float ratio);
+	glm::vec4 const &get_color();
+	Diffuse &set_color(glm::vec4 const &color);
 
 private:
 	Ratio _ratio;
+	Color _color;
 };

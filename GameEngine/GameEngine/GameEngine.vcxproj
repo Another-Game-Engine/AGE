@@ -261,6 +261,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec1.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec4.cpp" />
     <ClCompile Include="Engine\Render\Properties\AProperty.cpp" />
+    <ClCompile Include="Engine\Render\Properties\Materials\Color.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Diffuse.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Ratio.cpp" />
     <ClCompile Include="Engine\Render\Properties\Transformation.cpp" />
@@ -343,6 +344,7 @@
     <ClInclude Include="Engine\Render\GeometryManagement\Painting\Painter.hh" />
     <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
+    <ClInclude Include="Engine\Render\Properties\Materials\Color.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Diffuse.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Ratio.hh" />
     <ClInclude Include="Engine\Render\Properties\Transformation.hh" />

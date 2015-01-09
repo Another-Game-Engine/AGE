@@ -106,6 +106,7 @@
     <ClCompile Include="Engine\Render\Properties\Transformation.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Diffuse.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Ratio.cpp" />
+    <ClCompile Include="Engine\Render\Properties\Materials\Color.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Engine\Render\Properties\Transformation.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Diffuse.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Ratio.hh" />
+    <ClInclude Include="Engine\Render\Properties\Materials\Color.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
