@@ -104,6 +104,8 @@
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.cpp" />
     <ClCompile Include="Engine\Render\Properties\AProperty.cpp" />
     <ClCompile Include="Engine\Render\Properties\Transformation.cpp" />
+    <ClCompile Include="Engine\Render\Properties\Materials\Diffuse.cpp" />
+    <ClCompile Include="Engine\Render\Properties\Materials\Ratio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -285,6 +287,8 @@
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\Transformation.hh" />
+    <ClInclude Include="Engine\Render\Properties\Materials\Diffuse.hh" />
+    <ClInclude Include="Engine\Render\Properties\Materials\Ratio.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -1,6 +1,12 @@
 #include <Render/Properties/AProperty.hh>
 #include <Render/Program.hh>
 
+AProperty::AProperty(std::string &&name) :
+_name(std::move(name))
+{
+
+}
+
 AProperty::AProperty(std::string &&name, std::vector<std::shared_ptr<Program>> const &programs) :
 _name(std::move(name))
 {
@@ -21,11 +27,11 @@ std::string const & AProperty::name() const
 	return (_name);
 }
 
-IProgramResources * AProperty::get_resource(std::shared_ptr<Program> const &p)
+std::shared_ptr<IProgramResources> const & AProperty::get_resource(std::shared_ptr<Program> const &p)
 {
 	for (auto &resource : _resources) {
 		if (*resource.first == *p) {
-			return (resource.second.get());
+			return (resource.second);
 		}
 	}
 	return (nullptr);

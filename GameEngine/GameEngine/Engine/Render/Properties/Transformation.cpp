@@ -23,8 +23,8 @@ _model_matrix(move._model_matrix)
 
 IProperty & Transformation::update(std::shared_ptr<Program> const &p)
 {
-	auto resource = get_resource(p);
-	*static_cast<Mat4 *>(resource) = _model_matrix;
+	auto &resource = *std::static_pointer_cast<Mat4>(get_resource(p));
+	resource = _model_matrix;
 	return (*this);
 }
 

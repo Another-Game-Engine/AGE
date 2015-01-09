@@ -7,12 +7,13 @@
 class AProperty : public IProperty
 {
 public:
+	AProperty(std::string &&name);
 	AProperty(std::string &&name, std::vector<std::shared_ptr<Program>> const &programs);
 	AProperty(AProperty &&move);
 
 public:
 	virtual std::string const &name() const override final;
-	virtual IProgramResources *get_resource(std::shared_ptr<Program> const &p) override final;
+	virtual std::shared_ptr<IProgramResources> const & get_resource(std::shared_ptr<Program> const &p) override final;
 
 private:
 	std::string _name;
