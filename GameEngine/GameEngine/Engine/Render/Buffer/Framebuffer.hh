@@ -2,7 +2,7 @@
 
 #include <Utils/OpenGL.hh>
 
-class IStorages;
+class ITexture;
 
 class Framebuffer
 {
@@ -14,7 +14,7 @@ public:
 	Framebuffer const &size(GLint width, GLint height, GLint sample = 1) const;
 	Framebuffer const &bind() const;
 	Framebuffer const &unbind() const;
-	Framebuffer const &attachment(IStorages const &storage, GLenum attach) const;
+	Framebuffer const &attachment(ITexture const &storage, GLenum attach) const;
 	GLuint id() const;
 	GLenum type() const;
 

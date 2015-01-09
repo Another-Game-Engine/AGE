@@ -1,5 +1,4 @@
 #include <Render/Buffer/Framebuffer.hh>
-#include <Render/Storage/IStorage.hh>
 
 Framebuffer::Framebuffer(GLenum mode)
 	: _id(0),
@@ -44,8 +43,8 @@ GLenum Framebuffer::type() const
 	return (_mode);
 }
 
-Framebuffer const &Framebuffer::attachment(IStorages const &storage, GLenum attach) const
+Framebuffer const &Framebuffer::attachment(ITexture const &storage, GLenum attach) const
 {
-	storage.attachment(*this, attach);
+	//storage.attachment(*this, attach);
 	return (*this);
 }

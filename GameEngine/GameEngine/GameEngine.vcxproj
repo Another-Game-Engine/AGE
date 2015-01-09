@@ -267,7 +267,8 @@
     <ClCompile Include="Engine\Render\Render.cpp" />
     <ClCompile Include="Engine\Render\RenderManager.cpp" />
     <ClCompile Include="Engine\Render\Program.cpp" />
-    <ClCompile Include="Engine\Render\Storage\AStorage.cpp" />
+    <ClCompile Include="Engine\Render\Textures\ATexture.cpp" />
+    <ClCompile Include="Engine\Render\Textures\Texture2D.cpp" />
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
     <ClCompile Include="Engine\Render\Storage.cpp" />
     <ClCompile Include="Engine\Render\Task.cpp" />
@@ -349,8 +350,10 @@
     <ClInclude Include="Engine\Render\Properties\Materials\Diffuse.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Ratio.hh" />
     <ClInclude Include="Engine\Render\Properties\Transformation.hh" />
-    <ClInclude Include="Engine\Render\Storage\AStorage.hh" />
-    <ClInclude Include="Engine\Render\Storage\IStorage.hh" />
+    <ClInclude Include="Engine\Render\Textures\ATexture.hh" />
+    <ClInclude Include="Engine\Render\Textures\ITexture.hh" />
+    <ClInclude Include="Engine\Render\Textures\PixelTypesFormats.hh" />
+    <ClInclude Include="Engine\Render\Textures\Texture2D.hh" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
@@ -382,7 +385,6 @@
     <ClInclude Include="Engine\Render\Buffer\UniformBuffer.hh" />
     <ClInclude Include="Engine\Render\Buffer\VertexArray.hh" />
     <ClInclude Include="Engine\Render\Buffer\VertexBuffer.hh" />
-    <ClInclude Include="Engine\Render\Data.hh" />
     <ClInclude Include="Engine\Render\Key.hh" />
     <ClInclude Include="Engine\Render\LocationStorage.hh" />
     <ClInclude Include="Engine\Render\MacroRenderManager.hh" />
@@ -407,7 +409,6 @@
     <ClInclude Include="Engine\Render\Program.hh" />
     <ClInclude Include="Engine\Render\UnitProg.hh" />
     <ClInclude Include="Engine\Render\SimpleFormGeometry.hh" />
-    <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\Task.hh" />
     <ClInclude Include="Engine\Skinning\Animation.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />
