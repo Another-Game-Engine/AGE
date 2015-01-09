@@ -30,7 +30,6 @@ namespace AGE
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
 			ar(*dataSet.mesh);
-			delete dataSet.mesh;
 			dataSet.mesh = nullptr;
 			return true;
 		}
@@ -45,7 +44,7 @@ namespace AGE
 				return true;
 			dataSet.meshLoaded = false;
 
-			dataSet.mesh = new MeshData();
+			dataSet.mesh = std::make_shared<MeshData>();
 
 			dataSet.mesh->name = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() : dataSet.skinName;
 			dataSet.mesh->subMeshs.resize(dataSet.assimpScene->mNumMeshes);

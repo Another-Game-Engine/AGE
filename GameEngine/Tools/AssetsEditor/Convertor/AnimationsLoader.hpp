@@ -51,7 +51,7 @@ namespace AGE
 				for (unsigned int animNum = 0; animNum < dataSet.assimpScene->mNumAnimations; ++animNum)
 				{
 					auto aiAnim = dataSet.assimpScene->mAnimations[animNum];
-					dataSet.animations[animNum] = new Animation();
+					dataSet.animations[animNum] = std::make_shared<Animation>();
 					auto anim = dataSet.animations[animNum];
 					anim->name = aiAnim->mName.data;
 					anim->duration = aiAnim->mDuration;

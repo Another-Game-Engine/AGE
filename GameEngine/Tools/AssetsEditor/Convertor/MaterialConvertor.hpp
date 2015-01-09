@@ -77,7 +77,7 @@ namespace AGE
 				aiMat->GetTexture(aiTextureType_NORMALS, 0, &normalTexPath);
 				aiMat->Get(AI_MATKEY_TEXTURE_HEIGHT(0), bumpTexPath);
 
-				auto material = new MaterialData();
+				auto material = std::make_shared<MaterialData>();
 
 				material->diffuse = AssimpLoader::aiColorToGlm(diffuse);
 				material->ambient = AssimpLoader::aiColorToGlm(ambient);

@@ -8,6 +8,7 @@
 #include <assimp/Importer.hpp>
 
 #include <filesystem>
+#include <memory>
 
 #include <atomic>
 
@@ -24,16 +25,8 @@ namespace AGE
 		~AssetDataSet()
 		{
 			assimpImporter.FreeScene();
-			for (auto &e : animations)
-				delete e;
 			animations.clear();
-			if (mesh)
-				delete mesh;
-			for (auto &e : materials)
-				delete e;
 			materials.clear();
-			for (auto &e : textures)
-				delete e;
 			textures.clear();
 		}
 
@@ -53,6 +46,7 @@ namespace AGE
 		bool meshLoaded = false;
 		bool materialsLoaded = false;
 		bool texturesLoaded = false;
+		bool physicLoaded = false;
 
 		//Directory
 		std::tr2::sys::directory_entry rawDirectory;
@@ -67,13 +61,14 @@ namespace AGE
 		std::string skinName = ""; //if empty -> same name as file (fbx, collada)
 		std::string skeletonName = ""; //if empty -> same name as file (fbx, collada)
 		std::string materialName = ""; //if empty -> same name as file (fbx, collada)
+		std::string physicName = "";
 
 		//Ptrs
-		Skeleton *skeleton = nullptr;
-		AGE::Vector<Animation*> animations;
-		MeshData *mesh = nullptr;
-		AGE::Vector<MaterialData*> materials;
-		AGE::Vector<TextureData*> textures;
+		std::shared_ptr<Skeleton> skeleton = nullptr;
+		AGE::Vector<std::shared_ptr<Animation>> animations;
+		std::shared_ptr<MeshData> mesh = nullptr;
+		AGE::Vector<std::shared_ptr<MaterialData>> materials;
+		AGE::Vector<std::shared_ptr<TextureData>> textures;
 
 		//Assimp
 		aiScene* assimpScene = nullptr;
