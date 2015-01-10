@@ -10,6 +10,7 @@
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
+#include <Render/GeometryManagement/Painting/Painter.hh>
 
 namespace AGE
 {
@@ -62,6 +63,13 @@ namespace AGE
 			{
 				msg.function(e);
 			}
+		});
+
+		registerCallback<Commands::Render::DrawTestTriangle>([&](Commands::Render::DrawTestTriangle& msg)
+		{
+			msg.painter->update();
+			msg.painter->draw(GL_TRIANGLES, msg.program, msg.meshes);
+			glFlush();
 		});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)

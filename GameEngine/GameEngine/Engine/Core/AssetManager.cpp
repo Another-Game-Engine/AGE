@@ -4,7 +4,7 @@
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <Texture/Texture.hpp>
-#include <Render/RenderManager.hh>
+//#include <Render/RenderManager.hh>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/RenderThread.hpp>
@@ -258,16 +258,16 @@ namespace AGE
 		future2.get();
 	}
 	
-	std::shared_ptr<Program> AssetsManager::addProgram(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &u)
+	std::shared_ptr<Program> AssetsManager::addProgram(std::string const &name, std::vector<std::shared_ptr<UnitProg>> const &u)
 	{
-		std::shared_ptr<Program> program = std::make_shared<Program>(name, u);
+		std::shared_ptr<Program> program = std::make_shared<Program>(std::string(name), u);
 
 		_programs.push_back(program);
 		_programsMap[name] = program;
 		return (program);
 	}
 
-	std::shared_ptr<MeshInstance> AssetsManager::createMesh(std::string meshName,
+	std::shared_ptr<MeshInstance> AssetsManager::createMesh(std::string const &meshName,
 															AGE::Vector<glm::vec4> const &positions,
 															AGE::Vector<glm::vec4> const &colors,
 															AGE::Vector<unsigned int> const &idx)
@@ -276,7 +276,7 @@ namespace AGE
 
 		meshInstance->subMeshs.resize(1);
 		meshInstance->name = meshName;
-		meshInstance->path = ".";
+		meshInstance->path = meshName;
 
 		auto mesh = &meshInstance->subMeshs[0];
 
@@ -312,6 +312,8 @@ namespace AGE
 
 		future1.get();
 		future2.get();
+		_meshs[meshName] = meshInstance;
+		return (meshInstance);
 	}
 
 	// Create pool for mesh

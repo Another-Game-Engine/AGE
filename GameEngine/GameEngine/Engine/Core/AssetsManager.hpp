@@ -32,8 +32,10 @@ namespace AGE
 		std::shared_ptr<Skeleton> getSkeleton(const File &filePath);
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
-		std::shared_ptr<MeshInstance> createMesh(AGE::Vector<glm::vec4> const &positions, AGE::Vector<glm::vec4> const &colors, AGE::Vector<unsigned int> const &idx);
-		std::shared_ptr<Program> addProgram(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &u);
+		std::shared_ptr<MeshInstance> createMesh(std::string const &meshName, AGE::Vector<glm::vec4> const &positions, AGE::Vector<glm::vec4> const &colors, AGE::Vector<unsigned int> const &idx);
+		std::shared_ptr<Program> addProgram(std::string const &name, std::vector<std::shared_ptr<UnitProg>> const &u);
+		std::shared_ptr<Program> getProgram(std::string const &name) { assert(_programsMap.find(name) != _programsMap.end()); return (_programsMap[name]); }
+		std::shared_ptr<Painter> getPainter(std::bitset<MeshInfos::END> infos) { assert(_painters.find(infos) != _painters.end()); return (_painters[infos]); }
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 	private:
 		std::string _assetsDirectory;

@@ -1,10 +1,10 @@
 #include <Scenes/BenchmarkScene.hpp>
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Render/Pipeline.hh>
+//#include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
-#include <Render/RenderManager.hh>
+//#include <Render/RenderManager.hh>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
@@ -26,8 +26,8 @@ BenchmarkScene::~BenchmarkScene(void)
 }
 
 #include <Render/Program.hh>
-#include <Render/GeometryManagement/Vertices.hh>
-#include <Render/GeometryManagement/BufferPrograms.hh>
+//#include <Render/GeometryManagement/Vertices.hh>
+//#include <Render/GeometryManagement/BufferPrograms.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
 //#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
@@ -51,6 +51,24 @@ void BenchmarkScene::initRendering()
 		return (true);
 	});
 	assert(res.get());
+
+	AGE::Vector<glm::vec4> positions;
+	AGE::Vector<glm::vec4> colors;
+	AGE::Vector<unsigned int> idx;
+
+	positions.emplace_back(-1, -1, 0, 0);
+	positions.emplace_back(0, -1, 0, 0);
+	positions.emplace_back(1, 1, 0, 0);
+
+	colors.emplace_back(1, 0, 0, 1);
+	colors.emplace_back(0, 1, 0, 1);
+	colors.emplace_back(0, 0, 1, 1);
+
+	idx.emplace_back(0);
+	idx.emplace_back(1);
+	idx.emplace_back(2);
+
+	assetsManager->createMesh("triangle", positions, colors, idx);
 }
 
 bool BenchmarkScene::userStart()
@@ -63,6 +81,8 @@ bool BenchmarkScene::userStart()
 	registerComponentType<Component::Lifetime>();
 	registerComponentType<Component::RigidBody>();
 	registerComponentType<Component::PointLight>();
+
+#if 0
 
 #ifdef PHYSIC_SIMULATION
 	setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
@@ -193,7 +213,7 @@ bool BenchmarkScene::userStart()
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
 	//addComponent<Component::PointLight>(createEntity())->set(glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.f), glm::vec3(1.0f, 0.0f, 0.f));
-
+#endif
 	return true;
 }
 
@@ -336,7 +356,18 @@ bool BenchmarkScene::userUpdate(double time)
 	});
 #endif
 	
-	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::>();
+	std::bitset<AGE::MeshInfos::END> infos;
+
+
+	infos[AGE::MeshInfos::Positions] = true;
+	infos[AGE::MeshInfos::Colors] = true;
+	std::shared_ptr<Painter> painter = getInstance<AGE::AssetsManager>()->getPainter(infos);
+	std::shared_ptr<Program> program = getInstance<AGE::AssetsManager>()->getProgram("basic");
+	AGE::Vector<Key<Vertices>> meshes;
+
+	meshes.push_back(getInstance<AGE::AssetsManager>()->getMesh("triangle")->subMeshs[0].vertices);
+
+	AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::Render::DrawTestTriangle>(painter, meshes, program);
 
 	return true;
 }
