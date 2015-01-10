@@ -86,7 +86,6 @@
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
-    <ClCompile Include="Engine\Render\Buffer\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\Buffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Data\BlockMemory.cpp" />
@@ -100,6 +99,7 @@
     <ClCompile Include="Engine\Render\Textures\ATexture.cpp" />
     <ClCompile Include="Engine\Render\Textures\Texture2D.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Framebuffer.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -261,7 +261,6 @@
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
-    <ClInclude Include="Engine\Render\Buffer\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Data\BlockMemory.hh" />
@@ -279,6 +278,8 @@
     <ClInclude Include="Engine\Render\Textures\Texture2D.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Framebuffer.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Buffer\IFramebufferStorage.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
