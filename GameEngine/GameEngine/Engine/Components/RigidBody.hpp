@@ -121,21 +121,22 @@ namespace Component
 			_mass = btScalar(mass);
 		}
 
+		int getMass() const
+		{
+			return _mass;
+		}
+
 		void setInertia(const glm::vec3 &inertia)
 		{
 			_inertia = convertGLMVectorToBullet(inertia);
 		}
 
-		void setCollisionShape(std::weak_ptr<AScene> scene
+		void setCollisionMesh(std::weak_ptr<AScene> scene
 			, const Entity &entity
-			, CollisionShape c
-			, const std::string &shapeName = "NULL"
+			, const std::string &meshPath
 			, short filterGroup = 1
 			, short filterMask = -1)
 		{
-			if (c == UNDEFINED)
-				return;
-
 			if (_rigidBody != nullptr)
 			{
 				_manager->getWorld()->removeRigidBody(_rigidBody);
@@ -153,49 +154,36 @@ namespace Component
 				_collisionShape = nullptr;
 			}
 
-			_shapeName = shapeName;
-			_shapeType = c;
+			_shapeName = meshPath;
+			_shapeType = MESH;
 
 			auto link = scene.lock()->getLink(entity);
 
 			_motionState = new DynamicMotionState(link);
-			if (c == BOX)
+			auto media = _manager->loadStaticShape(meshPath);
+			if (!media)
+				return;
+			/*if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
 			{
-				_collisionShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));
+				auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(mediaManager->get(_shapeName));
+				_collisionShape = new btConvexHullShape(*s->shape.get());
 			}
-			else if (c == SPHERE)
+			else if (media->getType() == AMediaFile::COLLISION_SHAPE_STATIC)
+			{*/
+				_collisionShape = new btScaledBvhTriangleMeshShape(media.get(), btVector3(1, 1, 1));
+			/*}
+			else if (media->getType() == AMediaFile::COLLISION_BOX)
 			{
-				_collisionShape = new btSphereShape(1);
+				auto s = std::dynamic_pointer_cast<CollisionBoxFile>(mediaManager->get(_shapeName));
+				_collisionShape = new btBoxShape(*s->shape.get());
 			}
-			else if (c == MESH)
+			else if (media->getType() == AMediaFile::COLLISION_SPHERE)
 			{
-				//auto mediaManager = scene.lock()->getInstance<AssetsManager>();
-				//auto media = mediaManager->get(_shapeName);
-				//if (!media)
-				//	return;
-				//if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
-				//{
-				//	auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(mediaManager->get(_shapeName));
-				//	_collisionShape = new btConvexHullShape(*s->shape.get());
-				//}
-				//else if (media->getType() == AMediaFile::COLLISION_SHAPE_STATIC)
-				//{
-				//	auto s = std::dynamic_pointer_cast<CollisionShapeStaticFile>(mediaManager->get(_shapeName));
-				//	_collisionShape = new btScaledBvhTriangleMeshShape(s->shape.get(), btVector3(1, 1, 1));
-				//}
-				//else if (media->getType() == AMediaFile::COLLISION_BOX)
-				//{
-				//	auto s = std::dynamic_pointer_cast<CollisionBoxFile>(mediaManager->get(_shapeName));
-				//	_collisionShape = new btBoxShape(*s->shape.get());
-				//}
-				//else if (media->getType() == AMediaFile::COLLISION_SPHERE)
-				//{
-				//	auto s = std::dynamic_pointer_cast<CollisionSphereFile>(mediaManager->get(_shapeName));
-				//	_collisionShape = new btSphereShape(*s->shape.get());
-				//}
-				//else
-				//	assert(false && "Collision mesh not found.");
+				auto s = std::dynamic_pointer_cast<CollisionSphereFile>(mediaManager->get(_shapeName));
+				_collisionShape = new btSphereShape(*s->shape.get());
 			}
+			else
+				assert(false && "Collision mesh not found.");*/
 
 			if (_mass != 0)
 				_collisionShape->calculateLocalInertia(_mass, _inertia);
@@ -301,17 +289,17 @@ namespace Component
 		RigidBody(RigidBody &&o)
 			: ComponentBase<RigidBody>(std::move(o))
 		{
-				_shapeType = std::move(o._shapeType);
-				_mass = std::move(o._mass);
-				_inertia = std::move(o._inertia);
-				_rotationConstraint = std::move(o._rotationConstraint);
-				_transformConstraint = std::move(o._transformConstraint);
-				_shapeName = std::move(o._shapeName);
-				_collisionShape = std::move(o._collisionShape);
-				_motionState = std::move(o._motionState);
-				_rigidBody = std::move(o._rigidBody);
-				_manager = std::move(o._manager);
-			}
+			_shapeType = std::move(o._shapeType);
+			_mass = std::move(o._mass);
+			_inertia = std::move(o._inertia);
+			_rotationConstraint = std::move(o._rotationConstraint);
+			_transformConstraint = std::move(o._transformConstraint);
+			_shapeName = std::move(o._shapeName);
+			_collisionShape = std::move(o._collisionShape);
+			_motionState = std::move(o._motionState);
+			_rigidBody = std::move(o._rigidBody);
+			_manager = std::move(o._manager);
+		}
 
 		RigidBody &operator=(RigidBody &&o)
 		{

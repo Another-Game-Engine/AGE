@@ -204,18 +204,18 @@ bool BenchmarkScene::userStart()
 	getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMesh(File("Broken Tower/tower.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadMesh(File("Broken Tower/tower.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 //	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"), "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"), "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"), "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage"), "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMaterial(File("Broken Tower/tower.mage"), "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"), "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"), "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"), "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"), "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage"), "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Broken Tower/tower.mage"), "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"), "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"), "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"), "DEMO_SCENE_ASSETS");
 
 #ifdef LIFETIME_ACTIVATED
 	addSystem<LifetimeSystem>(2);
@@ -280,52 +280,54 @@ bool BenchmarkScene::userUpdate(double time)
 				_renderManager->setMaterial<gl::Ratio_specular>(mesh->getMaterial()->datas[index], 1.0f);
 			}
 {
-	GLOBAL_SPONZA = createEntity();
-		auto _l = getLink(GLOBAL_SPONZA);
-		_l->setPosition(glm::vec3(-5, 0, 0));
-		_l->setScale(glm::vec3(1.f));
-		//		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+	//GLOBAL_SPONZA = createEntity();
+	//auto _l = getLink(GLOBAL_SPONZA);
+	//_l->setPosition(glm::vec3(-5, 0, 0));
+	//_l->setScale(glm::vec3(20.f));
+	////_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
-		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
-		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
+	//auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
+	//_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
+	//std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	//addComponent<Component::RigidBody>(GLOBAL_SPONZA, 0.0f)->setCollisionMesh(weakOnThis, GLOBAL_FLOOR, "../../Assets/AGE-Assets-For-Test/Serialized/cube/cube_static.phage");
 }
 {
-	auto brokenTower = createEntity();
-	auto _l = getLink(brokenTower);
-	_l->setPosition(glm::vec3(0, 40, 0));
-	_l->setScale(glm::vec3(1.f));
-	_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+	//auto brokenTower = createEntity();
+	//auto _l = getLink(brokenTower);
+	//_l->setPosition(glm::vec3(0, 40, 0));
+	//_l->setScale(glm::vec3(1.f));
+	//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
-	auto _m = addComponent<Component::MeshRenderer>(brokenTower, getInstance<AGE::AssetsManager>()->getMesh("Broken Tower/tower.sage"));
-	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Broken Tower/tower.mage")));
-	auto brokenLight = createEntity();
-	_l = getLink(brokenLight);
-	_l->setPosition(glm::vec3(0, 55.0f, 0));
-	addComponent<Component::PointLight>(brokenLight)->set(glm::vec3(1.0f), glm::vec3(1.f, 0.1f, 0.0f));
+	//auto _m = addComponent<Component::MeshRenderer>(brokenTower, getInstance<AGE::AssetsManager>()->getMesh("Broken Tower/tower.sage"));
+	//_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Broken Tower/tower.mage")));
+	//auto brokenLight = createEntity();
+	//_l = getLink(brokenLight);
+	//_l->setPosition(glm::vec3(0, 55.0f, 0));
+	//addComponent<Component::PointLight>(brokenLight)->set(glm::vec3(1.0f), glm::vec3(1.f, 0.1f, 0.0f));
 }
 
 	{
-		GLOBAL_CATWOMAN = createEntity();
-		auto _l = getLink(GLOBAL_CATWOMAN);
+		//GLOBAL_CATWOMAN = createEntity();
+		//auto _l = getLink(GLOBAL_CATWOMAN);
 
-		static bool useOnce = false;
-		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-		_l->setPosition(glm::vec3(-4, 0, 0));
-		_l->setScale(glm::vec3(0.007f));
-		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
-		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
-		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-		{
-			_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 0.1f);
-			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
-			_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
-			//_renderManager->setMaterial<gl::Texture_normal>(getComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN)->getMaterial()->datas[index], _renderManager->getDefaultTexture2D());
-		}
-		//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
-		//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
-		//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
-		//	);
-		//_m->setAnimation(GLOBAL_CAT_ANIMATION);
+		//static bool useOnce = false;
+		//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+		//_l->setPosition(glm::vec3(-4, 0, 0));
+		//_l->setScale(glm::vec3(4.0f));
+		//auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
+		//_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
+		//for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+		//{
+		//	_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 0.1f);
+		//	_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+		//	_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+		//	//_renderManager->setMaterial<gl::Texture_normal>(getComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN)->getMaterial()->datas[index], _renderManager->getDefaultTexture2D());
+		//}
+		////GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
+		////	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
+		////	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
+		////	);
+		////_m->setAnimation(GLOBAL_CAT_ANIMATION);
 	}
 
 	for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
@@ -352,7 +354,7 @@ bool BenchmarkScene::userUpdate(double time)
 #ifdef PHYSIC_SIMULATION
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_FLOOR, 0.0f);
-	rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, Component::RigidBody::BOX);
+	rigidBody->setCollisionMesh(weakOnThis, GLOBAL_FLOOR, "../../Assets/AGE-Assets-For-Test/Serialized/cube/cube_static.phage");
 	rigidBody->getBody().setFriction(0.3f);
 #endif //PHYSIC_SIMULATION
 	return true;
@@ -389,7 +391,7 @@ bool BenchmarkScene::userUpdate(double time)
 	if (_chunkCounter >= _maxChunk)
 	{
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		for (auto i = 0; i < 30; ++i)
+		for (auto i = 0; i < 10; ++i)
 		{
 			auto e = createEntity();
 #ifdef LIFETIME_ACTIVATED
@@ -463,6 +465,16 @@ bool BenchmarkScene::userUpdate(double time)
 			{
 				lightComponent->set(lightComponent->getColor(), lightComponent->getRange());
 			}
+		}
+	}
+	{
+		auto e = GLOBAL_FLOOR;
+		auto link = getLink(e);
+
+		if (ImGui::SliderFloat4(std::string("Floor rotation").c_str(), link->getOrientationPtr(), -1, 1))
+		{
+			auto l = getLink(e);
+			l->setOrientation(l->getOrientation());
 		}
 	}
 #endif

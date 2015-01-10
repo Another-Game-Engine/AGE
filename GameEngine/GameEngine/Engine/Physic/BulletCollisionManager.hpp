@@ -15,7 +15,7 @@
 #include <Entities/Entity.hh>
 
 #include <set>
-
+#include <map>
 #include <memory>
 
 
@@ -99,11 +99,18 @@ public:
 	}
 
 	inline btCollisionWorld *getWorld() const { return _world.get(); }
+
+	std::shared_ptr<btBvhTriangleMeshShape> loadStaticShape(const std::string &path);
+
 protected:
 	std::shared_ptr<btCollisionWorld> _world;
 	btCollisionDispatcher *_dispatcher;
 	btBroadphaseInterface *_broadphase;
 	btCollisionConfiguration *_collisionConfiguration;
+	std::map<std::string, std::shared_ptr<btConvexHullShape>> _dynamicShapes;
+	std::map<std::string, std::shared_ptr<btBvhTriangleMeshShape>> _staticShapes;
+	std::map<std::string, std::shared_ptr<btBoxShape>> _boxShapes;
+	std::map<std::string, std::shared_ptr<btSphereShape>> _sphereShapes;
 };
 
 #endif    //__BULLET_COLLISION_MANAGER_HPP__

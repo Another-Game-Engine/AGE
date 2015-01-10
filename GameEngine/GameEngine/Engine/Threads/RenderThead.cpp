@@ -35,7 +35,7 @@ namespace AGE
 				return;
 			}
 			_render = msg.engine.lock()->setInstance<gl::RenderManager>();
-//			SDL_GL_SetSwapInterval(1);
+			SDL_GL_SetSwapInterval(0);
 			msg.setValue(true);
 		});
 

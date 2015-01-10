@@ -46,7 +46,6 @@ namespace AGE
 				return false;
 			auto &meshs = dataSet.mesh->subMeshs;
 			auto trimesh = new btTriangleMesh();
-
 			for (std::size_t j = 0; j < meshs.size(); ++j)
 			{
 				auto &geo = meshs[j];
@@ -54,7 +53,7 @@ namespace AGE
 				{
 					trimesh->addTriangle(btVector3(geo.positions[i].x, geo.positions[i].y, geo.positions[i].z)
 						, btVector3(geo.positions[i + std::size_t(1)].x, geo.positions[i + std::size_t(1)].y, geo.positions[i + std::size_t(1)].z)
-						, btVector3(geo.positions[i + std::size_t(2)].x, geo.positions[i + std::size_t(2)].y, geo.positions[i + std::size_t(2)].z), true);
+						, btVector3(geo.positions[i + std::size_t(2)].x, geo.positions[i + std::size_t(2)].y, geo.positions[i + std::size_t(2)].z), false);
 				}
 			}
 			dataSet.staticShape = std::make_shared<btBvhTriangleMeshShape>(trimesh, true);

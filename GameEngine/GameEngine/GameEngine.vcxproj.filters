@@ -90,6 +90,7 @@
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Utils\BitOperations.cpp" />
+    <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
