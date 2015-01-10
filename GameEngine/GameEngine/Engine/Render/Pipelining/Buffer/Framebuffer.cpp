@@ -1,4 +1,4 @@
-#include <Render/Buffer/Framebuffer.hh>
+#include <Render//Pipelining/Buffer/Framebuffer.hh>
 
 Framebuffer::Framebuffer(GLenum mode)
 	: _id(0),

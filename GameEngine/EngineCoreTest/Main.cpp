@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <Core/Engine.hh>
 
-#include <Render/RenderManager.hh>
 // SCENES
 #include <Scenes/BenchmarkScene.hpp>
 

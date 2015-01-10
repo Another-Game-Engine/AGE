@@ -1,10 +1,8 @@
 #include <Scenes/BenchmarkScene.hpp>
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Render/Pipeline.hh>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
-#include <Render/RenderManager.hh>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>

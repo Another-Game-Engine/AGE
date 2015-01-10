@@ -1,5 +1,4 @@
 #include <Render/Textures/ATexture.hh>
-# include <Render/Buffer/Framebuffer.hh>
 
 ATexture::ATexture(GLint width, GLint height, GLenum internal_format, GLint nbr_mip_map) :
 _id(0),

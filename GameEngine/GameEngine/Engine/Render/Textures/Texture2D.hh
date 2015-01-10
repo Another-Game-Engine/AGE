@@ -19,4 +19,5 @@ public:
 	virtual GLenum type() const override final;
 	virtual ITexture const &bind() const override final;
 	virtual ITexture const &unbind() const override final;
+	virtual ITexture const &parameter(GLenum mode, GLint param) const override final;
 };

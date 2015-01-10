@@ -45,5 +45,8 @@ Texture2D & Texture2D::set(std::vector<uint8_t> const &data, GLint level, GLenum
 	return (*this);
 }
 
-
-
+ITexture const &Texture2D::parameter(GLenum mode, GLint param) const
+{
+	glTexParameteri(GL_TEXTURE_2D, mode, param);
+	return (*this);
+}

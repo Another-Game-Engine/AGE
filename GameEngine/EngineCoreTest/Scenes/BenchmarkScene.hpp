@@ -13,7 +13,6 @@
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>
 #include <Skinning/AnimationInstance.hpp>
-#include <Render/Pipeline.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"

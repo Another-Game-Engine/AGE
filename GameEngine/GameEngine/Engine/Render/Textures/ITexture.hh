@@ -1,7 +1,6 @@
 #pragma once
 
 # include <Utils/OpenGL.hh>
-# include <Render/Buffer/Framebuffer.hh>
 
 class ITexture
 {
@@ -14,4 +13,5 @@ public:
 	virtual GLint width() const = 0;
 	virtual GLint height() const = 0;
 	virtual GLenum internal_format() const = 0;
+	virtual ITexture const &parameter(GLenum mode, GLint param) const = 0;
 };

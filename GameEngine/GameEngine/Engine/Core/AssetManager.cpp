@@ -1,10 +1,10 @@
+#include <Utils/OpenGL.hh>
 #include <Core/AssetsManager.hpp>
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
 #include <Geometry/Mesh.hpp>
 #include <Geometry/Material.hpp>
 #include <Texture/Texture.hpp>
-#include <Render/RenderManager.hh>
 
 namespace AGE
 {

@@ -5,7 +5,6 @@
 #include <Utils/GlmSerialization.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
-#include <Render/Material.hh>
 
 namespace AGE
 {
@@ -44,11 +43,8 @@ namespace AGE
 		}
 	};
 
-	typedef Key<Material> MaterialInstance;
-
 	struct MaterialSetInstance
 	{
-		AGE::Vector<MaterialInstance> datas;
 		std::string name;
 		std::string path;
 	};

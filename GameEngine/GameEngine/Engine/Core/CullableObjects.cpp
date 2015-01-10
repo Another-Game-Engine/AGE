@@ -13,16 +13,14 @@ namespace AGE
 	{
 	}
 
-	Drawable::Drawable(const SubMeshInstance &_m, const MaterialInstance &_mat, const glm::mat4 &_t)
+	Drawable::Drawable(const SubMeshInstance &_m, const glm::mat4 &_t)
 		: mesh(_m)
-		, material(_mat)
 		, transformation(_t)
 	{
 	}
 
-	Drawable::Drawable(const SubMeshInstance &_m, const MaterialInstance &_mat, const glm::mat4 &_t, const std::vector<glm::mat4> &_bones)
+	Drawable::Drawable(const SubMeshInstance &_m, const glm::mat4 &_t, const std::vector<glm::mat4> &_bones)
 		: mesh(_m)
-		, material(_mat)
 		, transformation(_t)
 		, bones(_bones)
 	{
@@ -31,7 +29,6 @@ namespace AGE
 	void Drawable::reset()
 	{
 		mesh = SubMeshInstance();
-		material = MaterialInstance();
 		transformation = glm::mat4(1);
 		meshAABB = AABoundingBox();
 		animation = Key<AGE::AnimationInstance>();

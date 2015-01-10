@@ -95,15 +95,6 @@ namespace Component
 
 		if (this->_mesh == nullptr || this->_material == nullptr)
 			return;
-		assert(_material->datas.size() > 0);
-		AGE::Vector<AGE::MaterialInstance> materials;
-		for (auto &e : _mesh->subMeshs)
-		{
-			if (e.defaultMaterialIndex >= _material->datas.size())
-				materials.push_back(_material->datas[0]);
-			else
-				materials.push_back(_material->datas[e.defaultMaterialIndex]);
-		}
 		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs);
 	}
 
