@@ -1,6 +1,5 @@
 #include "DefaultConfiguration.hpp"
 #include <Core/Engine.hh>
-#include <Render/RenderManager.hh>
 #include <Configuration.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>

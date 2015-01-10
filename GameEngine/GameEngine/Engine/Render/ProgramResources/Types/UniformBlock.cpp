@@ -23,7 +23,9 @@ UniformBlock::UniformBlock(UniformBlock &&move) :
 AProgramResources(std::move(move)),
 AInterfaceBlock(std::move(move))
 {
-
+	for (auto &resource : _block_resources) {
+		resource->assignation(this);
+	}
 }
 
 IProgramResources & UniformBlock::operator()()

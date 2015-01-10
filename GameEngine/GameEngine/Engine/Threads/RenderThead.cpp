@@ -1,6 +1,5 @@
 #include "RenderThread.hpp"
 #include <Core/Engine.hh>
-#include <Render/RenderManager.hh>
 #include <Context/SdlContext.hh>
 #include <Utils/ThreadName.hpp>
 #include <Core/Tasks/Render.hpp>

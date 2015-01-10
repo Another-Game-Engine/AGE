@@ -121,7 +121,7 @@ bool Program::coherent_attribute(std::vector<GLenum> const &p) const
 {
 	for (auto &resource : _program_resources) {
 		auto index = resource->id();
-		if (resource->type() == GL_PROGRAM_INPUT && *static_cast<Attribute *>(resource.get()) == p[index]) {
+		if (resource->type() == GL_PROGRAM_INPUT && *static_cast<Attribute *>(resource.get()) != p[index]) {
 			return (false);
 		}
 	}
@@ -146,5 +146,12 @@ bool Program::operator!=(Program const &p) const
 	return (!(*this == p));
 }
 
-
-
+std::shared_ptr<IProgramResources> Program::get_resource_interface(std::string const &name)
+{
+	for (size_t index = 0; index < _program_resources.size(); ++index) {
+		if (name == _program_resources[index]->name()) {
+			return (_program_resources[index]);
+		}
+	}
+	return (nullptr);
+}

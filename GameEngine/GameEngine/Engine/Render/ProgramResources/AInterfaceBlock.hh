@@ -10,7 +10,7 @@ class BlockResources;
 
 class AInterfaceBlock : public IInterfaceBlock
 {
-public:
+protected:
 	AInterfaceBlock(std::vector<std::unique_ptr<BlockResources>> &&resources, size_t size);
 	AInterfaceBlock(std::vector<std::unique_ptr<BlockResources>> &&resources, AInterfaceBlock const &shared);
 	AInterfaceBlock(AInterfaceBlock &&move);

@@ -449,13 +449,8 @@ namespace AGE
 					e->hasBeenFound = false;
 					// all the elements are drawable for the moment (TODO)
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
-					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation);
+					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->transformation);
 					//}
-						if (!currentDrawable->material)
-						{
-							std::cout << "lol" << std::endl;
-							assert(false);
-						}
 				}
 #else
 				for (auto &e : _drawables)
@@ -468,17 +463,6 @@ namespace AGE
 #endif
 			}
 			//getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
-				for (auto &i : this->_octreeDrawList)
-				{
-					for (auto &e : i.drawables)
-					{
-						if (!e.material)
-						{
-							std::cout << "lol";
-							assert(false);
-						}
-					}
-				}
 			GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::CopyDrawLists>(this->_octreeDrawList);
 		}
 

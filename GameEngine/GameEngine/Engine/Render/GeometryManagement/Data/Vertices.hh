@@ -5,6 +5,7 @@
 # include <stdint.h>
 # include <vector>
 # include <memory>
+# include <Render/Properties/IProperty.hh>
 
 class BlockMemory;
 
@@ -31,6 +32,10 @@ public:
 	Vertices &remove();
 	Vertices &reset(size_t o);
 	Vertices &draw(GLenum mode);
+	Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
+	Vertices &remove_property(Key<Property> &key);
+	template <typename type_t> std::shared_ptr<type_t> get_property(Key<Property> const &p) const;
+	Vertices &update(std::shared_ptr<Program> const &program);
 
 private:
 	size_t _index;
@@ -42,6 +47,7 @@ private:
 	std::vector<uint8_t> _indices_data;
 	std::vector<std::weak_ptr<BlockMemory>> _block_memories;
 	std::weak_ptr<BlockMemory> _indices_block_memory;
+	std::vector<std::shared_ptr<IProperty>> _properties;
 };
 
 template <typename type_t> 
@@ -72,4 +78,13 @@ Vertices &Vertices::set_data(std::vector<type_t> const &data, size_t index)
 	}
 	_data[index] = tmp;
 	return (*this);
+}
+
+template <typename type_t>
+std::shared_ptr<type_t> Vertices::get_property(Key<Property> const &p) const
+{
+	if (!p) {
+		return (std::shared_ptr<type_t>(nullptr));
+	}
+	return (std::static_pointer_cast<type_t>(_properties[p.getId()]));
 }

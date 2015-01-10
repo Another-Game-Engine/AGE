@@ -18,7 +18,6 @@ namespace AGE
 	{
 		DRAWABLE_ID id;
 		SubMeshInstance mesh;
-		MaterialInstance material;
 		glm::mat4 transformation;
 		AABoundingBox		meshAABB;
 		Key<AGE::AnimationInstance> animation;
@@ -27,8 +26,8 @@ namespace AGE
 
 		Drawable();
 		virtual ~Drawable();
-		Drawable(const SubMeshInstance &_m, const MaterialInstance &_mat, const glm::mat4 &_t);
-		Drawable(const SubMeshInstance &_m, const MaterialInstance &_mat, const glm::mat4 &_t, const std::vector<glm::mat4> &_bones);
+		Drawable(const SubMeshInstance &_m, const glm::mat4 &_t);
+		Drawable(const SubMeshInstance &_m, const glm::mat4 &_t, const std::vector<glm::mat4> &_bones);
 	};
 
 	struct Camera : public CullableFrustum

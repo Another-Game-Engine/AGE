@@ -1,5 +1,5 @@
-#include <Render/GeometryManagement/BlockMemory.hh>
-#include <Render/GeometryManagement/Buffer.hh>
+#include <Render/GeometryManagement/Data/BlockMemory.hh>
+#include <Render/GeometryManagement/Buffer/Buffer.hh>
 
 BlockMemory::BlockMemory(Buffer &parent, size_t index, size_t offset, std::vector<uint8_t> const &data) :
 _is_update(false),

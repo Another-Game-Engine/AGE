@@ -5,7 +5,6 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/CameraComponent.hpp>
 #include <Core/SceneManager.hh>
-#include <Render/RenderManager.hh>
 #include <Core/PreparableObject.hh>
 #include <Core/AssetsManager.hpp>
 #include <Utils/DependenciesInjector.hpp>

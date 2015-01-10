@@ -19,7 +19,6 @@ _type(move._type),
 _update(move._update)
 {
 	move._id = -1;
-	_name = "";
 }
 
 AProgramResources::AProgramResources(AProgramResources const &copy) :

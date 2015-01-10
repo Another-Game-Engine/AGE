@@ -6,7 +6,6 @@
 #include <Utils/File.hpp>
 #include <bitset>
 #include <Geometry/Mesh.hpp>
-#include <Render/Storage.hh>
 #include <Render/Key.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <map>
