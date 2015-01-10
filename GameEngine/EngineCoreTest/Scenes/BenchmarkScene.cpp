@@ -354,12 +354,11 @@ bool BenchmarkScene::userUpdate(double time)
 	// TODO
 	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::Render::RenderDrawLists>([this](AGE::DrawableCollection &collection)
 	{
-		// EN COURE DE CONSTRICTION :)
+		// EN COURS DE CONSTRUCTION :)
 	});
 #endif
 	
 	std::bitset<AGE::MeshInfos::END> infos;
-
 
 	infos[AGE::MeshInfos::Positions] = true;
 	infos[AGE::MeshInfos::Colors] = true;
@@ -369,7 +368,7 @@ bool BenchmarkScene::userUpdate(double time)
 
 	meshes.push_back(getInstance<AGE::AssetsManager>()->getMesh("triangle")->subMeshs[0].vertices);
 
-	AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::Render::DrawTestTriangle>(painter, meshes, program);
+	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::Render::DrawTestTriangle>(painter, meshes, program);
 
 	return true;
 }
