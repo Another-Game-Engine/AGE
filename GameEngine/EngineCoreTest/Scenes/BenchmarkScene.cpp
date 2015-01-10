@@ -47,13 +47,7 @@ void BenchmarkScene::initRendering()
 	{
 		auto u1 = std::make_shared<UnitProg>(VERTEX_SHADER, GL_VERTEX_SHADER);
 		auto u2 = std::make_shared<UnitProg>(FRAG_SHADER, GL_FRAGMENT_SHADER);
-		auto program = std::make_shared<Program>(Program(std::string("basic"), { u1, u2 }));
-
-		Painter p({ program }, { GL_FLOAT_VEC4 });
-		auto key = p.add_vertices(3, 6);
-		p.update();
-		p.draw(GL_TRIANGLES, program, {key});
-		glFlush();
+		auto program = assetsManager->addProgram(std::string("basic"), { u1, u2 });
 		return (true);
 	});
 	assert(res.get());
@@ -205,6 +199,7 @@ bool BenchmarkScene::userStart()
 
 bool BenchmarkScene::userUpdate(double time)
 {
+#if 0
 	++_frameCounter;
 	++_chunkFrame;
 	_timeCounter += time;
@@ -339,5 +334,9 @@ bool BenchmarkScene::userUpdate(double time)
 	{
 		// EN COURE DE CONSTRICTION :)
 	});
+#endif
+	
+	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::>();
+
 	return true;
 }

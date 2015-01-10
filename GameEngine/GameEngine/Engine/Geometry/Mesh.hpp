@@ -11,6 +11,9 @@
 #include <cereal/types/bitset.hpp>
 #include <Render/Key.hh>
 
+// to match the types with the mesh infos
+#include <Utils/OpenGL.hh>
+
 class Vertices;
 class Indices;
 
@@ -20,7 +23,7 @@ namespace AGE
 
 	enum MeshInfos
 	{
-		Positions = 0
+		Positions
 		, Normals
 		, Tangents
 		, BiTangents
@@ -29,6 +32,17 @@ namespace AGE
 		, BoneIndices
 		, Colors
 		, END
+	};
+
+	static GLenum g_InfosTypes[MeshInfos::END] = {
+		GL_FLOAT_VEC4,
+		GL_FLOAT_VEC4,
+		GL_FLOAT_VEC4,
+		GL_FLOAT_VEC4,
+		GL_FLOAT_VEC2,
+		GL_FLOAT_VEC4,
+		GL_FLOAT_VEC4,
+		GL_FLOAT_VEC4
 	};
 
 	struct SubMeshData

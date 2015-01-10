@@ -1,7 +1,7 @@
 #include <Render/GeometryManagement/Painting/Painter.hh>
 
-Painter::Painter(std::vector<std::shared_ptr<Program>> const &programs, std::vector<GLenum> &&types) :
-_buffer(std::move(types))
+Painter::Painter(std::vector<std::shared_ptr<Program>> const &programs, std::vector<GLenum>  const &types) :
+_buffer(types)
 {
 	for (auto &program : _programs) {
 		if (_buffer.coherent_program(program)) {

@@ -5,8 +5,8 @@
 #include <Render/Program.hh>
 #include <memory>
 
-BufferPrograms::BufferPrograms(std::vector<GLenum> &&types) :
-_types(std::move(types)),
+BufferPrograms::BufferPrograms(std::vector<GLenum> const &types) :
+_types(types),
 _indices_buffer(std::make_unique<IndexBuffer>())
 {
 	_buffers.reserve(_types.size());

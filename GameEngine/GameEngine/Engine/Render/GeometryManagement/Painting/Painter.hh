@@ -10,7 +10,7 @@
 class Painter
 {
 public:
-	Painter(std::vector<std::shared_ptr<Program>> const &programs, std::vector<GLenum> &&types);
+	Painter(std::vector<std::shared_ptr<Program>> const &programs, std::vector<GLenum> const &types);
 	Painter(Painter &&move);
 
 public:

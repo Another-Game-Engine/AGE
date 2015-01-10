@@ -31,6 +31,12 @@ namespace AGE
 				CreateRenderContext(std::weak_ptr<Engine> _engine) : engine(_engine){}
 				std::weak_ptr<Engine> engine;
 			};
+
+			struct LoadMesh : TMQ::FutureData < bool >
+			{
+
+			};
+
 		};
 	}
 }

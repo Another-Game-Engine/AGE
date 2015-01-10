@@ -8,6 +8,7 @@
 #include <Geometry/Mesh.hpp>
 #include <Render/Storage.hh>
 #include <Render/Key.hh>
+#include <Render/GeometryManagement/Painting/Painter.hh>
 #include <map>
 
 namespace AGE
@@ -30,12 +31,18 @@ namespace AGE
 		std::shared_ptr<Animation> getAnimation(const File &filePath);
 		std::shared_ptr<Skeleton> loadSkeleton(const File &filePath);
 		std::shared_ptr<Skeleton> getSkeleton(const File &filePath);
-		std::shared_ptr<MeshInstance> loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder = std::vector<MeshInfos>());
+		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
+		std::shared_ptr<MeshInstance> createMesh(AGE::Vector<glm::vec4> const &positions, AGE::Vector<glm::vec4> const &colors, AGE::Vector<unsigned int> const &idx);
+		std::shared_ptr<Program> addProgram(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &u);
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 	private:
 		std::string _assetsDirectory;
+		// Shaders
+		std::vector<std::shared_ptr<Program>> _programs;
+		std::map<std::string, std::shared_ptr<Program>> _programsMap;
 		// Vertices pools used by meshs
+		std::map<std::bitset<MeshInfos::END>, std::shared_ptr<Painter>, AssetsManager::BitsetComparer> _painters;
 		// Mesh collection
 		std::map<std::string, std::shared_ptr<MeshInstance>> _meshs;
 		//Skeleton collection
@@ -45,7 +52,7 @@ namespace AGE
 		//Material collection
 		//Texture collection
 
-		void loadSubmesh(SubMeshData &data, SubMeshInstance &mesh, const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos);
+		void loadSubmesh(SubMeshData &data, SubMeshInstance *mesh, /*const std::vector<MeshInfos> &order,*/ const std::bitset<MeshInfos::END> &infos);
 		// Create pool for meshs
 		void createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos);
 	};

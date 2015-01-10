@@ -13,7 +13,7 @@ class Program;
 class BufferPrograms
 {
 public:
-	BufferPrograms(std::vector<GLenum> &&types);
+	BufferPrograms(std::vector<GLenum> const &types);
 	BufferPrograms(BufferPrograms &&move);
 
 public:

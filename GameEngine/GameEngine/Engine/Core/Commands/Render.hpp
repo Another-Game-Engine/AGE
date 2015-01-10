@@ -37,6 +37,7 @@ namespace AGE
 					: function(_function)
 				{}
 			};
+
 		};
 	}
 }
