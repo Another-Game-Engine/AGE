@@ -40,6 +40,7 @@ using namespace AGE;
 
 bool loadAssets(AGE::Engine *e)
 {
+#if 0
 	return AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 		e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
 #ifdef RENDERING_ACTIVATED
@@ -62,6 +63,8 @@ bool loadAssets(AGE::Engine *e)
 		return true;
 #endif
 	}).get();
+#endif
+	return (true);
 }
 
 int			main(int ac, char **av)

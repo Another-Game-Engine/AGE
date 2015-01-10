@@ -82,6 +82,8 @@ bool BenchmarkScene::userStart()
 	registerComponentType<Component::RigidBody>();
 	registerComponentType<Component::PointLight>();
 
+	initRendering();
+
 #if 0
 
 #ifdef PHYSIC_SIMULATION
