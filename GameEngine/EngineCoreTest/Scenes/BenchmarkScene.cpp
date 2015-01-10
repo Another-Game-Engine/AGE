@@ -283,7 +283,7 @@ bool BenchmarkScene::userUpdate(double time)
 	GLOBAL_SPONZA = createEntity();
 		auto _l = getLink(GLOBAL_SPONZA);
 		_l->setPosition(glm::vec3(-5, 0, 0));
-		_l->setScale(glm::vec3(0.01f));
+		_l->setScale(glm::vec3(1.f));
 		//		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
 		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
@@ -293,7 +293,7 @@ bool BenchmarkScene::userUpdate(double time)
 	auto brokenTower = createEntity();
 	auto _l = getLink(brokenTower);
 	_l->setPosition(glm::vec3(0, 40, 0));
-	_l->setScale(glm::vec3(0.0008f));
+	_l->setScale(glm::vec3(1.f));
 	_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
 	auto _m = addComponent<Component::MeshRenderer>(brokenTower, getInstance<AGE::AssetsManager>()->getMesh("Broken Tower/tower.sage"));

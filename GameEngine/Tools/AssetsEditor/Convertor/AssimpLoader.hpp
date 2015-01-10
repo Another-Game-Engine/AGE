@@ -65,13 +65,15 @@ namespace AGE
 				aiProcess_JoinIdenticalVertices |
 				aiProcess_SortByPType |
 				aiProcess_ImproveCacheLocality |
-				aiProcess_OptimizeMeshes));
-
+				aiProcess_OptimizeMeshes |
+				aiProcess_FindDegenerates |
+				aiProcess_FindInvalidData));
 			if (dataSet.assimpScene == nullptr)
 			{
 				std::cerr << "Assimp fail to load file [" << path << "] : " << dataSet.assimpImporter.GetErrorString() << std::endl;
 				return false;
 			}
+
 			return true;
 		}
 	}

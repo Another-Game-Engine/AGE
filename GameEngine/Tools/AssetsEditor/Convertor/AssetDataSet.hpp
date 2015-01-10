@@ -12,6 +12,9 @@
 
 #include <atomic>
 
+class btBvhTriangleMeshShape;
+class btConvexHullShape;
+
 namespace AGE
 {
 	struct Skeleton;
@@ -46,7 +49,9 @@ namespace AGE
 		bool meshLoaded = false;
 		bool materialsLoaded = false;
 		bool texturesLoaded = false;
-		bool physicLoaded = false;
+		bool staticPhysicLoaded = false;
+		bool dynamicPhysicLoaded = false;
+
 
 		//Directory
 		std::tr2::sys::directory_entry rawDirectory;
@@ -69,6 +74,8 @@ namespace AGE
 		std::shared_ptr<MeshData> mesh = nullptr;
 		AGE::Vector<std::shared_ptr<MaterialData>> materials;
 		AGE::Vector<std::shared_ptr<TextureData>> textures;
+		std::shared_ptr<btBvhTriangleMeshShape> staticShape;
+		std::shared_ptr<btConvexHullShape> dynamicShape;
 
 		//Assimp
 		aiScene* assimpScene = nullptr;

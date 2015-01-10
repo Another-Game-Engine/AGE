@@ -212,6 +212,68 @@ namespace Component
 			setTransformation(link->getTransform());
 		}
 
+		void setCollisionShape(
+			std::weak_ptr<AScene> scene
+			, const Entity &entity
+			, CollisionShape c
+			, short filterGroup = 1
+			, short filterMask = -1)
+		{
+			if (c == UNDEFINED)
+				return;
+			if (c == MESH)
+			{
+				std::cerr << "Error : use setCollisionMesh instead of setCollisionShape" << std::endl;
+				return;
+			}
+			if (_rigidBody != nullptr)
+			{
+				_manager->getWorld()->removeRigidBody(_rigidBody);
+				delete _rigidBody;
+				_rigidBody = nullptr;
+			}
+			if (_motionState != nullptr)
+			{
+				delete _motionState;
+				_motionState = nullptr;
+			}
+			if (_collisionShape != nullptr)
+			{
+				delete _collisionShape;
+				_collisionShape = nullptr;
+			}
+			_shapeType = c;
+
+			auto link = scene.lock()->getLink(entity);
+			_motionState = new DynamicMotionState(link);
+			if (c == BOX)
+			{
+				_collisionShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));
+			}
+			else if (c == SPHERE)
+			{
+				_collisionShape = new btSphereShape(1);
+			}
+			else
+			{
+				assert(false);
+			}
+
+			if (_mass != 0)
+				_collisionShape->calculateLocalInertia(_mass, _inertia);
+			_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
+			_rigidBody->setUserPointer((void*)(scene.lock()->getEntityPtr(entity)));
+			_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
+			_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
+
+			if (_rigidBody->isStaticObject())
+			{
+				_rigidBody->setActivationState(DISABLE_SIMULATION);
+			}
+			_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
+			setTransformation(link->getTransform());
+		}
+
 		void setRotationConstraint(bool x, bool y, bool z)
 		{
 			_rotationConstraint = glm::vec3(static_cast<unsigned int>(x),

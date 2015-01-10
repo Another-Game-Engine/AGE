@@ -30,7 +30,6 @@ namespace AGE
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
 			ar(*dataSet.mesh);
-			dataSet.mesh = nullptr;
 			return true;
 		}
 
@@ -160,6 +159,29 @@ namespace AGE
 						}
 					}
 				}
+			}
+
+			glm::vec3 min(std::numeric_limits<float>::max());
+			glm::vec3 max(std::numeric_limits<float>::min());
+			for (auto &e : dataSet.mesh->subMeshs)
+			{
+				min = glm::min(e.boundingBox.minPoint, min);
+				max = glm::max(e.boundingBox.maxPoint, max);
+			}
+			auto dif = max - min;
+			float t = dif.x > dif.y ? dif.x : dif.y;
+			t = t > dif.z ? t : dif.z;
+			for (auto &e : dataSet.mesh->subMeshs)
+			{
+				e.boundingBox.minPoint /= t;
+				e.boundingBox.maxPoint /= t;
+				for (auto &f : e.positions)
+				{
+					f /= t;
+					f.w = 1.0f;
+				}
+				glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
+				e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
 			}
 			dataSet.meshLoaded = true;
 			return true;
