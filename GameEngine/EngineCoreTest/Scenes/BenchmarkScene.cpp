@@ -207,13 +207,13 @@ bool BenchmarkScene::userStart()
 	//getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMesh(File("Broken Tower/tower.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 //	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-	//getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"), "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Broken Tower/tower.mage"), "DEMO_SCENE_ASSETS");
-	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"), "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"), "DEMO_SCENE_ASSETS");
 
@@ -280,16 +280,16 @@ bool BenchmarkScene::userUpdate(double time)
 				_renderManager->setMaterial<gl::Ratio_specular>(mesh->getMaterial()->datas[index], 1.0f);
 			}
 {
-	//GLOBAL_SPONZA = createEntity();
-	//auto _l = getLink(GLOBAL_SPONZA);
+	GLOBAL_SPONZA = createEntity();
+	auto _l = getLink(GLOBAL_SPONZA);
 	//_l->setPosition(glm::vec3(-5, 0, 0));
-	//_l->setScale(glm::vec3(20.f));
-	////_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+	_l->setScale(glm::vec3(10.f));
+	//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
-	//auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
-	//_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
-	//std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	//addComponent<Component::RigidBody>(GLOBAL_SPONZA, 0.0f)->setCollisionMesh(weakOnThis, GLOBAL_FLOOR, "../../Assets/AGE-Assets-For-Test/Serialized/cube/cube_static.phage");
+	auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
+	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	addComponent<Component::RigidBody>(GLOBAL_SPONZA, 0.0f)->setCollisionMesh(weakOnThis, GLOBAL_FLOOR, "../../Assets/AGE-Assets-For-Test/Serialized/cube/cube_static.phage");
 }
 {
 	//auto brokenTower = createEntity();
@@ -387,6 +387,24 @@ bool BenchmarkScene::userUpdate(double time)
 		lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 		return (false);
+	if (getInstance<Input>()->getInput(SDLK_SPACE))
+	{
+		auto e = createEntity();
+		addComponent<Component::Lifetime>(e, 10.0f);
+		auto link = getLink(e);
+		link->setPosition(getLink(GLOBAL_CAMERA)->getPosition());
+		link->setOrientation(getLink(GLOBAL_CAMERA)->getOrientation());
+		link->setScale(glm::vec3(0.5f));
+		Component::MeshRenderer *mesh;
+		mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+		mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+		auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
+		rigidBody->getBody().setFriction(0.5f);
+		rigidBody->getBody().setRestitution(0.5f);
+		rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, -10));
+	}
 
 	if (_chunkCounter >= _maxChunk)
 	{
@@ -399,7 +417,7 @@ bool BenchmarkScene::userUpdate(double time)
 #endif
 
 			auto link = getLink(e);
-			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
+			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
 			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
 			link->setScale(glm::vec3(1.0f));
 
@@ -468,10 +486,10 @@ bool BenchmarkScene::userUpdate(double time)
 		}
 	}
 	{
-		auto e = GLOBAL_FLOOR;
+		auto e = GLOBAL_SPONZA;
 		auto link = getLink(e);
 
-		if (ImGui::SliderFloat4(std::string("Floor rotation").c_str(), link->getOrientationPtr(), -1, 1))
+		if (ImGui::SliderFloat4(std::string("Sponza rotation").c_str(), link->getOrientationPtr(), -1, 1))
 		{
 			auto l = getLink(e);
 			l->setOrientation(l->getOrientation());

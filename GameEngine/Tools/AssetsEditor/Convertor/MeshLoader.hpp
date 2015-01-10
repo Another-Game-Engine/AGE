@@ -171,12 +171,17 @@ namespace AGE
 			auto dif = max - min;
 			float t = dif.x > dif.y ? dif.x : dif.y;
 			t = t > dif.z ? t : dif.z;
+			auto center = ((max - min) / 2.0f);
+			auto center4 = glm::vec4(center.x, center.y, center.z, 0.0f);
 			for (auto &e : dataSet.mesh->subMeshs)
 			{
+				//e.boundingBox.minPoint += center;
 				e.boundingBox.minPoint /= t;
+				//e.boundingBox.maxPoint += center;
 				e.boundingBox.maxPoint /= t;
 				for (auto &f : e.positions)
 				{
+					//f += center4;
 					f /= t;
 					f.w = 1.0f;
 				}
