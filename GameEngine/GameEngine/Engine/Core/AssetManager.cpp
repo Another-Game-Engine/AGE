@@ -301,7 +301,7 @@ namespace AGE
 			// We need to keep an instance of FileData shared_ptr
 			std::shared_ptr<Painter> painter = _painters[infos];
 
-			mesh->vertices = painter->add_vertices(3, 6);
+			mesh->vertices = painter->add_vertices(positions.size(), idx.size());
 			Vertices *v = painter->get_vertices(mesh->vertices);
 
 			v->set_indices(idx);

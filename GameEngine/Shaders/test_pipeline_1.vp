@@ -8,5 +8,5 @@ out vec4 interpolated_color;
 void main(void)
 {
 	interpolated_color = color;
-	gl_Position = position;
+	gl_Position = vec4(position.xyz, 1);
 }
