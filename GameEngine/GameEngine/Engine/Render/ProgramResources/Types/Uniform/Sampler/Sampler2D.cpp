@@ -1,6 +1,6 @@
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <iostream>
-#include <Render/Textures/ITexture.hh>
+#include <Render/Textures/Texture2D.hh>
 
 Sampler2D::Sampler2D(GLint id, std::string &&name) :
 AProgramResources(id, std::move(name), GL_SAMPLER_2D),
@@ -51,7 +51,7 @@ size_t Sampler2D::size() const
 	return (sizeof(type_t));
 }
 
-Sampler2D & Sampler2D::operator=(std::shared_ptr<ITexture> const &texture)
+Sampler2D & Sampler2D::operator=(std::shared_ptr<Texture2D> const &texture)
 {
 	_update = false;
 	_texture = texture;

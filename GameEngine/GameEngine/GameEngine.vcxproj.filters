@@ -102,6 +102,7 @@
     <ClCompile Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Renderbuffer.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler2D.cpp" />
+    <ClCompile Include="Engine\Render\Properties\Materials\MapColor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -284,6 +285,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Renderbuffer.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler2D.hh" />
+    <ClInclude Include="Engine\Render\Properties\Materials\MapColor.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

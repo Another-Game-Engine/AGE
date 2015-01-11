@@ -3,7 +3,7 @@
 # include <Render/ProgramResources/AProgramResources.hh>
 # include <memory>
 
-class ITexture;
+class Texture2D;
 
 class Sampler2D : public AProgramResources
 {
@@ -12,7 +12,7 @@ public:
 	Sampler2D(Sampler2D &&move);
 	Sampler2D(Sampler2D const &copy);
 	Sampler2D &operator=(Sampler2D const &copy) = delete;
-	Sampler2D &operator=(std::shared_ptr<ITexture> const &texture);
+	Sampler2D &operator=(std::shared_ptr<Texture2D> const &texture);
 
 public:
 	virtual IProgramResources & update() override final;
@@ -21,8 +21,8 @@ public:
 	virtual size_t size() const override final;
 
 public:
-	typedef ITexture * type_t;
+	typedef Texture2D * type_t;
 
 private:
-	std::shared_ptr<ITexture> _texture;
+	std::shared_ptr<Texture2D> _texture;
 };

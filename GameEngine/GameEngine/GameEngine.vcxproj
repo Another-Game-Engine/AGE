@@ -260,6 +260,7 @@
     <ClCompile Include="Engine\Render\Properties\AProperty.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Color.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Diffuse.cpp" />
+    <ClCompile Include="Engine\Render\Properties\Materials\MapColor.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Ratio.cpp" />
     <ClCompile Include="Engine\Render\Properties\Transformation.cpp" />
     <ClCompile Include="Engine\Render\Program.cpp" />
@@ -346,6 +347,7 @@
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Color.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Diffuse.hh" />
+    <ClInclude Include="Engine\Render\Properties\Materials\MapColor.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Ratio.hh" />
     <ClInclude Include="Engine\Render\Properties\Transformation.hh" />
     <ClInclude Include="Engine\Render\Storage.hh" />
