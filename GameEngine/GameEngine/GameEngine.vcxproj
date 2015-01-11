@@ -254,6 +254,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\BlockResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\UniformBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler2D.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec1.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec4.cpp" />
     <ClCompile Include="Engine\Render\Properties\AProperty.cpp" />
@@ -340,6 +341,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\IFramebufferStorage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Renderbuffer.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler2D.hh" />
     <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Color.hh" />

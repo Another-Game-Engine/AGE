@@ -8,6 +8,7 @@ in vec4 pos_light_viewspace;
 
 uniform vec4 diffuse_color;
 uniform float diffuse_ratio;
+uniform sampler2D diffuse_texture; 
 
 layout (location = 0) out vec4 fragcolor;
 
@@ -16,7 +17,7 @@ void main(void)
 	vec3 light = vec3(pos_light_viewspace) / pos_light_viewspace.w;
 	vec3 position = vec3(interpolated_position) / interpolated_position.w;
 	vec3 lightVec = normalize(light - position);
-	vec4 diffuse =  diffuse_color * diffuse_ratio;
+	vec4 diffuse =  diffuse_color * diffuse_ratio * texture(diffuse_texture, interpolated_texCoord);
 	fragcolor = diffuse;
 	fragcolor += vec4(1.0f, 1.0f, 1.0f, 1.0f);
 }
