@@ -107,7 +107,7 @@ Program & Program::update()
 {
 	use();
 	for (auto &resource : _program_resources) {
-		(*resource)();
+		resource->update();
 	}
 	return (*this);
 }

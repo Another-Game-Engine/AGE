@@ -24,7 +24,7 @@ public:
 	BlockResources &assignation(IInterfaceBlock * interfaceBlock);
 
 public:
-	virtual IProgramResources &operator()() override final;
+	virtual IProgramResources &update() override final;
 	virtual bool safe(size_t size) const override final;
 	virtual size_t size() const override final;
 	virtual void print() const override final;
@@ -47,7 +47,7 @@ BlockResources & BlockResources::operator=(type_t value)
 	std::memcpy(_data.data(), (void *)&value, sizeof(type_t));
 	_update = false;
 	if (_parent) {
-		_parent->update();
+		_parent->require_update();
 	}
 	return (*this);
 }

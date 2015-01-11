@@ -16,7 +16,7 @@ protected:
 	AInterfaceBlock(AInterfaceBlock &&move);
 
 public:
-	virtual IInterfaceBlock &update() override final;
+	virtual IInterfaceBlock &require_update() override final;
 	virtual UniformBuffer const &buffer() const override final;
 	virtual BlockResources *get_resource(std::string const &name) override final;
 	virtual Key<ProgramResource> get_key(std::string const &name) override final;
