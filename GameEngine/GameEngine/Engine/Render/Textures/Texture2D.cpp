@@ -3,16 +3,14 @@
 #include <Render/Textures/PixelTypesFormats.hh>
 
 Texture2D::Texture2D(GLint width, GLint height, GLenum internal_format, bool is_mip_mapping) :
-ATexture(width, height, internal_format, is_mip_mapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(width), float(height))) + 1))) : 1),
-AFramebufferStorage()
+ATexture(width, height, internal_format, is_mip_mapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(width), float(height))) + 1))) : 1)
 {
 	glBindTexture(GL_TEXTURE_2D, _id);
 	glTexStorage2D(GL_TEXTURE_2D, _nbr_mip_map, _internal_format, _width, _height);
 }
 
 Texture2D::Texture2D(Texture2D &&move) :
-ATexture(std::move(move)),
-AFramebufferStorage()
+ATexture(std::move(move))
 {
 
 }

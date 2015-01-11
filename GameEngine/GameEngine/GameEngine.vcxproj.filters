@@ -100,6 +100,7 @@
     <ClCompile Include="Engine\Render\Textures\Texture2D.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Buffer\Renderbuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -280,6 +281,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\IFramebufferStorage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Buffer\Renderbuffer.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
