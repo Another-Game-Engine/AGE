@@ -392,8 +392,7 @@ bool BenchmarkScene::userUpdate(double time)
 		auto e = createEntity();
 		addComponent<Component::Lifetime>(e, 10.0f);
 		auto link = getLink(e);
-		link->setPosition(getLink(GLOBAL_CAMERA)->getPosition());
-		link->setOrientation(getLink(GLOBAL_CAMERA)->getOrientation());
+		link->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0,0,-2) * getLink(GLOBAL_CAMERA)->getOrientation());
 		link->setScale(glm::vec3(0.5f));
 		Component::MeshRenderer *mesh;
 		mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
@@ -403,7 +402,8 @@ bool BenchmarkScene::userUpdate(double time)
 		rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
 		rigidBody->getBody().setFriction(0.5f);
 		rigidBody->getBody().setRestitution(0.5f);
-		rigidBody->getBody().applyCentralImpulse(btVector3(0, 0, -10));
+		rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(getLink(GLOBAL_CAMERA)->getOrientation() * glm::vec3(0, 0, -10)));
+
 	}
 
 	if (_chunkCounter >= _maxChunk)
