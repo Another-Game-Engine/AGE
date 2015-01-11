@@ -46,14 +46,26 @@ namespace AGE
 				return false;
 			auto &meshs = dataSet.mesh->subMeshs;
 			auto trimesh = new btTriangleMesh();
+			std::size_t indiceNb = 0;
+			std::size_t verticeNb = 0;
+			for (auto &e : dataSet.mesh->subMeshs)
+			{
+				indiceNb += e.indices.size();
+				verticeNb += e.positions.size();
+			}
+			trimesh->preallocateIndices(indiceNb);
+			trimesh->preallocateVertices(verticeNb);
 			for (std::size_t j = 0; j < meshs.size(); ++j)
 			{
 				auto &geo = meshs[j];
-				for (std::size_t i = 0; i < geo.positions.size() - 2; i += 3)
+				for (std::size_t i = 0; i < geo.indices.size(); i += 3)
 				{
-					trimesh->addTriangle(btVector3(geo.positions[i].x, geo.positions[i].y, geo.positions[i].z)
-						, btVector3(geo.positions[i + std::size_t(1)].x, geo.positions[i + std::size_t(1)].y, geo.positions[i + std::size_t(1)].z)
-						, btVector3(geo.positions[i + std::size_t(2)].x, geo.positions[i + std::size_t(2)].y, geo.positions[i + std::size_t(2)].z), false);
+					auto a = geo.positions[geo.indices[i]];
+					auto b = geo.positions[geo.indices[i+1]];
+					auto c = geo.positions[geo.indices[i+2]];
+					trimesh->addTriangle(btVector3(a.x, a.y, a.z)
+						, btVector3(b.x, b.y, b.z)
+						, btVector3(c.x, c.y, c.z), true);
 				}
 			}
 			dataSet.staticShape = std::make_shared<btBvhTriangleMeshShape>(trimesh, true);
