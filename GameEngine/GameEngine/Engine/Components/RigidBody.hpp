@@ -163,6 +163,15 @@ namespace Component
 			auto media = _manager->loadStaticShape(meshPath);
 			if (!media)
 				return;
+			auto s = dynamic_cast<btConvexHullShape*>(media.get());
+			if (s) // dynamic
+			{
+				_collisionShape = new btConvexHullShape(*s);
+			}
+			else // static
+			{
+				_collisionShape = new btScaledBvhTriangleMeshShape(dynamic_cast<btBvhTriangleMeshShape*>(media.get()), btVector3(1, 1, 1));
+			}
 			/*if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
 			{
 				auto s = std::dynamic_pointer_cast<CollisionShapeDynamicFile>(mediaManager->get(_shapeName));
@@ -170,7 +179,6 @@ namespace Component
 			}
 			else if (media->getType() == AMediaFile::COLLISION_SHAPE_STATIC)
 			{*/
-				_collisionShape = new btScaledBvhTriangleMeshShape(media.get(), btVector3(1, 1, 1));
 			/*}
 			else if (media->getType() == AMediaFile::COLLISION_BOX)
 			{

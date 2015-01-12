@@ -289,7 +289,7 @@ bool BenchmarkScene::userUpdate(double time)
 	auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
 	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	addComponent<Component::RigidBody>(GLOBAL_SPONZA, 0.0f)->setCollisionMesh(weakOnThis, GLOBAL_FLOOR, "../../Assets/AGE-Assets-For-Test/Serialized/cube/cube_static.phage");
+	addComponent<Component::RigidBody>(GLOBAL_SPONZA, 0.0f)->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/AGE-Assets-For-Test/Serialized/sponza/sponza_static.phage");
 }
 {
 	//auto brokenTower = createEntity();
@@ -363,7 +363,7 @@ bool BenchmarkScene::userUpdate(double time)
 
 	auto lc = getLink(GLOBAL_CAMERA);
 	float c = 5.f;
-	if (getInstance<Input>()->getInput(SDLK_SPACE))
+	if (getInstance<Input>()->getInput(SDLK_LSHIFT))
 		c = c * 3.0f;
 	if (getInstance<Input>()->getInput(SDLK_z))
 		lc->setForward(glm::vec3(0.f, 0.f, -c * time));
@@ -387,24 +387,30 @@ bool BenchmarkScene::userUpdate(double time)
 		lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 	if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 		return (false);
-	if (getInstance<Input>()->getInput(SDLK_SPACE))
+	static float trigger = 0.0f;
+	if (getInstance<Input>()->getInput(SDLK_SPACE) && trigger == 0.0f)
 	{
+		trigger += time;
+		if (trigger >= 1.0f)
+			trigger = 0;
 		auto e = createEntity();
 		addComponent<Component::Lifetime>(e, 10.0f);
 		auto link = getLink(e);
-		link->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0,0,-2) * getLink(GLOBAL_CAMERA)->getOrientation());
+		link->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, 0, -2) * getLink(GLOBAL_CAMERA)->getOrientation());
 		link->setScale(glm::vec3(0.5f));
 		Component::MeshRenderer *mesh;
 		mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
 		mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
 		auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
+		//setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
+		rigidBody->setCollisionMesh(weakOnThis, e, "../../Assets/AGE-Assets-For-Test/Serialized/cube/cube_dynamic.phage");
 		rigidBody->getBody().setFriction(0.5f);
 		rigidBody->getBody().setRestitution(0.5f);
 		rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(getLink(GLOBAL_CAMERA)->getOrientation() * glm::vec3(0, 0, -10)));
-
 	}
+	else
+		trigger = 0.0f;
 
 	if (_chunkCounter >= _maxChunk)
 	{
