@@ -160,7 +160,7 @@ namespace Component
 			auto link = scene.lock()->getLink(entity);
 
 			_motionState = new DynamicMotionState(link);
-			auto media = _manager->loadStaticShape(meshPath);
+			auto media = _manager->loadShape(meshPath);
 			if (!media)
 				return;
 			auto s = dynamic_cast<btConvexHullShape*>(media.get());

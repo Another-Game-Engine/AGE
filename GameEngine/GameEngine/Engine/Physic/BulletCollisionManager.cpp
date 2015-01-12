@@ -2,7 +2,7 @@
 #include <Utils/File.hpp>
 #include <bullet/src/Serialize/BulletWorldImporter/btBulletWorldImporter.h>
 
-std::shared_ptr<btBvhTriangleMeshShape> BulletCollisionManager::loadStaticShape(const std::string &path)
+std::shared_ptr<btCollisionShape> BulletCollisionManager::loadShape(const std::string &path)
 {
 	File filePath(path);
 	if (!filePath.exists())
@@ -10,8 +10,8 @@ std::shared_ptr<btBvhTriangleMeshShape> BulletCollisionManager::loadStaticShape(
 		std::cerr << "Bullet file not found" << std::endl;
 		return nullptr;
 	}
-	if (_staticShapes.find(path) != std::end(_staticShapes))
-		return _staticShapes[path];
+	if (_collisionShapes.find(path) != std::end(_collisionShapes))
+		return _collisionShapes[path];
 	btBulletWorldImporter import(0);
 	auto loadStatus = import.loadFile(path.c_str());
 	if (loadStatus != true)
@@ -26,7 +26,7 @@ std::shared_ptr<btBvhTriangleMeshShape> BulletCollisionManager::loadStaticShape(
 		return nullptr;
 	}
 	auto o = import.getCollisionShapeByIndex(0);
-	auto shape = std::shared_ptr<btBvhTriangleMeshShape>(static_cast<btBvhTriangleMeshShape*>(o));
-	_staticShapes.insert(std::make_pair(path, shape));
+	auto shape = std::shared_ptr<btCollisionShape>(static_cast<btCollisionShape*>(o));
+	_collisionShapes.insert(std::make_pair(path, shape));
 	return shape;
 }
