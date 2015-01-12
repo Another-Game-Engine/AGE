@@ -45,7 +45,7 @@ namespace AGE
 			if (!dataSet.mesh)
 				return false;
 			auto &meshs = dataSet.mesh->subMeshs;
-			auto trimesh = new btTriangleMesh();
+			dataSet.staticTriangleMesh = std::make_shared<btTriangleMesh>();
 			std::size_t indiceNb = 0;
 			std::size_t verticeNb = 0;
 			for (auto &e : dataSet.mesh->subMeshs)
@@ -53,8 +53,8 @@ namespace AGE
 				indiceNb += e.indices.size();
 				verticeNb += e.positions.size();
 			}
-			trimesh->preallocateIndices(indiceNb);
-			trimesh->preallocateVertices(verticeNb);
+			dataSet.staticTriangleMesh->preallocateIndices(indiceNb);
+			dataSet.staticTriangleMesh->preallocateVertices(verticeNb);
 			for (std::size_t j = 0; j < meshs.size(); ++j)
 			{
 				auto &geo = meshs[j];
@@ -63,12 +63,12 @@ namespace AGE
 					auto a = geo.positions[geo.indices[i]];
 					auto b = geo.positions[geo.indices[i+1]];
 					auto c = geo.positions[geo.indices[i+2]];
-					trimesh->addTriangle(btVector3(a.x, a.y, a.z)
+					dataSet.staticTriangleMesh->addTriangle(btVector3(a.x, a.y, a.z)
 						, btVector3(b.x, b.y, b.z)
 						, btVector3(c.x, c.y, c.z), true);
 				}
 			}
-			dataSet.staticShape = std::make_shared<btBvhTriangleMeshShape>(trimesh, true);
+			dataSet.staticShape = std::make_shared<btBvhTriangleMeshShape>(dataSet.staticTriangleMesh.get(), false);
 			dataSet.staticShape->buildOptimizedBvh();
 			dataSet.staticPhysicLoaded = true;
 

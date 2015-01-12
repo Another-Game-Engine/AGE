@@ -14,6 +14,7 @@
 
 class btBvhTriangleMeshShape;
 class btConvexHullShape;
+class btTriangleMesh;
 
 namespace AGE
 {
@@ -75,6 +76,7 @@ namespace AGE
 		AGE::Vector<std::shared_ptr<MaterialData>> materials;
 		AGE::Vector<std::shared_ptr<TextureData>> textures;
 		std::shared_ptr<btBvhTriangleMeshShape> staticShape;
+		std::shared_ptr<btTriangleMesh> staticTriangleMesh;
 		std::shared_ptr<btConvexHullShape> dynamicShape;
 
 		//Assimp
