@@ -15,7 +15,7 @@ public:
 	Mat4 &operator=(glm::mat4 const &value);
 
 public:
-	virtual IProgramResources &operator()() override final;
+	virtual IProgramResources &update() override final;
 	virtual bool safe(size_t size) const override final;
 	virtual size_t size() const override final;
 	virtual void print() const override final;

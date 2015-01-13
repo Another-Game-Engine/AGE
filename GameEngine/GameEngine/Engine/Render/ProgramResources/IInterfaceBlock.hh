@@ -9,7 +9,7 @@ class BlockResources;
 class IInterfaceBlock
 {
 public:
-	virtual IInterfaceBlock &update() = 0;
+	virtual IInterfaceBlock &require_update() = 0;
 	virtual UniformBuffer const &buffer() const = 0;
 	virtual BlockResources *get_resource(std::string const &name) = 0;
 	virtual Key<ProgramResource> get_key(std::string const &name) = 0;

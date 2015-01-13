@@ -29,7 +29,7 @@ Mat4 &Mat4::operator=(glm::mat4 const &m)
 	return (*this);
 }
 
-IProgramResources & Mat4::operator()()
+IProgramResources & Mat4::update()
 {
 	if (!_update) {
 		glUniformMatrix4fv(_id, 1, GL_FALSE, (GLfloat *)(&_value[0]));

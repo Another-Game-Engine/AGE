@@ -4,8 +4,9 @@
 # include <utility>
 # include <stdint.h>
 # include <vector>
+# include <Render/Pipelining/Buffer/AFramebufferStorage.hh>
 
-class Texture2D : public ATexture
+class Texture2D : public ATexture, public AFramebufferStorage
 {
 public:
 	Texture2D(GLint weight, GLint height, GLenum internal_format, bool is_mip_mapping);
@@ -20,4 +21,5 @@ public:
 	virtual ITexture const &bind() const override final;
 	virtual ITexture const &unbind() const override final;
 	virtual ITexture const &parameter(GLenum mode, GLint param) const override final;
+	virtual IFramebufferStorage const &attachment(Framebuffer const &framebuffer, GLenum attach) const override final;
 };

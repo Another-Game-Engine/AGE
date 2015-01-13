@@ -43,7 +43,7 @@ size_t BlockResources::stride() const
 	return (_stride);
 }
 
-IProgramResources & BlockResources::operator()()
+IProgramResources & BlockResources::update()
 {
 	if (!_update) {
 		if (_parent) {

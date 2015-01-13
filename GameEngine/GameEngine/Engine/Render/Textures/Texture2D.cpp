@@ -50,3 +50,9 @@ ITexture const &Texture2D::parameter(GLenum mode, GLint param) const
 	glTexParameteri(GL_TEXTURE_2D, mode, param);
 	return (*this);
 }
+
+IFramebufferStorage const & Texture2D::attachment(Framebuffer const &framebuffer, GLenum attach) const
+{
+	glFramebufferTexture2D(framebuffer.type(), attach, GL_TEXTURE_2D, _id, 0);
+	return (*this);
+}

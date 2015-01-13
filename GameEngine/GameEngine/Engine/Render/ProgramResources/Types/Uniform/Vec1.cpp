@@ -29,7 +29,7 @@ Vec1 & Vec1::operator=(float v)
 	return (*this);
 }
 
-IProgramResources & Vec1::operator()()
+IProgramResources & Vec1::update()
 {
 	if (!_update) {
 		glUniform1f(_id, _value);

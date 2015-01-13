@@ -28,13 +28,13 @@ AInterfaceBlock(std::move(move))
 	}
 }
 
-IProgramResources & UniformBlock::operator()()
+IProgramResources & UniformBlock::update()
 {
 	if (_update_resource) {
 		_buffer->bind();
 		glBindBufferBase(_buffer->mode(), _binding_point, (GLuint)_buffer->id());
 		for (auto &blockResource : _block_resources) {
-			(*blockResource)();
+			blockResource->update();
 		}
 		_update_resource = true;
 	}

@@ -31,7 +31,7 @@ _update_resource(move._update_resource)
 
 }
 
-IInterfaceBlock & AInterfaceBlock::update()
+IInterfaceBlock & AInterfaceBlock::require_update()
 {
 	_update_resource = true;
 	return (*this);

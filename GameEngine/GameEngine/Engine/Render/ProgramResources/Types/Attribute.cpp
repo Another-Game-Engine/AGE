@@ -22,7 +22,7 @@ _available_type(copy._available_type)
 
 }
 
-IProgramResources & Attribute::operator()()
+IProgramResources & Attribute::update()
 {
 	return (*this);
 }

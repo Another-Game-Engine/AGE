@@ -29,7 +29,7 @@ Vec4 &Vec4::operator=(glm::vec4 const &p)
 	return (*this);
 }
 
-IProgramResources & Vec4::operator()()
+IProgramResources & Vec4::update()
 {
 	if (!_update) {
 		glUniform4f(_id, _value.x, _value.y, _value.z, _value.w);

@@ -8,7 +8,7 @@ class Program;
 class IProgramResources
 {
 public:
-	virtual IProgramResources &operator()() = 0;
+	virtual IProgramResources &update() = 0;
 	virtual std::string const &name() const = 0;
 	virtual GLuint id() const = 0;
 	virtual GLenum type() const = 0;
