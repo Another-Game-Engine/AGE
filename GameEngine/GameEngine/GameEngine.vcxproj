@@ -246,6 +246,7 @@
     <ClCompile Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Renderbuffer.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Render\ARendering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Render\RenderingPass.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AInterfaceBlock.cpp" />

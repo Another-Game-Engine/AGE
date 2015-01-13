@@ -10,14 +10,15 @@ _id(0)
 
 VertexArray::~VertexArray()
 {
-	if (_id)
+	if (_id) {
 		glDeleteVertexArrays(1, &_id);
+	}
 }
 
 VertexArray::VertexArray(VertexArray &&move) :
 _id(move._id)
 {
-	_id = 0;
+	move._id = 0;
 }
 
 void VertexArray::bind() const

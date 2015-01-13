@@ -18,7 +18,8 @@ _indices_buffer(std::make_unique<IndexBuffer>())
 			auto &a = iterator->second;
 			_buffers.emplace_back(std::make_unique<VertexBuffer>());
 			_buffers.back().bind();
-			glVertexAttribPointer(index, a.nbr_component, a.type_component, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index++, a.nbr_component, a.type_component, GL_FALSE, 0, 0);
 		}
 	}
 	_indices_buffer.bind();

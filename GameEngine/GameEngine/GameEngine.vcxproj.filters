@@ -105,6 +105,7 @@
     <ClCompile Include="Engine\Render\Properties\Materials\MapColor.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Render\RenderingPass.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Render\ARendering.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
