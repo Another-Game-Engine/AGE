@@ -1,5 +1,6 @@
 #include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
-
+#include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Render/Program.hh>
 
 ARenderingPipeline::ARenderingPipeline(std::string &&name, std::vector<std::shared_ptr<Painter>> const &painters, std::vector<std::shared_ptr<Program>> const &programs) :
 _name(std::move(name)),

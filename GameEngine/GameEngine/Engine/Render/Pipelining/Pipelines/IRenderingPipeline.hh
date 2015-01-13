@@ -5,6 +5,8 @@
 # include <memory>
 
 class IRendering;
+class Painter;
+class Program;
 
 class IRenderingPipeline
 {

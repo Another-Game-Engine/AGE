@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -171,8 +171,5 @@ Global
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
 		{F584710B-8089-4D6B-801A-8A2354FCF28A} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB} = {4F71FD1A-92D4-4EE1-A02A-3C30682405B3}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
