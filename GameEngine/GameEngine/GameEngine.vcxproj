@@ -246,7 +246,8 @@
     <ClCompile Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Renderbuffer.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\RenderPass.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Render\ARendering.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Render\RenderingPass.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AInterfaceBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AProgramResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Factory\ProgramResourcesFactory.cpp" />
@@ -343,7 +344,11 @@
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\IFramebufferStorage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Renderbuffer.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\RenderPass.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\IRenderingPipeline.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\ARendering.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\IRendering.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\Rendering.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\RenderingPass.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler2D.hh" />
     <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />

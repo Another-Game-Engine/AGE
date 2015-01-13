@@ -3,42 +3,40 @@
 # include <Utils/OpenGL.hh>
 # include <Render/Pipelining/Buffer/Framebuffer.hh>
 # include <Render/Pipelining/Buffer/IFramebufferStorage.hh>
-# include <memory>
-# include <vector>
-# include <functional>
-# include <Render/Key.hh>
+# include <Render/Pipelining/Render/ARendering.hh>
 # include <unordered_map>
 # include <utility>
 
 class Vertices;
 class Painter;
 class Program;
+class IRenderContext;
 
-# define FUNCTION_ARGS std::shared_ptr<Program> const &, std::shared_ptr<Painter> const &, std::vector<Key<Vertices>> const &, std::vector<std::shared_ptr<RenderPass>> const &input
-
-class RenderPass
+class RenderingPass : public ARendering
 {
 public:
-	RenderPass(std::function<RenderPass &(FUNCTION_ARGS)> function);
-	RenderPass(RenderPass &&move);
+	RenderingPass(std::function<IRendering &(FUNCTION_ARGS)> const &function);
+	RenderingPass(RenderingPass &&move);
+	virtual ~RenderingPass(){}
 
 public:
-	RenderPass &render(FUNCTION_ARGS);
-	template <typename type_t> RenderPass &push_storage_output(GLenum attach, std::shared_ptr<type_t> storage);
+	virtual IRendering &render(FUNCTION_ARGS) override final;
+
+public:
+	template <typename type_t> RenderingPass &push_storage_output(GLenum attach, std::shared_ptr<type_t> storage);
 	size_t nbr_output() const;
-	std::shared_ptr<IFramebufferStorage> const &operator[](GLenum attach) const;
+	std::shared_ptr<IFramebufferStorage> operator[](GLenum attach) const;
 	std::vector<GLenum> const &drawing_attach() const;
 
 private:
 	Framebuffer _frame_buffer;
 	std::unordered_map<GLenum, std::shared_ptr<IFramebufferStorage>> _frame_output;
-	std::function<RenderPass &(FUNCTION_ARGS)> _render_function;
 	bool _is_update;
 	std::vector<GLenum> _drawing_attach;
 };
 
 template <typename type_t>
-RenderPass & RenderPass::push_storage_output(GLenum attach, std::shared_ptr<type_t> storage)
+RenderingPass & RenderingPass::push_storage_output(GLenum attach, std::shared_ptr<type_t> storage)
 {
 	_is_update = false;
 	_frame_output[attach] = storage;
