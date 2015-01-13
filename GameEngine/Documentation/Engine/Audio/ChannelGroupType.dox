@@ -1,0 +1,9 @@
+/*!
+
+\file ChannelGroupType.hh
+
+\enum ChannelGroupType
+\brief Group category of Audio
+It qualify Audio and let user group their sounds into categories to manage them more easily.
+
+*/

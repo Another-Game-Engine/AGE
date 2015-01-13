@@ -1,0 +1,57 @@
+/*!
+
+\file AudioManager.hh
+
+\class AudioManager
+\brief Handle Audios
+
+\fn AudioManager()
+\brief Constructor
+Construct without initializing
+
+\fn virtual ~AudioManager()
+\brief Destructor
+Stop and close all audios or channelGroups.
+Free all memory.
+
+\fn bool init()
+\brief Initialize the class to use FMOD
+Initialize FMOD to the best setting for the current environnement.
+\return True if the class is initialized, false otherwise.
+
+\fn void update()
+\brief Update sounds
+Updates the FMOD system. This should be called once per 'game' tick, or once per frame in your application.
+
+\fn std::shared_ptr<Audio> loadSound(const File &file, Audio::AudioSpatialType spacialType, const std::string &name = "")
+\brief Load a sound from a file
+Create a sound if it doesn't exsit and add it to the update loop.
+\param file Path to the file containg the sound. 
+\param spacialType Audio enum to specify the type of the sound (2D, 3D).
+\param name Name choosed to acces to the sound.
+\return An Audio containing the sound specified loaded, or nullptr if the action failed.
+
+\fn std::shared_ptr<Audio> loadStream(const File &file, Audio::AudioSpatialType spacialType, const std::string &name = "")
+\brief Load a stream from a file
+Create a stream if it doesn't exsit and add it to the update loop.
+\param file Path to the file containg the stream. 
+\param spacialType Audio enum to specify the type of the stream (2D, 3D).
+\param name Name choosed to acces to the stream.
+\return An Audio containing the stream specified loaded, or nullptr if the action failed.
+
+\fn FMOD::System *getSystem()
+\brief Get the FMOD system
+\return A pointer to the main FMOD::System instance.
+
+\fn FMOD::ChannelGroup* getChannelGroup(ChannelGroupType type)
+\brief Get the FMOD ChannelGgroup
+Get the ChannelGroupe corresponding to the type passed as parameter.
+\param type Enum corresponding to the ChannelGroup wanted.
+\return The corresponding ChannelGroup
+
+\fn inline std::shared_ptr<Audio> getAudio(const std::string &name)
+\brief Get the audio by name
+\param name Name of the audio
+\return The wanted Audio instance or nullptr
+
+ */

@@ -1,0 +1,12 @@
+/*!
+
+\file FmodError.hh
+\brief Handle FMOD errors
+
+\fn bool fmodError(FMOD_RESULT result);
+\brief Print FMOD error
+Print FMOD error and return true if no error were found, false otherwise
+\param result result of a FMOD function
+\return True if no error was found, false otherwise.
+
+*/
