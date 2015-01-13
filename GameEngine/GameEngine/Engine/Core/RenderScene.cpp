@@ -164,7 +164,7 @@ namespace AGE
 		return (*this);
 	}
 
-	DRAWABLE_ID RenderScene::addDrawable(USER_OBJECT_ID uid)
+	DRAWABLE_ID RenderScene::_addDrawable(USER_OBJECT_ID uid)
 	{
 		DRAWABLE_ID res = DRAWABLE_ID(-1);
 		Drawable *co = nullptr;
@@ -288,7 +288,7 @@ namespace AGE
 			uo->drawableCollection.clear();
 			for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
 			{
-				auto id = addDrawable(msg.key.id);
+				auto id = _addDrawable(msg.key.id);
 				uo->drawableCollection.push_back(id);
 				_drawables[id].mesh = msg.submeshInstances[i];
 				_drawables[id].material = msg.materialInstances[i];

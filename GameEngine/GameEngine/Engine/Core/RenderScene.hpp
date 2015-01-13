@@ -41,7 +41,7 @@ namespace AGE
 		void _setScale(AGE::Commands::MainToPrepare::SetScale &msg);
 		void _setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg);
 		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
-
+		DRAWABLE_ID _addDrawable(USER_OBJECT_ID uid);
 	public:
 		PrepareKey addMesh();
 		PrepareKey addCamera();
@@ -61,7 +61,6 @@ namespace AGE
 			, const AGE::Vector<AGE::SubMeshInstance> &meshs
 			, const AGE::Vector<AGE::MaterialInstance> &materials
 			, const gl::Key<AGE::AnimationInstance> &animation);
-		DRAWABLE_ID addDrawable(USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
 	private:
 		friend class PrepareRenderThread;
