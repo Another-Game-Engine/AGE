@@ -18,17 +18,15 @@ Construct and stock fields present in parameters.
 Stop and release the sound from FMOD
 
 \fn bool load(AudioSpatialType type)
-\brief 
-
-\param type
-\return
+\brief Load a stream or sound from file
+\param type Type of Audio to be loaded
+\return True if it was a success, false otherwise
 
 \fn FMOD::Channel *play(ChannelGroupType channelGroup, bool now)
-\brief
-
-\param channelGroup
-\param now
-\return 
+\brief Plays all sound marked as the channel group
+\param channelGroup channelGroup assigned to Audios to play
+\param now Flag to play Audios now or later
+\return The FMOD channel found or nullptr
 
 \fn const File &getPath() const
 \brief Get file's path
