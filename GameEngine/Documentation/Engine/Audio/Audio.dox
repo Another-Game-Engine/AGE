@@ -3,6 +3,39 @@
 \file Audio.hh
 
 \class Audio
+\brief Represent a sound or a stream
+
+\fn Audio(std::shared_ptr<AudioManager> manager, const File &file, AudioType type, const std::string &name = "")
+\brief Constructor
+Construct and stock fields present in parameters.
+\param manager A pointer to the AudioManager that handle this instance
+\param file File containing the sound/stream
+\param type Type of sound based on the enum AudioType (sound, stream)
+\param name Name of the sound
+
+\fn ~Audio()
+\brief Destructor
+Stop and release the sound from FMOD
+
+\fn bool load(AudioSpatialType type)
 \brief 
+
+\param type
+\return
+
+\fn FMOD::Channel *play(ChannelGroupType channelGroup, bool now)
+\brief
+
+\param channelGroup
+\param now
+\return 
+
+\fn const File &getPath() const
+\brief Get file's path
+\return A const reference to the file containing the sound.
+
+\fn const std::string &getName() const
+\brief Get the name of the Audio
+\return The name of the Audio instance 
 
  */
