@@ -293,6 +293,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Render\ARendering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\Rendering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\IRenderingPipeline.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

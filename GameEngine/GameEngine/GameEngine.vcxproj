@@ -344,6 +344,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\IFramebufferStorage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Renderbuffer.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\IRenderingPipeline.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\ARendering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\IRendering.hh" />
