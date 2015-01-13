@@ -190,8 +190,7 @@ namespace AGE
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
 #ifdef ACTIVATE_OCTREE_CULLING
 		// remove drawable from octree
-		if (_drawables[id].toAddInOctree == false)
-			_octree.removeElement(&_drawables[id]);
+		_octree.removeElement(&_drawables[id]);
 #endif
 		_drawables[id].reset();
 		assert(id != (std::size_t)(-1));
@@ -301,8 +300,16 @@ namespace AGE
 				_drawables[id].orientation = uo->orientation;
 				_drawables[id].scale = uo->scale;
 				_drawables[id].meshAABB = msg.submeshInstances[i].boundingBox;
-				_drawables[id].toAddInOctree = true;
 				_drawables[id].animation = msg.animation;
+				_drawables[id].currentNode = UNDEFINED_IDX;
+				_drawables[id].transformation = glm::scale(glm::translate(glm::mat4(1),
+															_drawables[id].position) * glm::toMat4(_drawables[id].orientation),
+															_drawables[id].scale);
+				_drawables[id].currentAABB.fromTransformedBox(_drawables[id].meshAABB, _drawables[id].transformation);
+				_drawables[id].previousAABB = _drawables[id].currentAABB;
+				_octree.addElement(&_drawables[id]);
+				assert(_drawables[id].currentNode != UNDEFINED_IDX);
+				_drawables[id].active = true;
 			}
 		}
 
@@ -401,25 +408,25 @@ namespace AGE
 			// Update drawable positions in Octree
 			for (auto &e : _drawables)
 			{
-				if (e.hasMoved && e.toAddInOctree == false)
+				if (e.active)
 				{
-					e.hasMoved = false;
-					e.previousAABB = e.currentAABB;
-					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
-					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
-					_octree.moveElement(&e);
-				}
-				if (e.toAddInOctree)
-				{
-					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
-					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
-					e.previousAABB = e.currentAABB;
-					e.toAddInOctree = false;
-					_octree.addElement(&e);
+					assert(!(e.currentNode == UNDEFINED_IDX));
+					if (e.hasMoved)
+					{
+						e.hasMoved = false;
+						e.previousAABB = e.currentAABB;
+						e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
+						e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
+						_octree.moveElement(&e);
+					}
 				}
 			}
 			// Do culling for each camera
 			_octreeDrawList.clear();
+
+			// clean empty nodes
+			_octree.cleanOctree();
+
 			for (auto &camera : _cameras)
 			{
 				if (!camera.active)
@@ -444,8 +451,6 @@ namespace AGE
 				}
 
 #ifdef ACTIVATE_OCTREE_CULLING
-				// clean empty nodes
-				_octree.cleanOctree();
 
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);

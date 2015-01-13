@@ -21,7 +21,6 @@ namespace AGE
 		CullableType	type;
 		uint32_t		currentNode;
 		bool			hasBeenFound;
-		bool			toAddInOctree;
 
 		CullableObject();
 		virtual ~CullableObject();

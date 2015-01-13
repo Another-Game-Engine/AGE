@@ -19,16 +19,19 @@ namespace AGE
 	void LooseOctree::addElement(CullableObject *toAdd)
 	{
 		_root = _pool.get(_root).addElement(toAdd, _pool);
+		assert(_root != UNDEFINED_IDX);
 	}
 
 	void LooseOctree::removeElement(CullableObject *toRm)
 	{
 		_pool.get(_root).removeElement(toRm, _pool);
+		assert(_root != UNDEFINED_IDX);
 	}
 
 	void LooseOctree::moveElement(CullableObject *toMv)
 	{
 		_root = _pool.get(_root).moveElement(toMv, _pool);
+		assert(_root != UNDEFINED_IDX);
 	}
 
 	void LooseOctree::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill)

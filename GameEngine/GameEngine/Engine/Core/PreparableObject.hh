@@ -11,8 +11,8 @@ namespace AGE
 
 	struct PreparableObject
 	{
-		bool active;
 		bool hasMoved;
+		bool active;
 		PrepareKey key;
 		glm::vec3 position;
 		glm::vec3 forward;

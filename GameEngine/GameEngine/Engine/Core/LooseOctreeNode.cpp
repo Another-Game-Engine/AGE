@@ -170,6 +170,7 @@ namespace AGE
 				_sons[sonUsedIdx] = UNDEFINED_IDX;
 				removeAllSons(pool);
 				pool.dealloc(_thisIdx);
+				pool.get(newRoot)._father = UNDEFINED_IDX;
 				return (newRoot);
 			}
 		}
