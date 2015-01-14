@@ -32,9 +32,9 @@ namespace AGE
 		LooseOctreeNode();
 		~LooseOctreeNode();
 
-		uint32_t addElement(CullableObject *toAdd, MemoryPool<LooseOctreeNode> &pool);
-		void removeElement(CullableObject *toRm, MemoryPool<LooseOctreeNode> &pool);
-		uint32_t moveElement(CullableObject *toMove, MemoryPool<LooseOctreeNode> &pool);
+		uint32_t addElement(CullableBoundingBox *toAdd, MemoryPool<LooseOctreeNode> &pool);
+		void removeElement(CullableBoundingBox *toRm, MemoryPool<LooseOctreeNode> &pool);
+		uint32_t moveElement(CullableBoundingBox *toMove, MemoryPool<LooseOctreeNode> &pool);
 
 		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill, MemoryPool<LooseOctreeNode> &pool) const;
 
@@ -50,15 +50,15 @@ namespace AGE
 
 	private:
 		// Utils methods
-		uint32_t extendNode(CullableObject *toAdd, glm::i8vec3 const &direction, MemoryPool<LooseOctreeNode> &pool);
+		uint32_t extendNode(CullableBoundingBox *toAdd, glm::i8vec3 const &direction, MemoryPool<LooseOctreeNode> &pool);
 		void		generateAllSons(MemoryPool<LooseOctreeNode> &pool);
 		void		computeLooseNode();
 		// remove an element from a node
-		void removeElementFromNode(CullableObject *toRm, MemoryPool<LooseOctreeNode> &pool);
+		void removeElementFromNode(CullableBoundingBox *toRm, MemoryPool<LooseOctreeNode> &pool);
 		// move an element from in node
-		uint32_t moveElementFromNode(CullableObject *toMv, MemoryPool<LooseOctreeNode> &pool);
+		uint32_t moveElementFromNode(CullableBoundingBox *toMv, MemoryPool<LooseOctreeNode> &pool);
 		// add an element in the node if the element is entierly contained in the current node
-		bool addElementFromNode(CullableObject *toAdd, MemoryPool<LooseOctreeNode> &pool);
+		bool addElementFromNode(CullableBoundingBox *toAdd, MemoryPool<LooseOctreeNode> &pool);
 
 		uint32_t	_thisIdx;
 

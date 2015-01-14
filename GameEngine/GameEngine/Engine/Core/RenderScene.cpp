@@ -309,7 +309,6 @@ namespace AGE
 				_drawables[id].previousAABB = _drawables[id].currentAABB;
 				_octree.addElement(&_drawables[id]);
 				assert(_drawables[id].currentNode != UNDEFINED_IDX);
-				_drawables[id].active = true;
 			}
 		}
 
@@ -418,6 +417,7 @@ namespace AGE
 						e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 						e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
 						_octree.moveElement(&e);
+						assert(e.currentNode != UNDEFINED_IDX);
 					}
 				}
 			}

@@ -25,24 +25,14 @@ namespace AGE
 	{
 	}
 
-	uint32_t LooseOctreeNode::addElement(CullableObject *toAdd, MemoryPool<LooseOctreeNode> &pool)
+	uint32_t LooseOctreeNode::addElement(CullableBoundingBox *toAdd, MemoryPool<LooseOctreeNode> &pool)
 	{
 		glm::i8vec3	direction;
 		bool collisionState;
 		glm::vec3 objectDimensions;
 			
-		// check the collision state depending on the geometry shape
-		switch (toAdd->type)
-		{
-		case CULLABLE_BOUNDING_BOX:
-			collisionState = _node.checkPointIn(((CullableBoundingBox*)toAdd)->currentAABB.center, direction);
-			objectDimensions = ((CullableBoundingBox*)toAdd)->currentAABB.maxPoint -
-							   ((CullableBoundingBox*)toAdd)->currentAABB.minPoint;
-			break;
-		default:
-			assert(!"This cullable type is not handled yet.");
-			break;
-		}
+		collisionState = _node.checkPointIn(toAdd->currentAABB.center, direction);
+		objectDimensions = toAdd->currentAABB.maxPoint - toAdd->currentAABB.minPoint;
 		// if the center is in the loose node
 		if (collisionState == true)
 		{
@@ -60,6 +50,7 @@ namespace AGE
 						generateAllSons(pool);
 					for (uint32_t i = 0; i < 8; ++i)
 					{
+						assert(_sons[i] != UNDEFINED_IDX);
 						if (pool.get(_sons[i]).addElement(toAdd, pool) != UNDEFINED_IDX)
 							break;
 					}
@@ -91,12 +82,12 @@ namespace AGE
 			return (UNDEFINED_IDX);
 	}
 
-	void LooseOctreeNode::removeElement(CullableObject *toRm, MemoryPool<LooseOctreeNode> &pool)
+	void LooseOctreeNode::removeElement(CullableBoundingBox *toRm, MemoryPool<LooseOctreeNode> &pool)
 	{
 		pool.get(toRm->currentNode).removeElementFromNode(toRm, pool);
 	}
 
-	uint32_t LooseOctreeNode::moveElement(CullableObject *toMove, MemoryPool<LooseOctreeNode> &pool)
+	uint32_t LooseOctreeNode::moveElement(CullableBoundingBox *toMove, MemoryPool<LooseOctreeNode> &pool)
 	{
 		uint32_t newRoot = pool.get(toMove->currentNode).moveElementFromNode(toMove, pool);
 
@@ -198,7 +189,7 @@ namespace AGE
 		}
 	}
 
-	uint32_t LooseOctreeNode::extendNode(CullableObject *toAdd, glm::i8vec3 const &direction,
+	uint32_t LooseOctreeNode::extendNode(CullableBoundingBox *toAdd, glm::i8vec3 const &direction,
 												MemoryPool<LooseOctreeNode> &pool)
 	{
 		uint32_t newRootIdx = pool.alloc();
@@ -258,6 +249,7 @@ namespace AGE
 				glm::vec3	nodeHalfSize = (_node.maxPoint - _node.minPoint) / 2.0f;
 
 				newSon->setIdx(newSonIdx);
+				assert(newSonIdx != UNDEFINED_IDX);
 				newSon->_father = _thisIdx;
 				newSon->_node.minPoint = _node.minPoint + glm::vec3(currentSon) * nodeHalfSize;
 				newSon->_node.maxPoint = _node.maxPoint - glm::vec3(currentSon.x == 0 ? 1 : 0,
@@ -278,7 +270,7 @@ namespace AGE
 		_looseNode.recomputeCenter();
 	}
 
-	void LooseOctreeNode::removeElementFromNode(CullableObject *toRm, MemoryPool<LooseOctreeNode> &pool)
+	void LooseOctreeNode::removeElementFromNode(CullableBoundingBox *toRm, MemoryPool<LooseOctreeNode> &pool)
 	{
 		LooseOctreeNode *curNode = this;
 
@@ -300,7 +292,7 @@ namespace AGE
 
 	}
 
-	uint32_t LooseOctreeNode::moveElementFromNode(CullableObject *toMv, MemoryPool<LooseOctreeNode> &pool)
+	uint32_t LooseOctreeNode::moveElementFromNode(CullableBoundingBox *toMv, MemoryPool<LooseOctreeNode> &pool)
 	{
 		glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
 		glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
@@ -308,18 +300,9 @@ namespace AGE
 		bool currentCollisionState;
 		glm::vec3 currentObjectDimensions;
 
-		// check the collision state depending on the geometry shape
-		switch (toMv->type)
-		{
-		case CULLABLE_BOUNDING_BOX:
-			currentCollisionState = _node.checkPointIn(((CullableBoundingBox*)toMv)->currentAABB.center);
-			currentObjectDimensions = ((CullableBoundingBox*)toMv)->currentAABB.maxPoint -
-				((CullableBoundingBox*)toMv)->currentAABB.minPoint;
-			break;
-		default:
-			assert(!"This cullable type is not handled yet.");
-			break;
-		}
+		currentCollisionState = _node.checkPointIn(toMv->currentAABB.center);
+		currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
+
 		if (currentCollisionState &&
 			VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
 		{
@@ -349,17 +332,8 @@ namespace AGE
 				currentNode = &pool.get(currentNodeIdx);
 				looseNodeSize = currentNode->_looseNode.maxPoint - currentNode->_looseNode.minPoint;
 				halfLooseNodeSize = looseNodeSize / 2.0f;
-				switch (toMv->type)
-				{
-				case CULLABLE_BOUNDING_BOX:
-					currentCollisionState = _node.checkPointIn(((CullableBoundingBox*)toMv)->currentAABB.center);
-					currentObjectDimensions = ((CullableBoundingBox*)toMv)->currentAABB.maxPoint -
-						((CullableBoundingBox*)toMv)->currentAABB.minPoint;
-					break;
-				default:
-					assert(!"This cullable type is not handled yet.");
-					break;
-				}
+				currentCollisionState = _node.checkPointIn(toMv->currentAABB.center);
+				currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
 				if (currentCollisionState &&
 					VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
 				{
@@ -373,7 +347,7 @@ namespace AGE
 		}
 	}
 
-	bool LooseOctreeNode::addElementFromNode(CullableObject *toAdd, MemoryPool<LooseOctreeNode> &pool)
+	bool LooseOctreeNode::addElementFromNode(CullableBoundingBox *toAdd, MemoryPool<LooseOctreeNode> &pool)
 	{
 		glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
 		glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
@@ -381,33 +355,27 @@ namespace AGE
 		bool currentCollisionState;
 		glm::vec3 currentObjectDimensions;
 
-		switch (toAdd->type)
-		{
-		case CULLABLE_BOUNDING_BOX:
-			currentCollisionState = _node.checkPointIn(((CullableBoundingBox*)toAdd)->currentAABB.center);
-			currentObjectDimensions = ((CullableBoundingBox*)toAdd)->currentAABB.maxPoint -
-				((CullableBoundingBox*)toAdd)->currentAABB.minPoint;
-			break;
-		default:
-			assert(!"This cullable type is not handled yet.");
-			break;
-		}
+		currentCollisionState = _node.checkPointIn(toAdd->currentAABB.center);
+		currentObjectDimensions = toAdd->currentAABB.maxPoint - toAdd->currentAABB.minPoint;
 		if (currentCollisionState &&
 			VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
 		{
 			++_uniqueSubElements;
 			if (!VEC3_BIGGER(halfLooseNodeSize, currentObjectDimensions))
 			{
-				_elements.push_back(toAdd);
-				return (true);
-			}
-			else
-			{
+				if (isLeaf())
+					generateAllSons(pool);
 				for (int i = 0; i < 8; ++i)
 				{
 					if (pool.get(_sons[i]).addElementFromNode(toAdd, pool) == true)
 						return (true);
 				}
+			}
+			else
+			{
+				toAdd->currentNode = _thisIdx;
+				_elements.push_back(toAdd);
+				return (true);
 			}
 		}
 		return (false);
