@@ -11,9 +11,9 @@ namespace AGE
 		LooseOctree();
 		~LooseOctree();
 
-		void addElement(CullableObject *toAdd);
-		void removeElement(CullableObject *toRm);
-		void moveElement(CullableObject *toMv);
+		void addElement(CullableBoundingBox *toAdd);
+		void removeElement(CullableBoundingBox *toRm);
+		void moveElement(CullableBoundingBox *toMv);
 		void getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill);
 		void cleanOctree();
 

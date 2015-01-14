@@ -16,22 +16,22 @@ namespace AGE
 		_pool.dealloc(_root);
 	}
 
-	void LooseOctree::addElement(CullableObject *toAdd)
+	void LooseOctree::addElement(CullableBoundingBox *toAdd)
 	{
 		_root = _pool.get(_root).addElement(toAdd, _pool);
-		assert(_root != UNDEFINED_IDX);
 	}
 
-	void LooseOctree::removeElement(CullableObject *toRm)
+	void LooseOctree::removeElement(CullableBoundingBox *toRm)
 	{
-		_pool.get(_root).removeElement(toRm, _pool);
-		assert(_root != UNDEFINED_IDX);
+		_pool.get(toRm->currentNode).removeElementFromNode(toRm, _pool);
 	}
 
-	void LooseOctree::moveElement(CullableObject *toMv)
+	void LooseOctree::moveElement(CullableBoundingBox *toMv)
 	{
-		_root = _pool.get(_root).moveElement(toMv, _pool);
-		assert(_root != UNDEFINED_IDX);
+		uint32_t newRoot = _pool.get(toMv->currentNode).moveElementFromNode(toMv, _pool);
+
+		if (newRoot != UNDEFINED_IDX)
+			_root = newRoot;
 	}
 
 	void LooseOctree::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill)

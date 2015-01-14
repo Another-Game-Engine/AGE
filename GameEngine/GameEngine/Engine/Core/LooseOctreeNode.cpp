@@ -31,7 +31,8 @@ namespace AGE
 		bool collisionState;
 		glm::vec3 objectDimensions;
 			
-		collisionState = _node.checkPointIn(toAdd->currentAABB.center, direction);
+		collisionState = _node.checkPointIn(toAdd->currentAABB.center);
+		direction = _node.getDirection(toAdd->currentAABB.center);
 		objectDimensions = toAdd->currentAABB.maxPoint - toAdd->currentAABB.minPoint;
 		// if the center is in the loose node
 		if (collisionState == true)
@@ -46,52 +47,56 @@ namespace AGE
 				if (VEC3_BIGGER(halfLooseNodeSize, objectDimensions))
 				{
 					// if the object can fit in the lower level of the tree
+					uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
+						(direction.y == 1 ? 2 : 0) +
+						(direction.z == 1 ? 1 : 0);
+
 					if (isLeaf())
 						generateAllSons(pool);
-					for (uint32_t i = 0; i < 8; ++i)
-					{
-						assert(_sons[i] != UNDEFINED_IDX);
-						if (pool.get(_sons[i]).addElement(toAdd, pool) != UNDEFINED_IDX)
-							break;
-					}
+					pool.get(_sons[sonIdx]).addElementRecursive(toAdd, pool);
 				}
 				else
 				{
 					// else we put the object in this node
-					_elements.push_back(toAdd);
+					toAdd->currentIdx = _elements.size();
 					toAdd->currentNode = _thisIdx;
+					_elements.push_back(toAdd);
 				}
 				return (_thisIdx);
 			}
-			else if (_father == UNDEFINED_IDX)
-			{
-				// we need to put the object in a higher level of the tree
-				return (extendNode(toAdd, direction, pool));
-			}
-			else
-			{
-				// should never happend (insertion is made from the root)
-				return (UNDEFINED_IDX);
-			}
 		}
-		else if (_father == UNDEFINED_IDX)
-		{
+		if (_father == UNDEFINED_IDX)
 			return (extendNode(toAdd, direction, pool));
+		return (UNDEFINED_IDX);
+	}
+
+	void LooseOctreeNode::addElementRecursive(CullableBoundingBox *toAdd, MemoryPool<LooseOctreeNode> &pool)
+	{
+		glm::i8vec3	direction = _node.getDirection(toAdd->currentAABB.center);;
+		glm::vec3 objectDimensions = toAdd->currentAABB.maxPoint - toAdd->currentAABB.minPoint;
+
+		glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
+		glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
+
+		++_uniqueSubElements;
+		if (VEC3_BIGGER(halfLooseNodeSize, objectDimensions))
+		{
+			// if the object can fit in the lower level of the tree
+			uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
+				(direction.y == 1 ? 2 : 0) +
+				(direction.z == 1 ? 1 : 0);
+
+			if (isLeaf())
+				generateAllSons(pool);
+			pool.get(_sons[sonIdx]).addElementRecursive(toAdd, pool);
 		}
 		else
-			return (UNDEFINED_IDX);
-	}
-
-	void LooseOctreeNode::removeElement(CullableBoundingBox *toRm, MemoryPool<LooseOctreeNode> &pool)
-	{
-		pool.get(toRm->currentNode).removeElementFromNode(toRm, pool);
-	}
-
-	uint32_t LooseOctreeNode::moveElement(CullableBoundingBox *toMove, MemoryPool<LooseOctreeNode> &pool)
-	{
-		uint32_t newRoot = pool.get(toMove->currentNode).moveElementFromNode(toMove, pool);
-
-		return ((newRoot == UNDEFINED_IDX) ? _thisIdx : newRoot);
+		{
+			// else we put the object in this node
+			toAdd->currentIdx = _elements.size();
+			toAdd->currentNode = _thisIdx;
+			_elements.push_back(toAdd);
+		}
 	}
 
 	void		LooseOctreeNode::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill, MemoryPool<LooseOctreeNode> &pool) const
@@ -275,21 +280,15 @@ namespace AGE
 		LooseOctreeNode *curNode = this;
 
 		// remove the element from the node
-		for (uint32_t i = 0; i < _elements.size(); ++i)
+		_elements[toRm->currentIdx] = _elements[_elements.size() - 1];
+		_elements[toRm->currentIdx]->currentIdx = toRm->currentIdx;
+		_elements.pop_back();
+		for (uint32_t curNode = _thisIdx; curNode != UNDEFINED_IDX; curNode = pool.get(curNode)._father)
 		{
-			if (_elements[i] == toRm)
-			{
-				_elements[i] = _elements[_elements.size() - 1];
-				_elements.pop_back();
-				for (uint32_t curNode = _thisIdx; curNode != UNDEFINED_IDX; curNode = pool.get(curNode)._father)
-				{
-					--pool.get(curNode)._uniqueSubElements;
-				}
-				toRm->currentNode = UNDEFINED_IDX;
-				break;
-			}
+			--pool.get(curNode)._uniqueSubElements;
 		}
-
+		toRm->currentNode = UNDEFINED_IDX;
+		toRm->currentIdx = UNDEFINED_IDX;
 	}
 
 	uint32_t LooseOctreeNode::moveElementFromNode(CullableBoundingBox *toMv, MemoryPool<LooseOctreeNode> &pool)
@@ -306,79 +305,58 @@ namespace AGE
 		if (currentCollisionState &&
 			VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
 		{
-			if (!VEC3_BIGGER(halfLooseNodeSize, currentObjectDimensions))
+			if (VEC3_BIGGER(halfLooseNodeSize, currentObjectDimensions))
 			{
-				// The object is still in the same node
-				return (UNDEFINED_IDX);
-			}
-			else
-			{
-				removeElementFromNode(toMv, pool);
-				addElementFromNode(toMv, pool);
-				return (UNDEFINED_IDX);
-			}
-		}
-		else
-		{
-			// The object has changed node
-			LooseOctreeNode *prevNode = this;
-			uint32_t currentNodeIdx = this->_father;
-			LooseOctreeNode *currentNode;
-			LooseOctreeNode *newRoot;
-
-			removeElementFromNode(toMv, pool);
-			while (currentNodeIdx != UNDEFINED_IDX)
-			{
-				currentNode = &pool.get(currentNodeIdx);
-				looseNodeSize = currentNode->_looseNode.maxPoint - currentNode->_looseNode.minPoint;
-				halfLooseNodeSize = looseNodeSize / 2.0f;
-				currentCollisionState = _node.checkPointIn(toMv->currentAABB.center);
-				currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
-				if (currentCollisionState &&
-					VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
-				{
-					currentNode->addElementFromNode(toMv, pool);
-					return (UNDEFINED_IDX);
-				}
-				prevNode = currentNode;
-				currentNodeIdx = currentNode->_father;
-			}
-			return (prevNode->addElement(toMv, pool));
-		}
-	}
-
-	bool LooseOctreeNode::addElementFromNode(CullableBoundingBox *toAdd, MemoryPool<LooseOctreeNode> &pool)
-	{
-		glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
-		glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
-
-		bool currentCollisionState;
-		glm::vec3 currentObjectDimensions;
-
-		currentCollisionState = _node.checkPointIn(toAdd->currentAABB.center);
-		currentObjectDimensions = toAdd->currentAABB.maxPoint - toAdd->currentAABB.minPoint;
-		if (currentCollisionState &&
-			VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
-		{
-			++_uniqueSubElements;
-			if (!VEC3_BIGGER(halfLooseNodeSize, currentObjectDimensions))
-			{
+				glm::i8vec3	direction = _node.getDirection(toMv->currentAABB.center);
+				uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
+								(direction.y == 1 ? 2 : 0) +
+								(direction.z == 1 ? 1 : 0);
+				// remove element from node
+				_elements[toMv->currentIdx] = _elements[_elements.size() - 1];
+				_elements[toMv->currentIdx]->currentIdx = toMv->currentIdx;
+				_elements.pop_back();
 				if (isLeaf())
 					generateAllSons(pool);
-				for (int i = 0; i < 8; ++i)
-				{
-					if (pool.get(_sons[i]).addElementFromNode(toAdd, pool) == true)
-						return (true);
-				}
+				pool.get(_sons[sonIdx]).addElementRecursive(toMv, pool);
 			}
-			else
-			{
-				toAdd->currentNode = _thisIdx;
-				_elements.push_back(toAdd);
-				return (true);
-			}
+			// The object is still contained in the same node
+			return (UNDEFINED_IDX);
 		}
-		return (false);
+		// The object has changed node
+		LooseOctreeNode *prevNode = this;
+		uint32_t currentNodeIdx = _father;
+		LooseOctreeNode *currentNode;
+
+		// remove the element from the node
+		assert(toMv->currentIdx < _elements.size());
+		_elements[toMv->currentIdx] = _elements[_elements.size() - 1];
+		_elements[toMv->currentIdx]->currentIdx = toMv->currentIdx;
+		_elements.pop_back();
+		--_uniqueSubElements;
+
+		while (currentNodeIdx != UNDEFINED_IDX)
+		{
+			currentNode = &pool.get(currentNodeIdx);
+
+			looseNodeSize = currentNode->_looseNode.maxPoint - currentNode->_looseNode.minPoint;
+			halfLooseNodeSize = looseNodeSize / 2.0f;
+
+			currentCollisionState = currentNode->_node.checkPointIn(toMv->currentAABB.center);
+			currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
+
+			if (currentCollisionState &&
+				VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
+			{
+				currentNode->addElementRecursive(toMv, pool);
+				return (UNDEFINED_IDX);
+			}
+
+			--currentNode->_uniqueSubElements;
+
+			prevNode = currentNode;
+			currentNodeIdx = currentNode->_father;
+		}
+		return (prevNode->addElement(toMv, pool));
 	}
 
 	void LooseOctreeNode::setIdx(uint32_t idx)

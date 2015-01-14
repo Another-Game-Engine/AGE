@@ -20,6 +20,7 @@ namespace AGE
 	{
 		CullableType	type;
 		uint32_t		currentNode;
+		uint32_t		currentIdx;
 		bool			hasBeenFound;
 
 		CullableObject();
