@@ -418,62 +418,62 @@ bool BenchmarkScene::userUpdate(double time)
 	else
 		trigger = 0.0f;
 
-//	if (_chunkCounter >= _maxChunk)
-//	{
-//		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-//		for (auto i = 0; i < 10; ++i)
-//		{
-//			auto e = createEntity();
-//#ifdef LIFETIME_ACTIVATED
-//			addComponent<Component::Lifetime>(e, 5.0f);
-//#endif
-//
-//			auto link = getLink(e);
-//			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
-//			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-//			link->setScale(glm::vec3(1.0f));
-//
-//
-//			Component::MeshRenderer *mesh;
-//			if (i % 4 == 0)
-//			{
-//				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-//				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
-//				link->setScale(glm::vec3(0.5f));
-//			}
-//			else
-//			{
-//				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
-//				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
-//			}
-//
-//#ifdef PHYSIC_SIMULATION
-//			auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
-//			//				rigidBody->setTransformation(link->getTransform());
-//			if (i % 4 == 0)
-//				rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::SPHERE);
-//			else
-//				rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
-//			rigidBody->getBody().setFriction(0.5f);
-//			rigidBody->getBody().setRestitution(0.5f);
-//			rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
-//#endif
-//
-//
-//		}
-//#ifdef LOG_FRAMERATE
-//
-//		_logFile << _chunkFrame << ", ";
-//		_chunkCounter = 0.0;
-//		_chunkFrame = 0;
-//	}
-//	if (_timeCounter >= _maxTime)
-//	{
-//		_logFile << std::endl << "Total frames : " << _frameCounter << " -- Entity created : " << this->getNumberOfEntities() << std::endl << "----------------" << std::endl;
-//		_logFile.close();
-//		return false;
-//	}
-//#endif
+	if (_chunkCounter >= _maxChunk)
+	{
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		for (auto i = 0; i < 10; ++i)
+		{
+			auto e = createEntity();
+#ifdef LIFETIME_ACTIVATED
+			addComponent<Component::Lifetime>(e, 5.0f);
+#endif
+
+			auto link = getLink(e);
+			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
+			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+			link->setScale(glm::vec3(1.0f));
+
+
+			Component::MeshRenderer *mesh;
+			if (i % 4 == 0)
+			{
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+				link->setScale(glm::vec3(0.5f));
+			}
+			else
+			{
+				mesh = addComponent<Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+			}
+
+#ifdef PHYSIC_SIMULATION
+			auto rigidBody = addComponent<Component::RigidBody>(e, 1.0f);
+			//				rigidBody->setTransformation(link->getTransform());
+			if (i % 4 == 0)
+				rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::SPHERE);
+			else
+				rigidBody->setCollisionShape(weakOnThis, e, Component::RigidBody::BOX);
+			rigidBody->getBody().setFriction(0.5f);
+			rigidBody->getBody().setRestitution(0.5f);
+			rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
+#endif
+
+
+		}
+#ifdef LOG_FRAMERATE
+
+		_logFile << _chunkFrame << ", ";
+		_chunkCounter = 0.0;
+		_chunkFrame = 0;
+	}
+	if (_timeCounter >= _maxTime)
+	{
+		_logFile << std::endl << "Total frames : " << _frameCounter << " -- Entity created : " << this->getNumberOfEntities() << std::endl << "----------------" << std::endl;
+		_logFile.close();
+		return false;
+	}
+#endif
 
 	auto renderManager = getInstance<gl::RenderManager>();
 

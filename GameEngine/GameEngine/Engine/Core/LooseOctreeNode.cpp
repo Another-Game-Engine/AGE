@@ -10,6 +10,9 @@ namespace AGE
 		index = pidx;
 	}
 
+
+	static int nbrNodes = 0;
+
 	LooseOctreeNode::LooseOctreeNode() :
 		_node(glm::vec3(-1), glm::vec3(1))
 	{
@@ -19,10 +22,14 @@ namespace AGE
 		_uniqueSubElements = 0;
 		_thisIdx = UNDEFINED_IDX;
 		computeLooseNode();
+//		nbrNodes += 1;
+//		std::cout << nbrNodes << std::endl;
 	}
 
 	LooseOctreeNode::~LooseOctreeNode()
 	{
+//		nbrNodes -= 1;
+//		std::cout << nbrNodes << std::endl;
 	}
 
 	uint32_t LooseOctreeNode::addElement(CullableBoundingBox *toAdd, MemoryPool<LooseOctreeNode> &pool)
@@ -40,11 +47,11 @@ namespace AGE
 			glm::vec3 nodeSize = _node.maxPoint - _node.minPoint;
 			glm::vec3 halfNodeSize = nodeSize / 2.0f;
 
-			if (VEC3_BIGGER(nodeSize, objectDimensions))
+			if (glm::all(glm::greaterThan(nodeSize, objectDimensions)))
 			{
 				// if the object is entirely in the node
 				++_uniqueSubElements;
-				if (VEC3_BIGGER(halfNodeSize, objectDimensions))
+				if (glm::all(glm::greaterThan(halfNodeSize, objectDimensions)))
 				{
 					// if the object can fit in the lower level of the tree
 					uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
@@ -79,7 +86,7 @@ namespace AGE
 		glm::vec3 halfNodeSize = nodeSize / 2.0f;
 
 		++_uniqueSubElements;
-		if (VEC3_BIGGER(halfNodeSize, objectDimensions))
+		if (glm::all(glm::greaterThan(halfNodeSize, objectDimensions)))
 		{
 			// if the object can fit in the lower level of the tree
 			uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
@@ -122,7 +129,12 @@ namespace AGE
 			if (!isLeaf())
 			{
 				for (uint32_t i = 0; i < 8; ++i)
-					pool.get(_sons[i]).getElementsCollide(toTest, toFill, pool);
+				{
+					// octree mal clean
+					assert(!(pool.get(_sons[i])._uniqueSubElements == 0 && !pool.get(_sons[i]).isLeaf()));
+					if (pool.get(_sons[i])._uniqueSubElements != 0)
+						pool.get(_sons[i]).getElementsCollide(toTest, toFill, pool);
+				}
 			}
 		}
 	}
@@ -173,27 +185,6 @@ namespace AGE
 		return (UNDEFINED_IDX);
 	}
 
-	void LooseOctreeNode::removeEmptyLeafs(MemoryPool<LooseOctreeNode> &pool)
-	{
-		if (!isLeaf())
-		{
-			if (_uniqueSubElements == 0)
-			{
-				for (int i = 0; i < 8; ++i)
-				{
-					pool.get(_sons[i]).removeAllSons(pool);
-					pool.dealloc(_sons[i]);
-					_sons[i] = UNDEFINED_IDX;
-				}
-			}
-			else
-			{
-				for (int i = 0; i < 8; ++i)
-					pool.get(_sons[i]).removeEmptyLeafs(pool);
-			}
-		}
-	}
-
 	uint32_t LooseOctreeNode::extendNode(CullableBoundingBox *toAdd, glm::i8vec3 const &direction,
 												MemoryPool<LooseOctreeNode> &pool)
 	{
@@ -206,6 +197,7 @@ namespace AGE
 		newRoot->_sons[ (direction.x == -1 ? 4 : 0) +
 						(direction.y == -1 ? 2 : 0) +
 						(direction.z == -1 ? 1 : 0)] = _thisIdx;
+		newRoot->_uniqueSubElements = _uniqueSubElements;
 		if (direction.x == -1)
 		{
 			newRoot->_node.minPoint.x = _node.minPoint.x - nodeSize.x;
@@ -277,9 +269,8 @@ namespace AGE
 
 	void LooseOctreeNode::removeElementFromNode(CullableBoundingBox *toRm, MemoryPool<LooseOctreeNode> &pool)
 	{
-		LooseOctreeNode *curNode = this;
-
 		// remove the element from the node
+		assert(toRm->currentIdx < _elements.size());
 		_elements[toRm->currentIdx] = _elements[_elements.size() - 1];
 		_elements[toRm->currentIdx]->currentIdx = toRm->currentIdx;
 		_elements.pop_back();
@@ -303,9 +294,9 @@ namespace AGE
 		currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
 
 		if (currentCollisionState &&
-			VEC3_BIGGER(nodeSize, currentObjectDimensions))
+			glm::all(glm::greaterThan(nodeSize, currentObjectDimensions)))
 		{
-			if (VEC3_BIGGER(halfNodeSize, currentObjectDimensions))
+			if (glm::all(glm::greaterThan(halfNodeSize, currentObjectDimensions)))
 			{
 				glm::i8vec3	direction = _node.getDirection(toMv->currentAABB.center);
 				uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
@@ -324,6 +315,8 @@ namespace AGE
 			return (UNDEFINED_IDX);
 		}
 		// The object has changed node
+		--_uniqueSubElements;
+
 		LooseOctreeNode *prevNode = this;
 		uint32_t currentNodeIdx = _father;
 		LooseOctreeNode *currentNode;
@@ -333,7 +326,6 @@ namespace AGE
 		_elements[toMv->currentIdx] = _elements[_elements.size() - 1];
 		_elements[toMv->currentIdx]->currentIdx = toMv->currentIdx;
 		_elements.pop_back();
-		--_uniqueSubElements;
 
 		while (currentNodeIdx != UNDEFINED_IDX)
 		{
@@ -344,14 +336,14 @@ namespace AGE
 			currentCollisionState = currentNode->_node.checkPointIn(toMv->currentAABB.center);
 			currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
 
+			--currentNode->_uniqueSubElements;
+
 			if (currentCollisionState &&
-				VEC3_BIGGER(nodeSize, currentObjectDimensions))
+				glm::all(glm::greaterThan(nodeSize, currentObjectDimensions)))
 			{
 				currentNode->addElementRecursive(toMv, pool);
 				return (UNDEFINED_IDX);
 			}
-
-			--currentNode->_uniqueSubElements;
 
 			prevNode = currentNode;
 			currentNodeIdx = currentNode->_father;
@@ -362,6 +354,27 @@ namespace AGE
 	void LooseOctreeNode::setIdx(uint32_t idx)
 	{
 		_thisIdx = idx;
+	}
+
+	void LooseOctreeNode::removeEmptyLeafs(MemoryPool<LooseOctreeNode> &pool)
+	{
+		if (!isLeaf())
+		{
+			if (_uniqueSubElements == 0)
+			{
+				for (int i = 0; i < 8; ++i)
+				{
+					pool.get(_sons[i]).removeAllSons(pool);
+					pool.dealloc(_sons[i]);
+					_sons[i] = UNDEFINED_IDX;
+				}
+			}
+			else
+			{
+				for (int i = 0; i < 8; ++i)
+					pool.get(_sons[i]).removeEmptyLeafs(pool);
+			}
+		}
 	}
 
 	void LooseOctreeNode::removeAllSons(MemoryPool<LooseOctreeNode> &pool)

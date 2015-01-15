@@ -5,8 +5,6 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Core/CullableInterfaces.hh>
 
-#define VEC3_BIGGER(a, b) (a.x > b.x && a.y > b.y && a.z > b.z)
-
 #define UNDEFINED_IDX 0xFFFFFFFF
 
 namespace AGE

@@ -4,7 +4,7 @@
 namespace AGE
 {
 	LooseOctree::LooseOctree() :
-		_pool(32768 * 16)
+		_pool(32768)
 	{
 		_root = _pool.alloc();
 		_pool.get(_root).setIdx(_root);
