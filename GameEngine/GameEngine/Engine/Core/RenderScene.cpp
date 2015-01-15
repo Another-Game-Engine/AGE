@@ -191,7 +191,10 @@ namespace AGE
 #ifdef ACTIVATE_OCTREE_CULLING
 		if (_drawables[id].hasMoved)
 		{
-			_drawablesToMove[_drawables[id].moveBufferIdx] = _drawablesToMove[_drawablesToMove.size() - 1];
+			uint32_t idxMoveBuffer = _drawables[id].moveBufferIdx;
+
+			_drawablesToMove[idxMoveBuffer] = _drawablesToMove[_drawablesToMove.size() - 1];
+			_drawables[_drawablesToMove[idxMoveBuffer]].moveBufferIdx = idxMoveBuffer;
 			_drawablesToMove.pop_back();
 		}
 		// remove drawable from octree
