@@ -8,7 +8,6 @@
     <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
-    <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />
@@ -106,7 +105,6 @@
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
-    <ClInclude Include="Engine\Core\OctreeNode.hh" />
     <ClInclude Include="Engine\Core\PreparableObject.hh" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />

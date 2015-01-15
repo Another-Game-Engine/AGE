@@ -37,7 +37,7 @@ namespace AGE
 		// move an element from in node
 		uint32_t moveElementFromNode(CullableBoundingBox *toMv, MemoryPool<LooseOctreeNode> &pool);
 
-		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill, MemoryPool<LooseOctreeNode> &pool) const;
+		void		getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill, MemoryPool<LooseOctreeNode> &pool) const;
 
 		AABoundingBox const &getNodeBoundingBox() const;
 		bool				isLeaf() const;
@@ -68,6 +68,11 @@ namespace AGE
 		// nbr of elements in all the subnodes
 		uint32_t _uniqueSubElements;
 
-		AGE::Vector<CullableObject *> _elements;
+		void addElementToList(CullableObject *element);
+		void removeElementFromList(CullableObject *element);
+
+		// element list
+		uint32_t _nbrElements;
+		CullableObject *_elements;
 	};
 }

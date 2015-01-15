@@ -20,6 +20,8 @@ namespace AGE
 			_sons[i] = UNDEFINED_IDX;
 		_uniqueSubElements = 0;
 		_thisIdx = UNDEFINED_IDX;
+		_nbrElements = 0;
+		_elements = NULL;
 		computeLooseNode();
 	}
 
@@ -60,9 +62,8 @@ namespace AGE
 				else
 				{
 					// else we put the object in this node
-					toAdd->currentIdx = _elements.size();
 					toAdd->currentNode = _thisIdx;
-					_elements.push_back(toAdd);
+					addElementToList(toAdd);
 				}
 				return (_thisIdx);
 			}
@@ -95,29 +96,20 @@ namespace AGE
 		else
 		{
 			// else we put the object in this node
-			toAdd->currentIdx = _elements.size();
 			toAdd->currentNode = _thisIdx;
-			_elements.push_back(toAdd);
+			addElementToList(toAdd);
 		}
 	}
 
-	void		LooseOctreeNode::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject*> &toFill, MemoryPool<LooseOctreeNode> &pool) const
+	void		LooseOctreeNode::getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject*> &toFill, MemoryPool<LooseOctreeNode> &pool) const
 	{
 		assert(_uniqueSubElements != 0);
 		bool collisionState;
 
-		switch (toTest->type)
-		{
-		case CULLABLE_FRUSTUM:
-			collisionState = ((CullableFrustum*)toTest)->currentFrustum.checkCollision(_looseNode);
-			break;
-		default:
-			assert(!"This cullable type is not handled yet.");
-			break;
-		}
+		collisionState = toTest->currentFrustum.checkCollision(_looseNode);
 		if (collisionState)
 		{
-			for (auto e : _elements)
+			for (CullableObject *e = _elements; e != NULL; e = e->nextElement)
 			{
 				if (toTest->checkCollision(e))
 					toFill.push_back(e);
@@ -148,7 +140,7 @@ namespace AGE
 	uint32_t LooseOctreeNode::tryChangeRoot(MemoryPool<LooseOctreeNode> &pool)
 	{
 		// if the node is the root, has no elements and has sons, we try to change it
-		if (_father == UNDEFINED_IDX && !isLeaf() && _elements.size() == 0)
+		if (_father == UNDEFINED_IDX && !isLeaf() && _nbrElements == 0)
 		{
 			// if the node is the root, try to remove it
 			uint32_t nbrSonUsed = 0;
@@ -278,10 +270,7 @@ namespace AGE
 	void LooseOctreeNode::removeElementFromNode(CullableBoundingBox *toRm, MemoryPool<LooseOctreeNode> &pool)
 	{
 		// remove the element from the node
-		assert(toRm->currentIdx < _elements.size());
-		_elements[toRm->currentIdx] = _elements[_elements.size() - 1];
-		_elements[toRm->currentIdx]->currentIdx = toRm->currentIdx;
-		_elements.pop_back();
+		removeElementFromList(toRm);
 
 		LooseOctreeNode *toClean = NULL;
 
@@ -296,7 +285,6 @@ namespace AGE
 		if (toClean)
 			toClean->removeNode(pool);
 		toRm->currentNode = UNDEFINED_IDX;
-		toRm->currentIdx = UNDEFINED_IDX;
 	}
 
 	uint32_t LooseOctreeNode::moveElementFromNode(CullableBoundingBox *toMv, MemoryPool<LooseOctreeNode> &pool)
@@ -320,10 +308,8 @@ namespace AGE
 								(direction.y == 1 ? 2 : 0) +
 								(direction.z == 1 ? 1 : 0);
 				// remove element from node
-				assert(toMv->currentIdx < _elements.size());
-				_elements[toMv->currentIdx] = _elements[_elements.size() - 1];
-				_elements[toMv->currentIdx]->currentIdx = toMv->currentIdx;
-				_elements.pop_back();
+				removeElementFromList(toMv);
+
 				if (_sons[sonIdx] == UNDEFINED_IDX || _sons[sonIdx] == LEAF_NODE_IDX)
 					generateSon(sonIdx, pool);
 				pool.get(_sons[sonIdx]).addElementRecursive(toMv, pool);
@@ -335,10 +321,7 @@ namespace AGE
 		--_uniqueSubElements;
 
 		// remove the element from the node
-		assert(toMv->currentIdx < _elements.size());
-		_elements[toMv->currentIdx] = _elements[_elements.size() - 1];
-		_elements[toMv->currentIdx]->currentIdx = toMv->currentIdx;
-		_elements.pop_back();
+		removeElementFromList(toMv);
 
 		LooseOctreeNode *prevNode = this;
 		uint32_t currentNodeIdx = _father;
@@ -411,6 +394,27 @@ namespace AGE
 			pool.get(father)._sons[idx] = LEAF_NODE_IDX;
 			pool.dealloc(nodeIdx);
 		}
+	}
+
+	void LooseOctreeNode::addElementToList(CullableObject *toAdd)
+	{
+		++_nbrElements;
+		toAdd->nextElement = _elements;
+		if (_elements)
+			_elements->prevElement = toAdd;
+		toAdd->prevElement = NULL;
+		_elements = toAdd;
+	}
+
+	void LooseOctreeNode::removeElementFromList(CullableObject *toRm)
+	{
+		--_nbrElements;
+		if (toRm->prevElement)
+			toRm->prevElement->nextElement = toRm->nextElement;
+		else
+			_elements = toRm->nextElement;
+		if (toRm->nextElement)
+			toRm->nextElement->prevElement = toRm->prevElement;
 	}
 
 }

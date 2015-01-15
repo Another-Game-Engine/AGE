@@ -34,7 +34,7 @@ namespace AGE
 			_root = newRoot;
 	}
 
-	void LooseOctree::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill)
+	void LooseOctree::getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill)
 	{
 		_pool.get(_root).getElementsCollide(toTest, toFill, _pool);
 	}

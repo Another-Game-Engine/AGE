@@ -231,7 +231,6 @@
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\LooseOctree.cpp" />
     <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
-    <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
@@ -334,7 +333,6 @@
     <ClInclude Include="Engine\Core\LooseOctreeNode.hh" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
-    <ClInclude Include="Engine\Core\OctreeNode.hh" />
     <ClInclude Include="Engine\Core\PreparableObject.hh" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
     <ClInclude Include="Engine\Core\RenderScene.hpp" />

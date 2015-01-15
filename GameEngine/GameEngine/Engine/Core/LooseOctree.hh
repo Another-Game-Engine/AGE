@@ -14,7 +14,7 @@ namespace AGE
 		void addElement(CullableBoundingBox *toAdd);
 		void removeElement(CullableBoundingBox *toRm);
 		void moveElement(CullableBoundingBox *toMv);
-		void getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill);
+		void getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill);
 		void cleanOctree();
 
 	private:

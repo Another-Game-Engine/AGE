@@ -70,10 +70,13 @@ namespace AGE
 
 		LooseOctree _octree;
 
+		AGE::Vector<uint32_t> _drawablesToMove;
+
 		AGE::Vector<Mesh> _meshs;
 		AGE::Vector<Drawable> _drawables;
 		AGE::Vector<Camera> _cameras;
 		AGE::Vector<PointLight> _pointLights;
+
 		AGE::Queue<PrepareKey::OctreeObjectId> _freeDrawables;
 		AGE::Queue<PrepareKey::OctreeObjectId> _freeCameras;
 		AGE::Queue<PrepareKey::OctreeObjectId> _freeMeshs;
