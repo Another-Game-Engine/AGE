@@ -48,6 +48,6 @@ namespace AGE
 			_root = newRoot;
 			newRoot = _pool.get(_root).tryChangeRoot(_pool);
 		}
-		_pool.get(_root).removeEmptyLeafs(_pool);
+//		_pool.get(_root).removeEmptyLeafs(_pool);
 	}
 }

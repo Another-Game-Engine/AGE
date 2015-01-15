@@ -6,6 +6,7 @@
 #include <Core/CullableInterfaces.hh>
 
 #define UNDEFINED_IDX 0xFFFFFFFF
+#define LEAF_NODE_IDX 0xFFFFFFFE
 
 namespace AGE
 {
@@ -41,17 +42,17 @@ namespace AGE
 		AABoundingBox const &getNodeBoundingBox() const;
 		bool				isLeaf() const;
 
-		// clean octree functions
+		// clean octree function
 		uint32_t tryChangeRoot(MemoryPool<LooseOctreeNode> &pool);
-		void removeEmptyLeafs(MemoryPool<LooseOctreeNode> &pool);
 
 		void setIdx(uint32_t idx);
 		void removeAllSons(MemoryPool<LooseOctreeNode> &pool);
+		void removeNode(MemoryPool<LooseOctreeNode> &pool);
 
 	private:
 		// Utils methods
 		uint32_t extendNode(CullableBoundingBox *toAdd, glm::i8vec3 const &direction, MemoryPool<LooseOctreeNode> &pool);
-		void		generateAllSons(MemoryPool<LooseOctreeNode> &pool);
+		void		generateSon(uint32_t toGenIdx, MemoryPool<LooseOctreeNode> &pool);
 		void		computeLooseNode();
 		// add an element in the node if the element is entierly contained in the current node
 		void addElementRecursive(CullableBoundingBox *toAdd, MemoryPool<LooseOctreeNode> &pool);
