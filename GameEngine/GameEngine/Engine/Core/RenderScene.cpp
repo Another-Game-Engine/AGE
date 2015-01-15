@@ -307,6 +307,7 @@ namespace AGE
 															_drawables[id].scale);
 				_drawables[id].currentAABB.fromTransformedBox(_drawables[id].meshAABB, _drawables[id].transformation);
 				_drawables[id].previousAABB = _drawables[id].currentAABB;
+				_drawables[id].active = true;
 				_octree.addElement(&_drawables[id]);
 				assert(_drawables[id].currentNode != UNDEFINED_IDX);
 			}

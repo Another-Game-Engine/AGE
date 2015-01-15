@@ -37,14 +37,14 @@ namespace AGE
 		// if the center is in the loose node
 		if (collisionState == true)
 		{
-			glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
-			glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
+			glm::vec3 nodeSize = _node.maxPoint - _node.minPoint;
+			glm::vec3 halfNodeSize = nodeSize / 2.0f;
 
-			if (VEC3_BIGGER(looseNodeSize, objectDimensions))
+			if (VEC3_BIGGER(nodeSize, objectDimensions))
 			{
-				// if the object is entirely in the loose node
+				// if the object is entirely in the node
 				++_uniqueSubElements;
-				if (VEC3_BIGGER(halfLooseNodeSize, objectDimensions))
+				if (VEC3_BIGGER(halfNodeSize, objectDimensions))
 				{
 					// if the object can fit in the lower level of the tree
 					uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
@@ -75,11 +75,11 @@ namespace AGE
 		glm::i8vec3	direction = _node.getDirection(toAdd->currentAABB.center);;
 		glm::vec3 objectDimensions = toAdd->currentAABB.maxPoint - toAdd->currentAABB.minPoint;
 
-		glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
-		glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
+		glm::vec3 nodeSize = _node.maxPoint - _node.minPoint;
+		glm::vec3 halfNodeSize = nodeSize / 2.0f;
 
 		++_uniqueSubElements;
-		if (VEC3_BIGGER(halfLooseNodeSize, objectDimensions))
+		if (VEC3_BIGGER(halfNodeSize, objectDimensions))
 		{
 			// if the object can fit in the lower level of the tree
 			uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
@@ -141,7 +141,7 @@ namespace AGE
 	uint32_t LooseOctreeNode::tryChangeRoot(MemoryPool<LooseOctreeNode> &pool)
 	{
 		// if the node is the root, has no elements and has sons, we try to change it
-		if (_father == UNDEFINED_IDX && !isLeaf())
+		if (_father == UNDEFINED_IDX && !isLeaf() && _elements.size() == 0)
 		{
 			// if the node is the root, try to remove it
 			uint32_t nbrSonUsed = 0;
@@ -293,8 +293,8 @@ namespace AGE
 
 	uint32_t LooseOctreeNode::moveElementFromNode(CullableBoundingBox *toMv, MemoryPool<LooseOctreeNode> &pool)
 	{
-		glm::vec3 looseNodeSize = _looseNode.maxPoint - _looseNode.minPoint;
-		glm::vec3 halfLooseNodeSize = looseNodeSize / 2.0f;
+		glm::vec3 nodeSize = _node.maxPoint - _node.minPoint;
+		glm::vec3 halfNodeSize = nodeSize / 2.0f;
 
 		bool currentCollisionState;
 		glm::vec3 currentObjectDimensions;
@@ -303,15 +303,16 @@ namespace AGE
 		currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
 
 		if (currentCollisionState &&
-			VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
+			VEC3_BIGGER(nodeSize, currentObjectDimensions))
 		{
-			if (VEC3_BIGGER(halfLooseNodeSize, currentObjectDimensions))
+			if (VEC3_BIGGER(halfNodeSize, currentObjectDimensions))
 			{
 				glm::i8vec3	direction = _node.getDirection(toMv->currentAABB.center);
 				uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
 								(direction.y == 1 ? 2 : 0) +
 								(direction.z == 1 ? 1 : 0);
 				// remove element from node
+				assert(toMv->currentIdx < _elements.size());
 				_elements[toMv->currentIdx] = _elements[_elements.size() - 1];
 				_elements[toMv->currentIdx]->currentIdx = toMv->currentIdx;
 				_elements.pop_back();
@@ -338,14 +339,13 @@ namespace AGE
 		{
 			currentNode = &pool.get(currentNodeIdx);
 
-			looseNodeSize = currentNode->_looseNode.maxPoint - currentNode->_looseNode.minPoint;
-			halfLooseNodeSize = looseNodeSize / 2.0f;
+			glm::vec3 nodeSize = currentNode->_node.maxPoint - currentNode->_node.minPoint;
 
 			currentCollisionState = currentNode->_node.checkPointIn(toMv->currentAABB.center);
 			currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
 
 			if (currentCollisionState &&
-				VEC3_BIGGER(looseNodeSize, currentObjectDimensions))
+				VEC3_BIGGER(nodeSize, currentObjectDimensions))
 			{
 				currentNode->addElementRecursive(toMv, pool);
 				return (UNDEFINED_IDX);
