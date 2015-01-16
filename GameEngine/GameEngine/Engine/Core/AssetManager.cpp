@@ -391,15 +391,12 @@ namespace AGE
 
 		mesh->boundingBox = data.boundingBox;
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
-		auto future1 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			if (_pools.find(infos) == std::end(_pools))
 			{
 				createPool(order, infos);
 			}
-			return AssetsLoadingResult(false);
-		});
-		auto future2 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			// We need to keep an instance of FileData shared_ptr
 			auto fileDataCopy = fileData;
@@ -409,9 +406,7 @@ namespace AGE
 			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
 			mesh->vertexPool = pools.first;
 			mesh->indexPool = pools.second;
-			return AssetsLoadingResult(false);
-		});
-		auto future3 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		}
 		{
 			// We need to keep an instance of FileData shared_ptr
 			auto fileDataCopy = fileData;
@@ -420,11 +415,10 @@ namespace AGE
 			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
 			mesh->vertexPool = pools.first;
 			mesh->indexPool = pools.second;
+		}
 			return AssetsLoadingResult(false);
 		});
-		pushNewAsset(loadingChannel, data.name, future1);
-		pushNewAsset(loadingChannel, data.name, future2);
-		pushNewAsset(loadingChannel, data.name, future3);
+		pushNewAsset(loadingChannel, data.name, future);
 	}
 
 	// Create pool for mesh

@@ -295,8 +295,10 @@ bool BenchmarkScene::userUpdate(double time)
 	auto brokenTower = createEntity();
 	auto _l = getLink(brokenTower);
 	_l->setPosition(glm::vec3(0, 40, 0));
-	_l->setScale(glm::vec3(1.f));
+	_l->setScale(glm::vec3(10.f));
 	_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	addComponent<Component::RigidBody>(brokenTower, 0.0f)->setCollisionMesh(weakOnThis, brokenTower, "../../Assets/AGE-Assets-For-Test/Serialized/Broken Tower/tower_static.phage");
 
 	auto _m = addComponent<Component::MeshRenderer>(brokenTower, getInstance<AGE::AssetsManager>()->getMesh("Broken Tower/tower.sage"));
 	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Broken Tower/tower.mage")));
@@ -311,9 +313,9 @@ bool BenchmarkScene::userUpdate(double time)
 		auto _l = getLink(GLOBAL_CATWOMAN);
 
 		static bool useOnce = false;
-		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-		_l->setPosition(glm::vec3(0, 0, 0));
-		_l->setScale(glm::vec3(1.5f));
+		//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+		_l->setPosition(glm::vec3(-30, 0, 0));
+		_l->setScale(glm::vec3(8.5f));
 		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
 		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
@@ -325,10 +327,7 @@ bool BenchmarkScene::userUpdate(double time)
 		}
 		auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_CATWOMAN, 0);
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_static.phage");
-		rigidBody->getBody().setFriction(0.5f);
-		rigidBody->getBody().setRestitution(0.5f);
-		rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(getLink(GLOBAL_CAMERA)->getOrientation() * glm::vec3(0, 0, -10)));
+		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_dynamic.phage");
 		//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
 		//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
 		//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
