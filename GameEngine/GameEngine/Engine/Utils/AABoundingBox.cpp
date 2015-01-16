@@ -15,6 +15,12 @@ namespace AGE
 	{
 		minPoint = min;
 		maxPoint = max;
+		center = minPoint + ((maxPoint - minPoint) / 2.0f);
+	}
+
+	void AABoundingBox::recomputeCenter()
+	{
+		center = minPoint + ((maxPoint - minPoint) / 2.0f);
 	}
 
 	glm::vec3	AABoundingBox::getPositivePoint(glm::vec3 const &normal) const
@@ -68,6 +74,7 @@ namespace AGE
 			minPoint = glm::min(minPoint, glm::vec3(boundingBox[i]));
 			maxPoint = glm::max(maxPoint, glm::vec3(boundingBox[i]));
 		}
+		center = minPoint + ((maxPoint - minPoint) / 2.0f);
 	}
 
 	ECollision AABoundingBox::checkCollision(AABoundingBox const &oth, glm::i8vec3 &direction) const
@@ -116,6 +123,24 @@ namespace AGE
 			minPoint.y < oth.maxPoint.y &&
 			maxPoint.z > oth.minPoint.z &&
 			minPoint.z < oth.maxPoint.z);
+	}
+
+	bool	AABoundingBox::checkPointIn(glm::vec3 point, glm::i8vec3 &direction) const
+	{
+		glm::vec3 dif = point - center;
+		direction = glm::i8vec3((dif.x >= 0) ? 1 : -1,
+			(dif.y >= 0) ? 1 : -1,
+			(dif.z >= 0) ? 1 : -1);
+		return (point.x >= minPoint.x && point.x <= maxPoint.x &&
+			point.y >= minPoint.y && point.y <= maxPoint.y &&
+			point.z >= minPoint.z && point.z <= maxPoint.z);
+	}
+
+	bool	AABoundingBox::checkPointIn(glm::vec3 point) const
+	{
+		return (point.x >= minPoint.x && point.x <= maxPoint.x &&
+			point.y >= minPoint.y && point.y <= maxPoint.y &&
+			point.z >= minPoint.z && point.z <= maxPoint.z);
 	}
 
 }

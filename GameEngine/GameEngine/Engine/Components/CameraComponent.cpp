@@ -5,6 +5,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
+#include <Context/SdlContext.hh>
 
 namespace Component
 {
@@ -49,7 +50,8 @@ namespace Component
 		_scene = scene;
 		_key = AGE::GetPrepareThread()->addCamera();
 		scene->getLink(entityId)->registerOctreeObject(_key);
-		setProjection(glm::perspective(60.0f, 1920.0f / 1040.0f, 0.1f, 2000.0f));
+		auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
+		setProjection(glm::perspective(60.0f, (float)screenSize.x / (float)screenSize.y, 0.1f, 2000.0f));
 	}
 
 	void CameraComponent::reset(AScene *scene)

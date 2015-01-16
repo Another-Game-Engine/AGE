@@ -106,6 +106,10 @@
     <ClCompile Include="Engine\Render\Pipelining\Render\RenderingPass.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Render\ARendering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.cpp" />
+    <ClCompile Include="Engine\Utils\BitOperations.cpp" />
+    <ClCompile Include="Engine\Core\LooseOctree.cpp" />
+    <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
+    <ClCompile Include="Engine\Core\RenderThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -125,8 +129,8 @@
     <ClInclude Include="Engine\Core\PreparableObject.hh" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
+    <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
-    <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
@@ -249,6 +253,9 @@
     <ClInclude Include="Engine\Render\ProgramResources\AInterfaceBlock.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Attribute.hh" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
+    <ClInclude Include="Engine\Core\LooseOctreeNode.hh" />
+    <ClInclude Include="Engine\Core\LooseOctree.hh" />
+    <ClInclude Include="Engine\Utils\MemoryPool.hpp" />
     <ClInclude Include="Engine\Utils\ThreadName.hpp" />
     <ClInclude Include="Engine\Threads\Thread.hpp" />
     <ClInclude Include="Engine\Threads\ThreadManager.hpp" />
@@ -295,6 +302,13 @@
     <ClInclude Include="Engine\Render\Pipelining\Render\Rendering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\IRenderingPipeline.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.hh" />
+    <ClInclude Include="Engine\Utils\BitOperations.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
+    <ClInclude Include="Engine\Core\RenderThread.hpp" />
+    <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
+    <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
+    <ClInclude Include="Engine\Render\Key.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -15,7 +15,6 @@
 namespace AGE
 {
 	struct MeshInstance;
-	struct MaterialSetInstance;
 }
 
 namespace Component

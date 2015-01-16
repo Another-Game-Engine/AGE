@@ -9,6 +9,17 @@
 #include <Utils/CommandQueueHolder.hpp>
 #include <Utils/ThreadQueue.hpp>
 #include <Skinning/AnimationInstance.hpp>
+<<<<<<< HEAD
+=======
+#include <Core/LooseOctree.hh>
+
+#define LOOSE_OCTREE_CULLING
+//#define OCTREE_CULLING
+
+#if defined LOOSE_OCTREE_CULLING || defined OCTREE_CULLING
+#define ACTIVATE_OCTREE_CULLING
+#endif
+>>>>>>> master
 
 class AScene;
 
@@ -49,11 +60,23 @@ namespace AGE
 			const PrepareKey &id
 			, const Vector<SubMeshInstance> &meshs
 			, const Vector<MaterialInstance> &materials
+<<<<<<< HEAD
 			, const Key<AGE::AnimationInstance> &animation);
 		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
 
 	private:
 		OctreeNode *_octree;
+=======
+			, const gl::Key<AGE::AnimationInstance> &animation);
+		PrepareRenderThread &setCameraInfos(const PrepareKey &id, const glm::mat4 &projection);
+
+	private:
+#if defined LOOSE_OCTREE_CULLING
+		LooseOctree _octree;
+#elif defined OCTREE_CULLING
+		OctreeNode *_octree;
+#endif
+>>>>>>> master
 
 		std::weak_ptr<AScene> scene;
 

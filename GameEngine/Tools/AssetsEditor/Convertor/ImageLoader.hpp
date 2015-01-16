@@ -3,6 +3,7 @@
 #include "AssimpLoader.hpp"
 #include <Texture/Texture.hpp>
 #include <FreeImagePlus.h>
+#include <Utils/BitOperations.hpp>
 
 namespace AGE
 {
@@ -31,6 +32,27 @@ namespace AGE
 				auto colorType = image.getColorType();
 				t->bpp = image.getBitsPerPixel();
 
+				bool toResize = false;
+				if (!isPowerOfTwo(t->width))
+				{
+					t->width = roundToHighestPowerOfTwo(t->width);
+					toResize = true;
+				}
+				if (!isPowerOfTwo(t->height))
+				{
+					t->height = roundToHighestPowerOfTwo(t->height);
+					toResize = true;
+				}
+				if (toResize)
+				{
+					if (!image.rescale(t->width, t->height, FILTER_BICUBIC));
+					{
+						char a[2];
+						a[30000] = '1';
+					}
+					std::cout << "Texture : " << path << " resized !" << std::endl;
+				}
+
 				t->colorNumber = 0;
 				if (colorType == FIC_RGB)
 				{
@@ -53,7 +75,6 @@ namespace AGE
 				auto imgData = FreeImage_GetBits(image);
 				t->data.assign(imgData, imgData + sizeof(unsigned char) * t->width * t->height * t->colorNumber);
 
-
 				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder());
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
@@ -74,8 +95,7 @@ namespace AGE
 			dataSet.texturesLoaded = false;
 			if (!dataSet.assimpScene)
 			{
-				if (!AssimpLoader::Load(dataSet))
-					return false;
+				return false;
 			}
 
 			if (dataSet.assimpScene->HasTextures())

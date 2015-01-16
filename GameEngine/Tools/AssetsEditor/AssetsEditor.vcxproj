@@ -103,7 +103,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,16 +149,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AConfigurationFile.cpp" />
-    <ClCompile Include="AFormatConvertor.cpp" />
-    <ClCompile Include="AssetConvertor.cpp" />
-    <ClCompile Include="dataSet.cpp" />
+    <ClCompile Include="AssetFileCreator.cpp" />
+    <ClCompile Include="AssetFiles\RawMaterialFile.cpp" />
+    <ClCompile Include="AssetFiles\RawMeshFile.cpp" />
+    <ClCompile Include="AssetFiles\RawTextureFile.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="Folder.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="SimpleConf.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssetConvertor.hh" />
+    <ClInclude Include="AssetFileCreator.hpp" />
+    <ClInclude Include="AssetFiles\RawMaterialFile.hpp" />
+    <ClInclude Include="AssetFiles\RawMeshFile.hpp" />
+    <ClInclude Include="AssetFiles\RawTextureFile.hpp" />
+    <ClInclude Include="AssetFiles\UnknownFile.hpp" />
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
     <ClInclude Include="Convertor\AssimpLoader.hpp" />
@@ -166,11 +171,9 @@
     <ClInclude Include="Convertor\MaterialConvertor.hpp" />
     <ClInclude Include="Convertor\MeshLoader.hpp" />
     <ClInclude Include="Convertor\SkeletonLoader.hpp" />
-    <ClInclude Include="dataSet.hh" />
-    <ClInclude Include="AConfigurationFile.hh" />
-    <ClInclude Include="AFormatConvertor.hh" />
-    <ClInclude Include="SimpleConf.hh" />
-    <ClInclude Include="Texture.hh" />
+    <ClInclude Include="File.hpp" />
+    <ClInclude Include="Folder.hpp" />
+    <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">

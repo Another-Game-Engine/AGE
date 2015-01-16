@@ -30,7 +30,7 @@ public:
 		_screenSize = glm::uvec2(swidth, sheight);
 		return _init(mode);
 	}
-
+	inline const glm::uvec2 &getScreenSize() const { return _screenSize; }
 protected:
 	glm::uvec2 _screenSize;
 	std::string _windowName;

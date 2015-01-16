@@ -229,8 +229,11 @@
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
+    <ClCompile Include="Engine\Core\LooseOctree.cpp" />
+    <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
+    <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
@@ -288,6 +291,7 @@
     <ClCompile Include="Engine\TMQ\message.cpp" />
     <ClCompile Include="Engine\TMQ\queue.cpp" />
     <ClCompile Include="Engine\Utils\AABoundingBox.cpp" />
+    <ClCompile Include="Engine\Utils\BitOperations.cpp" />
     <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
@@ -336,11 +340,17 @@
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
+    <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
+    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
+    <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
+    <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Data\BlockMemory.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Data\Vertices.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Painting\Painter.hh" />
+    <ClInclude Include="Engine\Render\Key.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Framebuffer.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\IFramebufferStorage.hh" />
@@ -373,6 +383,8 @@
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
     <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />
     <ClInclude Include="Engine\Core\Link.hpp" />
+    <ClInclude Include="Engine\Core\LooseOctree.hh" />
+    <ClInclude Include="Engine\Core\LooseOctreeNode.hh" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Core\OctreeNode.hh" />
@@ -381,7 +393,6 @@
     <ClInclude Include="Engine\Core\RenderScene.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
-    <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
@@ -437,6 +448,7 @@
     <ClInclude Include="Engine\TMQ\queue.hpp" />
     <ClInclude Include="Engine\TMQ\templateDispatcher.hpp" />
     <ClInclude Include="Engine\Utils\AABoundingBox.hh" />
+    <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
@@ -503,6 +515,7 @@
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
     <ClInclude Include="Engine\Utils\MathematicTools.hh" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
+    <ClInclude Include="Engine\Utils\MemoryPool.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\Plane.hh" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />

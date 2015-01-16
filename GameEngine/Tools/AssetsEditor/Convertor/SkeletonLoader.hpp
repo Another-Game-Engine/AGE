@@ -4,6 +4,7 @@
 
 #include <map>
 #include <Skinning/Skeleton.hpp>
+#include <thread>
 
 namespace AGE
 {
@@ -34,8 +35,7 @@ namespace AGE
 		{
 			if (!dataSet.assimpScene)
 			{
-				if (!AssimpLoader::Load(dataSet))
-					return false;
+				return false;
 			}
 			auto boneOrigin = dataSet.assimpScene->mRootNode;
 			if (dataSet.skeletonLoaded)
