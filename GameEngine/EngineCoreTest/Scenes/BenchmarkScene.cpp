@@ -313,7 +313,7 @@ bool BenchmarkScene::userUpdate(double time)
 		auto _l = getLink(GLOBAL_CATWOMAN);
 
 		static bool useOnce = false;
-		//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l->setPosition(glm::vec3(-30, 0, 0));
 		_l->setScale(glm::vec3(8.5f));
 		auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
@@ -327,7 +327,7 @@ bool BenchmarkScene::userUpdate(double time)
 		}
 		auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_CATWOMAN, 0);
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_dynamic.phage");
+		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_static.phage");
 		//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
 		//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
 		//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
