@@ -1,10 +1,11 @@
 #include <Core/AssetsManager.hpp>
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
-#include <Data/Material/MaterialData.hh>
+#include <Data/MaterialData.hh>
+#include <Data/MeshData.hh>
 #include <Data/TextureData.hh>
-#include <Core/Material/MaterialInstance.hh>
-#include <Geometry/Mesh.hpp>
+#include <Core/Instance/MaterialInstance.hh>
+#include <Core/Instance/MeshInstance.hh>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/RenderThread.hpp>
@@ -12,7 +13,7 @@
 #include <Threads/QueueOwner.hpp>
 #include <Threads/Thread.hpp>
 #include <Render/Properties/Materials/Diffuse.hh>
-#include <Render/Textures/ITexture.hh>
+#include <Render/Textures/Texture2D.hh>
 
 namespace AGE
 {
@@ -42,7 +43,7 @@ namespace AGE
 		return nullptr;
 	}
 
-	void AssetsManager::loadMaterial(const File &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadMaterial(const File &_filePath, const std::string &loadingChannel)
 	{
 		auto material = std::make_shared<MaterialSetInstance>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
@@ -81,9 +82,10 @@ namespace AGE
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		return (true);
 	}
 
-	void AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel, std::function<void(ITexture &key_tex)> &callback)
+	bool AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel)
 	{
 		std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
@@ -92,82 +94,64 @@ namespace AGE
 		{
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				if (_textures.find(filePath.getFullName()) != std::end(_textures))
-				{
-					auto texture = _textures[filePath.getFullName()];
-					callback(*texture.get());
-					return AssetsLoadingResult(texture == nullptr);
+				if (_textures.find(filePath.getFullName()) != std::end(_textures)) {
+					return AssetsLoadingResult(true);
 				}
 			}
-
-			if (!filePath.exists())
-			{
-				auto key = manager->getDefaultTexture2D();
-				callback(key);
-				_textures.insert(std::make_pair(filePath.getFullName(), std::make_shared<gl::Key<gl::Texture>>(key)));
-				return AssetsLoadingResult(key.empty());
+			if (!filePath.exists()) {
+				return AssetsLoadingResult(false);
 			}
-
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*data.get());
-
-			// TODO fill texture with texture key
-
 			GLenum ct = GL_RGB32F;
 			GLenum color = GL_RGB;
-			if (data->colorNumber == 3)
+			switch (data->colorNumber)
 			{
-				ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
+			case 3:
+				ct = GL_RGB32F;
 				color = GL_BGR;
-			}
-			else if (data->colorNumber == 4)
-			{
-				ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
+				break;
+			case 4:
+				ct =  GL_RGBA32F;
 				color = GL_BGRA;
-			}
-			else if (data->colorNumber == 1)
-			{
-				ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
+				break;
+			case 1:
+				ct = GL_RGB32F;
 				color = GL_LUMINANCE;
-			}
-			else
+				break;
+			default:
 				return AssetsLoadingResult(true, "Image format not found.\n");
-			auto key = manager->addTexture2D(data->width, data->height, ct, true);
-			
-			manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data->data.data());
-			manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			
-			callback(key);
-				_textures.insert(std::make_pair(filePath.getFullName(), std::make_shared<gl::Key<gl::Texture>>(key)));
-			return AssetsLoadingResult(key.empty());
+				break;
+			}
+			auto texture = std::make_shared<Texture2D>(data->width, data->height, ct, true);
+			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
+			_textures.insert(std::make_pair(filePath.getFullName(), texture));
+			return AssetsLoadingResult(true);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		return (true);
 	}
 
-	void AssetsManager::loadAnimation(const File &_filePath, const std::string &loadingChannel)
->>>>>>> master
+	bool AssetsManager::loadAnimation(const File &_filePath, const std::string &loadingChannel)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		auto animation = std::make_shared<Animation>();
-		if (!filePath.exists())
-		{
+		if (!filePath.exists()) {
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
-			assert(false);
+			return (false);
 		}
-
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_animations.find(filePath.getFullName()) != std::end(_animations))
-			{
-				return;
+			if (_animations.find(filePath.getFullName()) != std::end(_animations)) {
+				return (true);
 			}
 			_animations.insert(std::make_pair(filePath.getFullName(), animation));
 		}
-
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
@@ -175,6 +159,7 @@ namespace AGE
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		return (true);
 	}
 
 	std::shared_ptr<Animation> AssetsManager::getAnimation(const File &_filePath)
@@ -185,47 +170,18 @@ namespace AGE
 		return nullptr;
 	}
 
-	std::shared_ptr<Skeleton> AssetsManager::getSkeleton(const File &_filePath)
-	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
-		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
-			return _skeletons[filePath.getFullName()];
-		return nullptr;
-	}
-
-	void AssetsManager::loadSkeleton(const File &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadSkeleton(const File &_filePath, const std::string &loadingChannel)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		auto skeleton = std::make_shared<Skeleton>();
-		if (!filePath.exists())
-		{
+		if (!filePath.exists()) {
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
-			assert(false);
+			return (false);
 		}
-
-<<<<<<< HEAD
-		auto skeleton = std::make_shared<Skeleton>();
-
-		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-		cereal::PortableBinaryInputArchive ar(ifs);
-		ar(*skeleton.get());
-		_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
-		return skeleton;
-	}
-
-	std::shared_ptr<MeshInstance> AssetsManager::loadMesh(const File &_filePath)
-	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
-		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
-			return _meshs[filePath.getFullName()];
-		if (!filePath.exists())
-=======
->>>>>>> master
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
-			{
-				return;
+			if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons)) {
+				return (true);
 			}
 			_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
 		}
@@ -236,20 +192,20 @@ namespace AGE
 			return true;
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		return (true);
 	}
 
-<<<<<<< HEAD
-		std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-		cereal::PortableBinaryInputArchive ar(ifs);
-		MeshData data;
-		ar(data);
 
-//		auto res = AGE::GetRenderThread()->getQueue()->
+	std::shared_ptr<Skeleton> AssetsManager::getSkeleton(const File &_filePath)
+	{
+		File filePath(_assetsDirectory + _filePath.getFullName());
+		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
+			return _skeletons[filePath.getFullName()];
+		return nullptr;
+	}
 
-=======
 	void AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
 	{
->>>>>>> master
 		auto meshInstance = std::make_shared<MeshInstance>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		{

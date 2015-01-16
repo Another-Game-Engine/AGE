@@ -72,7 +72,8 @@ void UnitProg::create()
 
 void UnitProg::destroy() const
 {
-	if (_id != 0)
+	if (_id != 0) {
 		glDeleteShader(_id);
+	}
 }
 

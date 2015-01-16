@@ -131,7 +131,6 @@
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
-    <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
@@ -312,6 +311,10 @@
     <ClInclude Include="Engine\Core\Material\MaterialInstance.hh" />
     <ClInclude Include="Engine\Data\TextureData.hh" />
     <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
+    <ClInclude Include="Engine\Data\MeshData.hh" />
+    <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
+    <ClInclude Include="Engine\Core\Instance\MeshInstance.hh" />
+    <ClInclude Include="Engine\Entities\EntityData.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

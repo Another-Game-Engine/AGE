@@ -5,13 +5,14 @@
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/File.hpp>
 #include <bitset>
-#include <Geometry/Mesh.hpp>
+#include <Data/MeshData.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <map>
 #include <future>
 #include <TMQ/message.hpp>
 
 struct MaterialSetInstance;
+struct MeshInstance;
 class ITexture;
 
 namespace AGE
@@ -84,15 +85,15 @@ namespace AGE
 			{}
 		};
 
-		void loadAnimation(const File &filePath, const std::string &loadingChannel = "");
+		bool loadAnimation(const File &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<Animation> getAnimation(const File &filePath);
-		void loadSkeleton(const File &filePath, const std::string &loadingChannel = "");
+		bool loadSkeleton(const File &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<Skeleton> getSkeleton(const File &filePath);
-		void loadMaterial(const File &filePath, const std::string &loadingChannel = "");
+		bool loadMaterial(const File &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<MaterialSetInstance> getMaterial(const File &filePath);
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
-		void loadTexture(const File &filepath, const std::string &loadingChannel = "", std::function<void(ITexture *key_tex)> &callback = std::function<void(ITexture *)>([](){}));
+		bool loadTexture(const File &filepath, const std::string &loadingChannel = "");
 
 //<<<<<<< HEAD
 
@@ -118,19 +119,21 @@ namespace AGE
 		std::map<std::string, std::shared_ptr<Animation>> _animations;
 		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
 		std::map<std::string, std::shared_ptr<ITexture>> _textures;
+		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
 		std::mutex _mutex;
 
 //<<<<<<< HEAD
 //
 //		void loadSubmesh(SubMeshData &data, SubMeshInstance *mesh, /*const std::vector<MeshInfos> &order,*/ const std::bitset<MeshInfos::END> &infos);
 //=======
-//		std::map<std::string, std::shared_ptr<gl::Key<gl::Texture>>> _textures;
 //		
-//		std::map < std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
+//		
+//		
 //
 //		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos, const std::string &loadingChannel);
 //>>>>>>> master
 		// Create pool for meshs
+	private:
 		void createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos);
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
 	};

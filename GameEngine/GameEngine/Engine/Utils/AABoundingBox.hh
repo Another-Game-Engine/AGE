@@ -12,7 +12,7 @@ namespace AGE
 		INTERSECT
 	};
 
-	struct		AABoundingBox
+	struct AABoundingBox
 	{
 		glm::vec3		minPoint;
 		glm::vec3		maxPoint;

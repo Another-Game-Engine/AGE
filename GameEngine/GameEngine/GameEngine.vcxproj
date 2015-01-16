@@ -340,6 +340,8 @@
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
+    <ClInclude Include="Engine\Core\Instance\MeshInstance.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
@@ -347,7 +349,9 @@
     <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
     <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
+    <ClInclude Include="Engine\Data\MeshData.hh" />
     <ClInclude Include="Engine\Data\TextureData.hh" />
+    <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Data\BlockMemory.hh" />
@@ -396,7 +400,6 @@
     <ClInclude Include="Engine\Core\RenderScene.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
-    <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
