@@ -309,6 +309,9 @@
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />
+    <ClInclude Include="Engine\Core\Material\MaterialInstance.hh" />
+    <ClInclude Include="Engine\Data\TextureData.hh" />
+    <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

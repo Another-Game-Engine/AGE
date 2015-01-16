@@ -1,16 +1,18 @@
 #include <Core/AssetsManager.hpp>
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
-#include <Core/Material/MaterialData.hh>
-#include <Core/Material/MaterialSetInstance.hh>
+#include <Data/Material/MaterialData.hh>
+#include <Data/TextureData.hh>
+#include <Core/Material/MaterialInstance.hh>
 #include <Geometry/Mesh.hpp>
-#include <Texture/Texture.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/QueueOwner.hpp>
 #include <Threads/Thread.hpp>
+#include <Render/Properties/Materials/Diffuse.hh>
+#include <Render/Textures/ITexture.hh>
 
 namespace AGE
 {
@@ -56,43 +58,21 @@ namespace AGE
 			if (!filePath.exists()) {
 				return AssetsLoadingResult(true, std::string("AssetsManager : Mesh File [" + filePath.getFullName() + "] does not exists.\n"));
 			}
-			std::shared_ptr<MaterialDataSet> data = std::make_shared<MaterialDataSet>();
+			std::shared_ptr<MaterialDataSet> material_data_set = std::make_shared<MaterialDataSet>();
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
-			ar(*data.get());
-			material->name = data->name;
+			ar(*material_data_set.get());
+			material->name = material_data_set->name;
 			material->path = _filePath.getFullName();
 			auto i = 0;
-			material->datas.resize(data->collection.size());
-			for (auto &e : data->collection) {
+			material->datas.resize(material_data_set->collection.size());
+			for (auto &material_data : material_data_set->collection) {
 				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 				{
-					auto key = manager->addMaterial();
-					material->datas[i] = key;
-
-					// TODO fill material with material key
-					gl::Key<gl::Material> &mat = material->datas[i];
-					manager->setMaterial<gl::Color_diffuse>(mat, e.diffuse);
-					manager->setMaterial<gl::Color_emissive>(mat, e.emissive);
-					manager->setMaterial<gl::Color_specular>(mat, e.specular);
-					manager->setMaterial<gl::Ratio_diffuse>(mat, 1.0f); // todo
-					manager->setMaterial<gl::Ratio_emissive>(mat, 1.0f); // todo
-					manager->setMaterial<gl::Ratio_specular>(mat, 1.0f); // todo
-					loadTexture(e.diffuseTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
-						manager->setMaterial<gl::Texture_diffuse>(mat, t);
-					}));
-					loadTexture(e.emissiveTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
-						manager->setMaterial<gl::Texture_emissive>(mat, t);
-					}));
-					loadTexture(e.specularTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
-						manager->setMaterial<gl::Texture_specular>(mat, t);
-					}));
-					loadTexture(e.bumpTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
-						manager->setMaterial<gl::Texture_bump>(mat, t);
-					}));
-					loadTexture(e.normalTexPath, loadingChannel, std::function<void(gl::Key<gl::Texture> &)>([=](gl::Key<gl::Texture> &t){
-						manager->setMaterial<gl::Texture_normal>(mat, t);
-					}));
+					material->datas[i].emplace_back(std::make_shared<Diffuse>());
+					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_color(material_data.diffuse);
+					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_ratio(1.0f);
+					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(nullptr);
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, _filePath.getFullName() + std::to_string(i), futureSubMaterial);
@@ -103,9 +83,8 @@ namespace AGE
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 	}
 
-	void AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel, std::function<void(gl::Key<gl::Texture> &key_tex)> &callback)
+	void AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel, std::function<void(ITexture &key_tex)> &callback)
 	{
-		auto manager = _dependencyManager.lock()->getInstance<gl::RenderManager>();
 		std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
 
@@ -115,9 +94,9 @@ namespace AGE
 				std::lock_guard<std::mutex> lock(_mutex);
 				if (_textures.find(filePath.getFullName()) != std::end(_textures))
 				{
-					auto key = _textures[filePath.getFullName()];
-					callback(*key.get());
-					return AssetsLoadingResult(key->empty());
+					auto texture = _textures[filePath.getFullName()];
+					callback(*texture.get());
+					return AssetsLoadingResult(texture == nullptr);
 				}
 			}
 

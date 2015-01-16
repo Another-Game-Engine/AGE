@@ -12,6 +12,7 @@
 #include <TMQ/message.hpp>
 
 struct MaterialSetInstance;
+class ITexture;
 
 namespace AGE
 {
@@ -91,6 +92,7 @@ namespace AGE
 		std::shared_ptr<MaterialSetInstance> getMaterial(const File &filePath);
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
+		void loadTexture(const File &filepath, const std::string &loadingChannel = "", std::function<void(ITexture *key_tex)> &callback = std::function<void(ITexture *)>([](){}));
 
 //<<<<<<< HEAD
 
@@ -102,7 +104,6 @@ namespace AGE
 //		void loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder = std::vector<MeshInfos>(), const std::string &loadingChannel = "");
 //		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
 //		
-//		void loadTexture(const File &filepath, const std::string &loadingChannel = "", std::function<void(gl::Key<gl::Texture> &key_tex)> &callback = std::function<void(gl::Key<gl::Texture> &)>([](){}));
 //>>>>>>> master
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		void updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error);
@@ -116,6 +117,7 @@ namespace AGE
 		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
 		std::map<std::string, std::shared_ptr<Animation>> _animations;
 		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
+		std::map<std::string, std::shared_ptr<ITexture>> _textures;
 		std::mutex _mutex;
 
 //<<<<<<< HEAD

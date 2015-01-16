@@ -5,10 +5,12 @@
 # include <memory>
 # include <Render/Properties/IProperty.hh>
 
+typedef std::vector<std::shared_ptr<IProperty>> MaterialInstance;
+
 struct MaterialSetInstance
 {
 public:
 	std::string name;
 	std::string path;
-	std::vector<std::shared_ptr<IProperty>> datas;
+	std::vector<MaterialInstance> datas;
 };
