@@ -221,9 +221,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
-    <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
@@ -334,10 +334,15 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\AssetManagement\AssetManager.hh" />
+    <ClInclude Include="Engine\AssetManagement\Data\MaterialData.hh" />
+    <ClInclude Include="Engine\AssetManagement\Data\MeshData.hh" />
+    <ClInclude Include="Engine\AssetManagement\Data\TextureData.hh" />
+    <ClInclude Include="Engine\AssetManagement\Instance\MaterialInstance.hh" />
+    <ClInclude Include="Engine\AssetManagement\Instance\MeshInstance.hh" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Configuration.hpp" />
-    <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />

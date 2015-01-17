@@ -1,11 +1,11 @@
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
-#include <Data/MaterialData.hh>
-#include <Data/MeshData.hh>
-#include <Data/TextureData.hh>
-#include <Core/Instance/MaterialInstance.hh>
-#include <Core/Instance/MeshInstance.hh>
+#include <AssetManagement/Data/MaterialData.hh>
+#include <AssetManagement/Data/MeshData.hh>
+#include <AssetManagement/Data/TextureData.hh>
+#include <AssetManagement/Instance/MaterialInstance.hh>
+#include <AssetManagement/Instance/MeshInstance.hh>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/RenderThread.hpp>
@@ -204,90 +204,43 @@ namespace AGE
 		return nullptr;
 	}
 
-	void AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
+	bool AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
 	{
 		auto meshInstance = std::make_shared<MeshInstance>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		{
-<<<<<<< HEAD
-			// If no vertex pool correspond to submesh
-			std::vector<MeshInfos> order;
-			std::bitset<MeshInfos::END> infos;
-
-//			if (loadOrder.empty())
-//			{
-				for (std::size_t j = 0; i < data.subMeshs[i].infos.size(); ++j)
-				{
-					if (!data.subMeshs[i].infos.test(j))
-						continue;
-					order.push_back(MeshInfos((1 << j)));
-					infos.set(j);
-				}
-//			}
-//			else
-//			{
-//				for (auto &e : loadOrder)
-//				{
-//					if (!data.subMeshs[i].infos.test(e))
-//						continue;
-//					order.push_back(e);
-//					infos.set(e);
-//				}
-//			}
-			loadSubmesh(data.subMeshs[i], &meshInstance->subMeshs[i], /*order, */infos);
-		}
-		_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
-		return meshInstance;
-	}
-
-	void AssetsManager::loadSubmesh(SubMeshData &data
-		, SubMeshInstance *mesh
-//		, const std::vector<MeshInfos> &order
-		, const std::bitset<MeshInfos::END> &infos)
-	{
-=======
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
-			{
-				return;
+			if (_meshs.find(filePath.getFullName()) != std::end(_meshs)) {
+				return (true);
 			}
 			_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
 		}
-
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
-			if (!filePath.exists())
-			{
+			if (!filePath.exists()) {
 				return AssetsLoadingResult(true, std::string("AssetsManager : Mesh File [" + filePath.getFullName() + "] does not exists.\n"));
 			}
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			std::shared_ptr<MeshData> data = std::make_shared<MeshData>();
 			ar(*data.get());
-
 			meshInstance->subMeshs.resize(data->subMeshs.size());
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();
-
-			for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
-			{
+			for (std::size_t i = 0; i < data->subMeshs.size(); ++i) {
 				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 					// If no vertex pool correspond to submesh
 					std::vector<MeshInfos> order;
 					std::bitset<MeshInfos::END> infos;
-					if (loadOrder.empty())
-					{
-						for (std::size_t j = 0; i < data->subMeshs[i].infos.size(); ++j)
-						{
+					if (loadOrder.empty()) {
+						for (std::size_t j = 0; j < data->subMeshs[i].infos.size(); ++j) {
 							if (!data->subMeshs[i].infos.test(j))
 								continue;
 							order.push_back(MeshInfos(j));
 							infos.set(j);
 						}
 					}
-					else
-					{
-						for (auto &e : loadOrder)
-						{
+					else {
+						for (auto &e : loadOrder) {
 							if (!data->subMeshs[i].infos.test(e))
 								continue;
 							order.push_back(e);
@@ -311,227 +264,73 @@ namespace AGE
 		, const std::bitset<MeshInfos::END> &infos
 		, const std::string &loadingChannel)
 	{
-		auto m = _dependencyManager.lock()->getInstance<gl::RenderManager>();
->>>>>>> master
-
 		auto &data = fileData->subMeshs[index];
-
 		std::size_t size = data.infos.count();
-
 		std::shared_ptr<AGE::Vector<void*>> buffer = std::make_shared<AGE::Vector<void*>>();
 		buffer->resize(size);
 		std::shared_ptr<AGE::Vector<std::size_t>> nbrBuffer = std::make_shared<AGE::Vector<std::size_t>>();
 		nbrBuffer->resize(size);
-
-		std::size_t loaded = 0;
+		std::size_t ctr = 0;
 		auto sizeofFloat = sizeof(float);
 		auto maxSize = data.positions.size();
-
-		for (uint32_t i = 0; i < infos.size(); ++i)
+		for (auto &e : order)
 		{
-			if (infos[i] == false)
-				continue;
-			switch (MeshInfos(i))
+			switch (MeshInfos(e))
 			{
 			case Positions:
-<<<<<<< HEAD
-				buffer[loaded] = &data.positions;
-				nbrBuffer[loaded] = data.positions.size() * 4 * sizeofFloat;
-=======
 				(*buffer)[ctr] = &data.positions[0].x;
 				(*nbrBuffer)[ctr] = data.positions.size() * 4 * sizeofFloat;
->>>>>>> master
 				if (data.positions.size() > maxSize)
 					maxSize = data.positions.size();
 				break;
 			case Normals:
-<<<<<<< HEAD
-				buffer[loaded] = &data.normals;
-				nbrBuffer[loaded] = data.normals.size() * 4 * sizeofFloat;
-=======
 				(*buffer)[ctr] = &data.normals[0].x;
 				(*nbrBuffer)[ctr] = data.normals.size() * 4 * sizeofFloat;
->>>>>>> master
 				if (data.normals.size() > maxSize)
 					maxSize = data.normals.size();
 				break;
 			case Tangents:
-<<<<<<< HEAD
-				buffer[loaded] = &data.tangents;
-				nbrBuffer[loaded] = data.tangents.size() * 4 * sizeofFloat;
-=======
 				(*buffer)[ctr] = &data.tangents[0].x;
 				(*nbrBuffer)[ctr] = data.tangents.size() * 4 * sizeofFloat;
->>>>>>> master
 				if (data.tangents.size() > maxSize)
 					maxSize = data.tangents.size();
 				break;
 			case BiTangents:
-<<<<<<< HEAD
-				buffer[loaded] = &data.biTangents;
-				nbrBuffer[loaded] = data.biTangents.size() * 4 * sizeofFloat;
-=======
 				(*buffer)[ctr] = &data.biTangents[0].x;
 				(*nbrBuffer)[ctr] = data.biTangents.size() * 4 * sizeofFloat;
->>>>>>> master
 				if (data.biTangents.size() > maxSize)
 					maxSize = data.biTangents.size();
 				break;
 			case Uvs:
-<<<<<<< HEAD
-				buffer[loaded] = &data.uvs[0];
-				nbrBuffer[loaded] = data.uvs[0].size() * 2 * sizeofFloat;
-=======
 				(*buffer)[ctr] = &data.uvs[0][0].x;
 				(*nbrBuffer)[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
->>>>>>> master
 				if (data.uvs[0].size() > maxSize)
 					maxSize = data.uvs[0].size();
 				break;
 			case Weights:
-<<<<<<< HEAD
-				buffer[loaded] = &data.weights;
-				nbrBuffer[loaded] = data.weights.size() * 4 * sizeofFloat;
-=======
 				(*buffer)[ctr] = &data.weights[0].x;
 				(*nbrBuffer)[ctr] = data.weights.size() * 4 * sizeofFloat;
->>>>>>> master
 				if (data.weights.size() > maxSize)
 					maxSize = data.weights.size();
 				break;
 			case BoneIndices:
-<<<<<<< HEAD
-				buffer[loaded] = &data.boneIndices;
-				nbrBuffer[loaded] = data.boneIndices.size() * 4 * sizeofFloat;
-=======
 				(*buffer)[ctr] = &data.boneIndices[0].x;
 				(*nbrBuffer)[ctr] = data.boneIndices.size() * 4 * sizeofFloat;
->>>>>>> master
 				if (data.boneIndices.size() > maxSize)
 					maxSize = data.boneIndices.size();
 				break;
 			case Colors:
-<<<<<<< HEAD
-				buffer[loaded] = &data.colors;
-				nbrBuffer[loaded] = data.colors.size() * 4 * sizeofFloat;
-=======
 				(*buffer)[ctr] = &data.colors[0].x;
 				(*nbrBuffer)[ctr] = data.colors.size() * 4 * sizeofFloat;
->>>>>>> master
 				if (data.colors.size() > maxSize)
 					maxSize = data.colors.size();
 				break;
 			default:
 				break;
 			}
-			++loaded;
+			++ctr;
 		}
 
-<<<<<<< HEAD
-		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
-		mesh->boundingBox = data.boundingBox;
-
-		AGE::Vector<GLenum> types;
-
-		for (uint32_t i = 0; i < infos.size(); ++i)
-		{
-			if (infos[i])
-				types.push_back(g_InfosTypes[i]);
-		}
-
-		// create the painter
-		auto future1 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=]()
-		{
-			if (_painters.find(infos) == _painters.end())
-			{
-				_painters[infos] = std::make_shared<Painter>(_programs, types);
-			}
-			return (true);
-		});
-
-		// fill the painter
-		auto future2 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=]()
-		{
-			// We need to keep an instance of FileData shared_ptr
-			std::shared_ptr<Painter> painter = _painters[infos];
-
-			mesh->vertices = painter->add_vertices(3, 6);
-			Vertices *v = painter->get_vertices(mesh->vertices);
-
-			v->set_indices(data.indices);
-			for (uint32_t attrib = 0; attrib < buffer.size(); ++attrib)
-			{
-				if (types[attrib] == GL_FLOAT_VEC4)
-					v->set_data<glm::vec4>(*reinterpret_cast<AGE::Vector<glm::vec4>*>(buffer[attrib]), attrib);
-				else if (types[attrib] == GL_FLOAT_VEC2)
-					v->set_data<glm::vec2>(*reinterpret_cast<AGE::Vector<glm::vec2>*>(buffer[attrib]), attrib);
-				else
-					assert(!"Cannot load this type of datas");
-			}
-			return (true);
-		});
-
-		future1.get();
-		future2.get();
-	}
-	
-	std::shared_ptr<Program> AssetsManager::addProgram(std::string const &name, std::vector<std::shared_ptr<UnitProg>> const &u)
-	{
-		std::shared_ptr<Program> program = std::make_shared<Program>(std::string(name), u);
-
-		_programs.push_back(program);
-		_programsMap[name] = program;
-		return (program);
-	}
-
-	std::shared_ptr<MeshInstance> AssetsManager::createMesh(std::string const &meshName,
-															AGE::Vector<glm::vec4> const &positions,
-															AGE::Vector<glm::vec4> const &colors,
-															AGE::Vector<unsigned int> const &idx)
-	{
-		auto meshInstance = std::make_shared<MeshInstance>();
-
-		meshInstance->subMeshs.resize(1);
-		meshInstance->name = meshName;
-		meshInstance->path = meshName;
-
-		auto mesh = &meshInstance->subMeshs[0];
-
-		std::bitset<MeshInfos::END> infos;
-
-		infos[MeshInfos::Positions] = true;
-		infos[MeshInfos::Colors] = true;
-
-		// create the painter
-		auto future1 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=]()
-		{
-			if (_painters.find(infos) == _painters.end())
-			{
-				_painters[infos] = std::make_shared<Painter>(Painter(_programs, { GL_FLOAT_VEC4, GL_FLOAT_VEC4 }));
-			}
-			return (true);
-		});
-
-		// fill the painter
-		auto future2 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=]()
-		{
-			// We need to keep an instance of FileData shared_ptr
-			std::shared_ptr<Painter> painter = _painters[infos];
-
-			mesh->vertices = painter->add_vertices(positions.size(), idx.size());
-			Vertices *v = painter->get_vertices(mesh->vertices);
-
-			v->set_indices(idx);
-			v->set_data<glm::vec4>(positions, 0);
-			v->set_data<glm::vec4>(colors, 1);
-			return (true);
-		});
-
-		future1.get();
-		future2.get();
-		_meshs[meshName] = meshInstance;
-		return (meshInstance);
-=======
 		mesh->boundingBox = data.boundingBox;
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
 		auto future1 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
@@ -568,9 +367,8 @@ namespace AGE
 		pushNewAsset(loadingChannel, data.name, future1);
 		pushNewAsset(loadingChannel, data.name, future2);
 		pushNewAsset(loadingChannel, data.name, future3);
->>>>>>> master
 	}
-
+	
 	// Create pool for mesh
 	void AssetsManager::createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos)
 	{

@@ -5,7 +5,7 @@
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/File.hpp>
 #include <bitset>
-#include <Data/MeshData.hh>
+#include <AssetManagement/Data/MeshData.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <map>
 #include <future>
@@ -13,7 +13,9 @@
 
 struct MaterialSetInstance;
 struct MeshInstance;
+struct SubMeshInstance;
 class ITexture;
+class Painter;
 
 namespace AGE
 {
@@ -29,9 +31,9 @@ namespace AGE
 				return b1.to_ulong() < b2.to_ulong();
 			}
 		};
+
 	public:
 		AssetsManager();
-
 		struct AssetsLoadingResult
 		{
 			bool error = false;
@@ -42,6 +44,8 @@ namespace AGE
 				, errorMessage(_errorMessage)
 			{}
 		};
+
+	public:
 		struct AssetsLoadingStatus
 		{
 			std::string filename = "";
@@ -61,6 +65,8 @@ namespace AGE
 				std::swap(future, _future);
 			}
 		};
+
+	public:
 		class AssetsLoadingChannel
 		{
 			std::list<AssetsLoadingStatus> _list;
@@ -77,6 +83,7 @@ namespace AGE
 			std::chrono::system_clock::time_point _lastUpdate;
 		};
 
+	public:
 		struct LoadAssetMessage : public TMQ::FutureData < AssetsLoadingResult >
 		{
 			std::function<AssetsLoadingResult()> function;
@@ -85,6 +92,7 @@ namespace AGE
 			{}
 		};
 
+	public:
 		bool loadAnimation(const File &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<Animation> getAnimation(const File &filePath);
 		bool loadSkeleton(const File &filePath, const std::string &loadingChannel = "");
@@ -94,26 +102,14 @@ namespace AGE
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
 		bool loadTexture(const File &filepath, const std::string &loadingChannel = "");
-
-//<<<<<<< HEAD
-
-//		std::shared_ptr<MeshInstance> createMesh(std::string const &meshName, AGE::Vector<glm::vec4> const &positions, AGE::Vector<glm::vec4> const &colors, AGE::Vector<unsigned int> const &idx);
-//		std::shared_ptr<Program> addProgram(std::string const &name, std::vector<std::shared_ptr<UnitProg>> const &u);
-//		std::shared_ptr<Program> getProgram(std::string const &name) { assert(_programsMap.find(name) != _programsMap.end()); return (_programsMap[name]); }
-//		std::shared_ptr<Painter> getPainter(std::bitset<MeshInfos::END> infos) { assert(_painters.find(infos) != _painters.end()); return (_painters[infos]); }
-//=======
-//		void loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder = std::vector<MeshInfos>(), const std::string &loadingChannel = "");
-//		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
-//		
-//>>>>>>> master
+		bool loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder = std::vector<MeshInfos>(), const std::string &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		void updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error);
 
 	private:
 		std::string _assetsDirectory;
-		std::vector<std::shared_ptr<Program>> _programs;
-		std::map<std::string, std::shared_ptr<Program>> _programsMap;
-		std::map<std::bitset<MeshInfos::END>, std::shared_ptr<Painter>, AssetsManager::BitsetComparer> _painters;
+		std::map<std::bitset<MeshInfos::END>, std::pair<Key<gl::VertexPool>, gl::Key<gl::IndexPool>>, BitsetComparer> _pools
+		std::map<std::string, std::shared_ptr<Painter>> _painters;
 		std::map<std::string, std::shared_ptr<MeshInstance>> _meshs;
 		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
 		std::map<std::string, std::shared_ptr<Animation>> _animations;
@@ -122,19 +118,9 @@ namespace AGE
 		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
 		std::mutex _mutex;
 
-//<<<<<<< HEAD
-//
-//		void loadSubmesh(SubMeshData &data, SubMeshInstance *mesh, /*const std::vector<MeshInfos> &order,*/ const std::bitset<MeshInfos::END> &infos);
-//=======
-//		
-//		
-//		
-//
-//		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos, const std::string &loadingChannel);
-//>>>>>>> master
-		// Create pool for meshs
 	private:
 		void createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos);
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
+		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos, const std::string &loadingChannel);
 	};
 }
