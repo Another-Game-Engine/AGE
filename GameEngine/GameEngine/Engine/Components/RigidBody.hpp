@@ -207,7 +207,7 @@ namespace Component
 
 			if (_rigidBody->isStaticObject())
 			{
-				_rigidBody->setActivationState(DISABLE_SIMULATION);
+				//_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
 			_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
 			setTransformation(link);
@@ -269,7 +269,7 @@ namespace Component
 
 			if (_rigidBody->isStaticObject())
 			{
-				_rigidBody->setActivationState(DISABLE_SIMULATION);
+				//_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
 			_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
 			setTransformation(link);

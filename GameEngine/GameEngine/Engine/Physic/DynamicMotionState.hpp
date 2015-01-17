@@ -32,9 +32,10 @@ public:
 
     virtual void setWorldTransform(const btTransform &worldTrans)
     {
-		if (_link->userModified())
+		if (_link->isUserModified())
 		{
 			mInitialPosition.setFromOpenGLMatrix(glm::value_ptr(_link->getTransform()));
+			_link->setUserModified(false);
 			return;
 		}
 		_link->internalSetPosition(convertBulletVectorToGLM(worldTrans.getOrigin()));

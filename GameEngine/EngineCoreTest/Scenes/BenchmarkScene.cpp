@@ -283,13 +283,13 @@ bool BenchmarkScene::userUpdate(double time)
 	GLOBAL_SPONZA = createEntity();
 	auto _l = getLink(GLOBAL_SPONZA);
 	//_l->setPosition(glm::vec3(-5, 0, 0));
+	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	addComponent<Component::RigidBody>(GLOBAL_SPONZA, 0.0f)->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/AGE-Assets-For-Test/Serialized/sponza/sponza_static.phage");
 	_l->setScale(glm::vec3(10.f));
 	//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
 	auto _m = addComponent<Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
 	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
-	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	addComponent<Component::RigidBody>(GLOBAL_SPONZA, 0.0f)->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/AGE-Assets-For-Test/Serialized/sponza/sponza_static.phage");
 }
 {
 	//auto brokenTower = createEntity();
@@ -313,6 +313,9 @@ bool BenchmarkScene::userUpdate(double time)
 		auto _l = getLink(GLOBAL_CATWOMAN);
 
 		static bool useOnce = false;
+		auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_CATWOMAN, 0);
+		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_dynamic.phage");
 		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l->setPosition(glm::vec3(-30, 0, 0));
 		_l->setScale(glm::vec3(8.5f));
@@ -325,9 +328,7 @@ bool BenchmarkScene::userUpdate(double time)
 			_renderManager->setMaterial<gl::Color_specular>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
 			//_renderManager->setMaterial<gl::Texture_normal>(getComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN)->getMaterial()->datas[index], _renderManager->getDefaultTexture2D());
 		}
-		auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_CATWOMAN, 0);
-		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_dynamic.phage");
+
 		//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
 		//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
 		//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")
@@ -497,14 +498,16 @@ bool BenchmarkScene::userUpdate(double time)
 		}
 	}
 	{
-		auto e = GLOBAL_SPONZA;
-		auto link = getLink(e);
-
-		if (ImGui::SliderFloat4(std::string("Sponza rotation").c_str(), link->getOrientationPtr(), -1, 1))
-		{
-			auto l = getLink(e);
-			l->setOrientation(l->getOrientation());
-		}
+		//auto e = GLOBAL_SPONZA;
+		//auto link = getLink(e);
+		//static glm::vec3 rot(0, 0, 0);
+		//rot = glm::eulerAngles(link->getOrientation());
+		//rot = glm::vec3(Mathematic::radianToDegree(rot.x), Mathematic::radianToDegree(rot.y), Mathematic::radianToDegree(rot.z));
+		//if (ImGui::SliderFloat3(std::string("Sponza rotation").c_str(), glm::value_ptr(rot), 0, 360))
+		//{
+		//	auto l = getLink(e);
+		//	l->setOrientation(glm::quat(Mathematic::degreeToRadian(rot.x), Mathematic::degreeToRadian(rot.y), Mathematic::degreeToRadian(rot.z)));
+		//}
 	}
 #endif
 

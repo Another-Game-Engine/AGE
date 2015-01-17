@@ -32,9 +32,14 @@ namespace AGE
 		// Used by modules like physic, do not use it to set object forward, use setForward instead
 		void internalSetForward(const glm::vec3 &v);
 
-		inline bool userModified()
+		inline bool isUserModified() const
 		{
-			auto ret = _userModification; _userModification = false; return ret;
+			return _userModification;
+		}
+
+		inline void setUserModified(bool tof)
+		{
+			_userModification = tof;
 		}
 
 		void setPosition(const glm::vec3 &v);

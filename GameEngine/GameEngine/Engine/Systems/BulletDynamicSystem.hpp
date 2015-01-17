@@ -32,11 +32,16 @@ private:
 		auto scene = _scene.lock();
 		for (auto e : _filter.getCollection())
 		{
-			auto rb = scene->getComponent<Component::RigidBody>(e);
-			if (rb->getMass() == 0)
+			if (scene->getLink(e)->isUserModified())
 			{
-				//rb->setTransformation(scene->getLink(e));
+				auto rb = scene->getComponent<Component::RigidBody>(e);
+				if (rb->getMass() == 0)
+				{
+					rb->setTransformation(scene->getLink(e));
+					scene->getLink(e)->setUserModified(false);
+				}
 			}
+
 		}
 		_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
 	}
