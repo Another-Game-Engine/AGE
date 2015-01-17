@@ -205,14 +205,14 @@ bool BenchmarkScene::userStart()
 	getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMesh(File("Broken Tower/tower.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadMesh(File("Broken Tower/tower.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 //	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"), "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"), "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage"), "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMaterial(File("Broken Tower/tower.mage"), "DEMO_SCENE_ASSETS");
+	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Broken Tower/tower.mage"), "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"), "DEMO_SCENE_ASSETS");
@@ -292,20 +292,20 @@ bool BenchmarkScene::userUpdate(double time)
 	addComponent<Component::RigidBody>(GLOBAL_SPONZA, 0.0f)->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/AGE-Assets-For-Test/Serialized/sponza/sponza_static.phage");
 }
 {
-	auto brokenTower = createEntity();
-	auto _l = getLink(brokenTower);
-	_l->setPosition(glm::vec3(0, 40, 0));
-	_l->setScale(glm::vec3(10.f));
-	_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	addComponent<Component::RigidBody>(brokenTower, 0.0f)->setCollisionMesh(weakOnThis, brokenTower, "../../Assets/AGE-Assets-For-Test/Serialized/Broken Tower/tower_static.phage");
+	//auto brokenTower = createEntity();
+	//auto _l = getLink(brokenTower);
+	//_l->setPosition(glm::vec3(0, 40, 0));
+	//_l->setScale(glm::vec3(10.f));
+	//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+	//std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+	//addComponent<Component::RigidBody>(brokenTower, 0.0f)->setCollisionMesh(weakOnThis, brokenTower, "../../Assets/AGE-Assets-For-Test/Serialized/Broken Tower/tower_static.phage");
 
-	auto _m = addComponent<Component::MeshRenderer>(brokenTower, getInstance<AGE::AssetsManager>()->getMesh("Broken Tower/tower.sage"));
-	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Broken Tower/tower.mage")));
-	auto brokenLight = createEntity();
-	_l = getLink(brokenLight);
-	_l->setPosition(glm::vec3(0, 55.0f, 0));
-	addComponent<Component::PointLight>(brokenLight)->set(glm::vec3(1.0f), glm::vec3(1.f, 0.1f, 0.0f));
+	//auto _m = addComponent<Component::MeshRenderer>(brokenTower, getInstance<AGE::AssetsManager>()->getMesh("Broken Tower/tower.sage"));
+	//_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Broken Tower/tower.mage")));
+	//auto brokenLight = createEntity();
+	//_l = getLink(brokenLight);
+	//_l->setPosition(glm::vec3(0, 55.0f, 0));
+	//addComponent<Component::PointLight>(brokenLight)->set(glm::vec3(1.0f), glm::vec3(1.f, 0.1f, 0.0f));
 }
 
 	{
@@ -327,7 +327,7 @@ bool BenchmarkScene::userUpdate(double time)
 		}
 		auto rigidBody = addComponent<Component::RigidBody>(GLOBAL_CATWOMAN, 0);
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_static.phage");
+		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_dynamic.phage");
 		//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
 		//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
 		//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")

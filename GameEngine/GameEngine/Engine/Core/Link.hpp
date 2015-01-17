@@ -47,6 +47,7 @@ namespace AGE
 
 		inline bool hasChildren() const { return _lastChildrenIndex != 0; };
 	public:
+		const glm::mat4 &getTransform() const;
 		const glm::mat4 &getTransform();
 	private:
 		bool _userModification = false;

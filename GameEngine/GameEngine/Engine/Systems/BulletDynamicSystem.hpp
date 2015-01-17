@@ -35,7 +35,7 @@ private:
 			auto rb = scene->getComponent<Component::RigidBody>(e);
 			if (rb->getMass() == 0)
 			{
-				rb->setTransformation(scene->getLink(e)->getTransform());
+				//rb->setTransformation(scene->getLink(e));
 			}
 		}
 		_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);

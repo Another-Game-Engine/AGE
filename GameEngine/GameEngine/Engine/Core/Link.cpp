@@ -125,6 +125,19 @@ const glm::mat4 &Link::getTransform()
 	return _trans;
 }
 
+const glm::mat4 &Link::getTransform() const
+{
+	if (_computeTrans)
+	{
+		auto trans = glm::mat4(1);
+		trans = glm::translate(_trans, _position);
+		trans = _trans * glm::toMat4(_orientation);
+		trans = glm::scale(_trans, _scale);
+		return trans;
+	}
+	return _trans;
+}
+
 Link::Link()
 {
 	reset();

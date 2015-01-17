@@ -87,15 +87,19 @@ namespace Component
 			_transformConstraint = glm::vec3(1, 1, 1);
 		}
 
-		void setTransformation(const glm::mat4 &transformation)
+		void setTransformation(const AGE::Link *link)
 		{
 			btTransform tt = _rigidBody->getCenterOfMassTransform();
-			tt.setOrigin(convertGLMVectorToBullet(posFromMat4(transformation)));
-			glm::quat rot = glm::quat(rotFromMat4(transformation, true));
+			tt.setOrigin(convertGLMVectorToBullet(link->getPosition()));
+			glm::quat rot = link->getOrientation();
 			tt.setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
-			_rigidBody->setCenterOfMassTransform(tt);
 			_rigidBody->setWorldTransform(tt);
-			_collisionShape->setLocalScaling(convertGLMVectorToBullet(scaleFromMat4(transformation)));
+			//tt.setOrigin(convertGLMVectorToBullet(posFromMat4(transformation)));
+			//glm::quat rot = glm::quat(rotFromMat4(transformation, true));
+			//_rigidBody->setCenterOfMassTransform(tt);
+			//tt.setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
+			//_rigidBody->setWorldTransform(tt);
+			_collisionShape->setLocalScaling(convertGLMVectorToBullet(link->getScale()));
 		}
 
 		btMotionState &getMotionState()
@@ -170,7 +174,8 @@ namespace Component
 			}
 			else // static
 			{
-				_collisionShape = new btScaledBvhTriangleMeshShape(dynamic_cast<btBvhTriangleMeshShape*>(media.get()), btVector3(1, 1, 1));
+				auto m = dynamic_cast<btBvhTriangleMeshShape*>(media.get());
+				_collisionShape = new btScaledBvhTriangleMeshShape(m, btVector3(1,1,1));
 			}
 			/*if (media->getType() == AMediaFile::COLLISION_SHAPE_DYNAMIC)
 			{
@@ -205,7 +210,7 @@ namespace Component
 				_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
 			_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
-			setTransformation(link->getTransform());
+			setTransformation(link);
 		}
 
 		void setCollisionShape(
@@ -267,7 +272,7 @@ namespace Component
 				_rigidBody->setActivationState(DISABLE_SIMULATION);
 			}
 			_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
-			setTransformation(link->getTransform());
+			setTransformation(link);
 		}
 
 		void setRotationConstraint(bool x, bool y, bool z)
