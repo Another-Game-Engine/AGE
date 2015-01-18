@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 
 namespace AGE
 {
@@ -13,25 +13,10 @@ namespace AGE
 		int				shadowId;
 		unsigned int	padding[3];
 
-		SpotLightData() { }
-
-		SpotLightData(SpotLightData const &o)
-		{
-			*this = o;
-		}
-
-		~SpotLightData()
-		{
-		}
-
-		SpotLightData &operator=(SpotLightData const &o)
-		{
-			lightVP = o.lightVP;
-			positionPower = o.positionPower;
-			colorRange = o.colorRange;
-			shadowId = o.shadowId;
-			return (*this);
-		}
+		SpotLightData();
+		SpotLightData(SpotLightData const &o);
+		~SpotLightData();
+		SpotLightData &operator=(SpotLightData const &o);
 	};
 
 	namespace Component

@@ -7,6 +7,8 @@
 #include <Core/AssetsManager.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/PrepareRenderThread.hpp>
+#include <Core/PrepareKey.hpp>
+#include <Skinning/AnimationInstance.hpp>
 
 namespace AGE
 {

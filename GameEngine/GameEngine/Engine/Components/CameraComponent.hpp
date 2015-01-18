@@ -1,9 +1,7 @@
 #pragma once
 
-#include <glm/glm.hpp>
 #include <Components/Component.hh>
 #include <Utils/GlmSerialization.hpp>
-#include <cereal/types/string.hpp>
 #include <Core/PrepareKey.hpp>
 
 namespace AGE

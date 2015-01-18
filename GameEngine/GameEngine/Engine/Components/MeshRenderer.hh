@@ -1,22 +1,18 @@
 #pragma once
 
-#include <map>
-#include <set>
-
 #include <Components/Component.hh>
-#include <Render/Shader.hh>
 #include <cereal/types/string.hpp>
 #include <Entities/Entity.hh>
-#include <Core/AScene.hh>
-#include <Core/PrepareKey.hpp>
-#include <Skinning/AnimationInstance.hpp>
 #include <cereal/types/memory.hpp>
+#include <Render/Key.hh>
 
 namespace AGE
 {
 	struct MeshInstance;
 	struct MaterialSetInstance;
-
+	struct PrepareKey;
+	struct AnimationInstance;
+	class AScene;
 	namespace Component
 	{
 		struct MeshRenderer : public Component::ComponentBase < MeshRenderer >

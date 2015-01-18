@@ -1,8 +1,6 @@
 #include <Components/Light.hh>
 #include <Core/AScene.hh>
-
 #include <Utils/MathematicTools.hh>
-
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 

@@ -1,5 +1,6 @@
 #pragma once
 
+// TODO TO CLEAN
 #include <Components/Component.hh>
 #include "Core/Engine.hh"
 #include <btBulletDynamicsCommon.h>
@@ -11,6 +12,8 @@
 #include <Core/AScene.hh>
 #include <Utils/GlmSerialization.hpp>
 #include <Entities/Entity.hh>
+
+class btGhostObject;
 
 namespace AGE
 {
@@ -40,62 +43,8 @@ namespace AGE
 			void setKey(CONTROLS k, unsigned int key);
 			void resetControls();
 
-			FPController(const FPController &o)
-			{
-				_entity = o._entity;
-				yOrientation = o.yOrientation;
-				forwardWalkSpeed = o.forwardWalkSpeed;
-				backwardWalkSpeed = o.backwardWalkSpeed;
-				forwardRunSpeed = o.forwardRunSpeed;
-				backwardRunSpeed = o.backwardRunSpeed;
-				sideWalkSpeed = o.sideWalkSpeed;
-				sideRunSpeed = o.sideRunSpeed;
-				rotateXSpeed = o.rotateXSpeed;
-				rotateYSpeed = o.rotateYSpeed;
-				jumpSpeed = o.jumpSpeed;
-				jumpHeight = o.jumpHeight;
-				canJump = o.canJump;
-				canRun = o.canRun;
-				justJump = o.justJump;
-				justArriveOnFloor = o.justArriveOnFloor;
-				wasOnGround = o.wasOnGround;
-				keys = o.keys;
-				controls = o.controls;
-
-				_controller = o._controller;
-				_ghost = o._ghost;
-				_shape = o._shape;
-				_manager = o._manager;
-			}
-
-			FPController& operator=(const FPController &o)
-			{
-				_entity = o._entity;
-				yOrientation = o.yOrientation;
-				forwardWalkSpeed = o.forwardWalkSpeed;
-				backwardWalkSpeed = o.backwardWalkSpeed;
-				forwardRunSpeed = o.forwardRunSpeed;
-				backwardRunSpeed = o.backwardRunSpeed;
-				sideWalkSpeed = o.sideWalkSpeed;
-				sideRunSpeed = o.sideRunSpeed;
-				rotateXSpeed = o.rotateXSpeed;
-				rotateYSpeed = o.rotateYSpeed;
-				jumpSpeed = o.jumpSpeed;
-				jumpHeight = o.jumpHeight;
-				canJump = o.canJump;
-				canRun = o.canRun;
-				justJump = o.justJump;
-				justArriveOnFloor = o.justArriveOnFloor;
-				wasOnGround = o.wasOnGround;
-				keys = o.keys;
-				controls = o.controls;
-
-				_controller = o._controller;
-				_ghost = o._ghost;
-				_shape = o._shape;
-				_manager = o._manager;
-				return *this;
-			}
+			FPController(const FPController &o);
+			FPController& operator=(const FPController &o);
 
 			//////
 			////

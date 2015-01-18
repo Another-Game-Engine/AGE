@@ -1,7 +1,29 @@
 #include <Components\SpotLight.hh>
+#include <glm/glm.hpp>
 
 namespace AGE
 {
+
+	SpotLightData::SpotLightData() { }
+
+	SpotLightData::SpotLightData(SpotLightData const &o)
+	{
+		*this = o;
+	}
+
+	SpotLightData::~SpotLightData()
+	{
+	}
+
+	SpotLightData &SpotLightData::operator = (SpotLightData const &o)
+	{
+		lightVP = o.lightVP;
+		positionPower = o.positionPower;
+		colorRange = o.colorRange;
+		shadowId = o.shadowId;
+		return (*this);
+	}
+
 	namespace Component
 	{
 

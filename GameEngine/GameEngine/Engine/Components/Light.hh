@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <glm/glm.hpp>
 #include <Render/Key.hh>
 #include <Core/PreparableObject.hh>
 #include <Utils/GlmSerialization.hpp>

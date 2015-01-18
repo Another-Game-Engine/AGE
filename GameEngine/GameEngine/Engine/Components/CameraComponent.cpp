@@ -1,11 +1,10 @@
 #include <Components/CameraComponent.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Entities/Entity.hh>
-#include <Core/AScene.hh>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Context/SdlContext.hh>
+#include <Core/AScene.hh>
 
 namespace AGE
 {
