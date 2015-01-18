@@ -17,6 +17,8 @@
 #include <glm/glm.hpp>
 #include <SDL/SDL.h>
 #include <Threads/TaskScheduler.hpp>
+#include <Components/CameraComponent.hpp>
+
 namespace AGE
 {
 	bool BenchmarkScene::initRenderingJustOneTime = true;
@@ -176,7 +178,6 @@ namespace AGE
 		// We register component types so that we can load components from file
 		// It'll create the component manager for the scene and
 		// register the type in the global component register manager
-		registerComponentType<Component::CameraComponent>();
 		registerComponentType<Component::MeshRenderer>();
 		registerComponentType<Component::Lifetime>();
 		registerComponentType<Component::RigidBody>();
@@ -194,7 +195,6 @@ namespace AGE
 		//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
 
-		auto &camerasystem = addSystem<CameraSystem>(70); // UPDATE CAMERA AND RENDER TO SCREEN
 		auto &m = *getInstance<gl::RenderManager>();
 		if (initRenderingJustOneTime)
 		{

@@ -4,7 +4,6 @@
 #include <Systems/LifetimeSystem.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Systems/BulletDynamicSystem.hpp>
-#include <Systems/CameraSystem.hh>
 #include <Components/MeshRenderer.hh>
 #include <Components/Light.hh>
 #include <Core/AssetsManager.hpp>
