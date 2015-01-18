@@ -11,75 +11,77 @@
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 
-AScene::AScene(std::weak_ptr<AGE::Engine> engine) :
-DependenciesInjector(std::move(engine))
-, _entityNumber(0)
-, _engine(engine)
-, _renderScene(nullptr)
+namespace AGE
 {
-	_componentsManagers.assign(nullptr);
-}
-
-AScene::~AScene()
-{
-	_systems.clear();
-}
-
-void 							AScene::update(double time)
-{
-	static double reorderingTime = 0.0f;
-	for (auto &e : _systems)
+	AScene::AScene(std::weak_ptr<AGE::Engine> engine) :
+		DependenciesInjector(std::move(engine))
+		, _entityNumber(0)
+		, _engine(engine)
+		, _renderScene(nullptr)
 	{
-		if (e.second->isActivated())
-			e.second->update(time);
+		_componentsManagers.assign(nullptr);
 	}
-	reorderingTime += time;
-	if (reorderingTime > 0.4)
+
+	AScene::~AScene()
 	{
-		reorganizeComponents();
-		reorderingTime = 0;
+		_systems.clear();
 	}
-}
 
-bool                           AScene::start()
-{
-	setInstance<PubSub::Manager>();
-	return userStart();
-}
-
-
-void                    AScene::informFiltersTagAddition(TAG_ID id, const EntityData &entity)
-{
-	for (auto &&f : _filters[id])
+	void 							AScene::update(double time)
 	{
-		f->tagAdded(entity, id);
+		static double reorderingTime = 0.0f;
+		for (auto &e : _systems)
+		{
+			if (e.second->isActivated())
+				e.second->update(time);
+		}
+		reorderingTime += time;
+		if (reorderingTime > 0.4)
+		{
+			reorganizeComponents();
+			reorderingTime = 0;
+		}
 	}
-}
-void                    AScene::informFiltersTagDeletion(TAG_ID id, const EntityData &entity)
-{
-	for (auto &&f : _filters[id])
-	{
-		f->tagRemoved(entity, id);
-	}
-}
 
-void                    AScene::informFiltersComponentAddition(COMPONENT_ID id, const EntityData &entity)
-{
-	for (auto &&f : _filters[id])
+	bool                           AScene::start()
 	{
-		f->componentAdded(entity, id);
+		setInstance<PubSub::Manager>();
+		return userStart();
 	}
-}
 
-void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, const EntityData &entity)
-{
-	for (auto &&f : _filters[id])
+
+	void                    AScene::informFiltersTagAddition(TAG_ID id, const EntityData &entity)
 	{
-		f->componentRemoved(entity, id);
+		for (auto &&f : _filters[id])
+		{
+			f->tagAdded(entity, id);
+		}
 	}
-}
+	void                    AScene::informFiltersTagDeletion(TAG_ID id, const EntityData &entity)
+	{
+		for (auto &&f : _filters[id])
+		{
+			f->tagRemoved(entity, id);
+		}
+	}
 
-Entity &AScene::createEntity()
+	void                    AScene::informFiltersComponentAddition(COMPONENT_ID id, const EntityData &entity)
+	{
+		for (auto &&f : _filters[id])
+		{
+			f->componentAdded(entity, id);
+		}
+	}
+
+	void                    AScene::informFiltersComponentDeletion(COMPONENT_ID id, const EntityData &entity)
+	{
+		for (auto &&f : _filters[id])
+		{
+			f->componentRemoved(entity, id);
+		}
+	}
+
+	Entity &AScene::createEntity()
 	{
 		if (_free.empty())
 		{
@@ -143,34 +145,35 @@ Entity &AScene::createEntity()
 		}
 	}
 
-void AScene::saveToJson(const std::string &fileName)
-{
-	std::ofstream file(fileName, std::ios::binary);
-	assert(file.is_open());
-	save<cereal::JSONOutputArchive>(file);
-	file.close();
-}
+	void AScene::saveToJson(const std::string &fileName)
+	{
+		std::ofstream file(fileName, std::ios::binary);
+		assert(file.is_open());
+		save<cereal::JSONOutputArchive>(file);
+		file.close();
+	}
 
-void AScene::loadFromJson(const std::string &fileName)
-{
-	std::ifstream file(fileName, std::ios::binary);
-	assert(file.is_open());
-	load<cereal::JSONInputArchive>(file);
-	file.close();
-}
+	void AScene::loadFromJson(const std::string &fileName)
+	{
+		std::ifstream file(fileName, std::ios::binary);
+		assert(file.is_open());
+		load<cereal::JSONInputArchive>(file);
+		file.close();
+	}
 
-void AScene::saveToBinary(const std::string &fileName)
-{
-	std::ofstream file(fileName, std::ios::binary);
-	assert(file.is_open());
-	save<cereal::BinaryOutputArchive>(file);
-	file.close();
-}
+	void AScene::saveToBinary(const std::string &fileName)
+	{
+		std::ofstream file(fileName, std::ios::binary);
+		assert(file.is_open());
+		save<cereal::BinaryOutputArchive>(file);
+		file.close();
+	}
 
-void AScene::loadFromBinary(const std::string &fileName)
-{
-	std::ifstream file(fileName, std::ios::binary);
-	assert(file.is_open());
-	load<cereal::BinaryInputArchive>(file);
-	file.close();
+	void AScene::loadFromBinary(const std::string &fileName)
+	{
+		std::ifstream file(fileName, std::ios::binary);
+		assert(file.is_open());
+		load<cereal::BinaryInputArchive>(file);
+		file.close();
+	}
 }

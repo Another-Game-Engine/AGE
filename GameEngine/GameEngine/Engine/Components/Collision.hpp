@@ -1,5 +1,4 @@
-#ifndef __COLLISION_HPP__
-# define __COLLISION_HPP__
+#pragma once
 
 #include <Components/Component.hh>
 #include <cereal/archives/binary.hpp>
@@ -9,102 +8,103 @@
 #include <cereal/types/set.hpp>
 #include <cereal/types/base_class.hpp>
 
-namespace Component
+namespace AGE
 {
-	struct Collision : public ComponentBase<Collision>
+	namespace Component
 	{
-		Collision()
-		: ComponentBase<Collision>()
-		, force(0)
+		struct Collision : public ComponentBase < Collision >
 		{
-
-		}
-
-		virtual ~Collision()
-		{
-		}
-
-		Collision &operator=(Collision &&other)
-		{
-			force = std::move(other.force);
-			collisions = std::move(other.collisions);
-			return *this;
-		}
-
-		Collision(Collision &&other)
-			: ComponentBase<Collision>(std::move(other))
-		{
-			force = std::move(other.force);
-			collisions = std::move(other.collisions);
-		}
-
-		void init(AScene *)
-		{
-			force = 0;
-		}
-
-		virtual void reset(AScene *)
-		{
-			collisions.clear();
-		}
-
-		void addCollision(const Entity &entity)
-		{
-			collisions.insert(entity);
-		}
-
-		std::set<Entity> &getCollisions()
-		{
-			return collisions;
-		}
-
-		void clear()
-		{
-			collisions.clear();
-		}
-
-		//////
-		////
-		// Serialization
-
-		template <typename Archive>
-		void save(Archive &ar) const
-		{
-			std::set<std::size_t> entityIds;
-			for (auto e : collisions)
+			Collision()
+				: ComponentBase<Collision>()
+				, force(0)
 			{
-				//@CESAR TODO
-				/*entityIds.insert(_entity.get()->getScene().lock()->registrarSerializedEntity(e.getId()));*/
+
 			}
-			ar(cereal::make_nvp("Collisions", entityIds));
-		}
 
-		template <typename Archive>
-		void load(Archive &ar)
-		{
-			std::set<std::size_t> entityIds;
-			ar(entityIds);
-			//@CESAR TODO
-			//for (auto e : entityIds)
-			//	collisions.insert(Entity(e));
-			for (auto it = std::begin(collisions); it != std::end(collisions); ++it)
-			{ 
-				//@CESAR TODO
-				//Entity *e = const_cast<Entity *>(&(*it));
-				//_entity->getScene().lock()->entityHandle(it->getId(), e);
+			virtual ~Collision()
+			{
 			}
-		}
 
-		// !Serialization
-		////
-		//////
-		float force;
-		std::set<Entity> collisions;
+			Collision &operator=(Collision &&other)
+			{
+				force = std::move(other.force);
+				collisions = std::move(other.collisions);
+				return *this;
+			}
 
-	private:
-		Collision &operator=(Collision const &o);
-		Collision(Collision const &o);
-	};
+			Collision(Collision &&other)
+				: ComponentBase<Collision>(std::move(other))
+			{
+				force = std::move(other.force);
+				collisions = std::move(other.collisions);
+			}
+
+			void init(AScene *)
+			{
+				force = 0;
+			}
+
+			virtual void reset(AScene *)
+			{
+				collisions.clear();
+			}
+
+			void addCollision(const Entity &entity)
+			{
+				collisions.insert(entity);
+			}
+
+			std::set<Entity> &getCollisions()
+			{
+				return collisions;
+			}
+
+			void clear()
+			{
+				collisions.clear();
+			}
+
+			//////
+			////
+			// Serialization
+
+			template <typename Archive>
+			void save(Archive &ar) const
+			{
+				std::set<std::size_t> entityIds;
+				for (auto e : collisions)
+				{
+					//@CESAR TODO
+					/*entityIds.insert(_entity.get()->getScene().lock()->registrarSerializedEntity(e.getId()));*/
+				}
+				ar(cereal::make_nvp("Collisions", entityIds));
+			}
+
+			template <typename Archive>
+			void load(Archive &ar)
+			{
+				std::set<std::size_t> entityIds;
+				ar(entityIds);
+				//@CESAR TODO
+				//for (auto e : entityIds)
+				//	collisions.insert(Entity(e));
+				for (auto it = std::begin(collisions); it != std::end(collisions); ++it)
+				{
+					//@CESAR TODO
+					//Entity *e = const_cast<Entity *>(&(*it));
+					//_entity->getScene().lock()->entityHandle(it->getId(), e);
+				}
+			}
+
+			// !Serialization
+			////
+			//////
+			float force;
+			std::set<Entity> collisions;
+
+		private:
+			Collision &operator=(Collision const &o);
+			Collision(Collision const &o);
+		};
+	}
 }
-
-#endif //__COLLISION_HPP__

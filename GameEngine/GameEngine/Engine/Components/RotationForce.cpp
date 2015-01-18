@@ -2,33 +2,35 @@
 #include <Components/RotationForce.hpp>
 #include <Core/Engine.hh>
 
-namespace Component
+namespace AGE
 {
-
-	RotationForce::RotationForce()
-		: Component::ComponentBase<RotationForce>()
-		, force(glm::vec3(0))
-	{}
-
-	RotationForce::~RotationForce(void)
-	{}
-	
-	void RotationForce::init(AScene *, const glm::vec3 &_force)
+	namespace Component
 	{
-		force = _force;
-	}
+		RotationForce::RotationForce()
+			: Component::ComponentBase<RotationForce>()
+			, force(glm::vec3(0))
+		{}
 
-	void RotationForce::reset(AScene *)
-	{}
+		RotationForce::~RotationForce(void)
+		{}
+
+		void RotationForce::init(AScene *, const glm::vec3 &_force)
+		{
+			force = _force;
+		}
+
+		void RotationForce::reset(AScene *)
+		{}
 
 
-	void RotationForce::setForce(const glm::vec3 &_force)
-	{
-		force = _force;
-	}
+		void RotationForce::setForce(const glm::vec3 &_force)
+		{
+			force = _force;
+		}
 
-	const glm::vec3 &RotationForce::getForce() const
-	{
-		return force;
-	}
-};
+		const glm::vec3 &RotationForce::getForce() const
+		{
+			return force;
+		}
+	};
+}

@@ -12,120 +12,123 @@
 #include <Core/AScene.hh>
 #include <Audio/AudioManager.hh>
 
-namespace Component
+namespace AGE
 {
-	struct AudioEmitter : public Component::ComponentBase<AudioEmitter>
+	namespace Component
 	{
-
-		AudioEmitter(AudioEmitter const &o)
+		struct AudioEmitter : public Component::ComponentBase < AudioEmitter >
 		{
-			audios = o.audios;
-		}
 
-		AudioEmitter &operator=(AudioEmitter const &o)
-		{
-			audios = o.audios;
-			return *this;
-		}
-
-		struct AudioInstance
-		{
-			AudioInstance();
-			~AudioInstance();
-			void setReverb(FMOD_REVERB_PROPERTIES prop); // @TODO -> to implement
-			std::shared_ptr<Audio> audio;
-			FMOD::Channel *channel;
-			ChannelGroupType channelGroupType;
-			std::string name;
-			FMOD::Reverb *reverb;
-		};
-
-		struct SerializedAudioInstance
-		{
-			std::string filename;
-			std::string name;
-			ChannelGroupType channelGroupType;
-			bool isPlaying;
-			float volume;
-			unsigned int position;
-			template <typename Archive>
-			void serialize(Archive &ar)
+			AudioEmitter(AudioEmitter const &o)
 			{
-				ar(filename, name, channelGroupType, isPlaying, volume, position);
+				audios = o.audios;
 			}
-		};
 
-		AudioEmitter();
-		virtual ~AudioEmitter(void);
-		void init(AScene *);
-		virtual void reset(AScene *);
-		void clearAllAudios();
-		void clearAudio(const std::string &name);
-		AudioInstance *getAudio(const std::string &name);
-		bool hasAudio(const std::string &name);
-		void setAudio(std::shared_ptr<Audio> audio, const std::string &name, ChannelGroupType groupType);
-		void updatePosition();
-		void play(const std::string &name, bool force);
-
-		//////
-		////
-		// Serialization
-
-		template <typename Archive>
-		void save(Archive &ar) const
-		{
-			AGE::Vector<SerializedAudioInstance> v;
-			for (auto &e : audios)
+			AudioEmitter &operator=(AudioEmitter const &o)
 			{
-				SerializedAudioInstance a;
-				a.channelGroupType = e.second.channelGroupType;
-				a.filename = e.second.audio->getName();
-				a.name = e.first;
-				a.isPlaying = false;
-				a.volume = 0.0f;
-				a.position = 0;
-				if (e.second.channel != nullptr)
+				audios = o.audios;
+				return *this;
+			}
+
+			struct AudioInstance
+			{
+				AudioInstance();
+				~AudioInstance();
+				void setReverb(FMOD_REVERB_PROPERTIES prop); // @TODO -> to implement
+				std::shared_ptr<Audio> audio;
+				FMOD::Channel *channel;
+				ChannelGroupType channelGroupType;
+				std::string name;
+				FMOD::Reverb *reverb;
+			};
+
+			struct SerializedAudioInstance
+			{
+				std::string filename;
+				std::string name;
+				ChannelGroupType channelGroupType;
+				bool isPlaying;
+				float volume;
+				unsigned int position;
+				template <typename Archive>
+				void serialize(Archive &ar)
 				{
-					e.second.channel->isPlaying(&a.isPlaying);
-					if (a.isPlaying)
-					{
-						e.second.channel->getVolume(&a.volume);
-						e.second.channel->getPosition(&a.position, FMOD_TIMEUNIT_MS);
-					}
+					ar(filename, name, channelGroupType, isPlaying, volume, position);
 				}
-				v.push_back(a);
-			}
-			ar(v);
-		}
+			};
 
+			AudioEmitter();
+			virtual ~AudioEmitter(void);
+			void init(AScene *);
+			virtual void reset(AScene *);
+			void clearAllAudios();
+			void clearAudio(const std::string &name);
+			AudioInstance *getAudio(const std::string &name);
+			bool hasAudio(const std::string &name);
+			void setAudio(std::shared_ptr<Audio> audio, const std::string &name, ChannelGroupType groupType);
+			void updatePosition();
+			void play(const std::string &name, bool force);
 
-		template <typename Archive>
-		void load(Archive &ar)
-		{
-			AGE::Vector<SerializedAudioInstance> v;
-			ar(v);
-			for (auto e : v)
+			//////
+			////
+			// Serialization
+
+			template <typename Archive>
+			void save(Archive &ar) const
 			{
-				//@CESAR TODO
-				//std::shared_ptr<Audio> a = _entity->getScene().lock()->getInstance<AudioManager>()->getAudio(e.filename);
-				//if (!a)
-				//	continue;
-				//setAudio(a, e.name, e.channelGroupType);
-				//if (e.isPlaying)
-				//{
-				//	play(e.name, false);
-				//	getAudio(e.name)->channel->setVolume(e.volume);
-				//	getAudio(e.name)->channel->setPosition(e.position, FMOD_TIMEUNIT_MS);
-				//}
-
+				AGE::Vector<SerializedAudioInstance> v;
+				for (auto &e : audios)
+				{
+					SerializedAudioInstance a;
+					a.channelGroupType = e.second.channelGroupType;
+					a.filename = e.second.audio->getName();
+					a.name = e.first;
+					a.isPlaying = false;
+					a.volume = 0.0f;
+					a.position = 0;
+					if (e.second.channel != nullptr)
+					{
+						e.second.channel->isPlaying(&a.isPlaying);
+						if (a.isPlaying)
+						{
+							e.second.channel->getVolume(&a.volume);
+							e.second.channel->getPosition(&a.position, FMOD_TIMEUNIT_MS);
+						}
+					}
+					v.push_back(a);
+				}
+				ar(v);
 			}
-		}
 
 
-		// !Serialization
-		////
-		//////
-	private:
-		std::map<std::string, AudioInstance> audios;
-	};
+			template <typename Archive>
+			void load(Archive &ar)
+			{
+				AGE::Vector<SerializedAudioInstance> v;
+				ar(v);
+				for (auto e : v)
+				{
+					//@CESAR TODO
+					//std::shared_ptr<Audio> a = _entity->getScene().lock()->getInstance<AudioManager>()->getAudio(e.filename);
+					//if (!a)
+					//	continue;
+					//setAudio(a, e.name, e.channelGroupType);
+					//if (e.isPlaying)
+					//{
+					//	play(e.name, false);
+					//	getAudio(e.name)->channel->setVolume(e.volume);
+					//	getAudio(e.name)->channel->setPosition(e.position, FMOD_TIMEUNIT_MS);
+					//}
+
+				}
+			}
+
+
+			// !Serialization
+			////
+			//////
+		private:
+			std::map<std::string, AudioInstance> audios;
+		};
+	}
 }

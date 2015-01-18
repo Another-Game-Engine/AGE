@@ -1,23 +1,25 @@
 #include <Components/SpaceshipController.hpp>
 
-namespace Component
+namespace AGE
 {
-
-	SpaceshipController::SpaceshipController() :
-		ComponentBase<SpaceshipController>(),
-		dist(0.0f)
-	{}
-
-	SpaceshipController::~SpaceshipController(void)
-	{}
-
-	void SpaceshipController::init(AScene *, const Entity &e, float distance)
+	namespace Component
 	{
-		spaceShip = e;
-		dist = distance;
+
+		SpaceshipController::SpaceshipController() :
+			ComponentBase<SpaceshipController>(),
+			dist(0.0f)
+		{}
+
+		SpaceshipController::~SpaceshipController(void)
+		{}
+
+		void SpaceshipController::init(AScene *, const Entity &e, float distance)
+		{
+			spaceShip = e;
+			dist = distance;
+		}
+
+		void SpaceshipController::reset(AScene *)
+		{}
 	}
-
-	void SpaceshipController::reset(AScene *)
-	{}
-
 }

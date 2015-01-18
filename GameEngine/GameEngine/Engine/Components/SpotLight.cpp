@@ -1,46 +1,49 @@
 #include <Components\SpotLight.hh>
 
-namespace Component
+namespace AGE
 {
-
-	SpotLight::SpotLight()
+	namespace Component
 	{
-	}
 
-	SpotLight::SpotLight(SpotLight const &o)
-	{
-		*this = o;
-	}
+		SpotLight::SpotLight()
+		{
+		}
 
-	SpotLight::~SpotLight()
-	{
-	}
+		SpotLight::SpotLight(SpotLight const &o)
+		{
+			*this = o;
+		}
 
-	void		SpotLight::updateLightData(const glm::mat4 &globalTransform)
-	{
-		lightData.lightVP = projection * glm::inverse(globalTransform);
-		lightData.positionPower.x = globalTransform[3].x;
-		lightData.positionPower.y = globalTransform[3].y;
-		lightData.positionPower.z = globalTransform[3].z;
-	}
+		SpotLight::~SpotLight()
+		{
+		}
 
-	void SpotLight::reset(AScene *)
-	{
-	}
+		void		SpotLight::updateLightData(const glm::mat4 &globalTransform)
+		{
+			lightData.lightVP = projection * glm::inverse(globalTransform);
+			lightData.positionPower.x = globalTransform[3].x;
+			lightData.positionPower.y = globalTransform[3].y;
+			lightData.positionPower.z = globalTransform[3].z;
+		}
 
-	SpotLight &SpotLight::operator=(SpotLight const &o)
-	{
-		lightData = o.lightData;
-		return (*this);
-	}
+		void SpotLight::reset(AScene *)
+		{
+		}
 
-	void	SpotLight::init(AScene *)
-	{
-	}
+		SpotLight &SpotLight::operator=(SpotLight const &o)
+		{
+			lightData = o.lightData;
+			return (*this);
+		}
 
-	template <typename Archive>
-	void SpotLight::serialize(Archive &ar)
-	{
-	}
+		void	SpotLight::init(AScene *)
+		{
+		}
 
+		template <typename Archive>
+		void SpotLight::serialize(Archive &ar)
+		{
+		}
+
+	}
 }

@@ -7,28 +7,31 @@
 #include <cereal/types/base_class.hpp>
 #include <cereal/types/string.hpp>
 
-namespace Component
+namespace AGE
 {
-	struct AudioListener : public Component::ComponentBase<AudioListener>
+	namespace Component
 	{
-		AudioListener();
-		virtual ~AudioListener(void);
-		void init(AScene *);
-		virtual void reset(AScene *);
-		AudioListener(AudioListener const &){}
-		AudioListener &operator=(AudioListener const &){ return *this; }
-		//////
-		////
-		// Serialization
-
-		template <typename Archive>
-		void serialize(Archive &ar)
+		struct AudioListener : public Component::ComponentBase < AudioListener >
 		{
-		}
+			AudioListener();
+			virtual ~AudioListener(void);
+			void init(AScene *);
+			virtual void reset(AScene *);
+			AudioListener(AudioListener const &){}
+			AudioListener &operator=(AudioListener const &){ return *this; }
+			//////
+			////
+			// Serialization
 
-		// !Serialization
-		////
-		//////
-	private:
-	};
+			template <typename Archive>
+			void serialize(Archive &ar)
+			{
+			}
+
+			// !Serialization
+			////
+			//////
+		private:
+		};
+	}
 }

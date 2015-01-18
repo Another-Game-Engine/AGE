@@ -6,11 +6,10 @@
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
 
-class AScene;
-
 namespace AGE
 {
 	class Engine;
+	class AScene;
 
 	class MainThread : public Thread, public QueuePusher, public QueueOwner
 	{

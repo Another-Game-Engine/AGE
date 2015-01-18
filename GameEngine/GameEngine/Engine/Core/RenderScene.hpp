@@ -7,8 +7,6 @@
 #include <Entities/EntityTypedef.hpp>
 #include <Core/LooseOctree.hh>
 
-class AScene;
-
 namespace AGE
 {
 	struct Drawable;
@@ -19,6 +17,7 @@ namespace AGE
 	struct SubMeshInstance;
 	class PrepareRenderThread;
 	class Engine;
+	class AScene;
 
 	class RenderScene
 	{

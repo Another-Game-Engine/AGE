@@ -10,51 +10,54 @@
 
 #include <future>
 
-class BulletDynamicSystem : public System
+namespace AGE
 {
-public:
-	BulletDynamicSystem(std::weak_ptr<AScene> &&scene)
-		: System(std::move(scene))
-		, _manager(nullptr)
-		, _filter(std::move(scene))
+	class BulletDynamicSystem : public System
 	{
-		_name = "bullet_dynamic_system";
-		_manager = dynamic_cast<BulletDynamicManager*>(_scene.lock()->getInstance<BulletCollisionManager>());
-		_filter.requireComponent<Component::RigidBody>();
-	}
-	virtual ~BulletDynamicSystem(){}
-private:
-	BulletDynamicManager* _manager;
-	EntityFilter _filter;
-
-	virtual void updateBegin(double time)
-	{
-		auto scene = _scene.lock();
-		for (auto e : _filter.getCollection())
+	public:
+		BulletDynamicSystem(std::weak_ptr<AScene> &&scene)
+			: System(std::move(scene))
+			, _manager(nullptr)
+			, _filter(std::move(scene))
 		{
-			if (scene->getLink(e)->isUserModified())
-			{
-				auto rb = scene->getComponent<Component::RigidBody>(e);
-				if (rb->getMass() == 0)
-				{
-					rb->setTransformation(scene->getLink(e));
-					scene->getLink(e)->setUserModified(false);
-				}
-			}
-
+			_name = "bullet_dynamic_system";
+			_manager = dynamic_cast<BulletDynamicManager*>(_scene.lock()->getInstance<BulletCollisionManager>());
+			_filter.requireComponent<Component::RigidBody>();
 		}
-		_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
-	}
+		virtual ~BulletDynamicSystem(){}
+	private:
+		BulletDynamicManager* _manager;
+		EntityFilter _filter;
 
-	virtual void updateEnd(double time)
-	{}
+		virtual void updateBegin(double time)
+		{
+			auto scene = _scene.lock();
+			for (auto e : _filter.getCollection())
+			{
+				if (scene->getLink(e)->isUserModified())
+				{
+					auto rb = scene->getComponent<Component::RigidBody>(e);
+					if (rb->getMass() == 0)
+					{
+						rb->setTransformation(scene->getLink(e));
+						scene->getLink(e)->setUserModified(false);
+					}
+				}
 
-	virtual void mainUpdate(double time)
-	{
-	}
+			}
+			_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
+		}
 
-	virtual bool initialize()
-	{
-		return true;
-	}
-};
+		virtual void updateEnd(double time)
+		{}
+
+		virtual void mainUpdate(double time)
+		{
+		}
+
+		virtual bool initialize()
+		{
+			return true;
+		}
+	};
+}

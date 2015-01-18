@@ -8,11 +8,10 @@
 #include <array>
 #include <Utils/GlmSerialization.hpp>
 
-class AScene;
-
 namespace AGE
 {
 	class RenderScene;
+	class AScene;
 	struct Link
 	{
 		inline const glm::vec3 &getPosition() const { return _position; }

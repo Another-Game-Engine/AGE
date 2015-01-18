@@ -9,11 +9,10 @@
 #include <Geometry/Mesh.hpp>
 #include <Core/CullableObjects.hh>
 
-class AScene;
-
 namespace AGE
 {
 	class RenderScene;
+	class AScene;
 	namespace Commands
 	{
 		namespace MainToPrepare

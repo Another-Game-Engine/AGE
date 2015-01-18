@@ -17,27 +17,30 @@
 //	class Pipeline;
 //}
 
-class CameraSystem : public System
+namespace AGE
 {
-public:
-	CameraSystem(std::weak_ptr<AScene> &&scene);
-	virtual ~CameraSystem(){}
-	
-	void setRenderDebugMode(bool t);
-	bool getRenderDebugMode() const;
-	void getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to);
-	void getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to);
-	double getLifeTime() const;
+	class CameraSystem : public System
+	{
+	public:
+		CameraSystem(std::weak_ptr<AScene> &&scene);
+		virtual ~CameraSystem(){}
 
-protected:
+		void setRenderDebugMode(bool t);
+		bool getRenderDebugMode() const;
+		void getRayFromMousePosOnScreen(glm::vec3 &from, glm::vec3 &to);
+		void getRayFromCenterOfScreen(glm::vec3 &from, glm::vec3 &to);
+		double getLifeTime() const;
 
-	bool _renderDebugMethod;
-	double	_totalTime;
-	EntityFilter _drawable;
-	EntityFilter _camera;
-	
-	virtual void updateBegin(double time);
-	virtual void updateEnd(double time);
-	virtual void mainUpdate(double time);
-	virtual bool initialize();
-};
+	protected:
+
+		bool _renderDebugMethod;
+		double	_totalTime;
+		EntityFilter _drawable;
+		EntityFilter _camera;
+
+		virtual void updateBegin(double time);
+		virtual void updateEnd(double time);
+		virtual void mainUpdate(double time);
+		virtual bool initialize();
+	};
+}

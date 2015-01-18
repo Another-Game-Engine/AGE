@@ -4,33 +4,36 @@
 #include <glm/glm.hpp>
 #include <Utils/GlmSerialization.hpp>
 
-namespace Component
+namespace AGE
 {
-	struct TrackingCamera : public Component::ComponentBase<TrackingCamera>
+	namespace Component
 	{
-		TrackingCamera();
-		virtual ~TrackingCamera(void);
-		void init(AScene *, const Entity &_toLook, glm::vec3 _dist);
-		virtual void reset(AScene *);
-
-		//////
-		////
-		// Serialization
-
-		template <typename Archive>
-		void serialize(Archive &ar)
+		struct TrackingCamera : public Component::ComponentBase < TrackingCamera >
 		{
-			ar(CEREAL_NVP(dist));
-		}
+			TrackingCamera();
+			virtual ~TrackingCamera(void);
+			void init(AScene *, const Entity &_toLook, glm::vec3 _dist);
+			virtual void reset(AScene *);
 
-		// !Serialization
-		////
-		//////
+			//////
+			////
+			// Serialization
 
-		glm::vec3               dist;
-		Entity                  toLook;
-	private:
-		TrackingCamera(TrackingCamera const &);
-		TrackingCamera &operator=(TrackingCamera const &);
-	};
+			template <typename Archive>
+			void serialize(Archive &ar)
+			{
+				ar(CEREAL_NVP(dist));
+			}
+
+			// !Serialization
+			////
+			//////
+
+			glm::vec3               dist;
+			Entity                  toLook;
+		private:
+			TrackingCamera(TrackingCamera const &);
+			TrackingCamera &operator=(TrackingCamera const &);
+		};
+	}
 }

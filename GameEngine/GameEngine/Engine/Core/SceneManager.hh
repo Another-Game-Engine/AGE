@@ -5,10 +5,9 @@
 #include <Utils/Dependency.hpp>
 #include <memory>
 
-class AScene;
-
 namespace AGE
 {
+	class AScene;
 	class SceneManager
 	{
 	private:
