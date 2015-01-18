@@ -223,6 +223,7 @@
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
+    <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />

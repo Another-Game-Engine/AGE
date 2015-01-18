@@ -84,6 +84,7 @@
     <ClCompile Include="Engine\Utils\BitOperations.cpp" />
     <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
+    <ClCompile Include="Engine\Context\IRenderContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />

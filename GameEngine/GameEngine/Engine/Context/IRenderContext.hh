@@ -1,40 +1,21 @@
+#pragma once
 
-#ifndef IRenderContext_HH_
-#define IRenderContext_HH_
-
-#include "Core/Input.hh"
+#include <glm/glm.hpp>
 #include <Utils/Dependency.hpp>
-#include <tmq/message.hpp>
-#include <Configuration.hpp>
+#include <string>
 
-#ifdef USE_IMGUI
-#include <Utils/Age_Imgui.hpp>
-#endif
-
-#include <Core/CullableObjects.hh>
-
-class IRenderContext : public Dependency<IRenderContext>
+namespace AGE
 {
-public:
-	IRenderContext()
-		: _screenSize(glm::uvec2(10,10))
-		, _windowName("<3 ~AGE~ <3")
-	{ }
-	virtual ~IRenderContext()
+	class IRenderContext : public Dependency < IRenderContext >
 	{
-	}
-
-	bool init(int mode, unsigned int swidth, unsigned int sheight, std::string && name)
-	{
-		_windowName = name;
-		_screenSize = glm::uvec2(swidth, sheight);
-		return _init(mode);
-	}
-	inline const glm::uvec2 &getScreenSize() const { return _screenSize; }
-protected:
-	glm::uvec2 _screenSize;
-	std::string _windowName;
-	virtual bool _init(int mode) = 0;
-};
-
-#endif
+	public:
+		IRenderContext();
+		virtual ~IRenderContext();
+		bool init(int mode, unsigned int swidth, unsigned int sheight, std::string && name);
+		const glm::uvec2 &getScreenSize() const;
+	protected:
+		glm::uvec2 _screenSize;
+		std::string _windowName;
+		virtual bool _init(int mode) = 0;
+	};
+}

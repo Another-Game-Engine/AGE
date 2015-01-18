@@ -5,6 +5,7 @@
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 #include <Physic/BulletDynamicManager.hpp>
+#include <SDL/SDL.h>
 
 namespace AGE
 {

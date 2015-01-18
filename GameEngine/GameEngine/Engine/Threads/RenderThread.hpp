@@ -6,14 +6,15 @@
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
 
-class SdlContext;
 class Input;
+
 namespace gl
 {
 	class RenderManager;
 }
 namespace AGE
 {
+	class SdlContext;
 	class Engine;
 	struct DrawableCollection;
 

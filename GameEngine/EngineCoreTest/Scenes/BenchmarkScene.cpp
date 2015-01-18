@@ -18,6 +18,7 @@
 #include <SDL/SDL.h>
 #include <Threads/TaskScheduler.hpp>
 #include <Components/CameraComponent.hpp>
+#include <Core/Input.hh>
 
 namespace AGE
 {
