@@ -5,7 +5,6 @@
 #include <Components/RigidBody.hpp>
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Engine.hh>
-#include <Components/Collision.hpp>
 #include <Entities/EntityFlags.hh>
 
 #include <future>
