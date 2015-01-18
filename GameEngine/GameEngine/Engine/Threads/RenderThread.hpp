@@ -5,6 +5,7 @@
 #include "QueueOwner.hpp"
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
+#include <Render/GeometryManagement/Painting/PaintingManager.hh>
 
 class SdlContext;
 class Input;
@@ -22,6 +23,10 @@ namespace AGE
 		bool update();
 		virtual bool launch();
 		virtual bool stop();
+
+	public:
+		PaintingManager paintingManager;
+
 	private:
 		RenderThread();
 		virtual ~RenderThread();

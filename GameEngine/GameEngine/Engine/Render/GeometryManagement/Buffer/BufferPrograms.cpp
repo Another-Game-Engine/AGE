@@ -86,9 +86,20 @@ BufferPrograms & BufferPrograms::clear()
 	return (*this);
 }
 
-bool BufferPrograms::coherent_program(std::shared_ptr<Program> const &p)
+bool BufferPrograms::coherent_program(std::shared_ptr<Program> const &p) const
 {
 	return (p->coherent_attribute(_types));
+}
+
+bool BufferPrograms::coherent_program(std::vector<GLenum> const &types) const
+{
+	auto index = 0ull;
+	for (auto &type : types) {
+		if (type != _types[index++]) {
+			return (false);
+		}
+	}
+	return (true);
 }
 
 std::vector<GLenum> const & BufferPrograms::get_types() const

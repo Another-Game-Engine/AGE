@@ -246,6 +246,7 @@
     <ClCompile Include="Engine\Render\GeometryManagement\Data\BlockMemory.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Data\Vertices.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Painting\Painter.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Painting\PaintingManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Renderbuffer.cpp" />
@@ -362,6 +363,7 @@
     <ClInclude Include="Engine\Render\GeometryManagement\Data\BlockMemory.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Data\Vertices.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Painting\Painter.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Painting\PaintingManager.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\AFramebufferStorage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Framebuffer.hh" />

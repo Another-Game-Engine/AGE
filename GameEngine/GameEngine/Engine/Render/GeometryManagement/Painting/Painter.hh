@@ -1,5 +1,6 @@
 #pragma once
 
+# include <Utils/OpenGL.hh>
 # include <memory>
 # include <vector>
 # include <Render/Key.hh>
@@ -10,10 +11,12 @@
 class Painter
 {
 public:
-	Painter(std::vector<std::shared_ptr<Program>> const &programs, std::vector<GLenum> const &types);
+	Painter(std::vector<GLenum> const &types);
 	Painter(Painter &&move);
 
 public:
+	bool coherent(std::vector<GLenum> const &types) const;
+	Painter &set_programs(std::vector<std::shared_ptr<Program>> const &programs);
 	Key<Vertices> add_vertices(size_t nbrVertex, size_t nbrIndices);
 	Painter &remove_vertices(Key<Vertices> &key);
 	Vertices *get_vertices(Key<Vertices> const &key);

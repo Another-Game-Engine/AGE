@@ -10,7 +10,7 @@
 
 enum MeshInfos
 {
-	Positions,
+	Positions = 0,
 	Normals,
 	Tangents,
 	BiTangents,

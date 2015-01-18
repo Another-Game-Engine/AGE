@@ -110,6 +110,7 @@
     <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\Painting\PaintingManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -320,6 +321,7 @@
     <ClInclude Include="Engine\AssetManagement\Data\MaterialData.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\MeshData.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\TextureData.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\Painting\PaintingManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

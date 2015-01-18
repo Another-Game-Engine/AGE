@@ -23,7 +23,8 @@ public:
 	BufferPrograms &bind();
 	BufferPrograms &unbind();
 	BufferPrograms &update();
-	bool coherent_program(std::shared_ptr<Program> const &p);
+	bool coherent_program(std::shared_ptr<Program> const &p) const;
+	bool coherent_program(std::vector<GLenum> const &types) const;
 	std::vector<GLenum> const &get_types() const;
 
 private:

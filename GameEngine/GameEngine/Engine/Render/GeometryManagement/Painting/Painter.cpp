@@ -1,13 +1,8 @@
 #include <Render/GeometryManagement/Painting/Painter.hh>
 
-Painter::Painter(std::vector<std::shared_ptr<Program>> const &programs, std::vector<GLenum>  const &types) :
+Painter::Painter(std::vector<GLenum>  const &types) :
 _buffer(types)
 {
-	for (auto &program : programs) {
-		if (_buffer.coherent_program(program)) {
-			_programs.emplace_back(program);
-		}
-	}
 }
 
 Painter::Painter(Painter &&move) :
@@ -16,6 +11,16 @@ _programs(std::move(move._programs)),
 _vertices(std::move(move._vertices))
 {
 
+}
+
+Painter &Painter::set_programs(std::vector<std::shared_ptr<Program>> const &programs)
+{
+	for (auto &program : programs) {
+		if (_buffer.coherent_program(program)) {
+			_programs.emplace_back(program);
+		}
+	}
+	return (*this);
 }
 
 Key<Vertices> Painter::add_vertices(size_t nbrVertex, size_t nbrIndices)
@@ -112,4 +117,9 @@ Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &p, std::vec
 {
 	draw(mode, get_key_program(p), drawList);
 	return (*this);
+}
+
+bool Painter::coherent(std::vector<GLenum> const &types) const
+{
+	return (_buffer.coherent_program(types));
 }

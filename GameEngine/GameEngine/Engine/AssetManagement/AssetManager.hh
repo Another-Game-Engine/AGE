@@ -108,8 +108,7 @@ namespace AGE
 
 	private:
 		std::string _assetsDirectory;
-		std::map<std::bitset<MeshInfos::END>, std::pair<Key<gl::VertexPool>, gl::Key<gl::IndexPool>>, BitsetComparer> _pools
-		std::map<std::string, std::shared_ptr<Painter>> _painters;
+		std::map<std::bitset<MeshInfos::END>, Key<Painter>, BitsetComparer> _painters;
 		std::map<std::string, std::shared_ptr<MeshInstance>> _meshs;
 		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
 		std::map<std::string, std::shared_ptr<Animation>> _animations;
@@ -119,7 +118,6 @@ namespace AGE
 		std::mutex _mutex;
 
 	private:
-		void createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos);
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
 		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos, const std::string &loadingChannel);
 	};

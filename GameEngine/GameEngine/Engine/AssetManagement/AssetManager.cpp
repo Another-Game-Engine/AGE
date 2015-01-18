@@ -14,6 +14,7 @@
 #include <Threads/Thread.hpp>
 #include <Render/Properties/Materials/Diffuse.hh>
 #include <Render/Textures/Texture2D.hh>
+#include <Render/GeometryManagement/Painting/Painter.hh>
 
 namespace AGE
 {
@@ -37,7 +38,8 @@ namespace AGE
 	std::shared_ptr<MaterialSetInstance> AssetsManager::getMaterial(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
-		if (_materials.find(filePath.getFullName()) != std::end(_materials)) {
+		if (_materials.find(filePath.getFullName()) != std::end(_materials)) 
+		{
 			return _materials[filePath.getFullName()];
 		}
 		return nullptr;
@@ -49,14 +51,16 @@ namespace AGE
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_materials.find(filePath.getFullName()) != std::end(_materials)) {
+			if (_materials.find(filePath.getFullName()) != std::end(_materials)) 
+			{
 				return;
 			}
 			_materials.insert(std::make_pair(filePath.getFullName(), material));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
-			if (!filePath.exists()) {
+			if (!filePath.exists()) 
+			{
 				return AssetsLoadingResult(true, std::string("AssetsManager : Mesh File [" + filePath.getFullName() + "] does not exists.\n"));
 			}
 			std::shared_ptr<MaterialDataSet> material_data_set = std::make_shared<MaterialDataSet>();
@@ -67,7 +71,8 @@ namespace AGE
 			material->path = _filePath.getFullName();
 			auto i = 0;
 			material->datas.resize(material_data_set->collection.size());
-			for (auto &material_data : material_data_set->collection) {
+			for (auto &material_data : material_data_set->collection) 
+			{
 				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 				{
 					material->datas[i].emplace_back(std::make_shared<Diffuse>());
@@ -94,11 +99,13 @@ namespace AGE
 		{
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				if (_textures.find(filePath.getFullName()) != std::end(_textures)) {
+				if (_textures.find(filePath.getFullName()) != std::end(_textures)) 
+				{
 					return AssetsLoadingResult(true);
 				}
 			}
-			if (!filePath.exists()) {
+			if (!filePath.exists()) 
+			{
 				return AssetsLoadingResult(false);
 			}
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
@@ -141,13 +148,15 @@ namespace AGE
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		auto animation = std::make_shared<Animation>();
-		if (!filePath.exists()) {
+		if (!filePath.exists()) 
+		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
 			return (false);
 		}
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_animations.find(filePath.getFullName()) != std::end(_animations)) {
+			if (_animations.find(filePath.getFullName()) != std::end(_animations)) 
+			{
 				return (true);
 			}
 			_animations.insert(std::make_pair(filePath.getFullName(), animation));
@@ -174,13 +183,15 @@ namespace AGE
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		auto skeleton = std::make_shared<Skeleton>();
-		if (!filePath.exists()) {
+		if (!filePath.exists()) 
+		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
 			return (false);
 		}
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons)) {
+			if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons)) 
+			{
 				return (true);
 			}
 			_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
@@ -210,13 +221,15 @@ namespace AGE
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_meshs.find(filePath.getFullName()) != std::end(_meshs)) {
+			if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
+			{
 				return (true);
 			}
 			_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
-			if (!filePath.exists()) {
+			if (!filePath.exists())
+			{
 				return AssetsLoadingResult(true, std::string("AssetsManager : Mesh File [" + filePath.getFullName() + "] does not exists.\n"));
 			}
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
@@ -226,26 +239,18 @@ namespace AGE
 			meshInstance->subMeshs.resize(data->subMeshs.size());
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();
-			for (std::size_t i = 0; i < data->subMeshs.size(); ++i) {
+			for (std::size_t i = 0; i < data->subMeshs.size(); ++i) 
+			{
 				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 					// If no vertex pool correspond to submesh
 					std::vector<MeshInfos> order;
 					std::bitset<MeshInfos::END> infos;
-					if (loadOrder.empty()) {
-						for (std::size_t j = 0; j < data->subMeshs[i].infos.size(); ++j) {
-							if (!data->subMeshs[i].infos.test(j))
-								continue;
-							order.push_back(MeshInfos(j));
-							infos.set(j);
-						}
-					}
-					else {
-						for (auto &e : loadOrder) {
-							if (!data->subMeshs[i].infos.test(e))
-								continue;
-							order.push_back(e);
-							infos.set(e);
-						}
+					for (auto &e : loadOrder) 
+					{
+						if (!data->subMeshs[i].infos.test(e))
+							continue;
+						order.push_back(e);
+						infos.set(e);
 					}
 					loadSubmesh(data, i, &meshInstance->subMeshs[i], order, infos, loadingChannel);
 					return AssetsLoadingResult(false);
@@ -333,105 +338,40 @@ namespace AGE
 
 		mesh->boundingBox = data.boundingBox;
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
-		auto future1 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
-		{
-			if (_pools.find(infos) == std::end(_pools))
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([&]() {
+			std::vector<GLenum> types;
+			for (auto &e : order)
+				types.emplace_back(g_InfosTypes[e]);
+			auto &paintingManager = GetRenderThread()->paintingManager;
+			if (!paintingManager.has_painter(types))
 			{
-				createPool(order, infos);
+				mesh->painter = paintingManager.add_painter(std::move(types));
 			}
-			return AssetsLoadingResult(false);
-		});
-		auto future2 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
-		{
-			// We need to keep an instance of FileData shared_ptr
-			auto fileDataCopy = fileData;
-			(void)(fileDataCopy);
-			auto &pools = _pools.find(infos)->second;
-			mesh->vertices = m->addVertices(maxSize, std::cref(*(nbrBuffer.get())), std::cref(*(buffer.get())), pools.first);
-			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
-			mesh->vertexPool = pools.first;
-			mesh->indexPool = pools.second;
-			return AssetsLoadingResult(false);
-		});
-		auto future3 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
-		{
-			// We need to keep an instance of FileData shared_ptr
-			auto fileDataCopy = fileData;
-			(void)(fileDataCopy);
-			auto &pools = _pools.find(infos)->second;
-			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
-			mesh->vertexPool = pools.first;
-			mesh->indexPool = pools.second;
-			return AssetsLoadingResult(false);
-		});
-		pushNewAsset(loadingChannel, data.name, future1);
-		pushNewAsset(loadingChannel, data.name, future2);
-		pushNewAsset(loadingChannel, data.name, future3);
-	}
-	
-	// Create pool for mesh
-	void AssetsManager::createPool(const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos)
-	{
-
-		std::size_t size = infos.count();
-
-		AGE::Vector<GLenum> typeComponent(size); // {GL_FLOAT, GL_FLOAT, GL_FLOAT};			
-		AGE::Vector<uint8_t> sizeTypeComponent(size); // { sizeof(float), sizeof(float), sizeof(float) };
-		AGE::Vector<uint8_t> nbrComponent(size);// {4, 4, 4};
-
-		std::size_t ctr = 0;
-
-		for (auto &e : order)
-		{
-			switch (e)
+			else
 			{
-			case Positions:
-				typeComponent[ctr] = GL_FLOAT;
-				sizeTypeComponent[ctr] = sizeof(float);
-				nbrComponent[ctr] = 4;
-				break;
-			case Normals:
-				typeComponent[ctr] = GL_FLOAT;
-				sizeTypeComponent[ctr] = sizeof(float);
-				nbrComponent[ctr] = 4;
-				break;
-			case Tangents:
-				typeComponent[ctr] = GL_FLOAT;
-				sizeTypeComponent[ctr] = sizeof(float);
-				nbrComponent[ctr] = 4;
-				break;
-			case BiTangents:
-				typeComponent[ctr] = GL_FLOAT;
-				sizeTypeComponent[ctr] = sizeof(float);
-				nbrComponent[ctr] = 4;
-				break;
-			case Uvs:
-				typeComponent[ctr] = GL_FLOAT;
-				sizeTypeComponent[ctr] = sizeof(float);
-				nbrComponent[ctr] = 2;
-				break;
-			case Weights:
-				typeComponent[ctr] = GL_FLOAT;
-				sizeTypeComponent[ctr] = sizeof(float);
-				nbrComponent[ctr] = 4;
-				break;
-			case BoneIndices:
-				typeComponent[ctr] = GL_FLOAT;
-				sizeTypeComponent[ctr] = sizeof(float);
-				nbrComponent[ctr] = 4;
-				break;
-			case Colors:
-				typeComponent[ctr] = GL_FLOAT;
-				sizeTypeComponent[ctr] = sizeof(float);
-				nbrComponent[ctr] = 4;
-				break;
-
-			default:
-				break;
+				mesh->painter = paintingManager.get_painter(types);
 			}
-			++ctr;
-		}
+			auto &painter = paintingManager.get_painter(mesh->painter);
+			mesh->vertices = painter->add_vertices(data.positions.size(), data.indices.size());
+			auto vertices = painter->get_vertices(mesh->vertices);
+			for (auto index = 0ull; index < buffer->size(); ++index)
+			{
 
+			}
+
+
+			//mesh->vertices = m->addVertices(maxSize, std::cref(*(nbrBuffer.get())), std::cref(*(buffer.get())), pools.first);
+			//mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
+			//mesh->vertexPool = pools.first;
+			//mesh->indexPool = pools.second;
+		
+			//auto &pools = _pools.find(infos)->second;
+			//mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
+			//mesh->vertexPool = pools.first;
+			//mesh->indexPool = pools.second;
+			return AssetsLoadingResult(false);
+		});
+		pushNewAsset(loadingChannel, data.name, future);
 	}
 
 	void AssetsManager::pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsManager::AssetsLoadingResult> &future)
