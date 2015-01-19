@@ -7,6 +7,7 @@
 #include <Entities/EntityTypedef.hpp>
 #include <Core/LooseOctree.hh>
 #include <Core/CullableObjects.hh>
+#include <array>
 
 namespace AGE
 {

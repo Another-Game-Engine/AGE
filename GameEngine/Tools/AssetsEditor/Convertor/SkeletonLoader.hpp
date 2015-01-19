@@ -5,6 +5,11 @@
 #include <map>
 #include <Skinning/Skeleton.hpp>
 #include <thread>
+// TODO to pass in .cpp
+#include <Utils/Serialization/SerializationArchives.hpp>
+#include <Utils/Serialization/MatrixSerialization.hpp>
+#include <Utils/Serialization/QuaternionSerialization.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace AGE
 {

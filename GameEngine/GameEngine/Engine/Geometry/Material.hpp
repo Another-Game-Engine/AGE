@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <glm/glm.hpp>
-#include <Utils/GlmSerialization.hpp>
+#include <glm/fwd.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 #include <Render/Material.hh>

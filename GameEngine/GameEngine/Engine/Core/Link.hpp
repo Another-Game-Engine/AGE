@@ -1,12 +1,11 @@
 #pragma once
 
-#include <glm/fwd.hpp>
-#include <glm/gtc/quaternion.hpp>
 #include <Entities/EntityTypedef.hpp>
 #include <Core/PrepareKey.hpp>
-#include <cstring>
 #include <array>
-#include <Utils/GlmSerialization.hpp>
+#include <Utils/Serialization/QuaternionSerialization.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace AGE
 {
@@ -17,9 +16,9 @@ namespace AGE
 		inline const glm::vec3 &getPosition() const { return _position; }
 		inline const glm::vec3 &getScale() const { return _scale; }
 		inline const glm::quat &getOrientation() const { return _orientation; }
-		inline float *getPositionPtr() { return glm::value_ptr(_position); }
-		inline float *getScalePtr() { return glm::value_ptr(_scale); }
-		inline float *getOrientationPtr() { return glm::value_ptr(_orientation); }
+		inline float *getPositionPtr() { return &_position.x; }
+		inline float *getScalePtr() { return &_scale.x; }
+		inline float *getOrientationPtr() { return &_orientation.x; }
 
 
 		// Used by modules like physic, do not use it to set object position, use setPosition instead

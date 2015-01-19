@@ -10,9 +10,9 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <array>
 #include <Core/AScene.hh>
-#include <Utils/GlmSerialization.hpp>
 #include <Entities/Entity.hh>
-
+//TODO to pass in .cpp
+#include <Utils/Serialization/MatrixSerialization.hpp>
 class btGhostObject;
 
 namespace AGE

@@ -3,7 +3,7 @@
 #include <Components/Component.hh>
 #include <Render/Key.hh>
 #include <Core/PreparableObject.hh>
-#include <Utils/GlmSerialization.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace gl { class GeometryManager; class Vertices; class Indices; }
 
@@ -27,8 +27,8 @@ namespace AGE
 			template <typename Archive>void serialize(Archive &ar);
 			inline const glm::vec3 &getColor() const { return _color; }
 			inline const glm::vec3 &getRange() const { return _range; }
-			inline float *getColorPtr() { return glm::value_ptr(_color); }
-			inline float *getRangePtr() { return glm::value_ptr(_range); }
+			inline float *getColorPtr() { return &_color.x; }
+			inline float *getRangePtr() { return &_range.x; }
 			virtual void postUnserialization(AScene *scene);
 		private:
 			AGE::PrepareKey _key;

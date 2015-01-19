@@ -226,6 +226,7 @@
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Core\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepareCommands.cpp" />
+    <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
@@ -302,6 +303,9 @@
     <ClCompile Include="Engine\Utils\Plane.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\MatrixSerialization.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\QuaternionSerialization.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\VectorSerialization.cpp" />
     <ClCompile Include="Engine\Utils\Sphere.cpp" />
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
   </ItemGroup>
@@ -444,6 +448,11 @@
     <ClInclude Include="Engine\Utils\Plane.hh" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\SerializationArchives.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\SerializationMacros.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\MatrixSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\QuaternionSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\VectorSerialization.hpp" />
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\Sphere.hh" />

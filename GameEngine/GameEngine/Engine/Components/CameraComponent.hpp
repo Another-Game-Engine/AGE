@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <Utils/GlmSerialization.hpp>
+#include <Utils/Serialization/MatrixSerialization.hpp>
 #include <Core/PrepareKey.hpp>
 
 namespace AGE

@@ -11,6 +11,7 @@
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/QueueOwner.hpp>
 #include <Threads/Thread.hpp>
+#include <Utils/Serialization/SerializationArchives.hpp>
 
 namespace AGE
 {

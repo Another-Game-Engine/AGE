@@ -85,6 +85,10 @@
     <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
+    <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\VectorSerialization.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\QuaternionSerialization.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\MatrixSerialization.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -233,6 +237,11 @@
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\VectorSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\QuaternionSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\MatrixSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\SerializationArchives.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\SerializationMacros.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -4,27 +4,18 @@
 #include <memory>
 #include <Components/ComponentRegistrar.hpp>
 #include <Core/EntityIdRegistrar.hh>
-
 #include <list>
-#include <map>
 #include <array>
-
 #include <glm/fwd.hpp>
-
 #include <cereal/cereal.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/map.hpp>
-#include <Components/ComponentRegistrar.hpp>
-
 #include <Core/ComponentManager.hpp>
 #include <Utils/Containers/Queue.hpp>
 #include <Entities/EntitySerializationInfos.hpp>
-
-//je remplace l'age queue par une std::queue pour le test
-#include <queue>
 
 namespace AGE
 {
@@ -40,12 +31,13 @@ namespace AGE
 		std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 		std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
 		std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
-		std::queue<std::uint16_t>                                               _free;
+		AGE::Queue<std::uint16_t>                                               _free;
 		ENTITY_ID                                                               _entityNumber;
-		AGE::RenderScene *_renderScene;
-
+		AGE::RenderScene                                                        *_renderScene;
+		friend EntityFilter;
+		friend class AGE::RenderScene;
 	protected:
-		std::weak_ptr<AGE::Engine> _engine;
+		std::weak_ptr<AGE::Engine>                                              _engine;
 	public:
 		AScene(std::weak_ptr<AGE::Engine> engine);
 		virtual ~AScene();
@@ -255,32 +247,9 @@ namespace AGE
 			}
 		}
 
-
-		void addTag(Entity &e, TAG_ID tag)
-		{
-			auto &data = _pool[e.id];
-			if (data.entity != e)
-				return;
-			data.barcode.setTag(tag);
-			informFiltersTagAddition(tag, data);
-		}
-
-		void removeTag(Entity &e, TAG_ID tag)
-		{
-			auto &data = _pool[e.id];
-			if (data.entity != e)
-				return;
-			data.barcode.unsetTag(tag);
-			informFiltersTagDeletion(tag, data);
-		}
-
-		bool isTagged(Entity &e, TAG_ID tag)
-		{
-			auto &data = _pool[e.id];
-			if (data.entity != e)
-				return false;
-			return data.barcode.hasTag(tag);
-		}
+		void addTag(Entity &e, TAG_ID tag);
+		void removeTag(Entity &e, TAG_ID tag);
+		bool isTagged(Entity &e, TAG_ID tag);
 
 		////////////////////////
 		//////
@@ -332,26 +301,9 @@ namespace AGE
 			return (e.barcode.hasComponent(id));
 		}
 
-		Component::Base *getComponent(const Entity &entity, COMPONENT_ID componentId)
-		{
-			auto &e = _pool[entity.id];
-			assert(e.entity == entity);
-			assert(e.barcode.hasComponent(componentId));
-			return this->_componentsManagers[componentId]->getComponentPtr(entity);
-		}
-
-		bool hasComponent(const Entity &entity, COMPONENT_ID componentId)
-		{
-			auto &e = _pool[entity.id];
-			assert(e.entity == entity);
-			return (e.barcode.hasComponent(componentId));
-		}
-
-		std::size_t getComponentHash(COMPONENT_ID componentId)
-		{
-			assert(this->_componentsManagers[componentId] != nullptr);
-			return this->_componentsManagers[componentId]->getHashCode();
-		}
+		Component::Base *getComponent(const Entity &entity, COMPONENT_ID componentId);
+		bool hasComponent(const Entity &entity, COMPONENT_ID componentId);
+		std::size_t getComponentHash(COMPONENT_ID componentId);
 
 		template <typename T>
 		bool removeComponent(Entity &entity)
@@ -370,45 +322,11 @@ namespace AGE
 			return true;
 		}
 
-		void reorganizeComponents()
-		{
-			for (auto &&e : _componentsManagers)
-			{
-				if (e != nullptr)
-					e->reorder();
-			}
-		}
-
-		const Entity *getEntityPtr(const Entity &e) const
-		{
-			auto &entity = _pool[e.id];
-			if (entity.entity != e)
-				return nullptr;
-			return &(entity.entity);
-		}
-
-		const Entity &getEntityFromId(ENTITY_ID id) const
-		{
-			return _pool[id].entity;
-		}
-
-		AComponentManager *getComponentManager(COMPONENT_ID componentId)
-		{
-			return _componentsManagers[componentId];
-		}
-
-		AGE::Link *getLink(const Entity &e)
-		{
-			return &_pool[e.id].link;
-		}
-
-		AGE::Link *getLink(const ENTITY_ID &id)
-		{
-			return &_pool[id].link;
-		}
-
-	private:
-		friend EntityFilter;
-		friend class AGE::RenderScene;
+		void reorganizeComponents();
+		const Entity *getEntityPtr(const Entity &e) const;
+		const Entity &getEntityFromId(ENTITY_ID id) const;
+		AComponentManager *getComponentManager(COMPONENT_ID componentId);
+		AGE::Link *getLink(const Entity &e);
+		AGE::Link *getLink(const ENTITY_ID &id);
 	};
 }

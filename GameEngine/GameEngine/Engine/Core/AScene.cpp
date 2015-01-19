@@ -1,6 +1,5 @@
 
 #include <Core/Engine.hh>
-#include <Utils/PubSub.hpp>
 #include <limits>
 #include <Core/AScene.hh>
 #include <Systems/System.h>
@@ -45,7 +44,6 @@ namespace AGE
 
 	bool                           AScene::start()
 	{
-		setInstance<PubSub::Manager>();
 		return userStart();
 	}
 
@@ -175,5 +173,90 @@ namespace AGE
 		assert(file.is_open());
 		load<cereal::BinaryInputArchive>(file);
 		file.close();
+	}
+	///////////////////////////////////////////////////////////
+
+	void AScene::addTag(Entity &e, TAG_ID tag)
+	{
+		auto &data = _pool[e.id];
+		if (data.entity != e)
+			return;
+		data.barcode.setTag(tag);
+		informFiltersTagAddition(tag, data);
+	}
+
+	void AScene::removeTag(Entity &e, TAG_ID tag)
+	{
+		auto &data = _pool[e.id];
+		if (data.entity != e)
+			return;
+		data.barcode.unsetTag(tag);
+		informFiltersTagDeletion(tag, data);
+	}
+
+	bool AScene::isTagged(Entity &e, TAG_ID tag)
+	{
+		auto &data = _pool[e.id];
+		if (data.entity != e)
+			return false;
+		return data.barcode.hasTag(tag);
+	}
+
+	Component::Base *AScene::getComponent(const Entity &entity, COMPONENT_ID componentId)
+	{
+		auto &e = _pool[entity.id];
+		assert(e.entity == entity);
+		assert(e.barcode.hasComponent(componentId));
+		return this->_componentsManagers[componentId]->getComponentPtr(entity);
+	}
+
+	bool AScene::hasComponent(const Entity &entity, COMPONENT_ID componentId)
+	{
+		auto &e = _pool[entity.id];
+		assert(e.entity == entity);
+		return (e.barcode.hasComponent(componentId));
+	}
+
+	std::size_t AScene::getComponentHash(COMPONENT_ID componentId)
+	{
+		assert(this->_componentsManagers[componentId] != nullptr);
+		return this->_componentsManagers[componentId]->getHashCode();
+	}
+
+	void AScene::reorganizeComponents()
+	{
+		for (auto &&e : _componentsManagers)
+		{
+			if (e != nullptr)
+				e->reorder();
+		}
+	}
+
+	const Entity *AScene::getEntityPtr(const Entity &e) const
+	{
+		auto &entity = _pool[e.id];
+		if (entity.entity != e)
+			return nullptr;
+		return &(entity.entity);
+	}
+
+	const Entity &AScene::getEntityFromId(ENTITY_ID id) const
+	{
+		return _pool[id].entity;
+	}
+
+	AComponentManager *AScene::getComponentManager(COMPONENT_ID componentId)
+	{
+		return _componentsManagers[componentId];
+	}
+
+	AGE::Link *AScene::getLink(const Entity &e)
+	{
+		return &_pool[e.id].link;
+	}
+
+	AGE::Link *AScene::getLink(const ENTITY_ID &id)
+	{
+		return &_pool[id].link;
 	}
 }

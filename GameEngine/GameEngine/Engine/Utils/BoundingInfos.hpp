@@ -1,6 +1,8 @@
 #pragma once
 
-#include <Utils/GlmSerialization.hpp>
+#include <Utils/Serialization/MatrixSerialization.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <Utils/Containers/Vector.hpp>
 

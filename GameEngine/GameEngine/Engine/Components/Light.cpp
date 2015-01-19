@@ -3,6 +3,7 @@
 #include <Utils/MathematicTools.hh>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <glm/glm.hpp>
 
 namespace AGE
 {
