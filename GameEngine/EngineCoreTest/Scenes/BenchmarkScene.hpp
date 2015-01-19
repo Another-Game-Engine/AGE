@@ -9,7 +9,7 @@
 #include <Systems/CameraSystem.hh>
 #include <Components/MeshRenderer.hh>
 #include <Components/Light.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>
 #include <Skinning/AnimationInstance.hpp>
@@ -34,11 +34,6 @@ public:
 	virtual bool userUpdate(double time);
 
 private:
-<<<<<<< HEAD
-=======
-	static gl::RenderManager *_renderManager;
-	static RenderKey key;
->>>>>>> master
 
 	std::size_t _frameCounter = 0;
 	double _timeCounter = 0.0;
@@ -53,11 +48,6 @@ private:
 	Entity GLOBAL_SPONZA;
 	Entity GLOBAL_FLOOR;
 	Entity GLOBAL_HEAD;
-<<<<<<< HEAD
-	Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
-=======
-	gl::Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
 	static bool initRenderingJustOneTime;
 	std::list<std::future<bool>> assetLoadingList;
->>>>>>> master
 };

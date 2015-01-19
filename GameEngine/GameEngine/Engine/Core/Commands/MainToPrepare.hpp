@@ -1,12 +1,10 @@
-#ifndef __COMMANDS_MAIN_TO_PREPARE__
-#define __COMMANDS_MAIN_TO_PREPARE__
+#pragma once
 
 #include <glm/glm.hpp>
-#include <Utils/Containers/Vector.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <AssetManagement/Instance/MaterialInstance.hh>
+#include <AssetManagement/Instance/MeshInstance.hh>
 #include <Core/PrepareKey.hpp>
-#include <glm/glm.hpp>
-#include <Geometry/Material.hpp>
-#include <Geometry/Mesh.hpp>
 #include <Core/CullableObjects.hh>
 
 class AScene;
@@ -112,4 +110,3 @@ namespace AGE
 		};
 	}
 }
-#endif

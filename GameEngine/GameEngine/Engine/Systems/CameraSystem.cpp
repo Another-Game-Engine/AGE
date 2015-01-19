@@ -6,7 +6,7 @@
 #include <Components/CameraComponent.hpp>
 #include <Core/SceneManager.hh>
 #include <Core/PreparableObject.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Utils/DependenciesInjector.hpp>
 
 

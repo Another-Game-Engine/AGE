@@ -11,6 +11,8 @@
 #include <Core/PrepareKey.hpp>
 #include <Skinning/AnimationInstance.hpp>
 #include <cereal/types/memory.hpp>
+#include <AssetManagement/Instance/MaterialInstance.hh>
+#include <AssetManagement/Instance/MeshInstance.hh>
 
 namespace AGE
 {
@@ -34,9 +36,9 @@ namespace Component
 
 
 		MeshRenderer &setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh);
-		std::shared_ptr<AGE::MeshInstance> getMesh();
-		MeshRenderer &setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_mesh);
-		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
+		std::shared_ptr<MeshInstance> getMesh();
+		MeshRenderer &setMaterial(const std::shared_ptr<MaterialSetInstance> &_mesh);
+		std::shared_ptr<MaterialSetInstance> getMaterial();
 		MeshRenderer &setAnimation(const Key<AGE::AnimationInstance> &key);
 
 		virtual void postUnserialization(AScene *scene);
@@ -44,8 +46,8 @@ namespace Component
 	private:
 		AGE::PrepareKey _key;
 		AScene *_scene;
-		std::shared_ptr<AGE::MeshInstance> _mesh;
-		std::shared_ptr<AGE::MaterialSetInstance> _material;
+		std::shared_ptr<MeshInstance> _mesh;
+		std::shared_ptr<MaterialSetInstance> _material;
 		Key<AGE::AnimationInstance> _animation;
 
 		struct SerializationInfos

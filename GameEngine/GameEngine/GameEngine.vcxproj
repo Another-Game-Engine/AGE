@@ -233,7 +233,6 @@
     <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
-    <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
@@ -353,7 +352,6 @@
     <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
     <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
-    <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Data\MeshData.hh" />
     <ClInclude Include="Engine\Data\TextureData.hh" />

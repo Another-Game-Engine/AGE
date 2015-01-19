@@ -11,7 +11,7 @@
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Core/SceneManager.hh>
 #include <Context/IRenderContext.hh>
 #include <Core/Input.hh>

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Geometry/Mesh.hpp>
-#include <Geometry/Material.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <Utils/Containers/Vector.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Utils/AABoundingBox.hh>

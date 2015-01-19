@@ -53,7 +53,7 @@ namespace AGE
 			std::lock_guard<std::mutex> lock(_mutex);
 			if (_materials.find(filePath.getFullName()) != std::end(_materials)) 
 			{
-				return;
+				return (true);
 			}
 			_materials.insert(std::make_pair(filePath.getFullName(), material));
 		}
@@ -75,10 +75,10 @@ namespace AGE
 			{
 				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 				{
-					material->datas[i].emplace_back(std::make_shared<Diffuse>());
-					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_color(material_data.diffuse);
-					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_ratio(1.0f);
-					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(nullptr);
+					//material->datas[i].emplace_back(std::make_shared<Diffuse>());
+					//std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_color(material_data.diffuse);
+					//std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_ratio(1.0f);
+					//std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(nullptr);
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, _filePath.getFullName() + std::to_string(i), futureSubMaterial);
@@ -239,136 +239,61 @@ namespace AGE
 			meshInstance->subMeshs.resize(data->subMeshs.size());
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();
-			for (std::size_t i = 0; i < data->subMeshs.size(); ++i) 
-			{
-				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
-					// If no vertex pool correspond to submesh
-					std::vector<MeshInfos> order;
-					std::bitset<MeshInfos::END> infos;
-					for (auto &e : loadOrder) 
-					{
-						if (!data->subMeshs[i].infos.test(e))
-							continue;
-						order.push_back(e);
-						infos.set(e);
-					}
-					loadSubmesh(data, i, &meshInstance->subMeshs[i], order, infos, loadingChannel);
-					return AssetsLoadingResult(false);
-				});
-				pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
-			}
+			auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() {
+				// If no vertex pool correspond to submesh
+				std::vector<GLenum> types;
+				for (auto &e : loadOrder)
+				{
+					if (!data->subMeshs[0].infos.test(e))
+						continue;
+					types.emplace_back(g_InfosTypes[e]);
+				}
+				auto &paintingManager = GetRenderThread()->paintingManager;
+				if (!paintingManager.has_painter(types))
+				{
+					auto t = types;
+					meshInstance->painter = paintingManager.add_painter(std::move(t));
+				}
+				else
+				{
+					meshInstance->painter = paintingManager.get_painter(types);
+				}
+				for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
+				{
+					auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+						loadSubmesh(data, i, meshInstance->subMeshs[i], types, loadingChannel);
+						return AssetsLoadingResult(false);
+					});
+					pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
+				}
+				return (AssetsLoadingResult(false));
+			});
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 	}
 
-	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData
-		, std::size_t index
-		, SubMeshInstance *mesh
-		, const std::vector<MeshInfos> &order
-		, const std::bitset<MeshInfos::END> &infos
-		, const std::string &loadingChannel)
+	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance &mesh, const std::vector<GLenum> &types, const std::string &loadingChannel)
 	{
 		auto &data = fileData->subMeshs[index];
 		std::size_t size = data.infos.count();
-		std::shared_ptr<AGE::Vector<void*>> buffer = std::make_shared<AGE::Vector<void*>>();
-		buffer->resize(size);
-		std::shared_ptr<AGE::Vector<std::size_t>> nbrBuffer = std::make_shared<AGE::Vector<std::size_t>>();
-		nbrBuffer->resize(size);
+		auto buffers = std::make_shared<AGE::Vector<std::vector<uint8_t>>>();
+		buffers->resize(size);
 		std::size_t ctr = 0;
 		auto sizeofFloat = sizeof(float);
 		auto maxSize = data.positions.size();
-		for (auto &e : order)
-		{
-			switch (MeshInfos(e))
-			{
-			case Positions:
-				(*buffer)[ctr] = &data.positions[0].x;
-				(*nbrBuffer)[ctr] = data.positions.size() * 4 * sizeofFloat;
-				if (data.positions.size() > maxSize)
-					maxSize = data.positions.size();
-				break;
-			case Normals:
-				(*buffer)[ctr] = &data.normals[0].x;
-				(*nbrBuffer)[ctr] = data.normals.size() * 4 * sizeofFloat;
-				if (data.normals.size() > maxSize)
-					maxSize = data.normals.size();
-				break;
-			case Tangents:
-				(*buffer)[ctr] = &data.tangents[0].x;
-				(*nbrBuffer)[ctr] = data.tangents.size() * 4 * sizeofFloat;
-				if (data.tangents.size() > maxSize)
-					maxSize = data.tangents.size();
-				break;
-			case BiTangents:
-				(*buffer)[ctr] = &data.biTangents[0].x;
-				(*nbrBuffer)[ctr] = data.biTangents.size() * 4 * sizeofFloat;
-				if (data.biTangents.size() > maxSize)
-					maxSize = data.biTangents.size();
-				break;
-			case Uvs:
-				(*buffer)[ctr] = &data.uvs[0][0].x;
-				(*nbrBuffer)[ctr] = data.uvs[0].size() * 2 * sizeofFloat;
-				if (data.uvs[0].size() > maxSize)
-					maxSize = data.uvs[0].size();
-				break;
-			case Weights:
-				(*buffer)[ctr] = &data.weights[0].x;
-				(*nbrBuffer)[ctr] = data.weights.size() * 4 * sizeofFloat;
-				if (data.weights.size() > maxSize)
-					maxSize = data.weights.size();
-				break;
-			case BoneIndices:
-				(*buffer)[ctr] = &data.boneIndices[0].x;
-				(*nbrBuffer)[ctr] = data.boneIndices.size() * 4 * sizeofFloat;
-				if (data.boneIndices.size() > maxSize)
-					maxSize = data.boneIndices.size();
-				break;
-			case Colors:
-				(*buffer)[ctr] = &data.colors[0].x;
-				(*nbrBuffer)[ctr] = data.colors.size() * 4 * sizeofFloat;
-				if (data.colors.size() > maxSize)
-					maxSize = data.colors.size();
-				break;
-			default:
-				break;
-			}
-			++ctr;
-		}
-
-		mesh->boundingBox = data.boundingBox;
-		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
+		mesh.boundingBox = data.boundingBox;
+		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([&]() {
-			std::vector<GLenum> types;
-			for (auto &e : order)
-				types.emplace_back(g_InfosTypes[e]);
 			auto &paintingManager = GetRenderThread()->paintingManager;
-			if (!paintingManager.has_painter(types))
+			auto &painter = paintingManager.get_painter(mesh.painter);
+			mesh.vertices = painter->add_vertices(data.positions.size(), data.indices.size());
+			auto vertices = painter->get_vertices(mesh.vertices);
+			for (auto index = 0ull; vertices->nbr_buffer(); ++index)
 			{
-				mesh->painter = paintingManager.add_painter(std::move(types));
+				g_InfosTypes[types[index]].second(*vertices, index, data);
 			}
-			else
-			{
-				mesh->painter = paintingManager.get_painter(types);
-			}
-			auto &painter = paintingManager.get_painter(mesh->painter);
-			mesh->vertices = painter->add_vertices(data.positions.size(), data.indices.size());
-			auto vertices = painter->get_vertices(mesh->vertices);
-			for (auto index = 0ull; index < buffer->size(); ++index)
-			{
-
-			}
-
-
-			//mesh->vertices = m->addVertices(maxSize, std::cref(*(nbrBuffer.get())), std::cref(*(buffer.get())), pools.first);
-			//mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
-			//mesh->vertexPool = pools.first;
-			//mesh->indexPool = pools.second;
-		
-			//auto &pools = _pools.find(infos)->second;
-			//mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
-			//mesh->vertexPool = pools.first;
-			//mesh->indexPool = pools.second;
+			vertices->set_indices(data.indices);
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, data.name, future);

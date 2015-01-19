@@ -234,7 +234,7 @@ namespace AGE
 
 	void PrepareRenderThread::updateGeometry(
 		const PrepareKey &key
-		, const AGE::Vector<AGE::SubMeshInstance> &meshs)
+		, const Vector<SubMeshInstance> &meshs)
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);

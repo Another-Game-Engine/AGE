@@ -1,11 +1,13 @@
 #pragma once
 
+#include <array>
 #include <Utils/Containers/Queue.hpp>
 #include <Utils/Containers/Vector.hpp>
 #include <Core/Commands/MainToPrepare.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Entities/EntityTypedef.hpp>
 #include <Core/LooseOctree.hh>
+#include <AssetManagement/Instance/MeshInstance.hh>
 
 class AScene;
 

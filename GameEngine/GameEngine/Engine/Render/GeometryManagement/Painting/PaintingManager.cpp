@@ -1,5 +1,5 @@
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
-#include <Render/GeometryManagement/Painting/Painter.hh>
+# include <Render/GeometryManagement/Painting/Painter.hh>
 
 PaintingManager::PaintingManager()
 {
@@ -13,11 +13,10 @@ _painters(std::move(move._painters))
 }
 
 
-
 Key<Painter> PaintingManager::add_painter(std::vector<GLenum> &&types)
 {
-	_painters.emplace_back(types);
-	return (Key<Painter>::createKey(_painters.size() - 1));
+	_painters.emplace_back(std::make_shared<Painter>(types));
+	return (Key<Painter>::createKey(int(_painters.size()) - 1));
 }
 
 std::shared_ptr<Painter> const & PaintingManager::get_painter(Key<Painter> const &key) const
@@ -29,7 +28,7 @@ Key<Painter> PaintingManager::get_painter(std::vector<GLenum> const &types) cons
 {
 	for (auto index = 0ull; index < _painters.size(); ++index) {
 		if (_painters[index]->coherent(types)) {
-			return (Key<Painter>::createKey(index));
+			return (Key<Painter>::createKey(int(index)));
 		}
 	}
 	return (Key<Painter>::createKey(-1));

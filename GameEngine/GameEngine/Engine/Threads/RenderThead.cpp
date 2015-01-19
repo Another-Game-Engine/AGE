@@ -10,11 +10,8 @@
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
-<<<<<<< HEAD
 #include <Render/GeometryManagement/Painting/Painter.hh>
-=======
 #include <Utils/OpenGL.hh>
->>>>>>> master
 
 namespace AGE
 {
@@ -36,11 +33,6 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
-<<<<<<< HEAD
-=======
-			_render = msg.engine.lock()->setInstance<gl::RenderManager>();
-//			SDL_GL_SetSwapInterval(1);
->>>>>>> master
 			msg.setValue(true);
 		});
 

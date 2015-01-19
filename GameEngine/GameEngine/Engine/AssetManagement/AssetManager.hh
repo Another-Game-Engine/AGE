@@ -7,6 +7,7 @@
 #include <bitset>
 #include <AssetManagement/Data/MeshData.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Render/GeometryManagement/Data/Vertices.hh>
 #include <map>
 #include <future>
 #include <TMQ/message.hpp>
@@ -16,6 +17,20 @@ struct MeshInstance;
 struct SubMeshInstance;
 class ITexture;
 class Painter;
+
+# define LAMBDA_FUNCTION [](Vertices &vertices, size_t index, SubMeshData const &data)
+
+static std::pair<GLenum, std::function<void(Vertices &vertices, size_t index, SubMeshData const &data)>> g_InfosTypes[MeshInfos::END] =
+{
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.positions, index); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.normals, index); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.tangents, index); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.biTangents, index); }),
+	std::make_pair(GL_FLOAT_VEC2, LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0], index); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights, index); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, index); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, index); })
+};
 
 namespace AGE
 {
@@ -119,6 +134,6 @@ namespace AGE
 
 	private:
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
-		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::vector<MeshInfos> &order, const std::bitset<MeshInfos::END> &infos, const std::string &loadingChannel);
+		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance &mesh, const std::vector<GLenum> &types/*, const std::bitset<MeshInfos::END> &infos,*/, const std::string &loadingChannel);
 	};
 }

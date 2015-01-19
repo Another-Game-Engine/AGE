@@ -7,7 +7,6 @@
 # include <Utils/AABoundingBox.hh>
 # include <Utils/OpenGL.hh>
 
-
 enum MeshInfos
 {
 	Positions = 0,
@@ -19,18 +18,6 @@ enum MeshInfos
 	BoneIndices,
 	Colors,
 	END
-};
-
-static GLenum g_InfosTypes[MeshInfos::END] =
-{
-	GL_FLOAT_VEC4,
-	GL_FLOAT_VEC4,
-	GL_FLOAT_VEC4,
-	GL_FLOAT_VEC4,
-	GL_FLOAT_VEC2,
-	GL_FLOAT_VEC4,
-	GL_FLOAT_VEC4,
-	GL_FLOAT_VEC4
 };
 
 struct SubMeshData

@@ -18,7 +18,7 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PerformanceDebugger.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 
 #include <Utils/Age_Imgui.hpp>
 #include <Skinning/AnimationManager.hpp>
@@ -38,38 +38,6 @@
 
 using namespace AGE;
 
-<<<<<<< HEAD
-bool loadAssets(AGE::Engine *e)
-{
-#if 0
-	return AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
-		e->getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
-#ifdef RENDERING_ACTIVATED
-		e->getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage")/*, { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }*/);
-		// LOAD MATERIAL TO FIX
-		//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"));
-		e->getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage")/*, { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }*/);
-		// LOAD MATERIAL TO FIX
-		//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"));
-		e->getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage")/*, { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }*/);
-		// LOAD MATERIAL TO FIX
-		//e->getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"));
-		e->getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"));
-		e->getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"));
-
-		e->getInstance<AGE::AssetsManager>()->loadMesh(File("sponza/sponza.sage")/*, { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }*/);
-
-		// LOAD MATERIAL TO FIX
-		// e->getInstance<AGE::AssetsManager>()->loadMaterial(File("sponza/sponza.mage"));
-		return true;
-#endif
-	}).get();
-#endif
-	return (true);
-}
-
-=======
->>>>>>> master
 int			main(int ac, char **av)
 {
 	///////////////////////////////////////////////////////////////////////////////////

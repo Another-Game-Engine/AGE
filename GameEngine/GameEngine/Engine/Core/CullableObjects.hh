@@ -2,6 +2,7 @@
 
 #include <Core/CullableInterfaces.hh>
 #include <Skinning/AnimationInstance.hpp>
+#include <AssetManagement/Instance/MeshInstance.hh>
 
 namespace AGE
 {

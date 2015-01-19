@@ -108,7 +108,6 @@
     <ClCompile Include="Engine\Utils\BitOperations.cpp" />
     <ClCompile Include="Engine\Core\LooseOctree.cpp" />
     <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
-    <ClCompile Include="Engine\Core\RenderThread.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Painting\PaintingManager.cpp" />
   </ItemGroup>
@@ -304,7 +303,6 @@
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
-    <ClInclude Include="Engine\Core\RenderThread.hpp" />
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />

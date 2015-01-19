@@ -1,10 +1,10 @@
 #include <Components/MeshRenderer.hh>
 #include "Core/Engine.hh"
 #include <Core/AScene.hh>
-#include <Geometry/Mesh.hpp>
-#include <Geometry/Material.hpp>
+#include <AssetManagement/Instance/MeshInstance.hh>
+#include <AssetManagement/Instance/MaterialInstance.hh>
+#include <AssetManagement/AssetManager.hh>
 #include <assert.h>
-#include <Core/AssetsManager.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 
@@ -65,19 +65,19 @@ namespace Component
 		return (*this);
 	}
 
-	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
+	std::shared_ptr<MeshInstance> MeshRenderer::getMesh()
 	{
 		return _mesh;
 	}
 
-	MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &material)
+	MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<MaterialSetInstance> &material)
 	{
 		_material = material;
 		updateGeometry();
 		return (*this);
 	}
 
-	std::shared_ptr<AGE::MaterialSetInstance> MeshRenderer::getMaterial()
+	std::shared_ptr<MaterialSetInstance> MeshRenderer::getMaterial()
 	{
 		return _material;
 	}

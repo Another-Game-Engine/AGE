@@ -63,5 +63,5 @@ std::shared_ptr<type_t> Program::get_resource(Key<ProgramResource> const &key)
 	if (key) {
 		return (nullptr);
 	}
-	return (_program_resources[key.getId()].get());
+	return (_program_resources[key.getId()]->safe(sizeof(type_t::type_t)) ? _program_resources[key.getId()].get() : nullptr);
 }
