@@ -1,5 +1,7 @@
 #include "MainToPrepare.hpp"
-
+#include <Utils/Containers/Vector.hpp>
+#include <Geometry/Mesh.hpp>
+#include <Core/CullableObjects.hh>
 
 namespace AGE
 {

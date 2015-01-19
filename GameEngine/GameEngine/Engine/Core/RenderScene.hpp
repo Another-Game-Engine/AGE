@@ -6,6 +6,7 @@
 #include <Core/PrepareKey.hpp>
 #include <Entities/EntityTypedef.hpp>
 #include <Core/LooseOctree.hh>
+#include <Core/CullableObjects.hh>
 
 namespace AGE
 {

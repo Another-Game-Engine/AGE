@@ -1,18 +1,18 @@
-#ifndef __COMMANDS_MAIN_TO_PREPARE__
-#define __COMMANDS_MAIN_TO_PREPARE__
+#pragma once
 
 #include <glm/glm.hpp>
-#include <Utils/Containers/Vector.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <Core/PrepareKey.hpp>
-#include <glm/glm.hpp>
+#include <Render/Key.hh>
 #include <Geometry/Material.hpp>
-#include <Geometry/Mesh.hpp>
-#include <Core/CullableObjects.hh>
 
 namespace AGE
 {
 	class RenderScene;
 	class AScene;
+	struct SubMeshInstance;
+	struct AnimationInstance;
+
 	namespace Commands
 	{
 		namespace MainToPrepare
@@ -115,4 +115,3 @@ namespace AGE
 		};
 	}
 }
-#endif
