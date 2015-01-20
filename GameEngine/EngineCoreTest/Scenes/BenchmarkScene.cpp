@@ -19,6 +19,7 @@
 #include <Threads/TaskScheduler.hpp>
 #include <Components/CameraComponent.hpp>
 #include <Core/Input.hh>
+#include <fstream>
 
 namespace AGE
 {

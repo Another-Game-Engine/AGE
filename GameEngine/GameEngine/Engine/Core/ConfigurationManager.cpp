@@ -1,4 +1,5 @@
 #include "ConfigurationManager.hpp"
+#include <fstream>
 
 namespace AGE
 {

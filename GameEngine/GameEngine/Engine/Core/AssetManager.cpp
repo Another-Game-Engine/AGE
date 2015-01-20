@@ -12,6 +12,8 @@
 #include <Threads/QueueOwner.hpp>
 #include <Threads/Thread.hpp>
 #include <Utils/Serialization/SerializationArchives.hpp>
+#include <istream>
+#include <fstream>
 
 namespace AGE
 {

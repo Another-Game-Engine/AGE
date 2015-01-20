@@ -11,6 +11,9 @@
 #include <CONFIGS.hh>
 #include <Skinning/AnimationInstance.hpp>
 #include <Render/Pipeline.hh>
+#include <ostream>
+#include <fstream>
+#include <string>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
