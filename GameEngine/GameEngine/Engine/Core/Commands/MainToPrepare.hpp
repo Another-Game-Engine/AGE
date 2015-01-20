@@ -1,10 +1,10 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <glm/fwd.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Render/Key.hh>
 #include <Geometry/Material.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace AGE
 {

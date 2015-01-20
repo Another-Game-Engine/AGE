@@ -1,5 +1,8 @@
 #pragma once
 
+// todo to pass in .cpp
+#include <glm/gtc/quaternion.hpp>
+
 #include "AssimpLoader.hpp"
 
 #include <map>

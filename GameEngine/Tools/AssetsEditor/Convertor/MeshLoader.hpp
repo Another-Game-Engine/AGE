@@ -7,6 +7,7 @@
 #include <Skinning/Skeleton.hpp>
 #include <Geometry/Mesh.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace AGE
 {

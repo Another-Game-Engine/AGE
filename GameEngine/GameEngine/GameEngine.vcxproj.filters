@@ -89,6 +89,8 @@
     <ClCompile Include="Engine\Utils\Serialization\VectorSerialization.cpp" />
     <ClCompile Include="Engine\Utils\Serialization\QuaternionSerialization.cpp" />
     <ClCompile Include="Engine\Utils\Serialization\MatrixSerialization.cpp" />
+    <ClCompile Include="Engine\Core\Tasks\RenderTasks.cpp" />
+    <ClCompile Include="Engine\Geometry\Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />

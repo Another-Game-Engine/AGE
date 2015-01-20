@@ -236,6 +236,8 @@
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
+    <ClCompile Include="Engine\Core\Tasks\RenderTasks.cpp" />
+    <ClCompile Include="Engine\Geometry\Mesh.cpp" />
     <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
     <ClCompile Include="Engine\Render\Data.cpp" />

@@ -2,6 +2,8 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Geometry/Mesh.hpp>
 #include <Core/CullableObjects.hh>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace AGE
 {
