@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/fwd.hpp>
-#include <glm/glm.hpp>
+#include <glm/detail/type_vec2.hpp>
 #include <TMQ/message.hpp>
 
 namespace AGE

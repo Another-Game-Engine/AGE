@@ -93,6 +93,8 @@
     <ClCompile Include="Engine\Geometry\Mesh.cpp" />
     <ClCompile Include="Engine\Systems\FPControllerSystem.cpp" />
     <ClCompile Include="Engine\Geometry\MaterialData.cpp" />
+    <ClCompile Include="Engine\Physic\DynamicMotionState.cpp" />
+    <ClCompile Include="Engine\Skinning\Bone.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
