@@ -2,7 +2,7 @@
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
 #include <Geometry/Mesh.hpp>
-#include <Geometry/Material.hpp>
+#include <Geometry/MaterialData.hpp>
 #include <Texture/Texture.hpp>
 #include <Render/RenderManager.hh>
 #include <Threads/ThreadManager.hpp>

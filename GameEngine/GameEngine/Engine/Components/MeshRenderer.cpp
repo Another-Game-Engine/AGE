@@ -2,7 +2,7 @@
 #include "Core/Engine.hh"
 #include <Core/AScene.hh>
 #include <Geometry/Mesh.hpp>
-#include <Geometry/Material.hpp>
+#include <Geometry/MaterialData.hpp>
 #include <assert.h>
 #include <Core/AssetsManager.hpp>
 #include <Threads/ThreadManager.hpp>

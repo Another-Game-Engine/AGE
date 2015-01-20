@@ -3,7 +3,7 @@
 #include <glm/fwd.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Render/Key.hh>
-#include <Geometry/Material.hpp>
+#include <Geometry/MaterialData.hpp>
 #include <glm/gtc/quaternion.hpp>
 
 namespace AGE

@@ -237,7 +237,7 @@
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Core\Tasks\RenderTasks.cpp" />
-    <ClCompile Include="Engine\Geometry\Material.cpp" />
+    <ClCompile Include="Engine\Geometry\MaterialData.cpp" />
     <ClCompile Include="Engine\Geometry\Mesh.cpp" />
     <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
     <ClCompile Include="Engine\Render\Buffer.cpp" />
@@ -322,6 +322,7 @@
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Geometry\MaterialData.hpp" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
@@ -340,7 +341,6 @@
     <ClInclude Include="Engine\Core\RenderScene.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
-    <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />

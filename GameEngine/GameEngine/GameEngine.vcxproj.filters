@@ -92,7 +92,7 @@
     <ClCompile Include="Engine\Core\Tasks\RenderTasks.cpp" />
     <ClCompile Include="Engine\Geometry\Mesh.cpp" />
     <ClCompile Include="Engine\Systems\FPControllerSystem.cpp" />
-    <ClCompile Include="Engine\Geometry\Material.cpp" />
+    <ClCompile Include="Engine\Geometry\MaterialData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -112,7 +112,6 @@
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
-    <ClInclude Include="Engine\Geometry\Material.hpp" />
     <ClInclude Include="Engine\Geometry\Mesh.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
@@ -246,6 +245,7 @@
     <ClInclude Include="Engine\Utils\Serialization\MatrixSerialization.hpp" />
     <ClInclude Include="Engine\Utils\Serialization\SerializationArchives.hpp" />
     <ClInclude Include="Engine\Utils\Serialization\SerializationMacros.hpp" />
+    <ClInclude Include="Engine\Geometry\MaterialData.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -163,5 +163,3 @@ class BinaryInputArchive; \
 			    }
 
 #define MACRO_STR(str)(#str)
-
-#define SERIALIZATION_CODE_BLOCK(code)(*"*/ code /*"*);
