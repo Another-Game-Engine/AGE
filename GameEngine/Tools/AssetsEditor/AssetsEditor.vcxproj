@@ -71,16 +71,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\git\AGE\GameEngine\Vendors\ResIL\include;$(SolutionDir)/Vendors/assimp/include;$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/FreeImage/include;;$(SolutionDir)Vendors/FreeImagePlus/include</IncludePath>
-    <LibraryPath>$(SolutionDir)/Vendors/assimp/x64/Debug;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)Vendors/FreeImage/Debug/;$(SolutionDir)Vendors/FreeImagePlus/Debug/</LibraryPath>
+    <IncludePath>D:\git\AGE\GameEngine\Vendors\ResIL\include;$(ProjectDir)../../Vendors/assimp/include;$(ProjectDir)../..Vendors/OpenGL/include;$(ProjectDir)../..GameEngine/Engine;$(ProjectDir)../..GameEngine;$(ProjectDir);$(ProjectDir)../..Vendors;$(ProjectDir)../..Vendors/TinyObjLoader;$(IncludePath);$(ProjectDir)../..Vendors/boost_1_55_0;$(ProjectDir)../..Vendors\bullet\src;$(ProjectDir)../..Vendors\fmod\inc;$(ProjectDir)../..Vendors/FreeImage/include;$(ProjectDir)../..Vendors/FreeImagePlus/include</IncludePath>
+    <LibraryPath>$(ProjectDir)../../Vendors/assimp/x64/Debug;$(ProjectDir)../../Vendors/OpenGL/lib/x64;$(ProjectDir)../../Vendors\fmod\lib;$(ProjectDir)../../Vendors/bullet\lib\x64Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)../../Vendors/FreeImage/Debug/;$(ProjectDir)../../Vendors/FreeImagePlus/Debug/</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)/Vendors/assimp/include;$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/FreeImage/include;;$(SolutionDir)Vendors/FreeImagePlus/include</IncludePath>
-    <LibraryPath>$(SolutionDir)/Vendors/assimp/x64/Release;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)Vendors/FreeImage/Release;$(SolutionDir)Vendors/FreeImagePlus/Release</LibraryPath>
+    <IncludePath>$(ProjectDir)../../Vendors/assimp/include;$(ProjectDir)../../Vendors/OpenGL/include;$(ProjectDir)../../GameEngine/Engine;$(ProjectDir)../../GameEngine;$(ProjectDir);$(ProjectDir)../../Vendors;$(ProjectDir)../../Vendors/TinyObjLoader;$(IncludePath);$(ProjectDir)../../Vendors/boost_1_55_0;$(ProjectDir)../../Vendors\bullet\src;$(ProjectDir)../../Vendors\fmod\inc;$(ProjectDir)../../Vendors/FreeImage/include;$(ProjectDir)../../Vendors/FreeImagePlus/include</IncludePath>
+    <LibraryPath>$(ProjectDir)../../Vendors/assimp/x64/Release;$(ProjectDir)../../Vendors/OpenGL/lib/x64;$(ProjectDir)../../Vendors\fmod\lib;$(ProjectDir)../../Vendors/bullet\lib\x64Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)../../Vendors/FreeImage/Release;$(ProjectDir)../../Vendors/FreeImagePlus/Release</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

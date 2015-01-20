@@ -83,8 +83,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc</IncludePath>
+    <LibraryPath>$(ProjectDir)../Vendors/OpenGL/lib/x64;$(ProjectDir)../Vendors\fmod\lib;$(ProjectDir)../Vendors/bullet\lib\x64Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)../Vendors/OpenGL/include;$(ProjectDir)../GameEngine/Engine;$(ProjectDir)../GameEngine;$(ProjectDir);$(ProjectDir)../Vendors;$(ProjectDir)../Vendors/TinyObjLoader;$(IncludePath);$(ProjectDir)../Vendors/boost_1_55_0;$(ProjectDir)../Vendors\bullet\src;$(ProjectDir)../Vendors\fmod\inc</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
