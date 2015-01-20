@@ -2,10 +2,13 @@
 
 #include <string>
 #include <glm/fwd.hpp>
-#include <Utils/Serialization/VectorSerialization.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/string.hpp>
+//#include <Utils/Serialization/VectorSerialization.hpp>
+//#include <cereal/types/vector.hpp>
+//#include <cereal/types/string.hpp>
+#include <Utils/Serialization/SerializationMacros.hpp>
 #include <Render/Material.hh>
+
+SERIALIZATION_ARCHIVE_FORWARD_DECLARATION()
 
 namespace AGE
 {
@@ -25,11 +28,7 @@ namespace AGE
 		std::string normalTexPath;
 		std::string bumpTexPath;
 
-		template <class Archive>
-		void serialize(Archive &ar)
-		{
-			ar(diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath, bumpTexPath);
-		}
+		SERIALIZATION_SERIALIZE_METHOD_DECLARATION();
 	};
 
 	struct MaterialDataSet
