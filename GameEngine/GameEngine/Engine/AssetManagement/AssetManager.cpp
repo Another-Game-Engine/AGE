@@ -246,7 +246,7 @@ namespace AGE
 				{
 					if (!data->subMeshs[0].infos.test(e))
 						continue;
-					types.emplace_back(g_InfosTypes[e]);
+					types.emplace_back(g_InfosTypes[e].first);
 				}
 				auto &paintingManager = GetRenderThread()->paintingManager;
 				if (!paintingManager.has_painter(types))
@@ -271,6 +271,7 @@ namespace AGE
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		return (true);
 	}
 
 	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance &mesh, const std::vector<GLenum> &types, const std::string &loadingChannel)

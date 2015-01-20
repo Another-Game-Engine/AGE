@@ -1,5 +1,9 @@
 #pragma once
 
+# include <cereal/archives/portable_binary.hpp>
+# include <cereal/types/vector.hpp>
+# include <cereal/types/bitset.hpp>
+# include <Utils/GlmSerialization.hpp>
 # include <string>
 # include <vector>
 # include <glm/glm.hpp>

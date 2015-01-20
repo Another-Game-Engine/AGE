@@ -155,7 +155,7 @@ namespace AGE
 
 	RenderScene &RenderScene::updateGeometry(
 		const PrepareKey &key
-		, const AGE::Vector<AGE::SubMeshInstance> &meshs)
+		, const AGE::Vector<SubMeshInstance> &meshs)
 	{
 		assert(!key.invalid() || key.type != PrepareKey::Type::Drawable);
 		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs);

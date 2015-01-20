@@ -14,10 +14,7 @@
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
 
-namespace AGE
-{
-	struct MeshInstance;
-}
+struct MeshInstance;
 
 namespace Component
 {
@@ -28,14 +25,14 @@ namespace Component
 		MeshRenderer(MeshRenderer &&o);
 		MeshRenderer &operator=(MeshRenderer &&o);
 		
-		void init(AScene *, std::shared_ptr<AGE::MeshInstance> file);
+		void init(AScene *, std::shared_ptr<MeshInstance> file);
 		virtual void reset(AScene *);
 
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
 
 
-		MeshRenderer &setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh);
+		MeshRenderer &setMesh(const std::shared_ptr<MeshInstance> &_mesh);
 		std::shared_ptr<MeshInstance> getMesh();
 		MeshRenderer &setMaterial(const std::shared_ptr<MaterialSetInstance> &_mesh);
 		std::shared_ptr<MaterialSetInstance> getMaterial();

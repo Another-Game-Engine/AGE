@@ -41,7 +41,7 @@ namespace Component
 		return *this;
 	}
 
-	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r)
+	void MeshRenderer::init(AScene *scene, std::shared_ptr<MeshInstance> r)
 	{
 		_scene = scene;
 		setMesh(r);
@@ -55,7 +55,7 @@ namespace Component
 		_key = AGE::PrepareKey();
 	}
 
-	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<AGE::MeshInstance> &mesh)
+	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<MeshInstance> &mesh)
 	{
 		_mesh = mesh;
 		_key = AGE::GetPrepareThread()->addMesh();

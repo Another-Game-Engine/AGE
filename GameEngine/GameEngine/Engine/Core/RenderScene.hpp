@@ -10,6 +10,7 @@
 #include <AssetManagement/Instance/MeshInstance.hh>
 
 class AScene;
+struct SubMeshInstance;
 
 namespace AGE
 {
@@ -18,7 +19,6 @@ namespace AGE
 	struct PointLight;
 	struct Camera;
 	struct DrawableCollection;
-	struct SubMeshInstance;
 	class PrepareRenderThread;
 	class Engine;
 
@@ -60,7 +60,7 @@ namespace AGE
 		RenderScene &setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 		RenderScene &updateGeometry(
 			const PrepareKey &key
-			, const AGE::Vector<AGE::SubMeshInstance> &meshs);
+			, const AGE::Vector<SubMeshInstance> &meshs);
 		DRAWABLE_ID addDrawable(USER_OBJECT_ID uid);
 		void removeDrawableObject(DRAWABLE_ID id);
 	private:
