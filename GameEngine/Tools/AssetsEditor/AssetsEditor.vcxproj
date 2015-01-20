@@ -157,6 +157,7 @@
     <ClCompile Include="Folder.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
+    <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetFileCreator.hpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="File.hpp" />
     <ClInclude Include="Folder.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
+    <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">

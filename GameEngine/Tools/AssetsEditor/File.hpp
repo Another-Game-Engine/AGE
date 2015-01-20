@@ -3,6 +3,8 @@
 #include <string>
 #include <filesystem>
 #include <array>
+#include <set>
+
 namespace AGE
 {
 	namespace AE
@@ -11,7 +13,7 @@ namespace AGE
 
 		typedef std::tr2::sys::path Path;
 
-		class AssetFile
+		class AssetFile : std::enable_shared_from_this<AssetFile>
 		{
 		public:
 			enum PrintInfosTypes
@@ -27,7 +29,7 @@ namespace AGE
 
 			AssetFile() = delete;
 			AssetFile(const std::tr2::sys::path &path, const std::string &type, Folder *parent = nullptr);
-			void printImgUi(AssetFile::PrintInfos infos = AssetFile::Name | AssetFile::Type);
+			void printImgUi(AssetFile::PrintInfos infos = AssetFile::Name | AssetFile::Type, std::set<std::shared_ptr<AssetFile>> *list = nullptr);
 			virtual ~AssetFile();
 			std::string getDate();
 			static std::string getExtension(const std::string &path);
@@ -36,6 +38,7 @@ namespace AGE
 			std::array<float, 3> _color;
 		private:
 			bool _active;
+			bool _selected;
 			const std::tr2::sys::path _path;
 			Folder *_folder;
 			const std::string _type;

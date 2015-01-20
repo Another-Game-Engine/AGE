@@ -14,6 +14,7 @@ namespace AGE
 				, _path(path)
 				, _folder(parent)
 				, _type(type)
+				, _selected(false)
 			{
 				_color.fill(0.5f);
 			}
@@ -32,7 +33,7 @@ namespace AGE
 				return res.str();
 			}
 
-			void AssetFile::printImgUi(AssetFile::PrintInfos infos)
+			void AssetFile::printImgUi(AssetFile::PrintInfos infos, std::set<std::shared_ptr<AssetFile>> *list)
 			{
 				if (!_active)
 					return;
@@ -42,8 +43,24 @@ namespace AGE
 				}
 				auto t = countOne(infos);
 				ImGui::Columns(t);
-
-				if (infos & Name)
+				if (list && infos & Name)
+				{
+					if (ImGui::Checkbox(_path.filename().c_str(), &_selected))
+					{
+						if (_selected)
+						{
+							list->insert(shared_from_this());
+						}
+						else
+						{
+							auto f = list->find(shared_from_this());
+							if (f != list->end())
+								list->erase(f);
+						}
+					}
+					ImGui::NextColumn();
+				}
+				else if (infos & Name)
 				{
 					ImGui::Text(_path.filename().c_str());
 					ImGui::NextColumn();

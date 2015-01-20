@@ -19,7 +19,7 @@ namespace AGE
 			Folder(const std::string &path, Folder* parent = nullptr);
 			Folder(const std::tr2::sys::basic_directory_entry<std::tr2::sys::path> &path, Folder *parent = nullptr);
 			void list();
-			void printImgUi(AssetFile::PrintInfos infos = AssetFile::Name | AssetFile::Type);
+			void printImgUi(AssetFile::PrintInfos infos = AssetFile::Name | AssetFile::Type, std::set<std::shared_ptr<AssetFile>> *list = nullptr);
 			void filesFilter(std::function<bool(const std::tr2::sys::path& file)> &filter);
 			void foldersFilter(std::function<bool(const std::tr2::sys::path& file)> &filter);
 			void clearFileFilter();

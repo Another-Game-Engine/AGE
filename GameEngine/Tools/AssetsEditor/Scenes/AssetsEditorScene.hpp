@@ -3,6 +3,7 @@
 #include <Core/AScene.hh>
 #include <Core/Engine.hh>
 #include <memory>
+#include <Folder.hpp>
 
 namespace AGE
 {
@@ -14,5 +15,10 @@ namespace AGE
 		virtual ~AssetsEditorScene(void);
 		virtual bool userStart();
 		virtual bool userUpdate(double time);
+
+	private:
+		AE::Folder _raw;
+	 	AE::Folder _cook;
+		std::set<std::shared_ptr<AE::AssetFile>> _selectedRaw;
 	};
 }

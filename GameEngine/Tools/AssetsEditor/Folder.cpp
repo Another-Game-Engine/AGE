@@ -95,7 +95,7 @@ namespace AGE
 		}
 
 
-		void Folder::printImgUi(AssetFile::PrintInfos infos)
+		void Folder::printImgUi(AssetFile::PrintInfos infos, std::set<std::shared_ptr<AssetFile>> *list)
 		{
 			if (ImGui::TreeNode((void*)(this), _path.path().filename().c_str()))
 			{
@@ -104,12 +104,12 @@ namespace AGE
 				{
 					if (e->_active)
 					{
-						e->printImgUi(infos);
+						e->printImgUi(infos, list);
 					}
 				}
 				for (auto &e : _files)
 				{
-					e->printImgUi(infos);
+					e->printImgUi(infos, list);
 				}
 				ImGui::Separator();
 				ImGui::TreePop();
