@@ -1,12 +1,12 @@
 #pragma once
 
-#include <File.hpp>
+#include "RawFile.hpp"
 
 namespace AGE
 {
 	namespace AE
 	{
-		class RawTextureFile : public AssetFile
+		class RawTextureFile : public RawFile
 		{
 		public:
 			virtual ~RawTextureFile();

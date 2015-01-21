@@ -8,7 +8,7 @@ namespace AGE
 			{
 			}
 			RawTextureFile::RawTextureFile(const AE::Path &path, Folder *parent)
-				: AssetFile(path, "Texture | Raw", parent)
+				: RawFile(path, "Texture | Raw", parent)
 			{
 				_color = { { 0.02f, 0.4f, 0.8f } };
 			}
