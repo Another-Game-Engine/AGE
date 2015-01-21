@@ -63,16 +63,19 @@ namespace AGE
 		}
 		ImGui::EndChild();
 		ImGui::SameLine();
-		ImGui::BeginChild("Cook list", ImVec2(ImGui::GetWindowWidth() * 0.15f, ImGui::GetIO().DisplaySize.y), true);
+		ImGui::BeginChild("Cook list", ImVec2(ImGui::GetWindowWidth() * 0.15f, ImGui::GetIO().DisplaySize.y), false);
 		{
 			{
-				ImGui::BeginChild("Raw", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.75 - 10), false);
-				_raw.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date), &_selectedRaw);
+				ImGui::BeginChild("Selected", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.75 - 10), false);
+				for (auto &e : _selectedRaw)
+				{
+					e->printImgUi(AE::AssetFile::Name);
+				}
 				ImGui::EndChild();
 			}
 			{
-				ImGui::BeginChild("Cooked", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.25 - 10), false);
-				_cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+				ImGui::BeginChild("Cooked", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.25 - 10), true);
+				//_cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
 				ImGui::EndChild();
 			}
 		}
