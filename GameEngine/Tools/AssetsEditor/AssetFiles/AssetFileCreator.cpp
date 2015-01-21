@@ -1,4 +1,4 @@
-#include <AssetFileCreator.hpp>
+#include <AssetFiles/AssetFileCreator.hpp>
 #include <Utils/FileSystem.hpp>
 #include <AssetFiles/RawFile.hpp>
 #include <AssetFiles/AssetsTypes.hpp>

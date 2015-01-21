@@ -151,7 +151,7 @@
   <ItemGroup>
     <ClCompile Include="AssetFiles\RawFile.cpp" />
     <ClCompile Include="AssetsDatabase.cpp" />
-    <ClCompile Include="AssetFileCreator.cpp" />
+    <ClCompile Include="AssetFiles\AssetFileCreator.cpp" />
     <ClCompile Include="AssetFiles\File.cpp" />
     <ClCompile Include="AssetFiles\Folder.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -162,7 +162,7 @@
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
     <ClInclude Include="AssetFiles\RawFile.hpp" />
     <ClInclude Include="AssetsDatabase.hpp" />
-    <ClInclude Include="AssetFileCreator.hpp" />
+    <ClInclude Include="AssetFiles\AssetFileCreator.hpp" />
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
     <ClInclude Include="Convertor\AssimpLoader.hpp" />
