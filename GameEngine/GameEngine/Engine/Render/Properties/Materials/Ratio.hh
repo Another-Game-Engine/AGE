@@ -6,8 +6,7 @@
 class Ratio : public AProperty
 {
 public:
-	Ratio(std::string const &add_name, std::vector<std::shared_ptr<Program>> const &programs);
-	Ratio(std::vector<std::shared_ptr<Program>> const &programs);
+	Ratio(std::string const &add_name);
 	Ratio(Ratio &&move);
 
 public:

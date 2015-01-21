@@ -1,14 +1,8 @@
 # include <Render/Properties/Materials/MapColor.hh>
 # include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 
-MapColor::MapColor(std::string const &add_name, std::vector<std::shared_ptr<Program>> const &programs) :
-AProperty(add_name + "_map", programs)
-{
-
-}
-
-MapColor::MapColor(std::vector<std::shared_ptr<Program>> const &programs) :
-AProperty(std::string("map"), programs)
+MapColor::MapColor(std::string const &add_name) :
+AProperty(add_name + "_map")
 {
 
 }

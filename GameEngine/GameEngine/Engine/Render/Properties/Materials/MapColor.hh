@@ -7,8 +7,7 @@ class Texture2D;
 class MapColor : public AProperty
 {
 public:
-	MapColor(std::string const &add_name, std::vector<std::shared_ptr<Program>> const &programs);
-	MapColor(std::vector<std::shared_ptr<Program>> const &programs);
+	MapColor(std::string const &add_name);
 	MapColor(MapColor &&move);
 
 public:

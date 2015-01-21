@@ -7,14 +7,6 @@ _name(std::move(name))
 
 }
 
-AProperty::AProperty(std::string &&name, std::vector<std::shared_ptr<Program>> const &programs) :
-_name(std::move(name))
-{
-	for (auto &program : programs) {
-		_resources.emplace_back(std::make_pair(program, program->get_resource_interface(_name)));
-	}
-}
-
 AProperty::AProperty(AProperty &&move) :
 _name(std::move(move._name)),
 _resources(std::move(move._resources))
@@ -35,4 +27,12 @@ std::shared_ptr<IProgramResources> const & AProperty::get_resource(std::shared_p
 		}
 	}
 	return (nullptr);
+}
+
+IProperty & AProperty::set_program(std::vector<std::shared_ptr<Program>> const &programs)
+{
+	for (auto &program : programs) {
+		_resources.emplace_back(std::make_pair(program, program->get_resource_interface(_name)));
+	}
+	return (*this);
 }

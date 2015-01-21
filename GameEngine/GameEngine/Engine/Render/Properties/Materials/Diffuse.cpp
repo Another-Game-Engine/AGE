@@ -1,10 +1,10 @@
 # include <Render/Properties/Materials/Diffuse.hh>
 
-Diffuse::Diffuse(std::vector<std::shared_ptr<Program>> const &programs) :
+Diffuse::Diffuse() :
 AProperty(std::string("diffuse_")),
-_ratio("diffuse_", programs),
-_color("diffuse_", programs),
-_mapColor("diffuse_", programs)
+_ratio("diffuse_"),
+_color("diffuse_"),
+_mapColor("diffuse_")
 {
 
 }
@@ -56,6 +56,15 @@ std::shared_ptr<Texture2D> const & Diffuse::get_map() const
 Diffuse & Diffuse::set_map(std::shared_ptr<Texture2D> const &m)
 {
 	_mapColor.set(m);
+	return (*this);
+}
+
+IProperty & Diffuse::set_program(std::vector<std::shared_ptr<Program>> const &programs)
+{
+	AProperty::set_program(programs);
+	_ratio.set_program(programs);
+	_color.set_program(programs);
+	_mapColor.set_program(programs);
 	return (*this);
 }
 

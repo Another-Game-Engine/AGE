@@ -1,16 +1,9 @@
 # include <Render/Properties/Materials/Ratio.hh>
 # include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 
-Ratio::Ratio(std::string const &add_name, std::vector<std::shared_ptr<Program>> const &programs) :
-AProperty(add_name + "ratio", programs),
+Ratio::Ratio(std::string const &add_name) :
+AProperty(add_name + "ratio"),
 _ratio(1.f)
-{
-
-}
-
-Ratio::Ratio(std::vector<std::shared_ptr<Program>> const &programs) :
-AProperty(std::string("ratio"), programs),
-_ratio(1.0f)
 {
 
 }

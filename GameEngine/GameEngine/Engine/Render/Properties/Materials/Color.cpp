@@ -1,15 +1,8 @@
 #include <Render/Properties/Materials/Color.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
 
-Color::Color(std::string const &add_name, std::vector<std::shared_ptr<Program>> const &programs) :
-AProperty(add_name + "color", programs),
-_color(glm::vec4(1.0f))
-{
-
-}
-
-Color::Color(std::vector<std::shared_ptr<Program>> const &programs) :
-AProperty(std::string("color"), programs),
+Color::Color(std::string const &add_name) :
+AProperty(add_name + "color"),
 _color(glm::vec4(1.0f))
 {
 

@@ -51,7 +51,7 @@ namespace AGE
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_materials.find(filePath.getFullName()) != std::end(_materials)) 
+			if (_materials.find(filePath.getFullName()) != std::end(_materials))
 			{
 				return (true);
 			}
@@ -75,10 +75,10 @@ namespace AGE
 			{
 				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 				{
-					//material->datas[i].emplace_back(std::make_shared<Diffuse>());
-					//std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_color(material_data.diffuse);
-					//std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_ratio(1.0f);
-					//std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(nullptr);
+					material->datas[i].emplace_back(std::make_shared<Diffuse>());
+					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_color(material_data.diffuse);
+					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_ratio(1.0f);
+					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(nullptr);
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, _filePath.getFullName() + std::to_string(i), futureSubMaterial);

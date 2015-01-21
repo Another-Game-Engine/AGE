@@ -5,8 +5,7 @@
 class Color : public AProperty
 {
 public:
-	Color(std::string const &add_name, std::vector<std::shared_ptr<Program>> const &programs);
-	Color(std::vector<std::shared_ptr<Program>> const &programs);
+	Color(std::string const &add_name);
 	Color(Color &&move);
 
 public:

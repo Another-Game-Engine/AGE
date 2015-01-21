@@ -2,13 +2,13 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 
 Transformation::Transformation(std::vector<std::shared_ptr<Program>> const &programs) :
-Transformation(glm::mat4(1.0f), programs)
+Transformation(glm::mat4(1.0f))
 {
 
 }
 
-Transformation::Transformation(glm::mat4 const &model_matrix, std::vector<std::shared_ptr<Program>> const &programs) :
-AProperty(std::string("model_matrix"), programs),
+Transformation::Transformation(glm::mat4 const &model_matrix) :
+AProperty(std::string("model_matrix")),
 _model_matrix(model_matrix)
 {
 

@@ -10,7 +10,7 @@ class Transformation : public AProperty
 {
 public:
 	Transformation(std::vector<std::shared_ptr<Program>> const &programs);
-	Transformation(glm::mat4 const &model_matrix, std::vector<std::shared_ptr<Program>> const &programs);
+	Transformation(glm::mat4 const &model_matrix);
 	Transformation(Transformation &&move);
 	Transformation(Transformation const &copy) = delete;
 
