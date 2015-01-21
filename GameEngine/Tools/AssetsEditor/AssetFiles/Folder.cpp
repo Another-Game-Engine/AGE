@@ -3,7 +3,7 @@
 #include <imgui\imgui.h>
 #include <regex>
 
-#include "AssetFileCreator.hpp"
+#include "AssetFileManager.hpp"
 
 #include <iostream>
 
@@ -50,7 +50,7 @@ namespace AGE
 
 				if (!std::tr2::sys::is_directory(file))
 				{
-					auto n = AssetFileCreator::CreateFile(file.relative_path(), this);
+					auto n = AssetFileManager::CreateFile(file.relative_path(), this);
 					_files.push_back(n);
 					std::cout << file.relative_path() << std::endl;
 				}
