@@ -2,7 +2,6 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
-#include <Core/OctreeNode.hh>
 #include <Core/Commands/Render.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -21,6 +20,7 @@ namespace AGE
 		, _cameraCounter(0)
 	{
 		_drawables.reserve(65536);
+		_drawablesToMove.reserve(65536);
 		assert(prepareThread && engine && scene);
 	}
 
@@ -164,7 +164,7 @@ namespace AGE
 		return (*this);
 	}
 
-	DRAWABLE_ID RenderScene::addDrawable(USER_OBJECT_ID uid)
+	DRAWABLE_ID RenderScene::_addDrawable(USER_OBJECT_ID uid)
 	{
 		DRAWABLE_ID res = DRAWABLE_ID(-1);
 		Drawable *co = nullptr;
@@ -189,9 +189,16 @@ namespace AGE
 	{
 		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
 #ifdef ACTIVATE_OCTREE_CULLING
+		if (_drawables[id].hasMoved)
+		{
+			uint32_t idxMoveBuffer = _drawables[id].moveBufferIdx;
+
+			_drawablesToMove[idxMoveBuffer] = _drawablesToMove[_drawablesToMove.size() - 1];
+			_drawables[_drawablesToMove[idxMoveBuffer]].moveBufferIdx = idxMoveBuffer;
+			_drawablesToMove.pop_back();
+		}
 		// remove drawable from octree
-		if (_drawables[id].toAddInOctree == false)
-			_octree.removeElement(&_drawables[id]);
+		_octree.removeElement(&_drawables[id]);
 #endif
 		_drawables[id].reset();
 		assert(id != (std::size_t)(-1));
@@ -288,7 +295,7 @@ namespace AGE
 			uo->drawableCollection.clear();
 			for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
 			{
-				auto id = addDrawable(msg.key.id);
+				auto id = _addDrawable(msg.key.id);
 				uo->drawableCollection.push_back(id);
 				_drawables[id].mesh = msg.submeshInstances[i];
 				_drawables[id].material = msg.materialInstances[i];
@@ -301,8 +308,16 @@ namespace AGE
 				_drawables[id].orientation = uo->orientation;
 				_drawables[id].scale = uo->scale;
 				_drawables[id].meshAABB = msg.submeshInstances[i].boundingBox;
-				_drawables[id].toAddInOctree = true;
 				_drawables[id].animation = msg.animation;
+				_drawables[id].currentNode = UNDEFINED_IDX;
+				_drawables[id].transformation = glm::scale(glm::translate(glm::mat4(1),
+															_drawables[id].position) * glm::toMat4(_drawables[id].orientation),
+															_drawables[id].scale);
+				_drawables[id].currentAABB.fromTransformedBox(_drawables[id].meshAABB, _drawables[id].transformation);
+				_drawables[id].previousAABB = _drawables[id].currentAABB;
+				_drawables[id].hasMoved = false;
+				_octree.addElement(&_drawables[id]);
+				assert(_drawables[id].currentNode != UNDEFINED_IDX);
 			}
 		}
 
@@ -326,7 +341,13 @@ namespace AGE
 				for (auto &e : uo->drawableCollection)
 				{
 					_drawables[e].position = uo->position;
-					_drawables[e].hasMoved = true;
+					assert(_drawables[e].currentNode != UNDEFINED_IDX);
+					if (_drawables[e].hasMoved == false)
+					{
+						_drawables[e].hasMoved = true;
+						_drawables[e].moveBufferIdx = _drawablesToMove.size();
+						_drawablesToMove.push_back(e);
+					}
 				}
 				break;
 			case(PrepareKey::Type::PointLight) :
@@ -355,7 +376,13 @@ namespace AGE
 				for (auto &e : uo->drawableCollection)
 				{
 					_drawables[e].scale = uo->scale;
-					_drawables[e].hasMoved = true;
+					assert(_drawables[e].currentNode != UNDEFINED_IDX);
+					if (_drawables[e].hasMoved == false)
+					{
+						_drawables[e].hasMoved = true;
+						_drawables[e].moveBufferIdx = _drawablesToMove.size();
+						_drawablesToMove.push_back(e);
+					}
 				}
 				break;
 			default:
@@ -380,7 +407,13 @@ namespace AGE
 				for (auto &e : uo->drawableCollection)
 				{
 					_drawables[e].orientation = uo->orientation;
-					_drawables[e].hasMoved = true;
+					assert(_drawables[e].currentNode != UNDEFINED_IDX);
+					if (_drawables[e].hasMoved == false)
+					{
+						_drawables[e].hasMoved = true;
+						_drawables[e].moveBufferIdx = _drawablesToMove.size();
+						_drawablesToMove.push_back(e);
+					}
 				}
 				break;
 			default:
@@ -399,27 +432,24 @@ namespace AGE
 
 
 			// Update drawable positions in Octree
-			for (auto &e : _drawables)
+			for (uint32_t idx : _drawablesToMove)
 			{
-				if (e.hasMoved && e.toAddInOctree == false)
-				{
-					e.hasMoved = false;
-					e.previousAABB = e.currentAABB;
-					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
-					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
-					_octree.moveElement(&e);
-				}
-				if (e.toAddInOctree)
-				{
-					e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
-					e.currentAABB.fromTransformedBox(e.meshAABB, e.transformation);
-					e.previousAABB = e.currentAABB;
-					e.toAddInOctree = false;
-					_octree.addElement(&e);
-				}
+				Drawable *e = &_drawables[idx];
+				assert(e->currentNode != UNDEFINED_IDX);
+				e->hasMoved = false;
+				e->previousAABB = e->currentAABB;
+				e->transformation = glm::scale(glm::translate(glm::mat4(1), e->position) * glm::toMat4(e->orientation), e->scale);
+				e->currentAABB.fromTransformedBox(e->meshAABB, e->transformation);
+				_octree.moveElement(e);
+				assert(e->currentNode != UNDEFINED_IDX);
 			}
+			_drawablesToMove.clear();
 			// Do culling for each camera
 			_octreeDrawList.clear();
+
+			// clean empty nodes
+			_octree.cleanOctree();
+
 			for (auto &camera : _cameras)
 			{
 				if (!camera.active)
@@ -444,8 +474,6 @@ namespace AGE
 				}
 
 #ifdef ACTIVATE_OCTREE_CULLING
-				// clean empty nodes
-				_octree.cleanOctree();
 
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);

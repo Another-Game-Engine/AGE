@@ -20,13 +20,14 @@ namespace AGE
 	{
 		CullableType	type;
 		uint32_t		currentNode;
+		CullableObject	*nextElement;
+		CullableObject	*prevElement;
+
+		uint32_t		moveBufferIdx;
 		bool			hasBeenFound;
-		bool			toAddInOctree;
 
 		CullableObject();
-		virtual ~CullableObject();
-
-		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const = 0;
+		~CullableObject();
 	};
 
 	struct CullableBoundingBox : public CullableObject
@@ -35,9 +36,7 @@ namespace AGE
 		AABoundingBox		currentAABB;
 
 		CullableBoundingBox();
-		virtual ~CullableBoundingBox();
-
-		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const;
+		~CullableBoundingBox();
 	};
 
 	struct CullableSphere : public CullableObject
@@ -47,8 +46,6 @@ namespace AGE
 
 		CullableSphere();
 		~CullableSphere();
-
-		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const;
 	};
 
 	struct CullableFrustum : public CullableObject
@@ -59,7 +56,7 @@ namespace AGE
 		CullableFrustum();
 		~CullableFrustum();
 
-		virtual bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const;
+		bool	checkCollision(CullableObject *oth, bool thisCurrent = true, bool othCurrent = true) const;
 	};
 
 }

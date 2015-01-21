@@ -2,14 +2,12 @@
 
 #include <Utils/Containers/Vector.hpp>
 #include <bitset>
-#include <glm/glm.hpp>
-
+#include <glm/fwd.hpp>
 #include <Utils/AABoundingBox.hh>
-
-#include <cereal/types/vector.hpp>
-#include <cereal/types/string.hpp>
-#include <cereal/types/bitset.hpp>
 #include <Render/Pool.hh>
+#include <Utils/Serialization/SerializationMacros.hpp>
+
+SERIALIZATION_ARCHIVE_FORWARD_DECLARATION();
 
 namespace AGE
 {
@@ -44,11 +42,7 @@ namespace AGE
 		AGE::AABoundingBox boundingBox;
 		MaterialIndex defaultMaterialIndex;
 
-		template <class Archive>
-		void serialize(Archive &ar)
-		{
-			ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors, boundingBox, defaultMaterialIndex);
-		}
+		SERIALIZATION_SERIALIZE_METHOD_DECLARATION();
 	};
 
 	struct MeshData
@@ -56,11 +50,7 @@ namespace AGE
 		std::string name;
 		AGE::Vector<SubMeshData> subMeshs;
 
-		template <class Archive>
-		void serialize(Archive &ar)
-		{
-			ar(name, subMeshs);
-		}
+		SERIALIZATION_SERIALIZE_METHOD_DECLARATION();
 	};
 
 	struct SubMeshInstance
@@ -83,5 +73,4 @@ namespace AGE
 		std::string path;
 		AGE::Vector<SubMeshInstance> subMeshs;
 	};
-
 }

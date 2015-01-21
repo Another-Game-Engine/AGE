@@ -16,22 +16,25 @@ namespace AGE
 		_pool.dealloc(_root);
 	}
 
-	void LooseOctree::addElement(CullableObject *toAdd)
+	void LooseOctree::addElement(CullableBoundingBox *toAdd)
 	{
 		_root = _pool.get(_root).addElement(toAdd, _pool);
 	}
 
-	void LooseOctree::removeElement(CullableObject *toRm)
+	void LooseOctree::removeElement(CullableBoundingBox *toRm)
 	{
-		_pool.get(_root).removeElement(toRm, _pool);
+		_pool.get(toRm->currentNode).removeElementFromNode(toRm, _pool);
 	}
 
-	void LooseOctree::moveElement(CullableObject *toMv)
+	void LooseOctree::moveElement(CullableBoundingBox *toMv)
 	{
-		_root = _pool.get(_root).moveElement(toMv, _pool);
+		uint32_t newRoot = _pool.get(toMv->currentNode).moveElementFromNode(toMv, _pool);
+
+		if (newRoot != UNDEFINED_IDX)
+			_root = newRoot;
 	}
 
-	void LooseOctree::getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill)
+	void LooseOctree::getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill)
 	{
 		_pool.get(_root).getElementsCollide(toTest, toFill, _pool);
 	}
@@ -45,6 +48,6 @@ namespace AGE
 			_root = newRoot;
 			newRoot = _pool.get(_root).tryChangeRoot(_pool);
 		}
-		_pool.get(_root).removeEmptyLeafs(_pool);
+//		_pool.get(_root).removeEmptyLeafs(_pool);
 	}
 }

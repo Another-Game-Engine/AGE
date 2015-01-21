@@ -7,6 +7,7 @@
 #include <Skinning/Skeleton.hpp>
 #include <Geometry/Mesh.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace AGE
 {
@@ -30,8 +31,6 @@ namespace AGE
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
 			ar(*dataSet.mesh);
-			delete dataSet.mesh;
-			dataSet.mesh = nullptr;
 			return true;
 		}
 
@@ -45,7 +44,7 @@ namespace AGE
 				return true;
 			dataSet.meshLoaded = false;
 
-			dataSet.mesh = new MeshData();
+			dataSet.mesh = std::make_shared<MeshData>();
 
 			dataSet.mesh->name = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() : dataSet.skinName;
 			dataSet.mesh->subMeshs.resize(dataSet.assimpScene->mNumMeshes);
@@ -161,6 +160,34 @@ namespace AGE
 						}
 					}
 				}
+			}
+
+			glm::vec3 min(std::numeric_limits<float>::max());
+			glm::vec3 max(std::numeric_limits<float>::min());
+			for (auto &e : dataSet.mesh->subMeshs)
+			{
+				min = glm::min(e.boundingBox.minPoint, min);
+				max = glm::max(e.boundingBox.maxPoint, max);
+			}
+			auto dif = max - min;
+			float t = dif.x > dif.y ? dif.x : dif.y;
+			t = t > dif.z ? t : dif.z;
+			auto center = ((max - min) / 2.0f);
+			auto center4 = glm::vec4(center.x, center.y, center.z, 0.0f);
+			for (auto &e : dataSet.mesh->subMeshs)
+			{
+				//e.boundingBox.minPoint += center;
+				e.boundingBox.minPoint /= t;
+				//e.boundingBox.maxPoint += center;
+				e.boundingBox.maxPoint /= t;
+				for (auto &f : e.positions)
+				{
+					//f += center4;
+					f /= t;
+					f.w = 1.0f;
+				}
+				glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
+				e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
 			}
 			dataSet.meshLoaded = true;
 			return true;

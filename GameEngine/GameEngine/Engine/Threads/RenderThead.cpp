@@ -12,6 +12,14 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
 #include <Utils/OpenGL.hh>
+#include "Utils/OpenGL.hh"
+#include <SDL/SDL.h>
+#include <Configuration.hpp>
+
+
+#ifdef USE_IMGUI
+#include <Utils/Age_Imgui.hpp>
+#endif
 
 namespace AGE
 {
@@ -35,7 +43,7 @@ namespace AGE
 				return;
 			}
 			_render = msg.engine.lock()->setInstance<gl::RenderManager>();
-//			SDL_GL_SetSwapInterval(1);
+			SDL_GL_SetSwapInterval(0);
 			msg.setValue(true);
 		});
 

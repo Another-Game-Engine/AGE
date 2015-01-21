@@ -16,7 +16,7 @@ namespace AGE
 				return false;
 			while (!dataSet.textures.empty())
 			{
-				auto &t = dataSet.textures.back();
+				auto t = dataSet.textures.back();
 				dataSet.textures.pop_back();
 				auto path = dataSet.rawDirectory.path().string() + "\\" + t->rawPath;
 
@@ -121,7 +121,7 @@ namespace AGE
 				if (found)
 					continue;
 
-				auto t = new TextureData();
+				auto t = std::make_shared<TextureData>();
 				dataSet.textures.push_back(t);
 				t->rawPath = e;
 			}

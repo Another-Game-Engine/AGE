@@ -2,7 +2,7 @@
 
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 #include <Render/Key.hh>
 
 namespace AGE

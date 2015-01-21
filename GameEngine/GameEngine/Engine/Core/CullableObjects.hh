@@ -2,6 +2,8 @@
 
 #include <Core/CullableInterfaces.hh>
 #include <Skinning/AnimationInstance.hpp>
+#include <Geometry/Mesh.hpp>
+#include <Geometry/MaterialData.hpp>
 
 namespace AGE
 {

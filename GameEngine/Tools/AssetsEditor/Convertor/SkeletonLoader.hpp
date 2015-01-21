@@ -5,6 +5,11 @@
 #include <map>
 #include <Skinning/Skeleton.hpp>
 #include <thread>
+// TODO to pass in .cpp
+#include <Utils/Serialization/SerializationArchives.hpp>
+#include <Utils/Serialization/MatrixSerialization.hpp>
+#include <Utils/Serialization/QuaternionSerialization.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace AGE
 {
@@ -43,8 +48,8 @@ namespace AGE
 				std::cerr << "Skeleton loader : skeleton [" << dataSet.skeleton->name << "] already exists." << std::endl;
 				return false;
 			}
-			dataSet.skeleton = new Skeleton();
-			Skeleton *skeleton = dataSet.skeleton;
+			dataSet.skeleton = std::make_shared<Skeleton>();
+			Skeleton *skeleton = dataSet.skeleton.get();
 			std::uint32_t minDepth = std::uint32_t(-1);
 			skeleton->firstBone = 0;
 			skeleton->name = dataSet.skeletonName.empty() == true ? dataSet.filePath.getShortFileName() : dataSet.skeletonName;
@@ -131,7 +136,7 @@ namespace AGE
 			if (skeleton->bones.size() == 0)
 			{
 				std::cerr << "Skeleton loader : assets does not contain any skeleton." << std::endl;
-				delete dataSet.skeleton;
+				dataSet.skeleton = nullptr;
 				dataSet.skeletonLoaded = false;
 				return false;
 			}

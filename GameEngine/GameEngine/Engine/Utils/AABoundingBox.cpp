@@ -125,22 +125,19 @@ namespace AGE
 			minPoint.z < oth.maxPoint.z);
 	}
 
-	bool	AABoundingBox::checkPointIn(glm::vec3 point, glm::i8vec3 &direction) const
-	{
-		glm::vec3 dif = point - center;
-		direction = glm::i8vec3((dif.x >= 0) ? 1 : -1,
-			(dif.y >= 0) ? 1 : -1,
-			(dif.z >= 0) ? 1 : -1);
-		return (point.x >= minPoint.x && point.x <= maxPoint.x &&
-			point.y >= minPoint.y && point.y <= maxPoint.y &&
-			point.z >= minPoint.z && point.z <= maxPoint.z);
-	}
-
 	bool	AABoundingBox::checkPointIn(glm::vec3 point) const
 	{
 		return (point.x >= minPoint.x && point.x <= maxPoint.x &&
 			point.y >= minPoint.y && point.y <= maxPoint.y &&
 			point.z >= minPoint.z && point.z <= maxPoint.z);
+	}
+
+	glm::i8vec3 AABoundingBox::getDirection(glm::vec3 point) const
+	{
+		glm::vec3 dif = point - center;
+		return (glm::i8vec3((dif.x >= 0) ? 1 : -1,
+							(dif.y >= 0) ? 1 : -1,
+							(dif.z >= 0) ? 1 : -1));
 	}
 
 }

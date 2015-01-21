@@ -86,5 +86,8 @@
     <ClInclude Include="AssetFiles\RawMaterialFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Convertor\BulletLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

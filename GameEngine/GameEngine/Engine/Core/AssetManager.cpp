@@ -2,7 +2,7 @@
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
 #include <Geometry/Mesh.hpp>
-#include <Geometry/Material.hpp>
+#include <Geometry/MaterialData.hpp>
 #include <Texture/Texture.hpp>
 #include <Render/RenderManager.hh>
 #include <Threads/ThreadManager.hpp>
@@ -11,6 +11,9 @@
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/QueueOwner.hpp>
 #include <Threads/Thread.hpp>
+#include <Utils/Serialization/SerializationArchives.hpp>
+#include <istream>
+#include <fstream>
 
 namespace AGE
 {
@@ -391,15 +394,12 @@ namespace AGE
 
 		mesh->boundingBox = data.boundingBox;
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
-		auto future1 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			if (_pools.find(infos) == std::end(_pools))
 			{
 				createPool(order, infos);
 			}
-			return AssetsLoadingResult(false);
-		});
-		auto future2 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			// We need to keep an instance of FileData shared_ptr
 			auto fileDataCopy = fileData;
@@ -409,9 +409,7 @@ namespace AGE
 			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
 			mesh->vertexPool = pools.first;
 			mesh->indexPool = pools.second;
-			return AssetsLoadingResult(false);
-		});
-		auto future3 = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		}
 		{
 			// We need to keep an instance of FileData shared_ptr
 			auto fileDataCopy = fileData;
@@ -420,11 +418,10 @@ namespace AGE
 			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
 			mesh->vertexPool = pools.first;
 			mesh->indexPool = pools.second;
+		}
 			return AssetsLoadingResult(false);
 		});
-		pushNewAsset(loadingChannel, data.name, future1);
-		pushNewAsset(loadingChannel, data.name, future2);
-		pushNewAsset(loadingChannel, data.name, future3);
+		pushNewAsset(loadingChannel, data.name, future);
 	}
 
 	// Create pool for mesh

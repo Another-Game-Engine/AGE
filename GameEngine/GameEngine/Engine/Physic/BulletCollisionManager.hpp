@@ -15,95 +15,102 @@
 #include <Entities/Entity.hh>
 
 #include <set>
-
+#include <map>
 #include <memory>
 
 
-class BulletCollisionManager : public Dependency<BulletCollisionManager>
+namespace AGE
 {
-public:
-	BulletCollisionManager()
-		: _world(nullptr)
-		, _dispatcher(nullptr)
-		, _broadphase(nullptr)
-	{}
-
-	virtual bool init(bool init = true)
+	class BulletCollisionManager : public Dependency < BulletCollisionManager >
 	{
-		btDefaultCollisionConstructionInfo cci;
-		cci.m_defaultMaxPersistentManifoldPoolSize = 32768;
-		btCollisionConfiguration *_collisionConfiguration = new btDefaultCollisionConfiguration(cci);
+	public:
+		BulletCollisionManager()
+			: _world(nullptr)
+			, _dispatcher(nullptr)
+			, _broadphase(nullptr)
+		{}
 
-		_dispatcher = new btCollisionDispatcher(_collisionConfiguration);
-
-		btVector3 worldAabbMin(-1000, -1000, -1000);
-		btVector3 worldAabbMax(1000, 1000, 1000);
-		const int maxProxies = 32766;
-		const int maxOverlap = 65535;
-		_broadphase = new btAxisSweep3(worldAabbMin, worldAabbMax, maxProxies);
-
-
-		if (init) // init is false when called by Dynamic World
+		virtual bool init(bool init = true)
 		{
-			_world = std::make_shared<btCollisionWorld>(_dispatcher, _broadphase, _collisionConfiguration);
-			btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher*>(_world->getDispatcher());
-			btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
-		}
-		return true;
-	}
+			btDefaultCollisionConstructionInfo cci;
+			cci.m_defaultMaxPersistentManifoldPoolSize = 32768;
+			btCollisionConfiguration *_collisionConfiguration = new btDefaultCollisionConfiguration(cci);
 
-	virtual ~BulletCollisionManager()
-	{
-		uninit();
-	}
+			_dispatcher = new btCollisionDispatcher(_collisionConfiguration);
 
-	virtual void uninit()
-	{
-		if (_broadphase)
-		{
-			delete _broadphase;
-			_broadphase = nullptr;
-		}
-		if (_dispatcher)
-		{
-			delete _dispatcher;
-			_dispatcher = nullptr;
-		}
-	}
+			btVector3 worldAabbMin(-1000, -1000, -1000);
+			btVector3 worldAabbMax(1000, 1000, 1000);
+			const int maxProxies = 32766;
+			const int maxOverlap = 65535;
+			_broadphase = new btAxisSweep3(worldAabbMin, worldAabbMax, maxProxies);
 
-	void addObject(btCollisionObject *object, int filterGroup, int collisionFilter)
-	{
-		_world->addCollisionObject(object, filterGroup, collisionFilter);
-	}
 
-	void removeObject(btCollisionObject *object)
-	{
-		_world->removeCollisionObject(object);
-	}
-
-	std::set<Entity> rayCast(const glm::vec3 &from, const glm::vec3 &to) const
-	{
-		std::set<Entity> r;
-		btCollisionWorld::AllHitsRayResultCallback raycastCallback(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to));
-		raycastCallback.m_collisionFilterMask = btBroadphaseProxy::AllFilter;
-		raycastCallback.m_collisionFilterGroup = btBroadphaseProxy::AllFilter;
-		_world->rayTest(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to), raycastCallback);
-		if (raycastCallback.hasHit())
-		{
-			for (int it = 0, mit = raycastCallback.m_collisionObjects.size(); it < mit; ++it)
+			if (init) // init is false when called by Dynamic World
 			{
-				r.insert(*static_cast<Entity*>(raycastCallback.m_collisionObjects.at(it)->getUserPointer()));
+				_world = std::make_shared<btCollisionWorld>(_dispatcher, _broadphase, _collisionConfiguration);
+				btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher*>(_world->getDispatcher());
+				btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
+			}
+			return true;
+		}
+
+		virtual ~BulletCollisionManager()
+		{
+			uninit();
+		}
+
+		virtual void uninit()
+		{
+			if (_broadphase)
+			{
+				delete _broadphase;
+				_broadphase = nullptr;
+			}
+			if (_dispatcher)
+			{
+				delete _dispatcher;
+				_dispatcher = nullptr;
 			}
 		}
-		return std::move(r);
-	}
 
-	inline btCollisionWorld *getWorld() const { return _world.get(); }
-protected:
-	std::shared_ptr<btCollisionWorld> _world;
-	btCollisionDispatcher *_dispatcher;
-	btBroadphaseInterface *_broadphase;
-	btCollisionConfiguration *_collisionConfiguration;
-};
+		void addObject(btCollisionObject *object, int filterGroup, int collisionFilter)
+		{
+			_world->addCollisionObject(object, filterGroup, collisionFilter);
+		}
+
+		void removeObject(btCollisionObject *object)
+		{
+			_world->removeCollisionObject(object);
+		}
+
+		std::set<Entity> rayCast(const glm::vec3 &from, const glm::vec3 &to) const
+		{
+			std::set<Entity> r;
+			btCollisionWorld::AllHitsRayResultCallback raycastCallback(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to));
+			raycastCallback.m_collisionFilterMask = btBroadphaseProxy::AllFilter;
+			raycastCallback.m_collisionFilterGroup = btBroadphaseProxy::AllFilter;
+			_world->rayTest(convertGLMVectorToBullet(from), convertGLMVectorToBullet(to), raycastCallback);
+			if (raycastCallback.hasHit())
+			{
+				for (int it = 0, mit = raycastCallback.m_collisionObjects.size(); it < mit; ++it)
+				{
+					r.insert(*static_cast<Entity*>(raycastCallback.m_collisionObjects.at(it)->getUserPointer()));
+				}
+			}
+			return std::move(r);
+		}
+
+		inline btCollisionWorld *getWorld() const { return _world.get(); }
+
+		std::shared_ptr<btCollisionShape> loadShape(const std::string &path);
+
+	protected:
+		std::shared_ptr<btCollisionWorld> _world;
+		btCollisionDispatcher *_dispatcher;
+		btBroadphaseInterface *_broadphase;
+		btCollisionConfiguration *_collisionConfiguration;
+		std::map<std::string, std::shared_ptr<btCollisionShape>> _collisionShapes;
+	};
+}
 
 #endif    //__BULLET_COLLISION_MANAGER_HPP__

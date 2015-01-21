@@ -1,11 +1,11 @@
 #pragma once
 
 #include <Utils/Containers/Vector.hpp>
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
+#include <glm/detail/type_mat4x4.hpp>
+#include <Utils/Serialization/SerializationMacros.hpp>
 
-#include <Utils/GlmSerialization.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/string.hpp>
+SERIALIZATION_ARCHIVE_FORWARD_DECLARATION();
 
 namespace AGE
 {
@@ -18,16 +18,6 @@ namespace AGE
 		AGE::Vector<std::uint32_t> children;
 		std::uint32_t parent = (std::uint32_t)(-1);
 	};
-
-	template <class Archive>
-	void serialize(Archive &ar, Bone &value)
-	{
-		ar(cereal::make_nvp("name", value.name));
-		ar(cereal::make_nvp("offset", value.offset));
-		ar(cereal::make_nvp("index", value.index));
-		ar(cereal::make_nvp("transformation", value.transformation));
-		ar(cereal::make_nvp("children", value.children));
-		ar(cereal::make_nvp("parent", value.parent));
-	}
-
 }
+
+SERIALIZATION_SERIALIZE_DECLARATION(AGE::Bone);

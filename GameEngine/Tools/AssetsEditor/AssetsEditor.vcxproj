@@ -167,6 +167,7 @@
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
     <ClInclude Include="Convertor\AssimpLoader.hpp" />
+    <ClInclude Include="Convertor\BulletLoader.hpp" />
     <ClInclude Include="Convertor\ImageLoader.hpp" />
     <ClInclude Include="Convertor\MaterialConvertor.hpp" />
     <ClInclude Include="Convertor\MeshLoader.hpp" />
