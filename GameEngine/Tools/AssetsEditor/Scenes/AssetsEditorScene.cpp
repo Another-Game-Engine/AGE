@@ -22,7 +22,7 @@
 #include <Convertor/ImageLoader.hpp>
 #include <Convertor/BulletLoader.hpp>
 
-#include <Folder.hpp>
+#include <AssetFiles/Folder.hpp>
 
 
 namespace AGE
@@ -52,12 +52,12 @@ namespace AGE
 		{
 			{
 				ImGui::BeginChild("Raw", ImVec2(0, ImGui::GetIO().DisplaySize.y / 2 - 10), false);
-				_raw.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date), &_selectedRaw);
+				//_raw.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date), &_selectedRaw);
 				ImGui::EndChild();
 			}
 			{
 				ImGui::BeginChild("Cooked", ImVec2(0, ImGui::GetIO().DisplaySize.y / 2 - 10), false);
-				_cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+				//_cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
 				ImGui::EndChild();
 			}
 		}
@@ -69,7 +69,7 @@ namespace AGE
 				ImGui::BeginChild("Selected", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.75 - 10), false);
 				for (auto &e : _selectedRaw)
 				{
-					e->printImgUi(AE::AssetFile::Name);
+					//e->printImgUi(AE::AssetFile::Name);
 				}
 				ImGui::EndChild();
 			}

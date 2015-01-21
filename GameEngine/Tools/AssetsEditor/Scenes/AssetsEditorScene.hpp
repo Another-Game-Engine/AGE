@@ -3,7 +3,7 @@
 #include <Core/AScene.hh>
 #include <Core/Engine.hh>
 #include <memory>
-#include <Folder.hpp>
+#include <AssetFiles/Folder.hpp>
 
 namespace AGE
 {

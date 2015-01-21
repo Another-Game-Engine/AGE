@@ -1,6 +1,6 @@
 #pragma once
 
-#include <File.hpp>
+#include "File.hpp"
 
 namespace AGE
 {
@@ -10,7 +10,9 @@ namespace AGE
 		{
 		public:
 			virtual ~RawFile();
-			RawFile(const AE::Path &path, const std::string &type, Folder *parent = nullptr);
+			RawFile(const AE::Path &path, Folder *parent = nullptr);
+
+			bool _dirty;
 		};
 	}
 }

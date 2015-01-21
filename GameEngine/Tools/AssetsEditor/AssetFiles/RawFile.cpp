@@ -7,8 +7,9 @@ namespace AGE
 		RawFile::~RawFile()
 		{
 		}
-		RawFile::RawFile(const std::tr2::sys::path &path, const std::string &type, Folder *parent)
-			: AssetFile(path, type, parent)
+		RawFile::RawFile(const std::tr2::sys::path &path, Folder *parent)
+			: AssetFile(path, parent)
+			, _dirty(true)
 		{
 		}
 	}
