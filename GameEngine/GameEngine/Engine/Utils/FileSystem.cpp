@@ -45,5 +45,14 @@ namespace AGE
 			return timeinfo;
 		}
 
+		double GetDiffTime(struct tm &first, struct tm &second)
+		{
+			return difftime(mktime(&first), mktime(&second));
+		}
+
+		double GetDiffTime(const std::string &first, const std::string &second)
+		{
+			return GetDiffTime(GetLastWriteTime(first), GetLastWriteTime(second));
+		}
 	}
 }

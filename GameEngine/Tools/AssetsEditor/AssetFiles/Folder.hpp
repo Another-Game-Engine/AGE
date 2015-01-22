@@ -30,10 +30,21 @@ namespace AGE
 				folderFunction(this);
 				for (auto &e : _folders)
 				{
-					if (e->_active)
-					{
-						e->update(folderFunction, fileFunction);
-					}
+					e->update(folderFunction, fileFunction);
+				}
+				for (auto &e : _files)
+				{
+					e->update(fileFunction);
+				}
+			}
+
+			template <typename T>
+			void update(std::function<void(T*)> &fileFunction)
+			{
+				folderFunction(this);
+				for (auto &e : _folders)
+				{
+					e->update(fileFunction);
 				}
 				for (auto &e : _files)
 				{
@@ -50,10 +61,7 @@ namespace AGE
 					return;
 				for (auto &e : _folders)
 				{
-					if (e->_active)
-					{
-						e->update(folderFunctionBegin, folderFunctionEnd, fileFunction);
-					}
+					e->update(folderFunctionBegin, folderFunctionEnd, fileFunction);
 				}
 				for (auto &e : _files)
 				{

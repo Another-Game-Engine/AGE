@@ -49,6 +49,20 @@ namespace AGE
 
 	bool AssetsEditorScene::userUpdate(double time)
 	{
+		//check dirty for test
+		{
+			static double counter = 0;
+			counter += time;
+			if (counter > 1)
+			{
+				std::set<std::shared_ptr<AE::RawFile>> dirty;
+				AE::AssetFileManager::CheckIfRawModified(&_raw, dirty);
+				if (dirty.size())
+					std::cout << "Dirty : " << dirty.size() << std::endl;
+				counter = 0;
+			}
+		}
+
 		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, 1, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3f, ImGui::GetIO().DisplaySize.y), true);
 		{

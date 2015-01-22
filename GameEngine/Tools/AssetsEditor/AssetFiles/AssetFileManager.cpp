@@ -3,6 +3,7 @@
 #include <AssetFiles/RawFile.hpp>
 #include <AssetFiles/AssetsTypes.hpp>
 #include <Utils/BitOperations.hpp>
+#include <AssetFiles/Folder.hpp>
 #include <imgui/imgui.h>
 #include <vector>
 
@@ -59,6 +60,20 @@ namespace AGE
 		std::shared_ptr<AssetFile> AssetFileManager::CreateFile(const std::string &path, Folder *parent)
 		{
 			return CreateFile(std::tr2::sys::path(path), parent);
+		}
+
+		void AssetFileManager::CheckIfRawModified(Folder *folder, std::set<std::shared_ptr<RawFile>> &list)
+		{
+			folder->update(std::function<void(Folder*)>([](Folder*){}), std::function<void(RawFile*)>([&](RawFile* ptr) {
+				auto lastWrite = FileSystem::GetLastWriteTime(ptr->getPath());
+				if (FileSystem::GetDiffTime(lastWrite, ptr->_lastWriteTime) > 0)
+				{
+					ptr->_dirty = true;
+					ptr->_lastWriteTime = lastWrite;
+					ptr->_lastWriteTimeStr = FileSystem::GetDateStr(ptr->getPath());
+					list.insert(std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis()));
+				}
+			}));
 		}
 
 		void AssetFileManager::PrintSelectableRawAssetsFile(RawFile *ptr, int printSections, std::set<std::shared_ptr<RawFile>> *list)

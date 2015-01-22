@@ -11,5 +11,7 @@ namespace AGE
 		std::string GetExtension(const std::string &path);
 		std::string GetDateStr(const std::string &path, const char* format = "%Y/%m/%d %H:%M:%S");
 		struct tm GetLastWriteTime(const std::string &path);
+		double GetDiffTime(struct tm &first, struct tm &second);
+		double GetDiffTime(const std::string &first, const std::string &second);
 	}
 }
