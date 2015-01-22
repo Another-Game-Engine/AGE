@@ -20,5 +20,4 @@ struct MeshInstance
 	std::string name;
 	std::string path;
 	std::vector<SubMeshInstance> subMeshs;
-	Key<Painter> painter;
 };

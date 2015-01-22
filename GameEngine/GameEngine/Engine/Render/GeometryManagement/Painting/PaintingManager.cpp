@@ -44,5 +44,9 @@ bool PaintingManager::has_painter(std::vector<GLenum> const types) const
 	return (false);
 }
 
-
-
+void PaintingManager::print() const
+{
+	for (auto &painter : _painters) {
+		painter->print();
+	}
+}

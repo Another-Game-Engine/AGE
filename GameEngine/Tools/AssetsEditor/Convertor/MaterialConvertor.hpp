@@ -4,7 +4,7 @@
 #include "ImageLoader.hpp"
 #include <map>
 
-#include <Geometry/Material.hpp>
+#include <AssetManagement/Data/MaterialData.hh>
 
 namespace AGE
 {

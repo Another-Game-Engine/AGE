@@ -26,6 +26,7 @@ public:
 	bool coherent_program(std::shared_ptr<Program> const &p) const;
 	bool coherent_program(std::vector<GLenum> const &types) const;
 	std::vector<GLenum> const &get_types() const;
+	void print() const;
 
 private:
 	std::vector<GLenum> _types;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AssimpLoader.hpp"
-#include <Texture/Texture.hpp>
+#include <AssetManagement/Data/TextureData.hh>
 #include <FreeImagePlus.h>
 #include <Utils/BitOperations.hpp>
 

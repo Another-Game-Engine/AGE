@@ -20,7 +20,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
 #include <Core/Timer.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Threads/RenderThread.hpp>
 #include <Utils/Age_Imgui.hpp>
 #include <Core/Tasks/Basics.hpp>

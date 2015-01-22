@@ -11,13 +11,14 @@
 
 #include <atomic>
 
+struct MeshData;
+struct MaterialData;
+struct TextureData;
+
 namespace AGE
 {
 	struct Skeleton;
 	struct Animation;
-	struct MeshData;
-	struct MaterialData;
-	struct TextureData;
 
 	struct AssetDataSet
 	{

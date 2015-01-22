@@ -134,6 +134,6 @@ namespace AGE
 
 	private:
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
-		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance &mesh, const std::vector<GLenum> &types/*, const std::bitset<MeshInfos::END> &infos,*/, const std::string &loadingChannel);
+		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance &mesh, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel);
 	};
 }

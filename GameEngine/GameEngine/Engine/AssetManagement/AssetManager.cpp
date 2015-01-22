@@ -239,42 +239,22 @@ namespace AGE
 			meshInstance->subMeshs.resize(data->subMeshs.size());
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();
-			auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() {
-				// If no vertex pool correspond to submesh
-				std::vector<GLenum> types;
-				for (auto &e : loadOrder)
-				{
-					if (!data->subMeshs[0].infos.test(e))
-						continue;
-					types.emplace_back(g_InfosTypes[e].first);
-				}
-				auto &paintingManager = GetRenderThread()->paintingManager;
-				if (!paintingManager.has_painter(types))
-				{
-					auto t = types;
-					meshInstance->painter = paintingManager.add_painter(std::move(t));
-				}
-				else
-				{
-					meshInstance->painter = paintingManager.get_painter(types);
-				}
-				for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
-				{
-					auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
-						loadSubmesh(data, i, meshInstance->subMeshs[i], types, loadingChannel);
-						return AssetsLoadingResult(false);
-					});
-					pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
-				}
-				return (AssetsLoadingResult(false));
-			});
+			// If no vertex pool correspond to submesh
+			for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
+			{
+				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+					loadSubmesh(data, i, meshInstance->subMeshs[i], loadOrder, loadingChannel);
+					return AssetsLoadingResult(false);
+				});
+				pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
+			}
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 		return (true);
 	}
 
-	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance &mesh, const std::vector<GLenum> &types, const std::string &loadingChannel)
+	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance &mesh, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
 	{
 		auto &data = fileData->subMeshs[index];
 		std::size_t size = data.infos.count();
@@ -287,6 +267,21 @@ namespace AGE
 		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([&]() {
 			auto &paintingManager = GetRenderThread()->paintingManager;
+			std::vector<GLenum> types;
+			for (auto &e : loadOrder)
+			{
+				if (!fileData->subMeshs[index].infos.test(e))
+					continue;
+				types.emplace_back(g_InfosTypes[e].first);
+			}
+			if (!paintingManager.has_painter(types))
+			{
+				mesh.painter = paintingManager.add_painter(std::move(types));
+			}
+			else
+			{
+				mesh.painter = paintingManager.get_painter(types);
+			}
 			auto &painter = paintingManager.get_painter(mesh.painter);
 			mesh.vertices = painter->add_vertices(data.positions.size(), data.indices.size());
 			auto vertices = painter->get_vertices(mesh.vertices);

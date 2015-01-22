@@ -36,6 +36,7 @@ public:
 	Vertices &remove_property(Key<Property> &key);
 	template <typename type_t> std::shared_ptr<type_t> get_property(Key<Property> const &p) const;
 	Vertices &update(std::shared_ptr<Program> const &program);
+	void print() const;
 
 private:
 	size_t _index;

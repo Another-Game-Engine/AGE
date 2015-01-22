@@ -1,8 +1,10 @@
 #pragma once
 
-#include <array>
-#include <unordered_map>
-#include <glm/glm.hpp>
+# include <array>
+# include <unordered_map>
+# include <glm/glm.hpp>
+# include <iostream>
+# include <string>
 
 static size_t const nbr_resources = 21;
 
@@ -65,6 +67,11 @@ struct GlType
 	bool operator!=(GLenum t) const
 	{
 		return (!(*this == t));
+	}
+
+	void print() const
+	{
+		std::cout << name << std::endl;
 	}
 };
 

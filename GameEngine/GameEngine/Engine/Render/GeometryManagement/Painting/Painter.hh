@@ -26,6 +26,7 @@ public:
 	Painter &update();
 	Painter &draw(GLenum mode, Key<Program> const &program, std::vector<Key<Vertices>> const &drawList);
 	Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Vertices>> const &drawList);
+	void print() const;
 
 private:
 	BufferPrograms _buffer;

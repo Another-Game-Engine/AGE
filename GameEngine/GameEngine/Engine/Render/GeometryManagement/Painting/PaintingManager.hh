@@ -20,6 +20,7 @@ public:
 	std::shared_ptr<Painter> const &get_painter(Key<Painter> const &key) const;
 	Key<Painter> get_painter(std::vector<GLenum> const &types) const;
 	bool has_painter(std::vector<GLenum> const types) const;
+	void print() const;
 
 private:
 	std::vector<std::shared_ptr<Painter>> _painters;

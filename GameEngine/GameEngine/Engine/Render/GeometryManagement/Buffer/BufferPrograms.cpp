@@ -106,3 +106,12 @@ std::vector<GLenum> const & BufferPrograms::get_types() const
 {
 	return (_types);
 }
+
+void BufferPrograms::print() const
+{
+	std::cout << "BufferPrograms:";
+	for (auto &type : _types) {
+		std::cout << "	";
+		available_types[type].print();
+	}
+}

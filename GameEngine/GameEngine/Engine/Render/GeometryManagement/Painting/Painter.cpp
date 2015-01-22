@@ -123,3 +123,16 @@ bool Painter::coherent(std::vector<GLenum> const &types) const
 {
 	return (_buffer.coherent_program(types));
 }
+
+void Painter::print() const
+{
+	std::cout << "Painter :"<< std::endl;
+	std::cout << "{" << std::endl;
+	_buffer.print();
+	std::cout << "vector<Vertices> size [" << _vertices.size() << "]:" << std::endl;
+	for (auto &vertices : _vertices) {
+		std::cout << "	";
+		vertices.print();
+	}
+	std::cout << "}" << std::endl;
+}
