@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 namespace AGE
 {
@@ -53,6 +54,13 @@ namespace AGE
 		double GetDiffTime(const std::string &first, const std::string &second)
 		{
 			return GetDiffTime(GetLastWriteTime(first), GetLastWriteTime(second));
+		}
+
+		std::string CleanPath(const std::string &path)
+		{
+			auto r = path;
+			std::replace(r.begin(), r.end(), '\\', '/');
+			return r;
 		}
 	}
 }

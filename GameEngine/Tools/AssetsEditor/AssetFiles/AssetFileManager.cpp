@@ -130,5 +130,12 @@ namespace AGE
 			}
 			ImGui::Columns(1);
 		}
+
+		void AssetFileManager::LinkRawToCooked(Folder *folder)
+		{
+			folder->update(std::function<void(RawFile *)>([](RawFile *ptr){
+				assert(false); //TODO
+			}));
+		}
 	}
 }

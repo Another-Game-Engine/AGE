@@ -13,5 +13,6 @@ namespace AGE
 		struct tm GetLastWriteTime(const std::string &path);
 		double GetDiffTime(struct tm &first, struct tm &second);
 		double GetDiffTime(const std::string &first, const std::string &second);
+		std::string CleanPath(const std::string &path);
 	}
 }

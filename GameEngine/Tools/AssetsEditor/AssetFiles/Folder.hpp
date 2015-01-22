@@ -23,6 +23,11 @@ namespace AGE
 			void foldersFilter(std::function<bool(const std::tr2::sys::path& file)> &filter);
 			void clearFileFilter();
 			void clearFolderFilter();
+			void find(const std::string &path, std::shared_ptr<AssetFile> &result);
+
+		private:
+			void _internalFind(const std::string &path, std::shared_ptr<AssetFile> &result);
+		public:
 
 			template <typename T>
 			void update(std::function<void(Folder*)> &folderFunction, std::function<void(T*)> &fileFunction)
@@ -41,7 +46,6 @@ namespace AGE
 			template <typename T>
 			void update(std::function<void(T*)> &fileFunction)
 			{
-				folderFunction(this);
 				for (auto &e : _folders)
 				{
 					e->update(fileFunction);

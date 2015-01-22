@@ -4,7 +4,7 @@
 #include <regex>
 
 #include "AssetFileManager.hpp"
-
+#include <Utils/FileSystem.hpp>
 #include <iostream>
 
 namespace AGE
@@ -94,6 +94,36 @@ namespace AGE
 				e->_active = true;
 				e->clearFolderFilter();
 			}
+		}
+
+		void Folder::_internalFind(const std::string &path, std::shared_ptr<AssetFile> &result)
+		{
+			if (result != nullptr)
+				return;
+			std::string::size_type f = path.find(_path.path().string());
+			if (f != std::string::npos && f == 0)
+			{
+				for (auto &e : _folders)
+				{
+					e->find(path, result);
+				}
+				if (result == nullptr)
+				{
+					for (auto &e : _files)
+					{
+						if (e->getPath() == path)
+						{
+							result = e;
+							return;
+						}
+					}
+				}
+			}
+		}
+
+		void Folder::find(const std::string &path, std::shared_ptr<AssetFile> &result)
+		{
+			_internalFind(FileSystem::CleanPath(path), result);
 		}
 	}
 }

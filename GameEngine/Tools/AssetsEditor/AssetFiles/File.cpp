@@ -16,7 +16,7 @@ namespace AGE
 				, _type(-1)
 				, _selected(false)
 			{
-				_pathStr = _path;
+				_pathStr = _path.string();;
 				_fileName = _path.filename();
 			}
 
