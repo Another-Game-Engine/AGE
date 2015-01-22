@@ -7,6 +7,9 @@
 #include <imgui/imgui.h>
 #include <vector>
 
+//to remove
+#include <iostream>
+
 namespace AGE
 {
 	namespace AE
@@ -131,11 +134,41 @@ namespace AGE
 			ImGui::Columns(1);
 		}
 
-		void AssetFileManager::LinkRawToCooked(Folder *folder)
+		void AssetFileManager::LinkRawToCooked(Folder *raw, Folder *cooked)
 		{
-			folder->update(std::function<void(RawFile *)>([](RawFile *ptr){
-				assert(false); //TODO
+			raw->update(std::function<void(RawFile *)>([&](RawFile *ptr){
+				//if (!ptr->_cookedFile)
+				{
+					std::shared_ptr<AGE::AE::AssetFile> result = nullptr;
+					auto cookedPath = RawPathToCooked(FileSystem::CleanPath(ptr->getPath()));
+					cooked->find(cookedPath, result);
+					if (result)
+						std::cout << result->getPath() << std::endl;
+				}
 			}));
+		}
+
+		std::string AssetFileManager::RawPathToCooked(const std::string &path)
+		{
+			auto index = path.find("/Raw/");
+			if (index == std::string::npos)
+				return path;
+			auto res = path;
+			res.replace(index, 5, "/Serialized/");
+			auto extension = FileSystem::GetExtension(res);
+			if (extension == "obj" || extension == "fbx" || extension == "collada")
+			{
+				res.replace(res.find("." + extension), extension.size() + 1, ".sage");
+			}
+			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
+			{
+				res.replace(res.find("." + extension), extension.size() + 1, ".tage");
+			}
+			else if (extension == "mtl")
+			{
+				res.replace(res.find("." + extension), extension.size() + 1, ".mage");
+			}
+			return res;
 		}
 	}
 }

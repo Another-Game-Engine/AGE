@@ -105,7 +105,7 @@ namespace AGE
 			{
 				for (auto &e : _folders)
 				{
-					e->find(path, result);
+					e->_internalFind(path, result);
 				}
 				if (result == nullptr)
 				{

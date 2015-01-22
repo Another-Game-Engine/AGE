@@ -36,6 +36,7 @@ namespace AGE
 	{
 		_raw.list();
 		_cook.list();
+		AE::AssetFileManager::LinkRawToCooked(&_raw, &_cook);
 	}
 
 	AssetsEditorScene::~AssetsEditorScene(void)
@@ -51,7 +52,6 @@ namespace AGE
 	{
 		std::shared_ptr<AE::AssetFile> testFind;
 		_raw.find("../../Assets/AGE-Assets-For-Test/Raw/ball/ball.obj", testFind);
-
 		//check dirty for test
 		{
 			static double counter = 0;
