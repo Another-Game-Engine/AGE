@@ -149,9 +149,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
     <ClCompile Include="AssetFiles\RawFile.cpp" />
     <ClCompile Include="AssetsDatabase.cpp" />
-    <ClCompile Include="AssetFiles\AssetFileCreator.cpp" />
     <ClCompile Include="AssetFiles\File.cpp" />
     <ClCompile Include="AssetFiles\Folder.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -159,10 +159,10 @@
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
     <ClInclude Include="AssetFiles\RawFile.hpp" />
     <ClInclude Include="AssetsDatabase.hpp" />
-    <ClInclude Include="AssetFiles\AssetFileCreator.hpp" />
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
     <ClInclude Include="Convertor\AssimpLoader.hpp" />

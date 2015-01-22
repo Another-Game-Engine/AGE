@@ -33,14 +33,14 @@ namespace AGE
 				t->bpp = image.getBitsPerPixel();
 
 				bool toResize = false;
-				if (!isPowerOfTwo(t->width))
+				if (!Bits::isPowerOfTwo(t->width))
 				{
-					t->width = roundToHighestPowerOfTwo(t->width);
+					t->width = Bits::roundToHighestPowerOfTwo(t->width);
 					toResize = true;
 				}
-				if (!isPowerOfTwo(t->height))
+				if (!Bits::isPowerOfTwo(t->height))
 				{
-					t->height = roundToHighestPowerOfTwo(t->height);
+					t->height = Bits::roundToHighestPowerOfTwo(t->height);
 					toResize = true;
 				}
 				if (toResize)

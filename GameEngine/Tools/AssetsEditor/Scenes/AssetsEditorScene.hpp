@@ -7,6 +7,10 @@
 
 namespace AGE
 {
+	namespace AE
+	{
+		class RawFile;
+	}
 	class AssetsEditorScene : public AScene
 	{
 	public:
@@ -19,6 +23,6 @@ namespace AGE
 	private:
 		AE::Folder _raw;
 	 	AE::Folder _cook;
-		std::set<std::shared_ptr<AE::AssetFile>> _selectedRaw;
+		std::set<std::shared_ptr<AE::RawFile>> _selectedRaw;
 	};
 }

@@ -16,6 +16,8 @@ namespace AGE
 				, _type(-1)
 				, _selected(false)
 			{
+				_pathStr = _path;
+				_fileName = _path.filename();
 			}
 
 			AssetFile::~AssetFile()

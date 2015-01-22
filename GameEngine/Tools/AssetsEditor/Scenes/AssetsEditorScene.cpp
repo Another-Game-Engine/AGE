@@ -23,6 +23,8 @@
 #include <Convertor/BulletLoader.hpp>
 
 #include <AssetFiles/Folder.hpp>
+#include <AssetFiles/RawFile.hpp>
+#include <AssetFiles/AssetFileManager.hpp>
 
 
 namespace AGE
@@ -51,15 +53,31 @@ namespace AGE
 		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3f, ImGui::GetIO().DisplaySize.y), true);
 		{
 			{
-				ImGui::BeginChild("Raw", ImVec2(0, ImGui::GetIO().DisplaySize.y / 2 - 10), false);
-				//_raw.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date), &_selectedRaw);
+				ImGui::BeginChild("Raw", ImVec2(0, ImGui::GetIO().DisplaySize.y /*/ 2 */- 10), false);
+				_raw.update(
+				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+					bool opened = ImGui::TreeNode((void*)(folder), folder->_path.path().filename().c_str());
+					if (opened)
+					{
+						ImGui::Separator();
+					}
+					return opened;
+				}),
+					std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+					ImGui::Separator();
+					ImGui::TreePop();
+					return true;
+				}),
+					std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
+					AE::AssetFileManager::PrintSelectableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Date | AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, &_selectedRaw);
+				}));
 				ImGui::EndChild();
 			}
-			{
-				ImGui::BeginChild("Cooked", ImVec2(0, ImGui::GetIO().DisplaySize.y / 2 - 10), false);
-				//_cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
-				ImGui::EndChild();
-			}
+			//{
+			//	ImGui::BeginChild("Cooked", ImVec2(0, ImGui::GetIO().DisplaySize.y / 2 - 10), false);
+			//	//_cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+			//	ImGui::EndChild();
+			//}
 		}
 		ImGui::EndChild();
 		ImGui::SameLine();
@@ -69,7 +87,9 @@ namespace AGE
 				ImGui::BeginChild("Selected", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.75 - 10), false);
 				for (auto &e : _selectedRaw)
 				{
-					//e->printImgUi(AE::AssetFile::Name);
+					e->update(std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
+						AE::AssetFileManager::PrintSelectableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, nullptr);
+					}));
 				}
 				ImGui::EndChild();
 			}

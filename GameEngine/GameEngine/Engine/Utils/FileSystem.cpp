@@ -1,5 +1,7 @@
 #include "FileSystem.hpp"
 #include <filesystem>
+#include <sstream>
+#include <iomanip>
 
 namespace AGE
 {
@@ -26,5 +28,22 @@ namespace AGE
 			else
 				return "";
 		}
+
+		std::string GetDateStr(const std::string &path, const char *format /*= "%Y/%m/%d %H:%M:%S"*/)
+		{
+			std::stringstream res;
+			auto timeinfo = GetLastWriteTime(path);
+			res << std::put_time(&timeinfo, format);
+			return res.str();
+		}
+
+		struct tm GetLastWriteTime(const std::string &path)
+		{
+			auto last_write = std::tr2::sys::last_write_time(std::tr2::sys::path(path));
+			struct tm timeinfo;
+			localtime_s(&timeinfo, &last_write);
+			return timeinfo;
+		}
+
 	}
 }

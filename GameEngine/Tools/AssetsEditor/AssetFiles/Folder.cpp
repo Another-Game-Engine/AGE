@@ -51,8 +51,10 @@ namespace AGE
 				if (!std::tr2::sys::is_directory(file))
 				{
 					auto n = AssetFileManager::CreateFile(file.relative_path(), this);
-					_files.push_back(n);
-					std::cout << file.relative_path() << std::endl;
+					if (n)
+					{
+						_files.push_back(n);
+					}
 				}
 				else if (std::tr2::sys::is_directory(file))
 				{
@@ -93,27 +95,5 @@ namespace AGE
 				e->clearFolderFilter();
 			}
 		}
-
-
-		/*void Folder::printImgUi(AssetFile::PrintInfos infos, std::set<std::shared_ptr<AssetFile>> *list)
-		{
-			if (ImGui::TreeNode((void*)(this), _path.path().filename().c_str()))
-			{
-				ImGui::Separator();
-				for (auto &e : _folders)
-				{
-					if (e->_active)
-					{
-						e->printImgUi(infos, list);
-					}
-				}
-				for (auto &e : _files)
-				{
-					e->printImgUi(infos, list);
-				}
-				ImGui::Separator();
-				ImGui::TreePop();
-			}
-		}*/
 	}
 }

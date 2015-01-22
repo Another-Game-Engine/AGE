@@ -21,7 +21,8 @@ namespace AGE
 			template <typename T>
 			void update(std::function<void(T*)> &function)
 			{
-				std::static_assert(std::is_convertible<T*, AssetFile*>::value, "Error : T should inherit from AssetFile.");
+				
+				static_assert(std::is_convertible<T*, AssetFile*>::value, "T have to inherit from AssetFile.");
 				function(static_cast<T*>(this));
 			}
 
@@ -29,11 +30,17 @@ namespace AGE
 
 			bool _active;
 			bool _selected;
-			struct tm _timeinfo;
+			struct tm _lastWriteTime;
+			std::string _lastWriteTimeStr;
 			int _type;
+			inline const std::string &getPath() const { return _pathStr; }
+			inline const std::string &getFileName() const { return _fileName; }
+			inline std::shared_ptr<AssetFile> getSharedPtrOnThis() { return shared_from_this(); }
 
 		private:
 			const std::tr2::sys::path _path;
+			std::string _pathStr;
+			std::string _fileName;
 			Folder *_folder;
 		};
 	}

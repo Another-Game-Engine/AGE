@@ -36,7 +36,7 @@
     <ClCompile Include="AssetFiles\Folder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetFiles\AssetFileCreator.cpp">
+    <ClCompile Include="AssetFiles\AssetFileManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,7 +86,7 @@
     <ClInclude Include="AssetFiles\AssetsTypes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetFiles\AssetFileCreator.hpp">
+    <ClInclude Include="AssetFiles\AssetFileManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

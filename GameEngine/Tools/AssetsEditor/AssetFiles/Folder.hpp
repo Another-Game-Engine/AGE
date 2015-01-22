@@ -23,7 +23,45 @@ namespace AGE
 			void foldersFilter(std::function<bool(const std::tr2::sys::path& file)> &filter);
 			void clearFileFilter();
 			void clearFolderFilter();
-		private:
+
+			template <typename T>
+			void update(std::function<void(Folder*)> &folderFunction, std::function<void(T*)> &fileFunction)
+			{
+				folderFunction(this);
+				for (auto &e : _folders)
+				{
+					if (e->_active)
+					{
+						e->update(folderFunction, fileFunction);
+					}
+				}
+				for (auto &e : _files)
+				{
+					e->update(fileFunction);
+				}
+			}
+
+			template <typename T>
+			void update(std::function<bool(Folder*)> &folderFunctionBegin
+				, std::function<bool(Folder*)> &folderFunctionEnd
+				, std::function<void(T*)> &fileFunction)
+			{
+				if (!folderFunctionBegin(this))
+					return;
+				for (auto &e : _folders)
+				{
+					if (e->_active)
+					{
+						e->update(folderFunctionBegin, folderFunctionEnd, fileFunction);
+					}
+				}
+				for (auto &e : _files)
+				{
+					e->update(fileFunction);
+				}
+				folderFunctionEnd(this);
+			}
+
 			std::tr2::sys::basic_directory_entry<std::tr2::sys::path> _path;
 			std::vector < std::shared_ptr<AE::Folder> > _folders;
 			std::vector < std::shared_ptr<AE::AssetFile> > _files;
