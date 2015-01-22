@@ -243,7 +243,7 @@ namespace AGE
 			for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
 			{
 				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
-					loadSubmesh(data, i, meshInstance->subMeshs[i], loadOrder, loadingChannel);
+					loadSubmesh(data, i, &meshInstance->subMeshs[i], loadOrder, loadingChannel);
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
@@ -254,7 +254,7 @@ namespace AGE
 		return (true);
 	}
 
-	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance &mesh, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
+	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance *mesh, const std::vector<MeshInfos> loadOrder, const std::string &loadingChannel)
 	{
 		auto &data = fileData->subMeshs[index];
 		std::size_t size = data.infos.count();
@@ -263,9 +263,9 @@ namespace AGE
 		std::size_t ctr = 0;
 		auto sizeofFloat = sizeof(float);
 		auto maxSize = data.positions.size();
-		mesh.boundingBox = data.boundingBox;
-		mesh.defaultMaterialIndex = data.defaultMaterialIndex;
-		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([&]() {
+		mesh->boundingBox = data.boundingBox;
+		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() {
 			auto &paintingManager = GetRenderThread()->paintingManager;
 			std::vector<GLenum> types;
 			for (auto &e : loadOrder)
@@ -276,18 +276,18 @@ namespace AGE
 			}
 			if (!paintingManager.has_painter(types))
 			{
-				mesh.painter = paintingManager.add_painter(std::move(types));
+				mesh->painter = paintingManager.add_painter(std::move(types));
 			}
 			else
 			{
-				mesh.painter = paintingManager.get_painter(types);
+				mesh->painter = paintingManager.get_painter(types);
 			}
-			auto &painter = paintingManager.get_painter(mesh.painter);
-			mesh.vertices = painter->add_vertices(data.positions.size(), data.indices.size());
-			auto vertices = painter->get_vertices(mesh.vertices);
-			for (auto index = 0ull; vertices->nbr_buffer(); ++index)
+			auto &painter = paintingManager.get_painter(mesh->painter);
+			mesh->vertices = painter->add_vertices(data.positions.size(), data.indices.size());
+			auto vertices = painter->get_vertices(mesh->vertices);
+			for (auto i = 0ull; i < vertices->nbr_buffer(); ++i)
 			{
-				g_InfosTypes[types[index]].second(*vertices, index, data);
+				g_InfosTypes[loadOrder[i]].second(*vertices, i, data);
 			}
 			vertices->set_indices(data.indices);
 			return AssetsLoadingResult(false);

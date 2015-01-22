@@ -75,10 +75,10 @@ struct GlType
 	}
 };
 
-static const size_t nbr_type = 4;
 static std::unordered_map<GLenum, GlType> available_types =
 {
 	std::make_pair(GL_FLOAT, GlType(GL_FLOAT, GL_FLOAT, sizeof(float), 1, std::string("float"))),
+	std::make_pair(GL_FLOAT_VEC2, GlType(GL_FLOAT_VEC2, GL_FLOAT, sizeof(glm::vec2), 2, std::string("vec2"))),
 	std::make_pair(GL_FLOAT_VEC3, GlType(GL_FLOAT_VEC3, GL_FLOAT, sizeof(glm::vec3), 3, std::string("vec3"))),
 	std::make_pair(GL_FLOAT_VEC4, GlType(GL_FLOAT_VEC4, GL_FLOAT, sizeof(glm::vec4), 4, std::string("vec4"))),
 	std::make_pair(GL_FLOAT_MAT4, GlType(GL_FLOAT_MAT4, GL_FLOAT, sizeof(glm::mat4), 16, std::string("mat4"))),

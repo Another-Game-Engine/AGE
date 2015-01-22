@@ -184,6 +184,6 @@ Vertices & Vertices::update(std::shared_ptr<Program> const &program)
 
 void Vertices::print() const
 {
-	std::cout << "element, nbr vertex [" << _nbr_vertex << "], nbr index [" << _nbr_indices << "]" << std::endl;
+	std::cout << "element, nbr vertex [" << _nbr_vertex << "], nbr index [" << _nbr_indices << "], offset [" << _offset << "]" << std::endl;
 }
 

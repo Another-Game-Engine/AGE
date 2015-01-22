@@ -29,7 +29,8 @@ Key<Vertices> Painter::add_vertices(size_t nbrVertex, size_t nbrIndices)
 	for (auto &vertices : _vertices) {
 		offset = vertices.nbr_vertex();
 	}
-	_vertices.emplace_back(_buffer.get_types(), nbrVertex, nbrIndices, offset);
+	_vertices.emplace_back(Vertices(_buffer.get_types(), nbrVertex, nbrIndices, offset));
+	_buffer.print();
 	_buffer.insert(_vertices.back());
 	return (Key<Vertices>::createKey(_vertices.size() - 1));
 }

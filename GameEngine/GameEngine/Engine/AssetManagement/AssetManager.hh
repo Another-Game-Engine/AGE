@@ -11,6 +11,7 @@
 #include <map>
 #include <future>
 #include <TMQ/message.hpp>
+#include <functional>
 
 struct MaterialSetInstance;
 struct MeshInstance;
@@ -117,7 +118,7 @@ namespace AGE
 		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
 		bool loadTexture(const File &filepath, const std::string &loadingChannel = "");
-		bool loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder = std::vector<MeshInfos>(), const std::string &loadingChannel = "");
+		bool loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		void updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error);
 
@@ -134,6 +135,6 @@ namespace AGE
 
 	private:
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
-		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance &mesh, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel);
+		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::vector<MeshInfos> loadOrder, const std::string &loadingChannel);
 	};
 }
