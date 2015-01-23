@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
+    <ClCompile Include="AssetFiles\CookedFile.cpp" />
     <ClCompile Include="AssetFiles\RawFile.cpp" />
     <ClCompile Include="AssetsDatabase.cpp" />
     <ClCompile Include="AssetFiles\File.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
+    <ClInclude Include="AssetFiles\CookedFile.hpp" />
     <ClInclude Include="AssetFiles\RawFile.hpp" />
     <ClInclude Include="AssetsDatabase.hpp" />
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />

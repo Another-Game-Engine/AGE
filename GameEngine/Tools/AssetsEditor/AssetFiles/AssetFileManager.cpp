@@ -1,6 +1,7 @@
 #include <AssetFiles/AssetFileManager.hpp>
 #include <Utils/FileSystem.hpp>
 #include <AssetFiles/RawFile.hpp>
+#include <AssetFiles/CookedFile.hpp>
 #include <AssetFiles/AssetsTypes.hpp>
 #include <Utils/BitOperations.hpp>
 #include <AssetFiles/Folder.hpp>
@@ -14,6 +15,7 @@ namespace AGE
 {
 	namespace AE
 	{
+		static char* DirtyString = "Dirty";
 		static std::vector<ImVec4> &Colors()
 		{
 			static auto colors = std::vector < ImVec4 > {
@@ -52,6 +54,23 @@ namespace AGE
 				t->_type = AssetType::Raw | AssetType::Material;
 
 			}
+			else if (extension == "sage")
+			{
+				t = std::make_shared<CookedFile>(path, parent);
+				t->_type = AssetType::Cooked | AssetType::Texture;
+			}
+			else if (extension == "tage")
+			{
+				t = std::make_shared<CookedFile>(path, parent);
+				t->_type = AssetType::Cooked | AssetType::Texture;
+			}
+			else if (extension == "mage")
+			{
+				t = std::make_shared<CookedFile>(path, parent);
+				t->_type = AssetType::Cooked | AssetType::Texture;
+			}
+
+
 			if (t)
 			{
 				t->_lastWriteTime = AGE::FileSystem::GetLastWriteTime(t->getPath());
@@ -87,7 +106,7 @@ namespace AGE
 			ImGui::Columns(t);
 			if (list && printSections & Name)
 			{
-				if (ImGui::Checkbox(ptr->getPath().c_str(), &ptr->_selected))
+				if (ImGui::Checkbox(ptr->getFileName().c_str(), &ptr->_selected))
 				{
 					auto castedPtr = std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis());
 					if (ptr->_selected)
@@ -119,6 +138,11 @@ namespace AGE
 					if (type)
 						ImGui::SameLine();
 				}
+				if (ptr->_dirty)
+				{
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(1, 0, 0, 1), DirtyString);
+				}
 				ImGui::NextColumn();
 			}
 			if (printSections & Date)
@@ -143,7 +167,24 @@ namespace AGE
 					auto cookedPath = RawPathToCooked(FileSystem::CleanPath(ptr->getPath()));
 					cooked->find(cookedPath, result);
 					if (result)
-						std::cout << result->getPath() << std::endl;
+					{
+						ptr->_cookedFile = std::static_pointer_cast<CookedFile>(result->getSharedPtrOnThis());
+						std::static_pointer_cast<CookedFile>(result)->_rawFile = std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis());
+						if (FileSystem::GetDiffTime(ptr->_lastWriteTime, result->_lastWriteTime) > 0)
+						{
+							std::cout << FileSystem::GetDateStr(ptr->getPath()) << " | " << FileSystem::GetDateStr(result->getPath()) << std::endl;
+							//TODO push in dirty list
+							ptr->_dirty = true;
+						}
+						else
+						{
+							ptr->_dirty = false;
+						}
+					}
+					else
+					{
+						ptr->_dirty = true;
+					}
 				}
 			}));
 		}

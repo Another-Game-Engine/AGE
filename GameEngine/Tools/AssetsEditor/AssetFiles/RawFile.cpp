@@ -10,6 +10,7 @@ namespace AGE
 		RawFile::RawFile(const std::tr2::sys::path &path, Folder *parent)
 			: AssetFile(path, parent)
 			, _dirty(true)
+			, _cookedFile(nullptr)
 		{
 		}
 	}
