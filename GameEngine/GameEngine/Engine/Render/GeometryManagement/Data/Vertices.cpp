@@ -61,6 +61,11 @@ size_t Vertices::nbr_buffer() const
 	return (_data.size());
 }
 
+size_t Vertices::offset() const
+{
+	return (_offset);
+}
+
 std::vector<uint8_t> &&Vertices::transfer_data(size_t index)
 {
 	return (std::move(_data[index]));

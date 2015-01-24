@@ -20,6 +20,7 @@ public:
 	size_t nbr_indices() const;
 	size_t nbr_vertex() const;
 	size_t nbr_buffer() const;
+	size_t offset() const;
 	GLenum get_type(size_t index) const;
 	std::vector<uint8_t> &&transfer_data(size_t index);
 	std::vector<uint8_t> &&transfer_indices_data();

@@ -38,6 +38,7 @@ BenchmarkScene::~BenchmarkScene(void)
 # include <Render/GeometryManagement/Painting/Painter.hh>
 # include <Render/Pipelining/Render/RenderingPass.hh>
 # include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
+# include <Render/GeometryManagement/Painting/PaintingManager.hh>
 
 void BenchmarkScene::initRendering()
 {
@@ -46,6 +47,8 @@ void BenchmarkScene::initRendering()
 
 	////TODO
 	AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Basic::VoidFunction>(std::function<void()>([&](){
+		auto &painter_manager = AGE::GetRenderThread()->paintingManager;
+		
 		//// create the shader
 		//key.getBuff.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER, DEFFERED_FRAG_SHADER);
 		//key.Accum.shader = _renderManager->addShader(DEFFERED_VERTEX_SHADER_ACCUM, DEFFERED_FRAG_SHADER_ACCUM);
@@ -298,6 +301,7 @@ bool BenchmarkScene::userUpdate(double time)
 				_l->setPosition(glm::vec3(-4, 0, 0));
 				_l->setScale(glm::vec3(0.007f));
 				auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
+				GetRenderThread()->defferd_shading.add(_m);
 				//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
 				//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
 				//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")

@@ -24,6 +24,5 @@ protected:
 protected:
 	std::string _name;
 	std::vector<std::shared_ptr<IRendering>> _rendering_list;
-	std::vector<std::shared_ptr<Painter>> _painters;
 	std::vector<std::shared_ptr<Program>> _programs;
 };

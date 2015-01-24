@@ -110,6 +110,8 @@
     <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Painting\PaintingManager.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Render\Rendering.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -320,6 +322,7 @@
     <ClInclude Include="Engine\AssetManagement\Data\MeshData.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\TextureData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Painting\PaintingManager.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

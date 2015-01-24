@@ -15,19 +15,27 @@ public:
 		_pool.reserve(maxSize);
 	}
 
+	MemoryPool(MemoryPool &&move) :
+		_pool(std::move(move._pool)),
+		_currentIdx(move._currentIdx),
+		_freeIdx(std::move(move._freeIdx))
+	{
+
+	}
+
 	~MemoryPool() { }
 
-	uint32_t alloc()
+	template <class... param_t>
+	uint32_t alloc(param_t... param)
 	{
 		if (_freeIdx.empty() == false)
 		{
 			uint32_t ret = _freeIdx.front();
 			_freeIdx.pop();
-			new (&_pool[ret]) T();
+			new (&_pool[ret]) T(param...);
 			return (ret);
 		}
-		assert(_currentIdx != _pool.capacity());
-		_pool.emplace_back();
+		_pool.emplace_back(param...);
 		return (_currentIdx++);
 	}
 
@@ -42,8 +50,13 @@ public:
 		return (_pool[idx]);
 	}
 
+	T const &get(uint32_t idx) const
+	{
+		return (_pool[idx]);
+	}
+
 private:
-	std::vector<T>			_pool;
+	std::vector<T>	_pool;
 	std::queue<uint32_t>	_freeIdx;
 	uint32_t				_currentIdx;
 };

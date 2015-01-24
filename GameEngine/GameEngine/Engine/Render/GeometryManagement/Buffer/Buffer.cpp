@@ -51,15 +51,17 @@ Buffer & Buffer::unbind()
 
 Buffer & Buffer::update()
 {
+	bool forced_full_transfert = false;
 	if (_request_resize) {
 		_buffer->bind();
 		_buffer->alloc(_size_alloc);
 		_request_resize = false;
+		forced_full_transfert = true;
 	}
 	if (_request_transfer) {
 		_buffer->bind();
 		for (auto &memory : _block_memories) {
-			if (!memory->is_update()) {
+			if (!memory->is_update() || forced_full_transfert) {
 				memory->update_buffer(*_buffer.get());
 			}
 		}

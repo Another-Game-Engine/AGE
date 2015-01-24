@@ -1,6 +1,7 @@
 #pragma once
 
 # include <Utils/OpenGL.hh>
+# include <Utils/MemoryPool.hpp>
 # include <memory>
 # include <vector>
 # include <Render/Key.hh>
@@ -31,5 +32,6 @@ public:
 private:
 	BufferPrograms _buffer;
 	std::vector<std::shared_ptr<Program>> _programs;
-	std::vector<Vertices> _vertices;
+	MemoryPool<Vertices> _vertices;
+	std::vector<uint32_t> _keys_positions;
 };

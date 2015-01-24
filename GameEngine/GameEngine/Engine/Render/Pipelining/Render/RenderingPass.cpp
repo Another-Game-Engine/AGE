@@ -15,7 +15,7 @@ _frame_output(std::move(move._frame_output))
 
 }
 
-IRendering & RenderingPass::render(IRenderingPipeline &_, std::vector<std::shared_ptr<IRenderingPipeline>> const &others)
+IRendering & RenderingPass::render(std::vector<AGE::Drawable> const &drawables, IRenderingPipeline &_, PaintingManager &paintingManager, std::vector<std::shared_ptr<IRenderingPipeline>> const &other)
 {
 	_frame_buffer.bind();
 	if (!_is_update) {
@@ -25,7 +25,7 @@ IRendering & RenderingPass::render(IRenderingPipeline &_, std::vector<std::share
 		}
 		_is_update = true;
 	}
-	_render_function(_, others);
+	_render_function(drawables, _, paintingManager, other);
 	_frame_buffer.unbind();
 	return (*this);
 }
