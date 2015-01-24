@@ -18,7 +18,6 @@ protected:
 	virtual IRenderingPipeline &set_rendering(std::vector<std::shared_ptr<IRendering>> const &rendering_list) override final;
 	virtual std::vector<std::shared_ptr<IRendering>> const &get_rendering() const override final;
 	virtual std::string const &name() const override final;
-	virtual std::vector<std::shared_ptr<Painter>> const &get_painters() const override final;
 	virtual std::vector<std::shared_ptr<Program>> const &get_programs() const override final;
 
 protected:
