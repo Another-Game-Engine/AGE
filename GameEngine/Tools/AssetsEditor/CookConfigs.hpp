@@ -38,7 +38,10 @@ namespace AGE
 			CookConfig(CookConfigType t);
 
 			void update();
+			void updateLastTimeEdited();
 			virtual void drawImGuiTypeSpecific() = 0;
+		protected:
+			int modified;
 		};
 
 		struct AnimationConfig : public CookConfig
@@ -78,7 +81,7 @@ namespace AGE
 				, sphere = 2
 				, cube = 3
 			};
-
+			Type rigidBodyType;
 			static const char * _typeString[];
 			static inline const char *TypeToString(int t) { return _typeString[t]; }
 		};

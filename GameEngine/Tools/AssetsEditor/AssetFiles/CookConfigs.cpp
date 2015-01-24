@@ -16,17 +16,26 @@ namespace AGE
 
 		void CookConfig::update()
 		{
+			modified = 0;
 			ImGui::Text("Type : %s", cookConfigTypeToString());
-			ImGui::InputText("Name", name, MAX_ASSET_NAME_LENGTH);
+			modified += ImGui::InputText("Name", name, MAX_ASSET_NAME_LENGTH);
 			if (ImGui::TreeNode("Last cooking logs :"))
 			{
 				ImGui::Text(logs.c_str());
 				ImGui::TreePop();
 			}
 			drawImGuiTypeSpecific();
+			if (modified > 0)
+				updateLastTimeEdited();
 		}
 
-//		virtual void drawImGuiTypeSpecific()
+		void CookConfig::updateLastTimeEdited()
+		{
+			time_t t;
+			time(&t);
+			lastTimeEdited = *localtime(&t);
+		}
+
 
 		AnimationConfig::AnimationConfig()
 			: CookConfig(CookConfigType::Animation)
@@ -54,19 +63,21 @@ namespace AGE
 		{
 			if (ImGui::Checkbox("Normalize size", &normalize))
 			{
+				modified++;
 				ImGui::SliderFloat("Max size length", &maxSideLength, 0.00001f, 1000.0f, "%.3f", 1.0f);
 			}
-			ImGui::Checkbox("Psitions", &positions);
-			ImGui::Checkbox("Normals", &normals);
-			ImGui::Checkbox("Bones infos", &bonesInfos);
-			ImGui::Checkbox("Texture coordinates", &uvs);
-			ImGui::Checkbox("Tangents", &tangents);
-			ImGui::Checkbox("BiTangents", &biTangents);
+			modified += ImGui::Checkbox("Psitions", &positions);
+			modified += ImGui::Checkbox("Normals", &normals);
+			modified += ImGui::Checkbox("Bones infos", &bonesInfos);
+			modified += ImGui::Checkbox("Texture coordinates", &uvs);
+			modified += ImGui::Checkbox("Tangents", &tangents);
+			modified += ImGui::Checkbox("BiTangents", &biTangents);
 		}
 
 		PhysicConfig::PhysicConfig()
 			: CookConfig(CookConfigType::Physic)
 		{
+			modified += ImGui::Combo("Rigid body type", (int*)&rigidBodyType, PhysicConfig::cookConfigTypeToString());
 		}
 
 		void PhysicConfig::drawImGuiTypeSpecific()

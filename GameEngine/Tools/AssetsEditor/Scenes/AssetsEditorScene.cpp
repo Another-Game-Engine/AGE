@@ -25,10 +25,13 @@
 #include <AssetFiles/Folder.hpp>
 #include <AssetFiles/RawFile.hpp>
 #include <AssetFiles/AssetFileManager.hpp>
+#include <AssetFiles/CookedFile.hpp>
 
 #include <AssetFiles/AssetsTypes.hpp>
 
 #include <CookConfigs.hpp>
+
+#include <Utils/FileSystem.hpp>
 
 
 namespace AGE
@@ -108,32 +111,44 @@ namespace AGE
 				ImGui::Text("Selected asset : "); ImGui::SameLine(); ImGui::TextColored(ImVec4(0.58, 0, 0.7, 1), _selectedRaw->getFileName().c_str());
 				ImGui::Text("Last modifiction : %s", _selectedRaw->_lastWriteTimeStr.c_str());
 				ImGui::Text("Add cook configurations : ");
+
+				std::shared_ptr<AE::CookConfig> newConfig = nullptr;
+
 				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Animation"))
 				{
-					_selectedRaw->configs.insert(std::make_shared<AE::AnimationConfig>());
+					newConfig = std::make_shared<AE::AnimationConfig>();
 				} ImGui::SameLine();
 				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Material"))
 				{
-					_selectedRaw->configs.insert(std::make_shared<AE::MaterialConfig>());
+					newConfig = std::make_shared<AE::MaterialConfig>();
 				} ImGui::SameLine();
 				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Skin"))
 				{
-					_selectedRaw->configs.insert(std::make_shared<AE::SkinConfig>());
+					newConfig = std::make_shared<AE::SkinConfig>();
 				} ImGui::SameLine();
 				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Physic"))
 				{
-					_selectedRaw->configs.insert(std::make_shared<AE::PhysicConfig>());
+					newConfig = std::make_shared<AE::PhysicConfig>();
 				} ImGui::SameLine();
 				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Skeleton"))
 				{
-					_selectedRaw->configs.insert(std::make_shared<AE::SkeletonConfig>());
+					newConfig = std::make_shared<AE::SkeletonConfig>();
 				} ImGui::SameLine();
 				if (_selectedRaw->_type & AE::AssetType::Texture && ImGui::Button("Texture"))
 				{
-					_selectedRaw->configs.insert(std::make_shared<AE::TextureConfig>());
+					newConfig = std::make_shared<AE::TextureConfig>();
 				}
+
 				ImGui::Separator();
 				ImGui::Separator();
+
+				if (newConfig != nullptr)
+				{
+					newConfig->rawFile = _selectedRaw;
+					_configs.insert(newConfig);
+					newConfig->updateLastTimeEdited();
+					_selectedRaw->configs.insert(newConfig);
+				}
 				std::list<std::shared_ptr<AE::CookConfig>> toDelete;
 				for (auto &e : _selectedRaw->configs)
 				{
@@ -150,11 +165,36 @@ namespace AGE
 				for (auto &e : toDelete)
 				{
 					_selectedRaw->configs.erase(e);
+					_configs.erase(e);
 				}
 				ImGui::EndChild();
 			}
 		}
 		ImGui::EndChild();
+		ImGui::SameLine();
+		ImGui::BeginChild("Todo", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, ImGui::GetIO().DisplaySize.y), false);
+		{
+			if (ImGui::Button("Cook dirty assets"))
+			{
+				for (auto &e : _configs)
+				{
+					if ((e->rawFile.lock() && e->rawFile.lock()->_dirty)
+						/*|| (e->cookedFile.lock() && FileSystem::GetDiffTime(e->cookedFile.lock()->_lastWriteTime , e->lastTimeEdited) < 0)*/)
+					{
+						switch (e->type)
+						{
+						case(AE::CookConfig::CookConfigType::Skin) :
+							//TO FUCKING DO !
+							break;
+						default:
+							break;
+						}
+					}
+				}
+			}
+		}
+		ImGui::EndChild();
+
 		ImGui::End();
 
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
