@@ -180,6 +180,9 @@
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\Vendors\crunch\crnlib\crnlib.2008.vcxproj">
+      <Project>{cf2e70e8-7133-4d96-92c7-68bb406c0664}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

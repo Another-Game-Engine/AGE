@@ -4,12 +4,20 @@
 #include <Texture/Texture.hpp>
 #include <FreeImagePlus.h>
 #include <Utils/BitOperations.hpp>
+#include <squish/squish.h>
+#include <crunch/inc/crnlib.h>
+
+#include <thread>
+#include <mutex>
+
+static std::mutex convertImageMutex;
 
 namespace AGE
 {
 	class ImageLoader
 	{
 	public:
+
 		static bool save(AssetDataSet &dataSet)
 		{
 			if (dataSet.texturesLoaded == false)
@@ -68,12 +76,56 @@ namespace AGE
 				}
 				else if (colorType == FIC_MINISBLACK || colorType == FIC_MINISWHITE)
 				{
+					// for the moment, we wont handle monochromatic images
 					t->colorNumber = 1;
 				}
 				else
 					assert(false);
+				
+				// Convert image to RGBA and the to DXT
+#if 1
+				convertImageMutex.lock();
+
+				crn_comp_params params;
+				crn_mipmap_params mipmaps;
+
+				params.m_height = t->height;
+				params.m_width = t->width;
+
+				assert(image.convertTo32Bits());
 				auto imgData = FreeImage_GetBits(image);
-				t->data.assign(imgData, imgData + sizeof(unsigned char) * t->width * t->height * t->colorNumber);
+
+				int	compressionFlag;
+
+				if (t->colorNumber == 4)
+					params.m_format = crn_format::cCRNFmtDXT5;
+				else
+					params.m_format = crn_format::cCRNFmtDXT5;
+
+				params.set_flag(cCRNCompFlagPerceptual, false);
+				params.m_file_type = cCRNFileTypeDDS;
+
+				params.m_pImages[0][0] = (crn_uint32*)imgData;
+
+				mipmaps.m_gamma_filtering = false;
+				mipmaps.m_mode = cCRNMipModeGenerateMips;
+
+				uint32_t compressedSize;
+
+				uint8_t *compressedData = static_cast<uint8_t*>(crn_compress(params, mipmaps, compressedSize));
+
+				assert(compressedData != NULL);
+
+				convertImageMutex.unlock();
+				// --- End of compression ---
+
+				t->data.assign(compressedData, compressedData + compressedSize);
+
+#else
+				auto imgData = FreeImage_GetBits(image);
+
+				t->data.assign(imgData, imgData + t->height * t->width * t->colorNumber);
+#endif
 
 				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder());
 
