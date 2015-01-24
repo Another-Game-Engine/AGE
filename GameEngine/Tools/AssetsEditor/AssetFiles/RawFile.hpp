@@ -1,6 +1,7 @@
 #pragma once
 
 #include "File.hpp"
+#include <set>
 
 namespace AGE
 {
@@ -17,7 +18,7 @@ namespace AGE
 
 			bool _dirty;
 			std::shared_ptr<CookedFile> _cookedFile;
-			std::list < std::shared_ptr<CookConfig> > configs;
+			std::set < std::shared_ptr<CookConfig> > configs;
 		};
 	}
 }

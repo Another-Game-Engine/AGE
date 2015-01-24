@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
+    <ClCompile Include="AssetFiles\CookConfigs.cpp" />
     <ClCompile Include="AssetFiles\CookedFile.cpp" />
     <ClCompile Include="AssetFiles\RawFile.cpp" />
     <ClCompile Include="AssetsDatabase.cpp" />

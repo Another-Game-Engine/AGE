@@ -26,6 +26,8 @@
 #include <AssetFiles/RawFile.hpp>
 #include <AssetFiles/AssetFileManager.hpp>
 
+#include <AssetFiles/AssetsTypes.hpp>
+
 #include <CookConfigs.hpp>
 
 
@@ -106,41 +108,48 @@ namespace AGE
 				ImGui::Text("Selected asset : "); ImGui::SameLine(); ImGui::TextColored(ImVec4(0.58, 0, 0.7, 1), _selectedRaw->getFileName().c_str());
 				ImGui::Text("Last modifiction : %s", _selectedRaw->_lastWriteTimeStr.c_str());
 				ImGui::Text("Add cook configurations : ");
-				if (ImGui::Button("Animation"))
+				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Animation"))
 				{
-					_selectedRaw->configs.push_back(std::make_shared<AE::AnimationConfig>());
+					_selectedRaw->configs.insert(std::make_shared<AE::AnimationConfig>());
 				} ImGui::SameLine();
-				if (ImGui::Button("Material"))
+				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Material"))
 				{
-					_selectedRaw->configs.push_back(std::make_shared<AE::MaterialConfig>());
+					_selectedRaw->configs.insert(std::make_shared<AE::MaterialConfig>());
 				} ImGui::SameLine();
-				if (ImGui::Button("Skin"))
+				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Skin"))
 				{
-					_selectedRaw->configs.push_back(std::make_shared<AE::SkinConfig>());
+					_selectedRaw->configs.insert(std::make_shared<AE::SkinConfig>());
 				} ImGui::SameLine();
-				if (ImGui::Button("Physic"))
+				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Physic"))
 				{
-					_selectedRaw->configs.push_back(std::make_shared<AE::PhysicConfig>());
+					_selectedRaw->configs.insert(std::make_shared<AE::PhysicConfig>());
 				} ImGui::SameLine();
-				if (ImGui::Button("Skeleton"))
+				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Skeleton"))
 				{
-					_selectedRaw->configs.push_back(std::make_shared<AE::SkeletonConfig>());
+					_selectedRaw->configs.insert(std::make_shared<AE::SkeletonConfig>());
 				} ImGui::SameLine();
-				if (ImGui::Button("Texture"))
+				if (_selectedRaw->_type & AE::AssetType::Texture && ImGui::Button("Texture"))
 				{
-					_selectedRaw->configs.push_back(std::make_shared<AE::TextureConfig>());
+					_selectedRaw->configs.insert(std::make_shared<AE::TextureConfig>());
 				}
 				ImGui::Separator();
 				ImGui::Separator();
+				std::list<std::shared_ptr<AE::CookConfig>> toDelete;
 				for (auto &e : _selectedRaw->configs)
 				{
-					if (ImGui::TreeNode(_selectedRaw.get(), "Cook config of type %s for %s", "TODO", _selectedRaw->getFileName().c_str()))
+					if (ImGui::TreeNode(e.get(), "%s | %s", e->cookConfigTypeToString(), e->name))
 					{
+						e->update();
+						if (ImGui::Button("Delete"))
+						{
+							toDelete.push_back(e);
+						}
 						ImGui::TreePop();
 					}
-					//e->update(std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
-					//	AE::AssetFileManager::PrintSelectableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, nullptr);
-					//}));
+				}
+				for (auto &e : toDelete)
+				{
+					_selectedRaw->configs.erase(e);
 				}
 				ImGui::EndChild();
 			}
