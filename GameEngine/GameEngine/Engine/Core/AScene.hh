@@ -23,6 +23,7 @@ namespace AGE
 	class RenderScene;
 	class EntityFilter;
 	class System;
+	class SceneManager;
 
 	class AScene : public DependenciesInjector, public EntityIdRegistrar
 	{
@@ -34,10 +35,13 @@ namespace AGE
 		AGE::Queue<std::uint16_t>                                               _free;
 		ENTITY_ID                                                               _entityNumber;
 		AGE::RenderScene                                                        *_renderScene;
+		bool                                                                    _active;
 		friend EntityFilter;
 		friend class AGE::RenderScene;
+		friend class AGE::SceneManager;
 	protected:
 		std::weak_ptr<AGE::Engine>                                              _engine;
+		inline void setActive(bool tof) { _active = tof; }
 	public:
 		AScene(std::weak_ptr<AGE::Engine> engine);
 		virtual ~AScene();
@@ -48,6 +52,7 @@ namespace AGE
 		bool                    start();
 		inline std::weak_ptr<AGE::Engine> getEngine() { return _engine; }
 		inline void setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }
+		inline bool isActive() const { return _active; }
 		void                    filterSubscribe(COMPONENT_ID id, EntityFilter* filter)
 		{
 			auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);

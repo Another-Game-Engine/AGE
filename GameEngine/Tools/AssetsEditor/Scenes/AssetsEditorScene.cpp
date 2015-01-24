@@ -12,6 +12,7 @@
 #include <Core/Input.hh>
 #include <SDL/SDL.h>
 
+#include <string>
 
 //CONVERTOR
 #include <Convertor/SkeletonLoader.hpp>
@@ -21,18 +22,21 @@
 #include <Convertor/ImageLoader.hpp>
 #include <Convertor/BulletLoader.hpp>
 
-#include <Folder.hpp>
+#include <AssetFiles/Folder.hpp>
+#include <AssetFiles/RawFile.hpp>
+#include <AssetFiles/AssetFileManager.hpp>
 
 
 namespace AGE
 {
-	static AE::Folder raw(std::string("../../Assets/AGE-Assets-For-Test/Raw"));
-	static AE::Folder cook(std::string("../../Assets/AGE-Assets-For-Test/Serialized"));
 	AssetsEditorScene::AssetsEditorScene(std::weak_ptr<AGE::Engine> engine)
 		: AScene(engine)
+		, _raw("../../Assets/AGE-Assets-For-Test/Raw")
+		, _cook("../../Assets/AGE-Assets-For-Test/Serialized")
 	{
-		raw.list();
-		cook.list();
+		_raw.list();
+		_cook.list();
+		AE::AssetFileManager::LinkRawToCooked(&_raw, &_cook);
 	}
 
 	AssetsEditorScene::~AssetsEditorScene(void)
@@ -46,11 +50,73 @@ namespace AGE
 
 	bool AssetsEditorScene::userUpdate(double time)
 	{
-		ImGui::Begin("Raw");
-		raw.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
-		ImGui::End();
-		ImGui::Begin("Cooked");
-		cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+		std::shared_ptr<AE::AssetFile> testFind;
+		_raw.find("../../Assets/AGE-Assets-For-Test/Raw/ball/ball.obj", testFind);
+		//check dirty for test
+		{
+			static double counter = 0;
+			counter += time;
+			if (counter > 1)
+			{
+				std::set<std::shared_ptr<AE::RawFile>> dirty;
+				AE::AssetFileManager::CheckIfRawModified(&_raw, dirty);
+				if (dirty.size())
+					std::cout << "Dirty : " << dirty.size() << std::endl;
+				counter = 0;
+			}
+		}
+
+		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, 1, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
+		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3f, ImGui::GetIO().DisplaySize.y), true);
+		{
+			{
+				ImGui::BeginChild("Raw", ImVec2(0, ImGui::GetIO().DisplaySize.y /*/ 2 */- 10), false);
+				_raw.update(
+				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+					bool opened = ImGui::TreeNode((void*)(folder), folder->_path.path().filename().c_str());
+					if (opened)
+					{
+						ImGui::Separator();
+					}
+					return opened;
+				}),
+					std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+					ImGui::Separator();
+					ImGui::TreePop();
+					return true;
+				}),
+					std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
+					AE::AssetFileManager::PrintSelectableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Date | AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, &_selectedRaw);
+				}));
+				ImGui::EndChild();
+			}
+			//{
+			//	ImGui::BeginChild("Cooked", ImVec2(0, ImGui::GetIO().DisplaySize.y / 2 - 10), false);
+			//	//_cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+			//	ImGui::EndChild();
+			//}
+		}
+		ImGui::EndChild();
+		ImGui::SameLine();
+		ImGui::BeginChild("Cook list", ImVec2(ImGui::GetWindowWidth() * 0.15f, ImGui::GetIO().DisplaySize.y), false);
+		{
+			{
+				ImGui::BeginChild("Selected", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.75 - 10), false);
+				for (auto &e : _selectedRaw)
+				{
+					e->update(std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
+						AE::AssetFileManager::PrintSelectableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, nullptr);
+					}));
+				}
+				ImGui::EndChild();
+			}
+			{
+				ImGui::BeginChild("Cooked", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.25 - 10), true);
+				//_cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+				ImGui::EndChild();
+			}
+		}
+		ImGui::EndChild();
 		ImGui::End();
 
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
@@ -169,58 +235,6 @@ namespace AGE
 						AGE::BulletLoader::save(*dataSet.get());
 					});
 				});
-				//BROKEN TOWER
-//				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-//					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-//					dataSet->filePath = File("Broken Tower/Broken Tower.fbx");
-//					dataSet->skinName = "tower";
-//					dataSet->materialName = "tower";
-//
-//					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-//					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-//
-//					AGE::AssimpLoader::Load(*dataSet.get());
-//
-//					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-//						AGE::MaterialLoader::load(*dataSet.get());
-//						AGE::MaterialLoader::save(*dataSet.get());
-//
-//						AGE::ImageLoader::load(*dataSet.get());
-//						AGE::ImageLoader::save(*dataSet.get());
-//
-//						AGE::MeshLoader::load(*dataSet.get());
-//						AGE::MeshLoader::save(*dataSet.get());
-//
-//						AGE::BulletLoader::load(*dataSet.get());
-//						AGE::BulletLoader::save(*dataSet.get());
-//					});
-//				});
-//				//VENICE
-//				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-//					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-//					dataSet->filePath = File("Venice/venice.obj");
-//					dataSet->skinName = "venice";
-//					dataSet->materialName = "venice";
-//
-//					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-//					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-//
-//					AGE::AssimpLoader::Load(*dataSet.get());
-//
-//					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-//						AGE::MaterialLoader::load(*dataSet.get());
-//						AGE::MaterialLoader::save(*dataSet.get());
-//
-//						AGE::ImageLoader::load(*dataSet.get());
-//						AGE::ImageLoader::save(*dataSet.get());
-//
-//						AGE::MeshLoader::load(*dataSet.get());
-//						AGE::MeshLoader::save(*dataSet.get());
-//
-//						AGE::BulletLoader::load(*dataSet.get());
-//						AGE::BulletLoader::save(*dataSet.get());
-//					});
-//				});
 			}
 			slowTouch = true;
 		}

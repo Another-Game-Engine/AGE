@@ -3,8 +3,8 @@
 #include <imgui\imgui.h>
 #include <regex>
 
-#include "AssetFileCreator.hpp"
-
+#include "AssetFileManager.hpp"
+#include <Utils/FileSystem.hpp>
 #include <iostream>
 
 namespace AGE
@@ -50,9 +50,11 @@ namespace AGE
 
 				if (!std::tr2::sys::is_directory(file))
 				{
-					auto n = AssetFileCreator::CreateFile(file.relative_path(), this);
-					_files.push_back(n);
-					std::cout << file.relative_path() << std::endl;
+					auto n = AssetFileManager::CreateFile(file.relative_path(), this);
+					if (n)
+					{
+						_files.push_back(n);
+					}
 				}
 				else if (std::tr2::sys::is_directory(file))
 				{
@@ -94,26 +96,34 @@ namespace AGE
 			}
 		}
 
-
-		void Folder::printImgUi(AssetFile::PrintInfos infos)
+		void Folder::_internalFind(const std::string &path, std::shared_ptr<AssetFile> &result)
 		{
-			if (ImGui::TreeNode((void*)(this), _path.path().filename().c_str()))
+			if (result != nullptr)
+				return;
+			std::string::size_type f = path.find(_path.path().string());
+			if (f != std::string::npos && f == 0)
 			{
-				ImGui::Separator();
 				for (auto &e : _folders)
 				{
-					if (e->_active)
+					e->_internalFind(path, result);
+				}
+				if (result == nullptr)
+				{
+					for (auto &e : _files)
 					{
-						e->printImgUi(infos);
+						if (e->getPath() == path)
+						{
+							result = e;
+							return;
+						}
 					}
 				}
-				for (auto &e : _files)
-				{
-					e->printImgUi(infos);
-				}
-				ImGui::Separator();
-				ImGui::TreePop();
 			}
+		}
+
+		void Folder::find(const std::string &path, std::shared_ptr<AssetFile> &result)
+		{
+			_internalFind(FileSystem::CleanPath(path), result);
 		}
 	}
 }
