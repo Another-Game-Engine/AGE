@@ -26,6 +26,8 @@
 #include <AssetFiles/RawFile.hpp>
 #include <AssetFiles/AssetFileManager.hpp>
 
+#include <CookConfigs.hpp>
+
 
 namespace AGE
 {
@@ -65,7 +67,7 @@ namespace AGE
 		}
 
 		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, 1, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
-		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3f, ImGui::GetIO().DisplaySize.y), true);
+		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3333333f, ImGui::GetIO().DisplaySize.y), true);
 		{
 			{
 				ImGui::BeginChild("Raw", ImVec2(0, ImGui::GetIO().DisplaySize.y /*/ 2 */- 10), false);
@@ -84,7 +86,7 @@ namespace AGE
 					return true;
 				}),
 					std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
-					AE::AssetFileManager::PrintSelectableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Date | AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, &_selectedRaw);
+					AE::AssetFileManager::PrintClickableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Date | AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, _selectedRaw);
 				}));
 				ImGui::EndChild();
 			}
@@ -96,21 +98,50 @@ namespace AGE
 		}
 		ImGui::EndChild();
 		ImGui::SameLine();
-		ImGui::BeginChild("Cook list", ImVec2(ImGui::GetWindowWidth() * 0.15f, ImGui::GetIO().DisplaySize.y), false);
+		ImGui::BeginChild("Selected Raw", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, ImGui::GetIO().DisplaySize.y), false);
 		{
+			if (_selectedRaw != nullptr)
 			{
-				ImGui::BeginChild("Selected", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.75 - 10), false);
-				for (auto &e : _selectedRaw)
+				ImGui::BeginChild(_selectedRaw->getFileName().c_str(), ImVec2(0, ImGui::GetIO().DisplaySize.y - 10), true);
+				ImGui::Text("Selected asset : "); ImGui::SameLine(); ImGui::TextColored(ImVec4(0.58, 0, 0.7, 1), _selectedRaw->getFileName().c_str());
+				ImGui::Text("Last modifiction : %s", _selectedRaw->_lastWriteTimeStr.c_str());
+				ImGui::Text("Add cook configurations : ");
+				if (ImGui::Button("Animation"))
 				{
-					e->update(std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
-						AE::AssetFileManager::PrintSelectableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, nullptr);
-					}));
+					_selectedRaw->configs.push_back(std::make_shared<AE::AnimationConfig>());
+				} ImGui::SameLine();
+				if (ImGui::Button("Material"))
+				{
+					_selectedRaw->configs.push_back(std::make_shared<AE::MaterialConfig>());
+				} ImGui::SameLine();
+				if (ImGui::Button("Skin"))
+				{
+					_selectedRaw->configs.push_back(std::make_shared<AE::SkinConfig>());
+				} ImGui::SameLine();
+				if (ImGui::Button("Physic"))
+				{
+					_selectedRaw->configs.push_back(std::make_shared<AE::PhysicConfig>());
+				} ImGui::SameLine();
+				if (ImGui::Button("Skeleton"))
+				{
+					_selectedRaw->configs.push_back(std::make_shared<AE::SkeletonConfig>());
+				} ImGui::SameLine();
+				if (ImGui::Button("Texture"))
+				{
+					_selectedRaw->configs.push_back(std::make_shared<AE::TextureConfig>());
 				}
-				ImGui::EndChild();
-			}
-			{
-				ImGui::BeginChild("Cooked", ImVec2(0, ImGui::GetIO().DisplaySize.y * 0.25 - 10), true);
-				//_cook.printImgUi(AE::AssetFile::PrintInfos(AE::AssetFile::Name | AE::AssetFile::Type | AE::AssetFile::Date));
+				ImGui::Separator();
+				ImGui::Separator();
+				for (auto &e : _selectedRaw->configs)
+				{
+					if (ImGui::TreeNode(_selectedRaw.get(), "Cook config of type %s for %s", "TODO", _selectedRaw->getFileName().c_str()))
+					{
+						ImGui::TreePop();
+					}
+					//e->update(std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
+					//	AE::AssetFileManager::PrintSelectableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, nullptr);
+					//}));
+				}
 				ImGui::EndChild();
 			}
 		}

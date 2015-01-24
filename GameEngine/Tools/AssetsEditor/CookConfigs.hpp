@@ -2,8 +2,9 @@
 
 #include <string>
 #include <memory>
+#include <glm/fwd.hpp>
 
-namepsace AGE
+namespace AGE
 {
 	namespace AE
 	{
@@ -15,6 +16,7 @@ namepsace AGE
 			std::string name;
 			std::weak_ptr<CookedFile> cookedFile;
 			std::weak_ptr<RawFile> rawFile;
+			std::string logs; // used by convertors to log errors and warnings
 			struct tm lastTimeEdited;
 		};
 
@@ -25,10 +27,27 @@ namepsace AGE
 		{};
 
 		struct SkinConfig : public CookConfig
-		{};
+		{
+			bool normalize;
+			float maxSideLength;
+			bool positions = true;
+			bool normals = true;
+			bool bonesInfos = false;
+			bool uvs = true;
+			bool tangents = true;
+			bool biTangents = true;
+		};
 
-		struct BulletConfig : public CookConfig
-		{};
+		struct PhysicConfig : public CookConfig
+		{
+			enum Type
+			{
+				staticConcave = 0
+				, dynamicConcave = 1
+				, sphere = 2
+				, cube = 3
+			};
+		};
 
 		struct SkeletonConfig : public CookConfig
 		{};

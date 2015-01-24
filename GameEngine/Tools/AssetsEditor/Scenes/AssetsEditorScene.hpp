@@ -23,6 +23,6 @@ namespace AGE
 	private:
 		AE::Folder _raw;
 	 	AE::Folder _cook;
-		std::set<std::shared_ptr<AE::RawFile>> _selectedRaw;
+		std::shared_ptr<AE::RawFile> _selectedRaw;
 	};
 }

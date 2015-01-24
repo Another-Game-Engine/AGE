@@ -7,6 +7,8 @@ namespace AGE
 	namespace AE
 	{
 		class CookedFile;
+		struct CookConfig;
+
 		class RawFile : public AssetFile
 		{
 		public:
@@ -15,6 +17,7 @@ namespace AGE
 
 			bool _dirty;
 			std::shared_ptr<CookedFile> _cookedFile;
+			std::list < std::shared_ptr<CookConfig> > configs;
 		};
 	}
 }

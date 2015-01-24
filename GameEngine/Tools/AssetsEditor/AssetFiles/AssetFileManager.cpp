@@ -158,6 +158,58 @@ namespace AGE
 			ImGui::Columns(1);
 		}
 
+		void AssetFileManager::PrintClickableRawAssetsFile(RawFile *ptr, int printSections, std::shared_ptr<RawFile> &selected)
+		{
+			if (!ptr->_active)
+				return;
+			auto t = Bits::countOne(printSections);
+			ImGui::Columns(t + 1);
+
+			ImGui::PushID((void*)ptr);
+			if (ImGui::Button("Select"))
+			{
+				selected = std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis());
+			}
+			ImGui::PopID();
+
+			ImGui::NextColumn();
+
+			if (printSections & Name)
+			{
+				ImGui::Text(ptr->getFileName().c_str());
+				ImGui::NextColumn();
+			}
+			if (printSections & Type)
+			{
+				int i; int type = ptr->_type;
+				while (type)
+				{
+					i = Bits::getFirstBitPosition(type);
+					type ^= 1 << i;
+					ImGui::TextColored(Colors()[i], EnumToString()[i]);
+					if (type)
+						ImGui::SameLine();
+				}
+				if (ptr->_dirty)
+				{
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(1, 0, 0, 1), DirtyString);
+				}
+				ImGui::NextColumn();
+			}
+			if (printSections & Date)
+			{
+				ImGui::Text(ptr->_lastWriteTimeStr.c_str());
+				ImGui::NextColumn();
+			}
+			if (printSections & Path)
+			{
+				ImGui::Text(ptr->getFileName().c_str());
+				ImGui::NextColumn();
+			}
+			ImGui::Columns(1);
+		}
+
 		void AssetFileManager::LinkRawToCooked(Folder *raw, Folder *cooked)
 		{
 			raw->update(std::function<void(RawFile *)>([&](RawFile *ptr){
