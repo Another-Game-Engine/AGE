@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
+    <ClInclude Include="CookConfigs.hpp" />
     <ClInclude Include="AssetFiles\CookedFile.hpp" />
     <ClInclude Include="AssetFiles\RawFile.hpp" />
     <ClInclude Include="AssetsDatabase.hpp" />
