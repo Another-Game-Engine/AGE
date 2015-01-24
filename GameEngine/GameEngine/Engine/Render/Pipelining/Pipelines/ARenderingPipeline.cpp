@@ -2,9 +2,8 @@
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Program.hh>
 
-ARenderingPipeline::ARenderingPipeline(std::string &&name, std::vector<std::shared_ptr<Painter>> const &painters, std::vector<std::shared_ptr<Program>> const &programs) :
-_name(std::move(name)),
-_programs(programs)
+ARenderingPipeline::ARenderingPipeline(std::string &&name) :
+_name(std::move(name))
 {
 
 }
@@ -15,12 +14,6 @@ _rendering_list(std::move(move._rendering_list)),
 _programs(std::move(move._programs))
 {
 
-}
-
-IRenderingPipeline & ARenderingPipeline::set_rendering(std::vector<std::shared_ptr<IRendering>> const &rendering_list)
-{
-	_rendering_list = rendering_list;
-	return (*this);
 }
 
 std::vector<std::shared_ptr<IRendering>> const & ARenderingPipeline::get_rendering() const

@@ -2,7 +2,22 @@
 
 # include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
 
-//class DeferredShading : public ARenderingPipeline
-//{
-//
-//};
+class DeferredShading : public ARenderingPipeline
+{
+public:
+	enum Step
+	{
+		BUFFERING = 0,
+		LIGHTNING,
+		MERGING,
+		TOTAL
+	};
+
+public:
+	DeferredShading(glm::mat4 const &perspective);
+	DeferredShading(DeferredShading &&move);
+	virtual ~DeferredShading() {}
+
+public:
+	virtual IRenderingPipeline &render(std::vector<AGE::Drawable> const &to_render, PaintingManager const &paintingManager) override final;
+};
