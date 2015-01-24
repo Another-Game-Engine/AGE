@@ -148,6 +148,7 @@ namespace AGE
 					_configs.insert(newConfig);
 					newConfig->updateLastTimeEdited();
 					_selectedRaw->configs.insert(newConfig);
+					memcpy(newConfig->name, _selectedRaw->getFileName().c_str(), MAX_ASSET_NAME_LENGTH);
 				}
 				std::list<std::shared_ptr<AE::CookConfig>> toDelete;
 				for (auto &e : _selectedRaw->configs)
