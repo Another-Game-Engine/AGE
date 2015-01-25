@@ -1,6 +1,6 @@
 #include <Render/Pipelining/Render/ARendering.hh>
 
-ARendering::ARendering(std::function<IRendering &(FUNCTION_ARGS)> const &function) :
+ARendering::ARendering(std::function<void (FUNCTION_ARGS)> const &function) :
 _render_function(function)
 {
 

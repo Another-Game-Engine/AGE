@@ -1,6 +1,6 @@
 #include <Render/Pipelining/Render/Rendering.hh>
 
-Rendering::Rendering(std::function<IRendering &(FUNCTION_ARGS)> const &function):
+Rendering::Rendering(std::function<void (FUNCTION_ARGS)> const &function):
 ARendering(function)
 {
 
@@ -12,9 +12,9 @@ ARendering(std::move(move))
 
 }
 
-IRendering & Rendering::render(std::vector<AGE::Drawable> const &drawables, IRenderingPipeline &_, PaintingManager &paintingManager, std::vector<std::shared_ptr<IRenderingPipeline>> const &other)
+IRendering & Rendering::render(FUNCTION_ARGS)
 {
-	_render_function(drawables, _, paintingManager, other);
+	_render_function(drawables, paintingManager);
 	return (*this);
 }
 

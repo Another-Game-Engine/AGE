@@ -1,7 +1,7 @@
 #include <Render/Pipelining/Render/RenderingPass.hh>
 #include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
 
-RenderingPass::RenderingPass(std::function<IRendering &(FUNCTION_ARGS)> const &function) :
+RenderingPass::RenderingPass(std::function<void (FUNCTION_ARGS)> const &function) :
 ARendering(function)
 {
 
@@ -15,7 +15,7 @@ _frame_output(std::move(move._frame_output))
 
 }
 
-IRendering & RenderingPass::render(std::vector<AGE::Drawable> const &drawables, IRenderingPipeline &_, PaintingManager &paintingManager, std::vector<std::shared_ptr<IRenderingPipeline>> const &other)
+IRendering & RenderingPass::render(FUNCTION_ARGS)
 {
 	_frame_buffer.bind();
 	if (!_is_update) {
@@ -25,7 +25,7 @@ IRendering & RenderingPass::render(std::vector<AGE::Drawable> const &drawables, 
 		}
 		_is_update = true;
 	}
-	_render_function(drawables, _, paintingManager, other);
+	_render_function(drawables, paintingManager);
 	_frame_buffer.unbind();
 	return (*this);
 }

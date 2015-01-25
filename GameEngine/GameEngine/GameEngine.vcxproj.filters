@@ -112,6 +112,7 @@
     <ClCompile Include="Engine\Render\GeometryManagement\Painting\PaintingManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Render\Rendering.cpp" />
+    <ClCompile Include="Engine\Render\OpenGLTask\Tasks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -323,6 +324,7 @@
     <ClInclude Include="Engine\AssetManagement\Data\TextureData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Painting\PaintingManager.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.hh" />
+    <ClInclude Include="Engine\Render\OpenGLTask\Tasks.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -9,9 +9,9 @@ public:
 	virtual ~ARendering() {}
 
 protected:
-	ARendering(std::function<IRendering &(FUNCTION_ARGS)> const & function);
+	ARendering(std::function<void (FUNCTION_ARGS)> const & function);
 	ARendering(ARendering &&move);
 
 protected:
-	std::function<IRendering &(FUNCTION_ARGS)> _render_function;
+	std::function<void (FUNCTION_ARGS)> _render_function;
 };

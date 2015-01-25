@@ -5,7 +5,7 @@
 class Rendering : public ARendering
 {
 public:
-	Rendering(std::function<IRendering &(FUNCTION_ARGS)> const &function);
+	Rendering(std::function<void (FUNCTION_ARGS)> const &function);
 	Rendering(Rendering &&move);
 	virtual ~Rendering() {}
 

@@ -15,7 +15,7 @@ class IRenderContext;
 class RenderingPass : public ARendering
 {
 public:
-	RenderingPass(std::function<IRendering &(FUNCTION_ARGS)> const &function);
+	RenderingPass(std::function<void (FUNCTION_ARGS)> const &function);
 	RenderingPass(RenderingPass &&move);
 	virtual ~RenderingPass(){}
 

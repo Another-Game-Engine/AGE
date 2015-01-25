@@ -301,7 +301,6 @@ bool BenchmarkScene::userUpdate(double time)
 				_l->setPosition(glm::vec3(-4, 0, 0));
 				_l->setScale(glm::vec3(0.007f));
 				auto _m = addComponent<Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
-				GetRenderThread()->defferd_shading.add(_m);
 				//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
 				//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
 				//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")

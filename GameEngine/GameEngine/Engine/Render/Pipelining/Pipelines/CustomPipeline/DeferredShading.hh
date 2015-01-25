@@ -14,10 +14,12 @@ public:
 	};
 
 public:
-	DeferredShading(glm::mat4 const &perspective);
+	DeferredShading(glm::mat4 const &perspective, glm::vec2 const &screen_size);
 	DeferredShading(DeferredShading &&move);
 	virtual ~DeferredShading() {}
 
 public:
 	virtual IRenderingPipeline &render(std::vector<AGE::Drawable> const &to_render, PaintingManager const &paintingManager) override final;
+
+private:
 };
