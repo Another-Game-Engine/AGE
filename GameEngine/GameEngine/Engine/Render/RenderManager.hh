@@ -89,6 +89,7 @@ namespace gl
 		RenderManager &setShaderByMaterial(Key<Shader> &shader, Key<Material> const &key);
 		Key<Texture> addTexture2D(GLsizei width, GLsizei height, GLenum internalFormat, bool mipmapping);
 		RenderManager &uploadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
+		RenderManager &uploadTextureMipMaps(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
 		RenderManager &downloadTexture(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img);
 		RenderManager &setlevelTargetTexture(Key<Texture> const &key, uint8_t level);
 		RenderManager &bindTexture(Key<Texture> const &key);

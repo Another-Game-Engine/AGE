@@ -17,6 +17,9 @@ namespace gl
 
 		virtual GLenum getType() const = 0;
 		virtual Storage const &attachement(Framebuffer const &fbo, GLenum attach) const = 0;
+
+		GLenum getInternalFormat() const { return (_internalFormat); }
+
 	protected:
 		Storage(size_t width, size_t height, GLenum internalFormat);
 
@@ -62,6 +65,9 @@ namespace gl
 		virtual Texture const &parameter(GLenum pname, GLint param) const;
 		virtual Texture const &generateMipMap() const;
 		virtual Storage const &attachement(Framebuffer const &fbo, GLenum attach) const;
+
+		int getWidth() const { return (_rect.z); }
+		int getHeight() const { return (_rect.w); }
 
 		Texture2D &configUpload(glm::ivec4 const &rect);
 

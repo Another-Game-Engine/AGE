@@ -6,7 +6,7 @@
 #include <Render/Pool.hh>
 #include <Render/SimpleFormGeometry.hh>
 #include <Render/Data.hh>
-
+#include <glm/glm.hpp>
 
 namespace gl
 {
@@ -292,6 +292,49 @@ namespace gl
 		Texture const *texture = getTexture(key);
 		texture->upload(format, type, img);
 		texture->generateMipMap();
+		return (*this);
+	}
+
+	RenderManager &RenderManager::uploadTextureMipMaps(Key<Texture> const &key, GLenum format, GLenum type, GLvoid *img)
+	{
+		uint32_t blockSize;
+
+		switch (format)
+		{
+		case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
+			blockSize = 8;
+			break;
+		case GL_COMPRESSED_RGBA_S3TC_DXT5_EXT:
+			blockSize = 16;
+			break;
+		default:
+			assert(false);
+			break;
+		}
+
+		Texture2D *texture = static_cast<Texture2D*>(getTexture(key));
+		int width = texture->getWidth();
+		int height = texture->getWidth();
+		size_t mipmapLevel = 0;
+		size_t offset = 0;
+
+		while (mipmapLevel < texture->getMaxLevelMipMap())
+		{
+			uint32_t byteSize = glm::max(1, ((width + 3) / 4)) * glm::max(1, ((height + 3) / 4)) * blockSize;
+
+			texture->setLevelTarget(mipmapLevel);
+			texture->upload(format, type, (char*)img + offset);
+
+			width /= 2;
+			height /= 2;
+			if (width == 0)
+				width = 1;
+			if (height == 0)
+				height = 1;
+			++mipmapLevel;
+			offset += byteSize;
+		}
+		texture->setLevelTarget(0);
 		return (*this);
 	}
 

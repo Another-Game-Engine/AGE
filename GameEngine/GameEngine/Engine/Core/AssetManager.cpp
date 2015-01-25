@@ -146,26 +146,26 @@ namespace AGE
 
 			GLenum ct = GL_RGB32F;
 			GLenum color = GL_RGB;
-			if (data->colorNumber == 3)
+			if (data->format == RGB_DXT1_FORMAT)
 			{
-				ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB32F;
+				ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//GL_RGB32F;
 				color = GL_BGR;
 			}
-			else if (data->colorNumber == 4)
+			else if (data->format == RGBA_DXT5_FORMAT)
 			{
-				ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA32F;
+				ct = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;// GL_RGBA32F;
 				color = GL_BGRA;
 			}
-			else if (data->colorNumber == 1)
+			else if (data->format == LUM_DXT1_FORMAT)
 			{
-				ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB32F;
+				ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;// GL_RGB32F;
 				color = GL_LUMINANCE;
 			}
 			else
 				return AssetsLoadingResult(true, "Image format not found.\n");
 			auto key = manager->addTexture2D(data->width, data->height, ct, true);
 			
-			manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data->data.data());
+			manager->uploadTextureMipMaps(key, color, GL_UNSIGNED_BYTE, data->data.data());
 			manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);

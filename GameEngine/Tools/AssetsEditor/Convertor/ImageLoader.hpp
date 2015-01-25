@@ -6,17 +6,119 @@
 #include <Utils/BitOperations.hpp>
 #include <squish/squish.h>
 #include <crunch/inc/crnlib.h>
+#include <Geometry/MaterialData.hpp>
 
 #include <thread>
 #include <mutex>
-
-static std::mutex convertImageMutex;
 
 namespace AGE
 {
 	class ImageLoader
 	{
 	public:
+
+		struct DDS_PIXELFORMAT
+		{
+			uint32_t dwSize;
+			uint32_t dwFlags;
+			uint32_t dwFourCC;
+			uint32_t dwRGBBitCount;
+			uint32_t dwRBitMask;
+			uint32_t dwGBitMask;
+			uint32_t dwBBitMask;
+			uint32_t dwABitMask;
+		};
+
+		struct DDS_HEADER
+		{
+			uint32_t		magicNbr;
+			uint32_t        dwSize;
+			uint32_t        dwFlags;
+			uint32_t        dwHeight;
+			uint32_t        dwWidth;
+			uint32_t        dwPitchOrLinearSize;
+			uint32_t        dwDepth;
+			uint32_t        dwMipMapCount;
+			uint32_t        dwReserved1[11];
+			DDS_PIXELFORMAT	ddspf;
+			uint32_t        dwCaps;
+			uint32_t        dwCaps2;
+			uint32_t        dwCaps3;
+			uint32_t        dwCaps4;
+			uint32_t        dwReserved2;
+		};
+
+		static inline uint32_t normalToColor(glm::vec3 const &normal)
+		{
+			glm::vec3 colorVector = ((normal + 1.0f) * 0.5f) * 255.0f;
+			uint32_t color;
+
+			color = static_cast<uint8_t>(colorVector.x) << 24;
+			color |= static_cast<uint8_t>(colorVector.y) << 16;
+			color |= static_cast<uint8_t>(colorVector.z) << 8;
+			return (color);
+		}
+
+		static inline float intensity(uint32_t pixel)
+		{
+			return ((float)((pixel & 0xFF000000) >> 24) / 255.0f);
+		}
+
+		static void convertBumpToNormal(fipImage &toConvert, float strength = 2.0f)
+		{
+			int w = toConvert.getWidth();
+			int h = toConvert.getHeight();
+
+			std::cout << "convert bump to bitmap" << std::endl;
+			for (int y = 0; y < h; ++y)
+			{
+				for (int x = 0; x < w; ++x)
+				{
+					const uint32_t *topLine = reinterpret_cast<uint32_t*>(toConvert.getScanLine(glm::clamp(y - 1, 0, h)));
+					uint32_t *line = reinterpret_cast<uint32_t*>(toConvert.getScanLine(y));
+					const uint32_t *bottomLine = reinterpret_cast<uint32_t*>(toConvert.getScanLine(glm::clamp(y + 1, 0, h)));
+
+					const uint32_t topLeft = topLine[glm::clamp(x - 1, 0, w)];
+					const uint32_t top = topLine[glm::clamp(x, 0, w)];
+					const uint32_t topRight = topLine[glm::clamp(x + 1, 0, w)];
+					const uint32_t left = line[glm::clamp(x - 1, 0, w)];
+					const uint32_t right = line[glm::clamp(x + 1, 0, w)];
+					const uint32_t bottomLeft = bottomLine[glm::clamp(x - 1, 0, w)];
+					const uint32_t bottom = bottomLine[glm::clamp(x, 0, w)];
+					const uint32_t bottomRight = bottomLine[glm::clamp(x + 1, 0, w)];
+
+					const float tl = intensity(topLeft);
+					const float t = intensity(top);
+					const float tr = intensity(topRight);
+					const float r = intensity(right);
+					const float br = intensity(bottomRight);
+					const float b = intensity(bottom);
+					const float bl = intensity(bottomLeft);
+					const float l = intensity(left);
+
+					glm::vec3 normal((tr + 2.0f * r + br) - (tl + 2.0f * l + bl),
+									 (bl + 2.0f * b + br) - (tl + 2.0f * t + tr),
+									 1.0f / strength);
+
+					normal = glm::normalize(normal);
+					line[x] = normalToColor(normal);
+				}
+			}
+		}
+
+		static std::string getFileName(std::string const &path)
+		{
+			size_t lastSlash = path.find_last_of('/');
+			size_t lastBackSlash = path.find_last_of('\\');
+			size_t lastPoint = path.find_last_of('.');
+
+			if (lastBackSlash != std::string::npos && lastBackSlash > lastSlash)
+				lastSlash = lastBackSlash;
+			if (lastSlash == std::string::npos)
+				lastSlash = 0;
+			if (lastSlash + 1 == path.size())
+			return (path.substr(lastSlash + 1, lastPoint - lastSlash));
+		}
 
 		static bool save(AssetDataSet &dataSet)
 		{
@@ -26,6 +128,19 @@ namespace AGE
 			{
 				auto t = dataSet.textures.back();
 				dataSet.textures.pop_back();
+
+				bool convertToNormal = false;
+
+				for (auto material : dataSet.materials)
+				{
+					std::cout << "compare " << getFileName(material->bumpTexPath) << " and " << getFileName(t->rawPath) << std::endl;
+					if (!t->rawPath.empty() && material->bumpTexPath == t->rawPath)
+					{
+						convertToNormal = true;
+						break;
+					}
+				}
+
 				auto path = dataSet.rawDirectory.path().string() + "\\" + t->rawPath;
 
 				fipImage image;
@@ -35,10 +150,12 @@ namespace AGE
 					continue;
 				}
 
+				std::cout << "texture path: " << t->rawPath << std::endl;
+
 				t->width = image.getWidth();
 				t->height = image.getHeight();
 				auto colorType = image.getColorType();
-				t->bpp = image.getBitsPerPixel();
+				uint32_t bpp = image.getBitsPerPixel();
 
 				bool toResize = false;
 				if (!Bits::isPowerOfTwo(t->width))
@@ -61,30 +178,28 @@ namespace AGE
 					std::cout << "Texture : " << path << " resized !" << std::endl;
 				}
 
-				t->colorNumber = 0;
 				if (colorType == FIC_RGB)
 				{
-					t->colorNumber = 3;
-					if (t->bpp > 24)
-						t->colorNumber = 4;
+					t->format = RGB_DXT1_FORMAT;
+					if (bpp > 24)
+						t->format = RGBA_DXT5_FORMAT;
 				}
 				else if (colorType == FIC_RGBALPHA)
 				{
-					t->colorNumber = 4;
-					if (t->bpp < 32)
-						t->colorNumber = 3;
+					t->format = RGBA_DXT5_FORMAT;
+					if (bpp < 32)
+						t->format = RGB_DXT1_FORMAT;
 				}
 				else if (colorType == FIC_MINISBLACK || colorType == FIC_MINISWHITE)
 				{
 					// for the moment, we wont handle monochromatic images
-					t->colorNumber = 1;
+					t->format = LUM_DXT1_FORMAT;
 				}
 				else
 					assert(false);
 				
 				// Convert image to RGBA and the to DXT
 #if 1
-				convertImageMutex.lock();
 
 				crn_comp_params params;
 				crn_mipmap_params mipmaps;
@@ -92,15 +207,20 @@ namespace AGE
 				params.m_height = t->height;
 				params.m_width = t->width;
 
-				assert(image.convertTo32Bits());
+				bool convertResult = image.convertTo32Bits();
+				assert(convertResult);
+
+				if (convertToNormal)
+					convertBumpToNormal(image);
+
 				auto imgData = FreeImage_GetBits(image);
 
 				int	compressionFlag;
 
-				if (t->colorNumber == 4)
+				if (t->format == RGBA_DXT5_FORMAT)
 					params.m_format = crn_format::cCRNFmtDXT5;
 				else
-					params.m_format = crn_format::cCRNFmtDXT5;
+					params.m_format = crn_format::cCRNFmtDXT1;
 
 				params.set_flag(cCRNCompFlagPerceptual, false);
 				params.m_file_type = cCRNFileTypeDDS;
@@ -116,10 +236,15 @@ namespace AGE
 
 				assert(compressedData != NULL);
 
-				convertImageMutex.unlock();
 				// --- End of compression ---
 
-				t->data.assign(compressedData, compressedData + compressedSize);
+				compressedSize -= sizeof(DDS_HEADER);
+
+				DDS_HEADER *textureHeader = (DDS_HEADER*)compressedData;
+
+				t->mipmapNbr = textureHeader->dwMipMapCount;
+
+				t->data.assign(compressedData + sizeof(DDS_HEADER), compressedData + compressedSize);
 
 #else
 				auto imgData = FreeImage_GetBits(image);
