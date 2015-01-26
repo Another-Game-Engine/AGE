@@ -177,9 +177,9 @@ namespace AGE
 
 						AGE::MeshLoader::load(*dataSet.get());
 						AGE::MeshLoader::save(*dataSet.get());
-
-						AGE::BulletLoader::load(*dataSet.get());
-						AGE::BulletLoader::save(*dataSet.get());
+//
+//						AGE::BulletLoader::load(*dataSet.get());
+//						AGE::BulletLoader::save(*dataSet.get());
 					});
 				});
 				//CUBE

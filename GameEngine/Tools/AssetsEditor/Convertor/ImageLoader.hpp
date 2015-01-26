@@ -48,60 +48,55 @@ namespace AGE
 			uint32_t        dwReserved2;
 		};
 
-		static inline uint32_t normalToColor(glm::vec3 const &normal)
+		static inline float intensity(RGBQUAD const &pixelColor)
 		{
-			glm::vec3 colorVector = ((normal + 1.0f) * 0.5f) * 255.0f;
-			uint32_t color;
-
-			color = static_cast<uint8_t>(colorVector.x) << 24;
-			color |= static_cast<uint8_t>(colorVector.y) << 16;
-			color |= static_cast<uint8_t>(colorVector.z) << 8;
-			return (color);
-		}
-
-		static inline float intensity(uint32_t pixel)
-		{
-			return ((float)((pixel & 0xFF000000) >> 24) / 255.0f);
+			return (float(pixelColor.rgbRed) / 255.0f);
 		}
 
 		static void convertBumpToNormal(fipImage &toConvert, float strength = 2.0f)
 		{
-			int w = toConvert.getWidth();
-			int h = toConvert.getHeight();
+			const int w = toConvert.getWidth();
+			const int h = toConvert.getHeight();
 
 			std::cout << "convert bump to bitmap" << std::endl;
 			for (int y = 0; y < h; ++y)
 			{
 				for (int x = 0; x < w; ++x)
 				{
-					const uint32_t *topLine = reinterpret_cast<uint32_t*>(toConvert.getScanLine(glm::clamp(y - 1, 0, h)));
-					uint32_t *line = reinterpret_cast<uint32_t*>(toConvert.getScanLine(y));
-					const uint32_t *bottomLine = reinterpret_cast<uint32_t*>(toConvert.getScanLine(glm::clamp(y + 1, 0, h)));
+					RGBQUAD topLeft, top, topRight, left, right, bottomLeft, bottom, bottomRight;
+					RGBQUAD current;
+					
+					toConvert.getPixelColor(glm::clamp(x - 1, 0, w - 1), glm::clamp(y - 1, 0, h - 1), &topLeft);
+					toConvert.getPixelColor(glm::clamp(x, 0, w - 1), glm::clamp(y - 1, 0, h - 1), &top);
+					toConvert.getPixelColor(glm::clamp(x + 1, 0, w - 1), glm::clamp(y - 1, 0, h - 1), &topRight);
+					toConvert.getPixelColor(glm::clamp(x - 1, 0, w - 1), glm::clamp(y, 0, h - 1), &left);
+					toConvert.getPixelColor(glm::clamp(x + 1, 0, w - 1), glm::clamp(y, 0, h - 1), &right);
+					toConvert.getPixelColor(glm::clamp(x - 1, 0, w - 1), glm::clamp(y + 1, 0, h - 1), &bottomLeft);
+					toConvert.getPixelColor(glm::clamp(x, 0, w - 1), glm::clamp(y + 1, 0, h - 1), &bottom);
+					toConvert.getPixelColor(glm::clamp(x + 1, 0, w - 1), glm::clamp(y + 1, 0, h - 1), &bottomRight);
 
-					const uint32_t topLeft = topLine[glm::clamp(x - 1, 0, w)];
-					const uint32_t top = topLine[glm::clamp(x, 0, w)];
-					const uint32_t topRight = topLine[glm::clamp(x + 1, 0, w)];
-					const uint32_t left = line[glm::clamp(x - 1, 0, w)];
-					const uint32_t right = line[glm::clamp(x + 1, 0, w)];
-					const uint32_t bottomLeft = bottomLine[glm::clamp(x - 1, 0, w)];
-					const uint32_t bottom = bottomLine[glm::clamp(x, 0, w)];
-					const uint32_t bottomRight = bottomLine[glm::clamp(x + 1, 0, w)];
+					toConvert.getPixelColor(x, y, &current);
 
 					const float tl = intensity(topLeft);
 					const float t = intensity(top);
 					const float tr = intensity(topRight);
-					const float r = intensity(right);
-					const float br = intensity(bottomRight);
-					const float b = intensity(bottom);
-					const float bl = intensity(bottomLeft);
 					const float l = intensity(left);
+					const float r = intensity(right);
+					const float bl = intensity(bottomLeft);
+					const float b = intensity(bottom);
+					const float br = intensity(bottomRight);
 
 					glm::vec3 normal((tr + 2.0f * r + br) - (tl + 2.0f * l + bl),
 									 (bl + 2.0f * b + br) - (tl + 2.0f * t + tr),
 									 1.0f / strength);
 
-					normal = glm::normalize(normal);
-					line[x] = normalToColor(normal);
+					normal = (glm::normalize(normal) + 1.0f) * 0.5f * 255.0f;
+
+					current.rgbRed = BYTE(normal.r);
+					current.rgbGreen = BYTE(normal.g);
+					current.rgbBlue = BYTE(normal.b);
+
+					toConvert.setPixelColor(x, y, &current);
 				}
 			}
 		}
@@ -116,7 +111,8 @@ namespace AGE
 				lastSlash = lastBackSlash;
 			if (lastSlash == std::string::npos)
 				lastSlash = 0;
-			if (lastSlash + 1 == path.size())
+			if (lastSlash + 1 >= path.size())
+				return ("");
 			return (path.substr(lastSlash + 1, lastPoint - lastSlash));
 		}
 
@@ -133,8 +129,7 @@ namespace AGE
 
 				for (auto material : dataSet.materials)
 				{
-					std::cout << "compare " << getFileName(material->bumpTexPath) << " and " << getFileName(t->rawPath) << std::endl;
-					if (!t->rawPath.empty() && material->bumpTexPath == t->rawPath)
+					if (!t->rawPath.empty() && getFileName(material->bumpTexPath) == getFileName(t->rawPath))
 					{
 						convertToNormal = true;
 						break;
@@ -178,7 +173,7 @@ namespace AGE
 					std::cout << "Texture : " << path << " resized !" << std::endl;
 				}
 
-				if (colorType == FIC_RGB)
+				if (colorType == FIC_RGB || convertToNormal)
 				{
 					t->format = RGB_DXT1_FORMAT;
 					if (bpp > 24)
@@ -213,20 +208,36 @@ namespace AGE
 				if (convertToNormal)
 					convertBumpToNormal(image);
 
-				auto imgData = FreeImage_GetBits(image);
+				auto imgData = image.accessPixels();
 
-				int	compressionFlag;
+				for (int y = 0; y < image.getHeight(); ++y)
+				{
+					for (int x = 0; x < image.getWidth(); ++x)
+					{
+						RGBQUAD color;
 
+						image.getPixelColor(x, y, &color);
+						BYTE r = color.rgbRed;
+						color.rgbRed = color.rgbBlue;
+						color.rgbBlue = r;
+						image.setPixelColor(x, y, &color);
+					}
+				}
+
+				// set the compression params
 				if (t->format == RGBA_DXT5_FORMAT)
 					params.m_format = crn_format::cCRNFmtDXT5;
 				else
 					params.m_format = crn_format::cCRNFmtDXT1;
-
-				params.set_flag(cCRNCompFlagPerceptual, false);
 				params.m_file_type = cCRNFileTypeDDS;
-
+				params.m_alpha_component = 0;
+				params.m_dxt_quality = cCRNDXTQualityNormal;
+				if (t->format == LUM_DXT1_FORMAT)
+					params.set_flag(cCRNCompFlagGrayscaleSampling, true);
+				params.set_flag(cCRNCompFlagPerceptual, false);
 				params.m_pImages[0][0] = (crn_uint32*)imgData;
 
+				// set the mipmaps params
 				mipmaps.m_gamma_filtering = false;
 				mipmaps.m_mode = cCRNMipModeGenerateMips;
 
@@ -263,6 +274,10 @@ namespace AGE
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 				cereal::PortableBinaryOutputArchive ar(ofs);
 				ar(*t);
+
+				std::ofstream ofs2(getFileName(t->rawPath) + "dds", std::ios::trunc | std::ios::binary);
+
+				ofs2.write((char*)compressedData, compressedSize + sizeof(DDS_HEADER));
 			}
 			return true;
 		}
