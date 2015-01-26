@@ -50,7 +50,7 @@ namespace AGE
 
 		static inline float intensity(RGBQUAD const &pixelColor)
 		{
-			return (float(pixelColor.rgbRed) / 255.0f);
+			return (float(pixelColor.rgbRed + pixelColor.rgbGreen + pixelColor.rgbBlue) / (255.0f * 3.0f));
 		}
 
 		static void convertBumpToNormal(fipImage &toConvert, float strength = 2.0f)
@@ -67,12 +67,12 @@ namespace AGE
 					RGBQUAD current;
 					
 					toConvert.getPixelColor(glm::clamp(x - 1, 0, w - 1), glm::clamp(y - 1, 0, h - 1), &topLeft);
-					toConvert.getPixelColor(glm::clamp(x, 0, w - 1), glm::clamp(y - 1, 0, h - 1), &top);
+					toConvert.getPixelColor(x, glm::clamp(y - 1, 0, h - 1), &top);
 					toConvert.getPixelColor(glm::clamp(x + 1, 0, w - 1), glm::clamp(y - 1, 0, h - 1), &topRight);
-					toConvert.getPixelColor(glm::clamp(x - 1, 0, w - 1), glm::clamp(y, 0, h - 1), &left);
-					toConvert.getPixelColor(glm::clamp(x + 1, 0, w - 1), glm::clamp(y, 0, h - 1), &right);
+					toConvert.getPixelColor(glm::clamp(x - 1, 0, w - 1), y, &left);
+					toConvert.getPixelColor(glm::clamp(x + 1, 0, w - 1), y, &right);
 					toConvert.getPixelColor(glm::clamp(x - 1, 0, w - 1), glm::clamp(y + 1, 0, h - 1), &bottomLeft);
-					toConvert.getPixelColor(glm::clamp(x, 0, w - 1), glm::clamp(y + 1, 0, h - 1), &bottom);
+					toConvert.getPixelColor(x, glm::clamp(y + 1, 0, h - 1), &bottom);
 					toConvert.getPixelColor(glm::clamp(x + 1, 0, w - 1), glm::clamp(y + 1, 0, h - 1), &bottomRight);
 
 					toConvert.getPixelColor(x, y, &current);
@@ -92,13 +92,31 @@ namespace AGE
 
 					normal = (glm::normalize(normal) + 1.0f) * 0.5f * 255.0f;
 
-					current.rgbRed = BYTE(normal.r);
+					current.rgbRed = BYTE(normal.b);
 					current.rgbGreen = BYTE(normal.g);
-					current.rgbBlue = BYTE(normal.b);
+					current.rgbBlue = BYTE(normal.r);
 
 					toConvert.setPixelColor(x, y, &current);
 				}
 			}
+		}
+
+		static void switchRedBlue(fipImage &image)
+		{
+			for (int y = 0; y < image.getHeight(); ++y)
+			{
+				for (int x = 0; x < image.getWidth(); ++x)
+				{
+					RGBQUAD color;
+
+					image.getPixelColor(x, y, &color);
+					BYTE r = color.rgbRed;
+					color.rgbRed = color.rgbBlue;
+					color.rgbBlue = r;
+					image.setPixelColor(x, y, &color);
+				}
+			}
+
 		}
 
 		static std::string getFileName(std::string const &path)
@@ -202,27 +220,16 @@ namespace AGE
 				params.m_height = t->height;
 				params.m_width = t->width;
 
+				bool flipVertical = image.flipVertical();
 				bool convertResult = image.convertTo32Bits();
-				assert(convertResult);
-
-				if (convertToNormal)
-					convertBumpToNormal(image);
+				assert(convertResult && flipVertical);
 
 				auto imgData = image.accessPixels();
 
-				for (int y = 0; y < image.getHeight(); ++y)
-				{
-					for (int x = 0; x < image.getWidth(); ++x)
-					{
-						RGBQUAD color;
-
-						image.getPixelColor(x, y, &color);
-						BYTE r = color.rgbRed;
-						color.rgbRed = color.rgbBlue;
-						color.rgbBlue = r;
-						image.setPixelColor(x, y, &color);
-					}
-				}
+				if (convertToNormal)
+					convertBumpToNormal(image);
+				else
+					switchRedBlue(image);
 
 				// set the compression params
 				if (t->format == RGBA_DXT5_FORMAT)
