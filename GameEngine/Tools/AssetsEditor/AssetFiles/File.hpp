@@ -35,6 +35,7 @@ namespace AGE
 			int _type;
 			inline const std::string &getPath() const { return _pathStr; }
 			inline const std::string &getFileName() const { return _fileName; }
+			inline std::tr2::sys::path getFsPath() const { return _path; }
 			inline std::shared_ptr<AssetFile> getSharedPtrOnThis() { return shared_from_this(); }
 
 		private:

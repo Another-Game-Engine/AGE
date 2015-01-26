@@ -63,6 +63,7 @@ namespace AGE
 			counter += time;
 			if (counter > 1)
 			{
+				_raw.list();
 				std::set<std::shared_ptr<AE::RawFile>> dirty;
 				AE::AssetFileManager::CheckIfRawModified(&_raw, dirty);
 				if (dirty.size())
@@ -177,6 +178,41 @@ namespace AGE
 		{
 			if (ImGui::Button("Cook dirty assets"))
 			{
+				_raw.update(
+					std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
+					if (file->_dirty)
+					{
+						AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+							std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
+							dataSet->filePath = File("catwoman/catwoman.fbx");
+							dataSet->skeletonName = "catwoman";
+							dataSet->animationName = "catwoman-roulade";
+							dataSet->skinName = "catwoman";
+							dataSet->materialName = "catwoman";
+
+							dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+							dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+
+							AGE::AssimpLoader::Load(*dataSet.get());
+
+							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+								AGE::MaterialLoader::load(*dataSet.get());
+								AGE::ImageLoader::load(*dataSet.get());
+								AGE::SkeletonLoader::load(*dataSet.get());
+								AGE::AnimationsLoader::load(*dataSet.get());
+								AGE::MeshLoader::load(*dataSet.get());
+								AGE::MaterialLoader::save(*dataSet.get());
+								AGE::ImageLoader::save(*dataSet.get());
+								AGE::MeshLoader::save(*dataSet.get());
+								AGE::SkeletonLoader::save(*dataSet.get());
+								AGE::AnimationsLoader::save(*dataSet.get());
+								AGE::BulletLoader::load(*dataSet.get());
+								AGE::BulletLoader::save(*dataSet.get());
+							});
+						});
+					}
+				}));
+
 				for (auto &e : _configs)
 				{
 					if ((e->rawFile.lock() && e->rawFile.lock()->_dirty)

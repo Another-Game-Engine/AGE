@@ -33,6 +33,15 @@ namespace AGE
 			static const char *enumStrings[] = { "Raw", "Cooked", "Mesh", "Material", "Texure" };
 			return enumStrings;
 		}
+
+		bool AssetFileManager::IsValidFile(const std::tr2::sys::path &path)
+		{
+			auto extension = AGE::FileSystem::GetExtension(path);
+			if (extension == "obj" || extension == "fbx" || extension == "collada")
+				return true;
+			return false;
+		}
+
 		std::shared_ptr<AssetFile> AssetFileManager::CreateFile(const std::tr2::sys::path &path, Folder *parent)
 		{
 			auto extension = AGE::FileSystem::GetExtension(path);
@@ -42,7 +51,7 @@ namespace AGE
 				t = std::make_shared<RawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Mesh;
 			}
-			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
+			/*else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
 			{
 				t = std::make_shared<RawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Texture;
@@ -68,7 +77,7 @@ namespace AGE
 			{
 				t = std::make_shared<CookedFile>(path, parent);
 				t->_type = AssetType::Cooked | AssetType::Texture;
-			}
+			}*/
 
 
 			if (t)
@@ -95,6 +104,8 @@ namespace AGE
 					ptr->_lastWriteTimeStr = FileSystem::GetDateStr(ptr->getPath());
 					list.insert(std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis()));
 				}
+				else
+					ptr->_dirty = false;
 			}));
 		}
 

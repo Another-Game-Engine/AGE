@@ -40,27 +40,59 @@ namespace AGE
 
 		void Folder::list()
 		{
-			_folders.clear();
-			_files.clear();
+			int dirCount = 0;
+			int fileCount = 0;
 			for (auto it = std::tr2::sys::directory_iterator(_path)
 				;  it != std::tr2::sys::directory_iterator()
 				; ++it)
 			{
 				const auto& file = it->path();
 
-				if (!std::tr2::sys::is_directory(file))
+				if (!std::tr2::sys::is_directory(file) && AssetFileManager::IsValidFile(file))
 				{
-					auto n = AssetFileManager::CreateFile(file.relative_path(), this);
-					if (n)
+					fileCount++;
+					if (_files.find(file.relative_path().string()) == std::end(_files))
 					{
-						_files.push_back(n);
+						auto n = AssetFileManager::CreateFile(file.relative_path(), this);
+						if (n)
+						{
+							_files.insert(std::make_pair(file.relative_path().string(), n));
+						}
 					}
 				}
 				else if (std::tr2::sys::is_directory(file))
 				{
-					auto n = std::make_shared<AE::Folder>(std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(_path.path().string() + "/" + file.filename() + "/"), this);
-					_folders.push_back(n);
-					n->list();
+					dirCount++;
+					if (_folders.find(file.filename()) == std::end(_folders))
+					{
+						auto n = std::make_shared<AE::Folder>(std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(_path.path().string() + "/" + file.filename() + "/"), this);
+						_folders.insert(std::make_pair(file.filename(), n));
+						n->list();
+					}
+				}
+			}
+			if (dirCount != _folders.size())
+			{
+				for (auto it = std::begin(_folders); it != std::end(_folders); )
+				{
+					if (!std::tr2::sys::exists(it->second->_path.path()))
+					{
+						_folders.erase(it++);
+					}
+					else
+						++it;
+				}
+			}
+			if (fileCount != _files.size())
+			{
+				for (auto it = std::begin(_files); it != std::end(_files);)
+				{
+					if (!std::tr2::sys::exists(it->second->getFsPath()))
+					{
+						_files.erase(it++);
+					}
+					else
+						++it;
 				}
 			}
 		}
@@ -76,8 +108,8 @@ namespace AGE
 			clearFolderFilter();
 			for (auto &e : _folders)
 			{
-				if (!filter(e->_path))
-					e->_active = false;
+				if (!filter(e.second->_path))
+					e.second->_active = false;
 			}
 		}
 
@@ -91,8 +123,8 @@ namespace AGE
 			_active = true;
 			for (auto &e : _folders)
 			{
-				e->_active = true;
-				e->clearFolderFilter();
+				e.second->_active = true;
+				e.second->clearFolderFilter();
 			}
 		}
 
@@ -105,15 +137,15 @@ namespace AGE
 			{
 				for (auto &e : _folders)
 				{
-					e->_internalFind(path, result);
+					e.second->_internalFind(path, result);
 				}
 				if (result == nullptr)
 				{
 					for (auto &e : _files)
 					{
-						if (e->getPath() == path)
+						if (e.second->getPath() == path)
 						{
-							result = e;
+							result = e.second;
 							return;
 						}
 					}
