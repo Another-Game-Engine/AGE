@@ -13,8 +13,7 @@ namespace AGE
 	public:
 		static bool save(AssetDataSet &dataSet)
 		{
-			if (dataSet.materialsLoaded == false)
-				return false;
+
 			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
@@ -36,7 +35,6 @@ namespace AGE
 		}
 		static bool load(AssetDataSet &dataSet)
 		{
-			dataSet.materialsLoaded = false;
 			if (!dataSet.assimpScene)
 			{
 				return false;
@@ -117,7 +115,6 @@ namespace AGE
 				std::cerr << "MaterialLoader : Materials has not been loaded" << std::endl;
 				return false;
 			}
-			dataSet.materialsLoaded = true;
 			return true;
 		}
 	};

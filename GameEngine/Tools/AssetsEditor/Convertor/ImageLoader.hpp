@@ -12,8 +12,6 @@ namespace AGE
 	public:
 		static bool save(AssetDataSet &dataSet)
 		{
-			if (dataSet.texturesLoaded == false)
-				return false;
 			while (!dataSet.textures.empty())
 			{
 				auto t = dataSet.textures.back();
@@ -92,7 +90,6 @@ namespace AGE
 
 		static bool load(AssetDataSet &dataSet)
 		{
-			dataSet.texturesLoaded = false;
 			if (!dataSet.assimpScene)
 			{
 				return false;
@@ -131,7 +128,6 @@ namespace AGE
 				std::cerr << "ImageLoader : Image has not been loaded" << std::endl;
 				return false;
 			}
-			dataSet.texturesLoaded = true;
 			return true;
 		}
 	};

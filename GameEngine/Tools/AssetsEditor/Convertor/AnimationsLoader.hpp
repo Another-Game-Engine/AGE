@@ -16,8 +16,6 @@ namespace AGE
 	public:
 		static bool save(AssetDataSet &dataSet)
 		{
-			if (dataSet.animationLoaded == false)
-				return false;
 			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
@@ -36,18 +34,12 @@ namespace AGE
 
 		static bool load(AssetDataSet &dataSet)
 		{
-			dataSet.animationLoaded = false;
 			if (!dataSet.assimpScene)
 			{
 				return false;
 			}
 			if (!dataSet.assimpScene->HasAnimations())
 				return false;
-			if (!dataSet.skeletonLoaded)
-			{
-				std::cerr << "AnimationLoader : Skeleton has not been loaded" << std::endl;
-				return false;
-			}
 			if (dataSet.assimpScene->HasAnimations())
 			{
 				dataSet.animations.resize(dataSet.assimpScene->mNumAnimations);
@@ -101,7 +93,6 @@ namespace AGE
 					}
 				}
 			}
-			dataSet.animationLoaded = true;
 			return true;
 		}
 	};

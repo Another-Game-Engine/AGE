@@ -108,253 +108,124 @@ namespace AGE
 		{
 			if (_selectedRaw != nullptr)
 			{
-				ImGui::BeginChild(_selectedRaw->getFileName().c_str(), ImVec2(0, ImGui::GetIO().DisplaySize.y - 10), true);
+				if (_selectedRaw->dataSet == nullptr)
+				{
+					_selectedRaw->dataSet = std::make_shared<AssetDataSet>();
+					auto path = _selectedRaw->getPath();
+					path = path.erase(0, _raw._path.path().string().size());
+					_selectedRaw->dataSet->filePath = File(path);
+				}
 				ImGui::Text("Selected asset : "); ImGui::SameLine(); ImGui::TextColored(ImVec4(0.58, 0, 0.7, 1), _selectedRaw->getFileName().c_str());
 				ImGui::Text("Last modifiction : %s", _selectedRaw->_lastWriteTimeStr.c_str());
-				ImGui::Text("Add cook configurations : ");
 
-				std::shared_ptr<AE::CookConfig> newConfig = nullptr;
+				auto dataset = _selectedRaw->dataSet;
 
-				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Animation"))
+				ImGui::Checkbox("Mesh", &dataset->loadMesh);
+				if (dataset->loadMesh)
 				{
-					newConfig = std::make_shared<AE::AnimationConfig>();
-				} ImGui::SameLine();
-				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Material"))
-				{
-					newConfig = std::make_shared<AE::MaterialConfig>();
-				} ImGui::SameLine();
-				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Skin"))
-				{
-					newConfig = std::make_shared<AE::SkinConfig>();
-				} ImGui::SameLine();
-				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Physic"))
-				{
-					newConfig = std::make_shared<AE::PhysicConfig>();
-				} ImGui::SameLine();
-				if (_selectedRaw->_type & AE::AssetType::Mesh && ImGui::Button("Skeleton"))
-				{
-					newConfig = std::make_shared<AE::SkeletonConfig>();
-				} ImGui::SameLine();
-				if (_selectedRaw->_type & AE::AssetType::Texture && ImGui::Button("Texture"))
-				{
-					newConfig = std::make_shared<AE::TextureConfig>();
-				}
-
-				ImGui::Separator();
-				ImGui::Separator();
-
-				if (newConfig != nullptr)
-				{
-					newConfig->rawFile = _selectedRaw;
-					_configs.insert(newConfig);
-					newConfig->updateLastTimeEdited();
-					_selectedRaw->configs.insert(newConfig);
-					memcpy(newConfig->name, _selectedRaw->getFileName().c_str(), MAX_ASSET_NAME_LENGTH);
-				}
-				std::list<std::shared_ptr<AE::CookConfig>> toDelete;
-				for (auto &e : _selectedRaw->configs)
-				{
-					if (ImGui::TreeNode(e.get(), "%s | %s", e->cookConfigTypeToString(), e->name))
+					ImGui::Checkbox("Normalize size", &dataset->normalize);
+					if (dataset->normalize)
 					{
-						e->update();
-						if (ImGui::Button("Delete"))
-						{
-							toDelete.push_back(e);
-						}
-						ImGui::TreePop();
+						ImGui::SliderFloat("Max size length", &dataset->maxSideLength, 0.00001f, 1000.0f, "%.3f", 1.0f);
 					}
+					ImGui::Checkbox("Positions", &dataset->positions);
+					ImGui::Checkbox("Normals", &dataset->normals);
+					ImGui::Checkbox("Bones infos", &dataset->bonesInfos);
+					ImGui::Checkbox("Texture coordinates", &dataset->uvs);
+					ImGui::Checkbox("Tangents", &dataset->tangents);
+					ImGui::Checkbox("BiTangents", &dataset->biTangents);
 				}
-				for (auto &e : toDelete)
+				ImGui::Separator();
+
+				ImGui::Checkbox("Physic", &dataset->loadPhysic);
+				if (dataset->loadPhysic)
 				{
-					_selectedRaw->configs.erase(e);
-					_configs.erase(e);
+					ImGui::Checkbox("Dynamic concave", &dataset->dynamicConcave);
+					ImGui::Checkbox("Static concave", &dataset->staticConcave);
 				}
-				ImGui::EndChild();
+				ImGui::Separator();
+
+				ImGui::Checkbox("Material", &dataset->loadMaterials);
+				if (dataset->loadMaterials)
+				{
+				}
+				ImGui::Separator();
+
+				ImGui::Checkbox("Animation", &dataset->loadAnimations);
+				if (dataset->loadAnimations)
+				{
+				}
+				ImGui::Separator();
+
+				ImGui::Checkbox("Skeleton", &dataset->loadSkeleton);
+				if (dataset->loadSkeleton || dataset->loadMesh || dataset->loadAnimations)
+				{
+				}
+				ImGui::Separator();
+
+				ImGui::Checkbox("Textures", &dataset->loadTextures);
+				if (dataset->loadTextures)
+				{
+				}
+				ImGui::Separator();
+				if (ImGui::Button("Cook"))
+				{
+					std::shared_ptr<AssetDataSet> copy = std::make_shared<AssetDataSet>(*_selectedRaw->dataSet.get());
+					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
+					{
+						copy->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+						copy->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+
+						AGE::AssimpLoader::Load(*copy.get());
+
+						AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+							AGE::MaterialLoader::load(*copy.get());
+							AGE::MaterialLoader::save(*copy.get());
+							AGE::ImageLoader::load(*copy.get());
+							AGE::ImageLoader::save(*copy.get());
+						});
+						if ((copy->loadMesh || copy->loadAnimations) && copy->loadSkeleton)
+						{
+							AGE::SkeletonLoader::load(*copy.get());
+							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+								AGE::AnimationsLoader::load(*copy.get());
+								AGE::AnimationsLoader::save(*copy.get());
+							});
+							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+								AGE::MeshLoader::load(*copy.get());
+								AGE::MeshLoader::save(*copy.get());
+							});
+							AGE::SkeletonLoader::save(*copy.get());
+						}
+						else
+						{
+							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+								AGE::AnimationsLoader::load(*copy.get());
+								AGE::AnimationsLoader::save(*copy.get());
+							});
+							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+								AGE::MeshLoader::load(*copy.get());
+								AGE::MeshLoader::save(*copy.get());
+							});
+							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+								AGE::SkeletonLoader::load(*copy.get());
+								AGE::SkeletonLoader::save(*copy.get());
+							});
+						}
+					});
+				}
 			}
 		}
 		ImGui::EndChild();
 		ImGui::SameLine();
 		ImGui::BeginChild("Todo", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, ImGui::GetIO().DisplaySize.y), false);
-		{
-			if (ImGui::Button("Cook dirty assets"))
-			{
-				_raw.update(
-					std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
-					if (file->_dirty)
-					{
-						AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-							std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-							dataSet->filePath = File("catwoman/catwoman.fbx");
-							dataSet->skeletonName = "catwoman";
-							dataSet->animationName = "catwoman-roulade";
-							dataSet->skinName = "catwoman";
-							dataSet->materialName = "catwoman";
 
-							dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-							dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-							AGE::AssimpLoader::Load(*dataSet.get());
-
-							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-								AGE::MaterialLoader::load(*dataSet.get());
-								AGE::ImageLoader::load(*dataSet.get());
-								AGE::SkeletonLoader::load(*dataSet.get());
-								AGE::AnimationsLoader::load(*dataSet.get());
-								AGE::MeshLoader::load(*dataSet.get());
-								AGE::MaterialLoader::save(*dataSet.get());
-								AGE::ImageLoader::save(*dataSet.get());
-								AGE::MeshLoader::save(*dataSet.get());
-								AGE::SkeletonLoader::save(*dataSet.get());
-								AGE::AnimationsLoader::save(*dataSet.get());
-								AGE::BulletLoader::load(*dataSet.get());
-								AGE::BulletLoader::save(*dataSet.get());
-							});
-						});
-					}
-				}));
-
-				for (auto &e : _configs)
-				{
-					if ((e->rawFile.lock() && e->rawFile.lock()->_dirty)
-						/*|| (e->cookedFile.lock() && FileSystem::GetDiffTime(e->cookedFile.lock()->_lastWriteTime , e->lastTimeEdited) < 0)*/)
-					{
-						switch (e->type)
-						{
-						case(AE::CookConfig::CookConfigType::Skin) :
-							//TO FUCKING DO !
-							break;
-						default:
-							break;
-						}
-					}
-				}
-			}
-		}
 		ImGui::EndChild();
 
 		ImGui::End();
 
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 			return (false);
-
-		static bool slowTouch = false;
-		if (getInstance<Input>()->getInput(SDLK_e))
-		{
-			if (!slowTouch)
-			{
-				slowTouch = true;
-				// CATWOMAN
-				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-					dataSet->filePath = File("catwoman/catwoman.fbx");
-					dataSet->skeletonName = "catwoman";
-					dataSet->animationName = "catwoman-roulade";
-					dataSet->skinName = "catwoman";
-					dataSet->materialName = "catwoman";
-
-					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-					AGE::AssimpLoader::Load(*dataSet.get());
-
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::MaterialLoader::load(*dataSet.get());
-						AGE::ImageLoader::load(*dataSet.get());
-						AGE::SkeletonLoader::load(*dataSet.get());
-						AGE::AnimationsLoader::load(*dataSet.get());
-						AGE::MeshLoader::load(*dataSet.get());
-						AGE::MaterialLoader::save(*dataSet.get());
-						AGE::ImageLoader::save(*dataSet.get());
-						AGE::MeshLoader::save(*dataSet.get());
-						AGE::SkeletonLoader::save(*dataSet.get());
-						AGE::AnimationsLoader::save(*dataSet.get());
-						AGE::BulletLoader::load(*dataSet.get());
-						AGE::BulletLoader::save(*dataSet.get());
-					});
-				});
-				////SPONZA
-				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-					dataSet->filePath = File("sponza/sponza.obj");
-					dataSet->skinName = "sponza";
-					dataSet->materialName = "sponza";
-
-					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-					AGE::AssimpLoader::Load(*dataSet.get());
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::MaterialLoader::load(*dataSet.get());
-						AGE::MaterialLoader::save(*dataSet.get());
-
-						AGE::ImageLoader::load(*dataSet.get());
-						AGE::ImageLoader::save(*dataSet.get());
-
-						AGE::MeshLoader::load(*dataSet.get());
-						AGE::MeshLoader::save(*dataSet.get());
-
-						AGE::BulletLoader::load(*dataSet.get());
-						AGE::BulletLoader::save(*dataSet.get());
-					});
-				});
-				//CUBE
-				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-					dataSet->filePath = File("cube/cube.obj");
-					dataSet->skinName = "cube";
-					dataSet->materialName = "cube";
-
-					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-					AGE::AssimpLoader::Load(*dataSet.get());
-
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::MaterialLoader::load(*dataSet.get());
-						AGE::MaterialLoader::save(*dataSet.get());
-
-						AGE::ImageLoader::load(*dataSet.get());
-						AGE::ImageLoader::save(*dataSet.get());
-
-						AGE::MeshLoader::load(*dataSet.get());
-						AGE::MeshLoader::save(*dataSet.get());
-
-						AGE::BulletLoader::load(*dataSet.get());
-						AGE::BulletLoader::save(*dataSet.get());
-					});
-				});
-				//BALL
-				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-					dataSet->filePath = File("ball/ball.obj");
-					dataSet->skinName = "ball";
-					dataSet->materialName = "ball";
-					dataSet->physicName = "ball";
-
-					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-					AGE::AssimpLoader::Load(*dataSet.get());
-
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::MaterialLoader::load(*dataSet.get());
-						AGE::MaterialLoader::save(*dataSet.get());
-
-						AGE::ImageLoader::load(*dataSet.get());
-						AGE::ImageLoader::save(*dataSet.get());
-
-						AGE::MeshLoader::load(*dataSet.get());
-						AGE::MeshLoader::save(*dataSet.get());
-
-						AGE::BulletLoader::load(*dataSet.get());
-						AGE::BulletLoader::save(*dataSet.get());
-					});
-				});
-			}
-			slowTouch = true;
-		}
-		else
-			slowTouch = false;
 		return true;
 	}
 }

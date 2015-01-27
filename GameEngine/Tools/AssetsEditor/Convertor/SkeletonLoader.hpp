@@ -18,8 +18,6 @@ namespace AGE
 	public:
 		static bool save(AssetDataSet &dataSet)
 		{
-			if (dataSet.skeletonLoaded == false)
-				return false;
 			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
@@ -43,11 +41,18 @@ namespace AGE
 				return false;
 			}
 			auto boneOrigin = dataSet.assimpScene->mRootNode;
-			if (dataSet.skeletonLoaded)
+			bool hasSkeleton = false;
+			for (unsigned int meshIndex = 0; meshIndex < dataSet.assimpScene->mNumMeshes; ++meshIndex)
 			{
-				std::cerr << "Skeleton loader : skeleton [" << dataSet.skeleton->name << "] already exists." << std::endl;
-				return false;
+				if (dataSet.assimpScene->mMeshes[0]->HasBones())
+					hasSkeleton = true;
 			}
+			if (!hasSkeleton)
+			{
+				std::cerr << "Skeleton loader : mesh do not have skeleton." << std::endl;
+				return true;
+			}
+
 			dataSet.skeleton = std::make_shared<Skeleton>();
 			Skeleton *skeleton = dataSet.skeleton.get();
 			std::uint32_t minDepth = std::uint32_t(-1);
@@ -137,10 +142,8 @@ namespace AGE
 			{
 				std::cerr << "Skeleton loader : assets does not contain any skeleton." << std::endl;
 				dataSet.skeleton = nullptr;
-				dataSet.skeletonLoaded = false;
 				return false;
 			}
-			dataSet.skeletonLoaded = true;
 			return true;
 		}
 	private:

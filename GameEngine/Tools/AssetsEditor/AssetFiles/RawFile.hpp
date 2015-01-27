@@ -5,6 +5,7 @@
 
 namespace AGE
 {
+	struct AssetDataSet;
 	namespace AE
 	{
 		class CookedFile;
@@ -18,7 +19,7 @@ namespace AGE
 
 			bool _dirty;
 			std::shared_ptr<CookedFile> _cookedFile;
-			std::set < std::shared_ptr<CookConfig> > configs;
+			std::shared_ptr<AssetDataSet> dataSet;
 		};
 	}
 }

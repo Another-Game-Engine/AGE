@@ -38,21 +38,12 @@ namespace AGE
 		{
 		}
 		//Configurations
-		bool loadSkeleton = false;
-		bool loadAnimations = false;
-		bool loadMesh = false;
-		bool loadMaterials = false;
-		bool loadTextures = false;
-
-		//Results
-		bool skeletonLoaded = false;
-		bool animationLoaded = false;
-		bool meshLoaded = false;
-		bool materialsLoaded = false;
-		bool texturesLoaded = false;
-		bool staticPhysicLoaded = false;
-		bool dynamicPhysicLoaded = false;
-
+		bool loadSkeleton = true;
+		bool loadAnimations = true;
+		bool loadMesh = true;
+		bool loadMaterials = true;
+		bool loadTextures = true;
+		bool loadPhysic = true;
 
 		//Directory
 		std::tr2::sys::directory_entry rawDirectory;
@@ -82,5 +73,20 @@ namespace AGE
 		//Assimp
 		aiScene* assimpScene = nullptr;
 		Assimp::Importer assimpImporter;
+
+
+		//Mesh Options
+		bool normalize = true;
+		float maxSideLength = 1.0f;
+		bool positions = true;
+		bool normals = true;
+		bool bonesInfos = false;
+		bool uvs = true;
+		bool tangents = true;
+		bool biTangents = true;
+
+		//Physic Options
+		bool staticConcave = true;
+		bool dynamicConcave = true;
 	};
 }

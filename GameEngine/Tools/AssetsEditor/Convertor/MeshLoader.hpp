@@ -16,8 +16,6 @@ namespace AGE
 	public:
 		static bool save(AssetDataSet &dataSet)
 		{
-			if (dataSet.meshLoaded == false)
-				return false;
 			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
@@ -42,7 +40,6 @@ namespace AGE
 			//}
 			if (!dataSet.assimpScene->HasMeshes())
 				return true;
-			dataSet.meshLoaded = false;
 
 			dataSet.mesh = std::make_shared<MeshData>();
 
@@ -189,7 +186,6 @@ namespace AGE
 				glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
 				e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
 			}
-			dataSet.meshLoaded = true;
 			return true;
 		}
 	};
