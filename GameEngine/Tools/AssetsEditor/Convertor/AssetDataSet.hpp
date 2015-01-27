@@ -56,7 +56,7 @@ namespace AGE
 		float maxSideLength = 1.0f;
 		bool positions = true;
 		bool normals = true;
-		bool bonesInfos = false;
+		bool bonesInfos = true;
 		bool uvs = true;
 		bool tangents = true;
 		bool biTangents = true;
