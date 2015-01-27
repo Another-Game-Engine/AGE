@@ -12,6 +12,7 @@
 #include <Utils/File.hpp>
 
 #include "AssetDataSet.hpp"
+#include "ConvertorStatusManager.hpp"
 
 namespace AGE
 {
@@ -56,7 +57,8 @@ namespace AGE
 				std::cerr << "File [" << path << "] does not exists." << std::endl;
 				return false;
 			}
-			
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Assimp : loading " + dataSet.filePath.getShortFileName());
+
 			dataSet.assimpScene = const_cast<aiScene*>(dataSet.assimpImporter.ReadFile(
 				path
 				, aiProcess_Triangulate |
@@ -70,10 +72,11 @@ namespace AGE
 				aiProcess_FindInvalidData));
 			if (dataSet.assimpScene == nullptr)
 			{
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 				std::cerr << "Assimp fail to load file [" << path << "] : " << dataSet.assimpImporter.GetErrorString() << std::endl;
 				return false;
 			}
-
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 	}

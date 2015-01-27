@@ -8,6 +8,7 @@
 #include <Geometry/Mesh.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include "ConvertorStatusManager.hpp"
 
 namespace AGE
 {
@@ -16,12 +17,14 @@ namespace AGE
 	public:
 		static bool save(AssetDataSet &dataSet)
 		{
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MeshLoader : saving " + dataSet.filePath.getShortFileName());
 			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
-					std::cerr << "Mesh convector error : creating directory" << std::endl;
-					return false;
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
+				std::cerr << "Mesh convector error : creating directory" << std::endl;
+				return false;
 			}
 			auto fileName = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() + ".sage" : dataSet.skinName + ".sage";
 			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
@@ -29,17 +32,13 @@ namespace AGE
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
 			ar(*dataSet.mesh);
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 
 		static bool load(AssetDataSet &dataSet)
 		{
-			//if (!dataSet.skeletonLoaded)
-			//{
-			//	return false;
-			//}
-			if (!dataSet.assimpScene->HasMeshes())
-				return true;
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MeshLoader : loading " + dataSet.filePath.getShortFileName());
 
 			dataSet.mesh = std::make_shared<MeshData>();
 
@@ -186,6 +185,7 @@ namespace AGE
 				glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
 				e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
 			}
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 	};

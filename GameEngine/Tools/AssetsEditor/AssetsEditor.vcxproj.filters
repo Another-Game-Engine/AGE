@@ -45,6 +45,9 @@
     <ClCompile Include="AssetFiles\CookConfigs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Convertor\ConvertorStatusManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convertor\AssimpLoader.hpp">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CookConfigs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\ConvertorStatusManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

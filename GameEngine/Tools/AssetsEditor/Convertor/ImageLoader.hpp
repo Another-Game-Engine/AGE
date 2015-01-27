@@ -4,6 +4,7 @@
 #include <Texture/Texture.hpp>
 #include <FreeImagePlus.h>
 #include <Utils/BitOperations.hpp>
+#include "ConvertorStatusManager.hpp"
 
 namespace AGE
 {
@@ -12,6 +13,7 @@ namespace AGE
 	public:
 		static bool save(AssetDataSet &dataSet)
 		{
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("ImageLoader : load and save " + dataSet.filePath.getShortFileName());
 			while (!dataSet.textures.empty())
 			{
 				auto t = dataSet.textures.back();
@@ -45,8 +47,7 @@ namespace AGE
 				{
 					if (!image.rescale(t->width, t->height, FILTER_BICUBIC));
 					{
-						char a[2];
-						a[30000] = '1';
+						//ERROR PAUL WILL FIXE ALL THAT PART :D
 					}
 					std::cout << "Texture : " << path << " resized !" << std::endl;
 				}
@@ -77,6 +78,7 @@ namespace AGE
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 				{
+					Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 					std::cerr << "Material convertor error : creating directory" << std::endl;
 					return false;
 				}
@@ -85,16 +87,12 @@ namespace AGE
 				cereal::PortableBinaryOutputArchive ar(ofs);
 				ar(*t);
 			}
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 
 		static bool load(AssetDataSet &dataSet)
 		{
-			if (!dataSet.assimpScene)
-			{
-				return false;
-			}
-
 			if (dataSet.assimpScene->HasTextures())
 			{
 				for (auto textureIndex = 0; textureIndex < dataSet.assimpScene->mNumTextures; ++textureIndex)

@@ -4,6 +4,7 @@
 #include "ImageLoader.hpp"
 #include <map>
 
+#include "ConvertorStatusManager.hpp"
 #include <Geometry/MaterialData.hpp>
 
 namespace AGE
@@ -13,12 +14,14 @@ namespace AGE
 	public:
 		static bool save(AssetDataSet &dataSet)
 		{
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : saving " + dataSet.filePath.getShortFileName());
 
 			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
 					std::cerr << "Material convertor error : creating directory" << std::endl;
+					Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 					return false;
 			}
 			auto fileName = dataSet.materialName.empty() ? dataSet.filePath.getShortFileName() + ".mage" : dataSet.materialName + ".mage";
@@ -31,17 +34,17 @@ namespace AGE
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
 			ar(materialDataSet);
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 		static bool load(AssetDataSet &dataSet)
 		{
-			if (!dataSet.assimpScene)
-			{
-				return false;
-			}
-
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : loading " + dataSet.filePath.getShortFileName());
 			if (!dataSet.assimpScene->HasMaterials())
-				return false;
+			{
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
+				return true;
+			}
 
 			for (auto materialIndex = 0; materialIndex < dataSet.assimpScene->mNumMaterials; ++materialIndex)
 			{
@@ -112,9 +115,11 @@ namespace AGE
 
 			if (dataSet.materials.size() == 0)
 			{
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 				std::cerr << "MaterialLoader : Materials has not been loaded" << std::endl;
 				return false;
 			}
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 	};

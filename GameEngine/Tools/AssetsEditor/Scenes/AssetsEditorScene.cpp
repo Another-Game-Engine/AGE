@@ -21,6 +21,7 @@
 #include <Convertor/MaterialConvertor.hpp>
 #include <Convertor/ImageLoader.hpp>
 #include <Convertor/BulletLoader.hpp>
+#include <Convertor/ConvertorStatusManager.hpp>
 
 #include <AssetFiles/Folder.hpp>
 #include <AssetFiles/RawFile.hpp>
@@ -52,6 +53,7 @@ namespace AGE
 
 	bool AssetsEditorScene::userStart()
 	{
+		Singleton<AGE::AE::ConvertorStatusManager>::setInstance();
 		return true;
 	}
 
@@ -194,6 +196,8 @@ namespace AGE
 							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 								AGE::MeshLoader::load(*copy.get());
 								AGE::MeshLoader::save(*copy.get());
+								AGE::BulletLoader::load(*copy.get());
+								AGE::BulletLoader::save(*copy.get());
 							});
 							AGE::SkeletonLoader::save(*copy.get());
 						}
@@ -206,6 +210,8 @@ namespace AGE
 							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 								AGE::MeshLoader::load(*copy.get());
 								AGE::MeshLoader::save(*copy.get());
+								AGE::BulletLoader::load(*copy.get());
+								AGE::BulletLoader::save(*copy.get());
 							});
 							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 								AGE::SkeletonLoader::load(*copy.get());
@@ -219,7 +225,7 @@ namespace AGE
 		ImGui::EndChild();
 		ImGui::SameLine();
 		ImGui::BeginChild("Todo", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, ImGui::GetIO().DisplaySize.y), false);
-
+		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->DisplayTasks();
 		ImGui::EndChild();
 
 		ImGui::End();

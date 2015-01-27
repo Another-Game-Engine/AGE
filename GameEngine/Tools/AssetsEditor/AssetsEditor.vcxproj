@@ -156,6 +156,7 @@
     <ClCompile Include="AssetsDatabase.cpp" />
     <ClCompile Include="AssetFiles\File.cpp" />
     <ClCompile Include="AssetFiles\Folder.cpp" />
+    <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
+    <ClInclude Include="Convertor\ConvertorStatusManager.hpp" />
     <ClInclude Include="CookConfigs.hpp" />
     <ClInclude Include="AssetFiles\CookedFile.hpp" />
     <ClInclude Include="AssetFiles\RawFile.hpp" />

@@ -11,6 +11,7 @@
 #include <BulletCollision/CollisionShapes/btTriangleMesh.h>
 #include <BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h>
 #include <BulletCollision/CollisionShapes/btConvexHullShape.h>
+#include "ConvertorStatusManager.hpp"
 
 namespace AGE
 {
@@ -21,10 +22,12 @@ namespace AGE
 		{
 			if (dataSet.staticShape)
 			{
+				auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : saving static shape for " + dataSet.filePath.getShortFileName());
 				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 				{
+					Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 					std::cerr << "Bullet convertor error : creating directory" << std::endl;
 					return false;
 				}
@@ -37,13 +40,16 @@ namespace AGE
 				dataSet.staticShape->serializeSingleShape(&serializer);
 				serializer.finishSerialization();
 				ofs.write((const char *)(serializer.getBufferPointer()), serializer.getCurrentBufferSize());
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			}
 			if (dataSet.dynamicShape)
 			{
+				auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : saving dynamic shape for " + dataSet.filePath.getShortFileName());
 				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 				{
+					Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 					std::cerr << "Bullet convertor error : creating directory" << std::endl;
 					return false;
 				}
@@ -56,14 +62,15 @@ namespace AGE
 				dataSet.dynamicShape->serializeSingleShape(&serializer);
 				serializer.finishSerialization();
 				ofs.write((const char *)(serializer.getBufferPointer()), serializer.getCurrentBufferSize());
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			}
 			return true;
 		}
 
 		static bool load(AssetDataSet &dataSet)
 		{
-			if (!dataSet.mesh)
-				return false;
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : loading " + dataSet.filePath.getShortFileName());
+
 			auto &meshs = dataSet.mesh->subMeshs;
 
 			//STATIC ----------------------------------
@@ -124,6 +131,7 @@ namespace AGE
 					delete tmp;
 				}
 			}
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 	};

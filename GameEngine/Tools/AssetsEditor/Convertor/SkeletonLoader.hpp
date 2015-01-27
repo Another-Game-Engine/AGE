@@ -11,6 +11,8 @@
 #include <Utils/Serialization/QuaternionSerialization.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
 
+#include "ConvertorStatusManager.hpp"
+
 namespace AGE
 {
 	class SkeletonLoader
@@ -20,12 +22,14 @@ namespace AGE
 		{
 			if (!dataSet.skeleton)
 				return true;
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("SkeletonLoader : saving " + dataSet.filePath.getShortFileName());
 			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
-					std::cerr << "Skeleton convertor error : creating directory" << std::endl;
-					return false;
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
+				std::cerr << "Skeleton convertor error : creating directory" << std::endl;
+				return false;
 			}
 			auto fileName = dataSet.skeletonName.empty() ? dataSet.filePath.getShortFileName() + ".skage" : dataSet.skeletonName + ".skage";
 			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
@@ -33,6 +37,7 @@ namespace AGE
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
 			ar(*dataSet.skeleton);
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 
@@ -42,6 +47,8 @@ namespace AGE
 			{
 				return false;
 			}
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("SkeletonLoader : loading " + dataSet.filePath.getShortFileName());
+
 			auto boneOrigin = dataSet.assimpScene->mRootNode;
 			bool hasSkeleton = false;
 			for (unsigned int meshIndex = 0; meshIndex < dataSet.assimpScene->mNumMeshes; ++meshIndex)
@@ -51,6 +58,7 @@ namespace AGE
 			}
 			if (!hasSkeleton)
 			{
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 				std::cerr << "Skeleton loader : mesh do not have skeleton." << std::endl;
 				return true;
 			}
@@ -144,8 +152,10 @@ namespace AGE
 			{
 				std::cerr << "Skeleton loader : assets does not contain any skeleton." << std::endl;
 				dataSet.skeleton = nullptr;
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 				return false;
 			}
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 	private:
