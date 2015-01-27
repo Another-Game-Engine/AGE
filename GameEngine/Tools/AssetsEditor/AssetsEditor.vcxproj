@@ -149,32 +149,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AssetFileCreator.cpp" />
-    <ClCompile Include="AssetFiles\RawMaterialFile.cpp" />
-    <ClCompile Include="AssetFiles\RawMeshFile.cpp" />
-    <ClCompile Include="AssetFiles\RawTextureFile.cpp" />
-    <ClCompile Include="File.cpp" />
-    <ClCompile Include="Folder.cpp" />
+    <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
+    <ClCompile Include="AssetFiles\CookedFile.cpp" />
+    <ClCompile Include="AssetFiles\RawFile.cpp" />
+    <ClCompile Include="AssetsDatabase.cpp" />
+    <ClCompile Include="AssetFiles\File.cpp" />
+    <ClCompile Include="AssetFiles\Folder.cpp" />
+    <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
+    <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssetFileCreator.hpp" />
-    <ClInclude Include="AssetFiles\RawMaterialFile.hpp" />
-    <ClInclude Include="AssetFiles\RawMeshFile.hpp" />
-    <ClInclude Include="AssetFiles\RawTextureFile.hpp" />
-    <ClInclude Include="AssetFiles\UnknownFile.hpp" />
+    <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
+    <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
+    <ClInclude Include="Convertor\ConvertorStatusManager.hpp" />
+    <ClInclude Include="AssetFiles\CookedFile.hpp" />
+    <ClInclude Include="AssetFiles\RawFile.hpp" />
+    <ClInclude Include="AssetsDatabase.hpp" />
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
     <ClInclude Include="Convertor\AssimpLoader.hpp" />
     <ClInclude Include="Convertor\BulletLoader.hpp" />
+    <ClInclude Include="Convertor\CookingTask.hpp" />
     <ClInclude Include="Convertor\ImageLoader.hpp" />
     <ClInclude Include="Convertor\MaterialConvertor.hpp" />
     <ClInclude Include="Convertor\MeshLoader.hpp" />
     <ClInclude Include="Convertor\SkeletonLoader.hpp" />
-    <ClInclude Include="File.hpp" />
-    <ClInclude Include="Folder.hpp" />
+    <ClInclude Include="AssetFiles\File.hpp" />
+    <ClInclude Include="AssetFiles\Folder.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
+    <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">

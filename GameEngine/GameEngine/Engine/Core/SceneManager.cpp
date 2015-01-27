@@ -48,6 +48,7 @@ namespace AGE
 		if (t == std::end(_scenes))
 			return;
 		_actives[priority] = t->second;
+		t->second->setActive(true);
 	}
 
 	void        SceneManager::disableScene(std::string const &name)
@@ -62,6 +63,7 @@ namespace AGE
 			if (a->second == t->second)
 			{
 				_actives.erase(a);
+				a->second->setActive(false);
 				break;
 			}
 		}
@@ -106,6 +108,14 @@ namespace AGE
 			GetMainThread()->setSceneAsActive(e.second.get());
 			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(e.second.get());
 			e.second->update(time);
+		}
+	}
+
+	void SceneManager::getSceneList(std::vector<std::string> &list) const
+	{
+		for (auto &e : _scenes)
+		{
+			list.push_back(e.first);
 		}
 	}
 }
