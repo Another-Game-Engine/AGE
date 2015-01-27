@@ -18,6 +18,8 @@ namespace AGE
 	public:
 		static bool save(AssetDataSet &dataSet)
 		{
+			if (!dataSet.skeleton)
+				return true;
 			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
