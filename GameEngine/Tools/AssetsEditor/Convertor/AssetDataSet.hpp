@@ -9,6 +9,7 @@
 
 #include <filesystem>
 #include <memory>
+#include "ConvertorStatusManager.hpp"
 
 #include <atomic>
 
@@ -28,15 +29,24 @@ namespace AGE
 	{
 		~AssetDataSet()
 		{
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Releasing memory for : " + filePath.getShortFileName());
 			assimpImporter.FreeScene();
 			animations.clear();
 			materials.clear();
 			textures.clear();
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(taskId);
 		}
 
-		AssetDataSet()
+		AssetDataSet() = delete;
+		AssetDataSet(const std::string &path)
 		{
+			filePath = File(path);
+			taskId = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("In active conversion : " + filePath.getShortFileName());
 		}
+
+		std::size_t taskId;
+
 		//Configurations
 		bool loadSkeleton = true;
 		bool loadAnimations = true;

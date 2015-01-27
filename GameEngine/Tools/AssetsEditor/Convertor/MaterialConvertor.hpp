@@ -6,17 +6,18 @@
 
 #include "ConvertorStatusManager.hpp"
 #include <Geometry/MaterialData.hpp>
+#include "AssetDataSet.hpp"
 
 namespace AGE
 {
 	class MaterialLoader
 	{
 	public:
-		static bool save(AssetDataSet &dataSet)
+		static bool save(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : saving " + dataSet.filePath.getShortFileName());
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : saving " + dataSet->filePath.getShortFileName());
 
-			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+			auto folderPath = std::tr2::sys::path(dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
@@ -24,10 +25,10 @@ namespace AGE
 					Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 					return false;
 			}
-			auto fileName = dataSet.materialName.empty() ? dataSet.filePath.getShortFileName() + ".mage" : dataSet.materialName + ".mage";
-			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+			auto fileName = dataSet->materialName.empty() ? dataSet->filePath.getShortFileName() + ".mage" : dataSet->materialName + ".mage";
+			auto name = dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder() + fileName;
 			MaterialDataSet materialDataSet;
-			for (auto &m : dataSet.materials)
+			for (auto &m : dataSet->materials)
 			{
 				materialDataSet.collection.push_back(*m);
 			}
@@ -37,18 +38,18 @@ namespace AGE
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
-		static bool load(AssetDataSet &dataSet)
+		static bool load(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : loading " + dataSet.filePath.getShortFileName());
-			if (!dataSet.assimpScene->HasMaterials())
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : loading " + dataSet->filePath.getShortFileName());
+			if (!dataSet->assimpScene->HasMaterials())
 			{
 				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 				return true;
 			}
 
-			for (auto materialIndex = 0; materialIndex < dataSet.assimpScene->mNumMaterials; ++materialIndex)
+			for (auto materialIndex = 0; materialIndex < dataSet->assimpScene->mNumMaterials; ++materialIndex)
 			{
-				auto &aiMat = dataSet.assimpScene->mMaterials[materialIndex];
+				auto &aiMat = dataSet->assimpScene->mMaterials[materialIndex];
 
 				aiColor4D diffuse(1.0f,1.0f,1.0f,1.0f);
 				aiColor4D ambient(1.0f, 1.0f, 1.0f, 1.0f);
@@ -86,21 +87,21 @@ namespace AGE
 				material->reflective = AssimpLoader::aiColorToGlm(reflective);
 				material->specular = AssimpLoader::aiColorToGlm(specular);
 
-				material->diffuseTexPath = diffuseTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(diffuseTexPath) : "";
-				material->ambientTexPath = ambientTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(ambientTexPath) : "";
-				material->emissiveTexPath = emissiveTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(emissiveTexPath) : "";
-				material->reflectiveTexPath = reflexionTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath) : "";
-				material->specularTexPath = specularTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath) : "";
-				material->normalTexPath = normalTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath) : "";
-				material->bumpTexPath = bumpTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(bumpTexPath) : "";
+				material->diffuseTexPath = diffuseTexPath.length > 0 ? dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(diffuseTexPath) : "";
+				material->ambientTexPath = ambientTexPath.length > 0 ? dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(ambientTexPath) : "";
+				material->emissiveTexPath = emissiveTexPath.length > 0 ? dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(emissiveTexPath) : "";
+				material->reflectiveTexPath = reflexionTexPath.length > 0 ? dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath) : "";
+				material->specularTexPath = specularTexPath.length > 0 ? dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath) : "";
+				material->normalTexPath = normalTexPath.length > 0 ? dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath) : "";
+				material->bumpTexPath = bumpTexPath.length > 0 ? dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(bumpTexPath) : "";
 
-				dataSet.texturesPath.insert(material->diffuseTexPath);
-				dataSet.texturesPath.insert(material->ambientTexPath);
-				dataSet.texturesPath.insert(material->emissiveTexPath);
-				dataSet.texturesPath.insert(material->reflectiveTexPath);
-				dataSet.texturesPath.insert(material->specularTexPath);
-				dataSet.texturesPath.insert(material->normalTexPath);
-				dataSet.texturesPath.insert(material->bumpTexPath);
+				dataSet->texturesPath.insert(material->diffuseTexPath);
+				dataSet->texturesPath.insert(material->ambientTexPath);
+				dataSet->texturesPath.insert(material->emissiveTexPath);
+				dataSet->texturesPath.insert(material->reflectiveTexPath);
+				dataSet->texturesPath.insert(material->specularTexPath);
+				dataSet->texturesPath.insert(material->normalTexPath);
+				dataSet->texturesPath.insert(material->bumpTexPath);
 
 				AssimpLoader::replaceExtension(material->diffuseTexPath, ".tage");
 				AssimpLoader::replaceExtension(material->ambientTexPath, ".tage");
@@ -110,10 +111,10 @@ namespace AGE
 				AssimpLoader::replaceExtension(material->normalTexPath, ".tage");
 				AssimpLoader::replaceExtension(material->bumpTexPath, ".tage");
 
-				dataSet.materials.push_back(material);
+				dataSet->materials.push_back(material);
             }
 
-			if (dataSet.materials.size() == 0)
+			if (dataSet->materials.size() == 0)
 			{
 				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 				std::cerr << "MaterialLoader : Materials has not been loaded" << std::endl;

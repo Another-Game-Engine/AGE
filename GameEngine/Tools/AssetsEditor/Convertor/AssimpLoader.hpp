@@ -11,7 +11,7 @@
 
 #include <Utils/File.hpp>
 
-#include "AssetDataSet.hpp"
+#include "AssetdataSet.hpp"
 #include "ConvertorStatusManager.hpp"
 
 namespace AGE
@@ -49,17 +49,17 @@ namespace AGE
 			return std::string(m.C_Str());
 		}
 
-		static bool Load(AssetDataSet &dataSet)
+		static bool Load(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			auto path = dataSet.rawDirectory.path().string() + "\\" + dataSet.filePath.getFullName();
+			auto path = dataSet->rawDirectory.path().string() + "\\" + dataSet->filePath.getFullName();
 			if (!File(path).exists())
 			{
 				std::cerr << "File [" << path << "] does not exists." << std::endl;
 				return false;
 			}
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Assimp : loading " + dataSet.filePath.getShortFileName());
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Assimp : loading " + dataSet->filePath.getShortFileName());
 
-			dataSet.assimpScene = const_cast<aiScene*>(dataSet.assimpImporter.ReadFile(
+			dataSet->assimpScene = const_cast<aiScene*>(dataSet->assimpImporter.ReadFile(
 				path
 				, aiProcess_Triangulate |
 				aiProcess_GenNormals |
@@ -70,10 +70,10 @@ namespace AGE
 				aiProcess_OptimizeMeshes |
 				aiProcess_FindDegenerates |
 				aiProcess_FindInvalidData));
-			if (dataSet.assimpScene == nullptr)
+			if (dataSet->assimpScene == nullptr)
 			{
 				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
-				std::cerr << "Assimp fail to load file [" << path << "] : " << dataSet.assimpImporter.GetErrorString() << std::endl;
+				std::cerr << "Assimp fail to load file [" << path << "] : " << dataSet->assimpImporter.GetErrorString() << std::endl;
 				return false;
 			}
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);

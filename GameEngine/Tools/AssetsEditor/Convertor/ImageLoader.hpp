@@ -11,14 +11,14 @@ namespace AGE
 	class ImageLoader
 	{
 	public:
-		static bool save(AssetDataSet &dataSet)
+		static bool save(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("ImageLoader : load and save " + dataSet.filePath.getShortFileName());
-			while (!dataSet.textures.empty())
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("ImageLoader : load and save " + dataSet->filePath.getShortFileName());
+			while (!dataSet->textures.empty())
 			{
-				auto t = dataSet.textures.back();
-				dataSet.textures.pop_back();
-				auto path = dataSet.rawDirectory.path().string() + "\\" + t->rawPath;
+				auto t = dataSet->textures.back();
+				dataSet->textures.pop_back();
+				auto path = dataSet->rawDirectory.path().string() + "\\" + t->rawPath;
 
 				fipImage image;
 
@@ -74,7 +74,7 @@ namespace AGE
 				auto imgData = FreeImage_GetBits(image);
 				t->data.assign(imgData, imgData + sizeof(unsigned char) * t->width * t->height * t->colorNumber);
 
-				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder());
+				auto folderPath = std::tr2::sys::path(dataSet->serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder());
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 				{
@@ -82,7 +82,7 @@ namespace AGE
 					std::cerr << "Material convertor error : creating directory" << std::endl;
 					return false;
 				}
-				auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder() + "\\" + File(t->rawPath).getShortFileName() + ".tage";
+				auto name = dataSet->serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder() + "\\" + File(t->rawPath).getShortFileName() + ".tage";
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 				cereal::PortableBinaryOutputArchive ar(ofs);
 				ar(*t);
@@ -91,21 +91,21 @@ namespace AGE
 			return true;
 		}
 
-		static bool load(AssetDataSet &dataSet)
+		static bool load(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			if (dataSet.assimpScene->HasTextures())
+			if (dataSet->assimpScene->HasTextures())
 			{
-				for (auto textureIndex = 0; textureIndex < dataSet.assimpScene->mNumTextures; ++textureIndex)
+				for (auto textureIndex = 0; textureIndex < dataSet->assimpScene->mNumTextures; ++textureIndex)
 				{
-					auto &aiText = dataSet.assimpScene->mTextures[textureIndex];
+					auto &aiText = dataSet->assimpScene->mTextures[textureIndex];
 					unsigned int i = 0;
 				}
 			}
 
-			for (auto &e : dataSet.texturesPath)
+			for (auto &e : dataSet->texturesPath)
 			{
 				bool found = false;
-				for (auto &f : dataSet.textures)
+				for (auto &f : dataSet->textures)
 				{
 					if (f->rawPath == e)
 					{
@@ -117,11 +117,11 @@ namespace AGE
 					continue;
 
 				auto t = std::make_shared<TextureData>();
-				dataSet.textures.push_back(t);
+				dataSet->textures.push_back(t);
 				t->rawPath = e;
 			}
-			dataSet.texturesPath.clear();
-			if (dataSet.textures.size() == 0)
+			dataSet->texturesPath.clear();
+			if (dataSet->textures.size() == 0)
 			{
 				std::cerr << "ImageLoader : Image has not been loaded" << std::endl;
 				return false;

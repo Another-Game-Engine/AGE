@@ -15,10 +15,10 @@ namespace AGE
 	class MeshLoader
 	{
 	public:
-		static bool save(AssetDataSet &dataSet)
+		static bool save(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MeshLoader : saving " + dataSet.filePath.getShortFileName());
-			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MeshLoader : saving " + dataSet->filePath.getShortFileName());
+			auto folderPath = std::tr2::sys::path(dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
@@ -26,33 +26,33 @@ namespace AGE
 				std::cerr << "Mesh convector error : creating directory" << std::endl;
 				return false;
 			}
-			auto fileName = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() + ".sage" : dataSet.skinName + ".sage";
-			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+			auto fileName = dataSet->skinName.empty() ? dataSet->filePath.getShortFileName() + ".sage" : dataSet->skinName + ".sage";
+			auto name = dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder() + fileName;
 
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
-			ar(*dataSet.mesh);
+			ar(*dataSet->mesh);
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 
-		static bool load(AssetDataSet &dataSet)
+		static bool load(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MeshLoader : loading " + dataSet.filePath.getShortFileName());
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MeshLoader : loading " + dataSet->filePath.getShortFileName());
 
-			dataSet.mesh = std::make_shared<MeshData>();
+			dataSet->mesh = std::make_shared<MeshData>();
 
-			dataSet.mesh->name = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() : dataSet.skinName;
-			dataSet.mesh->subMeshs.resize(dataSet.assimpScene->mNumMeshes);
+			dataSet->mesh->name = dataSet->skinName.empty() ? dataSet->filePath.getShortFileName() : dataSet->skinName;
+			dataSet->mesh->subMeshs.resize(dataSet->assimpScene->mNumMeshes);
 
-			auto &meshs = dataSet.mesh->subMeshs;
+			auto &meshs = dataSet->mesh->subMeshs;
 
 			// The meshes dont have bounding box (only the subMeshes)
 //			AGE::Vector<AGE::AABoundingBox> subMeshBoundings;
 
-			for (unsigned int meshIndex = 0; meshIndex < dataSet.assimpScene->mNumMeshes; ++meshIndex)
+			for (unsigned int meshIndex = 0; meshIndex < dataSet->assimpScene->mNumMeshes; ++meshIndex)
 			{
-				aiMesh *mesh = dataSet.assimpScene->mMeshes[meshIndex];
+				aiMesh *mesh = dataSet->assimpScene->mMeshes[meshIndex];
 
 				std::uint32_t indice = 0;
 
@@ -125,7 +125,7 @@ namespace AGE
 				meshs[meshIndex].defaultMaterialIndex = mesh->mMaterialIndex > 0 ? mesh->mMaterialIndex : std::uint16_t(-1);
 				for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 				{
-					unsigned int boneIndex = dataSet.skeleton->bonesReferences.find(mesh->mBones[i]->mName.data)->second;
+					unsigned int boneIndex = dataSet->skeleton->bonesReferences.find(mesh->mBones[i]->mName.data)->second;
 
 					meshs[meshIndex].infos.set(MeshInfos::Weights);
 					meshs[meshIndex].infos.set(MeshInfos::BoneIndices);
@@ -160,7 +160,7 @@ namespace AGE
 
 			glm::vec3 min(std::numeric_limits<float>::max());
 			glm::vec3 max(std::numeric_limits<float>::min());
-			for (auto &e : dataSet.mesh->subMeshs)
+			for (auto &e : dataSet->mesh->subMeshs)
 			{
 				min = glm::min(e.boundingBox.minPoint, min);
 				max = glm::max(e.boundingBox.maxPoint, max);
@@ -170,7 +170,7 @@ namespace AGE
 			t = t > dif.z ? t : dif.z;
 			auto center = ((max - min) / 2.0f);
 			auto center4 = glm::vec4(center.x, center.y, center.z, 0.0f);
-			for (auto &e : dataSet.mesh->subMeshs)
+			for (auto &e : dataSet->mesh->subMeshs)
 			{
 				//e.boundingBox.minPoint += center;
 				e.boundingBox.minPoint /= t;

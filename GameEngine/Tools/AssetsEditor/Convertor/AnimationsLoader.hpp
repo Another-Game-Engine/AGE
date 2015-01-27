@@ -15,13 +15,13 @@ namespace AGE
 	class AnimationsLoader
 	{
 	public:
-		static bool save(AssetDataSet &dataSet)
+		static bool save(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			if (dataSet.animations.empty())
+			if (dataSet->animations.empty())
 				return true;
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : saving " + dataSet.filePath.getShortFileName());
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : saving " + dataSet->filePath.getShortFileName());
 
-			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+			auto folderPath = std::tr2::sys::path(dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
@@ -29,28 +29,28 @@ namespace AGE
 				std::cerr << "Animation convertor error : creating directory" << std::endl;
 				return false;
 			}
-			auto fileName = dataSet.animationName.empty() ? dataSet.filePath.getShortFileName() + ".aage" : dataSet.animationName + ".aage";
-			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+			auto fileName = dataSet->animationName.empty() ? dataSet->filePath.getShortFileName() + ".aage" : dataSet->animationName + ".aage";
+			auto name = dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder() + fileName;
 
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
-			ar(*dataSet.animations[0]);
+			ar(*dataSet->animations[0]);
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 
-		static bool load(AssetDataSet &dataSet)
+		static bool load(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			if (!dataSet.assimpScene->HasAnimations())
+			if (!dataSet->assimpScene->HasAnimations())
 				return false;
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : loading " + dataSet.filePath.getShortFileName());
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : loading " + dataSet->filePath.getShortFileName());
 
-			dataSet.animations.resize(dataSet.assimpScene->mNumAnimations);
-			for (unsigned int animNum = 0; animNum < dataSet.assimpScene->mNumAnimations; ++animNum)
+			dataSet->animations.resize(dataSet->assimpScene->mNumAnimations);
+			for (unsigned int animNum = 0; animNum < dataSet->assimpScene->mNumAnimations; ++animNum)
 			{
-				auto aiAnim = dataSet.assimpScene->mAnimations[animNum];
-				dataSet.animations[animNum] = std::make_shared<Animation>();
-				auto anim = dataSet.animations[animNum];
+				auto aiAnim = dataSet->assimpScene->mAnimations[animNum];
+				dataSet->animations[animNum] = std::make_shared<Animation>();
+				auto anim = dataSet->animations[animNum];
 				anim->name = aiAnim->mName.data;
 				anim->duration = aiAnim->mDuration;
 				anim->id = animNum;
@@ -58,8 +58,8 @@ namespace AGE
 				for (unsigned int channelNbr = 0; channelNbr < aiAnim->mNumChannels; ++channelNbr)
 				{
 					auto aiChannel = aiAnim->mChannels[channelNbr];
-					auto findBoneName = dataSet.skeleton->bonesReferences.find(aiChannel->mNodeName.data);
-					if (findBoneName == std::end(dataSet.skeleton->bonesReferences))
+					auto findBoneName = dataSet->skeleton->bonesReferences.find(aiChannel->mNodeName.data);
+					if (findBoneName == std::end(dataSet->skeleton->bonesReferences))
 						continue;
 					anim->channels.resize(channelCounter + 1);
 					auto &channel = anim->channels[channelCounter];

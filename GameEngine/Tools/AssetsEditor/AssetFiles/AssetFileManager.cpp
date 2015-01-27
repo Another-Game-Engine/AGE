@@ -179,6 +179,10 @@ namespace AGE
 			ImGui::PushID((void*)ptr);
 			if (ImGui::Button("Select"))
 			{
+				if (selected)
+				{
+					selected->dataSet = nullptr;
+				}
 				selected = std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis());
 			}
 			ImGui::PopID();

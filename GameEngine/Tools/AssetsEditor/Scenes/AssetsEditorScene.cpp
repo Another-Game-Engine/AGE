@@ -112,10 +112,11 @@ namespace AGE
 			{
 				if (_selectedRaw->dataSet == nullptr)
 				{
-					_selectedRaw->dataSet = std::make_shared<AssetDataSet>();
 					auto path = _selectedRaw->getPath();
 					path = path.erase(0, _raw._path.path().string().size());
-					_selectedRaw->dataSet->filePath = File(path);
+					//_selectedRaw->dataSet->filePath = File(path);
+					_selectedRaw->dataSet = std::make_shared<AssetDataSet>(path);
+
 				}
 				ImGui::Text("Selected asset : "); ImGui::SameLine(); ImGui::TextColored(ImVec4(0.58, 0, 0.7, 1), _selectedRaw->getFileName().c_str());
 				ImGui::Text("Last modifiction : %s", _selectedRaw->_lastWriteTimeStr.c_str());
@@ -172,50 +173,50 @@ namespace AGE
 				ImGui::Separator();
 				if (ImGui::Button("Cook"))
 				{
-					std::shared_ptr<AssetDataSet> copy = std::make_shared<AssetDataSet>(*_selectedRaw->dataSet.get());
+					auto dataSet = _selectedRaw->dataSet;
 					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
 					{
-						copy->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-						copy->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+						dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
+						dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
 
-						AGE::AssimpLoader::Load(*copy.get());
+						AGE::AssimpLoader::Load(dataSet);
 
 						AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-							AGE::MaterialLoader::load(*copy.get());
-							AGE::MaterialLoader::save(*copy.get());
-							AGE::ImageLoader::load(*copy.get());
-							AGE::ImageLoader::save(*copy.get());
+							AGE::MaterialLoader::load(dataSet);
+							AGE::MaterialLoader::save(dataSet);
+							AGE::ImageLoader::load(dataSet);
+							AGE::ImageLoader::save(dataSet);
 						});
-						if ((copy->loadMesh || copy->loadAnimations) && copy->loadSkeleton)
+						if ((dataSet->loadMesh || dataSet->loadAnimations) && dataSet->loadSkeleton)
 						{
-							AGE::SkeletonLoader::load(*copy.get());
+							AGE::SkeletonLoader::load(dataSet);
 							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-								AGE::AnimationsLoader::load(*copy.get());
-								AGE::AnimationsLoader::save(*copy.get());
+								AGE::AnimationsLoader::load(dataSet);
+								AGE::AnimationsLoader::save(dataSet);
 							});
 							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-								AGE::MeshLoader::load(*copy.get());
-								AGE::MeshLoader::save(*copy.get());
-								AGE::BulletLoader::load(*copy.get());
-								AGE::BulletLoader::save(*copy.get());
+								AGE::MeshLoader::load(dataSet);
+								AGE::MeshLoader::save(dataSet);
+								AGE::BulletLoader::load(dataSet);
+								AGE::BulletLoader::save(dataSet);
 							});
-							AGE::SkeletonLoader::save(*copy.get());
+							AGE::SkeletonLoader::save(dataSet);
 						}
 						else
 						{
 							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-								AGE::AnimationsLoader::load(*copy.get());
-								AGE::AnimationsLoader::save(*copy.get());
+								AGE::AnimationsLoader::load(dataSet);
+								AGE::AnimationsLoader::save(dataSet);
 							});
 							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-								AGE::MeshLoader::load(*copy.get());
-								AGE::MeshLoader::save(*copy.get());
-								AGE::BulletLoader::load(*copy.get());
-								AGE::BulletLoader::save(*copy.get());
+								AGE::MeshLoader::load(dataSet);
+								AGE::MeshLoader::save(dataSet);
+								AGE::BulletLoader::load(dataSet);
+								AGE::BulletLoader::save(dataSet);
 							});
 							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-								AGE::SkeletonLoader::load(*copy.get());
-								AGE::SkeletonLoader::save(*copy.get());
+								AGE::SkeletonLoader::load(dataSet);
+								AGE::SkeletonLoader::save(dataSet);
 							});
 						}
 					});

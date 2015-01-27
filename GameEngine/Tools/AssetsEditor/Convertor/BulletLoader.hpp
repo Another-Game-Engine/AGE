@@ -18,12 +18,12 @@ namespace AGE
 	class BulletLoader
 	{
 	public:
-		static bool save(AssetDataSet &dataSet)
+		static bool save(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			if (dataSet.staticShape)
+			if (dataSet->staticShape)
 			{
-				auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : saving static shape for " + dataSet.filePath.getShortFileName());
-				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+				auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : saving static shape for " + dataSet->filePath.getShortFileName());
+				auto folderPath = std::tr2::sys::path(dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder());
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 				{
@@ -31,21 +31,21 @@ namespace AGE
 					std::cerr << "Bullet convertor error : creating directory" << std::endl;
 					return false;
 				}
-				auto fileName = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() + "_static.phage" : dataSet.skinName + "_static.phage";
-				auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+				auto fileName = dataSet->skinName.empty() ? dataSet->filePath.getShortFileName() + "_static.phage" : dataSet->skinName + "_static.phage";
+				auto name = dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder() + fileName;
 
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 				btDefaultSerializer	serializer;
 				serializer.startSerialization();
-				dataSet.staticShape->serializeSingleShape(&serializer);
+				dataSet->staticShape->serializeSingleShape(&serializer);
 				serializer.finishSerialization();
 				ofs.write((const char *)(serializer.getBufferPointer()), serializer.getCurrentBufferSize());
 				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			}
-			if (dataSet.dynamicShape)
+			if (dataSet->dynamicShape)
 			{
-				auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : saving dynamic shape for " + dataSet.filePath.getShortFileName());
-				auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+				auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : saving dynamic shape for " + dataSet->filePath.getShortFileName());
+				auto folderPath = std::tr2::sys::path(dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder());
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 				{
@@ -53,13 +53,13 @@ namespace AGE
 					std::cerr << "Bullet convertor error : creating directory" << std::endl;
 					return false;
 				}
-				auto fileName = dataSet.skinName.empty() ? dataSet.filePath.getShortFileName() + "_dynamic.phage" : dataSet.skinName + "_dynamic.phage";
-				auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+				auto fileName = dataSet->skinName.empty() ? dataSet->filePath.getShortFileName() + "_dynamic.phage" : dataSet->skinName + "_dynamic.phage";
+				auto name = dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder() + fileName;
 
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 				btDefaultSerializer	serializer;
 				serializer.startSerialization();
-				dataSet.dynamicShape->serializeSingleShape(&serializer);
+				dataSet->dynamicShape->serializeSingleShape(&serializer);
 				serializer.finishSerialization();
 				ofs.write((const char *)(serializer.getBufferPointer()), serializer.getCurrentBufferSize());
 				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
@@ -67,23 +67,23 @@ namespace AGE
 			return true;
 		}
 
-		static bool load(AssetDataSet &dataSet)
+		static bool load(std::shared_ptr<AssetDataSet> dataSet)
 		{
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : loading " + dataSet.filePath.getShortFileName());
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : loading " + dataSet->filePath.getShortFileName());
 
-			auto &meshs = dataSet.mesh->subMeshs;
+			auto &meshs = dataSet->mesh->subMeshs;
 
 			//STATIC ----------------------------------
-			dataSet.staticTriangleMesh = std::make_shared<btTriangleMesh>();
+			dataSet->staticTriangleMesh = std::make_shared<btTriangleMesh>();
 			std::size_t indiceNb = 0;
 			std::size_t verticeNb = 0;
-			for (auto &e : dataSet.mesh->subMeshs)
+			for (auto &e : dataSet->mesh->subMeshs)
 			{
 				indiceNb += e.indices.size();
 				verticeNb += e.positions.size();
 			}
-			dataSet.staticTriangleMesh->preallocateIndices(indiceNb);
-			dataSet.staticTriangleMesh->preallocateVertices(verticeNb);
+			dataSet->staticTriangleMesh->preallocateIndices(indiceNb);
+			dataSet->staticTriangleMesh->preallocateVertices(verticeNb);
 			for (std::size_t j = 0; j < meshs.size(); ++j)
 			{
 				auto &geo = meshs[j];
@@ -92,18 +92,18 @@ namespace AGE
 					auto a = geo.positions[geo.indices[i]];
 					auto b = geo.positions[geo.indices[i+1]];
 					auto c = geo.positions[geo.indices[i+2]];
-					dataSet.staticTriangleMesh->addTriangle(btVector3(a.x, a.y, a.z)
+					dataSet->staticTriangleMesh->addTriangle(btVector3(a.x, a.y, a.z)
 						, btVector3(b.x, b.y, b.z)
 						, btVector3(c.x, c.y, c.z), false);
 				}
 			}
-			dataSet.staticShape = std::make_shared<btBvhTriangleMeshShape>(dataSet.staticTriangleMesh.get(), true);
-			dataSet.staticShape->buildOptimizedBvh();
+			dataSet->staticShape = std::make_shared<btBvhTriangleMeshShape>(dataSet->staticTriangleMesh.get(), true);
+			dataSet->staticShape->buildOptimizedBvh();
 
 			//DYNAMIC ----------------------------------
 			{
-				auto &geos = dataSet.mesh->subMeshs;
-				dataSet.dynamicShape = std::make_shared<btConvexHullShape>();
+				auto &geos = dataSet->mesh->subMeshs;
+				dataSet->dynamicShape = std::make_shared<btConvexHullShape>();
 				for (std::size_t i = 0; i < geos.size(); ++i)
 				{
 					auto &geo = geos[i];
@@ -122,9 +122,9 @@ namespace AGE
 					tmp->setUserPointer(hull);
 					for (int it = 0; it < hull->numVertices(); ++it)
 					{
-						dataSet.dynamicShape->addPoint(hull->getVertexPointer()[std::size_t(it)], false);
+						dataSet->dynamicShape->addPoint(hull->getVertexPointer()[std::size_t(it)], false);
 					}
-					dataSet.dynamicShape->recalcLocalAabb();
+					dataSet->dynamicShape->recalcLocalAabb();
 					btTransform localTrans;
 					delete[] t;
 					delete hull;
