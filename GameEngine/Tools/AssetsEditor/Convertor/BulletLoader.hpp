@@ -20,6 +20,8 @@ namespace AGE
 	public:
 		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadPhysic)
+				return true;
 			if (cookingTask->staticShape)
 			{
 				auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : saving static shape for " + cookingTask->dataSet->filePath.getShortFileName());
@@ -69,38 +71,43 @@ namespace AGE
 
 		static bool load(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadPhysic)
+				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : loading " + cookingTask->dataSet->filePath.getShortFileName());
 
 			auto &meshs = cookingTask->mesh->subMeshs;
 
 			//STATIC ----------------------------------
-			cookingTask->staticTriangleMesh = std::make_shared<btTriangleMesh>();
-			std::size_t indiceNb = 0;
-			std::size_t verticeNb = 0;
-			for (auto &e : cookingTask->mesh->subMeshs)
+			if (cookingTask->dataSet->staticConcave)
 			{
-				indiceNb += e.indices.size();
-				verticeNb += e.positions.size();
-			}
-			cookingTask->staticTriangleMesh->preallocateIndices(indiceNb);
-			cookingTask->staticTriangleMesh->preallocateVertices(verticeNb);
-			for (std::size_t j = 0; j < meshs.size(); ++j)
-			{
-				auto &geo = meshs[j];
-				for (std::size_t i = 0; i < geo.indices.size(); i += 3)
+				cookingTask->staticTriangleMesh = std::make_shared<btTriangleMesh>();
+				std::size_t indiceNb = 0;
+				std::size_t verticeNb = 0;
+				for (auto &e : cookingTask->mesh->subMeshs)
 				{
-					auto a = geo.positions[geo.indices[i]];
-					auto b = geo.positions[geo.indices[i+1]];
-					auto c = geo.positions[geo.indices[i+2]];
-					cookingTask->staticTriangleMesh->addTriangle(btVector3(a.x, a.y, a.z)
-						, btVector3(b.x, b.y, b.z)
-						, btVector3(c.x, c.y, c.z), false);
+					indiceNb += e.indices.size();
+					verticeNb += e.positions.size();
 				}
+				cookingTask->staticTriangleMesh->preallocateIndices(indiceNb);
+				cookingTask->staticTriangleMesh->preallocateVertices(verticeNb);
+				for (std::size_t j = 0; j < meshs.size(); ++j)
+				{
+					auto &geo = meshs[j];
+					for (std::size_t i = 0; i < geo.indices.size(); i += 3)
+					{
+						auto a = geo.positions[geo.indices[i]];
+						auto b = geo.positions[geo.indices[i + 1]];
+						auto c = geo.positions[geo.indices[i + 2]];
+						cookingTask->staticTriangleMesh->addTriangle(btVector3(a.x, a.y, a.z)
+							, btVector3(b.x, b.y, b.z)
+							, btVector3(c.x, c.y, c.z), false);
+					}
+				}
+				cookingTask->staticShape = std::make_shared<btBvhTriangleMeshShape>(cookingTask->staticTriangleMesh.get(), true);
+				cookingTask->staticShape->buildOptimizedBvh();
 			}
-			cookingTask->staticShape = std::make_shared<btBvhTriangleMeshShape>(cookingTask->staticTriangleMesh.get(), true);
-			cookingTask->staticShape->buildOptimizedBvh();
-
 			//DYNAMIC ----------------------------------
+			if (cookingTask->dataSet->dynamicConcave)
 			{
 				auto &geos = cookingTask->mesh->subMeshs;
 				cookingTask->dynamicShape = std::make_shared<btConvexHullShape>();

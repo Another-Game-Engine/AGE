@@ -18,6 +18,8 @@ namespace AGE
 	public:
 		static bool save(std::shared_ptr<CookingTask> cookinTask)
 		{
+			if (!cookinTask->dataSet->loadAnimations)
+				return true;
 			if (cookinTask->animations.empty())
 				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : saving " + cookinTask->dataSet->filePath.getShortFileName());
@@ -42,6 +44,8 @@ namespace AGE
 
 		static bool load(std::shared_ptr<CookingTask> cookinTask)
 		{
+			if (!cookinTask->dataSet->loadAnimations)
+				return true;
 			if (!cookinTask->assimpScene->HasAnimations())
 				return false;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : loading " + cookinTask->dataSet->filePath.getShortFileName());

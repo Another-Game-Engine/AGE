@@ -17,6 +17,8 @@ namespace AGE
 	public:
 		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadMesh)
+				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MeshLoader : saving " + cookingTask->dataSet->filePath.getShortFileName());
 			auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder());
 
@@ -38,6 +40,8 @@ namespace AGE
 
 		static bool load(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadMesh)
+				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MeshLoader : loading " + cookingTask->dataSet->filePath.getShortFileName());
 
 			cookingTask->mesh = std::make_shared<MeshData>();
@@ -62,7 +66,7 @@ namespace AGE
 
 				for (size_t i = 0; i < mesh->mNumVertices; i++)
 				{
-					if (mesh->HasPositions())
+					if (mesh->HasPositions() && cookingTask->dataSet->positions)
 					{
 						auto &aiPositions = mesh->mVertices[i];
 						// set the bounding box
@@ -74,7 +78,7 @@ namespace AGE
 						meshs[meshIndex].positions.push_back(glm::vec4(aiPositions.x, aiPositions.y, aiPositions.z, 1));
 						meshs[meshIndex].infos.set(MeshInfos::Positions);
 					}
-					if (mesh->HasNormals())
+					if (mesh->HasNormals() && cookingTask->dataSet->normals)
 					{
 						auto &aiNormals = mesh->mNormals[i];
 						meshs[meshIndex].normals.push_back(glm::vec4(aiNormals.x, aiNormals.y, aiNormals.z, 1));
@@ -82,7 +86,7 @@ namespace AGE
 					}
 					for (unsigned int texCoordIndex = 0; texCoordIndex < 1 /*AI_MAX_NUMBER_OF_TEXTURECOORDS*/; ++texCoordIndex)
 					{
-						if (mesh->HasTextureCoords(texCoordIndex))
+						if (mesh->HasTextureCoords(texCoordIndex) && cookingTask->dataSet->uvs)
 						{
 							meshs[meshIndex].uvs.resize(texCoordIndex + 1);
 							auto &aiUvs = mesh->mTextureCoords[texCoordIndex][i];
@@ -93,11 +97,15 @@ namespace AGE
 					if (mesh->HasTangentsAndBitangents())
 					{
 						auto &aiTangents = mesh->mTangents[i];
-						meshs[meshIndex].tangents.push_back(glm::vec4(aiTangents.x, aiTangents.y, aiTangents.z, 1));
+						if (cookingTask->dataSet->tangents)
+							meshs[meshIndex].tangents.push_back(glm::vec4(aiTangents.x, aiTangents.y, aiTangents.z, 1));
 						auto &aiBiTangents = mesh->mBitangents[i];
-						meshs[meshIndex].biTangents.push_back(glm::vec4(aiBiTangents.x, aiBiTangents.y, aiBiTangents.z, 1));
-						meshs[meshIndex].infos.set(MeshInfos::Tangents);
-						meshs[meshIndex].infos.set(MeshInfos::BiTangents);
+						if (cookingTask->dataSet->biTangents)
+							meshs[meshIndex].biTangents.push_back(glm::vec4(aiBiTangents.x, aiBiTangents.y, aiBiTangents.z, 1));
+						if (cookingTask->dataSet->tangents)
+							meshs[meshIndex].infos.set(MeshInfos::Tangents);
+						if (cookingTask->dataSet->biTangents)
+							meshs[meshIndex].infos.set(MeshInfos::BiTangents);
 					}
 				}
 				// The meshes dont have bounding box (only the subMeshes)
@@ -118,72 +126,80 @@ namespace AGE
 
 				std::map<std::string, unsigned int> bonesIndices;
 				unsigned int numBone = 0;
-
-				meshs[meshIndex].weights.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
-				meshs[meshIndex].boneIndices.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
-				meshs[meshIndex].name = mesh->mName.C_Str();
-				meshs[meshIndex].defaultMaterialIndex = mesh->mMaterialIndex > 0 ? mesh->mMaterialIndex : std::uint16_t(-1);
-				for (unsigned int i = 0; i < mesh->mNumBones; ++i)
+				if (cookingTask->dataSet->bonesInfos)
 				{
-					unsigned int boneIndex = cookingTask->skeleton->bonesReferences.find(mesh->mBones[i]->mName.data)->second;
-
-					meshs[meshIndex].infos.set(MeshInfos::Weights);
-					meshs[meshIndex].infos.set(MeshInfos::BoneIndices);
-
-					for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; ++j)
+					meshs[meshIndex].weights.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
+					meshs[meshIndex].boneIndices.resize(meshs[meshIndex].positions.size(), glm::vec4(0));
+					meshs[meshIndex].name = mesh->mName.C_Str();
+					meshs[meshIndex].defaultMaterialIndex = mesh->mMaterialIndex > 0 ? mesh->mMaterialIndex : std::uint16_t(-1);
+					for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 					{
-						float weight = mesh->mBones[i]->mWeights[j].mWeight;
-						float vid = mesh->mBones[i]->mWeights[j].mVertexId;
-						if (meshs[meshIndex].weights[vid].r == 0.0f)
+						unsigned int boneIndex = cookingTask->skeleton->bonesReferences.find(mesh->mBones[i]->mName.data)->second;
+
+						meshs[meshIndex].infos.set(MeshInfos::Weights);
+						meshs[meshIndex].infos.set(MeshInfos::BoneIndices);
+
+						for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; ++j)
 						{
-							meshs[meshIndex].weights[vid].r = weight;
-							meshs[meshIndex].boneIndices[vid].r = boneIndex;
-						}
-						else if (meshs[meshIndex].weights[vid].g == 0.0f)
-						{
-							meshs[meshIndex].weights[vid].g = weight;
-							meshs[meshIndex].boneIndices[vid].g = boneIndex;
-						}
-						else if (meshs[meshIndex].weights[vid].b == 0.0f)
-						{
-							meshs[meshIndex].weights[vid].b = weight;
-							meshs[meshIndex].boneIndices[vid].b = boneIndex;
-						}
-						else if (meshs[meshIndex].weights[vid].a == 0.0f)
-						{
-							meshs[meshIndex].weights[vid].a = weight;
-							meshs[meshIndex].boneIndices[vid].a = boneIndex;
+							float weight = mesh->mBones[i]->mWeights[j].mWeight;
+							float vid = mesh->mBones[i]->mWeights[j].mVertexId;
+							if (meshs[meshIndex].weights[vid].r == 0.0f)
+							{
+								meshs[meshIndex].weights[vid].r = weight;
+								meshs[meshIndex].boneIndices[vid].r = boneIndex;
+							}
+							else if (meshs[meshIndex].weights[vid].g == 0.0f)
+							{
+								meshs[meshIndex].weights[vid].g = weight;
+								meshs[meshIndex].boneIndices[vid].g = boneIndex;
+							}
+							else if (meshs[meshIndex].weights[vid].b == 0.0f)
+							{
+								meshs[meshIndex].weights[vid].b = weight;
+								meshs[meshIndex].boneIndices[vid].b = boneIndex;
+							}
+							else if (meshs[meshIndex].weights[vid].a == 0.0f)
+							{
+								meshs[meshIndex].weights[vid].a = weight;
+								meshs[meshIndex].boneIndices[vid].a = boneIndex;
+							}
 						}
 					}
 				}
 			}
 
-			glm::vec3 min(std::numeric_limits<float>::max());
-			glm::vec3 max(std::numeric_limits<float>::min());
-			for (auto &e : cookingTask->mesh->subMeshs)
+			if (cookingTask->dataSet->normalize)
 			{
-				min = glm::min(e.boundingBox.minPoint, min);
-				max = glm::max(e.boundingBox.maxPoint, max);
-			}
-			auto dif = max - min;
-			float t = dif.x > dif.y ? dif.x : dif.y;
-			t = t > dif.z ? t : dif.z;
-			auto center = ((max - min) / 2.0f);
-			auto center4 = glm::vec4(center.x, center.y, center.z, 0.0f);
-			for (auto &e : cookingTask->mesh->subMeshs)
-			{
-				//e.boundingBox.minPoint += center;
-				e.boundingBox.minPoint /= t;
-				//e.boundingBox.maxPoint += center;
-				e.boundingBox.maxPoint /= t;
-				for (auto &f : e.positions)
+				glm::vec3 min(std::numeric_limits<float>::max());
+				glm::vec3 max(std::numeric_limits<float>::min());
+				for (auto &e : cookingTask->mesh->subMeshs)
 				{
-					//f += center4;
-					f /= t;
-					f.w = 1.0f;
+					min = glm::min(e.boundingBox.minPoint, min);
+					max = glm::max(e.boundingBox.maxPoint, max);
 				}
-				glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
-				e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
+				auto dif = max - min;
+				float t = dif.x > dif.y ? dif.x : dif.y;
+				t = t > dif.z ? t : dif.z;
+				auto center = ((max - min) / 2.0f);
+				auto center4 = glm::vec4(center.x, center.y, center.z, 0.0f);
+				for (auto &e : cookingTask->mesh->subMeshs)
+				{
+					//e.boundingBox.minPoint += center;
+					e.boundingBox.minPoint /= t;
+					e.boundingBox.minPoint *= cookingTask->dataSet->maxSideLength;
+					//e.boundingBox.maxPoint += center;
+					e.boundingBox.maxPoint /= t;
+					e.boundingBox.maxPoint *= cookingTask->dataSet->maxSideLength;
+					for (auto &f : e.positions)
+					{
+						//f += center4;
+						f /= t;
+						f *= cookingTask->dataSet->maxSideLength;
+						f.w = 1.0f;
+					}
+					glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
+					e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
+				}
 			}
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;

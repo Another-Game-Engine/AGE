@@ -66,8 +66,10 @@ namespace AGE
 				_raw.list();
 				std::set<std::shared_ptr<AE::RawFile>> dirty;
 				AE::AssetFileManager::CheckIfRawModified(&_raw, dirty);
-				if (dirty.size())
-					std::cout << "Dirty : " << dirty.size() << std::endl;
+				for (auto &e : dirty)
+				{
+
+				}
 				counter = 0;
 			}
 		}

@@ -20,6 +20,8 @@ namespace AGE
 	public:
 		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadSkeleton)
+				return true;
 			if (!cookingTask->skeleton)
 				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("SkeletonLoader : saving " + cookingTask->dataSet->filePath.getShortFileName());
@@ -43,6 +45,8 @@ namespace AGE
 
 		static bool load(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadSkeleton)
+				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("SkeletonLoader : loading " + cookingTask->dataSet->filePath.getShortFileName());
 
 			auto boneOrigin = cookingTask->assimpScene->mRootNode;

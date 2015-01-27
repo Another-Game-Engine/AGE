@@ -7,6 +7,7 @@
 #include <AssetFiles/Folder.hpp>
 #include <imgui/imgui.h>
 #include <vector>
+#include <Convertor/AssetDataSet.hpp>
 
 //to remove
 #include <iostream>
@@ -37,7 +38,7 @@ namespace AGE
 		bool AssetFileManager::IsValidFile(const std::tr2::sys::path &path)
 		{
 			auto extension = AGE::FileSystem::GetExtension(path);
-			if (extension == "obj" || extension == "fbx" || extension == "collada")
+			if (extension == "obj" || extension == "fbx" || extension == "dae")
 				return true;
 			return false;
 		}
@@ -46,7 +47,7 @@ namespace AGE
 		{
 			auto extension = AGE::FileSystem::GetExtension(path);
 			std::shared_ptr<AssetFile> t = nullptr;
-			if (extension == "obj" || extension == "fbx" || extension == "collada")
+			if (extension == "obj" || extension == "fbx" || extension == "dae")
 			{
 				t = std::make_shared<RawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Mesh;
@@ -96,12 +97,12 @@ namespace AGE
 		void AssetFileManager::CheckIfRawModified(Folder *folder, std::set<std::shared_ptr<RawFile>> &list)
 		{
 			folder->update(std::function<void(Folder*)>([](Folder*){}), std::function<void(RawFile*)>([&](RawFile* ptr) {
+				if (ptr->dataSet && ptr->dataSet->isConverting)
+					return;
 				auto lastWrite = FileSystem::GetLastWriteTime(ptr->getPath());
 				if (FileSystem::GetDiffTime(lastWrite, ptr->_lastWriteTime) > 0)
 				{
 					ptr->_dirty = true;
-					ptr->_lastWriteTime = lastWrite;
-					ptr->_lastWriteTimeStr = FileSystem::GetDateStr(ptr->getPath());
 					list.insert(std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis()));
 				}
 				else

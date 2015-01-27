@@ -13,6 +13,8 @@ namespace AGE
 	public:
 		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadTextures)
+				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("ImageLoader : load and save " + cookingTask->dataSet->filePath.getShortFileName());
 			while (!cookingTask->textures.empty())
 			{
@@ -93,6 +95,8 @@ namespace AGE
 
 		static bool load(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadTextures)
+				return true;
 			if (cookingTask->assimpScene->HasTextures())
 			{
 				for (auto textureIndex = 0; textureIndex < cookingTask->assimpScene->mNumTextures; ++textureIndex)

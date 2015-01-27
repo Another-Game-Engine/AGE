@@ -15,6 +15,8 @@ namespace AGE
 	public:
 		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadMaterials)
+				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : saving " + cookingTask->dataSet->filePath.getShortFileName());
 
 			auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder());
@@ -40,6 +42,8 @@ namespace AGE
 		}
 		static bool load(std::shared_ptr<CookingTask> cookingTask)
 		{
+			if (!cookingTask->dataSet->loadMaterials)
+				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : loading " + cookingTask->dataSet->filePath.getShortFileName());
 			if (!cookingTask->assimpScene->HasMaterials())
 			{
