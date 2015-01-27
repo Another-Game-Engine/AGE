@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Utils/Singleton.hh>
-#include <unordered_map>
+#include <map>
 #include <mutex>
 
 namespace AGE
@@ -17,7 +17,7 @@ namespace AGE
 		private:
 			ConvertorStatusManager(){}
 			~ConvertorStatusManager(){}
-			std::unordered_map<std::size_t, std::string> _tasks;
+			std::map<std::size_t, std::string> _tasks;
 			std::mutex _mutex;
 			std::string _text;
 			friend class Singleton < ConvertorStatusManager >;

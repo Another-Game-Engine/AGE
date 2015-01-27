@@ -42,9 +42,6 @@
     <ClCompile Include="AssetFiles\CookedFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetFiles\CookConfigs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -101,10 +98,10 @@
     <ClInclude Include="AssetFiles\CookedFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CookConfigs.hpp">
+    <ClInclude Include="Convertor\ConvertorStatusManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Convertor\ConvertorStatusManager.hpp">
+    <ClInclude Include="Convertor\CookingTask.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

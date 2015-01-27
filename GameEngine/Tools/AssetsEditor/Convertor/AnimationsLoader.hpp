@@ -9,19 +9,20 @@
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
 #include "ConvertorStatusManager.hpp"
+#include "CookingTask.hpp"
 
 namespace AGE
 {
 	class AnimationsLoader
 	{
 	public:
-		static bool save(std::shared_ptr<AssetDataSet> dataSet)
+		static bool save(std::shared_ptr<CookingTask> cookinTask)
 		{
-			if (dataSet->animations.empty())
+			if (cookinTask->animations.empty())
 				return true;
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : saving " + dataSet->filePath.getShortFileName());
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : saving " + cookinTask->dataSet->filePath.getShortFileName());
 
-			auto folderPath = std::tr2::sys::path(dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder());
+			auto folderPath = std::tr2::sys::path(cookinTask->serializedDirectory.path().directory_string() + "\\" + cookinTask->dataSet->filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
@@ -29,28 +30,28 @@ namespace AGE
 				std::cerr << "Animation convertor error : creating directory" << std::endl;
 				return false;
 			}
-			auto fileName = dataSet->animationName.empty() ? dataSet->filePath.getShortFileName() + ".aage" : dataSet->animationName + ".aage";
-			auto name = dataSet->serializedDirectory.path().directory_string() + "\\" + dataSet->filePath.getFolder() + fileName;
+			auto fileName = cookinTask->dataSet->filePath.getShortFileName() + ".aage";
+			auto name = cookinTask->serializedDirectory.path().directory_string() + "\\" + cookinTask->dataSet->filePath.getFolder() + fileName;
 
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
-			ar(*dataSet->animations[0]);
+			ar(*cookinTask->animations[0]);
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 
-		static bool load(std::shared_ptr<AssetDataSet> dataSet)
+		static bool load(std::shared_ptr<CookingTask> cookinTask)
 		{
-			if (!dataSet->assimpScene->HasAnimations())
+			if (!cookinTask->assimpScene->HasAnimations())
 				return false;
-			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : loading " + dataSet->filePath.getShortFileName());
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("Animation loader : loading " + cookinTask->dataSet->filePath.getShortFileName());
 
-			dataSet->animations.resize(dataSet->assimpScene->mNumAnimations);
-			for (unsigned int animNum = 0; animNum < dataSet->assimpScene->mNumAnimations; ++animNum)
+			cookinTask->animations.resize(cookinTask->assimpScene->mNumAnimations);
+			for (unsigned int animNum = 0; animNum < cookinTask->assimpScene->mNumAnimations; ++animNum)
 			{
-				auto aiAnim = dataSet->assimpScene->mAnimations[animNum];
-				dataSet->animations[animNum] = std::make_shared<Animation>();
-				auto anim = dataSet->animations[animNum];
+				auto aiAnim = cookinTask->assimpScene->mAnimations[animNum];
+				cookinTask->animations[animNum] = std::make_shared<Animation>();
+				auto anim = cookinTask->animations[animNum];
 				anim->name = aiAnim->mName.data;
 				anim->duration = aiAnim->mDuration;
 				anim->id = animNum;
@@ -58,8 +59,8 @@ namespace AGE
 				for (unsigned int channelNbr = 0; channelNbr < aiAnim->mNumChannels; ++channelNbr)
 				{
 					auto aiChannel = aiAnim->mChannels[channelNbr];
-					auto findBoneName = dataSet->skeleton->bonesReferences.find(aiChannel->mNodeName.data);
-					if (findBoneName == std::end(dataSet->skeleton->bonesReferences))
+					auto findBoneName = cookinTask->skeleton->bonesReferences.find(aiChannel->mNodeName.data);
+					if (findBoneName == std::end(cookinTask->skeleton->bonesReferences))
 						continue;
 					anim->channels.resize(channelCounter + 1);
 					auto &channel = anim->channels[channelCounter];
