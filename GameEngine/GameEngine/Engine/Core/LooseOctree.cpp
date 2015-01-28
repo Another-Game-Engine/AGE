@@ -3,32 +3,32 @@
 
 namespace AGE
 {
-	LooseOctree::LooseOctree() :
-		_pool(32768)
+	LooseOctree::LooseOctree(MemoryPool<Drawable> &drawables, MemoryPool<PointLight> &pointLights) :
+		_drawablesPool(drawables),
+		_pointLightsPool(pointLights)
 	{
-		_root = _pool.alloc();
-		_pool.get(_root).setIdx(_root);
+		_root = _nodesPool.alloc();
 	}
 
 	LooseOctree::~LooseOctree()
 	{
-		_pool.get(_root).removeAllSons(_pool);
-		_pool.dealloc(_root);
+		LooseOctreeNode::removeAllSons(_root, *this);
+		_nodesPool.dealloc(_root);
 	}
 
 	void LooseOctree::addElement(CullableBoundingBox *toAdd)
 	{
-		_root = _pool.get(_root).addElement(toAdd, _pool);
+		_root = LooseOctreeNode::addElement(_root, *this, toAdd);
 	}
 
 	void LooseOctree::removeElement(CullableBoundingBox *toRm)
 	{
-		_pool.get(toRm->currentNode).removeElementFromNode(toRm, _pool);
+		LooseOctreeNode::removeElementFromNode(toRm->currentNode, *this, toRm);
 	}
 
 	void LooseOctree::moveElement(CullableBoundingBox *toMv)
 	{
-		uint32_t newRoot = _pool.get(toMv->currentNode).moveElementFromNode(toMv, _pool);
+		uint32_t newRoot = LooseOctreeNode::moveElementFromNode(toMv->currentNode, *this, toMv);
 
 		if (newRoot != UNDEFINED_IDX)
 			_root = newRoot;
@@ -36,7 +36,7 @@ namespace AGE
 
 	void LooseOctree::getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill)
 	{
-		_pool.get(_root).getElementsCollide(toTest, toFill, _pool);
+		_nodesPool.get(_root).getElementsCollide(*this, toTest, toFill);
 	}
 
 	void LooseOctree::cleanOctree()
@@ -46,8 +46,44 @@ namespace AGE
 		while (newRoot != UNDEFINED_IDX)
 		{
 			_root = newRoot;
-			newRoot = _pool.get(_root).tryChangeRoot(_pool);
+			newRoot = LooseOctreeNode::tryChangeRoot(_root, *this);
 		}
-//		_pool.get(_root).removeEmptyLeafs(_pool);
 	}
+
+	MemoryPool<LooseOctreeNode> &LooseOctree::getNodePool()
+	{
+		return (_nodesPool);
+	}
+
+	MemoryPool<LooseOctreeNode> const &LooseOctree::getNodePool() const
+	{
+		return (_nodesPool);
+	}
+
+	MemoryPool<SOctreeElement> &LooseOctree::getElementPool()
+	{
+		return (_elementsPool);
+	}
+
+	MemoryPool<SOctreeElement> const &LooseOctree::getElementPool() const
+	{
+		return (_elementsPool);
+	}
+
+	CullableObject *LooseOctree::getElementFromPool(PrepareKey const &key) const
+	{
+		switch (key.type)
+		{
+		case PrepareKey::Drawable:
+			return (&_drawablesPool.get(key.id));
+			break;
+		case PrepareKey::PointLight:
+			return (&_pointLightsPool.get(key.id));
+			break;
+		default:
+			return (nullptr);
+			break;
+		}
+	}
+
 }

@@ -35,11 +35,13 @@ namespace AGE
 
 	struct Camera : public CullableFrustum
 	{
+		uint32_t activeCameraIdx;
 		glm::mat4 projection;
 	};
 
 	struct PointLight : public CullableSphere
 	{
+		uint32_t activePointLightIdx;
 		glm::vec3 range;
 		glm::vec3 color;
 		PointLight();

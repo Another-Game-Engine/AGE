@@ -40,9 +40,9 @@ namespace AGE
 			_activeScene->_createCamera(msg);
 		});
 
-		registerCallback<Commands::MainToPrepare::CreateDrawable>([this](Commands::MainToPrepare::CreateDrawable &msg){
+		registerCallback<Commands::MainToPrepare::CreateMesh>([this](Commands::MainToPrepare::CreateMesh &msg){
 			assert(this->_activeScene != nullptr);
-			_activeScene->_createDrawable(msg);
+			_activeScene->_createMesh(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::CreatePointLight>([this](Commands::MainToPrepare::CreatePointLight &msg){

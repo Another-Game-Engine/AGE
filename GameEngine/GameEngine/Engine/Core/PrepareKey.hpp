@@ -11,6 +11,7 @@ namespace AGE
 			no_type = 0
 			, Camera
 			, Drawable
+			, Mesh
 			, PointLight
 		};
 		
