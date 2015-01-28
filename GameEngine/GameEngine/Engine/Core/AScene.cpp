@@ -47,6 +47,22 @@ namespace AGE
 		return userStart();
 	}
 
+	void                    AScene::registerFilter(EntityFilter *filter)
+	{
+		_allFilters.push_back(filter);
+	}
+
+	void                    AScene::filterSubscribe(COMPONENT_ID id, EntityFilter* filter)
+	{
+		auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
+		if (findIter == std::end(_filters[id]))
+			_filters[id].push_back(filter);
+	}
+
+	void                    AScene::filterUnsubscribe(COMPONENT_ID id, EntityFilter* filter)
+	{
+		_filters[id].remove(filter);
+	}
 
 	void                    AScene::informFiltersTagAddition(TAG_ID id, const EntityData &entity)
 	{
@@ -79,6 +95,23 @@ namespace AGE
 		}
 	}
 
+
+	void                    AScene::informFiltersEntityCreation(const EntityData &entity)
+	{
+		for (auto &f : _allFilters)
+		{
+			f->entityAdded(entity);
+		}
+	}
+
+	void                    AScene::informFiltersEntityDeletion(const EntityData &entity)
+	{
+		for (auto &f : _allFilters)
+		{
+			f->entityRemoved(entity);
+		}
+	}
+
 	Entity &AScene::createEntity()
 	{
 		if (_free.empty())
@@ -88,6 +121,7 @@ namespace AGE
 			e.link._octree = _renderScene;
 			assert(++_entityNumber != UINT16_MAX);
 			e.entity.setActive(true);
+			informFiltersEntityCreation(e);
 			return e.entity;
 		}
 		else
@@ -96,6 +130,7 @@ namespace AGE
 			_free.pop();
 			_pool[id].link.reset();
 			_pool[id].entity.setActive(true);
+			informFiltersEntityCreation(_pool[id]);
 			return _pool[id].entity;
 		}
 	}
@@ -122,6 +157,7 @@ namespace AGE
 				informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), data);
 			}
 		}
+		informFiltersEntityDeletion(data);
 		_free.push(e.id);
 	}
 

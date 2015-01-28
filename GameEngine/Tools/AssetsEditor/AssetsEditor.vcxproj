@@ -182,6 +182,7 @@
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />
+    <ClInclude Include="Systems\EntityLister.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">

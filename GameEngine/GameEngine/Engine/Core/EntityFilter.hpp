@@ -38,6 +38,8 @@ namespace AGE
 		void virtual componentRemoved(const EntityData &e, COMPONENT_ID typeId);
 		void virtual tagAdded(const EntityData &e, TAG_ID typeId);
 		void virtual tagRemoved(const EntityData &e, TAG_ID typeId);
+		void virtual entityAdded(const EntityData &e);
+		void virtual entityRemoved(const EntityData &e);
 
 		bool isLocked() const;
 

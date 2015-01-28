@@ -30,6 +30,7 @@ namespace AGE
 	private:
 		std::multimap<std::size_t, std::shared_ptr<System> >                    _systems;
 		std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
+		std::list<EntityFilter*>                                                 _allFilters;
 		std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
 		std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
 		AGE::Queue<std::uint16_t>                                               _free;
@@ -53,22 +54,17 @@ namespace AGE
 		inline std::weak_ptr<AGE::Engine> getEngine() { return _engine; }
 		inline void setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }
 		inline bool isActive() const { return _active; }
-		void                    filterSubscribe(COMPONENT_ID id, EntityFilter* filter)
-		{
-			auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
-			if (findIter == std::end(_filters[id]))
-				_filters[id].push_back(filter);
-		}
 
-		void                    filterUnsubscribe(COMPONENT_ID id, EntityFilter* filter)
-		{
-			_filters[id].remove(filter);
-		}
+		void                    registerFilter(EntityFilter *filter);
+		void                    filterSubscribe(COMPONENT_ID id, EntityFilter* filter);
+		void                    filterUnsubscribe(COMPONENT_ID id, EntityFilter* filter);
 
 		void                    informFiltersTagAddition(TAG_ID id, const EntityData &entity);
 		void                    informFiltersTagDeletion(TAG_ID id, const EntityData &entity);
 		void                    informFiltersComponentAddition(COMPONENT_ID id, const EntityData &entity);
 		void                    informFiltersComponentDeletion(COMPONENT_ID id, const EntityData &entity);
+		void                    informFiltersEntityCreation(const EntityData &entity);
+		void                    informFiltersEntityDeletion(const EntityData &entity);
 
 		Entity &createEntity();
 		void destroy(const Entity &e);

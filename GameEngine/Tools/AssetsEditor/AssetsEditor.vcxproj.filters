@@ -110,5 +110,8 @@
     <ClInclude Include="Scenes\WorldEditorScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Systems\EntityLister.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
