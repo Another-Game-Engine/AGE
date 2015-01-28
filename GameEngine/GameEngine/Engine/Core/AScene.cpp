@@ -28,18 +28,18 @@ namespace AGE
 
 	void 							AScene::update(double time)
 	{
-		static double reorderingTime = 0.0f;
+		//static double reorderingTime = 0.0f;
 		for (auto &e : _systems)
 		{
 			if (e.second->isActivated())
 				e.second->update(time);
 		}
-		reorderingTime += time;
-		if (reorderingTime > 0.4)
-		{
-			reorganizeComponents();
-			reorderingTime = 0;
-		}
+		//reorderingTime += time;
+		//if (reorderingTime > 0.4)
+		//{
+		//	reorganizeComponents();
+		//	reorderingTime = 0;
+		//}
 	}
 
 	bool                           AScene::start()
