@@ -50,9 +50,9 @@ namespace AGE
 				gl::Key<AnimationInstance> animation;
 			};
 
-			struct CreateDrawable
+			struct CreateMesh
 			{
-				CreateDrawable(const PrepareKey &_key);
+				CreateMesh(const PrepareKey &_key);
 				PrepareKey key;
 			};
 
