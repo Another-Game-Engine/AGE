@@ -3,40 +3,38 @@
 
 namespace AGE
 {
-	LooseOctree::LooseOctree() :
-		_pool(32768)
+	LooseOctree::LooseOctree()
 	{
 		_root = _pool.alloc();
-		_pool.get(_root).setIdx(_root);
 	}
 
 	LooseOctree::~LooseOctree()
 	{
-		_pool.get(_root).removeAllSons(_pool);
+		LooseOctreeNode::removeAllSons(_root, _pool);
 		_pool.dealloc(_root);
 	}
 
 	void LooseOctree::addElement(CullableBoundingBox *toAdd)
 	{
-		_root = _pool.get(_root).addElement(toAdd, _pool);
+		_root = LooseOctreeNode::addElement(_root, _pool, toAdd);
 	}
 
 	void LooseOctree::removeElement(CullableBoundingBox *toRm)
 	{
-		_pool.get(toRm->currentNode).removeElementFromNode(toRm, _pool);
+		LooseOctreeNode::removeElementFromNode(toRm->currentNode, _pool, toRm);
 	}
 
 	void LooseOctree::moveElement(CullableBoundingBox *toMv)
 	{
-		uint32_t newRoot = _pool.get(toMv->currentNode).moveElementFromNode(toMv, _pool);
+		uint32_t newRoot = LooseOctreeNode::moveElementFromNode(toMv->currentNode, _pool, toMv);
 
 		if (newRoot != UNDEFINED_IDX)
 			_root = newRoot;
 	}
 
-	void LooseOctree::getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill)
+	void LooseOctree::getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill) const
 	{
-		_pool.get(_root).getElementsCollide(toTest, toFill, _pool);
+		_pool.get(_root).getElementsCollide(_pool, toTest, toFill);
 	}
 
 	void LooseOctree::cleanOctree()
@@ -46,8 +44,7 @@ namespace AGE
 		while (newRoot != UNDEFINED_IDX)
 		{
 			_root = newRoot;
-			newRoot = _pool.get(_root).tryChangeRoot(_pool);
+			newRoot = LooseOctreeNode::tryChangeRoot(_root, _pool);
 		}
-//		_pool.get(_root).removeEmptyLeafs(_pool);
 	}
 }

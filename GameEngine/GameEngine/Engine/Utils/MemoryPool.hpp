@@ -9,9 +9,15 @@ template<class T>
 class MemoryPool
 {
 public:
-	MemoryPool(uint32_t maxSize)
+	MemoryPool() :
+		_currentIdx(0)
 	{
 		_currentIdx = 0;
+	}
+
+	MemoryPool(uint32_t maxSize) :
+		_currentIdx(0)
+	{
 		_pool.reserve(maxSize);
 	}
 
@@ -26,7 +32,6 @@ public:
 			new (&_pool[ret]) T();
 			return (ret);
 		}
-		assert(_currentIdx != _pool.capacity());
 		_pool.emplace_back();
 		return (_currentIdx++);
 	}
@@ -38,6 +43,11 @@ public:
 	}
 
 	T &get(uint32_t idx)
+	{
+		return (_pool[idx]);
+	}
+
+	T const &get(uint32_t idx) const
 	{
 		return (_pool[idx]);
 	}
