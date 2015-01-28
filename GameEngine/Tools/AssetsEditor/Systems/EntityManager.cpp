@@ -58,7 +58,7 @@ namespace AGE
 			bool EntityManager::initialize()
 			{
 				_filter.setOnAdd(std::function<void(Entity e)>([&](Entity e){
-					_scene.lock()->addComponent<AGE::WE::EntityRepresentation>(e, std::string("Entity " + std::to_string(e.getId())).c_str());
+					_scene.lock()->addComponent<AGE::WE::EntityRepresentation>(e, std::string("Entity " + std::to_string(e.getId()) + "\0").c_str());
 				}));
 
 				for (auto i = 0; i < 30; ++i)

@@ -19,8 +19,10 @@ namespace AGE
 		{
 			if (_name)
 			{
-				for (auto i = 0; i < name.size() && name[i]; ++i)
+				auto i = 0;
+				for (; i < name.size() - 1 && _name[i] != '\0'; ++i)
 					name[i] = _name[i];
+				name[i] = '\0';
 			}
 			auto link = s->getLink(this->entityId);
 			position = link->getPosition();
@@ -30,7 +32,7 @@ namespace AGE
 
 		void EntityRepresentation::reset(AScene *)
 		{
-			name.fill('\0');
+			name.fill(0);
 		}
 
 		EntityRepresentation &EntityRepresentation::operator=(EntityRepresentation &&o)
