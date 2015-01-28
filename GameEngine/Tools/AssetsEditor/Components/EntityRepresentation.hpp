@@ -2,6 +2,7 @@
 
 #include <Components/Component.hh>
 #include <array>
+#include <glm/fwd.hpp>
 
 namespace AGE
 {
@@ -24,7 +25,9 @@ namespace AGE
 			}
 
 			std::array<char, 255> name;
-			
+			glm::vec3 position;
+			glm::vec3 rotation;
+			glm::vec3 scale;
 			
 			//EntityRepresentation &operator=(EntityRepresentation const &o) = delete;
 			//EntityRepresentation(EntityRepresentation const &o) = delete;

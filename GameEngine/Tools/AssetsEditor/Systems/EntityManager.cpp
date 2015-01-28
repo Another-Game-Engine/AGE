@@ -1,6 +1,7 @@
 #include "EntityManager.hpp"
 #include <imgui/imgui.h>
 #include <Components/EntityRepresentation.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace AGE
 {
@@ -28,8 +29,26 @@ namespace AGE
 				for (auto &e : _filter.getCollection())
 				{
 					auto cpt = scene->getComponent<AGE::WE::EntityRepresentation>(e);
+					if (ImGui::TreeNode((void*)(cpt), cpt->name.data()))
+					{
+						ImGui::InputText("Name", cpt->name.data(), cpt->name.size());
+						if (ImGui::SliderFloat3("Position", glm::value_ptr(cpt->position), -1000000, 1000000))
+						{
+							scene->getLink(e)->setPosition(cpt->position);
+						}
+						if (ImGui::SliderFloat3("Rotation", glm::value_ptr(cpt->rotation), -360, 360))
+						{
+							// temporary TODO
+							//cpt->rotation.x = std::fmod(cpt->rotation.x, 360); cpt->rotation.y = std::fmod(cpt->rotation.y, 360); cpt->rotation.z = std::fmod(cpt->rotation.z, 360);
+							scene->getLink(e)->setOrientation(glm::quat(cpt->rotation));
+						}
+						if (ImGui::SliderFloat3("Scale", glm::value_ptr(cpt->scale), 0.0f, 1000000))
+						{
+							scene->getLink(e)->setScale(cpt->scale);
+						}
 
-					ImGui::InputText("Entity %i", cpt->name.data(), cpt->name.size());
+						ImGui::TreePop();
+					}
 					//ImGui::TreeNode(e)
 					//ImGui::TreeNode()
 					//ImGui::TreePop()
