@@ -160,10 +160,12 @@
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
     <ClCompile Include="Scenes\WorldEditorScene.cpp" />
+    <ClCompile Include="Systems\EntityManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
+    <ClInclude Include="Components\EntityRepresentation.hpp" />
     <ClInclude Include="Convertor\ConvertorStatusManager.hpp" />
     <ClInclude Include="AssetFiles\CookedFile.hpp" />
     <ClInclude Include="AssetFiles\RawFile.hpp" />
@@ -182,7 +184,7 @@
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />
-    <ClInclude Include="Systems\EntityLister.hpp" />
+    <ClInclude Include="Systems\EntityManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">

@@ -21,7 +21,8 @@ namespace AGE
 
 		virtual ~AssetsEditorScene(void);
 		virtual bool userStart();
-		virtual bool userUpdate(double time);
+		virtual bool userUpdateBegin(double time);
+		virtual bool userUpdateEnd(double time);
 
 	private:
 		AE::Folder _raw;

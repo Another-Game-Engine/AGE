@@ -85,7 +85,8 @@ namespace AGE
 		virtual ~BenchmarkScene(void);
 		void initRendering();
 		virtual bool userStart();
-		virtual bool userUpdate(double time);
+		virtual bool userUpdateBegin(double time);
+		virtual bool userUpdateEnd(double time);
 
 	private:
 		static gl::RenderManager *_renderManager;

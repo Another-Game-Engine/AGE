@@ -20,7 +20,7 @@ namespace AGE
 		return true;
 	}
 
-	bool SceneSelectorScene::userUpdate(double time)
+	bool SceneSelectorScene::userUpdateBegin(double time)
 	{
 		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, 1, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 
@@ -37,6 +37,11 @@ namespace AGE
 			getEngine().lock()->disableScene(AssetsEditorScene::Name);
 		}
 		ImGui::EndChild(); ImGui::SameLine();
+		return true;
+	}
+
+	bool SceneSelectorScene::userUpdateEnd(double time)
+	{
 		return true;
 	}
 }

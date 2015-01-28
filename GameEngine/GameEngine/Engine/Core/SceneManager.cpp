@@ -90,25 +90,16 @@ namespace AGE
 		return t->second->start();
 	}
 
-	bool            SceneManager::userUpdateScenes(double time) const
+	bool            SceneManager::updateScenes(double time)
 	{
 		for (auto &e : _actives)
 		{
 			GetMainThread()->setSceneAsActive(e.second.get());
 			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(e.second.get());
-			if (!e.second->userUpdate(time))
+			if (!e.second->userUpdateBegin(time))
 				return false;
-		}
-		return true;
-	}
-
-	void            SceneManager::updateScenes(double time)
-	{
-		for (auto &e : _actives)
-		{
-			GetMainThread()->setSceneAsActive(e.second.get());
-			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(e.second.get());
 			e.second->update(time);
+			return e.second->userUpdateEnd(time);
 		}
 	}
 

@@ -48,6 +48,9 @@
     <ClCompile Include="Scenes\WorldEditorScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Systems\EntityManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convertor\AssimpLoader.hpp">
@@ -110,7 +113,10 @@
     <ClInclude Include="Scenes\WorldEditorScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\EntityLister.hpp">
+    <ClInclude Include="Systems\EntityManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\EntityRepresentation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

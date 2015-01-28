@@ -41,6 +41,9 @@ namespace AGE
 		void virtual entityAdded(const EntityData &e);
 		void virtual entityRemoved(const EntityData &e);
 
+		inline void setOnAdd(std::function<void(Entity e)> &onAdd) { _onAdd = onAdd; }
+		inline void setOnRemove(std::function<void(Entity e)> &onRm) { _onRemove = onRm; }
+
 		bool isLocked() const;
 
 		struct Lock
@@ -76,5 +79,7 @@ namespace AGE
 		bool _locked;
 		std::set<Entity> _trash;
 		std::set<Entity> _toAdd;
+		std::function<void(Entity e)> _onAdd;
+		std::function<void(Entity e)> _onRemove;
 	};
 }

@@ -1,5 +1,6 @@
 #include "WorldEditorScene.hpp"
 #include <imgui\imgui.h>
+#include <Systems/EntityManager.hpp>
 
 namespace AGE
 {
@@ -16,11 +17,21 @@ namespace AGE
 
 	bool WorldEditorScene::userStart()
 	{
+		addSystem<WE::EntityManager>(1);
 		return true;
 	}
 
-	bool WorldEditorScene::userUpdate(double time)
+	bool WorldEditorScene::userUpdateBegin(double time)
 	{
+		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3333333f, 0), true);
+		ImGui::BeginChild("Raw", ImVec2(0, 0), false);
+		return true;
+	}
+
+	bool WorldEditorScene::userUpdateEnd(double time)
+	{
+		ImGui::EndChild();
+		ImGui::EndChild();
 		ImGui::End();
 		return true;
 	}

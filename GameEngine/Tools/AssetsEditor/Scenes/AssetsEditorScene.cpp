@@ -57,7 +57,7 @@ namespace AGE
 		return true;
 	}
 
-	bool AssetsEditorScene::userUpdate(double time)
+	bool AssetsEditorScene::userUpdateBegin(double time)
 	{
 		//check dirty for test
 		{
@@ -236,9 +236,12 @@ namespace AGE
 		ImGui::BeginChild("Todo", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, 0), false);
 		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->DisplayTasks();
 		ImGui::EndChild();
+		return true;
+	}
 
+	bool AssetsEditorScene::userUpdateEnd(double time)
+	{
 		ImGui::End();
-
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 			return (false);
 		return true;

@@ -48,7 +48,8 @@ namespace AGE
 		virtual ~AScene();
 		inline std::uint16_t    getNumberOfEntities() const { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
 		virtual bool 			userStart() = 0;
-		virtual bool 			userUpdate(double time) = 0;
+		virtual bool 			userUpdateBegin(double time) = 0;
+		virtual bool            userUpdateEnd(double time) = 0;
 		void 					update(double time);
 		bool                    start();
 		inline std::weak_ptr<AGE::Engine> getEngine() { return _engine; }

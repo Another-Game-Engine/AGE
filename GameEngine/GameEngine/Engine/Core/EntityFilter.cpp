@@ -41,6 +41,8 @@ namespace AGE
 			}
 			else
 				_collection.insert(e.entity);
+			if (_onAdd)
+				_onAdd(e.entity);
 		}
 	}
 
@@ -54,6 +56,8 @@ namespace AGE
 			}
 			else
 				_collection.erase(e.entity);
+			if (_onRemove)
+				_onRemove(e.entity);
 		}
 	}
 
@@ -67,6 +71,8 @@ namespace AGE
 			}
 			else
 				_collection.insert(e.entity);
+			if (_onAdd)
+				_onAdd(e.entity);
 		}
 	}
 
@@ -80,6 +86,8 @@ namespace AGE
 			}
 			else
 				_collection.erase(e.entity);
+			if (_onRemove)
+				_onRemove(e.entity);
 		}
 	}
 
@@ -93,6 +101,8 @@ namespace AGE
 			}
 			else
 				_collection.insert(e.entity);
+			if (_onAdd)
+				_onAdd(e.entity);
 		}
 	}
 
@@ -104,6 +114,8 @@ namespace AGE
 		}
 		else
 			_collection.erase(e.entity);
+		if (_onRemove)
+			_onRemove(e.entity);
 	}
 
 	void EntityFilter::lock()
