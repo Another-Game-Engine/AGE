@@ -159,6 +159,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
+    <ClCompile Include="Scenes\WorldEditorScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="AssetFiles\Folder.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
+    <ClInclude Include="Scenes\WorldEditorScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">

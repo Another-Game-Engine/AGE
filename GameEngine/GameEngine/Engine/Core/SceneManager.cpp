@@ -62,8 +62,9 @@ namespace AGE
 			++e;
 			if (a->second == t->second)
 			{
+				auto t = a->second;
 				_actives.erase(a);
-				a->second->setActive(false);
+				t->setActive(false);
 				break;
 			}
 		}

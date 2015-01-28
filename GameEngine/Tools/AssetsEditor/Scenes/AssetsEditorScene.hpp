@@ -16,6 +16,7 @@ namespace AGE
 	class AssetsEditorScene : public AScene
 	{
 	public:
+		static const std::string Name;
 		AssetsEditorScene(std::weak_ptr<AGE::Engine> engine);
 
 		virtual ~AssetsEditorScene(void);

@@ -29,6 +29,7 @@
 //SCENE
 #include <Scenes/AssetsEditorScene.hpp>
 #include <Scenes/SceneSelectorScene.hpp>
+#include <Scenes/WorldEditorScene.hpp>
 
 int			main(int ac, char **av)
 {
@@ -50,15 +51,18 @@ int			main(int ac, char **av)
 		if (!loadAssets(engine.lock().get()))
 			return false;
 #endif
-		engine.lock()->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), "Assets Convertor");
-		engine.lock()->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), "SceneSelector");
+		engine.lock()->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
+		engine.lock()->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);
+		engine.lock()->addScene(std::make_shared<AGE::WorldEditorScene>(engine), AGE::WorldEditorScene::Name);
 
-		if (!engine.lock()->initScene("Assets Convertor"))
+		if (!engine.lock()->initScene(AGE::AssetsEditorScene::Name))
 			return false;
 		if (!engine.lock()->initScene(AGE::SceneSelectorScene::Name))
 			return false;
-		engine.lock()->enableScene("Assets Convertor", 1);
-		engine.lock()->enableScene(AGE::SceneSelectorScene::Name, 1000);
+		if (!engine.lock()->initScene(AGE::WorldEditorScene::Name))
+			return false;
+		engine.lock()->enableScene(AGE::AssetsEditorScene::Name, 1000);
+		engine.lock()->enableScene(AGE::SceneSelectorScene::Name, 1);
 		return true;
 	}));
 
