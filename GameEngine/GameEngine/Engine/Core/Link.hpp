@@ -1,26 +1,24 @@
 #pragma once
 
-#include <glm/fwd.hpp>
-#include <glm/gtc/quaternion.hpp>
 #include <Entities/EntityTypedef.hpp>
 #include <Core/PrepareKey.hpp>
-#include <cstring>
 #include <array>
-#include <Utils/GlmSerialization.hpp>
-
-class AScene;
+#include <Utils/Serialization/QuaternionSerialization.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace AGE
 {
 	class RenderScene;
+	class AScene;
 	struct Link
 	{
 		inline const glm::vec3 &getPosition() const { return _position; }
 		inline const glm::vec3 &getScale() const { return _scale; }
 		inline const glm::quat &getOrientation() const { return _orientation; }
-		inline float *getPositionPtr() { return glm::value_ptr(_position); }
-		inline float *getScalePtr() { return glm::value_ptr(_scale); }
-		inline float *getOrientationPtr() { return glm::value_ptr(_orientation); }
+		inline float *getPositionPtr() { return &_position.x; }
+		inline float *getScalePtr() { return &_scale.x; }
+		inline float *getOrientationPtr() { return &_orientation.x; }
 
 
 		// Used by modules like physic, do not use it to set object position, use setPosition instead
@@ -32,9 +30,14 @@ namespace AGE
 		// Used by modules like physic, do not use it to set object forward, use setForward instead
 		void internalSetForward(const glm::vec3 &v);
 
-		inline bool userModified()
+		inline bool isUserModified() const
 		{
-			auto ret = _userModification; _userModification = false; return ret;
+			return _userModification;
+		}
+
+		inline void setUserModified(bool tof)
+		{
+			_userModification = tof;
 		}
 
 		void setPosition(const glm::vec3 &v);
@@ -47,6 +50,7 @@ namespace AGE
 
 		inline bool hasChildren() const { return _lastChildrenIndex != 0; };
 	public:
+		const glm::mat4 &getTransform() const;
 		const glm::mat4 &getTransform();
 	private:
 		bool _userModification = false;

@@ -7,18 +7,21 @@
 # include <memory>
 # include <Render/ProgramResources/IProgramResources.hh>
 
-class Program;
-
-class UniformsFactory
+namespace AGE
 {
-public:
-	UniformsFactory();
-	UniformsFactory(UniformsFactory const &copy) = delete;
-	UniformsFactory &operator=(UniformsFactory const &p) = delete;
+	class Program;
 
-public:
-	std::shared_ptr<IProgramResources> build(GLenum mode, GLint id, std::string &&name);
+	class UniformsFactory
+	{
+	public:
+		UniformsFactory();
+		UniformsFactory(UniformsFactory const &copy) = delete;
+		UniformsFactory &operator=(UniformsFactory const &p) = delete;
 
-private:
-	std::vector<std::pair<GLenum, std::function<std::shared_ptr<IProgramResources>(GLuint id, std::string &&name)>>> _blue_prints;
-};
+	public:
+		std::shared_ptr<IProgramResources> build(GLenum mode, GLint id, std::string &&name);
+
+	private:
+		std::vector<std::pair<GLenum, std::function<std::shared_ptr<IProgramResources>(GLuint id, std::string &&name)>>> _blue_prints;
+	};
+}

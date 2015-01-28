@@ -9,21 +9,24 @@
 # include <Render/ProgramResources/Factory/UniformsFactory.hh>
 #include <Render/ProgramResources/Types/BlockResources.hh>
 
-class Program;
-
-class ProgramResourcesFactory
+namespace AGE
 {
-public:
-	ProgramResourcesFactory(Program const &program);
-	ProgramResourcesFactory(ProgramResourcesFactory const &copy) = delete;
-	ProgramResourcesFactory &operator=(ProgramResourcesFactory const &p) = delete;
+	class Program;
 
-public:
-	std::shared_ptr<IProgramResources> build(GLenum mode, GLint id, std::string &&name);
+	class ProgramResourcesFactory
+	{
+	public:
+		ProgramResourcesFactory(Program const &program);
+		ProgramResourcesFactory(ProgramResourcesFactory const &copy) = delete;
+		ProgramResourcesFactory &operator=(ProgramResourcesFactory const &p) = delete;
 
-private:
-	Program const &_program;
-	std::vector<std::pair<GLenum, std::function<std::shared_ptr<IProgramResources>(GLint, std::string &&)>>> _blue_prints;
-	UniformsFactory _uniformsFactory;
-	std::vector<std::unique_ptr<BlockResources>> _block_resources;
-};
+	public:
+		std::shared_ptr<IProgramResources> build(GLenum mode, GLint id, std::string &&name);
+
+	private:
+		Program const &_program;
+		std::vector<std::pair<GLenum, std::function<std::shared_ptr<IProgramResources>(GLint, std::string &&)>>> _blue_prints;
+		UniformsFactory _uniformsFactory;
+		std::vector<std::unique_ptr<BlockResources>> _block_resources;
+	};
+}

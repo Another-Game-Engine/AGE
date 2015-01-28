@@ -2,7 +2,6 @@
 
 #include "AnimationChannel.hpp"
 
-#include <Utils/GlmSerialization.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 

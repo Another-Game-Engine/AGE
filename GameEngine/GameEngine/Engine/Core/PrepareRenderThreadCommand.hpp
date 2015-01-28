@@ -57,17 +57,17 @@ namespace AGE
 			Key<AnimationInstance> animation;
 		};
 
-		struct CreateDrawable
+		struct CreateMesh
 		{
-			CreateDrawable(const PrepareKey &_key)
+			CreateMesh(const PrepareKey &_key)
 				: key(_key)
 			{}
 			PrepareKey key;
 		};
 
-		struct DeleteDrawable
+		struct DeleteMesh
 		{
-			DeleteDrawable(const PrepareKey &_key)
+			DeleteMesh(const PrepareKey &_key)
 				: key(_key)
 			{}
 			PrepareKey key;

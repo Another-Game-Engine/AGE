@@ -4,11 +4,11 @@
 #include <map>
 #include <Utils/Dependency.hpp>
 #include <memory>
-
-class AScene;
+#include <vector>
 
 namespace AGE
 {
+	class AScene;
 	class SceneManager
 	{
 	private:
@@ -39,6 +39,7 @@ namespace AGE
 		void		disableScene(std::string const &name);
 		void        resetScene(std::string const &name);
 		bool        initScene(std::string const &name);
+		void        getSceneList(std::vector<std::string> &list) const;
 
 		bool        userUpdateScenes(double time) const;
 		void        updateScenes(double time);

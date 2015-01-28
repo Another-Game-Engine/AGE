@@ -2,24 +2,27 @@
 
 # include <Render/ProgramResources/IProgramResources.hh>
 
-class Program;
-
-class AProgramResources : public IProgramResources
+namespace AGE
 {
-protected:
-	AProgramResources(GLuint id, std::string &&name, GLenum type);
-	AProgramResources(AProgramResources &&move);
-	AProgramResources(AProgramResources const &copy);
-	AProgramResources &operator=(AProgramResources const &a) = delete;
+	class Program;
 
-public:
-	virtual std::string const &name() const override final;
-	virtual GLuint id() const override final;
-	virtual GLenum type() const override final;
+	class AProgramResources : public IProgramResources
+	{
+	protected:
+		AProgramResources(GLuint id, std::string &&name, GLenum type);
+		AProgramResources(AProgramResources &&move);
+		AProgramResources(AProgramResources const &copy);
+		AProgramResources &operator=(AProgramResources const &a) = delete;
 
-protected:
-	std::string _name;
-	GLuint _id;
-	GLenum _type;
-	bool _update;
-};
+	public:
+		virtual std::string const &name() const override final;
+		virtual GLuint id() const override final;
+		virtual GLenum type() const override final;
+
+	protected:
+		std::string _name;
+		GLuint _id;
+		GLenum _type;
+		bool _update;
+	};
+}

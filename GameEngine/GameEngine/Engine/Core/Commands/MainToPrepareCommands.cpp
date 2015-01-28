@@ -1,5 +1,8 @@
 #include "MainToPrepare.hpp"
-
+#include <Utils/Containers/Vector.hpp>
+#include <Core/CullableObjects.hh>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace AGE
 {
@@ -30,11 +33,11 @@ namespace AGE
 			{
 			}
 
-			CreateDrawable::CreateDrawable(const PrepareKey &_key)
+			CreateMesh::CreateMesh(const PrepareKey &_key)
 				: key(_key)
 			{}
 
-			DeleteDrawable::DeleteDrawable(const PrepareKey &_key)
+			DeleteMesh::DeleteMesh(const PrepareKey &_key)
 				: key(_key)
 			{}
 

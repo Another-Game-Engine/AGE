@@ -63,19 +63,22 @@ std::make_pair(GL_PROGRAM_INPUT, LAMBDA_PROTO																																			
 	return (std::static_pointer_cast<IProgramResources>(tmp));															  \
 })																																															 
 
-ProgramResourcesFactory::ProgramResourcesFactory(Program const &program) :																			
-_program(program),
-_blue_prints({DECLAR_BUILDERS})
+namespace AGE
 {
+	ProgramResourcesFactory::ProgramResourcesFactory(Program const &program) :
+		_program(program),
+		_blue_prints({ DECLAR_BUILDERS })
+	{
 
-}
-
-std::shared_ptr<IProgramResources> ProgramResourcesFactory::build(GLenum mode, GLint id, std::string &&name)
-{
-	for (auto &blue_print : _blue_prints) {
-		if (mode == blue_print.first) {
-			return (blue_print.second(id, std::move(name)));
-		}
 	}
-	return (std::unique_ptr<IProgramResources>(nullptr));
+
+	std::shared_ptr<IProgramResources> ProgramResourcesFactory::build(GLenum mode, GLint id, std::string &&name)
+	{
+		for (auto &blue_print : _blue_prints) {
+			if (mode == blue_print.first) {
+				return (blue_print.second(id, std::move(name)));
+			}
+		}
+		return (std::unique_ptr<IProgramResources>(nullptr));
+	}
 }

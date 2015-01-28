@@ -10,8 +10,10 @@
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
+#include <Context/SdlContext.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Utils/OpenGL.hh>
+#include <Utils/Age_Imgui.hpp>
 
 namespace AGE
 {

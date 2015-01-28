@@ -7,18 +7,21 @@
 # include <Render/GeometryManagement/Data/Vertices.hh>
 # include <Render/GeometryManagement/Painting/Painter.hh>
 
-struct SubMeshInstance
+namespace AGE
 {
-	Key<Painter> painter;
-	Key<Vertices> vertices;
-	AGE::AABoundingBox boundingBox;
-	uint16_t defaultMaterialIndex;
-};
+	struct SubMeshInstance
+	{
+		Key<Painter> painter;
+		Key<Vertices> vertices;
+		AGE::AABoundingBox boundingBox;
+		uint16_t defaultMaterialIndex;
+	};
 
-struct MeshInstance
-{
-	std::string name;
-	std::string path;
-	std::vector<SubMeshInstance> subMeshs;
-	Key<Painter> painter;
-};
+	struct MeshInstance
+	{
+		std::string name;
+		std::string path;
+		std::vector<SubMeshInstance> subMeshs;
+		Key<Painter> painter;
+	};
+}

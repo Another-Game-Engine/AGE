@@ -1,4 +1,5 @@
 #include "Link.hpp"
+#include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Core/RenderScene.hpp>
@@ -121,6 +122,19 @@ const glm::mat4 &Link::getTransform()
 		_trans = _trans * glm::toMat4(_orientation);
 		_trans = glm::scale(_trans, _scale);
 		_computeTrans = false;
+	}
+	return _trans;
+}
+
+const glm::mat4 &Link::getTransform() const
+{
+	if (_computeTrans)
+	{
+		auto trans = glm::mat4(1);
+		trans = glm::translate(_trans, _position);
+		trans = _trans * glm::toMat4(_orientation);
+		trans = glm::scale(_trans, _scale);
+		return trans;
 	}
 	return _trans;
 }

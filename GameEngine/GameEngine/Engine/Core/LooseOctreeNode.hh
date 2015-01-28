@@ -5,25 +5,23 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Core/CullableInterfaces.hh>
 
-#define VEC3_BIGGER(a, b) (a.x > b.x && a.y > b.y && a.z > b.z)
-
 #define UNDEFINED_IDX 0xFFFFFFFF
+#define LEAF_NODE_IDX 0xFFFFFFFE
+
+#define POOL_NODE_ARGS uint32_t thisIdx, LooseOctree &manager
+
+#define CREATE_THIS_PTR LooseOctreeNode *thisPtr = &manager.getNodePool().get(thisIdx);
+#define UPDATE_THIS_PTR thisPtr = &manager.getNodePool().get(thisIdx);
 
 namespace AGE
 {
-	// Think about replacing octree elements pointer with that
-	enum	EElementType
-	{
-		OE_POINT_LIGHT,
-		OE_DRAWABLE
-	};
+	class LooseOctree;
 
-	struct	SOctreeElement
+	struct SOctreeElement
 	{
-		EElementType type;
-		uint32_t index;
-
-		SOctreeElement(EElementType ptype, uint32_t pidx);
+		PrepareKey object;
+		uint32_t prev;
+		uint32_t next;
 	};
 
 	class	LooseOctreeNode
@@ -32,35 +30,39 @@ namespace AGE
 		LooseOctreeNode();
 		~LooseOctreeNode();
 
-		uint32_t addElement(CullableObject *toAdd, MemoryPool<LooseOctreeNode> &pool);
-		void removeElement(CullableObject *toRm, MemoryPool<LooseOctreeNode> &pool);
-		uint32_t moveElement(CullableObject *toMove, MemoryPool<LooseOctreeNode> &pool);
+		// --- FUNCTIONS MODIFYING THE NODE POOL
 
-		void		getElementsCollide(CullableObject *toTest, AGE::Vector<CullableObject *> &toFill, MemoryPool<LooseOctreeNode> &pool) const;
-
-		AABoundingBox const &getNodeBoundingBox() const;
-		bool				isLeaf() const;
-
+		static uint32_t addElement(POOL_NODE_ARGS, CullableBoundingBox *toAdd);
+		// remove an element from a node
+		static void removeElementFromNode(POOL_NODE_ARGS, CullableBoundingBox *toRm);
+		// move an element from in node
+		static uint32_t moveElementFromNode(POOL_NODE_ARGS, CullableBoundingBox *toMv);
 		// clean octree functions
-		uint32_t tryChangeRoot(MemoryPool<LooseOctreeNode> &pool);
-		void removeEmptyLeafs(MemoryPool<LooseOctreeNode> &pool);
+		static uint32_t tryChangeRoot(POOL_NODE_ARGS);
+		static void removeAllSons(POOL_NODE_ARGS);
+		static void removeNode(POOL_NODE_ARGS);
 
-		void setIdx(uint32_t idx);
-		void removeAllSons(MemoryPool<LooseOctreeNode> &pool);
+		// --- CONST FUNCTIONS
+
+		void checkOctreeIntegrity(LooseOctree &manager) const;
+		void getElementsCollide(LooseOctree &manager, CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill) const;
+		bool isLeaf() const;
 
 	private:
-		// Utils methods
-		uint32_t extendNode(CullableObject *toAdd, glm::i8vec3 const &direction, MemoryPool<LooseOctreeNode> &pool);
-		void		generateAllSons(MemoryPool<LooseOctreeNode> &pool);
-		void		computeLooseNode();
-		// remove an element from a node
-		void removeElementFromNode(CullableObject *toRm, MemoryPool<LooseOctreeNode> &pool);
-		// move an element from in node
-		uint32_t moveElementFromNode(CullableObject *toMv, MemoryPool<LooseOctreeNode> &pool);
-		// add an element in the node if the element is entierly contained in the current node
-		bool addElementFromNode(CullableObject *toAdd, MemoryPool<LooseOctreeNode> &pool);
+		// --- FUNCTIONS MODIFYING THE NODE POOL
 
-		uint32_t	_thisIdx;
+		// Utils methods
+		static uint32_t extendNode(POOL_NODE_ARGS, CullableBoundingBox *toAdd, glm::i8vec3 const &direction);
+		static void generateSon(POOL_NODE_ARGS, uint32_t toGenIdx);
+		// add an element in the node if the element is entierly contained in the current node
+		static void addElementRecursive(POOL_NODE_ARGS, CullableBoundingBox *toAdd);
+
+		// --- CONST FUNCTIONS
+
+		void computeLooseNode();
+		// handle element list in node
+		void addElementToList(LooseOctree &manager, CullableObject *element);
+		void removeElementFromList(LooseOctree &manager, CullableObject *element);
 
 		uint32_t	_father;
 		uint32_t	_sons[8];
@@ -71,6 +73,8 @@ namespace AGE
 		// nbr of elements in all the subnodes
 		uint32_t _uniqueSubElements;
 
-		AGE::Vector<CullableObject *> _elements;
+		// element list
+		uint32_t _nbrElements;
+		uint32_t _firstElement;
 	};
 }

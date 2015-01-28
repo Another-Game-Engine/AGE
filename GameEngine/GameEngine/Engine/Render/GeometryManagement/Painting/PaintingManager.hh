@@ -5,22 +5,25 @@
 # include <memory>
 # include <Render/Key.hh>
 
-class Painter;
-
-class PaintingManager
+namespace AGE
 {
-public:
-	PaintingManager();
-	PaintingManager(PaintingManager &&move);
-	PaintingManager(PaintingManager const &copy) = delete;
-	PaintingManager &operator=(PaintingManager const &p) = delete;
+	class Painter;
 
-public:
-	Key<Painter> add_painter(std::vector<GLenum> &&types);
-	std::shared_ptr<Painter> const &get_painter(Key<Painter> const &key) const;
-	Key<Painter> get_painter(std::vector<GLenum> const &types) const;
-	bool has_painter(std::vector<GLenum> const types) const;
+	class PaintingManager
+	{
+	public:
+		PaintingManager();
+		PaintingManager(PaintingManager &&move);
+		PaintingManager(PaintingManager const &copy) = delete;
+		PaintingManager &operator=(PaintingManager const &p) = delete;
 
-private:
-	std::vector<std::shared_ptr<Painter>> _painters;
-};
+	public:
+		Key<Painter> add_painter(std::vector<GLenum> &&types);
+		std::shared_ptr<Painter> const &get_painter(Key<Painter> const &key) const;
+		Key<Painter> get_painter(std::vector<GLenum> const &types) const;
+		bool has_painter(std::vector<GLenum> const types) const;
+
+	private:
+		std::vector<std::shared_ptr<Painter>> _painters;
+	};
+}

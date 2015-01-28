@@ -215,11 +215,11 @@ bool BenchmarkScene::userStart()
 	// We register component types so that we can load components from file
 	// It'll create the component manager for the scene and
 	// register the type in the global component register manager
-	registerComponentType<Component::CameraComponent>();
-	registerComponentType<Component::MeshRenderer>();
-	registerComponentType<Component::Lifetime>();
-	registerComponentType<Component::RigidBody>();
-	registerComponentType<Component::PointLight>();
+	registerComponentType<AGE::Component::CameraComponent>();
+	registerComponentType<AGE::Component::MeshRenderer>();
+	registerComponentType<AGE::Component::Lifetime>();
+	registerComponentType<AGE::Component::RigidBody>();
+	registerComponentType<AGE::Component::PointLight>();
 
 	initRendering();
 

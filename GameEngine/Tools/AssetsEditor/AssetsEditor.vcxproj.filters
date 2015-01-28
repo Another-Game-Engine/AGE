@@ -21,22 +21,28 @@
     <ClCompile Include="Scenes\AssetsEditorScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Folder.cpp">
+    <ClCompile Include="Scenes\SceneSelectorScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="File.cpp">
+    <ClCompile Include="AssetsDatabase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetFileCreator.cpp">
+    <ClCompile Include="AssetFiles\RawFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetFiles\RawMeshFile.cpp">
+    <ClCompile Include="AssetFiles\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetFiles\RawTextureFile.cpp">
+    <ClCompile Include="AssetFiles\Folder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetFiles\RawMaterialFile.cpp">
+    <ClCompile Include="AssetFiles\AssetFileManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\CookedFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Convertor\ConvertorStatusManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,25 +71,37 @@
     <ClInclude Include="Scenes\AssetsEditorScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Folder.hpp">
+    <ClInclude Include="Convertor\BulletLoader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="File.hpp">
+    <ClInclude Include="Scenes\SceneSelectorScene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetFileCreator.hpp">
+    <ClInclude Include="AssetsDatabase.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetFiles\UnknownFile.hpp">
+    <ClInclude Include="AssetFiles\RawFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetFiles\RawMeshFile.hpp">
+    <ClInclude Include="AssetFiles\File.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetFiles\RawTextureFile.hpp">
+    <ClInclude Include="AssetFiles\Folder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetFiles\RawMaterialFile.hpp">
+    <ClInclude Include="AssetFiles\AssetsTypes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\AssetFileManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\CookedFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\ConvertorStatusManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\CookingTask.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

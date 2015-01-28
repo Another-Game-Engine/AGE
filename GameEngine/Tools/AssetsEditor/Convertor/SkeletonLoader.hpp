@@ -5,53 +5,73 @@
 #include <map>
 #include <Skinning/Skeleton.hpp>
 #include <thread>
+// TODO to pass in .cpp
+#include <Utils/Serialization/SerializationArchives.hpp>
+#include <Utils/Serialization/MatrixSerialization.hpp>
+#include <Utils/Serialization/QuaternionSerialization.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
+#include "CookingTask.hpp"
+#include "ConvertorStatusManager.hpp"
 
 namespace AGE
 {
 	class SkeletonLoader
 	{
 	public:
-		static bool save(AssetDataSet &dataSet)
+		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
-			if (dataSet.skeletonLoaded == false)
-				return false;
-			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+			if (!cookingTask->dataSet->loadSkeleton)
+				return true;
+			if (!cookingTask->skeleton)
+				return true;
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("SkeletonLoader : saving " + cookingTask->dataSet->filePath.getShortFileName());
+			auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
-					std::cerr << "Skeleton convertor error : creating directory" << std::endl;
-					return false;
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
+				std::cerr << "Skeleton convertor error : creating directory" << std::endl;
+				return false;
 			}
-			auto fileName = dataSet.skeletonName.empty() ? dataSet.filePath.getShortFileName() + ".skage" : dataSet.skeletonName + ".skage";
-			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+			auto fileName = cookingTask->dataSet->filePath.getShortFileName() + ".skage";
+			auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
 
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
-			ar(*dataSet.skeleton);
+			ar(*cookingTask->skeleton);
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 
-		static bool load(AssetDataSet &dataSet)
+		static bool load(std::shared_ptr<CookingTask> cookingTask)
 		{
-			if (!dataSet.assimpScene)
+			if (!cookingTask->dataSet->loadSkeleton)
+				return true;
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("SkeletonLoader : loading " + cookingTask->dataSet->filePath.getShortFileName());
+
+			auto boneOrigin = cookingTask->assimpScene->mRootNode;
+			bool hasSkeleton = false;
+			for (unsigned int meshIndex = 0; meshIndex < cookingTask->assimpScene->mNumMeshes; ++meshIndex)
 			{
-				return false;
+				if (cookingTask->assimpScene->mMeshes[0]->HasBones())
+					hasSkeleton = true;
 			}
-			auto boneOrigin = dataSet.assimpScene->mRootNode;
-			if (dataSet.skeletonLoaded)
+			if (!hasSkeleton)
 			{
-				std::cerr << "Skeleton loader : skeleton [" << dataSet.skeleton->name << "] already exists." << std::endl;
-				return false;
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
+				std::cerr << "Skeleton loader : mesh do not have skeleton." << std::endl;
+				return true;
 			}
-			dataSet.skeleton = new Skeleton();
-			Skeleton *skeleton = dataSet.skeleton;
+
+			cookingTask->skeleton = std::make_shared<Skeleton>();
+			Skeleton *skeleton = cookingTask->skeleton.get();
 			std::uint32_t minDepth = std::uint32_t(-1);
 			skeleton->firstBone = 0;
-			skeleton->name = dataSet.skeletonName.empty() == true ? dataSet.filePath.getShortFileName() : dataSet.skeletonName;
+			skeleton->name = cookingTask->dataSet->filePath.getShortFileName();
 
-			for (unsigned int meshIndex = 0; meshIndex < dataSet.assimpScene->mNumMeshes; ++meshIndex)
+			for (unsigned int meshIndex = 0; meshIndex < cookingTask->assimpScene->mNumMeshes; ++meshIndex)
 			{
-				aiMesh *mesh = dataSet.assimpScene->mMeshes[meshIndex];
+				aiMesh *mesh = cookingTask->assimpScene->mMeshes[meshIndex];
 
 				for (unsigned int i = 0; i < mesh->mNumBones; ++i)
 				{
@@ -65,7 +85,7 @@ namespace AGE
 					skeleton->bones.back().offset = AssimpLoader::aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
 					skeleton->bonesReferences.insert(std::make_pair(boneName, index));
 
-					auto boneNode = dataSet.assimpScene->mRootNode->FindNode(boneName.c_str());
+					auto boneNode = cookingTask->assimpScene->mRootNode->FindNode(boneName.c_str());
 					if (!boneNode)
 						continue;
 					skeleton->bones.back().transformation = AssimpLoader::aiMat4ToGlm(boneNode->mTransformation);
@@ -74,12 +94,12 @@ namespace AGE
 					{
 						minDepth = depth;
 						skeleton->firstBone = index;
-						boneOrigin = dataSet.assimpScene->mRootNode->FindNode(boneName.c_str());
+						boneOrigin = cookingTask->assimpScene->mRootNode->FindNode(boneName.c_str());
 					}
 				}
 			}
 
-			boneOrigin = dataSet.assimpScene->mRootNode->FindNode(skeleton->bones[skeleton->firstBone].name.c_str());
+			boneOrigin = cookingTask->assimpScene->mRootNode->FindNode(skeleton->bones[skeleton->firstBone].name.c_str());
 
 			if (boneOrigin->mParent)
 			{
@@ -92,7 +112,7 @@ namespace AGE
 			//we fill bone hierarchy
 			for (unsigned int i = 0; i < skeleton->bones.size(); ++i)
 			{
-				aiNode *bonenode = dataSet.assimpScene->mRootNode->FindNode(aiString(skeleton->bones[i].name));
+				aiNode *bonenode = cookingTask->assimpScene->mRootNode->FindNode(aiString(skeleton->bones[i].name));
 				if (!bonenode)
 					continue;
 
@@ -131,11 +151,11 @@ namespace AGE
 			if (skeleton->bones.size() == 0)
 			{
 				std::cerr << "Skeleton loader : assets does not contain any skeleton." << std::endl;
-				delete dataSet.skeleton;
-				dataSet.skeletonLoaded = false;
+				cookingTask->skeleton = nullptr;
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 				return false;
 			}
-			dataSet.skeletonLoaded = true;
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 	private:

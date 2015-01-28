@@ -7,10 +7,9 @@
 #include <Core/PrepareKey.hpp>
 #include <Core/CullableObjects.hh>
 
-class AScene;
-
 namespace AGE
 {
+	class AScene;
 	class RenderScene;
 	namespace Commands
 	{
@@ -45,15 +44,15 @@ namespace AGE
 				AGE::Vector<SubMeshInstance> submeshInstances;
 			};
 
-			struct CreateDrawable
+			struct CreateMesh
 			{
-				CreateDrawable(const PrepareKey &_key);
+				CreateMesh(const PrepareKey &_key);
 				PrepareKey key;
 			};
 
-			struct DeleteDrawable
+			struct DeleteMesh
 			{
-				DeleteDrawable(const PrepareKey &_key);
+				DeleteMesh(const PrepareKey &_key);
 				PrepareKey key;
 			};
 

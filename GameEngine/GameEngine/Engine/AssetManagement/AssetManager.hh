@@ -12,11 +12,14 @@
 #include <future>
 #include <TMQ/message.hpp>
 
-struct MaterialSetInstance;
-struct MeshInstance;
-struct SubMeshInstance;
-class ITexture;
-class Painter;
+namespace AGE
+{
+
+	struct MaterialSetInstance;
+	struct MeshInstance;
+	struct SubMeshInstance;
+	class ITexture;
+	class Painter;
 
 # define LAMBDA_FUNCTION [](Vertices &vertices, size_t index, SubMeshData const &data)
 
@@ -32,8 +35,6 @@ static std::pair<GLenum, std::function<void(Vertices &vertices, size_t index, Su
 	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, index); })
 };
 
-namespace AGE
-{
 	struct Skeleton;
 	struct Animation;
 

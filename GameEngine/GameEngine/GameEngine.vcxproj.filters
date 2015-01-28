@@ -3,16 +3,13 @@
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
-    <ClCompile Include="Engine\Components\SpaceshipController.cpp" />
     <ClCompile Include="Engine\Core\CullableInterfaces.cpp" />
     <ClCompile Include="Engine\Core\CullableObjects.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
-    <ClCompile Include="Engine\Core\OctreeNode.cpp" />
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
-    <ClCompile Include="Engine\Systems\CameraSystem.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
     <ClCompile Include="Engine\TMQ\dispatcher.cpp" />
     <ClCompile Include="Engine\TMQ\message.cpp" />
@@ -22,15 +19,10 @@
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
-    <ClCompile Include="Engine\Components\AudioEmitter.cpp" />
-    <ClCompile Include="Engine\Components\AudioListener.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\ComponentRegistrar.cpp" />
     <ClCompile Include="Engine\Components\FPController.cpp" />
-    <ClCompile Include="Engine\Components\RotationForce.cpp" />
-    <ClCompile Include="Engine\Components\TrackBallComponent.cpp" />
-    <ClCompile Include="Engine\Components\TrackingCamera.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
     <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
@@ -106,17 +98,29 @@
     <ClCompile Include="Engine\Render\Pipelining\Render\ARendering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.cpp" />
     <ClCompile Include="Engine\Utils\BitOperations.cpp" />
+    <ClCompile Include="Engine\Components\RigidBody.cpp" />
+    <ClCompile Include="Engine\Context\IRenderContext.cpp" />
+    <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\LooseOctree.cpp" />
     <ClCompile Include="Engine\Core\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Painting\PaintingManager.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\VectorSerialization.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\QuaternionSerialization.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\MatrixSerialization.cpp" />
+    <ClCompile Include="Engine\Systems\FPControllerSystem.cpp" />
+    <ClCompile Include="Engine\Skinning\Bone.cpp" />
+    <ClCompile Include="Engine\Utils\File.cpp" />
+    <ClCompile Include="Engine\Utils\FileSystem.cpp" />
+    <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
+    <ClCompile Include="Engine\Physic\DynamicMotionState.cpp" />
+    <ClCompile Include="Engine\Core\Tasks\RenderTasks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
     <ClInclude Include="Engine\Components\Light.hh" />
-    <ClInclude Include="Engine\Components\SpaceshipController.hpp" />
     <ClInclude Include="Engine\Configuration.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
     <ClInclude Include="Engine\Core\CullableInterfaces.hh" />
@@ -124,7 +128,6 @@
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
-    <ClInclude Include="Engine\Core\OctreeNode.hh" />
     <ClInclude Include="Engine\Core\PreparableObject.hh" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
@@ -144,7 +147,6 @@
     <ClInclude Include="Engine\Skinning\Bone.hpp" />
     <ClInclude Include="Engine\Skinning\Skeleton.hpp" />
     <ClInclude Include="Engine\Systems\3DTextSystem.hpp" />
-    <ClInclude Include="Engine\Systems\CameraSystem.hh" />
     <ClInclude Include="Engine\Components\SpotLight.hh" />
     <ClInclude Include="Engine\Systems\EntityPlacingSystem.hpp" />
     <ClInclude Include="Engine\Systems\SimpleMeshRenderer.hpp" />
@@ -164,24 +166,17 @@
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
     <ClInclude Include="Engine\Audio\FmodError.hpp" />
     <ClInclude Include="Engine\Audio\Audio.hh" />
-    <ClInclude Include="Engine\Components\AudioEmitter.hpp" />
     <ClInclude Include="Engine\Components\CameraComponent.hpp" />
     <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
-    <ClInclude Include="Engine\Components\Collision.hpp" />
     <ClInclude Include="Engine\Components\CollisionLayers.hpp" />
     <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
     <ClInclude Include="Engine\Components\FPController.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
-    <ClInclude Include="Engine\Components\RotationForce.hpp" />
-    <ClInclude Include="Engine\Components\SpriteComponent.hh" />
-    <ClInclude Include="Engine\Components\TrackBallComponent.hpp" />
-    <ClInclude Include="Engine\Components\TrackingCamera.hpp" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
     <ClInclude Include="Engine\Core\Material.hh" />
-    <ClInclude Include="Engine\Components\AudioListener.hpp" />
     <ClInclude Include="Engine\Core\SceneManager.hh" />
     <ClInclude Include="Engine\Core\Tags.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
@@ -193,18 +188,11 @@
     <ClInclude Include="Engine\Sprite\SpriteAnimation.hh" />
     <ClInclude Include="Engine\Sprite\SpriteFrame.hh" />
     <ClInclude Include="Engine\Sprite\SpriteManager.hh" />
-    <ClInclude Include="Engine\Systems\AudioSystem.hpp" />
     <ClInclude Include="Engine\Systems\BulletCollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\BulletDynamicSystem.hpp" />
-    <ClInclude Include="Engine\Systems\CollisionAdderSystem.hpp" />
-    <ClInclude Include="Engine\Systems\CollisionCleanerSystem.hpp" />
     <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
-    <ClInclude Include="Engine\Systems\RotationForceSystem.hpp" />
-    <ClInclude Include="Engine\Systems\SpriteSystem.hh" />
     <ClInclude Include="Engine\Systems\System.h" />
-    <ClInclude Include="Engine\Systems\TrackBallSystem.hpp" />
-    <ClInclude Include="Engine\Systems\TrackingCameraSystem.hpp" />
     <ClInclude Include="Engine\Text\Font.hh" />
     <ClInclude Include="Engine\Text\FontGlyph.hh" />
     <ClInclude Include="Engine\Text\FontManager.hh" />
@@ -301,8 +289,6 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\IRenderingPipeline.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.hh" />
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
-    <ClInclude Include="Engine\Core\PrepareRenderThread.hpp" />
-    <ClInclude Include="Engine\Core\PrepareRenderThreadCommand.hpp" />
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
     <ClInclude Include="Engine\Render\Key.hpp" />
@@ -312,7 +298,6 @@
     <ClInclude Include="Engine\Data\MeshData.hh" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Instance\MeshInstance.hh" />
-    <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\AssetManagement\AssetManager.hh" />
     <ClInclude Include="Engine\AssetManagement\Instance\MaterialInstance.hh" />
     <ClInclude Include="Engine\AssetManagement\Instance\MeshInstance.hh" />
@@ -320,6 +305,12 @@
     <ClInclude Include="Engine\AssetManagement\Data\MeshData.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\TextureData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Painting\PaintingManager.hh" />
+    <ClInclude Include="Engine\Utils\FileSystem.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\SerializationArchives.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\SerializationMacros.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\MatrixSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\QuaternionSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\VectorSerialization.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

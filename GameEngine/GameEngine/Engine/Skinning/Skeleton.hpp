@@ -6,7 +6,7 @@
 #include "Bone.hpp"
 
 
-#include <Utils/GlmSerialization.hpp>
+#include <Utils/Serialization/MatrixSerialization.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/map.hpp>

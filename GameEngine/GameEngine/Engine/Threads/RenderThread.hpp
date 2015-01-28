@@ -7,11 +7,11 @@
 #include <memory>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 
-class SdlContext;
-class Input;
-
 namespace AGE
 {
+	class SdlContext;
+	class Input;
+
 	class Engine;
 	struct DrawableCollection;
 

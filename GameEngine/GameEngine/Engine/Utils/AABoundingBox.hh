@@ -34,8 +34,8 @@ namespace AGE
 		ECollision checkCollision(AABoundingBox const &oth, glm::i8vec3 &direction) const;
 		bool		checkCollision(AABoundingBox const &oth) const;
 		// check if a point is in the aabb
-		bool checkPointIn(glm::vec3 point, glm::i8vec3 &direction) const;
 		bool checkPointIn(glm::vec3 point) const;
+		glm::i8vec3 AABoundingBox::getDirection(glm::vec3 point) const;
 
 		template <class Archive>
 		void serialize(Archive &ar)

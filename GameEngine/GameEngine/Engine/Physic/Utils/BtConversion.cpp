@@ -5,6 +5,7 @@
 #include <bullet/src/LinearMath/btQuaternion.h>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/glm.hpp>
 
 glm::mat4 convertBulletTransformToGLM(const btTransform& transform)
 {

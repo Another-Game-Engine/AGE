@@ -1,7 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <TMQ/message.hpp>
+#include <functional>
 #include <Utils/Containers/Vector.hpp>
 
 #include <Render/GeometryManagement/Painting/Painter.hh>
