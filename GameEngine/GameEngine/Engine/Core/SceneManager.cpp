@@ -99,7 +99,8 @@ namespace AGE
 			if (!e.second->userUpdateBegin(time))
 				return false;
 			e.second->update(time);
-			return e.second->userUpdateEnd(time);
+			if (!e.second->userUpdateEnd(time))
+				return false;
 		}
 	}
 
