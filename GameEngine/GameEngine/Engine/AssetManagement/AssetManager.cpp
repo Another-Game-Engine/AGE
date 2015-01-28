@@ -15,6 +15,7 @@
 #include <Render/Properties/Materials/Diffuse.hh>
 #include <Render/Textures/Texture2D.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Render/Properties/Transformation.hh>
 
 namespace AGE
 {
@@ -284,6 +285,7 @@ namespace AGE
 			}
 			auto &painter = paintingManager.get_painter(mesh->painter);
 			mesh->vertices = painter->add_vertices(data.positions.size(), data.indices.size());
+			mesh->transformation = painter->get_vertices(mesh->vertices)->add_property(std::make_shared<Transformation>(Transformation(glm::mat4(1.0f))));
 			auto vertices = painter->get_vertices(mesh->vertices);
 			for (auto i = 0ull; i < vertices->nbr_buffer(); ++i)
 			{

@@ -6,7 +6,7 @@
 class UniformBuffer;
 class BlockResources;
 
-class IInterfaceBlock
+class IInterfaceBlock : public std::enable_shared_from_this<IInterfaceBlock>
 {
 public:
 	virtual IInterfaceBlock &require_update() = 0;

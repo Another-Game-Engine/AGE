@@ -75,7 +75,7 @@ std::vector<uint8_t> const & BlockResources::data() const
 	return (_data);
 }
 
-BlockResources & BlockResources::assignation(IInterfaceBlock * interfaceBlock)
+BlockResources & BlockResources::assignation(std::shared_ptr<IInterfaceBlock> const &interfaceBlock)
 {
 	_parent = interfaceBlock;
 	return (*this);

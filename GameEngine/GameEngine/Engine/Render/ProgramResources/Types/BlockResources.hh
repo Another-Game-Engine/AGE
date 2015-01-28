@@ -21,7 +21,7 @@ public:
 	size_t size_array() const;
 	size_t stride() const;
 	std::vector<uint8_t> const &data() const;
-	BlockResources &assignation(IInterfaceBlock * interfaceBlock);
+	BlockResources &assignation(std::shared_ptr<IInterfaceBlock> const &interfaceBlock);
 
 public:
 	virtual IProgramResources &update() override final;
@@ -30,7 +30,7 @@ public:
 	virtual void print() const override final;
 
 private:
-	IInterfaceBlock * _parent;
+	std::shared_ptr<IInterfaceBlock> _parent;
 	size_t _offset;
 	size_t _size_array;
 	size_t _stride;
