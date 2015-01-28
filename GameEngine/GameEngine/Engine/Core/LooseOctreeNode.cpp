@@ -1,5 +1,6 @@
 
 #include <Core/LooseOctreeNode.hh>
+#include <Core/LooseOctree.hh>
 #include <Core/CullableObjects.hh>
 
 namespace AGE
@@ -12,7 +13,7 @@ namespace AGE
 			_sons[i] = UNDEFINED_IDX;
 		_uniqueSubElements = 0;
 		_nbrElements = 0;
-		_elements = NULL;
+		_firstElement = UNDEFINED_IDX;
 		computeLooseNode();
 	}
 
@@ -49,23 +50,23 @@ namespace AGE
 
 					if (thisPtr->_sons[sonIdx] == UNDEFINED_IDX || thisPtr->_sons[sonIdx] == LEAF_NODE_IDX)
 					{
-						generateSon(thisIdx, nodePool, sonIdx);
+						generateSon(thisIdx, manager, sonIdx);
 						UPDATE_THIS_PTR
 					}
-					addElementRecursive(thisPtr->_sons[sonIdx], nodePool, toAdd);
+					addElementRecursive(thisPtr->_sons[sonIdx], manager, toAdd);
 				}
 				else
 				{
 					// else we put the object in this node
 					toAdd->currentNode = thisIdx;
-					thisPtr->addElementToList(toAdd);
+					thisPtr->addElementToList(manager, toAdd);
 				}
 				return (thisIdx);
 			}
 		}
 		if (thisPtr->_father == UNDEFINED_IDX)
 		{
-			return (extendNode(thisIdx, nodePool, toAdd, direction));
+			return (extendNode(thisIdx, manager, toAdd, direction));
 		}
 		return (UNDEFINED_IDX);
 	}
@@ -89,20 +90,20 @@ namespace AGE
 
 			if (thisPtr->_sons[sonIdx] == UNDEFINED_IDX || thisPtr->_sons[sonIdx] == LEAF_NODE_IDX)
 			{
-				generateSon(thisIdx, nodePool, sonIdx);
+				generateSon(thisIdx, manager, sonIdx);
 				UPDATE_THIS_PTR
 			}
-			addElementRecursive(thisPtr->_sons[sonIdx], nodePool, toAdd);
+			addElementRecursive(thisPtr->_sons[sonIdx], manager, toAdd);
 		}
 		else
 		{
 			// else we put the object in this node
 			toAdd->currentNode = thisIdx;
-			thisPtr->addElementToList(toAdd);
+			thisPtr->addElementToList(manager, toAdd);
 		}
 	}
 
-	void		LooseOctreeNode::getElementsCollide(CONST_POOL_NODE, CullableFrustum *toTest, AGE::Vector<CullableObject*> &toFill) const
+	void		LooseOctreeNode::getElementsCollide(LooseOctree &manager, CullableFrustum *toTest, AGE::Vector<CullableObject*> &toFill) const
 	{
 		assert(_uniqueSubElements != 0);
 		bool collisionState;
@@ -110,10 +111,17 @@ namespace AGE
 		collisionState = toTest->currentFrustum.checkCollision(_looseNode);
 		if (collisionState)
 		{
-			for (CullableObject *e = _elements; e != NULL; e = e->nextElement)
+			uint32_t curElementIdx = _firstElement;
+			SOctreeElement *curElement;
+			CullableObject *curObject;
+
+			while (curElementIdx != UNDEFINED_IDX)
 			{
-				if (toTest->checkCollision(e))
-					toFill.push_back(e);
+				curElement = &manager.getElementPool().get(curElementIdx);
+				curObject = manager.getElementFromPool(curElement->object);
+				if (toTest->checkCollision(curObject))
+					toFill.push_back(curObject);
+				curElementIdx = curElement->next;
 			}
 			if (!isLeaf())
 			{
@@ -121,7 +129,7 @@ namespace AGE
 				{
 					assert(_sons[i] != UNDEFINED_IDX);
 					if (_sons[i] != LEAF_NODE_IDX)
-						nodePool.get(_sons[i]).getElementsCollide(nodePool, toTest, toFill);
+						manager.getNodePool().get(_sons[i]).getElementsCollide(manager, toTest, toFill);
 				}
 			}
 		}
@@ -147,7 +155,7 @@ namespace AGE
 			for (uint32_t i = 0; i < 8; ++i)
 			{
 				if (thisPtr->_sons[i] != LEAF_NODE_IDX &&
-					nodePool.get(thisPtr->_sons[i])._uniqueSubElements != 0)
+					manager.getNodePool().get(thisPtr->_sons[i])._uniqueSubElements != 0)
 				{
 					++nbrSonUsed;
 					sonUsedIdx = i;
@@ -161,9 +169,9 @@ namespace AGE
 				uint32_t newRoot = thisPtr->_sons[sonUsedIdx];
 
 				thisPtr->_sons[sonUsedIdx] = UNDEFINED_IDX;
-				removeAllSons(thisIdx, nodePool);
-				nodePool.dealloc(thisIdx);
-				nodePool.get(newRoot)._father = UNDEFINED_IDX;
+				removeAllSons(thisIdx, manager);
+				manager.getNodePool().dealloc(thisIdx);
+				manager.getNodePool().get(newRoot)._father = UNDEFINED_IDX;
 				return (newRoot);
 			}
 		}
@@ -172,8 +180,8 @@ namespace AGE
 
 	uint32_t LooseOctreeNode::extendNode(POOL_NODE_ARGS, CullableBoundingBox *toAdd, glm::i8vec3 const &direction)
 	{
-		uint32_t newRootIdx = nodePool.alloc();
-		LooseOctreeNode	*newRoot = &nodePool.get(newRootIdx);
+		uint32_t newRootIdx = manager.getNodePool().alloc();
+		LooseOctreeNode	*newRoot = &manager.getNodePool().get(newRootIdx);
 		// here we create thisPtr after the pool resize
 		CREATE_THIS_PTR
 		glm::vec3	nodeSize = thisPtr->_node.maxPoint - thisPtr->_node.minPoint;
@@ -214,8 +222,8 @@ namespace AGE
 
 		if (thisPtr->_uniqueSubElements == 0)
 		{
-			removeNode(thisIdx, nodePool);
-			newRoot = &nodePool.get(newRootIdx);
+			removeNode(thisIdx, manager);
+			newRoot = &manager.getNodePool().get(newRootIdx);
 		}
 		else
 		{
@@ -230,14 +238,14 @@ namespace AGE
 			}
 		}
 
-		return (addElement(newRootIdx, nodePool, toAdd));
+		return (addElement(newRootIdx, manager, toAdd));
 	}
 
 	void		LooseOctreeNode::generateSon(POOL_NODE_ARGS, uint32_t toGenIdx)
 	{
 		glm::u8vec3	currentSon((toGenIdx & 4) ? 1 : 0, (toGenIdx & 2) ? 1 : 0, toGenIdx & 1);
-		uint32_t newSonIdx = nodePool.alloc();
-		LooseOctreeNode	*newSon = &nodePool.get(newSonIdx);
+		uint32_t newSonIdx = manager.getNodePool().alloc();
+		LooseOctreeNode	*newSon = &manager.getNodePool().get(newSonIdx);
 		// here we create thisPtr after the pool resize
 		CREATE_THIS_PTR
 		glm::vec3	nodeHalfSize = (thisPtr->_node.maxPoint - thisPtr->_node.minPoint) / 2.0f;
@@ -270,20 +278,20 @@ namespace AGE
 	{
 		CREATE_THIS_PTR
 		// remove the element from the node
-		thisPtr->removeElementFromList(toRm);
+		thisPtr->removeElementFromList(manager, toRm);
 
 		uint32_t toCleanIdx = UNDEFINED_IDX;
 
-		for (uint32_t currentIdx = thisIdx; currentIdx != UNDEFINED_IDX; currentIdx = nodePool.get(currentIdx)._father)
+		for (uint32_t currentIdx = thisIdx; currentIdx != UNDEFINED_IDX; currentIdx = manager.getNodePool().get(currentIdx)._father)
 		{
-			LooseOctreeNode *current = &nodePool.get(currentIdx);
+			LooseOctreeNode *current = &manager.getNodePool().get(currentIdx);
 
 			--current->_uniqueSubElements;
 			if (current->_uniqueSubElements == 0)
 				toCleanIdx = currentIdx;
 		}
 		if (toCleanIdx != UNDEFINED_IDX)
-			removeNode(toCleanIdx, nodePool);
+			removeNode(toCleanIdx, manager);
 		toRm->currentNode = UNDEFINED_IDX;
 	}
 
@@ -309,14 +317,14 @@ namespace AGE
 								(direction.y == 1 ? 2 : 0) +
 								(direction.z == 1 ? 1 : 0);
 				// remove element from node
-				thisPtr->removeElementFromList(toMv);
+				thisPtr->removeElementFromList(manager, toMv);
 
 				if (thisPtr->_sons[sonIdx] == UNDEFINED_IDX || thisPtr->_sons[sonIdx] == LEAF_NODE_IDX)
 				{
-					generateSon(thisIdx, nodePool, sonIdx);
+					generateSon(thisIdx, manager, sonIdx);
 					UPDATE_THIS_PTR
 				}
-				addElementRecursive(thisPtr->_sons[sonIdx], nodePool, toMv);
+				addElementRecursive(thisPtr->_sons[sonIdx], manager, toMv);
 			}
 			// The object is still contained in the same node
 			return (UNDEFINED_IDX);
@@ -325,7 +333,7 @@ namespace AGE
 		--thisPtr->_uniqueSubElements;
 
 		// remove the element from the node
-		thisPtr->removeElementFromList(toMv);
+		thisPtr->removeElementFromList(manager, toMv);
 
 		uint32_t toCleanIdx = (thisPtr->_uniqueSubElements == 0) ? thisIdx : UNDEFINED_IDX;
 
@@ -335,8 +343,8 @@ namespace AGE
 
 		while (currentNodeIdx != UNDEFINED_IDX)
 		{
-			LooseOctreeNode *currentNode = &nodePool.get(currentNodeIdx);
-			LooseOctreeNode *prevNode = &nodePool.get(prevNodeIdx);
+			LooseOctreeNode *currentNode = &manager.getNodePool().get(currentNodeIdx);
+			LooseOctreeNode *prevNode = &manager.getNodePool().get(prevNodeIdx);
 
 			glm::vec3 nodeSize = currentNode->_node.maxPoint - currentNode->_node.minPoint;
 
@@ -349,8 +357,8 @@ namespace AGE
 				glm::all(glm::greaterThan(nodeSize, currentObjectDimensions)))
 			{
 				if (toCleanIdx != UNDEFINED_IDX)
-					removeNode(toCleanIdx, nodePool);
-				addElementRecursive(currentNodeIdx, nodePool, toMv);
+					removeNode(toCleanIdx, manager);
+				addElementRecursive(currentNodeIdx, manager, toMv);
 				return (UNDEFINED_IDX);
 			}
 			else if (currentNode->_uniqueSubElements == 0)
@@ -362,8 +370,8 @@ namespace AGE
 			currentNodeIdx = currentNode->_father;
 		}
 		if (toCleanIdx != UNDEFINED_IDX)
-			removeNode(toCleanIdx, nodePool);
-		return (addElement(prevNodeIdx, nodePool, toMv));
+			removeNode(toCleanIdx, manager);
+		return (addElement(prevNodeIdx, manager, toMv));
 	}
 
 	void LooseOctreeNode::removeAllSons(POOL_NODE_ARGS)
@@ -375,9 +383,9 @@ namespace AGE
 			{
 				if (thisPtr->_sons[i] != LEAF_NODE_IDX)
 				{
-					removeAllSons(thisPtr->_sons[i], nodePool);
+					removeAllSons(thisPtr->_sons[i], manager);
 					UPDATE_THIS_PTR
-					nodePool.dealloc(thisPtr->_sons[i]);
+					manager.getNodePool().dealloc(thisPtr->_sons[i]);
 					UPDATE_THIS_PTR
 				}
 				thisPtr->_sons[i] = UNDEFINED_IDX;
@@ -389,42 +397,50 @@ namespace AGE
 	{
 		CREATE_THIS_PTR
 
-		removeAllSons(thisIdx, nodePool);
+		removeAllSons(thisIdx, manager);
 		UPDATE_THIS_PTR
 		if (thisPtr->_father != UNDEFINED_IDX)
 		{
 			uint32_t idx = 0;
-			LooseOctreeNode *father = &nodePool.get(thisPtr->_father);
+			LooseOctreeNode *father = &manager.getNodePool().get(thisPtr->_father);
 
 			while (father->_sons[idx] != thisIdx)
 				++idx;
 			father->_sons[idx] = LEAF_NODE_IDX;
 		}
-		nodePool.dealloc(thisIdx);
+		manager.getNodePool().dealloc(thisIdx);
 	}
 
-	void LooseOctreeNode::addElementToList(CullableObject *toAdd)
+	void LooseOctreeNode::addElementToList(LooseOctree &manager, CullableObject *toAdd)
 	{
 		++_nbrElements;
-		toAdd->nextElement = _elements;
-		if (_elements)
-			_elements->prevElement = toAdd;
-		toAdd->prevElement = NULL;
-		_elements = toAdd;
+		uint32_t elementIdx = manager.getElementPool().alloc();
+		SOctreeElement &added = manager.getElementPool().get(elementIdx);
+
+		added.object = toAdd->key;
+		added.next = _firstElement;
+		if (_firstElement != UNDEFINED_IDX)
+			manager.getElementPool().get(_firstElement).prev = elementIdx;
+		added.prev = UNDEFINED_IDX;
+		_firstElement = elementIdx;
+		toAdd->currentElementInNode = elementIdx;
 	}
 
-	void LooseOctreeNode::removeElementFromList(CullableObject *toRm)
+	void LooseOctreeNode::removeElementFromList(LooseOctree &manager, CullableObject *toRm)
 	{
 		--_nbrElements;
-		if (toRm->prevElement)
-			toRm->prevElement->nextElement = toRm->nextElement;
+		SOctreeElement &removed = manager.getElementPool().get(toRm->currentElementInNode);
+		if (removed.prev != UNDEFINED_IDX)
+			manager.getElementPool().get(removed.prev).next = removed.next;
 		else
-			_elements = toRm->nextElement;
-		if (toRm->nextElement)
-			toRm->nextElement->prevElement = toRm->prevElement;
+			_firstElement = removed.next;
+		if (removed.next != UNDEFINED_IDX)
+			manager.getElementPool().get(removed.next).prev = removed.prev;
+		manager.getElementPool().dealloc(toRm->currentElementInNode);
+		toRm->currentElementInNode = UNDEFINED_IDX;
 	}
 
-	void LooseOctreeNode::checkOctreeIntegrity(CONST_POOL_NODE) const
+	void LooseOctreeNode::checkOctreeIntegrity(LooseOctree &manager) const
 	{
 		assert(_uniqueSubElements != 0);
 		if (!isLeaf())
@@ -433,7 +449,7 @@ namespace AGE
 			{
 				assert(_sons[i] != UNDEFINED_IDX);
 				if (_sons[i] != LEAF_NODE_IDX)
-					nodePool.get(_sons[i]).checkOctreeIntegrity(nodePool);
+					manager.getNodePool().get(_sons[i]).checkOctreeIntegrity(manager);
 			}
 		}
 	}

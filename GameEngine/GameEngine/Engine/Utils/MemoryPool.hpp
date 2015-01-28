@@ -59,6 +59,7 @@ public:
 	template <class... param_t>
 	void allocPreparated(uint32_t idx, param_t... param)
 	{
+		assert(idx <= _pool.size());
 		if (idx == _pool.size())
 			_pool.emplace_back(param...);
 		else

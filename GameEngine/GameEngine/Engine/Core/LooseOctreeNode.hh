@@ -8,14 +8,22 @@
 #define UNDEFINED_IDX 0xFFFFFFFF
 #define LEAF_NODE_IDX 0xFFFFFFFE
 
-#define POOL_NODE_ARGS uint32_t thisIdx, MemoryPool<LooseOctreeNode> &nodePool
-#define CONST_POOL_NODE MemoryPool<LooseOctreeNode> const &nodePool
+#define POOL_NODE_ARGS uint32_t thisIdx, LooseOctree &manager
 
-#define CREATE_THIS_PTR LooseOctreeNode *thisPtr = &nodePool.get(thisIdx);
-#define UPDATE_THIS_PTR thisPtr = &nodePool.get(thisIdx);
+#define CREATE_THIS_PTR LooseOctreeNode *thisPtr = &manager.getNodePool().get(thisIdx);
+#define UPDATE_THIS_PTR thisPtr = &manager.getNodePool().get(thisIdx);
 
 namespace AGE
 {
+	class LooseOctree;
+
+	struct SOctreeElement
+	{
+		PrepareKey object;
+		uint32_t prev;
+		uint32_t next;
+	};
+
 	class	LooseOctreeNode
 	{
 	public:
@@ -36,8 +44,8 @@ namespace AGE
 
 		// --- CONST FUNCTIONS
 
-		void checkOctreeIntegrity(CONST_POOL_NODE) const;
-		void getElementsCollide(CONST_POOL_NODE, CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill) const;
+		void checkOctreeIntegrity(LooseOctree &manager) const;
+		void getElementsCollide(LooseOctree &manager, CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill) const;
 		bool isLeaf() const;
 
 	private:
@@ -53,8 +61,8 @@ namespace AGE
 
 		void computeLooseNode();
 		// handle element list in node
-		void addElementToList(CullableObject *element);
-		void removeElementFromList(CullableObject *element);
+		void addElementToList(LooseOctree &manager, CullableObject *element);
+		void removeElementFromList(LooseOctree &manager, CullableObject *element);
 
 		uint32_t	_father;
 		uint32_t	_sons[8];
@@ -67,6 +75,6 @@ namespace AGE
 
 		// element list
 		uint32_t _nbrElements;
-		CullableObject *_elements;
+		uint32_t _firstElement;
 	};
 }

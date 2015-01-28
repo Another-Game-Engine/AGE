@@ -15,9 +15,8 @@ namespace AGE
 		: _prepareThread(prepareThread)
 		, _engine(engine)
 		, _scene(scene)
-		, _drawables(65536 * 4)
+		, _octree(_drawables, _pointLights)
 	{
-		_drawablesToMove.reserve(65536);
 		assert(prepareThread && engine && scene);
 	}
 
@@ -33,7 +32,7 @@ namespace AGE
 	PrepareKey RenderScene::addMesh()
 	{
 		PrepareKey res;
-		res.type = PrepareKey::Type::Drawable;
+		res.type = PrepareKey::Type::Mesh;
 		res.id = _meshs.prepareAlloc();
 		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreateMesh>(res);
 		return res;
@@ -66,7 +65,7 @@ namespace AGE
 			_cameras.prepareDealloc(key.id);
 			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteCamera>(key);
 			break;
-		case PrepareKey::Type::Drawable:
+		case PrepareKey::Type::Mesh:
 			_meshs.prepareDealloc(key.id);
 			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteDrawable>(key);
 			break;
@@ -138,7 +137,7 @@ namespace AGE
 		, const AGE::Vector<AGE::MaterialInstance> &materials
 		, const gl::Key<AGE::AnimationInstance> &animation)
 	{
-		assert(!key.invalid() || key.type != PrepareKey::Type::Drawable);
+		assert(!key.invalid() || key.type != PrepareKey::Type::Mesh);
 		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs, materials, animation);
 		return (*this);
 	}
@@ -153,7 +152,6 @@ namespace AGE
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
 		Drawable &toRm = _drawables.get(id);
-#ifdef ACTIVATE_OCTREE_CULLING
 		if (toRm.hasMoved)
 		{
 			uint32_t idxMoveBuffer = toRm.moveBufferIdx;
@@ -164,7 +162,6 @@ namespace AGE
 		}
 		// remove drawable from octree
 		_octree.removeElement(&toRm);
-#endif
 		_drawables.dealloc(id);
 		assert(id != (std::size_t)(-1));
 	}
@@ -259,6 +256,10 @@ namespace AGE
 				Drawable &added = _drawables.get(id);
 
 				uo->drawableCollection.push_back(id);
+				
+				added.key.type = PrepareKey::Type::Drawable;
+				added.key.id = id;
+
 				added.mesh = msg.submeshInstances[i];
 				added.material = msg.materialInstances[i];
 				if (!msg.materialInstances[i])
@@ -297,7 +298,7 @@ namespace AGE
 				co->position = msg.position;
 				co->hasMoved = true;
 				break;
-			case(PrepareKey::Type::Drawable) :
+			case(PrepareKey::Type::Mesh) :
 				uo = &_meshs.get(msg.key.id);
 				uo->position = msg.position;
 				for (uint32_t e : uo->drawableCollection)
@@ -332,7 +333,7 @@ namespace AGE
 				co->scale = msg.scale;
 				co->hasMoved = true;
 				break;
-			case(PrepareKey::Type::Drawable) :
+			case(PrepareKey::Type::Mesh) :
 				uo = &_meshs.get(msg.key.id);
 				uo->scale = msg.scale;
 				for (auto &e : uo->drawableCollection)
@@ -363,7 +364,7 @@ namespace AGE
 				co->orientation = msg.orientation;
 				co->hasMoved = true;
 				break;
-			case(PrepareKey::Type::Drawable) :
+			case(PrepareKey::Type::Mesh) :
 				uo = &_meshs.get(msg.key.id);
 				uo->orientation = msg.orientation;
 				for (auto &e : uo->drawableCollection)
@@ -433,16 +434,12 @@ namespace AGE
 					drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
 
-#ifdef ACTIVATE_OCTREE_CULLING
-
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);
 
 				// iter on element to draw
 				for (CullableObject *e : toDraw)
 				{
-					// mandatory if you want the object to be found again
-					e->hasBeenFound = false;
 					// all the elements are drawable for the moment (TODO)
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
 					//if (!currentDrawable->animation.empty())
@@ -456,32 +453,13 @@ namespace AGE
 					//}
 						if (!currentDrawable->material)
 						{
-							std::cout << "lol" << std::endl;
+							std::cout << "Material fail!" << std::endl;
 							assert(false);
 						}
 				}
-#else
-				for (auto &e : _drawables)
-				{
-					if (e.active)
-					{
-						drawList.drawables.emplace_back(e.mesh, e.material, e.transformation);
-					}
-				}
-#endif
 			}
 			//getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
-				for (auto &i : this->_octreeDrawList)
-				{
-					for (auto &e : i.drawables)
-					{
-						if (!e.material)
-						{
-							std::cout << "lol";
-							assert(false);
-						}
-					}
-				}
+
 			GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::CopyDrawLists>(this->_octreeDrawList);
 		}
 

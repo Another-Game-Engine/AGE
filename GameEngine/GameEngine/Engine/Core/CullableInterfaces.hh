@@ -20,11 +20,9 @@ namespace AGE
 	{
 		CullableType	type;
 		uint32_t		currentNode;
-		CullableObject	*nextElement;
-		CullableObject	*prevElement;
+		uint32_t		currentElementInNode;
 
 		uint32_t		moveBufferIdx;
-		bool			hasBeenFound;
 
 		CullableObject();
 		~CullableObject();
