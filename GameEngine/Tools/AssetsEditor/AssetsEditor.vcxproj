@@ -157,6 +157,7 @@
     <ClCompile Include="AssetFiles\Folder.cpp" />
     <ClCompile Include="Components\EntityRepresentation.cpp" />
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
+    <ClCompile Include="ImageUtils.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Convertor\SkeletonLoader.hpp" />
     <ClInclude Include="AssetFiles\File.hpp" />
     <ClInclude Include="AssetFiles\Folder.hpp" />
+    <ClInclude Include="ImageUtils.hh" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />

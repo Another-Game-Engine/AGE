@@ -33,6 +33,7 @@ namespace AGE
 
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
+
 			ar(*cookingTask->mesh);
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;

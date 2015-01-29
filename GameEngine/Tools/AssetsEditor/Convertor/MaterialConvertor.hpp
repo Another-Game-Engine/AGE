@@ -32,6 +32,8 @@ namespace AGE
 			MaterialDataSet materialDataSet;
 			for (auto &m : cookingTask->materials)
 			{
+				if (cookingTask->dataSet->bumpToNormal)
+					m->normalTexPath = m->bumpTexPath;
 				materialDataSet.collection.push_back(*m);
 			}
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);

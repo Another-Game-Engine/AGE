@@ -101,7 +101,7 @@ namespace AGE
 		std::ofstream _logFile;
 		Entity GLOBAL_CAMERA;
 		Entity GLOBAL_CATWOMAN;
-		std::array<Entity, 5> GLOBAL_LIGHTS;
+		std::array<Entity, 3> GLOBAL_LIGHTS;
 		Entity GLOBAL_SPONZA;
 		Entity GLOBAL_FLOOR;
 		Entity GLOBAL_HEAD;

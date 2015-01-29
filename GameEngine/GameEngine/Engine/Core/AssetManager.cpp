@@ -144,35 +144,35 @@ namespace AGE
 
 			// TODO fill texture with texture key
 
-			GLenum ct = GL_RGB32F;
+			GLenum ct = GL_RGB8;
 			GLenum color = GL_RGB;
-			if (data->format == RGB_DXT1_FORMAT)
+			if (data->colorNumber == 3)
 			{
-				ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//GL_RGB32F;
+				ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/GL_RGB8;
 				color = GL_BGR;
 			}
-			else if (data->format == RGBA_DXT5_FORMAT)
+			else if (data->colorNumber == 4)
 			{
-				ct = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;// GL_RGBA32F;
+				ct = /*GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;//*/ GL_RGBA8;
 				color = GL_BGRA;
 			}
-			else if (data->format == LUM_DXT1_FORMAT)
+			else if (data->colorNumber == 1)
 			{
-				ct = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;// GL_RGB32F;
+				ct = /*GL_COMPRESSED_RGB_S3TC_DXT1_EXT;//*/ GL_RGB8;
 				color = GL_LUMINANCE;
 			}
 			else
 				return AssetsLoadingResult(true, "Image format not found.\n");
 			auto key = manager->addTexture2D(data->width, data->height, ct, true);
-			
-			manager->uploadTextureMipMaps(key, color, GL_UNSIGNED_BYTE, data->data.data());
+
+			manager->uploadTexture(key, color, GL_UNSIGNED_BYTE, data->data.data());
 			manager->parameterTexture(key, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			manager->parameterTexture(key, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			manager->parameterTexture(key, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			manager->parameterTexture(key, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			
+
 			callback(key);
-				_textures.insert(std::make_pair(filePath.getFullName(), std::make_shared<gl::Key<gl::Texture>>(key)));
+			_textures.insert(std::make_pair(filePath.getFullName(), std::make_shared<gl::Key<gl::Texture>>(key)));
 			return AssetsLoadingResult(key.empty());
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
@@ -400,25 +400,25 @@ namespace AGE
 			{
 				createPool(order, infos);
 			}
-		{
-			// We need to keep an instance of FileData shared_ptr
-			auto fileDataCopy = fileData;
-			(void)(fileDataCopy);
-			auto &pools = _pools.find(infos)->second;
-			mesh->vertices = m->addVertices(maxSize, std::cref(*(nbrBuffer.get())), std::cref(*(buffer.get())), pools.first);
-			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
-			mesh->vertexPool = pools.first;
-			mesh->indexPool = pools.second;
-		}
-		{
-			// We need to keep an instance of FileData shared_ptr
-			auto fileDataCopy = fileData;
-			(void)(fileDataCopy);
-			auto &pools = _pools.find(infos)->second;
-			mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
-			mesh->vertexPool = pools.first;
-			mesh->indexPool = pools.second;
-		}
+			{
+				// We need to keep an instance of FileData shared_ptr
+				auto fileDataCopy = fileData;
+				(void)(fileDataCopy);
+				auto &pools = _pools.find(infos)->second;
+				mesh->vertices = m->addVertices(maxSize, std::cref(*(nbrBuffer.get())), std::cref(*(buffer.get())), pools.first);
+				mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
+				mesh->vertexPool = pools.first;
+				mesh->indexPool = pools.second;
+			}
+			{
+				// We need to keep an instance of FileData shared_ptr
+				auto fileDataCopy = fileData;
+				(void)(fileDataCopy);
+				auto &pools = _pools.find(infos)->second;
+				mesh->indices = m->addIndices(data.indices.size(), data.indices, pools.second);
+				mesh->vertexPool = pools.first;
+				mesh->indexPool = pools.second;
+			}
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, data.name, future);
