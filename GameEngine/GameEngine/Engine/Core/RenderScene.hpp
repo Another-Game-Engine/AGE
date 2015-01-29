@@ -2,6 +2,7 @@
 
 #include <Utils/Containers/Queue.hpp>
 #include <Utils/Containers/Vector.hpp>
+#include <Utils/MemoryPool.hpp>
 #include <Core/Commands/MainToPrepare.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Entities/EntityTypedef.hpp>
@@ -32,7 +33,7 @@ namespace AGE
 		void _setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg);
 		void _createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg);
 		void _createPointLight(AGE::Commands::MainToPrepare::CreatePointLight &msg);
-		void _createDrawable(AGE::Commands::MainToPrepare::CreateDrawable &msg);
+		void _createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg);
 		void _setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg);
 		void _deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg);
 		void _deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg);
@@ -42,7 +43,7 @@ namespace AGE
 		void _setScale(AGE::Commands::MainToPrepare::SetScale &msg);
 		void _setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg);
 		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
-		DRAWABLE_ID _addDrawable(USER_OBJECT_ID uid);
+		DRAWABLE_ID _addDrawable();
 	public:
 		PrepareKey addMesh();
 		PrepareKey addCamera();
@@ -73,18 +74,16 @@ namespace AGE
 
 		AGE::Vector<uint32_t> _drawablesToMove;
 
-		AGE::Vector<Mesh> _meshs;
-		AGE::Vector<Drawable> _drawables;
-		AGE::Vector<Camera> _cameras;
-		AGE::Vector<PointLight> _pointLights;
+		MemoryPool<Mesh> _meshs;
+		MemoryPool<Drawable> _drawables;
+		MemoryPool<Camera> _cameras;
+		MemoryPool<PointLight> _pointLights;
 
-		AGE::Queue<PrepareKey::OctreeObjectId> _freeDrawables;
-		AGE::Queue<PrepareKey::OctreeObjectId> _freeCameras;
-		AGE::Queue<PrepareKey::OctreeObjectId> _freeMeshs;
-		AGE::Queue<PrepareKey::OctreeObjectId> _freePointLights;
-		std::size_t _MeshCounter = 0;
-		std::size_t _cameraCounter = 0;
-		std::size_t _pointLightCounter = 0;
+		AGE::Vector<uint32_t> _activeCameras;
+
+		// TODO: remove active point lights and put it in the octree
+		AGE::Vector<uint32_t> _activePointLights;
+
 		AGE::Vector<DrawableCollection> _octreeDrawList;
 	};
 }

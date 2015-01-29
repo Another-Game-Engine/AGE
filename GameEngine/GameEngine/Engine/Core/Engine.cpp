@@ -77,8 +77,7 @@ namespace AGE
 		AGE::Imgui::getInstance()->startUpdate();
 #endif
 		_timer->update();
-		updateScenes(_timer->getElapsed());
-		res = userUpdateScenes(_timer->getElapsed());
+		res = updateScenes(_timer->getElapsed());
 		if (!res)
 			return false;
 		static double refreshStats = 0.0;

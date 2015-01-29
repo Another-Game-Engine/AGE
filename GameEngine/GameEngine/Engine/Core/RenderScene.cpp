@@ -15,12 +15,8 @@ namespace AGE
 		: _prepareThread(prepareThread)
 		, _engine(engine)
 		, _scene(scene)
-		, _MeshCounter(0)
-		, _pointLightCounter(0)
-		, _cameraCounter(0)
+		, _octree(_drawables, _pointLights)
 	{
-		_drawables.reserve(65536);
-		_drawablesToMove.reserve(65536);
 		assert(prepareThread && engine && scene);
 	}
 
@@ -36,15 +32,9 @@ namespace AGE
 	PrepareKey RenderScene::addMesh()
 	{
 		PrepareKey res;
-		res.type = PrepareKey::Type::Drawable;
-		if (!_freeMeshs.empty())
-		{
-			res.id = _freeMeshs.front();
-			_freeMeshs.pop();
-		}
-		else
-			res.id = PrepareKey::OctreeObjectId(_MeshCounter++);
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreateDrawable>(res);
+		res.type = PrepareKey::Type::Mesh;
+		res.id = _meshs.prepareAlloc();
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreateMesh>(res);
 		return res;
 	}
 
@@ -52,13 +42,7 @@ namespace AGE
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::Camera;
-		if (!_freeCameras.empty())
-		{
-			res.id = _freeCameras.front();
-			_freeCameras.pop();
-		}
-		else
-			res.id = PrepareKey::OctreeObjectId(_cameraCounter++);
+		res.id = _cameras.prepareAlloc();
 		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreateCamera>(res);
 		return res;
 	}
@@ -67,13 +51,7 @@ namespace AGE
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::PointLight;
-		if (!_freePointLights.empty())
-		{
-			res.id = _freePointLights.front();
-			_freePointLights.pop();
-		}
-		else
-			res.id = PrepareKey::OctreeObjectId(_pointLightCounter++);
+		res.id = _pointLights.prepareAlloc();
 		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreatePointLight>(res);
 		return res;
 	}
@@ -84,15 +62,15 @@ namespace AGE
 		switch (key.type)
 		{
 		case PrepareKey::Type::Camera:
-			_freeCameras.push(key.id);
+			_cameras.prepareDealloc(key.id);
 			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteCamera>(key);
 			break;
-		case PrepareKey::Type::Drawable:
-			_freeMeshs.push(key.id);
+		case PrepareKey::Type::Mesh:
+			_meshs.prepareDealloc(key.id);
 			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteDrawable>(key);
 			break;
 		case PrepareKey::Type::PointLight:
-			_freePointLights.push(key.id);
+			_pointLights.prepareDealloc(key.id);
 			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeletePointLight>(key);
 			break;
 		default:
@@ -159,165 +137,150 @@ namespace AGE
 		, const AGE::Vector<AGE::MaterialInstance> &materials
 		, const gl::Key<AGE::AnimationInstance> &animation)
 	{
-		assert(!key.invalid() || key.type != PrepareKey::Type::Drawable);
+		assert(!key.invalid() || key.type != PrepareKey::Type::Mesh);
 		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs, materials, animation);
 		return (*this);
 	}
 
-	DRAWABLE_ID RenderScene::_addDrawable(USER_OBJECT_ID uid)
+	DRAWABLE_ID RenderScene::_addDrawable()
 	{
-		DRAWABLE_ID res = DRAWABLE_ID(-1);
-		Drawable *co = nullptr;
-		if (!_freeDrawables.empty())
-		{
-			res = _freeDrawables.front();
-			_freeDrawables.pop();
-			co = &(_drawables[res]);
-		}
-		else
-		{
-			res = _drawables.size();
-			_drawables.emplace_back(Drawable());
-			co = &(_drawables.back());
-		}
-		co->id = res;
-		co->active = true;
+		DRAWABLE_ID res = _drawables.alloc();
+		_drawables.get(res).id = res;
 		return res;
 	}
 
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
-		_freeDrawables.push(PrepareKey::OctreeObjectId(id));
-#ifdef ACTIVATE_OCTREE_CULLING
-		if (_drawables[id].hasMoved)
+		Drawable &toRm = _drawables.get(id);
+		if (toRm.hasMoved)
 		{
-			uint32_t idxMoveBuffer = _drawables[id].moveBufferIdx;
+			uint32_t idxMoveBuffer = toRm.moveBufferIdx;
 
 			_drawablesToMove[idxMoveBuffer] = _drawablesToMove[_drawablesToMove.size() - 1];
-			_drawables[_drawablesToMove[idxMoveBuffer]].moveBufferIdx = idxMoveBuffer;
+			_drawables.get(_drawablesToMove[idxMoveBuffer]).moveBufferIdx = idxMoveBuffer;
 			_drawablesToMove.pop_back();
 		}
 		// remove drawable from octree
-		_octree.removeElement(&_drawables[id]);
-#endif
-		_drawables[id].reset();
+		_octree.removeElement(&toRm);
+		_drawables.dealloc(id);
 		assert(id != (std::size_t)(-1));
 	}
 
 		void RenderScene::_setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg)
 		{
 			Camera *co = nullptr;
-			co = &_cameras[msg.key.id];
+			co = &_cameras.get(msg.key.id);
 			co->hasMoved = true;
 			co->projection = msg.projection;
 		}
 
 		void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
 		{
-			Camera *co = nullptr;
-			if (msg.key.id >= _cameras.size())
-			{
-				_cameras.push_back(Camera());
-				co = &_cameras.back();
-			}
-			else
-				co = &_cameras[msg.key.id];
-			co->key.id = msg.key.id;
-			co->active = true;
+			_cameras.allocPreparated(msg.key.id);
+			Camera &toAdd = _cameras.get(msg.key.id);
+
+			toAdd.activeCameraIdx = _activeCameras.size();
+			_activeCameras.push_back(msg.key.id);
+
+			toAdd.key.id = msg.key.id;
 		}
 
 		void RenderScene::_createPointLight(AGE::Commands::MainToPrepare::CreatePointLight &msg)
 		{
-			PointLight *co = nullptr;
-			if (msg.key.id >= _pointLights.size())
-			{
-				_pointLights.push_back(PointLight());
-				co = &_pointLights.back();
-			}
-			else
-				co = &_pointLights.back();
-			co->key.id = msg.key.id;
-			co->active = true;
+			_pointLights.allocPreparated(msg.key.id);
+			PointLight &toAdd = _pointLights.get(msg.key.id);
+
+			// TODO: remove this
+			toAdd.activePointLightIdx = _activePointLights.size();
+			_activePointLights.push_back(msg.key.id);
+			// ---
+			toAdd.key.id = msg.key.id;
 		}
 
-		void RenderScene::_createDrawable(AGE::Commands::MainToPrepare::CreateDrawable &msg)
+		void RenderScene::_createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg)
 		{
-			Mesh *uo = nullptr;
-			if (msg.key.id >= _meshs.size())
-			{
-				_meshs.push_back(Mesh());
-				uo = &_meshs.back();
-			}
-			else
-				uo = &_meshs[msg.key.id];
+			_meshs.allocPreparated(msg.key.id);
+			Mesh &toAdd = _meshs.get(msg.key.id);
+			toAdd.key.id = msg.key.id;
 		}
 
 		void RenderScene::_setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg)
 		{
-			PointLight *l = nullptr;
-			l = &_pointLights[msg.key.id];
+			PointLight *l = &_pointLights.get(msg.key.id);
 			l->color = msg.color;
 			l->range = msg.range;
 		}
-
+		
 		void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)
 		{
-			Camera *co = nullptr;
-			co = &_cameras[msg.key.id];
-			co->active = false;
+			Camera &toRm = _cameras.get(msg.key.id);
+
+			_activeCameras[toRm.activeCameraIdx] = _activeCameras[_activeCameras.size() - 1];
+			_cameras.get(_activeCameras[toRm.activeCameraIdx]).activeCameraIdx = toRm.activeCameraIdx;
+			_activeCameras.pop_back();
+
+			_cameras.deallocPreparated(msg.key.id);
 		}
 
 		void RenderScene::_deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg)
 		{
-			PointLight *co = nullptr;
-			co = &_pointLights[msg.key.id];
-			co->active = false;
+			PointLight &toRm = _pointLights.get(msg.key.id);
+
+			_activePointLights[toRm.activePointLightIdx] = _activePointLights[_activePointLights.size() - 1];
+			_pointLights.get(_activePointLights[toRm.activePointLightIdx]).activePointLightIdx = toRm.activePointLightIdx;
+			_activePointLights.pop_back();
+
+			_pointLights.deallocPreparated(msg.key.id);
 		}
-		
+
 		void RenderScene::_deleteDrawable(AGE::Commands::MainToPrepare::DeleteDrawable &msg)
 		{
-			Mesh *uo = nullptr;
-			uo = &this->_meshs[msg.key.id];
-			for (auto &e : uo->drawableCollection)
+			Mesh &toRm = _meshs.get(msg.key.id);
+			for (auto &e : toRm.drawableCollection)
 			{
 				removeDrawableObject(e);
 			}
-			uo->drawableCollection.clear();
-			uo->active = false;
+			_meshs.deallocPreparated(msg.key.id);
 		}
 
 		void RenderScene::_setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg)
 		{
-			Mesh *uo = nullptr;
-			uo = &_meshs[msg.key.id];
+			Mesh *uo = &_meshs.get(msg.key.id);
+
 			for (auto &e : uo->drawableCollection)
 				removeDrawableObject(e);
 			uo->drawableCollection.clear();
 			for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
 			{
-				auto id = _addDrawable(msg.key.id);
+				uint32_t id = _addDrawable();
+				Drawable &added = _drawables.get(id);
+
 				uo->drawableCollection.push_back(id);
-				_drawables[id].mesh = msg.submeshInstances[i];
-				_drawables[id].material = msg.materialInstances[i];
+				
+				added.key.type = PrepareKey::Type::Drawable;
+				added.key.id = id;
+
+				added.mesh = msg.submeshInstances[i];
+				added.material = msg.materialInstances[i];
 				if (!msg.materialInstances[i])
 				{
 					std::cout << "lolkillme";
 					assert(false);
 				}
-				_drawables[id].position = uo->position;
-				_drawables[id].orientation = uo->orientation;
-				_drawables[id].scale = uo->scale;
-				_drawables[id].meshAABB = msg.submeshInstances[i].boundingBox;
-				_drawables[id].animation = msg.animation;
-				_drawables[id].currentNode = UNDEFINED_IDX;
-				_drawables[id].transformation = glm::scale(glm::translate(glm::mat4(1),
-															_drawables[id].position) * glm::toMat4(_drawables[id].orientation),
-															_drawables[id].scale);
-				_drawables[id].currentAABB.fromTransformedBox(_drawables[id].meshAABB, _drawables[id].transformation);
-				_drawables[id].previousAABB = _drawables[id].currentAABB;
-				_drawables[id].hasMoved = false;
-				_octree.addElement(&_drawables[id]);
-				assert(_drawables[id].currentNode != UNDEFINED_IDX);
+				added.position = uo->position;
+				added.orientation = uo->orientation;
+				added.scale = uo->scale;
+				added.meshAABB = msg.submeshInstances[i].boundingBox;
+				added.animation = msg.animation;
+				added.currentNode = UNDEFINED_IDX;
+				added.transformation = glm::scale(glm::translate(glm::mat4(1),
+															added.position) * glm::toMat4(added.orientation),
+															added.scale);
+				added.currentAABB.fromTransformedBox(added.meshAABB, added.transformation);
+				added.previousAABB = added.currentAABB;
+				added.hasMoved = false;
+				_octree.addElement(&added);
+				assert(added.currentNode != UNDEFINED_IDX);
 			}
 		}
 
@@ -331,27 +294,27 @@ namespace AGE
 			{
 
 			case(PrepareKey::Type::Camera) :
-				co = &_cameras[msg.key.id];
+				co = &_cameras.get(msg.key.id);
 				co->position = msg.position;
 				co->hasMoved = true;
 				break;
-			case(PrepareKey::Type::Drawable) :
-				uo = &_meshs[msg.key.id];
+			case(PrepareKey::Type::Mesh) :
+				uo = &_meshs.get(msg.key.id);
 				uo->position = msg.position;
-				for (auto &e : uo->drawableCollection)
+				for (uint32_t e : uo->drawableCollection)
 				{
-					_drawables[e].position = uo->position;
-					assert(_drawables[e].currentNode != UNDEFINED_IDX);
-					if (_drawables[e].hasMoved == false)
+					_drawables.get(e).position = uo->position;
+					assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+					if (_drawables.get(e).hasMoved == false)
 					{
-						_drawables[e].hasMoved = true;
-						_drawables[e].moveBufferIdx = _drawablesToMove.size();
+						_drawables.get(e).hasMoved = true;
+						_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
 						_drawablesToMove.push_back(e);
 					}
 				}
 				break;
 			case(PrepareKey::Type::PointLight) :
-				l = &_pointLights[msg.key.id];
+				l = &_pointLights.get(msg.key.id);
 				l->position = msg.position;
 				break;
 			default:
@@ -366,21 +329,21 @@ namespace AGE
 			switch (msg.key.type)
 			{
 			case(PrepareKey::Type::Camera) :
-				co = &_cameras[msg.key.id];
+				co = &_cameras.get(msg.key.id);
 				co->scale = msg.scale;
 				co->hasMoved = true;
 				break;
-			case(PrepareKey::Type::Drawable) :
-				uo = &_meshs[msg.key.id];
+			case(PrepareKey::Type::Mesh) :
+				uo = &_meshs.get(msg.key.id);
 				uo->scale = msg.scale;
 				for (auto &e : uo->drawableCollection)
 				{
-					_drawables[e].scale = uo->scale;
-					assert(_drawables[e].currentNode != UNDEFINED_IDX);
-					if (_drawables[e].hasMoved == false)
+					_drawables.get(e).scale = uo->scale;
+					assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+					if (_drawables.get(e).hasMoved == false)
 					{
-						_drawables[e].hasMoved = true;
-						_drawables[e].moveBufferIdx = _drawablesToMove.size();
+						_drawables.get(e).hasMoved = true;
+						_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
 						_drawablesToMove.push_back(e);
 					}
 				}
@@ -397,21 +360,21 @@ namespace AGE
 			switch (msg.key.type)
 			{
 			case(PrepareKey::Type::Camera) :
-				co = &_cameras[msg.key.id];
+				co = &_cameras.get(msg.key.id);
 				co->orientation = msg.orientation;
 				co->hasMoved = true;
 				break;
-			case(PrepareKey::Type::Drawable) :
-				uo = &_meshs[msg.key.id];
+			case(PrepareKey::Type::Mesh) :
+				uo = &_meshs.get(msg.key.id);
 				uo->orientation = msg.orientation;
 				for (auto &e : uo->drawableCollection)
 				{
-					_drawables[e].orientation = uo->orientation;
-					assert(_drawables[e].currentNode != UNDEFINED_IDX);
-					if (_drawables[e].hasMoved == false)
+					_drawables.get(e).orientation = uo->orientation;
+					assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+					if (_drawables.get(e).hasMoved == false)
 					{
-						_drawables[e].hasMoved = true;
-						_drawables[e].moveBufferIdx = _drawablesToMove.size();
+						_drawables.get(e).hasMoved = true;
+						_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
 						_drawablesToMove.push_back(e);
 					}
 				}
@@ -434,7 +397,7 @@ namespace AGE
 			// Update drawable positions in Octree
 			for (uint32_t idx : _drawablesToMove)
 			{
-				Drawable *e = &_drawables[idx];
+				Drawable *e = &_drawables.get(idx);
 				assert(e->currentNode != UNDEFINED_IDX);
 				e->hasMoved = false;
 				e->previousAABB = e->currentAABB;
@@ -450,10 +413,9 @@ namespace AGE
 			// clean empty nodes
 			_octree.cleanOctree();
 
-			for (auto &camera : _cameras)
+			for (uint32_t cameraIdx : _activeCameras)
 			{
-				if (!camera.active)
-					continue;
+				Camera &camera = _cameras.get(cameraIdx);
 				
 				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
 
@@ -466,14 +428,11 @@ namespace AGE
 				drawList.projection = camera.projection;
 
 				// no culling for the lights for the moment (TODO)
-				for (size_t index = 0; index < _pointLights.size(); ++index)
+				for (uint32_t pointLightIdx : _activePointLights)
 				{
-					auto &p = _pointLights[index];
-					if (p.active)
-						drawList.lights.emplace_back(p.position, p.color, p.range);
+					auto &p = _pointLights.get(pointLightIdx);
+					drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
-
-#ifdef ACTIVATE_OCTREE_CULLING
 
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);
@@ -481,8 +440,6 @@ namespace AGE
 				// iter on element to draw
 				for (CullableObject *e : toDraw)
 				{
-					// mandatory if you want the object to be found again
-					e->hasBeenFound = false;
 					// all the elements are drawable for the moment (TODO)
 					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
 					//if (!currentDrawable->animation.empty())
@@ -496,32 +453,13 @@ namespace AGE
 					//}
 						if (!currentDrawable->material)
 						{
-							std::cout << "lol" << std::endl;
+							std::cout << "Material fail!" << std::endl;
 							assert(false);
 						}
 				}
-#else
-				for (auto &e : _drawables)
-				{
-					if (e.active)
-					{
-						drawList.drawables.emplace_back(e.mesh, e.material, e.transformation);
-					}
-				}
-#endif
 			}
 			//getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
-				for (auto &i : this->_octreeDrawList)
-				{
-					for (auto &e : i.drawables)
-					{
-						if (!e.material)
-						{
-							std::cout << "lol";
-							assert(false);
-						}
-					}
-				}
+
 			GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::CopyDrawLists>(this->_octreeDrawList);
 		}
 

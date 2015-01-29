@@ -1,12 +1,16 @@
 #pragma once
 
 #include "File.hpp"
+#include <set>
 
 namespace AGE
 {
+	struct AssetDataSet;
 	namespace AE
 	{
 		class CookedFile;
+		struct CookConfig;
+
 		class RawFile : public AssetFile
 		{
 		public:
@@ -15,6 +19,7 @@ namespace AGE
 
 			bool _dirty;
 			std::shared_ptr<CookedFile> _cookedFile;
+			std::shared_ptr<AssetDataSet> dataSet;
 		};
 	}
 }

@@ -7,6 +7,7 @@ namespace AGE
 		, _locked(false)
 	{
 		assert(_scene.lock() != nullptr && "System Scene is not valid.");
+		_scene.lock()->registerFilter(this);
 	}
 
 	EntityFilter::~EntityFilter()
@@ -40,6 +41,8 @@ namespace AGE
 			}
 			else
 				_collection.insert(e.entity);
+			if (_onAdd)
+				_onAdd(e.entity);
 		}
 	}
 
@@ -53,6 +56,8 @@ namespace AGE
 			}
 			else
 				_collection.erase(e.entity);
+			if (_onRemove)
+				_onRemove(e.entity);
 		}
 	}
 
@@ -66,6 +71,8 @@ namespace AGE
 			}
 			else
 				_collection.insert(e.entity);
+			if (_onAdd)
+				_onAdd(e.entity);
 		}
 	}
 
@@ -79,7 +86,36 @@ namespace AGE
 			}
 			else
 				_collection.erase(e.entity);
+			if (_onRemove)
+				_onRemove(e.entity);
 		}
+	}
+
+	void EntityFilter::entityAdded(const EntityData &e)
+	{
+		if (this->_barcode.empty())
+		{
+			if (_locked)
+			{
+				_toAdd.insert(e.entity);
+			}
+			else
+				_collection.insert(e.entity);
+			if (_onAdd)
+				_onAdd(e.entity);
+		}
+	}
+
+	void EntityFilter::entityRemoved(const EntityData &e)
+	{
+		if (_locked)
+		{
+			_trash.insert(e.entity);
+		}
+		else
+			_collection.erase(e.entity);
+		if (_onRemove)
+			_onRemove(e.entity);
 	}
 
 	void EntityFilter::lock()

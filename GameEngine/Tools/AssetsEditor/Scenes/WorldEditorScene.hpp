@@ -6,14 +6,14 @@
 
 namespace AGE
 {
-	class SceneSelectorScene : public AScene
+	class WorldEditorScene : public AScene
 	{
 	public:
 		static const std::string Name;
 
-		SceneSelectorScene(std::weak_ptr<AGE::Engine> engine);
+		WorldEditorScene(std::weak_ptr<AGE::Engine> engine);
 
-		virtual ~SceneSelectorScene(void);
+		virtual ~WorldEditorScene(void);
 		virtual bool userStart();
 		virtual bool userUpdateBegin(double time);
 		virtual bool userUpdateEnd(double time);

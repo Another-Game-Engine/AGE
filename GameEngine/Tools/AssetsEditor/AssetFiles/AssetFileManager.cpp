@@ -7,6 +7,7 @@
 #include <AssetFiles/Folder.hpp>
 #include <imgui/imgui.h>
 #include <vector>
+#include <Convertor/AssetDataSet.hpp>
 
 //to remove
 #include <iostream>
@@ -33,16 +34,25 @@ namespace AGE
 			static const char *enumStrings[] = { "Raw", "Cooked", "Mesh", "Material", "Texure" };
 			return enumStrings;
 		}
+
+		bool AssetFileManager::IsValidFile(const std::tr2::sys::path &path)
+		{
+			auto extension = AGE::FileSystem::GetExtension(path);
+			if (extension == "obj" || extension == "fbx" || extension == "dae")
+				return true;
+			return false;
+		}
+
 		std::shared_ptr<AssetFile> AssetFileManager::CreateFile(const std::tr2::sys::path &path, Folder *parent)
 		{
 			auto extension = AGE::FileSystem::GetExtension(path);
 			std::shared_ptr<AssetFile> t = nullptr;
-			if (extension == "obj" || extension == "fbx" || extension == "collada")
+			if (extension == "obj" || extension == "fbx" || extension == "dae")
 			{
 				t = std::make_shared<RawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Mesh;
 			}
-			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
+			/*else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
 			{
 				t = std::make_shared<RawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Texture;
@@ -68,7 +78,7 @@ namespace AGE
 			{
 				t = std::make_shared<CookedFile>(path, parent);
 				t->_type = AssetType::Cooked | AssetType::Texture;
-			}
+			}*/
 
 
 			if (t)
@@ -87,14 +97,16 @@ namespace AGE
 		void AssetFileManager::CheckIfRawModified(Folder *folder, std::set<std::shared_ptr<RawFile>> &list)
 		{
 			folder->update(std::function<void(Folder*)>([](Folder*){}), std::function<void(RawFile*)>([&](RawFile* ptr) {
+				if (ptr->dataSet && ptr->dataSet->isConverting)
+					return;
 				auto lastWrite = FileSystem::GetLastWriteTime(ptr->getPath());
 				if (FileSystem::GetDiffTime(lastWrite, ptr->_lastWriteTime) > 0)
 				{
 					ptr->_dirty = true;
-					ptr->_lastWriteTime = lastWrite;
-					ptr->_lastWriteTimeStr = FileSystem::GetDateStr(ptr->getPath());
 					list.insert(std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis()));
 				}
+				else
+					ptr->_dirty = false;
 			}));
 		}
 
@@ -123,6 +135,58 @@ namespace AGE
 				ImGui::NextColumn();
 			}
 			else if (printSections & Name)
+			{
+				ImGui::Text(ptr->getFileName().c_str());
+				ImGui::NextColumn();
+			}
+			if (printSections & Type)
+			{
+				int i; int type = ptr->_type;
+				while (type)
+				{
+					i = Bits::getFirstBitPosition(type);
+					type ^= 1 << i;
+					ImGui::TextColored(Colors()[i], EnumToString()[i]);
+					if (type)
+						ImGui::SameLine();
+				}
+				if (ptr->_dirty)
+				{
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(1, 0, 0, 1), DirtyString);
+				}
+				ImGui::NextColumn();
+			}
+			if (printSections & Date)
+			{
+				ImGui::Text(ptr->_lastWriteTimeStr.c_str());
+				ImGui::NextColumn();
+			}
+			if (printSections & Path)
+			{
+				ImGui::Text(ptr->getFileName().c_str());
+				ImGui::NextColumn();
+			}
+			ImGui::Columns(1);
+		}
+
+		void AssetFileManager::PrintClickableRawAssetsFile(RawFile *ptr, int printSections, std::shared_ptr<RawFile> &selected)
+		{
+			if (!ptr->_active)
+				return;
+			auto t = Bits::countOne(printSections);
+			ImGui::Columns(t + 1);
+
+			ImGui::PushID((void*)ptr);
+			if (ImGui::Button("Select"))
+			{
+				selected = std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis());
+			}
+			ImGui::PopID();
+
+			ImGui::NextColumn();
+
+			if (printSections & Name)
 			{
 				ImGui::Text(ptr->getFileName().c_str());
 				ImGui::NextColumn();

@@ -9,6 +9,7 @@
 
 #include <filesystem>
 #include <memory>
+#include "ConvertorStatusManager.hpp"
 
 #include <atomic>
 
@@ -28,59 +29,40 @@ namespace AGE
 	{
 		~AssetDataSet()
 		{
-			assimpImporter.FreeScene();
-			animations.clear();
-			materials.clear();
-			textures.clear();
 		}
 
-		AssetDataSet()
+		AssetDataSet() = delete;
+		AssetDataSet(const std::string &path)
 		{
+			filePath = File(path);
+			isConverting = false;
 		}
-		//Configurations
-		bool loadSkeleton = false;
-		bool loadAnimations = false;
-		bool loadMesh = false;
-		bool loadMaterials = false;
-		bool loadTextures = false;
 
-		//Results
-		bool skeletonLoaded = false;
-		bool animationLoaded = false;
-		bool meshLoaded = false;
-		bool materialsLoaded = false;
-		bool texturesLoaded = false;
-		bool staticPhysicLoaded = false;
-		bool dynamicPhysicLoaded = false;
-
-
-		//Directory
-		std::tr2::sys::directory_entry rawDirectory;
-		std::tr2::sys::directory_entry serializedDirectory;
+		std::atomic_bool isConverting;
 
 		//Paths
 		File filePath = "";
 
-		std::set<std::string> texturesPath;
+		//Configurations
+		bool loadSkeleton = true;
+		bool loadAnimations = true;
+		bool loadMesh = true;
+		bool loadMaterials = true;
+		bool loadTextures = true;
+		bool loadPhysic = true;
 
-		std::string animationName = ""; //if empty -> same name as file (fbx, collada)
-		std::string skinName = ""; //if empty -> same name as file (fbx, collada)
-		std::string skeletonName = ""; //if empty -> same name as file (fbx, collada)
-		std::string materialName = ""; //if empty -> same name as file (fbx, collada)
-		std::string physicName = "";
+		//Mesh Options
+		bool normalize = true;
+		float maxSideLength = 1.0f;
+		bool positions = true;
+		bool normals = true;
+		bool bonesInfos = true;
+		bool uvs = true;
+		bool tangents = true;
+		bool biTangents = true;
 
-		//Ptrs
-		std::shared_ptr<Skeleton> skeleton = nullptr;
-		AGE::Vector<std::shared_ptr<Animation>> animations;
-		std::shared_ptr<MeshData> mesh = nullptr;
-		AGE::Vector<std::shared_ptr<MaterialData>> materials;
-		AGE::Vector<std::shared_ptr<TextureData>> textures;
-		std::shared_ptr<btBvhTriangleMeshShape> staticShape;
-		std::shared_ptr<btTriangleMesh> staticTriangleMesh;
-		std::shared_ptr<btConvexHullShape> dynamicShape;
-
-		//Assimp
-		aiScene* assimpScene = nullptr;
-		Assimp::Importer assimpImporter;
+		//Physic Options
+		bool staticConcave = true;
+		bool dynamicConcave = true;
 	};
 }

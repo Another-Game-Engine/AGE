@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <filesystem>
-#include <vector>
+#include <map>
 #include <string>
 #include <functional>
 #include <memory>
@@ -35,11 +35,11 @@ namespace AGE
 				folderFunction(this);
 				for (auto &e : _folders)
 				{
-					e->update(folderFunction, fileFunction);
+					e.second->update(folderFunction, fileFunction);
 				}
 				for (auto &e : _files)
 				{
-					e->update(fileFunction);
+					e.second->update(fileFunction);
 				}
 			}
 
@@ -48,11 +48,11 @@ namespace AGE
 			{
 				for (auto &e : _folders)
 				{
-					e->update(fileFunction);
+					e.second->update(fileFunction);
 				}
 				for (auto &e : _files)
 				{
-					e->update(fileFunction);
+					e.second->update(fileFunction);
 				}
 			}
 
@@ -65,18 +65,18 @@ namespace AGE
 					return;
 				for (auto &e : _folders)
 				{
-					e->update(folderFunctionBegin, folderFunctionEnd, fileFunction);
+					e.second->update(folderFunctionBegin, folderFunctionEnd, fileFunction);
 				}
 				for (auto &e : _files)
 				{
-					e->update(fileFunction);
+					e.second->update(fileFunction);
 				}
 				folderFunctionEnd(this);
 			}
 
 			std::tr2::sys::basic_directory_entry<std::tr2::sys::path> _path;
-			std::vector < std::shared_ptr<AE::Folder> > _folders;
-			std::vector < std::shared_ptr<AE::AssetFile> > _files;
+			std::map<std::string, std::shared_ptr<AE::Folder> > _folders;
+			std::map<std::string, std::shared_ptr<AE::AssetFile> > _files;
 			Folder *_parent;
 			bool _active;
 		};

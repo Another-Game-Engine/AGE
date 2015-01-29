@@ -38,7 +38,7 @@ namespace AGE
 			{
 			}
 
-			CreateDrawable::CreateDrawable(const PrepareKey &_key)
+			CreateMesh::CreateMesh(const PrepareKey &_key)
 				: key(_key)
 			{}
 
