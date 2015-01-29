@@ -5,29 +5,32 @@
 # include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 # include <memory>
 
-class Buffer
+namespace AGE
 {
-public:
-	Buffer(std::unique_ptr<IBuffer> &&buffer);
-	Buffer(Buffer const &copy) = delete;
-	Buffer(Buffer &&move);
+	class Buffer
+	{
+	public:
+		Buffer(std::unique_ptr<IBuffer> &&buffer);
+		Buffer(Buffer const &copy) = delete;
+		Buffer(Buffer &&move);
 
-public:
-	size_t size() const;
-	std::shared_ptr<BlockMemory> const &push_back(std::vector<uint8_t> &&data);
-	Buffer &clear();
-	Buffer &erase(size_t index);
-	Buffer &bind();
-	Buffer &unbind();
-	Buffer &update();
-	Buffer &require_resize();
-	Buffer &require_transfer();
-	std::shared_ptr<BlockMemory> const &operator[](size_t index);
+	public:
+		size_t size() const;
+		std::shared_ptr<BlockMemory> const &push_back(std::vector<uint8_t> &&data);
+		Buffer &clear();
+		Buffer &erase(size_t index);
+		Buffer &bind();
+		Buffer &unbind();
+		Buffer &update();
+		Buffer &require_resize();
+		Buffer &require_transfer();
+		std::shared_ptr<BlockMemory> const &operator[](size_t index);
 
-private:
-	bool _request_resize;
-	bool _request_transfer;
-	size_t _size_alloc;
-	std::vector<std::shared_ptr<BlockMemory>> _block_memories;
-	std::unique_ptr<IBuffer> _buffer;
-};
+	private:
+		bool _request_resize;
+		bool _request_transfer;
+		size_t _size_alloc;
+		std::vector<std::shared_ptr<BlockMemory>> _block_memories;
+		std::unique_ptr<IBuffer> _buffer;
+	};
+}

@@ -1,7 +1,7 @@
 #ifndef  __BT_CONVERSION_HPP__
 # define __BT_CONVERSION_HPP__
 
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 
 class btVertor3;
 class btTransform;

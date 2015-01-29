@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include <AssetManagement/AssetManager.hh>
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/Animation.hpp>
@@ -138,7 +140,7 @@ namespace AGE
 			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
 			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
 			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
-			_textures.insert(std::make_pair(filePath.getFullName(), texture));
+			_textures.insert(std::make_pair(filePath.getFullName(), std::static_pointer_cast<ITexture>(texture)));
 			return AssetsLoadingResult(true);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);

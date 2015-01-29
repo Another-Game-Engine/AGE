@@ -3,10 +3,9 @@
 
 #include <TMQ/message.hpp>
 
-class AScene;
-
 namespace AGE
 {
+	class AScene;
 	namespace Tasks
 	{
 		namespace MainToPrepare

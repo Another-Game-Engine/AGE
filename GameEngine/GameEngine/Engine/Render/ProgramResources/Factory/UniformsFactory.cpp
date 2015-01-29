@@ -24,21 +24,23 @@ std::make_pair(GL_SAMPLER_2D, LAMBDA_PROTO\
 	return (std::make_shared<Sampler2D>(id, std::move(name))); \
 })
 
-UniformsFactory::UniformsFactory() :
-_blue_prints({ DECLAR_BUILDERS })
+namespace AGE
 {
 
-}
+	UniformsFactory::UniformsFactory() :
+		_blue_prints({ DECLAR_BUILDERS })
+	{
 
-std::shared_ptr<IProgramResources> UniformsFactory::build(GLenum mode, GLint id, std::string &&name)
-{
-	for (auto &blue_print : _blue_prints) {
-		if (mode == blue_print.first) {
-			return (blue_print.second(id, std::move(name)));
-		}
 	}
-	return (std::shared_ptr<IProgramResources>(nullptr));
+
+	std::shared_ptr<IProgramResources> UniformsFactory::build(GLenum mode, GLint id, std::string &&name)
+	{
+		for (auto &blue_print : _blue_prints) {
+			if (mode == blue_print.first) {
+				return (blue_print.second(id, std::move(name)));
+			}
+		}
+		return (std::shared_ptr<IProgramResources>(nullptr));
+	}
+
 }
-
-
-

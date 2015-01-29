@@ -1,51 +1,56 @@
 #include <Render/Pipelining/Buffer/Renderbuffer.hh>
 #include <utility>
 
-Renderbuffer::Renderbuffer(GLint width, GLint height, GLenum internal_format) :
-_id(0),
-_width(width),
-_height(height),
-_internal_format(internal_format)
+namespace AGE
 {
-	glGenRenderbuffers(1, &_id);
-	glRenderbufferStorage(GL_RENDERBUFFER, _internal_format, _width, _height);
-}
 
-Renderbuffer::Renderbuffer(Renderbuffer &&move) :
-_id(move._id),
-_width(move._width),
-_height(move._height),
-_internal_format(move._internal_format)
-{
-	move._id = 0;
-}
-
-Renderbuffer::~Renderbuffer()
-{
-	if (_id) {
-		glDeleteRenderbuffers(1, &_id);
+	Renderbuffer::Renderbuffer(GLint width, GLint height, GLenum internal_format) :
+		_id(0),
+		_width(width),
+		_height(height),
+		_internal_format(internal_format)
+	{
+		glGenRenderbuffers(1, &_id);
+		glRenderbufferStorage(GL_RENDERBUFFER, _internal_format, _width, _height);
 	}
-}
 
-GLenum Renderbuffer::type() const
-{
-	return (GL_RENDERBUFFER);
-}
+	Renderbuffer::Renderbuffer(Renderbuffer &&move) :
+		_id(move._id),
+		_width(move._width),
+		_height(move._height),
+		_internal_format(move._internal_format)
+	{
+		move._id = 0;
+	}
 
-Renderbuffer const & Renderbuffer::bind() const
-{
-	glBindRenderbuffer(GL_RENDERBUFFER, _id);
-	return (*this);
-}
+	Renderbuffer::~Renderbuffer()
+	{
+		if (_id) {
+			glDeleteRenderbuffers(1, &_id);
+		}
+	}
 
-Renderbuffer const & Renderbuffer::unbind() const
-{
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	return (*this);
-}
+	GLenum Renderbuffer::type() const
+	{
+		return (GL_RENDERBUFFER);
+	}
 
-IFramebufferStorage const & Renderbuffer::attachment(Framebuffer const &framebuffer, GLenum attach) const
-{
-	glFramebufferRenderbuffer(framebuffer.type(), attach, GL_RENDERBUFFER, _id);
-	return (*this);
+	Renderbuffer const & Renderbuffer::bind() const
+	{
+		glBindRenderbuffer(GL_RENDERBUFFER, _id);
+		return (*this);
+	}
+
+	Renderbuffer const & Renderbuffer::unbind() const
+	{
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		return (*this);
+	}
+
+	IFramebufferStorage const & Renderbuffer::attachment(Framebuffer const &framebuffer, GLenum attach) const
+	{
+		glFramebufferRenderbuffer(framebuffer.type(), attach, GL_RENDERBUFFER, _id);
+		return (*this);
+	}
+
 }

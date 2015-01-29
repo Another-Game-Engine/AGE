@@ -4,14 +4,14 @@
 #include <glm/gtc/quaternion.hpp>
 #include <Utils/Containers/Vector.hpp>
 #include <Core/PrepareKey.hpp>
-#include <Utils/AABoundingBox.hh>
+#include <glm/fwd.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace AGE
 {
 
 	struct PreparableObject
 	{
-		bool active;
 		bool hasMoved;
 		PrepareKey key;
 		glm::vec3 position;

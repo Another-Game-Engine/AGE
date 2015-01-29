@@ -4,50 +4,61 @@
 #include "ImageLoader.hpp"
 #include <map>
 
+<<<<<<< HEAD
 #include <AssetManagement/Data/MaterialData.hh>
 
+=======
+#include "ConvertorStatusManager.hpp"
+#include <Geometry/MaterialData.hpp>
+#include "AssetDataSet.hpp"
+#include "CookingTask.hpp"
+>>>>>>> prod_graphic
 namespace AGE
 {
 	class MaterialLoader
 	{
 	public:
-		static bool save(AssetDataSet &dataSet)
+		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
-			if (dataSet.materialsLoaded == false)
-				return false;
-			auto folderPath = std::tr2::sys::path(dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder());
+			if (!cookingTask->dataSet->loadMaterials)
+				return true;
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : saving " + cookingTask->dataSet->filePath.getShortFileName());
+
+			auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder());
 
 			if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 			{
 					std::cerr << "Material convertor error : creating directory" << std::endl;
+					Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 					return false;
 			}
-			auto fileName = dataSet.materialName.empty() ? dataSet.filePath.getShortFileName() + ".mage" : dataSet.materialName + ".mage";
-			auto name = dataSet.serializedDirectory.path().directory_string() + "\\" + dataSet.filePath.getFolder() + fileName;
+			auto fileName = cookingTask->dataSet->filePath.getShortFileName() + ".mage";
+			auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
 			MaterialDataSet materialDataSet;
-			for (auto &m : dataSet.materials)
+			for (auto &m : cookingTask->materials)
 			{
 				materialDataSet.collection.push_back(*m);
 			}
 			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(ofs);
 			ar(materialDataSet);
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
-		static bool load(AssetDataSet &dataSet)
+		static bool load(std::shared_ptr<CookingTask> cookingTask)
 		{
-			dataSet.materialsLoaded = false;
-			if (!dataSet.assimpScene)
+			if (!cookingTask->dataSet->loadMaterials)
+				return true;
+			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MaterialLoader : loading " + cookingTask->dataSet->filePath.getShortFileName());
+			if (!cookingTask->assimpScene->HasMaterials())
 			{
-				return false;
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
+				return true;
 			}
 
-			if (!dataSet.assimpScene->HasMaterials())
-				return false;
-
-			for (auto materialIndex = 0; materialIndex < dataSet.assimpScene->mNumMaterials; ++materialIndex)
+			for (auto materialIndex = 0; materialIndex < cookingTask->assimpScene->mNumMaterials; ++materialIndex)
 			{
-				auto &aiMat = dataSet.assimpScene->mMaterials[materialIndex];
+				auto &aiMat = cookingTask->assimpScene->mMaterials[materialIndex];
 
 				aiColor4D diffuse(1.0f,1.0f,1.0f,1.0f);
 				aiColor4D ambient(1.0f, 1.0f, 1.0f, 1.0f);
@@ -77,7 +88,7 @@ namespace AGE
 				aiMat->GetTexture(aiTextureType_NORMALS, 0, &normalTexPath);
 				aiMat->Get(AI_MATKEY_TEXTURE_HEIGHT(0), bumpTexPath);
 
-				auto material = new MaterialData();
+				auto material = std::make_shared<MaterialData>();
 
 				material->diffuse = AssimpLoader::aiColorToGlm(diffuse);
 				material->ambient = AssimpLoader::aiColorToGlm(ambient);
@@ -85,21 +96,21 @@ namespace AGE
 				material->reflective = AssimpLoader::aiColorToGlm(reflective);
 				material->specular = AssimpLoader::aiColorToGlm(specular);
 
-				material->diffuseTexPath = diffuseTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(diffuseTexPath) : "";
-				material->ambientTexPath = ambientTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(ambientTexPath) : "";
-				material->emissiveTexPath = emissiveTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(emissiveTexPath) : "";
-				material->reflectiveTexPath = reflexionTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath) : "";
-				material->specularTexPath = specularTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath) : "";
-				material->normalTexPath = normalTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath) : "";
-				material->bumpTexPath = bumpTexPath.length > 0 ? dataSet.filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(bumpTexPath) : "";
+				material->diffuseTexPath = diffuseTexPath.length > 0 ? cookingTask->dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(diffuseTexPath) : "";
+				material->ambientTexPath = ambientTexPath.length > 0 ? cookingTask->dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(ambientTexPath) : "";
+				material->emissiveTexPath = emissiveTexPath.length > 0 ? cookingTask->dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(emissiveTexPath) : "";
+				material->reflectiveTexPath = reflexionTexPath.length > 0 ? cookingTask->dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(reflexionTexPath) : "";
+				material->specularTexPath = specularTexPath.length > 0 ? cookingTask->dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(specularTexPath) : "";
+				material->normalTexPath = normalTexPath.length > 0 ? cookingTask->dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(normalTexPath) : "";
+				material->bumpTexPath = bumpTexPath.length > 0 ? cookingTask->dataSet->filePath.getFolder() + "/" + AssimpLoader::aiStringToStd(bumpTexPath) : "";
 
-				dataSet.texturesPath.insert(material->diffuseTexPath);
-				dataSet.texturesPath.insert(material->ambientTexPath);
-				dataSet.texturesPath.insert(material->emissiveTexPath);
-				dataSet.texturesPath.insert(material->reflectiveTexPath);
-				dataSet.texturesPath.insert(material->specularTexPath);
-				dataSet.texturesPath.insert(material->normalTexPath);
-				dataSet.texturesPath.insert(material->bumpTexPath);
+				cookingTask->texturesPath.insert(material->diffuseTexPath);
+				cookingTask->texturesPath.insert(material->ambientTexPath);
+				cookingTask->texturesPath.insert(material->emissiveTexPath);
+				cookingTask->texturesPath.insert(material->reflectiveTexPath);
+				cookingTask->texturesPath.insert(material->specularTexPath);
+				cookingTask->texturesPath.insert(material->normalTexPath);
+				cookingTask->texturesPath.insert(material->bumpTexPath);
 
 				AssimpLoader::replaceExtension(material->diffuseTexPath, ".tage");
 				AssimpLoader::replaceExtension(material->ambientTexPath, ".tage");
@@ -109,15 +120,16 @@ namespace AGE
 				AssimpLoader::replaceExtension(material->normalTexPath, ".tage");
 				AssimpLoader::replaceExtension(material->bumpTexPath, ".tage");
 
-				dataSet.materials.push_back(material);
+				cookingTask->materials.push_back(material);
             }
 
-			if (dataSet.materials.size() == 0)
+			if (cookingTask->materials.size() == 0)
 			{
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 				std::cerr << "MaterialLoader : Materials has not been loaded" << std::endl;
 				return false;
 			}
-			dataSet.materialsLoaded = true;
+			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
 	};

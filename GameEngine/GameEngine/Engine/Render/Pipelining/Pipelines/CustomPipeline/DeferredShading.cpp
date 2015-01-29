@@ -13,46 +13,50 @@
 #define DEFERRED_SHADING_BUFFERING_VERTEX "../../Shaders/Deffered_shading/deffered_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "../../Shaders/Deffered_shading/deffered_shading_get_buffer.fp"
 
-DeferredShading::DeferredShading(glm::mat4 const &perspective, glm::vec2 const &screen_size) :
-ARenderingPipeline(std::string("deferred shading"))
-{
-	_programs.resize(TOTAL);
-	_programs[BUFFERING] = std::make_shared<Program>(Program(std::string("program_buffering"), { std::make_shared<UnitProg>(DEFERRED_SHADING_BUFFERING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER) }));
-	_programs[LIGHTNING] = std::make_shared<Program>(Program(std::string("program lightning"), { std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_FRAG, GL_FRAGMENT_SHADER) }));
-	_programs[MERGING] = std::make_shared<Program>(Program(std::string("program_merging"), { std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER) }));
-	*_programs[BUFFERING]->get_resource<UniformBlock>("global_state")->get_resource("projection_matrix") = perspective;
-	*_programs[LIGHTNING]->get_resource<UniformBlock>("global_state")->get_resource("projection_matrix") = perspective;
-	_rendering_list.resize(TOTAL);
-	std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT0, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
-	std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT1, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
-	std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT2, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
-	std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_DEPTH_ATTACHMENT, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
-	_rendering_list[BUFFERING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
-		OpenGLTasks::set_depth_test(true);
-		OpenGLTasks::set_clear_color(glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
-		OpenGLTasks::set_blend_test(false, 0);
-		OpenGLTasks::set_blend_test(false, 1);
-		OpenGLTasks::set_blend_test(false, 2);
-		OpenGLTasks::clear_buffer();
-		for (auto &drawable : drawables) {
-		//...
-		}
-	});
-	_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
-
-	});
-	_rendering_list[MERGING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
-	});
-}
-
-DeferredShading::DeferredShading(DeferredShading &&move) :
-ARenderingPipeline(std::move(move))
+namespace AGE
 {
 
-}
+	DeferredShading::DeferredShading(glm::mat4 const &perspective, glm::vec2 const &screen_size) :
+		ARenderingPipeline(std::string("deferred shading"))
+	{
+		_programs.resize(TOTAL);
+		_programs[BUFFERING] = std::make_shared<Program>(Program(std::string("program_buffering"), { std::make_shared<UnitProg>(DEFERRED_SHADING_BUFFERING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER) }));
+		_programs[LIGHTNING] = std::make_shared<Program>(Program(std::string("program lightning"), { std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_FRAG, GL_FRAGMENT_SHADER) }));
+		_programs[MERGING] = std::make_shared<Program>(Program(std::string("program_merging"), { std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER) }));
+		*_programs[BUFFERING]->get_resource<UniformBlock>("global_state")->get_resource("projection_matrix") = perspective;
+		*_programs[LIGHTNING]->get_resource<UniformBlock>("global_state")->get_resource("projection_matrix") = perspective;
+		_rendering_list.resize(TOTAL);
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT0, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT1, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT2, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_DEPTH_ATTACHMENT, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
+		_rendering_list[BUFFERING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
+			OpenGLTasks::set_depth_test(true);
+			OpenGLTasks::set_clear_color(glm::vec4(0.25f, 0.25f, 0.25f, 1.0f));
+			OpenGLTasks::set_blend_test(false, 0);
+			OpenGLTasks::set_blend_test(false, 1);
+			OpenGLTasks::set_blend_test(false, 2);
+			OpenGLTasks::clear_buffer();
+			for (auto &drawable : drawables) {
+				//...
+			}
+		});
+		_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
 
-IRenderingPipeline & DeferredShading::render(std::vector<AGE::Drawable> const &to_render, PaintingManager const &paintingManager)
-{
-	return (*this);
-}
+		});
+		_rendering_list[MERGING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
+		});
+	}
 
+	DeferredShading::DeferredShading(DeferredShading &&move) :
+		ARenderingPipeline(std::move(move))
+	{
+
+	}
+
+	IRenderingPipeline & DeferredShading::render(std::vector<AGE::Drawable> const &to_render, PaintingManager const &paintingManager)
+	{
+		return (*this);
+	}
+
+}

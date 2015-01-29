@@ -5,113 +5,107 @@
 #include <Render/Program.hh>
 #include <memory>
 
-BufferPrograms::BufferPrograms(std::vector<GLenum> const &types) :
-_types(types),
-_indices_buffer(std::make_unique<IndexBuffer>())
+namespace AGE
 {
-	_buffers.reserve(_types.size());
-	_vertex_array.bind();
-	auto index = 0ull;
-	for (auto &type : _types) {
-		auto &iterator = available_types.find(type);
-		if (iterator != available_types.end()) {
-			auto &a = iterator->second;
-			_buffers.emplace_back(std::make_unique<VertexBuffer>());
-			_buffers.back().bind();
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index++, a.nbr_component, a.type_component, GL_FALSE, 0, 0);
+	BufferPrograms::BufferPrograms(std::vector<GLenum> const &types) :
+		_types(types),
+		_indices_buffer(std::make_unique<IndexBuffer>())
+	{
+		_buffers.reserve(_types.size());
+		_vertex_array.bind();
+		auto index = 0ull;
+		for (auto &type : _types) {
+			auto &iterator = available_types.find(type);
+			if (iterator != available_types.end()) {
+				auto &a = iterator->second;
+				_buffers.emplace_back(std::make_unique<VertexBuffer>());
+				_buffers.back().bind();
+				glEnableVertexAttribArray(index);
+				glVertexAttribPointer(index++, a.nbr_component, a.type_component, GL_FALSE, 0, 0);
+			}
 		}
+		_indices_buffer.bind();
+		_vertex_array.unbind();
 	}
-	_indices_buffer.bind();
-	_vertex_array.unbind();
-}
 
-BufferPrograms::BufferPrograms(BufferPrograms &&move) :
-_types(std::move(move._types)),
-_buffers(std::move(move._buffers)),
-_indices_buffer(std::move(move._indices_buffer)),
-_vertex_array(std::move(move._vertex_array))
-{
-}
-
-bool BufferPrograms::insert(Vertices &vertices)
-{
-	if (vertices.nbr_buffer() != _types.size()) {
-		return (false);
+	BufferPrograms::BufferPrograms(BufferPrograms &&move) :
+		_types(std::move(move._types)),
+		_buffers(std::move(move._buffers)),
+		_indices_buffer(std::move(move._indices_buffer)),
+		_vertex_array(std::move(move._vertex_array))
+	{
 	}
-	for (auto index = 0ull; index < vertices.nbr_buffer(); ++index) {
-		if (_types[index] != vertices.get_type(index)) {
+
+	bool BufferPrograms::insert(Vertices &vertices)
+	{
+		if (vertices.nbr_buffer() != _types.size()) {
 			return (false);
 		}
-	}
-	for (auto index = 0ull; index < vertices.nbr_buffer(); ++index) {
-		vertices.set_block_memory(_buffers[index].push_back(vertices.transfer_data(index)), index);
-	}
-	vertices.set_indices_block_memory(_indices_buffer.push_back(vertices.transfer_indices_data()));
-	return (true);
-}
-
-size_t BufferPrograms::size() const
-{
-	return (_buffers.size());
-}
-
-BufferPrograms & BufferPrograms::bind()
-{
-	_vertex_array.bind();
-	return (*this);
-}
-
-BufferPrograms & BufferPrograms::unbind()
-{
-	_vertex_array.unbind();
-	return (*this);
-}
-
-BufferPrograms & BufferPrograms::update()
-{
-	for (auto &buffer : _buffers) {
-		buffer.update();
-	}
-	_indices_buffer.update();
-	return (*this);
-}
-
-BufferPrograms & BufferPrograms::clear()
-{
-	for (auto &buffer : _buffers) {
-		buffer.clear();
-	}
-	_indices_buffer.clear();
-	return (*this);
-}
-
-bool BufferPrograms::coherent_program(std::shared_ptr<Program> const &p) const
-{
-	return (p->coherent_attribute(_types));
-}
-
-bool BufferPrograms::coherent_program(std::vector<GLenum> const &types) const
-{
-	auto index = 0ull;
-	for (auto &type : types) {
-		if (type != _types[index++]) {
-			return (false);
+		for (auto index = 0ull; index < vertices.nbr_buffer(); ++index) {
+			if (_types[index] != vertices.get_type(index)) {
+				return (false);
+			}
 		}
+		for (auto index = 0ull; index < vertices.nbr_buffer(); ++index) {
+			vertices.set_block_memory(_buffers[index].push_back(vertices.transfer_data(index)), index);
+		}
+		vertices.set_indices_block_memory(_indices_buffer.push_back(vertices.transfer_indices_data()));
+		return (true);
 	}
-	return (true);
-}
 
-std::vector<GLenum> const & BufferPrograms::get_types() const
-{
-	return (_types);
-}
+	size_t BufferPrograms::size() const
+	{
+		return (_buffers.size());
+	}
 
-void BufferPrograms::print() const
-{
-	std::cout << "BufferPrograms:";
-	for (auto &type : _types) {
-		std::cout << "	";
-		available_types[type].print();
+	BufferPrograms & BufferPrograms::bind()
+	{
+		_vertex_array.bind();
+		return (*this);
+	}
+
+	BufferPrograms & BufferPrograms::unbind()
+	{
+		_vertex_array.unbind();
+		return (*this);
+	}
+
+	BufferPrograms & BufferPrograms::update()
+	{
+		for (auto &buffer : _buffers) {
+			buffer.update();
+		}
+		_indices_buffer.update();
+		return (*this);
+	}
+
+	BufferPrograms & BufferPrograms::clear()
+	{
+		for (auto &buffer : _buffers) {
+			buffer.clear();
+		}
+		_indices_buffer.clear();
+		return (*this);
+	}
+
+	bool BufferPrograms::coherent_program(std::shared_ptr<Program> const &p) const
+	{
+		return (p->coherent_attribute(_types));
+	}
+
+	bool BufferPrograms::coherent_program(std::vector<GLenum> const &types) const
+	{
+		auto index = 0ull;
+		for (auto &type : types) {
+			if (type != _types[index++]) {
+				return (false);
+			}
+		}
+		return (true);
+	}
+
+	std::vector<GLenum> const & BufferPrograms::get_types() const
+	{
+		return (_types);
 	}
 }

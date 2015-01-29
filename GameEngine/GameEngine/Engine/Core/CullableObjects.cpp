@@ -26,17 +26,6 @@ namespace AGE
 	{
 	}
 
-	void Drawable::reset()
-	{
-		mesh = SubMeshInstance();
-		transformation = glm::mat4(1);
-		meshAABB = AABoundingBox();
-		animation = Key<AGE::AnimationInstance>();
-		this->toAddInOctree = false;
-		this->hasMoved = false;
-		bones.clear();
-	}
-
 	PointLight::PointLight() :
 		range(1.0f),
 		color(1.0f)

@@ -2,11 +2,16 @@
 
 # include <Render/Pipelining/Buffer/IFramebufferStorage.hh>
 
-class AFramebufferStorage : public IFramebufferStorage
+namespace AGE
 {
-public:
-	virtual ~AFramebufferStorage();
 
-protected:
-	AFramebufferStorage();
-};
+	class AFramebufferStorage : public IFramebufferStorage
+	{
+	public:
+		virtual ~AFramebufferStorage();
+
+	protected:
+		AFramebufferStorage();
+	};
+
+}

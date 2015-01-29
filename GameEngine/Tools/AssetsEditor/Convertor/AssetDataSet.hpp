@@ -8,12 +8,20 @@
 #include <assimp/Importer.hpp>
 
 #include <filesystem>
+#include <memory>
+#include "ConvertorStatusManager.hpp"
 
 #include <atomic>
 
+<<<<<<< HEAD
 struct MeshData;
 struct MaterialData;
 struct TextureData;
+=======
+class btBvhTriangleMeshShape;
+class btConvexHullShape;
+class btTriangleMesh;
+>>>>>>> prod_graphic
 
 namespace AGE
 {
@@ -24,60 +32,40 @@ namespace AGE
 	{
 		~AssetDataSet()
 		{
-			assimpImporter.FreeScene();
-			for (auto &e : animations)
-				delete e;
-			animations.clear();
-			if (mesh)
-				delete mesh;
-			for (auto &e : materials)
-				delete e;
-			materials.clear();
-			for (auto &e : textures)
-				delete e;
-			textures.clear();
 		}
 
-		AssetDataSet()
+		AssetDataSet() = delete;
+		AssetDataSet(const std::string &path)
 		{
+			filePath = File(path);
+			isConverting = false;
 		}
-		//Configurations
-		bool loadSkeleton = false;
-		bool loadAnimations = false;
-		bool loadMesh = false;
-		bool loadMaterials = false;
-		bool loadTextures = false;
 
-		//Results
-		bool skeletonLoaded = false;
-		bool animationLoaded = false;
-		bool meshLoaded = false;
-		bool materialsLoaded = false;
-		bool texturesLoaded = false;
-
-		//Directory
-		std::tr2::sys::directory_entry rawDirectory;
-		std::tr2::sys::directory_entry serializedDirectory;
+		std::atomic_bool isConverting;
 
 		//Paths
 		File filePath = "";
 
-		std::set<std::string> texturesPath;
+		//Configurations
+		bool loadSkeleton = true;
+		bool loadAnimations = true;
+		bool loadMesh = true;
+		bool loadMaterials = true;
+		bool loadTextures = true;
+		bool loadPhysic = true;
 
-		std::string animationName = ""; //if empty -> same name as file (fbx, collada)
-		std::string skinName = ""; //if empty -> same name as file (fbx, collada)
-		std::string skeletonName = ""; //if empty -> same name as file (fbx, collada)
-		std::string materialName = ""; //if empty -> same name as file (fbx, collada)
+		//Mesh Options
+		bool normalize = true;
+		float maxSideLength = 1.0f;
+		bool positions = true;
+		bool normals = true;
+		bool bonesInfos = true;
+		bool uvs = true;
+		bool tangents = true;
+		bool biTangents = true;
 
-		//Ptrs
-		Skeleton *skeleton = nullptr;
-		AGE::Vector<Animation*> animations;
-		MeshData *mesh = nullptr;
-		AGE::Vector<MaterialData*> materials;
-		AGE::Vector<TextureData*> textures;
-
-		//Assimp
-		aiScene* assimpScene = nullptr;
-		Assimp::Importer assimpImporter;
+		//Physic Options
+		bool staticConcave = true;
+		bool dynamicConcave = true;
 	};
 }

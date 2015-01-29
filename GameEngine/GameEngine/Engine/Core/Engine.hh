@@ -2,8 +2,6 @@
 
 #include <Configuration.hpp>
 #include "Utils/DependenciesInjector.hpp"
-#include <array>
-#include <map>
 #include <Core/SceneManager.hh>
 
 namespace AGE

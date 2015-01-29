@@ -9,10 +9,10 @@ template<class T>
 class MemoryPool
 {
 public:
-	MemoryPool(uint32_t maxSize)
+	MemoryPool() :
+		_currentIdx(0)
 	{
 		_currentIdx = 0;
-		_pool.reserve(maxSize);
 	}
 
 	MemoryPool(MemoryPool &&move) :
@@ -21,6 +21,12 @@ public:
 		_freeIdx(std::move(move._freeIdx))
 	{
 
+	}
+
+	MemoryPool(uint32_t maxSize) :
+		_currentIdx(0)
+	{
+		_pool.reserve(maxSize);
 	}
 
 	~MemoryPool() { }
@@ -39,10 +45,41 @@ public:
 		return (_currentIdx++);
 	}
 
+	uint32_t prepareAlloc()
+	{
+		if (_freeIdx.empty() == false)
+		{
+			uint32_t ret = _freeIdx.front();
+			_freeIdx.pop();
+			return (ret);
+		}
+		return (_currentIdx++);
+	}
+
+	template <class... param_t>
+	void allocPreparated(uint32_t idx, param_t... param)
+	{
+		assert(idx <= _pool.size());
+		if (idx == _pool.size())
+			_pool.emplace_back(param...);
+		else
+			new (&_pool[idx]) T(param...);
+	}
+
 	void dealloc(uint32_t idx)
 	{
 		_pool[idx].~T();
 		_freeIdx.push(idx);
+	}
+
+	void prepareDealloc(uint32_t idx)
+	{
+		_freeIdx.push(idx);
+	}
+
+	void deallocPreparated(uint32_t idx)
+	{
+		_pool[idx].~T();
 	}
 
 	T &get(uint32_t idx)

@@ -1,12 +1,16 @@
 #include <Render/Pipelining/Buffer/AFramebufferStorage.hh>
 
-AFramebufferStorage::~AFramebufferStorage()
+namespace AGE
 {
 
+	AFramebufferStorage::~AFramebufferStorage()
+	{
+
+	}
+
+	AFramebufferStorage::AFramebufferStorage()
+	{
+
+	}
+
 }
-
-AFramebufferStorage::AFramebufferStorage()
-{
-
-}
-

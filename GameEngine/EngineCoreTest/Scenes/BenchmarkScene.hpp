@@ -1,14 +1,16 @@
 #pragma once
 
+#include <ostream>
+#include <fstream>
+#include <string>
+
 #include <Core/AScene.hh>
 #include <Systems/LifetimeSystem.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Systems/BulletDynamicSystem.hpp>
-#include <Systems/CollisionAdderSystem.hpp>
-#include <Systems/CollisionCleanerSystem.hpp>
-#include <Systems/CameraSystem.hh>
 #include <Components/MeshRenderer.hh>
 #include <Components/Light.hh>
+#include <Components/CameraComponent.hpp>
 #include <AssetManagement/AssetManager.hh>
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>
@@ -23,7 +25,8 @@
 # define DEFERRED_FRAG_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.fp"
 # define DEFERRED_VERTEX_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.vp"
 
-class BenchmarkScene : public AScene	
+
+class BenchmarkScene : public AGE::AScene	
 {
 public:
 	BenchmarkScene(std::weak_ptr<AGE::Engine> engine);
@@ -42,12 +45,12 @@ private:
 	double _maxChunk = 0.25f;
 	std::size_t _chunkFrame = 0;
 	std::ofstream _logFile;
-	Entity GLOBAL_CAMERA;
-	Entity GLOBAL_CATWOMAN;
-	std::array<Entity, 5> GLOBAL_LIGHTS;
-	Entity GLOBAL_SPONZA;
-	Entity GLOBAL_FLOOR;
-	Entity GLOBAL_HEAD;
+	AGE::Entity GLOBAL_CAMERA;
+	AGE::Entity GLOBAL_CATWOMAN;
+	std::array<AGE::Entity, 5> GLOBAL_LIGHTS;
+	AGE::Entity GLOBAL_SPONZA;
+	AGE::Entity GLOBAL_FLOOR;
+	AGE::Entity GLOBAL_HEAD;
 	static bool initRenderingJustOneTime;
 	std::list<std::future<bool>> assetLoadingList;
 };

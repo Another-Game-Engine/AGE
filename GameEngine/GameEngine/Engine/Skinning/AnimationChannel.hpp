@@ -1,11 +1,11 @@
 #pragma once
 
 #include <Utils/Containers/Vector.hpp>
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtc/quaternion.hpp>
-
+#include <Utils/Serialization/SerializationMacros.hpp>
+#include <glm/fwd.hpp>
 #include "AnimationKey.hpp"
+
+SERIALIZATION_ARCHIVE_FORWARD_DECLARATION();
 
 namespace AGE
 {
@@ -18,14 +18,7 @@ namespace AGE
 
 		void findKeyIndex(float t, glm::uvec3 &keys, glm::uvec3 &nextKeys);
 		void getInterpolatedTransform(float t, glm::mat4 &res);
-	};
 
-	template <class Archive>
-	void serialize(Archive &ar, AnimationChannel &value)
-	{
-		ar(cereal::make_nvp("bone", value.boneIndex));
-		ar(cereal::make_nvp("scale", value.scale));
-		ar(cereal::make_nvp("rotation", value.rotation));
-		ar(cereal::make_nvp("translation", value.translation));
-	}
+		SERIALIZATION_SERIALIZE_METHOD_DECLARATION();
+	};
 }
