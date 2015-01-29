@@ -154,6 +154,11 @@ namespace AGE
 					ImGui::Checkbox("Material", &dataset->loadMaterials);
 					if (dataset->loadMaterials)
 					{
+						ImGui::Checkbox("Generate normal map from bump", &dataset->bumpToNormal);
+						if (dataset->bumpToNormal)
+						{
+							ImGui::SliderInt("Normal strength", &dataset->normalStrength, 1, 10);
+						}
 					}
 					ImGui::Separator();
 
@@ -172,6 +177,12 @@ namespace AGE
 					ImGui::Checkbox("Textures", &dataset->loadTextures);
 					if (dataset->loadTextures)
 					{
+						ImGui::Checkbox("Compress textures", &dataset->compressTextures);
+						ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
+						if (dataset->generateMipmap)
+						{
+							ImGui::SliderInt("Mipmap levels", &dataset->mipmapLevels, 1, 16);
+						}
 					}
 					ImGui::Separator();
 					if (ImGui::Button("Cook"))
