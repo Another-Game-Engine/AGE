@@ -62,8 +62,9 @@ namespace AGE
 			++e;
 			if (a->second == t->second)
 			{
+				auto t = a->second;
 				_actives.erase(a);
-				a->second->setActive(false);
+				t->setActive(false);
 				break;
 			}
 		}
@@ -89,25 +90,17 @@ namespace AGE
 		return t->second->start();
 	}
 
-	bool            SceneManager::userUpdateScenes(double time) const
+	bool            SceneManager::updateScenes(double time)
 	{
 		for (auto &e : _actives)
 		{
 			GetMainThread()->setSceneAsActive(e.second.get());
 			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(e.second.get());
-			if (!e.second->userUpdate(time))
+			if (!e.second->userUpdateBegin(time))
 				return false;
-		}
-		return true;
-	}
-
-	void            SceneManager::updateScenes(double time)
-	{
-		for (auto &e : _actives)
-		{
-			GetMainThread()->setSceneAsActive(e.second.get());
-			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SceneUpdateBegin>(e.second.get());
 			e.second->update(time);
+			if (!e.second->userUpdateEnd(time))
+				return false;
 		}
 	}
 

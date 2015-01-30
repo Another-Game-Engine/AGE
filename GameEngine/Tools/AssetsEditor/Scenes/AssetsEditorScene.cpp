@@ -35,6 +35,8 @@
 
 namespace AGE
 {
+	const std::string AssetsEditorScene::Name = "AssetsEditor";
+
 	AssetsEditorScene::AssetsEditorScene(std::weak_ptr<AGE::Engine> engine)
 		: AScene(engine)
 		, _raw("../../Assets/AGE-Assets-For-Test/Raw")
@@ -55,7 +57,7 @@ namespace AGE
 		return true;
 	}
 
-	bool AssetsEditorScene::userUpdate(double time)
+	bool AssetsEditorScene::userUpdateBegin(double time)
 	{
 		//check dirty for test
 		{
@@ -74,11 +76,10 @@ namespace AGE
 			}
 		}
 
-		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, 1, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
-		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3333333f, ImGui::GetIO().DisplaySize.y), true);
+		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3333333f, 0), true);
 		{
 			{
-				ImGui::BeginChild("Raw", ImVec2(0, ImGui::GetIO().DisplaySize.y /*/ 2 */- 10), false);
+				ImGui::BeginChild("Raw", ImVec2(0, 0), false);
 				_raw.update(
 				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
 					bool opened = ImGui::TreeNode((void*)(folder), folder->_path.path().filename().c_str());
@@ -106,7 +107,7 @@ namespace AGE
 		}
 		ImGui::EndChild();
 		ImGui::SameLine();
-		ImGui::BeginChild("Selected Raw", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, ImGui::GetIO().DisplaySize.y), false);
+		ImGui::BeginChild("Selected Raw", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, 0), false);
 		{
 			if (_selectedRaw != nullptr)
 			{
@@ -153,6 +154,11 @@ namespace AGE
 					ImGui::Checkbox("Material", &dataset->loadMaterials);
 					if (dataset->loadMaterials)
 					{
+						ImGui::Checkbox("Generate normal map from bump", &dataset->bumpToNormal);
+						if (dataset->bumpToNormal)
+						{
+							ImGui::SliderInt("Normal strength", &dataset->normalStrength, 1, 10);
+						}
 					}
 					ImGui::Separator();
 
@@ -171,6 +177,12 @@ namespace AGE
 					ImGui::Checkbox("Textures", &dataset->loadTextures);
 					if (dataset->loadTextures)
 					{
+						ImGui::Checkbox("Compress textures", &dataset->compressTextures);
+						ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
+						if (dataset->generateMipmap)
+						{
+							ImGui::SliderInt("Mipmap levels", &dataset->mipmapLevels, 1, 16);
+						}
 					}
 					ImGui::Separator();
 					if (ImGui::Button("Cook"))
@@ -232,12 +244,15 @@ namespace AGE
 		}
 		ImGui::EndChild();
 		ImGui::SameLine();
-		ImGui::BeginChild("Todo", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, ImGui::GetIO().DisplaySize.y), false);
+		ImGui::BeginChild("Todo", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, 0), false);
 		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->DisplayTasks();
 		ImGui::EndChild();
+		return true;
+	}
 
+	bool AssetsEditorScene::userUpdateEnd(double time)
+	{
 		ImGui::End();
-
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 			return (false);
 		return true;

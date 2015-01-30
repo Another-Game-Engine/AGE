@@ -202,6 +202,11 @@ namespace AGE
 			code.reset();
 		}
 
+		inline bool empty()
+		{
+			return code.none();
+		}
+
 		template < typename Archive >
 		void serialize(Archive &ar)
 		{

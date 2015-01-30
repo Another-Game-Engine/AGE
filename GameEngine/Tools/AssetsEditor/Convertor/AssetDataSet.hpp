@@ -64,5 +64,14 @@ namespace AGE
 		//Physic Options
 		bool staticConcave = true;
 		bool dynamicConcave = true;
+
+		// Textures options
+		bool compressTextures = true;
+		bool generateMipmap = true;
+		int mipmapLevels = 4;
+
+		// Material options
+		bool bumpToNormal = true;
+		int normalStrength = 5;
 	};
 }
