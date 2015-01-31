@@ -42,7 +42,7 @@ namespace AGE
 
 		EntityRepresentation &EntityRepresentation::operator=(EntityRepresentation &&o)
 		{
-			name = std::move(o.name);
+ 			name = std::move(o.name);
 			position = std::move(o.position);
 			rotation = std::move(o.rotation);
 			scale = std::move(o.scale);
