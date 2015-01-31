@@ -448,49 +448,6 @@ bool BenchmarkScene::userUpdate(double time)
 	// TODO
 	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
 	// TODO
-	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::Render::RenderDrawLists>([this](AGE::DrawableCollection &collection)
-	{
-		//renderManager->locationStorage.generateLocation(collection.lights.size() + 2);
-		//renderManager->locationStorage.setLocation(0, collection.lights.size());
-		//renderManager->locationStorage.setLocation(collection.lights.size() + 1, size_t(0));
-		//AGE::Vector<AGE::Drawable> lights;
-		//for (size_t index = 0; index < collection.lights.size(); ++index)
-		//{
-		//	AGE::Drawable drawable;
-		//
-		//	drawable.material = renderManager->getDefaultMaterial();
-		//	drawable.mesh.vertices = renderManager->getSimpleFormGeo(gl::SimpleForm::SPHERE);
-		//	drawable.mesh.indices = renderManager->getSimpleFormId(gl::SimpleForm::SPHERE);
-		//	renderManager->locationStorage.setLocation(index + 1, collection.lights[index]);
-		//	lights.push_back(drawable);
-		//}
-		//renderManager->setUniformBlock(key.global_state, 0, collection.projection);
-		//renderManager->setUniformBlock(key.global_state, 1, collection.transformation);
-		//renderManager->updatePipeline(key.getBuff.pipeline, collection.drawables);
-		//renderManager->updatePipeline(key.Accum.pipeline, lights);
-		//renderManager->drawPipelines();
-
-		// Push fibonacci task to test task pool
-		//		for (auto i = 0; i < 20; ++i)
-		//		{
-		//			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([](){
-		//				int n = rand();
-		//				int fnow = 0, fnext = 1, tempf;
-		//				while (--n > 0){
-		//					tempf = fnow + fnext;
-		//					fnow = fnext;
-		//					fnext = tempf;
-		//				}
-		//				//std::ofstream myfile;
-		//				//myfile.open(std::string(std::string("C:/Users/cesar/Desktop/trash/lol-") + std::to_string(fnext)).c_str());
-		//				//myfile << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId());
-		//				//myfile << " : " << std::to_string(fnext);
-		//				//myfile << "\n";
-		//				//myfile.close();
-		////				std::cout << AGE::Thread::threadTypeToString((AGE::Thread::ThreadType)AGE::CurrentThread()->getId()) << " : " << fnext << std::endl;
-		////				std::this_thread::sleep_for(std::chrono::milliseconds(1));
-		//			});
-		//		}
-	});
+	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::Render::RenderDrawLists>();
 	return true;
 }

@@ -6,6 +6,8 @@
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
+#include <Core/PrepareRender/RenderCamera.hh>
+#include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
 
 namespace AGE
 {
@@ -26,6 +28,7 @@ namespace AGE
 
 	public:
 		PaintingManager paintingManager;
+		std::vector<std::unique_ptr<IRenderingPipeline>> _pipelines;
 
 	private:
 		RenderThread();
@@ -40,7 +43,7 @@ namespace AGE
 		bool _run;
 
 		SdlContext *_context;
-		AGE::Vector < AGE::DrawableCollection > _drawlist;
+		AGE::Vector < AGE::RenderCamera > _drawlist;
 
 		friend class ThreadManager;
 	};

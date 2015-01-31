@@ -34,16 +34,22 @@ namespace AGE
 	struct Camera : public CullableShape<Frustum>
 	{
 		uint32_t activeCameraIdx;
+
 		glm::mat4 projection;
 	};
 
 	struct PointLight : public CullableShape<Sphere>
 	{
+		// To remove when light will be in octree
 		uint32_t activePointLightIdx;
-		glm::vec3 range;
+
+		glm::vec3 attenuation;
 		glm::vec3 color;
+
+		glm::mat4 sphereTransform;
+
 		PointLight();
-		PointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &range);
+		PointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &attenuation);
 	};
 
 	struct DrawableCollection

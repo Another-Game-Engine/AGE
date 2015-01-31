@@ -199,7 +199,7 @@ namespace AGE
 		{
 			PointLight *l = &_pointLights.get(msg.key.id);
 			l->color = msg.color;
-			l->range = msg.range;
+			l->attenuation = msg.range;
 		}
 		
 		void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)
@@ -377,13 +377,6 @@ namespace AGE
 		{
 			AGE::Vector<Cullable*> toDraw;
 
-
-			// we update animation instances
-			//auto animationManager = getDependencyManager().lock()->getInstance<AGE::AnimationManager>();
-			//animationManager->update(0.1f);
-
-
-			// Update drawable positions in Octree
 			for (uint32_t idx : _drawablesToMove)
 			{
 				Drawable *e = &_drawables.get(idx);
@@ -406,22 +399,33 @@ namespace AGE
 				// update frustum infos for culling
 				camera.shape.setMatrix(camera.projection * view);
 				_octreeDrawList.emplace_back();
-				auto &drawList = _octreeDrawList.back();
-				drawList.transformation = view;
-				drawList.projection = camera.projection;
+				auto &renderCamera = _octreeDrawList.back();
+				renderCamera.view = view;
+				renderCamera.projection = camera.projection;
 				// no culling for the lights for the moment (TODO)
 				for (uint32_t pointLightIdx : _activePointLights)
 				{
 					auto &p = _pointLights.get(pointLightIdx);
-					drawList.lights.emplace_back(p.position, p.color, p.range);
+					renderCamera.pipelines[0].pointLights.emplace_back(p.position, p.color, p.range);
 				}
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);
 				// iter on element to draw
 				for (Cullable *e : toDraw)
 				{
-					Drawable *currentDrawable = static_cast<Drawable*>(e);
-					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->transformation);
+					switch (e->key.type)
+					{
+					case PrepareKey::Type::Drawable:
+						{
+							Drawable *currentDrawable = static_cast<Drawable*>(e);
+							RenderCamera.pipelines[0].drawables.emplace_back(currentDrawable->mesh, currentDrawable->transformation);
+						}
+						break;
+					default:
+						assert(!"Type cannot be added to the ");
+						break;
+					}
+					
 				}
 			}
 			GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::CopyDrawLists>(this->_octreeDrawList);

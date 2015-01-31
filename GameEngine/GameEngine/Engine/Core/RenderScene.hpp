@@ -8,6 +8,7 @@
 #include <Entities/EntityTypedef.hpp>
 #include <SpacePartitioning/LooseOctree.hh>
 #include <Core/CullableObjects.hh>
+#include <Core/PrepareRender/RenderCamera.hh>
 #include <array>
 
 namespace AGE
@@ -82,6 +83,6 @@ namespace AGE
 		// TODO: remove active point lights and put it in the octree
 		AGE::Vector<uint32_t> _activePointLights;
 
-		AGE::Vector<DrawableCollection> _octreeDrawList;
+		AGE::Vector<RenderCamera> _octreeDrawList;
 	};
 }

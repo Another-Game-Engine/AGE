@@ -74,7 +74,7 @@ namespace AGE
 				SetPointLight(glm::vec3 const &color, glm::vec3 const &range, PrepareKey &key);
 				PrepareKey key;
 				glm::vec3 color;
-				glm::vec3 range;
+				glm::vec3 attenuation;
 			};
 
 			struct DeleteCamera

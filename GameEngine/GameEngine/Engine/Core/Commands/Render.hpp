@@ -2,13 +2,13 @@
 
 #include <functional>
 #include <Utils/Containers/Vector.hpp>
-
 #include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Core/PrepareRender/RenderCamera.hh>
+#include <AssetManagement/Instance/MaterialInstance.hh>
 
 namespace AGE
 {
 	class Engine;
-	struct DrawableCollection;
 
 	namespace Commands
 	{
@@ -24,19 +24,16 @@ namespace AGE
 
 			struct CopyDrawLists
 			{
-				AGE::Vector<AGE::DrawableCollection> list;
+				AGE::Vector<AGE::RenderCamera> list;
 				
-				CopyDrawLists(AGE::Vector<AGE::DrawableCollection> &c)
+				CopyDrawLists(AGE::Vector<AGE::RenderCamera> &c)
 					: list(std::move(c))
 				{}
 			};
 
 			struct RenderDrawLists
 			{
-				std::function<void(AGE::DrawableCollection)> function;
-				RenderDrawLists(std::function<void(AGE::DrawableCollection)> _function)
-					: function(_function)
-				{}
+				RenderDrawLists() { }
 			};
 
 			struct DrawTestTriangle
@@ -52,6 +49,19 @@ namespace AGE
 					meshes(p_meshes),
 					program(p_proram)
 				{ }
+			};
+
+			struct SetMeshMaterial
+			{
+				std::shared_ptr<MaterialSetInstance> material;
+				std::shared_ptr<MeshInstance> mesh;
+
+				SetMeshMaterial(std::shared_ptr<MaterialSetInstance> pMaterial,
+								std::shared_ptr<MeshInstance> pMesh) :
+								material(pMaterial),
+								mesh(pMesh)
+				{ }
+
 			};
 
 		};

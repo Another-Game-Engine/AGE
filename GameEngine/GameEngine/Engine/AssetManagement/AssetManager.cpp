@@ -81,7 +81,9 @@ namespace AGE
 					material->datas[i].emplace_back(std::make_shared<Diffuse>());
 					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_color(material_data.diffuse);
 					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_ratio(1.0f);
-					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(nullptr);
+					loadTexture(material_data.diffuseTexPath, loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)>([=](std::shared_ptr<ITexture> &texture) {
+						std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(std::static_pointer_cast<Texture2D>(texture));
+					}));
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, _filePath.getFullName() + std::to_string(i), futureSubMaterial);
@@ -93,7 +95,7 @@ namespace AGE
 		return (true);
 	}
 
-	bool AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)> &callback)
 	{
 		std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
 		File filePath(_assetsDirectory + _filePath.getFullName());
@@ -140,7 +142,9 @@ namespace AGE
 			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
 			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
 			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
-			_textures.insert(std::make_pair(filePath.getFullName(), std::static_pointer_cast<ITexture>(texture)));
+			std::shared_ptr<ITexture> textureInterface = std::static_pointer_cast<ITexture>(texture);
+			callback(textureInterface);
+			_textures.insert(std::make_pair(filePath.getFullName(), textureInterface));
 			return AssetsLoadingResult(true);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);

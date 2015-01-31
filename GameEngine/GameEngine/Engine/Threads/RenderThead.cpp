@@ -12,6 +12,7 @@
 #include <Core/Engine.hh>
 #include <Context/SdlContext.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
 
@@ -19,7 +20,8 @@ namespace AGE
 {
 	RenderThread::RenderThread()
 		: Thread(AGE::Thread::ThreadType::Render)
-		, _context(nullptr)
+		, _context(nullptr),
+		_pipelines({ std::make_unique<DeferredShading>(glm::vec2(1920, 1000)) })
 	{}
 
 	RenderThread::~RenderThread()
@@ -56,16 +58,12 @@ namespace AGE
 
 		registerCallback<Commands::Render::CopyDrawLists>([&](Commands::Render::CopyDrawLists& msg)
 		{
-			//this->_drawlist.insert(this->_drawlist.end(), msg.list.begin(), msg.list.end());
 			this->_drawlist = msg.list;
 		});
 
 		registerCallback<Commands::Render::RenderDrawLists>([&](Commands::Render::RenderDrawLists& msg)
 		{
-			for (auto &e : this->_drawlist)
-			{
-				msg.function(e);
-			}
+			// TODO: Code the render!!!!!
 		});
 
 		registerCallback<Commands::Render::DrawTestTriangle>([&](Commands::Render::DrawTestTriangle& msg)
@@ -101,6 +99,31 @@ namespace AGE
 			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 		});
 #endif
+
+		registerCallback<Commands::Render::SetMeshMaterial>([&](Commands::Render::SetMeshMaterial& msg)
+		{
+			for (auto &subMesh : msg.mesh->subMeshs)
+			{
+				auto vertices = paintingManager.get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
+				assert(vertices != nullptr);
+				if (subMesh.defaultMaterialIndex >= msg.material->datas.size())
+				{
+					for (auto &prop : msg.material->datas[0])
+					{
+						prop->set_program(_pipelines[0]->get_programs());
+						vertices->add_property(prop);
+					}
+				}
+				else
+				{
+					for (auto &prop : msg.material->datas[subMesh.defaultMaterialIndex])
+					{
+						prop->set_program(_pipelines[0]->get_programs());
+						vertices->add_property(prop);
+					}
+				}
+			}
+		});
 
 		return true;
 	}

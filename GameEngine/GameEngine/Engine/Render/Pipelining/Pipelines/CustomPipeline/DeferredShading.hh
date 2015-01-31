@@ -17,12 +17,12 @@ namespace AGE
 		};
 
 	public:
-		DeferredShading(glm::mat4 const &perspective, glm::vec2 const &screen_size);
+		DeferredShading(glm::vec2 const &screen_size);
 		DeferredShading(DeferredShading &&move);
 		virtual ~DeferredShading() {}
 
 	public:
-		virtual IRenderingPipeline &render(std::vector<AGE::Drawable> const &to_render, PaintingManager const &paintingManager) override final;
+		virtual IRenderingPipeline &render(ARGS_FUNCTION_RENDER) override final;
 
 	private:
 	};

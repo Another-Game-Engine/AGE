@@ -16,7 +16,7 @@
 namespace AGE
 {
 
-	DeferredShading::DeferredShading(glm::mat4 const &perspective, glm::vec2 const &screen_size) :
+	DeferredShading::DeferredShading(glm::vec2 const &screen_size) :
 		ARenderingPipeline(std::string("deferred shading"))
 	{
 		_programs.resize(TOTAL);
@@ -54,7 +54,7 @@ namespace AGE
 
 	}
 
-	IRenderingPipeline & DeferredShading::render(std::vector<AGE::Drawable> const &to_render, PaintingManager const &paintingManager)
+	IRenderingPipeline & DeferredShading::render(ARGS_FUNCTION_RENDER)
 	{
 		return (*this);
 	}
