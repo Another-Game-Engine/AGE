@@ -9,6 +9,7 @@
 #include <Threads/PrepareRenderThread.hpp>
 namespace AGE
 {
+
 	namespace Component
 	{
 		MeshRenderer::MeshRenderer() :
@@ -16,7 +17,7 @@ namespace AGE
 			_scene(nullptr)
 			, _serializationInfos(nullptr)
 		{
-			}
+		}
 
 		MeshRenderer::~MeshRenderer(void)
 		{
@@ -86,7 +87,6 @@ namespace AGE
 		void MeshRenderer::updateGeometry()
 		{
 			assert(_scene != nullptr);
-
 			if (this->_mesh == nullptr || this->_material == nullptr)
 				return;
 			AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs);
@@ -109,4 +109,5 @@ namespace AGE
 			}
 		}
 	}
+
 }

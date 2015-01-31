@@ -4,8 +4,7 @@
 namespace AGE
 {
 
-	Drawable::Drawable() :
-		meshAABB(glm::vec3(-1), glm::vec3(1))
+	Drawable::Drawable()
 	{
 	}
 

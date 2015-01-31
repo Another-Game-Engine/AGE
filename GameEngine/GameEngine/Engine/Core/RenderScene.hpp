@@ -6,7 +6,7 @@
 #include <Core/Commands/MainToPrepare.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Entities/EntityTypedef.hpp>
-#include <Core/LooseOctree.hh>
+#include <SpacePartitioning/LooseOctree.hh>
 #include <Core/CullableObjects.hh>
 #include <array>
 
@@ -43,7 +43,7 @@ namespace AGE
 		void _setScale(AGE::Commands::MainToPrepare::SetScale &msg);
 		void _setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg);
 		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
-		DRAWABLE_ID _addDrawable();
+
 	public:
 		PrepareKey addMesh();
 		PrepareKey addCamera();

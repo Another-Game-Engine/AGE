@@ -1,5 +1,4 @@
-
-#include <Core/LooseOctree.hh>
+#include <SpacePartitioning/LooseOctree.hh>
 
 namespace AGE
 {
@@ -16,17 +15,17 @@ namespace AGE
 		_nodesPool.dealloc(_root);
 	}
 
-	void LooseOctree::addElement(CullableBoundingBox *toAdd)
+	void LooseOctree::addElement(CullableShape<AABoundingBox> *toAdd)
 	{
 		_root = LooseOctreeNode::addElement(_root, *this, toAdd);
 	}
 
-	void LooseOctree::removeElement(CullableBoundingBox *toRm)
+	void LooseOctree::removeElement(CullableShape<AABoundingBox> *toRm)
 	{
 		LooseOctreeNode::removeElementFromNode(toRm->currentNode, *this, toRm);
 	}
 
-	void LooseOctree::moveElement(CullableBoundingBox *toMv)
+	void LooseOctree::moveElement(CullableShape<AABoundingBox> *toMv)
 	{
 		uint32_t newRoot = LooseOctreeNode::moveElementFromNode(toMv->currentNode, *this, toMv);
 
@@ -34,7 +33,7 @@ namespace AGE
 			_root = newRoot;
 	}
 
-	void LooseOctree::getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill)
+	void LooseOctree::getElementsCollide(CullableShape<Frustum> *toTest, AGE::Vector<Cullable *> &toFill)
 	{
 		_nodesPool.get(_root).getElementsCollide(*this, toTest, toFill);
 	}
@@ -70,7 +69,7 @@ namespace AGE
 		return (_elementsPool);
 	}
 
-	CullableObject *LooseOctree::getElementFromPool(PrepareKey const &key) const
+	Cullable *LooseOctree::getElementFromPool(PrepareKey const &key) const
 	{
 		switch (key.type)
 		{

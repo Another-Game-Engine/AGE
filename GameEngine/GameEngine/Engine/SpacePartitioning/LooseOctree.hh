@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Core/CullableObjects.hh>
-#include <Core/LooseOctreeNode.hh>
+#include <SpacePartitioning/LooseOctreeNode.hh>
 #include <Utils/MemoryPool.hpp>
 
 namespace AGE
@@ -12,10 +12,10 @@ namespace AGE
 		LooseOctree(MemoryPool<Drawable> &drawables, MemoryPool<PointLight> &pointLights);
 		~LooseOctree();
 
-		void addElement(CullableBoundingBox *toAdd);
-		void removeElement(CullableBoundingBox *toRm);
-		void moveElement(CullableBoundingBox *toMv);
-		void getElementsCollide(CullableFrustum *toTest, AGE::Vector<CullableObject *> &toFill);
+		void addElement(CullableShape<AABoundingBox> *toAdd);
+		void removeElement(CullableShape<AABoundingBox> *toRm);
+		void moveElement(CullableShape<AABoundingBox> *toMv);
+		void getElementsCollide(CullableShape<Frustum> *toTest, AGE::Vector<Cullable *> &toFill);
 		void cleanOctree();
 
 		MemoryPool<LooseOctreeNode> &getNodePool();
@@ -24,7 +24,7 @@ namespace AGE
 		MemoryPool<SOctreeElement> &getElementPool();
 		MemoryPool<SOctreeElement> const &getElementPool() const;
 
-		CullableObject *getElementFromPool(PrepareKey const &key) const;
+		Cullable *getElementFromPool(PrepareKey const &key) const;
 
 	private:
 		LooseOctree();

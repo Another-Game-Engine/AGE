@@ -1,8 +1,11 @@
 #pragma once
 
-#include <Core/CullableInterfaces.hh>
 #include <Skinning/AnimationInstance.hpp>
 #include <AssetManagement/Instance/MeshInstance.hh>
+#include <Utils/Frustum.hh>
+#include <Utils/Sphere.hh>
+#include <Utils/AABoundingBox.hh>
+#include <SpacePartitioning/Cullable/CullableShape.hh>
 
 namespace AGE
 {
@@ -12,15 +15,12 @@ namespace AGE
 	struct Mesh : public PreparableObject
 	{
 		AGE::Vector<DRAWABLE_ID> drawableCollection;
-		USER_OBJECT_ID id;
 	};
 
-	struct Drawable : public CullableBoundingBox
+	struct Drawable : public CullableShape<AABoundingBox>
 	{
-		DRAWABLE_ID id;
 		SubMeshInstance mesh;
 		glm::mat4 transformation;
-		AABoundingBox		meshAABB;
 		Key<AGE::AnimationInstance> animation;
 		std::vector<glm::mat4> bones; // we'll have to find a optimized solution than copy vector of mat4 oO
 		void reset();
@@ -31,13 +31,13 @@ namespace AGE
 		Drawable(const SubMeshInstance &_m, const glm::mat4 &_t, const std::vector<glm::mat4> &_bones);
 	};
 
-	struct Camera : public CullableFrustum
+	struct Camera : public CullableShape<Frustum>
 	{
 		uint32_t activeCameraIdx;
 		glm::mat4 projection;
 	};
 
-	struct PointLight : public CullableSphere
+	struct PointLight : public CullableShape<Sphere>
 	{
 		uint32_t activePointLightIdx;
 		glm::vec3 range;

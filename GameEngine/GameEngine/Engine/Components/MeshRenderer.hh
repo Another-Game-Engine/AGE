@@ -10,11 +10,13 @@
 
 namespace AGE
 {
+
 	struct MeshInstance;
 	struct MaterialSetInstance;
 	struct PrepareKey;
 	struct AnimationInstance;
 	class AScene;
+
 	namespace Component
 	{
 		struct MeshRenderer : public Component::ComponentBase < MeshRenderer >
@@ -85,4 +87,5 @@ namespace AGE
 			ar(_serializationInfos);
 		}
 	}
+
 }

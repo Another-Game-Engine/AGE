@@ -1,8 +1,8 @@
-#include "RenderScene.hpp"
+#include <Core/RenderScene.hpp>
+#include <Core/Commands/Render.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
-#include <Core/Commands/Render.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -140,13 +140,6 @@ namespace AGE
 		return (*this);
 	}
 
-	DRAWABLE_ID RenderScene::_addDrawable()
-	{
-		DRAWABLE_ID res = _drawables.alloc();
-		_drawables.get(res).id = res;
-		return res;
-	}
-
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
 		Drawable &toRm = _drawables.get(id);
@@ -250,7 +243,7 @@ namespace AGE
 			uo->drawableCollection.clear();
 			for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
 			{
-				uint32_t id = _addDrawable();
+				uint32_t id = _drawables.alloc();
 				Drawable &added = _drawables.get(id);
 
 				uo->drawableCollection.push_back(id);
@@ -268,14 +261,12 @@ namespace AGE
 				added.position = uo->position;
 				added.orientation = uo->orientation;
 				added.scale = uo->scale;
-				added.meshAABB = msg.submeshInstances[i].boundingBox;
 //				added.animation = msg.animation;
 				added.currentNode = UNDEFINED_IDX;
 				added.transformation = glm::scale(glm::translate(glm::mat4(1),
 															added.position) * glm::toMat4(added.orientation),
 															added.scale);
-				added.currentAABB.fromTransformedBox(added.meshAABB, added.transformation);
-				added.previousAABB = added.currentAABB;
+				added.shape.fromTransformedBox(added.mesh.boundingBox, added.transformation);
 				added.hasMoved = false;
 				_octree.addElement(&added);
 				assert(added.currentNode != UNDEFINED_IDX);
@@ -384,7 +375,7 @@ namespace AGE
 		
 		void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
 		{
-			AGE::Vector<CullableObject*> toDraw;
+			AGE::Vector<Cullable*> toDraw;
 
 
 			// we update animation instances
@@ -398,66 +389,41 @@ namespace AGE
 				Drawable *e = &_drawables.get(idx);
 				assert(e->currentNode != UNDEFINED_IDX);
 				e->hasMoved = false;
-				e->previousAABB = e->currentAABB;
 				e->transformation = glm::scale(glm::translate(glm::mat4(1), e->position) * glm::toMat4(e->orientation), e->scale);
-				e->currentAABB.fromTransformedBox(e->meshAABB, e->transformation);
+				e->shape.fromTransformedBox(e->mesh.boundingBox, e->transformation);
 				_octree.moveElement(e);
 				assert(e->currentNode != UNDEFINED_IDX);
 			}
 			_drawablesToMove.clear();
 			// Do culling for each camera
 			_octreeDrawList.clear();
-
 			// clean empty nodes
 			_octree.cleanOctree();
-
 			for (uint32_t cameraIdx : _activeCameras)
 			{
 				Camera &camera = _cameras.get(cameraIdx);
-				
 				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
-
 				// update frustum infos for culling
-				camera.currentFrustum.setMatrix(camera.projection * view);
-
+				camera.shape.setMatrix(camera.projection * view);
 				_octreeDrawList.emplace_back();
 				auto &drawList = _octreeDrawList.back();
 				drawList.transformation = view;
 				drawList.projection = camera.projection;
-
 				// no culling for the lights for the moment (TODO)
 				for (uint32_t pointLightIdx : _activePointLights)
 				{
 					auto &p = _pointLights.get(pointLightIdx);
 					drawList.lights.emplace_back(p.position, p.color, p.range);
 				}
-
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);
-
 				// iter on element to draw
-				for (CullableObject *e : toDraw)
+				for (Cullable *e : toDraw)
 				{
-					// all the elements are drawable for the moment (TODO)
-					Drawable *currentDrawable = dynamic_cast<Drawable*>(e);
-					//if (!currentDrawable->animation.empty())
-					//{
-					//	drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->material, currentDrawable->transformation, animationManager->getBones(currentDrawable->animation));
-					//	drawList.drawables.back().animation = currentDrawable->animation;
-					//}
-					//else
-					//{
-						drawList.drawables.emplace_back(currentDrawable->mesh, /*currentDrawable->material, */currentDrawable->transformation);
-					//}
-//						if (!currentDrawable->material)
-//						{
-//							std::cout << "Material fail!" << std::endl;
-//							assert(false);
-//						}
+					Drawable *currentDrawable = static_cast<Drawable*>(e);
+					drawList.drawables.emplace_back(currentDrawable->mesh, currentDrawable->transformation);
 				}
 			}
-			//getDependencyManager().lock()->getInstance<AGE::AnimationManager>()->update(0.1f);
-
 			GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::CopyDrawLists>(this->_octreeDrawList);
 		}
 

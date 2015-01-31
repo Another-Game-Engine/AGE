@@ -1,7 +1,8 @@
-
-#include <Core/LooseOctreeNode.hh>
-#include <Core/LooseOctree.hh>
-#include <Core/CullableObjects.hh>
+#include <SpacePartitioning/LooseOctreeNode.hh>
+#include <SpacePartitioning/LooseOctree.hh>
+#include <SpacePartitioning/Cullable/CullableShape.hh>
+#include <SpacePartitioning/Cullable/Cullable.hh>
+#include <Utils/Frustum.hh>
 
 namespace AGE
 {
@@ -21,16 +22,16 @@ namespace AGE
 	{
 	}
 
-	uint32_t LooseOctreeNode::addElement(POOL_NODE_ARGS, CullableBoundingBox *toAdd)
+	uint32_t LooseOctreeNode::addElement(POOL_NODE_ARGS, CullableShape<AABoundingBox> *toAdd)
 	{
 		CREATE_THIS_PTR
 		glm::i8vec3	direction;
 		bool collisionState;
 		glm::vec3 objectDimensions;
 
-		collisionState = thisPtr->_node.checkPointIn(toAdd->currentAABB.center);
-		direction = thisPtr->_node.getDirection(toAdd->currentAABB.center);
-		objectDimensions = toAdd->currentAABB.maxPoint - toAdd->currentAABB.minPoint;
+		collisionState = thisPtr->_node.checkPointIn(toAdd->shape.center);
+		direction = thisPtr->_node.getDirection(toAdd->shape.center);
+		objectDimensions = toAdd->shape.maxPoint - toAdd->shape.minPoint;
 		// if the center is in the loose node
 		if (collisionState == true)
 		{
@@ -71,11 +72,11 @@ namespace AGE
 		return (UNDEFINED_IDX);
 	}
 
-	void LooseOctreeNode::addElementRecursive(POOL_NODE_ARGS, CullableBoundingBox *toAdd)
+	void LooseOctreeNode::addElementRecursive(POOL_NODE_ARGS, CullableShape<AABoundingBox> *toAdd)
 	{
 		CREATE_THIS_PTR
-		glm::i8vec3	direction = thisPtr->_node.getDirection(toAdd->currentAABB.center);
-		glm::vec3 objectDimensions = toAdd->currentAABB.maxPoint - toAdd->currentAABB.minPoint;
+			glm::i8vec3	direction = thisPtr->_node.getDirection(toAdd->shape.center);
+		glm::vec3 objectDimensions = toAdd->shape.maxPoint - toAdd->shape.minPoint;
 
 		glm::vec3 nodeSize = thisPtr->_node.maxPoint - thisPtr->_node.minPoint;
 		glm::vec3 halfNodeSize = nodeSize / 2.0f;
@@ -103,17 +104,17 @@ namespace AGE
 		}
 	}
 
-	void		LooseOctreeNode::getElementsCollide(LooseOctree &manager, CullableFrustum *toTest, AGE::Vector<CullableObject*> &toFill) const
+	void		LooseOctreeNode::getElementsCollide(LooseOctree &manager, CullableShape<Frustum> *toTest, AGE::Vector<Cullable*> &toFill) const
 	{
 		assert(_uniqueSubElements != 0);
 		bool collisionState;
 
-		collisionState = toTest->currentFrustum.checkCollision(_looseNode);
+		collisionState = toTest->shape.checkCollision(_looseNode);
 		if (collisionState)
 		{
 			uint32_t curElementIdx = _firstElement;
 			SOctreeElement *curElement;
-			CullableObject *curObject;
+			Cullable *curObject;
 
 			while (curElementIdx != UNDEFINED_IDX)
 			{
@@ -178,7 +179,7 @@ namespace AGE
 		return (UNDEFINED_IDX);
 	}
 
-	uint32_t LooseOctreeNode::extendNode(POOL_NODE_ARGS, CullableBoundingBox *toAdd, glm::i8vec3 const &direction)
+	uint32_t LooseOctreeNode::extendNode(POOL_NODE_ARGS, CullableShape<AABoundingBox> *toAdd, glm::i8vec3 const &direction)
 	{
 		uint32_t newRootIdx = manager.getNodePool().alloc();
 		LooseOctreeNode	*newRoot = &manager.getNodePool().get(newRootIdx);
@@ -274,7 +275,7 @@ namespace AGE
 		_looseNode.recomputeCenter();
 	}
 
-	void LooseOctreeNode::removeElementFromNode(POOL_NODE_ARGS, CullableBoundingBox *toRm)
+	void LooseOctreeNode::removeElementFromNode(POOL_NODE_ARGS, CullableShape<AABoundingBox> *toRm)
 	{
 		CREATE_THIS_PTR
 		// remove the element from the node
@@ -295,7 +296,7 @@ namespace AGE
 		toRm->currentNode = UNDEFINED_IDX;
 	}
 
-	uint32_t LooseOctreeNode::moveElementFromNode(POOL_NODE_ARGS, CullableBoundingBox *toMv)
+	uint32_t LooseOctreeNode::moveElementFromNode(POOL_NODE_ARGS, CullableShape<AABoundingBox> *toMv)
 	{
 		CREATE_THIS_PTR
 		glm::vec3 nodeSize = thisPtr->_node.maxPoint - thisPtr->_node.minPoint;
@@ -304,15 +305,15 @@ namespace AGE
 		bool currentCollisionState;
 		glm::vec3 currentObjectDimensions;
 
-		currentCollisionState = thisPtr->_node.checkPointIn(toMv->currentAABB.center);
-		currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
+		currentCollisionState = thisPtr->_node.checkPointIn(toMv->shape.center);
+		currentObjectDimensions = toMv->shape.maxPoint - toMv->shape.minPoint;
 
 		if (currentCollisionState &&
 			glm::all(glm::greaterThan(nodeSize, currentObjectDimensions)))
 		{
 			if (glm::all(glm::greaterThan(halfNodeSize, currentObjectDimensions)))
 			{
-				glm::i8vec3	direction = thisPtr->_node.getDirection(toMv->currentAABB.center);
+				glm::i8vec3	direction = thisPtr->_node.getDirection(toMv->shape.center);
 				uint32_t sonIdx = (direction.x == 1 ? 4 : 0) +
 								(direction.y == 1 ? 2 : 0) +
 								(direction.z == 1 ? 1 : 0);
@@ -348,8 +349,8 @@ namespace AGE
 
 			glm::vec3 nodeSize = currentNode->_node.maxPoint - currentNode->_node.minPoint;
 
-			currentCollisionState = currentNode->_node.checkPointIn(toMv->currentAABB.center);
-			currentObjectDimensions = toMv->currentAABB.maxPoint - toMv->currentAABB.minPoint;
+			currentCollisionState = currentNode->_node.checkPointIn(toMv->shape.center);
+			currentObjectDimensions = toMv->shape.maxPoint - toMv->shape.minPoint;
 
 			--currentNode->_uniqueSubElements;
 
@@ -411,7 +412,7 @@ namespace AGE
 		manager.getNodePool().dealloc(thisIdx);
 	}
 
-	void LooseOctreeNode::addElementToList(LooseOctree &manager, CullableObject *toAdd)
+	void LooseOctreeNode::addElementToList(LooseOctree &manager, Cullable *toAdd)
 	{
 		++_nbrElements;
 		uint32_t elementIdx = manager.getElementPool().alloc();
@@ -426,7 +427,7 @@ namespace AGE
 		toAdd->currentElementInNode = elementIdx;
 	}
 
-	void LooseOctreeNode::removeElementFromList(LooseOctree &manager, CullableObject *toRm)
+	void LooseOctreeNode::removeElementFromList(LooseOctree &manager, Cullable *toRm)
 	{
 		--_nbrElements;
 		SOctreeElement &removed = manager.getElementPool().get(toRm->currentElementInNode);
