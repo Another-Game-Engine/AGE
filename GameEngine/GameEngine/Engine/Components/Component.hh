@@ -1,5 +1,7 @@
 #pragma once
 
+#define EDITOR_ENABLED
+
 #include <string>
 #include <Entities/Entity.hh>
 
@@ -36,6 +38,14 @@ namespace AGE
 			{
 				_serialize(ar, dependecyInjector);
 			}
+
+#ifdef EDITOR_ENABLED
+			virtual void editorCreate(AScene *scene){}
+			virtual void editorDelete(AScene *scene){}
+			virtual void editorUpdate(AScene *scene){}
+			bool exposedInEditor = true;
+			bool deletableInEditor = true;
+#endif
 
 		protected:
 			static unsigned short uniqueId()

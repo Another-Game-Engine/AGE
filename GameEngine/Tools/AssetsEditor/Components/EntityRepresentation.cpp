@@ -7,7 +7,9 @@ namespace AGE
 	{
 		EntityRepresentation::EntityRepresentation()
 		{
-
+#ifdef EDITOR_ENABLED
+			exposedInEditor = false;
+#endif
 		}
 
 		EntityRepresentation::~EntityRepresentation()
@@ -17,6 +19,9 @@ namespace AGE
 
 		void EntityRepresentation::init(AScene *s, const char *_name)
 		{
+#ifdef EDITOR_ENABLED
+			exposedInEditor = false;
+#endif
 			if (_name)
 			{
 				auto i = 0;
@@ -38,12 +43,19 @@ namespace AGE
 		EntityRepresentation &EntityRepresentation::operator=(EntityRepresentation &&o)
 		{
 			name = std::move(o.name);
+			position = std::move(o.position);
+			rotation = std::move(o.rotation);
+			scale = std::move(o.scale);
 			return *this;
 		}
 
 		EntityRepresentation::EntityRepresentation(EntityRepresentation &&o)
+			: ComponentBase<EntityRepresentation>(std::move(o))
 		{
-			*this = std::move(o);
+			name = std::move(o.name);
+			position = std::move(o.position);
+			rotation = std::move(o.rotation);
+			scale = std::move(o.scale);
 		}
 	}
 }

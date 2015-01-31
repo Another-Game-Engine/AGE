@@ -246,6 +246,19 @@ namespace AGE
 		return this->_componentsManagers[componentId]->getComponentPtr(entity);
 	}
 
+	bool AScene::removeComponent(Entity &entity, COMPONENT_ID componentId)
+	{
+		auto &e = _pool[entity.id];
+		if (e.entity != entity)
+			return false;
+		if (!e.barcode.hasComponent(componentId))
+			return false;
+		this->_componentsManagers[componentId]->removeComponent(entity);
+		e.barcode.unsetComponent(componentId);
+		informFiltersComponentDeletion(componentId, e);
+		return true;
+	}
+
 	bool AScene::hasComponent(const Entity &entity, COMPONENT_ID componentId)
 	{
 		auto &e = _pool[entity.id];

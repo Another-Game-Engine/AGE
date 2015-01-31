@@ -305,6 +305,7 @@ namespace AGE
 
 		Component::Base *getComponent(const Entity &entity, COMPONENT_ID componentId);
 		bool hasComponent(const Entity &entity, COMPONENT_ID componentId);
+		bool removeComponent(Entity &entity, COMPONENT_ID componentId);
 		std::size_t getComponentHash(COMPONENT_ID componentId);
 
 		template <typename T>

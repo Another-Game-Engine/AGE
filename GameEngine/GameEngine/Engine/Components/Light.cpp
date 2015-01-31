@@ -5,6 +5,10 @@
 #include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
 
+#ifdef EDITOR_ENABLED
+#include <imgui\imgui.h>
+#include <glm/gtc/type_ptr.hpp>
+#endif
 namespace AGE
 {
 	namespace Component
@@ -88,6 +92,24 @@ namespace AGE
 		{
 			init(scene);
 			set(_color, _range);
+		}
+
+		void PointLight::editorCreate(AScene *scene)
+		{}
+
+		void PointLight::editorDelete(AScene *scene)
+		{}
+
+		void PointLight::editorUpdate(AScene *scene)
+		{
+			if(ImGui::SliderFloat3("Color", glm::value_ptr(_color), 0.0f, 1.0f))
+			{
+				set(_color, _range);
+			}
+			if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1000.0f))
+			{
+				set(_color, _range);
+			}
 		}
 	}
 }

@@ -30,6 +30,13 @@ namespace AGE
 			inline float *getColorPtr() { return &_color.x; }
 			inline float *getRangePtr() { return &_range.x; }
 			virtual void postUnserialization(AScene *scene);
+
+#ifdef EDITOR_ENABLED
+			virtual void editorCreate(AScene *scene);
+			virtual void editorDelete(AScene *scene);
+			virtual void editorUpdate(AScene *scene);
+#endif
+
 		private:
 			AGE::PrepareKey _key;
 			AScene *_scene;

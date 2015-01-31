@@ -130,12 +130,12 @@ namespace AGE
 
 		virtual void reorder()
 		{
-			if (!_reorder)
-				return;
-			if (_size <= 1)
-				return;
-			quicksort(0, int(_size - 1));
-			this->_reorder = false;
+			//if (!_reorder)
+			//	return;
+			//if (_size <= 1)
+			//	return;
+			//quicksort(0, int(_size - 1));
+			//this->_reorder = false;
 		}
 
 		virtual Component::Base *getComponentPtr(const Entity &e)

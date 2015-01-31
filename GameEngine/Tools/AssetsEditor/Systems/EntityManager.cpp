@@ -3,6 +3,9 @@
 #include <Components/EntityRepresentation.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+//FOR TEST ! TO REMOVE
+#include <Components/Light.hh>
+
 namespace AGE
 {
 	namespace WE
@@ -26,7 +29,7 @@ namespace AGE
 				float t = static_cast<float>(time);
 				auto scene = _scene.lock();
 				EntityFilter::Lock lock(_filter);
-				for (auto &e : _filter.getCollection())
+				for (auto e : _filter.getCollection())
 				{
 					auto cpt = scene->getComponent<AGE::WE::EntityRepresentation>(e);
 					if (ImGui::TreeNode((void*)(cpt), cpt->name.data()))
@@ -47,6 +50,32 @@ namespace AGE
 							scene->getLink(e)->setScale(cpt->scale);
 						}
 
+						for (COMPONENT_ID i = 0; i < MAX_CPT_NUMBER; ++i)
+						{
+							if (scene->hasComponent(e, i))
+							{
+								auto ptr = scene->getComponent(e, i);
+								if (ptr->exposedInEditor)
+								{
+									if (ImGui::TreeNode("Component Name TODO"))
+									{
+										ptr->editorUpdate(scene.get());
+										if (ptr->deletableInEditor)
+										{
+											ImGui::PushID(i);
+											if (ImGui::Button("Delete"))
+											{
+												ptr->editorDelete(scene.get());
+												scene->removeComponent(e, i);
+											}
+											ImGui::PopID();
+										}
+										ImGui::TreePop();
+									}
+								}
+							}
+						}
+
 						ImGui::TreePop();
 					}
 					//ImGui::TreeNode(e)
@@ -62,7 +91,10 @@ namespace AGE
 				}));
 
 				for (auto i = 0; i < 30; ++i)
-					_scene.lock()->createEntity();
+				{
+					auto e = _scene.lock()->createEntity();
+					_scene.lock()->addComponent<Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
+				}
 				return true;
 			}
 	}
