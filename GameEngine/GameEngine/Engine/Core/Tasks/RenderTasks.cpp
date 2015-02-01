@@ -1,4 +1,4 @@
-#include "Render.hpp"
+#include <Core/Tasks/RenderTasks.hpp>
 #include <glm/glm.hpp>
 
 namespace AGE
@@ -10,5 +10,14 @@ namespace AGE
 			: size(_size)
 		{}
 		Render::CreateRenderContext::CreateRenderContext(std::weak_ptr<Engine> _engine) : engine(_engine){}
+
+		Render::SetMeshTransform::SetMeshTransform(Key<Painter> pPainter, Key<Vertices> pMesh,
+			Key<Property> pTransform, glm::mat4 pTransformMat) :
+			painter(pPainter),
+			mesh(pMesh),
+			transform(pTransform),
+			transformMat(pTransformMat)
+		{ }
+
 	}
 }

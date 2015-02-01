@@ -1,5 +1,6 @@
 #include <Core/RenderScene.hpp>
-#include <Core/Commands/Render.hpp>
+#include <Core/Commands/RenderCommands.hpp>
+#include <Core/Tasks/RenderTasks.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
@@ -261,12 +262,6 @@ namespace AGE
 				added.key.id = id;
 
 				added.mesh = msg.submeshInstances[i];
-//				added.material = msg.materialInstances[i];
-//				if (!msg.materialInstances[i])
-//				{
-//					std::cout << "lolkillme";
-//					assert(false);
-//				}
 				added.position = uo->position;
 				added.orientation = uo->orientation;
 				added.scale = uo->scale;
@@ -398,6 +393,7 @@ namespace AGE
 				e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 				e.shape.fromTransformedBox(e.mesh.boundingBox, e.transformation);
 				_octree.moveElement(&e);
+				AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.mesh.vertices, e.mesh.transformation, e.transformation);
 				assert(e.currentNode != UNDEFINED_IDX);
 			}
 			for (uint32_t idx : _pointLightsToMove)

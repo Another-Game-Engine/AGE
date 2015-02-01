@@ -2,8 +2,8 @@
 #include <Core/Engine.hh>
 #include <Context/SdlContext.hh>
 #include <Utils/ThreadName.hpp>
-#include <Core/Tasks/Render.hpp>
-#include <Core/Commands/Render.hpp>
+#include <Core/Tasks/RenderTasks.hpp>
+#include <Core/Commands/RenderCommands.hpp>
 #include <Context/SdlContext.hh>
 #include <Utils/Containers/Vector.hpp>
 #include <Core/CullableObjects.hh>
@@ -15,21 +15,24 @@
 #include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
+#include <Render/Properties/Transformation.hh>
 
 namespace AGE
 {
 	RenderThread::RenderThread()
 		: Thread(AGE::Thread::ThreadType::Render)
 		, _context(nullptr),
-		_pipelines({ std::make_unique<DeferredShading>(glm::vec2(1920, 1000)) })
-	{}
+		_pipelines(1)
+	{
+		_pipelines[0] = std::make_unique<DeferredShading>(glm::vec2(1920, 1000));
+	}
 
 	RenderThread::~RenderThread()
 	{}
 
 	bool RenderThread::init()
 	{
-		this->registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
+		registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
 			_context = msg.engine.lock()->setInstance<SdlContext, IRenderContext>();
 			if (!_context->init(0, 1920, 1000, "~AGE~ V0.00001 Demo"))
@@ -44,6 +47,16 @@ namespace AGE
 		{
 			_context->swapContext();
 			glClear(GL_COLOR_BUFFER_BIT);
+		});
+
+		registerCallback<Tasks::Render::SetMeshTransform>([&](Tasks::Render::SetMeshTransform &msg)
+		{
+			auto painter = paintingManager.get_painter(msg.painter);
+			auto vertices = painter->get_vertices(msg.mesh);
+			auto property = vertices->get_property<Transformation>(msg.transform);
+			
+			assert(property != nullptr);
+			*property = msg.transformMat;
 		});
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
@@ -100,7 +113,7 @@ namespace AGE
 		});
 #endif
 
-		registerCallback<Commands::Render::SetMeshMaterial>([&](Commands::Render::SetMeshMaterial& msg)
+		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
 		{
 			for (auto &subMesh : msg.mesh->subMeshs)
 			{

@@ -4,10 +4,11 @@
 #include "QueuePusher.hpp"
 #include "QueueOwner.hpp"
 #include <Utils/Containers/Vector.hpp>
-#include <memory>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 #include <Core/PrepareRender/RenderCamera.hh>
 #include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
+#include <memory>
+#include <vector>
 
 namespace AGE
 {

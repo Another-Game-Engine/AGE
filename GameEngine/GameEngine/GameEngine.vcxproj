@@ -291,7 +291,7 @@
     <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\QueuePusher.cpp" />
-    <ClCompile Include="Engine\Threads\RenderThead.cpp" />
+    <ClCompile Include="Engine\Threads\RenderThread.cpp" />
     <ClCompile Include="Engine\Threads\TaskThread.cpp" />
     <ClCompile Include="Engine\Threads\Thread.cpp" />
     <ClCompile Include="Engine\Threads\ThreadManager.cpp" />
@@ -350,7 +350,7 @@
     <ClInclude Include="Engine\AssetManagement\Instance\MeshInstance.hh" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Configuration.hpp" />
-    <ClInclude Include="Engine\Core\Commands\Render.hpp" />
+    <ClInclude Include="Engine\Core\Commands\RenderCommands.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Instance\MeshInstance.hh" />
@@ -401,7 +401,7 @@
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
-    <ClInclude Include="Engine\Core\Tasks\Render.hpp" />
+    <ClInclude Include="Engine\Core\Tasks\RenderTasks.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
     <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />

@@ -7,9 +7,9 @@
 #include <Threads/RenderThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Core/Commands/MainToPrepare.hpp>
-#include <Core/Commands/Render.hpp>
+#include <Core/Commands/RenderCommands.hpp>
 #include <Core/Tasks/Basics.hpp>
-#include <Core/Tasks/Render.hpp>
+#include <Core/Tasks/RenderTasks.hpp>
 #include <glm/glm.hpp>
 #include <SDL/SDL.h>
 #include <Threads/TaskScheduler.hpp>

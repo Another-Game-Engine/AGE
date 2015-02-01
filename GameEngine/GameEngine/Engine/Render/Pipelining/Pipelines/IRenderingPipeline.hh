@@ -18,6 +18,7 @@ namespace AGE
 	class IRenderingPipeline
 	{
 	public:
+		IRenderingPipeline(IRenderingPipeline const &oth) = delete;
 		virtual ~IRenderingPipeline() {}
 		virtual std::vector<std::shared_ptr<IRendering>> const &get_rendering() const = 0;
 		virtual std::string const &name() const = 0;

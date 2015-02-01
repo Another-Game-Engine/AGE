@@ -67,7 +67,6 @@
     <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\QueuePusher.cpp" />
-    <ClCompile Include="Engine\Threads\RenderThead.cpp" />
     <ClCompile Include="Engine\Threads\TaskThread.cpp" />
     <ClCompile Include="Engine\Threads\Thread.cpp" />
     <ClCompile Include="Engine\Threads\ThreadManager.cpp" />
@@ -118,6 +117,7 @@
     <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\Cullable\Cullable.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
+    <ClCompile Include="Engine\Threads\RenderThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -131,7 +131,6 @@
     <ClInclude Include="Engine\AssetManagement\Instance\MeshInstance.hh" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Configuration.hpp" />
-    <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Instance\MeshInstance.hh" />
@@ -176,7 +175,6 @@
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
-    <ClInclude Include="Engine\Core\Tasks\Render.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
     <ClInclude Include="Engine\Core\CullableObjects.hh" />
     <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />
@@ -317,6 +315,8 @@
     <ClInclude Include="Engine\SpacePartitioning\Cullable\Cullable.hh" />
     <ClInclude Include="Engine\SpacePartitioning\Cullable\CullableShape.hh" />
     <ClInclude Include="Engine\Core\PrepareRender\RenderCamera.hh" />
+    <ClInclude Include="Engine\Core\Tasks\RenderTasks.hpp" />
+    <ClInclude Include="Engine\Core\Commands\RenderCommands.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

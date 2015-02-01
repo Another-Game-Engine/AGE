@@ -49,10 +49,10 @@ namespace AGE
 				: key(key)
 			{}
 
-			SetPointLight::SetPointLight(glm::vec3 const &color, glm::vec3 const &range, PrepareKey &key)
+			SetPointLight::SetPointLight(glm::vec3 const &color, glm::vec3 const &attenuation, PrepareKey &key)
 				: key(key),
 				color(color),
-				range(range)
+				attenuation(attenuation)
 			{}
 
 			DeleteCamera::DeleteCamera(const PrepareKey &_key)

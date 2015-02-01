@@ -35,6 +35,6 @@ namespace AGE
 		glm::mat4 projection;
 		std::vector<RenderLight<PointLight>> pointLights;
 		std::vector<RenderPipeline> pipelines;
-	}
+	};
 
 }
