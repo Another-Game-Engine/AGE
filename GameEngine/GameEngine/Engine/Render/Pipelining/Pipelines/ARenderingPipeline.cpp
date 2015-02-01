@@ -5,14 +5,16 @@
 namespace AGE
 {
 
-	ARenderingPipeline::ARenderingPipeline(std::string &&name) :
-		_name(std::move(name))
+	ARenderingPipeline::ARenderingPipeline(std::string &&name, std::shared_ptr<PaintingManager> const &painter_manager) :
+		_name(std::move(name)),
+		_painter_manager(painter_manager)
 	{
 
 	}
 
 	ARenderingPipeline::ARenderingPipeline(ARenderingPipeline &&move) :
 		_name(std::move(move._name)),
+		_painter_manager(std::move(move._painter_manager)),
 		_rendering_list(std::move(move._rendering_list)),
 		_programs(std::move(move._programs))
 	{

@@ -9,7 +9,7 @@ namespace AGE
 {
 	class IRenderingPipeline;
 
-# define FUNCTION_ARGS std::vector<AGE::Drawable> const &drawables, PaintingManager &paintingManager
+# define FUNCTION_ARGS std::vector<Key<Vertices>> const &vertices, Painter &painter
 
 	class IRendering
 	{

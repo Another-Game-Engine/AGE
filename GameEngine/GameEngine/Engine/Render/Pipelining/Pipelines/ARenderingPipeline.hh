@@ -15,7 +15,7 @@ namespace AGE
 		virtual ~ARenderingPipeline() {}
 
 	protected:
-		ARenderingPipeline(std::string &&name);
+		ARenderingPipeline(std::string &&name, std::shared_ptr<PaintingManager> const &painter_manager);
 		ARenderingPipeline(ARenderingPipeline &&move);
 
 	protected:
@@ -25,6 +25,7 @@ namespace AGE
 
 	protected:
 		std::string _name;
+		std::shared_ptr<PaintingManager> _painter_manager;
 		std::vector<std::shared_ptr<IRendering>> _rendering_list;
 		std::vector<std::shared_ptr<Program>> _programs;
 	};

@@ -17,14 +17,12 @@ namespace AGE
 		};
 
 	public:
-		DeferredShading(glm::vec2 const &screen_size);
+		DeferredShading(glm::vec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager);
 		DeferredShading(DeferredShading &&move);
-		virtual ~DeferredShading() {}
+		virtual ~DeferredShading() = default;
 
 	public:
 		virtual IRenderingPipeline &render(ARGS_FUNCTION_RENDER) override final;
 
-	private:
-	};
-
+	}
 }

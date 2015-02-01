@@ -17,6 +17,11 @@ namespace AGE
 		Key<Painter> painter;
 	};
 
+	struct RenderLightList
+	{
+		RenderLight<PointLight> _pointLight;
+	};
+
 	template<typename type_t>
 	struct RenderLight
 	{

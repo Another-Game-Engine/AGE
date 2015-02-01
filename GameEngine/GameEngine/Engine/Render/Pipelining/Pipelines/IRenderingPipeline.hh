@@ -5,8 +5,9 @@
 # include <memory>
 # include <Render/GeometryManagement/Painting/PaintingManager.hh>
 # include <Core/CullableObjects.hh>
+# include <Core/PrepareRender/RenderCamera.hh>
 
-# define ARGS_FUNCTION_RENDER std::vector<Key<Vertices>> const &to_render, Painter const &painter
+# define ARGS_FUNCTION_RENDER std::vector<Key<Vertices>> &pipeline, RenderLightList &lights
 
 namespace AGE
 {
