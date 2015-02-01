@@ -8,7 +8,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Core/Commands/Render.hpp>
+#include <Core/Tasks/RenderTasks.hpp>
 
 namespace AGE
 {
@@ -78,7 +78,7 @@ namespace AGE
 		MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<MaterialSetInstance> &material)
 		{
 			_material = material;
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::SetMeshMaterial>(_mesh, _material);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::SetMeshMaterial>(_material, _mesh);
 			return (*this);
 		}
 

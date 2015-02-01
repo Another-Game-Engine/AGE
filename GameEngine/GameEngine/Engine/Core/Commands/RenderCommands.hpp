@@ -51,19 +51,6 @@ namespace AGE
 				{ }
 			};
 
-			struct SetMeshMaterial
-			{
-				std::shared_ptr<MaterialSetInstance> material;
-				std::shared_ptr<MeshInstance> mesh;
-
-				SetMeshMaterial(std::shared_ptr<MaterialSetInstance> pMaterial,
-								std::shared_ptr<MeshInstance> pMesh) :
-								material(pMaterial),
-								mesh(pMesh)
-				{ }
-
-			};
-
 		};
 	}
 }
