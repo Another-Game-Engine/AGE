@@ -44,6 +44,7 @@ namespace AGE
 		void _setScale(AGE::Commands::MainToPrepare::SetScale &msg);
 		void _setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg);
 		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
+		void _moveElementsInOctree();
 
 	public:
 		PrepareKey addMesh();
@@ -72,6 +73,7 @@ namespace AGE
 		LooseOctree _octree;
 
 		AGE::Vector<uint32_t> _drawablesToMove;
+		AGE::Vector<uint32_t> _pointLightsToMove;
 
 		MemoryPool<Mesh> _meshs;
 		MemoryPool<Drawable> _drawables;

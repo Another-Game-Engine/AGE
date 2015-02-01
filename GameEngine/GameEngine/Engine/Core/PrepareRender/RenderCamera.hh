@@ -26,7 +26,6 @@ namespace AGE
 
 	struct RenderPipeline
 	{
-		std::vector<RenderLight<PointLight>> pointLights;
 		std::vector<RenderPainter> painters;
 	};
 
@@ -34,6 +33,7 @@ namespace AGE
 	{
 		glm::mat4 view;
 		glm::mat4 projection;
+		std::vector<RenderLight<PointLight>> pointLights;
 		std::vector<RenderPipeline> pipelines;
 	}
 

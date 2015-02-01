@@ -199,7 +199,8 @@ namespace AGE
 		{
 			PointLight *l = &_pointLights.get(msg.key.id);
 			l->color = msg.color;
-			l->attenuation = msg.range;
+			l->attenuation = msg.attenuation;
+			l->hasMoved = true;
 		}
 		
 		void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)
@@ -217,9 +218,17 @@ namespace AGE
 		{
 			PointLight &toRm = _pointLights.get(msg.key.id);
 
+			// TODO: remove when point lights will be in octree
 			_activePointLights[toRm.activePointLightIdx] = _activePointLights[_activePointLights.size() - 1];
 			_pointLights.get(_activePointLights[toRm.activePointLightIdx]).activePointLightIdx = toRm.activePointLightIdx;
 			_activePointLights.pop_back();
+			// ---
+			if (toRm.hasMoved)
+			{
+				_pointLightsToMove[toRm.moveBufferIdx] = _pointLightsToMove[_pointLightsToMove.size() - 1];
+				_pointLights.get(_pointLightsToMove[toRm.moveBufferIdx]).moveBufferIdx = toRm.moveBufferIdx;
+				_pointLightsToMove.pop_back();
+			}
 
 			_pointLights.deallocPreparated(msg.key.id);
 		}
@@ -305,6 +314,12 @@ namespace AGE
 			case(PrepareKey::Type::PointLight) :
 				l = &_pointLights.get(msg.key.id);
 				l->position = msg.position;
+				if (l->hasMoved == false)
+				{
+					l->hasMoved = true;
+					l->moveBufferIdx = _pointLightsToMove.size();
+					_pointLightsToMove.push_back(msg.key.id);
+				}
 				break;
 			default:
 				break;
@@ -372,22 +387,36 @@ namespace AGE
 				break;
 			}
 		}
+
+		void RenderScene::_moveElementsInOctree()
+		{
+			for (uint32_t idx : _drawablesToMove)
+			{
+				Drawable &e = _drawables.get(idx);
+				assert(e.currentNode != UNDEFINED_IDX);
+				e.hasMoved = false;
+				e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
+				e.shape.fromTransformedBox(e.mesh.boundingBox, e.transformation);
+				_octree.moveElement(&e);
+				assert(e.currentNode != UNDEFINED_IDX);
+			}
+			for (uint32_t idx : _pointLightsToMove)
+			{
+				PointLight &e = _pointLights.get(idx);
+
+				e.hasMoved = false;
+				e.computeSphereTransform();
+				// TODO: move in octree
+			}
+			_drawablesToMove.clear();
+			_pointLightsToMove.clear();
+		}
 		
 		void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
 		{
 			AGE::Vector<Cullable*> toDraw;
 
-			for (uint32_t idx : _drawablesToMove)
-			{
-				Drawable *e = &_drawables.get(idx);
-				assert(e->currentNode != UNDEFINED_IDX);
-				e->hasMoved = false;
-				e->transformation = glm::scale(glm::translate(glm::mat4(1), e->position) * glm::toMat4(e->orientation), e->scale);
-				e->shape.fromTransformedBox(e->mesh.boundingBox, e->transformation);
-				_octree.moveElement(e);
-				assert(e->currentNode != UNDEFINED_IDX);
-			}
-			_drawablesToMove.clear();
+			_moveElementsInOctree();
 			// Do culling for each camera
 			_octreeDrawList.clear();
 			// clean empty nodes
@@ -406,11 +435,13 @@ namespace AGE
 				for (uint32_t pointLightIdx : _activePointLights)
 				{
 					auto &p = _pointLights.get(pointLightIdx);
-					renderCamera.pipelines[0].pointLights.emplace_back(p.position, p.color, p.range);
+					renderCamera.pointLights.emplace_back();
+					renderCamera.pointLights.back().light = p;
+					// TODO: Cull the shadows
 				}
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);
-				// iter on element to draw
+				// iter on elements to draw
 				for (Cullable *e : toDraw)
 				{
 					switch (e->key.type)
@@ -418,7 +449,34 @@ namespace AGE
 					case PrepareKey::Type::Drawable:
 						{
 							Drawable *currentDrawable = static_cast<Drawable*>(e);
-							RenderCamera.pipelines[0].drawables.emplace_back(currentDrawable->mesh, currentDrawable->transformation);
+							// TODO: get the pipeline idx of the mesh to render, here we use 0
+							RenderPipeline *curRenderPipeline = &renderCamera.pipelines[0];
+							RenderPainter *curRenderPainter = nullptr;
+
+							for (auto &renderPainter : curRenderPipeline->painters)
+							{
+								if (renderPainter.painter == currentDrawable->mesh.painter)
+								{
+									curRenderPainter = &renderPainter;
+									break;
+								}
+							}
+							if (curRenderPainter == NULL)
+							{
+								curRenderPipeline->painters.emplace_back();
+								curRenderPainter = &curRenderPipeline->painters.back();
+								curRenderPainter->painter = currentDrawable->mesh.painter;
+							}
+							// TODO: set property "transformation"
+							curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
+						}
+						break;
+					case PrepareKey::Type::PointLight:
+						{
+							PointLight *currentPointLight = static_cast<PointLight*>(e);
+							renderCamera.pointLights.emplace_back();
+							renderCamera.pointLights.back().light = *currentPointLight;
+							// TODO: Cull the shadows
 						}
 						break;
 					default:

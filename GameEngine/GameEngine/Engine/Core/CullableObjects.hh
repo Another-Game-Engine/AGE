@@ -50,6 +50,8 @@ namespace AGE
 
 		PointLight();
 		PointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &attenuation);
+
+		void computeSphereTransform();
 	};
 
 	struct DrawableCollection
