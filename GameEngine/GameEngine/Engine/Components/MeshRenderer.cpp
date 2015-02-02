@@ -79,6 +79,7 @@ namespace AGE
 		{
 			_material = material;
 			AGE::GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::SetMeshMaterial>(_material, _mesh);
+			updateGeometry();
 			return (*this);
 		}
 

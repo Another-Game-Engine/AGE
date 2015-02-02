@@ -43,11 +43,11 @@ namespace AGE
 
 	Program const & Program::use() const
 	{
-		static auto currentProgram = 0;
-		if (currentProgram == _id) {
-			return (*this);
-		}
-		currentProgram = _id;
+		//static auto currentProgram = -1;
+		//if (currentProgram == _id) {
+		//	return (*this);
+		//}
+		//currentProgram = _id;
 		glUseProgram(_id);
 		return (*this);
 	}

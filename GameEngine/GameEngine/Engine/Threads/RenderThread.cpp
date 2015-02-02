@@ -12,7 +12,7 @@
 #include <Core/Engine.hh>
 #include <Context/SdlContext.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
+#include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
 #include <Render/Properties/Transformation.hh>
@@ -22,9 +22,9 @@ namespace AGE
 	RenderThread::RenderThread()
 		: Thread(AGE::Thread::ThreadType::Render)
 		, _context(nullptr),
-		_pipelines(1)
+		paintingManager(std::make_shared<PaintingManager>()),
+		pipelines(1)
 	{
-		_pipelines[0] = std::make_unique<DeferredShading>(glm::vec2(1920, 1000));
 	}
 
 	RenderThread::~RenderThread()
@@ -40,6 +40,7 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
+			pipelines[0] = std::make_unique<BasicPipeline>(paintingManager);
 			msg.setValue(true);
 		});
 
@@ -51,7 +52,7 @@ namespace AGE
 
 		registerCallback<Tasks::Render::SetMeshTransform>([&](Tasks::Render::SetMeshTransform &msg)
 		{
-			auto painter = paintingManager.get_painter(msg.painter);
+			auto painter = paintingManager->get_painter(msg.painter);
 			auto vertices = painter->get_vertices(msg.mesh);
 			auto property = vertices->get_property<Transformation>(msg.transform);
 			
@@ -71,12 +72,21 @@ namespace AGE
 
 		registerCallback<Commands::Render::CopyDrawLists>([&](Commands::Render::CopyDrawLists& msg)
 		{
-			this->_drawlist = msg.list;
+			_drawlist = msg.list;
 		});
 
 		registerCallback<Commands::Render::RenderDrawLists>([&](Commands::Render::RenderDrawLists& msg)
 		{
-			// TODO: Code the render!!!!!
+			uint32_t pipelineIdx = 0;
+
+			for (auto &curPipeline : pipelines) {
+				for (auto &curCamera : _drawlist) {
+					if (pipelineIdx < curCamera.pipelines.size()) {
+						curPipeline->render(curCamera.pipelines[pipelineIdx], curCamera.lights, curCamera.camInfos);
+					}
+				}
+				++pipelineIdx;
+			}
 		});
 
 		registerCallback<Commands::Render::DrawTestTriangle>([&](Commands::Render::DrawTestTriangle& msg)
@@ -117,13 +127,13 @@ namespace AGE
 		{
 			for (auto &subMesh : msg.mesh->subMeshs)
 			{
-				auto vertices = paintingManager.get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
+				auto vertices = paintingManager->get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
 				assert(vertices != nullptr);
 				if (subMesh.defaultMaterialIndex >= msg.material->datas.size())
 				{
 					for (auto &prop : msg.material->datas[0])
 					{
-						prop->set_program(_pipelines[0]->get_programs());
+						prop->set_program(pipelines[0]->get_programs());
 						vertices->add_property(prop);
 					}
 				}
@@ -131,7 +141,7 @@ namespace AGE
 				{
 					for (auto &prop : msg.material->datas[subMesh.defaultMaterialIndex])
 					{
-						prop->set_program(_pipelines[0]->get_programs());
+						prop->set_program(pipelines[0]->get_programs());
 						vertices->add_property(prop);
 					}
 				}

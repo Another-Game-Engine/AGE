@@ -78,12 +78,12 @@ namespace AGE
 			{
 				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 				{
-					material->datas[i].emplace_back(std::make_shared<Diffuse>());
-					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_color(material_data.diffuse);
-					std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_ratio(1.0f);
-					loadTexture(material_data.diffuseTexPath, loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)>([=](std::shared_ptr<ITexture> &texture) {
-						std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(std::static_pointer_cast<Texture2D>(texture));
-					}));
+				//	material->datas[i].emplace_back(std::make_shared<Diffuse>());
+				//	std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_color(material_data.diffuse);
+				//	std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_ratio(1.0f);
+				//	loadTexture(material_data.diffuseTexPath, loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)>([=](std::shared_ptr<ITexture> &texture) {
+				//		std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(std::static_pointer_cast<Texture2D>(texture));
+				//	}));
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, _filePath.getFullName() + std::to_string(i), futureSubMaterial);
@@ -281,18 +281,19 @@ namespace AGE
 					continue;
 				types.emplace_back(g_InfosTypes[e].first);
 			}
-			if (!paintingManager.has_painter(types))
+			if (!paintingManager->has_painter(types))
 			{
-				mesh->painter = paintingManager.add_painter(std::move(types));
+				mesh->painter = paintingManager->add_painter(std::move(types));
 			}
 			else
 			{
-				mesh->painter = paintingManager.get_painter(types);
+				mesh->painter = paintingManager->get_painter(types);
 			}
-			auto &painter = paintingManager.get_painter(mesh->painter);
+			auto &painter = paintingManager->get_painter(mesh->painter);
 			mesh->vertices = painter->add_vertices(data.positions.size(), data.indices.size());
 			mesh->transformation = painter->get_vertices(mesh->vertices)->add_property(std::make_shared<Transformation>(Transformation(glm::mat4(1.0f))));
-			painter->get_vertices(mesh->vertices)->get_property<Transformation>(mesh->transformation)->set_program(GetRenderThread()->_pipelines[0]->get_programs());
+			painter->set_programs(GetRenderThread()->pipelines[0]->get_programs());
+			painter->get_vertices(mesh->vertices)->get_property<Transformation>(mesh->transformation)->set_program(GetRenderThread()->pipelines[0]->get_programs());
 			auto vertices = painter->get_vertices(mesh->vertices);
 			for (auto i = 0ull; i < vertices->nbr_buffer(); ++i)
 			{

@@ -24,5 +24,5 @@ namespace AGE
 	public:
 		virtual IRenderingPipeline &render(ARGS_FUNCTION_RENDER) override final;
 
-	}
+	};
 }

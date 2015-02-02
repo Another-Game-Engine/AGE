@@ -33,6 +33,7 @@ namespace AGE
 
 			struct RenderDrawLists
 			{
+				int lol;
 				RenderDrawLists() { }
 			};
 

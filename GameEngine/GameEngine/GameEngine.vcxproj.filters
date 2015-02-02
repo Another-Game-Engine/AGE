@@ -118,6 +118,7 @@
     <ClCompile Include="Engine\SpacePartitioning\Cullable\Cullable.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
     <ClCompile Include="Engine\Threads\RenderThread.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -317,6 +318,7 @@
     <ClInclude Include="Engine\Core\PrepareRender\RenderCamera.hh" />
     <ClInclude Include="Engine\Core\Tasks\RenderTasks.hpp" />
     <ClInclude Include="Engine\Core\Commands\RenderCommands.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

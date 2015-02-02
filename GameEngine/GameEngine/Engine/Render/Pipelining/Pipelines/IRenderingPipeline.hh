@@ -7,7 +7,7 @@
 # include <Core/CullableObjects.hh>
 # include <Core/PrepareRender/RenderCamera.hh>
 
-# define ARGS_FUNCTION_RENDER std::vector<Key<Vertices>> &pipeline, RenderLightList &lights
+# define ARGS_FUNCTION_RENDER RenderPipeline &pipeline, RenderLightList &lights, CameraInfos &infos
 
 namespace AGE
 {
@@ -19,7 +19,6 @@ namespace AGE
 	class IRenderingPipeline
 	{
 	public:
-		IRenderingPipeline(IRenderingPipeline const &oth) = delete;
 		virtual ~IRenderingPipeline() {}
 		virtual std::vector<std::shared_ptr<IRendering>> const &get_rendering() const = 0;
 		virtual std::string const &name() const = 0;

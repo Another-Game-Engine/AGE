@@ -106,7 +106,7 @@ namespace AGE
 
 	void		LooseOctreeNode::getElementsCollide(LooseOctree &manager, CullableShape<Frustum> *toTest, AGE::Vector<Cullable*> &toFill) const
 	{
-		assert(_uniqueSubElements != 0);
+		assert(_uniqueSubElements != 0 || _father == UNDEFINED_IDX);
 		bool collisionState;
 
 		collisionState = toTest->shape.checkCollision(_looseNode);
@@ -443,7 +443,7 @@ namespace AGE
 
 	void LooseOctreeNode::checkOctreeIntegrity(LooseOctree &manager) const
 	{
-		assert(_uniqueSubElements != 0);
+		assert(_uniqueSubElements != 0 || _father == UNDEFINED_IDX);
 		if (!isLeaf())
 		{
 			for (uint32_t i = 0; i < 8; ++i)

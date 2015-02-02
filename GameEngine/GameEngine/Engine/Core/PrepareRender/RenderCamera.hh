@@ -17,11 +17,6 @@ namespace AGE
 		Key<Painter> painter;
 	};
 
-	struct RenderLightList
-	{
-		RenderLight<PointLight> _pointLight;
-	};
-
 	template<typename type_t>
 	struct RenderLight
 	{
@@ -29,16 +24,26 @@ namespace AGE
 		std::vector<RenderPainter> painters;
 	};
 
+	struct RenderLightList
+	{
+		std::vector<RenderLight<PointLight>> pointLight;
+	};
+
 	struct RenderPipeline
 	{
 		std::vector<RenderPainter> painters;
 	};
 
-	struct RenderCamera
+	struct CameraInfos
 	{
 		glm::mat4 view;
 		glm::mat4 projection;
-		std::vector<RenderLight<PointLight>> pointLights;
+	};
+
+	struct RenderCamera
+	{
+		CameraInfos camInfos;
+		RenderLightList lights;
 		std::vector<RenderPipeline> pipelines;
 	};
 

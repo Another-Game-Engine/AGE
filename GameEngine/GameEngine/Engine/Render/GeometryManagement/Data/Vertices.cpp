@@ -31,7 +31,8 @@ namespace AGE
 		_data(copy._data),
 		_indices_data(copy._indices_data),
 		_block_memories(copy._block_memories),
-		_indices_block_memory(copy._indices_block_memory)
+		_indices_block_memory(copy._indices_block_memory),
+		_properties(copy._properties)
 	{
 	}
 
@@ -43,7 +44,8 @@ namespace AGE
 		_data(std::move(move._data)),
 		_indices_data(std::move(move._indices_data)),
 		_block_memories(std::move(move._block_memories)),
-		_indices_block_memory(std::move(move._indices_block_memory))
+		_indices_block_memory(std::move(move._indices_block_memory)),
+		_properties(std::move(move._properties))
 	{
 
 	}

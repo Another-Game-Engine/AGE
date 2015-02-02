@@ -252,6 +252,7 @@
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Renderbuffer.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Render\ARendering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Render\Rendering.cpp" />
@@ -375,6 +376,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Buffer\IFramebufferStorage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Renderbuffer.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\IRenderingPipeline.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\ARendering.hh" />

@@ -23,10 +23,11 @@ _id(move._id)
 
 void VertexArray::bind() const
 {
-	if (_current_id != _id) {
-		glBindVertexArray(_id);
-		_current_id = _id;
-	}
+//	if (_current_id != _id) {
+//		_current_id = _id;
+//	}
+	glBindVertexArray(_id);
+
 }
 
 void VertexArray::unbind() const

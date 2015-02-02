@@ -425,18 +425,20 @@ namespace AGE
 				camera.shape.setMatrix(camera.projection * view);
 				_octreeDrawList.emplace_back();
 				auto &renderCamera = _octreeDrawList.back();
-				renderCamera.view = view;
-				renderCamera.projection = camera.projection;
+				renderCamera.camInfos.view = view;
+				renderCamera.camInfos.projection = camera.projection;
 				// no culling for the lights for the moment (TODO)
 				for (uint32_t pointLightIdx : _activePointLights)
 				{
 					auto &p = _pointLights.get(pointLightIdx);
-					renderCamera.pointLights.emplace_back();
-					renderCamera.pointLights.back().light = p;
+					renderCamera.lights.pointLight.emplace_back();
+					renderCamera.lights.pointLight.back().light = p;
 					// TODO: Cull the shadows
 				}
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);
+				// TODO: Remove that
+				renderCamera.pipelines.emplace_back();
 				// iter on elements to draw
 				for (Cullable *e : toDraw)
 				{
@@ -470,8 +472,8 @@ namespace AGE
 					case PrepareKey::Type::PointLight:
 						{
 							PointLight *currentPointLight = static_cast<PointLight*>(e);
-							renderCamera.pointLights.emplace_back();
-							renderCamera.pointLights.back().light = *currentPointLight;
+							renderCamera.lights.pointLight.emplace_back();
+							renderCamera.lights.pointLight.back().light = *currentPointLight;
 							// TODO: Cull the shadows
 						}
 						break;

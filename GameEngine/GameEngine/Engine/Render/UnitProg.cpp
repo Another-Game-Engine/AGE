@@ -40,8 +40,9 @@ bool UnitProg::compileUnitProg(char const *fileName)
 	glCompileShader(_id);
 	GLint compileRet = 0;
 	glGetShaderiv(_id, GL_COMPILE_STATUS, &compileRet);
-	if (compileRet != GL_FALSE)
+	if (compileRet != GL_FALSE) {
 		return (true);
+	}
 	GLsizei msgLenght;
 	glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &msgLenght);
 	GLchar *errorMsg;
@@ -67,7 +68,8 @@ GLuint UnitProg::getId() const
 void UnitProg::create()
 {
 	_id = glCreateShader(_type);
-	assert(compileUnitProg(_filename.c_str()));
+	auto ret = compileUnitProg(_filename.c_str());
+	assert(ret);
 }
 
 void UnitProg::destroy() const

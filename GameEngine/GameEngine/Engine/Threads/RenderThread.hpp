@@ -28,8 +28,8 @@ namespace AGE
 		virtual bool stop();
 
 	public:
-		PaintingManager paintingManager;
-		std::vector<std::unique_ptr<IRenderingPipeline>> _pipelines;
+		std::shared_ptr<PaintingManager> paintingManager;
+		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;
 
 	private:
 		RenderThread();
