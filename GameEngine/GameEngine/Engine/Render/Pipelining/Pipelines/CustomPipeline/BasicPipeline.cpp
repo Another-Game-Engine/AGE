@@ -20,8 +20,10 @@ namespace AGE
 		_programs[RENDER] = std::make_shared<Program>(Program(std::string("basic program"), units));
 		_rendering_list.resize(TOTAL);
 		_rendering_list[RENDER] = std::make_shared<Rendering>([&](FUNCTION_ARGS) {
+			OpenGLTasks::set_depth_test(true);
 			OpenGLTasks::clear_buffer();
 			OpenGLTasks::set_clear_color(glm::vec4(0, 0, 0.2, 1));
+			painter.update();
 			painter.draw(GL_TRIANGLES, _programs[RENDER], vertices);
 		});
 		auto &rendering = std::static_pointer_cast<Rendering>(_rendering_list[RENDER]);
@@ -39,7 +41,6 @@ namespace AGE
 		*_programs[RENDER]->get_resource<Mat4>("view_matrix") = infos.view;
 		for (auto &painter : pipeline.painters) {
 			auto p = _painter_manager->get_painter(painter.painter);
-			p->update();
 			_rendering_list[RENDER]->render(painter.vertices, *p);
 		}
 		return (*this);

@@ -19,8 +19,10 @@ namespace AGE
 
 	IProperty & Color::update(std::shared_ptr<Program> const &program)
 	{
-		auto &resource = *std::static_pointer_cast<Vec4>(get_resource(program));
-		resource = _color;
+		auto resource = std::static_pointer_cast<Vec4>(get_resource(program));
+		if (resource) {
+			*resource = _color;
+		}
 		return (*this);
 	}
 

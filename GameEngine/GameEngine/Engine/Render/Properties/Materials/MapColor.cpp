@@ -18,8 +18,10 @@ namespace AGE
 
 	IProperty & MapColor::update(std::shared_ptr<Program> const &p)
 	{
-		auto &resource = *(std::static_pointer_cast<Sampler2D>(get_resource(p)));
-		resource = _texture;
+		auto resource = std::static_pointer_cast<Sampler2D>(get_resource(p));
+		if (resource) {
+			*resource = _texture;
+		}
 		return (*this);
 	}
 

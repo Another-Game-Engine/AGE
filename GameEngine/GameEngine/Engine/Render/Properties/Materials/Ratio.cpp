@@ -19,8 +19,10 @@ namespace AGE
 
 	IProperty & Ratio::update(std::shared_ptr<Program> const &p)
 	{
-		auto &resource = *std::static_pointer_cast<Vec1>(get_resource(p));
-		resource = _ratio;
+		auto resource = std::static_pointer_cast<Vec1>(get_resource(p));
+		if (resource) {
+			*resource = _ratio;
+		}
 		return (*this);
 	}
 
